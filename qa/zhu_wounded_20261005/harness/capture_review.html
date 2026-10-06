@@ -1,0 +1,25 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8">
+<title>石秀录制帧审核</title>
+<style>body{background:#18211e;color:#eee;font:16px system-ui;margin:20px}h1{font-size:22px}button,input{font:inherit;margin:4px;padding:8px}img{display:block;max-width:100%;height:auto;border:1px solid #65776b}output{display:block;margin:12px 0}p{max-width:900px;line-height:1.6}input{width:80px}</style>
+<h1>石秀四向起停：原生录制帧审核</h1>
+<p>播放引擎实际输出的帧，按记录时间切换。可暂停并逐帧检查身形、衣装和落脚点；这是隔离素材预览，原游戏的移动与动作仍需另验。</p>
+<button id="play">播放</button><button id="pause">暂停</button>
+<button id="prev">上一帧</button><button id="next">下一帧</button>
+<label for="frame">帧号</label><input id="frame" type="number" min="0" max="63" value="0"><button id="jump">定位帧</button>
+<output id="status" aria-live="polite">正在载入64张原生录制帧</output>
+<img id="capture" alt="石秀四方向原生引擎录制帧" width="900" height="340">
+<script>
+let index=0,playing=false,timer,record,images=[];
+const status=document.getElementById('status'),frame=document.getElementById('frame'),capture=document.getElementById('capture');
+function show(i){index=Math.max(0,Math.min(63,i));const row=record.captures[index];capture.src=images[index].src;frame.value=index;status.textContent=`帧 ${index}/63 · 录制时间 ${row.time_seconds.toFixed(3)} 秒 · ${row.moving?'行走':'待机'} · 四向相位 ${row.indexes.join('/')}`;}
+function stop(){playing=false;clearTimeout(timer);}
+function advance(){if(!playing)return;const next=(index+1)%64;const delay=next===0?100:Math.max(1,(record.captures[next].time_seconds-record.captures[index].time_seconds)*1000);timer=setTimeout(()=>{show(next);advance();},delay);}
+document.getElementById('play').onclick=()=>{stop();playing=true;advance();};
+document.getElementById('pause').onclick=stop;
+document.getElementById('next').onclick=()=>{stop();show(index+1);};
+document.getElementById('prev').onclick=()=>{stop();show(index-1);};
+document.getElementById('jump').onclick=()=>{stop();show(Number(frame.value));};
+(async()=>{try{const response=await fetch('preview_result.json');if(!response.ok)throw Error('录制记录载入失败');record=await response.json();if(!record.passed||record.captures.length!==64)throw Error('录制记录不完整');
+await Promise.all(record.captures.map(row=>new Promise((resolve,reject)=>{const image=new Image();images.push(image);image.onload=()=>{if(image.naturalWidth!==900||image.naturalHeight!==340)reject(Error('录制帧尺寸异常'));else resolve();};image.onerror=()=>reject(Error('录制帧缺失'));image.src=row.capture;})));show(0);
+}catch(error){status.textContent='审核错误：'+error.message;document.querySelectorAll('button').forEach(button=>button.disabled=true);}})();
+</script></html>

@@ -1,0 +1,596 @@
+{
+  "original_reference": {
+    "path": "assets/characters/wang_ying_bound_20261005/bound.png",
+    "sha256": "3a1d3cb2e8916306c8c6141d0d044ddbac3ed619bcd7440bbced09241be84793"
+  },
+  "jobs": [
+    {
+      "key": "baseline_ref_87eac29bd5b1",
+      "method": "retained_identity_reference",
+      "generation_id": null,
+      "repository_path": "assets/characters/shi_qian_bound_20261005/bound.png",
+      "sha256": "08787ccf51041c8e6134999a7dc6e9c6e884631d2feebac3e7df868c9060a108",
+      "baseline_commit": "27f45b245e2b39f1f779fbfa62772e14bb68dd56",
+      "reference_role": "Retained original character identity/anatomy reference; no new generation prompt claimed",
+      "references": [],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "sw_initial_rejected",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-14e9b9ec-b822-445d-b639-37f1b69f93db",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/native_references/sw_initial_rejected.png",
+      "sha256": "0d671be87f60f2bcf662a443765caa39722691be329bf360c5be7b516c2e6ddb",
+      "prompt": "Use case: historical-scene. Native transparent SINGLE FULL BODY wounded Shi Qian opposite walking pose. Output ONLY ONE man, NOT a grid or multiple copies. Reference atlas is IDENTITY and clothes only; REMOVE ropes/bindings. Same slim black masked Chinese man in charcoal cross-over cloth tunic, black headwrap and mask, cloth belt, dark trousers/shin wraps and boots. NO sack/armor/weapons/flags. Free wrists and empty hands, one hand guards sore abdomen, other balances, slight tired hunch. Critical anatomical foot pose: SW FRONT THREEQUARTER facing DOWN-LEFT. Its planted FORWARD boot must be on LOWER-RIGHT side of the silhouette, connected to RIGHT side of the image pelvis. Its trailing lifted boot must be on UPPER-LEFT side, heel raised. Both toes face downLEFT, whole torso/head faces LEFT. Left/right foot lead must visibly differ from standard alternate stride. Leading knee crosses in FRONT of trailing knee with each leg connected to its own pelvis side. Clearly short careful limping STEP, not standing/running/jumping. Foot positions specified are relative to complete silhouette, no twisting hip. Both legs/feet visible and distinct. Elevated isometric historic painterly RTS camera, full silhouette centered and contained, generous empty margin100px each edge, body60-70% canvas height. Native square<=1536, actual transparent alpha, no floor shadow/grid/text/background/extra people.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_step_b_sw.json",
+      "request_sha256": "bcd885b9badf089374d13158f26f7c54cf02127f8928ed9f60386f50d0350a2f",
+      "references": [
+        "baseline_ref_87eac29bd5b1"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_qian_step_b_sw",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-b26411e6-641e-4a9a-a172-1c37a305b869",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/step_b_sw.png",
+      "sha256": "01a2cc521b116e0cff5f2c3c74774ff51cf2517a19c2029e6be6e76baa4a0b0f",
+      "prompt": "Edit this single transparent SW-facing masked man. Keep head, face direction, body, clothes and empty hands. Remove the red/blood stain from abdomen completely: clean dark cloth, NO blood/injury props.\nCHANGE ONLY THE TWO LEGS below the pelvis to the OPPOSITE walking step. Currently the foot at bottom-left is planted, and foot at upper-right is lifted. Swap their gait: the leg on the RIGHT side of the image must now straighten FORWARD with its boot planted at LOWER-RIGHT, approximately(x780,y1100) on this1254canvas; the leg on the LEFT side must bend BACK with boot lifted at UPPER-LEFT approximately(x580,y940). Keep each leg attached to its existing hip. Draw the RIGHT-SIDE IMAGE KNEE in front, LEFT-SIDE knee behind. Both boot toes still point LEFT. Do not keep the original foot placements. The planted boot must move to the OTHER side of the silhouette. This is an alternate short wounded walk step, not running, no new prop.\nSame elevated isometric SW frontthreequarter camera, torso and face pointingLEFT, one man only, native transparent RGBA square<=1536, full figure contained, no text/grid/floor/shadow/weapon/rope/bag. Keep black wrap and mask, charcoal tunic and trousers, shin wraps, painterly clothing identity unchanged.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_sw_leg_edit.json",
+      "request_sha256": "f344a6ee879a3e9ca3740115422156f37a966f35e406b1cb3a5b3f627352bff9",
+      "references": [
+        "sw_initial_rejected"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_qian_proportion_v2",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-c11831c3-8262-4bc1-bc31-4cabd4ac12dd",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/proportion_reference_v2.png",
+      "sha256": "7f8d1d563e6eff35801bdab942867fb751cc2ccb90ae363ec39b16cf7a582499",
+      "prompt": "Use case: identity-preserve. Redraw this masked black-clothed adult Shi Qian with CORRECT NATURAL ADULT HUMAN PROPORTIONS. Current image is rejected: head and boots too big, legs too short, body too hunched and cartoonish. Keep the same identifiable man, black cloth headwrap/topknot and black mouth/nose mask, charcoal cross-over tunic and plain brown cloth sash, dark trousers/shin wraps/cloth boots, restrained hand-painted Chinese historical RTS rendering. NOT pixel-preservation: redraw anatomy fully as needed.\nNEW BODY: slim athletic normal adult, about7 to7.5 HEADS tall from skull top to sole. Bare head height only about one-seventh total body height; headcloth must not turn it into an oversized head. Natural narrow but adult shoulders, visible neck, proportionate torso, LONGER natural legs with hip-to-floor about half entire figure. Knees correctly midway along legs, normal slender calves, small natural hands, human-sized cloth boots WITHOUT giant bulky feet. Balanced anatomical joints, same believable adult throughout. No chibi/dwarf/oversized-head/short-legged/caricature proportions, no inflated hands or comic boots.\nPOSE: quiet NEUTRAL standing with feet naturally close and both grounded, only slight fatigue in shoulders. Upright spine and level head, no extreme stoop, crouch, furtive peeking, aggressive grimace, exaggerated lifted knee, twisted hip or running pose. Empty arms rest naturally; one empty hand may lightly rest near lower abdomen without squeezing or deep bending. This is a tired rescued adult with calm dignity, NOT a sneaking goblin. No ropes, weapons, sacks, blood/injury props, cape, armor or new accessories.\nView remains SW front three-quarter facing down-left, elevated isometric camera. Exactly ONE full body, all headcloth tails/fingers/feet contained, centered with generous transparent margins. Body about65–70% square canvas height. GENUINE alpha TRANSPARENT background, native square max1536, no floor shadow/background/checkerboard/grid/text/labels. Detailed face retains original identity but at natural smaller anatomical size.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_proportion_v2.json",
+      "request_sha256": "b1e2f2282759fe21f8c79677225a038887290f0321fd728d4ca889b2a34fb232",
+      "references": [
+        "shi_qian_step_b_sw"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_proportion_v2",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-d126c76a-9d2a-4cdf-a229-8cc0e587c05b",
+      "repository_path": "assets/characters/wang_ying_wounded_20261005/proportion_v2.png",
+      "sha256": "ecf96a2d07784a73dd4176ef5ffd3b682446833ab2f297df43b15bedebcfa3dd",
+      "prompt": "Use case: identity-preserve. ONE full-body unarmed rescued wang_ying standing proportion reference, NOT an atlas. Reference1 is the sole FACE/HAIR/CLOTHING identity reference; remove ALL bindings/ropes and weapons. Reference2 supplies ONLY the mature natural human anatomy target and painterly elevated isometric camera; DO NOT copy its mask, black costume or face.\nIdentity: Distinctly SHORT STOCKY man, broad round face, short dark beard/moustache, dark topknot and rust-red tied headband, rust-red tunic, brown leather lamellar torso/shoulders with brass studs, broad belt, dark trousers, short boots. Naturally short stature with credible ADULT thighs/calves and proportionate feet, not chibi or dwarf anatomy. No helmet, sabers or sheaths.\nRedraw the short reference anatomy into a believable mature ADULT: naturally SHORT and STOCKY, broad torso, about6.5–7 heads tall, proportionate neck/thighs/calves and modest adult hands/feet; keep his short stout identity without giant head, boots or stunted knees.  Each knee naturally midway along the leg, no shortened thighs or giant footwear. Keep costume colors/materials and recognisable face/hair; any armor decoration fits his natural adult body.\nPose: SW front-three-quarter facing down-left, quiet upright tired rescued man with dignity, level head and relaxed empty hands by sides, both feet naturally close and grounded. Only slight fatigue in shoulders, no crouch/stoop/sneaking/high raised knee/running/combat stance. Natural anatomical joints. No weapon, sheath, rope, sack, flag, mount, blood, glow or new props. Preserve original identity, don't make everyone the same slim black masked man. Historic restrained hand-painted Chinese RTS rendering. Exactly one COMPLETE body, all cloth tails/cape/fingers/boots contained with generous margins, about75–80% native square height, max1536. Genuine transparent alpha background, no floor/shadow/grid/text/labels/checkerboard.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/wang_ying_proportion_v2.json",
+      "request_sha256": "05d57d8746ef04b47ee243c6a777a0eb1a3e3a20bf300ced2922d4213f06f993",
+      "references": [
+        "original",
+        "shi_qian_proportion_v2"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_posture_v3",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-134de701-da2f-41a4-9b37-6af04b420a47",
+      "repository_path": "assets/characters/wang_ying_wounded_20261005/posture_v3.png",
+      "sha256": "77312d74543504f24bac1057c1a5300f12d3e00f4d9f9eabdacf73382e6034c4",
+      "prompt": "Use case: identity-preserve. EDIT the attached ONE full-body character reference. User requires an upright dignified SOLDIER posture: head UP and chest OPEN. Reject lowered chin, forward head, closed shoulders or hunched back. Only improve pose; preserve this SAME individual face, clothes, mature ADULT proportions and painterly rendering.\nPOSE: erect balanced military attention-like stance. Naturally straight stacked spine, neutral pelvis, neck vertical ABOVE torso; head lifted with chin LEVEL, eyes looking toward distant horizon in the SAME front three-quarter SW facing direction, never down at feet. Shoulders gently back and down, broad collarbones, naturally lifted open chest, sternum confidently forward. No stoop, rounded back, shrugged shoulders, forward craned neck, wounded hunch or tired slump. Do not hyperextend neck, flare ribs, thrust belly or arch lower back. Keep the small natural head/hands/boots and adult thighs/calves. Moderately elevated isometric camera does not imply bowed head.\nBoth feet grounded in stable modest hip-width parallel stance, knees straight but not locked. Empty arms straight naturally at sides and open relaxed hands, no fists or combat stance. Preserve his naturally SHORT STOCKY adult body, broad round face and compact adult legs; do not make him tall, slender or childlike. No oversized head or boots.\nExactly ONE complete full figure with all fingers/tails/cloak/boots contained in generous transparent margins, 75–80% square height, native max1536. No weapons/sheaths/rope/chains/blood/new props. Preserve true transparent alpha; no floor/shadow/background/text/grid/checkerboard.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/wang_ying_posture_v3.json",
+      "request_sha256": "af3c1fe6462498af59090b5e2380967f372ea9c997e67182fc051761ca91de89",
+      "references": [
+        "wang_ying_proportion_v2"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_idle_v3",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-8491eec2-e135-4d4c-abee-a4a5386cade8",
+      "repository_path": "assets/characters/wang_ying_wounded_20261005/idle_v3.png",
+      "sha256": "7162d17b993883de7e396493ba2c96e3b1b0f17dadaf60c63f31c37223be4412",
+      "prompt": "Use case: identity-preserve. Create native FOUR independently drawn isometric IDLE views of this SAME upright adult soldier. Reference is the selected v3 single-body posture; preserve its face, proportions, clothing and colors. Exactly 2 columns x 2 rows: TOP LEFT SE front three-quarter looking screen DOWN-RIGHT; TOP RIGHT SW front three-quarter looking screen DOWN-LEFT; BOTTOM LEFT NE back three-quarter looking screen UP-RIGHT; BOTTOM RIGHT NW back three-quarter looking screen UP-LEFT. Turn the WHOLE torso, hips and both feet into each direction. SE and SW must be genuinely opposite whole-body views; do not repeat SW in the SE cell. Back views show back clothes and back of head, with only a small far cheek visible. Never mirror a rendered cell. ALL FOUR poses stand dignified and upright like disciplined soldiers: lifted head, LEVEL chin/horizon gaze, neck vertically above torso, stacked natural spine, shoulders back/down, naturally open lifted chest. Elevated camera never means bowed head. NO hunch, forward neck, closed chest, tired shoulder slump, shrug, belly thrust or arched lower back. Empty relaxed hands and naturally straight arms at sides. Stable feet at modest hip width, straight natural knees. Keep mature adult head/hands/boots and adult leg lengths. Body type identity: Distinctly SHORT STOCKY man, broad round face, short dark beard/moustache, dark topknot and rust-red tied headband, rust-red tunic, brown leather lamellar torso/shoulders with brass studs, broad belt, dark trousers, short boots. Stout compact legs. No helmet, sabers or sheaths. Preserve v3 body anatomy over any old compact sprite instructions; never chibi. Same front/back clothing hem length and construction, no weapons/sheaths/rope/chains/blood/new props. Each whole figure fits inside its OWN quadrant with wide true-alpha outer margins and wide empty transparent central gutters; no tails/capes/boots cross cell boundaries. Figures equal body height within this character. Native square max1536, painterly reference quality, TRUE RGBA transparent background; no floor/shadows/text/labels/grid/checkerboard. Layout priority: figures occupy only 78–82% of EACH quadrant height, about490–515px tall at1254px native square. Center each figure inside its cell; keep at least45px transparent clearance on every cell edge, including cape/boots/headcloth. The central horizontal gutter should be at least80px. Reduce whole figure size uniformly to leave room; NEVER shorten legs or enlarge heads to fit. Do not nearly touch the two rows.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/wang_ying_idle_v3.json",
+      "request_sha256": "6929f1655fa5b6f705ea5b8969177db7f28875d7ae515f0dc971dde87d32e961",
+      "references": [
+        "wang_ying_posture_v3"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_idle_spacing_v3",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-24846719-3091-4d74-a3e6-c2cb77741864",
+      "repository_path": "assets/characters/wang_ying_wounded_20261005/idle_spacing_v3.png",
+      "sha256": "89c83171b9d3fb5b4a04f256f022b19ea93fe5d0c2aa08a921d08bae98c1b203",
+      "prompt": "Use case: identity-preserve. EDIT this four-view Wang Ying atlas. Keep SAME short STOCKY mature adult proportions, upright soldier posture, face, rust-red headcloth/tunic, brass-studded brown leather lamellar, broad belt and dark trousers/boots. Only fix unsafe atlas layout: figures currently nearly touch around central horizontal boundary. Redraw each whole figure uniformly smaller inside its OWN quadrant, about450–480px tall at a1254px square, centered in each627px quadrant, leaving at least65px transparent top/bottom clearance on EVERY quadrant edge. A very wide completely EMPTY transparent horizontal band must separate rows. Do not shorten legs/change body/head proportions to fit. Full hands/headcloth/boots contained; no clipping, no overlapping cells. FOUR independently rendered directions: top-left SE front down-right, top-right SW front down-left, bottom-left NE rear up-right, bottom-right NW rear up-left. Whole body and both feet follow facing. Maintain lifted head, level chin/horizon gaze, vertical neck, straight stacked spine, shoulders back/down, naturally open chest, grounded feet and empty arms naturally at sides. No hunch/slouch/forward neck; no weapons/rope/sheaths/new props. True transparent RGBA, native square max1536, no floor/shadows/labels/grid/checkerboard.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/wang_ying_idle_spacing_v3.json",
+      "request_sha256": "a26eaeff77d17b90af58b9ccd22385f934915bc6271e398462661a96fb174abd",
+      "references": [
+        "wang_ying_idle_v3"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_idle_single_se_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-65c0418c-10b3-4188-99b2-ab81e8e31df0",
+      "repository_path": "assets/characters/wang_ying_wounded_20261005/idle_single_se_v4.png",
+      "sha256": "3c596585e61cd4c58aae3da726541bbe0162d244c39389299cf1b776c96aaaa3",
+      "prompt": "Edit this reference atlas into ONE single full-canvas Wang Ying idle sprite using ONLY its top-left, FRONT-RIGHT/southeast view figure. Preserve this specific short sturdy MATURE adult, rough bearded face, headband and tied hair, red tunic, brown riveted armor, belt, bracers, grey trousers and wrapped boots. Keep the original naturally short limbs, broad body and adult head/neck proportions, relaxed empty hands, grounded balanced stance and this entire SE facing. Do not stretch him tall or make a child; no rigid overarched parade pose. Render that same figure at full native single-sprite detail on a square transparent RGBA canvas, complete head to both boots with at least 80-pixel clear padding. Keep the same overhead isometric camera, lighting, palette and garment details so it can anchor later gait frames. Remove the other three figures and atlas grid; no rope, weapon, background, floor/shadow, labels or extra person.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/wang_ying_idle_single_se_v4.json",
+      "request_sha256": "fc2249e4ff48f62adf44823999fb102cf586a2024a5356fd922c4ced9f482fca",
+      "references": [
+        "wang_ying_idle_spacing_v3"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_idle_single_sw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-640e9cb5-c2ea-4080-b6d8-2413eaceda88",
+      "repository_path": "assets/characters/wang_ying_wounded_20261005/idle_single_sw_v4.png",
+      "sha256": "a4bedd58a1e2edd3d76d0fb3f451f27f6d30ea99429e318891b0ce2bac409796",
+      "prompt": "Edit this reference atlas into ONE single full-canvas Wang Ying idle sprite using ONLY its top-right, FRONT-LEFT/southwest view figure. Preserve this specific short sturdy MATURE adult, rough bearded face, headband and tied hair, red tunic, brown riveted armor, belt, bracers, grey trousers and wrapped boots. Keep the original naturally short limbs, broad body and adult head/neck proportions, relaxed empty hands, grounded balanced stance and this entire SW facing. Do not stretch him tall or make a child; no rigid overarched parade pose. Render that same figure at full native single-sprite detail on a square transparent RGBA canvas, complete head to both boots with at least 80-pixel clear padding. Keep the same overhead isometric camera, lighting, palette and garment details so it can anchor later gait frames. Remove the other three figures and atlas grid; no rope, weapon, background, floor/shadow, labels or extra person.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/wang_ying_idle_single_sw_v4.json",
+      "request_sha256": "0feb9e3cef4307407dab896f4cd8ae87d431c6b584d29d4e98940e7caa5ad64b",
+      "references": [
+        "wang_ying_idle_spacing_v3"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_idle_single_ne_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-b4540df6-c718-42a9-9a93-f9e73ed51dba",
+      "repository_path": "assets/characters/wang_ying_wounded_20261005/idle_single_ne_v4.png",
+      "sha256": "35db0d48e259a905eaf8f9b060659cc6a0ca1fb96f605d4acc650739b730aedb",
+      "prompt": "Edit this reference atlas into ONE single full-canvas Wang Ying idle sprite using ONLY its bottom-left, BACK-RIGHT/northeast view figure. Preserve this specific short sturdy MATURE adult, rough bearded face, headband and tied hair, red tunic, brown riveted armor, belt, bracers, grey trousers and wrapped boots. Keep the original naturally short limbs, broad body and adult head/neck proportions, relaxed empty hands, grounded balanced stance and this entire NE facing. Do not stretch him tall or make a child; no rigid overarched parade pose. Render that same figure at full native single-sprite detail on a square transparent RGBA canvas, complete head to both boots with at least 80-pixel clear padding. Keep the same overhead isometric camera, lighting, palette and garment details so it can anchor later gait frames. Remove the other three figures and atlas grid; no rope, weapon, background, floor/shadow, labels or extra person.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/wang_ying_idle_single_ne_v4.json",
+      "request_sha256": "1f46e7df82a46c0184112fea71810e4bcafb7e9f3c401c657a72a14341d81bbb",
+      "references": [
+        "wang_ying_idle_spacing_v3"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_idle_single_nw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-1df1879b-b98e-493b-91e3-c23c898cfa59",
+      "repository_path": "assets/characters/wang_ying_wounded_20261005/idle_single_nw_v4.png",
+      "sha256": "e73e10a79068a9a109c717602c1054e6c94682292588e91d38d8aa11b5d2d1de",
+      "prompt": "Edit this reference atlas into ONE single full-canvas Wang Ying idle sprite using ONLY its bottom-right, BACK-LEFT/northwest view figure. Preserve this specific short sturdy MATURE adult, rough bearded face, headband and tied hair, red tunic, brown riveted armor, belt, bracers, grey trousers and wrapped boots. Keep the original naturally short limbs, broad body and adult head/neck proportions, relaxed empty hands, grounded balanced stance and this entire NW facing. Do not stretch him tall or make a child; no rigid overarched parade pose. Render that same figure at full native single-sprite detail on a square transparent RGBA canvas, complete head to both boots with at least 80-pixel clear padding. Keep the same overhead isometric camera, lighting, palette and garment details so it can anchor later gait frames. Remove the other three figures and atlas grid; no rope, weapon, background, floor/shadow, labels or extra person.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/wang_ying_idle_single_nw_v4.json",
+      "request_sha256": "88f72c9483c863ca0100dc6d9298731b105e1a058b59471cee86d4fd76f4b986",
+      "references": [
+        "wang_ying_idle_spacing_v3"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_walk_a_se_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-bb760029-4f06-4f6b-be83-ebcc50acdda1",
+      "repository_path": "assets/characters/wang_ying_wounded_20261005/walk_a_se_v4.png",
+      "sha256": "35dd9a37ba51f21d99b6592d97816e6d66def6cee2751ad3d09f62eb772efb41",
+      "prompt": "Use case: identity-preserve. Edit this ONE native full-body Wang Ying sprite into short natural walking CONTACT A phase. Input is the exact identity, body proportions, costume, rendering and SE facing template.\nPreserve this MATURE naturally SHORT, broad STOCKY adult; rough bearded face, headband/topknot, red tunic, brown brass-riveted armor/round-studded belt/bracers, grey trousers and wrapped boots. Keep the same head size, torso width, shoulder height, adult limb lengths, palette, camera and every garment layer. Upright grounded adult posture with slight natural walking motion, not taller, thinner, childlike, overarched parade stance or hunched. Empty hands naturally swing only a little.\nOnly change his quiet feet into a modest short walking step: anatomical LEFT leg steps FORWARD and its boot is planted flat carrying weight; anatomical RIGHT leg trails BACK with heel lifted and toe lightly contacting ground. Modest stride, both knees close to their natural body axis. No wide lunge, high knee, jumping, combat stance or kicked-up sole. Keep hip/upper-body centered above the support, natural pelvis rotation. Clearly distinguish the two legs and preserve their true attachment to the hip.\nWhole head, torso, knees and both toes maintain FRONT-RIGHT / southeast, head and both boot toes point down-right, at the SAME elevated isometric viewing angle as reference. Exactly ONE complete person on genuine transparent RGBA square canvas, max1536, ample clear margin at every edge, entire cloth tails/fingers/boots contained. Same native painterly game detail. No rope, weapon, shadow, floor, grid, label, background, extra people or new accessories. CONTACT A is the first planted-foot pose; do not reuse neutral idle feet. Keep the frame suitable for later opposing contact B and two low passing phases. Always preserve short adult anatomy.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/wang_ying_walk_a_se_v4.json",
+      "request_sha256": "4f84f56b792c641bacf399d329a035a337eefec8af62d71becedf99fe4ff59b6",
+      "references": [
+        "wang_ying_idle_single_se_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_walk_a_sw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-94da8fef-29ed-40be-b486-3453e9169416",
+      "repository_path": "assets/characters/wang_ying_wounded_20261005/walk_a_sw_v4.png",
+      "sha256": "953255aa817205df4a719c021aafb28e25d189fc6e86bffcbb2d3aabc87f3ea4",
+      "prompt": "Use case: identity-preserve. Edit this ONE native full-body Wang Ying sprite into short natural walking CONTACT A phase. Input is the exact identity, body proportions, costume, rendering and SW facing template.\nPreserve this MATURE naturally SHORT, broad STOCKY adult; rough bearded face, headband/topknot, red tunic, brown brass-riveted armor/round-studded belt/bracers, grey trousers and wrapped boots. Keep the same head size, torso width, shoulder height, adult limb lengths, palette, camera and every garment layer. Upright grounded adult posture with slight natural walking motion, not taller, thinner, childlike, overarched parade stance or hunched. Empty hands naturally swing only a little.\nOnly change his quiet feet into a modest short walking step: anatomical LEFT leg steps FORWARD and its boot is planted flat carrying weight; anatomical RIGHT leg trails BACK with heel lifted and toe lightly contacting ground. Modest stride, both knees close to their natural body axis. No wide lunge, high knee, jumping, combat stance or kicked-up sole. Keep hip/upper-body centered above the support, natural pelvis rotation. Clearly distinguish the two legs and preserve their true attachment to the hip.\nWhole head, torso, knees and both toes maintain FRONT-LEFT / southwest, head and both boot toes point down-left, at the SAME elevated isometric viewing angle as reference. Exactly ONE complete person on genuine transparent RGBA square canvas, max1536, ample clear margin at every edge, entire cloth tails/fingers/boots contained. Same native painterly game detail. No rope, weapon, shadow, floor, grid, label, background, extra people or new accessories. CONTACT A is the first planted-foot pose; do not reuse neutral idle feet. Keep the frame suitable for later opposing contact B and two low passing phases. Always preserve short adult anatomy.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/wang_ying_walk_a_sw_v4.json",
+      "request_sha256": "2617626e7627a61f00100af54126a1971451ac6ae5d3a1c832ea422c03d62b30",
+      "references": [
+        "wang_ying_idle_single_sw_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_walk_a_ne_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-c48f9dce-423a-4b30-8ae9-9f6fffedd98b",
+      "repository_path": "assets/characters/wang_ying_wounded_20261005/walk_a_ne_v4.png",
+      "sha256": "5b3ac1bbe6a8c2c4f583a631e5163cc99281ff958cc7a4cc9b1ddc7fd744e795",
+      "prompt": "Use case: identity-preserve. Edit this ONE native full-body Wang Ying sprite into short natural walking CONTACT A phase. Input is the exact identity, body proportions, costume, rendering and NE facing template.\nPreserve this MATURE naturally SHORT, broad STOCKY adult; rough bearded face, headband/topknot, red tunic, brown brass-riveted armor/round-studded belt/bracers, grey trousers and wrapped boots. Keep the same head size, torso width, shoulder height, adult limb lengths, palette, camera and every garment layer. Upright grounded adult posture with slight natural walking motion, not taller, thinner, childlike, overarched parade stance or hunched. Empty hands naturally swing only a little.\nOnly change his quiet feet into a modest short walking step: anatomical LEFT leg steps FORWARD and its boot is planted flat carrying weight; anatomical RIGHT leg trails BACK with heel lifted and toe lightly contacting ground. Modest stride, both knees close to their natural body axis. No wide lunge, high knee, jumping, combat stance or kicked-up sole. Keep hip/upper-body centered above the support, natural pelvis rotation. Clearly distinguish the two legs and preserve their true attachment to the hip.\nWhole head, torso, knees and both toes maintain BACK-RIGHT / northeast, face away with visible right profile, both boot toes point up-right, at the SAME elevated isometric viewing angle as reference. Exactly ONE complete person on genuine transparent RGBA square canvas, max1536, ample clear margin at every edge, entire cloth tails/fingers/boots contained. Same native painterly game detail. No rope, weapon, shadow, floor, grid, label, background, extra people or new accessories. CONTACT A is the first planted-foot pose; do not reuse neutral idle feet. Keep the frame suitable for later opposing contact B and two low passing phases. Always preserve short adult anatomy.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/wang_ying_walk_a_ne_v4.json",
+      "request_sha256": "35c5752dff3500e64ec96342ac4f9be91a6e78fcf6fb89cd80c14d6cccb50ea3",
+      "references": [
+        "wang_ying_idle_single_ne_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_walk_a_nw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-777e878d-58b5-4bdc-893d-4113b5d0da29",
+      "repository_path": "assets/characters/wang_ying_wounded_20261005/walk_a_nw_v4.png",
+      "sha256": "d0122e85e35a257dbeb19c4c6f6c252759d7e9b507fcc61786be38edb0283aee",
+      "prompt": "Use case: identity-preserve. Edit this ONE native full-body Wang Ying sprite into short natural walking CONTACT A phase. Input is the exact identity, body proportions, costume, rendering and NW facing template.\nPreserve this MATURE naturally SHORT, broad STOCKY adult; rough bearded face, headband/topknot, red tunic, brown brass-riveted armor/round-studded belt/bracers, grey trousers and wrapped boots. Keep the same head size, torso width, shoulder height, adult limb lengths, palette, camera and every garment layer. Upright grounded adult posture with slight natural walking motion, not taller, thinner, childlike, overarched parade stance or hunched. Empty hands naturally swing only a little.\nOnly change his quiet feet into a modest short walking step: anatomical LEFT leg steps FORWARD and its boot is planted flat carrying weight; anatomical RIGHT leg trails BACK with heel lifted and toe lightly contacting ground. Modest stride, both knees close to their natural body axis. No wide lunge, high knee, jumping, combat stance or kicked-up sole. Keep hip/upper-body centered above the support, natural pelvis rotation. Clearly distinguish the two legs and preserve their true attachment to the hip.\nWhole head, torso, knees and both toes maintain BACK-LEFT / northwest, face away with visible left profile, both boot toes point up-left, at the SAME elevated isometric viewing angle as reference. Exactly ONE complete person on genuine transparent RGBA square canvas, max1536, ample clear margin at every edge, entire cloth tails/fingers/boots contained. Same native painterly game detail. No rope, weapon, shadow, floor, grid, label, background, extra people or new accessories. CONTACT A is the first planted-foot pose; do not reuse neutral idle feet. Keep the frame suitable for later opposing contact B and two low passing phases. Always preserve short adult anatomy.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/wang_ying_walk_a_nw_v4.json",
+      "request_sha256": "00ce5d5d4e342bcbde54063c99ca6f5edbd836e772493e2802fbbf30755c09e6",
+      "references": [
+        "wang_ying_idle_single_nw_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_walk_b_se_geometry_v5",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/wang_ying_walk_b_se_geometry_v5.png",
+      "sha256": "91f81e25f46f0aefcab88051ad104a5dac9afe669fde3e3d6199182f719e35e4",
+      "prompt": "New deterministic short broad adult primitive geometry reference; red image-left flat support boot, blue image-right raised boot. No character bitmap read or edited; no costume/face/production sprite.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/wang_ying_pose_geometry_v5.gd",
+          "sha256": "737316431f043fe0b450108c75ffe4e4eee57aed4ae0a7e1eb52451b1bb669c9"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_wang_ying_pose_geometry_v4.py",
+          "sha256": "b8ae667b4f08f55bac0840ef207a39fa5e54497d3b88fc24e954236471e5b0ee"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_walk_b3_se_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-0081eb78-e3e3-43e7-a47a-cd29c57ba561",
+      "repository_path": "assets/characters/wang_ying_wounded_20261005/walk_b3_se_v4.png",
+      "sha256": "39a4afe645b41dbde7b0c12f4984b5b01e15be8378bfa17b5137e60858336537",
+      "prompt": "POSE-GUIDED NATIVE CHARACTER EDIT. TWO reference images have different roles. IMAGE1 is a NEW GEOMETRY pose guide only: it fixes which foot is planted and which is raised. IMAGE2 is the identity/body/costume/style reference for the one short stout mature Wang Ying character.\nMake a full-body native Wang Ying sprite in the EXACT OPPOSING LOWER-BODY SUPPORT LAYOUT of IMAGE1: the leg/boot colored RED in the guide is the IMAGE-LEFT foreground support leg, boot FLAT planted at lower-left, connected continuously to its own hip. The BLUE leg/boot is IMAGE-RIGHT raised slightly at upper-right, knee bent modestly, attached to the other hip. This image-left planted / image-right raised pattern is mandatory. Do NOT reuse the quiet leg positions of IMAGE2. Preserve the geometric hip-knee-ankle relation and separation; do not reverse the two legs. Replace colored rods/box boots with Wang Ying's own believable short adult legs, gray trousers and brown wrapped boots with HORIZONTAL band groups. Both boot toes point DOWN-RIGHT / southeast. Quiet compact step, not deep lunge, high kick, run or jump.\nRender the Wang Ying of IMAGE2: specific mature rough bearded round face, dark topknot/red headband, naturally SHORT BROAD STOCKY adult body, normal head/neck/hands/feet, upright head and upper back, red tunic, brown brass-riveted shoulder/torso armor/bracers and round-studded belt. Preserve his recognizable face, shoulder width, naturally short adult thighs/calves, armor layering, palette, horizontal shin wraps and native painterly materials. Do not stretch tall, slim down, hunch, make child/chibi, oversize head/boots, or copy the robot's box torso/gray body/colors. No red or blue leg colors or green ground patch in output.\nImage1 contributes only lower-body pose and the same SE front-right elevated isometric camera. Image2 contributes all identity and materials. Exactly ONE complete full-body Wang Ying on genuine transparent RGBA square<=1536, wholly contained and centered with clear margins. No floor/shadow/background, robot/color patches, text/labels, grid, weapon/rope/new prop/other person. Natural empty hands close to his body. New opposing walking support sprite; not a mirrored image.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/wang_ying_walk_b3_se_v4.json",
+      "request_sha256": "a8d54b180226e7272b08df03f629f268c71cf48c47e0eb7dded472732cf3512f",
+      "references": [
+        "wang_ying_walk_b_se_geometry_v5",
+        "wang_ying_idle_single_se_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_walk_b_sw_geometry_v6",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/wang_ying_walk_b_sw_geometry_v6.png",
+      "sha256": "1cdecce65015f14e492ed86884fe7cd57dda533ca7b0b45fe74132b3829b63ec",
+      "prompt": "New deterministic short broad adult SW primitive geometry; red image-right flat support, blue image-left raised boot. No source bitmap read or edited. No costume, face or production artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/wang_ying_pose_geometry_v6.gd",
+          "sha256": "e8af04927d013a4e6344233fccf32f11e85d8e69087e6eff538a7e4e4d8b5f7a"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_wang_ying_pose_geometry_v6.py",
+          "sha256": "1c5176982b26eb2db516daf6ae589f00d9092bb2e6e854515b6cc81188e0c5a0"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/geometry_sw_v6.json",
+          "sha256": "c904912371f39529e6b0be23ceb6f16474c53e0ad6242d405716b70a73993c14"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_walk_b3_sw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-786be429-060d-46b0-a138-8235e6542065",
+      "repository_path": "assets/characters/wang_ying_wounded_20261005/walk_b3_sw_v4.png",
+      "sha256": "8b1ebf22f8a065d77a79018ed2457f6440cb972a47107caecfabe5e20c6b6880",
+      "prompt": "POSE-GUIDED NATIVE CHARACTER EDIT. IMAGE1 is only a NEW GEOMETRY lower-body pose guide; IMAGE2 is the identity/body/costume/rendering reference for ONE Wang Ying.\nCreate Wang Ying in EXACTLY the opposing support layout of IMAGE1: its RED leg/boot is the IMAGE-RIGHT foreground FLAT planted support leg/boot at lower-right; its BLUE leg/boot is IMAGE-LEFT raised modestly at upper-left with a mild bent knee. Each leg connects naturally to its own hip. Image-right planted and image-left raised is mandatory; do not reuse the neutral feet of IMAGE2 or reverse the two legs. Retain the geometric hip/knee/ankle placement, separation and modest low boot lift. Replace colored rods/boxes with Wang Ying's believable SHORT adult gray-trousered legs and own brown boots with HORIZONTAL grouped shin bands. Both toes/head/body maintain FRONT-LEFT/southwest, head and both boot toes point down-left in the same elevated isometric camera. Quiet compact step, no wide lunge/high kick/running/jumping.\nRender the specific MATURE naturally SHORT BROAD STOCKY Wang Ying of IMAGE2: rough bearded round face/profile, dark topknot and red headband, short natural adult thigh/calf proportions, normal head/neck/hands/feet, upright head and upper back, red tunic, brown brass-riveted shoulder/torso armor/bracers and round-studded belt, gray trousers, horizontal shin wrap groups. Preserve face, shoulder width, stature, costume layers, color/material detail and own boots. Do not stretch tall, slim down, hunch, make child/chibi, enlarge head/boots, change to cross-wrapped shins, or copy the robot's box torso/gray body/colors. Natural empty relaxed hands.\nImage1 contributes ONLY lower-body pose and camera direction. Image2 controls all identity, adult proportions, garments and painterly game style. Exactly ONE complete Wang Ying wholly contained and centered on genuine transparent RGBA square<=1536 with ample clear margins. No floor/shadow/background, robot/color patches/green contact plate, text/labels/grid, weapon/rope/new prop/extra person. Newly authored opposing walking support sprite, never a mirrored image.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/wang_ying_walk_b3_sw_v4.json",
+      "request_sha256": "189ad41a46f8825ba0fdb17a49ed62fda890b3a57c63bacf1dcefb091c471f87",
+      "references": [
+        "wang_ying_walk_b_sw_geometry_v6",
+        "wang_ying_idle_single_sw_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_qian_ne_b2_v2",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-ff2afd4c-550d-4c3f-80bb-54aa34ab12b3",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/ne_b2_v2.png",
+      "sha256": "900460d91149a681de0df4495a655ca813bf57189f3bcc5b2d3418d66d37daad",
+      "prompt": "Use case: identity-preserve. Native transparent SINGLE FULL BODY unarmed rescued Shi Qian, exactly one. Reference1 identity/costume only, remove bindings and completely replace squat anatomy; reference2 natural ADULT anatomical target/rendering. Slim adult7-head proportions, small head/hands/cloth boots and long legs hip-to-sole half height, upright spine with slight tired shoulders. Same black topknot/headwrap/tails and face mask, charcoal crossover cloth tunic, brown plain cloth sash, dark trousers with tan crossed shinwraps, small dark cloth boots. Empty hands with slight relaxed swing, no bags/weapons/rope/blood/armor/props.\nCAMERA is NE REAR THREE-QUARTER facing AWAY toward screen UP-RIGHT. Visible BACK of head/headwrap, back of neck, shoulders and tunic back, right ear/nose only tiny profile at far right. NO front chest/eyes/front-face; cannot face down-right. Hips/knees and both toes point UP-RIGHT. Quiet short low walking phase B: grounded support boot is LOWER-RIGHT of silhouette, connected to image-RIGHT pelvis; other boot lightly raised UPPER-LEFT connected to image-LEFT pelvis. CRITICAL the RIGHT sole is lowest and planted, left boot is higher and lightly raised. Each knee/thigh anatomically connected, no crossing hips or twisting back. Both legs visible and mature, only slight knee flex, no crouch/stoop/high knee/run. Lowest sole is RIGHT boot. Maintain the same slender adult silhouette without giant hands/feet or tiny legs. Elevated isometric painterly historic RTS view, same mature anatomy as reference2. Centered complete full figure all tails/fingers/feet contained, generous alpha margins, body75–80% native square canvas height, max1536. Actual transparent alpha, no shadow/floor/grid/text/checkerboard.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_ne_b2_v2.json",
+      "request_sha256": "2cf77acfd6c95d0c8952f62939e06249732a9c33a879f8c5dc71bd504428f8a5",
+      "references": [
+        "baseline_ref_87eac29bd5b1",
+        "shi_qian_proportion_v2"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "baseline_ref_2e03ae5574a9",
+      "method": "retained_identity_reference",
+      "generation_id": null,
+      "repository_path": "assets/anim/shi_xiu_walk.png",
+      "sha256": "91e0f9a04725d208243dc5f125e9607ba63b4054bc39de23eed8246aa04c1933",
+      "baseline_commit": "27f45b245e2b39f1f779fbfa62772e14bb68dd56",
+      "reference_role": "Retained original character identity/anatomy reference; no new generation prompt claimed",
+      "references": [],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_xiu_proportion_v2",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-8ed11193-d439-4e55-aa65-a6bb7ac2f88c",
+      "repository_path": "assets/characters/shi_xiu_wounded_20261005/proportion_v2.png",
+      "sha256": "8e838c6f8d50ab755b19b1d2b027b37ef9c409a4cac3200012e52d559ad258cb",
+      "prompt": "Use case: identity-preserve. Create one full-body unarmed rescued Shi Xiu adult proportion reference, based on reference1 identity/clothing, using reference2 ONLY for natural mature anatomy and painterly elevated isometric camera. Redraw the short-legged reference1 anatomy to a believable lean adult about7–7.5-head proportions; long legs hip-to-floor half height, visible natural neck, normal small head/hands/cloth boots. SAME clean-shaven Chinese man with black topknot, tied DARK BLUE-GREEN forehead band and trailing ends. Blue-gray crossover LONG-SLEEVE tunic with pale inner collar, brown cloth/leather waist belt, gray-brown trousers and dark wrapped boots. Remove BOTH curved sabers, scabbards and combat gear. No face mask, no black charcoal costume from reference2, no bare chest/rope/blood/flags/props. He is calm and tired, dignity, upright standing, slight tired shoulders only, empty hands relaxed naturally, both feet grounded close together. No hunched sneaking, crouch, high raised knee, chibi head or comic large footwear. SW front-three-quarter facing down-left including torso/feet, same moderate elevated isometric historical hand-painted RTS style. Exactly ONE full figure, all cloth tails/fingers/boots contained with generous margins, body75–80% native square canvas height, max1536. GENUINE transparent alpha background, no floor/shadow/grid/text/labels/checkerboard.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_xiu_proportion_v2.json",
+      "request_sha256": "33ccf6474b0c943427c69ebc5ae8ab2556e5254395a15c03179007ee976dd971",
+      "references": [
+        "baseline_ref_2e03ae5574a9",
+        "shi_qian_proportion_v2"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_xiu_posture_v3",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-ca799bc6-3fdc-423e-b51c-37b71b33452d",
+      "repository_path": "assets/characters/shi_xiu_wounded_20261005/posture_v3.png",
+      "sha256": "d7b81ae0b2dbdb699bba39bdd679d961f16d0cd010c21ef40340a43803e4bdf2",
+      "prompt": "Use case: identity-preserve. EDIT this one full-body Shi Xiu proportion reference. The user requests a proud upright SOLDIER posture: HEAD UP, CHEST OPEN, shoulders back. Current lowered chin, forward head and closed/slouched upper torso are rejected. Change posture, not identity/clothes/adult leg proportions.\nPOSE: erect balanced military attention-like stance, dignified and disciplined. Spine naturally straight and vertically stacked, neutral pelvis, neck upright centered ABOVE the torso, head fully lifted and chin LEVEL with the ground. Eyes look straight ahead toward the distant horizon in his SW down-left facing direction, not down at his feet. Shoulders gently drawn BACK and DOWN, collarbones broad, chest naturally lifted/open and sternum visible forward. Chest and shoulders look confident rather than shrinking inward. No forward head/rounded shoulders/hunched back/downward gaze/stoop/crouch. Keep natural human anatomy: don't hyperextend neck, flare ribs, stick belly out, or arch lower back unnaturally. Body remains front-three-quarter SW, moderately elevated isometric camera does NOT imply a bowed head.\nKeep the SAME lean mature adult proportions, natural small head/hands/boots, long adult thighs/calves, same clean-shaven face/black topknot/blue-gray tied forehead cloth/tails, blue-gray crossover long-sleeve tunic/pale collar, brown sash/forearm wraps, gray-brown trousers/dark wrapped boots and painterly detail. Both feet grounded parallel in a stable natural soldier stance at modest hip width, knees straight but not locked. Empty arms naturally straight at sides, relaxed open hands without weapons. Rescued soldier still stands dignified and upright: NO tired shoulder slump or wounded hunch. No weapons/sheaths/rope/mask/blood/armor/new props. Exactly ONE complete full figure, all tails/fingers/boots contained in generous transparent margins, about75–80% square height, native max1536. Preserve genuine transparent alpha, no floor/shadow/grid/text/labels/checkerboard.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_xiu_posture_v3.json",
+      "request_sha256": "4d56d79bdfe6b2635e7699f6487809936ae929e311fb6d921d633852390df109",
+      "references": [
+        "shi_xiu_proportion_v2"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_qian_se_b2_v2",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-7da2a7c1-3d98-4feb-870e-9592a2141e00",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/se_b2_v2.png",
+      "sha256": "c3884952ca43a7f674388bf55c11798bded3d6320e1653e21740a706d39c78b0",
+      "prompt": "Use case: identity-preserve. Native transparent SINGLE FULL BODY unarmed rescued Shi Qian. Exactly one figure. Reference1 gives identity/clothes ONLY, remove ropes, do NOT keep short bound anatomy. Reference2 gives correct slim mature ADULT anatomical proportions and rendering: normal head/hands/boots, about7 heads tall, hip-to-sole half height, upright spine and slight tired shoulders. Same black masked Chinese man in charcoal crossover tunic, brown cloth belt, black headwrap/topknot/tails, dark trousers/shinwraps/cloth boots. No weapons/bag/armor/rope/blood/props. Empty hands with restrained natural swing.\nNEW CAMERA: SE FRONT THREE-QUARTER looking/facing screen DOWN-RIGHT. See chest and RIGHT-facing nose profile; head, pelvis, shoulders, knees and both boot toes all point RIGHT/down-right. Not a left-facing man. Quiet SHORT low walking step B. Grounded forward boot on LOWER-LEFT side of silhouette connected to LEFT side of image pelvis; trailing lightly lifted boot UPPER-RIGHT connected to RIGHT side of pelvis. CRITICAL lowest planted boot must be on image-LEFT; right boot is higher. Both toes point RIGHT. Left-side leading knee crosses IN FRONT of right trailing knee, each thigh correctly connected, both legs visible and human-sized feet, small natural knee flex, no squat/hunch/high-knee/running. Keep natural adult proportions and same identity, not chibi. Elevated isometric historic painterly RTS camera. Full silhouette centered, all tails/fingers/feet contained, generous margins, body75–80% native square canvas height, native max1536. Transparent alpha background, no shadow/floor/grid/text/checkerboard.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_se_b2_v2.json",
+      "request_sha256": "76904e8a2744d2af4911fbebd4b59b8274ee856b6a59bbf5da47866cb9ada07e",
+      "references": [
+        "baseline_ref_87eac29bd5b1",
+        "shi_qian_proportion_v2"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_xiu_step_b_transfer_v3",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-0cc4ac18-7a6e-49a3-89dc-c6ab576ae04f",
+      "repository_path": "assets/characters/shi_xiu_wounded_20261005/step_b_transfer_v3.png",
+      "sha256": "466423bb70303920712e3c976c911255cf2d22d7f29517cc11c823efe91df271",
+      "prompt": "Use case: compositing / identity transfer. Native transparent SINGLE full-body adult Shi Xiu sprite. Image 1 is the EDIT TARGET specifically for exact pelvis, knees, legs and boots positions; Image 2 supplies Shi Xiu's face and all clothing. Replace the masked charcoal character in image 1 with unmasked blue-gray Shi Xiu from image 2 while PRESERVING image 1's unmistakable opposite-step lower-body pose: the lowest supporting boot is at SCREEN-LEFT beneath the left knee, and the screen-RIGHT leg is trailing, bent back with heel raised. This exact lower-body arrangement is the primary invariant. Keep both knees, boots and hips in precisely image 1's positions and leg overlap, clothes may differ. Do not revert to the commonly drawn bottom-right supporting boot. Both boots point right/down-right. Whole torso, hips, shoulders and face point screen DOWN-RIGHT (SE), chest visible. Then correct ONLY the upper body to the user's proud military posture: head raised eyes level, vertical neck and back, shoulders opened backward and chest naturally up, no rounded shoulders or forward-head stoop. Keep slender mature adult normal head/hand/boot sizes and naturally long legs. Identity of image 2: clean-shaven Chinese adult man, stern face, black topknot, blue-gray forehead band with tails, blue-gray full-sleeved cross-over tunic with pale collar and worn split hem, plain brown waist sash and forearm wraps, gray-brown trousers and dark brown wrapped boots. No mask, no weapon, sack, rope, helmet, flag or armor. Empty hands naturally counter-swing subtly. Preserve realistic painterly RTS game detail, mild overhead isometric camera. One figure in square native image, full head/tails/boots contained, body 80–85% canvas height with generous transparent margin. Genuine transparent alpha, no floor/shadow, text, diagram, colored limb marks, grid, or extra people. Output one complete Shi Xiu in the SCREEN-LEFT-BOOT-SUPPORT pose from image 1.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_xiu_step_b_transfer_v3.json",
+      "request_sha256": "0756c389aab47e03371cf2dc68b18f82bec31f2c7e317b164fda22af03952ab4",
+      "references": [
+        "shi_qian_se_b2_v2",
+        "shi_xiu_posture_v3"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_xiu_step_b_transfer_ne_v3",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-46d30482-ae63-4845-851e-c300106724a9",
+      "repository_path": "assets/characters/shi_xiu_wounded_20261005/step_b_transfer_ne_v3.png",
+      "sha256": "f469d67fdd405500641f10b898a40d8a6b89fe89c929d513dcf87183915cdd9a",
+      "prompt": "Use case: compositing / identity transfer. Output ONE full-body transparent native Shi Xiu game sprite. IMAGE 1 is the primary edit target: preserve its EXACT pelvis, legs, knees, boot positions, overlap and full-body facing. IMAGE 2 supplies Shi Xiu identity and proud upright adult anatomy; IMAGE 3 supplies the latest Shi Xiu clothing, color and rendering consistency. Replace the masked dark-clothed man in image 1 with the unmasked blue-gray Shi Xiu from images 2/3. The lowest grounded boot and raised trailing boot MUST keep the exact screen positions and connecting hips in image 1. This is an opposite-step B frame; do not replace it with a generic walking pose. Correct ONLY upper posture to head raised, level gaze, vertical neck/back, shoulders opened, natural military chest out, normal head/hands/boots and long adult legs. Lean mature clean-shaven Chinese male, topknot and blue-gray forehead band with tails, blue-gray long-sleeved crossover tunic with pale collar, brown plain waist sash and forearm wraps, gray-brown trousers and dark brown wrapped boots. Preserve detailed painterly historic RTS sprite appearance and mild overhead isometric camera. Empty hands restrained counter-swing, no mask, weapon, sack, flag, ropes, armor or props. Single person, whole silhouette and toes contained in square canvas, body 80–85% canvas height with 60px clear transparent border, no floor/shadow/text/labels/grid or extra copies. NE REAR three-quarter toward screen UP-RIGHT. BACK of tunic and shoulders visible, cheek only small right-facing side sliver, chest hidden, hips/head/boots aligned UP-RIGHT. Grounded boot LOWER-RIGHT and raised trailing boot UPPER-LEFT with visible sole exactly as image 1.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_xiu_step_b_transfer_ne_v3.json",
+      "request_sha256": "857369c219593a789df3c2043320d68e22fa7d8a0e0123f7398cc136e9337933",
+      "references": [
+        "shi_qian_ne_b2_v2",
+        "shi_xiu_posture_v3",
+        "shi_xiu_step_b_transfer_v3"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_xiu_idle_v3",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-b9b76811-49ae-4366-8c1e-7e524d8d524e",
+      "repository_path": "assets/characters/shi_xiu_wounded_20261005/idle_v3.png",
+      "sha256": "3d603b78b6eaae7ed5a74f01828686534af02ca7294823fca2514aa0cd50b15b",
+      "prompt": "Use case: identity-preserve. Create native FOUR independently drawn isometric IDLE views of this SAME upright adult soldier. Reference is the selected v3 single-body posture; preserve its face, proportions, clothing and colors. Exactly 2 columns x 2 rows: TOP LEFT SE front three-quarter looking screen DOWN-RIGHT; TOP RIGHT SW front three-quarter looking screen DOWN-LEFT; BOTTOM LEFT NE back three-quarter looking screen UP-RIGHT; BOTTOM RIGHT NW back three-quarter looking screen UP-LEFT. Turn the WHOLE torso, hips and both feet into each direction. SE and SW must be genuinely opposite whole-body views; do not repeat SW in the SE cell. Back views show back clothes and back of head, with only a small far cheek visible. Never mirror a rendered cell. ALL FOUR poses stand dignified and upright like disciplined soldiers: lifted head, LEVEL chin/horizon gaze, neck vertically above torso, stacked natural spine, shoulders back/down, naturally open lifted chest. Elevated camera never means bowed head. NO hunch, forward neck, closed chest, tired shoulder slump, shrug, belly thrust or arched lower back. Empty relaxed hands and naturally straight arms at sides. Stable feet at modest hip width, straight natural knees. Keep mature adult head/hands/boots and adult leg lengths. Body type identity: Lean clean-shaven Chinese man, black topknot and dark blue-green tied forehead cloth with trailing ends; blue-gray cross-over long-sleeved tunic with pale inner collar, brown cloth/leather waist belt, gray-brown trousers, dark wrapped boots. Preserve current walking-body face and clothing, REMOVE both curved sabers, sheaths and combat stance. Preserve v3 body anatomy over any old compact sprite instructions; never chibi. Same front/back clothing hem length and construction, no weapons/sheaths/rope/chains/blood/new props. Each whole figure fits inside its OWN quadrant with wide true-alpha outer margins and wide empty transparent central gutters; no tails/capes/boots cross cell boundaries. Figures equal body height within this character. Native square max1536, painterly reference quality, TRUE RGBA transparent background; no floor/shadows/text/labels/grid/checkerboard.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_xiu_idle_v3.json",
+      "request_sha256": "921adb9962ea1c585301d37fd0875f9f6d53755c3fcf41d9fc8e9e9325d203ac",
+      "references": [
+        "shi_xiu_posture_v3"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_xiu_idle_spacing_v3",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-74ded10d-a0ca-4b14-a9aa-8dd842a8386a",
+      "repository_path": "assets/characters/shi_xiu_wounded_20261005/idle_spacing_v3.png",
+      "sha256": "1baa021328a7f0f49b662438ef0a0382f043d261af95bb18927c9f1e563ce8d1",
+      "prompt": "Use case: identity-preserve. EDIT this existing FOUR-VIEW Shi Xiu upright soldier atlas. Keep exactly the same character, correct four directions and upright head/chest posture. Fix ONLY atlas spacing/layout: the two rows almost touch at the middle, causing unsafe sampling. Re-layout natively with a WIDE EMPTY TRANSPARENT horizontal central gutter at least 80 pixels at a 1254px square, and a wide vertical gutter. Each full figure about 500–525px tall (80–84% of a 627px quadrant), NOT 620px. Generous at least 40px clear transparent inner/outer margins in EACH quadrant; all boots/headcloth/fingers included. Four equal figure sizes, preserve natural adult head/body/leg proportions (shrink whole figure uniformly in composition, don't shorten legs). Upper row centered approximately y310, lower row y945. Top-left SE front down-right, top-right SW front down-left, bottom-left NE rear up-right, bottom-right NW rear up-left, as current image; whole body orientation retained. SAME upright soldier posture in every view: lifted head, level chin/horizon gaze, neck vertical, shoulders back/down, open chest, naturally stacked spine, grounded hip-width feet. No hunched back/forward head/rounded shoulders. Preserve exact blue-gray tunic/headcloth, brown sash/forearmwraps, graybrown trousers/dark boots, clean-shaven face; same rear/front hem length, no weapon/mask/beard/new props. Native square max1536 true RGBA transparency, no shadows/floor/text/grid/checkerboard. No overlapping figures or drawn separator lines.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_xiu_idle_spacing_v3.json",
+      "request_sha256": "47dfdf6faa954a8a2537139d4f2cc7915d452453d3ad4a5d75deadf9ce453902",
+      "references": [
+        "shi_xiu_idle_v3"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_xiu_walk_a_v3",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-e1101a54-fa0b-4601-83c2-fe45ee1c67d0",
+      "repository_path": "assets/characters/shi_xiu_wounded_20261005/walk_a_v3.png",
+      "sha256": "c57f71841a6a158c76705485f466145f86fe33f95415a94e07fb0a2894be7a08",
+      "prompt": "Use case: identity-preserve. Create a FOUR-VIEW WALK STEP A atlas for the SAME upright adult Shi Xiu as this four-idle reference. Exactly 2x2 cells, top-left SE FRONT three-quarter whole body facing down-right, top-right SW FRONT facing down-left, bottom-left NE REAR facing up-right, bottom-right NW REAR facing up-left. Maintain SAME face/bluegray forehead cloth/tails/bluegray long sleeve crossover tunic/pale collar/brown sash and forearm wraps/graybrown trousers/dark wrapped boots. Natural adult lean body, SMALL adult head/hands/boots and LONG adult thighs/calves, preserve proportions from idle. Same head/body sizes and front/back hem.\nAll FOUR cells show a REAL natural short walking stride rather than close-foot standing. Phase A: the ANATOMICAL LEFT leg is clearly FORWARD in each character's facing direction with heel/sole supporting body on ground; ANATOMICAL RIGHT leg is clearly TRAILING behind with knee softly bent and heel LIFTED, toes near ground. Leading and trailing boots separated by about one boot length, visible alternating legs under tunic. Torso upright above grounded support foot, natural small opposite arm swing (RIGHT arm slightly forward, LEFT slightly behind), open empty relaxed hands, no clenched fists. Respect each rear view's true body orientation; the left anatomical leg in rear views is not the same screen-side leg as front views. This is ONE specific step phase A, not random mixed steps. No high raised knee/running/leap/long lunges/combat pose.\nHEAD UP, chin level/horizon gaze, neck straight vertical, naturally stacked spine, shoulders back/down, chest open throughout stepping. No hunched walking, forward head, bowed chin, slouch or tired shoulders. Maintain naturally small head/hands/boots and long adult legs, do not shorten legs to fit grid. Do not copy idle feet. No weapons/sheaths/ropes/chains/blood/mask/beard/armor/new props. Painterly historical Chinese RTS, same moderately elevated camera as reference.\nEntire figures inside their OWN quadrants with very wide empty true-alpha central horizontal/vertical gutters; each body only78% cell height with at least45px transparent margin on every cell edge. Reduce complete figure uniformly in composition if necessary, never shrink legs alone. Native square max1536 true RGBA transparency, no floor/shadows/text/labels/grid/checkerboard. Four independently painted true directions, no rendered horizontal mirrors.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_xiu_walk_a_v3.json",
+      "request_sha256": "2b65e55844e5a106b6d18d43f1a858e8e294e3d4978add95b314e96e0b12f84e",
+      "references": [
+        "shi_xiu_idle_spacing_v3"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_xiu_step_b_cloth_ne_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-1f337f24-f917-44f3-a155-eaad259ec44f",
+      "repository_path": "assets/characters/shi_xiu_wounded_20261005/step_b_cloth_ne_v4.png",
+      "sha256": "b5f966e063b42ba0dc6244127b2632122375f8c540dc02cb508148556fc3e677",
+      "prompt": "Use case: precise-object-edit. Asset: transparent SINGLE full-body adult Shi Xiu RTS walking frame. Image 1 is the EDIT TARGET. Image 2 is only the costume/material consistency reference in a DIFFERENT leg phase. Change only clothing surface and tunic hem construction to match Image 2; muted worn blue-gray cloth with sparse understated uneven weave, NOT conspicuous repeating diamond print, and same gray-brown trousers, pale rolled cuffs, brown forearm wraps and boots. Image 2 lower-left NE pose supplies the exact back costume construction: plain wrapped belt across back WITHOUT hanging brown sash tails; simple split trapezoid tunic hem WITHOUT extra layered blue skirt. Keep back-facing torso towards UP-RIGHT, lower supporting boot at SCREEN RIGHT, SCREEN LEFT boot raised. MOST IMPORTANT preserve Image 1's exact pelvis, knees and two boots positions, leg overlap and supporting leg. Do not copy reference Image 2's leg arrangement. Preserve Image 1's mature adult face/topknot/headband, upright torso, body proportions, shoulder breadth, hands and silhouette positions. Remove costume changes between animation frames. Painterly game art, same mild overhead isometric camera. One whole figure contained with ample transparent margin. True transparent background, no shadow/floor, text, weapon, extra people or atlas. Output ONE NE pose.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_xiu_step_b_cloth_ne_v4.json",
+      "request_sha256": "ff3c5aabd0ecb69d662376a094dbf358cab607352a039e2ad3e4823826a13605",
+      "references": [
+        "shi_xiu_step_b_transfer_ne_v3",
+        "shi_xiu_walk_a_v3"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_xiu_step_b_body2_ne_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-875a29a7-db58-4cdb-90ba-a96d2fdc7675",
+      "repository_path": "assets/characters/shi_xiu_wounded_20261005/step_b_body2_ne_v4.png",
+      "sha256": "6939f4745e97b3c02ced0338ada686ceb61f89253b5a395f82d6ace9f7a5e891",
+      "prompt": "Use case: precise-object-edit. Edit THIS single transparent adult Shi Xiu sprite facing NE. Change ONLY upper body above the brown waist belt: shoulders, chest/back and upper arms about 10 percent more natural breadth and robust volume, hands about 5 percent more volume, remaining a lean adult martial man. Keep head/topknot, headband, pale collar/cuffs, brown wraps and confident upright carriage. Soften conspicuous diamond cloth printing on the upper tunic into muted irregular worn fabric. INVARIANT: everything below the waist belt MUST remain exactly as in the input: same tunic panels, plain belt without back sash tails, hips, knees, trousers, both boots, raised heel, lowest supporting leg and overlap. DO NOT redraw, switch, mirror, flip or re-pose lower body. Lowest planted boot remains at SCREEN RIGHT and SCREEN LEFT boot remains raised, in precisely input positions. This is an upper-body-only local edit, no new walking pose. Keep facing NE, canvas, scale, camera, lighting and painterly rendering unchanged. One whole figure with true transparent background, no floor/shadow, text, weapon, additional people or atlas.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_xiu_step_b_body2_ne_v4.json",
+      "request_sha256": "9f5119889113628578eff86e0bd3c9414589976366b4bcab0f8c02cee142b4f1",
+      "references": [
+        "shi_xiu_step_b_cloth_ne_v4"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_walk_b_ne_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-a390c63c-82a2-44fb-930a-ccaa11032b2b",
+      "repository_path": "assets/characters/wang_ying_wounded_20261005/walk_b_ne_v4.png",
+      "sha256": "c4bf828fd34b819edca32f6810065f514979f58b7d6b2b1150b550ad88de804c",
+      "prompt": "Two images have strictly separate roles. IMAGE1 is the EDIT TARGET: ONE short stocky mature Wang Ying NE/back-right sprite. Preserve his exact face/profile, topknot/red headband, broad body, short adult thighs/calves, head proportions, red tunic, brown riveted armor/bracers and round belt studs, gray trousers and brown wrapped boots, empty hands, upright upper torso, palette, elevated isometric NE camera. Change ONLY his two legs below the lower tunic into the OPPOSITE support pose.\nIMAGE2 is ONLY A LEG-POSE GUIDE for the opposite phase, NOT an identity, body-type, costume, hair, color or armor reference. Match the IMAGE2 relative knee/ankle/sole arrangement and boot direction: the image-right foreground leg carries weight and its boot is FLAT planted; the image-left rear leg bends slightly BACK and its boot is lifted low, heel/sole partially visible. This must visibly reverse IMAGE1, whose image-left rear boot is planted and image-right boot is ahead. Retain both legs attached to their own hips. Natural compact quiet step, no knee-high kick or running/lunge.\nTranslate that opposite leg pose onto Wang Ying's own SHORT BROAD adult anatomy. Do not copy the slender taller man, blue outfit, torn tunic, cloth sash or slim legs from IMAGE2. Preserve every Wang Ying garment and upper-body material; only necessary lower tunic fabric follows the new legs. Keep both toes and torso pointing away up-RIGHT, same complete NE view. Exactly ONE full Wang Ying on genuine transparent RGBA square<=1536 with ample margins and contained boots/cloth/fingers. No other man, shadow/floor/grid/text/rope/weapons/new accessory. This is a separately authored opposing walking support pose, not neutral idle and not a mirrored image.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/wang_ying_walk_b_ne_v4.json",
+      "request_sha256": "1c320a91b2efaf607f5962c0731cfff73e6fc386c9908ef0fe0e20b27dbcca6d",
+      "references": [
+        "wang_ying_walk_a_ne_v4",
+        "shi_xiu_step_b_body2_ne_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_walk_b_nw_geometry_v6",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/wang_ying_walk_b_nw_geometry_v6.png",
+      "sha256": "4cb30f2a9d588894cea91a0c13e10ee1e47a76c7d20242cc7fc969d22ee70826",
+      "prompt": "New deterministic short broad adult NW primitive geometry; red image-right flat support, blue image-left raised boot. No source bitmap read or edited. No costume, face or production artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/wang_ying_pose_geometry_v6.gd",
+          "sha256": "e8af04927d013a4e6344233fccf32f11e85d8e69087e6eff538a7e4e4d8b5f7a"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_wang_ying_pose_geometry_v6.py",
+          "sha256": "1c5176982b26eb2db516daf6ae589f00d9092bb2e6e854515b6cc81188e0c5a0"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/geometry_nw_v6.json",
+          "sha256": "70b564b9f67250a6eb313989edf2b54d91dde0ca1d18e8f7b4d3e7e70a8793f8"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_walk_b3_nw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-a475f899-ff0d-47e7-bae8-70d6c442fdba",
+      "repository_path": "assets/characters/wang_ying_wounded_20261005/walk_b3_nw_v4.png",
+      "sha256": "e0bf6fdbc7f4aae85bf73f41cc444f768131ef98115247a470f18bc3a9788d25",
+      "prompt": "POSE-GUIDED NATIVE CHARACTER EDIT. IMAGE1 is only a NEW GEOMETRY lower-body pose guide; IMAGE2 is the identity/body/costume/rendering reference for ONE Wang Ying.\nCreate Wang Ying in EXACTLY the opposing support layout of IMAGE1: its RED leg/boot is the IMAGE-RIGHT foreground FLAT planted support leg/boot at lower-right; its BLUE leg/boot is IMAGE-LEFT raised modestly at upper-left with a mild bent knee. Each leg connects naturally to its own hip. Image-right planted and image-left raised is mandatory; do not reuse the neutral feet of IMAGE2 or reverse the two legs. Retain the geometric hip/knee/ankle placement, separation and modest low boot lift. Replace colored rods/boxes with Wang Ying's believable SHORT adult gray-trousered legs and own brown boots with HORIZONTAL grouped shin bands. Both toes/head/body maintain BACK-LEFT/northwest, face away-left and both boot toes point up-left in the same elevated isometric camera. Quiet compact step, no wide lunge/high kick/running/jumping.\nRender the specific MATURE naturally SHORT BROAD STOCKY Wang Ying of IMAGE2: rough bearded round face/profile, dark topknot and red headband, short natural adult thigh/calf proportions, normal head/neck/hands/feet, upright head and upper back, red tunic, brown brass-riveted shoulder/torso armor/bracers and round-studded belt, gray trousers, horizontal shin wrap groups. Preserve face, shoulder width, stature, costume layers, color/material detail and own boots. Do not stretch tall, slim down, hunch, make child/chibi, enlarge head/boots, change to cross-wrapped shins, or copy the robot's box torso/gray body/colors. Natural empty relaxed hands.\nImage1 contributes ONLY lower-body pose and camera direction. Image2 controls all identity, adult proportions, garments and painterly game style. Exactly ONE complete Wang Ying wholly contained and centered on genuine transparent RGBA square<=1536 with ample clear margins. No floor/shadow/background, robot/color patches/green contact plate, text/labels/grid, weapon/rope/new prop/extra person. Newly authored opposing walking support sprite, never a mirrored image.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/wang_ying_walk_b3_nw_v4.json",
+      "request_sha256": "7389de9d57d41850215218141af792d4577dd3187794c93f1f841b9957d47d12",
+      "references": [
+        "wang_ying_walk_b_nw_geometry_v6",
+        "wang_ying_idle_single_nw_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    }
+  ],
+  "scope": "Native complete ancestry plus new mathematical geometry references; diagnostic contact pairs only"
+}

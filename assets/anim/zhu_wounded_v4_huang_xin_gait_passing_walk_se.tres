@@ -1,0 +1,58 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/huang_xin_wounded_20261005/walk_a_se_v4.png" id="walk_a_se"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/huang_xin_wounded_20261005/passing_a_se_v4.png" id="passing_a_se"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/huang_xin_wounded_20261005/walk_b_se_v4.png" id="walk_b_se"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/huang_xin_wounded_20261005/passing_b_se_v4.png" id="passing_b_se"]
+
+[sub_resource type="AtlasTexture" id="walk_a_se"]
+atlas = ExtResource("walk_a_se")
+region = Rect2(0, 0, 1254, 1254)
+margin = Rect2(0, 0, 0, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-18.0, -164.72)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.867897
+
+[sub_resource type="AtlasTexture" id="passing_a_se"]
+atlas = ExtResource("passing_a_se")
+region = Rect2(0, 0, 1254, 1254)
+margin = Rect2(0, 0, 0, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-31.0, -172.72)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.865593
+
+[sub_resource type="AtlasTexture" id="walk_b_se"]
+atlas = ExtResource("walk_b_se")
+region = Rect2(0, 0, 1254, 1254)
+margin = Rect2(0, 0, 0, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(41.5, -163.72)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.863301
+
+[sub_resource type="AtlasTexture" id="passing_b_se"]
+atlas = ExtResource("passing_b_se")
+region = Rect2(0, 0, 1254, 1254)
+margin = Rect2(0, 0, 0, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-6.0, -148.72)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.865593
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("walk_a_se")},
+{"duration": 1.0, "texture": SubResource("passing_a_se")},
+{"duration": 1.0, "texture": SubResource("walk_b_se")},
+{"duration": 1.0, "texture": SubResource("passing_b_se")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

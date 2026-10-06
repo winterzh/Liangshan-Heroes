@@ -1,0 +1,888 @@
+{
+  "original_reference": {
+    "path": "assets/characters/yang_lin_bound_20261005/bound.png",
+    "sha256": "f3d872794ae10b671510811ec4d3b0ce00d6befb219911fd5cb61570c0992a69"
+  },
+  "jobs": [
+    {
+      "key": "baseline_ref_87eac29bd5b1",
+      "method": "retained_identity_reference",
+      "generation_id": null,
+      "repository_path": "assets/characters/shi_qian_bound_20261005/bound.png",
+      "sha256": "08787ccf51041c8e6134999a7dc6e9c6e884631d2feebac3e7df868c9060a108",
+      "baseline_commit": "27f45b245e2b39f1f779fbfa62772e14bb68dd56",
+      "reference_role": "Retained original character identity/anatomy reference; no new generation prompt claimed",
+      "references": [],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "sw_initial_rejected",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-14e9b9ec-b822-445d-b639-37f1b69f93db",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/native_references/sw_initial_rejected.png",
+      "sha256": "0d671be87f60f2bcf662a443765caa39722691be329bf360c5be7b516c2e6ddb",
+      "prompt": "Use case: historical-scene. Native transparent SINGLE FULL BODY wounded Shi Qian opposite walking pose. Output ONLY ONE man, NOT a grid or multiple copies. Reference atlas is IDENTITY and clothes only; REMOVE ropes/bindings. Same slim black masked Chinese man in charcoal cross-over cloth tunic, black headwrap and mask, cloth belt, dark trousers/shin wraps and boots. NO sack/armor/weapons/flags. Free wrists and empty hands, one hand guards sore abdomen, other balances, slight tired hunch. Critical anatomical foot pose: SW FRONT THREEQUARTER facing DOWN-LEFT. Its planted FORWARD boot must be on LOWER-RIGHT side of the silhouette, connected to RIGHT side of the image pelvis. Its trailing lifted boot must be on UPPER-LEFT side, heel raised. Both toes face downLEFT, whole torso/head faces LEFT. Left/right foot lead must visibly differ from standard alternate stride. Leading knee crosses in FRONT of trailing knee with each leg connected to its own pelvis side. Clearly short careful limping STEP, not standing/running/jumping. Foot positions specified are relative to complete silhouette, no twisting hip. Both legs/feet visible and distinct. Elevated isometric historic painterly RTS camera, full silhouette centered and contained, generous empty margin100px each edge, body60-70% canvas height. Native square<=1536, actual transparent alpha, no floor shadow/grid/text/background/extra people.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_step_b_sw.json",
+      "request_sha256": "bcd885b9badf089374d13158f26f7c54cf02127f8928ed9f60386f50d0350a2f",
+      "references": [
+        "baseline_ref_87eac29bd5b1"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_qian_step_b_sw",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-b26411e6-641e-4a9a-a172-1c37a305b869",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/step_b_sw.png",
+      "sha256": "01a2cc521b116e0cff5f2c3c74774ff51cf2517a19c2029e6be6e76baa4a0b0f",
+      "prompt": "Edit this single transparent SW-facing masked man. Keep head, face direction, body, clothes and empty hands. Remove the red/blood stain from abdomen completely: clean dark cloth, NO blood/injury props.\nCHANGE ONLY THE TWO LEGS below the pelvis to the OPPOSITE walking step. Currently the foot at bottom-left is planted, and foot at upper-right is lifted. Swap their gait: the leg on the RIGHT side of the image must now straighten FORWARD with its boot planted at LOWER-RIGHT, approximately(x780,y1100) on this1254canvas; the leg on the LEFT side must bend BACK with boot lifted at UPPER-LEFT approximately(x580,y940). Keep each leg attached to its existing hip. Draw the RIGHT-SIDE IMAGE KNEE in front, LEFT-SIDE knee behind. Both boot toes still point LEFT. Do not keep the original foot placements. The planted boot must move to the OTHER side of the silhouette. This is an alternate short wounded walk step, not running, no new prop.\nSame elevated isometric SW frontthreequarter camera, torso and face pointingLEFT, one man only, native transparent RGBA square<=1536, full figure contained, no text/grid/floor/shadow/weapon/rope/bag. Keep black wrap and mask, charcoal tunic and trousers, shin wraps, painterly clothing identity unchanged.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_sw_leg_edit.json",
+      "request_sha256": "f344a6ee879a3e9ca3740115422156f37a966f35e406b1cb3a5b3f627352bff9",
+      "references": [
+        "sw_initial_rejected"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_qian_proportion_v2",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-c11831c3-8262-4bc1-bc31-4cabd4ac12dd",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/proportion_reference_v2.png",
+      "sha256": "7f8d1d563e6eff35801bdab942867fb751cc2ccb90ae363ec39b16cf7a582499",
+      "prompt": "Use case: identity-preserve. Redraw this masked black-clothed adult Shi Qian with CORRECT NATURAL ADULT HUMAN PROPORTIONS. Current image is rejected: head and boots too big, legs too short, body too hunched and cartoonish. Keep the same identifiable man, black cloth headwrap/topknot and black mouth/nose mask, charcoal cross-over tunic and plain brown cloth sash, dark trousers/shin wraps/cloth boots, restrained hand-painted Chinese historical RTS rendering. NOT pixel-preservation: redraw anatomy fully as needed.\nNEW BODY: slim athletic normal adult, about7 to7.5 HEADS tall from skull top to sole. Bare head height only about one-seventh total body height; headcloth must not turn it into an oversized head. Natural narrow but adult shoulders, visible neck, proportionate torso, LONGER natural legs with hip-to-floor about half entire figure. Knees correctly midway along legs, normal slender calves, small natural hands, human-sized cloth boots WITHOUT giant bulky feet. Balanced anatomical joints, same believable adult throughout. No chibi/dwarf/oversized-head/short-legged/caricature proportions, no inflated hands or comic boots.\nPOSE: quiet NEUTRAL standing with feet naturally close and both grounded, only slight fatigue in shoulders. Upright spine and level head, no extreme stoop, crouch, furtive peeking, aggressive grimace, exaggerated lifted knee, twisted hip or running pose. Empty arms rest naturally; one empty hand may lightly rest near lower abdomen without squeezing or deep bending. This is a tired rescued adult with calm dignity, NOT a sneaking goblin. No ropes, weapons, sacks, blood/injury props, cape, armor or new accessories.\nView remains SW front three-quarter facing down-left, elevated isometric camera. Exactly ONE full body, all headcloth tails/fingers/feet contained, centered with generous transparent margins. Body about65–70% square canvas height. GENUINE alpha TRANSPARENT background, native square max1536, no floor shadow/background/checkerboard/grid/text/labels. Detailed face retains original identity but at natural smaller anatomical size.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_proportion_v2.json",
+      "request_sha256": "b1e2f2282759fe21f8c79677225a038887290f0321fd728d4ca889b2a34fb232",
+      "references": [
+        "shi_qian_step_b_sw"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "yang_lin_proportion_v2",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-b4b5bc6e-d158-43af-85ef-280a7b7ca447",
+      "repository_path": "assets/characters/yang_lin_wounded_20261005/proportion_v2.png",
+      "sha256": "cc9b304b2280213da8b030592f61da57edb99d8e2d1b291a0da51578707bed73",
+      "prompt": "Use case: identity-preserve. ONE full-body unarmed rescued yang_lin standing proportion reference, NOT an atlas. Reference1 is the sole FACE/HAIR/CLOTHING identity reference; remove ALL bindings/ropes and weapons. Reference2 supplies ONLY the mature natural human anatomy target and painterly elevated isometric camera; DO NOT copy its mask, black costume or face.\nIdentity: Lean man, pointed short black beard and moustache, blue-black tied headscarf, tan LEOPARD-SPOTTED fur tunic and pale short rolled sleeves, blue sash, dark blue shin wraps and cloth boots. Preserve spots not tiger stripes. No helmet or weapon.\nRedraw the short reference anatomy into a believable mature ADULT: about7–7.5 heads tall, normal small head/hands/boots, natural visible neck and LONG adult legs with hip-to-ground around half height.  Each knee naturally midway along the leg, no shortened thighs or giant footwear. Keep costume colors/materials and recognisable face/hair; any armor decoration fits his natural adult body.\nPose: SW front-three-quarter facing down-left, quiet upright tired rescued man with dignity, level head and relaxed empty hands by sides, both feet naturally close and grounded. Only slight fatigue in shoulders, no crouch/stoop/sneaking/high raised knee/running/combat stance. Natural anatomical joints. No weapon, sheath, rope, sack, flag, mount, blood, glow or new props. Preserve original identity, don't make everyone the same slim black masked man. Historic restrained hand-painted Chinese RTS rendering. Exactly one COMPLETE body, all cloth tails/cape/fingers/boots contained with generous margins, about75–80% native square height, max1536. Genuine transparent alpha background, no floor/shadow/grid/text/labels/checkerboard.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/yang_lin_proportion_v2.json",
+      "request_sha256": "b520004dc7be7796d630b9cc0a134175d973b8b75609948dc8eb734ab0bdd2d7",
+      "references": [
+        "original",
+        "shi_qian_proportion_v2"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "yang_lin_proportion_fix_v2",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-47bffda6-9006-4a55-8a08-b8ab305ca459",
+      "repository_path": "assets/characters/yang_lin_wounded_20261005/proportion_fix_v2.png",
+      "sha256": "6a875157598d4960944d33b591c2be2bf5d548f2c52ff2124da9dd1cb4bdce80",
+      "prompt": "Use case: precise-object-edit. Edit reference1: change ONLY the pattern on tan fur garment to authentic irregular LEOPARD ROSETTES. Current pattern looks like regularly spaced four-petal flowers, that is rejected. Replace flower-shaped marks with irregular dark brown/black open broken-ring rosettes, uneven sizes/spacing and a few small solid spots as natural leopard pelt; use reference2 for leopard pattern identity only. NO repeating flowers, diamond/star shapes, stripes or geometric tiling. Preserve reference1 adult anatomy/proportions completely, same face/black headscarf/short beard, fur garment cut/white fur trim, rolled pale sleeves/blue sash/tan trousers/blue shinwraps/small dark boots, empty relaxed hands and SW upright stance. Keep all other colors/materials, no weapons/rope/blood/new props, genuine transparent alpha background, one fully contained figure, native square max1536. Do not shrink legs or enlarge head/hands/boots.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/yang_lin_proportion_fix_v2.json",
+      "request_sha256": "c4d8aae5b6d53d9f0cdf56f6127cb1dc1f5a5aff2ede40c7d1d4bab1d1c9d977",
+      "references": [
+        "yang_lin_proportion_v2",
+        "original"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "yang_lin_posture_v3",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-2824b065-3f7e-4db9-8f56-25efc9c2d617",
+      "repository_path": "assets/characters/yang_lin_wounded_20261005/posture_v3.png",
+      "sha256": "c346a5a9610aa34a9e4b732b10cf2f613f1219c2bcb962932b62bab997fe7d98",
+      "prompt": "Use case: identity-preserve. EDIT the attached ONE full-body character reference. User requires an upright dignified SOLDIER posture: head UP and chest OPEN. Reject lowered chin, forward head, closed shoulders or hunched back. Only improve pose; preserve this SAME individual face, clothes, mature ADULT proportions and painterly rendering.\nPOSE: erect balanced military attention-like stance. Naturally straight stacked spine, neutral pelvis, neck vertical ABOVE torso; head lifted with chin LEVEL, eyes looking toward distant horizon in the SAME front three-quarter SW facing direction, never down at feet. Shoulders gently back and down, broad collarbones, naturally lifted open chest, sternum confidently forward. No stoop, rounded back, shrugged shoulders, forward craned neck, wounded hunch or tired slump. Do not hyperextend neck, flare ribs, thrust belly or arch lower back. Keep the small natural head/hands/boots and adult thighs/calves. Moderately elevated isometric camera does not imply bowed head.\nBoth feet grounded in stable modest hip-width parallel stance, knees straight but not locked. Empty arms straight naturally at sides and open relaxed hands, no fists or combat stance. Keep the same LEOPARD irregular black rosette spots and tan fur, blue sash, pale rolled sleeves; no tiger stripes, flower motifs or armor.\nExactly ONE complete full figure with all fingers/tails/cloak/boots contained in generous transparent margins, 75–80% square height, native max1536. No weapons/sheaths/rope/chains/blood/new props. Preserve true transparent alpha; no floor/shadow/background/text/grid/checkerboard.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/yang_lin_posture_v3.json",
+      "request_sha256": "b06d815f672ab069f90e3c59c47a46de61531536c56435d2ab0d0258e6342054",
+      "references": [
+        "yang_lin_proportion_fix_v2"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "yang_lin_idle_v3",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-28ea7e79-1457-40e4-81a4-ed222b6c351e",
+      "repository_path": "assets/characters/yang_lin_wounded_20261005/idle_v3.png",
+      "sha256": "0f0da8ef29a48400e71ab14c72df0ee8ab7412c91be5b2980c47b0f8b739a6bf",
+      "prompt": "Use case: identity-preserve. Create native FOUR independently drawn isometric IDLE views of this SAME upright adult soldier. Reference is the selected v3 single-body posture; preserve its face, proportions, clothing and colors. Exactly 2 columns x 2 rows: TOP LEFT SE front three-quarter looking screen DOWN-RIGHT; TOP RIGHT SW front three-quarter looking screen DOWN-LEFT; BOTTOM LEFT NE back three-quarter looking screen UP-RIGHT; BOTTOM RIGHT NW back three-quarter looking screen UP-LEFT. Turn the WHOLE torso, hips and both feet into each direction. SE and SW must be genuinely opposite whole-body views; do not repeat SW in the SE cell. Back views show back clothes and back of head, with only a small far cheek visible. Never mirror a rendered cell. ALL FOUR poses stand dignified and upright like disciplined soldiers: lifted head, LEVEL chin/horizon gaze, neck vertically above torso, stacked natural spine, shoulders back/down, naturally open lifted chest. Elevated camera never means bowed head. NO hunch, forward neck, closed chest, tired shoulder slump, shrug, belly thrust or arched lower back. Empty relaxed hands and naturally straight arms at sides. Stable feet at modest hip width, straight natural knees. Keep mature adult head/hands/boots and adult leg lengths. Body type identity: Lean man, pointed short black beard and moustache, blue-black tied headscarf, tan LEOPARD-SPOTTED fur tunic and pale short rolled sleeves, blue sash, dark blue shin wraps and cloth boots. Preserve spots not tiger stripes. No helmet or weapon. Preserve v3 body anatomy over any old compact sprite instructions; never chibi. Same front/back clothing hem length and construction, no weapons/sheaths/rope/chains/blood/new props. Each whole figure fits inside its OWN quadrant with wide true-alpha outer margins and wide empty transparent central gutters; no tails/capes/boots cross cell boundaries. Figures equal body height within this character. Native square max1536, painterly reference quality, TRUE RGBA transparent background; no floor/shadows/text/labels/grid/checkerboard. Layout priority: figures occupy only 78–82% of EACH quadrant height, about490–515px tall at1254px native square. Center each figure inside its cell; keep at least45px transparent clearance on every cell edge, including cape/boots/headcloth. The central horizontal gutter should be at least80px. Reduce whole figure size uniformly to leave room; NEVER shorten legs or enlarge heads to fit. Do not nearly touch the two rows.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/yang_lin_idle_v3.json",
+      "request_sha256": "400e1164e9ed12b4a9cf02e52746ce67820568cd4d513a7edb5f8d442a0f50b9",
+      "references": [
+        "yang_lin_posture_v3"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "yang_lin_idle_single_se_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-1833868a-9b23-44ae-a079-221963b190a5",
+      "repository_path": "assets/characters/yang_lin_wounded_20261005/idle_single_se_v4.png",
+      "sha256": "599295cb108c5de8b0c20125569785a980f3c1e7b2f50d0195a16f1678c3c5b9",
+      "prompt": "Create exactly ONE whole full-body Yang Lin idle sprite from the corresponding SE view in this reference sheet. SINGLE view only, not another four-view sheet. Preserve his recognisable mature Chinese face, short POINTED black beard/moustache, blue-black tied headcloth with trailing ends, tan LEOPARD-ROSETTE-SPOTTED fur coat/tunic with PALE FUR trim around collar/front/hem, pale linen rolled short sleeves, blue tied waist sash, tan trousers, layered dark-blue shin wraps and ordinary dark cloth boots. Preserve rosette spots, never tiger stripes or plain fur. Same refined painterly palette/materials and exact garment layering as reference. No helmet/armor/weapon/rope/backpack/new prop.\nCAMERA: FRONT three-quarter elevated isometric view facing LOWER-RIGHT / southeast; chest and pointed beard visible, both boot toes lower-right. Head/torso/boot toes all agree. Rear views must show coat back, never a mirrored front view.\nINDIVIDUAL ANATOMY/BEARING: normal ADULT Yang Lin, broad shoulders and relatively NARROW waist, mobile experienced-traveler/martial bearing. Keep normal adult head/neck/hands/feet and long natural limbs, not short chibi, huge head or boot. Alert LEVEL searching gaze, naturally aligned head/upper back, shoulders open comfortably. Feet planted in a modest balanced stance, knees LIGHTLY SOFT and small functional hip readiness; relaxed EMPTY hands close for balance. Do not force stiff parade/military chest-arching, deep squat, rounded hump or elderly stoop. Preserve identifiable face/coat proportions, normal narrow waist rather than shrinking shoulders or thickening belly. Mild natural asymmetry allowed, no attack/running pose.\nExactly ONE COMPLETE adult figure centered with at least80px generous alpha clearance including headcloth/boots, genuine transparent RGBA native square<=1536. Whole head, both hands and both boots unclipped. No floor/shadow/background, grid/text/labels, extra people/views, mirror/crop, weapons/rope/props or changed costume. This is unarmed rescued-foot idle candidate, alert flexible Yang Lin.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/yang_lin_idle_single_se_v4.json",
+      "request_sha256": "4e184916f42a4c4a7282b648719b7bea1683449eaec4a53ace8522cc069f0bc4",
+      "references": [
+        "yang_lin_idle_v3"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "yang_lin_idle_single_sw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-c979c650-2aad-41b8-b391-08c5238fbbb8",
+      "repository_path": "assets/characters/yang_lin_wounded_20261005/idle_single_sw_v4.png",
+      "sha256": "f101a3c817a75f77b052d59f89becbefc5c49ed493e421d2736c87cbd9d1be7a",
+      "prompt": "Create exactly ONE whole full-body Yang Lin idle sprite from the corresponding SW view in this reference sheet. SINGLE view only, not another four-view sheet. Preserve his recognisable mature Chinese face, short POINTED black beard/moustache, blue-black tied headcloth with trailing ends, tan LEOPARD-ROSETTE-SPOTTED fur coat/tunic with PALE FUR trim around collar/front/hem, pale linen rolled short sleeves, blue tied waist sash, tan trousers, layered dark-blue shin wraps and ordinary dark cloth boots. Preserve rosette spots, never tiger stripes or plain fur. Same refined painterly palette/materials and exact garment layering as reference. No helmet/armor/weapon/rope/backpack/new prop.\nCAMERA: FRONT three-quarter elevated isometric view facing LOWER-LEFT / southwest; chest and pointed beard visible, both boot toes lower-left. Head/torso/boot toes all agree. Rear views must show coat back, never a mirrored front view.\nINDIVIDUAL ANATOMY/BEARING: normal ADULT Yang Lin, broad shoulders and relatively NARROW waist, mobile experienced-traveler/martial bearing. Keep normal adult head/neck/hands/feet and long natural limbs, not short chibi, huge head or boot. Alert LEVEL searching gaze, naturally aligned head/upper back, shoulders open comfortably. Feet planted in a modest balanced stance, knees LIGHTLY SOFT and small functional hip readiness; relaxed EMPTY hands close for balance. Do not force stiff parade/military chest-arching, deep squat, rounded hump or elderly stoop. Preserve identifiable face/coat proportions, normal narrow waist rather than shrinking shoulders or thickening belly. Mild natural asymmetry allowed, no attack/running pose.\nExactly ONE COMPLETE adult figure centered with at least80px generous alpha clearance including headcloth/boots, genuine transparent RGBA native square<=1536. Whole head, both hands and both boots unclipped. No floor/shadow/background, grid/text/labels, extra people/views, mirror/crop, weapons/rope/props or changed costume. This is unarmed rescued-foot idle candidate, alert flexible Yang Lin.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/yang_lin_idle_single_sw_v4.json",
+      "request_sha256": "318eebc9e78415aa0fe21a52ed584d615b4d692cacea7d77b2d8c65410c9e40d",
+      "references": [
+        "yang_lin_idle_v3"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "yang_lin_idle_single_ne_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-5452d911-d54b-4a48-9819-738993f1e4d6",
+      "repository_path": "assets/characters/yang_lin_wounded_20261005/idle_single_ne_v4.png",
+      "sha256": "f0c0a6decc5561a2772194f09b7f5c9d9f91f841cbc74d9694d54315298cacb4",
+      "prompt": "Create exactly ONE whole full-body Yang Lin idle sprite from the corresponding NE view in this reference sheet. SINGLE view only, not another four-view sheet. Preserve his recognisable mature Chinese face, short POINTED black beard/moustache, blue-black tied headcloth with trailing ends, tan LEOPARD-ROSETTE-SPOTTED fur coat/tunic with PALE FUR trim around collar/front/hem, pale linen rolled short sleeves, blue tied waist sash, tan trousers, layered dark-blue shin wraps and ordinary dark cloth boots. Preserve rosette spots, never tiger stripes or plain fur. Same refined painterly palette/materials and exact garment layering as reference. No helmet/armor/weapon/rope/backpack/new prop.\nCAMERA: BACK three-quarter elevated isometric view facing AWAY-UPPER-RIGHT / northeast; back of shoulders/headcloth/coat visible, small far-side beard profile only, no frontal chest/both eyes; boot toes upper-right. Head/torso/boot toes all agree. Rear views must show coat back, never a mirrored front view.\nINDIVIDUAL ANATOMY/BEARING: normal ADULT Yang Lin, broad shoulders and relatively NARROW waist, mobile experienced-traveler/martial bearing. Keep normal adult head/neck/hands/feet and long natural limbs, not short chibi, huge head or boot. Alert LEVEL searching gaze, naturally aligned head/upper back, shoulders open comfortably. Feet planted in a modest balanced stance, knees LIGHTLY SOFT and small functional hip readiness; relaxed EMPTY hands close for balance. Do not force stiff parade/military chest-arching, deep squat, rounded hump or elderly stoop. Preserve identifiable face/coat proportions, normal narrow waist rather than shrinking shoulders or thickening belly. Mild natural asymmetry allowed, no attack/running pose.\nExactly ONE COMPLETE adult figure centered with at least80px generous alpha clearance including headcloth/boots, genuine transparent RGBA native square<=1536. Whole head, both hands and both boots unclipped. No floor/shadow/background, grid/text/labels, extra people/views, mirror/crop, weapons/rope/props or changed costume. This is unarmed rescued-foot idle candidate, alert flexible Yang Lin.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/yang_lin_idle_single_ne_v4.json",
+      "request_sha256": "82b8858668b0790aaf49ab6d08973f653b8213c37b61023a758098f1719ac38b",
+      "references": [
+        "yang_lin_idle_v3"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "yang_lin_idle_single_nw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-bd1f1c07-a2ba-40f9-aa10-2aabd7545a4a",
+      "repository_path": "assets/characters/yang_lin_wounded_20261005/idle_single_nw_v4.png",
+      "sha256": "4104ae5bb8aa1f01f485c41deefd9139162c479836b501c58b703a6bf2f847ee",
+      "prompt": "Create exactly ONE whole full-body Yang Lin idle sprite from the corresponding NW view in this reference sheet. SINGLE view only, not another four-view sheet. Preserve his recognisable mature Chinese face, short POINTED black beard/moustache, blue-black tied headcloth with trailing ends, tan LEOPARD-ROSETTE-SPOTTED fur coat/tunic with PALE FUR trim around collar/front/hem, pale linen rolled short sleeves, blue tied waist sash, tan trousers, layered dark-blue shin wraps and ordinary dark cloth boots. Preserve rosette spots, never tiger stripes or plain fur. Same refined painterly palette/materials and exact garment layering as reference. No helmet/armor/weapon/rope/backpack/new prop.\nCAMERA: BACK three-quarter elevated isometric view facing AWAY-UPPER-LEFT / northwest; back of shoulders/headcloth/coat visible, small far-side beard profile only, no frontal chest/both eyes; boot toes upper-left. Head/torso/boot toes all agree. Rear views must show coat back, never a mirrored front view.\nINDIVIDUAL ANATOMY/BEARING: normal ADULT Yang Lin, broad shoulders and relatively NARROW waist, mobile experienced-traveler/martial bearing. Keep normal adult head/neck/hands/feet and long natural limbs, not short chibi, huge head or boot. Alert LEVEL searching gaze, naturally aligned head/upper back, shoulders open comfortably. Feet planted in a modest balanced stance, knees LIGHTLY SOFT and small functional hip readiness; relaxed EMPTY hands close for balance. Do not force stiff parade/military chest-arching, deep squat, rounded hump or elderly stoop. Preserve identifiable face/coat proportions, normal narrow waist rather than shrinking shoulders or thickening belly. Mild natural asymmetry allowed, no attack/running pose.\nExactly ONE COMPLETE adult figure centered with at least80px generous alpha clearance including headcloth/boots, genuine transparent RGBA native square<=1536. Whole head, both hands and both boots unclipped. No floor/shadow/background, grid/text/labels, extra people/views, mirror/crop, weapons/rope/props or changed costume. This is unarmed rescued-foot idle candidate, alert flexible Yang Lin.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/yang_lin_idle_single_nw_v4.json",
+      "request_sha256": "128ccdb7a844d5fb7142f7263820b3fcdeb756de3362d11d0fe80f803247ea81",
+      "references": [
+        "yang_lin_idle_v3"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_walk_a_se_geometry_v4",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_a_se_geometry_v4.png",
+      "sha256": "7caff54e4b7dccd1eab462566ad37995f68b1a2cf09222815abd20036f38eda6",
+      "prompt": "New primitive-only SE contact A: red image-right flat support, blue image-left low lifted boot. No source bitmap read or modified. Robot colors/proportions are not artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/qin_ming_contact_geometry_v4.gd",
+          "sha256": "74730ccd656542728251f76c82a816c8386150555b38c39b58c7515b1800c392"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_qin_ming_contact_geometry_v4.py",
+          "sha256": "8542f8bf6fda71800821c87e90d6918f35bf27913ee2cfeacf2c6206e7a6c69c"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_a_se_geometry_v4.json",
+          "sha256": "1e4d7ee0690567125b1d99bdd1876e33571560a1307ec49ac6649312ecc6bb07"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "yang_lin_walk_a_se_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-da530501-6878-44c6-8a28-f4b43d5d6efe",
+      "repository_path": "assets/characters/yang_lin_wounded_20261005/walk_a_se_v4.png",
+      "sha256": "a94b3a134f6165e8756e65d588c71ee6d88772cecb0b9170a77eb7eb0bdfc7fc",
+      "prompt": "POSE-GUIDED SINGLE Yang Lin WALK_A native sprite. IMAGE1 gives ONLY lower-leg pose and camera: RED IMAGE-RIGHT boot flat support, BLUE IMAGE-LEFT low raised swing. Robot torso/proportions/colors/green marker/labels NOT character art. IMAGE2 gives all Yang Lin identity/body/garment/material invariants. Yang Lin's exact mature face/POINTED short black beard/moustache and blue-black tied headcloth with trailing ends; tan LEOPARD-ROSETTE spotted fur coat with pale fur collar/front/hem trim, pale rolled linen sleeves, BLUE tied sash, tan trousers, layered dark-blue shin wraps and ordinary dark cloth boots. Preserve spots, never tiger stripes/plain fur. NORMAL ADULT proportions with broad shoulders, relatively narrow waist and long natural limbs; exact head/hand/boot sizes and painterly materials from IMAGE2. Do not copy robot stocky box torso/short body or colored legs. Experienced mobile traveler/martial bearing, naturally aligned level head/upper back and searching gaze, lightly soft knees and modest functional hip movement. No forced parade stiffness, deep squat, rounded hump, huge head/boots or overarched chest.\nFACING: FRONT three-quarter elevated isometric view facing LOWER-RIGHT SE; chest/pointed beard visible, head torso and boot toes lower-right. Keep entire body orientation, never turn rear view into frontal portrait or mirror front to fake back.\nMANDATORY LOWER BODY: COMPACT NATURAL CONTACT: RED IMAGE-RIGHT support boot HEEL AND TOE fully flat on ground under own hip, BLUE IMAGE-LEFT opposite boot modestly LOW raised, soft knee, short natural stride. Preserve colored guide's support assignment rather than two-planted idle legs. Each adult leg continuously belongs to its own hip; no crossing/disconnected shins. Entire underside of PLANTED boot must not face camera; support heel stays down. Raised foot low, no large high sole/kick. A/B alternate support side.\nRelaxed empty hands near sides with a SMALL natural opposing arm swing/balance; head level/neck aligned, shoulders comfortable and waist mobile. Preserve coat rosette density, pale trim and sleeve cuffs, blue sash knot/pattern and calf wraps throughout; coat hem follows minimally and never hides both boots. No helmet/armor/weapon/sheath/rope/bag/banner/new prop. No long lunge/run/jump/attack/deep crouch/hump/parade chest.\nExactly ONE complete full-body adult Yang Lin on genuine transparent RGBA native square<=1536, centered with generous80px+ clear alpha margins including headcloth/boots. Head, both hands and boots whole/unclipped; original adult limb lengths. No floor/shadow/background, grid/text/guide colors/robots, extra people/views, cropping/mirroring or changed costume. New WALK_A leg pose, matching identifiable Yang Lin.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/yang_lin_walk_a_se_v4.json",
+      "request_sha256": "5b044bf67c907fdb5bd1b20b3a04a3d01e8531c4baca136d461249b48836786d",
+      "references": [
+        "qin_ming_walk_a_se_geometry_v4",
+        "yang_lin_idle_single_se_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_walk_a_sw_geometry_v4",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_a_sw_geometry_v4.png",
+      "sha256": "1654f14c0c874473b7f90091657151273986c204cb4b679a69b356d7093ec338",
+      "prompt": "New primitive-only sw walk_a contact: red flat support, blue low raised boot; screen support side verified. No character bitmap read/edit; robot anatomy/colors not artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/qin_ming_contact_geometry_v4.gd",
+          "sha256": "74730ccd656542728251f76c82a816c8386150555b38c39b58c7515b1800c392"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_qin_ming_contact_geometry_v4.py",
+          "sha256": "8542f8bf6fda71800821c87e90d6918f35bf27913ee2cfeacf2c6206e7a6c69c"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_a_sw_geometry_v4.json",
+          "sha256": "9791172c166e6f1f1d2152eaa41998aa1ea887db8bd064aa7d216e6b1ef7c969"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "yang_lin_walk_a_sw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-34451763-96dd-4de9-8b9f-3814fbb79355",
+      "repository_path": "assets/characters/yang_lin_wounded_20261005/walk_a_sw_v4.png",
+      "sha256": "cdb5a0cb9e2f46980a33e303cfb63e761b15d8b35dc1162bca8c78bfd383367b",
+      "prompt": "POSE-GUIDED SINGLE Yang Lin WALK_A native sprite. IMAGE1 gives ONLY lower-leg pose and camera: RED IMAGE-LEFT boot flat support, BLUE IMAGE-RIGHT low raised swing. Robot torso/proportions/colors/green marker/labels NOT character art. IMAGE2 gives all Yang Lin identity/body/garment/material invariants. Yang Lin's exact mature face/POINTED short black beard/moustache and blue-black tied headcloth with trailing ends; tan LEOPARD-ROSETTE spotted fur coat with pale fur collar/front/hem trim, pale rolled linen sleeves, BLUE tied sash, tan trousers, layered dark-blue shin wraps and ordinary dark cloth boots. Preserve spots, never tiger stripes/plain fur. NORMAL ADULT proportions with broad shoulders, relatively narrow waist and long natural limbs; exact head/hand/boot sizes and painterly materials from IMAGE2. Do not copy robot stocky box torso/short body or colored legs. Experienced mobile traveler/martial bearing, naturally aligned level head/upper back and searching gaze, lightly soft knees and modest functional hip movement. No forced parade stiffness, deep squat, rounded hump, huge head/boots or overarched chest.\nFACING: FRONT three-quarter elevated isometric view facing LOWER-LEFT SW; chest/pointed beard visible, head torso and boot toes lower-left. Keep entire body orientation, never turn rear view into frontal portrait or mirror front to fake back.\nMANDATORY LOWER BODY: COMPACT NATURAL CONTACT: RED IMAGE-LEFT support boot HEEL AND TOE fully flat on ground under own hip, BLUE IMAGE-RIGHT opposite boot modestly LOW raised, soft knee, short natural stride. Preserve colored guide's support assignment rather than two-planted idle legs. Each adult leg continuously belongs to its own hip; no crossing/disconnected shins. Entire underside of PLANTED boot must not face camera; support heel stays down. Raised foot low, no large high sole/kick. A/B alternate support side.\nRelaxed empty hands near sides with a SMALL natural opposing arm swing/balance; head level/neck aligned, shoulders comfortable and waist mobile. Preserve coat rosette density, pale trim and sleeve cuffs, blue sash knot/pattern and calf wraps throughout; coat hem follows minimally and never hides both boots. No helmet/armor/weapon/sheath/rope/bag/banner/new prop. No long lunge/run/jump/attack/deep crouch/hump/parade chest.\nExactly ONE complete full-body adult Yang Lin on genuine transparent RGBA native square<=1536, centered with generous80px+ clear alpha margins including headcloth/boots. Head, both hands and boots whole/unclipped; original adult limb lengths. No floor/shadow/background, grid/text/guide colors/robots, extra people/views, cropping/mirroring or changed costume. New WALK_A leg pose, matching identifiable Yang Lin.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/yang_lin_walk_a_sw_v4.json",
+      "request_sha256": "e2fa50496a74d4b700c4f65b5b26978fda3c78e72b2a603396a8d00cede8f284",
+      "references": [
+        "qin_ming_walk_a_sw_geometry_v4",
+        "yang_lin_idle_single_sw_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_walk_a_ne_geometry_v4",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_a_ne_geometry_v4.png",
+      "sha256": "7d70366456faac65df7c9359e524bca6b38f1fc81c0250b7c7681740be5a9af4",
+      "prompt": "New primitive-only ne walk_a contact: red flat support, blue low raised boot; screen support side verified. No character bitmap read/edit; robot anatomy/colors not artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/qin_ming_contact_geometry_v4.gd",
+          "sha256": "74730ccd656542728251f76c82a816c8386150555b38c39b58c7515b1800c392"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_qin_ming_contact_geometry_v4.py",
+          "sha256": "8542f8bf6fda71800821c87e90d6918f35bf27913ee2cfeacf2c6206e7a6c69c"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_a_ne_geometry_v4.json",
+          "sha256": "e7dbf35e143a7956a106306944138fa6c335af371eeae5a13c002bc0d5917a0e"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "yang_lin_walk_a_ne_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-30498107-4396-43b3-a5a3-2e8439abd4a2",
+      "repository_path": "assets/characters/yang_lin_wounded_20261005/walk_a_ne_v4.png",
+      "sha256": "d999be0da740620aba9fc49c686a82055fac2fbe83bd7f8bb2474c8a0c37313d",
+      "prompt": "POSE-GUIDED SINGLE Yang Lin WALK_A native sprite. IMAGE1 gives ONLY lower-leg pose and camera: RED IMAGE-LEFT boot flat support, BLUE IMAGE-RIGHT low raised swing. Robot torso/proportions/colors/green marker/labels NOT character art. IMAGE2 gives all Yang Lin identity/body/garment/material invariants. Yang Lin's exact mature face/POINTED short black beard/moustache and blue-black tied headcloth with trailing ends; tan LEOPARD-ROSETTE spotted fur coat with pale fur collar/front/hem trim, pale rolled linen sleeves, BLUE tied sash, tan trousers, layered dark-blue shin wraps and ordinary dark cloth boots. Preserve spots, never tiger stripes/plain fur. NORMAL ADULT proportions with broad shoulders, relatively narrow waist and long natural limbs; exact head/hand/boot sizes and painterly materials from IMAGE2. Do not copy robot stocky box torso/short body or colored legs. Experienced mobile traveler/martial bearing, naturally aligned level head/upper back and searching gaze, lightly soft knees and modest functional hip movement. No forced parade stiffness, deep squat, rounded hump, huge head/boots or overarched chest.\nFACING: BACK three-quarter elevated isometric view facing AWAY-UPPER-RIGHT NE; back of coat/shoulders/headcloth visible, tiny far-side beard profile only, no frontal chest or both eyes; boot toes upper-right. Keep entire body orientation, never turn rear view into frontal portrait or mirror front to fake back.\nMANDATORY LOWER BODY: COMPACT NATURAL CONTACT: RED IMAGE-LEFT support boot HEEL AND TOE fully flat on ground under own hip, BLUE IMAGE-RIGHT opposite boot modestly LOW raised, soft knee, short natural stride. Preserve colored guide's support assignment rather than two-planted idle legs. Each adult leg continuously belongs to its own hip; no crossing/disconnected shins. Entire underside of PLANTED boot must not face camera; support heel stays down. Raised foot low, no large high sole/kick. A/B alternate support side.\nRelaxed empty hands near sides with a SMALL natural opposing arm swing/balance; head level/neck aligned, shoulders comfortable and waist mobile. Preserve coat rosette density, pale trim and sleeve cuffs, blue sash knot/pattern and calf wraps throughout; coat hem follows minimally and never hides both boots. No helmet/armor/weapon/sheath/rope/bag/banner/new prop. No long lunge/run/jump/attack/deep crouch/hump/parade chest.\nExactly ONE complete full-body adult Yang Lin on genuine transparent RGBA native square<=1536, centered with generous80px+ clear alpha margins including headcloth/boots. Head, both hands and boots whole/unclipped; original adult limb lengths. No floor/shadow/background, grid/text/guide colors/robots, extra people/views, cropping/mirroring or changed costume. New WALK_A leg pose, matching identifiable Yang Lin.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/yang_lin_walk_a_ne_v4.json",
+      "request_sha256": "6387f4972b84597cc3ead364bf16c5b98c05c9f66d4726ea3b1fe85f480618f1",
+      "references": [
+        "qin_ming_walk_a_ne_geometry_v4",
+        "yang_lin_idle_single_ne_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_walk_a_nw_geometry_v4",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_a_nw_geometry_v4.png",
+      "sha256": "7462d694bbc602d0d16fe0ad39029a479c7d022dfb1080f3cb1d16fd21920d61",
+      "prompt": "New primitive-only nw walk_a contact: red flat support, blue low raised boot; screen support side verified. No character bitmap read/edit; robot anatomy/colors not artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/qin_ming_contact_geometry_v4.gd",
+          "sha256": "74730ccd656542728251f76c82a816c8386150555b38c39b58c7515b1800c392"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_qin_ming_contact_geometry_v4.py",
+          "sha256": "8542f8bf6fda71800821c87e90d6918f35bf27913ee2cfeacf2c6206e7a6c69c"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_a_nw_geometry_v4.json",
+          "sha256": "d5a39458f5641be2df1882077e66935852f1735b99ae8317589f831790811fac"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "yang_lin_walk_a_nw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-176e45e4-4678-4ee6-964e-3b42eb5f168e",
+      "repository_path": "assets/characters/yang_lin_wounded_20261005/walk_a_nw_v4.png",
+      "sha256": "7869f6ed1fe6c79837c3e18a24e5142d91f2fb62cb855bca4a33d497cbd98902",
+      "prompt": "POSE-GUIDED SINGLE Yang Lin WALK_A native sprite. IMAGE1 gives ONLY lower-leg pose and camera: RED IMAGE-LEFT boot flat support, BLUE IMAGE-RIGHT low raised swing. Robot torso/proportions/colors/green marker/labels NOT character art. IMAGE2 gives all Yang Lin identity/body/garment/material invariants. Yang Lin's exact mature face/POINTED short black beard/moustache and blue-black tied headcloth with trailing ends; tan LEOPARD-ROSETTE spotted fur coat with pale fur collar/front/hem trim, pale rolled linen sleeves, BLUE tied sash, tan trousers, layered dark-blue shin wraps and ordinary dark cloth boots. Preserve spots, never tiger stripes/plain fur. NORMAL ADULT proportions with broad shoulders, relatively narrow waist and long natural limbs; exact head/hand/boot sizes and painterly materials from IMAGE2. Do not copy robot stocky box torso/short body or colored legs. Experienced mobile traveler/martial bearing, naturally aligned level head/upper back and searching gaze, lightly soft knees and modest functional hip movement. No forced parade stiffness, deep squat, rounded hump, huge head/boots or overarched chest.\nFACING: BACK three-quarter elevated isometric view facing AWAY-UPPER-LEFT NW; back of coat/shoulders/headcloth visible, tiny far-side beard profile only, no frontal chest or both eyes; boot toes upper-left. Keep entire body orientation, never turn rear view into frontal portrait or mirror front to fake back.\nMANDATORY LOWER BODY: COMPACT NATURAL CONTACT: RED IMAGE-LEFT support boot HEEL AND TOE fully flat on ground under own hip, BLUE IMAGE-RIGHT opposite boot modestly LOW raised, soft knee, short natural stride. Preserve colored guide's support assignment rather than two-planted idle legs. Each adult leg continuously belongs to its own hip; no crossing/disconnected shins. Entire underside of PLANTED boot must not face camera; support heel stays down. Raised foot low, no large high sole/kick. A/B alternate support side.\nRelaxed empty hands near sides with a SMALL natural opposing arm swing/balance; head level/neck aligned, shoulders comfortable and waist mobile. Preserve coat rosette density, pale trim and sleeve cuffs, blue sash knot/pattern and calf wraps throughout; coat hem follows minimally and never hides both boots. No helmet/armor/weapon/sheath/rope/bag/banner/new prop. No long lunge/run/jump/attack/deep crouch/hump/parade chest.\nExactly ONE complete full-body adult Yang Lin on genuine transparent RGBA native square<=1536, centered with generous80px+ clear alpha margins including headcloth/boots. Head, both hands and boots whole/unclipped; original adult limb lengths. No floor/shadow/background, grid/text/guide colors/robots, extra people/views, cropping/mirroring or changed costume. New WALK_A leg pose, matching identifiable Yang Lin.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/yang_lin_walk_a_nw_v4.json",
+      "request_sha256": "f018914937eef2c2265cbf536a5a84be340241d3cbce8e2ba100d137ba6c57e7",
+      "references": [
+        "qin_ming_walk_a_nw_geometry_v4",
+        "yang_lin_idle_single_nw_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_passing_a_se_geometry_v7",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/wang_ying_passing_a_se_geometry_v7.png",
+      "sha256": "6b6257070ade9b7dfba378df11f28d5e14e94db09c5cce613ec18a08f0c970a0",
+      "prompt": "New SE passing_a short broad adult geometry: red flat support, blue low passing boot under pelvis. No source bitmap read/edit or production artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/wang_ying_passing_geometry_v7.gd",
+          "sha256": "2070bcd5ca8b31bd0a0b901a1db266354d07922ac61521c83991a4da9086384f"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_wang_ying_passing_geometry_v7.py",
+          "sha256": "35df66125d5caf116d296a2d1f68ced53e9f81494d50c472837c11e672734c9e"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/geometry_passing_a_se_v7.json",
+          "sha256": "db1d1b7850982943b69a343671abb1361d00c2ff364ef3d96ceee0ee9780d6af"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "yang_lin_passing_a_se_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-82eca228-dca2-44e2-b78b-52cca136df09",
+      "repository_path": "assets/characters/yang_lin_wounded_20261005/passing_a_se_v4.png",
+      "sha256": "f1fbcc46deb04c8b1ceb6b376a2aed0d3341563825f7a76d201e3309b179e85b",
+      "prompt": "POSE-GUIDED SINGLE Yang Lin PASSING_A native sprite. IMAGE1 gives ONLY lower-leg pose and camera: RED IMAGE-RIGHT boot flat support, BLUE IMAGE-LEFT low raised swing. Robot torso/proportions/colors/green marker/labels NOT character art. IMAGE2 gives all Yang Lin identity/body/garment/material invariants. Yang Lin's exact mature face/POINTED short black beard/moustache and blue-black tied headcloth with trailing ends; tan LEOPARD-ROSETTE spotted fur coat with pale fur collar/front/hem trim, pale rolled linen sleeves, BLUE tied sash, tan trousers, layered dark-blue shin wraps and ordinary dark cloth boots. Preserve spots, never tiger stripes/plain fur. NORMAL ADULT proportions with broad shoulders, relatively narrow waist and long natural limbs; exact head/hand/boot sizes and painterly materials from IMAGE2. Do not copy robot stocky box torso/short body or colored legs. Experienced mobile traveler/martial bearing, naturally aligned level head/upper back and searching gaze, lightly soft knees and modest functional hip movement. No forced parade stiffness, deep squat, rounded hump, huge head/boots or overarched chest.\nFACING: FRONT three-quarter elevated isometric view facing LOWER-RIGHT SE; chest/pointed beard visible, head torso and boot toes lower-right. Keep entire body orientation, never turn rear view into frontal portrait or mirror front to fake back.\nMANDATORY LOWER BODY: TRUE DISTINCT NEAR-FOOT PASSING: RED IMAGE-RIGHT boot FLAT planted, supporting weight directly under hip. BLUE IMAGE-LEFT boot clearly LOW raised and moving past UNDER pelvis beside support foot, knee mildly bent. Close fore-aft/lateral gap rather than wide walking-contact stride. Both boots fully distinct and connected through normal adult ankle/shin/knee to own hips. Raised heel/toe visibly clear of its corresponding ground plane by about ONE BOOT-THICKNESS, not both boots flat planted. Do not replace with idle/contact legs. Compact low passing, never high knee/huge sole/kick; A/B alternate support. Avoid hiding raised boot behind hem.\nRelaxed empty hands near sides with a SMALL natural opposing arm swing/balance; head level/neck aligned, shoulders comfortable and waist mobile. Preserve coat rosette density, pale trim and sleeve cuffs, blue sash knot/pattern and calf wraps throughout; coat hem follows minimally and never hides both boots. No helmet/armor/weapon/sheath/rope/bag/banner/new prop. No long lunge/run/jump/attack/deep crouch/hump/parade chest.\nExactly ONE complete full-body adult Yang Lin on genuine transparent RGBA native square<=1536, centered with generous80px+ clear alpha margins including headcloth/boots. Head, both hands and boots whole/unclipped; original adult limb lengths. No floor/shadow/background, grid/text/guide colors/robots, extra people/views, cropping/mirroring or changed costume. New PASSING_A leg pose, matching identifiable Yang Lin.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/yang_lin_passing_a_se_v4.json",
+      "request_sha256": "517df7f2ba2c5e841aa676dc6355341536662aad043a33505dd201c8c852081a",
+      "references": [
+        "wang_ying_passing_a_se_geometry_v7",
+        "yang_lin_idle_single_se_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_passing_a_sw_geometry_v7",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/wang_ying_passing_a_sw_geometry_v7.png",
+      "sha256": "fbe6f2236268b92446892e8c3910c085dfd72aac617e639a14d75ab188654bf3",
+      "prompt": "New SW passing_a short broad adult geometry: red flat support, blue low passing boot under pelvis. No source bitmap read/edit or production artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/wang_ying_passing_geometry_v7.gd",
+          "sha256": "2070bcd5ca8b31bd0a0b901a1db266354d07922ac61521c83991a4da9086384f"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_wang_ying_passing_geometry_v7.py",
+          "sha256": "35df66125d5caf116d296a2d1f68ced53e9f81494d50c472837c11e672734c9e"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/geometry_passing_a_sw_v7.json",
+          "sha256": "c8328a120a1055cc3a199670f96d5e115de0d9799549d6425da6a52dcf62cec6"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "yang_lin_passing_a_sw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-1e7cc024-4a0a-4094-b6e6-9101f887919b",
+      "repository_path": "assets/characters/yang_lin_wounded_20261005/passing_a_sw_v4.png",
+      "sha256": "033a487acd255da9accfb40fdddddc94c0fd29fa4d9d465d20f9b7954e53fcb5",
+      "prompt": "POSE-GUIDED SINGLE Yang Lin PASSING_A native sprite. IMAGE1 gives ONLY lower-leg pose and camera: RED IMAGE-LEFT boot flat support, BLUE IMAGE-RIGHT low raised swing. Robot torso/proportions/colors/green marker/labels NOT character art. IMAGE2 gives all Yang Lin identity/body/garment/material invariants. Yang Lin's exact mature face/POINTED short black beard/moustache and blue-black tied headcloth with trailing ends; tan LEOPARD-ROSETTE spotted fur coat with pale fur collar/front/hem trim, pale rolled linen sleeves, BLUE tied sash, tan trousers, layered dark-blue shin wraps and ordinary dark cloth boots. Preserve spots, never tiger stripes/plain fur. NORMAL ADULT proportions with broad shoulders, relatively narrow waist and long natural limbs; exact head/hand/boot sizes and painterly materials from IMAGE2. Do not copy robot stocky box torso/short body or colored legs. Experienced mobile traveler/martial bearing, naturally aligned level head/upper back and searching gaze, lightly soft knees and modest functional hip movement. No forced parade stiffness, deep squat, rounded hump, huge head/boots or overarched chest.\nFACING: FRONT three-quarter elevated isometric view facing LOWER-LEFT SW; chest/pointed beard visible, head torso and boot toes lower-left. Keep entire body orientation, never turn rear view into frontal portrait or mirror front to fake back.\nMANDATORY LOWER BODY: TRUE DISTINCT NEAR-FOOT PASSING: RED IMAGE-LEFT boot FLAT planted, supporting weight directly under hip. BLUE IMAGE-RIGHT boot clearly LOW raised and moving past UNDER pelvis beside support foot, knee mildly bent. Close fore-aft/lateral gap rather than wide walking-contact stride. Both boots fully distinct and connected through normal adult ankle/shin/knee to own hips. Raised heel/toe visibly clear of its corresponding ground plane by about ONE BOOT-THICKNESS, not both boots flat planted. Do not replace with idle/contact legs. Compact low passing, never high knee/huge sole/kick; A/B alternate support. Avoid hiding raised boot behind hem.\nRelaxed empty hands near sides with a SMALL natural opposing arm swing/balance; head level/neck aligned, shoulders comfortable and waist mobile. Preserve coat rosette density, pale trim and sleeve cuffs, blue sash knot/pattern and calf wraps throughout; coat hem follows minimally and never hides both boots. No helmet/armor/weapon/sheath/rope/bag/banner/new prop. No long lunge/run/jump/attack/deep crouch/hump/parade chest.\nExactly ONE complete full-body adult Yang Lin on genuine transparent RGBA native square<=1536, centered with generous80px+ clear alpha margins including headcloth/boots. Head, both hands and boots whole/unclipped; original adult limb lengths. No floor/shadow/background, grid/text/guide colors/robots, extra people/views, cropping/mirroring or changed costume. New PASSING_A leg pose, matching identifiable Yang Lin.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/yang_lin_passing_a_sw_v4.json",
+      "request_sha256": "77d6f40b63211aba7ea36f35a141ea83c58fd1ebd5d696ad98d6bebe6c4e6be9",
+      "references": [
+        "wang_ying_passing_a_sw_geometry_v7",
+        "yang_lin_idle_single_sw_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_passing_a_ne_geometry_v7",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/wang_ying_passing_a_ne_geometry_v7.png",
+      "sha256": "3dbfc5d48126454dd8c5590ac85cfd95bfd78d702f90c98cd88898de29c32288",
+      "prompt": "New NE passing_a short broad adult geometry: red flat support, blue low passing boot under pelvis. No source bitmap read/edit or production artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/wang_ying_passing_geometry_v7.gd",
+          "sha256": "2070bcd5ca8b31bd0a0b901a1db266354d07922ac61521c83991a4da9086384f"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_wang_ying_passing_geometry_v7.py",
+          "sha256": "35df66125d5caf116d296a2d1f68ced53e9f81494d50c472837c11e672734c9e"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/geometry_passing_a_ne_v7.json",
+          "sha256": "5d328f6b1c18ebc66ae6cc5eb83406c457f679df1d712bf88e85ec02a04e0132"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "yang_lin_passing_a_ne_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-19e7eb1d-e59f-4efe-b7b4-30145b54d20e",
+      "repository_path": "assets/characters/yang_lin_wounded_20261005/passing_a_ne_v4.png",
+      "sha256": "6f729b7a1491a272b67dac15a1e04e0db507bcad29d750410c03955265837f0c",
+      "prompt": "POSE-GUIDED SINGLE Yang Lin PASSING_A native sprite. IMAGE1 gives ONLY lower-leg pose and camera: RED IMAGE-LEFT boot flat support, BLUE IMAGE-RIGHT low raised swing. Robot torso/proportions/colors/green marker/labels NOT character art. IMAGE2 gives all Yang Lin identity/body/garment/material invariants. Yang Lin's exact mature face/POINTED short black beard/moustache and blue-black tied headcloth with trailing ends; tan LEOPARD-ROSETTE spotted fur coat with pale fur collar/front/hem trim, pale rolled linen sleeves, BLUE tied sash, tan trousers, layered dark-blue shin wraps and ordinary dark cloth boots. Preserve spots, never tiger stripes/plain fur. NORMAL ADULT proportions with broad shoulders, relatively narrow waist and long natural limbs; exact head/hand/boot sizes and painterly materials from IMAGE2. Do not copy robot stocky box torso/short body or colored legs. Experienced mobile traveler/martial bearing, naturally aligned level head/upper back and searching gaze, lightly soft knees and modest functional hip movement. No forced parade stiffness, deep squat, rounded hump, huge head/boots or overarched chest.\nFACING: BACK three-quarter elevated isometric view facing AWAY-UPPER-RIGHT NE; back of coat/shoulders/headcloth visible, tiny far-side beard profile only, no frontal chest or both eyes; boot toes upper-right. Keep entire body orientation, never turn rear view into frontal portrait or mirror front to fake back.\nMANDATORY LOWER BODY: TRUE DISTINCT NEAR-FOOT PASSING: RED IMAGE-LEFT boot FLAT planted, supporting weight directly under hip. BLUE IMAGE-RIGHT boot clearly LOW raised and moving past UNDER pelvis beside support foot, knee mildly bent. Close fore-aft/lateral gap rather than wide walking-contact stride. Both boots fully distinct and connected through normal adult ankle/shin/knee to own hips. Raised heel/toe visibly clear of its corresponding ground plane by about ONE BOOT-THICKNESS, not both boots flat planted. Do not replace with idle/contact legs. Compact low passing, never high knee/huge sole/kick; A/B alternate support. Avoid hiding raised boot behind hem.\nRelaxed empty hands near sides with a SMALL natural opposing arm swing/balance; head level/neck aligned, shoulders comfortable and waist mobile. Preserve coat rosette density, pale trim and sleeve cuffs, blue sash knot/pattern and calf wraps throughout; coat hem follows minimally and never hides both boots. No helmet/armor/weapon/sheath/rope/bag/banner/new prop. No long lunge/run/jump/attack/deep crouch/hump/parade chest.\nExactly ONE complete full-body adult Yang Lin on genuine transparent RGBA native square<=1536, centered with generous80px+ clear alpha margins including headcloth/boots. Head, both hands and boots whole/unclipped; original adult limb lengths. No floor/shadow/background, grid/text/guide colors/robots, extra people/views, cropping/mirroring or changed costume. New PASSING_A leg pose, matching identifiable Yang Lin.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/yang_lin_passing_a_ne_v4.json",
+      "request_sha256": "2368a8fcf402cbdd069858ebde6d4e0da0f282d7eb615a930606babc4a43c7c4",
+      "references": [
+        "wang_ying_passing_a_ne_geometry_v7",
+        "yang_lin_idle_single_ne_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_passing_a_nw_geometry_v7",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/wang_ying_passing_a_nw_geometry_v7.png",
+      "sha256": "21fce21da6bd7e33b61230c77d1532e9aa99dda4506c72a4a307f71d4aff9dfb",
+      "prompt": "New NW passing_a short broad adult geometry: red flat support, blue low passing boot under pelvis. No source bitmap read/edit or production artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/wang_ying_passing_geometry_v7.gd",
+          "sha256": "2070bcd5ca8b31bd0a0b901a1db266354d07922ac61521c83991a4da9086384f"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_wang_ying_passing_geometry_v7.py",
+          "sha256": "35df66125d5caf116d296a2d1f68ced53e9f81494d50c472837c11e672734c9e"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/geometry_passing_a_nw_v7.json",
+          "sha256": "69d66e7f9621d021d84ea7f14c346b91094b40c5cf0dbcc3abc0cd5a55e92aa5"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "yang_lin_passing_a_nw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-3924acb9-94b3-4224-9eef-5ff30f09edba",
+      "repository_path": "assets/characters/yang_lin_wounded_20261005/passing_a_nw_v4.png",
+      "sha256": "8d5daeaa45708441dcb4ed51876c3d679f8d8c082bd52b9f7f98c949f61b9de4",
+      "prompt": "POSE-GUIDED SINGLE Yang Lin PASSING_A native sprite. IMAGE1 gives ONLY lower-leg pose and camera: RED IMAGE-LEFT boot flat support, BLUE IMAGE-RIGHT low raised swing. Robot torso/proportions/colors/green marker/labels NOT character art. IMAGE2 gives all Yang Lin identity/body/garment/material invariants. Yang Lin's exact mature face/POINTED short black beard/moustache and blue-black tied headcloth with trailing ends; tan LEOPARD-ROSETTE spotted fur coat with pale fur collar/front/hem trim, pale rolled linen sleeves, BLUE tied sash, tan trousers, layered dark-blue shin wraps and ordinary dark cloth boots. Preserve spots, never tiger stripes/plain fur. NORMAL ADULT proportions with broad shoulders, relatively narrow waist and long natural limbs; exact head/hand/boot sizes and painterly materials from IMAGE2. Do not copy robot stocky box torso/short body or colored legs. Experienced mobile traveler/martial bearing, naturally aligned level head/upper back and searching gaze, lightly soft knees and modest functional hip movement. No forced parade stiffness, deep squat, rounded hump, huge head/boots or overarched chest.\nFACING: BACK three-quarter elevated isometric view facing AWAY-UPPER-LEFT NW; back of coat/shoulders/headcloth visible, tiny far-side beard profile only, no frontal chest or both eyes; boot toes upper-left. Keep entire body orientation, never turn rear view into frontal portrait or mirror front to fake back.\nMANDATORY LOWER BODY: TRUE DISTINCT NEAR-FOOT PASSING: RED IMAGE-LEFT boot FLAT planted, supporting weight directly under hip. BLUE IMAGE-RIGHT boot clearly LOW raised and moving past UNDER pelvis beside support foot, knee mildly bent. Close fore-aft/lateral gap rather than wide walking-contact stride. Both boots fully distinct and connected through normal adult ankle/shin/knee to own hips. Raised heel/toe visibly clear of its corresponding ground plane by about ONE BOOT-THICKNESS, not both boots flat planted. Do not replace with idle/contact legs. Compact low passing, never high knee/huge sole/kick; A/B alternate support. Avoid hiding raised boot behind hem.\nRelaxed empty hands near sides with a SMALL natural opposing arm swing/balance; head level/neck aligned, shoulders comfortable and waist mobile. Preserve coat rosette density, pale trim and sleeve cuffs, blue sash knot/pattern and calf wraps throughout; coat hem follows minimally and never hides both boots. No helmet/armor/weapon/sheath/rope/bag/banner/new prop. No long lunge/run/jump/attack/deep crouch/hump/parade chest.\nExactly ONE complete full-body adult Yang Lin on genuine transparent RGBA native square<=1536, centered with generous80px+ clear alpha margins including headcloth/boots. Head, both hands and boots whole/unclipped; original adult limb lengths. No floor/shadow/background, grid/text/guide colors/robots, extra people/views, cropping/mirroring or changed costume. New PASSING_A leg pose, matching identifiable Yang Lin.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/yang_lin_passing_a_nw_v4.json",
+      "request_sha256": "6e479b229107aa19804111a3a1144e3423be2bf2c731288ddab3dfe509722557",
+      "references": [
+        "wang_ying_passing_a_nw_geometry_v7",
+        "yang_lin_idle_single_nw_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_walk_b_se_geometry_v4",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_b_se_geometry_v4.png",
+      "sha256": "5dbf43d26104d74104cc5c3d05f85dc4d9c6a7d8acd3ce9873ba19598a5939a2",
+      "prompt": "New primitive-only se walk_b contact: red flat support, blue low raised boot; screen support side verified. No character bitmap read/edit; robot anatomy/colors not artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/qin_ming_contact_geometry_v4.gd",
+          "sha256": "74730ccd656542728251f76c82a816c8386150555b38c39b58c7515b1800c392"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_qin_ming_contact_geometry_v4.py",
+          "sha256": "8542f8bf6fda71800821c87e90d6918f35bf27913ee2cfeacf2c6206e7a6c69c"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_b_se_geometry_v4.json",
+          "sha256": "62bb6799fa87f2ccb00697cfb91036a819daac8093ce7544ef1dbc7a933a8b1a"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "yang_lin_walk_b_se_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-8720b2fc-9175-4205-b289-c36795789973",
+      "repository_path": "assets/characters/yang_lin_wounded_20261005/walk_b_se_v4.png",
+      "sha256": "2158afde2a9a5b412a093bfa043d1401e9ebc4f4918d06b10a4a58f5de46ebd2",
+      "prompt": "POSE-GUIDED SINGLE Yang Lin WALK_B native sprite. IMAGE1 gives ONLY lower-leg pose and camera: RED IMAGE-LEFT boot flat support, BLUE IMAGE-RIGHT low raised swing. Robot torso/proportions/colors/green marker/labels NOT character art. IMAGE2 gives all Yang Lin identity/body/garment/material invariants. Yang Lin's exact mature face/POINTED short black beard/moustache and blue-black tied headcloth with trailing ends; tan LEOPARD-ROSETTE spotted fur coat with pale fur collar/front/hem trim, pale rolled linen sleeves, BLUE tied sash, tan trousers, layered dark-blue shin wraps and ordinary dark cloth boots. Preserve spots, never tiger stripes/plain fur. NORMAL ADULT proportions with broad shoulders, relatively narrow waist and long natural limbs; exact head/hand/boot sizes and painterly materials from IMAGE2. Do not copy robot stocky box torso/short body or colored legs. Experienced mobile traveler/martial bearing, naturally aligned level head/upper back and searching gaze, lightly soft knees and modest functional hip movement. No forced parade stiffness, deep squat, rounded hump, huge head/boots or overarched chest.\nFACING: FRONT three-quarter elevated isometric view facing LOWER-RIGHT SE; chest/pointed beard visible, head torso and boot toes lower-right. Keep entire body orientation, never turn rear view into frontal portrait or mirror front to fake back.\nMANDATORY LOWER BODY: COMPACT NATURAL CONTACT: RED IMAGE-LEFT support boot HEEL AND TOE fully flat on ground under own hip, BLUE IMAGE-RIGHT opposite boot modestly LOW raised, soft knee, short natural stride. Preserve colored guide's support assignment rather than two-planted idle legs. Each adult leg continuously belongs to its own hip; no crossing/disconnected shins. Entire underside of PLANTED boot must not face camera; support heel stays down. Raised foot low, no large high sole/kick. A/B alternate support side.\nRelaxed empty hands near sides with a SMALL natural opposing arm swing/balance; head level/neck aligned, shoulders comfortable and waist mobile. Preserve coat rosette density, pale trim and sleeve cuffs, blue sash knot/pattern and calf wraps throughout; coat hem follows minimally and never hides both boots. No helmet/armor/weapon/sheath/rope/bag/banner/new prop. No long lunge/run/jump/attack/deep crouch/hump/parade chest.\nExactly ONE complete full-body adult Yang Lin on genuine transparent RGBA native square<=1536, centered with generous80px+ clear alpha margins including headcloth/boots. Head, both hands and boots whole/unclipped; original adult limb lengths. No floor/shadow/background, grid/text/guide colors/robots, extra people/views, cropping/mirroring or changed costume. New WALK_B leg pose, matching identifiable Yang Lin.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/yang_lin_walk_b_se_v4.json",
+      "request_sha256": "bbc35213caf27961078cf33d269042f05d089cc9f75c43ddc77e9cc9a61fe335",
+      "references": [
+        "qin_ming_walk_b_se_geometry_v4",
+        "yang_lin_idle_single_se_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_walk_b_sw_geometry_v4",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_b_sw_geometry_v4.png",
+      "sha256": "42b8d886a3324b278769ba75eed40461629067b38a50fc7cf6f5cbb3151ab00e",
+      "prompt": "New primitive-only sw walk_b contact: red flat support, blue low raised boot; screen support side verified. No character bitmap read/edit; robot anatomy/colors not artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/qin_ming_contact_geometry_v4.gd",
+          "sha256": "74730ccd656542728251f76c82a816c8386150555b38c39b58c7515b1800c392"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_qin_ming_contact_geometry_v4.py",
+          "sha256": "8542f8bf6fda71800821c87e90d6918f35bf27913ee2cfeacf2c6206e7a6c69c"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_b_sw_geometry_v4.json",
+          "sha256": "b17ff2f34a05c025109b07d9c165b6dc2e5d0731ce7f853c988c73ec3a0527f8"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "yang_lin_walk_b_sw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-2f239a57-b3cd-4691-8d8b-4b660202a311",
+      "repository_path": "assets/characters/yang_lin_wounded_20261005/walk_b_sw_v4.png",
+      "sha256": "342044c8de4d1fd7df7a24a825f7a7ff182c01f50a9a2dbbd964e66a8e44f525",
+      "prompt": "POSE-GUIDED SINGLE Yang Lin WALK_B native sprite. IMAGE1 gives ONLY lower-leg pose and camera: RED IMAGE-RIGHT boot flat support, BLUE IMAGE-LEFT low raised swing. Robot torso/proportions/colors/green marker/labels NOT character art. IMAGE2 gives all Yang Lin identity/body/garment/material invariants. Yang Lin's exact mature face/POINTED short black beard/moustache and blue-black tied headcloth with trailing ends; tan LEOPARD-ROSETTE spotted fur coat with pale fur collar/front/hem trim, pale rolled linen sleeves, BLUE tied sash, tan trousers, layered dark-blue shin wraps and ordinary dark cloth boots. Preserve spots, never tiger stripes/plain fur. NORMAL ADULT proportions with broad shoulders, relatively narrow waist and long natural limbs; exact head/hand/boot sizes and painterly materials from IMAGE2. Do not copy robot stocky box torso/short body or colored legs. Experienced mobile traveler/martial bearing, naturally aligned level head/upper back and searching gaze, lightly soft knees and modest functional hip movement. No forced parade stiffness, deep squat, rounded hump, huge head/boots or overarched chest.\nFACING: FRONT three-quarter elevated isometric view facing LOWER-LEFT SW; chest/pointed beard visible, head torso and boot toes lower-left. Keep entire body orientation, never turn rear view into frontal portrait or mirror front to fake back.\nMANDATORY LOWER BODY: COMPACT NATURAL CONTACT: RED IMAGE-RIGHT support boot HEEL AND TOE fully flat on ground under own hip, BLUE IMAGE-LEFT opposite boot modestly LOW raised, soft knee, short natural stride. Preserve colored guide's support assignment rather than two-planted idle legs. Each adult leg continuously belongs to its own hip; no crossing/disconnected shins. Entire underside of PLANTED boot must not face camera; support heel stays down. Raised foot low, no large high sole/kick. A/B alternate support side.\nRelaxed empty hands near sides with a SMALL natural opposing arm swing/balance; head level/neck aligned, shoulders comfortable and waist mobile. Preserve coat rosette density, pale trim and sleeve cuffs, blue sash knot/pattern and calf wraps throughout; coat hem follows minimally and never hides both boots. No helmet/armor/weapon/sheath/rope/bag/banner/new prop. No long lunge/run/jump/attack/deep crouch/hump/parade chest.\nExactly ONE complete full-body adult Yang Lin on genuine transparent RGBA native square<=1536, centered with generous80px+ clear alpha margins including headcloth/boots. Head, both hands and boots whole/unclipped; original adult limb lengths. No floor/shadow/background, grid/text/guide colors/robots, extra people/views, cropping/mirroring or changed costume. New WALK_B leg pose, matching identifiable Yang Lin.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/yang_lin_walk_b_sw_v4.json",
+      "request_sha256": "705738b6e9b2208f1ef06585476b5ef1aaec044155f968237bce314a9f4511f9",
+      "references": [
+        "qin_ming_walk_b_sw_geometry_v4",
+        "yang_lin_idle_single_sw_v4"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "yang_lin_walk_b2_sw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-421e01a4-6f5f-43c7-84b8-8c516b627d96",
+      "repository_path": "assets/characters/yang_lin_wounded_20261005/walk_b2_sw_v4.png",
+      "sha256": "3c68ceb8b9514007b04ef562f523091509fb7f729f49e20c0c9ec93df85ed16a",
+      "prompt": "TARGETED OPPOSITE-SUPPORT LEG correction, ONE Yang Lin front three-quarter sprite facing LOWER-LEFT SW. IMAGE1 fixes ONLY leg geometry: RED image-RIGHT boot FLAT planted, BLUE image-LEFT boot LOW raised. IMAGE2 is exact edit target, currently wrongly retaining image-left planted A foot. KEEP every upper-body/face/headcloth/coat-rosette/pale-trim/linen-sleeve/BLUE sash/hands/adult proportion/material/camera unchanged, except minimal natural following lower hem. Normal adult Yang Lin broad shoulders/narrow waist and long normal limbs, aligned level head, no hunch/deep squat/parade.\nSWAP THE LEGS BELOW HIPS: IMAGE-RIGHT boot must now be foreground support at lower-right, HEEL AND TOE FLAT down, straight natural support shin/knee to own hip. IMAGE-LEFT boot must now be raised modestly near upper-left, knee softly bent and heel visibly clear, low short stride. Both boot toes still LOWER-LEFT. Do not keep the current image-left planted/right raised layout. This opposite support is mandatory. Follow red/blue only; never copy gray robot anatomy/colors/green patch/text. Each leg continuously belongs to its own hip; no crossing or shortened legs, no giant sole/high kick/lunge/run. The planted boot underside cannot face camera; heel remains down. Keep both boots distinct and cloth wraps/boot materials exactly from target.\nNative transparent RGBA square<=1536, exactly ONE complete Yang Lin centered with generous margins, full head/hands/boots. No mirror/crop/body scale change, background/floor/shadow/labels/grid/extra person/weapon/rope/prop. All upper identity and wardrobe invariant. Correct SW WALK B: image-RIGHT flat support, image-LEFT low raised.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/yang_lin_walk_b2_sw_v4.json",
+      "request_sha256": "59cb14b104f71fe65faa7446ff16788a20ffc665ce877d7887f4af0d9c46b449",
+      "references": [
+        "qin_ming_walk_b_sw_geometry_v4",
+        "yang_lin_walk_b_sw_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_walk_b_ne_geometry_v4",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_b_ne_geometry_v4.png",
+      "sha256": "fec7c4048e49db2c41be94a1abafdb34352a221e4d4912200e6dd612a0bcdc92",
+      "prompt": "New primitive-only ne walk_b contact: red flat support, blue low raised boot; screen support side verified. No character bitmap read/edit; robot anatomy/colors not artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/qin_ming_contact_geometry_v4.gd",
+          "sha256": "74730ccd656542728251f76c82a816c8386150555b38c39b58c7515b1800c392"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_qin_ming_contact_geometry_v4.py",
+          "sha256": "8542f8bf6fda71800821c87e90d6918f35bf27913ee2cfeacf2c6206e7a6c69c"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_b_ne_geometry_v4.json",
+          "sha256": "548c8ffe9111ea5bc202a69a751984f5f91e093862d7a5bc4dfa9f14ed7af44e"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "yang_lin_walk_b_ne_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-40dbd71a-3732-40a7-9970-e27147ee42e4",
+      "repository_path": "assets/characters/yang_lin_wounded_20261005/walk_b_ne_v4.png",
+      "sha256": "075196e8d0a8b9f721b523ff985fe52e53c2cf122db292bd8b8c5e04473ebca2",
+      "prompt": "POSE-GUIDED SINGLE Yang Lin WALK_B native sprite. IMAGE1 gives ONLY lower-leg pose and camera: RED IMAGE-RIGHT boot flat support, BLUE IMAGE-LEFT low raised swing. Robot torso/proportions/colors/green marker/labels NOT character art. IMAGE2 gives all Yang Lin identity/body/garment/material invariants. Yang Lin's exact mature face/POINTED short black beard/moustache and blue-black tied headcloth with trailing ends; tan LEOPARD-ROSETTE spotted fur coat with pale fur collar/front/hem trim, pale rolled linen sleeves, BLUE tied sash, tan trousers, layered dark-blue shin wraps and ordinary dark cloth boots. Preserve spots, never tiger stripes/plain fur. NORMAL ADULT proportions with broad shoulders, relatively narrow waist and long natural limbs; exact head/hand/boot sizes and painterly materials from IMAGE2. Do not copy robot stocky box torso/short body or colored legs. Experienced mobile traveler/martial bearing, naturally aligned level head/upper back and searching gaze, lightly soft knees and modest functional hip movement. No forced parade stiffness, deep squat, rounded hump, huge head/boots or overarched chest.\nFACING: BACK three-quarter elevated isometric view facing AWAY-UPPER-RIGHT NE; back of coat/shoulders/headcloth visible, tiny far-side beard profile only, no frontal chest or both eyes; boot toes upper-right. Keep entire body orientation, never turn rear view into frontal portrait or mirror front to fake back.\nMANDATORY LOWER BODY: COMPACT NATURAL CONTACT: RED IMAGE-RIGHT support boot HEEL AND TOE fully flat on ground under own hip, BLUE IMAGE-LEFT opposite boot modestly LOW raised, soft knee, short natural stride. Preserve colored guide's support assignment rather than two-planted idle legs. Each adult leg continuously belongs to its own hip; no crossing/disconnected shins. Entire underside of PLANTED boot must not face camera; support heel stays down. Raised foot low, no large high sole/kick. A/B alternate support side.\nRelaxed empty hands near sides with a SMALL natural opposing arm swing/balance; head level/neck aligned, shoulders comfortable and waist mobile. Preserve coat rosette density, pale trim and sleeve cuffs, blue sash knot/pattern and calf wraps throughout; coat hem follows minimally and never hides both boots. No helmet/armor/weapon/sheath/rope/bag/banner/new prop. No long lunge/run/jump/attack/deep crouch/hump/parade chest.\nExactly ONE complete full-body adult Yang Lin on genuine transparent RGBA native square<=1536, centered with generous80px+ clear alpha margins including headcloth/boots. Head, both hands and boots whole/unclipped; original adult limb lengths. No floor/shadow/background, grid/text/guide colors/robots, extra people/views, cropping/mirroring or changed costume. New WALK_B leg pose, matching identifiable Yang Lin.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/yang_lin_walk_b_ne_v4.json",
+      "request_sha256": "48754b49c0b93b0744220472d43f37d16f539344da11e34c1d83949799178c02",
+      "references": [
+        "qin_ming_walk_b_ne_geometry_v4",
+        "yang_lin_idle_single_ne_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_walk_b_nw_geometry_v4",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_b_nw_geometry_v4.png",
+      "sha256": "2490edb0c9ef74a93f7e418865823df74af261df80e5edf25f8c01e7c4db2730",
+      "prompt": "New primitive-only nw walk_b contact: red flat support, blue low raised boot; screen support side verified. No character bitmap read/edit; robot anatomy/colors not artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/qin_ming_contact_geometry_v4.gd",
+          "sha256": "74730ccd656542728251f76c82a816c8386150555b38c39b58c7515b1800c392"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_qin_ming_contact_geometry_v4.py",
+          "sha256": "8542f8bf6fda71800821c87e90d6918f35bf27913ee2cfeacf2c6206e7a6c69c"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_b_nw_geometry_v4.json",
+          "sha256": "7e9c8bfca05fdf2799c4daf445530ffde06ae813f4de2ad137362270f0a85efb"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "yang_lin_walk_b_nw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-b2f91767-2415-41c4-9b80-90948b99d5ef",
+      "repository_path": "assets/characters/yang_lin_wounded_20261005/walk_b_nw_v4.png",
+      "sha256": "c62f251b28cb10e3d16eefaa3680846ac25c69202ed9eca146daaffff0f219c7",
+      "prompt": "POSE-GUIDED SINGLE Yang Lin WALK_B native sprite. IMAGE1 gives ONLY lower-leg pose and camera: RED IMAGE-RIGHT boot flat support, BLUE IMAGE-LEFT low raised swing. Robot torso/proportions/colors/green marker/labels NOT character art. IMAGE2 gives all Yang Lin identity/body/garment/material invariants. Yang Lin's exact mature face/POINTED short black beard/moustache and blue-black tied headcloth with trailing ends; tan LEOPARD-ROSETTE spotted fur coat with pale fur collar/front/hem trim, pale rolled linen sleeves, BLUE tied sash, tan trousers, layered dark-blue shin wraps and ordinary dark cloth boots. Preserve spots, never tiger stripes/plain fur. NORMAL ADULT proportions with broad shoulders, relatively narrow waist and long natural limbs; exact head/hand/boot sizes and painterly materials from IMAGE2. Do not copy robot stocky box torso/short body or colored legs. Experienced mobile traveler/martial bearing, naturally aligned level head/upper back and searching gaze, lightly soft knees and modest functional hip movement. No forced parade stiffness, deep squat, rounded hump, huge head/boots or overarched chest.\nFACING: BACK three-quarter elevated isometric view facing AWAY-UPPER-LEFT NW; back of coat/shoulders/headcloth visible, tiny far-side beard profile only, no frontal chest or both eyes; boot toes upper-left. Keep entire body orientation, never turn rear view into frontal portrait or mirror front to fake back.\nMANDATORY LOWER BODY: COMPACT NATURAL CONTACT: RED IMAGE-RIGHT support boot HEEL AND TOE fully flat on ground under own hip, BLUE IMAGE-LEFT opposite boot modestly LOW raised, soft knee, short natural stride. Preserve colored guide's support assignment rather than two-planted idle legs. Each adult leg continuously belongs to its own hip; no crossing/disconnected shins. Entire underside of PLANTED boot must not face camera; support heel stays down. Raised foot low, no large high sole/kick. A/B alternate support side.\nRelaxed empty hands near sides with a SMALL natural opposing arm swing/balance; head level/neck aligned, shoulders comfortable and waist mobile. Preserve coat rosette density, pale trim and sleeve cuffs, blue sash knot/pattern and calf wraps throughout; coat hem follows minimally and never hides both boots. No helmet/armor/weapon/sheath/rope/bag/banner/new prop. No long lunge/run/jump/attack/deep crouch/hump/parade chest.\nExactly ONE complete full-body adult Yang Lin on genuine transparent RGBA native square<=1536, centered with generous80px+ clear alpha margins including headcloth/boots. Head, both hands and boots whole/unclipped; original adult limb lengths. No floor/shadow/background, grid/text/guide colors/robots, extra people/views, cropping/mirroring or changed costume. New WALK_B leg pose, matching identifiable Yang Lin.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/yang_lin_walk_b_nw_v4.json",
+      "request_sha256": "0bc98bdd4efeb837ef2e70c30d4c568b90eff149e16d9db133d407afcc3d773e",
+      "references": [
+        "qin_ming_walk_b_nw_geometry_v4",
+        "yang_lin_idle_single_nw_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_passing_b_se_geometry_v7",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/wang_ying_passing_b_se_geometry_v7.png",
+      "sha256": "720906c1a872bdadac3a878f6c4b76a8a43ee5ed4aade5d0aaf63e5389ac3fd9",
+      "prompt": "New SE passing_b short broad adult geometry: red flat support, blue low passing boot under pelvis. No source bitmap read/edit or production artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/wang_ying_passing_geometry_v7.gd",
+          "sha256": "2070bcd5ca8b31bd0a0b901a1db266354d07922ac61521c83991a4da9086384f"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_wang_ying_passing_geometry_v7.py",
+          "sha256": "35df66125d5caf116d296a2d1f68ced53e9f81494d50c472837c11e672734c9e"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/geometry_passing_b_se_v7.json",
+          "sha256": "f6117b85e45a4f1e6e1a91221e4c179a53318e966ba6831a4f4aa09118b4ca9e"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "yang_lin_passing_b_se_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-3a4db697-d869-4ec7-a02a-9ef8e73a5896",
+      "repository_path": "assets/characters/yang_lin_wounded_20261005/passing_b_se_v4.png",
+      "sha256": "e61378fecd6c23c6710bcddf98e67a8dbcdd396be1ef401c9c03fff741d4056f",
+      "prompt": "POSE-GUIDED SINGLE Yang Lin PASSING_B native sprite. IMAGE1 gives ONLY lower-leg pose and camera: RED IMAGE-LEFT boot flat support, BLUE IMAGE-RIGHT low raised swing. Robot torso/proportions/colors/green marker/labels NOT character art. IMAGE2 gives all Yang Lin identity/body/garment/material invariants. Yang Lin's exact mature face/POINTED short black beard/moustache and blue-black tied headcloth with trailing ends; tan LEOPARD-ROSETTE spotted fur coat with pale fur collar/front/hem trim, pale rolled linen sleeves, BLUE tied sash, tan trousers, layered dark-blue shin wraps and ordinary dark cloth boots. Preserve spots, never tiger stripes/plain fur. NORMAL ADULT proportions with broad shoulders, relatively narrow waist and long natural limbs; exact head/hand/boot sizes and painterly materials from IMAGE2. Do not copy robot stocky box torso/short body or colored legs. Experienced mobile traveler/martial bearing, naturally aligned level head/upper back and searching gaze, lightly soft knees and modest functional hip movement. No forced parade stiffness, deep squat, rounded hump, huge head/boots or overarched chest.\nFACING: FRONT three-quarter elevated isometric view facing LOWER-RIGHT SE; chest/pointed beard visible, head torso and boot toes lower-right. Keep entire body orientation, never turn rear view into frontal portrait or mirror front to fake back.\nMANDATORY LOWER BODY: TRUE DISTINCT NEAR-FOOT PASSING: RED IMAGE-LEFT boot FLAT planted, supporting weight directly under hip. BLUE IMAGE-RIGHT boot clearly LOW raised and moving past UNDER pelvis beside support foot, knee mildly bent. Close fore-aft/lateral gap rather than wide walking-contact stride. Both boots fully distinct and connected through normal adult ankle/shin/knee to own hips. Raised heel/toe visibly clear of its corresponding ground plane by about ONE BOOT-THICKNESS, not both boots flat planted. Do not replace with idle/contact legs. Compact low passing, never high knee/huge sole/kick; A/B alternate support. Avoid hiding raised boot behind hem.\nRelaxed empty hands near sides with a SMALL natural opposing arm swing/balance; head level/neck aligned, shoulders comfortable and waist mobile. Preserve coat rosette density, pale trim and sleeve cuffs, blue sash knot/pattern and calf wraps throughout; coat hem follows minimally and never hides both boots. No helmet/armor/weapon/sheath/rope/bag/banner/new prop. No long lunge/run/jump/attack/deep crouch/hump/parade chest.\nExactly ONE complete full-body adult Yang Lin on genuine transparent RGBA native square<=1536, centered with generous80px+ clear alpha margins including headcloth/boots. Head, both hands and boots whole/unclipped; original adult limb lengths. No floor/shadow/background, grid/text/guide colors/robots, extra people/views, cropping/mirroring or changed costume. New PASSING_B leg pose, matching identifiable Yang Lin.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/yang_lin_passing_b_se_v4.json",
+      "request_sha256": "f350fe8499b1226bbf20364537ce3fd7c99a733d997beb54bbd5ad25a6f5337b",
+      "references": [
+        "wang_ying_passing_b_se_geometry_v7",
+        "yang_lin_idle_single_se_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_passing_b_sw_geometry_v7",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/wang_ying_passing_b_sw_geometry_v7.png",
+      "sha256": "031d1f6e392d6456c048d35f5c80ed0abf1148a5f3cf62330477701caad44268",
+      "prompt": "New SW passing_b short broad adult geometry: red flat support, blue low passing boot under pelvis. No source bitmap read/edit or production artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/wang_ying_passing_geometry_v7.gd",
+          "sha256": "2070bcd5ca8b31bd0a0b901a1db266354d07922ac61521c83991a4da9086384f"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_wang_ying_passing_geometry_v7.py",
+          "sha256": "35df66125d5caf116d296a2d1f68ced53e9f81494d50c472837c11e672734c9e"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/geometry_passing_b_sw_v7.json",
+          "sha256": "c06eca15e49eee86c396efb8a8a8714c75124c9d5474803bac9974a8f04f5295"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "yang_lin_passing_b_sw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-4a9e2dd1-8b97-423e-befb-d6deaccbc55f",
+      "repository_path": "assets/characters/yang_lin_wounded_20261005/passing_b_sw_v4.png",
+      "sha256": "48f4e48d88b7a0294777800da90131ede156af4102b90b5a9270305ac60e5903",
+      "prompt": "POSE-GUIDED SINGLE Yang Lin PASSING_B native sprite. IMAGE1 gives ONLY lower-leg pose and camera: RED IMAGE-RIGHT boot flat support, BLUE IMAGE-LEFT low raised swing. Robot torso/proportions/colors/green marker/labels NOT character art. IMAGE2 gives all Yang Lin identity/body/garment/material invariants. Yang Lin's exact mature face/POINTED short black beard/moustache and blue-black tied headcloth with trailing ends; tan LEOPARD-ROSETTE spotted fur coat with pale fur collar/front/hem trim, pale rolled linen sleeves, BLUE tied sash, tan trousers, layered dark-blue shin wraps and ordinary dark cloth boots. Preserve spots, never tiger stripes/plain fur. NORMAL ADULT proportions with broad shoulders, relatively narrow waist and long natural limbs; exact head/hand/boot sizes and painterly materials from IMAGE2. Do not copy robot stocky box torso/short body or colored legs. Experienced mobile traveler/martial bearing, naturally aligned level head/upper back and searching gaze, lightly soft knees and modest functional hip movement. No forced parade stiffness, deep squat, rounded hump, huge head/boots or overarched chest.\nFACING: FRONT three-quarter elevated isometric view facing LOWER-LEFT SW; chest/pointed beard visible, head torso and boot toes lower-left. Keep entire body orientation, never turn rear view into frontal portrait or mirror front to fake back.\nMANDATORY LOWER BODY: TRUE DISTINCT NEAR-FOOT PASSING: RED IMAGE-RIGHT boot FLAT planted, supporting weight directly under hip. BLUE IMAGE-LEFT boot clearly LOW raised and moving past UNDER pelvis beside support foot, knee mildly bent. Close fore-aft/lateral gap rather than wide walking-contact stride. Both boots fully distinct and connected through normal adult ankle/shin/knee to own hips. Raised heel/toe visibly clear of its corresponding ground plane by about ONE BOOT-THICKNESS, not both boots flat planted. Do not replace with idle/contact legs. Compact low passing, never high knee/huge sole/kick; A/B alternate support. Avoid hiding raised boot behind hem.\nRelaxed empty hands near sides with a SMALL natural opposing arm swing/balance; head level/neck aligned, shoulders comfortable and waist mobile. Preserve coat rosette density, pale trim and sleeve cuffs, blue sash knot/pattern and calf wraps throughout; coat hem follows minimally and never hides both boots. No helmet/armor/weapon/sheath/rope/bag/banner/new prop. No long lunge/run/jump/attack/deep crouch/hump/parade chest.\nExactly ONE complete full-body adult Yang Lin on genuine transparent RGBA native square<=1536, centered with generous80px+ clear alpha margins including headcloth/boots. Head, both hands and boots whole/unclipped; original adult limb lengths. No floor/shadow/background, grid/text/guide colors/robots, extra people/views, cropping/mirroring or changed costume. New PASSING_B leg pose, matching identifiable Yang Lin.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/yang_lin_passing_b_sw_v4.json",
+      "request_sha256": "33c6b699318fbf92a3ba29fa0bfafa1b1bfb65bbcec01f5f30b6c0df1e4148a1",
+      "references": [
+        "wang_ying_passing_b_sw_geometry_v7",
+        "yang_lin_idle_single_sw_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_passing_b_ne_geometry_v7",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/wang_ying_passing_b_ne_geometry_v7.png",
+      "sha256": "1f96a2fa3475c0761b4eb2649e4752f54a1323e9ebd441a7df462f8ec3516807",
+      "prompt": "New NE passing_b short broad adult geometry: red flat support, blue low passing boot under pelvis. No source bitmap read/edit or production artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/wang_ying_passing_geometry_v7.gd",
+          "sha256": "2070bcd5ca8b31bd0a0b901a1db266354d07922ac61521c83991a4da9086384f"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_wang_ying_passing_geometry_v7.py",
+          "sha256": "35df66125d5caf116d296a2d1f68ced53e9f81494d50c472837c11e672734c9e"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/geometry_passing_b_ne_v7.json",
+          "sha256": "afe197fb6c8bfde89fe914e72a67f7da2f1d36d2350dc6aa184b249c33e0b0cf"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "yang_lin_passing_b_ne_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-8fbb848e-f5d5-4a53-b2db-ceba1b171ee5",
+      "repository_path": "assets/characters/yang_lin_wounded_20261005/passing_b_ne_v4.png",
+      "sha256": "63b2df84fcc1928fc95d580d6eff8dd2a0f8ffaeda6309506b6d73aa6d185026",
+      "prompt": "POSE-GUIDED SINGLE Yang Lin PASSING_B native sprite. IMAGE1 gives ONLY lower-leg pose and camera: RED IMAGE-RIGHT boot flat support, BLUE IMAGE-LEFT low raised swing. Robot torso/proportions/colors/green marker/labels NOT character art. IMAGE2 gives all Yang Lin identity/body/garment/material invariants. Yang Lin's exact mature face/POINTED short black beard/moustache and blue-black tied headcloth with trailing ends; tan LEOPARD-ROSETTE spotted fur coat with pale fur collar/front/hem trim, pale rolled linen sleeves, BLUE tied sash, tan trousers, layered dark-blue shin wraps and ordinary dark cloth boots. Preserve spots, never tiger stripes/plain fur. NORMAL ADULT proportions with broad shoulders, relatively narrow waist and long natural limbs; exact head/hand/boot sizes and painterly materials from IMAGE2. Do not copy robot stocky box torso/short body or colored legs. Experienced mobile traveler/martial bearing, naturally aligned level head/upper back and searching gaze, lightly soft knees and modest functional hip movement. No forced parade stiffness, deep squat, rounded hump, huge head/boots or overarched chest.\nFACING: BACK three-quarter elevated isometric view facing AWAY-UPPER-RIGHT NE; back of coat/shoulders/headcloth visible, tiny far-side beard profile only, no frontal chest or both eyes; boot toes upper-right. Keep entire body orientation, never turn rear view into frontal portrait or mirror front to fake back.\nMANDATORY LOWER BODY: TRUE DISTINCT NEAR-FOOT PASSING: RED IMAGE-RIGHT boot FLAT planted, supporting weight directly under hip. BLUE IMAGE-LEFT boot clearly LOW raised and moving past UNDER pelvis beside support foot, knee mildly bent. Close fore-aft/lateral gap rather than wide walking-contact stride. Both boots fully distinct and connected through normal adult ankle/shin/knee to own hips. Raised heel/toe visibly clear of its corresponding ground plane by about ONE BOOT-THICKNESS, not both boots flat planted. Do not replace with idle/contact legs. Compact low passing, never high knee/huge sole/kick; A/B alternate support. Avoid hiding raised boot behind hem.\nRelaxed empty hands near sides with a SMALL natural opposing arm swing/balance; head level/neck aligned, shoulders comfortable and waist mobile. Preserve coat rosette density, pale trim and sleeve cuffs, blue sash knot/pattern and calf wraps throughout; coat hem follows minimally and never hides both boots. No helmet/armor/weapon/sheath/rope/bag/banner/new prop. No long lunge/run/jump/attack/deep crouch/hump/parade chest.\nExactly ONE complete full-body adult Yang Lin on genuine transparent RGBA native square<=1536, centered with generous80px+ clear alpha margins including headcloth/boots. Head, both hands and boots whole/unclipped; original adult limb lengths. No floor/shadow/background, grid/text/guide colors/robots, extra people/views, cropping/mirroring or changed costume. New PASSING_B leg pose, matching identifiable Yang Lin.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/yang_lin_passing_b_ne_v4.json",
+      "request_sha256": "a4917151d459d9bc2ea8a0af0b11a2806516fac34fb02771557114d9c856bfe6",
+      "references": [
+        "wang_ying_passing_b_ne_geometry_v7",
+        "yang_lin_idle_single_ne_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_passing_b_nw_geometry_v7",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/wang_ying_passing_b_nw_geometry_v7.png",
+      "sha256": "362fb53746b7ab26a49e0f7aa3807c9c77b9c3d44c9f6ff514aff1d29c151616",
+      "prompt": "New NW passing_b short broad adult geometry: red flat support, blue low passing boot under pelvis. No source bitmap read/edit or production artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/wang_ying_passing_geometry_v7.gd",
+          "sha256": "2070bcd5ca8b31bd0a0b901a1db266354d07922ac61521c83991a4da9086384f"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_wang_ying_passing_geometry_v7.py",
+          "sha256": "35df66125d5caf116d296a2d1f68ced53e9f81494d50c472837c11e672734c9e"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/geometry_passing_b_nw_v7.json",
+          "sha256": "4087b0b3d54f26d56d2a11d40d8c861dd9708fe1af54faaed92326c2a52223c1"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "yang_lin_passing_b_nw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-de801251-6978-4fec-b43c-049aa9c5cb13",
+      "repository_path": "assets/characters/yang_lin_wounded_20261005/passing_b_nw_v4.png",
+      "sha256": "bfcaa3302e93577a96f1692744716941583f1706e5129c55dedb77fe5cf711bb",
+      "prompt": "POSE-GUIDED SINGLE Yang Lin PASSING_B native sprite. IMAGE1 gives ONLY lower-leg pose and camera: RED IMAGE-RIGHT boot flat support, BLUE IMAGE-LEFT low raised swing. Robot torso/proportions/colors/green marker/labels NOT character art. IMAGE2 gives all Yang Lin identity/body/garment/material invariants. Yang Lin's exact mature face/POINTED short black beard/moustache and blue-black tied headcloth with trailing ends; tan LEOPARD-ROSETTE spotted fur coat with pale fur collar/front/hem trim, pale rolled linen sleeves, BLUE tied sash, tan trousers, layered dark-blue shin wraps and ordinary dark cloth boots. Preserve spots, never tiger stripes/plain fur. NORMAL ADULT proportions with broad shoulders, relatively narrow waist and long natural limbs; exact head/hand/boot sizes and painterly materials from IMAGE2. Do not copy robot stocky box torso/short body or colored legs. Experienced mobile traveler/martial bearing, naturally aligned level head/upper back and searching gaze, lightly soft knees and modest functional hip movement. No forced parade stiffness, deep squat, rounded hump, huge head/boots or overarched chest.\nFACING: BACK three-quarter elevated isometric view facing AWAY-UPPER-LEFT NW; back of coat/shoulders/headcloth visible, tiny far-side beard profile only, no frontal chest or both eyes; boot toes upper-left. Keep entire body orientation, never turn rear view into frontal portrait or mirror front to fake back.\nMANDATORY LOWER BODY: TRUE DISTINCT NEAR-FOOT PASSING: RED IMAGE-RIGHT boot FLAT planted, supporting weight directly under hip. BLUE IMAGE-LEFT boot clearly LOW raised and moving past UNDER pelvis beside support foot, knee mildly bent. Close fore-aft/lateral gap rather than wide walking-contact stride. Both boots fully distinct and connected through normal adult ankle/shin/knee to own hips. Raised heel/toe visibly clear of its corresponding ground plane by about ONE BOOT-THICKNESS, not both boots flat planted. Do not replace with idle/contact legs. Compact low passing, never high knee/huge sole/kick; A/B alternate support. Avoid hiding raised boot behind hem.\nRelaxed empty hands near sides with a SMALL natural opposing arm swing/balance; head level/neck aligned, shoulders comfortable and waist mobile. Preserve coat rosette density, pale trim and sleeve cuffs, blue sash knot/pattern and calf wraps throughout; coat hem follows minimally and never hides both boots. No helmet/armor/weapon/sheath/rope/bag/banner/new prop. No long lunge/run/jump/attack/deep crouch/hump/parade chest.\nExactly ONE complete full-body adult Yang Lin on genuine transparent RGBA native square<=1536, centered with generous80px+ clear alpha margins including headcloth/boots. Head, both hands and boots whole/unclipped; original adult limb lengths. No floor/shadow/background, grid/text/guide colors/robots, extra people/views, cropping/mirroring or changed costume. New PASSING_B leg pose, matching identifiable Yang Lin.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/yang_lin_passing_b_nw_v4.json",
+      "request_sha256": "f57e609dfbac087762e692f1f44839c16ffcfe9bda12bb5065dfa024e9ce0592",
+      "references": [
+        "wang_ying_passing_b_nw_geometry_v7",
+        "yang_lin_idle_single_nw_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    }
+  ],
+  "scope": "Native complete ancestry plus new mathematical geometry references; Full four-phase candidate gait only; no production routing"
+}

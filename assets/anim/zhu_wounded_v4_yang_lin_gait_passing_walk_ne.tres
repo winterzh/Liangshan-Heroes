@@ -1,0 +1,58 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/yang_lin_wounded_20261005/walk_a_ne_v4.png" id="walk_a_ne"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/yang_lin_wounded_20261005/passing_a_ne_v4.png" id="passing_a_ne"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/yang_lin_wounded_20261005/walk_b_ne_v4.png" id="walk_b_ne"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/yang_lin_wounded_20261005/passing_b_ne_v4.png" id="passing_b_ne"]
+
+[sub_resource type="AtlasTexture" id="walk_a_ne"]
+atlas = ExtResource("walk_a_ne")
+region = Rect2(0, 0, 1254, 1254)
+margin = Rect2(0, 0, 0, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-74.5, -130.72)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.910726
+
+[sub_resource type="AtlasTexture" id="passing_a_ne"]
+atlas = ExtResource("passing_a_ne")
+region = Rect2(0, 0, 1254, 1254)
+margin = Rect2(0, 0, 0, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-38.5, -128.72)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.927128
+
+[sub_resource type="AtlasTexture" id="walk_b_ne"]
+atlas = ExtResource("walk_b_ne")
+region = Rect2(0, 0, 1254, 1254)
+margin = Rect2(0, 0, 0, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-4.0, -124.72)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.930657
+
+[sub_resource type="AtlasTexture" id="passing_b_ne"]
+atlas = ExtResource("passing_b_ne")
+region = Rect2(0, 0, 1254, 1254)
+margin = Rect2(0, 0, 0, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-11.5, -141.72)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.880396
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("walk_a_ne")},
+{"duration": 1.0, "texture": SubResource("passing_a_ne")},
+{"duration": 1.0, "texture": SubResource("walk_b_ne")},
+{"duration": 1.0, "texture": SubResource("passing_b_ne")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

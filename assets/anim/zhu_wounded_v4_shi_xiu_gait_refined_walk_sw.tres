@@ -1,0 +1,58 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/shi_xiu_wounded_20261005/walk_a_matched_sw_v4.png" id="walk_a_sw"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/shi_xiu_wounded_20261005/passing_a_sw_v4.png" id="passing_a_sw"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/shi_xiu_wounded_20261005/step_b_body2_sw_v4.png" id="walk_b_sw"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/shi_xiu_wounded_20261005/passing_b3_sw_v4.png" id="passing_b_sw"]
+
+[sub_resource type="AtlasTexture" id="walk_a_sw"]
+atlas = ExtResource("walk_a_sw")
+region = Rect2(0, 0, 1254, 1254)
+margin = Rect2(0, 0, 0, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-19.0, -189.72)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.823333
+
+[sub_resource type="AtlasTexture" id="passing_a_sw"]
+atlas = ExtResource("passing_a_sw")
+region = Rect2(0, 0, 1254, 1254)
+margin = Rect2(0, 0, 0, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-7.0, -184.72)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.826813
+
+[sub_resource type="AtlasTexture" id="walk_b_sw"]
+atlas = ExtResource("walk_b_sw")
+region = Rect2(0, 0, 1254, 1254)
+margin = Rect2(0, 0, 0, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-21.0, -179.72)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.829618
+
+[sub_resource type="AtlasTexture" id="passing_b_sw"]
+atlas = ExtResource("passing_b_sw")
+region = Rect2(0, 0, 1254, 1254)
+margin = Rect2(0, 0, 0, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-5.5, -145.72)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.855
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("walk_a_sw")},
+{"duration": 1.0, "texture": SubResource("passing_a_sw")},
+{"duration": 1.0, "texture": SubResource("walk_b_sw")},
+{"duration": 1.0, "texture": SubResource("passing_b_sw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

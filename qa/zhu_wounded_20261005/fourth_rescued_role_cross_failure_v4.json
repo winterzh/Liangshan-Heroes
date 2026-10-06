@@ -1,0 +1,135 @@
+{
+  "scope": "Bound61 and freed127 passed; midroute failed ordinary defender-clearance fixture. Not all-five qualification.",
+  "receipt": "E:\\ChatGPT\\qa-rescued-seven-persistence-20261006\\rescued_role_cross_v4_c52ec535\\receipt.json",
+  "receipt_sha256": "719a0934a3926eaba63be1e5d3c6a1573a2b96c8428433c3286212e2dc3f016f",
+  "failure": {
+    "type": "AssertionError",
+    "message": "Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org\nOpenGL API 3.3.0 NVIDIA 616.56 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce RTX 3070 Ti\n\nWARNING: 2D MSAA is not yet supported for GLES3.\n   at: render_target_set_msaa (drivers/gles3/storage/texture_storage.cpp:2934)\nFAIL MOVE normal attacks clear original defender\nRESCUED_ROLE_PROCESS_COMPLETE midroute 63 false\n"
+  },
+  "steps": [
+    {
+      "case": "import",
+      "pid": 172536,
+      "process_nonce": "9f2b3192de034310954c232dd432642f",
+      "started_ns": 451727109000000,
+      "finished_ns": 451765015000000,
+      "exit_code": 0,
+      "stopped_for": null,
+      "log_sha256": "a258c79ad7299e21970e2e97133af3ed5cd18c088f0bbfe96454f87b32b32755",
+      "command": [
+        "C:\\Users\\Administrator\\Desktop\\新建文件夹 (2)\\Godot_v4.6.3-stable_win64.exe",
+        "--path",
+        "E:\\ChatGPT\\qa-rescued-seven-persistence-20261006\\rescued_role_cross_v4_c52ec535\\project",
+        "--rendering-method",
+        "gl_compatibility",
+        "--headless",
+        "--editor",
+        "--import",
+        "--quit"
+      ],
+      "actual_rendering": false,
+      "passed": true
+    },
+    {
+      "case": "profile_guard",
+      "pid": 172040,
+      "process_nonce": "c99cea0639954f5da2c82ca6fb5a0989",
+      "started_ns": 451765234000000,
+      "finished_ns": 451774750000000,
+      "exit_code": 2,
+      "stopped_for": null,
+      "log_sha256": "62a6200a01be71b28ea0a2c0e68d2b15b72ae97ce554b73e461d73892c99c1e1",
+      "command": [
+        "C:\\Users\\Administrator\\Desktop\\新建文件夹 (2)\\Godot_v4.6.3-stable_win64.exe",
+        "--path",
+        "E:\\ChatGPT\\qa-rescued-seven-persistence-20261006\\rescued_role_cross_v4_c52ec535\\project",
+        "--rendering-method",
+        "gl_compatibility",
+        "--headless",
+        "res://tools/rescued_role_process_v4.tscn"
+      ],
+      "actual_rendering": false,
+      "passed": true
+    },
+    {
+      "case": "bound",
+      "pid": 172956,
+      "process_nonce": "5828c6c0ccb64a3a91d78a466e2b88e2",
+      "started_ns": 451775000000000,
+      "finished_ns": 451892156000000,
+      "exit_code": 0,
+      "stopped_for": null,
+      "log_sha256": "92f59b87b99815b7ae75da6544a02b75487e7d24a4a82329227e7f3050c29947",
+      "command": [
+        "C:\\Users\\Administrator\\Desktop\\新建文件夹 (2)\\Godot_v4.6.3-stable_win64.exe",
+        "--path",
+        "E:\\ChatGPT\\qa-rescued-seven-persistence-20261006\\rescued_role_cross_v4_c52ec535\\project",
+        "--rendering-method",
+        "gl_compatibility",
+        "--audio-driver",
+        "Dummy",
+        "--resolution",
+        "1280x720",
+        "--position",
+        "30000,30000",
+        "res://tools/rescued_role_process_v4.tscn"
+      ],
+      "actual_rendering": true,
+      "passed": true
+    },
+    {
+      "case": "freed",
+      "pid": 176680,
+      "process_nonce": "d6314928c05041aa934391e89d1dc0ad",
+      "started_ns": 452182406000000,
+      "finished_ns": 452255359000000,
+      "exit_code": 0,
+      "stopped_for": null,
+      "log_sha256": "3a0179cc2ef40b1c2f8abb6544f0e82bbb80ba21922f255b9c9967b34939009e",
+      "command": [
+        "C:\\Users\\Administrator\\Desktop\\新建文件夹 (2)\\Godot_v4.6.3-stable_win64.exe",
+        "--path",
+        "E:\\ChatGPT\\qa-rescued-seven-persistence-20261006\\rescued_role_cross_v4_c52ec535\\project",
+        "--rendering-method",
+        "gl_compatibility",
+        "--audio-driver",
+        "Dummy",
+        "--resolution",
+        "1280x720",
+        "--position",
+        "30000,30000",
+        "res://tools/rescued_role_process_v4.tscn"
+      ],
+      "actual_rendering": true,
+      "passed": true
+    },
+    {
+      "case": "midroute",
+      "pid": 154100,
+      "process_nonce": "b2e2d1782e8f4ff1857feb3e900b1f67",
+      "started_ns": 452255578000000,
+      "finished_ns": 452431312000000,
+      "exit_code": 1,
+      "stopped_for": null,
+      "log_sha256": "ff792e51b2ffafec532845d9f7ccd46e62cec3f22f1bb976d2b8173cc29ea5da",
+      "command": [
+        "C:\\Users\\Administrator\\Desktop\\新建文件夹 (2)\\Godot_v4.6.3-stable_win64.exe",
+        "--path",
+        "E:\\ChatGPT\\qa-rescued-seven-persistence-20261006\\rescued_role_cross_v4_c52ec535\\project",
+        "--rendering-method",
+        "gl_compatibility",
+        "--audio-driver",
+        "Dummy",
+        "--resolution",
+        "1280x720",
+        "--position",
+        "30000,30000",
+        "res://tools/rescued_role_process_v4.tscn"
+      ],
+      "actual_rendering": true,
+      "passed": false
+    }
+  ],
+  "diagnosis": "Unlike original artwork evacuation fixture, fog remains enabled. Player _enemy_at rejects stale invisible cells. Fighter contact position changed immediately before order with no normal fog refresh. Add normal-time visibility wait and exact command-hit guard, without changing fog arrays/damage/timers.",
+  "diagnosis_scope": "Source-derived suspect only: first failed batch did not record clicked target/visibility. The new runtime guard must confirm or refute stale sight before attributing the failure."
+}

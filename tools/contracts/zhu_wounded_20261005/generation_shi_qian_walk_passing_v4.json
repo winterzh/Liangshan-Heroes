@@ -1,0 +1,706 @@
+{
+  "original_reference": {
+    "path": "assets/characters/shi_qian_bound_20261005/bound.png",
+    "sha256": "08787ccf51041c8e6134999a7dc6e9c6e884631d2feebac3e7df868c9060a108"
+  },
+  "jobs": [
+    {
+      "key": "sw_initial_rejected",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-14e9b9ec-b822-445d-b639-37f1b69f93db",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/native_references/sw_initial_rejected.png",
+      "sha256": "0d671be87f60f2bcf662a443765caa39722691be329bf360c5be7b516c2e6ddb",
+      "prompt": "Use case: historical-scene. Native transparent SINGLE FULL BODY wounded Shi Qian opposite walking pose. Output ONLY ONE man, NOT a grid or multiple copies. Reference atlas is IDENTITY and clothes only; REMOVE ropes/bindings. Same slim black masked Chinese man in charcoal cross-over cloth tunic, black headwrap and mask, cloth belt, dark trousers/shin wraps and boots. NO sack/armor/weapons/flags. Free wrists and empty hands, one hand guards sore abdomen, other balances, slight tired hunch. Critical anatomical foot pose: SW FRONT THREEQUARTER facing DOWN-LEFT. Its planted FORWARD boot must be on LOWER-RIGHT side of the silhouette, connected to RIGHT side of the image pelvis. Its trailing lifted boot must be on UPPER-LEFT side, heel raised. Both toes face downLEFT, whole torso/head faces LEFT. Left/right foot lead must visibly differ from standard alternate stride. Leading knee crosses in FRONT of trailing knee with each leg connected to its own pelvis side. Clearly short careful limping STEP, not standing/running/jumping. Foot positions specified are relative to complete silhouette, no twisting hip. Both legs/feet visible and distinct. Elevated isometric historic painterly RTS camera, full silhouette centered and contained, generous empty margin100px each edge, body60-70% canvas height. Native square<=1536, actual transparent alpha, no floor shadow/grid/text/background/extra people.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_step_b_sw.json",
+      "request_sha256": "bcd885b9badf089374d13158f26f7c54cf02127f8928ed9f60386f50d0350a2f",
+      "references": [
+        "original"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_qian_step_b_sw",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-b26411e6-641e-4a9a-a172-1c37a305b869",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/step_b_sw.png",
+      "sha256": "01a2cc521b116e0cff5f2c3c74774ff51cf2517a19c2029e6be6e76baa4a0b0f",
+      "prompt": "Edit this single transparent SW-facing masked man. Keep head, face direction, body, clothes and empty hands. Remove the red/blood stain from abdomen completely: clean dark cloth, NO blood/injury props.\nCHANGE ONLY THE TWO LEGS below the pelvis to the OPPOSITE walking step. Currently the foot at bottom-left is planted, and foot at upper-right is lifted. Swap their gait: the leg on the RIGHT side of the image must now straighten FORWARD with its boot planted at LOWER-RIGHT, approximately(x780,y1100) on this1254canvas; the leg on the LEFT side must bend BACK with boot lifted at UPPER-LEFT approximately(x580,y940). Keep each leg attached to its existing hip. Draw the RIGHT-SIDE IMAGE KNEE in front, LEFT-SIDE knee behind. Both boot toes still point LEFT. Do not keep the original foot placements. The planted boot must move to the OTHER side of the silhouette. This is an alternate short wounded walk step, not running, no new prop.\nSame elevated isometric SW frontthreequarter camera, torso and face pointingLEFT, one man only, native transparent RGBA square<=1536, full figure contained, no text/grid/floor/shadow/weapon/rope/bag. Keep black wrap and mask, charcoal tunic and trousers, shin wraps, painterly clothing identity unchanged.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_sw_leg_edit.json",
+      "request_sha256": "f344a6ee879a3e9ca3740115422156f37a966f35e406b1cb3a5b3f627352bff9",
+      "references": [
+        "sw_initial_rejected"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_qian_proportion_v2",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-c11831c3-8262-4bc1-bc31-4cabd4ac12dd",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/proportion_reference_v2.png",
+      "sha256": "7f8d1d563e6eff35801bdab942867fb751cc2ccb90ae363ec39b16cf7a582499",
+      "prompt": "Use case: identity-preserve. Redraw this masked black-clothed adult Shi Qian with CORRECT NATURAL ADULT HUMAN PROPORTIONS. Current image is rejected: head and boots too big, legs too short, body too hunched and cartoonish. Keep the same identifiable man, black cloth headwrap/topknot and black mouth/nose mask, charcoal cross-over tunic and plain brown cloth sash, dark trousers/shin wraps/cloth boots, restrained hand-painted Chinese historical RTS rendering. NOT pixel-preservation: redraw anatomy fully as needed.\nNEW BODY: slim athletic normal adult, about7 to7.5 HEADS tall from skull top to sole. Bare head height only about one-seventh total body height; headcloth must not turn it into an oversized head. Natural narrow but adult shoulders, visible neck, proportionate torso, LONGER natural legs with hip-to-floor about half entire figure. Knees correctly midway along legs, normal slender calves, small natural hands, human-sized cloth boots WITHOUT giant bulky feet. Balanced anatomical joints, same believable adult throughout. No chibi/dwarf/oversized-head/short-legged/caricature proportions, no inflated hands or comic boots.\nPOSE: quiet NEUTRAL standing with feet naturally close and both grounded, only slight fatigue in shoulders. Upright spine and level head, no extreme stoop, crouch, furtive peeking, aggressive grimace, exaggerated lifted knee, twisted hip or running pose. Empty arms rest naturally; one empty hand may lightly rest near lower abdomen without squeezing or deep bending. This is a tired rescued adult with calm dignity, NOT a sneaking goblin. No ropes, weapons, sacks, blood/injury props, cape, armor or new accessories.\nView remains SW front three-quarter facing down-left, elevated isometric camera. Exactly ONE full body, all headcloth tails/fingers/feet contained, centered with generous transparent margins. Body about65–70% square canvas height. GENUINE alpha TRANSPARENT background, native square max1536, no floor shadow/background/checkerboard/grid/text/labels. Detailed face retains original identity but at natural smaller anatomical size.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_proportion_v2.json",
+      "request_sha256": "b1e2f2282759fe21f8c79677225a038887290f0321fd728d4ca889b2a34fb232",
+      "references": [
+        "shi_qian_step_b_sw"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_qian_posture_v3",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-a2bf7bb7-b9d0-46fb-abca-2ebe0e97bde5",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/posture_v3.png",
+      "sha256": "061cd956832e36b76449fc95bfa5ba4ec83a345cc22d2ee59380085afa3eafd6",
+      "prompt": "Use case: identity-preserve. EDIT the attached ONE full-body character reference. User requires an upright dignified SOLDIER posture: head UP and chest OPEN. Reject lowered chin, forward head, closed shoulders or hunched back. Only improve pose; preserve this SAME individual face, clothes, mature ADULT proportions and painterly rendering.\nPOSE: erect balanced military attention-like stance. Naturally straight stacked spine, neutral pelvis, neck vertical ABOVE torso; head lifted with chin LEVEL, eyes looking toward distant horizon in the SAME front three-quarter SW facing direction, never down at feet. Shoulders gently back and down, broad collarbones, naturally lifted open chest, sternum confidently forward. No stoop, rounded back, shrugged shoulders, forward craned neck, wounded hunch or tired slump. Do not hyperextend neck, flare ribs, thrust belly or arch lower back. Keep the small natural head/hands/boots and adult thighs/calves. Moderately elevated isometric camera does not imply bowed head.\nBoth feet grounded in stable modest hip-width parallel stance, knees straight but not locked. Empty arms straight naturally at sides and open relaxed hands, no fists or combat stance. Preserve BLACK nose/mouth cloth mask and black wrapped headcloth; arms straight naturally at sides, remove the hand touching the belly/sash. No sack or backpack.\nExactly ONE complete full figure with all fingers/tails/cloak/boots contained in generous transparent margins, 75–80% square height, native max1536. No weapons/sheaths/rope/chains/blood/new props. Preserve true transparent alpha; no floor/shadow/background/text/grid/checkerboard.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_posture_v3.json",
+      "request_sha256": "71c028ac30eb1ab82439ee00c5c7b31344cf8e389257506911d1f1578efc1108",
+      "references": [
+        "shi_qian_proportion_v2"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_qian_idle_v3",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-36030a2b-fb22-4b80-a5d4-c4b90a2d031e",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/idle_v3.png",
+      "sha256": "c88c9ba3b93ca9dfbfa1e2d5bc56ba19e4df957d6da63e797d262a2d7b43fdd8",
+      "prompt": "Use case: identity-preserve. Create native FOUR independently drawn isometric IDLE views of this SAME upright adult soldier. Reference is the selected v3 single-body posture; preserve its face, proportions, clothing and colors. Exactly 2 columns x 2 rows: TOP LEFT SE front three-quarter looking screen DOWN-RIGHT; TOP RIGHT SW front three-quarter looking screen DOWN-LEFT; BOTTOM LEFT NE back three-quarter looking screen UP-RIGHT; BOTTOM RIGHT NW back three-quarter looking screen UP-LEFT. Turn the WHOLE torso, hips and both feet into each direction. SE and SW must be genuinely opposite whole-body views; do not repeat SW in the SE cell. Back views show back clothes and back of head, with only a small far cheek visible. Never mirror a rendered cell. ALL FOUR poses stand dignified and upright like disciplined soldiers: lifted head, LEVEL chin/horizon gaze, neck vertically above torso, stacked natural spine, shoulders back/down, naturally open lifted chest. Elevated camera never means bowed head. NO hunch, forward neck, closed chest, tired shoulder slump, shrug, belly thrust or arched lower back. Empty relaxed hands and naturally straight arms at sides. Stable feet at modest hip width, straight natural knees. Keep mature adult head/hands/boots and adult leg lengths. Body type identity: Slim Chinese man, alert eyes, black wrapped headcloth and black nose/mouth mask, charcoal cross-over cloth tunic and trousers, dark shin wraps and cloth boots. NO sack, backpack or weapon. Keep mask and narrow unarmored body. Preserve v3 body anatomy over any old compact sprite instructions; never chibi. Same front/back clothing hem length and construction, no weapons/sheaths/rope/chains/blood/new props. Each whole figure fits inside its OWN quadrant with wide true-alpha outer margins and wide empty transparent central gutters; no tails/capes/boots cross cell boundaries. Figures equal body height within this character. Native square max1536, painterly reference quality, TRUE RGBA transparent background; no floor/shadows/text/labels/grid/checkerboard. Layout priority: figures occupy only 78–82% of EACH quadrant height, about490–515px tall at1254px native square. Center each figure inside its cell; keep at least45px transparent clearance on every cell edge, including cape/boots/headcloth. The central horizontal gutter should be at least80px. Reduce whole figure size uniformly to leave room; NEVER shorten legs or enlarge heads to fit. Do not nearly touch the two rows.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_idle_v3.json",
+      "request_sha256": "c130ac8c11b84b3dcb6621a98e46e5e72fe3006c62a1f31d562e8afefe5f35f1",
+      "references": [
+        "shi_qian_posture_v3"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_qian_idle_traits_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-4f73c3f0-a27b-4b01-9fd8-70d55c0228fb",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/idle_traits_v4.png",
+      "sha256": "276ec14e93a0ee154434fc4c3db21442df34ce5e36af5deea2bcf1d10149561f",
+      "prompt": "Use case: identity-preserve. Edit this four-direction native transparent Shi Qian idle sprite atlas to express his novel character as a nimble alert infiltrator, NOT a parade soldier. Keep the exact same masked adult man, face/black headwrap and tails, charcoal crossover tunic, plain brown sash, dark trousers, shin wraps/cloth boots, slim mature adult proportions and long natural legs. Preserve four WHOLE BODY facings in exact 2x2 layout: upper-left SE front down-right, upper-right SW front down-left, lower-left NE back up-right, lower-right NW back up-left. Independently render all four, no mirrored or duplicated cells. CHANGE THE BODY LANGUAGE in every cell: quiet watchful ready-to-slip-away standing posture, knees LIGHTLY flexed, center of gravity slightly lowered and subtly forward, restrained functional lean FROM THE HIPS, flexible coordinated spine, shoulders relaxed and asymmetrically balanced, head slightly forward but eyes looking ahead searching surroundings, hands empty with elbows softly bent close to the waist, ready to balance. He is a capable healthy nimble adult known for wall climbing and infiltration. Make the alert stealth character recognizable at small RTS size. Not timid, old, grotesque or lecherous; no rounded hump, excessive forward neck, deep squat, crouching on the floor or giant head/boots. No forced chest thrust or rigid arms held straight at sides. Preserve same adult proportions and all clothes/hem details throughout all four views; back views show same plain belt without adding front sash tails on the back. No weapon, sack/backpack, armor, ropes, blood, props or new facial covering. These are unarmed rescued idle poses, not attack or running; personality must not imply combat. Each entire figure inside own quadrant, body ~78–82% quadrant height, at least45px real transparent clearance around each head/hand/boot/tail and between rows. Preserve realistic painterly historic RTS style and mild elevated isometric camera. Native square max1536, genuine RGBA transparency, no floor/shadow/text/border/grid/checkerboard. This replaces only Shi Qian's over-formal soldier stance while retaining identity and natural adult anatomy.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_idle_traits_v4.json",
+      "request_sha256": "ece854c15f7aafce4599134293ebe75288d1bcc45622f8d36d6a48069152ad6b",
+      "references": [
+        "shi_qian_idle_v3"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_qian_se_a2_v2",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-236d3a82-49d3-457e-909a-37cb162ffd85",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/se_a2_v2.png",
+      "sha256": "9cc1ec1b1336dd0cdefe12833b1a22f5ba3051a58b44543645af2ee277fb665a",
+      "prompt": "Use case: identity-preserve. Native transparent SINGLE FULL BODY unarmed rescued Shi Qian. Exactly one figure. Reference1 gives identity/clothes ONLY, remove ropes, do NOT keep short bound anatomy. Reference2 gives correct slim mature ADULT anatomical proportions and rendering: normal head/hands/boots, about7 heads tall, hip-to-sole half height, upright spine and slight tired shoulders. Same black masked Chinese man in charcoal crossover tunic, brown cloth belt, black headwrap/topknot/tails, dark trousers/shinwraps/cloth boots. No weapons/bag/armor/rope/blood/props. Empty hands with restrained natural swing.\nNEW CAMERA: SE FRONT THREE-QUARTER looking/facing screen DOWN-RIGHT. See chest and RIGHT-facing nose profile; head, pelvis, shoulders, knees and both boot toes all point RIGHT/down-right. Not a left-facing man. Quiet SHORT low walking step A. Grounded forward boot on LOWER-RIGHT side of silhouette connected to RIGHT side of image pelvis; trailing lightly lifted boot UPPER-LEFT connected to LEFT side pelvis. Both toes point RIGHT. Leading knee in front of trailing knee, each thigh correctly connected, both legs visible and human-sized feet, small natural knee flex, no squat/hunch/high-knee/running. Keep natural adult proportions and same identity, not chibi. Elevated isometric historic painterly RTS camera. Full silhouette centered, all tails/fingers/feet contained, generous margins, body75–80% native square canvas height, native max1536. Transparent alpha background, no shadow/floor/grid/text/checkerboard.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_se_a2_v2.json",
+      "request_sha256": "378d623cc3019a8e2145acfa06e55953a16625b9e8931fc18df8d9129ea8986b",
+      "references": [
+        "original",
+        "shi_qian_proportion_v2"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_qian_se_b_v2",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-b44294df-0788-4bf2-8676-d3b274637084",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/se_b_v2.png",
+      "sha256": "dcd03326b1a02e62d8e5a8b48adcf01efbe9605046066652a949041e21b30be2",
+      "prompt": "Use case: identity-preserve. ONE full-body adult Shi Qian in a quiet walking pose, not an atlas. Reference is identity/costume and the mature natural body proportions. Keep about7–7.5-head ADULT anatomy, long legs hip-to-sole half height, small head/hands/cloth boots, upright spine, neutral tired expression, charcoal crossover tunic/brown sash, black headwrap and mouth mask, shinwrap trousers. No crouch/high-knee/weapon/bag/rope/blood/added armor. Pose: SE front-three-quarter facing screen DOWN-RIGHT, including chest/hips/toes. Gentle short step. IMAGE-LEFT leg leads, its boot is firmly grounded LOWER-LEFT (roughly x520,y1080). IMAGE-RIGHT leg trails, its boot lightly lifts UPPER-RIGHT (roughly x720,y950). Keep right-facing toes on both boots; do not rotate him to SW. The forward grounded LEFT boot must be the lowest boot in the picture; RIGHT boot is visibly higher to the right. Knees stay nearly straight with modest natural flex, no large knee lift. Arms empty and relaxed, small natural opposite swing. All limbs anatomically connected, SAME mature slender body, no shortened thighs or bulky oversized footwear. One figure centered about75–80% square height, fully contain tails/fingers/feet with generous margins, native square max1536. Painterly Chinese historical RTS moderately elevated isometric camera. Transparent alpha background, no shadow/floor/grid/text/checkerboard.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_se_b_v2.json",
+      "request_sha256": "061ef5471dfce302917719050f165222aef89c7b200e230fe152867516369536",
+      "references": [
+        "shi_qian_proportion_v2"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_qian_ne_a2_v2",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-57920d3a-76e2-4c57-b66c-0de2be92ec76",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/ne_a2_v2.png",
+      "sha256": "9aa380fac5ffcdb13844ca3f9d0bc7b284f0d664822921b79f381c215bb4268c",
+      "prompt": "Use case: identity-preserve. Native transparent SINGLE FULL BODY unarmed rescued Shi Qian, exactly one. Reference1 identity/costume only, remove bindings and completely replace squat anatomy; reference2 natural ADULT anatomical target/rendering. Slim adult7-head proportions, small head/hands/cloth boots and long legs hip-to-sole half height, upright spine with slight tired shoulders. Same black topknot/headwrap/tails and face mask, charcoal crossover cloth tunic, brown plain cloth sash, dark trousers with tan crossed shinwraps, small dark cloth boots. Empty hands with slight relaxed swing, no bags/weapons/rope/blood/armor/props.\nCAMERA is NE REAR THREE-QUARTER facing AWAY toward screen UP-RIGHT. Visible BACK of head/headwrap, back of neck, shoulders and tunic back, right ear/nose only tiny profile at far right. NO front chest/eyes/front-face; cannot face down-right. Hips/knees and both toes point UP-RIGHT. Quiet short low walking phase A: grounded support boot is LOWER-LEFT of silhouette, connected to image-LEFT pelvis; other boot lightly raised UPPER-RIGHT connected to image-RIGHT pelvis. Each knee/thigh anatomically connected, no crossing hips or twisting back. Both legs visible and mature, only slight knee flex, no crouch/stoop/high knee/run. Lowest sole is LEFT boot. Maintain the same slender adult silhouette without giant hands/feet or tiny legs. Elevated isometric painterly historic RTS view, same mature anatomy as reference2. Centered complete full figure all tails/fingers/feet contained, generous alpha margins, body75–80% native square canvas height, max1536. Actual transparent alpha, no shadow/floor/grid/text/checkerboard.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_ne_a2_v2.json",
+      "request_sha256": "fc81f2892bb6db80aaf77550d7a34ecaad8ce448d0473d60bfe99b8d1b78b93d",
+      "references": [
+        "original",
+        "shi_qian_proportion_v2"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_qian_nw_a2_v2",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-d51775c2-a140-44b9-ae11-bad4df026e2f",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/nw_a2_v2.png",
+      "sha256": "4c06da77d37a846d45568f595eeada4c552273beb3feb75cb1536299dd238c18",
+      "prompt": "Use case: identity-preserve. Native transparent SINGLE FULL BODY unarmed rescued Shi Qian, exactly one. Reference1 identity/costume only, remove bindings and completely replace squat anatomy; reference2 natural ADULT anatomical target/rendering. Slim adult7-head proportions, small head/hands/cloth boots and long legs hip-to-sole half height, upright spine with slight tired shoulders. Same black topknot/headwrap/tails and face mask, charcoal crossover cloth tunic, brown plain cloth sash, dark trousers with tan crossed shinwraps, small dark cloth boots. Empty hands with slight relaxed swing, no bags/weapons/rope/blood/armor/props.\nCAMERA is NW REAR THREE-QUARTER facing AWAY toward screen UP-LEFT. Visible BACK of head/headwrap, back of neck, shoulders and tunic back, left ear/nose only tiny profile at far left. NO front chest/eyes/front-face; cannot face down-left. Hips/knees and both toes point UP-LEFT. Quiet short low walking phase A: grounded support boot is LOWER-LEFT of silhouette, connected to image-LEFT pelvis; other boot lightly raised UPPER-RIGHT connected to image-RIGHT pelvis. Each knee/thigh anatomically connected, no crossing hips or twisting back. Both legs visible and mature, only slight knee flex, no crouch/stoop/high knee/run. Lowest sole is LEFT boot. Maintain the same slender adult silhouette without giant hands/feet or tiny legs. Elevated isometric painterly historic RTS view, same mature anatomy as reference2. Centered complete full figure all tails/fingers/feet contained, generous alpha margins, body75–80% native square canvas height, max1536. Actual transparent alpha, no shadow/floor/grid/text/checkerboard.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_nw_a2_v2.json",
+      "request_sha256": "86fb89bec0502ea66612ac4c48b71566f97bfb72c338b0e19e80cee1d9757736",
+      "references": [
+        "original",
+        "shi_qian_proportion_v2"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_qian_walk_a_traits_atlas_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-2ed8c906-530e-40c7-9236-72e655dbd847",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/walk_a_traits_atlas_v4.png",
+      "sha256": "710ed2b6e0b51f85fa8869b84b857fee186baae15e66bb96fe8baaa1561048ca",
+      "prompt": "Edit IMAGE1 into ONE FOUR-DIRECTION 2x2 Shi Qian sprite atlas for WALK_A, a separately authored walking phase. Preserve the same distinct SLIM agile mature adult infiltrator: alert eyes, black mouth/nose mask, dark tied headwrap/topknot/trailing cloth, charcoal cross-over tunic with the same subtle cloth pattern and garment layers, plain tan cloth sash, dark trousers, tan DIAGONAL shin wraps and his modest dark cloth boots. Empty hands, no weapons/ropes/sack/armor/blood/new accessory. Every figure must keep the identity and garment detail of IMAGE1, not any older human guide.\nPERSONALITY AND ANATOMY: match IMAGE1's light flexible knees, modest lowered/forward weight from hips, alert searching head, arms close with slight ready balance. Natural slim adult neck/torso/thigh/calf proportions and normal hands/feet. He is a nimble infiltrator; do not force rigid military parade chest/locked knees. Avoid an accidental rounded hump, elderly stoop, deep squat, timid grimace, oversized head/boots or child/chibi proportions. This is a quiet light short walking step in the current unarmed rescued context.\nFOUR FIXED VIEWS: top-left SE FRONT-RIGHT with toes down-right; top-right SW FRONT-LEFT with toes down-left; bottom-left NE BACK-RIGHT away-right with toes up-right; bottom-right NW BACK-LEFT away-left with toes up-left. Never swap views, mirror a figure, rotate its upper torso against its feet, or show a front face in a back cell.\nIMAGE2 is only SE lower-leg pose guide, IMAGE3 only SW, IMAGE4 only NE, IMAGE5 only NW. A compact walking contact/support step with separated feet: use each direction's lower-body guide in images2–5 for its knee/boot placement and planted-versus-lifted foot. Keep the stride short and knees softly flexible. Do not copy the guide upper body, head shape, heavy garment pattern or expression.\nUse each guide solely for its corresponding leg pose. Re-author those legs on the slim adult Shi Qian of IMAGE1 while preserving his alert low-ready upper body and all charcoal clothing. Keep all four figures and all phases consistent in face, head size, body proportions, cloth layering/texture, sash and wrapped boots. Newly authored walk_a feet must differ from IMAGE1's idle feet; no reused stationary idle as passing.\nNative square transparent RGBA atlas <=1536, preferably same1254 square as IMAGE1, exactly FOUR complete full-body figures, each centered in its own equal cell with generous clear margins around headcloth/fingers/boots and at least50px cell padding. Same elevated isometric painterly historic game camera/light/palette as IMAGE1. No background, floor/shadow, grid lines, text/labels, robot colors or extra figures.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_walk_a_traits_atlas_v4.json",
+      "request_sha256": "f4875df03fdac1d82bd2bb3cf9770ede5547cd69c7fe06cb7e8e2c11fcbb44c9",
+      "references": [
+        "shi_qian_idle_traits_v4",
+        "shi_qian_se_a2_v2",
+        "shi_qian_se_b_v2",
+        "shi_qian_ne_a2_v2",
+        "shi_qian_nw_a2_v2"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_qian_walk_a_spacing_atlas_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-f2319b1c-3d4b-4efe-8fa6-3df09a98f59a",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/walk_a_spacing_atlas_v4.png",
+      "sha256": "93392aefe11c0d7ce3ec44f055042d722ea71daa3add93cc8eac728385c5b417",
+      "prompt": "Edit this FOUR-FIGURE Shi Qian WALK_A atlas only to give each complete figure MUCH MORE CLEAR CELL PADDING. Earlier boots crossed the horizontal cell seam; this output must not cross any seam. Keep the EXACT four identities, gait/support poses, black mask/headwrap, mature slim adult proportions, charcoal tunic/trousers with subtle textile and layering, plain tan sash, diagonal shin wraps, normal boots, light soft-kneed infiltrator bearing and empty near-body hands. No soldier-parade chest, elderly hump or deep squat. Do not change left/right support legs or direction.\nNATIVE SPACING: redraw the same complete figures SMALLER and centered in their SAME four cells, keeping all internal body/head/limb proportions. Canvas remains1254x1254 square transparent RGBA. Each cell is627x627. Each WHOLE FIGURE INCLUDING headcloth tails, fingers and boots must be no taller than450–470pixels, about72–75% cell height. Use at least70–80pixels CLEAR margin on ALL four sides of each cell. TOP-LEFT and TOP-RIGHT figures wholly inside y80..550; BOTTOM figures wholly inside y710..1180. Top-left centered near x313,y313, top-right x940,y313, bottom-left x313,y940, bottom-right x940,y940. No figure or boot intrudes across x627 or y627. Each headcloth/hand/boot wholly contained inside its own cell.\nKeep SE front-right in top-left, SW front-left in top-right, NE back-right in bottom-left and NW back-left in bottom-right, same painterly elevated isometric camera/light/palette. Native redraw to correct spacing, no added figure/grid/seam line/text/labels/background/floor/shadow/weapon/rope/sack/armor/prop. Exactly4 intact Shi Qian figures and genuine transparent alpha. Preserve the specific walk_a leg positions while expanding the clear gaps between complete silhouettes.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_walk_a_spacing_atlas_v4.json",
+      "request_sha256": "488e6cf681a3104095a7e1b21f4e22f18050383b48d5f6f469f3b26df260efef",
+      "references": [
+        "shi_qian_walk_a_traits_atlas_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_passing_a_se_geometry_v7",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/wang_ying_passing_a_se_geometry_v7.png",
+      "sha256": "6b6257070ade9b7dfba378df11f28d5e14e94db09c5cce613ec18a08f0c970a0",
+      "prompt": "New SE passing_a short broad adult geometry: red flat support, blue low passing boot under pelvis. No source bitmap read/edit or production artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/wang_ying_passing_geometry_v7.gd",
+          "sha256": "2070bcd5ca8b31bd0a0b901a1db266354d07922ac61521c83991a4da9086384f"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_wang_ying_passing_geometry_v7.py",
+          "sha256": "35df66125d5caf116d296a2d1f68ced53e9f81494d50c472837c11e672734c9e"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/geometry_passing_a_se_v7.json",
+          "sha256": "db1d1b7850982943b69a343671abb1361d00c2ff364ef3d96ceee0ee9780d6af"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_walk_b_se_geometry_v5",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/wang_ying_walk_b_se_geometry_v5.png",
+      "sha256": "91f81e25f46f0aefcab88051ad104a5dac9afe669fde3e3d6199182f719e35e4",
+      "prompt": "New deterministic short broad adult primitive geometry reference; red image-left flat support boot, blue image-right raised boot. No character bitmap read or edited; no costume/face/production sprite.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/wang_ying_pose_geometry_v5.gd",
+          "sha256": "737316431f043fe0b450108c75ffe4e4eee57aed4ae0a7e1eb52451b1bb669c9"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_wang_ying_pose_geometry_v4.py",
+          "sha256": "b8ae667b4f08f55bac0840ef207a39fa5e54497d3b88fc24e954236471e5b0ee"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_qian_walk_b_geometry_se_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-7aee970b-c411-45c1-8cbd-de18a7c4e4d1",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/walk_b_geometry_se_v4.png",
+      "sha256": "c12d0ab5f7e63c3c094ef913c4c4813c4e8879cffe6af3a5ba6e75220ce65080",
+      "prompt": "POSE-GUIDED SINGLE CHARACTER. IMAGE1 contributes ONLY lower-leg geometry: RED boot is FLAT planted on IMAGE-LEFT, BLUE boot is modestly raised on the opposite side. IMAGE2 contributes ONLY the identity of Shi Qian (use the corresponding SE view), his SLIM adult body proportions, gray-black painterly cloth, face, black mask, tied dark headcloth, tan sash, diagonal cloth shin wraps and plain gray-black boots.\nGenerate exactly ONE complete full-body Shi Qian in SE direction. Camera same elevated three-quarter view as IMAGE1. Replace the red and blue robot rods with Shi Qian's normal adult legs and boots. Keep the RED planted boot on IMAGE-LEFT and BLUE lifted boot opposite; that support side is essential, do not copy idle legs. Reduce excessive robot spread to a compact natural short walking contact pose, each leg connected to its own hip, lifted heel modest and low. Knees soft, a small functional lean from hips, shoulder blades and neck naturally aligned, watchful eyes level, close empty hands. Body/head/hand/feet normal slim adult proportions, never short broad robot proportions, deep squat, rounded hump or parade stiffness.\nPreserve recognisable masked face and charcoal clothing from IMAGE2, including subtle patterned tunic, tan tied sash, diagonal shin wraps. No red/blue skin or boots, robot torso, green patch, floor, shadow, text/labels, weapons, rope, sack or extra people. Both boot toes and torso/head agree with SE facing. Genuine transparent RGBA native square<=1536, ONE entire figure centered with at least80px margin; no four-view sheet, no crop, no mirror. This is the opposite-contact B sprite, not idle.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_walk_b_geometry_se_v4.json",
+      "request_sha256": "0c75cbe190ed82eed5acf87cf7272f65c7580f26fcf242444bb7de1c62777706",
+      "references": [
+        "wang_ying_walk_b_se_geometry_v5",
+        "shi_qian_idle_traits_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_qian_passing_a_geometry_se_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-610be593-d58d-4826-a5d7-12bbe1a1900b",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/passing_a_geometry_se_v4.png",
+      "sha256": "2051a4d73f2892ba85615552ded5726e293cde66155fa4f500d1d86867dc84e8",
+      "prompt": "POSE-GUIDED ONE CHARACTER native sprite. IMAGE1 contributes ONLY lower-leg near-foot PASSING geometry and camera; its red support boot is flat planted on IMAGE-RIGHT and blue opposite boot is LOW raised moving past directly UNDER pelvis. IMAGE2 contributes all Shi Qian identity, slim normal ADULT body proportions, facial/headcloth shape, BLACK face mask, charcoal subtle patterned tunic and layered hem, TAN sash, diagonal tan shin wraps and ordinary dark cloth boots, painterly colors/materials. No robot block torso/short broad anatomy/colors/green marker/labels in output.\nFacing is FRONT three-quarter view facing LOWER-RIGHT, chest and masked face visible. Both boot toes, torso and head agree with that direction. Same elevated isometric camera, same slim adult head/neck/shoulder/hand/leg proportions. Keep soft knees and a small functional lean FROM HIPS with naturally aligned neck/back, watchful level gaze; no rounded hump, deep squat, parade stiffness or overlarge boots. Close empty relaxed hands.\nChange IMAGE2 walking-contact legs to the DISTINCT NEAR-FOOT PASSING POSE of IMAGE1: IMAGE-RIGHT support boot FLAT on ground directly below its hip; the OPPOSITE boot just barely lifted beside it and moving forward UNDER pelvis, slightly bent knee. Feet are close laterally and in fore-aft stride; COMPACT NEAR-FOOT passing, not wide separated contact stride, not unchanged IMAGE2 legs, idle, lunge, run, jump, high knee or large sole toward camera. Both whole boots distinct, each leg continuously attached to its own hip, no crossed/disconnected thighs. Lift only about one boot-thickness; preserve leg lengths and adult anatomy. Lower tunic cloth follows minimally. Keep matching face/body/clothes and direction from IMAGE2.\nExactly ONE COMPLETE Shi Qian, native square transparent RGBA<=1536 with at least80px clear margin, centered full body. No other views/people, floor/shadow/text/grid, colored rods/green patch, weapons/rope/sack/props, cropping or mirroring. This is PASSING_A (SE) intermediate step, independently redrawn genuine passing legs; do not copy contact pose.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_passing_a_geometry_se_v4.json",
+      "request_sha256": "e6a855ddd5a285eccce23e7b3c29ce89da86559304e29e30b5891d9ed38eafa5",
+      "references": [
+        "wang_ying_passing_a_se_geometry_v7",
+        "shi_qian_walk_b_geometry_se_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_passing_a_sw_geometry_v7",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/wang_ying_passing_a_sw_geometry_v7.png",
+      "sha256": "fbe6f2236268b92446892e8c3910c085dfd72aac617e639a14d75ab188654bf3",
+      "prompt": "New SW passing_a short broad adult geometry: red flat support, blue low passing boot under pelvis. No source bitmap read/edit or production artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/wang_ying_passing_geometry_v7.gd",
+          "sha256": "2070bcd5ca8b31bd0a0b901a1db266354d07922ac61521c83991a4da9086384f"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_wang_ying_passing_geometry_v7.py",
+          "sha256": "35df66125d5caf116d296a2d1f68ced53e9f81494d50c472837c11e672734c9e"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/geometry_passing_a_sw_v7.json",
+          "sha256": "c8328a120a1055cc3a199670f96d5e115de0d9799549d6425da6a52dcf62cec6"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_walk_b_sw_geometry_v6",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/wang_ying_walk_b_sw_geometry_v6.png",
+      "sha256": "1cdecce65015f14e492ed86884fe7cd57dda533ca7b0b45fe74132b3829b63ec",
+      "prompt": "New deterministic short broad adult SW primitive geometry; red image-right flat support, blue image-left raised boot. No source bitmap read or edited. No costume, face or production artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/wang_ying_pose_geometry_v6.gd",
+          "sha256": "e8af04927d013a4e6344233fccf32f11e85d8e69087e6eff538a7e4e4d8b5f7a"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_wang_ying_pose_geometry_v6.py",
+          "sha256": "1c5176982b26eb2db516daf6ae589f00d9092bb2e6e854515b6cc81188e0c5a0"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/geometry_sw_v6.json",
+          "sha256": "c904912371f39529e6b0be23ceb6f16474c53e0ad6242d405716b70a73993c14"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_qian_walk_b_geometry_sw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-91a8de92-c4f4-4c9b-a30c-f8a2a9dfc7e2",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/walk_b_geometry_sw_v4.png",
+      "sha256": "d4be089c7e777e07666bdcd7d8524ea34935b490853317b39ff1466a9eaa4519",
+      "prompt": "POSE-GUIDED SINGLE CHARACTER. IMAGE1 contributes ONLY lower-leg geometry: RED boot is FLAT planted on IMAGE-RIGHT, BLUE boot is modestly raised on the opposite side. IMAGE2 contributes ONLY the identity of Shi Qian (use the corresponding SW view), his SLIM adult body proportions, gray-black painterly cloth, face, black mask, tied dark headcloth, tan sash, diagonal cloth shin wraps and plain gray-black boots.\nGenerate exactly ONE complete full-body Shi Qian in SW direction. Camera same elevated three-quarter view as IMAGE1. Replace the red and blue robot rods with Shi Qian's normal adult legs and boots. Keep the RED planted boot on IMAGE-RIGHT and BLUE lifted boot opposite; that support side is essential, do not copy idle legs. Reduce excessive robot spread to a compact natural short walking contact pose, each leg connected to its own hip, lifted heel modest and low. Knees soft, a small functional lean from hips, shoulder blades and neck naturally aligned, watchful eyes level, close empty hands. Body/head/hand/feet normal slim adult proportions, never short broad robot proportions, deep squat, rounded hump or parade stiffness.\nPreserve recognisable masked face and charcoal clothing from IMAGE2, including subtle patterned tunic, tan tied sash, diagonal shin wraps. No red/blue skin or boots, robot torso, green patch, floor, shadow, text/labels, weapons, rope, sack or extra people. Both boot toes and torso/head agree with SW facing. Genuine transparent RGBA native square<=1536, ONE entire figure centered with at least80px margin; no four-view sheet, no crop, no mirror. This is the opposite-contact B sprite, not idle.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_walk_b_geometry_sw_v4.json",
+      "request_sha256": "33bf157ca9e8b01fdc77653e16420f6321b0032e412c3873a8110e94c034ee3c",
+      "references": [
+        "wang_ying_walk_b_sw_geometry_v6",
+        "shi_qian_idle_traits_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_qian_passing_a_geometry_sw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-8da2d910-91e7-4051-9034-d18a6c51fee8",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/passing_a_geometry_sw_v4.png",
+      "sha256": "545d92850b6329e093be9a5c22cf6050a7c288c8516e9116cc3778a79d7f395c",
+      "prompt": "POSE-GUIDED ONE CHARACTER native sprite. IMAGE1 contributes ONLY lower-leg near-foot PASSING geometry and camera; its red support boot is flat planted on IMAGE-LEFT and blue opposite boot is LOW raised moving past directly UNDER pelvis. IMAGE2 contributes all Shi Qian identity, slim normal ADULT body proportions, facial/headcloth shape, BLACK face mask, charcoal subtle patterned tunic and layered hem, TAN sash, diagonal tan shin wraps and ordinary dark cloth boots, painterly colors/materials. No robot block torso/short broad anatomy/colors/green marker/labels in output.\nFacing is FRONT three-quarter view facing LOWER-LEFT, chest and masked face visible. Both boot toes, torso and head agree with that direction. Same elevated isometric camera, same slim adult head/neck/shoulder/hand/leg proportions. Keep soft knees and a small functional lean FROM HIPS with naturally aligned neck/back, watchful level gaze; no rounded hump, deep squat, parade stiffness or overlarge boots. Close empty relaxed hands.\nChange IMAGE2 walking-contact legs to the DISTINCT NEAR-FOOT PASSING POSE of IMAGE1: IMAGE-LEFT support boot FLAT on ground directly below its hip; the OPPOSITE boot just barely lifted beside it and moving forward UNDER pelvis, slightly bent knee. Feet are close laterally and in fore-aft stride; COMPACT NEAR-FOOT passing, not wide separated contact stride, not unchanged IMAGE2 legs, idle, lunge, run, jump, high knee or large sole toward camera. Both whole boots distinct, each leg continuously attached to its own hip, no crossed/disconnected thighs. Lift only about one boot-thickness; preserve leg lengths and adult anatomy. Lower tunic cloth follows minimally. Keep matching face/body/clothes and direction from IMAGE2.\nExactly ONE COMPLETE Shi Qian, native square transparent RGBA<=1536 with at least80px clear margin, centered full body. No other views/people, floor/shadow/text/grid, colored rods/green patch, weapons/rope/sack/props, cropping or mirroring. This is PASSING_A (SW) intermediate step, independently redrawn genuine passing legs; do not copy contact pose.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_passing_a_geometry_sw_v4.json",
+      "request_sha256": "4117332bcb7295ef5688bf9e3dab8d588f13bf5027c2370b4b3198999b34d33c",
+      "references": [
+        "wang_ying_passing_a_sw_geometry_v7",
+        "shi_qian_walk_b_geometry_sw_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_passing_a_ne_geometry_v7",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/wang_ying_passing_a_ne_geometry_v7.png",
+      "sha256": "3dbfc5d48126454dd8c5590ac85cfd95bfd78d702f90c98cd88898de29c32288",
+      "prompt": "New NE passing_a short broad adult geometry: red flat support, blue low passing boot under pelvis. No source bitmap read/edit or production artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/wang_ying_passing_geometry_v7.gd",
+          "sha256": "2070bcd5ca8b31bd0a0b901a1db266354d07922ac61521c83991a4da9086384f"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_wang_ying_passing_geometry_v7.py",
+          "sha256": "35df66125d5caf116d296a2d1f68ced53e9f81494d50c472837c11e672734c9e"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/geometry_passing_a_ne_v7.json",
+          "sha256": "5d328f6b1c18ebc66ae6cc5eb83406c457f679df1d712bf88e85ec02a04e0132"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_qian_opposite_ne_geometry_v6",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/shi_qian_opposite_ne_geometry_v6.png",
+      "sha256": "fec7c4048e49db2c41be94a1abafdb34352a221e4d4912200e6dd612a0bcdc92",
+      "prompt": "Independent code-native primitive-only opposing-foot pose reference; no character image read or edited. Robot proportions and colors are not production artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/shi_qian_opposite_ne_geometry_v6.gd",
+          "sha256": "5ee42c0f7487de612e95d7e015bea77df8202a5d71bb7675eec2d4e63588d431"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_shi_qian_opposite_ne_geometry_v6.py",
+          "sha256": "e17576a94d98c5eadc9395b2582d3ebdf00030139e2fe41718c07147b29dceab"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_qian_walk_b_geometry_ne_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-ee4ace4d-306a-44e4-9fde-bd938a2be237",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/walk_b_geometry_ne_v4.png",
+      "sha256": "636ad5771883108489df35a61fed71f5a8ece6f9af5d58aad92f6b9a132eafcc",
+      "prompt": "Create exactly ONE full-body Shi Qian WALK B viewed FROM BEHIND, back three-quarter camera, facing AWAY toward UPPER-RIGHT of canvas. We see his BACK, back of headcloth, back of shoulders and tunic, rear calves; NOT frontal chest, NOT both eyes. Head turned only a little with a small side cheek glimpse. Both boot toes point UPPER-RIGHT. His entire body faces UPPER-RIGHT / northeast, never lower-right. IMAGE1 robot gives the BACK CAMERA and legs only; IMAGE2 gives updated identity and materials ONLY, do NOT copy its front-facing camera; IMAGE3 gives rear-view silhouette ONLY, ignore its old stronger patterned clothes and pose.\nKeep updated Shi Qian's slim adult body, charcoal subtle painterly cloth tunic, layered hem, TAN SASH with knot toward front (not big front knot pasted on back), diagonal tan calf wraps, plain dark cloth boots, tied long headcloth ends and black face mask barely visible on far side. Preserve normal adult leg lengths, watchful head level, mild functional hip lean/soft knees and close empty hands. No rounded hump, deep squat, rigid parade, short broad robot body or tiny child head.\nREAR-VIEW opposing support: IMAGE-RIGHT boot must be FLAT planted at lower-right, IMAGE-LEFT boot modestly raised near upper-left with bent knee and heel low, as RED/BLUE geometry. Both boots distinct, each attached to correct hip. Compact natural short contact B step, no long lunge, large sole/kick or cross-legged stance. Match robot back camera but never copy boxes, colored limbs, green patch, text or background.\nTransparent RGBA square<=1536, exactly ONE complete BACK-VIEW Shi Qian centered with at least80px margins, no four-view sheet, floor/shadow/labels/grid/extra people/weapon/rope/prop. The back of his shoulders and head must face us. All face/chest point AWAY-UPPER-RIGHT.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_walk_b_geometry_ne_v4.json",
+      "request_sha256": "714825356a15a810a4dfe1a0e99c13d4e39e2c1c19afa6a332766a0c0659dbc6",
+      "references": [
+        "shi_qian_opposite_ne_geometry_v6",
+        "shi_qian_walk_b_geometry_se_v4",
+        "shi_qian_ne_a2_v2"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_qian_passing_a_geometry_ne_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-b3a48817-2aeb-4f13-9c16-1b9891ee3c48",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/passing_a_geometry_ne_v4.png",
+      "sha256": "c0845d2ea2eb124b861485fa6955b86d88fb8d180013db158b5274585d75f038",
+      "prompt": "POSE-GUIDED ONE CHARACTER native sprite. IMAGE1 contributes ONLY lower-leg near-foot PASSING geometry and camera; its red support boot is flat planted on IMAGE-LEFT and blue opposite boot is LOW raised moving past directly UNDER pelvis. IMAGE2 contributes all Shi Qian identity, slim normal ADULT body proportions, facial/headcloth shape, BLACK face mask, charcoal subtle patterned tunic and layered hem, TAN sash, diagonal tan shin wraps and ordinary dark cloth boots, painterly colors/materials. No robot block torso/short broad anatomy/colors/green marker/labels in output.\nFacing is BACK three-quarter view facing AWAY UPPER-RIGHT, back of headcloth shoulders and tunic visible, no frontal chest. Both boot toes, torso and head agree with that direction. Same elevated isometric camera, same slim adult head/neck/shoulder/hand/leg proportions. Keep soft knees and a small functional lean FROM HIPS with naturally aligned neck/back, watchful level gaze; no rounded hump, deep squat, parade stiffness or overlarge boots. Close empty relaxed hands.\nChange IMAGE2 walking-contact legs to the DISTINCT NEAR-FOOT PASSING POSE of IMAGE1: IMAGE-LEFT support boot FLAT on ground directly below its hip; the OPPOSITE boot just barely lifted beside it and moving forward UNDER pelvis, slightly bent knee. Feet are close laterally and in fore-aft stride; COMPACT NEAR-FOOT passing, not wide separated contact stride, not unchanged IMAGE2 legs, idle, lunge, run, jump, high knee or large sole toward camera. Both whole boots distinct, each leg continuously attached to its own hip, no crossed/disconnected thighs. Lift only about one boot-thickness; preserve leg lengths and adult anatomy. Lower tunic cloth follows minimally. Keep matching face/body/clothes and direction from IMAGE2.\nExactly ONE COMPLETE Shi Qian, native square transparent RGBA<=1536 with at least80px clear margin, centered full body. No other views/people, floor/shadow/text/grid, colored rods/green patch, weapons/rope/sack/props, cropping or mirroring. This is PASSING_A (NE) intermediate step, independently redrawn genuine passing legs; do not copy contact pose.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_passing_a_geometry_ne_v4.json",
+      "request_sha256": "b03878088f6ac69a2cf89023f1885c7a97933e7d38e506aa1a25db0f244088da",
+      "references": [
+        "wang_ying_passing_a_ne_geometry_v7",
+        "shi_qian_walk_b_geometry_ne_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_passing_a_nw_geometry_v7",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/wang_ying_passing_a_nw_geometry_v7.png",
+      "sha256": "21fce21da6bd7e33b61230c77d1532e9aa99dda4506c72a4a307f71d4aff9dfb",
+      "prompt": "New NW passing_a short broad adult geometry: red flat support, blue low passing boot under pelvis. No source bitmap read/edit or production artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/wang_ying_passing_geometry_v7.gd",
+          "sha256": "2070bcd5ca8b31bd0a0b901a1db266354d07922ac61521c83991a4da9086384f"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_wang_ying_passing_geometry_v7.py",
+          "sha256": "35df66125d5caf116d296a2d1f68ced53e9f81494d50c472837c11e672734c9e"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/geometry_passing_a_nw_v7.json",
+          "sha256": "69d66e7f9621d021d84ea7f14c346b91094b40c5cf0dbcc3abc0cd5a55e92aa5"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_walk_b_nw_geometry_v6",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/wang_ying_walk_b_nw_geometry_v6.png",
+      "sha256": "4cb30f2a9d588894cea91a0c13e10ee1e47a76c7d20242cc7fc969d22ee70826",
+      "prompt": "New deterministic short broad adult NW primitive geometry; red image-right flat support, blue image-left raised boot. No source bitmap read or edited. No costume, face or production artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/wang_ying_pose_geometry_v6.gd",
+          "sha256": "e8af04927d013a4e6344233fccf32f11e85d8e69087e6eff538a7e4e4d8b5f7a"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_wang_ying_pose_geometry_v6.py",
+          "sha256": "1c5176982b26eb2db516daf6ae589f00d9092bb2e6e854515b6cc81188e0c5a0"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/geometry_nw_v6.json",
+          "sha256": "70b564b9f67250a6eb313989edf2b54d91dde0ca1d18e8f7b4d3e7e70a8793f8"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_qian_walk_b2_geometry_nw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-e46a308e-95eb-415a-8356-c889fa9c82b2",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/walk_b2_geometry_nw_v4.png",
+      "sha256": "a34c3aa1683919c07803c5a4e1ed6e56270528f74465a83f7725413599f73808",
+      "prompt": "Create exactly ONE full-body Shi Qian WALK B viewed FROM BEHIND, back three-quarter camera, facing AWAY toward UPPER-LEFT of canvas. We see his BACK, back of headcloth, back of shoulders and tunic, rear calves; NOT frontal chest, NOT both eyes. Head turned only a little with a small side cheek glimpse. Both boot toes point UPPER-LEFT. His entire body faces UPPER-LEFT / northwest, never lower-right. IMAGE1 robot gives the BACK CAMERA and legs only; IMAGE2 gives updated identity and materials ONLY, do NOT copy its front-facing camera; IMAGE3 gives rear-view silhouette ONLY, ignore its old stronger patterned clothes and pose.\nKeep updated Shi Qian's slim adult body, charcoal subtle painterly cloth tunic, layered hem, TAN SASH with knot toward front (not big front knot pasted on back), diagonal tan calf wraps, plain dark cloth boots, tied long headcloth ends and black face mask barely visible on far side. Preserve normal adult leg lengths, watchful head level, mild functional hip lean/soft knees and close empty hands. No rounded hump, deep squat, rigid parade, short broad robot body or tiny child head.\nREAR-VIEW opposing support: IMAGE-RIGHT boot must be FLAT planted at lower-right, IMAGE-LEFT boot modestly raised near upper-left with bent knee and heel low, as RED/BLUE geometry. Both boots distinct, each attached to correct hip. Compact natural short contact B step, no long lunge, large sole/kick or cross-legged stance. Match robot back camera but never copy boxes, colored limbs, green patch, text or background.\nTransparent RGBA square<=1536, exactly ONE complete BACK-VIEW Shi Qian centered with at least80px margins, no four-view sheet, floor/shadow/labels/grid/extra people/weapon/rope/prop. The back of his shoulders and head must face us. All face/chest point AWAY-UPPER-LEFT.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_walk_b2_geometry_nw_v4.json",
+      "request_sha256": "ef9977cc3511c3af5f0441635aac90f7d79e5b271d588cacb00d468e3e21d41c",
+      "references": [
+        "wang_ying_walk_b_nw_geometry_v6",
+        "shi_qian_walk_b_geometry_se_v4",
+        "shi_qian_nw_a2_v2"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_qian_passing_a_geometry_nw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-eeaa0562-dda3-4ae3-a3a9-a9f387cce160",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/passing_a_geometry_nw_v4.png",
+      "sha256": "c8ad1c1ed977c7786b21eb93906ea42825bffd43855dfd9c236b6dae1f30b6d3",
+      "prompt": "POSE-GUIDED ONE CHARACTER native sprite. IMAGE1 contributes ONLY lower-leg near-foot PASSING geometry and camera; its red support boot is flat planted on IMAGE-LEFT and blue opposite boot is LOW raised moving past directly UNDER pelvis. IMAGE2 contributes all Shi Qian identity, slim normal ADULT body proportions, facial/headcloth shape, BLACK face mask, charcoal subtle patterned tunic and layered hem, TAN sash, diagonal tan shin wraps and ordinary dark cloth boots, painterly colors/materials. No robot block torso/short broad anatomy/colors/green marker/labels in output.\nFacing is BACK three-quarter view facing AWAY UPPER-LEFT, back of headcloth shoulders and tunic visible, no frontal chest. Both boot toes, torso and head agree with that direction. Same elevated isometric camera, same slim adult head/neck/shoulder/hand/leg proportions. Keep soft knees and a small functional lean FROM HIPS with naturally aligned neck/back, watchful level gaze; no rounded hump, deep squat, parade stiffness or overlarge boots. Close empty relaxed hands.\nChange IMAGE2 walking-contact legs to the DISTINCT NEAR-FOOT PASSING POSE of IMAGE1: IMAGE-LEFT support boot FLAT on ground directly below its hip; the OPPOSITE boot just barely lifted beside it and moving forward UNDER pelvis, slightly bent knee. Feet are close laterally and in fore-aft stride; COMPACT NEAR-FOOT passing, not wide separated contact stride, not unchanged IMAGE2 legs, idle, lunge, run, jump, high knee or large sole toward camera. Both whole boots distinct, each leg continuously attached to its own hip, no crossed/disconnected thighs. Lift only about one boot-thickness; preserve leg lengths and adult anatomy. Lower tunic cloth follows minimally. Keep matching face/body/clothes and direction from IMAGE2.\nExactly ONE COMPLETE Shi Qian, native square transparent RGBA<=1536 with at least80px clear margin, centered full body. No other views/people, floor/shadow/text/grid, colored rods/green patch, weapons/rope/sack/props, cropping or mirroring. This is PASSING_A (NW) intermediate step, independently redrawn genuine passing legs; do not copy contact pose.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_passing_a_geometry_nw_v4.json",
+      "request_sha256": "a3d92a6117a46a06eb4d770b23c4220b3a2f8b499a631313445d3ce589770305",
+      "references": [
+        "wang_ying_passing_a_nw_geometry_v7",
+        "shi_qian_walk_b2_geometry_nw_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_passing_b_se_geometry_v7",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/wang_ying_passing_b_se_geometry_v7.png",
+      "sha256": "720906c1a872bdadac3a878f6c4b76a8a43ee5ed4aade5d0aaf63e5389ac3fd9",
+      "prompt": "New SE passing_b short broad adult geometry: red flat support, blue low passing boot under pelvis. No source bitmap read/edit or production artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/wang_ying_passing_geometry_v7.gd",
+          "sha256": "2070bcd5ca8b31bd0a0b901a1db266354d07922ac61521c83991a4da9086384f"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_wang_ying_passing_geometry_v7.py",
+          "sha256": "35df66125d5caf116d296a2d1f68ced53e9f81494d50c472837c11e672734c9e"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/geometry_passing_b_se_v7.json",
+          "sha256": "f6117b85e45a4f1e6e1a91221e4c179a53318e966ba6831a4f4aa09118b4ca9e"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_qian_passing_b_geometry_se_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-3028eb8c-395d-4a2d-876e-383298587602",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/passing_b_geometry_se_v4.png",
+      "sha256": "5c041b91e03514b5e688a3d639a10cbfaa26ff1efefe4c22c18da48e0876c489",
+      "prompt": "POSE-GUIDED ONE CHARACTER native sprite. IMAGE1 contributes ONLY lower-leg near-foot PASSING geometry and camera; its red support boot is flat planted on IMAGE-LEFT and blue opposite boot is LOW raised moving past directly UNDER pelvis. IMAGE2 contributes all Shi Qian identity, slim normal ADULT body proportions, facial/headcloth shape, BLACK face mask, charcoal subtle patterned tunic and layered hem, TAN sash, diagonal tan shin wraps and ordinary dark cloth boots, painterly colors/materials. No robot block torso/short broad anatomy/colors/green marker/labels in output.\nFacing is FRONT three-quarter view facing LOWER-RIGHT, chest and masked face visible. Both boot toes, torso and head agree with that direction. Same elevated isometric camera, same slim adult head/neck/shoulder/hand/leg proportions. Keep soft knees and a small functional lean FROM HIPS with naturally aligned neck/back, watchful level gaze; no rounded hump, deep squat, parade stiffness or overlarge boots. Close empty relaxed hands.\nChange IMAGE2 walking-contact legs to the DISTINCT NEAR-FOOT PASSING POSE of IMAGE1: IMAGE-LEFT support boot FLAT on ground directly below its hip; the OPPOSITE boot just barely lifted beside it and moving forward UNDER pelvis, slightly bent knee. Feet are close laterally and in fore-aft stride; COMPACT NEAR-FOOT passing, not wide separated contact stride, not unchanged IMAGE2 legs, idle, lunge, run, jump, high knee or large sole toward camera. Both whole boots distinct, each leg continuously attached to its own hip, no crossed/disconnected thighs. Lift only about one boot-thickness; preserve leg lengths and adult anatomy. Lower tunic cloth follows minimally. Keep matching face/body/clothes and direction from IMAGE2.\nExactly ONE COMPLETE Shi Qian, native square transparent RGBA<=1536 with at least80px clear margin, centered full body. No other views/people, floor/shadow/text/grid, colored rods/green patch, weapons/rope/sack/props, cropping or mirroring. This is PASSING_B (SE) intermediate step, independently redrawn genuine passing legs; do not copy contact pose.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_passing_b_geometry_se_v4.json",
+      "request_sha256": "e0d3f5814a25394d8413352e94933fb91bbeb296c0a71115ff336aa372deba91",
+      "references": [
+        "wang_ying_passing_b_se_geometry_v7",
+        "shi_qian_walk_b_geometry_se_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_passing_b_sw_geometry_v7",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/wang_ying_passing_b_sw_geometry_v7.png",
+      "sha256": "031d1f6e392d6456c048d35f5c80ed0abf1148a5f3cf62330477701caad44268",
+      "prompt": "New SW passing_b short broad adult geometry: red flat support, blue low passing boot under pelvis. No source bitmap read/edit or production artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/wang_ying_passing_geometry_v7.gd",
+          "sha256": "2070bcd5ca8b31bd0a0b901a1db266354d07922ac61521c83991a4da9086384f"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_wang_ying_passing_geometry_v7.py",
+          "sha256": "35df66125d5caf116d296a2d1f68ced53e9f81494d50c472837c11e672734c9e"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/geometry_passing_b_sw_v7.json",
+          "sha256": "c06eca15e49eee86c396efb8a8a8714c75124c9d5474803bac9974a8f04f5295"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_qian_passing_b_geometry_sw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-9381f585-d7db-4662-bdd4-3962747da8a6",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/passing_b_geometry_sw_v4.png",
+      "sha256": "e87d1f9acbfe482dc434f85ff7863313d817e6e1d032e8ad0b8b56390e5c71b9",
+      "prompt": "POSE-GUIDED ONE CHARACTER native sprite. IMAGE1 contributes ONLY lower-leg near-foot PASSING geometry and camera; its red support boot is flat planted on IMAGE-RIGHT and blue opposite boot is LOW raised moving past directly UNDER pelvis. IMAGE2 contributes all Shi Qian identity, slim normal ADULT body proportions, facial/headcloth shape, BLACK face mask, charcoal subtle patterned tunic and layered hem, TAN sash, diagonal tan shin wraps and ordinary dark cloth boots, painterly colors/materials. No robot block torso/short broad anatomy/colors/green marker/labels in output.\nFacing is FRONT three-quarter view facing LOWER-LEFT, chest and masked face visible. Both boot toes, torso and head agree with that direction. Same elevated isometric camera, same slim adult head/neck/shoulder/hand/leg proportions. Keep soft knees and a small functional lean FROM HIPS with naturally aligned neck/back, watchful level gaze; no rounded hump, deep squat, parade stiffness or overlarge boots. Close empty relaxed hands.\nChange IMAGE2 walking-contact legs to the DISTINCT NEAR-FOOT PASSING POSE of IMAGE1: IMAGE-RIGHT support boot FLAT on ground directly below its hip; the OPPOSITE boot just barely lifted beside it and moving forward UNDER pelvis, slightly bent knee. Feet are close laterally and in fore-aft stride; COMPACT NEAR-FOOT passing, not wide separated contact stride, not unchanged IMAGE2 legs, idle, lunge, run, jump, high knee or large sole toward camera. Both whole boots distinct, each leg continuously attached to its own hip, no crossed/disconnected thighs. Lift only about one boot-thickness; preserve leg lengths and adult anatomy. Lower tunic cloth follows minimally. Keep matching face/body/clothes and direction from IMAGE2.\nExactly ONE COMPLETE Shi Qian, native square transparent RGBA<=1536 with at least80px clear margin, centered full body. No other views/people, floor/shadow/text/grid, colored rods/green patch, weapons/rope/sack/props, cropping or mirroring. This is PASSING_B (SW) intermediate step, independently redrawn genuine passing legs; do not copy contact pose.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_passing_b_geometry_sw_v4.json",
+      "request_sha256": "8986a5470c1c87bff4135f857202e8d2214523c176afd12fa9de0798547420be",
+      "references": [
+        "wang_ying_passing_b_sw_geometry_v7",
+        "shi_qian_walk_b_geometry_sw_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_passing_b_ne_geometry_v7",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/wang_ying_passing_b_ne_geometry_v7.png",
+      "sha256": "1f96a2fa3475c0761b4eb2649e4752f54a1323e9ebd441a7df462f8ec3516807",
+      "prompt": "New NE passing_b short broad adult geometry: red flat support, blue low passing boot under pelvis. No source bitmap read/edit or production artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/wang_ying_passing_geometry_v7.gd",
+          "sha256": "2070bcd5ca8b31bd0a0b901a1db266354d07922ac61521c83991a4da9086384f"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_wang_ying_passing_geometry_v7.py",
+          "sha256": "35df66125d5caf116d296a2d1f68ced53e9f81494d50c472837c11e672734c9e"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/geometry_passing_b_ne_v7.json",
+          "sha256": "afe197fb6c8bfde89fe914e72a67f7da2f1d36d2350dc6aa184b249c33e0b0cf"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_qian_passing_b_geometry_ne_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-113c9638-1e44-4b98-99b8-c45a0738b6c8",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/passing_b_geometry_ne_v4.png",
+      "sha256": "43b5f59ef739b41b97942055ba457df234b78e817bc2f80a55475ffdc2805bed",
+      "prompt": "POSE-GUIDED ONE CHARACTER native sprite. IMAGE1 contributes ONLY lower-leg near-foot PASSING geometry and camera; its red support boot is flat planted on IMAGE-RIGHT and blue opposite boot is LOW raised moving past directly UNDER pelvis. IMAGE2 contributes all Shi Qian identity, slim normal ADULT body proportions, facial/headcloth shape, BLACK face mask, charcoal subtle patterned tunic and layered hem, TAN sash, diagonal tan shin wraps and ordinary dark cloth boots, painterly colors/materials. No robot block torso/short broad anatomy/colors/green marker/labels in output.\nFacing is BACK three-quarter view facing AWAY UPPER-RIGHT, back of headcloth shoulders and tunic visible, no frontal chest. Both boot toes, torso and head agree with that direction. Same elevated isometric camera, same slim adult head/neck/shoulder/hand/leg proportions. Keep soft knees and a small functional lean FROM HIPS with naturally aligned neck/back, watchful level gaze; no rounded hump, deep squat, parade stiffness or overlarge boots. Close empty relaxed hands.\nChange IMAGE2 walking-contact legs to the DISTINCT NEAR-FOOT PASSING POSE of IMAGE1: IMAGE-RIGHT support boot FLAT on ground directly below its hip; the OPPOSITE boot just barely lifted beside it and moving forward UNDER pelvis, slightly bent knee. Feet are close laterally and in fore-aft stride; COMPACT NEAR-FOOT passing, not wide separated contact stride, not unchanged IMAGE2 legs, idle, lunge, run, jump, high knee or large sole toward camera. Both whole boots distinct, each leg continuously attached to its own hip, no crossed/disconnected thighs. Lift only about one boot-thickness; preserve leg lengths and adult anatomy. Lower tunic cloth follows minimally. Keep matching face/body/clothes and direction from IMAGE2.\nExactly ONE COMPLETE Shi Qian, native square transparent RGBA<=1536 with at least80px clear margin, centered full body. No other views/people, floor/shadow/text/grid, colored rods/green patch, weapons/rope/sack/props, cropping or mirroring. This is PASSING_B (NE) intermediate step, independently redrawn genuine passing legs; do not copy contact pose.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_passing_b_geometry_ne_v4.json",
+      "request_sha256": "4e3688abb25a481e27f736ae648feca88602d59be090adc7ad9174b626f5d90c",
+      "references": [
+        "wang_ying_passing_b_ne_geometry_v7",
+        "shi_qian_walk_b_geometry_ne_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_passing_b_nw_geometry_v7",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/wang_ying_passing_b_nw_geometry_v7.png",
+      "sha256": "362fb53746b7ab26a49e0f7aa3807c9c77b9c3d44c9f6ff514aff1d29c151616",
+      "prompt": "New NW passing_b short broad adult geometry: red flat support, blue low passing boot under pelvis. No source bitmap read/edit or production artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/wang_ying_passing_geometry_v7.gd",
+          "sha256": "2070bcd5ca8b31bd0a0b901a1db266354d07922ac61521c83991a4da9086384f"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_wang_ying_passing_geometry_v7.py",
+          "sha256": "35df66125d5caf116d296a2d1f68ced53e9f81494d50c472837c11e672734c9e"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/geometry_passing_b_nw_v7.json",
+          "sha256": "4087b0b3d54f26d56d2a11d40d8c861dd9708fe1af54faaed92326c2a52223c1"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_qian_passing_b_geometry_nw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-eec35b54-6b2e-4563-ab36-380cb491e561",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/passing_b_geometry_nw_v4.png",
+      "sha256": "b94c62386ec3553c5aa30b78e5e4a4daa77923852ea6288fded1fb1cc8b3efe3",
+      "prompt": "POSE-GUIDED ONE CHARACTER native sprite. IMAGE1 contributes ONLY lower-leg near-foot PASSING geometry and camera; its red support boot is flat planted on IMAGE-RIGHT and blue opposite boot is LOW raised moving past directly UNDER pelvis. IMAGE2 contributes all Shi Qian identity, slim normal ADULT body proportions, facial/headcloth shape, BLACK face mask, charcoal subtle patterned tunic and layered hem, TAN sash, diagonal tan shin wraps and ordinary dark cloth boots, painterly colors/materials. No robot block torso/short broad anatomy/colors/green marker/labels in output.\nFacing is BACK three-quarter view facing AWAY UPPER-LEFT, back of headcloth shoulders and tunic visible, no frontal chest. Both boot toes, torso and head agree with that direction. Same elevated isometric camera, same slim adult head/neck/shoulder/hand/leg proportions. Keep soft knees and a small functional lean FROM HIPS with naturally aligned neck/back, watchful level gaze; no rounded hump, deep squat, parade stiffness or overlarge boots. Close empty relaxed hands.\nChange IMAGE2 walking-contact legs to the DISTINCT NEAR-FOOT PASSING POSE of IMAGE1: IMAGE-RIGHT support boot FLAT on ground directly below its hip; the OPPOSITE boot just barely lifted beside it and moving forward UNDER pelvis, slightly bent knee. Feet are close laterally and in fore-aft stride; COMPACT NEAR-FOOT passing, not wide separated contact stride, not unchanged IMAGE2 legs, idle, lunge, run, jump, high knee or large sole toward camera. Both whole boots distinct, each leg continuously attached to its own hip, no crossed/disconnected thighs. Lift only about one boot-thickness; preserve leg lengths and adult anatomy. Lower tunic cloth follows minimally. Keep matching face/body/clothes and direction from IMAGE2.\nExactly ONE COMPLETE Shi Qian, native square transparent RGBA<=1536 with at least80px clear margin, centered full body. No other views/people, floor/shadow/text/grid, colored rods/green patch, weapons/rope/sack/props, cropping or mirroring. This is PASSING_B (NW) intermediate step, independently redrawn genuine passing legs; do not copy contact pose.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_passing_b_geometry_nw_v4.json",
+      "request_sha256": "eb7d02053ce7300ca6ca167899b028ec2844a18901aa3a3a3ed019fe9d4cc0f3",
+      "references": [
+        "wang_ying_passing_b_nw_geometry_v7",
+        "shi_qian_walk_b2_geometry_nw_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    }
+  ],
+  "scope": "Native complete ancestry plus new mathematical geometry references; complete candidate four-phase gait only; no production routing"
+}

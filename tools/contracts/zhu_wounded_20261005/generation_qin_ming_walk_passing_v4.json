@@ -1,0 +1,871 @@
+{
+  "original_reference": {
+    "path": "assets/characters/qin_ming_bound_20261005/bound.png",
+    "sha256": "f1dda9f6ac465a29a42ab4e920d6deb04eec5bd907f883528c67c205078abfc9"
+  },
+  "jobs": [
+    {
+      "key": "baseline_ref_87eac29bd5b1",
+      "method": "retained_identity_reference",
+      "generation_id": null,
+      "repository_path": "assets/characters/shi_qian_bound_20261005/bound.png",
+      "sha256": "08787ccf51041c8e6134999a7dc6e9c6e884631d2feebac3e7df868c9060a108",
+      "baseline_commit": "27f45b245e2b39f1f779fbfa62772e14bb68dd56",
+      "reference_role": "Retained original character identity/anatomy reference; no new generation prompt claimed",
+      "references": [],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "sw_initial_rejected",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-14e9b9ec-b822-445d-b639-37f1b69f93db",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/native_references/sw_initial_rejected.png",
+      "sha256": "0d671be87f60f2bcf662a443765caa39722691be329bf360c5be7b516c2e6ddb",
+      "prompt": "Use case: historical-scene. Native transparent SINGLE FULL BODY wounded Shi Qian opposite walking pose. Output ONLY ONE man, NOT a grid or multiple copies. Reference atlas is IDENTITY and clothes only; REMOVE ropes/bindings. Same slim black masked Chinese man in charcoal cross-over cloth tunic, black headwrap and mask, cloth belt, dark trousers/shin wraps and boots. NO sack/armor/weapons/flags. Free wrists and empty hands, one hand guards sore abdomen, other balances, slight tired hunch. Critical anatomical foot pose: SW FRONT THREEQUARTER facing DOWN-LEFT. Its planted FORWARD boot must be on LOWER-RIGHT side of the silhouette, connected to RIGHT side of the image pelvis. Its trailing lifted boot must be on UPPER-LEFT side, heel raised. Both toes face downLEFT, whole torso/head faces LEFT. Left/right foot lead must visibly differ from standard alternate stride. Leading knee crosses in FRONT of trailing knee with each leg connected to its own pelvis side. Clearly short careful limping STEP, not standing/running/jumping. Foot positions specified are relative to complete silhouette, no twisting hip. Both legs/feet visible and distinct. Elevated isometric historic painterly RTS camera, full silhouette centered and contained, generous empty margin100px each edge, body60-70% canvas height. Native square<=1536, actual transparent alpha, no floor shadow/grid/text/background/extra people.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_step_b_sw.json",
+      "request_sha256": "bcd885b9badf089374d13158f26f7c54cf02127f8928ed9f60386f50d0350a2f",
+      "references": [
+        "baseline_ref_87eac29bd5b1"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_qian_step_b_sw",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-b26411e6-641e-4a9a-a172-1c37a305b869",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/step_b_sw.png",
+      "sha256": "01a2cc521b116e0cff5f2c3c74774ff51cf2517a19c2029e6be6e76baa4a0b0f",
+      "prompt": "Edit this single transparent SW-facing masked man. Keep head, face direction, body, clothes and empty hands. Remove the red/blood stain from abdomen completely: clean dark cloth, NO blood/injury props.\nCHANGE ONLY THE TWO LEGS below the pelvis to the OPPOSITE walking step. Currently the foot at bottom-left is planted, and foot at upper-right is lifted. Swap their gait: the leg on the RIGHT side of the image must now straighten FORWARD with its boot planted at LOWER-RIGHT, approximately(x780,y1100) on this1254canvas; the leg on the LEFT side must bend BACK with boot lifted at UPPER-LEFT approximately(x580,y940). Keep each leg attached to its existing hip. Draw the RIGHT-SIDE IMAGE KNEE in front, LEFT-SIDE knee behind. Both boot toes still point LEFT. Do not keep the original foot placements. The planted boot must move to the OTHER side of the silhouette. This is an alternate short wounded walk step, not running, no new prop.\nSame elevated isometric SW frontthreequarter camera, torso and face pointingLEFT, one man only, native transparent RGBA square<=1536, full figure contained, no text/grid/floor/shadow/weapon/rope/bag. Keep black wrap and mask, charcoal tunic and trousers, shin wraps, painterly clothing identity unchanged.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_sw_leg_edit.json",
+      "request_sha256": "f344a6ee879a3e9ca3740115422156f37a966f35e406b1cb3a5b3f627352bff9",
+      "references": [
+        "sw_initial_rejected"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_qian_proportion_v2",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-c11831c3-8262-4bc1-bc31-4cabd4ac12dd",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/proportion_reference_v2.png",
+      "sha256": "7f8d1d563e6eff35801bdab942867fb751cc2ccb90ae363ec39b16cf7a582499",
+      "prompt": "Use case: identity-preserve. Redraw this masked black-clothed adult Shi Qian with CORRECT NATURAL ADULT HUMAN PROPORTIONS. Current image is rejected: head and boots too big, legs too short, body too hunched and cartoonish. Keep the same identifiable man, black cloth headwrap/topknot and black mouth/nose mask, charcoal cross-over tunic and plain brown cloth sash, dark trousers/shin wraps/cloth boots, restrained hand-painted Chinese historical RTS rendering. NOT pixel-preservation: redraw anatomy fully as needed.\nNEW BODY: slim athletic normal adult, about7 to7.5 HEADS tall from skull top to sole. Bare head height only about one-seventh total body height; headcloth must not turn it into an oversized head. Natural narrow but adult shoulders, visible neck, proportionate torso, LONGER natural legs with hip-to-floor about half entire figure. Knees correctly midway along legs, normal slender calves, small natural hands, human-sized cloth boots WITHOUT giant bulky feet. Balanced anatomical joints, same believable adult throughout. No chibi/dwarf/oversized-head/short-legged/caricature proportions, no inflated hands or comic boots.\nPOSE: quiet NEUTRAL standing with feet naturally close and both grounded, only slight fatigue in shoulders. Upright spine and level head, no extreme stoop, crouch, furtive peeking, aggressive grimace, exaggerated lifted knee, twisted hip or running pose. Empty arms rest naturally; one empty hand may lightly rest near lower abdomen without squeezing or deep bending. This is a tired rescued adult with calm dignity, NOT a sneaking goblin. No ropes, weapons, sacks, blood/injury props, cape, armor or new accessories.\nView remains SW front three-quarter facing down-left, elevated isometric camera. Exactly ONE full body, all headcloth tails/fingers/feet contained, centered with generous transparent margins. Body about65–70% square canvas height. GENUINE alpha TRANSPARENT background, native square max1536, no floor shadow/background/checkerboard/grid/text/labels. Detailed face retains original identity but at natural smaller anatomical size.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_proportion_v2.json",
+      "request_sha256": "b1e2f2282759fe21f8c79677225a038887290f0321fd728d4ca889b2a34fb232",
+      "references": [
+        "shi_qian_step_b_sw"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_proportion_v2",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-eeea1497-aba0-4b30-b210-0dca5125f911",
+      "repository_path": "assets/characters/qin_ming_wounded_20261005/proportion_v2.png",
+      "sha256": "6057cadecb7e9c153e8da18e178d0dc24d6bb95b4671671d0eed1c45fa59ea73",
+      "prompt": "Use case: identity-preserve. ONE full-body unarmed rescued qin_ming standing proportion reference, NOT an atlas. Reference1 is the sole FACE/HAIR/CLOTHING identity reference; remove ALL bindings/ropes and weapons. Reference2 supplies ONLY the mature natural human anatomy target and painterly elevated isometric camera; DO NOT copy its mask, black costume or face.\nIdentity: Broad powerful middle-aged man, curly black beard, red wrapped headscarf with small gold band, red robe/scarf, dark bronze armor with distinctive gold beast-face shoulders, dark trousers, gold-trim boots and quiet dark-red cloak. FOOT ONLY; NO horse, mace, weapon or rope.\nRedraw the short reference anatomy into a believable mature ADULT: about7–7.5 heads tall, normal small head/hands/boots, natural visible neck and LONG adult legs with hip-to-ground around half height. Broad muscular build and beast-face shoulder armor remain, ornaments fit adult shoulders rather than enlarge head or crush leg length. Each knee naturally midway along the leg, no shortened thighs or giant footwear. Keep costume colors/materials and recognisable face/hair; any armor decoration fits his natural adult body.\nPose: SW front-three-quarter facing down-left, quiet upright tired rescued man with dignity, level head and relaxed empty hands by sides, both feet naturally close and grounded. Only slight fatigue in shoulders, no crouch/stoop/sneaking/high raised knee/running/combat stance. Natural anatomical joints. No weapon, sheath, rope, sack, flag, mount, blood, glow or new props. Preserve original identity, don't make everyone the same slim black masked man. Historic restrained hand-painted Chinese RTS rendering. Exactly one COMPLETE body, all cloth tails/cape/fingers/boots contained with generous margins, about75–80% native square height, max1536. Genuine transparent alpha background, no floor/shadow/grid/text/labels/checkerboard.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/qin_ming_proportion_v2.json",
+      "request_sha256": "38f8ccbf130086d07e438d44fed2af783565d67e9bf2dc1e641643959c6f32e5",
+      "references": [
+        "original",
+        "shi_qian_proportion_v2"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_posture_v3",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-62e91509-6dd4-4876-a430-d6344fc41328",
+      "repository_path": "assets/characters/qin_ming_wounded_20261005/posture_v3.png",
+      "sha256": "8a4e23306fd997d9ce763f88d0d8c385ec69eaf78ceee6fe52031fdbbb0caaf8",
+      "prompt": "Use case: identity-preserve. EDIT the attached ONE full-body character reference. User requires an upright dignified SOLDIER posture: head UP and chest OPEN. Reject lowered chin, forward head, closed shoulders or hunched back. Only improve pose; preserve this SAME individual face, clothes, mature ADULT proportions and painterly rendering.\nPOSE: erect balanced military attention-like stance. Naturally straight stacked spine, neutral pelvis, neck vertical ABOVE torso; head lifted with chin LEVEL, eyes looking toward distant horizon in the SAME front three-quarter SW facing direction, never down at feet. Shoulders gently back and down, broad collarbones, naturally lifted open chest, sternum confidently forward. No stoop, rounded back, shrugged shoulders, forward craned neck, wounded hunch or tired slump. Do not hyperextend neck, flare ribs, thrust belly or arch lower back. Keep the small natural head/hands/boots and adult thighs/calves. Moderately elevated isometric camera does not imply bowed head.\nBoth feet grounded in stable modest hip-width parallel stance, knees straight but not locked. Empty arms straight naturally at sides and open relaxed hands, no fists or combat stance. Keep every existing armor plate/shoulder detail/cloak and beard, same color and body build; don't add extra armor.\nExactly ONE complete full figure with all fingers/tails/cloak/boots contained in generous transparent margins, 75–80% square height, native max1536. No weapons/sheaths/rope/chains/blood/new props. Preserve true transparent alpha; no floor/shadow/background/text/grid/checkerboard.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/qin_ming_posture_v3.json",
+      "request_sha256": "43a056a205a87222fb1b780687ab9536ae2b0f7686c6af6a254bcdd2d740617a",
+      "references": [
+        "qin_ming_proportion_v2"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_idle_v3",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-a178fe65-ed67-4d2a-bb25-99f23ecf950c",
+      "repository_path": "assets/characters/qin_ming_wounded_20261005/idle_v3.png",
+      "sha256": "8bbc90f27031aeb3cac07dee94bc9bce354ec3771f64cb5f3798d4e7cbfd5e94",
+      "prompt": "Use case: identity-preserve. Create native FOUR independently drawn isometric IDLE views of this SAME upright adult soldier. Reference is the selected v3 single-body posture; preserve its face, proportions, clothing and colors. Exactly 2 columns x 2 rows: TOP LEFT SE front three-quarter looking screen DOWN-RIGHT; TOP RIGHT SW front three-quarter looking screen DOWN-LEFT; BOTTOM LEFT NE back three-quarter looking screen UP-RIGHT; BOTTOM RIGHT NW back three-quarter looking screen UP-LEFT. Turn the WHOLE torso, hips and both feet into each direction. SE and SW must be genuinely opposite whole-body views; do not repeat SW in the SE cell. Back views show back clothes and back of head, with only a small far cheek visible. Never mirror a rendered cell. ALL FOUR poses stand dignified and upright like disciplined soldiers: lifted head, LEVEL chin/horizon gaze, neck vertically above torso, stacked natural spine, shoulders back/down, naturally open lifted chest. Elevated camera never means bowed head. NO hunch, forward neck, closed chest, tired shoulder slump, shrug, belly thrust or arched lower back. Empty relaxed hands and naturally straight arms at sides. Stable feet at modest hip width, straight natural knees. Keep mature adult head/hands/boots and adult leg lengths. Body type identity: Broad powerful middle-aged man, curly black beard, red wrapped headscarf with small gold band, red robe/scarf, dark bronze armor with distinctive gold beast-face shoulders, dark trousers, gold-trim boots and quiet dark-red cloak. FOOT ONLY; NO horse, mace, weapon or rope. Preserve v3 body anatomy over any old compact sprite instructions; never chibi. Same front/back clothing hem length and construction, no weapons/sheaths/rope/chains/blood/new props. Each whole figure fits inside its OWN quadrant with wide true-alpha outer margins and wide empty transparent central gutters; no tails/capes/boots cross cell boundaries. Figures equal body height within this character. Native square max1536, painterly reference quality, TRUE RGBA transparent background; no floor/shadows/text/labels/grid/checkerboard. Layout priority: figures occupy only 78–82% of EACH quadrant height, about490–515px tall at1254px native square. Center each figure inside its cell; keep at least45px transparent clearance on every cell edge, including cape/boots/headcloth. The central horizontal gutter should be at least80px. Reduce whole figure size uniformly to leave room; NEVER shorten legs or enlarge heads to fit. Do not nearly touch the two rows.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/qin_ming_idle_v3.json",
+      "request_sha256": "55e07fc89fee7a5d42bf90ea00dcff47b753d54dd15767ea07f13f751db05309",
+      "references": [
+        "qin_ming_posture_v3"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_idle_single_se_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-782153c2-a53f-4be3-a43b-34d00041adff",
+      "repository_path": "assets/characters/qin_ming_wounded_20261005/idle_single_se_v4.png",
+      "sha256": "9a52e77d86708ace9da553d6bcdc8b3a9a355245b1c332f2f94176d778632294",
+      "prompt": "Create exactly ONE full-body native Qin Ming idle sprite from the corresponding SE character in this reference four-view sheet. This is a SINGLE view, not another sheet. Character identity/costume/style invariants: Broad powerful middle-aged Qin Ming, stern curly black beard and long curly black hair, red wrapped headscarf with small GOLD band, red robe/scarf, dark bronze breast/torso armor with gold beast-face shoulders and trim, bracers, gold beast-face knee guards, dark trousers, gold-trim boots and quiet patterned dark-red cloak. Preserve the exact identifiable face, layered armor plates/edges, warm bronze/red palette and fine painterly style from the reference. Same NORMAL ADULT head size, neck length, limb lengths, hands and boots; keep his broad adult shoulders and strong torso, not a short chibi/child body, huge head/boots or skinny substitute.\nCAMERA/FACING: FRONT three-quarter elevated isometric view facing LOWER-RIGHT / southeast. Chest/beard visible. Both boot toes, torso and head face lower-right. Keep corresponding body orientation; never mirror a front view to pretend it is a back view.\nPOSTURE: Qin Ming's own strong forceful military officer bearing: head naturally raised with level gaze, neck aligned over shoulders, broad chest/shoulders comfortably open and upright upper back. Ordinary firm stance with both feet planted, modest natural knee softness and relaxed EMPTY hands near sides; no overarched chest, artificial parade rigidity, limp crouch, rounded hunch or aggressive attack gesture. His exact broad warrior physique is retained rather than stretching/slimming. This is an unarmed rescued FOOT-only candidate, no horse/mace/weapon/sheath/rope/banner/writing or new props. Cloak hangs quietly, same relative length as reference, cape must not obscure both legs/boots or trail beyond figure margins; never inflate like huge sails. Preserve original costume, no extra armor ornaments.\nFULL NATIVE FRAME: ONE complete adult Qin Ming centered on genuine transparent RGBA native square <=1536. At least80px clear margin around entire figure including cloak/headcloth/feet, slightly smaller within canvas rather than squashing body. Whole head, both hands, both boots and cape present and unclipped. No other people/views, grid/labels/text, floor/shadow/background, cropping, mirroring or added weapon. High-detail painterly game sprite consistent with reference.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/qin_ming_idle_single_se_v4.json",
+      "request_sha256": "0df7c2bb68bddbf27afb4ca2a7d2c3a7c6ff70e5ea392fc63452609611bdd225",
+      "references": [
+        "qin_ming_idle_v3"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_idle_single_sw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-67d5aa40-49ff-45f2-8136-3ea96b06124d",
+      "repository_path": "assets/characters/qin_ming_wounded_20261005/idle_single_sw_v4.png",
+      "sha256": "26162fefef32508332f4cb31f62a82574ed686ed5197f94986a7d3c69b3c7bb5",
+      "prompt": "Create exactly ONE full-body native Qin Ming idle sprite from the corresponding SW character in this reference four-view sheet. This is a SINGLE view, not another sheet. Character identity/costume/style invariants: Broad powerful middle-aged Qin Ming, stern curly black beard and long curly black hair, red wrapped headscarf with small GOLD band, red robe/scarf, dark bronze breast/torso armor with gold beast-face shoulders and trim, bracers, gold beast-face knee guards, dark trousers, gold-trim boots and quiet patterned dark-red cloak. Preserve the exact identifiable face, layered armor plates/edges, warm bronze/red palette and fine painterly style from the reference. Same NORMAL ADULT head size, neck length, limb lengths, hands and boots; keep his broad adult shoulders and strong torso, not a short chibi/child body, huge head/boots or skinny substitute.\nCAMERA/FACING: FRONT three-quarter elevated isometric view facing LOWER-LEFT / southwest. Chest/beard visible. Both boot toes, torso and head face lower-left. Keep corresponding body orientation; never mirror a front view to pretend it is a back view.\nPOSTURE: Qin Ming's own strong forceful military officer bearing: head naturally raised with level gaze, neck aligned over shoulders, broad chest/shoulders comfortably open and upright upper back. Ordinary firm stance with both feet planted, modest natural knee softness and relaxed EMPTY hands near sides; no overarched chest, artificial parade rigidity, limp crouch, rounded hunch or aggressive attack gesture. His exact broad warrior physique is retained rather than stretching/slimming. This is an unarmed rescued FOOT-only candidate, no horse/mace/weapon/sheath/rope/banner/writing or new props. Cloak hangs quietly, same relative length as reference, cape must not obscure both legs/boots or trail beyond figure margins; never inflate like huge sails. Preserve original costume, no extra armor ornaments.\nFULL NATIVE FRAME: ONE complete adult Qin Ming centered on genuine transparent RGBA native square <=1536. At least80px clear margin around entire figure including cloak/headcloth/feet, slightly smaller within canvas rather than squashing body. Whole head, both hands, both boots and cape present and unclipped. No other people/views, grid/labels/text, floor/shadow/background, cropping, mirroring or added weapon. High-detail painterly game sprite consistent with reference.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/qin_ming_idle_single_sw_v4.json",
+      "request_sha256": "d7a6113c7c746f8b707b8615ad1578b85326751ffd615f53c56879fff01b3802",
+      "references": [
+        "qin_ming_idle_v3"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_idle_single_ne_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-751a3f40-6a17-4c16-abac-c88a64bd2bb2",
+      "repository_path": "assets/characters/qin_ming_wounded_20261005/idle_single_ne_v4.png",
+      "sha256": "e4d8d90b0bf555e2e2be0e42f7dedd6279bf075a0250d84190d312269d0f9fc4",
+      "prompt": "Create exactly ONE full-body native Qin Ming idle sprite from the corresponding NE character in this reference four-view sheet. This is a SINGLE view, not another sheet. Character identity/costume/style invariants: Broad powerful middle-aged Qin Ming, stern curly black beard and long curly black hair, red wrapped headscarf with small GOLD band, red robe/scarf, dark bronze breast/torso armor with gold beast-face shoulders and trim, bracers, gold beast-face knee guards, dark trousers, gold-trim boots and quiet patterned dark-red cloak. Preserve the exact identifiable face, layered armor plates/edges, warm bronze/red palette and fine painterly style from the reference. Same NORMAL ADULT head size, neck length, limb lengths, hands and boots; keep his broad adult shoulders and strong torso, not a short chibi/child body, huge head/boots or skinny substitute.\nCAMERA/FACING: BACK three-quarter elevated isometric view facing AWAY-UPPER-RIGHT / northeast. Back of shoulders, back of headcloth and cloak visible, just small far-side beard profile; no frontal chest or both eyes. Both boot toes point upper-right. Keep corresponding body orientation; never mirror a front view to pretend it is a back view.\nPOSTURE: Qin Ming's own strong forceful military officer bearing: head naturally raised with level gaze, neck aligned over shoulders, broad chest/shoulders comfortably open and upright upper back. Ordinary firm stance with both feet planted, modest natural knee softness and relaxed EMPTY hands near sides; no overarched chest, artificial parade rigidity, limp crouch, rounded hunch or aggressive attack gesture. His exact broad warrior physique is retained rather than stretching/slimming. This is an unarmed rescued FOOT-only candidate, no horse/mace/weapon/sheath/rope/banner/writing or new props. Cloak hangs quietly, same relative length as reference, cape must not obscure both legs/boots or trail beyond figure margins; never inflate like huge sails. Preserve original costume, no extra armor ornaments.\nFULL NATIVE FRAME: ONE complete adult Qin Ming centered on genuine transparent RGBA native square <=1536. At least80px clear margin around entire figure including cloak/headcloth/feet, slightly smaller within canvas rather than squashing body. Whole head, both hands, both boots and cape present and unclipped. No other people/views, grid/labels/text, floor/shadow/background, cropping, mirroring or added weapon. High-detail painterly game sprite consistent with reference.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/qin_ming_idle_single_ne_v4.json",
+      "request_sha256": "d327c58b08ba9649f1215495009f840592fa1d9d08cce713b18204a9ad0cea7c",
+      "references": [
+        "qin_ming_idle_v3"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_idle_single_nw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-a94ab351-aeaa-46a3-b5db-8182cd6df332",
+      "repository_path": "assets/characters/qin_ming_wounded_20261005/idle_single_nw_v4.png",
+      "sha256": "626784c3f181c6dd82d6693f85910f75a977c729a48ec48462c9318e8018c7a9",
+      "prompt": "Create exactly ONE full-body native Qin Ming idle sprite from the corresponding NW character in this reference four-view sheet. This is a SINGLE view, not another sheet. Character identity/costume/style invariants: Broad powerful middle-aged Qin Ming, stern curly black beard and long curly black hair, red wrapped headscarf with small GOLD band, red robe/scarf, dark bronze breast/torso armor with gold beast-face shoulders and trim, bracers, gold beast-face knee guards, dark trousers, gold-trim boots and quiet patterned dark-red cloak. Preserve the exact identifiable face, layered armor plates/edges, warm bronze/red palette and fine painterly style from the reference. Same NORMAL ADULT head size, neck length, limb lengths, hands and boots; keep his broad adult shoulders and strong torso, not a short chibi/child body, huge head/boots or skinny substitute.\nCAMERA/FACING: BACK three-quarter elevated isometric view facing AWAY-UPPER-LEFT / northwest. Back of shoulders, back of headcloth and cloak visible, just small far-side beard profile; no frontal chest or both eyes. Both boot toes point upper-left. Keep corresponding body orientation; never mirror a front view to pretend it is a back view.\nPOSTURE: Qin Ming's own strong forceful military officer bearing: head naturally raised with level gaze, neck aligned over shoulders, broad chest/shoulders comfortably open and upright upper back. Ordinary firm stance with both feet planted, modest natural knee softness and relaxed EMPTY hands near sides; no overarched chest, artificial parade rigidity, limp crouch, rounded hunch or aggressive attack gesture. His exact broad warrior physique is retained rather than stretching/slimming. This is an unarmed rescued FOOT-only candidate, no horse/mace/weapon/sheath/rope/banner/writing or new props. Cloak hangs quietly, same relative length as reference, cape must not obscure both legs/boots or trail beyond figure margins; never inflate like huge sails. Preserve original costume, no extra armor ornaments.\nFULL NATIVE FRAME: ONE complete adult Qin Ming centered on genuine transparent RGBA native square <=1536. At least80px clear margin around entire figure including cloak/headcloth/feet, slightly smaller within canvas rather than squashing body. Whole head, both hands, both boots and cape present and unclipped. No other people/views, grid/labels/text, floor/shadow/background, cropping, mirroring or added weapon. High-detail painterly game sprite consistent with reference.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/qin_ming_idle_single_nw_v4.json",
+      "request_sha256": "cc11b161a1b445b8e2d32b9d8bf57ac5873bcc079193dbbab9961dad56847178",
+      "references": [
+        "qin_ming_idle_v3"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_walk_a_se_geometry_v4",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_a_se_geometry_v4.png",
+      "sha256": "7caff54e4b7dccd1eab462566ad37995f68b1a2cf09222815abd20036f38eda6",
+      "prompt": "New primitive-only SE contact A: red image-right flat support, blue image-left low lifted boot. No source bitmap read or modified. Robot colors/proportions are not artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/qin_ming_contact_geometry_v4.gd",
+          "sha256": "74730ccd656542728251f76c82a816c8386150555b38c39b58c7515b1800c392"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_qin_ming_contact_geometry_v4.py",
+          "sha256": "8542f8bf6fda71800821c87e90d6918f35bf27913ee2cfeacf2c6206e7a6c69c"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_a_se_geometry_v4.json",
+          "sha256": "1e4d7ee0690567125b1d99bdd1876e33571560a1307ec49ac6649312ecc6bb07"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_walk_a_se_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-12bf0d9c-c9ba-4298-a58d-2e2e15aad4ba",
+      "repository_path": "assets/characters/qin_ming_wounded_20261005/walk_a_se_v4.png",
+      "sha256": "18d563fe873263b7aba300069750bc3dd471481ee0ff2e9281d1aca6d9b5bef0",
+      "prompt": "POSE-GUIDED SINGLE Qin Ming CONTACT A. IMAGE1 fixes ONLY legs and camera: RED IMAGE-RIGHT boot is FLAT planted carrying weight; BLUE IMAGE-LEFT boot is LOW raised behind. IMAGE2 fixes exact Qin Ming identity, broad strong NORMAL ADULT proportions, raised level head and aligned upper back, mature fierce face/curly beard/long curly hair, red tied headcloth and gold band, red scarf/sleeves, dark bronze armor with gold beast-face shoulders, gold beast knee guards/bracers/belt, dark trousers, gold-trim boots and patterned dark-red cloak. Follow IMAGE2 body/head/hand/boot sizes and armor plate shapes, not robot stocky box anatomy or colors.\nFRONT three-quarter elevated isometric camera facing LOWER-RIGHT / southeast. Head torso and both boot toes down-right. SHORT HEAVY-BOOT WALKING CONTACT: image-RIGHT foreground boot HEEL AND TOE flat planted under forward body weight, image-LEFT boot raised only about a boot-thickness behind, connected by slightly bent knee to own hip. Copy red/blue support assignment, not IMAGE2's two planted idle legs. Compact natural stride, modest weight transfer, shoulders/chest held strong with only natural hip follow-through. Head level and upper back aligned; no deep crouch/rounded hump, parade stiffness, long lunge/high kick/jump/run. Legs normal adult lengths, no crossing hips or disconnected shins; no entire sole facing camera on planted boot.\nEmpty hands close with restrained natural opposing arm swing; no fists/attack/weapon/horse/mace/rope/banner. Red cloak hangs and follows minimally, same relative length/pattern as IMAGE2; keep both boots distinct and visible instead of hiding swing leg behind enormous cloak. Cloak cannot inflate or drag to canvas edge. Preserve exact face, helmetless headscarf, armor materials and painterly palette. No robot box/color limbs/green patch/guide text.\nExactly ONE complete full-body Qin Ming on genuine transparent RGBA square<=1536. Centered with clear margins80px+ around headcloth/cloak/boots; whole head, hands and both boots unclipped. No extra people/views, floor/shadow/background, grid/text/labels, mirroring/cropping or new props. New walking contact A legs; not idle.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/qin_ming_walk_a_se_v4.json",
+      "request_sha256": "9c097b0d3b312d0bf64bd81af5a2e1cd2eed6d81ac25ec7c6791cb404b44fe05",
+      "references": [
+        "qin_ming_walk_a_se_geometry_v4",
+        "qin_ming_idle_single_se_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_walk_a_sw_geometry_v4",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_a_sw_geometry_v4.png",
+      "sha256": "1654f14c0c874473b7f90091657151273986c204cb4b679a69b356d7093ec338",
+      "prompt": "New primitive-only sw walk_a contact: red flat support, blue low raised boot; screen support side verified. No character bitmap read/edit; robot anatomy/colors not artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/qin_ming_contact_geometry_v4.gd",
+          "sha256": "74730ccd656542728251f76c82a816c8386150555b38c39b58c7515b1800c392"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_qin_ming_contact_geometry_v4.py",
+          "sha256": "8542f8bf6fda71800821c87e90d6918f35bf27913ee2cfeacf2c6206e7a6c69c"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_a_sw_geometry_v4.json",
+          "sha256": "9791172c166e6f1f1d2152eaa41998aa1ea887db8bd064aa7d216e6b1ef7c969"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_walk_a_sw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-b4e237d0-1b9d-424b-b886-671fad859afd",
+      "repository_path": "assets/characters/qin_ming_wounded_20261005/walk_a_sw_v4.png",
+      "sha256": "a0b078df08befee6233708ad57f605dca2258a07f04fff80bb20d1455b31129a",
+      "prompt": "POSE-GUIDED SINGLE Qin Ming WALK_A sprite. IMAGE1 supplies ONLY colored lower-leg pose and camera; RED boot flat support is on IMAGE-LEFT, BLUE low-raised swing boot IMAGE-RIGHT. Its robot torso/colors/green floor/labels are NOT artwork. IMAGE2 is the sole Qin Ming identity/body/wardrobe/material reference. Exact Qin Ming from IMAGE2: broad powerful middle-aged warrior body, normal ADULT head/neck/limb/hand/boot proportions, strong shoulders/chest and naturally aligned raised level head/upper back. Mature stern face, curly black beard/long curly hair, red wrapped headcloth with gold band, red scarf/sleeves, dark bronze torso/hip/bracer armor and gold beast-face shoulders/knees/belt, dark trousers, gold-trim boots and patterned dark-red cloak. Preserve exact armor plate shapes, face, relative cloak length and painterly bronze/red material detail. Do NOT copy robot short broad box-body proportions/colors.\nCAMERA: FRONT three-quarter elevated isometric camera facing LOWER-LEFT / southwest. Chest/beard visible; both boot toes and torso/head down-left. Preserve that entire body orientation; never make back view into frontal portrait.\nMANDATORY LEGS: SHORT HEAVY-BOOT CONTACT step: RED image-LEFT support boot HEEL AND TOE FLAT planted, leg continuous to its own hip. BLUE image-RIGHT boot only modestly raised (about one boot-thickness) with soft knee, compact short stride on the opposite side. Copy the exact red/blue support assignment; do not copy idle's two planted boots. Each leg has normal adult length, no crossing/disconnected hips/shins. The entire underside of the PLANTED boot must not face camera; its heel is down. Raised boot is low, not large high sole/kick. Contact A and B alternate the support sides.\nNatural restrained weight transfer through hips with strong stable chest/shoulders and level gaze. No rounded hump, deep squat, overarched chest, forced parade rigidity, long lunge, run/jump or attack pose. Empty hands near sides with small natural opposing arm motion, no fists/new props. Red cloak and hanging armor/cloth follow minimally, same length/pattern as IMAGE2; do not inflate/drag cloak or hide both boots. Both boots visible and anatomically attached under costume. No horse/mace/weapon/sheath/rope/banner/writing, no robot/leg colors/green patch/diagram text.\nExactly ONE COMPLETE full-body Qin Ming on genuine transparent RGBA native square<=1536, centered with generous80px+ clear margins including headcloth/cloak/boots. Whole head, hands and both boots unclipped. No extra people/views, floor/shadow/background, labels/grid, cropping/mirroring or added ornaments. New WALK_A legs, matching recognizable Qin Ming.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/qin_ming_walk_a_sw_v4.json",
+      "request_sha256": "96af1452a7aa0a8ec21f961a681a21bd5e0e37df390da842a65091199521b82a",
+      "references": [
+        "qin_ming_walk_a_sw_geometry_v4",
+        "qin_ming_idle_single_sw_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_walk_a_ne_geometry_v4",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_a_ne_geometry_v4.png",
+      "sha256": "7d70366456faac65df7c9359e524bca6b38f1fc81c0250b7c7681740be5a9af4",
+      "prompt": "New primitive-only ne walk_a contact: red flat support, blue low raised boot; screen support side verified. No character bitmap read/edit; robot anatomy/colors not artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/qin_ming_contact_geometry_v4.gd",
+          "sha256": "74730ccd656542728251f76c82a816c8386150555b38c39b58c7515b1800c392"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_qin_ming_contact_geometry_v4.py",
+          "sha256": "8542f8bf6fda71800821c87e90d6918f35bf27913ee2cfeacf2c6206e7a6c69c"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_a_ne_geometry_v4.json",
+          "sha256": "e7dbf35e143a7956a106306944138fa6c335af371eeae5a13c002bc0d5917a0e"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_walk_a_ne_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-4ba7ad68-bb7e-42e9-b1df-b1a242e907ea",
+      "repository_path": "assets/characters/qin_ming_wounded_20261005/walk_a_ne_v4.png",
+      "sha256": "bd24f5d36e20607bdd2eb15a9f72973754fda9753b726ddd6ed6bf43a7e542d5",
+      "prompt": "POSE-GUIDED SINGLE Qin Ming WALK_A sprite. IMAGE1 supplies ONLY colored lower-leg pose and camera; RED boot flat support is on IMAGE-LEFT, BLUE low-raised swing boot IMAGE-RIGHT. Its robot torso/colors/green floor/labels are NOT artwork. IMAGE2 is the sole Qin Ming identity/body/wardrobe/material reference. Exact Qin Ming from IMAGE2: broad powerful middle-aged warrior body, normal ADULT head/neck/limb/hand/boot proportions, strong shoulders/chest and naturally aligned raised level head/upper back. Mature stern face, curly black beard/long curly hair, red wrapped headcloth with gold band, red scarf/sleeves, dark bronze torso/hip/bracer armor and gold beast-face shoulders/knees/belt, dark trousers, gold-trim boots and patterned dark-red cloak. Preserve exact armor plate shapes, face, relative cloak length and painterly bronze/red material detail. Do NOT copy robot short broad box-body proportions/colors.\nCAMERA: BACK three-quarter elevated isometric camera facing AWAY-UPPER-RIGHT / northeast. Back of headcloth/shoulders/cloak visible, small far-side beard profile only, no frontal chest or both eyes; boot toes upper-right. Preserve that entire body orientation; never make back view into frontal portrait.\nMANDATORY LEGS: SHORT HEAVY-BOOT CONTACT step: RED image-LEFT support boot HEEL AND TOE FLAT planted, leg continuous to its own hip. BLUE image-RIGHT boot only modestly raised (about one boot-thickness) with soft knee, compact short stride on the opposite side. Copy the exact red/blue support assignment; do not copy idle's two planted boots. Each leg has normal adult length, no crossing/disconnected hips/shins. The entire underside of the PLANTED boot must not face camera; its heel is down. Raised boot is low, not large high sole/kick. Contact A and B alternate the support sides.\nNatural restrained weight transfer through hips with strong stable chest/shoulders and level gaze. No rounded hump, deep squat, overarched chest, forced parade rigidity, long lunge, run/jump or attack pose. Empty hands near sides with small natural opposing arm motion, no fists/new props. Red cloak and hanging armor/cloth follow minimally, same length/pattern as IMAGE2; do not inflate/drag cloak or hide both boots. Both boots visible and anatomically attached under costume. No horse/mace/weapon/sheath/rope/banner/writing, no robot/leg colors/green patch/diagram text.\nExactly ONE COMPLETE full-body Qin Ming on genuine transparent RGBA native square<=1536, centered with generous80px+ clear margins including headcloth/cloak/boots. Whole head, hands and both boots unclipped. No extra people/views, floor/shadow/background, labels/grid, cropping/mirroring or added ornaments. New WALK_A legs, matching recognizable Qin Ming.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/qin_ming_walk_a_ne_v4.json",
+      "request_sha256": "60b5fe14e3ee438d2f1e379769742591fd57121b8a7dea5d8c6037e2596c10dd",
+      "references": [
+        "qin_ming_walk_a_ne_geometry_v4",
+        "qin_ming_idle_single_ne_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_walk_a_nw_geometry_v4",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_a_nw_geometry_v4.png",
+      "sha256": "7462d694bbc602d0d16fe0ad39029a479c7d022dfb1080f3cb1d16fd21920d61",
+      "prompt": "New primitive-only nw walk_a contact: red flat support, blue low raised boot; screen support side verified. No character bitmap read/edit; robot anatomy/colors not artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/qin_ming_contact_geometry_v4.gd",
+          "sha256": "74730ccd656542728251f76c82a816c8386150555b38c39b58c7515b1800c392"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_qin_ming_contact_geometry_v4.py",
+          "sha256": "8542f8bf6fda71800821c87e90d6918f35bf27913ee2cfeacf2c6206e7a6c69c"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_a_nw_geometry_v4.json",
+          "sha256": "d5a39458f5641be2df1882077e66935852f1735b99ae8317589f831790811fac"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_walk_a_nw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-6ab36802-e08c-4050-81c8-b9881a5e7083",
+      "repository_path": "assets/characters/qin_ming_wounded_20261005/walk_a_nw_v4.png",
+      "sha256": "935ab18e75b3872a606169204269d5552a46423868e84f18588a6ff56247244b",
+      "prompt": "POSE-GUIDED SINGLE Qin Ming WALK_A sprite. IMAGE1 supplies ONLY colored lower-leg pose and camera; RED boot flat support is on IMAGE-LEFT, BLUE low-raised swing boot IMAGE-RIGHT. Its robot torso/colors/green floor/labels are NOT artwork. IMAGE2 is the sole Qin Ming identity/body/wardrobe/material reference. Exact Qin Ming from IMAGE2: broad powerful middle-aged warrior body, normal ADULT head/neck/limb/hand/boot proportions, strong shoulders/chest and naturally aligned raised level head/upper back. Mature stern face, curly black beard/long curly hair, red wrapped headcloth with gold band, red scarf/sleeves, dark bronze torso/hip/bracer armor and gold beast-face shoulders/knees/belt, dark trousers, gold-trim boots and patterned dark-red cloak. Preserve exact armor plate shapes, face, relative cloak length and painterly bronze/red material detail. Do NOT copy robot short broad box-body proportions/colors.\nCAMERA: BACK three-quarter elevated isometric camera facing AWAY-UPPER-LEFT / northwest. Back of headcloth/shoulders/cloak visible, small far-side beard profile only, no frontal chest or both eyes; boot toes upper-left. Preserve that entire body orientation; never make back view into frontal portrait.\nMANDATORY LEGS: SHORT HEAVY-BOOT CONTACT step: RED image-LEFT support boot HEEL AND TOE FLAT planted, leg continuous to its own hip. BLUE image-RIGHT boot only modestly raised (about one boot-thickness) with soft knee, compact short stride on the opposite side. Copy the exact red/blue support assignment; do not copy idle's two planted boots. Each leg has normal adult length, no crossing/disconnected hips/shins. The entire underside of the PLANTED boot must not face camera; its heel is down. Raised boot is low, not large high sole/kick. Contact A and B alternate the support sides.\nNatural restrained weight transfer through hips with strong stable chest/shoulders and level gaze. No rounded hump, deep squat, overarched chest, forced parade rigidity, long lunge, run/jump or attack pose. Empty hands near sides with small natural opposing arm motion, no fists/new props. Red cloak and hanging armor/cloth follow minimally, same length/pattern as IMAGE2; do not inflate/drag cloak or hide both boots. Both boots visible and anatomically attached under costume. No horse/mace/weapon/sheath/rope/banner/writing, no robot/leg colors/green patch/diagram text.\nExactly ONE COMPLETE full-body Qin Ming on genuine transparent RGBA native square<=1536, centered with generous80px+ clear margins including headcloth/cloak/boots. Whole head, hands and both boots unclipped. No extra people/views, floor/shadow/background, labels/grid, cropping/mirroring or added ornaments. New WALK_A legs, matching recognizable Qin Ming.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/qin_ming_walk_a_nw_v4.json",
+      "request_sha256": "73cf5be20a48f3b5253284139a24031393791d24e6c4b49890553cb189ad989f",
+      "references": [
+        "qin_ming_walk_a_nw_geometry_v4",
+        "qin_ming_idle_single_nw_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_passing_a_se_geometry_v7",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/wang_ying_passing_a_se_geometry_v7.png",
+      "sha256": "6b6257070ade9b7dfba378df11f28d5e14e94db09c5cce613ec18a08f0c970a0",
+      "prompt": "New SE passing_a short broad adult geometry: red flat support, blue low passing boot under pelvis. No source bitmap read/edit or production artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/wang_ying_passing_geometry_v7.gd",
+          "sha256": "2070bcd5ca8b31bd0a0b901a1db266354d07922ac61521c83991a4da9086384f"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_wang_ying_passing_geometry_v7.py",
+          "sha256": "35df66125d5caf116d296a2d1f68ced53e9f81494d50c472837c11e672734c9e"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/geometry_passing_a_se_v7.json",
+          "sha256": "db1d1b7850982943b69a343671abb1361d00c2ff364ef3d96ceee0ee9780d6af"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_passing_a_se_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-78f0385f-a0cd-4b3e-9edd-642fa8606a86",
+      "repository_path": "assets/characters/qin_ming_wounded_20261005/passing_a_se_v4.png",
+      "sha256": "dfedaf77bb9ba9a8fccbe6273abda66c9ec0e9cc903dfe52e9b155f079628d98",
+      "prompt": "POSE-GUIDED SINGLE Qin Ming PASSING_A sprite. IMAGE1 supplies ONLY colored lower-leg pose and camera; RED boot flat support is on IMAGE-RIGHT, BLUE low-raised swing boot IMAGE-LEFT. Its robot torso/colors/green floor/labels are NOT artwork. IMAGE2 is the sole Qin Ming identity/body/wardrobe/material reference. Exact Qin Ming from IMAGE2: broad powerful middle-aged warrior body, normal ADULT head/neck/limb/hand/boot proportions, strong shoulders/chest and naturally aligned raised level head/upper back. Mature stern face, curly black beard/long curly hair, red wrapped headcloth with gold band, red scarf/sleeves, dark bronze torso/hip/bracer armor and gold beast-face shoulders/knees/belt, dark trousers, gold-trim boots and patterned dark-red cloak. Preserve exact armor plate shapes, face, relative cloak length and painterly bronze/red material detail. Do NOT copy robot short broad box-body proportions/colors.\nCAMERA: FRONT three-quarter elevated isometric camera facing LOWER-RIGHT / southeast. Chest/beard visible; both boot toes and torso/head down-right. Preserve that entire body orientation; never make back view into frontal portrait.\nMANDATORY LEGS: DISTINCT NEAR-FOOT PASSING step: RED image-RIGHT support boot FLAT planted directly under hip. BLUE image-LEFT boot JUST BARELY raised beside it, moving past UNDER pelvis with a small knee bend and low heel. Fore-aft feet gap compact/near, not widely separated walking-contact stride. Exactly copy red/blue support and near-foot geometry while retaining own normal adult leg lengths. Both boots distinguishable, each continuous to its own hip; no crossing/disconnected thighs. Do not repeat idle/contact legs. Low heavy-boot passing (about one boot-thickness lift), no large high sole, high knee or kick. Passing A and B alternate support sides.\nNatural restrained weight transfer through hips with strong stable chest/shoulders and level gaze. No rounded hump, deep squat, overarched chest, forced parade rigidity, long lunge, run/jump or attack pose. Empty hands near sides with small natural opposing arm motion, no fists/new props. Red cloak and hanging armor/cloth follow minimally, same length/pattern as IMAGE2; do not inflate/drag cloak or hide both boots. Both boots visible and anatomically attached under costume. No horse/mace/weapon/sheath/rope/banner/writing, no robot/leg colors/green patch/diagram text.\nExactly ONE COMPLETE full-body Qin Ming on genuine transparent RGBA native square<=1536, centered with generous80px+ clear margins including headcloth/cloak/boots. Whole head, hands and both boots unclipped. No extra people/views, floor/shadow/background, labels/grid, cropping/mirroring or added ornaments. New PASSING_A legs, matching recognizable Qin Ming.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/qin_ming_passing_a_se_v4.json",
+      "request_sha256": "b1f0d205199df8f1d7177d838625b1450797e8e11149d304ccc8b3783609a7db",
+      "references": [
+        "wang_ying_passing_a_se_geometry_v7",
+        "qin_ming_idle_single_se_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_passing_a_sw_geometry_v7",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/wang_ying_passing_a_sw_geometry_v7.png",
+      "sha256": "fbe6f2236268b92446892e8c3910c085dfd72aac617e639a14d75ab188654bf3",
+      "prompt": "New SW passing_a short broad adult geometry: red flat support, blue low passing boot under pelvis. No source bitmap read/edit or production artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/wang_ying_passing_geometry_v7.gd",
+          "sha256": "2070bcd5ca8b31bd0a0b901a1db266354d07922ac61521c83991a4da9086384f"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_wang_ying_passing_geometry_v7.py",
+          "sha256": "35df66125d5caf116d296a2d1f68ced53e9f81494d50c472837c11e672734c9e"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/geometry_passing_a_sw_v7.json",
+          "sha256": "c8328a120a1055cc3a199670f96d5e115de0d9799549d6425da6a52dcf62cec6"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_passing_a_sw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-ee45edca-dd8d-48cc-9f44-05e743a6536d",
+      "repository_path": "assets/characters/qin_ming_wounded_20261005/passing_a_sw_v4.png",
+      "sha256": "5fd8c787626179a57a30812cae5c225c3fec60423329f2ce5599931dbe19f3ec",
+      "prompt": "POSE-GUIDED SINGLE Qin Ming PASSING_A sprite. IMAGE1 supplies ONLY colored lower-leg pose and camera; RED boot flat support is on IMAGE-LEFT, BLUE low-raised swing boot IMAGE-RIGHT. Its robot torso/colors/green floor/labels are NOT artwork. IMAGE2 is the sole Qin Ming identity/body/wardrobe/material reference. Exact Qin Ming from IMAGE2: broad powerful middle-aged warrior body, normal ADULT head/neck/limb/hand/boot proportions, strong shoulders/chest and naturally aligned raised level head/upper back. Mature stern face, curly black beard/long curly hair, red wrapped headcloth with gold band, red scarf/sleeves, dark bronze torso/hip/bracer armor and gold beast-face shoulders/knees/belt, dark trousers, gold-trim boots and patterned dark-red cloak. Preserve exact armor plate shapes, face, relative cloak length and painterly bronze/red material detail. Do NOT copy robot short broad box-body proportions/colors.\nCAMERA: FRONT three-quarter elevated isometric camera facing LOWER-LEFT / southwest. Chest/beard visible; both boot toes and torso/head down-left. Preserve that entire body orientation; never make back view into frontal portrait.\nMANDATORY LEGS: DISTINCT NEAR-FOOT PASSING step: RED image-LEFT support boot FLAT planted directly under hip. BLUE image-RIGHT boot JUST BARELY raised beside it, moving past UNDER pelvis with a small knee bend and low heel. Fore-aft feet gap compact/near, not widely separated walking-contact stride. Exactly copy red/blue support and near-foot geometry while retaining own normal adult leg lengths. Both boots distinguishable, each continuous to its own hip; no crossing/disconnected thighs. Do not repeat idle/contact legs. Low heavy-boot passing (about one boot-thickness lift), no large high sole, high knee or kick. Passing A and B alternate support sides.\nNatural restrained weight transfer through hips with strong stable chest/shoulders and level gaze. No rounded hump, deep squat, overarched chest, forced parade rigidity, long lunge, run/jump or attack pose. Empty hands near sides with small natural opposing arm motion, no fists/new props. Red cloak and hanging armor/cloth follow minimally, same length/pattern as IMAGE2; do not inflate/drag cloak or hide both boots. Both boots visible and anatomically attached under costume. No horse/mace/weapon/sheath/rope/banner/writing, no robot/leg colors/green patch/diagram text.\nExactly ONE COMPLETE full-body Qin Ming on genuine transparent RGBA native square<=1536, centered with generous80px+ clear margins including headcloth/cloak/boots. Whole head, hands and both boots unclipped. No extra people/views, floor/shadow/background, labels/grid, cropping/mirroring or added ornaments. New PASSING_A legs, matching recognizable Qin Ming.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/qin_ming_passing_a_sw_v4.json",
+      "request_sha256": "e7a389b7a4b683c001db2011757cfea51f6e9cb0cfdddf1c5c1f05cacba507ec",
+      "references": [
+        "wang_ying_passing_a_sw_geometry_v7",
+        "qin_ming_idle_single_sw_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_passing_a_ne_geometry_v7",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/wang_ying_passing_a_ne_geometry_v7.png",
+      "sha256": "3dbfc5d48126454dd8c5590ac85cfd95bfd78d702f90c98cd88898de29c32288",
+      "prompt": "New NE passing_a short broad adult geometry: red flat support, blue low passing boot under pelvis. No source bitmap read/edit or production artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/wang_ying_passing_geometry_v7.gd",
+          "sha256": "2070bcd5ca8b31bd0a0b901a1db266354d07922ac61521c83991a4da9086384f"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_wang_ying_passing_geometry_v7.py",
+          "sha256": "35df66125d5caf116d296a2d1f68ced53e9f81494d50c472837c11e672734c9e"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/geometry_passing_a_ne_v7.json",
+          "sha256": "5d328f6b1c18ebc66ae6cc5eb83406c457f679df1d712bf88e85ec02a04e0132"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_passing_a_ne_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-47cd2e20-1fed-4a4a-9453-e32cb547ebb7",
+      "repository_path": "assets/characters/qin_ming_wounded_20261005/passing_a_ne_v4.png",
+      "sha256": "e48021a20cdea7e34aba0e1816140adf4dca0f0fb7af041bdacf010f21d33a18",
+      "prompt": "POSE-GUIDED SINGLE Qin Ming PASSING_A sprite. IMAGE1 supplies ONLY colored lower-leg pose and camera; RED boot flat support is on IMAGE-LEFT, BLUE low-raised swing boot IMAGE-RIGHT. Its robot torso/colors/green floor/labels are NOT artwork. IMAGE2 is the sole Qin Ming identity/body/wardrobe/material reference. Exact Qin Ming from IMAGE2: broad powerful middle-aged warrior body, normal ADULT head/neck/limb/hand/boot proportions, strong shoulders/chest and naturally aligned raised level head/upper back. Mature stern face, curly black beard/long curly hair, red wrapped headcloth with gold band, red scarf/sleeves, dark bronze torso/hip/bracer armor and gold beast-face shoulders/knees/belt, dark trousers, gold-trim boots and patterned dark-red cloak. Preserve exact armor plate shapes, face, relative cloak length and painterly bronze/red material detail. Do NOT copy robot short broad box-body proportions/colors.\nCAMERA: BACK three-quarter elevated isometric camera facing AWAY-UPPER-RIGHT / northeast. Back of headcloth/shoulders/cloak visible, small far-side beard profile only, no frontal chest or both eyes; boot toes upper-right. Preserve that entire body orientation; never make back view into frontal portrait.\nMANDATORY LEGS: DISTINCT NEAR-FOOT PASSING step: RED image-LEFT support boot FLAT planted directly under hip. BLUE image-RIGHT boot JUST BARELY raised beside it, moving past UNDER pelvis with a small knee bend and low heel. Fore-aft feet gap compact/near, not widely separated walking-contact stride. Exactly copy red/blue support and near-foot geometry while retaining own normal adult leg lengths. Both boots distinguishable, each continuous to its own hip; no crossing/disconnected thighs. Do not repeat idle/contact legs. Low heavy-boot passing (about one boot-thickness lift), no large high sole, high knee or kick. Passing A and B alternate support sides.\nNatural restrained weight transfer through hips with strong stable chest/shoulders and level gaze. No rounded hump, deep squat, overarched chest, forced parade rigidity, long lunge, run/jump or attack pose. Empty hands near sides with small natural opposing arm motion, no fists/new props. Red cloak and hanging armor/cloth follow minimally, same length/pattern as IMAGE2; do not inflate/drag cloak or hide both boots. Both boots visible and anatomically attached under costume. No horse/mace/weapon/sheath/rope/banner/writing, no robot/leg colors/green patch/diagram text.\nExactly ONE COMPLETE full-body Qin Ming on genuine transparent RGBA native square<=1536, centered with generous80px+ clear margins including headcloth/cloak/boots. Whole head, hands and both boots unclipped. No extra people/views, floor/shadow/background, labels/grid, cropping/mirroring or added ornaments. New PASSING_A legs, matching recognizable Qin Ming.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/qin_ming_passing_a_ne_v4.json",
+      "request_sha256": "706efd558331280777bbba827460ac8bf2396fe870e44905ff70c65d0954fd88",
+      "references": [
+        "wang_ying_passing_a_ne_geometry_v7",
+        "qin_ming_idle_single_ne_v4"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_passing_a2_ne_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-7cb5251b-09d3-491b-8759-3160230100d8",
+      "repository_path": "assets/characters/qin_ming_wounded_20261005/passing_a2_ne_v4.png",
+      "sha256": "e827947081a17669317b91e3a0b1da7e8a737a6fba422183cb8daf670384536f",
+      "prompt": "TARGETED LOWER-LEG correction of exactly ONE rear-view Qin Ming. IMAGE1 is pose-only new mathematical passing guide: RED support IMAGE-LEFT boot flat grounded, BLUE swing IMAGE-RIGHT boot clearly LOW RAISED moving under pelvis. IMAGE2 is edit target; preserve ALL its exact mature face/back headcloth, curly beard/hair, broad strong ADULT body proportions, stable head/shoulder posture, torso/hip/shoulder armor and gold beasts, red cloth/cloak pattern/length, hands and painterly colors. Keep same BACK three-quarter elevated camera facing AWAY-UPPER-RIGHT NE, no frontal chest.\nCHANGE ONLY knee/ankle/boot pose and minimal following bottom cloth. Current target shows both boots too flat/grounded. Keep IMAGE-LEFT boot fully FLAT planted, heel and toe down, supporting body. Lift IMAGE-RIGHT boot only about one boot-thickness but make CLEAR alpha gap below it relative to the matching ground plane; heel visibly clear and knee softly flexed, boot passes close UNDER hip beside planted foot. Right boot top/heel about60–90px higher than its current location in this full frame, with a natural continuous adult hip-thigh-knee-shin chain; do not shorten leg/disconnect boot. Both toes still UPPER-RIGHT; support heel down, swing low, avoid huge sole/kick or high knee. Do NOT swap support sides, copy idle legs, widen contact stride, change body/camera or cover boot with cape. Both boots remain fully distinguishable. Keep cape quiet and existing length/pattern, head aligned, no hunch/deep crouch/parade stiffness. No robot/leg colors/green patch/text/floor/shadow/props/horse/mace/rope/extra people.\nNative transparent RGBA square<=1536, ONE full body centered with clear margins, same exact adult proportions and identity. No crop/mirror/rescale of body. Corrected TRUE low raised IMAGE-RIGHT passing A boot, IMAGE-LEFT flat support. All upper-body/costume details invariant.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/qin_ming_passing_a2_ne_v4.json",
+      "request_sha256": "42e1352a3e1db1b85212ecfcade482c3eed78c250ba51bce0942e08782810332",
+      "references": [
+        "wang_ying_passing_a_ne_geometry_v7",
+        "qin_ming_passing_a_ne_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_passing_a_nw_geometry_v7",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/wang_ying_passing_a_nw_geometry_v7.png",
+      "sha256": "21fce21da6bd7e33b61230c77d1532e9aa99dda4506c72a4a307f71d4aff9dfb",
+      "prompt": "New NW passing_a short broad adult geometry: red flat support, blue low passing boot under pelvis. No source bitmap read/edit or production artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/wang_ying_passing_geometry_v7.gd",
+          "sha256": "2070bcd5ca8b31bd0a0b901a1db266354d07922ac61521c83991a4da9086384f"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_wang_ying_passing_geometry_v7.py",
+          "sha256": "35df66125d5caf116d296a2d1f68ced53e9f81494d50c472837c11e672734c9e"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/geometry_passing_a_nw_v7.json",
+          "sha256": "69d66e7f9621d021d84ea7f14c346b91094b40c5cf0dbcc3abc0cd5a55e92aa5"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_passing_a_nw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-3ce58cee-e268-4c44-85a0-963b48de6d92",
+      "repository_path": "assets/characters/qin_ming_wounded_20261005/passing_a_nw_v4.png",
+      "sha256": "008bcf950520a7ac0180c3a868ef554aeab929ea2a34fbce928cb2a281a99aa1",
+      "prompt": "POSE-GUIDED SINGLE Qin Ming PASSING_A sprite. IMAGE1 supplies ONLY colored lower-leg pose and camera; RED boot flat support is on IMAGE-LEFT, BLUE low-raised swing boot IMAGE-RIGHT. Its robot torso/colors/green floor/labels are NOT artwork. IMAGE2 is the sole Qin Ming identity/body/wardrobe/material reference. Exact Qin Ming from IMAGE2: broad powerful middle-aged warrior body, normal ADULT head/neck/limb/hand/boot proportions, strong shoulders/chest and naturally aligned raised level head/upper back. Mature stern face, curly black beard/long curly hair, red wrapped headcloth with gold band, red scarf/sleeves, dark bronze torso/hip/bracer armor and gold beast-face shoulders/knees/belt, dark trousers, gold-trim boots and patterned dark-red cloak. Preserve exact armor plate shapes, face, relative cloak length and painterly bronze/red material detail. Do NOT copy robot short broad box-body proportions/colors.\nCAMERA: BACK three-quarter elevated isometric camera facing AWAY-UPPER-LEFT / northwest. Back of headcloth/shoulders/cloak visible, small far-side beard profile only, no frontal chest or both eyes; boot toes upper-left. Preserve that entire body orientation; never make back view into frontal portrait.\nMANDATORY LEGS: DISTINCT NEAR-FOOT PASSING step: RED image-LEFT support boot FLAT planted directly under hip. BLUE image-RIGHT boot JUST BARELY raised beside it, moving past UNDER pelvis with a small knee bend and low heel. Fore-aft feet gap compact/near, not widely separated walking-contact stride. Exactly copy red/blue support and near-foot geometry while retaining own normal adult leg lengths. Both boots distinguishable, each continuous to its own hip; no crossing/disconnected thighs. Do not repeat idle/contact legs. Low heavy-boot passing (about one boot-thickness lift), no large high sole, high knee or kick. Passing A and B alternate support sides.\nNatural restrained weight transfer through hips with strong stable chest/shoulders and level gaze. No rounded hump, deep squat, overarched chest, forced parade rigidity, long lunge, run/jump or attack pose. Empty hands near sides with small natural opposing arm motion, no fists/new props. Red cloak and hanging armor/cloth follow minimally, same length/pattern as IMAGE2; do not inflate/drag cloak or hide both boots. Both boots visible and anatomically attached under costume. No horse/mace/weapon/sheath/rope/banner/writing, no robot/leg colors/green patch/diagram text.\nExactly ONE COMPLETE full-body Qin Ming on genuine transparent RGBA native square<=1536, centered with generous80px+ clear margins including headcloth/cloak/boots. Whole head, hands and both boots unclipped. No extra people/views, floor/shadow/background, labels/grid, cropping/mirroring or added ornaments. New PASSING_A legs, matching recognizable Qin Ming.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/qin_ming_passing_a_nw_v4.json",
+      "request_sha256": "741f8245ba474953cb1443d9948d540bf88bf007318fa44301ea526d75656ec7",
+      "references": [
+        "wang_ying_passing_a_nw_geometry_v7",
+        "qin_ming_idle_single_nw_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_walk_b_se_geometry_v4",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_b_se_geometry_v4.png",
+      "sha256": "5dbf43d26104d74104cc5c3d05f85dc4d9c6a7d8acd3ce9873ba19598a5939a2",
+      "prompt": "New primitive-only se walk_b contact: red flat support, blue low raised boot; screen support side verified. No character bitmap read/edit; robot anatomy/colors not artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/qin_ming_contact_geometry_v4.gd",
+          "sha256": "74730ccd656542728251f76c82a816c8386150555b38c39b58c7515b1800c392"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_qin_ming_contact_geometry_v4.py",
+          "sha256": "8542f8bf6fda71800821c87e90d6918f35bf27913ee2cfeacf2c6206e7a6c69c"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_b_se_geometry_v4.json",
+          "sha256": "62bb6799fa87f2ccb00697cfb91036a819daac8093ce7544ef1dbc7a933a8b1a"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_walk_b_se_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-791e563d-53bf-421b-bbe5-36c21e486f21",
+      "repository_path": "assets/characters/qin_ming_wounded_20261005/walk_b_se_v4.png",
+      "sha256": "9f178772542a62a0ec3fa40b2e851c9a111274de31befe17fc99720a36aa0023",
+      "prompt": "POSE-GUIDED SINGLE Qin Ming WALK_B sprite. IMAGE1 supplies ONLY colored lower-leg pose and camera; RED boot flat support is on IMAGE-LEFT, BLUE low-raised swing boot IMAGE-RIGHT. Its robot torso/colors/green floor/labels are NOT artwork. IMAGE2 is the sole Qin Ming identity/body/wardrobe/material reference. Exact Qin Ming from IMAGE2: broad powerful middle-aged warrior body, normal ADULT head/neck/limb/hand/boot proportions, strong shoulders/chest and naturally aligned raised level head/upper back. Mature stern face, curly black beard/long curly hair, red wrapped headcloth with gold band, red scarf/sleeves, dark bronze torso/hip/bracer armor and gold beast-face shoulders/knees/belt, dark trousers, gold-trim boots and patterned dark-red cloak. Preserve exact armor plate shapes, face, relative cloak length and painterly bronze/red material detail. Do NOT copy robot short broad box-body proportions/colors.\nCAMERA: FRONT three-quarter elevated isometric camera facing LOWER-RIGHT / southeast. Chest/beard visible; both boot toes and torso/head down-right. Preserve that entire body orientation; never make back view into frontal portrait.\nMANDATORY LEGS: SHORT HEAVY-BOOT CONTACT step: RED image-LEFT support boot HEEL AND TOE FLAT planted, leg continuous to its own hip. BLUE image-RIGHT boot only modestly raised (about one boot-thickness) with soft knee, compact short stride on the opposite side. Copy the exact red/blue support assignment; do not copy idle's two planted boots. Each leg has normal adult length, no crossing/disconnected hips/shins. The entire underside of the PLANTED boot must not face camera; its heel is down. Raised boot is low, not large high sole/kick. Contact A and B alternate the support sides.\nNatural restrained weight transfer through hips with strong stable chest/shoulders and level gaze. No rounded hump, deep squat, overarched chest, forced parade rigidity, long lunge, run/jump or attack pose. Empty hands near sides with small natural opposing arm motion, no fists/new props. Red cloak and hanging armor/cloth follow minimally, same length/pattern as IMAGE2; do not inflate/drag cloak or hide both boots. Both boots visible and anatomically attached under costume. No horse/mace/weapon/sheath/rope/banner/writing, no robot/leg colors/green patch/diagram text.\nExactly ONE COMPLETE full-body Qin Ming on genuine transparent RGBA native square<=1536, centered with generous80px+ clear margins including headcloth/cloak/boots. Whole head, hands and both boots unclipped. No extra people/views, floor/shadow/background, labels/grid, cropping/mirroring or added ornaments. New WALK_B legs, matching recognizable Qin Ming.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/qin_ming_walk_b_se_v4.json",
+      "request_sha256": "8dd6481a35141dfa328a003694884188f33222eaccc88d08bd0ef1685d0f4bd0",
+      "references": [
+        "qin_ming_walk_b_se_geometry_v4",
+        "qin_ming_idle_single_se_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_walk_b_sw_geometry_v4",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_b_sw_geometry_v4.png",
+      "sha256": "42b8d886a3324b278769ba75eed40461629067b38a50fc7cf6f5cbb3151ab00e",
+      "prompt": "New primitive-only sw walk_b contact: red flat support, blue low raised boot; screen support side verified. No character bitmap read/edit; robot anatomy/colors not artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/qin_ming_contact_geometry_v4.gd",
+          "sha256": "74730ccd656542728251f76c82a816c8386150555b38c39b58c7515b1800c392"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_qin_ming_contact_geometry_v4.py",
+          "sha256": "8542f8bf6fda71800821c87e90d6918f35bf27913ee2cfeacf2c6206e7a6c69c"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_b_sw_geometry_v4.json",
+          "sha256": "b17ff2f34a05c025109b07d9c165b6dc2e5d0731ce7f853c988c73ec3a0527f8"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_walk_b_sw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-ed8651d8-a9bb-43bc-a6f5-d89319ae93a4",
+      "repository_path": "assets/characters/qin_ming_wounded_20261005/walk_b_sw_v4.png",
+      "sha256": "3d72dc0e4fd5d176b6cf1c3fcbbf3c9520a7e3f5ca2f6f7d95f695b7952a1567",
+      "prompt": "POSE-GUIDED SINGLE Qin Ming WALK_B sprite. IMAGE1 supplies ONLY colored lower-leg pose and camera; RED boot flat support is on IMAGE-RIGHT, BLUE low-raised swing boot IMAGE-LEFT. Its robot torso/colors/green floor/labels are NOT artwork. IMAGE2 is the sole Qin Ming identity/body/wardrobe/material reference. Exact Qin Ming from IMAGE2: broad powerful middle-aged warrior body, normal ADULT head/neck/limb/hand/boot proportions, strong shoulders/chest and naturally aligned raised level head/upper back. Mature stern face, curly black beard/long curly hair, red wrapped headcloth with gold band, red scarf/sleeves, dark bronze torso/hip/bracer armor and gold beast-face shoulders/knees/belt, dark trousers, gold-trim boots and patterned dark-red cloak. Preserve exact armor plate shapes, face, relative cloak length and painterly bronze/red material detail. Do NOT copy robot short broad box-body proportions/colors.\nCAMERA: FRONT three-quarter elevated isometric camera facing LOWER-LEFT / southwest. Chest/beard visible; both boot toes and torso/head down-left. Preserve that entire body orientation; never make back view into frontal portrait.\nMANDATORY LEGS: SHORT HEAVY-BOOT CONTACT step: RED image-RIGHT support boot HEEL AND TOE FLAT planted, leg continuous to its own hip. BLUE image-LEFT boot only modestly raised (about one boot-thickness) with soft knee, compact short stride on the opposite side. Copy the exact red/blue support assignment; do not copy idle's two planted boots. Each leg has normal adult length, no crossing/disconnected hips/shins. The entire underside of the PLANTED boot must not face camera; its heel is down. Raised boot is low, not large high sole/kick. Contact A and B alternate the support sides.\nNatural restrained weight transfer through hips with strong stable chest/shoulders and level gaze. No rounded hump, deep squat, overarched chest, forced parade rigidity, long lunge, run/jump or attack pose. Empty hands near sides with small natural opposing arm motion, no fists/new props. Red cloak and hanging armor/cloth follow minimally, same length/pattern as IMAGE2; do not inflate/drag cloak or hide both boots. Both boots visible and anatomically attached under costume. No horse/mace/weapon/sheath/rope/banner/writing, no robot/leg colors/green patch/diagram text.\nExactly ONE COMPLETE full-body Qin Ming on genuine transparent RGBA native square<=1536, centered with generous80px+ clear margins including headcloth/cloak/boots. Whole head, hands and both boots unclipped. No extra people/views, floor/shadow/background, labels/grid, cropping/mirroring or added ornaments. New WALK_B legs, matching recognizable Qin Ming.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/qin_ming_walk_b_sw_v4.json",
+      "request_sha256": "e26147b18b4e810d1a74efd9e366e824f3c98a2f8c72892a95ab7904eb7f5a94",
+      "references": [
+        "qin_ming_walk_b_sw_geometry_v4",
+        "qin_ming_idle_single_sw_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_walk_b_ne_geometry_v4",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_b_ne_geometry_v4.png",
+      "sha256": "fec7c4048e49db2c41be94a1abafdb34352a221e4d4912200e6dd612a0bcdc92",
+      "prompt": "New primitive-only ne walk_b contact: red flat support, blue low raised boot; screen support side verified. No character bitmap read/edit; robot anatomy/colors not artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/qin_ming_contact_geometry_v4.gd",
+          "sha256": "74730ccd656542728251f76c82a816c8386150555b38c39b58c7515b1800c392"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_qin_ming_contact_geometry_v4.py",
+          "sha256": "8542f8bf6fda71800821c87e90d6918f35bf27913ee2cfeacf2c6206e7a6c69c"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_b_ne_geometry_v4.json",
+          "sha256": "548c8ffe9111ea5bc202a69a751984f5f91e093862d7a5bc4dfa9f14ed7af44e"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_walk_b_ne_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-b389d14f-a8d7-4c93-b337-82510752bd4b",
+      "repository_path": "assets/characters/qin_ming_wounded_20261005/walk_b_ne_v4.png",
+      "sha256": "1d033bc450f86f379b7f269ad8fb3cd41678be15cb0dddafa8353f7a40dc9d7d",
+      "prompt": "POSE-GUIDED SINGLE Qin Ming WALK_B sprite. IMAGE1 supplies ONLY colored lower-leg pose and camera; RED boot flat support is on IMAGE-RIGHT, BLUE low-raised swing boot IMAGE-LEFT. Its robot torso/colors/green floor/labels are NOT artwork. IMAGE2 is the sole Qin Ming identity/body/wardrobe/material reference. Exact Qin Ming from IMAGE2: broad powerful middle-aged warrior body, normal ADULT head/neck/limb/hand/boot proportions, strong shoulders/chest and naturally aligned raised level head/upper back. Mature stern face, curly black beard/long curly hair, red wrapped headcloth with gold band, red scarf/sleeves, dark bronze torso/hip/bracer armor and gold beast-face shoulders/knees/belt, dark trousers, gold-trim boots and patterned dark-red cloak. Preserve exact armor plate shapes, face, relative cloak length and painterly bronze/red material detail. Do NOT copy robot short broad box-body proportions/colors.\nCAMERA: BACK three-quarter elevated isometric camera facing AWAY-UPPER-RIGHT / northeast. Back of headcloth/shoulders/cloak visible, small far-side beard profile only, no frontal chest or both eyes; boot toes upper-right. Preserve that entire body orientation; never make back view into frontal portrait.\nMANDATORY LEGS: SHORT HEAVY-BOOT CONTACT step: RED image-RIGHT support boot HEEL AND TOE FLAT planted, leg continuous to its own hip. BLUE image-LEFT boot only modestly raised (about one boot-thickness) with soft knee, compact short stride on the opposite side. Copy the exact red/blue support assignment; do not copy idle's two planted boots. Each leg has normal adult length, no crossing/disconnected hips/shins. The entire underside of the PLANTED boot must not face camera; its heel is down. Raised boot is low, not large high sole/kick. Contact A and B alternate the support sides.\nNatural restrained weight transfer through hips with strong stable chest/shoulders and level gaze. No rounded hump, deep squat, overarched chest, forced parade rigidity, long lunge, run/jump or attack pose. Empty hands near sides with small natural opposing arm motion, no fists/new props. Red cloak and hanging armor/cloth follow minimally, same length/pattern as IMAGE2; do not inflate/drag cloak or hide both boots. Both boots visible and anatomically attached under costume. No horse/mace/weapon/sheath/rope/banner/writing, no robot/leg colors/green patch/diagram text.\nExactly ONE COMPLETE full-body Qin Ming on genuine transparent RGBA native square<=1536, centered with generous80px+ clear margins including headcloth/cloak/boots. Whole head, hands and both boots unclipped. No extra people/views, floor/shadow/background, labels/grid, cropping/mirroring or added ornaments. New WALK_B legs, matching recognizable Qin Ming.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/qin_ming_walk_b_ne_v4.json",
+      "request_sha256": "e5b64018adf107235bb00ce8acefa88671755fa9b30987704ad031b3ffc97739",
+      "references": [
+        "qin_ming_walk_b_ne_geometry_v4",
+        "qin_ming_idle_single_ne_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_walk_b_nw_geometry_v4",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_b_nw_geometry_v4.png",
+      "sha256": "2490edb0c9ef74a93f7e418865823df74af261df80e5edf25f8c01e7c4db2730",
+      "prompt": "New primitive-only nw walk_b contact: red flat support, blue low raised boot; screen support side verified. No character bitmap read/edit; robot anatomy/colors not artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/qin_ming_contact_geometry_v4.gd",
+          "sha256": "74730ccd656542728251f76c82a816c8386150555b38c39b58c7515b1800c392"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_qin_ming_contact_geometry_v4.py",
+          "sha256": "8542f8bf6fda71800821c87e90d6918f35bf27913ee2cfeacf2c6206e7a6c69c"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_b_nw_geometry_v4.json",
+          "sha256": "7e9c8bfca05fdf2799c4daf445530ffde06ae813f4de2ad137362270f0a85efb"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_walk_b_nw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-2ec2990e-f576-4311-8dc0-7e17ef36f7e9",
+      "repository_path": "assets/characters/qin_ming_wounded_20261005/walk_b_nw_v4.png",
+      "sha256": "084a80b5b7baf4b2f70f876641f59e45328356f18f1c3370b10755f1f6f2c64b",
+      "prompt": "POSE-GUIDED SINGLE Qin Ming WALK_B sprite. IMAGE1 supplies ONLY colored lower-leg pose and camera; RED boot flat support is on IMAGE-RIGHT, BLUE low-raised swing boot IMAGE-LEFT. Its robot torso/colors/green floor/labels are NOT artwork. IMAGE2 is the sole Qin Ming identity/body/wardrobe/material reference. Exact Qin Ming from IMAGE2: broad powerful middle-aged warrior body, normal ADULT head/neck/limb/hand/boot proportions, strong shoulders/chest and naturally aligned raised level head/upper back. Mature stern face, curly black beard/long curly hair, red wrapped headcloth with gold band, red scarf/sleeves, dark bronze torso/hip/bracer armor and gold beast-face shoulders/knees/belt, dark trousers, gold-trim boots and patterned dark-red cloak. Preserve exact armor plate shapes, face, relative cloak length and painterly bronze/red material detail. Do NOT copy robot short broad box-body proportions/colors.\nCAMERA: BACK three-quarter elevated isometric camera facing AWAY-UPPER-LEFT / northwest. Back of headcloth/shoulders/cloak visible, small far-side beard profile only, no frontal chest or both eyes; boot toes upper-left. Preserve that entire body orientation; never make back view into frontal portrait.\nMANDATORY LEGS: SHORT HEAVY-BOOT CONTACT step: RED image-RIGHT support boot HEEL AND TOE FLAT planted, leg continuous to its own hip. BLUE image-LEFT boot only modestly raised (about one boot-thickness) with soft knee, compact short stride on the opposite side. Copy the exact red/blue support assignment; do not copy idle's two planted boots. Each leg has normal adult length, no crossing/disconnected hips/shins. The entire underside of the PLANTED boot must not face camera; its heel is down. Raised boot is low, not large high sole/kick. Contact A and B alternate the support sides.\nNatural restrained weight transfer through hips with strong stable chest/shoulders and level gaze. No rounded hump, deep squat, overarched chest, forced parade rigidity, long lunge, run/jump or attack pose. Empty hands near sides with small natural opposing arm motion, no fists/new props. Red cloak and hanging armor/cloth follow minimally, same length/pattern as IMAGE2; do not inflate/drag cloak or hide both boots. Both boots visible and anatomically attached under costume. No horse/mace/weapon/sheath/rope/banner/writing, no robot/leg colors/green patch/diagram text.\nExactly ONE COMPLETE full-body Qin Ming on genuine transparent RGBA native square<=1536, centered with generous80px+ clear margins including headcloth/cloak/boots. Whole head, hands and both boots unclipped. No extra people/views, floor/shadow/background, labels/grid, cropping/mirroring or added ornaments. New WALK_B legs, matching recognizable Qin Ming.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/qin_ming_walk_b_nw_v4.json",
+      "request_sha256": "139dbddbb0117f99ebad3d5b65b1a14fc28221c2450f45ba2c5545b48487b8ce",
+      "references": [
+        "qin_ming_walk_b_nw_geometry_v4",
+        "qin_ming_idle_single_nw_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_passing_b_se_geometry_v7",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/wang_ying_passing_b_se_geometry_v7.png",
+      "sha256": "720906c1a872bdadac3a878f6c4b76a8a43ee5ed4aade5d0aaf63e5389ac3fd9",
+      "prompt": "New SE passing_b short broad adult geometry: red flat support, blue low passing boot under pelvis. No source bitmap read/edit or production artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/wang_ying_passing_geometry_v7.gd",
+          "sha256": "2070bcd5ca8b31bd0a0b901a1db266354d07922ac61521c83991a4da9086384f"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_wang_ying_passing_geometry_v7.py",
+          "sha256": "35df66125d5caf116d296a2d1f68ced53e9f81494d50c472837c11e672734c9e"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/geometry_passing_b_se_v7.json",
+          "sha256": "f6117b85e45a4f1e6e1a91221e4c179a53318e966ba6831a4f4aa09118b4ca9e"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_passing_b_se_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-37d14d33-8388-4331-b458-b7d00093fb9b",
+      "repository_path": "assets/characters/qin_ming_wounded_20261005/passing_b_se_v4.png",
+      "sha256": "84d404a645a5c47a2ec040bf1ca54f4493cc3cfff6305a8ea3eb47d3f1023093",
+      "prompt": "POSE-GUIDED SINGLE Qin Ming PASSING_B sprite. IMAGE1 supplies ONLY colored lower-leg pose and camera; RED boot flat support is on IMAGE-LEFT, BLUE low-raised swing boot IMAGE-RIGHT. Its robot torso/colors/green floor/labels are NOT artwork. IMAGE2 is the sole Qin Ming identity/body/wardrobe/material reference. Exact Qin Ming from IMAGE2: broad powerful middle-aged warrior body, normal ADULT head/neck/limb/hand/boot proportions, strong shoulders/chest and naturally aligned raised level head/upper back. Mature stern face, curly black beard/long curly hair, red wrapped headcloth with gold band, red scarf/sleeves, dark bronze torso/hip/bracer armor and gold beast-face shoulders/knees/belt, dark trousers, gold-trim boots and patterned dark-red cloak. Preserve exact armor plate shapes, face, relative cloak length and painterly bronze/red material detail. Do NOT copy robot short broad box-body proportions/colors.\nCAMERA: FRONT three-quarter elevated isometric camera facing LOWER-RIGHT / southeast. Chest/beard visible; both boot toes and torso/head down-right. Preserve that entire body orientation; never make back view into frontal portrait.\nMANDATORY LEGS: DISTINCT NEAR-FOOT PASSING step: RED image-LEFT support boot FLAT planted directly under hip. BLUE image-RIGHT boot JUST BARELY raised beside it, moving past UNDER pelvis with a small knee bend and low heel. Fore-aft feet gap compact/near, not widely separated walking-contact stride. Exactly copy red/blue support and near-foot geometry while retaining own normal adult leg lengths. Both boots distinguishable, each continuous to its own hip; no crossing/disconnected thighs. Do not repeat idle/contact legs. Low heavy-boot passing (about one boot-thickness lift), no large high sole, high knee or kick. Passing A and B alternate support sides.\nNatural restrained weight transfer through hips with strong stable chest/shoulders and level gaze. No rounded hump, deep squat, overarched chest, forced parade rigidity, long lunge, run/jump or attack pose. Empty hands near sides with small natural opposing arm motion, no fists/new props. Red cloak and hanging armor/cloth follow minimally, same length/pattern as IMAGE2; do not inflate/drag cloak or hide both boots. Both boots visible and anatomically attached under costume. No horse/mace/weapon/sheath/rope/banner/writing, no robot/leg colors/green patch/diagram text.\nExactly ONE COMPLETE full-body Qin Ming on genuine transparent RGBA native square<=1536, centered with generous80px+ clear margins including headcloth/cloak/boots. Whole head, hands and both boots unclipped. No extra people/views, floor/shadow/background, labels/grid, cropping/mirroring or added ornaments. New PASSING_B legs, matching recognizable Qin Ming.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/qin_ming_passing_b_se_v4.json",
+      "request_sha256": "5b2cd86be8a10b829cd42c84aa124d6f35aee447f7fb89a7fc35a2343f4a5d07",
+      "references": [
+        "wang_ying_passing_b_se_geometry_v7",
+        "qin_ming_idle_single_se_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_passing_b_sw_geometry_v7",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/wang_ying_passing_b_sw_geometry_v7.png",
+      "sha256": "031d1f6e392d6456c048d35f5c80ed0abf1148a5f3cf62330477701caad44268",
+      "prompt": "New SW passing_b short broad adult geometry: red flat support, blue low passing boot under pelvis. No source bitmap read/edit or production artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/wang_ying_passing_geometry_v7.gd",
+          "sha256": "2070bcd5ca8b31bd0a0b901a1db266354d07922ac61521c83991a4da9086384f"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_wang_ying_passing_geometry_v7.py",
+          "sha256": "35df66125d5caf116d296a2d1f68ced53e9f81494d50c472837c11e672734c9e"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/geometry_passing_b_sw_v7.json",
+          "sha256": "c06eca15e49eee86c396efb8a8a8714c75124c9d5474803bac9974a8f04f5295"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_passing_b_sw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-8769811f-6e5c-41ec-a815-4d32cd0d1323",
+      "repository_path": "assets/characters/qin_ming_wounded_20261005/passing_b_sw_v4.png",
+      "sha256": "78ed48d3ec7d27fb9f8edffe0e1dc4f764bc29e4d274a8d3bb92f260c61be004",
+      "prompt": "POSE-GUIDED SINGLE Qin Ming PASSING_B sprite. IMAGE1 supplies ONLY colored lower-leg pose and camera; RED boot flat support is on IMAGE-RIGHT, BLUE low-raised swing boot IMAGE-LEFT. Its robot torso/colors/green floor/labels are NOT artwork. IMAGE2 is the sole Qin Ming identity/body/wardrobe/material reference. Exact Qin Ming from IMAGE2: broad powerful middle-aged warrior body, normal ADULT head/neck/limb/hand/boot proportions, strong shoulders/chest and naturally aligned raised level head/upper back. Mature stern face, curly black beard/long curly hair, red wrapped headcloth with gold band, red scarf/sleeves, dark bronze torso/hip/bracer armor and gold beast-face shoulders/knees/belt, dark trousers, gold-trim boots and patterned dark-red cloak. Preserve exact armor plate shapes, face, relative cloak length and painterly bronze/red material detail. Do NOT copy robot short broad box-body proportions/colors.\nCAMERA: FRONT three-quarter elevated isometric camera facing LOWER-LEFT / southwest. Chest/beard visible; both boot toes and torso/head down-left. Preserve that entire body orientation; never make back view into frontal portrait.\nMANDATORY LEGS: DISTINCT NEAR-FOOT PASSING step: RED image-RIGHT support boot FLAT planted directly under hip. BLUE image-LEFT boot JUST BARELY raised beside it, moving past UNDER pelvis with a small knee bend and low heel. Fore-aft feet gap compact/near, not widely separated walking-contact stride. Exactly copy red/blue support and near-foot geometry while retaining own normal adult leg lengths. Both boots distinguishable, each continuous to its own hip; no crossing/disconnected thighs. Do not repeat idle/contact legs. Low heavy-boot passing (about one boot-thickness lift), no large high sole, high knee or kick. Passing A and B alternate support sides.\nNatural restrained weight transfer through hips with strong stable chest/shoulders and level gaze. No rounded hump, deep squat, overarched chest, forced parade rigidity, long lunge, run/jump or attack pose. Empty hands near sides with small natural opposing arm motion, no fists/new props. Red cloak and hanging armor/cloth follow minimally, same length/pattern as IMAGE2; do not inflate/drag cloak or hide both boots. Both boots visible and anatomically attached under costume. No horse/mace/weapon/sheath/rope/banner/writing, no robot/leg colors/green patch/diagram text.\nExactly ONE COMPLETE full-body Qin Ming on genuine transparent RGBA native square<=1536, centered with generous80px+ clear margins including headcloth/cloak/boots. Whole head, hands and both boots unclipped. No extra people/views, floor/shadow/background, labels/grid, cropping/mirroring or added ornaments. New PASSING_B legs, matching recognizable Qin Ming.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/qin_ming_passing_b_sw_v4.json",
+      "request_sha256": "c955f1e04091f1e383e138b8efc19e2cb55a9ee79b39161b30e6cdd8e191512e",
+      "references": [
+        "wang_ying_passing_b_sw_geometry_v7",
+        "qin_ming_idle_single_sw_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_passing_b_ne_geometry_v7",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/wang_ying_passing_b_ne_geometry_v7.png",
+      "sha256": "1f96a2fa3475c0761b4eb2649e4752f54a1323e9ebd441a7df462f8ec3516807",
+      "prompt": "New NE passing_b short broad adult geometry: red flat support, blue low passing boot under pelvis. No source bitmap read/edit or production artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/wang_ying_passing_geometry_v7.gd",
+          "sha256": "2070bcd5ca8b31bd0a0b901a1db266354d07922ac61521c83991a4da9086384f"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_wang_ying_passing_geometry_v7.py",
+          "sha256": "35df66125d5caf116d296a2d1f68ced53e9f81494d50c472837c11e672734c9e"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/geometry_passing_b_ne_v7.json",
+          "sha256": "afe197fb6c8bfde89fe914e72a67f7da2f1d36d2350dc6aa184b249c33e0b0cf"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_passing_b_ne_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-f2b23262-5379-49aa-9c26-484a267b755d",
+      "repository_path": "assets/characters/qin_ming_wounded_20261005/passing_b_ne_v4.png",
+      "sha256": "8a54d540a93bf0d4fbe4b6c61508fb8838ff1d257a9f37ec10ae6e7a5f86fe92",
+      "prompt": "POSE-GUIDED SINGLE Qin Ming PASSING_B sprite. IMAGE1 supplies ONLY colored lower-leg pose and camera; RED boot flat support is on IMAGE-RIGHT, BLUE low-raised swing boot IMAGE-LEFT. Its robot torso/colors/green floor/labels are NOT artwork. IMAGE2 is the sole Qin Ming identity/body/wardrobe/material reference. Exact Qin Ming from IMAGE2: broad powerful middle-aged warrior body, normal ADULT head/neck/limb/hand/boot proportions, strong shoulders/chest and naturally aligned raised level head/upper back. Mature stern face, curly black beard/long curly hair, red wrapped headcloth with gold band, red scarf/sleeves, dark bronze torso/hip/bracer armor and gold beast-face shoulders/knees/belt, dark trousers, gold-trim boots and patterned dark-red cloak. Preserve exact armor plate shapes, face, relative cloak length and painterly bronze/red material detail. Do NOT copy robot short broad box-body proportions/colors.\nCAMERA: BACK three-quarter elevated isometric camera facing AWAY-UPPER-RIGHT / northeast. Back of headcloth/shoulders/cloak visible, small far-side beard profile only, no frontal chest or both eyes; boot toes upper-right. Preserve that entire body orientation; never make back view into frontal portrait.\nMANDATORY LEGS: DISTINCT NEAR-FOOT PASSING step: RED image-RIGHT support boot FLAT planted directly under hip. BLUE image-LEFT boot JUST BARELY raised beside it, moving past UNDER pelvis with a small knee bend and low heel. Fore-aft feet gap compact/near, not widely separated walking-contact stride. Exactly copy red/blue support and near-foot geometry while retaining own normal adult leg lengths. Both boots distinguishable, each continuous to its own hip; no crossing/disconnected thighs. Do not repeat idle/contact legs. Low heavy-boot passing (about one boot-thickness lift), no large high sole, high knee or kick. Passing A and B alternate support sides.\nNatural restrained weight transfer through hips with strong stable chest/shoulders and level gaze. No rounded hump, deep squat, overarched chest, forced parade rigidity, long lunge, run/jump or attack pose. Empty hands near sides with small natural opposing arm motion, no fists/new props. Red cloak and hanging armor/cloth follow minimally, same length/pattern as IMAGE2; do not inflate/drag cloak or hide both boots. Both boots visible and anatomically attached under costume. No horse/mace/weapon/sheath/rope/banner/writing, no robot/leg colors/green patch/diagram text.\nExactly ONE COMPLETE full-body Qin Ming on genuine transparent RGBA native square<=1536, centered with generous80px+ clear margins including headcloth/cloak/boots. Whole head, hands and both boots unclipped. No extra people/views, floor/shadow/background, labels/grid, cropping/mirroring or added ornaments. New PASSING_B legs, matching recognizable Qin Ming.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/qin_ming_passing_b_ne_v4.json",
+      "request_sha256": "d0c78c18cff0b817689677829e43b05ee087cf8f67ef55e34e34cca41d421e18",
+      "references": [
+        "wang_ying_passing_b_ne_geometry_v7",
+        "qin_ming_idle_single_ne_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_passing_b_nw_geometry_v7",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/wang_ying_passing_b_nw_geometry_v7.png",
+      "sha256": "362fb53746b7ab26a49e0f7aa3807c9c77b9c3d44c9f6ff514aff1d29c151616",
+      "prompt": "New NW passing_b short broad adult geometry: red flat support, blue low passing boot under pelvis. No source bitmap read/edit or production artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/wang_ying_passing_geometry_v7.gd",
+          "sha256": "2070bcd5ca8b31bd0a0b901a1db266354d07922ac61521c83991a4da9086384f"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_wang_ying_passing_geometry_v7.py",
+          "sha256": "35df66125d5caf116d296a2d1f68ced53e9f81494d50c472837c11e672734c9e"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/geometry_passing_b_nw_v7.json",
+          "sha256": "4087b0b3d54f26d56d2a11d40d8c861dd9708fe1af54faaed92326c2a52223c1"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_passing_b_nw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-6f661c5a-c69a-44b6-a606-48698b991d35",
+      "repository_path": "assets/characters/qin_ming_wounded_20261005/passing_b_nw_v4.png",
+      "sha256": "21a68dbc60e50b89fd72630f37a88306109a7ac54b0714077587af1369cdf4f9",
+      "prompt": "POSE-GUIDED SINGLE Qin Ming PASSING_B sprite. IMAGE1 supplies ONLY colored lower-leg pose and camera; RED boot flat support is on IMAGE-RIGHT, BLUE low-raised swing boot IMAGE-LEFT. Its robot torso/colors/green floor/labels are NOT artwork. IMAGE2 is the sole Qin Ming identity/body/wardrobe/material reference. Exact Qin Ming from IMAGE2: broad powerful middle-aged warrior body, normal ADULT head/neck/limb/hand/boot proportions, strong shoulders/chest and naturally aligned raised level head/upper back. Mature stern face, curly black beard/long curly hair, red wrapped headcloth with gold band, red scarf/sleeves, dark bronze torso/hip/bracer armor and gold beast-face shoulders/knees/belt, dark trousers, gold-trim boots and patterned dark-red cloak. Preserve exact armor plate shapes, face, relative cloak length and painterly bronze/red material detail. Do NOT copy robot short broad box-body proportions/colors.\nCAMERA: BACK three-quarter elevated isometric camera facing AWAY-UPPER-LEFT / northwest. Back of headcloth/shoulders/cloak visible, small far-side beard profile only, no frontal chest or both eyes; boot toes upper-left. Preserve that entire body orientation; never make back view into frontal portrait.\nMANDATORY LEGS: DISTINCT NEAR-FOOT PASSING step: RED image-RIGHT support boot FLAT planted directly under hip. BLUE image-LEFT boot JUST BARELY raised beside it, moving past UNDER pelvis with a small knee bend and low heel. Fore-aft feet gap compact/near, not widely separated walking-contact stride. Exactly copy red/blue support and near-foot geometry while retaining own normal adult leg lengths. Both boots distinguishable, each continuous to its own hip; no crossing/disconnected thighs. Do not repeat idle/contact legs. Low heavy-boot passing (about one boot-thickness lift), no large high sole, high knee or kick. Passing A and B alternate support sides.\nNatural restrained weight transfer through hips with strong stable chest/shoulders and level gaze. No rounded hump, deep squat, overarched chest, forced parade rigidity, long lunge, run/jump or attack pose. Empty hands near sides with small natural opposing arm motion, no fists/new props. Red cloak and hanging armor/cloth follow minimally, same length/pattern as IMAGE2; do not inflate/drag cloak or hide both boots. Both boots visible and anatomically attached under costume. No horse/mace/weapon/sheath/rope/banner/writing, no robot/leg colors/green patch/diagram text.\nExactly ONE COMPLETE full-body Qin Ming on genuine transparent RGBA native square<=1536, centered with generous80px+ clear margins including headcloth/cloak/boots. Whole head, hands and both boots unclipped. No extra people/views, floor/shadow/background, labels/grid, cropping/mirroring or added ornaments. New PASSING_B legs, matching recognizable Qin Ming.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/qin_ming_passing_b_nw_v4.json",
+      "request_sha256": "15201f8ff138c053c74e33cb97182b42e5e060a994804d87c4da489fbe43c086",
+      "references": [
+        "wang_ying_passing_b_nw_geometry_v7",
+        "qin_ming_idle_single_nw_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    }
+  ],
+  "scope": "Native complete ancestry plus new mathematical geometry references; Full four-phase candidate gait only; no production routing"
+}

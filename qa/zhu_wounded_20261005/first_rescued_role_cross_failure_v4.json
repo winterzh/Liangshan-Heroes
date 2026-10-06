@@ -1,0 +1,46 @@
+{
+  "scope": "Failed five-process fixture before first disk slot; no persistence qualification",
+  "receipt": "E:\\ChatGPT\\qa-rescued-seven-persistence-20261006\\rescued_role_cross_v4_2b82d4a3\\receipt.json",
+  "receipt_sha256": "464501832fc3273876f6181bbd0d4754cc118d29a0cb75770198a0c3d7a7ea0c",
+  "steps": [
+    {
+      "case": "import",
+      "pid": 155080,
+      "process_nonce": "ab5185a12c664928bdca302ca102a7de",
+      "started_ns": 449945218000000,
+      "finished_ns": 450003453000000,
+      "exit_code": 0,
+      "stopped_for": null,
+      "log_sha256": "8558f08b1b170bb021de14709701341c8256b83acfc75f5cdb19f78971aae938",
+      "passed": true
+    },
+    {
+      "case": "profile_guard",
+      "pid": 173176,
+      "process_nonce": "1ce320bb7daa436fa816732666b44c09",
+      "started_ns": 450003906000000,
+      "finished_ns": 450019703000000,
+      "exit_code": 2,
+      "stopped_for": null,
+      "log_sha256": "62a6200a01be71b28ea0a2c0e68d2b15b72ae97ce554b73e461d73892c99c1e1",
+      "passed": true
+    },
+    {
+      "case": "bound",
+      "pid": 174732,
+      "process_nonce": "00af18aaa36c48b083915dc48ee1a03f",
+      "started_ns": 450020125000000,
+      "finished_ns": 450201734000000,
+      "exit_code": 1,
+      "stopped_for": null,
+      "log_sha256": "068ce2d887994ee861636e79c98e2a009db9ccbee233eb7981bb80b57efcd7c7",
+      "passed": false
+    }
+  ],
+  "failure": {
+    "type": "AssertionError",
+    "message": "Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org\n\nFAIL SAVE original save barrier and session succeed\nROLE_SAVE_FAILURE { \"ok\": false, \"code\": \"BARRIER_REQUEST\" }\nRESCUED_ROLE_PROCESS_COMPLETE bound 58 false\n"
+  },
+  "lock_released": true,
+  "reason": "Normal Battle defaults its capture gate to classic30. Original Zhu component tests explicitly configure the installed campaign capture profile; new fixture omitted that explicit profile. Preserve rejection, configure test profile and retain public-gate limitation."
+}

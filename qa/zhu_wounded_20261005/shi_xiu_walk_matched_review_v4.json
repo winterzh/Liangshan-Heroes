@@ -1,0 +1,72 @@
+{
+  "schema": 1,
+  "result": "candidate_improved_but_gait_not_qualified",
+  "review": "Direct native 12-pose matrix and actual recorded phases 0/1/2/3 viewed",
+  "matrix_sha256": "a7601c1db93f93c59b00d764c2812fd6cca33f752637721335563959293d423e",
+  "phase_rows": [
+    {
+      "capture": "live_005.png",
+      "indexes": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "moving": true,
+      "phase": 0.595495514166667,
+      "time_seconds": 0.459
+    },
+    {
+      "capture": "live_007.png",
+      "indexes": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "moving": true,
+      "phase": 1.78864069388889,
+      "time_seconds": 0.626
+    },
+    {
+      "capture": "live_010.png",
+      "indexes": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "moving": true,
+      "phase": 3.570145315,
+      "time_seconds": 0.874
+    },
+    {
+      "capture": "live_012.png",
+      "indexes": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "moving": true,
+      "phase": 4.76492574555555,
+      "time_seconds": 1.043
+    }
+  ],
+  "improvements": [
+    "A and B now share adult body/shoulder template",
+    "NW A shortened from wide lunge",
+    "Idle atlas padding repaired natively to 63/61/80/84px"
+  ],
+  "remaining": [
+    "Idle cloth detail density still differs from full-canvas A/B",
+    "Stationary idle reused as transition, not authored passing phases",
+    "Actual Unit movement, secondary motion, planted feet and campaign must be checked"
+  ],
+  "limits": [
+    "No continuous browser playback; browser native bridge unavailable",
+    "Only isolated SpriteFrames process-clock/start/stop, not original Unit/campaign"
+  ],
+  "continuous_gait_qualified": false,
+  "production_qualified": false
+}

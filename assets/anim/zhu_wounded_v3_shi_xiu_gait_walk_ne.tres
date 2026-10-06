@@ -1,0 +1,47 @@
+[gd_resource type="SpriteFrames" load_steps=7 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/shi_xiu_wounded_20261005/walk_a_v3.png" id="walk_a"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/shi_xiu_wounded_20261005/idle_spacing_v3.png" id="idle"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/shi_xiu_wounded_20261005/step_b_transfer_ne_v3.png" id="walk_b_ne"]
+
+[sub_resource type="AtlasTexture" id="walk_a_ne"]
+atlas = ExtResource("walk_a")
+region = Rect2(0, 627, 627, 627)
+margin = Rect2(0, 0, 0, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-52.5, -46.86)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.949631
+
+[sub_resource type="AtlasTexture" id="idle_ne"]
+atlas = ExtResource("idle")
+region = Rect2(0, 627, 627, 627)
+margin = Rect2(0, 0, 0, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-78.0, -64.86)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.871765
+
+[sub_resource type="AtlasTexture" id="walk_b_ne"]
+atlas = ExtResource("walk_b_ne")
+region = Rect2(0, 0, 1254, 1254)
+margin = Rect2(0, 0, 0, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-4.5, -95.72)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.945957
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("walk_a_ne")},
+{"duration": 1.0, "texture": SubResource("idle_ne")},
+{"duration": 1.0, "texture": SubResource("walk_b_ne")},
+{"duration": 1.0, "texture": SubResource("idle_ne")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

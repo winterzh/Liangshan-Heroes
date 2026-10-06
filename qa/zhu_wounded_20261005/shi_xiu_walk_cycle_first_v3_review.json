@@ -1,0 +1,24 @@
+{
+  "scope": "Direct review of real isolated SpriteFrames pose matrix and process-clock capture receipt; no actual Unit or campaign",
+  "run": "E:/ChatGPT/qa-zhu-wounded-20261005/walk_preview_v3_2242e471",
+  "matrix_sha256": "2c12a4876709582f9deb25b4a94aae14cd77076037bbd2dcb4f192a9e7e6679a",
+  "matrix_directly_viewed": true,
+  "process_capture_count": 64,
+  "process_seen_entries": 20,
+  "source_import_checks": 6,
+  "source_lineage_checks": 145,
+  "resource_count": 8,
+  "input_sha_drift": 0,
+  "process_clock_render_completed": true,
+  "visual_walk_rejected": true,
+  "reasons": [
+    "B transferred sprites have more prominent diamond fabric texture than the existing idle and A atlas.",
+    "NE/NW B back views introduce a long brown sash tail and multiple layered hem panels; existing idle/A back views use a plain belt and simpler tunic hem.",
+    "B heads/hands and torso width look different enough at common body-height normalization to require direct frame consistency correction. No measured anatomy claim.",
+    "Visible opposite support legs and engine checks do not compensate for costume/body continuity failure."
+  ],
+  "next_action": "Native edit B candidates to match exact accepted idle/A clothing and body appearance while retaining opposite lower-body pose and upright upper posture; reimport and rerender.",
+  "continuous_gait_qualified": false,
+  "actual_campaign_qualified": false,
+  "production_qualified": false
+}

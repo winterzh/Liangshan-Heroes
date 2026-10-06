@@ -1,0 +1,17 @@
+{
+  "scope": "First original-Battle QA failure, retained immutable private project/harness, not a production qualification",
+  "receipt": "E:\\ChatGPT\\qa-rescued-seven-current-20261006\\20261006_143759_dca97340\\evidence\\receipt.json",
+  "receipt_sha256": "c6a71df64cc51bb029d8a22e30441d3cd545c1b4851da0cb24ab8f9eec72664f",
+  "failure": {
+    "type": "RuntimeError",
+    "message": "Private character QA step failed: rescued_seven_current"
+  },
+  "stopped_for": "timeout",
+  "case_seconds": 1000.688,
+  "failed_assertions": 7,
+  "reason": "Detached HP/maxHP=110 fixture incorrectly treated as original seven stats; actual original definitions retain individual HP. Later final identity scan exceeded 1000-second own-case limit. No production stats changed.",
+  "source_drift": 0,
+  "private_source_drift": 0,
+  "captures": 12,
+  "repair": "Compare actual pre/post rescue HP/maxHP; retain original stats. Use longer explicit own-case limit and persist eight-opening checkpoint before rescue."
+}

@@ -395,6 +395,8 @@ func ui_portrait_texture(key: String, variant := "") -> Texture2D:
 
 ## 保留战役变体原图查询，用于素材预览与来源契约；游戏界面用 ui_portrait_texture。
 func avatar_texture(key: String, variant := "") -> Texture2D:
+	if not CampaignArt.native_wounded_owner(variant).is_empty():
+		return unit_texture(key, variant, "se")
 	if IDENTITY_PORTRAIT_VARIANTS.has(variant):
 		return portrait_texture(key) if IDENTITY_PORTRAIT_VARIANTS[variant] == key else null
 	if not variant.is_empty():
@@ -423,7 +425,7 @@ func avatar_texture(key: String, variant := "") -> Texture2D:
 
 
 func unit_texture(key: String, variant := "", direction := "") -> Texture2D:
-	if not CampaignArt.native_bound_owner(variant).is_empty():
+	if not CampaignArt.native_body_owner(variant).is_empty():
 		var native_direction: String = "se" if direction.is_empty() else direction
 		var native_frames := unit_anim_frames(key, "idle", native_direction, variant)
 		return null if native_frames.is_empty() else native_frames[0]
@@ -677,14 +679,14 @@ func portrait_texture(key: String) -> Texture2D:
 func unit_anim_frames(key: String, state: String, direction := "", variant := "") -> Array:
 	if not direction.is_empty() and direction not in CampaignArt.DIRECTIONS:
 		return []
-	var native_owner := CampaignArt.native_bound_owner(variant)
+	var native_owner := CampaignArt.native_body_owner(variant)
 	if not native_owner.is_empty():
 		if key != native_owner: return []
-		var native_path := CampaignArt.native_bound_path(variant, state, direction)
+		var native_path := CampaignArt.native_body_path(variant, state, direction)
 		if native_path.is_empty(): return []
 		# Canvas draw commands retain a texture RID, not the temporary resource.
 		# Keep native frames alive between draws, including stationary captives.
-		var native_cache_key := "native_bound|" + native_path
+		var native_cache_key := "native_body|" + native_path
 		if not _anim_cache.has(native_cache_key):
 			_anim_cache[native_cache_key] = _load_generic_directional_frames(native_path)
 		return _anim_cache[native_cache_key]
@@ -868,7 +870,7 @@ func _slice_anim_strip(tex: Texture2D) -> Array:
 func unit_anim_uses_directional_source(key: String, state: String, direction: String, variant := "") -> bool:
 	if direction not in CampaignArt.DIRECTIONS:
 		return false
-	if not CampaignArt.native_bound_owner(variant).is_empty():
+	if not CampaignArt.native_body_owner(variant).is_empty():
 		return not unit_anim_frames(key, state, direction, variant).is_empty()
 	if not variant.is_empty():
 		var bound_owner := CampaignArt.programmatic_bound_owner(variant)
@@ -916,16 +918,17 @@ func _campaign_texture(path: String) -> Texture2D:
 func campaign_variant_has_direction(variant: String, direction: String) -> bool:
 	if variant.is_empty() or direction not in CampaignArt.DIRECTIONS:
 		return false
-	if not CampaignArt.native_bound_owner(variant).is_empty():
-		return not _load_generic_directional_frames(CampaignArt.native_bound_path(variant, "idle", direction)).is_empty()
+	if not CampaignArt.native_body_owner(variant).is_empty():
+		return not _load_generic_directional_frames(CampaignArt.native_body_path(variant, "idle", direction)).is_empty()
 	var path := CampaignArt.animation_path(variant, "idle", direction)
 	return not path.is_empty() and ResourceLoader.exists(path)
 
 ## 精确动作存在判断；复用纹理缓存，绝不以idle回退冒充双人动作。
 func campaign_variant_has_animation(variant: String, state: String, direction: String) -> bool:
 	if variant.is_empty() or direction not in CampaignArt.DIRECTIONS: return false
-	if not CampaignArt.native_bound_owner(variant).is_empty():
-		return state == "idle" and campaign_variant_has_direction(variant, direction)
+	if not CampaignArt.native_body_owner(variant).is_empty():
+		var authored_states: Array = ["idle", "walk"] if not CampaignArt.native_wounded_owner(variant).is_empty() else ["idle"]
+		return state in authored_states and not _load_generic_directional_frames(CampaignArt.native_body_path(variant, state, direction)).is_empty()
 	var path := CampaignArt.animation_path(variant, state, direction)
 	var texture := _campaign_texture(path)
 	return texture != null and texture.get_height() > 0 and texture.get_width() % texture.get_height() == 0

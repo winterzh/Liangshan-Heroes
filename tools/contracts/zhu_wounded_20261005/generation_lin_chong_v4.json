@@ -1,0 +1,70 @@
+{
+  "original_reference": {
+    "path": "assets/characters/lin_chong_direction4_20260906/sw.png",
+    "sha256": "8dcef108eb8ce6c7a755300463f44c3fe7b73859170e57e7d51d8479927c4516"
+  },
+  "jobs": [
+    {
+      "key": "baseline_ref_c5b4f147a07b",
+      "method": "retained_identity_reference",
+      "generation_id": null,
+      "repository_path": "assets/characters/codex_portraits_20260913/lin_chong.png",
+      "sha256": "d801cb931c481f0794d980cebccb4e035dbe7f771426e25ad4b00adf05bd299e",
+      "baseline_commit": "27f45b245e2b39f1f779fbfa62772e14bb68dd56",
+      "reference_role": "Existing committed artwork retained as identity or anatomy ancestry; no new generation prompt claimed.",
+      "references": [],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "lin_chong_idle_traits_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-fa5e1b99-073c-4df6-901f-408506068bf7",
+      "repository_path": "assets/characters/lin_chong_traits_20261006/idle_v4.png",
+      "sha256": "fd2ba3a59fc526790b8160ed3a503797fe81cc6505bbf83bedb21158d4890e3c",
+      "prompt": "Use case: identity-preserve. Create a revised four-direction ordinary upright idle sprite atlas of the existing project's Lin Chong, using native input images as editing references. Image 1 is a mixed-action sheet: use only its TOP-LEFT IDLE figure for established armor, clothing, spear and silhouette identity. Its action rows and brown background are not the target. Image 2 supplies existing face identity, dark tied-up hair, beard and composed stern expression; do not copy paper background. Main change per user: Lin Chong is a tall imposing martial instructor; upright spine, level chin and eyes, broad naturally settled shoulders and open chest, normal powerful adult proportions and legs, restrained calm strength. Natural disciplined standing, not a stiff modern parade pose, not crouching or hunched, not tiny headless torso or big-head short-legged cartoon. Preserve existing dark-blue cloth/scarf, black steel lamellar armor with muted gold edging and shoulder plates, red belt accent, armored boots, tied hair and facial hair. Hold his existing long wood-shaft steel spear with red tassel in one natural relaxed grip, resting diagonally low toward the facing direction as in source idle; both feet grounded, knees naturally extended. Same face/head/body proportions, armor, hand grip, spear length and colors in all views. Four distinct whole-body facings in 2x2: top-left SE front-right, top-right SW front-left, bottom-left NE back-right, bottom-right NW back-left. Full torso/hips/knees/toes/spear and head follow the facing, bottom row genuine armored back views. No horizontal-flip shortcuts. Elevated isometric game camera ~30 degrees downward. Scale each complete figure INCLUDING all spear tips and tassels to leave at least 60 pixels of transparent space within all four sides of EACH quadrant; generously spaced center gutters, no overlap or clipping. Maintain detailed painterly game-sprite style and readable adult face rather than photoreal render. True transparent RGBA, no background, floor, shadow, labels, grid, extra figure or action. Tall upright instructor stance is canon-informed art interpretation; do not invent insignia or change equipment.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/lin_chong_idle_traits_v4.json",
+      "request_sha256": "ac1d7dc600dbe3cf4c5db2bbc2c357328fe8def923d1dd87df4bdf27ccda950c",
+      "references": [
+        "original",
+        "baseline_ref_c5b4f147a07b"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "lin_chong_idle_spacing_traits_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-6427464f-eeb7-4ee9-9957-1298ce6b4f7e",
+      "repository_path": "assets/characters/lin_chong_traits_20261006/idle_spacing_v4.png",
+      "sha256": "e72f40b3b541ec2aa3177830d195539d6f387ff588f3b1e7d9a4ce5de514d1d6",
+      "prompt": "Edit this exact 2x2 ordinary upright Lin Chong atlas. Preserve the same imposing adult instructor anatomy, face/beard, ponytail, dark-blue cloth, black steel lamellar armor/gold edging, red belt, armored boots and upright calmly disciplined posture. Make a targeted correction to direction, spear and layout. TOP LEFT SE: his head and nose, chest, pelvis, knees and toes ALL face down-right/front-right, do not look left while torso faces right. TOP RIGHT SW: all face down-left/front-left. BOTTOM LEFT NE and BOTTOM RIGHT NW: retain genuine three-quarter back views oriented up-right and up-left respectively. Preserve a LONG wooden-shaft spear with steel blade and red tassel held naturally in one hand low diagonally, consistent full length about 1.2 times his standing body height in each view; do not shorten to a small hand weapon. Hand must grip continuous shaft, no floating spear or extra hands. Space each complete figure INCLUDING long spear ends within its own quadrant with at least 55 pixels clear transparent padding to every quadrant edge; uniformly make figures smaller as necessary and keep same adult body scale in all four quadrants. Full heads, hair, hands, boots and spear tips visible, wide clear center gutters. Native true RGBA transparency, no background, text, grid, labels, extra figure, floor or shadow. Existing ordinary stance, no attack lunge.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/lin_chong_idle_spacing_traits_v4.json",
+      "request_sha256": "e0654b8c822e682b0c2abef62418a7885c763e5e2f458626b5e3bedbd089ed27",
+      "references": [
+        "lin_chong_idle_traits_v4"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "lin_chong_idle_spacing2_traits_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-c880b46a-e8d2-4d82-9205-d892005dcb2a",
+      "repository_path": "assets/characters/lin_chong_traits_20261006/idle_spacing2_v4.png",
+      "sha256": "5d1480e516058b09adee8b4b0593a83b1f5a4d87ebb4c1fc898e2b5b081ec484",
+      "prompt": "Edit ONLY the placement of the BOTTOM-LEFT complete figure in this exact 2x2 Lin Chong upright idle atlas. Move that entire bottom-left NE figure, including its long spear, tassel, hair and boots, approximately 90 pixels LEFT as one intact figure within the bottom-left quadrant. Its spear tip currently nearly touches the right boundary of that quadrant; leave at least 60 clear transparent pixels between the spear tip and the quadrant's right edge. There is ample unused transparent space on its left. Preserve its exact adult proportions, upright posture, NE three-quarter back camera, armor, face and long spear. Preserve TOP-LEFT, TOP-RIGHT and BOTTOM-RIGHT figures and positions. Do not add/remove anything or crop any part, do not shorten spear or change pose. Keep four complete figures, wide clear center gutters, same native transparent RGBA atlas, no text/grid/background or shadow.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/lin_chong_idle_spacing2_traits_v4.json",
+      "request_sha256": "20530b9d352eeaa73ef9d7065917999a317931cc4c0a4653e9d1be04c50f8830",
+      "references": [
+        "lin_chong_idle_spacing_traits_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    }
+  ],
+  "scope": "Complete required ancestry retained; historical rejected pixels are edit parents only, not selected as runtime frames."
+}

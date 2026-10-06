@@ -1,0 +1,42 @@
+"""Prepare exact native Lin Chong requests; no raster edits or runtime changes."""
+from pathlib import Path
+import json
+
+HERE = Path(__file__).resolve().parent
+ROOT = HERE.parents[2]
+for phase, support in [("a", "IMAGE-RIGHT"), ("b", "IMAGE-LEFT")]:
+    state = f"walk_{phase}_se"
+    destination = HERE / "requests" / f"lin_chong_{state}_v5.json"
+    assert not destination.exists()
+    prompt = (
+        "Use case: historical-scene. Native transparent SINGLE FULL BODY ordinary Lin Chong walking contact pose. "
+        "Reference 1 is identity, anatomy, clothing and weapon: use its TOP-LEFT SE adult Lin Chong only. "
+        "Same tall mature disciplined military instructor, upright healthy upper back, head lifted, calm resolute "
+        "short-bearded face, long black tied hair and gold hair clasp, blue scarf and blue patterned robe, black/steel "
+        "lamellar armor with gold edging, red waist belt, armored shin guards and boots. "
+        "Reference 2 is FOOT SUPPORT geometry ONLY; do not copy its robot, colored legs, green ground or text. "
+        "Camera: elevated isometric RTS, SE front three-quarter facing DOWN-RIGHT. Head, torso, pelvis and toes "
+        "face the same heading. Adult long usable legs, natural pelvis and shoulders; no hunched neck, rounded "
+        "back, deep crouch, child proportions or stiff parade pose. Ordinary purposeful armed walking with slight "
+        "natural hip movement. Preserve the SINGLE wooden-shaft spear with steel point and red tassel, held in "
+        "the same hand and low diagonal carry as the top-left identity reference: tip extends down towards "
+        "IMAGE-LEFT, shaft behind hand, other hand relaxed; do not raise or reverse the spear or add a weapon. "
+        "Foot pose: match reference 2 RED foot as flat support, heel and forefoot at the same contact level; BLUE "
+        "foot as low raised recovery boot. Each leg connects to its own hip. Translate colors into ordinary "
+        f"armored legs/boots. The {support} boot is the flat supporting foot, the opposite boot is low raised. "
+        "Natural knees and healthy upright chest. Keep the same man, face, hair, scarf, armor panels, robe and "
+        "spear between idle and walking. One complete man only, square native PNG <=1536, genuine RGBA "
+        "transparent alpha, full silhouette with generous >=100px clear margins; body about70-75% square height "
+        "with full spear contained. No ground, shadow, background, grid, labels, guide colors, extra limbs or "
+        "other people. Preserve the historical game painting style of reference1."
+    )
+    args = {
+        "prompt": prompt,
+        "referenced_image_paths": [
+            str(ROOT / "assets/characters/lin_chong_traits_20261006/idle_spacing2_v4.png"),
+            str(HERE / "guides" / f"qin_ming_walk_{phase}_se_geometry_v4.png"),
+        ],
+        "transparent_background": True,
+    }
+    destination.write_bytes((json.dumps(args, ensure_ascii=False, indent=2) + "\n").encode("utf-8"))
+    print(destination.relative_to(ROOT).as_posix())

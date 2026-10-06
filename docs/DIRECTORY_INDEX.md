@@ -1,3 +1,226 @@
+<!-- traits-contacts-v5-current -->
+## 2026-10-06 按人物特性修正体态：当前素材与同步范围
+
+用户要求按原著人物特点塑造体态，不能全员统一军姿。武松普通待机/行走强调魁梧、剽悍、抬头挺胸；林冲强调教头的挺拔、沉稳和自然持枪。时迁保留轻巧机警、轻微髋部前倾与自然软膝，不画成病态驼背或深蹲；王英成熟矮壮，秦明强壮端正，石秀精干敏捷，杨林灵活，黄信稳健，邓飞粗犷警觉。攻击、受击、负伤允许动作需要的弯曲，不能强行军姿。具体衣装、甲片、步相和数值比例属于项目美术解释，不冒称原著逐项规定。
+
+内置imagegen新增武松SE两张交替承重候选、林冲SE两张交替承重候选，另保留林冲首版B失败图（重复A承重）和原生B2修正。五张1254×1254 RGBA均原字节保存，精确请求、父图和几何参考producer可核对。只读SHA/透明边界/输入链检查通过；最小透明余量58px，未裁切，但未完全满足请求的100px余量。直接静态观察已记录；尚缺另外三向、过渡步相、导入/采样/足点和真实起停/反向/战斗/UI验收。普通武松/林冲生产取图未替换，production_qualified=false。
+
+本轮同步范围包括已有获救七人取图增量、946项原关卡/16截图与410项五进程续玩组件证据，以及人物候选和完整来源链。五进程资格限定于安装来源的战役组件QA；不等于公开继续入口、全章结局/奖励一次性或完整发布资格。此前“尚未提交/推送”属于历史阶段记录；同步结果以stable分支提交历史与本轮同步收据为准。完整八关动态阶段、九模式、性能、Android及人物完整动作仍按DEVELOPMENT_AUDIT_20261006.md推进。
+
+本次没有清理缓存、打包、Steam发布或main合并。继续遵守共享Godot自然等待策略。
+<!-- /traits-contacts-v5-current -->
+
+新增候选：assets/characters/{wu_song,lin_chong}_traits_20261006/*_v5.png；精确请求/生成来源：tools/contracts/zhu_wounded_20261005/{requests,jobs}/*_v5.json；静态资格/判退：qa/zhu_wounded_20261005/ordinary_contacts_static_review_v5.json。全部为素材与证据，不是运行缓存。
+
+
+## 2026-10-06 武松/林冲起停对照已运行，画面衔接判退
+
+两人各80项/80截图、4904输入零漂移的正常属性、英雄/四技能、真实Unit指令物理与绘制对照通过。分别直接查看1×/4×待机、现有走路与停步帧5/15/35。新待机挺拔且成人比例改善，但武松现有walk仍深屈膝前倾，并将NE/NW沿用前视旧走图；林冲旧持枪角度/屈膝姿势与新直立放低枪待机之间有突然切换。机械断言通过不能代替画面合格，两者production_qualified=false，生产普通取图尚未替换。
+
+下一步按各自身份补匹配四向自然武装行走/真实四步相，上背保持正常直立，动作中允许合理身体发力，不强制攻击军姿。仍沿用imagegen内置原生生成/编辑，保留输入、原图、失败及精确请求，禁止以idle充walk或镜像缺失后视；完成实际衔接、武器/脚点/衣装和原关卡/UI资格后再接入。相关mechanical/review收据位于qa/zhu_wounded_20261005/ordinary_wu_song与ordinary_lin_chong_idle_motion_comparison_*v4.json。首轮Wu夹具foot类型推断失败及精确自有进程终止记录保留。
+
+
+## 2026-10-06 获救七人五个独立进程续玩组件已通过
+
+实际gl_compatibility渲染、正常时钟下，解救前61、解救后127、途中91、到营69、再次到营读档62项共410项通过；五个先后退出的进程nonce/PID/单调时间区间核实。相邻存档与读档对七人真实持久ID、生命值/角色/位置/路径命令/方向、空art_variant及原生造型、任务阶段的IEEE位模式指纹完全一致；无数值或坐标容差。4904生产输入与私有副本零漂移，三份执行helper不变，自己的锁释放。迷雾纹理校验保留，11名原守军正常普攻清除；原囚徒经正常移动命令撤回，庄院未倒不提前结算。收据qa/zhu_wounded_20261005/rescued_seven_cross_process_qualified_v4.json。
+
+这是显式已安装战役profile的保存屏障/Session组件补验，公开玩家续玩入口仍未开放。不是整章自然胜败/奖励一次性、正常保存UI、终态/连续播放/性能/平台或完整八关资格。此前五次失败批/原脚本/原图/存档和独立JSON解析探针保留；生产存档逻辑及游戏HP没有为测试而修改。继续普通武松/林冲起停对照及开发审计中的完整剩余项。尚未清理、暂存/提交/推送、打包或发布。
+
+
+## 2026-10-06 本批冗余缓存只读盘点
+
+6个已结束失败批（首轮原Battle和五轮跨进程批）的imported与保留成功原Battle20261006_152842_60aec8f8逐文件核对，21924个同名/大小/SHA完全一致，5179351872字节约4.824GiB；实际精确字节以qa/zhu_wounded_20261005/readonly_cache_cleanup_candidate_v4.json为准。这里只列候选，删除量0，仍等本批资格与保护后验；最新成功缓存、当前运行批、所有人物bootstrap/Unit/时钟成功批、主缓存、源码/PNG/请求/失败父图/数学producer、存档/日志/截图全部未动。
+
+开发完成审计：docs/DEVELOPMENT_AUDIT_20261006.md（完整目标、实际证据和未闭合门槛）。
+
+
+## 2026-10-06 战役续玩屏障补验边界
+
+首次五进程补验在第一份存档前被屏障拒绝，失败批rescued_role_cross_v4_2b82d4a3及其脚本保留。正常Battle默认将屏障配置为经典30波；既有祝家庄组件测试需显式启用已安装ZHU_CONTEXT。新夹具现先断言真实战斗已经分类为祝家庄，再仅配置保存屏障的战役profile，未修改世界的分类或屏障校验规则，并保留原始拒绝码。组件补验不等于公开续玩入口：ContinueFlow公开入口仍限经典30波，战役profile记录player_entry_enabled=false。五进程通过后也不能据此宣称战役玩家保存按钮、完整胜利/奖励一次性、全部八关续玩或平台验收完成，必须继续按完整计划补齐。
+
+
+## 2026-10-06 普通武松/林冲起停对照准备
+
+qa/zhu_wounded_20261005/harness/ordinary_idle_comparison_actor_v4.gd、ordinary_idle_motion_comparison_v4.gd及对应.py已准备，尚未运行。将用正常Defs的各自生命值/英雄身份/四技能，继承真实Unit指令、物理和绘制，按四向同时比较原待机与新挺拔待机衔接现有走图，记录1×/4×起步、停步和反向。只替换夹具idle取帧，不改生产ArtDB、战斗动作或像素；用于判断成人比例、脚点、衣装、方向和武器在切换时是否连续，不能当原Battle/生产/UI/战斗/存档/连续播放/平台验收。
+
+入口：python -X utf8 -B qa/zhu_wounded_20261005/harness/ordinary_idle_motion_comparison_v4.py --key wu_song --from-receipt <已完成原Battle evidence/receipt.json> --work-root <工程外QA根目录> --run。林冲将参数改为--key lin_chong。无--run为只读预检。主验收仍先完成获救身份五进程续玩，再运行普通角色对照；必要时修正素材/动作，不能只替换站图就宣称完整角色完成。
+
+<!-- original-rescued-health-fixture-correction-v4 -->
+## 2026-10-06 生命值验收边界修正
+
+脱离Battle的七人候选Unit夹具人为设置HP/maxHP=110，仅用来验证候选身份与绘制，不能把110当成原祝家庄七人的游戏数值。原关卡从正常定义生成各角色，解救回调没有改变生命值；新取图源码也没有修改生命值。首次原Battle QA将夹具110误用于原角色断言，七人均在该项报错，失败批和原脚本保留。修复应逐人保存真实解救前HP/maxHP并比较解救后及跨进程读档值；不能改游戏数值迎合夹具。此前“HP110”等记录均指候选夹具，原关卡数值需以新实际运行记录为准。
+<!-- /original-rescued-health-fixture-correction-v4 -->
+
+
+## 2026-10-06 跨进程获救身份补验准备
+
+tools/rescued_seven_cross_process_qa.gd及tools/run_rescued_seven_cross_process_qa.py已准备，尚未执行。将从已完成且零输入漂移的原Battle QA批复制独立私有工程与缓存，在五个真正先后退出的进程中分别保存解救前、解救后、撤回途中、到营，并再次恢复到营存档。记录进程nonce/PID/单调起止区间、原七人的持久实体ID、数值/位置/命令、四向造型、空art_variant字段、任务阶段和未提前结算。接触人与林冲近战位置是明确夹具，囚徒撤离仍由正常玩家移动命令完成；保持正常时钟并冻结非参与者。该补验不代替完整获胜/奖励一次性、常规UI保存按钮、终态、性能或平台验收。
+
+复验：python -X utf8 -B tools/run_rescued_seven_cross_process_qa.py --from-receipt <已完成原Battle evidence/receipt.json> --work-root <工程外新QA根目录> --run。无--run仅检查已验证来源；自然等待共享引擎空闲，不控制或联系其他任务。
+
+<!-- original-rescued-route-v4-current -->
+## 2026-10-06 当前增量：原关卡获救七人取图接入
+
+人物姿态继续按特性分别处理：武松、林冲普通待机挺拔；时迁机警轻身而非病态驼背，秦明强壮端正，王英成熟矮壮，杨林灵活，黄信稳健，邓飞粗犷警觉。七人候选清单与原图/失败父图不改写。
+
+Unit.visual_art_variant仅在现行祝家庄RTS脚本、该关prisoners成员、梁山/非战斗/非英雄/已获救及空显式变体时派生zhu_wounded_人物key。原解救回调及各人真实生命值不变；获救速度82/攻击0/无技能与存档空art_variant校验不变；显式剧情变体优先，旧三日关卡恢复战斗能力后不触发此路由。只说明字段契约兼容，不承诺不同安装来源SHA的旧存档可跨版本恢复。
+
+CampaignArt登记七套原生idle/walk资源；ArtDB本体、来源/方向、精确动作、来源预览与所属人物UI查询一致，错人物/非法方向拒绝。hurt复用站立idle，不称新受伤动作；缺失attack/gather/assisted/death/down拒绝普通武装回退，终态走现有同造型程序化绘制。Unit各实际身体查询及旧scenery影子兼容入口使用派生造型，UI保留标准人物头像。
+
+原Battle回归已通过946项、16张原生视口截图、4904冻结输入零漂移；原七人经真实解救回调并用正常玩家命令撤回前营，姿态取图/标准头像/选择按钮/缺失武装动作拒绝与真实撤离均核验。证据：qa/zhu_wounded_20261005/original_rescued_seven_production_route_v4.json。
+
+独立复验入口：python -X utf8 -B tools/run_rescued_seven_art_qa.py --repo <checkout> --manifest rescued_seven_current=assets/direction4/zhu_wounded_shi_qian_20261006_walk_footclear_declared_v4.json --work-root <工程外QA目录> --cache-from <已核验原关卡QA批> --shared-checks --run。无--run为只读预检。自然等待Godot空闲；不控制或联系其他任务。新QA脚本tools/rescued_seven_art_qa.gd保留旧current_campaign_art_qa及历史收据。
+
+连续步态/衣装、完整终态画面、跨进程保存退出续玩/奖励一次性、旧三日与普通武松/林冲动作衔接仍待进一步资格验证。全计划的八关动态阶段/生产/船体/身份动作UI、九模式、约10分钟性能尾帧与Android真机/平台目标仍开放。production_qualified=false。本批尚未提交/推送、清理、打包或发布。
+<!-- /original-rescued-route-v4-current -->
+<!-- deng-fei-traits-gait-v4-current -->
+## 2026-10-06 邓飞候选资源与收据
+
+- assets/characters/deng_fei_wounded_20261005/idle_single_*_v4.png、walk_a/b_*_v4.png、passing_a/b_*_v4.png及修正版：20选用原生源，失败父图独立保留。
+- assets/direction4/zhu_wounded_deng_fei_20261006_walk_passing_v4.json及assets/anim/zhu_wounded_v4_deng_fei_gait_passing_*：20姿态/8资源，candidate_only，production_qualified=false。
+- tools/contracts/zhu_wounded_20261005/prepare_deng_fei_*、generation_deng_fei_walk_passing_v4.json、requests/、jobs/：精确原生请求与完整来源链。
+- qa/zhu_wounded_20261005/deng_fei_walk_{texture,sources,cycle}_passing_v4.*、review/native_prompt_set及unit_motion_passing_v4收据/审核：真实导入/时钟/自身Unit证据；早期8源partial记录保持原位。
+- 邓飞专用texture_bootstrap/walk_preview/unit_motion及record/update helper：之前角色producer输入保持SHA不变。
+- docs/RESCUED_ART_INTEGRATION_20261006.md：七人原流程、生产查询一致性、存档兼容和跨进程奖励一次性接入计划；候选通过不代表原流程完成。
+- docs/RESCUED_ART_CANDIDATE_MATRIX_20261006.md、rescued_seven_candidate_identity_audit_v4.json：七人候选来源/资源/自身身份的交叉证据；不是原Battle验收。
+- unit_motion_shi_xiu_identity_v4.py/.gd/.tscn与shi_xiu_unit_motion_identity_footclear_v4.json/review：保留旧44项后增加52项逐帧身份复验。
+- merge_candidate_import_cache_v4.py及deng_fei_unit_cache_conflict/descriptor_guard_failure_v4.json：候选缓存选择、引擎前拒绝和修复证据；旧私有缓存及失败批不清理。
+<!-- /deng-fei-traits-gait-v4-current -->
+
+<!-- huang-xin-traits-gait-v4-current -->
+## 2026-10-06 黄信候选资源与QA
+
+- assets/characters/huang_xin_wounded_20261005/idle_single_*_v4.png及walk/passing原生PNG：20选用源，失败变体另保留。
+- assets/direction4/zhu_wounded_huang_xin_20261006_walk_passing_v4.json、assets/anim/zhu_wounded_v4_huang_xin_gait_passing_*：20姿态/8资源，candidate_only及production_qualified=false。
+- tools/contracts/zhu_wounded_20261005/prepare_huang_xin_requests/harnesses/walk_passing_v4.py、generation_huang_xin_walk_passing_v4.json、requests/、jobs/：精确请求与完整原生父图/数学producer来源。
+- qa/zhu_wounded_20261005/huang_xin_walk_{texture,sources,cycle}_passing_v4.*及review/native_prompt_set、huang_xin_unit_motion_passing_v4.json/review：真实导入/时钟/Unit收据。
+- 黄信专用texture_bootstrap、walk_preview、unit_motion及record/update helper：保留原角色生产者，连续动作与原关卡资格仍开放。
+- docs/RESCUED_ART_INTEGRATION_20261006.md及qa/zhu_wounded_20261005/rescued_route_preflight_v4.json：生产解析器/解救回调/存档兼容的只读预检与后续原流程验收计划，未修改生产代码。
+- assets/characters/deng_fei_wounded_20261005/idle_single_*_v4.png、walk_a_*_v4.png及deng_fei_fullidle/contact_a_native_review_v4.json：等待期间推进的8张原生单姿态来源，尚不证明Godot/完整步态/Unit通过。
+<!-- /huang-xin-traits-gait-v4-current -->
+
+<!-- yang-lin-traits-gait-v4-current -->
+## 2026-10-06 杨林候选资源与证据
+
+- assets/characters/yang_lin_wounded_20261005/：20选用全画幅idle/四步相原生PNG；walk_b_sw首版判退保留，walk_b2_sw选用。
+- assets/direction4/zhu_wounded_yang_lin_20261006_walk_passing_v4.json及assets/anim/zhu_wounded_v4_yang_lin_gait_passing_*：20姿态/8资源，candidate_only，production_qualified=false。
+- tools/contracts/zhu_wounded_20261005/prepare_yang_lin_*、generation_yang_lin_walk_passing_v4.json、requests/、jobs/：精确请求、原生父图与数学producer完整来源链。
+- qa/zhu_wounded_20261005/yang_lin_walk_{texture,sources,cycle}_passing_v4.*、walk_passing_review、walk_native_prompt_set及unit_motion_passing收据/审核：实际导入/时钟/Unit证据，连续动作与原流程资格开放。
+- 杨林专用texture_bootstrap/idle_preview/walk_preview/unit_motion及record/update helper；保留之前角色收据所依赖的producer。
+<!-- /yang-lin-traits-gait-v4-current -->
+
+<!-- qin-ming-traits-gait-v4-current -->
+## 2026-10-06 秦明强壮军官四步相新增
+
+- assets/characters/qin_ming_wounded_20261005/idle_single_*_v4.png、walk_a/b_*_v4.png、passing_a/b_*_v4.png及passing_a2_ne_v4.png：20选用原生源；东北首版passing_a_ne保留为失败父图。
+- assets/direction4/zhu_wounded_qin_ming_20261006_walk_passing_v4.json与assets/anim/zhu_wounded_v4_qin_ming_gait_passing_*：20真实姿态/8资源，candidate_only与production_qualified=false。
+- tools/contracts/zhu_wounded_20261005/prepare_qin_ming_walk_passing_v4.py及generation_qin_ming_walk_passing_v4.json：原生来源链/完整数学guide producer依赖。
+- qa/zhu_wounded_20261005/qin_ming_walk_{texture,sources,cycle}_passing_v4.*与review/native_authoring_bundle/native_prompt_set：342来源、64截图/20记录/50输入零漂移；原生请求/首版判退保留。
+- Qin专用texture_bootstrap/idle_preview/walk_preview/unit_motion与record helper：同目录旧角色producer不覆盖；自身Unit最终状态以自身receipt为准。
+- qin_ming_contact_geometry_v4.gd、render_qin_ming_contact_geometry_v4.py、guides/qin_ming_walk_{a,b}_{se,sw,ne,nw}_geometry_v4.*：8新数学参考，每份3 producer SHA输入；无人物位图输入或本地像素编辑。
+- fullidle保留79来源/13输入静态矩阵；原七人/生产/UI/连续步态资格仍开放，不能以该静态矩阵代替。
+<!-- /qin-ming-traits-gait-v4-current -->
+
+<!-- shi-qian-traits-gait-v4-current -->
+## 2026-10-06 当前时迁footclear新增
+
+- walk_footclear_declared_v4清单、gait_footclear资源与walk_a_geometry_ne_v4原生PNG：15源/20姿态；旧A atlas东北格有明确弃用理由，其他三格保留直接采样。
+- shi_qian_walk_sources_footclear_declared_v4.json、shi_qian_footclear_declaration_equivalence_v4.json：294来源检查通过，运行字段/8资源与原footclear清单完全一致；293项漏声明失败记录另保留。
+- shi_qian_walk_{texture,cycle}_footclear_v4.*、shi_qian_walk_footclear_review_v4.json：15源真实导入，64截图/20记录/40输入零漂移。
+- shi_qian_unit_motion_footclear_v4.json及review：52项/80截图/4657运行输入零漂移，自身key的脱离Battle实际Unit；原任务/全七人/生产/UI/连续步态仍不合格。
+- prepare_shi_qian_footclear_declaration_v4.py、prepare/record_shi_qian_walk_footclear_v4.py与专用footclear时钟/Unit夹具：旧来源/夹具/失败记录不覆盖；native_prompt_set_footclear_v4包含15精确请求。
+- NE contact_a几何v7：平落地红脚/低抬蓝脚，独立代码与原生guide/实际receipt；无人物位图输入或本地PNG编辑。
+
+下方14源为初轮阶段记录。
+
+## 2026-10-06 时迁机警轻身真实四步相新增
+
+- assets/direction4/zhu_wounded_shi_qian_20261006_walk_passing_v4.json、assets/anim/zhu_wounded_v4_shi_qian_gait_traits_*：14原生源/20候选姿态，4真实步相，每向独立资源，production_qualified=false。
+- prepare_shi_qian_walk_passing_v4.py、generation_shi_qian_walk_passing_v4.json：两原生quad与十二单向帧的直接采样/完整原生父图和代码几何来源链。
+- qa/zhu_wounded_20261005/shi_qian_walk_{texture,sources,cycle}_passing_v4.*、shi_qian_walk_passing_review_v4.json、shi_qian_walk_native_prompt_set_v4.json、shi_qian_walk_native_rejections_v4.json：281来源、64截图/20记录/38冻结输入零漂移、原生14请求和5类失败保留。未证明自然步态生产合格。
+- 六源12姿态contact_pair另保留153来源/21输入静态对照；不能替代完整步态。
+- harness/shi_qian_walk_preview_v4.*、unit_motion_shi_qian_v4.*、texture_bootstrap_shi_qian_v4.py：时迁独立候选验证，不覆盖被石秀/王英旧收据依赖的producer。Unit最终状态以自身receipt为准。
+- shi_qian_opposite_quad_geometry_v4/v5及opposite_ne_geometry_v6 producer、guides、receipts：v4共享world多腿判退，v5独立world和NE v6新数学腿姿，仅新原生geometry，无人物位图编辑。
+<!-- /shi-qian-traits-gait-v4-current -->
+
+## 2026-10-06 王英真实四步相及实际Unit新增
+
+- assets/characters/wang_ying_wounded_20261005/walk_b3_{se,sw,nw}_v4.png与passing_{a,b}_{se,sw,ne,nw}_v4.png：原生相反支撑及8真实低抬脚过渡，失败B/B2/NE A2保持原位。
+- assets/direction4/zhu_wounded_wang_ying_20261006_walk_passing_v4.json、8份zhu_wounded_v4_wang_ying_gait_passing_*资源及prepare_wang_ying_walk_passing_v4.py/generation_wang_ying_walk_passing_v4.json：完整20源候选，未接生产。
+- QA的wang_ying_walk_{texture,sources,cycle}_passing_v4.*、wang_ying_walk_passing_review_v4.json和wang_ying_walk_native_prompt_set_v4.json：364来源、50输入/64截图、20矩阵、观察范围与20完整请求。record_wang_ying_walk_passing_v4.py保存收据。
+- harness/wang_ying_walk_preview_v4.py/.gd、unit_motion_wang_ying_v4.py/.gd/.tscn及通用unit_candidate_adapter_v4.gd：独立Wang标签、自身key身份与继承原Unit的52项夹具；record_wang_ying_unit_motion_v4.py、wang_ying_unit_motion_passing_v4.json及review记录80截图/4597运行输入零漂移。
+- prepare_wang_ying_contact_pairs_v4.py、generation_wang_ying_contact_pair_v4.json、对应contact_pair manifest/8资源、harness/contact_pair_preview_v4.py/.gd及record_wang_ying_contact_{authoring,preview}_v4.py：12源两接触诊断，236来源/33输入；有独立review/matrix/preview，明确不替代全四步相。
+- guides/wang_ying_walk_b_se_geometry_v5.png、walk_b_{sw,nw}_geometry_v6.png、wang_ying_{passing_a,passing_b}_{se,sw,ne,nw}_geometry_v7.png、geometry_*配置及相应jobs：新数学参考及精确输入，非生产人物位图。harness/render_wang_ying_pose_geometry_v4.py、render_wang_ying_pose_geometry_v6.py、render_wang_ying_passing_geometry_v7.py及其GD源码作为必需来源保留。
+- record_wang_ying_geometry_v5.py、record_wang_ying_geometry_v6.py、record_wang_ying_passing_geometry_v7.py、prepare_wang_ying_geometry_*_v4.py、prepare_wang_ying_passing_requests_v4.py和QA对应geometry review/收据：SE错误初版投影保留，选定参考的接触高度/屏幕侧/低抬脚验证。人物编辑使用内置imagegen。
+
+## 2026-10-06 王英全画幅静态与行走候选新增（历史阶段）
+
+- `assets/direction4/zhu_wounded_wang_ying_20261006_fullidle_v4.json`及4份`zhu_wounded_v4_wang_ying_fullidle_idle_*.tres`：四张全画幅native idle独立候选，实际导入尺寸已核验。
+- `prepare_full_idle_v4.py`、`generation_wang_ying_fullidle_v4.json`、`wang_ying_fullidle_sampling_v4.json`：四源完整来源、体高和脚点元数据；原始PNG不修改。
+- `record_full_idle_v4.py`及QA的`wang_ying_fullidle_{texture,sources,preview,matrix,review}_v4.*`：82来源/13输入零漂移的实际四向静态证据，未接生产。
+- `prepare_wang_ying_contact_requests_v4.py`、requests/jobs中的`wang_ying_walk_a_{se,sw,ne,nw}_v4.json`、`assets/characters/wang_ying_wounded_20261005/walk_a_{se,sw,ne,nw}_v4.png`：四向首步原生候选。
+- `record_wang_ying_walk_a_v4.py`与`wang_ying_walk_a_authoring_v4.json`：字节/请求/父图/透明边界及直接观察；NE步相问题、后脚接触及成对审核明确保留，尚无行走导入/Unit资格。
+- `idle_preview_v3.py/.gd`：QA个别预览显式identity_key及context显示，避免fullidle后缀被误识别为人名，以及获救演员误称ordinary；旧矩阵不覆盖。
+
+- walk_a2_ne_v4.png、walk_b_ne_v4.png及对应requests/jobs；prepare_wang_ying_ne_contact_fix_v4.py、prepare_wang_ying_ne_opposite_v4.py、record_wang_ying_ne_pair_v4.py、wang_ying_ne_support_pair_v4.json：NE文字修正未选中，参考腿姿生成B后可辨相反支撑，仍无运动资格。
+- walk_b_se_v4.png、walk_b2_se_v4.png及对应requests/jobs；prepare_wang_ying_opposite_requests_v4.py、prepare_wang_ying_se_support_transfer_v4.py、record_wang_ying_se_rejections_v4.py、wang_ying_se_opposite_rejections_v4.json：SE重复支撑/绑腿身份漂移判退；SW/NW已准备请求尚未生成。
+
+## 2026-10-06 最新个别体态与脚步证据（历史阶段）
+
+- `assets/characters/shi_xiu_wounded_20261005/passing_b{4,5}_sw_v4.png`及requests/jobs：B4错误支撑腿保留判退，最新B5前脚收回抬起、后脚落地；`shi_xiu_passing_b4_sw_rejection_v4.json`记录原因。
+- `assets/direction4/zhu_wounded_shi_xiu_20261006_walk_footclear_v4.json`、8份对应TRES、`generation_shi_xiu_walk_footclear_v4.json`：20源最新脚步候选，生产资格仍未通过。
+- QA的`shi_xiu_walk_*footclear*_v4.*`、`shi_xiu_unit_motion_footclear_v4.json`和`shi_xiu_unit_motion_footclear_review_v4.json`：348来源/50隔离输入、44项80实际Unit帧/4533运行输入零漂移及观察范围。
+- `assets/direction4/zhu_wounded_wang_ying_20261006_traits_v4.json`、4份对应idle TRES、`selection_idle_wang_ying_traits_v4.json`：保留矮壮成年原生待机，52来源/7输入静态证据位于`wang_ying_traits_{sources,texture,idle_preview,idle_matrix,idle_review}_v4.*`。
+- `assets/characters/wang_ying_wounded_20261005/idle_single_{se,sw,ne,nw}_v4.png`及requests/jobs：内置imagegen四张全画幅模板，原字节保留；尚未实际导入、动作或生产验证。
+- `record_wang_ying_traits_v4.py`：核验保存旧待机实际收据及新原生模板请求/父图/可见透明边界，分别记录不裁切门和请求留白。
+
+## 2026-10-06 人物分别设计与真实步相候选新增
+
+- `assets/characters/shi_xiu_wounded_20261005/passing_b3_sw_v4.png`、`passing_b3_ne_v4.png`及对应requests/jobs：内置imagegen原生低抬脚编辑，保留B2父图。
+- `assets/direction4/zhu_wounded_shi_xiu_20261006_walk_refined_v4.json`、8份`zhu_wounded_v4_shi_xiu_gait_refined_*`资源及`generation_shi_xiu_walk_refined_v4.json`：20源修正版；348来源、50输入/64截图的隔离预览证据位于QA的`shi_xiu_walk_*refined*_v4.*`。
+- `record_unit_motion_v4.py`、`record_unit_review_v4.py`：保存实际Unit测试及观察范围；QA的`shi_xiu_unit_motion_{passing,refined}_v4.json`和`*_review_v4.json`分别记录44项/80帧、4501/4514冻结输入零漂移。仅候选帧解析的脱离Battle测试，未接生产。
+- `assets/direction4/zhu_wounded_shi_xiu_20261006_walk_passing_v4.json`：20张全画幅原生源，4向idle及每向4个独立行走相位；8份`zhu_wounded_v4_shi_xiu_gait_passing_*`候选TRES，尚无生产资格。
+- `assets/characters/shi_xiu_wounded_20261005/`：新增passing与idle_single原生PNG；SW/NE重复支撑腿的首次版本保留来源链，修正版独立命名。
+- `tools/contracts/zhu_wounded_20261005/prepare_passing_requests_v4.py`、`record_passing_v4.py`、`update_passing_progress_v4.py`：精确原生编辑请求、实际收据保存、交接文档更新。
+- `qa/zhu_wounded_20261005/shi_xiu_walk_*passing*_v4.*`：独立导入/342来源/64帧渲染/20姿态矩阵与未合格质量结论。
+- `qa/zhu_wounded_20261005/harness/unit_motion_v4.py`、`unit_motion_v4.gd/.tscn`、`unit_candidate_adapter_v4.gd`：正常Node场景入口的私有实际Unit指令和绘制测试，帧解析适配仅属于测试，不注册生产路由。首次入口失败收据与修正版自然等待状态分别记录于`shi_xiu_unit_motion_entry_failure_v4.json`和`shi_xiu_unit_motion_pending_v4.json`；未完成收据不算移动资格。
+
+## 2026-10-06 按人物特性设计姿态（开发中）
+
+- assets/characters/{wu_song,lin_chong}_traits_20261006/：普通待机原生候选和留白修正父图；与获救伤员分开。ordinary_*_20261006_traits_v4.json及character_traits_v4_*_idle_*.tres：各四向静态候选，未接生产。
+- save_character_traits_v4.py、prepare_ordinary_selection_v4.py、ordinary_identity_references_v4.json、selection_ordinary_traits_v4.json：保留基线身份/原生编辑来源，显式ordinary构建，不改历史七人authoring。
+- record_ordinary_traits_v4.py及QA的{wu_song,lin_chong}_idle_traits_{authoring,sources,texture,preview,matrix,review}_v4*：37/40来源、各7输入零漂移的独立静态证据，不等于动作/原Unit资格。
+- assets/characters/shi_xiu_wounded_20261005/{step_b_body2_*,walk_a_matched_*,idle_spacing_matched_v4}.png、generation_shi_xiu_walk_{body2,matched}_v4.json、walk_*候选manifest：保留全部父图，NW首版/修短步版及idle留白失败来源不覆盖。
+- record_body2_v4.py、record_matched_v4.py及QA的shi_xiu_walk_{texture,cycle,sources}_{body2,matched}_v4*和*_review_v4.json：169/208来源与22/28冻结输入的64截图证据；体态已改善但自然步态未合格。
+- shi_xiu_walk_cycle_cloth_v4.json和*_review.json已是完整lease释放收据；旧pending.json仅历史核验。harness/capture_review.html是64原生帧交互查看器；浏览器连接不可用，未据此宣称连续播放验收。
+
+- docs/CHARACTER_POSTURE_20261006.md、tools/contracts/zhu_wounded_20261005/character_posture_profiles_v4.json：用户最新要求、原著来源、个别姿态与待核对范围。
+- assets/characters/shi_qian_wounded_20261005/idle_traits_v4.png、selection_idle_traits_v4.json及assets/direction4/zhu_wounded_shi_qian_20261006_traits_v4.json：时迁机警轻身四向候选，新旧文件不覆盖。
+- qa/zhu_wounded_20261005/user_character_traits_review_v4.json及shi_qian_idle_traits_bounds_v4.json：个性要求及原生来源/边界门；v3统一军姿生成默认入口已阻止。
+- prepare_shi_xiu_walk_v3.py、generation_shi_xiu_walk_v3.json、zhu_wounded_shi_xiu_20261006_walk_v3.json及harness/walk_preview_v3.py/.gd：隔离石秀步态构建与process-clock起停预览；实际衣装连续性失败记录保留，未接生产。
+- qa/zhu_wounded_20261005/shi_xiu_walk_cycle_first_v3*：64截图运行收据、原生矩阵、视觉判退及第一轮六纹理导入。
+- qa/zhu_wounded_20261005/shi_qian_traits_{texture_import,idle_preview,idle_review,idle_matrix,sources}_v4*：时迁机警轻身四向静态候选实际导入、来源与7输入零漂移预览证据。
+- tools/contracts/zhu_wounded_20261005/record_traits_v4.py：校验并保留公开静态候选证据；assets/characters/shi_xiu_wounded_20261005/step_b_cloth_*_v4.png及对应requests/jobs：石秀四向衣装一致性编辑原图，尚待匹配动作审查。
+- assets/direction4/zhu_wounded_shi_xiu_20261006_walk_v4.json、generation_shi_xiu_walk_v4.json与shi_xiu_walk_sampling_v4.json：新衣装独立候选取样及完整来源，未覆盖v3。
+- record_walk_cloth_v4.py及QA的shi_xiu_walk_{sources,texture_import}_v4.json、shi_xiu_walk_cycle_cloth_v4.png、shi_xiu_walk_cycle_cloth_pending_v4.json：157来源、8资源与64截图/20记录输出，22输入零漂移；匹配矩阵再次视觉判退，最终lease收据等待自然空闲。
+
+## 2026-10-06 七人挺拔待机候选（历史阶段）
+
+- tools/contracts/zhu_wounded_20261005/audit_walk_transfer_v3.py及requests/jobs中的shi_xiu_step_b_transfer*：石秀四张相反步相候选与只读字节/透明度检查。
+- qa/zhu_wounded_20261005/{shi_xiu_walk_transfer_v3.json,authoring_check_v3_transfer.json,portable_idle_metadata_v3.json}：相反腿直接审核、27作业字节/待机输入冻结及另一目录42元数据重建；不算walk/原关卡资格。
+
+- assets/direction4/zhu_wounded_<人物>_20261005_v3.json及assets/anim/zhu_wounded_v3_<人物>_idle_*.tres：七人28独立待机候选，实际导入尺寸已核验，未接生产路由。
+- tools/contracts/zhu_wounded_20261005/selection_idle_v3.json、prepare_idle_v3.py和generation_<人物>_v3.json：选择、只读取样、完整父图/基线来源与初始脚点元数据；audit_idle_v3.py为只读边界门。
+- qa/zhu_wounded_20261005/harness/{texture_bootstrap_v3.py,idle_preview_v3.py,idle_preview_v3.gd}：私有导入和七人静态渲染；seven_idle_*收据/矩阵及逐人source/sampling证据；walk判退记录保留。
+- tools/directional_character_sources.py：新增既有基线参考的Git字节校验；不虚构旧来源的生成请求。
+
+## 2026-10-05 祝家庄获救人物成人比例与挺拔姿态（历史进展）
+
+- assets/characters/{shi_qian,shi_xiu,qin_ming,yang_lin,huang_xin,wang_ying,deng_fei}_wounded_20261005/：七张posture_v3挺拔参考及原生候选/必需父图；石秀idle_spacing_v3为四向留白修正，旧拒绝图保留来源，未接生产。
+- assets/direction4/zhu_wounded_shi_qian_20261005.json与assets/anim/zhu_wounded_shi_qian_*.tres：当前12姿态/8资源候选，production_qualified=false。
+- tools/contracts/zhu_wounded_20261005/：七人身份需求、完整请求/job SHA、新旧比例来源、authoring_v3与prepare_posture_v3只读参考核验；save_v3原字节保存；旧prepare/prepare_v2均已阻止过期候选重新构建。
+- qa/zhu_wounded_20261005/：用户比例纠正、失败/最新静态矩阵、导入/来源/边界证据及隔离预览harness；不代表连续步态/七人解救验收。
+
 ## 2026-10-05 当前八关素材开场与真实撤回
 
 - tools/current_campaign_art_qa.gd与run_current_campaign_art_qa.py：当前注册八关开场、石秀和原七人正常移动验收。

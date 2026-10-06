@@ -1,0 +1,984 @@
+{
+  "original_reference": {
+    "path": "assets/characters/deng_fei_bound_20261005/bound.png",
+    "sha256": "47a62effc16e7a89900ad2275294e26dce02f4bbf40e35dd03d8898316d751bd"
+  },
+  "jobs": [
+    {
+      "key": "baseline_ref_87eac29bd5b1",
+      "method": "retained_identity_reference",
+      "generation_id": null,
+      "repository_path": "assets/characters/shi_qian_bound_20261005/bound.png",
+      "sha256": "08787ccf51041c8e6134999a7dc6e9c6e884631d2feebac3e7df868c9060a108",
+      "baseline_commit": "27f45b245e2b39f1f779fbfa62772e14bb68dd56",
+      "reference_role": "Retained original character identity/anatomy reference; no new generation prompt claimed",
+      "references": [],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "sw_initial_rejected",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-14e9b9ec-b822-445d-b639-37f1b69f93db",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/native_references/sw_initial_rejected.png",
+      "sha256": "0d671be87f60f2bcf662a443765caa39722691be329bf360c5be7b516c2e6ddb",
+      "prompt": "Use case: historical-scene. Native transparent SINGLE FULL BODY wounded Shi Qian opposite walking pose. Output ONLY ONE man, NOT a grid or multiple copies. Reference atlas is IDENTITY and clothes only; REMOVE ropes/bindings. Same slim black masked Chinese man in charcoal cross-over cloth tunic, black headwrap and mask, cloth belt, dark trousers/shin wraps and boots. NO sack/armor/weapons/flags. Free wrists and empty hands, one hand guards sore abdomen, other balances, slight tired hunch. Critical anatomical foot pose: SW FRONT THREEQUARTER facing DOWN-LEFT. Its planted FORWARD boot must be on LOWER-RIGHT side of the silhouette, connected to RIGHT side of the image pelvis. Its trailing lifted boot must be on UPPER-LEFT side, heel raised. Both toes face downLEFT, whole torso/head faces LEFT. Left/right foot lead must visibly differ from standard alternate stride. Leading knee crosses in FRONT of trailing knee with each leg connected to its own pelvis side. Clearly short careful limping STEP, not standing/running/jumping. Foot positions specified are relative to complete silhouette, no twisting hip. Both legs/feet visible and distinct. Elevated isometric historic painterly RTS camera, full silhouette centered and contained, generous empty margin100px each edge, body60-70% canvas height. Native square<=1536, actual transparent alpha, no floor shadow/grid/text/background/extra people.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_step_b_sw.json",
+      "request_sha256": "bcd885b9badf089374d13158f26f7c54cf02127f8928ed9f60386f50d0350a2f",
+      "references": [
+        "baseline_ref_87eac29bd5b1"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_qian_step_b_sw",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-b26411e6-641e-4a9a-a172-1c37a305b869",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/step_b_sw.png",
+      "sha256": "01a2cc521b116e0cff5f2c3c74774ff51cf2517a19c2029e6be6e76baa4a0b0f",
+      "prompt": "Edit this single transparent SW-facing masked man. Keep head, face direction, body, clothes and empty hands. Remove the red/blood stain from abdomen completely: clean dark cloth, NO blood/injury props.\nCHANGE ONLY THE TWO LEGS below the pelvis to the OPPOSITE walking step. Currently the foot at bottom-left is planted, and foot at upper-right is lifted. Swap their gait: the leg on the RIGHT side of the image must now straighten FORWARD with its boot planted at LOWER-RIGHT, approximately(x780,y1100) on this1254canvas; the leg on the LEFT side must bend BACK with boot lifted at UPPER-LEFT approximately(x580,y940). Keep each leg attached to its existing hip. Draw the RIGHT-SIDE IMAGE KNEE in front, LEFT-SIDE knee behind. Both boot toes still point LEFT. Do not keep the original foot placements. The planted boot must move to the OTHER side of the silhouette. This is an alternate short wounded walk step, not running, no new prop.\nSame elevated isometric SW frontthreequarter camera, torso and face pointingLEFT, one man only, native transparent RGBA square<=1536, full figure contained, no text/grid/floor/shadow/weapon/rope/bag. Keep black wrap and mask, charcoal tunic and trousers, shin wraps, painterly clothing identity unchanged.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_sw_leg_edit.json",
+      "request_sha256": "f344a6ee879a3e9ca3740115422156f37a966f35e406b1cb3a5b3f627352bff9",
+      "references": [
+        "sw_initial_rejected"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_qian_proportion_v2",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-c11831c3-8262-4bc1-bc31-4cabd4ac12dd",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/proportion_reference_v2.png",
+      "sha256": "7f8d1d563e6eff35801bdab942867fb751cc2ccb90ae363ec39b16cf7a582499",
+      "prompt": "Use case: identity-preserve. Redraw this masked black-clothed adult Shi Qian with CORRECT NATURAL ADULT HUMAN PROPORTIONS. Current image is rejected: head and boots too big, legs too short, body too hunched and cartoonish. Keep the same identifiable man, black cloth headwrap/topknot and black mouth/nose mask, charcoal cross-over tunic and plain brown cloth sash, dark trousers/shin wraps/cloth boots, restrained hand-painted Chinese historical RTS rendering. NOT pixel-preservation: redraw anatomy fully as needed.\nNEW BODY: slim athletic normal adult, about7 to7.5 HEADS tall from skull top to sole. Bare head height only about one-seventh total body height; headcloth must not turn it into an oversized head. Natural narrow but adult shoulders, visible neck, proportionate torso, LONGER natural legs with hip-to-floor about half entire figure. Knees correctly midway along legs, normal slender calves, small natural hands, human-sized cloth boots WITHOUT giant bulky feet. Balanced anatomical joints, same believable adult throughout. No chibi/dwarf/oversized-head/short-legged/caricature proportions, no inflated hands or comic boots.\nPOSE: quiet NEUTRAL standing with feet naturally close and both grounded, only slight fatigue in shoulders. Upright spine and level head, no extreme stoop, crouch, furtive peeking, aggressive grimace, exaggerated lifted knee, twisted hip or running pose. Empty arms rest naturally; one empty hand may lightly rest near lower abdomen without squeezing or deep bending. This is a tired rescued adult with calm dignity, NOT a sneaking goblin. No ropes, weapons, sacks, blood/injury props, cape, armor or new accessories.\nView remains SW front three-quarter facing down-left, elevated isometric camera. Exactly ONE full body, all headcloth tails/fingers/feet contained, centered with generous transparent margins. Body about65–70% square canvas height. GENUINE alpha TRANSPARENT background, native square max1536, no floor shadow/background/checkerboard/grid/text/labels. Detailed face retains original identity but at natural smaller anatomical size.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_proportion_v2.json",
+      "request_sha256": "b1e2f2282759fe21f8c79677225a038887290f0321fd728d4ca889b2a34fb232",
+      "references": [
+        "shi_qian_step_b_sw"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "deng_fei_proportion_v2",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-1ad08e95-c7ac-4583-8842-002aef1e4819",
+      "repository_path": "assets/characters/deng_fei_wounded_20261005/proportion_v2.png",
+      "sha256": "94a50103cf8bf563b4084b8e268ba82754b0676fac4fe63decc6615315fbfdd2",
+      "prompt": "Use case: identity-preserve. ONE full-body unarmed rescued deng_fei standing proportion reference, NOT an atlas. Reference1 is the sole FACE/HAIR/CLOTHING identity reference; remove ALL bindings/ropes and weapons. Reference2 supplies ONLY the mature natural human anatomy target and painterly elevated isometric camera; DO NOT copy its mask, black costume or face.\nIdentity: Rugged tawny Chinese man with thick curly black hair and beard, rust-brown hair tie, brown ragged shoulder scarf, brown leather/lamellar armor with brass round chest ornament, rust-red sash, dark trousers/boots. Natural intense reddish-brown eyes, NO glow, iron chain or weapons.\nRedraw the short reference anatomy into a believable mature ADULT: about7–7.5 heads tall, normal small head/hands/boots, natural visible neck and LONG adult legs with hip-to-ground around half height.  Each knee naturally midway along the leg, no shortened thighs or giant footwear. Keep costume colors/materials and recognisable face/hair; any armor decoration fits his natural adult body.\nPose: SW front-three-quarter facing down-left, quiet upright tired rescued man with dignity, level head and relaxed empty hands by sides, both feet naturally close and grounded. Only slight fatigue in shoulders, no crouch/stoop/sneaking/high raised knee/running/combat stance. Natural anatomical joints. No weapon, sheath, rope, sack, flag, mount, blood, glow or new props. Preserve original identity, don't make everyone the same slim black masked man. Historic restrained hand-painted Chinese RTS rendering. Exactly one COMPLETE body, all cloth tails/cape/fingers/boots contained with generous margins, about75–80% native square height, max1536. Genuine transparent alpha background, no floor/shadow/grid/text/labels/checkerboard.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/deng_fei_proportion_v2.json",
+      "request_sha256": "92b50557c27a381d61a663b905785c698ad1ace78576ef6fc554b09e9e1f5ab0",
+      "references": [
+        "original",
+        "shi_qian_proportion_v2"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "deng_fei_posture_v3",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-af9da74e-6ce0-4d83-9bee-951cdc5bdc15",
+      "repository_path": "assets/characters/deng_fei_wounded_20261005/posture_v3.png",
+      "sha256": "05bb03f03be358d6cceccd1c357e929d97a0b09136ee478ed3459d96b205f305",
+      "prompt": "Use case: identity-preserve. EDIT the attached ONE full-body character reference. User requires an upright dignified SOLDIER posture: head UP and chest OPEN. Reject lowered chin, forward head, closed shoulders or hunched back. Only improve pose; preserve this SAME individual face, clothes, mature ADULT proportions and painterly rendering.\nPOSE: erect balanced military attention-like stance. Naturally straight stacked spine, neutral pelvis, neck vertical ABOVE torso; head lifted with chin LEVEL, eyes looking toward distant horizon in the SAME front three-quarter SW facing direction, never down at feet. Shoulders gently back and down, broad collarbones, naturally lifted open chest, sternum confidently forward. No stoop, rounded back, shrugged shoulders, forward craned neck, wounded hunch or tired slump. Do not hyperextend neck, flare ribs, thrust belly or arch lower back. Keep the small natural head/hands/boots and adult thighs/calves. Moderately elevated isometric camera does not imply bowed head.\nBoth feet grounded in stable modest hip-width parallel stance, knees straight but not locked. Empty arms straight naturally at sides and open relaxed hands, no fists or combat stance. Keep every existing armor plate/shoulder detail/cloak and beard, same color and body build; don't add extra armor.\nExactly ONE complete full figure with all fingers/tails/cloak/boots contained in generous transparent margins, 75–80% square height, native max1536. No weapons/sheaths/rope/chains/blood/new props. Preserve true transparent alpha; no floor/shadow/background/text/grid/checkerboard.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/deng_fei_posture_v3.json",
+      "request_sha256": "dc81edaad01d6cba558472b2c845fa485d1206ae1cb306632b98ce318031932c",
+      "references": [
+        "deng_fei_proportion_v2"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "deng_fei_idle_v3",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-f9f777e8-ec97-4590-9a27-8b39317ef774",
+      "repository_path": "assets/characters/deng_fei_wounded_20261005/idle_v3.png",
+      "sha256": "8bd30a7ae0cc9a37e27d734c335e9e11233870d14e4d0d0fc26dc0583cbb5cd8",
+      "prompt": "Use case: identity-preserve. Create native FOUR independently drawn isometric IDLE views of this SAME upright adult soldier. Reference is the selected v3 single-body posture; preserve its face, proportions, clothing and colors. Exactly 2 columns x 2 rows: TOP LEFT SE front three-quarter looking screen DOWN-RIGHT; TOP RIGHT SW front three-quarter looking screen DOWN-LEFT; BOTTOM LEFT NE back three-quarter looking screen UP-RIGHT; BOTTOM RIGHT NW back three-quarter looking screen UP-LEFT. Turn the WHOLE torso, hips and both feet into each direction. SE and SW must be genuinely opposite whole-body views; do not repeat SW in the SE cell. Back views show back clothes and back of head, with only a small far cheek visible. Never mirror a rendered cell. ALL FOUR poses stand dignified and upright like disciplined soldiers: lifted head, LEVEL chin/horizon gaze, neck vertically above torso, stacked natural spine, shoulders back/down, naturally open lifted chest. Elevated camera never means bowed head. NO hunch, forward neck, closed chest, tired shoulder slump, shrug, belly thrust or arched lower back. Empty relaxed hands and naturally straight arms at sides. Stable feet at modest hip width, straight natural knees. Keep mature adult head/hands/boots and adult leg lengths. Body type identity: Rugged tawny Chinese man with thick curly black hair and beard, rust-brown hair tie, brown ragged shoulder scarf, brown leather/lamellar armor with brass round chest ornament, rust-red sash, dark trousers/boots. Natural intense reddish-brown eyes, NO glow, iron chain or weapons. Preserve v3 body anatomy over any old compact sprite instructions; never chibi. Same front/back clothing hem length and construction, no weapons/sheaths/rope/chains/blood/new props. Each whole figure fits inside its OWN quadrant with wide true-alpha outer margins and wide empty transparent central gutters; no tails/capes/boots cross cell boundaries. Figures equal body height within this character. Native square max1536, painterly reference quality, TRUE RGBA transparent background; no floor/shadows/text/labels/grid/checkerboard. Layout priority: figures occupy only 78–82% of EACH quadrant height, about490–515px tall at1254px native square. Center each figure inside its cell; keep at least45px transparent clearance on every cell edge, including cape/boots/headcloth. The central horizontal gutter should be at least80px. Reduce whole figure size uniformly to leave room; NEVER shorten legs or enlarge heads to fit. Do not nearly touch the two rows.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/deng_fei_idle_v3.json",
+      "request_sha256": "ac1ec947ba38992134dd3f12cb23feefc801ac91bc63b7fa8ba3eeb6e4032f0b",
+      "references": [
+        "deng_fei_posture_v3"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "deng_fei_idle_single_se_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-60093c95-14c2-43ee-9953-f365b1a3da97",
+      "repository_path": "assets/characters/deng_fei_wounded_20261005/idle_single_se_v4.png",
+      "sha256": "edcfb6bdddc1268b108d056ff36d6ab08818fd041aea0c3ba4f7a37e73b4e98f",
+      "prompt": "Create exactly ONE whole full-body Deng Fei IDLE from corresponding SE reference-sheet view in IMAGE1. IMAGE1 locks his recognizable mature rugged tawny Chinese face, THICK CURLY BLACK HAIR tied high with RUST-BROWN cloth and trailing ends, FULL thick CURLY BLACK beard/moustache, intense natural reddish-brown eyes (NO glowing/fire eyes), brown ragged shoulder scarf/torn layered brown cloth, brown leather/lamellar armor with round BRASS chest ornament, rust-red tied waist sash, dark-brown trousers and dark boots with existing brass ornamental shin armor. Preserve the existing face/costume/material layers and refined painterly palette. No iron chain, weapon/sheath, rope, banner, bag or new prop.\nFACING: FRONT elevated isometric three-quarter facing LOWER-RIGHT SE, chest ornament/beard visible, head torso and both boot toes lower-right. Whole head, shoulders, hips and feet agree. Rear views must be real back views, not mirrored front portraits. Single view only.\nINDIVIDUAL BEARING: mature rugged martial adult with a strong grounded balanced stance and alert intense level gaze. Naturally open shoulders, head over neck/spine, straight healthy upper back; subtle individual shoulder/hip asymmetry allowed. Feet both planted in moderate stance, softly natural knees, relaxed empty hands ready near sides. Keep natural long adult limbs and proportionate head/hands/boots, do not make short/chibi, giant boots/head, deep squat or collapsed rounded hunch. Strong alertness does not require stiff parade chest-arching, scowling caricature or elderly stoop. Preserve full curly hair/beard and brass/brown armor; not a generic uniform soldier. Specific hair/costume/proportions are retained project design.\nExactly ONE COMPLETE adult on genuine transparent RGBA square native<=1536, centered with generous80px+ clear alpha margins around curly hair/trailing cloth/hem/both boots. Head/hands/feet whole, no crop/mirror/local paint or costume changes. No floor/shadow/background/grid/text/labels/extra people/views/props/attack pose. Refined native painterly unarmed rescued-foot idle candidate.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/deng_fei_idle_single_se_v4.json",
+      "request_sha256": "86e3caafcdd6cbbf5c1f7ae96c36616d99fec25485f7698fccc322ca15d2a73d",
+      "references": [
+        "deng_fei_idle_v3"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "deng_fei_idle_single_sw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-5677c272-ee46-40b0-b406-6a519069d2e1",
+      "repository_path": "assets/characters/deng_fei_wounded_20261005/idle_single_sw_v4.png",
+      "sha256": "e1abaef7d2dd929cc2bcc60025b4340e4554fb234d2c58c705e1a96eed829513",
+      "prompt": "Create exactly ONE whole full-body Deng Fei IDLE from corresponding SW reference-sheet view in IMAGE1. IMAGE1 locks his recognizable mature rugged tawny Chinese face, THICK CURLY BLACK HAIR tied high with RUST-BROWN cloth and trailing ends, FULL thick CURLY BLACK beard/moustache, intense natural reddish-brown eyes (NO glowing/fire eyes), brown ragged shoulder scarf/torn layered brown cloth, brown leather/lamellar armor with round BRASS chest ornament, rust-red tied waist sash, dark-brown trousers and dark boots with existing brass ornamental shin armor. Preserve the existing face/costume/material layers and refined painterly palette. No iron chain, weapon/sheath, rope, banner, bag or new prop.\nFACING: FRONT elevated isometric three-quarter facing LOWER-LEFT SW, chest ornament/beard visible, nose/eyes explicitly image-left, head torso and both boot toes lower-left. Not another right-facing SE. Whole head, shoulders, hips and feet agree. Rear views must be real back views, not mirrored front portraits. Single view only.\nINDIVIDUAL BEARING: mature rugged martial adult with a strong grounded balanced stance and alert intense level gaze. Naturally open shoulders, head over neck/spine, straight healthy upper back; subtle individual shoulder/hip asymmetry allowed. Feet both planted in moderate stance, softly natural knees, relaxed empty hands ready near sides. Keep natural long adult limbs and proportionate head/hands/boots, do not make short/chibi, giant boots/head, deep squat or collapsed rounded hunch. Strong alertness does not require stiff parade chest-arching, scowling caricature or elderly stoop. Preserve full curly hair/beard and brass/brown armor; not a generic uniform soldier. Specific hair/costume/proportions are retained project design.\nExactly ONE COMPLETE adult on genuine transparent RGBA square native<=1536, centered with generous80px+ clear alpha margins around curly hair/trailing cloth/hem/both boots. Head/hands/feet whole, no crop/mirror/local paint or costume changes. No floor/shadow/background/grid/text/labels/extra people/views/props/attack pose. Refined native painterly unarmed rescued-foot idle candidate.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/deng_fei_idle_single_sw_v4.json",
+      "request_sha256": "9b3a5890794dfd353a02247cf864a1a060d55659b0c40da9946a763fbb5181f8",
+      "references": [
+        "deng_fei_idle_v3"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "deng_fei_idle_single_ne_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-baf7b368-59e3-4fce-bee4-4a13cbe161c9",
+      "repository_path": "assets/characters/deng_fei_wounded_20261005/idle_single_ne_v4.png",
+      "sha256": "ed40ae3d0160d614373f74840c58181a8a1f22823915b9b357f56c7d8424c720",
+      "prompt": "Create exactly ONE whole full-body Deng Fei IDLE from corresponding NE reference-sheet view in IMAGE1. IMAGE1 locks his recognizable mature rugged tawny Chinese face, THICK CURLY BLACK HAIR tied high with RUST-BROWN cloth and trailing ends, FULL thick CURLY BLACK beard/moustache, intense natural reddish-brown eyes (NO glowing/fire eyes), brown ragged shoulder scarf/torn layered brown cloth, brown leather/lamellar armor with round BRASS chest ornament, rust-red tied waist sash, dark-brown trousers and dark boots with existing brass ornamental shin armor. Preserve the existing face/costume/material layers and refined painterly palette. No iron chain, weapon/sheath, rope, banner, bag or new prop.\nFACING: BACK elevated isometric three-quarter facing AWAY-UPPER-RIGHT NE, back armor/scarf/curly hair visible, tiny far-side beard profile only, no frontal chest ornament/both eyes, boot toes upper-right. Whole head, shoulders, hips and feet agree. Rear views must be real back views, not mirrored front portraits. Single view only.\nINDIVIDUAL BEARING: mature rugged martial adult with a strong grounded balanced stance and alert intense level gaze. Naturally open shoulders, head over neck/spine, straight healthy upper back; subtle individual shoulder/hip asymmetry allowed. Feet both planted in moderate stance, softly natural knees, relaxed empty hands ready near sides. Keep natural long adult limbs and proportionate head/hands/boots, do not make short/chibi, giant boots/head, deep squat or collapsed rounded hunch. Strong alertness does not require stiff parade chest-arching, scowling caricature or elderly stoop. Preserve full curly hair/beard and brass/brown armor; not a generic uniform soldier. Specific hair/costume/proportions are retained project design.\nExactly ONE COMPLETE adult on genuine transparent RGBA square native<=1536, centered with generous80px+ clear alpha margins around curly hair/trailing cloth/hem/both boots. Head/hands/feet whole, no crop/mirror/local paint or costume changes. No floor/shadow/background/grid/text/labels/extra people/views/props/attack pose. Refined native painterly unarmed rescued-foot idle candidate.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/deng_fei_idle_single_ne_v4.json",
+      "request_sha256": "06e58ed6dd1ec5940b02332385d3b37c283d612633913c68108ffe6879001952",
+      "references": [
+        "deng_fei_idle_v3"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "deng_fei_idle_single_nw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-6c8cc396-d445-423c-9a0d-c9c7311fdddd",
+      "repository_path": "assets/characters/deng_fei_wounded_20261005/idle_single_nw_v4.png",
+      "sha256": "9ecf08e3a71bdb2b046189b45a7705db900cc2f3cead2d8f6afed535574cc999",
+      "prompt": "Create exactly ONE whole full-body Deng Fei IDLE from corresponding NW reference-sheet view in IMAGE1. IMAGE1 locks his recognizable mature rugged tawny Chinese face, THICK CURLY BLACK HAIR tied high with RUST-BROWN cloth and trailing ends, FULL thick CURLY BLACK beard/moustache, intense natural reddish-brown eyes (NO glowing/fire eyes), brown ragged shoulder scarf/torn layered brown cloth, brown leather/lamellar armor with round BRASS chest ornament, rust-red tied waist sash, dark-brown trousers and dark boots with existing brass ornamental shin armor. Preserve the existing face/costume/material layers and refined painterly palette. No iron chain, weapon/sheath, rope, banner, bag or new prop.\nFACING: BACK elevated isometric three-quarter facing AWAY-UPPER-LEFT NW, back armor/scarf/curly hair visible, tiny far-side beard profile only, no frontal chest ornament/both eyes, boot toes upper-left. Whole head, shoulders, hips and feet agree. Rear views must be real back views, not mirrored front portraits. Single view only.\nINDIVIDUAL BEARING: mature rugged martial adult with a strong grounded balanced stance and alert intense level gaze. Naturally open shoulders, head over neck/spine, straight healthy upper back; subtle individual shoulder/hip asymmetry allowed. Feet both planted in moderate stance, softly natural knees, relaxed empty hands ready near sides. Keep natural long adult limbs and proportionate head/hands/boots, do not make short/chibi, giant boots/head, deep squat or collapsed rounded hunch. Strong alertness does not require stiff parade chest-arching, scowling caricature or elderly stoop. Preserve full curly hair/beard and brass/brown armor; not a generic uniform soldier. Specific hair/costume/proportions are retained project design.\nExactly ONE COMPLETE adult on genuine transparent RGBA square native<=1536, centered with generous80px+ clear alpha margins around curly hair/trailing cloth/hem/both boots. Head/hands/feet whole, no crop/mirror/local paint or costume changes. No floor/shadow/background/grid/text/labels/extra people/views/props/attack pose. Refined native painterly unarmed rescued-foot idle candidate.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/deng_fei_idle_single_nw_v4.json",
+      "request_sha256": "287642fcb4a348d843edd3e03ef4da24f1ad2a4d6697566f0a46a3a10ce91336",
+      "references": [
+        "deng_fei_idle_v3"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_walk_a_se_geometry_v4",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_a_se_geometry_v4.png",
+      "sha256": "7caff54e4b7dccd1eab462566ad37995f68b1a2cf09222815abd20036f38eda6",
+      "prompt": "New primitive-only SE contact A: red image-right flat support, blue image-left low lifted boot. No source bitmap read or modified. Robot colors/proportions are not artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/qin_ming_contact_geometry_v4.gd",
+          "sha256": "74730ccd656542728251f76c82a816c8386150555b38c39b58c7515b1800c392"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_qin_ming_contact_geometry_v4.py",
+          "sha256": "8542f8bf6fda71800821c87e90d6918f35bf27913ee2cfeacf2c6206e7a6c69c"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_a_se_geometry_v4.json",
+          "sha256": "1e4d7ee0690567125b1d99bdd1876e33571560a1307ec49ac6649312ecc6bb07"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "deng_fei_walk_a_se_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-b9ce4396-f4dd-4e9a-a13e-d9cc509de68a",
+      "repository_path": "assets/characters/deng_fei_wounded_20261005/walk_a_se_v4.png",
+      "sha256": "663ed9d77cd8480e3ed2adfb5907ac7346c9db5c795fc7e3725bad98e2fa18be",
+      "prompt": "POSE-GUIDED exactly ONE full-body Deng Fei WALK_A native sprite. IMAGE1 provides ONLY lower leg geometry/camera, RED IMAGE-RIGHT FLAT support and BLUE IMAGE-LEFT LOW swing. Do not copy robot torso/short box proportions/colors/green marker/labels. IMAGE2 provides exact Deng Fei identity/adult body/wardrobe. Exact mature rugged tawny Chinese Deng Fei face, thick curly black hair/high tied bundle and full thick curly black beard/moustache, rust-brown hair cloth and trailing ends, intense natural reddish-brown eyes without glow. Brown ragged shoulder scarf/layered torn brown cloth, brown leather/lamellar armor with round brass chest ornament, rust-red tied sash, dark brown trousers, dark boots/brass decorative shin armor. Match character reference's adult head/hands/boots and long normal limbs, all armor/cloth layers and refined painterly materials. Rugged alert martial adult, strong balanced stance, healthy straight upper back and aligned level head/gaze, naturally open shoulders, small individual hip/shoulder asymmetry. Never short/chibi/giant head/boots, collapsed hunch, deep squat, elderly slump, forced parade/chest arch. No chain/weapon/rope/bag/banner/props/new costume.\nFACING: FRONT elevated isometric three-quarter LOWER-RIGHT SE; chest brass ornament/full curly beard visible, head torso and boot toes lower-right. Head shoulders torso hips feet all agree; rear shows actual BACK, never front portrait or mirrored front.\nMANDATORY LEG POSE: SHORT CONTACT: RED IMAGE-RIGHT support boot heel AND toe fully FLAT on its ground under own hip, BLUE IMAGE-LEFT boot low raised in compact short stride with soft knee. Both legs connect continuously to own hips, no crossing/disconnected shins. Support whole underside must not face camera; supporting heel remains down. Opposite foot visibly low raised, not both-planted idle. A and B MUST alternate visible support. No huge forward sole, high knee/kick, run or lunge.\nRelaxed EMPTY hands near sides with small natural opposite arm swing, stable level head/neck and natural shoulders. Rust sash, curly hair, brass rivets/ornaments, ragged scarf/hem follow minimally and stay consistent. Keep both boots readable; cloth must not hide swing foot. Personality stays alert rugged, no aggressive attack pose.\nExactly ONE COMPLETE adult on genuine transparent RGBA native square<=1536, centered with generous80px+ clear alpha margins including hair/trailing cloth/hem/boots. Head/hands/feet whole, no crop/mirror/background/floor/shadow/grid/text/guide colors/extra people/views/changed clothes. New distinct WALK_A legs with stated support side.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/deng_fei_walk_a_se_v4.json",
+      "request_sha256": "ef13316f1a99518e6847964bedb770a5373c1efc55086f4298c14b77f9b78c9a",
+      "references": [
+        "qin_ming_walk_a_se_geometry_v4",
+        "deng_fei_idle_single_se_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_walk_a_sw_geometry_v4",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_a_sw_geometry_v4.png",
+      "sha256": "1654f14c0c874473b7f90091657151273986c204cb4b679a69b356d7093ec338",
+      "prompt": "New primitive-only sw walk_a contact: red flat support, blue low raised boot; screen support side verified. No character bitmap read/edit; robot anatomy/colors not artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/qin_ming_contact_geometry_v4.gd",
+          "sha256": "74730ccd656542728251f76c82a816c8386150555b38c39b58c7515b1800c392"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_qin_ming_contact_geometry_v4.py",
+          "sha256": "8542f8bf6fda71800821c87e90d6918f35bf27913ee2cfeacf2c6206e7a6c69c"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_a_sw_geometry_v4.json",
+          "sha256": "9791172c166e6f1f1d2152eaa41998aa1ea887db8bd064aa7d216e6b1ef7c969"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "deng_fei_walk_a_sw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-7784a421-71a6-47e2-a1c9-29c6a86fe811",
+      "repository_path": "assets/characters/deng_fei_wounded_20261005/walk_a_sw_v4.png",
+      "sha256": "39f79de15882275c511d4b8254de304e24de9da3c7d54e064e9f51ec0d612bbf",
+      "prompt": "POSE-GUIDED exactly ONE full-body Deng Fei WALK_A native sprite. IMAGE1 provides ONLY lower leg geometry/camera, RED IMAGE-LEFT FLAT support and BLUE IMAGE-RIGHT LOW swing. Do not copy robot torso/short box proportions/colors/green marker/labels. IMAGE2 provides exact Deng Fei identity/adult body/wardrobe. Exact mature rugged tawny Chinese Deng Fei face, thick curly black hair/high tied bundle and full thick curly black beard/moustache, rust-brown hair cloth and trailing ends, intense natural reddish-brown eyes without glow. Brown ragged shoulder scarf/layered torn brown cloth, brown leather/lamellar armor with round brass chest ornament, rust-red tied sash, dark brown trousers, dark boots/brass decorative shin armor. Match character reference's adult head/hands/boots and long normal limbs, all armor/cloth layers and refined painterly materials. Rugged alert martial adult, strong balanced stance, healthy straight upper back and aligned level head/gaze, naturally open shoulders, small individual hip/shoulder asymmetry. Never short/chibi/giant head/boots, collapsed hunch, deep squat, elderly slump, forced parade/chest arch. No chain/weapon/rope/bag/banner/props/new costume.\nFACING: FRONT elevated isometric three-quarter LOWER-LEFT SW; chest brass ornament/full curly beard visible, head torso and boot toes lower-left. Head shoulders torso hips feet all agree; rear shows actual BACK, never front portrait or mirrored front.\nMANDATORY LEG POSE: SHORT CONTACT: RED IMAGE-LEFT support boot heel AND toe fully FLAT on its ground under own hip, BLUE IMAGE-RIGHT boot low raised in compact short stride with soft knee. Both legs connect continuously to own hips, no crossing/disconnected shins. Support whole underside must not face camera; supporting heel remains down. Opposite foot visibly low raised, not both-planted idle. A and B MUST alternate visible support. No huge forward sole, high knee/kick, run or lunge.\nRelaxed EMPTY hands near sides with small natural opposite arm swing, stable level head/neck and natural shoulders. Rust sash, curly hair, brass rivets/ornaments, ragged scarf/hem follow minimally and stay consistent. Keep both boots readable; cloth must not hide swing foot. Personality stays alert rugged, no aggressive attack pose.\nExactly ONE COMPLETE adult on genuine transparent RGBA native square<=1536, centered with generous80px+ clear alpha margins including hair/trailing cloth/hem/boots. Head/hands/feet whole, no crop/mirror/background/floor/shadow/grid/text/guide colors/extra people/views/changed clothes. New distinct WALK_A legs with stated support side.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/deng_fei_walk_a_sw_v4.json",
+      "request_sha256": "577225cff47df3679db35679b08bfd7498cc60040e4f68a075a1a9695bde95e4",
+      "references": [
+        "qin_ming_walk_a_sw_geometry_v4",
+        "deng_fei_idle_single_sw_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_walk_a_ne_geometry_v4",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_a_ne_geometry_v4.png",
+      "sha256": "7d70366456faac65df7c9359e524bca6b38f1fc81c0250b7c7681740be5a9af4",
+      "prompt": "New primitive-only ne walk_a contact: red flat support, blue low raised boot; screen support side verified. No character bitmap read/edit; robot anatomy/colors not artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/qin_ming_contact_geometry_v4.gd",
+          "sha256": "74730ccd656542728251f76c82a816c8386150555b38c39b58c7515b1800c392"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_qin_ming_contact_geometry_v4.py",
+          "sha256": "8542f8bf6fda71800821c87e90d6918f35bf27913ee2cfeacf2c6206e7a6c69c"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_a_ne_geometry_v4.json",
+          "sha256": "e7dbf35e143a7956a106306944138fa6c335af371eeae5a13c002bc0d5917a0e"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "deng_fei_walk_a_ne_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-3de62925-568f-400e-b575-532f10725187",
+      "repository_path": "assets/characters/deng_fei_wounded_20261005/walk_a_ne_v4.png",
+      "sha256": "ba5c7b8bed5b5c6d19c036af4e04ca8d77293b79a727f8307b5fb7147b07ad48",
+      "prompt": "POSE-GUIDED exactly ONE full-body Deng Fei WALK_A native sprite. IMAGE1 provides ONLY lower leg geometry/camera, RED IMAGE-LEFT FLAT support and BLUE IMAGE-RIGHT LOW swing. Do not copy robot torso/short box proportions/colors/green marker/labels. IMAGE2 provides exact Deng Fei identity/adult body/wardrobe. Exact mature rugged tawny Chinese Deng Fei face, thick curly black hair/high tied bundle and full thick curly black beard/moustache, rust-brown hair cloth and trailing ends, intense natural reddish-brown eyes without glow. Brown ragged shoulder scarf/layered torn brown cloth, brown leather/lamellar armor with round brass chest ornament, rust-red tied sash, dark brown trousers, dark boots/brass decorative shin armor. Match character reference's adult head/hands/boots and long normal limbs, all armor/cloth layers and refined painterly materials. Rugged alert martial adult, strong balanced stance, healthy straight upper back and aligned level head/gaze, naturally open shoulders, small individual hip/shoulder asymmetry. Never short/chibi/giant head/boots, collapsed hunch, deep squat, elderly slump, forced parade/chest arch. No chain/weapon/rope/bag/banner/props/new costume.\nFACING: BACK elevated isometric three-quarter AWAY-UPPER-RIGHT NE; back armor/scarf/curly hair visible, only tiny far-side beard profile, no frontal chest ornament/both eyes, boot toes upper-right. Head shoulders torso hips feet all agree; rear shows actual BACK, never front portrait or mirrored front.\nMANDATORY LEG POSE: SHORT CONTACT: RED IMAGE-LEFT support boot heel AND toe fully FLAT on its ground under own hip, BLUE IMAGE-RIGHT boot low raised in compact short stride with soft knee. Both legs connect continuously to own hips, no crossing/disconnected shins. Support whole underside must not face camera; supporting heel remains down. Opposite foot visibly low raised, not both-planted idle. A and B MUST alternate visible support. No huge forward sole, high knee/kick, run or lunge.\nRelaxed EMPTY hands near sides with small natural opposite arm swing, stable level head/neck and natural shoulders. Rust sash, curly hair, brass rivets/ornaments, ragged scarf/hem follow minimally and stay consistent. Keep both boots readable; cloth must not hide swing foot. Personality stays alert rugged, no aggressive attack pose.\nExactly ONE COMPLETE adult on genuine transparent RGBA native square<=1536, centered with generous80px+ clear alpha margins including hair/trailing cloth/hem/boots. Head/hands/feet whole, no crop/mirror/background/floor/shadow/grid/text/guide colors/extra people/views/changed clothes. New distinct WALK_A legs with stated support side.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/deng_fei_walk_a_ne_v4.json",
+      "request_sha256": "6b3a873c27f26339e02f693b1cdc691bcffbab0a7e476d955b4bae0b6334b493",
+      "references": [
+        "qin_ming_walk_a_ne_geometry_v4",
+        "deng_fei_idle_single_ne_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_walk_a_nw_geometry_v4",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_a_nw_geometry_v4.png",
+      "sha256": "7462d694bbc602d0d16fe0ad39029a479c7d022dfb1080f3cb1d16fd21920d61",
+      "prompt": "New primitive-only nw walk_a contact: red flat support, blue low raised boot; screen support side verified. No character bitmap read/edit; robot anatomy/colors not artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/qin_ming_contact_geometry_v4.gd",
+          "sha256": "74730ccd656542728251f76c82a816c8386150555b38c39b58c7515b1800c392"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_qin_ming_contact_geometry_v4.py",
+          "sha256": "8542f8bf6fda71800821c87e90d6918f35bf27913ee2cfeacf2c6206e7a6c69c"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_a_nw_geometry_v4.json",
+          "sha256": "d5a39458f5641be2df1882077e66935852f1735b99ae8317589f831790811fac"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "deng_fei_walk_a_nw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-a96cb4be-992a-4658-b8cc-f9e65fa2c3db",
+      "repository_path": "assets/characters/deng_fei_wounded_20261005/walk_a_nw_v4.png",
+      "sha256": "3934e335c864eabf0560e537cef23a1eddfe05434aed95eaac96a1cd59c1eb2c",
+      "prompt": "POSE-GUIDED exactly ONE full-body Deng Fei WALK_A native sprite. IMAGE1 provides ONLY lower leg geometry/camera, RED IMAGE-LEFT FLAT support and BLUE IMAGE-RIGHT LOW swing. Do not copy robot torso/short box proportions/colors/green marker/labels. IMAGE2 provides exact Deng Fei identity/adult body/wardrobe. Exact mature rugged tawny Chinese Deng Fei face, thick curly black hair/high tied bundle and full thick curly black beard/moustache, rust-brown hair cloth and trailing ends, intense natural reddish-brown eyes without glow. Brown ragged shoulder scarf/layered torn brown cloth, brown leather/lamellar armor with round brass chest ornament, rust-red tied sash, dark brown trousers, dark boots/brass decorative shin armor. Match character reference's adult head/hands/boots and long normal limbs, all armor/cloth layers and refined painterly materials. Rugged alert martial adult, strong balanced stance, healthy straight upper back and aligned level head/gaze, naturally open shoulders, small individual hip/shoulder asymmetry. Never short/chibi/giant head/boots, collapsed hunch, deep squat, elderly slump, forced parade/chest arch. No chain/weapon/rope/bag/banner/props/new costume.\nFACING: BACK elevated isometric three-quarter AWAY-UPPER-LEFT NW; back armor/scarf/curly hair visible, only tiny far-side beard profile, no frontal chest ornament/both eyes, boot toes upper-left. Head shoulders torso hips feet all agree; rear shows actual BACK, never front portrait or mirrored front.\nMANDATORY LEG POSE: SHORT CONTACT: RED IMAGE-LEFT support boot heel AND toe fully FLAT on its ground under own hip, BLUE IMAGE-RIGHT boot low raised in compact short stride with soft knee. Both legs connect continuously to own hips, no crossing/disconnected shins. Support whole underside must not face camera; supporting heel remains down. Opposite foot visibly low raised, not both-planted idle. A and B MUST alternate visible support. No huge forward sole, high knee/kick, run or lunge.\nRelaxed EMPTY hands near sides with small natural opposite arm swing, stable level head/neck and natural shoulders. Rust sash, curly hair, brass rivets/ornaments, ragged scarf/hem follow minimally and stay consistent. Keep both boots readable; cloth must not hide swing foot. Personality stays alert rugged, no aggressive attack pose.\nExactly ONE COMPLETE adult on genuine transparent RGBA native square<=1536, centered with generous80px+ clear alpha margins including hair/trailing cloth/hem/boots. Head/hands/feet whole, no crop/mirror/background/floor/shadow/grid/text/guide colors/extra people/views/changed clothes. New distinct WALK_A legs with stated support side.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/deng_fei_walk_a_nw_v4.json",
+      "request_sha256": "8e8db97309471e8d23af678edfb2b6caf6e33040cca212b8f09f404fb6cd7967",
+      "references": [
+        "qin_ming_walk_a_nw_geometry_v4",
+        "deng_fei_idle_single_nw_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_passing_a_se_geometry_v7",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/wang_ying_passing_a_se_geometry_v7.png",
+      "sha256": "6b6257070ade9b7dfba378df11f28d5e14e94db09c5cce613ec18a08f0c970a0",
+      "prompt": "New SE passing_a short broad adult geometry: red flat support, blue low passing boot under pelvis. No source bitmap read/edit or production artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/wang_ying_passing_geometry_v7.gd",
+          "sha256": "2070bcd5ca8b31bd0a0b901a1db266354d07922ac61521c83991a4da9086384f"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_wang_ying_passing_geometry_v7.py",
+          "sha256": "35df66125d5caf116d296a2d1f68ced53e9f81494d50c472837c11e672734c9e"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/geometry_passing_a_se_v7.json",
+          "sha256": "db1d1b7850982943b69a343671abb1361d00c2ff364ef3d96ceee0ee9780d6af"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "deng_fei_passing_a_se_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-a2822448-5e06-4c3a-9a35-3102c3eb9bea",
+      "repository_path": "assets/characters/deng_fei_wounded_20261005/passing_a_se_v4.png",
+      "sha256": "32f09a6c814c4faa9cd68a56c879d0414d9766e8b993b6f2e3d884b415d151a6",
+      "prompt": "POSE-GUIDED exactly ONE full-body Deng Fei PASSING_A native sprite. IMAGE1 provides ONLY lower leg geometry/camera, RED IMAGE-RIGHT FLAT support and BLUE IMAGE-LEFT LOW swing. Do not copy robot torso/short box proportions/colors/green marker/labels. IMAGE2 provides exact Deng Fei identity/adult body/wardrobe. Exact mature rugged tawny Chinese Deng Fei face, thick curly black hair/high tied bundle and full thick curly black beard/moustache, rust-brown hair cloth and trailing ends, intense natural reddish-brown eyes without glow. Brown ragged shoulder scarf/layered torn brown cloth, brown leather/lamellar armor with round brass chest ornament, rust-red tied sash, dark brown trousers, dark boots/brass decorative shin armor. Match character reference's adult head/hands/boots and long normal limbs, all armor/cloth layers and refined painterly materials. Rugged alert martial adult, strong balanced stance, healthy straight upper back and aligned level head/gaze, naturally open shoulders, small individual hip/shoulder asymmetry. Never short/chibi/giant head/boots, collapsed hunch, deep squat, elderly slump, forced parade/chest arch. No chain/weapon/rope/bag/banner/props/new costume.\nFACING: FRONT elevated isometric three-quarter LOWER-RIGHT SE; chest brass ornament/full curly beard visible, head torso and boot toes lower-right. Head shoulders torso hips feet all agree; rear shows actual BACK, never front portrait or mirrored front.\nMANDATORY LEG POSE: TRUE DISTINCT NEAR-FOOT PASSING: RED IMAGE-RIGHT support boot heel AND toe fully FLAT under hip bearing weight, BLUE IMAGE-LEFT boot LOW raised about one boot-thickness and passing UNDER pelvis closely BESIDE support boot with mild knee bend. Both boots clear/distinct and connected to own hip. Small gap, not wide contact stride. A/B MUST visibly alternate support. No both-planted idle, invisible raised boot, huge sole/high knee/kick. Preserve image-RIGHT flat/image-LEFT raised assignment, do not repeat A as B.\nRelaxed EMPTY hands near sides with small natural opposite arm swing, stable level head/neck and natural shoulders. Rust sash, curly hair, brass rivets/ornaments, ragged scarf/hem follow minimally and stay consistent. Keep both boots readable; cloth must not hide swing foot. Personality stays alert rugged, no aggressive attack pose.\nExactly ONE COMPLETE adult on genuine transparent RGBA native square<=1536, centered with generous80px+ clear alpha margins including hair/trailing cloth/hem/boots. Head/hands/feet whole, no crop/mirror/background/floor/shadow/grid/text/guide colors/extra people/views/changed clothes. New distinct PASSING_A legs with stated support side.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/deng_fei_passing_a_se_v4.json",
+      "request_sha256": "5187fc8946c96c01665c6322848dce8059d8bfe2c62b34e01c80b573ce9a9a99",
+      "references": [
+        "wang_ying_passing_a_se_geometry_v7",
+        "deng_fei_idle_single_se_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_passing_a_sw_geometry_v7",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/wang_ying_passing_a_sw_geometry_v7.png",
+      "sha256": "fbe6f2236268b92446892e8c3910c085dfd72aac617e639a14d75ab188654bf3",
+      "prompt": "New SW passing_a short broad adult geometry: red flat support, blue low passing boot under pelvis. No source bitmap read/edit or production artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/wang_ying_passing_geometry_v7.gd",
+          "sha256": "2070bcd5ca8b31bd0a0b901a1db266354d07922ac61521c83991a4da9086384f"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_wang_ying_passing_geometry_v7.py",
+          "sha256": "35df66125d5caf116d296a2d1f68ced53e9f81494d50c472837c11e672734c9e"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/geometry_passing_a_sw_v7.json",
+          "sha256": "c8328a120a1055cc3a199670f96d5e115de0d9799549d6425da6a52dcf62cec6"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "deng_fei_passing_a_sw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-4bc11d21-c781-4bd7-b3b5-9bb645b2cfdb",
+      "repository_path": "assets/characters/deng_fei_wounded_20261005/passing_a_sw_v4.png",
+      "sha256": "d8a31a4821018efbbb232a9480d444b80050e74b1141554df704208d01a8cba8",
+      "prompt": "POSE-GUIDED exactly ONE full-body Deng Fei PASSING_A native sprite. IMAGE1 provides ONLY lower leg geometry/camera, RED IMAGE-LEFT FLAT support and BLUE IMAGE-RIGHT LOW swing. Do not copy robot torso/short box proportions/colors/green marker/labels. IMAGE2 provides exact Deng Fei identity/adult body/wardrobe. Exact mature rugged tawny Chinese Deng Fei face, thick curly black hair/high tied bundle and full thick curly black beard/moustache, rust-brown hair cloth and trailing ends, intense natural reddish-brown eyes without glow. Brown ragged shoulder scarf/layered torn brown cloth, brown leather/lamellar armor with round brass chest ornament, rust-red tied sash, dark brown trousers, dark boots/brass decorative shin armor. Match character reference's adult head/hands/boots and long normal limbs, all armor/cloth layers and refined painterly materials. Rugged alert martial adult, strong balanced stance, healthy straight upper back and aligned level head/gaze, naturally open shoulders, small individual hip/shoulder asymmetry. Never short/chibi/giant head/boots, collapsed hunch, deep squat, elderly slump, forced parade/chest arch. No chain/weapon/rope/bag/banner/props/new costume.\nFACING: FRONT elevated isometric three-quarter LOWER-LEFT SW; chest brass ornament/full curly beard visible, head torso and boot toes lower-left. Head shoulders torso hips feet all agree; rear shows actual BACK, never front portrait or mirrored front.\nMANDATORY LEG POSE: TRUE DISTINCT NEAR-FOOT PASSING: RED IMAGE-LEFT support boot heel AND toe fully FLAT under hip bearing weight, BLUE IMAGE-RIGHT boot LOW raised about one boot-thickness and passing UNDER pelvis closely BESIDE support boot with mild knee bend. Both boots clear/distinct and connected to own hip. Small gap, not wide contact stride. A/B MUST visibly alternate support. No both-planted idle, invisible raised boot, huge sole/high knee/kick. Preserve image-LEFT flat/image-RIGHT raised assignment, do not repeat A as B.\nRelaxed EMPTY hands near sides with small natural opposite arm swing, stable level head/neck and natural shoulders. Rust sash, curly hair, brass rivets/ornaments, ragged scarf/hem follow minimally and stay consistent. Keep both boots readable; cloth must not hide swing foot. Personality stays alert rugged, no aggressive attack pose.\nExactly ONE COMPLETE adult on genuine transparent RGBA native square<=1536, centered with generous80px+ clear alpha margins including hair/trailing cloth/hem/boots. Head/hands/feet whole, no crop/mirror/background/floor/shadow/grid/text/guide colors/extra people/views/changed clothes. New distinct PASSING_A legs with stated support side.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/deng_fei_passing_a_sw_v4.json",
+      "request_sha256": "3687ca9008752925475357007b10afc744f996b8ba6faec65e4bf9f7cf5bc675",
+      "references": [
+        "wang_ying_passing_a_sw_geometry_v7",
+        "deng_fei_idle_single_sw_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_passing_a_ne_geometry_v7",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/wang_ying_passing_a_ne_geometry_v7.png",
+      "sha256": "3dbfc5d48126454dd8c5590ac85cfd95bfd78d702f90c98cd88898de29c32288",
+      "prompt": "New NE passing_a short broad adult geometry: red flat support, blue low passing boot under pelvis. No source bitmap read/edit or production artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/wang_ying_passing_geometry_v7.gd",
+          "sha256": "2070bcd5ca8b31bd0a0b901a1db266354d07922ac61521c83991a4da9086384f"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_wang_ying_passing_geometry_v7.py",
+          "sha256": "35df66125d5caf116d296a2d1f68ced53e9f81494d50c472837c11e672734c9e"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/geometry_passing_a_ne_v7.json",
+          "sha256": "5d328f6b1c18ebc66ae6cc5eb83406c457f679df1d712bf88e85ec02a04e0132"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "deng_fei_passing_a_ne_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-fa966413-a39b-4d39-aca5-28ec613addde",
+      "repository_path": "assets/characters/deng_fei_wounded_20261005/passing_a_ne_v4.png",
+      "sha256": "ffccaf6f9a3d0c0ed4574b1cfb239ec621c8fc467567c501e3ac5707732e0d6e",
+      "prompt": "POSE-GUIDED exactly ONE full-body Deng Fei PASSING_A native sprite. IMAGE1 provides ONLY lower leg geometry/camera, RED IMAGE-LEFT FLAT support and BLUE IMAGE-RIGHT LOW swing. Do not copy robot torso/short box proportions/colors/green marker/labels. IMAGE2 provides exact Deng Fei identity/adult body/wardrobe. Exact mature rugged tawny Chinese Deng Fei face, thick curly black hair/high tied bundle and full thick curly black beard/moustache, rust-brown hair cloth and trailing ends, intense natural reddish-brown eyes without glow. Brown ragged shoulder scarf/layered torn brown cloth, brown leather/lamellar armor with round brass chest ornament, rust-red tied sash, dark brown trousers, dark boots/brass decorative shin armor. Match character reference's adult head/hands/boots and long normal limbs, all armor/cloth layers and refined painterly materials. Rugged alert martial adult, strong balanced stance, healthy straight upper back and aligned level head/gaze, naturally open shoulders, small individual hip/shoulder asymmetry. Never short/chibi/giant head/boots, collapsed hunch, deep squat, elderly slump, forced parade/chest arch. No chain/weapon/rope/bag/banner/props/new costume.\nFACING: BACK elevated isometric three-quarter AWAY-UPPER-RIGHT NE; back armor/scarf/curly hair visible, only tiny far-side beard profile, no frontal chest ornament/both eyes, boot toes upper-right. Head shoulders torso hips feet all agree; rear shows actual BACK, never front portrait or mirrored front.\nMANDATORY LEG POSE: TRUE DISTINCT NEAR-FOOT PASSING: RED IMAGE-LEFT support boot heel AND toe fully FLAT under hip bearing weight, BLUE IMAGE-RIGHT boot LOW raised about one boot-thickness and passing UNDER pelvis closely BESIDE support boot with mild knee bend. Both boots clear/distinct and connected to own hip. Small gap, not wide contact stride. A/B MUST visibly alternate support. No both-planted idle, invisible raised boot, huge sole/high knee/kick. Preserve image-LEFT flat/image-RIGHT raised assignment, do not repeat A as B.\nRelaxed EMPTY hands near sides with small natural opposite arm swing, stable level head/neck and natural shoulders. Rust sash, curly hair, brass rivets/ornaments, ragged scarf/hem follow minimally and stay consistent. Keep both boots readable; cloth must not hide swing foot. Personality stays alert rugged, no aggressive attack pose.\nExactly ONE COMPLETE adult on genuine transparent RGBA native square<=1536, centered with generous80px+ clear alpha margins including hair/trailing cloth/hem/boots. Head/hands/feet whole, no crop/mirror/background/floor/shadow/grid/text/guide colors/extra people/views/changed clothes. New distinct PASSING_A legs with stated support side.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/deng_fei_passing_a_ne_v4.json",
+      "request_sha256": "3d8aeee1b1729090be83bad658ecb9384d87950e0f0879676a4c0365c0405b3a",
+      "references": [
+        "wang_ying_passing_a_ne_geometry_v7",
+        "deng_fei_idle_single_ne_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_passing_a_nw_geometry_v7",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/wang_ying_passing_a_nw_geometry_v7.png",
+      "sha256": "21fce21da6bd7e33b61230c77d1532e9aa99dda4506c72a4a307f71d4aff9dfb",
+      "prompt": "New NW passing_a short broad adult geometry: red flat support, blue low passing boot under pelvis. No source bitmap read/edit or production artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/wang_ying_passing_geometry_v7.gd",
+          "sha256": "2070bcd5ca8b31bd0a0b901a1db266354d07922ac61521c83991a4da9086384f"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_wang_ying_passing_geometry_v7.py",
+          "sha256": "35df66125d5caf116d296a2d1f68ced53e9f81494d50c472837c11e672734c9e"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/geometry_passing_a_nw_v7.json",
+          "sha256": "69d66e7f9621d021d84ea7f14c346b91094b40c5cf0dbcc3abc0cd5a55e92aa5"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "deng_fei_passing_a_nw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-11d23782-309d-4c7c-a3ec-e3722630a8d8",
+      "repository_path": "assets/characters/deng_fei_wounded_20261005/passing_a_nw_v4.png",
+      "sha256": "1cedeefb245a67d464a08be2b33d710793dc04ff3130b24992649bfb5a5434f5",
+      "prompt": "POSE-GUIDED exactly ONE full-body Deng Fei PASSING_A native sprite. IMAGE1 provides ONLY lower leg geometry/camera, RED IMAGE-LEFT FLAT support and BLUE IMAGE-RIGHT LOW swing. Do not copy robot torso/short box proportions/colors/green marker/labels. IMAGE2 provides exact Deng Fei identity/adult body/wardrobe. Exact mature rugged tawny Chinese Deng Fei face, thick curly black hair/high tied bundle and full thick curly black beard/moustache, rust-brown hair cloth and trailing ends, intense natural reddish-brown eyes without glow. Brown ragged shoulder scarf/layered torn brown cloth, brown leather/lamellar armor with round brass chest ornament, rust-red tied sash, dark brown trousers, dark boots/brass decorative shin armor. Match character reference's adult head/hands/boots and long normal limbs, all armor/cloth layers and refined painterly materials. Rugged alert martial adult, strong balanced stance, healthy straight upper back and aligned level head/gaze, naturally open shoulders, small individual hip/shoulder asymmetry. Never short/chibi/giant head/boots, collapsed hunch, deep squat, elderly slump, forced parade/chest arch. No chain/weapon/rope/bag/banner/props/new costume.\nFACING: BACK elevated isometric three-quarter AWAY-UPPER-LEFT NW; back armor/scarf/curly hair visible, only tiny far-side beard profile, no frontal chest ornament/both eyes, boot toes upper-left. Head shoulders torso hips feet all agree; rear shows actual BACK, never front portrait or mirrored front.\nMANDATORY LEG POSE: TRUE DISTINCT NEAR-FOOT PASSING: RED IMAGE-LEFT support boot heel AND toe fully FLAT under hip bearing weight, BLUE IMAGE-RIGHT boot LOW raised about one boot-thickness and passing UNDER pelvis closely BESIDE support boot with mild knee bend. Both boots clear/distinct and connected to own hip. Small gap, not wide contact stride. A/B MUST visibly alternate support. No both-planted idle, invisible raised boot, huge sole/high knee/kick. Preserve image-LEFT flat/image-RIGHT raised assignment, do not repeat A as B.\nRelaxed EMPTY hands near sides with small natural opposite arm swing, stable level head/neck and natural shoulders. Rust sash, curly hair, brass rivets/ornaments, ragged scarf/hem follow minimally and stay consistent. Keep both boots readable; cloth must not hide swing foot. Personality stays alert rugged, no aggressive attack pose.\nExactly ONE COMPLETE adult on genuine transparent RGBA native square<=1536, centered with generous80px+ clear alpha margins including hair/trailing cloth/hem/boots. Head/hands/feet whole, no crop/mirror/background/floor/shadow/grid/text/guide colors/extra people/views/changed clothes. New distinct PASSING_A legs with stated support side.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/deng_fei_passing_a_nw_v4.json",
+      "request_sha256": "2f7feffbbc0086bade5d6f1fcfe0f5e0b768dd3d7c6cb619ca8dc24a78b58cc8",
+      "references": [
+        "wang_ying_passing_a_nw_geometry_v7",
+        "deng_fei_idle_single_nw_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_walk_b_se_geometry_v4",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_b_se_geometry_v4.png",
+      "sha256": "5dbf43d26104d74104cc5c3d05f85dc4d9c6a7d8acd3ce9873ba19598a5939a2",
+      "prompt": "New primitive-only se walk_b contact: red flat support, blue low raised boot; screen support side verified. No character bitmap read/edit; robot anatomy/colors not artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/qin_ming_contact_geometry_v4.gd",
+          "sha256": "74730ccd656542728251f76c82a816c8386150555b38c39b58c7515b1800c392"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_qin_ming_contact_geometry_v4.py",
+          "sha256": "8542f8bf6fda71800821c87e90d6918f35bf27913ee2cfeacf2c6206e7a6c69c"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_b_se_geometry_v4.json",
+          "sha256": "62bb6799fa87f2ccb00697cfb91036a819daac8093ce7544ef1dbc7a933a8b1a"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "deng_fei_walk_b_se_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-478a4144-e66c-4d34-bf0d-8161c3151584",
+      "repository_path": "assets/characters/deng_fei_wounded_20261005/walk_b_se_v4.png",
+      "sha256": "02ba0ba48b81370709bafffa1031315957ecb009f20d5aeeb6d5b3ff663c8c25",
+      "prompt": "POSE-GUIDED exactly ONE full-body Deng Fei WALK_B native sprite. IMAGE1 provides ONLY lower leg geometry/camera, RED IMAGE-LEFT FLAT support and BLUE IMAGE-RIGHT LOW swing. Do not copy robot torso/short box proportions/colors/green marker/labels. IMAGE2 provides exact Deng Fei identity/adult body/wardrobe. Exact mature rugged tawny Chinese Deng Fei face, thick curly black hair/high tied bundle and full thick curly black beard/moustache, rust-brown hair cloth and trailing ends, intense natural reddish-brown eyes without glow. Brown ragged shoulder scarf/layered torn brown cloth, brown leather/lamellar armor with round brass chest ornament, rust-red tied sash, dark brown trousers, dark boots/brass decorative shin armor. Match character reference's adult head/hands/boots and long normal limbs, all armor/cloth layers and refined painterly materials. Rugged alert martial adult, strong balanced stance, healthy straight upper back and aligned level head/gaze, naturally open shoulders, small individual hip/shoulder asymmetry. Never short/chibi/giant head/boots, collapsed hunch, deep squat, elderly slump, forced parade/chest arch. No chain/weapon/rope/bag/banner/props/new costume.\nFACING: FRONT elevated isometric three-quarter LOWER-RIGHT SE; chest brass ornament/full curly beard visible, head torso and boot toes lower-right. Head shoulders torso hips feet all agree; rear shows actual BACK, never front portrait or mirrored front.\nMANDATORY LEG POSE: SHORT CONTACT: RED IMAGE-LEFT support boot heel AND toe fully FLAT on its ground under own hip, BLUE IMAGE-RIGHT boot low raised in compact short stride with soft knee. Both legs connect continuously to own hips, no crossing/disconnected shins. Support whole underside must not face camera; supporting heel remains down. Opposite foot visibly low raised, not both-planted idle. A and B MUST alternate visible support. No huge forward sole, high knee/kick, run or lunge.\nRelaxed EMPTY hands near sides with small natural opposite arm swing, stable level head/neck and natural shoulders. Rust sash, curly hair, brass rivets/ornaments, ragged scarf/hem follow minimally and stay consistent. Keep both boots readable; cloth must not hide swing foot. Personality stays alert rugged, no aggressive attack pose.\nExactly ONE COMPLETE adult on genuine transparent RGBA native square<=1536, centered with generous80px+ clear alpha margins including hair/trailing cloth/hem/boots. Head/hands/feet whole, no crop/mirror/background/floor/shadow/grid/text/guide colors/extra people/views/changed clothes. New distinct WALK_B legs with stated support side.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/deng_fei_walk_b_se_v4.json",
+      "request_sha256": "05e392b4a1c20db24944df23ded7cee0860d39aae722eba1dcd4bbf9feea438b",
+      "references": [
+        "qin_ming_walk_b_se_geometry_v4",
+        "deng_fei_idle_single_se_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_walk_b_sw_geometry_v4",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_b_sw_geometry_v4.png",
+      "sha256": "42b8d886a3324b278769ba75eed40461629067b38a50fc7cf6f5cbb3151ab00e",
+      "prompt": "New primitive-only sw walk_b contact: red flat support, blue low raised boot; screen support side verified. No character bitmap read/edit; robot anatomy/colors not artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/qin_ming_contact_geometry_v4.gd",
+          "sha256": "74730ccd656542728251f76c82a816c8386150555b38c39b58c7515b1800c392"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_qin_ming_contact_geometry_v4.py",
+          "sha256": "8542f8bf6fda71800821c87e90d6918f35bf27913ee2cfeacf2c6206e7a6c69c"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_b_sw_geometry_v4.json",
+          "sha256": "b17ff2f34a05c025109b07d9c165b6dc2e5d0731ce7f853c988c73ec3a0527f8"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "deng_fei_walk_b_sw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-490ec512-acbe-40e6-8092-ca7f2d83741e",
+      "repository_path": "assets/characters/deng_fei_wounded_20261005/walk_b_sw_v4.png",
+      "sha256": "d2db6320b57df3586dd875890c04984f5925ea9fd18051c8fe9f049f422a9695",
+      "prompt": "POSE-GUIDED exactly ONE full-body Deng Fei WALK_B native sprite. IMAGE1 provides ONLY lower leg geometry/camera, RED IMAGE-RIGHT FLAT support and BLUE IMAGE-LEFT LOW swing. Do not copy robot torso/short box proportions/colors/green marker/labels. IMAGE2 provides exact Deng Fei identity/adult body/wardrobe. Exact mature rugged tawny Chinese Deng Fei face, thick curly black hair/high tied bundle and full thick curly black beard/moustache, rust-brown hair cloth and trailing ends, intense natural reddish-brown eyes without glow. Brown ragged shoulder scarf/layered torn brown cloth, brown leather/lamellar armor with round brass chest ornament, rust-red tied sash, dark brown trousers, dark boots/brass decorative shin armor. Match character reference's adult head/hands/boots and long normal limbs, all armor/cloth layers and refined painterly materials. Rugged alert martial adult, strong balanced stance, healthy straight upper back and aligned level head/gaze, naturally open shoulders, small individual hip/shoulder asymmetry. Never short/chibi/giant head/boots, collapsed hunch, deep squat, elderly slump, forced parade/chest arch. No chain/weapon/rope/bag/banner/props/new costume.\nFACING: FRONT elevated isometric three-quarter LOWER-LEFT SW; chest brass ornament/full curly beard visible, head torso and boot toes lower-left. Head shoulders torso hips feet all agree; rear shows actual BACK, never front portrait or mirrored front.\nMANDATORY LEG POSE: SHORT CONTACT: RED IMAGE-RIGHT support boot heel AND toe fully FLAT on its ground under own hip, BLUE IMAGE-LEFT boot low raised in compact short stride with soft knee. Both legs connect continuously to own hips, no crossing/disconnected shins. Support whole underside must not face camera; supporting heel remains down. Opposite foot visibly low raised, not both-planted idle. A and B MUST alternate visible support. No huge forward sole, high knee/kick, run or lunge.\nRelaxed EMPTY hands near sides with small natural opposite arm swing, stable level head/neck and natural shoulders. Rust sash, curly hair, brass rivets/ornaments, ragged scarf/hem follow minimally and stay consistent. Keep both boots readable; cloth must not hide swing foot. Personality stays alert rugged, no aggressive attack pose.\nExactly ONE COMPLETE adult on genuine transparent RGBA native square<=1536, centered with generous80px+ clear alpha margins including hair/trailing cloth/hem/boots. Head/hands/feet whole, no crop/mirror/background/floor/shadow/grid/text/guide colors/extra people/views/changed clothes. New distinct WALK_B legs with stated support side.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/deng_fei_walk_b_sw_v4.json",
+      "request_sha256": "e7d6f5c3ab3262579b00fbec06e016d2f054bf1a628986bca4bc9f597882fc8e",
+      "references": [
+        "qin_ming_walk_b_sw_geometry_v4",
+        "deng_fei_idle_single_sw_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_walk_b_ne_geometry_v4",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_b_ne_geometry_v4.png",
+      "sha256": "fec7c4048e49db2c41be94a1abafdb34352a221e4d4912200e6dd612a0bcdc92",
+      "prompt": "New primitive-only ne walk_b contact: red flat support, blue low raised boot; screen support side verified. No character bitmap read/edit; robot anatomy/colors not artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/qin_ming_contact_geometry_v4.gd",
+          "sha256": "74730ccd656542728251f76c82a816c8386150555b38c39b58c7515b1800c392"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_qin_ming_contact_geometry_v4.py",
+          "sha256": "8542f8bf6fda71800821c87e90d6918f35bf27913ee2cfeacf2c6206e7a6c69c"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_b_ne_geometry_v4.json",
+          "sha256": "548c8ffe9111ea5bc202a69a751984f5f91e093862d7a5bc4dfa9f14ed7af44e"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "deng_fei_walk_b_ne_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-d2dd7aa4-dbc4-493e-aae7-b1afb7c6a283",
+      "repository_path": "assets/characters/deng_fei_wounded_20261005/walk_b_ne_v4.png",
+      "sha256": "8ed1d405e565b9b6bb1a1b06b2605ca20b0ea35137036063ce9e4bac6bde6736",
+      "prompt": "POSE-GUIDED exactly ONE full-body Deng Fei WALK_B native sprite. IMAGE1 provides ONLY lower leg geometry/camera, RED IMAGE-RIGHT FLAT support and BLUE IMAGE-LEFT LOW swing. Do not copy robot torso/short box proportions/colors/green marker/labels. IMAGE2 provides exact Deng Fei identity/adult body/wardrobe. Exact mature rugged tawny Chinese Deng Fei face, thick curly black hair/high tied bundle and full thick curly black beard/moustache, rust-brown hair cloth and trailing ends, intense natural reddish-brown eyes without glow. Brown ragged shoulder scarf/layered torn brown cloth, brown leather/lamellar armor with round brass chest ornament, rust-red tied sash, dark brown trousers, dark boots/brass decorative shin armor. Match character reference's adult head/hands/boots and long normal limbs, all armor/cloth layers and refined painterly materials. Rugged alert martial adult, strong balanced stance, healthy straight upper back and aligned level head/gaze, naturally open shoulders, small individual hip/shoulder asymmetry. Never short/chibi/giant head/boots, collapsed hunch, deep squat, elderly slump, forced parade/chest arch. No chain/weapon/rope/bag/banner/props/new costume.\nFACING: BACK elevated isometric three-quarter AWAY-UPPER-RIGHT NE; back armor/scarf/curly hair visible, only tiny far-side beard profile, no frontal chest ornament/both eyes, boot toes upper-right. Head shoulders torso hips feet all agree; rear shows actual BACK, never front portrait or mirrored front.\nMANDATORY LEG POSE: SHORT CONTACT: RED IMAGE-RIGHT support boot heel AND toe fully FLAT on its ground under own hip, BLUE IMAGE-LEFT boot low raised in compact short stride with soft knee. Both legs connect continuously to own hips, no crossing/disconnected shins. Support whole underside must not face camera; supporting heel remains down. Opposite foot visibly low raised, not both-planted idle. A and B MUST alternate visible support. No huge forward sole, high knee/kick, run or lunge.\nRelaxed EMPTY hands near sides with small natural opposite arm swing, stable level head/neck and natural shoulders. Rust sash, curly hair, brass rivets/ornaments, ragged scarf/hem follow minimally and stay consistent. Keep both boots readable; cloth must not hide swing foot. Personality stays alert rugged, no aggressive attack pose.\nExactly ONE COMPLETE adult on genuine transparent RGBA native square<=1536, centered with generous80px+ clear alpha margins including hair/trailing cloth/hem/boots. Head/hands/feet whole, no crop/mirror/background/floor/shadow/grid/text/guide colors/extra people/views/changed clothes. New distinct WALK_B legs with stated support side.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/deng_fei_walk_b_ne_v4.json",
+      "request_sha256": "934124dcc428b6ecb11b2f4bf08ca4b3f0fffabaabd02f027cccc9ad27305d77",
+      "references": [
+        "qin_ming_walk_b_ne_geometry_v4",
+        "deng_fei_idle_single_ne_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_walk_b_nw_geometry_v4",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_b_nw_geometry_v4.png",
+      "sha256": "2490edb0c9ef74a93f7e418865823df74af261df80e5edf25f8c01e7c4db2730",
+      "prompt": "New primitive-only nw walk_b contact: red flat support, blue low raised boot; screen support side verified. No character bitmap read/edit; robot anatomy/colors not artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/qin_ming_contact_geometry_v4.gd",
+          "sha256": "74730ccd656542728251f76c82a816c8386150555b38c39b58c7515b1800c392"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_qin_ming_contact_geometry_v4.py",
+          "sha256": "8542f8bf6fda71800821c87e90d6918f35bf27913ee2cfeacf2c6206e7a6c69c"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/qin_ming_walk_b_nw_geometry_v4.json",
+          "sha256": "7e9c8bfca05fdf2799c4daf445530ffde06ae813f4de2ad137362270f0a85efb"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "deng_fei_walk_b_nw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-f3f9d877-6fed-4ced-b4ee-f7b90f715533",
+      "repository_path": "assets/characters/deng_fei_wounded_20261005/walk_b_nw_v4.png",
+      "sha256": "54ae62dcfd6d00af6f1ee3b28df626a0c702e8a1873f737a63deaac269fdbd1a",
+      "prompt": "POSE-GUIDED exactly ONE full-body Deng Fei WALK_B native sprite. IMAGE1 provides ONLY lower leg geometry/camera, RED IMAGE-RIGHT FLAT support and BLUE IMAGE-LEFT LOW swing. Do not copy robot torso/short box proportions/colors/green marker/labels. IMAGE2 provides exact Deng Fei identity/adult body/wardrobe. Exact mature rugged tawny Chinese Deng Fei face, thick curly black hair/high tied bundle and full thick curly black beard/moustache, rust-brown hair cloth and trailing ends, intense natural reddish-brown eyes without glow. Brown ragged shoulder scarf/layered torn brown cloth, brown leather/lamellar armor with round brass chest ornament, rust-red tied sash, dark brown trousers, dark boots/brass decorative shin armor. Match character reference's adult head/hands/boots and long normal limbs, all armor/cloth layers and refined painterly materials. Rugged alert martial adult, strong balanced stance, healthy straight upper back and aligned level head/gaze, naturally open shoulders, small individual hip/shoulder asymmetry. Never short/chibi/giant head/boots, collapsed hunch, deep squat, elderly slump, forced parade/chest arch. No chain/weapon/rope/bag/banner/props/new costume.\nFACING: BACK elevated isometric three-quarter AWAY-UPPER-LEFT NW; back armor/scarf/curly hair visible, only tiny far-side beard profile, no frontal chest ornament/both eyes, boot toes upper-left. Head shoulders torso hips feet all agree; rear shows actual BACK, never front portrait or mirrored front.\nMANDATORY LEG POSE: SHORT CONTACT: RED IMAGE-RIGHT support boot heel AND toe fully FLAT on its ground under own hip, BLUE IMAGE-LEFT boot low raised in compact short stride with soft knee. Both legs connect continuously to own hips, no crossing/disconnected shins. Support whole underside must not face camera; supporting heel remains down. Opposite foot visibly low raised, not both-planted idle. A and B MUST alternate visible support. No huge forward sole, high knee/kick, run or lunge.\nRelaxed EMPTY hands near sides with small natural opposite arm swing, stable level head/neck and natural shoulders. Rust sash, curly hair, brass rivets/ornaments, ragged scarf/hem follow minimally and stay consistent. Keep both boots readable; cloth must not hide swing foot. Personality stays alert rugged, no aggressive attack pose.\nExactly ONE COMPLETE adult on genuine transparent RGBA native square<=1536, centered with generous80px+ clear alpha margins including hair/trailing cloth/hem/boots. Head/hands/feet whole, no crop/mirror/background/floor/shadow/grid/text/guide colors/extra people/views/changed clothes. New distinct WALK_B legs with stated support side.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/deng_fei_walk_b_nw_v4.json",
+      "request_sha256": "5f1e2ee24078bcbf4ad486f56a4d18f4635b10e7d81f11348babf2923eb82840",
+      "references": [
+        "qin_ming_walk_b_nw_geometry_v4",
+        "deng_fei_idle_single_nw_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_passing_b_se_geometry_v7",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/wang_ying_passing_b_se_geometry_v7.png",
+      "sha256": "720906c1a872bdadac3a878f6c4b76a8a43ee5ed4aade5d0aaf63e5389ac3fd9",
+      "prompt": "New SE passing_b short broad adult geometry: red flat support, blue low passing boot under pelvis. No source bitmap read/edit or production artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/wang_ying_passing_geometry_v7.gd",
+          "sha256": "2070bcd5ca8b31bd0a0b901a1db266354d07922ac61521c83991a4da9086384f"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_wang_ying_passing_geometry_v7.py",
+          "sha256": "35df66125d5caf116d296a2d1f68ced53e9f81494d50c472837c11e672734c9e"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/geometry_passing_b_se_v7.json",
+          "sha256": "f6117b85e45a4f1e6e1a91221e4c179a53318e966ba6831a4f4aa09118b4ca9e"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "deng_fei_passing_b_se_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-7af88c86-027d-4391-a945-40d74af4721d",
+      "repository_path": "assets/characters/deng_fei_wounded_20261005/passing_b_se_v4.png",
+      "sha256": "fa17f6a4aacb0475a58a35f07607b4269b086dd88d2e13fd6476aceee3c879ba",
+      "prompt": "POSE-GUIDED exactly ONE full-body Deng Fei PASSING_B native sprite. IMAGE1 provides ONLY lower leg geometry/camera, RED IMAGE-LEFT FLAT support and BLUE IMAGE-RIGHT LOW swing. Do not copy robot torso/short box proportions/colors/green marker/labels. IMAGE2 provides exact Deng Fei identity/adult body/wardrobe. Exact mature rugged tawny Chinese Deng Fei face, thick curly black hair/high tied bundle and full thick curly black beard/moustache, rust-brown hair cloth and trailing ends, intense natural reddish-brown eyes without glow. Brown ragged shoulder scarf/layered torn brown cloth, brown leather/lamellar armor with round brass chest ornament, rust-red tied sash, dark brown trousers, dark boots/brass decorative shin armor. Match character reference's adult head/hands/boots and long normal limbs, all armor/cloth layers and refined painterly materials. Rugged alert martial adult, strong balanced stance, healthy straight upper back and aligned level head/gaze, naturally open shoulders, small individual hip/shoulder asymmetry. Never short/chibi/giant head/boots, collapsed hunch, deep squat, elderly slump, forced parade/chest arch. No chain/weapon/rope/bag/banner/props/new costume.\nFACING: FRONT elevated isometric three-quarter LOWER-RIGHT SE; chest brass ornament/full curly beard visible, head torso and boot toes lower-right. Head shoulders torso hips feet all agree; rear shows actual BACK, never front portrait or mirrored front.\nMANDATORY LEG POSE: TRUE DISTINCT NEAR-FOOT PASSING: RED IMAGE-LEFT support boot heel AND toe fully FLAT under hip bearing weight, BLUE IMAGE-RIGHT boot LOW raised about one boot-thickness and passing UNDER pelvis closely BESIDE support boot with mild knee bend. Both boots clear/distinct and connected to own hip. Small gap, not wide contact stride. A/B MUST visibly alternate support. No both-planted idle, invisible raised boot, huge sole/high knee/kick. Preserve image-LEFT flat/image-RIGHT raised assignment, do not repeat A as B.\nRelaxed EMPTY hands near sides with small natural opposite arm swing, stable level head/neck and natural shoulders. Rust sash, curly hair, brass rivets/ornaments, ragged scarf/hem follow minimally and stay consistent. Keep both boots readable; cloth must not hide swing foot. Personality stays alert rugged, no aggressive attack pose.\nExactly ONE COMPLETE adult on genuine transparent RGBA native square<=1536, centered with generous80px+ clear alpha margins including hair/trailing cloth/hem/boots. Head/hands/feet whole, no crop/mirror/background/floor/shadow/grid/text/guide colors/extra people/views/changed clothes. New distinct PASSING_B legs with stated support side.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/deng_fei_passing_b_se_v4.json",
+      "request_sha256": "d775aab676d1c2ca08f44bcc6f8c4a6855aac6c3d57364803c530375b22fc99c",
+      "references": [
+        "wang_ying_passing_b_se_geometry_v7",
+        "deng_fei_idle_single_se_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_passing_b_sw_geometry_v7",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/wang_ying_passing_b_sw_geometry_v7.png",
+      "sha256": "031d1f6e392d6456c048d35f5c80ed0abf1148a5f3cf62330477701caad44268",
+      "prompt": "New SW passing_b short broad adult geometry: red flat support, blue low passing boot under pelvis. No source bitmap read/edit or production artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/wang_ying_passing_geometry_v7.gd",
+          "sha256": "2070bcd5ca8b31bd0a0b901a1db266354d07922ac61521c83991a4da9086384f"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_wang_ying_passing_geometry_v7.py",
+          "sha256": "35df66125d5caf116d296a2d1f68ced53e9f81494d50c472837c11e672734c9e"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/geometry_passing_b_sw_v7.json",
+          "sha256": "c06eca15e49eee86c396efb8a8a8714c75124c9d5474803bac9974a8f04f5295"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "baseline_ref_20f98df7cf31",
+      "method": "retained_identity_reference",
+      "generation_id": null,
+      "repository_path": "assets/characters/huang_xin_bound_20261005/bound.png",
+      "sha256": "93d76a0d3b0dd612d40aa74ffbcdd10e1aa822feb09693ac9054a438eea95f3f",
+      "baseline_commit": "27f45b245e2b39f1f779fbfa62772e14bb68dd56",
+      "reference_role": "Retained original character identity/anatomy reference; no new generation prompt claimed",
+      "references": [],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "huang_xin_proportion_v2",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-104f8d3c-5c7c-42d4-8dac-34d98a42f863",
+      "repository_path": "assets/characters/huang_xin_wounded_20261005/proportion_v2.png",
+      "sha256": "db2e01d5bc2cd2f92ce139f8087e9eef9ed79a96b1b46ca5f9ac23083f3572be",
+      "prompt": "Use case: identity-preserve. ONE full-body unarmed rescued huang_xin standing proportion reference, NOT an atlas. Reference1 is the sole FACE/HAIR/CLOTHING identity reference; remove ALL bindings/ropes and weapons. Reference2 supplies ONLY the mature natural human anatomy target and painterly elevated isometric camera; DO NOT copy its mask, black costume or face.\nIdentity: Stern middle-aged man, full dark beard, ochre headband and dark topknot, ochre tunic/scarf, black-brown lamellar armor with gold rivets/shoulder edges, dark trousers, ochre shin wraps/boots. NO back banner, writing, pole or sword.\nRedraw the short reference anatomy into a believable mature ADULT: about7–7.5 heads tall, normal small head/hands/boots, natural visible neck and LONG adult legs with hip-to-ground around half height.  Each knee naturally midway along the leg, no shortened thighs or giant footwear. Keep costume colors/materials and recognisable face/hair; any armor decoration fits his natural adult body.\nPose: SW front-three-quarter facing down-left, quiet upright tired rescued man with dignity, level head and relaxed empty hands by sides, both feet naturally close and grounded. Only slight fatigue in shoulders, no crouch/stoop/sneaking/high raised knee/running/combat stance. Natural anatomical joints. No weapon, sheath, rope, sack, flag, mount, blood, glow or new props. Preserve original identity, don't make everyone the same slim black masked man. Historic restrained hand-painted Chinese RTS rendering. Exactly one COMPLETE body, all cloth tails/cape/fingers/boots contained with generous margins, about75–80% native square height, max1536. Genuine transparent alpha background, no floor/shadow/grid/text/labels/checkerboard.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/huang_xin_proportion_v2.json",
+      "request_sha256": "501080956a7bea71d091ce91bb5c8c8e8d41fc53e3f423b5b873468fc542d097",
+      "references": [
+        "baseline_ref_20f98df7cf31",
+        "shi_qian_proportion_v2"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "huang_xin_posture_v3",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-0daac50e-ada0-4e39-bd27-2f9161e9ef49",
+      "repository_path": "assets/characters/huang_xin_wounded_20261005/posture_v3.png",
+      "sha256": "6025375638054b299bc9878c702ae4e1fcb46cd9727990f14d38860fa4efaf87",
+      "prompt": "Use case: identity-preserve. EDIT the attached ONE full-body character reference. User requires an upright dignified SOLDIER posture: head UP and chest OPEN. Reject lowered chin, forward head, closed shoulders or hunched back. Only improve pose; preserve this SAME individual face, clothes, mature ADULT proportions and painterly rendering.\nPOSE: erect balanced military attention-like stance. Naturally straight stacked spine, neutral pelvis, neck vertical ABOVE torso; head lifted with chin LEVEL, eyes looking toward distant horizon in the SAME front three-quarter SW facing direction, never down at feet. Shoulders gently back and down, broad collarbones, naturally lifted open chest, sternum confidently forward. No stoop, rounded back, shrugged shoulders, forward craned neck, wounded hunch or tired slump. Do not hyperextend neck, flare ribs, thrust belly or arch lower back. Keep the small natural head/hands/boots and adult thighs/calves. Moderately elevated isometric camera does not imply bowed head.\nBoth feet grounded in stable modest hip-width parallel stance, knees straight but not locked. Empty arms straight naturally at sides and open relaxed hands, no fists or combat stance. Keep every existing armor plate/shoulder detail/cloak and beard, same color and body build; don't add extra armor.\nExactly ONE complete full figure with all fingers/tails/cloak/boots contained in generous transparent margins, 75–80% square height, native max1536. No weapons/sheaths/rope/chains/blood/new props. Preserve true transparent alpha; no floor/shadow/background/text/grid/checkerboard.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/huang_xin_posture_v3.json",
+      "request_sha256": "acfe856e952ae1e5c1f6df8980fafd1ea279fdcad0978bc79a57e7c850d6c337",
+      "references": [
+        "huang_xin_proportion_v2"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "huang_xin_idle_v3",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-a90191ad-6876-45f4-95ca-5646bf878b53",
+      "repository_path": "assets/characters/huang_xin_wounded_20261005/idle_v3.png",
+      "sha256": "977ff86d8bc026c4825b4691fdd2f58dd3b6590649550d63f787d883b3a03362",
+      "prompt": "Use case: identity-preserve. Create native FOUR independently drawn isometric IDLE views of this SAME upright adult soldier. Reference is the selected v3 single-body posture; preserve its face, proportions, clothing and colors. Exactly 2 columns x 2 rows: TOP LEFT SE front three-quarter looking screen DOWN-RIGHT; TOP RIGHT SW front three-quarter looking screen DOWN-LEFT; BOTTOM LEFT NE back three-quarter looking screen UP-RIGHT; BOTTOM RIGHT NW back three-quarter looking screen UP-LEFT. Turn the WHOLE torso, hips and both feet into each direction. SE and SW must be genuinely opposite whole-body views; do not repeat SW in the SE cell. Back views show back clothes and back of head, with only a small far cheek visible. Never mirror a rendered cell. ALL FOUR poses stand dignified and upright like disciplined soldiers: lifted head, LEVEL chin/horizon gaze, neck vertically above torso, stacked natural spine, shoulders back/down, naturally open lifted chest. Elevated camera never means bowed head. NO hunch, forward neck, closed chest, tired shoulder slump, shrug, belly thrust or arched lower back. Empty relaxed hands and naturally straight arms at sides. Stable feet at modest hip width, straight natural knees. Keep mature adult head/hands/boots and adult leg lengths. Body type identity: Stern middle-aged man, full dark beard, ochre headband and dark topknot, ochre tunic/scarf, black-brown lamellar armor with gold rivets/shoulder edges, dark trousers, ochre shin wraps/boots. NO back banner, writing, pole or sword. Preserve v3 body anatomy over any old compact sprite instructions; never chibi. Same front/back clothing hem length and construction, no weapons/sheaths/rope/chains/blood/new props. Each whole figure fits inside its OWN quadrant with wide true-alpha outer margins and wide empty transparent central gutters; no tails/capes/boots cross cell boundaries. Figures equal body height within this character. Native square max1536, painterly reference quality, TRUE RGBA transparent background; no floor/shadows/text/labels/grid/checkerboard. Layout priority: figures occupy only 78–82% of EACH quadrant height, about490–515px tall at1254px native square. Center each figure inside its cell; keep at least45px transparent clearance on every cell edge, including cape/boots/headcloth. The central horizontal gutter should be at least80px. Reduce whole figure size uniformly to leave room; NEVER shorten legs or enlarge heads to fit. Do not nearly touch the two rows.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/huang_xin_idle_v3.json",
+      "request_sha256": "5a8c55c17338ee13c38452aa41793ec3c812eec3d2a3b6752c95469772626e96",
+      "references": [
+        "huang_xin_posture_v3"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "huang_xin_idle_single_sw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-2cd1b914-880e-4267-af58-386d52d34599",
+      "repository_path": "assets/characters/huang_xin_wounded_20261005/idle_single_sw_v4.png",
+      "sha256": "fd4b322ab1b8bf23033100acd6b42457f1708a0422aa03f3c85c0c076cc3846c",
+      "prompt": "Create exactly ONE complete full-body Huang Xin idle sprite from the corresponding SW view in IMAGE1 reference sheet, not another multi-view sheet. IMAGE1 is identity/material/camera reference. Stern MATURE Chinese Huang Xin with full dark beard/moustache, ochre cloth headband and dark topknot, ochre scarf tied at chest with trailing back cloth, ochre sleeves/tunic, black-brown lamellar chest/back/hip armor with gold rivets and gold beast-face shoulder plates, brown belt with round gold buckle, dark trousers, ochre crossed shin wraps and dark cloth boots edged ochre. Exact recognizable face, armor layers, scarf/hem silhouette and painterly palette from character reference. No helmet, banner, lettering, pole, weapon, sheath, rope, bag or new prop.\nFACING: FRONT elevated isometric three-quarter facing LOWER-LEFT SW, chest/beard visible, head torso and both boot toes lower-left. Rear means armor BACK and back of head/scarf, never mirrored front portrait.\nINDIVIDUAL BEARING: NORMAL MATURE ADULT anatomy, natural head/hands/boots and long natural legs, robust officer build. Steady upright military bearing: level alert gaze, head comfortably over neck/spine, straight upper back, shoulders open, grounded balanced weight. Natural knees and minimal walking hip/arm motion; not rigid parade or overarched chest. No hunch, elderly slump, timid cramped shoulders, short/chibi limbs, giant head or inflated boots. Specific armor/proportions are project art design, preserve individuality. Feet both planted in a modest stable standing stance, relaxed empty hands naturally near sides. No attack/running pose.\nExactly ONE whole figure centered on genuine transparent RGBA square native<=1536, generous80px+ clear alpha margin around complete topknot/scarf/hem/boots. No ground, shadows, grid, text, guide colors, extra people/views, cropped hands/feet, mirror or costume change.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/huang_xin_idle_single_sw_v4.json",
+      "request_sha256": "3d82204d32d1c47caf1ed7c433ab54c75283a1426f834eedf8a556e7bd9266fa",
+      "references": [
+        "huang_xin_idle_v3"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "huang_xin_idle_single2_sw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-7ac98577-b38b-40f0-b1c9-f93a7319a4fc",
+      "repository_path": "assets/characters/huang_xin_wounded_20261005/idle_single2_sw_v4.png",
+      "sha256": "77c28a10886ec2a14b5643540e534a72ef0bbfe6e1524bd872127d1c28f1922c",
+      "prompt": "Correct ONLY whole-body camera orientation of IMAGE2 Huang Xin: it incorrectly faces image-right. Produce ONE full-body IDLE facing LOWER-LEFT SOUTHWEST. IMAGE1 gives ONLY camera: FRONT three-quarter facing image-LEFT, not red/blue leg colors, robot or walking leg position. Both boots must be PLANTED in a balanced idle stance. IMAGE3 top-right sheet cell is corresponding original Huang Xin left-facing identity reference. IMAGE2 locks his exact face/armor/palette/proportions, not its wrong direction.\nMANDATORY: nose and eyes look image-LEFT; chest is seen obliquely on the image-LEFT facing side, both boot toes point LOWER-LEFT. Head, shoulders, chest, hips and both boots turn coherently to southwest. This must visually DIFFER in facing from IMAGE2 right-facing portrait. Do not return another SE, rear view or multi-view sheet. Do not simply flip all decorative details; render the requested side correctly.\nPreserve mature bearded Chinese officer, ochre headband/topknot/scarf, gold beast shoulder plates and rivets, dark lamellar chest/back/hip armor, brown belt/gold buckle, ochre sleeves/ragged tunic and crossed calf wraps/dark ochre-edged boots. Upright natural head/upper back, calm stern gaze, normal adult proportions and relaxed empty hands, two planted feet. No hunch/parade arch/weapon/rope/banner/new prop. Refined painterly materials unchanged.\nExactly ONE WHOLE adult figure on genuine transparent RGBA square native<=1536, centered with generous80px+ alpha margins around headcloth/hem/boots. No crop, giant head/boots, floor/shadow/grid/text/guide colors or extra figure.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/huang_xin_idle_single2_sw_v4.json",
+      "request_sha256": "f92cf1b662292ba485f75b73798ef42b4f140b35f23593ebd1ce7423008faff9",
+      "references": [
+        "qin_ming_walk_a_sw_geometry_v4",
+        "huang_xin_idle_single_sw_v4",
+        "huang_xin_idle_v3"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "huang_xin_passing_b_idlefix_sw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-e03cf939-b939-4fc2-9b79-5324fbbfec12",
+      "repository_path": "assets/characters/huang_xin_wounded_20261005/passing_b_idlefix_sw_v4.png",
+      "sha256": "5a78d1ad18912d8d30f40c5b66beebc9cc4ed288a4495f3fb5d220fe3f0fd73d",
+      "prompt": "POSE-GUIDED exactly ONE full-body Huang Xin PASSING_B sprite. IMAGE1 gives ONLY camera/lower-body geometry: red IMAGE-RIGHT flat support, blue IMAGE-LEFT low raised swing. Do NOT copy robot torso/short proportions/colors/green marker/labels. IMAGE2 gives character identity/body/clothes. Stern MATURE Chinese Huang Xin with full dark beard/moustache, ochre cloth headband and dark topknot, ochre scarf tied at chest with trailing back cloth, ochre sleeves/tunic, black-brown lamellar chest/back/hip armor with gold rivets and gold beast-face shoulder plates, brown belt with round gold buckle, dark trousers, ochre crossed shin wraps and dark cloth boots edged ochre. Exact recognizable face, armor layers, scarf/hem silhouette and painterly palette from character reference. No helmet, banner, lettering, pole, weapon, sheath, rope, bag or new prop. NORMAL MATURE ADULT anatomy, natural head/hands/boots and long natural legs, robust officer build. Steady upright military bearing: level alert gaze, head comfortably over neck/spine, straight upper back, shoulders open, grounded balanced weight. Natural knees and minimal walking hip/arm motion; not rigid parade or overarched chest. No hunch, elderly slump, timid cramped shoulders, short/chibi limbs, giant head or inflated boots. Specific armor/proportions are project art design, preserve individuality.\nFACING: FRONT elevated isometric three-quarter facing LOWER-LEFT SW, chest/beard visible, head torso and both boot toes lower-left. Do not turn a rear view frontal or mirror a front sprite.\nMANDATORY LOWER BODY: TRUE DISTINCT PASSING: red IMAGE-RIGHT support boot heel AND toe FLAT under hip, blue IMAGE-LEFT boot clearly LOW raised about one boot-thickness and passing UNDER pelvis beside support foot with soft knee. Near-foot spacing, not wide contact stride. Both boots distinct/fully visible and connected to own hip. Not both planted or idle legs; not hidden swing foot. A/B alternate support. No kick/high knee/giant sole.\nNatural SMALL opposing empty-arm swing; steady upright head/upper back and normal shoulders. Armor and scarf/hem follow slightly, preserving gold rivets, beast-face shoulder plates, dark armor panel arrangement, ochre cloth and wrapped boots. Hem must not hide both feet. No weapon/rope/banner, running/jumping/attack/deep squat/parade arch or hunched head.\nExactly ONE complete figure centered on genuine transparent RGBA native square<=1536, generous80px+ alpha margins around topknot/scarf/hem/boots. Head/hands/feet whole, natural adult limb lengths. No floor/shadow/background/grid/text/guide colors/robots/extra people/views/crop/mirror/costume changes. Distinct new PASSING_B legs.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/huang_xin_passing_b_idlefix_sw_v4.json",
+      "request_sha256": "bb12bfb79a7bb3e74282a4793d800191576dc87c3d185b41b65110509ac8f626",
+      "references": [
+        "wang_ying_passing_b_sw_geometry_v7",
+        "huang_xin_idle_single2_sw_v4"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "huang_xin_passing_b2_sw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-8ff3d11f-a070-4631-a27b-529fde0eb5c6",
+      "repository_path": "assets/characters/huang_xin_wounded_20261005/passing_b2_sw_v4.png",
+      "sha256": "8d16c8dfaa0976af110a3a1dea223caf1d5c13b51ada50340d1b74552ebac13d",
+      "prompt": "Focused native leg correction to IMAGE2 Huang Xin. Preserve EXACT face, frontal SW camera facing image-left, stern mature dark beard/topknot/ochre headband/scarf, gold shoulder beast plates and rivets, dark armor, hands/belt/ochre cloth/torn hem and natural adult proportions. Correct ONLY legs below hips and minimal associated hem.\nIMAGE1 geometry is MANDATORY support assignment: RED IMAGE-RIGHT boot HEEL AND TOE FLAT under its own hip bearing weight. BLUE IMAGE-LEFT boot LOW RAISED, passing under pelvis close BESIDE support boot with soft knee. IMAGE2 incorrectly uses image-left flat/image-right raised, repeating A. The corrected pose MUST visibly swap: right foot fully flat, left foot clearly off its corresponding ground plane by about one boot-thickness. Both boot soles distinct and connected to own hips; no crossed/detached leg. No both-flat idle, no wide contact stride, no high knee or large sole/kick. Raised left foot remains very close under body, never rear hidden boot on right.\nKeep FRONT three-quarter elevated SW facing LOWER-LEFT, nose/chest/boot toes all left, not front-right or rear. Head/upper back naturally upright, stable military bearing with small balance motion, no hunch or parade arch. IMAGE1 gives pose only, no robot/short box torso/red-blue/green/labels in final.\nExactly ONE complete adult on genuine transparent RGBA native square<=1536, centered with generous80px+ clear alpha margins around cloth/boots/head. Preserve refined painterly materials. No crop/mirror/weapons/rope/banner/props/text/grid/floor/shadow/new costume. Distinct near-foot PASSING B with RIGHT flat support and LEFT low swing.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/huang_xin_passing_b2_sw_v4.json",
+      "request_sha256": "4cddbe1adf7a6c71f3b291155e8306525afa1ad8de89b05e3ffee64379734355",
+      "references": [
+        "wang_ying_passing_b_sw_geometry_v7",
+        "huang_xin_passing_b_idlefix_sw_v4"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "deng_fei_passing_b4_sw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-c87934ab-ab80-4bb4-ac8f-7a1bb95d2799",
+      "repository_path": "assets/characters/deng_fei_wounded_20261005/passing_b4_sw_v4.png",
+      "sha256": "52cd4338730eaca144a8077807e8e16f0defc8b6c47d5db87335afcc5a2bdadb",
+      "prompt": "Create ONE full-body DENG FEI in EXACT lower-leg passing POSE of IMAGE1, with ONLY Deng Fei identity/materials from IMAGE3. IMAGE1 is a HUMAN POSE REFERENCE ONLY: IMAGE-RIGHT leg straight, vertical weight-bearing, right boot heel AND toe FLAT planted; IMAGE-LEFT thigh/knee distinctly bent and left boot LOW dangling OFF ground close beneath pelvis beside planted foot. Copy that exact visible right-straight/left-bent leg topology and foot spacing. Never use left-straight/planted and right-raised legs. IMAGE2 mathematical guide confirms RIGHT red support/LEFT blue swing only; no guide colors/robot/green marker/labels in final. IMAGE3 locks Deng Fei face/body/clothes, NOT its extended contact legs.\nMUST be Deng Fei: rugged mature tawny Chinese face, thick curly BLACK hair/high tied bundle and full CURLY black beard, rust-brown hair tie/trailing cloth, brown ragged shoulder scarf/cloth, brown brass-decorated lamellar armor and brass chest ornaments, rust-red tied sash, dark brown trousers, dark boots with Deng Fei ornate brass shin armor. Exact refined painterly palette/materials from IMAGE3. Do NOT copy IMAGE1's face/topknot/ochre headband/yellow robe/gold lion pauldrons or generic uniform torso/body. Natural adult limbs/head/hands/boots, robust alert individual martial build, healthy upper back/level gaze and relaxed empty hands. No chain/weapon/rope/banner/new prop.\nFRONT elevated isometric three-quarter SOUTHWEST LOWER-LEFT, chest visible, nose/head/torso/boot toes all left, same camera as references. RIGHT support leg straight and flat under own hip; LEFT knee obviously bent, left heel/toe completely OFF its own ground plane about one boot-thickness with left foot close under body. Both legs continuously connect to own hips and boots distinct. No crossed leg, two planted idle feet, wide contact stride, high kick/huge sole, hunch/parade arch or glowing eyes. Cloth moves minimally without hiding the raised LEFT foot.\nExactly ONE complete adult on genuine transparent RGBA native square<=1536, centered with generous80px+ clear alpha margins around entire curly hair/scarf/hem/boots; whole head/hands/both feet, no crop/mirror/background/floor/shadow/grid/text/extra views. Only IMAGE1 LEG POSE, IMAGE3 Deng Fei identity, true distinct passing B with RIGHT planted and LEFT bent/low raised.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/deng_fei_passing_b4_sw_v4.json",
+      "request_sha256": "deee858137be905b4ca9b0ce1dff9f658101033277ffbdd6a97ad7adb07f52f2",
+      "references": [
+        "huang_xin_passing_b2_sw_v4",
+        "wang_ying_passing_b_sw_geometry_v7",
+        "deng_fei_walk_b_sw_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_passing_b_ne_geometry_v7",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/wang_ying_passing_b_ne_geometry_v7.png",
+      "sha256": "1f96a2fa3475c0761b4eb2649e4752f54a1323e9ebd441a7df462f8ec3516807",
+      "prompt": "New NE passing_b short broad adult geometry: red flat support, blue low passing boot under pelvis. No source bitmap read/edit or production artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/wang_ying_passing_geometry_v7.gd",
+          "sha256": "2070bcd5ca8b31bd0a0b901a1db266354d07922ac61521c83991a4da9086384f"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_wang_ying_passing_geometry_v7.py",
+          "sha256": "35df66125d5caf116d296a2d1f68ced53e9f81494d50c472837c11e672734c9e"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/geometry_passing_b_ne_v7.json",
+          "sha256": "afe197fb6c8bfde89fe914e72a67f7da2f1d36d2350dc6aa184b249c33e0b0cf"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "deng_fei_passing_b_ne_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-c68ed004-6697-445d-81d5-8a616991d764",
+      "repository_path": "assets/characters/deng_fei_wounded_20261005/passing_b_ne_v4.png",
+      "sha256": "42d4c91c62310f4613ae27b977eedb84ff2e41e920a9ace63ec4ac140f562815",
+      "prompt": "POSE-GUIDED exactly ONE full-body Deng Fei PASSING_B native sprite. IMAGE1 provides ONLY lower leg geometry/camera, RED IMAGE-RIGHT FLAT support and BLUE IMAGE-LEFT LOW swing. Do not copy robot torso/short box proportions/colors/green marker/labels. IMAGE2 provides exact Deng Fei identity/adult body/wardrobe. Exact mature rugged tawny Chinese Deng Fei face, thick curly black hair/high tied bundle and full thick curly black beard/moustache, rust-brown hair cloth and trailing ends, intense natural reddish-brown eyes without glow. Brown ragged shoulder scarf/layered torn brown cloth, brown leather/lamellar armor with round brass chest ornament, rust-red tied sash, dark brown trousers, dark boots/brass decorative shin armor. Match character reference's adult head/hands/boots and long normal limbs, all armor/cloth layers and refined painterly materials. Rugged alert martial adult, strong balanced stance, healthy straight upper back and aligned level head/gaze, naturally open shoulders, small individual hip/shoulder asymmetry. Never short/chibi/giant head/boots, collapsed hunch, deep squat, elderly slump, forced parade/chest arch. No chain/weapon/rope/bag/banner/props/new costume.\nFACING: BACK elevated isometric three-quarter AWAY-UPPER-RIGHT NE; back armor/scarf/curly hair visible, only tiny far-side beard profile, no frontal chest ornament/both eyes, boot toes upper-right. Head shoulders torso hips feet all agree; rear shows actual BACK, never front portrait or mirrored front.\nMANDATORY LEG POSE: TRUE DISTINCT NEAR-FOOT PASSING: RED IMAGE-RIGHT support boot heel AND toe fully FLAT under hip bearing weight, BLUE IMAGE-LEFT boot LOW raised about one boot-thickness and passing UNDER pelvis closely BESIDE support boot with mild knee bend. Both boots clear/distinct and connected to own hip. Small gap, not wide contact stride. A/B MUST visibly alternate support. No both-planted idle, invisible raised boot, huge sole/high knee/kick. Preserve image-RIGHT flat/image-LEFT raised assignment, do not repeat A as B.\nRelaxed EMPTY hands near sides with small natural opposite arm swing, stable level head/neck and natural shoulders. Rust sash, curly hair, brass rivets/ornaments, ragged scarf/hem follow minimally and stay consistent. Keep both boots readable; cloth must not hide swing foot. Personality stays alert rugged, no aggressive attack pose.\nExactly ONE COMPLETE adult on genuine transparent RGBA native square<=1536, centered with generous80px+ clear alpha margins including hair/trailing cloth/hem/boots. Head/hands/feet whole, no crop/mirror/background/floor/shadow/grid/text/guide colors/extra people/views/changed clothes. New distinct PASSING_B legs with stated support side.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/deng_fei_passing_b_ne_v4.json",
+      "request_sha256": "f20c24f2fb4cdeda5aafdba91e26a0a246f4007feeab157490d136c080b54d39",
+      "references": [
+        "wang_ying_passing_b_ne_geometry_v7",
+        "deng_fei_idle_single_ne_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wang_ying_passing_b_nw_geometry_v7",
+      "method": "godot_3d_pose_reference",
+      "generation_id": null,
+      "repository_path": "tools/contracts/zhu_wounded_20261005/guides/wang_ying_passing_b_nw_geometry_v7.png",
+      "sha256": "362fb53746b7ab26a49e0f7aa3807c9c77b9c3d44c9f6ff514aff1d29c151616",
+      "prompt": "New NW passing_b short broad adult geometry: red flat support, blue low passing boot under pelvis. No source bitmap read/edit or production artwork.",
+      "references": [],
+      "generator_artifacts": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/wang_ying_passing_geometry_v7.gd",
+          "sha256": "2070bcd5ca8b31bd0a0b901a1db266354d07922ac61521c83991a4da9086384f"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/render_wang_ying_passing_geometry_v7.py",
+          "sha256": "35df66125d5caf116d296a2d1f68ced53e9f81494d50c472837c11e672734c9e"
+        },
+        {
+          "path": "tools/contracts/zhu_wounded_20261005/guides/geometry_passing_b_nw_v7.json",
+          "sha256": "4087b0b3d54f26d56d2a11d40d8c861dd9708fe1af54faaed92326c2a52223c1"
+        }
+      ],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "deng_fei_passing_b_nw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-e8b0f86e-f881-4eff-a008-cbb2d8f9ea2d",
+      "repository_path": "assets/characters/deng_fei_wounded_20261005/passing_b_nw_v4.png",
+      "sha256": "538f14f81b3f7e8e9cdc8eaf52d042890fa3b5582d35535ec0d7b688e8e4bed6",
+      "prompt": "POSE-GUIDED exactly ONE full-body Deng Fei PASSING_B native sprite. IMAGE1 provides ONLY lower leg geometry/camera, RED IMAGE-RIGHT FLAT support and BLUE IMAGE-LEFT LOW swing. Do not copy robot torso/short box proportions/colors/green marker/labels. IMAGE2 provides exact Deng Fei identity/adult body/wardrobe. Exact mature rugged tawny Chinese Deng Fei face, thick curly black hair/high tied bundle and full thick curly black beard/moustache, rust-brown hair cloth and trailing ends, intense natural reddish-brown eyes without glow. Brown ragged shoulder scarf/layered torn brown cloth, brown leather/lamellar armor with round brass chest ornament, rust-red tied sash, dark brown trousers, dark boots/brass decorative shin armor. Match character reference's adult head/hands/boots and long normal limbs, all armor/cloth layers and refined painterly materials. Rugged alert martial adult, strong balanced stance, healthy straight upper back and aligned level head/gaze, naturally open shoulders, small individual hip/shoulder asymmetry. Never short/chibi/giant head/boots, collapsed hunch, deep squat, elderly slump, forced parade/chest arch. No chain/weapon/rope/bag/banner/props/new costume.\nFACING: BACK elevated isometric three-quarter AWAY-UPPER-LEFT NW; back armor/scarf/curly hair visible, only tiny far-side beard profile, no frontal chest ornament/both eyes, boot toes upper-left. Head shoulders torso hips feet all agree; rear shows actual BACK, never front portrait or mirrored front.\nMANDATORY LEG POSE: TRUE DISTINCT NEAR-FOOT PASSING: RED IMAGE-RIGHT support boot heel AND toe fully FLAT under hip bearing weight, BLUE IMAGE-LEFT boot LOW raised about one boot-thickness and passing UNDER pelvis closely BESIDE support boot with mild knee bend. Both boots clear/distinct and connected to own hip. Small gap, not wide contact stride. A/B MUST visibly alternate support. No both-planted idle, invisible raised boot, huge sole/high knee/kick. Preserve image-RIGHT flat/image-LEFT raised assignment, do not repeat A as B.\nRelaxed EMPTY hands near sides with small natural opposite arm swing, stable level head/neck and natural shoulders. Rust sash, curly hair, brass rivets/ornaments, ragged scarf/hem follow minimally and stay consistent. Keep both boots readable; cloth must not hide swing foot. Personality stays alert rugged, no aggressive attack pose.\nExactly ONE COMPLETE adult on genuine transparent RGBA native square<=1536, centered with generous80px+ clear alpha margins including hair/trailing cloth/hem/boots. Head/hands/feet whole, no crop/mirror/background/floor/shadow/grid/text/guide colors/extra people/views/changed clothes. New distinct PASSING_B legs with stated support side.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/deng_fei_passing_b_nw_v4.json",
+      "request_sha256": "8bc739c9f3561d1aa315f1c1a2b32d7de006d9ed8c823a2255d504fe5f71de97",
+      "references": [
+        "wang_ying_passing_b_nw_geometry_v7",
+        "deng_fei_idle_single_nw_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    }
+  ],
+  "scope": "Native complete ancestry plus new mathematical geometry references; Full four-phase candidate gait only; no production routing"
+}

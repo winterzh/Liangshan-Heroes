@@ -176,6 +176,34 @@ static func native_bound_path(variant: String, state: String, direction: String)
 		return ""
 	return "res://assets/anim/%s_idle_%s.tres" % [variant, direction]
 
+## Unarmed evacuees in the current Zhu RTS chapter. These families contain
+## authored idle/walk only; missing combat/terminal states must never borrow arms.
+const NATIVE_WOUNDED_FAMILIES := {
+	"shi_qian": "zhu_wounded_v4_shi_qian_gait_footclear",
+	"shi_xiu": "zhu_wounded_v4_shi_xiu_gait_footclear",
+	"qin_ming": "zhu_wounded_v4_qin_ming_gait_passing",
+	"yang_lin": "zhu_wounded_v4_yang_lin_gait_passing",
+	"huang_xin": "zhu_wounded_v4_huang_xin_gait_passing",
+	"wang_ying": "zhu_wounded_v4_wang_ying_gait_passing",
+	"deng_fei": "zhu_wounded_v4_deng_fei_gait_passing",
+}
+
+static func native_wounded_owner(variant: String) -> String:
+	if not variant.begins_with("zhu_wounded_"): return ""
+	var owner := variant.trim_prefix("zhu_wounded_")
+	return owner if NATIVE_WOUNDED_FAMILIES.has(owner) else ""
+
+static func native_body_owner(variant: String) -> String:
+	var owner := native_bound_owner(variant)
+	return owner if not owner.is_empty() else native_wounded_owner(variant)
+
+static func native_body_path(variant: String, state: String, direction: String) -> String:
+	var owner := native_wounded_owner(variant)
+	if owner.is_empty(): return native_bound_path(variant, state, direction)
+	if direction not in DIRECTIONS or state not in ["idle", "walk", "hurt"]: return ""
+	# Hurt remains the standing idle body, not a separately authored hurt action.
+	return "res://assets/anim/%s_%s_%s.tres" % [NATIVE_WOUNDED_FAMILIES[owner], "idle" if state == "hurt" else state, direction]
+
 ## 江州刑台使用现有通用刑台格，不虚报成一张尚不存在的战役专图。
 ## 这是显式的战役物件别名；其返回值由 ArtDB 从通用地形图集取用。
 const GENERIC_OBJECT_ALIASES := {
@@ -215,6 +243,8 @@ const PORTRAIT_OWNERS := {
 }
 
 static func portrait_owner(variant: String) -> String:
+	var wounded := native_wounded_owner(variant)
+	if not wounded.is_empty(): return wounded
 	return String(PORTRAIT_OWNERS.get(variant, PROGRAMMATIC_BOUND_VARIANTS.get(variant, "")))
 
 static func programmatic_bound_owner(variant: String) -> String:
