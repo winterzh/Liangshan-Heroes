@@ -1,0 +1,55 @@
+[gd_resource type="SpriteFrames" load_steps=7 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/wu_song_traits_20261006/actions_ne_v6.png" id="actions_ne_v6"]
+[ext_resource type="Texture2D" path="res://assets/characters/wu_song_traits_20261006/idle_spacing_v4.png" id="idle"]
+
+[sub_resource type="AtlasTexture" id="windup"]
+atlas = ExtResource("actions_ne_v6")
+region = Rect2(0, 0, 627, 627)
+margin = Rect2(0, 0, 0, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(6.0, -82.36)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.965568
+
+[sub_resource type="AtlasTexture" id="strike"]
+atlas = ExtResource("actions_ne_v6")
+region = Rect2(627, 0, 627, 627)
+margin = Rect2(0, 0, 0, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(78.25, -74.86)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.990714
+
+[sub_resource type="AtlasTexture" id="recovery"]
+atlas = ExtResource("actions_ne_v6")
+region = Rect2(0, 627, 627, 627)
+margin = Rect2(0, 0, 0, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-25.0, -13.86)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.992008
+
+[sub_resource type="AtlasTexture" id="idle"]
+atlas = ExtResource("idle")
+region = Rect2(0, 599, 656, 599)
+margin = Rect2(0, 28, 0, 57)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-18.0, 4.919999999999959)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.165558
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("windup")},
+{"duration": 1.0, "texture": SubResource("windup")},
+{"duration": 1.0, "texture": SubResource("strike")},
+{"duration": 1.0, "texture": SubResource("strike")},
+{"duration": 1.0, "texture": SubResource("recovery")},
+{"duration": 1.0, "texture": SubResource("idle")}
+],
+"loop": false,
+"name": &"default",
+"speed": 4.0
+}]

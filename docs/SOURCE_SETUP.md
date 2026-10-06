@@ -1,3 +1,17 @@
+<!-- ordinary-default-combat-v7-current -->
+## 2026-10-07 新站姿与武松四向战斗已接入源码默认取图
+
+ArtDB仅对空显式剧情变体的普通武松/林冲登记新idle/walk；普通武松增加四向attack/hurt，Unit将武松加入完整原生攻击绘制白名单，避免重复叠加整图挥动/程序刀影。林冲原四向战斗图继续使用。时迁与其他人物保持各自姿态，孟州武松、押解/囚犯林冲等显式剧情变体仍走原造型。人物数值、技能定义、指令与任务回调未修改。死亡、技能完整演出及连续步态后续继续审核；本轮不将这些未完成项标为合格。
+
+武松斩击西北后腿/后靴修清，新原生actions_nw3_v7.png保留原字节与精确请求/父图。6原生来源（含旧待机）编排20姿态、8战斗资源；attack按蓄势/蓄势/斩击/斩击/收势/同向idle六槽匹配真实命中相位，hurt每向一帧。脚点分别取两只靴子的落地锚点，头部独立测量；正常出手允许身体发力和重心降低，不把斩击拉成直立军姿。原作者候选清单/旧失败来源不改写，当前实际采用范围见qa/zhu_wounded_20261005/ordinary_character_default_routes_v7.json。
+
+私有试接入343项/48截图通过；随后用现行生产脚本原样复制、无私有ArtDB/Unit修改的原祝家庄林冲/大名府武松复验367项/48截图通过。正常时钟1.0，4904来源与105候选/资源输入零漂移，四向正常近战/反击、真实蓄势/命中/收势与恢复行走、原HUD/标准头像/剧情隔离及原数值均核实。直接查看并原字节保留12张实际生产视口；证据ordinary_chapter_combat_production_v7.json及ordinary_combat_production_visual_review_v7.json。显式接触摆位、非参与者冻结、关雾/镜头和阶段冻结是画面夹具，不证明连续播放、技能/死亡、自然通关、存档或性能。
+
+审核本次覆盖状态无阻塞问题后，只清两个指定旧失败批的imported中与保留最新成功生产批同名/大小/SHA256一致的7436个文件，1,780,976,820字节（约1.66GiB）；15274受保护文件与保留缓存匹配SHA零漂移。源图/旧失败图/源码/日志/截图/私有profile/存档和成功批缓存完整保留，两个imported目录保持原处；复查旧失败工程先重新导入。范围及恢复见qa/zhu_wounded_20261005/failed_action_import_cleanup_v7.json。未清主缓存、其他旧批、Git对象或平台包，先前6批只读清单的4.824GiB仍未删除。
+
+下一步按完整DEVELOPMENT_AUDIT_20261006.md继续：连续足底/衣装/武器、两人技能/死亡/多尺寸UI、全库人物、八关动态阶段/生产/船体/身份UI、同版战役保存自然结局/奖励一次、九玩法/发行程序、正常时钟约10分钟尾帧性能与Android实际设备资格。本次是源码默认绘制接入，不是Steam更新或完整目标完成。
+<!-- /ordinary-default-combat-v7-current -->
+
 <!-- ordinary-actions-sync-v6 -->
 2026-10-07：本轮52白名单文件（21,701,568字节）已提交并推送stable，独立回读源码SHA 7ee20b6fe84761881faadf6f4fc1ddc7df5e2ffc 一致。收据qa/zhu_wounded_20261005/ordinary_actions_source_sync_v6.json。255项原关卡诊断/32截图及7原生纹理导入已验证；新战斗图仍为候选，resources=0，默认取图未替换。后续文档收尾另见Git历史，未清理或发布平台。
 <!-- /ordinary-actions-sync-v6 -->
@@ -2238,3 +2252,5 @@ py -3 -X utf8 -B tools/run_art_full_qa.py --run --work-root D:\CodexTemp\art_ful
 Level 7 四处酒望继续使用 `assets/campaign/environment/art_full_20260915/taverns.png` 与 `assets/campaign/environment/level7/roadside_tavern_{a,b,c,d}.tres` 作为来源和 route 记录。由于 Godot 4.6.3 的 Unit 画布路径会把这组带虚拟 margin 的 AtlasTexture 合成为白色矩形，`scripts/unit.gd` 的实时 Unit 绘制只改用已经验收的真透明 `assets/campaign/objects/roadside_tavern_default.png`；没有覆盖来源文件、改原图像素、改变关卡范围或删除 TRES。实景与全库回归收据见 `qa/level7_tavern_render_20260916/`。
 
 当前原关卡诊断入口：python -X utf8 -B qa/zhu_wounded_20261005/harness/ordinary_chapter_actions_v6b.py --from-receipt <已完成原Battle evidence/receipt.json> --work-root <包含Wu/Lin已核验native texture bootstrap收据的工程外QA目录> --run。无--run只读预检。自然等待共享Godot，使用独立私有profile。该入口只诊断旧战斗图与新idle/walk，不加载本轮新战斗候选。
+
+当前默认绘制复验：python -X utf8 -B qa/zhu_wounded_20261005/harness/ordinary_chapter_combat_production_v7.py --from-receipt <原Battle source baseline收据> --work-root <已完成Wu/Lin gait、Wu combat native bootstrap与v7 pilot的工程外QA目录> --run。工具比原baseline只允许ArtDB/Unit这两份登记变更，冻结现行脚本原样运行，没有私有运行时补丁；该工具是此轮收据的固定producer，后续源码版本需要新baseline/新producer。正常源码启动仍按下文入口；所有本机Godot路径通过忽略配置提供。

@@ -1,0 +1,22 @@
+[gd_resource type="SpriteFrames" load_steps=3 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/wu_song_traits_20261006/hurt_sw_v6.png" id="hurt_sw_v6"]
+
+[sub_resource type="AtlasTexture" id="hurt"]
+atlas = ExtResource("hurt_sw_v6")
+region = Rect2(0, 0, 1254, 1254)
+margin = Rect2(0, 0, 0, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-55.0, -83.22)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.036693
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("hurt")}
+],
+"loop": false,
+"name": &"default",
+"speed": 4.0
+}]

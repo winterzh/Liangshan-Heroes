@@ -1,0 +1,727 @@
+{
+  "schema": "native_direction4_spriteframes_v1",
+  "identity_key": "wu_song",
+  "character": "character_traits_v7_wu_song_combat",
+  "revision": "character_traits_v5",
+  "candidate_only": true,
+  "production_qualified": false,
+  "runtime_action_qualified": false,
+  "sources": {
+    "actions_se_v6": {
+      "path": "assets/characters/wu_song_traits_20261006/actions_se_v6.png",
+      "sha256": "d874ee1b9555e307b23d40d8c17aea63710747397a81f31c96b4295ac0cbe5b1",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "selected": true,
+      "selection": "all four southeast phases",
+      "imported_size": [
+        1254,
+        1254
+      ],
+      "import_dimensions_verified": true,
+      "alpha_zero_fraction": 0.6816528416880973,
+      "native_alpha_bounds": [
+        106,
+        44,
+        1223,
+        1212
+      ]
+    },
+    "actions_sw2_v6": {
+      "path": "assets/characters/wu_song_traits_20261006/actions_sw2_v6.png",
+      "sha256": "992e9ac37a4dcb8c359f3f8869b58a29205f63761a44aea03e992d0a6a2fe837",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "selected": true,
+      "selection": "ONLY windup/strike/recovery selected; hurt still faces southeast",
+      "imported_size": [
+        1254,
+        1254
+      ],
+      "import_dimensions_verified": true,
+      "alpha_zero_fraction": 0.6845202210979093,
+      "native_alpha_bounds": [
+        66,
+        32,
+        1231,
+        1208
+      ]
+    },
+    "actions_ne_v6": {
+      "path": "assets/characters/wu_song_traits_20261006/actions_ne_v6.png",
+      "sha256": "20206216420720780f9537c256fedb1a64aa5b783ba622363df837bab07917bd",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "selected": true,
+      "selection": "all four northeast rear phases",
+      "imported_size": [
+        1254,
+        1254
+      ],
+      "import_dimensions_verified": true,
+      "alpha_zero_fraction": 0.7062103024706903,
+      "native_alpha_bounds": [
+        60,
+        59,
+        1220,
+        1167
+      ]
+    },
+    "hurt_sw_v6": {
+      "path": "assets/characters/wu_song_traits_20261006/hurt_sw_v6.png",
+      "sha256": "c729b47c4703bf8fbab6f27b5ef3a11d7edfa68d144d12879da1145b97d1950b",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "selected": true,
+      "selection": "single southwest hurt selected",
+      "imported_size": [
+        1254,
+        1254
+      ],
+      "import_dimensions_verified": true,
+      "alpha_zero_fraction": 0.7342144690419684,
+      "native_alpha_bounds": [
+        163,
+        168,
+        1066,
+        1151
+      ]
+    },
+    "idle": {
+      "path": "assets/characters/wu_song_traits_20261006/idle_spacing_v4.png",
+      "sha256": "2779494857f783d412af53030b918d0694a9b769c38e5054719059eb0f4cee28",
+      "job": "wu_song_idle_spacing_traits_v4",
+      "mode": "RGBA",
+      "native_size": [
+        1312,
+        1199
+      ],
+      "imported_size": [
+        1312,
+        1199
+      ],
+      "import_limit": 1536,
+      "import_dimension_status": "independently verified native texture dimensions",
+      "import_dimensions_verified": true,
+      "full_atlas": true,
+      "alpha_zero_fraction": 0.8127898757094326
+    },
+    "actions_nw3_v7": {
+      "path": "assets/characters/wu_song_traits_20261006/actions_nw3_v7.png",
+      "sha256": "9dc1a1bc4a9d76285f13ef7290ddfab4f62ab3d77de054fc0340c56ea21798bd",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "imported_size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "selected": true,
+      "selection": "all four northwest phases, explicit both-boot support correction",
+      "import_dimensions_verified": true,
+      "native_alpha_bounds": [
+        38,
+        10,
+        1229,
+        1206
+      ]
+    }
+  },
+  "poses": {
+    "windup_se": {
+      "source": "actions_se_v6",
+      "region": [
+        0,
+        0,
+        627,
+        627
+      ],
+      "margin": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "virtual_size_imported": 627,
+      "pivot": [
+        321.5,
+        604.5
+      ],
+      "draw_offset_px": [
+        -8.0,
+        -90.36
+      ],
+      "draw_scale": 0.967478,
+      "sampling_qualified": false,
+      "ground_pivot_status": "Independent boot/head ROI metadata; actual body/weapon/foot transitions not yet qualified"
+    },
+    "strike_se": {
+      "source": "actions_se_v6",
+      "region": [
+        627,
+        0,
+        627,
+        627
+      ],
+      "margin": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "virtual_size_imported": 627,
+      "pivot": [
+        256.75,
+        594.0
+      ],
+      "draw_offset_px": [
+        56.75,
+        -79.86
+      ],
+      "draw_scale": 0.990714,
+      "sampling_qualified": false,
+      "ground_pivot_status": "Independent boot/head ROI metadata; actual body/weapon/foot transitions not yet qualified"
+    },
+    "recovery_se": {
+      "source": "actions_se_v6",
+      "region": [
+        0,
+        627,
+        627,
+        627
+      ],
+      "margin": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "virtual_size_imported": 627,
+      "pivot": [
+        329.0,
+        559.0
+      ],
+      "draw_offset_px": [
+        -15.5,
+        -44.86
+      ],
+      "draw_scale": 0.942312,
+      "sampling_qualified": false,
+      "ground_pivot_status": "Independent boot/head ROI metadata; actual body/weapon/foot transitions not yet qualified"
+    },
+    "hurt_se": {
+      "source": "actions_se_v6",
+      "region": [
+        627,
+        627,
+        627,
+        627
+      ],
+      "margin": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "virtual_size_imported": 627,
+      "pivot": [
+        343.75,
+        559.0
+      ],
+      "draw_offset_px": [
+        -30.25,
+        -44.86
+      ],
+      "draw_scale": 0.960825,
+      "sampling_qualified": false,
+      "ground_pivot_status": "Independent boot/head ROI metadata; actual body/weapon/foot transitions not yet qualified"
+    },
+    "idle_se": {
+      "source": "idle",
+      "region_raw": [
+        0,
+        0,
+        656,
+        599
+      ],
+      "region": [
+        0,
+        0,
+        656,
+        599
+      ],
+      "margin": [
+        0,
+        28,
+        0,
+        57
+      ],
+      "virtual_size_imported": 656,
+      "pivot": [
+        345.0,
+        556
+      ],
+      "draw_offset_px": [
+        -17.0,
+        -46.08000000000004
+      ],
+      "draw_scale": 1.147265
+    },
+    "windup_sw": {
+      "source": "actions_sw2_v6",
+      "region": [
+        0,
+        0,
+        627,
+        627
+      ],
+      "margin": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "virtual_size_imported": 627,
+      "pivot": [
+        354.25,
+        595.0
+      ],
+      "draw_offset_px": [
+        -40.75,
+        -80.86
+      ],
+      "draw_scale": 0.986008,
+      "sampling_qualified": false,
+      "ground_pivot_status": "Independent boot/head ROI metadata; actual body/weapon/foot transitions not yet qualified"
+    },
+    "strike_sw": {
+      "source": "actions_sw2_v6",
+      "region": [
+        627,
+        0,
+        627,
+        627
+      ],
+      "margin": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "virtual_size_imported": 627,
+      "pivot": [
+        340.0,
+        596.5
+      ],
+      "draw_offset_px": [
+        -26.5,
+        -82.36
+      ],
+      "draw_scale": 0.981158,
+      "sampling_qualified": false,
+      "ground_pivot_status": "Independent boot/head ROI metadata; actual body/weapon/foot transitions not yet qualified"
+    },
+    "recovery_sw": {
+      "source": "actions_sw2_v6",
+      "region": [
+        0,
+        627,
+        627,
+        627
+      ],
+      "margin": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "virtual_size_imported": 627,
+      "pivot": [
+        331.75,
+        555.0
+      ],
+      "draw_offset_px": [
+        -18.25,
+        -40.86
+      ],
+      "draw_scale": 0.949631,
+      "sampling_qualified": false,
+      "ground_pivot_status": "Independent boot/head ROI metadata; actual body/weapon/foot transitions not yet qualified"
+    },
+    "hurt_sw": {
+      "source": "hurt_sw_v6",
+      "region": [
+        0,
+        0,
+        1254,
+        1254
+      ],
+      "margin": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "virtual_size_imported": 1254,
+      "pivot": [
+        682.0,
+        1111.5
+      ],
+      "draw_offset_px": [
+        -55.0,
+        -83.22
+      ],
+      "draw_scale": 1.036693,
+      "sampling_qualified": false,
+      "ground_pivot_status": "Independent boot/head ROI metadata; actual body/weapon/foot transitions not yet qualified"
+    },
+    "idle_sw": {
+      "source": "idle",
+      "region_raw": [
+        656,
+        0,
+        656,
+        599
+      ],
+      "region": [
+        656,
+        0,
+        656,
+        599
+      ],
+      "margin": [
+        0,
+        28,
+        0,
+        57
+      ],
+      "virtual_size_imported": 656,
+      "pivot": [
+        326.5,
+        556
+      ],
+      "draw_offset_px": [
+        1.5,
+        -46.08000000000004
+      ],
+      "draw_scale": 1.147265
+    },
+    "windup_ne": {
+      "source": "actions_ne_v6",
+      "region": [
+        0,
+        0,
+        627,
+        627
+      ],
+      "margin": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "virtual_size_imported": 627,
+      "pivot": [
+        307.5,
+        596.5
+      ],
+      "draw_offset_px": [
+        6.0,
+        -82.36
+      ],
+      "draw_scale": 0.965568,
+      "sampling_qualified": false,
+      "ground_pivot_status": "Independent boot/head ROI metadata; actual body/weapon/foot transitions not yet qualified"
+    },
+    "strike_ne": {
+      "source": "actions_ne_v6",
+      "region": [
+        627,
+        0,
+        627,
+        627
+      ],
+      "margin": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "virtual_size_imported": 627,
+      "pivot": [
+        235.25,
+        589.0
+      ],
+      "draw_offset_px": [
+        78.25,
+        -74.86
+      ],
+      "draw_scale": 0.990714,
+      "sampling_qualified": false,
+      "ground_pivot_status": "Independent boot/head ROI metadata; actual body/weapon/foot transitions not yet qualified"
+    },
+    "recovery_ne": {
+      "source": "actions_ne_v6",
+      "region": [
+        0,
+        627,
+        627,
+        627
+      ],
+      "margin": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "virtual_size_imported": 627,
+      "pivot": [
+        338.5,
+        528.0
+      ],
+      "draw_offset_px": [
+        -25.0,
+        -13.86
+      ],
+      "draw_scale": 0.992008,
+      "sampling_qualified": false,
+      "ground_pivot_status": "Independent boot/head ROI metadata; actual body/weapon/foot transitions not yet qualified"
+    },
+    "hurt_ne": {
+      "source": "actions_ne_v6",
+      "region": [
+        627,
+        627,
+        627,
+        627
+      ],
+      "margin": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "virtual_size_imported": 627,
+      "pivot": [
+        330.25,
+        521.0
+      ],
+      "draw_offset_px": [
+        -16.75,
+        -6.86
+      ],
+      "draw_scale": 1.016757,
+      "sampling_qualified": false,
+      "ground_pivot_status": "Independent boot/head ROI metadata; actual body/weapon/foot transitions not yet qualified"
+    },
+    "idle_ne": {
+      "source": "idle",
+      "region_raw": [
+        0,
+        599,
+        656,
+        599
+      ],
+      "region": [
+        0,
+        599,
+        656,
+        599
+      ],
+      "margin": [
+        0,
+        28,
+        0,
+        57
+      ],
+      "virtual_size_imported": 656,
+      "pivot": [
+        346.0,
+        505
+      ],
+      "draw_offset_px": [
+        -18.0,
+        4.919999999999959
+      ],
+      "draw_scale": 1.165558
+    },
+    "windup_nw": {
+      "source": "actions_nw3_v7",
+      "region": [
+        0,
+        0,
+        627,
+        627
+      ],
+      "margin": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "virtual_size_imported": 627,
+      "pivot": [
+        355.75,
+        607.0
+      ],
+      "draw_offset_px": [
+        -42.25,
+        -92.86
+      ],
+      "draw_scale": 0.970357,
+      "sampling_qualified": false,
+      "ground_pivot_status": "Independent boot/head ROI metadata; actual body/weapon/foot transitions not yet qualified"
+    },
+    "strike_nw": {
+      "source": "actions_nw3_v7",
+      "region": [
+        627,
+        0,
+        627,
+        627
+      ],
+      "margin": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "virtual_size_imported": 627,
+      "pivot": [
+        426.5,
+        603.0
+      ],
+      "draw_offset_px": [
+        -113.0,
+        -88.86
+      ],
+      "draw_scale": 0.999367,
+      "sampling_qualified": false,
+      "ground_pivot_status": "Independent boot/head ROI metadata; actual body/weapon/foot transitions not yet qualified"
+    },
+    "recovery_nw": {
+      "source": "actions_nw3_v7",
+      "region": [
+        0,
+        627,
+        627,
+        627
+      ],
+      "margin": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "virtual_size_imported": 627,
+      "pivot": [
+        363.0,
+        560.5
+      ],
+      "draw_offset_px": [
+        -49.5,
+        -46.36
+      ],
+      "draw_scale": 0.920151,
+      "sampling_qualified": false,
+      "ground_pivot_status": "Independent boot/head ROI metadata; actual body/weapon/foot transitions not yet qualified"
+    },
+    "hurt_nw": {
+      "source": "actions_nw3_v7",
+      "region": [
+        627,
+        627,
+        627,
+        627
+      ],
+      "margin": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "virtual_size_imported": 627,
+      "pivot": [
+        349.25,
+        571.0
+      ],
+      "draw_offset_px": [
+        -35.75,
+        -56.86
+      ],
+      "draw_scale": 0.958941,
+      "sampling_qualified": false,
+      "ground_pivot_status": "Independent boot/head ROI metadata; actual body/weapon/foot transitions not yet qualified"
+    },
+    "idle_nw": {
+      "source": "idle",
+      "region_raw": [
+        656,
+        599,
+        656,
+        599
+      ],
+      "region": [
+        656,
+        599,
+        656,
+        599
+      ],
+      "margin": [
+        0,
+        28,
+        0,
+        57
+      ],
+      "virtual_size_imported": 656,
+      "pivot": [
+        313.0,
+        506
+      ],
+      "draw_offset_px": [
+        15.0,
+        3.919999999999959
+      ],
+      "draw_scale": 1.162909
+    }
+  },
+  "resources": [
+    "assets/anim/character_traits_v7_wu_song_combat_attack_se.tres",
+    "assets/anim/character_traits_v7_wu_song_combat_hurt_se.tres",
+    "assets/anim/character_traits_v7_wu_song_combat_attack_sw.tres",
+    "assets/anim/character_traits_v7_wu_song_combat_hurt_sw.tres",
+    "assets/anim/character_traits_v7_wu_song_combat_attack_ne.tres",
+    "assets/anim/character_traits_v7_wu_song_combat_hurt_ne.tres",
+    "assets/anim/character_traits_v7_wu_song_combat_attack_nw.tres",
+    "assets/anim/character_traits_v7_wu_song_combat_hurt_nw.tres"
+  ],
+  "scope": "Native combat candidate frames including matched existing gait idle recovery. Metadata-only sampling. Exact physical actions, continuous body/weapon transitions, cast/death and production qualification remain required.",
+  "continuous_gait_qualified": false,
+  "states": {
+    "attack": [
+      "windup",
+      "windup",
+      "strike",
+      "strike",
+      "recovery",
+      "idle"
+    ],
+    "hurt": [
+      "hurt"
+    ]
+  }
+}

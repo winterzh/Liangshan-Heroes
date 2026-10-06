@@ -424,7 +424,32 @@ func avatar_texture(key: String, variant := "") -> Texture2D:
 	return t
 
 
+## Ordinary armed bodies only. Explicit story appearances retain their own routes.
+## Unlisted actions retain existing art while further action review continues.
+const ORDINARY_CHARACTER_FAMILIES := {
+	"wu_song": {
+		"idle": "character_traits_v5_wu_song_gait", "walk": "character_traits_v5_wu_song_gait",
+		"attack": "character_traits_v7_wu_song_combat", "hurt": "character_traits_v7_wu_song_combat"
+	},
+	"lin_chong": {
+		"idle": "character_traits_v5_lin_chong_gait", "walk": "character_traits_v5_lin_chong_gait"
+	}
+}
+
+func _ordinary_character_frames(key: String, state: String, direction: String, variant: String) -> Array:
+	if not variant.is_empty() or direction not in CampaignArt.DIRECTIONS:
+		return []
+	var family: Dictionary = ORDINARY_CHARACTER_FAMILIES.get(key, {})
+	if not family.has(state): return []
+	var path := "res://assets/anim/%s_%s_%s.tres" % [family[state], state, direction]
+	var cache_key := "ordinary_character|" + path
+	if not _anim_cache.has(cache_key):
+		_anim_cache[cache_key] = _load_generic_directional_frames(path)
+	return _anim_cache[cache_key]
+
 func unit_texture(key: String, variant := "", direction := "") -> Texture2D:
+	var ordinary := _ordinary_character_frames(key, "idle", "se" if direction.is_empty() else direction, variant)
+	if not ordinary.is_empty(): return ordinary[0]
 	if not CampaignArt.native_body_owner(variant).is_empty():
 		var native_direction: String = "se" if direction.is_empty() else direction
 		var native_frames := unit_anim_frames(key, "idle", native_direction, variant)
@@ -679,6 +704,8 @@ func portrait_texture(key: String) -> Texture2D:
 func unit_anim_frames(key: String, state: String, direction := "", variant := "") -> Array:
 	if not direction.is_empty() and direction not in CampaignArt.DIRECTIONS:
 		return []
+	var ordinary := _ordinary_character_frames(key, state, direction, variant)
+	if not ordinary.is_empty(): return ordinary
 	var native_owner := CampaignArt.native_body_owner(variant)
 	if not native_owner.is_empty():
 		if key != native_owner: return []
@@ -870,6 +897,7 @@ func _slice_anim_strip(tex: Texture2D) -> Array:
 func unit_anim_uses_directional_source(key: String, state: String, direction: String, variant := "") -> bool:
 	if direction not in CampaignArt.DIRECTIONS:
 		return false
+	if not _ordinary_character_frames(key, state, direction, variant).is_empty(): return true
 	if not CampaignArt.native_body_owner(variant).is_empty():
 		return not unit_anim_frames(key, state, direction, variant).is_empty()
 	if not variant.is_empty():
