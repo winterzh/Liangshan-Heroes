@@ -1,0 +1,143 @@
+{
+  "source_declaration_audit_complete": true,
+  "campaign_chapters": [
+    {
+      "index": 0,
+      "level_id": "level1",
+      "title": "智取生辰纲",
+      "installed_level_script": "scripts/levels/level1_huangnigang_short.gd",
+      "factory_path": "scripts/run_level1_world_factory.gd",
+      "factory_exists": true,
+      "profile_context_declared": true,
+      "level_component_declared": true,
+      "qualification": "Declaration inventory only; not actual restore/continue or natural chapter proof."
+    },
+    {
+      "index": 1,
+      "level_id": "level2",
+      "title": "江州劫法场",
+      "installed_level_script": "scripts/levels/level2_jiangzhou_rts.gd",
+      "factory_path": "scripts/run_level2_world_factory.gd",
+      "factory_exists": true,
+      "profile_context_declared": true,
+      "level_component_declared": true,
+      "qualification": "Declaration inventory only; not actual restore/continue or natural chapter proof."
+    },
+    {
+      "index": 2,
+      "level_id": "level3",
+      "title": "三打祝家庄",
+      "installed_level_script": "scripts/levels/level3_zhujiazhuang_rts.gd",
+      "factory_path": "scripts/run_level3_world_factory.gd",
+      "factory_exists": true,
+      "profile_context_declared": true,
+      "level_component_declared": true,
+      "qualification": "Declaration inventory only; not actual restore/continue or natural chapter proof."
+    },
+    {
+      "index": 3,
+      "level_id": "level4",
+      "title": "大破连环马",
+      "installed_level_script": "scripts/levels/level4_lianhuanma_rts.gd",
+      "factory_path": "scripts/run_level4_world_factory.gd",
+      "factory_exists": true,
+      "profile_context_declared": true,
+      "level_component_declared": true,
+      "qualification": "Declaration inventory only; not actual restore/continue or natural chapter proof."
+    },
+    {
+      "index": 4,
+      "level_id": "level5",
+      "title": "三败高太尉",
+      "installed_level_script": "scripts/levels/level5_gao_rts.gd",
+      "factory_path": "scripts/run_level5_world_factory.gd",
+      "factory_exists": false,
+      "profile_context_declared": false,
+      "level_component_declared": true,
+      "qualification": "Declaration inventory only; not actual restore/continue or natural chapter proof."
+    },
+    {
+      "index": 5,
+      "level_id": "level6",
+      "title": "大闹野猪林",
+      "installed_level_script": "scripts/levels/level6_yezhulin.gd",
+      "factory_path": "scripts/run_level6_world_factory.gd",
+      "factory_exists": true,
+      "profile_context_declared": true,
+      "level_component_declared": true,
+      "qualification": "Declaration inventory only; not actual restore/continue or natural chapter proof."
+    },
+    {
+      "index": 6,
+      "level_id": "level7",
+      "title": "醉打蒋门神",
+      "installed_level_script": "scripts/levels/level7_kuaihuolin_short.gd",
+      "factory_path": "scripts/run_level7_world_factory.gd",
+      "factory_exists": true,
+      "profile_context_declared": true,
+      "level_component_declared": true,
+      "qualification": "Declaration inventory only; not actual restore/continue or natural chapter proof."
+    },
+    {
+      "index": 7,
+      "level_id": "level8",
+      "title": "智取大名府",
+      "installed_level_script": "scripts/levels/level8_daming_rts.gd",
+      "factory_path": "scripts/run_level8_world_factory.gd",
+      "factory_exists": false,
+      "profile_context_declared": false,
+      "level_component_declared": true,
+      "qualification": "Declaration inventory only; not actual restore/continue or natural chapter proof."
+    }
+  ],
+  "missing_declared_factory_or_profile": [
+    "level5",
+    "level8"
+  ],
+  "public_save_gate_expression": "Campaign.skirmish and not Campaign.skirmish_ai and not Campaign.arena and not Campaign.custom_defense and not Campaign.scenario and Campaign.defense_waves == 30 and Campaign.defense_hero_cap == 4 and not Campaign.defense_random",
+  "public_campaign_entry_qualified": false,
+  "gao_end_button_uses_anonymous_callback": true,
+  "gao_external_end_button_declared": true,
+  "gao_named_activation_hook_present": false,
+  "required_work": [
+    "Complete installed level5/level8 profile/factory/core bindings; level5 named and reconstructible mission end button with correct callback ownership.",
+    "Verify actual boats/transport/production/stages and level references; exit and independent process continue/resave for both chapters; revalidate existing chapter and unsupported-scope guards.",
+    "Prove natural endings/reward once and full plan regression before exposing public campaign save entry. Current public save is classic30 only."
+  ],
+  "sources": [
+    {
+      "path": "scripts/campaign.gd",
+      "sha256": "db50f6d1c97ca26746f5fbe576487390af5d81f4af708c289155f23cca38ff02"
+    },
+    {
+      "path": "scripts/run_official_restore_profile.gd",
+      "sha256": "ae0e891b1003fd5b392013af0832c011b9aee5232f2ffa662883bb91ad7248bc"
+    },
+    {
+      "path": "scripts/run_battle_world_core.gd",
+      "sha256": "fafabfaedd0432225701b08c5927b812201d80a6fd4ff27468d2f745c35d0117"
+    },
+    {
+      "path": "scripts/run_campaign_level_state.gd",
+      "sha256": "ea3e3b14a723d359eeb1a6268ecef03f73ca9cbacf8782451cfcf5e3fdd03db1"
+    },
+    {
+      "path": "scripts/run_campaign_presentation_state.gd",
+      "sha256": "f447bae90fea73f64b2c50376c2b470cd1279cff46661275587996820d72c8d7"
+    },
+    {
+      "path": "scripts/continue_flow.gd",
+      "sha256": "a169690ba69adbc436355dfce45d5373f0f0c18ca013c09d57fbd552156df172"
+    },
+    {
+      "path": "scripts/levels/level5_gao_rts.gd",
+      "sha256": "bbe8caf25ab8cfd7ce75c6103d1b0f9430b49d04d45389863dbaa8cc97edc0a6"
+    },
+    {
+      "path": "scripts/levels/level8_daming_rts.gd",
+      "sha256": "72e57093715ebfb29247aaf332838f233d736936d29d83a4b24ecd90ee677db7"
+    }
+  ],
+  "producer_sha256": "1d0540db230ff70511431a0fe50c1105088ea5ab65581fc96a4474282673869f",
+  "scope": "Read-only exact current-source inventory. Missing declarations are evidence of incompleteness; existing declarations are not evidence of functional or platform qualification."
+}

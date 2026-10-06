@@ -1,0 +1,27 @@
+{
+  "passed": false,
+  "mechanical_passed": true,
+  "blocked_by": "lin_guard_sprite_occlusion",
+  "receipt_sha256": "a4866594cb9a16fa1574757026c86bc6ff9d45b4f4775a71d5281fcdc7597531",
+  "checks": 761,
+  "captures": 112,
+  "actual_effects": 28,
+  "viewed_rejection": [
+    {
+      "case": "lin_chong_3_ne_mid_1440x960",
+      "path": "qa/zhu_wounded_20261005/ordinary_skill_guard_rejection_v16b_frames/lin_chong_3_ne_mid_1440x960.png",
+      "sha256": "e3d4318eff7cd0f0390bf03b5d329257ed294208bea4484dcdee74b6338b93d6"
+    },
+    {
+      "case": "lin_chong_3_ne_late_1920x1080",
+      "path": "qa/zhu_wounded_20261005/ordinary_skill_guard_rejection_v16b_frames/lin_chong_3_ne_late_1920x1080.png",
+      "sha256": "d847ed036ee8eb0b6654431e982ed991ae99ec0563afeeb460bd5cbc56fe8801"
+    }
+  ],
+  "findings": [
+    "Complete seven active abilities/four headings actual mid/late phases and outcomes passed; whole source/private inputs unchanged, original roster targets retained.",
+    "Current Lin R with preceding W guard: bright center-to-edge spokes and near-opaque white spearheads cover upper body and approach/overlap the healthbar. Directly viewed current NE mid/late native views confirm defect.",
+    "LinGuardFx draw geometry in Battle uses zero origin, spokes9..35, tips41 and white alpha0.9. Fix drawing placement/opacity/peripheral spokes only; preserve target, life/dur/process, damage reduction and retaliation. Full new production/source/visual verification required."
+  ],
+  "scope": "Full mechanics qualified; overall visual qualification false. No uninterrupted skill playback, complete campaign/save/nine-mode/performance/export/device qualification."
+}

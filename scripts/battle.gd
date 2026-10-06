@@ -14073,14 +14073,17 @@ class LinGuardFx extends TimedFx:
 		draw_set_transform_matrix(GameMap.ISO_INV)
 		var fade := clampf(minf((dur - t) / 0.16, t / 0.22), 0.0, 1.0)
 		var pulse := 0.78 + 0.22 * sin((dur - t) * TAU * 2.4)
-		var c := Color(col.r, col.g, col.b, 0.72 * fade * pulse)
-		draw_arc(Vector2.ZERO, 25.0, -PI * 0.92, PI * 0.12, 26, c, 3.0)
-		draw_arc(Vector2.ZERO, 31.0, -PI * 0.88, PI * 0.08, 26, Color(c.r, c.g, c.b, c.a * 0.45), 1.5)
+		# Keep the guard cue around the feet instead of over the torso/head.
+		# Only drawing changes: the target, guard duration and damage rules stay intact.
+		var origin := Vector2(0.0, 8.0)
+		var c := Color(col.r, col.g, col.b, 0.34 * fade * pulse)
+		draw_arc(origin, 25.0, -PI * 0.92, PI * 0.12, 26, c, 1.8)
+		draw_arc(origin, 31.0, -PI * 0.88, PI * 0.08, 26, Color(c.r, c.g, c.b, c.a * 0.45), 1.0)
 		for a in [-2.55, -1.95, -1.35, -0.75, -0.15]:
 			var d := Vector2(cos(a), sin(a))
-			draw_line(d * 9.0, d * 35.0, c, 2.4)
-			draw_colored_polygon(PackedVector2Array([d * 41.0, d.rotated(0.16) * 32.0, d.rotated(-0.16) * 32.0]),
-				Color(0.94, 0.97, 1.0, 0.9 * fade))
+			draw_line(origin + d * 25.0, origin + d * 31.0, c, 1.5)
+			draw_colored_polygon(PackedVector2Array([origin + d * 33.0, origin + d.rotated(0.12) * 27.0, origin + d.rotated(-0.12) * 27.0]),
+				Color(0.94, 0.97, 1.0, 0.36 * fade))
 		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
 
