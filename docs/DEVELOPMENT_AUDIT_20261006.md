@@ -11,7 +11,7 @@
 
 新增只读八关声明审计campaign_restore_gap_inventory_v18.json：level5三败高太尉、level8智取大名府缺少已安装恢复profile/factory；高太尉结局按钮仍为匿名回调，需要具名可恢复的任务按钮及对应对象/船体/运输/生产绑定。下一阶段补齐实际恢复并验独立进程保存、继续、再保存、自然结局/奖励一次和既有关卡回归。当前公开继续仍classic30；声明齐全不算功能通过。拥挤编队UI、完整连续演出、同版九玩法/发行程序、约10分钟尾帧及Android2.0.1真机等全项目项仍开放。
 
-本轮源码、审核证据、清理记录和七份交接文档尚待白名单提交推送；上一独立远端回读897c0ad763ac22d9c953ae8dfdc805e2ba0bdc17。未合main或发布平台。
+本轮61白名单文件（40,287,254字节）已本地提交并推送stable，独立回读984f16448e1ef83eb65f0626cb746e153a886e9e一致；同步收据guard_source_sync_v17.json。收据与文档同步状态另作元数据收尾提交。未合main或发布平台。
 <!-- /guard-readability-v17-current -->
 
 <!-- continuous-gait-v15b-current -->
@@ -65,6 +65,6 @@
 | 约10分钟性能、尾帧、切换清理 | 历史有效窗口中位FPS139–190，但P95/P99最高值和最终清理门槛未通过；当前截图FPS不作性能证据 | 在正常时钟、同负载下完成能正常结束的约10分钟夹具；目标60FPS、P95≤16.7ms/P99≤33.3ms。测尾帧原因、节点/内存清理及切换；不擅自改为30分钟要求 |
 | Android真机及平台资格 | 历史2.0安装/联网/触控有用户确认；本轮未取得2.0.1手机/平板持续性能、DPI/安全区/触控后验 | 需实际设备和平台回读证据，不能用桌面模拟、构建成功或截图替代。第二账号/跨设备按已有用户决定不作为现阶段发布阻塞，但不标为通过 |
 | 审核、修错、有限冗余清理 | 当前v15b采样及主要桌面HUD复核通过；判退v15/v15a重复imported 7476文件、1,803,637,428字节已清，受保护/保留缓存零漂移。先前v7/v14清理保留原收据 | 只关闭指定重复文件，旧工程复查先重导入；6批4.824GiB未删。完整审核继续，失败来源/报告不删除 |
-| GitHub增量同步 | 上一独立回读897c0ad7；当前v17生产画面修正、761项112图/19视口证据及失败/清理记录待本轮白名单同步 | 不合main、不发布平台；全目标继续 |
+| GitHub增量同步 | 当前61白名单文件已提交推送stable，独立回读984f16448e1ef83eb65f0626cb746e153a886e9e一致；761项112图/19视口、生产绘制修正、失败/清理记录及八关缺口审计已同步 | 全目标继续；收据/文档元数据另见Git历史，不合main、不发布平台 |
 
 当前合格来源：qa/zhu_wounded_20261005/original_rescued_seven_production_route_v4.json、original_rescued_seven_visual_review_v4.json、rescued_seven_candidate_identity_audit_v4.json、rescued_seven_cross_process_qualified_v4.json。原始成功批为E:/ChatGPT/qa-rescued-seven-current-20261006/20261006_152842_60aec8f8/evidence/receipt.json。新结果必须补入相应审计项；未完成项不得仅因其他测试绿色而关闭。

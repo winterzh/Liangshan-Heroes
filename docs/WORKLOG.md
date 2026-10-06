@@ -11,7 +11,7 @@
 
 新增只读八关声明审计campaign_restore_gap_inventory_v18.json：level5三败高太尉、level8智取大名府缺少已安装恢复profile/factory；高太尉结局按钮仍为匿名回调，需要具名可恢复的任务按钮及对应对象/船体/运输/生产绑定。下一阶段补齐实际恢复并验独立进程保存、继续、再保存、自然结局/奖励一次和既有关卡回归。当前公开继续仍classic30；声明齐全不算功能通过。拥挤编队UI、完整连续演出、同版九玩法/发行程序、约10分钟尾帧及Android2.0.1真机等全项目项仍开放。
 
-本轮源码、审核证据、清理记录和七份交接文档尚待白名单提交推送；上一独立远端回读897c0ad763ac22d9c953ae8dfdc805e2ba0bdc17。未合main或发布平台。
+本轮61白名单文件（40,287,254字节）已本地提交并推送stable，独立回读984f16448e1ef83eb65f0626cb746e153a886e9e一致；同步收据guard_source_sync_v17.json。收据与文档同步状态另作元数据收尾提交。未合main或发布平台。
 <!-- /guard-readability-v17-current -->
 
 <!-- continuous-gait-v15b-current -->
