@@ -1,0 +1,21 @@
+{
+  "qualified": false,
+  "receipt_sha256": "85b1a16483a320f72901141e05ae28bf93474780051ab907aa2fcb437fccc029",
+  "log_sha256": "29cfeb0b26c0c841d698a5d3826bbf4892f4b77fd3f4326de5a3a2d9664a4a75",
+  "harnesses": [
+    {
+      "path": "qa/zhu_wounded_20261005/harness/campaign_foundation_v18a.gd",
+      "sha256": "0c6de11712ceeecd8a5f4a0b20acc04e57562f62934c95469590bd51b84f9e23"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/harness/run_campaign_foundation_v18a.py",
+      "sha256": "555788ddafa44c89acb6707404b47bb3c74f2625618143a72b9879b3c4ee4a44"
+    }
+  ],
+  "failures": [
+    "Gao is intentionally absent from CampaignEnvironment.LEVELS; its production map uses the native Liangshan environment, not CampaignEnvironment.enabled(level5). Copied Level4 guard was wrong.",
+    "QA owner.hud is typed HUD; a bare CanvasLayer is rejected.",
+    "QA dispatched process(delta=0) before original strategy timer elapsed, so end-button stage could be postponed. Use explicit 0.5-second authored stage tick, without writing the timer."
+  ],
+  "fix": "Remove erroneous factory environment prerequisite only; retain native empty environment_buildings. Use installed HUD.new and actual chapter stage tick in sibling v18b. No change to environment/gameplay/level values."
+}

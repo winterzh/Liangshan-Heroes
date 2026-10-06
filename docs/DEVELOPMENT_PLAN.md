@@ -1,3 +1,17 @@
+<!-- campaign-foundation-v18b-current -->
+## 2026-10-07 第5/8关恢复组件接入与高太尉具名收兵按钮
+
+已补齐已安装level5/level8固定profile、旗标和惰性runtime/Level工厂。高太尉收兵按钮改为Mission.add_level_button("gao_end")及具名activate_mission_button，保留原_finish的战斗阶段、威胁清空、忠义堂/宋江存活条件和原结局；重建不携带旧世界闭包。Gao使用原梁山环境，修正误套其他关卡CampaignEnvironment.enabled条件，未改环境配置或地图。
+
+真实原两关启动后，关卡全部声明字段和任务/表现组件捕获并重建：76项通过、5036输入零漂移，无私有运行时补丁。覆盖高太尉初态/收兵按钮态和大名府初态；重建后Level再次捕获payload一致，事件账本不重放，按钮归属新Mission；内容不匹配/丢失按钮拒绝。原高太尉按钮在明确敌方伤害/0.5秒关卡调度夹具下抵达原基础结局。证据campaign_foundation_qualified_v18b.json、campaign_foundation_verified_log_v18b.txt及campaign_foundation_review_v18b.json。
+
+组件验收使用脱离场景树的ID绑定Unit空壳和只读原地图几何，**不证明Unit/船体/运输/生产/完整世界读档**。两次失败producer/收据保留：v18在autoload初始化前preload导致Localize编译失败；v18a发现Gao环境前提错误、测试HUD类型错误和零delta策略节拍问题；另建v18a/v18b修正。旧level4/official-profile测试的“level5未安装”断言是历史范围，不能当现行九profile验收入口；未改写旧执行工具。
+
+下一阶段完成level5/8专属Unit契约、图成员与对象引用（刘唐登船/押俘、乔装/俘虏/工人矿点），原梁山/大名府场景与灯光/通道、表现分区和world core；高太尉需等Mission按钮重建后再绑定Level。随后实际保存、退出、独立进程继续/再保存、自然结局/奖励一次和既有关卡回归。公开战役继续仍关闭，公开保存仍classic30；九玩法/发行程序、长帧/切换清理、真机及人物拥挤/完整演出等全目标未关闭。
+
+本轮代码与组件证据/交接文档尚待白名单提交推送，上一远端d561d78c。只清指定失败v18/v18a工程imported中与保留v18b成功批同名、大小、SHA256一致的7476文件、1,803,637,428字节（约1.68GiB）；15315受保护文件及保留匹配缓存零漂移，不同缓存保留。收据failed_campaign_import_cleanup_v18.json，旧工程复查先重导入。未新增平台发布。
+<!-- /campaign-foundation-v18b-current -->
+
 <!-- guard-readability-v17-current -->
 ## 2026-10-07 人物特性、技能画面复核与林冲枪架遮挡修正
 
