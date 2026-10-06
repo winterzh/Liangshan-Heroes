@@ -1,0 +1,2072 @@
+{
+  "failures": [
+    {
+      "run": "E:\\ChatGPT\\qa-ordinary-posture-20261006\\ordinary_chapter_actions_v6_5600c55f",
+      "receipt_sha256": "41a24a3e323626d09a409031d95fb7f58c306938b1da895b69ab441a5f058c13",
+      "failure": {
+        "type": "AssertionError",
+        "message": "Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org\nOpenGL API 3.3.0 NVIDIA 616.56 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce RTX 3070 Ti\n\nSCRIPT ERROR: Parse Error: Cannot infer the type of \"hit\" variable because the value doesn't have a set type.\n   at: GDScript::reload (res://ordinary_chapter_actions_v6.gd:16)\nERROR: Failed to load script \"res://ordinary_chapter_actions_v6.gd\" with error \"Parse error\".\n   at: load (modules/gdscript/gdscript.cpp:2907)\n"
+      },
+      "harnesses": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/ordinary_chapter_actions_v6.gd",
+          "sha256": "e57782cedebcfce65fe2abb0492becaeefb8912f64169c6ad235436851b1eb70"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/ordinary_chapter_actions_v6.py",
+          "sha256": "48baf111b68e331d823f9a3b90aa1e4bff593b040830648ad6421e3d5e78e6f4"
+        }
+      ],
+      "steps": [
+        {
+          "name": "import",
+          "pid": 184816,
+          "exit_code": 0,
+          "stopped_for": null,
+          "log_sha256": "bb48eb579d81d25b789c5c4681b439201f33f7b5b80ff3703b6fdc53c6085e20"
+        },
+        {
+          "name": "render",
+          "pid": 187376,
+          "exit_code": 1,
+          "stopped_for": "fatal_script_or_engine_error",
+          "log_sha256": "83b3a2168761587f769d1eb0c6d7b90e91d3fec4c53dcf606f90a953228a9209"
+        }
+      ]
+    },
+    {
+      "run": "E:\\ChatGPT\\qa-ordinary-posture-20261006\\ordinary_chapter_actions_v6a_5ea8ab6d",
+      "receipt_sha256": "71a5eb89ee7dd17691f60522a9dc63a647287e34286aea02f9a5789f04f71f0a",
+      "failure": {
+        "type": "AssertionError",
+        "message": "ance unchanged wu_song_mengzhou down ne\n[rts] PASS story appearance unchanged wu_song_mengzhou idle nw\n[rts] PASS story appearance unchanged wu_song_mengzhou walk nw\n[rts] PASS story appearance unchanged wu_song_mengzhou attack nw\n[rts] PASS story appearance unchanged wu_song_mengzhou hurt nw\n[rts] PASS story appearance unchanged wu_song_mengzhou death nw\n[rts] PASS story appearance unchanged wu_song_mengzhou down nw\n[rts] PASS actual ordinary chapter actor lin_chong\n[rts] PASS existing clear terrain patch lin_chong\n[rts] PASS original melee enemies for four directions lin_chong\n[rts] PASS real rendered screenshot: lin_chong_se_idle\n[rts] PASS observed resting state lin_chong se\n[rts] PASS observed candidate idle lin_chong se\n[rts] PASS normal melee damage captured lin_chong se\n[rts] PASS normal attack priority lin_chong se\n[rts] PASS attack uses existing production action lin_chong se\n[rts] PASS real rendered screenshot: lin_chong_se_attack\n[rts] PASS normal counter-hit captured lin_chong se\n[rts] PASS normal hurt priority lin_chong se\n[rts] PASS hurt uses existing production action lin_chong se\n[rts] PASS real rendered screenshot: lin_chong_se_hurt\n[rts] PASS real rendered screenshot: lin_chong_se_walk\n[rts] PASS normal movement returns candidate lin_chong se\n[rts] PASS combat stats/skills remain original lin_chong se\n[rts] PASS real rendered screenshot: lin_chong_sw_idle\n[rts] PASS observed resting state lin_chong sw\n[rts] PASS observed candidate idle lin_chong sw\n[rts] PASS normal melee damage captured lin_chong sw\n[rts] PASS normal attack priority lin_chong sw\n[rts] PASS attack uses existing production action lin_chong sw\n[rts] PASS real rendered screenshot: lin_chong_sw_attack\n[rts] PASS normal counter-hit captured lin_chong sw\n[rts] PASS normal hurt priority lin_chong sw\n[rts] PASS hurt uses existing production action lin_chong sw\n[rts] PASS real rendered screenshot: lin_chong_sw_hurt\n[rts] PASS real rendered screenshot: lin_chong_sw_walk\n[rts] PASS normal movement returns candidate lin_chong sw\n[rts] PASS combat stats/skills remain original lin_chong sw\n[rts] PASS real rendered screenshot: lin_chong_ne_idle\n[rts] PASS observed resting state lin_chong ne\n[rts] PASS observed candidate idle lin_chong ne\n[rts] PASS normal melee damage captured lin_chong ne\n[rts] PASS normal attack priority lin_chong ne\n[rts] PASS attack uses existing production action lin_chong ne\n[rts] PASS real rendered screenshot: lin_chong_ne_attack\n[rts] PASS normal counter-hit captured lin_chong ne\n[rts] PASS normal hurt priority lin_chong ne\n[rts] PASS hurt uses existing production action lin_chong ne\n[rts] PASS real rendered screenshot: lin_chong_ne_hurt\n[rts] PASS real rendered screenshot: lin_chong_ne_walk\n[rts] PASS normal movement returns candidate lin_chong ne\n[rts] PASS combat stats/skills remain original lin_chong ne\n[rts] PASS real rendered screenshot: lin_chong_nw_idle\n[rts] PASS observed resting state lin_chong nw\n[rts] PASS observed candidate idle lin_chong nw\n[rts] PASS normal melee damage captured lin_chong nw\n[rts] PASS normal attack priority lin_chong nw\n[rts] PASS attack uses existing production action lin_chong nw\n[rts] PASS real rendered screenshot: lin_chong_nw_attack\n[rts] PASS normal counter-hit captured lin_chong nw\n[rts] PASS normal hurt priority lin_chong nw\n[rts] PASS hurt uses existing production action lin_chong nw\n[rts] PASS real rendered screenshot: lin_chong_nw_hurt\n[rts] PASS real rendered screenshot: lin_chong_nw_walk\n[rts] FAIL normal movement returns candidate lin_chong nw\n[rts] PASS combat stats/skills remain original lin_chong nw\n[rts] PASS actual ordinary chapter actor wu_song\n[rts] PASS existing clear terrain patch wu_song\n[rts] PASS original melee enemies for four directions wu_song\n[rts] PASS real rendered screenshot: wu_song_se_idle\n[rts] PASS observed resting state wu_song se\n[rts] PASS observed candidate idle wu_song se\n[rts] PASS normal melee damage captured wu_song se\n[rts] PASS normal attack priority wu_song se\n[rts] PASS attack uses existing production action wu_song se\n[rts] PASS real rendered screenshot: wu_song_se_attack\n[rts] PASS normal counter-hit captured wu_song se\n[rts] PASS normal hurt priority wu_song se\n[rts] FAIL hurt uses existing production action wu_song se\n[rts] PASS real rendered screenshot: wu_song_se_hurt\n[rts] PASS real rendered screenshot: wu_song_se_walk\n[rts] PASS normal movement returns candidate wu_song se\n[rts] PASS combat stats/skills remain original wu_song se\n[rts] PASS real rendered screenshot: wu_song_sw_idle\n[rts] PASS observed resting state wu_song sw\n[rts] PASS observed candidate idle wu_song sw\n[rts] PASS normal melee damage captured wu_song sw\n[rts] PASS normal attack priority wu_song sw\n[rts] PASS attack uses existing production action wu_song sw\n[rts] PASS real rendered screenshot: wu_song_sw_attack\n[rts] PASS normal counter-hit captured wu_song sw\n[rts] PASS normal hurt priority wu_song sw\n[rts] FAIL hurt uses existing production action wu_song sw\n[rts] PASS real rendered screenshot: wu_song_sw_hurt\n[rts] PASS real rendered screenshot: wu_song_sw_walk\n[rts] PASS normal movement returns candidate wu_song sw\n[rts] PASS combat stats/skills remain original wu_song sw\n[rts] PASS real rendered screenshot: wu_song_ne_idle\n[rts] PASS observed resting state wu_song ne\n[rts] PASS observed candidate idle wu_song ne\n[rts] PASS normal melee damage captured wu_song ne\n[rts] PASS normal attack priority wu_song ne\n[rts] PASS attack uses existing production action wu_song ne\n[rts] PASS real rendered screenshot: wu_song_ne_attack\n[rts] PASS normal counter-hit captured wu_song ne\n[rts] PASS normal hurt priority wu_song ne\n[rts] FAIL hurt uses existing production action wu_song ne\n[rts] PASS real rendered screenshot: wu_song_ne_hurt\n[rts] PASS real rendered screenshot: wu_song_ne_walk\n[rts] PASS normal movement returns candidate wu_song ne\n[rts] PASS combat stats/skills remain original wu_song ne\n[rts] PASS real rendered screenshot: wu_song_nw_idle\n[rts] PASS observed resting state wu_song nw\n[rts] PASS observed candidate idle wu_song nw\n[rts] PASS normal melee damage captured wu_song nw\n[rts] PASS normal attack priority wu_song nw\n[rts] PASS attack uses existing production action wu_song nw\n[rts] PASS real rendered screenshot: wu_song_nw_attack\n[rts] PASS normal counter-hit captured wu_song nw\n[rts] PASS normal hurt priority wu_song nw\n[rts] FAIL hurt uses existing production action wu_song nw\n[rts] PASS real rendered screenshot: wu_song_nw_hurt\n[rts] PASS real rendered screenshot: wu_song_nw_walk\n[rts] PASS normal movement returns candidate wu_song nw\n[rts] PASS combat stats/skills remain original wu_song nw\n[art-character] ordinary_wu_lin_actions_v6 255 checks; failures=[\"normal movement returns candidate lin_chong nw\", \"hurt uses existing production action wu_song se\", \"hurt uses existing production action wu_song sw\", \"hurt uses existing production action wu_song ne\", \"hurt uses existing production action wu_song nw\"]\n"
+      },
+      "harnesses": [
+        {
+          "path": "qa/zhu_wounded_20261005/harness/ordinary_chapter_actions_v6a.gd",
+          "sha256": "b8286a675cdb1c7b1632cf09a02cedc196808a7727d08d8fa299e638a878edd6"
+        },
+        {
+          "path": "qa/zhu_wounded_20261005/harness/ordinary_chapter_actions_v6a.py",
+          "sha256": "dd16a3a01ed241ec222caea76eaf20e7d1688bb96604976ab220df762a8170e5"
+        }
+      ],
+      "steps": [
+        {
+          "name": "import",
+          "pid": 191980,
+          "exit_code": 0,
+          "stopped_for": null,
+          "log_sha256": "bb48eb579d81d25b789c5c4681b439201f33f7b5b80ff3703b6fdc53c6085e20"
+        },
+        {
+          "name": "render",
+          "pid": 189364,
+          "exit_code": 1,
+          "stopped_for": null,
+          "log_sha256": "9fbde6ab944839bf387e17a3934540888d6461e448d65de82cbae5ba513b65fc"
+        }
+      ],
+      "report": {
+        "character": "ordinary_wu_lin_actions_v6",
+        "checks": 255,
+        "engine_time_scale": 1.0,
+        "failures": [
+          "normal movement returns candidate lin_chong nw",
+          "hurt uses existing production action wu_song se",
+          "hurt uses existing production action wu_song sw",
+          "hurt uses existing production action wu_song ne",
+          "hurt uses existing production action wu_song nw"
+        ],
+        "identity_after": {},
+        "identity_before": {},
+        "manifest": "",
+        "passed": false,
+        "private_profile": {
+          "actual_environment": {
+            "APPDATA": "E:/ChatGPT/qa-ordinary-posture-20261006/profiles/ordinary_chapter_actions_v6a_5ea8ab6d/appdata",
+            "LOCALAPPDATA": "E:/ChatGPT/qa-ordinary-posture-20261006/profiles/ordinary_chapter_actions_v6a_5ea8ab6d/localappdata",
+            "TEMP": "E:/ChatGPT/qa-ordinary-posture-20261006/profiles/ordinary_chapter_actions_v6a_5ea8ab6d/temp",
+            "TMP": "E:/ChatGPT/qa-ordinary-posture-20261006/profiles/ordinary_chapter_actions_v6a_5ea8ab6d/tmp"
+          },
+          "passed": true,
+          "profile": "E:/ChatGPT/qa-ordinary-posture-20261006/profiles/ordinary_chapter_actions_v6a_5ea8ab6d",
+          "user_data_dir": "E:/ChatGPT/qa-ordinary-posture-20261006/profiles/ordinary_chapter_actions_v6a_5ea8ab6d/appdata/Godot/app_userdata/水浒英雄传：八幕战役"
+        },
+        "render_window": {
+          "position": [
+            30000,
+            30000
+          ],
+          "unfocusable": true
+        },
+        "resources": [
+          {
+            "baseline": [
+              "res://assets/anim/wu_song_idle.png[P: (0.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_idle.png[P: (256.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_idle.png[P: (512.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_idle.png[P: (768.0, 0.0), S: (256.0, 256.0)]"
+            ],
+            "candidate": [
+              "res://assets/characters/wu_song_traits_20261006/idle_spacing_v4.png[P: (0.0, 0.0), S: (656.0, 599.0)]"
+            ],
+            "direction": "se",
+            "key": "wu_song",
+            "scope": "resource query, not observed action",
+            "state": "idle"
+          },
+          {
+            "baseline": [
+              "res://assets/anim/wu_song_walk.png[P: (0.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_walk.png[P: (256.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_walk.png[P: (512.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_walk.png[P: (768.0, 0.0), S: (256.0, 256.0)]"
+            ],
+            "candidate": [
+              "res://assets/characters/wu_song_traits_20261006/walk_a_se_v5.png[P: (0.0, 0.0), S: (1254.0, 1254.0)]",
+              "res://assets/characters/wu_song_traits_20261006/passing_a_se_v5.png[P: (0.0, 0.0), S: (1254.0, 1254.0)]",
+              "res://assets/characters/wu_song_traits_20261006/walk_b_se_v5.png[P: (0.0, 0.0), S: (1254.0, 1254.0)]",
+              "res://assets/characters/wu_song_traits_20261006/passing_b_se_v5.png[P: (0.0, 0.0), S: (1254.0, 1254.0)]"
+            ],
+            "direction": "se",
+            "key": "wu_song",
+            "scope": "resource query, not observed action",
+            "state": "walk"
+          },
+          {
+            "baseline": [
+              "res://assets/anim/wu_song_attack.png[P: (0.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_attack.png[P: (256.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_attack.png[P: (512.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_attack.png[P: (768.0, 0.0), S: (256.0, 256.0)]"
+            ],
+            "candidate": [
+              "res://assets/anim/wu_song_attack.png[P: (0.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_attack.png[P: (256.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_attack.png[P: (512.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_attack.png[P: (768.0, 0.0), S: (256.0, 256.0)]"
+            ],
+            "direction": "se",
+            "key": "wu_song",
+            "scope": "resource query, not observed action",
+            "state": "attack"
+          },
+          {
+            "baseline": [],
+            "candidate": [],
+            "direction": "se",
+            "key": "wu_song",
+            "scope": "resource query, not observed action",
+            "state": "hurt"
+          },
+          {
+            "baseline": [
+              "res://assets/anim/wu_song_death.png[P: (0.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_death.png[P: (256.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_death.png[P: (512.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_death.png[P: (768.0, 0.0), S: (256.0, 256.0)]"
+            ],
+            "candidate": [
+              "res://assets/anim/wu_song_death.png[P: (0.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_death.png[P: (256.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_death.png[P: (512.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_death.png[P: (768.0, 0.0), S: (256.0, 256.0)]"
+            ],
+            "direction": "se",
+            "key": "wu_song",
+            "scope": "resource query, not observed action",
+            "state": "death"
+          },
+          {
+            "baseline": [],
+            "candidate": [],
+            "direction": "se",
+            "key": "wu_song",
+            "scope": "resource query, not observed action",
+            "state": "down"
+          },
+          {
+            "baseline": [
+              "res://assets/anim/wu_song_idle.png[P: (0.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_idle.png[P: (256.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_idle.png[P: (512.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_idle.png[P: (768.0, 0.0), S: (256.0, 256.0)]"
+            ],
+            "candidate": [
+              "res://assets/characters/wu_song_traits_20261006/idle_spacing_v4.png[P: (656.0, 0.0), S: (656.0, 599.0)]"
+            ],
+            "direction": "sw",
+            "key": "wu_song",
+            "scope": "resource query, not observed action",
+            "state": "idle"
+          },
+          {
+            "baseline": [
+              "res://assets/anim/wu_song_walk.png[P: (0.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_walk.png[P: (256.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_walk.png[P: (512.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_walk.png[P: (768.0, 0.0), S: (256.0, 256.0)]"
+            ],
+            "candidate": [
+              "res://assets/characters/wu_song_traits_20261006/walk_a_sw_v5.png[P: (0.0, 0.0), S: (1254.0, 1254.0)]",
+              "res://assets/characters/wu_song_traits_20261006/passing_a_sw_v5.png[P: (0.0, 0.0), S: (1254.0, 1254.0)]",
+              "res://assets/characters/wu_song_traits_20261006/walk_b_sw3_v5.png[P: (0.0, 0.0), S: (1254.0, 1254.0)]",
+              "res://assets/characters/wu_song_traits_20261006/passing_b_sw_v5.png[P: (0.0, 0.0), S: (1254.0, 1254.0)]"
+            ],
+            "direction": "sw",
+            "key": "wu_song",
+            "scope": "resource query, not observed action",
+            "state": "walk"
+          },
+          {
+            "baseline": [
+              "res://assets/anim/wu_song_attack.png[P: (0.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_attack.png[P: (256.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_attack.png[P: (512.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_attack.png[P: (768.0, 0.0), S: (256.0, 256.0)]"
+            ],
+            "candidate": [
+              "res://assets/anim/wu_song_attack.png[P: (0.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_attack.png[P: (256.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_attack.png[P: (512.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_attack.png[P: (768.0, 0.0), S: (256.0, 256.0)]"
+            ],
+            "direction": "sw",
+            "key": "wu_song",
+            "scope": "resource query, not observed action",
+            "state": "attack"
+          },
+          {
+            "baseline": [],
+            "candidate": [],
+            "direction": "sw",
+            "key": "wu_song",
+            "scope": "resource query, not observed action",
+            "state": "hurt"
+          },
+          {
+            "baseline": [
+              "res://assets/anim/wu_song_death.png[P: (0.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_death.png[P: (256.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_death.png[P: (512.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_death.png[P: (768.0, 0.0), S: (256.0, 256.0)]"
+            ],
+            "candidate": [
+              "res://assets/anim/wu_song_death.png[P: (0.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_death.png[P: (256.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_death.png[P: (512.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_death.png[P: (768.0, 0.0), S: (256.0, 256.0)]"
+            ],
+            "direction": "sw",
+            "key": "wu_song",
+            "scope": "resource query, not observed action",
+            "state": "death"
+          },
+          {
+            "baseline": [],
+            "candidate": [],
+            "direction": "sw",
+            "key": "wu_song",
+            "scope": "resource query, not observed action",
+            "state": "down"
+          },
+          {
+            "baseline": [
+              "res://assets/anim/wu_song_idle.png[P: (0.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_idle.png[P: (256.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_idle.png[P: (512.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_idle.png[P: (768.0, 0.0), S: (256.0, 256.0)]"
+            ],
+            "candidate": [
+              "res://assets/characters/wu_song_traits_20261006/idle_spacing_v4.png[P: (0.0, 599.0), S: (656.0, 599.0)]"
+            ],
+            "direction": "ne",
+            "key": "wu_song",
+            "scope": "resource query, not observed action",
+            "state": "idle"
+          },
+          {
+            "baseline": [
+              "res://assets/anim/wu_song_walk.png[P: (0.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_walk.png[P: (256.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_walk.png[P: (512.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_walk.png[P: (768.0, 0.0), S: (256.0, 256.0)]"
+            ],
+            "candidate": [
+              "res://assets/characters/wu_song_traits_20261006/walk_a_ne_v5.png[P: (0.0, 0.0), S: (1254.0, 1254.0)]",
+              "res://assets/characters/wu_song_traits_20261006/passing_a_ne_v5.png[P: (0.0, 0.0), S: (1254.0, 1254.0)]",
+              "res://assets/characters/wu_song_traits_20261006/walk_b_ne_v5.png[P: (0.0, 0.0), S: (1254.0, 1254.0)]",
+              "res://assets/characters/wu_song_traits_20261006/passing_b_ne_v5.png[P: (0.0, 0.0), S: (1254.0, 1254.0)]"
+            ],
+            "direction": "ne",
+            "key": "wu_song",
+            "scope": "resource query, not observed action",
+            "state": "walk"
+          },
+          {
+            "baseline": [
+              "res://assets/anim/wu_song_attack.png[P: (0.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_attack.png[P: (256.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_attack.png[P: (512.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_attack.png[P: (768.0, 0.0), S: (256.0, 256.0)]"
+            ],
+            "candidate": [
+              "res://assets/anim/wu_song_attack.png[P: (0.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_attack.png[P: (256.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_attack.png[P: (512.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_attack.png[P: (768.0, 0.0), S: (256.0, 256.0)]"
+            ],
+            "direction": "ne",
+            "key": "wu_song",
+            "scope": "resource query, not observed action",
+            "state": "attack"
+          },
+          {
+            "baseline": [],
+            "candidate": [],
+            "direction": "ne",
+            "key": "wu_song",
+            "scope": "resource query, not observed action",
+            "state": "hurt"
+          },
+          {
+            "baseline": [
+              "res://assets/anim/wu_song_death.png[P: (0.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_death.png[P: (256.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_death.png[P: (512.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_death.png[P: (768.0, 0.0), S: (256.0, 256.0)]"
+            ],
+            "candidate": [
+              "res://assets/anim/wu_song_death.png[P: (0.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_death.png[P: (256.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_death.png[P: (512.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_death.png[P: (768.0, 0.0), S: (256.0, 256.0)]"
+            ],
+            "direction": "ne",
+            "key": "wu_song",
+            "scope": "resource query, not observed action",
+            "state": "death"
+          },
+          {
+            "baseline": [],
+            "candidate": [],
+            "direction": "ne",
+            "key": "wu_song",
+            "scope": "resource query, not observed action",
+            "state": "down"
+          },
+          {
+            "baseline": [
+              "res://assets/anim/wu_song_idle.png[P: (0.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_idle.png[P: (256.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_idle.png[P: (512.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_idle.png[P: (768.0, 0.0), S: (256.0, 256.0)]"
+            ],
+            "candidate": [
+              "res://assets/characters/wu_song_traits_20261006/idle_spacing_v4.png[P: (656.0, 599.0), S: (656.0, 599.0)]"
+            ],
+            "direction": "nw",
+            "key": "wu_song",
+            "scope": "resource query, not observed action",
+            "state": "idle"
+          },
+          {
+            "baseline": [
+              "res://assets/anim/wu_song_walk.png[P: (0.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_walk.png[P: (256.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_walk.png[P: (512.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_walk.png[P: (768.0, 0.0), S: (256.0, 256.0)]"
+            ],
+            "candidate": [
+              "res://assets/characters/wu_song_traits_20261006/walk_a_nw_v5.png[P: (0.0, 0.0), S: (1254.0, 1254.0)]",
+              "res://assets/characters/wu_song_traits_20261006/passing_a_nw_v5.png[P: (0.0, 0.0), S: (1254.0, 1254.0)]",
+              "res://assets/characters/wu_song_traits_20261006/walk_b_nw2_v5.png[P: (0.0, 0.0), S: (1254.0, 1254.0)]",
+              "res://assets/characters/wu_song_traits_20261006/passing_b_nw_v5.png[P: (0.0, 0.0), S: (1254.0, 1254.0)]"
+            ],
+            "direction": "nw",
+            "key": "wu_song",
+            "scope": "resource query, not observed action",
+            "state": "walk"
+          },
+          {
+            "baseline": [
+              "res://assets/anim/wu_song_attack.png[P: (0.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_attack.png[P: (256.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_attack.png[P: (512.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_attack.png[P: (768.0, 0.0), S: (256.0, 256.0)]"
+            ],
+            "candidate": [
+              "res://assets/anim/wu_song_attack.png[P: (0.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_attack.png[P: (256.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_attack.png[P: (512.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_attack.png[P: (768.0, 0.0), S: (256.0, 256.0)]"
+            ],
+            "direction": "nw",
+            "key": "wu_song",
+            "scope": "resource query, not observed action",
+            "state": "attack"
+          },
+          {
+            "baseline": [],
+            "candidate": [],
+            "direction": "nw",
+            "key": "wu_song",
+            "scope": "resource query, not observed action",
+            "state": "hurt"
+          },
+          {
+            "baseline": [
+              "res://assets/anim/wu_song_death.png[P: (0.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_death.png[P: (256.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_death.png[P: (512.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_death.png[P: (768.0, 0.0), S: (256.0, 256.0)]"
+            ],
+            "candidate": [
+              "res://assets/anim/wu_song_death.png[P: (0.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_death.png[P: (256.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_death.png[P: (512.0, 0.0), S: (256.0, 256.0)]",
+              "res://assets/anim/wu_song_death.png[P: (768.0, 0.0), S: (256.0, 256.0)]"
+            ],
+            "direction": "nw",
+            "key": "wu_song",
+            "scope": "resource query, not observed action",
+            "state": "death"
+          },
+          {
+            "baseline": [],
+            "candidate": [],
+            "direction": "nw",
+            "key": "wu_song",
+            "scope": "resource query, not observed action",
+            "state": "down"
+          },
+          {
+            "baseline": [
+              "res://assets/characters/lin_chong_direction4_20260906/se.png[P: (22.0, 8.0), S: (214.0, 182.0)]"
+            ],
+            "candidate": [
+              "res://assets/characters/lin_chong_traits_20261006/idle_spacing2_v4.png[P: (0.0, 0.0), S: (627.0, 627.0)]"
+            ],
+            "direction": "se",
+            "key": "lin_chong",
+            "scope": "resource query, not observed action",
+            "state": "idle"
+          },
+          {
+            "baseline": [
+              "res://assets/characters/lin_chong_direction4_20260906/se.png[P: (22.0, 8.0), S: (214.0, 182.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/se.png[P: (322.0, 8.0), S: (188.0, 187.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/se.png[P: (22.0, 8.0), S: (214.0, 182.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/se.png[P: (29.0, 208.0), S: (227.0, 180.0)]"
+            ],
+            "candidate": [
+              "res://assets/characters/lin_chong_traits_20261006/walk_a_se_v5.png[P: (0.0, 0.0), S: (1254.0, 1254.0)]",
+              "res://assets/characters/lin_chong_traits_20261006/passing_a_se2_v5.png[P: (0.0, 0.0), S: (1254.0, 1254.0)]",
+              "res://assets/characters/lin_chong_traits_20261006/walk_b_se2_v5.png[P: (0.0, 0.0), S: (1254.0, 1254.0)]",
+              "res://assets/characters/lin_chong_traits_20261006/passing_b_se2_v5.png[P: (0.0, 0.0), S: (1254.0, 1254.0)]"
+            ],
+            "direction": "se",
+            "key": "lin_chong",
+            "scope": "resource query, not observed action",
+            "state": "walk"
+          },
+          {
+            "baseline": [
+              "res://assets/characters/lin_chong_direction4_20260906/se.png[P: (317.0, 195.0), S: (181.0, 195.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/se.png[P: (317.0, 195.0), S: (181.0, 195.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/se.png[P: (36.0, 401.0), S: (220.0, 151.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/se.png[P: (36.0, 401.0), S: (220.0, 151.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/se.png[P: (22.0, 8.0), S: (214.0, 182.0)]"
+            ],
+            "candidate": [
+              "res://assets/characters/lin_chong_direction4_20260906/se.png[P: (317.0, 195.0), S: (181.0, 195.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/se.png[P: (317.0, 195.0), S: (181.0, 195.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/se.png[P: (36.0, 401.0), S: (220.0, 151.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/se.png[P: (36.0, 401.0), S: (220.0, 151.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/se.png[P: (22.0, 8.0), S: (214.0, 182.0)]"
+            ],
+            "direction": "se",
+            "key": "lin_chong",
+            "scope": "resource query, not observed action",
+            "state": "attack"
+          },
+          {
+            "baseline": [
+              "res://assets/characters/lin_chong_direction4_20260906/se.png[P: (322.0, 396.0), S: (180.0, 162.0)]"
+            ],
+            "candidate": [
+              "res://assets/characters/lin_chong_direction4_20260906/se.png[P: (322.0, 396.0), S: (180.0, 162.0)]"
+            ],
+            "direction": "se",
+            "key": "lin_chong",
+            "scope": "resource query, not observed action",
+            "state": "hurt"
+          },
+          {
+            "baseline": [
+              "res://assets/characters/lin_chong_direction4_20260906/se.png[P: (322.0, 396.0), S: (180.0, 162.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/se.png[P: (24.0, 578.0), S: (199.0, 158.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/se.png[P: (266.0, 618.0), S: (224.0, 130.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/se.png[P: (266.0, 618.0), S: (224.0, 130.0)]"
+            ],
+            "candidate": [
+              "res://assets/characters/lin_chong_direction4_20260906/se.png[P: (322.0, 396.0), S: (180.0, 162.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/se.png[P: (24.0, 578.0), S: (199.0, 158.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/se.png[P: (266.0, 618.0), S: (224.0, 130.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/se.png[P: (266.0, 618.0), S: (224.0, 130.0)]"
+            ],
+            "direction": "se",
+            "key": "lin_chong",
+            "scope": "resource query, not observed action",
+            "state": "death"
+          },
+          {
+            "baseline": [],
+            "candidate": [],
+            "direction": "se",
+            "key": "lin_chong",
+            "scope": "resource query, not observed action",
+            "state": "down"
+          },
+          {
+            "baseline": [
+              "res://assets/characters/lin_chong_direction4_20260906/sw.png[P: (10.0, 7.0), S: (176.0, 189.0)]"
+            ],
+            "candidate": [
+              "res://assets/characters/lin_chong_traits_20261006/idle_spacing2_v4.png[P: (627.0, 0.0), S: (627.0, 627.0)]"
+            ],
+            "direction": "sw",
+            "key": "lin_chong",
+            "scope": "resource query, not observed action",
+            "state": "idle"
+          },
+          {
+            "baseline": [
+              "res://assets/characters/lin_chong_direction4_20260906/sw.png[P: (10.0, 7.0), S: (176.0, 189.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/sw_walk.png[P: (6.0, 43.0), S: (214.0, 252.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/sw.png[P: (10.0, 7.0), S: (176.0, 189.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/sw_walk.png[P: (252.0, 43.0), S: (245.0, 250.0)]"
+            ],
+            "candidate": [
+              "res://assets/characters/lin_chong_traits_20261006/walk_a_sw_v5.png[P: (0.0, 0.0), S: (1254.0, 1254.0)]",
+              "res://assets/characters/lin_chong_traits_20261006/passing_a_sw2_v5.png[P: (0.0, 0.0), S: (1254.0, 1254.0)]",
+              "res://assets/characters/lin_chong_traits_20261006/walk_b_sw4_v5.png[P: (0.0, 0.0), S: (1254.0, 1254.0)]",
+              "res://assets/characters/lin_chong_traits_20261006/passing_b_sw2_v5.png[P: (0.0, 0.0), S: (1254.0, 1254.0)]"
+            ],
+            "direction": "sw",
+            "key": "lin_chong",
+            "scope": "resource query, not observed action",
+            "state": "walk"
+          },
+          {
+            "baseline": [
+              "res://assets/characters/lin_chong_direction4_20260906/sw_windup.png[P: (7.0, 0.0), S: (371.0, 246.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/sw_windup.png[P: (7.0, 0.0), S: (371.0, 246.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/sw.png[P: (4.0, 399.0), S: (256.0, 155.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/sw.png[P: (4.0, 399.0), S: (256.0, 155.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/sw.png[P: (10.0, 7.0), S: (176.0, 189.0)]"
+            ],
+            "candidate": [
+              "res://assets/characters/lin_chong_direction4_20260906/sw_windup.png[P: (7.0, 0.0), S: (371.0, 246.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/sw_windup.png[P: (7.0, 0.0), S: (371.0, 246.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/sw.png[P: (4.0, 399.0), S: (256.0, 155.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/sw.png[P: (4.0, 399.0), S: (256.0, 155.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/sw.png[P: (10.0, 7.0), S: (176.0, 189.0)]"
+            ],
+            "direction": "sw",
+            "key": "lin_chong",
+            "scope": "resource query, not observed action",
+            "state": "attack"
+          },
+          {
+            "baseline": [
+              "res://assets/characters/lin_chong_direction4_20260906/sw.png[P: (274.0, 400.0), S: (230.0, 165.0)]"
+            ],
+            "candidate": [
+              "res://assets/characters/lin_chong_direction4_20260906/sw.png[P: (274.0, 400.0), S: (230.0, 165.0)]"
+            ],
+            "direction": "sw",
+            "key": "lin_chong",
+            "scope": "resource query, not observed action",
+            "state": "hurt"
+          },
+          {
+            "baseline": [
+              "res://assets/characters/lin_chong_direction4_20260906/sw.png[P: (274.0, 400.0), S: (230.0, 165.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/sw.png[P: (8.0, 593.0), S: (242.0, 151.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/sw.png[P: (267.0, 625.0), S: (241.0, 119.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/sw.png[P: (267.0, 625.0), S: (241.0, 119.0)]"
+            ],
+            "candidate": [
+              "res://assets/characters/lin_chong_direction4_20260906/sw.png[P: (274.0, 400.0), S: (230.0, 165.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/sw.png[P: (8.0, 593.0), S: (242.0, 151.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/sw.png[P: (267.0, 625.0), S: (241.0, 119.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/sw.png[P: (267.0, 625.0), S: (241.0, 119.0)]"
+            ],
+            "direction": "sw",
+            "key": "lin_chong",
+            "scope": "resource query, not observed action",
+            "state": "death"
+          },
+          {
+            "baseline": [],
+            "candidate": [],
+            "direction": "sw",
+            "key": "lin_chong",
+            "scope": "resource query, not observed action",
+            "state": "down"
+          },
+          {
+            "baseline": [
+              "res://assets/characters/lin_chong_direction4_20260906/ne.png[P: (88.0, 17.0), S: (130.0, 171.0)]"
+            ],
+            "candidate": [
+              "res://assets/characters/lin_chong_traits_20261006/idle_spacing2_v4.png[P: (0.0, 627.0), S: (627.0, 627.0)]"
+            ],
+            "direction": "ne",
+            "key": "lin_chong",
+            "scope": "resource query, not observed action",
+            "state": "idle"
+          },
+          {
+            "baseline": [
+              "res://assets/characters/lin_chong_direction4_20260906/ne.png[P: (88.0, 17.0), S: (130.0, 171.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/ne_walk.png[P: (14.0, 21.0), S: (246.0, 276.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/ne.png[P: (88.0, 17.0), S: (130.0, 171.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/ne_walk.png[P: (286.0, 21.0), S: (220.0, 275.0)]"
+            ],
+            "candidate": [
+              "res://assets/characters/lin_chong_traits_20261006/walk_a_ne3_v5.png[P: (0.0, 0.0), S: (1254.0, 1254.0)]",
+              "res://assets/characters/lin_chong_traits_20261006/passing_a_ne2_v5.png[P: (0.0, 0.0), S: (1254.0, 1254.0)]",
+              "res://assets/characters/lin_chong_traits_20261006/walk_b_ne_v5.png[P: (0.0, 0.0), S: (1254.0, 1254.0)]",
+              "res://assets/characters/lin_chong_traits_20261006/passing_b_ne2_v5.png[P: (0.0, 0.0), S: (1254.0, 1254.0)]"
+            ],
+            "direction": "ne",
+            "key": "lin_chong",
+            "scope": "resource query, not observed action",
+            "state": "walk"
+          },
+          {
+            "baseline": [
+              "res://assets/characters/lin_chong_direction4_20260906/ne.png[P: (332.0, 220.0), S: (136.0, 159.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/ne.png[P: (332.0, 220.0), S: (136.0, 159.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/ne.png[P: (58.0, 398.0), S: (192.0, 156.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/ne.png[P: (58.0, 398.0), S: (192.0, 156.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/ne.png[P: (88.0, 17.0), S: (130.0, 171.0)]"
+            ],
+            "candidate": [
+              "res://assets/characters/lin_chong_direction4_20260906/ne.png[P: (332.0, 220.0), S: (136.0, 159.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/ne.png[P: (332.0, 220.0), S: (136.0, 159.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/ne.png[P: (58.0, 398.0), S: (192.0, 156.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/ne.png[P: (58.0, 398.0), S: (192.0, 156.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/ne.png[P: (88.0, 17.0), S: (130.0, 171.0)]"
+            ],
+            "direction": "ne",
+            "key": "lin_chong",
+            "scope": "resource query, not observed action",
+            "state": "attack"
+          },
+          {
+            "baseline": [
+              "res://assets/characters/lin_chong_direction4_20260906/ne.png[P: (330.0, 391.0), S: (145.0, 161.0)]"
+            ],
+            "candidate": [
+              "res://assets/characters/lin_chong_direction4_20260906/ne.png[P: (330.0, 391.0), S: (145.0, 161.0)]"
+            ],
+            "direction": "ne",
+            "key": "lin_chong",
+            "scope": "resource query, not observed action",
+            "state": "hurt"
+          },
+          {
+            "baseline": [
+              "res://assets/characters/lin_chong_direction4_20260906/ne.png[P: (330.0, 391.0), S: (145.0, 161.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/ne.png[P: (39.0, 609.0), S: (189.0, 105.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/ne.png[P: (288.0, 644.0), S: (196.0, 72.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/ne.png[P: (288.0, 644.0), S: (196.0, 72.0)]"
+            ],
+            "candidate": [
+              "res://assets/characters/lin_chong_direction4_20260906/ne.png[P: (330.0, 391.0), S: (145.0, 161.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/ne.png[P: (39.0, 609.0), S: (189.0, 105.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/ne.png[P: (288.0, 644.0), S: (196.0, 72.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/ne.png[P: (288.0, 644.0), S: (196.0, 72.0)]"
+            ],
+            "direction": "ne",
+            "key": "lin_chong",
+            "scope": "resource query, not observed action",
+            "state": "death"
+          },
+          {
+            "baseline": [],
+            "candidate": [],
+            "direction": "ne",
+            "key": "lin_chong",
+            "scope": "resource query, not observed action",
+            "state": "down"
+          },
+          {
+            "baseline": [
+              "res://assets/characters/lin_chong_direction4_20260906/nw.png[P: (62.0, 32.0), S: (131.0, 153.0)]"
+            ],
+            "candidate": [
+              "res://assets/characters/lin_chong_traits_20261006/idle_spacing2_v4.png[P: (627.0, 627.0), S: (627.0, 627.0)]"
+            ],
+            "direction": "nw",
+            "key": "lin_chong",
+            "scope": "resource query, not observed action",
+            "state": "idle"
+          },
+          {
+            "baseline": [
+              "res://assets/characters/lin_chong_direction4_20260906/nw.png[P: (62.0, 32.0), S: (131.0, 153.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/nw.png[P: (316.0, 32.0), S: (127.0, 154.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/nw.png[P: (62.0, 32.0), S: (131.0, 153.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/nw.png[P: (62.0, 214.0), S: (134.0, 144.0)]"
+            ],
+            "candidate": [
+              "res://assets/characters/lin_chong_traits_20261006/walk_a_nw_v5.png[P: (0.0, 0.0), S: (1254.0, 1254.0)]",
+              "res://assets/characters/lin_chong_traits_20261006/passing_a_nw2_v5.png[P: (0.0, 0.0), S: (1254.0, 1254.0)]",
+              "res://assets/characters/lin_chong_traits_20261006/walk_b_nw3_v5.png[P: (0.0, 0.0), S: (1254.0, 1254.0)]",
+              "res://assets/characters/lin_chong_traits_20261006/passing_b_nw2_v5.png[P: (0.0, 0.0), S: (1254.0, 1254.0)]"
+            ],
+            "direction": "nw",
+            "key": "lin_chong",
+            "scope": "resource query, not observed action",
+            "state": "walk"
+          },
+          {
+            "baseline": [
+              "res://assets/characters/lin_chong_direction4_20260906/nw.png[P: (294.0, 232.0), S: (165.0, 134.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/nw.png[P: (294.0, 232.0), S: (165.0, 134.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/nw.png[P: (36.0, 400.0), S: (188.0, 144.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/nw.png[P: (36.0, 400.0), S: (188.0, 144.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/nw.png[P: (62.0, 32.0), S: (131.0, 153.0)]"
+            ],
+            "candidate": [
+              "res://assets/characters/lin_chong_direction4_20260906/nw.png[P: (294.0, 232.0), S: (165.0, 134.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/nw.png[P: (294.0, 232.0), S: (165.0, 134.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/nw.png[P: (36.0, 400.0), S: (188.0, 144.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/nw.png[P: (36.0, 400.0), S: (188.0, 144.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/nw.png[P: (62.0, 32.0), S: (131.0, 153.0)]"
+            ],
+            "direction": "nw",
+            "key": "lin_chong",
+            "scope": "resource query, not observed action",
+            "state": "attack"
+          },
+          {
+            "baseline": [
+              "res://assets/characters/lin_chong_direction4_20260906/nw.png[P: (317.0, 403.0), S: (131.0, 134.0)]"
+            ],
+            "candidate": [
+              "res://assets/characters/lin_chong_direction4_20260906/nw.png[P: (317.0, 403.0), S: (131.0, 134.0)]"
+            ],
+            "direction": "nw",
+            "key": "lin_chong",
+            "scope": "resource query, not observed action",
+            "state": "hurt"
+          },
+          {
+            "baseline": [
+              "res://assets/characters/lin_chong_direction4_20260906/nw.png[P: (317.0, 403.0), S: (131.0, 134.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/nw.png[P: (40.0, 581.0), S: (185.0, 123.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/nw.png[P: (292.0, 620.0), S: (186.0, 78.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/nw.png[P: (292.0, 620.0), S: (186.0, 78.0)]"
+            ],
+            "candidate": [
+              "res://assets/characters/lin_chong_direction4_20260906/nw.png[P: (317.0, 403.0), S: (131.0, 134.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/nw.png[P: (40.0, 581.0), S: (185.0, 123.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/nw.png[P: (292.0, 620.0), S: (186.0, 78.0)]",
+              "res://assets/characters/lin_chong_direction4_20260906/nw.png[P: (292.0, 620.0), S: (186.0, 78.0)]"
+            ],
+            "direction": "nw",
+            "key": "lin_chong",
+            "scope": "resource query, not observed action",
+            "state": "death"
+          },
+          {
+            "baseline": [],
+            "candidate": [],
+            "direction": "nw",
+            "key": "lin_chong",
+            "scope": "resource query, not observed action",
+            "state": "down"
+          }
+        ],
+        "runtime": [
+          {
+            "actor": {
+              "atk": 24.0,
+              "base_speed": 88.0,
+              "chapter": "res://scripts/levels/level3_zhujiazhuang_rts.gd",
+              "hp": 320.0,
+              "instance": 2686233610815,
+              "key": "lin_chong",
+              "max_hp": 320.0,
+              "skills": [
+                {
+                  "cast_seq": 0,
+                  "cd_t": 0.0,
+                  "charges": 0,
+                  "id": "lin_thrust",
+                  "passive": false,
+                  "rank": 0,
+                  "recharge_t": 0.0
+                },
+                {
+                  "cast_seq": 0,
+                  "cd_t": 0.0,
+                  "charges": 0,
+                  "id": "lin_sweep",
+                  "passive": false,
+                  "rank": 0,
+                  "recharge_t": 0.0
+                },
+                {
+                  "cast_seq": 0,
+                  "cd_t": 0.0,
+                  "charges": 0,
+                  "id": "lin_predator",
+                  "passive": true,
+                  "rank": 0,
+                  "recharge_t": 0.0
+                },
+                {
+                  "cast_seq": 0,
+                  "cd_t": 0.0,
+                  "charges": 0,
+                  "id": "lin_chrono",
+                  "passive": false,
+                  "rank": 0,
+                  "recharge_t": 0.0
+                }
+              ]
+            },
+            "case": "original_actor",
+            "enemy_roster": [
+              {
+                "atk": 11.0,
+                "hp": 95.0,
+                "instance": 2686686595727,
+                "key": "zhu_keke"
+              },
+              {
+                "atk": 11.0,
+                "hp": 95.0,
+                "instance": 2686703372944,
+                "key": "zhu_keke"
+              },
+              {
+                "atk": 11.0,
+                "hp": 95.0,
+                "instance": 2686921476759,
+                "key": "zhu_keke"
+              },
+              {
+                "atk": 42.0,
+                "hp": 420.0,
+                "instance": 2686955031193,
+                "key": "hu_sanniang"
+              }
+            ],
+            "fixture_cell": [
+              8,
+              8
+            ]
+          },
+          {
+            "case": "lin_chong_se_idle",
+            "observed": {
+              "cast_t": 0.0,
+              "direction": "se",
+              "flinch_squared": 0.0,
+              "hp": 320.0,
+              "key": "lin_chong",
+              "lunge": 0.0,
+              "move_blend": 0.0,
+              "portrait": "res://assets/characters/codex_portraits_20260913/lin_chong.png",
+              "pose": "res://assets/characters/lin_chong_traits_20261006/idle_spacing2_v4.png[P: (0.0, 0.0), S: (627.0, 627.0)]",
+              "position": [
+                271.0,
+                272.0
+              ],
+              "source": "res://assets/characters/lin_chong_traits_20261006/idle_spacing2_v4.png",
+              "variant": ""
+            }
+          },
+          {
+            "actor": "lin_chong",
+            "case": "real_melee_hit",
+            "direction": "se",
+            "observation": {
+              "after_hp": 73.1818181818182,
+              "before_hp": 95.0,
+              "cast_t": 0.0,
+              "direction": "se",
+              "enemy_hp": 73.1818181818182,
+              "flinch_squared": 0.0,
+              "frame_directional": true,
+              "kind": "attack",
+              "lunge": 0.44,
+              "region": "[P: (36.0, 401.0), S: (220.0, 151.0)]",
+              "source": "res://assets/characters/lin_chong_direction4_20260906/se.png",
+              "subject_hp": 320.0
+            }
+          },
+          {
+            "case": "lin_chong_se_attack",
+            "observed": {
+              "cast_t": 0.0,
+              "direction": "se",
+              "flinch_squared": 0.0,
+              "hp": 320.0,
+              "key": "lin_chong",
+              "lunge": 0.44,
+              "move_blend": 0.0,
+              "portrait": "res://assets/characters/codex_portraits_20260913/lin_chong.png",
+              "pose": "res://assets/characters/lin_chong_direction4_20260906/se.png[P: (36.0, 401.0), S: (220.0, 151.0)]",
+              "position": [
+                271.0,
+                272.0
+              ],
+              "source": "res://assets/characters/lin_chong_direction4_20260906/se.png",
+              "variant": ""
+            }
+          },
+          {
+            "actor": "lin_chong",
+            "case": "real_counter_hit",
+            "direction": "se",
+            "observation": {
+              "after_hp": 311.851851851852,
+              "before_hp": 320.0,
+              "cast_t": 0.0,
+              "direction": "se",
+              "enemy_hp": 73.1818181818182,
+              "flinch_squared": 15.9999990463257,
+              "frame_directional": true,
+              "kind": "hurt",
+              "lunge": 0.0,
+              "region": "[P: (322.0, 396.0), S: (180.0, 162.0)]",
+              "source": "res://assets/characters/lin_chong_direction4_20260906/se.png",
+              "subject_hp": 311.851851851852
+            }
+          },
+          {
+            "case": "lin_chong_se_hurt",
+            "observed": {
+              "cast_t": 0.0,
+              "direction": "se",
+              "flinch_squared": 15.9999990463257,
+              "hp": 311.851851851852,
+              "key": "lin_chong",
+              "lunge": 0.0,
+              "move_blend": 0.0,
+              "portrait": "res://assets/characters/codex_portraits_20260913/lin_chong.png",
+              "pose": "res://assets/characters/lin_chong_direction4_20260906/se.png[P: (322.0, 396.0), S: (180.0, 162.0)]",
+              "position": [
+                271.0,
+                272.0
+              ],
+              "source": "res://assets/characters/lin_chong_direction4_20260906/se.png",
+              "variant": ""
+            }
+          },
+          {
+            "case": "lin_chong_se_walk",
+            "observed": {
+              "cast_t": 0.0,
+              "direction": "se",
+              "flinch_squared": 0.0,
+              "hp": 311.851851851852,
+              "key": "lin_chong",
+              "lunge": 0.0,
+              "move_blend": 1.0,
+              "portrait": "res://assets/characters/codex_portraits_20260913/lin_chong.png",
+              "pose": "res://assets/characters/lin_chong_traits_20261006/passing_a_se2_v5.png[P: (0.0, 0.0), S: (1254.0, 1254.0)]",
+              "position": [
+                291.327728271484,
+                272.0
+              ],
+              "source": "res://assets/characters/lin_chong_traits_20261006/passing_a_se2_v5.png",
+              "variant": ""
+            }
+          },
+          {
+            "case": "lin_chong_sw_idle",
+            "observed": {
+              "cast_t": 0.0,
+              "direction": "sw",
+              "flinch_squared": 0.0,
+              "hp": 311.851851851852,
+              "key": "lin_chong",
+              "lunge": 0.0,
+              "move_blend": 0.0,
+              "portrait": "res://assets/characters/codex_portraits_20260913/lin_chong.png",
+              "pose": "res://assets/characters/lin_chong_traits_20261006/idle_spacing2_v4.png[P: (627.0, 0.0), S: (627.0, 627.0)]",
+              "position": [
+                272.0,
+                271.0
+              ],
+              "source": "res://assets/characters/lin_chong_traits_20261006/idle_spacing2_v4.png",
+              "variant": ""
+            }
+          },
+          {
+            "actor": "lin_chong",
+            "case": "real_melee_hit",
+            "direction": "sw",
+            "observation": {
+              "after_hp": 55.7272727272727,
+              "before_hp": 95.0,
+              "cast_t": 0.0,
+              "direction": "sw",
+              "enemy_hp": 55.7272727272727,
+              "flinch_squared": 0.0,
+              "frame_directional": true,
+              "kind": "attack",
+              "lunge": 0.44,
+              "region": "[P: (4.0, 399.0), S: (256.0, 155.0)]",
+              "source": "res://assets/characters/lin_chong_direction4_20260906/sw.png",
+              "subject_hp": 311.851851851852
+            }
+          },
+          {
+            "case": "lin_chong_sw_attack",
+            "observed": {
+              "cast_t": 0.0,
+              "direction": "sw",
+              "flinch_squared": 0.0,
+              "hp": 311.851851851852,
+              "key": "lin_chong",
+              "lunge": 0.44,
+              "move_blend": 0.0,
+              "portrait": "res://assets/characters/codex_portraits_20260913/lin_chong.png",
+              "pose": "res://assets/characters/lin_chong_direction4_20260906/sw.png[P: (4.0, 399.0), S: (256.0, 155.0)]",
+              "position": [
+                272.0,
+                271.0
+              ],
+              "source": "res://assets/characters/lin_chong_direction4_20260906/sw.png",
+              "variant": ""
+            }
+          },
+          {
+            "actor": "lin_chong",
+            "case": "real_counter_hit",
+            "direction": "sw",
+            "observation": {
+              "after_hp": 303.703703703704,
+              "before_hp": 311.851851851852,
+              "cast_t": 0.0,
+              "direction": "sw",
+              "enemy_hp": 55.7272727272727,
+              "flinch_squared": 15.9999990463257,
+              "frame_directional": true,
+              "kind": "hurt",
+              "lunge": 0.0,
+              "region": "[P: (274.0, 400.0), S: (230.0, 165.0)]",
+              "source": "res://assets/characters/lin_chong_direction4_20260906/sw.png",
+              "subject_hp": 303.703703703704
+            }
+          },
+          {
+            "case": "lin_chong_sw_hurt",
+            "observed": {
+              "cast_t": 0.0,
+              "direction": "sw",
+              "flinch_squared": 15.9999990463257,
+              "hp": 303.703703703704,
+              "key": "lin_chong",
+              "lunge": 0.0,
+              "move_blend": 0.0,
+              "portrait": "res://assets/characters/codex_portraits_20260913/lin_chong.png",
+              "pose": "res://assets/characters/lin_chong_direction4_20260906/sw.png[P: (274.0, 400.0), S: (230.0, 165.0)]",
+              "position": [
+                272.0,
+                271.0
+              ],
+              "source": "res://assets/characters/lin_chong_direction4_20260906/sw.png",
+              "variant": ""
+            }
+          },
+          {
+            "case": "lin_chong_sw_walk",
+            "observed": {
+              "cast_t": 0.0,
+              "direction": "sw",
+              "flinch_squared": 0.0,
+              "hp": 303.703703703704,
+              "key": "lin_chong",
+              "lunge": 0.0,
+              "move_blend": 1.0,
+              "portrait": "res://assets/characters/codex_portraits_20260913/lin_chong.png",
+              "pose": "res://assets/characters/lin_chong_traits_20261006/walk_a_sw_v5.png[P: (0.0, 0.0), S: (1254.0, 1254.0)]",
+              "position": [
+                272.0,
+                291.327728271484
+              ],
+              "source": "res://assets/characters/lin_chong_traits_20261006/walk_a_sw_v5.png",
+              "variant": ""
+            }
+          },
+          {
+            "case": "lin_chong_ne_idle",
+            "observed": {
+              "cast_t": 0.0,
+              "direction": "ne",
+              "flinch_squared": 0.0,
+              "hp": 303.703703703704,
+              "key": "lin_chong",
+              "lunge": 0.0,
+              "move_blend": 0.0,
+              "portrait": "res://assets/characters/codex_portraits_20260913/lin_chong.png",
+              "pose": "res://assets/characters/lin_chong_traits_20261006/idle_spacing2_v4.png[P: (0.0, 627.0), S: (627.0, 627.0)]",
+              "position": [
+                272.0,
+                273.0
+              ],
+              "source": "res://assets/characters/lin_chong_traits_20261006/idle_spacing2_v4.png",
+              "variant": ""
+            }
+          },
+          {
+            "actor": "lin_chong",
+            "case": "real_melee_hit",
+            "direction": "ne",
+            "observation": {
+              "after_hp": 73.1818181818182,
+              "before_hp": 95.0,
+              "cast_t": 0.0,
+              "direction": "ne",
+              "enemy_hp": 73.1818181818182,
+              "flinch_squared": 0.0,
+              "frame_directional": true,
+              "kind": "attack",
+              "lunge": 0.44,
+              "region": "[P: (58.0, 398.0), S: (192.0, 156.0)]",
+              "source": "res://assets/characters/lin_chong_direction4_20260906/ne.png",
+              "subject_hp": 303.703703703704
+            }
+          },
+          {
+            "case": "lin_chong_ne_attack",
+            "observed": {
+              "cast_t": 0.0,
+              "direction": "ne",
+              "flinch_squared": 0.0,
+              "hp": 303.703703703704,
+              "key": "lin_chong",
+              "lunge": 0.44,
+              "move_blend": 0.0,
+              "portrait": "res://assets/characters/codex_portraits_20260913/lin_chong.png",
+              "pose": "res://assets/characters/lin_chong_direction4_20260906/ne.png[P: (58.0, 398.0), S: (192.0, 156.0)]",
+              "position": [
+                272.0,
+                273.0
+              ],
+              "source": "res://assets/characters/lin_chong_direction4_20260906/ne.png",
+              "variant": ""
+            }
+          },
+          {
+            "actor": "lin_chong",
+            "case": "real_counter_hit",
+            "direction": "ne",
+            "observation": {
+              "after_hp": 295.555555555556,
+              "before_hp": 303.703703703704,
+              "cast_t": 0.0,
+              "direction": "ne",
+              "enemy_hp": 73.1818181818182,
+              "flinch_squared": 15.9999990463257,
+              "frame_directional": true,
+              "kind": "hurt",
+              "lunge": 0.0,
+              "region": "[P: (330.0, 391.0), S: (145.0, 161.0)]",
+              "source": "res://assets/characters/lin_chong_direction4_20260906/ne.png",
+              "subject_hp": 295.555555555556
+            }
+          },
+          {
+            "case": "lin_chong_ne_hurt",
+            "observed": {
+              "cast_t": 0.0,
+              "direction": "ne",
+              "flinch_squared": 15.9999990463257,
+              "hp": 295.555555555556,
+              "key": "lin_chong",
+              "lunge": 0.0,
+              "move_blend": 0.0,
+              "portrait": "res://assets/characters/codex_portraits_20260913/lin_chong.png",
+              "pose": "res://assets/characters/lin_chong_direction4_20260906/ne.png[P: (330.0, 391.0), S: (145.0, 161.0)]",
+              "position": [
+                272.0,
+                273.0
+              ],
+              "source": "res://assets/characters/lin_chong_direction4_20260906/ne.png",
+              "variant": ""
+            }
+          },
+          {
+            "case": "lin_chong_ne_walk",
+            "observed": {
+              "cast_t": 0.0,
+              "direction": "ne",
+              "flinch_squared": 0.0,
+              "hp": 295.555555555556,
+              "key": "lin_chong",
+              "lunge": 0.0,
+              "move_blend": 1.0,
+              "portrait": "res://assets/characters/codex_portraits_20260913/lin_chong.png",
+              "pose": "res://assets/characters/lin_chong_traits_20261006/walk_b_ne_v5.png[P: (0.0, 0.0), S: (1254.0, 1254.0)]",
+              "position": [
+                272.0,
+                252.672210693359
+              ],
+              "source": "res://assets/characters/lin_chong_traits_20261006/walk_b_ne_v5.png",
+              "variant": ""
+            }
+          },
+          {
+            "case": "lin_chong_nw_idle",
+            "observed": {
+              "cast_t": 0.0,
+              "direction": "nw",
+              "flinch_squared": 0.0,
+              "hp": 295.555555555556,
+              "key": "lin_chong",
+              "lunge": 0.0,
+              "move_blend": 0.0,
+              "portrait": "res://assets/characters/codex_portraits_20260913/lin_chong.png",
+              "pose": "res://assets/characters/lin_chong_traits_20261006/idle_spacing2_v4.png[P: (627.0, 627.0), S: (627.0, 627.0)]",
+              "position": [
+                274.0,
+                272.0
+              ],
+              "source": "res://assets/characters/lin_chong_traits_20261006/idle_spacing2_v4.png",
+              "variant": ""
+            }
+          },
+          {
+            "actor": "lin_chong",
+            "case": "real_melee_hit",
+            "direction": "nw",
+            "observation": {
+              "after_hp": 400.8,
+              "before_hp": 420.0,
+              "cast_t": 0.0,
+              "direction": "nw",
+              "enemy_hp": 400.8,
+              "flinch_squared": 0.0,
+              "frame_directional": true,
+              "kind": "attack",
+              "lunge": 0.44,
+              "region": "[P: (36.0, 400.0), S: (188.0, 144.0)]",
+              "source": "res://assets/characters/lin_chong_direction4_20260906/nw.png",
+              "subject_hp": 295.555555555556
+            }
+          },
+          {
+            "case": "lin_chong_nw_attack",
+            "observed": {
+              "cast_t": 0.0,
+              "direction": "nw",
+              "flinch_squared": 0.0,
+              "hp": 295.555555555556,
+              "key": "lin_chong",
+              "lunge": 0.44,
+              "move_blend": 0.0,
+              "portrait": "res://assets/characters/codex_portraits_20260913/lin_chong.png",
+              "pose": "res://assets/characters/lin_chong_direction4_20260906/nw.png[P: (36.0, 400.0), S: (188.0, 144.0)]",
+              "position": [
+                274.0,
+                272.0
+              ],
+              "source": "res://assets/characters/lin_chong_direction4_20260906/nw.png",
+              "variant": ""
+            }
+          },
+          {
+            "actor": "lin_chong",
+            "case": "real_counter_hit",
+            "direction": "nw",
+            "observation": {
+              "after_hp": 245.555555555556,
+              "before_hp": 295.555555555556,
+              "cast_t": 0.0,
+              "direction": "nw",
+              "enemy_hp": 400.8,
+              "flinch_squared": 15.9999990463257,
+              "frame_directional": true,
+              "kind": "hurt",
+              "lunge": 0.0,
+              "region": "[P: (317.0, 403.0), S: (131.0, 134.0)]",
+              "source": "res://assets/characters/lin_chong_direction4_20260906/nw.png",
+              "subject_hp": 245.555555555556
+            }
+          },
+          {
+            "case": "lin_chong_nw_hurt",
+            "observed": {
+              "cast_t": 0.0,
+              "direction": "nw",
+              "flinch_squared": 15.9999990463257,
+              "hp": 245.555555555556,
+              "key": "lin_chong",
+              "lunge": 0.0,
+              "move_blend": 0.0,
+              "portrait": "res://assets/characters/codex_portraits_20260913/lin_chong.png",
+              "pose": "res://assets/characters/lin_chong_direction4_20260906/nw.png[P: (317.0, 403.0), S: (131.0, 134.0)]",
+              "position": [
+                274.0,
+                272.0
+              ],
+              "source": "res://assets/characters/lin_chong_direction4_20260906/nw.png",
+              "variant": ""
+            }
+          },
+          {
+            "case": "lin_chong_nw_walk",
+            "observed": {
+              "cast_t": 0.0,
+              "direction": "nw",
+              "flinch_squared": 0.0,
+              "hp": 245.555555555556,
+              "key": "lin_chong",
+              "lunge": 0.0,
+              "move_blend": 0.0,
+              "portrait": "res://assets/characters/codex_portraits_20260913/lin_chong.png",
+              "pose": "res://assets/characters/lin_chong_traits_20261006/idle_spacing2_v4.png[P: (627.0, 627.0), S: (627.0, 627.0)]",
+              "position": [
+                274.0,
+                272.0
+              ],
+              "source": "res://assets/characters/lin_chong_traits_20261006/idle_spacing2_v4.png",
+              "variant": ""
+            }
+          },
+          {
+            "actor": {
+              "atk": 23.0,
+              "base_speed": 86.0,
+              "chapter": "res://scripts/levels/level8_daming_rts.gd",
+              "hp": 360.0,
+              "instance": 5142434810684,
+              "key": "wu_song",
+              "max_hp": 360.0,
+              "skills": [
+                {
+                  "cast_seq": 0,
+                  "cd_t": 0.0,
+                  "charges": 0,
+                  "id": "wu_tigers",
+                  "passive": false,
+                  "rank": 0,
+                  "recharge_t": 0.0
+                },
+                {
+                  "cast_seq": 0,
+                  "cd_t": 0.0,
+                  "charges": 0,
+                  "id": "wu_wine",
+                  "passive": false,
+                  "rank": 0,
+                  "recharge_t": 0.0
+                },
+                {
+                  "cast_seq": 0,
+                  "cd_t": 0.0,
+                  "charges": 0,
+                  "id": "wu_blades",
+                  "passive": false,
+                  "rank": 0,
+                  "recharge_t": 0.0
+                },
+                {
+                  "cast_seq": 0,
+                  "cd_t": 0.0,
+                  "charges": 0,
+                  "id": "wu_drunkgod",
+                  "passive": false,
+                  "rank": 0,
+                  "recharge_t": 0.0
+                }
+              ]
+            },
+            "case": "original_actor",
+            "enemy_roster": [
+              {
+                "atk": 9.0,
+                "hp": 85.0,
+                "instance": 5143173007700,
+                "key": "guan_dao"
+              },
+              {
+                "atk": 9.0,
+                "hp": 85.0,
+                "instance": 5143189785580,
+                "key": "guan_dao"
+              },
+              {
+                "atk": 9.0,
+                "hp": 85.0,
+                "instance": 5143206562164,
+                "key": "guan_dao"
+              },
+              {
+                "atk": 9.0,
+                "hp": 85.0,
+                "instance": 5143223339406,
+                "key": "guan_dao"
+              }
+            ],
+            "fixture_cell": [
+              11,
+              16
+            ]
+          },
+          {
+            "case": "wu_song_se_idle",
+            "observed": {
+              "cast_t": 0.0,
+              "direction": "se",
+              "flinch_squared": 0.0,
+              "hp": 360.0,
+              "key": "wu_song",
+              "lunge": 0.0,
+              "move_blend": 0.0,
+              "portrait": "res://assets/characters/art_full_20260916/wu_song_portrait_20260916.png",
+              "pose": "res://assets/characters/wu_song_traits_20261006/idle_spacing_v4.png[P: (0.0, 0.0), S: (656.0, 599.0)]",
+              "position": [
+                367.0,
+                528.0
+              ],
+              "source": "res://assets/characters/wu_song_traits_20261006/idle_spacing_v4.png",
+              "variant": ""
+            }
+          },
+          {
+            "actor": "wu_song",
+            "case": "real_melee_hit",
+            "direction": "se",
+            "observation": {
+              "after_hp": 65.0,
+              "before_hp": 85.0,
+              "cast_t": 0.0,
+              "direction": "se",
+              "enemy_hp": 65.0,
+              "flinch_squared": 0.0,
+              "frame_directional": false,
+              "kind": "attack",
+              "lunge": 0.475,
+              "region": "[P: (512.0, 0.0), S: (256.0, 256.0)]",
+              "source": "res://assets/anim/wu_song_attack.png",
+              "subject_hp": 360.0
+            }
+          },
+          {
+            "case": "wu_song_se_attack",
+            "observed": {
+              "cast_t": 0.0,
+              "direction": "se",
+              "flinch_squared": 0.0,
+              "hp": 360.0,
+              "key": "wu_song",
+              "lunge": 0.475,
+              "move_blend": 0.0,
+              "portrait": "res://assets/characters/art_full_20260916/wu_song_portrait_20260916.png",
+              "pose": "res://assets/anim/wu_song_attack.png[P: (512.0, 0.0), S: (256.0, 256.0)]",
+              "position": [
+                367.0,
+                528.0
+              ],
+              "source": "res://assets/anim/wu_song_attack.png",
+              "variant": ""
+            }
+          },
+          {
+            "actor": "wu_song",
+            "case": "real_counter_hit",
+            "direction": "se",
+            "observation": {
+              "after_hp": 353.076923076923,
+              "before_hp": 360.0,
+              "cast_t": 0.0,
+              "direction": "se",
+              "enemy_hp": 65.0,
+              "flinch_squared": 15.9999990463257,
+              "frame_directional": true,
+              "kind": "hurt",
+              "lunge": 0.0,
+              "region": "[P: (0.0, 0.0), S: (656.0, 599.0)]",
+              "source": "res://assets/characters/wu_song_traits_20261006/idle_spacing_v4.png",
+              "subject_hp": 353.076923076923
+            }
+          },
+          {
+            "case": "wu_song_se_hurt",
+            "observed": {
+              "cast_t": 0.0,
+              "direction": "se",
+              "flinch_squared": 15.9999990463257,
+              "hp": 353.076923076923,
+              "key": "wu_song",
+              "lunge": 0.0,
+              "move_blend": 0.0,
+              "portrait": "res://assets/characters/art_full_20260916/wu_song_portrait_20260916.png",
+              "pose": "res://assets/characters/wu_song_traits_20261006/idle_spacing_v4.png[P: (0.0, 0.0), S: (656.0, 599.0)]",
+              "position": [
+                367.0,
+                528.0
+              ],
+              "source": "res://assets/characters/wu_song_traits_20261006/idle_spacing_v4.png",
+              "variant": ""
+            }
+          },
+          {
+            "case": "wu_song_se_walk",
+            "observed": {
+              "cast_t": 0.0,
+              "direction": "se",
+              "flinch_squared": 0.0,
+              "hp": 353.076923076923,
+              "key": "wu_song",
+              "lunge": 0.0,
+              "move_blend": 1.0,
+              "portrait": "res://assets/characters/art_full_20260916/wu_song_portrait_20260916.png",
+              "pose": "res://assets/characters/wu_song_traits_20261006/passing_a_se_v5.png[P: (0.0, 0.0), S: (1254.0, 1254.0)]",
+              "position": [
+                388.852355957031,
+                528.0
+              ],
+              "source": "res://assets/characters/wu_song_traits_20261006/passing_a_se_v5.png",
+              "variant": ""
+            }
+          },
+          {
+            "case": "wu_song_sw_idle",
+            "observed": {
+              "cast_t": 0.0,
+              "direction": "sw",
+              "flinch_squared": 0.0,
+              "hp": 353.076923076923,
+              "key": "wu_song",
+              "lunge": 0.0,
+              "move_blend": 0.0,
+              "portrait": "res://assets/characters/art_full_20260916/wu_song_portrait_20260916.png",
+              "pose": "res://assets/characters/wu_song_traits_20261006/idle_spacing_v4.png[P: (656.0, 0.0), S: (656.0, 599.0)]",
+              "position": [
+                368.0,
+                527.0
+              ],
+              "source": "res://assets/characters/wu_song_traits_20261006/idle_spacing_v4.png",
+              "variant": ""
+            }
+          },
+          {
+            "actor": "wu_song",
+            "case": "real_melee_hit",
+            "direction": "sw",
+            "observation": {
+              "after_hp": 65.0,
+              "before_hp": 85.0,
+              "cast_t": 0.0,
+              "direction": "sw",
+              "enemy_hp": 65.0,
+              "flinch_squared": 0.0,
+              "frame_directional": false,
+              "kind": "attack",
+              "lunge": 0.475,
+              "region": "[P: (512.0, 0.0), S: (256.0, 256.0)]",
+              "source": "res://assets/anim/wu_song_attack.png",
+              "subject_hp": 353.076923076923
+            }
+          },
+          {
+            "case": "wu_song_sw_attack",
+            "observed": {
+              "cast_t": 0.0,
+              "direction": "sw",
+              "flinch_squared": 0.0,
+              "hp": 353.076923076923,
+              "key": "wu_song",
+              "lunge": 0.475,
+              "move_blend": 0.0,
+              "portrait": "res://assets/characters/art_full_20260916/wu_song_portrait_20260916.png",
+              "pose": "res://assets/anim/wu_song_attack.png[P: (512.0, 0.0), S: (256.0, 256.0)]",
+              "position": [
+                368.0,
+                527.0
+              ],
+              "source": "res://assets/anim/wu_song_attack.png",
+              "variant": ""
+            }
+          },
+          {
+            "actor": "wu_song",
+            "case": "real_counter_hit",
+            "direction": "sw",
+            "observation": {
+              "after_hp": 346.153846153846,
+              "before_hp": 353.076923076923,
+              "cast_t": 0.0,
+              "direction": "sw",
+              "enemy_hp": 65.0,
+              "flinch_squared": 15.9999990463257,
+              "frame_directional": true,
+              "kind": "hurt",
+              "lunge": 0.0,
+              "region": "[P: (656.0, 0.0), S: (656.0, 599.0)]",
+              "source": "res://assets/characters/wu_song_traits_20261006/idle_spacing_v4.png",
+              "subject_hp": 346.153846153846
+            }
+          },
+          {
+            "case": "wu_song_sw_hurt",
+            "observed": {
+              "cast_t": 0.0,
+              "direction": "sw",
+              "flinch_squared": 15.9999990463257,
+              "hp": 346.153846153846,
+              "key": "wu_song",
+              "lunge": 0.0,
+              "move_blend": 0.0,
+              "portrait": "res://assets/characters/art_full_20260916/wu_song_portrait_20260916.png",
+              "pose": "res://assets/characters/wu_song_traits_20261006/idle_spacing_v4.png[P: (656.0, 0.0), S: (656.0, 599.0)]",
+              "position": [
+                368.0,
+                527.0
+              ],
+              "source": "res://assets/characters/wu_song_traits_20261006/idle_spacing_v4.png",
+              "variant": ""
+            }
+          },
+          {
+            "case": "wu_song_sw_walk",
+            "observed": {
+              "cast_t": 0.0,
+              "direction": "sw",
+              "flinch_squared": 0.0,
+              "hp": 346.153846153846,
+              "key": "wu_song",
+              "lunge": 0.0,
+              "move_blend": 1.0,
+              "portrait": "res://assets/characters/art_full_20260916/wu_song_portrait_20260916.png",
+              "pose": "res://assets/characters/wu_song_traits_20261006/walk_a_sw_v5.png[P: (0.0, 0.0), S: (1254.0, 1254.0)]",
+              "position": [
+                368.0,
+                548.852355957031
+              ],
+              "source": "res://assets/characters/wu_song_traits_20261006/walk_a_sw_v5.png",
+              "variant": ""
+            }
+          },
+          {
+            "case": "wu_song_ne_idle",
+            "observed": {
+              "cast_t": 0.0,
+              "direction": "ne",
+              "flinch_squared": 0.0,
+              "hp": 346.153846153846,
+              "key": "wu_song",
+              "lunge": 0.0,
+              "move_blend": 0.0,
+              "portrait": "res://assets/characters/art_full_20260916/wu_song_portrait_20260916.png",
+              "pose": "res://assets/characters/wu_song_traits_20261006/idle_spacing_v4.png[P: (0.0, 599.0), S: (656.0, 599.0)]",
+              "position": [
+                368.0,
+                529.0
+              ],
+              "source": "res://assets/characters/wu_song_traits_20261006/idle_spacing_v4.png",
+              "variant": ""
+            }
+          },
+          {
+            "actor": "wu_song",
+            "case": "real_melee_hit",
+            "direction": "ne",
+            "observation": {
+              "after_hp": 65.0,
+              "before_hp": 85.0,
+              "cast_t": 0.0,
+              "direction": "ne",
+              "enemy_hp": 65.0,
+              "flinch_squared": 0.0,
+              "frame_directional": false,
+              "kind": "attack",
+              "lunge": 0.475,
+              "region": "[P: (512.0, 0.0), S: (256.0, 256.0)]",
+              "source": "res://assets/anim/wu_song_attack.png",
+              "subject_hp": 346.153846153846
+            }
+          },
+          {
+            "case": "wu_song_ne_attack",
+            "observed": {
+              "cast_t": 0.0,
+              "direction": "ne",
+              "flinch_squared": 0.0,
+              "hp": 346.153846153846,
+              "key": "wu_song",
+              "lunge": 0.475,
+              "move_blend": 0.0,
+              "portrait": "res://assets/characters/art_full_20260916/wu_song_portrait_20260916.png",
+              "pose": "res://assets/anim/wu_song_attack.png[P: (512.0, 0.0), S: (256.0, 256.0)]",
+              "position": [
+                368.0,
+                529.0
+              ],
+              "source": "res://assets/anim/wu_song_attack.png",
+              "variant": ""
+            }
+          },
+          {
+            "actor": "wu_song",
+            "case": "real_counter_hit",
+            "direction": "ne",
+            "observation": {
+              "after_hp": 339.230769230769,
+              "before_hp": 346.153846153846,
+              "cast_t": 0.0,
+              "direction": "ne",
+              "enemy_hp": 65.0,
+              "flinch_squared": 15.9999990463257,
+              "frame_directional": true,
+              "kind": "hurt",
+              "lunge": 0.0,
+              "region": "[P: (0.0, 599.0), S: (656.0, 599.0)]",
+              "source": "res://assets/characters/wu_song_traits_20261006/idle_spacing_v4.png",
+              "subject_hp": 339.230769230769
+            }
+          },
+          {
+            "case": "wu_song_ne_hurt",
+            "observed": {
+              "cast_t": 0.0,
+              "direction": "ne",
+              "flinch_squared": 15.9999990463257,
+              "hp": 339.230769230769,
+              "key": "wu_song",
+              "lunge": 0.0,
+              "move_blend": 0.0,
+              "portrait": "res://assets/characters/art_full_20260916/wu_song_portrait_20260916.png",
+              "pose": "res://assets/characters/wu_song_traits_20261006/idle_spacing_v4.png[P: (0.0, 599.0), S: (656.0, 599.0)]",
+              "position": [
+                368.0,
+                529.0
+              ],
+              "source": "res://assets/characters/wu_song_traits_20261006/idle_spacing_v4.png",
+              "variant": ""
+            }
+          },
+          {
+            "case": "wu_song_ne_walk",
+            "observed": {
+              "cast_t": 0.0,
+              "direction": "ne",
+              "flinch_squared": 0.0,
+              "hp": 339.230769230769,
+              "key": "wu_song",
+              "lunge": 0.0,
+              "move_blend": 1.0,
+              "portrait": "res://assets/characters/art_full_20260916/wu_song_portrait_20260916.png",
+              "pose": "res://assets/characters/wu_song_traits_20261006/walk_b_ne_v5.png[P: (0.0, 0.0), S: (1254.0, 1254.0)]",
+              "position": [
+                368.0,
+                507.147644042969
+              ],
+              "source": "res://assets/characters/wu_song_traits_20261006/walk_b_ne_v5.png",
+              "variant": ""
+            }
+          },
+          {
+            "case": "wu_song_nw_idle",
+            "observed": {
+              "cast_t": 0.0,
+              "direction": "nw",
+              "flinch_squared": 0.0,
+              "hp": 339.230769230769,
+              "key": "wu_song",
+              "lunge": 0.0,
+              "move_blend": 0.0,
+              "portrait": "res://assets/characters/art_full_20260916/wu_song_portrait_20260916.png",
+              "pose": "res://assets/characters/wu_song_traits_20261006/idle_spacing_v4.png[P: (656.0, 599.0), S: (656.0, 599.0)]",
+              "position": [
+                369.0,
+                528.0
+              ],
+              "source": "res://assets/characters/wu_song_traits_20261006/idle_spacing_v4.png",
+              "variant": ""
+            }
+          },
+          {
+            "actor": "wu_song",
+            "case": "real_melee_hit",
+            "direction": "nw",
+            "observation": {
+              "after_hp": 65.0,
+              "before_hp": 85.0,
+              "cast_t": 0.0,
+              "direction": "nw",
+              "enemy_hp": 65.0,
+              "flinch_squared": 0.0,
+              "frame_directional": false,
+              "kind": "attack",
+              "lunge": 0.475,
+              "region": "[P: (512.0, 0.0), S: (256.0, 256.0)]",
+              "source": "res://assets/anim/wu_song_attack.png",
+              "subject_hp": 339.230769230769
+            }
+          },
+          {
+            "case": "wu_song_nw_attack",
+            "observed": {
+              "cast_t": 0.0,
+              "direction": "nw",
+              "flinch_squared": 0.0,
+              "hp": 339.230769230769,
+              "key": "wu_song",
+              "lunge": 0.475,
+              "move_blend": 0.0,
+              "portrait": "res://assets/characters/art_full_20260916/wu_song_portrait_20260916.png",
+              "pose": "res://assets/anim/wu_song_attack.png[P: (512.0, 0.0), S: (256.0, 256.0)]",
+              "position": [
+                369.0,
+                528.0
+              ],
+              "source": "res://assets/anim/wu_song_attack.png",
+              "variant": ""
+            }
+          },
+          {
+            "actor": "wu_song",
+            "case": "real_counter_hit",
+            "direction": "nw",
+            "observation": {
+              "after_hp": 332.307692307692,
+              "before_hp": 339.230769230769,
+              "cast_t": 0.0,
+              "direction": "nw",
+              "enemy_hp": 65.0,
+              "flinch_squared": 15.9999990463257,
+              "frame_directional": true,
+              "kind": "hurt",
+              "lunge": 0.0,
+              "region": "[P: (656.0, 599.0), S: (656.0, 599.0)]",
+              "source": "res://assets/characters/wu_song_traits_20261006/idle_spacing_v4.png",
+              "subject_hp": 332.307692307692
+            }
+          },
+          {
+            "case": "wu_song_nw_hurt",
+            "observed": {
+              "cast_t": 0.0,
+              "direction": "nw",
+              "flinch_squared": 15.9999990463257,
+              "hp": 332.307692307692,
+              "key": "wu_song",
+              "lunge": 0.0,
+              "move_blend": 0.0,
+              "portrait": "res://assets/characters/art_full_20260916/wu_song_portrait_20260916.png",
+              "pose": "res://assets/characters/wu_song_traits_20261006/idle_spacing_v4.png[P: (656.0, 599.0), S: (656.0, 599.0)]",
+              "position": [
+                369.0,
+                528.0
+              ],
+              "source": "res://assets/characters/wu_song_traits_20261006/idle_spacing_v4.png",
+              "variant": ""
+            }
+          },
+          {
+            "case": "wu_song_nw_walk",
+            "observed": {
+              "cast_t": 0.0,
+              "direction": "nw",
+              "flinch_squared": 0.0,
+              "hp": 332.307692307692,
+              "key": "wu_song",
+              "lunge": 0.0,
+              "move_blend": 1.0,
+              "portrait": "res://assets/characters/art_full_20260916/wu_song_portrait_20260916.png",
+              "pose": "res://assets/characters/wu_song_traits_20261006/walk_a_nw_v5.png[P: (0.0, 0.0), S: (1254.0, 1254.0)]",
+              "position": [
+                347.147644042969,
+                528.0
+              ],
+              "source": "res://assets/characters/wu_song_traits_20261006/walk_a_nw_v5.png",
+              "variant": ""
+            }
+          }
+        ],
+        "scope": "Isolated character resource/command/render fixtures at normal time. Not a chapter clear, balance, save/restore or long performance acceptance.",
+        "screenshots": [
+          {
+            "name": "lin_chong_se_idle",
+            "path": "E:\\ChatGPT\\qa-ordinary-posture-20261006\\ordinary_chapter_actions_v6a_5ea8ab6d\\evidence/lin_chong_se_idle.png",
+            "sha256": "fce995a9e84c2c45437ad2433d7b40c559de00ad3c1b5e17abed4194caa7712a"
+          },
+          {
+            "name": "lin_chong_se_attack",
+            "path": "E:\\ChatGPT\\qa-ordinary-posture-20261006\\ordinary_chapter_actions_v6a_5ea8ab6d\\evidence/lin_chong_se_attack.png",
+            "sha256": "2d07e77f49cad21b022ac1ac9ec20aa0133ce5a9e9ca69409af961960b90069b"
+          },
+          {
+            "name": "lin_chong_se_hurt",
+            "path": "E:\\ChatGPT\\qa-ordinary-posture-20261006\\ordinary_chapter_actions_v6a_5ea8ab6d\\evidence/lin_chong_se_hurt.png",
+            "sha256": "19c2280b1ea18fe16ce73e9e2d2862732a23037b85f08c8e2b6df89244527946"
+          },
+          {
+            "name": "lin_chong_se_walk",
+            "path": "E:\\ChatGPT\\qa-ordinary-posture-20261006\\ordinary_chapter_actions_v6a_5ea8ab6d\\evidence/lin_chong_se_walk.png",
+            "sha256": "6a4254da93c1ade453506da842d45d2411db9825828d90ba664ec1cc8ee061e2"
+          },
+          {
+            "name": "lin_chong_sw_idle",
+            "path": "E:\\ChatGPT\\qa-ordinary-posture-20261006\\ordinary_chapter_actions_v6a_5ea8ab6d\\evidence/lin_chong_sw_idle.png",
+            "sha256": "b0699146d86890423abb1f28b7547bc1e964be54e6d800389eeb693a26e9c1df"
+          },
+          {
+            "name": "lin_chong_sw_attack",
+            "path": "E:\\ChatGPT\\qa-ordinary-posture-20261006\\ordinary_chapter_actions_v6a_5ea8ab6d\\evidence/lin_chong_sw_attack.png",
+            "sha256": "c1f5feb0d9e7a1e630e8865de5e9fcef1f2b608c76b93016efde861fdb0022b3"
+          },
+          {
+            "name": "lin_chong_sw_hurt",
+            "path": "E:\\ChatGPT\\qa-ordinary-posture-20261006\\ordinary_chapter_actions_v6a_5ea8ab6d\\evidence/lin_chong_sw_hurt.png",
+            "sha256": "97ca2e2735709275eb4e215b6d480f55e529ce6a119e7df318cc3269e5c97add"
+          },
+          {
+            "name": "lin_chong_sw_walk",
+            "path": "E:\\ChatGPT\\qa-ordinary-posture-20261006\\ordinary_chapter_actions_v6a_5ea8ab6d\\evidence/lin_chong_sw_walk.png",
+            "sha256": "a73cdf51e8d3e6f04799bf4be577d313b2604de68ebe79a8daade8ee06b80d4b"
+          },
+          {
+            "name": "lin_chong_ne_idle",
+            "path": "E:\\ChatGPT\\qa-ordinary-posture-20261006\\ordinary_chapter_actions_v6a_5ea8ab6d\\evidence/lin_chong_ne_idle.png",
+            "sha256": "3a530fe153e03c4c21c00c315900fede4220768961ba4653587f190be2c44e15"
+          },
+          {
+            "name": "lin_chong_ne_attack",
+            "path": "E:\\ChatGPT\\qa-ordinary-posture-20261006\\ordinary_chapter_actions_v6a_5ea8ab6d\\evidence/lin_chong_ne_attack.png",
+            "sha256": "3054a78f61268296fd514c6915796c4ba0ebc8dbebb2347282cfd7b02cbdd729"
+          },
+          {
+            "name": "lin_chong_ne_hurt",
+            "path": "E:\\ChatGPT\\qa-ordinary-posture-20261006\\ordinary_chapter_actions_v6a_5ea8ab6d\\evidence/lin_chong_ne_hurt.png",
+            "sha256": "eadf3ba80079b1a031172c1e8730f436aaf35a8dbf5bd6832ce035ad22d7c48b"
+          },
+          {
+            "name": "lin_chong_ne_walk",
+            "path": "E:\\ChatGPT\\qa-ordinary-posture-20261006\\ordinary_chapter_actions_v6a_5ea8ab6d\\evidence/lin_chong_ne_walk.png",
+            "sha256": "ce651d5c243e2e16bb40ca3907d8a3bafc14f2bb7ad43803713198e40ad7ebba"
+          },
+          {
+            "name": "lin_chong_nw_idle",
+            "path": "E:\\ChatGPT\\qa-ordinary-posture-20261006\\ordinary_chapter_actions_v6a_5ea8ab6d\\evidence/lin_chong_nw_idle.png",
+            "sha256": "b2c608d33880eb2ea11f5a2a85a147310bb39fafb950bcf8d88cb2b7a2ee3541"
+          },
+          {
+            "name": "lin_chong_nw_attack",
+            "path": "E:\\ChatGPT\\qa-ordinary-posture-20261006\\ordinary_chapter_actions_v6a_5ea8ab6d\\evidence/lin_chong_nw_attack.png",
+            "sha256": "1c925365a3acb6ad4471692914275242047b109a7fc1919077252a67150b31be"
+          },
+          {
+            "name": "lin_chong_nw_hurt",
+            "path": "E:\\ChatGPT\\qa-ordinary-posture-20261006\\ordinary_chapter_actions_v6a_5ea8ab6d\\evidence/lin_chong_nw_hurt.png",
+            "sha256": "a71975bdcd613c62c75097b216f1febab69a6a32aaec05490bf3bec72187986d"
+          },
+          {
+            "name": "lin_chong_nw_walk",
+            "path": "E:\\ChatGPT\\qa-ordinary-posture-20261006\\ordinary_chapter_actions_v6a_5ea8ab6d\\evidence/lin_chong_nw_walk.png",
+            "sha256": "0bedcbbc3f7eb801012e966bcc8e2507174853071c2988a3b2805d09e2814af4"
+          },
+          {
+            "name": "wu_song_se_idle",
+            "path": "E:\\ChatGPT\\qa-ordinary-posture-20261006\\ordinary_chapter_actions_v6a_5ea8ab6d\\evidence/wu_song_se_idle.png",
+            "sha256": "574726f9e8dd4fbf74b130b17844d1014ffa1d97bd32a6d41373cfeae6b0ee81"
+          },
+          {
+            "name": "wu_song_se_attack",
+            "path": "E:\\ChatGPT\\qa-ordinary-posture-20261006\\ordinary_chapter_actions_v6a_5ea8ab6d\\evidence/wu_song_se_attack.png",
+            "sha256": "07284327487f9e0d41a8cc0d4c109c9fd58755e476823b43029c0998aa56abdb"
+          },
+          {
+            "name": "wu_song_se_hurt",
+            "path": "E:\\ChatGPT\\qa-ordinary-posture-20261006\\ordinary_chapter_actions_v6a_5ea8ab6d\\evidence/wu_song_se_hurt.png",
+            "sha256": "31fc2634542987e7405563e5b16b41847f6af1279683efbfe1460482845d1c20"
+          },
+          {
+            "name": "wu_song_se_walk",
+            "path": "E:\\ChatGPT\\qa-ordinary-posture-20261006\\ordinary_chapter_actions_v6a_5ea8ab6d\\evidence/wu_song_se_walk.png",
+            "sha256": "a0d88ca2f79021e2919af7b212a8221367d92b73c2e796cb8b004f0b2f208433"
+          },
+          {
+            "name": "wu_song_sw_idle",
+            "path": "E:\\ChatGPT\\qa-ordinary-posture-20261006\\ordinary_chapter_actions_v6a_5ea8ab6d\\evidence/wu_song_sw_idle.png",
+            "sha256": "6c1931c0d47762ab53030908f849c0ca3cde5f7119ffa2d19bf25efc4aec924b"
+          },
+          {
+            "name": "wu_song_sw_attack",
+            "path": "E:\\ChatGPT\\qa-ordinary-posture-20261006\\ordinary_chapter_actions_v6a_5ea8ab6d\\evidence/wu_song_sw_attack.png",
+            "sha256": "95a29c48fdf6b5ab7c096573cfca64d2f0d9b91d96c283b62afa936d82bcc179"
+          },
+          {
+            "name": "wu_song_sw_hurt",
+            "path": "E:\\ChatGPT\\qa-ordinary-posture-20261006\\ordinary_chapter_actions_v6a_5ea8ab6d\\evidence/wu_song_sw_hurt.png",
+            "sha256": "da2b70041edb938bf9e5f7bc0420981cfc7a5888b351d81263fd9b8f4995ac32"
+          },
+          {
+            "name": "wu_song_sw_walk",
+            "path": "E:\\ChatGPT\\qa-ordinary-posture-20261006\\ordinary_chapter_actions_v6a_5ea8ab6d\\evidence/wu_song_sw_walk.png",
+            "sha256": "1f2f4fc60247ab9a8ed945abaf42006eb072fb3c8501b0c70391efdec616da1b"
+          },
+          {
+            "name": "wu_song_ne_idle",
+            "path": "E:\\ChatGPT\\qa-ordinary-posture-20261006\\ordinary_chapter_actions_v6a_5ea8ab6d\\evidence/wu_song_ne_idle.png",
+            "sha256": "44b8fbe04c55f2dfaff19ad46647e495fee7e63e1b5933abf04213a5e62752e2"
+          },
+          {
+            "name": "wu_song_ne_attack",
+            "path": "E:\\ChatGPT\\qa-ordinary-posture-20261006\\ordinary_chapter_actions_v6a_5ea8ab6d\\evidence/wu_song_ne_attack.png",
+            "sha256": "d819443a32e9c07d9adeea58c74240bdd14f92552ca183445bc7d7e478bbec5e"
+          },
+          {
+            "name": "wu_song_ne_hurt",
+            "path": "E:\\ChatGPT\\qa-ordinary-posture-20261006\\ordinary_chapter_actions_v6a_5ea8ab6d\\evidence/wu_song_ne_hurt.png",
+            "sha256": "bb4e11cff6641c4df99607c14d8b931b00bcac00971a5ac7c31086da74e576ac"
+          },
+          {
+            "name": "wu_song_ne_walk",
+            "path": "E:\\ChatGPT\\qa-ordinary-posture-20261006\\ordinary_chapter_actions_v6a_5ea8ab6d\\evidence/wu_song_ne_walk.png",
+            "sha256": "a793c3ebb97a6653fb9e1d8cbe65fe7b94b6a1e4d4c6b3e684500ad829df4bce"
+          },
+          {
+            "name": "wu_song_nw_idle",
+            "path": "E:\\ChatGPT\\qa-ordinary-posture-20261006\\ordinary_chapter_actions_v6a_5ea8ab6d\\evidence/wu_song_nw_idle.png",
+            "sha256": "30e2bfd8f739fdb681046c02f66e0eb5b582a5e5c9cf835dc397b0ef9dd6495b"
+          },
+          {
+            "name": "wu_song_nw_attack",
+            "path": "E:\\ChatGPT\\qa-ordinary-posture-20261006\\ordinary_chapter_actions_v6a_5ea8ab6d\\evidence/wu_song_nw_attack.png",
+            "sha256": "3308578f9fea9779be101466da27dd0c56ed4ea02d19d5f8288cb42812bbef94"
+          },
+          {
+            "name": "wu_song_nw_hurt",
+            "path": "E:\\ChatGPT\\qa-ordinary-posture-20261006\\ordinary_chapter_actions_v6a_5ea8ab6d\\evidence/wu_song_nw_hurt.png",
+            "sha256": "e3c1ee206ba0b538b6b6de679eec4b02b3f456b4623a68707202788150a40845"
+          },
+          {
+            "name": "wu_song_nw_walk",
+            "path": "E:\\ChatGPT\\qa-ordinary-posture-20261006\\ordinary_chapter_actions_v6a_5ea8ab6d\\evidence/wu_song_nw_walk.png",
+            "sha256": "e4db815311b47b744c003661e61531597753007448ea128d691118f71f5fe257"
+          }
+        ],
+        "visual": true
+      },
+      "report_sha256": "6374ffb6330d4c00f1af2166790581f0cafcc57746500bb68d800f3789506ca6"
+    }
+  ],
+  "scope": "Failed originals and exact frozen producers retained. v6 parse type error; v6a four incorrect assumptions about missing Wu hurt plus slow-render timer movement sampling. v6b uses explicit bool, existing no-hurt fallback and observed physical movement. No production fixes or stat injections."
+}

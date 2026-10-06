@@ -1,3 +1,15 @@
+<!-- ordinary-actions-v6-current -->
+## 2026-10-07 原关卡动作诊断与武松战斗候选
+
+人物按原著特性分别处理：武松魁梧剽悍、林冲沉稳挺拔，普通待机保持健康上背与成人比例；时迁保留轻巧机警。攻击/受击允许合理转胯、屈膝、倾身，不统一成僵硬军姿。
+
+原祝家庄林冲/大名府武松的正常指令、真实近战/反击、恢复行走与原HUD诊断255项、32截图通过，正常时钟1.0；4904原输入及86候选输入零漂移。只有私有ArtDB普通idle/walk查询替换，生产源码四脚本未修改。接触摆位、冻结非参与者、关雾/镜头及命中物理帧冻结是明确夹具；这不是默认接入、技能/死亡、连续步态、自然通关、保存、性能或平台资格。v6类型错误及v6a受击/计时夹具错误原批完整保留。当前证据：qa/zhu_wounded_20261005/ordinary_chapter_actions_v6b.json及ordinary_chapter_actions_review_v6.json。
+
+实际发现武松四向攻击仍取同一旧侧面帧带，后视出手会跳回侧面；无独立hurt图时沿用身体加程序化退缩。新增imagegen原生战斗候选保留7张1254RGBA来源，5张选用来源组成四向蓄势/斩击/收势/受击16姿态，7张实际原生尺寸导入通过。西南首版两帧错向、西南第二版hurt错向、西北首版脚跨格均保留；西南hurt改为独立原生图。清单assets/direction4/ordinary_wu_song_20261007_actions_v6.json，精确请求/父图链tools/contracts/zhu_wounded_20261005/generation_wu_song_actions_v6.json。未本地裁切/缩放/镜像/重绘。
+
+下一步为新战斗图独立编排脚点/头部身高与SpriteFrames，实跑动作与待机/行走衔接；核验双刀握法、后视支撑腿，林冲连续枪长/枪缨与体型。新战斗资源尚未编排，resources=0；普通两人默认路由、完整动作/连续资格仍开放。全项目仍按DEVELOPMENT_AUDIT_20261006.md执行。本轮未清理、打包或发布平台。
+<!-- /ordinary-actions-v6-current -->
+
 <!-- lin-gait-source-sync-v5 -->
 ## 2026-10-07 林冲行走候选增量已同步
 
@@ -2220,3 +2232,5 @@ py -3 -X utf8 -B tools/run_art_full_qa.py --run --work-root D:\CodexTemp\art_ful
 ## 2026-09-16 快活林酒望运行时绘制修复
 
 Level 7 四处酒望继续使用 `assets/campaign/environment/art_full_20260915/taverns.png` 与 `assets/campaign/environment/level7/roadside_tavern_{a,b,c,d}.tres` 作为来源和 route 记录。由于 Godot 4.6.3 的 Unit 画布路径会把这组带虚拟 margin 的 AtlasTexture 合成为白色矩形，`scripts/unit.gd` 的实时 Unit 绘制只改用已经验收的真透明 `assets/campaign/objects/roadside_tavern_default.png`；没有覆盖来源文件、改原图像素、改变关卡范围或删除 TRES。实景与全库回归收据见 `qa/level7_tavern_render_20260916/`。
+
+当前原关卡诊断入口：python -X utf8 -B qa/zhu_wounded_20261005/harness/ordinary_chapter_actions_v6b.py --from-receipt <已完成原Battle evidence/receipt.json> --work-root <包含Wu/Lin已核验native texture bootstrap收据的工程外QA目录> --run。无--run只读预检。自然等待共享Godot，使用独立私有profile。该入口只诊断旧战斗图与新idle/walk，不加载本轮新战斗候选。

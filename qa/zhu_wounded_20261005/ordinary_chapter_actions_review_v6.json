@@ -1,0 +1,69 @@
+{
+  "mechanical_checks": 255,
+  "captures": 32,
+  "baseline_inputs": 4904,
+  "candidate_inputs": 86,
+  "root_input_drift": 0,
+  "private_input_drift_except_declared_artdb_patch": 0,
+  "normal_clock": 1.0,
+  "reviewed": [
+    {
+      "name": "lin_chong_nw_idle",
+      "path": "qa/zhu_wounded_20261005/ordinary_chapter_actions_review_frames_v6/lin_chong_nw_idle.png",
+      "sha256": "d9f4ad901321b6a270f9db8ded310f18feb8500514ab3c844461cfba22fae746",
+      "native_bytes_unchanged": true
+    },
+    {
+      "name": "lin_chong_nw_attack",
+      "path": "qa/zhu_wounded_20261005/ordinary_chapter_actions_review_frames_v6/lin_chong_nw_attack.png",
+      "sha256": "db518b22a9a7e92f5f6d55e40998b7426ad73b123c94ba3829bf2c34f952699f",
+      "native_bytes_unchanged": true
+    },
+    {
+      "name": "lin_chong_se_hurt",
+      "path": "qa/zhu_wounded_20261005/ordinary_chapter_actions_review_frames_v6/lin_chong_se_hurt.png",
+      "sha256": "f6b572b90430990f3b4d9e8044828a30998f771107ee8fba9c5794ec51b9be5b",
+      "native_bytes_unchanged": true
+    },
+    {
+      "name": "lin_chong_nw_walk",
+      "path": "qa/zhu_wounded_20261005/ordinary_chapter_actions_review_frames_v6/lin_chong_nw_walk.png",
+      "sha256": "7919c829e1aad69fd6047995e7363521bf024120703d65d5e4aae06e4b0d56f1",
+      "native_bytes_unchanged": true
+    },
+    {
+      "name": "wu_song_ne_idle",
+      "path": "qa/zhu_wounded_20261005/ordinary_chapter_actions_review_frames_v6/wu_song_ne_idle.png",
+      "sha256": "479fe988742e30f13ee187c09ad3a6524545812a5cb8bdb227f52049566f88ac",
+      "native_bytes_unchanged": true
+    },
+    {
+      "name": "wu_song_ne_attack",
+      "path": "qa/zhu_wounded_20261005/ordinary_chapter_actions_review_frames_v6/wu_song_ne_attack.png",
+      "sha256": "491ba61b02199d99230f9c33bab4c82e00364700575af2eb79cf4816e0ff037d",
+      "native_bytes_unchanged": true
+    },
+    {
+      "name": "wu_song_sw_hurt",
+      "path": "qa/zhu_wounded_20261005/ordinary_chapter_actions_review_frames_v6/wu_song_sw_hurt.png",
+      "sha256": "1f8e602427f10d6b4667d3a5b1aff9553ee150e458bf12bb0c5f615292dc6deb",
+      "native_bytes_unchanged": true
+    },
+    {
+      "name": "wu_song_ne_walk",
+      "path": "qa/zhu_wounded_20261005/ordinary_chapter_actions_review_frames_v6/wu_song_ne_walk.png",
+      "sha256": "eb4905454987b6d30fc77dbf71e41dafad29beaed25e90ddd344bc40125b5d93",
+      "native_bytes_unchanged": true
+    }
+  ],
+  "findings": [
+    "New ordinary idle/walk stays upright in the sampled actual chapter contexts; standard portraits, selected unit panel and skill identities remain.",
+    "Original Lin has four authored directional attack/hurt resources; complete continuous spear/body alignment remains unqualified.",
+    "Actual Wu attacks in all four logical directions use the same legacy side-view strip with directional=false: rear-facing idle transitions to a side-view attack. Actual Wu has no authored hurt and normally retains the current body under programmatic recoil.",
+    "Seven native imagegen outputs retained, selected five supply sixteen new Wu action candidates; native1254RGBA import checks passed. Three-phase attack and hurt sampling/resources are not authored or run yet. Incorrect SW heading and NW cross-cell boot source variants retained."
+  ],
+  "scope": "Actual original Lin/Zhu and Wu/Daming actors, real Unit orders/state priority/melee damage and original HUD. Contact placement, frozen nonparticipants, fog-off, camera zoom and exact-damage-tick physics freeze are explicit fixtures. Private ArtDB substitutes ordinary idle/walk only. Not default production, full chapter, skills/cast/death playback, continuous gait, save/restore, performance, export or platform qualification.",
+  "production_qualified": false,
+  "continuous_gait_qualified": false,
+  "new_action_runtime_qualified": false
+}
