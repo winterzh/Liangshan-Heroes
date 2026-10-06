@@ -1,0 +1,21 @@
+{
+  "qualified": false,
+  "reason": "Fog calculation was disabled but the old unexplored fog texture remained visible; actual actor viewport was black.",
+  "failed_run": "E:\\ChatGPT\\qa-ordinary-posture-20261006\\ordinary_final_actions_v8_f2904419",
+  "receipt_sha256": "7d694487851063834a237bd5d19d6bbdb6f4fef48b33eb003e561ce3d8e50c57",
+  "owned_engine_exit_code": 4294967295,
+  "lock_released": true,
+  "reviewed_native_viewports": [
+    {
+      "path": "qa/zhu_wounded_20261005/ordinary_final_actions_rejected_v8_frames/lin_chong_0_ne_cast.png",
+      "sha256": "4f13dc0dba984643455c2ddaf61e8bf54eb5aece6d9502273628a41131c1fa55"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/ordinary_final_actions_rejected_v8_frames/lin_chong_0_ne_effect.png",
+      "sha256": "8f535bbec48c871e002469c062e7abaa66fbc4eda8a61e7891b86b01c9151c01"
+    }
+  ],
+  "replacement_harness": "qa/zhu_wounded_20261005/harness/ordinary_skills_death_v8a.gd",
+  "correction": "Explicit visual fixture hides old fog layer and asserts actual actor visibility; original production scripts are unchanged.",
+  "scope": "Partial mechanical assertions do not qualify rejected screenshots. Executed v8 producer and complete failure run retained."
+}

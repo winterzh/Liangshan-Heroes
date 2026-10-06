@@ -1,3 +1,17 @@
+<!-- wu-death-candidate-v8-current -->
+## 2026-10-07 武松倒地候选与技能检查进度
+
+人物体态继续按原著身份分别处理：武松魁梧剽悍、林冲沉稳挺拔，普通站立与行走保持健康成人比例；时迁保留轻巧机警。攻击、受击和倒地允许合理发力、屈膝与身体弯曲。衣甲细节属于本项目的美术解释。
+
+武松新增内置imagegen原生倒地来源9张，全部保存原字节与精确请求/父图链。选4张新来源及同人物既有西北受击来源，组成12姿态/4向资源；致命受击、倒下、静止、静止四槽，末槽是终态停留。错误朝向、缺刀、跨格的原图保留，相应错误格不采用；AtlasTexture仅用元数据取样，倒地保持固定成人解剖尺度。5个实际原生来源导入与来源/SHA核验通过，仍为候选，未登记生产默认death。
+
+首轮v8技能画面因旧雾纹理覆盖人物判退，执行脚本、失败收据及两张实际黑屏证据保留。v8a夹具显式隐藏旧雾层并核验人物可见，未为此修改游戏源码。原祝家庄林冲第一技能四向61检查/8原生视口完成，正常时钟1.0；4904来源与105既有输入在本检查点零漂移。直接查看5张，人物/地图、前后视角和原HUD可见，施法后恢复挺拔idle；其余三张保存，连续衔接及完整技能特效不据此判为完成。合法level6/rank1恢复、接触摆位、非参与者冻结、关雾/镜头/相位冻结均为明确夹具，不是自然升级或通关。
+
+完整两人技能及原level1真实致命伤/四向倒地仍在同一v8a私有批继续；共享引擎繁忙时自然等待，不操作其他任务。证据见qa/zhu_wounded_20261005/wu_death_native_review_v8.json、ordinary_final_actions_rejected_v8.json、ordinary_lin_skill0_checkpoint_v8a.json；请求与来源链见tools/contracts/zhu_wounded_20261005/generation_wu_song_death_v8.json。生产脚本和v7已合格默认范围保持本轮输入零漂移。本轮不将候选同步写成默认接入、完整审查、性能或平台发布；全项目未完成项继续按DEVELOPMENT_AUDIT_20261006.md执行。
+<!-- /wu-death-candidate-v8-current -->
+
+v8a复查入口：python -X utf8 -B qa/zhu_wounded_20261005/harness/run_ordinary_final_actions_v8a.py --from-receipt <已合格v7生产receipt.json> --work-root <含倒地原生导入收据的工程外QA目录> --run。当前批已在运行，复查前须核对外部continuation_state.json及共享锁，不能重复启动。无--run只预检。
+
 <!-- ordinary-combat-sync-v7 -->
 2026-10-07：本轮52白名单文件、20,048,844字节已提交并推送stable，独立回读源码SHA 33bd7d7e2ba558b20a4453501c5577b4fe1e8c87 一致。367项/48图的生产原样复验、源码默认取图接入与两个旧失败批7436重复缓存清理已同步记录。收据qa/zhu_wounded_20261005/ordinary_combat_source_sync_v7.json；文档收尾另见Git历史。完整资格按审计继续，未更新Steam。
 <!-- /ordinary-combat-sync-v7 -->
