@@ -11,6 +11,6 @@
 | 约10分钟性能、尾帧、切换清理 | 历史有效窗口中位FPS139–190，但P95/P99最高值和最终清理门槛未通过；当前截图FPS不作性能证据 | 在正常时钟、同负载下完成能正常结束的约10分钟夹具；目标60FPS、P95≤16.7ms/P99≤33.3ms。测尾帧原因、节点/内存清理及切换；不擅自改为30分钟要求 |
 | Android真机及平台资格 | 历史2.0安装/联网/触控有用户确认；本轮未取得2.0.1手机/平板持续性能、DPI/安全区/触控后验 | 需实际设备和平台回读证据，不能用桌面模拟、构建成功或截图替代。第二账号/跨设备按已有用户决定不作为现阶段发布阻塞，但不标为通过 |
 | 审核、修错、有限冗余清理 | 修正武松西北斩击后腿/后靴与四向真实动作；覆盖状态生产审核通过。两个指定旧失败批7436同名/大小/SHA重复imported文件已删，1,780,976,820字节；15274受保护文件及保留匹配缓存零漂移，源码/原图/日志/存档/成功批保留 | 只关闭该两批已核验重复缓存；此前6批4.824GiB只读清单仍未删除。完整目标的审核与相应资格持续开放；旧失败项目需重导入，不删除失败证据或平台包 |
-| GitHub增量同步 | 本轮52白名单文件已推送stable并独立回读7ee20b6fe84761881faadf6f4fc1ddc7df5e2ffc一致；原关卡255项/32截图、7原生动作来源导入及精确请求/父图/失败记录已同步 | ordinary_actions_source_sync_v6.json记录源码提交，文档收尾另见Git历史。新动作取样/资源/运行未完成，默认取图未替换；继续按轮同步，不自行合main或发布平台 |
+| GitHub增量同步 | 本轮52白名单文件已推送stable并独立回读33bd7d7e2ba558b20a4453501c5577b4fe1e8c87一致；两人gait/Wu四向combat源码默认接入、生产原样367项/48图及限定重复缓存清理记录已同步 | ordinary_combat_source_sync_v7.json记录源码提交，文档收尾另见Git历史。完整角色/连续/全项目资格继续；不自行合main或发布平台 |
 
 当前合格来源：qa/zhu_wounded_20261005/original_rescued_seven_production_route_v4.json、original_rescued_seven_visual_review_v4.json、rescued_seven_candidate_identity_audit_v4.json、rescued_seven_cross_process_qualified_v4.json。原始成功批为E:/ChatGPT/qa-rescued-seven-current-20261006/20261006_152842_60aec8f8/evidence/receipt.json。新结果必须补入相应审计项；未完成项不得仅因其他测试绿色而关闭。

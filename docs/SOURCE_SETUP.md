@@ -1,3 +1,7 @@
+<!-- ordinary-combat-sync-v7 -->
+2026-10-07：本轮52白名单文件、20,048,844字节已提交并推送stable，独立回读源码SHA 33bd7d7e2ba558b20a4453501c5577b4fe1e8c87 一致。367项/48图的生产原样复验、源码默认取图接入与两个旧失败批7436重复缓存清理已同步记录。收据qa/zhu_wounded_20261005/ordinary_combat_source_sync_v7.json；文档收尾另见Git历史。完整资格按审计继续，未更新Steam。
+<!-- /ordinary-combat-sync-v7 -->
+
 <!-- ordinary-default-combat-v7-current -->
 ## 2026-10-07 新站姿与武松四向战斗已接入源码默认取图
 
