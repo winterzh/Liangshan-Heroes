@@ -1,3 +1,17 @@
+<!-- continuous-gait-v15b-current -->
+## 2026-10-07 普通武松、林冲连续运动采样与三种桌面窗口复核
+
+原祝家庄林冲/大名府武松保持人物物理与正常时钟1.0，各四向实际指令行走，每案8张原生运动采样并遍及全部4步相，位置实际推进；标准头像和人物数值保留。v15b生产脚本原样、无私有补丁，441项/70图通过，5034输入零漂移。直接复核当前14视口（每人每向1运动样本、3种待机窗口）；另保存已直接复核的v15a每人每向前4样本共32图，当前与前批的全部来源输入和逐案4姿态集合一致。证据ordinary_continuous_gait_qualified_v15b.json、ordinary_continuous_gait_visual_review_v15b.json。1280×720、1440×960、1920×1080中资源栏、头像、技能及底栏可见，人物头部、衣装/盔甲和武器保持身份。
+
+审核保留两次真实判退：v15首个新方向采到四次投票转向前的旧姿态，301项中12项失败；v15a机械301项/70图通过但手动镜头跳转后的氛围矩形明暗边界判退。v15b只在采样时等待实际方向，并调用既有_refresh_run_capture_presentation刷新派生几何，逐图验证滤镜原点和完整视口尺寸；不改生产脚本、PNG、动作资源或模拟值。旧producer、失败图/日志/收据不改写。当前资格为正常运动采样和所述桌面视口复核，不是无间断录像或逐像素脚底接触证明；完整攻击/施法连续演出、技能中后期血条间距、多尺寸完整流程和Android真机仍开放。
+
+只清指定判退v15/v15a工程imported中与保留v15b成功批同名、大小、SHA256一致的7476文件、1,803,637,428字节（约1.68GiB）；15517受保护文件和保留匹配缓存零漂移。源码、原生图片、失败证据、私有profile/存档、主缓存、其他任务、成功v14/v15b缓存及平台包保留，旧工程复查先重导入；清单/恢复见rejected_continuous_import_cleanup_v15.json。此前6批4.824GiB清单仍未删除。
+
+本轮验收工具、相关证据/文档尚待本轮白名单提交推送；上一远端为99ed9d85。下一项ordinary_skill_clearance_v16.gd/run_ordinary_skill_clearance_v16.py核验7个主动技能、4向、中/后期实际计时姿态，后期再核对3种窗口，共计划112图；合法level6/rank1与到达相位后冻结截图均为明确夹具，结果依新完成收据，准备或启动不算通过。被动林冲E无抬手，沿用已有被动命中证据。全项目其他审计门槛仍按DEVELOPMENT_AUDIT_20261006.md推进，未合main或发布平台。
+<!-- /continuous-gait-v15b-current -->
+
+连续复验固定producer：python -X utf8 -B qa/zhu_wounded_20261005/harness/run_ordinary_continuous_gait_v15b.py --from-production <v14完成收据> --work-root <工程外QA父目录> --run；v15b已完成，不重复启动。技能中/后期入口run_ordinary_skill_clearance_v16.py参数同前，先查工程外continuation_state.json/运行定位文件再恢复已有进程；本机Godot仍由忽略配置提供。
+
 <!-- ordinary-production-v14-qualified -->
 ## 2026-10-07 当前正式源码：人物特征动作、受击与倒地复验通过
 

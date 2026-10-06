@@ -1,0 +1,25 @@
+{
+  "passed": false,
+  "mechanical_passed": true,
+  "checks": 301,
+  "captures": 70,
+  "receipt_sha256": "749f152f594ffc3667b8c68c39a6122e61ff4a236ad093d9ac5f3d74ee91e00c",
+  "viewed_rejection": [
+    {
+      "case": "wu_song_idle_1440x960",
+      "path": "qa/zhu_wounded_20261005/ordinary_continuous_gait_rejected_v15a_frames/wu_song_idle_1440x960.png",
+      "sha256": "9af8d41e67c709ff86e954892465d636c2481395472e822e7aa896f49c7833fa"
+    },
+    {
+      "case": "wu_song_idle_1920x1080",
+      "path": "qa/zhu_wounded_20261005/ordinary_continuous_gait_rejected_v15a_frames/wu_song_idle_1920x1080.png",
+      "sha256": "92b511ddadbddca242ecf11aa1acee5de137fbddde83ceec624f6c29e7b0603a"
+    }
+  ],
+  "findings": [
+    "All eight continuous cases: actual subject physics kept enabled, original stats/portrait, four correct directional gait resources and eight samples with normal movement.",
+    "Directly viewed all first four continuous frames for each actor/direction and six desktop idle sizes. Wu resized idle views show a partial rectangular atmosphere tint boundary, so overall visual/UI qualification is rejected.",
+    "Sampler calls center_camera_cell/force_update_scroll after atmosphere process. Existing production _refresh_run_capture_presentation refreshes derived atmosphere geometry at snapshot boundaries; sibling will use that helper without stopping subject physics or changing production scripts."
+  ],
+  "scope": "Mechanical continuous sampling qualified only. Complete seamless visual/UI proof remains open until geometry-correct capture. No long performance or device qualification."
+}
