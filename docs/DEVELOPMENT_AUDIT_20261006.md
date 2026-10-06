@@ -7,7 +7,7 @@
 
 只清指定判退v15/v15a工程imported中与保留v15b成功批同名、大小、SHA256一致的7476文件、1,803,637,428字节（约1.68GiB）；15517受保护文件和保留匹配缓存零漂移。源码、原生图片、失败证据、私有profile/存档、主缓存、其他任务、成功v14/v15b缓存及平台包保留，旧工程复查先重导入；清单/恢复见rejected_continuous_import_cleanup_v15.json。此前6批4.824GiB清单仍未删除。
 
-本轮验收工具、相关证据/文档尚待本轮白名单提交推送；上一远端为99ed9d85。下一项ordinary_skill_clearance_v16.gd/run_ordinary_skill_clearance_v16.py核验7个主动技能、4向、中/后期实际计时姿态，后期再核对3种窗口，共计划112图；合法level6/rank1与到达相位后冻结截图均为明确夹具，结果依新完成收据，准备或启动不算通过。被动林冲E无抬手，沿用已有被动命中证据。全项目其他审计门槛仍按DEVELOPMENT_AUDIT_20261006.md推进，未合main或发布平台。
+本轮79白名单文件（68,443,231字节）已本地提交并推送stable，独立回读远端b22e5efbef31a97e9ce7c2951b81c258b0cef690一致；收据continuous_source_sync_v15.json。同步收据/文档另作收尾元数据提交。下一项ordinary_skill_clearance_v16.gd/run_ordinary_skill_clearance_v16.py核验7个主动技能、4向、中/后期实际计时姿态，后期再核对3种窗口，共计划112图；合法level6/rank1与到达相位后冻结截图均为明确夹具，结果依新完成收据，准备或启动不算通过。被动林冲E无抬手，沿用已有被动命中证据。全项目其他审计门槛仍按DEVELOPMENT_AUDIT_20261006.md推进，未合main或发布平台。
 <!-- /continuous-gait-v15b-current -->
 
 <!-- ordinary-production-v14-qualified -->
@@ -49,6 +49,6 @@
 | 约10分钟性能、尾帧、切换清理 | 历史有效窗口中位FPS139–190，但P95/P99最高值和最终清理门槛未通过；当前截图FPS不作性能证据 | 在正常时钟、同负载下完成能正常结束的约10分钟夹具；目标60FPS、P95≤16.7ms/P99≤33.3ms。测尾帧原因、节点/内存清理及切换；不擅自改为30分钟要求 |
 | Android真机及平台资格 | 历史2.0安装/联网/触控有用户确认；本轮未取得2.0.1手机/平板持续性能、DPI/安全区/触控后验 | 需实际设备和平台回读证据，不能用桌面模拟、构建成功或截图替代。第二账号/跨设备按已有用户决定不作为现阶段发布阻塞，但不标为通过 |
 | 审核、修错、有限冗余清理 | 当前v15b采样及主要桌面HUD复核通过；判退v15/v15a重复imported 7476文件、1,803,637,428字节已清，受保护/保留缓存零漂移。先前v7/v14清理保留原收据 | 只关闭指定重复文件，旧工程复查先重导入；6批4.824GiB未删。完整审核继续，失败来源/报告不删除 |
-| GitHub增量同步 | 当前66白名单文件已提交推送stable，远端独立回读8c3a584f5b821b4d6a502e37a1145473ba9613e4一致；生产715项80图和36资源默认路由、指定缓存清理收据已同步 | 完整资格仍开放；本同步不合并main、不发布平台。同步元数据另见本轮收尾Git提交 |
+| GitHub增量同步 | 当前79白名单文件已提交推送stable，独立回读b22e5efbef31a97e9ce7c2951b81c258b0cef690一致；441项70图采样、选定视口审核、判退记录、重复缓存清理及待资格v16工具已同步 | 完整资格继续；v16工具同步不算技能通过。同步不合main、不发布平台，元数据收尾另见Git历史 |
 
 当前合格来源：qa/zhu_wounded_20261005/original_rescued_seven_production_route_v4.json、original_rescued_seven_visual_review_v4.json、rescued_seven_candidate_identity_audit_v4.json、rescued_seven_cross_process_qualified_v4.json。原始成功批为E:/ChatGPT/qa-rescued-seven-current-20261006/20261006_152842_60aec8f8/evidence/receipt.json。新结果必须补入相应审计项；未完成项不得仅因其他测试绿色而关闭。

@@ -7,7 +7,7 @@
 
 只清指定判退v15/v15a工程imported中与保留v15b成功批同名、大小、SHA256一致的7476文件、1,803,637,428字节（约1.68GiB）；15517受保护文件和保留匹配缓存零漂移。源码、原生图片、失败证据、私有profile/存档、主缓存、其他任务、成功v14/v15b缓存及平台包保留，旧工程复查先重导入；清单/恢复见rejected_continuous_import_cleanup_v15.json。此前6批4.824GiB清单仍未删除。
 
-本轮验收工具、相关证据/文档尚待本轮白名单提交推送；上一远端为99ed9d85。下一项ordinary_skill_clearance_v16.gd/run_ordinary_skill_clearance_v16.py核验7个主动技能、4向、中/后期实际计时姿态，后期再核对3种窗口，共计划112图；合法level6/rank1与到达相位后冻结截图均为明确夹具，结果依新完成收据，准备或启动不算通过。被动林冲E无抬手，沿用已有被动命中证据。全项目其他审计门槛仍按DEVELOPMENT_AUDIT_20261006.md推进，未合main或发布平台。
+本轮79白名单文件（68,443,231字节）已本地提交并推送stable，独立回读远端b22e5efbef31a97e9ce7c2951b81c258b0cef690一致；收据continuous_source_sync_v15.json。同步收据/文档另作收尾元数据提交。下一项ordinary_skill_clearance_v16.gd/run_ordinary_skill_clearance_v16.py核验7个主动技能、4向、中/后期实际计时姿态，后期再核对3种窗口，共计划112图；合法level6/rank1与到达相位后冻结截图均为明确夹具，结果依新完成收据，准备或启动不算通过。被动林冲E无抬手，沿用已有被动命中证据。全项目其他审计门槛仍按DEVELOPMENT_AUDIT_20261006.md推进，未合main或发布平台。
 <!-- /continuous-gait-v15b-current -->
 
 <!-- ordinary-production-v14-qualified -->
