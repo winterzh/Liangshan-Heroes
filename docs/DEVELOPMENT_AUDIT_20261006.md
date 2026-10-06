@@ -11,6 +11,6 @@
 | 约10分钟性能、尾帧、切换清理 | 历史有效窗口中位FPS139–190，但P95/P99最高值和最终清理门槛未通过；当前截图FPS不作性能证据 | 在正常时钟、同负载下完成能正常结束的约10分钟夹具；目标60FPS、P95≤16.7ms/P99≤33.3ms。测尾帧原因、节点/内存清理及切换；不擅自改为30分钟要求 |
 | Android真机及平台资格 | 历史2.0安装/联网/触控有用户确认；本轮未取得2.0.1手机/平板持续性能、DPI/安全区/触控后验 | 需实际设备和平台回读证据，不能用桌面模拟、构建成功或截图替代。第二账号/跨设备按已有用户决定不作为现阶段发布阻塞，但不标为通过 |
 | 审核、修错、有限冗余清理 | 原图/请求/失败父图/数学producer与私有失败批均保留；本轮已修正生命值假设、保存profile夹具及渲染方式 | 完成相应资格再审核。只删除经同名/大小/SHA与保留成功缓存一致的本批旧imported；保留源码、资源、存档、失败证据和最新成功缓存。旧失败批只读盘点21,924同名/大小/SHA一致缓存，5,179,351,872字节；删除量0 |
-| GitHub增量同步 | 源码增量已提交/推送stable并独立回读4cfa9902ba2df374e209ebdb206e0670fcb57438一致；1783文件白名单、文件大小/敏感模式/精确Git对象和两批各4904冻结输入复查通过 | 收据source_sync_round_20261006_v5.json记录源码提交；本次文档收尾为后续提交。继续逐轮同步已验证范围，不自行合main或发布平台 |
+| GitHub增量同步 | 武松行走候选本轮113白名单文件已推送stable并独立回读d9f1cec867be0916f3bd3269c2096cfa1de8cc00一致；原生字节、来源、尺寸、敏感模式和实际Unit证据核对通过 | 收据wu_song_gait_source_sync_v5.json记录本轮源码提交；后续文档收尾另见Git历史。继续逐轮同步已验证范围，不自行合main或发布平台 |
 
 当前合格来源：qa/zhu_wounded_20261005/original_rescued_seven_production_route_v4.json、original_rescued_seven_visual_review_v4.json、rescued_seven_candidate_identity_audit_v4.json、rescued_seven_cross_process_qualified_v4.json。原始成功批为E:/ChatGPT/qa-rescued-seven-current-20261006/20261006_152842_60aec8f8/evidence/receipt.json。新结果必须补入相应审计项；未完成项不得仅因其他测试绿色而关闭。
