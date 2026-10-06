@@ -1,3 +1,7 @@
+<!-- ordinary-actions-sync-v6 -->
+2026-10-07：本轮52白名单文件（21,701,568字节）已提交并推送stable，独立回读源码SHA 7ee20b6fe84761881faadf6f4fc1ddc7df5e2ffc 一致。收据qa/zhu_wounded_20261005/ordinary_actions_source_sync_v6.json。255项原关卡诊断/32截图及7原生纹理导入已验证；新战斗图仍为候选，resources=0，默认取图未替换。后续文档收尾另见Git历史，未清理或发布平台。
+<!-- /ordinary-actions-sync-v6 -->
+
 <!-- ordinary-actions-v6-current -->
 ## 2026-10-07 原关卡动作诊断与武松战斗候选
 
