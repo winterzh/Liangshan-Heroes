@@ -1,3 +1,17 @@
+<!-- lin-full-gait-v5-current -->
+## 2026-10-07 林冲四向待机/四步相行走候选完成独立对照
+
+按沉稳挺拔的教头体态处理，健康上背、自然抬头挺胸、成年比例；保留蓝衣金边甲与长枪低持。17原生来源形成四向idle及每向walk_a/passing_a/walk_b/passing_b，共20姿态/8资源。脚点按独立靴子区域编排，避开伸入下部的长枪与红缨；原v4待机资源不修改。内置imagegen原生生成/编辑，数学参考和已验证武松步相仅作腿姿/镜头参考，不继承武松脸、服装或双刀。所有精确请求、父图和换脚/背景失败原图保留，不本地裁切/缩放/镜像/重绘，不以idle充walk。
+
+17来源原生尺寸导入与374项来源/透明/资源检查通过。真实Unit/正常Defs英雄与四技能、正常时钟1.0的独立起停/反向对照96项、80截图通过，4904旧输入及42候选输入零漂移，四向四步相全部实际出现。直接查看原生1×/4×视口帧5/6/8/11/13/15/35/59/75，体态与主要身高/脚点衔接改善。仍需连续足底/衣装/枪缨/枪长/握法、血条间距、战斗/终态和原Battle/生产取图/UI/存档资格；普通生产路由未替换，production_qualified=false。
+
+清单：assets/direction4/ordinary_lin_chong_20261006_gait_v5.json；来源链：tools/contracts/zhu_wounded_20261005/generation_lin_chong_gait_v5.json；实际对照与审核：qa/zhu_wounded_20261005/ordinary_lin_chong_gait_motion_comparison_v5.json及ordinary_lin_chong_gait_motion_review_v5.json。此前只到idle/SE候选的段落是历史阶段；旧producer与收据不改写。
+
+下一步同时核验武松/林冲的连续与完整动作、原关卡/生产UI路由，再推进完整DEVELOPMENT_AUDIT_20261006.md。八关动态、自然结局/奖励一次、九模式、性能及Android资格仍开放。本轮未清理、打包或发布平台。
+<!-- /lin-full-gait-v5-current -->
+
+林冲新对照入口：python -X utf8 -B qa/zhu_wounded_20261005/harness/ordinary_lin_gait_motion_comparison_v5.py --key lin_chong --from-receipt <已完成原Battle evidence/receipt.json> --work-root <包含已核验texture_bootstrap_lin_chong_gait_v5_run.json的工程外QA目录> --run。无--run预检。自然等待共享Godot，不改变生产入口或角色数值。
+
 <!-- wu-gait-source-sync-v5 -->
 ## 2026-10-06 武松行走候选增量已同步
 
