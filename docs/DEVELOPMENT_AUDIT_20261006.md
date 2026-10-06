@@ -7,7 +7,7 @@
 
 只删除指定失败批ordinary_death_pilot_v10_5101dfd0的imported中与保留v14成功批同名、大小、SHA256一致的3738个文件、901,818,714字节（约860.0MiB）；10244个受保护文件及保留匹配缓存零漂移。源码、原图、失败画面、日志、存档、成功批、主缓存、其他工程和平台包保留。旧失败工程复查前须重新导入。范围、完整清单位置与恢复方式见failed_death_import_cleanup_v14.json。先前6批4.824GiB只读清单仍未删除。
 
-本轮已本地修改并验证，尚待本轮白名单提交、推送和独立远端SHA回读；当前此前远端为7ebfe4e3。GitHub源码同步不等于Steam发布。完整目标继续依DEVELOPMENT_AUDIT_20261006.md：连续动作与多尺寸UI、八关动态/生产/船体、战役独立进程保存与自然结局/奖励一次、同版九玩法/发行程序、正常时钟约10分钟尾帧/切换清理和Android真机资格。
+本轮66白名单文件（40,255,191字节）已本地提交并推送stable，独立远端SHA回读8c3a584f5b821b4d6a502e37a1145473ba9613e4一致；同步收据ordinary_production_source_sync_v14.json。文档及此同步收据为独立收尾元数据提交。GitHub源码同步不等于Steam发布。完整目标继续依DEVELOPMENT_AUDIT_20261006.md：连续动作与多尺寸UI、八关动态/生产/船体、战役独立进程保存与自然结局/奖励一次、同版九玩法/发行程序、正常时钟约10分钟尾帧/切换清理和Android真机资格。
 <!-- /ordinary-production-v14-qualified -->
 
 以下为历史检查点，状态以本节及最新同步收据为准。
@@ -37,6 +37,6 @@
 | 约10分钟性能、尾帧、切换清理 | 历史有效窗口中位FPS139–190，但P95/P99最高值和最终清理门槛未通过；当前截图FPS不作性能证据 | 在正常时钟、同负载下完成能正常结束的约10分钟夹具；目标60FPS、P95≤16.7ms/P99≤33.3ms。测尾帧原因、节点/内存清理及切换；不擅自改为30分钟要求 |
 | Android真机及平台资格 | 历史2.0安装/联网/触控有用户确认；本轮未取得2.0.1手机/平板持续性能、DPI/安全区/触控后验 | 需实际设备和平台回读证据，不能用桌面模拟、构建成功或截图替代。第二账号/跨设备按已有用户决定不作为现阶段发布阻塞，但不标为通过 |
 | 审核、修错、有限冗余清理 | 本轮覆盖状态审核通过。指定v10失败批3738个重复imported文件、901,818,714字节已删除；受保护文件和保留匹配缓存零漂移。先前两批7436文件清理保留原收据 | 仅关闭指定批缓存；先前6批4.824GiB未删。完整目标审核持续开放，旧失败工程须重新导入 |
-| GitHub增量同步 | 本轮52白名单文件已推送stable并独立回读33bd7d7e2ba558b20a4453501c5577b4fe1e8c87一致；两人gait/Wu四向combat源码默认接入、生产原样367项/48图及限定重复缓存清理记录已同步 | ordinary_combat_source_sync_v7.json记录源码提交，文档收尾另见Git历史。完整角色/连续/全项目资格继续；不自行合main或发布平台 |
+| GitHub增量同步 | 当前66白名单文件已提交推送stable，远端独立回读8c3a584f5b821b4d6a502e37a1145473ba9613e4一致；生产715项80图和36资源默认路由、指定缓存清理收据已同步 | 完整资格仍开放；本同步不合并main、不发布平台。同步元数据另见本轮收尾Git提交 |
 
 当前合格来源：qa/zhu_wounded_20261005/original_rescued_seven_production_route_v4.json、original_rescued_seven_visual_review_v4.json、rescued_seven_candidate_identity_audit_v4.json、rescued_seven_cross_process_qualified_v4.json。原始成功批为E:/ChatGPT/qa-rescued-seven-current-20261006/20261006_152842_60aec8f8/evidence/receipt.json。新结果必须补入相应审计项；未完成项不得仅因其他测试绿色而关闭。
