@@ -1,0 +1,20 @@
+[gd_resource type="SpriteFrames" load_steps=3 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/lin_chong_traits_20261006/death_sw2_v10.png" id="sw2"]
+
+[sub_resource type="AtlasTexture" id="recoil"]
+atlas = ExtResource("sw2")
+region = Rect2(0, 0, 627, 720)
+margin = Rect2(46.5, 0.0, 93, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-111.75, -18.6)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.120958
+
+[resource]
+animations = [{
+"frames": [{"duration": 1.0, "texture": SubResource("recoil")}],
+"loop": false,
+"name": &"default",
+"speed": 4.0
+}]

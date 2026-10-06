@@ -1,3 +1,41 @@
+<!-- ordinary-production-v14-qualified -->
+## 2026-10-07 当前正式源码：人物特征动作、受击与倒地复验通过
+
+武松、林冲待机和行走保留端正站姿；时迁等人物保留各自原著特性。ArtDB普通默认取图已登记武松四向death、林冲四向death/hurt；林冲仅西南采用新朝左站立受击和倒地，其他三向为原资源逐字节别名。当前36个默认资源及6份来源清单见ordinary_character_default_routes_v14.json。生产代码本轮只修改ArtDB两行查表，Unit、人物数值、技能、存档、任务回调未改；显式剧情变体继续采用原路由。作者候选清单的历史资格字段不改写。
+
+正式生产脚本原样复制，无私有运行时补丁，正常时钟1.0：近战/非致命反击369项、48图；真实致命战斗/四阶段倒地/影子保留与释放/Unit释放346项、32图，合计715项、80图通过。4904来源、105既有和25新输入零漂移。12张关键原生视口直接复核并原字节保存，林冲SW朝向、成人比例与长枪完整，武松四向落地保持双刀与身体身份。证据ordinary_production_qualified_v14.json及ordinary_production_visual_review_v14.json。接触摆位、非参与者冻结、关雾、镜头和相位仍为明确夹具，不能据此关闭连续步态、血条间距、多尺寸UI、自然通关或性能资格。
+
+只删除指定失败批ordinary_death_pilot_v10_5101dfd0的imported中与保留v14成功批同名、大小、SHA256一致的3738个文件、901,818,714字节（约860.0MiB）；10244个受保护文件及保留匹配缓存零漂移。源码、原图、失败画面、日志、存档、成功批、主缓存、其他工程和平台包保留。旧失败工程复查前须重新导入。范围、完整清单位置与恢复方式见failed_death_import_cleanup_v14.json。先前6批4.824GiB只读清单仍未删除。
+
+本轮已本地修改并验证，尚待本轮白名单提交、推送和独立远端SHA回读；当前此前远端为7ebfe4e3。GitHub源码同步不等于Steam发布。完整目标继续依DEVELOPMENT_AUDIT_20261006.md：连续动作与多尺寸UI、八关动态/生产/船体、战役独立进程保存与自然结局/奖励一次、同版九玩法/发行程序、正常时钟约10分钟尾帧/切换清理和Android真机资格。
+<!-- /ordinary-production-v14-qualified -->
+
+以下为历史检查点，状态以本节及最新同步收据为准。
+
+<!-- ordinary-death-hurt-adopted-v14-pending -->
+## 2026-10-07 修正倒地与活体受击已本地登记，正式副本复验进行中
+
+v13原祝家庄林冲/大名府武松普通指令、四向近战/反击与恢复动作369检查/48图通过，正常时钟1.0，4904来源、105既有、25新输入零漂移。林冲SW真实反击前生命311.851851851852，受击后303.703703703704，仍为活人，实际采用站立recoil；直接查看保存SW待机/受击/恢复行走、NE/NW受击及Wu SW受击6图。正确朝左、完整长枪/靴子与成人体型保留；原数值/技能/HUD/头像及其他普通/剧情路由通过。证据ordinary_hurt_pilot_qualified_v13.json和ordinary_hurt_pilot_visual_review_v13.json。v10a倒地/影子346项/32图资格仍保留。接触/冻结/相位/镜头等夹具不等于连续或自然通关。
+
+本地ArtDB普通查表新增Wu death及Lin death/hurt，内容逐字节等于已验证v13私有ArtDB；其余生产输入原样。Lin只改SW死亡与站立受击，其他各三向资源为原TRES字节别名，显式剧情变体不走普通新族。作者候选清单继续保留历史false资格字段，当前实际登记与后验由独立收据记录。v14使用当前生产脚本原样复制，无私有运行时补丁，分近战/受击及倒地/影子两个独立进程继续复验，尚未取得完成收据。生产脚本仅改ArtDB查表，未改Unit、数值、技能、存档或任务回调。
+
+正式资格、完整连续动作/血条间距/多尺寸UI及DEVELOPMENT_AUDIT_20261006.md的其他全项目项继续开放。当前新增文件/文档和本地ArtDB登记尚未提交推送；上一个已同步检查点仍为7ebfe4e3，本轮成功后再白名单同步。未新增清理、打包或平台发布。
+<!-- /ordinary-death-hurt-adopted-v14-pending -->
+
+v14正式副本复验入口：python -X utf8 -B qa/zhu_wounded_20261005/harness/run_ordinary_production_v14.py --from-pilot <已完成v13 receipt.json> --visual-review qa/zhu_wounded_20261005/ordinary_hurt_pilot_visual_review_v13.json --work-root <工程外QA父目录> --run。无--run预检；当前已启动，先核对外部continuation_state.json/共享锁，不重复启动。
+
+<!-- death-qualified-hurt-pending-v13-current -->
+## 2026-10-07 倒地/影子候选复验通过，补修林冲西南活体受击
+
+v10a正常时钟下346检查/32原生视口通过；4904来源、105既有、20新输入零漂移，仅私有ArtDB两人death查表。真实原level1战斗伤害、四阶段倒地、离开活体列表、影子批保留/释放与节点释放完成。直接查看并保存林冲SW四阶段和武松四向落地8图；其余死亡取图/姿态与已直接审查的v8a对应值一致。林冲新SW朝左、头脚方向连续、完整长枪与成人比例保留。证据ordinary_death_pilot_qualified_v10a.json、ordinary_death_pilot_visual_review_v10a.json；这是候选资格，生产默认death仍未采纳，非连续/全项目完成。
+
+核对发现旧Lin SW hurt与death首格是同一个错向区域，需修正活体受击。v12只采用已核验新图的站立受击/后仰首姿态，绝不用躺倒尸体表示活人受击；另外三向hurt资源逐字节别名保留。1姿态/4资源，没有新增PNG。清单ordinary_lin_chong_20261007_hurt_v12.json，真实原关卡普通近战/反击及恢复动作的v13私有复验已启动，尚未取得完成收据。生产ArtDB/Unit未修改；该受击资格以及后续正式接入、连续动作/血条间距/多尺寸UI等仍开放。
+
+此前81白名单文件（55,408,917字节）已推送stable，独立回读7ebfe4e3d5f4e87fc25e5d86dda69b4c6ac0eed5一致；death_diagnostic_source_sync_v10.json记录实际同期范围，后续死亡合格收据和受击工作是新的增量，不冒称已包含在该SHA。v10失败脚本/批和v9未执行生成输入保留；本批未新增缓存清理或平台发布。全目标继续按DEVELOPMENT_AUDIT_20261006.md执行。
+<!-- /death-qualified-hurt-pending-v13-current -->
+
+v13入口：run_ordinary_hurt_pilot_v13.py --from-pilot <已完成v10a的receipt.json> --visual-review qa/zhu_wounded_20261005/ordinary_death_pilot_visual_review_v10a.json --work-root <工程外QA父目录> --run（python -X utf8 -B；无--run预检）。当前批已启动，先查外部continuation_state.json/共享锁，不重复启动。v10a死亡批已完成，v10编译失败原批保留。
+
 2026-10-07复验入口修正：林冲SW第二版原生导入/1254×1254尺寸回读已通过，PNG字节不变；收据lin_sw_death_native_texture_v10.json。v10影子夹具因提前preload触发Art依赖编译错误，未取得死亡画面；失败源码/批保留，ordinary_death_pilot_rejected_v10.json记录原因。改用run_ordinary_death_pilot_v10a.py（其余参数同前）；它从原关卡实际WorldShadowBatch取保留/释放证据，生产脚本未改。v9未执行；v10已失败，不能再称待验证成功候选。v10a资格依新收据，目前新death未默认接入。
 
 <!-- death-diagnostic-v10-current -->

@@ -429,10 +429,10 @@ func avatar_texture(key: String, variant := "") -> Texture2D:
 const ORDINARY_CHARACTER_FAMILIES := {
 	"wu_song": {
 		"idle": "character_traits_v5_wu_song_gait", "walk": "character_traits_v5_wu_song_gait",
-		"attack": "character_traits_v7_wu_song_combat", "hurt": "character_traits_v7_wu_song_combat"
+		"attack": "character_traits_v7_wu_song_combat", "hurt": "character_traits_v7_wu_song_combat", "death": "character_traits_v8_wu_song_death"
 	},
 	"lin_chong": {
-		"idle": "character_traits_v5_lin_chong_gait", "walk": "character_traits_v5_lin_chong_gait"
+		"idle": "character_traits_v5_lin_chong_gait", "walk": "character_traits_v5_lin_chong_gait", "death": "character_traits_v10_lin_chong_death", "hurt": "character_traits_v12_lin_chong_hurt"
 	}
 }
 
