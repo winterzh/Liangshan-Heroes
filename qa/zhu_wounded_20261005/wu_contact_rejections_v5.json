@@ -1,0 +1,27 @@
+{
+  "scope": "Direct native static-image inspection, no motion qualification",
+  "rejected": [
+    {
+      "path": "assets/characters/wu_song_traits_20261006/walk_b_sw_v5.png",
+      "sha256": "ba8a18a32c9f647667cec6b9581cbfd0bf40ab668dbaa5be32dcf459fb3e62ca",
+      "job": "tools/contracts/zhu_wounded_20261005/jobs/wu_song_walk_b_sw_v5.json",
+      "job_sha256": "b7f7beb9908ad253e02be36b8772465d500883479a50a740a656d7c47771260a",
+      "reason": "IMAGE-LEFT boot still supports: repeats A instead of required image-right B support."
+    },
+    {
+      "path": "assets/characters/wu_song_traits_20261006/walk_b_sw2_v5.png",
+      "sha256": "384b573045c0b3a2f05f6ff20739f735f612b696b604828f5677363408362289",
+      "job": "tools/contracts/zhu_wounded_20261005/jobs/wu_song_walk_b_sw2_v5.json",
+      "job_sha256": "74aa8343cbfbf74f8b40b8c2ffcd5a3e8b3587268b56749c45eb281318897587",
+      "reason": "Second edit still retains image-left support and image-right recovery; opposite B not achieved."
+    },
+    {
+      "path": "assets/characters/wu_song_traits_20261006/walk_b_nw_v5.png",
+      "sha256": "48eda87634848b025b973744c4c7655bdbbfab8e3c187fe19162634c74d02100",
+      "job": "tools/contracts/zhu_wounded_20261005/jobs/wu_song_walk_b_nw_v5.json",
+      "job_sha256": "f05fe5600a2715cbb3762569e49b52b9648361bd6c81047c142ad24b356ee259",
+      "reason": "Body/head and toes face away-upper-right NE rather than requested away-upper-left NW."
+    }
+  ],
+  "production_qualified": false
+}

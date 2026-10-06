@@ -1,3 +1,15 @@
+<!-- wu-full-gait-v5-current -->
+## 2026-10-06 武松四向待机/四步相行走候选完成独立对照
+
+按武松魁梧剽悍、健康上背与抬头挺胸的普通体态处理；保留行者衣装、念珠、绑腿与双刀低持，步行允许自然重心转移。原生17来源构成四向idle及每向walk_a/passing_a/walk_b/passing_b，共20姿态/8资源。全部经内置imagegen原生生成/编辑，精确请求、父图、数学腿部producer及三张错误换脚/朝向原图保留；不本地裁切/缩放/镜像/重绘，不以idle充walk。
+
+17张原生尺寸导入、306项来源/透明/取样检查通过。独立实际Unit/正常Defs英雄与四技能起停/反向对照96项、80截图通过，4904旧输入及42候选输入零漂移，四向四步相全部实际出现。直接查看原生视口帧5/6/7/9/10/15/35/59/75的1×/4×：普通行走保持挺拔，背面朝向和主要身高/脚点与idle衔接改善。此为脱离Battle的动作组件证据；未连续播放审查衣装/足底滑动，仍需攻击/受击/终态、血条间距、原关卡/生产取图/UI/存档资格。普通武松生产路由未替换，production_qualified=false。林冲目前仍为idle与SE两步相候选，下一步补同等完整动作。
+
+清单：assets/direction4/ordinary_wu_song_20261006_gait_v5.json；来源链：tools/contracts/zhu_wounded_20261005/generation_wu_song_gait_v5.json；实际对照与审核：qa/zhu_wounded_20261005/ordinary_wu_song_gait_motion_comparison_v5.json及ordinary_wu_song_gait_motion_review_v5.json。旧producer与旧收据不改写。
+
+全目标仍按DEVELOPMENT_AUDIT_20261006.md推进；八关动态阶段、自然胜败/奖励一次、九模式、性能/Android资格尚未关闭。本轮没有清理、打包或平台发布。以下历史状态按对应日期/范围理解。
+<!-- /wu-full-gait-v5-current -->
+
 <!-- source-sync-v5-verified -->
 ## 2026-10-06 本轮源码素材已同步GitHub
 
