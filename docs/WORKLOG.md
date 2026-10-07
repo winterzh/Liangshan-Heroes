@@ -1,3 +1,15 @@
+<!-- daming-lighting-v22-qualified -->
+## 2026-10-07 大名府原生灯光子组件审核通过
+
+run_daming_lighting_state 已完成原初态、入牢放行未救人、原举火回调、原计时过期回调四案图形原生测试：113 项检查通过，正常时钟1.0，5039 输入零漂移、零私有运行时补丁。五灯亮度/有限渐变存储属性精确再捕获；新工厂五灯共享自己的新渐变，旧新世界资源不混用；五套真实导航保持相同，错误 owner/纹理/亮度与失败 apply 负例通过。
+
+该项只交付灯光子组件与测试，原生 map/nav/height 复制是明确的组件夹具，不能证明完整地图/场景/Units/Mission/时钟或独立进程继续；公开战役继续仍关闭。完整 Daming 场景候选在外部 E:/ChatGPT/daming_scenery_v23a_proposal 审核准备中，不覆盖已执行输入。Gao 三个生产候选仍待完整图形复验，未混入本次提交。
+
+证据：`qa/zhu_wounded_20261005/daming_lighting_qualified_v22.json`、`daming_lighting_native_report_v22.json`、`daming_lighting_verified_log_v22.txt`、`daming_lighting_native_review_v22.json`；实现与复查入口：`scripts/run_daming_lighting_state.gd`、`qa/zhu_wounded_20261005/harness/run_daming_lighting_v22.py` 和 `daming_lighting_v22.gd`。私有 producer 仅适用于记录中的本机 QA 路径，不改变公共启动脚本。
+
+完整场景审查发现：CanvasModulate 本身继承 Node2D，保留既有 Node2D 类型；不要对原厂未抬高的灯和夜景额外套用 sync_render_position。固定工厂按已校验的原翠云楼 default/signal 视觉状态配置，再比较完整节点/所有权；不重跑任务/部署/奖励。参见 `docs/DAMING_SCENERY_RESTORE_DESIGN_20261007.md` 和外部候选 manifest。完整目标未完成，缓存清理留待完整候选验收；本轮不发布 Steam。
+<!-- /daming-lighting-v22-qualified -->
+
 <!-- daming-source-audit-v21a -->
 ## 2026-10-07 引擎等待期间：大名府源码合同审查完成
 
