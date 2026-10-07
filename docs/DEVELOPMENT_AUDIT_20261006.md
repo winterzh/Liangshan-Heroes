@@ -9,7 +9,7 @@ level5/8专属Unit契约和图schema已本地接入。原高太尉波次/登船�
 
 脱离场景树的禁用owner/map空壳、保存Node旗标重放、接触和阶段调度均为明确夹具；已证明真实Unit字段与引用恢复，**未证明地图/场景/灯光/FX/时钟/完整Mission/跨进程世界恢复或自然通关**。下一阶段完成原梁山/大名府场景、灯光/通道/地图、表现分区、root/core及Gao按钮延后绑定，再实际保存、退出、独立进程继续/再保存、自然结局/奖励一次。公开战役继续仍关闭；全项目人物拥挤/连续演出、同版九玩法/发行程序、性能/切换清理、Android真机门槛继续。
 
-后续类型/绑定缺口详见remaining_world_restore_audit_v20.json，审计不算运行验收。当前源码/证据/属性与七份交接尚待本轮白名单同步；上一远端e1d546d0。只清指定取消v19/失败v19b/v19c工程imported中与保留v19d成功批同名、大小、SHA256一致的11214文件、2,705,456,142字节（约2.52GiB），20389受保护文件及保留匹配缓存零漂移。不同缓存保留；收据failed_unit_graph_import_cleanup_v19.json，旧工程复查先重导入。未新增平台发布。
+后续类型/绑定缺口详见remaining_world_restore_audit_v20.json，审计不算运行验收。本轮70白名单文件（31,111,234字节）已提交并推送stable，独立回读00ee0b5b8385388e2dde7aaf933fbac20337d0b8一致；同步收据unit_graph_source_sync_v19.json。收据/文档远端状态另作收尾元数据提交。只清指定取消v19/失败v19b/v19c工程imported中与保留v19d成功批同名、大小、SHA256一致的11214文件、2,705,456,142字节（约2.52GiB），20389受保护文件及保留匹配缓存零漂移。不同缓存保留；收据failed_unit_graph_import_cleanup_v19.json，旧工程复查先重导入。未新增平台发布。
 <!-- /campaign-units-v19d-current -->
 
 <!-- campaign-foundation-v18b-current -->
@@ -93,6 +93,6 @@ level5/8专属Unit契约和图schema已本地接入。原高太尉波次/登船�
 | 约10分钟性能、尾帧、切换清理 | 历史有效窗口中位FPS139–190，但P95/P99最高值和最终清理门槛未通过；当前截图FPS不作性能证据 | 在正常时钟、同负载下完成能正常结束的约10分钟夹具；目标60FPS、P95≤16.7ms/P99≤33.3ms。测尾帧原因、节点/内存清理及切换；不擅自改为30分钟要求 |
 | Android真机及平台资格 | 历史2.0安装/联网/触控有用户确认；本轮未取得2.0.1手机/平板持续性能、DPI/安全区/触控后验 | 需实际设备和平台回读证据，不能用桌面模拟、构建成功或截图替代。第二账号/跨设备按已有用户决定不作为现阶段发布阻塞，但不标为通过 |
 | 审核、修错、有限冗余清理 | 当前两关真实Unit图767项复验通过，StringName/引用/槽位问题修正，实际失败来源保留。本轮指定v19/v19b/v19c重复imported 11214文件、2,705,456,142字节清除，保护/保留缓存零漂移，历史清理收据保留 | 只删除指定一致文件，旧工程重导入。6批4.824GiB未删；完整审核继续 |
-| GitHub增量同步 | 上一远端e1d546d0；当前四文件Unit图接入、原字节属性、七态证据/失败/清理及后续地图缺口审计待本轮白名单同步 | 不合main、不发布平台；全目标继续 |
+| GitHub增量同步 | 当前70白名单文件已提交推送stable，独立回读00ee0b5b8385388e2dde7aaf933fbac20337d0b8一致；767项/7态、真实Unit图和矿点/键类型、原字节属性、失败/清理及后续地图缺口审计已同步 | 全目标继续；同步收据/文档元数据另见Git历史，不合main、不发布平台 |
 
 当前合格来源：qa/zhu_wounded_20261005/original_rescued_seven_production_route_v4.json、original_rescued_seven_visual_review_v4.json、rescued_seven_candidate_identity_audit_v4.json、rescued_seven_cross_process_qualified_v4.json。原始成功批为E:/ChatGPT/qa-rescued-seven-current-20261006/20261006_152842_60aec8f8/evidence/receipt.json。新结果必须补入相应审计项；未完成项不得仅因其他测试绿色而关闭。

@@ -9,7 +9,7 @@ level5/8专属Unit契约和图schema已本地接入。原高太尉波次/登船�
 
 脱离场景树的禁用owner/map空壳、保存Node旗标重放、接触和阶段调度均为明确夹具；已证明真实Unit字段与引用恢复，**未证明地图/场景/灯光/FX/时钟/完整Mission/跨进程世界恢复或自然通关**。下一阶段完成原梁山/大名府场景、灯光/通道/地图、表现分区、root/core及Gao按钮延后绑定，再实际保存、退出、独立进程继续/再保存、自然结局/奖励一次。公开战役继续仍关闭；全项目人物拥挤/连续演出、同版九玩法/发行程序、性能/切换清理、Android真机门槛继续。
 
-后续类型/绑定缺口详见remaining_world_restore_audit_v20.json，审计不算运行验收。当前源码/证据/属性与七份交接尚待本轮白名单同步；上一远端e1d546d0。只清指定取消v19/失败v19b/v19c工程imported中与保留v19d成功批同名、大小、SHA256一致的11214文件、2,705,456,142字节（约2.52GiB），20389受保护文件及保留匹配缓存零漂移。不同缓存保留；收据failed_unit_graph_import_cleanup_v19.json，旧工程复查先重导入。未新增平台发布。
+后续类型/绑定缺口详见remaining_world_restore_audit_v20.json，审计不算运行验收。本轮70白名单文件（31,111,234字节）已提交并推送stable，独立回读00ee0b5b8385388e2dde7aaf933fbac20337d0b8一致；同步收据unit_graph_source_sync_v19.json。收据/文档远端状态另作收尾元数据提交。只清指定取消v19/失败v19b/v19c工程imported中与保留v19d成功批同名、大小、SHA256一致的11214文件、2,705,456,142字节（约2.52GiB），20389受保护文件及保留匹配缓存零漂移。不同缓存保留；收据failed_unit_graph_import_cleanup_v19.json，旧工程复查先重导入。未新增平台发布。
 <!-- /campaign-units-v19d-current -->
 
 <!-- campaign-foundation-v18b-current -->
