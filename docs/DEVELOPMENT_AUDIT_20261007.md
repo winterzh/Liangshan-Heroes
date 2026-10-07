@@ -1,3 +1,8 @@
+<!-- offline-terminal-v25x16 -->
+## 2026-10-08 04:36：离线准备通过，原生导入仍中断
+
+新F/run71d4275a在实际导入64.42秒后因共享Godot恢复占用终止exit1，锁已释放。原独立复制与完整endpoint审计通过，不能替代未完成的import；profileguard/C/双方单人撤离A均未执行，E1闭合proof不存在、full未启动。完整失败证据见qa/zhu_wounded_20261005/offline_import_interruption_delivery_v25x15.json，原prefix五文件及失败profile保留，editor cache未上传。两生产候选仍未资格，当前没有活跃本线程原生后台。后续独立计划项可继续准备，但06:00按实际结果收尾，完整原计划与公司新基线要求不变。
+
 <!-- night-progress-v25x14 -->
 当前阶段快照与完整续做顺序见 [NIGHT_PROGRESS_20261008.md](NIGHT_PROGRESS_20261008.md)；普通源码启动与原生QA依赖已分开说明。原生结果及06:00终态以最终收据为准。
 

@@ -1,6 +1,6 @@
 # 2026-10-08 夜间开发当前结果
 
-本页是04:30阶段快照；06:00最终交接会按实际后台终态更新。公司先读[启动与续做入口](OFFICE_START_20261008.md)，原完整计划保留在[DEVELOPMENT_PLAN.md](DEVELOPMENT_PLAN.md)。
+本页更新到04:36终态；06:00最终交接会按实际后台终态更新。公司先读[启动与续做入口](OFFICE_START_20261008.md)，原完整计划保留在[DEVELOPMENT_PLAN.md](DEVELOPMENT_PLAN.md)。
 
 | 工作 | 实际结果 | 证据 |
 | --- | --- | --- |
@@ -8,7 +8,7 @@
 | 单人撤离两文件候选 | 完整代码和原字节备份已保留在QA；尚未取得完整新候选资格 | `safe_retreat_candidate_v25x1.json`、`proposals/daming_safe_retreat_v25/{original,proposed}/scripts/` |
 | 新六文件候选前序 | 原07ad37bf的JSON533/OwnedSlot76/A39/B351已通过；C被共享引擎恢复占用中断，原批仍失败 | `retreat_explorer_shared_interruption_review_v25x4.json` |
 | 两次补C恢复尝试 | 8f3d393d及5284b47e都中断在导入，未执行新C或双方撤离A；原profile、工具、收据及日志保留 | `prefix_interrupted_delivery_v25x7.json`、`second_prefix_interrupted_delivery_v25x9.json` |
-| r2f离线准备新批71d4275a | 原独立复制及末尾完整Root5037/private5102/native9/QA9核验通过；当时仍等待共享Godot | `offline_prepare_actual_stages_v25x13.json` |
+| r2f离线准备新批71d4275a | 原独立复制及末尾完整Root5037/private5102/native9/QA9核验通过；随后实际导入64.42秒被共享Godot打断、exit1/锁释放，C/双方A未运行 | `offline_prepare_actual_stages_v25x13.json`、`offline_import_interruption_delivery_v25x15.json` |
 | 完整负例与自然终局工具 | r2e1独立静态审查闭合；缺真实C和双方A来源证明时必须阻断，尚未启动完整矩阵 | `full_reuse_review_delivery_v25x11.json` |
 | 公司普通启动 | 正常Godot源码开发与隔离原生QA依赖已分开说明；公司机器尚未实测 | `office_native_scope_delivery_v25x12.json` |
 
