@@ -1,0 +1,341 @@
+{
+  "source_audit_passed": true,
+  "runtime_qualified": false,
+  "restore_qualified": false,
+  "public_campaign_continue_qualified": false,
+  "production_modified": false,
+  "scope": "Engine-free source contracts for installed Daming; no runtime qualification.",
+  "checks": [
+    {
+      "name": "installed RTS script",
+      "passed": true
+    },
+    {
+      "name": "installed map 60x66 town",
+      "passed": true
+    },
+    {
+      "name": "legacy map is distinct 60x52",
+      "passed": true
+    },
+    {
+      "name": "installed sealed wicket",
+      "passed": true
+    },
+    {
+      "name": "source decor chain",
+      "passed": true
+    },
+    {
+      "name": "level decor before environment factory",
+      "passed": true
+    },
+    {
+      "name": "environment transform before scenery setup",
+      "passed": true
+    },
+    {
+      "name": "four market lamp locations",
+      "passed": true
+    },
+    {
+      "name": "market lamp energy independent",
+      "passed": true
+    },
+    {
+      "name": "Cuiyun owner location and initial energy",
+      "passed": true
+    },
+    {
+      "name": "night tint",
+      "passed": true
+    },
+    {
+      "name": "terrain tint is separate",
+      "passed": true
+    },
+    {
+      "name": "shared fresh lantern texture",
+      "passed": true
+    },
+    {
+      "name": "gradient fixed contract",
+      "passed": true
+    },
+    {
+      "name": "signal energy branch",
+      "passed": true
+    },
+    {
+      "name": "signal expiry is not extinguishing",
+      "passed": true
+    },
+    {
+      "name": "prison opening is navigation authority",
+      "passed": true
+    },
+    {
+      "name": "passage reads land navigation",
+      "passed": true
+    },
+    {
+      "name": "passage new map binding",
+      "passed": true
+    },
+    {
+      "name": "prison art belongs to actual passage",
+      "passed": true
+    },
+    {
+      "name": "sealed wicket adds wall instead of passage",
+      "passed": true
+    },
+    {
+      "name": "south gate is Unit not passage",
+      "passed": true
+    },
+    {
+      "name": "city wall uses original renderer",
+      "passed": true
+    },
+    {
+      "name": "wall panel spacing and height",
+      "passed": true
+    },
+    {
+      "name": "wall mesh derived from fields",
+      "passed": true
+    },
+    {
+      "name": "original wall salt is default",
+      "passed": true
+    },
+    {
+      "name": "installed Level state matches RTS",
+      "passed": true
+    },
+    {
+      "name": "wall source segment [Vector2(7,4),Vector2(52,4)]",
+      "passed": true
+    },
+    {
+      "name": "wall source segment [Vector2(7,4),Vector2(7,39)]",
+      "passed": true
+    },
+    {
+      "name": "wall source segment [Vector2(52,4),Vector2(52,39)]",
+      "passed": true
+    },
+    {
+      "name": "wall source segment [Vector2(7,39),Vector2(28,39)]",
+      "passed": true
+    },
+    {
+      "name": "wall source segment [Vector2(32,39),Vector2(32.5,39)]",
+      "passed": true
+    },
+    {
+      "name": "wall source segment [Vector2(33.5,39),Vector2(52,39)]",
+      "passed": true
+    },
+    {
+      "name": "wall source segment _add_wall(Vector2(32.5,39),Vector2(33.5,39))",
+      "passed": true
+    },
+    {
+      "name": "wall source segment [Vector2(15,13),Vector2(21,13)]",
+      "passed": true
+    },
+    {
+      "name": "wall source segment [Vector2(15,13),Vector2(15,20)]",
+      "passed": true
+    },
+    {
+      "name": "wall source segment [Vector2(21,13),Vector2(21,20)]",
+      "passed": true
+    },
+    {
+      "name": "wall source segment [Vector2(15,20),Vector2(18.5,20)]",
+      "passed": true
+    },
+    {
+      "name": "wall source segment [Vector2(19.5,20),Vector2(21,20)]",
+      "passed": true
+    }
+  ],
+  "mutation_cases": [
+    {
+      "case": "wrong installed script",
+      "rejected": true,
+      "failed_contracts": [
+        "installed RTS script"
+      ]
+    },
+    {
+      "case": "legacy dimensions",
+      "rejected": true,
+      "failed_contracts": [
+        "installed map 60x66 town"
+      ]
+    },
+    {
+      "case": "unsealed installed wicket",
+      "rejected": true,
+      "failed_contracts": [
+        "installed sealed wicket"
+      ]
+    },
+    {
+      "case": "lost market lamp",
+      "rejected": true,
+      "failed_contracts": [
+        "four market lamp locations"
+      ]
+    },
+    {
+      "case": "independent texture per lamp",
+      "rejected": true,
+      "failed_contracts": [
+        "shared fresh lantern texture"
+      ]
+    },
+    {
+      "case": "wrong Cuiyun owner",
+      "rejected": true,
+      "failed_contracts": [
+        "Cuiyun owner location and initial energy"
+      ]
+    },
+    {
+      "case": "door ignores navigation",
+      "rejected": true,
+      "failed_contracts": [
+        "passage reads land navigation"
+      ]
+    },
+    {
+      "case": "door references old world",
+      "rejected": true,
+      "failed_contracts": [
+        "passage new map binding"
+      ]
+    },
+    {
+      "case": "duplicate static prison art",
+      "rejected": true,
+      "failed_contracts": [
+        "prison art belongs to actual passage"
+      ]
+    }
+  ],
+  "confirmed_adapter_blockers": {
+    "installed_level8_context_missing": true,
+    "lights_explicitly_rejected": true,
+    "city_wall_and_passage_kinds_missing": true,
+    "level8_crowd_kind_missing": true
+  },
+  "source_inputs_unchanged": true,
+  "fixed_source_layout": {
+    "map": [
+      60,
+      66
+    ],
+    "wall_panel_counts": {
+      "outer": 94,
+      "sealed_wicket": 1,
+      "prison": 18
+    },
+    "city_walls_total": 113,
+    "passages": [
+      [
+        19,
+        20
+      ]
+    ],
+    "market_lamps": [
+      [
+        27,
+        12
+      ],
+      [
+        33,
+        20
+      ],
+      [
+        27,
+        27
+      ],
+      [
+        34,
+        33
+      ]
+    ],
+    "market_energy": 0.55,
+    "cuiyun": [
+      37,
+      15
+    ],
+    "cuiyun_energies": [
+      0.45,
+      1.15
+    ]
+  },
+  "source_files": [
+    {
+      "path": "scripts/campaign.gd",
+      "bytes": 14689,
+      "sha256": "db50f6d1c97ca26746f5fbe576487390af5d81f4af708c289155f23cca38ff02"
+    },
+    {
+      "path": "scripts/levels/level8_daming_rts.gd",
+      "bytes": 24789,
+      "sha256": "72e57093715ebfb29247aaf332838f233d736936d29d83a4b24ecd90ee677db7"
+    },
+    {
+      "path": "scripts/levels/level8_dongchangfu.gd",
+      "bytes": 47759,
+      "sha256": "ac09d53e4c2f21a5012e91fda4cd9c39bd3a83cc0efb77c48d15bfe33775fa77"
+    },
+    {
+      "path": "scripts/campaign_environment.gd",
+      "bytes": 13369,
+      "sha256": "93c0f575a0716a9b00545781f29686740277290f6c29fab4539094d2a1334766"
+    },
+    {
+      "path": "scripts/campaign_scenery.gd",
+      "bytes": 20426,
+      "sha256": "ca6f9993800bdf4bc638e5d0288290d6cdb5f3b7fb1e0c5358a19168c9cc2339"
+    },
+    {
+      "path": "scripts/campaign_city_wall.gd",
+      "bytes": 2483,
+      "sha256": "02cc31b5ff761d3832c5a12f292002603ac15bc1fa28c2a781d944634416a622"
+    },
+    {
+      "path": "scripts/campaign_passage.gd",
+      "bytes": 1807,
+      "sha256": "665bf4a589539b4215b6baf8bc130948cd31d886c05f8c62aa1cdc8ea57cc364"
+    },
+    {
+      "path": "scripts/game_map.gd",
+      "bytes": 34327,
+      "sha256": "0f090079229a68269ac94870d1902238444e9ba0ddbc7f359df52f38a4b2db87"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "bytes": 789563,
+      "sha256": "f020f434f755950d41dae9320bcdcb388359835b714f83bbd4592300514172b1"
+    },
+    {
+      "path": "scripts/run_campaign_level_state.gd",
+      "bytes": 20744,
+      "sha256": "ea3e3b14a723d359eeb1a6268ecef03f73ca9cbacf8782451cfcf5e3fdd03db1"
+    },
+    {
+      "path": "scripts/run_scenery_state.gd",
+      "bytes": 63318,
+      "sha256": "b441362d505d145b78babc2a684e4628f21ed6f4ea21a296b8f9efd2dc202ec9"
+    }
+  ],
+  "producer_sha256": "59eee936bdb9631e6cac4a3e3f0672034be46c3bc4477ada51a1871a7f7f393a"
+}

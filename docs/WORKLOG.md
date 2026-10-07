@@ -1,3 +1,13 @@
+<!-- daming-source-audit-v21a -->
+## 2026-10-07 引擎等待期间：大名府源码合同审查完成
+
+按用户“做别的呗”推进无需 Godot 的工作。大名府 RTS 的实际 60×66/town 身份、封闭偏门、五灯共享渐变、113 段原墙源码推算、牢门导航与翠云楼火号状态已核对。39 项来源检查通过，9 种错误来源变体被拒绝，11 个生产输入前后 SHA 相同；没有启动引擎或改动生产源码，不记为运行/恢复合格。
+
+设计与待执行测试矩阵：`docs/DAMING_SCENERY_RESTORE_DESIGN_20261007.md`；检查工具：`qa/zhu_wounded_20261005/harness/audit_daming_scenery_source_v21a.py`；收据：`qa/zhu_wounded_20261005/daming_scenery_source_audit_v21a.json`。初次工具使用错误方法名的失败记录及原 producer 保留。
+
+本轮白名单仅包括检查工具、设计和这些交接增量。既有 Gao 三个生产候选、旧 QA 和原文档待验收部分仍留本地；完整图形往返、Daming 接入、独立进程继续与全部开发计划尚未验收。共享引擎阻塞记录保持；本轮未清理缓存、未发布 Steam，公开战役继续仍关闭。
+<!-- /daming-source-audit-v21a -->
+
 <!-- steam-release-20261007-live -->
 ## 2026-10-07 Steam Windows 角色与动作更新已上线
 
