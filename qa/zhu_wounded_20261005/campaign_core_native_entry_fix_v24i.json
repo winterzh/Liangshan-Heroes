@@ -1,0 +1,17 @@
+{
+  "runtime_qualified": false,
+  "sources": [
+    {
+      "path": "scripts/run_campaign_presentation_state.gd",
+      "sha256": "9ff9b423394a86174ba387e4e7840a9a7f53a9366e18159e580aaa1f4e0cd655"
+    },
+    {
+      "path": "scripts/run_battle_world_core.gd",
+      "sha256": "621426f2714207dd69fb66981dbf73f34b9b9a1637cd890b23fb53d4a39fd571"
+    }
+  ],
+  "previous_native_checks": 43,
+  "previous_failures": 2,
+  "finding": "Binding order now exact. Native entering a prepopulated hidden button list clamps two containers and writes offsets despite early assignment. Original constructor enters with empty buttons/base Label state.",
+  "candidate": "Owned two-phase UI entry: verify full registry/gates; detach only exact factory-created button objects, restore constructor base properties for native ready; restore saved base geometry before same real buttons enter ready container. Final registry and gates verified before existing full UI activation/recapture. No saved-field omission, arbitrary snapshots, mission/Level start/tick/reward replay."
+}

@@ -905,6 +905,9 @@ func activate_campaign() -> Dictionary:
 	if nodes != _campaign_order: return _fail("CAMPAIGN_ACTIVATION_TOPOLOGY")
 	for node: Node in nodes:
 		if not node.is_node_ready() or not node.is_blocking_signals() or node.process_mode != Node.PROCESS_MODE_DISABLED: return _fail("CAMPAIGN_ACTIVATION_GATE")
+	if _native_campaign():
+		var static_flags: Dictionary = _restore_native_static_enter_flags()
+		if not static_flags.ok: return static_flags
 	var captured: Dictionary = capture(_campaign_owner)
 	if not captured.ok: return captured
 	if captured.value != _campaign_record: return _fail("CAMPAIGN_PREPARED_STATE_CHANGED")
@@ -915,6 +918,41 @@ func activate_campaign() -> Dictionary:
 		node.set_block_signals(false)
 	_campaign_activation.clear(); _campaign_activated = true
 	return {"ok": true, "complete_world": false}
+
+## Entering the tree enables a scripted _process even when it was disabled
+## on a detached node. Only the two fixed, permanently static dock overlays
+## have that original saved state. Check the complete snapshot before any
+## flag write; no life/time callback or gameplay process is invoked.
+func _restore_native_static_enter_flags() -> Dictionary:
+	if not _native_campaign() or _campaign_activated or not is_instance_valid(_campaign_owner) or not _campaign_owner.is_inside_tree() or not _campaign_owner.get_tree().paused or Engine.is_in_physics_frame(): return _fail("LEVEL5_STATIC_ENTER_PHASE")
+	var context_check: Dictionary = _campaign_map(_campaign_owner)
+	if not context_check.ok: return context_check
+	var battle: Node = _campaign_owner.get_parent().get_parent()
+	if battle.process_mode != Node.PROCESS_MODE_DISABLED or not battle.is_blocking_signals(): return _fail("LEVEL5_STATIC_ENTER_OWNER")
+	var nodes: Array = []; _walk_nodes(_campaign_visual, nodes)
+	if nodes != _campaign_order: return _fail("LEVEL5_STATIC_ENTER_TOPOLOGY")
+	for node: Node in nodes:
+		if not node.is_node_ready() or not node.is_blocking_signals() or node.process_mode != Node.PROCESS_MODE_DISABLED: return _fail("LEVEL5_STATIC_ENTER_GATE")
+	var current: Dictionary = capture(_campaign_owner)
+	if not current.ok: return current
+	if current.value == _campaign_record: return {"ok": true, "changed_flags": 0}
+	var normalized: Dictionary = current.value.duplicate(true)
+	var pending: Array[Node] = []
+	var codec := Codec.new()
+	for index: int in _campaign_record.ownership.dock_parts:
+		var node: Node = nodes[index]
+		var saved: Dictionary = codec.decode(_campaign_record.nodes[index]).value
+		var mounted: Dictionary = codec.decode(normalized.nodes[index]).value
+		if node.get_script() != ArtEvent or saved.kind != "art" or mounted.kind != "art": return _fail("LEVEL5_STATIC_ENTER_SCRIPT")
+		if saved.fixed.duration != -1.0 or saved.runtime.life != -1.0 or mounted.fixed.duration != -1.0 or mounted.runtime.life != -1.0: return _fail("LEVEL5_STATIC_ENTER_LIFETIME")
+		if saved.runtime.processing == false and mounted.runtime.processing == true:
+			mounted.runtime.processing = false
+			normalized.nodes[index] = codec.encode(mounted).value
+			pending.append(node)
+	# Every other value, owner, node, shader, reed and flag must still be exact.
+	if normalized != _campaign_record: return _fail("CAMPAIGN_PREPARED_STATE_CHANGED")
+	for node: Node in pending: node.set_process(false)
+	return {"ok": true, "changed_flags": pending.size()}
 
 func dispose_campaign() -> void:
 	# Full world rollback still owns/frees the map and Battle. This helper only

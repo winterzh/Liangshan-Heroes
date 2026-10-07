@@ -347,7 +347,11 @@ func capture_source(source: Dictionary) -> Dictionary:
 
 func finish_mounted(adapter: Variant, owner: Node) -> Dictionary:
 	get_tree().paused = true
+	var entering: Dictionary = adapter.prepare_native_entry()
+	if not entering.ok: return entering
 	add_child(owner)
+	var entered: Dictionary = adapter.finish_native_entry()
+	if not entered.ok: return entered
 	var result: Dictionary = {"ok": false, "code": "NOT_CALLED"}
 	for attempt: int in 12:
 		await get_tree().process_frame
@@ -387,9 +391,6 @@ func exercise_restore(bundle: Dictionary, prefix: String, source: Dictionary = {
 	check(prefix + " detached UI and owner remain gated", not target.owner.is_inside_tree() and branch_gated(target.owner))
 	check(prefix + " restore did not deploy or replay", target.owner.level.elapsed == 0.0 and target.owner.level.ai_trained == 0 and target.owner.messages.is_empty() and target.owner.selections == 0)
 	check(prefix + " Mission contract state and timer restored", mission.stage_id == "zhu_rts" and mission.story_goals.size() == 3 and mission._stage_started_ms == -8000)
-	check(prefix + " Localize format survives empty history", binding(mission._status).get("source") == STATUS_TEMPLATE and binding(mission._status).get("args") == ["孙立", 17, "5"])
-	check(prefix + " source property suffix survives", binding(mission._objective, "tooltip_text").get("source") == SOURCE_STATUS and binding(mission._objective, "tooltip_text").get("suffix") == " [QA]")
-	check(prefix + " actor renderer owns new Mission", binding(mission.actions.zhu_rts_inside.actor_button).get("render", Callable()).get_object() == mission)
 	var before_ready: Dictionary = adapter.activate()
 	check(prefix + " cannot activate before layout", not before_ready.get("ok", false))
 	mission.actions.zhu_rts_inside.button.pressed.emit()
@@ -398,6 +399,9 @@ func exercise_restore(bundle: Dictionary, prefix: String, source: Dictionary = {
 	check(prefix + " mounted layout finishes", laid_out.get("ok", false))
 	if not laid_out.get("ok", false): print(laid_out); adapter.dispose(); adapters.erase(adapter); return
 	check(prefix + " mounted layout remains gated", branch_gated(target.owner))
+	check(prefix + " Localize format survives empty history", binding(mission._status).get("source") == STATUS_TEMPLATE and binding(mission._status).get("args") == ["孙立", 17, "5"])
+	check(prefix + " source property suffix survives", binding(mission._objective, "tooltip_text").get("source") == SOURCE_STATUS and binding(mission._objective, "tooltip_text").get("suffix") == " [QA]")
+	check(prefix + " actor renderer owns new Mission", binding(mission.actions.zhu_rts_inside.actor_button).get("render", Callable()).get_object() == mission)
 	var expected: Dictionary = codec.decode(bundle.expected).value
 	verify_view(mission, expected, prefix + " gated")
 	var activated: Dictionary = adapter.activate()

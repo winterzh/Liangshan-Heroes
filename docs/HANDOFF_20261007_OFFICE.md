@@ -1,0 +1,38 @@
+# 2026-10-07 办公室续做交接
+
+本次按用户“同步GitHub，明天去公司继续做”要求收尾。目标仓库 winterzh/Liangshan-Heroes，分支 `codex/sync-20260905-stable`；不操作 main。此文件随代码、原生报告和失败证据一起提交，实际远端 SHA 以最终回复和 Git 分支为准。
+
+## 已同步的实现与验证范围
+
+Root/Visual/Core 已接入实际高俅与大名府关卡，恢复同一新世界中的真实 Mission/Level/收兵按钮引用。修复高俅两个永久静态码头节点的原生入树处理位，以及任务面板空构造器入树、同一按钮回挂、文字/本地化绑定填充的顺序。原完整字段比较、所有权与激活门槛保留；没有开放公开战役续玩入口。
+
+- 初态完整世界：高俅、大名府 2 案 43 项通过。
+- 高俅实际收兵按钮组件：1 案 32 项通过，含损坏描述拒绝、当前新 Level 回调、重复按钮不重放完成事件。结局由明确组件夹具创建，不是自然通关或全生命周期奖励一次证明。
+- 任务界面：同进程 218 项、真实独立进程界面重启 130 项通过。仅界面夹具，不能当作完整战斗跨进程续玩。
+- 旧关整局回归：索引 0（第一关初态）22 项通过。索引 1 测试被外部 Godot 恢复占用中断，其原收据保留；其他五关尚未全部完成。
+
+5039 个冻结输入 SHA 全部吻合，正常时钟 1.0，零私有运行时补丁。源码专项审核见 `qa/zhu_wounded_20261005/office_source_review_v24m.json`；相应 `campaign_core_initial_qualified_v24i1.json`、`campaign_core_end_qualified_v24g2.json`、`campaign_presentation_qualified_v24j.json` 为已完成主收据。QA 的绝对 E:/ 路径是原机器历史证据，不是办公室必需路径；世界 JSON 是隔离原生 QA 夹具，不是玩家存档。
+
+## 明天开始
+
+先在办公室独立 Git checkout 检查身份、分支和未提交改动。工作区干净且未分叉时执行：
+
+```powershell
+git status --short --branch
+git remote -v
+git switch codex/sync-20260905-stable
+git pull --ff-only origin codex/sync-20260905-stable
+```
+
+有未提交修改、分叉或其他任务占用时先核对来源，不自动 stash/reset。办公室共享外层目录不是 Git checkout，不能把它当作此分支直接拉取。Godot 路径通过被忽略的 `godot.local.txt`、`GODOT_PATH` 或启动参数配置，按 SOURCE_SETUP.md 使用既有入口；本批固定 Godot 4.6.3。缺少私有导入缓存时重新导入，缓存和导出包不通过 Git 分发。
+
+家里现有旧关后台 session41556/Python201028，工作目录 `original_world_checkpoint_v24l_8c220248`。在本线程继续时先确认它是否已结束、是否已有新案例收据，不重复启动。办公室不要直接运行本批带原机器绝对路径的历史 producer，也不要复制旧 QA profile；按原 harness 和冻结输入要求，在新工程外路径建立新的 producer/私有 profile/独立收据。原执行文件及失败证据不覆盖。
+
+## 下一步顺序
+
+1. 收齐旧六章初态整局回归，已通过 case0 保留；共享 Godot 自然空闲时再运行，不控制盲盒任务。真实断言/引擎错误须修复，新建 sibling 后再验；外部占用中断与工程失败分开记录。
+2. 源码审核还发现 `tools/campaign_fx_partition_qa.gd` 的直接 Presentation 调用仍是旧挂载顺序。迁移同一原生 entry hooks 并跑完整 FX partition 回归；本次未修改这份被当前后台钉住的输入，不能声称它在当前版本已通过。
+3. 双关动态分支、付费生产、船体/运输，实际整局保存退出、独立进程继续/再保存、自然胜败和奖励一次。
+4. 同版九玩法/实际发行 EXE，再做完整演出、拥挤 UI 与多尺寸流程、正常时钟同负载约 10 分钟性能与切换回收、Android 2.0.1 真机 DPI/安全区/触控与持续性能。
+
+全开发目标仍未完成，原平台长期计划保留。本次只同步源码与证据，不发布新 Steam/Android 包；Steam 历史上线状态仍见 STEAM_UPDATE_20261007.md。此前已释放的约1.68GiB重复 imported 缓存不重复清理。本次本地、提交、远端同步三个状态以实际 Git 回读结果为准。

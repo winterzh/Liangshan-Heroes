@@ -342,11 +342,22 @@ func prepare(record: Variant) -> Dictionary:
 	var lvl_rec = s.level if is_campaign else null
 	var m_token: String = record.profile.mission_token if is_campaign else ""
 	var is_huang: bool = is_campaign and _campaign_level_id() == "level1"
+	var is_gao: bool = is_campaign and _campaign_level_id() == "level5"
+	var is_daming: bool = is_campaign and _campaign_level_id() == "level8"
 	var is_jiang: bool = is_campaign and _campaign_level_id() == "level2"
 	var is_kuai: bool = is_campaign and _campaign_level_id() == "level7"
 	var hg_external: Dictionary = {}
 	var jiang_external: Dictionary = {}
 	var kuai_external: Dictionary = {}
+	var gao_external: Dictionary = {}
+	if is_gao:
+		# Validate exact Mission-owned end-button descriptor before allocating Units.
+		var gao_context := {"level_id": "level5", "content_version": version,
+			"mission_token": m_token, "presentation_token": record.profile.presentation_token}
+		var presentation: Dictionary = PresentationState.new().validate(s.presentation, gao_context)
+		if not presentation.ok: return _abort(presentation, "presentation")
+		for row: Dictionary in presentation.value.buttons:
+			if row.descriptor.kind == "level" and row.descriptor.button_id == "gao_end": gao_external["level5:end"] = true
 	if is_jiang:
 		# The Level owns a reference to one Mission-owned button. Validate its
 		# fixed descriptor now; bind the real disabled control after UI creation.
@@ -374,7 +385,7 @@ func prepare(record: Variant) -> Dictionary:
 			checked = _visual.configure_level7(s.level, version, indexed.known_ids, indexed.next_entity_id, m_token)
 			if not checked.ok: return _abort(checked, "chapter_visual")
 			kuai_external = checked.tokens
-	var chapter_external: Dictionary = jiang_external if is_jiang else (kuai_external if is_kuai else hg_external)
+	var chapter_external: Dictionary = gao_external if is_gao else jiang_external if is_jiang else (kuai_external if is_kuai else hg_external)
 	_unit_plan = _graph().prepare(s.units, version, _battle, _battle.map, lvl_rec, m_token, chapter_external)
 	if not _unit_plan.ok: return _abort(_unit_plan, "units")
 	_identity = _unit_plan.identity
@@ -385,7 +396,15 @@ func prepare(record: Variant) -> Dictionary:
 	_battle.next_entity_id = _unit_plan.pending_battle_fields.next_entity_id
 	var ids: Dictionary = _unit_plan.id_to_unit
 
-	if is_huang:
+	if is_gao:
+		# Do not bind saved button references to a placeholder. Actual Level state
+		# waits for the new Mission-owned control; this shell is identity only.
+		_battle.level = Profiles.level_script(Profiles.GAO_ID).new()
+	elif is_daming:
+		checked = preload("res://scripts/run_level8_world_factory.gd").restore_level(s.level, _trusted, ids, _battle.next_entity_id, m_token)
+		if not checked.ok: return _abort(checked, "level")
+		_battle.level = checked.level
+	elif is_huang:
 		# Inert installed script identity for the map factory; never deploy/start.
 		_battle.level = Profiles.level_script(Profiles.HG_ID).new()
 	elif is_jiang:
@@ -508,7 +527,15 @@ func prepare(record: Variant) -> Dictionary:
 		if not checked.ok: return _abort(checked, "presentation")
 		checked = _visual.bind_presentation(_presentation_module)
 		if not checked.ok: return _abort(checked, "visual_bind_presentation")
-		if is_jiang:
+		if is_gao:
+			var bound_external: Dictionary = {}
+			if _presentation_module.level_buttons.has("gao_end"):
+				bound_external["level5:end"] = _presentation_module.level_buttons.gao_end
+			if bound_external.keys() != gao_external.keys(): return _abort(_bad("LEVEL5_END_BINDING"), "level")
+			checked = preload("res://scripts/run_level5_world_factory.gd").restore_level(s.level, _trusted, ids, _battle.next_entity_id, m_token, bound_external)
+			if not checked.ok: return _abort(checked, "level")
+			_battle.level = checked.level
+		elif is_jiang:
 			var bound_external: Dictionary = {}
 			if _presentation_module.level_buttons.has("jiang_depart"):
 				bound_external["level2:depart"] = _presentation_module.level_buttons.jiang_depart
@@ -574,7 +601,13 @@ func mount_disabled(parent: Node) -> Dictionary:
 	if not ground.ok: return _abort(ground, "ground_fire_install")
 	_mount_frame = {"clock": _battle._run_clock, "physics": bound.bound_physics_frame, "process": bound.bound_process_frame}
 	_battle.set_meta("_run_core_clock_bound", _mount_frame.duplicate())
+	if _presentation_module != null:
+		var entering: Dictionary = _presentation_module.prepare_native_entry()
+		if not entering.ok: return _abort(entering, "presentation_entry")
 	parent.add_child(_battle)
+	if _presentation_module != null:
+		var entered: Dictionary = _presentation_module.finish_native_entry()
+		if not entered.ok: return _abort(entered, "presentation_entry_finish")
 	if not _battle.gameplay_rng_fault().is_empty(): return _abort(_bad("PREPARED_READY_FAULT"), "mount")
 	var hud: Dictionary = _hud_module.finish()
 	if not hud.ok: return _abort(hud, "hud_finish")
