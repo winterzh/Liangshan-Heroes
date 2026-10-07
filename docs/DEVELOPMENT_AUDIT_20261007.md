@@ -1,3 +1,21 @@
+## 2026-10-08 03点后：第三进程被共享引擎恢复占用中断
+
+原run07ad37bf已终止exit1并释放锁。新6路径候选的JSON533、OwnedSlot76、实际办理保存A39/B继续重存351已通过，第三进程C在运行中因foreign_engine_resumed中止；完整ABC仍未资格，Lu/Shi单人撤离尚未执行。原完整profile、producer、收据及日志全部保留，不覆盖或重用失败profile。主证据retreat_explorer_shared_interruption_review_v25x4.json。
+
+后继必须新UUID/新profile并保留所有原源码/原生/packet/时钟/nonce/PID及缺失C实际验证门禁。若复用已完成B前序证据，必须先严格验证并复制原完整slot/journal/handoff到新profile，原失败profile只读保留；不得略过C或假称原批完成。未具备该门禁则全新批完整重跑。仍按用户要求等待共享Godot自然空闲，不控制其他任务。
+
+两个生产候选仍仅本地未资格，Git生产源码继续为已验证版本；候选/工具/失败证据与真实持久进度设计均存QA供公司继续。完整consumer nullable和模块HEX64问题已由新不可变r2b2修复并独立静态闭合，尚未原生/full启动。公开战役继续、自然结局/奖励、真实Campaign写盘、全部后续计划均未由这些前序检查证明；6点按实际状态收尾同步。
+
+## 2026-10-08 03点前：原回归继续，完整接入修复与持久进度设计
+
+当前A探索保留原JSON533、OwnedSlot76和实际办理半程三进程，再分别取得Lu/Shi单人撤离存档。最新已实读JSON533/OwnedSlot76/首次办理保存A39通过，B/C及真实撤离A尚待结果；运行仍限定隔离冻结候选，两份本地生产候选未资格、不纳入生产提交。
+
+完整测试consumer审查发现必需nullable字段缺失被当null接受，已保留旧源和更正收据，新后继加入字段存在与精确type/value门禁。随后复制回调的HEX64模块global遗漏也保留原失败设计，新后继补明确namespace闭合。这些是未执行测试接入的缺口，不是当前A原生失败；完整接入须新独立审查，不沿用旧通过文字。
+
+下一计划项外部设计已存qa/zhu_wounded_20261005/proposals/campaign_local_context_progress_20261008：当前token/rawSHA/active-terminal绑定有效，缺章节context语义；Campaign.record_level_result忽略_save失败，而terminal先于cfg写盘形成恢复窗口。设计保留classic v1字节兼容，未来新campaign日志需要冻结结果与持久进度确认；CAMPAIGN_QA=0正常私有profile真实写盘/新进程回读及失败恢复另测。设计尚未实现/原生，不修改当前冻结批，不宣称Steam奖励或公开续玩入口已合格。
+
+所有后续动态、付费生产/船体运输、自然结局奖励、九玩法发行EXE、美术UI、多尺寸、正常时钟长跑性能及Android真机继续保留。当前run/profiles不得在办公室并行复用；最终6点按实际证据收尾同步。
+
 ## 2026-10-08 02:20：真实单人撤离新批次已启动，待原生结果
 
 Git稳定源码最新已回读845c59ca；随后只在本地受控应用v25的Core/UnitContract两文件候选，原字节备份完整、六路径SHA桥固定。它尚未原生资格、未提交为生产；已同步的JSON四文件保持不变。候选声明见safe_retreat_candidate_v25x1.json及safe_retreat_preparation_delivery_v25x1.json。

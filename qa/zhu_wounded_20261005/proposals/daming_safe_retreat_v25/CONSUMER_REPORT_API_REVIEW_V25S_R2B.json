@@ -1,0 +1,124 @@
+{
+  "schema": "daming_safe_retreat_consumer_report_api_review_v25s_r2b",
+  "created_utc": "2026-10-07T18:51:50.803474+00:00",
+  "producer_pin": {
+    "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/run_daming_safe_retreat_v25s_r2b_full.py",
+    "sha256": "c9791942b0c71d83bcf47fbfb703a2096fd596737f88b2593e8b7fa27d34c0ea",
+    "bytes": 31209
+  },
+  "inherited_consumer_pin": {
+    "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/run_daming_safe_retreat_v25s_r2a_explore.py",
+    "sha256": "d2fd596b94b2de563a073c897aa30892212e3f0c1ada2db475aec34ecf22801b",
+    "bytes": 40970
+  },
+  "parent_validation_pin": {
+    "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/run_daming_safe_retreat_v25s.py",
+    "sha256": "5941315849982fb73d4851c2fcb95a2369d498760a83801427d315dd6a229af5",
+    "bytes": 68093
+  },
+  "reviewed_scope": "Exact world/component/live consumer report API, source/nonce/PID/evidence and nullable semantics; no native reports or live run observation",
+  "static_api_closure_passed": false,
+  "blocking_findings": [
+    {
+      "priority": "P2",
+      "code": "MISSING_NULLABLE_REQUIRED_REPORT_FIELD_ACCEPTED",
+      "affected": [
+        "18 world Slot canonical rows per role",
+        "116 component non-Pair rows per role"
+      ],
+      "world_null_keys": [
+        "initially_empty",
+        "zero_world_before_dispose",
+        "core_battle_null",
+        "core_identity_null",
+        "core_unit_plan_empty"
+      ],
+      "component_null_keys": [
+        "core_zero_before",
+        "core_zero_after"
+      ],
+      "detail": "The consumers use row.get(field) without mandatory presence. Missing fields and explicit JSON null both become None, and therefore pass the existing type/value comparison for expected null. The pinned GD normally emits those fields; this is damaged/incomplete-report acceptance, not a native producer guaranteed failure.",
+      "fix": "New immutable full successor must first require all checked world expected fields present and component checked fields present, then keep original exact Python type and value comparisons. Do not require component interface serialization metadata that GD does not emit. Capture already requires required_row_fields presence."
+    }
+  ],
+  "synthetic_python_expression_probe_only": {
+    "source": "Read exact interface rows and evaluate the existing Python get/type/value expression only. Did not import or run a producer, Godot or any validator callback.",
+    "world_case": "identity_units_schema_int/json",
+    "world_removed_fields": [
+      "initially_empty",
+      "zero_world_before_dispose",
+      "core_battle_null",
+      "core_identity_null",
+      "core_unit_plan_empty"
+    ],
+    "old_expression_accepts_missing": true,
+    "new_presence_condition_rejects": true,
+    "component_case": "unit_full_safe_stop__chase_intent/source",
+    "component_removed_fields": [
+      "core_zero_before",
+      "core_zero_after"
+    ],
+    "old_component_expression_accepts_missing": true,
+    "new_component_presence_condition_rejects": true
+  },
+  "interface_pins": [
+    {
+      "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/NEGATIVE_WORLD_INTERFACE_V25B2.json",
+      "sha256": "fada0b4936d90341f72901a1f9c6f785afac3ba0a4f0e1c07b0ffddab4b877d3",
+      "bytes": 167250
+    },
+    {
+      "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/COMPONENT_NEGATIVE_INTERFACE_V25.json",
+      "sha256": "8ce5e3379c9a6502682cb8a3c6fb38261e708888492a0126c8677f7ad4d4e160",
+      "bytes": 295670
+    },
+    {
+      "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/CAPTURE_NEGATIVE_INTERFACE_V25D1.json",
+      "sha256": "79fb3307b616686d07a53bb88923160451e9ba63781f240b820bba04e943db72",
+      "bytes": 9826
+    }
+  ],
+  "harness_pins": [
+    {
+      "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/daming_safe_retreat_negative_world_v25b2.gd",
+      "sha256": "bc494c0bdabd1c52726f4f12465154529ed3cc9cee75042543d1872e11959b5d",
+      "bytes": 32238
+    },
+    {
+      "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/daming_safe_retreat_component_negative_v25.gd",
+      "sha256": "ccb4abd78fe1277c2475f53ace9ff4c5c133e1e8ca4ebb59fa6ac30c65ab134a",
+      "bytes": 44135
+    },
+    {
+      "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/daming_safe_retreat_capture_negative_v25d1.gd",
+      "sha256": "9933c71c514685da54ace5daf2e50ed645a998d34993c9709676dfb48d1e110b",
+      "bytes": 45594
+    }
+  ],
+  "planned_counts_not_native_passes": {
+    "world_per_role": 264,
+    "world_actual_Core_per_role": 246,
+    "world_slot_never_created_per_role": 18,
+    "component_per_role": 362,
+    "component_actual_pure_pair_per_role": 246,
+    "component_Unit_Contract_per_role": 116,
+    "live_per_role": 24,
+    "live_cast_arrays_per_role": 5,
+    "negative_stages_two_roles": 52
+  },
+  "otherwise_static_api_conclusions": [
+    "World uses exact case/route Cartesian set, exact expected typed values and codes, explicit never_created/no-audit false/null semantics for Slot-first18; 246 actual Core prepare rows retain pre-dispose emptiness/input/grid evidence.",
+    "Component requires exact362 id/route matrix and raw target API/module/code; Pair booleans true and nonPair Core observations explicitly null. Eight actual-original positive rows remain narrower Unit/pair positives, not two-unretreated whole world.",
+    "Live has mandatory field presence, exact24 case set per role and one independent process/profile each. Five arrays require actual CastFlow/ItemFlow.capture acceptance, actual Core capture, LEVEL8_SAFE_CAST_INTENT and exact section/array, genuine object ID, full undo/HELD/identity invariance.",
+    "Common actual process gate checks terminated exit0, error-free native marker, exact PID/nonce/firstrole/source/engine/userdir, original A termination-before-consumer start, and no nonce/PID reuse. All actual report checks must be true.",
+    "Five A file provenance and actual SHA pin reads, manifest pin, source module pins, evidence SHA readback and entire owned slot/journal/handoff unchanged gates align with emitted report API. World scope does not invent component/live/global native qualification.",
+    "Child scope flags remain false and parent may only aggregate after actual full fixed matrices, both genuine natural A/B/C/D roles and final source/native/profile audit. Missing native data remains failure; no count threshold substitute."
+  ],
+  "native_qualified": false,
+  "engine_started": false,
+  "godot_parse_verified": false,
+  "public_source_modified": false,
+  "executed_producer_modified": false,
+  "live_run_observed": false,
+  "disposition": "Preserve c979 and its original reviews. Require a new full producer sibling with explicit presence guard and fresh independent review. Current A-only exploration did not call these consumers and is unaffected."
+}

@@ -1,0 +1,91 @@
+--- run_daming_safe_retreat_v25s_r2b_full.py
++++ run_daming_safe_retreat_v25s_r2b1_full.py
+@@ -1,4 +1,4 @@
+-"""UNEXECUTED full adapter sibling: b2 world, independent components, d1 live24.
++"""UNEXECUTED full adapter successor with mandatory nullable evidence presence: b2 world, independent components, d1 live24.
+ 
+ This source reuses immutable r2a/parent/base guards. A scoped exploration receipt
+ is never a full pass; full startup requires its own producer/runner peer review.
+@@ -83,7 +83,7 @@
+         require(sha(path) == digest, "exact immutable producer source missing")
+         ast.parse(path.read_text(encoding="utf-8-sig"))
+     approval = read(args.adapter_review)
+-    require(approval.get("schema") == "daming_safe_retreat_adapter_review_v25s_r2b"
++    require(approval.get("schema") == "daming_safe_retreat_adapter_review_v25s_r2b1"
+             and approval.get("static_api_closure_passed") is True and approval.get("approved_stages") == ["full"]
+             and pin(approval["producer_pin"]) == Path(__file__).resolve(), "full independent producer review missing")
+     runner = read(args.runner_review)
+@@ -134,7 +134,7 @@
+     class Full(Scoped):
+         def __init__(self, args, run, reviewed, matrix, interfaces, extra_pins):
+             super().__init__(args, run, reviewed, matrix, interfaces, extra_pins)
+-            self.receipt.update(schema="daming_safe_retreat_full_adapter_batch_v25s_r2b",
++            self.receipt.update(schema="daming_safe_retreat_full_adapter_batch_v25s_r2b1",
+                                 producer_sha256=sha(Path(__file__)), explorer_source_sha256=EXPLORER_SHA,
+                                 execution_scope="full", full_matrix_consumer_implemented=True,
+                                 actual_live_cases_per_role=24, all_negatives_qualified=False,
+@@ -173,6 +173,47 @@
+             clean = re.sub(r"\x1b\[[0-?]*[ -/]*[@-~]", "", log)
+             base.require(not re.search(r"(?m)^\s*(?:SCRIPT ERROR:|Parse Error:|ERROR:)", clean), "ANSI-stripped negative native error")
+             return super().claim_negative(step, report, fixture, nonce, marker, clean)
++
++        def run_world_dto_negatives(self, variant):
++            interface = self.interfaces["world"]; fixture = self.frozen_a[variant]
++            group = self.new_group("world_" + variant); self.activate_group(group)
++            manifest_path = self.output / "actual_A_manifest.json"
++            manifest = self.actual_manifest(interface, fixture, manifest_path, False)
++            report_path = self.output / "report.json"; nonce = uuid.uuid4().hex
++            env = self.env.copy()
++            env.update(DAMING_NEGATIVE_PROFILE=str(self.profile), DAMING_NEGATIVE_REPORT=str(report_path),
++                       DAMING_NEGATIVE_MANIFEST=str(manifest_path), DAMING_NEGATIVE_MANIFEST_SHA256=sha(manifest_path),
++                       DAMING_NEGATIVE_NONCE=nonce, DAMING_NEGATIVE_EXPECT_CONTENT=self.installed["content_version"],
++                       DAMING_NEGATIVE_EXPECT_ENGINE=self.receipt["godot_sha256"], DAMING_ADMIT_NONCE=nonce)
++            def validate(step, log):
++                data = base.read(report_path)
++                self.claim_negative(step, data, fixture, nonce, "DAMING_SAFE_NEGATIVE_WORLD_V25_COMPLETE ", log)
++                base.require(data.get("schema") == interface["report_schema"]
++                             and all(data.get(k) is True for k in ["pure_matrix_passed", "fixture_ready", "matrix_complete"])
++                             and data.get("whole_world_dto_negative_only") is True, "world DTO scope/matrix missing")
++                for k in ["overall_v25_qualified", "live_object_capture_negative_implemented", "live_object_capture_negative_qualified", "separate_component_harness_implemented", "future_producer_integration_qualified"]:
++                    base.require(data.get(k) is False, "DTO claimed another scope")
++                base.require(all(type(data.get(k)) is int and data[k] == 0 for k in ["disk_slot_writes", "direct_gameplay_calls", "cached_grids_cleared"]), "DTO side effects claimed")
++                expected = {(r["case"], r["route"]): r for r in interface["route_expectations"]}
++                rows = data.get("executed_rows")
++                base.require(isinstance(rows, list) and len(rows) == 264, "world exact264 rows absent")
++                actual = {(r.get("case"), r.get("route")): r for r in rows}
++                base.require(len(actual) == 264 and set(actual) == set(expected), "world duplicated/missing fixed routes")
++                for key, row in actual.items():
++                    base.require(set(expected[key]) <= set(row), "world actual mandatory nullable evidence key omitted")
++                    for field, value in expected[key].items():
++                        base.require(type(row.get(field)) is type(value) and row.get(field) == value, "world actual route layer/nullable observation mismatch: " + field)
++                    base.require(row.get("passed") is True and row.get("actual_code") == expected[key]["expected_code"]
++                                 and row.get("source_input_type_ieee_exact") is True and row.get("cached_grids_preserved") is True
++                                 and HEX64.fullmatch(row.get("mutated_packet_sha256", ""))
++                                 and HEX64.fullmatch(row.get("typed_document_sha256", "")), "world actual immutable source/code proof missing")
++                positives = data.get("positives")
++                base.require(isinstance(positives, list) and len(positives) == 2 and {r["route"] for r in positives} == {"source", "json"}
++                             and all(all(r.get(k) is True for k in ["actual_A_unmodified", "prepared", "detached_inert", "input_exact"]) for r in positives),
++                             "world actual A full original positive prepare not proven")
++                self.verify_manifest_sources(data, manifest, manifest_path); self.verify_sources(data, "world")
++                self.record_negative(variant + "/world", step, report_path, 264)
++            self.native_phase("world_negative_" + variant, ["--headless", interface["scene_resource"]], env, 900, validate)
+ 
+         def run_component_negatives(self, variant):
+             interface = self.interfaces["component"]; fixture = self.frozen_a[variant]
+@@ -206,6 +247,7 @@
+                           "core_constructor_called", "core_prepare_called", "core_capture_called",
+                           "core_zero_before", "core_zero_after", "direct_pair_branch_called"]
+                 for key, row in actual.items():
++                    base.require(set(fields) <= set(row), "component actual mandatory nullable evidence key omitted")
+                     for field in fields:
+                         value = expected[key][field]
+                         base.require(type(row.get(field)) is type(value) and row.get(field) == value, "component actual API/nullable Core row mismatch")
+@@ -351,7 +393,7 @@
+                 "retreat-route": here / "daming_safe_retreat_route_v25.gd",
+                 "capture-base": here / "daming_safe_retreat_cross_process_v25.gd",
+                 "capture-base-scene": here / "daming_safe_retreat_cross_process_v25.tscn",
+-                "negative-matrix": here / "ADAPTER_BUNDLE_MATRIX_V25S_R2B.json",
++                "negative-matrix": here / "ADAPTER_BUNDLE_MATRIX_V25S_R2B1.json",
+                 "passed-admit-successor-proof": here / "PASSED_SUCCESSOR_PROOF_V25S_ACTUAL_2A817E70.json",
+                 "proof-repository-root": Path("E:/ChatGPT/水浒"),
+                 "world-interface": here / "NEGATIVE_WORLD_INTERFACE_V25B2.json",
