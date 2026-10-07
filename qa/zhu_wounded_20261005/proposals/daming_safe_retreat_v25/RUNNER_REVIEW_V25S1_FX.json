@@ -1,0 +1,122 @@
+{
+  "created_utc": "2026-10-07T18:18:10.560998+00:00",
+  "reviewer": "fx_caller_review",
+  "findings": [],
+  "godot_parse_verified": false,
+  "engine_started": false,
+  "native_qualified": false,
+  "overall_v25_qualified": false,
+  "public_source_modified": false,
+  "old_artifacts_modified": false,
+  "schema": "daming_safe_retreat_runner_cross_review_v25",
+  "review_status": "static_api_closure_no_identified_execution_blocker_native_pending",
+  "static_api_closure_passed": true,
+  "reviewed_execution_scope": "A_single_save_only",
+  "candidate_pins": [
+    {
+      "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/daming_safe_retreat_cross_process_v25s1.gd",
+      "sha256": "91df2daf3310f3bf0525b0266c9795aaf149e3d8af261c8d1e634e8fc7b04cef",
+      "bytes": 57295
+    },
+    {
+      "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/daming_safe_retreat_cross_process_v25s1.tscn",
+      "sha256": "f07e71ab7d439809d595622212343ab5bbcf631c5c2f6af8ebe914a0f18c8a19",
+      "bytes": 220
+    },
+    {
+      "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/daming_safe_retreat_route_v25.gd",
+      "sha256": "339f09795f48a9fa89615e271e87f2316b3d1ef55c8f0278752b456888d45e27",
+      "bytes": 10964
+    }
+  ],
+  "predecessor_pins": [
+    {
+      "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/daming_safe_retreat_cross_process_v25s.gd",
+      "sha256": "0144ae38410400a2db32fc012fa69494f39d1d87802a53d3a4af5df9b1e94723",
+      "bytes": 55306
+    },
+    {
+      "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/daming_safe_retreat_cross_process_v25s.tscn",
+      "sha256": "30426ef68a0b31c6a838e06f0ba7b9e5ee195dccc9e15a75e07fb5bf6ceded17",
+      "bytes": 218
+    }
+  ],
+  "source_dependency_pins": [
+    {
+      "path": "E:/ChatGPT/水浒/scripts/run_world_session.gd",
+      "sha256": "b9fdd59cfe65cd5ecfb07a39041a8ad4e96594c85f5fc1fa105d52219e966a88",
+      "bytes": 16547
+    },
+    {
+      "path": "E:/ChatGPT/水浒/scripts/run_battle_world_core.gd",
+      "sha256": "92b2bdac0058f9e1642d1b991c3ca353e902481d8daff990388e377597df87b1",
+      "bytes": 49463
+    },
+    {
+      "path": "E:/ChatGPT/水浒/scripts/run_level8_unit_contract.gd",
+      "sha256": "b2f52bcce60b27507b498a6d32e45b5cadd3409030fcd2e1024c78dac90e90d5",
+      "bytes": 8211
+    },
+    {
+      "path": "E:/ChatGPT/水浒/scripts/run_graph_identity.gd",
+      "sha256": "c16f53cf32dad8e1ef05e17628cb4f846f80ec3873ce562f79f5b4f6372c5e5f",
+      "bytes": 11445
+    },
+    {
+      "path": "E:/ChatGPT/水浒/scripts/run_slot_store.gd",
+      "sha256": "d67fe7794f23fe1bda3d74c7e284ba6b90d2cb488a5d35cb1a187eea77fa3532",
+      "bytes": 13212
+    },
+    {
+      "path": "E:/ChatGPT/水浒/scripts/run_snapshot_store.gd",
+      "sha256": "581e638b8f0ce7cb24d5533b03ee94b99732c5cffcbf373b1a5a69a1618d8251",
+      "bytes": 21642
+    }
+  ],
+  "changed_functions_exact": [
+    "_launch",
+    "_save",
+    "_restore",
+    "finish"
+  ],
+  "qualified_hold_function_proofs": [
+    {
+      "method": "_hold_owned_links",
+      "raw_function_sha256": "db08779f4a2e3a5bf43768a824198464d9fb3dadd376f597ee44615db378c06f",
+      "qualified_s_raw_byte_equal": true
+    },
+    {
+      "method": "_hold_other_links",
+      "raw_function_sha256": "fcdf17eced017ac5c87576b97b7ab6f84ba8d51fdfc2cb9a160ae34d37c3b8a5",
+      "qualified_s_raw_byte_equal": true
+    },
+    {
+      "method": "_hold_link_summary",
+      "raw_function_sha256": "2315ac06f4f352e9a26fd8ae63853d79e30177a8987ab2a6a85ef3badc180c1f",
+      "qualified_s_raw_byte_equal": true
+    },
+    {
+      "method": "_hold_cleanup",
+      "raw_function_sha256": "b08c4a12bbe887dad67482b4a50c60952b9fdcd7900eb7c922789a6f26b0ef8f",
+      "qualified_s_raw_byte_equal": true
+    },
+    {
+      "method": "_hold",
+      "raw_function_sha256": "43d6af961690c657c5a80b40d5fbf898b6ef47f1e2332e7d13ff7c1ec19fe111",
+      "qualified_s_raw_byte_equal": true
+    }
+  ],
+  "conclusions": [
+    "Actual private menu launch Battle is retained immediately before Daming/context/health checks can return null; no cleanup target inferred from unrelated current_scene/menu/tree child.",
+    "Actual successful Session commit handed-off Battle is retained before later install/HELD/full-world checks. Caller-owned identity remains explicitly retained and disposed once after the own world is freed.",
+    "Original Session.save_held transaction is strongly held in save_session. Save failure result is recorded; has_pending_save and pending_save_status are existing actual APIs. Pending phase makes report/exit fail and retains original Session/store token until process exit, with no dispose/retry/new token/replacement.",
+    "Successful/nonpending Session disposal happens only after own scene cleanup and retained identity. Original source Session capture identity ownership and installed Session handoff disposal rules were read directly.",
+    "All other methods and all original assertions/labels remain raw-byte exact; five hold methods exactly match original actual qualified s harness. No mutation/capture/semantic guard is removed.",
+    "Original normal menu launch/manual route, real Mission and physics, single safe state, actual HELD, complete Session save_held, disk readback, packet/world/handoff and route evidence remain unchanged."
+  ],
+  "qualification_limits": [
+    "Static API/ownership review of this new runner only; no native/parser execution.",
+    "Only A_single_save execution approved by this review. B/C/D natural continuation/terminal, pending-writer retry/recovery, full 24-role live negative matrix and public Continue remain unqualified.",
+    "Failed pending save deliberately exits process with failed evidence and original token preserved; this is not a retry or resumption qualification."
+  ]
+}

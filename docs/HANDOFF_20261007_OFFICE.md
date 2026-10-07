@@ -1,5 +1,15 @@
 # 2026-10-07 办公室续做交接
 
+## 2026-10-08 02:20：真实单人撤离新批次已启动，待原生结果
+
+Git稳定源码最新已回读845c59ca；随后只在本地受控应用v25的Core/UnitContract两文件候选，原字节备份完整、六路径SHA桥固定。它尚未原生资格、未提交为生产；已同步的JSON四文件保持不变。候选声明见safe_retreat_candidate_v25x1.json及safe_retreat_preparation_delivery_v25x1.json。
+
+新r2a实际后台PID217168、run daming_safe_retreat_v25s_r2a_07ad37bf，明确选择Lu先撤离、Shi先撤离两独立profile。当前原生前置自然空闲/私有冻结阶段已完成，import阶段仍按共享Godot自然空闲规则等待/执行；未取得任何新通过结果。该探索保留完整JSON533/OwnedSlot76/办理半程ABC原回归后，才能用普通移动/战斗取得真实单人安全A存档。overall_v25_qualified始终false，不能将拿到A夹具当整个四进程/负例已验收。
+
+独立复核发现旧执行器失败时丢已拥有场景与pending Session引用；新s1显式只记真实launch/commit场景、只释放自身场景，失败待写事务强持到进程退出，不重试/替换或判成功，原文件与原断言保留。新runner/producer独立闭合收据与可执行参数已存QA；48个实际对象负例、264世界DTO路线及362组件路线是准备数量，未运行即不计通过。
+
+本机运行只由本线程观察，办公室不能重复同一run/profile。六点收尾时将把实际完整/失败/中断状态写回；若两文件仍未资格，保留完整候选与证据供公司续做，生产分支继续使用已验证代码。所有原计划、真实战役写盘、自然结局/奖励、九玩法发行EXE、美术/UI、长跑性能及Android真机仍保留；不发布新Steam版本。
+
 ## 2026-10-08 同步范围补充：冻结工程与本地完整目录分别记录
 
 三进程通过范围为原冻结输入raw5041/distinct5037及明确补齐依赖、元数据后的隔离runtime5102。四个公开修复文件与该批精确同SHA；不能将这份资格解释为当前本地完整目录的运行资格。独立只读清单发现本地整树5042文件与隔离工程有24个额外草稿素材、84个依赖/元数据缺项及4个UID差异；草稿未混入本轮提交。公司使用既有bootstrap/重新导入后重新建立完整身份与私有profile，不能沿用家里content_version。完整差异见qa/zhu_wounded_20261005/independent_readonly_public_identity_v24s1.json。

@@ -1,0 +1,119 @@
+--- daming_safe_retreat_capture_negative_v25c.gd
++++ daming_safe_retreat_capture_negative_v25d.gd
+@@ -3,6 +3,8 @@
+ ## Inherit only the complete Session/install/world/packet/binding audits. Override
+ ## all entry, driver, report and HELD methods; the old _hold is never invoked.
+ const CAPTURE_SCHEMA := "daming_safe_retreat_capture_report_v25"
++const CAPTURE_REVISION := "v25d"
++const LIVE_CAST_FIELDS := ["_walk_casts", "_pending_casts", "_channels", "_pending_item_casts", "_walk_item_casts"]
+ const CAPTURE_INPUT_SCHEMA := "daming_safe_retreat_capture_inputs_v25"
+ const CAPTURE_CASES := {
+ 	"safe_queue_nonempty": "LEVEL8_SAFE_RETREAT_QUEUE",
+@@ -22,7 +24,12 @@
+ 	"other_safe_event_without_retreat": "LEVEL8_SAFE_EVENT_OUTCOME_PAIR",
+ 	"safe_actor_outcome_empty": "LEVEL8_SAFE_EVENT_OUTCOME_PAIR",
+ 	"freed_event_missing": "LEVEL8_SAFE_RESCUE_EVENT_PAIR",
+-	"rescue_done_false": "LEVEL8_SAFE_RESCUE_EVENT_PAIR"
++	"rescue_done_false": "LEVEL8_SAFE_RESCUE_EVENT_PAIR",
++	"safe_caster__walk_casts": "LEVEL8_SAFE_CAST_INTENT",
++	"safe_caster__pending_casts": "LEVEL8_SAFE_CAST_INTENT",
++	"safe_caster__channels": "LEVEL8_SAFE_CAST_INTENT",
++	"safe_caster__pending_item_casts": "LEVEL8_SAFE_CAST_INTENT",
++	"safe_caster__walk_item_casts": "LEVEL8_SAFE_CAST_INTENT"
+ }
+ const IDENTITY_FIELDS := ["_entities", "_known_ids", "_object_ids", "_retired_ids", "_retired_sources", "_decoded_ids", "_decoded_sources", "_issued_id_tokens", "_issued_source_tokens", "_next_id_token", "_next_source_token", "_tombstones", "_expired", "_released"]
+ var capture_case := ""
+@@ -289,6 +296,37 @@
+ 	for name: String in IDENTITY_FIELDS: result[name] = _clone(retained_identity.get(name))
+ 	return result
+ 
++func _live_cast_entry(safe: Node, field: String) -> Dictionary:
++	# These are native Object references and native Vector2 values, never saved DTO tags.
++	# No command, allocator, cooldown, Unit setter or gameplay consumer is called.
++	var serial: int = safe._order_serial if field in ["_walk_casts", "_walk_item_casts"] else safe._cast_serial
++	if not check("actual original cast/order serial acceptable", serial >= (-1 if field in ["_walk_casts", "_walk_item_casts"] else 0)): return {}
++	var uid := 0
++	if field in ["_pending_item_casts", "_walk_item_casts"]:
++		# Battle's allocator issues monotonically from 1 and never reuses a UID.
++		# Original ItemFlow explicitly accepts a consumed/transferred retired alias.
++		# Use an already-issued alias below the actual unchanged counter, never allocate.
++		if not check("actual issued item alias exists without changing allocator", typeof(battle.get("next_item_uid")) == TYPE_INT and battle.next_item_uid > 1 and battle.next_item_uid <= Core.ItemCasts.MAX_UID): return {}
++		uid = battle.next_item_uid - 1
++	match field:
++		"_walk_casts": return {"c": safe, "slot": 0, "tgt": null, "point": safe.position, "serial": serial, "t": 0.4, "age": 0.0}
++		"_pending_casts": return {"caster": safe, "slot": 0, "lp": safe.position, "tgt": null, "serial": serial}
++		"_channels": return {"caster": safe, "center": safe.position, "eff": {"kind": "channel", "dur": 3.0, "tick": 0.5}, "sc": 1.0, "rank": 1, "r": 110.0, "tick": 0.5, "tick_t": 0.0, "ad": {}}
++		"_pending_item_casts": return {"caster": safe, "slot": 0, "uid": uid, "point": safe.position, "target": null, "serial": serial}
++		"_walk_item_casts": return {"c": safe, "uid": uid, "tgt": null, "point": safe.position, "serial": serial, "t": 0.4, "age": 0.0}
++	return {}
++
++func _capture_cast_component(field: String) -> Dictionary:
++	var ids := {}
++	for unit: Node in battle.units_root.get_children(true): ids[unit] = str(unit.entity_id)
++	var module: RefCounted = Core.ItemCasts.new(Codec, B, Core.U) if field in ["_pending_item_casts", "_walk_item_casts"] else Core.Casts.new(Codec, B, Core.U)
++	return module.capture(battle, trusted.content_version, ids)
++
++func _capture_guard_layer(refusal: Dictionary) -> String:
++	if refusal.get("code") == "LEVEL8_SAFE_CAST_INTENT": return "level8_safe_pair"
++	if typeof(refusal.get("section")) == TYPE_STRING: return "Core.capture section " + refusal.section
++	return "Core.capture earlier validator or unknown layer"
++
+ func _make_mutation() -> Dictionary:
+ 	var safe: Node = battle.level.get(first_role)
+ 	var other: Node = battle.level.get("shi" if first_role == "lu" else "lu")
+@@ -296,7 +334,13 @@
+ 	var target: Object = safe
+ 	var field := ""
+ 	var temporary: Variant = null
+-	if capture_case == "safe_queue_nonempty": field = "_queue"; temporary = [{"kind": "move", "pos": safe.position, "group_cap": 0.0}]
++	if capture_case.begins_with("safe_caster_"):
++		target = battle; field = capture_case.trim_prefix("safe_caster_")
++		if not check("one actual existing cast array", field in LIVE_CAST_FIELDS and typeof(battle.get(field)) == TYPE_ARRAY): return {}
++		var entry: Dictionary = _live_cast_entry(safe, field)
++		if entry.is_empty(): return {}
++		temporary = _clone(battle.get(field)); temporary.append(entry)
++	elif capture_case == "safe_queue_nonempty": field = "_queue"; temporary = [{"kind": "move", "pos": safe.position, "group_cap": 0.0}]
+ 	elif capture_case.begins_with("safe_stop_"):
+ 		field = capture_case.trim_prefix("safe_stop_")
+ 		match field:
+@@ -364,6 +408,8 @@
+ 	var target: Object = mutation.target
+ 	target.set(mutation.field, mutation.temporary)
+ 	var applied := _exact(target.get(mutation.field), mutation.temporary)
++	var cast_case: bool = capture_case.begins_with("safe_caster_")
++	var cast_component: Dictionary = _capture_cast_component(mutation.field) if cast_case else {}
+ 	actual_negative_capture_called = true
+ 	var refusal: Dictionary = capture_adapter.capture(battle, retained_identity)
+ 	var temporary_unchanged := _exact(target.get(mutation.field), mutation.temporary)
+@@ -374,9 +420,22 @@
+ 	var restored: Dictionary = capture_adapter.capture(battle, retained_identity)
+ 	var after_max := Time.get_ticks_msec()
+ 	var exact_code: bool = refusal.get("ok") == false and refusal.get("code") == CAPTURE_CASES[capture_case]
++	if cast_case: exact_code = exact_code and cast_component.get("ok", false) and refusal.get("field") == mutation.field
+ 	var identity_ok: bool = is_instance_valid(retained_identity) and _exact(identity_before, _identity_snapshot()) and restored.get("identity") == retained_identity
+ 	var held_ok: bool = get_tree().paused and battle._save_barrier.state == battle._save_barrier.State.HELD and battle._save_barrier.health().ok and battle._run_clock._next_tick == next_tick and Engine.get_physics_frames() == physics_before and Engine.get_process_frames() == process_before and get_tree().current_scene == battle and _exact(canvas_before, get_tree().root.canvas_transform) and _exact(nodes_before, _node_ids(battle))
+ 	live_row = {"case": capture_case, "first_role": first_role, "expected_code": CAPTURE_CASES[capture_case], "actual_code": refusal.get("code", ""), "actual_Core_capture_called": actual_negative_capture_called, "DTO_substitution": false, "single_live_field_applied": applied, "temporary_field_unchanged_by_capture": temporary_unchanged, "original_field_type_ieee_restored": restored_typed, "retained_identity_same_live_unchanged": identity_ok, "source_held_no_ticks_no_nodes_added": held_ok, "original_target_object_id": mutation.object_id, "field": mutation.field, "original_typed_view": _live_view(mutation.original_snapshot), "temporary_typed_view": _live_view(mutation.temporary), "refusal_summary": _brief(refusal), "passed": false}
++	live_row["cast_component_capture_called"] = cast_case
++	live_row["cast_component_capture_accepted"] = cast_component.get("ok", false) if cast_case else false
++	live_row["cast_component_actual_code"] = cast_component.get("code", "") if cast_case else "not_run_original_19_case"
++	live_row["expected_guard_layer"] = "level8_safe_pair" if cast_case else "original_fixed_capture_guard"
++	live_row["actual_guard_layer"] = _capture_guard_layer(refusal)
++	live_row["actual_section"] = refusal.get("section", "")
++	live_row["actual_field"] = refusal.get("field", "")
++	live_row["direct_safe_cast_pair_coverage"] = cast_case and exact_code
++	if cast_case:
++		live_row["actual_caster_object_id"] = str(battle.level.get(first_role).get_instance_id())
++		live_row["actual_item_counter_unchanged"] = battle.next_item_uid
++		if not _write_new_json(output.path_join("cast_component_capture.json"), cast_component): return false
+ 	if not check("actual live capture exact controlled refusal", applied and temporary_unchanged and exact_code, refusal): return false
+ 	if not check("original typed property and caller-owned identity restored", restored_typed and identity_ok): return false
+ 	if not check("source remains exact HELD with no ticks/nodes/scene change", held_ok): return false
+@@ -393,7 +452,7 @@
+ 	if not mutation.is_empty() and is_instance_valid(mutation.get("target")):
+ 		mutation.target.set(mutation.field, mutation.original)
+ 	var passed: bool = row_completed and live_row.get("passed", false) and not checks.is_empty() and checks.all(func(r): return r.passed)
+-	var report := {"schema": CAPTURE_SCHEMA, "passed": passed, "row_completed": row_completed, "case": capture_case, "first_role": first_role, "pid": OS.get_process_id(), "nonce": nonce, "actual_user_data_dir": OS.get_user_data_dir(), "private_profile": profile, "content_version": trusted.get("content_version", ""), "engine_sha256": FileAccess.get_sha256(OS.get_executable_path()), "checks": checks, "observations": observations, "evidence": evidence, "provenance": capture_provenance, "executed_live_row": live_row, "actual_Core_capture_called": actual_negative_capture_called, "actual_live_object_capture": actual_negative_capture_called, "whole_live_capture_matrix_qualified": false, "overall_v25_qualified": false, "separate_component_harness_implemented": false, "native_log_zero_ERROR_verified": false, "implemented_cases": CAPTURE_CASES.keys(), "not_run_scope": ["five live cast array negatives", "record schema/identity types are DTO-only; no user-settable live identity leaf", "full role/case/process matrix aggregation requires producer", "natural terminal/reward/tick regressions"], "source_row_isolation": "one case per fresh independent process/profile; complete actual A Session installed", "successful_handoff_owned_world_tracked": is_instance_valid(owned_installed_battle), "hold_helper_source": "v24s 76ed6f114de755b398112778ddabf5af820a30237b75070a5a2aaaea188b87db", "hold_helper_native_qualified_at_preparation": false, "base_harness_sha256": FileAccess.get_sha256("res://tools/daming_safe_retreat_cross_process_v25.gd"), "harness_sha256": FileAccess.get_sha256(get_script().resource_path), "disk_slot_writes": 0, "gameplay_ticks_injected": 0, "grid_clears": 0, "runtime_patches": 0}
++	var report := {"schema": CAPTURE_SCHEMA, "passed": passed, "row_completed": row_completed, "case": capture_case, "first_role": first_role, "pid": OS.get_process_id(), "nonce": nonce, "actual_user_data_dir": OS.get_user_data_dir(), "private_profile": profile, "content_version": trusted.get("content_version", ""), "engine_sha256": FileAccess.get_sha256(OS.get_executable_path()), "checks": checks, "observations": observations, "evidence": evidence, "provenance": capture_provenance, "executed_live_row": live_row, "actual_Core_capture_called": actual_negative_capture_called, "actual_live_object_capture": actual_negative_capture_called, "whole_live_capture_matrix_qualified": false, "overall_v25_qualified": false, "separate_component_harness_implemented": false, "native_log_zero_ERROR_verified": false, "implemented_cases": CAPTURE_CASES.keys(), "harness_revision": CAPTURE_REVISION, "planned_cases": 24, "planned_roles": ["lu", "shi"], "live_cast_cases_implemented": 5, "not_run_scope": ["all 24-by-two-role native matrix aggregation not executed", "record schema/identity types are DTO-only; no user-settable live identity leaf", "full role/case/process matrix aggregation requires producer", "natural terminal/reward/tick regressions"], "source_row_isolation": "one case per fresh independent process/profile; complete actual A Session installed", "successful_handoff_owned_world_tracked": is_instance_valid(owned_installed_battle), "hold_helper_source": "v24s 76ed6f114de755b398112778ddabf5af820a30237b75070a5a2aaaea188b87db", "hold_helper_native_qualified_at_preparation": false, "base_harness_sha256": FileAccess.get_sha256("res://tools/daming_safe_retreat_cross_process_v25.gd"), "harness_sha256": FileAccess.get_sha256(get_script().resource_path), "disk_slot_writes": 0, "gameplay_ticks_injected": 0, "grid_clears": 0, "runtime_patches": 0}
+ 	if not output.is_empty() and DirAccess.dir_exists_absolute(output) and not FileAccess.file_exists(output.path_join("report.json")):
+ 		var file := FileAccess.open(output.path_join("report.json"), FileAccess.WRITE)
+ 		if file != null: file.store_string(JSON.stringify(report, "\t") + "\n"); file.close()
