@@ -1,0 +1,63 @@
+{
+  "schema": "office_native_vs_ordinary_source_scope_correction_20261008",
+  "created_utc": "2026-10-07T20:26:27.464783+00:00",
+  "source_pins": [
+    {
+      "path": "E:/ChatGPT/水浒/scripts/steam_service.gd",
+      "sha256": "69118d0e0f45d062ab8258c44bdfcfdb5dee0db55154a3097ce0f6343bccc675",
+      "bytes": 15386
+    },
+    {
+      "path": "E:/ChatGPT/水浒/scripts/steam_stats_reader.gd",
+      "sha256": "23dc98449a5e71add9114483b8c29a5e423044b257281ec699bca3b34e65c6ec",
+      "bytes": 3835
+    },
+    {
+      "path": "E:/ChatGPT/水浒/docs/STEAM_INTEGRATION_20260907.md",
+      "sha256": "77571fdb7afe58e49c589d3e9af97fa75d98d618d39f9b5a87298438037325bf",
+      "bytes": 13057
+    },
+    {
+      "path": "E:/ChatGPT/水浒/tools/run_local.ps1",
+      "sha256": "806154bad8cf079bedfd29a768fc505da54eff3554d094d87940bef2043f053e",
+      "bytes": 884
+    },
+    {
+      "path": "E:/ChatGPT/水浒/tools/run_steam_integration_qa.py",
+      "sha256": "0673d6ab09904fd653152b127c30ca325dbf791de0b77a5da2a60cd30f0a5ad9",
+      "bytes": 11766
+    },
+    {
+      "path": "E:/ChatGPT/水浒/tools/setup_steam_dependency.py",
+      "sha256": "48479818a57acc70171caea79a1efd6d137df3b08e2061e0bb3af3770ae44f8f",
+      "bytes": 2164
+    }
+  ],
+  "original_R1_draft_preserved_pin": {
+    "path": "E:/ChatGPT/office_handoff_review_20261008/OFFICE_START_NEXT_R1.md",
+    "sha256": "15b7bb51bbbd5eb322ae7d97b1d877abd0f599894e9ecda535604fe565a864db",
+    "bytes": 5271
+  },
+  "normal_source_requires_reader_build_before_import_play": false,
+  "missing_vendor_alone_is_a_proven_normal_source_startup_blocker": false,
+  "ordinary_source_checks": [
+    "SteamService._ready returns before native singleton access if no steam feature or test_environment. Portable code has no static Steam class reference.",
+    "docs/STEAM_INTEGRATION_20260907.md:42 explicitly isolates vendor through .gdignore and says ordinary source project does not install the Steam extension.",
+    "tools/run_local.ps1 resolves local Godot, calls ensure_import_cache, then import exits or runs normal project. It does not install native/vendor/addons.",
+    "StatsReader facade checks ClassDB.class_exists dynamically; it does not statically extend a missing native SteamStatsReader type."
+  ],
+  "native_QA_separate_contract": [
+    "setup_steam_dependency.py writes only fixed GodotSteam files/provenance under vendor/godotsteam and a .gdignore; it does not write ordinary root addons or extension_list.",
+    "run_steam_integration_qa.install_native(project) explicitly copies verified dependency files into the provided isolated QA project addons and registers both extensions before its first import.",
+    "Actual restore native QA baseline requires both vendor manifests/files and reader dependency provenance; a missing native_dependencies precheck blocks that QA only.",
+    "Ordinary source import/play success is narrower than native restore/Steam reward qualification. No source startup or engine test was executed by this reviewer."
+  ],
+  "documentation_fix": "Move native bootstrap and reader commands under an explicit optional-for-normal-development / required-for-native-restore-QA section. Remove any phrase that places reader build/vendor before normal Godot4.6.3 import/play. Scope native precheck failure to native QA, not all development.",
+  "public_source_modified": false,
+  "R1_draft_modified": false,
+  "original_reviews_modified": false,
+  "executed_tools_modified": false,
+  "engine_started": false,
+  "ordinary_startup_executed": false,
+  "native_qualified": false
+}

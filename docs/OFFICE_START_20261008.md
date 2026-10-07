@@ -28,18 +28,20 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\run_local.ps1
 
 先等共享引擎自然空闲；不结束或控制其它任务。普通启动/导入后回读日志和 git status，形成公司自己的启动 baseline；不把这一步当保存续玩或完整战役原生资格。
 
-## 2. 原生依赖分开准备，先只读核验
+## 2. 原生续玩 QA 的依赖准备（普通开发无需先执行）
 
-GodotSteam 固定下载包可用 `python -X utf8 -B tools/setup_steam_dependency.py`，工具验证固定 archive SHA 并写本机忽略的 vendor/provenance；这不是 Steam登录/上传。reader还需 Visual Studio C++/CMake/Ninja，入口为 `tools/build_steam_stats_reader.py --work-root <公司独立英文短目录> --profile-root <新私有profile根>`，详见 `native/steam_stats_reader/README.md`。该工具编译并跑原生 smoke，受测 DLL 到 vendor 的 promotion 是后续受控步骤，不能把编译产物直接当已资格的原依赖。
+先正常导入和开发即可；缺 vendor 或未编译 reader 本身不构成普通源工程的启动前置。只有重新建立原生续玩 QA 基线时，才需要以下原生依赖与来源核验。普通启动无 steam 特性时由 SteamService 提前返回；这只是当前源码合同，尚未验证公司机器启动。
 
-准备到正常项目可导入后，下面是现成的**只读**前置命令（均不加 --run、不启动 Godot）：
+GodotSteam 固定下载包可用 `python -X utf8 -B tools/setup_steam_dependency.py`，工具验证固定 archive SHA 并写本机忽略的 vendor/provenance；这不是 Steam登录/上传，也不会自动把扩展安装到普通Root。QA producer调用install_native(project)时才给隔离工程装入addons并在首次导入前登记extension_list；普通run_local不做此步骤。reader还需 Visual Studio C++/CMake/Ninja，入口为 `tools/build_steam_stats_reader.py --work-root <公司独立英文短目录> --profile-root <新私有profile根>`，详见 `native/steam_stats_reader/README.md`。该工具编译并跑原生 smoke，受测 DLL 到 vendor 的 promotion 是后续受控步骤，不能把编译产物直接当已资格的原依赖。
+
+准备原生续玩 QA 基线时，下面是现成的**只读**前置命令（均不加 --run、不启动 Godot）：
 
 ```powershell
 python -X utf8 -B tools/run_steam_integration_qa.py
 python -X utf8 -B -c "from tools.run_steam_integration_qa import native_dependencies; print('native manifests verified:', ', '.join(native_dependencies()))"
 ```
 
-第一条只核对普通 source/Godot/lock 配置，第二条核对实际 vendor 文件、manifest/SHA/许可清单。缺依赖或 SHA 不符即停在前置，不能绕过。`.godot`、vendor原生包、玩家/登录数据与导出包不靠 Git迁移。导入会重建缓存，不会下载DLL。
+第一条只核对普通 source/Godot/lock 配置，第二条核对实际 vendor 文件、manifest/SHA/许可清单。缺依赖或 SHA 不符时只阻断原生 QA 前置；正常源码开发仍按第1节启动，不绕过 QA 来源核验。`.godot`、vendor原生包、玩家/登录数据与导出包不靠 Git迁移。导入会重建缓存，不会下载DLL。
 
 ## 3. 公司新建 QA 后继
 

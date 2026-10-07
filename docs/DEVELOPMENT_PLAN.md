@@ -1,3 +1,6 @@
+<!-- night-progress-v25x14 -->
+当前阶段快照与完整续做顺序见 [NIGHT_PROGRESS_20261008.md](NIGHT_PROGRESS_20261008.md)；普通源码启动与原生QA依赖已分开说明。原生结果及06:00终态以最终收据为准。
+
 <!-- offline-prepare-v25x10 -->
 ## 2026-10-08 04:19：最新恢复准备
 
