@@ -1924,3 +1924,5 @@ Git 克隆版以仓库根目录为工程根：`project.godot`、`assets/`、`scr
 
 - `docs/STEAM_UPDATE_20261007.md`：上传、分支上线、公告、客户端和Git状态分项记录。
 - `qa/steam_release_20261007/`：原生/候选/EXE证据归档、六文件哈希、SteamCMD白名单预览与上传脱敏日志、服务器清单、等待确认回读及现有四语公告文案。发行包、缓存、玩家和认证数据留在外部/忽略目录。
+
+2026-10-07 Steam正式上线收尾：qa/steam_release_20261007新增default_live_readback.json、announcement_public_readback.json、client_update_pending.json、release_closeout.json与前批pending_git_sync_receipt.json；发行包/认证原日志/页面截图保留外部，不进Git。

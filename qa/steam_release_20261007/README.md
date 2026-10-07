@@ -4,7 +4,7 @@
 
 Steamworks 构建页实时确认上一正式 Windows Build `25498721` / Depot `5088121` / Manifest `1253492451014755378`，作为本次回滚版本。目标 App `5088120` / Windows Depot `5088121` / `default`。
 
-当前为准备状态，尚未上传、切换正式分支或公开公告。共享 Godot 仍有其他任务运行时等待自然空闲；不结束或修改其他任务。
+当前Build25768878已在default正式上线；四语Event703281660030877705已公开、关联新Build，并通过新闻列表及四语全文/封面回读。本机客户端仍旧Build，目标更新/启动未验收。下文准备、失败、上传待确认段落为执行历史，成功结论见末尾收尾及独立新收据。
 
 Steam 社区登录已由用户确认并实时回读。隐藏草稿活动 `703281660030877705` 已保存，四语标题、摘要与完整正文逐项一致；英语回退品牌封面上传/保存成功。见 `announcement_draft_readback.json`。后台验收与发布收尾心跳已安排，当前等待引擎，不把排队或隐藏草稿记为已上线。
 
@@ -35,3 +35,14 @@ D 在创建自动加载脚本期间发现外部 Godot 恢复，监测程序仅�
 ## 已验收与上传 / 尚待确认
 
 F原生219、候选1148、身份10+10与11EXE均完整通过；来源bf9e192d。冻结ZIP880,370,340字节，六成员，collector完整归档。SteamCMD白名单Preview1预览退出0，正式Preview0上传退出0；Build25768878 / Manifest7052320823704356026，服务器六文件大小/SHA1匹配。单次Set Live后浏览器原生确认阻塞，独立匿名回读旧default25498721，等待用户现有Edge确认，不能重复提交。四语草稿703281660030877705尚未关联新Build/公开，Git发布收尾待完成；客户端未验收。原生异常/共享占用失败、取消等待历史保留。
+
+
+## 2026-10-07 Steam Windows 角色与动作更新已上线
+
+Build `25768878` 已在 `default`，Windows Depot `5088121` / Manifest `7052320823704356026`；用户批准后刷新权威构建页，新Build带default标签，服务器六成员名称/大小/SHA1匹配。回滚Build `25498721` 保留。来源 `bf9e192d`，原生219、包1148、身份10+10、实际EXE11通过。
+
+既有Event `703281660030877705` 已关联新Build并于12:29 HKT公开，[补丁说明](https://store.steampowered.com/news/app/5088120/view/703281660030877705)在新闻列表出现。简中、繁中、英语、日语的标题、完整正文、已加载封面逐一回读通过；Steam库展示仍待平台管理审核。前批上传验收记录已推送stable `2b8b564c`，本次上线/公开回验元数据按白名单收尾提交；最终远端SHA以本轮独立Git回读为准。
+
+本机Steam客户端仍为旧Build25498721，已请求正常Steam启动但未完成目标更新/文件哈希/新Build启动验收；未执行隔离服务端下载，不覆盖Steam管理文件。长期开发目标保持暂停；公开续玩仍限既有经典30波，战役完整世界恢复、自然结局、持续性能和Android真机验收继续开放。本次只宣称已交付人物比例/站姿、选定动作、俘虏获救状态、头像图标、林冲护身画面。详见STEAM_UPDATE_20261007.md和qa/steam_release_20261007的新回读收据。
+
+成功证据：default_live_readback.json、announcement_public_readback.json、client_update_pending.json、release_closeout.json。原default_readback_pending.json和全部失败producer/收据保持原字节。
