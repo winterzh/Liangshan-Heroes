@@ -1,3 +1,14 @@
+<!-- night-final-20261008 -->
+## 2026-10-08 06:02：本夜开发截止收尾
+
+已到香港06:00，停止启动新开发批。所有本线程原生后台均真实终态；新六文件单人撤离候选未完成C/双方A/完整负例及BCD，整体资格仍false。最后71d4275a原生导入因共享Godot恢复占用退出1，锁已释放；原failures/profile/五个前序文件全部保留。原四文件JSON修复及限定办理半程ABC资格保留。
+
+06:02实际执行精确最新终态绑定的r4工具，逐文件复原本线程Core/UnitContract两份未资格生产候选；当前before逐字节等于备份/QAoriginal/HEAD，QA proposed与备份完整，JSON四文件SHA不变。没有reset/stash、没有控制其它任务或删除失败数据。原r3编码与自匹配阻断、两次只读审计采集失败均保存为独立记录，r4只排除本工具exact自身PID。
+
+Campaign真实保存回读v27b两文件提案与独立源码/API审查已存QA，current=proposed_b；未应用生产、未native解析、19条故障未执行。玩家失败UI、pending锁/安全重试、章节日志/终局gen2→cfg→ack与跨进程故障恢复仍未完成。完整动态/付费生产/船体运输、自然胜败奖励、九玩法发行程序、美术UI多尺寸、正常时钟长跑性能及Android真机计划全部保留。
+
+公司从 [OFFICE_START_20261008.md](OFFICE_START_20261008.md) 继续；最终实际结果见 [NIGHT_PROGRESS_20261008.md](NIGHT_PROGRESS_20261008.md) 及qa/zhu_wounded_20261005/night_final_wrap_delivery_20261008.json。本收尾只源码/QA/文档同步stable，不发布新Steam/Android、不合并main。最终推送独立回读后暂停一次性心跳6，再关闭本夜有界任务；这些调度操作另以实际收据为准。
+
 <!-- campaign-proposal-v27x1 -->
 ## 2026-10-08 05:12：战役真实保存回读收据提案完成源码审查
 

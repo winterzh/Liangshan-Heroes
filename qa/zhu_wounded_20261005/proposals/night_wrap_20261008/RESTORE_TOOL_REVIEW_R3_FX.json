@@ -1,0 +1,33 @@
+{
+  "schema": "night_restore_tool_independent_review_r3_fx",
+  "created_utc": "2026-10-07T22:01:26.857583+00:00",
+  "reviewer": "/root/fx_caller_review",
+  "tool_pin": {
+    "path": "E:\\ChatGPT\\restore_unqualified_night_candidates_20261008_r3.py",
+    "bytes": 11169,
+    "sha256": "b94d6f32928548d200565cf8699c66437c26f4beac2bff07828be5924c8463fd"
+  },
+  "previous_tool_pin": {
+    "path": "E:\\ChatGPT\\restore_unqualified_night_candidates_20261008_r2.py",
+    "bytes": 11076,
+    "sha256": "54612fb498b7158f25108ba4ce383a835259ca4b8980cd3544d72b22f97dac4d"
+  },
+  "static_API_encoding_fix_correct": true,
+  "AST_compile_only": true,
+  "static_closure_passed": false,
+  "tool_executed": false,
+  "runtime_files_written": false,
+  "encoding_delta": "Exact diff only Console UTF8 noBOM, check_output explicit utf8 strict, receipt schema_r3. Remaining r2 gates/tryfinally unchanged.",
+  "blocking": [
+    {
+      "priority": "P1 execution blocker before source writes",
+      "function": "owned_process_rows",
+      "finding": "Inherited selector includes the restoration process itself. Python actual argv must carry --terminal-receipt exact LATEST_RUN under qa-world-restore-20261007; marker list matches it. No os.getpid exclusion exists. Therefore its own producer absence assert will fail before output/source mutations.",
+      "pure_argument_shape_example": "python E:/ChatGPT/restore_unqualified_night_candidates_20261008_r3.py --terminal-receipt E:/ChatGPT/qa-world-restore-20261007/daming_safe_retreat_v25s_r2f_offline_prefix_c_71d4275a/receipt.json --output E:/ChatGPT/night_wrap_preparation_20261008/result.json",
+      "same_original_marker_predicate_accepts_self": true,
+      "native_or_main_reproduction_performed": false,
+      "minimum_next_sibling_fix": "New immutable r4 exclude exact os.getpid only from returned selector; all other knownPID/sourceconsumer, deadline, terminalSHA, source/HEAD/backup, beforeMutation and post/finally checks unchanged."
+    }
+  ],
+  "safe_scope": "This blocker prevents restoration rather than unsafe mutation. Root may execute only a corrected independently reviewed new sibling; r2/r3 and original QA evidence preserved."
+}

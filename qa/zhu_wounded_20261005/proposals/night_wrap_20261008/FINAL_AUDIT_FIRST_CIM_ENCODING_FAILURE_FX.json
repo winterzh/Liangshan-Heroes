@@ -1,0 +1,13 @@
+{
+  "schema": "final_audit_cim_encoding_failure_v25_fx",
+  "observed_utc": "2026-10-07T21:55:29+00:00",
+  "observer": "/root/fx_caller_review",
+  "actual_tool_exit_code": 1,
+  "error": "PowerShell.exe default output bytes were not valid UTF8; subprocess UTF8 strict reader raised UnicodeDecodeError at109286-109287, then json.loads(None) TypeError.",
+  "actual_process_snapshot_obtained": false,
+  "final_file_created": false,
+  "source_writes": false,
+  "processes_controlled": false,
+  "correction": "Fresh read-only PowerShell child explicitly Console.OutputEncoding=UTF8 no BOM; strictly decode its real bytes.",
+  "scope": "Acquisition failure only, not native QA or an input drift finding."
+}

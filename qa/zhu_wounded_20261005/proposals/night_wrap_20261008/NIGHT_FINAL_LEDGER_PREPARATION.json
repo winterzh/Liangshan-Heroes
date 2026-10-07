@@ -1,0 +1,216 @@
+{
+  "schema": "night_final_ledger_preparation_20261008",
+  "created_utc": "2026-10-07T21:17:54+00:00",
+  "reviewer": "/root/dynamic_next_review",
+  "review_scope": "一次只读资格分类审核：当前三份交接文档顶部、v27x1/v25x15及代表归档收据；不重新执行QA，不采样FX后台。",
+  "allowed_statuses": ["pass", "failed", "source-reviewed", "not-run", "backlog"],
+  "evidence_basis": "下列pass/failed是所读不可变归档收据的实际限定范围；source-reviewed不等于GDScript原生解析或运行。数量用于标识原合同/报告，不作为放宽通过条件的依据。",
+  "deadline_utc": "2026-10-07T22:00:00+00:00",
+  "deadline_hong_kong": "2026-10-08T06:00:00+08:00",
+  "deadline_reached_at_this_review": false,
+  "public_files_modified_by_review": false,
+  "docs_modified_by_review": false,
+  "engine_started_by_review": false,
+  "producer_executed_by_review": false,
+  "live_backend_sampled": false,
+  "live_process_absence_independently_verified": false,
+  "documents_read": [
+    {"path": "E:/ChatGPT/水浒/docs/NIGHT_PROGRESS_20261008.md", "bytes": 3774, "sha256": "da5d34da598f4959793dfbe5deab550c82c3bf0f57b0f5a5892d737093b77ecc"},
+    {"path": "E:/ChatGPT/水浒/docs/OFFICE_START_20261008.md", "bytes": 7539, "sha256": "0a42db44a01e29e5a1680f1f6e4387b40f9b9dfebdf48018bd85d84adb09c38b"},
+    {"path": "E:/ChatGPT/水浒/docs/DEVELOPMENT_PLAN.md", "bytes": 158298, "sha256": "736a89adfc36947d93aa80cf18dd0985f3e177a8993763d593f2c436cc5fd8da"}
+  ],
+  "ledger": [
+    {
+      "id": "qualified_json_four_files_and_original_admission_ABC",
+      "status": "pass",
+      "scope": "固定Gao/Daming ownership JSON读取边界四文件；原冻结工程JSON533、OwnedSlot76，以及实际正常办理半程保存A39、独立完整Session恢复/自然办理/重存B351、第三进程世代2回读和120原生物理步C342。不同PID/nonce、世代1到2和完整来源链属于该原资格范围。",
+      "qualification_scope": "原v24s冻结批；不把当前整个Root目录或后续两个候选并入原资格。",
+      "source_files": [
+        {"path": "scripts/run_snapshot_store.gd", "sha256": "581e638b8f0ce7cb24d5533b03ee94b99732c5cffcbf373b1a5a69a1618d8251"},
+        {"path": "scripts/run_slot_store.gd", "sha256": "d67fe7794f23fe1bda3d74c7e284ba6b90d2cb488a5d35cb1a187eea77fa3532"},
+        {"path": "scripts/run_scenery_json_boundary.gd", "sha256": "476ee2ee83a513d29a0db04b5dc08eb5a3dcd6895a036697ed368b28c5d5c6ea"},
+        {"path": "scripts/run_scenery_json_boundary.gd.uid", "sha256": "9f13d4502be15ab7149a43832ca61aaa0622a47e769a72f55d23a6bc29c0523d"}
+      ],
+      "evidence": [{"path": "E:/ChatGPT/水浒/qa/zhu_wounded_20261005/daming_admission_continuation_qualified_v24s.json", "sha256": "6b2b89d1131e1ab1c84d11f5877a7b23a497c4919f429c1438af57676478c329"}],
+      "public_continue_qualified": false,
+      "natural_victory_qualified": false,
+      "reward_once_qualified": false,
+      "campaign_persistence_qualified": false,
+      "safe_retreat_qualified": false
+    },
+    {
+      "id": "v25_two_source_candidates",
+      "status": "source-reviewed",
+      "scope": "Core/UnitContract单Lu或Shi安全撤离配对候选及原字节已保留；本地受控应用不等于stable生产提交资格。公司stable使用原已验证生产字节；候选从QA proposed逐文件取到新私有checkout。",
+      "candidate_sources": [
+        {"path": "qa/zhu_wounded_20261005/proposals/daming_safe_retreat_v25/proposed/scripts/run_battle_world_core.gd", "sha256": "92b2bdac0058f9e1642d1b991c3ca353e902481d8daff990388e377597df87b1"},
+        {"path": "qa/zhu_wounded_20261005/proposals/daming_safe_retreat_v25/proposed/scripts/run_level8_unit_contract.gd", "sha256": "b2f52bcce60b27507b498a6d32e45b5cadd3409030fcd2e1024c78dac90e90d5"}
+      ],
+      "evidence": [{"path": "E:/ChatGPT/水浒/qa/zhu_wounded_20261005/safe_retreat_candidate_v25x1.json", "sha256": "aef6fdce01ecbce31537a40773ccb0608411d4ea9d73616557d41ac0d9b0fd02"}],
+      "full_candidate_qualified": false,
+      "restoration_already_executed": false
+    },
+    {
+      "id": "new_six_source_07ad_prefix_checks",
+      "status": "pass",
+      "scope": "新六源码07ad37bf的JSON533/OwnedSlot76及办理保存A39、恢复重存B351是实际前序通过；仅保存其真实前序范围，不从旧v24s借C342。",
+      "evidence": [{"path": "E:/ChatGPT/水浒/qa/zhu_wounded_20261005/retreat_explorer_shared_interruption_review_v25x4.json", "sha256": "316e2fe1ed480ddc18e183018ef95edbc2a7069be124ed5f6f149816c52adbf2"}],
+      "complete_ABC_qualified": false,
+      "single_safe_A_executed": false
+    },
+    {
+      "id": "new_six_source_07ad_aggregate",
+      "status": "failed",
+      "scope": "07ad37bf第三进程C被foreign_engine_resumed中断，实际PTY exit1；缺失C且双方真实单人撤离A未运行，整批不能判绿。失败批/profile只读保留。",
+      "evidence": [{"path": "E:/ChatGPT/水浒/qa/zhu_wounded_20261005/retreat_explorer_shared_interruption_review_v25x4.json", "sha256": "316e2fe1ed480ddc18e183018ef95edbc2a7069be124ed5f6f149816c52adbf2"}],
+      "full_candidate_qualified": false
+    },
+    {
+      "id": "two_prefix_import_attempts",
+      "status": "failed",
+      "scope": "8f3d393d与5284b47e均实际导入中断、PTY exit1；新C/双方A未执行，原失败收据/profile保留，不覆盖或拼接成通过。",
+      "evidence": [
+        {"path": "E:/ChatGPT/水浒/qa/zhu_wounded_20261005/prefix_interrupted_delivery_v25x7.json", "sha256": "fd5d95683b17213a0ac8361e352d7248743bc25fd13014e6da4c3a81c5dadca7"},
+        {"path": "E:/ChatGPT/水浒/qa/zhu_wounded_20261005/second_prefix_interrupted_delivery_v25x9.json", "sha256": "75639a08dd7d4d7d50bea2039729fd9d4267b16aebb00e3df6254c7ab63a0fb2"}
+      ],
+      "new_C_executed": false,
+      "both_actual_A_executed": false
+    },
+    {
+      "id": "71d_offline_copy_and_endpoint_audit",
+      "status": "pass",
+      "scope": "71d4275a纯文件独立冻结/复制和末尾Root5037/private5102/native9/QA9来源核验通过；限定准备阶段，不是import、完整原生性能或FPS资格。",
+      "evidence": [{"path": "E:/ChatGPT/水浒/qa/zhu_wounded_20261005/offline_prepare_actual_stages_v25x13.json", "sha256": "aa63fb7ac26d4f756d42cf78208f4d66f64d728e6b6d1f13278ec5216d8b2af9"}],
+      "native_import_qualified": false,
+      "overall_v25_qualified": false
+    },
+    {
+      "id": "71d_actual_native_import",
+      "status": "failed",
+      "scope": "71d4275a实际导入64.42秒后共享Godot恢复占用中断、PTY exit1。交付收据确认complete=false、C与双方A未执行、closed source proof不存在；锁释放/终态为原归档观察，不是本审核重新采样实时进程。",
+      "evidence": [
+        {"path": "E:/ChatGPT/水浒/qa/zhu_wounded_20261005/offline_import_interruption_delivery_v25x15.json", "sha256": "1fe0460fa8e589f5a77642c5cba166c7d49b0a2ba52a482fa062fe61afdafd7d"},
+        {"path": "E:/ChatGPT/水浒/qa/zhu_wounded_20261005/raw/daming_safe_retreat_v25s_r2f_offline_prefix_c_71d4275a/receipt.json", "sha256": "8ef980467ddebaff0da48819f2771ff38713e20806a5469160a7c0c20a6613c4"}
+      ],
+      "overall_v25_qualified": false,
+      "new_C_executed": false,
+      "both_actual_A_executed": false,
+      "closed_source_proof_created": false
+    },
+    {
+      "id": "remaining_new_C_and_Lu_Shi_actual_single_safe_A",
+      "status": "not-run",
+      "scope": "缺失的新六源码C和Lu-first/Shi-first两份真实安全撤离A尚未完成。公司新机器必须新baseline/profile/UUID/截止和后继路径门禁，不复用今夜同机四小时/monotonic/profile条件。",
+      "evidence": [{"path": "E:/ChatGPT/水浒/qa/zhu_wounded_20261005/offline_import_interruption_delivery_v25x15.json", "sha256": "1fe0460fa8e589f5a77642c5cba166c7d49b0a2ba52a482fa062fe61afdafd7d"}],
+      "execution_ready_on_fresh_office_machine": false
+    },
+    {
+      "id": "negative_harness_and_full_producer_source",
+      "status": "source-reviewed",
+      "scope": "world264、component362、每角色live24以及自然B/C/D的工具与精确report消费者已准备；最新r2e1独立静态闭合，仍受真实C/双方A来源门禁。当前数量是合同，未计原生通过。",
+      "evidence": [
+        {"path": "E:/ChatGPT/水浒/qa/zhu_wounded_20261005/full_reuse_review_delivery_v25x11.json", "sha256": "9f62417a530825cb4be781a43c5c1a43fa7c1439f58e2c31912df36158a37796"},
+        {"path": "E:/ChatGPT/水浒/qa/zhu_wounded_20261005/proposals/daming_safe_retreat_v25/FULL_REUSE_REVIEW_V25S_R2E1_FX.json", "sha256": "b3a1e6cb90f5f271a54b5bb20b27690656d358ea6558d06a2306ff9f04f470d4"}
+      ],
+      "native_full_matrix_executed": false,
+      "overall_v25_qualified": false
+    },
+    {
+      "id": "full_negative_and_natural_terminal_execution",
+      "status": "not-run",
+      "scope": "必须真实执行完整world/source+JSON路由、component/source+JSON路由、每角色24个actual object capture独立进程以及双方B/C/D。不能用DTO代替实际对象、不能用夹具结局代替自然胜利、不能用A-only审查解锁full。",
+      "evidence": [{"path": "E:/ChatGPT/水浒/qa/zhu_wounded_20261005/full_reuse_review_delivery_v25x11.json", "sha256": "9f62417a530825cb4be781a43c5c1a43fa7c1439f58e2c31912df36158a37796"}],
+      "public_campaign_continue_qualified": false,
+      "safe_retreat_qualified": false
+    },
+    {
+      "id": "campaign_observability_v27b_source_proposal",
+      "status": "source-reviewed",
+      "scope": "current=proposed_b，两文件保存结果/ConfigFile回读可观察性提案及独立API源码审查已保留。只补保存结果可观察性；不宣称玩家失败UI、安全重试/pending锁或跨进程持久恢复已实现。",
+      "evidence": [
+        {"path": "E:/ChatGPT/水浒/qa/zhu_wounded_20261005/campaign_observability_source_delivery_v27x1.json", "sha256": "62210b6c251ee479bc5cf5451820fa245306bdac2930a9db6352851bc128f611"},
+        {"path": "E:/ChatGPT/水浒/qa/zhu_wounded_20261005/proposals/campaign_persistence_observability_v27/INDEPENDENT_SOURCE_API_REVIEW_V27B_FX.json", "sha256": "eaf681ae46356cc45d4f46fe1482d53f745d16d3d1a1a804035bceab3e1b20fd"}
+      ],
+      "production_applied": false,
+      "native_parse_executed": false,
+      "native_qualified": false,
+      "durable_campaign_progress_qualified": false
+    },
+    {
+      "id": "v27b_native_parse_and_19_ConfigFile_faults",
+      "status": "not-run",
+      "scope": "19条真实ConfigFile故障矩阵计划未执行，GDScript原生解析未执行，source-reviewed不能计入实际故障覆盖。公司新baseline后再按实际报告推进。",
+      "evidence": [{"path": "E:/ChatGPT/水浒/qa/zhu_wounded_20261005/campaign_observability_source_delivery_v27x1.json", "sha256": "62210b6c251ee479bc5cf5451820fa245306bdac2930a9db6352851bc128f611"}],
+      "fault_cases_planned": 19,
+      "fault_cases_executed": 0
+    },
+    {
+      "id": "local_context_and_durable_progress_remaining_contract",
+      "status": "backlog",
+      "scope": "现有journal固定defense/30与slot campaign/level8/0的不同不等于当前token/rawSHA链失效；真实章节语义、QA=0正常写盘/新进程回读、terminal到cfg窗口恢复、失败UI/pending安全重试和奖励一次另须实现验收。QA=1不写campaign.cfg；Steam-disabled不证明真实奖励。",
+      "evidence": [{"path": "E:/ChatGPT/水浒/qa/zhu_wounded_20261005/proposals/campaign_local_context_progress_20261008/DESIGN.md", "sha256": "b8e81af990881158da1e832f036b169d341c941f2c3a2a08674a13f4fa552c03"}],
+      "campaign_persistence_qualified": false,
+      "reward_once_qualified": false
+    },
+    {
+      "id": "office_start_instructions",
+      "status": "source-reviewed",
+      "scope": "Godot4.6.3普通source import/play和原生续玩QA依赖已明确分开：普通开发不因缺vendor/reader必然阻断；隔离native QA另须实际manifest/source/cache/engine和安装门禁。公司启动和native基线都未由本机源码说明证明。",
+      "evidence": [
+        {"path": "E:/ChatGPT/水浒/qa/zhu_wounded_20261005/office_native_scope_delivery_v25x12.json", "sha256": "504cd3139c856056022907ba0b460981368ded6158b9f1604bb5f549d338ca40"},
+        {"path": "E:/ChatGPT/水浒/docs/OFFICE_START_20261008.md", "sha256": "0a42db44a01e29e5a1680f1f6e4387b40f9b9dfebdf48018bd85d84adb09c38b"}
+      ],
+      "office_normal_start_tested": false,
+      "office_native_baseline_qualified": false,
+      "old_QA_argv_portable_without_new_sibling": false
+    },
+    {
+      "id": "restoration_tool_r2_preparation",
+      "status": "source-reviewed",
+      "scope": "r2非assert optimize阻断、固定22UTC/exact最新71d终态/source与pointer/PID/字节门槛及逐文件finally实状态静态闭合。原工具P1、r1有限失败均不可变保留。仅具备条件式执行提案，不表示源码已复原。",
+      "evidence": [
+        {"path": "E:/ChatGPT/水浒/qa/zhu_wounded_20261005/night_restore_tool_preparation_delivery_v25x17.json", "sha256": "80955e748b40d621612e8d3687b23cb1da792cfdb1ea63d102c6fa857b446f3e"},
+        {"path": "E:/ChatGPT/水浒/qa/zhu_wounded_20261005/proposals/night_wrap_20261008/RESTORE_TOOL_REVIEW_R2.json", "sha256": "07a9a992d8562bb06f0d9b1bf449ab1c90fabfbc4989b41b46789410aa6b0cd9"}
+      ],
+      "restoration_executed": false
+    },
+    {
+      "id": "original_complete_development_plan",
+      "status": "backlog",
+      "scope": "付费生产、船体/运输、其他动态状态、自然胜败/奖励、同版九玩法发行EXE、美术/UI完整流程/多尺寸、正常时钟长跑性能、Android真机及完整公开继续入口均保留；本夜部分组件和源码工具不能关闭全计划。",
+      "evidence": [{"path": "E:/ChatGPT/水浒/docs/DEVELOPMENT_PLAN.md", "sha256": "736a89adfc36947d93aa80cf18dd0985f3e177a8993763d593f2c436cc5fd8da"}],
+      "whole_plan_completed": false,
+      "remaining_plan_preserved": true,
+      "new_Steam_release_delivered_by_this_sync": false,
+      "Android_device_qualified": false
+    }
+  ],
+  "deadline_closeout": {
+    "status": "not-run",
+    "scope": "本夜任务是推进到香港06:00并按实际结果收尾同步供公司继续；可按有界任务验收，不能把全开发计划标complete。",
+    "deadline_reached": false,
+    "at_deadline_actual_all_owned_backends_terminal_verified": false,
+    "at_deadline_no_owned_source_consumers_verified": false,
+    "two_unqualified_source_files_restored": false,
+    "four_qualified_sources_post_restoration_verified": false,
+    "final_actual_results_docs_written": false,
+    "final_stable_sync_after_closeout_executed": false,
+    "final_remote_SHA_independently_read_back": false,
+    "final_commit_sha": null,
+    "heartbeat_6_paused": false,
+    "heartbeat_6_PAUSED_read_back": false,
+    "bounded_night_goal_complete": false,
+    "whole_project_goal_complete": false,
+    "latest_incremental_sync_parent_reported_short_SHA": "4b2ac20e",
+    "local_HEAD_read_only_verified": "4b2ac20edfb5f6737bc4e3e29712fecf3c56f9a8",
+    "remote_readback_repeated_by_this_review": false,
+    "pending_actions": [
+      "22UTC到达后确认真实最新终态/完整收据已flush和本线程producer/native消费者已退出；不控制foreign任务。",
+      "如完整六源码资格仍false且所有冻结输入读者已terminal，运行已审r2 exact门槛，仅逐文件复原Core/UnitContract原字节，保留QA候选和原失败；任一新run/pointer/source变化都不能沿用旧失败授权。",
+      "回读实际恢复收据与两原字节/已资格JSON4，更新最终文档，完整后续计划不删除。",
+      "逐文件白名单提交推送既定stable并独立回读远端完整SHA；今夜此前增量4b2ac20e不是尚未执行的最终closeout SHA。",
+      "全部收尾和Git同步完成后暂停心跳6并回读PAUSED；完成有界夜间goal，保持长期开发目标原状态。"
+    ]
+  },
+  "classification_review_result": "未发现当前顶部文档/v27x1/v25x15将未执行项目当成全范围通过的确定资格阻断；本文仅准备最终台账，22UTC实际结果必须由Root另存新最终收据，不覆盖此快照。"
+}

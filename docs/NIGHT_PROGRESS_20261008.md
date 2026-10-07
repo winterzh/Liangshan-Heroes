@@ -1,11 +1,11 @@
 # 2026-10-08 夜间开发当前结果
 
-本页更新到05:12源码提案；06:00最终交接会按实际后台终态更新。公司先读[启动与续做入口](OFFICE_START_20261008.md)，原完整计划保留在[DEVELOPMENT_PLAN.md](DEVELOPMENT_PLAN.md)。
+本页记录06:02实际收尾：原生后台已终态，未资格两生产候选已精确复原，QA候选/备份/失败证据保留。公司先读[启动与续做入口](OFFICE_START_20261008.md)，原完整计划保留在[DEVELOPMENT_PLAN.md](DEVELOPMENT_PLAN.md)。
 
 | 工作 | 实际结果 | 证据 |
 | --- | --- | --- |
 | 固定JSON边界四文件 | 已完成限定范围原生验证并同步stable。JSON533、OwnedSlot76、大名府办理半程保存/独立继续/再保存/第三进程回读39/351/342通过 | `qa/zhu_wounded_20261005/daming_admission_continuation_qualified_v24s.json` |
-| 单人撤离两文件候选 | 完整代码和原字节备份已保留在QA；尚未取得完整新候选资格 | `safe_retreat_candidate_v25x1.json`、`proposals/daming_safe_retreat_v25/{original,proposed}/scripts/` |
+| 单人撤离两文件候选 | 完整代码和原字节备份保留在QA；未取得完整资格，已实际复原两生产文件至HEAD原字节 | `safe_retreat_candidate_v25x1.json`、`proposals/daming_safe_retreat_v25/{original,proposed}/scripts/` |
 | 新六文件候选前序 | 原07ad37bf的JSON533/OwnedSlot76/A39/B351已通过；C被共享引擎恢复占用中断，原批仍失败 | `retreat_explorer_shared_interruption_review_v25x4.json` |
 | 两次补C恢复尝试 | 8f3d393d及5284b47e都中断在导入，未执行新C或双方撤离A；原profile、工具、收据及日志保留 | `prefix_interrupted_delivery_v25x7.json`、`second_prefix_interrupted_delivery_v25x9.json` |
 | r2f离线准备新批71d4275a | 原独立复制及末尾完整Root5037/private5102/native9/QA9核验通过；随后实际导入64.42秒被共享Godot打断、exit1/锁释放，C/双方A未运行 | `offline_prepare_actual_stages_v25x13.json`、`offline_import_interruption_delivery_v25x15.json` |
@@ -22,8 +22,6 @@
 3. 处理本地日志的真实章节语义、正常`CAMPAIGN_QA=0`的持久进度与失败恢复，再核对自然胜败和奖励一次。当前`CAMPAIGN_QA=1`不写campaign.cfg，Steam-disabled不证明真实奖励。
 4. 继续付费生产、船体/运输和其他动态、同版九玩法发行程序、美术/UI完整流程与多尺寸、正常时钟长跑性能和Android真机。它们仍属完整计划。
 
-到香港时间06:00不启动新开发批。完成本线程后台终态与最终审计后，按实际结果逐文件同步stable并独立回读SHA。若两文件仍未资格，保留QA候选和证据后仅复原本线程这两份生产候选；已资格四文件保留。公司续做须建立新机器基线和新截止的后继工具，不能复用今夜固定截止/同机时钟/物理缓存路径。
+已于香港06:00停止启动新开发批，06:02在当前无本线程消费者、最新71d失败收据及全部SHA门槛成立后，用受审r4逐文件复原Core/UnitContract；before等于HEAD/备份/QAoriginal，candidate仍存QA，JSON四文件不变。实际收据见 `qa/zhu_wounded_20261005/proposals/night_wrap_20261008/ACTUAL_CANDIDATE_RESTORATION_R4.json`。
 
-本夜增量只做源码、QA和文档同步；不据此宣称全项目完成，也不代表新的Steam或Android版本已发布。
-
-保存回读提案 current 为 `proposals/campaign_persistence_observability_v27/proposed_b`；只补保存结果可观察性。玩家失败UI、pending锁/安全重试、跨进程恢复仍是后续要求。
+本夜最终同步只源码/QA/文档，不新发布Steam/Android、不合并main。公司继续须建立新机器基线和新截止后继，不能复用今夜固定截止、同机时钟和物理缓存。完整开发计划继续开放，保存回读v27b仅源提案，其19故障/玩家失败UI/pending重试/跨进程故障恢复仍待完成。
