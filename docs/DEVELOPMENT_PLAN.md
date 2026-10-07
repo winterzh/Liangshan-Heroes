@@ -1,10 +1,12 @@
-## 2026-10-07 深夜：真实保存失败已定位，修复尚待验收
+## 2026-10-08 零点后：真实保存通过，独立继续测试修复中
 
-大名府通过正常移动进入办理半程后真实 Session.save_held 返回 NONCANONICAL_RECORD，B/C未启动。同一失败 pending proposal 的原文对比确认仅196个场景归属整数变为JSON浮点，UTF-8增加392字节。旧规范检查、SHA/修订链保留，未重试不安全事务。四文件候选备份在 qa/zhu_wounded_20261005/proposals/native_ownership_json_v24q，来源/失败收据/原harness均同步；生产候选尚未提交为验收版本。
+固定JSON边界原生11案533项、原OwnedSlot故障事务76项通过；原失败pending payload逐UTF-8字节还原，错误数据仍受控拒绝。大名府正常移动进入办理半程后，真实Session保存世代1并正常退出，A32项通过。B完成独立安装的完整world/packet/时钟比较，但第二次HELD时QA重复连接capture_rejected导致ERROR，整批失败，B未写报告、C未启动；不能称完整磁盘续玩已验收。修复仅针对QA自己的一次性监听生命周期，生产候选四文件仍未提交为合格版本。原失败producer/profile/日志保留，新sibling另行验收。
 
-v24r 的11正例通过，但267项整体有1条wrong-kind夹具错误；q1改为选择真实入口/夜景节点，原拒绝断言保留。v24r1首批import被共享引擎恢复占用中止，新独立批次仍待JSON/OwnedSlot/实际A-B-C全序通过。普通.import/.uid补充元数据88份有原合格内容身份来源；不含.godot、玩家数据、凭据或安装包。外层Slot旧schema/context叶类型负例仍待补，不能宣称全slot故障输入通过。
+主证据：qa/zhu_wounded_20261005/native_ownership_json_component_pass_v24r2.json、daming_admit_signal_failure_review_v24r2.json及各原始报告/完整数据。新helper与UID补明确Git字节属性，避免Windows换行转换破坏冻结SHA；QA目录本来已受-text保护、被Godot忽略。
 
-已完成资格仍为Core9案207、Presentation348、FX681各自限定组件。安全撤离v25仅外部方案，不属于实际交付。最新办公室入口见 HANDOFF_20261007_OFFICE.md；用户要求香港时间10月8日06:00最终收尾，未完成动态/自然结局奖励/同版九玩法EXE/美术UI/10分钟性能/Android真机等门槛保留。以下阶段条目为历史。
+单人安全撤离的两文件提案、普通指令路线/四进程runner及静态审查已保存于qa/zhu_wounded_20261005/proposals/daming_safe_retreat_v25；详见DAMING_SAFE_RETREAT_DESIGN_20261008.md。它尚未apply/native，旧runner也须采纳上述_hold后继修复。CAMPAIGN_QA=1跳过Campaign写盘，本批不可声称战役进度持久或Steam奖励；未来正常私有profile另测。负例工具和producer实现继续准备，缺门禁前置阻断，不跳过判绿。
+
+此前Core9案207、Presentation348、FX681仍是各自原资格，不替代完整动态/自然结局。后续付费生产、船体运输、旧关动态、自然胜败奖励、同版九玩法EXE、完整美术/UI、正常时钟10分钟性能及Android真机全部保留。用户要求香港时间2026-10-08 06:00最终收尾同步；当前办公室入口为HANDOFF_20261007_OFFICE.md。以下阶段条目是历史。
 
 ## 2026-10-07 旧六章整局初态与 FX 组合回归已通过
 

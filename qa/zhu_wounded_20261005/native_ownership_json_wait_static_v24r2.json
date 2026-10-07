@@ -1,0 +1,91 @@
+{
+  "schema": "daming_admit_producer_static_v24r2",
+  "revision": "v24r2",
+  "created_utc": "2026-10-07T15:37:50.940525+00:00",
+  "source": {
+    "path": "E:\\ChatGPT\\daming_admit_v24o_proposal\\run_daming_admit_v24r1.py",
+    "sha256": "f968a250b95091b0b917b9fa3ee43c60ef01ad0b1180dc39a739c2619972f2d0",
+    "bytes": 90944,
+    "executed_immutable": true
+  },
+  "candidate": {
+    "path": "E:\\ChatGPT\\daming_admit_v24o_proposal\\run_daming_admit_v24r2.py",
+    "sha256": "1b486f16c955d5a54b7e7e15e570fc66e3573cc9f02581d6027e5a73be725fb4",
+    "bytes": 91968,
+    "executed": false
+  },
+  "static_ast_parse": true,
+  "static_compile_only": true,
+  "producer_imported_or_executed": false,
+  "native_engine_started": false,
+  "qualification_unchanged": true,
+  "source_runtime_qualification": {
+    "baseline_raw_rows": 5039,
+    "baseline_unique": 5035,
+    "candidate_raw_rows": 5041,
+    "candidate_unique": 5037,
+    "baseline_installed_files": 5100,
+    "candidate_installed_files": 5102,
+    "private_runtime_patches": 0
+  },
+  "allowed_changes": [
+    "unexecuted sibling documentation",
+    "receipt schema r2",
+    "fresh run prefix r2",
+    "add r2 to inherited immutable producer source pins",
+    "wait_idle continuous observed natural idle 60 seconds"
+  ],
+  "changed_runner_methods": [
+    "__init__",
+    "preflight",
+    "wait_idle"
+  ],
+  "all_other_source_bytes_reconstruct_exact": true,
+  "unchanged_methods_ast_exact": [
+    "acquire",
+    "copy_checked",
+    "evidence_path",
+    "execute",
+    "execute_regressions",
+    "input_integrity",
+    "limit",
+    "native_phase",
+    "pause",
+    "prepare",
+    "prepare_regression_inputs",
+    "release",
+    "select_boundary",
+    "select_candidate",
+    "stage",
+    "stop_owned",
+    "validate_case",
+    "verify_failed_boundary_ancestry",
+    "verify_slot",
+    "wait_prior"
+  ],
+  "wait_policy": {
+    "minimum_seconds": 60,
+    "clock": "time.monotonic",
+    "idle_poll_seconds": 1,
+    "busy_poll_seconds": 5,
+    "reset_on_observed_foreign_engine_or_lock": true,
+    "deadline_limit_and_pause_unchanged": true,
+    "exclusive_acquire_and_final_engine_check_unchanged": true,
+    "does_not_control_other_tasks": true,
+    "sampling_does_not_guarantee_future_idle": true
+  },
+  "native_order_unchanged": [
+    "import",
+    "profile_guard",
+    "pure boundary q1",
+    "original OwnedSlot retry",
+    "A_half_save",
+    "B_continue_resave",
+    "C_verify_resave"
+  ],
+  "diff": {
+    "path": "E:\\ChatGPT\\daming_admit_v24o_proposal\\V24R2_PRODUCER.diff",
+    "sha256": "d15bebba7abe04250afb794bd3867bb2166d8df9fa25814fd53abc3676b54ae4"
+  },
+  "native_proof_required": true
+}

@@ -1,6 +1,6 @@
 # 2026-10-07 办公室续做交接
 
-仓库 https://github.com/winterzh/Liangshan-Heroes.git，分支 `codex/sync-20260905-stable`。本轮从已独立回读的 `738e6e8f83ec2cf542bbbc2d6076ec232aa89616` 增量同步失败证据、修复提案和交接，生产候选尚待验收。最终提交以远端分支及同步收据为准。用户要求继续推进到香港时间 2026-10-08 06:00，届时更新实际进度并收尾。
+仓库 https://github.com/winterzh/Liangshan-Heroes.git，分支 `codex/sync-20260905-stable`。当前已独立回读的远端为 `e8f3c332058811c881694eae330b64cd2448d25b`；之后原生证据与实现继续增量同步，生产候选尚待完整验收。最终提交以远端分支及同步收据为准。用户要求继续推进到香港时间 2026-10-08 06:00，届时更新实际进度并收尾。
 
 ## 已完成并同步
 
@@ -21,7 +21,7 @@ Root/Visual/Core 已接入实际高俅与大名府关卡，恢复同一新世界
 
 四文件候选在 `qa/zhu_wounded_20261005/proposals/native_ownership_json_v24q`，来源见 `native_ownership_json_candidate_v24q.json`，设计见 [NATIVE_OWNERSHIP_JSON_REPAIR_20261007.md](NATIVE_OWNERSHIP_JSON_REPAIR_20261007.md)。只在固定Map/Scenery读取边界检查有限性/整数性/节点范围后还原Gao/Daming归属索引；原生写入仍要求整数，原全量Scenery验证、canonical字节、SHA和修订链保留。旧章/标准场景不转换。helper UID为原生生成，需逐文件显式同步，不能受默认忽略遗漏。
 
-v24r的11正例通过，但整体267项一条QA wrong-kind夹具错误（选到合法sprite），故整体失败。q1从实际描述选择入口/夜景节点，原拒绝断言保留。v24r1首批import遇共享引擎恢复占用后中止，新独立批次待结果。必须完整通过JSON正负例、原OwnedSlot故障事务、实际A保存退出/B独立继续再保存/C独立回读tick不重放，才可称生产修复合格。静态审查只覆盖本次fixedownership边界；外层Slot旧schema/context叶类型故障仍待补，不宣称全Slot受控拒绝。
+v24r原267项一条wrong-kind QA夹具错误，历史整体失败保留。q1选择真实入口/夜景节点后，r2原生11案533项全部通过，原OwnedSlot76项全部通过。A真实世代1保存32项通过并退出。B已写完整world/packet/时钟安装审计，第二次HELD却因测试自己的capture_rejected一次性监听未清理而重复连接ERROR；整批失败、B无最终报告、C未启动。新sibling只修QA监听生命周期，须重新完整A/B/C。生产四文件仍未判合格，原profile不得复用。外层Slot旧身份叶类型守卫与对应纯harness另为v26未apply/未native提案，不把Map/display负例称作全Slot资格。证据见native_ownership_json_component_pass_v24r2.json和daming_admit_signal_failure_review_v24r2.json。
 
 ## 明天开始
 
@@ -43,8 +43,10 @@ QA绝对E:/路径/PID是历史证据，不能直接作为办公室参数。world
 ## 后续顺序
 
 1. 当前JSON边界及大名府三进程实际办理半程磁盘续玩。
-2. 单个获救者安全撤离仍FIGHT的合同修复：v25仅外部方案，尚未apply/原生。限定实际Lu/Shi，严格stop字段、selection/caster清理、另一演员live/root/active及同token Mission安全事件。实际保存/独立继续后等durable terminal完成才称本地结算成功；Steam-disabled批次不证明Steam奖励。
+2. 单个获救者安全撤离仍FIGHT的合同修复：v25提案和路线/四进程runner已存入QA，尚未apply/原生，须先采纳已通过后继_hold并完成负例门禁。限定实际Lu/Shi，严格stop字段、selection/caster清理、另一演员live/root/active及同token Mission安全事件。实际保存/独立继续后等durable terminal完成才称本地结算成功；Steam-disabled批次不证明Steam奖励。
 3. 双关其他动态、付费生产、船体/运输、旧章动态、自然胜败及奖励一次。
 4. 同版九玩法/实际发行EXE；完整美术动作/拥挤UI/多尺寸流程；正常时钟同负载约10分钟性能、长帧/内存/切换回收；Android2.0.1真机DPI/安全区/触控/持续性能。
+
+单人安全撤离的完整设计见 [DAMING_SAFE_RETREAT_DESIGN_20261008.md](DAMING_SAFE_RETREAT_DESIGN_20261008.md)。`CAMPAIGN_QA=1`跳过Campaign写盘，所以当前runner不证明战役进度持久；正常私有profile须另测。
 
 全开发计划和长期平台方向保留。源码同步与Steam发布分开；本轮不发布新平台包。Steam已上线Build25768878及四语公告见 [STEAM_UPDATE_20261007.md](STEAM_UPDATE_20261007.md)。此前约1.68GiB重复imported清理已完成，不重复执行。

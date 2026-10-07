@@ -1,0 +1,60 @@
+{
+  "schema": "daming_safe_retreat_qa_design_v25",
+  "status": "external_unexecuted_runner_and_design",
+  "source_review_correction": "Campaign._save returns true without writing campaign.cfg while CAMPAIGN_QA=1; current C records actual memory result, D verifies file unchanged or absent and prior persistent baseline. Separate normal-private-profile persistence batch remains pending.",
+  "mandatory_variants": ["lu_first", "shi_first"],
+  "mandatory_cases": ["A_single_save", "B_install_settle_resave", "C_install_finish", "D_read_terminal"],
+  "environment": {
+    "STEAM_DISABLED": "1",
+    "CAMPAIGN_QA": "1",
+    "DAMING_RETREAT_QA": "1",
+    "DAMING_RETREAT_PROFILE": "absolute unique sibling private profile; APPDATA/LOCALAPPDATA/TEMP/TMP each below it",
+    "DAMING_RETREAT_OUT": "absolute unique evidence root outside frozen project",
+    "DAMING_RETREAT_CASE": "one mandatory case",
+    "DAMING_RETREAT_FIRST_ROLE": "lu or shi",
+    "DAMING_RETREAT_NONCE": "fresh nonempty nonce per process",
+    "DAMING_RETREAT_EXPECT_CONTENT": "exact installed frozen source content identity",
+    "DAMING_RETREAT_EXPECT_ENGINE": "exact measured installed engine binary SHA256"
+  },
+  "paths": {
+    "slot_root": "user://daming_safe_retreat_v25/continue/v1",
+    "handoff_a": "user://daming_safe_retreat_v25/handoff_A.json",
+    "handoff_b": "user://daming_safe_retreat_v25/handoff_B.json",
+    "terminal_handoff_c": "user://daming_safe_retreat_v25/terminal_C.json"
+  },
+  "timeouts_ms": {
+    "whole_natural_route": 900000,
+    "one_natural_route_checkpoint": 180000,
+    "actual_barrier": 15000,
+    "natural_second_escort": 180000,
+    "durable_terminal_after_END": 15000
+  },
+  "normal_clock": {"engine_time_scale": 1, "physics_ticks_per_second": 60, "settings_game_speed": 1},
+  "B_native_ticks_before_resave": 120,
+  "C_terminal_process_frames_observation": 120,
+  "runner_integration": {
+    "A": "route.configure(self, role); await route.natural_rescue(b); await route.first_exit_and_hold(b); copied v24o Session save_held wrapper pending successful successor corrections with new slot/handoff; report then quit",
+    "B": "copied v24o full Session install/packet/22-section/clock/binding checks pending successful successor corrections; route.single_safe_valid; release actual barrier; 120 measured natural physics ticks; new actual HELD; exact safe-effect baseline check; Session save_held generation2; report then quit",
+    "C": "same independent full Session install of generation2; route.finish_other_naturally; real terminal receipt/head, actual Campaign memory result and UI observation; Campaign file must remain absent or unchanged because CAMPAIGN_QA=1; no terminal world save; 120 normal processframe observation; report then quit",
+    "D": "profile guard and fixed receipt read; same content/engine/PID/nonce chain check; actual Session prepare_restore must fail LOCAL_RUN_TERMINAL with old menu unchanged and no allocated Battle; terminal file SHA match C; Campaign file absent or unchanged and runtime reloads prior persistent baseline"
+  },
+  "requires_runner_changes": [
+    "new report/handoff schemas and case dispatch, do not retain v24o admit-only assertions",
+    "_save state payload becomes full retreat observation while preserving all packet/world/clock audits",
+    "B real per-tick observer plus safe event/report/action/control baseline count",
+    "C terminal file collector reads actual lifecycle and Campaign memory state; Campaign file suppression is asserted; outcome UI inspection and one operation_finished signal are not complete callback invocation counts",
+    "D terminal-only readback branch, no call to normal _restore success path",
+    "new producer immutable source/script/module/scene/fixture/manifest SHA receipt and actual natural shared-engine wait"
+  ],
+  "forbidden_natural_route_operations": ["teleport", "assign hp", "assign rescued/gate/prison/safe flags", "assign story_outcome", "mark injected mission events", "invoke on_mission_action", "invoke resolve_story", "invoke win", "manual physics/process callback", "accelerated clock", "clear caches/grids", "drop safe actor from root/active"],
+  "qualification_flags": {
+    "natural_victory_qualified": "only true after natural route and C durable terminal success",
+    "local_terminal_once_qualified": "only true after B no-replay, C observed completion and D unchanged terminal/read rejection",
+    "local_result_persistence_qualified": false,
+    "campaign_persistence_qualified": false,
+    "callback_invocation_count_qualified": false,
+    "steam_reward_once_qualified": false,
+    "public_campaign_continue_qualified": false,
+    "release_exe_qualified": false
+  }
+}

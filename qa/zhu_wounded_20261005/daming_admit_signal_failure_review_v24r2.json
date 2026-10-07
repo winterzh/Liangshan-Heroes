@@ -1,0 +1,120 @@
+{
+  "schema": "daming_admit_signal_failure_review_v24r2",
+  "created_utc": "2026-10-07T16:21:10.883206+00:00",
+  "full_candidate_qualified": false,
+  "A_actual_save_passed": true,
+  "A_checks": 32,
+  "A_pid": 213784,
+  "A_generation": 1,
+  "A_slot_sha256": "c2a0a7cfebf20b96f0b0213561569140c65bac538caba0bec655151800bae083",
+  "B_terminal_failed": true,
+  "B_report_written": false,
+  "C_started": false,
+  "failed_pid": 215472,
+  "actual_failure": "QA _hold connects capture_rejected CONNECT_ONE_SHOT again; first successful capture did not emit rejection, leaving own listener connected",
+  "source_runtime_defect_demonstrated": false,
+  "B_install_component_evidence": "Complete envelope/sections/nonclock fields and bounded clocks comparison written before later repeated capture error; not a passed B report or complete continuation qualification.",
+  "repair_scope": "New harness/producer sibling handles own success/rejection listener lifecycle around each request; original entire assertions and all source/hash checks remain. No production patch for this QA signal error.",
+  "original_profile_retained": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24r2_68ecb20a\\profile",
+  "profile_reused": false,
+  "producer_rewritten": false,
+  "files": [
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_signal_failed_v24r2.json",
+      "bytes": 3897135,
+      "sha256": "d2295c94e79da7566caddb81efba7d521fb2801a207c31a4fbea3d0d163c2cd8"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_signal_failed_log_v24r2.txt",
+      "bytes": 4203,
+      "sha256": "4e8fa2fe242be5768f26b682936b6eef581a78f4fa96b1699ebc14d6af9b69c7"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_A_save_step_v24r2.json",
+      "bytes": 2324,
+      "sha256": "fc3255f3e1a261649d0c73c39ebae444b659df3cfb50a32d7611bb0f031ba190"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_B_failed_step_v24r2.json",
+      "bytes": 1452,
+      "sha256": "50bcc863c6877496a931e5105eef8a56571ca631974ed1f593a38ff45cab6b2a"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_A_half_save_report_v24r2.json",
+      "bytes": 6305,
+      "sha256": "ac88f0bcbb7044cbdb5837f43106df9fad1bfd7af3cdf26af862f70c2794d729"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_A_half_save_saved_packet_v24r2.json",
+      "bytes": 7510426,
+      "sha256": "4f36d991072e23bdb2461309e4281f7cdd9aa799a0d6ec289d1d0c8205eb0e2a"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_A_half_save_saved_world_v24r2.json",
+      "bytes": 7172127,
+      "sha256": "b5bad30fd3b1c44e2a37cb31c3139bf98e748f363c6ee37d4abb726042d323df"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_B_continue_resave_restored_world_v24r2.json",
+      "bytes": 7172126,
+      "sha256": "645ec7567f580f414ccddd52bf0c36a928f2134b243904821d76e43e17dbbeb6"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_B_continue_resave_full_world_comparison_v24r2.json",
+      "bytes": 811,
+      "sha256": "66bbee8be198ef5ec8bfd54bf67716993a55a703e44b2ce8eec6a887bce8a060"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_B_continue_resave_session_packet_install_audit_v24r2.json",
+      "bytes": 7378,
+      "sha256": "61bfc01ff9bc279ed37109d632891ad98ea49ab8528576e8242375f523d893c2"
+    }
+  ],
+  "evidence": [
+    {
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24r2_68ecb20a\\native_evidence\\A_half_save\\report.json",
+      "sha256": "ac88f0bcbb7044cbdb5837f43106df9fad1bfd7af3cdf26af862f70c2794d729",
+      "bytes": 6305
+    },
+    {
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24r2_68ecb20a\\native_evidence\\A_half_save\\saved_packet.json",
+      "sha256": "4f36d991072e23bdb2461309e4281f7cdd9aa799a0d6ec289d1d0c8205eb0e2a",
+      "bytes": 7510426
+    },
+    {
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24r2_68ecb20a\\native_evidence\\A_half_save\\saved_world.json",
+      "sha256": "b5bad30fd3b1c44e2a37cb31c3139bf98e748f363c6ee37d4abb726042d323df",
+      "bytes": 7172127
+    },
+    {
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24r2_68ecb20a\\native_evidence\\B_continue_resave\\restored_world.json",
+      "sha256": "645ec7567f580f414ccddd52bf0c36a928f2134b243904821d76e43e17dbbeb6",
+      "bytes": 7172126
+    },
+    {
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24r2_68ecb20a\\native_evidence\\B_continue_resave\\full_world_comparison.json",
+      "sha256": "66bbee8be198ef5ec8bfd54bf67716993a55a703e44b2ce8eec6a887bce8a060",
+      "bytes": 811
+    },
+    {
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24r2_68ecb20a\\native_evidence\\B_continue_resave\\session_packet_install_audit.json",
+      "sha256": "61bfc01ff9bc279ed37109d632891ad98ea49ab8528576e8242375f523d893c2",
+      "bytes": 7378
+    },
+    {
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24r2_68ecb20a\\native_evidence\\B_continue_resave\\input_packet.json",
+      "sha256": "4f36d991072e23bdb2461309e4281f7cdd9aa799a0d6ec289d1d0c8205eb0e2a",
+      "bytes": 7510426,
+      "same_bytes_as": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24r2_68ecb20a\\native_evidence\\A_half_save\\saved_packet.json"
+    },
+    {
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24r2_68ecb20a\\native_evidence\\B_continue_resave\\input_world.json",
+      "sha256": "b5bad30fd3b1c44e2a37cb31c3139bf98e748f363c6ee37d4abb726042d323df",
+      "bytes": 7172127,
+      "same_bytes_as": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24r2_68ecb20a\\native_evidence\\A_half_save\\saved_world.json"
+    }
+  ],
+  "public_campaign_entry_qualified": false,
+  "natural_victory_qualified": false,
+  "reward_once_qualified": false
+}
