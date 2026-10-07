@@ -1,0 +1,28 @@
+{
+  "review_complete": true,
+  "runtime_qualified": false,
+  "source_before_sha256": "4972498e2838c0b2f9bd1a9a995643279b9edec96a1ac870ae857d2c4243be22",
+  "source_after_sha256": "15d050bfc40f255ec90129cc3c14d83603e888649f7bf0079843dec347efa50c",
+  "issue": "Owned prepared map/world removed from parent could access null before rejection.",
+  "fix": "Validate both world and installed Battle owner before any parent access; require activation order starts at owned visual.",
+  "new_runtime_negatives": [
+    "map detached",
+    "world detached",
+    "rogue descendant",
+    "process gate changed"
+  ],
+  "waiting_backend_cancelled": {
+    "session": 21837,
+    "pid": 207404,
+    "verified_command": "harness/run_full_scenery_v23d.py",
+    "no_child": true,
+    "no_source_lock": true,
+    "engine_steps": 0
+  },
+  "old_executed_producers_and_failed_evidence_preserved": true,
+  "harnesses": [
+    "qa/zhu_wounded_20261005/harness/gao_scenery_v20m.gd",
+    "qa/zhu_wounded_20261005/harness/full_scenery_v23e.gd"
+  ],
+  "producer": "qa/zhu_wounded_20261005/harness/run_full_scenery_v23e.py"
+}

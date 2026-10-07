@@ -38,6 +38,12 @@ const HALL_CELL := Vector2i(16,30)
 
 
 func setup(game_map: GameMap) -> void:
+	setup_original_decor(game_map, game_map.decor)
+
+
+## Fixed visual factory input only; gameplay map.decor is never changed.
+## Gao retains four old decorative boat nodes after filtering gameplay decor.
+func setup_original_decor(game_map: GameMap, visual_decor: Array) -> void:
 	_map = game_map
 	_battle = _map.get_parent().get_parent()
 	var level_id := _active_campaign_level_id()
@@ -76,7 +82,7 @@ func setup(game_map: GameMap) -> void:
 				_cache_reeds(x,y)
 	_build_reed_mesh()
 	# 从旧装饰列表复制视觉，原列表本身保持不变。
-	for d in _map.decor:
+	for d in visual_decor:
 		var tex: Texture2D = null
 		var flag_rect: Array = []
 		var routed_flag := false

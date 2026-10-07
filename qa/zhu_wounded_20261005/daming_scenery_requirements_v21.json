@@ -1,0 +1,59 @@
+{
+  "inspection_only": true,
+  "runtime_qualified": false,
+  "level_id": "level8",
+  "required_native_types": [
+    "CanvasModulate LanternNight",
+    "PointLight2D shared GradientTexture2D",
+    "campaign_city_wall.gd",
+    "campaign_passage.gd"
+  ],
+  "fixed_factory_values": {
+    "night_color": [
+      0.62,
+      0.67,
+      0.79
+    ],
+    "lantern_texture_size": [
+      128,
+      128
+    ],
+    "lantern_texture_scale": 1.8,
+    "lantern_color": [
+      1.0,
+      0.68,
+      0.32
+    ],
+    "lantern_fill": "radial",
+    "cuiyun_energy_states": [
+      0.45,
+      1.15
+    ],
+    "cuiyun_cell": [
+      37,
+      15
+    ]
+  },
+  "required_bindings": [
+    "all lantern textures are same fresh scenery-owned gradient",
+    "Cuiyun light owner must match actual fixed lamp slot",
+    "city-wall endpoint/height/salt and derived geometry",
+    "Passage map points to new restored GameMap, cached open flag matches captured source/navigation phase",
+    "restored _walls/_sprites/_trees/_ground_shadows ownership without rerunning deploy or mission callbacks"
+  ],
+  "sources": [
+    {
+      "path": "scripts/campaign_scenery.gd",
+      "sha256": "ca6f9993800bdf4bc638e5d0288290d6cdb5f3b7fb1e0c5358a19168c9cc2339"
+    },
+    {
+      "path": "scripts/campaign_city_wall.gd",
+      "sha256": "02cc31b5ff761d3832c5a12f292002603ac15bc1fa28c2a781d944634416a622"
+    },
+    {
+      "path": "scripts/campaign_passage.gd",
+      "sha256": "665bf4a589539b4215b6baf8bc130948cd31d886c05f8c62aa1cdc8ea57cc364"
+    }
+  ],
+  "scope": "Current source inspection for next original-Daming scenery implementation. Not runtime acceptance; full goal includes outer world, process continuation, natural endings and all existing plan gates."
+}

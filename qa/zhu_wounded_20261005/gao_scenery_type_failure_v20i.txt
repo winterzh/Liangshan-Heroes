@@ -1,0 +1,51 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 616.56 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce RTX 3070 Ti
+
+WARNING: 2D MSAA is not yet supported for GLES3.
+   at: render_target_set_msaa (drivers/gles3/storage/texture_storage.cpp:2934)
+[rts] PASS installed content identity resolves
+[rts] PASS installed content identity
+[rts] PASS level5 initial actual original map capture
+[rts] PASS level5 initial gameplay decor keeps original filtered boat state
+[rts] PASS level5 initial four original decorative boat visuals retained separately from gameplay decor
+[rts] PASS level5 initial native installed chapter envelope
+[rts] PASS level5 initial default context rejects native chapter
+[rts] PASS level5 initial other chapter rejects envelope
+[rts] PASS level5 initial floating wave count rejected
+[rts] PASS level5 initial missing native sprite owner rejected
+[rts] PASS level5 initial root impersonating entrance rejected
+[rts] PASS level5 initial duplicate tree owner rejected
+[rts] PASS level5 initial null owner lane safely rejected
+[rts] PASS level5 initial missing actual tree rejected
+[rts] PASS level5 initial missing entrance owner lane rejected: gate_parts
+[rts] PASS level5 initial duplicated entrance owner lane rejected: gate_parts
+[rts] PASS level5 initial missing entrance owner lane rejected: side_gate_parts
+[rts] PASS level5 initial duplicated entrance owner lane rejected: side_gate_parts
+[rts] PASS level5 initial missing entrance owner lane rejected: wall_parts
+[rts] PASS level5 initial duplicated entrance owner lane rejected: wall_parts
+[rts] PASS level5 initial missing entrance owner lane rejected: dock_parts
+[rts] PASS level5 initial duplicated entrance owner lane rejected: dock_parts
+[rts] PASS level5 initial foreign entrance map reference rejected
+[rts] PASS level5 initial missing live original gate binding rejected
+[rts] PASS level5 initial authoritative map staged with pending display
+[rts] PASS level5 initial tampered staged native identity rejected before scenery: liangshan_art_level_id
+[rts] PASS level5 initial tampered staged native identity rejected before scenery: liangshan_rts_court
+[rts] PASS level5 initial tampered staged native identity rejected before scenery: zhongyi_hall_facing_cardinal
+[rts] PASS level5 initial tampered staged native identity rejected before scenery: zhongyi_hall_front_vector
+SCRIPT ERROR: Invalid operands 'Vector2' and 'Vector2i' in operator '!='.
+   at: _campaign_map (res://scripts/run_scenery_state.gd:708)
+   GDScript backtrace (most recent call first):
+       [0] _campaign_map (res://scripts/run_scenery_state.gd:708)
+       [1] restore_into (res://scripts/run_scenery_state.gd:220)
+       [2] _finish_display (res://scripts/run_map_state.gd:152)
+       [3] finish_display (res://scripts/run_map_state.gd:144)
+       [4] _roundtrip_map (res://gao_scenery_v20i.gd:65)
+       [5] _run (res://gao_scenery_v20i.gd:126)
+SCRIPT ERROR: Invalid access to property or key 'ok' on a base object of type 'Dictionary'.
+   at: restore_into (res://scripts/run_scenery_state.gd:221)
+   GDScript backtrace (most recent call first):
+       [0] restore_into (res://scripts/run_scenery_state.gd:221)
+       [1] _finish_display (res://scripts/run_map_state.gd:152)
+       [2] finish_display (res://scripts/run_map_state.gd:144)
+       [3] _roundtrip_map (res://gao_scenery_v20i.gd:65)
+       [4] _run (res://gao_scenery_v20i.gd:126)

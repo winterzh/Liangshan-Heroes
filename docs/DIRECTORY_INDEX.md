@@ -1,3 +1,27 @@
+## 2026-10-07 地图与场景恢复验收完成（当前状态）
+
+高俅两案、经典标准地图一案、大名府五案共221项原生检查通过；其余六章初态回归共60项通过，14案/281项均完成精确地图与场景再捕获。正常时钟1.0，5039个生产输入零漂移，零私有运行时补丁。共享引擎恢复占用时仅停止自己的子进程；原失败/中断证据保留，各章以新独立收据续验。
+
+审核修复了原生入口子节点高度、严格地图身份、原始视觉船只、夜景原生组、灯光资源与新地图归属，以及禁用准备事务的只读捕获。旧六章回归通过。此轮证明禁用/脱离世界的地图与场景组件；完整Units/Mission/时钟/FX、最终激活、独立进程继续和自然结局仍待开发，公开战役继续入口保持关闭。
+
+随后仅移除两个本轮已失败且闲置的私有工程中7476个与保留候选同相对路径、大小、SHA一致的imported文件，释放1803637428字节（约1.68GiB）。10303个受保护文件及保留缓存复核不变；源码、原收据、日志、存档、导出包均保留，旧工程复查需重新导入。
+
+证据：`qa/zhu_wounded_20261005/campaign_scene_closeout_v23h.json`、`full_scenery_qualified_v23f.json`、`official_scene_checkpoint_qualified_v23h.json`及逐章原生报告/日志。源码与文档按白名单同步既定stable分支；不发布新Steam版本。下一步审查整局Root/Visual/Core接入方案，然后验证完整世界、任务回调归属与独立进程续玩；全开发目标仍未完成。
+
+以下条目记录此前阶段状态，以本段为当前验收状态。
+
+<!-- full-scenery-v23a-current -->
+## 2026-10-07 完整双关地图/场景候选已接入，待原生八案验收
+
+灯光 v22 已通过原生113项/四案，代码与QA/交接独立提交 c7192594767df04917d6b73864c35b9caf6e7e60，远端 stable SHA 一致。此提交只资格化灯光组件；既有未验收 Gao 候选没有混入。
+
+随后回读原后台83257已终止成功且锁释放，按审核后的外部 v23a proposal 接入完整 Daming 场景：installed RTS/60×66/town/封闭偏门身份、夜景/有限灯光资源、CityWall派生mesh、Passage新地图引用与原_open缓存、人群/owner/shadow归属，以及翠云楼default/signal原工厂视觉配置。地图存档仅增加原灯市四个crowd坐标与variant/零尺寸专属校验。仍使用 Node2D；灯/夜景不额外抬高。旧生产输入备份及原v23/v23a proposal保留。
+
+全新 full_scenery_v23a producer/harness 包含8案：Gao初态/已发波、原classic标准图，以及Daming初态/放行未救/举火/计时结束/开门获救。要求真实整个 map/nav/height/material/reed/scenery/owner payload 精确再捕获、原世界不变、缺失owner/伪灯主/错误Passage拒绝和惰性激活边界。现有后台 session87812/own Python206660 已确认存活，等待共享引擎自然空闲；不重复运行、不控制或发消息给其他任务。本完整候选尚无通过结果。
+
+当前新增 Scene/Map/lighting方法仅本地待验收，未清理缓存或推送这些完整候选。即使八案全部通过，仍须外层Units/Mission/时钟/FX和最终激活、独立进程继续与自然结局及全开发计划其余验收；公开战役继续仍关闭。本轮不重发 Steam。
+<!-- /full-scenery-v23a-current -->
+
 <!-- daming-lighting-v22-qualified -->
 ## 2026-10-07 大名府原生灯光子组件审核通过
 
@@ -1948,3 +1972,67 @@ Git 克隆版以仓库根目录为工程根：`project.godot`、`assets/`、`scr
 - `qa/steam_release_20261007/`：原生/候选/EXE证据归档、六文件哈希、SteamCMD白名单预览与上传脱敏日志、服务器清单、等待确认回读及现有四语公告文案。发行包、缓存、玩家和认证数据留在外部/忽略目录。
 
 2026-10-07 Steam正式上线收尾：qa/steam_release_20261007新增default_live_readback.json、announcement_public_readback.json、client_update_pending.json、release_closeout.json与前批pending_git_sync_receipt.json；发行包/认证原日志/页面截图保留外部，不进Git。
+
+2026-10-07第5关场景恢复准备：qa/zhu_wounded_20261005/harness/gao_scenery_v20*.gd、run_gao_scenery_v20*.py和gao_scenery_*v20*.json；原失败/取消批保留，尚非运行资格。私有工程/原日志/缓存在E:/ChatGPT/qa-world-restore-20261007，不同步Git。
+
+第5关v20b真实失败report/哈希证据已原字节归档；v20c/d/e独立诊断/中断记录保留；daming_scenery_requirements_v21.json为原大名府灯光/通道只读实现要求，非运行资格。
+
+第5关v20e原生归属精确诊断原report/log、v20f原布局修复、v20g审查/经典场景回归工具及阶段证据位于qa/zhu_wounded_20261005；均按实际未合格边界保存。
+
+第5关v20g原列表/函数体源码审查、v20h原梁山身份修正和私有地图拒绝用例已归档，运行资格仍须新收据。
+
+第5关v20i原入口内部新对象归属契约、原源/保存lane拒绝用例，及等待批次无引擎步骤取消证据已准备；仍待实际图形资格。
+
+<!-- gao-v20j-daming-v22-current -->
+### 2026-10-07 继续开发：真实坐标类型失败修复，大名府灯光组件待原生验证
+
+共享引擎本次检查自然空闲，v20i 新私有批 717badd5 完成导入并进入真实图形负例。错误类型的 liangshan_hall_cell=Vector2 先与 Level5.HALL 的 Vector2i 比较，引发脚本错误；原 roundtrip.log 字节归档 gao_scenery_type_failure_v20i.txt，收据及运行私有工程保留。生产修复为先检查 TYPE_VECTOR2I 再比较，不减少原负例或完整地图相等门槛；新 v20j producer/harness 使用独立 run/profile，后台 session80562，实际结果仍须回读。
+
+新增 run_daming_lighting_state.gd 子组件：严格已安装 RTS level8/60×66/town/封闭偏门与原 Scenery/Battle/map 身份；原五灯/夜景/翠云楼归属；固定原渐变全部存储属性与 Light2D 默认设置；snapshot 编解码、重复/伪 owner/错误亮度/外来渐变拒绝。恢复只使用新原工厂创建的共享纹理，在所有前置检查完成后应用亮度。尚未接入完整 scenery/map adapter，公开战役继续仍关闭。
+
+独立 daming_lighting_v22 原生 harness/producer 已准备，测试原初态、先放行未救人、原举火回调、原计时过期回调的精确灯光再捕获与新旧资源隔离。原生 map/nav/height 复制是显式组件夹具，不能当作完整地图恢复或自然通关；尚未启动此 producer、无通过声明。另发现地图存档 crowd 条目校验仍仅接江州，完整大名府接入须增加原灯市四点、variant 和零尺寸专属合同，不能泛化允许任意 crowd。
+
+本轮生产候选仍待验收，未清缓存或推送生产代码；最新已核对远端仅为上轮源码审查文档提交 faa9a8fd802ceb17b763c53f7e02203280ab2a33。Gao/Daming 完整场景、外层世界/独立进程继续以及完整开发计划继续。
+<!-- /gao-v20j-daming-v22-current -->
+
+2026-10-07本批状态回读：Gao v20j_aa4122a4 导入退出0，图形运行期间外部 Godot206576 恢复，producer stop_reason=foreign_engine_resumed，仅停止自身且锁已释放；未完成任何完整地图复捕获，原失败证据见 gao_scenery_interrupted_v20j.json。Daming v22 own Python196708/session83257 已确认启动，准备/等待自然空闲后才使用引擎；截至此记录尚无原生结果。只观察现有会话，不能重复启动。灯光组件的失败 apply 不得改变目标状态负例也已纳入未执行 harness。生产源码及新候选尚未提交/推送，公开入口/Steam 包不变，全部长期目标保持 active 未完成。
+
+2026-10-07完整候选实际回读：v23a first3d9d25d7 在导入期间外部引擎恢复，0项资格、原失败收据/日志保留且锁释放。确认原会话87812终止后才使用同一未修改producer重试一次，fresh5844ea60；本次导入退出0，后台88755/own Python207664继续真实图形八案，未修改冻结输入。现无完整地图通过声明，当前远端仍只有已资格化灯光提交c7192594。
+
+<!-- full-scenery-v23b-current -->
+2026-10-07 八案首次完整原生结果：v23a_5844ea60 的78项/7失败已真实报告；classic 标准地图完整复捕获相等，Gao两案均SCENERY_FIXED_STATE_CHANGED/127，Daming五案均CAMPAIGN_NODE_INPUT，不能记为双关场景合格。报告/原日志字节归档full_scenery_failed_report_v23a.json、full_scenery_failed_log_v23a.txt，原run/producer/收据均保留。
+
+v23b按固定Godot4.6.3 CanvasModulate源码确认其可见时原生加入仅当前canvas RID对应的_canvas_modulate_组；严格按本节点实际canvas和可见/挂树阶段接受这一生成组，非任意prefix放行，额外组负例保留。Gao新增fixed/textures/metadata首项差异诊断，严格相等不变，第127项根因尚待新结果。新producer/harness及私有run/profile，后台session38951/ownPython207852已回读存活；只观察本会话，不重复启动或控制其他Godot任务。
+
+当前合格且远端同步的仍为灯光组件113项/四案，stable c7192594767df04917d6b73864c35b9caf6e7e60。完整Scene/Map/追加lighting方法候选仍未资格化/提交，缓存未清，公开战役继续未开放，外层完整世界及全开发计划继续。
+<!-- /full-scenery-v23b-current -->
+
+2026-10-07完整候选最新后台：v23b_5782ec3f 导入0，图形初启外部Godot恢复，仍未取得第127项诊断；原producer/run/收据保持。新独立 frozen-v23c producer 复用此精确哈希核对的已导入冻结工程，5039源/原harness相同、引擎SHA固定，并独立回读原安装native DLL/说明文件全部SHA相同；不是复用失败功能资格。fresh profile/run/log/report/receipt，不覆盖旧执行证据、不做私有运行时补丁。当前 ownPython205368/session88774 与 ownGodot204300已回读真实存活，8案完整图形测试在跑；私有输出442a71df，project引用5782ec3f/project。不能仅因观测超时重启，也不能改冻结输入。全源候选未合格，未清缓存/新提交；已交付远端仍只有灯光组件c7192594。
+
+<!-- full-scenery-v23d-current -->
+2026-10-07原生进一步结果：frozen-v23c_442a71df 的173项/12失败保留，Daming五态均完成真实原固定场景工厂重建且全部map/nav/height/economy/RNG guard相同，但普通新适配器复捕获拒绝旧恢复事务持有的信号屏蔽。Gao精确差异为第127门柱metadata的render_height=4.10399997234344：原首次process对入口门柱同步高度，detached setup未执行此纯视觉步。
+
+v23d仅对新入口gate/side_gate/wall后代同步原高度，不调用会影响Units/FX的整套_sync_elevated_nodes；新增capture_prepared只接本事务持有的SceneryState、相同content/context、精确完整节点注册与子节点顺序、禁用owner/节点和信号屏蔽。普通capture仍拒绝被屏蔽的外部事务，不激活任何处理/信号，也不放宽payload相等。原经典标准图继续普通capture。新harness还拒绝非持有adapter，全部原负例保留。
+
+首次准备助手两条相同recapture前缀断言失败在源修改后发生；保留助手/失败记录，按原冻结前字节恢复before来源，只接续未写出的harness/producer尾段，没有重复源patch。v23d_ec362d49随后导入时外部引擎恢复，0项资格且锁释放；已确认原session18115终止后，才用同一未修改producer全新retry，当前session21837已启动。只读回此会话，不能超时就重启；未改冻结源。仍待本候选完整图形八案结果，当前只有灯光113项/四案已合格并远端c7192594；无缓存清理、无全源候选推送、无公开战役继续开放，全原始目标仍active。
+<!-- /full-scenery-v23d-current -->
+
+<!-- full-scenery-v23e-current -->
+2026-10-07预审继续发现prepared_capture_ready在已持有的map/world被移出父容器时会直接链式访问空父节点。先核对原等待后台Python207404完整CLI、无子进程、无source lock，且仍在首个自然空闲循环，仅取消这一本任务未启动引擎的等待；session21837回读终止1，未控制任何盲盒进程。
+
+v23e在所有父节点访问前验证world/Battle实例与原Battle脚本及map引用，并核对activation order首节点就是原visual。新Gao/Daming harness分别加入map移出父容器、world移出owner、非持有后代插入、process gate改动四组拒绝负例；随后恢复原夹具关系，再作原严格整个payload相等复验。原生产/QA失败证据、v23d已执行producer/harness不改写；v23e为全新producer/harness，后台session39438/ownPython202604已回读真实存活，外部引擎仍占用，0项新资格。
+
+本次还只读核对Android后续门槛：当前PATH未解析到adb，尚未据此判断设备或SDK不存在，不能当真机验证通过；完整开发计划所需Android2.0.1真机资格仍待实际设备/触控/DPI/安全区/持续性能回读。此项未安装工具、未操作设备或发布其他平台。
+
+当前远端仍为合格灯光c7192594；完整Scene/Map/额外lighting方法候选本地待原生八案及负例验收，未清缓存、未推送这些候选。整个原始目标保持active，公开战役继续仍关闭。
+<!-- /full-scenery-v23e-current -->
+
+<!-- full-scene-qualified-regression-v23h -->
+2026-10-07完整地图/场景组件真实通过：frozen-v23f_2fcb3bf2 原生221项/0失败，8案原整个payload精确再捕获（Gao初态/已发波、classic标准图，Daming初态/放行未救/举火/计时结束/开门救人）；正常时钟1.0、5039源码输入root/private零漂移、零私有运行时补丁。qualified receipt/native report/原日志按字节归档full_scenery_qualified_v23f.json、full_scenery_native_report_v23f.json、full_scenery_verified_log_v23f.txt，审核边界见full_scenery_native_review_v23f.json。仍是禁用新owner/Level空壳的完整map/scenery组件，非完整Units/Mission/时钟/最终激活或独立进程继续资格；公开战役继续仍关闭。
+
+共享SceneryState修改须再验旧六关。v23g原六案整批两次因外部引擎恢复中断，原项目/失败收据/日志保留；原函数/门槛不改，v23h按固定0/1/2/3/5/6逐案独立profile/原生报告/收据，聚合仍要求全部六案，已成功案例不重测，仅foreign中断案例等待自然空闲重试，真实SCRIPT/check失败立即结束待修。当前后台session19240/ownPython206132存活，0/1两案已持久原生通过，2案等待；尚不记六案全通过。
+
+缓存只读预审：两个旧且非活跃Gao私有工程imported中7476文件/1803637428字节（约1.68GiB）与保留候选同相对路径/大小/SHA完全相同，10303源码/资源/日志/收据/profile/其他cache保护文件前验SHA一致。manifest与原始逐文件清单在E:/ChatGPT/scene_duplicate_cache_20261007；当前删除0。准备脚本仅逐文件LiteralPath删除上述匹配缓存、先要求六案通过，并验原SHA/keeper，禁止reparse/越界/live目标；完成后再作全部保护与keeper后验。不碰主缓存、候选keeper、Git、玩家、包或任何盲盒目录。
+
+下一阶段campaign_core_v24三文件可审查候选已在工程外生成，不改变当前冻结输入：补原Gao/Daming root与visual安装上下文/schema、Gao结束按钮descriptor在Unit前验证，原level5 shell只提供身份，真正新Mission创建gao_end后才交给纯Level5 factory恢复引用。尚需完整世界原生harness/跨组件/暂停装树最终激活/真实独立进程及自然结局等，未应用/未资格化。完整原始目标继续；当前已推送的仍只有灯光c7192594，整地图候选及该阶段QA尚未提交，六案审核通过后再清理与白名单同步。
+<!-- /full-scene-qualified-regression-v23h -->

@@ -1,0 +1,26 @@
+{
+  "failed_run": "E:/ChatGPT/qa-world-restore-20261007/gao_scenery_v20e_607592c0",
+  "diagnostic": "Both original initial and sent-wave maps: entrance saved126 rebuilt122. Headless data diagnostic also failed30/2; no graphical qualification.",
+  "root_cause": "Installed Gao calls Skirmish.decorate(), which creates native scenery using four decorative boat entries, then filters boats from map.decor after scenery setup. Saved gameplay decor therefore differs from original visual factory input.",
+  "fix": "Extract original static visual layout as fresh pure values. Normal Skirmish/Gao decoration order and rendered boats unchanged. Native Liangshan setup delegates to same implementation with explicit fixed original visual-decor values for Gao restore only, validates original filtered gameplay decor and never temporarily changes map/nav/height/resources/RNG. Snapshot cannot select a layout or script.",
+  "source_delta": [
+    {
+      "path": "scripts/levels/skirmish.gd",
+      "before_sha256": "364edf941b5834132d54da20b097aafa7508bf1e92d29a0cd0fac1a3edb03042",
+      "after_sha256": "cdd75c6dd5841329891dbec65314e979e2f33e16188e63adf63fa91404784844"
+    },
+    {
+      "path": "scripts/liangshan_scenery.gd",
+      "before_sha256": "74359cd158172a152785fdf70fcd1fa79568782c6d391c76d95355b89c81bab6",
+      "after_sha256": "b9fb9a24cd4cd9cb873b4c48a43128362739d11a666274a9fc035672bf199323"
+    },
+    {
+      "path": "scripts/run_scenery_state.gd",
+      "before_sha256": "9420710c7ca9e7f7f1607fd8275fee862dd3e3edfdc26919f28e758d8deae312",
+      "after_sha256": "a512a410735c94bdd37d3b569779a5ca3d93edf0702c717f162077b58492c581"
+    }
+  ],
+  "private_runtime_patches": 0,
+  "full_world_qualified": false,
+  "next": "Full graphical native map recapture with original four decorative boat nodes, strict owner/fixed/texture/metadata equality and all five nav guards; existing chapters/modes regression remains required."
+}

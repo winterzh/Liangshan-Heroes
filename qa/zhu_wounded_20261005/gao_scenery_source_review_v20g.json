@@ -1,0 +1,22 @@
+{
+  "source_review_complete": true,
+  "runtime_qualified": false,
+  "base_commit": "f1473d78e2273ff85a1f8f0d8e66e4dc17af5344",
+  "checks": [
+    "Extracted pure visual layout literal exactly equals original Skirmish decor values including four boat entries and original order.",
+    "Original native scenery setup implementation unchanged except explicit visual-decor loop input; public setup signature and CampaignScenery override unchanged.",
+    "Restore uses fixed installed original visual layout and checks filtered gameplay decor; no deploy/reward or temporary gameplay-map changes.",
+    "Raw unchanged mixed line endings preserved in current production diffs."
+  ],
+  "pending_review_issue": {
+    "id": "GAO_NATIVE_ART_IDENTITY",
+    "finding": "Installed native-Gao map identity checks dimensions/theme/Hall but should also bind original liangshan_rts_court, liangshan_art_level_id and Hall-facing metadata. Current arbitrary allowed metadata could route to another chapter despite Gao owner.",
+    "next": "After current immutable g producer terminal, add exact installed native metadata checks with tampered-art/context negative cases; preserve g receipt, use distinct sibling and rerun. Do not mutate frozen g inputs while handle is live."
+  },
+  "source_hashes": {
+    "scripts/levels/skirmish.gd": "cdd75c6dd5841329891dbec65314e979e2f33e16188e63adf63fa91404784844",
+    "scripts/liangshan_scenery.gd": "2c8ce5311032d4eeef5e0e1081ca651780e89bfd10d7a02c3daed484b8bb1101",
+    "scripts/run_scenery_state.gd": "a512a410735c94bdd37d3b569779a5ca3d93edf0702c717f162077b58492c581"
+  },
+  "full_goal_qualified": false
+}

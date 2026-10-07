@@ -1,0 +1,33 @@
+{
+  "original_run": "E:\\ChatGPT\\qa-world-restore-20261007\\full_scenery_frozen_v23c_442a71df",
+  "original_checks": 173,
+  "original_failures": [
+    "level5 initial native visual rebuilt by original fixed factory",
+    "level5 wave sent native visual rebuilt by original fixed factory",
+    "level8 initial whole restored map recaptured",
+    "level8 initial exact whole map/scenery payload recapture",
+    "level8 prison admitted whole restored map recaptured",
+    "level8 prison admitted exact whole map/scenery payload recapture",
+    "level8 signal whole restored map recaptured",
+    "level8 signal exact whole map/scenery payload recapture",
+    "level8 signal expired whole restored map recaptured",
+    "level8 signal expired exact whole map/scenery payload recapture",
+    "level8 gate open rescued whole restored map recaptured",
+    "level8 gate open rescued exact whole map/scenery payload recapture"
+  ],
+  "source_before": {
+    "scripts/run_scenery_state.gd": "7dd64a9eb8a04967674563798ccba1b9926bc7513fc2aefdfde41563441e41a0",
+    "scripts/run_map_state.gd": "36b5bfa05faa40c524d05ef46735b054bf042d1f6a724c8dc5e06a79594002ff"
+  },
+  "source_after": {
+    "scripts/run_scenery_state.gd": "4972498e2838c0b2f9bd1a9a995643279b9edec96a1ac870ae857d2c4243be22",
+    "scripts/run_map_state.gd": "b435fac24af6a0e12f7e169ccb2e6aa9431aae27b6543146ed3022c56c85d7e1"
+  },
+  "gao_cause": "source127 metadata render_height=4.10399997234344 is produced by original process gate sync, absent at detached setup",
+  "gao_fix": "Pure new entrance gate/side-gate/wall render sync; no Units/FX or logical coordinates touched.",
+  "daming_cause": "A new SceneryState cannot recognize the still-gated activation plan belonging to the successful restore adapter.",
+  "daming_fix": "capture_prepared only accepts the exact owning adapter, content/context, full original node order/membership, disabled owner and blocked node flags. Ordinary capture stays strict, no signal/process activation.",
+  "runtime_qualified": false,
+  "full_world_qualified": false,
+  "new_producer": "qa/zhu_wounded_20261005/harness/run_full_scenery_v23d.py"
+}

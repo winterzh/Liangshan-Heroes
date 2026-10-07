@@ -182,3 +182,26 @@ func _fields(value: Variant, names: Array) -> bool:
 
 func _bad(code: String, field := "") -> Dictionary:
 	return {"ok": false, "code": code, "field": field}
+
+func default_light_settings() -> Dictionary:
+	var probe := PointLight2D.new()
+	probe.texture_scale = 1.8; probe.color = Color(1.0, 0.68, 0.32); probe.shadow_enabled = false
+	var value: Dictionary = _light_settings_values(probe)
+	probe.free()
+	return value
+
+func light_settings(node: PointLight2D) -> Dictionary:
+	var value: Dictionary = _light_settings_values(node)
+	if value != default_light_settings(): return _bad("DAMING_LAMP_SETTINGS")
+	return {"ok": true, "value": value}
+
+func _light_settings_values(node: PointLight2D) -> Dictionary:
+	var base := Node2D.new(); var inherited := {}
+	for property: Dictionary in base.get_property_list(): inherited[String(property.name)] = true
+	base.free()
+	var result := {}
+	for property: Dictionary in node.get_property_list():
+		var name: String = String(property.name)
+		if not (int(property.usage) & PROPERTY_USAGE_STORAGE) or inherited.has(name) or name in ["texture", "energy"]: continue
+		result[name] = node.get(name)
+	return result
