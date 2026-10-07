@@ -1918,3 +1918,9 @@ Git 克隆版以仓库根目录为工程根：`project.godot`、`assets/`、`scr
 - `qa/workshop_defense_public_20260924/`: public Defense example, subscription file hashes, callback reproduction and native regression.
 
 - `qa/stockade_boundary_20260924/`：据守围栏缺口复现、修复前后地图寻路检查及独立回读。
+
+
+## 2026-10-07 Steam发布批次
+
+- `docs/STEAM_UPDATE_20261007.md`：上传、分支上线、公告、客户端和Git状态分项记录。
+- `qa/steam_release_20261007/`：原生/候选/EXE证据归档、六文件哈希、SteamCMD白名单预览与上传脱敏日志、服务器清单、等待确认回读及现有四语公告文案。发行包、缓存、玩家和认证数据留在外部/忽略目录。

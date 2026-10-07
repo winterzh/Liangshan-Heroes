@@ -861,3 +861,9 @@ scripts/run_level8_world_factory.gd -text -whitespace
 # Native installed naval/disguise unit contracts.
 scripts/run_level5_unit_contract.gd -text -whitespace
 scripts/run_level8_unit_contract.gd -text -whitespace
+
+# Preserve executed Steam release evidence and producer bytes exactly.
+qa/steam_release_20261007/** -text -whitespace
+tools/run_steam_release_native_qa_20261007.py -text -whitespace
+tools/run_steam_release_native_qa_20261007_retry_d.py -text -whitespace
+tools/run_steam_release_native_qa_20261007_retry_f.py -text -whitespace
