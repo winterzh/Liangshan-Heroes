@@ -1,3 +1,8 @@
+<!-- office-prefix-v25x6 -->
+## 2026-10-08 公司续做入口
+
+先读 [公司启动与下一步](OFFICE_START_20261008.md)。正常启动、已验证生产四文件、QA 两份未验证候选和不可跨机复用的旧批次分别说明。新恢复批 8f3d393d 已启动并冻结工程，此条仅记录启动状态；实际原生结果以本次最终收据为准。完整开发计划继续保留。
+
 ## 2026-10-08 03点后：第三进程被共享引擎恢复占用中断
 
 原run07ad37bf已终止exit1并释放锁。新6路径候选的JSON533、OwnedSlot76、实际办理保存A39/B继续重存351已通过，第三进程C在运行中因foreign_engine_resumed中止；完整ABC仍未资格，Lu/Shi单人撤离尚未执行。原完整profile、producer、收据及日志全部保留，不覆盖或重用失败profile。主证据retreat_explorer_shared_interruption_review_v25x4.json。

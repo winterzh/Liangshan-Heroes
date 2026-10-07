@@ -1,3 +1,12 @@
+<!-- office-prefix-v25x6 -->
+## 2026-10-08 03:35：恢复入口启动与公司续做准备
+
+新 r2d/run8f3d393d 已由本线程唯一观察者启动，Python220144，私有冻结阶段完成。严格回读原失败批 source6、私有5102、28证据和五个完整前序文件后，只复制到新profile；仍须实际 C342 与双方真实单人撤离 A，未宣称新的原生通过或 v25 整体资格。原run07ad37bf/producer/失败profile不改。准备与启动证据见 `qa/zhu_wounded_20261005/safe_retreat_prefix_preparation_delivery_v25x5.json` 及 proposals/daming_safe_retreat_v25 的 PREFIX_C_STARTED_8F3D393D_FX.json。
+
+r2e 完整复用入口已独立静态闭合，继承 r2b2/e61 修正后的三消费者；缺真实双方A闭合证明时前置阻断、不创建原生批。全部52负例和双方BCD保留，不能用A探索代替自然终止、完整负例或Campaign真实写盘。两份生产候选仍仅本地未验证，不纳入生产提交。首次启动器日期转换被前置拒绝，原输出另存，随后保留原ISO字符串启动；原producer/审查未修改。
+
+公司最新简明入口为 [OFFICE_START_20261008.md](OFFICE_START_20261008.md)：正常Godot/原生依赖启动可用；旧QA物理缓存、固定今晚截止和同机时钟不能迁移，公司新批需建立本机基线与新后继。原稿两处路径控制字符已另存更正记录并修成原样命令，未执行文档里的公司命令。仍于香港06:00按实际结果收尾、逐文件同步，所有后续计划保留。
+
 ## 2026-10-08 03点后：第三进程被共享引擎恢复占用中断
 
 原run07ad37bf已终止exit1并释放锁。新6路径候选的JSON533、OwnedSlot76、实际办理保存A39/B继续重存351已通过，第三进程C在运行中因foreign_engine_resumed中止；完整ABC仍未资格，Lu/Shi单人撤离尚未执行。原完整profile、producer、收据及日志全部保留，不覆盖或重用失败profile。主证据retreat_explorer_shared_interruption_review_v25x4.json。
