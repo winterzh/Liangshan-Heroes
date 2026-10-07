@@ -1,3 +1,17 @@
+<!-- campaign-units-v19d-current -->
+## 2026-10-07 两关真实Unit图/矿点引用/船体定义复验通过
+
+level5/8专属Unit契约和图schema已本地接入。原高太尉波次/登船、船体/押俘角色，大名府乔装/俘虏/工人与矿点按实际关卡声明校验；高太尉角色/波次不接受重复槽位，大名府死亡援军虽被原调度器移出池仍保留正在死亡的源lane。daming_mine只在level8按entity/expired/none标签保存，完整注册表建立后绑定新对象，不把旧世界Object或保存标签留给游戏逻辑。
+
+当前正式生产脚本复制、零私有运行时补丁、正常时钟1.0：767项通过、5038来源零漂移，7原章状态（Gao初态/付60木刘唐登船/波次已发，Daming初态/暴露/开门救人/付费援军死亡）。原Unit全部值与引用实例化、注册表绑定后再次捕获，完整Unit/Level payload一致；两个工人矿点指向新矿点，失效标签由本任务tombstone绑定/释放；未知或伪矿点、重复波次和遗漏活体俘虏成员拒绝。证据campaign_units_qualified_v19d.json、campaign_units_verified_log_v19d.txt、campaign_units_review_v19d.json和7紧凑原生快照。
+
+保留实际v19b失败：83项/3失败，Gao定义键StringName虽已通过Unit定义规则但通用Codec不支持，大名府初态61真Unit精确重建通过后误调测试_spy_tick。v19c修正新level5 Unit wire，按有界条目保留String/StringName键类型、顺序和值；旧Unit schema/公共Codec未改，测试改用原_cover_tick。另保留v19c终态761项/3失败：三组Gao重捕获正确拒绝测试owner缺Mission按钮容器；四组Daming完整payload重捕获通过，整批仍失败。v19d只补原固定Mission构造器的惰性私有HUD/fx壳，空账本、不调用begin/tick/reward，未放宽生产校验。原producer/失败报告、导入前取消v19和准备工具失败记录均保留，不改写为通过。
+
+脱离场景树的禁用owner/map空壳、保存Node旗标重放、接触和阶段调度均为明确夹具；已证明真实Unit字段与引用恢复，**未证明地图/场景/灯光/FX/时钟/完整Mission/跨进程世界恢复或自然通关**。下一阶段完成原梁山/大名府场景、灯光/通道/地图、表现分区、root/core及Gao按钮延后绑定，再实际保存、退出、独立进程继续/再保存、自然结局/奖励一次。公开战役继续仍关闭；全项目人物拥挤/连续演出、同版九玩法/发行程序、性能/切换清理、Android真机门槛继续。
+
+后续类型/绑定缺口详见remaining_world_restore_audit_v20.json，审计不算运行验收。当前源码/证据/属性与七份交接尚待本轮白名单同步；上一远端e1d546d0。只清指定取消v19/失败v19b/v19c工程imported中与保留v19d成功批同名、大小、SHA256一致的11214文件、2,705,456,142字节（约2.52GiB），20389受保护文件及保留匹配缓存零漂移。不同缓存保留；收据failed_unit_graph_import_cleanup_v19.json，旧工程复查先重导入。未新增平台发布。
+<!-- /campaign-units-v19d-current -->
+
 <!-- campaign-foundation-v18b-current -->
 ## 2026-10-07 第5/8关恢复组件接入与高太尉具名收兵按钮
 

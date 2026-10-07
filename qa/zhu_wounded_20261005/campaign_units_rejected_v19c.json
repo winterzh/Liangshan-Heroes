@@ -1,0 +1,60 @@
+{
+  "qualified": false,
+  "receipt_sha256": "49f26d9aff665a1543ce01fab3a7a2fd5d28919f4dfe3c449cc448471f656cd7",
+  "report_sha256": "77a2953058835cebfeb9478e64a0f80feab59e64c5f6693915b90badffeb93ac",
+  "checks": 761,
+  "failures": [
+    "level5 initial bound Unit graph recaptured without simulation",
+    "level5 Liu embarked bound Unit graph recaptured without simulation",
+    "level5 wave sent bound Unit graph recaptured without simulation"
+  ],
+  "harnesses": [
+    {
+      "path": "qa/zhu_wounded_20261005/harness/campaign_units_v19c.gd",
+      "sha256": "77e79fdef2890135884939c24fb2390b9c65ea8f2476ab77c1d62cfbfa736152"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/harness/run_campaign_units_v19c.py",
+      "sha256": "0829dd5448f7e92431272877b551398b102d77e0068b24964282a9508a4f5e64"
+    }
+  ],
+  "snapshots": [
+    {
+      "case": "level5 initial",
+      "path": "qa/zhu_wounded_20261005/campaign_units_failed_snapshots_v19c/level5_initial_snapshot.json",
+      "sha256": "e03c615e846d104426559ed903c2f8c143fc3f8e13785dfa2c8403c497216fe0"
+    },
+    {
+      "case": "level5 Liu embarked",
+      "path": "qa/zhu_wounded_20261005/campaign_units_failed_snapshots_v19c/level5_Liu_embarked_snapshot.json",
+      "sha256": "99daf3d685d23670a053bd04d5667ddfd3ae941867f9732c5cf0298a2d3ab476"
+    },
+    {
+      "case": "level5 wave sent",
+      "path": "qa/zhu_wounded_20261005/campaign_units_failed_snapshots_v19c/level5_wave_sent_snapshot.json",
+      "sha256": "129b04ff3a1e579a134803f49dd3b6725072a655cbf6a18882f2676fcbf7516f"
+    },
+    {
+      "case": "level8 initial",
+      "path": "qa/zhu_wounded_20261005/campaign_units_failed_snapshots_v19c/level8_initial_snapshot.json",
+      "sha256": "0e82df5aba5c8386eaeef70927513aaf2bfdf5661f348ff3b925ecb66b3a8629"
+    },
+    {
+      "case": "level8 exposed scout",
+      "path": "qa/zhu_wounded_20261005/campaign_units_failed_snapshots_v19c/level8_exposed_scout_snapshot.json",
+      "sha256": "6dd180662ad3a558f65f6942a60e0d65fb6c660617b57d5afb6182476fe10bbd"
+    },
+    {
+      "case": "level8 gate open rescued",
+      "path": "qa/zhu_wounded_20261005/campaign_units_failed_snapshots_v19c/level8_gate_open_rescued_snapshot.json",
+      "sha256": "33e6aa972670c22a2c40584bf4ce13c8d944bb356a507a78f70147094cd97657"
+    },
+    {
+      "case": "level8 paid support dying",
+      "path": "qa/zhu_wounded_20261005/campaign_units_failed_snapshots_v19c/level8_paid_support_dying_snapshot.json",
+      "sha256": "cd5b3de1d751f0ba2703fc80d5bc78bc359fce029e5c2dcd27b104883a270c29"
+    }
+  ],
+  "finding": "All original actor construction/key-kind/reference checks and four Daming whole recaptures passed. Gao recapture correctly refused missing installed Mission/buttons on detached QA owner (LEVEL5_MISSION_BUTTONS). No production guard change.",
+  "fix": "Sibling v19d uses the installed inert Mission constructor with typed private HUD/fx shell, empty ledger and no begin/tick/reward. Disconnect its owned localization signal before disposal. Re-run full seven cases."
+}

@@ -1,0 +1,108 @@
+{
+  "declaration_audit_complete": true,
+  "existing_campaign_kinds": [
+    "campaign_scenery",
+    "story_sign",
+    "story_crowd",
+    "story_stall",
+    "mengzhou_gate",
+    "mengzhou_shadow",
+    "ground_overlay",
+    "sprite",
+    "stockade",
+    "flag",
+    "art"
+  ],
+  "missing_chapter_scenery_schemas": [
+    "level5",
+    "level8"
+  ],
+  "gao": {
+    "campaign_environment_enabled": false,
+    "production_reason": "CampaignEnvironment.LEVELS excludes level5; normal launch uses native Liangshan scenery, map/environment identity must be bound to installed Gao chapter. Merely adding level5 to campaign _campaign_enabled would wrongly require CampaignScenery.",
+    "required": [
+      "Dedicated installed Gao native-scenery identity/schema while reusing qualified Liangshan node/material/navigation decoder.",
+      "Original60x60 native-height/shore navigation and all shipyard/building footprints, original private RNG and scenery-owned arrays/entrance/flags."
+    ]
+  },
+  "daming": {
+    "unhandled_production_types": [
+      "CanvasModulate LanternNight",
+      "PointLight2D lanterns/Cuiyun",
+      "campaign_city_wall.gd CityWall",
+      "campaign_passage.gd Passage"
+    ],
+    "state_requiring_restore": [
+      "Fixed night tint and shared generated lantern gradient texture identity.",
+      "Cuiyun lamp energy0.45/1.15 follows actual source signal state.",
+      "Wall end_local/height_scale/salt; derived mesh rebuilt from those fixed values.",
+      "Passage map pointer/caption/object_key and cached _open; navigation tables remain gameplay authority.",
+      "CampaignScenery _walls/_sprites/_trees/_ground_shadows and shared _lantern_texture/_cuiyun_light ownership."
+    ],
+    "required": [
+      "Extend fixed node factories/field contracts for installed Daming context only; preserve original hierarchy, lighting/resources and dynamic states.",
+      "Capture/restore gate/wicket/prison navigation and scenery in staged detached world, without re-running deploy or reward/mission callbacks."
+    ]
+  },
+  "outer_remaining": [
+    "Visual partition installed chapter identities/schemas and original effect ownership.",
+    "Battle root installed level5/8 capture eligibility and model-specific queues/resources/states.",
+    "World core: Gao token level5:end validated before Unit preparation; inert Level shell then actual Mission-owned end_button binding, final Level restore and cross-component consistency.",
+    "Independent real process save/exit/continue/resave, paid production/ship/transport and natural ending/reward-once proofs; existing chapter/mode regression before player entry."
+  ],
+  "public_campaign_entry_qualified": false,
+  "public_save_gate_expression": "Campaign.skirmish and not Campaign.skirmish_ai and not Campaign.arena and not Campaign.custom_defense and not Campaign.scenario and Campaign.defense_waves == 30 and Campaign.defense_hero_cap == 4 and not Campaign.defense_random",
+  "runtime_qualified": false,
+  "sources": [
+    {
+      "path": "scripts/run_scenery_state.gd",
+      "sha256": "c866a24538394c398a4799d3a231f6b59089adf49e613b0957c135a6ded04fc3"
+    },
+    {
+      "path": "scripts/run_map_state.gd",
+      "sha256": "f6117801a78edb69eb027bc6b35fa0f7b82519ff700618fe704760312eb011a2"
+    },
+    {
+      "path": "scripts/run_visual_graph.gd",
+      "sha256": "ede8a682e9c796b8c2d38c9510c7c69db50da2bc1ce45807a7f84c0300c325e9"
+    },
+    {
+      "path": "scripts/run_battle_root_state.gd",
+      "sha256": "7370fa8f8a65d2cad2ef1500e8e9d27784dd19871f1b6015f308112d54c2db6e"
+    },
+    {
+      "path": "scripts/run_battle_world_core.gd",
+      "sha256": "fafabfaedd0432225701b08c5927b812201d80a6fd4ff27468d2f745c35d0117"
+    },
+    {
+      "path": "scripts/game_map.gd",
+      "sha256": "0f090079229a68269ac94870d1902238444e9ba0ddbc7f359df52f38a4b2db87"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "sha256": "f020f434f755950d41dae9320bcdcb388359835b714f83bbd4592300514172b1"
+    },
+    {
+      "path": "scripts/campaign_scenery.gd",
+      "sha256": "ca6f9993800bdf4bc638e5d0288290d6cdb5f3b7fb1e0c5358a19168c9cc2339"
+    },
+    {
+      "path": "scripts/campaign_environment.gd",
+      "sha256": "93c0f575a0716a9b00545781f29686740277290f6c29fab4539094d2a1334766"
+    },
+    {
+      "path": "scripts/campaign_city_wall.gd",
+      "sha256": "02cc31b5ff761d3832c5a12f292002603ac15bc1fa28c2a781d944634416a622"
+    },
+    {
+      "path": "scripts/campaign_passage.gd",
+      "sha256": "665bf4a589539b4215b6baf8bc130948cd31d886c05f8c62aa1cdc8ea57cc364"
+    },
+    {
+      "path": "scripts/continue_flow.gd",
+      "sha256": "a169690ba69adbc436355dfce45d5373f0f0c18ca013c09d57fbd552156df172"
+    }
+  ],
+  "producer_sha256": "04f7427c45b7a4b81cd6334298155cb3bc095a9f3be2c9f9aa1ede25b0319733",
+  "scope": "Exact current-source inspection. This is remaining-work evidence, not map/scenery/world runtime acceptance. Current Unit v19c is separately pending its active engine wrapper."
+}

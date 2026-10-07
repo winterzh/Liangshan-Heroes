@@ -1,0 +1,22 @@
+{
+  "qualified": false,
+  "receipt_sha256": "84bfcf59a90e8d181958dfa59e99188962983dcac611a3bba3ee7ab7ee503a16",
+  "report_sha256": "bc63852bf5950daef6595a2e83db1f0273e8e9ee65a63938787970d9fc4d4821",
+  "checks": 83,
+  "harnesses": [
+    {
+      "path": "qa/zhu_wounded_20261005/harness/campaign_units_v19b.gd",
+      "sha256": "c781d160a5f341340d12e4b2c9dca86d88af7c916d69bdd99efce27e24aedf00"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/harness/run_campaign_units_v19b.py",
+      "sha256": "1a14300a6a5acc768a94b05caf7fb47f7af6efcaf1e85705764245c6dc779c73"
+    }
+  ],
+  "findings": [
+    "Gao Unit definition accepts StringName keys but common bounded codec rejects them; actual capture fails at setup_def key15. Keep key type, do not stringify the live definition or broaden the global codec.",
+    "Daming initial61 real Units bound and recaptured exactly; both miners point to fresh minerals, invalid/false-mineral/expired tags checked. Whole batch still failed before later Daming cases.",
+    "QA called nonexistent _spy_tick; installed method is _cover_tick."
+  ],
+  "next": "Sibling v19c stores bounded root setup_def key-kind entries in Level5 Unit wire representation and restores exact String/StringName kinds; old schemas/global codec unchanged. Correct QA callback name; full new execution required."
+}

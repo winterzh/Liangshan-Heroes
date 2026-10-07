@@ -12,6 +12,10 @@ const LEVEL3_SCHEMA := "level3_unit_state_v1"
 const LEVEL1_SCHEMA := "level1_unit_state_v1"
 const LEVEL6_SCHEMA := "level6_unit_state_v1"
 const LEVEL2_SCHEMA := "level2_unit_state_v1"
+const LEVEL5_SCHEMA := "level5_unit_state_v1"
+const LEVEL8_SCHEMA := "level8_unit_state_v1"
+var _gao_contract: RefCounted
+var _daming_contract: RefCounted
 const LEVEL4_SCHEMA := "level4_unit_state_v1"
 var _lian_contract: RefCounted
 const LEVEL7_SCHEMA := "level7_unit_state_v1"
@@ -890,6 +894,22 @@ func _configure_context(context: Dictionary, roles: Dictionary) -> void:
 		return
 	if _unit_script != preload("res://scripts/unit.gd"):
 		_scope_error = "CHAPTER_PRODUCTION_UNIT_REQUIRED"; return
+	if context.mode == "campaign" and context.level_id == "level5" and context.waves == 0:
+		_gao_contract = preload("res://scripts/run_level5_unit_contract.gd").new()
+		var result: Dictionary = _gao_contract.configure(roles)
+		if not result.ok: _scope_error = result.code; return
+		_chapter_roles = _gao_contract.actors.duplicate(true)
+		for id in _gao_contract.pools:_chapter_roles[id] = {}
+		_unit_schema = LEVEL5_SCHEMA
+		return
+	if context.mode == "campaign" and context.level_id == "level8" and context.waves == 0:
+		_daming_contract = preload("res://scripts/run_level8_unit_contract.gd").new()
+		var result: Dictionary = _daming_contract.configure(roles)
+		if not result.ok: _scope_error = result.code; return
+		_chapter_roles = _daming_contract.actors.duplicate(true)
+		for id in _daming_contract.pools:_chapter_roles[id] = {}
+		_unit_schema = LEVEL8_SCHEMA
+		return
 	if context.mode == "campaign" and context.level_id == "level4" and context.waves == 0:
 		_lian_contract = preload("res://scripts/run_level4_unit_contract.gd").new()
 		var result: Dictionary = _lian_contract.configure(roles)
@@ -1171,6 +1191,7 @@ func _configure_level6_roles(roles: Dictionary) -> void:
 func _chapter_registry(known_ids: Dictionary) -> Dictionary:
 	if not _scope_error.is_empty(): return _failure(_scope_error)
 	for id: String in _chapter_roles:
+		if _unit_schema in [LEVEL5_SCHEMA,LEVEL8_SCHEMA] and not known_ids.has(id):return _failure("LEVEL5_ROLE_NOT_IN_GRAPH" if _unit_schema == LEVEL5_SCHEMA else "LEVEL8_ROLE_NOT_IN_GRAPH",id)
 		if _unit_schema == LEVEL7_SCHEMA and not known_ids.has(id): return _failure("LEVEL7_ROLE_NOT_IN_GRAPH", id)
 		if not known_ids.has(id): return _failure("LEVEL2_ROLE_NOT_IN_GRAPH" if _unit_schema == LEVEL2_SCHEMA else ("LEVEL6_ROLE_NOT_IN_GRAPH" if _unit_schema == LEVEL6_SCHEMA else "LEVEL3_ROLE_NOT_IN_GRAPH"), id)
 	return {"ok": true}
@@ -1199,6 +1220,8 @@ func _check_chapter_values(v: Dictionary) -> Dictionary:
 				if (v.hp <= 0.0) != v._dying: return _failure("LEVEL1_YANG_LIFETIME")
 		# Wine scheme uses story poses and may drug/capture escorts; allow those.
 		return {"ok": true}
+	if _unit_schema == LEVEL5_SCHEMA: return _gao_contract.values(v)
+	if _unit_schema == LEVEL8_SCHEMA: return _daming_contract.values(v)
 	if _unit_schema == LEVEL4_SCHEMA: return _lian_contract.values(v)
 	if _unit_schema == LEVEL6_SCHEMA: return _check_level6_values(v)
 	if _unit_schema == LEVEL2_SCHEMA: return _check_level2_values(v)
@@ -1249,6 +1272,8 @@ func _check_chapter_parts(v: Dictionary, refs: Dictionary, meta: Dictionary, nod
 		# No gate footprints; bundles may be captured/drugged with ordinary units.
 		if v.is_captive and v.garrisoned: return _failure("LEVEL1_CAPTIVE_GARRISON")
 		return {"ok": true}
+	if _unit_schema == LEVEL5_SCHEMA: return _gao_contract.parts(v, refs, meta, node)
+	if _unit_schema == LEVEL8_SCHEMA: return _daming_contract.parts(v, refs, meta, node)
 	if _unit_schema == LEVEL4_SCHEMA: return _lian_contract.parts(v, refs, meta, node)
 	if _unit_schema == LEVEL6_SCHEMA: return _check_level6_parts(v, refs, meta)
 	if _unit_schema == LEVEL2_SCHEMA: return _check_level2_parts(v, refs, meta, node)
@@ -1643,6 +1668,14 @@ func validate_level6_membership(states: Dictionary, active_ids: Array) -> Dictio
 	if retired_orders > absent_escorts: return _failure("LEVEL6_ESCORT_ORDER_RETIRED_COUNT")
 	return {"ok": true, "complete_world": false, "root_and_effect_validation_required": true}
 
+func validate_level5_membership(states: Dictionary, active_ids: Array) -> Dictionary:
+	if _unit_schema != LEVEL5_SCHEMA or not _scope_error.is_empty():return _failure("LEVEL5_CONTEXT_REQUIRED")
+	return _gao_contract.membership(states, active_ids)
+
+func validate_level8_membership(states: Dictionary, active_ids: Array) -> Dictionary:
+	if _unit_schema != LEVEL8_SCHEMA or not _scope_error.is_empty():return _failure("LEVEL8_CONTEXT_REQUIRED")
+	return _daming_contract.membership(states, active_ids)
+
 func validate_level4_membership(states: Dictionary, active_ids: Array) -> Dictionary:
 	if _unit_schema != LEVEL4_SCHEMA or not _scope_error.is_empty(): return _failure("LEVEL4_CONTEXT_REQUIRED")
 	return _lian_contract.membership(states, active_ids)
@@ -1714,7 +1747,7 @@ func _check_values(values: Dictionary) -> Dictionary:
 				if typeof(value) != TYPE_BOOL: return _failure("VALUE_TYPE",field)
 			"int":
 				if typeof(value) != TYPE_INT: return _failure("VALUE_TYPE",field)
-				if field == "faction" and _unit_schema in [LEVEL3_SCHEMA, LEVEL1_SCHEMA, LEVEL2_SCHEMA]:
+				if field == "faction" and _unit_schema in [LEVEL3_SCHEMA, LEVEL1_SCHEMA, LEVEL2_SCHEMA, LEVEL8_SCHEMA]:
 					if value < 0 or value > 2: return _failure("VALUE_RANGE", field)
 				elif INT_RANGES.has(field) and (value < INT_RANGES[field][0] or value > INT_RANGES[field][1]): return _failure("VALUE_RANGE",field)
 			"float":
@@ -1789,6 +1822,13 @@ func _check_values(values: Dictionary) -> Dictionary:
 
 func _to_wire(values: Dictionary) -> Dictionary:
 	var wire := values.duplicate(false)
+	if _unit_schema == LEVEL5_SCHEMA:
+		# Dictionary property assignments can add StringName keys to naval definitions.
+		# Only this new chapter wire shape carries key kind; the shared codec stays closed.
+		var entries: Array = []
+		for key in values.setup_def:
+			entries.append({"kind":"string_name" if typeof(key) == TYPE_STRING_NAME else "string","key":String(key),"value":values.setup_def[key]})
+		wire.setup_def = {"schema":"level5_definition_keys_v1","entries":entries}
 	var points: Array[Vector2] = []
 	for point in values._path: points.append(point)
 	wire._path = points
@@ -1805,6 +1845,18 @@ func _from_wire(wire: Dictionary) -> Dictionary:
 		if typeof(point) != TYPE_VECTOR2 or not point.is_finite(): return _failure("PATH_SHAPE","_path")
 		points.append(point)
 	var values := wire.duplicate(false)
+	if _unit_schema == LEVEL5_SCHEMA:
+		var definition: Variant = wire.setup_def
+		if typeof(definition) != TYPE_DICTIONARY or not _fields(definition,["schema","entries"]):return _failure("LEVEL5_DEFINITION_KEYS")
+		if typeof(definition.schema) != TYPE_STRING or definition.schema != "level5_definition_keys_v1" or typeof(definition.entries) != TYPE_ARRAY or definition.entries.size() > 512:return _failure("LEVEL5_DEFINITION_KEYS")
+		var restored: Dictionary = {}
+		for entry: Variant in definition.entries:
+			if typeof(entry) != TYPE_DICTIONARY or not _fields(entry,["kind","key","value"]):return _failure("LEVEL5_DEFINITION_ENTRY")
+			if typeof(entry.kind) != TYPE_STRING or entry.kind not in ["string","string_name"] or typeof(entry.key) != TYPE_STRING or entry.key.is_empty() or entry.key.length() > 256:return _failure("LEVEL5_DEFINITION_KEY")
+			var key: Variant = StringName(entry.key) if entry.kind == "string_name" else entry.key
+			if restored.has(key):return _failure("LEVEL5_DEFINITION_DUPLICATE_KEY")
+			restored[key] = entry.value
+		values.setup_def = restored
 	values._path = PackedVector2Array(points)
 	for field in ["_ai_dest","mission_order_target","_chase_best_distance"]:
 		var tagged: Variant = wire[field]
@@ -2041,7 +2093,7 @@ func _identities(ids: Variant, pools: Variant, callback: Callable, operation: St
 		result_pools[field] = mapped if operation == "decode" else entries
 	return {"ok": true, "ids": result_ids, "pools": result_pools}
 
-func _read_metadata(unit: Variant) -> Dictionary:
+func _read_metadata(unit: Variant, object_to_id: Dictionary = {}) -> Dictionary:
 	var result: Dictionary = {}
 	var names: Array[StringName] = unit.get_meta_list()
 	if names.size() > 128: return _failure("METADATA_LIMIT")
@@ -2049,21 +2101,30 @@ func _read_metadata(unit: Variant) -> Dictionary:
 		var key: String = String(meta_name)
 		if key.is_empty() or key.length() > 256: return _failure("METADATA_KEY", key)
 		var value: Variant = unit.get_meta(meta_name)
-		if typeof(value) == TYPE_RECT2:
+		if _unit_schema == LEVEL8_SCHEMA and key == "daming_mine":
+			var reference: Dictionary = _tag(value, object_to_id, "metadata.daming_mine")
+			if not reference.ok:return reference
+			result[key] = {"kind": "unit_reference", "tag": reference.value}
+		elif typeof(value) == TYPE_RECT2:
 			result[key] = {"kind": "rect2", "position": value.position, "size": value.size}
 		else:
 			# Codec rejects unsupported Objects/Resources; never silently drops meta.
 			result[key] = {"kind": "value", "value": value}
 	return {"ok": true, "value": result}
 
-func _check_metadata(values: Variant) -> Dictionary:
+func _check_metadata(values: Variant, known_ids: Dictionary = {}) -> Dictionary:
 	if typeof(values) != TYPE_DICTIONARY or values.size() > 128: return _failure("METADATA_SHAPE")
 	var result: Dictionary = {}
 	for key in values:
 		if typeof(key) != TYPE_STRING or key.is_empty() or key.length() > 256: return _failure("METADATA_KEY")
 		var entry: Variant = values[key]
 		if typeof(entry) != TYPE_DICTIONARY or typeof(entry.get("kind")) != TYPE_STRING: return _failure("METADATA_ENTRY", key)
-		if entry.kind == "rect2":
+		if entry.kind == "unit_reference":
+			if _unit_schema != LEVEL8_SCHEMA or key != "daming_mine" or not _fields(entry,["kind","tag"]):return _failure("METADATA_REFERENCE_SCOPE",key)
+			var checked: Dictionary = _check_tag(entry.tag,known_ids,"metadata.daming_mine")
+			if not checked.ok:return checked
+			result[key] = entry.tag.duplicate(true)
+		elif entry.kind == "rect2":
 			if not _fields(entry, ["kind", "position", "size"]) or typeof(entry.position) != TYPE_VECTOR2 or typeof(entry.size) != TYPE_VECTOR2:
 				return _failure("METADATA_RECT", key)
 			if not entry.position.is_finite() or not entry.size.is_finite(): return _failure("METADATA_RECT", key)
@@ -2144,14 +2205,14 @@ func capture(unit: Variant, entity_id: String, content_version: String, object_t
 		{"_lin_spear_target_id": unit._lin_spear_target_id, "_chase_last_id": unit._chase_last_id, "_giveup_id": unit._giveup_id},
 		{"_aura_atkspeed_sources": unit._aura_atkspeed_sources, "_damage_reduction_sources": unit._damage_reduction_sources}, encode_identity, "capture")
 	if not identities.ok: return identities
-	var metadata: Dictionary = _read_metadata(unit)
+	var metadata: Dictionary = _read_metadata(unit, object_to_id)
 	if not metadata.ok: return metadata
 	var inventory: Dictionary = _read_inventory(unit)
 	if not inventory.ok: return inventory
 	var node: Dictionary = _read_node(unit)
 	checked = _check_node(node)
 	if not checked.ok: return checked
-	var flat_metadata: Dictionary = _check_metadata(metadata.value)
+	var flat_metadata: Dictionary = _check_metadata(metadata.value, registry.ids)
 	if not flat_metadata.ok: return flat_metadata
 	checked = _check_chapter_parts(values, references.values, flat_metadata.value, node)
 	if not checked.ok: return checked
@@ -2192,7 +2253,7 @@ func validate(record: Variant, content_version: String, known_ids: Dictionary, v
 		if typeof(payload.inventory) != TYPE_DICTIONARY: return _failure("INVENTORY_FIELDS")
 		checked = _check_inventory(payload.inventory)
 		if not checked.ok: return checked
-	var metadata: Dictionary = _check_metadata(payload.metadata)
+	var metadata: Dictionary = _check_metadata(payload.metadata, known_ids)
 	if not metadata.ok: return metadata
 	checked = _check_node(payload.node)
 	if not checked.ok: return checked
@@ -2219,7 +2280,10 @@ func instantiate(record: Variant, content_version: String, known_ids: Dictionary
 	unit.show_behind_parent = node.show_behind_parent
 	unit.top_level = node.top_level
 	unit.y_sort_enabled = node.y_sort_enabled
-	for key in state.metadata: unit.set_meta(StringName(key), state.metadata[key])
+	for key in state.metadata:
+		# The new registry exists only at bind(); never install a saved tag as gameplay metadata.
+		if _unit_schema == LEVEL8_SCHEMA and key == "daming_mine":continue
+		unit.set_meta(StringName(key), state.metadata[key])
 	if state.inventory != null:
 		var inv: Variant = _inventory_script.new(unit)
 		inv.slots = state.inventory.slots
@@ -2272,6 +2336,7 @@ func bind(unit: Variant, record: Variant, content_version: String, id_to_unit: D
 	var map_script: Variant = game_map.get_script()
 	if map_script == null or map_script.get_global_name() != &"GameMap": return _failure("MAP_TYPE")
 	var count: int = _expired_count(state.references)
+	if _unit_schema == LEVEL8_SCHEMA and state.metadata.has("daming_mine") and state.metadata.daming_mine.state == "expired":count += 1
 	if count > 0:
 		if not _unit(expired_unit) or expired_unit.is_inside_tree() or expired_unit.get_parent() != null or seen.has(expired_unit):
 			return _failure("LIVE_DETACHED_TOMBSTONE_REQUIRED")
@@ -2296,6 +2361,8 @@ func bind(unit: Variant, record: Variant, content_version: String, id_to_unit: D
 	unit._giveup_id = identities.ids._giveup_id
 	unit._aura_atkspeed_sources = identities.pools._aura_atkspeed_sources
 	unit._damage_reduction_sources = identities.pools._damage_reduction_sources
+	if _unit_schema == LEVEL8_SCHEMA and state.metadata.has("daming_mine"):
+		unit.set_meta("daming_mine", _resolve_tag(state.metadata.daming_mine,id_to_unit,expired_unit))
 	unit.battle = battle
 	unit.map = game_map
 	return {"ok": true, "bound": true, "expired_bindings": count, "activation": state.node.activation,
