@@ -1,0 +1,89 @@
+{
+	"character": "campaign_core_v24d",
+	"checks": 33,
+	"engine_time_scale": 1.0,
+	"failures": [
+		"level5 initial world final components activate under pause",
+		"level8 initial world every non-root complete section with separately audited Mission clock",
+		"level8 initial world full Root simulation/cache/input clock contract verified"
+	],
+	"identity_after": {
+
+	},
+	"identity_before": {
+
+	},
+	"manifest": "",
+	"passed": false,
+	"private_profile": {
+		"actual_environment": {
+			"APPDATA": "E:/ChatGPT/qa-world-restore-20261007/profiles/campaign_core_v24d_5fecc9b6/appdata",
+			"LOCALAPPDATA": "E:/ChatGPT/qa-world-restore-20261007/profiles/campaign_core_v24d_5fecc9b6/localappdata",
+			"TEMP": "E:/ChatGPT/qa-world-restore-20261007/profiles/campaign_core_v24d_5fecc9b6/temp",
+			"TMP": "E:/ChatGPT/qa-world-restore-20261007/profiles/campaign_core_v24d_5fecc9b6/tmp"
+		},
+		"passed": true,
+		"profile": "E:/ChatGPT/qa-world-restore-20261007/profiles/campaign_core_v24d_5fecc9b6",
+		"user_data_dir": "E:/ChatGPT/qa-world-restore-20261007/profiles/campaign_core_v24d_5fecc9b6/appdata/Godot/app_userdata/水浒英雄传：八幕战役"
+	},
+	"render_window": {
+		"position": [
+			3360,
+			1768
+		],
+		"unfocusable": false
+	},
+	"resources": [],
+	"runtime": [
+		{
+			"activated": true,
+			"case": "level8 initial world",
+			"exact_nonroot_sections": false,
+			"full_core_prepared": true,
+			"full_world_qualified": false,
+			"independent_process_qualified": false,
+			"mounted": true,
+			"root_nonclock_exact": true,
+			"scope": "Actual initial world HELD capture, detached preparation, paused mount/final activation. All non-clock whole sections exact and Mission/Root temporal fields bounded against actual source/prepare/mount/activation/capture timestamps. Complete unmodified before/after evidence retained. No independent process or natural ending.",
+			"timing_audit": {
+				"activation_physics": 81,
+				"fresh_capture_after": 166807,
+				"fresh_capture_before": 165679,
+				"fresh_stage_age": 2834,
+				"fresh_stage_started": 163402,
+				"held_physics": 90,
+				"input_ages": {
+					"_last_group_time": {
+						"bounded_at_mount": false,
+						"new_stamp": 0,
+						"saved_age": 161390
+					},
+					"_last_tap_ms": {
+						"bounded_at_mount": false,
+						"new_stamp": 0,
+						"saved_age": 161390
+					},
+					"_press_ms": {
+						"bounded_at_mount": false,
+						"new_stamp": 0,
+						"saved_age": 161390
+					}
+				},
+				"mission_age_qualified": true,
+				"mount_after": 164813,
+				"mount_before": 164772,
+				"prepare_after": 164370,
+				"prepare_before": 161466,
+				"root_clock_qualified": false,
+				"saved_stage_age": 872,
+				"source_capture_after": 161413,
+				"source_capture_before": 160292,
+				"source_stage_started": 159975
+			},
+			"whole_capture": true
+		}
+	],
+	"scope": "Isolated character resource/command/render fixtures at normal time. Not a chapter clear, balance, save/restore or long performance acceptance.",
+	"screenshots": [],
+	"visual": false
+}
