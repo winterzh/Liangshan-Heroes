@@ -1,3 +1,12 @@
+<!-- offline-prepare-v25x10 -->
+## 2026-10-08 04:19：新离线准备入口已启动，待原生结果
+
+此前5284b47e也在import被共享引擎恢复占用中止，actual exit1、锁已释放，没有新C或双方撤离A；完整原失败证据见second_prefix_interrupted_delivery_v25x9.json。新的r2f/run71d4275a已唯一启动，Python206868；只把纯文件准备提前、合并相邻无写入的重复全树走读。原base约2.145GB独立复制、一次末尾完整Root/private5102/native9/QA9核验及所有native前后/空闲/lease/foreign守卫保留，真实import/guard/C342/bothA仍必须完成，目前没有新原生资格。
+
+原“每native约120秒全是空闲”措辞另存更正：连续空闲窗是60秒，其余主要为完整SHA守卫；准备优化收益尚未实测，不能称性能提升。新的r2e1仅准备接受r2f真实闭合来源，原942不改；当前缺实际C/bothA证明，full仍阻断。20:17只读CIM确证当次foreign是manghe工作树，不据此推断历史已退出PID身份，也未控制或消息其他任务。
+
+公司入口仍为 [OFFICE_START_20261008.md](OFFICE_START_20261008.md)。两生产候选仍未资格，不纳入生产提交；复原范围已独立预审但尚未执行，必须所有本线程后台真实终态且full仍false后才能逐文件回原。06:00按实际证据收尾，原开发计划完整保留。
+
 <!-- prefix-interruption-v25x7 -->
 ## 2026-10-08 03:46：恢复批导入被共享引擎占用中断
 

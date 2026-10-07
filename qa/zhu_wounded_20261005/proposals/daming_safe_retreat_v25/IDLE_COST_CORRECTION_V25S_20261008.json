@@ -1,0 +1,40 @@
+{
+  "schema": "daming_safe_retreat_idle_cost_correction_v25s_20261008",
+  "original_record_preserved": true,
+  "corrected_statement": "The source continuous natural idle window is 60 seconds, not 120. Observed roughly128seconds from native phase start to launch also includes full input SHA walks before and after acquire.",
+  "source_api": {
+    "path": "E:/ChatGPT/daming_admit_v24o_proposal/run_daming_admit_v24s.py",
+    "lines": "657-695,821",
+    "continuous_idle_seconds": 60
+  },
+  "read_only_observed_batches": [
+    {
+      "run": "daming_safe_retreat_v25s_r2d_prefix_c_8f3d393d",
+      "base_freeze_seconds": 203.718,
+      "adjacent_postbase_prepare_seconds": 90.952443,
+      "import_native_runtime_seconds": 50.313,
+      "terminal_exit": 1,
+      "stop_reason": "foreign_engine_resumed"
+    },
+    {
+      "run": "daming_safe_retreat_v25s_r2d_prefix_c_5284b47e",
+      "base_freeze_seconds": 201.438,
+      "adjacent_postbase_prepare_seconds": 89.334903,
+      "import_native_runtime_seconds": 28.843,
+      "terminal_exit": 1,
+      "stop_reason": "foreign_engine_resumed"
+    }
+  ],
+  "every_fresh_copy": {
+    "source_distinct_files": 5037,
+    "source_bytes": 1242141885,
+    "qualified_cache_files": 3745,
+    "qualified_cache_bytes": 902562078,
+    "native_files": 9,
+    "native_bytes": 8946228,
+    "full_runtime_files": 5102,
+    "full_runtime_bytes": 1250846842
+  },
+  "no_native_performance_prediction_or_pass_claim": true,
+  "scope": "Read-only actual receipts and immutable source inspection; original records unchanged."
+}
