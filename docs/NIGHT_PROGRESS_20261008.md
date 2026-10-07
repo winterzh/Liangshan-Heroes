@@ -25,3 +25,5 @@
 已于香港06:00停止启动新开发批，06:02在当前无本线程消费者、最新71d失败收据及全部SHA门槛成立后，用受审r4逐文件复原Core/UnitContract；before等于HEAD/备份/QAoriginal，candidate仍存QA，JSON四文件不变。实际收据见 `qa/zhu_wounded_20261005/proposals/night_wrap_20261008/ACTUAL_CANDIDATE_RESTORATION_R4.json`。
 
 本夜最终同步只源码/QA/文档，不新发布Steam/Android、不合并main。公司继续须建立新机器基线和新截止后继，不能复用今夜固定截止、同机时钟和物理缓存。完整开发计划继续开放，保存回读v27b仅源提案，其19故障/玩家失败UI/pending重试/跨进程故障恢复仍待完成。
+
+最终操作已实际确认：交接提交d609b38e远端回读一致，心跳6已PAUSED并回读，候选恢复与证据保全收据已纳Git。完成元数据同步后关闭本夜有界目标；完整开发计划继续开放。
