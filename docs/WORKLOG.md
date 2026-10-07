@@ -1,3 +1,12 @@
+<!-- campaign-proposal-v27x1 -->
+## 2026-10-08 05:12：战役真实保存回读收据提案完成源码审查
+
+新的v27b外部候选已完成Campaign/Battle两文件实现与独立源码/API审查，原best单局/no union、旧QA内存语义和Steam当局结算保持。候选将逻辑accepted、memory_applied、真实save+全新ConfigFile完整语义回读的persisted、QA suppressed分开；坏既有cfg/不支持数据写前拒绝，写后读回失败明确disk_state_unconfirmed而不声称回滚。Cloud callback在candidate内存安装后请求，不等于上传确认。
+
+当前仅源码提案，未应用Root、未运行Godot解析/真实磁盘/19条故障矩阵。玩家失败提示、pending锁/安全重试、终局gen2→cfg→ack与跨进程故障恢复仍未实现，不可当作战役持久恢复验收完成。当前提案目录为qa/zhu_wounded_20261005/proposals/campaign_persistence_observability_v27，使用proposed_b及V27B文档，oldff与原版证据保留。
+
+当前没有本线程原生后台；单人撤离两生产候选仍未资格。收尾精确双文件复原工具r2已独立静态审查，只可在22UTC后重新核最新71d终态、无own进程与全部字节条件后执行；目前未复原。完整剩余计划与06:00最终同步不变，公司续做先看[OFFICE_START_20261008.md](OFFICE_START_20261008.md)。
+
 <!-- offline-terminal-v25x16 -->
 ## 2026-10-08 04:36：离线准备通过，原生导入仍中断
 

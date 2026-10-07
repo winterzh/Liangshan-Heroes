@@ -1,0 +1,100 @@
+{
+  "schema": "campaign_persistence_official_engine_source_evidence_v27",
+  "created_utc": "2026-10-07T20:55:42.064951+00:00",
+  "reviewer": "/root/fx_caller_review",
+  "source_access": "Read-only official Godot4.6 documentation and exact4.6.3-stable engine source via web open. No local compiler or engine process.",
+  "native_qualified": false,
+  "engine_executed": false,
+  "sources": [
+    {
+      "url": "https://raw.githubusercontent.com/godotengine/godot/4.6.3-stable/core/variant/variant_parser.cpp",
+      "actual_read_line_ranges": [
+        [
+          1867,
+          1914
+        ],
+        [
+          2023,
+          2035
+        ],
+        [
+          2045,
+          2110
+        ],
+        [
+          2112,
+          2219
+        ]
+      ],
+      "short_quotes": [
+        "collapsing -0 to 0, collapsing NaN values",
+        "Max recursion reached"
+      ],
+      "observations": [
+        "rtos_fix normalizes signed zero and NaNs, and avoids unnecessary double digits for float32 representations. This is ConfigFile serialization semantics, not IEEE bit identity.",
+        "Float writer preserves float literal type; StringName, NodePath and math types have native syntax.",
+        "Typed Dictionary/Array metadata is written explicitly; custom-script type references can fail encoding.",
+        "Objects may serialize properties/resource paths; recursion overflow emits an error and substitutes null. Text equality alone is not arbitrary Object identity proof."
+      ]
+    },
+    {
+      "url": "https://raw.githubusercontent.com/godotengine/godot/4.6.3-stable/core/io/config_file.cpp",
+      "actual_read_line_ranges": [
+        [
+          34,
+          50
+        ],
+        [
+          72,
+          96
+        ],
+        [
+          112,
+          141
+        ],
+        [
+          176,
+          205
+        ],
+        [
+          240,
+          281
+        ]
+      ],
+      "short_quotes": [
+        "ConfigFile parse error"
+      ],
+      "observations": [
+        "Section/key enumeration returns complete current membership. Nil removes a key.",
+        "encode_to_text delegates values to VariantWriter but its section header differs from save escaping of closing brackets.",
+        "save opens the destination for writing; internal serialization returns OK. A fresh independent load and semantic comparison is needed for readback evidence.",
+        "load/parse progressively populate the ConfigFile rather than clearing earlier fields. Use a new ConfigFile for readback.",
+        "Malformed parsing returns its Error and logs a native parser diagnostic. No overwrite should follow a failed existing-file load."
+      ]
+    },
+    {
+      "url": "https://docs.godotengine.org/en/4.6/classes/class_configfile.html",
+      "actual_read_sections": [
+        "Description",
+        "get_sections",
+        "get_section_keys",
+        "get_value",
+        "load",
+        "save",
+        "encode_to_text",
+        "set_value"
+      ],
+      "observations": [
+        "Documented ConfigFile API stores Variants, exposes section/key sets, and returns Error for load/save. Mutation of the ConfigFile object alone is not a filesystem write."
+      ]
+    }
+  ],
+  "review_implications": [
+    "Compare exact section/key membership and types plus native ConfigFile value-serialization meaning. Do not substitute JSON or require undocumented full IEEE preservation.",
+    "Do not depend on whole-config textual key order or raw headers to compare documents. Fixed safe section/key wrappers can compare supported values without original header escaping differences.",
+    "Unsupported custom Object/scripted typed-container or cyclic/deep serialization must be refused before overwriting original data; no placeholder-based false pass.",
+    "After successful save but failed readback, memory restoration is separate from disk status. Do not claim disk rollback, power-loss durability, transactional/crash safety or cloud/server upload.",
+    "Malformed ConfigFile negative tests may emit expected native parser ERROR; this does not authorize overlooking SCRIPT ERROR or uncontrolled extra native diagnostics."
+  ],
+  "citation_scope": "Primary-source API evidence only. No candidate GDScript parse or native testcase pass is implied."
+}

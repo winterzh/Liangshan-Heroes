@@ -1,5 +1,8 @@
 # 公司电脑续做入口（2026-10-08）
 
+<!-- campaign-proposal-v27x1 -->
+下一计划项已备妥：v27b保存回读收据代码与独立源码审查存QA proposals/campaign_persistence_observability_v27。current=proposed_b，未native/未Rootapply。公司先建立新基线，再做19条真实ConfigFile故障验收；它不代替单人撤离完整负例/终局与日志持久恢复。收尾工具r2静态闭合，仍待06:00实际门槛和执行。
+
 <!-- offline-terminal-v25x16 -->
 最新终态（04:36）：F/run71d4275a在导入被共享Godot打断，actual exit1/锁已释放，C和双方撤离A未运行。完整证据已归档；当前没有本线程运行中的原生后台。准备通过、原始四文件资格及后续计划分别保留，源码候选仍未资格。下方04:19运行中与启动段落是历史。
 

@@ -1,6 +1,6 @@
 # 2026-10-08 夜间开发当前结果
 
-本页更新到04:36终态；06:00最终交接会按实际后台终态更新。公司先读[启动与续做入口](OFFICE_START_20261008.md)，原完整计划保留在[DEVELOPMENT_PLAN.md](DEVELOPMENT_PLAN.md)。
+本页更新到05:12源码提案；06:00最终交接会按实际后台终态更新。公司先读[启动与续做入口](OFFICE_START_20261008.md)，原完整计划保留在[DEVELOPMENT_PLAN.md](DEVELOPMENT_PLAN.md)。
 
 | 工作 | 实际结果 | 证据 |
 | --- | --- | --- |
@@ -10,6 +10,7 @@
 | 两次补C恢复尝试 | 8f3d393d及5284b47e都中断在导入，未执行新C或双方撤离A；原profile、工具、收据及日志保留 | `prefix_interrupted_delivery_v25x7.json`、`second_prefix_interrupted_delivery_v25x9.json` |
 | r2f离线准备新批71d4275a | 原独立复制及末尾完整Root5037/private5102/native9/QA9核验通过；随后实际导入64.42秒被共享Godot打断、exit1/锁释放，C/双方A未运行 | `offline_prepare_actual_stages_v25x13.json`、`offline_import_interruption_delivery_v25x15.json` |
 | 完整负例与自然终局工具 | r2e1独立静态审查闭合；缺真实C和双方A来源证明时必须阻断，尚未启动完整矩阵 | `full_reuse_review_delivery_v25x11.json` |
+| Campaign保存回读收据v27b | 两文件源码提案与独立API审查完成；未应用/未解析/19故障未执行 | `campaign_observability_source_delivery_v27x1.json` |
 | 公司普通启动 | 正常Godot源码开发与隔离原生QA依赖已分开说明；公司机器尚未实测 | `office_native_scope_delivery_v25x12.json` |
 
 表内简写QA文件统一位于`qa/zhu_wounded_20261005/`。准备阶段通过不能代替原生运行，静态审查不能代替实际负例或终局资格。
@@ -24,3 +25,5 @@
 到香港时间06:00不启动新开发批。完成本线程后台终态与最终审计后，按实际结果逐文件同步stable并独立回读SHA。若两文件仍未资格，保留QA候选和证据后仅复原本线程这两份生产候选；已资格四文件保留。公司续做须建立新机器基线和新截止的后继工具，不能复用今夜固定截止/同机时钟/物理缓存路径。
 
 本夜增量只做源码、QA和文档同步；不据此宣称全项目完成，也不代表新的Steam或Android版本已发布。
+
+保存回读提案 current 为 `proposals/campaign_persistence_observability_v27/proposed_b`；只补保存结果可观察性。玩家失败UI、pending锁/安全重试、跨进程恢复仍是后续要求。
