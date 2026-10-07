@@ -1,5 +1,13 @@
 # 大名府单人安全撤离：保存与继续设计
 
+## 2026-10-08 同步范围补充：冻结工程与本地完整目录分别记录
+
+三进程通过范围为原冻结输入raw5041/distinct5037及明确补齐依赖、元数据后的隔离runtime5102。四个公开修复文件与该批精确同SHA；不能将这份资格解释为当前本地完整目录的运行资格。独立只读清单发现本地整树5042文件与隔离工程有24个额外草稿素材、84个依赖/元数据缺项及4个UID差异；草稿未混入本轮提交。公司使用既有bootstrap/重新导入后重新建立完整身份与私有profile，不能沿用家里content_version。完整差异见qa/zhu_wounded_20261005/independent_readonly_public_identity_v24s1.json。
+
+额外核对实际active local journal头、原文件SHA、token、世代1/2 binding及存档副本相等，没有writing锁。原LocalLifecycle固定context为defense/空章/30，与本次Slot的campaign/level8/0不同；这是当前API的实际行为，只证明原声明的本地生命周期与binding，不证明逐战役context或奖励语义。原数据保留，未修改ledger。原生profile目录保留作为证据；释放的是进程及写锁。
+
+独立Unit/Contract/Pair组件负例已准备181用例×2路线，尚未解析/运行；不把362计划行计为通过。单人撤离producer、五组实际live cast负例、自然结局/持久战役进度等仍待完成。完整计划继续按办公室交接推进。
+
 当前为未应用、未运行的提案与 QA 接入代码。生产分支未开放战役继续入口；不能把本页或静态审查作为自然通关、独立磁盘续玩或奖励资格。
 
 ## 要修复的实际状态

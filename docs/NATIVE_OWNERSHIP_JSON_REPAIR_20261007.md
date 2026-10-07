@@ -1,5 +1,13 @@
 # 原生场景归属索引的保存边界修复
 
+## 2026-10-08 同步范围补充：冻结工程与本地完整目录分别记录
+
+三进程通过范围为原冻结输入raw5041/distinct5037及明确补齐依赖、元数据后的隔离runtime5102。四个公开修复文件与该批精确同SHA；不能将这份资格解释为当前本地完整目录的运行资格。独立只读清单发现本地整树5042文件与隔离工程有24个额外草稿素材、84个依赖/元数据缺项及4个UID差异；草稿未混入本轮提交。公司使用既有bootstrap/重新导入后重新建立完整身份与私有profile，不能沿用家里content_version。完整差异见qa/zhu_wounded_20261005/independent_readonly_public_identity_v24s1.json。
+
+额外核对实际active local journal头、原文件SHA、token、世代1/2 binding及存档副本相等，没有writing锁。原LocalLifecycle固定context为defense/空章/30，与本次Slot的campaign/level8/0不同；这是当前API的实际行为，只证明原声明的本地生命周期与binding，不证明逐战役context或奖励语义。原数据保留，未修改ledger。原生profile目录保留作为证据；释放的是进程及写锁。
+
+独立Unit/Contract/Pair组件负例已准备181用例×2路线，尚未解析/运行；不把362计划行计为通过。单人撤离producer、五组实际live cast负例、自然结局/持久战役进度等仍待完成。完整计划继续按办公室交接推进。
+
 当前四文件已由v24s完整验收：固定JSON533、OwnedSlot76、实际A39/B351/C342及最终5102源码/原生核对通过，纳入stable同步。公开战役续玩入口仍关闭。下面r2描述为历史失败。r2固定JSON11案533项与原OwnedSlot76项通过，A真实保存退出32项通过。B独立安装全量比较已写证据，第二次HELD因QA自己的重复rejection信号连接ERROR中止；B无最终报告/C未启动，整体仍失败。新sibling只修测试监听生命周期，不覆盖原生产者/profile或放宽任何世界比较。
 
 大名府的真实任务办理半程验收通过正常移动到达触发点，进入真实 HELD 后调用 Session.save_held，返回 NONCANONICAL_RECORD。A进程终止，B/C未启动。v24p在同一失败事务中保留原 pending proposal 的两个完整字符串，确认196个场景归属索引从整数变为JSON浮点，其余形状和值无变化；UTF-8文本增加392字节。首个差异为 world.sections.map.sections.display.ownership.sprites 中的2与2.0。原规范格式检查正确拒绝了发生变化的记录。

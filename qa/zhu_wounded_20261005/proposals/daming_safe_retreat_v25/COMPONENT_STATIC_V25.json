@@ -1,0 +1,152 @@
+{
+  "schema": "daming_safe_retreat_component_static_preparation_v25",
+  "created_utc": "2026-10-07T17:36:38.716843+00:00",
+  "harness": {
+    "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/daming_safe_retreat_component_negative_v25.gd",
+    "sha256": "ccb4abd78fe1277c2475f53ace9ff4c5c133e1e8ca4ebb59fa6ac30c65ab134a",
+    "bytes": 44135
+  },
+  "scene": {
+    "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/daming_safe_retreat_component_negative_v25.tscn",
+    "sha256": "46adcee78872917b6518dc186ba1a055ff3bf00694835b723e51447282ba22fc",
+    "bytes": 219
+  },
+  "interface": {
+    "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/COMPONENT_NEGATIVE_INTERFACE_V25.json",
+    "sha256": "8ce5e3379c9a6502682cb8a3c6fb38261e708888492a0126c8677f7ad4d4e160",
+    "bytes": 295670
+  },
+  "scope": "Source/API selfcheck only, independent peer review required before producer consumption",
+  "actual_api_signatures_checked": [
+    "UnitState.new(Codec,Core.U,Core.Inventory,Profiles.DAMING_CONTEXT,roles)",
+    "UnitState.validate(record,version,known,identity.validate_identity)",
+    "Contract.configure(full checked roles)",
+    "Contract.values(full native values)",
+    "Contract.parts(full native values,refs,metadata,node)",
+    "UnitState.validate_level8_membership(states,active)",
+    "Contract.membership(states,active)",
+    "Core._validate_daming_safe_pair(full sections,mission_token,presentation_token)",
+    "Identity.declare_entities(known) and single dispose",
+    "Store._decode(raw canonical A)/_validate_document(native A)/read_slot()",
+    "LocalLifecycle.open_head() without writes",
+    "UnitState._to_wire/_from_wire and _check_metadata original installed representation"
+  ],
+  "case_count": 181,
+  "route_row_count": 362,
+  "module_counts": {
+    "unit_full": 36,
+    "contract_values": 17,
+    "contract_parts": 1,
+    "unit_membership": 2,
+    "contract_membership": 2,
+    "pair": 123
+  },
+  "expected_error_codes_source_reviewed": true,
+  "GDScript_grammar_or_native_verified": false,
+  "harness_imported_or_executed": false,
+  "engine_started": false,
+  "public_source_modified": false,
+  "native_qualified": false,
+  "peer_review_complete": false,
+  "source_files": {
+    "res://scripts/run_battle_world_core.gd": {
+      "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/proposed/scripts/run_battle_world_core.gd",
+      "sha256": "92b2bdac0058f9e1642d1b991c3ca353e902481d8daff990388e377597df87b1",
+      "bytes": 49463
+    },
+    "res://scripts/run_level8_unit_contract.gd": {
+      "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/proposed/scripts/run_level8_unit_contract.gd",
+      "sha256": "b2f52bcce60b27507b498a6d32e45b5cadd3409030fcd2e1024c78dac90e90d5",
+      "bytes": 8211
+    },
+    "res://scripts/run_unit_state.gd": {
+      "path": "E:/ChatGPT/水浒/scripts/run_unit_state.gd",
+      "sha256": "6be9f0a5193c1ea32e667419cd2447e3fe44f101cc4c5a50135b949d9085e694",
+      "bytes": 132317
+    },
+    "res://scripts/run_unit_graph.gd": {
+      "path": "E:/ChatGPT/水浒/scripts/run_unit_graph.gd",
+      "sha256": "daf426873cb65970bfc851a41e25d4a157c07efa895ec2050cc59bd0915a297d",
+      "bytes": 32833
+    },
+    "res://scripts/run_graph_identity.gd": {
+      "path": "E:/ChatGPT/水浒/scripts/run_graph_identity.gd",
+      "sha256": "c16f53cf32dad8e1ef05e17628cb4f846f80ec3873ce562f79f5b4f6372c5e5f",
+      "bytes": 11445
+    },
+    "res://scripts/run_campaign_level_state.gd": {
+      "path": "E:/ChatGPT/水浒/scripts/run_campaign_level_state.gd",
+      "sha256": "ea3e3b14a723d359eeb1a6268ecef03f73ca9cbacf8782451cfcf5e3fdd03db1",
+      "bytes": 20744
+    },
+    "res://scripts/run_campaign_mission_state.gd": {
+      "path": "E:/ChatGPT/水浒/scripts/run_campaign_mission_state.gd",
+      "sha256": "20448a9235e58b9c31b5bf30db485e758c923a1cfc1ac0661aa73557ab4437aa",
+      "bytes": 25797
+    },
+    "res://scripts/run_campaign_presentation_state.gd": {
+      "path": "E:/ChatGPT/水浒/scripts/run_campaign_presentation_state.gd",
+      "sha256": "9ff9b423394a86174ba387e4e7840a9a7f53a9366e18159e580aaa1f4e0cd655",
+      "bytes": 47059
+    },
+    "res://scripts/run_battle_root_state.gd": {
+      "path": "E:/ChatGPT/水浒/scripts/run_battle_root_state.gd",
+      "sha256": "0a0017050b82a5cef78d54593fe7c08bef21916e23e6980a2d0e0e0f8be06111",
+      "bytes": 39588
+    },
+    "res://scripts/run_state_value_codec.gd": {
+      "path": "E:/ChatGPT/水浒/scripts/run_state_value_codec.gd",
+      "sha256": "c8c4a58d1e68e22abb9f8b1abcb1a9cc1dbaa486e51ea5174dd16984aaa35d15",
+      "bytes": 12091
+    },
+    "res://scripts/run_slot_store.gd": {
+      "path": "E:/ChatGPT/水浒/scripts/run_slot_store.gd",
+      "sha256": "d67fe7794f23fe1bda3d74c7e284ba6b90d2cb488a5d35cb1a187eea77fa3532",
+      "bytes": 13212
+    },
+    "res://scripts/run_snapshot_store.gd": {
+      "path": "E:/ChatGPT/水浒/scripts/run_snapshot_store.gd",
+      "sha256": "581e638b8f0ce7cb24d5533b03ee94b99732c5cffcbf373b1a5a69a1618d8251",
+      "bytes": 21642
+    },
+    "res://scripts/run_local_lifecycle.gd": {
+      "path": "E:/ChatGPT/水浒/scripts/run_local_lifecycle.gd",
+      "sha256": "e68cb817a6dcc4cc1df91caf29c07c4c4c6cfdca378f6c05335636e6a6617e00",
+      "bytes": 6638
+    },
+    "res://scripts/run_cast_flow_state.gd": {
+      "path": "E:/ChatGPT/水浒/scripts/run_cast_flow_state.gd",
+      "sha256": "127a230696570b50207fd06a3c4e7a4f33dad7bb24d33a333e4d136343976587",
+      "bytes": 15409
+    },
+    "res://scripts/run_item_cast_flow_state.gd": {
+      "path": "E:/ChatGPT/水浒/scripts/run_item_cast_flow_state.gd",
+      "sha256": "cd57ee0c8a536f3f46aca5b7694818d17e06aee1860eb030d55886b8805b12a0",
+      "bytes": 14610
+    },
+    "res://scripts/unit.gd": {
+      "path": "E:/ChatGPT/水浒/scripts/unit.gd",
+      "sha256": "e3909e2d78dd68fa03ef2091bd35a22419f7179b750cff52143b0141305f54bb",
+      "bytes": 214831
+    },
+    "res://scripts/hero_inventory.gd": {
+      "path": "E:/ChatGPT/水浒/scripts/hero_inventory.gd",
+      "sha256": "948b45ad54493a42adc85f0f4b79992703d976ee86f17554cf31216cf1e54084",
+      "bytes": 12809
+    },
+    "res://scripts/run_official_restore_profile.gd": {
+      "path": "E:/ChatGPT/水浒/scripts/run_official_restore_profile.gd",
+      "sha256": "a1791e5eb3bb7b8dffa1bdd6a2ccee274a672ae77d44b9740bf16a8c0843a42c",
+      "bytes": 11375
+    }
+  },
+  "known_qualification_blockers": [
+    "actual Godot parser/native execution",
+    "actual real single-safe A fixture unavailable at preparation",
+    "actual two-unretreated complete positive fixture absent; only original other rescued Unit positive narrower",
+    "actual live five cast-array negatives are NOT replaced by pure pair cast models",
+    "full 38 live capture cases",
+    "full A/B/C/D natural terminal/reward/tick suite",
+    "successor full native proof and future producer integration independent gates"
+  ]
+}
