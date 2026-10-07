@@ -1,27 +1,31 @@
-## 2026-10-07 晚间进展与明早收尾安排
-
-旧六章整局初态回归已全部完成，6案132项通过；FX组合650+31项通过，公共FX测试入口已迁移。下文“其他五关待完成”和“FX迁移待完成”是较早同步时状态，现由本段取代；原收据保持历史原样。当前完整Core组件合计9案207项，独立Presentation348项与FX681项分别为各自组件资格，均不证明自然完整通关或实际整局磁盘续玩。
-
-大名府办理半程三进程真实Session续玩方案正在准备与交叉审核，尚未运行；接着做动态与自然结局/奖励、同版九玩法EXE、完整美术/UI/约10分钟性能与Android真机。用户要求继续推进，香港时间10月8日06:00收尾同步GitHub，心跳已安排，明早以最终远端SHA为准。
-
 # 2026-10-07 办公室续做交接
 
-本次按用户“同步GitHub，明天去公司继续做”要求收尾。目标仓库 winterzh/Liangshan-Heroes，分支 `codex/sync-20260905-stable`；不操作 main。此文件随代码、原生报告和失败证据一起提交，实际远端 SHA 以最终回复和 Git 分支为准。
+仓库 https://github.com/winterzh/Liangshan-Heroes.git，分支 `codex/sync-20260905-stable`。本轮从已独立回读的 `738e6e8f83ec2cf542bbbc2d6076ec232aa89616` 增量同步失败证据、修复提案和交接，生产候选尚待验收。最终提交以远端分支及同步收据为准。用户要求继续推进到香港时间 2026-10-08 06:00，届时更新实际进度并收尾。
 
-## 已同步的实现与验证范围
+## 已完成并同步
 
-Root/Visual/Core 已接入实际高俅与大名府关卡，恢复同一新世界中的真实 Mission/Level/收兵按钮引用。修复高俅两个永久静态码头节点的原生入树处理位，以及任务面板空构造器入树、同一按钮回挂、文字/本地化绑定填充的顺序。原完整字段比较、所有权与激活门槛保留；没有开放公开战役续玩入口。
+Root/Visual/Core 已接入实际高俅与大名府关卡，恢复同一新世界的 Mission/Level/收兵按钮引用。修复高俅永久静态码头节点的原生处理位，以及任务面板空构造器入树、原按钮回挂、文字和本地化绑定的填充顺序。原完整字段比较、所有权及激活门槛保留；公开战役续玩入口关闭。
 
-- 初态完整世界：高俅、大名府 2 案 43 项通过。
-- 高俅实际收兵按钮组件：1 案 32 项通过，含损坏描述拒绝、当前新 Level 回调、重复按钮不重放完成事件。结局由明确组件夹具创建，不是自然通关或全生命周期奖励一次证明。
-- 任务界面：同进程 218 项、真实独立进程界面重启 130 项通过。仅界面夹具，不能当作完整战斗跨进程续玩。
-- 旧关整局回归：索引 0（第一关初态）22 项通过。索引 1 测试被外部 Godot 恢复占用中断，其原收据保留；其他五关尚未全部完成。
+| 验证 | 已通过范围 | 主收据（qa/zhu_wounded_20261005） |
+| --- | --- | --- |
+| 地图/场景 | 高俅、标准地图、大名府及旧六章14案281项 | campaign_scene_closeout_v23h.json |
+| Core初态/高俅收兵组件 | 双关43、按钮32、旧六章132，共9案207项 | campaign_core_initial_qualified_v24i1.json、campaign_core_end_qualified_v24g2.json、original_world_complete_review_v24l.json |
+| 独立任务界面 | 同进程218、独立重启130项 | campaign_presentation_qualified_v24j.json |
+| FX组合 | 同进程650、独立重启31项，保留17类负例 | fx_partition_qualified_v24n1.json、fx_partition_caller_migration_v24n1.json |
 
-5039 个冻结输入 SHA 全部吻合，正常时钟 1.0，零私有运行时补丁。源码专项审核见 `qa/zhu_wounded_20261005/office_source_review_v24m.json`；相应 `campaign_core_initial_qualified_v24i1.json`、`campaign_core_end_qualified_v24g2.json`、`campaign_presentation_qualified_v24j.json` 为已完成主收据。QA 的绝对 E:/ 路径是原机器历史证据，不是办公室必需路径；世界 JSON 是隔离原生 QA 夹具，不是玩家存档。
+这些分别限定范围的组件资格不能相加当成完整动态战役验收。高俅按钮结局由组件夹具创建，不证明自然通关或奖励一次。Presentation/FX公共测试入口已迁移。5039行冻结输入为5035不同路径，4个重复行内容一致，不能把行数当作唯一文件数。
+
+## 当前候选与真实失败
+
+大名府通过正常移动进入办理半程及HELD，首次真实 `Session.save_held` 返回 `NONCANONICAL_RECORD`，B/C未启动。v24p只读取同一失败事务pending proposal，保留两个完整字符串：仅196个归属整数变为JSON浮点，UTF-8增加392字节。原规范校验正确拒绝了变化后的记录；没有重捕世界替代失败数据或重试不安全写事务。
+
+四文件候选在 `qa/zhu_wounded_20261005/proposals/native_ownership_json_v24q`，来源见 `native_ownership_json_candidate_v24q.json`，设计见 [NATIVE_OWNERSHIP_JSON_REPAIR_20261007.md](NATIVE_OWNERSHIP_JSON_REPAIR_20261007.md)。只在固定Map/Scenery读取边界检查有限性/整数性/节点范围后还原Gao/Daming归属索引；原生写入仍要求整数，原全量Scenery验证、canonical字节、SHA和修订链保留。旧章/标准场景不转换。helper UID为原生生成，需逐文件显式同步，不能受默认忽略遗漏。
+
+v24r的11正例通过，但整体267项一条QA wrong-kind夹具错误（选到合法sprite），故整体失败。q1从实际描述选择入口/夜景节点，原拒绝断言保留。v24r1首批import遇共享引擎恢复占用后中止，新独立批次待结果。必须完整通过JSON正负例、原OwnedSlot故障事务、实际A保存退出/B独立继续再保存/C独立回读tick不重放，才可称生产修复合格。静态审查只覆盖本次fixedownership边界；外层Slot旧schema/context叶类型故障仍待补，不宣称全Slot受控拒绝。
 
 ## 明天开始
 
-先在办公室独立 Git checkout 检查身份、分支和未提交改动。工作区干净且未分叉时执行：
+在办公室独立checkout核对身份、分支及未提交改动。干净且未分叉时：
 
 ```powershell
 git status --short --branch
@@ -30,15 +34,17 @@ git switch codex/sync-20260905-stable
 git pull --ff-only origin codex/sync-20260905-stable
 ```
 
-有未提交修改、分叉或其他任务占用时先核对来源，不自动 stash/reset。办公室共享外层目录不是 Git checkout，不能把它当作此分支直接拉取。Godot 路径通过被忽略的 `godot.local.txt`、`GODOT_PATH` 或启动参数配置，按 SOURCE_SETUP.md 使用既有入口；本批固定 Godot 4.6.3。缺少私有导入缓存时重新导入，缓存和导出包不通过 Git 分发。
+未提交修改或分叉先核对来源，不自动stash/reset。共享外层目录不是checkout，按 [SOURCE_SETUP.md](SOURCE_SETUP.md) 使用既有独立checkout。Godot路径通过被忽略的godot.local.txt、GODOT_PATH或参数配置，本批固定4.6.3；缺缓存重新导入。包、玩家存档、登录数据和.godot不通过Git分发。
 
-家里现有旧关后台 session41556/Python201028，工作目录 `original_world_checkpoint_v24l_8c220248`。在本线程继续时先确认它是否已结束、是否已有新案例收据，不重复启动。办公室不要直接运行本批带原机器绝对路径的历史 producer，也不要复制旧 QA profile；按原 harness 和冻结输入要求，在新工程外路径建立新的 producer/私有 profile/独立收据。原执行文件及失败证据不覆盖。
+QA绝对E:/路径/PID是历史证据，不能直接作为办公室参数。world/pending文本来自隔离原生夹具，不是玩家数据。办公室复验从对应harness、新工程外输出目录及私有profile开始，重新建立source/engine/native哈希，不复用旧写锁/失败profile，不覆盖已执行producer。88个 `daming_qualified_metadata_v24o4` .import/.uid是原合格工程普通源码伴随文件，不是.godot缓存。
 
-## 下一步顺序
+当前家里后台仅由本线程回读，办公室不要重复启动同一运行。共享Godot等自然空闲，不控制或给盲盒任务发消息。占用中断与工程失败分开记录；真实断言失败须先修复再建新sibling。
 
-1. 收齐旧六章初态整局回归，已通过 case0 保留；共享 Godot 自然空闲时再运行，不控制盲盒任务。真实断言/引擎错误须修复，新建 sibling 后再验；外部占用中断与工程失败分开记录。
-2. 源码审核还发现 `tools/campaign_fx_partition_qa.gd` 的直接 Presentation 调用仍是旧挂载顺序。迁移同一原生 entry hooks 并跑完整 FX partition 回归；本次未修改这份被当前后台钉住的输入，不能声称它在当前版本已通过。
-3. 双关动态分支、付费生产、船体/运输，实际整局保存退出、独立进程继续/再保存、自然胜败和奖励一次。
-4. 同版九玩法/实际发行 EXE，再做完整演出、拥挤 UI 与多尺寸流程、正常时钟同负载约 10 分钟性能与切换回收、Android 2.0.1 真机 DPI/安全区/触控与持续性能。
+## 后续顺序
 
-全开发目标仍未完成，原平台长期计划保留。本次只同步源码与证据，不发布新 Steam/Android 包；Steam 历史上线状态仍见 STEAM_UPDATE_20261007.md。此前已释放的约1.68GiB重复 imported 缓存不重复清理。本次本地、提交、远端同步三个状态以实际 Git 回读结果为准。
+1. 当前JSON边界及大名府三进程实际办理半程磁盘续玩。
+2. 单个获救者安全撤离仍FIGHT的合同修复：v25仅外部方案，尚未apply/原生。限定实际Lu/Shi，严格stop字段、selection/caster清理、另一演员live/root/active及同token Mission安全事件。实际保存/独立继续后等durable terminal完成才称本地结算成功；Steam-disabled批次不证明Steam奖励。
+3. 双关其他动态、付费生产、船体/运输、旧章动态、自然胜败及奖励一次。
+4. 同版九玩法/实际发行EXE；完整美术动作/拥挤UI/多尺寸流程；正常时钟同负载约10分钟性能、长帧/内存/切换回收；Android2.0.1真机DPI/安全区/触控/持续性能。
+
+全开发计划和长期平台方向保留。源码同步与Steam发布分开；本轮不发布新平台包。Steam已上线Build25768878及四语公告见 [STEAM_UPDATE_20261007.md](STEAM_UPDATE_20261007.md)。此前约1.68GiB重复imported清理已完成，不重复执行。
