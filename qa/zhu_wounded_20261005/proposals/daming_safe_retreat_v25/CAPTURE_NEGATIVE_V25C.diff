@@ -1,0 +1,98 @@
+--- daming_safe_retreat_capture_negative_v25b.gd
++++ daming_safe_retreat_capture_negative_v25c.gd
+@@ -34,6 +34,7 @@
+ var live_row: Dictionary = {}
+ var row_completed := false
+ var actual_negative_capture_called := false
++var owned_installed_battle: Node
+ var evidence_serial := 0
+ 
+ func _brief(value: Variant) -> Dictionary:
+@@ -217,6 +218,64 @@
+ 	row_completed = true
+ 	finish()
+ 
++func _restore() -> Node:
++	handoff = _read_json(HANDOFF_A if mode == CASES[1] else HANDOFF_B)
++	if not check("complete prior process handoff", handoff.has_all(["schema", "mode", "pid", "nonce", "first_role", "content_version", "engine_sha256", "file_sha256", "generation", "packet", "state", "source_timing", "ancestor_pids", "ancestor_nonces"])): return null
++	var expected_mode: String = CASES[0] if mode == CASES[1] else CASES[1]
++	if not check("correct preceding genuinely distinct process", handoff.schema == "daming_safe_retreat_cross_process_handoff_v25" and handoff.mode == expected_mode and handoff.first_role == first_role and int(handoff.pid) != OS.get_process_id() and handoff.nonce != nonce and not handoff.ancestor_pids.has(OS.get_process_id()) and not handoff.ancestor_nonces.has(nonce)): return null
++	if not check("same frozen source and actual engine across processes", handoff.content_version == trusted.content_version and handoff.engine_sha256 == trusted.engine_binary_sha256): return null
++	var slot: Dictionary = Store.new(SLOT_ROOT).read_slot(true)
++	if not check("prior disk bytes and generation verified", slot.get("ok", false) and slot.file_sha256 == handoff.file_sha256 and slot.revision == int(handoff.generation), slot.get("code", "")): return null
++	# The actual Store hash above proves disk bytes. Normalize only this external
++	# handoff comparison through JSON; it gives both sides identical number types.
++	# All strict component comparisons below use the Store-validated packet.
++	if not check("handoff retains the full committed packet", JSON.parse_string(JSON.stringify(slot.document)) == handoff.packet): return null
++	if not _write_new_json(output.path_join("input_packet.json"), slot.document): return null
++	if not _write_new_json(output.path_join("input_world.json"), slot.document.world): return null
++	var menu: Node = load("res://scenes/menu.tscn").instantiate()
++	get_tree().root.add_child(menu)
++	get_tree().current_scene = menu
++	await get_tree().process_frame
++	get_tree().paused = true
++	restore_session = Session.new(trusted, runtime, SLOT_ROOT)
++	var prepare_before: int = Time.get_ticks_msec()
++	var prepared: Dictionary = restore_session.prepare_restore(menu)
++	var prepare_after: int = Time.get_ticks_msec()
++	if not check("actual Session prepare_restore succeeds", prepared.get("ok", false), prepared): return null
++	if not check("old menu retained and new entire Battle detached inert", get_tree().current_scene == menu and not prepared.battle.is_inside_tree() and prepared.battle.process_mode == Node.PROCESS_MODE_DISABLED): return null
++	# Stage separately only to observe the real Session mount bounds and rebased
++	# pointer stamps. commit_restore_async then owns native layout/final activation.
++	var mount_before: int = Time.get_ticks_msec()
++	var staged: Dictionary = restore_session.stage_mount()
++	var mount_after: int = Time.get_ticks_msec()
++	if not check("actual Session paused stage_mount succeeds", staged.get("ok", false), staged): return null
++	var mounted_input_stamps := {}
++	for field: String in ["_last_group_time", "_press_ms", "_last_tap_ms"]: mounted_input_stamps[field] = staged.battle.get(field)
++	var before_commit_physics: int = Engine.get_physics_frames()
++	var installed: Dictionary = await restore_session.commit_restore_async(120)
++	var after_commit_physics: int = Engine.get_physics_frames()
++	if not check("actual Session commit_restore_async succeeds", installed.get("ok", false), installed): return null
++	var b: Node = installed.battle
++	# Record only the actual successful Session handoff, before any later audit.
++	owned_installed_battle = b
++	retained_identity = installed.identity
++	var activation_physics: int = b._run_clock._engine_anchor
++	if not check("complete installed paused Battle and local resume", get_tree().current_scene == b and b.get_parent() == get_tree().root and get_tree().paused and _healthy(b) and not installed.steam_credit and installed.generation == slot.revision and installed.paused == slot.document.resume_paused and activation_physics >= before_commit_physics and activation_physics <= after_commit_physics): return null
++	if not await _hold(b, "restored complete world"): return null
++	if not _verify_packet_install(b, slot.document): return null
++	var fresh_before: int = Time.get_ticks_msec()
++	var fresh_process: int = Engine.get_process_frames()
++	var fresh_stage_started: int = b.mission._stage_started_ms
++	var capture: Dictionary = Core.new(trusted, runtime, {}, null, Profiles.DAMING_CONTEXT).capture(b, retained_identity)
++	var fresh_after: int = Time.get_ticks_msec()
++	if not check("fresh full Core capture at real restored HELD", capture.get("ok", false), capture): return null
++	if not _write_new_json(output.path_join("restored_world.json"), capture.record): return null
++	var times := {"prepare_before": prepare_before, "prepare_after": prepare_after, "mount_before": mount_before, "mount_after": mount_after, "mounted_input_stamps": mounted_input_stamps, "activation_physics": activation_physics, "held_physics": held_physics, "fresh_before": fresh_before, "fresh_after": fresh_after, "fresh_process": fresh_process, "fresh_stage_started": fresh_stage_started}
++	if not _compare_complete_world(slot.document.world, capture.record, times): return null
++	if not _audit_bindings(b): return null
++	observations.append({"restored": _retreat_state(b), "clock_audit": times})
++	return b
++
+ func _retreat_state(b: Node) -> Dictionary:
+ 	return {"phase": b.phase, "lu_id": str(b.level.lu.entity_id), "shi_id": str(b.level.shi.entity_id), "lu_outcome": b.level.lu.story_outcome, "shi_outcome": b.level.shi.story_outcome, "events": b.mission.events.duplicate(true), "mission_elapsed": b.mission.elapsed, "level_elapsed": b.level.elapsed, "next_tick": str(b._run_clock._next_tick)}
+ 
+@@ -334,7 +393,7 @@
+ 	if not mutation.is_empty() and is_instance_valid(mutation.get("target")):
+ 		mutation.target.set(mutation.field, mutation.original)
+ 	var passed: bool = row_completed and live_row.get("passed", false) and not checks.is_empty() and checks.all(func(r): return r.passed)
+-	var report := {"schema": CAPTURE_SCHEMA, "passed": passed, "row_completed": row_completed, "case": capture_case, "first_role": first_role, "pid": OS.get_process_id(), "nonce": nonce, "actual_user_data_dir": OS.get_user_data_dir(), "private_profile": profile, "content_version": trusted.get("content_version", ""), "engine_sha256": FileAccess.get_sha256(OS.get_executable_path()), "checks": checks, "observations": observations, "evidence": evidence, "provenance": capture_provenance, "executed_live_row": live_row, "actual_Core_capture_called": actual_negative_capture_called, "actual_live_object_capture": actual_negative_capture_called, "whole_live_capture_matrix_qualified": false, "overall_v25_qualified": false, "separate_component_harness_implemented": false, "native_log_zero_ERROR_verified": false, "implemented_cases": CAPTURE_CASES.keys(), "not_run_scope": ["five live cast array negatives", "record schema/identity types are DTO-only; no user-settable live identity leaf", "full role/case/process matrix aggregation requires producer", "natural terminal/reward/tick regressions"], "source_row_isolation": "one case per fresh independent process/profile; complete actual A Session installed", "hold_helper_source": "v24s 76ed6f114de755b398112778ddabf5af820a30237b75070a5a2aaaea188b87db", "hold_helper_native_qualified_at_preparation": false, "base_harness_sha256": FileAccess.get_sha256("res://tools/daming_safe_retreat_cross_process_v25.gd"), "harness_sha256": FileAccess.get_sha256(get_script().resource_path), "disk_slot_writes": 0, "gameplay_ticks_injected": 0, "grid_clears": 0, "runtime_patches": 0}
++	var report := {"schema": CAPTURE_SCHEMA, "passed": passed, "row_completed": row_completed, "case": capture_case, "first_role": first_role, "pid": OS.get_process_id(), "nonce": nonce, "actual_user_data_dir": OS.get_user_data_dir(), "private_profile": profile, "content_version": trusted.get("content_version", ""), "engine_sha256": FileAccess.get_sha256(OS.get_executable_path()), "checks": checks, "observations": observations, "evidence": evidence, "provenance": capture_provenance, "executed_live_row": live_row, "actual_Core_capture_called": actual_negative_capture_called, "actual_live_object_capture": actual_negative_capture_called, "whole_live_capture_matrix_qualified": false, "overall_v25_qualified": false, "separate_component_harness_implemented": false, "native_log_zero_ERROR_verified": false, "implemented_cases": CAPTURE_CASES.keys(), "not_run_scope": ["five live cast array negatives", "record schema/identity types are DTO-only; no user-settable live identity leaf", "full role/case/process matrix aggregation requires producer", "natural terminal/reward/tick regressions"], "source_row_isolation": "one case per fresh independent process/profile; complete actual A Session installed", "successful_handoff_owned_world_tracked": is_instance_valid(owned_installed_battle), "hold_helper_source": "v24s 76ed6f114de755b398112778ddabf5af820a30237b75070a5a2aaaea188b87db", "hold_helper_native_qualified_at_preparation": false, "base_harness_sha256": FileAccess.get_sha256("res://tools/daming_safe_retreat_cross_process_v25.gd"), "harness_sha256": FileAccess.get_sha256(get_script().resource_path), "disk_slot_writes": 0, "gameplay_ticks_injected": 0, "grid_clears": 0, "runtime_patches": 0}
+ 	if not output.is_empty() and DirAccess.dir_exists_absolute(output) and not FileAccess.file_exists(output.path_join("report.json")):
+ 		var file := FileAccess.open(output.path_join("report.json"), FileAccess.WRITE)
+ 		if file != null: file.store_string(JSON.stringify(report, "\t") + "\n"); file.close()
+@@ -342,9 +401,11 @@
+ 	else: passed = false
+ 	# Session.handoff_world gives caller ownership. Installed Session.dispose does
+ 	# not release it. Free source once, then retained identity once, after evidence.
+-	if is_instance_valid(battle):
+-		battle.queue_free()
++	if is_instance_valid(owned_installed_battle):
++		owned_installed_battle.queue_free()
+ 		await get_tree().process_frame
++	owned_installed_battle = null
++	battle = null
+ 	if retained_identity != null: retained_identity.dispose(); retained_identity = null
+ 	if capture_adapter != null: capture_adapter.dispose(); capture_adapter = null
+ 	if restore_session != null: restore_session.dispose(); restore_session = null

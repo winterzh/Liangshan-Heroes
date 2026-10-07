@@ -1,0 +1,71 @@
+--- daming_safe_retreat_negative_world_v25.gd
++++ daming_safe_retreat_negative_world_v25b.gd
+@@ -216,7 +216,9 @@
+ 	var accepted: bool = prepared.get("ok", false) and is_instance_valid(core._battle) and not core._battle.is_inside_tree() and core._battle.process_mode == Node.PROCESS_MODE_DISABLED and _exact(before, opened.document) and _exact(base, original)
+ 	positives.append({"route": route_name, "actual_A_unmodified": true, "prepared": prepared.get("ok", false), "detached_inert": is_instance_valid(core._battle) and not core._battle.is_inside_tree(), "input_exact": _exact(before, opened.document) and _exact(base, original)})
+ 	core.dispose()
+-	return check("actual A full-world positive prepare/dispose " + route_name, accepted, prepared)
++	var disposed_zero := _zero(core)
++	positives[-1]["disposed_zero"] = disposed_zero
++	return check("actual A full-world positive prepare/dispose " + route_name, accepted and disposed_zero, prepared)
+ 
+ func _add(id: String, kind: String, expected: String, args: Dictionary = {}, layer: String = "paired") -> void:
+ 	var spec := {"id": id, "kind": kind, "expected_code": expected, "expected_guard_layer": layer, "direct_pair_branch_coverage": layer == "paired" or layer == "pair_identity_type"}
+@@ -326,6 +328,39 @@
+ 		return true
+ 	return check("known immutable fixed negative mutation", false, spec.kind)
+ 
++func _canonical_json_int(spec: Dictionary, packet: Dictionary, before: Dictionary, base_before: Dictionary, fingerprint: String, opened: Dictionary) -> bool:
++	# Actual JSON envelope route remains mandatory. Bare integer identity leaves
++	# parse as Float; the unchanged Base exact canonical guard rejects before Core.
++	var payload: String = JSON.stringify(packet)
++	var parsed: Variant = JSON.parse_string(payload)
++	if not check("canonical route actual JSON Dictionary " + spec.id, parsed is Dictionary): return false
++	var parsed_before: Dictionary = parsed.duplicate(true)
++	var hook: Dictionary = Store.new("user://v25_negative_data_only_no_disk")._validate_json_document(parsed)
++	if not check("canonical route Slot document hook valid before exact-byte refusal " + spec.id, hook.get("ok", false), hook): return false
++	var expected_normalized: Dictionary = packet.duplicate(true)
++	var expected_record: Dictionary = expected_normalized.world.sections[spec.section]
++	if spec.path.size() == 1: expected_record[spec.path[0]] = float(spec.value)
++	else: expected_record[spec.path[0]][spec.path[1]] = float(spec.value)
++	var record: Dictionary = hook.document.world.sections[spec.section]
++	var leaf: Variant = record[spec.path[0]] if spec.path.size() == 1 else record[spec.path[0]][spec.path[1]]
++	var normalized: String = JSON.stringify(hook.document)
++	var core: RefCounted = Core.new(trusted, runtime, {}, null, Profiles.DAMING_CONTEXT)
++	var initially_empty := _zero(core)
++	# No Core.prepare call here. The observed refusal is the actual Store._decode
++	# result already obtained by _read_route; this independent Core stays empty.
++	var refused: bool = opened.get("ok") == false and opened.get("code") == "NONCANONICAL_RECORD"
++	var one_leaf: bool = typeof(leaf) == TYPE_FLOAT and is_finite(leaf) and leaf == float(spec.value) and _exact(expected_normalized, hook.document) and normalized != payload
++	var immutable: bool = _exact(packet, before) and _exact(base, base_before) and _exact(parsed, parsed_before) and JSON.stringify(packet).sha256_text() == fingerprint
++	var no_allocation := _zero(core)
++	var passed: bool = refused and one_leaf and immutable and initially_empty and no_allocation
++	rows.append({"case": spec.id, "route": "json", "passed": passed, "expected_code": "NONCANONICAL_RECORD", "actual_code": opened.get("code", ""), "expected_guard_layer": "slot_exact_canonical", "direct_pair_branch_coverage": false,
++		"core_prepare_called": false, "initially_empty": initially_empty, "zero_world_before_dispose": no_allocation, "core_battle_null": core._battle == null, "core_identity_null": core._identity == null, "core_unit_plan_empty": core._unit_plan.is_empty(),
++		"source_input_type_ieee_exact": immutable, "mutated_packet_sha256": fingerprint, "typed_document_sha256": normalized.sha256_text(), "cached_grids_preserved": true, "actual_store_envelope_decode_called": true, "json_source_scalar_type": "int", "json_decoded_scalar_type": type_string(typeof(leaf)), "json_int_to_float_one_leaf_exact": one_leaf, "core_expected_if_reached": spec.expected_code,
++		"detail": null if passed else _brief(opened)})
++	core.dispose()
++	return check("actual Slot canonical rejection/no Core.prepare/input immutable " + spec.id + "/json", passed, opened)
++
++
+ func _negative(spec: Dictionary, route_name: String) -> bool:
+ 	var base_before: Dictionary = base.duplicate(true)
+ 	var packet: Dictionary = base.duplicate(true)
+@@ -336,6 +371,8 @@
+ 	var mutated_before: Dictionary = packet.duplicate(true)
+ 	var fingerprint: String = JSON.stringify(packet).sha256_text()
+ 	var opened: Dictionary = _read_route(packet, route_name)
++	if route_name == "json" and spec.kind == "identity" and typeof(spec.value) == TYPE_INT:
++		return _canonical_json_int(spec, packet, mutated_before, base_before, fingerprint, opened)
+ 	if not check("negative valid Slot front schema reaches Core " + spec.id + "/" + route_name, opened.get("ok", false) and _exact(packet, mutated_before), opened): return false
+ 	var typed_before: Dictionary = opened.document.duplicate(true)
+ 	var core: RefCounted = Core.new(trusted, runtime, {}, null, Profiles.DAMING_CONTEXT)
+@@ -346,7 +383,7 @@
+ 	var immutable := _exact(packet, mutated_before) and _exact(opened.document, typed_before) and _exact(base, base_before) and JSON.stringify(packet).sha256_text() == fingerprint
+ 	var passed: bool = initially_empty and not prepared.get("ok", false) and prepared.get("code") == spec.expected_code and no_allocation and immutable
+ 	rows.append({"case": spec.id, "route": route_name, "passed": passed, "expected_code": spec.expected_code, "actual_code": prepared.get("code", ""), "expected_guard_layer": spec.expected_guard_layer, "direct_pair_branch_coverage": spec.direct_pair_branch_coverage,
+-		"core_prepare_called": true, "initially_empty": initially_empty, "zero_world_before_dispose": no_allocation, "core_battle_null": core._battle == null, "core_identity_null": core._identity == null, "core_unit_plan_empty": core._unit_plan.is_empty(),
++		"actual_store_envelope_decode_called": route_name == "json", "core_prepare_called": true, "initially_empty": initially_empty, "zero_world_before_dispose": no_allocation, "core_battle_null": core._battle == null, "core_identity_null": core._identity == null, "core_unit_plan_empty": core._unit_plan.is_empty(),
+ 		"source_input_type_ieee_exact": immutable, "mutated_packet_sha256": fingerprint, "typed_document_sha256": JSON.stringify(typed_before).sha256_text(), "cached_grids_preserved": true, "detail": null if passed else _brief(prepared)})
+ 	core.dispose()
+ 	return check("exact rejection/no world allocation/input immutable " + spec.id + "/" + route_name, passed, prepared)

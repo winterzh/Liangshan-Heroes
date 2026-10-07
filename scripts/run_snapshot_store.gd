@@ -103,7 +103,7 @@ func _decode(raw: String) -> Dictionary:
 	if value.previous_sha256.length() != 64: return bad("PREVIOUS_HASH")
 	var document_parser := JSON.new()
 	if document_parser.parse(value.payload) != OK: return bad("DOCUMENT_JSON")
-	var opened := _validate_document(document_parser.data)
+	var opened := _validate_json_document(document_parser.data)
 	if not opened.ok: return opened
 	if JSON.stringify(opened.document) != value.payload: return bad("NONCANONICAL_RECORD")
 	if int(opened.revision) != int(value.revision): return bad("DOCUMENT_REVISION")
@@ -386,6 +386,11 @@ func _magic() -> String:
 
 func _byte_limit() -> int:
 	return MAX_BYTES
+
+func _validate_json_document(value: Variant) -> Dictionary:
+	# JSON readers may normalize fixed model fields before native type validation.
+	# Other document models retain exactly their original validation route.
+	return _validate_document(value)
 
 func _validate_document(_value: Variant) -> Dictionary:
 	return bad("DOCUMENT_MODEL_REQUIRED")

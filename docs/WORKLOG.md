@@ -1,3 +1,13 @@
+## 2026-10-08 凌晨：大名府办理半程三进程磁盘续玩通过
+
+当前 v24s 重新完整执行：固定 JSON 边界 11 案 533 项、原 OwnedSlot 故障事务 76 项通过；实际正常移动办理半程 A 保存退出 39 项、新进程 B 完整 Session 安装/正常办理完成/再保存 351 项、第三进程 C 世代 2 安装和 120 原生物理步无重复效果 342 项全部通过。三个实际 PID/nonce 不同且不重叠，世代 1→2 SHA 链及最终完整 5102 文件源码/原生依赖零漂移核对通过；生产四文件据此纳入 stable 同步。公开战役继续入口仍关闭。
+
+主收据：`qa/zhu_wounded_20261005/daming_admission_continuation_qualified_v24s.json`，含原整批收据、完整 packet/world、原日志和隔离 QA 存档证据。历史 NONCANONICAL_RECORD、wrong-kind 夹具错误、r2 重复 QA 监听错误和共享引擎中断均保留；新 s 只修 QA 自己的监听生命周期，固定 JSON 读取转换仍限 Gao/Daming Map 所有权整数。原 canonical 字节/SHA/修订链保留。证据收集首版将 user:// 当文件系统路径失败，另存失败记录并用新 sibling 正确解析；原生通过结果不受影响。
+
+单个获救者安全撤离提案仍未应用/未原生验收。已准备 world DTO 的 264 路径（246 Core、18 Slot canonical 拒绝）及 19 实际对象 capture 用例；数量是计划，不能称运行通过。组件负例及 producer 接入继续审核；缺真实 A 夹具或未实现门禁仍前置阻断。`CAMPAIGN_QA=1` 不写 campaign.cfg，本批不证明战役进度持久、自然通关或 Steam 奖励。
+
+后续付费生产、船体/运输、其他动态、自然胜败奖励、同版九玩法 EXE、完整美术/UI、多尺寸、正常时钟长跑性能与 Android 真机全部保留。此前 Core 207、Presentation 348、FX 681 是独立组件资格。办公室入口为 [HANDOFF_20261007_OFFICE.md](HANDOFF_20261007_OFFICE.md)。本轮只同步源码、QA 和文档；既有 Steam Build 25768878/四语公告不变。用户要求香港时间 2026-10-08 06:00 最终收尾；下方条目保留历史。
+
 ## 2026-10-08 零点后：真实保存通过，独立继续测试修复中
 
 固定JSON边界原生11案533项、原OwnedSlot故障事务76项通过；原失败pending payload逐UTF-8字节还原，错误数据仍受控拒绝。大名府正常移动进入办理半程后，真实Session保存世代1并正常退出，A32项通过。B完成独立安装的完整world/packet/时钟比较，但第二次HELD时QA重复连接capture_rejected导致ERROR，整批失败，B未写报告、C未启动；不能称完整磁盘续玩已验收。修复仅针对QA自己的一次性监听生命周期，生产候选四文件仍未提交为合格版本。原失败producer/profile/日志保留，新sibling另行验收。

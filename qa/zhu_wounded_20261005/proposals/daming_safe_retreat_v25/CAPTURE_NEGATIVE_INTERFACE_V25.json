@@ -1,0 +1,138 @@
+{
+  "schema": "daming_safe_retreat_capture_bundle_v25",
+  "status": "prepared_not_executed",
+  "harness": {
+    "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/daming_safe_retreat_capture_negative_v25.gd",
+    "sha256": "caf638bdf4fb523772ba68967b522eef47890835e65018c33cb8a8ee4c430d4f",
+    "bytes": 35014
+  },
+  "scene": {
+    "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/daming_safe_retreat_capture_negative_v25.tscn",
+    "sha256": "27f08fdd0e90b9d4fab3554c893df6724fc4a4f80db0ecd3696e07078d47047e",
+    "bytes": 215
+  },
+  "base_harness": {
+    "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/daming_safe_retreat_cross_process_v25.gd",
+    "sha256": "6a70e00e6a7786bdf8791b84e3fdfdbe85159bf5398ec8ab385f2e34a3242940",
+    "bytes": 50763
+  },
+  "scene_resource": "res://tools/daming_safe_retreat_capture_negative_v25.tscn",
+  "report_schema": "daming_safe_retreat_capture_report_v25",
+  "manifest_schema": "daming_safe_retreat_capture_inputs_v25",
+  "hold_source": {
+    "path": "E:/ChatGPT/daming_admit_v24o_proposal/daming_admit_cross_process_v24s.gd",
+    "sha256": "76ed6f114de755b398112778ddabf5af820a30237b75070a5a2aaaea188b87db",
+    "bytes": 43390
+  },
+  "hold_source_native_qualified_at_preparation": false,
+  "environment": {
+    "DAMING_CAPTURE_PROFILE": "fresh per-role/per-row private profile; clone exact A slot subtree and handoff",
+    "DAMING_CAPTURE_OUT": "fresh external per-row directory, must not exist",
+    "DAMING_CAPTURE_CASE": "one exact implemented case id",
+    "DAMING_CAPTURE_MANIFEST": "pinned complete actual A input manifest",
+    "DAMING_CAPTURE_MANIFEST_SHA256": "actual manifest SHA",
+    "DAMING_CAPTURE_NONCE": "fresh per-process nonce",
+    "DAMING_CAPTURE_EXPECT_CONTENT": "same complete frozen installed content as A",
+    "DAMING_CAPTURE_EXPECT_ENGINE": "same actual engine SHA as A",
+    "APPDATA/LOCALAPPDATA/TEMP/TMP": "<profile>/<lowercase name>",
+    "STEAM_DISABLED": "1",
+    "CAMPAIGN_QA": "1"
+  },
+  "required_cases": {
+    "safe_queue_nonempty": "LEVEL8_SAFE_RETREAT_QUEUE",
+    "safe_stop__chase_intent": "LEVEL8_SAFE_RETREAT_STOP_ANCHOR",
+    "safe_stop__group_cap": "LEVEL8_SAFE_RETREAT_STOP_ANCHOR",
+    "safe_stop__has_home": "LEVEL8_SAFE_RETREAT_STOP_ANCHOR",
+    "safe_stop__home": "LEVEL8_SAFE_RETREAT_STOP_ANCHOR",
+    "safe_stop__hua_lock_shots": "LEVEL8_SAFE_RETREAT_STOP_ANCHOR",
+    "other_hp_zero": "LEVEL8_LIFETIME",
+    "other_dying_true": "LEVEL8_LIFETIME",
+    "other_role_null": "LEVEL8_SAFE_REQUIRED_ACTOR_MISSING",
+    "other_alive_missing_active": "LEVEL8_ACTIVE_MEMBERSHIP",
+    "other_outcome_captured": "LEVEL8_UNSUPPORTED_STORY_OUTCOME",
+    "root_safe_selection": "LEVEL8_SAFE_SELECTED_ROOT",
+    "root_safe__ability_caster": "LEVEL8_SAFE_ARMED_CASTER",
+    "root_safe__item_caster": "LEVEL8_SAFE_ARMED_CASTER",
+    "safe_event_missing": "LEVEL8_SAFE_EVENT_OUTCOME_PAIR",
+    "other_safe_event_without_retreat": "LEVEL8_SAFE_EVENT_OUTCOME_PAIR",
+    "safe_actor_outcome_empty": "LEVEL8_SAFE_EVENT_OUTCOME_PAIR",
+    "freed_event_missing": "LEVEL8_SAFE_RESCUE_EVENT_PAIR",
+    "rescue_done_false": "LEVEL8_SAFE_RESCUE_EVENT_PAIR"
+  },
+  "required_roles": [
+    "lu",
+    "shi"
+  ],
+  "isolation": "EXACTLY one case per process and fresh private A profile snapshot; all role/case processes distinct PID/nonce; never reuse a failed profile",
+  "source_inputs": {
+    "a_report": "qualified actual A report path/SHA",
+    "a_handoff": "actual generation1 handoff path/SHA; copy raw to user://daming_safe_retreat_v25/handoff_A.json",
+    "a_packet": "actual saved_packet JSON path/SHA in report.evidence",
+    "a_world": "actual saved_world JSON path/SHA in report.evidence",
+    "a_slot": "actual closed generation1 raw slot path/SHA matching handoff",
+    "profile_files": "nonempty exact file snapshot of entire A user://daming_safe_retreat_v25/continue/v1 subtree including local_runs; each {path:absolute frozen source copy,sha256,relative:exact suffix under SLOT_ROOT}. Copy each byte to new private profile corresponding subtree before native launch. Capture at A termination before B can resave; no Godot log/root-wide profile copying required."
+  },
+  "required_row_fields": [
+    "case",
+    "first_role",
+    "expected_code",
+    "actual_code",
+    "actual_Core_capture_called",
+    "DTO_substitution",
+    "single_live_field_applied",
+    "temporary_field_unchanged_by_capture",
+    "original_field_type_ieee_restored",
+    "retained_identity_same_live_unchanged",
+    "source_held_no_ticks_no_nodes_added",
+    "original_target_object_id",
+    "field",
+    "original_typed_view",
+    "temporary_typed_view",
+    "refusal_summary",
+    "passed"
+  ],
+  "producer_predicates": {
+    "passed": true,
+    "row_completed": true,
+    "actual_live_object_capture": true,
+    "executed_live_row_passed": true,
+    "DTO_substitution": false,
+    "whole_live_capture_matrix_qualified": false,
+    "overall_v25_qualified": false,
+    "checks": "all actual checks true",
+    "full_role_case_set": "exact Cartesian set, no minimum count shortcut",
+    "source_and_runtime": "all source/harness/scene/base pins, same actual A content/engine, source provenance copied SHA re-read",
+    "native_process": "exit0 plus exact marker, report PID/nonce/user_dir verified, log zero ERROR and SCRIPT ERROR independently checked",
+    "artifacts": "all full raw worlds/packet audits+mutation view kept and independently SHA-read; per-row exact slot subtree and handoff unchanged"
+  },
+  "base_methods_used": [
+    "_restore",
+    "_verify_packet_install",
+    "_compare_complete_world",
+    "_audit_bindings",
+    "_healthy",
+    "_same_keys",
+    "_on_held",
+    "_on_rejected",
+    "_read_json"
+  ],
+  "child_overrides": [
+    "_ready",
+    "_load_fixed_scripts",
+    "run",
+    "check",
+    "_write_new_json",
+    "_retreat_state",
+    "finish",
+    "_hold"
+  ],
+  "base_native_qualification_claimed": false,
+  "live_cases_not_implemented": [
+    "five actual cast-array negatives",
+    "live record identity/schema type negatives: no such user-settable native leaf"
+  ],
+  "overall_qualified": false,
+  "godot_parse_verified": false,
+  "engine_started": false,
+  "public_source_modified": false
+}

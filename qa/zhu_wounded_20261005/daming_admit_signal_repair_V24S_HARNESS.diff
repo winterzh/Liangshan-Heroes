@@ -1,0 +1,101 @@
+--- E:\ChatGPT\daming_admit_v24o_proposal\daming_admit_cross_process_v24o.gd
++++ E:\ChatGPT\daming_admit_v24o_proposal\daming_admit_cross_process_v24s.gd
+@@ -1,3 +1,4 @@
++## Unexecuted v24s sibling: only own barrier one-shot connection lifecycle repaired; all original admission/Session audits retained.
+ extends Node
+ ## PROPOSAL ONLY: three real processes, complete Session disk save/install/resave.
+ ## Ordinary player movement and native Mission/Battle ticks only. No gameplay fixture.
+@@ -203,19 +204,89 @@
+ 
+ func _on_rejected(code: String) -> void: rejected = code
+ 
++func _hold_owned_links(barrier: Node, signal_name: String, callback: Callable) -> Array:
++	var found: Array = []
++	for link: Dictionary in barrier.get_signal_connection_list(signal_name):
++		if link.callable == callback: found.append(link)
++	return found
++
++func _hold_other_links(barrier: Node, signal_name: String, callback: Callable) -> Array:
++	var found: Array = []
++	for link: Dictionary in barrier.get_signal_connection_list(signal_name):
++		if link.callable != callback: found.append({"callable": link.callable, "flags": link.flags})
++	return found
++
++func _hold_link_summary(links: Array) -> Dictionary:
++	var flags: Array = []
++	var targets: Array = []
++	var methods: Array = []
++	var bound_counts: Array = []
++	var unbound_counts: Array = []
++	for link: Dictionary in links:
++		var callback: Callable = link.callable
++		flags.append(int(link.flags))
++		targets.append(callback.get_object_id())
++		methods.append(String(callback.get_method()))
++		bound_counts.append(callback.get_bound_arguments().size())
++		unbound_counts.append(callback.get_unbound_arguments_count())
++	return {"own_count": links.size(), "flags": flags, "targets": targets, "methods": methods, "bound_counts": bound_counts, "unbound_counts": unbound_counts}
++
++func _hold_cleanup(barrier: Node, label: String, stage: String) -> bool:
++	var results: Dictionary = {}
++	var clean := true
++	for name: String in ["capture_ready", "capture_rejected"]:
++		var callback: Callable = Callable(self, "_on_held" if name == "capture_ready" else "_on_rejected")
++		var own_before: Array = _hold_owned_links(barrier, name, callback)
++		var other_before: Array = _hold_other_links(barrier, name, callback)
++		# Only this exact unbound callable is removed; other targets/methods/binds
++		# remain registered even when they listen to the same barrier signal.
++		if barrier.is_connected(name, callback): barrier.disconnect(name, callback)
++		var own_after: Array = _hold_owned_links(barrier, name, callback)
++		var other_after: Array = _hold_other_links(barrier, name, callback)
++		var untouched: bool = other_before == other_after
++		var summary: Dictionary = _hold_link_summary(own_before)
++		summary["own_after"] = own_after.size()
++		summary["flags_after"] = _hold_link_summary(own_after).flags
++		summary["other_before"] = other_before.size()
++		summary["other_after"] = other_after.size()
++		summary["other_unchanged"] = untouched
++		results[name] = summary
++		clean = check(label + " " + stage + " " + name + " only own listeners cleared", own_after.is_empty() and untouched, summary) and clean
++	observations.append({"hold_connection_audit": {"label": label, "stage": stage, "signals": results}})
++	return check(label + " " + stage + " both own barrier listeners cleared", clean, results)
++
+ func _hold(b: Node, label: String) -> bool:
++	var barrier: Node = b._save_barrier
++	if not _hold_cleanup(barrier, label, "before_connect"): return false
+ 	held = false
+ 	rejected = ""
+ 	held_physics = -1
+-	b._save_barrier.capture_ready.connect(_on_held, CONNECT_ONE_SHOT)
+-	b._save_barrier.capture_rejected.connect(_on_rejected, CONNECT_ONE_SHOT)
++	var ready_error: int = barrier.capture_ready.connect(_on_held, CONNECT_ONE_SHOT)
++	var rejected_error: int = barrier.capture_rejected.connect(_on_rejected, CONNECT_ONE_SHOT)
++	var ready_links: Array = _hold_owned_links(barrier, "capture_ready", Callable(self, "_on_held"))
++	var rejected_links: Array = _hold_owned_links(barrier, "capture_rejected", Callable(self, "_on_rejected"))
++	var ready_summary: Dictionary = _hold_link_summary(ready_links)
++	var rejected_summary: Dictionary = _hold_link_summary(rejected_links)
++	var exact: bool = ready_error == OK and rejected_error == OK and ready_links.size() == 1 and rejected_links.size() == 1
++	exact = exact and ready_summary.flags == [CONNECT_ONE_SHOT] and rejected_summary.flags == [CONNECT_ONE_SHOT]
++	exact = exact and ready_summary.targets == [get_instance_id()] and rejected_summary.targets == [get_instance_id()]
++	exact = exact and ready_summary.methods == ["_on_held"] and rejected_summary.methods == ["_on_rejected"]
++	exact = exact and ready_summary.bound_counts == [0] and rejected_summary.bound_counts == [0] and ready_summary.unbound_counts == [0] and rejected_summary.unbound_counts == [0]
++	observations.append({"hold_connection_audit": {"label": label, "stage": "installed", "signals": {"capture_ready": ready_summary, "capture_rejected": rejected_summary}, "ready_error": ready_error, "rejected_error": rejected_error}})
++	if not check(label + " exact two owned one-shot barrier listeners", exact, {"ready": ready_summary, "rejected": rejected_summary, "ready_error": ready_error, "rejected_error": rejected_error}):
++		_hold_cleanup(barrier, label, "connect_failure")
++		return false
+ 	var requested: Dictionary = b._save_barrier.request_capture()
+-	if not check(label + " actual barrier request", requested.get("ok", false), requested): return false
++	if not check(label + " actual barrier request", requested.get("ok", false), requested):
++		_hold_cleanup(barrier, label, "request_refused")
++		return false
+ 	var deadline: int = Time.get_ticks_msec() + 15000
+ 	for frame in range(180):
+ 		await get_tree().process_frame
+ 		if held or not rejected.is_empty() or Time.get_ticks_msec() >= deadline: break
+-	return check(label + " real healthy HELD", held and rejected.is_empty() and b._save_barrier.state == b._save_barrier.State.HELD and b._save_barrier.health().ok, {"rejected": rejected, "health": b._save_barrier.health(), "held_physics": held_physics})
++	var ready: bool = check(label + " real healthy HELD", held and rejected.is_empty() and b._save_barrier.state == b._save_barrier.State.HELD and b._save_barrier.health().ok, {"rejected": rejected, "health": b._save_barrier.health(), "held_physics": held_physics})
++	var cleaned: bool = _hold_cleanup(barrier, label, "after_wait")
++	return ready and cleaned
+ 
+ func _admit_state(b: Node) -> Dictionary:
+ 	var m: Variant = b.mission

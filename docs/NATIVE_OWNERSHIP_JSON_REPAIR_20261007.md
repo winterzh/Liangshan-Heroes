@@ -1,6 +1,6 @@
 # 原生场景归属索引的保存边界修复
 
-当前为本地待完整验收候选；公开战役续玩入口仍关闭。r2固定JSON11案533项与原OwnedSlot76项通过，A真实保存退出32项通过。B独立安装全量比较已写证据，第二次HELD因QA自己的重复rejection信号连接ERROR中止；B无最终报告/C未启动，整体仍失败。新sibling只修测试监听生命周期，不覆盖原生产者/profile或放宽任何世界比较。
+当前四文件已由v24s完整验收：固定JSON533、OwnedSlot76、实际A39/B351/C342及最终5102源码/原生核对通过，纳入stable同步。公开战役续玩入口仍关闭。下面r2描述为历史失败。r2固定JSON11案533项与原OwnedSlot76项通过，A真实保存退出32项通过。B独立安装全量比较已写证据，第二次HELD因QA自己的重复rejection信号连接ERROR中止；B无最终报告/C未启动，整体仍失败。新sibling只修测试监听生命周期，不覆盖原生产者/profile或放宽任何世界比较。
 
 大名府的真实任务办理半程验收通过正常移动到达触发点，进入真实 HELD 后调用 Session.save_held，返回 NONCANONICAL_RECORD。A进程终止，B/C未启动。v24p在同一失败事务中保留原 pending proposal 的两个完整字符串，确认196个场景归属索引从整数变为JSON浮点，其余形状和值无变化；UTF-8文本增加392字节。首个差异为 world.sections.map.sections.display.ownership.sprites 中的2与2.0。原规范格式检查正确拒绝了发生变化的记录。
 

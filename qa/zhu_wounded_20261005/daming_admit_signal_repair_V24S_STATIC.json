@@ -1,0 +1,147 @@
+{
+  "schema": "daming_admit_v24s_static",
+  "created_utc": "2026-10-07T16:29:16.289912+00:00",
+  "status": "unexecuted_native_required",
+  "candidate_files": [
+    {
+      "path": "E:\\ChatGPT\\daming_admit_v24o_proposal\\daming_admit_cross_process_v24s.gd",
+      "sha256": "76ed6f114de755b398112778ddabf5af820a30237b75070a5a2aaaea188b87db",
+      "bytes": 43390
+    },
+    {
+      "path": "E:\\ChatGPT\\daming_admit_v24o_proposal\\daming_admit_cross_process_v24s.tscn",
+      "sha256": "d7e1475d5e2b5add7cf008ac163b1eb909b6a6889641eff6ddb5821500851dee",
+      "bytes": 205
+    },
+    {
+      "path": "E:\\ChatGPT\\daming_admit_v24o_proposal\\run_daming_admit_v24s.py",
+      "sha256": "049dcdc74fab7936d4812f71a9806cee46569163ece4c524043ac7cfdedd8626",
+      "bytes": 95807
+    },
+    {
+      "path": "E:\\ChatGPT\\daming_admit_v24o_proposal\\V24S_HARNESS.diff",
+      "sha256": "610edd8487368c0f74d306db6112e049791412d2c4dca51ef8767093f1654730",
+      "bytes": 6542
+    },
+    {
+      "path": "E:\\ChatGPT\\daming_admit_v24o_proposal\\V24S_PRODUCER.diff",
+      "sha256": "52858c0e6324b0592d2a717fb206e08ee779e0148f73f3186b572704242264d9",
+      "bytes": 11234
+    }
+  ],
+  "immutable_executed_inputs": [
+    {
+      "path": "E:\\ChatGPT\\daming_admit_v24o_proposal\\daming_admit_cross_process_v24o.gd",
+      "sha256": "2aade96b57e83b03e9c43cd21d9fd29490534778deb05ec98204c3a1ec1da74f",
+      "bytes": 38786
+    },
+    {
+      "path": "E:\\ChatGPT\\daming_admit_v24o_proposal\\daming_admit_cross_process_v24o.tscn",
+      "sha256": "c5e1b3a1dbdcb35bf7a0bcfe6e0538005370a8ea53a4fa2b6db9aea5186bbc86",
+      "bytes": 205
+    },
+    {
+      "path": "E:\\ChatGPT\\daming_admit_v24o_proposal\\run_daming_admit_v24r2.py",
+      "sha256": "1b486f16c955d5a54b7e7e15e570fc66e3573cc9f02581d6027e5a73be725fb4",
+      "bytes": 91968
+    }
+  ],
+  "failed_r2_evidence": [
+    {
+      "path": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24r2_68ecb20a\\receipt.json",
+      "sha256": "d2295c94e79da7566caddb81efba7d521fb2801a207c31a4fbea3d0d163c2cd8",
+      "bytes": 3897135
+    },
+    {
+      "path": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24r2_68ecb20a\\steps\\08_A_half_save\\native.log",
+      "sha256": "251a97414b4c03ed5b6d9232eae765f5e75b683bf07f094ab7dcf9130fb5f8ee",
+      "bytes": 353,
+      "case": "A_half_save",
+      "exit_code": 0,
+      "terminal": true
+    },
+    {
+      "path": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24r2_68ecb20a\\steps\\09_B_continue_resave\\native.log",
+      "sha256": "4e8fa2fe242be5768f26b682936b6eef581a78f4fa96b1699ebc14d6af9b69c7",
+      "bytes": 4203,
+      "case": "B_continue_resave",
+      "exit_code": 1,
+      "terminal": true
+    }
+  ],
+  "failed_r2_state": {
+    "complete": false,
+    "A_report_checks": 32,
+    "B_report_present": false,
+    "C_report_present": false,
+    "full_qualified": false
+  },
+  "changed_original_GD_methods": [
+    "_hold"
+  ],
+  "new_owned_signal_helpers": [
+    "_hold_cleanup",
+    "_hold_link_summary",
+    "_hold_other_links",
+    "_hold_owned_links"
+  ],
+  "all_other_original_GD_methods_byte_exact": true,
+  "changed_runner_methods": [
+    "__init__",
+    "execute",
+    "preflight",
+    "prepare",
+    "validate_case"
+  ],
+  "all_other_runner_methods_AST_exact": [
+    "acquire",
+    "copy_checked",
+    "evidence_path",
+    "execute_regressions",
+    "input_integrity",
+    "limit",
+    "native_phase",
+    "pause",
+    "prepare_regression_inputs",
+    "release",
+    "select_boundary",
+    "select_candidate",
+    "stage",
+    "stop_owned",
+    "verify_failed_boundary_ancestry",
+    "verify_slot",
+    "wait_idle",
+    "wait_prior"
+  ],
+  "all_original_validate_case_strings_retained": true,
+  "unchanged_wait_idle_continuous_seconds": 60,
+  "frozen_raw_rows": 5041,
+  "frozen_unique_rows": 5037,
+  "installed_runtime_files": 5102,
+  "original_boundary_q1_and_OwnedSlot_and_full_ABC_retained": true,
+  "profile_guard_new_scene_expected_exit": 2,
+  "original_GD_report_handoff_schema_and_paths_retained": true,
+  "actual_hold_counts_required_by_producer": {
+    "A": 1,
+    "B": 2,
+    "C": 2,
+    "stages_per_hold": [
+      "before_connect",
+      "installed",
+      "after_wait"
+    ],
+    "exact_signal_one_shot_flag": 4,
+    "other_callbacks_preserved": true,
+    "failure_cleanup_stages": [
+      "connect_failure",
+      "request_refused",
+      "after_wait includes timeout/rejected signal"
+    ]
+  },
+  "python_AST_parse": true,
+  "python_compile_AST_only": true,
+  "GDScript_native_parse": false,
+  "producer_started": false,
+  "engine_started": false,
+  "public_modified": false
+}
