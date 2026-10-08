@@ -1,3 +1,7 @@
+## 2026-10-09：首次／重复自然终局候选与第四批 Lu A 原件
+
+恢复QA新增 original19_first_repeat_candidate_v1/（GD/SOURCE/17项HOST_SOURCE_PREFLIGHT/独立预备收据），以及 DURABLE_CHAIN_V12_FOURTH_RUN_LU_A_OBSERVATION_V1.json、actual_durable_chain_v12_r4_lu_a/ 原 report/log。前者仅source static/stages[]，后者为本批 A 实际305项通过原件；无profile上传，不替代全61和原19资格。
+
 ## 2026-10-09：成功前置收据绑定执行器 V3
 
 新增 tools/run_campaign_file_faults_v3.py；恢复QA新增 exact source snapshot、ORIGINAL19_SIX_FILE_FAULT_V3_HOST_GATE_CHECKS.json 及 ORIGINAL19_SIX_FILE_FAULT_PRODUCER_V3_PRELIMINARY_REVIEW.json。仅有限源码预备通过，无成功 prior 或 V3 seal/native准入；旧 V1/V2 原件保留。

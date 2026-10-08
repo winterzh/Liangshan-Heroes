@@ -1,3 +1,13 @@
+## 2026-10-09：Lu A 实际305项通过与首次／重复终局源码候选
+
+完整第四 V12 原 run8fe7b18b/session14695 已完成 cold_import 和 lu_a_single_save。Lu A PID5224/nonce846a793172b54059aed2a14ef974ef1c 实际退出0、错误0、complete=true；原报告305项全 passed，SHA `35b1421448a64f72c7a2133e82bd333168429cfb243d813aad75858e505c8107`，原日志实际标记 `DAMING_RETREAT_V25_COMPLETE A_single_save 305 true`。报告与日志逐字节归档到 `actual_durable_chain_v12_r4_lu_a/`，索引为 `DURABLE_CHAIN_V12_FOURTH_RUN_LU_A_OBSERVATION_V1.json`。仅证明原 A 单安全磁盘场景；全61仍未完成，不能转授原19/回归/UI/SDK资格。原会话已进入 lu_world，继续观察实际进程和终态。
+
+新增 `original19_first_repeat_candidate_v1/`，候选 SHA `53e4e3a10ef6107f095ae1df9be355308200a99fee444dc68f912418ac6803ab`。真实普通黄泥岗路线，四进程 first/restart_first/repeat/restart_repeat 共用本批真实私有 profile；repeat 从真实首次终局原 raw handoff SHA/token/完整identity/context/原CFG/三代生命周期读回，重复自然通关新token且首次三代文件原件不变；真实 HUD 首次／已收录文本与四目标、印记/unlock 验证。不生成进度seed、调用伪造on_level_won、替换Campaign/Cloud/Battle/Mission或加速时钟。
+
+独立有限源码预审 SHA `0bbd25b61f0e828a854dba663f3a6522c829d87187084c263d838ea8ef525b8a`，static_api_closure_passed=true、approved_stages=[]；9来源pin、五原route/helper函数及GDv6关闭nonce-stage发布函数逐字一致，真实Localize/HUD/lifecycle接口闭合。本机17项检查仅为源码字节/原函数文本，不是Godot解析或原生通过。仍缺新producer、fresh三文件/restart两文件完整发布集合、完整有序host消费和持续两token原件校验，须集成后另做精确执行准入；现故障版publisher的fresh五文件合同不能直接套用。SOURCE文件保留创建时状态，以独立收据描述当前预审范围。
+
+正式恢复源未晋升；六故障 V3仍等成功全61 prior，剩余三类真实回调/Cloud边界及其余UI/SDK、八章/九玩法/导出/持续性能/Android真机均未完成，无 main 合并或 Steam 发布。
+
 ## 2026-10-09：六故障 V3 显式绑定成功前置收据
 
 新增执行器 V3，移除 V2 固定失败6409批的源码常量。`--prior-durable` 必须为工程外的绝对 `receipt.json` 路径；创建 source seal 前真实核验成功且关闭的 V12 全61阶段及来源、原日志/报告/生命周期证据，封存首次原始 receipt pin。Suite 在创建新目录/档案/原生进程前再次完整核验，并要求 receipt pin 与 seal 完全一致；旧版本及原封存不改写。
