@@ -1,0 +1,257 @@
+{
+  "schema": "campaign_original19_file_fault_evidence_preliminary_independent_review_v1",
+  "independent": true,
+  "reviewed_at_utc": "2026-10-08T22:02:07.664123+00:00",
+  "source_spec_file_sha256": "6865ba799ccd7be8358479c5cb7f76e52a9e07a110b09c9e200abb76aa98c95e",
+  "consumer_sha256": "d02e2aa38bc3bc935451b85963e22dba00994247129389d2a8353fe2120a9f9f",
+  "records_decoder_sha256": "0bc166e0ee4c95de0f53318db93052da7df49f0fa769926de4060a0eb6b4a485",
+  "seed_archive_controller_sha256": "37f1b0f6e7e9d2193aabd6542e852d41a9e17e6bf5718fba365d75b5fbc898fb",
+  "label_builder_sha256": "775fada8c1e533ca9ec6b0c71510804683da5e8ff403dfeef1e0ddf3264d9a55",
+  "label_contract_sha256": "ff1114edb59dabf14cec6a3912d1b3f0573d93d771e7527717980a24921bcb28",
+  "candidate_sha256": "395ce698af1f6ac9c4eca892e5264b98c892cc1cd8cc8e8d93b14d380e642606",
+  "source_manifest_sha256": "43abb9161b7551f7485757dbadc5486ee1f7a63aa53fb4ad8b86a6559dc53da0",
+  "static_api_closure_passed": false,
+  "approved_stages": [],
+  "native_started": false,
+  "producer_qualified": false,
+  "full_original19_qualified": false,
+  "overall_goal_qualified": false,
+  "scope": "有限consumer/seed archive/decoder/labels源码预审；未整合launcher或授予任何执行准入。",
+  "source_pins_verified": 25,
+  "local_python_modules_verified": 10,
+  "local_import_edges_verified": 16,
+  "all_local_imports_closed": true,
+  "manifest_runtime_source_pins_verified": 10,
+  "ordered_label_contract_rebuilt_exact": true,
+  "label_counts": {
+    "fresh": {
+      "bad_existing_cfg_load": 95,
+      "existing_vanished_prior": 95,
+      "write_failure": 98,
+      "save_OK_fresh_load_failure": 98,
+      "readback_semantic_mismatch": 98,
+      "readback_SHA_changed": 98
+    },
+    "restart": 20,
+    "preterminal": 56,
+    "orders_preterminal": 11,
+    "orders_fresh_final": 19
+  },
+  "findings": [
+    {
+      "id": "FILEFAULT-CODE-001",
+      "severity": "blocking",
+      "file": "D:\\AI项目\\水浒\\开发工程\\tools\\campaign_file_fault_evidence_v1.py",
+      "lines": [
+        234,
+        235
+      ],
+      "finding": "save_OK_fresh_load_failure/readback_semantic_mismatch/readback_SHA_changed的GD、manifest、controller和consumer预期内层CFG_READBACK_*码。实际R12 retry_write第297-298行将candidate _stable_cfg全部失败统一包装为CFG_STAGE_READBACK；Flow会保留外层码，正常预期故障不能满足当前检查或repair。",
+      "production_source": {
+        "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\run_campaign_cfg_transaction.gd",
+        "sha256": "71803fc42a6bef59479db5b8cf70a953716a3968e45ba1fb391eed5726a51d17",
+        "lines": [
+          297,
+          298
+        ]
+      },
+      "minimum_fix": "不可变后继将三case actual Flow code绑定CFG_STAGE_READBACK；inner code只作为真实拒绝点描述保留，literal FAULT_CODES与manifest及consumer合同一起核对。"
+    },
+    {
+      "id": "FILEFAULT-SEMANTICS-002",
+      "severity": "blocking",
+      "file": "D:\\AI项目\\水浒\\开发工程\\tools\\campaign_file_fault_evidence_v1.py",
+      "lines": [
+        119,
+        125
+      ],
+      "finding": "完整CFG pair目前仅验证semantics_sha256是64hex及两代相同，没有将candidate四case的原pending proposal_semantics.sections绑定到final prepared/applied semantics SHA。两个consumer方法会接受全0语义SHA而原public CFG和request/previous链保持原值。",
+      "related_locations": [
+        {
+          "file": "D:\\AI项目\\水浒\\开发工程\\tools\\campaign_file_fault_records_v1.py",
+          "lines": [
+            39,
+            40
+          ]
+        },
+        {
+          "file": "D:\\AI项目\\水浒\\开发工程\\tools\\campaign_file_fault_evidence_v1.py",
+          "lines": [
+            173,
+            176
+          ]
+        }
+      ],
+      "minimum_fix": "candidate四case将原真实冻结proposal sections的canonical SHA与final两代semantics_sha256精确绑定；使用实际Godot JSON.stringify(sections)摘要或已证明兼容的精确编码规则。prior两case无原proposal，不虚称此绑定已具备。",
+      "synthetic_repro": {
+        "classification": "synthetic/pure-host/noNative/noPopen",
+        "executed": true,
+        "scope": "__new__ consumer + fixed-byte stub，只调用seed_and_final_cfg和injection_details，不代表完整pipeline通过。",
+        "both_methods_incorrectly_accepted": true,
+        "proposal_sections_digest": "1b9d3f5109fb1e94f305cf349b4f33739ad107551c4139e95e568061574760b4",
+        "final_pair_semantics_sha256": [
+          "0000000000000000000000000000000000000000000000000000000000000000",
+          "0000000000000000000000000000000000000000000000000000000000000000"
+        ],
+        "public_CFG_and_candidate_SHA_remained_same": true,
+        "journal_envelope_payload_and_previous_chain_recomputed": true
+      }
+    }
+  ],
+  "verified_boundary": [
+    "25 direct pins、10实际Python模块、16local imports、14 manifest runtime源及label合同metadata原件全部回读一致。",
+    "原有序重复标签/动作/identity字段与固定SEVEN后bai顺序重建一致；95/98、20、56及11→19保持。",
+    "Controller V4在实际自有writing锁窗口归档真实seed CFG及g1/g2原字节，不把随后会被production keep2剪除的原seed路径登记为持续缓存pin。",
+    "原9-string envelope/typed generation/source/request/previousSHA/CFG ACK/lifecycle三代/packet PID与stack/restore原字节字段检查存在；上述两个阻断仍需后继修复。",
+    "runtimeV2仍绑定ControllerV3。本部件未整合；未来launcher需实际接入archive controller和完整consumer并另行审查，不能将本预审当执行资格。"
+  ],
+  "source_pins": [
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\ORIGINAL19_FAULT_RUNTIME_PRELIMINARY_REVIEW_V2.json",
+      "bytes": 14168,
+      "sha256": "cbb744e1815b9814d78277b93d19ee2f4132397b31033524dfc26527dc2337e2"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\ORIGINAL19_FAULT_RUNTIME_SOURCE_SPEC_V2.json",
+      "bytes": 16331,
+      "sha256": "774cefb368faa74059f8c7b5c1987e04a93d3f03bed8e370ddabec0e0d79e489"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\ORIGINAL19_FILE_FAULT_FULL_LABEL_CONTRACT_V1.json",
+      "bytes": 61551,
+      "sha256": "ff1114edb59dabf14cec6a3912d1b3f0573d93d771e7527717980a24921bcb28"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\campaign_file_fault_evidence_v1_source_snapshot.py",
+      "bytes": 27248,
+      "sha256": "d02e2aa38bc3bc935451b85963e22dba00994247129389d2a8353fe2120a9f9f"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\campaign_file_fault_records_v1_source_snapshot.py",
+      "bytes": 2731,
+      "sha256": "0bc166e0ee4c95de0f53318db93052da7df49f0fa769926de4060a0eb6b4a485"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\campaign_original19_debug_faults_v4_source_snapshot.py",
+      "bytes": 22111,
+      "sha256": "37f1b0f6e7e9d2193aabd6542e852d41a9e17e6bf5718fba365d75b5fbc898fb"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\huangnigang_bai_arrival_candidate_v1\\level1_huangnigang.gd",
+      "bytes": 61059,
+      "sha256": "572d9c6cd8bc28c00f234dd0f2e33801e203e4bb0cd41f4612bebedd28124f06"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\run_campaign_cfg_transaction.gd",
+      "bytes": 27586,
+      "sha256": "71803fc42a6bef59479db5b8cf70a953716a3968e45ba1fb391eed5726a51d17"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\run_campaign_local_lifecycle.gd",
+      "bytes": 14384,
+      "sha256": "ee2d3fb936dfe8e1a4f8e129733fad8fbb5a6598df666d83024046cd0d878ed2"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\run_campaign_progress_coordinator.gd",
+      "bytes": 11741,
+      "sha256": "23193509d2e1d7f367cbfe3c06a2a479276c7eefb31e987136db635945d1417e"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\original19_natural_file_faults_candidate_v4\\SOURCE.json",
+      "bytes": 9723,
+      "sha256": "43abb9161b7551f7485757dbadc5486ee1f7a63aa53fb4ad8b86a6559dc53da0"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\original19_natural_file_faults_candidate_v4\\campaign_original19_natural_file_faults_v4.gd",
+      "bytes": 27797,
+      "sha256": "395ce698af1f6ac9c4eca892e5264b98c892cc1cd8cc8e8d93b14d380e642606"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\prepare_campaign_file_fault_labels_v1_source_snapshot.py",
+      "bytes": 5861,
+      "sha256": "775fada8c1e533ca9ec6b0c71510804683da5e8ff403dfeef1e0ddf3264d9a55"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\scripts\\run_snapshot_store.gd",
+      "bytes": 21642,
+      "sha256": "581e638b8f0ce7cb24d5533b03ee94b99732c5cffcbf373b1a5a69a1618d8251"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\campaign_file_fault_evidence_v1.py",
+      "bytes": 27248,
+      "sha256": "d02e2aa38bc3bc935451b85963e22dba00994247129389d2a8353fe2120a9f9f"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\campaign_file_fault_records_v1.py",
+      "bytes": 2731,
+      "sha256": "0bc166e0ee4c95de0f53318db93052da7df49f0fa769926de4060a0eb6b4a485"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\campaign_original19_atomic_files_v1.py",
+      "bytes": 1310,
+      "sha256": "cb7ed5a5c4ca5067118a5c96cae7de2b39cc5297b955c5b85cd50ca8262a0fdb"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\campaign_original19_debug_faults_v3.py",
+      "bytes": 19342,
+      "sha256": "b71cad9c63ecaffce38cc371c1e2674fa9ea3cdedc4ed182b7a83a2c7f58dbcb"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\campaign_original19_debug_faults_v4.py",
+      "bytes": 22111,
+      "sha256": "37f1b0f6e7e9d2193aabd6542e852d41a9e17e6bf5718fba365d75b5fbc898fb"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\durable_campaign_full_matrices.py",
+      "bytes": 15976,
+      "sha256": "0cf09e81d27c1ab7068b9286f5e9f8b833ae06d2f0ae22b3e99aa661db8a302a"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\durable_campaign_full_runtime.py",
+      "bytes": 13938,
+      "sha256": "0c8ce0b44bd7d4afd8813099f7de16b167c9b4941f99afacbc9208f95ae4e8c1"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\godot_debug_wire.py",
+      "bytes": 6794,
+      "sha256": "41703c88628a3fa473db00d8eeb79e87e6c2f250b0dc243a951b8295973e0c35"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\prepare_campaign_file_fault_labels_v1.py",
+      "bytes": 5861,
+      "sha256": "775fada8c1e533ca9ec6b0c71510804683da5e8ff403dfeef1e0ddf3264d9a55"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\run_steam_integration_qa.py",
+      "bytes": 11766,
+      "sha256": "0673d6ab09904fd653152b127c30ca325dbf791de0b77a5da2a60cd30f0a5ad9"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\run_workstation_baseline.py",
+      "bytes": 8636,
+      "sha256": "1220817bacea5469035403084c3e4ddc7c23d222440876cd199e650a9b7dd8b2"
+    }
+  ],
+  "transitive_label_metadata_pins": [
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\original19_natural_file_faults_candidate_v4\\campaign_original19_natural_file_faults_v4.gd",
+      "bytes": 27797,
+      "sha256": "395ce698af1f6ac9c4eca892e5264b98c892cc1cd8cc8e8d93b14d380e642606"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\huangnigang_bai_arrival_candidate_v1\\level1_huangnigang.gd",
+      "bytes": 61059,
+      "sha256": "572d9c6cd8bc28c00f234dd0f2e33801e203e4bb0cd41f4612bebedd28124f06"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\DURABLE_FULL_SOURCE_INPUTS_V7.json",
+      "bytes": 1073678,
+      "sha256": "04b9154c141b862a4990869f18c8471f0dafce1a657a1c5d3570cc9df57f8293"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\prepare_campaign_file_fault_labels_v1.py",
+      "bytes": 5861,
+      "sha256": "775fada8c1e533ca9ec6b0c71510804683da5e8ff403dfeef1e0ddf3264d9a55"
+    }
+  ]
+}

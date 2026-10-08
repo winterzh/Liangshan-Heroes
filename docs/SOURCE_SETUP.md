@@ -1,3 +1,11 @@
+## 2026-10-09：完整六故障报告验证接续
+
+`campaign_file_fault_evidence_v2.py`、`campaign_file_fault_records_v1.py`、`campaign_original19_debug_faults_v5.py` 及 labels builderV3/GDv6 已有限静态预审通过；收据 SHA `99f6890c21986d859c4689f4bce6dfe0cf3aabaf7dd7b6c0ad1ce4d6f17e9014`，stages=[]。真实完整fresh95/98、restart20、preterminal56的顺序、seedCFG原g1/g2、final g3/g4、lifecycleg1-3、原pending/packet/mutation/repair/重启全部是consumer要求，尚无实际六case资格。
+
+三候选读失败必须使用actual Flow code CFG_STAGE_READBACK，inner code只为来源说明；四candidate pending新增原生proposal_semantics_sha256并绑定最终pair，prior无提案。新producer须选择这些后继源/manifest/16字段接口，不能继续组合旧GDv4错误码或runtimeV2旧controller的15字段接口。接入完整执行器后仍须独立执行准入。
+
+现唯一完整V12会话仍32145/host32920/run6409dde9，外部39900占用，0个原生阶段；只回读同一handle，不重复启动。正式源/平台不变。
+
 ## 2026-10-09：故障执行部件后继与唯一后台批
 
 `campaign_original19_fault_runtime_v2.py` / `native_exports_v1.py` / `atomic_files_v2.py` 及自然文件故障 GD v4 已通过有限独立源码预审，收据 SHA `cbb744e1815b9814d78277b93d19ee2f4132397b31033524dfc26527dc2337e2`，stages空。V1三问题拒绝和所有旧源保留；新host负责首次原始字节、固定进程/目录/identity环境、完整发布及同ERROR块诊断预算。完整 producer/report validator 尚未实现，没有新六故障原生准入。

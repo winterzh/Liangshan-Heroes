@@ -1,3 +1,13 @@
+## 2026-10-09：六故障完整报告验证器与原始 CFG 来源
+
+新增完整有序标签合同：两类 prior fresh 各95项、四类 candidate fresh 各98项、restart20项、preterminal56项，普通玩家订单11→19；固定实际八演员顺序与六identity字段，保留所有重复动作和提案分支检查。controllerV4/V5 在故障前复制真实 prefs CFG g1/g2 与 public CFG 原字节，核当前 writing lock/PID；生产 keep2 后仍可验证原seed→progress g3/g4链，不freeze会被正常prune的原seed路径。
+
+consumer读取实际native exports、完整报告/标签、gen1-3生命期、ACK/CFG、原seed和final CFG全14字段/两代相等、原pending/内存Cloud/原对象、实际raw packet PID+stack、精确mutation/backup/repair原SHA和同profile重启字节。V1独立拒绝 SHA `1e33bef5ce5e77be900e10827c64321d254b1259218e0c8669993b9fd0911474`：三candidate故障实际Flow外层码为CFG_STAGE_READBACK；原proposal语义SHA未绑定最终pair。全部原件保留。
+
+后继 GDv5/v6 修实际outer code，保留inner/source窗口；v6从实际retained proposal.sections用原生JSON.stringify计算SHA，16字段pending导出，controllerV5和consumerV2将四candidate原hash绑定最终g3/g4，prior明确无提案。原全部检查数量/顺序不变。V2 spec SHA `faa50f9ec6fbb73586db7b5b4dab850cd758588a0d60c8fe2d9094b198557384`，42pins/13tools/26imports；独立收据 SHA `99f6890c21986d859c4689f4bce6dfe0cf3aabaf7dd7b6c0ad1ce4d6f17e9014` 静态部件通过，stages空。32项我方primitive与9项独立有限host检查只为synthetic，不是整pipeline/Popen/Godot资格。
+
+当前没有新六故障原生结果/完整执行器准入。完整 V12 原session32145/Python32920/run6409dde9仍live等待外部39900释放引擎，原生阶段0，不重启或控制他项。下一步接新controller/consumer/GDv6到完整producer，保留完整源/真实报告/原件校验与独立准入。正式恢复源未晋升，八章/玩法/UI/性能/Android/SDK原计划保持，未合并main或发布Steam。
+
 ## 2026-10-09：六故障串行流程、完整报告发布及第三完整批
 
 新增故障串行 runtime 候选、native export/原始字节 publisher 及 GD v3/v4 来源。V1 独立拒绝收据 SHA `75192e37610786056fb4c66d51843566f02a9cf8def6bf4b34d48ab6948c4751` 保留三个问题：启动环境未提前绑定本步骤；Godot rename 可删除已有目标；诊断栈在整份日志中查找，未关联到对应 ERROR。

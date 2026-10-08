@@ -1,3 +1,13 @@
+## 2026-10-09：完整六故障 consumer / seed来源 / 标签合同
+
+新增 `ORIGINAL19_FILE_FAULT_FULL_LABEL_CONTRACT_V1/V2/V3.json` 和生成器各代：完整95/98 fresh、20 restart、56 ready prefix、19最终普通订单全部有序，实际Bai父关卡八演员和6identity字段固定。Source/check/标签不降格为少数关键assertion。
+
+`ORIGINAL19_FILE_FAULT_EVIDENCE_SOURCE_SPEC_V1/V2.json` 固定 consumer/严格9-string envelope和14-field CFG decoder、故障前实际seed原件归档controller、完整标签及各代源码。V1 review SHA `1e33bef5ce5e77be900e10827c64321d254b1259218e0c8669993b9fd0911474` 拒 CODE-001（实际outer CFG_STAGE_READBACK）和SEMANTICS-002（原提案未绑定final语义SHA）。原件不改。
+
+V2 spec `faa50f…` / review `99f6890c21986d859c4689f4bce6dfe0cf3aabaf7dd7b6c0ad1ce4d6f17e9014`，42pin/13tools/26edge，source-only/stages=[]。GDv6输出实际原生proposal.sections摘要，pending16字段；controllerV5/consumerV2绑定四candidate final g3/g4语义，prior保持无原proposal范围。Seed原CFG/两代档先复制并固定SHA，再结合真实最终两代/生命期三代、原packet栈、target原backup、repair、重启验证；不freeze正常会prune的旧生产seed路径。
+
+我方32项primitive和审查方9项host检查均synthetic/noNative/非整pipeline。真正launcher还须接入新GD/16字段controller与consumer并独立审核，不授六故障/全19/玩家继续。完整V12现原会话32145/host32920仍等待外部引擎，0原生阶段，原总体计划与正式源不变。
+
 ## 2026-10-09：六故障 runtime 与闭合 JSON 发布后继
 
 `ORIGINAL19_FAULT_RUNTIME_SOURCE_SPEC_V1/V2.json` 固定 runtime、controller v3、host atomic/raw-byte publisher、GD v3/v4、原件 snapshot 和导入闭合。V1收据 `75192e…` 拒绝 ENV-001/PUBLISH-002/DIAG-003：未提前绑定实际环境、Godot不同名rename会删除目标、诊断栈可被无关前文decoy满足。全部原字节保留。

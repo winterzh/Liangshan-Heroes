@@ -1,3 +1,7 @@
+## 2026-10-09：完整故障报告、seed来源与有序合同
+
+tools新增 file_fault_evidence_v1/v2、file_fault_records_v1、debug_faults_v4/v5、labels builderV1/V2/V3；恢复QA新增其8份source snapshot、完整labels三个合同、SOURCE_SPEC/预检/两次独立收据/32项primitive结果，以及natural_file_faults_candidate_v5/v6（outer错误码/原生提案SHA）。仅后继consumer/GDv6部件静态通过，source stages空；尚无整执行器或新Native资格。
+
 ## 2026-10-09：六故障串行部件和完整文件发布来源
 
 tools新增 atomic_files_v1/v2、debug_faults_v3、fault_runtime_v1/v2、native_exports_v1。恢复QA新增六份source snapshot、ORIGINAL19_FAULT_RUNTIME_*封存/两次独立收据/人工host检查脚本结果、natural_file_faults_candidate_v3/v4（仅JSON发布改动）及完整V12第三批历史启动观察。原共享完整runtime不改；全producer/六故障实际验收未完成。
