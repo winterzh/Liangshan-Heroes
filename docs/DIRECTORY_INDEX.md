@@ -1,3 +1,9 @@
+## 2026-10-08：白胜诊断与v32实际启动
+
+- `qa/campaign_progress_recovery_20261008/actual_failed_natural_terminal_v3/`：五份原证据与binding，不含玩家CFG。
+- 同QA `natural_terminal_executor_v4_r2/`、`NATURAL_TERMINAL_SOURCE_SPEC_V4_R2.json`、`NATURAL_TERMINAL_INDEPENDENT_REVIEW_V4_R2.json`：原期限/自然命令不变的只读诊断，尚未native。
+- `qa/office_campaign_route_20261008/ACTUAL_LAUNCH_V12.json`：实际v32旧full新批argv，结果待终态。
+
 ## 2026-10-08：v32旧full审查
 
 `qa/office_campaign_route_20261008/OFFICE_FULL_INDEPENDENT_REVIEW_V12.json`是旧full v32单独静态准入，尚未native，不覆盖R9新完整恢复consumer。

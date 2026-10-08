@@ -1,3 +1,15 @@
+## 2026-10-08：普通终局V3实际白胜失败；V4_R2只读诊断准入
+
+`natural_terminal_a30fe00d`已终态失败、锁释放，session2937退出1：导入26860退出0/零错误；normal_fresh13248退出1/引擎错误0，22项检查唯一失败为白胜在原60秒内自动卸酒。真实菜单、六项完整identity、普通时钟、押队到场与一次玩家刘唐应答均通过；没有进入自然终局或写CFG确认，白胜精确状态未采集，不能认定具体路径/控制原因。五份原收据/identity/日志/report在`actual_failed_natural_terminal_v3/`，原profile不改不复用。
+
+V4_R2只添加每15秒白胜原对象的hp/位置/state/path/queue/serial/manual/unload/near/segment只读观测及失败详情，PackedVector2Array使用for遍历；原玩家命令、60秒/正常tick/墙钟上限、终局/CFG/gen3和所有重启/debugger断言不变。只读preflight成功，spec SHA`8fcdcc13c90610aeee88867683dd0c6360f9e6896bf18297f03997c31fbbf85f`；独立收据`NATURAL_TERMINAL_INDEPENDENT_REVIEW_V4_R2.json` SHA`86b438174e8ae5507a98688cd7512a44d245dee70f506684a286b36ff9b6687f`已回读，107固定来源一致，仅scoped静态准入、尚未native，失败资格不转移为绿色。
+
+当前唯一新自有原生批是已准入v32旧完整续玩`office_full_3eb4617b`，session27770，单独全新profile；实际导入已退出0，前置JSON/store/半程ABC及双角色流程继续，不能按日志滚动认定whole通过。等它实际终态后才能串行执行V4_R2诊断。不缩短或改自然条件，不用玩家接管代替自动卸酒检查。
+
+最终R9双角色/19故障/52负例/真实CFG重启/错误UI/奖励一次性仍未完成；八章、九玩法/导出、性能内存和Android真机目标继续。正式源码未晋升，Git只同步stable，不合并main或发布。
+
+以下此前“V3运行中”等段落保留历史，以本段和实际终态为准。
+
 ## 2026-10-08：v32旧full静态准入与普通终局V3实际导入
 
 v32独立V12收据`qa/office_campaign_route_20261008/OFFICE_FULL_INDEPENDENT_REVIEW_V12.json` SHA`032312d7f03b80760194a607923ddd3227379eb57dc28369b3b6a5343d0db5f0`已回读：原旧full范围静态准入，native_started=false；仅调整admission/扩军时序并补诊断，原Core/Contract候选与全部原矩阵不变。该批准不覆盖R9完整恢复consumer，旧V11实际失败不能升级，v32尚未启动。待普通终局批实际终态后再串行安排。
