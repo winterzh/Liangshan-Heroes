@@ -1,3 +1,9 @@
+## 最新观察：完整V8-R2失败保留，CFG组件等待
+
+V8-R2的办理半程ABC39/351/342及前序真实通过；Lu-first A开始后外部Godot进入，整批终止退出1、锁释放，原档案保留，不补齐成完整双方资格。当前唯一新批为CFG组件cfg_component_c5212404/session41902，正在等待自然空闲，尚无Godot结果。[完整记录](../qa/office_campaign_full_20261008/README.md)。
+
+当前恢复候选扩为六GD：v2日志/冻结意图/CFG语义/受控替换、WorldSession双层实际scope派发，以及保留无关/未知数据的纯同局投影。源码闭合/9生产SHA不变，未解析/未native/未晋升；完整协调器、startup扫描/玩家失败UI/pending/prefs/cloud和普通fresh路径尚未实现。[候选证据](../qa/campaign_progress_recovery_20261008/README.md)。原完整计划保持。
+
 ## 当前：V8-R2与CFG受控替换源码候选
 
 完整V8已因B期间外部Godot进入终止，原失败保存；同一批准来源用新UUID/profile开启V8-R2 `office_full_e8f3fca4`，当前实际导入/守卫/JSON533通过，其余门禁待本批终态。未测试到新守营策略，未沿用旧成功补齐全链。[当前完整QA](../qa/office_campaign_full_20261008/README.md)。

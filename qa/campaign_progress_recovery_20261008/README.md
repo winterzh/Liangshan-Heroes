@@ -1,3 +1,9 @@
+## 当前六份GD候选与完整批终态
+
+新增WorldSession候选：campaign用严格v2、classic用原v1；在Core.prepare前和mount前核对真实脚本/token/root/context/安装身份/owner。旧不绑定章节的campaign v1明确拒绝，不迁移、不修改原记录。新增纯同局投影保留偏好/未知CFG及record数据，不union跨局目标；无文件/回调/战斗/奖励操作。六候选原字节与9生产来源核对记录在SOURCE_AUDIT_V4/combined_source_snapshot_v4，未解析/未native/未接入正式游戏。
+
+完整V8-R2已在Lu-first A期间因外部Godot进入终止，完整双角色仍无资格。当前唯一新自有批为CFG组件cfg_component_c5212404/session41902，使用源封存V5；控制器等待自然空闲，尚无Godot结果。没有同时新开完整续玩批。旧19案只属v27b，不能延伸为本轮候选或玩家恢复通过。
+
 ## 当前v2后继与受控CFG组件候选
 
 `proposed/`原v1与SOURCE_AUDIT_V1原样保留；其三代模型会受到父存储默认只留两代的影响，不可作为native准入。`proposed_v2/`四文件候选修正三代保留、只有本对象实际提交/持有原锁才取得结算能力，新增v27b原数据Variant/语义helper和受控CFG替换。

@@ -1,3 +1,7 @@
+## 新增六候选源与完整R2原失败
+
+`qa/campaign_progress_recovery_20261008/combined_source_snapshot_v4/`、SOURCE_AUDIT_V4和WORLD_SESSION_DISPATCH_SOURCE_V1记录六GD候选实际字节/API/生产SHA；全部未解析/未native/未生产。`qa/office_campaign_full_20261008/actual_failed_v8_r2/`保留真实ABC与Lu-first A外部竞争失败，原profile在工程外完整保留。
+
 ## 当前新增CFG组件与V8-R2来源
 
 - `qa/campaign_progress_recovery_20261008/proposed_v2/`、SOURCE_AUDIT_V3与CFG_COMPONENT_SOURCE_PREFLIGHT_V5：四GD候选及完整固定来源，未native/未生产。

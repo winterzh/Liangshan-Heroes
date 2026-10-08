@@ -1,3 +1,9 @@
+## 当前完整批终态与CFG组件观察
+
+V8-R2 `office_full_e8f3fca4`已真实终态退出1，锁释放。其导入/守卫/JSON533/OwnedSlot76/办理半程ABC39/351/342和源审计通过；Lu-first A PID22392开始后另一引擎进入，按原守卫终止，原profile/失败完整保留并归档actual_failed_v8_r2。新守营策略未完成验证，完整双角色/負例/自然终局仍未通过。
+
+当前唯一自有新批为CFG组件 `D:/CodexTemp/lsh-campaign-cfg-20261008/cfg_component_c5212404`（观察session41902），使用源封存V5、同引擎实际协议proof/基线；目前只控制器启动、等待自然空闲，尚无组件Godot/结果。没有同时运行新的完整续玩批。后续只观察本批终态，不按观察超时重启。
+
 ## 当前V8-R2真实范围
 
 V8全批在B独立恢复时因外部Godot进入终止，尚未到新守营策略。相同静态批准的三份v28来源与producer/seal不变，新全批`office_full_e8f3fca4`使用新profile；原命令另存ACTUAL_LAUNCH_V8_R2。新策略真实效果与完整双角色ABCD仍未资格。
