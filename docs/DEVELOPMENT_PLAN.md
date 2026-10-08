@@ -1,3 +1,13 @@
+## 2026-10-08：真实启动屏障上下文及空屏障防线修正，R12静态候选
+
+最终恢复的办理半程后继 `final_executor_candidate_v1_r2/` 保留原79项标签，新增正常startup门禁、真实Battle屏障归属与完整五参数v2生命周期检查。独立审查初步拒绝 FINAL-ADM-001：R9实际新游戏入口用缺省classic上下文创建保存屏障，原测试额外configure掩盖该问题。没有删除断言或恢复测试注入。
+
+R10将Battle屏障创建/configure/add移到实际SteamRunPolicy.classify之后，显式传入本次实际上下文，prepared restore分支不变。独立复核确认上下文问题已解决，同时拒绝FINAL-ADM-002：失败启动可能没有屏障，而ContinueFlow保存入口直接调用空对象。R11在request_save_exit设置source前、confirm的_begin_save修改UI/连接信号前和_disconnect_capture读取屏障后检查实际有效性，返回既有RUN_BARRIER_UNAVAILABLE或安全结束disconnect。相对R9仅Battle/ContinueFlow变化，另12源字节不变。R11的第二层guard进入_fail后仍会空对象访问，因此独立拒绝；R12继续保护_fail、retry_release、has_capture_request与cancel-for-terminal路径，保留原错误及确认前pause意图，不伪装已解除持有。十四候选/80固定引用/13正式来源及新快照封存在 `SOURCE_AUDIT_V14.json`、`integrated_source_snapshot_v14/`；正式源码零修改。独立复核见 `INTEGRATION_SOURCE_REVIEW_V5_R12.json`，仅静态源/API范围，未授予任何native/full阶段。R10/R11及其拒绝收据原样保留。
+
+旧完整续玩 `office_full_3eb4617b` / session27770已实际终态退出1，Lu A PID45692、131项检查唯一失败“prison approach clear natural deadline”。真实受验、内应、举火、开南门事件已发生，部队仍有存活，但失败报告不足以定位移动/攻击原因；43份原始记录85,208,161字节在 `qa/office_campaign_full_20261008/actual_failed_v12/`，原档不改不复用。普通终局V4_R2诊断 `natural_terminal_e75e0f96` / session9861也已终态失败、锁释放：normal_fresh PID42496、22checks唯一白胜60秒内自动卸酒失败；五份原记录在 `actual_failed_natural_terminal_v4_r2/`。从tick2697至5397白胜位置911.29565,741.92834完全不变，ST_MOVE/path仍指向752,784，静态segment畅通，hp70、无手动接管、serial1/auto保留。只能确认正常自动走路停滞，不能仅凭静态路线穿过押队站位认定动态身体阻挡。V5仅补充实际128范围敌对移动body半径/距离及下一60Hz步/轴步的map与can_unit_step结果，所有命令/60秒边界/断言不变；107来源封存spec及快照、独立静态scoped准入收据同目录，未转移R12全链资格。最终R12完整producer及双角色/19故障/52负例/真实CFG重启/错误UI/奖励一次性继续待实现和验收。八章、九玩法/导出、性能内存和Android真机仍在计划内。
+
+本轮仅同步候选、独立审查和交接到既定stable；不晋升正式源码，不合并main或发布。
+
 ## 2026-10-08：普通终局V3实际白胜失败；V4_R2只读诊断准入
 
 `natural_terminal_a30fe00d`已终态失败、锁释放，session2937退出1：导入26860退出0/零错误；normal_fresh13248退出1/引擎错误0，22项检查唯一失败为白胜在原60秒内自动卸酒。真实菜单、六项完整identity、普通时钟、押队到场与一次玩家刘唐应答均通过；没有进入自然终局或写CFG确认，白胜精确状态未采集，不能认定具体路径/控制原因。五份原收据/identity/日志/report在`actual_failed_natural_terminal_v3/`，原profile不改不复用。

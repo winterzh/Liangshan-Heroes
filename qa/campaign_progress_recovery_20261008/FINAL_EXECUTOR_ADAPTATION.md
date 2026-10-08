@@ -1,3 +1,7 @@
+## 当前后继R12范围（2026-10-08）
+
+用户已授权恢复接入与全链后继的独立审查。最新源为`integrated_v4_r12/scripts/`十四脚本，封存`SOURCE_AUDIT_V14.json`；R9/R10/R11及既有spec/收据保留。R11使用实际launch分类上下文创建屏障，测试只读检查而不额外configure，并拒绝空屏障保存/安全disconnect。最终完整执行器尚未就绪；任何R12运行须新producer/spec与独立准入，旧R9 scoped批准不转移。
+
 # 最终恢复执行器接入约束
 
 2026-10-08 独立审查员只读核查了旧 full producer、v31 路线与 R9 接入。旧 full 没有最终恢复资格，不能把旧结果或两个来源审查简单相加。

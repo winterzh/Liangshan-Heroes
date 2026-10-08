@@ -1,3 +1,7 @@
+## 2026-10-08：最终恢复半程候选、R10至R12屏障修正和旧full失败证据
+
+`qa/campaign_progress_recovery_20261008/final_executor_candidate_v1/`、`final_executor_candidate_v1_r2/` 保留五参数v2半程后继及初步拒绝；`integrated_v4_r10/`、`integrated_v4_r12/`、`integrated_source_snapshot_v12/`、`integrated_source_snapshot_v14/`及V12至V14审计封存真实launch上下文和空屏障防线，尚未native/full。`qa/office_campaign_full_20261008/actual_failed_v12/`保留旧Lu A131checks牢前失败43份原记录。V4_R2诊断新实际启动收据同恢复QA目录。
+
 ## 2026-10-08：白胜诊断与v32实际启动
 
 - `qa/campaign_progress_recovery_20261008/actual_failed_natural_terminal_v3/`：五份原证据与binding，不含玩家CFG。
