@@ -1,3 +1,26 @@
+## 2026-10-08：v32旧full审查
+
+`qa/office_campaign_route_20261008/OFFICE_FULL_INDEPENDENT_REVIEW_V12.json`是旧full v32单独静态准入，尚未native，不覆盖R9新完整恢复consumer。
+
+## 2026-10-08：普通终局V3独立收据
+
+`qa/campaign_progress_recovery_20261008/NATURAL_TERMINAL_INDEPENDENT_REVIEW_V3.json`：固定延后加载探针、新spec、完整候选组合scoped准入；新批实际已启动，完整资格未授予。
+
+## 2026-10-08：普通终局V2失败与V3源
+
+`qa/campaign_progress_recovery_20261008/actual_failed_natural_terminal_v2/`保留四原证据及binding；`natural_terminal_executor_v3/`与`NATURAL_TERMINAL_SOURCE_SPEC_V3.json`是固定autoload后加载的探针后继，待独立复审、未新native。
+
+## 2026-10-08：普通终局scoped独立审查
+
+`qa/campaign_progress_recovery_20261008/NATURAL_TERMINAL_INDEPENDENT_REVIEW_V2.json`绑定spec V2与11helpers/14R9/80依赖/两项CoreContract组合；仅三组自然终局/restart静态准入，实际新批仍待终态，完整consumer尚未完成。
+
+## 2026-10-08：V11终态与普通终局执行器准备
+
+- `qa/office_campaign_full_20261008/actual_failed_v11/`：42原证据与SOURCE_BINDING，无玩家CFG。
+- `qa/campaign_progress_recovery_20261008/NATURAL_TERMINAL_SOURCE_SPEC_V1.json`/`V2.json`、`natural_terminal_executor_v1/`/`v2/`与`FINAL_EXECUTOR_ADAPTATION.md`：普通自然终局/两个重启窗口工具及静态修正版，完整consumer仍待接入。
+- `tools/run_campaign_natural_terminal_recovery.py`及`campaign_natural_terminal_probe.gd`：source/PID/debugger/普通CFG/冷导入绑定，尚未native。
+- `qa/office_campaign_route_20261008/v32/`、`ROUTE_V32_PREPARATION.json`、`complete_inputs_seal_v12.json`：普通入牢提前、火号仍等待扩军，原矩阵不降；待独立准入。
+
 ## 2026-10-08：R9独立源码审查收据
 
 `qa/campaign_progress_recovery_20261008/INTEGRATION_SOURCE_REVIEW_V2.json`：R9十四源/80引用/十三生产来源静态准入；尚无全链执行器/原生资格。原审查范围字节保持，后继范围说明独立保存在`INTEGRATION_REVIEW_SCOPE_V2.md`。

@@ -1,3 +1,45 @@
+## 2026-10-08：v32旧full静态准入与普通终局V3实际导入
+
+v32独立V12收据`qa/office_campaign_route_20261008/OFFICE_FULL_INDEPENDENT_REVIEW_V12.json` SHA`032312d7f03b80760194a607923ddd3227379eb57dc28369b3b6a5343d0db5f0`已回读：原旧full范围静态准入，native_started=false；仅调整admission/扩军时序并补诊断，原Core/Contract候选与全部原矩阵不变。该批准不覆盖R9完整恢复consumer，旧V11实际失败不能升级，v32尚未启动。待普通终局批实际终态后再串行安排。
+
+普通终局新批`natural_terminal_a30fe00d`导入PID26860已真实退出0、零引擎错误；session2937仍运行，后续normal fresh/restart与两个中断窗口待实际结果。无自然终局或重启通过可宣称。
+
+## 2026-10-08：普通终局scoped V3独立准入，新档实际运行
+
+V3独立审查收据`qa/campaign_progress_recovery_20261008/NATURAL_TERMINAL_INDEPENDENT_REVIEW_V3.json` SHA`392f11d5e8c317b2383aa0b3fd94bfb2729e364a9340995288d0927b42957160`已实际回读，spec3e3a3d…、producer不变、probe固定autoload后load、十四R9/80引用/两项CoreContract组合一致；仅natural_terminal_scoped准入。V2真实导入22748/启动43612的成功/编译失败和保留原档均纳入审查，不转移原生资格。
+
+全新`natural_terminal_a30fe00d`已实际启动，观察session2937，原V2失败profile不复用；必须逐阶段实际终态检查，当前尚未完成三组。最终双角色/原19/52/SDK/故障UI仍未通过。正式游戏源码未改。
+
+## 2026-10-08：普通终局V2实际解析失败保留，固定延后加载V3待复审
+
+`natural_terminal_b58fec06`已实际终态失败、锁释放（session35059退出1）：import PID22748退出0、引擎错误0，前后完整源/冷导入派生元数据及postcold identity核验完成；normal_fresh PID43612退出1、一个Compile Error：SceneTree primary probe过早预载Intent→Profiles→Campaign，autoload名称SteamService尚未注册。未进入自然玩法、没有终局/CFG/重启结果。原receipt/postcold identity/两日志保留`actual_failed_natural_terminal_v2/`，原profile不改不复用。
+
+修正仅在V3探针：Provider/Intent/Lifecycle为固定Script变量，实际autoload/菜单180帧后才加载固定路径，生命周期变量显式RefCounted；producer/R9十四源不改，V1/V2源与spec保持。V3只读preflight成功，spec SHA`3e3a3d94f22d4778e68187e35c48f9fe47a3d5596f4824eaa41d45356c209f2a`，冻结`natural_terminal_executor_v3/`。新独立复审待终态，尚未新native；V2旧独立准入不能覆盖改后probe或代替运行通过。
+
+当前没有自有Godot运行。最终双角色/19/52及SDK完整目标继续；正式生产源码未改，旧V11完整失败和v32后继仍保留。此前“新批运行中”等是历史，以本段及实际收据为准。
+
+## 2026-10-08：普通自然终局三组执行器独立准入并实际启动
+
+scoped V2独立收据`qa/campaign_progress_recovery_20261008/NATURAL_TERMINAL_INDEPENDENT_REVIEW_V2.json` SHA`e52b0b657ede0bbc70f4bd2ada17fc8531e479f3e1fcb8fc95ceb5437ead25e4`已实际回读。11 helpers、14 R9、80依赖、选用的两项Core/Contract及冻结副本一致，三类V1阻断修复；仅`natural_terminal_scoped`准入，不授予双角色/19/52/SDK/错误UI或full资格。
+
+实际新批`natural_terminal_b58fec06`已启动（session35059），仅在连续idle60后按单进程隔离执行。三组：normal fresh/restart；真实gen2源码点中断/restart；真实CFG后ACK前源码点中断/restart。必须实际PID/nonce/stack、完整冷导入identity、普通时钟/CFG/gen3/无重放与原链不变全部通过才计此范围；正在准备/运行，当前没有结果可升级。失败保留全批，不重开或复用档案。
+
+最终完整恢复consumer仍未实现，详见`FINAL_EXECUTOR_ADAPTATION.md`；V11旧full实际失败已保留，v32另待独立静态准入。正式生产源码未改，平台未发布。
+
+## 2026-10-08：V11完整续玩实际失败，新普通终局检查准备
+
+完整批`office_full_e85e9994`已终态退出1、锁释放，不能继续视为运行。导入11016、JSON5456、OwnedSlot16496及半程ABC27944/45552/34464均终态0；档案保护38872/41692按预期拒绝。Lu-first A PID37260、119检查，在real admission complete natural deadline失败；军队19仍存活、营1500血、吴用186血、没有牢门/火号/营救事件。六原工人及付费第二house/workshop/2投石车/12步兵均已实际走过，入牢失败具体原因未观察到。42份原收据/日志/报告保留`qa/office_campaign_full_20261008/actual_failed_v11/`，原profile保持，未上传CFG/玩家档。
+
+旧full无法直接安装R9后验收：原producer要求Core/Contract两项变化、QA=1、v1构造器及两代生命周期；新普通恢复要求R9六替换八新增、正常QA空、固定root、active1→pending2→applied3，并真实写CFG。ABC/组件/live继承base和consumer必须有更严格后继，保留原检查/矩阵，不豁免或转移历史green。详细约束见`qa/campaign_progress_recovery_20261008/FINAL_EXECUTOR_ADAPTATION.md`。
+
+新增普通终局工具`tools/run_campaign_natural_terminal_recovery.py`与`campaign_natural_terminal_probe.gd`：实际菜单首关、原生时钟1、普通玩家酒计/挑担/撤离，自然END后真实CFG/gen3与新菜单不重放；两处真正Coordinator源码断点经实际PID/stack确认后只结束自有Popen，再新进程恢复。三组各fresh/restart、四用户目录隔离、来源/native/冷导入/完整identity/nonce/ERROR/foreign闸绑定。V1静态发现revision字符串和来源/进程闸缺口，原V1源/spec保留；V2修复并真实只读preflight成功，spec SHA`1390dfbcf3b29d05dd665086d9027fc647d2e839bbc9511d3ff478f06b840dd9`。仍待独立具体准入，尚未native；只承担首关自然终局与两个恢复窗口，不是最终双角色+19+52/故障UI/Steam完整consumer。
+
+v32旧路线候选仅将同样的付费扩军移到真实admission/入内院后、火号前，新增实际spy hp/invis/位置/命令诊断；六工人、军队规模/成本、所有原检查/ABCD/52仍保持。bundle/seal_v12（SHA`5dda50a489695c34a9bfeeec4ef8ee6ce3678976ac6a0db4d7dcde962bcc9f55`）已封，独立审查待完成、未native、不保证解决入牢失败。
+
+完整开发目标继续：最终组合双角色自然ABCD+负例；普通fresh/续玩与最终19故障/配置确认重启/真实错误重试/奖励一次性；八章动态、美术动画UI/多尺寸；九玩法与导出EXE；正常时钟性能/内存及Android真机/平板。正式游戏源码未改，只白名单同步stable、不合并main或发布。
+
+以下“V11运行中”等较早段落为历史，以本段及原终态为准。
+
 ## 2026-10-08：R9独立静态源码准入完成
 
 独立审查收据`qa/campaign_progress_recovery_20261008/INTEGRATION_SOURCE_REVIEW_V2.json` SHA`6c558b6e5279972819c0ea90789e1e183ee86f00f045d4fc28e52f0ae63f47ec`已实际回读：R9十四源、80固定引用、十三正式来源、十四快照完全一致，12个历史阻断逐项静态解决。`approved_static_sources_only=true`，但`approved_stages=[]`、`full_executor_not_ready=true`、`native_started=false`。后继恢复全链执行器尚未完成，未扩展成原生/终局/重启/UI/奖励资格。
