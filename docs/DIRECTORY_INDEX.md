@@ -1,3 +1,9 @@
+## 2026-10-08：V9完整批与V3源码候选
+
+- `qa/office_campaign_full_20261008/actual_failed_v8_r3/`：27份实际失败/成功前序的原收据、日志和报告，无CFG/profile存档。
+- `qa/office_campaign_route_20261008/v29/`、`ROUTE_V29_PREPARATION.json`、`complete_inputs_seal_v9.json`、`OFFICE_FULL_INDEPENDENT_REVIEW_V9.json`、`ACTUAL_LAUNCH_V9.json`：普通玩家地形反算目标断言后继、真实独立静态批准和新全批实际argv。
+- `qa/campaign_progress_recovery_20261008/proposed_v3/scripts/`、`combined_source_snapshot_v6/`、`SOURCE_AUDIT_V6.json`：八源候选及来源核对，未原生/集成，原V2组件资格不延伸。
+
 ## 新增实际CFG组件与保留式协调器来源
 
 `qa/campaign_progress_recovery_20261008/actual_cfg_component_v6/`与ACTUAL_CFG_COMPONENT_PASS_V6保存真实四案/八PID/36检查通过；failed_cfg_component_v5保留原失败。SOURCE_AUDIT_V5/combined_source_snapshot_v5封存八GD候选（gate/协调器未集成）。`qa/office_campaign_route_20261008/ACTUAL_LAUNCH_V8_R3.json`为同一V8批准来源下新UUID/profile完整批命令。

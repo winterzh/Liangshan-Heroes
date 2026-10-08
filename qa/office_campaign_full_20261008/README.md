@@ -1,3 +1,13 @@
+## 2026-10-08：V8-R3失败保留，V9新完整批
+
+V8-R3 `office_full_f2d8d7cc`实际终态失败、锁已释放；Lu-first A PID30668退出1，24检查仅“normal building order sets camp rally”失败。实际JSON533、OwnedSlot76、办理半程独立ABC39/351/342及来源审计通过，不能拼成完整双角色资格。原收据SHA `f4b9e370918d64ff60db791649f2324d97a3384351445309d4ab0543aa898c0d`，27份原收据/日志/报告已逐字节保存于`actual_failed_v8_r3/`；玩家/测试profile、CFG及存档不入Git，原位置保持。
+
+源码核实普通minimap_order经to_screen→_issue_order→to_logic；高度场unproject做20次二分，原逻辑点与反算命令点不要求逐位相等。旧失败报告未记录实际rally，因此不能把运行原因写为已确证。后继v29保留玩家命令，要求真实selection/produces/has_rally、exact API逆投影目标及原cell，并记录实际请求/画面/API/集结数据。原v28和不可变消费者/全部门禁未修改。
+
+同一用户授权独立审查员完成V9来源/API/full审查：收据SHA `87e3a55c033a622b8e318425e25ce1e272dac62345111a99ad5cf1512012c443`，绑定producer `6a3fbe5b…`、prep `5864a673…`、seal_v9 `5e04a907…`、v29三源清单。54 QA pins、两端5132 runtime、5031基线来源、engine/native闭合；只读完整预检实际通过。静态批准不证明守营或完整续玩通过。
+
+全新批`office_full_b0f1d997`控制器于本机15:25启动（观察session36807），使用新UUID/profile及新有界截止UTC2026-10-08T13:25:19.483091Z；实际argv见`../office_campaign_route_20261008/ACTUAL_LAUNCH_V9.json`。各native阶段仍等待自然空闲60秒，启动后外部Godot进入则整批失败并保留；未控制/消息协调其它任务。本段仅记录启动，结果须读本批实际终态，不因观察过期或缺收据另开批。
+
 ## 最新：CFG受控替换组件36检查通过，完整V8-R3继续
 
 CFG组件四案例/八个不同实际PID/36检查完整通过，包含backup/install两处真实进程中断后恢复与外部CFG改动后的拒绝覆盖。原失败保留，正式生产源码未改；结果不延伸为玩家UI、自然战役、完整gen2→cfg→ack或奖励通过。[真实组件证据](../campaign_progress_recovery_20261008/README.md)。
