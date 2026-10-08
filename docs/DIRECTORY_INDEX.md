@@ -1,3 +1,15 @@
+## 2026-10-09：六文件故障V2独立源码预备收据
+
+V2目录新增PRELIMINARY_REVIEW_V2.json，仅source static/stages[]。六原case仍没有controller/Native结果，旧V1拒绝保留。
+
+## 2026-10-09：六故障V1拒绝与V2first-raw候选
+
+恢复QA的natural_file_faults_candidate_v1/新增拒绝和source preflight；新增original19_natural_file_faults_candidate_v2/修订GD/SOURCE，源码复审中，无controller/Native资格。
+
+## 2026-10-09：原19真实文件故障自然路径候选
+
+恢复QA新增original19_natural_file_faults_candidate_v1/（GD/SOURCE六实际断点和原件控制合同）。只源码预备审查中，无controller/Native/all19资格，原正常完整批输入不变。
+
 ## 2026-10-09：GDv5/helperV3独立预备收据
 
 新增GDv5目录预备收据及ORIGINAL19_DATA_EVIDENCE_PRELIMINARY_REVIEW_V3.json，均stages空/source-only，旧V2拒绝保留，无newproducer/Native资格。

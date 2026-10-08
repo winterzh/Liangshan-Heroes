@@ -1,3 +1,25 @@
+## 2026-10-09：六真实自然文件故障V2源码预备通过
+
+original19_natural_file_faults_candidate_v2/ORIGINAL19_NATURAL_FILE_FAULT_PRELIMINARY_REVIEW_V2.json SHA d27dc6005b1cd7d140b968b438ab64340c101263d53604a2fd28528e83d3089d 已实际回读：first原UTF8 bytes SHA/pending原SHA/current+repair声明双等原SHA闭合，static_api_closure_passed=true/approved_stages=[]。candidate664749…/SOURCEca0399…匹配，原六断点/路线/实际对象和gen2-gen3/restart声明保留。
+
+本轮只源码候选及独立预备审查，没有Godot解析、debugger controller、expected-native-diagnostic预算运行实现或实际六case结果；未来完整producer必须另审并固定所有原raw pin，不把这里当全19/玩家恢复功能交付。正常full61与其余5原ID/额外UI/SDK/性能/设备计划继续，协调授权仍待用户回复，没有新Native批或正式源码晋升。
+
+## 2026-10-09：六故障V1原注入custody拒绝，V2first-raw修订
+
+V1独立预备拒绝收据SHA cf109c7e7104fee2155bbf982a0ef679461e2c9cb4bd10f3f0f2915b7e789bc6：唯一FAULTGD-CUSTODY-001，repair原声明只比较当前injection SHA，可接受pending之后文件替换，未绑定pending原SHA。旧GD/SOURCE/14source-preflight/拒绝收据原字节保留，stages空/没有Native或controller。
+
+后继original19_natural_file_faults_candidate_v2/源码SHA6647491fd2ae38e20bbce89351f0e7ba6e59763f52578827dbadb22d99797df9，SOURCE SHAca039915860cde53fc06681e59c6318a5185dc8cd1391062d0439061e7d9984e。只修first raw UTF8 bytes/1MiB bound/当次SHA定义→核currentfileSHA→parse；pending保存这个firstSHA，repair只能在currentSHA==pending.firstSHA且其声明==pending.firstSHA时通过。六实际source窗口/原普通naturalroute/同实际对象/gen2-gen3/restart其余不变；预备集中复审中，无Godot解析/controller/Native。
+
+水浒没有active第三完整批；其余完整19/正常full61/SDK/八章/UI/玩法/性能/真机全部原计划不变。跨聊天协调消息仍等待用户授权，未向其他聊天发送。
+
+## 2026-10-09：原19六真实文件故障自然终局源码候选
+
+新增original19_natural_file_faults_candidate_v1/ GD与SOURCE。它继承原真实黄泥岗普通玩家订单/四目标/15guards无击杀/八survivors路线，先用实际Campaign.save_prefs真实正常private priorCFG，再等待本批自然terminal与actual coordinator gen2。六原ID保留：bad_existing_cfg_load/existing_vanished_prior/write_failure/save_OK_fresh_load_failure/readback_semantic_mismatch/readback_SHA_changed；SOURCE逐SHA/函数/精确源码行绑定真实R12 CFG读写断点及caller约束，实际host只能操作这批的已观测原SHA/private文件。semantic-mismatch在当前更早expectedSHA守卫拒绝，明确不声称后来semantic比较已到达。
+
+GD记录actual pending ERROR/code、未gen3/未展示、原Campaign+真正Cloud状态不变、同coordinator/writer/lifecycle/intent/可用frozen proposal；host repair需原mutationSHA与pid/nonce/case绑定，之后GD通过真实可见RetryTerminal压信号并检查同对象完成、原gen1/2不变/gen3确认，继续原natural postterminal/restart门禁。pre-staging prior-load失败不捏造frozen CFG，onlyprepared release与staging retention按实际API分开。
+
+当前只有source prototype、独立预备审查中；没有debugger controller/source admission/error预算运行实现、没有Godot解析/Native结果，不把它称六实际故障通过/完整19或UI/SDK资格。正式源未修改；水浒全61仍两个foreign中断失败、无active第三批，跨聊天协调许可请求仍待用户回复。其余2自然first/repeat及3真实回调/Cloud边界source尚需适配，原完整计划保持。
+
 ## 2026-10-09：GDv5/helperV3源码预备复审通过，仍无Native批
 
 两独立预备收据已按原SHA回读：original19_data_layers_candidate_v5/ORIGINAL19_DATA_LAYERS_PRELIMINARY_REVIEW_V5.json SHA fbf67c77d77d9911707732f19faab6688da4863515b60e8fabeed5b21d1bb274；ORIGINAL19_DATA_EVIDENCE_PRELIMINARY_REVIEW_V3.json SHA c1233f270dc194977149f59e8f9c1bf7848ea386871758366a5daa6dffeda0b2。两者static_api_closure_passed=true/approved_stages=[]，原4纯host反例与cleanup/doc/metadata同类alias均拒绝、正常exact pure进度正例通过；21pin/14Python36edge、原45check/109顺序/七commit/14历史/final两代源码闭合。没有Godot解析/Native/实际新109结果，不授尚未实现的新producer或完整19。
