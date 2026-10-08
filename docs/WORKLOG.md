@@ -1,3 +1,9 @@
+## 2026-10-09：完整 V12 第四新批已进入冷导入
+
+复核当前无引擎占用及共享锁后，原已审 V12 无运行预检退出0，逻辑 SHA `867bd2d1b78339f357200e4dca344d14fb38a05c39f3e7906fe3f11507b60209` 不变。启动全新 `durable_chain_8fe7b18b`，session14695/host PID38692，未复用前三失败批的工程或档案。串行 idle60 后实际 cold_import PID45856 已退出0/错误0且 complete=true，原日志SHA已核对；主进程仍在运行等待Lu A，尚无终态/完整61资格。
+
+历史观察见 `DURABLE_CHAIN_V12_FOURTH_RUN_START_V1.json`。接续必须回读原 session14695 和实际进程/终态 receipt，不能用本条或锁证明未来存活，不能因观察超时重复启动。原六故障 V2 仍绑定失败6409且批准阶段为空，不因第四批启动获得准入；须等新的完整成功结果后另建封存。跨聊天协调未发送，正式游戏源码和发布平台未变，完整后续范围保持。
+
 ## 2026-10-09：六文件故障执行器源码审查完成，第三完整批实际中断
 
 后继 GDv6/controllerV5/consumerV2 已接入执行器 V2，设计为冷导入1次、六真实故障 fresh 和六同 profile restart，共13个原生进程；保留27个覆盖文件、完整标签和原件校验。V1 独立拒绝收据 SHA `fe7726a2a449324813c4d3a05c3b07edd5f53bf009880f36198a3f1f154faf46` 保留：前置 receipt 先 pin 后另读解析可接受 ABA 替换，journal 比较存在 bool/int 别名。
