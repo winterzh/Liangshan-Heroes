@@ -870,3 +870,10 @@ tools/run_steam_release_native_qa_20261007_retry_f.py -text -whitespace
 
 # Preserve the frozen ownership boundary and authored UID across checkouts.
 scripts/run_scenery_json_boundary.gd* -text -whitespace
+
+# Preserve current office QA producer and startup probe source pins.
+tools/run_workstation_baseline.py -text -whitespace
+tools/workstation_startup_probe.gd -text -whitespace
+tools/prepare_office_campaign_qa.py -text -whitespace
+tools/run_office_campaign_restore_qa.py -text -whitespace
+qa/office_baseline_20261008/** -text -whitespace

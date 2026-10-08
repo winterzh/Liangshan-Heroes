@@ -1,3 +1,9 @@
+## 2026-10-08 公司本机启动基线已实测
+
+已在官方Godot4.6.3上验证当前普通源码导入、180帧启动与真实菜单绘制。正常启动仍使用既有run_local，不需要原生QA依赖。可复验 `python -X utf8 -B tools/run_workstation_baseline.py --run`；工具等待共享引擎连续自然空闲60秒、采用新独立APPDATA并保留日志/截图/原生终态。本次证明普通启动，完整续玩资格另测。
+
+完整新续玩执行器及独立候选的继续方式见[公司开发记录](OFFICE_DEVELOPMENT_20261008.md)。旧夜间截止、E盘cache/profile/PID不复用。原生依赖按当前本机manifest与DLL哈希核对；导入不会下载或编译它们。[实际QA](../qa/office_baseline_20261008/README.md)。
+
 <!-- night-wrap-completed-metadata -->
 ## 2026-10-08 06:06：收尾同步与心跳暂停已回读
 

@@ -1,3 +1,10 @@
+## 2026-10-08 公司本机开发入口
+
+- `docs/OFFICE_DEVELOPMENT_20261008.md`：本机已验证基线、独立候选与完整续玩新批要求。
+- `qa/office_baseline_20261008/`：导入/正常入口/真实菜单原日志与截图、首轮中止、源码快照、准备与来源SHA。
+- `tools/run_workstation_baseline.py` / `workstation_startup_probe.gd`：独立profile本机基线与真实视口。
+- `tools/prepare_office_campaign_qa.py` / `run_office_campaign_restore_qa.py`：新候选准备与保留完整断言的本机续玩执行器；原生资格待后续真实结果。
+
 <!-- night-final-20261008 -->
 ## 2026-10-08 06:02：本夜开发截止收尾
 
