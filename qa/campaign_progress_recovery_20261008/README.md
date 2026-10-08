@@ -1,3 +1,23 @@
+## 2026-10-08：URI后继V7独立准入，新批实际启动
+
+V5拒绝DUR-CHAIN-LEGACY-PIN-001（旧evidence host/preparation叶子未pin），V6拒绝DUR-CHAIN-LEGACY-CFG-PIN-002（旧v2 producer仅供CFG host API测试的叶子未pin）。两版源/spec/快照及拒绝原样保留。V7集中补齐后独立审查通过：5132基础/26覆盖/36pins全部回读，14活跃local modules及24 import边闭合，身份当前调用链无动态import；URI/CFG/原生与所有矩阵谓词保持，AST仅source_spec/__init__来源与schema变化。
+
+`DURABLE_CHAIN_SOURCE_SPEC_V7.json`逻辑SHA`96eaca0f946601e66aa44d171b627b6a9f3355e40c7d4ccba41c7402085e65cc`，限定审查收据SHA`7814aca21ccfdf1463973ce952b87ba8dc701cb5504ce138ab5ca067ed223f6a`，只准`durable_chain_and_matrices`。`durable_chain_executor_v7/`保存十一工具快照、静态import图及旧/当前CFG host API AST相等证明，21 URI host测试原日志见V5快照。
+
+全新`durable_chain_3cbf11be`/exec session14402/自有Python23092已实际启动，启动绑定见`ACTUAL_DURABLE_CHAIN_LAUNCH_V7.json`；每阶段连续自然idle60、61原生进程串行，继续观察同一exec句柄。旧失败profile与offline A manifest不复用，旧收据不补complete；新批未取得整批终态，ABCD/52/19/JSON/Owned/半程/UI/SDK/性能/设备及整体目标未通过。正式源码未晋升，只白名单同步stable，不合并main或Steam发布。
+
+## 2026-10-08：V5来源叶子拒绝保留，V6补齐直接绑定
+
+独立V5收据`DURABLE_CHAIN_INDEPENDENT_REVIEW_V5.json`拒绝执行（stages空），唯一阻断DUR-CHAIN-LEGACY-PIN-001：准备工具和host测试仍导入旧`durable_campaign_full_evidence.py`，V5没有直接pin该叶子。URI API兼容审查通过，313原生A通过与旧整批主机失败保持区分；offline freeze证明仅host验证，不能供后续native复用。
+
+后继`run_durable_campaign_chain_v6.py`只追加该legacy host/preparation叶子的直接pin和spec/batch版本6，原生/矩阵/CFG执行不变；AST差异仅source_spec与__init__。新`DURABLE_CHAIN_SOURCE_SPEC_V6.json`逻辑SHA`ee6c153d173e0419056634cf105ce908268e40e71617a90b6015efa150ef31dc`已通过来源预检，十源快照与差异证明在`durable_chain_executor_v6/`。当前复审中、尚未启动新批。V5原源/spec/快照与拒绝收据均保留，旧profile/failed receipt不改、不复用；8+52及整体资格尚未成立。
+
+## 2026-10-08：原生A313实际全过，主机证据URI校验停止
+
+V4批`durable_chain_8eeef1ab`/session2330主机终态1/锁释放；Lu A PID43840原生退出0、错误0、313检查全过、handoff已写，完整A的原生证据成立。主机把user:// URI当Windows Path，is_file失败被合并断言误报Duplicate evidence；后续矩阵未启动，不记整批或整体绿。12原始记录在`actual_host_failed_durable_chain_v4/`，仅对应本批scope，边界见`ACTUAL_NATIVE_A_HOST_URI_FAILURE_V4.json`。
+
+新EvidenceV2只解析三个固定handoff user URI并仍验证当前userdata/noLinks/containment/SHA/重复，producerV5登记实际路径，其余验证/执行不变。21host方法与实际报告offline校验通过（不启动Godot、不称原19），九源/原日志在`durable_chain_executor_v5/`。SourceSpecV5已封等待新独立准入，新批未启动；旧profile不复用、旧收据不补complete，原ABCD/52/19/UI/SDK/性能/设备等仍未通过。
+
 ## 2026-10-08：V3营救/第一人撤离及实际保存通过，A因handoff目录失败
 
 `durable_chain_38024dd3`/session96977已终态1/锁释放。冷导入PID23640通过/错误0；Lu A PID43076的302检查仅`evidence writable handoff_A.json`失败/错误0。真实普通地面行军、营救、第一人安全撤离、完整Session保存/实际槽gen1＋active journal gen1读回均观察到。默认continue根不创建旧handoff父目录，未显式mkdir导致最后证据写入失败。11份原日志/报告/收据/受控partial槽/日志在`actual_failed_durable_chain_v3/`，边界见`ACTUAL_SINGLE_SAFE_SAVE_CHECKPOINT_V3.json`，不复制裸CFG/缓存、不补为成功A或供负例fixture。

@@ -1,3 +1,15 @@
+## 2026-10-08：URI后继V7实际启动记录
+
+恢复QA保存V5/V6拒绝与V7限定独立准入、三版spec及工具字节快照，V7十一源/import图/CFG API相等证明在`durable_chain_executor_v7/`；`ACTUAL_DURABLE_CHAIN_LAUNCH_V7.json`记录同一新批3cbf11be/session14402。新批正在执行，尚未整批验收；旧A313/native与主机失败raw在V4对应目录。
+
+## 2026-10-08：URI来源补齐与独立拒绝记录
+
+恢复QA保存V5独立拒绝收据、V6 source spec和`durable_chain_executor_v6/`十源字节快照及差异证明。V6仅补host/preparation旧evidence直接pin；当前等待限定复审，未启动原生。
+
+## 2026-10-08：原生A313与主机证据URI后继
+
+`qa/campaign_progress_recovery_20261008/actual_host_failed_durable_chain_v4/`保存原生A313全过但主机URI校验失败的12原记录；`ACTUAL_NATIVE_A_HOST_URI_FAILURE_V4.json`明确原生/主机边界。`durable_chain_executor_v5/`保存九源及21host测试原日志/收据，SourceSpecV5封存新user URI解析helper/producer；新批未准入或执行。
+
 ## 2026-10-08：真实单人撤离/gen1部分证据及handoff目录后继
 
 `qa/campaign_progress_recovery_20261008/actual_failed_durable_chain_v3/`保存302检查批11原始记录/受控partial槽与日志；`ACTUAL_SINGLE_SAFE_SAVE_CHECKPOINT_V3.json`明确A整体失败、非fixture。`final_durable_retreat_consumer_v1_r3/`保存仅准备固定handoff目录的consumer/scene/v34 route/SOURCE及目录/继承兼容静态review。InputsV5/SourceSpecV4已封存，`durable_chain_executor_v4/`保存八源与差异证明；新工具已获限定独立准入，`ACTUAL_DURABLE_CHAIN_LAUNCH_V4.json`绑定实际新批8eeef1ab/session2330；未取得整批实际结果。

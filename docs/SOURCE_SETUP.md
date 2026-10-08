@@ -1,3 +1,21 @@
+## 2026-10-08：URI后继V7独立准入，新批实际启动
+
+V5拒绝DUR-CHAIN-LEGACY-PIN-001（旧evidence host/preparation叶子未pin），V6拒绝DUR-CHAIN-LEGACY-CFG-PIN-002（旧v2 producer仅供CFG host API测试的叶子未pin）。两版源/spec/快照及拒绝原样保留。V7集中补齐后独立审查通过：5132基础/26覆盖/36pins全部回读，14活跃local modules及24 import边闭合，身份当前调用链无动态import；URI/CFG/原生与所有矩阵谓词保持，AST仅source_spec/__init__来源与schema变化。
+
+`DURABLE_CHAIN_SOURCE_SPEC_V7.json`逻辑SHA`96eaca0f946601e66aa44d171b627b6a9f3355e40c7d4ccba41c7402085e65cc`，限定审查收据SHA`7814aca21ccfdf1463973ce952b87ba8dc701cb5504ce138ab5ca067ed223f6a`，只准`durable_chain_and_matrices`。`durable_chain_executor_v7/`保存十一工具快照、静态import图及旧/当前CFG host API AST相等证明，21 URI host测试原日志见V5快照。
+
+全新`durable_chain_3cbf11be`/exec session14402/自有Python23092已实际启动，启动绑定见`ACTUAL_DURABLE_CHAIN_LAUNCH_V7.json`；每阶段连续自然idle60、61原生进程串行，继续观察同一exec句柄。旧失败profile与offline A manifest不复用，旧收据不补complete；新批未取得整批终态，ABCD/52/19/JSON/Owned/半程/UI/SDK/性能/设备及整体目标未通过。正式源码未晋升，只白名单同步stable，不合并main或Steam发布。
+
+## 2026-10-08：V5来源叶子拒绝保留，V6补齐直接绑定
+
+独立V5收据`DURABLE_CHAIN_INDEPENDENT_REVIEW_V5.json`拒绝执行（stages空），唯一阻断DUR-CHAIN-LEGACY-PIN-001：准备工具和host测试仍导入旧`durable_campaign_full_evidence.py`，V5没有直接pin该叶子。URI API兼容审查通过，313原生A通过与旧整批主机失败保持区分；offline freeze证明仅host验证，不能供后续native复用。
+
+后继`run_durable_campaign_chain_v6.py`只追加该legacy host/preparation叶子的直接pin和spec/batch版本6，原生/矩阵/CFG执行不变；AST差异仅source_spec与__init__。新`DURABLE_CHAIN_SOURCE_SPEC_V6.json`逻辑SHA`ee6c153d173e0419056634cf105ce908268e40e71617a90b6015efa150ef31dc`已通过来源预检，十源快照与差异证明在`durable_chain_executor_v6/`。当前复审中、尚未启动新批。V5原源/spec/快照与拒绝收据均保留，旧profile/failed receipt不改、不复用；8+52及整体资格尚未成立。
+
+## 2026-10-08：V4主机批已终态，V5证据解析候选
+
+session2330/`durable_chain_8eeef1ab`已主机退出1/锁释放，Lu A原生PID43840退出0、313全过。主机URI路径错误停止聚合，不能视整批合格。新`durable_campaign_full_evidence_v2.py`/`run_durable_campaign_chain_v5.py`/URI host测试及SourceSpecV5已封，九源快照在`durable_chain_executor_v5/`；仍待独立准入，新批未启动。旧frozen/runtime源不改，旧profile不复用，不能将历史主机失败收据改成complete。
+
 ## 2026-10-08：V3已终态，完整A尚未通过
 
 session96977/`durable_chain_38024dd3`已经退出1/锁释放；302项仅handoff_A父目录缺失导致写证据失败。真实营救/第一人撤离与gen1保存可作对应部分证据，整个A不能作52矩阵输入。新consumer R3目录/继承兼容已有仅静态复核，`prepare_durable_campaign_full_inputs_v5.py`/`run_durable_campaign_chain_v4.py`已封`DURABLE_FULL_SOURCE_INPUTS_V5.json`/`DURABLE_CHAIN_SOURCE_SPEC_V4.json`，八源快照见`durable_chain_executor_v4/`，新SourceSpecV4独立准入通过，全新`durable_chain_8eeef1ab`/session2330/自有Python26396已启动。继续观察同一exec句柄，未整批终态；旧SourceSpecV3批准不转移，旧失败profile不复用。
