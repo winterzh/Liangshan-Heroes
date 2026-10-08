@@ -1,3 +1,10 @@
+## 2026-10-09：原回归V4限定审查通过，真实pending UI候选准备
+
+原回归后继 `run_campaign_admission_regressions_v4.py` / `ADMISSION_REGRESSION_SOURCE_SPEC_V4.json` 只将前置失败V8改为全新V9 `4eeadd45`。仅source_spec与verify_closed_prior两函数改变；共享runtime、三原validator body及execute/CFG等不变。80pins/25Python/64依赖边闭合，30覆盖/11原fixture及三工具快照回读一致。独立收据 `ADMISSION_REGRESSION_INDEPENDENT_REVIEW_V4.json` SHA `bf4959221d411c31f0a92ee6f2428697e8db42ff7dee869b99277c2532de5c2a` 仅准原JSON533/OwnedSlot76/半程ABC六进程。当前未运行，须固定V9实际完整61退出0/全部日志证据与三代journal门禁先通过；旧V3不可沿用。
+
+新的 `pending_terminal_ui_candidate_v1/` 保留原正常黄泥冈完整玩家路线与重启判据，只在自有userdata制造nonce绑定stage-parent文件故障，检查真实CFG_STAGE_PARENT、实际可见RetryTerminal按钮及原pressed连接。故障未清时重试需保持同coordinator/writer/frozenCFG/intent/lifecycle对象、旧进度、CFG与gen2；仅清自己原SHA文件后再按按钮，确认原gen1/gen2不改而附gen3，并正常重启。`run_campaign_pending_terminal_ui_v2.py` 与 `PENDING_TERMINAL_UI_SOURCE_SPEC_V2.json` 预检逻辑SHA `d32c0d51c0b3a7fae0e87b02b6c0af5afc5d40324b19a86bf35697bf3207c9a6`；87来源pin、完整Python import闭合与两源字节快照在 `pending_terminal_ui_executor_v2/`。V1仅初准备、V2增加原生PNG来源回读；旧V1源/spec保留。尚未独立准入或运行，不给UI、19、SDK或整体通过资格；无改正式游戏源。
+
+唯一原生批仍V9/session28289，冷导入已完成，Lu A正在执行；保持同一句柄串行等待。
 ## 2026-10-09：V8组件执行超时已关闭，V9审查通过并启动新批
 
 V8 `durable_chain_9a2419c2` / session53244 已终态退出1、锁释放。冷导入、Lu A（311项）与world（264行/1540项）原生及主机通过；component在1200秒执行上限停止、引擎错误0、未写终态报告，不能认定组件或整批通过。17份原始受控记录共30089560字节保存在 `actual_timed_out_durable_chain_v8/`，边界见 `ACTUAL_COMPONENT_EXECUTION_TIMEOUT_V8.json`；旧档保留且不复用。
