@@ -1,3 +1,11 @@
+## 2026-10-09：V4独立限定收据与新隔离run
+
+新增COMPONENT_AUDIT_BENCHMARK_INDEPENDENT_REVIEW_V4.json，源码准入仅benchmark；私有audit_benchmark_cccd1b29为全新工程/profile，只观察session73354，不上传profile/工程。
+
+## 2026-10-09：实际基准V3失败与V4单点后继
+
+恢复QA新增actual_failed_audit_benchmark_v3/四原始文件、ACTUAL_COMPONENT_AUDIT_BENCHMARK_FAILURE_V3.json、SourceSpecV4和component_audit_benchmark_executor_v4/双源/proof；tools新增producerV4/GDv3。旧批已经实际关闭，无benchmark资格，新后继限定复审中。
+
 ## 2026-10-09：基准V3限定准入收据
 
 新增COMPONENT_AUDIT_BENCHMARK_INDEPENDENT_REVIEW_V3.json，仅只读基准。私有audit_benchmark_8279f4e8正在唯一隔离执行，尚无native终态；不上传其profile或工程。

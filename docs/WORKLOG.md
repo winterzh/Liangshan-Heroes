@@ -1,3 +1,15 @@
+## 2026-10-09：V4限定准入与全新隔离批
+
+COMPONENT_AUDIT_BENCHMARK_INDEPENDENT_REVIEW_V4.json SHA 526ca1f3c5890f19280dc838810fcf7a442e38d305a4c9217a8a38c7d6207a01 按实际字节回读；唯一批准read_only_component_audit_equivalence_and_cost_benchmark。原V3失败证据不转移资格。新批 D:/CodexTemp/lsh-component-audit-benchmark-20261009/audit_benchmark_cccd1b29 /session73354/ownPython32448已启动完整工程冻结准备。另一盲盒Godot曾出现，控制器仍要求自然空闲60秒再每阶段运行，不控制外部进程；当前尚无本批等价/成本终态报告。
+
+所有R6数据字段/原指纹/边界/完整mandatory不变；仅审计表示比较测试修订。只观察此自有批，不重复启动，不修改封存源，日志与原始结果稍后另行保存/同步。正式源、完整61/原19/UI/SDK/八章/性能/真机资格未完成，未合并main或发布Steam。
+
+## 2026-10-09：V3基准实际失败关闭，V4修订等价比较复审
+
+唯一新批audit_benchmark_8279f4e8/session84569已exit1、锁释放；cold38336实际exit0，benchmark37704实际terminal/exit1。GD第41行直接比较完整嵌套审计Dictionary触发Godot native Max recursion reached，host按原Native error规则终止；无等价/成本/矩阵资格。actual_failed_audit_benchmark_v3/保存四原始receipt/checkpoint/两日志，ACTUAL_COMPONENT_AUDIT_BENCHMARK_FAILURE_V3.json索引；旧profile与整个工程原处保留，不重用、不删证据。
+
+V4只将pretty/compact解析后的Dictionary递归==改为完整JSON.stringify canonical字节相等，且要求等于原完整full_audit；不删除字段或放宽typed/fingerprint/边界/全部mandatory。GD campaign_component_audit_benchmark_v3.gd，producer run_component_audit_benchmark_v4.py只更新probe/schema/历史来源pins。SourceSpec逻辑SHA be100fc167020c0ccc54db40e0f1ebc0d69811af46fe7fde4f8db08ba7918b56；68pins/26Python/importmissing[]/29overlays，快照/proof在component_audit_benchmark_executor_v4/。限定复审中，尚未新Native；后继若准入必须全新工程/profile与idle60两阶段。正式源/旧V9失败全61边界均不变。
+
 ## 2026-10-09：V3限定审查通过，隔离基准已启动
 
 独立收据 COMPONENT_AUDIT_BENCHMARK_INDEPENDENT_REVIEW_V3.json SHA d4cfc5b3732e21a1f96cbd213df6f2554812db62696afb3a1cddf0fdf600336e 已按原字节回读；仅批准read_only_component_audit_equivalence_and_cost_benchmark。两项V2阻断闭合，源码准入不等于native通过。
