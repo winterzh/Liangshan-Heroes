@@ -1,3 +1,13 @@
+## 2026-10-09：六文件故障执行器源码审查完成，第三完整批实际中断
+
+后继 GDv6/controllerV5/consumerV2 已接入执行器 V2，设计为冷导入1次、六真实故障 fresh 和六同 profile restart，共13个原生进程；保留27个覆盖文件、完整标签和原件校验。V1 独立拒绝收据 SHA `fe7726a2a449324813c4d3a05c3b07edd5f53bf009880f36198a3f1f154faf46` 保留：前置 receipt 先 pin 后另读解析可接受 ABA 替换，journal 比较存在 bool/int 别名。
+
+V2 将首次 raw 同时用于 pin 和解析，basis/interface 绑定原 pin，Suite 直接使用已核验的同一 prior 对象；完整 journal 使用递归严格类型比较。独立收据 SHA `051c4c59e547b89dd5b6f267dd6cd05dbe719066869935634d1f6cb22df77ee9`：静态接口闭合通过，106 pins / 50 Python / 139 imports；5项有限主机核验通过，只含人工边界检查与失败 prior 只读拒绝，不是原生通过。SOURCE_SPEC_V2 逻辑 SHA `c68c2bb6fd7fcff26f5656e88dfc9c3bf9c25de40d8d9c739c87502b8e2cfa2f`，原文件 SHA `96b8cf7d08db110f969ea724b24af4af482c2dd99e0573e8e50838d2efc25ea3`。批准阶段为空，execution_blocked=true。
+
+第三完整 V12 批 `durable_chain_6409dde9` / session32145 已实际退出1，complete=false、lock_released=true。冷导入 PID44236 退出0/错误0；Lu A PID27128 在外部 Godot 启动后退出1/未完成，错误0不代表通过。失败为 `Foreign engine after owned child start`，原 receipt SHA `57398e21aa160f694424b53e46d35d59d0c40304d3d6b69aabe80cc9c6e3a607`。五份原始 receipt/checkpoint/identity/log 已逐字节归档到 `actual_foreign_interrupted_durable_chain_v12_r3/`，索引 `ACTUAL_FOREIGN_INTERRUPTION_FULL_V12_R3.json`；旧启动观察只为历史，不再作为当前存活证明。原私有工程与测试档案保留，未上传测试 profile。
+
+第四完整批与六故障批均未启动。当前执行器绑定的失败 prior 不得复用，须在取得新的成功完整61进程结果后另建来源封存和准入。跨聊天协调许可仍待用户回复，未发送协调消息或控制他项。十四份正式恢复源码未晋升；完整19/UI/SDK、八章/九玩法/Windows导出、连续性能/Android真机仍按原计划继续，无 main 合并或 Steam 发布。后续顺序见 `docs/NEXT_DEVELOPMENT_20261009.md`。
+
 ## 2026-10-09：完整六故障 consumer / seed来源 / 标签合同
 
 新增 `ORIGINAL19_FILE_FAULT_FULL_LABEL_CONTRACT_V1/V2/V3.json` 和生成器各代：完整95/98 fresh、20 restart、56 ready prefix、19最终普通订单全部有序，实际Bai父关卡八演员和6identity字段固定。Source/check/标签不降格为少数关键assertion。

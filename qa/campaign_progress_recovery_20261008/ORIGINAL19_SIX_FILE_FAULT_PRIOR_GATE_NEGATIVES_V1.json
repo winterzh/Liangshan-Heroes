@@ -1,0 +1,27 @@
+{
+  "schema": "campaign_six_file_fault_actual_prior_negative_gate_checks_v1",
+  "checks": [
+    {
+      "case": "durable_chain_fb1da6e0",
+      "original_receipt_sha256": "05b9a1e614352ee2ccdfe8e9e9f856d73a05c67b09e23dc5d1936b6d2b0693aa",
+      "rejected": true,
+      "error": "Exact successful limited prior source seal"
+    },
+    {
+      "case": "durable_chain_6b31df47",
+      "original_receipt_sha256": "d529370f392fdf5215a00c9399bbbbec548f719bdbe8ec770cb2cc70a555ea58",
+      "rejected": true,
+      "error": "Exact successful limited prior source seal"
+    },
+    {
+      "case": "current_live_batch_has_no_terminal_receipt",
+      "rejected": true,
+      "path": "D:\\CodexTemp\\lsh-durable-chain-20261009\\durable_chain_6409dde9\\receipt.json"
+    }
+  ],
+  "count": 3,
+  "actual_failed_receipts_read_only": true,
+  "current_waiting_no_terminal_receipt": true,
+  "native_started_by_checks": false,
+  "scope": "Two actual failed V12 priors rejected after matching each actual run path; current live waiting batch cannot qualify without terminal receipt. No successful prior qualification claimed."
+}

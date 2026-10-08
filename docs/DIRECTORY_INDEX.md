@@ -1,3 +1,7 @@
+## 2026-10-09：六故障完整执行器封存与第三批终态原档
+
+tools 新增 `campaign_file_fault_prior_v1/v2.py`、`campaign_original19_fault_runtime_v3.py`、`run_campaign_file_faults_v1/v2.py`；恢复 QA 新增五份 source snapshot、两代 SOURCE_SPEC/HOST_PREFLIGHT/PRIOR_GATE_NEGATIVES/INDEPENDENT_REVIEW，以及 `ACTUAL_FOREIGN_INTERRUPTION_FULL_V12_R3.json` 和 `actual_foreign_interrupted_durable_chain_v12_r3/` 五份原始终态文件。V1拒绝原件保留；V2静态闭合通过但阶段为空，固定失败 prior 使执行阻断。第三批已真实退出1，冷导入通过但全链未通过；旧 START 文件仅保留历史。未上传 private profile、未启动第四批或晋升正式源码。
+
 ## 2026-10-09：完整故障报告、seed来源与有序合同
 
 tools新增 file_fault_evidence_v1/v2、file_fault_records_v1、debug_faults_v4/v5、labels builderV1/V2/V3；恢复QA新增其8份source snapshot、完整labels三个合同、SOURCE_SPEC/预检/两次独立收据/32项primitive结果，以及natural_file_faults_candidate_v5/v6（outer错误码/原生提案SHA）。仅后继consumer/GDv6部件静态通过，source stages空；尚无整执行器或新Native资格。
