@@ -1,3 +1,12 @@
+## 2026-10-09：真实pending UI V2拒绝封存，V3五项修复候选复审
+
+`PENDING_TERMINAL_UI_INDEPENDENT_REVIEW_V2.json` SHA `24845cf4e3a54cd220a0b868cd5e54689bb2a80f69ce66eedc388745d30880e4` 已独立拒绝（stages空），完整保留原V2源/spec/快照。五项为逐阶段与全部前置证据custody、Python优化关闭assert、实际native安装组合遗漏、完整宿主断言/PNG来源闭合，以及遗留admission范围字段。V2不运行。
+
+新 `run_campaign_pending_terminal_ui_v3.py` / `pending_terminal_ui_candidate_v2/` 绑定原shared batch.integrity作每阶段source/spec/review/原61日志与evidence完整复核；安装actual native并重新封before/postcold全身份；显式拒绝-O；清理当前admission count/QA字段。原fresh72项多重集（含普通移动重复标签）及restart20项保持，新增33项UI/冻结语义检查，因此预期105/20。host核十字段journal/typed scope/gen1→2→3/同完整四目标intent/CFG-bound五字段ACK/两份完整handoff与所有原SHA；GD记录2轮同对象ID与完整ConfigFile语义/文本不变；原生截图SHA/尺寸由host实际PNG解码及hash复核。来源spec逻辑SHA `e7e0751063795a72eb7856121f1c0436de31b4412d07123e85529eaf34cf5b35`，94pin与依赖图/双源字节快照在 `pending_terminal_ui_executor_v3/`。正在独立复审，未准入、未运行，不授予UI/19/SDK/整体资格。
+
+`PENDING_UI_TYPED_INTENT_HOST_CHECKS_V3.json` 记录13项只读宿主验证：历史实际自然intent一个正例，仅测试类型校验；12项布尔/浮点/字符串计数、重复/缺目标、整数胜利、token/profile/source变化均拒绝，原始输入SHA不变、无profile写、无Godot。实际python -B -O V3在main明确拒绝，未启动native。历史72/20与该正例只作为原标签/数据约束，不转移旧native资格。
+
+当前唯一native仍V9 `4eeadd45` / session28289 / Python44560。冷43800与Lu A37128已退出0/error0且host通过；本批A原报告303checks全部passed。world37936仍执行，完整61未通过；按同一句柄串行观察，后续原JSON/Owned/半程及UI需固定实际V9完整门禁先通过。
 ## 2026-10-09：原回归V4限定审查通过，真实pending UI候选准备
 
 原回归后继 `run_campaign_admission_regressions_v4.py` / `ADMISSION_REGRESSION_SOURCE_SPEC_V4.json` 只将前置失败V8改为全新V9 `4eeadd45`。仅source_spec与verify_closed_prior两函数改变；共享runtime、三原validator body及execute/CFG等不变。80pins/25Python/64依赖边闭合，30覆盖/11原fixture及三工具快照回读一致。独立收据 `ADMISSION_REGRESSION_INDEPENDENT_REVIEW_V4.json` SHA `bf4959221d411c31f0a92ee6f2428697e8db42ff7dee869b99277c2532de5c2a` 仅准原JSON533/OwnedSlot76/半程ABC六进程。当前未运行，须固定V9实际完整61退出0/全部日志证据与三代journal门禁先通过；旧V3不可沿用。

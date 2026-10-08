@@ -1,3 +1,7 @@
+## 2026-10-09：终局错误界面V2拒绝与V3复审来源
+
+恢复QA新增PENDING_TERMINAL_UI_INDEPENDENT_REVIEW_V2.json（五项拒绝）、pending_terminal_ui_candidate_v2/（GD与105/20原检查多重集）、PENDING_TERMINAL_UI_SOURCE_SPEC_V3.json、pending_terminal_ui_executor_v3/双源快照与完整proof、PENDING_UI_TYPED_INTENT_HOST_CHECKS_V3.json（13只读host检查，无native资格）。
+
 ## 2026-10-09：原回归V4及真实终局错误界面候选
 
 恢复QA新增ADMISSION_REGRESSION_SOURCE_SPEC_V4.json、限定INDEPENDENT_REVIEW_V4与admission_regression_executor_v4/三工具/完整proof。真实UI源在pending_terminal_ui_candidate_v1/，V1/V2来源spec与pending_terminal_ui_executor_v2/字节快照保留；只准备复审，未原生运行。
