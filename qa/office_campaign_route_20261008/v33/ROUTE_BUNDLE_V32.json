@@ -1,0 +1,36 @@
+{
+  "schema": "office_defended_retreat_route_bundle_v26",
+  "complete_source_preparation": true,
+  "production_changes": 0,
+  "native_started": false,
+  "baseline_route_sha256": "339f09795f48a9fa89615e271e87f2316b3d1ef55c8f0278752b456888d45e27",
+  "baseline_runner_sha256": "91df2daf3310f3bf0525b0266c9795aaf149e3d8af261c8d1e634e8fc7b04cef",
+  "replacements": {
+    "retreat_runner": {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\office_campaign_route_20261008\\v33\\daming_safe_retreat_cross_process_v26.gd",
+      "bytes": 57295,
+      "sha256": "c241d259c60c7c13d992f47a300018b3a2e0ba32967e83452d766e1398827298"
+    },
+    "retreat_scene": {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\office_campaign_route_20261008\\v33\\daming_safe_retreat_cross_process_v26.tscn",
+      "bytes": 218,
+      "sha256": "f26ffd1b6802e7e9f3961dbc2fc3d35ecd2ac4c73e39fd2d97878cc372245a83"
+    },
+    "retreat_route": {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\office_campaign_route_20261008\\v33\\daming_safe_retreat_route_v26.gd",
+      "bytes": 25496,
+      "sha256": "94cd0489342b2b995fb5278781b605f52a34b93175040387cfd29147f7c5350f"
+    }
+  },
+  "scope": "Only read-only troop order/target/path and prison guard diagnostics added. Original commands, deadlines, guards, costs and rescue/result conditions unchanged; original runner remains legacy QA-only and has no R12/full qualification.",
+  "review_revision": 13,
+  "resolved_findings": [
+    "all added real commands keep nonempty actual ids and explicit bool attack_move required by immutable validator",
+    "house placement uses actual ordinary terrain/building/resource preview before unchanged player construction API",
+    "Rally assertion compares exact terrain inverse API target and original cell; selection/produces/has_rally remain required. Actual details retained.",
+    "V9 camp survives but original field crew perishes at prison; add genuine resource-funded siege/reinforcement before fire.",
+    "V10 failed second six-worker survival check after actual house/workshop construction; route starts ordinary east camp harvesting before construction and restricts preview to eastern camp sites. Six-worker check remains, actual failure diagnostics added.",
+    "V11 119 checks passed through paid army but admission timed out; attempt unchanged ordinary admission/inner actor movement before long training, then keep original paid army/fire/rescue sequence and add spy actual diagnostics. Precise V11 admission cause was not observed.",
+    "V12 real Lu A131checks prison approach clear deadline failed; V33 adds actual motion/target/guard readback without changing orders or deadline. Cause unlocalized until new actual evidence."
+  ]
+}

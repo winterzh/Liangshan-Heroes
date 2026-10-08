@@ -1,3 +1,15 @@
+## 2026-10-08：R12＋白胜候选普通终局与三组恢复实际通过，完整双角色后继继续
+
+实际批 `natural_terminal_645e69a6` / session85300已完整终态退出0、锁释放。七个独立PID：import43784退出0；normal_fresh32384退出0/72checks、normal_restart43736退出0/20checks；gen2_fresh36640在真实第二代已落盘/CFG未写的源码断点被只终止自有进程，gen2_restart23320退出0/20checks；cfg_ack_fresh27544在真实CFG已确认/ACK前断点被只终止自有进程，cfg_ack_restart8056退出0/20checks。两次预期终止退出1不是失败重开；所有过程引擎错误0，三个唯一token、两个中断前后原gen1/gen2字节与同意图保留。三组均恢复第三代applied，CFG确认后的重启SHA不变，启动不重放Battle/Mission/展示/结算。完整36份原收据/identity/log/handshake/journal证据在 `actual_scoped_recovery_r12_bai_v1/`，正常fresh9份独立阶段checkpoint在 `actual_normal_fresh_r12_bai_v1/`，不复制裸CFG或私有profile。
+
+白胜南侧普通排队行走、八人自然撤离、真实CFG fresh-load、gen3确认与重复完成拒绝已在当前110来源组合下实测通过。此资格仅普通黄泥冈三组，不能替代双角色ABCD、原19故障、52负例、故障UI/同对象重试、实际Steam奖励、导出/性能/Android真机；正式源码仍未晋升。
+
+`qa/office_campaign_route_20261008/v33/` 只增加牢前部队path/target/state/manual/serial/queue/root/stun/stuck及guard/segment只读观测，原命令、成本、期限、27route标签和runner/scene均不变，独立route审查仅静态，空approved_stages；旧V12牢前失败原因仍未定位，不新开旧QA1全量来冒充R12。
+
+完整ABCD consumer后继 `final_durable_retreat_consumer_v1/` 保留旧100唯一标签中96项，4个旧QA抑制写盘标签明确替换为更严格的真实持久化断言，使用新schema，旧validator不改不绕过。R1独立拒绝DUR-CONS-001：安装校验仍inline v1 Script/两参数；不可变R2 `final_durable_retreat_consumer_v1_r2/` 修成固定v2/five args、原token/script/directory断言及完整matches_scope。R2新增startup/default root/真实barrier归属、三代journal/CFG-ACK SHA、一次completion能力和data-only D读回；独立源码复核通过，但新full producer、半程、362component/24live适配及最终矩阵仍未整合，不授Native/full资格。R1拒绝和源原样保留。
+
+下一步继续最终执行器完整来源组合与矩阵接入、双角色自然路线和错误重试，原八章、九玩法/EXE、性能内存、Android真机目标保持。本轮白名单同步stable，不合并main或发布。
+
 ## 2026-10-08：白胜实际身体阻挡定位，R12组合南侧普通路线候选
 
 旧V5实际批 `natural_terminal_1577d6e0` / session42979已终态失败并释放锁：import PID25388退出0/错误0；normal_fresh PID7880退出1/错误0，22检查唯一失败仍为原60秒自动卸酒。实际白胜位置911.29565,741.92834停滞，hp70/root0/stun0/manualfalse/auto/serial1均正常；next60Hz步map_open=true、body_open=false，两轴body也false。原军汉entity20位于891.7191,752，下一步与其距离20.9854，小于身体允许22。结合真实Unit._follow_path和static-only watchdog，此次停滞已定位到押队身体阻挡；不把诊断当终局、CFG或修复通过。五份原receipt/identity/log/report封存 `actual_failed_natural_terminal_v5/`，原失败档保留不复用，诊断来源及实际数值在 `BAI_BODY_STALL_DIAGNOSIS_V1.json`。

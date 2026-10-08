@@ -1,3 +1,7 @@
+## 2026-10-08：当前可证明范围与后继接口
+
+R12＋白胜普通南侧路线的110来源三组已实际complete/zeroerrors：normal fresh/restart、真gen2中断/restart、真CFG确认前ACK中断/restart。仅此范围，final roles/19/52/SDK/UI/perf/devices仍未资格。完整consumer R2有独立静态复核，100原unique labels保留96、4个旧QA-suppression标签在新schema改严格CFG确认，原v1 validator保持，不用旧绿转移资格。完整producer及component/live后继未就绪。
+
 ## 当前后继R12范围（2026-10-08）
 
 用户已授权恢复接入与全链后继的独立审查。最新源为`integrated_v4_r12/scripts/`十四脚本，封存`SOURCE_AUDIT_V14.json`；R9/R10/R11及既有spec/收据保留。R11使用实际launch分类上下文创建屏障，测试只读检查而不额外configure，并拒绝空屏障保存/安全disconnect。最终完整执行器尚未就绪；任何R12运行须新producer/spec与独立准入，旧R9 scoped批准不转移。

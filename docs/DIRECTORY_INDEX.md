@@ -1,3 +1,7 @@
+## 2026-10-08：R12普通三组实际通过与durable full consumer R1/R2
+
+恢复QA新增`actual_normal_fresh_r12_bai_v1/`（阶段9份）、`actual_scoped_recovery_r12_bai_v1/`（完整36份）、`final_durable_retreat_consumer_v1/`和`final_durable_retreat_consumer_v1_r2/`（源码/scene/route及独立拒绝/后继复审）；路线QA `v33/`与两个V33根记录只读观察，未native/full。裸CFG/profile不入Git。
+
 ## 2026-10-08：白胜阻挡实际证据与南侧路线候选
 
 `qa/campaign_progress_recovery_20261008/actual_failed_natural_terminal_v5/`、`BAI_BODY_STALL_DIAGNOSIS_V1.json`保存原生身体阻挡读数；`huangnigang_bai_arrival_candidate_v1/`、`natural_terminal_executor_r12_bai_v1/`及同名spec/独立review封存R12加父关卡的110来源组合，尚无full资格。
