@@ -1,3 +1,7 @@
+## 2026-10-09：V8超时证据与V9新批来源
+
+恢复QA新增 actual_timed_out_durable_chain_v8/（17份受控原始记录）、ACTUAL_COMPONENT_EXECUTION_TIMEOUT_V8.json、DURABLE_CHAIN_SOURCE_SPEC_V9.json、DURABLE_CHAIN_INDEPENDENT_REVIEW_V9.json、durable_chain_executor_v9/（源码快照与差异）和 ACTUAL_DURABLE_CHAIN_LAUNCH_V9.json。新批4eeadd45/session28289尚未完整终态，旧V8/admissionV3不可沿用。
+
 ## 2026-10-09：V8实际启动与原回归V3来源
 
 恢复QA新增V8限定独立收据与`ACTUAL_DURABLE_CHAIN_LAUNCH_V8.json`（9a2419c2/session53244）；原回归V3封存spec、三工具字节/import图在`admission_regression_executor_v3/`，静态复审中、未执行。前置V8必须先实际全61闭合，原19/整体未通过。

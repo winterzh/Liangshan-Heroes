@@ -1,3 +1,10 @@
+## 2026-10-09：V8组件执行超时已关闭，V9审查通过并启动新批
+
+V8 `durable_chain_9a2419c2` / session53244 已终态退出1、锁释放。冷导入、Lu A（311项）与world（264行/1540项）原生及主机通过；component在1200秒执行上限停止、引擎错误0、未写终态报告，不能认定组件或整批通过。17份原始受控记录共30089560字节保存在 `actual_timed_out_durable_chain_v8/`，边界见 `ACTUAL_COMPONENT_EXECUTION_TIMEOUT_V8.json`；旧档保留且不复用。
+
+V9只将component单阶段上限改为3600秒，world/live仍1200、ABCD1800、全批21600。原Codec、全部输入/检查/矩阵数量、源码封存和进程所有权规则不变。43个来源pin及18个Python/31条依赖边独立审查闭合；收据 `DURABLE_CHAIN_INDEPENDENT_REVIEW_V9.json` SHA `a87a9d61600b260ca74bc4fe684d595c0fd79753311d399174491f083a63535d` 只准 `durable_chain_and_matrices`。spec逻辑SHA `edcb416a41c25b658e13b23eaa99c1cb4eb4dda9fa29947b386114456b9bc278`，源码字节快照与差异在 `durable_chain_executor_v9/`。
+
+全新 `durable_chain_4eeadd45` / session28289 / 自有Python44560已启动，准确绑定在 `ACTUAL_DURABLE_CHAIN_LAUNCH_V9.json`。每阶段自然空闲60秒串行，继续观察同一句柄；尚未整批终态。admission V3固定失败V8，不可运行；后继必须另封来源、审查，并等V9实际61阶段全部通过后再运行。原19场景、错误UI/同对象重试/SDK一次奖励、八章九玩法、导出、性能与Android真机仍未完成。正式游戏源码未晋升；仅同步既定stable分支，无main合并或Steam发布。
 ## 2026-10-09：原回归V3源码准入完成，等待V8实际61终态
 
 `ADMISSION_REGRESSION_INDEPENDENT_REVIEW_V3.json`SHA`67339b16f0c5ecf689f806cf6326c561aff62b0f2191362bccc82e20ed569a37`已回读，仅准原JSON533/OwnedSlot76与半程ABC六进程。73pin/30overlay/11fixture/三工具快照与三原validator body exact；旧V1/V2拒绝保留。当前不能运行：固定V8新批9a2419c2尚未完成，必须先通过真实61关闭/全部原日志与证据回读门禁。
