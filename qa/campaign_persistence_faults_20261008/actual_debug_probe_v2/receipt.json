@@ -1,0 +1,118 @@
+{
+  "schema": "campaign_owned_debugger_fault_probe_v1",
+  "complete": true,
+  "run": "D:\\CodexTemp\\lsh-campaign-faults-20261008\\debug_probe_3314a8ba",
+  "nonce": "3768c5cb75ef4a719c98f7987536fbf0",
+  "engine_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+  "script_sha256": "8d564bfc18741aa5643c7fc6ce700d4b94329185d12e7525140641357b69fda3",
+  "breakpoint_line": 22,
+  "production_code_patches": 0,
+  "cfg_return_values_simulated": false,
+  "fault_matrix_qualified": false,
+  "messages": [
+    {
+      "name": "set_pid",
+      "thread": 1,
+      "data": [
+        5900
+      ],
+      "packet_sha256": "9f1cd1e655bad0e86256cf82402abb897ffc84cde8ceb7e851078d907182cef3"
+    },
+    {
+      "name": "output",
+      "thread": 1,
+      "data": [
+        [
+          "Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org\n"
+        ],
+        [
+          0
+        ]
+      ],
+      "packet_sha256": "7341711e7fecc820ab124c1107405a11602feca0f3b98ad60db2e3bf313be2f5"
+    },
+    {
+      "name": "window:title",
+      "thread": 1,
+      "data": [
+        "LSH FaultDebugProbe (DEBUG)"
+      ],
+      "packet_sha256": "592fb0054ccaf694d359e34a9239b224285dab03ce2f6cf4e21c018d154f9930"
+    },
+    {
+      "name": "debug_enter",
+      "thread": 1,
+      "data": [
+        true,
+        "Breakpoint",
+        true,
+        1
+      ],
+      "packet_sha256": "15055b8142fb875bb27a8055b7c819019792dcfd4bb33a24c975b73f0929d141"
+    },
+    {
+      "name": "stack_dump",
+      "thread": 1,
+      "data": [
+        3,
+        "res://tools/campaign_fault_debug_probe.gd",
+        22,
+        "_run"
+      ],
+      "packet_sha256": "78bae4d03202e3297b95d463a819d518d0d2686e245d73d944e929b92d9c7811"
+    },
+    {
+      "name": "debug_exit",
+      "thread": 1,
+      "data": [],
+      "packet_sha256": "a9feb46f8d9cb89c8efd96521391c80a6ea99cd3839b58a5eff153941345b250"
+    }
+  ],
+  "mutations": [
+    {
+      "path": "D:\\CodexTemp\\lsh-campaign-faults-20261008\\debug_probe_3314a8ba\\profile\\appdata\\Godot\\app_userdata\\LSH FaultDebugProbe\\debug_probe.cfg",
+      "before_sha256": "9087c49ecbd526415fedc7641a5c9545b37045926cdd15ae4044de4bf40b7080",
+      "after_sha256": "1e002fe0d62c5919e4f05c6a39408484b8b311d797f14c27c9bf5cdcfae70f31",
+      "actual_filesystem_write": true
+    }
+  ],
+  "command": [
+    "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+    "--path",
+    "D:\\CodexTemp\\lsh-campaign-faults-20261008\\debug_probe_3314a8ba\\project",
+    "--headless",
+    "--remote-debug",
+    "tcp://127.0.0.1:60501",
+    "--breakpoints",
+    "res://tools/campaign_fault_debug_probe.gd:22",
+    "--script",
+    "res://tools/campaign_fault_debug_probe.gd"
+  ],
+  "pid": 5900,
+  "actual_breakpoint_frames": [
+    {
+      "source": "res://tools/campaign_fault_debug_probe.gd",
+      "line": 22,
+      "function": "_run"
+    }
+  ],
+  "exit_code": 0,
+  "process_terminal": true,
+  "log_sha256": "462f8d4acb1b2bee6cddde6881dd23536afc523b589ca74f744892ef7a4a7359",
+  "report": {
+    "actual_user_dir": "D:/CodexTemp/lsh-campaign-faults-20261008/debug_probe_3314a8ba/profile/appdata/Godot/app_userdata/LSH FaultDebugProbe",
+    "after_sha256": "1e002fe0d62c5919e4f05c6a39408484b8b311d797f14c27c9bf5cdcfae70f31",
+    "before_sha256": "9087c49ecbd526415fedc7641a5c9545b37045926cdd15ae4044de4bf40b7080",
+    "fault_matrix_qualified": false,
+    "load_error": 0,
+    "nonce": "3768c5cb75ef4a719c98f7987536fbf0",
+    "pid": 5900,
+    "production_campaign_called": false,
+    "save_error": 0,
+    "schema": "campaign_fault_debug_probe_v1",
+    "value": 29
+  },
+  "actual_debugger_stack_verified": true,
+  "actual_cfg_read_observed": true,
+  "lock_released": true
+}

@@ -1,3 +1,13 @@
+## 2026-10-08 11:49：19案组件通过与完整续玩新批
+
+真实19案V4 `campaign_19_7aac9db9`完成194检查、零失败，runtime PID43016终态退出0、锁释放。Godot调试断点和Windows原生oplock已分别实测，矩阵内真实ConfigFile.load期间文件变化也命中；原V2/V3失败保持。该资格仅属于QA v27b持久化组件，正式Campaign/Battle未修改。[实际组件证据](../qa/campaign_persistence_faults_20261008/README.md)。
+
+原完整V5真实JSON533/OwnedSlot76/办理半程ABC39/351/342通过，Lu-first A在营救前END失败，整批退出1；完整双方续玩仍未资格。新普通守营路线v28经用户授权的同一独立审查通过V8，producer/seal_v8/bundle三源精确绑定。全新完整批 `office_full_933181f4`11:49已启动，等待共享引擎自然空闲；全部原门禁保留，结果须等实际终态。[完整批](../qa/office_campaign_full_20261008/README.md)与[新路线](../qa/office_campaign_route_20261008/README.md)。
+
+新增 `qa/campaign_progress_recovery_20261008/` 两份v2终局进度日志/意图基础候选，只做源码核对，不安装生产、不声称解析/原生通过。下一步是普通fresh/续玩终局→gen2→真实cfg→gen3 ack、受控临时文件/CAS、prefs/cloud pending锁、玩家失败UI/安全重试与重启恢复；奖励一次性、八关动态/生产运输、美术UI、九玩法发行程序、正常时钟约10分钟性能及Android真机均继续开放。源码同步stable不等于发布。
+
+以下旧日期状态为当时记录，当前以本段及对应实际原生终态为准。
+
 <!-- night-wrap-completed-metadata -->
 ## 2026-10-08 06:06：收尾同步与心跳暂停已回读
 

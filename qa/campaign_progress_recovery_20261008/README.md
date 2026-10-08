@@ -1,0 +1,15 @@
+# 战役终局进度恢复：v2 日志基础候选
+
+当前只有两份新GD候选，放在本目录`proposed/scripts/`，没有安装到正式工程或任何正在运行的QA。尚未经过独立审查、Godot解析或原生测试；不是玩家恢复功能交付。
+
+原`run_local_lifecycle.gd`经典v1和`run_snapshot_store.gd`保持原字节，分别SHA e68cb817…/581e638b…。新campaign sibling沿用原存储层的canonical UTF8/envelope/payload、previous SHA/CAS、持有者原锁重试与死进程恢复，不放宽v1。新版精确gen1 active→gen2 terminal/pending（原同局冻结结果）→gen3 terminal/applied（真实cfg确认）；3代全部保留，缺genesis、跨context/token/owner/installed identity、gen2→gen3结果/胜败改变均拒绝。
+
+Intent从真实当前END Battle、安装章节分类、原Mission对象和实际result_snapshot取得，仅记录原同局6个进度字段。八章固定version/goal IDs已与当前叶脚本/继承父脚本逐值核对；这只是目录/源码闭合，不证明八章自然结果。恢复验证只读数据，不重新创建Battle、Mission或章节工厂，不重复tick/胜利画面/Steam结算。
+
+ack只能接受真实非QA写盘回读收据；另外独立读取固定`user://campaign.cfg`，核验稳定原SHA、owner、解锁和单局非叠加结果。QA suppression不能作为ack；败局只能确认“不需要写进度”，不声称写盘。历史gen3的cfg SHA只作为当时收据，后来合法偏好/其他关进度更新不要求永远保持同一SHA。
+
+原存储层原锁重试会对任何terminal record标记终态，因此新版另持结算能力：progress-only recovery的ack重试不会获得新Battle/Steam结算授权。所有cfg/ack不确定写入仍待完整协调器接入。
+
+仍需实现和验证：Campaign纯投影及受控临时文件/CAS替换，prefs/cloud与进度pending写入锁；WorldSession按actual/slot context选择v1或v2并在Core分配前二次核对；ContinueFlow的普通fresh无save胜利与terminal→cfg→ack协调、startup有界发现/恢复与async安装；Battle结果只冻结一次、玩家失败UI/安全重试/一次性展示。然后独立源码审查、正常QA=0双角色ABCD、gen2后退出/cfg后ack前退出的跨进程故障、旧classic原字节/完整故障回归。完整原计划与平台/性能/真机资格保留。
+
+`SOURCE_AUDIT_V1.json`为当前候选及实际生产来源/八章目标表的源码核对，所有runtime资格仍false。设计依据为`qa/zhu_wounded_20261005/proposals/campaign_local_context_progress_20261008/DESIGN.md`，当前运行批及旧失败profile均未修改。

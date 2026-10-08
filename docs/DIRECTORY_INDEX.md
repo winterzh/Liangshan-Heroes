@@ -1,3 +1,10 @@
+## 2026-10-08 11:49：新增真实结果与进度恢复候选
+
+- `qa/campaign_persistence_faults_20261008/actual_matrix_v4/`与`ACTUAL_19_COMPONENT_PASS_V4.json`：19案/194检查真实组件通过；旧失败/来源快照保留，没有CFG或玩家profile入Git。
+- `qa/office_campaign_full_20261008/actual_failed_v5/`：完整V5成功前序及Lu-first A实际失败原收据/日志/报告。
+- `qa/office_campaign_route_20261008/`：v26/v27/v28普通守营路线、V6/V7拒绝及V8独立批准、54pins来源封存与新完整批实际argv。
+- `qa/campaign_progress_recovery_20261008/`：v2 terminal/pending→cfg→applied日志/冻结意图基础源码候选，尚未原生资格。
+
 ## 2026-10-08 10:40 19案源封存与 Windows 实际proof
 
 `qa/campaign_persistence_faults_20261008/matrix_source_preflight_v2.json`与`matrix_source_snapshot_v2/`封存完整19案GD/producer/7 helper；`windows_actual_v2/`保存真实内核等待与追加/取消收据及执行字节。新的tools矩阵和Windows helper均未覆盖正式Campaign/Battle。Godot协议尚需新UUID成功proof，19案尚未native，完整目标保持。[QA](../qa/campaign_persistence_faults_20261008/README.md)。

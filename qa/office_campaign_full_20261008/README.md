@@ -1,6 +1,14 @@
+## 2026-10-08 11:49：独立V8静态通过，新完整批启动
+
+当前唯一新批 `office_full_933181f4`，全新UUID/profile，实际argv与新6小时截止UTC2026-10-08T09:49:16.717669Z封存于 `../office_campaign_route_20261008/ACTUAL_LAUNCH_V8.json`。启动时等待共享Godot连续自然空闲60秒，不启动第二批，不控制其它任务。完整结果仍以这个批次实际终态为准。
+
+独立V8审查SHA `33cedc5d60246dcc82cc0b9c13258e90645101a4d3b04b1e5218437527da4468`、producer `6a3fbe5b…`、seal_v8 `22e915a5…` 和v28 bundle `a58bba32…`精确绑定；54 QA pins、两端5132 runtime、5031基线输入与engine/native闭合。新路线使用普通合法建屋、实际扣费/人口/正常训练与集结守营，原双角色ABCD、world264/component362/live24及52负例全部保留。V6/V7拒绝及旧失败profile不变；静态批准不是策略或完整续玩通过。
+
 # 公司完整续玩后继：独立静态审查与实际启动
 
 ## 当前 V5 与实际 V4 失败
+
+V5后续已真实终态失败（11:10）：JSON533/OwnedSlot76/办理半程ABC39/351/342全部通过；Lu-first真实A在未救出两人时phaseEND，33checks内一项不通过，整批退出1、锁释放、producer PID37484已不存在。`actual_failed_v5/`保留整批、逐阶段/源审计收据、全部日志、成功前序报告与失败Lu报告；所有原profile仍完整，不复用。完整双角色ABCD与负例资格仍false。普通守营策略后继及独立失败审查另存[路线QA](../office_campaign_route_20261008/README.md)。下方V5“仍运行”文字为历史。
 
 V4 实际完成导入（PID5752/退出0）、私有 profile 拒绝守卫（PID8416/预期退出2）、JSON533（PID30036/退出0）与 OwnedSlot76（PID27600/退出0）。办理半程 A 尚未创建子进程时，另一引擎进入；整批退出1、complete=false、锁释放。实际 producer PID6416 已确认不存在。`actual_failed_v4/`保存整批/逐阶段收据、日志和两份报告原字节，旧profile留在工程外，不复用。
 
