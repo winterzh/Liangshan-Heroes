@@ -1,3 +1,7 @@
+## 2026-10-09：首次／重复完整消费者的各代来源与binary复制
+
+新增 tools/campaign_first_repeat_evidence_v1/v2/v3.py、campaign_original19_binary_files_v1.py；恢复QA新增四份snapshot、FIRST_REPEAT_EVIDENCE_SOURCE_SPEC_V1/V3、V1拒绝/V3预备收据，以及历史V1_V2与纠正V3的两份可复现primitive脚本/结果。V2未封草稿不准入，V3只source static/stages[]；完整producer/真实四流程仍未运行。
+
 ## 2026-10-09：首次／重复发布部件、完整标签与第四批终态原档
 
 新增 tools/campaign_natural_terminal_exports_v1.py、campaign_natural_terminal_runtime_v1.py、prepare_campaign_first_repeat_labels_v1.py；恢复QA新增三个snapshot、NATURAL_FIRST_REPEAT_RUNTIME_SOURCE_SPEC/预备收据/可复现人工host脚本及结果、ORIGINAL19_FIRST_REPEAT_COMPLETE_LABEL_CONTRACT_V1.json。新增第四完整批失败索引/六原文件目录和后继拒绝该终态prior的只读记录。部件只source static/stages[]，原完整批已退出1；旧START/A单阶段原件保留，不上传profile。

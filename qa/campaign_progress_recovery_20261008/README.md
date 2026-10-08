@@ -1,3 +1,15 @@
+## 2026-10-09：首次／重复完整证据验证器；CFG复制拒绝与修复
+
+新增完整报告消费者，固定 first/restart_first/repeat/restart_repeat 四个真实独立Popen、同private profile/user、74/21/80/21全部有序检查及唯一stdout标记、3/2原stage/public首次bytes、真实Mission/HUD/记录、原first handoff与新token、两token各生命周期gen1/2/3/ACK。真实CFG prepared/applied1/2→3/4全部14字段、source/request/previousSHA/原candidate与各次publicCFG/ACK绑定；首次会被正常prune的CFG原件和各次可改写publicCFG先复制到本步骤输出再ledgerfreeze，不把原可变路径错误当作永久不可变证据。完整producer仍未实现。
+
+V1 SOURCE_SPEC 17pins/24根导入边；独立拒绝 SHA `fe0da0e38bdf8f53ed6cdff02467dfddc61ac65b9e1acfd484ce293be402ee49`，唯一确定 FIRSTREPEAT-COPY-001：capture把真实CFG文本交给JSON-validating publisher，会JSONDecodeError；原件不变且无目标/临时文件。旧源码、snapshot、封存和拒绝原字节保留。
+
+曾按未成立的typed IDs推断创建V2草稿并去掉跨次semSHA比较。独立审查回读实际R12 Intent.validate_result的untyped ids与Coordinator规范化后撤回该疑虑；V2没有SOURCE_SPEC/准入，原18项primitive记录仅历史，不能支持生产类型或原生判断。后继V3恢复严格跨次semSHA条件，整个validate AST与V1逐字结构相同，只改capture/cfg_pair：CFG用新bounded binary no-replace/exclusive/fsync publisher，journal仍旧JSON路径。既有JSON publisher未修改。
+
+V3 SOURCE_SPEC固定30pins/27根导入边（所有已pin源码/历史比较/脚本74条本地边均闭合）。独立预备 SHA `ef36f7695fa17153b8272e375ece98d58a02294bcdce966e1140936411a718bb`，static=true/stages=[]、COPY-001闭合。可复现20项我方与9项独立primitive host检查通过：CFG/非UTF8原bytes、禁止覆盖、JSON拒非JSON、原CFG两代复制与模拟合法prune、档案原copy漂移及fake terminal metadata拒绝等；均无实际Popen/Godot/完整consumer pipeline资格。每个CFG pair的primitive decoder检查不替代完整validate的跨次摘要约束。
+
+下一步把已审GD/完整标签、runtime/publisher与V3消费者接入完整producer，再做精确来源封存和独立执行准入。此前四完整V12均真实失败（第四Lu A305项单场通过仍仅单场），当前无活跃水浒原生批；成功全61前置与共享引擎整批串行窗口仍未取得，跨聊天协调许可仍待回复。正式恢复源、原19/UI/SDK/内容/持续性能/Android真机未完成，无main/Steam发布。
+
 ## 2026-10-09：第四完整批真实中断；首次／重复终局发布组件预审通过
 
 完整第四 V12 run8fe7b18b/session14695 已实际退出1，complete=false、lock_released=true。冷导入及 Lu A 原305项通过结果保留；Lu_world PID7688 运行约380秒时遇外部盲盒引擎，实际未完成，失败为 `Foreign engine after owned child start`。原 receipt/checkpoint/identity 和三份日志六文件逐字节归档到 `actual_foreign_interrupted_durable_chain_v12_r4/`，索引为 `ACTUAL_FOREIGN_INTERRUPTION_FULL_V12_R4.json`。之前START/Lu A记录只为历史观察，不能证明全链通过或当前存活。本轮没有活跃水浒原生批，第五批未启动。
