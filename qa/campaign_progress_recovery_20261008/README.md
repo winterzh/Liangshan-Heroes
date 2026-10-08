@@ -1,3 +1,6 @@
+## 2026-10-09：原19八项源预备核验完成，尚无运行准入
+
+六数据层V2独立预备收据 `original19_data_layers_candidate_v2/ORIGINAL19_DATA_LAYERS_PRELIMINARY_REVIEW_V2.json` SHA `197cbb4fc1847831d01cd393b882bf0873e7032015fe92c609d9869ffb3efc7d` 已回读：三项对点修复已核，5currentR12/131GD/2CoreContract和原Source回读无差异，stages仍空。与已预备核准的两QA源一致，只有源码静态/API闭合通过，没有执行器/原生/full19资格。下一步为这八项构建源封存、受控四进程cold+data+两独立QA profile执行器并另做精确独立审查；剩余11原ID与全部额外门禁仍必须实现/验证。唯一V9 native批保持同session28289，不同时打开任何Godot。
 ## 2026-10-09：原19六数据层与两QA兼容源码适配
 
 原19全部ID与当前机制仍以 ORIGINAL19_R12_ADAPTATION_REQUIREMENTS_V1.json 为完整要求，未缩减为以下八项。新增 original19_data_layers_candidate_v1/ 六GD数据案例及来源，独立预备拒绝收据SHA `1e87b791832fd5a3cf22830ecb586162739f625d163a1a8eecc12192513ec2a1`：内置Projection被loader变量遮蔽；first missing和unknown-preservation只有prefs而非progress更新路径。旧V1全部保留，stages空、不运行。
