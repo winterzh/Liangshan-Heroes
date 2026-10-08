@@ -1,0 +1,369 @@
+{
+  "schema": "campaign_R12_original19_adaptation_requirements_v1",
+  "original_matrix": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\proposals\\campaign_persistence_observability_v27\\FAULT_MATRIX_V27B.json",
+    "sha256": "83fb60c2569c02f09c74bf8318a09544bcfca1c0650add3c710a953b2ddc9320"
+  },
+  "current_runtime_input_basis": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\DURABLE_FULL_SOURCE_INPUTS_V5.json",
+    "sha256": "3c5da7543d75f923cf3d26cc36e208d584e9bf6b7a9dc253437ff31f32d40ce9"
+  },
+  "case_count": 19,
+  "cases": [
+    {
+      "id": "normal_first_full_seal",
+      "original_scope": "real private CFG",
+      "original_expected_retained_for_history": {
+        "accepted": true,
+        "memory_applied": true,
+        "persisted": true,
+        "suppressed": false,
+        "save_code": "CAMPAIGN_CFG_READBACK_VERIFIED",
+        "cloud_callback_only_not_upload": true,
+        "new_story_seal": true,
+        "durable_new_story_seal": true
+      },
+      "current_layer": "natural_live_terminal",
+      "required_current_mechanism": "Current ordinary Huangnigang route completes all four real Mission goals. Actual ContinueFlow completion consumes the live capability once; fresh CFG and lifecycle generation3 must agree.",
+      "implemented": false,
+      "executed": false,
+      "passed": null
+    },
+    {
+      "id": "normal_repeat_full",
+      "original_scope": "real private CFG",
+      "original_expected_retained_for_history": {
+        "accepted": true,
+        "memory_applied": true,
+        "persisted": true,
+        "suppressed": false,
+        "save_code": "CAMPAIGN_CFG_READBACK_VERIFIED",
+        "cloud_callback_only_not_upload": true,
+        "new_story_seal": false,
+        "durable_new_story_seal": false
+      },
+      "current_layer": "natural_live_terminal",
+      "required_current_mechanism": "A second genuine natural full victory in the same successful profile; new token, prior seal retained, new_story_seal false. A recovery projection cannot supply this live assertion.",
+      "implemented": false,
+      "executed": false,
+      "passed": null
+    },
+    {
+      "id": "best_single_run_no_union",
+      "original_scope": "real private CFG",
+      "original_expected_retained_for_history": {
+        "accepted": true,
+        "memory_applied": true,
+        "persisted": true,
+        "suppressed": false,
+        "save_code": "CAMPAIGN_CFG_READBACK_VERIFIED",
+        "cloud_callback_only_not_upload": true,
+        "new_story_seal": false,
+        "durable_new_story_seal": false,
+        "best_ids_from_one_run": true,
+        "goal_union": false
+      },
+      "current_layer": "pure_projection_and_real_CFG",
+      "required_current_mechanism": "Use independently validated current typed intent/context and current ProgressProjection; distinct partial goal sets, worse and tied results. Prove best IDs come from one run and persist the projected CFG via the real transaction.",
+      "implemented": false,
+      "executed": false,
+      "passed": null
+    },
+    {
+      "id": "invalid_no_unlock",
+      "original_scope": "logic",
+      "original_expected_retained_for_history": {
+        "accepted": false,
+        "memory_applied": false,
+        "persisted": false,
+        "new_story_seal": false,
+        "disk_write_attempted": false,
+        "unlocked_unchanged": true
+      },
+      "current_layer": "pure_projection_refusal",
+      "required_current_mechanism": "Reject non-campaign/unknown level/invalid core result before any write; actual files and Campaign memory unchanged. Normal direct on_level_won is now deliberately refused outside QA.",
+      "implemented": false,
+      "executed": false,
+      "passed": null
+    },
+    {
+      "id": "QA_memory_only",
+      "original_scope": "suppression",
+      "original_expected_retained_for_history": {
+        "accepted": true,
+        "memory_applied": true,
+        "new_story_seal": true,
+        "durable_new_story_seal": false,
+        "persisted": false,
+        "suppressed": true,
+        "legacy_save_bool": true,
+        "sentinel_unchanged": true,
+        "cloud_calls": 0
+      },
+      "current_layer": "explicit_QA_compatibility",
+      "required_current_mechanism": "A separate QA1-only process exercises the retained compatibility path; sentinel bytes unchanged and no durable/UI/SDK qualification.",
+      "implemented": false,
+      "executed": false,
+      "passed": null
+    },
+    {
+      "id": "QA_cloud_bool_compatibility",
+      "original_scope": "legacy caller",
+      "original_expected_retained_for_history": {
+        "old_bool": true,
+        "memory_cloud_profile_replaced": true,
+        "persisted": false,
+        "suppressed": true,
+        "cloud_calls": 0
+      },
+      "current_layer": "explicit_QA_compatibility",
+      "required_current_mechanism": "Separate QA1-only actual apply_cloud_progress compatibility, unchanged sentinel and zero dirty callback. Do not let this process satisfy a normal persistence case.",
+      "implemented": false,
+      "executed": false,
+      "passed": null
+    },
+    {
+      "id": "bad_existing_cfg_load",
+      "original_scope": "real prior load failure",
+      "original_expected_retained_for_history": {
+        "save_code": "CAMPAIGN_CFG_PRIOR_LOAD_FAILED",
+        "accepted": true,
+        "memory_applied": false,
+        "write_attempted": false,
+        "persisted": false,
+        "new_story_seal": false,
+        "old_memory_unchanged": true,
+        "file_not_written_by_attempt": true
+      },
+      "current_layer": "real_CFG_fault",
+      "required_current_mechanism": "Malformed existing private CFG; current transaction refuses before staging. Budget only its exact expected native parse diagnostic, with zero SCRIPT ERROR and all unrelated errors rejected.",
+      "implemented": false,
+      "executed": false,
+      "passed": null
+    },
+    {
+      "id": "existing_vanished_prior",
+      "original_scope": "filesystem race",
+      "original_expected_retained_for_history": {
+        "save_code": "CAMPAIGN_CFG_PRIOR_LOAD_FAILED",
+        "write_attempted": false,
+        "persisted": false,
+        "memory_applied": false
+      },
+      "current_layer": "real_CFG_fault",
+      "required_current_mechanism": "At the actual current _stable_cfg prior-read source point, remove only a controller-owned private file after the positive existence/hash observation. Reject changed or absent prior, preserve memory and staged state.",
+      "implemented": false,
+      "executed": false,
+      "passed": null
+    },
+    {
+      "id": "true_new_missing_cfg",
+      "original_scope": "real private CFG",
+      "original_expected_retained_for_history": {
+        "accepted": true,
+        "memory_applied": true,
+        "persisted": true,
+        "suppressed": false,
+        "save_code": "CAMPAIGN_CFG_READBACK_VERIFIED",
+        "cloud_callback_only_not_upload": true
+      },
+      "current_layer": "real_CFG_transaction",
+      "required_current_mechanism": "Actually absent private campaign.cfg; current begin_write/commit_prepared, stable readback and controlled prepared/applied transaction. Prove no old memory becomes progress before confirmed write.",
+      "implemented": false,
+      "executed": false,
+      "passed": null
+    },
+    {
+      "id": "write_failure",
+      "original_scope": "real private filesystem fault",
+      "original_expected_retained_for_history": {
+        "save_code": "CAMPAIGN_CFG_WRITE_FAILED",
+        "accepted": true,
+        "memory_applied": false,
+        "persisted": false,
+        "write_attempted": true,
+        "readback_attempted": false,
+        "disk_state_unconfirmed": true,
+        "retry_safe": false,
+        "cloud_calls": 0
+      },
+      "current_layer": "real_CFG_fault",
+      "required_current_mechanism": "The current writer saves an owned stage candidate rather than the public CFG. Inject a real private filesystem denial at the actual stage-save point; preserve public original bytes and pending proposal. No mocked save status.",
+      "implemented": false,
+      "executed": false,
+      "passed": null
+    },
+    {
+      "id": "save_OK_fresh_load_failure",
+      "original_scope": "real save/readback fault",
+      "original_expected_retained_for_history": {
+        "save_code": "CAMPAIGN_CFG_READBACK_FAILED",
+        "write_error": 0,
+        "readback_failed": true,
+        "disk_state_unconfirmed": true,
+        "accepted": true,
+        "memory_applied": false,
+        "persisted": false,
+        "durable_new_story_seal": false,
+        "disk_may_contain_candidate": true,
+        "retry_safe": false,
+        "cloud_calls": 0
+      },
+      "current_layer": "real_CFG_fault",
+      "required_current_mechanism": "After a real candidate save succeeds, use the actual current _stable_cfg load source point to deny or remove only the owned candidate. No confirmed Campaign memory or generation3 acknowledgement.",
+      "implemented": false,
+      "executed": false,
+      "passed": null
+    },
+    {
+      "id": "readback_semantic_mismatch",
+      "original_scope": "real CFG semantic fault",
+      "original_expected_retained_for_history": {
+        "save_code": "CAMPAIGN_CFG_READBACK_MISMATCH",
+        "readback_failed": true,
+        "disk_state_unconfirmed": true,
+        "memory_applied": false,
+        "persisted": false,
+        "cloud_calls": 0
+      },
+      "current_layer": "real_CFG_fault",
+      "required_current_mechanism": "Change a candidate known or unknown key between real save and fresh read. Require current SHA/semantic refusal; retain original public CFG, frozen proposal and old memory.",
+      "implemented": false,
+      "executed": false,
+      "passed": null
+    },
+    {
+      "id": "readback_SHA_changed",
+      "original_scope": "real read interval race",
+      "original_expected_retained_for_history": {
+        "save_code": "CAMPAIGN_CFG_READBACK_MISMATCH",
+        "disk_state_unconfirmed": true,
+        "persisted": false,
+        "memory_applied": false
+      },
+      "current_layer": "real_CFG_fault",
+      "required_current_mechanism": "Change comment-only bytes during the actual stable ConfigFile read interval. Semantics may match, but the before/after SHA guard must refuse.",
+      "implemented": false,
+      "executed": false,
+      "passed": null
+    },
+    {
+      "id": "legal_unknown_variant_preservation",
+      "original_scope": "real private CFG",
+      "original_expected_retained_for_history": {
+        "accepted": true,
+        "memory_applied": true,
+        "persisted": true,
+        "suppressed": false,
+        "save_code": "CAMPAIGN_CFG_READBACK_VERIFIED",
+        "cloud_callback_only_not_upload": true,
+        "all_unknown_section_keys_retained": true,
+        "ConfigFile_semantics_equal": true,
+        "IEEE_bits_claimed": false
+      },
+      "current_layer": "real_CFG_transaction",
+      "required_current_mechanism": "Original legal future section/key, built-in typed containers, Packed arrays and non-finite/-0 values. Compare current Values.semantics after real transaction; no IEEE claim for ConfigFile serialization.",
+      "implemented": false,
+      "executed": false,
+      "passed": null
+    },
+    {
+      "id": "unsupported_object_or_script_container",
+      "original_scope": "component prewrite refusal",
+      "original_expected_retained_for_history": {
+        "save_code": "CAMPAIGN_CFG_UNSUPPORTED_VALUE",
+        "write_attempted": false,
+        "memory_applied": false,
+        "persisted": false,
+        "prior_file_not_written_by_attempt": true,
+        "cloud_calls": 0
+      },
+      "current_layer": "component_prewrite_refusal",
+      "required_current_mechanism": "Exercise current Values.supported/semantics and transaction pre-encoder refusal for Object/RID/Callable/Signal and object/script-typed containers. Preserve inputs and original file.",
+      "implemented": false,
+      "executed": false,
+      "passed": null
+    },
+    {
+      "id": "cycle_or_overdepth",
+      "original_scope": "component prewrite refusal",
+      "original_expected_retained_for_history": {
+        "save_code": "CAMPAIGN_CFG_UNSUPPORTED_VALUE",
+        "write_attempted": false,
+        "persisted": false,
+        "input_unchanged": true
+      },
+      "current_layer": "component_prewrite_refusal",
+      "required_current_mechanism": "Keep original root-depth0/depth128 boundary and depth129 refusal, including scalar/key leaves and alias cycles. Break only owned fixture cycles for cleanup after observations.",
+      "implemented": false,
+      "executed": false,
+      "passed": null
+    },
+    {
+      "id": "callback_sees_new_memory",
+      "original_scope": "actual callback",
+      "original_expected_retained_for_history": {
+        "accepted": true,
+        "memory_applied": true,
+        "persisted": true,
+        "suppressed": false,
+        "save_code": "CAMPAIGN_CFG_READBACK_VERIFIED",
+        "cloud_callback_only_not_upload": true,
+        "callback_observes_candidate_memory": true,
+        "callback_invocations": 1,
+        "cloud_dirty_observed": null,
+        "upload_verified": false
+      },
+      "current_layer": "actual_commit_callback",
+      "required_current_mechanism": "Observe the actual current Campaign.progress_committed or writer-complete boundary after CFG confirmation. Callback sees newly loaded memory, dirty is a request only; preserve genuine SteamCloud node/source.",
+      "implemented": false,
+      "executed": false,
+      "passed": null
+    },
+    {
+      "id": "cloud_applying_callback_no_upload_claim",
+      "original_scope": "actual legacy Cloud branch",
+      "original_expected_retained_for_history": {
+        "persisted": true,
+        "cloud_dirty_requested": true,
+        "cloud_dirty_callback_invoked": true,
+        "cloud_dirty_observed": null,
+        "cloud_upload_verified": false
+      },
+      "current_layer": "actual_Cloud_branch",
+      "required_current_mechanism": "Use the actual SteamCloud applying branch with a validated private payload. Successful CFG acknowledgement may request mark_dirty while applying; no upload assertion.",
+      "implemented": false,
+      "executed": false,
+      "passed": null
+    },
+    {
+      "id": "legacy_real_cloud_apply_failure_boundary",
+      "original_scope": "legacy existing behavior",
+      "original_expected_retained_for_history": {
+        "old_bool": false,
+        "persisted": false,
+        "memory_cloud_profile_existing_behavior_not_rolled_back": true,
+        "not_full_account_or_crash_recovery": true
+      },
+      "current_layer": "actual_Cloud_real_fault",
+      "required_current_mechanism": "Keep the original scenario ID, but explicitly supersede its old pre-save-memory bug expectation: R12 staged cloud failure must retain the old Campaign records/unlocked/owner and same pending writer until retry.",
+      "implemented": false,
+      "executed": false,
+      "passed": null
+    }
+  ],
+  "additional_required": [
+    "Actual terminal/startup/config pending overlay and its real retry button",
+    "Same Coordinator or CFG writer object and original frozen intent retained across repaired real fault",
+    "prefs/cloud exclusion during terminal pending and account/installed-source drift refusal",
+    "No Battle/Mission/metrics/presentation/SDK replay during data recovery",
+    "Genuine credited run token and actual once-only reward integration, separate from Steam-disabled cases"
+  ],
+  "native_started": false,
+  "native_qualified": false,
+  "original19_qualified": false,
+  "overall_goal_qualified": false,
+  "producer_implemented": false,
+  "independent_executor_review_required": true,
+  "original19_prior_native_green_transferred": false
+}

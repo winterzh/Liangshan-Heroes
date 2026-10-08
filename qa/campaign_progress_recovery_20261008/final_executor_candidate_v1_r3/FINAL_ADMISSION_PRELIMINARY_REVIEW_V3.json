@@ -1,0 +1,234 @@
+{
+  "schema": "campaign_admission_consumer_preliminary_independent_review_v3",
+  "review_version": 3,
+  "independent": true,
+  "reviewer": "office_full_review",
+  "reviewed_at": "2026-10-08T15:29:50.913144+00:00",
+  "review_kind": "read_only_halfway_ABC_consumer_diff_current_R12_API_and_fixed_source_binding_review",
+  "consumer_sha256": "d31899fc9b5442a9d69ab4ac594acc3f197b8523edf4f98beb4cfd8ae80589d8",
+  "consumer_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\final_executor_candidate_v1_r3\\daming_admit_campaign_v2_candidate_v1.gd",
+    "bytes": 45537,
+    "sha256": "d31899fc9b5442a9d69ab4ac594acc3f197b8523edf4f98beb4cfd8ae80589d8"
+  },
+  "source_manifest": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\final_executor_candidate_v1_r3\\SOURCE.json",
+    "bytes": 12630,
+    "sha256": "afd6f2cb2c56e0cce42ffac41fc7e0763eff9258981ad1c994d98409b85b4e23"
+  },
+  "static_api_closure_passed": true,
+  "source_integrity_verified": true,
+  "source_only": true,
+  "approved_stages": [],
+  "native_started_by_reviewer": false,
+  "native_qualified": false,
+  "full_qualified": false,
+  "overall_goal_qualified": false,
+  "halfway_regression_producer_ready": false,
+  "next_producer_required": true,
+  "findings": [],
+  "open_blockers": [],
+  "diff_verification": {
+    "predecessor_literal_labels": 82,
+    "candidate_literal_labels": 86,
+    "lost_literal_labels": [],
+    "changed_existing_functions": [
+      "_ready"
+    ],
+    "new_functions": [
+      "_prepare_handoff_parent"
+    ],
+    "all_32_other_existing_function_bodies_exactly_equal_to_r2": true,
+    "scene_exactly_equal_to_r2": true,
+    "full_packet_install_admission_time_normal_source_clock_and_own_HELD_listener_coverage_unchanged": true
+  },
+  "source_verification": {
+    "manifest_file_pins_checked_from_original_paths_with_parents_no_links": 24,
+    "current_R12_and_Bai_runtime_sources": 15,
+    "actual_private_Core_Contract_sources": 2,
+    "current_inputsV5_basis": {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\DURABLE_FULL_SOURCE_INPUTS_V5.json",
+      "bytes": 1067771,
+      "sha256": "3c5da7543d75f923cf3d26cc36e208d584e9bf6b7a9dc253437ff31f32d40ce9"
+    },
+    "all_12_root_literal_resource_targets_exist_in_reviewed_input_mapping": true,
+    "candidate_GD_and_scene_are_new_source_candidates_not_installed_by_inputsV5": true
+  },
+  "runtime_source_pins": [
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\battle.gd",
+      "bytes": 789546,
+      "sha256": "e3b9314d3442dbf90683736388170258756338d279a47e4f157b830c1378ea63",
+      "runtime_path": "scripts/battle.gd"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\campaign.gd",
+      "bytes": 22806,
+      "sha256": "3e7257e412e65ffc012d3dfd5d0392d4d96a5ce32cbdf1634caf221d2e88060b",
+      "runtime_path": "scripts/campaign.gd"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\continue_flow.gd",
+      "bytes": 31285,
+      "sha256": "20674da5a412db0cc41cc48dacfcbf619e91009a81026c735fd80e7cb5a9a16d",
+      "runtime_path": "scripts/continue_flow.gd"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\menu.gd",
+      "bytes": 42272,
+      "sha256": "63b945585bc0b4a9a1f92d0a1b7576b139bee6083c8d62bc4378a9abe0d6406c",
+      "runtime_path": "scripts/menu.gd"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\run_campaign_cfg_transaction.gd",
+      "bytes": 27586,
+      "sha256": "71803fc42a6bef59479db5b8cf70a953716a3968e45ba1fb391eed5726a51d17",
+      "runtime_path": "scripts/run_campaign_cfg_transaction.gd"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\run_campaign_cfg_values.gd",
+      "bytes": 2640,
+      "sha256": "8d962715c19f0b9d3c045a25b5f215e9600ceeff204524fc0be630da8598eb27",
+      "runtime_path": "scripts/run_campaign_cfg_values.gd"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\run_campaign_local_lifecycle.gd",
+      "bytes": 14384,
+      "sha256": "ee2d3fb936dfe8e1a4f8e129733fad8fbb5a6598df666d83024046cd0d878ed2",
+      "runtime_path": "scripts/run_campaign_local_lifecycle.gd"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\run_campaign_progress_coordinator.gd",
+      "bytes": 11741,
+      "sha256": "23193509d2e1d7f367cbfe3c06a2a479276c7eefb31e987136db635945d1417e",
+      "runtime_path": "scripts/run_campaign_progress_coordinator.gd"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\run_campaign_progress_gate.gd",
+      "bytes": 3152,
+      "sha256": "129bd0a9cd6ee5b41595b294494681125accfa1bf9906cebd41fe905c15e5460",
+      "runtime_path": "scripts/run_campaign_progress_gate.gd"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\run_campaign_progress_intent.gd",
+      "bytes": 10291,
+      "sha256": "a64add7d20999f0c306006a08a7fad7d263e252d8aae430424bd97ff4049f894",
+      "runtime_path": "scripts/run_campaign_progress_intent.gd"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\run_campaign_progress_projection.gd",
+      "bytes": 5723,
+      "sha256": "6c627f95c44f6876895f012b5e6a6859500b73d391f92d7bf46f41f4b0d1e68b",
+      "runtime_path": "scripts/run_campaign_progress_projection.gd"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\run_campaign_startup_scan.gd",
+      "bytes": 7796,
+      "sha256": "a0860555b5960e6ce59c8946788d23e6bdb1c119ebb4fa8920c177faf0625dfc",
+      "runtime_path": "scripts/run_campaign_startup_scan.gd"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\run_world_session.gd",
+      "bytes": 19733,
+      "sha256": "5d47372a2b25dedb39d6440a270d1e84dea850bf988a089aeb7daa1978fdb249",
+      "runtime_path": "scripts/run_world_session.gd"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\steam_cloud.gd",
+      "bytes": 33188,
+      "sha256": "230c26034104b19be04b2f1533deba79dd304473ac060f021fd38eaeee354dac",
+      "runtime_path": "scripts/steam_cloud.gd"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\huangnigang_bai_arrival_candidate_v1\\level1_huangnigang.gd",
+      "bytes": 61059,
+      "sha256": "572d9c6cd8bc28c00f234dd0f2e33801e203e4bb0cd41f4612bebedd28124f06",
+      "runtime_path": "scripts/levels/level1_huangnigang.gd"
+    }
+  ],
+  "actual_semantic_Core_Contract": [
+    {
+      "path": "D:\\CodexTemp\\lsh-office-candidate-20261008\\scripts\\run_battle_world_core.gd",
+      "bytes": 49463,
+      "sha256": "92b2bdac0058f9e1642d1b991c3ca353e902481d8daff990388e377597df87b1"
+    },
+    {
+      "path": "D:\\CodexTemp\\lsh-office-candidate-20261008\\scripts\\run_level8_unit_contract.gd",
+      "bytes": 8211,
+      "sha256": "b2f52bcce60b27507b498a6d32e45b5cadd3409030fcd2e1024c78dac90e90d5"
+    }
+  ],
+  "predecessor_files": [
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\final_executor_candidate_v1_r2\\daming_admit_campaign_v2_candidate_v1.gd",
+      "bytes": 44314,
+      "sha256": "370d618ce979740c631d931d3653bed00c5bceff2e1a2130948501d9bf7ada94"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\final_executor_candidate_v1_r2\\daming_admit_campaign_v2_candidate_v1.tscn",
+      "bytes": 217,
+      "sha256": "b3ee73957b518626173e59e2099cea1d193796fed546c241b30a933ba231fb0d"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\final_executor_candidate_v1_r2\\FINAL_ADMISSION_PRELIMINARY_REVIEW_V1.json",
+      "bytes": 51916,
+      "sha256": "0893eb9597185b00a6b118fdd4c3ceb17962ce8c4f6c5c69d1c1a1e28f098765"
+    }
+  ],
+  "directory_helper_source": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\final_durable_retreat_consumer_v1_r3\\daming_campaign_durable_cross_process_v1.gd",
+    "bytes": 60712,
+    "sha256": "abb72d8eb8530f4b73431f1f7976789015da9883f1a2e3914995840252c6d721"
+  },
+  "directory_helper_review": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\final_durable_retreat_consumer_v1_r3\\CONSUMER_HANDOFF_DIRECTORY_INDEPENDENT_REVIEW_V3.json",
+    "bytes": 12036,
+    "sha256": "791ae49eed07a10dfecad8405132ee2b936a6b150ff26880227f299c2eb3f0c1"
+  },
+  "current_R12_review": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\INTEGRATION_SOURCE_REVIEW_V5_R12.json",
+    "bytes": 82537,
+    "sha256": "7996a27e97a0ff8a4650b718925d97b17f01d1cbc9bb617937424c44df54d3bd"
+  },
+  "api_review": [
+    {
+      "candidate_line": 50,
+      "result": "Existing private profile/environment/output guard remains unchanged: normal empty CAMPAIGN_QA, STEAM_DISABLED1 and actual userdata under profile/appdata are required."
+    },
+    {
+      "candidate_line": 79,
+      "result": "The already-reviewed fullR3 directory helper is adapted only from three to two known handoff paths and to daming_admit_v24o. It verifies exact actual userdata sibling, walks ancestor link checks and creates directory only. Immutable file writer remains unchanged."
+    },
+    {
+      "candidate_line": 128,
+      "result": "Real ContinueFlow startup_checked/IDLE and background Gate precede Factory preparation and any Battle construction; normal clock/physics/settings and actual eligible provider content/engine are required."
+    },
+    {
+      "candidate_line": 174,
+      "result": "Current R12 Battle classifies the actual campaign before configuring the production barrier with world, clock and _capture_context. Candidate observes those actual fields and _context_error, with no extra harness configure."
+    },
+    {
+      "candidate_line": 430,
+      "result": "Current run_campaign_local_lifecycle._init requires exactly token, slot_root, context, installed_identity and profile_owner. Candidate passes allfive and checks fixed script/token/directory plus complete matches_scope(context,trusted,cloud_owner)."
+    },
+    {
+      "candidate_line": 316,
+      "result": "Session.new(trusted,runtime,default continue/v1), save_held, real disk generation/readback, prepare_restore/stage_mount/commit_restore_async and original complete packet/world/clock/binding checks are byte-identical to R2 and compatible with the frozen R12/Core composition."
+    },
+    {
+      "candidate_line": 279,
+      "result": "Own one-shot capture_ready/capture_rejected listener audits, both cleanup branches and unrelated listener preservation are unchanged; no oldE cache/deadline/PID qualification is reused."
+    }
+  ],
+  "integration_requirements": [
+    "Implement and independently admit a successor half-ABC producer, fixed source inputs and actual A_half_save/B_continue_resave/C_verify_resave report predicates before any native run.",
+    "Install the new candidate GD/scene under their fixed tools URI with fresh source pins; the inputsV5 basis currently maps the old R2 admission GD, so this preliminary review does not replace that mapping implicitly.",
+    "The current durable61 producer and evidence-v2 whitelist admit only full-retreat handoff URIs, not user://daming_admit_v24o/handoff_A.json or handoff_B.json. A separately scoped half-ABC URI/schema consumer binding is required; do not broaden that whitelist implicitly.",
+    "Use fresh UUID/profile and exact runtime/native identity; retain actual source/native evidence and all original half-ABC/HELD/clock/world predicates."
+  ],
+  "limitations": [
+    "No Godot/native process was started and no source was edited by this reviewer; the active V7 durable batch was not controlled or polled.",
+    "This is source/API preparation only with empty approved_stages. No native half-ABC, full/goals, original19, JSON/OwnedSlot, SDK/public/device/performance result is granted.",
+    "The old R2 barrier-context issue was reviewed against the then-current older composition; the actual fixed R12 classification/configuration and lifecycle APIs are the basis for this current static compatibility conclusion."
+  ]
+}

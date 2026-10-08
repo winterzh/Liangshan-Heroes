@@ -1,3 +1,35 @@
+## 2026-10-09：原回归V3源码准入完成，等待V8实际61终态
+
+`ADMISSION_REGRESSION_INDEPENDENT_REVIEW_V3.json`SHA`67339b16f0c5ecf689f806cf6326c561aff62b0f2191362bccc82e20ed569a37`已回读，仅准原JSON533/OwnedSlot76与半程ABC六进程。73pin/30overlay/11fixture/三工具快照与三原validator body exact；旧V1/V2拒绝保留。当前不能运行：固定V8新批9a2419c2尚未完成，必须先通过真实61关闭/全部原日志与证据回读门禁。
+
+V8同一session53244冷导入10696已经退出0/无引擎错误，Lu A已按自然idle60开始；继续观察同一句柄，不重开。新批尚未A/整批终态，原19/UI/SDK/设备性能/完整目标不因源码准入升级。正式游戏源码不晋升。
+
+## 2026-10-09：V8限定准入与全新批实际启动
+
+V8独立收据SHA`fb2e4859d62797b5ae8b0731e181d1dcc5d91f879559f66ff81f90e2c6e0ef2f`已回读，39pins/27metadata/26overlays/5132 base原路径验证、两处producer AST差异和唯一R5 component映射均闭合。只准`durable_chain_and_matrices`，8+52+cold=61仍不减。
+
+全新`durable_chain_9a2419c2`/session53244/自有Python27780实际启动，绑定见`ACTUAL_DURABLE_CHAIN_LAUNCH_V8.json`。每阶段自然idle60串行运行；旧V7失败profile/frozenA均未复用，尚未新整批终态，不重复启动或转移资格。
+
+原回归6进程后继V3已封来源预检，`ADMISSION_REGRESSION_SOURCE_SPEC_V3.json`逻辑SHA`47476a711fae22e40527a98a2c8756afbc1921a19aa2a4b6048b7fb35df08d7e`；当前仅复审、未运行。V1/V2空stage拒绝与旧源保留。V3修实际六个角色键/两组三代journal回读和原fixture manifest/frozen路径分离，保留三原validator函数body与共享runtime；完整静态import无漏pin。运行门槛精确绑定V8必须先真实完整61关闭/qualified、全部原证据/日志再次回读，当前不满足。源码/三工具快照与图见`admission_regression_executor_v3/`。19/UI/SDK/八章九玩法/导出/性能/真机及整个目标保持未完成；正式源码未晋升，仅同步stable。
+
+## 2026-10-09：V7已终态失败，R5逐记录测试传输及V8来源封存
+
+`durable_chain_3cbf11be`/session14402已主机终态1、锁释放，自有Python23092/全部Godot已退出。冷15256、Lu A45604/313、world20888/264rows/1540checks都原生及主机通过；component23700退出1/引擎错误0、5563checks唯一失败membership full installed wire JSON route：BYTE_LIMIT，73行已执行。后续live24/B/C/D/shi未启动，不能称8+52/整批/整体通过。18份原始收据/日志/报告/受控槽和active journal共31022127字节在`actual_failed_durable_chain_v7/`，边界见`ACTUAL_COMPONENT_MEMBERSHIP_CODEC_FAILURE_V7.json`，未复制裸CFG/缓存，旧档保留不复用。
+
+原component测试把完整所有Unit states聚合交给单值Codec 1MiB限制；生产Unit payload逐记录编码、Slot整体64MiB。新`final_durable_component_transport_v1_r5/`只修membership JSON测试wire：每个完整state/id/outer key与值按原Codec编码/解码，所有字段/类型保留，整体两侧使用实际Slot64MiB。生产Codec/每条1MiB/depth32/nodes32768、全部181×2/8positive/54labels/原code和layer/type/IEEE/noNodes/noTick断言不改。R5独立静态收据SHA`2d4e8e346d2857addbbe50425a5dd3004544b220fe6228324692bfd3f0bb3daf`通过、stages空，无新native资格。
+
+InputsV6预检逻辑SHA`7de143442eac3cce6154d4d5d730b7d1587a54582d50a54dec6fed7bd0c4d108`；SourceSpecV8逻辑SHA`6d4fb8ab8eb3bd1ea36f47a59da6be17082be436ce47eb0aab165d287339c10b`，只换26中一个componentGD map。V8 producer只改来源及schema，全部运行/validator/CFG/fixture/lease函数保持V7 exact；十二工具字节快照与diff/import图在`durable_chain_executor_v8/`。当前限定源码复审收尾，尚未启动新批；须fresh全新profile和完整61终态，不转移旧V7失败或fixture资格。
+
+新6进程JSON533/Owned76/半程ABC入口V1五项及V2两项独立拒绝均保留，源码/spec/快照不可变。后继V3只准备源（尚未封/准入/运行），改正实际V7/V8六个role keys与两组三代journal、原fixture manifest/frozen路径分离，并将prior精确绑定将来的V8整批闭合结果。`ORIGINAL19_R12_ADAPTATION_REQUIREMENTS_V1.json`保留全部19原ID/历史期待并逐项指定当前事务机制，尚无新19执行器或运行；尤其旧cloud预写内存bug期待明确改为R12失败保留旧内存。错误UI/同对象重试/SDK/八章九玩法/导出/性能/Android完整目标仍未完成，正式源码未晋升。
+
+## 2026-10-08：V7实际A与world阶段通过，后继回归入口准备
+
+同一批`durable_chain_3cbf11be`/session14402仍在执行：冷导入15256终态0；Lu A45604终态0、313全过，主机证据校验与gen1槽/active日志/实际handoff封存通过；Lu world20888终态0、264行与1540检查全过，主机来源/谓词回读通过。仍需component362、live24、B/C/D以及史进整组；不能记整批或整体资格。
+
+半程consumer后继R3只准备固定两handoff父目录，82原标签保留+4，当前R12/API兼容独立静态收据SHA`0b5ce15c7a8a3e172bad1e212ac42ca034723fbc258dc156d231634a10df0cc3`，approved_stages空。`final_executor_candidate_v1_r3/`及新`ADMISSION_REGRESSION_SOURCE_SPEC_V1.json`、`admission_regression_executor_v1/`三工具快照/原谓词AST证明均仅准备。
+
+新6进程回归入口保留JSON533、原OwnedSlot76、半程ABC最低39/351/342与完整mandatory/hold谓词，明确两pure测试使用QA1，正常ABC为空；仅换半程R3映射，保留全部当前运行来源与11原fixture SHA。运行必须先有V7实际61进程整批关闭/合格收据和新独立准入。V1正在集中独立审查，已发现host envelope返回形状、阶段小写label和Windows profile规范化接入错误；源码/spec/快照保留、未启动该批，修正后另建后继。原19故障、错误UI/同对象重试、SDK/性能/真机等仍未通过；正式源码不晋升。
+
 ## 2026-10-08：URI后继V7独立准入，新批实际启动
 
 V5拒绝DUR-CHAIN-LEGACY-PIN-001（旧evidence host/preparation叶子未pin），V6拒绝DUR-CHAIN-LEGACY-CFG-PIN-002（旧v2 producer仅供CFG host API测试的叶子未pin）。两版源/spec/快照及拒绝原样保留。V7集中补齐后独立审查通过：5132基础/26覆盖/36pins全部回读，14活跃local modules及24 import边闭合，身份当前调用链无动态import；URI/CFG/原生与所有矩阵谓词保持，AST仅source_spec/__init__来源与schema变化。

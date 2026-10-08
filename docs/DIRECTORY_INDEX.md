@@ -1,3 +1,15 @@
+## 2026-10-09：V8实际启动与原回归V3来源
+
+恢复QA新增V8限定独立收据与`ACTUAL_DURABLE_CHAIN_LAUNCH_V8.json`（9a2419c2/session53244）；原回归V3封存spec、三工具字节/import图在`admission_regression_executor_v3/`，静态复审中、未执行。前置V8必须先实际全61闭合，原19/整体未通过。
+
+## 2026-10-09：component真实失败及后继来源
+
+恢复QA新增`actual_failed_durable_chain_v7/`18原始记录、`ACTUAL_COMPONENT_MEMBERSHIP_CODEC_FAILURE_V7.json`、`final_durable_component_transport_v1_r5/`及仅静态review、InputsV6/SourceSpecV8与`durable_chain_executor_v8/`十二源/diff图。原回归候选V1/V2拒绝、两版spec/快照与host-only actual A API证明保留，V3源暂未封存/准入。19原场景当前机制在`ORIGINAL19_R12_ADAPTATION_REQUIREMENTS_V1.json`，未实现/运行新故障矩阵。
+
+## 2026-10-08：半程与原回归后继准备
+
+恢复QA新增`final_executor_candidate_v1_r3/`（固定目录GD/scene/SOURCE/仅静态审查）、`ADMISSION_REGRESSION_SOURCE_SPEC_V1.json`与`admission_regression_executor_v1/`三工具快照/完整旧谓词AST证明。六进程入口尚未准入/启动；当前V7同批A313/world264阶段通过，整批未终态。
+
 ## 2026-10-08：URI后继V7实际启动记录
 
 恢复QA保存V5/V6拒绝与V7限定独立准入、三版spec及工具字节快照，V7十一源/import图/CFG API相等证明在`durable_chain_executor_v7/`；`ACTUAL_DURABLE_CHAIN_LAUNCH_V7.json`记录同一新批3cbf11be/session14402。新批正在执行，尚未整批验收；旧A313/native与主机失败raw在V4对应目录。
