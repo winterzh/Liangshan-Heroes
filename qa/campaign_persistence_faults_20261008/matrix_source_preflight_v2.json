@@ -1,0 +1,107 @@
+{
+  "schema": "campaign_full19_source_preflight_v2",
+  "complete": true,
+  "proposal_sha256": "a5ad0a3197274c76c2b1fef8dbabc0371bbe36a480a38b722003bf9e94a9a482",
+  "matrix_sha256": "83fb60c2569c02f09c74bf8318a09544bcfca1c0650add3c710a953b2ddc9320",
+  "original_ids": [
+    "normal_first_full_seal",
+    "normal_repeat_full",
+    "best_single_run_no_union",
+    "invalid_no_unlock",
+    "QA_memory_only",
+    "QA_cloud_bool_compatibility",
+    "bad_existing_cfg_load",
+    "existing_vanished_prior",
+    "true_new_missing_cfg",
+    "write_failure",
+    "save_OK_fresh_load_failure",
+    "readback_semantic_mismatch",
+    "readback_SHA_changed",
+    "legal_unknown_variant_preservation",
+    "unsupported_object_or_script_container",
+    "cycle_or_overdepth",
+    "callback_sees_new_memory",
+    "cloud_applying_callback_no_upload_claim",
+    "legacy_real_cloud_apply_failure_boundary"
+  ],
+  "all_case_indices_reached_in_source": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18
+  ],
+  "exact_breakpoint_anchors": {
+    "prior_vanished": [
+      357
+    ],
+    "write_readonly": [
+      385
+    ],
+    "fresh_load_missing": [
+      391
+    ],
+    "semantic_mismatch": [
+      388
+    ],
+    "sha_interval_change": [
+      391
+    ]
+  },
+  "native_started": false,
+  "GDScript_parse_qualified": false,
+  "fault_matrix_qualified": false,
+  "source_review_independence_claimed": false,
+  "actual_Windows_opener_proof_required": true,
+  "files": [
+    {
+      "path": "tools/campaign_persistence_fault_matrix.gd",
+      "sha256": "f5413488aa28311d7f6c57d41a84373cee17237571d87ad64d443aa3dbac59c0",
+      "bytes": 17097
+    },
+    {
+      "path": "tools/run_campaign_persistence_fault_matrix.py",
+      "sha256": "867680a491d629946f9fbbbf2386474eaebee00eb514be573cb0c087d7da50e1",
+      "bytes": 22487
+    },
+    {
+      "path": "tools/godot_debug_wire.py",
+      "sha256": "41703c88628a3fa473db00d8eeb79e87e6c2f250b0dc243a951b8295973e0c35",
+      "bytes": 6794
+    },
+    {
+      "path": "tools/windows_owned_oplock.py",
+      "sha256": "4cf6fc1ab9d1258ea6e076c9a9a451c0000c733123b827a3d36d0e4a7eda4d45",
+      "bytes": 5891
+    },
+    {
+      "path": "tools/run_campaign_debug_fault_probe.py",
+      "sha256": "cf844811c1c1445c5bc3d656bb7378a81de1d4b687ce0f1208c2fa3c13160850",
+      "bytes": 9737
+    },
+    {
+      "path": "tools/run_steam_integration_qa.py",
+      "sha256": "0673d6ab09904fd653152b127c30ca325dbf791de0b77a5da2a60cd30f0a5ad9",
+      "bytes": 11766
+    },
+    {
+      "path": "tools/run_workstation_baseline.py",
+      "sha256": "1220817bacea5469035403084c3e4ddc7c23d222440876cd199e650a9b7dd8b2",
+      "bytes": 8636
+    }
+  ]
+}

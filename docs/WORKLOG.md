@@ -1,3 +1,11 @@
+## 2026-10-08 10:40 真实故障19案夹具与 Windows 文件等待实测
+
+原19案组件夹具/控制器已完整编写并只读预检：SHA固定原v27b Campaign与矩阵，源码封存包含GD/producer/全部7 helper输入；真实autoload与原SteamCloud兼容分支保留，组件对象/循环拒绝不冒充磁盘序列化。所有故障准备在自己的实际源码断点/私有文件，未替换ConfigFile返回值。
+
+独立Windows真实文件proof通过：内核独占oplock让真实reader等待，期间实际WriteFile追加，释放后reader读取新字节；未触发请求也先完成取消再释放OVERLAPPED/event存储。实际PID2452、reader34796、helper SHA4cf6fc1a…，原收据/来源保留。SHA故障未来在实际fresh cfg.load opener等待期间修改；当前只证明Windows机制，Godot协议首轮仍失败，GDScript尚未native解析、19案未运行、玩家UI/终局恢复/奖励资格未完成。[故障QA](../qa/campaign_persistence_faults_20261008/README.md)。
+
+完整续玩V5现已实际导入退出0、私有profile守卫预期退出2、JSON533退出0；在OwnedSlot启动前自然等待其它Godot，仍保留同一PID37484/run，不复用V4资格或启动竞争批。原完整计划持续开放。
+
 ## 2026-10-08 10:15 本机完整续玩 V5 接续与原生故障协议准备
 
 V4 实际导入/私有profile守卫/JSON533/OwnedSlot76完成；A尚未创建子进程时被其它Godot进入阻断，整批终态1、complete=false、锁释放，PID6416消失。原失败、报告、日志、V4来源和私有profile保留，不复用或冒充全链通过。V5仅在自有子进程尚未启动时重新自然等待，启动后仍整批失败即停止；同一用户授权独立子代理复审绑定实际producer/seal通过。新批office_full_8499098a/PID37484实际启动，完整原矩阵不缩减。[实际记录](../qa/office_campaign_full_20261008/README.md)。

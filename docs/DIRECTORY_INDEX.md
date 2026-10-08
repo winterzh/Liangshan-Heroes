@@ -1,3 +1,7 @@
+## 2026-10-08 10:40 19案源封存与 Windows 实际proof
+
+`qa/campaign_persistence_faults_20261008/matrix_source_preflight_v2.json`与`matrix_source_snapshot_v2/`封存完整19案GD/producer/7 helper；`windows_actual_v2/`保存真实内核等待与追加/取消收据及执行字节。新的tools矩阵和Windows helper均未覆盖正式Campaign/Battle。Godot协议尚需新UUID成功proof，19案尚未native，完整目标保持。[QA](../qa/campaign_persistence_faults_20261008/README.md)。
+
 ## 2026-10-08 10:15 完整续玩 V5 与真实故障协议来源
 
 `qa/office_campaign_full_20261008/actual_failed_v4/`保留实测JSON533/OwnedSlot76及A未启动的整批失败；V5审查、seal、实际argv和source_snapshot_v5封存新UUID全链。`qa/campaign_persistence_faults_20261008/`新增官方标签协议源、首轮真实失败与说明；对应tools调试wire/probe只为未来19案提供协议准备，尚无19案资格。[公司续做](OFFICE_DEVELOPMENT_20261008.md)。

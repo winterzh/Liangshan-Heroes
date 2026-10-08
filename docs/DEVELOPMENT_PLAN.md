@@ -1,3 +1,9 @@
+## 2026-10-08 10:40 完整续玩V5与持久进度19案准备
+
+V5用户授权独立源码复审通过，新UUID完整批已实际导入/私有profile守卫/JSON533完成，OwnedSlot前仍等待自然空闲。原V4的JSON533/OwnedSlot76只为该失败批前序资格，双角色完整续玩尚未完成。原19案GD/控制器与7 helper已封存预检；Windows原生文件等待/追加/取消proof已实际通过，Godot调试协议首轮失败保留，尚待新UUID复验，19案未native。正式Campaign/Battle/Core/Contract本轮不变。[完整QA](../qa/office_campaign_full_20261008/README.md)与[19案准备](../qa/campaign_persistence_faults_20261008/README.md)。
+
+完整后续仍为真实进度/玩家失败UI/pending锁/安全重试/终局gen2→cfg→ack和重启恢复、八关动态及生产运输/自然胜败奖励、全库美术UI、多尺寸/九玩法发行程序、正常时钟约10分钟性能/切换清理与Android真机。以下启动及历史记录不替代当前实际终态。
+
 ## 2026-10-08 本机完整续玩执行器独立审查已闭合，新批实际启动
 
 用户明确允许独立子代理审查新执行器。V1/V2/V3先后记录完整来源准入、LIFO工具路径、固定SHA重新赋值三项阻断，原审查全部保留；逐项修正后V4独立审查通过。当前门禁绑定5132项完整candidate/production身份、50QA/helper/原11fixture源、5031项真实基线输入及engine/native来源；49份仅LF/CRLF表达差异已在私有候选对齐并备份，唯一语义改动是原Core/Contract提案。原264/362/24、两角色ABCD和52负例流程完整保留。

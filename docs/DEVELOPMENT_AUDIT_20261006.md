@@ -1,3 +1,7 @@
+## 2026-10-08 10:40 最新办公室资格边界
+
+完整续玩V5新批实际导入0/profile守卫预期2/JSON533通过，仍未完成双角色ABCD/完整负例，候选Core/Contract未晋升。进度19案GD/producer/7 helper封存预检已完成；真实Windows文件oplock等待/追加/取消实测通过，只证明故障注入机制。Godot调试proof首轮失败、19案未native解析/执行，真实玩家UI/终局落盘/重启恢复/奖励一次性及其余计划均保持开放。[最新实际来源](../qa/campaign_persistence_faults_20261008/README.md)。
+
 <!-- campaign-units-v19d-current -->
 ## 2026-10-07 两关真实Unit图/矿点引用/船体定义复验通过
 

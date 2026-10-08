@@ -42,6 +42,8 @@ python -X utf8 -B tools/run_office_campaign_restore_qa.py --preparation D:/Codex
 
 ## 后续目标保持完整
 
+10:40接续：当前完整V5已实测导入0/私有profile守卫预期2/JSON533，OwnedSlot前保持同一批自然等待。下一阶段原19案GD与控制器已经编写、全ID/固定源码/7 helper封存预检通过；Windows实际文件oplock等待/追加/取消通过。Godot协议首轮未命中断点的失败保留，单冒号修正须在当前完整批终态后独立新UUID复验；未native解析/运行19案，未开放玩家入口或晋升Campaign提案。详细来源和继续参数见[真实故障准备](../qa/campaign_persistence_faults_20261008/README.md)。
+
 完成新本机全链后再处理真实章节语义、正常非QA的进度持久写盘、19故障、失败UI/pending锁/安全重试及跨进程恢复；继续八关动态、生产/船体运输、自然胜败和奖励一次、全库美术与完整UI流程、同版九玩法发行程序、正常时钟约10分钟尾帧与切换清理、Android手机和平板实际验收。
 
 本机普通启动通过不代表上述事项完成，也不开放战役玩家继续入口。每批修正、实际验证、交接及白名单源码同步按现行AGENTS执行。

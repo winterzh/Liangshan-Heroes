@@ -1,3 +1,9 @@
+## 2026-10-08 10:40 19案组件测试的实际准入
+
+新增19案GD/producer及Windows独占oplock helper/probe。`python -X utf8 -B tools/run_campaign_persistence_fault_matrix.py`只预检原19ID与固定Campaign/matrix SHA，不启动Godot。完整运行还必须带成功Godot `--protocol-receipt`、当前helper实际Windows `--oplock-receipt`、`--source-preflight qa/campaign_persistence_faults_20261008/matrix_source_preflight_v2.json`与真实基线；当前仅Windows proof已实测，Godot协议尚待新UUID复验，因此不同时启动第二批。
+
+Windows proof可独立复验`python -X utf8 -B tools/run_windows_oplock_probe.py --run`，它只创建自己的新临时文件并验证原生等待/写入/取消，不启动Godot、不证明ConfigFile或19案。实际收据和源封存见[故障QA](../qa/campaign_persistence_faults_20261008/README.md)。正常玩家启动、正式Campaign/Battle源码和平台发布入口未变。
+
 ## 2026-10-08 10:15 完整续玩当前使用 V5 门禁
 
 当前新批命令绑定 `complete_inputs_seal_v5.json` 和 `OFFICE_FULL_INDEPENDENT_REVIEW_V5.json`；producer/seal/preparation三SHA均经用户授权的独立复审。V4已实际失败终止，JSON533/OwnedSlot76仅为那一批的前序通过，不能沿用为全矩阵完成。新批office_full_8499098a使用新UUID/profile，只有启动前无自有子进程的竞争会释放锁再自然等待；启动后仍失败终止。实际来源/命令/收据见[完整QA](../qa/office_campaign_full_20261008/README.md)。
