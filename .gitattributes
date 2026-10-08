@@ -882,3 +882,9 @@ qa/office_baseline_20261008/** -text -whitespace
 tools/align_office_candidate_sources.py -text -whitespace
 tools/seal_office_campaign_inputs.py -text -whitespace
 qa/office_campaign_full_20261008/** -text -whitespace
+
+# Preserve real debugger wire evidence and private fault-test source bytes.
+tools/godot_debug_wire.py -text -whitespace
+tools/campaign_fault_debug_probe.gd -text -whitespace
+tools/run_campaign_debug_fault_probe.py -text -whitespace
+qa/campaign_persistence_faults_20261008/** -text -whitespace

@@ -1,0 +1,75 @@
+{
+  "schema": "debug_wire_offline_v2",
+  "complete": true,
+  "checks": [
+    {
+      "packet_hex": "00000000",
+      "expected": null,
+      "pass": true
+    },
+    {
+      "packet_hex": "0100000001000000",
+      "expected": true,
+      "pass": true
+    },
+    {
+      "packet_hex": "02000000ffffffff",
+      "expected": -1,
+      "pass": true
+    },
+    {
+      "packet_hex": "040000000300000061626300",
+      "expected": "abc",
+      "pass": true
+    },
+    {
+      "packet_hex": "1c0000000200000002000000050000000100000000000000",
+      "expected": [
+        5,
+        false
+      ],
+      "pass": true
+    },
+    {
+      "packet_hex": "18000000",
+      "refused": true
+    },
+    {
+      "packet_hex": "1c000000ffffff7f",
+      "refused": true
+    },
+    {
+      "packet_hex": "0400000008000000616263",
+      "refused": true
+    },
+    {
+      "packet_hex": "02000000",
+      "refused": true
+    },
+    {
+      "packet_hex": "0000000000000000",
+      "refused": true
+    },
+    {
+      "fragmented_TCP_timeout_preserves_packet": true
+    },
+    {
+      "AST": "godot_debug_wire.py",
+      "sha256": "41703c88628a3fa473db00d8eeb79e87e6c2f250b0dc243a951b8295973e0c35",
+      "pass": true
+    },
+    {
+      "AST": "run_campaign_debug_fault_probe.py",
+      "sha256": "cf844811c1c1445c5bc3d656bb7378a81de1d4b687ce0f1208c2fa3c13160850",
+      "pass": true
+    },
+    {
+      "AST": "run_office_campaign_restore_qa.py",
+      "sha256": "dbf313280333960f7e17e374675ff75e764ae5bf175141cfc8e1163dea6f9f03",
+      "pass": true
+    }
+  ],
+  "native_started": false,
+  "protocol_runtime_qualified": false,
+  "fault_matrix_qualified": false
+}

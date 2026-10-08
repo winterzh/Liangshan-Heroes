@@ -2,7 +2,7 @@
 
 ## 新完整执行器当前入口
 
-V1—V3独立失败审查均保留，三项来源/工具解析阻断修复后V4闭合。当前执行器还要求 `--source-bridge`，独立review须同时绑定producer/preparation/source-bridge三个SHA。两端5132项完整runtime、50份QA来源和实际基线已逐项核对；当前唯一新批已启动并等待自然空闲，运行资格依它的后续实际结果。[新审查与启动QA](../qa/office_campaign_full_20261008/README.md)。以下首轮准备描述保留当时状态。
+V1—V3独立失败审查保留；V4实际JSON533/OwnedSlot76通过，但A启动前竞争导致整批失败退出，锁已释放。V5只在尚无自有子进程时释放锁重等自然空闲，启动后原失败策略不变，用户授权独立复审通过。当前唯一新批office_full_8499098a/PID37484已启动；必须按它的真实后续终态判断。执行器要求 `--source-bridge`，独立review同时绑定producer/preparation/source-bridge三个SHA，两端5132项runtime/50QA及实际基线核对保持。[新审查与启动QA](../qa/office_campaign_full_20261008/README.md)。以下首轮准备描述保留当时状态。
 
 完整目标仍为 `DEVELOPMENT_PLAN.md` 和 `DEVELOPMENT_AUDIT_20261006.md` 的全部未完成项。
 
@@ -30,12 +30,12 @@ V1—V3独立失败审查均保留，三项来源/工具解析阻断修复后V4�
 1. 本机已完成基线收据 `--baseline`，引擎SHA与该收据一致；真实稳定4.6.3版本取原生报告，不在共享引擎占用时另起version进程。
 2. 新执行器独立审查 `--independent-review`：schema为 `office_campaign_restore_independent_review_v1`，`independent=true`、`static_api_closure_passed=true`、`approved_stages=["full"]`，精确绑定当前producer和preparation SHA。旧A-only审查不能替代，新工具不自动写批准文件。
 3. 本次新的有界 `--deadline-utc`；它仅控制这次测试批的结束，不缩小完整开发目标。旧06:00截止和旧物理E盘cache/profile/PID不复用。
-4. 新UUID私有运行目录。每个原生阶段前持续自然空闲60秒，完整源码/私有输入/原生依赖守卫；其它Godot恢复占用时只停止自己这一批并保存失败，不控制其它项目。
+4. 新UUID私有运行目录。每个原生阶段前持续自然空闲60秒，完整源码/私有输入/原生依赖守卫；自有子进程启动前竞争只释放自己的锁并重等，启动后其它Godot恢复占用仍终止自己整批并保留失败。
 
 只读预检示例：
 
 ```powershell
-python -X utf8 -B tools/run_office_campaign_restore_qa.py --preparation D:/CodexTemp/lsh-office-candidate-preparation-20261008/preparation.json --source-bridge D:/CodexTemp/lsh-office-candidate-preparation-20261008/complete_inputs_seal_v4.json --godot <本机Godot.exe>
+python -X utf8 -B tools/run_office_campaign_restore_qa.py --preparation D:/CodexTemp/lsh-office-candidate-preparation-20261008/preparation.json --source-bridge D:/CodexTemp/lsh-office-candidate-preparation-20261008/complete_inputs_seal_v5.json --godot <本机Godot.exe>
 ```
 
 加 `--run` 之前须具备上述实际收据和新审查。当前本机准备文件与侧车清单分别在 `D:/CodexTemp/lsh-office-candidate-preparation-20261008/`，Git归档副本见QA。原生包按生产vendor清单逐文件核验后供给候选；不上传vendor二进制、编辑器缓存、玩家/登录数据或导出包。

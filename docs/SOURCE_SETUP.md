@@ -1,3 +1,9 @@
+## 2026-10-08 10:15 完整续玩当前使用 V5 门禁
+
+当前新批命令绑定 `complete_inputs_seal_v5.json` 和 `OFFICE_FULL_INDEPENDENT_REVIEW_V5.json`；producer/seal/preparation三SHA均经用户授权的独立复审。V4已实际失败终止，JSON533/OwnedSlot76仅为那一批的前序通过，不能沿用为全矩阵完成。新批office_full_8499098a使用新UUID/profile，只有启动前无自有子进程的竞争会释放锁再自然等待；启动后仍失败终止。实际来源/命令/收据见[完整QA](../qa/office_campaign_full_20261008/README.md)。
+
+真实Campaign故障测试工具目前只准备调试协议，`python -X utf8 -B tools/run_campaign_debug_fault_probe.py` 是不启动引擎的预检。不要与完整批次同时加 `--run`；协议首轮失败与单冒号修正记录见[故障准备](../qa/campaign_persistence_faults_20261008/README.md)，未替代19案或真实进度资格。
+
 ## 2026-10-08 完整续玩后继必须绑定完整输入门禁
 
 新CLI额外要求 `--source-bridge <complete_inputs_seal_v4.json>`；独立review必须同时绑定producer/preparation/source-bridge三SHA。`tools/align_office_candidate_sources.py`只对齐候选和实测Main之间的LF/CRLF差异，保存原字节；`tools/seal_office_campaign_inputs.py`将完整runtime及50条QA/helper/11fixture源写为不可变门禁。两端5132项和仅两份语义变更已实核，V4独立静态full审查通过。完整命令、截止和观察到的唯一活批见[新QA](../qa/office_campaign_full_20261008/README.md)。

@@ -1,5 +1,15 @@
 # 公司完整续玩后继：独立静态审查与实际启动
 
+## 当前 V5 与实际 V4 失败
+
+V4 实际完成导入（PID5752/退出0）、私有 profile 拒绝守卫（PID8416/预期退出2）、JSON533（PID30036/退出0）与 OwnedSlot76（PID27600/退出0）。办理半程 A 尚未创建子进程时，另一引擎进入；整批退出1、complete=false、锁释放。实际 producer PID6416 已确认不存在。`actual_failed_v4/`保存整批/逐阶段收据、日志和两份报告原字节，旧profile留在工程外，不复用。
+
+V5 只修正启动前竞争：尚无自有子进程时释放自己的锁，回到连续自然空闲60秒；启动后的原检查/失败策略完整保留。用户允许的同一独立审查子代理已比较原消费者 AST，V5 full 静态通过，审查SHA `c742d44e…`；producer `dbf31328…` 和 seal_v5 `b16aeb4d…` 精确绑定。
+
+新的唯一完整批为 `D:/CodexTemp/lsh-office-restore-20261008/office_full_8499098a`，producer实际PID37484，session28901。`ACTUAL_LAUNCH_V5.json` 保存实际命令，新批截止UTC2026-10-08T08:15:02.308150Z；它仅约束本测试批。`source_snapshot_v5/`与`delivery_v5.json`封存启动来源。原V1—V4来源/审查保持。V4前序通过不继承成V5全链通过，继续只轮询实际活批；所有完整计划仍开放。
+
+以下V4启动文字保留为历史，当前以本段及新批实际终态为准。
+
 V1、V2、V3为真实未通过的独立审查，保留三项来源/工具解析问题与原pins。修正后的V4独立审查 `static_api_closure_passed=true`、`approved_stages=["full"]`，绑定实际producer `7de38d40…`、原preparation及seal_v4 `b59eebf5…`。这仅是开始完整运行的源准入，不是原生测试通过。
 
 新完整来源表包含两端各5132项runtime、50条QA/helper/11fixtures源；真实5031份启动基线、引擎与native依赖也由独立审查核对。49个非提案文件只有LF/CRLF表示差异，候选已精确对齐并保留原字节。只有Core/UnitContract两项语义提案，Main正式代码未变化。

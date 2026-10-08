@@ -1,3 +1,7 @@
+## 2026-10-08 10:15 完整续玩 V5 与真实故障协议来源
+
+`qa/office_campaign_full_20261008/actual_failed_v4/`保留实测JSON533/OwnedSlot76及A未启动的整批失败；V5审查、seal、实际argv和source_snapshot_v5封存新UUID全链。`qa/campaign_persistence_faults_20261008/`新增官方标签协议源、首轮真实失败与说明；对应tools调试wire/probe只为未来19案提供协议准备，尚无19案资格。[公司续做](OFFICE_DEVELOPMENT_20261008.md)。
+
 ## 2026-10-08 完整续玩独立审查与来源封存
 
 - `qa/office_campaign_full_20261008/`：V1—V3失败审查、V4闭合审查、完整原始来源表、当前工具源码快照和实际启动命令。

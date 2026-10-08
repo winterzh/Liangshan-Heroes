@@ -1,0 +1,41 @@
+{
+  "schema": "campaign_owned_debugger_fault_probe_v1",
+  "complete": false,
+  "run": "D:\\CodexTemp\\lsh-campaign-faults-20261008\\debug_probe_7a3c2009",
+  "nonce": "402cb937d41c4ff8b385ecd3ab53d0fe",
+  "engine_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+  "script_sha256": "8d564bfc18741aa5643c7fc6ce700d4b94329185d12e7525140641357b69fda3",
+  "breakpoint_line": 22,
+  "production_code_patches": 0,
+  "cfg_return_values_simulated": false,
+  "fault_matrix_qualified": false,
+  "messages": [
+    {
+      "name": "set_pid",
+      "thread": 1,
+      "data": [
+        16364
+      ],
+      "packet_sha256": "065c1e6e9192632c8d0d4bab96b2e79153ed1b053e218dc6631c0ddfb1b70113"
+    }
+  ],
+  "mutations": [],
+  "command": [
+    "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+    "--path",
+    "D:\\CodexTemp\\lsh-campaign-faults-20261008\\debug_probe_7a3c2009\\project",
+    "--headless",
+    "--remote-debug",
+    "tcp://127.0.0.1:62047",
+    "--breakpoints",
+    "res://tools/campaign_fault_debug_probe.gd::22",
+    "--script",
+    "res://tools/campaign_fault_debug_probe.gd"
+  ],
+  "pid": 16364,
+  "exit_code": 0,
+  "process_terminal": true,
+  "log_sha256": "eacd08a5d940aff504fcf3505589478d0858d8548a8d1755cde9fa91a5cd7adc",
+  "failure": "RuntimeError('Actual ConfigFile did not observe controlled real file mutation')",
+  "lock_released": true
+}
