@@ -1,3 +1,7 @@
+## 2026-10-09：首次／重复发布部件、完整标签与第四批终态原档
+
+新增 tools/campaign_natural_terminal_exports_v1.py、campaign_natural_terminal_runtime_v1.py、prepare_campaign_first_repeat_labels_v1.py；恢复QA新增三个snapshot、NATURAL_FIRST_REPEAT_RUNTIME_SOURCE_SPEC/预备收据/可复现人工host脚本及结果、ORIGINAL19_FIRST_REPEAT_COMPLETE_LABEL_CONTRACT_V1.json。新增第四完整批失败索引/六原文件目录和后继拒绝该终态prior的只读记录。部件只source static/stages[]，原完整批已退出1；旧START/A单阶段原件保留，不上传profile。
+
 ## 2026-10-09：首次／重复自然终局候选与第四批 Lu A 原件
 
 恢复QA新增 original19_first_repeat_candidate_v1/（GD/SOURCE/17项HOST_SOURCE_PREFLIGHT/独立预备收据），以及 DURABLE_CHAIN_V12_FOURTH_RUN_LU_A_OBSERVATION_V1.json、actual_durable_chain_v12_r4_lu_a/ 原 report/log。前者仅source static/stages[]，后者为本批 A 实际305项通过原件；无profile上传，不替代全61和原19资格。

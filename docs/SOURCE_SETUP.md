@@ -1,3 +1,15 @@
+## 2026-10-09：第四完整批真实中断；首次／重复终局发布组件预审通过
+
+完整第四 V12 run8fe7b18b/session14695 已实际退出1，complete=false、lock_released=true。冷导入及 Lu A 原305项通过结果保留；Lu_world PID7688 运行约380秒时遇外部盲盒引擎，实际未完成，失败为 `Foreign engine after owned child start`。原 receipt/checkpoint/identity 和三份日志六文件逐字节归档到 `actual_foreign_interrupted_durable_chain_v12_r4/`，索引为 `ACTUAL_FOREIGN_INTERRUPTION_FULL_V12_R4.json`。之前START/Lu A记录只为历史观察，不能证明全链通过或当前存活。本轮没有活跃水浒原生批，第五批未启动。
+
+真实第四终态 receipt 已通过后继 V3 source_spec 只读调用验证为拒绝，见 `FOURTH_FAILED_PRIOR_SUCCESSOR_GATE_REJECTION_V1.json`。单独 A 通过不满足成功完整61前置，未创建新 seal/profile/原生批。原工程与测试档案保留；完整原生验收仍须整批共享引擎串行窗口，跨聊天协调许可仍待回复，没有向其他聊天发送消息或控制他项。
+
+新增 natural_terminal_exports_v1 与 natural_terminal_runtime_v1 部件及 exact snapshot。仅允许 first/repeat 三份原始JSON和两次restart各两份；原nonce-stage PID/nonce/SHA marker首次字节冻结、Windows no-replace发布逻辑保持。固定四mode/GD命令和1800秒上限，Popen前精确校验output/profile/nonce、原post-cold完整identity、Windows环境别名和已发布first/repeat原handoff token；实际poll发布，最终集合/log原pin；原清理handler逐AST相同，cold直接继承原phase，没有CLI或自行准入。
+
+SOURCE_SPEC_V1固定17 pins/21根导入边（所有已pin Python连旧publisher比较共25条闭合）。独立部件预审收据 SHA `bf15305276c459193516c14f6ea61f7fbfee60ad37f952f7e14cd7c9c1ac91c4`，static_api_closure_passed=true/stages=[]，无新增确定阻断。可复现29项我方与6项独立纯host检查仅为synthetic，未构造真实Popen/Godot或证明活nativePID所有权，不能计为原生通过。
+
+新增完整有序标签 builder/contract/snapshot：first74、repeat80、两restart各21，ready52/57，六identity字段、八演员和11→19普通订单全部保留。独立审查仅对源码重建合同，不称这些为实际通过数量。仍须完整有序host消费者、原CFG/两token三代原件持续核对、完整producer及成功61 prior后的精确执行准入；正式恢复源、原19/UI/SDK/内容/持续性能/Android真机仍未完成，无 main 合并或 Steam 发布。
+
 ## 2026-10-09：Lu A 实际305项通过与首次／重复终局源码候选
 
 完整第四 V12 原 run8fe7b18b/session14695 已完成 cold_import 和 lu_a_single_save。Lu A PID5224/nonce846a793172b54059aed2a14ef974ef1c 实际退出0、错误0、complete=true；原报告305项全 passed，SHA `35b1421448a64f72c7a2133e82bd333168429cfb243d813aad75858e505c8107`，原日志实际标记 `DAMING_RETREAT_V25_COMPLETE A_single_save 305 true`。报告与日志逐字节归档到 `actual_durable_chain_v12_r4_lu_a/`，索引为 `DURABLE_CHAIN_V12_FOURTH_RUN_LU_A_OBSERVATION_V1.json`。仅证明原 A 单安全磁盘场景；全61仍未完成，不能转授原19/回归/UI/SDK资格。原会话已进入 lu_world，继续观察实际进程和终态。
