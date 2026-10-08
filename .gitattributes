@@ -877,3 +877,8 @@ tools/workstation_startup_probe.gd -text -whitespace
 tools/prepare_office_campaign_qa.py -text -whitespace
 tools/run_office_campaign_restore_qa.py -text -whitespace
 qa/office_baseline_20261008/** -text -whitespace
+
+# Complete office source bridge and independently reviewed full successor.
+tools/align_office_candidate_sources.py -text -whitespace
+tools/seal_office_campaign_inputs.py -text -whitespace
+qa/office_campaign_full_20261008/** -text -whitespace

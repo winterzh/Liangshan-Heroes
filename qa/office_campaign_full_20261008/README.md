@@ -1,0 +1,13 @@
+# 公司完整续玩后继：独立静态审查与实际启动
+
+V1、V2、V3为真实未通过的独立审查，保留三项来源/工具解析问题与原pins。修正后的V4独立审查 `static_api_closure_passed=true`、`approved_stages=["full"]`，绑定实际producer `7de38d40…`、原preparation及seal_v4 `b59eebf5…`。这仅是开始完整运行的源准入，不是原生测试通过。
+
+新完整来源表包含两端各5132项runtime、50条QA/helper/11fixtures源；真实5031份启动基线、引擎与native依赖也由独立审查核对。49个非提案文件只有LF/CRLF表示差异，候选已精确对齐并保留原字节。只有Core/UnitContract两项语义提案，Main正式代码未变化。
+
+执行器继承原固定四模块的真实完整消费者：JSON533、OwnedSlot76、办理半程ABC39/351/342、Lu-first/Shi-first两份真实A、各world264/component362/live24及ABCD自然终局/新进程旧槽拒绝，合计52负例进程。固定pin持续检查，不重新以漂移字节建立基准。新冷导入只可添加有对应原源文件的UID/import描述，原源码/native bytes必须不变；随后整个身份封存。
+
+`ACTUAL_LAUNCH_V4.json` 保存实际argv和本次6小时批次截止。唯一活批为 `D:/CodexTemp/lsh-office-restore-20261008/office_full_4d0eefc5`，观察时实际producer PID6416存活、仍在自然空闲等待，原生阶段尚未开始。后续必须轮询同一session/实际PID与其终态，不能因观察超时重启，也不能把旧审查或准备判为运行通过。原始运行日志/profile/receipt留在工程外，完成或失败后按实际原字节另归档。
+
+`delivery.json` 为此次静态来源交付SHA；`source_snapshot_v4/`为实际启动执行器和封存工具字节。旧首版源码在 `qa/office_baseline_20261008/source_snapshot/` 保持历史，不替换为当前版本。
+
+完整目标仍含真实进度落盘/19故障、玩家错误反馈与恢复、八关动态及生产运输、美术UI、九玩法发行程序、正常时钟约10分钟性能和Android真机。当前 `runtime_qualified=false`。

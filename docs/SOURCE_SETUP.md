@@ -1,3 +1,7 @@
+## 2026-10-08 完整续玩后继必须绑定完整输入门禁
+
+新CLI额外要求 `--source-bridge <complete_inputs_seal_v4.json>`；独立review必须同时绑定producer/preparation/source-bridge三SHA。`tools/align_office_candidate_sources.py`只对齐候选和实测Main之间的LF/CRLF差异，保存原字节；`tools/seal_office_campaign_inputs.py`将完整runtime及50条QA/helper/11fixture源写为不可变门禁。两端5132项和仅两份语义变更已实核，V4独立静态full审查通过。完整命令、截止和观察到的唯一活批见[新QA](../qa/office_campaign_full_20261008/README.md)。
+
 ## 2026-10-08 公司本机启动基线已实测
 
 已在官方Godot4.6.3上验证当前普通源码导入、180帧启动与真实菜单绘制。正常启动仍使用既有run_local，不需要原生QA依赖。可复验 `python -X utf8 -B tools/run_workstation_baseline.py --run`；工具等待共享引擎连续自然空闲60秒、采用新独立APPDATA并保留日志/截图/原生终态。本次证明普通启动，完整续玩资格另测。

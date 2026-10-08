@@ -1,3 +1,8 @@
+## 2026-10-08 完整续玩独立审查与来源封存
+
+- `qa/office_campaign_full_20261008/`：V1—V3失败审查、V4闭合审查、完整原始来源表、当前工具源码快照和实际启动命令。
+- `tools/align_office_candidate_sources.py`、`tools/seal_office_campaign_inputs.py`：本机完整候选字节桥和不可变QA/fixture来源门禁。
+
 ## 2026-10-08 公司本机开发入口
 
 - `docs/OFFICE_DEVELOPMENT_20261008.md`：本机已验证基线、独立候选与完整续玩新批要求。

@@ -1,5 +1,9 @@
 # 公司本机继续开发（2026-10-08）
 
+## 新完整执行器当前入口
+
+V1—V3独立失败审查均保留，三项来源/工具解析阻断修复后V4闭合。当前执行器还要求 `--source-bridge`，独立review须同时绑定producer/preparation/source-bridge三个SHA。两端5132项完整runtime、50份QA来源和实际基线已逐项核对；当前唯一新批已启动并等待自然空闲，运行资格依它的后续实际结果。[新审查与启动QA](../qa/office_campaign_full_20261008/README.md)。以下首轮准备描述保留当时状态。
+
 完整目标仍为 `DEVELOPMENT_PLAN.md` 和 `DEVELOPMENT_AUDIT_20261006.md` 的全部未完成项。
 
 ## 当前实际结果
@@ -31,7 +35,7 @@
 只读预检示例：
 
 ```powershell
-python -X utf8 -B tools/run_office_campaign_restore_qa.py --preparation D:/CodexTemp/lsh-office-candidate-preparation-20261008/preparation.json --godot <本机Godot.exe>
+python -X utf8 -B tools/run_office_campaign_restore_qa.py --preparation D:/CodexTemp/lsh-office-candidate-preparation-20261008/preparation.json --source-bridge D:/CodexTemp/lsh-office-candidate-preparation-20261008/complete_inputs_seal_v4.json --godot <本机Godot.exe>
 ```
 
 加 `--run` 之前须具备上述实际收据和新审查。当前本机准备文件与侧车清单分别在 `D:/CodexTemp/lsh-office-candidate-preparation-20261008/`，Git归档副本见QA。原生包按生产vendor清单逐文件核验后供给候选；不上传vendor二进制、编辑器缓存、玩家/登录数据或导出包。
