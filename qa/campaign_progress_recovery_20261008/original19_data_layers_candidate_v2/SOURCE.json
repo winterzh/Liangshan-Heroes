@@ -1,0 +1,75 @@
+{
+  "schema": "original19_data_layers_source_candidate_v2",
+  "candidate": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\original19_data_layers_candidate_v2\\campaign_original19_data_layers_v2.gd",
+    "bytes": 15998,
+    "sha256": "78b5496a2e1166902cc192ba85addcf2484529fefa2ed7172160a344c9568726"
+  },
+  "original_source": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\tools\\campaign_persistence_fault_matrix.gd",
+    "bytes": 17380,
+    "sha256": "b755b358f095634d5b78865d78633d497fa7046c224e6be8da405b695ea7d677"
+  },
+  "cases": [
+    "true_new_missing_cfg",
+    "best_single_run_no_union",
+    "invalid_no_unlock",
+    "legal_unknown_variant_preservation",
+    "unsupported_object_or_script_container",
+    "cycle_or_overdepth"
+  ],
+  "runtime_sources": [
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\campaign.gd",
+      "bytes": 22806,
+      "sha256": "3e7257e412e65ffc012d3dfd5d0392d4d96a5ce32cbdf1634caf221d2e88060b"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\run_campaign_progress_projection.gd",
+      "bytes": 5723,
+      "sha256": "6c627f95c44f6876895f012b5e6a6859500b73d391f92d7bf46f41f4b0d1e68b"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\run_campaign_progress_intent.gd",
+      "bytes": 10291,
+      "sha256": "a64add7d20999f0c306006a08a7fad7d263e252d8aae430424bd97ff4049f894"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\run_campaign_cfg_transaction.gd",
+      "bytes": 27586,
+      "sha256": "71803fc42a6bef59479db5b8cf70a953716a3968e45ba1fb391eed5726a51d17"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\run_campaign_cfg_values.gd",
+      "bytes": 2640,
+      "sha256": "8d962715c19f0b9d3c045a25b5f215e9600ceeff204524fc0be630da8598eb27"
+    }
+  ],
+  "producer_implemented": false,
+  "source_reviewed": false,
+  "native_started": false,
+  "full_original19_qualified": false,
+  "other13_original_ids_still_required": true,
+  "UI_orSDK_qualified": false,
+  "case_order_reason": "One fresh private CFG first; actual transactions continue without resets; pure fixtures never provide live capability.",
+  "predecessor_source": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\original19_data_layers_candidate_v1\\campaign_original19_data_layers_v1.gd",
+    "bytes": 13302,
+    "sha256": "daa1460eb7c5446f18e29500ba271568855530c9ed79d4b6868b986472830086"
+  },
+  "predecessor_manifest": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\original19_data_layers_candidate_v1\\SOURCE.json",
+    "bytes": 2559,
+    "sha256": "5fd77557de17261084906c4a84839485103a7ae739e9fe56084eca9c909dac5c"
+  },
+  "predecessor_rejection": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\original19_data_layers_candidate_v1\\ORIGINAL19_DATA_LAYERS_PRELIMINARY_REVIEW_V1.json",
+    "bytes": 9397,
+    "sha256": "1e87b791832fd5a3cf22830ecb586162739f625d163a1a8eecc12192513ec2a1"
+  },
+  "fixes": [
+    "DATA19-API-001 builtin Projection preserved; loader variable ProgressProjection",
+    "DATA19-COVERAGE-002 genuinely missing CFG first valid partial intent/current projection/progress transaction; unknown14 physically stored before new full pure progress projection/update and all unknown semantics compare",
+    "DATA19-REFUSAL-003 exact CONTEXT/CONTEXT/OUTCOME_MISMATCH/IDS with actual before/after file SHA"
+  ]
+}

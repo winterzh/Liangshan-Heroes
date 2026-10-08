@@ -1,3 +1,12 @@
+## 2026-10-09：原19六数据层与两QA兼容源码适配
+
+原19全部ID与当前机制仍以 ORIGINAL19_R12_ADAPTATION_REQUIREMENTS_V1.json 为完整要求，未缩减为以下八项。新增 original19_data_layers_candidate_v1/ 六GD数据案例及来源，独立预备拒绝收据SHA `1e87b791832fd5a3cf22830ecb586162739f625d163a1a8eecc12192513ec2a1`：内置Projection被loader变量遮蔽；first missing和unknown-preservation只有prefs而非progress更新路径。旧V1全部保留，stages空、不运行。
+
+后继 original19_data_layers_candidate_v2/ 源GD SHA `78b5496a2e1166902cc192ba85addcf2484529fefa2ed7172160a344c9568726`：改ProgressProjection变量保留内置Projection.IDENTITY；真正missing CFG先验证partial intent并通过当前progress projection/真实事务写入；14原unknown值先实际物理保存，再用另一个valid pure full intent的progress事务更新既有CFG并逐比unknown语义。四invalid请求精确CONTEXT/CONTEXT/OUTCOME_MISMATCH/IDS与实际before-after SHA已记录。best/tied/worse/noUnion、7原unsupported类别、root0/128允许/129拒绝及alias环保留。纯数据fixture不提供Battle/Mission/settlement能力，不发布Campaign memory。当前仅源码候选、独立预备复审，尚无producer/运行准入/Native结果。
+
+original19_QA_compatibility_candidate_v1/ 两原QA ID GD SHA `3bab991f9347f2a5383f200be1a520c93440176ddb4555de58c6161b8de38ebe` 已预备源码核准，review SHA `b9f14c2d0f3b0431991a5b3379eb68751aaf5b6f4ee97c7f6c220712ef988014`、stages空。每case必须不同fresh QA1进程/profile、SDK disabled；实际Campaign/Cloud节点不替换，sentinel campaign.cfg原SHA/读回与dirty/pending/revision保持。现接口legacy_save bool与QA record/cloud memory replacement按实际R12字段验证，不伪造已移除receipt。Cloud自己的private settings/language apply可能写，明确不宣称全盘无写。尚无producer、不能跑Native，不能扩为normal/UI/SDK或全19。
+
+其余11原ID（自然first/repeat、6真实文件故障、3真实回调/Cloud边界）仍需完整适配与原生运行；额外实际UI/同对象重试/source-account drift/exclusion/SDK once亦保持要求。全新V9 4eeadd45/session28289/Python44560/component28096仍同一live批，不另开Godot；尚未component或完整61终态，原回归V4与UI V5继续等待前置门禁。
 ## 2026-10-09：实际pending UI V5限定审查准入，等待同批V9全61闭合
 
 V4唯一cold日志custody遗漏已保存在 `PENDING_TERMINAL_UI_INDEPENDENT_REVIEW_V4.json`（SHA `59d11a92ea60c0b259059038f9fb6fd17928fd4d987a412f3d6874fe45d4b130`，stages空），旧源/spec/快照保持不变。V5仅在已绑定batch.integrity中遍历所有已terminal且有log_sha256的步骤，以原step.log_sha256固定登记并末次复核，补齐cold/fresh/restart全部三阶段原日志。

@@ -1,3 +1,7 @@
+## 2026-10-09：原19数据层与QA兼容源码候选
+
+恢复QA新增 original19_data_layers_candidate_v1/（GD/SOURCE/预备拒绝）、original19_data_layers_candidate_v2/（修正版GD/SOURCE，复审中）、original19_QA_compatibility_candidate_v1/（GD/SOURCE/预备review、stages空）。八原ID只有源码适配，不是原19完整运行或准入，尚无producer。
+
 ## 2026-10-09：实际pending UI V5限定收据与三阶段日志原值来源
 
 恢复QA新增PENDING_TERMINAL_UI_INDEPENDENT_REVIEW_V4.json（cold custody拒绝）、PENDING_TERMINAL_UI_SOURCE_SPEC_V5.json、pending_terminal_ui_executor_v5/双源与单点proof、PENDING_TERMINAL_UI_INDEPENDENT_REVIEW_V5.json（仅限定UI）。尚未UI运行，前置V9全61尚不满足。

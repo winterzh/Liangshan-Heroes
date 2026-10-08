@@ -1,0 +1,105 @@
+{
+  "schema": "campaign_original19_QA_compatibility_preliminary_independent_review_v1",
+  "review_version": 1,
+  "independent": true,
+  "reviewer": "office_full_review",
+  "reviewed_at": "2026-10-08T18:20:05.598462+00:00",
+  "candidate_path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\original19_QA_compatibility_candidate_v1\\campaign_original19_QA_compatibility_v1.gd",
+  "candidate_sha256": "3bab991f9347f2a5383f200be1a520c93440176ddb4555de58c6161b8de38ebe",
+  "source_manifest": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\original19_QA_compatibility_candidate_v1\\SOURCE.json",
+    "bytes": 1903,
+    "sha256": "64233ab5804ea0f91361c881eb087201330f0a4a4b53af86e4d4024eacaad5f6"
+  },
+  "source_manifest_sha256": "64233ab5804ea0f91361c881eb087201330f0a4a4b53af86e4d4024eacaad5f6",
+  "original_source": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\tools\\campaign_persistence_fault_matrix.gd",
+    "bytes": 17380,
+    "sha256": "b755b358f095634d5b78865d78633d497fa7046c224e6be8da405b695ea7d677"
+  },
+  "runtime_source_pins": [
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\campaign.gd",
+      "bytes": 22806,
+      "sha256": "3e7257e412e65ffc012d3dfd5d0392d4d96a5ce32cbdf1634caf221d2e88060b"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\steam_cloud.gd",
+      "bytes": 33188,
+      "sha256": "230c26034104b19be04b2f1533deba79dd304473ac060f021fd38eaeee354dac"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\continue_flow.gd",
+      "bytes": 31285,
+      "sha256": "20674da5a412db0cc41cc48dacfcbf619e91009a81026c735fd80e7cb5a9a16d"
+    }
+  ],
+  "static_api_closure_passed": true,
+  "source_integrity_verified": true,
+  "approved_static_sources_only": true,
+  "approved_stages": [],
+  "producer_implemented": false,
+  "full_executor_not_ready": true,
+  "native_started_by_reviewer": false,
+  "native_qualified": false,
+  "normal_persistence_qualified": false,
+  "full_original19_qualified": false,
+  "UI_qualified": false,
+  "SDK_reward_once_qualified": false,
+  "overall_goal_qualified": false,
+  "live_native_checkpoint_polled_by_reviewer": false,
+  "source_closure_reference": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\final_durable_component_transport_v1_r5\\COMPONENT_MEMBERSHIP_TRANSPORT_PRELIMINARY_REVIEW_R5.json",
+    "bytes": 45585,
+    "sha256": "2d4e8e346d2857addbbe50425a5dd3004544b220fe6228324692bfd3f0bb3daf"
+  },
+  "current_composite_GD_pins_verified": 131,
+  "actual_semantic_Core_Contract": [
+    {
+      "path": "D:\\CodexTemp\\lsh-office-candidate-20261008\\scripts\\run_battle_world_core.gd",
+      "bytes": 49463,
+      "sha256": "92b2bdac0058f9e1642d1b991c3ca353e902481d8daff990388e377597df87b1"
+    },
+    {
+      "path": "D:\\CodexTemp\\lsh-office-candidate-20261008\\scripts\\run_level8_unit_contract.gd",
+      "bytes": 8211,
+      "sha256": "b2f52bcce60b27507b498a6d32e45b5cadd3409030fcd2e1024c78dac90e90d5"
+    }
+  ],
+  "original_ID_scope": [
+    "QA_memory_only",
+    "QA_cloud_bool_compatibility"
+  ],
+  "API_and_scope_findings": [
+    {
+      "status": "passed",
+      "detail": "Loads actual current Campaign and SteamCloud nodes and checks exact scripts after real menu/startup. Both cases require CAMPAIGN_QA=1, STEAM_DISABLED=1, normal clock and private APPDATA/LOCALAPPDATA/TEMP/TMP. No replacement Cloud counter or obsolete _last_save_receipt/outcome fields are used."
+    },
+    {
+      "status": "passed",
+      "detail": "QA_memory_only calls real Campaign.record_level_result with full current three-ID Daming result, checks in-memory first seal/has_story_seal and the actual _save()==true compatibility branch. QA suppresses normal writer creation, matching current R12 API."
+    },
+    {
+      "status": "passed",
+      "detail": "QA_cloud_bool_compatibility uses the actual Cloud._default_payload/_validate_payload/_apply_profile and current Campaign.apply_cloud_progress QA branch. The owner value123456789 is an explicitly private data fixture, not SDK/account activation. Actual Campaign memory replacement and owner are checked, along with cleared pending/applying state and no normal writer."
+    },
+    {
+      "status": "passed",
+      "detail": "Each case requires campaign.cfg initially absent and writes an actual private ConfigFile sentinel with known schema/owner/records. The original SHA and fresh read of sentinel/empty progress records are checked unchanged after compatibility operations."
+    },
+    {
+      "status": "passed",
+      "detail": "Actual Cloud dirty/pending-upload/revision are captured and compared unchanged. R12 _applying guards and early QA _save/apply-cloud branches preserve this state. Source scope correctly allows actual Cloud private settings/language writes and makes no whole-disk-zero-write or durable-normal/UI/SDK claim."
+    }
+  ],
+  "future_producer_requirements": {
+    "each_original_case_new_distinct_fresh_QA1_process_and_profile": true,
+    "no_profile_reuse_or_combining_both_modes_one_process": true,
+    "exact_full_runtime_identity_source_engine_manifest_binding": true,
+    "original_case_request_report_native_log_source_and_sentinel_SHA_custody": true,
+    "actual_nonempty_complete_native_checks_and_terminal_marker_required": true,
+    "other17_original_ID_mechanisms_still_required": true
+  },
+  "findings": [],
+  "qualification_note": "Only preliminary static source compatibility for these two original QA-only IDs. There is no producer or execution admission, so stages remain empty. No Godot was run, no profile written and no live V9 checkpoint polled. The eventual QA1 outcomes cannot establish normal persistence, recovery, UI,SDK,complete19 or whole-goal qualification."
+}
