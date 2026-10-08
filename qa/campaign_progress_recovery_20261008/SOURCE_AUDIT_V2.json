@@ -1,0 +1,107 @@
+{
+  "schema": "campaign_progress_recovery_candidate_source_audit_v2",
+  "production_sources": [
+    {
+      "path": "scripts/run_local_lifecycle.gd",
+      "bytes": 6638,
+      "sha256": "e68cb817a6dcc4cc1df91caf29c07c4c4c6cfdca378f6c05335636e6a6617e00"
+    },
+    {
+      "path": "scripts/run_snapshot_store.gd",
+      "bytes": 21642,
+      "sha256": "581e638b8f0ce7cb24d5533b03ee94b99732c5cffcbf373b1a5a69a1618d8251"
+    },
+    {
+      "path": "scripts/run_world_session.gd",
+      "bytes": 16547,
+      "sha256": "b9fdd59cfe65cd5ecfb07a39041a8ad4e96594c85f5fc1fa105d52219e966a88"
+    },
+    {
+      "path": "scripts/continue_flow.gd",
+      "bytes": 19844,
+      "sha256": "a169690ba69adbc436355dfce45d5373f0f0c18ca013c09d57fbd552156df172"
+    },
+    {
+      "path": "scripts/campaign.gd",
+      "bytes": 14689,
+      "sha256": "db50f6d1c97ca26746f5fbe576487390af5d81f4af708c289155f23cca38ff02"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "bytes": 789563,
+      "sha256": "f020f434f755950d41dae9320bcdcb388359835b714f83bbd4592300514172b1"
+    },
+    {
+      "path": "scripts/campaign_mission.gd",
+      "bytes": 36624,
+      "sha256": "c4694973f9abce06792ad9eab6e3c37450d4c6138679c446c7a112ecc3db06c7"
+    },
+    {
+      "path": "scripts/run_official_restore_profile.gd",
+      "bytes": 11375,
+      "sha256": "a1791e5eb3bb7b8dffa1bdd6a2ccee274a672ae77d44b9740bf16a8c0843a42c"
+    },
+    {
+      "path": "scripts/run_content_identity.gd",
+      "bytes": 17768,
+      "sha256": "1ea430ae4dec555f18e7fd11382b24dae38ee51ae30b60096909af992019a063"
+    }
+  ],
+  "production_sources_unchanged": true,
+  "candidate_files": [
+    {
+      "path": "qa\\campaign_progress_recovery_20261008\\proposed_v2\\scripts\\run_campaign_cfg_transaction.gd",
+      "bytes": 21989,
+      "sha256": "4b1c3db62e9af94059802c24aa6b3f6d4a1ddbd27383a82949a8ec2ade3ff2d9"
+    },
+    {
+      "path": "qa\\campaign_progress_recovery_20261008\\proposed_v2\\scripts\\run_campaign_cfg_values.gd",
+      "bytes": 2640,
+      "sha256": "8d962715c19f0b9d3c045a25b5f215e9600ceeff204524fc0be630da8598eb27"
+    },
+    {
+      "path": "qa\\campaign_progress_recovery_20261008\\proposed_v2\\scripts\\run_campaign_local_lifecycle.gd",
+      "bytes": 12116,
+      "sha256": "b329eb48aa035c970f422a740a5cddcda285e8af1aed0ed06ed9783e90c2de47"
+    },
+    {
+      "path": "qa\\campaign_progress_recovery_20261008\\proposed_v2\\scripts\\run_campaign_progress_intent.gd",
+      "bytes": 10291,
+      "sha256": "a64add7d20999f0c306006a08a7fad7d263e252d8aae430424bd97ff4049f894"
+    }
+  ],
+  "local_method_closure": [
+    {
+      "path": "qa\\campaign_progress_recovery_20261008\\proposed_v2\\scripts\\run_campaign_cfg_transaction.gd",
+      "unresolved_local_underscore_calls": []
+    },
+    {
+      "path": "qa\\campaign_progress_recovery_20261008\\proposed_v2\\scripts\\run_campaign_cfg_values.gd",
+      "unresolved_local_underscore_calls": []
+    },
+    {
+      "path": "qa\\campaign_progress_recovery_20261008\\proposed_v2\\scripts\\run_campaign_local_lifecycle.gd",
+      "unresolved_local_underscore_calls": []
+    },
+    {
+      "path": "qa\\campaign_progress_recovery_20261008\\proposed_v2\\scripts\\run_campaign_progress_intent.gd",
+      "unresolved_local_underscore_calls": []
+    }
+  ],
+  "full_Godot_API_parse_verified": false,
+  "independent_review_passed": false,
+  "native_component_passed": false,
+  "normal_fresh_campaign_integration_passed": false,
+  "player_UI_pending_recovery_passed": false,
+  "cfg19_v27b_qualification_extends_to_this_candidate": false,
+  "fixed_source_findings": [
+    "v1 Base _prune retains two; v2 sibling preserves all three generations",
+    "v2 terminal settlement capability requires own commit or retained own lock; foreign writer attempt cannot grant it",
+    "Windows tag different-name rename deletes destination; cfg successor uses fixed owned backup and empty destinations",
+    "component baseline identity uses actual engine_sha256 field",
+    "debugger source/function/line/thread bound before actual stop or CFG mutation"
+  ],
+  "native_source_tag_only": true,
+  "power_loss_atomicity_qualified": false,
+  "cfg_component_preflight": "CFG_COMPONENT_SOURCE_PREFLIGHT_V3.json"
+}

@@ -1,3 +1,11 @@
+## 当前：V8-R2与CFG受控替换源码候选
+
+完整V8已因B期间外部Godot进入终止，原失败保存；同一批准来源用新UUID/profile开启V8-R2 `office_full_e8f3fca4`，当前实际导入/守卫/JSON533通过，其余门禁待本批终态。未测试到新守营策略，未沿用旧成功补齐全链。[当前完整QA](../qa/office_campaign_full_20261008/README.md)。
+
+新增v2日志后继、CFG数据语义helper和受控替换候选、四案例八进程的真实CFG/中断/CAS组件工具。源码检查发现并修正父层两代保留、外部writer尝试不能授予结算能力、Windows覆盖rename、whole-file encode转义和备份前再次SHA检查。当前8源封存V5/9生产来源回读不变，只有Python/方法/来源检查，尚未Godot解析/执行/独立审查，不安装生产。详情见[组件矩阵](../qa/campaign_progress_recovery_20261008/CFG_COMPONENT_PLAN.md)。
+
+已通过的旧v27b19案/194检查组件资格保持；不能延伸为新CFG候选、gen2→cfg→ack、玩家UI/安全重试或自然战役/奖励通过。原完整开发/发行/性能/真机计划继续。
+
 ## 2026-10-08 11:49：19案组件通过与完整续玩新批
 
 真实19案V4 `campaign_19_7aac9db9`完成194检查、零失败，runtime PID43016终态退出0、锁释放。Godot调试断点和Windows原生oplock已分别实测，矩阵内真实ConfigFile.load期间文件变化也命中；原V2/V3失败保持。该资格仅属于QA v27b持久化组件，正式Campaign/Battle未修改。[实际组件证据](../qa/campaign_persistence_faults_20261008/README.md)。

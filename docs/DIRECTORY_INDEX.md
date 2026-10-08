@@ -1,3 +1,10 @@
+## 当前新增CFG组件与V8-R2来源
+
+- `qa/campaign_progress_recovery_20261008/proposed_v2/`、SOURCE_AUDIT_V3与CFG_COMPONENT_SOURCE_PREFLIGHT_V5：四GD候选及完整固定来源，未native/未生产。
+- `tools/campaign_cfg_transaction_probe.gd`、`tools/run_campaign_cfg_transaction_probe.py`：真实CFG/两处精确中断/外部CAS，四案例八进程；完整续玩活批结束前不启动。
+- `qa/office_campaign_full_20261008/actual_failed_v8/`：外部Godot进入B后的原失败整批/逐阶段/报告。
+- `qa/office_campaign_route_20261008/ACTUAL_LAUNCH_V8_R2.json`：相同V8批准来源下新UUID全链命令。
+
 ## 2026-10-08 11:49：新增真实结果与进度恢复候选
 
 - `qa/campaign_persistence_faults_20261008/actual_matrix_v4/`与`ACTUAL_19_COMPONENT_PASS_V4.json`：19案/194检查真实组件通过；旧失败/来源快照保留，没有CFG或玩家profile入Git。

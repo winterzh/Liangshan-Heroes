@@ -1,3 +1,9 @@
+## 当前V8-R2：V8已终止，新批不继承前序资格
+
+`office_full_933181f4`真实导入/守卫/JSON533/OwnedSlot76/办理半程A39通过，B进程期间另一Godot进入，整批退出1、锁释放；原日志/profile原样保存，收据/逐阶段/报告归档`actual_failed_v8/`。没有测试到新守营路线，不宣称策略失败或通过。
+
+相同已批准producer/seal_v8/v28路线未改，用全新UUID/profile启动`office_full_e8f3fca4`；`../office_campaign_route_20261008/ACTUAL_LAUNCH_V8_R2.json`保存实际命令与新截止UTC2026-10-08T10:17:07.645475Z。当前真实导入PID39084退出0、守卫PID7464预期2、JSON PID11812/533退出0；其余阶段尚待实际结果，不沿用旧批成功。当前观察session40788仍活。以下旧“唯一新批”属于历史。
+
 ## 2026-10-08 11:49：独立V8静态通过，新完整批启动
 
 当前唯一新批 `office_full_933181f4`，全新UUID/profile，实际argv与新6小时截止UTC2026-10-08T09:49:16.717669Z封存于 `../office_campaign_route_20261008/ACTUAL_LAUNCH_V8.json`。启动时等待共享Godot连续自然空闲60秒，不启动第二批，不控制其它任务。完整结果仍以这个批次实际终态为准。

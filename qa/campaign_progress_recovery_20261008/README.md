@@ -1,3 +1,11 @@
+## 当前v2后继与受控CFG组件候选
+
+`proposed/`原v1与SOURCE_AUDIT_V1原样保留；其三代模型会受到父存储默认只留两代的影响，不可作为native准入。`proposed_v2/`四文件候选修正三代保留、只有本对象实际提交/持有原锁才取得结算能力，新增v27b原数据Variant/语义helper和受控CFG替换。
+
+Windows官方tag的不同名rename会先删目的文件，候选先将旧CFG移入自有固定备份、再向空目的安装；全流程固定元数据/SHA、深拷贝ConfigFile、真实save/fresh load/完整语义回读。旧文件未知字段、偏好及无关record保留，backup/install窗口可由新进程按同事务恢复。备份前重新读SHA，拒绝外部改动时保留公开CFG。全文件encode_to_text缺少章节名转义，仅用于大小估计，不再作为恢复序列化。
+
+当前仅Python解析/固定依赖与源检查，全部9份生产源码SHA未变；没有安装正式工程、没有Godot解析/native资格、没有独立审查。当前源为`CFG_COMPONENT_SOURCE_PREFLIGHT_V5.json`与`SOURCE_AUDIT_V3.json`，完整案例和执行约束见[组件计划](CFG_COMPONENT_PLAN.md)。v27b旧19案通过不延伸到这些新候选。完整协调器、入口/扫描、pending/UI/prefs/cloud、自然终局及gen2→cfg→gen3 ack仍未集成。
+
 # 战役终局进度恢复：v2 日志基础候选
 
 当前只有两份新GD候选，放在本目录`proposed/scripts/`，没有安装到正式工程或任何正在运行的QA。尚未经过独立审查、Godot解析或原生测试；不是玩家恢复功能交付。

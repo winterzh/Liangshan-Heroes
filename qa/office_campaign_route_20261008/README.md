@@ -1,3 +1,7 @@
+## 当前V8-R2真实范围
+
+V8全批在B独立恢复时因外部Godot进入终止，尚未到新守营策略。相同静态批准的三份v28来源与producer/seal不变，新全批`office_full_e8f3fca4`使用新profile；原命令另存ACTUAL_LAUNCH_V8_R2。新策略真实效果与完整双角色ABCD仍未资格。
+
 ## 2026-10-08 11:49：V8批准与新批
 
 独立V8静态full审查通过，实际审查JSON及seal_v8、新argv、执行器源保存在本目录。使用v28、全新profile的完整批 `office_full_933181f4`已启动；策略效果、真实双角色ABCD和自然终局仍须实际终态证明。下方“V8进行中”保留历史。
