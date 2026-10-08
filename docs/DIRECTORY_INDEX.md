@@ -1,3 +1,15 @@
+## 2026-10-09：GDv5/helperV3独立预备收据
+
+新增GDv5目录预备收据及ORIGINAL19_DATA_EVIDENCE_PRELIMINARY_REVIEW_V3.json，均stages空/source-only，旧V2拒绝保留，无newproducer/Native资格。
+
+## 2026-10-09：原19原生子树语义与严格类型后继
+
+恢复QA新增helperV2拒绝、original19_data_layers_candidate_v5/源/manifest、完整labels V3、evidence SOURCE_SPEC_V3及HOST_SOURCE_PREFLIGHT_V3；tools新增evidence_v3 helper。GDv5/helperV3集中预备复审中、无newproducer/Native资格，旧V2拒绝原样保存。
+
+## 2026-10-09：外部中断原档与原19强证据来源
+
+恢复QA新增两actual_foreign_interrupted_durable_chain_v12/与_v12_r2/共8原文件及两索引、original19_data_layers_candidate_v3/v4/源/manifest/预备收据、ORIGINAL19_COMPLETE_LABEL_CONTRACT_V1/V2及ORIGINAL19_DATA_EVIDENCE_SOURCE_SPEC_V2。tools新增standalone evidence_v2 helper。两GD只static/stages[]，helper复审中，无新Native；当前水浒两完整批均真实失败、无active批。
+
 ## 2026-10-09：完整V12限定准入及唯一新批
 
 新增DURABLE_CHAIN_INDEPENDENT_REVIEW_V12.json，仅durable_chain_and_matrices；私有durable_chain_fb1da6e0/session53980为唯一全新完整批，未终态/未资格化，不上传工程/profile。实际审计基准219项通过与此全链边界分开记录。

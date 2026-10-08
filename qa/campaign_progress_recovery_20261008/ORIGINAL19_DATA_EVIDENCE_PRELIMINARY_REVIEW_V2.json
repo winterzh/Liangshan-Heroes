@@ -1,0 +1,90 @@
+{
+  "schema": "campaign_original19_data_evidence_preliminary_independent_review_v1",
+  "review_version": 2,
+  "independent": true,
+  "reviewer": "office_full_review",
+  "reviewed_at": "2026-10-08T20:17:08.678426+00:00",
+  "review_kind": "standalone_host_helper_source_only",
+  "helper_sha256": "8df50fdefbf63f0a4b6319008903701da94ef753405e331fcb937c5c6604fe18",
+  "source_spec_file_sha256": "d1f52760e4e39de1d6a01c88b4d7e6a04cfc562dfa53ef07bc5357000a026ece",
+  "helper_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\tools\\campaign_original19_data_evidence_v2.py",
+    "bytes": 20824,
+    "sha256": "8df50fdefbf63f0a4b6319008903701da94ef753405e331fcb937c5c6604fe18"
+  },
+  "source_spec_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\ORIGINAL19_DATA_EVIDENCE_SOURCE_SPEC_V2.json",
+    "bytes": 3843,
+    "sha256": "d1f52760e4e39de1d6a01c88b4d7e6a04cfc562dfa53ef07bc5357000a026ece"
+  },
+  "static_api_closure_passed": false,
+  "source_integrity_verified": true,
+  "actual_helper_static_import_closure_verified": true,
+  "approved_stages": [],
+  "producer_implemented": false,
+  "full_executor_not_ready": true,
+  "native_started_by_reviewer": false,
+  "native_qualified": false,
+  "full_original19_qualified": false,
+  "UI_qualified": false,
+  "SDK_reward_once_qualified": false,
+  "overall_goal_qualified": false,
+  "checked_interfaces": {
+    "source_pins_verified": 11,
+    "actual_helper_import_python_modules": 5,
+    "actual_local_import_edges": 5,
+    "missing_helper_import_pins": [],
+    "old_rejected_V1_producer_comparison_only_not_imported": true,
+    "GD_v4_source_sha256": "afe359b69727d1bdd017468bd0aed3facd12d0ede77780ab7846e9f905cc6dcf",
+    "complete_label_contract_sha256": "d79c464e04aed865f089bf61495cad85eee80f2118021c2803d8c4db399ea0d1",
+    "current_14_CFG_record_fields_and_9_string_envelope_shape_match_real_R12": true,
+    "actual_SnapshotStore_raw_canonical_JSON_has_no_added_newline": true,
+    "actual_two_record_production_prune_and_history_copy_model_match": true,
+    "expected_seven_commits_fourteen_historical_revisions_final13_14_and57_copies_match_GD": true
+  },
+  "findings": [
+    {
+      "id": "DATAEVID-TYPE-001",
+      "severity": "blocking",
+      "file": "D:\\AI项目\\水浒\\开发工程\\tools\\campaign_original19_data_evidence_v2.py",
+      "line": 126,
+      "title": "Loose Python equality does not prove preservation of original nested native types",
+      "detail": "Unknown affected future_blob and the complete level2 record are compared using dict/list ==. Python accepts True for int1 and False for int0, and int0 for False. Native JSON also erases distinctions such as String versus StringName inside raw progress. The authenticated whole-record semantics SHA binds each snapshot to its own CFG/journal, but no preserved native subtree canonical/type comparison joins the original seed to the later changed progress record. Thus type drift in an unknown subtree or other record can pass.",
+      "pure_host_reproductions": [
+        "progress(final_with_future_blob_opaque0=True,FULL,future=True) accepted",
+        "progress(final_with_level2_cleared=0,FULL,future=True) accepted",
+        "progress(final_with_level2_best_done=False,FULL,future=True) accepted"
+      ],
+      "same_type_exact_gap_other_sites": [
+        "line97 entry.document == decoded doc can accept a bool declaration for integer generation1",
+        "line155 owned_stage_cleanup == {ok:True} accepts ok=1",
+        "line176 array_builtin/key_builtin/value_builtin equality does not require exact integer types"
+      ],
+      "required_fix": "Use recursive JSON type-exact comparison for all declared documents/progress/preserved record data/expectations/cleanup, plus exact metadata field types and keysets. Export native single-value ConfigFile canonical and Variant/container metadata for every unknown progress key, unknown affected record field and whole other raw record at original seed and subsequent snapshots; compare those actual original probes before/after so JSON cannot erase StringName or nested type changes."
+    },
+    {
+      "id": "DATAEVID-REVISION-002",
+      "severity": "blocking",
+      "file": "D:\\AI项目\\水浒\\开发工程\\tools\\campaign_original19_data_evidence_v2.py",
+      "line": 82,
+      "title": "Expected retained filenames are not bound to their actual decoded revisions",
+      "detail": "records() verifies that filenames equal generation-1/generation but uses entry.revision independently for envelope verification. After all historical revisions are available, valid known g11/g12 raw documents can be replayed under g13/g14 filenames while a separately supplied known headSHA14 passes. The native GD verifies name against _verified revision, but the host does not repeat that binding.",
+      "pure_host_reproduction": "An isolated records(value_with_expected_names13_14_but_entry_revisions11_12_and_known_head14,generation14) accepted when supplied already-valid original revision bytes through a read-only copy substitute; no native/file/profile writes.",
+      "required_fix": "Bind each entry revision to the exact expected generation in the ordered pair, require entry.name == record_%010d.json for that revision, and bind declared head SHA to the actual final entry SHA and the fixed known head revision."
+    }
+  ],
+  "host_only_review_checks": {
+    "Native_or_profile_writes": false,
+    "progress_type_alias_negative_calls_executed": 3,
+    "isolated_record_replay_negative_call_executed": 1,
+    "all_four_defect_reproductions_accepted_by_V2": true,
+    "candidate_or_production_source_edited": false
+  },
+  "verified_nonblocking_parts": [
+    "labels enforces the complete ordered native labels and exact bool ok/case when supplied. The fixed source contract matches data109/QA20 and all branch-specific labels.",
+    "copy pins original declared bytes/SHA and exact controlled source/output label paths through the supplied fixed-byte suite API. Later orchestration must still validate the actual user profile/PID/nonce and runtime fields.",
+    "Raw envelope and decoded journal records use the actual nine all-string envelope and fourteen-field CFG document. Canonical payload/hash/previous-chain and full prepared/applied proposal/source/request bindings are retained.",
+    "Per-case before/after, all original fourteen legal value canonical rows and top-level metadata, exact refusal fixtures/codes, final actual CFG SHA/current13-14 pair, empty staging and exact57 evidence inventory are substantially covered. The two remaining blockers above prevent qualification."
+  ],
+  "scope_limit": "Rejected standalone helper source only; approved_stages is empty. No new producer/native or original19 acceptance is granted. Old V1 producer remains rejected and is only a pinned comparison reference; its broader imports are not invoked by this helper. V2 source/spec remains immutable for successor review."
+}
