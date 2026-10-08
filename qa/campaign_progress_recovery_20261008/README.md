@@ -1,3 +1,9 @@
+## 2026-10-08：durable链执行器候选与20项host测试
+
+V1 seal/六源快照/20项host日志及独立拒绝原样保留：DUR-CHAIN-CFG-001/ACK-002拒绝非固定CFG路径与整数布尔别名。不可变后继`DURABLE_CHAIN_SOURCE_SPEC_V2.json`逻辑SHA`653ebc6f7661574c28362edc1f6cdf99debcb6f271d47550fa2a86bec13fa965`，只修`campaign.cfg`三字段和ACK五字段严格类型。`durable_chain_executor_v2/`保存七工具快照及20＋3项host原日志/收据。V2源码预检和独立复核通过，仅准入8+52与cold import；实际批`durable_chain_65cae0c9`/session93131/自有Python10628已启动，启动绑定见`ACTUAL_DURABLE_CHAIN_LAUNCH_V2.json`。未取得整批终态或实际A资格，不重复启动。
+
+校验器由固定旧r2b2/parent源码AST保留world264/component362/live24、nullable/type/原code/layer、完整install/自然终局mandatory与hold清理谓词，单独新schema接gen3/真实CFG。来源、每阶段实际PID/nonce/日志与封存A归属均要求完整终态。实际19持久故障、JSON/OwnedSlot/半程、SDK/公开入口、导出/性能/Android保持未完成，不因20项host测试或8+52范围而缩小原目标。审查期间没有原生运行。
+
 ## 2026-10-08：264/362/24持久化矩阵后继R4静态闭合，完整输入26覆盖封存
 
 `final_durable_negative_adapters_v1/` 独立拒绝NEG-ADAPT-001/002：capture自己override守卫仍要求QA1，且override loader未初始化继承安装校验所用Lifecycle。R2修守卫并加入world264，但loader缺口保留，准确拒绝。不可变R3修两处，后继R4 `final_durable_negative_adapters_v1_r4/` 保留修复并显式固定load campaign-v2 Lifecycle/Intent；不加载或调用父natural route/drivers。

@@ -1,3 +1,7 @@
+## 2026-10-08：durable链执行器与host验证
+
+`qa/campaign_progress_recovery_20261008/durable_chain_executor_v1/`保存六个新工具的字节快照、`HOST_TESTS_V1.json`与原20项host测试日志；V1 spec与独立拒绝收据原样保留。后继`durable_chain_executor_v2/`保存七工具快照、23项host测试/日志；`DURABLE_CHAIN_SOURCE_SPEC_V2.json`封存固定CFG/ACK类型后的8+52范围。V2独立审查及`ACTUAL_DURABLE_CHAIN_LAUNCH_V2.json`记录限定准入和同一新批的实际启动，未取得实际A/原生链验收；原19故障与整体目标仍未完成。运行支持、冻结证据、固定谓词和主入口均在`tools/`，不改变正式游戏入口。
+
 ## 2026-10-08：durable拒绝矩阵R1至R4与完整输入V1至V3
 
 恢复QA `final_durable_negative_adapters_v1/`、`final_durable_negative_adapters_v1_r2/`、`final_durable_negative_adapters_v1_r3/`保留原适配及两次拒绝/后继静态收据，最后六GD/scene用于264/362/24；`DURABLE_FULL_SOURCE_INPUTS_V3.json`与`DURABLE_FULL_INPUTS_PREPARATION_REVIEW_V3.json`封存source-only 26runtime覆盖。工具`prepare_durable_campaign_full_inputs.py`不启动native。

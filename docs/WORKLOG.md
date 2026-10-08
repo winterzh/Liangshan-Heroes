@@ -1,3 +1,11 @@
+## 2026-10-08：双角色持久续玩与52负例执行器候选
+
+新增 `tools/run_durable_campaign_chain_v1.py` 及运行、实际A冻结、矩阵校验支持。范围为普通CAMPAIGN_QA空值、双角色ABCD八进程与world264/component362/live24每角色的52负例阶段，加一次冷导入共61原生进程；19持久故障、JSON/OwnedSlot/半程、SDK、公开入口、导出/性能和设备验收另列未完成，不授整体目标资格。
+
+来源预检已核5132基础文件、26覆盖、原完整矩阵谓词、当前本机基线/引擎/本地native依赖。`DURABLE_CHAIN_SOURCE_SPEC_V1.json`逻辑SHA为`72217404a23d9adab6da22970dda949cef8ff6f228713394554cef031195ca1b`。六工具快照及20项host故障测试在`durable_chain_executor_v1/`；测试全过，临时合成档与mock进程不计实际存档/战役资格。
+
+独立审查推动修复：自有锁创建/写入故障清理、真实PID集合API、ANSI错误、子进程未知终态保留句柄和锁、空pending目录/Windows路径越界、冻结中来源漂移；原完整安装/自然终局mandatory及hold谓词从固定旧源码保留，新schema明确要求实际gen3与CFG确认。V1独立拒绝DUR-CHAIN-CFG-001/ACK-002，收据SHA`81ff2b64c496c15cd7cf846d24ba8c8b6bd8255d1f63a4d89f4a44617cb1c579`：CFG路径未固定与ACK布尔整数别名。V1/spec/快照全部原样保留；独立V2只固定`campaign.cfg`完整三字段及ACK五字段精确类型，新增3项host测试，合计23项全过。`DURABLE_CHAIN_SOURCE_SPEC_V2.json`逻辑SHA`653ebc6f7661574c28362edc1f6cdf99debcb6f271d47550fa2a86bec13fa965`，快照与测试见`durable_chain_executor_v2/`。V2独立复核通过，收据SHA`6883b422e73d00d857c559a20e51681e9b44db2a0bf8610d8f54a304c668a383`，只准入8+52及冷导入。实际新批`durable_chain_65cae0c9`/session93131/自有Python10628已启动，来源和CLI见`ACTUAL_DURABLE_CHAIN_LAUNCH_V2.json`；按每阶段自然idle60串行执行，尚未整批终态，不记原生通过。正式源码未晋升，下一步准入后串行执行该范围，再接原19故障与错误UI/同对象重试；原完整开发目标保持active。
+
 ## 2026-10-08：264/362/24持久化矩阵后继R4静态闭合，完整输入26覆盖封存
 
 `final_durable_negative_adapters_v1/` 独立拒绝NEG-ADAPT-001/002：capture自己override守卫仍要求QA1，且override loader未初始化继承安装校验所用Lifecycle。R2修守卫并加入world264，但loader缺口保留，准确拒绝。不可变R3修两处，后继R4 `final_durable_negative_adapters_v1_r4/` 保留修复并显式固定load campaign-v2 Lifecycle/Intent；不加载或调用父natural route/drivers。

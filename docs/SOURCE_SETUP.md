@@ -1,3 +1,9 @@
+## 2026-10-08：durable链执行器候选使用边界
+
+`tools/run_durable_campaign_chain_v2.py`默认只做来源预检；`--write-spec`只写全新seal。`--run`必须同时提供完全匹配的`--source-spec`与新独立审查收据，批准阶段只能为`durable_chain_and_matrices`。当前候选seal为`qa/campaign_progress_recovery_20261008/DURABLE_CHAIN_SOURCE_SPEC_V2.json`，七工具源码快照/23项host测试见`durable_chain_executor_v2/`。V1源码/spec/六源快照及CFG路径/ACK类型拒绝收据保留，不能执行V1。V2独立复核只批准`durable_chain_and_matrices`，实际批`durable_chain_65cae0c9`/session93131已启动；继续观察同一句柄，不因等待超时重开。未记整批原生验收。
+
+实际运行只使用新私有工程/档案，每阶段自然连续空闲60秒，外来引擎出现则中止；未知自有进程终态保留Popen/PID/锁。每角色真实A成功退出后只冻结gen1槽与对应v2日志、handoff，负例各用新档，不复制裸CFG或缓存。完整8+52聚合要求所有实际报告/日志/来源/manifest回读。此范围不包含原19持久故障、原JSON/OwnedSlot/半程、SDK/公开入口、性能或真机，不能称整体完成或正式版本发布。
+
 ## 2026-10-08：264/362/24持久化矩阵后继R4静态闭合，完整输入26覆盖封存
 
 `final_durable_negative_adapters_v1/` 独立拒绝NEG-ADAPT-001/002：capture自己override守卫仍要求QA1，且override loader未初始化继承安装校验所用Lifecycle。R2修守卫并加入world264，但loader缺口保留，准确拒绝。不可变R3修两处，后继R4 `final_durable_negative_adapters_v1_r4/` 保留修复并显式固定load campaign-v2 Lifecycle/Intent；不加载或调用父natural route/drivers。
