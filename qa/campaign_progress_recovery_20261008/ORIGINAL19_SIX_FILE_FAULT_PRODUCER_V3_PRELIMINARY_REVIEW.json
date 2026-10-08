@@ -1,0 +1,69 @@
+{
+  "schema": "campaign_six_file_fault_producer_preliminary_independent_review_v1",
+  "independent": true,
+  "reviewed_at_utc": "2026-10-08T22:38:55.285988+00:00",
+  "producer_sha256": "243791416a34d6f4680b584f1c107b1d9897fa4c9ceebe1dc9b1cfa3d6db10eb",
+  "source_snapshot_sha256": "243791416a34d6f4680b584f1c107b1d9897fa4c9ceebe1dc9b1cfa3d6db10eb",
+  "predecessor_producer_sha256": "caa7af28a8a49815db60605542d30e262fe432cb38fc0afa19bf1de6eecd7117",
+  "prior_verifier_sha256": "fc0f1cebc739cdd2ae073316105907c077f7bbdf2c31b7bebf6625429a3f3b8e",
+  "static_api_closure_passed": true,
+  "approved_stages": [],
+  "source_only": true,
+  "source_spec_created": false,
+  "source_spec_sha256": null,
+  "source_spec_file_sha256": null,
+  "successful_closed_prior_available": false,
+  "execution_blocked": true,
+  "native_started": false,
+  "six_file_faults_and_restarts_qualified": false,
+  "original19_qualified": false,
+  "SDK_reward_once_qualified": false,
+  "UI_qualified": false,
+  "overall_goal_qualified": false,
+  "review_scope": "仅V3相对已审V2的prior path/first original receipt pin封存绑定及source snapshot，不是完整新seal或Native准入。",
+  "blocking_source_findings": [],
+  "exact_AST_difference": {
+    "changed_existing_functions": [
+      "source_spec",
+      "main",
+      "__init__"
+    ],
+    "added_function": [
+      "prior_receipt_path"
+    ],
+    "removed_functions": [],
+    "execute_validator_integrity_cleanup_AST_exact_V2": true,
+    "other_source_context": "采用V2已审来源；没有重做历史完整矩阵或授予其结果。"
+  },
+  "binding_verified": [
+    "--prior-durable为required，绝对receipt.json、祖先noLinks且在checkout外。",
+    "source_spec先通过现有V12完整61原件verifier，才产生包含first original receipt pin的spec；缺失/失败/未终态prior不能生成seal。",
+    "Suite运行前再次核全部61原log/evidence及source并精确比较spec.prior_durable_receipt原pin，在创建新run/project/profile之前完成。",
+    "不再硬编码失败6409；source recipe和独立准入仍必须另行exact封存及匹配，未经批准不能运行。"
+  ],
+  "independent_host_checks": {
+    "classification": "read-only actual failed prior + synthetic unfinished/path negatives; no successful fixture, no Suite/main/Popen",
+    "executed": true,
+    "count": 6,
+    "all_refused": true,
+    "checks": [
+      "actual failed6409 source_spec refused",
+      "synthetic unfinished receipt source_spec refused",
+      "None path refused",
+      "relative receipt path refused",
+      "checkout receipt path refused",
+      "checkpoint.json refused"
+    ],
+    "source_spec_written": false,
+    "profiles_written": false,
+    "actual_live_fourth_run_inspected": false
+  },
+  "parent_host_checks_reference": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\ORIGINAL19_SIX_FILE_FAULT_V3_HOST_GATE_CHECKS.json",
+    "sha256": "4a42b63fa2664dfc7c960ddc1fac5015617b6adf2b30e4082dd3de410b32c79d",
+    "reported_count": 8,
+    "independently_read_source_binding_and_flags": true,
+    "classification": "parent-produced pure-host negatives, not native or success-prior qualification"
+  },
+  "qualification_boundary": "当前没有成功闭合61 prior或V3 source seal。必须等待实际成功prior后另做exact封存和独立执行准入；本预备收据空stage，不能作为main的运行review。未启动Godot/Popen，未修改profile或旧封存源码。"
+}

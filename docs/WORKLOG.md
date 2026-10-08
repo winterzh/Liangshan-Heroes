@@ -1,3 +1,11 @@
+## 2026-10-09：六故障 V3 显式绑定成功前置收据
+
+新增执行器 V3，移除 V2 固定失败6409批的源码常量。`--prior-durable` 必须为工程外的绝对 `receipt.json` 路径；创建 source seal 前真实核验成功且关闭的 V12 全61阶段及来源、原日志/报告/生命周期证据，封存首次原始 receipt pin。Suite 在创建新目录/档案/原生进程前再次完整核验，并要求 receipt pin 与 seal 完全一致；旧版本及原封存不改写。
+
+V3 producer/snapshot SHA `243791416a34d6f4680b584f1c107b1d9897fa4c9ceebe1dc9b1cfa3d6db10eb`。独立有限源码预备收据 SHA `f79472ed9cf2f3c727c5d9163b09b64194e59d74014831272e1d18552f110600`：无新增确定阻断，只有 source_spec/main/__init__ 和新增路径检查变化，execute/validator/integrity/cleanup 与 V2 AST 一致，批准阶段为空。本机8项有限只读主机检查拒绝三失败 prior、新批未闭合 receipt 及四不合规路径；审查方另核实际失败/人工未终态和路径负例。均无成功 prior、无新 seal、无 Suite/main/Popen，不能计为13进程或原19原生通过。
+
+完整第四 V12 仍接续原 session14695/run8fe7b18b；冷导入已通过，Lu A 仍等待引擎串行窗口。接续必须回读实际 handle/进程/终态，启动记录不是未来存活证明。只有取得新成功全61结果后，才能为 V3 生成精确新 seal 并审查执行准入。正式恢复源码未晋升，其余原19/UI/SDK、内容/性能/真机保持未完成，无 main 合并或 Steam 发布。
+
 ## 2026-10-09：完整 V12 第四新批已进入冷导入
 
 复核当前无引擎占用及共享锁后，原已审 V12 无运行预检退出0，逻辑 SHA `867bd2d1b78339f357200e4dca344d14fb38a05c39f3e7906fe3f11507b60209` 不变。启动全新 `durable_chain_8fe7b18b`，session14695/host PID38692，未复用前三失败批的工程或档案。串行 idle60 后实际 cold_import PID45856 已退出0/错误0且 complete=true，原日志SHA已核对；主进程仍在运行等待Lu A，尚无终态/完整61资格。

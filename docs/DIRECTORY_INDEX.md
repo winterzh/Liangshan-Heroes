@@ -1,3 +1,7 @@
+## 2026-10-09：成功前置收据绑定执行器 V3
+
+新增 tools/run_campaign_file_faults_v3.py；恢复QA新增 exact source snapshot、ORIGINAL19_SIX_FILE_FAULT_V3_HOST_GATE_CHECKS.json 及 ORIGINAL19_SIX_FILE_FAULT_PRODUCER_V3_PRELIMINARY_REVIEW.json。仅有限源码预备通过，无成功 prior 或 V3 seal/native准入；旧 V1/V2 原件保留。
+
 ## 2026-10-09：第四完整批历史启动观察
 
 恢复QA新增 `DURABLE_CHAIN_V12_FOURTH_RUN_START_V1.json`，只记录新批8fe7b18b/session14695进入cold_import时的实际进程与原封存SHA，不是终态或通过资格；私有工程/档案不上传。
