@@ -1,3 +1,13 @@
+## 2026-10-09：首次／重复终局完整五进程执行器源码接入
+
+新增 run_campaign_first_repeat_v1.py：原完整V12 base5132/CoreContract/原26覆盖保持，增加已审GD共27覆盖；接入NaturalSerialBatch/publisher、完整74/21/80/21有序消费者V3。运行顺序为冷导入一次和同一真实隔离profile的first/restart_first/repeat/restart_repeat四次，完整五独立PID/nonce及四报告全部成功才授该两类终局/重启的有限资格。继承已审EvidenceSuite的first-byte ledger、persist和全源/原件/native/installed identity完整性；消费者在仍持有实际终态Popen时调用，未知child保留原lease与finalization规则，不替换生产节点。
+
+--write-recipe仅生成无运行来源配方，不检查成功prior、不授执行资格；--write-spec/--run在任何新mkdir/profile/Popen前都必须真实核验成功且关闭的完整V12 all61与首次原receipt bytes，运行另要求精确新seal及独立阶段准入。当前 SOURCE_RECIPE logical `95bc3c36739a2a524f1e5f83e4a2ecfdd5bb49e30a1d703bfb497ea7e3222523` / raw `6cb31e3bfa46c087fd1f291b58383b68f14e219bd87165d8f79a780e95843417`，99pins/51Python/全178本地导入边闭合，只有recipe，没有成功prior绑定的source seal。
+
+独立有限预备收据 SHA `28f0dd614f4b9cb1b4d54b784426209d21b806434b0a0f36948bfc11f3c9661b`，static=true、stages=[]、execution_blocked=true。source_recipe独立重建exact，五phase/ledger/callback/cleanup源码集成未见确定阻断。我方可复现四真实failed receipts分别source_spec和constructor共8次拒绝，独立方另核失败6409两gate；原receipt不漂移、workroot未创建。无新Suite成功、seal/profile/Popen/Godot结果，不能当五原生流程通过。
+
+后续仍须取得成功全61前置，再封存当前完整执行器来源并独立准入、执行真实首次/重复及重启。当前四V12均终态失败，第五批未启动，共享引擎整批串行窗口与跨聊天协调许可仍未取得；继续其余回调/云端边界等源码工作。正式恢复源、完整原19/基线/UI/SDK、八章/九玩法/导出/性能/Android真机仍未完成，无main/Steam发布。
+
 ## 2026-10-09：首次／重复完整证据验证器；CFG复制拒绝与修复
 
 新增完整报告消费者，固定 first/restart_first/repeat/restart_repeat 四个真实独立Popen、同private profile/user、74/21/80/21全部有序检查及唯一stdout标记、3/2原stage/public首次bytes、真实Mission/HUD/记录、原first handoff与新token、两token各生命周期gen1/2/3/ACK。真实CFG prepared/applied1/2→3/4全部14字段、source/request/previousSHA/原candidate与各次publicCFG/ACK绑定；首次会被正常prune的CFG原件和各次可改写publicCFG先复制到本步骤输出再ledgerfreeze，不把原可变路径错误当作永久不可变证据。完整producer仍未实现。

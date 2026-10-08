@@ -1,3 +1,7 @@
+## 2026-10-09：首次／重复终局完整producer与来源recipe
+
+新增 tools/run_campaign_first_repeat_v1.py；恢复QA新增 exact snapshot、FIRST_REPEAT_PRODUCER_SOURCE_RECIPE_V1.json、HOST_PREFLIGHT、可复现FAILED_PRIOR_CHECKS脚本/结果和PRELIMINARY_REVIEW。99pins/51Python/178import/27overlay source-only/stages[]，五实际流程未运行；recipe不等于成功prior绑定的seal。
+
 ## 2026-10-09：首次／重复完整消费者的各代来源与binary复制
 
 新增 tools/campaign_first_repeat_evidence_v1/v2/v3.py、campaign_original19_binary_files_v1.py；恢复QA新增四份snapshot、FIRST_REPEAT_EVIDENCE_SOURCE_SPEC_V1/V3、V1拒绝/V3预备收据，以及历史V1_V2与纠正V3的两份可复现primitive脚本/结果。V2未封草稿不准入，V3只source static/stages[]；完整producer/真实四流程仍未运行。
