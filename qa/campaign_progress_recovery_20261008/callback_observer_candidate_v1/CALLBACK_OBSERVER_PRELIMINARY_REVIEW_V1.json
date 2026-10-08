@@ -1,0 +1,126 @@
+{
+  "schema": "campaign_callback_observer_preliminary_independent_review_v1",
+  "reviewed_at_utc": "2026-10-08T23:49:32.337084+00:00",
+  "independent": true,
+  "source_only": true,
+  "static_api_closure_passed": true,
+  "approved_stages": [],
+  "candidate_sha256": "97105db494a71c3821507092f02550d1d022ea30f082d7e61226646f7576b989",
+  "wire_sha256": "ead7f49ee949a73f302129374c815091910aaade44d5e24f7ade40b34a17726d",
+  "source_manifest_sha256": "5114054f2f43f18d9522b8d2d66c085c4ccbf8fd1096a8bee11cccf9cce5096d",
+  "candidate_pin": {
+    "path": "D:/AI项目/水浒/开发工程/qa/campaign_progress_recovery_20261008/callback_observer_candidate_v1/campaign_callback_snapshot_v1.gd",
+    "bytes": 4363,
+    "sha256": "97105db494a71c3821507092f02550d1d022ea30f082d7e61226646f7576b989"
+  },
+  "wire_pin": {
+    "path": "D:/AI项目/水浒/开发工程/tools/campaign_callback_snapshot_wire_v1.py",
+    "bytes": 1214,
+    "sha256": "ead7f49ee949a73f302129374c815091910aaade44d5e24f7ade40b34a17726d"
+  },
+  "source_manifest_pin": {
+    "path": "D:/AI项目/水浒/开发工程/qa/campaign_progress_recovery_20261008/callback_observer_candidate_v1/SOURCE.json",
+    "bytes": 4521,
+    "sha256": "5114054f2f43f18d9522b8d2d66c085c4ccbf8fd1096a8bee11cccf9cce5096d"
+  },
+  "snapshot_pin": {
+    "path": "D:/AI项目/水浒/开发工程/qa/campaign_progress_recovery_20261008/campaign_callback_snapshot_wire_v1_source_snapshot.py",
+    "bytes": 1214,
+    "sha256": "ead7f49ee949a73f302129374c815091910aaade44d5e24f7ade40b34a17726d"
+  },
+  "source_pins": [
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\callback_observer_candidate_v1\\campaign_callback_snapshot_v1.gd",
+      "bytes": 4363,
+      "sha256": "97105db494a71c3821507092f02550d1d022ea30f082d7e61226646f7576b989"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\campaign_callback_snapshot_wire_v1.py",
+      "bytes": 1214,
+      "sha256": "ead7f49ee949a73f302129374c815091910aaade44d5e24f7ade40b34a17726d"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\godot_debug_wire.py",
+      "bytes": 6794,
+      "sha256": "41703c88628a3fa473db00d8eeb79e87e6c2f250b0dc243a951b8295973e0c35"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\campaign.gd",
+      "bytes": 22806,
+      "sha256": "3e7257e412e65ffc012d3dfd5d0392d4d96a5ce32cbdf1634caf221d2e88060b"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\steam_cloud.gd",
+      "bytes": 33188,
+      "sha256": "230c26034104b19be04b2f1533deba79dd304473ac060f021fd38eaeee354dac"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\run_campaign_progress_coordinator.gd",
+      "bytes": 11741,
+      "sha256": "23193509d2e1d7f367cbfe3c06a2a479276c7eefb31e987136db635945d1417e"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\run_campaign_cfg_transaction.gd",
+      "bytes": 27586,
+      "sha256": "71803fc42a6bef59479db5b8cf70a953716a3968e45ba1fb391eed5726a51d17"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\callback_observer_candidate_v1\\protocol_reference_4_4\\core\\debugger\\remote_debugger.cpp",
+      "bytes": 24150,
+      "sha256": "93ffffa69e6bda1d4b102aebd0bc488871b266c71189eea2961833b350ab5678"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\callback_observer_candidate_v1\\protocol_reference_4_4\\core\\debugger\\engine_debugger.cpp",
+      "bytes": 8191,
+      "sha256": "2867767b483c7d335375627678d2370254b2e352683441c085f1ffd619dc0391"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\callback_observer_candidate_v1\\protocol_reference_4_4\\core\\core_bind.cpp",
+      "bytes": 87790,
+      "sha256": "2f41424d6cb576f67ecccca460ab5a1c8d78075db3246daeda3b9add7c17d4fe"
+    }
+  ],
+  "blocking_findings": [],
+  "verified_scope": [
+    "Manifest candidate, wire, five dependency source pins and three protocol-reference copies are byte/hash exact (10 pins); wire snapshot is byte exact. New local Python import godot_debug_wire is pinned and its original command allowlist is unchanged.",
+    "Host request is limited to lsh_callback19:read with typed thread/PID, positive PID, hex nonce, three fixed case IDs and integer sequence 1..8. Existing bounded object-free scalar/Array codec and inherited loopback connection check remain in use; no evaluation or production mutation command is added.",
+    "GD install requires normal CAMPAIGN_QA-empty and Steam-disabled private-profile environment, actual root Campaign/SteamCloud nodes and fixed production script paths. Each read checks those paths and original instance IDs and the exact PID/nonce/case/next sequence before producing the snapshot.",
+    "Reads of Campaign records/unlocked/cloud_owner and SteamCloud state only duplicate values. Campaign.persistence_busy at R12 campaign.gd:291 invokes read-only transaction.busy at transaction.gd:154; Cloud.shared_profile_pending at steam_cloud.gd:686 is read-only. Observer mutations are limited to its own fields, registry and sequence bookkeeping.",
+    "Archived 4.4-stable RemoteDebugger._try_capture:340 and paused debug dispatch:568 support colon capture forwarding in that reference; core_bind.cpp:2083 accepts the two-argument Callable and requires its bool return. These references establish reference-source API correspondence only."
+  ],
+  "synthetic_host_checks": {
+    "classification": "pure-host in-memory socket stub; synthetic PID 12345 and thread 77 are metadata only",
+    "fixed_request_codec_roundtrips": 24,
+    "presend_refusals": [
+      "thread_bool",
+      "pid_bool",
+      "pid_zero",
+      "nonce_invalid",
+      "nonce_short",
+      "unknown_case",
+      "sequence_bool",
+      "sequence_zero",
+      "sequence_nine",
+      "non_loopback_peer"
+    ],
+    "real_socket_opened": false,
+    "Popen_started": false,
+    "Godot_started": false,
+    "ownership_proven": false,
+    "paused_delivery_proven": false
+  },
+  "remaining_boundaries": [
+    "Exact current binary source is not verified. The manifest identifies unavailable 7d41c59c4 references; archived 4.4-stable source is explicitly historical reference. Current-engine paused GDScript capture/reply delivery and registration lifecycle need later independent native proof.",
+    "The driver/controller/complete three-case ordered report consumer and producer do not exist here. Actual owned PID, exact entered production stack, first-byte request/reply custody, installed source identity and each callback/cloud assertion must be supplied and independently reviewed in that later integration.",
+    "Provided identity is retained observer input, not an independently established installed-identity proof. JSON snapshot is an observation payload; this review does not certify full typed Variant preservation or the underlying three case outcomes."
+  ],
+  "qualification": {
+    "GD_parsed": false,
+    "actual_current_engine_compatibility_verified": false,
+    "native_started": false,
+    "three_case_actual_passed": false,
+    "original19_qualified": false,
+    "SDK_reward_once_qualified": false,
+    "overall_goal_qualified": false
+  }
+}

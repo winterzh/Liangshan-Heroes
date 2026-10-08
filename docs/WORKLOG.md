@@ -1,3 +1,13 @@
+## 2026-10-09：实际回调只读快照入口的有限源码预审
+
+新增 QA-only campaign_callback_snapshot_v1.gd 与独立 campaign_callback_snapshot_wire_v1.py。候选只读取实际 Campaign/SteamCloud 节点，核对生产脚本路径、原 instance ID、私有环境和固定 PID/nonce/case/递增序号；只修改观察器自有注册与序号。新命令限定 lsh_callback19:read，原 debugger 命令白名单不变，没有 evaluate、set_variable 或生产节点替换。
+
+独立收据 CALLBACK_OBSERVER_PRELIMINARY_REVIEW_V1.json SHA e5dfdd91bfc45731c952ba00bec11b4f652f009dcd9ffa44425947031aed18f3，static_api_closure_passed=true、approved_stages=[]、无确定有限源码阻断；10份来源 pin 与 wire snapshot 原字节一致。我方21项及独立24个固定包/10个拒绝检查均为纯内存 socket stub，没有建立连接、Popen 或 Godot。当前引擎提交源码获取返回404，保存的 Godot 4.4-stable 三份官方源码只是协议参考；当前引擎 GD 解析、暂停捕获/回复兼容性和注册生命周期尚未验证。
+
+ACTUAL_CALLBACK_SOURCE_MAP_V1.json 绑定三个真实生产路径：确认 CFG 后内存发布再回调；真实 Cloud._apply_profile 内的 applying 回调；真实云端应用写盘失败。R12 正常云端路径在确认 writer 后才加载进度，未来故障验收须证明旧 Campaign 进度/公开 CFG 保留及真实 pending writer，不沿用旧矩阵的提前替换内存预期。设置/语言可先写入，不能宣称整个 profile 原子性；未来本地数字账号夹具须明确为 SDK-disabled 合成输入，不能证明实际账号、上传或奖励。
+
+三个用例的完整 driver、owned debugger controller、有序证据消费者及 producer 尚未实现；观察器输入 identity 也不能独立证明安装身份。后续须绑定真实自有进程、精确进入的生产调用栈、首次原始数据包和来源后另审完整集成。原19、完整V12、玩家入口/SDK及原定内容/性能/Android真机目标仍未完成，正式恢复候选未晋升，无 main/Steam 发布。本次只收尾此有限源码部件。
+
 ## 2026-10-09：首次／重复终局完整五进程执行器源码接入
 
 新增 run_campaign_first_repeat_v1.py：原完整V12 base5132/CoreContract/原26覆盖保持，增加已审GD共27覆盖；接入NaturalSerialBatch/publisher、完整74/21/80/21有序消费者V3。运行顺序为冷导入一次和同一真实隔离profile的first/restart_first/repeat/restart_repeat四次，完整五独立PID/nonce及四报告全部成功才授该两类终局/重启的有限资格。继承已审EvidenceSuite的first-byte ledger、persist和全源/原件/native/installed identity完整性；消费者在仍持有实际终态Popen时调用，未知child保留原lease与finalization规则，不替换生产节点。

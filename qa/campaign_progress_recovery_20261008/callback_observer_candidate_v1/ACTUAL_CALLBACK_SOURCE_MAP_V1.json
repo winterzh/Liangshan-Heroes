@@ -1,0 +1,106 @@
+{
+  "schema": "original19_callback_actual_source_mechanism_map_v1",
+  "cases": {
+    "callback_sees_new_memory": {
+      "observer_stop": {
+        "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\steam_cloud.gd",
+        "sha256": "230c26034104b19be04b2f1533deba79dd304473ac060f021fd38eaeee354dac",
+        "runtime_source": "res://scripts/steam_cloud.gd",
+        "function": "mark_dirty",
+        "line": 230,
+        "statement": "if _applying:"
+      },
+      "actual_callers": [
+        {
+          "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\campaign.gd",
+          "sha256": "3e7257e412e65ffc012d3dfd5d0392d4d96a5ce32cbdf1634caf221d2e88060b",
+          "runtime_source": "res://scripts/campaign.gd",
+          "function": "progress_committed",
+          "line": 405,
+          "statement": "if cloud != null: cloud.mark_dirty()"
+        },
+        {
+          "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\run_campaign_progress_coordinator.gd",
+          "sha256": "23193509d2e1d7f367cbfe3c06a2a479276c7eefb31e987136db635945d1417e",
+          "runtime_source": "res://scripts/run_campaign_progress_coordinator.gd",
+          "function": "retry",
+          "line": 189,
+          "statement": "_campaign.progress_committed(self)"
+        }
+      ],
+      "publication_before_callback": {
+        "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\run_campaign_progress_coordinator.gd",
+        "sha256": "23193509d2e1d7f367cbfe3c06a2a479276c7eefb31e987136db635945d1417e",
+        "runtime_source": "res://scripts/run_campaign_progress_coordinator.gd",
+        "function": "retry",
+        "line": 184,
+        "statement": "_campaign._load()"
+      },
+      "required_actual_snapshot": "actual same production Campaign records/unlocked/owner already equal original confirmed CFG intent, before real Cloud dirty callback; complete actual stack and PID required"
+    },
+    "cloud_applying_callback_no_upload_claim": {
+      "observer_stop": {
+        "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\steam_cloud.gd",
+        "sha256": "230c26034104b19be04b2f1533deba79dd304473ac060f021fd38eaeee354dac",
+        "runtime_source": "res://scripts/steam_cloud.gd",
+        "function": "mark_dirty",
+        "line": 230,
+        "statement": "if _applying:"
+      },
+      "actual_callers": [
+        {
+          "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\campaign.gd",
+          "sha256": "3e7257e412e65ffc012d3dfd5d0392d4d96a5ce32cbdf1634caf221d2e88060b",
+          "runtime_source": "res://scripts/campaign.gd",
+          "function": "_writer_complete",
+          "line": 350,
+          "statement": "if cloud != null: cloud.mark_dirty()"
+        },
+        {
+          "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\steam_cloud.gd",
+          "sha256": "230c26034104b19be04b2f1533deba79dd304473ac060f021fd38eaeee354dac",
+          "runtime_source": "res://scripts/steam_cloud.gd",
+          "function": "_apply_profile",
+          "line": 415,
+          "statement": "ok = campaign.apply_cloud_progress(payload.campaign, _owner)"
+        }
+      ],
+      "actual_applying_start": {
+        "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\steam_cloud.gd",
+        "sha256": "230c26034104b19be04b2f1533deba79dd304473ac060f021fd38eaeee354dac",
+        "runtime_source": "res://scripts/steam_cloud.gd",
+        "function": "_apply_profile",
+        "line": 410,
+        "statement": "_applying = true"
+      },
+      "required_actual_snapshot": "actual Cloud._applying true at real callback under actual local _apply_profile; before/after dirty/pending/revision unchanged; SDK disabled and no upload qualification",
+      "synthetic_local_account_binding_must_be_explicit": true
+    },
+    "legacy_real_cloud_apply_failure_boundary": {
+      "actual_apply": {
+        "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\steam_cloud.gd",
+        "sha256": "230c26034104b19be04b2f1533deba79dd304473ac060f021fd38eaeee354dac",
+        "runtime_source": "res://scripts/steam_cloud.gd",
+        "function": "_apply_profile",
+        "line": 415,
+        "statement": "ok = campaign.apply_cloud_progress(payload.campaign, _owner)"
+      },
+      "normal_publication_after_confirmed_writer": {
+        "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\campaign.gd",
+        "sha256": "3e7257e412e65ffc012d3dfd5d0392d4d96a5ce32cbdf1634caf221d2e88060b",
+        "runtime_source": "res://scripts/campaign.gd",
+        "function": "_writer_complete",
+        "line": 348,
+        "statement": "if operation == \"cloud\": _load()"
+      },
+      "actual_normal_source_does_not_replace_memory_before_confirmed_CFG": true,
+      "required_actual_failure": "owned private candidate readback failure with actual _apply_profile false; original Campaign progress and public CFG preserved, retained real pending writer/shared profile; settings/language auxiliary writes may precede failure, so no whole-profile atomicity claim",
+      "old_matrix_pre_save_memory_replacement_expectation_not_current_R12_normal_contract": true
+    }
+  },
+  "three_case_driver_implemented": false,
+  "host_controller_implemented": false,
+  "native_started": false,
+  "original19_qualified": false,
+  "approved_stages": []
+}
