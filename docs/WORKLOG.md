@@ -1,3 +1,12 @@
+## 2026-10-09：V9实际组件3600秒超时关闭，完整原始审计保留与R6候选
+
+V9 4eeadd45/session28289已host终态1，lock_released true，自有Python44560与component28096均退出。冷43800/A37128（303）/world37936（264行1540）原生及host通过；component28096达到既定3600秒、错误0、未终态report，后续live/B/C/D/shi未启动，全61失败。actual_timed_out_durable_chain_v9/保存16关键原始收据/日志/报告/受控槽及journal共29587808字节；ACTUAL_COMPONENT_EXECUTION_TIMEOUT_V9.json含全部461原组件审计文件逐SHA索引。约10059690114字节大型审计完整保留在精确原私有run，不是缓存、不删除、不Git上传；已完成230结果行全部passed但不能算完整362通过、不能复用旧A/profile给后续全链资格。没有裸CFG/cache/export复制。
+
+full typed审计每文件最高86649894字节，计算/JSON重复扩张是新的具体成本线索，尚未基准证明性能因果。final_durable_component_audit_v1_r6/候选仅加exact typeof/IEEE64/exact text不可变scalar audit leaf缓存（不缓存container或validator、256字符/8192项有界）和去每份JSON pretty indent；原_typed完整body、_fingerprint/all fields/IEEE、181x2+8positive、原code/layer/NoNode/NoTick、生产Codec/Slot限制保留。仅source preliminary review中，未运行/采用；必须fresh隔离old/new审计representation和fingerprint一致及耗时基准后再考虑全链，不能以节省审计代替字段。
+
+八原ID新四进程候选run_campaign_original19_data_cases_v1.py与campaign_original19_data_runtime_v1.py已完成source preflight，逻辑SHA d915b8d456d42e1f20cde7f3d6cabcfd3b526caf4252d7ad25d525d4fa18d853，111pin/32Python/95边与四源快照在 original19_data_executor_v1/。独立审查拒绝 ORIGINAL19_DATA_CASES_INDEPENDENT_REVIEW_V1.json SHA894ad4caf8bf60f1abc156dc9a9da81ded22d670f76c8992ff8fe9d2d73c462a，stages空：data/QA完整mandatory标签漏验、完整CFG/typed journal/实际request与原物理SHA未闭合。全部旧源/spec/拒绝保留，不运行；GD preliminary不是executor准入，剩余11原ID/UI/SDK与完整计划仍需完成。
+
+当前无active Godot批。原回归V4/UI V5/八原机制V1均固定失败V9为前置，不能沿用或运行；后继需要新的审计基准/源码准入、全新实际全61闭合及精确新来源绑定。正式游戏源未晋升，不合并main/不Steam发布。
 ## 2026-10-09：原19八项源预备核验完成，尚无运行准入
 
 六数据层V2独立预备收据 `original19_data_layers_candidate_v2/ORIGINAL19_DATA_LAYERS_PRELIMINARY_REVIEW_V2.json` SHA `197cbb4fc1847831d01cd393b882bf0873e7032015fe92c609d9869ffb3efc7d` 已回读：三项对点修复已核，5currentR12/131GD/2CoreContract和原Source回读无差异，stages仍空。与已预备核准的两QA源一致，只有源码静态/API闭合通过，没有执行器/原生/full19资格。下一步为这八项构建源封存、受控四进程cold+data+两独立QA profile执行器并另做精确独立审查；剩余11原ID与全部额外门禁仍必须实现/验证。唯一V9 native批保持同session28289，不同时打开任何Godot。

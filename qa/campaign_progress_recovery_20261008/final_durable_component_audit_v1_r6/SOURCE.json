@@ -1,0 +1,31 @@
+{
+  "schema": "component_audit_scalar_cache_compact_json_candidate_r6",
+  "candidate": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\final_durable_component_audit_v1_r6\\daming_campaign_component_negative_v1.gd",
+    "bytes": 50113,
+    "sha256": "e4f3b46cfc99ae8a738d6ddc3e53b242315c3810f423a5bf66d80ba22b778ceb"
+  },
+  "predecessor": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\final_durable_component_transport_v1_r5\\daming_campaign_component_negative_v1.gd",
+    "bytes": 49400,
+    "sha256": "94551b5393ae4f3a65045cf9f48bd6c22c7bfd39208e73f801153e0b82d7166f"
+  },
+  "actual_timeout_evidence": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\ACTUAL_COMPONENT_EXECUTION_TIMEOUT_V9.json",
+    "bytes": 178396,
+    "sha256": "1401476b8b67f8f46311d9cdb40629d4fbbe123e488c1b1cf559cbeefac1f0cb"
+  },
+  "changes": [
+    "immutable scalar audit leaf cache keyed by exact native type and original IEEE64 or exact text; no container caching",
+    "pretty-print indentation removed only from per-case evidence JSON; all typed fields remain"
+  ],
+  "unchanged": [
+    "original _typed body renamed _typed_uncached with same recursion through _typed wrapper",
+    "all _fingerprint predicates, 181x2 negatives and8positive rows, code/layer/IEEE/NoNodes/NoTicks and full inputs",
+    "production Codec/Slot limits and per-record R5 membership transport"
+  ],
+  "native_started": false,
+  "source_reviewed": false,
+  "full_component_qualified": false,
+  "benchmark_required": "fresh isolated read-only benchmark against original typed representation and fingerprint; no old A used for future full-chain qualification"
+}

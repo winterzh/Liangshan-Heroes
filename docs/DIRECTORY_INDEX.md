@@ -1,3 +1,7 @@
+## 2026-10-09：V9组件超时与完整审计索引，R6及原19四进程候选
+
+恢复QA新增actual_timed_out_durable_chain_v9/（16受控raw）、ACTUAL_COMPONENT_EXECUTION_TIMEOUT_V9.json（含原私有10.06GB/461文件SHA索引，原件保留非缓存）、final_durable_component_audit_v1_r6/（GD/SOURCE，未准入）；ORIGINAL19_DATA_CASES_SOURCE_SPEC_V1.json、INDEPENDENT_REVIEW_V1拒绝、original19_data_executor_v1/四源与图。两个newPython helper在tools/，未Native。当前无active Godot，固定旧V9的所有后继不得运行。
+
 ## 2026-10-09：原19数据层与QA兼容源码候选
 
 恢复QA新增 original19_data_layers_candidate_v1/（GD/SOURCE/预备拒绝）、original19_data_layers_candidate_v2/（修正版GD/SOURCE，复审中）、original19_QA_compatibility_candidate_v1/（GD/SOURCE/预备review、stages空）。八原ID只有源码适配，不是原19完整运行或准入，尚无producer。
