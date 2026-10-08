@@ -1,3 +1,17 @@
+## 2026-10-09：V3限定审查通过，隔离基准已启动
+
+独立收据 COMPONENT_AUDIT_BENCHMARK_INDEPENDENT_REVIEW_V3.json SHA d4cfc5b3732e21a1f96cbd213df6f2554812db62696afb3a1cddf0fdf600336e 已按原字节回读；仅批准read_only_component_audit_equivalence_and_cost_benchmark。两项V2阻断闭合，源码准入不等于native通过。
+
+已启动唯一新自有批 D:/CodexTemp/lsh-component-audit-benchmark-20261009/audit_benchmark_8279f4e8，session84569/ownPython23372，原producer/spec/review保持封存。控制器复制完整新工程并安装固定native依赖，每阶段自然空闲60秒。只观察这一批；未获得终态benchmark report、未确认等价/成本改善，不开其他Godot。旧V9全61仍失败，正式源未晋升；本轮Git仅同步候选来源、审查与明确边界，不Steam发布。
+
+## 2026-10-09：R6审计等价基准V3，限定审查中
+
+R6源码预备收据 COMPONENT_AUDIT_PRELIMINARY_REVIEW_R6.json 已完成静态/API闭合，approved_stages仍空。新增独立只读old/new基准：V1封存后发现工具import来源未闭合；V2补齐后独立审查仍拒绝cold缓存继承与边界/容量/共享别名缺测。旧producer/spec/拒绝收据保持原字节，不覆盖、不运行。
+
+V3 producer run_component_audit_benchmark_v3.py 与GD campaign_component_audit_benchmark_v2.gd 每项先清空缓存，再测完整typed representation/原IEEE fingerprint；追加256/257字符、9000唯一整数饱和8192/未缓存miss、共享container实际变更。22个原packet完整section和54unit decode完整数据均保留；pretty/compact全字段解析相等并分别计时。SourceSpec逻辑SHA 6c0bf9f446bd916462b7a4cd57581c36991c11e59524fb737c1aac8c9b1d1c10；63pins/25Python/import missing=[]/29overlays，两个source快照及proof在component_audit_benchmark_executor_v3/。
+
+仅CPU/序列化表示等价与成本观察；不测物理写盘耗时、不证明完整矩阵加速、不移交旧A或失败profile资格。若限定审查通过，执行全新UUID工程/profile的cold+benchmark两原生阶段，均先自然空闲60秒，只控制自有Popen；SDK禁用、CAMPAIGN_QA空、正常1.0/60Hz。当前未启动此新批，正式游戏源未晋升。完整61、原19与真实pending UI/SDK once、八章/美术/九玩法/性能/Android原计划保持未完成；固定失败V9的后继仍不得运行。
+
 ## 2026-10-09：V9实际组件3600秒超时关闭，完整原始审计保留与R6候选
 
 V9 4eeadd45/session28289已host终态1，lock_released true，自有Python44560与component28096均退出。冷43800/A37128（303）/world37936（264行1540）原生及host通过；component28096达到既定3600秒、错误0、未终态report，后续live/B/C/D/shi未启动，全61失败。actual_timed_out_durable_chain_v9/保存16关键原始收据/日志/报告/受控槽及journal共29587808字节；ACTUAL_COMPONENT_EXECUTION_TIMEOUT_V9.json含全部461原组件审计文件逐SHA索引。约10059690114字节大型审计完整保留在精确原私有run，不是缓存、不删除、不Git上传；已完成230结果行全部passed但不能算完整362通过、不能复用旧A/profile给后续全链资格。没有裸CFG/cache/export复制。

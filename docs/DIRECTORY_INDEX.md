@@ -1,3 +1,11 @@
+## 2026-10-09：基准V3限定准入收据
+
+新增COMPONENT_AUDIT_BENCHMARK_INDEPENDENT_REVIEW_V3.json，仅只读基准。私有audit_benchmark_8279f4e8正在唯一隔离执行，尚无native终态；不上传其profile或工程。
+
+## 2026-10-09：组件审计只读基准V1—V3
+
+恢复QA新增COMPONENT_AUDIT_BENCHMARK_SOURCE_SPEC_V1/V2/V3、V2独立拒绝、component_audit_benchmark_executor_v2/v3/两个源快照及import proof；R6目录新增静态预备收据。tools新增三代producer与两代GD基准。V3限定复审中、无新native资格；完整原私有10GB审计仍保留非缓存，不上传Git。
+
 ## 2026-10-09：V9组件超时与完整审计索引，R6及原19四进程候选
 
 恢复QA新增actual_timed_out_durable_chain_v9/（16受控raw）、ACTUAL_COMPONENT_EXECUTION_TIMEOUT_V9.json（含原私有10.06GB/461文件SHA索引，原件保留非缓存）、final_durable_component_audit_v1_r6/（GD/SOURCE，未准入）；ORIGINAL19_DATA_CASES_SOURCE_SPEC_V1.json、INDEPENDENT_REVIEW_V1拒绝、original19_data_executor_v1/四源与图。两个newPython helper在tools/，未Native。当前无active Godot，固定旧V9的所有后继不得运行。
