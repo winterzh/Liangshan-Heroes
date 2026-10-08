@@ -1,3 +1,15 @@
+## 2026-10-09：无启动入口的实际文件故障控制器候选
+
+PRELIMINARY_REVIEW_V1 SHA `6a9c9eb0c1b4197ec79f4f4922dcb3ccd00c5fe1b2d7cffc0f89fa96d2df9bfe` 拒绝 `DEBUGFAULT-PENDING-001`；V2 SHA `c6bbfb60b07b8142266b22295523e5ca639affb0af0bcc5c3255cde2e0ba2cb4` 解决该项，静态部件预审通过，均 `approved_stages=[]`。真正 proposal/对象、监听栈、Popen 所有权、错误预算和完整聚合仍需后续执行器独立准入及真实结果。
+
+独立 `ORIGINAL19_DEBUG_FAULTS_SYNTHETIC_HOST_REPRO_V1_V2_R2.json` SHA `160d7a5b6904a48f75a757f16de324c610dcca7f95830a4b8fec221da5d481dd` 为纯主机人工夹具：V1 七种漂移均错误修复，V2 同七种均在首个文件变更前拒绝，负 RefCounted ID 正例恢复原字节。跳过真正 Popen、debugger 和构造器，不构成六实际自然故障资格；R1 长路径失败脚本保留，R2 新短私有路径未触碰玩家档案。
+
+`ORIGINAL19_DEBUG_FAULTS_SOURCE_SPEC_V1/V2.json` 固定两版 tools helper、源码 snapshot、真实自然故障 GD/SOURCE、R12 相关源及完整本地 Python 导入；V1 19 pins/6 Python/6 edges，V2 23/7/9。HOST_SOURCE_PREFLIGHT 仅 SHA/AST/原源码断点检查，HOST_GUARD_CHECKS_V1 六项仅私有临时文件字节边界，不验证 Popen/debugger/native。
+
+独立审查指出 V1 在核完整 pending/gen1/gen2 前就修复文件。V2 保存原 ready/生命周期，修复前必须重读其首次原始 SHA、当前 exact gen1/gen2 且无 gen3、完整 intent/旧 memory/cloud、原 CFG SHA 与实际 proposal/stage；typed 比较拒绝 bool/int 别名，RefCounted ID 按非零整数允许负值。旧 V1/spec/snapshot 不改写，后继独立收据分别保存，approved_stages 均应为空。
+
+当前仍只有部件源码，无新原生批、无整个六故障/full19/SDK/玩家恢复资格。完整 V12 预检退出 0 且原逻辑 SHA 未变，但此前两次原生中断仍为失败，不能复用其 A/profile。真正 producer 的监听/串行流程、精确预期诊断预算、完整报告及独立执行准入还须完成。
+
 ## 2026-10-09：六真实自然文件故障V2源码预备通过
 
 original19_natural_file_faults_candidate_v2/ORIGINAL19_NATURAL_FILE_FAULT_PRELIMINARY_REVIEW_V2.json SHA d27dc6005b1cd7d140b968b438ab64340c101263d53604a2fd28528e83d3089d 已实际回读：first原UTF8 bytes SHA/pending原SHA/current+repair声明双等原SHA闭合，static_api_closure_passed=true/approved_stages=[]。candidate664749…/SOURCEca0399…匹配，原六断点/路线/实际对象和gen2-gen3/restart声明保留。

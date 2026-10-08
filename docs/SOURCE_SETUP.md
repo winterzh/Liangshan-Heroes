@@ -1,3 +1,13 @@
+## 2026-10-09：文件故障控制器来源与当前接续点
+
+V1 独立预审拒绝已保留；V2 `ORIGINAL19_DEBUG_FAULTS_PRELIMINARY_REVIEW_V2.json` SHA `c6bbfb60b07b8142266b22295523e5ca639affb0af0bcc5c3255cde2e0ba2cb4` 静态部件通过但 stages 为空。接续须另做整个 producer 审查和实际原生验收，不把该收据当执行许可。
+
+独立人工主机重放七种原 pending/记录漂移：V1 都仍写文件，V2 都在文件修改前拒绝，负引用对象 ID 正例通过；结果及 R1/R2 脚本保留 QA。此重放跳过真正 Popen/debugger/Godot，只验证源代码守卫顺序。
+
+测试工具新增 `tools/campaign_original19_debug_faults_v1.py` 与后继 V2，来源 spec/snapshot/AST 主机预检在 `qa/campaign_progress_recovery_20261008/ORIGINAL19_DEBUG_FAULTS_*`。V1 原 pending 修复前绑定不足保留待审拒绝；V2 SHA `10aa7439c209eec1956d2d52ad2512097cf2e843f0c9444d41aaa7a77ee02558` 在所有修复变更前再次核原 ready/injection/两代生命周期/完整 pending，允许 RefCounted 非零负 ID。两者均无原生启动入口，也没有完整 producer 准入；真正六故障仍待实际运行。
+
+完整 V12 来源预检保持已审逻辑 SHA，尚未取得完整通过结果，当前外部 Godot 占用。本轮只推进源码与独立预审，未发送尚未授权的跨聊天协调消息。接续顺序见 `docs/NEXT_DEVELOPMENT_20261009.md`，原完整计划、正式恢复入口与平台发布边界不变。
+
 ## 2026-10-09：六真实自然文件故障V2源码预备通过
 
 original19_natural_file_faults_candidate_v2/ORIGINAL19_NATURAL_FILE_FAULT_PRELIMINARY_REVIEW_V2.json SHA d27dc6005b1cd7d140b968b438ab64340c101263d53604a2fd28528e83d3089d 已实际回读：first原UTF8 bytes SHA/pending原SHA/current+repair声明双等原SHA闭合，static_api_closure_passed=true/approved_stages=[]。candidate664749…/SOURCEca0399…匹配，原六断点/路线/实际对象和gen2-gen3/restart声明保留。

@@ -1,0 +1,63 @@
+{
+  "schema": "campaign_original19_debug_faults_preliminary_independent_review_v1",
+  "review_version": 1,
+  "independent": true,
+  "reviewer": "office_full_review",
+  "reviewed_at": "2026-10-08T21:10:46.441195+00:00",
+  "helper_sha256": "0e9c1f37eb1c1bf24a74a5e2007c3e27bd864f0e391b2dfd483c1295ec0e42a8",
+  "source_spec_file_sha256": "953ecd2d34d17123ac05152dba9e15ed2de3888c40841fec0693a7968ee1475e",
+  "helper_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\tools\\campaign_original19_debug_faults_v1.py",
+    "bytes": 15714,
+    "sha256": "0e9c1f37eb1c1bf24a74a5e2007c3e27bd864f0e391b2dfd483c1295ec0e42a8"
+  },
+  "source_spec_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\ORIGINAL19_DEBUG_FAULTS_SOURCE_SPEC_V1.json",
+    "bytes": 6992,
+    "sha256": "953ecd2d34d17123ac05152dba9e15ed2de3888c40841fec0693a7968ee1475e"
+  },
+  "approved_stages": [],
+  "source_integrity_verified": true,
+  "source_import_closure_verified": true,
+  "source_pins_verified": 19,
+  "python_modules": 7,
+  "static_local_import_edges": 9,
+  "missing_import_pins": [],
+  "synthetic_host_repro_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\ORIGINAL19_DEBUG_FAULTS_SYNTHETIC_HOST_REPRO_V1_V2_R2.json",
+    "bytes": 10873,
+    "sha256": "160d7a5b6904a48f75a757f16de324c610dcca7f95830a4b8fec221da5d481dd"
+  },
+  "synthetic_host_repro_script_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\ORIGINAL19_DEBUG_FAULTS_SYNTHETIC_HOST_REPRO_V1_V2_R2.py",
+    "bytes": 9051,
+    "sha256": "dc0a444b680950916195da60b564b8e3046e196ca21379a51980276175799133"
+  },
+  "initial_host_repro_script_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\ORIGINAL19_DEBUG_FAULTS_SYNTHETIC_HOST_REPRO_V1_V2.py",
+    "bytes": 8987,
+    "sha256": "a53cdc24ee12ba4d4b0fbfe554795cd1ecd005ab9123c6b94503ef66c2304006"
+  },
+  "synthetic": true,
+  "pure_host": true,
+  "real_Popen_and_Godot_debugger_not_exercised": true,
+  "native_started_by_reviewer": false,
+  "native_qualified": false,
+  "producer_implemented": false,
+  "full_original19_qualified": false,
+  "UI_qualified": false,
+  "SDK_qualified": false,
+  "overall_goal_qualified": false,
+  "static_api_closure_passed": false,
+  "findings": [
+    {
+      "id": "DEBUGFAULT-PENDING-001",
+      "severity": "blocking",
+      "file": "D:\\AI项目\\水浒\\开发工程\\tools\\campaign_original19_debug_faults_v1.py",
+      "line": 152,
+      "detail": "Before rmdir/unlink/restore, repair only verifies case/injection SHA/code. It does not bind full pending intent/old memory/cloud/gen1/gen2 original SHAs or re-read exact unchanged disk lifecycle with no gen3. Synthetic seven drift cases all changed target and wrote repair artifact despite invalid pending/lifecycle state.",
+      "minimal_fix": "Retain first ready/lifecycle/intent at arm, re-read fixed original ready/injection and exact current gen1/gen2 before any target mutation, then type-exact compare all pending fields/source/prior SHA/intent/memory/cloud and stage/proposal form. Candidate-only faults must keep original public CFG SHA."
+    }
+  ],
+  "qualification_note": "V1 source remains rejected and immutable. Temporary successor >0 RefCounted-ID check was a V2 draft issue, fixed before V2 seal to exact int/nonzero (including negative IDs); it is not listed as an original V1 defect."
+}

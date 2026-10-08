@@ -1,3 +1,7 @@
+## 2026-10-09：原19文件故障控制器来源与后续开发清单
+
+tools 新增 `campaign_original19_debug_faults_v1.py` / `v2.py`（均无原生启动入口）；恢复 QA 新增对应 SOURCE_SPEC、source snapshot、HOST_SOURCE_PREFLIGHT、纯主机 HOST_GUARD_CHECKS 及独立预审材料。正式游戏源码未晋升，未取得真实六故障资格。新增 `docs/NEXT_DEVELOPMENT_20261009.md` 汇总原定开发顺序与各阶段验收边界。
+
 ## 2026-10-09：六文件故障V2独立源码预备收据
 
 V2目录新增PRELIMINARY_REVIEW_V2.json，仅source static/stages[]。六原case仍没有controller/Native结果，旧V1拒绝保留。

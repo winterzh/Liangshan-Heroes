@@ -1,3 +1,15 @@
+## 2026-10-09：真实文件故障控制器预审修订与后续开发顺序
+
+独立收据已回读：V1 SHA `6a9c9eb0c1b4197ec79f4f4922dcb3ccd00c5fe1b2d7cffc0f89fa96d2df9bfe` 拒绝 `DEBUGFAULT-PENDING-001`；V2 SHA `c6bbfb60b07b8142266b22295523e5ca639affb0af0bcc5c3255cde2e0ba2cb4` 静态部件预审通过，`approved_stages=[]`。未授原生执行、完整 producer、full19、UI 或 SDK 资格。
+
+独立纯主机人工夹具重放已落盘 `ORIGINAL19_DEBUG_FAULTS_SYNTHETIC_HOST_REPRO_V1_V2_R2.json`，SHA `160d7a5b6904a48f75a757f16de324c610dcca7f95830a4b8fec221da5d481dd`：七种 pending/gen1/gen2/intent/memory/cloud/磁盘记录漂移在 V1 均仍改写目标，封存 V2 七种均在首次改写前拒绝；非零负 RefCounted ID 正例恢复原字节。明确跳过 Popen 构造与真实 debugger/Godot，不是原生通过。初版人工夹具遇 Windows 长路径失败，保留脚本，后继短私有路径完成。
+
+新增无进程启动入口的 `campaign_original19_debug_faults_v1.py`，限定自有串行批的实际 Popen、私有 profile、真实调试栈及六个已固定源码窗口。原 CFG 字节先备份并固定 SHA，故障修复只能恢复本批精确目标。19 pins / 6 Python / 6 本地导入边已封存；6 项纯主机字节边界检查通过，不涉及真实 Godot 或六故障资格。
+
+独立审查发现 V1 修复前缺少原 pending 意图、内存/云端和两代生命周期再次核对。旧源及 snapshot 原字节保留；后继 V2 在任何文件改动前重读原 ready/injection，核原 gen1/gen2 SHA、当前没有 gen3、完整 typed pending 及原 intent/memory/cloud，candidate-only 故障还核原 public CFG SHA。Godot RefCounted ID 按整数非零处理，允许真实负 ID。V2 源码 SHA `10aa7439c209eec1956d2d52ad2512097cf2e843f0c9444d41aaa7a77ee02558`，spec SHA `7b89f97c74930345820492cfe2965632fe0e5297fceda350256e20a8b139435b`，23 pins / 7 Python / 9 导入边及 AST 预检通过，独立复核结果另存收据。
+
+完整 V12 无运行预检再次退出 0，逻辑 SHA `867bd2d1b78339f357200e4dca344d14fb38a05c39f3e7906fe3f11507b60209` 保持不变。外部盲盒引擎仍运行，本轮没有新水浒原生批；协调消息许可仍待回复。新增 `docs/NEXT_DEVELOPMENT_20261009.md` 整理完整恢复、原19/重试、玩家入口/SDK、八章/九玩法/导出、性能/Android的开发顺序。正式源未晋升，无 main 合并或 Steam 发布。
+
 ## 2026-10-09：六真实自然文件故障V2源码预备通过
 
 original19_natural_file_faults_candidate_v2/ORIGINAL19_NATURAL_FILE_FAULT_PRELIMINARY_REVIEW_V2.json SHA d27dc6005b1cd7d140b968b438ab64340c101263d53604a2fd28528e83d3089d 已实际回读：first原UTF8 bytes SHA/pending原SHA/current+repair声明双等原SHA闭合，static_api_closure_passed=true/approved_stages=[]。candidate664749…/SOURCEca0399…匹配，原六断点/路线/实际对象和gen2-gen3/restart声明保留。
