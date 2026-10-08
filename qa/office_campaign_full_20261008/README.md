@@ -1,3 +1,35 @@
+## 2026-10-08：R9独立静态源码准入完成
+
+独立审查收据`qa/campaign_progress_recovery_20261008/INTEGRATION_SOURCE_REVIEW_V2.json` SHA`6c558b6e5279972819c0ea90789e1e183ee86f00f045d4fc28e52f0ae63f47ec`已实际回读：R9十四源、80固定引用、十三正式来源、十四快照完全一致，12个历史阻断逐项静态解决。`approved_static_sources_only=true`，但`approved_stages=[]`、`full_executor_not_ready=true`、`native_started=false`。后继恢复全链执行器尚未完成，未扩展成原生/终局/重启/UI/奖励资格。
+
+完整旧续玩v31批`office_full_e85e9994`继续串行运行；本轮生产源码没有变更。下一步在该批实际终态后串行解析并验证R9接入，再完成与独立审查最终全链执行器，核验自然终局、真实CFG和第三代确认/重启/故障UI及奖励一次性。更早“待审”描述为历史记录，以本段与实际收据为准。
+
+## 2026-10-08：当前恢复接入源R9，来源与规范化同时保留
+
+R8独立复审发现合法旧云记录的缺省字段/旧best_total与Campaign规范化结果不同，会导致严格确认无法完成。R9先验证原来源并单独保留原payload，再按既有固定记录规则形成唯一写入目标；初次attach和普通apply均在实际共享写入前冻结规范目标，不放宽最终SHA/目标owner/配置语义的漂移拒绝。十四源、80固定引用、十三生产来源零差异封存在`qa/campaign_progress_recovery_20261008/SOURCE_AUDIT_V11.json`与`integrated_source_snapshot_v11/`；R8及以前不变。R9目前仅通过来源预检，独立审查待终态、尚未运行原生解析，不称完整恢复通过。
+
+当前完整旧续玩批仍为`office_full_e85e9994`（session53649），串行等待各阶段自然闲置60秒，不并发新恢复原生批。后继恢复全链执行器尚待实现和独立审查；完整目标仍继续。
+
+## 2026-10-08：R5解析终态与R8确认保护，完整V11运行中
+
+R5真实解析批`integration_parse_fc392cb9`已终态成功：导入PID1712、正常菜单180帧PID6124均退出0、引擎错误0、锁释放。原收据和两个日志完整保留`qa/campaign_progress_recovery_20261008/actual_integration_parse_v4_r5/`；仅证明这份R5源能导入/启动菜单，不能证明终局恢复。
+
+独立复审发现R5首次binding失败前没有完整提案冻结，R6修复后又发现首次写入可覆盖未知tmp及close重试缺少共享CFG重读。R6/R7原源保留；最新R8十四源、80引用及十三生产来源冻结在`SOURCE_AUDIT_V10.json`和`integrated_source_snapshot_v10/`。R8共同binding入口拒绝已有tmp文件/目录；进入close前冻结实际campaign/settings/language三个文件的稳定SHA和目标owner/进度/设置语义，首次及每次close重试都重新核对、漂移拒绝不重置基线；shared未确认期间设置请求保留，确认后重新调度。R8未原生解析、独立复审待结论；新恢复全链执行器尚未完成，原生产未安装。
+
+旧完整续玩路线v31经独立V11静态准入（SHA`4a770182fb38ee0afe8765cbdd243f87d0d421cfabfc3e8eb46c79917fc4c070`），全新批`office_full_e85e9994`已串行启动，观察session53649。完整原validator、双角色ABCD与52负例保留；当前运行中，不能写成通过。东侧金矿只有一个、正常单工人机制可能让后来的工人转去其他矿，静态准入只保证初始命令目标，持续存活必须以实际检查为准。此V11批准不覆盖新恢复十四源。
+
+后续依次完成：双角色完整自然续玩；最终恢复源normal fresh/续玩终局→第二代日志→实际CFG→第三代确认及跨进程重启、19故障、错误界面/安全重试/奖励只一次；八章动态、美术动画UI/多尺寸；最终九玩法与导出EXE；正常时钟性能/内存及Android真手机和平板。Git只同步已记录范围到stable，不合并main或发布Steam。
+
+以下段落记录较早状态，最新范围以本段和实际终态为准。
+
+## 2026-10-08：V9/V10真实失败保留；东营经济后继待审
+
+V9 `office_full_b0f1d997`终态失败、锁释放：前序JSON533/Owned76/半程ABC39/351/342通过；Lu-first A PID12360、46检查在prison approach clear natural deadline失败。phase=FIGHT、营HP1500、四真实守兵110血、吴用24.85血、assault为空，卢/石尚未救。rally检查已通过；可确认守营与攻城队存活是不同问题，完整撤离未通过。26份原收据/日志/报告保留`actual_failed_v9/`。
+
+普通付费采集/第二民居/作坊/2投石车/12步兵的v30经独立V10审查准入，原51必需标签和52负例不变；新批`office_full_74d3a3eb`终态退出1、锁释放。Lu-first A PID37532、59检查：两house及workshop实际建造完成，第二次六工人存活采集检查失败，尚未到攻城训练/营救；原报告没有工人详情，不能确定具体死亡/路径原因。26份原证据保留`actual_failed_v10/`，原profiles/CFG/存档未改或上传。
+
+新不可变v31在开局先用普通资源中心minimap_order安排六原工人采集东营实际金/木，再限制新增建筑普通preview在东营；仍要求六工人，失败记录实际hp/dying/outcome/position。付费/人口/队列、军队规模、原ABCD/负例和validator均不改。源bundle/seal_v11已封存，独立审查待完成，尚未启动新full。当前唯一新自有native为恢复候选R5解析批；不并行新full，观察超时不重开。
+
 ## 2026-10-08：V8-R3失败保留，V9新完整批
 
 V8-R3 `office_full_f2d8d7cc`实际终态失败、锁已释放；Lu-first A PID30668退出1，24检查仅“normal building order sets camp rally”失败。实际JSON533、OwnedSlot76、办理半程独立ABC39/351/342及来源审计通过，不能拼成完整双角色资格。原收据SHA `f4b9e370918d64ff60db791649f2324d97a3384351445309d4ab0543aa898c0d`，27份原收据/日志/报告已逐字节保存于`actual_failed_v8_r3/`；玩家/测试profile、CFG及存档不入Git，原位置保持。

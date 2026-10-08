@@ -1,3 +1,39 @@
+## 2026-10-08：R9独立静态源码准入完成
+
+独立审查收据`qa/campaign_progress_recovery_20261008/INTEGRATION_SOURCE_REVIEW_V2.json` SHA`6c558b6e5279972819c0ea90789e1e183ee86f00f045d4fc28e52f0ae63f47ec`已实际回读：R9十四源、80固定引用、十三正式来源、十四快照完全一致，12个历史阻断逐项静态解决。`approved_static_sources_only=true`，但`approved_stages=[]`、`full_executor_not_ready=true`、`native_started=false`。后继恢复全链执行器尚未完成，未扩展成原生/终局/重启/UI/奖励资格。
+
+完整旧续玩v31批`office_full_e85e9994`继续串行运行；本轮生产源码没有变更。下一步在该批实际终态后串行解析并验证R9接入，再完成与独立审查最终全链执行器，核验自然终局、真实CFG和第三代确认/重启/故障UI及奖励一次性。更早“待审”描述为历史记录，以本段与实际收据为准。
+
+## 2026-10-08：当前恢复接入源R9，来源与规范化同时保留
+
+R8独立复审发现合法旧云记录的缺省字段/旧best_total与Campaign规范化结果不同，会导致严格确认无法完成。R9先验证原来源并单独保留原payload，再按既有固定记录规则形成唯一写入目标；初次attach和普通apply均在实际共享写入前冻结规范目标，不放宽最终SHA/目标owner/配置语义的漂移拒绝。十四源、80固定引用、十三生产来源零差异封存在`qa/campaign_progress_recovery_20261008/SOURCE_AUDIT_V11.json`与`integrated_source_snapshot_v11/`；R8及以前不变。R9目前仅通过来源预检，独立审查待终态、尚未运行原生解析，不称完整恢复通过。
+
+当前完整旧续玩批仍为`office_full_e85e9994`（session53649），串行等待各阶段自然闲置60秒，不并发新恢复原生批。后继恢复全链执行器尚待实现和独立审查；完整目标仍继续。
+
+## 2026-10-08：R5解析终态与R8确认保护，完整V11运行中
+
+R5真实解析批`integration_parse_fc392cb9`已终态成功：导入PID1712、正常菜单180帧PID6124均退出0、引擎错误0、锁释放。原收据和两个日志完整保留`qa/campaign_progress_recovery_20261008/actual_integration_parse_v4_r5/`；仅证明这份R5源能导入/启动菜单，不能证明终局恢复。
+
+独立复审发现R5首次binding失败前没有完整提案冻结，R6修复后又发现首次写入可覆盖未知tmp及close重试缺少共享CFG重读。R6/R7原源保留；最新R8十四源、80引用及十三生产来源冻结在`SOURCE_AUDIT_V10.json`和`integrated_source_snapshot_v10/`。R8共同binding入口拒绝已有tmp文件/目录；进入close前冻结实际campaign/settings/language三个文件的稳定SHA和目标owner/进度/设置语义，首次及每次close重试都重新核对、漂移拒绝不重置基线；shared未确认期间设置请求保留，确认后重新调度。R8未原生解析、独立复审待结论；新恢复全链执行器尚未完成，原生产未安装。
+
+旧完整续玩路线v31经独立V11静态准入（SHA`4a770182fb38ee0afe8765cbdd243f87d0d421cfabfc3e8eb46c79917fc4c070`），全新批`office_full_e85e9994`已串行启动，观察session53649。完整原validator、双角色ABCD与52负例保留；当前运行中，不能写成通过。东侧金矿只有一个、正常单工人机制可能让后来的工人转去其他矿，静态准入只保证初始命令目标，持续存活必须以实际检查为准。此V11批准不覆盖新恢复十四源。
+
+后续依次完成：双角色完整自然续玩；最终恢复源normal fresh/续玩终局→第二代日志→实际CFG→第三代确认及跨进程重启、19故障、错误界面/安全重试/奖励只一次；八章动态、美术动画UI/多尺寸；最终九玩法与导出EXE；正常时钟性能/内存及Android真手机和平板。Git只同步已记录范围到stable，不合并main或发布Steam。
+
+以下段落记录较早状态，最新范围以本段和实际终态为准。
+
+## 2026-10-08：十四源接入、真实16检查与独立拒绝后继
+
+候选`integrated_v4_r2/scripts/`已把恢复模型接到Campaign/ContinueFlow/Battle/Menu/SteamCloud，含固定目录最多256合法token只读扫描、当前pending与已确认历史区分、三代确认、真实Steam token侧日志及Core分配前旧槽拒绝、one-use完成展示、延后设置写入和错误重试。正式13来源（含原Core/Contract、classic）SHA/提交字节零差异，未安装生产。
+
+R2真实解析批`integration_parse_7cb75b98`：导入23272/正常菜单180帧40996终态0、错误0。真实启动/设置批`integration_startup_8f93ba0c`：导入42372/探针45576终态0、错误0、16检查全过。根Flow确实startup_checked=true，Gate开放；正常save_prefs延后写实际CFG，fresh ConfigFile读回hard/regicide，同内容重存SHA不变，无运行日志或Steam活跃run。原收据/日志/报告在`actual_integration_parse_v4_r2/`、`actual_integration_startup_v4_r2/`，原第一轮Projection内置名称冲突失败保留`failed_integration_parse_v4/`。只覆盖空档案和正常prefs，不证明pending/UI/终局/重启/奖励。
+
+用户明确授权扩展独立审查至十四源及后继全链执行器。R2独立审查拒绝8项P1：源身份重试不复核、设置队列不唤醒、云错误无重试、A→B误拒绝、mirror/exit绕过gate、空active自有锁释放无重试、startup非progress CFG对象丢失、零代/恢复锁误判无pending。收据`INTEGRATION_SOURCE_REVIEW_V1.json` SHA`8fbcd0b708dbff0a18816e4c91139d3c2dd19c432f160ed6aa518fa6beee1d83`；14源/77引用/13生产和原真实证据回读一致。R3/R4中间修复不升级为资格，所有源保留。
+
+最新不可变`integrated_v4_r5/scripts/`与`SOURCE_AUDIT_V8.json`、`integrated_source_snapshot_v8/`封存14源/80引用。新增实时完整身份复核及门禁后设置调度，Cloud保留原owner/目标owner/bindingSHA/初始完整身份并可见同对象重试，最底层mirror拒绝shared pending；CFG/lifecycle保留已成功移除原owner后的空目录释放阶段，仅核同实例/原nonce/路径/head/SHA及空目录后重试，不删除staged/pending/data；无proposal自有锁失败状态保留，零代/恢复锁阻挡启动，startup保留非progress CFG对象/原提案。新批`integration_parse_fc392cb9`只做隔离解析/菜单，观察session58153，实际结果待终态；独立R5复审进行中，不给full批准。
+
+完整normal fresh/续玩终局→gen2→真实CFG→gen3、跨进程故障、19案最终源、玩家pending/安全重试、多章节和真实Steam奖励仍待后继完整执行器及实际证明。旧V2 CFG四案八PID36检查/v27b19案194检查只属原组件，不能扩展给这些新接入源。
+
 ## 2026-10-08：V3候选保护；旧组件通过范围保持
 
 新增`proposed_v3/scripts/`八文件候选，原V2及其真实四案/八PID/36检查CFG证据保持不可变。V3协调器在访问Battle属性前先核验固定缓存脚本及当前真实scene；纯进度投影拒绝时，只能释放本对象持有且仍处于building阶段、无冻结/暂存/待写记录的CFG锁。释放失败保留原状态供再次核验；未知/丢失所有权继续拒绝，不承诺所有故障都可原位重试。真实已暂存提案/原文件/日志不丢弃。生产9来源SHA不变。

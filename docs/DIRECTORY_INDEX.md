@@ -1,3 +1,24 @@
+## 2026-10-08：R9独立源码审查收据
+
+`qa/campaign_progress_recovery_20261008/INTEGRATION_SOURCE_REVIEW_V2.json`：R9十四源/80引用/十三生产来源静态准入；尚无全链执行器/原生资格。原审查范围字节保持，后继范围说明独立保存在`INTEGRATION_REVIEW_SCOPE_V2.md`。
+
+## 2026-10-08：R9规范目标后继
+
+`qa/campaign_progress_recovery_20261008/integrated_v4_r9/`、`integrated_source_snapshot_v11/`和`SOURCE_AUDIT_V11.json`：验证原来源并保留，规范化后冻结唯一配置目标；14源/80引用，未原生资格。
+
+## 2026-10-08：R5实际终态与R6—R8确认后继
+
+- `qa/campaign_progress_recovery_20261008/actual_integration_parse_v4_r5/`：原receipt/import/菜单日志及来源绑定，无玩家CFG。
+- 同QA `integrated_v4_r6/`—`integrated_v4_r8/`、`integrated_source_snapshot_v9/`与`integrated_source_snapshot_v10/`、`SOURCE_AUDIT_V9.json`与`SOURCE_AUDIT_V10.json`：首次binding与最终确认保护的不可变源码后继；R8仍待独立及原生验证。
+- `qa/office_campaign_route_20261008/OFFICE_FULL_INDEPENDENT_REVIEW_V11.json`及`ACTUAL_LAUNCH_V11.json`：v31旧全链静态准入与真实新批argv；完整终态尚待观察。
+
+## 2026-10-08：恢复实际接入与失败后继目录
+
+- `qa/campaign_progress_recovery_20261008/integrated_v4/`、`integrated_v4_r2/`—`integrated_v4_r5/`、`integrated_source_snapshot_v7/`、`integrated_source_snapshot_v8/`：十四源接入及不可变后继；SOURCE_AUDIT_V7/V8分别14/77与14/80引用，十三正式来源不变。
+- 同QA的`failed_integration_parse_v4/`、`actual_integration_parse_v4_r2/`、`actual_integration_startup_v4_r2/`、`ACTUAL_INTEGRATION_STARTUP_PASS_V4_R2.json`、`INTEGRATION_SOURCE_REVIEW_V1.json`：首轮实际解析失败、R2解析/菜单/正常设置16项实际范围及独立拒绝；无CFG/玩家档。
+- `tools/run_campaign_integration_parse.py`、`run_campaign_integration_startup.py`、`campaign_integration_startup_probe.gd`：源与基线绑定、每阶段idle60/确切自有PID、实际状态/普通设置观察，不是全链执行器。
+- `qa/office_campaign_full_20261008/actual_failed_v9/`与`actual_failed_v10/`：每批26原收据/日志/报告；`qa/office_campaign_route_20261008/v30/`与`v31/`、seal_v10/v11、V10独立静态审查和argv：普通付费扩军/东营采集后继，原生产/validator不变。
+
 ## 2026-10-08：V9完整批与V3源码候选
 
 - `qa/office_campaign_full_20261008/actual_failed_v8_r3/`：27份实际失败/成功前序的原收据、日志和报告，无CFG/profile存档。
