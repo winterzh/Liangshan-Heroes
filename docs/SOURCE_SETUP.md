@@ -1,3 +1,7 @@
+## 2026-10-08：V2已经终态，v34候选尚未准入
+
+session93131/`durable_chain_65cae0c9`已退出1并释放锁；Lu A只有牢前清敌期限失败，原档与五份原始证据保留。不能把前文启动记录理解为仍在后台，不能沿用旧失败A作负例来源。`v34/`普通地面落点已有仅静态审查；`prepare_durable_campaign_full_inputs_v4.py`已封InputsV4，`run_durable_campaign_chain_v3.py`已封SourceSpecV3，八源快照见`durable_chain_executor_v3/`。V3已获新限定原生准入，实际全新`durable_chain_38024dd3`/session96977/自有Python45548已启动；来源绑定见`ACTUAL_DURABLE_CHAIN_LAUNCH_V3.json`。观察同一句柄，旧V2失败profile不用，不因观测到期重开；新整批未完成。
+
 ## 2026-10-08：durable链执行器候选使用边界
 
 `tools/run_durable_campaign_chain_v2.py`默认只做来源预检；`--write-spec`只写全新seal。`--run`必须同时提供完全匹配的`--source-spec`与新独立审查收据，批准阶段只能为`durable_chain_and_matrices`。当前候选seal为`qa/campaign_progress_recovery_20261008/DURABLE_CHAIN_SOURCE_SPEC_V2.json`，七工具源码快照/23项host测试见`durable_chain_executor_v2/`。V1源码/spec/六源快照及CFG路径/ACK类型拒绝收据保留，不能执行V1。V2独立复核只批准`durable_chain_and_matrices`，实际批`durable_chain_65cae0c9`/session93131已启动；继续观察同一句柄，不因等待超时重开。未记整批原生验收。

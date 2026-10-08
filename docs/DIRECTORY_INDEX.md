@@ -1,3 +1,7 @@
+## 2026-10-08：牢前集火实际诊断与v34普通路线候选
+
+`qa/campaign_progress_recovery_20261008/actual_failed_durable_chain_v2/`保存已终态失败批五份原记录；`PRISON_FOCUS_ROUTE_DIAGNOSIS_V1.json`保存实际20单位集火enemy91及后续退营样本。`qa/office_campaign_route_20261008/v34/`保存只改牢前普通地面落点的route、SOURCE与仅静态审查。新`DURABLE_FULL_SOURCE_INPUTS_V4.json`/`DURABLE_CHAIN_SOURCE_SPEC_V3.json`封存单映射变化，`durable_chain_executor_v3/`保存八工具字节与差异证明；来源预检与新限定独立准入通过，`ACTUAL_DURABLE_CHAIN_LAUNCH_V3.json`记录全新批`38024dd3`/session96977实际启动；未取得整批实测结果。
+
 ## 2026-10-08：durable链执行器与host验证
 
 `qa/campaign_progress_recovery_20261008/durable_chain_executor_v1/`保存六个新工具的字节快照、`HOST_TESTS_V1.json`与原20项host测试日志；V1 spec与独立拒绝收据原样保留。后继`durable_chain_executor_v2/`保存七工具快照、23项host测试/日志；`DURABLE_CHAIN_SOURCE_SPEC_V2.json`封存固定CFG/ACK类型后的8+52范围。V2独立审查及`ACTUAL_DURABLE_CHAIN_LAUNCH_V2.json`记录限定准入和同一新批的实际启动，未取得实际A/原生链验收；原19故障与整体目标仍未完成。运行支持、冻结证据、固定谓词和主入口均在`tools/`，不改变正式游戏入口。

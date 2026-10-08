@@ -1,3 +1,11 @@
+## 2026-10-08：V2原生终态失败与牢前普通落点后继v34
+
+`durable_chain_65cae0c9`/session93131已终态退出1、锁释放。冷导入PID43800退出0/引擎错误0；Lu A PID27632退出1/引擎错误0，133项检查唯一失败`prison approach clear natural deadline`。没有完整A保存、后续ABCD或52负例资格。五份原receipt/identity/log/report按字节保存至`actual_failed_durable_chain_v2/`，原失败profile保留不复用。
+
+v33新增只读观察证明20个进军单位刚发完牢前命令都实际集火enemy91（坐标626.2234,784.5632，原点624,784），ST_CHASE且旧amove目的仍在南门。普通A+敌人分支确实调用explicit attack；随后手动链结束，剩余12人退回营地。证据及采样在`PRISON_FOCUS_ROUTE_DIAGNOSIS_V1.json`。后继`qa/office_campaign_route_20261008/v34/`仅为牢前攻击移动选择原点附近最多2格、开放且真实_enemy_at为空的地面，仍调用minimap_order并核对完整formation/ST_AMOVE目标；27原标签、所有成本/敌军/自然期限与其它路线保留，新增4个命令身份检查。修复效果尚未实测。
+
+v34独立静态复核通过，收据SHA`a16194b909ded82edb838fddf21c330baf141be51f0240a124334a001ee0cd68`，仅静态/approved_stages空；偏移界限为各轴最多2格（最远sqrt5格）。新`prepare_durable_campaign_full_inputs_v4.py`来源预检通过，封`DURABLE_FULL_SOURCE_INPUTS_V4.json`逻辑SHA`779fe49d53da9d1771e51f81d15149fa16411327aa94fb29ad3525d44bbb1765`；ProducerV3也通过无native预检，`DURABLE_CHAIN_SOURCE_SPEC_V3.json`逻辑SHA`d06e17b2b2756c61673ddce3441e4998e12b765895cdca005b0b0496fa1bb5f6`，八工具快照及差异证明在`durable_chain_executor_v3/`。V2源、23项host原收据均保留，共用源未变所以不重复测试。新完整来源独立准入通过，收据SHA`1ddf74b849464b18f0343adc6a39f7e1107ef853b82c2a092f8c50ff711e4d07`仅批准8+52及cold import。全新`durable_chain_38024dd3`/session96977/自有Python45548已启动并进入自然idle60，绑定见`ACTUAL_DURABLE_CHAIN_LAUNCH_V3.json`。旧失败档未复用；新批未终态，不称路线修复或原生通过。原19故障必须接当前真实事务与UI，不沿用旧直接Campaign API结果；八章/九玩法/EXE、性能/Android等完整目标继续。
+
 ## 2026-10-08：双角色持久续玩与52负例执行器候选
 
 新增 `tools/run_durable_campaign_chain_v1.py` 及运行、实际A冻结、矩阵校验支持。范围为普通CAMPAIGN_QA空值、双角色ABCD八进程与world264/component362/live24每角色的52负例阶段，加一次冷导入共61原生进程；19持久故障、JSON/OwnedSlot/半程、SDK、公开入口、导出/性能和设备验收另列未完成，不授整体目标资格。

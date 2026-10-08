@@ -1,3 +1,9 @@
+## 2026-10-08：V2终态失败，未取得A来源资格
+
+实际批`durable_chain_65cae0c9`/session93131已退出1/锁释放。冷导入PID43800通过且引擎错误0；Lu A PID27632的133检查只有牢前清敌期限失败，引擎错误0。五原始记录在`actual_failed_durable_chain_v2/`；旧档不改、不复用、不给任何后续矩阵作成功A。v33观察显示牢前A点击被实际enemy91命中转为explicit attack，20单位旧amove目标保留、随后链结束并退营；`PRISON_FOCUS_ROUTE_DIAGNOSIS_V1.json`绑定原报告/日志和精确采样。
+
+`qa/office_campaign_route_20261008/v34/`只改该牢前普通指令：原点附近开放/无实际点击敌人的地面，保留同一minimap_order及全部成本/敌军/期限/27标签，另核完整selection和formation目标/ST_AMOVE。v34静态审查/InputsV4/ProducerV3预检及新限定源码准入均通过，实际全新批`durable_chain_38024dd3`/session96977/自有Python45548已启动；新来源与启动绑定在同目录V4/V3 spec/review/launch，八源快照在`durable_chain_executor_v3/`。效果未取得完整实测结果，不复用旧失败profile，不重复启动。后续ABCD/52、原19/UI、SDK、八章/九玩法/导出、性能/设备目标全部保持未完成。
+
 ## 2026-10-08：durable链执行器候选与20项host测试
 
 V1 seal/六源快照/20项host日志及独立拒绝原样保留：DUR-CHAIN-CFG-001/ACK-002拒绝非固定CFG路径与整数布尔别名。不可变后继`DURABLE_CHAIN_SOURCE_SPEC_V2.json`逻辑SHA`653ebc6f7661574c28362edc1f6cdf99debcb6f271d47550fa2a86bec13fa965`，只修`campaign.cfg`三字段和ACK五字段严格类型。`durable_chain_executor_v2/`保存七工具快照及20＋3项host原日志/收据。V2源码预检和独立复核通过，仅准入8+52与cold import；实际批`durable_chain_65cae0c9`/session93131/自有Python10628已启动，启动绑定见`ACTUAL_DURABLE_CHAIN_LAUNCH_V2.json`。未取得整批终态或实际A资格，不重复启动。

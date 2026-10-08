@@ -1,0 +1,191 @@
+{
+  "schema": "daming_prison_ground_route_independent_review_v34",
+  "independent": true,
+  "reviewer": "office_full_review",
+  "reviewed_at": "2026-10-08T14:13:02.228594+00:00",
+  "review_kind": "read_only_route_diff_api_and_actual_failed_evidence_review",
+  "static_api_closure_passed": true,
+  "source_integrity_verified": true,
+  "route_static_compatible": true,
+  "route_sha256": "b802ac37694a9cdffd52e1ec4680a5e8e3effee36a407c37aae4f0f2bf0e6e69",
+  "route_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\office_campaign_route_20261008\\v34\\daming_safe_retreat_route_v26.gd",
+    "bytes": 27562,
+    "sha256": "b802ac37694a9cdffd52e1ec4680a5e8e3effee36a407c37aae4f0f2bf0e6e69"
+  },
+  "source_manifest": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\office_campaign_route_20261008\\v34\\SOURCE.json",
+    "bytes": 1334,
+    "sha256": "80fb4a057cad826f258322e29096cacb586a9769a822dbcf5f6bba7d3b3069b6"
+  },
+  "predecessor_route": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\office_campaign_route_20261008\\v33\\daming_safe_retreat_route_v26.gd",
+    "bytes": 25496,
+    "sha256": "94cd0489342b2b995fb5278781b605f52a34b93175040387cfd29147f7c5350f"
+  },
+  "approved_stages": [],
+  "native_started_by_reviewer": false,
+  "native_qualified": false,
+  "full_qualified": false,
+  "overall_goal_qualified": false,
+  "actual_strategy_fix_proven": false,
+  "findings": [],
+  "open_blockers": [],
+  "source_api_pins": [
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\battle.gd",
+      "bytes": 789546,
+      "sha256": "e3b9314d3442dbf90683736388170258756338d279a47e4f157b830c1378ea63"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\scripts\\unit.gd",
+      "bytes": 214831,
+      "sha256": "e3909e2d78dd68fa03ef2091bd35a22419f7179b750cff52143b0141305f54bb"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\scripts\\game_map.gd",
+      "bytes": 34327,
+      "sha256": "0f090079229a68269ac94870d1902238444e9ba0ddbc7f359df52f38a4b2db87"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\scripts\\levels\\level8_daming_rts.gd",
+      "bytes": 24789,
+      "sha256": "72e57093715ebfb29247aaf332838f233d736936d29d83a4b24ecd90ee677db7"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\final_durable_retreat_consumer_v1_r2\\daming_campaign_durable_cross_process_v1.gd",
+      "bytes": 59443,
+      "sha256": "ae1a20c87bf5c5a7efff9aaaf0426fc58965f2a9dac2bed34f06940a2e40a837"
+    }
+  ],
+  "static_diff": {
+    "predecessor_function_count": 21,
+    "candidate_function_count": 21,
+    "changed_functions": [
+      "_order"
+    ],
+    "other_20_function_bodies_exactly_unchanged": true,
+    "retained_literal_check_labels": 27,
+    "new_literal_check_labels": 4,
+    "lost_literal_labels": [],
+    "costs_paid_training_resources_guard_predicates_and_deadlines_unchanged": true,
+    "normal_nonprison_commands_unchanged_except_additional_requested_cell_diagnostic": true
+  },
+  "api_review": [
+    {
+      "file": "integrated_v4_r12/scripts/battle.gd",
+      "line": 10615,
+      "result": "Actual _order_amove_at checks the same screen point with _enemy_at. Enemy hit uses order_attack(enemy, queued, true); empty ground uses the actual to_logic inverse, _formation_targets with spacing30 and _formation_origin, then ordinary Unit.order_amove."
+    },
+    {
+      "file": "scripts/unit.gd",
+      "line": 804,
+      "result": "Explicit attack sets _target and ST_CHASE, clears _resume_amove, and leaves the prior _amove_dest. Ordinary _begin_amove clears _target, sets the real amove destination/path and ST_AMOVE."
+    },
+    {
+      "file": "qa/office_campaign_route_20261008/v34/daming_safe_retreat_route_v26.gd",
+      "line": 62,
+      "result": "Only attack_move to PRISON_CHECK searches 12 fixed nearby cells. The search is bounded by two cells on each axis, requires existing open land and no actual visible enemy click, and fails if no candidate is legal."
+    },
+    {
+      "file": "qa/office_campaign_route_20261008/v34/daming_safe_retreat_route_v26.gd",
+      "line": 74,
+      "result": "Complete actual selected movers are required; expected formation targets use the exact same actual player inverse/API. The command still calls minimap_order; subsequent checks read real ST_AMOVE, destination distance<=0.01 and null target for every mover."
+    },
+    {
+      "file": "qa/office_campaign_route_20261008/v34/daming_safe_retreat_route_v26.gd",
+      "line": 78,
+      "result": "No direct mutation of target, state, path, HP, resources, enemy population, clock or Mission is introduced. Formation preview is only a read for validation; ordinary player command owns all movement and combat."
+    }
+  ],
+  "actual_failure_evidence": {
+    "diagnosis": {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\PRISON_FOCUS_ROUTE_DIAGNOSIS_V1.json",
+      "bytes": 45610,
+      "sha256": "6ccd4915e5496c4104ed4d4125a5c8349a81f079c77f93f9b871b86612316092"
+    },
+    "raw_files_verified": [
+      {
+        "source": "D:\\CodexTemp\\lsh-durable-chain-20261008\\durable_chain_65cae0c9\\receipt.json",
+        "archive": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\actual_failed_durable_chain_v2\\receipt.json",
+        "bytes": 3087774,
+        "sha256": "2979f5e8882417145ae591db2b0de6e39ccc0b50e6202cbf6a13a800e48b05ed"
+      },
+      {
+        "source": "D:\\CodexTemp\\lsh-durable-chain-20261008\\durable_chain_65cae0c9\\post_cold_identity.json",
+        "archive": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\actual_failed_durable_chain_v2\\post_cold_identity.json",
+        "bytes": 422,
+        "sha256": "b265278c3ee27823927f0595c6a9f5a1fe3a5ff970a078c9dd2bc38c93937569"
+      },
+      {
+        "source": "D:\\CodexTemp\\lsh-durable-chain-20261008\\durable_chain_65cae0c9\\steps\\cold_import\\native.log",
+        "archive": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\actual_failed_durable_chain_v2\\steps\\cold_import\\native.log",
+        "bytes": 433756,
+        "sha256": "5fcbca61c26c462363b0e249c27b86eae7b40ec817fc60f15c2cd2227916aa20"
+      },
+      {
+        "source": "D:\\CodexTemp\\lsh-durable-chain-20261008\\durable_chain_65cae0c9\\steps\\lu_a_single_save\\native.log",
+        "archive": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\actual_failed_durable_chain_v2\\steps\\lu_a_single_save\\native.log",
+        "bytes": 12358,
+        "sha256": "e6ad209dcccba5220e3d834560a2637d19a9d836d1913f8260345301fcb5d954"
+      },
+      {
+        "source": "D:\\CodexTemp\\lsh-durable-chain-20261008\\durable_chain_65cae0c9\\steps\\lu_a_single_save\\A_single_save\\report.json",
+        "archive": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\actual_failed_durable_chain_v2\\steps\\lu_a_single_save\\A_single_save\\report.json",
+        "bytes": 265251,
+        "sha256": "05207f163cc7aa09c2ede9ead7092cace9cf280272722a4f3fd088c6cbfc47a3"
+      }
+    ],
+    "batch": "durable_chain_65cae0c9",
+    "batch_complete": false,
+    "batch_exit_code": 1,
+    "lock_released": true,
+    "cold_import": {
+      "pid": 43800,
+      "exit_code": 0,
+      "engine_errors": 0
+    },
+    "lu_A": {
+      "pid": 27632,
+      "exit_code": 1,
+      "engine_errors": 0,
+      "checks": 133,
+      "failed_labels": [
+        "prison approach clear natural deadline"
+      ],
+      "actual_A_save_qualified": false
+    },
+    "initial_20_mover_observation_exactly_matches_original_report": true,
+    "initial_target_ids": [
+      "91"
+    ],
+    "initial_states": [
+      3
+    ],
+    "initial_target_position": [
+      626.223388671875,
+      784.563232421875
+    ],
+    "samples": 12,
+    "first_sample": {
+      "logical_tick": "17724",
+      "army_alive": 20,
+      "manual_active": 20,
+      "prison_guards": 7
+    },
+    "last_sample": {
+      "logical_tick": "27628",
+      "army_alive": 12,
+      "manual_active": 0,
+      "prison_guards": 6
+    },
+    "api_sources_exactly_match_failed_batch_installed_input_pins": true,
+    "interpretation": "Observed immediate target91/ST_CHASE and old gate amove destination agree with the real explicit enemy-click branch. Candidate ground selection directly addresses that command distinction; successful rescue remains unproven."
+  },
+  "limitations": [
+    "This is route-only static compatibility. approved_stages is empty; a new source-input seal and producer independent review are required for any new native batch.",
+    "V2 actual terminal failure did not produce a qualified A save, ABCD chain or any 52-negative qualification; no failed profile may be reused.",
+    "The original prison guard predicates, combat, route/deadline limits and all costs remain required. No statement that v34 rescues either role is made.",
+    "Original19 faults, JSON/OwnedSlot, halfway recovery, SDK, public/device/performance and overall-goal acceptance are outside this review."
+  ]
+}
