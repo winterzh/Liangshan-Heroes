@@ -1,3 +1,13 @@
+## 2026-10-08：白胜实际身体阻挡定位，R12组合南侧普通路线候选
+
+旧V5实际批 `natural_terminal_1577d6e0` / session42979已终态失败并释放锁：import PID25388退出0/错误0；normal_fresh PID7880退出1/错误0，22检查唯一失败仍为原60秒自动卸酒。实际白胜位置911.29565,741.92834停滞，hp70/root0/stun0/manualfalse/auto/serial1均正常；next60Hz步map_open=true、body_open=false，两轴body也false。原军汉entity20位于891.7191,752，下一步与其距离20.9854，小于身体允许22。结合真实Unit._follow_path和static-only watchdog，此次停滞已定位到押队身体阻挡；不把诊断当终局、CFG或修复通过。五份原receipt/identity/log/report封存 `actual_failed_natural_terminal_v5/`，原失败档保留不复用，诊断来源及实际数值在 `BAI_BODY_STALL_DIAGNOSIS_V1.json`。
+
+父关卡候选 `huangnigang_bai_arrival_candidate_v1/` 只将白胜自动初始命令改为普通队列经过南侧(40,30)/(23,30)，再到原WINE_UNLOAD。没有修改身体碰撞、坐标/生命/敌军/时钟，玩家接管、同演员、serial门禁及1.5秒正常idle卸酒保持。两次queued=true不会改变替代命令serial，内部执行队列也不增加serial。
+
+新 `tools/run_campaign_natural_terminal_r12_bai_candidate.py` 明确绑定14份R12恢复源、该父关卡、原两份Core/Contract候选及110来源/81引用；runtime安装路径固定。原完整冷导入/identity、共享idle60、owned-process串行、正常无QA环境、实际自然终局/真CFG/gen3和三组重启/真实中断窗口全部保留。spec逻辑SHA `017d01e338cece864018c9e57e7002347089864393f9c3815e90f1a5e8c38b86`，独立准入见 `NATURAL_TERMINAL_INDEPENDENT_REVIEW_R12_BAI_V1.json`，仅natural_terminal_scoped。候选实际启动/结果以当轮独立收据为准，当前不宣称修复或完整恢复通过。
+
+双角色ABCD/19故障/52负例/实际失败UI重试/Steam奖励一次性仍待最终执行器；大名府牢前推进也仍待定位。八章、九玩法/导出、性能内存、Android真机原目标保持。正式游戏源码未晋升；本轮只同步stable，不发布。
+
 ## 2026-10-08：真实启动屏障上下文及空屏障防线修正，R12静态候选
 
 最终恢复的办理半程后继 `final_executor_candidate_v1_r2/` 保留原79项标签，新增正常startup门禁、真实Battle屏障归属与完整五参数v2生命周期检查。独立审查初步拒绝 FINAL-ADM-001：R9实际新游戏入口用缺省classic上下文创建保存屏障，原测试额外configure掩盖该问题。没有删除断言或恢复测试注入。
