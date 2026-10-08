@@ -1,3 +1,13 @@
+## 2026-10-09：回调原包严格消费者及 Unicode 拒绝修复
+
+新增纯 packet 消费者 campaign_callback_packets_v1/v2.py 与逐字节 snapshot/source spec。只接受一次 ready 与固定 PID/nonce/case/线程的递增1..8 snapshot，核对原 instance ID、提供的 installed identity/user、精确字段和正常时钟；拒绝重复JSON键、非有限数、过深结构、类型变化、重放及任何通过资格声明。返回保留 original packet bytes/size/SHA；provided PID/identity只是绑定输入，ownership_proven/native_qualified始终false。此JSON只为观察投影，不替代Godot Variant/CFG/lifecycle严格语义，也不保存实际socket收发或生产栈。
+
+V1封存10pins，58项可复现synthetic host通过；独立审查确认 CALLBACK-UNICODE-001：JSON转义孤立surrogate可被接受并推进序号，后续ensure_ascii=False UTF8保存失败。V1和其原封存不修改，保留为拒绝候选。V2只加JSON所有key/string的strict UTF8可编码核验，合法转义NUL保留；12pins含旧来源、60项synthetic通过，独立差异复审结果另见有限收据。所有检查只用原包/JSON夹具，没有真实socket/Popen/Godot、实际回调或原19资格，执行批准仍为空。
+
+独立V1拒绝收据SHA `8aade94cf2a92236489e24cdd0d09200a07e570fae3d73525e0da2635a5a147f`；V2有限通过收据SHA `12127a04cf7a49ed216e6c078ff3151062b1772afde94b21f8f258a85625e6bb`，static=true/stages=[]、12pins/全10本地导入边闭合，完整CallbackPackets class AST与V1一致。独立12项差异检查及我方3项完整snapshot Unicode回归只属synthetic；未连接socket/Popen/Godot，不授实际回调资格。
+
+新增 CONTROLLER_INTEGRATION_CONTRACT_V1.md，规定未来真实Popen持有关系、精确生产栈、首次原包收发全序与闭合证据，以及三类真实回调/云端路径；文件是设计，controller和三case driver/完整结果producer尚未实现。回读实际生产调用点无漂移；当前外部Godot PID41732占用、水浒来源锁不存在，第五完整批未启动。完整V12、原19、正式恢复接入、玩家入口/SDK和内容/性能/Android原目标仍待真实验证，无main/Steam发布。
+
 ## 2026-10-09：实际回调只读快照入口的有限源码预审
 
 新增 QA-only campaign_callback_snapshot_v1.gd 与独立 campaign_callback_snapshot_wire_v1.py。候选只读取实际 Campaign/SteamCloud 节点，核对生产脚本路径、原 instance ID、私有环境和固定 PID/nonce/case/递增序号；只修改观察器自有注册与序号。新命令限定 lsh_callback19:read，原 debugger 命令白名单不变，没有 evaluate、set_variable 或生产节点替换。

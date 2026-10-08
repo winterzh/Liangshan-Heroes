@@ -1,3 +1,7 @@
+## 2026-10-09：回调原包消费者各代证据
+
+新增 tools/campaign_callback_packets_v1/v2.py；恢复QA新增两代snapshot、SOURCE_SPEC、可复现synthetic检查脚本/记录及有限独立收据。V1 Unicode拒绝原件保留，V2差异复审仅源码。callback_observer_candidate_v1/ 新增 CONTROLLER_INTEGRATION_CONTRACT_V1.md，设计未实现，不能计为controller或原生资格。
+
 ## 2026-10-09：回调只读观察器来源
 
 新增 tools/campaign_callback_snapshot_wire_v1.py；恢复 QA 的 callback_observer_candidate_v1/ 包含 GD、SOURCE、实际生产调用源码映射、有限独立收据及 protocol_reference_4_4/ 三份官方参考源码；另保留 wire exact snapshot 与21项可复现纯主机脚本/记录。只属 source-only、stages=[]，不是三用例执行器或当前引擎兼容性证明。
