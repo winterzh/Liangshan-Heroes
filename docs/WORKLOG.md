@@ -1,3 +1,13 @@
+## 2026-10-09：六故障串行流程、完整报告发布及第三完整批
+
+新增故障串行 runtime 候选、native export/原始字节 publisher 及 GD v3/v4 来源。V1 独立拒绝收据 SHA `75192e37610786056fb4c66d51843566f02a9cf8def6bf4b34d48ab6948c4751` 保留三个问题：启动环境未提前绑定本步骤；Godot rename 可删除已有目标；诊断栈在整份日志中查找，未关联到对应 ERROR。
+
+后继 runtime V2 在 Popen 前核实际 output/profile/nonce/case 与 post-cold identity 首次 pin，拒绝 Windows 环境 key 别名；GD v4 只写关闭后的 nonce stage 并输出 PID/nonce/name/SHA，host 发布精确原始字节，使用 Windows no-replace rename。fresh 五文件/restart 两文件集合和原件/public SHA 收尾复核，真实终局栈前有界等待 ready 发布；错误只能对应同块紧随的 parser/backtrace/R12 frame。原路线/check/报告 v2 正文逐字不变，共享完整 V12 runtime 未修改。
+
+SOURCE_SPEC_V2 SHA `774cefb368faa74059f8c7b5c1987e04a93d3f03bed8e370ddabec0e0d79e489` 固定39 pins/11 tools Python/26 imports。独立 V2 收据 SHA `cbb744e1815b9814d78277b93d19ee2f4132397b31033524dfc26527dc2337e2` 有限静态部件通过，stages空；我方可复现20项与审查方12项均为人工主机夹具，不是 Popen/debugger/Godot 资格。完整报告验证器/producer 和真实六故障仍须继续。
+
+完整 V12 同一来源预检通过后启动全新第三批 `durable_chain_6409dde9`，session32145/host Python32920；启动时无外部引擎，准备后外部 Godot39900 恢复，新批仍在等待连续 idle60，尚无原生阶段结果。历史启动观察见 DURABLE_CHAIN_V12_THIRD_RUN_START_V1.json；该文件本身不能证明后续存活，接续须回读同一会话/CIM，不重复启动。未复用失败 A/profile、未控制其他引擎/发送未授权跨聊天消息。正式恢复源未晋升，无 main/Steam 发布。
+
 ## 2026-10-09：真实文件故障控制器预审修订与后续开发顺序
 
 独立收据已回读：V1 SHA `6a9c9eb0c1b4197ec79f4f4922dcb3ccd00c5fe1b2d7cffc0f89fa96d2df9bfe` 拒绝 `DEBUGFAULT-PENDING-001`；V2 SHA `c6bbfb60b07b8142266b22295523e5ca639affb0af0bcc5c3255cde2e0ba2cb4` 静态部件预审通过，`approved_stages=[]`。未授原生执行、完整 producer、full19、UI 或 SDK 资格。

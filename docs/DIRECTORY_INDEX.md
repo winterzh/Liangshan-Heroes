@@ -1,3 +1,7 @@
+## 2026-10-09：六故障串行部件和完整文件发布来源
+
+tools新增 atomic_files_v1/v2、debug_faults_v3、fault_runtime_v1/v2、native_exports_v1。恢复QA新增六份source snapshot、ORIGINAL19_FAULT_RUNTIME_*封存/两次独立收据/人工host检查脚本结果、natural_file_faults_candidate_v3/v4（仅JSON发布改动）及完整V12第三批历史启动观察。原共享完整runtime不改；全producer/六故障实际验收未完成。
+
 ## 2026-10-09：原19文件故障控制器来源与后续开发清单
 
 tools 新增 `campaign_original19_debug_faults_v1.py` / `v2.py`（均无原生启动入口）；恢复 QA 新增对应 SOURCE_SPEC、source snapshot、HOST_SOURCE_PREFLIGHT、纯主机 HOST_GUARD_CHECKS 及独立预审材料。正式游戏源码未晋升，未取得真实六故障资格。新增 `docs/NEXT_DEVELOPMENT_20261009.md` 汇总原定开发顺序与各阶段验收边界。

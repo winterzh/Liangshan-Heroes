@@ -1,3 +1,13 @@
+## 2026-10-09：六故障 runtime 与闭合 JSON 发布后继
+
+`ORIGINAL19_FAULT_RUNTIME_SOURCE_SPEC_V1/V2.json` 固定 runtime、controller v3、host atomic/raw-byte publisher、GD v3/v4、原件 snapshot 和导入闭合。V1收据 `75192e…` 拒绝 ENV-001/PUBLISH-002/DIAG-003：未提前绑定实际环境、Godot不同名rename会删除目标、诊断栈可被无关前文decoy满足。全部原字节保留。
+
+V2 spec SHA `774cefb368faa74059f8c7b5c1987e04a93d3f03bed8e370ddabec0e0d79e489`，39pin/11tools/26edge；review SHA `cbb744e1815b9814d78277b93d19ee2f4132397b31033524dfc26527dc2337e2` 静态部件通过、stages=[]。GDv4没有rename，关闭nonce-stage后输出actual PID/nonce/fixed-name/SHA；host冻结首次closed bytes再no-replace发布，要求fresh5/restart2原件、公有JSON最终SHA一致。启动前精确step/identity原pin环境；预算只能该ERROR紧随的parser/backtrace/R12 frame，其他native ERROR/SCRIPT/Parse零容忍，不猜候选写失败额外允许。原自然路线/check/report v2 exact。
+
+SYNTHETIC_HOST_CHECKS_V2.py/.json可复现20项纯host（环境/alias/identity、同块/decoy诊断、半UTF8/半marker、完整原字节发布、PID/nonce/重复/缺项/漂移），V1十二项原记录保留；审查方另做十二项有限host检查。没有真实Popen/debugger/新GD解析、完整producer或原19资格。
+
+完整 V12 第三批 session32145/Python32920/run6409dde9 已准备，当前仍等外部引擎39900自然空闲，0个原生阶段。DURABLE_CHAIN_V12_THIRD_RUN_START_V1.json只保存历史live启动观察，不证明当前存活/退出；须回读相同handle，不能因此重启。正式源和平台未变。
+
 ## 2026-10-09：无启动入口的实际文件故障控制器候选
 
 PRELIMINARY_REVIEW_V1 SHA `6a9c9eb0c1b4197ec79f4f4922dcb3ccd00c5fe1b2d7cffc0f89fa96d2df9bfe` 拒绝 `DEBUGFAULT-PENDING-001`；V2 SHA `c6bbfb60b07b8142266b22295523e5ca639affb0af0bcc5c3255cde2e0ba2cb4` 解决该项，静态部件预审通过，均 `approved_stages=[]`。真正 proposal/对象、监听栈、Popen 所有权、错误预算和完整聚合仍需后续执行器独立准入及真实结果。

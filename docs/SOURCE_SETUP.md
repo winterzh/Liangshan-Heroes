@@ -1,3 +1,9 @@
+## 2026-10-09：故障执行部件后继与唯一后台批
+
+`campaign_original19_fault_runtime_v2.py` / `native_exports_v1.py` / `atomic_files_v2.py` 及自然文件故障 GD v4 已通过有限独立源码预审，收据 SHA `cbb744e1815b9814d78277b93d19ee2f4132397b31033524dfc26527dc2337e2`，stages空。V1三问题拒绝和所有旧源保留；新host负责首次原始字节、固定进程/目录/identity环境、完整发布及同ERROR块诊断预算。完整 producer/report validator 尚未实现，没有新六故障原生准入。
+
+本机唯一完整 V12 第三批为 session32145/host32920，私有 `D:/CodexTemp/lsh-durable-chain-20261009/durable_chain_6409dde9`；当前观测外部39900占用，等待连续idle60，不能把等待记为测试通过或重复启动。先回读同一 handle/CIM，再查该 run checkpoint/receipt；启动历史记录在 QA，仅为历史观察。原完整计划不缩范围，正式入口和 Steam 不变。
+
 ## 2026-10-09：文件故障控制器来源与当前接续点
 
 V1 独立预审拒绝已保留；V2 `ORIGINAL19_DEBUG_FAULTS_PRELIMINARY_REVIEW_V2.json` SHA `c6bbfb60b07b8142266b22295523e5ca639affb0af0bcc5c3255cde2e0ba2cb4` 静态部件通过但 stages 为空。接续须另做整个 producer 审查和实际原生验收，不把该收据当执行许可。
