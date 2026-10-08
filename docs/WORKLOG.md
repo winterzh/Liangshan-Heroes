@@ -1,3 +1,10 @@
+## 2026-10-09：实际pending UI V5限定审查准入，等待同批V9全61闭合
+
+V4唯一cold日志custody遗漏已保存在 `PENDING_TERMINAL_UI_INDEPENDENT_REVIEW_V4.json`（SHA `59d11a92ea60c0b259059038f9fb6fd17928fd4d987a412f3d6874fe45d4b130`，stages空），旧源/spec/快照保持不变。V5仅在已绑定batch.integrity中遍历所有已terminal且有log_sha256的步骤，以原step.log_sha256固定登记并末次复核，补齐cold/fresh/restart全部三阶段原日志。
+
+新V5 SourceSpec逻辑SHA `714a2b8307f94e119562241ea5a94bc5a37c6a1417399c3e193682c883010156`，100pin/30Python/87边闭合。`pending_terminal_ui_executor_v5/`两源快照与单点差异proof已核；GD `59be03c34cc6154551786bb3670961d245465b54d9f059e5f21ae9048d60fa79`、105/20完整检查多重集与其余原值/完整CFG/intent/ACK/PNG/对象/所有权/优化/native安装判据都保持V4 exact。
+
+独立限定收据 `PENDING_TERMINAL_UI_INDEPENDENT_REVIEW_V5.json` SHA `dac37f2450b2eb7343a1caf992adc7bd97b6ec18eff0dc90e543862e9f3f8eab` 已实际回读，只准 `actual_pending_terminal_UI_same_object_retry_and_restart`。尚未运行UI。执行必须固定freshV9 `4eeadd45` 实际全61complete、所有原日志/evidence/三代journal回读门禁通过，再使用新的UI run/profile；不能并发，不能继承旧fixture资格。下一步原回归V4六进程与UI V5依此串行运行。当前V9同session28289/Python44560/component28096仍live，已越过旧1200秒但未超过本批审查的3600上限；尚未该矩阵或全链终态，原19/SDK/完整计划未通过。
 ## 2026-10-09：UI V3原值custody拒绝，V4固定字节候选复审
 
 V3独立拒绝 `PENDING_TERMINAL_UI_INDEPENDENT_REVIEW_V3.json` SHA `204109aa871bd43530ef9a022e829785ce36bd6d4fefba964f1f6321064bbe69` 已保存，stages空。唯一剩余PUI-CUSTODY-001：重新file_pin可能把验证中变化的文件当作新基准。此前其余修复、94pins/28Python/77边、105fresh/20restart原检查多重集及GD实际API均已核；V3不运行，旧源/spec/快照保留。

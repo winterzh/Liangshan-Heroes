@@ -1,3 +1,7 @@
+## 2026-10-09：实际pending UI V5限定收据与三阶段日志原值来源
+
+恢复QA新增PENDING_TERMINAL_UI_INDEPENDENT_REVIEW_V4.json（cold custody拒绝）、PENDING_TERMINAL_UI_SOURCE_SPEC_V5.json、pending_terminal_ui_executor_v5/双源与单点proof、PENDING_TERMINAL_UI_INDEPENDENT_REVIEW_V5.json（仅限定UI）。尚未UI运行，前置V9全61尚不满足。
+
 ## 2026-10-09：UI原值固定V4来源与V3拒绝收据
 
 恢复QA新增PENDING_TERMINAL_UI_INDEPENDENT_REVIEW_V3.json（原值custody拒绝）、PENDING_TERMINAL_UI_SOURCE_SPEC_V4.json、pending_terminal_ui_executor_v4/双源快照/完整proof、PENDING_UI_FIXED_EVIDENCE_HOST_CHECKS_V4.json。V4复审中、未native；V9 world264已过，同批component仍运行。
