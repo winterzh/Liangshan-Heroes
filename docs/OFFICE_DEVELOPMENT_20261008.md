@@ -1,3 +1,11 @@
+## 最新：CFG受控替换组件36检查通过，完整V8-R3继续
+
+CFG组件四案例/八个不同实际PID/36检查完整通过，包含backup/install两处真实进程中断后恢复与外部CFG改动后的拒绝覆盖。原失败保留，正式生产源码未改；结果不延伸为玩家UI、自然战役、完整gen2→cfg→ack或奖励通过。[真实组件证据](../qa/campaign_progress_recovery_20261008/README.md)。
+
+恢复候选增至八GD，新进度gate和保留式协调器只完成源码闭合，尚未安装/解析/独立审查或集成Campaign/ContinueFlow/Battle/startup/prefs/cloud。源快照与实际原失败均完整。
+
+同一V8批准的完整续玩源启动新全批 `office_full_f2d8d7cc`，观察session36886，当前等自然引擎空闲；V8-R2原失败未复用，新结果须等本批实际终态。[完整QA](../qa/office_campaign_full_20261008/README.md)。原19案/194检查v27b组件资格保留，其余完整计划继续。
+
 ## 最新观察：完整V8-R2失败保留，CFG组件等待
 
 V8-R2的办理半程ABC39/351/342及前序真实通过；Lu-first A开始后外部Godot进入，整批终止退出1、锁释放，原档案保留，不补齐成完整双方资格。当前唯一新批为CFG组件cfg_component_c5212404/session41902，正在等待自然空闲，尚无Godot结果。[完整记录](../qa/office_campaign_full_20261008/README.md)。

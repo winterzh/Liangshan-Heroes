@@ -1,3 +1,7 @@
+## 新增实际CFG组件与保留式协调器来源
+
+`qa/campaign_progress_recovery_20261008/actual_cfg_component_v6/`与ACTUAL_CFG_COMPONENT_PASS_V6保存真实四案/八PID/36检查通过；failed_cfg_component_v5保留原失败。SOURCE_AUDIT_V5/combined_source_snapshot_v5封存八GD候选（gate/协调器未集成）。`qa/office_campaign_route_20261008/ACTUAL_LAUNCH_V8_R3.json`为同一V8批准来源下新UUID/profile完整批命令。
+
 ## 新增六候选源与完整R2原失败
 
 `qa/campaign_progress_recovery_20261008/combined_source_snapshot_v4/`、SOURCE_AUDIT_V4和WORLD_SESSION_DISPATCH_SOURCE_V1记录六GD候选实际字节/API/生产SHA；全部未解析/未native/未生产。`qa/office_campaign_full_20261008/actual_failed_v8_r2/`保留真实ABC与Lu-first A外部竞争失败，原profile在工程外完整保留。

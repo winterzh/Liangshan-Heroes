@@ -1,3 +1,13 @@
+## 当前：CFG四案例实际组件通过，完整续玩V8-R3启动
+
+CFG新批 `cfg_component_40939c93`已完整终态退出0，锁释放：四案例、八个实际不同PID，36检查全部通过。正常替换/同内容重存、真实backup窗口中断并新进程恢复、真实install窗口中断并恢复、控制器实际外部CFG变更后的拒绝覆盖及新进程再次拒绝全部完成。真实断点源/函数/行/thread和文件SHA已由控制器绑定，偏好/未知字段/无关record保持。
+
+原收据SHA `c555249e35c509b12655ed5c9f23bb4dcd26f639e646840a10ee4fc03604c09f`；原收据/日志/报告存`actual_cfg_component_v6/`，资格明细见ACTUAL_CFG_COMPONENT_PASS_V6。原V5初轮首案失败、原profile及源全部保留；V6只等待真实process frame进入非physics阶段并补失败code观察，生产磁盘守卫/原检查数不放宽。
+
+新增progress gate和保留式terminal→cfg→ack协调器候选，冻结同局意图、每次重试再核对实际Battle/owner/context/安装身份，完成展示仅可消费一次；恢复只能进度，不重新构造战斗/Mission/结算。八GD来源见SOURCE_AUDIT_V5/combined_source_snapshot_v5。除CFG组件涉及的存储/语义两文件外，其余新候选仍未解析/native；新协调器未接Campaign/ContinueFlow/Battle/startup/UI/prefs/cloud，不宣称玩家恢复功能、gen2→cfg→gen3实际全链或奖励通过。
+
+完整续玩用同一V8批准producer/seal_v8/v28三源、新UUID/profile再开V8-R3；目前真实结果须读本批，不能继承旧ABC作为全链。当前只运行这一自有完整批，不同时重开CFG组件。完整八关/生产运输/美术UI/九玩法/性能/Android原计划继续。
+
 ## 当前六份GD候选与完整批终态
 
 新增WorldSession候选：campaign用严格v2、classic用原v1；在Core.prepare前和mount前核对真实脚本/token/root/context/安装身份/owner。旧不绑定章节的campaign v1明确拒绝，不迁移、不修改原记录。新增纯同局投影保留偏好/未知CFG及record数据，不union跨局目标；无文件/回调/战斗/奖励操作。六候选原字节与9生产来源核对记录在SOURCE_AUDIT_V4/combined_source_snapshot_v4，未解析/未native/未接入正式游戏。
