@@ -1,3 +1,7 @@
+## 2026-10-09：UI原值固定V4来源与V3拒绝收据
+
+恢复QA新增PENDING_TERMINAL_UI_INDEPENDENT_REVIEW_V3.json（原值custody拒绝）、PENDING_TERMINAL_UI_SOURCE_SPEC_V4.json、pending_terminal_ui_executor_v4/双源快照/完整proof、PENDING_UI_FIXED_EVIDENCE_HOST_CHECKS_V4.json。V4复审中、未native；V9 world264已过，同批component仍运行。
+
 ## 2026-10-09：终局错误界面V2拒绝与V3复审来源
 
 恢复QA新增PENDING_TERMINAL_UI_INDEPENDENT_REVIEW_V2.json（五项拒绝）、pending_terminal_ui_candidate_v2/（GD与105/20原检查多重集）、PENDING_TERMINAL_UI_SOURCE_SPEC_V3.json、pending_terminal_ui_executor_v3/双源快照与完整proof、PENDING_UI_TYPED_INTENT_HOST_CHECKS_V3.json（13只读host检查，无native资格）。

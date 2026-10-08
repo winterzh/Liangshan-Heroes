@@ -1,3 +1,12 @@
+## 2026-10-09：UI V3原值custody拒绝，V4固定字节候选复审
+
+V3独立拒绝 `PENDING_TERMINAL_UI_INDEPENDENT_REVIEW_V3.json` SHA `204109aa871bd43530ef9a022e829785ce36bd6d4fefba964f1f6321064bbe69` 已保存，stages空。唯一剩余PUI-CUSTODY-001：重新file_pin可能把验证中变化的文件当作新基准。此前其余修复、94pins/28Python/77边、105fresh/20restart原检查多重集及GD实际API均已核；V3不运行，旧源/spec/快照保留。
+
+新 `run_campaign_pending_terminal_ui_v4.py` 只补原值固定：首次raw bytes解析report/handoff/seal/review，固定路径原pin不可替换；日志持续用step原log_sha256，PNG持续用native声明SHA且从同一BytesIO原字节实际解码；envelope原row立即固定，CFG绑定原ACK声明SHA；阶段前后及末次都复核原值。GD/原105/20/类型/完整scope/intent/ACK/Objects/native安装与优化保护不变。source-spec逻辑SHA `7a6fda19adc320e866e9d8bf83aeef28b43e70808ac1d84de5b66aad71f7cbef`，97pins/import图与双源字节快照在 `pending_terminal_ui_executor_v4/`。当前仅预检及独立复审，未UI原生运行、未获资格。
+
+`PENDING_UI_FIXED_EVIDENCE_HOST_CHECKS_V4.json` 记录4项宿主验证：原文件及稳定重读、修改report不得重基准、原native声明SHA必须匹配、两次拒绝后原pin仍保留。仅自有临时JSON测试，无游戏profile写/无Godot；保留测试输入与原SHA，可复查，不转移native资格。
+
+全新V9 `4eeadd45` 同session28289：冷43800/Lu A37128（303项）/world37936（264行1540项）均原生与host通过、exit0/error0。component28096已开始，尚未终态。继续同一自有批次；完整61/原回归六进程/UI/19/SDK/八章九玩法/导出/性能/真机及整个目标均未完成，不发布或晋升正式源。
 ## 2026-10-09：真实pending UI V2拒绝封存，V3五项修复候选复审
 
 `PENDING_TERMINAL_UI_INDEPENDENT_REVIEW_V2.json` SHA `24845cf4e3a54cd220a0b868cd5e54689bb2a80f69ce66eedc388745d30880e4` 已独立拒绝（stages空），完整保留原V2源/spec/快照。五项为逐阶段与全部前置证据custody、Python优化关闭assert、实际native安装组合遗漏、完整宿主断言/PNG来源闭合，以及遗留admission范围字段。V2不运行。
