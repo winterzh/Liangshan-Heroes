@@ -1,3 +1,15 @@
+## 2026-10-09：完整V12限定准入及唯一新批
+
+新增DURABLE_CHAIN_INDEPENDENT_REVIEW_V12.json，仅durable_chain_and_matrices；私有durable_chain_fb1da6e0/session53980为唯一全新完整批，未终态/未资格化，不上传工程/profile。实际审计基准219项通过与此全链边界分开记录。
+
+## 2026-10-09：完整V12封存与有界审计预算
+
+新增tools/run_durable_campaign_chain_v12.py、DURABLE_CHAIN_SOURCE_SPEC_V12.json、durable_chain_executor_v12/三源和完整closure proof。只有audit deadline6000的新候选来源、尚未Native；V11封存保持。
+
+## 2026-10-09：实际审计等价通过与完整候选V11
+
+恢复QA新增actual_passed_audit_benchmark_v4/五原始文件、ACTUAL_COMPONENT_AUDIT_BENCHMARK_PASS_V4.json、DURABLE_FULL_SOURCE_INPUTS_V7、完整SourceSpecV10/V11、durable_chain_executor_v10/静态图拒绝来源与durable_chain_executor_v11/三源和host/source proof。tools新增prepare_full_inputs_v7及fullproducerV10/V11。只有基准219/31实际通过，完整V11复审中/未Native，所有原任务未完成。
+
 ## 2026-10-09：V4独立限定收据与新隔离run
 
 新增COMPONENT_AUDIT_BENCHMARK_INDEPENDENT_REVIEW_V4.json，源码准入仅benchmark；私有audit_benchmark_cccd1b29为全新工程/profile，只观察session73354，不上传profile/工程。

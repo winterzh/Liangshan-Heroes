@@ -1,3 +1,27 @@
+## 2026-10-09：完整V12限定审查准入，新61批已启动
+
+DURABLE_CHAIN_INDEPENDENT_REVIEW_V12.json SHA 0dd6fcaff8773a185872747332b7376b36c72649db312deb072bcf3c9044fc92 已按第一raw字节回读，唯一approved_stages=[durable_chain_and_matrices]；producer/spec三SHA精确匹配。独立实际核验InputsV7及SpecV12与封存完全相同，116联合pin/29Python72edges/26overlays、基准5原档/219项31组和成本汇总闭合。6000只审计预算，不授矩阵速度/游戏性能/full19/UI/SDK/整体资格。
+
+已启动唯一新自有完整批 D:/CodexTemp/lsh-durable-chain-20261009/durable_chain_fb1da6e0，session53980/ownPython30988；全新UUID/project/profile与本批actual A，从完整源码冷导入开始，每phase自然空闲60秒，全部8+52加cold61进程必须同批实际闭合。当前只是完整工程冻结准备，尚未任何全链终态资格；固定源/spec/review不更改，只观察此原session，不重复启动。旧所有失败profile/A与benchmark只读A不作为新fixture。原回归V4/UI V5/原19数据V1仍绑定失败V9，待新批实际complete后另建精确后继。
+
+本轮收尾白名单同步实际benchmark通过原件及已审查候选来源/交接；正式恢复源未晋升，八章/美术UI/九玩法/性能/Android完整开发计划保持未完成，不合并main/不Steam发布。
+
+## 2026-10-09：完整候选V12有界组件审计预算，等待限定准入
+
+V11源/spec/proof原样保留、未Native。考虑V9在3600秒仅完成230/362行，按旧速度完整矩阵约5666秒；新CPU编码基准减少21.46%并不证明矩阵在原3600秒内足够快。V12只将组件审计deadline改6000秒，并更新schema/历史来源pins；world/capture1200、ABCD1800、整批21600、全部264/362/24原判据与Codec/Slot限制保持，不扩大任何游戏性能阈值、不宣称矩阵加速或通过。
+
+V12 producer SHA 6309ed4976199a0afc058b0cf3a0bc78f0ba3dcc1bb01193958a19751eb3d7c5，SourceSpec逻辑SHA 867bd2d1b78339f357200e4dca344d14fb38a05c39f3e7906fe3f11507b60209/raw4bba2b87b74afe93be6e5bd52cc693debe1af505962eecb91709964d5534369e。durable_chain_executor_v12/三源及proof：116pins/29Python/importmissing=[]/26overlays，V11除source_spec/schema constructor/phase budget外全部ASTexact；R6/InputV7与实际benchmark原件相同。独立复审针对V12，未Native；准入后只开全新完整61批，自有原生串行/自然idle60，actual A从本批生成。
+
+## 2026-10-09：R6实际等价基准通过，新完整候选V11独立复审
+
+新隔离基准cccd1b29/session73354实际host终态0，complete/equivalence=true、lock_released=true；cold45580与bench13392实际exit0/errors0。219检查/31组完整旧新typed JSON/IEEE fingerprint全部相同，actual_passed_audit_benchmark_v4/保留5原始receipt/checkpoint/日志/report，ACTUAL_COMPONENT_AUDIT_BENCHMARK_PASS_V4.json逐SHA索引。31组本批汇总旧编码2629418us、R6cold2065047us（减少21.46%）、warm1889315us（减少28.15%）；pretty86572761bytes/compact21660974bytes（减少74.98%）。仅这一次实际CPU/序列化语料观察，未测物理写盘，不证明全矩阵加速或游戏FPS；full/SDK/whole全部false。V3仍是保留的实际失败，未转移资格；旧A只读数据不作未来全链fixture。
+
+prepare_durable_campaign_full_inputs_v7.py 只将完整26overlay中的组件R5映射到R6，逐核本批实际原件/收据/准入；输入逻辑SHA 9ae0b50ccc99c261a3f9273ba2b18e7beda297d7a8457b05957c7134de41c987，所有原8+52合同保留。source-only V10遗漏metadata benchmark producer的间接UI helper，被完整import图检查拒绝、未Native，源/spec/失败proof在durable_chain_executor_v10/原样保留。
+
+后继run_durable_campaign_chain_v11.py和SourceSpecV11逻辑SHA a19939818312caf8b50eb5f2752162b44210c375af8d9630993710bc1d74568f 完整113pins/28Python/importmissing=[]/26overlays。durable_chain_executor_v11/三源/proof显示V9全部函数AST除source_spec/constructor/integrity/main均exact，原矩阵/ABCD/61 distinct processes/timeouts3600及批21600/owned handle/unknown-child retention/idle60都保持；额外固定第一raw seal/review，全部terminal原log SHA复核。host原SHA漂移、malformed、优化Python拒绝均已检查；初次验证助手预期异常类写成AssertionError但真实require正确抛RuntimeError，仅修复临时验证catch，无候选/source seal变更。
+
+当前独立复审中，尚未启动新完整批；若准入必须全新UUID/project/profile、双角色本批实际A，不复制任何失败V9或benchmark旧profile。原回归V4/UI V5/原19数据V1仍固定失败V9不能运行；待新全61实际闭合再准备新的精确后继绑定。正式恢复源尚未晋升，八章/美术/九玩法/性能/Android完整计划仍未完成，无main合并/Steam发布。
+
 ## 2026-10-09：V4限定准入与全新隔离批
 
 COMPONENT_AUDIT_BENCHMARK_INDEPENDENT_REVIEW_V4.json SHA 526ca1f3c5890f19280dc838810fcf7a442e38d305a4c9217a8a38c7d6207a01 按实际字节回读；唯一批准read_only_component_audit_equivalence_and_cost_benchmark。原V3失败证据不转移资格。新批 D:/CodexTemp/lsh-component-audit-benchmark-20261009/audit_benchmark_cccd1b29 /session73354/ownPython32448已启动完整工程冻结准备。另一盲盒Godot曾出现，控制器仍要求自然空闲60秒再每阶段运行，不控制外部进程；当前尚无本批等价/成本终态报告。
