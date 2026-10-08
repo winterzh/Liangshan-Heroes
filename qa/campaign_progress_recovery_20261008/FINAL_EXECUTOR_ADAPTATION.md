@@ -1,3 +1,7 @@
+## 2026-10-08：拒绝矩阵后继与输入准备边界
+
+R4 six-file后继静态兼容已闭合，R3 resource addendum明确限制旧初审，world264/component362/live24不减，v1/v2拒绝全部保留。输入准备26覆盖/base5132源已封存但无执行能力；最终producer必须新绑定R4独立review、每role真实A成功退出后冻结、52完整负例阶段及19/UI/SDK严格结果，不能沿用old schema/suppression/历史绿。当前无新的full native准入。
+
 ## 2026-10-08：当前可证明范围与后继接口
 
 R12＋白胜普通南侧路线的110来源三组已实际complete/zeroerrors：normal fresh/restart、真gen2中断/restart、真CFG确认前ACK中断/restart。仅此范围，final roles/19/52/SDK/UI/perf/devices仍未资格。完整consumer R2有独立静态复核，100原unique labels保留96、4个旧QA-suppression标签在新schema改严格CFG确认，原v1 validator保持，不用旧绿转移资格。完整producer及component/live后继未就绪。

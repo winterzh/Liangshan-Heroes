@@ -1,3 +1,13 @@
+## 2026-10-08：264/362/24持久化矩阵后继R4静态闭合，完整输入26覆盖封存
+
+`final_durable_negative_adapters_v1/` 独立拒绝NEG-ADAPT-001/002：capture自己override守卫仍要求QA1，且override loader未初始化继承安装校验所用Lifecycle。R2修守卫并加入world264，但loader缺口保留，准确拒绝。不可变R3修两处，后继R4 `final_durable_negative_adapters_v1_r4/` 保留修复并显式固定load campaign-v2 Lifecycle/Intent；不加载或调用父natural route/drivers。
+
+R4保留world33原unique labels、component52、capture50，world132×source/json=264和component181×source/json=362每角色合同、24live字典与5caster、全部mutation/IEEE/HELD/noTick/noNode/实际Core及原层/code/类型不变，只接正常startup/default root/v2五参数与完整scope、实际新A schema及32源pins。独立V4已核135 literal图、R12Bai110组合与两CoreContract/继承durable R2 exact，仅静态兼容，approved_stages=[]；尚无新实际A冻结或full producer，不能称矩阵运行通过。
+
+`tools/prepare_durable_campaign_full_inputs_v3.py` 实际无native预检成功，封存 `DURABLE_FULL_SOURCE_INPUTS_V3.json`：完整base5132逐文件与两CoreContract、15运行源+11测试gd/scene/route共26唯一runtime覆盖，逻辑SHA `c00aafd462a4c6a2a96f88a085c6297e4e3a6bb6fc67b75b4e571bb4e9cab869`。V1独立拒绝PREP-LINK-001：pin先resolve再查链接，且base子文件没有逐个检查原路径；保留原V1/spec/快照。V2在resolve前、每次read/sha前和110/base5132每项stat/hash前检查原路径及所有父链。输入映射复核追加NEG-ADAPT-003：R3 capture report读取旧absent基类SHA；保留V3初审与明确覆盖它的资源addendum、V1/V2 inputs拒绝。R4只把该证据读取改成实际继承的durable基类，矩阵正文不变；Inputs V3选用R4并保留V2逐原路径检查。来源准备工具无--run，仅不可变JSON输入封存；独立prepare-only复核不授Native/full，R4审查仍须绑定至最终执行器的新seal。八ABCD进程/264/362/24/52负例阶段/19故障/默认continue根与三代生命期合同全部列明。
+
+普通黄泥冈三组actual complete的旧绿保留其scope：不扩展角色、19/52、真实故障UI/同对象重试、Steam奖励、导出/性能/真机。下一步实现最终producer的严格durable consumer/来源冻结/完整矩阵聚合及新19/UI cases，再做独立完整准入；大名府牢前推进尚待v33实际诊断。正式游戏源码未晋升，原完整目标不缩小，本轮只白名单同步stable。
+
 ## 2026-10-08：R12＋白胜候选普通终局与三组恢复实际通过，完整双角色后继继续
 
 实际批 `natural_terminal_645e69a6` / session85300已完整终态退出0、锁释放。七个独立PID：import43784退出0；normal_fresh32384退出0/72checks、normal_restart43736退出0/20checks；gen2_fresh36640在真实第二代已落盘/CFG未写的源码断点被只终止自有进程，gen2_restart23320退出0/20checks；cfg_ack_fresh27544在真实CFG已确认/ACK前断点被只终止自有进程，cfg_ack_restart8056退出0/20checks。两次预期终止退出1不是失败重开；所有过程引擎错误0，三个唯一token、两个中断前后原gen1/gen2字节与同意图保留。三组均恢复第三代applied，CFG确认后的重启SHA不变，启动不重放Battle/Mission/展示/结算。完整36份原收据/identity/log/handshake/journal证据在 `actual_scoped_recovery_r12_bai_v1/`，正常fresh9份独立阶段checkpoint在 `actual_normal_fresh_r12_bai_v1/`，不复制裸CFG或私有profile。

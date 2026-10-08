@@ -1,0 +1,109 @@
+{
+  "schema": "durable_campaign_full_inputs_preparation_independent_review_v1",
+  "review_version": 1,
+  "independent": true,
+  "reviewer": "office_full_review",
+  "reviewed_utc": "2026-10-08T12:56:11.860475+00:00",
+  "review_kind": "read_only_source_input_seal_paths_hashes_and_resource_targets",
+  "tool": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\tools\\prepare_durable_campaign_full_inputs.py",
+    "bytes": 5191,
+    "sha256": "bf448210b8992449fef8e26f821617e924d46aa761f41ff98c03002e285ec7d7"
+  },
+  "source_inputs_spec": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\DURABLE_FULL_SOURCE_INPUTS_V1.json",
+    "bytes": 1064093,
+    "sha256": "0aa5f02e962dfc6a4b2d9cc16f0710f54662c12e6f45fa638e890b93329145a4"
+  },
+  "logical_source_inputs_sha256": "0c7a17562deb728588cfd871fda44fa285e3fa867416d53f5f14558ac4db2934",
+  "approved_static_preparation_only": false,
+  "static_input_closure_passed": false,
+  "approved_stages": [],
+  "native_started": false,
+  "full_qualified": false,
+  "whole_producer_ready": false,
+  "findings": [
+    {
+      "id": "PREP-LINK-001",
+      "severity": "blocking",
+      "location": "D:\\AI项目\\水浒\\开发工程\\tools\\prepare_durable_campaign_full_inputs.py:25",
+      "evidence": "pin resolves the original input path before no_links, hiding original symlink/junction segments; original110 and base5132 paths are read/stat/hashed without a per-path original link check.",
+      "required_successor_change": "Check the original path/parents before resolve/read/hash/stat and check every base/input row, as implemented in V2."
+    },
+    {
+      "id": "PREP-RESOURCE-002",
+      "severity": "blocking",
+      "location": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\final_durable_negative_adapters_v1_r3\\daming_campaign_capture_negative_v1.gd:464",
+      "evidence": "The capture report reads base_harness_sha256 from res://tools/daming_safe_retreat_cross_process_v25.gd, while actual extends is the fixed new R2 durable base. This old tools resource is absent from both base5132 and all26 overlay targets. Its checksum therefore cannot bind the actual inherited code. Earlier load/preload/extends graph review did not cover this FileAccess.get_sha256 literal; this finding arose during the complete installed resource readback check.",
+      "required_successor_change": "In a new immutable adapter version change only this report SHA source to the actual fixed inherited durable base, then seal its metadata/overlays and review the complete resource graph. Do not install an unused old base to conceal the wrong evidence target."
+    }
+  ],
+  "resolved_findings": [],
+  "positive_actual_checks": {
+    "base_runtime_rows": 5132,
+    "runtime_and_harness_overlays": 26,
+    "new_harness_files": 11,
+    "current_base_overlays_metadata_and_two_CoreContract_hash_size_rows_verified": true,
+    "current_actual_original_paths_reparse_symlink_scan_clean": true,
+    "all26_current_targets_relative_and_no_dotdot_backslash_absolute_paths": true,
+    "all26_current_targets_casefold_normalized_unique": true,
+    "no_native_or_Godot_code_in_tool": true,
+    "imports": [
+      "argparse",
+      "hashlib",
+      "json",
+      "pathlib.Path"
+    ],
+    "CLI": "Only optional --write-spec; no --run or execution/copy option. Writes new source JSON only with exclusive open, no source/install mutation.",
+    "source_only_boundaries": {
+      "source_prepare_only": true,
+      "new_negative_review_required": true,
+      "whole_producer_ready": false,
+      "approved_stages": [],
+      "native_started": false,
+      "full_qualified": false
+    },
+    "case_contract_is_static_only": {
+      "roles": [
+        "lu",
+        "shi"
+      ],
+      "role_ABCD_processes": 8,
+      "world_rows_per_role": 264,
+      "component_rows_per_role": 362,
+      "live_cases_per_role": 24,
+      "negative_process_stages": 52,
+      "original_fault_cases": 19,
+      "CAMPAIGN_QA": "",
+      "slot_root": "user://continue/v1",
+      "lifecycle_generations": [
+        1,
+        2,
+        3
+      ]
+    },
+    "independent_V2_no_write_preflight": null
+  },
+  "source_snapshot": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\full_input_preparation_tool_v1\\prepare_durable_campaign_full_inputs.py",
+    "bytes": 5191,
+    "sha256": "bf448210b8992449fef8e26f821617e924d46aa761f41ff98c03002e285ec7d7"
+  },
+  "snapshot_exact": true,
+  "resource_scope": {
+    "base_paths_and26_overlay_paths_checked": true,
+    "missing_direct_evidence_file_read": [
+      "res://tools/daming_safe_retreat_cross_process_v25.gd"
+    ],
+    "no_load_or_extends_resource_missing": true,
+    "existing_negative_R3_static_review_needs_addendum_for_new_report_SHA_finding": true
+  },
+  "qualification_boundaries": {
+    "source_pins_and_case_contracts_are_not_executed_tests": true,
+    "no_actual_new_A_fixture_or_matrices_run": true,
+    "half_admission_roles_ABCD_19_52_not_qualified": true,
+    "full_native_or_SDK_or_release_not_qualified": true,
+    "scoped_Huangnigang_green_not_transferred_to_full": true
+  },
+  "preservation": "V1/V2 tool and spec bytes, all prior source/candidates/native evidence remain unchanged; only this new review receipt was written."
+}

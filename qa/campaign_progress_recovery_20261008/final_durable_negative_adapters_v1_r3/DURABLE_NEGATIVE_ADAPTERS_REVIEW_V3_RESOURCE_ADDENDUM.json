@@ -1,0 +1,31 @@
+{
+  "schema": "daming_durable_negative_adapters_review_resource_addendum_v1",
+  "independent": true,
+  "reviewer": "office_full_review",
+  "reviewed_utc": "2026-10-08T12:56:11.894226+00:00",
+  "prior_review": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\final_durable_negative_adapters_v1_r3\\DURABLE_NEGATIVE_ADAPTERS_PRELIMINARY_REVIEW_V3.json",
+    "bytes": 56330,
+    "sha256": "e44dd5510185c12e29372fb26288277cd3cd290c383a58c9441ccbe678eec66b"
+  },
+  "candidate_capture": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\final_durable_negative_adapters_v1_r3\\daming_campaign_capture_negative_v1.gd",
+    "bytes": 46262,
+    "sha256": "7b43c04c0de5cce4832dd5bea11a98c4be291a486469eaf9a4fa4e210b98794f"
+  },
+  "new_finding": {
+    "id": "PREP-RESOURCE-002",
+    "severity": "blocking",
+    "location": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\final_durable_negative_adapters_v1_r3\\daming_campaign_capture_negative_v1.gd:464",
+    "evidence": "The capture report reads base_harness_sha256 from res://tools/daming_safe_retreat_cross_process_v25.gd, while actual extends is the fixed new R2 durable base. This old tools resource is absent from both base5132 and all26 overlay targets. Its checksum therefore cannot bind the actual inherited code. Earlier load/preload/extends graph review did not cover this FileAccess.get_sha256 literal; this finding arose during the complete installed resource readback check.",
+    "required_successor_change": "In a new immutable adapter version change only this report SHA source to the actual fixed inherited durable base, then seal its metadata/overlays and review the complete resource graph. Do not install an unused old base to conceal the wrong evidence target."
+  },
+  "prior_load_extends_graph_scope_was_incomplete_for_FileAccess_evidence_paths": true,
+  "supersedes_prior_static_compatibility_approval_for_any_future_execution": true,
+  "approved_static_compatibility_only": false,
+  "approved_stages": [],
+  "native_started": false,
+  "full_qualified": false,
+  "case_tables_and_mutation_assertions_unchanged": true,
+  "requires_new_immutable_capture_evidence_path_and_source_seal": true
+}

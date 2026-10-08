@@ -1,3 +1,7 @@
+## 2026-10-08：durable拒绝矩阵R1至R4与完整输入V1至V3
+
+恢复QA `final_durable_negative_adapters_v1/`、`final_durable_negative_adapters_v1_r2/`、`final_durable_negative_adapters_v1_r3/`保留原适配及两次拒绝/后继静态收据，最后六GD/scene用于264/362/24；`DURABLE_FULL_SOURCE_INPUTS_V3.json`与`DURABLE_FULL_INPUTS_PREPARATION_REVIEW_V3.json`封存source-only 26runtime覆盖。工具`prepare_durable_campaign_full_inputs.py`不启动native。
+
 ## 2026-10-08：R12普通三组实际通过与durable full consumer R1/R2
 
 恢复QA新增`actual_normal_fresh_r12_bai_v1/`（阶段9份）、`actual_scoped_recovery_r12_bai_v1/`（完整36份）、`final_durable_retreat_consumer_v1/`和`final_durable_retreat_consumer_v1_r2/`（源码/scene/route及独立拒绝/后继复审）；路线QA `v33/`与两个V33根记录只读观察，未native/full。裸CFG/profile不入Git。
