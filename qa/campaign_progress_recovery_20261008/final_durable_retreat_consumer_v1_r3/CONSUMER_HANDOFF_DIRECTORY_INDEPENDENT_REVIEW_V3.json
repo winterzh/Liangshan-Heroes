@@ -1,0 +1,201 @@
+{
+  "schema": "daming_consumer_handoff_directory_independent_review_v3",
+  "independent": true,
+  "reviewer": "office_full_review",
+  "reviewed_at": "2026-10-08T14:38:02.312882+00:00",
+  "review_kind": "read_only_consumer_ready_directory_diff_source_api_and_inherited_negative_compatibility_review",
+  "static_api_closure_passed": true,
+  "negative_adapters_compatibility_passed": true,
+  "source_integrity_verified": true,
+  "consumer_sha256": "abb72d8eb8530f4b73431f1f7976789015da9883f1a2e3914995840252c6d721",
+  "consumer_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\final_durable_retreat_consumer_v1_r3\\daming_campaign_durable_cross_process_v1.gd",
+    "bytes": 60712,
+    "sha256": "abb72d8eb8530f4b73431f1f7976789015da9883f1a2e3914995840252c6d721"
+  },
+  "source_manifest": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\final_durable_retreat_consumer_v1_r3\\SOURCE.json",
+    "bytes": 2020,
+    "sha256": "57282f46d4653408dc4045641512fa461d411fd3ad4eeb0bed529f7908c21e70"
+  },
+  "predecessor_consumer": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\final_durable_retreat_consumer_v1_r2\\daming_campaign_durable_cross_process_v1.gd",
+    "bytes": 59443,
+    "sha256": "ae1a20c87bf5c5a7efff9aaaf0426fc58965f2a9dac2bed34f06940a2e40a837"
+  },
+  "candidate_scene": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\final_durable_retreat_consumer_v1_r3\\daming_campaign_durable_cross_process_v1.tscn",
+    "bytes": 221,
+    "sha256": "6e59c967772f99aed9312677c72d739175cd4b43a1efa3d6e5779c2a9cfe7055"
+  },
+  "candidate_route": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\final_durable_retreat_consumer_v1_r3\\daming_safe_retreat_route_v26.gd",
+    "bytes": 27562,
+    "sha256": "b802ac37694a9cdffd52e1ec4680a5e8e3effee36a407c37aae4f0f2bf0e6e69"
+  },
+  "route_review": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\office_campaign_route_20261008\\v34\\ROUTE_V34_GROUND_INDEPENDENT_REVIEW.json",
+    "bytes": 9133,
+    "sha256": "a16194b909ded82edb838fddf21c330baf141be51f0240a124334a001ee0cd68"
+  },
+  "approved_stages": [],
+  "native_started_by_reviewer": false,
+  "native_qualified": false,
+  "full_qualified": false,
+  "overall_goal_qualified": false,
+  "SDK_reward_once_qualified": false,
+  "findings": [],
+  "open_blockers": [],
+  "diff_verification": {
+    "changed_existing_functions": [
+      "_ready"
+    ],
+    "new_functions": [
+      "_prepare_handoff_parent"
+    ],
+    "all_other_predecessor_function_bodies_exactly_unchanged": true,
+    "predecessor_literal_labels": 105,
+    "candidate_literal_labels": 109,
+    "lost_literal_labels": [],
+    "scene_exactly_equal_to_r2": true,
+    "route_exactly_equal_to_reviewed_v34": true,
+    "immutable_file_writer_install_hold_save_gen3_CFG_and_no_replay_predicates_unchanged": true
+  },
+  "directory_api_review": [
+    {
+      "line": 94,
+      "result": "Directory preparation executes after the existing private-profile guard and fresh per-case evidence directory creation, before deferred case execution. A failure finishes the case through the unchanged failure report path."
+    },
+    {
+      "line": 100,
+      "result": "The three fixed HANDOFF_A/HANDOFF_B/HANDOFF_C paths must have the same parent. Globalized parent must equal exact actual userdata plus daming_safe_retreat_v25; no arbitrary caller target is accepted."
+    },
+    {
+      "line": 105,
+      "result": "The helper walks the parent chain using DirAccess.is_link and refuses detected links. mkdir prepares only the fixed directory; failure or absence of the resulting directory rejects the case. Existing host original-path/no-link and fresh private-profile gates remain required."
+    },
+    {
+      "line": 112,
+      "result": "The existing immutable evidence writer is byte-identical: it still refuses existing handoff/evidence files, opens only a new file and records its SHA. No slot, journal, CFG, enemy, HP, resource, clock or Mission mutation is added by the helper."
+    }
+  ],
+  "negative_adapter_compatibility": {
+    "capture_source": {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\final_durable_negative_adapters_v1_r4\\daming_campaign_capture_negative_v1.gd",
+      "bytes": 46265,
+      "sha256": "2b8d8be629a9803994de0c83b583eab5cb73c18705f3a160b38be6dd0f47fc28"
+    },
+    "capture_manifest": {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\final_durable_negative_adapters_v1_r4\\SOURCE.json",
+      "bytes": 4635,
+      "sha256": "b2f554c45180565bcb78ce2a6036e0d502e2bbf60b97b7cca965d8be305e4fd0"
+    },
+    "capture_ready_override_line": 111,
+    "capture_evidence_writer_override_line": 99,
+    "capture_ready_calls_super": false,
+    "capture_ready_calls_handoff_helper": false,
+    "capture_reachable_changed_inherited_execution_functions": [],
+    "all_remaining_inherited_restore_packet_binding_HELD_and_capture_audit_functions_exactly_unchanged": true,
+    "actual_A_manifest_and_fresh_profile_are_still_required": true,
+    "complete_matrix_contract_not_reduced": true
+  },
+  "actual_failed_batch_boundary": {
+    "checkpoint": {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\ACTUAL_SINGLE_SAFE_SAVE_CHECKPOINT_V3.json",
+      "bytes": 6078,
+      "sha256": "d0234f22e09701199632ae921e4c6920668c2cf0ee4ed67f1304b237bbf32a54"
+    },
+    "raw_files_verified": [
+      {
+        "source": "D:\\CodexTemp\\lsh-durable-chain-20261008\\durable_chain_38024dd3\\receipt.json",
+        "archive": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\actual_failed_durable_chain_v3\\receipt.json",
+        "bytes": 3090844,
+        "sha256": "d82b72fb6ab051fe7c7d09bd2236f494b01304a0072dfbd1df411e6d4a86cb5c"
+      },
+      {
+        "source": "D:\\CodexTemp\\lsh-durable-chain-20261008\\durable_chain_38024dd3\\post_cold_identity.json",
+        "archive": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\actual_failed_durable_chain_v3\\post_cold_identity.json",
+        "bytes": 422,
+        "sha256": "b265278c3ee27823927f0595c6a9f5a1fe3a5ff970a078c9dd2bc38c93937569"
+      },
+      {
+        "source": "D:\\CodexTemp\\lsh-durable-chain-20261008\\durable_chain_38024dd3\\steps\\cold_import\\native.log",
+        "archive": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\actual_failed_durable_chain_v3\\steps\\cold_import\\native.log",
+        "bytes": 433756,
+        "sha256": "5fcbca61c26c462363b0e249c27b86eae7b40ec817fc60f15c2cd2227916aa20"
+      },
+      {
+        "source": "D:\\CodexTemp\\lsh-durable-chain-20261008\\durable_chain_38024dd3\\steps\\lu_a_single_save\\native.log",
+        "archive": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\actual_failed_durable_chain_v3\\steps\\lu_a_single_save\\native.log",
+        "bytes": 412,
+        "sha256": "52cd78ae770003bece9c40d0b825bbfb78af0c29e996fefca5d05566c5f13cad"
+      },
+      {
+        "source": "D:\\CodexTemp\\lsh-durable-chain-20261008\\durable_chain_38024dd3\\steps\\lu_a_single_save\\A_single_save\\report.json",
+        "archive": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\actual_failed_durable_chain_v3\\steps\\lu_a_single_save\\A_single_save\\report.json",
+        "bytes": 121732,
+        "sha256": "8ca3f4d32d50544f87f84d18ebdc076979955b0570c599fa8766cd180f200e79"
+      },
+      {
+        "source": "D:\\CodexTemp\\lsh-durable-chain-20261008\\durable_chain_38024dd3\\steps\\lu_a_single_save\\A_single_save\\route_commands.json",
+        "archive": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\actual_failed_durable_chain_v3\\steps\\lu_a_single_save\\A_single_save\\route_commands.json",
+        "bytes": 9693,
+        "sha256": "1f2e7c2d9bbc0e7b7a5d7c112d3c740118ebbc83a60ecbcd7a71dd6ee617b699"
+      },
+      {
+        "source": "D:\\CodexTemp\\lsh-durable-chain-20261008\\durable_chain_38024dd3\\steps\\lu_a_single_save\\A_single_save\\natural_route_checkpoints.json",
+        "archive": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\actual_failed_durable_chain_v3\\steps\\lu_a_single_save\\A_single_save\\natural_route_checkpoints.json",
+        "bytes": 1983,
+        "sha256": "c796ee8637b20386968643ccc9cad9e32b666c49cb44b262bad4b8c53ed6e584"
+      },
+      {
+        "source": "D:\\CodexTemp\\lsh-durable-chain-20261008\\durable_chain_38024dd3\\steps\\lu_a_single_save\\A_single_save\\saved_packet.json",
+        "archive": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\actual_failed_durable_chain_v3\\steps\\lu_a_single_save\\A_single_save\\saved_packet.json",
+        "bytes": 7670381,
+        "sha256": "c97aa83290dfedd64855ef96b6d034f8907129a11206371b17c2eb4bd5aa15c7"
+      },
+      {
+        "source": "D:\\CodexTemp\\lsh-durable-chain-20261008\\durable_chain_38024dd3\\steps\\lu_a_single_save\\A_single_save\\saved_world.json",
+        "archive": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\actual_failed_durable_chain_v3\\steps\\lu_a_single_save\\A_single_save\\saved_world.json",
+        "bytes": 7325390,
+        "sha256": "199956f450d98eb03941cede4b3e057aacddfcd8fe313484c7796bbe9fe03bb0"
+      },
+      {
+        "source": "D:\\CodexTemp\\lsh-durable-chain-20261008\\durable_chain_38024dd3\\profiles\\lu_chain\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\continue\\v1\\5088120\\1\\record_0000000001.json",
+        "archive": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\actual_failed_durable_chain_v3\\partial_slot_evidence\\5088120\\1\\record_0000000001.json",
+        "bytes": 3334296,
+        "sha256": "be8c67843d9965a594119df1bb46497bf3048a65cb8a248bed36eb97a04a805f"
+      },
+      {
+        "source": "D:\\CodexTemp\\lsh-durable-chain-20261008\\durable_chain_38024dd3\\profiles\\lu_chain\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\continue\\v1\\local_runs\\9bb14016502f02e1fabaa0a925638397\\5088120\\1\\record_0000000001.json",
+        "archive": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\actual_failed_durable_chain_v3\\partial_slot_evidence\\local_runs\\9bb14016502f02e1fabaa0a925638397\\5088120\\1\\record_0000000001.json",
+        "bytes": 807,
+        "sha256": "e8bd3c3f9e13ac8062a6af3e6ed88fedc0ba815a3c8b3c74b566c977f478dd30"
+      }
+    ],
+    "raw_file_count": 11,
+    "batch_terminal_exit": 1,
+    "lu_A_pid": 43076,
+    "checks": 302,
+    "failed_labels": [
+      "evidence writable handoff_A.json"
+    ],
+    "slot_generation": 1,
+    "slot_sha256": "be8c67843d9965a594119df1bb46497bf3048a65cb8a248bed36eb97a04a805f",
+    "lifecycle_generation": 1,
+    "lifecycle_sha256": "e8bd3c3f9e13ac8062a6af3e6ed88fedc0ba815a3c8b3c74b566c977f478dd30",
+    "observed_committed_single_safe_save_before_handoff_failure": true,
+    "actual_A_successfully_closed": false,
+    "qualified_A_fixture": false,
+    "ABCD_qualified": false,
+    "negative52_qualified": false,
+    "campaign_durability_qualified": false,
+    "bare_CFG_or_profile_cache_copied": false
+  },
+  "limitations": [
+    "This receipt is consumer/negative inheritance static compatibility only; approved_stages is empty and no native batch is admitted.",
+    "The failed V3 A had real rescue/single-safe/save observations and committed gen1 files, but failed immutable handoff writing and cannot supply a successful A fixture.",
+    "A successor input/producer seal and independent stage admission are required; the successor must use a new UUID/private profile and acquire all actual A/ABCD/matrix evidence anew.",
+    "Original19/JSON/OwnedSlot/halfway/SDK/public/device/performance and whole-goal acceptance are outside this review."
+  ]
+}

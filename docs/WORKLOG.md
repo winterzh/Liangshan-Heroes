@@ -1,3 +1,9 @@
+## 2026-10-08：v34实际完成营救/第一人撤离与gen1保存，交接目录失败
+
+`durable_chain_38024dd3`/session96977已终态退出1、锁释放。冷导入PID23640退出0/错误0；Lu A PID43076退出1/错误0，302检查唯一失败`evidence writable handoff_A.json`。v34普通地面命令、真实营救/第一人撤离、完整Session.save_held、实际槽gen1和相应active日志gen1、读回/暂停完整包检查均通过；不能把最后失败的A补成成功fixture。11份原记录及受控partial槽/日志保存至`actual_failed_durable_chain_v3/`，证明边界见`ACTUAL_SINGLE_SAFE_SAVE_CHECKPOINT_V3.json`；裸CFG/缓存不复制，旧profile不复用。
+
+默认槽根改为`continue/v1`后，Store不再间接创建旧handoff sibling，原consumer未显式mkdir，因此FileAccess.WRITE失败。新`final_durable_retreat_consumer_v1_r3/`只在Ready准备三个固定handoff共用目录，核精确private userdata及祖先无link，只建目录；105原标签、不可变文件写入、所有安装/自然路线/hold/gen3/CFG均保留。新增4标签，共用live继承者自己override Ready/writer，不改变继承调用。独立目录/继承复核通过，收据SHA`791ae49eed07a10dfecad8405132ee2b936a6b150ff26880227f299c2eb3f0c1`仅静态。InputsV5预检/封存逻辑SHA`5ea81b445eed4428fc96a545e9da12a138faf92daed093154eb92b6761d0ef16`；ProducerV4预检/SourceSpec逻辑SHA`2ab2758f974606baf98f73aa159f3d10ab1d94d41594f18e94ddc42e9c3ad484`，八源快照与差异证明在`durable_chain_executor_v4/`。共用23host来源未变，不重复测试。新整体源码独立准入通过，收据SHA`6c3db1dd72c041866dab37a0aa8c59135cfbe128ebe92be7f9e068a278189c31`只准8+52及cold import。全新`durable_chain_8eeef1ab`/session2330/自有Python26396已启动，绑定见`ACTUAL_DURABLE_CHAIN_LAUNCH_V4.json`；未整批终态，不复用旧失败profile。原ABCD/52/19/UI/SDK/性能/设备与整体目标仍未完成。
+
 ## 2026-10-08：V2原生终态失败与牢前普通落点后继v34
 
 `durable_chain_65cae0c9`/session93131已终态退出1、锁释放。冷导入PID43800退出0/引擎错误0；Lu A PID27632退出1/引擎错误0，133项检查唯一失败`prison approach clear natural deadline`。没有完整A保存、后续ABCD或52负例资格。五份原receipt/identity/log/report按字节保存至`actual_failed_durable_chain_v2/`，原失败profile保留不复用。

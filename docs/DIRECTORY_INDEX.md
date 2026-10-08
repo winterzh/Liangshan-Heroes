@@ -1,3 +1,7 @@
+## 2026-10-08：真实单人撤离/gen1部分证据及handoff目录后继
+
+`qa/campaign_progress_recovery_20261008/actual_failed_durable_chain_v3/`保存302检查批11原始记录/受控partial槽与日志；`ACTUAL_SINGLE_SAFE_SAVE_CHECKPOINT_V3.json`明确A整体失败、非fixture。`final_durable_retreat_consumer_v1_r3/`保存仅准备固定handoff目录的consumer/scene/v34 route/SOURCE及目录/继承兼容静态review。InputsV5/SourceSpecV4已封存，`durable_chain_executor_v4/`保存八源与差异证明；新工具已获限定独立准入，`ACTUAL_DURABLE_CHAIN_LAUNCH_V4.json`绑定实际新批8eeef1ab/session2330；未取得整批实际结果。
+
 ## 2026-10-08：牢前集火实际诊断与v34普通路线候选
 
 `qa/campaign_progress_recovery_20261008/actual_failed_durable_chain_v2/`保存已终态失败批五份原记录；`PRISON_FOCUS_ROUTE_DIAGNOSIS_V1.json`保存实际20单位集火enemy91及后续退营样本。`qa/office_campaign_route_20261008/v34/`保存只改牢前普通地面落点的route、SOURCE与仅静态审查。新`DURABLE_FULL_SOURCE_INPUTS_V4.json`/`DURABLE_CHAIN_SOURCE_SPEC_V3.json`封存单映射变化，`durable_chain_executor_v3/`保存八工具字节与差异证明；来源预检与新限定独立准入通过，`ACTUAL_DURABLE_CHAIN_LAUNCH_V3.json`记录全新批`38024dd3`/session96977实际启动；未取得整批实测结果。

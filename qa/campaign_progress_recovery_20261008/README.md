@@ -1,3 +1,9 @@
+## 2026-10-08：V3营救/第一人撤离及实际保存通过，A因handoff目录失败
+
+`durable_chain_38024dd3`/session96977已终态1/锁释放。冷导入PID23640通过/错误0；Lu A PID43076的302检查仅`evidence writable handoff_A.json`失败/错误0。真实普通地面行军、营救、第一人安全撤离、完整Session保存/实际槽gen1＋active journal gen1读回均观察到。默认continue根不创建旧handoff父目录，未显式mkdir导致最后证据写入失败。11份原日志/报告/收据/受控partial槽/日志在`actual_failed_durable_chain_v3/`，边界见`ACTUAL_SINGLE_SAFE_SAVE_CHECKPOINT_V3.json`，不复制裸CFG/缓存、不补为成功A或供负例fixture。
+
+consumer R3只补固定private handoff目录：精确userdata sibling、祖先link检查与只建目录，105标签和不可变证据写入/完整保存安装/终局gen3/CFG保持。新InputsV5/SourceSpecV4与ProducerV4来源预检、目录/继承及整体限定独立审查均通过，原共享validator不动。新八源快照在durable_chain_executor_v4/，独立收据与ACTUAL_DURABLE_CHAIN_LAUNCH_V4.json绑定全新8eeef1ab/session2330/自有Python26396实际启动。原profile保留不复用；新批未整批终态，ABCD/52/19/UI/SDK/整体验收仍未通过。
+
 ## 2026-10-08：V2终态失败，未取得A来源资格
 
 实际批`durable_chain_65cae0c9`/session93131已退出1/锁释放。冷导入PID43800通过且引擎错误0；Lu A PID27632的133检查只有牢前清敌期限失败，引擎错误0。五原始记录在`actual_failed_durable_chain_v2/`；旧档不改、不复用、不给任何后续矩阵作成功A。v33观察显示牢前A点击被实际enemy91命中转为explicit attack，20单位旧amove目标保留、随后链结束并退营；`PRISON_FOCUS_ROUTE_DIAGNOSIS_V1.json`绑定原报告/日志和精确采样。

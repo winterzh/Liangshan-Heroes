@@ -1,3 +1,7 @@
+## 2026-10-08：V3已终态，完整A尚未通过
+
+session96977/`durable_chain_38024dd3`已经退出1/锁释放；302项仅handoff_A父目录缺失导致写证据失败。真实营救/第一人撤离与gen1保存可作对应部分证据，整个A不能作52矩阵输入。新consumer R3目录/继承兼容已有仅静态复核，`prepare_durable_campaign_full_inputs_v5.py`/`run_durable_campaign_chain_v4.py`已封`DURABLE_FULL_SOURCE_INPUTS_V5.json`/`DURABLE_CHAIN_SOURCE_SPEC_V4.json`，八源快照见`durable_chain_executor_v4/`，新SourceSpecV4独立准入通过，全新`durable_chain_8eeef1ab`/session2330/自有Python26396已启动。继续观察同一exec句柄，未整批终态；旧SourceSpecV3批准不转移，旧失败profile不复用。
+
 ## 2026-10-08：V2已经终态，v34候选尚未准入
 
 session93131/`durable_chain_65cae0c9`已退出1并释放锁；Lu A只有牢前清敌期限失败，原档与五份原始证据保留。不能把前文启动记录理解为仍在后台，不能沿用旧失败A作负例来源。`v34/`普通地面落点已有仅静态审查；`prepare_durable_campaign_full_inputs_v4.py`已封InputsV4，`run_durable_campaign_chain_v3.py`已封SourceSpecV3，八源快照见`durable_chain_executor_v3/`。V3已获新限定原生准入，实际全新`durable_chain_38024dd3`/session96977/自有Python45548已启动；来源绑定见`ACTUAL_DURABLE_CHAIN_LAUNCH_V3.json`。观察同一句柄，旧V2失败profile不用，不因观测到期重开；新整批未完成。
