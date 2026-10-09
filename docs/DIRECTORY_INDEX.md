@@ -1,3 +1,11 @@
+## 2026-10-09：回调消费者尾流修复来源
+
+新增两个 evidence_v2 工具、两份原字节 snapshot、SOURCE_SPEC_V2、原 V1 拒绝及 V2 有限通过收据、六项顺序反例脚本/结果与封存准备脚本。V1 原件保留；没有原生批、成功前置或执行准入。
+
+## 2026-10-09：自然callback完整消费者来源
+
+新增tools/campaign_natural_callback_evidence_v1.py、campaign_callback_packet_evidence_v1.py、prepare_campaign_callback_labels_v1.py；恢复QA新增80/56/21完整标签合同、三snapshot、CALLBACK_EVIDENCE_SOURCE_SPEC_V1、15项synthetic脚本/记录与有限review。当前无真实完整validate/Native/执行准入，物理七方法保持已审原件。
+
 ## 2026-10-09：自然回调phase集成来源
 
 新增 tools/campaign_callback_runtime_v1.py；恢复QA新增exact snapshot、CALLBACK_RUNTIME_SOURCE_SPEC_V1/V2、原拒绝及后继有限review、26项synthetic host脚本/结果和可复现全pin AST closure脚本/结果与有限独立review。69pins来源只覆盖phase集成，未有完整consumer/producer或native准入；普通cold/restart保持已审父方法。

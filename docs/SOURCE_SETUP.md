@@ -1,3 +1,19 @@
+## 2026-10-09：回调尾流顺序检查修复候选 V2
+
+独立 V1 审查确认 CALLBACK-PACKET-ORDER-001：先记录 terminal_tail_prefix 再记录不同的 receive_gate_refused 原字节时，旧 replay 可遗漏该字节解析。原拒绝收据 SHA c14ddc74658f1c270fe8aef41f1803eef53b8907a47265562b4bdbac4e1b6122 与原 104 pins 保持不变。V2 仅修改两处 guard，要求 refused prefix 先于全部尾流并逐字节进入尾流重构；完整消费者仅换 import，class AST 不变。
+
+六项可复现合成检查通过并再次回读：旧反例复现、新检查拒绝、正确分段 header/prefix/tail 通过、异字节与遗漏 prefix 拒绝、普通终态流保持。SOURCE_SPEC_V2 固定 113 pins / 248 AST 本地导入边，两份新 snapshot 保持原字节；完整 validate、真实 Popen/socket/Godot 和成功 V12 前置未执行，阶段批准为空。有限差异复审结果另记；正式恢复接入、完整原19、UI/SDK、内容、性能与 Android 目标仍未完成。
+
+独立 V2 有限差异复审通过，收据 SHA 2cdace3a06ec509f5db22adbb595e661d4bc968eddadc7449e6aacf1fe3ad2c3：只确认 ORDER-001 修复、113 pins/248 导入边、原 104 pins 和 class AST 保持；六项顺序回归独立通过。完整 validate/physical/Popen/native/SDK/原19/整体资格仍未证明，approved_stages=[]。收尾观察另一项目 Godot PID19448 活跃，未启动第五完整批。
+
+## 2026-10-09：自然回调完整报告与原包/物理记录消费者候选
+
+新增 prepare_campaign_callback_labels_v1，组合已审父GD与仅三override的自然callback GD，固定完整first80、preterminal56、parent restart_first21有序标签；这些只是source合同，不是实际通过数量。新增 NaturalCallbackEvidence，保留旧消费者fixed/read/physical/capture/lifecycle/cfg_pair/retained_cfg七方法AST原样，仍用binary原CFG复制与JSON journal复制、完整14字段CFG prepared/applied1/2、三代lifecycle intent/ACK/原bytes、同profile普通restart原件核对。validate必须实际retained subprocess.Popen/同phase/PID/nonce/terminal0/零diagnostic，完整15字段Provider identity、四/两原export与19普通订单及实际Mission/HUD/record等全部验证。
+
+新增原packet replay：每原event metadata/path/size/SHA和目录全量闭合，adapter/controller重复frame必须原bytes一致，send_attempt须对应紧接的真实send_complete标记与期望命令；按原setPID/ready/entered/精确production stack/read/snapshot/disable/continue全序重放。snapshot必须同Campaign instance，空owner、unlock2、完整level1记录等于真实report seal，normal callback applying=false与busy=false。原tail prefix/chunks拼接按完整对象无关Variant包解码，拒绝截断/unknown/late control，不把重复留存当两次网络接收；受审terminal竞争允许adapter-only最后noise frame，不吞其他拒绝。
+
+SOURCE_SPEC_V1固定104pins、44根/全217本地Python边闭合，三份exact snapshot。15项可复现合成packet私有文件/伪metadata和fake terminal child拒绝通过，真实constructor/Popen/socket/Godot未启动，完整consumer validate/lifecycle管线尚未运行；不能授actual callback/SDK/原19/whole资格。当前只新增源码消费者，完整producer/成功V12前置和执行准入仍未准备；两真实云driver/QA兼容、正式接入/UI/内容/性能/Android原目标保留。独立有限审查结果另记，无main/Steam发布。
+
 ## 2026-10-09：自然回调实际phase的源码集成候选
 
 新增 campaign_callback_runtime_v1.py，继承已审NaturalSerialBatch的cold和普通同档案restart原方法。固定callback_first/first与自然callback GD，调用前要求manifest/map及所有driver依赖属于producer seal，原完整post-cold身份和精确受保护环境在Popen前核对。实际自有Popen/唯一PID、串行idle、外部engine检测、实际loopback连接和闭合driver ready四file publisher后，才构造已审controllerV3/rawreceiverV3；不用旧先decode的peer.receive，不给六字段身份伪造eligible。

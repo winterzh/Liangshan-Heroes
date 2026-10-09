@@ -1,0 +1,87 @@
+{
+  "schema": "campaign_callback_evidence_preliminary_independent_review_v1",
+  "review_revision": 2,
+  "reviewed_at_utc": "2026-10-09T01:24:26.227053+00:00",
+  "independent": true,
+  "source_only": true,
+  "limited_delta_only": true,
+  "static_api_closure_passed": true,
+  "approved_stages": [],
+  "static_conclusion_scope": "Only the confirmed CALLBACK-PACKET-ORDER-001 repair and exact source/pin delta; this is not complete consumer, pipeline or native admission.",
+  "source_spec_file_sha256": "e99dc0d5d5a82c80a55c05199f20e5a0728ef7ceb4c6aa8f62e9d38560235aec",
+  "source_spec_pin": {
+    "path": "D:/AI项目/水浒/开发工程/qa/campaign_progress_recovery_20261008/CALLBACK_EVIDENCE_SOURCE_SPEC_V2.json",
+    "bytes": 113092,
+    "sha256": "e99dc0d5d5a82c80a55c05199f20e5a0728ef7ceb4c6aa8f62e9d38560235aec"
+  },
+  "packet_helper_pin": {
+    "path": "D:/AI项目/水浒/开发工程/tools/campaign_callback_packet_evidence_v2.py",
+    "bytes": 10844,
+    "sha256": "52208a51b54c3a8b6949c76af09d12f2f1fac76fc221970d061afd534327c6f4"
+  },
+  "natural_consumer_pin": {
+    "path": "D:/AI项目/水浒/开发工程/tools/campaign_natural_callback_evidence_v2.py",
+    "bytes": 23251,
+    "sha256": "56a76514381a521b2b1fe45d01da5a955c70dc7ec65cc8ac77f3a4cb8f7f1388"
+  },
+  "previous_rejected_review_pin": {
+    "path": "D:/AI项目/水浒/开发工程/qa/campaign_progress_recovery_20261008/CALLBACK_EVIDENCE_PRELIMINARY_REVIEW_V1.json",
+    "bytes": 5252,
+    "sha256": "c14ddc74658f1c270fe8aef41f1803eef53b8907a47265562b4bdbac4e1b6122"
+  },
+  "blocking_findings_in_this_delta": [],
+  "resolved_findings": [
+    {
+      "id": "CALLBACK-PACKET-ORDER-001",
+      "status": "confirmed_fixed_in_limited_delta",
+      "fix": "Refused original prefix must precede any terminal prefix/tail reconstruction; EOF independently requires byte-exact reconstructed prefix coverage. Existing equality check of terminal_tail_prefix and refused_prefix remains.",
+      "verified_regressions": [
+        "V1 accepts the known synthetic lost-prefix trace; V2 rejects it",
+        "correct partial length header/refusal/prefix/tail order passes",
+        "different prefix bytes reject",
+        "omitted explicit prefix rejects",
+        "ordinary terminal trace is unchanged"
+      ]
+    }
+  ],
+  "source_delta": {
+    "packet_helper_only_changes": "Two refusal-order/original-prefix guards",
+    "natural_consumer_only_change": "Import packet_evidence_v2",
+    "natural_consumer_class_AST_exact_V1": true,
+    "original104pins_rows_exact_preserved": true,
+    "new_source_pins_verified": 113,
+    "all_pinned_local_tools_import_edges": 248,
+    "missing_local_import_pins": [],
+    "new_two_snapshots_byte_exact": true
+  },
+  "independent_regression": {
+    "proof_pin": {
+      "path": "D:/CodexTemp/callback-order-independent-d558b0cd27db423499d093b7c9f3cdbc.json",
+      "bytes": 1388,
+      "sha256": "6b597f940ac96c381832c4ebe26c0d5e5d0ba3db45228e7dcf29a205cfcf33ac"
+    },
+    "cases": 6,
+    "classification": "Existing six source-pinned synthetic packet-file/forged-metadata regressions only",
+    "all_passed": true,
+    "complete_validate_called": false,
+    "callback_phase_called": false,
+    "actual_Popen_socket_Godot_created": false
+  },
+  "unverified_and_unapproved": [
+    "Full NaturalCallbackEvidence.validate with actual retained Popen and physical CFG/lifecycle was not executed or newly approved.",
+    "Label builder and other consumer branches retain their prior finite/unverified status; no additional matrix or full phase was simulated.",
+    "Complete producer, successful V12 prior, current-engine callback compatibility, Native/SDK/original19/whole-goal qualification remain unproven."
+  ],
+  "qualification": {
+    "complete_consumer_pipeline_qualified": false,
+    "actual_terminal_Popen_verified": false,
+    "socket_opened": false,
+    "Popen_started": false,
+    "Godot_started": false,
+    "actual_callback_qualified": false,
+    "successful_prior_verified": false,
+    "original19_qualified": false,
+    "SDK_qualified": false,
+    "overall_goal_qualified": false
+  }
+}
