@@ -1,0 +1,188 @@
+{
+  "schema": "cloud_restart_complete_label_contract_v1",
+  "GD": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\cloud_restart_driver_candidate_v1\\campaign_original19_cloud_restart_v1.gd",
+    "bytes": 9098,
+    "sha256": "d10b6b40c746a58e2fc4da21ff4ac28e9ce1318a59d09b0bca10bf5e1fa4b185"
+  },
+  "parent_GD": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\original19_first_repeat_candidate_v1\\campaign_original19_first_repeat_v1.gd",
+    "bytes": 21899,
+    "sha256": "53e4e3a10ef6107f095ae1df9be355308200a99fee444dc68f912418ac6803ab"
+  },
+  "builder": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\cloud_restart_driver_candidate_v1\\PREPARE_SOURCE_V1.py",
+    "bytes": 3706,
+    "sha256": "481edfa3a79a9a942db4f497dfe53bf7050216ceddbf8f310563224ed83b23b1"
+  },
+  "parent_builder": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\tools\\prepare_campaign_first_repeat_labels_v1.py",
+    "bytes": 4129,
+    "sha256": "9070d1f718ff291281a81b5dbdba44f334db027a87777444a2eebd39785b64b4"
+  },
+  "parser": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\tools\\prepare_campaign_file_fault_labels_v3.py",
+    "bytes": 5987,
+    "sha256": "7e8f3325bf2d876dc52f09eb7e5b52d8377384334cc7fcdf7b3b2f2e41345f5f"
+  },
+  "identity_fields_order": [
+    "content_version",
+    "rules_sha256",
+    "file_count",
+    "total_bytes",
+    "engine_binary_sha256",
+    "provider_sha256"
+  ],
+  "complete_labels": [
+    "normal simulation clock",
+    "actual configured menu opens",
+    "immutable controller post cold identity readable",
+    "native complete installed identity field content_version",
+    "native complete installed identity field rules_sha256",
+    "native complete installed identity field file_count",
+    "native complete installed identity field total_bytes",
+    "native complete installed identity field engine_binary_sha256",
+    "native complete installed identity field provider_sha256",
+    "actual installed source identity is eligible",
+    "actual menu remains current",
+    "production startup finishes and opens gate",
+    "ordinary cloud restart mode and case",
+    "immutable actual preceding cloud report path and SHA",
+    "original cloud report exact bounded UTF8 bytes",
+    "preceding original successful cloud report",
+    "same full installed identity and raw user text in a distinct process",
+    "original local cloud result and exact final CFG hash",
+    "original whole native typed CFG projection hash",
+    "original whole native projection readable",
+    "ordinary startup loads exact local cloud progress without a story seal",
+    "ordinary startup has no pending writer or shared cloud apply",
+    "ordinary SDK disabled startup has no attached account or active run",
+    "ordinary startup neither recovers a terminal nor creates Battle presentation",
+    "ordinary restart fresh load keeps original final public CFG bytes",
+    "whole restart typed CFG projection matches original including unknown keys",
+    "ordinary restart retains exactly two nonempty CFG journal originals",
+    "ordinary restart has empty candidate stage and no terminal lifecycle files",
+    "same loaded production objects retain progress across ordinary frames",
+    "ordinary restart frames do not replay CFG or create terminal records",
+    "ordinary restart remains idle with settlement denied and gate open",
+    "ordinary frames create no cloud pending upload revision or SDK run",
+    "original preceding cloud report unchanged after ordinary frames"
+  ],
+  "literal_check_inventory": {
+    "_restart": [
+      {
+        "label_prefix": "ordinary cloud restart mode and case",
+        "label_expression": "\"ordinary cloud restart mode and case\"",
+        "check_expression": "mode==\"restart_first\" and OS.get_environment(\"CAMPAIGN_CALLBACK_CASE\")==CALLBACK_CASE"
+      },
+      {
+        "label_prefix": "immutable actual preceding cloud report path and SHA",
+        "label_expression": "\"immutable actual preceding cloud report path and SHA\"",
+        "check_expression": "path.is_absolute_path() and Intent.hex(digest,64) and FileAccess.file_exists(path)"
+      },
+      {
+        "label_prefix": "original cloud report exact bounded UTF8 bytes",
+        "label_expression": "\"original cloud report exact bounded UTF8 bytes\"",
+        "check_expression": "not raw.is_empty() and raw.size()<=2097152 and text.to_utf8_buffer()==raw and text.sha256_text()==digest and FileAccess.get_sha256(path)==digest"
+      },
+      {
+        "label_prefix": "preceding original successful cloud report",
+        "label_expression": "\"preceding original successful cloud report\"",
+        "check_expression": "prior is Dictionary and prior.get(\"schema\")==\"campaign_original19_cloud_applying_probe_v3\" and prior.get(\"passed\")==true and prior.get(\"failures\")==[] and prior.get(\"case\")==CALLBACK_CASE and prior.get(\"mode\")==\"first\""
+      },
+      {
+        "label_prefix": "same full installed identity and raw user text in a distinct process",
+        "label_expression": "\"same full installed identity and raw user text in a distinct process\"",
+        "check_expression": "prior.get(\"identity\")==identity and prior.get(\"user_directory\")==OS.get_user_data_dir() and prior.get(\"pid\")!=OS.get_process_id() and Intent.hex(prior.get(\"nonce\",\"\"),32) and prior.nonce!=nonce"
+      },
+      {
+        "label_prefix": "original local cloud result and exact final CFG hash",
+        "label_expression": "\"original local cloud result and exact final CFG hash\"",
+        "check_expression": "evidence is Dictionary and semantic is Dictionary and evidence.get(\"applied\")==true and evidence.get(\"synthetic_local_owner\")==true and evidence.get(\"SDK_disabled\")==true and evidence.get(\"final_memory\")=={\"records\":{},\"unlocked\":2,\"owner\":\"1\"} and Intent.hex(evidence.get(\"cfg_sha256\",\"\"),64)"
+      },
+      {
+        "label_prefix": "original whole native typed CFG projection hash",
+        "label_expression": "\"original whole native typed CFG projection hash\"",
+        "check_expression": "semantic.get(\"final_sections_json\") is String and semantic.get(\"final_semantics_sha256\") is String and semantic.final_sections_json.sha256_text()==semantic.final_semantics_sha256"
+      },
+      {
+        "label_prefix": "original whole native projection readable",
+        "label_expression": "\"original whole native projection readable\"",
+        "check_expression": "expected is Dictionary"
+      },
+      {
+        "label_prefix": "ordinary startup loads exact local cloud progress without a story seal",
+        "label_expression": "\"ordinary startup loads exact local cloud progress without a story seal\"",
+        "check_expression": "campaign.records.is_empty() and campaign.unlocked==2 and campaign.cloud_owner==\"1\" and not campaign.has_story_seal(\"level1\")"
+      },
+      {
+        "label_prefix": "ordinary startup has no pending writer or shared cloud apply",
+        "label_expression": "\"ordinary startup has no pending writer or shared cloud apply\"",
+        "check_expression": "not campaign.persistence_busy() and not cloud.shared_profile_pending() and not cloud._applying"
+      },
+      {
+        "label_prefix": "ordinary SDK disabled startup has no attached account or active run",
+        "label_expression": "\"ordinary SDK disabled startup has no attached account or active run\"",
+        "check_expression": "not steam.available and steam._active_run==0 and not cloud.cloud_ready and cloud._owner.is_empty()"
+      },
+      {
+        "label_prefix": "ordinary startup neither recovers a terminal nor creates Battle presentation",
+        "label_expression": "\"ordinary startup neither recovers a terminal nor creates Battle presentation\"",
+        "check_expression": "flow.last_result=={\"ok\":true,\"startup_checked\":true,\"progress_recovered\":0,\"settlement_authorized\":false} and flow._campaign_completion.is_empty() and current_scene.scene_file_path==\"res://scenes/menu.tscn\""
+      },
+      {
+        "label_prefix": "ordinary restart fresh load keeps original final public CFG bytes",
+        "label_expression": "\"ordinary restart fresh load keeps original final public CFG bytes\"",
+        "check_expression": "FileAccess.get_sha256(\"user://campaign.cfg\")==evidence.cfg_sha256 and cfg.load(\"user://campaign.cfg\")==OK"
+      },
+      {
+        "label_prefix": "whole restart typed CFG projection matches original including unknown keys",
+        "label_expression": "\"whole restart typed CFG projection matches original including unknown keys\"",
+        "check_expression": "projected.get(\"ok\",false) and projected.sections==expected"
+      },
+      {
+        "label_prefix": "ordinary restart retains exactly two nonempty CFG journal originals",
+        "label_expression": "\"ordinary restart retains exactly two nonempty CFG journal originals\"",
+        "check_expression": "journals.size()==2 and journals.values().all(func(value):return Intent.hex(value,64))"
+      },
+      {
+        "label_prefix": "ordinary restart has empty candidate stage and no terminal lifecycle files",
+        "label_expression": "\"ordinary restart has empty candidate stage and no terminal lifecycle files\"",
+        "check_expression": "_empty_cloud_stage() and _no_terminal_files()"
+      },
+      {
+        "label_prefix": "same loaded production objects retain progress across ordinary frames",
+        "label_expression": "\"same loaded production objects retain progress across ordinary frames\"",
+        "check_expression": "campaign.get_instance_id()==campaign_id and cloud.get_instance_id()==cloud_id and campaign.records.is_empty() and campaign.unlocked==2 and campaign.cloud_owner==\"1\""
+      },
+      {
+        "label_prefix": "ordinary restart frames do not replay CFG or create terminal records",
+        "label_expression": "\"ordinary restart frames do not replay CFG or create terminal records\"",
+        "check_expression": "FileAccess.get_sha256(\"user://campaign.cfg\")==evidence.cfg_sha256 and _cloud_journal_files()==journals and _empty_cloud_stage() and _no_terminal_files()"
+      },
+      {
+        "label_prefix": "ordinary restart remains idle with settlement denied and gate open",
+        "label_expression": "\"ordinary restart remains idle with settlement denied and gate open\"",
+        "check_expression": "flow.phase==flow.Phase.IDLE and flow.last_result=={\"ok\":true,\"startup_checked\":true,\"progress_recovered\":0,\"settlement_authorized\":false} and flow._campaign_completion.is_empty() and Gate.background_allowed()"
+      },
+      {
+        "label_prefix": "ordinary frames create no cloud pending upload revision or SDK run",
+        "label_expression": "\"ordinary frames create no cloud pending upload revision or SDK run\"",
+        "check_expression": "not campaign.persistence_busy() and not cloud.shared_profile_pending() and not cloud._applying and cloud.dirty==original_cloud.dirty and cloud._pending_upload==original_cloud.pending_upload and cloud._revision==original_cloud.revision and not steam.available and steam._active_run==0 and not cloud.cloud_ready and cloud._owner.is_empty()"
+      },
+      {
+        "label_prefix": "original preceding cloud report unchanged after ordinary frames",
+        "label_expression": "\"original preceding cloud report unchanged after ordinary frames\"",
+        "check_expression": "FileAccess.get_sha256(path)==digest"
+      }
+    ],
+    "_cloud_journal_files": [],
+    "_empty_cloud_stage": [],
+    "_no_terminal_files": [],
+    "_write": [],
+    "_finish": []
+  },
+  "GD_parsed": false,
+  "native_started": false,
+  "approved_stages": []
+}

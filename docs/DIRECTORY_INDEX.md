@@ -1,3 +1,7 @@
+## 2026-10-09：云普通重启来源
+
+恢复QA新增 cloud_restart_driver_candidate_v1/：GD、33来源标签合同、SOURCE、准备脚本、scope、host原snapshot/direct source；tools新增 campaign_cloud_restart_evidence_v1.py。独立review原件纳入本轮白名单，native/完整producer均未通过。
+
 ## 2026-10-09：自然callback文本与producer重绑定来源
 
 新增packet_evidence_v3/natural_evidence_v3及两snapshot、NATURAL_CALLBACK_USER_TEXT_SOURCE/准备/SCOPE/19项synthetic与有限独立收据；新增producer_v2与snapshot、190pin recipe、scope、第四failed prior实际CLI拒绝与有限producer review。旧原件全部保留，未有成功prior/native准入。

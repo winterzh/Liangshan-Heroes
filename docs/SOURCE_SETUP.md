@@ -1,3 +1,13 @@
+## 2026-10-09：云恢复后同档案普通重启候选
+
+独立有限源码审查已完成，原驱动收据 SHA c7fc3c75cf9b11b2bd220e1f695ddb88d1bcd229c3716c1bb288f709c3c3930c、consumer收据 SHA 92f3a1501561d0ac2e7d6937d66b3a5bef4dcd107a8ed2cf3f5a845a4a314f9e；14列明来源pin回核一致，未发现确定静态API错误。原B1/B2为已明确尚未接入的单report安全publisher/phase与三进程完整producer，继续实现；stage=[]、无Godot解析或native资格。
+
+新增 cloud_restart_driver_candidate_v1：继承正常菜单启动父驱动，读取前一实际云应用 report 的原始 SHA、完整 identity 与原生 userdata 原文；独立 ConfigFile.load/Values whole projection 与原 CFG hash，检查 owner=1/unlocked=2/records={}、无 story seal、普通 startup 恢复数0/settlement=false、无 Battle/SDK/account，另180普通帧不重写。完整成功来源合同33项，builder实际exit0；未执行Godot解析或原生流程。
+
+新增 campaign_cloud_restart_evidence_v1，继承已审 first consumerV4；完整first validate成功后保留真实firststep/result，后继必须实际owned terminal Popen/zero、精确cold→cloud→restart、同profile/raw user与full身份/33报告/原闭合标记，并把public CFG和prepared/applied原日志逐字节绑定到第一进程closed originals。Python AST/import实际通过，source snapshot/direct九导入边保存；没有构造/调用完整consumer，也未封存recursive完整producer来源。数字owner只为SDK禁用本地夹具，不授真实Steam账号或上传资格。
+
+独立有限源码审查结果以新原收据为准，approved_stages=[]。尚未实现固定单report publisher、restart phase包装与完整cloud producer；无成功all61前置或native准入。第五完整原生批未启动；当前其他项目仍占Godot，后续须整批串行窗口。原19/UI/SDK/八章/美术/多尺寸/九模式/Windows安装/10分钟性能/Android真机继续保持全部原定要求，R12正式源未晋升。
+
 ## 2026-10-09：自然终局回调原userdata文本修复与完整producer V2重绑定
 
 natural_consumer_v3与packet_replay_v3保留report raw native_user给driver-ready/ready-snapshot协议，Path仅用于noLinks/private边界与physicalIO；旧V2也会在Windows把合法D:/文本重构成D:\而拒绝，同类云拒绝和真实LuA表示原件保留。原80/56/21、actual terminal Popen/PID/nonce/15identity、全部CFG和三代lifecycle/noReplay/ORDER001尾流保持。19项synthetic=原15+4Windows反例/新文本拒绝通过，不是actual完整consumer或native。187pins/377边/两snapshot封存；有限独立修复原收据 SHA 6fc45de28b44e388d685e133d6e0cb46a5ee90b5cc81d4366b4dbb44ebe85729，stage=[]。
