@@ -1,3 +1,13 @@
+## 2026-10-09：自然回调三进程完整执行器源码候选
+
+新增 run_campaign_natural_callback_v1，串接原 cold import、真实 callback phase、同 private profile 普通 restart_first 与完整 NaturalCallbackEvidence V2；固定三个实际进程、first80/preterminal56/restart21全部标签，全部原packet/tail/报告/CFG/lifecycle检查保持。来源 recipe 实际准备通过，175 pins/343全AST本地导入边/29 overlays，补齐 child/parent/observer 三GD；源码准备不检查成功prior、不授执行资格。
+
+write-spec/run 必须完整成功 V12 all61 收据先于创建来源/运行目录，Suite再次验证首次原receipt与全部证据。新的完整来源准入须 complete_consumer_and_phase_reviewed=true 及精确source/producer SHA和唯一批准阶段；旧 ORDER-001 delta review 不能代替。十项来源/真实失败prior/实际Suite mkdir前拒绝检查通过；四失败prior全部拒绝。第四批 receipt 的实际 CLI write-spec 退出1，原reason为 Exact successful limited prior source seal，后继spec与work root均未创建。无Godot/socket或完整validate启动；有限独立预审结果另记。
+
+完整producer源码已接入，当前无成功prior/source seal/native admission，三进程实际执行仍未运行。其他云边界、原19/UI/SDK/内容/性能/Android仍按原计划继续。
+
+独立审查员已返回有限确认意见：新增producer接口、同档案handoff、175 pins/343导入边/29覆盖、成功前置先于mkdir和新的完整准入检查未发现确定阻断。正式机器可读审查收据尚未归档，当前不能声称已有该独立收据或原生准入；完整validate/phase/成功prior未实跑。后续收到原件再补记，不自造审查结果。
+
 ## 2026-10-09：回调尾流顺序检查修复候选 V2
 
 独立 V1 审查确认 CALLBACK-PACKET-ORDER-001：先记录 terminal_tail_prefix 再记录不同的 receive_gate_refused 原字节时，旧 replay 可遗漏该字节解析。原拒绝收据 SHA c14ddc74658f1c270fe8aef41f1803eef53b8907a47265562b4bdbac4e1b6122 与原 104 pins 保持不变。V2 仅修改两处 guard，要求 refused prefix 先于全部尾流并逐字节进入尾流重构；完整消费者仅换 import，class AST 不变。

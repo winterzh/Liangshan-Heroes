@@ -1,3 +1,7 @@
+## 2026-10-09：自然回调完整执行器来源
+
+新增 tools/run_campaign_natural_callback_v1.py；恢复QA新增完整producer源码recipe、原字节snapshot、SCOPE、十项host检查脚本/结果、第四失败prior实际CLI拒绝观察及有限独立review。当前未创建成功前置seal或native batch。
+
 ## 2026-10-09：回调消费者尾流修复来源
 
 新增两个 evidence_v2 工具、两份原字节 snapshot、SOURCE_SPEC_V2、原 V1 拒绝及 V2 有限通过收据、六项顺序反例脚本/结果与封存准备脚本。V1 原件保留；没有原生批、成功前置或执行准入。

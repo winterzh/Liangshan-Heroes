@@ -1,0 +1,92 @@
+{
+  "schema": "natural_callback_producer_host_checks_v1",
+  "script_sha256": "581bc80450a79bca86c54198546dd2ac7f22d7fc7a9cc84a5bcabdbb3d0271ce",
+  "recipe_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\NATURAL_CALLBACK_PRODUCER_SOURCE_RECIPE_V1.json",
+    "bytes": 1293360,
+    "sha256": "6da8a9ba39b2f80125b12303a279dc53585e0284a2ea43411c1919ce04a4189f"
+  },
+  "producer_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\tools\\run_campaign_natural_callback_v1.py",
+    "bytes": 16012,
+    "sha256": "6cbdd39add5fa8c52f7b06d403da54eb7c91a2f71c22485c91a67ed42aa8a55f"
+  },
+  "checks": [
+    {
+      "label": "all175 original recipe pins unchanged",
+      "passed": true
+    },
+    {
+      "label": "native child/parent/read-only observer all sealed as actual overlays",
+      "passed": true
+    },
+    {
+      "label": "recipe logical hash equals original bytes-derived document",
+      "passed": true
+    },
+    {
+      "label": "missing explicit prior refused",
+      "passed": true
+    },
+    {
+      "label": "actual failed prior fb1da6e0 refused, no partial A promotion",
+      "passed": true
+    },
+    {
+      "label": "actual failed prior 6b31df47 refused, no partial A promotion",
+      "passed": true
+    },
+    {
+      "label": "actual failed prior 6409dde9 refused, no partial A promotion",
+      "passed": true
+    },
+    {
+      "label": "actual failed prior 8fe7b18b refused, no partial A promotion",
+      "passed": true
+    },
+    {
+      "label": "actual Suite rejects failed prior before mkdir/batch/profile construction",
+      "passed": true
+    },
+    {
+      "label": "static main sequence requires successful prior and new complete admission before Suite",
+      "passed": true
+    }
+  ],
+  "count": 10,
+  "all_passed": true,
+  "actual_failed_priors": [
+    {
+      "path": "D:\\CodexTemp\\lsh-durable-chain-20261009\\durable_chain_fb1da6e0\\receipt.json",
+      "bytes": 1148395,
+      "sha256": "05b9a1e614352ee2ccdfe8e9e9f856d73a05c67b09e23dc5d1936b6d2b0693aa",
+      "refused": true
+    },
+    {
+      "path": "D:\\CodexTemp\\lsh-durable-chain-20261009\\durable_chain_6b31df47\\receipt.json",
+      "bytes": 3105692,
+      "sha256": "d529370f392fdf5215a00c9399bbbbec548f719bdbe8ec770cb2cc70a555ea58",
+      "refused": true
+    },
+    {
+      "path": "D:\\CodexTemp\\lsh-durable-chain-20261009\\durable_chain_6409dde9\\receipt.json",
+      "bytes": 3105692,
+      "sha256": "57398e21aa160f694424b53e46d35d59d0c40304d3d6b69aabe80cc9c6e3a607",
+      "refused": true
+    },
+    {
+      "path": "D:\\CodexTemp\\lsh-durable-chain-20261009\\durable_chain_8fe7b18b\\receipt.json",
+      "bytes": 3108859,
+      "sha256": "058c5678b54848846a75b4f7333881dc19d347a9a19e39cda0bed719c8b2b05f",
+      "refused": true
+    }
+  ],
+  "work": "D:\\CodexTemp\\lsh-callback-producer-host-7o6igsje",
+  "classification": "source/actual failed-prior and pre-mkdir Suite refusal only",
+  "native_started": false,
+  "socket_opened": false,
+  "complete_consumer_validate_called": false,
+  "successful_prior_verified": false,
+  "approved_stages": [],
+  "overall_goal_qualified": false
+}
