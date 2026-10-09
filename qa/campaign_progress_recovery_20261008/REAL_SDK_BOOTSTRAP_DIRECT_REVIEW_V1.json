@@ -1,0 +1,951 @@
+{
+  "schema": "campaign_real_sdk_bootstrap_direct_source_review_v1",
+  "reviewed_utc": "2026-10-09T08:16:17.474950+00:00",
+  "independent": true,
+  "reviewer": "cloud_case_full_review independent subagent",
+  "scope": "Finite direct static review of normal exported bootstrap Node/scene/descriptor/report, real production Steam/account/identity/current-stat APIs and startup/process/exit side-effect boundaries. No native or host execution.",
+  "source_inputs_file": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\REAL_SDK_BOOTSTRAP_SOURCE_INPUTS_V1.json",
+    "bytes": 4937,
+    "sha256": "d4a38b4e25e9f6054377c48ba13d7a9d95b0fb933b3e49a2e90ec201c35b04eb"
+  },
+  "source_input_pins": [
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\real_sdk_bootstrap_candidate_v1\\real_sdk_bootstrap_v1.gd",
+      "bytes": 6947,
+      "sha256": "7167b4e9e8b33e60da3ca1b2a347a9900101a2e13f33e7b8a035393d4c3953fc"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\real_sdk_bootstrap_candidate_v1\\real_sdk_bootstrap_v1.tscn",
+      "bytes": 334,
+      "sha256": "37f1aca8fbb24863dd785efa2515a1cae6e0a70675cb2a0887d952abdee45448"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\real_sdk_bootstrap_candidate_v1\\README.md",
+      "bytes": 2259,
+      "sha256": "85ab155597045df7cbc6029e0f2ff0a9ab366b74b0e0b3326527b543ca228b58"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\scripts\\steam_service.gd",
+      "bytes": 15386,
+      "sha256": "69118d0e0f45d062ab8258c44bdfcfdb5dee0db55154a3097ce0f6343bccc675"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\scripts\\steam_run_policy.gd",
+      "bytes": 1607,
+      "sha256": "fc4959bc133da6aeda2cf58977f395d5f946e0769994485083a7f6986e7ba16b"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\scripts\\steam_stats_reader.gd",
+      "bytes": 3835,
+      "sha256": "23dc98449a5e71add9114483b8c29a5e423044b257281ec699bca3b34e65c6ec"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\scripts\\run_content_identity.gd",
+      "bytes": 17768,
+      "sha256": "1ea430ae4dec555f18e7fd11382b24dae38ee51ae30b60096909af992019a063"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\scripts\\steam_presence.gd",
+      "bytes": 7823,
+      "sha256": "f833e6eff2f331851a818e4f855c33a82982ad5b60b3425edaf344040798c844"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\scripts\\workshop_service.gd",
+      "bytes": 9267,
+      "sha256": "5582d8b541da23fefdce8be23c682d082c295732c38704353554bfa8df335763"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\project.godot",
+      "bytes": 1748,
+      "sha256": "270d34d3febd8580bfdec92ba6328d251fa9cfb92142e15c70c0328ab6ef3b60"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\scenes\\menu.tscn",
+      "bytes": 255,
+      "sha256": "032145d2f3b2f84c51de6a1948f37c86f15a9edb5e23fb901a89d51ecda41c2e"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\steam_cloud.gd",
+      "bytes": 33188,
+      "sha256": "230c26034104b19be04b2f1533deba79dd304473ac060f021fd38eaeee354dac"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\menu.gd",
+      "bytes": 42272,
+      "sha256": "63b945585bc0b4a9a1f92d0a1b7576b139bee6083c8d62bc4378a9abe0d6406c"
+    }
+  ],
+  "install_aliases": {
+    "tools/real_sdk_bootstrap_v1.gd": {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\real_sdk_bootstrap_candidate_v1\\real_sdk_bootstrap_v1.gd",
+      "bytes": 6947,
+      "sha256": "7167b4e9e8b33e60da3ca1b2a347a9900101a2e13f33e7b8a035393d4c3953fc"
+    },
+    "tools/real_sdk_bootstrap_v1.tscn": {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\real_sdk_bootstrap_candidate_v1\\real_sdk_bootstrap_v1.tscn",
+      "bytes": 334,
+      "sha256": "37f1aca8fbb24863dd785efa2515a1cae6e0a70675cb2a0887d952abdee45448"
+    }
+  },
+  "candidate_main_scene": "res://tools/real_sdk_bootstrap_v1.tscn",
+  "additional_actual_dependencies_read": [
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\scripts\\steam_achievement_catalog.gd",
+      "bytes": 4150,
+      "sha256": "fd4ec8fb6c5851d2085aad7fb691de0c6a952ce1880d6919f6ef0cc465cfcf3d"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\scripts\\android_updater.gd",
+      "bytes": 26594,
+      "sha256": "462de9ec208f73320f7abd42105e4ff1f0a95d6f63755a49569d028d3cdfae61"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\native\\steam_stats_reader\\extension.cpp",
+      "bytes": 2384,
+      "sha256": "4540316e0f63973d2d796a9db3469826ec57e8a26475fe694807c0b325aedde6"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\native\\steam_stats_reader\\reader.hpp",
+      "bytes": 5433,
+      "sha256": "11be67d8d8cc1ef412c10073d8596f56e2b73ecdc6956f1b3ef309217f32e51c"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\native\\steam_stats_reader\\windows_api.hpp",
+      "bytes": 3760,
+      "sha256": "4b9a19a0094b4c540635cc5ac3586b869f9f0d93d818107c4171df60db7b528a"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\vendor\\steam_stats_reader\\provenance.json",
+      "bytes": 2577,
+      "sha256": "b47345574cfabeb30655dddf88ac7107c0f923cf917d2fbe26f9e37d64e08420"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\vendor\\godotsteam\\provenance.json",
+      "bytes": 1187,
+      "sha256": "3939f2c48b11c9cfc2e47df49144718bfbf3fa024cd946656cb06fe899173f66"
+    }
+  ],
+  "all13_source_input_pins_independently_verified": true,
+  "complete_direct_static_review_performed": true,
+  "actual_native_API_or_signature_defects_found": [],
+  "static_api_closure_passed": false,
+  "source_review_passed": false,
+  "verdict": "static report original-byte/completion boundary gaps; preserve V1 and repair separately pinned successor; no execution admission",
+  "direct_source_method_ranges": [
+    {
+      "source": {
+        "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\real_sdk_bootstrap_candidate_v1\\real_sdk_bootstrap_v1.gd",
+        "bytes": 6947,
+        "sha256": "7167b4e9e8b33e60da3ca1b2a347a9900101a2e13f33e7b8a035393d4c3953fc"
+      },
+      "method_source_ranges": {
+        "_hex_nonce": {
+          "start": 18,
+          "end": 23
+        },
+        "_check": {
+          "start": 24,
+          "end": 28
+        },
+        "_ready": {
+          "start": 29,
+          "end": 33
+        },
+        "_observe": {
+          "start": 34,
+          "end": 99
+        },
+        "_finish": {
+          "start": 100,
+          "end": 118
+        }
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\AI项目\\水浒\\开发工程\\scripts\\steam_service.gd",
+        "bytes": 15386,
+        "sha256": "69118d0e0f45d062ab8258c44bdfcfdb5dee0db55154a3097ce0f6343bccc675"
+      },
+      "method_source_ranges": {
+        "_ready": {
+          "start": 35,
+          "end": 59
+        },
+        "_process": {
+          "start": 60,
+          "end": 96
+        },
+        "_read_initial_state": {
+          "start": 97,
+          "end": 132
+        },
+        "begin_run": {
+          "start": 133,
+          "end": 144
+        },
+        "record_kill": {
+          "start": 145,
+          "end": 162
+        },
+        "settle": {
+          "start": 163,
+          "end": 174
+        },
+        "_sync_state": {
+          "start": 175,
+          "end": 197
+        },
+        "flush": {
+          "start": 198,
+          "end": 206
+        },
+        "_on_stored": {
+          "start": 207,
+          "end": 242
+        },
+        "_import_legacy": {
+          "start": 243,
+          "end": 271
+        },
+        "open_page": {
+          "start": 272,
+          "end": 277
+        },
+        "ensure_account": {
+          "start": 278,
+          "end": 287
+        },
+        "_exit_tree": {
+          "start": 288,
+          "end": 293
+        },
+        "_local_bad": {
+          "start": 294,
+          "end": 296
+        },
+        "_open_persistent_runs": {
+          "start": 297,
+          "end": 329
+        },
+        "_begin_persistent_run": {
+          "start": 330,
+          "end": 340
+        },
+        "_checkpoint_persistent_run": {
+          "start": 341,
+          "end": 355
+        },
+        "_persistent_binding": {
+          "start": 356,
+          "end": 364
+        },
+        "_prepare_persistent_resume": {
+          "start": 365,
+          "end": 371
+        },
+        "_install_persistent_resume": {
+          "start": 372,
+          "end": 379
+        },
+        "_adopt_publisher": {
+          "start": 380,
+          "end": 387
+        }
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\AI项目\\水浒\\开发工程\\scripts\\steam_run_policy.gd",
+        "bytes": 1607,
+        "sha256": "fc4959bc133da6aeda2cf58977f395d5f946e0769994485083a7f6986e7ba16b"
+      },
+      "method_source_ranges": {
+        "classify": {
+          "start": 5,
+          "end": 23
+        },
+        "test_environment": {
+          "start": 24,
+          "end": 32
+        }
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\AI项目\\水浒\\开发工程\\scripts\\steam_stats_reader.gd",
+        "bytes": 3835,
+        "sha256": "23dc98449a5e71add9114483b8c29a5e423044b257281ec699bca3b34e65c6ec"
+      },
+      "method_source_ranges": {
+        "_bad": {
+          "start": 9,
+          "end": 11
+        },
+        "_query": {
+          "start": 12,
+          "end": 19
+        },
+        "attach": {
+          "start": 20,
+          "end": 25
+        },
+        "_identity": {
+          "start": 26,
+          "end": 31
+        },
+        "current_snapshot": {
+          "start": 32,
+          "end": 34
+        },
+        "request": {
+          "start": 35,
+          "end": 45
+        },
+        "poll": {
+          "start": 46,
+          "end": 59
+        },
+        "_snapshot": {
+          "start": 60,
+          "end": 85
+        },
+        "_valid_handle": {
+          "start": 86,
+          "end": 90
+        }
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\AI项目\\水浒\\开发工程\\scripts\\run_content_identity.gd",
+        "bytes": 17768,
+        "sha256": "1ea430ae4dec555f18e7fd11382b24dae38ee51ae30b60096909af992019a063"
+      },
+      "method_source_ranges": {
+        "_bad": {
+          "start": 16,
+          "end": 18
+        },
+        "_sha_text": {
+          "start": 19,
+          "end": 21
+        },
+        "_valid_sha": {
+          "start": 22,
+          "end": 27
+        },
+        "_path_ok": {
+          "start": 28,
+          "end": 35
+        },
+        "_register": {
+          "start": 36,
+          "end": 46
+        },
+        "_no_link": {
+          "start": 47,
+          "end": 56
+        },
+        "_file": {
+          "start": 57,
+          "end": 92
+        },
+        "_walk": {
+          "start": 93,
+          "end": 122
+        },
+        "_optional": {
+          "start": 123,
+          "end": 137
+        },
+        "_source_snapshot": {
+          "start": 138,
+          "end": 186
+        },
+        "_mount_status": {
+          "start": 187,
+          "end": 202
+        },
+        "_check_optional_content": {
+          "start": 203,
+          "end": 222
+        },
+        "_native_export_check": {
+          "start": 223,
+          "end": 271
+        },
+        "resolve_runtime_identity": {
+          "start": 272,
+          "end": 333
+        }
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\AI项目\\水浒\\开发工程\\scripts\\steam_presence.gd",
+        "bytes": 7823,
+        "sha256": "f833e6eff2f331851a818e4f855c33a82982ad5b60b3425edaf344040798c844"
+      },
+      "method_source_ranges": {
+        "_ready": {
+          "start": 35,
+          "end": 42
+        },
+        "_attach": {
+          "start": 43,
+          "end": 53
+        },
+        "set_presence": {
+          "start": 54,
+          "end": 59
+        },
+        "_publish": {
+          "start": 60,
+          "end": 84
+        },
+        "clear_presence": {
+          "start": 85,
+          "end": 93
+        },
+        "_account_valid": {
+          "start": 94,
+          "end": 101
+        },
+        "_detach": {
+          "start": 102,
+          "end": 109
+        },
+        "_on_service_changed": {
+          "start": 110,
+          "end": 113
+        },
+        "_on_language_changed": {
+          "start": 114,
+          "end": 117
+        },
+        "_process": {
+          "start": 118,
+          "end": 131
+        },
+        "_build_keys": {
+          "start": 132,
+          "end": 150
+        },
+        "_status_for": {
+          "start": 151,
+          "end": 156
+        },
+        "_body_for": {
+          "start": 157,
+          "end": 183
+        },
+        "_t": {
+          "start": 184,
+          "end": 189
+        },
+        "_exit_tree": {
+          "start": 190,
+          "end": 192
+        },
+        "level_title": {
+          "start": 193,
+          "end": 209
+        }
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\AI项目\\水浒\\开发工程\\scripts\\workshop_service.gd",
+        "bytes": 9267,
+        "sha256": "5582d8b541da23fefdce8be23c682d082c295732c38704353554bfa8df335763"
+      },
+      "method_source_ranges": {
+        "_ready": {
+          "start": 14,
+          "end": 18
+        },
+        "_connect_native": {
+          "start": 19,
+          "end": 29
+        },
+        "_process": {
+          "start": 30,
+          "end": 44
+        },
+        "refresh": {
+          "start": 45,
+          "end": 67
+        },
+        "play": {
+          "start": 68,
+          "end": 84
+        },
+        "unsubscribe": {
+          "start": 85,
+          "end": 90
+        },
+        "publish": {
+          "start": 91,
+          "end": 141
+        },
+        "_created": {
+          "start": 142,
+          "end": 158
+        },
+        "_submit": {
+          "start": 159,
+          "end": 175
+        },
+        "_updated": {
+          "start": 176,
+          "end": 180
+        },
+        "_owns_pending": {
+          "start": 181,
+          "end": 183
+        },
+        "_finish": {
+          "start": 184,
+          "end": 189
+        },
+        "_installed": {
+          "start": 190,
+          "end": 195
+        },
+        "_downloaded": {
+          "start": 196,
+          "end": 203
+        },
+        "open_item": {
+          "start": 204,
+          "end": 206
+        },
+        "_write": {
+          "start": 207,
+          "end": 212
+        }
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\steam_cloud.gd",
+        "bytes": 33188,
+        "sha256": "230c26034104b19be04b2f1533deba79dd304473ac060f021fd38eaeee354dac"
+      },
+      "method_source_ranges": {
+        "_ready": {
+          "start": 42,
+          "end": 50
+        },
+        "_attach": {
+          "start": 51,
+          "end": 58
+        },
+        "_process": {
+          "start": 59,
+          "end": 81
+        },
+        "_attach_account": {
+          "start": 82,
+          "end": 228
+        },
+        "mark_dirty": {
+          "start": 229,
+          "end": 240
+        },
+        "profile_bytes": {
+          "start": 241,
+          "end": 244
+        },
+        "_build_payload": {
+          "start": 245,
+          "end": 249
+        },
+        "_default_payload": {
+          "start": 250,
+          "end": 255
+        },
+        "_capture_local": {
+          "start": 256,
+          "end": 264
+        },
+        "_remember_local": {
+          "start": 265,
+          "end": 272
+        },
+        "_pull_or_seed": {
+          "start": 273,
+          "end": 310
+        },
+        "_flush": {
+          "start": 311,
+          "end": 325
+        },
+        "_send_payload": {
+          "start": 326,
+          "end": 354
+        },
+        "_fail": {
+          "start": 355,
+          "end": 362
+        },
+        "_stop_local": {
+          "start": 363,
+          "end": 369
+        },
+        "_finish": {
+          "start": 370,
+          "end": 375
+        },
+        "apply_payload": {
+          "start": 376,
+          "end": 386
+        },
+        "_apply_profile": {
+          "start": 387,
+          "end": 420
+        },
+        "_validate_payload": {
+          "start": 421,
+          "end": 460
+        },
+        "_whole": {
+          "start": 461,
+          "end": 464
+        },
+        "_valid_owner": {
+          "start": 465,
+          "end": 468
+        },
+        "_account_matches": {
+          "start": 469,
+          "end": 473
+        },
+        "_local_campaign": {
+          "start": 474,
+          "end": 480
+        },
+        "_merged_campaign": {
+          "start": 481,
+          "end": 491
+        },
+        "_better_record": {
+          "start": 492,
+          "end": 504
+        },
+        "_normalize_record": {
+          "start": 505,
+          "end": 522
+        },
+        "_mirror_path": {
+          "start": 523,
+          "end": 526
+        },
+        "_read_profile_file": {
+          "start": 527,
+          "end": 538
+        },
+        "_load_mirror": {
+          "start": 539,
+          "end": 545
+        },
+        "_read_mirror": {
+          "start": 546,
+          "end": 550
+        },
+        "_store_mirror": {
+          "start": 551,
+          "end": 566
+        },
+        "_read_binding": {
+          "start": 567,
+          "end": 579
+        },
+        "_legacy_import_owner": {
+          "start": 580,
+          "end": 590
+        },
+        "_has_scoped_mirror": {
+          "start": 591,
+          "end": 600
+        },
+        "_write_binding": {
+          "start": 601,
+          "end": 610
+        },
+        "_write_text": {
+          "start": 611,
+          "end": 622
+        },
+        "_cloud_enabled": {
+          "start": 623,
+          "end": 631
+        },
+        "_cloud_read": {
+          "start": 632,
+          "end": 657
+        },
+        "_cloud_write": {
+          "start": 658,
+          "end": 671
+        },
+        "_exit_tree": {
+          "start": 672,
+          "end": 680
+        },
+        "_campaign_io_ready": {
+          "start": 681,
+          "end": 685
+        },
+        "shared_profile_pending": {
+          "start": 686,
+          "end": 688
+        },
+        "_clear_shared_pending": {
+          "start": 689,
+          "end": 699
+        },
+        "_shared_scope_ok": {
+          "start": 700,
+          "end": 710
+        },
+        "allows_config_retry": {
+          "start": 711,
+          "end": 714
+        },
+        "retry_shared_profile": {
+          "start": 715,
+          "end": 759
+        },
+        "_mirror_write_ready": {
+          "start": 760,
+          "end": 762
+        },
+        "_actual_installed_identity": {
+          "start": 763,
+          "end": 767
+        },
+        "_read_shared_confirmation": {
+          "start": 768,
+          "end": 797
+        },
+        "_freeze_shared_confirmation": {
+          "start": 798,
+          "end": 804
+        },
+        "_shared_confirmation_ok": {
+          "start": 805,
+          "end": 807
+        },
+        "_close_shared_binding": {
+          "start": 808,
+          "end": 809
+        }
+      }
+    },
+    {
+      "source": {
+        "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\menu.gd",
+        "bytes": 42272,
+        "sha256": "63b945585bc0b4a9a1f92d0a1b7576b139bee6083c8d62bc4378a9abe0d6406c"
+      },
+      "method_source_ranges": {
+        "_ready": {
+          "start": 11,
+          "end": 27
+        },
+        "_notification": {
+          "start": 28,
+          "end": 32
+        },
+        "_launch": {
+          "start": 33,
+          "end": 46
+        },
+        "_build": {
+          "start": 47,
+          "end": 185
+        },
+        "_mk_module": {
+          "start": 186,
+          "end": 236
+        },
+        "_mk_overlay": {
+          "start": 237,
+          "end": 283
+        },
+        "_add_back": {
+          "start": 284,
+          "end": 296
+        },
+        "_mk_big_btn": {
+          "start": 297,
+          "end": 311
+        },
+        "_show_story": {
+          "start": 312,
+          "end": 364
+        },
+        "_show_defense": {
+          "start": 365,
+          "end": 558
+        },
+        "_show_1v1": {
+          "start": 559,
+          "end": 652
+        },
+        "_show_economy_guide": {
+          "start": 653,
+          "end": 667
+        },
+        "_show_more": {
+          "start": 668,
+          "end": 713
+        },
+        "_show_scenario_picker": {
+          "start": 714,
+          "end": 743
+        },
+        "_show_custom_picker": {
+          "start": 744,
+          "end": 775
+        },
+        "_make_card": {
+          "start": 776,
+          "end": 871
+        },
+        "_show_settings": {
+          "start": 872,
+          "end": 878
+        },
+        "_setup_content_update_ui": {
+          "start": 879,
+          "end": 898
+        },
+        "_on_content_update_status": {
+          "start": 899,
+          "end": 912
+        },
+        "_on_content_update_available": {
+          "start": 913,
+          "end": 935
+        },
+        "_on_content_update_ready": {
+          "start": 936,
+          "end": 955
+        },
+        "_on_full_package_update": {
+          "start": 956,
+          "end": 977
+        },
+        "_update_platform_name": {
+          "start": 978,
+          "end": 983
+        },
+        "_full_update_package": {
+          "start": 984,
+          "end": 991
+        },
+        "_open_full_update_package": {
+          "start": 992,
+          "end": 997
+        },
+        "_retry_autostart": {
+          "start": 998,
+          "end": 999
+        }
+      }
+    }
+  ],
+  "direct_chain_findings": [
+    "Bootstrap Node uses known Godot4.x Node.PROCESS_MODE_ALWAYS/call_deferred/SceneTree.process_frame/quit, OS environment/feature/args/path/userdir/PID, FileAccess bytes/length/SHA, HashingContext start/update/finish and PackedByteArray conversion/hex APIs. No definite nonexistent API/signature identified; no current Godot4.6 parser/runtime execution claimed.",
+    "Descriptor absolute original path, first SHA, maximum1MiB buffer, HashingContext buffer SHA and stable physical source are checked; required bootstrap schema/case/side-effect acknowledgment/32 lowercase hex characters/user_directory, compiled normal steam feature/policy, actual executable path/SHA and complete native installed identity equality consumed. Descriptor is host binding data, not execution admission or pre-start protection.",
+    "Scene imports original res://scenes/menu.tscn as child of root Node with fixed probe script res://tools/real_sdk_bootstrap_v1.gd. Production autoload paths retained. Future host must actually install aliases and main_scene in a sealed private export; source manifest is not a packaged export.",
+    "Actual SteamService Node fields available/native/account/stats_ready/_correction_required/_stats_reader and ensure_account exist. Probe waits45000ms ordinary frames then validates actual Engine.get_singleton Steam pointer, real getSteamID/AppID5088120/exact expected account, correction-free original stats reader. No replacement of native/account/availability, test flag bypass, new SDK initialization, fault/retry/reward/start-run/settle call by observer.",
+    "Original SteamStatsReader.current_snapshot calls _snapshot(true,emptyhandle): native identity before/after, all4 stats and30 achievements with getter success/source=current_cache/owner/handle, finite exact nonnegative int32 counters and bool unlocks. Original initial snapshot duplicated, final original snapshot after180frames same owner/singleton/identity. They are cached data after startup and before exit, not fresh server read/request handle/store acknowledgement or reward-once proof.",
+    "Native reader extension.cpp registers SteamStatsReader.query(command) as actual RefCounted method returning JSON. reader.hpp query bounds and real current owner/app guard permanently poison account change; native getter failure never encoded as zero/false. WindowsApi attaches already-loaded initialized steam_api64.dll (no load/init/write/pump), binds real SteamAPI_GetStatInt32/GetAchievement/current app/owner. C++ source inspection does not prove DLL or SDK runtime acceptance.",
+    "Actual Provider.resolve_runtime_identity requires AndroidUpdater valid no-patch mount provenance, normal source-backing rejection outside editor, compiled run_build_identity script/constants, exact native dependency/layout/loading/external release DLL bytes, optional content and actual EXE SHA. Full15 return fields match descriptor equality; no partial identity or source-mode fallback can qualify exported bootstrap.",
+    "SteamService normal startup steamInitEx->statsread->legacyimport/evaluate->local ledger adoption->sync_state/flush can setStatInt/setAchievement/storeStats before observer. Ordinary callbacks/checkpoints/retries and _exit_tree checkpoint/flush/steamShutdown remain real; same account checks are used but expected_account is checked only after autoload side effects.",
+    "R12 Cloud _ready/attach/_attach_account can bind account/scoped mirror/shared marker/settings/language/Campaign writer; _pull_or_seed reads actual fixed RemoteStorage liangshan_profile_v1.json, merges/applies and sends fileWrite even with fresh local profile. Process/exit retries may also write. Strict original read byte count/UTF8 and write bool reviewed; fileWrite is local Steam cache acceptance, not server upload. No fileDelete in reviewed startup route.",
+    "SteamPresence startup/menu/process/exit can clear/set Rich Presence. WorkshopService _ready->_connect_native->refresh can getSubscribedItems/getItemState/getItemInstallInfo and downloadItem subscribed content, with callback refresh. No automatic create/publish/unsubscribe in inspected startup path; original interactive menu can invoke separate operations.",
+    "R12 menu _ready can auto launch Battle when SCREENSHOT_DIR nonempty although SteamRunPolicy does not list that key; original buttons remain interactive during wait/180frames. The probe itself performs bootstrap_only, but source cannot prove absence of other menu/gameplay actions. Future host must clear env and bind input/scene scope.",
+    "Private_profile_verified means only actual user-directory equality with supplied descriptor. It occurs after autoload startup; no pre-start empty/no-link/lease/four-root/account/data protection proof. Host launcher/complete held terminal consumer absent is an explicit remaining implementation gap; Node cannot repair that by claiming execution qualification.",
+    "Final report is a pre-exit observation projection with broader cloud retry/restart/SDK/19/overall false. Original Popen terminal/closed native log/report and exit side effects must later be independently consumed by host; currently no such host exists."
+  ],
+  "findings": [
+    {
+      "id": "SDKBOOT-REPORT-001",
+      "priority": "P1",
+      "kind": "definite original-report boundary gap",
+      "file": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\real_sdk_bootstrap_candidate_v1\\real_sdk_bootstrap_v1.gd",
+      "start": 112,
+      "end": 113,
+      "evidence": "FileAccess.open(user://real_sdk_bootstrap_report.json,FileAccess.WRITE) can truncate existing original report; no fresh target/no-replace publication or original-byte guard.",
+      "impact": "Cannot guarantee first original report preserved. External freshprofile proof remains mandatory, but future consumer cannot restore overwritten bytes.",
+      "action": "Keep V1 immutable; successor needs collision refusal/original closed byte preservation plus host unique profile lease/no-replace ownership."
+    },
+    {
+      "id": "SDKBOOT-REPORT-002",
+      "priority": "P1",
+      "kind": "definite write-completion evidence gap",
+      "file": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\real_sdk_bootstrap_candidate_v1\\real_sdk_bootstrap_v1.gd",
+      "start": 114,
+      "end": 118,
+      "evidence": "store_string+flush+close has no get_error or original closed length/bytes/SHA readback before successful marker/exit0.",
+      "impact": "Open succeeds but I/O can fail, leaving incomplete report while native_bootstrap_observed/stdout success/exit0 based solely on previous checks.",
+      "action": "Successor checks write/flush error and closed original bytes/SHA before success; future held-terminal consumer must independently validate original report."
+    },
+    {
+      "id": "SDKBOOT-STARTUP-001",
+      "priority": "P1",
+      "kind": "host missing; not additional Node API block",
+      "evidence": "Autoload init occurs before descriptor/account/userdir observation. No host launcher/complete consumer implemented.",
+      "impact": "Wrong expected account/invalid descriptor can be refused only after real stats/cloud/presence/workshop effects.",
+      "action": "Exact exported staging, pre-start actual account/local+remote data protection/private empty profile/four env roots/lease/source identity and specific admission still required."
+    },
+    {
+      "id": "SDKBOOT-WORKSHOP-001",
+      "priority": "P2",
+      "kind": "actual scope/documentation gap",
+      "evidence": "Original Workshop startup may invoke downloadItem, not merely connect autoload.",
+      "action": "Document/bind automatic subscription/download effect range."
+    },
+    {
+      "id": "SDKBOOT-MENU-001",
+      "priority": "P2",
+      "kind": "finite scope host requirement",
+      "evidence": "SCREENSHOT_DIR auto-start and original live menu input can leave bootstrap scene; probe has no input/scene exclusion.",
+      "action": "Document host env/input/scene controls without bypassing original policy."
+    },
+    {
+      "id": "SDKBOOT-DESCRIPTOR-001",
+      "priority": "P3",
+      "kind": "format precision",
+      "evidence": "README says32字节十六进制 nonce; code actually32 ASCII hex characters (16 bytes). Descriptor parser lacks explicit UTF8 roundtrip/duplicate-key/exact-field guard.",
+      "action": "Correct nonce wording and require strict bounded original UTF8/schema host descriptor; hash binding alone not host authorization."
+    }
+  ],
+  "Godot_API_review_limit": "Source API/type compatibility checked without current Godot4.6 parse/class-db/export/SDK execution; no runtime acceptance. Unknown package/native loading is explicitly unverified.",
+  "host_launch_and_complete_consumer_implemented": false,
+  "full_fixed_export_package_sealed": false,
+  "successful_closed_all61_V12_prior_available": false,
+  "specific_exact_native_admission_obtained": false,
+  "approved_stages": [],
+  "export_execution_admission": false,
+  "full_chain_execution_admission": false,
+  "native_started": false,
+  "Godot_parsed": false,
+  "exported": false,
+  "SDK_initialized_by_review": false,
+  "actual_account_observed": false,
+  "bootstrap_qualified": false,
+  "successful_cloud_retry_qualified": false,
+  "same_profile_restart_qualified": false,
+  "SDK_reward_once_qualified": false,
+  "original19_qualified": false,
+  "UI_qualified": false,
+  "overall_goal_qualified": false,
+  "preservation": "Only new requested source review JSON. Candidate/production/V1manifest/old evidence unchanged. No engine/SDK/Popen/socket or fake account run."
+}

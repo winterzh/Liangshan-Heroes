@@ -1,3 +1,7 @@
+## 2026-10-09：真实SDK启动观察候选
+
+恢复QA新增real_sdk_bootstrap_candidate_v1/v2/（各gd、tscn及执行边界README）、REAL_SDK_BOOTSTRAP_SOURCE_INPUTS_V1/V2.json和REAL_SDK_BOOTSTRAP_DIRECT_REVIEW_V1/V2.json。V1静态拒绝；V2有限直接源码审查通过，13/14原输入pin、两安装alias，仅source-only启动基础。没有导出/运行工具或完整消费者，stages=[]，不授SDK/重试/奖励资格。
+
 ## 2026-10-09：正常提交回调完整直接源码审查
 
 恢复QA新增NATURAL_CALLBACK_COMPLETE_DIRECT_REVIEW_SCOPE_V2.md、NATURAL_CALLBACK_COMPLETE_DIRECT_REVIEW_V2.json和REAL_STEAM_RETRY_LAUNCH_SOURCE_CONSTRAINTS_V1.json；完整直接源码审查已完成，原V2 source recipe/pins实际logical独立回核，未发现确定静态阻断，approved_stages=[]。真实SDK导出入口限制同步记录在WORKLOG/SOURCE_SETUP/DEVELOPMENT_PLAN/恢复README；现行--script/disabled用例没有真实账号授权资格，原producer/GD/consumer未修改。
