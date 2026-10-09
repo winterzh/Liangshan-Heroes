@@ -1,0 +1,9 @@
+# 云写入失败边界producer直接调用链审查
+
+固定tools/run_campaign_cloud_failure_v1.py、exact源快照、CLOUD_FAILURE_PRODUCER_SOURCE_RECIPE_V1.json及consumer V2/runtime V1、直接EvidenceSuite和prior verifier API。recipe-only已实际exit0，logical a98ff6e134bad773de7bc56fe8ae154f26d47d4d5c3989d3b38c76fd93edc561；没有Godot或Suite/完整consumer构造。SOURCE_SPEC仍要求先通过真实成功closed all61 V12 receipt，然后才能生成；Suite再次核原收据才建外部自有目录。
+
+实现cold→fresh failure两个实际OwnedSerialBatch阶段，冷导入后完整identity、engine/native/source原件保持；固定GD40标签和真实失败数据、writer/journal/CFG物理原字节由source-bound消费者核对。当前stages为空，有限静态审查不是执行准入；--run需要新精确SOURCE_SPEC和完整直接chain独立准入（schema、producer SHA、logical及source file SHA全绑定），既有preliminary/V12准入不能替代。
+
+这是正常SDK禁用、本地owner seam的失败及账号拒绝边界。成功授权账号同writer重试、同档案重启、完整原十九案/玩家UI/SDK仍未实现或取得，所有资格false；producer不得把complete局部标记提升成这些资格。无全目标重新缩小。
+
+独立审查只做来源、AST和真实signature/direct字段核对，不启动Godot/Popen/socket、不造fake prior/Popen/holder或完整validate、不改源或旧证据。新增CLOUD_FAILURE_PRODUCER_INDEPENDENT_REVIEW_V1.json记录有限源码结论、剩余缺口，approved_stages=[]。

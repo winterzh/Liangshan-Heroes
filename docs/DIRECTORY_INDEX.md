@@ -1,3 +1,7 @@
+## 2026-10-09：云写入失败宿主全链源码
+
+恢复QA新增CLOUD_FAILURE_EVIDENCE_* V1、CLOUD_FAILURE_RUNTIME_* V2、CLOUD_FAILURE_PRODUCER_* V1、两份source-only builder、四份helper/producer精确snapshot及原失败gate日志。tools新增campaign_cloud_failure_evidence_v1/v2.py、campaign_cloud_failure_runtime_v1.py和run_campaign_cloud_failure_v1.py。V1弱物理关联及初始fixture失败保持，V2修复原日志pair/实际CFG关联；全部静态/纯数据证据与原生资格分开。原成功all61前置尚缺，未新native或改生产源。
+
 ## 2026-10-09：云写入失败边界来源
 
 新增恢复QA cloud_write_failure_candidate_v1/v2：GD、builder、SOURCE、39/40来源标签合同、source-only PREPARATION、具体review scope及独立原收据。两份原候选/审查保留，不授Godot运行、成功账号重试/原19/UI/SDK资格；V2仅强化完整shared pending保留。

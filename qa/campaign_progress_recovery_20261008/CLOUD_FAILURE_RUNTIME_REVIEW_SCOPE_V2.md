@@ -1,0 +1,9 @@
+# 云写入失败证据与原执行阶段接入：V2差异审查
+
+V1消费者、source spec、源快照、初始测试错误均保留。V2修复V1独立审查发现的物理关联缺口：每对原prepared/applied的全部提案字段必须一致，后继transaction不得复用上一对，末applied.candidate_sha256绑定实际保留campaign.cfg原SHA。规则对照R12 CFG writer._chain；不额外假定跨操作original_sha连续，不用Python重建ConfigFile语义。裁剪祖先和写入前宿主快照仍不可用，不计完整CFG资格。
+
+新增campaign_cloud_failure_runtime_v1.py，只提供CloudFailureSerialBatch.cloud_failure_phase，无CLI或自建run/profile。保留原OwnedSerialBatch.phase和真实Popen/nonce/终态/租约/错误清理：一个实际成功cold后，严格空四目录新profile与原post-cold身份、精确V2 GD/parent和env；terminal Popen尚被持有时单report publisher→原日志固定→consumer→integrity，最后由父phase清child/租约。没有remote socket、fake Popen或强行SDK账号。
+
+源码闭包311pins/734导入边，logical ef88b4cf1829fd8424ce46fc2f9aa7a66c286fedc6324e7cc2834d10c099c458，原SOURCE_SPEC_V2与两个snapshot精确保存。16个纯decoded-data反例实际拒绝，四个合成0/2/4形状可接受；AST/import/继承/实际签名检查通过，均不调用完整consumer/phase，不是原生结果。
+
+独立审查只读上述新V2消费者、wrapper、fixed spec/snapshot和直接依赖，核对真实API、字段、原件关联及错误清理。无native执行/准入，approved_stages=[]。完整producer仍未实现，all61成功前置未取得；正常有账号同writer成功重试与同档案重启仍待实现，原19/UI/SDK/整体开发资格全部false。

@@ -1,3 +1,15 @@
+## 2026-10-09：云写入失败消费者、原执行阶段与两进程执行器源码接齐
+
+新增failure evidence V1/V2、CloudFailureSerialBatch和run_campaign_cloud_failure_v1。消费者绑定实际尚持有的terminal Popen、固定原Godot/命令/环境、完整安装身份、单report原字节/关闭标记/40标签及原内存、shared十字段、同writer/提案；物理CFG、绑定文件、锁和保留journal原件仅复制到外部自有批。
+
+V1独立审查指出同prepared/applied提案及末candidate关联实际CFG不足。不可变V2补齐生产_chain要求的同pair所有提案字段、后继不同transaction、末candidate→原物理CFG SHA；不新增跨operation original SHA连续限制。V1/spec/snapshot/初始测试错误保留。V2＋wrapper独立有限静态审查无确定阻断，review SHA13534a14070e145b713e5c1635a7e6dff2524aa8995944e72398b1c7ebcdf758，stages=[]，不授native准入。
+
+12个原结构反例与16个journal纯数据反例已实际拒绝；后者四个合成0/2/4形状可接受。新AST/import/继承/实际signature检查通过。wrapper保留原OwnedSerialBatch.phase，terminal publisher→consumer→integrity完成后才由父清child/租约；不造Popen或解析Godot ConfigFile。以上均非原生验收。
+
+两进程producer recipe-only实际exit0，313pins/743导入边/32alias，logical a98ff6e134bad773de7bc56fe8ae154f26d47d4d5c3989d3b38c76fd93edc561，精确source snapshot保留。新CLI用原第四失败V12 receipt实际exit1于successful all61门槛，未创建SOURCE_SPEC/运行目录，也没有启动Godot。最终producer独立直接调用链审查已完成，review SHA1a75a53460000bf70ca5bdf34199c8c3045da90f1ef8eead5d64bbd82a7c243c，未见确定静态API阻断；stages=[]。执行仍需成功closed all61、新精确seal及具体独立准入。
+
+本批只有SDK禁用本地真实写入失败＋账号拒绝边界的源码接入；成功授权账号同对象重试/同档案重启、原十九案、玩家错误UI和SDK一次性等仍未完成，所有资格false。完整V12第五批未启动，另项Godot实际运行；长期验收协调问题待用户答复。R12未晋升正式源，Steam Build25821275不受本轮改变。原八章动态/九玩法及Windows导出/多尺寸/连续10分钟性能内存/Android真机完整计划保持。
+
 ## 2026-10-09：云写入失败入口与共享待写档案完整保留源码
 
 新增cloud_write_failure_candidate_v1/v2：继承正常菜单/startup/私有env/identity，SDK禁用数字owner仅作本地输入。新GD实际设计用自有关闭文件阻塞campaign_cfg_candidates/v1，由原Cloud._apply_profile→Campaign实际CFG writer返回CFG_STAGE_PARENT；保持旧进度/CFG、同writer和冻结提案，实际错误overlay/RetryCampaignConfig通过生产retry_config路由。仅修自有阻塞文件，不直接调用writer重试，不伪造Steam可用；真实账号缺失时必须CLOUD_RETRY_SCOPE_CHANGED，并保留原对象和数据。
