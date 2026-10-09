@@ -1,3 +1,7 @@
+## 2026-10-09：原native userdata文本后继
+
+新增semantics_v2/arm_packet_evidence_v2/first_evidence_v4/runtime_v5与四snapshot；恢复QA新增原USER-TEXT拒绝、SOURCE/SCOPE/准备、35项Windows表示host脚本/结果、初始fixture script/失败观察及有限独立review。真实LuA报告只是表示证据，不晋升失败full。
+
 ## 2026-10-09：完整原生CFG语义来源
 
 恢复QA新增cloud_applying_driver_candidate_v3/：独立原/expected/final wholeCFG投影GD、SOURCE/40-24-27合同/准备脚本；新增四tools与snapshot、CLOUD_CFG_SEMANTICS_SOURCE_SPEC_V1/准备/SCOPE、25项伪造投影host脚本/结果及有限review。当前没有actualGodot解析/运行或整个cloud用例通过。

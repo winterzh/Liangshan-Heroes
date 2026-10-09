@@ -1,3 +1,11 @@
+## 2026-10-09：原生userdata文本被Windows Path重写的阻断与修复
+
+准备cloud restart时发现 CLOUD-NATIVE-USER-TEXT-001；独立原拒绝 SHA fb1408052d68f7a1df0de02278ce3dc0ae8bf8b65dc95f045e5386ae2c86d630。真实已保留LuA305 report原actual_user_data_dir为D:/...；Windows Path→str变D:\...，旧semantics binder最早pre-arm就会拒绝同一合法native文本，firstconsumer/replay亦重构字符串。旧source-only审查不证明pipeline执行，不沿用为通过资格。
+
+新四后继保留原packets.user/report.user_directory字符串用于所有protocol/ready/semantics精确相等；独立Path只用于noLinks/private边界/physicalIO。raw API明确拒绝Path对象或改变native文本，不放宽PID/nonce/full15 identity/原四export/40labels/arm/CFG/journal。runtime_v5仅换binderimport。272pins/669边/四snapshot及原254pin保持；35合成覆盖原27与8实际Windows表示/拒绝反例，未跑实际Popen/socket/Godot/完整validate。初始fixture错读旧33label合同退出1，原script/观察保留；切换实际GDv3/40合同后通过，四生产后继不变。
+
+有限独立修复收据 SHA b5c42547f06abe985866e267cb5ab9281cd6a14c8ee8d44a72399db2d500c785：3项独立内存API、原文本/Path/重建backslash拒绝、272pins/669边闭合，stage=[]。LuA原报告仅作格式证据，第四full依然失败、没有成功prior或native准入。横向源码检查还发现natural_callback_evidence_v2和callback_packet_evidence_v2同类Path→str点，下一步先修这项已知前置，再接普通cloud restart/完整producer；全部原目标保留。
+
 ## 2026-10-09：原生完整CFG语义投影与首次consumer源码接入
 
 新增cloud GDv3，复用原正常menu/source/private环境/真实cloud writer和arm路径。实际写入前独立ConfigFile.load并用真实CfgValues.semantics逐键记录Variant_type与canonical probe原文本，在不写文件的独立ConfigFile只改四target构完整expected；实际写入后独立fresh load，全sections/key/type/canonical与expected比较，原和final文件SHA稳定。新增closed semantics-ready原件含完整native JSON字符串与各SHA，report含原final JSON/SHA；40完整/24ready/27调用前source标签，不是实际通过数。
