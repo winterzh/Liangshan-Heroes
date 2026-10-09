@@ -1,3 +1,11 @@
+## 2026-10-09：完整恢复续验来源预检与云用例直接API审查
+
+Steam本批发布已完成，回到原完整开发目标。已批准V12执行器的当前只读CLI实际exit0，重算source_spec_sha256仍867bd2d1b78339f357200e4dca344d14fb38a05c39f3e7906fe3f11507b60209；官方4.6.3/本机成功baseline/全部来源与原准入仍匹配。原第四批durable_chain_8fe7b18b实际failure为Foreign engine after owned child start，cold与Lu A成功不授全批，原receipt/失败profile保留、lock已释放。第五批尚未启动，来源预检不计61阶段通过。
+
+云应用→同档案普通重启新增独立CLOUD_CASE_FULL_API_REVIEW_V1及同V1 ADDENDUM。287来源与logical、147 Python AST、10关键签名以及实际GD first40/restart33标签回展开已核；实际完整直接producer/consumer/phase接口与必需字段未见确定阻断，complete_consumer_and_phase_reviewed=true仅为静态直接调用链审查，不是原生行为结果。未穷尽无关147模块内部行为不另造执行门槛。仍approved_stages=[]、无native准入、无成功all61前置或精确后继seal；真实Godot解析/断点原包/终态竞态/三进程与完整consumer仍未运行。
+
+下一步为原已批准61进程阶段：冷导入、双角色ABCD及52负例，原每角色world264/component362/live24门槛不减。需要连续引擎时间；用户此前跨聊天协调仅覆盖Steam验收，本次已请求单独允许协调这轮完整恢复，未发新的协调消息或启动原生。原19故障/真实UI同对象重试/SDK一次性/八章动态内容/九玩法及Windows导出/多尺寸/10分钟性能内存/Android真机全部保留，R12未晋升正式源。详情DURABLE_V12_RESUME_PREFLIGHT_20261009.json及两份独立云审查，原目标继续active。
+
 ## 2026-10-08：264/362/24持久化矩阵后继R4静态闭合，完整输入26覆盖封存
 
 `final_durable_negative_adapters_v1/` 独立拒绝NEG-ADAPT-001/002：capture自己override守卫仍要求QA1，且override loader未初始化继承安装校验所用Lifecycle。R2修守卫并加入world264，但loader缺口保留，准确拒绝。不可变R3修两处，后继R4 `final_durable_negative_adapters_v1_r4/` 保留修复并显式固定load campaign-v2 Lifecycle/Intent；不加载或调用父natural route/drivers。

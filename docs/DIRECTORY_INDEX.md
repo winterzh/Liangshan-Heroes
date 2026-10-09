@@ -1,3 +1,7 @@
+## 2026-10-09：完整恢复续验准备证据
+
+恢复QA新增CLOUD_CASE_FULL_API_REVIEW_V1.json和同V1 ADDENDUM，以及DURABLE_V12_RESUME_PREFLIGHT_20261009.json/log。仅静态直接接口审查与实际只读来源预检，不授云native/all61/原19资格；原失败批及旧审查保留，未新建原生批。
+
 ## 2026-10-09：Steam 正式上线与客户端验收完成
 
 用户授权更新Steam并完成手机确认。控制连接恢复后，将唯一冻结候选设为default；Steamworks成功提示、default分支/构建行和独立SteamCMD public回读均为Build25821275，Windows Depot5088121 / Manifest1831225442917801106；macos=0、steam-integration=25476210未变。回滚基线25768878。

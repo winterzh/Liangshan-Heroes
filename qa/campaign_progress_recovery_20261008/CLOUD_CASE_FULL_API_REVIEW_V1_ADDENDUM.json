@@ -1,0 +1,149 @@
+{
+  "schema": "cloud_case_full_api_review_v1_addendum",
+  "same_review_version": "V1",
+  "independent": true,
+  "reviewer": "independent_subagent_cloud_case_full_review",
+  "reviewed_at_utc": "2026-10-09T05:43:37.571816+00:00",
+  "original_review_file": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\CLOUD_CASE_FULL_API_REVIEW_V1.json",
+    "bytes": 21508,
+    "sha256": "d7ddb1500716a0fdca5a0c44c5027fb2d234ac458b6988a85c3ea71ff7523c50"
+  },
+  "recipe_file": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\CLOUD_CASE_PRODUCER_SOURCE_RECIPE_V1.json",
+    "bytes": 1486107,
+    "sha256": "c766c05255fb4df33a6b3cd6c84bdda5b0509395ba6d75d48bac72c2138c5dc5"
+  },
+  "recipe_logical_sha256": "202e2644289164cf98043179fd8031d346bcdee0064194ab25df53bd9d11b147",
+  "status": "DIRECT_EXECUTION_CALL_CHAIN_STATIC_REVIEW_CLARIFIED_NATIVE_UNVERIFIED",
+  "complete_consumer_and_phase_reviewed": true,
+  "meaning_of_complete_consumer_and_phase_reviewed": "Actual complete direct cold/cloud/restart producer, inherited phase, publisher and consumer static call interfaces, required fields and return shapes were reviewed; this is not an execution result or native admission.",
+  "full_API_dependency_audit_completed": false,
+  "meaning_of_full_API_dependency_audit_completed_false": "Every internal branch/function in all 147 imported Python modules and unrelated source files was not exhaustively audited; this does not identify an uncovered direct API or return-field gap and is not itself a reason to reject a reviewed direct execution call chain.",
+  "direct_API_or_required_return_field_gaps": [],
+  "definite_static_API_blockers": [],
+  "supplemental_interfaces": [
+    {
+      "file": "tools/godot_debug_wire.py",
+      "methods": [
+        "DebugConnection.__init__",
+        "encode",
+        "decode",
+        "stack_frames"
+      ],
+      "lines": [
+        14,
+        167
+      ],
+      "result": "Initializer supplies connection and empty bytearray buffer. Scalar/untyped-Array command parameters and decoded list/name/thread/data envelopes match controller and packet consumers; stack_frames returns source/line/function dictionaries matching fixed stack guards.",
+      "source_pin": {
+        "path": "D:\\AI项目\\水浒\\开发工程\\tools\\godot_debug_wire.py",
+        "bytes": 6794,
+        "sha256": "41703c88628a3fa473db00d8eeb79e87e6c2f250b0dc243a951b8295973e0c35"
+      }
+    },
+    {
+      "file": "tools/run_steam_integration_qa.py",
+      "methods": [
+        "native_dependencies",
+        "install_native"
+      ],
+      "lines": [
+        38,
+        79
+      ],
+      "result": "Both return the same manifest mapping expected by producer and Suite.integrity; project Path receives dependencies and extension registration before cold import.",
+      "source_pin": {
+        "path": "D:\\AI项目\\水浒\\开发工程\\tools\\run_steam_integration_qa.py",
+        "bytes": 11766,
+        "sha256": "0673d6ab09904fd653152b127c30ca325dbf791de0b77a5da2a60cd30f0a5ad9"
+      }
+    },
+    {
+      "file": "tools/run_workstation_baseline.py",
+      "methods": [
+        "engines"
+      ],
+      "lines": [
+        25,
+        31
+      ],
+      "result": "Returns a PID set, matching idle emptiness checks and owned-child set subtraction in inherited/native phases.",
+      "source_pin": {
+        "path": "D:\\AI项目\\水浒\\开发工程\\tools\\run_workstation_baseline.py",
+        "bytes": 8636,
+        "sha256": "1220817bacea5469035403084c3e4ddc7c23d222440876cd199e650a9b7dd8b2"
+      }
+    },
+    {
+      "file": "tools/run_durable_campaign_chain_v12.py",
+      "methods": [
+        "identity_module",
+        "canonical",
+        "verify_pin"
+      ],
+      "lines": [
+        39,
+        56
+      ],
+      "additional_lines": [
+        179,
+        184
+      ],
+      "result": "identity_module pins and imports the fixed helper and returns its module; canonical returns SHA256 string; verify_pin checks declared bytes/SHA in place and returns no value, matching actual use.",
+      "source_pin": {
+        "path": "D:\\AI项目\\水浒\\开发工程\\tools\\run_durable_campaign_chain_v12.py",
+        "bytes": 38922,
+        "sha256": "6309ed4976199a0afc058b0cf3a0bc78f0ba3dcc1bb01193958a19751eb3d7c5"
+      }
+    },
+    {
+      "file": "qa/zhu_wounded_20261005/harness/run_daming_admit_v24s.py",
+      "methods": [
+        "installed_identity",
+        "relative_path",
+        "no_reparse",
+        "sha"
+      ],
+      "lines": [
+        126,
+        192
+      ],
+      "result": "installed_identity(project Path) returns exactly content_version/rules_sha256/file_count/total_bytes/files/directories; count and bytes agree with returned file rows. This is consumed as six-key host identity and bound to the full fifteen-field actual native Provider identity.",
+      "source_pin": {
+        "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\harness\\run_daming_admit_v24s.py",
+        "bytes": 95807,
+        "sha256": "049dcdc74fab7936d4812f71a9806cee46569163ece4c524043ac7cfdedd8626"
+      }
+    }
+  ],
+  "already_reviewed_direct_chain": [
+    "Suite.execute -> FrozenProject.prepare -> native installation -> inherited cold phase -> freeze_cold -> installed_identity -> CloudCaseEvidence constructor",
+    "cloud_apply_phase -> closed native exports -> CloudArmController -> CallbackRawReceiver -> original pre-arm native semantics and physical CFG -> retained terminal publication -> validate_first",
+    "cloud_restart_phase -> inherited OwnedSerialBatch.phase -> retained terminal restart export publisher -> validate_restart -> require_all",
+    "Inherited Suite remember/freeze_bytes/read_fixed/persist/integrity attributes and return use; exact env and step/report fields; retained actual Popen through publishers and consumers; whole CFG and fourteen-field journal original custody; raw arm/packet/terminal-tail replay",
+    "Native parent first/restart_first dispatch and actual cloud -> Campaign CFG writer -> mark_dirty callback stack"
+  ],
+  "approved_stages": [],
+  "full_chain_execution_admission": false,
+  "native_started": false,
+  "actual_Popen_validated": false,
+  "full_consumer_validation_run": false,
+  "successful_all61_prior_verified_in_this_review": false,
+  "successful_all61_prior_available": false,
+  "fixed_successor_source_seal_verified": false,
+  "remaining_prerequisites": [
+    "Actual successful closed all61 V12 prior, reverified against original evidence before successor source sealing and work-directory creation",
+    "Exact successor source seal and independent admission pinned to that seal and producer bytes; this addendum is not such an admission",
+    "Actual native parsing, EngineDebugger handshake and paused message delivery, actual three cold/cloud/restart processes, ordinary same-profile runtime and original evidence consumer acceptance"
+  ],
+  "clarifications": [
+    "No currently identified direct executed-path API, required attribute or returned field remains unchecked within the reviewed producer/phase/consumer call chain.",
+    "Native timing, paused capture delivery, terminal races and runtime acceptance are unverified execution facts; do not invent successful prior or loosen original guards to fill them.",
+    "No need to audit unrelated module functions as an automatic prerequisite for this narrowly stated direct-chain static result."
+  ],
+  "sources_modified": false,
+  "original_review_unchanged": true,
+  "no_new_review_version": true,
+  "operations": "Read-only source clarification and this new V1 addendum file only; no Godot/Popen/socket/full validate/test or code modification."
+}
