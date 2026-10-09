@@ -1,3 +1,17 @@
+## 2026-10-09：自然回调实际phase的源码集成候选
+
+新增 campaign_callback_runtime_v1.py，继承已审NaturalSerialBatch的cold和普通同档案restart原方法。固定callback_first/first与自然callback GD，调用前要求manifest/map及所有driver依赖属于producer seal，原完整post-cold身份和精确受保护环境在Popen前核对。实际自有Popen/唯一PID、串行idle、外部engine检测、实际loopback连接和闭合driver ready四file publisher后，才构造已审controllerV3/rawreceiverV3；不用旧先decode的peer.receive，不给六字段身份伪造eligible。
+
+退出0且唯一实际栈观察完成后，保持真实Popen对象直到future validator与全源校验结束；保留尾流前缀、全部原tail chunks与真实transport EOF，future完整消费者必须拼接解析并拒绝截断/未知包。仅精确owned-live WireError、同持有child/PID、zero终态、complete/nonwaiting且无custody error note的进程退出竞争可转尾流；decode/source/文件留存异常不得吞。transport EOF不当作Popen终态，无重连。原fault runtime的owned child kill/wait、未知child保留handle/lease和finally关闭逻辑逐AST不变。
+
+SOURCE_SPEC_V1 69pins/45根本地导入边，exact snapshot与Python解析闭合。26项可复现synthetic环境/terminal race/内存尾流fixture检查通过，cold/restart继承方法identity相同；没有完整phase、actual constructor/socket/Popen/Godot资格。该library无CLI或自授运行准入，source-only/stages[]；完整有序报告/原包/CFG/lifecycle消费者和producer尚未实现，成功完整V12前置未绑定。step/observation仍不得授原19/SDK或整体资格。
+
+独立V1拒绝收据SHA `e7a13889fb2289ec14b89fd1831d792b8f032fadecb9961de691b805764acf87`，唯一 CALLBACK-RUNTIME-CLOSURE-001：已pin历史FaultRuntimeV3依赖NativeExportsV1未列入全pin图。原V1/source/body/snapshot保留；后继仅SOURCE_SPEC_V2补leaf和原拒绝/spec/纯AST checker，共73pins，runtime原SHA不变。可复现全118条已pin local-tools import边闭合、missing0；该AST检查不证明动态import或实际phase，批准仍为空。
+
+后继有限通过收据SHA `2a6a2c4e3ce750605f4fac821584bbbd549c58daf0398890389ff1ed4caa6ef8`，static=true/stages=[]；73pins/全118条导入边独立闭合，CLOSURE-001修复，原69行及执行body/snapshot原字节保持。复用24项独立有限host/API结论，不扩成完整phase模拟；26项我方synthetic与该静态复审均不授constructor/socket/Popen/Godot、consumer/producer/prior或native准入。
+
+开始时另一项目Godot PID35992在测试，收尾回读已换到PID44372的新测试；整批串行窗口未确认，本轮第五完整V12未启动。完成当前原19、正式恢复接入/UI/SDK、内容/性能/Android全目标仍需原定真实验收；无main/Steam发布。独立有限源码预审结果另记。
+
 ## 2026-10-09：长自然回调包预算及四文件发布器候选
 
 新增 controllerV3和raw_receiverV3：只将原包留存上限改4096事件/64MiB，按1800秒一Hz参考流每frame两份证据3600事件加496控制/拒绝事件设计，旧256/16MiB版本保留。controller除_retain预算外其余方法AST exact V2，receiver class AST exact V2只换controller import，不丢原包、不关闭正常时钟/性能。参考来自历史4.4，当前binary频率/真实性能未验证；高于模型或超上限仍失败，不能授实际长路线通过。

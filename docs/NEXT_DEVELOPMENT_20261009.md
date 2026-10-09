@@ -10,21 +10,17 @@
 
 ## 2. 完成原 19 类故障和玩家重试
 
-六类纯数据测试及六类真实文件故障已有源码候选。文件故障控制器后继版已通过独立静态部件预审，只允许改动当前自有进程的私有文件，保留首次原始字节，故障后通过实际重试按钮继续同一终局。此预审没有授予原生执行资格。
+完整目标保留六类纯数据、六类真实文件故障、首次/重复两类自然终局、两类QA兼容，以及三个实际回调/云端边界，共原19类。原JSON533、Owned76、普通half-ABC39/351/342基线、完整标签、真实CFG与三代生命周期、同对象重试、账号/来源排除和noReplay回归仍须当前来源的实际证据；历史旧来源通过不能授R12候选资格。
 
-后继 GDv6/controllerV5/consumerV2 已接入六故障执行器 V2，设计为冷导入一次、六次真实故障和六次同档案重启，共13个原生进程。独立审查已修复首次原始字节绑定与严格类型比较两项问题，106个来源 pin、50份 Python 和139条本地导入闭合。审查只确认源码，批准阶段为空：执行器固定的前置 run6409dde9 已失败，不能运行。后继执行器 V3 已通过有限源码预审，显式接受成功前置 receipt，封存其首次原始 pin，并在创建新批前复核；无成功 prior、无新 seal 或执行批准。下一步须取得新的完整61进程通过结果，再创建绑定该成功来源的新封存和执行准入；两类自然首次/重复终局候选已通过独立有限源码预审，发布及串行runtime部件也已通过有限源码预审（阶段为空），完整74/80/21有序合同已准备，V3完整有序消费者也已通过预审，物理CFG/两token原件和重启核对已在源码接入，完整五进程producer也已接入并通过源码预审（99来源pin、阶段为空），仍须成功61前置后的精确封存、执行准入及真实四流程验收；两类 QA 兼容及三类实际回调/云端边界也继续完成。所有原19类、完整标签、真实 CFG 与生命周期记录、内存/云端状态、同对象重试和重启读回都须分别给出实际结果。源码审查与主机检查不计为原生通过。
+六文件故障GDv6/controllerV5/consumerV2与完整producerV3已通过有限源码预审。V3显式接受成功完整V12的首次原receipt pin，创建新批前复核all61；当前四失败prior均拒绝，没有成功prior绑定seal或运行准入。六纯数据及相关旧后继仍须按当前来源和成功前置重新闭合，不沿用失败完整批资格。
 
-三个实际回调/云端边界的只读观察器和固定协议入口已完成有限独立源码预审，阶段为空。下一步实现真实用例 driver、精确生产栈及 owned PID/原包绑定的 controller，再接完整有序消费者和 producer。当前未解析或运行观察器，4.4 协议参考不证明当前引擎兼容；不得把合成主机包或本地账号夹具计为实际回调、云上传或 SDK 奖励通过。
+首次/重复自然终局的GD、74/80/21标签、publisher/runtime、完整消费者V3和五进程producer已完成源码接入与有限预审，阶段为空；实际冷导入及first/restart_first/repeat/restart_repeat四流程仍未运行。须成功all61前置后封存精确来源、独立执行准入，再取得完整报告、CFG prepared/applied1/2→3/4及两token各gen1/2/3的实际结果。
 
-原包消费者已增加两代候选：V1孤立surrogate缺口被独立审查拒绝；V2只修UTF8字符串有效性，保留原拒绝证据。纯解码与合成包检查不证明owned PID或实际回调；后续仍须按 CONTROLLER_INTEGRATION_CONTRACT_V1.md 接真实栈/包全序及三个实际用例。
+单个callback_sees_new_memory自然GD已准备，保留父实际黄泥岗路线；只读observer、严格packet消费者、controllerV3、rawreceiverV3、四export publisher已通过有限源码预审。4096事件/64MiB只为1800秒一Hz参考模型的有界留存容量，当前binary流量和性能未证明。callback phase集成源码已准备，继承已审cold/普通同profile restart，当前完整执行与结果资格仍未取得。
 
-两个实际回调栈的owned controller V2已接packetsV2，并通过仅源码的独立差异预审（23pins/stages[]），V1身份缺口原拒绝证据保留，原包发送尝试/完成与精确栈观察逻辑已实现；33项synthetic检查不证明完整pipeline。下一步实现发布实际ready的driver、保留拒绝/部分EOF原件的raw receiver及串行runtime，再补第三真实云故障driver和完整报告/重启验收。
+callback phase初版遗漏历史NativeExports依赖已被独立审查拒绝；后继仅封存补齐至73pins/118本地边，执行body不改。此metadata修复已通过独立有限源码复审，阶段为空。下一步接完整80项报告合同、全部原packet与terminal tail重放、实际进度/CFG及三代lifecycle消费者，再创建完整producer与成功V12前置封存/运行准入。两类真实云应用/失败driver与故障集成、两类QA兼容、实际失败UI与重试仍继续；R12正常云失败须证实旧进度/公开CFG保留、真实pending writer/shared profile保留，设置/语言可先写入，不能声称整个profile原子性。本地数字账号夹具只为SDK-disabled输入，不授实际账号、上传或SDK奖励一次性结果。
 
-完整runtime前须先修订并独立审查包预算：历史4.4参考默认每秒performance消息，而当前controller256事件加双份留存可能在长自然路线前耗尽；这不是当前binary流量证明，具体来源见 CALLBACK_FULL_RUNTIME_PACKET_BUDGET_OBSERVATION_V1.md。不得丢原包或关闭正常性能/时钟规避。
-
-原包receiver V2候选补超时同buffer、非法头/partial EOF留存及拒绝永久停止；V1拒绝证据保留。单自然回调GD已继承原黄泥岗路线，但未解析/运行；下一步接四原export的publisher、串行runtime与完整有序消费者/producer，并另实现两类真实云驱动。源码/合成流检查不能授实际回调资格。
-
-4096/64MiB controller/receiver后继和固定四export publisher已准备，14项synthetic磁盘检查与70项receiver检查通过，当前binary流量与性能未证明。下一步接实际自然callback phase和同档案parent restart，把完整报告/原包/CFG/lifecycle全部接消费者再封完整producer；只有源码部件，尚无串行运行准入。
+源码审查、合成流与私有磁盘原件回读均不计原生通过。全部原19和所有原定额外回归都须分别闭合；正式恢复源未晋升。
 
 ## 3. 完成玩家入口与平台集成
 
@@ -36,6 +32,6 @@
 
 ## 5. 完成性能与 Android 真机验收
 
-验证实际连续运行、帧时间和场景切换内存；性能目标仍为 60 FPS、P95 不高于 16.7 ms、P99 不高于 33.3 ms。Android 手机和平板另做触控、DPI、安全区与持续性能验证，不能用主机模拟代替。
+验证实际连续10分钟运行、帧时间和场景切换内存；性能目标仍为 60 FPS、P95 不高于 16.7 ms、P99 不高于 33.3 ms。Android 手机和平板另做触控、DPI、安全区与持续性能验证，不能用主机模拟代替。
 
 每轮按对应验收结果更新 QA 与交接，并以逐文件白名单提交、推送和回读 GitHub stable 分支。未完成阶段保持未完成，不因某个组件通过而提前宣告全部开发完成。

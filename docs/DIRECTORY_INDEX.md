@@ -1,3 +1,7 @@
+## 2026-10-09：自然回调phase集成来源
+
+新增 tools/campaign_callback_runtime_v1.py；恢复QA新增exact snapshot、CALLBACK_RUNTIME_SOURCE_SPEC_V1/V2、原拒绝及后继有限review、26项synthetic host脚本/结果和可复现全pin AST closure脚本/结果与有限独立review。69pins来源只覆盖phase集成，未有完整consumer/producer或native准入；普通cold/restart保持已审父方法。
+
 ## 2026-10-09：包预算与四文件发布器后继
 
 新增tools/campaign_callback_controller_v3.py、campaign_callback_raw_receiver_v3.py、campaign_callback_native_exports_v1.py；恢复QA新增三snapshot、CALLBACK_BUDGET_EXPORTS_SOURCE_SPEC_V1、可复现14项磁盘/70项receiver scripts/results、初始host失败script/观察及有限review。callback_budget_exports_independent_host_v1/保留两份独立fixture结果与原字节来源；4096证据文件保留在CodexTemp合成测试目录，不上传全部临时文件；原预算/源/拒绝都保留。

@@ -1,0 +1,91 @@
+{
+  "schema": "campaign_callback_runtime_preliminary_independent_review_v1",
+  "reviewed_at_utc": "2026-10-09T00:52:40.115493+00:00",
+  "independent": true,
+  "source_only": true,
+  "static_api_closure_passed": false,
+  "approved_stages": [],
+  "helper_sha256": "1d1edb269e33d21c7ebd5d75b5f9d0d84c6c4b7b0b5d0f39e98433b7bb865e7e",
+  "source_spec_file_sha256": "0fab673ca7196fe6b682b4b9d181a94d24f2f7d9350a22f714474ebc5a10e643",
+  "helper_pin": {
+    "path": "D:/AI项目/水浒/开发工程/tools/campaign_callback_runtime_v1.py",
+    "bytes": 13076,
+    "sha256": "1d1edb269e33d21c7ebd5d75b5f9d0d84c6c4b7b0b5d0f39e98433b7bb865e7e"
+  },
+  "source_spec_pin": {
+    "path": "D:/AI项目/水浒/开发工程/qa/campaign_progress_recovery_20261008/CALLBACK_RUNTIME_SOURCE_SPEC_V1.json",
+    "bytes": 29066,
+    "sha256": "0fab673ca7196fe6b682b4b9d181a94d24f2f7d9350a22f714474ebc5a10e643"
+  },
+  "findings": [
+    {
+      "id": "CALLBACK-RUNTIME-CLOSURE-001",
+      "severity": "blocking_source_seal",
+      "file": "D:/AI项目/水浒/开发工程/qa/campaign_progress_recovery_20261008/CALLBACK_RUNTIME_SOURCE_SPEC_V1.json",
+      "problem": "Full AST scan of all pinned Python modules finds a local dependency omitted from the source seal: pinned historical comparison module campaign_original19_fault_runtime_v3.py imports campaign_original19_native_exports_v1.py. The actual new root traversal is narrower, but the all-pinned-module closure required for this source group is incomplete.",
+      "missing_leaf_pin_observed": {
+        "path": "D:/AI项目/水浒/开发工程/tools/campaign_original19_native_exports_v1.py",
+        "bytes": 4142,
+        "sha256": "6ad6304d5d38561266b42c33bafff9eb00af1715266d7db90b1c951a8cf6fd2c"
+      },
+      "caller": "D:/AI项目/水浒/开发工程/tools/campaign_original19_fault_runtime_v3.py",
+      "leaf_direct_imports_already_pinned": [
+        "campaign_original19_atomic_files_v2",
+        "durable_campaign_full_matrices",
+        "durable_campaign_full_runtime",
+        "run_workstation_baseline"
+      ],
+      "minimal_fix": "Preserve this V1 source/spec/rejection and create a successor seal directly pinning the missing legacy NativeExports leaf; runtime implementation need not change."
+    }
+  ],
+  "closure": {
+    "existing_pins_verified": 69,
+    "snapshot_byte_exact": true,
+    "root_local_import_edges": 45,
+    "all_pinned_local_import_edges_observed": 114,
+    "missing_local_imports": 1,
+    "all_pinned_module_closure_passed": false
+  },
+  "verified_finite_runtime_boundaries": [
+    "Fixed source manifest/map and all five driver dependencies are source-sealed and first-byte read before launch. Exact protected environment and original post-cold identity pin are checked before Popen; actual controller is created only after loopback accept and closed driver-ready publication.",
+    "Original receiver handles complete raw bytes before semantic decode. EOF requires complete/nonwaiting observation without partial frame; it is transport closure only and does not assert process termination.",
+    "Only the exact WireError owned-live guard, no custody notes, retained same child, zero terminal exit and complete/nonpaused state may transition to terminal-tail drain. Source/decode/custody and other exception paths do not qualify as this transition.",
+    "Terminal prefix, every remaining byte chunk and actual transport EOF are retained. Parsing/rejecting truncated or unknown tail packets and replaying any adapter-only frame abandoned by a terminal race remain mandatory responsibilities of the future full consumer.",
+    "Validator is called before self.child is cleared and lease released. BaseException owned-child/unknown-child cleanup handler is AST exact with reviewed FaultRuntime; cold and ordinary restart methods are inherited unchanged."
+  ],
+  "independent_host_checks": {
+    "classification": "synthetic stubs/AST/private fabricated identity file only",
+    "primitive_checks_passed": 24,
+    "coverage": [
+      "cleanup handler AST",
+      "inherited cold/restart methods",
+      "exact completed zero transition",
+      "wrong error type/message/notes",
+      "nonterminal or nonzero child code",
+      "incomplete/paused/different holder",
+      "prefix and tail with timeout to EOF",
+      "deadline without false EOF",
+      "exact env binding and output/nonce/mode/profile/SHA/protected-key/alias/extra-key refusals"
+    ],
+    "full_callback_phase_called": false,
+    "actual_constructor_or_socket_or_Popen_exercised": false,
+    "reference": "The source-pinned 26-check host proof is fixture evidence only. It does not establish actual callback phase or native compatibility."
+  },
+  "remaining_boundaries": [
+    "No complete report/CFG/lifecycle consumer or producer exists.",
+    "Future executable integration requires early __debug__ protection, exact full source seal/review and actual successful closed V12 prior; none is granted here.",
+    "Actual current-engine paused capture, packet traffic, ownership and complete native case remain unverified."
+  ],
+  "qualification": {
+    "socket_opened": false,
+    "Popen_started": false,
+    "Godot_started": false,
+    "actual_phase_qualified": false,
+    "successful_prior_V12_verified": false,
+    "complete_pipeline_qualified": false,
+    "actual_callback_qualified": false,
+    "original19_qualified": false,
+    "SDK_qualified": false,
+    "overall_goal_qualified": false
+  }
+}
