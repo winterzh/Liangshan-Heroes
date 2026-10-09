@@ -1,3 +1,15 @@
+## 2026-10-09：真实SDK启动前描述符及私有环境合同
+
+V1独立审查已实际拒绝SDKHOST-PATH001：exists/is_symlink均false的失效Windows junction可能跳过lstat。原V1两模块/7pins/32报告/审查不改。不可变V2改为逐原路径始终lstat，仅FileNotFound才跳过、用原metadata拒绝S_ISLNK/Windows0x400；同时规范深嵌套和超长整数JSON异常。实际V2 exit0/36反例，包括真实_winapi.CreateJunction的自有fixture和其missing_child；仅移除本批已核路径的空target，junction/所有报告保留。不是Godot或SDK测试。新增V2源码八pins/报告原字节与copy及四工具精确-text规则，V2独立delta审查已完成，原SHA 5b80c5f4170afbe7ffc733a3918ea929d66069450e61703b17648be6c07c98b4；八pin/36报告及实际失效junction再次独立核对，未见确定有限直接接口阻断，source_review_passed=true仅指此组件静态范围。stages=[]；metadata检查不能代替lease/原子TOCTOU防护。
+
+新增tools/campaign_real_sdk_bootstrap_contract_v1.py及selftest。host合同读取原hash绑定UTF8描述符（1MiB），拒绝BOM/无效UTF8/重复键/NaN、Infinity、指数溢出及转义孤立surrogate，核精确字段/schema/bootstrap_case、32小写hex nonce、准确账号输入、正常账号副作用声明。十五字段compiled身份/两optional记录原类型、预算、source_version与实际EXE pin相符；实际EXE原字节stream SHA、大小/mtime及原路径reparse检查先于返回。它不把host提供identity或数字owner当native观察。
+
+isolated_environment只构造环境：原绝对路径/父链不可链接，userdir位于自有appdata内，四root目录必须实际存在且空，拒绝Windows环境变量大小写重复并清SCREENSHOT_DIR/STEAM_DISABLED/全部标准QA及LSH/ART/DAMING/V25测试flags，再绑定新描述符。它没有创建/持有profile租约，也没有Popen；全包/编译manifest及依赖、真实账号/云本地保护、成功all61前置与精确运行准入、宿主启动和终态consumer仍缺。
+
+实际CPU/自有外部文件回归exit0，32反例准确拒绝：包含重复根/嵌套key、BOM/非法UTF8/指数溢出/孤立surrogate、非bool声明/账号漂移/真假int、完整身份source与engine/optional、环境别名/越界/非空root以及原EXE/descriptor实际字节漂移。原32case报告逐字节保留为REAL_SDK_HOST_CONTRACT_CPU_REGRESSION_V1.json，首30case原批仍外部保留。synthetic account和非可执行fake binary仅作CPU输入，未运行、不补SDK资格。两Python AST通过，来源封存七pin及原报告/copy；V1独立源码审查实际拒绝，原SHA 6b66f968e9a26e0ab159014e14cc518da3c47068cd1418558980c79371f73fa1，不称完整启动绕过；后继V2及新记录分别保留。
+
+本轮初次暂无Godot，但另一聊天已开始长期经营矩阵且active，未确认一小时窗口/长期协调授权，因此完整第五批仍未启动。原十九故障/真实UI同对象重试及SDK奖励一次性、八章动态/九玩法Windows导出/多尺寸/10分钟性能内存/Android真机完整目标不缩小；正式生产和Steam25821275保持。
+
 ## 2026-10-09：真实Steam正常导出启动观察候选V1
 
 V1审查已指出报告可覆盖且缺关闭字节核验；原V1不改。新real_sdk_bootstrap_candidate_v2/及SOURCE_INPUTS_V2保留原启动观察并补nonce独立报告路径、存在性拒绝、flush错误、关闭原字节/SHA回读，再发完成标记。这不是原子独占写，宿主唯一空profile租约仍缺。审查还确认Workshop可downloadItem，宿主须清SCREENSHOT_DIR并约束普通菜单输入。V2尚未解析/导出/运行或取得准入。

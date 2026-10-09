@@ -1,3 +1,7 @@
+## 2026-10-09：SDK启动前host合同
+
+新增tools/campaign_real_sdk_bootstrap_contract_v1/v2.py及各selftest.py；恢复QA新增REAL_SDK_HOST_CONTRACT_SOURCE_INPUTS_V1/V2.json、CPU_REGRESSION_V1/V2.json及DIRECT_REVIEW_V1/V2.json。V1路径helper静态拒绝，V2修始终lstat及JSON异常，原32/新36 CPU报告保留。仅严格描述符/实际EXE原SHA/四空目录和env构造，无lease/launcher/full consumer或SDK资格。
+
 ## 2026-10-09：真实SDK启动观察候选
 
 恢复QA新增real_sdk_bootstrap_candidate_v1/v2/（各gd、tscn及执行边界README）、REAL_SDK_BOOTSTRAP_SOURCE_INPUTS_V1/V2.json和REAL_SDK_BOOTSTRAP_DIRECT_REVIEW_V1/V2.json。V1静态拒绝；V2有限直接源码审查通过，13/14原输入pin、两安装alias，仅source-only启动基础。没有导出/运行工具或完整消费者，stages=[]，不授SDK/重试/奖励资格。
