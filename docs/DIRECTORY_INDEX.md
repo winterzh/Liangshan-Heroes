@@ -1,3 +1,7 @@
+## 2026-10-09：原包接收与自然回调驱动来源
+
+新增 tools/campaign_callback_raw_receiver_v1/v2.py；恢复QA新增两代exact snapshot、SOURCE_SPEC、可复现67/70项synthetic脚本/记录与有限独立收据。callback_natural_driver_candidate_v1/包含单自然回调GD、SOURCE和有限源码审查，未解析/未运行。旧V1拒绝/后继修复和原生产parent全部保留。
+
 ## 2026-10-09：回调控制器来源与接口
 
 新增 tools/campaign_callback_controller_v1/v2.py；恢复QA新增两代 exact snapshot、CALLBACK_CONTROLLER_SOURCE_SPEC_V1/V2、早期SOURCE_PREFLIGHT、可复现33项synthetic脚本/结果及独立有限收据。CALLBACK_CONTROLLER_INTERFACE_V1.md记录后续driver/raw receiver/完整消费者与producer接口，尚无原生准入或两case结果。

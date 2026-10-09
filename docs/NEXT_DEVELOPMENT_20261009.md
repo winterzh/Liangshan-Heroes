@@ -20,6 +20,10 @@
 
 两个实际回调栈的owned controller V2已接packetsV2，并通过仅源码的独立差异预审（23pins/stages[]），V1身份缺口原拒绝证据保留，原包发送尝试/完成与精确栈观察逻辑已实现；33项synthetic检查不证明完整pipeline。下一步实现发布实际ready的driver、保留拒绝/部分EOF原件的raw receiver及串行runtime，再补第三真实云故障driver和完整报告/重启验收。
 
+完整runtime前须先修订并独立审查包预算：历史4.4参考默认每秒performance消息，而当前controller256事件加双份留存可能在长自然路线前耗尽；这不是当前binary流量证明，具体来源见 CALLBACK_FULL_RUNTIME_PACKET_BUDGET_OBSERVATION_V1.md。不得丢原包或关闭正常性能/时钟规避。
+
+原包receiver V2候选补超时同buffer、非法头/partial EOF留存及拒绝永久停止；V1拒绝证据保留。单自然回调GD已继承原黄泥岗路线，但未解析/运行；下一步接四原export的publisher、串行runtime与完整有序消费者/producer，并另实现两类真实云驱动。源码/合成流检查不能授实际回调资格。
+
 ## 3. 完成玩家入口与平台集成
 
 验证实际失败界面、继续入口、取消与重试，以及 Steam 奖励一次性边界。只有全部必要恢复验收完成，才将恢复候选接入正式游戏。GitHub 同步与 Steam 发布分别处理，发布仍需单独授权。

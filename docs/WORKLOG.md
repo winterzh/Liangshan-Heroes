@@ -1,3 +1,17 @@
+## 2026-10-09：原包接收适配器与自然回调驱动源码候选
+
+新增 campaign_callback_raw_receiver_v1/v2.py 与exact snapshot/source specs。原完整frame在任何decode之前进入已审controller的exclusive/fsync/first-byte ledger；adapter/controller各留一次完整frame，属于重复证据而非两次网络接收。超时保留同一连接/原buffer；非法长度头不分配body，部分EOF/IOError保留收到的原bytes与独立状态marker。EOF只表示transport关闭，不能当Popen终态；适配器不启动/关闭/替换进程或socket，不授原生资格。
+
+V1 29pins/14根导入边、67项synthetic检查；独立拒绝 RAW-STOP-001：前置live/peer.buffer门禁失败未永久停止，清空旧缓冲后仍可能复用同一流。原V1及其拒绝证据保留。V2加_gate：入口和每次recv前的非timeout拒绝永久锁存，保留自身partial及旧peer原buffer，保留失败也不能恢复读取；只有真实recv socket.timeout可继续。V2 32pins、70项可复现合成数据流检查，包括该重启反例/lost owner及双buffer留存。检查明确绕过真实constructor，仅memory stream/custody fixture，没有socket/Popen/Godot、真实ownership或controller pipeline通过。
+
+独立raw V1拒绝收据SHA `fbc273831a0858ad765a817dfa7b182c84f1b9e7842584baef2defc7c9c4282c`；V2有限通过收据SHA `f35ffa6e477829d5e38d2d6454dceb8404a806c2a007ff4457679af09b4eaca8`，static=true/stages=[]、32pins/全35本地导入边闭合。独立6项synthetic差异验证RAW-STOP-001闭合，FrameBuffer/constructor AST不变；未建立真实socket/Popen/Godot或完整controller流程。
+
+callback_natural_driver_candidate_v1/ 新增单个 callback_sees_new_memory GD驱动，继承已审first-repeat的实际普通黄泥岗路线及全部订单/守卫，在super._fresh前注册只读真实节点observer并输出闭合stage ready原件。parent自然终局/CFG/lifecycle/HUD逻辑保持，final guard拒绝错mode与未seq1；新报告资格全部false。五来源pins含parent/observer及原有限收据，尚未Godot解析或运行；新ready publisher、串行runtime、完整有序报告消费者/producer及另两类真实云驱动仍未接入。有限独立审查收据另列，不能由source或synthetic通过宣称实际case通过。
+
+单自然GD有限预审收据SHA `42868dad03cf7acc605abe908503c80ea41df5d973647b97d514e8d79d673e1f`，static=true/stages=[]、五pin原字节一致、GD_parsed=false。只有三override，原父74检查加4hook和2finish guard的80仅源码成功路径计数，未实际通过；发布四原exports、完整host消费者/运行准入、owned packet/栈、当前pause兼容及长路线事件预算仍待实现/验证。SDK字段缺省不得当一次性奖励通过，完整report schema另收口。
+
+完整V12成功前置、全部原19、正式恢复接入、玩家入口/SDK及原内容/性能/Android目标仍未完成。另一项目Godot PID41732仍占用，本轮第五完整批未启动，无main/Steam发布。
+
 ## 2026-10-09：实际回调栈与自有进程控制器候选
 
 新增 campaign_callback_controller_v1.py，仅覆盖 callback_sees_new_memory 与 cloud_applying_callback_no_upload_claim 两个实际mark_dirty栈，第三云端文件故障明确留给后续driver。构造要求真实retained Popen、suite.batch.child/live/PID、实际loopback socket、私有output/profile/user；当前driver原ready完整身份须匹配所有六个post-cold运行字段，来源map与全部固定栈源码须在producer seal。观察请求只在实际同线程精确栈匹配后发送，唯一回复先经已审packetsV2，再移除固定breakpoint并继续；不替换生产节点或模拟返回。
