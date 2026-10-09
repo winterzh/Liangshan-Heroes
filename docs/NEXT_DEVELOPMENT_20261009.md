@@ -18,6 +18,8 @@
 
 原包消费者已增加两代候选：V1孤立surrogate缺口被独立审查拒绝；V2只修UTF8字符串有效性，保留原拒绝证据。纯解码与合成包检查不证明owned PID或实际回调；后续仍须按 CONTROLLER_INTEGRATION_CONTRACT_V1.md 接真实栈/包全序及三个实际用例。
 
+两个实际回调栈的owned controller V2已接packetsV2，并通过仅源码的独立差异预审（23pins/stages[]），V1身份缺口原拒绝证据保留，原包发送尝试/完成与精确栈观察逻辑已实现；33项synthetic检查不证明完整pipeline。下一步实现发布实际ready的driver、保留拒绝/部分EOF原件的raw receiver及串行runtime，再补第三真实云故障driver和完整报告/重启验收。
+
 ## 3. 完成玩家入口与平台集成
 
 验证实际失败界面、继续入口、取消与重试，以及 Steam 奖励一次性边界。只有全部必要恢复验收完成，才将恢复候选接入正式游戏。GitHub 同步与 Steam 发布分别处理，发布仍需单独授权。

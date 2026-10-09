@@ -1,3 +1,7 @@
+## 2026-10-09：回调控制器来源与接口
+
+新增 tools/campaign_callback_controller_v1/v2.py；恢复QA新增两代 exact snapshot、CALLBACK_CONTROLLER_SOURCE_SPEC_V1/V2、早期SOURCE_PREFLIGHT、可复现33项synthetic脚本/结果及独立有限收据。CALLBACK_CONTROLLER_INTERFACE_V1.md记录后续driver/raw receiver/完整消费者与producer接口，尚无原生准入或两case结果。
+
 ## 2026-10-09：回调原包消费者各代证据
 
 新增 tools/campaign_callback_packets_v1/v2.py；恢复QA新增两代snapshot、SOURCE_SPEC、可复现synthetic检查脚本/记录及有限独立收据。V1 Unicode拒绝原件保留，V2差异复审仅源码。callback_observer_candidate_v1/ 新增 CONTROLLER_INTEGRATION_CONTRACT_V1.md，设计未实现，不能计为controller或原生资格。

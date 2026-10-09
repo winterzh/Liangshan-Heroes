@@ -1,3 +1,17 @@
+## 2026-10-09：实际回调栈与自有进程控制器候选
+
+新增 campaign_callback_controller_v1.py，仅覆盖 callback_sees_new_memory 与 cloud_applying_callback_no_upload_claim 两个实际mark_dirty栈，第三云端文件故障明确留给后续driver。构造要求真实retained Popen、suite.batch.child/live/PID、实际loopback socket、私有output/profile/user；当前driver原ready完整身份须匹配所有六个post-cold运行字段，来源map与全部固定栈源码须在producer seal。观察请求只在实际同线程精确栈匹配后发送，唯一回复先经已审packetsV2，再移除固定breakpoint并继续；不替换生产节点或模拟返回。
+
+每个完整原入包先exclusive/fsync留存，固定出包先存send_attempt，sendall完成后另存SHA完成标记；全部原件入first-byte ledger与持久checkpoint，拒绝或发送失败不授成功。最多256事件/16MiB。observation_result仍全部actual_case/original19/SDK/overall资格false；真实before/after、终态Popen、CFG/lifecycle、重启由未来完整消费者另验。
+
+当前 SOURCE_SPEC_V1 18pins/10本地导入边，exact snapshot/实际Python解析及33项可复现synthetic栈匹配、缺帧/错误source/function/line和fakePopen拒绝通过。早期24项SOURCE_PREFLIGHT仅带较早源码SHA的历史，不能当当前controller全pipeline。独立源码预审结果以本目录有限收据为准；没有socket/Popen/Godot执行，也不证明当前引擎暂停捕获兼容。
+
+独立审查确认V1唯一身份阻断 CALLBACK-IDENTITY-001：eligible+六字段不足以证明完整Provider response，缺少或伪造status/source_mode/optional等也可通过。原V1/source spec保留为拒绝候选。后继V2新增expected_native_identity，从完整host安装清单与原运行字段构建15字段精确Provider期望，严格核对ok/code/schema/scope、source-v1摘要、source_mode=true、save_code及实际provider/optional内容bytes/SHA。66项synthetic主机检查通过，原控制器其他方法AST完全保持；无实际native身份或case资格。
+
+独立V1拒绝收据SHA `4e0de9ab9ae5af9bb61aa9fb5acea7c706a5352dca6c76cf2d111eb14914769c`；V2有限通过收据SHA `1f5844bce65c60fd1c0e3a86ff5e27a3a06447249ba912d3543c5cfbc032f53c`，static=true/stages=[]、23pins/全21本地导入边闭合。独立41项pure-host及5个旧identity反例拒绝，IDENTITY-001闭合；除constructor门禁和新增helper，其余六方法AST不变。没有成功constructor、socket/Popen/Godot或完整pipeline证据，不授原生case资格。
+
+CALLBACK_CONTROLLER_INTERFACE_V1.md 明确driver_ready及接收接口：新driver、完整原包接收/部分EOF适配器、串行runtime、完整报告消费者和producer仍未接入。旧peer.receive先decode不可用来丢弃拒绝原包，未来必须先留raw；当前handle只处理完整raw。实际另一项目Godot PID41732仍占用，水浒第五完整批未启动。完整V12/原19/正式恢复/玩家入口/SDK/内容/性能/Android原目标继续，无main/Steam发布。
+
 ## 2026-10-09：回调原包严格消费者及 Unicode 拒绝修复
 
 新增纯 packet 消费者 campaign_callback_packets_v1/v2.py 与逐字节 snapshot/source spec。只接受一次 ready 与固定 PID/nonce/case/线程的递增1..8 snapshot，核对原 instance ID、提供的 installed identity/user、精确字段和正常时钟；拒绝重复JSON键、非有限数、过深结构、类型变化、重放及任何通过资格声明。返回保留 original packet bytes/size/SHA；provided PID/identity只是绑定输入，ownership_proven/native_qualified始终false。此JSON只为观察投影，不替代Godot Variant/CFG/lifecycle严格语义，也不保存实际socket收发或生产栈。
