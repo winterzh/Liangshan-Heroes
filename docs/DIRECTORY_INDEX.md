@@ -1,3 +1,7 @@
+## 2026-10-09：云回调主机arm与phase来源
+
+新增 tools/campaign_cloud_arm_packets_v1.py、campaign_cloud_arm_controller_v1.py、campaign_cloud_arm_raw_receiver_v1.py、campaign_cloud_applying_exports_v1.py、campaign_cloud_applying_runtime_v1.py。恢复QA新增五snapshot、CLOUD_ARM_HOST_SOURCE_SPEC_V1、准备/SCOPE、32/43合成脚本/结果与初始fixture失败script/观察及有限独立review。无原生准入或完整consumer/restart/producer。
+
 ## 2026-10-09：云应用回调arm后继来源
 
 cloud_applying_driver_candidate_v1/保留原链/API和追加握手拒绝；cloud_applying_driver_candidate_v2/新增driver、只读observer arm子类、SOURCE/33-20-23合同、准备脚本、范围与有限review。主机接入与原生兼容性未建立。

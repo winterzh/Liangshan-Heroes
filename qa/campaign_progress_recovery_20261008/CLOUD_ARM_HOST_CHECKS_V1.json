@@ -1,0 +1,152 @@
+{
+  "schema": "cloud_arm_synthetic_host_checks_v1",
+  "script_sha256": "4685ccd0d12c90bdfd4d86562b54e51b0e43573702060068bd93dcbda4b814ff",
+  "source_sha256": {
+    "campaign_cloud_arm_packets_v1.py": "bfab53ce340819eb13012fd53f20b6b67ee22460b8f72678aeb3ac095cb0adfd",
+    "campaign_cloud_arm_controller_v1.py": "486ca429e5a04519af75617d782b240b8facf656e7c6295b71102d7be51a5bc6",
+    "campaign_cloud_arm_raw_receiver_v1.py": "70a7a0e900b6cad8f1fbb59eeb19853ead2bd98ca63300665fd855accf372dd7",
+    "campaign_cloud_applying_exports_v1.py": "761e6f13a4a9e8a0e38329270d512e55a31ff2cf201f9b63260ae1640de8d1c2",
+    "campaign_cloud_applying_runtime_v1.py": "0e7869136da7edc78646bda6cda4ded6fe80ef9fe7c10e7f4faa0a984eea2917"
+  },
+  "checks": [
+    {
+      "label": "exact arm bytes retained without native qualification or snapshot advance",
+      "passed": true
+    },
+    {
+      "label": "duplicate arm reply",
+      "passed": true
+    },
+    {
+      "label": "arm before ready",
+      "passed": true
+    },
+    {
+      "label": "snapshot before arm",
+      "passed": true
+    },
+    {
+      "label": "changed arm pid 12346",
+      "passed": true
+    },
+    {
+      "label": "changed arm pid True",
+      "passed": true
+    },
+    {
+      "label": "changed arm nonce 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'",
+      "passed": true
+    },
+    {
+      "label": "changed arm case 'callback_sees_new_memory'",
+      "passed": true
+    },
+    {
+      "label": "changed arm sequence True",
+      "passed": true
+    },
+    {
+      "label": "changed arm sequence 1",
+      "passed": true
+    },
+    {
+      "label": "changed arm campaign_id 101",
+      "passed": true
+    },
+    {
+      "label": "changed arm cloud_id 201",
+      "passed": true
+    },
+    {
+      "label": "changed arm campaign_id True",
+      "passed": true
+    },
+    {
+      "label": "changed arm identity {'save_eligible': True}",
+      "passed": true
+    },
+    {
+      "label": "changed arm user_directory 'other'",
+      "passed": true
+    },
+    {
+      "label": "changed arm schema 'other'",
+      "passed": true
+    },
+    {
+      "label": "changed arm SDK_reward_once_qualified True",
+      "passed": true
+    },
+    {
+      "label": "changed arm actual_callback_qualified True",
+      "passed": true
+    },
+    {
+      "label": "changed arm overall_goal_qualified True",
+      "passed": true
+    },
+    {
+      "label": "wrong thread",
+      "passed": true
+    },
+    {
+      "label": "wrong outer nonce",
+      "passed": true
+    },
+    {
+      "label": "outer bool sequence",
+      "passed": true
+    },
+    {
+      "label": "duplicate JSON key",
+      "passed": true
+    },
+    {
+      "label": "nonfinite JSON",
+      "passed": true
+    },
+    {
+      "label": "isolated surrogate",
+      "passed": true
+    },
+    {
+      "label": "fake owned controller constructor",
+      "passed": true
+    },
+    {
+      "label": "arm send before original breakpoint/ready",
+      "passed": true
+    },
+    {
+      "label": "synthetic controller sends breakpoint before arm with both original completion rows",
+      "passed": true
+    },
+    {
+      "label": "synthetic requested original-thread acknowledgment accepted",
+      "passed": true
+    },
+    {
+      "label": "synthetic duplicate arm send",
+      "passed": true
+    },
+    {
+      "label": "synthetic duplicate acknowledgment",
+      "passed": true
+    },
+    {
+      "label": "synthetic mutation command refused",
+      "passed": true
+    }
+  ],
+  "count": 32,
+  "all_passed": true,
+  "classification": "synthetic Variant packets and constructor-bypassed CPU state only; no actual ownership or file ledger",
+  "actual_controller_constructed": false,
+  "socket_opened": false,
+  "Popen_started": false,
+  "native_started": false,
+  "complete_phase_called": false,
+  "breakpoint_installation_verified": false,
+  "approved_stages": [],
+  "overall_goal_qualified": false
+}

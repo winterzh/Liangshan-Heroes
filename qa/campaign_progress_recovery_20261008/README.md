@@ -1,3 +1,13 @@
+## 2026-10-09：主机云回调arm握手与实际phase源码接入
+
+新增五库：strict CloudArmPackets、CloudArmController、原rawreceiver import后继、固定三export publisher与CloudApplyingSerialBatch实际phase。controller继承原真实Popen/socket/来源身份/原字节ledger，先读同PID/nonce/identity/user/node的原apply-ready、完整payload/原CFG SHA及cloud状态，再按同peer breakpoint -> ready -> arm send_complete -> 原ack -> 实际匹配production栈 -> read snapshot -> disable/continue顺序处理。snapshot须目标内存/writerbusyfalse、applying/shared pending true且原dirty/pending/revision不变；arm ack不证明断点安装。
+
+rawreceiver类AST原样，terminal tail/race函数AST保持；publisher仅固定三文件集合，原stage/stdout close/SHA/Windows no-replace行为不变。cloud phase要求driver/apply ready原发布后才构造controller，固定新case/GD/四native依赖，owned进程/EOF/原尾流与失败/未知handle+lease规则保持。SOURCE_SPEC固定212pins/406全已pin AST本地边/五snapshot；无CLI/执行准入/成功prior。
+
+32与43项伪造Variant/JSON+constructor-bypassed CPU状态检查通过，只证明局部消息/状态拒绝边界，不计实际controller/socket/Popen/原字节磁盘ledger或phase管线。43项首次fixture缺events退出1，原script/观察保留，补synthetic events后通过，五库未因此改变。完整新报告/原packet+arm+tail/CFGjournals消费者、云restart/完整producer还未接入，Godot解析/实际兼容性未证明，stage=[]。另一项目引擎仍有原生测试，水浒第五整批未启动；完整原19/UI/SDK/内容/性能/Android目标保留。有限独立审查结果另记。
+
+有限五库独立收据已保存，SHA ac19e1378eed1589a6dac7d8f4a69a63423d4fddf2022b00e40fed18cb10934e：source-only/无新增确定阻断，212pins/406边/5snapshot，stage=[]。实际constructor/socket/Popen/phase、当前engine断点顺序/确认、完整原packet+CFGjournals/restart/producer及成功prior均未建立；32/43合成证据未在独立审查扩跑为完整管线。
+
 ## 2026-10-09：云应用回调等待主机arm的后继源码 V2
 
 V1链/API原收据 c584d46378cb681218de3368f8b9943bc677494c78682ac50bc30d29452bb3da 保留；后续独立追加拒绝 5a76baeea957d49601236a360e38b6293c58aaeb499e518c9138ce4fcad3355a 确认 CLOUD-ARM-001：ready之后同帧同步apply，缺少主机arm实际dispatcher确认，可能早于断点处理而漏掉回调。链/API可闭合不代表具备观察执行资格。
