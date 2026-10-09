@@ -1,0 +1,9 @@
+# 真实SDK启动观察 V3：实际四Windows环境根
+
+V2原源及独立审查保持。V3保留所有真实SDK/完整身份/原current-cache/普通菜单及关闭报告检查，新增OS.get_environment实际APPDATA/LOCALAPPDATA/TEMP/TMP值，与原描述符private_windows_roots四字符串逐个相等。完整检查变为18项，报告schema为campaign_real_sdk_bootstrap_v3，descriptor schema为campaign_real_sdk_bootstrap_descriptor_v2。
+
+原描述符字段保持，新增private_windows_roots，四键必须精确APPDATA/LOCALAPPDATA/TEMP/TMP；宿主contract V3逐一核自有profile四个实际根目录路径，再构造进程env。nonce仍是32个小写十六进制字符（16字节）。observer读回与宿主Popen原环境对应是后续完整消费者要求，metadata或单userdata不替代四根实际读回。
+
+未Godot解析/导出/运行。源码/CPU结构检查不授原生准入，执行仍缺成功all61前置、全包编译身份封存、目录租约/宿主启动和原Popen终态完整consumer、实际账号及云/本地保护和精确独立准入。私有profile不隔离Steam远程账号。正常Service启动/退出可能同步真实统计，Cloud可能读取/写入真实远程档案，Presence更新状态，Workshop下载订阅；Node在autoload之后观察，不能补启动前保护。
+
+V3不证明云故障同writer成功重试、普通同档案重启、服务端上传或奖励一次性。原所有V1/V2候选与审查/报告均保留，正式游戏不变。

@@ -1,3 +1,13 @@
+## 2026-10-09：真实SDK关闭报告消费者与实际四Windows根读回
+
+新增bootstrap evidence V1/V2/V3及pure report selftest。消费者设计在原OwnedSerialBatch实际Popen对象/真实poll+wait终态0及原租约仍持有时，核原step对象/正常[exe]命令、stdout唯一完成行、原关闭report/descriptor字节及首次pin/完整安装身份，再执行原Suite.integrity，才completed。现行只有组件接口，完整Suite/launcher/全包导出/租约与实际调用仍缺；没有构造Suite、consumer或Popen，也没有运行full_validate。
+
+原V1绑定GDV2的17必需check、24报告字段、原4stats/30achievement完整typed current_cache及账号/正常clock；实际46纯数据反例exit0，初末正常同步数值变化允许，不把cache等值/变化当服务端确认或奖励一次性。独立V1拒绝ENV证据范围：只核userdata，无法证明其它私有根。原源/11pins/6edges/46报告保留。不可变GDV3新增真实OS.get_environment的APPDATA/LOCALAPPDATA/TEMP/TMP四根和SCREENSHOT_DIR空；18check/25字段，descriptor schemaV2新增private_windows_roots。hostV3核同profile四根，evidenceV2同时核原descriptor四根、实际报告四根和原step六环境字段，实际49/38反例通过。
+
+V2独立审查限定canonical字符串下通过，但指出host Path相等接受斜线/大小写alias、GD严格字串会在启动后拒绝的接口不一致。原V2/16pins/7edges/49和38/conditional review不改。hostV4在原描述符验证阶段精确要求四root字符串==str(profile/key.lower())且仍lstat/no_links；evidenceV3只换此host依赖，GDV3/18/25/完整snapshot/原Popen消费不变。实际40host反例（包含Windows Path等价slash/case两alias准确拒绝和真danglingjunction）及49report反例均exit0，原报告/现场保留；均是CPU/自有文件数据，synthetic account/PID/非执行binary不补native证据。
+
+现行source inputs V3封存18pins/7imports、原GD/tscn/README和V2来源/审查，最终独立有限delta审查已完成，V3原SHA 0e4f7bc4865c084ab9cd4aee5e911619b3f370b89e257bcfb258b758935c4583；18pins/7edges/49和40报告原字节与接口闭合复核，未见新的确定有限矛盾。V1原ENV拒绝SHA7757e134edd744a1ec42f78c97596675558adf6a709cdaa400c367fb3d4572bd、V2条件性SHA64b6de4da21d7273048f32dcbbb550af43477c812ad61c4e38122f6e1eeb9b75保持。stages=[]；有限组件静态通过不补完整host/SDK/运行。需要真实成功closed all61前置、新全包compiled identity/导出来源封存、实际账号及云/本地启动前保护、具体native准入和实际持有Popen的执行器/完整consumer结果。本轮初次另一真实Godot27016长期批仍运行（对方33/72），未启动第五批或SDK。原十九故障/真实错误UI同对象重试/奖励一次性/八章动态/九玩法Windows导出/多尺寸/10分钟性能内存/Android真机全目标不缩小，生产和Steam25821275保持。
+
 ## 2026-10-09：真实SDK启动前描述符及私有环境合同
 
 V1独立审查已实际拒绝SDKHOST-PATH001：exists/is_symlink均false的失效Windows junction可能跳过lstat。原V1两模块/7pins/32报告/审查不改。不可变V2改为逐原路径始终lstat，仅FileNotFound才跳过、用原metadata拒绝S_ISLNK/Windows0x400；同时规范深嵌套和超长整数JSON异常。实际V2 exit0/36反例，包括真实_winapi.CreateJunction的自有fixture和其missing_child；仅移除本批已核路径的空target，junction/所有报告保留。不是Godot或SDK测试。新增V2源码八pins/报告原字节与copy及四工具精确-text规则，V2独立delta审查已完成，原SHA 5b80c5f4170afbe7ffc733a3918ea929d66069450e61703b17648be6c07c98b4；八pin/36报告及实际失效junction再次独立核对，未见确定有限直接接口阻断，source_review_passed=true仅指此组件静态范围。stages=[]；metadata检查不能代替lease/原子TOCTOU防护。

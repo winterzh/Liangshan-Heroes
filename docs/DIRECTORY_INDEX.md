@@ -1,3 +1,7 @@
+## 2026-10-09：SDK原关闭报告与真实四根读回
+
+新增tools/campaign_real_sdk_bootstrap_evidence_v1/v2/v3.py及各selftest、host contractV3/V4及各selftest、恢复QA real_sdk_bootstrap_candidate_v3/、EVIDENCE_SOURCE_INPUTS_V1/V2/V3、各CPU/独立审查JSON及HOST_CONTRACT_CPU_V3/V4。V1拒绝ENV范围，V2记录alias接口限制，V3以hostV4原canonical strings闭合并独立有限审查通过，18pins/7edges、49/40原CPU报告回核；仅组件source/CPU，无launcher/SDK资格。
+
 ## 2026-10-09：SDK启动前host合同
 
 新增tools/campaign_real_sdk_bootstrap_contract_v1/v2.py及各selftest.py；恢复QA新增REAL_SDK_HOST_CONTRACT_SOURCE_INPUTS_V1/V2.json、CPU_REGRESSION_V1/V2.json及DIRECT_REVIEW_V1/V2.json。V1路径helper静态拒绝，V2修始终lstat及JSON异常，原32/新36 CPU报告保留。仅严格描述符/实际EXE原SHA/四空目录和env构造，无lease/launcher/full consumer或SDK资格。
