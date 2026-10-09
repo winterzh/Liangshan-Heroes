@@ -1,0 +1,223 @@
+{
+  "schema": "cloud_write_failure_source_label_contract_v1",
+  "GD": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\cloud_write_failure_candidate_v1\\campaign_original19_cloud_write_failure_v1.gd",
+    "bytes": 10110,
+    "sha256": "269fc2e818461bf717a2f65483cff732c647fba35cdb0696001f14f0fea1b1d4"
+  },
+  "parent_GD": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\original19_first_repeat_candidate_v1\\campaign_original19_first_repeat_v1.gd",
+    "bytes": 21899,
+    "sha256": "53e4e3a10ef6107f095ae1df9be355308200a99fee444dc68f912418ac6803ab"
+  },
+  "builder": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\cloud_write_failure_candidate_v1\\PREPARE_SOURCE_V1.py",
+    "bytes": 5603,
+    "sha256": "13ab77e8d052f54fa247e1116be8e965eec00369f5d8f95224297448499f2df3"
+  },
+  "inherited_header_labels": [
+    "normal simulation clock",
+    "actual configured menu opens",
+    "immutable controller post cold identity readable",
+    "native complete installed identity field content_version",
+    "native complete installed identity field rules_sha256",
+    "native complete installed identity field file_count",
+    "native complete installed identity field total_bytes",
+    "native complete installed identity field engine_binary_sha256",
+    "native complete installed identity field provider_sha256",
+    "actual installed source identity is eligible",
+    "actual menu remains current",
+    "production startup finishes and opens gate"
+  ],
+  "literal_check_inventory": {
+    "_campaign_memory": [],
+    "_cloud_flags": [],
+    "_cfg_digest": [],
+    "_fresh": [
+      {
+        "label_prefix": "only actual cloud failure boundary mode",
+        "label_expression": "\"only actual cloud failure boundary mode\"",
+        "check_expression": "mode == \"first\" and OS.get_environment(\"CAMPAIGN_CALLBACK_CASE\") == FAILURE_CASE"
+      },
+      {
+        "label_prefix": "SDK disabled and original cloud unattached",
+        "label_expression": "\"SDK disabled and original cloud unattached\"",
+        "check_expression": "not steam.available and not cloud.cloud_ready and cloud._owner.is_empty()"
+      },
+      {
+        "label_prefix": "ordinary fresh profile has no pending campaign writer",
+        "label_expression": "\"ordinary fresh profile has no pending campaign writer\"",
+        "check_expression": "campaign.records.is_empty() and campaign.unlocked == 1 and campaign.cloud_owner.is_empty()\n\t\tand not campaign.persistence_busy() and not cloud.shared_profile_pending()"
+      },
+      {
+        "label_prefix": "private stage obstruction path is initially absent",
+        "label_expression": "\"private stage obstruction path is initially absent\"",
+        "check_expression": "not FileAccess.file_exists(BLOCKER) and not DirAccess.dir_exists_absolute(BLOCKER)"
+      },
+      {
+        "label_prefix": "own private obstruction parent created",
+        "label_expression": "\"own private obstruction parent created\"",
+        "check_expression": "DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(BLOCKER_PARENT)) == OK"
+      },
+      {
+        "label_prefix": "own real stage-parent file obstruction opened",
+        "label_expression": "\"own real stage-parent file obstruction opened\"",
+        "check_expression": "file != null"
+      },
+      {
+        "label_prefix": "closed original obstruction is a regular file",
+        "label_expression": "\"closed original obstruction is a regular file\"",
+        "check_expression": "not blocker_sha.is_empty() and FileAccess.file_exists(BLOCKER) and not DirAccess.dir_exists_absolute(BLOCKER)"
+      },
+      {
+        "label_prefix": "actual payload validator accepts bounded local input",
+        "label_expression": "\"actual payload validator accepts bounded local input\"",
+        "check_expression": "cloud._validate_payload(payload,LOCAL_OWNER)"
+      },
+      {
+        "label_prefix": "actual production cloud apply returns false on real storage obstruction",
+        "label_expression": "\"actual production cloud apply returns false on real storage obstruction\"",
+        "check_expression": "not applied"
+      },
+      {
+        "label_prefix": "same actual Campaign CFG writer remains pending",
+        "label_expression": "\"same actual Campaign CFG writer remains pending\"",
+        "check_expression": "writer != null and writer.busy() and campaign.cloud_configuration_pending()"
+      },
+      {
+        "label_prefix": "real failed writer retains frozen ConfigFile proposal",
+        "label_expression": "\"real failed writer retains frozen ConfigFile proposal\"",
+        "check_expression": "proposal != null"
+      },
+      {
+        "label_prefix": "actual frozen cloud scope and staging proposal retained",
+        "label_expression": "\"actual frozen cloud scope and staging proposal retained\"",
+        "check_expression": "scope.get(\"operation\") == \"cloud\" and scope.get(\"target_owner\") == LOCAL_OWNER\n\t\tand active.get(\"stage\") == \"staging\" and proposal_values.get(\"ok\",false)"
+      },
+      {
+        "label_prefix": "real parent-path failure code retained",
+        "label_expression": "\"real parent-path failure code retained\"",
+        "check_expression": "campaign.get(\"_cfg_writer_error\").get(\"code\") == \"CFG_STAGE_PARENT\""
+      },
+      {
+        "label_prefix": "failed staged cloud write preserves original Campaign memory and CFG bytes",
+        "label_expression": "\"failed staged cloud write preserves original Campaign memory and CFG bytes\"",
+        "check_expression": "_campaign_memory(campaign) == memory and _cfg_digest() == cfg_sha"
+      },
+      {
+        "label_prefix": "failed production apply keeps original cloud flags and shared pending profile",
+        "label_expression": "\"failed production apply keeps original cloud flags and shared pending profile\"",
+        "check_expression": "_cloud_flags(cloud) == flags and not cloud._applying and cloud.shared_profile_pending()"
+      },
+      {
+        "label_prefix": "actual configuration ERROR pauses with original failure",
+        "label_expression": "\"actual configuration ERROR pauses with original failure\"",
+        "check_expression": "flow.phase == flow.Phase.ERROR and flow.last_result.get(\"config_pending\",false)\n\t\tand flow.last_result.get(\"code\") == \"CFG_STAGE_PARENT\" and paused"
+      },
+      {
+        "label_prefix": "actual configuration failure overlay retained",
+        "label_expression": "\"actual configuration failure overlay retained\"",
+        "check_expression": "is_instance_valid(flow._overlay) and flow._overlay.visible"
+      },
+      {
+        "label_prefix": "actual visible retry control is connected to production retry_config",
+        "label_expression": "\"actual visible retry control is connected to production retry_config\"",
+        "check_expression": "retry != null and retry.text == \"重试保存设置\" and not retry.disabled and retry.is_visible_in_tree()\n\t\tand retry.is_connected(\"pressed\",Callable(flow,\"retry_config\"))"
+      },
+      {
+        "label_prefix": "original obstruction bytes unchanged before own repair",
+        "label_expression": "\"original obstruction bytes unchanged before own repair\"",
+        "check_expression": "FileAccess.get_sha256(BLOCKER) == blocker_sha"
+      },
+      {
+        "label_prefix": "only this probe's closed obstruction file is removed",
+        "label_expression": "\"only this probe's closed obstruction file is removed\"",
+        "check_expression": "DirAccess.remove_absolute(ProjectSettings.globalize_path(BLOCKER)) == OK"
+      },
+      {
+        "label_prefix": "real stage parent repaired to an empty directory",
+        "label_expression": "\"real stage parent repaired to an empty directory\"",
+        "check_expression": "DirAccess.make_dir_absolute(ProjectSettings.globalize_path(BLOCKER)) == OK"
+      },
+      {
+        "label_prefix": "filesystem repair does not replace pending writer proposal or publish progress",
+        "label_expression": "\"filesystem repair does not replace pending writer proposal or publish progress\"",
+        "check_expression": "campaign.get(\"_cfg_writer\") == writer and writer.get(\"_frozen_cfg\") == proposal\n\t\tand writer.get(\"_active\") == active and writer.get(\"_pending_record\") == pending\n\t\tand Values.semantics(proposal) == proposal_values and _campaign_memory(campaign) == memory and _cfg_digest() == cfg_sha"
+      },
+      {
+        "label_prefix": "actual UI retry refuses synthetic owner without real account authority",
+        "label_expression": "\"actual UI retry refuses synthetic owner without real account authority\"",
+        "check_expression": "flow.last_result.get(\"code\") == \"CLOUD_RETRY_SCOPE_CHANGED\" and flow.phase == flow.Phase.ERROR\n\t\tand flow.last_result.get(\"config_pending\",false) and paused"
+      },
+      {
+        "label_prefix": "unauthorized retry retains exact same writer scope and frozen proposal",
+        "label_expression": "\"unauthorized retry retains exact same writer scope and frozen proposal\"",
+        "check_expression": "campaign.get(\"_cfg_writer\") == writer and writer.get_instance_id() == writer_id\n\t\tand writer.get(\"_frozen_cfg\") == proposal and proposal.get_instance_id() == proposal_id\n\t\tand writer.get(\"_active\") == active and writer.get(\"_pending_record\") == pending\n\t\tand campaign.get(\"_cfg_writer_scope\") == scope and Values.semantics(proposal) == proposal_values"
+      },
+      {
+        "label_prefix": "refused retry changes no progress CFG memory cloud flags or SDK state",
+        "label_expression": "\"refused retry changes no progress CFG memory cloud flags or SDK state\"",
+        "check_expression": "_campaign_memory(campaign) == memory and _cfg_digest() == cfg_sha and _cloud_flags(cloud) == flags\n\t\tand not steam.available and not cloud.cloud_ready and not cloud._applying and cloud.shared_profile_pending()"
+      },
+      {
+        "label_prefix": "ordinary post-refusal frames preserve same original objects and pending data",
+        "label_expression": "\"ordinary post-refusal frames preserve same original objects and pending data\"",
+        "check_expression": "campaign.get_instance_id() == campaign_id and cloud.get_instance_id() == cloud_id\n\t\tand campaign.get(\"_cfg_writer\") == writer and writer.busy() and writer.get(\"_frozen_cfg\") == proposal\n\t\tand _campaign_memory(campaign) == memory and _cfg_digest() == cfg_sha and _cloud_flags(cloud) == flags"
+      }
+    ],
+    "_finish": [
+      {
+        "label_prefix": "failure boundary cannot substitute authorized account retry or restart",
+        "label_expression": "\"failure boundary cannot substitute authorized account retry or restart\"",
+        "check_expression": "mode == \"first\""
+      }
+    ]
+  },
+  "complete_local_boundary_labels": [
+    "normal simulation clock",
+    "actual configured menu opens",
+    "immutable controller post cold identity readable",
+    "native complete installed identity field content_version",
+    "native complete installed identity field rules_sha256",
+    "native complete installed identity field file_count",
+    "native complete installed identity field total_bytes",
+    "native complete installed identity field engine_binary_sha256",
+    "native complete installed identity field provider_sha256",
+    "actual installed source identity is eligible",
+    "actual menu remains current",
+    "production startup finishes and opens gate",
+    "only actual cloud failure boundary mode",
+    "SDK disabled and original cloud unattached",
+    "ordinary fresh profile has no pending campaign writer",
+    "private stage obstruction path is initially absent",
+    "own private obstruction parent created",
+    "own real stage-parent file obstruction opened",
+    "closed original obstruction is a regular file",
+    "actual payload validator accepts bounded local input",
+    "actual production cloud apply returns false on real storage obstruction",
+    "same actual Campaign CFG writer remains pending",
+    "real failed writer retains frozen ConfigFile proposal",
+    "actual frozen cloud scope and staging proposal retained",
+    "real parent-path failure code retained",
+    "failed staged cloud write preserves original Campaign memory and CFG bytes",
+    "failed production apply keeps original cloud flags and shared pending profile",
+    "actual configuration ERROR pauses with original failure",
+    "actual configuration failure overlay retained",
+    "actual visible retry control is connected to production retry_config",
+    "original obstruction bytes unchanged before own repair",
+    "only this probe's closed obstruction file is removed",
+    "real stage parent repaired to an empty directory",
+    "filesystem repair does not replace pending writer proposal or publish progress",
+    "actual UI retry refuses synthetic owner without real account authority",
+    "unauthorized retry retains exact same writer scope and frozen proposal",
+    "refused retry changes no progress CFG memory cloud flags or SDK state",
+    "ordinary post-refusal frames preserve same original objects and pending data",
+    "failure boundary cannot substitute authorized account retry or restart"
+  ],
+  "source_label_count": 39,
+  "actual_pass_count": null,
+  "full_case_qualification": false,
+  "GD_parsed": false,
+  "native_started": false,
+  "approved_stages": []
+}

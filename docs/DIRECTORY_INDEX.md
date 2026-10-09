@@ -1,3 +1,7 @@
+## 2026-10-09：云写入失败边界来源
+
+新增恢复QA cloud_write_failure_candidate_v1/v2：GD、builder、SOURCE、39/40来源标签合同、source-only PREPARATION、具体review scope及独立原收据。两份原候选/审查保留，不授Godot运行、成功账号重试/原19/UI/SDK资格；V2仅强化完整shared pending保留。
+
 ## 2026-10-09：完整恢复续验准备证据
 
 恢复QA新增CLOUD_CASE_FULL_API_REVIEW_V1.json和同V1 ADDENDUM，以及DURABLE_V12_RESUME_PREFLIGHT_20261009.json/log。仅静态直接接口审查与实际只读来源预检，不授云native/all61/原19资格；原失败批及旧审查保留，未新建原生批。

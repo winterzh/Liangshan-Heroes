@@ -1,3 +1,11 @@
+## 2026-10-09：云写入失败入口与共享待写档案完整保留源码
+
+新增cloud_write_failure_candidate_v1/v2：继承正常菜单/startup/私有env/identity，SDK禁用数字owner仅作本地输入。新GD实际设计用自有关闭文件阻塞campaign_cfg_candidates/v1，由原Cloud._apply_profile→Campaign实际CFG writer返回CFG_STAGE_PARENT；保持旧进度/CFG、同writer和冻结提案，实际错误overlay/RetryCampaignConfig通过生产retry_config路由。仅修自有阻塞文件，不直接调用writer重试，不伪造Steam可用；真实账号缺失时必须CLOUD_RETRY_SCOPE_CHANGED，并保留原对象和数据。
+
+V1有限独立审查无确定API阻断，但shared pending只检查bool。不可变V2新增10字段全量native快照：profile/source/identity/kind/phase/original_owner/binding/marker/confirmation/current_owner；绑定原payload/实际安装身份，修盘、UI账号拒绝和另180process帧后完整相等。旧writer/proposal/scope/active/pending及CFG/内存/cloud flags原检查保持，V1/source/review不覆盖。V2独立delta审查原SHA04114d740d283ebcdd136620c51eaa00392578ba17abc074f88af27a778cee55，未见确定静态阻断；stage=[]。
+
+builder实际source-only准备exit0，V1 291pins/32alias/39来源标签，V2 294pins/32alias/40来源标签，全部pin与logical回核、Python AST通过。这些标签不是actual通过数：新GD未Godot解析/运行，无host phase/consumer/producer。成功有账号同对象重试、同档案重启、该原十九案全案、玩家故障UI、SDK/上传资格仍未实现或取得，所有完整资格false，不能用本地拒绝代替。当前仍未取得成功all61前置；完整native时间协调请求待用户回答，没有追加跨聊天消息或启动新批。原19/UI/SDK/八章动态/九玩法及Windows导出/多尺寸/连续10分钟性能内存/Android真机完整目标继续，R12未晋升正式源。
+
 ## 2026-10-09：完整恢复续验来源预检与云用例直接API审查
 
 Steam本批发布已完成，回到原完整开发目标。已批准V12执行器的当前只读CLI实际exit0，重算source_spec_sha256仍867bd2d1b78339f357200e4dca344d14fb38a05c39f3e7906fe3f11507b60209；官方4.6.3/本机成功baseline/全部来源与原准入仍匹配。原第四批durable_chain_8fe7b18b实际failure为Foreign engine after owned child start，cold与Lu A成功不授全批，原receipt/失败profile保留、lock已释放。第五批尚未启动，来源预检不计61阶段通过。
