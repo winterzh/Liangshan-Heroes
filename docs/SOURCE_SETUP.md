@@ -1,3 +1,13 @@
+## 2026-10-09：自然终局回调原userdata文本修复与完整producer V2重绑定
+
+natural_consumer_v3与packet_replay_v3保留report raw native_user给driver-ready/ready-snapshot协议，Path仅用于noLinks/private边界与physicalIO；旧V2也会在Windows把合法D:/文本重构成D:\而拒绝，同类云拒绝和真实LuA表示原件保留。原80/56/21、actual terminal Popen/PID/nonce/15identity、全部CFG和三代lifecycle/noReplay/ORDER001尾流保持。19项synthetic=原15+4Windows反例/新文本拒绝通过，不是actual完整consumer或native。187pins/377边/两snapshot封存；有限独立修复原收据 SHA 6fc45de28b44e388d685e133d6e0cb46a5ee90b5cc81d4366b4dbb44ebe85729，stage=[]。
+
+新增run_campaign_natural_callback_v2，精确换consumer/component/source review/helper pins及受控recipe/spec/batch/admission schema；原cold/actualcallback/同档案restart三进程、29覆盖和完整原机制不变。recipe-only实际准备成功，190pins/387边、logical a77bdcbfccfb274d6580d12a1d0cd56414d59a82ccf576c96530117c2fcfc64e；不授成功prior或native准入。第四failed V12实际write-spec exit1，仍在closed all61原successful-source门槛拒绝，来源seal与work root未创建。run仍须新V2完整consumer+phase review/精确唯一scope及SHA，不接受USER-TEXT/旧stage[]作运行准入。producer有限复审结果另记。
+
+无成功fullprior或actual三进程结果；普通cloud restart/其完整producer、其余原19/UI/SDK/内容/性能/Android继续保留全部原要求。水浒第五整批未启动。
+
+producer V2有限独立原收据已保存，SHA 6b29d9fb92639177908150388a2f0115fb12391c103be40f28b29d74fc341d42；190pins/387边/29覆盖/80-56-21及执行AST保持确认，无新增delta源码阻断、stage=[]。独立checker末步从错误模块import canonical失败，原收据明确logical SHA只引用recipe声明、没有独立重算；不能扩称完整前置/phase/consumer/native已通过。主线程recipe实际预检和失败prior拒绝另有原件。
+
 ## 2026-10-09：原生userdata文本被Windows Path重写的阻断与修复
 
 准备cloud restart时发现 CLOUD-NATIVE-USER-TEXT-001；独立原拒绝 SHA fb1408052d68f7a1df0de02278ce3dc0ae8bf8b65dc95f045e5386ae2c86d630。真实已保留LuA305 report原actual_user_data_dir为D:/...；Windows Path→str变D:\...，旧semantics binder最早pre-arm就会拒绝同一合法native文本，firstconsumer/replay亦重构字符串。旧source-only审查不证明pipeline执行，不沿用为通过资格。

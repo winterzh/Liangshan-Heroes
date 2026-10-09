@@ -1,3 +1,7 @@
+## 2026-10-09：自然callback文本与producer重绑定来源
+
+新增packet_evidence_v3/natural_evidence_v3及两snapshot、NATURAL_CALLBACK_USER_TEXT_SOURCE/准备/SCOPE/19项synthetic与有限独立收据；新增producer_v2与snapshot、190pin recipe、scope、第四failed prior实际CLI拒绝与有限producer review。旧原件全部保留，未有成功prior/native准入。
+
 ## 2026-10-09：原native userdata文本后继
 
 新增semantics_v2/arm_packet_evidence_v2/first_evidence_v4/runtime_v5与四snapshot；恢复QA新增原USER-TEXT拒绝、SOURCE/SCOPE/准备、35项Windows表示host脚本/结果、初始fixture script/失败观察及有限独立review。真实LuA报告只是表示证据，不晋升失败full。

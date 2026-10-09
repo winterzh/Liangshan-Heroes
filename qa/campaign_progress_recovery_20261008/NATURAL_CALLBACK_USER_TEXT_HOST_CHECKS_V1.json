@@ -1,0 +1,96 @@
+{
+  "schema": "natural_callback_native_user_text_synthetic_checks_v1",
+  "script_sha256": "dc0d5a53f26973549ac2d89545f11923a45f4253898cf539bc4104abd823577f",
+  "source_sha256": {
+    "campaign_callback_packet_evidence_v3.py": "f7a6da74c5ed38b13ca27b72bbe6eacecde941502dec3e89fa0adc6e48b198e4",
+    "campaign_natural_callback_evidence_v3.py": "216ed821a08bdb1cd6e55c004f48941b176d12000c80f42ca3025d376c9a041f",
+    "prepare_campaign_callback_labels_v1.py": "8ccfd14ee1639ce982ba7d1fc7f01d8088854092711e7c5ea3b182b98b4e421c"
+  },
+  "checks": [
+    {
+      "label": "complete synthetic original request/reply/resume replay",
+      "passed": true
+    },
+    {
+      "label": "valid complete terminal noise replay",
+      "passed": true
+    },
+    {
+      "label": "truncated terminal body rejected",
+      "passed": true
+    },
+    {
+      "label": "late snapshot cannot add control claims",
+      "passed": true
+    },
+    {
+      "label": "metadata stack differs from raw original",
+      "passed": true
+    },
+    {
+      "label": "metadata memory differs from raw original",
+      "passed": true
+    },
+    {
+      "label": "observation cannot grant whole qualification",
+      "passed": true
+    },
+    {
+      "label": "seal uses different actual campaign object",
+      "passed": true
+    },
+    {
+      "label": "callback memory must equal original full report record",
+      "passed": true
+    },
+    {
+      "label": "original packet byte drift",
+      "passed": true
+    },
+    {
+      "label": "unlisted packet file rejected",
+      "passed": true
+    },
+    {
+      "label": "Boolean event index rejected",
+      "passed": true
+    },
+    {
+      "label": "send completion metadata cannot be forged",
+      "passed": true
+    },
+    {
+      "label": "80/56/21 source contract rebuilt",
+      "passed": true
+    },
+    {
+      "label": "fake terminal child cannot run complete consumer",
+      "passed": true
+    },
+    {
+      "label": "old natural replay rejects equivalent Windows Path reconstructed text",
+      "passed": true
+    },
+    {
+      "label": "new natural replay preserves original forward-slash native text",
+      "passed": true
+    },
+    {
+      "label": "new natural replay rejects Path rather than original string",
+      "passed": true
+    },
+    {
+      "label": "new natural replay rejects changed native directory text",
+      "passed": true
+    }
+  ],
+  "count": 19,
+  "all_passed": true,
+  "work": "D:\\CodexTemp\\lsh-callback-evidence-d01twbtj",
+  "classification": "fabricated packet files/metadata and fake-child rejection only, not actual native Popen/complete consumer pipeline",
+  "socket_connected": false,
+  "Popen_started": false,
+  "native_started": false,
+  "actual_callback_qualified": false,
+  "approved_stages": []
+}
