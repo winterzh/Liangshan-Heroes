@@ -1,3 +1,13 @@
+## 2026-10-09：Steam 正式上线与客户端验收完成
+
+用户授权更新Steam并完成手机确认。控制连接恢复后，将唯一冻结候选设为default；Steamworks成功提示、default分支/构建行和独立SteamCMD public回读均为Build25821275，Windows Depot5088121 / Manifest1831225442917801106；macos=0、steam-integration=25476210未变。回滚基线25768878。
+
+服务器新Manifest隔离下载实际exit0，六文件大小/SHA256均与候选一致。Steam客户端正常下载5,641,936字节，ACF Build/TargetBuild25821275、StateFlags4，新Manifest与库内六文件全部一致，未手动覆盖库文件。Steam库-applaunch实际进程45716来自正确库路径，窗口“水浒英雄传：八幕战役”响应正常，自动短测自然exit0，Vulkan日志目标错误0；这不是完整通关或菜单画面的人工验收。
+
+四语小型补丁说明已公开，Event703281660030879826关联Build25821275；简中/繁中/英语/日语标题与完整正文逐页回读一致，四张公开截图图片已加载。共用英文封面保存成功，Steam小型补丁公开布局显示游戏图片。公开链接 https://store.steampowered.com/news/app/5088120/view/703281660030879826 。仅宣传存档校验与景物维护，公开续玩仍限经典固定30波；不宣称R12完整战役续玩、真人完整通关、10分钟性能或Android真机完成。
+
+客户端串行验收窗口按用户已有跨聊天授权协调，实际进程退出后已通知盲盒恢复；未停止外部进程或把对方中断批记为通过。源锁不存在，生产源仍等于6d3bab21。此前匿名拒绝、两次回下载No connection、旧版客户端/本地准备和上传未激活收据作为历史证据原样保留。最新权威收据qa/steam_release_20261009/release_closeout.json；本次Steam发布完成，原完整开发目标未完成。
+
 ## 2026-10-09：公司电脑已有登录复用，Steam上传成功、正式分支待切换
 
 用户说明公司电脑此前上传过。找到原ContentBuilder，SteamCMD签名Valid/Valve，复用原保存的登录状态，无需收集密码或验证码。实际Preview退出0，六成员名称/大小/SHA1与冻结候选完全一致；正式Upload退出0，Steam返回Build25821275、Windows Depot5088121 / Manifest1831225442917801106。只改变一个EXE，0新增/0删除文件；没有重导出或重压候选。
