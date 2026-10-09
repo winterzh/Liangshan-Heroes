@@ -1,3 +1,13 @@
+## 2026-10-09：终局错误UI同对象重试与普通重启接到当前V12
+
+新增tools/run_campaign_pending_terminal_ui_v6.py。原V5及probe V2、mandatory105 fresh/20 restart、同Coordinator/CFG writer/冻结提案/intent/lifecycle、真实RetryTerminal错误再试与修故障成功、两张viewport PNG、原三代生命周期/CFG和普通同档案restart/noReplay检查全部保留。旧V5绑定V9，不直接借用其前置或准入；新V6使用当前V12完整base/26原运行覆盖并附原UI probe，以verify_closed_prior_v12核验真实成功all61。
+
+V6自有Suite构造在创建外部目录前再次核成功prior及原pin；source_spec核验先于生成seal。实际终态Popen仍持有时补充精确GUI命令/阶段顺序/同档案和完整15字段native身份，再运行原详细consumer；结束补三实际不同PID/nonce/零退出核验。没有调用旧Suite构造或修改旧源/validator，没有模拟SDK或Godot ConfigFile。
+
+recipe-only实际exit0，131pins/160导入边/27alias，logical761755c797bc79e3ec754da9195e611e22f76890d4834130616cad329807dd7a；来源回核、AST/import/实际签名和精确snapshot成功。105/20是来源检查要求数量，不是actual通过数。新CLI使用原第四失败V12真实receipt实际exit1，SOURCE_SPEC及work-root均未创建，原stdout保留。独立直接调用链源码审查已完成，原review SHA4f77582a4b195e993817f616f68d22075dcd771286c94b989eb5b036211848f1，未见确定静态API阻断；stages=[]。当前没有新的native准入或Godot运行。
+
+当前依然缺成功closed all61 V12前置、具体新seal与独立准入以及真实UI成功重试/重启结果。SDK禁用UI用例不补账号授权云重试/真实奖励一次性；原十九案、八章动态、九玩法/Windows导出、多尺寸、连续10分钟性能内存与Android真机完整目标继续，R12未晋升生产。长期原生验收协调问题待答复，另项Godot实际运行；Steam25821275保持。
+
 ## 2026-10-09：云写入失败消费者、原执行阶段与两进程执行器源码接齐
 
 新增failure evidence V1/V2、CloudFailureSerialBatch和run_campaign_cloud_failure_v1。消费者绑定实际尚持有的terminal Popen、固定原Godot/命令/环境、完整安装身份、单report原字节/关闭标记/40标签及原内存、shared十字段、同writer/提案；物理CFG、绑定文件、锁和保留journal原件仅复制到外部自有批。

@@ -1,0 +1,9 @@
+# 当前V12后继真实终局错误UI重试与重启：独立源码审查
+
+固定tools/run_campaign_pending_terminal_ui_v6.py、精确snapshot与PENDING_TERMINAL_UI_SOURCE_RECIPE_V6.json；logical 761755c797bc79e3ec754da9195e611e22f76890d4834130616cad329807dd7a。旧V5执行器、probe V2、mandatory标签、五轮spec/review原字节保留，旧V5的V9成功前置不能替代当前V12。
+
+V6继承V5实际完整consumer/values/execute，只以自有构造绑定verify_closed_prior_v12的真实all61原件，source_spec成功前置先于write-spec，Suite再次核成功prior及原pin才创建外部目录。使用当前V12完整base/26运行覆盖并附原UI probe；逐项复核原旧来源、实际引擎/native、PNG decoder版本和mandatory multiplicities。新完整seal及具体独立准入才能--run，source-only recipe和旧V5批准不能替代。
+
+原GD真实普通酒计/八人撤离→terminal gen2→真实stage-parent文件阻塞→同Coordinator/CFG writer/ConfigFile提案/intent/lifecycle→真实RetryTerminal重复故障→只删除自有闭合故障→同对象成功gen3/CFG→真实两张viewport PNG→普通同档案重启/noReplay全保留。V6在原详细consumer前增加真实尚持有terminal Popen/原命令/phase顺序/同profile与完整15字段identity，完成后额外核三个实际不同PID/nonce及原生终态0。不得将阶段已通过、源码可调用或合成data当成actual运行。
+
+本审查覆盖新完整producer→所有实际继承方法、OwnedSerialBatch阶段生命周期/清理、原GD及其生产直接API、prior gate与exact admission。仅只读/AST/signature核对，不运行Godot/Popen/socket，不构造fake prior/holder/完整consumer，不改变旧源/验收。写PENDING_TERMINAL_UI_V6_INDEPENDENT_SOURCE_REVIEW.json，保持approved_stages=[]、native/UI/original19/SDK/overall全部false；明确已接齐源码范围与剩余实际证据，指出确定阻断。

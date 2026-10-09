@@ -1,3 +1,7 @@
+## 2026-10-09：当前V12后继终局错误UI验收来源
+
+恢复QA新增PENDING_TERMINAL_UI_SOURCE_RECIPE_V6.json、PREPARATION_V6.json、REVIEW_SCOPE_V6.md、真实prior拒绝JSON/log和run_campaign_pending_terminal_ui_v6_source_snapshot.py；tools新增同名V6执行器。原V5/probe与所有原105/20检查保留，当前V12真实成功prior与新具体准入独立绑定；尚无原生UI通过。
+
 ## 2026-10-09：云写入失败宿主全链源码
 
 恢复QA新增CLOUD_FAILURE_EVIDENCE_* V1、CLOUD_FAILURE_RUNTIME_* V2、CLOUD_FAILURE_PRODUCER_* V1、两份source-only builder、四份helper/producer精确snapshot及原失败gate日志。tools新增campaign_cloud_failure_evidence_v1/v2.py、campaign_cloud_failure_runtime_v1.py和run_campaign_cloud_failure_v1.py。V1弱物理关联及初始fixture失败保持，V2修复原日志pair/实际CFG关联；全部静态/纯数据证据与原生资格分开。原成功all61前置尚缺，未新native或改生产源。

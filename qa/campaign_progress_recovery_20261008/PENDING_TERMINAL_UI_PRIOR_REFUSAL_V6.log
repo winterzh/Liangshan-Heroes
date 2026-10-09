@@ -1,0 +1,22 @@
+Traceback (most recent call last):
+  File "D:\AI项目\水浒\开发工程\tools\run_campaign_pending_terminal_ui_v6.py", line 242, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "D:\AI项目\水浒\开发工程\tools\run_campaign_pending_terminal_ui_v6.py", line 202, in main
+    spec = source_spec(args)
+  File "D:\AI项目\水浒\开发工程\tools\run_campaign_pending_terminal_ui_v6.py", line 106, in source_spec
+    _, pin = verify_closed_prior_v12(prior_receipt_path(args), spec)
+             ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\AI项目\水浒\开发工程\tools\campaign_file_fault_prior_v2.py", line 27, in verify_closed_prior_v12
+    require(prior['complete'] is True and prior['lock_released'] is True
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            and prior['durable_chain_and_matrices_qualified'] is True and prior['overall_goal_qualified'] is False
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            and prior['source_spec'] == basis['spec'] and prior['source_spec_sha256'] == basis['source_spec_sha256']
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            == canonical(prior['source_spec']), 'Exact successful limited prior source seal')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\AI项目\水浒\开发工程\tools\durable_campaign_full_matrices.py", line 7, in require
+    if not condition: raise RuntimeError(message)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Exact successful limited prior source seal
