@@ -1,3 +1,7 @@
+## 2026-10-09：公司Steam本地验收
+
+新增qa/steam_release_20261009/：当前来源helpers、native219/包1152/身份20/EXE11原收据、六文件delivery/传输、既有线上版client hash、发布待登录拒绝和四语草稿；新增continue_flow_20260909/20261009_120933_fbd22058/的302项真实回归记录。包/凭据/原认证日志保留外部，未上传Steam。
+
 ## 2026-10-09：完整云用例来源
 
 tools新增固定重启publisher、case runtime包装和完整cloud producer；恢复QA新增三snapshot、CLOUD_CASE完整recipe/准备/scope、11项publication synthetic脚本/结果、第四failed prior原stdout/拒绝及有限独立mainchain初审。原source-only与原拒绝均保留，无成功前置/native准入。

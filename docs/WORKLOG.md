@@ -1,3 +1,9 @@
+## 2026-10-09：公司电脑Steam候选已验证，发布待构建账号
+
+用户授权更新Steam。当前主线6d3bab21较线上bf9e192d为13份存档/景物生产脚本变化；R12候选未晋升。本次Steam原生219、正常保存/跨进程续玩/失败重试与终局拒绝302、包1152、来源/包身份10+10、实际EXE11均通过。唯一候选20261009_122012_eb6ef6bc，ZIP SHA d810068b7f76a2cf5cc1aab0e9cfccdd6b54848462fd658415d4a064e8819ac3，源码/玩家目录/EXE不变。用户允许协调后安全取得引擎窗口，验证结束已通知盲盒恢复，水浒源锁释放。
+
+官方签名SteamCMD已在本机D盘准备；匿名实时线上仍Build25768878/Manifest7052320823704356026，公司Steam客户端正常下载既有线上版并核六文件一致（未启动游戏）。新六文件传输/VDF和四语草稿齐备，但匿名Preview实际exit6/Access Denied，须构建账号；两种电脑控制工具重置后仍kernel assets路径失败。当前未上传/未切default/未公开新公告/未接受新客户端。详情qa/steam_release_20261009/README.md；完整恢复与原19/UI/内容/性能/Android目标保持未完成。
+
 ## 2026-10-09：云应用与普通重启完整执行器源码接入
 
 新增cloud_restart_exports_v1/case_runtime_v1/run_cloud_case_v1，接齐旧独立审查B1/B2的单report安全发布和完整cold→cloud→同档案restart三进程源码。publisher原stage/marker/SHA和Windows no-replace保持；restart wrapper在Popen前核精确环境、installed GD/parent alias、first report与post-cold identity，终态Popen仍持有时publisher→consumer→integrity，清child/lease和失败cleanup全继承原phase。完整40/33标签、15identity、原arm/packet/tail/wholeCFG/14字段journal/noReplay/SDK禁用边界不放宽。
