@@ -1,3 +1,15 @@
+## 2026-10-09：JSON533/OwnedSlot76及战役载入ABC接到当前V12
+
+新增tools/run_campaign_admission_regressions_v5.py。原V4仍固定V9 launch，不能拿当前V12成功前置直接启动；新V5保留V4所有prepare/execute/JSON533/OwnedSlot76/三真实ABC consumer、原native GD/scene、fixture原字节链、默认slot根/v2 lifecycle、whole-world/设置/context/clock、两generation/noReplay、真实one-shot listener清理和异常owned-process清理。自有ctor与source_spec均用verify_closed_prior_v12，成功原receipt pin先于run mkdir及seal，必须新精确source/review准入。
+
+当前V12完整26覆盖只将已知admission driver alias换回原已审final_executor_r3，并追加四原JSON/OwnedSlot gd/scene，current component negative保留。原R12+Bai生产来源完全匹配；Core/Contract已在完整base，初次preflight误要求它们也在overlay而实际exit1，初始source snapshot和observed tool error JSON保留。修正为实际semantic来源pin及base identity字节SHA双绑定，不改生产或放宽哈希。
+
+真实terminal Popen尚持有时，V5补精确命令/phase顺序/privateenv/两个固定pureQA label、冷/JSON/OwnedSlot/ABC首档独立与ABC后两档相同，再调用全部原consumer及integrity，父phase才清child/租约。无模拟Godot/holder/账号，也无fixture操作移入普通ABC。
+
+recipe-only实际exit0，109pins/134导入边/30aliases，logicald3816ee05628eb1c13070631f476d7fcf04dd0ba1e132c181a350bf9f4db1379；source snapshot精确，AST/import/七继承方法对象及实际签名检查通过。533/76和ABC是保留要求，不是actual新批通过数。使用真实第四失败V12的新CLI实际exit1，SOURCE_SPEC/work-root均未创建、原stdout保留。独立完整直接源码审查已完成，原review SHA4bd722edc09d00cae7dcff456f939be1e9461c1f2f7e751e6164079b0312a99d，未见确定静态API阻断或合法流程误拒；stages=[]，尚无native准入或六实际进程。
+
+完整恢复all61实际成功前置、新seal/独立准入、原19故障、真实错误UI/同对象重试、SDK真实账号/一次性奖励、八章动态、九玩法/Windows导出、多尺寸、连续10分钟性能内存及Android真机仍待完成。本轮初次回读有外部Godot；末次暂未见Godot，但对方聊天仍active且在验收收尾，尚未确认长时窗口，协调问题待答复。R12未晋升生产，Steam25821275保持。
+
 ## 2026-10-09：六数据CFG与两QA兼容场景接入完整证据消费者
 
 首次/重复自然通关producer原本已绑定当前V12，不另改。实际剩余缺口是被拒ORIGINAL19_DATA_CASES V1：只有数目/五泛用QA标签和弱物理证据，DATAEXEC-MANDATORY-001、DATAEXEC-CFG-002原拒绝及源/spec/snapshot保留。新tools/run_campaign_original19_data_cases_v2.py接入原GD data V5、DataEvidence V3、full label V3及原QA GD V1，不调用被拒V1 consumer。原全部109数据/各20 QA标签、七真实CFG提交/14原journal代/57原字节复制、四准确invalid request、完整scope/source/token/proposal、十四unknown Variant与future progress/affected/other record native type/canonical、真实final CFG/13、14和空stage完整消费。

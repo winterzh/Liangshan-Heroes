@@ -1,0 +1,9 @@
+# JSON533/OwnedSlot76/战役载入ABC：当前V12后继直接源码审查
+
+固定tools/run_campaign_admission_regressions_v5.py、精确snapshot、ADMISSION_REGRESSION_SOURCE_RECIPE_V5.json；recipe-only实际exit0，logicald3816ee05628eb1c13070631f476d7fcf04dd0ba1e132c181a350bf9f4db1379。原V4及所有原predicate/GD/runtime/spec/review不改，旧V9 launch或scoped批准不能替代当前V12成功all61和新具体准入。
+
+V5采用当前V12完整输入，只将已知admission driver alias换回原已审final_executor_r3，并添加四份原JSON/OwnedSlot gd/scene。新V12 component negative保留，不执行这项但不改整体输入。原14 R12+Bai production依赖保持；Core/Contract实际已在完整base中，新验证同时绑定inputs实际semantic pin与base identity的精确字节SHA，不错误要求它们在overlay。初始误分类导致真实preflight exit1，初始source snapshot与observed-error receipt保留，无recipe/native；修正不改生产/hash要求。
+
+原JSON533/OwnedSlot76全部检查与fixture原字节链、三真实A_half_save/B_continue_resave/C_verify_resave consumer、原默认slot根/v2 lifecycle/noReplay/两generation/whole-world/真实listener清理及所有既有mandatory检查均继承。新constructor在mkdir前verify_closed_prior_v12，source_spec在写seal前同样核成功prior；preflight recipe不做执行。实际terminal Popen尚持有时，追加精确原命令/phase顺序/正常及两个纯QA allowlist/private env/独立及ABC同档案检查，然后原completeconsumer/integrity，父phase再清child/锁。
+
+独立审查自有constructor全部实际继承attrs、完整直接prepare/execute/validators/slot/fixtures、原native源与production接口、V12 prior→seal/目录、新exact source/review gate、terminal及异常cleanup。只静态读/AST/signature，不Godot/Popen/socket，不造fake prior/holder/fullconsumer，源不改。写ADMISSION_REGRESSION_V5_INDEPENDENT_SOURCE_REVIEW.json，approved_stages=[]/native/regressions/19/UI/SDK/overall全部false，指出确定阻断/误拒/弱证据。旧原先通过或候选标签数不能补真实native结果，完整原计划保持。
