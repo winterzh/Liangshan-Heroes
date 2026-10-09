@@ -1,0 +1,102 @@
+{
+  "schema": "campaign_cloud_first_evidence_preliminary_independent_review_v1",
+  "reviewed_at_utc": "2026-10-09T02:18:23.790894+00:00",
+  "independent": true,
+  "source_only": true,
+  "limited_delta_only": true,
+  "static_api_closure_passed": true,
+  "approved_stages": [],
+  "source_spec_file_sha256": "1248d4003e80a32484fba45e54deda3403027759ea8823590616f2892d1cc65c",
+  "review_scope_sha256": "bc260e5fb706fae5283354f1e7efe687eeaa11a7e37fdd23eb8cfb0ace8f09c9",
+  "previous_rejection_sha256": "b0bd8ab3b0836417ac7602fa8025b91daeea23ac039676e52488069c67bc7a94",
+  "reviewed_helpers": {
+    "campaign_cloud_cfg_physical_v2.py": "f5fa04ca76cb0ebca3cc089c5e55088d01a933a1bac465f802d1b8dcd3c03183",
+    "campaign_cloud_applying_runtime_v3.py": "a3fed2664626fef33a6b57082911763b1b7ebf732e21ea0860d2dca7498ed595",
+    "campaign_cloud_apply_first_evidence_v2.py": "7bd768905b249b4d8880195e1a7eee739b84f4e39cde84d33c10fb07d73ee454"
+  },
+  "verified_source_counts": {
+    "unique_pins": 236,
+    "all_pinned_local_python_import_edges": 531,
+    "missing_import_pins": 0,
+    "exact_new_snapshots": 3,
+    "original_pins_preserved": 225
+  },
+  "confirmed_findings": [],
+  "resolved_finding": {
+    "id": "CLOUD-CFG-GENERATION-001",
+    "scope": "Only the native generation boundary omission and its exact import successors.",
+    "resolution": "strict_journal requires exact integer generation in 1..2147483647 before parsing; journal_names requires both parsed consecutive filename generations within the same production range."
+  },
+  "confirmed_limited_conclusions": [
+    "Physical helper differs only by these two range guards; its original copy, typed-envelope, scope/owner, source, CFG SHA and previous-byte chain checks remain unchanged.",
+    "Runtime V3 and first consumer V2 differ only by the physical-helper import; their class ASTs are identical to the V1-reviewed bodies. Original packet replay remains unchanged.",
+    "All 236 source pins and 531 all-pinned local import edges were independently checked with no missing pins, the three new snapshots are exact and all original 225 pins retain their original bytes/SHA.",
+    "Independent pure-host memory checks reproduced old V1 acceptance of generation 2147483649, verified V2 rejects it and other invalid scalar/range values, and accepts exact integer endpoints. No private profile or journal files were written.",
+    "Both filename bounds are applied before odd/consecutive pair acceptance, so a pair cannot pass with an overflowing second generation."
+  ],
+  "independent_pure_host_boundary_checks": [
+    {
+      "input_generation": 2147483649,
+      "input_type": "int",
+      "rejected": true,
+      "reason": "Exact native CFG generation range"
+    },
+    {
+      "input_generation": 2147483648,
+      "input_type": "int",
+      "rejected": true,
+      "reason": "Exact native CFG generation range"
+    },
+    {
+      "input_generation": true,
+      "input_type": "bool",
+      "rejected": true,
+      "reason": "Exact native CFG generation range"
+    },
+    {
+      "input_generation": 1.0,
+      "input_type": "float",
+      "rejected": true,
+      "reason": "Exact native CFG generation range"
+    },
+    {
+      "input_generation": 0,
+      "input_type": "int",
+      "rejected": true,
+      "reason": "Exact native CFG generation range"
+    },
+    {
+      "input_generation": -1,
+      "input_type": "int",
+      "rejected": true,
+      "reason": "Exact native CFG generation range"
+    },
+    {
+      "input_generation": 1,
+      "input_type": "int",
+      "accepted": true
+    },
+    {
+      "input_generation": 2147483647,
+      "input_type": "int",
+      "accepted": true
+    }
+  ],
+  "host_check_scope": "Synthetic raw JSON/envelopes in memory only; no actual Popen/socket/ConfigFile/native or complete pipeline execution. Parent 27-case fixtures were not rerun as a new matrix.",
+  "unverified": [
+    "Actual pre-arm physical capture and complete retained-Popen validation have not executed.",
+    "Current-engine debugger compatibility, full native CFG semantics, ordinary same-profile cloud restart, complete producer, successful V12 prior and executable admission remain unestablished."
+  ],
+  "actual_pipeline_executed": false,
+  "actual_Popen_or_socket_constructed": false,
+  "native_started": false,
+  "full_native_CFG_semantics_verified": false,
+  "ordinary_cloud_restart_implemented": false,
+  "complete_cloud_producer_implemented": false,
+  "successful_prior_bound": false,
+  "complete_cloud_case_qualified": false,
+  "original19_qualified": false,
+  "SDK_reward_once_qualified": false,
+  "overall_goal_qualified": false,
+  "scope_note": "Finite generation-guard delta passed; original V1 rejection and sources remain immutable. No execution stages approved."
+}

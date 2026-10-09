@@ -1,3 +1,11 @@
+## 2026-10-09：CFG generation范围后继来源
+
+新增physical_v2/runtime_v3/first_evidence_v2及三snapshot；恢复QA新增原V1拒绝、V2 SOURCE_SPEC/准备/SCOPE、27项synthetic脚本/结果与有限独立delta review。旧225来源和原包重放保持，未取得native资格。
+
+## 2026-10-09：首次云回调中间消费者来源
+
+新增四tools：cloud_arm_packet_evidence_v1、cloud_cfg_physical_v1、cloud_applying_runtime_v2、cloud_apply_first_evidence_v1。恢复QA新增四snapshot、CLOUD_FIRST_EVIDENCE_SOURCE_SPEC_V1、准备/SCOPE、17项synthetic files脚本/结果与有限独立review。完整native semantics/cloud restart/producer仍待完成。
+
 ## 2026-10-09：云回调主机arm与phase来源
 
 新增 tools/campaign_cloud_arm_packets_v1.py、campaign_cloud_arm_controller_v1.py、campaign_cloud_arm_raw_receiver_v1.py、campaign_cloud_applying_exports_v1.py、campaign_cloud_applying_runtime_v1.py。恢复QA新增五snapshot、CLOUD_ARM_HOST_SOURCE_SPEC_V1、准备/SCOPE、32/43合成脚本/结果与初始fixture失败script/观察及有限独立review。无原生准入或完整consumer/restart/producer。

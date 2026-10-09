@@ -1,0 +1,78 @@
+{
+  "schema": "campaign_cloud_first_evidence_preliminary_independent_review_v1",
+  "reviewed_at_utc": "2026-10-09T02:15:18.702407+00:00",
+  "independent": true,
+  "source_only": true,
+  "limited_preliminary_review": true,
+  "static_api_closure_passed": false,
+  "source_hash_import_closure_passed": true,
+  "approved_stages": [],
+  "source_spec_file_sha256": "cbfdb4e2e1488108a2b5c0557e5bd18dcc006a05b9e430621a8a81dbaf8897af",
+  "review_scope_sha256": "eb144997e77f4653f08b68efdf639571e8db5fd02c30bba435f98b46465bb6fc",
+  "reviewed_helpers": {
+    "campaign_cloud_arm_packet_evidence_v1.py": "c60187bcfdb4e2eaf7944842b428c08d5990b9ef15cdbf51a40757eb72646aaa",
+    "campaign_cloud_cfg_physical_v1.py": "1e9fb302f8b4d081a1f675c5f9b9b53cace37fee1ca002cc9faca25e6e849483",
+    "campaign_cloud_applying_runtime_v2.py": "c8d743f81a51f82a8ab475a8f5ba9b05c21fe9b450e62505f33191f9ef77aa03",
+    "campaign_cloud_apply_first_evidence_v1.py": "fe001c3aaddd913881cca6281680fd8b22aeec91ae24bccae10895d0d5980fd2"
+  },
+  "verified_source_counts": {
+    "unique_pins": 225,
+    "all_pinned_local_python_import_edges": 474,
+    "missing_import_pins": 0,
+    "exact_snapshots": 4
+  },
+  "confirmed_findings": [
+    {
+      "id": "CLOUD-CFG-GENERATION-001",
+      "severity": "blocking",
+      "file": "tools/campaign_cloud_cfg_physical_v1.py",
+      "locations": [
+        {
+          "function": "strict_journal",
+          "start_line": 36,
+          "end_line": 45
+        },
+        {
+          "function": "journal_names",
+          "start_line": 63,
+          "end_line": 66
+        }
+      ],
+      "problem": "The physical decoder and ten-digit odd/consecutive filename pair do not enforce the production generation upper bound. R12 run_campaign_cfg_transaction.gd lines 57-59 requires an integral generation within 1..2147483647.",
+      "independent_reproduction": {
+        "scope": "synthetic pure-host memory only; no native process, socket, profile or physical case execution",
+        "function": "strict_journal",
+        "generation": 2147483649,
+        "previous_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "host_accepted": true,
+        "fixture": "Complete nine-string LH_CAMPAIGN_CFG_TRANSACTION envelope with version 1/app 5088120/owner 1, exact revision and payload bytes/SHA; complete fourteen-field typed document, prepared state and valid transaction/hashes.",
+        "raw_fixture_sha256": "2826928bdfc122210d5748ddff844813a32cdc417070e11676076402eba591d7"
+      },
+      "minimum_fix": "Require exact integer generation in 1..2147483647 in strict_journal and for both parsed journal filename generations; retain exact envelope, typed field, parity, consecutive and original hash-chain checks."
+    }
+  ],
+  "other_confirmed_limited_conclusions": [
+    "Original-packet replay adds the completed arm request/reply before matched-stack/read/snapshot while retaining original event paths/size/SHA, adapter/controller duplicate frames, send completion markers and strict prefix/tail/EOF reconstruction.",
+    "Phase V2 only adds capture_cloud_pre_apply after actual controller construction and before receiver creation or ready processing/arm send. The capture requires the actual retained live owned Popen and publishes binary CFG plus retained journal copies without pinning legally mutable original public paths.",
+    "Physical copies retain original bytes/SHA before and after publication; before and after pairs bind complete typed fields, fixed source/owner/operation, previous original record-byte SHA and exact original/candidate CFG SHA. Pruned predecessor bytes are explicitly marked unavailable rather than reconstructed.",
+    "First-report consumer requires a retained actual terminal Popen, original step/PID/nonce, zero exit/errors, normal private environment, three immutable native exports, 33 ordered checks, complete Provider identity and independently replayed report/arm/snapshot metadata. Full native CFG semantics and ordinary restart remain explicitly false."
+  ],
+  "unverified": [
+    "No actual complete validate path, pre-arm native capture, owned phase, ConfigFile parser, socket or Popen was executed.",
+    "Parent 17 fabricated private packet/journal/binary checks are primitive evidence and were not independently rerun as a full pipeline.",
+    "Current-engine debugger compatibility, native full CFG semantics, ordinary cloud restart, complete producer, successful V12 prior and executable admission remain unestablished."
+  ],
+  "independent_synthetic_reproductions": 1,
+  "native_started": false,
+  "actual_Popen_or_socket_constructed": false,
+  "actual_pipeline_executed": false,
+  "full_native_CFG_semantics_verified": false,
+  "ordinary_cloud_restart_implemented": false,
+  "complete_cloud_producer_implemented": false,
+  "successful_prior_bound": false,
+  "complete_cloud_case_qualified": false,
+  "original19_qualified": false,
+  "SDK_reward_once_qualified": false,
+  "overall_goal_qualified": false,
+  "scope_note": "Finite four-library source/API/custody review rejected for the confirmed native generation boundary omission. Existing source and snapshots remain unchanged; no execution stage approved."
+}

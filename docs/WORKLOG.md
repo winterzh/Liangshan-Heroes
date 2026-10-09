@@ -1,3 +1,19 @@
+## 2026-10-09：原生CFG generation边界遗漏拒绝与后继修复
+
+独立V1拒绝原收据 SHA b0bd8ab3b0836417ac7602fa8025b91daeea23ac039676e52488069c67bc7a94，唯一确认 CLOUD-CFG-GENERATION-001：physical helper未限制native generation<=2147483647；实际纯host反例2147483649被原strict_journal接受。原225pins/源码/17项原synthetic与拒绝保留，不能因其source closure/API其他部分闭合而授完整通过。
+
+physical_v2只增加strict generation exact-int 1..2147483647入口和两代filename范围检查；runtime_v3/first_consumer_v2只改physical import，原class执行body保持。SOURCE_SPEC_V2 236pins/531全AST边/三后继snapshot，原packet replay/source225pins保持。27项synthetic包括原17和10个range反例/合法边界检查：旧接受复现、新拒绝、native MAX单prepared与最大完整pair合法、末代/双代溢出及0/负/bool/float拒绝。仍无actualPopen/socket/phase/ConfigFile parser/native，完整native语义/cloud普通restart/producer及整个原目标继续待验收，stage=[]。有限delta独立复审结果另记。
+
+V2有限delta独立原收据已保存，SHA bb8734c7fb2c3cf69bf5c3f0c3ffde7664c6119378aea7582c5a983824fe7ac2；GENERATION-001两guard修复确认、原225pins保持、236pins/531边闭合、三new snapshot和两个class AST保持。独立纯内存界限检查8项通过，未跑磁盘档案/Popen/socket/Godot；全nativeCFG semantics/restart/producer及原整个目标仍未通过，stage=[]。
+
+## 2026-10-09：首次云回调原包重放与应用前后物理CFG中间验证
+
+新增严格原cloud arm/callback/tail replay，保留已审尾流V2全部路径、原size/SHA/目录/index、重复frame与send-complete要求，新增唯一completed arm/原ack及metadata原bytes一致性、实际production栈/新memory/applying/shared与原upload状态一致。helper不授Popen/断点安装/SDK/整个用例资格。
+
+新增physical helper：actual held live Popen在处理ready/发arm前，将原mutable CFG及当前retained prepared/applied pair复制到私有immutable原件；cloud phase V2只在controller构造与receiver创建之间加此调用。完成后复制public候选CFG和实际next pair，核全部14 typed fields、当前源/owner/cloud operation、exact before/candidate SHA与previous raw-byte链。已裁剪祖先如无bytes明确标注不可用，不虚构完整链。
+
+新增 CloudApplyFirstEvidence 中间consumer，要求实际retained terminal Popen/phase/PID/nonce/exit0/errors0/privateenv，原三export及唯一marker、33完整标签、full15 identity、original input/arm/report与独立原包重放、真实physical CFG/journals。它没有完整producer调用、尚未实际validate；native全CFG semantics、普通cloud restart和complete producer仍未完成，相关资格明确false，原完整目标不缩范围。225pins/474全AST边和四exact snapshots封存；17项私有伪造packet/journal/binary与fake-holder拒绝检查通过，不计Godot ConfigFile parser、actualowned phase或原19。有限独立审查及发现另记。
+
 ## 2026-10-09：主机云回调arm握手与实际phase源码接入
 
 新增五库：strict CloudArmPackets、CloudArmController、原rawreceiver import后继、固定三export publisher与CloudApplyingSerialBatch实际phase。controller继承原真实Popen/socket/来源身份/原字节ledger，先读同PID/nonce/identity/user/node的原apply-ready、完整payload/原CFG SHA及cloud状态，再按同peer breakpoint -> ready -> arm send_complete -> 原ack -> 实际匹配production栈 -> read snapshot -> disable/continue顺序处理。snapshot须目标内存/writerbusyfalse、applying/shared pending true且原dirty/pending/revision不变；arm ack不证明断点安装。
