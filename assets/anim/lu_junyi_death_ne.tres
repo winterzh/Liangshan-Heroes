@@ -1,0 +1,35 @@
+[gd_resource type="SpriteFrames" load_steps=5 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/lu_junyi_direction4_20261004/fall_ne.png" id="fall_ne"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/lu_junyi_direction4_20261004/terminal.png" id="terminal"]
+
+[sub_resource type="AtlasTexture" id="fall_ne"]
+atlas = ExtResource("fall_ne")
+region = Rect2(0, 0, 1254, 1254)
+margin = Rect2(0, 0, 0, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-15.0, 40.28)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.94134
+
+[sub_resource type="AtlasTexture" id="terminal_ne"]
+atlas = ExtResource("terminal")
+region = Rect2(0, 666, 639, 588)
+margin = Rect2(0, 25, 0, 51)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-12.5, 28.98)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.94241
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("fall_ne")},
+{"duration": 1.0, "texture": SubResource("terminal_ne")},
+{"duration": 1.0, "texture": SubResource("terminal_ne")}
+],
+"loop": false,
+"name": &"default",
+"speed": 4.0
+}]

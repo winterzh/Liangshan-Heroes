@@ -1,0 +1,66 @@
+{
+  "schema": "daming_safe_retreat_full_adapter_nullable_fix_v25s_r2b1",
+  "created_utc": "2026-10-07T18:53:25.459319+00:00",
+  "source": {
+    "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/run_daming_safe_retreat_v25s_r2b1_full.py",
+    "sha256": "f16d9eea15d5cabce5a37f95b21c6272b59342005ecf2a179dee1818e081bd42",
+    "bytes": 35411
+  },
+  "predecessor": {
+    "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/run_daming_safe_retreat_v25s_r2b_full.py",
+    "sha256": "c9791942b0c71d83bcf47fbfb703a2096fd596737f88b2593e8b7fa27d34c0ea",
+    "bytes": 31209
+  },
+  "matrix": {
+    "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/ADAPTER_BUNDLE_MATRIX_V25S_R2B1.json",
+    "sha256": "b873319c6788a5385411b8493b964b270eeeeb3505280ec9b55d85063bcfe6a4",
+    "bytes": 2338
+  },
+  "predecessor_api_review": {
+    "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/CONSUMER_REPORT_API_REVIEW_V25S_R2B.json",
+    "sha256": "baf4849f7c77801da02d49a93a6838a4c6d0137d6e2a63963ee706e0f32dcc0f",
+    "bytes": 6814
+  },
+  "exact_changes": [
+    "New world consumer copied from immutable explorer with mandatory expected row keys presence check inserted before unchanged per-field exacttype/value/code/layer/count/immutability validation. No old explorer or executing file change.",
+    "Independent component consumer now requires set(fields)<=set(row) before unchanged exacttype/value checks. Only actual checked GD fields mandatory, not serialization descriptive metadata.",
+    "New producer/receipt/review/matrix schema version r2b1; predecessor c979/ada907 all retained."
+  ],
+  "world_checked_keys_null_cases": [
+    "initially_empty",
+    "zero_world_before_dispose",
+    "core_battle_null",
+    "core_identity_null",
+    "core_unit_plan_empty"
+  ],
+  "component_checked_nullable_keys": [
+    "core_zero_before",
+    "core_zero_after"
+  ],
+  "semantic_unit_examples_source_only": [
+    {
+      "test": "missing mandatory nullable key",
+      "accept": false
+    },
+    {
+      "test": "explicit None matching neverCore/nonpair observation",
+      "accept": "only if every independent row/native/source guard passes"
+    },
+    {
+      "test": "false in place of mandatory null",
+      "accept": false
+    },
+    {
+      "test": "serialization_route metadata absent",
+      "accept": "not required because actual GD row does not emit it"
+    }
+  ],
+  "all_other_full_driver_and_guards_unchanged": true,
+  "AST_parse_compile_only": true,
+  "new_producer_or_base_imported": false,
+  "CLI_or_engine_executed": false,
+  "public_source_or_executing_r2a_s1_changed": false,
+  "native_qualified": false,
+  "overall_v25_qualified": false,
+  "new_peer_review_required": true
+}

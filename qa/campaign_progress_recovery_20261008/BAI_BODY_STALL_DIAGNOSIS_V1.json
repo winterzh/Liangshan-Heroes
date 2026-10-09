@@ -1,0 +1,96 @@
+{
+  "schema": "bai_actual_body_stall_diagnosis_v1",
+  "actual_report": {
+    "path": "qa/campaign_progress_recovery_20261008/actual_failed_natural_terminal_v5/output_normal_fresh/report.json",
+    "bytes": 20552,
+    "sha256": "5b836c8a7fd3c199c984a4dbd5dcfc7196bc846aae8aa6e94cec5345ff9210ae"
+  },
+  "actual_receipt": {
+    "path": "qa/campaign_progress_recovery_20261008/actual_failed_natural_terminal_v5/receipt.json",
+    "bytes": 5112432,
+    "sha256": "9650262d309a8520b503ddc120d5980183df1787d73191478acc587cbb10c406"
+  },
+  "source_spec_sha256": "013f882772ce3a4f843568e2807b9c10aaf8043df25d93a55b4419c94d155ebb",
+  "actor": {
+    "at_unload": false,
+    "captive": false,
+    "garrisoned": false,
+    "home": [
+      752.0,
+      784.0
+    ],
+    "hp": 70.0,
+    "id": "26",
+    "manual_active": false,
+    "manual_time": 0.0,
+    "move_retry": 0,
+    "outcome": "",
+    "path": [
+      [
+        752.0,
+        784.0
+      ]
+    ],
+    "path_i": 0,
+    "physics_processing": true,
+    "position": [
+      911.295654296875,
+      741.928344726563
+    ],
+    "queued": 0,
+    "radius": 10.0,
+    "root_time": 0.0,
+    "segment_open": true,
+    "serial": 1,
+    "state": 1,
+    "stuck_time": 0.05,
+    "stun_time": 0.0
+  },
+  "next_step": {
+    "body_open": false,
+    "map_open": true,
+    "position": [
+      910.274658203125,
+      742.197998046875
+    ],
+    "speed": 63.36,
+    "x_body_open": false,
+    "y_body_open": false
+  },
+  "blocking_original_actor": {
+    "distance": 22.0154285430908,
+    "faction": 1,
+    "hp": 80.0,
+    "id": "20",
+    "key": "jun_han",
+    "minimum_distance": 22.0,
+    "position": [
+      891.719116210938,
+      752.0
+    ],
+    "radius": 10.0,
+    "state": 0
+  },
+  "next_step_distance_to_blocker": 20.98540876211095,
+  "source_references": [
+    {
+      "path": "scripts/unit.gd",
+      "bytes": 214831,
+      "sha256": "e3909e2d78dd68fa03ef2091bd35a22419f7179b750cff52143b0141305f54bb"
+    },
+    {
+      "path": "scripts/battle.gd",
+      "bytes": 789563,
+      "sha256": "f020f434f755950d41dae9320bcdcb388359835b714f83bbd4592300514172b1"
+    },
+    {
+      "path": "scripts/levels/level1_huangnigang.gd",
+      "bytes": 60774,
+      "sha256": "f788a0eb757171899fe7b30b6842fce9699c42902940ba4c9b22100b9d1abaa2"
+    }
+  ],
+  "interpretation": "Actual ordinary 60Hz waypoint step is map-open but body-closed, including both sliding axes; it enters original guard20 radius sum. Actor is alive, unstunned/unrooted and retains automatic original serial. Static-only watchdog returns the same path; no terrain closure/player takeover explains this observed stall.",
+  "candidate_fix_native_verified": false,
+  "production_edited": false,
+  "no_CFG_or_terminal_qualified": true
+}

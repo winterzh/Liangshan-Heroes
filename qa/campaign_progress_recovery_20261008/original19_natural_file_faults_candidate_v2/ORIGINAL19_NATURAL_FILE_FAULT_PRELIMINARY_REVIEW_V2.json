@@ -1,0 +1,46 @@
+{
+  "schema": "campaign_original19_natural_file_fault_preliminary_independent_review_v1",
+  "review_version": 2,
+  "independent": true,
+  "reviewer": "office_full_review",
+  "reviewed_at": "2026-10-08T20:45:17.746856+00:00",
+  "candidate_sha256": "6647491fd2ae38e20bbce89351f0e7ba6e59763f52578827dbadb22d99797df9",
+  "source_manifest_sha256": "ca039915860cde53fc06681e59c6318a5185dc8cd1391062d0439061e7d9984e",
+  "candidate_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\original19_natural_file_faults_candidate_v2\\campaign_original19_natural_file_faults_v2.gd",
+    "bytes": 27192,
+    "sha256": "6647491fd2ae38e20bbce89351f0e7ba6e59763f52578827dbadb22d99797df9"
+  },
+  "source_manifest_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\original19_natural_file_faults_candidate_v2\\SOURCE.json",
+    "bytes": 9742,
+    "sha256": "ca039915860cde53fc06681e59c6318a5185dc8cd1391062d0439061e7d9984e"
+  },
+  "previous_rejection_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\original19_natural_file_faults_candidate_v1\\ORIGINAL19_NATURAL_FILE_FAULT_PRELIMINARY_REVIEW_V1.json",
+    "bytes": 3667,
+    "sha256": "cf109c7e7104fee2155bbf982a0ef679461e2c9cb4bd10f3f0f2915b7e789bc6"
+  },
+  "static_api_closure_passed": true,
+  "source_integrity_verified": true,
+  "approved_static_sources_only": true,
+  "approved_stages": [],
+  "producer_implemented": false,
+  "controller_implemented": false,
+  "native_started_by_reviewer": false,
+  "native_qualified": false,
+  "full_original19_qualified": false,
+  "UI_qualified": false,
+  "SDK_qualified": false,
+  "overall_goal_qualified": false,
+  "resolved_findings": [
+    {
+      "id": "FAULTGD-CUSTODY-001",
+      "resolved": true,
+      "evidence": "Injection JSON is parsed from the same first nonempty <=1MiB raw bytes whose valid UTF8 round-trip is checked. That exact text SHA equals current file SHA before parse and is stored in pending_fault. Repair accepts only current injection SHA and its declared SHA both equal to the original pending SHA; no later hash becomes a new baseline."
+    }
+  ],
+  "exact_difference": "Only _exercise_actual_file_fault first-byte pin/current-before-parse check/pending originalSHA/repair comparison and _finish report schema changed. Original six cases/source breakpoints/natural route/seed/pending objects/gen2-to-gen3/restart conclusions from V1 are retained; one explicit first-raw-byte check is added.",
+  "findings": [],
+  "qualification_note": "Source-only preliminary compatibility, no Native/controller stage admission. Future controller must independently pin its first raw artifacts, own process/profile/source/stack and mutation paths, and implement a precise expected-native-diagnostic budget before any execution. V1 rejection/source remains immutable; no prior A/lifecycle or complete19 qualification is transferred."
+}

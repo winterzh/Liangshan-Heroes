@@ -1,0 +1,27 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+CAMPAIGN_FAULT_CASE_BEGIN normal_first_full_seal
+CAMPAIGN_FAULT_CASE_END normal_first_full_seal
+CAMPAIGN_FAULT_CASE_BEGIN normal_repeat_full
+CAMPAIGN_FAULT_CASE_END normal_repeat_full
+CAMPAIGN_FAULT_CASE_BEGIN best_single_run_no_union
+CAMPAIGN_FAULT_CASE_END best_single_run_no_union
+CAMPAIGN_FAULT_CASE_BEGIN invalid_no_unlock
+CAMPAIGN_FAULT_CASE_END invalid_no_unlock
+CAMPAIGN_FAULT_CASE_BEGIN QA_memory_only
+CAMPAIGN_FAULT_CASE_END QA_memory_only
+CAMPAIGN_FAULT_CASE_BEGIN QA_cloud_bool_compatibility
+CAMPAIGN_FAULT_CASE_END QA_cloud_bool_compatibility
+CAMPAIGN_FAULT_CASE_BEGIN bad_existing_cfg_load
+ERROR: ConfigFile parse error at user://campaign.cfg:0: Unexpected EOF while parsing simple tag.
+   at: _parse (core/io/config_file.cpp:292)
+   GDScript backtrace (most recent call first):
+       [0] _write_config_receipt (res://scripts/campaign.gd:357)
+       [1] _record_level_result_with_progress (res://scripts/campaign.gd:209)
+       [2] record_level_result (res://scripts/campaign.gd:179)
+       [3] _run (res://tools/campaign_persistence_fault_matrix.gd:207)
+       [4] _begin (res://tools/campaign_persistence_fault_matrix.gd:127)
+CAMPAIGN_FAULT_CASE_END bad_existing_cfg_load
+CAMPAIGN_FAULT_CASE_BEGIN existing_vanished_prior
+CAMPAIGN_FAULT_CASE_END existing_vanished_prior
+CAMPAIGN_FAULT_CASE_BEGIN true_new_missing_cfg

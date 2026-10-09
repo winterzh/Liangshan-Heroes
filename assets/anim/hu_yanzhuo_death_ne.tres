@@ -1,0 +1,33 @@
+[gd_resource type="SpriteFrames" load_steps=4 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/hu_yanzhuo_direction4_20261003/death.png" id="death"]
+
+[sub_resource type="AtlasTexture" id="fall_ne"]
+atlas = ExtResource("death")
+region = Rect2(40, 782, 419, 341)
+margin = Rect2(0, 39, 0, 78)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0.0, -29.42)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.749531
+
+[sub_resource type="AtlasTexture" id="terminal_ne"]
+atlas = ExtResource("death")
+region = Rect2(482, 843, 529, 261)
+margin = Rect2(0, 134, 0, 268)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0.0, 45.78)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.871533
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("fall_ne")},
+{"duration": 1.0, "texture": SubResource("terminal_ne")},
+{"duration": 1.0, "texture": SubResource("terminal_ne")}
+],
+"loop": false,
+"name": &"default",
+"speed": 4.0
+}]

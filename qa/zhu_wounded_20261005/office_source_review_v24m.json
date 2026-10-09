@@ -1,0 +1,48 @@
+{
+  "scope": "Source delivery of qualified initial/end/UI components; full campaign continuation remains closed.",
+  "source_files_checked": 5039,
+  "source_drift": [],
+  "private_runtime_patches": 0,
+  "qualified_core_checks": 75,
+  "qualified_presentation_checks": 348,
+  "original_case0_checks": 22,
+  "production": [
+    {
+      "path": "scripts/run_battle_root_state.gd",
+      "sha256": "0a0017050b82a5cef78d54593fe7c08bef21916e23e6980a2d0e0e0f8be06111"
+    },
+    {
+      "path": "scripts/run_battle_world_core.gd",
+      "sha256": "621426f2714207dd69fb66981dbf73f34b9b9a1637cd890b23fb53d4a39fd571"
+    },
+    {
+      "path": "scripts/run_campaign_presentation_state.gd",
+      "sha256": "9ff9b423394a86174ba387e4e7840a9a7f53a9366e18159e580aaa1f4e0cd655"
+    },
+    {
+      "path": "scripts/run_scenery_state.gd",
+      "sha256": "93a3744ccaa28f0110098acf34a353b03822e248ddb5d95db2ad312187092f9e"
+    },
+    {
+      "path": "scripts/run_visual_graph.gd",
+      "sha256": "515f2d9c613130fca1c4c418c2ea9b4cbfba852c1866f6a81831a83358854c2d"
+    }
+  ],
+  "caller_migration_semantically_identical_to_native_tested_harness": true,
+  "correction": "v24j review and v24k migration incorrectly said the standalone presentation QA caller was one of5039 inputs. It is absent. All5039 source hashes still exactly match initial/end/UI frozen inputs. Historical receipts retained unchanged.",
+  "caller_audit": "Core and standalone Presentation QA use new native entry hooks. tools/campaign_fx_partition_qa.gd directly uses Presentation but still has the previous mounting protocol; it needs caller migration and a fresh FX partition regression before claiming current FX QA compatibility. Its previous pass is historical.",
+  "pending": [
+    "Remaining five original chapter whole-core initial cases",
+    "FX partition QA caller migration and regression",
+    "Dynamic states, paid production/transport",
+    "Actual full-world disk save/exit/independent-process continue/resave",
+    "Natural endings and reward once",
+    "Same-source nine modes and release EXE",
+    "Art complete flows and crowded/multi-size UI",
+    "Normal-clock approximately10minute performance and cleanup",
+    "Android2.0.1 real-device acceptance"
+  ],
+  "platform_published_this_round": false,
+  "cleanup_this_round": false,
+  "whole_goal_complete": false
+}

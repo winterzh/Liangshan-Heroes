@@ -1,0 +1,61 @@
+{
+  "schema": "daming_safe_retreat_full_adapter_globals_fix_v25s_r2b2",
+  "created_utc": "2026-10-07T18:56:42.519670+00:00",
+  "source": {
+    "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/run_daming_safe_retreat_v25s_r2b2_full.py",
+    "sha256": "e61b7e87a5c52792040fc9d6e84828c6fce2aec8f3496ec3bf883c78aab5fd79",
+    "bytes": 35449
+  },
+  "predecessor": {
+    "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/run_daming_safe_retreat_v25s_r2b1_full.py",
+    "sha256": "f16d9eea15d5cabce5a37f95b21c6272b59342005ecf2a179dee1818e081bd42",
+    "bytes": 35411
+  },
+  "matrix": {
+    "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/ADAPTER_BUNDLE_MATRIX_V25S_R2B2.json",
+    "sha256": "cccae5c45c68baf34d6943b206abf12e5e2ee50dcf20e00ada5d085a7e417c4a",
+    "bytes": 2515
+  },
+  "fix": "Declare original HEX64 regex in actual module globals used by copied world callback. Both mandatory nullable evidence presence guards retained unchanged. No predecessor or running source changed.",
+  "copied_function": "run_world_dto_negatives",
+  "copied_function_free_names": [
+    "HEX64",
+    "all",
+    "base",
+    "int",
+    "isinstance",
+    "len",
+    "list",
+    "set",
+    "sha",
+    "str",
+    "type",
+    "uuid"
+  ],
+  "module_defined_or_imported_free_names": [
+    "HEX64",
+    "sha",
+    "uuid"
+  ],
+  "explicit_outer_closure_free_names": [
+    "base"
+  ],
+  "builtin_free_names": [
+    "all",
+    "int",
+    "isinstance",
+    "len",
+    "list",
+    "set",
+    "str",
+    "type"
+  ],
+  "unresolved_free_names": [],
+  "global_definition_HEX64": "re.compile(r\"[0-9a-f]{64}\\Z\")",
+  "AST_parse_compile_only": true,
+  "module_or_CLI_executed": false,
+  "engine_started": false,
+  "public_or_running_artifacts_modified": false,
+  "native_qualified": false,
+  "new_peer_required": true
+}

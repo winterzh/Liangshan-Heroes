@@ -1,0 +1,36 @@
+{
+  "schema": "campaign_original19_debug_faults_host_guard_checks_v1",
+  "helper_sha256": "0e9c1f37eb1c1bf24a74a5e2007c3e27bd864f0e391b2dfd483c1295ec0e42a8",
+  "checks": [
+    {
+      "label": "bounded stable first original CFG bytes",
+      "passed": true
+    },
+    {
+      "label": "declared native SHA mismatch",
+      "rejected": true
+    },
+    {
+      "label": "empty original CFG",
+      "rejected": true
+    },
+    {
+      "label": "oversized original CFG before mutation",
+      "rejected": true
+    },
+    {
+      "label": "missing original CFG",
+      "rejected": true
+    },
+    {
+      "label": "directory cannot be original CFG",
+      "rejected": true
+    }
+  ],
+  "count": 6,
+  "passed": true,
+  "scope": "pure host private temporary byte-boundary checks only; constructor, debugger, lifecycle, actual pending and native six faults not executed",
+  "native_started": false,
+  "full_original19_qualified": false,
+  "approved_stages": []
+}

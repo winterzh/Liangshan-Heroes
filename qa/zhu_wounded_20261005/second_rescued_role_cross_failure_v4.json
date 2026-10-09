@@ -1,0 +1,45 @@
+{
+  "scope": "Second fixture failed before first slot; no persistence qualification",
+  "receipt": "E:\\ChatGPT\\qa-rescued-seven-persistence-20261006\\rescued_role_cross_v4_24c67a68\\receipt.json",
+  "receipt_sha256": "613eaf4b441238fa5d8733bac3e3b13bdb54cec6ed9f0d47065ffe162bf28ad4",
+  "failure": {
+    "type": "AssertionError",
+    "message": "Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org\n\nFAIL SAVE original save barrier and session succeed\nROLE_SAVE_FAILURE { \"ok\": false, \"code\": \"TEXTURE_IMAGE_MISMATCH\", \"section\": \"fog\", \"cause\": { \"ok\": false, \"code\": \"TEXTURE_IMAGE_MISMATCH\", \"field\": \"\", \"complete_battle\": false }, \"complete_world\": false }\nRESCUED_ROLE_PROCESS_COMPLETE bound 59 false\n"
+  },
+  "steps": [
+    {
+      "case": "import",
+      "pid": 167868,
+      "process_nonce": "3e33cfdbaabf4ebf8b4321880dd4db03",
+      "started_ns": 450668828000000,
+      "finished_ns": 450713750000000,
+      "exit_code": 0,
+      "stopped_for": null,
+      "log_sha256": "a258c79ad7299e21970e2e97133af3ed5cd18c088f0bbfe96454f87b32b32755",
+      "passed": true
+    },
+    {
+      "case": "profile_guard",
+      "pid": 176524,
+      "process_nonce": "675f42351f1e45e9aae995a6336b4f7e",
+      "started_ns": 450714078000000,
+      "finished_ns": 450726843000000,
+      "exit_code": 2,
+      "stopped_for": null,
+      "log_sha256": "62a6200a01be71b28ea0a2c0e68d2b15b72ae97ce554b73e461d73892c99c1e1",
+      "passed": true
+    },
+    {
+      "case": "bound",
+      "pid": 176864,
+      "process_nonce": "2cbe69ed86f64c069927e3c584094948",
+      "started_ns": 450727218000000,
+      "finished_ns": 450902593000000,
+      "exit_code": 1,
+      "stopped_for": null,
+      "log_sha256": "90fd687956247fd204689a2291694f1862836ea923ac1e5d9dc17a567531f054",
+      "passed": false
+    }
+  ],
+  "reason": "Headless dummy texture readback does not match actual fog ImageTexture. Existing original world-restore runner uses gl_compatibility native rendering for world cases. Keep texture equality invariant and use same real renderer, not a weaker capture."
+}

@@ -1,0 +1,93 @@
+{
+  "schema": "cloud_restart_publication_synthetic_host_checks_v1",
+  "fixture_run": "D:\\CodexTemp\\lsh-cloud-restart-publication-fixtures-a21bd1d0",
+  "checks": [
+    {
+      "case": "valid",
+      "expected_accepted": true,
+      "accepted": true,
+      "error": "",
+      "passed": true
+    },
+    {
+      "case": "missing_marker",
+      "expected_accepted": false,
+      "accepted": false,
+      "error": "RuntimeError('Complete fixed actual cloud restart export set')",
+      "passed": true
+    },
+    {
+      "case": "wrong_pid",
+      "expected_accepted": false,
+      "accepted": false,
+      "error": "RuntimeError('Actual current native PID/nonce/fixed filename')",
+      "passed": true
+    },
+    {
+      "case": "wrong_nonce",
+      "expected_accepted": false,
+      "accepted": false,
+      "error": "RuntimeError('Actual current native PID/nonce/fixed filename')",
+      "passed": true
+    },
+    {
+      "case": "extra_name",
+      "expected_accepted": false,
+      "accepted": false,
+      "error": "RuntimeError('Actual current native PID/nonce/fixed filename')",
+      "passed": true
+    },
+    {
+      "case": "duplicate_marker",
+      "expected_accepted": false,
+      "accepted": false,
+      "error": "RuntimeError('Each native stage is exported once')",
+      "passed": true
+    },
+    {
+      "case": "bad_marker",
+      "expected_accepted": false,
+      "accepted": false,
+      "error": "RuntimeError('Exact complete native JSON export marker')",
+      "passed": true
+    },
+    {
+      "case": "wrong_hash",
+      "expected_accepted": false,
+      "accepted": false,
+      "error": "AssertionError()",
+      "passed": true
+    },
+    {
+      "case": "missing_stage",
+      "expected_accepted": false,
+      "accepted": false,
+      "error": "RuntimeError('Bounded closed native original stage')",
+      "passed": true
+    },
+    {
+      "case": "existing_destination",
+      "expected_accepted": false,
+      "accepted": false,
+      "error": "RuntimeError('Windows fresh owned JSON destination required')",
+      "passed": true
+    },
+    {
+      "case": "malformed_JSON",
+      "expected_accepted": false,
+      "accepted": false,
+      "error": "JSONDecodeError('Expecting value: line 1 column 1 (char 0)')",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "check_count": 11,
+  "actual_native_Popen_constructed": false,
+  "actual_consumer_validate_executed": false,
+  "GD_parsed": false,
+  "native_started": false,
+  "source_only": true,
+  "ordinary_restart_qualified": false,
+  "original19_qualified": false,
+  "overall_goal_qualified": false
+}

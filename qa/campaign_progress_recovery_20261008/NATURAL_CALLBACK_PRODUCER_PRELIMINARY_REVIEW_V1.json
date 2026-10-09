@@ -1,0 +1,45 @@
+{
+  "schema": "campaign_natural_callback_producer_preliminary_independent_review_v1",
+  "reviewed_at_utc": "2026-10-09T01:39:15.641836+00:00",
+  "independent": true,
+  "source_only": true,
+  "limited_preliminary_review": true,
+  "static_api_closure_passed": true,
+  "approved_stages": [],
+  "producer_sha256": "6cbdd39add5fa8c52f7b06d403da54eb7c91a2f71c22485c91a67ed42aa8a55f",
+  "source_recipe_file_sha256": "6da8a9ba39b2f80125b12303a279dc53585e0284a2ea43411c1919ce04a4189f",
+  "source_recipe_sha256": "c55f2012fb9a3b1993e52fd385859286c1db025582000b96a02ea9911b3da2de",
+  "scope_file_sha256": "4ff5448b3d5cbf83773e8520f1f7eeb006b13b3f930f8d671215a340ab2bd27b",
+  "verified_source_counts": {
+    "pins": 175,
+    "all_pinned_python_local_import_edges": 343,
+    "missing_import_pins": 0,
+    "unique_runtime_overlays": 29
+  },
+  "confirmed_findings": [],
+  "confirmed_limited_conclusions": [
+    "Producer and source snapshot are byte-identical; recipe pins, all pinned Python local-import closure, unique overlays, and the three actual GD aliases were independently read back.",
+    "Cold import, callback_first, and same-profile restart_first use the current runtime and consumer interfaces. Borrowed validate only forwards to the current consumer and records its report; first_handoff is set by that consumer and restart reads the original pin and token.",
+    "source_spec and Suite require a genuinely successful exact V12 all-61 prior and preserve its first receipt pin and all evidence/log pins before creating the batch or profile directories.",
+    "Run admission requires a new exact review with complete_consumer_and_phase_reviewed=true and the sole current scope. The old ORDER-001 delta review and preliminary empty-stage receipts cannot satisfy this gate.",
+    "Inherited fixed-byte ledger, source integrity, original terminal-log custody, and owned-child/unknown-child lease finalization remain connected to the new producer."
+  ],
+  "unverified": [
+    "Complete consumer validate with actual retained Popen and physical evidence pipeline has not run.",
+    "Cold/callback/restart phases, live socket/debugger protocol, and native compatibility have not run in this review.",
+    "No successful complete V12 prior exists for this candidate; no executable source seal or positive admission has been established.",
+    "Existing parent host checks and failed-prior rejection receipts are references, not independent native proof or a new complete-pipeline execution."
+  ],
+  "complete_consumer_and_phase_reviewed": false,
+  "successful_prior_verified": false,
+  "executable_source_seal_created": false,
+  "native_execution_approved": false,
+  "native_executed": false,
+  "socket_executed": false,
+  "popen_constructed": false,
+  "actual_callback_qualified": false,
+  "original19_qualified": false,
+  "SDK_qualified": false,
+  "whole_goal_qualified": false,
+  "scope_note": "Finite source/API preliminary review of the new producer only. No new simulations, native execution, or complete consumer proof; approved stages remain empty."
+}

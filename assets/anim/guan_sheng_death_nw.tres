@@ -1,0 +1,35 @@
+[gd_resource type="SpriteFrames" load_steps=5 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/guan_sheng_direction4_20261004/fall.png" id="fall"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/guan_sheng_direction4_20261004/terminal.png" id="terminal"]
+
+[sub_resource type="AtlasTexture" id="fall_nw"]
+atlas = ExtResource("fall")
+region = Rect2(642, 658, 612, 596)
+margin = Rect2(0, 8, 0, 16)
+filter_clip = true
+metadata/draw_offset_px = Vector2(21.0, 11.84)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.810213
+
+[sub_resource type="AtlasTexture" id="terminal_nw"]
+atlas = ExtResource("terminal")
+region = Rect2(632, 654, 622, 600)
+margin = Rect2(0, 11, 0, 22)
+filter_clip = true
+metadata/draw_offset_px = Vector2(4.5, 42.04)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.915691
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("fall_nw")},
+{"duration": 1.0, "texture": SubResource("terminal_nw")},
+{"duration": 1.0, "texture": SubResource("terminal_nw")}
+],
+"loop": false,
+"name": &"default",
+"speed": 4.0
+}]

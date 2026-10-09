@@ -1,0 +1,2298 @@
+{
+  "schema": "slot_identity_guard_native_matrix_plan_v26",
+  "status": "planned_not_executed",
+  "native_parsed": false,
+  "native_executed": false,
+  "fixture_provenance": [
+    {
+      "path": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24p_e0f2b6c4\\native_evidence\\A_half_save\\failed_payload_original.txt",
+      "sha256": "975438e07af96fbded5d705c1807941bffae8cc344207eb2a224b73569e0cb96",
+      "bytes": 2761662,
+      "role": "immutable actual failed pending payload; not a qualified save"
+    },
+    {
+      "path": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24p_e0f2b6c4\\native_evidence\\A_half_save\\failed_payload_normalized.txt",
+      "sha256": "17194c35b47442232df9e1f8a1c46bb1b0302eca738dcc1c22907d3a7f12077b",
+      "bytes": 2762054,
+      "role": "immutable actual failed pending payload; not a qualified save"
+    }
+  ],
+  "actual_base": {
+    "schema": "official_continue_slot_v1",
+    "context": {
+      "level_id": "level8",
+      "mode": "campaign",
+      "waves": 0
+    },
+    "profile_id": "campaign_level8_v1",
+    "binding_kind": "uncredited",
+    "binding_fields": [
+      "kind",
+      "receipt_sha256",
+      "token"
+    ]
+  },
+  "fixture_preparation": {
+    "json_base": "Godot JSON.parse of exact actual pending original payload; no type repair before Slot._validate_json_document.",
+    "native_source_base": "Independently parse same actual pending payload, then replace only map with successful existing SceneryJSON.normalize_json(... trusted actual content/context ...).value; exact fixed ownership integers only, no schema/id/context coercion; original helper full Scenery validator must pass.",
+    "mutations": "Prepare good base once, then deep duplicate and replace exactly one JSON pointer per case; do not run helper with mutated leaf as typed context/version. Compare original input with exact Codec/typeof-aware recursive fingerprint, not a coerced JSON-only equality.",
+    "logs": "Retain every malformed case report and native log; whole process must exit zero, no SCRIPT ERROR/Parse Error/ERROR lines, no filesystem save/writer/Unit/restore activation in this pure guard suite."
+  },
+  "negative_case_count": 134,
+  "route_checks": 268,
+  "cases": [
+    {
+      "id": "type_schema_nil",
+      "json_pointer": "/schema",
+      "replacement_type": "nil",
+      "replacement": null,
+      "expected_code": "SLOT_SCHEMA",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_schema_bool",
+      "json_pointer": "/schema",
+      "replacement_type": "bool",
+      "replacement": false,
+      "expected_code": "SLOT_SCHEMA",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_schema_int",
+      "json_pointer": "/schema",
+      "replacement_type": "int",
+      "replacement": 7,
+      "expected_code": "SLOT_SCHEMA",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_schema_float",
+      "json_pointer": "/schema",
+      "replacement_type": "float",
+      "replacement": 1.5,
+      "expected_code": "SLOT_SCHEMA",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_schema_array",
+      "json_pointer": "/schema",
+      "replacement_type": "array",
+      "replacement": [],
+      "expected_code": "SLOT_SCHEMA",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_schema_dictionary",
+      "json_pointer": "/schema",
+      "replacement_type": "dictionary",
+      "replacement": {},
+      "expected_code": "SLOT_SCHEMA",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_context_mode_nil",
+      "json_pointer": "/context/mode",
+      "replacement_type": "nil",
+      "replacement": null,
+      "expected_code": "SLOT_CONTEXT",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_context_mode_bool",
+      "json_pointer": "/context/mode",
+      "replacement_type": "bool",
+      "replacement": false,
+      "expected_code": "SLOT_CONTEXT",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_context_mode_int",
+      "json_pointer": "/context/mode",
+      "replacement_type": "int",
+      "replacement": 7,
+      "expected_code": "SLOT_CONTEXT",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_context_mode_float",
+      "json_pointer": "/context/mode",
+      "replacement_type": "float",
+      "replacement": 1.5,
+      "expected_code": "SLOT_CONTEXT",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_context_mode_array",
+      "json_pointer": "/context/mode",
+      "replacement_type": "array",
+      "replacement": [],
+      "expected_code": "SLOT_CONTEXT",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_context_mode_dictionary",
+      "json_pointer": "/context/mode",
+      "replacement_type": "dictionary",
+      "replacement": {},
+      "expected_code": "SLOT_CONTEXT",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_context_level_id_nil",
+      "json_pointer": "/context/level_id",
+      "replacement_type": "nil",
+      "replacement": null,
+      "expected_code": "SLOT_CONTEXT",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_context_level_id_bool",
+      "json_pointer": "/context/level_id",
+      "replacement_type": "bool",
+      "replacement": false,
+      "expected_code": "SLOT_CONTEXT",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_context_level_id_int",
+      "json_pointer": "/context/level_id",
+      "replacement_type": "int",
+      "replacement": 7,
+      "expected_code": "SLOT_CONTEXT",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_context_level_id_float",
+      "json_pointer": "/context/level_id",
+      "replacement_type": "float",
+      "replacement": 1.5,
+      "expected_code": "SLOT_CONTEXT",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_context_level_id_array",
+      "json_pointer": "/context/level_id",
+      "replacement_type": "array",
+      "replacement": [],
+      "expected_code": "SLOT_CONTEXT",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_context_level_id_dictionary",
+      "json_pointer": "/context/level_id",
+      "replacement_type": "dictionary",
+      "replacement": {},
+      "expected_code": "SLOT_CONTEXT",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_world_schema_nil",
+      "json_pointer": "/world/schema",
+      "replacement_type": "nil",
+      "replacement": null,
+      "expected_code": "SLOT_WORLD_IDENTITY",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_world_schema_bool",
+      "json_pointer": "/world/schema",
+      "replacement_type": "bool",
+      "replacement": false,
+      "expected_code": "SLOT_WORLD_IDENTITY",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_world_schema_int",
+      "json_pointer": "/world/schema",
+      "replacement_type": "int",
+      "replacement": 7,
+      "expected_code": "SLOT_WORLD_IDENTITY",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_world_schema_float",
+      "json_pointer": "/world/schema",
+      "replacement_type": "float",
+      "replacement": 1.5,
+      "expected_code": "SLOT_WORLD_IDENTITY",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_world_schema_array",
+      "json_pointer": "/world/schema",
+      "replacement_type": "array",
+      "replacement": [],
+      "expected_code": "SLOT_WORLD_IDENTITY",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_world_schema_dictionary",
+      "json_pointer": "/world/schema",
+      "replacement_type": "dictionary",
+      "replacement": {},
+      "expected_code": "SLOT_WORLD_IDENTITY",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_world_profile_schema_nil",
+      "json_pointer": "/world/profile/schema",
+      "replacement_type": "nil",
+      "replacement": null,
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_world_profile_schema_bool",
+      "json_pointer": "/world/profile/schema",
+      "replacement_type": "bool",
+      "replacement": false,
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_world_profile_schema_int",
+      "json_pointer": "/world/profile/schema",
+      "replacement_type": "int",
+      "replacement": 7,
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_world_profile_schema_float",
+      "json_pointer": "/world/profile/schema",
+      "replacement_type": "float",
+      "replacement": 1.5,
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_world_profile_schema_array",
+      "json_pointer": "/world/profile/schema",
+      "replacement_type": "array",
+      "replacement": [],
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_world_profile_schema_dictionary",
+      "json_pointer": "/world/profile/schema",
+      "replacement_type": "dictionary",
+      "replacement": {},
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_world_profile_id_nil",
+      "json_pointer": "/world/profile/id",
+      "replacement_type": "nil",
+      "replacement": null,
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_world_profile_id_bool",
+      "json_pointer": "/world/profile/id",
+      "replacement_type": "bool",
+      "replacement": false,
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_world_profile_id_int",
+      "json_pointer": "/world/profile/id",
+      "replacement_type": "int",
+      "replacement": 7,
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_world_profile_id_float",
+      "json_pointer": "/world/profile/id",
+      "replacement_type": "float",
+      "replacement": 1.5,
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_world_profile_id_array",
+      "json_pointer": "/world/profile/id",
+      "replacement_type": "array",
+      "replacement": [],
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_world_profile_id_dictionary",
+      "json_pointer": "/world/profile/id",
+      "replacement_type": "dictionary",
+      "replacement": {},
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_world_profile_context_mode_nil",
+      "json_pointer": "/world/profile/context/mode",
+      "replacement_type": "nil",
+      "replacement": null,
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_world_profile_context_mode_bool",
+      "json_pointer": "/world/profile/context/mode",
+      "replacement_type": "bool",
+      "replacement": false,
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_world_profile_context_mode_int",
+      "json_pointer": "/world/profile/context/mode",
+      "replacement_type": "int",
+      "replacement": 7,
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_world_profile_context_mode_float",
+      "json_pointer": "/world/profile/context/mode",
+      "replacement_type": "float",
+      "replacement": 1.5,
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_world_profile_context_mode_array",
+      "json_pointer": "/world/profile/context/mode",
+      "replacement_type": "array",
+      "replacement": [],
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_world_profile_context_mode_dictionary",
+      "json_pointer": "/world/profile/context/mode",
+      "replacement_type": "dictionary",
+      "replacement": {},
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_world_profile_context_level_id_nil",
+      "json_pointer": "/world/profile/context/level_id",
+      "replacement_type": "nil",
+      "replacement": null,
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_world_profile_context_level_id_bool",
+      "json_pointer": "/world/profile/context/level_id",
+      "replacement_type": "bool",
+      "replacement": false,
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_world_profile_context_level_id_int",
+      "json_pointer": "/world/profile/context/level_id",
+      "replacement_type": "int",
+      "replacement": 7,
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_world_profile_context_level_id_float",
+      "json_pointer": "/world/profile/context/level_id",
+      "replacement_type": "float",
+      "replacement": 1.5,
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_world_profile_context_level_id_array",
+      "json_pointer": "/world/profile/context/level_id",
+      "replacement_type": "array",
+      "replacement": [],
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_world_profile_context_level_id_dictionary",
+      "json_pointer": "/world/profile/context/level_id",
+      "replacement_type": "dictionary",
+      "replacement": {},
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_binding_kind_nil",
+      "json_pointer": "/binding/kind",
+      "replacement_type": "nil",
+      "replacement": null,
+      "expected_code": "SLOT_BINDING_TYPE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_binding_kind_bool",
+      "json_pointer": "/binding/kind",
+      "replacement_type": "bool",
+      "replacement": false,
+      "expected_code": "SLOT_BINDING_TYPE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_binding_kind_int",
+      "json_pointer": "/binding/kind",
+      "replacement_type": "int",
+      "replacement": 7,
+      "expected_code": "SLOT_BINDING_TYPE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_binding_kind_float",
+      "json_pointer": "/binding/kind",
+      "replacement_type": "float",
+      "replacement": 1.5,
+      "expected_code": "SLOT_BINDING_TYPE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_binding_kind_array",
+      "json_pointer": "/binding/kind",
+      "replacement_type": "array",
+      "replacement": [],
+      "expected_code": "SLOT_BINDING_TYPE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "type_binding_kind_dictionary",
+      "json_pointer": "/binding/kind",
+      "replacement_type": "dictionary",
+      "replacement": {},
+      "expected_code": "SLOT_BINDING_TYPE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "container_document_nil",
+      "json_pointer": "",
+      "replacement_type": "nil",
+      "replacement": null,
+      "expected_code": "SLOT_FIELDS",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "container_document_bool",
+      "json_pointer": "",
+      "replacement_type": "bool",
+      "replacement": false,
+      "expected_code": "SLOT_FIELDS",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "container_document_int",
+      "json_pointer": "",
+      "replacement_type": "int",
+      "replacement": 7,
+      "expected_code": "SLOT_FIELDS",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "container_document_float",
+      "json_pointer": "",
+      "replacement_type": "float",
+      "replacement": 1.5,
+      "expected_code": "SLOT_FIELDS",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "container_document_string",
+      "json_pointer": "",
+      "replacement_type": "string",
+      "replacement": "invalid",
+      "expected_code": "SLOT_FIELDS",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "container_document_array",
+      "json_pointer": "",
+      "replacement_type": "array",
+      "replacement": [],
+      "expected_code": "SLOT_FIELDS",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "container_context_nil",
+      "json_pointer": "/context",
+      "replacement_type": "nil",
+      "replacement": null,
+      "expected_code": "SLOT_CONTEXT",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "container_context_bool",
+      "json_pointer": "/context",
+      "replacement_type": "bool",
+      "replacement": false,
+      "expected_code": "SLOT_CONTEXT",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "container_context_int",
+      "json_pointer": "/context",
+      "replacement_type": "int",
+      "replacement": 7,
+      "expected_code": "SLOT_CONTEXT",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "container_context_float",
+      "json_pointer": "/context",
+      "replacement_type": "float",
+      "replacement": 1.5,
+      "expected_code": "SLOT_CONTEXT",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "container_context_string",
+      "json_pointer": "/context",
+      "replacement_type": "string",
+      "replacement": "invalid",
+      "expected_code": "SLOT_CONTEXT",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "container_context_array",
+      "json_pointer": "/context",
+      "replacement_type": "array",
+      "replacement": [],
+      "expected_code": "SLOT_CONTEXT",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "container_world_nil",
+      "json_pointer": "/world",
+      "replacement_type": "nil",
+      "replacement": null,
+      "expected_code": "SLOT_WORLD_FIELDS",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "container_world_bool",
+      "json_pointer": "/world",
+      "replacement_type": "bool",
+      "replacement": false,
+      "expected_code": "SLOT_WORLD_FIELDS",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "container_world_int",
+      "json_pointer": "/world",
+      "replacement_type": "int",
+      "replacement": 7,
+      "expected_code": "SLOT_WORLD_FIELDS",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "container_world_float",
+      "json_pointer": "/world",
+      "replacement_type": "float",
+      "replacement": 1.5,
+      "expected_code": "SLOT_WORLD_FIELDS",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "container_world_string",
+      "json_pointer": "/world",
+      "replacement_type": "string",
+      "replacement": "invalid",
+      "expected_code": "SLOT_WORLD_FIELDS",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "container_world_array",
+      "json_pointer": "/world",
+      "replacement_type": "array",
+      "replacement": [],
+      "expected_code": "SLOT_WORLD_FIELDS",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "container_world_profile_nil",
+      "json_pointer": "/world/profile",
+      "replacement_type": "nil",
+      "replacement": null,
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "container_world_profile_bool",
+      "json_pointer": "/world/profile",
+      "replacement_type": "bool",
+      "replacement": false,
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "container_world_profile_int",
+      "json_pointer": "/world/profile",
+      "replacement_type": "int",
+      "replacement": 7,
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "container_world_profile_float",
+      "json_pointer": "/world/profile",
+      "replacement_type": "float",
+      "replacement": 1.5,
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "container_world_profile_string",
+      "json_pointer": "/world/profile",
+      "replacement_type": "string",
+      "replacement": "invalid",
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "container_world_profile_array",
+      "json_pointer": "/world/profile",
+      "replacement_type": "array",
+      "replacement": [],
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "container_world_profile_context_nil",
+      "json_pointer": "/world/profile/context",
+      "replacement_type": "nil",
+      "replacement": null,
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "container_world_profile_context_bool",
+      "json_pointer": "/world/profile/context",
+      "replacement_type": "bool",
+      "replacement": false,
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "container_world_profile_context_int",
+      "json_pointer": "/world/profile/context",
+      "replacement_type": "int",
+      "replacement": 7,
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "container_world_profile_context_float",
+      "json_pointer": "/world/profile/context",
+      "replacement_type": "float",
+      "replacement": 1.5,
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "container_world_profile_context_string",
+      "json_pointer": "/world/profile/context",
+      "replacement_type": "string",
+      "replacement": "invalid",
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "container_world_profile_context_array",
+      "json_pointer": "/world/profile/context",
+      "replacement_type": "array",
+      "replacement": [],
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "container_binding_nil",
+      "json_pointer": "/binding",
+      "replacement_type": "nil",
+      "replacement": null,
+      "expected_code": "STEAM_BINDING_FIELDS",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "container_binding_bool",
+      "json_pointer": "/binding",
+      "replacement_type": "bool",
+      "replacement": false,
+      "expected_code": "STEAM_BINDING_FIELDS",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "container_binding_int",
+      "json_pointer": "/binding",
+      "replacement_type": "int",
+      "replacement": 7,
+      "expected_code": "STEAM_BINDING_FIELDS",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "container_binding_float",
+      "json_pointer": "/binding",
+      "replacement_type": "float",
+      "replacement": 1.5,
+      "expected_code": "STEAM_BINDING_FIELDS",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "container_binding_string",
+      "json_pointer": "/binding",
+      "replacement_type": "string",
+      "replacement": "invalid",
+      "expected_code": "STEAM_BINDING_FIELDS",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "container_binding_array",
+      "json_pointer": "/binding",
+      "replacement_type": "array",
+      "replacement": [],
+      "expected_code": "STEAM_BINDING_FIELDS",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "waves_context_waves_nil",
+      "json_pointer": "/context/waves",
+      "replacement_type": "nil",
+      "replacement": null,
+      "expected_code": "SLOT_CONTEXT",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "waves_context_waves_bool",
+      "json_pointer": "/context/waves",
+      "replacement_type": "bool",
+      "replacement": false,
+      "expected_code": "SLOT_CONTEXT",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "waves_context_waves_string",
+      "json_pointer": "/context/waves",
+      "replacement_type": "string",
+      "replacement": "0",
+      "expected_code": "SLOT_CONTEXT",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "waves_context_waves_array",
+      "json_pointer": "/context/waves",
+      "replacement_type": "array",
+      "replacement": [],
+      "expected_code": "SLOT_CONTEXT",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "waves_context_waves_dictionary",
+      "json_pointer": "/context/waves",
+      "replacement_type": "dictionary",
+      "replacement": {},
+      "expected_code": "SLOT_CONTEXT",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "waves_context_waves_wrong_integer",
+      "json_pointer": "/context/waves",
+      "replacement_type": "wrong_integer",
+      "replacement": 1,
+      "expected_code": "SLOT_CONTEXT",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "waves_context_waves_fractional",
+      "json_pointer": "/context/waves",
+      "replacement_type": "fractional",
+      "replacement": 0.5,
+      "expected_code": "SLOT_CONTEXT",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "waves_world_profile_context_waves_nil",
+      "json_pointer": "/world/profile/context/waves",
+      "replacement_type": "nil",
+      "replacement": null,
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "waves_world_profile_context_waves_bool",
+      "json_pointer": "/world/profile/context/waves",
+      "replacement_type": "bool",
+      "replacement": false,
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "waves_world_profile_context_waves_string",
+      "json_pointer": "/world/profile/context/waves",
+      "replacement_type": "string",
+      "replacement": "0",
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "waves_world_profile_context_waves_array",
+      "json_pointer": "/world/profile/context/waves",
+      "replacement_type": "array",
+      "replacement": [],
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "waves_world_profile_context_waves_dictionary",
+      "json_pointer": "/world/profile/context/waves",
+      "replacement_type": "dictionary",
+      "replacement": {},
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "waves_world_profile_context_waves_wrong_integer",
+      "json_pointer": "/world/profile/context/waves",
+      "replacement_type": "wrong_integer",
+      "replacement": 1,
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "waves_world_profile_context_waves_fractional",
+      "json_pointer": "/world/profile/context/waves",
+      "replacement_type": "fractional",
+      "replacement": 0.5,
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "string_schema_empty",
+      "json_pointer": "/schema",
+      "replacement_type": "string",
+      "replacement": "",
+      "expected_code": "SLOT_SCHEMA",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true,
+      "original_unknown_string_rejection_preserved": true
+    },
+    {
+      "id": "string_schema_unsupported",
+      "json_pointer": "/schema",
+      "replacement_type": "string",
+      "replacement": "unsupported_identity_v26",
+      "expected_code": "SLOT_SCHEMA",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true,
+      "original_unknown_string_rejection_preserved": true
+    },
+    {
+      "id": "string_context_mode_empty",
+      "json_pointer": "/context/mode",
+      "replacement_type": "string",
+      "replacement": "",
+      "expected_code": "SLOT_CONTEXT",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true,
+      "original_unknown_string_rejection_preserved": true
+    },
+    {
+      "id": "string_context_mode_unsupported",
+      "json_pointer": "/context/mode",
+      "replacement_type": "string",
+      "replacement": "unsupported_identity_v26",
+      "expected_code": "SLOT_CONTEXT",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true,
+      "original_unknown_string_rejection_preserved": true
+    },
+    {
+      "id": "string_context_level_id_empty",
+      "json_pointer": "/context/level_id",
+      "replacement_type": "string",
+      "replacement": "",
+      "expected_code": "SLOT_CONTEXT",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true,
+      "original_unknown_string_rejection_preserved": true
+    },
+    {
+      "id": "string_context_level_id_unsupported",
+      "json_pointer": "/context/level_id",
+      "replacement_type": "string",
+      "replacement": "unsupported_identity_v26",
+      "expected_code": "SLOT_CONTEXT",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true,
+      "original_unknown_string_rejection_preserved": true
+    },
+    {
+      "id": "string_world_schema_empty",
+      "json_pointer": "/world/schema",
+      "replacement_type": "string",
+      "replacement": "",
+      "expected_code": "SLOT_WORLD_IDENTITY",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true,
+      "original_unknown_string_rejection_preserved": true
+    },
+    {
+      "id": "string_world_schema_unsupported",
+      "json_pointer": "/world/schema",
+      "replacement_type": "string",
+      "replacement": "unsupported_identity_v26",
+      "expected_code": "SLOT_WORLD_IDENTITY",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true,
+      "original_unknown_string_rejection_preserved": true
+    },
+    {
+      "id": "string_world_profile_schema_empty",
+      "json_pointer": "/world/profile/schema",
+      "replacement_type": "string",
+      "replacement": "",
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true,
+      "original_unknown_string_rejection_preserved": true
+    },
+    {
+      "id": "string_world_profile_schema_unsupported",
+      "json_pointer": "/world/profile/schema",
+      "replacement_type": "string",
+      "replacement": "unsupported_identity_v26",
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true,
+      "original_unknown_string_rejection_preserved": true
+    },
+    {
+      "id": "string_world_profile_id_empty",
+      "json_pointer": "/world/profile/id",
+      "replacement_type": "string",
+      "replacement": "",
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true,
+      "original_unknown_string_rejection_preserved": true
+    },
+    {
+      "id": "string_world_profile_id_unsupported",
+      "json_pointer": "/world/profile/id",
+      "replacement_type": "string",
+      "replacement": "unsupported_identity_v26",
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true,
+      "original_unknown_string_rejection_preserved": true
+    },
+    {
+      "id": "string_world_profile_context_mode_empty",
+      "json_pointer": "/world/profile/context/mode",
+      "replacement_type": "string",
+      "replacement": "",
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true,
+      "original_unknown_string_rejection_preserved": true
+    },
+    {
+      "id": "string_world_profile_context_mode_unsupported",
+      "json_pointer": "/world/profile/context/mode",
+      "replacement_type": "string",
+      "replacement": "unsupported_identity_v26",
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true,
+      "original_unknown_string_rejection_preserved": true
+    },
+    {
+      "id": "string_world_profile_context_level_id_empty",
+      "json_pointer": "/world/profile/context/level_id",
+      "replacement_type": "string",
+      "replacement": "",
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true,
+      "original_unknown_string_rejection_preserved": true
+    },
+    {
+      "id": "string_world_profile_context_level_id_unsupported",
+      "json_pointer": "/world/profile/context/level_id",
+      "replacement_type": "string",
+      "replacement": "unsupported_identity_v26",
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true,
+      "original_unknown_string_rejection_preserved": true
+    },
+    {
+      "id": "string_binding_kind_empty",
+      "json_pointer": "/binding/kind",
+      "replacement_type": "string",
+      "replacement": "",
+      "expected_code": "STEAM_BINDING_FIELDS",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true,
+      "original_unknown_string_rejection_preserved": true
+    },
+    {
+      "id": "string_binding_kind_unsupported",
+      "json_pointer": "/binding/kind",
+      "replacement_type": "string",
+      "replacement": "unsupported_identity_v26",
+      "expected_code": "STEAM_BINDING_FIELDS",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true,
+      "original_unknown_string_rejection_preserved": true
+    },
+    {
+      "id": "missing_schema",
+      "json_pointer": "/schema",
+      "mutation": "remove_key",
+      "expected_code": "SLOT_FIELDS",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "missing_context_mode",
+      "json_pointer": "/context/mode",
+      "mutation": "remove_key",
+      "expected_code": "SLOT_CONTEXT",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "missing_context_level_id",
+      "json_pointer": "/context/level_id",
+      "mutation": "remove_key",
+      "expected_code": "SLOT_CONTEXT",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "missing_context_waves",
+      "json_pointer": "/context/waves",
+      "mutation": "remove_key",
+      "expected_code": "SLOT_CONTEXT",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "missing_world_schema",
+      "json_pointer": "/world/schema",
+      "mutation": "remove_key",
+      "expected_code": "SLOT_WORLD_FIELDS",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "missing_world_profile_schema",
+      "json_pointer": "/world/profile/schema",
+      "mutation": "remove_key",
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "missing_world_profile_id",
+      "json_pointer": "/world/profile/id",
+      "mutation": "remove_key",
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "missing_world_profile_context",
+      "json_pointer": "/world/profile/context",
+      "mutation": "remove_key",
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "missing_world_profile_context_mode",
+      "json_pointer": "/world/profile/context/mode",
+      "mutation": "remove_key",
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "missing_world_profile_context_level_id",
+      "json_pointer": "/world/profile/context/level_id",
+      "mutation": "remove_key",
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "missing_world_profile_context_waves",
+      "json_pointer": "/world/profile/context/waves",
+      "mutation": "remove_key",
+      "expected_code": "SLOT_WORLD_PROFILE",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    },
+    {
+      "id": "missing_binding_kind",
+      "json_pointer": "/binding/kind",
+      "mutation": "remove_key",
+      "expected_code": "STEAM_BINDING_FIELDS",
+      "routes": [
+        "_validate_document(native_source_base)",
+        "_validate_json_document(json_base)"
+      ],
+      "single_leaf": true,
+      "must_return_dictionary": true,
+      "must_ok_false": true,
+      "must_no_script_error": true,
+      "must_input_strictly_unchanged": true
+    }
+  ],
+  "positive_cases": [
+    {
+      "id": "actual_pending_json_identity",
+      "input": "json_base",
+      "route": "_validate_json_document",
+      "expected": "ok=true/document original canonical payload-equivalent after existing bounded ownership normalization; no input change",
+      "scope": "actual pending document validation only; historical failed full save remains unqualified"
+    },
+    {
+      "id": "actual_pending_native_source_identity",
+      "input": "native_source_base",
+      "route": "_validate_document",
+      "expected": "ok=true; document exactly original successful source model; no new type conversions",
+      "scope": "source DTO validation only, not live restore"
+    },
+    {
+      "id": "campaign_context_waves_float_zero_preserved",
+      "input": "native_source_base and json_base, two independent single-leaf runs each for slot.context.waves and world.profile.context.waves",
+      "replacement": 0.0,
+      "routes": [
+        "_validate_document",
+        "_validate_json_document"
+      ],
+      "expected": "document validators accept original INT/FLOAT zero rule; canonical _decode still rejects any noncanonical payload bytes where normalization changes textual 0.0 to 0"
+    },
+    {
+      "id": "FaultSlot_custom_two_field_model",
+      "input": "original tools/owned_slot_retry_qa.gd FaultSlot original generation/value schema-less document",
+      "route": "original full owned_slot_retry_qa native suite",
+      "expected": "all original checks pass; no edited assertions/minimum-only count",
+      "scope": "preserve base-hook subclass dispatch; custom data fallback calls overridden _validate_document"
+    },
+    {
+      "id": "canonical_unchanged_actual_record",
+      "input": "actual payload reconstructed through original writer canonical JSON and original _encode model in private profile",
+      "route": "original Snapshot _decode",
+      "expected": "exact hash/canonical checks preserved; bad envelope/payload hashes/noncanonical bytes still fail original codes",
+      "scope": "new QA proposal required; do not claim old failed pending file was a valid record"
+    },
+    {
+      "id": "current_classic_whole_slot",
+      "input": "future actual current native classic complete slot fixture with pinned record/profile identity",
+      "routes": [
+        "_validate_document",
+        "_validate_json_document",
+        "original Snapshot _decode"
+      ],
+      "expected": "original exact current schema/context/sections pass; fixed INT/FLOAT30 document rule preserved and full canonical model unchanged",
+      "scope": "not available from current campaign pending payload; requires separate actual native capture/qualified current fixture, no relabeling old Scenery-only fixture"
+    }
+  ],
+  "classic_branch_obligations": {
+    "must_use_current_valid_classic_slot_fixture": "Capture a fresh original native classic slot/private profile or reuse actual current classic complete canonical record with pinned provenance; historical old-schema component is not a current whole-slot positive.",
+    "negative_single_leaves": [
+      "schema",
+      "context.mode",
+      "context.level_id",
+      "context.waves",
+      "world.schema",
+      "binding.kind"
+    ],
+    "exact_codes": {
+      "schema": "SLOT_SCHEMA",
+      "context.mode": "SLOT_CONTEXT",
+      "context.level_id": "SLOT_CONTEXT",
+      "context.waves": "SLOT_CONTEXT",
+      "world.schema": "SLOT_WORLD_IDENTITY",
+      "binding.kind": "SLOT_BINDING_TYPE"
+    },
+    "types_per_string_leaf": [
+      [
+        "nil",
+        null
+      ],
+      [
+        "bool",
+        false
+      ],
+      [
+        "int",
+        7
+      ],
+      [
+        "float",
+        1.5
+      ],
+      [
+        "array",
+        []
+      ],
+      [
+        "dictionary",
+        {}
+      ]
+    ],
+    "scope": "Same two Slot routes on complete valid classic fixture. Pending campaign data must not be relabeled as actual classic gameplay."
+  },
+  "limits": [
+    "No native harness/parse/execution in v26 proposal. Expected codes are source-derived obligations, not observed native passes.",
+    "Profiles.normalize_context already guards Variant context. v26 duplicates those exact accepted types at Slot entry; it adds no new context fields or profile IDs.",
+    "Binding kind nonstring gets new SLOT_BINDING_TYPE; unknown String continues original LocalRun/LocalLifecycle routing/refusal.",
+    "Profile token, deep Codec/business sections, map schema validators and other Snapshot subclasses are unchanged. This does not prove arbitrary DTOs universally avoid SCRIPT ERROR."
+  ]
+}

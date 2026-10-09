@@ -1,0 +1,53 @@
+{
+  "schema": "campaign_natural_callback_user_text_preliminary_independent_review_v1",
+  "reviewed_at_utc": "2026-10-09T02:52:50.092822+00:00",
+  "independent": true,
+  "source_only": true,
+  "limited_delta_only": true,
+  "static_api_closure_passed": true,
+  "approved_stages": [],
+  "source_spec_file_sha256": "f723fba50a421723bb2e790f1c8670d09776e3faf8b73937cc16ce7a361ff174",
+  "review_scope_sha256": "688af9765f0aac0b23329b40575c7bba249e84c5f1679f9f0221d4a7bdacfb6d",
+  "packet_helper_pin": {
+    "path": "D:\\AI\u9879\u76ee\\\u6c34\u6d52\\\u5f00\u53d1\u5de5\u7a0b\\tools\\campaign_callback_packet_evidence_v3.py",
+    "bytes": 10933,
+    "sha256": "f7a6da74c5ed38b13ca27b72bbe6eacecde941502dec3e89fa0adc6e48b198e4"
+  },
+  "natural_consumer_pin": {
+    "path": "D:\\AI\u9879\u76ee\\\u6c34\u6d52\\\u5f00\u53d1\u5de5\u7a0b\\tools\\campaign_natural_callback_evidence_v3.py",
+    "bytes": 23396,
+    "sha256": "216ed821a08bdb1cd6e55c004f48941b176d12000c80f42ca3025d376c9a041f"
+  },
+  "verified_source_counts": {
+    "unique_pins": 187,
+    "all_pinned_local_python_import_edges": 377,
+    "missing_import_pins": 0,
+    "exact_new_snapshots": 2,
+    "original_recipe_pins_preserved": 175
+  },
+  "confirmed_findings": [],
+  "resolved_issue": "Natural callback counterpart of CLOUD-NATIVE-USER-TEXT-001: original OS.get_user_data_dir protocol text is preserved without Path-to-str reconstruction.",
+  "confirmed_limited_conclusions": [
+    "Packet replay V3 adds only the raw nonempty-string API guard and passes that original string directly to the decoder. Original event/SHA/index/frame/send ordering and ORDER-001 refused-prefix/tail reconstruction remain unchanged.",
+    "Natural consumer V3 preserves report.user_directory as native_user for exact driver-ready comparison and packet replay. A separate Path continues absolute/private-user containment, no_links, physical CFG/lifecycle IO and same-user checks across processes.",
+    "All other consumer function ASTs are exact V2. Actual retained Popen/step/PID/nonce/zero-exit/errors, full fifteen-field identity, original full report, CFG, three-generation lifecycle and noReplay conditions retain their original predicates.",
+    "Source contracts 80 first/56 preterminal/21 restart checks remain unchanged. These counts are source contracts, not native results.",
+    "All 187 pins and 377 all-pinned local import edges were independently read back with no missing pins; both new snapshots are exact and all original 175 producer-recipe pins preserve bytes/SHA."
+  ],
+  "unverified": [
+    "No complete consumer validate, actual retained Popen, packet socket, Godot, CFG parser or native phase was executed.",
+    "Parent 19 synthetic packet fixtures are primitive representation/order evidence, not complete native pipeline proof; no new matrix or independent rerun of that suite was performed.",
+    "Producer still references the old libraries and needs an exact successor binding. A successful complete V12 prior and new full consumer/phase admission remain unestablished.",
+    "Original19, SDK and overall qualification remain unproven; this delta receipt cannot replace executable admission."
+  ],
+  "synthetic_suite_independently_rerun": false,
+  "actual_complete_consumer_executed": false,
+  "actual_Popen_or_socket_constructed": false,
+  "native_started": false,
+  "producer_rebound": false,
+  "successful_prior_bound": false,
+  "original19_qualified": false,
+  "SDK_reward_once_qualified": false,
+  "overall_goal_qualified": false,
+  "scope_note": "Finite natural-callback raw-user-text delta only; prior source and limited reviews remain unchanged. No execution stage approved."
+}

@@ -1,0 +1,58 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/shi_qian_wounded_20261005/walk_a_geometry_ne_v4.png" id="shi_qian_walk_a_geometry_ne_v4"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/shi_qian_wounded_20261005/passing_a_geometry_ne_v4.png" id="shi_qian_passing_a_geometry_ne_v4"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/shi_qian_wounded_20261005/walk_b_geometry_ne_v4.png" id="shi_qian_walk_b_geometry_ne_v4"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/shi_qian_wounded_20261005/passing_b_geometry_ne_v4.png" id="shi_qian_passing_b_geometry_ne_v4"]
+
+[sub_resource type="AtlasTexture" id="walk_a_ne"]
+atlas = ExtResource("shi_qian_walk_a_geometry_ne_v4")
+region = Rect2(0, 0, 1254, 1254)
+margin = Rect2(0, 0, 0, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-76.0, -144.72)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.883577
+
+[sub_resource type="AtlasTexture" id="passing_a_ne"]
+atlas = ExtResource("shi_qian_passing_a_geometry_ne_v4")
+region = Rect2(0, 0, 1254, 1254)
+margin = Rect2(0, 0, 0, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-24.5, -99.72)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.931543
+
+[sub_resource type="AtlasTexture" id="walk_b_ne"]
+atlas = ExtResource("shi_qian_walk_b_geometry_ne_v4")
+region = Rect2(0, 0, 1254, 1254)
+margin = Rect2(0, 0, 0, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-1.5, -149.72)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.881189
+
+[sub_resource type="AtlasTexture" id="passing_b_ne"]
+atlas = ExtResource("shi_qian_passing_b_geometry_ne_v4")
+region = Rect2(0, 0, 1254, 1254)
+margin = Rect2(0, 0, 0, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-28.0, -154.72)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.884376
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("walk_a_ne")},
+{"duration": 1.0, "texture": SubResource("passing_a_ne")},
+{"duration": 1.0, "texture": SubResource("walk_b_ne")},
+{"duration": 1.0, "texture": SubResource("passing_b_ne")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

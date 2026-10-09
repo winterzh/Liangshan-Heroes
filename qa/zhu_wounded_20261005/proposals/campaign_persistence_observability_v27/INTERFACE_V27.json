@@ -1,0 +1,84 @@
+{
+  "schema": "campaign_persistence_observability_interface_v27",
+  "stage": "external_source_candidate_not_applied_not_native",
+  "source_pins": [
+    {
+      "path": "E:\\ChatGPT\\campaign_persistence_observability_v27_proposal\\original\\scripts\\campaign.gd",
+      "bytes": 14689,
+      "sha256": "db50f6d1c97ca26746f5fbe576487390af5d81f4af708c289155f23cca38ff02"
+    },
+    {
+      "path": "E:\\ChatGPT\\campaign_persistence_observability_v27_proposal\\original\\scripts\\battle.gd",
+      "bytes": 789563,
+      "sha256": "f020f434f755950d41dae9320bcdcb388359835b714f83bbd4592300514172b1"
+    },
+    {
+      "path": "E:\\ChatGPT\\campaign_persistence_observability_v27_proposal\\proposed\\scripts\\campaign.gd",
+      "bytes": 21958,
+      "sha256": "ff819e38b6a6516feb17e9880b033171ea17cb10937f7004ffd9be8009e71f00"
+    },
+    {
+      "path": "E:\\ChatGPT\\campaign_persistence_observability_v27_proposal\\proposed\\scripts\\battle.gd",
+      "bytes": 790278,
+      "sha256": "6d9ea00b2fe65341af24378507f399456cc3a71bcad582093580b41d514ca381"
+    }
+  ],
+  "public_result_contract": {
+    "accepted": "Input/current-run result logically accepted; NOT persistence. May be true on real write/readback failure.",
+    "memory_applied": "Valid result installed in Campaign memory only on actual verified write or QA suppression. False on rejected input/real failure.",
+    "new_story_seal": "Existing memory first-seal meaning; QA retained. False if valid result could not be applied after real failure.",
+    "durable_new_story_seal": "new_story_seal AND observed persisted; local ConfigFile readback only, NOT crash/fsync guarantee.",
+    "persisted": "Actual cfg.save==OK + entirely fresh cfg.load==OK + full section/key/Variant serialization semantic match + file SHA stable across read.",
+    "suppressed": "CAMPAIGN_QA=1 early path: no FileAccess/ConfigFile save/load/cloud call; persisted=false.",
+    "save_receipt": "Dictionary campaign_cfg_save_receipt_v27, including real prior/write/read errors, attempted flags, disk_state_unconfirmed, verified file SHA and Cloud callback observations."
+  },
+  "receipt_contract": {
+    "ok": "Verified real local write OR allowed QA memory-only suppression; old _save bool returns this, not persisted.",
+    "disk_state_unconfirmed": "True after any attempted write that did not complete verified fresh readback; disk may already contain candidate. No rollback/retry/crash-safety claim.",
+    "retry_safe": false,
+    "readback_semantics": "Exact section/key sets plus typeof and fixed-safe-name per-value ConfigFile canonical text. NaN/-zero/math/Packed/Typed variants use ConfigFile serialization semantics, not IEEE bits.",
+    "supported_values": "ConfigFile-readable data Variant types, including built-in typed containers/math/Packed/StringName/NaN; finite acyclic Dictionary/Array tree at depth<=128.",
+    "controlled_before_write_refusal": "Any Object/RID/Callable/Signal, object/script-typed container, cycle or container depth>128 refuses before save or canonical probe, preserving existing file from this attempt.",
+    "cloud_dirty_requested": "mark_dirty requested after verified local cfg and candidate live memory applied.",
+    "cloud_dirty_callback_invoked": "Actual invocation only; may immediately return during _applying.",
+    "cloud_dirty_observed": null,
+    "cloud_upload_verified": false,
+    "crash_recovery_qualified": false
+  },
+  "legacy_callers": [
+    {
+      "call": "record_level_result/on_level_won",
+      "change": "Valid result computed with byteexact same-run best algorithm; rejected/failed actual save does not mutate records/unlocked. QA still mutates memory and old memory new_story_seal."
+    },
+    {
+      "call": "save_prefs -> _save bool ignored",
+      "change": "Signature/void behavior retained; stricter prior-load/readback failures can now return false internally. No new player-visible error/retry UI implemented; _last_save_receipt contains outcome."
+    },
+    {
+      "call": "apply_cloud_progress -> _save bool -> SteamCloud._apply_profile",
+      "change": "Existing method/body byteexact; QA bool remains true. Real save/readback failure returns false. Existing pre-save cloud-memory replacement is retained and is NOT transactionally rolled back by this proposal."
+    },
+    {
+      "call": "SteamCloud.mark_dirty",
+      "change": "Only after verified local readback; result records callback requested/invoked, not dirty state/upload. Record result commits live Campaign before callback so immediate _remember_local sees candidate."
+    },
+    {
+      "call": "Battle._complete_end",
+      "change": "Copies accepted/memory/persisted/suppressed/durable/save_receipt only. SteamService.settle, victory and mission result snapshot lines are original bytes."
+    }
+  ],
+  "outside_scope": [
+    "Full gen2 lifecycle -> cfg -> ack transaction/restart/crash recovery",
+    "fsync/power-loss durability or atomic file replacement",
+    "Cloud upload or account ownership recovery",
+    "Player failure visibility/retry/pending HUD flow: HUD currently ignores new receipt",
+    "Public continue entry/natural victory/source6 qualification/Steam release/Android",
+    "Native GDScript parser/runtime and ConfigFile disk/fault QA not run"
+  ],
+  "overall_qualified": false,
+  "api_sources": [
+    "https://docs.godotengine.org/en/stable/classes/class_configfile.html",
+    "https://raw.githubusercontent.com/godotengine/godot/4.6.3-stable/core/io/config_file.cpp",
+    "https://raw.githubusercontent.com/godotengine/godot/4.6.3-stable/core/variant/variant_parser.cpp"
+  ]
+}

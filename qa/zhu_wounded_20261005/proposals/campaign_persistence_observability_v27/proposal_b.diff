@@ -1,0 +1,243 @@
+--- original/scripts/campaign.gd
++++ proposed_b/scripts/campaign.gd
+@@ -28,6 +28,7 @@
+ var current := 0
+ var unlocked := 1
+ var records: Dictionary = {} # stable level id -> best base clear / same-run original-story result
++var _last_save_receipt: Dictionary = {} # Local observed CFG write/readback; never a crash/Cloud acknowledgement.
+ var cloud_owner := "" # Owner of the shared local progress; never relabel another account's progress.
+ var skirmish := false       # 启动自由「遭遇战」模式而非战役关卡
+ var skirmish_ai := false    # 启动「AI 对战」1v1 模式
+@@ -161,21 +162,32 @@
+ 
+ func on_level_won(result: Dictionary = {}, context: Dictionary = {}) -> Dictionary:
+ 	if context.get("mode", "custom") != "campaign":
+-		return {"accepted":false,"new_story_seal":false}
++		return _rejected_campaign_result("CAMPAIGN_CONTEXT_REQUIRED")
+ 	var level_id := String(context.get("level_id", ""))
+ 	var index := index_for_id(level_id)
+ 	if index < 0:
+-		return {"accepted":false,"new_story_seal":false}
+-	unlocked = maxi(unlocked, index + 2)
++		return _rejected_campaign_result("CAMPAIGN_LEVEL_REQUIRED")
+ 	if result.is_empty():
+ 		result = {"core_cleared":true,"story_complete":false,"story_done":0,"story_total":0,
+ 			"done_ids":[],"contract_version":1}
+-	return record_level_result(level_id, result)
++	# Stage unlock with the record; rejected input or real save/readback failure
++	# must not advance live progress. QA still applies memory-only progress.
++	return _record_level_result_with_progress(level_id, result, maxi(unlocked, index + 2))
+ 
+ 
+ func record_level_result(level_id: String, result: Dictionary) -> Dictionary:
++	return _record_level_result_with_progress(level_id, result, unlocked)
++
++
++func _rejected_campaign_result(code: String) -> Dictionary:
++	return {"accepted":false,"memory_applied":false,"new_story_seal":false,
++		"durable_new_story_seal":false,"persisted":false,"suppressed":false,
++		"save_receipt":_save_receipt_result(code, false, false, false)}
++
++
++func _record_level_result_with_progress(level_id: String, result: Dictionary, next_unlocked: int) -> Dictionary:
+ 	if index_for_id(level_id) < 0 or not bool(result.get("core_cleared", false)):
+-		return {"accepted":false,"new_story_seal":false}
++		return _rejected_campaign_result("CAMPAIGN_RESULT_NOT_ACCEPTED")
+ 	var old: Dictionary = _normalize_record(records.get(level_id, {}))
+ 	var record := old.duplicate(true)
+ 	var was_story_complete := bool(old.story_complete)
+@@ -192,11 +204,25 @@
+ 		record.best_done = run_done
+ 		record.story_total = run_total
+ 		record.best_goal_ids = run_ids
+-	records[level_id] = _normalize_record(record)
+-	_save()
+-	var response: Dictionary = records[level_id].duplicate(true)
++	var candidate_records: Dictionary = records.duplicate(true)
++	candidate_records[level_id] = _normalize_record(record)
++	var saved: Dictionary = _write_config_receipt(next_unlocked, candidate_records)
++	# accepted describes the valid same-run result, not disk persistence. Real
++	# failures retain old live records/unlocked; the file may already have changed.
++	var memory_applied: bool = bool(saved.ok)
++	if memory_applied:
++		records = candidate_records
++		unlocked = next_unlocked
++	if bool(saved.persisted):
++		_request_cloud_dirty(saved)
++	var response: Dictionary = candidate_records[level_id].duplicate(true)
+ 	response.accepted = true
+-	response.new_story_seal = run_complete and not was_story_complete
++	response.memory_applied = memory_applied
++	response.new_story_seal = memory_applied and run_complete and not was_story_complete
++	response.durable_new_story_seal = response.new_story_seal and bool(saved.persisted)
++	response.persisted = bool(saved.persisted)
++	response.suppressed = bool(saved.suppressed)
++	response.save_receipt = saved.duplicate(true)
+ 	return response
+ 
+ 
+@@ -253,15 +279,95 @@
+ 
+ 
+ func _save() -> bool:
++	# Existing bool callers keep QA success and receive false for actual write or
++	# fresh-readback failure. persisted alone would break QA Cloud attach semantics.
++	var receipt: Dictionary = _write_config_receipt(unlocked, records)
++	if bool(receipt.persisted): _request_cloud_dirty(receipt)
++	return bool(receipt.ok)
++
++
++func _save_receipt_result(code: String, ok: bool, persisted: bool, suppressed: bool, observed: Dictionary = {}) -> Dictionary:
++	var receipt := {"schema":"campaign_cfg_save_receipt_v27","code":code,"ok":ok,
++		"persisted":persisted,"suppressed":suppressed,"prior_load_attempted":false,
++		"prior_load_error":null,"write_attempted":false,"write_error":null,
++		"readback_attempted":false,"readback_error":null,"readback_failed":false,
++		"disk_state_unconfirmed":false,"file_sha256":"","cloud_dirty_requested":false,
++		"cloud_dirty_callback_invoked":false,"cloud_dirty_observed":null,
++		"cloud_upload_verified":false,"retry_safe":false,"crash_recovery_qualified":false,
++		"readback_semantics":"ConfigFile Variant serialization semantics; not IEEE bits, object identity or power-loss durability"}
++	for key in observed:
++		receipt[key] = observed[key]
++	_last_save_receipt = receipt.duplicate(true)
++	return receipt
++
++
++func _cfg_value_supported(value: Variant, depth := 0, ancestors: Array = []) -> bool:
++	# Refuse unsupported identities/cycles/depth BEFORE writing or probing the
++	# writer, whose fallback can otherwise emit ERROR/null and look canonical.
++	if depth > 128: return false
++	var kind := typeof(value)
++	if kind not in [TYPE_DICTIONARY, TYPE_ARRAY]:
++		# Fixed 4.6.3 data-Variant leaves. Identity-bearing or future enum kinds
++		# never gain write permission through a catch-all default.
++		return kind in [TYPE_NIL, TYPE_BOOL, TYPE_INT, TYPE_FLOAT, TYPE_STRING,
++			TYPE_VECTOR2, TYPE_VECTOR2I, TYPE_RECT2, TYPE_RECT2I, TYPE_VECTOR3, TYPE_VECTOR3I,
++			TYPE_TRANSFORM2D, TYPE_VECTOR4, TYPE_VECTOR4I, TYPE_PLANE, TYPE_QUATERNION,
++			TYPE_AABB, TYPE_BASIS, TYPE_TRANSFORM3D, TYPE_PROJECTION, TYPE_COLOR,
++			TYPE_STRING_NAME, TYPE_NODE_PATH, TYPE_PACKED_BYTE_ARRAY, TYPE_PACKED_INT32_ARRAY,
++			TYPE_PACKED_INT64_ARRAY, TYPE_PACKED_FLOAT32_ARRAY, TYPE_PACKED_FLOAT64_ARRAY,
++			TYPE_PACKED_STRING_ARRAY, TYPE_PACKED_VECTOR2_ARRAY, TYPE_PACKED_VECTOR3_ARRAY,
++			TYPE_PACKED_COLOR_ARRAY, TYPE_PACKED_VECTOR4_ARRAY]
++	for previous in ancestors:
++		if is_same(value, previous): return false
++	var nested: Array = ancestors.duplicate()
++	nested.append(value)
++	if kind == TYPE_ARRAY:
++		if value.get_typed_builtin() == TYPE_OBJECT or value.get_typed_script() != null: return false
++		for item in value:
++			if not _cfg_value_supported(item, depth + 1, nested): return false
++	else:
++		if value.get_typed_key_builtin() == TYPE_OBJECT or value.get_typed_value_builtin() == TYPE_OBJECT: return false
++		if value.get_typed_key_script() != null or value.get_typed_value_script() != null: return false
++		for key in value:
++			if not _cfg_value_supported(key, depth + 1, nested) or not _cfg_value_supported(value[key], depth + 1, nested): return false
++	return true
++
++
++func _cfg_semantics(cfg: ConfigFile) -> Dictionary:
++	var sections: Dictionary = {}
++	for section in cfg.get_sections():
++		var keys: Dictionary = {}
++		for key in cfg.get_section_keys(section):
++			var value: Variant = cfg.get_value(section, key)
++			if not _cfg_value_supported(value): return {"ok":false,"code":"CAMPAIGN_CFG_UNSUPPORTED_VALUE"}
++			# Fixed safe probe names avoid whole-file encode_to_text differences in
++			# escaping legal unknown section names. No JSON or full IEEE comparison.
++			var probe := ConfigFile.new()
++			probe.set_value("value", "value", value)
++			keys[key] = {"variant_type":typeof(value),"canonical":probe.encode_to_text()}
++		sections[section] = keys
++	return {"ok":true,"sections":sections}
++
++
++func _write_config_receipt(next_unlocked: int, next_records: Dictionary) -> Dictionary:
+ 	if OS.get_environment("CAMPAIGN_QA") == "1":
+-		return true
++		return _save_receipt_result("CAMPAIGN_QA_SUPPRESSED", true, false, true)
+ 	var cfg := ConfigFile.new()
+-	# Preserve unknown sections/keys from prior or newer builds instead of
+-	# reconstructing campaign.cfg and silently discarding them.
+-	cfg.load(SAVE_PATH)
++	var existed: bool = FileAccess.file_exists(SAVE_PATH)
++	var prior_error: int = cfg.load(SAVE_PATH)
++	var observed := {"prior_load_attempted":true,"prior_load_error":prior_error}
++	# A bad/vanished prior file must not be rebuilt and lose unknown keys. Only
++	# a genuinely absent new file permits ERR_FILE_NOT_FOUND.
++	if prior_error != OK and not (prior_error == ERR_FILE_NOT_FOUND and not existed and not FileAccess.file_exists(SAVE_PATH)):
++		return _save_receipt_result("CAMPAIGN_CFG_PRIOR_LOAD_FAILED", false, false, false, observed)
++	# Validate every existing unknown value before any write. Unsupported object
++	# identity or structural cases leave the prior file untouched by this attempt.
++	var prior_semantics: Dictionary = _cfg_semantics(cfg)
++	if not prior_semantics.ok:
++		return _save_receipt_result(prior_semantics.code, false, false, false, observed)
+ 	cfg.set_value("progress", "schema", SAVE_SCHEMA)
+-	cfg.set_value("progress", "unlocked", unlocked)
+-	cfg.set_value("progress", "records", records)
++	cfg.set_value("progress", "unlocked", next_unlocked)
++	cfg.set_value("progress", "records", next_records)
+ 	cfg.set_value("progress", "owner", cloud_owner)
+ 	cfg.set_value("pref", "ai_difficulty", ai_difficulty)
+ 	cfg.set_value("pref", "victory_mode", victory_mode)
+@@ -271,12 +377,42 @@
+ 	cfg.set_value("pref", "hero_mult_touched", hero_mult_touched)
+ 	cfg.set_value("pref", "defense_rand_waves", defense_rand_waves)
+ 	cfg.set_value("pref", "defense_interval", defense_interval)
+-	if cfg.save(SAVE_PATH) != OK:
+-		return false
++	var expected: Dictionary = _cfg_semantics(cfg)
++	if not expected.ok:
++		return _save_receipt_result(expected.code, false, false, false, observed)
++	observed.write_attempted = true
++	observed.write_error = cfg.save(SAVE_PATH)
++	observed.disk_state_unconfirmed = true
++	if observed.write_error != OK:
++		return _save_receipt_result("CAMPAIGN_CFG_WRITE_FAILED", false, false, false, observed)
++	var before_read_sha: String = FileAccess.get_sha256(SAVE_PATH)
++	var readback := ConfigFile.new() # Never reload into the old incremental object.
++	observed.readback_attempted = true
++	observed.readback_error = readback.load(SAVE_PATH)
++	if observed.readback_error != OK:
++		observed.readback_failed = true
++		return _save_receipt_result("CAMPAIGN_CFG_READBACK_FAILED", false, false, false, observed)
++	var actual: Dictionary = _cfg_semantics(readback)
++	var after_read_sha: String = FileAccess.get_sha256(SAVE_PATH)
++	if not actual.ok or before_read_sha.length() != 64 or before_read_sha != after_read_sha or actual.sections != expected.sections:
++		observed.readback_failed = true
++		return _save_receipt_result("CAMPAIGN_CFG_READBACK_MISMATCH", false, false, false, observed)
++	observed.disk_state_unconfirmed = false
++	observed.file_sha256 = after_read_sha
++	return _save_receipt_result("CAMPAIGN_CFG_READBACK_VERIFIED", true, true, false, observed)
++
++
++func _request_cloud_dirty(receipt: Dictionary) -> void:
++	if not bool(receipt.get("ok", false)) or not bool(receipt.get("persisted", false)): return
++	# record_level_result publishes candidate memory BEFORE this callback:
++	# mark_dirty may synchronously build an account mirror from live Campaign.
+ 	var cloud := get_node_or_null("/root/SteamCloud")
+ 	if cloud != null:
++		receipt.cloud_dirty_requested = true
+ 		cloud.mark_dirty()
+-	return true
++		receipt.cloud_dirty_callback_invoked = true
++	# Invocation may be suppressed during Cloud apply, and is not an upload ack.
++	_last_save_receipt = receipt.duplicate(true)
+ 
+ 
+ ## SteamCloud validates the complete profile first. Replacement is intentional:
+--- original/scripts/battle.gd
++++ proposed_b/scripts/battle.gd
+@@ -4490,6 +4490,14 @@
+ 	if camp != null and victory and _official_context.get("mode") == "campaign":
+ 		var saved_result: Dictionary = camp.on_level_won(campaign_result, _official_context)
+ 		campaign_result["new_story_seal"] = bool(saved_result.get("new_story_seal", false))
++		# Save acceptance, observed persistence and QA suppression are separate.
++		# The same-run victory/Steam settlement below is unchanged by disk failure.
++		campaign_result["campaign_result_accepted"] = bool(saved_result.get("accepted", false))
++		campaign_result["campaign_memory_applied"] = bool(saved_result.get("memory_applied", false))
++		campaign_result["campaign_persisted"] = bool(saved_result.get("persisted", false))
++		campaign_result["campaign_save_suppressed"] = bool(saved_result.get("suppressed", false))
++		campaign_result["durable_new_story_seal"] = bool(saved_result.get("durable_new_story_seal", false))
++		campaign_result["campaign_save_receipt"] = saved_result.get("save_receipt", {}).duplicate(true)
+ 	SteamService.settle(_steam_run_id, victory, campaign_result)
+ 	_update_steam_presence()
+ 	var report := _hero_end_tally()

@@ -1,0 +1,39 @@
+{
+  "schema": "daming_retreat_negative_implementation_matrix_v25",
+  "implemented": false,
+  "api_review_complete": false,
+  "status": "template_only_missing_two_native_implementations_and_consumer_API_review",
+  "covered_categories": ["refs_queue", "actual_stop_fields", "other_actor_live_root_active", "selection_and_caster", "five_record_identity_primitive_guards"],
+  "required_routes": ["source", "json"],
+  "pins": [],
+  "harnesses": [],
+  "descriptor_contract": {
+    "id": "safe lowercase unique path component",
+    "implemented": "actual reviewed source implementation exists, boolean true only after completion",
+    "api_review_complete": "consumer/report adapter source has been reviewed, boolean true only then",
+    "consumer_schema": "v25_producer_negative_descriptor_v1",
+    "gd": "absolute reviewed GD path included in pins",
+    "scene": "absolute reviewed scene path included in pins",
+    "static_review": "absolute static API and implementation audit receipt included in pins",
+    "report_schema": "exact actual native report schema",
+    "terminal_marker": "exact native successful terminal marker",
+    "env": "mapping actual fixed uppercase env key to one fixed value name",
+    "env_allowed_values": ["profile", "report", "fixtures", "fixtures_sha256", "nonce", "content_version", "engine_sha256", "first_role", "variant"],
+    "required_checks": "nonempty exact native mandatory check labels",
+    "expected_flags": "nonempty exact scope/zero-world-allocation typed fields",
+    "required_rows": "complete distinct {id,route,path,code} rows, covering source and json"
+  },
+  "report_contract": {
+    "schema": "descriptor report_schema",
+    "pid": "actual owned child PID",
+    "nonce": "actual producer fresh nonce",
+    "passed": "boolean true only if every required implemented check passed",
+    "checks": "nonempty [{label,passed}] with every real row passed",
+    "trusted": "actual current runtime Provider {content_version,engine_binary_sha256}",
+    "rows": "complete required matrix [{id,route,path,code,passed,input_unchanged,zero_world_allocation}]",
+    "fixture_inputs": "exact five actual-A report/handoff/rawslot/fullpacket/fullworld {path,bytes,sha256} objects passed by producer",
+    "source_pins": "actual validator source [{path relative to project,sha256}], covering all six changed/added production paths",
+    "evidence": "nonempty immutable actual evidence files [{path,sha256}]"
+  },
+  "scope": "Template is not the active matrix and does not imply execution or qualification. If actual GD uses a different report shape, write and review a precise consumer adapter before setting consumer_schema or api_review_complete. Never rename fields in a fabricated report to claim pass."
+}

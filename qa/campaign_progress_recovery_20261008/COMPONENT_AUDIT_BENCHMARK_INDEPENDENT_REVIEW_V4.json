@@ -1,0 +1,114 @@
+{
+  "schema": "component_audit_benchmark_independent_review_v1",
+  "review_revision": 4,
+  "independent": true,
+  "reviewer": "office_full_review",
+  "reviewed_at": "2026-10-08T19:18:53.037116+00:00",
+  "producer_sha256": "e5f354b33e053ad0d312ea010597e83c1f104525eafd443265cfb3720f169914",
+  "probe_sha256": "64d196a8475d9d62f6254fc2a77ebf596e16a7d493a1b211bf03db984530229a",
+  "source_spec_sha256": "be100fc167020c0ccc54db40e0f1ebc0d69811af46fe7fde4f8db08ba7918b56",
+  "source_spec_file_sha256": "0134e4ba1d42dc40372b890e413f125babb111cee0e79b50e360bcbb0db8b612",
+  "producer_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\tools\\run_component_audit_benchmark_v4.py",
+    "bytes": 14173,
+    "sha256": "e5f354b33e053ad0d312ea010597e83c1f104525eafd443265cfb3720f169914"
+  },
+  "probe_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\tools\\campaign_component_audit_benchmark_v3.gd",
+    "bytes": 8012,
+    "sha256": "64d196a8475d9d62f6254fc2a77ebf596e16a7d493a1b211bf03db984530229a"
+  },
+  "source_spec_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\COMPONENT_AUDIT_BENCHMARK_SOURCE_SPEC_V4.json",
+    "bytes": 1145181,
+    "sha256": "0134e4ba1d42dc40372b890e413f125babb111cee0e79b50e360bcbb0db8b612"
+  },
+  "source_proof_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\component_audit_benchmark_executor_v4\\SOURCE_PROOF_V4.json",
+    "bytes": 7961,
+    "sha256": "eb4e5abf48475e52a0aa2eac66c83737e892d188c365012eb505235874e1b58c"
+  },
+  "previous_source_review_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\COMPONENT_AUDIT_BENCHMARK_INDEPENDENT_REVIEW_V3.json",
+    "bytes": 24130,
+    "sha256": "d4cfc5b3732e21a1f96cbd213df6f2554812db62696afb3a1cddf0fdf600336e"
+  },
+  "actual_previous_failure_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\ACTUAL_COMPONENT_AUDIT_BENCHMARK_FAILURE_V3.json",
+    "bytes": 2284,
+    "sha256": "cee1ed0f9105685ba8e7452663d15e6cc7a629d8e63006dfb743209425c95ca7"
+  },
+  "static_api_closure_passed": true,
+  "source_integrity_verified": true,
+  "local_import_closure_verified": true,
+  "actual_read_only_preflight_exact_sealed_spec": true,
+  "approved_stages": [
+    "read_only_component_audit_equivalence_and_cost_benchmark"
+  ],
+  "native_started": false,
+  "native_qualified": false,
+  "equivalence_benchmark_qualified": false,
+  "performance_benchmark_qualified": false,
+  "physical_write_cost_measured": false,
+  "matrix_runtime_speedup_qualified": false,
+  "component_matrix_qualified": false,
+  "full_chain_qualified": false,
+  "SDK_qualified": false,
+  "overall_goal_qualified": false,
+  "ABCD_qualified": false,
+  "negative52_qualified": false,
+  "original19_faults_qualified": false,
+  "checked_scope": {
+    "native_processes": 2,
+    "fixed_pins_verified": 68,
+    "runtime_unique_overlay_targets": 29,
+    "static_python_modules": 26,
+    "local_static_import_edges": 67,
+    "missing_local_import_pins": [],
+    "mandatory_observation_count": 31,
+    "mandatory_check_count": 219,
+    "old_A_is_read_only_data_only": true,
+    "old_profile_reuse_permitted": false,
+    "old_A_is_future_matrix_fixture": false
+  },
+  "exact_difference": {
+    "producer_changed_functions": [
+      "source_spec",
+      "__init__",
+      "validate"
+    ],
+    "producer_behavior_changes": "Probe, historical pins and schemas only; validate report schema only. Execute/main/ownership/custody/mandatory predicates unchanged.",
+    "GD_behavior_change_line": 41,
+    "GD_behavior_change": "Replace recursive parsed Dictionary equality with complete JSON.stringify(parsed pretty) == JSON.stringify(parsed compact), and parsed compact canonical bytes == JSON.stringify(full_audit). Report schema changes to v3.",
+    "R5_R6_audit_sources_and_current_production_combination_unchanged": true
+  },
+  "canonical_comparison_review": {
+    "all_original_fields_preserved": true,
+    "full_reference_comparison_added": true,
+    "ordered_array_content_preserved": true,
+    "existing_complete_old_cold_warm_typed_byte_and_IEEE_fingerprint_gates_exact": true,
+    "no_recursive_Dictionary_equality_in_changed_gate": true,
+    "detail": "The changed gate compares full serialized parsed audit trees to each other and to the full unindented reference; it does not sample fields, trim values or substitute a weaker hash-only check. The typed/IEEE representation already stores integer/StringName and IEEE bit identity explicitly, and the original old/new/warm typed JSON byte equality remains mandatory. The full reference comparison also rejects simultaneous failed/partial pretty and compact parses."
+  },
+  "actual_previous_failure": {
+    "archived_raw_files_verified": 4,
+    "archived_raw_bytes_verified": 6735084,
+    "cold_pid": 38336,
+    "cold_exit_code": 0,
+    "benchmark_pid": 37704,
+    "benchmark_exit_code": 1,
+    "benchmark_engine_errors": 42,
+    "terminal_and_lock_release_recorded": true,
+    "log_first_error": "ERROR: Max recursion reached at recursive_equal (core/variant/dictionary.cpp:278), _compare GDv2:41 from _run GDv2:84",
+    "equivalence_benchmark_qualified": false
+  },
+  "preserved_admission_boundaries": [
+    "Exact 63 previous pins plus current successor/history/failure pins; sealed spec recomputation matched all fields. The same current R12+Bai/private CoreContract runtime and native addons are installed and cold-frozen.",
+    "Fresh UUID/cold+benchmark profiles, normal QA-empty/Steam-disabled clock, natural idle60, serial own-PID/nonce/lease/unknown-child cleanup and complete source/all-terminal-log custody remain unchanged.",
+    "Both audit Nodes remain outside SceneTree and are freed. No Factory, gameplay tick, prepare/capture or disk Slot/CFG mutation is introduced.",
+    "Cold-empty, 256/257 String/StringName, 9000-unique/8192-cap/miss, shared-container aliases, all 22 raw sections/54 actual Unit payloads/complete Level, 219 mandatory checks and 31 observations remain exact.",
+    "CPU and pretty/compact serialization timings are observations only; no superiority assertion, physical-write cost claim or full matrix speedup qualification. Original failed V9 saved packet remains read-only pinned data."
+  ],
+  "findings": [],
+  "scope_limit": "Only static admission for a new isolated read-only component audit equivalence and CPU/serialization benchmark. Reviewer did not start Godot or run the benchmark. Prior V3 failure stays failed; this source approval is not actual benchmark success, complete matrix/full-chain acceptance, original19/UI/SDK or whole-goal qualification."
+}

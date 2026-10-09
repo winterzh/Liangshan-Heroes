@@ -1,0 +1,22 @@
+[gd_resource type="SpriteFrames" load_steps=3 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/yang_zhi_direction4_20261004/yang_hurt_nw_fixed.png" id="yang_hurt_nw_fixed"]
+
+[sub_resource type="AtlasTexture" id="hurt_nw"]
+atlas = ExtResource("yang_hurt_nw_fixed")
+region = Rect2(0, 0, 1254, 1254)
+margin = Rect2(0, 0, 0, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(199.0, -42.72)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.124276
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("hurt_nw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

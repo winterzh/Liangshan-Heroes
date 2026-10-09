@@ -1,0 +1,22 @@
+[gd_resource type="SpriteFrames" load_steps=3 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/lu_junyi_direction4_20261004/hurt.png" id="hurt"]
+
+[sub_resource type="AtlasTexture" id="hurt_se"]
+atlas = ExtResource("hurt")
+region = Rect2(0, 0, 686, 642)
+margin = Rect2(0, 22, 0, 44)
+filter_clip = true
+metadata/draw_offset_px = Vector2(39.0, -29.48)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.015332
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("hurt_se")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

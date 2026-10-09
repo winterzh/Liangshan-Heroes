@@ -1,0 +1,144 @@
+{
+  "schema": "native_direction4_generation_lineage_v1",
+  "character": "zhu_qi",
+  "original_reference": {
+    "path": "assets/portraits5.png",
+    "sha256": "3de4bd48e38ecb088359076b827a1c5b0e431fd771719519186218862a6d673a"
+  },
+  "identity_note": "Bottom-left current standard portrait: brown headcloth, short beard, dark lamellar and russet scarf/cape. Chestnut horse and one two-hand tasseled spear retained from current body. Generic range26 sword timing remains unchanged; authored spear art does not redefine gameplay weapon profile.",
+  "jobs": [
+    {
+      "key": "legacy_idle_se",
+      "repository_path": "assets/anim/zhu_qi_idle_se.png",
+      "sha256": "269b3cf918fcc8d6a6d876bb5d9a18d5dc58a47f497bafa6bfcceac64391936b",
+      "method": "existing_project_reference",
+      "prompt": "Existing project identity/camera reference, unmodified.",
+      "references": [
+        "original"
+      ],
+      "status": "required_reference"
+    },
+    {
+      "key": "legacy_idle_nw",
+      "repository_path": "assets/anim/zhu_qi_idle_nw.png",
+      "sha256": "b30533a50040e3d3748cf2183d1490135d2e9850cc626ccca8a725906b960547",
+      "method": "existing_project_reference",
+      "prompt": "Existing project identity/camera reference, unmodified.",
+      "references": [
+        "original"
+      ],
+      "status": "required_reference"
+    },
+    {
+      "key": "idle",
+      "repository_path": "assets/characters/zhu_qi_direction4_20261004/idle.png",
+      "sha256": "ef2c25593a2e68d06b322d122511bd7391ba05689ca38e7afedacc05b84de900",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Asset type: native transparent RGBA game sprite atlas for Liangshan Heroes, Zhu family ordinary mounted spearman zhu_qi. Input 1 is identity reference ONLY: use ONLY bottom-left portrait of 3x3 sheet, with brown cloth headwrap, short black moustache and pointed short beard, mature rugged Chinese male, dark brown lamellar armor and russet red-brown neck scarf/short cape. Inputs 2 and 3 are prior isometric rider/horse scale and painting style references ONLY. Create NEW four independent painted idle poses on a square 1024x1024 genuinely transparent canvas. Strict 2x2 grid with generous empty gutters and padding: top left southeast facing DOWN-RIGHT (front visible), top right southwest facing DOWN-LEFT (front visible), bottom left northeast facing UP-RIGHT (back visible), bottom right northwest facing UP-LEFT (back visible). Isometric elevated camera same for all. Whole mounted rider and whole chestnut horse with black mane and tail, four anatomical legs, brown leather saddle/reins, no barding or ornate hero gear. One full long wooden spear, silver leaf tip with small dark-red tassel, supported with two rider hands diagonally in relaxed ready position, both human hands correctly attached, no sword. Match bottom-left portrait headwrap/beard/armor/cape exactly across all four views. All hooves grounded in stationary balanced horse stance, rider firmly seated, no riding attack or gallop yet. Full spear tips, cape and tail safely inside each grid cell. Each direction independently drawn, not a reflected copy. Clear readable compact painted low-frame strategy-game sprite style consistent with prior existing sprites; no scenic background, no text, no labels, no checkerboard, no glow or cast ground shadow. Crisp natural RGBA alpha, do not draw extra helmets, standards, shields, human footmen or detached weapons.\n",
+      "references": [
+        "original",
+        "legacy_idle_se",
+        "legacy_idle_nw"
+      ],
+      "status": "selected",
+      "generation_id": "bdf51981-77aa-4793-a19a-beb522f7f931"
+    },
+    {
+      "key": "walk_a",
+      "repository_path": "assets/characters/zhu_qi_direction4_20261004/walk_a.png",
+      "sha256": "2eb0beb8752d6017ca2282cb4e23fd8fa5a1a1e0e6ba8fb9e6420207b5819111",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Native transparent RGBA four-direction game sprite atlas zhu_qi Zhu family ordinary cavalry. Input image is IDENTITY, horse design, palette, painting style and facing layout reference; create NEW walking/trotting phase A only, not another idle. On a square 1024x1024 transparent canvas, 2x2 independent isometric drawings: top left SE front down-right, top right SW front down-left, bottom left NE back up-right, bottom right NW back up-left. Same rugged short-bearded rider with plain brown cloth headwrap, dark brown lamellar armor, russet red-brown scarf and short cape, seated astride chestnut horse with black mane/tail and brown leather tack. Rider holds ONE long wooden spear with silver leaf tip and small red tassel in both hands diagonally across the saddle, no attack pose. EXACT trot A: horse anatomical LEFT FORELEG reaches forward along horse travel axis and RIGHT HINDLEG reaches backward, the diagonal support pair; RIGHT FORELEG distinctly bent/lifted and behind the left foreleg, LEFT HINDLEG distinctly bent/lifted and ahead of the right hindleg. Rear views must use same anatomical legs relative to horse rather than screen coordinates. All four horse legs clearly attached and hooves readable, rider keeps two seated legs with boots/stirrups clearly separate from horse limbs. Gently forward moving neck/rider, cape trails behind. Four views drawn independently without mirrored copies. Entire rider, horse, full spear tip, shaft and tail entirely inside each cell, generous outer padding and empty central gutters; keep horse/chassis scale consistent, no neighboring overlap. Compact elevated isometric painted sprite detail matching the input identity; genuinely transparent RGBA backdrop; no shadows, text, border, symbols, background, additional units, ghost limbs, extra spears, shields or helmet.\n",
+      "references": [
+        "idle"
+      ],
+      "status": "selected",
+      "generation_id": "4064bf45-9483-4437-8572-51d33a90ebdc"
+    },
+    {
+      "key": "walk_b_v2",
+      "repository_path": "assets/characters/zhu_qi_direction4_20261004/walk_b_v2.png",
+      "sha256": "4d364e9c895a16bbc0e4620639cb024362943f4690fa6e9e89b97e1a99650b0d",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: precise-object-edit. Native transparent RGBA sprite atlas WALK PHASE B for Zhu family mounted spearman zhu_qi. Input image is edit target WALK A, edit horse leg positions only plus slight natural body bob; preserve rider, full spear, armor, scarf, headcloth, chestnut horse, leather tack, four camera views, 2x2 arrangement and transparent background. The previous attempt reused the long front leg. THIS TIME EVERY cell must clearly show the horse's nearest front leg FOLDED UP UNDER THE CHEST, no long straight nearest foreleg reaching down. Draw its upper arm forward, knee prominently raised to chest level, shin folded backward horizontally, hoof tucked beneath horse chest. The opposite farther front leg extends straight forward/down to ground. Hind legs exchange the lifted/supporting arrangement to balance the horse, four horse legs total, no missing or extra limbs. The reference's long prominent front leg must disappear and become a tightly folded raised front leg in top-left and top-right views. Rear-facing bottom-left and bottom-right views must also show distinct exchanged horse legs, not reused A. This is a visibly different moving phase, not idle and not a tiny hoof shift. Both rider boots still attached to two seated legs/stirrups and distinct from all four horse legs. Same SE front down-right top left; SW front down-left top right; NE rear up-right bottom left; NW rear up-left bottom right, elevated isometric. Keep full figure compact safely inside each quadrant with generous empty margins/gutters. Only one complete silver-tipped red-tasseled spear in two correctly attached rider hands. Brown cloth headwrap, short beard, dark lamellar armor and russet cape unchanged. Painterly compact RTS sprite style, independently draw each view. No labels, text, shadow, backdrop or checkerboard. Genuinely transparent RGBA.\n",
+      "references": [
+        "walk_a"
+      ],
+      "status": "selected",
+      "generation_id": "726830a6-fd67-47c2-8464-e611ce778a91"
+    },
+    {
+      "key": "windup",
+      "repository_path": "assets/characters/zhu_qi_direction4_20261004/windup.png",
+      "sha256": "d7a781762f4a4decaa3d2a83a01f2a561c7fdbb23411a8fc8184c58a9037e74a",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. NEW native transparent RGBA 2x2 game sprite atlas for zhu_qi ordinary Zhu family mounted spearman. Input is identity and isometric style reference ONLY. Independently paint four consistent views of same rugged Chinese mature rider, brown cloth headwrap, black short moustache and pointed beard, dark brown lamellar armor, russet red-brown scarf/short cape, chestnut horse with black mane/tail, brown leather saddle/reins. Exactly one long wooden spear with silver leaf tip and dark-red tassel, exactly two correctly attached rider hands gripping it and two seated rider legs. Same elevated isometric camera and horse size as reference. Top left SE facing front down-right; top right SW front down-left; bottom left NE back up-right; bottom right NW back up-left. Full entire horse, rider and full spear safely within each of four cells with generous transparent padding and cross gutters. The horse stays grounded balanced, no walking or leaping during strike. No extra weapons, shield, helmet, operators, background, checkerboard, text, labels, glow or ground shadow. Native square 1024x1024 requested, genuine transparent alpha, compact painterly historical RTS sprite style. STATE: MELEE SPEAR WINDUP READY-TO-THRUST. Rider visibly turns shoulders and draws BOTH grips backward toward own torso, spear shaft at chest height, tip elevated moderately and aimed forward along the horse's travel direction. LEFT hand forward on shaft toward point, RIGHT hand rear near butt; both grips attached and visible where not physically occluded. Keep spear one straight rigid shaft running through both hands. Elbows clearly bent, rider torso slightly back/rotated in preparation, horse feet grounded. Not a overhead slash, axe blow or released projectile. Spear is drawn back relative to forthcoming forward-thrust image, a distinct windup silhouette.\n",
+      "references": [
+        "idle"
+      ],
+      "status": "selected",
+      "generation_id": "40b4505e-ac47-424c-b615-54d42982c414"
+    },
+    {
+      "key": "strike",
+      "repository_path": "assets/characters/zhu_qi_direction4_20261004/strike.png",
+      "sha256": "ff19fb638ee4ff2e3c4eff84be834b76c702dd1f67ebb5cd348b8d4e5562cb62",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. NEW native transparent RGBA 2x2 game sprite atlas for zhu_qi ordinary Zhu family mounted spearman. Input is identity and isometric style reference ONLY. Independently paint four consistent views of same rugged Chinese mature rider, brown cloth headwrap, black short moustache and pointed beard, dark brown lamellar armor, russet red-brown scarf/short cape, chestnut horse with black mane/tail, brown leather saddle/reins. Exactly one long wooden spear with silver leaf tip and dark-red tassel, exactly two correctly attached rider hands gripping it and two seated rider legs. Same elevated isometric camera and horse size as reference. Top left SE facing front down-right; top right SW front down-left; bottom left NE back up-right; bottom right NW back up-left. Full entire horse, rider and full spear safely within each of four cells with generous transparent padding and cross gutters. The horse stays grounded balanced, no walking or leaping during strike. No extra weapons, shield, helmet, operators, background, checkerboard, text, labels, glow or ground shadow. Native square 1024x1024 requested, genuine transparent alpha, compact painterly historical RTS sprite style. STATE: COMPLETED FORWARD MELEE SPEAR THRUST. Rider leans forward from hips, BOTH hands force one spear shaft forward and downward along horse's facing direction, spearhead far IN FRONT of horse muzzle at target upper-body height. Front LEFT grip reaches well past chest with arm nearly extended, rear RIGHT grip drives from waist and elbow visibly bent; anatomically two arms and two fists on one rigid shaft. The silver leaf point is a stab point, no slash blade. Speartip on top-left projects toward screen LOWER-RIGHT and top-right toward LOWER-LEFT, not high above head as windup. Rear NE point travels upper-right in world, NW upper-left. In rear views maintain clear physically plausible hands and attachment, far forward grip may be partially occluded by horse neck but must not float free. Markedly different torso, hands and weapon silhouette from drawn-back windup. Horse stays firmly planted in same balanced stance, head lower slightly but not rearing. Whole extended spearhead and rear butt inside each cell with broad transparent margin, no other cell overlap. No blood, wounds, detached arms or fallen horse. Four independently painted directions consistent identity and scale.\n",
+      "references": [
+        "idle",
+        "windup"
+      ],
+      "status": "selected",
+      "generation_id": "be829fa4-64a1-4ad2-9109-8b51cc64b018"
+    },
+    {
+      "key": "hurt",
+      "repository_path": "assets/characters/zhu_qi_direction4_20261004/hurt.png",
+      "sha256": "c4e5f51a446485220faf9eb0d067fa938010b12497aed203190e3d2f0454b8cf",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. NEW native transparent RGBA 2x2 game sprite atlas for zhu_qi ordinary Zhu family mounted spearman. Input is identity and isometric style reference ONLY. Independently paint four consistent views of same rugged Chinese mature rider, brown cloth headwrap, black short moustache and pointed beard, dark brown lamellar armor, russet red-brown scarf/short cape, chestnut horse with black mane/tail, brown leather saddle/reins. Exactly one long wooden spear with silver leaf tip and dark-red tassel, exactly two correctly attached rider hands gripping it and two seated rider legs. Same elevated isometric camera and horse size as reference. Top left SE facing front down-right; top right SW front down-left; bottom left NE back up-right; bottom right NW back up-left. Full entire horse, rider and full spear safely within each of four cells with generous transparent padding and cross gutters. The horse stays grounded balanced, no walking or leaping during strike. No extra weapons, shield, helmet, operators, background, checkerboard, text, labels, glow or ground shadow. Native square 1024x1024 requested, genuine transparent alpha, compact painterly historical RTS sprite style. STATE: NONLETHAL MOUNTED RECOIL. Rider visibly recoils backward and twists shoulders away from incoming front hit, chin pulled back with strained face, TWO hands still keep the ONE spear securely across body with shaft drawn back and tip angled upward away from target. Horse reacts by bending knees slightly and pulling neck back, all legs retain attachment and grounded balance; no falling, rearing, attack thrust or trotting. The torso and spear pose must be visibly different from idle, windup and forward strike. Both rider feet remain seated in stirrups. Front directions show tense face/backward lean, rear directions show clear backward shoulder/cape posture and secure grip. No blood, wound, impact symbols or glow.\n",
+      "references": [
+        "idle"
+      ],
+      "status": "selected",
+      "generation_id": "ef22ec3b-5001-4c4e-b3c8-405045327e77"
+    },
+    {
+      "key": "fall",
+      "repository_path": "assets/characters/zhu_qi_direction4_20261004/fall.png",
+      "sha256": "2c4d6f4f199432a0d320c8ed1dda4be27aacf93899d5eb377d0dae61bd400ba3",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. NEW native transparent RGBA 2x2 game sprite atlas for zhu_qi ordinary Zhu family mounted spearman. Input is identity and isometric style reference ONLY. Independently paint four consistent views of same rugged Chinese mature rider, brown cloth headwrap, black short moustache and pointed beard, dark brown lamellar armor, russet red-brown scarf/short cape, chestnut horse with black mane/tail, brown leather saddle/reins. Exactly one long wooden spear with silver leaf tip and dark-red tassel, exactly two correctly attached rider hands gripping it and two seated rider legs. Same elevated isometric camera and horse size as reference. Top left SE facing front down-right; top right SW front down-left; bottom left NE back up-right; bottom right NW back up-left. Full entire horse, rider and full spear safely within each of four cells with generous transparent padding and cross gutters. The horse stays grounded balanced, no walking or leaping during strike. No extra weapons, shield, helmet, operators, background, checkerboard, text, labels, glow or ground shadow. Native square 1024x1024 requested, genuine transparent alpha, compact painterly historical RTS sprite style. STATE: FIRST LETHAL COLLAPSE STAGE, horse buckles onto BOTH FRONT KNEES, hindquarters still above the ground, legs visibly folding without extra limbs. Rider loses seat balance, torso slumps strongly forward over horse neck and down toward same ground contact, boots loosening from stirrups but two legs remain anatomically connected. Rider retains brown headwrap and dark armor/russet cape, spear slipping down diagonally near ground still one full shaft, no second spear or floating fists. This is a low kneeling collapse silhouette, much LOWER than upright idle, but NOT fully flat terminal wreck. In SE view horse head points down-right; SW down-left; NE horse head toward upper-right; NW upper-left; show the appropriate front or back of the slumping rider, not four side-on copies. Complete horse, human, one spear and tassel all fully inside each cell and separated by broad alpha gutters. Humane stylized game defeat, no blood or visible wounds, no dismemberment, no mud or scenery.\n",
+      "references": [
+        "idle"
+      ],
+      "status": "selected",
+      "generation_id": "479682f2-9638-4a51-881a-c10ddfd1927a"
+    },
+    {
+      "key": "terminal",
+      "repository_path": "assets/characters/zhu_qi_direction4_20261004/terminal.png",
+      "sha256": "d592b7f0ba08eb2a7f9f7ccc27f35b40c843b25cbd25341a27420b3c55e59bc3",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. NEW native transparent RGBA 2x2 game sprite atlas for zhu_qi ordinary Zhu family mounted spearman. Input is identity and isometric style reference ONLY. Independently paint four consistent views of same rugged Chinese mature rider, brown cloth headwrap, black short moustache and pointed beard, dark brown lamellar armor, russet red-brown scarf/short cape, chestnut horse with black mane/tail, brown leather saddle/reins. Exactly one long wooden spear with silver leaf tip and dark-red tassel, exactly two correctly attached rider hands gripping it and two seated rider legs. Same elevated isometric camera and horse size as reference. Top left SE facing front down-right; top right SW front down-left; bottom left NE back up-right; bottom right NW back up-left. Full entire horse, rider and full spear safely within each of four cells with generous transparent padding and cross gutters. The horse stays grounded balanced, no walking or leaping during strike. No extra weapons, shield, helmet, operators, background, checkerboard, text, labels, glow or ground shadow. Native square 1024x1024 requested, genuine transparent alpha, compact painterly historical RTS sprite style. STATE: TERMINAL DEFEATED GROUND POSE, entirely flat low silhouette. One whole chestnut horse lies completely ON ITS SIDE, head, neck, belly and hindquarters resting on ground, all four legs folded/lowered naturally without extra legs. Same rider lies collapsed BESIDE the saddle on the ground, head and torso down, two arms and two legs naturally attached, brown headwrap/beard/dark lamellar/russet cape recognizable. NO one stays seated upright, kneeling on a horse, standing or raised-neck rearing. Rider and horse are both low and motionless. Exactly one full spear laid on ground nearby, silver leaf tip and red tassel remain visible; no floating weapons. Four independent views preserve travel orientation: top-left horse head points DOWN-RIGHT and viewer sees front-side of fallen rider; top-right head DOWN-LEFT and front-side; bottom-left horse head UP-RIGHT with rear back/cape visible; bottom-right head UP-LEFT with rear back/cape visible. Do not draw same left-facing side silhouette four times or mirror it; observe separate camera angles. Full horse tail/ears, complete human limbs and full spear all inside individual cells with large transparent gutters. Compact painted low-frame RTS death sprite, no blood, wounds, severed limbs, ground patch or scenic background. Flat lower than previous front-knee collapse, full contact with ground.\n",
+      "references": [
+        "idle",
+        "fall"
+      ],
+      "status": "selected",
+      "generation_id": "4a45cbbb-7029-4346-82ef-af9beb6c4c33"
+    },
+    {
+      "key": "walk_b_rejected",
+      "repository_path": "",
+      "sha256": "e8621ec8ac664b81be375db40115ebfad9c10d5f8bb8e5a03cb8d0b2a2d2e4b6",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: precise-object-edit. Input image is edit target: zhu_qi four independent isometric mounted spearman WALK PHASE A atlas. Produce WALK PHASE B by changing ONLY horse leg gait and slight associated torso bob, preserving rider identity/clothing, one spear and its full tips, horse color, saddle, full 2x2 facing layout and genuinely transparent canvas. All four cells MUST have obviously DIFFERENT horse leg positions from input. For every horse, visibly swap support and lifted diagonal pairs: each currently stretched-down foreleg must now be strongly folded with hoof lifted back under chest; the currently bent foreleg must extend forward and down. Each hind leg currently straight and rearward must bend/lift forward; the currently bent hindleg must extend backward and down. Large unambiguous opposite gait, not tiny hoof shift or reused idle. All 4 anatomical horse legs correctly attach, stay legible and distinct from rider boots/stirrups; NO extra limbs, no phantom hooves. Same 2x2 layout: SE front down-right top left, SW front down-left top right, NE rear up-right bottom left, NW rear up-left bottom right. Correct depth separation of far and near legs from each view; rear view legs visibly swap and whole tail stays within cell. Keep seated two-legged rider firmly astride, no standing footman. Brown headwrap, short beard, dark lamellar, russet scarf/cape, chestnut horse black mane/tail and two-hand tasseled spear EXACTLY retained. Generous cell padding and empty gutters, all spears/tails within cells. Match original painted sprite style, no background, labels, text, ground shadow, glows or checkerboard. Native transparent RGBA.\n",
+      "references": [
+        "walk_a"
+      ],
+      "status": "rejected_unused"
+    }
+  ]
+}

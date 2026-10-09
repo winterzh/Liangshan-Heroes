@@ -1,0 +1,117 @@
+{
+  "scope": "Bound slot passed61; freed process failed one text-equivalence assertion despite all reported fields equal. Not full persistence qualification.",
+  "receipt": "E:\\ChatGPT\\qa-rescued-seven-persistence-20261006\\rescued_role_cross_v4_d781a416\\receipt.json",
+  "receipt_sha256": "4940822eda47833f2b421de2527e32d8ba1db518c20308cfbaa2c6baf75ded68",
+  "failure": {
+    "type": "AssertionError",
+    "message": "Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org\nOpenGL API 3.3.0 NVIDIA 616.56 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce RTX 3070 Ti\n\nWARNING: 2D MSAA is not yet supported for GLES3.\n   at: render_target_set_msaa (drivers/gles3/storage/texture_storage.cpp:2934)\nFAIL RESTORE seven IDs/stats/positions/commands/phase unchanged\nRESCUED_ROLE_PROCESS_COMPLETE freed 127 false\n"
+  },
+  "steps": [
+    {
+      "case": "import",
+      "pid": 173264,
+      "process_nonce": "fef6ce9473ff40be9418e717777283ab",
+      "started_ns": 451198234000000,
+      "finished_ns": 451238734000000,
+      "exit_code": 0,
+      "stopped_for": null,
+      "log_sha256": "a258c79ad7299e21970e2e97133af3ed5cd18c088f0bbfe96454f87b32b32755",
+      "command": [
+        "C:\\Users\\Administrator\\Desktop\\新建文件夹 (2)\\Godot_v4.6.3-stable_win64.exe",
+        "--path",
+        "E:\\ChatGPT\\qa-rescued-seven-persistence-20261006\\rescued_role_cross_v4_d781a416\\project",
+        "--rendering-method",
+        "gl_compatibility",
+        "--headless",
+        "--editor",
+        "--import",
+        "--quit"
+      ],
+      "actual_rendering": false,
+      "passed": true
+    },
+    {
+      "case": "profile_guard",
+      "pid": 176112,
+      "process_nonce": "241d866641da4f598db66e7fbe169e91",
+      "started_ns": 451238968000000,
+      "finished_ns": 451250015000000,
+      "exit_code": 2,
+      "stopped_for": null,
+      "log_sha256": "62a6200a01be71b28ea0a2c0e68d2b15b72ae97ce554b73e461d73892c99c1e1",
+      "command": [
+        "C:\\Users\\Administrator\\Desktop\\新建文件夹 (2)\\Godot_v4.6.3-stable_win64.exe",
+        "--path",
+        "E:\\ChatGPT\\qa-rescued-seven-persistence-20261006\\rescued_role_cross_v4_d781a416\\project",
+        "--rendering-method",
+        "gl_compatibility",
+        "--headless",
+        "res://tools/rescued_role_process_v4.tscn"
+      ],
+      "actual_rendering": false,
+      "passed": true
+    },
+    {
+      "case": "bound",
+      "pid": 172624,
+      "process_nonce": "c2b4bfd5fc67488baab579a5f42864b8",
+      "started_ns": 451250250000000,
+      "finished_ns": 451370390000000,
+      "exit_code": 0,
+      "stopped_for": null,
+      "log_sha256": "92f59b87b99815b7ae75da6544a02b75487e7d24a4a82329227e7f3050c29947",
+      "command": [
+        "C:\\Users\\Administrator\\Desktop\\新建文件夹 (2)\\Godot_v4.6.3-stable_win64.exe",
+        "--path",
+        "E:\\ChatGPT\\qa-rescued-seven-persistence-20261006\\rescued_role_cross_v4_d781a416\\project",
+        "--rendering-method",
+        "gl_compatibility",
+        "--audio-driver",
+        "Dummy",
+        "--resolution",
+        "1280x720",
+        "--position",
+        "30000,30000",
+        "res://tools/rescued_role_process_v4.tscn"
+      ],
+      "actual_rendering": true,
+      "passed": true
+    },
+    {
+      "case": "freed",
+      "pid": 172928,
+      "process_nonce": "b6d8d17fb11b4d38bd487344de77fbd9",
+      "started_ns": 451370640000000,
+      "finished_ns": 451443765000000,
+      "exit_code": 1,
+      "stopped_for": null,
+      "log_sha256": "6f5c2eb269f1bcba20ce20fb5926719d5494ffe795e83c4043b5c1f5d2e75687",
+      "command": [
+        "C:\\Users\\Administrator\\Desktop\\新建文件夹 (2)\\Godot_v4.6.3-stable_win64.exe",
+        "--path",
+        "E:\\ChatGPT\\qa-rescued-seven-persistence-20261006\\rescued_role_cross_v4_d781a416\\project",
+        "--rendering-method",
+        "gl_compatibility",
+        "--audio-driver",
+        "Dummy",
+        "--resolution",
+        "1280x720",
+        "--position",
+        "30000,30000",
+        "res://tools/rescued_role_process_v4.tscn"
+      ],
+      "actual_rendering": true,
+      "passed": false
+    }
+  ],
+  "reported_bound_restored_fields_equal": true,
+  "freed_checks": 127,
+  "failed_checks": [
+    {
+      "label": "seven IDs/stats/positions/commands/phase unchanged",
+      "matrix": "RESTORE",
+      "passed": false
+    }
+  ],
+  "repair": "Exact recursive field equality: integers/floats compare equal numerically without tolerance; booleans/strings/arrays/dicts retain structure. Handoff JSON full_precision=true to preserve raw float values. Keep old evidence and source."
+}

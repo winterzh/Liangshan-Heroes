@@ -1,0 +1,44 @@
+{
+  "schema": "callback_evidence_order_regression_v2",
+  "script_sha256": "3bba16d46bda28420da6739e2ea6c0c90a2a4e3e495e303f8d6e8abd78c12019",
+  "source_sha256": {
+    "campaign_callback_packet_evidence_v1.py": "efde3c75f03b5bf18161f9be5afb4c17acb01237ab25e49c30e2d3af9e54a39f",
+    "campaign_callback_packet_evidence_v2.py": "52208a51b54c3a8b6949c76af09d12f2f1fac76fc221970d061afd534327c6f4",
+    "campaign_natural_callback_evidence_v2.py": "56a76514381a521b2b1fe45d01da5a955c70dc7ec65cc8ac77f3a4cb8f7f1388"
+  },
+  "checks": [
+    {
+      "label": "originalV1 counterexample accepted synthetic lost-prefix trace",
+      "passed": true
+    },
+    {
+      "label": "V2 rejects prefix-before-refusal counterexample",
+      "passed": true
+    },
+    {
+      "label": "correct partial header/prefix/tail order fully replayed",
+      "passed": true
+    },
+    {
+      "label": "different prefix bytes refused",
+      "passed": true
+    },
+    {
+      "label": "omitted explicit original prefix refused",
+      "passed": true
+    },
+    {
+      "label": "prior ordinary terminal trace unchanged",
+      "passed": true
+    }
+  ],
+  "count": 6,
+  "all_passed": true,
+  "work": "D:\\CodexTemp\\lsh-callback-order-rdnjm53j",
+  "synthetic_only": true,
+  "socket_connected": false,
+  "Popen_started": false,
+  "native_started": false,
+  "complete_pipeline_qualified": false,
+  "approved_stages": []
+}

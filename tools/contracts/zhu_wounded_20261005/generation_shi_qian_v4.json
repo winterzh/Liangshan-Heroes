@@ -1,0 +1,105 @@
+{
+  "original_reference": {
+    "path": "assets/characters/shi_qian_bound_20261005/bound.png",
+    "sha256": "08787ccf51041c8e6134999a7dc6e9c6e884631d2feebac3e7df868c9060a108"
+  },
+  "jobs": [
+    {
+      "key": "sw_initial_rejected",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-14e9b9ec-b822-445d-b639-37f1b69f93db",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/native_references/sw_initial_rejected.png",
+      "sha256": "0d671be87f60f2bcf662a443765caa39722691be329bf360c5be7b516c2e6ddb",
+      "prompt": "Use case: historical-scene. Native transparent SINGLE FULL BODY wounded Shi Qian opposite walking pose. Output ONLY ONE man, NOT a grid or multiple copies. Reference atlas is IDENTITY and clothes only; REMOVE ropes/bindings. Same slim black masked Chinese man in charcoal cross-over cloth tunic, black headwrap and mask, cloth belt, dark trousers/shin wraps and boots. NO sack/armor/weapons/flags. Free wrists and empty hands, one hand guards sore abdomen, other balances, slight tired hunch. Critical anatomical foot pose: SW FRONT THREEQUARTER facing DOWN-LEFT. Its planted FORWARD boot must be on LOWER-RIGHT side of the silhouette, connected to RIGHT side of the image pelvis. Its trailing lifted boot must be on UPPER-LEFT side, heel raised. Both toes face downLEFT, whole torso/head faces LEFT. Left/right foot lead must visibly differ from standard alternate stride. Leading knee crosses in FRONT of trailing knee with each leg connected to its own pelvis side. Clearly short careful limping STEP, not standing/running/jumping. Foot positions specified are relative to complete silhouette, no twisting hip. Both legs/feet visible and distinct. Elevated isometric historic painterly RTS camera, full silhouette centered and contained, generous empty margin100px each edge, body60-70% canvas height. Native square<=1536, actual transparent alpha, no floor shadow/grid/text/background/extra people.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_step_b_sw.json",
+      "request_sha256": "bcd885b9badf089374d13158f26f7c54cf02127f8928ed9f60386f50d0350a2f",
+      "references": [
+        "original"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_qian_step_b_sw",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-b26411e6-641e-4a9a-a172-1c37a305b869",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/step_b_sw.png",
+      "sha256": "01a2cc521b116e0cff5f2c3c74774ff51cf2517a19c2029e6be6e76baa4a0b0f",
+      "prompt": "Edit this single transparent SW-facing masked man. Keep head, face direction, body, clothes and empty hands. Remove the red/blood stain from abdomen completely: clean dark cloth, NO blood/injury props.\nCHANGE ONLY THE TWO LEGS below the pelvis to the OPPOSITE walking step. Currently the foot at bottom-left is planted, and foot at upper-right is lifted. Swap their gait: the leg on the RIGHT side of the image must now straighten FORWARD with its boot planted at LOWER-RIGHT, approximately(x780,y1100) on this1254canvas; the leg on the LEFT side must bend BACK with boot lifted at UPPER-LEFT approximately(x580,y940). Keep each leg attached to its existing hip. Draw the RIGHT-SIDE IMAGE KNEE in front, LEFT-SIDE knee behind. Both boot toes still point LEFT. Do not keep the original foot placements. The planted boot must move to the OTHER side of the silhouette. This is an alternate short wounded walk step, not running, no new prop.\nSame elevated isometric SW frontthreequarter camera, torso and face pointingLEFT, one man only, native transparent RGBA square<=1536, full figure contained, no text/grid/floor/shadow/weapon/rope/bag. Keep black wrap and mask, charcoal tunic and trousers, shin wraps, painterly clothing identity unchanged.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_sw_leg_edit.json",
+      "request_sha256": "f344a6ee879a3e9ca3740115422156f37a966f35e406b1cb3a5b3f627352bff9",
+      "references": [
+        "sw_initial_rejected"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_qian_proportion_v2",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-c11831c3-8262-4bc1-bc31-4cabd4ac12dd",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/proportion_reference_v2.png",
+      "sha256": "7f8d1d563e6eff35801bdab942867fb751cc2ccb90ae363ec39b16cf7a582499",
+      "prompt": "Use case: identity-preserve. Redraw this masked black-clothed adult Shi Qian with CORRECT NATURAL ADULT HUMAN PROPORTIONS. Current image is rejected: head and boots too big, legs too short, body too hunched and cartoonish. Keep the same identifiable man, black cloth headwrap/topknot and black mouth/nose mask, charcoal cross-over tunic and plain brown cloth sash, dark trousers/shin wraps/cloth boots, restrained hand-painted Chinese historical RTS rendering. NOT pixel-preservation: redraw anatomy fully as needed.\nNEW BODY: slim athletic normal adult, about7 to7.5 HEADS tall from skull top to sole. Bare head height only about one-seventh total body height; headcloth must not turn it into an oversized head. Natural narrow but adult shoulders, visible neck, proportionate torso, LONGER natural legs with hip-to-floor about half entire figure. Knees correctly midway along legs, normal slender calves, small natural hands, human-sized cloth boots WITHOUT giant bulky feet. Balanced anatomical joints, same believable adult throughout. No chibi/dwarf/oversized-head/short-legged/caricature proportions, no inflated hands or comic boots.\nPOSE: quiet NEUTRAL standing with feet naturally close and both grounded, only slight fatigue in shoulders. Upright spine and level head, no extreme stoop, crouch, furtive peeking, aggressive grimace, exaggerated lifted knee, twisted hip or running pose. Empty arms rest naturally; one empty hand may lightly rest near lower abdomen without squeezing or deep bending. This is a tired rescued adult with calm dignity, NOT a sneaking goblin. No ropes, weapons, sacks, blood/injury props, cape, armor or new accessories.\nView remains SW front three-quarter facing down-left, elevated isometric camera. Exactly ONE full body, all headcloth tails/fingers/feet contained, centered with generous transparent margins. Body about65–70% square canvas height. GENUINE alpha TRANSPARENT background, native square max1536, no floor shadow/background/checkerboard/grid/text/labels. Detailed face retains original identity but at natural smaller anatomical size.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_proportion_v2.json",
+      "request_sha256": "b1e2f2282759fe21f8c79677225a038887290f0321fd728d4ca889b2a34fb232",
+      "references": [
+        "shi_qian_step_b_sw"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_qian_posture_v3",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-a2bf7bb7-b9d0-46fb-abca-2ebe0e97bde5",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/posture_v3.png",
+      "sha256": "061cd956832e36b76449fc95bfa5ba4ec83a345cc22d2ee59380085afa3eafd6",
+      "prompt": "Use case: identity-preserve. EDIT the attached ONE full-body character reference. User requires an upright dignified SOLDIER posture: head UP and chest OPEN. Reject lowered chin, forward head, closed shoulders or hunched back. Only improve pose; preserve this SAME individual face, clothes, mature ADULT proportions and painterly rendering.\nPOSE: erect balanced military attention-like stance. Naturally straight stacked spine, neutral pelvis, neck vertical ABOVE torso; head lifted with chin LEVEL, eyes looking toward distant horizon in the SAME front three-quarter SW facing direction, never down at feet. Shoulders gently back and down, broad collarbones, naturally lifted open chest, sternum confidently forward. No stoop, rounded back, shrugged shoulders, forward craned neck, wounded hunch or tired slump. Do not hyperextend neck, flare ribs, thrust belly or arch lower back. Keep the small natural head/hands/boots and adult thighs/calves. Moderately elevated isometric camera does not imply bowed head.\nBoth feet grounded in stable modest hip-width parallel stance, knees straight but not locked. Empty arms straight naturally at sides and open relaxed hands, no fists or combat stance. Preserve BLACK nose/mouth cloth mask and black wrapped headcloth; arms straight naturally at sides, remove the hand touching the belly/sash. No sack or backpack.\nExactly ONE complete full figure with all fingers/tails/cloak/boots contained in generous transparent margins, 75–80% square height, native max1536. No weapons/sheaths/rope/chains/blood/new props. Preserve true transparent alpha; no floor/shadow/background/text/grid/checkerboard.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_posture_v3.json",
+      "request_sha256": "71c028ac30eb1ab82439ee00c5c7b31344cf8e389257506911d1f1578efc1108",
+      "references": [
+        "shi_qian_proportion_v2"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_qian_idle_v3",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-36030a2b-fb22-4b80-a5d4-c4b90a2d031e",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/idle_v3.png",
+      "sha256": "c88c9ba3b93ca9dfbfa1e2d5bc56ba19e4df957d6da63e797d262a2d7b43fdd8",
+      "prompt": "Use case: identity-preserve. Create native FOUR independently drawn isometric IDLE views of this SAME upright adult soldier. Reference is the selected v3 single-body posture; preserve its face, proportions, clothing and colors. Exactly 2 columns x 2 rows: TOP LEFT SE front three-quarter looking screen DOWN-RIGHT; TOP RIGHT SW front three-quarter looking screen DOWN-LEFT; BOTTOM LEFT NE back three-quarter looking screen UP-RIGHT; BOTTOM RIGHT NW back three-quarter looking screen UP-LEFT. Turn the WHOLE torso, hips and both feet into each direction. SE and SW must be genuinely opposite whole-body views; do not repeat SW in the SE cell. Back views show back clothes and back of head, with only a small far cheek visible. Never mirror a rendered cell. ALL FOUR poses stand dignified and upright like disciplined soldiers: lifted head, LEVEL chin/horizon gaze, neck vertically above torso, stacked natural spine, shoulders back/down, naturally open lifted chest. Elevated camera never means bowed head. NO hunch, forward neck, closed chest, tired shoulder slump, shrug, belly thrust or arched lower back. Empty relaxed hands and naturally straight arms at sides. Stable feet at modest hip width, straight natural knees. Keep mature adult head/hands/boots and adult leg lengths. Body type identity: Slim Chinese man, alert eyes, black wrapped headcloth and black nose/mouth mask, charcoal cross-over cloth tunic and trousers, dark shin wraps and cloth boots. NO sack, backpack or weapon. Keep mask and narrow unarmored body. Preserve v3 body anatomy over any old compact sprite instructions; never chibi. Same front/back clothing hem length and construction, no weapons/sheaths/rope/chains/blood/new props. Each whole figure fits inside its OWN quadrant with wide true-alpha outer margins and wide empty transparent central gutters; no tails/capes/boots cross cell boundaries. Figures equal body height within this character. Native square max1536, painterly reference quality, TRUE RGBA transparent background; no floor/shadows/text/labels/grid/checkerboard. Layout priority: figures occupy only 78–82% of EACH quadrant height, about490–515px tall at1254px native square. Center each figure inside its cell; keep at least45px transparent clearance on every cell edge, including cape/boots/headcloth. The central horizontal gutter should be at least80px. Reduce whole figure size uniformly to leave room; NEVER shorten legs or enlarge heads to fit. Do not nearly touch the two rows.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_idle_v3.json",
+      "request_sha256": "c130ac8c11b84b3dcb6621a98e46e5e72fe3006c62a1f31d562e8afefe5f35f1",
+      "references": [
+        "shi_qian_posture_v3"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_qian_idle_traits_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-4f73c3f0-a27b-4b01-9fd8-70d55c0228fb",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/idle_traits_v4.png",
+      "sha256": "276ec14e93a0ee154434fc4c3db21442df34ce5e36af5deea2bcf1d10149561f",
+      "prompt": "Use case: identity-preserve. Edit this four-direction native transparent Shi Qian idle sprite atlas to express his novel character as a nimble alert infiltrator, NOT a parade soldier. Keep the exact same masked adult man, face/black headwrap and tails, charcoal crossover tunic, plain brown sash, dark trousers, shin wraps/cloth boots, slim mature adult proportions and long natural legs. Preserve four WHOLE BODY facings in exact 2x2 layout: upper-left SE front down-right, upper-right SW front down-left, lower-left NE back up-right, lower-right NW back up-left. Independently render all four, no mirrored or duplicated cells. CHANGE THE BODY LANGUAGE in every cell: quiet watchful ready-to-slip-away standing posture, knees LIGHTLY flexed, center of gravity slightly lowered and subtly forward, restrained functional lean FROM THE HIPS, flexible coordinated spine, shoulders relaxed and asymmetrically balanced, head slightly forward but eyes looking ahead searching surroundings, hands empty with elbows softly bent close to the waist, ready to balance. He is a capable healthy nimble adult known for wall climbing and infiltration. Make the alert stealth character recognizable at small RTS size. Not timid, old, grotesque or lecherous; no rounded hump, excessive forward neck, deep squat, crouching on the floor or giant head/boots. No forced chest thrust or rigid arms held straight at sides. Preserve same adult proportions and all clothes/hem details throughout all four views; back views show same plain belt without adding front sash tails on the back. No weapon, sack/backpack, armor, ropes, blood, props or new facial covering. These are unarmed rescued idle poses, not attack or running; personality must not imply combat. Each entire figure inside own quadrant, body ~78–82% quadrant height, at least45px real transparent clearance around each head/hand/boot/tail and between rows. Preserve realistic painterly historic RTS style and mild elevated isometric camera. Native square max1536, genuine RGBA transparency, no floor/shadow/text/border/grid/checkerboard. This replaces only Shi Qian's over-formal soldier stance while retaining identity and natural adult anatomy.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_idle_traits_v4.json",
+      "request_sha256": "ece854c15f7aafce4599134293ebe75288d1bcc45622f8d36d6a48069152ad6b",
+      "references": [
+        "shi_qian_idle_v3"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    }
+  ],
+  "scope": "Complete required ancestry retained; historical rejected pixels are edit parents only, not selected as runtime frames."
+}

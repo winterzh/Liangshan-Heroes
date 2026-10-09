@@ -395,6 +395,8 @@ func ui_portrait_texture(key: String, variant := "") -> Texture2D:
 
 ## 保留战役变体原图查询，用于素材预览与来源契约；游戏界面用 ui_portrait_texture。
 func avatar_texture(key: String, variant := "") -> Texture2D:
+	if not CampaignArt.native_wounded_owner(variant).is_empty():
+		return unit_texture(key, variant, "se")
 	if IDENTITY_PORTRAIT_VARIANTS.has(variant):
 		return portrait_texture(key) if IDENTITY_PORTRAIT_VARIANTS[variant] == key else null
 	if not variant.is_empty():
@@ -422,7 +424,36 @@ func avatar_texture(key: String, variant := "") -> Texture2D:
 	return t
 
 
+## Ordinary armed bodies only. Explicit story appearances retain their own routes.
+## Unlisted actions retain existing art while further action review continues.
+const ORDINARY_CHARACTER_FAMILIES := {
+	"wu_song": {
+		"idle": "character_traits_v5_wu_song_gait", "walk": "character_traits_v5_wu_song_gait",
+		"attack": "character_traits_v7_wu_song_combat", "hurt": "character_traits_v7_wu_song_combat", "death": "character_traits_v8_wu_song_death"
+	},
+	"lin_chong": {
+		"idle": "character_traits_v5_lin_chong_gait", "walk": "character_traits_v5_lin_chong_gait", "death": "character_traits_v10_lin_chong_death", "hurt": "character_traits_v12_lin_chong_hurt"
+	}
+}
+
+func _ordinary_character_frames(key: String, state: String, direction: String, variant: String) -> Array:
+	if not variant.is_empty() or direction not in CampaignArt.DIRECTIONS:
+		return []
+	var family: Dictionary = ORDINARY_CHARACTER_FAMILIES.get(key, {})
+	if not family.has(state): return []
+	var path := "res://assets/anim/%s_%s_%s.tres" % [family[state], state, direction]
+	var cache_key := "ordinary_character|" + path
+	if not _anim_cache.has(cache_key):
+		_anim_cache[cache_key] = _load_generic_directional_frames(path)
+	return _anim_cache[cache_key]
+
 func unit_texture(key: String, variant := "", direction := "") -> Texture2D:
+	var ordinary := _ordinary_character_frames(key, "idle", "se" if direction.is_empty() else direction, variant)
+	if not ordinary.is_empty(): return ordinary[0]
+	if not CampaignArt.native_body_owner(variant).is_empty():
+		var native_direction: String = "se" if direction.is_empty() else direction
+		var native_frames := unit_anim_frames(key, "idle", native_direction, variant)
+		return null if native_frames.is_empty() else native_frames[0]
 	if not variant.is_empty():
 		var bound_owner := CampaignArt.programmatic_bound_owner(variant)
 		if not bound_owner.is_empty():
@@ -570,7 +601,7 @@ const STANDALONE_PORTRAITS := {
 	"lu_junyi": "res://assets/characters/hero_portraits_commanders_20260926/lu_junyi.png",
 	"guan_sheng": "res://assets/characters/hero_portraits_aligned_20260926/guan_sheng.png",
 	"qin_ming": "res://assets/characters/hero_portraits_aligned_20260926/qin_ming.png",
-	"hu_yanzhuo": "res://assets/characters/hero_portraits_aligned_20260926/hu_yanzhuo.png",
+	"hu_yanzhuo": "res://assets/characters/hu_yanzhuo_direction4_20261003/portrait.png",
 	# 新增四名核心英雄的独立头像，沿用统一纸纹与工笔厚涂风格。
 	"wu_yong": "res://assets/characters/hero_portraits_20260926/wu_yong.png",
 	"hua_rong": "res://assets/characters/hero_portraits_aligned_20260926/hua_rong.png",
@@ -673,6 +704,19 @@ func portrait_texture(key: String) -> Texture2D:
 func unit_anim_frames(key: String, state: String, direction := "", variant := "") -> Array:
 	if not direction.is_empty() and direction not in CampaignArt.DIRECTIONS:
 		return []
+	var ordinary := _ordinary_character_frames(key, state, direction, variant)
+	if not ordinary.is_empty(): return ordinary
+	var native_owner := CampaignArt.native_body_owner(variant)
+	if not native_owner.is_empty():
+		if key != native_owner: return []
+		var native_path := CampaignArt.native_body_path(variant, state, direction)
+		if native_path.is_empty(): return []
+		# Canvas draw commands retain a texture RID, not the temporary resource.
+		# Keep native frames alive between draws, including stationary captives.
+		var native_cache_key := "native_body|" + native_path
+		if not _anim_cache.has(native_cache_key):
+			_anim_cache[native_cache_key] = _load_generic_directional_frames(native_path)
+		return _anim_cache[native_cache_key]
 	if not variant.is_empty():
 		var bound_owner := CampaignArt.programmatic_bound_owner(variant)
 		if not bound_owner.is_empty():
@@ -768,6 +812,19 @@ func unit_anim_frames(key: String, state: String, direction := "", variant := ""
 	return frames
 
 
+## A living prisoner has a dedicated pose, never idle/death or an aliased hero.
+## Only the reviewed Han Tao body owns this route; campaign outfits remain isolated.
+func unit_captured_frames(key: String, direction: String, variant := "") -> Array:
+	if key != "han_tao" or not variant.is_empty() or direction not in CampaignArt.DIRECTIONS:
+		return []
+	var cache_key := "captured|%s|%s" % [key, direction]
+	if _anim_cache.has(cache_key): return _anim_cache[cache_key]
+	var path := _resolve_generic_directional_path(key, "captured", direction)
+	var frames := _load_generic_directional_frames(path)
+	_anim_cache[cache_key] = frames
+	return frames
+
+
 func _generic_directional_path(key: String, state: String, direction: String) -> String:
 	if direction not in CampaignArt.DIRECTIONS:
 		return ""
@@ -781,9 +838,9 @@ func _resolve_generic_directional_path(key: String, state: String, direction: St
 	if _generic_directional_path_cache.has(cache_key):
 		return String(_generic_directional_path_cache[cache_key])
 	var path := _generic_directional_path(key, state, direction)
-	# The executioner's legacy idle PNGs remain as provenance references.
-	# Prefer its reviewed atlas sequence without changing other units' routing.
-	if key == "guan_zhanzi":
+	# Keep legacy PNGs as provenance while these reviewed batches use native
+	# atlas sequences. All other units retain their existing PNG-first routing.
+	if key in ["guan_zhanzi", "siege_cata", "zhu_qi", "zhu_gong", "zhu_keke", "gou_lian", "lian_huan_ma", "xu_ning", "han_tao"]:
 		var authored_path := path.get_basename() + ".tres"
 		if ResourceLoader.exists(authored_path) and not _load_generic_directional_frames(authored_path).is_empty():
 			_generic_directional_path_cache[cache_key] = authored_path
@@ -840,6 +897,9 @@ func _slice_anim_strip(tex: Texture2D) -> Array:
 func unit_anim_uses_directional_source(key: String, state: String, direction: String, variant := "") -> bool:
 	if direction not in CampaignArt.DIRECTIONS:
 		return false
+	if not _ordinary_character_frames(key, state, direction, variant).is_empty(): return true
+	if not CampaignArt.native_body_owner(variant).is_empty():
+		return not unit_anim_frames(key, state, direction, variant).is_empty()
 	if not variant.is_empty():
 		var bound_owner := CampaignArt.programmatic_bound_owner(variant)
 		if not bound_owner.is_empty():
@@ -886,12 +946,17 @@ func _campaign_texture(path: String) -> Texture2D:
 func campaign_variant_has_direction(variant: String, direction: String) -> bool:
 	if variant.is_empty() or direction not in CampaignArt.DIRECTIONS:
 		return false
+	if not CampaignArt.native_body_owner(variant).is_empty():
+		return not _load_generic_directional_frames(CampaignArt.native_body_path(variant, "idle", direction)).is_empty()
 	var path := CampaignArt.animation_path(variant, "idle", direction)
 	return not path.is_empty() and ResourceLoader.exists(path)
 
 ## 精确动作存在判断；复用纹理缓存，绝不以idle回退冒充双人动作。
 func campaign_variant_has_animation(variant: String, state: String, direction: String) -> bool:
 	if variant.is_empty() or direction not in CampaignArt.DIRECTIONS: return false
+	if not CampaignArt.native_body_owner(variant).is_empty():
+		var authored_states: Array = ["idle", "walk"] if not CampaignArt.native_wounded_owner(variant).is_empty() else ["idle"]
+		return state in authored_states and not _load_generic_directional_frames(CampaignArt.native_body_path(variant, state, direction)).is_empty()
 	var path := CampaignArt.animation_path(variant, state, direction)
 	var texture := _campaign_texture(path)
 	return texture != null and texture.get_height() > 0 and texture.get_width() % texture.get_height() == 0

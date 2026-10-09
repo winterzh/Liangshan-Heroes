@@ -1,0 +1,218 @@
+{
+  "schema": "campaign_original19_natural_file_fault_probe_source_v5",
+  "candidate": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\original19_natural_file_faults_candidate_v5\\campaign_original19_natural_file_faults_v5.gd",
+    "bytes": 27798,
+    "sha256": "89f10bc184bf1d06ac064d58546822effb8add62d6b361a08bf7ec6789dffd85"
+  },
+  "predecessor": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\original19_natural_file_faults_candidate_v4\\campaign_original19_natural_file_faults_v4.gd",
+    "bytes": 27797,
+    "sha256": "395ce698af1f6ac9c4eca892e5264b98c892cc1cd8cc8e8d93b14d380e642606"
+  },
+  "pending_UI_source_reference": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\pending_terminal_ui_candidate_v2\\campaign_pending_terminal_ui_probe_v2.gd",
+    "bytes": 24629,
+    "sha256": "59be03c34cc6154551786bb3670961d245465b54d9f059e5f21ae9048d60fa79"
+  },
+  "original_case_requirements": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\ORIGINAL19_R12_ADAPTATION_REQUIREMENTS_V1.json",
+    "bytes": 16119,
+    "sha256": "faeb9b48c96cf3c785c6e6a129912a4873bbc1ce14819dd53649666bad6335d9"
+  },
+  "runtime_sources": [
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\campaign.gd",
+      "bytes": 22806,
+      "sha256": "3e7257e412e65ffc012d3dfd5d0392d4d96a5ce32cbdf1634caf221d2e88060b"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\continue_flow.gd",
+      "bytes": 31285,
+      "sha256": "20674da5a412db0cc41cc48dacfcbf619e91009a81026c735fd80e7cb5a9a16d"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\run_campaign_progress_coordinator.gd",
+      "bytes": 11741,
+      "sha256": "23193509d2e1d7f367cbfe3c06a2a479276c7eefb31e987136db635945d1417e"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\run_campaign_cfg_transaction.gd",
+      "bytes": 27586,
+      "sha256": "71803fc42a6bef59479db5b8cf70a953716a3968e45ba1fb391eed5726a51d17"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\run_campaign_cfg_values.gd",
+      "bytes": 2640,
+      "sha256": "8d962715c19f0b9d3c045a25b5f215e9600ceeff204524fc0be630da8598eb27"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\run_campaign_local_lifecycle.gd",
+      "bytes": 14384,
+      "sha256": "ee2d3fb936dfe8e1a4f8e129733fad8fbb5a6598df666d83024046cd0d878ed2"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\run_campaign_progress_intent.gd",
+      "bytes": 10291,
+      "sha256": "a64add7d20999f0c306006a08a7fad7d263e252d8aae430424bd97ff4049f894"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\integrated_v4_r12\\scripts\\run_campaign_progress_gate.gd",
+      "bytes": 3152,
+      "sha256": "129bd0a9cd6ee5b41595b294494681125accfa1bf9906cebd41fe905c15e5460"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\scripts\\run_snapshot_store.gd",
+      "bytes": 21642,
+      "sha256": "581e638b8f0ce7cb24d5533b03ee94b99732c5cffcbf373b1a5a69a1618d8251"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\godot_debug_wire.py",
+      "bytes": 6794,
+      "sha256": "41703c88628a3fa473db00d8eeb79e87e6c2f250b0dc243a951b8295973e0c35"
+    }
+  ],
+  "case_ids": [
+    "bad_existing_cfg_load",
+    "existing_vanished_prior",
+    "write_failure",
+    "save_OK_fresh_load_failure",
+    "readback_semantic_mismatch",
+    "readback_SHA_changed"
+  ],
+  "actual_debugger_windows": {
+    "bad_existing_cfg_load": {
+      "stop": {
+        "source": "res://scripts/run_campaign_cfg_transaction.gd",
+        "function": "begin_write",
+        "line": 172,
+        "exact_source_line": "\tvar prior: Dictionary = _cfg_sha(ProjectSettings.globalize_path(CFG_PATH))"
+      },
+      "caller": "_drive_cfg",
+      "mutation": "replace only exact seeded public CFG with owned malformed UTF8; record original bytes and bothSHA; restore exact original before retry",
+      "code": "CFG_READBACK_LOAD",
+      "native_error_policy": "only precise expected ConfigFile malformed-load diagnostic; SCRIPT ERROR and all unrelated errors forbidden"
+    },
+    "existing_vanished_prior": {
+      "stop": {
+        "source": "res://scripts/run_campaign_cfg_transaction.gd",
+        "function": "_stable_cfg",
+        "line": 145,
+        "exact_source_line": "\tvar cfg := ConfigFile.new()"
+      },
+      "immediate_caller": "begin_write",
+      "mutation": "after positive original prior SHA remove only exact owned seeded public file; restore exact original to empty path before retry",
+      "code": "CFG_READBACK_LOAD",
+      "native_error_policy": "no unrelated diagnostics"
+    },
+    "write_failure": {
+      "stop": {
+        "source": "res://scripts/run_campaign_cfg_transaction.gd",
+        "function": "retry_write",
+        "line": 292,
+        "exact_source_line": "\t\t\tvar saved: int = _frozen_cfg.save(candidate)"
+      },
+      "caller": "_drive_cfg",
+      "mutation": "native owns exactly one stage directory; create empty directory at its absent candidate.cfg path; remove only this exact empty controller-owned directory before retry",
+      "code": "CFG_STAGE_WRITE",
+      "native_error_policy": "budget only actual expected candidate FileAccess open denial if emitted"
+    },
+    "save_OK_fresh_load_failure": {
+      "stop": {
+        "source": "res://scripts/run_campaign_cfg_transaction.gd",
+        "function": "_stable_cfg",
+        "line": 145,
+        "exact_source_line": "\tvar cfg := ConfigFile.new()"
+      },
+      "immediate_caller": "retry_write",
+      "mutation": "after real candidate save and positive stable SHA, remove only current owned candidate file; restore exact saved candidate bytes before retry",
+      "code": "CFG_STAGE_READBACK",
+      "native_error_policy": "no unrelated diagnostics",
+      "inner_rejection_code": "CFG_READBACK_LOAD",
+      "outer_return": {
+        "source": "res://scripts/run_campaign_cfg_transaction.gd",
+        "function": "retry_write",
+        "line": 298,
+        "exact_source_line": "\t\tif not read.ok or read.semantics_sha256 != _active.semantics_sha256: return bad(\"CFG_STAGE_READBACK\")"
+      }
+    },
+    "readback_semantic_mismatch": {
+      "stop": {
+        "source": "res://scripts/run_campaign_cfg_transaction.gd",
+        "function": "_stable_cfg",
+        "line": 143,
+        "exact_source_line": "\tvar before: Dictionary = _cfg_sha(path)"
+      },
+      "immediate_caller": "retry_write",
+      "mutation": "append an owned valid unknown ConfigFile section/key to actual saved candidate before fresh read; current earlier expected-SHA guard refuses changed data; restore exact original candidate",
+      "code": "CFG_STAGE_READBACK",
+      "native_error_policy": "zero diagnostics; no claim that later semantic comparison was reached",
+      "inner_rejection_code": "CFG_READBACK_SHA",
+      "outer_return": {
+        "source": "res://scripts/run_campaign_cfg_transaction.gd",
+        "function": "retry_write",
+        "line": 298,
+        "exact_source_line": "\t\tif not read.ok or read.semantics_sha256 != _active.semantics_sha256: return bad(\"CFG_STAGE_READBACK\")"
+      }
+    },
+    "readback_SHA_changed": {
+      "stop": {
+        "source": "res://scripts/run_campaign_cfg_transaction.gd",
+        "function": "_stable_cfg",
+        "line": 149,
+        "exact_source_line": "\tvar after: Dictionary = _cfg_sha(path)"
+      },
+      "immediate_caller": "retry_write",
+      "mutation": "append only owned comment bytes after native fresh load/semantics before after-SHA; restore exact original candidate before retry",
+      "code": "CFG_STAGE_READBACK",
+      "native_error_policy": "zero diagnostics",
+      "inner_rejection_code": "CFG_READBACK_CHANGED",
+      "outer_return": {
+        "source": "res://scripts/run_campaign_cfg_transaction.gd",
+        "function": "retry_write",
+        "line": 298,
+        "exact_source_line": "\t\tif not read.ok or read.semantics_sha256 != _active.semantics_sha256: return bad(\"CFG_STAGE_READBACK\")"
+      }
+    }
+  },
+  "required_debugger_guard": "Owned loopback connection set_pid exact, full stack top source/function/line plus actual coordinator _drive_cfg/retry/ContinueFlow._commit_terminal; no mutation until actual natural ready artifact and samegen2/pending intent; skip all unrelated/prefs calls without fault",
+  "native_profile_scope": "each fault gets its own fresh normal SDK-disabled profile, native Campaign.save_prefs real prior transaction and ordinary natural Huangnigang route; actual visible RetryTerminal after exact filesystem repair",
+  "expected_seed_CFG_journal_generations": [
+    1,
+    2
+  ],
+  "required_local_lifecycle_after_fault": [
+    1,
+    2
+  ],
+  "required_local_lifecycle_after_real_retry": [
+    1,
+    2,
+    3
+  ],
+  "source_reviewed": false,
+  "producer_implemented": false,
+  "native_started": false,
+  "full_original19_qualified": false,
+  "UI_qualified": false,
+  "SDK_qualified": false,
+  "overall_goal_qualified": false,
+  "predecessor_manifest": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\original19_natural_file_faults_candidate_v4\\SOURCE.json",
+    "bytes": 9723,
+    "sha256": "43abb9161b7551f7485757dbadc5486ee1f7a63aa53fb4ad8b86a6559dc53da0"
+  },
+  "predecessor_rejection": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\original19_natural_file_faults_candidate_v1\\ORIGINAL19_NATURAL_FILE_FAULT_PRELIMINARY_REVIEW_V1.json",
+    "bytes": 3667,
+    "sha256": "cf109c7e7104fee2155bbf982a0ef679461e2c9cb4bd10f3f0f2915b7e789bc6"
+  },
+  "changes": [
+    "Only three FAULT_CODES corrected to actual outer CFG_STAGE_READBACK; inner rejection metadata retained; all ordinary route/check/report/publication functions unchanged"
+  ],
+  "predecessor_review": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\original19_natural_file_faults_candidate_v2\\ORIGINAL19_NATURAL_FILE_FAULT_PRELIMINARY_REVIEW_V2.json",
+    "bytes": 2963,
+    "sha256": "d27dc6005b1cd7d140b968b438ab64340c101263d53604a2fd28528e83d3089d"
+  }
+}

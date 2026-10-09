@@ -1,0 +1,92 @@
+--- daming_safe_retreat_cross_process_v25s.gd
++++ daming_safe_retreat_cross_process_v25s1.gd
+@@ -1,4 +1,6 @@
+ extends Node
++## IMMUTABLE v25s1: retain only this process's actual launch/commit Battle;
++## keep the original pending save Session until exit, with no retry or replacement.
+ ## EXTERNAL UNEXECUTED v25: four processes, actual single-safe save/continue/terminal.
+ ## v25s adopts exact external v24s four helpers and _hold. v24s45024 is
+ ## not yet full native qualified; complete successful ABC successor is mandatory.
+@@ -43,6 +45,9 @@
+ var restore_session: RefCounted
+ var retained_identity: RefCounted
+ var battle: Node
++var owned_battle: Node
++var save_session: RefCounted
++var failed_save_result: Dictionary = {}
+ var finished := false
+ var first_role := ""
+ var route: RefCounted
+@@ -160,6 +165,9 @@
+ 		var current: Node = get_tree().current_scene
+ 		if is_instance_valid(current) and current.get_script() == B: break
+ 	var b: Node = get_tree().current_scene
++	# This is the actual scene produced by our private menu._launch above.
++	# Retain before any later context/health audit can return null to run().
++	if is_instance_valid(b) and b.get_script() == B: owned_battle = b
+ 	if not check("actual Daming Battle launched", is_instance_valid(b) and b.get_script() == B and b.level.get_script() == Daming): return null
+ 	# Original launch UI signals skip only the intro/deployment wait, never gameplay.
+ 	b.hud._intro_root.hide()
+@@ -284,11 +292,14 @@
+ 	return value
+ 
+ func _save(b: Node, handoff_path: String, expected: Dictionary) -> bool:
+-	var saver: RefCounted = Session.new(trusted, runtime, SLOT_ROOT)
++	# Retain the original transaction, including its exact pending writer token.
++	save_session = Session.new(trusted, runtime, SLOT_ROOT)
++	var saver: RefCounted = save_session
+ 	var before: int = Time.get_ticks_msec()
+ 	var stage_started: int = b.mission._stage_started_ms
+ 	var saved: Dictionary = saver.save_held(b, retained_identity, expected)
+ 	var after: int = Time.get_ticks_msec()
++	if not saved.get("ok", false): failed_save_result = saved.duplicate(true)
+ 	if not check("complete Session save_held succeeds", saved.get("ok", false), saved): return false
+ 	var slot: Dictionary = Store.new(SLOT_ROOT).read_slot()
+ 	if not check("actual committed disk head matches receipt", slot.get("ok", false) and slot.file_sha256 == saved.file_sha256 and slot.revision == saved.generation, slot.get("code", "")): return false
+@@ -347,6 +358,9 @@
+ 	var after_commit_physics: int = Engine.get_physics_frames()
+ 	if not check("actual Session commit_restore_async succeeds", installed.get("ok", false), installed): return null
+ 	var b: Node = installed.battle
++	# commit_restore_async handed this exact world to the caller, even when a
++	# later packet/hold/world audit fails and _restore returns null.
++	owned_battle = b
+ 	retained_identity = installed.identity
+ 	var activation_physics: int = b._run_clock._engine_anchor
+ 	if not check("complete installed paused Battle and local resume", get_tree().current_scene == b and b.get_parent() == get_tree().root and get_tree().paused and _healthy(b) and not installed.steam_credit and installed.generation == slot.revision and installed.paused == slot.document.resume_paused and activation_physics >= before_commit_physics and activation_physics <= after_commit_physics): return null
+@@ -662,7 +676,11 @@
+ func finish() -> void:
+ 	if finished: return
+ 	finished = true
+-	var passed: bool = not checks.is_empty() and checks.all(func(row): return row.passed)
++	var pending_save: bool = save_session != null and save_session.has_pending_save()
++	if save_session != null:
++		observations.append({"retained_save_session": {"phase": save_session._phase, "pending_save": pending_save, "pending_status": save_session.pending_save_status() if pending_save else {}, "original_failure": failed_save_result.duplicate(true), "retry_attempted": false, "pending_session_preserved_until_process_exit": pending_save}})
++	observations.append({"owned_battle_cleanup_target": {"exists": is_instance_valid(owned_battle), "instance_id": str(owned_battle.get_instance_id()) if is_instance_valid(owned_battle) else "", "run_result_is_same_owned_battle": is_instance_valid(battle) and battle == owned_battle, "source": "actual_private_launch_or_successful_session_commit_only"}})
++	var passed: bool = not pending_save and not checks.is_empty() and checks.all(func(row): return row.passed)
+ 	var report := {"schema": "daming_safe_retreat_cross_process_report_v25", "case": mode, "pid": OS.get_process_id(), "nonce": nonce, "passed": passed, "checks": checks, "observations": observations, "evidence": evidence, "trusted": trusted, "orders": orders, "previous_pid": handoff.get("pid", 0), "previous_nonce": handoff.get("nonce", ""), "private_profile": profile, "actual_user_data_dir": OS.get_user_data_dir(), "full_world_case_only": true, "public_campaign_continue_qualified": false, "first_role": first_role, "single_safe_disk_case_qualified": passed and single_safe_disk_qualified, "natural_victory_qualified": passed and terminal_qualified, "local_terminal_readback_qualified": passed and terminal_readback_qualified, "campaign_persistence_qualified": false, "steam_reward_once_qualified": false, "callback_invocation_count_qualified": false, "negative_harness_status": "not_implemented_not_run", "teleports": 0, "fixture_ticks": 0, "progress_injections": 0, "clock_acceleration": false, "scope": "External unexecuted runner adapted from failing v24o baseline; requires qualified successor audit corrections. Natural rescue/single-safe complete disk Session install/resave and durable local natural terminal; each case qualified only by actual checks. No public continue, Steam reward, release, performance or device qualification."}
+ 	if output.is_empty() or not DirAccess.dir_exists_absolute(output) or FileAccess.file_exists(output.path_join("report.json")):
+ 		print("DAMING_RETREAT REPORT_PATH_NOT_FRESH")
+@@ -671,12 +689,20 @@
+ 		var file := FileAccess.open(output.path_join("report.json"), FileAccess.WRITE)
+ 		if file == null: passed = false
+ 		else: file.store_string(JSON.stringify(report, "\t") + "\n"); file.close()
+-	# Dispose the installed world and caller-owned identity only after evidence.
+-	if is_instance_valid(battle):
+-		battle.queue_free()
++	# Free only our own actual launch or handed-off commit scene. Never infer a
++	# cleanup target from current_scene, a retained menu, or another tree child.
++	if is_instance_valid(owned_battle):
++		owned_battle.queue_free()
+ 		await get_tree().process_frame
++	owned_battle = null
++	battle = null
+ 	if retained_identity != null: retained_identity.dispose(); retained_identity = null
+ 	if restore_session != null: restore_session.dispose(); restore_session = null
++	# An unsafe pending writer remains strongly owned through process exit.
++	# There is no retry, new writer, replacement token, or success claim here.
++	if save_session != null and not pending_save:
++		save_session.dispose()
++		save_session = null
+ 	print("DAMING_RETREAT_V25_COMPLETE ", mode, " ", checks.size(), " ", passed)
+ 	get_node("/root/Sfx").shutdown()
+ 	get_node("/root/Music").shutdown()

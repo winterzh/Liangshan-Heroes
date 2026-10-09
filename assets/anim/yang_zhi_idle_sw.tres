@@ -1,0 +1,22 @@
+[gd_resource type="SpriteFrames" load_steps=3 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/yang_zhi_direction4_20261004/idle_corrected_candidate.png" id="idle_corrected_candidate"]
+
+[sub_resource type="AtlasTexture" id="idle_sw"]
+atlas = ExtResource("idle_corrected_candidate")
+region = Rect2(638, 0, 616, 633)
+margin = Rect2(8, 0, 17, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(50.0, -70.94)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.945862
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("idle_sw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

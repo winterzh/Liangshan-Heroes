@@ -1,0 +1,36 @@
+{
+  "created_utc": "2026-10-07T21:03:50.409525+00:00",
+  "review_scope": "Pure Python AST/compile and source field/order/pin review; no imports or execution of tool main/helper/CIM, no live backend sampling",
+  "engine_started": false,
+  "main_run": false,
+  "source_restoration_performed": false,
+  "root_docs_or_production_modified": false,
+  "runtime_terminal_verified_by_reviewer": false,
+  "deadline_reached_verified_by_reviewer": false,
+  "native_qualified": false,
+  "schema": "night_restore_tool_r1_limited_independent_review_20261008",
+  "tool_pin": {
+    "path": "E:/ChatGPT/restore_unqualified_night_candidates_20261008_r1.py",
+    "sha256": "cd84f1d19681cf12eef82c5733ec812b1bbc3a178fe260bc20a79bc1f89098c8",
+    "bytes": 10292
+  },
+  "static_closure_passed": false,
+  "closed_prior_findings": [
+    "Latest71d exact path/rawSHA/schema/producer/failure/candidate6/pointer binding",
+    "Explicit known PID marker fallback",
+    "Fresh output open+flush+fsync before mutation and finally actual per-file failure receipt"
+  ],
+  "findings": [
+    {
+      "priority": "P2",
+      "code": "ASSERT_ONLY_GUARDS_WITHOUT_OPTIMIZATION_REJECTION",
+      "detail": "Python -O or PYTHONOPTIMIZE removes deadline/terminal/branch/SHA assertions. The source did not explicitly refuse optimized execution; Root controlled normal interpreter is not a source-enforced guard."
+    },
+    {
+      "priority": "P2",
+      "code": "FINAL_FALSE_PRESERVATION_ROW_NOT_FOLDED_IN_COMPLETE",
+      "detail": "finally may record candidate_retained_in_QA=false or restored=false while receipt.complete remains true. Final exit assertion only checks restored, so false QA candidate-preservation can still exit0 and save complete=true."
+    }
+  ],
+  "disposition": "Preserve r1cd84 unchanged; only later r2 resolves these remaining source guards."
+}

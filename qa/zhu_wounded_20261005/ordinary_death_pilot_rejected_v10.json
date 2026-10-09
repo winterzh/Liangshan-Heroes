@@ -1,0 +1,40 @@
+{
+  "qualified": false,
+  "failed_receipt": "E:\\ChatGPT\\qa-ordinary-posture-20261006\\ordinary_death_pilot_v10_5101dfd0\\receipt.json",
+  "failed_receipt_sha256": "b5de070a9944c113b52ad1b4021cafdda93738314e0f5c0485431f72cb6983ba",
+  "failure": {
+    "type": "AssertionError",
+    "message": "Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org\nOpenGL API 3.3.0 NVIDIA 616.56 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce RTX 3070 Ti\n\nSCRIPT ERROR: Compile Error: Identifier not found: Art\n   at: GDScript::reload (res://scripts/game_map.gd:581)\nSCRIPT ERROR: Compile Error: Failed to compile depended scripts.\n   at: GDScript::reload (res://scripts/campaign_gate_visual.gd:0)\nSCRIPT ERROR: Compile Error: Failed to compile depended scripts.\n   at: GDScript::reload (res://scripts/world_shadow.gd:0)\n"
+  },
+  "steps": [
+    {
+      "case": "import",
+      "pid": 184508,
+      "exit_code": 0,
+      "stop_reason": null,
+      "log_sha256": "7cb44f883c739dea2c05a04a587998b8f3273a1ac8173970d578ba8a8294be86"
+    },
+    {
+      "case": "render",
+      "pid": 187732,
+      "exit_code": 1,
+      "stop_reason": "fatal_script_or_engine_error",
+      "log_sha256": "25c04689ff19b7f148985c7f0ec83de420adf24f06cd744b103e8ae7958721c8"
+    }
+  ],
+  "harnesses": [
+    {
+      "path": "qa/zhu_wounded_20261005/harness/ordinary_death_pilot_v10.gd",
+      "sha256": "0633709113fdd1153c1be2ae918ccaac86123ad9dc8f4227208da504ef4bb515"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/harness/run_ordinary_death_pilot_v10.py",
+      "sha256": "0fb3f821581ab5c939b804038b6f2c53f13f7c6d97b735b303bd990570e35d33"
+    }
+  ],
+  "lock_released": true,
+  "correction": "Sibling v10a removes early WorldShadow preload and inspects the actual loaded WorldShadowBatch node after original Battle startup.",
+  "production_scripts_changed": false,
+  "death_viewports_captured": 0,
+  "scope": "Failed fixture compilation; no actual death or production qualification. Exact failed producer/project/logs retained."
+}

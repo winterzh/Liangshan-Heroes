@@ -1,0 +1,72 @@
+--- E:\ChatGPT\daming_admit_v24o_proposal\run_daming_admit_v24r1.py
++++ E:\ChatGPT\daming_admit_v24o_proposal\run_daming_admit_v24r2.py
+@@ -1,4 +1,5 @@
+-# Unexecuted v24r1 sibling: preserve failed v24r batch; only reviewed boundary fixture/pins and evidence validation change.
++# Unexecuted v24r2 sibling: exact executed v24r1 qualification; require 60 seconds of continuous observed natural shared engine/lock idle.
++# Source/runtime5102, q1 boundary, OwnedSlot and native A/B/C qualification are unchanged; no retry or control of other tasks.
+ # Candidate v24r derives from immutable executed v24o4; no older producer is overwritten.
+ # This file is prepared only. Native import/regression/A/B/C must still prove qualification.
+ """Run one fresh frozen three-process Daming admission Session batch.
+@@ -208,7 +209,7 @@
+         self.native = None
+         self.code_pins = {}
+         self.reports = {}
+-        self.receipt = {"schema": "daming_admit_batch_v24r1", "complete": False, "run": str(run),
++        self.receipt = {"schema": "daming_admit_batch_v24r2", "complete": False, "run": str(run),
+                         "project": str(self.project), "source_root": str(self.root),
+                         "scope": SCOPE, "private_runtime_patches": 0, "qa_harness_added": True,
+                         "public_campaign_continue_qualified": False, "natural_victory_qualified": False,
+@@ -382,7 +383,7 @@
+             committed_owned_tool = subprocess.check_output(["git", "show", "HEAD:tools/owned_slot_retry_qa.gd"], cwd=self.root)
+             require(committed_owned_tool.replace(b"\r\n", b"\n") == owned_tool.read_bytes().replace(b"\r\n", b"\n"), "OwnedSlot original tool has uncommitted drift")
+             self.code_pins[str(owned_tool)] = sha(owned_tool)
+-            for name in ["run_daming_admit_v24r1.py", "run_daming_admit_v24r.py", "run_daming_admit_v24o4.py", "daming_admit_cross_process_v24o.gd", "daming_admit_cross_process_v24o.tscn"]:
++            for name in ["run_daming_admit_v24r2.py", "run_daming_admit_v24r1.py", "run_daming_admit_v24r.py", "run_daming_admit_v24o4.py", "daming_admit_cross_process_v24o.gd", "daming_admit_cross_process_v24o.tscn"]:
+                 self.code_pins[str(proposal / name)] = sha(proposal / name)
+             self.receipt["helper_and_proposal_files"] = [{"path": p, "sha256": digest} for p, digest in self.code_pins.items()]
+             self.input_integrity()
+@@ -649,12 +650,32 @@
+             step.update(prior_complete=True, prior_sha256=sha(self.args.prior_receipt))
+ 
+     def wait_idle(self):
++        idle_since = None
++        last_idle_notice = None
+         while True:
+             self.limit()
+             rows = engine_rows()
+-            if not rows and not self.lock.exists(): return
+-            print("WAIT natural shared engine idle", rows, "lock_busy=", self.lock.exists(), flush=True)
+-            self.pause()
++            lock_busy = self.lock.exists()
++            now = time.monotonic()
++            if rows or lock_busy:
++                idle_since = None
++                last_idle_notice = None
++                print("WAIT natural shared engine idle", rows, "lock_busy=", lock_busy,
++                      "continuous_idle_seconds_reset=", 60, flush=True)
++                self.pause()
++                continue
++            if idle_since is None:
++                idle_since = now
++            elapsed = now - idle_since
++            if elapsed >= 60:
++                print("IDLE natural shared engine and lock continuously observed idle",
++                      round(elapsed, 3), "s", flush=True)
++                return
++            if last_idle_notice is None or now - last_idle_notice >= 10:
++                print("WAIT continuous natural shared engine and lock idle",
++                      round(elapsed, 3), "/ 60 s", flush=True)
++                last_idle_notice = now
++            self.pause(1)
+ 
+     def acquire(self):
+         while True:
+@@ -976,7 +997,7 @@
+     require(args.source_root.is_dir() and (args.source_root / "project.godot").is_file(), "source root not a Godot project")
+     require(not args.work_root.is_relative_to(args.source_root) and args.work_root != args.source_root, "work root must be outside source checkout")
+     args.work_root.mkdir(parents=True, exist_ok=True)
+-    run = args.work_root / ("daming_admit_v24r1_" + uuid.uuid4().hex[:8])
++    run = args.work_root / ("daming_admit_v24r2_" + uuid.uuid4().hex[:8])
+     run.mkdir(exist_ok=False)
+     runner = Runner(args, run)
+     code = 0

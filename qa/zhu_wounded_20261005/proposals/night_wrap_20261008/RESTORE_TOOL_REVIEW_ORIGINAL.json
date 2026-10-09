@@ -1,0 +1,36 @@
+{
+  "created_utc": "2026-10-07T21:03:50.409525+00:00",
+  "review_scope": "Pure Python AST/compile and source field/order/pin review; no imports or execution of tool main/helper/CIM, no live backend sampling",
+  "engine_started": false,
+  "main_run": false,
+  "source_restoration_performed": false,
+  "root_docs_or_production_modified": false,
+  "runtime_terminal_verified_by_reviewer": false,
+  "deadline_reached_verified_by_reviewer": false,
+  "native_qualified": false,
+  "schema": "night_restore_tool_original_independent_review_20261008",
+  "tool_pin": {
+    "path": "E:/ChatGPT/restore_unqualified_night_candidates_20261008.py",
+    "sha256": "7045ee190f4f5138dfc43147ac23547631438504584b17dc40e5ee91de4d8640",
+    "bytes": 5784
+  },
+  "static_closure_passed": false,
+  "findings": [
+    {
+      "priority": "P1",
+      "code": "ARBITRARY_OLD_FALSE_RECEIPT_ACCEPTED",
+      "detail": "Only broad qa-world directory, overallfalse, lock_releasedtrue and truthy finished_utc are checked. No exact run/schema/producer/source6/raw receipt SHA binds the decision to the latest night backend. An oldfalse receipt can therefore permit reversal even if a later actual full run qualified. Even a three-key unrelated JSON is sufficient for the receipt predicate."
+    },
+    {
+      "priority": "P2",
+      "code": "KNOWN_OWN_PID_WITHOUT_COMMANDLINE_MAY_BE_MISSED",
+      "detail": "CIM filter relies only on CommandLine markers; missing metadata makes known own PID disappear from blocked rows. Explicit known producer/consumer PID checks are required."
+    },
+    {
+      "priority": "P2",
+      "code": "MUTATION_FAILURE_CAN_LEAVE_NO_RECEIPT",
+      "detail": "Fresh output is opened only after both source writes, without mutation finally. Second-file/write/output failure leaves actual partial source state without new failure receipt and an ordinary rerun no longer matches afterSHA."
+    }
+  ],
+  "disposition": "Preserve original7045 as historical unexecuted rejected candidate; do not execute it. New sibling required."
+}

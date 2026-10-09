@@ -1,0 +1,54 @@
+--- daming_safe_retreat_negative_world_v25b.gd
++++ daming_safe_retreat_negative_world_v25b2.gd
+@@ -1,6 +1,6 @@
+ extends Node
+ ## External, unexecuted fixed DTO negative suite. Actual A source files are mandatory.
+-## Source and actual JSON-reader routes both reach an independent Core.prepare.
++## Each real route verifies its actual layer; bare JSON Int fails exact Slot bytes before Core.
+ ## No capture/live-object negative is implemented, and no saved data is written.
+ const INPUT_SCHEMA := "daming_safe_retreat_negative_inputs_v25"
+ const REPORT_SCHEMA := "daming_safe_retreat_negative_world_report_v25"
+@@ -344,21 +344,17 @@
+ 	var record: Dictionary = hook.document.world.sections[spec.section]
+ 	var leaf: Variant = record[spec.path[0]] if spec.path.size() == 1 else record[spec.path[0]][spec.path[1]]
+ 	var normalized: String = JSON.stringify(hook.document)
+-	var core: RefCounted = Core.new(trusted, runtime, {}, null, Profiles.DAMING_CONTEXT)
+-	var initially_empty := _zero(core)
+ 	# No Core.prepare call here. The observed refusal is the actual Store._decode
+-	# result already obtained by _read_route; this independent Core stays empty.
++	# result already obtained by _read_route. No Core instance is constructed.
+ 	var refused: bool = opened.get("ok") == false and opened.get("code") == "NONCANONICAL_RECORD"
+ 	var one_leaf: bool = typeof(leaf) == TYPE_FLOAT and is_finite(leaf) and leaf == float(spec.value) and _exact(expected_normalized, hook.document) and normalized != payload
+ 	var immutable: bool = _exact(packet, before) and _exact(base, base_before) and _exact(parsed, parsed_before) and JSON.stringify(packet).sha256_text() == fingerprint
+-	var no_allocation := _zero(core)
+-	var passed: bool = refused and one_leaf and immutable and initially_empty and no_allocation
++	var passed: bool = refused and one_leaf and immutable
+ 	rows.append({"case": spec.id, "route": "json", "passed": passed, "expected_code": "NONCANONICAL_RECORD", "actual_code": opened.get("code", ""), "expected_guard_layer": "slot_exact_canonical", "direct_pair_branch_coverage": false,
+-		"core_prepare_called": false, "initially_empty": initially_empty, "zero_world_before_dispose": no_allocation, "core_battle_null": core._battle == null, "core_identity_null": core._identity == null, "core_unit_plan_empty": core._unit_plan.is_empty(),
++		"core_prepare_called": false, "core_constructor_called": false, "core_instance_state": "never_created", "core_no_allocation_audited": false, "initially_empty": null, "zero_world_before_dispose": null, "core_battle_null": null, "core_identity_null": null, "core_unit_plan_empty": null,
+ 		"source_input_type_ieee_exact": immutable, "mutated_packet_sha256": fingerprint, "typed_document_sha256": normalized.sha256_text(), "cached_grids_preserved": true, "actual_store_envelope_decode_called": true, "json_source_scalar_type": "int", "json_decoded_scalar_type": type_string(typeof(leaf)), "json_int_to_float_one_leaf_exact": one_leaf, "core_expected_if_reached": spec.expected_code,
+ 		"detail": null if passed else _brief(opened)})
+-	core.dispose()
+-	return check("actual Slot canonical rejection/no Core.prepare/input immutable " + spec.id + "/json", passed, opened)
++	return check("actual Slot canonical rejection/Core never created/input immutable " + spec.id + "/json", passed, opened)
+ 
+ 
+ func _negative(spec: Dictionary, route_name: String) -> bool:
+@@ -383,7 +379,7 @@
+ 	var immutable := _exact(packet, mutated_before) and _exact(opened.document, typed_before) and _exact(base, base_before) and JSON.stringify(packet).sha256_text() == fingerprint
+ 	var passed: bool = initially_empty and not prepared.get("ok", false) and prepared.get("code") == spec.expected_code and no_allocation and immutable
+ 	rows.append({"case": spec.id, "route": route_name, "passed": passed, "expected_code": spec.expected_code, "actual_code": prepared.get("code", ""), "expected_guard_layer": spec.expected_guard_layer, "direct_pair_branch_coverage": spec.direct_pair_branch_coverage,
+-		"actual_store_envelope_decode_called": route_name == "json", "core_prepare_called": true, "initially_empty": initially_empty, "zero_world_before_dispose": no_allocation, "core_battle_null": core._battle == null, "core_identity_null": core._identity == null, "core_unit_plan_empty": core._unit_plan.is_empty(),
++		"actual_store_envelope_decode_called": route_name == "json", "core_prepare_called": true, "core_constructor_called": true, "core_instance_state": "constructed_in_this_row", "core_no_allocation_audited": true, "initially_empty": initially_empty, "zero_world_before_dispose": no_allocation, "core_battle_null": core._battle == null, "core_identity_null": core._identity == null, "core_unit_plan_empty": core._unit_plan.is_empty(),
+ 		"source_input_type_ieee_exact": immutable, "mutated_packet_sha256": fingerprint, "typed_document_sha256": JSON.stringify(typed_before).sha256_text(), "cached_grids_preserved": true, "detail": null if passed else _brief(prepared)})
+ 	core.dispose()
+ 	return check("exact rejection/no world allocation/input immutable " + spec.id + "/" + route_name, passed, prepared)
+@@ -402,7 +398,7 @@
+ 		"whole_world_dto_negative_only": true, "store_routes": ["native_source_document", "actual_JSON_envelope_decode_hook"], "live_object_capture_negative_implemented": false, "live_object_capture_negative_qualified": false, "separate_component_harness_implemented": false, "overall_v25_qualified": false,
+ 		"disk_slot_writes": 0, "direct_gameplay_calls": 0, "cached_grids_cleared": 0, "future_producer_integration_qualified": false,
+ 		"not_implemented": ["live object capture negatives", "separate Unit/Pair component harness", "two-safe full coherent DTO and terminal/result branches beyond this fixed matrix", "all other packet/payload leaf types outside fixed five-record identity leaves"],
+-		"scope": "Actual qualified A raw source pinned; source/JSON Store hooks then independent complete Core.prepare. Exact fixed DTO failures and pre-dispose no-world states. No live capture negative, activation, ticks, save IO or feature qualification."}
++		"scope": "Actual qualified A raw source pinned. Bare JSON Int identity routes reject at exact Slot canonical bytes with no Core created. Other source/JSON routes call independent complete Core.prepare and audit pre-dispose no-world states. No live capture negative, activation, ticks, save IO or feature qualification."}
+ 	if not output.is_empty() and DirAccess.dir_exists_absolute(output.get_base_dir()) and not FileAccess.file_exists(output):
+ 		var file := FileAccess.open(output, FileAccess.WRITE)
+ 		if file != null: file.store_string(JSON.stringify(report, "\t") + "\n"); file.close()

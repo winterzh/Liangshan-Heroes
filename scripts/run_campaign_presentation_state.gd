@@ -39,6 +39,12 @@ var level_buttons: Dictionary = {}
 var activation_plan: Dictionary = {}
 var _raw: Dictionary = {}
 var _layout_done := false
+var _labels_restored := false
+var _deferred_label_bindings: Array = []
+var _entry_defaults: Dictionary = {}
+var _pending_buttons: Array[Node] = []
+var _entry_suspended := false
+var _entry_restored := false
 var _active := false
 var _used := false
 var _mount_frame := -1
@@ -470,6 +476,15 @@ func prepare(owner: Node, presentation_record: Variant, mission_record: Variant,
 	if state_data.value.scroll != checked.value.scroll: return _bad("PRESENTATION_SCROLL_PAIR")
 	_used = true; _owner = owner; _raw = checked.value
 	mission = Mission.new(owner)
+	# Preserve the original empty constructor state for native tree entry.
+	# Button objects already exist later for exact Level references, but enter
+	# the ready panel afterward, as in the normal Mission creation sequence.
+	var base_registry: Dictionary = _registry(mission)
+	for row: Dictionary in base_registry.rows:
+		var node: Control = row.node
+		var values: Dictionary = {}
+		for field: String in ["size", "position", "custom_minimum_size", "anchor_left", "anchor_top", "anchor_right", "anchor_bottom", "offset_left", "offset_top", "offset_right", "offset_bottom", "visible"]: values[field] = node.get(field)
+		_entry_defaults[node] = values
 	# Fixed shipped UI constructors only. In particular no Level method is invoked
 	# here, no begin/configure/tick, and no request_action/finish/reward is called.
 	for id: String in state_data.actions:
@@ -505,6 +520,9 @@ func prepare(owner: Node, presentation_record: Variant, mission_record: Variant,
 		var node: Control = token_to_external[row.token]
 		if node.get_class() != row.kind or paths[row.token] != row.path: return _abort("PRESENTATION_GRAPH_PATH", row.token)
 		for field: String in row.values:
+			# Original Mission enters with blank Labels, then fills their text.
+			# Keep that sequence so hidden glyph minima do not resize saved UI.
+			if field == "text" and node is Label: continue
 			if field == "button_pressed": (node as Button).set_pressed_no_signal(row.values[field])
 			elif field == "texture_kind":
 				if not _internal(node) or not node.get_parent() is ScrollContainer: return _abort("PRESENTATION_TEXTURE_OWNER", row.token)
@@ -526,12 +544,9 @@ func prepare(owner: Node, presentation_record: Variant, mission_record: Variant,
 		if absf(float(marker.get_meta("render_height", 0.0)) - float(row.render_height if row.render_height != null else 0.0)) > 0.00001: return _abort("PRESENTATION_MAP_HEIGHT_MISMATCH")
 		activation_plan[marker] = row.flags.duplicate()
 	_remove_bindings(registry.external_to_token)
-	for row: Dictionary in _raw.bindings:
-		var node: Node = token_to_external[row.token]; var descriptor: Dictionary = row.descriptor
-		if descriptor.kind == "actor_render": Localize.bind_render(node, Callable(mission, "_actor_locator_text").bind(descriptor.actor_key), StringName(row.property))
-		else:
-			var binding: Dictionary = descriptor.duplicate(true); binding.erase("kind")
-			Localize._bind(node, StringName(row.property), binding)
+	# Register every binding later in the original saved order. Deferring only
+	# Label bindings changes the sequence of the global localization registry.
+	_deferred_label_bindings.assign(_raw.bindings.duplicate(true))
 	_gate(mission._panel)
 	for marker: Node in mission._markers: _gate(marker)
 	var restored: Dictionary = _state.restore_into(mission, owner, mission_record, context, id_to_unit, next_entity_id, token_to_external, restore_ticks_msec, true)
@@ -541,15 +556,56 @@ func prepare(owner: Node, presentation_record: Variant, mission_record: Variant,
 		"level_buttons": level_buttons, "activation_plan": activation_plan, "resume_eligible": restored.resume_eligible,
 		"complete_world": false, "begin_called": false, "events_replayed": 0}
 
+## Called by the owned Core transaction immediately before native mounting.
+## No button is fabricated: retain the exact fixed-factory objects and references.
+func prepare_native_entry() -> Dictionary:
+	if _entry_suspended or _active or not _used or not is_instance_valid(_owner) or _owner.is_inside_tree() or _owner.get_parent() != null or not _all_gated(): return _bad("PRESENTATION_ENTRY_PHASE")
+	if _registry(mission).token_to_external != token_to_external: return _bad("PRESENTATION_ENTRY_GRAPH")
+	for button: Node in mission._buttons.get_children():
+		if not token_to_external.values().has(button) or not button is Button or button.get_script() != null: return _bad("PRESENTATION_ENTRY_BUTTON")
+	for button: Node in mission._buttons.get_children():
+		_pending_buttons.append(button); mission._buttons.remove_child(button)
+	for node: Control in _entry_defaults:
+		var values: Dictionary = _entry_defaults[node]
+		for field: String in values:
+			if field != "visible": node.set(field, values[field])
+		node.visible = values.visible
+	_entry_suspended = true
+	return {"ok": true}
+
+## Match the normal constructor: ready empty panel, then attach real controls
+## and fill data. Keep every input/signal gate closed until final activation.
+func finish_native_entry() -> Dictionary:
+	if not _entry_suspended or _entry_restored or not is_instance_valid(_owner) or not _owner.is_inside_tree() or not _owner.get_tree().paused or not _all_gated(): return _bad("PRESENTATION_ENTRY_FINISH_PHASE")
+	for button: Node in _pending_buttons:
+		if not is_instance_valid(button) or button.get_parent() != null or button.is_inside_tree(): return _bad("PRESENTATION_ENTRY_BUTTON_CHANGED")
+	# Restore base geometry while labels and button list are still empty. The
+	# native minimum-size cache is then the same as the original constructor.
+	for row: Dictionary in _raw.controls:
+		var node: Control = token_to_external[row.token]
+		if not _entry_defaults.has(node): continue
+		for field: String in _entry_defaults[node]:
+			if field != "visible": node.set(field, row.values[field])
+	for row: Dictionary in _raw.controls:
+		var node: Control = token_to_external[row.token]
+		if _entry_defaults.has(node): node.visible = row.values.visible
+	for button: Node in _pending_buttons: mission._buttons.add_child(button)
+	_pending_buttons.clear()
+	if _registry(mission).token_to_external != token_to_external or not _all_gated(): return _bad("PRESENTATION_ENTRY_FINAL_GRAPH")
+	_entry_restored = true
+	return {"ok": true}
+
 func finish_layout() -> Dictionary:
 	if _active or _layout_done or not is_instance_valid(_owner) or not _owner.is_inside_tree() or not _owner.get_tree().paused or not _all_gated(): return _bad("PRESENTATION_LAYOUT_PHASE")
 	if _mount_frame < 0:
 		_mount_frame = Engine.get_process_frames()
-		if _raw.locale != Localize.locale: mission._on_language_changed(Localize.locale)
 		for node: Node in token_to_external.values():
-			if node is Container: node.queue_sort()
+			if node is Container and node.is_visible_in_tree(): node.queue_sort()
 		return _bad("PRESENTATION_LAYOUT_PENDING")
 	if Engine.get_process_frames() <= _mount_frame: return _bad("PRESENTATION_LAYOUT_PENDING")
+	if not _labels_restored:
+		_restore_mounted_label_text()
+		return _bad("PRESENTATION_LAYOUT_PENDING")
 	var scroll: ScrollContainer = mission._detail_scroll
 	var horizontal: HScrollBar = scroll.get_h_scroll_bar(); var vertical: VScrollBar = scroll.get_v_scroll_bar()
 	if float(_raw.scroll.horizontal) > maxf(horizontal.min_value, horizontal.max_value - horizontal.page) or float(_raw.scroll.vertical) > maxf(vertical.min_value, vertical.max_value - vertical.page): return _bad("PRESENTATION_LAYOUT_PENDING")
@@ -559,7 +615,8 @@ func finish_layout() -> Dictionary:
 	# content at the saved offset and wait for that layout before restoring
 	# transforms which Container.fit_child_in_rect normally resets.
 	if _scroll_frame < 0:
-		_scroll_frame = Engine.get_process_frames(); scroll.queue_sort()
+		_scroll_frame = Engine.get_process_frames()
+		if scroll.is_visible_in_tree(): scroll.queue_sort()
 		return _bad("PRESENTATION_LAYOUT_PENDING")
 	if Engine.get_process_frames() <= _scroll_frame: return _bad("PRESENTATION_LAYOUT_PENDING")
 	for row: Dictionary in _raw.controls:
@@ -569,8 +626,26 @@ func finish_layout() -> Dictionary:
 	_layout_done = true
 	return {"ok": true, "input_enabled": false, "complete_world": false}
 
+## The normal constructor's Labels become ready while blank. Filling their
+## saved text afterward preserves hidden container dimensions below current
+## glyph minima, exactly as the original Mission does. Nothing is hidden or
+## resized to make capture pass; all saved Control values remain mandatory.
+func _restore_mounted_label_text() -> void:
+	for row: Dictionary in _raw.controls:
+		var node: Control = token_to_external[row.token]
+		if node is Label: node.text = row.values.text
+	for row: Dictionary in _deferred_label_bindings:
+		var node: Node = token_to_external[row.token]; var descriptor: Dictionary = row.descriptor
+		if descriptor.kind == "actor_render": Localize.bind_render(node, Callable(mission, "_actor_locator_text").bind(descriptor.actor_key), StringName(row.property))
+		else:
+			var binding: Dictionary = descriptor.duplicate(true); binding.erase("kind")
+			Localize._bind(node, StringName(row.property), binding)
+	_deferred_label_bindings.clear()
+	if _raw.locale != Localize.locale: mission._on_language_changed(Localize.locale)
+	_labels_restored = true
+
 func activate() -> Dictionary:
-	if _active or not _layout_done or not is_instance_valid(_owner) or not _owner.is_inside_tree() or not _owner.get_tree().paused or not _all_gated(): return _bad("PRESENTATION_ACTIVATION_PHASE")
+	if _active or not _layout_done or not _labels_restored or not _entry_restored or not is_instance_valid(_owner) or not _owner.is_inside_tree() or not _owner.get_tree().paused or not _all_gated(): return _bad("PRESENTATION_ACTIVATION_PHASE")
 	for node: Node in activation_plan:
 		var flags: Dictionary = activation_plan[node]
 		node.process_priority = flags.priority; node.process_physics_priority = flags.physics_priority
@@ -581,6 +656,9 @@ func activate() -> Dictionary:
 	return {"ok": true, "complete_world": false, "gameplay_activated": false}
 
 func dispose() -> void:
+	for button: Node in _pending_buttons:
+		if is_instance_valid(button): button.free()
+	_pending_buttons.clear(); _entry_defaults.clear()
 	if is_instance_valid(mission):
 		if Localize.language_changed.is_connected(mission._on_language_changed): Localize.language_changed.disconnect(mission._on_language_changed)
 		var nodes: Dictionary = {}

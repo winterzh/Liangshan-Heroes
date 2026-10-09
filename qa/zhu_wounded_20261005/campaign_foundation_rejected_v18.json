@@ -1,0 +1,17 @@
+{
+  "qualified": false,
+  "failure": "QA SceneTree early preloads compiled Battle/chapters before Localize autoload registration; no runtime component result.",
+  "receipt_sha256": "767760639d1ed3c422846721c949d624bdca7519598d521493dcd8120627fbf7",
+  "harnesses": [
+    {
+      "path": "qa/zhu_wounded_20261005/harness/campaign_foundation_v18.gd",
+      "sha256": "41dfe8cdbced061707534629fc7707d27aed75fd281b33b070f7656c4380b4f3"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/harness/run_campaign_foundation_v18.py",
+      "sha256": "509c0b5ecc491f8fda824571c158ea57e7d07113d8cd6223317f2fc91c5b9431"
+    }
+  ],
+  "production_changed_for_fix": false,
+  "fix": "Sibling v18a loads installed Scripts after private profile guard and autoload initialization. Original producer and failed receipt retained."
+}

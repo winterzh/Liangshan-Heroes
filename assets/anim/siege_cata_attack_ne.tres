@@ -1,42 +1,61 @@
-[gd_resource type="SpriteFrames" load_steps=6 format=3]
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
 
-[ext_resource type="Texture2D" path="res://assets/characters/art_full_20260916/siege_cata_attack_direction4.png" id="siege_cata_attack_atlas"]
+[ext_resource type="Texture2D" path="res://assets/characters/siege_cata_direction4_20261004/idle.png" id="idle"]
 
-[sub_resource type="AtlasTexture" id="charge_ne"]
-atlas = ExtResource("siege_cata_attack_atlas")
-region = Rect2(0, 1254, 627, 627)
-margin = Rect2(70, 0, 141, 141)
+[ext_resource type="Texture2D" path="res://assets/characters/siege_cata_direction4_20261004/raise.png" id="raise"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/siege_cata_direction4_20261004/release.png" id="release"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/siege_cata_direction4_20261004/recover.png" id="recover"]
+
+[sub_resource type="AtlasTexture" id="idle_ne"]
+atlas = ExtResource("idle")
+region = Rect2(0, 624, 638, 630)
+margin = Rect2(0, 4, 0, 8)
 filter_clip = true
-metadata/draw_offset_px = Vector2(0.0, 0.0)
+metadata/draw_offset_px = Vector2(6.0, 27.16)
 metadata/authored_direction4 = true
+metadata/draw_scale = 1.297627
 
 [sub_resource type="AtlasTexture" id="raise_ne"]
-atlas = ExtResource("siege_cata_attack_atlas")
-region = Rect2(627, 1254, 627, 627)
-margin = Rect2(70, 0, 141, 141)
+atlas = ExtResource("raise")
+region = Rect2(0, 622, 626, 632)
+margin = Rect2(3, 0, 6, 0)
 filter_clip = true
-metadata/draw_offset_px = Vector2(0.0, 0.0)
+metadata/draw_offset_px = Vector2(1.0, 12.24)
 metadata/authored_direction4 = true
+metadata/draw_scale = 1.285424
 
 [sub_resource type="AtlasTexture" id="release_ne"]
-atlas = ExtResource("siege_cata_attack_atlas")
-region = Rect2(1254, 1254, 627, 627)
-margin = Rect2(70, 0, 141, 141)
+atlas = ExtResource("release")
+region = Rect2(0, 624, 626, 630)
+margin = Rect2(2, 0, 4, 0)
 filter_clip = true
-metadata/draw_offset_px = Vector2(0.0, 0.0)
+metadata/draw_offset_px = Vector2(-27.5, -32.4)
 metadata/authored_direction4 = true
+metadata/draw_scale = 1.281356
 
 [sub_resource type="AtlasTexture" id="recover_ne"]
-atlas = ExtResource("siege_cata_attack_atlas")
-region = Rect2(1881, 1254, 627, 627)
-margin = Rect2(70, 0, 141, 141)
+atlas = ExtResource("recover")
+region = Rect2(0, 626, 637, 628)
+margin = Rect2(0, 4, 0, 9)
 filter_clip = true
-metadata/draw_offset_px = Vector2(0.0, 0.0)
+metadata/draw_offset_px = Vector2(4.0, 26.34)
 metadata/authored_direction4 = true
+metadata/draw_scale = 1.295593
 
 [resource]
 animations = [{
-"frames": [{"duration": 1.0, "texture": SubResource("charge_ne")},{"duration": 1.0, "texture": SubResource("raise_ne")},{"duration": 1.0, "texture": SubResource("release_ne")},{"duration": 1.0, "texture": SubResource("recover_ne")}],
+"frames": [
+{"duration": 1.0, "texture": SubResource("idle_ne")},
+{"duration": 1.0, "texture": SubResource("raise_ne")},
+{"duration": 1.0, "texture": SubResource("raise_ne")},
+{"duration": 1.0, "texture": SubResource("raise_ne")},
+{"duration": 1.0, "texture": SubResource("release_ne")},
+{"duration": 1.0, "texture": SubResource("release_ne")},
+{"duration": 1.0, "texture": SubResource("recover_ne")},
+{"duration": 1.0, "texture": SubResource("idle_ne")}
+],
 "loop": true,
 "name": &"default",
 "speed": 4.0

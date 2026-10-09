@@ -1,0 +1,9 @@
+# 自然终局回调原生userdata文本前置修复
+
+原consumer_v2/replay_v2也将OS.get_user_data_dir原forwardslash字符串Path化再str重构，Windows下拒绝合法原native ready/snapshot。原云分支拒绝与真实LuA目录表示已独立确认；原175pin自然callback recipe保持，本批不授原V1执行资格。
+
+新natural consumer_v3仅保留report原native_user字符串并传driver-ready/replay；独立Path仍承担noLinks/private userdata boundary、physical CFG/lifecycle读写。packet replay_v3只要求raw str并直传原decoder，不改完整event/size/SHA/typed/raw/tail（含ORDER-001修复）语义。80/56/21完整合同、actual terminal Popen/同phase/PID/nonce/exit0/errors0/full15 identity、完整原report/CFG/三代lifecycle/noReplay保持，未减scope。
+
+19项synthetic包含原15、old-v2在真实Windows Path重构后拒绝与新raw文本通过/Path输入和changed text拒绝；所有私有packet/metadata是fixture，没有native process或完整consumer调用。producer尚未换库，必须在有限review后另做精确来源重绑定；旧delta/source-only收据不能替代成功V12前置及新的完整native admission。
+
+请有限核对已知USER-TEXT在自然分支的精确修复、原物理方法/边界保持与原pin闭合。不Godot/大模拟、stage=[]。为后继producer精确引用，请原收据含 source_spec_file_sha256、packet_helper_pin、natural_consumer_pin，记录 source-only/independent/static_api_closure_passed及confirmed/unverified，保存 NATURAL_CALLBACK_USER_TEXT_PRELIMINARY_REVIEW_V1.json 后返回SHA。普通cloud restart/完整producer及所有原要求仍待完成。

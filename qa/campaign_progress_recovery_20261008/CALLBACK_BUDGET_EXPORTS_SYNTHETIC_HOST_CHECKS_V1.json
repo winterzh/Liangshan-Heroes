@@ -1,0 +1,79 @@
+{
+  "schema": "callback_budget_exports_synthetic_host_checks_v1",
+  "script_sha256": "5a76b15a25867a15e792f7f5fd0eba3f8e4515cafd37286f6e318cc3e3aab6e1",
+  "source_sha256": {
+    "campaign_callback_controller_v3.py": "19c7683d2dc2c2c7b50774fc8092211b21fafbf6969fed7138e516a797296307",
+    "campaign_callback_native_exports_v1.py": "f38c5eabb00f50929c7f7623945cb0d0686936d3ea2c84e4370996ec3cb85d50"
+  },
+  "checks": [
+    {
+      "label": "old 256 events reject frame129 before natural phase horizon",
+      "passed": true
+    },
+    {
+      "label": "1800 one-Hz frame pairs retained with exact bytes",
+      "passed": true
+    },
+    {
+      "label": "496 control/refusal reserve reaches bounded4096",
+      "passed": true
+    },
+    {
+      "label": "new event overflow still refused",
+      "passed": true
+    },
+    {
+      "label": "64MiB cumulative overflow refused before write",
+      "passed": true
+    },
+    {
+      "label": "all4096 original disk records independently reread with sameSHA",
+      "passed": true
+    },
+    {
+      "label": "four fixed synthetic closed stages publish exact JSON bytes",
+      "passed": true
+    },
+    {
+      "label": "original four export hashes stable on reread",
+      "passed": true
+    },
+    {
+      "label": "other callback cannot claim fixed natural exports",
+      "passed": true
+    },
+    {
+      "label": "missing terminal exports refuse complete",
+      "passed": true
+    },
+    {
+      "label": "unallowed restart marker refused",
+      "passed": true
+    },
+    {
+      "label": "duplicate export marker refused",
+      "passed": true
+    },
+    {
+      "label": "foreign synthetic nonce refused",
+      "passed": true
+    },
+    {
+      "label": "existing public file cannot be replaced",
+      "passed": true
+    }
+  ],
+  "count": 14,
+  "all_passed": true,
+  "work": "D:\\CodexTemp\\lsh-callback-budget-s05ak7w7",
+  "classification": "synthetic constructor-bypassed private disk retention and forged PID/nonce/JSON markers only; not native ownership or whole pipeline",
+  "telemetry_frame_bytes": 544,
+  "new_events": 4096,
+  "new_retained_bytes": 1967328,
+  "socket_connected": false,
+  "Popen_started": false,
+  "native_started": false,
+  "actual_engine_traffic_verified": false,
+  "performance_qualified": false,
+  "approved_stages": []
+}

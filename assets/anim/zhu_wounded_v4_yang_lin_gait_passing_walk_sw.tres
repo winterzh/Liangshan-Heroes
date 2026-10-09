@@ -1,0 +1,58 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/yang_lin_wounded_20261005/walk_a_sw_v4.png" id="walk_a_sw"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/yang_lin_wounded_20261005/passing_a_sw_v4.png" id="passing_a_sw"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/yang_lin_wounded_20261005/walk_b2_sw_v4.png" id="walk_b_sw"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/yang_lin_wounded_20261005/passing_b_sw_v4.png" id="passing_b_sw"]
+
+[sub_resource type="AtlasTexture" id="walk_a_sw"]
+atlas = ExtResource("walk_a_sw")
+region = Rect2(0, 0, 1254, 1254)
+margin = Rect2(0, 0, 0, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-11.0, -159.72)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.86636
+
+[sub_resource type="AtlasTexture" id="passing_a_sw"]
+atlas = ExtResource("passing_a_sw")
+region = Rect2(0, 0, 1254, 1254)
+margin = Rect2(0, 0, 0, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-8.0, -153.72)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.880396
+
+[sub_resource type="AtlasTexture" id="walk_b_sw"]
+atlas = ExtResource("walk_b_sw")
+region = Rect2(0, 0, 1254, 1254)
+margin = Rect2(0, 0, 0, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(17.0, -179.72)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.834573
+
+[sub_resource type="AtlasTexture" id="passing_b_sw"]
+atlas = ExtResource("passing_b_sw")
+region = Rect2(0, 0, 1254, 1254)
+margin = Rect2(0, 0, 0, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-7.0, -163.72)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.86178
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("walk_a_sw")},
+{"duration": 1.0, "texture": SubResource("passing_a_sw")},
+{"duration": 1.0, "texture": SubResource("walk_b_sw")},
+{"duration": 1.0, "texture": SubResource("passing_b_sw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

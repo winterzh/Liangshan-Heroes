@@ -1,0 +1,386 @@
+{
+  "schema": "native_direction4_generation_lineage_v1",
+  "character": "gou_lian",
+  "original_reference": {
+    "path": "assets/portraits8.png",
+    "sha256": "7fb27cf2cdc7b499682edc43b216ab8edbc55189dfe6402715732c8b422b1752"
+  },
+  "identity_note": "Middle-right current standard portrait: plain iron helmet, grey neck flap and folded collar, short moustache/goatee, brown quilted tunic. One hooked spear, left hand forward and right rear; ordinary non-hero foot infantry with exact spear timing and anti-cavalry bonus retained. Legacy blue body is camera/style only.",
+  "jobs": [
+    {
+      "key": "legacy_idle_se",
+      "repository_path": "assets/anim/gou_lian_idle_se.png",
+      "sha256": "21ec095af6f381d2cc200c5fa6878fb78d058b46a3ef489874877a2c74a2a77e",
+      "method": "existing_project_reference",
+      "prompt": "Legacy camera/style and single hooked spear shape only; old blue cloth is not current portrait identity.",
+      "references": [
+        "original"
+      ],
+      "status": "required_reference"
+    },
+    {
+      "key": "legacy_idle_nw",
+      "repository_path": "assets/anim/gou_lian_idle_nw.png",
+      "sha256": "55725776ccda150c00c22dda988f7246e215f5fd3ad79ebfa732f92eb233be09",
+      "method": "existing_project_reference",
+      "prompt": "Legacy camera/style and single hooked spear shape only; old blue cloth is not current portrait identity.",
+      "references": [
+        "original"
+      ],
+      "status": "required_reference"
+    },
+    {
+      "key": "grip_sw",
+      "repository_path": "tools/contracts/gou_lian_direction4_20261004/guides/grip_sw.png",
+      "sha256": "e2615e2400f9a9f966bc857b4b3b585a6462416916d50d8764ea3db179e0df21",
+      "method": "orthographic_geometry_diagram",
+      "prompt": "Fresh code-native anatomical grip geometry on a blank canvas; production PNG pixels are never edited.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/gou_lian_direction4_20261004/guides/draw_grip_guides.py",
+          "sha256": "a2ef863b7e53d0b1514d402beab9d4c007f47c43688538cb4d32cf201f0cd7e5"
+        }
+      ]
+    },
+    {
+      "key": "grip_ne",
+      "repository_path": "tools/contracts/gou_lian_direction4_20261004/guides/grip_ne.png",
+      "sha256": "c463c4f8a373f00ca932a1bbe733bffaf32eb5140266d37d007c7a18ee3af574",
+      "method": "orthographic_geometry_diagram",
+      "prompt": "Fresh code-native anatomical grip geometry on a blank canvas; production PNG pixels are never edited.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/gou_lian_direction4_20261004/guides/draw_grip_guides.py",
+          "sha256": "a2ef863b7e53d0b1514d402beab9d4c007f47c43688538cb4d32cf201f0cd7e5"
+        }
+      ]
+    },
+    {
+      "key": "strike_ne_guide",
+      "repository_path": "tools/contracts/gou_lian_direction4_20261004/guides/strike_ne_guide.png",
+      "sha256": "6d9dc4ff885c9e3d032c97d9996622349b02b2c613bbd4940390f47a4ed6a814",
+      "method": "orthographic_geometry_diagram",
+      "prompt": "Fresh code-native anatomical grip geometry on a blank canvas; production PNG pixels are never edited.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/gou_lian_direction4_20261004/guides/draw_strike_ne_guide.py",
+          "sha256": "42c733983ac816cc30f6020882186a1e0d542743fdbc0547fea6563e9cf26997"
+        }
+      ]
+    },
+    {
+      "key": "idle",
+      "repository_path": "assets/characters/gou_lian_direction4_20261004/idle.png",
+      "sha256": "77d9578d95e89981c32a587122fa85045e598995b2aed58c326d4be9a17f2594",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Production game asset gou_lian ordinary hook-spear infantry, FOUR independently drawn IDLE facings, native transparent RGBA square 1024 strict 2x2 atlas. Input1 identity reference ONLY middle-RIGHT portrait of this 3x3 portraits8 sheet: rugged Chinese male short moustache/goatee, plain dark iron round helmet with small top stud and dark cloth neck flap, brown quilted padded tunic/armor, grey folded collar/scarf, brown belt, dark trousers, offwhite cloth wrapped calves/dark shoes. Inputs2/3 old bodies CAMERA/compact painterly isometric STYLE and hooked spear shape ONLY; replace old blue tunic/black cloth topknot with current iron helmet and brown quilt. One long brown wooden hook-spear shaft, silver spear head with one curved SIDE HOOK near tip, small red neck tassel retained from old weapon, held TWO-handed: anatomical LEFT hand is forward grip near head, anatomical RIGHT hand rear grip near butt. Front views left shoulder on SCREEN-RIGHT leads forward grip and right shoulder on SCREEN-LEFT leads rear grip, back views left shoulder SCREEN-LEFT leads forward grip and right shoulder SCREEN-RIGHT leads rear grip. Independently rotate torso/shaft and never mirror to swap hands. TL southeast DOWN-RIGHT front, TR southwest DOWN-LEFT front, BL northeast UP-RIGHT rear, BR northwest UP-LEFT rear. Idle guarded low diagonal carry shaft across waist toward facing, not attacking or overhead. Whole standing feet grounded, one spear in both hands, shoulder/forearm attachments coherent. Same body scale and elevated painterly camera. Compact body plus full polearm fit centrally each quadrant with 50px+ outer padding and at least 80px fully empty cross gutter; tips/butt/feet not clipped or overlapping. No extra weapons/arms, cape, horse, bow, shield, scenery, ground shadow, labels, glow or checkerboard. Genuine transparent alpha.",
+      "references": [
+        "original",
+        "legacy_idle_se",
+        "legacy_idle_nw"
+      ],
+      "status": "selected",
+      "generation_id": "a3fadfe0-36ac-4d7d-94d9-7787e4521493"
+    },
+    {
+      "key": "idle_sw",
+      "repository_path": "assets/characters/gou_lian_direction4_20261004/idle_sw.png",
+      "sha256": "077e4a6eed387c89419f574e86c2638d1bc885a4e13da68352ca9162371dddf5",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Create NEW isometric infantry sprite following input1 schematic ARM TOPOLOGY, NOT a traced former sprite. Input1 geometry: BLUE LEFT arm on screen-RIGHT goes down/cross-body to screen-LEFT FORWARD shaft grip; RED RIGHT arm on screen-LEFT bends out left then forearm crosses belt to screen-CENTER/RIGHT REAR grip. Must visually CROSS forearms/arms: left sleeve runs diagonally from RIGHT shoulder across front abdomen to lower-left front fist; right forearm comes from LEFT elbow to rear grip in front of center belt. Hands cannot both remain on same side as originating shoulder. Spear shaft from silver tip at bottom-left to brown butt at top-right, left FRONT fist low-left nearer tip, right REAR fist centered at belly nearer butt. Independently painted human body faces southwest/down-left, chest front three-quarter and nose points left. Input2 identity ONLY middle-RIGHT portrait: dark round iron helmet with stud and neck flap, short moustache/goatee, brown quilted padded tunic, grey collar, dark trousers/wrapped calves/shoes; repaint both diagram arms ordinary brown fabric, no colored sleeves. Silver pointed hook-spear head with curved sidehook, small red tassel. Grounded idle low guard, knees modestly flexed, NOT thrusting. ONE sprite, not atlas, full body/shaft with ample margin in1024 square TRUE transparent RGBA, compact painterly elevated strategy game style. No diagram colors/text/background, old sprite, shadow/cape/shield/horse/extra hands or weapons.",
+      "references": [
+        "grip_sw",
+        "original"
+      ],
+      "status": "selected",
+      "generation_id": "20ba9067-4d61-4f43-a9ab-42c4a67ffb56"
+    },
+    {
+      "key": "idle_ne",
+      "repository_path": "assets/characters/gou_lian_direction4_20261004/idle_ne.png",
+      "sha256": "25be08573697ca5f340daf25b411207b002c7faea2d0f555883d28b2ac88be00",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Create ONE brand NEW transparent RGBA isometric infantry IDLE facing NORTHEAST UP-RIGHT seen BACK. Reference only middle-RIGHT portrait for identity: iron round stud helmet/grey cloth neck flap, short beard, brown quilted padded tunic/back, belt, dark trousers/wrapped calves/shoes. Hold ONE long hook-spear in UPRIGHT CARRY GUARD at character's LEFT side, not extended toward target yet: shaft almost vertical on SCREEN-LEFT of body, curved silver pointed hookhead above LEFT shoulder safely within canvas, small red neck tassel. LEFT anatomical arm emerges SCREEN-LEFT BACK shoulder and bends forward round left flank; LEFT fist at SCREEN-LEFT chest height holds FORWARD grip under hookhead. RIGHT anatomical arm emerges SCREEN-RIGHT BACK shoulder and bends around RIGHT waist across low belly to RIGHT fist at screen-left belt height on the REAR grip lower down same shaft. Back torso may occlude crossing right forearm, but attached right elbow at right waist, visible rear hand lower left and left front upper hand attached to left sleeve. NEVER put front grip in screen-right upper arm or mirror NW. Helmet/nose look UP-RIGHT, back mostly visible, feet grounded guard ready, no attack thrust. Two hands on SAME almost upright wood shaft with correct forward-left/rear-right positions. Whole polearm/body centrally contained with at least100px margin around all sides of1024 square true transparent canvas, compact painterly elevated RTS camera. No old blue uniform/topknot, horse, cape, shield/bow, extra hands/weapons, scene/background/shadow/text/checkerboard.",
+      "references": [
+        "original"
+      ],
+      "status": "selected",
+      "generation_id": "2561d868-fdef-4b88-8eb6-9ad7e452a85c"
+    },
+    {
+      "key": "walk_a_initial",
+      "repository_path": "tools/contracts/gou_lian_direction4_20261004/generated/walk_a_initial.png",
+      "sha256": "f079e3e82ab4c53e82c5e882a67e4dbf0889e467c60302b97e53dfe81a6a1438",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: precise-object-edit. Generate WALK A four independent views ordinary hook-spear infantry gou_lian. Input1 atlas use ONLY top-LEFT SE and bottom-RIGHT NW identity/low two-hand carry; Input2 is CORRECT SW crossed-arm grip; Input3 is CORRECT NE upright spear carry. Preserve each specified posture/hand identity: LEFT hand nearer hookhead/front, RIGHT hand rear/butt. For SW left arm starts screen-right and crosses front chest to front grip low-left; right rear forearm across belt; for NE keep UPRIGHT shaft on screen-left and LEFT upper grip screen-left with RIGHT lower grip from screen-right waist as input3, not old mirrored NE in input1. Native square1024 transparent RGBA strict2x2: TL SE down-right front, TR SW down-left front, BL NE up-right back, BR NW up-left back. Plain iron helmet/cloth neck flap brown quilted tunic greycollar shortbeard belt darktrousers wrappedcalves shoes same. WALK A anatomical LEFT foot planted FORWARD, RIGHT foot trails bent: FRONT views screen-RIGHT hip leg extends down with forward shoe, screen-LEFT hip knee bent shoe lifted back; REAR views screen-LEFT hip leg supports forward/up, screen-RIGHT hip leg bent trailing toward bottom. Modest lean in facing; TWO distinct stepping legs, not idle. Carry one whole long hooked spear small red tassel safely, no attack. Same compact elevated painterly RTS style/body height; whole blade/butt/feet eachcell contained with generous 50px+ outer margin and100px+ fully empty center crossgutter. Independently draw each cell, no reflection. No horses/shields/bows/capes/extra arms/weapons/trails/shadows/background/checkerboard/text.",
+      "references": [
+        "idle",
+        "idle_sw",
+        "idle_ne"
+      ],
+      "status": "required_reference",
+      "generation_id": "079cd632-5c99-404a-8124-81a79012788b"
+    },
+    {
+      "key": "walk_a",
+      "repository_path": "assets/characters/gou_lian_direction4_20261004/walk_a.png",
+      "sha256": "460df49cdc760da35c962e7e40ccf831c2a71c153f740c272ca091f70589f576",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: precise-object-edit. EDIT input four-view WALK A atlas to correct SPACING ONLY. All four exact bodies/legs/upper arms/grips/helmets/costume/weapon angles/facings must remain same. Important input ALL four are correct, don't swap legphase or mirror a single arm. Preserve TL SE and TR SW forward walking phase currently planted front shoe; preserve BL NE/NW currently screen-left trailingliftedsole andscreen-rightsupport. Repaint each entire figure identically but SMALLER and centered safely in its own quarter. Need at least120px COMPLETELY EMPTY CENTRAL HORIZONTAL BAND between top row soles and bottom row spear tips, and100px emptyverticalband. Current nearzero horizontalgap invalid; bottom-left NE spearhead must move well below center row (y>=600 on1024canvas), top feet mustend y<=430. Every whole spearhead/butt/boots within ownquadrant. At least55px outermargins. Keep trueLEFTfront/RIGHTrear grip all4: SW crossedarms, NE uprightleftshaft LEFTupper RIGHTlower. Square1024 genuine transparentRGBA strict2x2 same painterlyRTS no background/shadow/text/extraarms/weapon/reflection.",
+      "references": [
+        "walk_a_initial"
+      ],
+      "status": "selected",
+      "generation_id": "ec9a9129-7113-44bf-8643-df7ccf4aec54"
+    },
+    {
+      "key": "walk_b_initial",
+      "repository_path": "tools/contracts/gou_lian_direction4_20261004/generated/walk_b_initial.png",
+      "sha256": "c5d624df69dd074e991cae415042349515bacabf7d6f5051bf96170fe32a3ef4",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: precise-object-edit. EDIT input four-view hook-spear WALK A atlas into WALK B. Change ONLY stepping leg phase, modest carry sway if necessary, preserve current corrected left-front/right-rear two-hand grips, iron helmet/brown quilt/greycollar/shaft silverhook/redtassel/body camera and facings. Critical CLEARLY SWAP planted/trailing legs in ALL four cells: TOP-LEFT and TOP-RIGHT FRONT now screen-LEFT hip leg extends down-left with planted shoe below waist, SCREEN-RIGHT hip leg bends BACK with shoe lifted behind at upper calf height. BOTTOM-LEFT and BOTTOM-RIGHT REAR now screen-LEFT hip leg supports straight under left hip, SCREEN-RIGHT hip knee bends backward and its shoe is LIFTED toward bottom-right with visible sole. Do not leave screen-right front shoe planted or screen-left rear lifted sole as input; unmistakable complementary opposite phase. TL SE down-right front, TR SW down-left front with LEFT forward arm crossing torso, BL NE up-right rear with LEFT upper grip on upright shaft screen-left and RIGHT lower grip, BR NW up-left rear with LEFT upper-front grip screen-left and RIGHT low rear grip. Two hands/feet whole, no mirrored grips. Strict2x2 square1024 genuine transparent RGBA, compact silhouette ensure70px outer padding and at least100px FULLY EMPTY central horizontal and vertical gutters including spear tip, shrink composition if necessary. Whole spearhead/butt/shoes no clipping. No idle wide stance, horse/cape/shield/bow/background/shadow/trails/checkerboard/text/extra weapons.",
+      "references": [
+        "walk_a_initial"
+      ],
+      "status": "required_reference",
+      "generation_id": "472cadec-4dc0-4a7f-9a12-9abad72f3fa3"
+    },
+    {
+      "key": "walk_b",
+      "repository_path": "assets/characters/gou_lian_direction4_20261004/walk_b.png",
+      "sha256": "a404a0db73741c4c6450b9624fbaaafdd8c8b8f911d7b68a81518cd777e88181",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: precise-object-edit. EDIT input hook-spear WALK B four-view atlas. Change ONLY TOP ROW legs to the OPPOSITE walking phase. Keep BOTTOM TWO back views exactly, keep ALL four existing helmets/tunics/arms/hands/spear grips/facings. TL SE front: screen-LEFT leg must extend straight down below left hip, its shoe PLANTED far left of belt (x approx200/512 local); screen-RIGHT thigh lifted bent knee, right shoe lifted BACK at y330/512, no foot at old planted bottom-right position. TR SW front: screen-RIGHT leg now extends down below right hip, its shoe PLANTED far right of belt (x approx350/512 local); screen-LEFT knee bends back and its shoe lifted behind at y330/512, NO foot at old planted bottom-left. Both top views show unambiguously SWAPPED planted leg vs input. Do NOT mirror any upper-body/weapon. Keep left hand FORWARD near spearhead and right hand REAR near butt in all cells; SW anatomical left crosses torso. Keep bottom NE/NW current left leg support/right lifted sole, unchanged. Iron helmet greyflap brown quilted tunic greycollar; one hooked spear redtassel. Strict2x2 square1024 genuine transparent RGBA. Give generous margins and90px fully transparent central horizontal/vertical gutters including all spear tips. No clipping/shadow/text/checkerboard/extra limbs.",
+      "references": [
+        "walk_b_initial"
+      ],
+      "status": "selected",
+      "generation_id": "d7a490d0-ce8f-4104-b8ef-b7381748d46d"
+    },
+    {
+      "key": "windup_initial",
+      "repository_path": "tools/contracts/gou_lian_direction4_20261004/generated/windup_initial.png",
+      "sha256": "3e81c7a17212c13813005f9f5a3d84e10b0497ad535c3cff743c69ff8116858a",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: precise-object-edit. Create a four-direction WINDUP anticipation frame for ordinary Chinese hook-spear infantry gou_lian, drawn independently. Input1 atlas ONLY top-left SE and bottom-right NW identity/weapon reference; Input2 correct SW crossed-arm grip; Input3 correct NE upright carry. Same rugged shortbearded man plain iron round helmet grey neck flap brown quilted tunic grey scarf dark trousers wrapped calves. One long brown shaft silver pointed spearhead with curved side hook and small red tassel. Anatomical LEFT hand always front near blade, RIGHT rear near butt, both hands contact same shaft. WINDUP: wide braced feet bent knees, torso twists back, spear drawn slightly back close waist ready to thrust in facing direction. Four facings TL SE down-right front, TR SW down-left front, BL NE up-right rear, BR NW up-left rear. Blade must aim down-right in SE, down-left SW, up-right NE, up-left NW, never opposite. SW LEFT forward arm from screen-right shoulder crosses chest to front grip low-left, right rear hand from screen-left shoulder across belt to rear grip on right. NE LEFT forward arm from screen-left shoulder crosses back toward high-right grip near up-right blade; RIGHT rear hand from right shoulder behind low-left butt; keep two distinct arms and real back-facing head looking up-right. NW LEFT front shoulder screen-left near up-left blade, right rear arm screen-right low nearbutt. Short compact weapon angle contained in each cell. Four whole independent full bodies elevated painterly RTS isometric same visual style. Strict2x2 square1024 genuine transparent RGBA, allow80px outer padding and100px completely EMPTY central crossgutters including all shaft/head/shoes. Entire pointed blade/butt inside cell no crop. Do not mirror hand laterality. No sword/bow/horse/shield/cape/extra arms/weapon duplicates/trails/shadow/background/checkerboard/text.",
+      "references": [
+        "idle",
+        "idle_sw",
+        "idle_ne"
+      ],
+      "status": "required_reference",
+      "generation_id": "ac8e0078-3dc4-4ea8-9c96-4427d61fa808"
+    },
+    {
+      "key": "windup",
+      "repository_path": "assets/characters/gou_lian_direction4_20261004/windup.png",
+      "sha256": "1af4c3e4a0d838baab739ec70f8f9050c364ee9009877bfe5bd751b0d13ad67e",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: precise-object-edit. Correct TWO hand grips ONLY in input1 four-view WINDUP atlas. Preserve TOP LEFT SE and BOTTOM RIGHT NW unchanged, entire helmet/quilt/scarf/pants/shoes and spearhead/tassel. Input2 blue LEFT/red RIGHT analytical SW arm map; input3 blue LEFT/red RIGHT NE arm map, guides are structure only and no labels/colors in production. TOP RIGHT SW: anatomically LEFT shoulder is SCREEN-RIGHT. Its sleeve MUST CROSS in front of chest diagonally to SCREEN-LEFT forward grip toward spear blade. Anatomically RIGHT shoulder SCREEN-LEFT sends forearm across BELT BELOW left arm to rear grip at SCREEN-RIGHT near butt. Two crossed arms, LEFT over RIGHT, NOT uncrossed current mirror. BOTTOM LEFT NE: LEFT shoulder is SCREEN-LEFT on back, LEFT sleeve reaches diagonally across upper back to front grip at SCREEN-RIGHT near up-right spearhead; RIGHT sleeve from SCREEN-RIGHT shoulder goes BEHIND torso to rear grip at lower SCREEN-LEFT near butt. LEFT over RIGHT crossing across back, left upper/front grip, right lower/rear. Keep faces SE/SW/NE/NW respectively. Whole weapon points toward each facing. Wide braced knees still anticipation not full thrust. Native square1024 transparent RGBA 2x2 compact elevated painterly RTS. Generous padding and center full empty gutters100px; no reflections, extra arms/hands/props, horse, shadows, text or background.",
+      "references": [
+        "windup_initial",
+        "grip_sw",
+        "grip_ne"
+      ],
+      "status": "selected",
+      "generation_id": "f9abfacf-aa4f-442b-b60c-29431e42bcbd"
+    },
+    {
+      "key": "windup_ne",
+      "repository_path": "assets/characters/gou_lian_direction4_20261004/windup_ne.png",
+      "sha256": "1f186be4ddd3302c351a5520fd084f0e5da8a2eb7622ddf0f3232ca6739625b4",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: precise-object-edit. EDIT input CORRECT NE back-view hook-spear IDLE guard into WINDUP. Change ONLY legs and small torso lean: widen both feet to braced stance, bend knees, lean torso slightly backward. KEEP upperbody arms/hands/spear EXACTLY AS INPUT: upright shaft on SCREEN-LEFT, LEFT upper/front hand beside screen-left shoulder, RIGHT lower/rear hand reaching from screen-right waist across low back. Spear blade stays upper-left in drawn-back upright guard before NE thrust; this is anticipation, no need to point blade at target yet. Do NOT rotate shaft toward screen-right or swap raised hand. Keep head/back facing UP-RIGHT NE same, plain roundironhelmet greyclothneckflap brownquilt greyfoldedcollar darktrousers wrappedcalves one pointedcurvedhookspear smallredtassel. Entire whole spearhead/butt/shoes inside single centered square1024 transparentRG​BA fullbody elevatedpainterlyRTS with80pxpadding. No croppedparts, extra arms/props, shield/horse/cape/bow/sword/text/shadow/background/checkerboard.",
+      "references": [
+        "idle_ne"
+      ],
+      "status": "selected",
+      "generation_id": "8793b07f-570a-427b-87f5-0e443c57e8d7"
+    },
+    {
+      "key": "strike",
+      "repository_path": "assets/characters/gou_lian_direction4_20261004/strike.png",
+      "sha256": "a44e2dd84472294d526d088b001600c58e67892a031f2b8da294209592988744",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: precise-object-edit. Create ATTACK STRIKE four-direction hook-spear infantry atlas. Input1 corrected windup atlas use SE top-left SW top-right NW bottom-right only; input2 CORRECT NE guard must keep LEFT higher/front hand SCREEN-LEFT, RIGHT lower/rear hand from right waist across lowerback. Same ironhelmet/greyclothneckflap brownquilt/greyfoldedcollar darkpants wrappedcalves shortbeard one brown shaft silverpointedhead curvedsidehook smallredtassel. All four independently painted. Thrust forward in facing with torso lean and longer frontstep, kneesbent, one hooked spear extended; clearly more extension/lean than windup. Strict2x2 TL SE down-right front bladeLOWRIGHT, TR SW down-left front bladeLOWLEFT and LEFT frontarm startsSCREEN-RIGHT crossingchest frontgrip low-left RIGHT reararmbelowatbelt reargrip high-right. BL NE up-rightBACK: LEFT upper/front grip stays SCREEN-LEFT beside left shoulder, RIGHT lower/rear grip SCREEN-LEFT acrosswaist. Shaft diagonal from low-left butt through LEFT uppergrip to bladeUPRIGHT abovehelmet, NOT rightarm raisednearhead. Keep both grips left of back even while bladeaimup-right; spearcanoccludehelmet. BR NW up-leftBACK: LEFT frontarmSCREEN-LEFT forwardnearup-leftblade, RIGHT reararmSCREEN-RIGHT lower. Useonecontinuousshaft clearly in twohands. Compact entirebody/weapon 1024square genuinelytransparentRGBA, generous80px outerpadding and100px empty full crossgutters including spearblade/tassel, no clipping. Same painterly elevatedRTS, no reflection, swingtrails, sword/bow/horse/shield/cape, extra arms/hands, checkerboard/shadows/background/text.",
+      "references": [
+        "windup",
+        "windup_ne"
+      ],
+      "status": "selected",
+      "generation_id": "9b614ae5-79d7-4d92-91e8-78e23b6dc3b8"
+    },
+    {
+      "key": "strike_ne",
+      "repository_path": "assets/characters/gou_lian_direction4_20261004/strike_ne.png",
+      "sha256": "5e295e14de42268b73631df73bfd31d1dc53b84e7598d6a51e6642d4aabb2a60",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Fresh SINGLE NE BACK-view hook-spear infantry STRIKE. Input1 exact NE geometry, BLUE anatomical LEFT arm at screen-left upper front grip, RED anatomical RIGHT arm from screen-right shoulder down across lowerback to screen-left lower reargrip. Use arm topology precisely, not a mirror. Input2 MIDDLE-RIGHT portrait identity plain ironhelmet greynape brownquiltedman shortbeard. Both grips are SCREEN-LEFT of back. LEFT elbow juts left beside left shoulder and left forearm bends inward to upper-front grip at left of back. RIGHT elbow juts screen-right hip then rear forearm reaches HORIZONTALLY ACROSS LOWER BACK to low-left rear grip. NO raised arm from screen-right shoulder. One brown continuous shaft runs diagonally low-left butt through low-left RIGHT rear hand then higher-left LEFT front hand across upperback toward UP-RIGHT spearblade above head, so blade aims NE despite both grips on left. Pointed silverhead onecurvedsidehook small redtassel. Body unmistakably BACK THREEQUARTER looking UP-RIGHT with long forward NE step kneesbent and torsolean forward, actualthrust notidle. Plain iron roundhelmet smallstud greyclothneckflap greyfoldedcollar brownquilt darkpants wrappedcalves boots. ElevatedpainterlyRTS sameidentity. Singlewholefullbody square1024 genuine transparentRGBA allblade/butt/shoes within80pxpadding. No diagramscolors/text, extra limbs/hands, mirror/reflection, horse/shield/cape/sword/bow/background/shadow/checkerboard.",
+      "references": [
+        "strike_ne_guide",
+        "original"
+      ],
+      "status": "selected",
+      "generation_id": "9229b05f-6191-40d1-9c04-843a98bd58b9"
+    },
+    {
+      "key": "strike_sw",
+      "repository_path": "assets/characters/gou_lian_direction4_20261004/strike_sw.png",
+      "sha256": "440341e29172f3d0bbd61d7e2a1232385d5c8da52c9a237d47faf469c2861053",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: precise-object-edit. EDIT CORRECT SW input idle hook-spear guard into STRIKE. Keep EXACT current crossed two arms and hand laterality: LEFT sleeve begins SCREEN-RIGHT shoulder and crosses down chest into FRONT low-left grip, RIGHT sleeve begins SCREEN-LEFT shoulder and crosses BELOW near belt into REAR high-right grip. Do not uncross the arms or mirror body. Change ONLY forward stance/extension: down-left front foot makes long forward step, rear knee bent, torso leans down-left and both existing crossedhands shift modestly down-left along SAME single spear extending blade outward towardLOWLEFT. The left front elbow remains attached at screen-right shoulder and leftarm crosseswholefronttorso. Right rear forearm acrossbelt underneath. Same plainroundironhelmet greynape brownquilt greyfoldedcollar shortbeard darkpants whitewrappedcalves/shoes, existinglongbrownshaft pointedcurvedsilversidehook redtassel, same painterly elevatedRTS identity NOT photoreal newperson. SW FRONT looks down-left. Whole body/blade/butt/boots single centered1024 square genuine transparentRGBA with80pxouterpadding. No extraarms/hands, mirrored pose, costumechanges, cape/horse/shield/sword/bow/shadows/background/text/checkerboard.",
+      "references": [
+        "idle_sw"
+      ],
+      "status": "selected",
+      "generation_id": "51c79891-dbda-499e-b19b-7bb580e54a60"
+    },
+    {
+      "key": "hurt_initial",
+      "repository_path": "tools/contracts/gou_lian_direction4_20261004/generated/hurt_initial.png",
+      "sha256": "040e4990f882ac30f3ef966d601fa61a4417277d85d9645bdec8f3000845509c",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: precise-object-edit. Four directional HURT recoils hook-spear gou_lian infantry. Input1 atlas ONLY TL SE and BR NW identities; input2 corrected crossed-arm SW; input3 correct NE uprightshaftleft twohandgrip. Preserve these exact face/costume/hand laterality with no mirroring. Ordinary ironroundhelmet greyneckflap shortbeard brownquilt greyscarf darkpants whitewrappedcalves one brownshaft silverpointedhead curvedsidehook redtassel. HURT: modest upperbody flinch backwards shouldershunched kneesbent twisted, alive with bothfeet grounded. Both hands STILL in same LEFT front/RIGHT rear grips: SE leftfrontSCREENRIGHT rightrearSCREENLEFT, SW LEFT startsSCREENRIGHT crosses torso towardlowLEFT blade, RIGHTscreenleftsleeve crossesbelt tohighRIGHT rearbutt, NE LEFT upperhandSCREENLEFT near uprightblade RIGHT lowerhandacrosswaist fromSCREENRIGHT, NW LEFTscreenLEFT nearbladeRIGHTlowerrearSCREENRIGHT. NE keep shaftUPRIGHT onSCREENLEFT as input3 notrotate it. Clearly recoil different fromidle noattackextension. Native square1024 genuinely transparentRGBA strict2x2 TL SEdown-rightfront TR SWdown-leftfront BL NEup-rightBACK BR NWup-leftBACK elevatedpainterlyRTS samebody scale; wholeweapons/feet/padding70px and100pxEMPTY fullcrossgutter. No clippedhead/butt/feet, reflection, extraarms/hands/weapons/horse/cape/shield/bow/sword/swingtrails/shadows/text/background/checkerboard.",
+      "references": [
+        "idle",
+        "idle_sw",
+        "idle_ne"
+      ],
+      "status": "required_reference",
+      "generation_id": "3c02f952-1628-4de4-a1aa-a04d47bab8e7"
+    },
+    {
+      "key": "hurt",
+      "repository_path": "assets/characters/gou_lian_direction4_20261004/hurt.png",
+      "sha256": "5251fe80ab507ea9cce9b5370edf8a304659c388bc8115b894bbe4ae54a1d287",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: precise-object-edit. EDIT input four-view HURT atlas to correct SPACING ONLY. Preserve exact four recoiling bodies/handgrips/helmet/costume/weapon angles/facings and grounded legs. All currentarmgrips correct: LEFT front nearbladeRIGHTrear nearbutt, SW crossedarms andNE uprightleftshaft. Native repaint each full figure smaller and centered in ownquarter. Need120px completelyEMPTY central horizontalband between top row soles and bottom row spear tips;100px emptyverticalband,55px outerpadding. Top feet endy<=430 and bottomNEbladebeginsy>=600 on1024canvas. Current almostzero horizontalgap invalid. Do not mirror/reface/un-crossarms/turn intoidle. TL SE front grimace backwardsflinch TR SWfront backwardsflinch BL NEback shoulderrecoil BR NWback shoulderrecoil. Keepplainroundironhelmet greyneckflap brownquilt greyscarf darkpantswhitecalfwraps andone brownshaft silverpointedcurvedsidehook redtassel. Entirebody/wholeweapon safeinsidecells, strict2x2 square1024 genuine transparentRGBA elevatedpainterlyRTS noextraarms/weapons/shadow/background/text/checkerboard.",
+      "references": [
+        "hurt_initial"
+      ],
+      "status": "selected",
+      "generation_id": "ffe2e18f-1263-4f97-be70-21984af7a840"
+    },
+    {
+      "key": "fall_initial",
+      "repository_path": "tools/contracts/gou_lian_direction4_20261004/generated/fall_initial.png",
+      "sha256": "8f90854a83dc3597a228bb191c3733579953c559b4e39ba502c00e4e97145816",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: precise-object-edit. Four directional FALL transition frames ordinary hook-spear infantry gou_lian. Referenceinput1 corrected fourview hurt atlas, input2 standardportrait MIDDLE-RIGHT identity. Same plainironhelmet greyclothneckflap brownquilt greyscarf darkpants whitecalfwraps shortbeard one single hookedpointedsilverhead brownshaft redtassel. FALLING DYING under non-graphic lethal hit: body half-height leaning tipped SIDEWAYS, one knee collapsed towardground, torso diagonal headlower, still visibly between standing and lying, not kneeling idleguard. LEFT hand loosens/releases spear front, RIGHT hand near reargrip/butt dragging shaft groundward, spear FALLS BESIDE body one whole shaft. Hands relaxed distinct no impossibleweaponthroughtorso. Facings independent TL SE front down-right TR SW front down-left BL NE BACK up-right BR NW BACK up-left; face/chestfront vsback maintained, helmet staysonhead. No mirroring ofhand orcamera. Entire collapsedbody and entire droppedblade/butt/shoes safelycontained native1024square transparentRGBA strict2x2 generouslysmall (body~250px eachcell),80px outermargins and120px completelyEMPTY central horizontal/verticalgutter. PainterlyelevatedRTS no horse/cape/shield/bow/sword/extrahands/weapons/shadows/blood/gore/trails/text/background/checkerboard.",
+      "references": [
+        "hurt_initial",
+        "original"
+      ],
+      "status": "required_reference",
+      "generation_id": "67633afe-d909-482a-93b4-efabdb541c0c"
+    },
+    {
+      "key": "fall",
+      "repository_path": "assets/characters/gou_lian_direction4_20261004/fall.png",
+      "sha256": "aa453b57a01d1381fc7e7a868423ce3fba7dac879354b76e0841b1f85108201a",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: precise-object-edit. EDIT input four-view infantry FALL atlas. Correct ONLY duplicated/split spear shafts: EVERY cell must contain EXACTLY ONE intact SINGLE long brownshaft silverpointedcurvedhook redtassel spear resting on ground BESIDE the fallen man. REMOVE ALL extra partial brown stick segments currently in hands (top left angledstick fromrightpalm; top right angledstick; bottomleft extra rearstick heldbyhand; bottomright extra rearstick). Keep only the separate ONE complete ground spear eachcell, not joined Y/fork or broken pieces. Both hands NOW EMPTY, one palm bracesground and other looselyopen close body, no hand pretending to grasp nonexistentrod. Keep exactly same four falling halfcollapsed bodies, helmets/brownquilt/greyscarf darkpants whitecalfwraps/shoes, TL SEfront TR SWfront BL NEback BR NWback. No fullterminallying yet. Keep all body/weapon contained centered1024square transparentRGBA strict2x2 withgenerousemptycentralgutters. Native redraw fullasset no labels/blood/shadows/background/capes/horse/shields/swords/bows.",
+      "references": [
+        "fall_initial"
+      ],
+      "status": "selected",
+      "generation_id": "c43defff-18bf-46af-8675-c53691504e37"
+    },
+    {
+      "key": "terminal",
+      "repository_path": "assets/characters/gou_lian_direction4_20261004/terminal.png",
+      "sha256": "3c118cbb26afc0fd0858bacf4eee3082fb8d527774f40bb834666009d84c893a",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: precise-object-edit. Create final TERMINAL DEATH four-view gou_lian infantry fromcorrectedfallinput. All four men now FULLY LYING horizontally collapsed motionless, torso/headatground with legs extended or slightbent. NOT kneeling/crouching/holdingstandingguard. Helmetremainsonhead brownquiltgreyscarf darkpants whitewrappedcalves sameidentity. Empty limp hands beside body, ONE and onlyONE complete dropped hooked-spear rests beside each body, not held: one straightbrownshaft silverpointedhead curvedsidehook redtassel, no partialstick or fork. Front/backorientation distinct: TL SE showing frontface/chest headtowarddown-right, TR SW showingfrontface/chest headtowarddown-left, BL NE trueBACK/nape backbrownquilt headtowardup-right, BR NW trueBACK/nape headtowardup-left. Independentlydraw facings no reflection. Isometric painterly elevatedRTS clean non-graphicno blood. Bodies clearlylower/longerthanfall, give exact contact lyingpose. Native1024square genuine transparentRGBA strict2x2, eachwholebody+spear withincell with80pxouterpadding and120px fullEMPTY center crossgutters. No horse/shield/bow/sword/cape/weaponduplicates/extraarms/shadows/background/text/checkerboard.",
+      "references": [
+        "fall"
+      ],
+      "status": "selected",
+      "generation_id": "016a544f-655d-4208-9962-675abadfc4b1"
+    },
+    {
+      "key": "idle_sw_rejected",
+      "repository_path": "",
+      "sha256": "bdf69541a6f579ccd78045b724a8f27d1a7c0878f62fb81ff4137111422c5e41",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Create ONE independent transparent RGBA isometric sprite NOT atlas, ordinary hook-spear infantry gou_lian IDLE facing SOUTHWEST DOWN-LEFT FRONT three-quarter. Input1 middle-RIGHT portrait ONLY current identity: plain iron round helmet small stud/cloth neck flap, brown quilted padded tunic, grey folded collar, short moustache/goatee, dark trousers and legwrap shoes. Input2 top-right character is style/camera/weapon reference, FIX its mirrored grip. ONE long brown hook-spear with silver pointed spearhead curved side hook and small red tassel at lower SCREEN-LEFT, butt end higher screen-RIGHT. TWO attached hands: anatomical LEFT arm starts SCREEN-RIGHT shoulder, visible left sleeve reaches DIAGONALLY ACROSS FRONT chest down-left to FRONT grip near silver head at low screen-left; anatomical RIGHT arm starts SCREEN-LEFT shoulder, bent elbow pulls across belt to REAR shaft grip at screen-right near waist/butt. Clearly trace left forward sleeve across torso, right rear arm near belly. Do not use screen-left shoulder arm for forward grip, do not mirror southeast. Head/chest nose stays looking DOWN-LEFT, feet grounded guarded ready stance, no attack thrust yet. Complete shaft crosses low waist, full silver sidehook/tassel/butt/shoes contained generously in 1024 square alpha canvas. Compact painterly elevated isometric RTS body proportions. No horse, shield, bow, second spear, detached hands, extra limbs/cape, scenery/shadow/text/checkerboard.",
+      "references": [
+        "original",
+        "idle"
+      ],
+      "status": "rejected_unused",
+      "generation_id": "e010a53a-5c91-457c-85a3-c56c07cf86ab"
+    },
+    {
+      "key": "idle_sw_v2_rejected",
+      "repository_path": "",
+      "sha256": "2e05dd7967dc48686f0116a30fea3fc3fcc94d9bac44e471bb2ba0f2583345fd",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Create ONE native transparent RGBA hook-spear infantry IDLE SOUTHWEST DOWN-LEFT front three-quarter. Input1 is FRESH ANALYTICAL GEOMETRY diagram ONLY, follow its BLUE anatomical LEFT sleeve starting at SCREEN-RIGHT shoulder and crossing across torso to front grip at low screen-left, RED anatomical RIGHT sleeve starts SCREEN-LEFT shoulder bends out then reaches REAR grip near screen-center/right belly. Both hands hold the ONE shaft at distinct grips exactly like diagram. Diagram colors/lines/labels/background are NOT sprite features: repaint normal brown sleeves, human hands and silver hook spear. Input2 is appearance reference ONLY middle-RIGHT portrait iron helmet/neck flap brown quilt/grey collar/short goatee; input3 earlier sprite identity/style ONLY, do NOT copy its mirrored same-side arms. VERY IMPORTANT left forward arm must be visibly CROSSING FRONT torso; right rear fist at belt closer to butt, NOT holding tip. SW torso/nose remain DOWN-LEFT not southeast. Shaft across low belly from silver hook-head/small red tassel low left to brown butt upper right. Same dark trousers/wraps/shoes, grounded guard idle not attack. Elevated compact painterly RTS sprite, whole body plus spear inside square1024 genuine transparent alpha with ample padding, no text/colors/diagram/background/shadow/extra limbs/weapons/horse/cape. Do not reflect any existing sprite.",
+      "references": [
+        "grip_sw",
+        "original",
+        "idle_sw_rejected"
+      ],
+      "status": "rejected_unused",
+      "generation_id": "5c86b323-44f6-4bc9-9785-2748e31051a4"
+    },
+    {
+      "key": "idle_ne_rejected",
+      "repository_path": "",
+      "sha256": "9945bd8b334a99cb64cfb80b73cd6ef44dd923bee4982fe8615bd49d7218b2d5",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. NEW ONE native transparent RGBA hook-spear infantry IDLE facing NORTHEAST UP-RIGHT BACK three-quarter, not front. Input1 fresh analytical NE arm diagram is TOPOLOGY only, Input2 middle-RIGHT portrait IDENTITY only. Plain dark round iron helmet/stud/grey neck flap, brown quilted padded tunic/back with belt, dark trousers/cloth calves/dark shoes. NO topknot/blue tunic. One long brown shaft, silver pointed spearhead with curved SIDE HOOK and small red tassel forward at screen-UP-RIGHT, butt behind low screen-LEFT. Character LEFT arm is on SCREEN-LEFT of back: BLUE diagram sleeve starts LEFT back shoulder, reaches FORWARD around left side of neck/torso across upper front to LEFT fist at screen-UP-RIGHT FRONT grip nearer head. Character RIGHT arm on SCREEN-RIGHT back: RED diagram sleeve bends back/down so right fist holds rear shaft near screen-LEFT waist/butt. Keep actual LEFT forward / RIGHT rear, not mirrored northwest grip. Left upper arm/forearm may be partly hidden by neck/back but its attachment to LEFT shoulder must be readable above-left shoulder and no detached hand; right sleeve from right shoulder bends near right waist and rear hand near belt. Head nose/profile points UP-RIGHT; dark quilted BACK mostly visible. Both feet grounded idle guard stance, not lunging/thrusting. Elevated compact painterly RTS camera. Full spear tip/butt/hook/tassel/shoes inside ample empty1024 square genuinely transparent alpha. No diagram colors/labels/background, horse/cape/shield/bow/extra arms/weapons/shadow/checkerboard.",
+      "references": [
+        "grip_ne",
+        "original"
+      ],
+      "status": "rejected_unused",
+      "generation_id": "1c1396fd-755a-40ac-ba7e-c612a13b51bc"
+    },
+    {
+      "key": "windup_ne_rejected",
+      "repository_path": "",
+      "sha256": "f598e31992e7e06c254ac141b6aa839242990acc855b248e1b7603e80a98863e",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Fresh single NE back-view hook-spear infantry WINDUP. Input1 standard portrait MIDDLE-RIGHT cell is exact man identity, iron roundhelmet small stud greyclothneckflap shortbeard brownquiltedtunic greyfoldedcollar darkpants wrappedcalves. Input2 analytical diagram blue=LEFT arm,red=RIGHT arm establishes two-hand laterality, no diagram text/color in sprite. Entire man is BACK THREE QUARTER facing UP-RIGHT/NE, wide braced feet, kneesbent torsopulledback preparing thrust. One brown longshaft silverpointedhead curvedSIDEHOOK smallredtassel. Spear blade at upper-right, butt at lower-left. LEFT hand near upper-right blade; RIGHT hand at lower-left butt. CRITICAL foreground RIGHT arm from screen-right shoulder travels DOWN to elbow near right hip and ACROSS waist to LOW-LEFT rear grip. NOT right arm raised toward head. LEFT forward arm is FAR arm, mostly HIDDEN BEHIND TORSO/HEAD; small forearm/hand emerges at upper-right near front grip, upper sleeve trace from LEFT shoulder partly hidden. Thus a visibly down-bent right rear arm across lower back, left forward hand near blade, not mirror of NW. Correct 3/4 back helmet/nape no front chest. Full whole body and entire spear within square1024 transparent RGBA, compact centered 100px+ all outer margins. Same painterly elevated RTS realistic readable infantry as portrait, no addedarmor/capes/horse/shield/bow/sword/extra limbs/background/shadow/checkerboard/text.",
+      "references": [
+        "original",
+        "grip_ne"
+      ],
+      "status": "rejected_unused",
+      "generation_id": "e5866108-149e-47f7-a3a6-0b27065bff49"
+    },
+    {
+      "key": "windup_ne_v2_rejected",
+      "repository_path": "",
+      "sha256": "19ea5fc2ff3b740b1e738de688c6dbe619432a01128a7d949acfafab2ba10b41",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: precise-object-edit. EDIT input1 CORRECT NE idle carry guard into NE WINDUP for hooked spear infantry. Preserve original correct LEFT hand UPPER/FORWARD on screen-left and RIGHT hand LOWER/REAR across waist. Preserve helmet brown quilt greyscarf darkpants wrappedcalves. Change stance to widebraced knees bent and torsolean slightlyback. Change shaft angle from nearlyvertical to diagonal UP-RIGHT: KEEP LEFT front grip beside LEFT shoulder SCREEN-LEFT, RIGHT rear grip lower on SCREEN-LEFT, move hooked pointed blade UP-RIGHT above helmet. Whole shaft runs from low-left rearbutt through two SCREEN-LEFT grips toward upper-right blade. LEFT arm bends beside LEFT shoulder at left of back to higher front grip; RIGHT arm originates RIGHT shoulder bends down to rightwaist and forearm reaches ACROSS LOWER BACK to low-left rear grip. No raised arm from right shoulder; don't put front hand on screen-right. This diagonal spear can partially occlude top/back of helmet, that's acceptable. Entire man unmistakably BACK NE looking up-right, not NW mirrored. Same single pointed silver hooked head small redtassel long brownshaft. Fresh1024 square genuinelytransparent fullbody single, 100px outerpadding entireblade/butt/boots contained no clipping. No new arms/hands/cape/horse/shield/sword/background/shadow/text/diagramcolors.",
+      "references": [
+        "idle_ne"
+      ],
+      "status": "rejected_unused",
+      "generation_id": "ff842436-5f2e-483b-965b-77169bf236a2"
+    },
+    {
+      "key": "strike_sw_rejected",
+      "repository_path": "",
+      "sha256": "d3bbe0919a980b52fb8f6b663be39bc8b91c4fe974f1c1c45c767d5f8e111cde",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Fresh SINGLE SW hooked-spear infantry STRIKE. Input1 blueLEFT/redRIGHT SW geometry guide defines exact crossed hand anatomy; input2 standardportrait MIDDLE-RIGHT identity. Do not copy mirrored pose. Back-free FRONT THREEQUARTER man facing DOWN-LEFT. Anatomical LEFT shoulder SCREEN-RIGHT, left sleeve goes across chest to FRONT grip low SCREEN-LEFT near hookedblade. RIGHT shoulder SCREEN-LEFT, right sleeve bends outward and forearm crosses BELT BELOW leftarm to REAR grip high SCREEN-RIGHT near butt. Left above right crossedarms, left front hand nearest blade. Strong extended forwardthrust, leftfrontarm extended acrosschest towardlow-left not only idleguard, torsolean SW frontleftfootlong plantedstep rearkneebent. One brownlongshaft silverpointedhead curvedsidehook smallredtassel bladeDOWNLEFT buttUPRIGHT, twohands securelyholding. Plainironroundhelmet smallstud greyneckflap shortbeard brownquilt greyscarf darkpants wrappedcalves. Fullbody elevated painterlyRTS square1024 genuine transparentRGBA centered wholeblade/butt/feet80pxpadding. No referenceguidecolors/text, mirror/reflection, extraarms/hands/weapons, shield/horse/cape/bow/sword/shadow/background.",
+      "references": [
+        "grip_sw",
+        "original"
+      ],
+      "status": "rejected_unused",
+      "generation_id": "43e5f921-22ee-4e62-9eeb-f4dc05e19dac"
+    }
+  ]
+}

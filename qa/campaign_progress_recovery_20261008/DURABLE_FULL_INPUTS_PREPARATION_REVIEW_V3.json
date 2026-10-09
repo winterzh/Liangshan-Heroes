@@ -1,0 +1,120 @@
+{
+  "schema": "durable_campaign_full_inputs_preparation_independent_review_v1",
+  "review_version": 3,
+  "independent": true,
+  "reviewer": "office_full_review",
+  "reviewed_utc": "2026-10-08T13:00:50.761261+00:00",
+  "tool": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\tools\\prepare_durable_campaign_full_inputs_v3.py",
+    "bytes": 5422,
+    "sha256": "44a6d740d38bf65f21210ce97e642c4e82afd65d682493ef1a2e1887276c586e"
+  },
+  "source_inputs_spec": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\DURABLE_FULL_SOURCE_INPUTS_V3.json",
+    "bytes": 1064096,
+    "sha256": "8598b853b6738ae6ec8a170496c47e80a675237afce88fe85f44c31d999bf6c9"
+  },
+  "logical_source_inputs_sha256": "c00aafd462a4c6a2a96f88a085c6297e4e3a6bb6fc67b75b4e571bb4e9cab869",
+  "approved_static_preparation_only": true,
+  "static_input_closure_passed": true,
+  "approved_stages": [],
+  "native_started": false,
+  "full_qualified": false,
+  "whole_producer_ready": false,
+  "findings": [],
+  "resolved_findings": [
+    {
+      "id": "PREP-LINK-001",
+      "evidence": "V2 original raw path/parents guards before resolve/read/sha/stat, per110 input rows/base5132 and output; V3 keeps these exact bytes."
+    },
+    {
+      "id": "PREP-RESOURCE-002 / NEG-ADAPT-003",
+      "evidence": "R4 report checksum reads the fixed actual inherited durable base. All GD/scene literal resource references including FileAccess checksum paths resolve within exact base5132 or controlled26 targets."
+    }
+  ],
+  "previous_rejected_preparation_reviews": [
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\DURABLE_FULL_INPUTS_PREPARATION_REVIEW_V1.json",
+      "bytes": 5303,
+      "sha256": "8aba6ef34cd16700b1f3e72c473c9dc5d3897eb6b38560aa32f17866f8c94837"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\DURABLE_FULL_INPUTS_PREPARATION_REVIEW_V2.json",
+      "bytes": 5338,
+      "sha256": "23cc6ab80b58a9be11006bfbadab3741fe8716cf8aaec2eada41512fc6879b63"
+    }
+  ],
+  "negative_R4_static_review": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\final_durable_negative_adapters_v1_r4\\DURABLE_NEGATIVE_ADAPTERS_PRELIMINARY_REVIEW_V4.json",
+    "bytes": 59012,
+    "sha256": "9ba218a661c312b1d0d38057120b16392f6fe3a32e721924302996b0441faec0"
+  },
+  "source_snapshot": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\full_input_preparation_tool_v3\\prepare_durable_campaign_full_inputs_v3.py",
+    "bytes": 5422,
+    "sha256": "44a6d740d38bf65f21210ce97e642c4e82afd65d682493ef1a2e1887276c586e"
+  },
+  "snapshot_exact": true,
+  "actual_read_only_preflight": {
+    "exit_code": 0,
+    "overlays": 26,
+    "harnesses": 11,
+    "source_inputs_sha256": "c00aafd462a4c6a2a96f88a085c6297e4e3a6bb6fc67b75b4e571bb4e9cab869",
+    "native_started": false,
+    "full_qualified": false
+  },
+  "actual_integrity_checks": {
+    "base_rows": 5132,
+    "overlays": 26,
+    "harnesses": 11,
+    "all_base_overlays_metadata_twoCoreContract_SHA_size_verified": true,
+    "original_path_and_parents_symlink_reparse_scan_clean": true,
+    "26_relative_targets_no_dotdot_backslashes_absolute_paths": true,
+    "26_casefold_normalized_targets_unique": true,
+    "direct_GD_scene_literal_refs_checked": 184,
+    "missing_refs": [],
+    "FileAccess_evidence_readback_targets_closed": true
+  },
+  "execution_contract_is_unexecuted_plan": {
+    "roles": [
+      "lu",
+      "shi"
+    ],
+    "role_ABCD_processes": 8,
+    "world_rows_per_role": 264,
+    "component_rows_per_role": 362,
+    "live_cases_per_role": 24,
+    "negative_process_stages": 52,
+    "original_fault_cases": 19,
+    "CAMPAIGN_QA": "",
+    "slot_root": "user://continue/v1",
+    "lifecycle_generations": [
+      1,
+      2,
+      3
+    ]
+  },
+  "source_only_boundaries": {
+    "source_prepare_only": true,
+    "new_negative_review_required": true,
+    "whole_producer_ready": false,
+    "approved_stages": [],
+    "native_started": false,
+    "full_qualified": false
+  },
+  "tool_diff_and_side_effects": {
+    "V2_to_V3_only_R4_directory_and_schema": true,
+    "no_copy_native_launch_or_run_option": true,
+    "only_optional_exclusive_write_of_new_JSON_spec": true,
+    "no_source_or_profile_edits_by_reviewer": true
+  },
+  "qualification_boundaries": {
+    "new_full_producer_not_reviewed_or_ready": true,
+    "actual_daming_A_fixtures_not_frozen": true,
+    "roles_ABCD_19_52_not_run_or_qualified": true,
+    "SDK_or_public_release_not_qualified": true,
+    "scoped_Huangnigang_success_only_predecessor_evidence": true
+  },
+  "remaining_work": "A concrete full producer/aggregator/19 fault+UI/classic consumers and full validator still require source binding and independent execution-stage review. This preparation spec deliberately retains new_negative_review_required and empty stages; future execution must additionally bind the newly available R4 review and complete actual A fixtures.",
+  "preservation": "All prior tools/specs/source candidates/rejected reviews/native evidence stay unchanged; only new static-only review receipts were written."
+}

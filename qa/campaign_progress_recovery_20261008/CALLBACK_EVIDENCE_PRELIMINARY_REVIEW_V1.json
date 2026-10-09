@@ -1,0 +1,109 @@
+{
+  "schema": "campaign_callback_evidence_preliminary_independent_review_v1",
+  "reviewed_at_utc": "2026-10-09T01:16:41.886867+00:00",
+  "independent": true,
+  "source_only": true,
+  "static_api_closure_passed": false,
+  "approved_stages": [],
+  "source_spec_file_sha256": "996975b0507a84584d60257e93b31addeead5cc98f4f0d4b5baa043c9e342669",
+  "source_spec_pin": {
+    "path": "D:/AI项目/水浒/开发工程/qa/campaign_progress_recovery_20261008/CALLBACK_EVIDENCE_SOURCE_SPEC_V1.json",
+    "bytes": 98140,
+    "sha256": "996975b0507a84584d60257e93b31addeead5cc98f4f0d4b5baa043c9e342669"
+  },
+  "module_pins": [
+    {
+      "path": "D:/AI项目/水浒/开发工程/tools/campaign_natural_callback_evidence_v1.py",
+      "bytes": 23251,
+      "sha256": "3ea22f470097b0820214566759b1ce49e70a5e32f4ed78d3c3746729375d89a9"
+    },
+    {
+      "path": "D:/AI项目/水浒/开发工程/tools/campaign_callback_packet_evidence_v1.py",
+      "bytes": 10688,
+      "sha256": "efde3c75f03b5bf18161f9be5afb4c17acb01237ab25e49c30e2d3af9e54a39f"
+    },
+    {
+      "path": "D:/AI项目/水浒/开发工程/tools/prepare_campaign_callback_labels_v1.py",
+      "bytes": 2279,
+      "sha256": "8ccfd14ee1639ce982ba7d1fc7f01d8088854092711e7c5ea3b182b98b4e421c"
+    }
+  ],
+  "findings": [
+    {
+      "id": "CALLBACK-PACKET-ORDER-001",
+      "severity": "blocking",
+      "file": "D:/AI项目/水浒/开发工程/tools/campaign_callback_packet_evidence_v1.py",
+      "lines": [
+        118,
+        119,
+        120,
+        121,
+        133,
+        134,
+        135,
+        136,
+        140,
+        142,
+        143
+      ],
+      "problem": "A terminal_tail_prefix can precede receive_gate_refused. When the later refused prefix differs, EOF only requires prefix_seen and never compares it with the already reconstructed prefix. Thus original refused bytes can be omitted from the strict tail parser while the replay reports closed terminal transport.",
+      "confirmed_independent_reproduction": {
+        "classification": "synthetic packet files and forged metadata only; no actual Popen/socket/Godot or complete validate pipeline",
+        "private_work": "D:/CodexTemp/lsh-callback-order-review-wlk668mf",
+        "sequence_after_complete_snapshot": [
+          "terminal_tail_prefix: valid framed debug_exit",
+          "receive_gate_refused: BAD_PREFIX_NOT_A_FRAME",
+          "transport_status: CALLBACK_TRANSPORT_RECEIVE_GATE_REFUSED",
+          "terminal_transport_eof"
+        ],
+        "step_terminal_transition_guard_observed": true,
+        "step_terminal_tail": [],
+        "replay_accepted": true,
+        "replay_events": 24,
+        "original_bytes": 4553,
+        "returned_transport_eof": "terminal",
+        "native_ownership_proven": false,
+        "whole_suite_qualified": false,
+        "omitted_bytes": "BAD_PREFIX_NOT_A_FRAME is retained as an event but never parsed or matched to the earlier prefix."
+      },
+      "minimal_fix": "Enforce runtime order: any refusal prefix/status must precede tail prefix/chunks. Reject a late refusal after tail reconstruction begins and ensure every retained refused-prefix byte is exactly the reconstructed prefix before EOF parsing; do not allow prefix_seen alone to satisfy the byte binding."
+    }
+  ],
+  "completed_finite_source_checks": {
+    "source_pins_verified": 104,
+    "all_pinned_local_import_edges": 217,
+    "missing_local_import_pins": [],
+    "three_snapshots_byte_exact": true,
+    "seven_physical_methods_AST_exact_reviewed_FirstRepeatEvidenceV3": [
+      "fixed",
+      "read",
+      "physical",
+      "capture",
+      "lifecycle",
+      "cfg_pair",
+      "retained_cfg"
+    ],
+    "actual_store_magic_API_correspondence_read": true,
+    "report_and_label_source_review": "Current callback80/parent restart21 field contracts, actual retained terminal Popen guard, whole15-field identity, four/two exports, same profile/token/ACK/noReplay branches and label composer were read. No separate confirmed defect in those paths was established in this finite review."
+  },
+  "unverified_or_unexecuted": [
+    "Actual full NaturalCallbackEvidence.validate pipeline with retained Popen and physical CFG/lifecycle was not executed.",
+    "Label build was source-reviewed, not independently executed in this turn; declared80/56/21 are source contract counts, not native results.",
+    "The pinned15-check fixture proof was read as synthetic reference, not promoted to actual ownership or complete consumer pipeline qualification.",
+    "No new complete phase, real socket/Popen/Godot or successful V12 prior was constructed or verified."
+  ],
+  "scope_limit": "Finite source/API/packet-order review closed at the confirmed counterexample. Remaining implementation is not claimed fully qualified; preserve V1 source/spec and correct in a separate immutable successor.",
+  "qualification": {
+    "socket_opened": false,
+    "Popen_started": false,
+    "Godot_started": false,
+    "actual_terminal_Popen_verified": false,
+    "complete_validate_pipeline_qualified": false,
+    "producer_implemented": false,
+    "successful_prior_verified": false,
+    "actual_callback_qualified": false,
+    "original19_qualified": false,
+    "SDK_qualified": false,
+    "overall_goal_qualified": false
+  }
+}

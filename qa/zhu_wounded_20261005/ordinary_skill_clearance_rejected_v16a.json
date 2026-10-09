@@ -1,0 +1,25 @@
+{
+  "qualified": false,
+  "checks": 733,
+  "captures": 112,
+  "failures": [
+    "original skill target remains alive"
+  ],
+  "lock_released": true,
+  "receipt_sha256": "3ff00d06b73891d70a7288856b92fe6ae5d5a4b8ccb92b0e66d3728a3c19c1ec",
+  "report_sha256": "557ab0290eece6e4d49eabb518d872600ee19a0955d7ad9177f885ce8345648c",
+  "log_sha256": "d90f3e11386dde8662e6e73009aba3858a7ad7878a786d565be29564b8a9295e",
+  "harnesses": [
+    {
+      "path": "qa/zhu_wounded_20261005/harness/ordinary_skill_clearance_v16a.gd",
+      "sha256": "a9cf6f0bdd722e5c2b9b0b329921100d8fb0f77b662f35c1c5e49d0c0632bbc4"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/harness/run_ordinary_skill_clearance_v16a.py",
+      "sha256": "ff7d58c4a071aa15b3cf12b3d365c2fb7d27b211e2047810003490555e37e8e3"
+    }
+  ],
+  "reason": "Wu SW slot2 actual smite killed the retained original enemy. Before slot3 self-buff, fixture reused that dead target and failed its alive check. All native cast phase views were still saved, but the whole batch remains failed.",
+  "fix": "Sibling selects a living original enemy from the same pre-existing roster per slot, excludes inappropriate roles, keeps Lin original-hero target rule and verifies each active ability actual result. No spawned dummy, restored enemy HP or production/stat/timer changes.",
+  "scope": "Full phase samples acquired but whole mechanical qualification false; later source/visual/effect qualification requires new completed sibling receipt."
+}

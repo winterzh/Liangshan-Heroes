@@ -1,0 +1,543 @@
+{
+  "schema": "native_direction4_generation_lineage_v1",
+  "character": "guan_sheng",
+  "original_reference": {
+    "path": "assets/characters/hero_portraits_aligned_20260926/guan_sheng.png",
+    "sha256": "3a796681105d44a1fcdf285f7d4d6f464eee45b20bd81dbfe8cac3bd7875b826"
+  },
+  "identity_note": "Existing red face, green headcloth and gold-green armor, long black beard and two-handed crescent guandao. Left forward grip, right rear grip. Existing mounted melee stats and skills retained; chestnut horse is a painted game interpretation.",
+  "jobs": [
+    {
+      "key": "old_body",
+      "repository_path": "assets/anim/guan_sheng_walk.png",
+      "sha256": "712463aaab5073945d777bc573513ad6d7d019e9e67317e1d82473bbdee5b196",
+      "method": "existing_project_reference",
+      "prompt": "Existing project reference; only Guan outfit and painterly style.",
+      "references": [
+        "original"
+      ],
+      "status": "required_reference"
+    },
+    {
+      "key": "mounted_style",
+      "repository_path": "assets/characters/hu_yanzhuo_direction4_20261003/idle.png",
+      "sha256": "a1bc29646d2b2bd29a58e28847f33fc580095388f8083004baa563d8820c316f",
+      "method": "existing_project_reference",
+      "prompt": "Existing project reference; only Mounted camera style only; other general identity and weapons not reused.",
+      "references": [
+        "original"
+      ],
+      "status": "required_reference"
+    },
+    {
+      "key": "fall",
+      "repository_path": "assets/characters/guan_sheng_direction4_20261004/fall.png",
+      "sha256": "582aec739b4e599f4d5b6891beb7f9e45962dec77a626dcd7063688674227ad6",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Native transparent RGBA game sprite atlas. Create one square 2x2 atlas of FOUR independently painted mounted Guan Sheng sprites. Reference 1 is accepted idle identity, horse, tack, weapon and camera style. Preserve exactly the mature red face, long black beard, green wrapped headcloth with gold emblem/red jewel, ornate bronze-gold armor, green gold-embroidered robe/cape, chestnut brown horse with black mane/tail and same green saddle cloth. ONE long guandao with straight black shaft, ornate gold throat and large silver curved crescent blade. Anatomical LEFT grip closer to blade, RIGHT grip closer to butt; two actual hands, shaft passes continuously through both. Exactly four horse legs, two rider legs in stirrups, no duplicate weapons. Orthographic isometric camera down 35 degrees. Cell order TL SE front facing screen lower-right, TR SW front facing lower-left, BL NE back facing upper-right, BR NW back facing upper-left. Horse muzzle and rider face align. Back views show horse rump/tail, back armor/cape and back headcloth, not front faces. Each full horse+rider+blade/tail fits entirely in its own cell with generous alpha margins, completely empty wide cross gutters. All four equal scale about 68 percent of cell height. Rich painted game sprite, sharp readable silhouette. Real alpha transparency. No ground, shadows, text, grid, labels, border, opaque background or painted checkerboard. Pose DEATH COLLAPSE first stage: chestnut horse buckles down onto bent foreknees, hindquarters drop and legs fold. Rider still in saddle slumps to his anatomical right with lowered shoulders, cloak drooping, not standing beside horse and not attacking. Guandao is lowered beside ground on rider's right; RIGHT hand retains rear grip, LEFT hand relaxed empty against saddle, one blade and continuous shaft. No blood or gore. One horse and one rider per cell. Maintain the last facing: horse muzzle SE down-right, SW down-left, NE up-right, NW up-left, rear views from rump. Natural horse anatomy with four folded legs. Keep complete compact collapse silhouette at 55 percent of cell height. At least 70px completely empty central cross gutter and 40px exterior margin. All native painted, no copied rotation.",
+      "references": [
+        "idle"
+      ],
+      "status": "selected",
+      "generation_id": "exec-1f9d8946-04ba-44c5-b18f-ba6a5fda2e20"
+    },
+    {
+      "key": "hurt",
+      "repository_path": "assets/characters/guan_sheng_direction4_20261004/hurt.png",
+      "sha256": "06b9406c50c6dcf7741ef47ed12e70a577f77650e177bed842d78a54eef0f919",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Native transparent RGBA game sprite atlas. Create one square 2x2 atlas of FOUR independently painted mounted Guan Sheng sprites. Reference 1 is accepted idle identity, horse, tack, weapon and camera style. Preserve exactly the mature red face, long black beard, green wrapped headcloth with gold emblem/red jewel, ornate bronze-gold armor, green gold-embroidered robe/cape, chestnut brown horse with black mane/tail and same green saddle cloth. ONE long guandao with straight black shaft, ornate gold throat and large silver curved crescent blade. Anatomical LEFT grip closer to blade, RIGHT grip closer to butt; two actual hands, shaft passes continuously through both. Exactly four horse legs, two rider legs in stirrups, no duplicate weapons. Orthographic isometric camera down 35 degrees. Cell order TL SE front facing screen lower-right, TR SW front facing lower-left, BL NE back facing upper-right, BR NW back facing upper-left. Horse muzzle and rider face align. Back views show horse rump/tail, back armor/cape and back headcloth, not front faces. Each full horse+rider+blade/tail fits entirely in its own cell with generous alpha margins, completely empty wide cross gutters. All four equal scale about 68 percent of cell height. Rich painted game sprite, sharp readable silhouette. Real alpha transparency. No ground, shadows, text, grid, labels, border, opaque background or painted checkerboard. Pose HURT: horse flinches and crouches on all four legs, head dipped slightly, still facing prescribed direction. Seated rider visibly recoils torso backwards with bent elbows; guandao lowered to waist and both hands still securely grip continuous shaft in same anatomical order. Green cape swings slightly forward; grimace face in front views. It is a distinct recoil frame, not idle or attacking. Body plus complete horse and blade occupies ONLY central 58 percent of each quadrant height. Mandatory 70px EMPTY transparent gap between rows and columns, at least 35px margin at outside canvas. Do not let ears/blade/hooves intrude central gutter.",
+      "references": [
+        "idle"
+      ],
+      "status": "selected",
+      "generation_id": "exec-8ac3e1da-6fc8-42a0-8f03-3b0e7f3f64a6"
+    },
+    {
+      "key": "hurt_ne",
+      "repository_path": "assets/characters/guan_sheng_direction4_20261004/hurt_ne.png",
+      "sha256": "202e47607b7a2ce2045da760e6d255306e382807a170b08effc7999a4809f323",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. ONE single native RGBA transparent mounted Guan Sheng sprite, NE BACK 3/4 facing UPPER RIGHT, camera behind his anatomical RIGHT shoulder. Input1 is mathematical pose/camera reference RED anatomical LEFT, BLUE RIGHT. Input2 is approved identity/horse/tack/painterly style with CORRECT grip chain. Same green headcloth, red face only side edge, long black beard, bronze-gold dragon shoulder armor, green gold-embroidered cape/robe, chestnut horse black mane/tail, green saddle cloth and bronze tack. One continuous long black-shaft crescent guandao, gold dragon throat, silver curved blade. VISIBLE NEAR RIGHT shoulder and arm point DOWN; elbow bends near body, hand at WAIST/RIGHT HIP REAR grip closer to butt. FAR LEFT arm reaches FORWARD AWAY from camera; left hand beyond near hand grips FRONT near blade. Follow approved reference hand and arm chain; never turn near right hand into forward grip. Both gloves/arms attached, no extra hand. Four natural horse legs and rider boots in stirrups. Complete horse+rider+weapon central 70 percent square, generous true-alpha margins, no shadows/ground/text/guide colors/background.Pose HURT: horse visibly crouches lower with all four legs bent and muzzle dipped; seated rider RECOILS TORSO BACKWARD and downward with head pulling back, cape thrown slightly forward. Right elbow still points down and near right hand stays rear at waist/hip, far left grips forward; guandao lowered and not attacking. Clear visual difference from upright idle and walking, no dismount, no death.",
+      "references": [
+        "diagram_v1_hurt_ne",
+        "walk_b_ne"
+      ],
+      "status": "selected",
+      "generation_id": "exec-9a48ea44-4de0-4986-b226-5800bbee42cc"
+    },
+    {
+      "key": "idle",
+      "repository_path": "assets/characters/guan_sheng_direction4_20261004/idle.png",
+      "sha256": "a383d165db62355cf4ed9af40b9b20253ea19a5a41b0a7f12d72a9b9f7eb853c",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Asset: native transparent RGBA game sprite atlas for Liangshan Heroes. Generate ONE square 2x2 atlas containing FOUR independently painted mounted Guan Sheng idle sprites. Input 1 is his CURRENT identity portrait; input 2 is his legacy outfit/body STYLE reference; input 3 is ONLY an example of mounted isometric game style/layout, DO NOT copy that other general's identity or steel rods. Preserve Guan Sheng: mature rugged red face, long flowing black beard and moustache, deep green wrapped headcloth with small gold brow emblem and red jewel, dark green gold-embroidered robe/cape over ornate bronze-gold lamellar armor and dragon shoulder bosses. He rides ONE chestnut brown horse with black mane/tail, dark leather bridle/reins, green saddle cloth and bronze tack in every cell. Exactly four horse legs, rider boots in stirrups, natural seated riding posture. One long GREEN DRAGON crescent guandao with straight dark shaft, ornate gold dragon throat and broad curved silver blade. Both hands hold the shaft: anatomical LEFT hand forward closer to blade, anatomical RIGHT hand rear closer to butt. Continuous shaft, only one blade; reins resting loosely on saddle. Neutral ready posture, horse four hooves planted, blade points forward and slightly upward beside horse's head, not piercing horse. Strict cell order TOP LEFT SE front 3/4 facing screen lower-right; TOP RIGHT SW front 3/4 facing lower-left; BOTTOM LEFT NE BACK 3/4 facing upper-right; BOTTOM RIGHT NW BACK 3/4 facing upper-left. Horse muzzle and rider orientation both match the direction. Back views show green cape, rear armor, saddle back and horse rump/tail; no front portrait pasted onto back view. Orthographic isometric camera viewed downward about 35 degrees, painterly richly shaded small game sprite silhouettes, not photoreal 3D. Each rider+horse+complete weapon entirely inside its own quadrant at about 68 percent cell height. Broad COMPLETELY EMPTY transparent cross gutters, generous external margins; ears, hooves, tail, cape and blade uncut. Equal scale across four cells. No text, ground, shadows, grids, labels, painted checkerboard or scenery. Actual alpha transparency.",
+      "references": [
+        "original",
+        "old_body",
+        "mounted_style"
+      ],
+      "status": "selected",
+      "generation_id": "exec-3bd72d86-8e7c-4d6d-8238-d4486b385d46"
+    },
+    {
+      "key": "idle_ne",
+      "repository_path": "assets/characters/guan_sheng_direction4_20261004/idle_ne.png",
+      "sha256": "ded032761644ca7323258b6efbb998cd3ec584b9b494352865a5980dc0add751",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. ONE single native RGBA transparent mounted Guan Sheng sprite, NE BACK 3/4 facing UPPER RIGHT, camera behind his anatomical RIGHT shoulder. Input1 is mathematical pose/camera reference RED anatomical LEFT, BLUE RIGHT. Input2 is approved identity/horse/tack/painterly style with CORRECT grip chain. Same green headcloth, red face only side edge, long black beard, bronze-gold dragon shoulder armor, green gold-embroidered cape/robe, chestnut horse black mane/tail, green saddle cloth and bronze tack. One continuous long black-shaft crescent guandao, gold dragon throat, silver curved blade. VISIBLE NEAR RIGHT shoulder and arm point DOWN; elbow bends near body, hand at WAIST/RIGHT HIP REAR grip closer to butt. FAR LEFT arm reaches FORWARD AWAY from camera; left hand beyond near hand grips FRONT near blade. Follow approved reference hand and arm chain; never turn near right hand into forward grip. Both gloves/arms attached, no extra hand. Four natural horse legs and rider boots in stirrups. Complete horse+rider+weapon central 70 percent square, generous true-alpha margins, no shadows/ground/text/guide colors/background.Pose IDLE: horse stands calmly with ALL FOUR HOOVES PLANTED, near legs vertical, no lifted or galloping hoof. Rider upright and seated neutral, guandao carried securely at waist, crescent tip slightly raised forward upper-right. Cape mostly relaxed; no attacking or recoil.",
+      "references": [
+        "diagram_v1_idle_ne",
+        "walk_b_ne"
+      ],
+      "status": "selected",
+      "generation_id": "exec-d44cfd94-625f-4a84-85ad-7301fe37db11"
+    },
+    {
+      "key": "strike",
+      "repository_path": "assets/characters/guan_sheng_direction4_20261004/strike.png",
+      "sha256": "bf03438082a8b8ac771e752da400b5cbc9b82452307e67c8fe07a7000ecbc444",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Native transparent RGBA game sprite atlas. Create one square 2x2 atlas of FOUR independently painted mounted Guan Sheng sprites. Reference 1 is accepted idle identity, horse, tack, weapon and camera style. Preserve exactly the mature red face, long black beard, green wrapped headcloth with gold emblem/red jewel, ornate bronze-gold armor, green gold-embroidered robe/cape, chestnut brown horse with black mane/tail and same green saddle cloth. ONE long guandao with straight black shaft, ornate gold throat and large silver curved crescent blade. Anatomical LEFT grip closer to blade, RIGHT grip closer to butt; two actual hands, shaft passes continuously through both. Exactly four horse legs, two rider legs in stirrups, no duplicate weapons. Orthographic isometric camera down 35 degrees. Cell order TL SE front facing screen lower-right, TR SW front facing lower-left, BL NE back facing upper-right, BR NW back facing upper-left. Horse muzzle and rider face align. Back views show horse rump/tail, back armor/cape and back headcloth, not front faces. Each full horse+rider+blade/tail fits entirely in its own cell with generous alpha margins, completely empty wide cross gutters. All four equal scale about 68 percent of cell height. Rich painted game sprite, sharp readable silhouette. Real alpha transparency. No ground, shadows, text, grid, labels, border, opaque background or painted checkerboard. Pose ATTACK STRIKE: horse firmly planted and braced, rider seated and torso leans forward into a powerful diagonal DOWNWARD guandao slash, both arms push the continuous pole forward/down. Blade projects FORWARD beside horse head and below rider's chest, lower than idle, clear of horse body; not spear thrust and not raised windup. LEFT hand front near blade, RIGHT rear driving hand near butt, elbows and torso visibly distinct from idle. Horse not rearing. Back views are true back views; rider arms thrust forward away from camera. Complete horse+rider+weapon only in central 58 percent quadrant height and 78 percent width. Mandatory completely empty 90px transparent cross gutter, generous 40px exterior margins. No slash trails or effects, no ground or shadows.",
+      "references": [
+        "idle"
+      ],
+      "status": "selected",
+      "generation_id": "exec-d946003b-a63e-4a32-a18f-ae76fc97d839"
+    },
+    {
+      "key": "strike_ne",
+      "repository_path": "assets/characters/guan_sheng_direction4_20261004/strike_ne.png",
+      "sha256": "7206e581ac9b8ef1c93f9e072940f27cca700d24e6df96fd2e6572c86e2444db",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. ONE native transparent RGBA mounted Guan Sheng ATTACK STRIKE, NE rear 3/4 facing upper right, camera behind anatomical RIGHT shoulder. Image1 mathematical guide shows a DOWNWARD guandao cut, RED far LEFT hand near blade, BLUE near RIGHT rear grip; image2 accepted NE idle establishes character horse and correct anatomical arms. Same green headcloth, long beard edge, bronze gold armor and green gold embroidered cape, chestnut horse black mane/tail, green saddle cloth. Horse four hooves planted, rider seated leaning slightly forward. Guandao has completed a strong DOWNWARD SLASH: complete silver crescent blade LOW FORWARD beside and past horse muzzle, much lower than raised windup; straight continuous shaft descends from near right hand at upper waist / lower chest REAR grip to far left hand forward and lower nearest blade. Visible near RIGHT elbow bent by torso with rear hand closer to butt; FAR LEFT elbow/forearm reaches forward across far side, left hand nearest blade. Don't swap arms, no sword or spear thrust, no raised overhead weapon. Blade beyond horse head so fully visible, not buried inside horse. One weapon, two connected hands, four natural horse legs, boots separately in stirrups, clear rear cape and saddle back. Complete group central 70 percent square, wide transparent margins, no text, guide colors, ground shadow or background.",
+      "references": [
+        "diagram_v3_strike_ne",
+        "idle_ne"
+      ],
+      "status": "selected",
+      "generation_id": "exec-07be67c3-5cda-486a-b901-f3d93fe65d2b"
+    },
+    {
+      "key": "terminal",
+      "repository_path": "assets/characters/guan_sheng_direction4_20261004/terminal.png",
+      "sha256": "9f4a4ed07807674a0e926f1970fe4f6f5dece8376329ec0ab305ba6a7d214e07",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Native transparent RGBA game sprite atlas. Create one square 2x2 atlas of FOUR independently painted mounted Guan Sheng sprites. Reference 1 is accepted idle identity, horse, tack, weapon and camera style. Preserve exactly the mature red face, long black beard, green wrapped headcloth with gold emblem/red jewel, ornate bronze-gold armor, green gold-embroidered robe/cape, chestnut brown horse with black mane/tail and same green saddle cloth. ONE long guandao with straight black shaft, ornate gold throat and large silver curved crescent blade. Anatomical LEFT grip closer to blade, RIGHT grip closer to butt; two actual hands, shaft passes continuously through both. Exactly four horse legs, two rider legs in stirrups, no duplicate weapons. Orthographic isometric camera down 35 degrees. Cell order TL SE front facing screen lower-right, TR SW front facing lower-left, BL NE back facing upper-right, BR NW back facing upper-left. Horse muzzle and rider face align. Back views show horse rump/tail, back armor/cape and back headcloth, not front faces. Each full horse+rider+blade/tail fits entirely in its own cell with generous alpha margins, completely empty wide cross gutters. All four equal scale about 68 percent of cell height. Rich painted game sprite, sharp readable silhouette. Real alpha transparency. No ground, shadows, text, grid, labels, border, opaque background or painted checkerboard. Pose DEATH TERMINAL: complete horse and rider lie motionless on the ground; NO kneeling, sitting or standing. Chestnut horse lies on its side, legs folded naturally at ground level, bridle and saddle intact. Guan Sheng has fallen out of saddle and lies stretched on his side beside the horse, visibly same red-faced bearded green-robed armored general; one rider only, head and legs connected naturally. Guandao lies flat on ground beside his relaxed right hand; left hand empty, no shaft through horse or body. Keep horse muzzle pointing along former facing SE down-right, SW down-left, NE up-right, NW up-left. Cameras maintain exact four perspectives including genuine back views for NE/NW: see rider cape/headcloth backs and horse rump side rather than front portrait. One rider and one horse per cell, silhouette low and wide but entirely inside own quadrant. The entire full grouping occupies central 72 percent cell width and 40 percent cell height, at least 70px completely empty cross gutter and generous exterior margins. No blood or gore, no ground or shadows, actual transparent alpha. Do not rotate idle pose, fully paint anatomical fallen subjects.",
+      "references": [
+        "idle"
+      ],
+      "status": "selected",
+      "generation_id": "exec-6e4dfa4a-0557-458e-8a35-4ae80ef92624"
+    },
+    {
+      "key": "walk_a",
+      "repository_path": "assets/characters/guan_sheng_direction4_20261004/walk_a.png",
+      "sha256": "c4d8d5b81cfda84fc8a7e3468d5ee23b96f4e388e50eecd49516b80c68b672c5",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Native transparent RGBA game sprite atlas. Create one square 2x2 atlas of FOUR independently painted mounted Guan Sheng sprites. Reference 1 is accepted idle identity, horse, tack, weapon and camera style. Preserve exactly the mature red face, long black beard, green wrapped headcloth with gold emblem/red jewel, ornate bronze-gold armor, green gold-embroidered robe/cape, chestnut brown horse with black mane/tail and same green saddle cloth. ONE long guandao with straight black shaft, ornate gold throat and large silver curved crescent blade. Anatomical LEFT grip closer to blade, RIGHT grip closer to butt; two actual hands, shaft passes continuously through both. Exactly four horse legs, two rider legs in stirrups, no duplicate weapons. Orthographic isometric camera down 35 degrees. Cell order TL SE front facing screen lower-right, TR SW front facing lower-left, BL NE back facing upper-right, BR NW back facing upper-left. Horse muzzle and rider face align. Back views show horse rump/tail, back armor/cape and back headcloth, not front faces. Each full horse+rider+blade/tail fits entirely in its own cell with generous alpha margins, completely empty wide cross gutters. All four equal scale about 68 percent of cell height. Rich painted game sprite, sharp readable silhouette. Real alpha transparency. No ground, shadows, text, grid, labels, border, opaque background or painted checkerboard. Pose WALK A: animated horse mid-trot, not planted idle. LEFT FORELEG extended forward toward muzzle, RIGHT FORELEG bent/lifted back under chest. RIGHT HINDLEG extends backward toward tail, LEFT HINDLEG bent coming forward. Visible separated four legs with diagonal trot pair. Rider seated securely, slight forward lean, boots in stirrups; cape and beard stream back. Carry guandao at waist with both hands securely fixed in anatomical order, not attacking. Make foot silhouette unmistakably distinct from idle. Match the same real pose in all four cameras, don't mirror anatomical leg identities.",
+      "references": [
+        "idle"
+      ],
+      "status": "selected",
+      "generation_id": "exec-1a01b6b6-b312-4f6c-a71e-3f88028c5161"
+    },
+    {
+      "key": "walk_a_ne",
+      "repository_path": "assets/characters/guan_sheng_direction4_20261004/walk_a_ne.png",
+      "sha256": "6b60e595d372473dacf126416200e1dca95538dc2dbbc592da6493dc8622edd4",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Create ONE native RGBA transparent Guan Sheng mounted WALK PHASE A sprite, NE rear 3/4, facing upper right. Image1 mathematical anatomy diagram establishes precise opposite horse gait from image2 accepted phase B design. Same mature Guan Sheng green wrapped headcloth, beard side edge, bronze gold armor, embroidered green cape, chestnut horse black mane/tail, saddle cloth and single silver crescent guandao. Camera behind anatomical RIGHT shoulder. Change horse to PHASE A: visible NEAR RIGHT FORELEG extends STRAIGHT FORWARD toward muzzle / upper right; FAR LEFT FORELEG bent and lifted back under chest. NEAR RIGHT HINDLEG extends BACK toward tail, far LEFT hindleg moves FORWARD underneath belly. Four distinct connected natural horse legs and separate rider boots in stirrups. Opposite silhouette to reference B, especially near right foreleg straight vs bent. KEEP visible near RIGHT arm down with right hand at rear hip grip close to butt; far LEFT arm reaches forward to front grip near blade. Do not mirror anatomy or put near right hand closest to blade. One uninterrupted straight shaft. Genuine rear camera and saddle back, horse muzzle upper right, tail lower left. Complete horse/rider/weapon central 70 percent square with generous transparent borders. No labels, diagram colors, shadows or background.",
+      "references": [
+        "diagram_v1_walk_a_ne",
+        "walk_b_ne"
+      ],
+      "status": "selected",
+      "generation_id": "exec-e05163c0-e7f7-48ee-8fbf-61ba5659efae"
+    },
+    {
+      "key": "walk_a_nw",
+      "repository_path": "assets/characters/guan_sheng_direction4_20261004/walk_a_nw.png",
+      "sha256": "a7ab38cda565505ac2e355743ac25ff3db1d304f9c68ef048085a1fccda22717",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. ONE native RGBA transparent mounted Guan Sheng sprite, NW BACK 3/4 facing screen UPPER LEFT, camera behind his anatomical LEFT shoulder. Input1 is exact horse-limb and grip reference diagram for PHASE A, RED anatomical LEFT and BLUE RIGHT. Input2 is approved SAME PHASE A front SW view and identity/style; independently redraw from rear camera. One red-faced black-long-bearded green-headcloth bronze-gold armored green-robed general on same chestnut horse with black mane/tail, green saddle cloth and bronze tack. No front face pasted backward: headcloth back and green embroidered cape, saddle back, left rump visible, horse muzzle upper-left and tail lower-right. NEAR LEFT FORELEG BENT/LIFTED with hoof HIGH BACK UNDER CHEST, far RIGHT FORELEG extended forward toward muzzle/upper-left. NEAR LEFT HINDLEG comes forward under belly; far RIGHT HINDLEG extends backwards toward tail. Do not reuse phase B's near left foreleg extended stance. Four natural horse limbs/hooves, two rider boots in stirrups. Same long crescent guandao held in anatomical LEFT forward and RIGHT rear grip, front blade upper-left and butt behind, one straight shaft. Match connected colored reference limbs exactly but remove guide colors. Full group central 70 percent square, all tail/blade/hooves uncut with generous true-alpha margins. Rich painted game sprite, no ground, shadows, text or backdrop.",
+      "references": [
+        "diagram_v1_walk_a_nw",
+        "walk_a_sw"
+      ],
+      "status": "selected",
+      "generation_id": "exec-7175f475-c395-4060-84e1-c0ae32bae14e"
+    },
+    {
+      "key": "walk_a_sw",
+      "repository_path": "assets/characters/guan_sheng_direction4_20261004/walk_a_sw.png",
+      "sha256": "f41594ce234459939a42ab1574c96b21cb18552d53372b64a4e381e153e51fc9",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Generate ONE single native RGBA transparent mounted Guan Sheng sprite, SW FRONT 3/4 facing screen LOWER LEFT. Input1 is exact mathematical horse-limb pose/camera diagram, RED anatomical LEFT, BLUE RIGHT. Input2 is accepted Guan Sheng identity, chestnut horse, green tack and painterly style; use top-right identity, do NOT copy horse leg pose. Red face, long black beard, green wrapped headcloth, bronze-gold dragon shoulder armor, green gold-embroidered cape/robe; one black-shaft ornate silver crescent guandao in left forward and right rear grip, seated rider boots in stirrups. Horse PHASE A: NEAR-SIDE anatomical LEFT FORELEG is bent at the knee with hoof LIFTED HIGH BACK UNDER CHEST, not straight or reaching towards lower-left. FAR RIGHT FORELEG is long and extended forward towards lower-left, touching ground and visible beyond raised near leg. NEAR LEFT HINDLEG reaches forward beneath belly, FAR RIGHT HINDLEG extends backward towards tail. Exact opposite to the SW phase B atlas. Natural horse knees and hocks, four connected legs, hooves separate from rider boots. Match colored limb projection in diagram but remove all guide colors/text. Full grouping in central 70 percent square with generous true-alpha margins, no cropping, shadows, ground, labels or background. Rich painted game sprite, not plastic.",
+      "references": [
+        "diagram_v1_walk_a_sw",
+        "idle"
+      ],
+      "status": "selected",
+      "generation_id": "exec-ca6bacdf-cb3b-4cc4-87a9-69e4ac173838"
+    },
+    {
+      "key": "walk_b",
+      "repository_path": "",
+      "sha256": "36ab2da5fd1614fbac19fad235e350e11204492b092bd93f76ff78229c8ad508",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Native transparent RGBA game sprite atlas. Create one square 2x2 atlas of FOUR independently painted mounted Guan Sheng sprites. Reference 1 is accepted idle identity, horse, tack, weapon and camera style. Preserve exactly the mature red face, long black beard, green wrapped headcloth with gold emblem/red jewel, ornate bronze-gold armor, green gold-embroidered robe/cape, chestnut brown horse with black mane/tail and same green saddle cloth. ONE long guandao with straight black shaft, ornate gold throat and large silver curved crescent blade. Anatomical LEFT grip closer to blade, RIGHT grip closer to butt; two actual hands, shaft passes continuously through both. Exactly four horse legs, two rider legs in stirrups, no duplicate weapons. Orthographic isometric camera down 35 degrees. Cell order TL SE front facing screen lower-right, TR SW front facing lower-left, BL NE back facing upper-right, BR NW back facing upper-left. Horse muzzle and rider face align. Back views show horse rump/tail, back armor/cape and back headcloth, not front faces. Each full horse+rider+blade/tail fits entirely in its own cell with generous alpha margins, completely empty wide cross gutters. All four equal scale about 68 percent of cell height. Rich painted game sprite, sharp readable silhouette. Real alpha transparency. No ground, shadows, text, grid, labels, border, opaque background or painted checkerboard. Reference 2 is PHASE A for the opposite phase comparison. Pose WALK B: horse trot has exactly OPPOSITE foot positions to phase A in every direction. RIGHT FORELEG extended forward toward muzzle, LEFT FORELEG bent/lifted back under chest. LEFT HINDLEG extends backward toward tail, RIGHT HINDLEG bent coming forward. Make anatomical opposite diagonal pair distinct; no reuse of phase A or idle leg silhouette. All four real cameras preserve the same leg identities. Rider securely seated and slight forward lean, green cape/beard follows trot; retain same two-handed guandao grip and same outfit, horse scale, perspective. No weapon attacking, no rearing.",
+      "references": [
+        "idle",
+        "walk_a"
+      ],
+      "status": "rejected_unused",
+      "generation_id": "exec-5ad9c722-f050-401e-9795-dea0a200375f"
+    },
+    {
+      "key": "walk_b_ne",
+      "repository_path": "assets/characters/guan_sheng_direction4_20261004/walk_b_ne.png",
+      "sha256": "6ef0b0a9cf2c108cab148bc8eb678e026ad77b650ecab83abd33f7576b7e0b22",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. ONE native RGBA transparent mounted Guan Sheng sprite, NE BACK 3/4 facing screen UPPER RIGHT, camera behind his anatomical RIGHT shoulder. Input1 is exact reference diagram for PHASE B horse limbs and two hands (blue anatomical RIGHT, red LEFT); input2 is approved phase B FRONT view only to establish the SAME LEG PHASE and same character/horse design. Repaint from a genuinely rear camera, no mirrored or front face pasted backward. Green wrapped headcloth, long black beard only partial side edge, bronze-gold armor, green gold-embroidered cape, chestnut horse black mane/tail and green saddle cloth. Horse muzzle upper-right; see near right rump and saddle back, tail lower-left. NEAR RIGHT FORELEG is BENT/LIFTED with hoof tucked high back under chest; FAR LEFT FORELEG extends forward towards muzzle/upper-right. NEAR RIGHT HINDLEG comes FORWARD under belly, FAR LEFT HINDLEG extends BACK toward tail. Exact opposite foot silhouette to phase A. Four natural connected horse legs, rider boots separate in stirrups. One crescent guandao carried naturally: visible NEAR RIGHT ARM stays bent at waist/back hip with REAR grip close to butt, FAR LEFT ARM reaches forward away from camera for front grip close to silver crescent blade. Never let visible near right hand grip nearest blade. Cape may cover far arm upper chain but both grips should remain plausible, one shaft continuous. Complete full group central 70 percent square, generous alpha margins; no text, colored guide limbs, shadows or backdrop.",
+      "references": [
+        "diagram_v1_walk_b_ne",
+        "walk_b_se"
+      ],
+      "status": "selected",
+      "generation_id": "exec-7ed633bd-ad2c-4d24-936b-003ae0b528b7"
+    },
+    {
+      "key": "walk_b_se",
+      "repository_path": "assets/characters/guan_sheng_direction4_20261004/walk_b_se.png",
+      "sha256": "4662e7e7f63230ab628b24b7af93ee11e485a30b31aad4801c3200fbaf84485b",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Generate ONE single native RGBA fully transparent mounted Guan Sheng sprite, orthographic isometric SE FRONT 3/4 facing screen LOWER RIGHT. Image 1 is exact mathematical horse leg and hand pose guide, BLUE anatomical RIGHT and RED anatomical LEFT. Image 2 is identity/tack/style only (use its TOP LEFT character design, but DO NOT copy its planted legs). Same red-faced long black-bearded green-headcloth bronze-gold green-robed general on chestnut brown horse with black mane/tail, green saddle cloth and ornate bronze tack. Same long black-shaft silver crescent guandao held with LEFT forward and RIGHT rear grip, relaxed riding carry. The ESSENTIAL motion: PHASE B, near-side anatomical RIGHT FORELEG is LIFTED, KNEE BENT and HOOF TUCKED HIGH UNDER THE CHEST, well above ground, never straight or reaching forward. Far-side LEFT FORELEG is LONG EXTENDED down-forward towards lower-right beneath muzzle, full hoof at ground level visibly peeking beyond the bent near leg. Near-side RIGHT HINDLEG reaches forward under belly; far LEFT HINDLEG stretches backward toward tail. Match exactly the blue/red limb paths of image1, with natural horse joints. Do not produce the common pose with NEAR foreleg stretched forward; that is rejected phase A. Secure seated rider, both boots in stirrups, four horse legs and no detached hooves. Rich painted game sprite not plastic 3D. Show complete horse, rider, weapon, tail, ears in center 70 percent of square, large true alpha margins all sides. No grid, text, shadow, floor, backdrop or guide colors.",
+      "references": [
+        "diagram_v1_walk_b_se",
+        "idle"
+      ],
+      "status": "selected",
+      "generation_id": "exec-d309e606-5655-407d-9126-f3e69f844d0e"
+    },
+    {
+      "key": "walk_b_v2",
+      "repository_path": "assets/characters/guan_sheng_direction4_20261004/walk_b_v2.png",
+      "sha256": "b4ab9da74fa0087f1d93b99028e4a7aa62a42772a29ef78bf2fbe6020173a955",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Native transparent RGBA game sprite atlas. Create one square 2x2 atlas of FOUR independently painted mounted Guan Sheng sprites. Inputs 1-4 are mathematical pose/camera reference diagrams in quadrant order, RED anatomical LEFT, BLUE anatomical RIGHT; they define the four horse leg positions. Input 5 is the accepted idle identity, horse, tack, guandao and painterly style. Replace geometric tubes with correctly jointed horse legs, NOT colored tubes. Preserve exactly the mature red face, long black beard, green wrapped headcloth with gold emblem/red jewel, ornate bronze-gold armor, green gold-embroidered robe/cape, chestnut brown horse with black mane/tail and same green saddle cloth. ONE long guandao with straight black shaft, ornate gold throat and large silver curved crescent blade. Anatomical LEFT grip closer to blade, RIGHT grip closer to butt; two actual hands, shaft passes continuously through both. Exactly four horse legs, two rider legs in stirrups, no duplicate weapons. Orthographic isometric camera down 35 degrees. Cell order TL SE front facing screen lower-right, TR SW front facing lower-left, BL NE back facing upper-right, BR NW back facing upper-left. Horse muzzle and rider face align. Back views show horse rump/tail, back armor/cape and back headcloth, not front faces. Each full horse+rider+blade/tail fits entirely in its own cell with generous alpha margins, completely empty wide cross gutters. All four equal scale about 68 percent of cell height. Rich painted game sprite, sharp readable silhouette. Real alpha transparency. No ground, shadows, text, grid, labels, border, opaque background or painted checkerboard. Pose WALK B must follow the four guide foot silhouettes: anatomical LEFT foreleg/red forward toward muzzle and RIGHT foreleg/blue lifted/bent backward; RIGHT hind/blue coming forward and LEFT hind/red back. In SE near-side RIGHT FORELEG is visibly LIFTED AND BENT UNDER CHEST while FAR LEFT foreleg reaches forward down-right; in SW near-side LEFT foreleg reaches forward down-left and far RIGHT foreleg is lifted and bent; match hind pair inversely. Rear NE/NW views show respective swapped diagonal phase. Avoid recreating old phase A. Natural knees/hocks, four connected horse legs, rider boots stay in stirrups and separate from horse hooves. Both hands retain same pole grip. Sprite grouping only 58 percent of quadrant height with at least 60px empty central gutter and 35px exterior margins. No text from guides.",
+      "references": [
+        "diagram_v1_walk_b_se",
+        "diagram_v1_walk_b_sw",
+        "diagram_v1_walk_b_ne",
+        "diagram_v1_walk_b_nw",
+        "idle"
+      ],
+      "status": "selected",
+      "generation_id": "exec-d63964b8-083e-4f2a-8282-c00733b89ff4"
+    },
+    {
+      "key": "windup",
+      "repository_path": "",
+      "sha256": "3b9ac4caee748989cd22cb21f22db6d3199d3d0a4e8910157e08a27447457328",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Native transparent RGBA game sprite atlas. Create one square 2x2 atlas of FOUR independently painted mounted Guan Sheng sprites. Reference 1 is accepted idle identity, horse, tack, weapon and camera style. Preserve exactly the mature red face, long black beard, green wrapped headcloth with gold emblem/red jewel, ornate bronze-gold armor, green gold-embroidered robe/cape, chestnut brown horse with black mane/tail and same green saddle cloth. ONE long guandao with straight black shaft, ornate gold throat and large silver curved crescent blade. Anatomical LEFT grip closer to blade, RIGHT grip closer to butt; two actual hands, shaft passes continuously through both. Exactly four horse legs, two rider legs in stirrups, no duplicate weapons. Orthographic isometric camera down 35 degrees. Cell order TL SE front facing screen lower-right, TR SW front facing lower-left, BL NE back facing upper-right, BR NW back facing upper-left. Horse muzzle and rider face align. Back views show horse rump/tail, back armor/cape and back headcloth, not front faces. Each full horse+rider+blade/tail fits entirely in its own cell with generous alpha margins, completely empty wide cross gutters. All four equal scale about 68 percent of cell height. Rich painted game sprite, sharp readable silhouette. Real alpha transparency. No ground, shadows, text, grid, labels, border, opaque background or painted checkerboard. Pose ATTACK WINDUP: horse is planted in a low stable braced stance with four hooves, NOT rearing or trotting. Guan Sheng turns torso slightly and brings guandao back high above his right shoulder to prepare a diagonal downward sweeping cut. Blade remains at the FORWARD end, LEFT hand closer to blade, RIGHT driving hand rear; both hands firmly on a single continuous shaft. Raised crescent blade and butt are distinct, no swap between directions. Arms show clear elbow bend, weapon markedly different from waist-height idle. Match the anatomy across four cameras. Horse muzzle stays aligned with facing, rider remains seated in saddle with both stirrups. Very wide alpha margin above raised blade.",
+      "references": [
+        "idle"
+      ],
+      "status": "rejected_unused",
+      "generation_id": "exec-f4f729b1-974c-4771-8de3-c0eeab65865a"
+    },
+    {
+      "key": "windup_ne",
+      "repository_path": "",
+      "sha256": "8f07ae363021cfd6ce19c94b0c985327e2a0dd03453dc65b0f532bd39c29a336",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. ONE native RGBA transparent mounted Guan Sheng sprite, NE BACK 3/4 facing UPPER RIGHT, camera behind anatomical RIGHT shoulder. Input1 is exact mathematical WINDUP diagram (RED LEFT arm/hand, BLUE RIGHT arm/hand). Input2 is accepted character, chestnut horse, tack and correct existing grip chain. Paint same green headcloth, bronze-gold armor, green embroidered cape, black long beard with only side edge, chestnut horse black mane/tail, same green saddle cloth. Horse planted four hooves, rider securely seated; genuinely rear view, no front face. ATTACK WINDUP: FAR LEFT arm/red extends UP FORWARD away from camera, left hand above head grips shaft close to the silver crescent blade. VISIBLE NEAR RIGHT arm/blue bends backwards, elbow close to torso, right hand grips REAR shaft low near upper chest/right shoulder, closer to butt. Do NOT extend the near right arm forward to nearest blade. One continuous straight black shaft, gold throat and silver crescent blade HIGH FORWARD upper-right; butt low behind near right hip. Clear raised-weapon preparation distinct from waist-height idle, no attacking cut yet. Match diagram's hand ordering and arm chains exactly; remove all guide colors. Entire horse+rider+raised blade fully within central 70 percent square, generous margins ABOVE full blade, no cropping or shadows, true alpha, no ground/text/background.",
+      "references": [
+        "diagram_v2_windup_ne",
+        "walk_b_ne"
+      ],
+      "status": "rejected_unused",
+      "generation_id": "exec-0b380630-71a2-43bc-8d34-7b444fe40559"
+    },
+    {
+      "key": "windup_ne_v2",
+      "repository_path": "tools/contracts/guan_sheng_direction4_20261004/native_inputs/windup_ne_v2.png",
+      "sha256": "ca8c8d804f8c3ffea13bc2670adc6aa1522b55432962dbbf177179c812dac7f5",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: precise-object-edit. Image1 is the EDIT TARGET, accepted NE BACK-view Guan Sheng mounted IDLE sprite. Image2 is ONLY the mathematical hand/weapon windup reference (RED far LEFT, BLUE near RIGHT). Change only FAR LEFT ARM and the guandao position to create attack WINDUP. Preserve horse with four planted hooves, rider torso/head and NE rear camera, green clothing/cape/armor, seated legs, framing, palette and true alpha. Most important invariant: VISIBLE NEAR RIGHT gold shoulder/bicep currently points DOWN and its right hand is at waist/hip on the REAR grip. KEEP THAT RIGHT ARM AND RIGHT HAND DOWN AT WAIST exactly; do not lift it toward the blade. Raise the FAR LEFT elbow visibly on the FAR LEFT side behind/above the head, far left forearm crosses high FORWARD ABOVE the head to a LEFT hand raised near crescent blade. Left front hand is closer to blade, right rear hand remains low near butt. This one arm change tilts the same continuous straight shaft from low rear butt near RIGHT HIP to high blade upper-right. You must see near RIGHT bicep descend from its visible gold shoulder to the waist grip, while raised arm emerges from the far LEFT shoulder behind head. No swapped arms, no extra hands, no detached shoulder. The complete silver crescent blade and gold throat remain forward high upper-right with generous transparent margin, not cropped. Rich native painterly detail, no labels, no guide colors, no background, no shadows. Retain existing transparency.",
+      "references": [
+        "idle_ne",
+        "diagram_v2_windup_ne"
+      ],
+      "status": "required_reference",
+      "generation_id": "exec-ad2106d5-345a-4551-bc34-bae1a7b0fb5b"
+    },
+    {
+      "key": "windup_ne_v3",
+      "repository_path": "assets/characters/guan_sheng_direction4_20261004/windup_ne_v3.png",
+      "sha256": "dceb424edb4213590c39651a4e35ec85bd4961f39e142f3a7d8cc0859849a37a",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: precise-object-edit. Edit this native transparent Guan Sheng mounted NE rear-view windup sprite. Fix ONLY its framing: redraw the SAME full rider, chestnut horse, cape and raised guandao about 25 percent smaller and centered in a larger transparent square, so the COMPLETE silver crescent blade tip has at least 100 pixels clear transparent margin above it. All four complete hooves, tail, cape edges and weapon need clear alpha border. Preserve exact correct arm chain: near RIGHT gold shoulder/bicep points down, right hand at hip on rear grip; far LEFT raised arm above head with left hand nearest blade. Preserve current exact pose, long black beard, dark green headcloth/robe, ornate gold armor, horse and weapon design, painterly detail and true alpha. Reconstruct the currently clipped very top blade tip. Do not change leg placement or switch hands; no background, floor shadow, labels or colored reference guides. One complete group occupies central 70 percent of square.",
+      "references": [
+        "windup_ne_v2"
+      ],
+      "status": "selected",
+      "generation_id": "exec-89f9aaf8-a895-4cbb-9416-7f9721e507ad"
+    },
+    {
+      "key": "windup_v2",
+      "repository_path": "",
+      "sha256": "d7725350c9e2cad63ce4f58e21f67ae3bc457d06903e7afaa0c9ab86c02de3e1",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Native transparent RGBA game sprite atlas. Create one square 2x2 atlas of FOUR independently painted mounted Guan Sheng sprites. Reference 1 is accepted idle identity, horse, tack, weapon and camera style. Preserve exactly the mature red face, long black beard, green wrapped headcloth with gold emblem/red jewel, ornate bronze-gold armor, green gold-embroidered robe/cape, chestnut brown horse with black mane/tail and same green saddle cloth. ONE long guandao with straight black shaft, ornate gold throat and large silver curved crescent blade. Anatomical LEFT grip closer to blade, RIGHT grip closer to butt; two actual hands, shaft passes continuously through both. Exactly four horse legs, two rider legs in stirrups, no duplicate weapons. Orthographic isometric camera down 35 degrees. Cell order TL SE front facing screen lower-right, TR SW front facing lower-left, BL NE back facing upper-right, BR NW back facing upper-left. Horse muzzle and rider face align. Back views show horse rump/tail, back armor/cape and back headcloth, not front faces. Each full horse+rider+blade/tail fits entirely in its own cell with generous alpha margins, completely empty wide cross gutters. All four equal scale about 68 percent of cell height. Rich painted game sprite, sharp readable silhouette. Real alpha transparency. No ground, shadows, text, grid, labels, border, opaque background or painted checkerboard. Pose ATTACK WINDUP: planted stable horse, seated rider with torso turned slightly and both elbows raised, guandao pulled back HIGH ABOVE RIGHT SHOULDER, preparing diagonal downward slash. LEFT hand grips forward near crescent blade; RIGHT hand rear closer to butt. Horse not rearing, no movement gait. VERY IMPORTANT FRAMING: each complete horse+rider+raised weapon fits ONLY inside center 55 PERCENT of its quadrant height and 75 percent width. Large empty transparent margin OVER raised blades. The central cross must have a completely empty transparent 100-pixel-wide band. Top-row subjects MUST END before 550 on a 1280 canvas. Bottom-row subjects MUST START after 730. Full blade, headcloth, cape, tails and four hooves all uncut, no parts protrude into central band. Do not make overlarge sprites even if detail requires simplification; character scale is adjusted by runtime metadata. Native independently painted four views, no mirroring.",
+      "references": [
+        "idle"
+      ],
+      "status": "rejected_unused",
+      "generation_id": "exec-519d5d56-6db3-4518-9240-9ef6ecb9e20e"
+    },
+    {
+      "key": "windup_v3",
+      "repository_path": "assets/characters/guan_sheng_direction4_20261004/windup_v3.png",
+      "sha256": "bfca382815507e67ddfb4b3000a7433cf160096b91116e4657076868d94568c3",
+      "method": "built_in_imagegen",
+      "prompt": "Use case: stylized-concept. Native transparent RGBA game sprite atlas. Create one square 2x2 atlas of FOUR independently painted mounted Guan Sheng sprites. Inputs 1-4 are newly drawn mathematical anatomy and camera diagrams in quadrant order: BLUE anatomical RIGHT, RED anatomical LEFT. Input5 gives ONLY the accepted Guan Sheng/horse/outfit/weapon identity and painterly style. Preserve exactly the mature red face, long black beard, green wrapped headcloth with gold emblem/red jewel, ornate bronze-gold armor, green gold-embroidered robe/cape, chestnut brown horse with black mane/tail and same green saddle cloth. ONE long guandao with straight black shaft, ornate gold throat and large silver curved crescent blade. Anatomical LEFT grip closer to blade, RIGHT grip closer to butt; two actual hands, shaft passes continuously through both. Exactly four horse legs, two rider legs in stirrups, no duplicate weapons. Orthographic isometric camera down 35 degrees. Cell order TL SE front facing screen lower-right, TR SW front facing lower-left, BL NE back facing upper-right, BR NW back facing upper-left. Horse muzzle and rider face align. Back views show horse rump/tail, back armor/cape and back headcloth, not front faces. Each full horse+rider+blade/tail fits entirely in its own cell with generous alpha margins, completely empty wide cross gutters. All four equal scale about 68 percent of cell height. Rich painted game sprite, sharp readable silhouette. Real alpha transparency. No ground, shadows, text, grid, labels, border, opaque background or painted checkerboard. Pose WINDUP exactly matches each diagram's connected arms, hand ordering and shaft direction, not the idle posture. LEFT RED arm raises the forward grip closer to crescent blade; RIGHT BLUE hand draws the rear grip back near shoulder. In SE the blade is HIGH FORWARD screen upper-right, rear butt screen left; in SW blade HIGH FORWARD screen upper-left, rear butt screen right, foreshortened appropriately. NE/NW same anatomical pose seen from rear, not reversed pole. Horse stands firmly planted with all four hooves; rider remains in saddle. Complete grouping, including raised blade, only 56 percent quadrant height. Top row fully within y70..550; bottom row fully within y730..1210 of 1280 canvas. Absolutely empty central horizontal band y560..720 and vertical band x580..700, no parts entering them. No guide colors or labels. Do not reverse the guandao or swap hands.",
+      "references": [
+        "diagram_v1_windup_se",
+        "diagram_v1_windup_sw",
+        "diagram_v1_windup_ne",
+        "diagram_v1_windup_nw",
+        "idle"
+      ],
+      "status": "selected",
+      "generation_id": "exec-609bd1ff-8c91-44ec-8a0b-e040bcb0e362"
+    },
+    {
+      "key": "diagram_v1_hurt_ne",
+      "repository_path": "tools/contracts/guan_sheng_direction4_20261004/guides/diagram_v1_hurt_ne.png",
+      "sha256": "c8dc86c8fc36da35a259dfed324b79603ec801e6b8e857881d312a32397f3159",
+      "method": "orthographic_geometry_diagram",
+      "prompt": "New deterministic mathematical orthographic anatomy diagram; blue right, red left, opposite diagonal horse gait pairs. No original bitmap read or edited. Reference only.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/guan_sheng_direction4_20261004/guides/v1/render_pose_diagrams.py.txt",
+          "sha256": "37a1f476b810a3813d947f2aa5539722c71ab157f272e67f3e2baa8075526b3b"
+        }
+      ]
+    },
+    {
+      "key": "diagram_v1_idle_ne",
+      "repository_path": "tools/contracts/guan_sheng_direction4_20261004/guides/diagram_v1_idle_ne.png",
+      "sha256": "ccae190386aeeb0ba9e308eed77b38b7f77d7e522dab0b7aaeae7bcb8170c349",
+      "method": "orthographic_geometry_diagram",
+      "prompt": "New deterministic mathematical orthographic anatomy diagram; blue right, red left, opposite diagonal horse gait pairs. No original bitmap read or edited. Reference only.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/guan_sheng_direction4_20261004/guides/v1/render_pose_diagrams.py.txt",
+          "sha256": "37a1f476b810a3813d947f2aa5539722c71ab157f272e67f3e2baa8075526b3b"
+        }
+      ]
+    },
+    {
+      "key": "diagram_v1_walk_a_ne",
+      "repository_path": "tools/contracts/guan_sheng_direction4_20261004/guides/diagram_v1_walk_a_ne.png",
+      "sha256": "898bd48ad5601ce26fbc8c5cad7575130c45bcf8c1ac1ec0cd8b2dc27dc37144",
+      "method": "orthographic_geometry_diagram",
+      "prompt": "New deterministic mathematical orthographic anatomy diagram; blue right, red left, opposite diagonal horse gait pairs. No original bitmap read or edited. Reference only.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/guan_sheng_direction4_20261004/guides/v1/render_pose_diagrams.py.txt",
+          "sha256": "37a1f476b810a3813d947f2aa5539722c71ab157f272e67f3e2baa8075526b3b"
+        }
+      ]
+    },
+    {
+      "key": "diagram_v1_walk_a_nw",
+      "repository_path": "tools/contracts/guan_sheng_direction4_20261004/guides/diagram_v1_walk_a_nw.png",
+      "sha256": "90a517fdcd4b522c21d50cbe9bdeb663616fa8f1537274b01a39907f9725da35",
+      "method": "orthographic_geometry_diagram",
+      "prompt": "New deterministic mathematical orthographic anatomy diagram; blue right, red left, opposite diagonal horse gait pairs. No original bitmap read or edited. Reference only.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/guan_sheng_direction4_20261004/guides/v1/render_pose_diagrams.py.txt",
+          "sha256": "37a1f476b810a3813d947f2aa5539722c71ab157f272e67f3e2baa8075526b3b"
+        }
+      ]
+    },
+    {
+      "key": "diagram_v1_walk_a_sw",
+      "repository_path": "tools/contracts/guan_sheng_direction4_20261004/guides/diagram_v1_walk_a_sw.png",
+      "sha256": "6f3b3e7bdf6f1ab03860221bb0eb87cb7549ffe53a808466418f5cf35dd55fbe",
+      "method": "orthographic_geometry_diagram",
+      "prompt": "New deterministic mathematical orthographic anatomy diagram; blue right, red left, opposite diagonal horse gait pairs. No original bitmap read or edited. Reference only.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/guan_sheng_direction4_20261004/guides/v1/render_pose_diagrams.py.txt",
+          "sha256": "37a1f476b810a3813d947f2aa5539722c71ab157f272e67f3e2baa8075526b3b"
+        }
+      ]
+    },
+    {
+      "key": "diagram_v1_walk_b_ne",
+      "repository_path": "tools/contracts/guan_sheng_direction4_20261004/guides/diagram_v1_walk_b_ne.png",
+      "sha256": "587b50ffef2ad82c6b06e944b77b08c32255f85c8c4f3e2e36f12f7c164c7d4c",
+      "method": "orthographic_geometry_diagram",
+      "prompt": "New deterministic mathematical orthographic anatomy diagram; blue right, red left, opposite diagonal horse gait pairs. No original bitmap read or edited. Reference only.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/guan_sheng_direction4_20261004/guides/v1/render_pose_diagrams.py.txt",
+          "sha256": "37a1f476b810a3813d947f2aa5539722c71ab157f272e67f3e2baa8075526b3b"
+        }
+      ]
+    },
+    {
+      "key": "diagram_v1_walk_b_nw",
+      "repository_path": "tools/contracts/guan_sheng_direction4_20261004/guides/diagram_v1_walk_b_nw.png",
+      "sha256": "8abf1392236c671347ad1a7a6441d223a0e95913b280d748647686f95a780416",
+      "method": "orthographic_geometry_diagram",
+      "prompt": "New deterministic mathematical orthographic anatomy diagram; blue right, red left, opposite diagonal horse gait pairs. No original bitmap read or edited. Reference only.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/guan_sheng_direction4_20261004/guides/v1/render_pose_diagrams.py.txt",
+          "sha256": "37a1f476b810a3813d947f2aa5539722c71ab157f272e67f3e2baa8075526b3b"
+        }
+      ]
+    },
+    {
+      "key": "diagram_v1_walk_b_se",
+      "repository_path": "tools/contracts/guan_sheng_direction4_20261004/guides/diagram_v1_walk_b_se.png",
+      "sha256": "905fa651f14d754275f4f80b5633a70d2ed43e4ddadd1812dc8e566916df962f",
+      "method": "orthographic_geometry_diagram",
+      "prompt": "New deterministic mathematical orthographic anatomy diagram; blue right, red left, opposite diagonal horse gait pairs. No original bitmap read or edited. Reference only.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/guan_sheng_direction4_20261004/guides/v1/render_pose_diagrams.py.txt",
+          "sha256": "37a1f476b810a3813d947f2aa5539722c71ab157f272e67f3e2baa8075526b3b"
+        }
+      ]
+    },
+    {
+      "key": "diagram_v1_walk_b_sw",
+      "repository_path": "tools/contracts/guan_sheng_direction4_20261004/guides/diagram_v1_walk_b_sw.png",
+      "sha256": "ed7fbad9edfae01b02f50f114b32a315fa94b2c270a55395a96b58a793dc0946",
+      "method": "orthographic_geometry_diagram",
+      "prompt": "New deterministic mathematical orthographic anatomy diagram; blue right, red left, opposite diagonal horse gait pairs. No original bitmap read or edited. Reference only.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/guan_sheng_direction4_20261004/guides/v1/render_pose_diagrams.py.txt",
+          "sha256": "37a1f476b810a3813d947f2aa5539722c71ab157f272e67f3e2baa8075526b3b"
+        }
+      ]
+    },
+    {
+      "key": "diagram_v1_windup_ne",
+      "repository_path": "tools/contracts/guan_sheng_direction4_20261004/guides/diagram_v1_windup_ne.png",
+      "sha256": "b014f5fd83837e44877c1311128e427a552242f17eddc6ee5df326cd8f22208d",
+      "method": "orthographic_geometry_diagram",
+      "prompt": "New deterministic mathematical orthographic anatomy diagram; blue right, red left, opposite diagonal horse gait pairs. No original bitmap read or edited. Reference only.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/guan_sheng_direction4_20261004/guides/v1/render_pose_diagrams.py.txt",
+          "sha256": "37a1f476b810a3813d947f2aa5539722c71ab157f272e67f3e2baa8075526b3b"
+        }
+      ]
+    },
+    {
+      "key": "diagram_v1_windup_nw",
+      "repository_path": "tools/contracts/guan_sheng_direction4_20261004/guides/diagram_v1_windup_nw.png",
+      "sha256": "1250dc31635a2d53ade7debc37373d06aa3e4135d636d5d0d766f25e29480679",
+      "method": "orthographic_geometry_diagram",
+      "prompt": "New deterministic mathematical orthographic anatomy diagram; blue right, red left, opposite diagonal horse gait pairs. No original bitmap read or edited. Reference only.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/guan_sheng_direction4_20261004/guides/v1/render_pose_diagrams.py.txt",
+          "sha256": "37a1f476b810a3813d947f2aa5539722c71ab157f272e67f3e2baa8075526b3b"
+        }
+      ]
+    },
+    {
+      "key": "diagram_v1_windup_se",
+      "repository_path": "tools/contracts/guan_sheng_direction4_20261004/guides/diagram_v1_windup_se.png",
+      "sha256": "fd37880c8016f51939d25f3509c41d756bd183fecf803b57ae744eaaf13924f1",
+      "method": "orthographic_geometry_diagram",
+      "prompt": "New deterministic mathematical orthographic anatomy diagram; blue right, red left, opposite diagonal horse gait pairs. No original bitmap read or edited. Reference only.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/guan_sheng_direction4_20261004/guides/v1/render_pose_diagrams.py.txt",
+          "sha256": "37a1f476b810a3813d947f2aa5539722c71ab157f272e67f3e2baa8075526b3b"
+        }
+      ]
+    },
+    {
+      "key": "diagram_v1_windup_sw",
+      "repository_path": "tools/contracts/guan_sheng_direction4_20261004/guides/diagram_v1_windup_sw.png",
+      "sha256": "f34119cf67ead0a8d0a868522eb8ffbbb916e11160af8a5cc7c8ba9ea3a9a342",
+      "method": "orthographic_geometry_diagram",
+      "prompt": "New deterministic mathematical orthographic anatomy diagram; blue right, red left, opposite diagonal horse gait pairs. No original bitmap read or edited. Reference only.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/guan_sheng_direction4_20261004/guides/v1/render_pose_diagrams.py.txt",
+          "sha256": "37a1f476b810a3813d947f2aa5539722c71ab157f272e67f3e2baa8075526b3b"
+        }
+      ]
+    },
+    {
+      "key": "diagram_v2_windup_ne",
+      "repository_path": "tools/contracts/guan_sheng_direction4_20261004/guides/diagram_v2_windup_ne.png",
+      "sha256": "17538129662b8ef2a45a97585eb1f7a6aeae332ec3a9d76e6e5c6bcf48e4aafe",
+      "method": "orthographic_geometry_diagram",
+      "prompt": "New deterministic mathematical orthographic anatomy diagram; blue right, red left, opposite diagonal horse gait pairs. No original bitmap read or edited. Reference only.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/guan_sheng_direction4_20261004/guides/v2/render_pose_diagrams_v2.py.txt",
+          "sha256": "ae7c615ed4ab24d19b0007d2679a6fa513bf692739ec8ecc76c270cdae35d827"
+        }
+      ]
+    },
+    {
+      "key": "diagram_v3_strike_ne",
+      "repository_path": "tools/contracts/guan_sheng_direction4_20261004/guides/diagram_v3_strike_ne.png",
+      "sha256": "aabac2811a209fd876f123d557b249274efab9264e3ab47870c29b6d96617f1d",
+      "method": "orthographic_geometry_diagram",
+      "prompt": "New deterministic mathematical orthographic anatomy diagram; blue right, red left, opposite diagonal horse gait pairs. No original bitmap read or edited. Reference only.",
+      "references": [],
+      "status": "required_reference",
+      "generator_artifacts": [
+        {
+          "path": "tools/contracts/guan_sheng_direction4_20261004/guides/v3/render_pose_diagrams_v3.py.txt",
+          "sha256": "efa3fc09e4bfa33866c504e01434df8b7722c3e67b07bef8d203955829215edd"
+        }
+      ]
+    }
+  ]
+}

@@ -168,7 +168,14 @@ func decorate(map: GameMap) -> void:
 	# 驻守战复用已经校准过的梁山泊第五关环境素材，但不改变关卡ID或战役进度。
 	map.set_meta("liangshan_art_level_id", "level5")
 	map.set_meta("liangshan_hall_cell", HALL)
-	map.decor = [
+	map.decor = liangshan_visual_decor()
+	map.enable_liangshan_sample()
+
+
+## Pure original visual layout, shared by new games and fixed Gao reconstruction.
+## Returns fresh values; does not decorate maps, consume RNG or deploy actors.
+static func liangshan_visual_decor() -> Array:
+	return [
 		["banner", Vector2i(18, 33), 220.0, "zhongyi_hall_standard_east"],
 		["banner", Vector2i(14, 33), 220.0, "zhongyi_hall_standard_west"],
 		# 杏黄“替天行道”旗在山顶、忠义堂后方且位于寨墙以内；不再孤悬寨外。
@@ -177,8 +184,6 @@ func decorate(map: GameMap) -> void:
 		["boat", Vector2i(37, 31), 58.0], ["boat", Vector2i(34, 53), 52.0],
 		["rocks", Vector2i(7, 23), 128.0], ["rocks", Vector2i(26, 12), 128.0],
 	]
-	map.enable_liangshan_sample()
-
 
 ## 子类(自定义据守)可覆写这些钩子改波次/投石车/数值；据守本体返回原值，行为不变。
 var _wavelist_cache: Array = []

@@ -1,0 +1,196 @@
+--- a/scripts/run_level8_unit_contract.gd
++++ b/scripts/run_level8_unit_contract.gd
+@@ -3,6 +3,8 @@
+ var roles: Dictionary = {}
+ var actors: Dictionary = {}
+ var pools: Dictionary = {}
++const DamingLevel := preload("res://scripts/levels/level8_daming_rts.gd")
++const MapScript := preload("res://scripts/game_map.gd")
+ const NAMED := {"hall":"hall","strategist":"wu_yong","scout":"shi_qian","chai":"chai_jin","yue":"yue_he","gate":"zhu_gate","lu":"lu_junyi","shi":"shi_xiu","enemy_hq":"hall"}
+ const SPY_ART := {"scout":"shi_qian_lantern","chai":"chai_jin_officer","yue":"yue_he_officer"}
+ func bad(code: String) -> Dictionary:return {"ok":false,"code":"LEVEL8_"+code}
+@@ -31,7 +33,13 @@
+ func values(v: Dictionary) -> Dictionary:
+ 	var role: Dictionary=actors.get(str(v.entity_id),{});var name: String=role.get("role","")
+ 	if v._story_pose_t!=0.0 or v._pose_previous_variant!="" or v.defeat_outcome!="":return bad("UNSUPPORTED_STORY_POSE")
+-	if v.story_outcome!="" and (name!="gate" or v.story_outcome!="retreated" or not roles.values.gate_open):return bad("UNSUPPORTED_STORY_OUTCOME")
++	if v.story_outcome!="":
++		var retired_gate: bool=name=="gate" and v.story_outcome=="retreated" and roles.values.gate_open
++		var safe_prisoner: bool=name in ["lu","shi"] and v.story_outcome=="retreated" and roles.values.rescued and roles.values.prison_open and roles.values.gate_open
++		if not retired_gate and not safe_prisoner:return bad("UNSUPPORTED_STORY_OUTCOME")
++		if safe_prisoner:
++			var stopped: Dictionary=_safe_retreat_values(v)
++			if not stopped.ok:return stopped
+ 	if not role.is_empty() and v.key!=role.key:return bad("ROLE_KEY")
+ 	if (v.hp<=0.0)!=v._dying:return bad("LIFETIME")
+ 	if name in ["lu","shi"]:
+@@ -55,6 +63,11 @@
+ func parts(v: Dictionary,refs: Dictionary,meta: Dictionary,_node: Dictionary) -> Dictionary:
+ 	var role: String=actors.get(str(v.entity_id),{}).get("role","")
+ 	if refs.story_assist_owner.state!="none" or refs.story_assist_partner.state!="none" or meta.has("story_pose"):return bad("ASSISTANCE_OR_POSE")
++	if role in ["lu","shi"] and v.story_outcome=="retreated":
++		if _node.visible:return bad("SAFE_RETREAT_VISIBLE")
++		if not refs._queue.is_empty():return bad("SAFE_RETREAT_QUEUE")
++		for field: String in ["_target","_pending_target","_hua_lock_target"]:
++			if refs[field].state!="none":return bad("SAFE_RETREAT_TARGET")
+ 	if SPY_ART.has(role):
+ 		if typeof(meta.get("daming_covered"))!=TYPE_BOOL:return bad("COVER_TYPE")
+ 		for field in ["daming_suspicion","daming_recover"]:
+@@ -69,6 +82,19 @@
+ 		if pools.get(str(v.entity_id))!="escorts" and not (v._dying and v.faction==1 and v.key in ["guan_dao","guan_gong"]):return bad("UNREGISTERED_SUPPORT_LANE")
+ 	return {"ok":true}
+ 
++# Structural Unit component only. Complete Core additionally pairs these fixed
++# roles with the validated Mission safe events before accepting a whole world.
++func _safe_retreat_values(v: Dictionary) -> Dictionary:
++	if v.hp<1.0 or v._dying or not v.passive or v.stance!=3 or v.selected:return bad("SAFE_RETREAT_LIFETIME")
++	if v._state!=0 or not v._path.is_empty() or v._patrolling or v._resume_amove or v._hold_order_active:return bad("SAFE_RETREAT_ORDER")
++	if v._chase_intent!=0 or v._group_cap!=0.0 or not v._has_home or v._home!=v.position or v._hua_lock_shots!=0:return bad("SAFE_RETREAT_STOP_ANCHOR")
++	if v.mission_order_active or v.mission_order_token!=0 or v.mission_order_arrival_t!=0.0 or v.mission_order_target!=Vector2.INF:return bad("SAFE_RETREAT_MISSION_ORDER")
++	if not v._pending_done or v._lunge!=0.0 or v._cast_t!=0.0 or v._stepped or v._move_blend!=0.0:return bad("SAFE_RETREAT_PENDING")
++	# Exact installed Level condition; no map instance, deployment, or tick is made.
++	var exit_position:=Vector2(DamingLevel.EXIT_CELL.x*MapScript.CELL+MapScript.CELL*0.5,DamingLevel.EXIT_CELL.y*MapScript.CELL+MapScript.CELL*0.5)
++	if v.position.distance_to(exit_position)>130.0 or floor(v.position.y/MapScript.CELL)<45.0:return bad("SAFE_RETREAT_EXIT")
++	return {"ok":true}
++
+ func membership(states: Dictionary,active: Array) -> Dictionary:
+ 	for id in actors.keys()+pools.keys():
+ 		if not states.has(id):return bad("ROLE_NOT_IN_GRAPH")
+--- a/scripts/run_battle_world_core.gd
++++ b/scripts/run_battle_world_core.gd
+@@ -266,6 +266,11 @@
+ 	sections["items"] = counter.value
+ 
+ 	if _is_official_campaign():
++		if lvl_id=="level8":
++			var paired: Dictionary=_validate_daming_safe_pair(sections,m_token,p_token)
++			if not paired.ok:
++				if retained_identity==null:identity.dispose()
++				return paired
+ 		var norm_prof := Profiles.normalize_context(_trusted_context)
+ 		var profile := {
+ 			"schema": Profiles.SCHEMA,
+@@ -293,6 +298,112 @@
+ 	dispose()
+ 	return _bad(String(result.get("code", "SECTION_PREPARE")), section)
+ 
++## Fixed Level8 record pairing only. No caller bool, Unit metadata, saved script
++## path or live Node chooses eligibility; all five records are independently
++## checked against the installed context before any Unit/tombstone allocation.
++# Reject fixed identity leaf types before old validators compare dictionaries.
++# This adds no coercion/normalization and changes no public validator.
++func _daming_safe_record_identity_types(sections: Dictionary) -> Dictionary:
++	var text_fields: Dictionary={"units":["schema","content_version"],"level":["schema","level_id","content_version","mission_token"],"root":["schema","content_version"],"mission":["schema"],"presentation":["schema"]}
++	for section: String in text_fields:
++		var record: Variant=sections.get(section)
++		if typeof(record)!=TYPE_DICTIONARY:return _bad("LEVEL8_SAFE_RECORD_TYPE",section)
++		for field: String in text_fields[section]:
++			if typeof(record.get(field))!=TYPE_STRING:return _bad("LEVEL8_SAFE_IDENTITY_TEXT_TYPE",section+"/"+field)
++		if section in ["mission","presentation"]:
++			var context: Variant=record.get("context")
++			if typeof(context)!=TYPE_DICTIONARY or context.size()!=4 or not context.has_all(["level_id","content_version","mission_token","presentation_token"]):return _bad("LEVEL8_SAFE_CONTEXT_TYPE",section)
++			for field: String in ["level_id","content_version","mission_token","presentation_token"]:
++				if typeof(context[field])!=TYPE_STRING:return _bad("LEVEL8_SAFE_CONTEXT_TEXT_TYPE",section+"/"+field)
++	return {"ok":true}
++
++func _validate_daming_safe_pair(sections: Dictionary, mission_token: String, presentation_token: String) -> Dictionary:
++	if not _is_official_campaign() or _campaign_level_id()!="level8":return _bad("LEVEL8_SAFE_PAIR_CONTEXT")
++	if not sections.has_all(["units","level","mission","presentation","root"]):return _bad("LEVEL8_SAFE_PAIR_SECTIONS")
++	var identity_types: Dictionary=_daming_safe_record_identity_types(sections)
++	if not identity_types.ok:return identity_types
++	var version: String=_trusted.content_version
++	var graph: Variant=_graph()
++	var indexed: Dictionary=graph.validate_index(sections.units,version)
++	if not indexed.ok:return indexed
++	var known: Dictionary=indexed.known_ids
++	var next_id: int=indexed.next_entity_id
++	var level_data: Dictionary=CampaignLevelState.new().validate(sections.level,"level8",version,known,next_id,{},mission_token)
++	if not level_data.ok:return level_data
++	var context: Dictionary={"level_id":"level8","content_version":version,"mission_token":mission_token,"presentation_token":presentation_token}
++	var shown: Dictionary=PresentationState.new().validate(sections.presentation,context)
++	if not shown.ok:return shown
++	var mission_data: Dictionary=CampaignMissionState.new().validate(sections.mission,context,known,next_id,shown.tokens)
++	if not mission_data.ok:return mission_data
++	var unit_data: Dictionary=graph.validate(sections.units,version,sections.level,mission_token,{})
++	if not unit_data.ok:return unit_data
++	# Root's existing full schema/identity/reference/clock/economy/FIGHT checks
++	# remain authoritative. This abstract registry allocates no actual Unit.
++	var proof_identity: Variant=Identity.new(U)
++	var declared: Dictionary=proof_identity.declare_entities(known)
++	if not declared.ok:proof_identity.dispose();return declared
++	var root_data: Dictionary=_root_state(proof_identity).validate(sections.root,version,known)
++	proof_identity.dispose()
++	if not root_data.ok:return root_data
++	var levels: Dictionary=level_data.value
++	var mission: Dictionary=mission_data.value
++	var values_by_id: Dictionary={}
++	# UnitGraph has already validated every complete wire record, including the
++	# special sentinels and exact fixed role identity. Decode only the pair data.
++	for record: Dictionary in unit_data.value.records:
++		var opened: Dictionary=Codec.new().decode(record.payload)
++		if not opened.ok:return opened
++		values_by_id[record.entity_id]=opened.value.values
++	var safe_count:=0
++	var safe_ids: Array=[]
++	for role: String in ["lu","shi"]:
++		var event_id: String="daming_"+role+"_safe"
++		var has_safe: bool=mission.events.has(event_id)
++		var id: Variant=levels.references[role]
++		if id==null:
++			if has_safe:return _bad("LEVEL8_SAFE_EVENT_WITHOUT_ACTOR")
++			continue
++		if typeof(id)!=TYPE_STRING or not values_by_id.has(id):return _bad("LEVEL8_SAFE_ACTOR_NOT_IN_GRAPH")
++		var actor: Dictionary=values_by_id[id]
++		var retired: bool=actor.story_outcome=="retreated"
++		if has_safe!=retired:return _bad("LEVEL8_SAFE_EVENT_OUTCOME_PAIR")
++		if retired:
++			safe_count+=1
++			safe_ids.append(id)
++			if not unit_data.value.root_order.has(id) or not unit_data.value.active_order.has(id):return _bad("LEVEL8_SAFE_ACTOR_MEMBERSHIP")
++	if safe_count==2:return _bad("LEVEL8_BOTH_SAFE_NOT_CONTINUABLE_FIGHT")
++	if safe_count>0:
++		# Lu/Shi death immediately loses the original battle. The new single-safe
++		# continuation cannot omit, kill, or exclude the other required survivor.
++		for role: String in ["lu","shi"]:
++			var required_id: Variant=levels.references[role]
++			if typeof(required_id)!=TYPE_STRING or not values_by_id.has(required_id):return _bad("LEVEL8_SAFE_REQUIRED_ACTOR_MISSING")
++			var required_actor: Dictionary=values_by_id[required_id]
++			if required_actor.hp<=0.0 or required_actor._dying or not unit_data.value.root_order.has(required_id) or not unit_data.value.active_order.has(required_id):return _bad("LEVEL8_SAFE_REQUIRED_ACTOR_LIFETIME")
++			if not safe_ids.has(required_id) and required_actor.story_outcome!="":return _bad("LEVEL8_SAFE_OTHER_ACTOR_OUTCOME")
++		# Preserve grids/groups/cache rows. Only direct command ownership that the
++		# real story_resolved callback explicitly removes is forbidden for safe IDs.
++		for tag: Dictionary in root_data.value.selection:
++			if tag.state=="entity" and safe_ids.has(tag.id):return _bad("LEVEL8_SAFE_SELECTED_ROOT")
++		for field: String in ["_ability_caster","_item_caster"]:
++			var tag: Dictionary=root_data.value.references[field]
++			if tag.state=="entity" and safe_ids.has(tag.id):return _bad("LEVEL8_SAFE_ARMED_CASTER",field)
++		if not sections.has_all(["casts","item_casts"]):return _bad("LEVEL8_SAFE_CAST_SECTIONS")
++		var casts: Dictionary=Casts.new(Codec,B,U).validate(sections.casts,version,known)
++		if not casts.ok:return casts
++		var item_casts: Dictionary=ItemCasts.new(Codec,B,U).validate(sections.item_casts,version,known)
++		if not item_casts.ok:return item_casts
++		for arrays: Dictionary in [casts.arrays,item_casts.arrays]:
++			for kind: String in arrays:
++				var caster_field: String="c" if kind in ["_walk_casts","_walk_item_casts"] else "caster"
++				for entry: Dictionary in arrays[kind]:
++					var tag: Dictionary=entry[caster_field]
++					if tag.state=="entity" and safe_ids.has(tag.id):return _bad("LEVEL8_SAFE_CAST_INTENT",kind)
++		if not levels.values.rescued or not levels.values.prison_open or not levels.values.gate_open:return _bad("LEVEL8_SAFE_STAGE_PAIR")
++		if mission.values.stage_id!="daming_rts" or not mission.events.has("daming_prisoners_freed") or not mission_data.actions.has("daming_rescue") or not mission_data.actions.daming_rescue.done:return _bad("LEVEL8_SAFE_RESCUE_EVENT_PAIR")
++		if mission.events.has("daming_victory") or not mission_data.resume_eligible or root_data.value.values.phase!=B.Phase.FIGHT:return _bad("LEVEL8_SAFE_TERMINAL_PAIR")
++	return {"ok":true,"complete_world":false,"safe_count":safe_count,"same_mission_token":mission_token}
++
+ func prepare(record: Variant) -> Dictionary:
+ 	if is_instance_valid(_battle): return _bad("ALREADY_PREPARED")
+ 	if not _context(): return _bad("TRUSTED_CONTEXT_REQUIRED")
+@@ -324,6 +435,10 @@
+ 	var checked: Dictionary = map_state.validate(s.map)
+ 	if not checked.ok: return checked
+ 	if not checked.requirements.is_empty(): return _bad("MAP_DISPLAY_UNSUPPORTED")
++	if is_campaign and _campaign_level_id()=="level8":
++		if typeof(record.profile.mission_token)!=TYPE_STRING or typeof(record.profile.presentation_token)!=TYPE_STRING:return _bad("LEVEL8_SAFE_PAIR_TOKEN_TYPE")
++		checked=_validate_daming_safe_pair(s,record.profile.mission_token,record.profile.presentation_token)
++		if not checked.ok:return checked
+ 	_battle = B.new()
+ 	_battle._cursor_resources_released = true # No global cursor is owned until final installation.
+ 	_battle.scene_file_path = "res://scenes/main.tscn" # Trusted restart route, never a saved path.

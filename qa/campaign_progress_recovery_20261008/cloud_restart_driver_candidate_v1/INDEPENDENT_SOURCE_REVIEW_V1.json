@@ -1,0 +1,124 @@
+{
+  "schema": "cloud_restart_independent_source_review_v1",
+  "focus": "native restart driver and source dependency contract",
+  "review": {
+    "reviewer": "independent_subagent_cloud_restart_review",
+    "reviewed_at_utc": "2026-10-09T03:15:13.2150546Z",
+    "review_kind": "finite_readonly_source_review",
+    "status": "SOURCE_REVIEW_COMPLETE_NATIVE_CHAIN_INCOMPLETE",
+    "approved_stages": [],
+    "native_started": false,
+    "GD_parsed": false,
+    "native_qualification": false,
+    "ordinary_restart_qualified": false,
+    "original19_qualified": false,
+    "overall_goal_qualified": false,
+    "source_pins": [
+      {
+        "path": "qa/campaign_progress_recovery_20261008/cloud_restart_driver_candidate_v1/campaign_original19_cloud_restart_v1.gd",
+        "bytes": 9098,
+        "sha256": "d10b6b40c746a58e2fc4da21ff4ac28e9ce1318a59d09b0bca10bf5e1fa4b185"
+      },
+      {
+        "path": "tools/campaign_cloud_restart_evidence_v1.py",
+        "bytes": 12339,
+        "sha256": "780a6807cbff013dd73ca3afaa99790656bb7b8864509b2c073b80ad19da49ea"
+      },
+      {
+        "path": "qa/campaign_progress_recovery_20261008/cloud_restart_driver_candidate_v1/SOURCE.json",
+        "bytes": 18158,
+        "sha256": "91c1e712b287a4906e6560508c991cf636259187c5de250df18a2e3fa0e7a80b"
+      },
+      {
+        "path": "qa/campaign_progress_recovery_20261008/cloud_restart_driver_candidate_v1/COMPLETE_LABEL_CONTRACT_V1.json",
+        "bytes": 11774,
+        "sha256": "948a880a333cdbe16a2f105c8b506396554274f67c50f71a32124906d457915d"
+      },
+      {
+        "path": "qa/campaign_progress_recovery_20261008/original19_first_repeat_candidate_v1/campaign_original19_first_repeat_v1.gd",
+        "bytes": 21899,
+        "sha256": "53e4e3a10ef6107f095ae1df9be355308200a99fee444dc68f912418ac6803ab"
+      },
+      {
+        "path": "tools/campaign_cloud_apply_first_evidence_v4.py",
+        "bytes": 12283,
+        "sha256": "043b947a00106ac15f87da49d12da653a4e38542d593ad4c0dfebd581e7a153a"
+      },
+      {
+        "path": "qa/campaign_progress_recovery_20261008/cloud_applying_driver_candidate_v3/campaign_original19_cloud_applying_v3.gd",
+        "bytes": 11477,
+        "sha256": "50eccb5f6142065cee2227298d3f79dba16388e67bbcf98e140899b476ad5064"
+      },
+      {
+        "path": "tools/campaign_cloud_cfg_physical_v2.py",
+        "bytes": 9827,
+        "sha256": "f5fa04ca76cb0ebca3cc089c5e55088d01a933a1bac465f802d1b8dcd3c03183"
+      },
+      {
+        "path": "qa/campaign_progress_recovery_20261008/integrated_v4_r12/scripts/campaign.gd",
+        "bytes": 22806,
+        "sha256": "3e7257e412e65ffc012d3dfd5d0392d4d96a5ce32cbdf1634caf221d2e88060b"
+      },
+      {
+        "path": "qa/campaign_progress_recovery_20261008/integrated_v4_r12/scripts/continue_flow.gd",
+        "bytes": 31285,
+        "sha256": "20674da5a412db0cc41cc48dacfcbf619e91009a81026c735fd80e7cb5a9a16d"
+      },
+      {
+        "path": "qa/campaign_progress_recovery_20261008/integrated_v4_r12/scripts/steam_cloud.gd",
+        "bytes": 33188,
+        "sha256": "230c26034104b19be04b2f1533deba79dd304473ac060f021fd38eaeee354dac"
+      },
+      {
+        "path": "qa/campaign_progress_recovery_20261008/integrated_v4_r12/scripts/run_campaign_cfg_values.gd",
+        "bytes": 2640,
+        "sha256": "8d962715c19f0b9d3c045a25b5f215e9600ceeff204524fc0be630da8598eb27"
+      },
+      {
+        "path": "qa/campaign_progress_recovery_20261008/integrated_v4_r12/scripts/run_campaign_startup_scan.gd",
+        "bytes": 7796,
+        "sha256": "a0860555b5960e6ce59c8946788d23e6bdb1c119ebb4fa8920c177faf0625dfc"
+      },
+      {
+        "path": "scripts/steam_service.gd",
+        "bytes": 15386,
+        "sha256": "69118d0e0f45d062ab8258c44bdfcfdb5dee0db55154a3097ce0f6343bccc675"
+      }
+    ],
+    "limitations": [
+      "No Godot launched, no native tests, no full consumer validation, and no success-all-61-prior qualification.",
+      "R12 scripts are integration candidates, not production promoted.",
+      "Only finite source review of listed APIs and boundary checks; no full dependency or runtime correctness assertion."
+    ],
+    "findings": [
+      {
+        "id": "B1",
+        "severity": "integration_blocker",
+        "file": "qa/campaign_progress_recovery_20261008/cloud_restart_driver_candidate_v1/campaign_original19_cloud_restart_v1.gd",
+        "line": 69,
+        "detail": "Restart _write emits report.json.native-NONCE only. Consumer requires preserved native stage plus no-replace published report.json and exact native markers (consumer lines 76-88). Single-report publisher/restart phase is not implemented in this reviewed candidate.",
+        "action": "Implement owned single-report closed-byte no-replace publication and phase orchestration before native qualification."
+      },
+      {
+        "id": "B2",
+        "severity": "integration_blocker",
+        "file": "tools/campaign_cloud_restart_evidence_v1.py",
+        "line": 45,
+        "detail": "validate_restart requires exactly cold_import, validated first cloud, and owned terminal cloud_restart with same private profile. This module provides no launcher or complete three-process producer; SOURCE.json declares complete_cloud_producer_implemented=false.",
+        "action": "Implement actual three-process producer with retained Popen, original exports, and first evidence physical capture before calling validation."
+      }
+    ],
+    "observed_source_contracts": [
+      "Parent _run opens configured menu and waits 180 ordinary frames before dynamic child _restart; child waits another 180 ordinary frames.",
+      "Driver reads whole pinned first report with bounded UTF8/SHA, same raw user-directory text, distinct PID/nonce, whole typed CFG projection, SDK-disabled/no-settlement assertions.",
+      "Consumer inherits validated first cloud evidence; requires actual terminal owned Popen, cold/cloud/restart ordering, exact environment and full 33 ordered labels and markers.",
+      "Consumer compares complete restart CFG and retained journal bytes against first actual evidence originals; report flags do not grant Steam/account/upload or overall qualification.",
+      "No definite static API defect was identified in the finite reviewed interfaces; runtime execution remains untested."
+    ],
+    "tests_performed": [
+      "Read source text and line contracts only",
+      "Recomputed SHA256 source pins"
+    ],
+    "source_modified": false
+  }
+}

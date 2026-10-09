@@ -1,0 +1,54 @@
+{
+  "schema": "campaign_original19_natural_file_fault_preliminary_independent_review_v1",
+  "review_version": 1,
+  "independent": true,
+  "reviewer": "office_full_review",
+  "reviewed_at": "2026-10-08T20:43:08.377488+00:00",
+  "candidate_sha256": "f05c1d97123db22d7ba1e6eeb2a167c416061df3b2fd873e09cfb9c4901e4c24",
+  "source_manifest_sha256": "f9867cc6091d2e2da7439456799cad4c41e328bb1dcdb2ebc9db86f1f8945295",
+  "candidate_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\original19_natural_file_faults_candidate_v1\\campaign_original19_natural_file_faults_v1.gd",
+    "bytes": 26678,
+    "sha256": "f05c1d97123db22d7ba1e6eeb2a167c416061df3b2fd873e09cfb9c4901e4c24"
+  },
+  "source_manifest_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\original19_natural_file_faults_candidate_v1\\SOURCE.json",
+    "bytes": 8638,
+    "sha256": "f9867cc6091d2e2da7439456799cad4c41e328bb1dcdb2ebc9db86f1f8945295"
+  },
+  "static_api_closure_passed": false,
+  "source_integrity_verified": true,
+  "approved_stages": [],
+  "producer_implemented": false,
+  "controller_implemented": false,
+  "native_started_by_reviewer": false,
+  "native_qualified": false,
+  "full_original19_qualified": false,
+  "UI_qualified": false,
+  "SDK_qualified": false,
+  "overall_goal_qualified": false,
+  "findings": [
+    {
+      "id": "FAULTGD-CUSTODY-001",
+      "severity": "blocking",
+      "file": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\original19_natural_file_faults_candidate_v1\\campaign_original19_natural_file_faults_v1.gd",
+      "line": 295,
+      "title": "Repair references the current injection file SHA instead of the frozen pending SHA",
+      "detail": "pending_fault.injection_sha256 is stored at line289, but repair acceptance compares its declaration only with FileAccess.get_sha256(injection_path) at line295. Replacing injection.json after pending and supplying that new SHA can pass while the original pending evidence points to a different file. The asserted exact-original-fault repair binding is therefore not enforced.",
+      "required_fix": "Parse injection from the same first raw UTF8 bytes used for SHA, verify the current file remains that SHA, preserve the first pin in pending_fault, and require both current injection bytes and repair declaration to equal that original pending SHA. Future controller must retain its first raw pin too."
+    }
+  ],
+  "verified_unchanged_scope": {
+    "original_normal_route_survivors_orders_clock_and_restart_checks_preserved": true,
+    "actual_R12_save_prefs_CFG_seed_API": true,
+    "six_breakpoint_source_lines_exact": true,
+    "preloading_refusals_release_unprepared_writer": true,
+    "candidate_stage_refusals_keep_frozen_proposal_and_owned_writer": true,
+    "same_coordinator_writer_lifecycle_UI_retry_API_matches_R12": true,
+    "local_gen2_pending_then_real_gen3_checks_preserved": true,
+    "semantic_data_mutation_stops_at_earlier_CFG_READBACK_SHA_not_later_semantic_compare": true,
+    "comment_only_after_load_stops_at_CFG_READBACK_CHANGED": true,
+    "source_pins_verified": 14
+  },
+  "qualification_note": "Rejected source-only preliminary candidate, no native/controller admission. Only the indicated custody defect requires successor source change; other reviewed source/API conclusions can be reused for its precise diff. Future debugger must bind exact source/stack/current coordinator and owned candidate/public path, skip unrelated prefs calls, and have a narrow expected-diagnostic runtime before any execution. No old A or prior lifecycle qualification is transferred."
+}

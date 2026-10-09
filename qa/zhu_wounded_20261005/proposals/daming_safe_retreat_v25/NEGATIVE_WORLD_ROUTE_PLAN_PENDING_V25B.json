@@ -1,0 +1,2127 @@
+{
+  "schema": "v25b_route_aware_DTO_consumer_plan",
+  "status": "NOT_COMPATIBLE_UNTIL_NEW_V25B_INTERFACE_AND_PEER_REVIEW",
+  "old_c6ce_harness_NOT_QUALIFIED": true,
+  "route_expectations": [
+    {
+      "case": "safe_queue_nonempty",
+      "route": "source",
+      "expected_code": "UNIT_LEVEL8_SAFE_RETREAT_QUEUE",
+      "expected_guard_layer": "full_unit_contract",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": false
+    },
+    {
+      "case": "safe_queue_nonempty",
+      "route": "json",
+      "expected_code": "UNIT_LEVEL8_SAFE_RETREAT_QUEUE",
+      "expected_guard_layer": "full_unit_contract",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": false
+    },
+    {
+      "case": "safe_stop__chase_intent",
+      "route": "source",
+      "expected_code": "UNIT_LEVEL8_SAFE_RETREAT_STOP_ANCHOR",
+      "expected_guard_layer": "full_unit_contract",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": false
+    },
+    {
+      "case": "safe_stop__chase_intent",
+      "route": "json",
+      "expected_code": "UNIT_LEVEL8_SAFE_RETREAT_STOP_ANCHOR",
+      "expected_guard_layer": "full_unit_contract",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": false
+    },
+    {
+      "case": "safe_stop__group_cap",
+      "route": "source",
+      "expected_code": "UNIT_LEVEL8_SAFE_RETREAT_STOP_ANCHOR",
+      "expected_guard_layer": "full_unit_contract",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": false
+    },
+    {
+      "case": "safe_stop__group_cap",
+      "route": "json",
+      "expected_code": "UNIT_LEVEL8_SAFE_RETREAT_STOP_ANCHOR",
+      "expected_guard_layer": "full_unit_contract",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": false
+    },
+    {
+      "case": "safe_stop__has_home",
+      "route": "source",
+      "expected_code": "UNIT_LEVEL8_SAFE_RETREAT_STOP_ANCHOR",
+      "expected_guard_layer": "full_unit_contract",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": false
+    },
+    {
+      "case": "safe_stop__has_home",
+      "route": "json",
+      "expected_code": "UNIT_LEVEL8_SAFE_RETREAT_STOP_ANCHOR",
+      "expected_guard_layer": "full_unit_contract",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": false
+    },
+    {
+      "case": "safe_stop__home",
+      "route": "source",
+      "expected_code": "UNIT_LEVEL8_SAFE_RETREAT_STOP_ANCHOR",
+      "expected_guard_layer": "full_unit_contract",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": false
+    },
+    {
+      "case": "safe_stop__home",
+      "route": "json",
+      "expected_code": "UNIT_LEVEL8_SAFE_RETREAT_STOP_ANCHOR",
+      "expected_guard_layer": "full_unit_contract",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": false
+    },
+    {
+      "case": "safe_stop__hua_lock_shots",
+      "route": "source",
+      "expected_code": "UNIT_LEVEL8_SAFE_RETREAT_STOP_ANCHOR",
+      "expected_guard_layer": "full_unit_contract",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": false
+    },
+    {
+      "case": "safe_stop__hua_lock_shots",
+      "route": "json",
+      "expected_code": "UNIT_LEVEL8_SAFE_RETREAT_STOP_ANCHOR",
+      "expected_guard_layer": "full_unit_contract",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": false
+    },
+    {
+      "case": "other_role_null",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_REQUIRED_ACTOR_MISSING",
+      "expected_guard_layer": "paired",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "other_role_null",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_REQUIRED_ACTOR_MISSING",
+      "expected_guard_layer": "paired",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "other_dead_complete_lifetime",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_REQUIRED_ACTOR_LIFETIME",
+      "expected_guard_layer": "paired",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "other_dead_complete_lifetime",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_REQUIRED_ACTOR_LIFETIME",
+      "expected_guard_layer": "paired",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "other_alive_missing_active",
+      "route": "source",
+      "expected_code": "LEVEL8_ACTIVE_MEMBERSHIP",
+      "expected_guard_layer": "full_graph_membership",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": false
+    },
+    {
+      "case": "other_alive_missing_active",
+      "route": "json",
+      "expected_code": "LEVEL8_ACTIVE_MEMBERSHIP",
+      "expected_guard_layer": "full_graph_membership",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": false
+    },
+    {
+      "case": "other_missing_root_record",
+      "route": "source",
+      "expected_code": "UNBOUND_UNIT",
+      "expected_guard_layer": "full_level_registry",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": false
+    },
+    {
+      "case": "other_missing_root_record",
+      "route": "json",
+      "expected_code": "UNBOUND_UNIT",
+      "expected_guard_layer": "full_level_registry",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": false
+    },
+    {
+      "case": "other_captured_outcome",
+      "route": "source",
+      "expected_code": "UNIT_LEVEL8_UNSUPPORTED_STORY_OUTCOME",
+      "expected_guard_layer": "full_unit_contract",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": false
+    },
+    {
+      "case": "other_captured_outcome",
+      "route": "json",
+      "expected_code": "UNIT_LEVEL8_UNSUPPORTED_STORY_OUTCOME",
+      "expected_guard_layer": "full_unit_contract",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": false
+    },
+    {
+      "case": "safe_event_missing",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_EVENT_OUTCOME_PAIR",
+      "expected_guard_layer": "paired",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "safe_event_missing",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_EVENT_OUTCOME_PAIR",
+      "expected_guard_layer": "paired",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "safe_actor_outcome_empty",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_EVENT_OUTCOME_PAIR",
+      "expected_guard_layer": "paired",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "safe_actor_outcome_empty",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_EVENT_OUTCOME_PAIR",
+      "expected_guard_layer": "paired",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "other_safe_event_without_retreat",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_EVENT_OUTCOME_PAIR",
+      "expected_guard_layer": "paired",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "other_safe_event_without_retreat",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_EVENT_OUTCOME_PAIR",
+      "expected_guard_layer": "paired",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "root_safe_selection",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_SELECTED_ROOT",
+      "expected_guard_layer": "paired",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "root_safe_selection",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_SELECTED_ROOT",
+      "expected_guard_layer": "paired",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "root_safe__ability_caster",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_ARMED_CASTER",
+      "expected_guard_layer": "paired",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "root_safe__ability_caster",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_ARMED_CASTER",
+      "expected_guard_layer": "paired",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "root_safe__item_caster",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_ARMED_CASTER",
+      "expected_guard_layer": "paired",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "root_safe__item_caster",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_ARMED_CASTER",
+      "expected_guard_layer": "paired",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "safe_caster__walk_casts",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CAST_INTENT",
+      "expected_guard_layer": "paired",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "safe_caster__walk_casts",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CAST_INTENT",
+      "expected_guard_layer": "paired",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "safe_caster__pending_casts",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CAST_INTENT",
+      "expected_guard_layer": "paired",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "safe_caster__pending_casts",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CAST_INTENT",
+      "expected_guard_layer": "paired",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "safe_caster__channels",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CAST_INTENT",
+      "expected_guard_layer": "paired",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "safe_caster__channels",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CAST_INTENT",
+      "expected_guard_layer": "paired",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "safe_caster__walk_item_casts",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CAST_INTENT",
+      "expected_guard_layer": "paired",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "safe_caster__walk_item_casts",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CAST_INTENT",
+      "expected_guard_layer": "paired",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "safe_caster__pending_item_casts",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CAST_INTENT",
+      "expected_guard_layer": "paired",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "safe_caster__pending_item_casts",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CAST_INTENT",
+      "expected_guard_layer": "paired",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "freed_event_missing",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_RESCUE_EVENT_PAIR",
+      "expected_guard_layer": "paired",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "freed_event_missing",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_RESCUE_EVENT_PAIR",
+      "expected_guard_layer": "paired",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "rescue_done_false",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_RESCUE_EVENT_PAIR",
+      "expected_guard_layer": "paired",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "rescue_done_false",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_RESCUE_EVENT_PAIR",
+      "expected_guard_layer": "paired",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_units_schema_nil",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_units_schema_nil",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_units_schema_bool",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_units_schema_bool",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_units_schema_int",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_units_schema_int",
+      "route": "json",
+      "expected_code": "NONCANONICAL_RECORD",
+      "expected_guard_layer": "slot_canonical",
+      "expected_core_prepare_called": false,
+      "expected_direct_pair_branch_coverage": false
+    },
+    {
+      "case": "identity_units_schema_float",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_units_schema_float",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_units_schema_array",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_units_schema_array",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_units_schema_dictionary",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_units_schema_dictionary",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_units_content_version_nil",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_units_content_version_nil",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_units_content_version_bool",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_units_content_version_bool",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_units_content_version_int",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_units_content_version_int",
+      "route": "json",
+      "expected_code": "NONCANONICAL_RECORD",
+      "expected_guard_layer": "slot_canonical",
+      "expected_core_prepare_called": false,
+      "expected_direct_pair_branch_coverage": false
+    },
+    {
+      "case": "identity_units_content_version_float",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_units_content_version_float",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_units_content_version_array",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_units_content_version_array",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_units_content_version_dictionary",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_units_content_version_dictionary",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_schema_nil",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_schema_nil",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_schema_bool",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_schema_bool",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_schema_int",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_schema_int",
+      "route": "json",
+      "expected_code": "NONCANONICAL_RECORD",
+      "expected_guard_layer": "slot_canonical",
+      "expected_core_prepare_called": false,
+      "expected_direct_pair_branch_coverage": false
+    },
+    {
+      "case": "identity_level_schema_float",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_schema_float",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_schema_array",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_schema_array",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_schema_dictionary",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_schema_dictionary",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_level_id_nil",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_level_id_nil",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_level_id_bool",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_level_id_bool",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_level_id_int",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_level_id_int",
+      "route": "json",
+      "expected_code": "NONCANONICAL_RECORD",
+      "expected_guard_layer": "slot_canonical",
+      "expected_core_prepare_called": false,
+      "expected_direct_pair_branch_coverage": false
+    },
+    {
+      "case": "identity_level_level_id_float",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_level_id_float",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_level_id_array",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_level_id_array",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_level_id_dictionary",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_level_id_dictionary",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_content_version_nil",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_content_version_nil",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_content_version_bool",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_content_version_bool",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_content_version_int",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_content_version_int",
+      "route": "json",
+      "expected_code": "NONCANONICAL_RECORD",
+      "expected_guard_layer": "slot_canonical",
+      "expected_core_prepare_called": false,
+      "expected_direct_pair_branch_coverage": false
+    },
+    {
+      "case": "identity_level_content_version_float",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_content_version_float",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_content_version_array",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_content_version_array",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_content_version_dictionary",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_content_version_dictionary",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_mission_token_nil",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_mission_token_nil",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_mission_token_bool",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_mission_token_bool",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_mission_token_int",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_mission_token_int",
+      "route": "json",
+      "expected_code": "NONCANONICAL_RECORD",
+      "expected_guard_layer": "slot_canonical",
+      "expected_core_prepare_called": false,
+      "expected_direct_pair_branch_coverage": false
+    },
+    {
+      "case": "identity_level_mission_token_float",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_mission_token_float",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_mission_token_array",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_mission_token_array",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_mission_token_dictionary",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_mission_token_dictionary",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_root_schema_nil",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_root_schema_nil",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_root_schema_bool",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_root_schema_bool",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_root_schema_int",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_root_schema_int",
+      "route": "json",
+      "expected_code": "NONCANONICAL_RECORD",
+      "expected_guard_layer": "slot_canonical",
+      "expected_core_prepare_called": false,
+      "expected_direct_pair_branch_coverage": false
+    },
+    {
+      "case": "identity_root_schema_float",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_root_schema_float",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_root_schema_array",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_root_schema_array",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_root_schema_dictionary",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_root_schema_dictionary",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_root_content_version_nil",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_root_content_version_nil",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_root_content_version_bool",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_root_content_version_bool",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_root_content_version_int",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_root_content_version_int",
+      "route": "json",
+      "expected_code": "NONCANONICAL_RECORD",
+      "expected_guard_layer": "slot_canonical",
+      "expected_core_prepare_called": false,
+      "expected_direct_pair_branch_coverage": false
+    },
+    {
+      "case": "identity_root_content_version_float",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_root_content_version_float",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_root_content_version_array",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_root_content_version_array",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_root_content_version_dictionary",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_root_content_version_dictionary",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_schema_nil",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_schema_nil",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_schema_bool",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_schema_bool",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_schema_int",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_schema_int",
+      "route": "json",
+      "expected_code": "NONCANONICAL_RECORD",
+      "expected_guard_layer": "slot_canonical",
+      "expected_core_prepare_called": false,
+      "expected_direct_pair_branch_coverage": false
+    },
+    {
+      "case": "identity_mission_schema_float",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_schema_float",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_schema_array",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_schema_array",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_schema_dictionary",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_schema_dictionary",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_schema_nil",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_schema_nil",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_schema_bool",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_schema_bool",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_schema_int",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_schema_int",
+      "route": "json",
+      "expected_code": "NONCANONICAL_RECORD",
+      "expected_guard_layer": "slot_canonical",
+      "expected_core_prepare_called": false,
+      "expected_direct_pair_branch_coverage": false
+    },
+    {
+      "case": "identity_presentation_schema_float",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_schema_float",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_schema_array",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_schema_array",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_schema_dictionary",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_schema_dictionary",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_level_id_nil",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_level_id_nil",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_level_id_bool",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_level_id_bool",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_level_id_int",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_level_id_int",
+      "route": "json",
+      "expected_code": "NONCANONICAL_RECORD",
+      "expected_guard_layer": "slot_canonical",
+      "expected_core_prepare_called": false,
+      "expected_direct_pair_branch_coverage": false
+    },
+    {
+      "case": "identity_mission_context_level_id_float",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_level_id_float",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_level_id_array",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_level_id_array",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_level_id_dictionary",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_level_id_dictionary",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_content_version_nil",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_content_version_nil",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_content_version_bool",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_content_version_bool",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_content_version_int",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_content_version_int",
+      "route": "json",
+      "expected_code": "NONCANONICAL_RECORD",
+      "expected_guard_layer": "slot_canonical",
+      "expected_core_prepare_called": false,
+      "expected_direct_pair_branch_coverage": false
+    },
+    {
+      "case": "identity_mission_context_content_version_float",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_content_version_float",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_content_version_array",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_content_version_array",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_content_version_dictionary",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_content_version_dictionary",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_mission_token_nil",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_mission_token_nil",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_mission_token_bool",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_mission_token_bool",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_mission_token_int",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_mission_token_int",
+      "route": "json",
+      "expected_code": "NONCANONICAL_RECORD",
+      "expected_guard_layer": "slot_canonical",
+      "expected_core_prepare_called": false,
+      "expected_direct_pair_branch_coverage": false
+    },
+    {
+      "case": "identity_mission_context_mission_token_float",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_mission_token_float",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_mission_token_array",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_mission_token_array",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_mission_token_dictionary",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_mission_token_dictionary",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_presentation_token_nil",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_presentation_token_nil",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_presentation_token_bool",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_presentation_token_bool",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_presentation_token_int",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_presentation_token_int",
+      "route": "json",
+      "expected_code": "NONCANONICAL_RECORD",
+      "expected_guard_layer": "slot_canonical",
+      "expected_core_prepare_called": false,
+      "expected_direct_pair_branch_coverage": false
+    },
+    {
+      "case": "identity_mission_context_presentation_token_float",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_presentation_token_float",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_presentation_token_array",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_presentation_token_array",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_presentation_token_dictionary",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_presentation_token_dictionary",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_level_id_nil",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_level_id_nil",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_level_id_bool",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_level_id_bool",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_level_id_int",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_level_id_int",
+      "route": "json",
+      "expected_code": "NONCANONICAL_RECORD",
+      "expected_guard_layer": "slot_canonical",
+      "expected_core_prepare_called": false,
+      "expected_direct_pair_branch_coverage": false
+    },
+    {
+      "case": "identity_presentation_context_level_id_float",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_level_id_float",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_level_id_array",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_level_id_array",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_level_id_dictionary",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_level_id_dictionary",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_content_version_nil",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_content_version_nil",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_content_version_bool",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_content_version_bool",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_content_version_int",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_content_version_int",
+      "route": "json",
+      "expected_code": "NONCANONICAL_RECORD",
+      "expected_guard_layer": "slot_canonical",
+      "expected_core_prepare_called": false,
+      "expected_direct_pair_branch_coverage": false
+    },
+    {
+      "case": "identity_presentation_context_content_version_float",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_content_version_float",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_content_version_array",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_content_version_array",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_content_version_dictionary",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_content_version_dictionary",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_mission_token_nil",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_mission_token_nil",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_mission_token_bool",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_mission_token_bool",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_mission_token_int",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_mission_token_int",
+      "route": "json",
+      "expected_code": "NONCANONICAL_RECORD",
+      "expected_guard_layer": "slot_canonical",
+      "expected_core_prepare_called": false,
+      "expected_direct_pair_branch_coverage": false
+    },
+    {
+      "case": "identity_presentation_context_mission_token_float",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_mission_token_float",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_mission_token_array",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_mission_token_array",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_mission_token_dictionary",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_mission_token_dictionary",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_presentation_token_nil",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_presentation_token_nil",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_presentation_token_bool",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_presentation_token_bool",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_presentation_token_int",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_presentation_token_int",
+      "route": "json",
+      "expected_code": "NONCANONICAL_RECORD",
+      "expected_guard_layer": "slot_canonical",
+      "expected_core_prepare_called": false,
+      "expected_direct_pair_branch_coverage": false
+    },
+    {
+      "case": "identity_presentation_context_presentation_token_float",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_presentation_token_float",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_presentation_token_array",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_presentation_token_array",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_presentation_token_dictionary",
+      "route": "source",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_presentation_token_dictionary",
+      "route": "json",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "expected_core_prepare_called": true,
+      "expected_direct_pair_branch_coverage": true
+    }
+  ],
+  "source_rows": 132,
+  "json_rows": 132,
+  "Core_routes": 246,
+  "canonical_only_json_integer_rows": 18,
+  "typed_document_or_zero_Core_fields_for_refused_rows": "Await new exact native interface; do not guess hashes/nullability or fabricate Core calls",
+  "new_harness_pins": null,
+  "review_closed": false,
+  "native_run": false
+}

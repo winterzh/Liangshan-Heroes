@@ -1,0 +1,155 @@
+{
+  "schema": "office_prison_motion_route_independent_review_v1",
+  "independent": true,
+  "reviewer": "office_full_review",
+  "reviewed_utc": "2026-10-08T12:03:02.031362+00:00",
+  "source_revision": "v33/review_revision13",
+  "static_api_closure_passed": true,
+  "approved_static_route_compatibility_only": true,
+  "approved_stages": [],
+  "native_started": false,
+  "runtime_qualified": false,
+  "full_qualified": false,
+  "R12_qualified": false,
+  "scope": "Only static compatibility of the v33 route diagnostic additions against immutable v32 route/runner/scene and actual unchanged legacy Unit/Map/Level8 APIs. No legacy full execution, R12 installation, native campaign or restoration qualification.",
+  "preparation": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\office_campaign_route_20261008\\ROUTE_V33_DIAGNOSTIC_PREPARATION.json",
+    "bytes": 1263,
+    "sha256": "c8f088b73116d0e54089ddbd8dbfa8b1684db40a60e67257abbca0fe4c04fd6c"
+  },
+  "route_bundle": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\office_campaign_route_20261008\\v33\\ROUTE_BUNDLE_V32.json",
+    "bytes": 2765,
+    "sha256": "86f69e8c632432ddaefb703dfbe598f53266a87d464638a9759fa6a8930611ae"
+  },
+  "route_bundle_historical_basename": "ROUTE_BUNDLE_V32.json is retained historical basename; actual contents refer solely to v33 replacements and review_revision13.",
+  "candidate_files": [
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\office_campaign_route_20261008\\v33\\daming_safe_retreat_cross_process_v26.gd",
+      "bytes": 57295,
+      "sha256": "c241d259c60c7c13d992f47a300018b3a2e0ba32967e83452d766e1398827298"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\office_campaign_route_20261008\\v33\\daming_safe_retreat_cross_process_v26.tscn",
+      "bytes": 218,
+      "sha256": "f26ffd1b6802e7e9f3961dbc2fc3d35ecd2ac4c73e39fd2d97878cc372245a83"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\office_campaign_route_20261008\\v33\\daming_safe_retreat_route_v26.gd",
+      "bytes": 25496,
+      "sha256": "94cd0489342b2b995fb5278781b605f52a34b93175040387cfd29147f7c5350f"
+    }
+  ],
+  "comparison_baseline": [
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\office_campaign_route_20261008\\v32\\daming_safe_retreat_cross_process_v26.gd",
+      "bytes": 57295,
+      "sha256": "c241d259c60c7c13d992f47a300018b3a2e0ba32967e83452d766e1398827298"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\office_campaign_route_20261008\\v32\\daming_safe_retreat_cross_process_v26.tscn",
+      "bytes": 218,
+      "sha256": "f26ffd1b6802e7e9f3961dbc2fc3d35ecd2ac4c73e39fd2d97878cc372245a83"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\office_campaign_route_20261008\\v32\\daming_safe_retreat_route_v26.gd",
+      "bytes": 23758,
+      "sha256": "e85e6e881dc22f306f4ab477fff7b5c0b2093c9487b6798ffed6b45040886235"
+    }
+  ],
+  "actual_API_source_pins": [
+    {
+      "path": "D:\\CodexTemp\\lsh-office-candidate-20261008\\scripts\\unit.gd",
+      "bytes": 214831,
+      "sha256": "e3909e2d78dd68fa03ef2091bd35a22419f7179b750cff52143b0141305f54bb"
+    },
+    {
+      "path": "D:\\CodexTemp\\lsh-office-candidate-20261008\\scripts\\game_map.gd",
+      "bytes": 34327,
+      "sha256": "0f090079229a68269ac94870d1902238444e9ba0ddbc7f359df52f38a4b2db87"
+    },
+    {
+      "path": "D:\\CodexTemp\\lsh-office-candidate-20261008\\scripts\\levels\\level8_daming_rts.gd",
+      "bytes": 24789,
+      "sha256": "72e57093715ebfb29247aaf332838f233d736936d29d83a4b24ecd90ee677db7"
+    }
+  ],
+  "unchanged_current_legacy_producer": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\tools\\run_office_campaign_restore_qa.py",
+    "bytes": 29784,
+    "sha256": "6a3fbe5bd13588a21ca83712e6b8645d78091aa990ddd5d6a346ed1fc1e47001"
+  },
+  "findings": [],
+  "complete_diff_audit": {
+    "runner_exact_to_v32": true,
+    "scene_exact_to_v32": true,
+    "changed_existing_route_functions": [
+      "func _step_wait(b: Node, label: String, predicate: Callable, limit_ms: int = 180000) -> bool:",
+      "func _order(b: Node, members: Array, cell: Vector2i, attack_move := false) -> bool:",
+      "func observe(b: Node) -> Dictionary:"
+    ],
+    "added_route_functions": [
+      "func _motion_state(b: Node, u: Variant) -> Dictionary:"
+    ],
+    "all_other_route_functions_byte_identical": true,
+    "original_literal_check_calls": 27,
+    "successor_literal_check_calls": 27,
+    "all_original_labels_preserved_with_multiplicity": true,
+    "player_commands_selection_costs_resource_gather_building_preview_queues_deadlines_and_predicates_unchanged": true,
+    "all_original_runner_world_restore_clocks_bindings_terminal_checks_preserved_by_exact_runner_bytes": true,
+    "changed_observation_shape": "Existing assault id/key/hp/position values remain and gain more fields; actual prison_guards and command/wait observations are added. The route diagnostics do not replace gameplay or success criteria."
+  },
+  "API_and_read_only_audit": {
+    "Unit_motion_fields": "_path PackedVector2Array/_path_i/_home/_amove_dest/_state/_queue/_order_serial/manual_order_active/mission_order_active/_root_t/_stun_t/_stuck_t/_move_retry are actual fixed fields.",
+    "Unit_target_type": "unit.gd:269 _target:Unit=null; a separate local Variant receives it, is_instance_valid before entity id/key/hp/position access. No assumption that target is a Vector2.",
+    "PackedVector2Array": "for point traversal appends separate numeric xy values; indexed waypoint has explicit Vector2 and nonnegative/in-range check. No PackedVector2Array.map call.",
+    "geometry": "Actual Level8._near:112 reads validity/HP/outcome and distance only; GameMap._segment_open reads nav/bounds only. Waypoint uses actual unit movement profile; prison-guard segment query uses the existing default land profile and is a geometric observation, not a body/movement permission assertion.",
+    "post_order_observation": "Runs after the exact same ordinary select_members/minimap_order and command evidence; writes only driver.observations. No new Unit order, serial stamp, selection change, path clearing, queue execution or Mission update.",
+    "periodic_observation": "Only prison approach clear label, after original await/healthy check, at first eligible frame and then15000 monotonic wall-clock milliseconds apart; original local/global deadline and predicate are untouched.",
+    "diagnostic_mutations": "Only newly created arrays/dictionaries and the driver evidence observations array. No Unit, map, Mission, clock, runtime or process state setters."
+  },
+  "prior_actual_failure": {
+    "receipt": {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\office_campaign_full_20261008\\actual_failed_v12\\receipt.json",
+      "bytes": 4091563,
+      "sha256": "4cc15c9c69e965bdc713fc4ae7540871eb22913b45bd23ff85a1f212b36f35fc"
+    },
+    "report": {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\office_campaign_full_20261008\\actual_failed_v12\\native_evidence_groups\\lu_first\\A_single_save\\report.json",
+      "bytes": 20546,
+      "sha256": "21c839b71b215e0bf6f8623695104255711b9261fad9d27031e3e84a7918576c"
+    },
+    "batch": "office_full_3eb4617b",
+    "pid": 45692,
+    "exit_code": 1,
+    "process_terminal": true,
+    "whole_batch_complete": false,
+    "lock_released": true,
+    "checks": 131,
+    "failed_checks": [
+      "prison approach clear natural deadline"
+    ],
+    "route_root_cause_not_localized_by_old_report": true,
+    "v33_not_executed_or_proven_fix": true
+  },
+  "legacy_boundary": {
+    "CAMPAIGN_QA": "Legacy runner requires1 atline76.",
+    "slot_root": "Legacy custom user://daming_safe_retreat_v25/continue/v1 atline11.",
+    "extra_configure": "Legacy runnerline179 explicitly configures Daming capture context.",
+    "lifecycle": "Legacy two-argument v1 local lifecycle atlines414/575; terminal/persistence suppression assertions remain.",
+    "normal_CFG_gen3_R12_not_installed_or_qualified": true,
+    "final_source_combo_and_complete_inputs_seal_not_reviewed_here": true,
+    "this_receipt_cannot_satisfy_full_executor_independent_review_schema_or_stage_gate": true
+  },
+  "qualification_boundaries": {
+    "Godot_import_compile_qualified": false,
+    "native_qualified": false,
+    "full_ABCD_qualified": false,
+    "original19_faults_qualified": false,
+    "original52_negative_matrix_qualified": false,
+    "SDK_or_rewards_qualified": false,
+    "R12_normal_CFG_gen3_qualified": false,
+    "release_or_public_continue_qualified": false
+  },
+  "preservation": "V32/V33 candidate bytes, preparations, prior full reviews/native evidence and production remain unchanged. Only this new route-static review receipt was written."
+}

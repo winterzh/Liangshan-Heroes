@@ -1,0 +1,22 @@
+[gd_resource type="SpriteFrames" load_steps=3 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/xu_ning_direction4_20261005/hurt_initial.png" id="hurt_initial"]
+
+[sub_resource type="AtlasTexture" id="hurt_se"]
+atlas = ExtResource("hurt_initial")
+region = Rect2(0, 0, 635, 611)
+margin = Rect2(0, 12, 0, 24)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-52.0, -70.3)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.948851
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("hurt_se")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

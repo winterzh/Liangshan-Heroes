@@ -1,0 +1,43 @@
+[gd_resource type="SpriteFrames" load_steps=5 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/wu_song_traits_20261006/death_ne3_v8.png" id="ne3"]
+
+[sub_resource type="AtlasTexture" id="fatal"]
+atlas = ExtResource("ne3")
+region = Rect2(0, 0, 627, 720)
+margin = Rect2(46.5, 0.0, 93, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-5.75, -41.6)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.063636
+
+[sub_resource type="AtlasTexture" id="fall"]
+atlas = ExtResource("ne3")
+region = Rect2(627, 0, 627, 720)
+margin = Rect2(46.5, 0.0, 93, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0.0, -7.2)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.063636
+
+[sub_resource type="AtlasTexture" id="rest"]
+atlas = ExtResource("ne3")
+region = Rect2(627, 740, 627, 514)
+margin = Rect2(0.0, 56.5, 0, 113)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0.0, 144.1)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.92625
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("fatal")},
+{"duration": 1.0, "texture": SubResource("fall")},
+{"duration": 1.0, "texture": SubResource("rest")},
+{"duration": 1.0, "texture": SubResource("rest")}
+],
+"loop": false,
+"name": &"default",
+"speed": 4.0
+}]

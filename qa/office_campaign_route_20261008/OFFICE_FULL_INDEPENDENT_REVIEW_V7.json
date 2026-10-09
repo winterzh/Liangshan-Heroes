@@ -1,0 +1,634 @@
+{
+  "schema": "office_campaign_restore_independent_review_v1",
+  "independent": true,
+  "static_api_closure_passed": false,
+  "approved_stages": [],
+  "producer_sha256": "6a3fbe5bd13588a21ca83712e6b8645d78091aa990ddd5d6a346ed1fc1e47001",
+  "preparation_sha256": "5864a6736e3cff3a3542c3881c2b67ad907db659dc55a83f4478604ef3f809be",
+  "source_bridge_sha256": "13dfe353ace1eef45437a00e838035a91061db19091b3a5792841ae91ff6dff5",
+  "review_version": 7,
+  "reviewed_utc": "2026-10-08T03:37:57.370096+00:00",
+  "result": "BLOCKED_ORDINARY_HOUSE_PLACEMENT_OVERLAP",
+  "review_scope": "Static review of v26 guarded camp ordinary player route and unchanged full validator chain. No Godot/native/QA invocation.",
+  "mro": [
+    "OfficeFull",
+    "Full",
+    "Adapter",
+    "V25Runner",
+    "OfficeBase",
+    "Runner"
+  ],
+  "api_method_closure_passed": true,
+  "missing_runtime_args": [],
+  "unresolved_self_methods": [],
+  "findings": [
+    {
+      "id": "OFFICE-ROUTE-005",
+      "severity": "blocking",
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\office_campaign_route_20261008\\v27\\daming_safe_retreat_route_v26.gd",
+      "line": 69,
+      "consumer_path": "D:\\CodexTemp\\lsh-office-candidate-20261008\\scripts\\battle.gd",
+      "consumer_lines": [
+        1555,
+        1556,
+        1602
+      ],
+      "message": "House center is CAMP+(4,3)=(35,60), hall center CAMP=(31,57). Actual hall radius58 with CELL32 yields half2 and house radius20 yields half1. Existing normal placement policy expands by one tile and rejects inclusive AABB overlap: dx4 and dy3 are both within half2+half1+1=4. Thus _try_place_building rejects before spending/creating a site; the new house predicate deterministically fails.",
+      "required_resolution": "Prepare a separately sealed immutable successor with a truly legal ordinary placement (check terrain, occupied footprint, padded building spacing, resources and worker accessibility). Keep the production placement rules and ordinary API unchanged."
+    }
+  ],
+  "resolved_findings": [
+    {
+      "id": "OFFICE-SOURCE-001",
+      "verified_resolution": "Mandatory independently-bound complete input seal checks candidate/production full identity and 50 fixed QA/helper/fixture rows, plus the actual workstation baseline source files."
+    },
+    {
+      "id": "OFFICE-TOOL-002",
+      "verified_resolution": "Tool dependency resolution uses the predeclared reviewed basename-to-source seed map, including QA/harness admission GD. All 13 files and 9 unique tool-reference edges close without missing paths or filename collisions."
+    },
+    {
+      "id": "OFFICE-SOURCE-003",
+      "verified_resolution": "fixed_pin rejects conflicting existing expected digests. OwnedSlot, JSON sources and all copied QA sources keep the fixed seal digest; copy_checked and installed file registration use the expected pin without rebasing."
+    },
+    {
+      "id": "OFFICE-ROUTE-004",
+      "verified_resolution": "v27 successor only adds true actual ids/cell and explicit bool attack_move=false to new build/rally/train records. Original validator remains unchanged."
+    }
+  ],
+  "source_pins": [
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\office_campaign_route_20261008\\v27\\daming_safe_retreat_cross_process_v26.gd",
+      "bytes": 57295,
+      "sha256": "c241d259c60c7c13d992f47a300018b3a2e0ba32967e83452d766e1398827298"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\office_campaign_route_20261008\\v27\\daming_safe_retreat_cross_process_v26.tscn",
+      "bytes": 218,
+      "sha256": "f26ffd1b6802e7e9f3961dbc2fc3d35ecd2ac4c73e39fd2d97878cc372245a83"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\office_campaign_route_20261008\\v27\\daming_safe_retreat_route_v26.gd",
+      "bytes": 15261,
+      "sha256": "a1857d77834ef2855cb21aa843a17c23dae11430519278227fc16f650e688e2d"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\office_campaign_route_20261008\\v27\\ROUTE_BUNDLE_V27.json",
+      "bytes": 1550,
+      "sha256": "2e711b81b6b5a06790f0f1f05ff7af9b684844d43d2295ef9f2c6cb014c5b8af"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\world_slot_20260908\\runs\\overlay_20260908T024849Z_d0fb85ff\\fixtures\\main\\5088120\\1\\record_0000000002.json",
+      "bytes": 4089966,
+      "sha256": "fff22ac64a7c10f8d0535aacd780d8c48405b318047e2d49d5ad70c7fe77073e"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\campaign_core_initial_level5_world_v24i1.json",
+      "bytes": 8195481,
+      "sha256": "edda79fd6bed8599423d81b2473f8d48caba2863b90f88247c07b9abfa3e6b8f"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\campaign_core_initial_level8_world_v24i1.json",
+      "bytes": 5519687,
+      "sha256": "f936f08d03f26761dba247656c66047281f2155cbcaadbd05270f6d19091c8fd"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\daming_admit_canonical_normalized_v24p.txt",
+      "bytes": 2762054,
+      "sha256": "17194c35b47442232df9e1f8a1c46bb1b0302eca738dcc1c22907d3a7f12077b"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\daming_admit_canonical_original_v24p.txt",
+      "bytes": 2761662,
+      "sha256": "975438e07af96fbded5d705c1807941bffae8cc344207eb2a224b73569e0cb96"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\harness\\daming_admit_cross_process_v24s.gd",
+      "bytes": 43390,
+      "sha256": "76ed6f114de755b398112778ddabf5af820a30237b75070a5a2aaaea188b87db"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\harness\\daming_admit_cross_process_v24s.tscn",
+      "bytes": 205,
+      "sha256": "d7e1475d5e2b5add7cf008ac163b1eb909b6a6889641eff6ddb5821500851dee"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\harness\\native_ownership_json_boundary_v24q1.gd",
+      "bytes": 30215,
+      "sha256": "91e393e8cea2ffa4dc465ebadc1156349d967149999be53a2ae4c71268c96a1d"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\harness\\run_daming_admit_v24s.py",
+      "bytes": 95807,
+      "sha256": "049dcdc74fab7936d4812f71a9806cee46569163ece4c524043ac7cfdedd8626"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\native_ownership_json_fixtures_v24q.json",
+      "bytes": 3839,
+      "sha256": "e14eb9a77f971d3e6a44e5a57b384aba87612b86e53216160f6e43cf34b6e4e6"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\original_world_case0_world_v24l.json",
+      "bytes": 1762922,
+      "sha256": "89d90516ca823f6f496144c56adba1f882f31434d73ba8ba7b0dea77e5ce8d75"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\original_world_case1_world_v24l.json",
+      "bytes": 4425465,
+      "sha256": "7571a7a67ae7f3301cea6d1627e1c083094f9526caa31e4dfc90a2fe51f723f3"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\original_world_case2_world_v24l.json",
+      "bytes": 5200717,
+      "sha256": "d0ea9419b53d5ae165786efc3559e8175376aecc1a212e8acdaef749cfbf5544"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\original_world_case3_world_v24l.json",
+      "bytes": 6246909,
+      "sha256": "ebf37de7d78b7601dc8357db46be203d38a7ce2873d2067cbc68bb206105fef4"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\original_world_case5_world_v24l.json",
+      "bytes": 1991797,
+      "sha256": "6b67cbadc103a554a0ae3d12eac31a978a145d4d5e35177c2c258c1a784e0a94"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\original_world_case6_world_v24l.json",
+      "bytes": 2169937,
+      "sha256": "883a4b3590d60e2a2099f2c5731f8e2aa2abe7a41bd0d16d6a2bb9f0fa43cae0"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\proposals\\daming_safe_retreat_v25\\ADAPTER_BUNDLE_MATRIX_V25S_R2B2.json",
+      "bytes": 2515,
+      "sha256": "cccae5c45c68baf34d6943b206abf12e5e2ee50dcf20e00ada5d085a7e417c4a"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\proposals\\daming_safe_retreat_v25\\CAPTURE_NEGATIVE_INTERFACE_V25D1.json",
+      "bytes": 9826,
+      "sha256": "79fb3307b616686d07a53bb88923160451e9ba63781f240b820bba04e943db72"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\proposals\\daming_safe_retreat_v25\\COMPONENT_NEGATIVE_INTERFACE_V25.json",
+      "bytes": 295670,
+      "sha256": "8ce5e3379c9a6502682cb8a3c6fb38261e708888492a0126c8677f7ad4d4e160"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\proposals\\daming_safe_retreat_v25\\daming_safe_retreat_capture_negative_v25d1.gd",
+      "bytes": 45594,
+      "sha256": "9933c71c514685da54ace5daf2e50ed645a998d34993c9709676dfb48d1e110b"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\proposals\\daming_safe_retreat_v25\\daming_safe_retreat_capture_negative_v25d1.tscn",
+      "bytes": 219,
+      "sha256": "19d6c5c79a209cbee0e571a6992483ca31a56c0bde67681bf075b8a4543543f9"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\proposals\\daming_safe_retreat_v25\\daming_safe_retreat_component_negative_v25.gd",
+      "bytes": 44135,
+      "sha256": "ccb4abd78fe1277c2475f53ace9ff4c5c133e1e8ca4ebb59fa6ac30c65ab134a"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\proposals\\daming_safe_retreat_v25\\daming_safe_retreat_component_negative_v25.tscn",
+      "bytes": 219,
+      "sha256": "46adcee78872917b6518dc186ba1a055ff3bf00694835b723e51447282ba22fc"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\proposals\\daming_safe_retreat_v25\\daming_safe_retreat_cross_process_v25.gd",
+      "bytes": 50763,
+      "sha256": "6a70e00e6a7786bdf8791b84e3fdfdbe85159bf5398ec8ab385f2e34a3242940"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\proposals\\daming_safe_retreat_v25\\daming_safe_retreat_cross_process_v25.tscn",
+      "bytes": 216,
+      "sha256": "5df31a7071b2625bda2fce59b72398257807babbd42f50d022ae37615e39247a"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\proposals\\daming_safe_retreat_v25\\daming_safe_retreat_cross_process_v25s1.gd",
+      "bytes": 57295,
+      "sha256": "91df2daf3310f3bf0525b0266c9795aaf149e3d8af261c8d1e634e8fc7b04cef"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\proposals\\daming_safe_retreat_v25\\daming_safe_retreat_cross_process_v25s1.tscn",
+      "bytes": 220,
+      "sha256": "f07e71ab7d439809d595622212343ab5bbcf631c5c2f6af8ebe914a0f18c8a19"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\proposals\\daming_safe_retreat_v25\\daming_safe_retreat_negative_world_v25b2.gd",
+      "bytes": 32238,
+      "sha256": "bc494c0bdabd1c52726f4f12465154529ed3cc9cee75042543d1872e11959b5d"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\proposals\\daming_safe_retreat_v25\\daming_safe_retreat_negative_world_v25b2.tscn",
+      "bytes": 218,
+      "sha256": "113eb68bde983102e92eb99b14d9537d968daa2516e8fc734808d03bdd30ccf0"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\proposals\\daming_safe_retreat_v25\\daming_safe_retreat_route_v25.gd",
+      "bytes": 10964,
+      "sha256": "339f09795f48a9fa89615e271e87f2316b3d1ef55c8f0278752b456888d45e27"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\proposals\\daming_safe_retreat_v25\\NEGATIVE_WORLD_INTERFACE_V25B2.json",
+      "bytes": 167250,
+      "sha256": "fada0b4936d90341f72901a1f9c6f785afac3ba0a4f0e1c07b0ffddab4b877d3"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\proposals\\daming_safe_retreat_v25\\proposed\\scripts\\run_battle_world_core.gd",
+      "bytes": 49463,
+      "sha256": "92b2bdac0058f9e1642d1b991c3ca353e902481d8daff990388e377597df87b1"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\proposals\\daming_safe_retreat_v25\\proposed\\scripts\\run_level8_unit_contract.gd",
+      "bytes": 8211,
+      "sha256": "b2f52bcce60b27507b498a6d32e45b5cadd3409030fcd2e1024c78dac90e90d5"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\proposals\\daming_safe_retreat_v25\\run_daming_safe_retreat_v25s.py",
+      "bytes": 68093,
+      "sha256": "5941315849982fb73d4851c2fcb95a2369d498760a83801427d315dd6a229af5"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\proposals\\daming_safe_retreat_v25\\run_daming_safe_retreat_v25s_r2a_explore.py",
+      "bytes": 40970,
+      "sha256": "d2fd596b94b2de563a073c897aa30892212e3f0c1ada2db475aec34ecf22801b"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\proposals\\daming_safe_retreat_v25\\run_daming_safe_retreat_v25s_r2b2_full.py",
+      "bytes": 35449,
+      "sha256": "e61b7e87a5c52792040fc9d6e84828c6fce2aec8f3496ec3bf883c78aab5fd79"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\proposals\\daming_safe_retreat_v25\\RUNNER_REVIEW_V25S1_FULL_FX.json",
+      "bytes": 9121,
+      "sha256": "2d2bd3c40ef1d534af12963c9911e25bc2bf2ca26a15340410eb855e80c43455"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\scripts\\run_graph_identity.gd",
+      "bytes": 11445,
+      "sha256": "c16f53cf32dad8e1ef05e17628cb4f846f80ec3873ce562f79f5b4f6372c5e5f"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\scripts\\run_slot_store.gd",
+      "bytes": 13212,
+      "sha256": "d67fe7794f23fe1bda3d74c7e284ba6b90d2cb488a5d35cb1a187eea77fa3532"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\scripts\\run_snapshot_store.gd",
+      "bytes": 21642,
+      "sha256": "581e638b8f0ce7cb24d5533b03ee94b99732c5cffcbf373b1a5a69a1618d8251"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\scripts\\run_world_session.gd",
+      "bytes": 16547,
+      "sha256": "b9fdd59cfe65cd5ecfb07a39041a8ad4e96594c85f5fc1fa105d52219e966a88"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\owned_slot_retry_qa.gd",
+      "bytes": 13416,
+      "sha256": "424987ebca5d8204c1b410c5ef12ecc5d460f6ca6bbb5c479ac0de59bf988a5c"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\run_office_campaign_restore_qa.py",
+      "bytes": 29784,
+      "sha256": "6a3fbe5bd13588a21ca83712e6b8645d78091aa990ddd5d6a346ed1fc1e47001"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\run_steam_integration_qa.py",
+      "bytes": 11766,
+      "sha256": "0673d6ab09904fd653152b127c30ca325dbf791de0b77a5da2a60cd30f0a5ad9"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\seal_office_campaign_inputs.py",
+      "bytes": 4665,
+      "sha256": "841401969b2d40fb67af3eaf07404d5bd2c5b9f842e958d85f8b155ad8708980"
+    },
+    {
+      "path": "D:\\CodexTemp\\lsh-office-candidate-20261008\\tools\\owned_slot_retry_qa.gd",
+      "bytes": 13416,
+      "sha256": "424987ebca5d8204c1b410c5ef12ecc5d460f6ca6bbb5c479ac0de59bf988a5c"
+    },
+    {
+      "path": "D:\\CodexTemp\\lsh-office-candidate-20261008\\tools\\run_steam_integration_qa.py",
+      "bytes": 11766,
+      "sha256": "0673d6ab09904fd653152b127c30ca325dbf791de0b77a5da2a60cd30f0a5ad9"
+    },
+    {
+      "path": "D:\\CodexTemp\\lsh-office-candidate-preparation-20261008\\complete_source_bridge_v1.json",
+      "bytes": 2078422,
+      "sha256": "b969cdd06abe9b76b0f79d610c990912188885171b97112800354e97a94a3707"
+    },
+    {
+      "path": "D:\\CodexTemp\\lsh-office-candidate-preparation-20261008\\preparation.json",
+      "bytes": 18543,
+      "sha256": "5864a6736e3cff3a3542c3881c2b67ad907db659dc55a83f4478604ef3f809be"
+    },
+    {
+      "path": "D:\\CodexTemp\\lsh-office-candidate-preparation-20261008\\sources\\native_ownership_json_boundary_v24q1.tscn",
+      "bytes": 208,
+      "sha256": "c1c6cf443fed59d3afb493d12591f59341aa878011dea93fe58420fb1818ded1"
+    }
+  ],
+  "historical_review_bridge_pins": [
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\proposals\\daming_safe_retreat_v25\\run_daming_safe_retreat_v25s_r2b2_full.py",
+      "bytes": 35449,
+      "sha256": "e61b7e87a5c52792040fc9d6e84828c6fce2aec8f3496ec3bf883c78aab5fd79",
+      "matches_preparation": true
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\proposals\\daming_safe_retreat_v25\\run_daming_safe_retreat_v25s_r2a_explore.py",
+      "bytes": 40970,
+      "sha256": "d2fd596b94b2de563a073c897aa30892212e3f0c1ada2db475aec34ecf22801b",
+      "matches_preparation": true
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\proposals\\daming_safe_retreat_v25\\run_daming_safe_retreat_v25s.py",
+      "bytes": 68093,
+      "sha256": "5941315849982fb73d4851c2fcb95a2369d498760a83801427d315dd6a229af5",
+      "matches_preparation": true
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\harness\\run_daming_admit_v24s.py",
+      "bytes": 95807,
+      "sha256": "049dcdc74fab7936d4812f71a9806cee46569163ece4c524043ac7cfdedd8626",
+      "matches_preparation": true
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\proposals\\daming_safe_retreat_v25\\daming_safe_retreat_negative_world_v25b2.gd",
+      "bytes": 32238,
+      "sha256": "bc494c0bdabd1c52726f4f12465154529ed3cc9cee75042543d1872e11959b5d",
+      "matches_preparation": true
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\proposals\\daming_safe_retreat_v25\\daming_safe_retreat_negative_world_v25b2.tscn",
+      "bytes": 218,
+      "sha256": "113eb68bde983102e92eb99b14d9537d968daa2516e8fc734808d03bdd30ccf0",
+      "matches_preparation": true
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\proposals\\daming_safe_retreat_v25\\daming_safe_retreat_component_negative_v25.gd",
+      "bytes": 44135,
+      "sha256": "ccb4abd78fe1277c2475f53ace9ff4c5c133e1e8ca4ebb59fa6ac30c65ab134a",
+      "matches_preparation": true
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\proposals\\daming_safe_retreat_v25\\daming_safe_retreat_component_negative_v25.tscn",
+      "bytes": 219,
+      "sha256": "46adcee78872917b6518dc186ba1a055ff3bf00694835b723e51447282ba22fc",
+      "matches_preparation": true
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\proposals\\daming_safe_retreat_v25\\daming_safe_retreat_capture_negative_v25d1.gd",
+      "bytes": 45594,
+      "sha256": "9933c71c514685da54ace5daf2e50ed645a998d34993c9709676dfb48d1e110b",
+      "matches_preparation": true
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\proposals\\daming_safe_retreat_v25\\daming_safe_retreat_capture_negative_v25d1.tscn",
+      "bytes": 219,
+      "sha256": "19d6c5c79a209cbee0e571a6992483ca31a56c0bde67681bf075b8a4543543f9",
+      "matches_preparation": true
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\proposals\\daming_safe_retreat_v25\\daming_safe_retreat_cross_process_v25s1.gd",
+      "bytes": 57295,
+      "sha256": "91df2daf3310f3bf0525b0266c9795aaf149e3d8af261c8d1e634e8fc7b04cef",
+      "matches_preparation": true
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\proposals\\daming_safe_retreat_v25\\daming_safe_retreat_cross_process_v25s1.tscn",
+      "bytes": 220,
+      "sha256": "f07e71ab7d439809d595622212343ab5bbcf631c5c2f6af8ebe914a0f18c8a19",
+      "matches_preparation": true
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\proposals\\daming_safe_retreat_v25\\daming_safe_retreat_route_v25.gd",
+      "bytes": 10964,
+      "sha256": "339f09795f48a9fa89615e271e87f2316b3d1ef55c8f0278752b456888d45e27",
+      "matches_preparation": true
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\scripts\\run_world_session.gd",
+      "bytes": 16547,
+      "sha256": "b9fdd59cfe65cd5ecfb07a39041a8ad4e96594c85f5fc1fa105d52219e966a88",
+      "matches_preparation": true
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\proposals\\daming_safe_retreat_v25\\proposed\\scripts\\run_battle_world_core.gd",
+      "bytes": 49463,
+      "sha256": "92b2bdac0058f9e1642d1b991c3ca353e902481d8daff990388e377597df87b1",
+      "matches_preparation": true
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\zhu_wounded_20261005\\proposals\\daming_safe_retreat_v25\\proposed\\scripts\\run_level8_unit_contract.gd",
+      "bytes": 8211,
+      "sha256": "b2f52bcce60b27507b498a6d32e45b5cadd3409030fcd2e1024c78dac90e90d5",
+      "matches_preparation": true
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\scripts\\run_graph_identity.gd",
+      "bytes": 11445,
+      "sha256": "c16f53cf32dad8e1ef05e17628cb4f846f80ec3873ce562f79f5b4f6372c5e5f",
+      "matches_preparation": true
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\scripts\\run_slot_store.gd",
+      "bytes": 13212,
+      "sha256": "d67fe7794f23fe1bda3d74c7e284ba6b90d2cb488a5d35cb1a187eea77fa3532",
+      "matches_preparation": true
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\scripts\\run_snapshot_store.gd",
+      "bytes": 21642,
+      "sha256": "581e638b8f0ce7cb24d5533b03ee94b99732c5cffcbf373b1a5a69a1618d8251",
+      "matches_preparation": true
+    }
+  ],
+  "actual_source_evidence": {
+    "production_complete_runtime_files": 5132,
+    "candidate_complete_runtime_files": 5132,
+    "complete_identity_equal_to_reviewed_seal": true,
+    "directory_sets_identical": true,
+    "only_actual_raw_differing_paths": [
+      "scripts/run_battle_world_core.gd",
+      "scripts/run_level8_unit_contract.gd"
+    ],
+    "fresh_source_companions_count": 132,
+    "fresh_companion_drift": [],
+    "representation_changes": 49,
+    "original_backup_normalized_equivalence_verified": true,
+    "fixed_qa_input_rows": 50,
+    "fixed_qa_input_drift": [],
+    "actual_baseline_source_rows": 5031,
+    "actual_baseline_source_drift": [],
+    "production_HEAD": "21940608a60eb3d0d0c8c96018b00b442691150e",
+    "candidate_HEAD": "31354faccba96cd638bd02e68b7d510ecd9a3893",
+    "prepared_candidate_semantic_changes_are_not_promoted_to_production": true
+  },
+  "actual_native_engine_evidence": {
+    "baseline_path": "D:\\AI项目\\水浒\\开发工程\\qa\\office_baseline_20261008\\baseline\\receipt.json",
+    "baseline_sha256": "62d167a99557a3f768a572f4d432e50c04c1f97c0909ad19f67e183c09adf03a",
+    "engine_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+    "native_dependency_file_count": 7,
+    "current_manifests_match_actual_baseline": true,
+    "engine_or_native_binary_not_executed_by_reviewer": true,
+    "candidate_vendor_dependencies_also_verified": true
+  },
+  "fixed_scope_preserved": {
+    "original_json_checks": 533,
+    "original_owned_slot_checks": 76,
+    "admission_processes": [
+      "A",
+      "B",
+      "C"
+    ],
+    "admission_expected_checks": [
+      39,
+      351,
+      342
+    ],
+    "retreat_roles": [
+      "lu_first",
+      "shi_first"
+    ],
+    "retreat_processes_per_role": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "world_routes_per_role": 264,
+    "component_routes_per_role": 362,
+    "live_cases_per_role": 24,
+    "aggregate_negative_stages": 52
+  },
+  "complete_harness_closure": {
+    "retained_seed_files": 13,
+    "unique_literal_tool_reference_edges": 9,
+    "runtime_literal_reference_count": 24,
+    "unresolved_tool_references": [],
+    "missing_literal_runtime_references": [],
+    "filename_collisions": [],
+    "five_live_safe_caster_cases_preserved": true,
+    "all_native_world_component_and_live_matrix_checks_remain_original_full_consumer_methods": true
+  },
+  "cold_import_static_contract": {
+    "existing_source_native_rows_must_remain_byte_exact": true,
+    "only_new_uid_import_with_existing_source_is_allowed": true,
+    "installed_identity_resealed_before_first_runtime_case": true
+  },
+  "historical_state_not_reused": {
+    "old_deadline_not_reached_in_active_methods": true,
+    "old_E_cache_not_reached_in_active_methods": true,
+    "old_successor_proof_not_adopted": true,
+    "new_uuid_and_isolated_profiles_required": true
+  },
+  "profile_and_process_contract": {
+    "new_uuid_private_project": true,
+    "all_APPDATA_LOCALAPPDATA_TEMP_TMP_isolated": true,
+    "natural_shared_engine_idle_guard_retained": true,
+    "stop_only_exact_Popen_owned_child": true,
+    "actual_PID_nonce_terminal_and_predecessor_monotonic_checks_retained": true,
+    "real_Engine_time_scale_physics_and_game_speed_checks_retained": true,
+    "Lu_and_Shi_each_require_natural_ABCD_terminal_and_old_slot_refusal": true
+  },
+  "qualification_boundaries": {
+    "native_import_and_execution_not_started_by_this_review": true,
+    "JSON_scene_is_new_explicit_Node_binding_not_original_external_scene": true,
+    "CAMPAIGN_QA_1_does_not_qualify_campaign_cfg_durability": true,
+    "STEAM_DISABLED_does_not_qualify_credited_rewards": true,
+    "public_continue_release_performance_Android_not_qualified": true,
+    "original_failed_reviews_retained": [
+      "OFFICE_FULL_INDEPENDENT_REVIEW_V1.json",
+      "OFFICE_FULL_INDEPENDENT_REVIEW_V2.json",
+      "OFFICE_FULL_INDEPENDENT_REVIEW_V3.json"
+    ],
+    "prior_review_files_retained": [
+      "OFFICE_FULL_INDEPENDENT_REVIEW_V1.json",
+      "OFFICE_FULL_INDEPENDENT_REVIEW_V2.json",
+      "OFFICE_FULL_INDEPENDENT_REVIEW_V3.json",
+      "OFFICE_FULL_INDEPENDENT_REVIEW_V4.json"
+    ]
+  },
+  "native_started": false,
+  "runtime_qualified": false,
+  "prelaunch_wait_revision_audit": {
+    "actual_failure_receipt_path": "D:\\CodexTemp\\lsh-office-restore-20261008\\office_full_4d0eefc5\\receipt.json",
+    "actual_failure_receipt_sha256": "983fac405e7037da5234396b10d949415e6607ecb004e3f4ad440d2188a661ee",
+    "actual_original_batch_complete": false,
+    "failure": "foreign engine entered before child launch",
+    "original_failed_A_has_no_pid_or_native_log": true,
+    "original_producer_PID_6416_absent_on_independent_CIM_read": true,
+    "original_import_terminal_exit0": true,
+    "original_profile_guard_terminal_exit2": true,
+    "original_actual_JSON533_and_OwnedSlot76_reports_read": true,
+    "old_qualification_not_adopted_by_new_batch": true,
+    "new_child_not_created_in_prelaunch_loop": true,
+    "prelaunch_loop_calls_case_validator": false,
+    "prelaunch_loop_order": [
+      "input_integrity(True)",
+      "acquire: natural shared engine/lock idle continuously 60 seconds",
+      "input_integrity(True)",
+      "limit",
+      "fail-closed engine_rows",
+      "if no foreign: break toward one Popen",
+      "if foreign: record own_child_started=false, release and return to natural wait"
+    ],
+    "postlaunch_six_statement_block_normalized_AST_equal_to_immutable_Base": true,
+    "normalizations_used": [
+      "base namespace for immutable engine_rows/ENGINE_ERRORS/BatchFailure",
+      "local foreign versus rows variable",
+      "equivalent started/last_notice monotonic initialization"
+    ],
+    "finally_block_normalized_AST_equal_to_immutable_Base": true,
+    "all_runtime_errors_still_reraise": true,
+    "exception_metadata_change_only": "Old expired six-am error text classification removed; all unclassified exceptions still receive producer_or_validation_exception and re-raise. Office absolute deadline remains enforced by self.limit.",
+    "active_child_foreign_engine_error_timeout_failure_aborts_entire_batch": true,
+    "no_postlaunch_retry_or_failed_profile_reuse": true,
+    "log_exclusive_open_command_PID_nonce_actual_start_end_terminal_binding_retained": true,
+    "source_native_engine_checks_before_launch_after_validator_retained": true,
+    "new_full_batch_UUID_profile_required": true
+  },
+  "route_bundle_path": "D:\\AI项目\\水浒\\开发工程\\qa\\office_campaign_route_20261008\\v27\\ROUTE_BUNDLE_V27.json",
+  "route_bundle_sha256": "2e711b81b6b5a06790f0f1f05ff7af9b684844d43d2295ef9f2c6cb014c5b8af",
+  "route_static_evidence": {
+    "new_runner_only_changes_fixed_route_load_path": true,
+    "copied_tool_files": 14,
+    "unique_literal_tool_edges": 9,
+    "tool_closure_errors": [],
+    "build_API_chain": "select_members -> arm_build -> _try_place_building -> can_afford/spend -> _start_construction -> normal worker order_build/advance_build -> on_building_complete",
+    "train_API_chain": "queue_train -> _train_block_reason active+queued population/resource/capacity checks -> faction_spend -> _train_queue/_train_t -> ordinary _production_tick -> on_unit_trained -> rally order_move",
+    "actual_house_cost": {
+      "gold": 0,
+      "wood": 40,
+      "provides_pop": 10,
+      "build_time": 16.0
+    },
+    "actual_soldier_cost_each": {
+      "gold": 25,
+      "wood": 8,
+      "pop": 1,
+      "train_time": 16.0
+    },
+    "player_start_resources": {
+      "gold": 300,
+      "wood": 200,
+      "base_pop_cap": 24
+    },
+    "resource_HP_enemy_time_mission_or_result_direct_patch_detected": false,
+    "native_strategy_success_not_qualified": true,
+    "actual_house_placement": {
+      "cell": [
+        35,
+        60
+      ],
+      "hall_cell": [
+        31,
+        57
+      ],
+      "hall_half": 2,
+      "house_half": 1,
+      "ordinary_padding_tiles": 1,
+      "actual_inclusive_overlap": true
+    }
+  }
+}

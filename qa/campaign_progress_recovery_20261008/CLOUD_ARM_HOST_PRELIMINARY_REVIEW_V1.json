@@ -1,0 +1,57 @@
+{
+  "schema": "campaign_cloud_arm_host_preliminary_independent_review_v1",
+  "reviewed_at_utc": "2026-10-09T01:59:28.717720+00:00",
+  "independent": true,
+  "source_only": true,
+  "limited_preliminary_review": true,
+  "static_api_closure_passed": true,
+  "approved_stages": [],
+  "source_spec_file_sha256": "9d5527c8ca4a4e1267f308eed2736f35ee8edc0663840afdead60a5402a9ec3d",
+  "review_scope_sha256": "75074a3d4ed4bb1c17f51656d345437d1c80bf66e4a1f9d54e1c80d89b5a987e",
+  "reviewed_helpers": {
+    "campaign_cloud_arm_packets_v1.py": "bfab53ce340819eb13012fd53f20b6b67ee22460b8f72678aeb3ac095cb0adfd",
+    "campaign_cloud_arm_controller_v1.py": "486ca429e5a04519af75617d782b240b8facf656e7c6295b71102d7be51a5bc6",
+    "campaign_cloud_arm_raw_receiver_v1.py": "70a7a0e900b6cad8f1fbb59eeb19853ead2bd98ca63300665fd855accf372dd7",
+    "campaign_cloud_applying_exports_v1.py": "761e6f13a4a9e8a0e38329270d512e55a31ff2cf201f9b63260ae1640de8d1c2",
+    "campaign_cloud_applying_runtime_v1.py": "0e7869136da7edc78646bda6cda4ded6fe80ef9fe7c10e7f4faa0a984eea2917"
+  },
+  "verified_source_counts": {
+    "unique_pins": 212,
+    "all_pinned_python_local_import_edges": 406,
+    "missing_import_pins": 0,
+    "exact_source_snapshots": 5
+  },
+  "confirmed_findings": [],
+  "confirmed_limited_conclusions": [
+    "All 212 unique pins were independently read against declared bytes/SHA. Independent all-pinned-Python AST traversal found 406 local-tools import edges with no missing target pins. Five new helper snapshots are byte-identical.",
+    "CloudArmPackets retains strict ready/snapshot decoding and only accepts one original arm reply after ready and before sequence advancement: exact case/PID/nonce/thread/integer zero, node IDs, full identity/user and false qualification fields. Failed arm decoding does not assign arm state.",
+    "CloudArmController retains actual owned live Popen/socket, private path, complete Provider identity, source map and original-byte ledger checks. Published apply-ready is frozen under its original export SHA and binds baseline nodes/memory, typed original cloud state and explicit bounded SDK-disabled owner=1 payload.",
+    "set_pid sends the fixed production breakpoint; ready then sends one fixed arm on the same peer with retained send_attempt and send_complete. Original acknowledgment is required before a matching actual production stack can request the snapshot.",
+    "Snapshot must show confirmed new Campaign memory, persistence_busy=false, applying/shared pending=true, owner=1 and unchanged original dirty/pending-upload/revision before breakpoint disable and continue complete the observation.",
+    "Raw receiver differs only by the controller import alias. Export publisher preserves closed-stage first-byte/SHA and Windows no-replace behavior with the fixed three-file set. Cloud phase constructs the controller only after both original ready exports are published.",
+    "Runtime changes are confined to new libraries, fixed case/GD/dependency interface and two-ready controller construction. Original terminal tail/recognized terminal race, validator-before-child-clear and BaseException/unknown-child lease cleanup remain preserved."
+  ],
+  "unverified": [
+    "No actual controller/socket/Popen construction or owned cloud phase was executed.",
+    "Arm acknowledgment proves dispatcher receipt only. Current-engine breakpoint/arm ordering and paused read-only capture compatibility are not established.",
+    "The baseline original CFG SHA is bound as an original native declaration; complete physical CFG, historical journals, original packet replay and restart validation require the future complete consumer.",
+    "The referenced 32/43 synthetic CPU checks bypass complete physical/owned constructors and do not prove native compatibility or full pipeline behavior. The preserved initial fixture failure was not a production-library repair.",
+    "Complete report/packet/CFG consumer, cloud restart, full producer, successful closed V12 prior and exact executable admission remain unestablished."
+  ],
+  "synthetic_checks_independently_rerun": false,
+  "actual_Popen_or_socket_constructed": false,
+  "native_started": false,
+  "native_execution_approved": false,
+  "breakpoint_installation_verified": false,
+  "actual_callback_qualified": false,
+  "complete_report_packet_CFG_consumer_implemented": false,
+  "cloud_restart_implemented": false,
+  "cloud_producer_implemented": false,
+  "successful_prior_bound": false,
+  "Steam_account_qualified": false,
+  "upload_qualified": false,
+  "SDK_reward_once_qualified": false,
+  "original19_qualified": false,
+  "overall_goal_qualified": false,
+  "scope_note": "Finite source/API/order/custody review of five libraries only. Existing limited source reviews and synthetic fixtures do not grant executable admission or complete consumer proof."
+}

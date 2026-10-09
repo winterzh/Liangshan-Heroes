@@ -9,6 +9,14 @@ const Huang := preload("res://scripts/levels/level1_huangnigang_short.gd")
 const Yezhu := preload("res://scripts/levels/level6_yezhulin.gd")
 const Jiang := preload("res://scripts/levels/level2_jiangzhou_rts.gd")
 const Kuai := preload("res://scripts/levels/level7_kuaihuolin_short.gd")
+const Gao := preload("res://scripts/levels/level5_gao_rts.gd")
+const Daming := preload("res://scripts/levels/level8_daming_rts.gd")
+const GAO_ID := "campaign_level5_v1"
+const DAMING_ID := "campaign_level8_v1"
+const GAO_CONTEXT := {"mode": "campaign", "level_id": "level5", "waves": 0}
+const DAMING_CONTEXT := {"mode": "campaign", "level_id": "level8", "waves": 0}
+const GAO_FLAGS := {"current": 4, "skirmish": false, "skirmish_ai": false, "arena": false, "custom_defense": false, "scenario": false}
+const DAMING_FLAGS := {"current": 7, "skirmish": false, "skirmish_ai": false, "arena": false, "custom_defense": false, "scenario": false}
 const SCHEMA := "official_restore_profile_v1"
 const CLASSIC_ID := "classic_30_v1"
 const ZHU_ID := "campaign_level3_v1"
@@ -73,10 +81,18 @@ static func normalize_context(value: Variant) -> Dictionary:
 		return {"ok": true, "context": KUAI_CONTEXT.duplicate(), "profile_id": KUAI_ID}
 	if value.mode == "campaign" and value.level_id == "level4" and value.waves == 0:
 		return {"ok": true, "context": LIAN_CONTEXT.duplicate(), "profile_id": LIAN_ID}
+	if value.mode == "campaign" and value.level_id == "level5" and value.waves == 0:
+		return {"ok": true, "context": GAO_CONTEXT.duplicate(), "profile_id": GAO_ID}
+	if value.mode == "campaign" and value.level_id == "level8" and value.waves == 0:
+		return {"ok": true, "context": DAMING_CONTEXT.duplicate(), "profile_id": DAMING_ID}
 	return _bad("OFFICIAL_CONTEXT_NOT_SUPPORTED")
 
 static func _installed(profile_id: String) -> bool:
 	match profile_id:
+		GAO_ID:
+			return CampaignScript.LEVELS.size() > 4 and CampaignScript.LEVELS[4].id == "level5" and CampaignScript.LEVELS[4].script == (Gao as Script).resource_path
+		DAMING_ID:
+			return CampaignScript.LEVELS.size() > 7 and CampaignScript.LEVELS[7].id == "level8" and CampaignScript.LEVELS[7].script == (Daming as Script).resource_path
 		LIAN_ID:
 			return CampaignScript.LEVELS.size() > 3 and CampaignScript.LEVELS[3].id == "level4" and CampaignScript.LEVELS[3].script == (Lian as Script).resource_path
 		CLASSIC_ID:
@@ -130,7 +146,7 @@ static func select_saved(context: Variant, content_version: Variant,
 
 static func capture_selection(campaign: Node, level: RefCounted, identity: Dictionary) -> Dictionary:
 	if not is_instance_valid(campaign) or campaign.get_script() != CampaignScript or not is_instance_valid(level): return _bad("OFFICIAL_SOURCE_REQUIRED")
-	if level.get_script() not in [Classic, Zhu, Huang, Yezhu, Jiang, Kuai, Lian]: return _bad("OFFICIAL_SCRIPT_IDENTITY")
+	if level.get_script() not in [Classic, Zhu, Huang, Yezhu, Jiang, Kuai, Lian, Gao, Daming]: return _bad("OFFICIAL_SCRIPT_IDENTITY")
 	var selected: Dictionary = select_context(Policy.classify(campaign, level), identity)
 	if not selected.ok: return selected
 	var expected: Script = level_script(selected.profile_id)
@@ -141,6 +157,8 @@ static func install_flags(profile_id: String) -> Dictionary:
 	# Internal return value, never read from a file or applied by this selector.
 	# Session must snapshot/revalidate/rollback every returned Campaign field.
 	match profile_id:
+		GAO_ID: return {"ok": true, "flags": GAO_FLAGS.duplicate()}
+		DAMING_ID: return {"ok": true, "flags": DAMING_FLAGS.duplicate()}
 		LIAN_ID: return {"ok": true, "flags": LIAN_FLAGS.duplicate()}
 		CLASSIC_ID: return {"ok": true, "flags": CLASSIC_FLAGS.duplicate()}
 		ZHU_ID: return {"ok": true, "flags": ZHU_FLAGS.duplicate()}
@@ -153,6 +171,8 @@ static func install_flags(profile_id: String) -> Dictionary:
 static func level_script(profile_id: String) -> Script:
 	# Call only with a profile selected above; no ResourceLoader/load/fallback.
 	match profile_id:
+		GAO_ID: return Gao
+		DAMING_ID: return Daming
 		LIAN_ID: return Lian
 		CLASSIC_ID: return Classic
 		ZHU_ID: return Zhu
@@ -163,7 +183,7 @@ static func level_script(profile_id: String) -> Script:
 	return null
 
 static func is_official_campaign_profile(profile_id: String) -> bool:
-	return profile_id in [ZHU_ID, HG_ID, YEZHU_ID, JIANG_ID, KUAI_ID, LIAN_ID]
+	return profile_id in [ZHU_ID, HG_ID, YEZHU_ID, JIANG_ID, KUAI_ID, LIAN_ID, GAO_ID, DAMING_ID]
 
 static func is_official_campaign_context(context: Variant) -> bool:
 	var norm := normalize_context(context)

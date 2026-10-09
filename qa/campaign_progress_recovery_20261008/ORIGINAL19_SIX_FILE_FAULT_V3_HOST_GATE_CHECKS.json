@@ -1,0 +1,67 @@
+{
+  "schema": "six_file_fault_v3_finite_host_gate_checks_v1",
+  "producer_sha256": "243791416a34d6f4680b584f1c107b1d9897fa4c9ceebe1dc9b1cfa3d6db10eb",
+  "changed_existing_functions": [
+    "__init__",
+    "main",
+    "source_spec"
+  ],
+  "added_function": "prior_receipt_path",
+  "execute_validator_integrity_cleanup_AST_exact_V2": true,
+  "checks": [
+    {
+      "case": "durable_chain_fb1da6e0",
+      "refused": true,
+      "exception": "RuntimeError",
+      "reason": "Exact successful limited prior source seal"
+    },
+    {
+      "case": "durable_chain_6b31df47",
+      "refused": true,
+      "exception": "RuntimeError",
+      "reason": "Exact successful limited prior source seal"
+    },
+    {
+      "case": "durable_chain_6409dde9",
+      "refused": true,
+      "exception": "RuntimeError",
+      "reason": "Exact successful limited prior source seal"
+    },
+    {
+      "case": "durable_chain_8fe7b18b",
+      "refused": true,
+      "exception": "FileNotFoundError",
+      "reason": "[Errno 2] No such file or directory: 'D:\\\\CodexTemp\\\\lsh-durable-chain-20261009\\\\durable_chain_8fe7b18b\\\\receipt.json'"
+    },
+    {
+      "case": "None",
+      "refused": true,
+      "exception": "RuntimeError",
+      "reason": "Explicit absolute terminal prior receipt required"
+    },
+    {
+      "case": "receipt.json",
+      "refused": true,
+      "exception": "RuntimeError",
+      "reason": "Explicit absolute terminal prior receipt required"
+    },
+    {
+      "case": "D:\\AI项目\\水浒\\开发工程\\receipt.json",
+      "refused": true,
+      "exception": "RuntimeError",
+      "reason": "Prior must be outside source checkout"
+    },
+    {
+      "case": "D:\\CodexTemp\\lsh-durable-chain-20261009\\durable_chain_8fe7b18b\\checkpoint.json",
+      "refused": true,
+      "exception": "RuntimeError",
+      "reason": "Explicit absolute terminal prior receipt required"
+    }
+  ],
+  "count": 8,
+  "all_passed": true,
+  "native_started": false,
+  "success_prior_qualification_claimed": false,
+  "source_seal_created": false,
+  "approved_stages": []
+}

@@ -1,0 +1,107 @@
+{
+  "schema": "campaign_local_progress_native_route_plan_20261008",
+  "implementation_status": "design_only_not_implemented_not_run",
+  "env": {
+    "CAMPAIGN_QA": "0",
+    "STEAM_DISABLED": "1",
+    "LSH_CONTINUE_FLOW_QA": "1 if actual private UI flow tested",
+    "LSH_CONTINUE_FLOW_PROFILE": "exact future isolated profile root",
+    "APPDATA": "profile/appdata",
+    "LOCALAPPDATA": "profile/localappdata",
+    "TEMP": "profile/temp",
+    "TMP": "profile/tmp"
+  },
+  "remove_env": [
+    "LEVEL",
+    "SMOKE_TEST",
+    "SCREENSHOT_DIR",
+    "SCENARIO",
+    "CUSTOM_DEFENSE",
+    "AUTO_MICRO",
+    "AUTOMICRO",
+    "SKIRMISH",
+    "SKIRMISH_AI",
+    "ARENA"
+  ],
+  "clock": {
+    "time_scale": 1.0,
+    "physics_hz": 60,
+    "game_speed": 1.0
+  },
+  "role_profiles": [
+    "Lu-first fresh profile",
+    "Shi-first separate fresh profile"
+  ],
+  "processes": [
+    {
+      "case": "A",
+      "operation": "actual normal task rescue and single first-safe, complete real HELD Session gen1 save; process exits",
+      "forbidden": [
+        "teleport",
+        "hp patch",
+        "manual story/action callback",
+        "factory ending",
+        "direct mark/win",
+        "freeze unrelated enemies"
+      ]
+    },
+    {
+      "case": "B",
+      "operation": "new process full Session async restore, complete packet/world/clock/binding comparison, actual ticks, gen2 resave, process exits"
+    },
+    {
+      "case": "C",
+      "operation": "new process full restore; ordinary escort of second original actor to actual natural terminal; frozen same-run intent; actual journal/CFG write+readback/ack"
+    },
+    {
+      "case": "D",
+      "operation": "new process actual Campaign._ready/_load cfg readback; terminal obsolete Slot rejection before Battle/Units; exact journal chain/context/result and files unchanged after read"
+    }
+  ],
+  "required_evidence": [
+    "complete pinned source and native dependency pre/post indexes",
+    "engine binary SHA",
+    "PID terminal and distinct PID/nonce ancestry",
+    "all native report checks true and zeroERROR logs",
+    "slot gen1-to-gen2 rawSHA chain",
+    "journal canonical raw UTF8 and full previous-hash chain",
+    "cfg raw bytes/SHA and full actually-persisted progress/prefs semantic readback",
+    "complete original Mission same-run snapshot, not union across fixture runs",
+    "no SteamService stats/settle side effect, SDK disabled"
+  ],
+  "fault_routes": [
+    "oldclassic v1 raw receipt read/binding/terminal and original owned fault suite byte compatibility",
+    "newcampaign fixed context strict source/json malformed identity/type negatives before world creation",
+    "exact v2 gen1/2/3 transitions and intent/context/token/victory invariance",
+    "actual isolated cfg write/load failure truthfully reports pending progress, no progress-completed signal",
+    "new test profile process exit after terminal2 before cfg, then separate process progress-only recovery",
+    "new test profile process exit after cfg before ack3, retry identical intent without new settlement",
+    "profile owner mismatch rejects recovery without overwriting cfg",
+    "repeated read/recovery never unions goal IDs or reissues new-story/Steam notifications"
+  ],
+  "historical_failed_profiles": [
+    "preserve raw original profiles/slots/journals/logs",
+    "never rewrite context/schema/hash",
+    "compat fixtures use new owned copies with full original SHA provenance"
+  ],
+  "scope_false_until_actual_proof": [
+    "normal_private_continue_button if only direct Session async used",
+    "all other seven chapters",
+    "Steam rewards/achievement/cloud-server status",
+    "power-loss durability",
+    "public campaign continue",
+    "full project completion"
+  ],
+  "whole_original_plan_kept": [
+    "v25 real whole-world routes and all source/json/component/livecast negatives",
+    "v26 Slot malformed type guards",
+    "paid production",
+    "ship/transport dynamics",
+    "other eight-chapter dynamic stages and natural outcomes",
+    "same-version nine-playmode EXE acceptance",
+    "full art/UI and window sizes",
+    "normal-clock long-run tail-frame performance",
+    "Android actual-device acceptance"
+  ],
+  "native_qualified": false
+}

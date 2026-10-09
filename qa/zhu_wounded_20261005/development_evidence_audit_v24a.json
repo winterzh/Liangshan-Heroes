@@ -1,0 +1,46 @@
+{
+  "source_audit_complete": true,
+  "runtime_started_by_this_audit": false,
+  "whole_goal_complete": false,
+  "qualified_scenery_commit": "fcdc10ceef09e9de1aade9be0bbd5d551d7c5e2d",
+  "metadata_commit": "f0171d36238282196ceb686465fed9bb284d3937",
+  "remote_readback": "f0171d36238282196ceb686465fed9bb284d3937",
+  "qualified_cases": 14,
+  "qualified_checks": 281,
+  "current_source_changes_since_qualified_scenery": [
+    "scripts/run_battle_root_state.gd",
+    "scripts/run_battle_world_core.gd",
+    "scripts/run_visual_graph.gd"
+  ],
+  "core_candidate_runtime_qualified": false,
+  "release_historical_receipt": {
+    "build": 25768878,
+    "manifest": "7052320823704356026",
+    "announcement": "https://store.steampowered.com/news/app/5088120/view/703281660030877705",
+    "four_languages": "Titles, summaries and complete bodies match saved source in schinese/tchinese/english/japanese. Direct read-only values checked in UI; AX textarea diff can be stale on language changes.",
+    "client_update_complete": false,
+    "scope": "Read prior confirmed receipt, not a new Steam server or client check."
+  },
+  "cleanup": {
+    "phase": "after",
+    "protected_files": 10303,
+    "protected_bytes_unchanged": true,
+    "keeper_files_unchanged": true,
+    "removed_files": 7476,
+    "removed_bytes": 1803637428
+  },
+  "timing_review": {
+    "mission_stage_age": "Source capture uses capture_ticks_msec - mission._stage_started_ms. Restore uses restore_ticks_msec - saved_age. Later native layout/capture wall time causes a legitimate age delta; literal payload equality alone cannot qualify clock handling. Keep all bytes and audit bounded elapsed time and root logical cache separately.",
+    "root_clock": "Root engine input stamps rebase by preserved ages. Simulation/cache record survives load and re-anchors at activation; existing logical cache bucket/stamps retained. Native initial/post-mount/after-first-step proof remains required."
+  },
+  "remaining_requirements": [
+    "Gao actual Mission-owned end button and invalid/missing/extra-token negatives before Unit allocation.",
+    "Whole-world Root/Visual/Mission/Level/Unit/nav/FX/clock initial and dynamic integration with final activation.",
+    "Actual independent process save/exit/continue/resave, paid production/ships/transport, natural outcomes and reward once.",
+    "Existing whole-world chapters and same-source nine-mode/executable acceptance.",
+    "Crowded UI, continuous complete actions, whole-library and multiple-size actual flows.",
+    "Normal-clock roughly ten-minute comparable load, tail frames and final node/memory/switch cleanup.",
+    "Android2.0.1 actual-device DPI/safe-area/touch/sustained performance.",
+    "Source review/fixes, narrowly verified duplicate cleanup, scoped stable commit/push/readback for each qualified round."
+  ]
+}

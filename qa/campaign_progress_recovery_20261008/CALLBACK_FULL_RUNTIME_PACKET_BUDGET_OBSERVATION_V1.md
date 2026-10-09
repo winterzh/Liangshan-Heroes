@@ -1,0 +1,9 @@
+# 后续完整runtime的原包预算待验证项
+
+这是源码参考观察，不是当前引擎实际流量或原生结果。
+
+已保留的Godot 4.4-stable RemoteDebugger参考源码45—89行按1000ms发送performance:profile_frame，704—706行默认启用performance profiler；这些历史源码不证明当前4.6.3 binary行为。当前已审controllerV2最多256事件/16MiB，raw receiver在controller.handle前另留完整frame，故每完整入包会占两个事件。
+
+若当前binary确实同样每秒发送性能数据，则仅129个完整包就会超过事件上限，可能在自然终局到达前因预算失败。当前driver/runtime未接，不能宣称完整pipeline可跑或因有限部件预审而忽略该约束。
+
+下一轮完整runtime来源修订须根据1800秒phase上限、实际消息频率、重复留存及全部命令/拒绝事件预算，选择足够但有界的事件/字节容量并独立复审，保留当前原限制版本和证据。不能通过丢弃原包、关闭正常性能/时钟或放宽case结果来规避。当前没有新controller来源、没有准入、没有native或帧性能资格。

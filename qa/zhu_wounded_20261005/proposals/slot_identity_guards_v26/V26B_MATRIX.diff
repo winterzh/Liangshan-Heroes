@@ -1,0 +1,1690 @@
+--- E:\ChatGPT\slot_identity_guards_v26_proposal\NATIVE_MATRIX.json
++++ E:\ChatGPT\slot_identity_guards_v26_proposal\NATIVE_MATRIX_V26B.json
+@@ -1,5 +1,5 @@
+ {
+-  "schema": "slot_identity_guard_native_matrix_plan_v26",
++  "schema": "slot_identity_guard_native_matrix_plan_v26b",
+   "status": "planned_not_executed",
+   "native_parsed": false,
+   "native_executed": false,
+@@ -35,7 +35,7 @@
+   "fixture_preparation": {
+     "json_base": "Godot JSON.parse of exact actual pending original payload; no type repair before Slot._validate_json_document.",
+     "native_source_base": "Independently parse same actual pending payload, then replace only map with successful existing SceneryJSON.normalize_json(... trusted actual content/context ...).value; exact fixed ownership integers only, no schema/id/context coercion; original helper full Scenery validator must pass.",
+-    "mutations": "Prepare good base once, then deep duplicate and replace exactly one JSON pointer per case; do not run helper with mutated leaf as typed context/version. Compare original input with exact Codec/typeof-aware recursive fingerprint, not a coerced JSON-only equality.",
++    "mutations": "Prepare two good bases once. Nonempty pointer: deep duplicate, replace/remove that one field path, then exact compare all other fields. Empty pointer: construct exactly the declared invalid whole-root replacement and check its exact type/value; no unaffected-field/single-leaf claim. Full mutated-input typeof/IEEE and original-base immutability remain required on both scopes.",
+     "logs": "Retain every malformed case report and native log; whole process must exit zero, no SCRIPT ERROR/Parse Error/ERROR lines, no filesystem save/writer/Unit/restore activation in this pure guard suite."
+   },
+   "negative_case_count": 134,
+@@ -55,7 +55,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_schema_bool",
+@@ -71,7 +74,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_schema_int",
+@@ -87,7 +93,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_schema_float",
+@@ -103,7 +112,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_schema_array",
+@@ -119,7 +131,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_schema_dictionary",
+@@ -135,7 +150,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_context_mode_nil",
+@@ -151,7 +169,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_context_mode_bool",
+@@ -167,7 +188,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_context_mode_int",
+@@ -183,7 +207,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_context_mode_float",
+@@ -199,7 +226,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_context_mode_array",
+@@ -215,7 +245,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_context_mode_dictionary",
+@@ -231,7 +264,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_context_level_id_nil",
+@@ -247,7 +283,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_context_level_id_bool",
+@@ -263,7 +302,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_context_level_id_int",
+@@ -279,7 +321,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_context_level_id_float",
+@@ -295,7 +340,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_context_level_id_array",
+@@ -311,7 +359,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_context_level_id_dictionary",
+@@ -327,7 +378,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_world_schema_nil",
+@@ -343,7 +397,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_world_schema_bool",
+@@ -359,7 +416,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_world_schema_int",
+@@ -375,7 +435,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_world_schema_float",
+@@ -391,7 +454,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_world_schema_array",
+@@ -407,7 +473,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_world_schema_dictionary",
+@@ -423,7 +492,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_world_profile_schema_nil",
+@@ -439,7 +511,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_world_profile_schema_bool",
+@@ -455,7 +530,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_world_profile_schema_int",
+@@ -471,7 +549,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_world_profile_schema_float",
+@@ -487,7 +568,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_world_profile_schema_array",
+@@ -503,7 +587,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_world_profile_schema_dictionary",
+@@ -519,7 +606,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_world_profile_id_nil",
+@@ -535,7 +625,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_world_profile_id_bool",
+@@ -551,7 +644,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_world_profile_id_int",
+@@ -567,7 +663,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_world_profile_id_float",
+@@ -583,7 +682,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_world_profile_id_array",
+@@ -599,7 +701,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_world_profile_id_dictionary",
+@@ -615,7 +720,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_world_profile_context_mode_nil",
+@@ -631,7 +739,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_world_profile_context_mode_bool",
+@@ -647,7 +758,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_world_profile_context_mode_int",
+@@ -663,7 +777,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_world_profile_context_mode_float",
+@@ -679,7 +796,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_world_profile_context_mode_array",
+@@ -695,7 +815,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_world_profile_context_mode_dictionary",
+@@ -711,7 +834,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_world_profile_context_level_id_nil",
+@@ -727,7 +853,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_world_profile_context_level_id_bool",
+@@ -743,7 +872,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_world_profile_context_level_id_int",
+@@ -759,7 +891,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_world_profile_context_level_id_float",
+@@ -775,7 +910,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_world_profile_context_level_id_array",
+@@ -791,7 +929,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_world_profile_context_level_id_dictionary",
+@@ -807,7 +948,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_binding_kind_nil",
+@@ -823,7 +967,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_binding_kind_bool",
+@@ -839,7 +986,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_binding_kind_int",
+@@ -855,7 +1005,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_binding_kind_float",
+@@ -871,7 +1024,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_binding_kind_array",
+@@ -887,7 +1043,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "type_binding_kind_dictionary",
+@@ -903,7 +1062,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "container_document_nil",
+@@ -915,11 +1077,14 @@
+         "_validate_document(native_source_base)",
+         "_validate_json_document(json_base)"
+       ],
+-      "single_leaf": true,
+-      "must_return_dictionary": true,
+-      "must_ok_false": true,
+-      "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "single_leaf": false,
++      "must_return_dictionary": true,
++      "must_ok_false": true,
++      "must_no_script_error": true,
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "root_shape",
++      "root_shape": true,
++      "single_path": false
+     },
+     {
+       "id": "container_document_bool",
+@@ -931,11 +1096,14 @@
+         "_validate_document(native_source_base)",
+         "_validate_json_document(json_base)"
+       ],
+-      "single_leaf": true,
+-      "must_return_dictionary": true,
+-      "must_ok_false": true,
+-      "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "single_leaf": false,
++      "must_return_dictionary": true,
++      "must_ok_false": true,
++      "must_no_script_error": true,
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "root_shape",
++      "root_shape": true,
++      "single_path": false
+     },
+     {
+       "id": "container_document_int",
+@@ -947,11 +1115,14 @@
+         "_validate_document(native_source_base)",
+         "_validate_json_document(json_base)"
+       ],
+-      "single_leaf": true,
+-      "must_return_dictionary": true,
+-      "must_ok_false": true,
+-      "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "single_leaf": false,
++      "must_return_dictionary": true,
++      "must_ok_false": true,
++      "must_no_script_error": true,
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "root_shape",
++      "root_shape": true,
++      "single_path": false
+     },
+     {
+       "id": "container_document_float",
+@@ -963,11 +1134,14 @@
+         "_validate_document(native_source_base)",
+         "_validate_json_document(json_base)"
+       ],
+-      "single_leaf": true,
+-      "must_return_dictionary": true,
+-      "must_ok_false": true,
+-      "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "single_leaf": false,
++      "must_return_dictionary": true,
++      "must_ok_false": true,
++      "must_no_script_error": true,
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "root_shape",
++      "root_shape": true,
++      "single_path": false
+     },
+     {
+       "id": "container_document_string",
+@@ -979,11 +1153,14 @@
+         "_validate_document(native_source_base)",
+         "_validate_json_document(json_base)"
+       ],
+-      "single_leaf": true,
+-      "must_return_dictionary": true,
+-      "must_ok_false": true,
+-      "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "single_leaf": false,
++      "must_return_dictionary": true,
++      "must_ok_false": true,
++      "must_no_script_error": true,
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "root_shape",
++      "root_shape": true,
++      "single_path": false
+     },
+     {
+       "id": "container_document_array",
+@@ -995,11 +1172,14 @@
+         "_validate_document(native_source_base)",
+         "_validate_json_document(json_base)"
+       ],
+-      "single_leaf": true,
+-      "must_return_dictionary": true,
+-      "must_ok_false": true,
+-      "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "single_leaf": false,
++      "must_return_dictionary": true,
++      "must_ok_false": true,
++      "must_no_script_error": true,
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "root_shape",
++      "root_shape": true,
++      "single_path": false
+     },
+     {
+       "id": "container_context_nil",
+@@ -1015,7 +1195,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "container_context_bool",
+@@ -1031,7 +1214,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "container_context_int",
+@@ -1047,7 +1233,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "container_context_float",
+@@ -1063,7 +1252,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "container_context_string",
+@@ -1079,7 +1271,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "container_context_array",
+@@ -1095,7 +1290,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "container_world_nil",
+@@ -1111,7 +1309,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "container_world_bool",
+@@ -1127,7 +1328,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "container_world_int",
+@@ -1143,7 +1347,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "container_world_float",
+@@ -1159,7 +1366,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "container_world_string",
+@@ -1175,7 +1385,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "container_world_array",
+@@ -1191,7 +1404,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "container_world_profile_nil",
+@@ -1207,7 +1423,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "container_world_profile_bool",
+@@ -1223,7 +1442,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "container_world_profile_int",
+@@ -1239,7 +1461,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "container_world_profile_float",
+@@ -1255,7 +1480,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "container_world_profile_string",
+@@ -1271,7 +1499,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "container_world_profile_array",
+@@ -1287,7 +1518,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "container_world_profile_context_nil",
+@@ -1303,7 +1537,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "container_world_profile_context_bool",
+@@ -1319,7 +1556,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "container_world_profile_context_int",
+@@ -1335,7 +1575,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "container_world_profile_context_float",
+@@ -1351,7 +1594,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "container_world_profile_context_string",
+@@ -1367,7 +1613,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "container_world_profile_context_array",
+@@ -1383,7 +1632,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "container_binding_nil",
+@@ -1399,7 +1651,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "container_binding_bool",
+@@ -1415,7 +1670,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "container_binding_int",
+@@ -1431,7 +1689,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "container_binding_float",
+@@ -1447,7 +1708,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "container_binding_string",
+@@ -1463,7 +1727,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "container_binding_array",
+@@ -1479,7 +1746,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "waves_context_waves_nil",
+@@ -1495,7 +1765,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "waves_context_waves_bool",
+@@ -1511,7 +1784,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "waves_context_waves_string",
+@@ -1527,7 +1803,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "waves_context_waves_array",
+@@ -1543,7 +1822,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "waves_context_waves_dictionary",
+@@ -1559,7 +1841,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "waves_context_waves_wrong_integer",
+@@ -1575,7 +1860,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "waves_context_waves_fractional",
+@@ -1591,7 +1879,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "waves_world_profile_context_waves_nil",
+@@ -1607,7 +1898,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "waves_world_profile_context_waves_bool",
+@@ -1623,7 +1917,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "waves_world_profile_context_waves_string",
+@@ -1639,7 +1936,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "waves_world_profile_context_waves_array",
+@@ -1655,7 +1955,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "waves_world_profile_context_waves_dictionary",
+@@ -1671,7 +1974,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "waves_world_profile_context_waves_wrong_integer",
+@@ -1687,7 +1993,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "waves_world_profile_context_waves_fractional",
+@@ -1703,7 +2012,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "string_schema_empty",
+@@ -1720,7 +2032,10 @@
+       "must_ok_false": true,
+       "must_no_script_error": true,
+       "must_input_strictly_unchanged": true,
+-      "original_unknown_string_rejection_preserved": true
++      "original_unknown_string_rejection_preserved": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "string_schema_unsupported",
+@@ -1737,7 +2052,10 @@
+       "must_ok_false": true,
+       "must_no_script_error": true,
+       "must_input_strictly_unchanged": true,
+-      "original_unknown_string_rejection_preserved": true
++      "original_unknown_string_rejection_preserved": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "string_context_mode_empty",
+@@ -1754,7 +2072,10 @@
+       "must_ok_false": true,
+       "must_no_script_error": true,
+       "must_input_strictly_unchanged": true,
+-      "original_unknown_string_rejection_preserved": true
++      "original_unknown_string_rejection_preserved": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "string_context_mode_unsupported",
+@@ -1771,7 +2092,10 @@
+       "must_ok_false": true,
+       "must_no_script_error": true,
+       "must_input_strictly_unchanged": true,
+-      "original_unknown_string_rejection_preserved": true
++      "original_unknown_string_rejection_preserved": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "string_context_level_id_empty",
+@@ -1788,7 +2112,10 @@
+       "must_ok_false": true,
+       "must_no_script_error": true,
+       "must_input_strictly_unchanged": true,
+-      "original_unknown_string_rejection_preserved": true
++      "original_unknown_string_rejection_preserved": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "string_context_level_id_unsupported",
+@@ -1805,7 +2132,10 @@
+       "must_ok_false": true,
+       "must_no_script_error": true,
+       "must_input_strictly_unchanged": true,
+-      "original_unknown_string_rejection_preserved": true
++      "original_unknown_string_rejection_preserved": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "string_world_schema_empty",
+@@ -1822,7 +2152,10 @@
+       "must_ok_false": true,
+       "must_no_script_error": true,
+       "must_input_strictly_unchanged": true,
+-      "original_unknown_string_rejection_preserved": true
++      "original_unknown_string_rejection_preserved": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "string_world_schema_unsupported",
+@@ -1839,7 +2172,10 @@
+       "must_ok_false": true,
+       "must_no_script_error": true,
+       "must_input_strictly_unchanged": true,
+-      "original_unknown_string_rejection_preserved": true
++      "original_unknown_string_rejection_preserved": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "string_world_profile_schema_empty",
+@@ -1856,7 +2192,10 @@
+       "must_ok_false": true,
+       "must_no_script_error": true,
+       "must_input_strictly_unchanged": true,
+-      "original_unknown_string_rejection_preserved": true
++      "original_unknown_string_rejection_preserved": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "string_world_profile_schema_unsupported",
+@@ -1873,7 +2212,10 @@
+       "must_ok_false": true,
+       "must_no_script_error": true,
+       "must_input_strictly_unchanged": true,
+-      "original_unknown_string_rejection_preserved": true
++      "original_unknown_string_rejection_preserved": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "string_world_profile_id_empty",
+@@ -1890,7 +2232,10 @@
+       "must_ok_false": true,
+       "must_no_script_error": true,
+       "must_input_strictly_unchanged": true,
+-      "original_unknown_string_rejection_preserved": true
++      "original_unknown_string_rejection_preserved": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "string_world_profile_id_unsupported",
+@@ -1907,7 +2252,10 @@
+       "must_ok_false": true,
+       "must_no_script_error": true,
+       "must_input_strictly_unchanged": true,
+-      "original_unknown_string_rejection_preserved": true
++      "original_unknown_string_rejection_preserved": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "string_world_profile_context_mode_empty",
+@@ -1924,7 +2272,10 @@
+       "must_ok_false": true,
+       "must_no_script_error": true,
+       "must_input_strictly_unchanged": true,
+-      "original_unknown_string_rejection_preserved": true
++      "original_unknown_string_rejection_preserved": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "string_world_profile_context_mode_unsupported",
+@@ -1941,7 +2292,10 @@
+       "must_ok_false": true,
+       "must_no_script_error": true,
+       "must_input_strictly_unchanged": true,
+-      "original_unknown_string_rejection_preserved": true
++      "original_unknown_string_rejection_preserved": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "string_world_profile_context_level_id_empty",
+@@ -1958,7 +2312,10 @@
+       "must_ok_false": true,
+       "must_no_script_error": true,
+       "must_input_strictly_unchanged": true,
+-      "original_unknown_string_rejection_preserved": true
++      "original_unknown_string_rejection_preserved": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "string_world_profile_context_level_id_unsupported",
+@@ -1975,7 +2332,10 @@
+       "must_ok_false": true,
+       "must_no_script_error": true,
+       "must_input_strictly_unchanged": true,
+-      "original_unknown_string_rejection_preserved": true
++      "original_unknown_string_rejection_preserved": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "string_binding_kind_empty",
+@@ -1992,7 +2352,10 @@
+       "must_ok_false": true,
+       "must_no_script_error": true,
+       "must_input_strictly_unchanged": true,
+-      "original_unknown_string_rejection_preserved": true
++      "original_unknown_string_rejection_preserved": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "string_binding_kind_unsupported",
+@@ -2009,7 +2372,10 @@
+       "must_ok_false": true,
+       "must_no_script_error": true,
+       "must_input_strictly_unchanged": true,
+-      "original_unknown_string_rejection_preserved": true
++      "original_unknown_string_rejection_preserved": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "missing_schema",
+@@ -2024,7 +2390,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "missing_context_mode",
+@@ -2039,7 +2408,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "missing_context_level_id",
+@@ -2054,7 +2426,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "missing_context_waves",
+@@ -2069,7 +2444,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "missing_world_schema",
+@@ -2084,7 +2462,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "missing_world_profile_schema",
+@@ -2099,7 +2480,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "missing_world_profile_id",
+@@ -2114,7 +2498,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "missing_world_profile_context",
+@@ -2129,7 +2516,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "missing_world_profile_context_mode",
+@@ -2144,7 +2534,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "missing_world_profile_context_level_id",
+@@ -2159,7 +2552,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "missing_world_profile_context_waves",
+@@ -2174,7 +2570,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     },
+     {
+       "id": "missing_binding_kind",
+@@ -2189,7 +2588,10 @@
+       "must_return_dictionary": true,
+       "must_ok_false": true,
+       "must_no_script_error": true,
+-      "must_input_strictly_unchanged": true
++      "must_input_strictly_unchanged": true,
++      "mutation_scope": "single_path",
++      "root_shape": false,
++      "single_path": true
+     }
+   ],
+   "positive_cases": [
+@@ -2294,5 +2696,14 @@
+     "Profiles.normalize_context already guards Variant context. v26 duplicates those exact accepted types at Slot entry; it adds no new context fields or profile IDs.",
+     "Binding kind nonstring gets new SLOT_BINDING_TYPE; unknown String continues original LocalRun/LocalLifecycle routing/refusal.",
+     "Profile token, deep Codec/business sections, map schema validators and other Snapshot subclasses are unchanged. This does not prove arbitrary DTOs universally avoid SCRIPT ERROR."
+-  ]
++  ],
++  "single_path_case_count": 128,
++  "root_shape_case_count": 6,
++  "single_path_route_checks": 256,
++  "root_shape_route_checks": 12,
++  "scope_classification": "128 nonempty field-path mutations plus 6 whole-root shape replacements; 134 cases and 268 validator calls. Whole-root replacement does not claim retained unaffected fields.",
++  "review_provenance": {
++    "path": "E:\\ChatGPT\\slot_identity_guards_v26_proposal\\REVIEW_V26.json",
++    "sha256": "3d62f62e3eb4f0f473b306c661ba23d79ac5b434e65d5f62e6ce66aaaff3fde3"
++  }
+ }

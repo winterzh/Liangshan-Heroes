@@ -1,0 +1,11 @@
+{
+  "prepared_only": true,
+  "runtime_qualified": false,
+  "source_harness": "tools/campaign_presentation_state_qa.gd",
+  "source_harness_sha256": "b9e5afa61869ceb33e9612c90c1749add482692c13c7672101b153dda3f0f080",
+  "new_harness_sha256": "1816a8b00b3049eae078a132bf741bba051d1cba5efb5425ebd41bdc5866c851",
+  "check_statements_preserved": 87,
+  "coverage": "Exact existing expanded/collapsed controls, scroll, localized source/format/actor render, real Level3 callback, invalid records and failed-prepare ownership cases. Three binding checks move from detached preparation to mandatory mounted-layout completion because labels/localization now install at owned native-entry phase. No assertion removed.",
+  "new_api": "Call prepare_native_entry before mounting, finish_native_entry immediately after; retain exact standalone state comparisons and fresh-process test.",
+  "source_inputs_modified": false
+}

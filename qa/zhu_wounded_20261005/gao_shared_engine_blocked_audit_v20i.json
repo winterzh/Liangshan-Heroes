@@ -1,0 +1,36 @@
+{
+  "goal_status": "blocked_pending_shared_engine_idle",
+  "blocking_condition": "Foreign Godot repeatedly resumes before qualified original graphical map/scenery roundtrip can complete",
+  "consecutive_goal_turns": 3,
+  "evidence_runs": [
+    "gao_scenery_v20i_bc06546d",
+    "gao_scenery_v20i_5eea3d54"
+  ],
+  "latest_receipt_sha256": "21a0bc2062c6934e6295277322889737154bab59605a0b660397840dc048ce8b",
+  "latest_steps": [
+    {
+      "case": "import",
+      "pid": 202612,
+      "exit_code": 0,
+      "stop_reason": null,
+      "log_sha256": "e37dc91a1ff2eb9824b4a1ef5ffa5c86e52767e14440f72841292146b52179a1"
+    },
+    {
+      "case": "roundtrip",
+      "pid": 198788,
+      "exit_code": 1,
+      "stop_reason": "foreign_engine_resumed",
+      "log_sha256": "86a936984c2d5d7ae2c0c22f7483daee494db39ff3c83b2cf349c7011f9672c7"
+    }
+  ],
+  "latest_lock_released": true,
+  "currently_observed_foreign_pid": 204624,
+  "foreign_command_scope": "manghe headless test_async_first_game_v1",
+  "release_source_branch": "codex/sync-20260905-stable",
+  "last_synced_commit": "f1473d78e2273ff85a1f8f0d8e66e4dc17af5344",
+  "runtime_qualified": false,
+  "cleanup_performed": false,
+  "new_code_pushed": false,
+  "no_foreign_task_control_or_messages": true,
+  "next_required": "Wait for shared Godot naturally idle long enough for actual current-source graphical qualification. Rerun same immutable i producer only in a new UUID/profile after confirming old session terminal. Inspect real failures, review, qualify, exact duplicate-cache whitelist cleanup, scoped stable commit/push/readback. Continue full Daming/world/process/performance/device plan; never mark full goal complete from component QA."
+}

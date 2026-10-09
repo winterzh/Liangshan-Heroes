@@ -1,0 +1,75 @@
+{
+  "schema": "campaign_callback_runtime_preliminary_independent_review_v1",
+  "review_revision": 2,
+  "reviewed_at_utc": "2026-10-09T00:55:49.359942+00:00",
+  "independent": true,
+  "source_only": true,
+  "static_api_closure_passed": true,
+  "approved_stages": [],
+  "helper_sha256": "1d1edb269e33d21c7ebd5d75b5f9d0d84c6c4b7b0b5d0f39e98433b7bb865e7e",
+  "source_spec_file_sha256": "8d2d349144e29ff3682f1abb35d0cf39089c9bdcc98055b0c487779057ac2ba3",
+  "helper_pin": {
+    "path": "D:/AI项目/水浒/开发工程/tools/campaign_callback_runtime_v1.py",
+    "bytes": 13076,
+    "sha256": "1d1edb269e33d21c7ebd5d75b5f9d0d84c6c4b7b0b5d0f39e98433b7bb865e7e"
+  },
+  "source_spec_pin": {
+    "path": "D:/AI项目/水浒/开发工程/qa/campaign_progress_recovery_20261008/CALLBACK_RUNTIME_SOURCE_SPEC_V2.json",
+    "bytes": 30211,
+    "sha256": "8d2d349144e29ff3682f1abb35d0cf39089c9bdcc98055b0c487779057ac2ba3"
+  },
+  "previous_rejected_review_pin": {
+    "path": "D:/AI项目/水浒/开发工程/qa/campaign_progress_recovery_20261008/CALLBACK_RUNTIME_PRELIMINARY_REVIEW_V1.json",
+    "bytes": 5435,
+    "sha256": "e7a13889fb2289ec14b89fd1831d792b8f032fadecb9961de691b805764acf87"
+  },
+  "snapshot_pin": {
+    "path": "D:/AI项目/水浒/开发工程/qa/campaign_progress_recovery_20261008/campaign_callback_runtime_v1_source_snapshot.py",
+    "bytes": 13076,
+    "sha256": "1d1edb269e33d21c7ebd5d75b5f9d0d84c6c4b7b0b5d0f39e98433b7bb865e7e"
+  },
+  "blocking_findings": [],
+  "resolved_findings": [
+    {
+      "id": "CALLBACK-RUNTIME-CLOSURE-001",
+      "status": "closed_for_this_static_source_group",
+      "fix": "Successor seal directly pins the missing historical NativeExports leaf, original V1 spec/rejection and static closure checker. Its four direct local dependencies are also pinned."
+    }
+  ],
+  "source_delta": {
+    "metadata_only": true,
+    "runtime_V1_bytes_and_SHA_unchanged": true,
+    "runtime_snapshot_byte_exact": true,
+    "old69pins_rows_exact_preserved": true,
+    "added_pins": 4,
+    "implementation_or_validator_changes": false
+  },
+  "independent_closure_checks": {
+    "source_pins_verified": 73,
+    "all_pinned_local_tools_import_edges": 118,
+    "missing_local_import_pins": [],
+    "duplicate_resolved_casefold_pin_paths": false,
+    "checker_source_reviewed": true,
+    "limit": "AST establishes local static imports only; it does not execute code or prove dynamic imports/current-engine/native behavior."
+  },
+  "reused_V1_finite_conclusions": "Existing independent 24 primitive environment/terminal-transition/tail and cleanup-AST conclusions are unchanged. Driver handshake, fixed protected environment, original raw custody and validator-before-child-release paths were statically reviewed; none is promoted to an actual callback phase result.",
+  "remaining_boundaries": [
+    "Full callback phase, actual successful controller/receiver constructor, socket and Popen have not been exercised.",
+    "Complete tail/report/CFG/lifecycle consumer and executable producer/source admission are unimplemented; future consumer must parse/replay original packet chain and reject truncation or unknown tail data.",
+    "No actual successful closed V12 prior or current-engine paused capture/traffic is verified here; future executable integration requires exact admission and early __debug__ guard."
+  ],
+  "qualification": {
+    "callback_phase_called": false,
+    "actual_constructor_called": false,
+    "socket_opened": false,
+    "Popen_started": false,
+    "Godot_started": false,
+    "actual_phase_qualified": false,
+    "successful_prior_V12_verified": false,
+    "complete_pipeline_qualified": false,
+    "actual_callback_qualified": false,
+    "original19_qualified": false,
+    "SDK_qualified": false,
+    "overall_goal_qualified": false
+  }
+}

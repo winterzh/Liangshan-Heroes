@@ -1,0 +1,115 @@
+--- E:\ChatGPT\daming_admit_v24o_proposal\run_daming_admit_v24r2.py
++++ E:\ChatGPT\daming_admit_v24o_proposal\run_daming_admit_v24s.py
+@@ -1,5 +1,5 @@
+-# Unexecuted v24r2 sibling: exact executed v24r1 qualification; require 60 seconds of continuous observed natural shared engine/lock idle.
+-# Source/runtime5102, q1 boundary, OwnedSlot and native A/B/C qualification are unchanged; no retry or control of other tasks.
++# Unexecuted v24s sibling: immutable executed r2 qualification plus own-only barrier one-shot listener lifecycle repair.
++# Source/runtime5102, q1 boundary, OwnedSlot, full A/B/C and continuous60-second natural idle retained; no old profile retry.
+ # Candidate v24r derives from immutable executed v24o4; no older producer is overwritten.
+ # This file is prepared only. Native import/regression/A/B/C must still prove qualification.
+ """Run one fresh frozen three-process Daming admission Session batch.
+@@ -38,6 +38,9 @@
+ CURRENT_CANDIDATE_INSTALLED_FILE_COUNT = 5102
+ INHERITED_EXECUTED_PRODUCER_SHA256 = 'f6506b67db21885f1afe6abde0d2e76b284dbe4673612add931360e5f93afb5d'
+ EXECUTED_DAMING_A_B_C_HARNESS_SHA256 = '2aade96b57e83b03e9c43cd21d9fd29490534778deb05ec98204c3a1ec1da74f'
++INHERITED_EXECUTED_R2_SHA256 = '1b486f16c955d5a54b7e7e15e570fc66e3573cc9f02581d6027e5a73be725fb4'
++V24S_DAMING_HARNESS_SHA256 = '76ed6f114de755b398112778ddabf5af820a30237b75070a5a2aaaea188b87db'
++V24S_DAMING_SCENE_SHA256 = 'd7e1475d5e2b5add7cf008ac163b1eb909b6a6889641eff6ddb5821500851dee'
+ BOUNDARY_HARNESS_SHA256 = "91e393e8cea2ffa4dc465ebadc1156349d967149999be53a2ae4c71268c96a1d"
+ BOUNDARY_SCENE_SHA256 = "56854ee5fdb931ece82abd6d056db19507d23e67c135b7020bbb69a016ec889f"
+ BOUNDARY_MANIFEST_SHA256 = "e14eb9a77f971d3e6a44e5a57b384aba87612b86e53216160f6e43cf34b6e4e6"
+@@ -209,7 +212,7 @@
+         self.native = None
+         self.code_pins = {}
+         self.reports = {}
+-        self.receipt = {"schema": "daming_admit_batch_v24r2", "complete": False, "run": str(run),
++        self.receipt = {"schema": "daming_admit_batch_v24s", "complete": False, "run": str(run),
+                         "project": str(self.project), "source_root": str(self.root),
+                         "scope": SCOPE, "private_runtime_patches": 0, "qa_harness_added": True,
+                         "public_campaign_continue_qualified": False, "natural_victory_qualified": False,
+@@ -375,6 +378,8 @@
+             proposal = Path(__file__).resolve().parent
+             require(sha(proposal / "run_daming_admit_v24o4.py") == INHERITED_EXECUTED_PRODUCER_SHA256, "immutable executed producer changed")
+             require(sha(proposal / "daming_admit_cross_process_v24o.gd") == EXECUTED_DAMING_A_B_C_HARNESS_SHA256, "original executed A/B/C harness changed")
++            require(sha(proposal / "run_daming_admit_v24r2.py") == INHERITED_EXECUTED_R2_SHA256, "immutable executed r2 producer changed")
++            require(sha(proposal / "daming_admit_cross_process_v24s.gd") == V24S_DAMING_HARNESS_SHA256 and sha(proposal / "daming_admit_cross_process_v24s.tscn") == V24S_DAMING_SCENE_SHA256, "reviewed v24s harness/scene changed")
+             self.verify_failed_boundary_ancestry()
+             self.select_candidate(grouped, cache_project)
+             self.select_boundary()
+@@ -383,7 +388,7 @@
+             committed_owned_tool = subprocess.check_output(["git", "show", "HEAD:tools/owned_slot_retry_qa.gd"], cwd=self.root)
+             require(committed_owned_tool.replace(b"\r\n", b"\n") == owned_tool.read_bytes().replace(b"\r\n", b"\n"), "OwnedSlot original tool has uncommitted drift")
+             self.code_pins[str(owned_tool)] = sha(owned_tool)
+-            for name in ["run_daming_admit_v24r2.py", "run_daming_admit_v24r1.py", "run_daming_admit_v24r.py", "run_daming_admit_v24o4.py", "daming_admit_cross_process_v24o.gd", "daming_admit_cross_process_v24o.tscn"]:
++            for name in ["run_daming_admit_v24s.py", "daming_admit_cross_process_v24s.gd", "daming_admit_cross_process_v24s.tscn", "run_daming_admit_v24r2.py", "run_daming_admit_v24r1.py", "run_daming_admit_v24r.py", "run_daming_admit_v24o4.py", "daming_admit_cross_process_v24o.gd", "daming_admit_cross_process_v24o.tscn"]:
+                 self.code_pins[str(proposal / name)] = sha(proposal / name)
+             self.receipt["helper_and_proposal_files"] = [{"path": p, "sha256": digest} for p, digest in self.code_pins.items()]
+             self.input_integrity()
+@@ -760,7 +765,7 @@
+             dump_new(self.run / "qualified_import_metadata_companions.json", correction)
+             self.receipt["import_metadata_companions_manifest_sha256"] = sha(self.run / "qualified_import_metadata_companions.json")
+             additions = []
+-            for name in ["daming_admit_cross_process_v24o.gd", "daming_admit_cross_process_v24o.tscn"]:
++            for name in ["daming_admit_cross_process_v24s.gd", "daming_admit_cross_process_v24s.tscn"]:
+                 source = Path(__file__).resolve().with_name(name)
+                 target = self.project / "tools" / name
+                 self.copy_checked(source, target, self.code_pins[str(source)])
+@@ -910,6 +915,34 @@
+             require(data["orders"] == 0, "B/C driver issued gameplay orders")
+         if case == CASES[1]: mandatory |= {"original natural native tick completes admission after resume", "admission event/report/control/marker effects occur exactly once", "Mission elapsed advances only by resumed fixed physics ticks", "complete Session save_held succeeds"}
+         if case == CASES[2]: mandatory |= {"second generation independently read and no driver orders", "requested real uninterrupted ticks observed", "final running-world complete capture succeeds", "process C leaves generation-two disk slot intact"}
++        hold_labels = ["A partial admission"] if case == CASES[0] else ["restored complete world", "B admitted resave" if case == CASES[1] else "C post-run final audit"]
++        for hold_label in hold_labels:
++            mandatory |= {hold_label + " actual barrier request", hold_label + " real healthy HELD", hold_label + " exact two owned one-shot barrier listeners"}
++            for stage in ["before_connect", "after_wait"]:
++                mandatory.add(hold_label + " " + stage + " both own barrier listeners cleared")
++                for signal_name in ["capture_ready", "capture_rejected"]:
++                    mandatory.add(hold_label + " " + stage + " " + signal_name + " only own listeners cleared")
++        audits = [row["hold_connection_audit"] for row in data.get("observations", []) if "hold_connection_audit" in row]
++        require(len(audits) == len(hold_labels) * 3, "actual hold connection lifecycle row count mismatch")
++        require([(row.get("label"), row.get("stage")) for row in audits] == [(label, stage) for label in hold_labels for stage in ["before_connect", "installed", "after_wait"]], "actual hold connection lifecycle sequence mismatch")
++        for audit in audits:
++            require(set(audit.get("signals", {})) == {"capture_ready", "capture_rejected"}, "actual both barrier signal audit absent")
++            if audit["stage"] == "installed":
++                require(audit.get("ready_error") == 0 and audit.get("rejected_error") == 0, "actual barrier connect failed")
++                targets = []
++                for signal_name, method in [("capture_ready", "_on_held"), ("capture_rejected", "_on_rejected")]:
++                    row = audit["signals"][signal_name]
++                    require(row.get("own_count") == 1 and row.get("flags") == [4] and row.get("methods") == [method] and row.get("bound_counts") == [0] and row.get("unbound_counts") == [0], "actual exact one-shot callable/flags mismatch")
++                    require(isinstance(row.get("targets"), list) and len(row["targets"]) == 1 and isinstance(row["targets"][0], int) and row["targets"][0] > 0, "actual callable target absent")
++                    targets.append(row["targets"][0])
++                require(targets[0] == targets[1], "barrier callbacks do not target same actual QA instance")
++            else:
++                for signal_name in ["capture_ready", "capture_rejected"]:
++                    row = audit["signals"][signal_name]
++                    require(row.get("own_after") == 0 and row.get("flags_after") == [] and row.get("other_before") == row.get("other_after") and row.get("other_unchanged") is True, "cleanup left own listener or changed another callback")
++                    require(row.get("own_count") in [0, 1] and row.get("flags") == ([] if row["own_count"] == 0 else [4]), "unexpected stale own listener count/flags")
++                    if audit["stage"] == "after_wait":
++                        require(row["own_count"] == (0 if signal_name == "capture_ready" else 1), "actual success did not consume ready while retaining then clearing rejected one-shot")
+         require(mandatory <= labels, "required original case coverage absent: " + str(sorted(mandatory - labels)))
+         require("DAMING_ADMIT_V24O_COMPLETE " + case in text, "native terminal marker missing")
+         handoff_name = "handoff_A.json" if case == CASES[0] else "handoff_B.json"
+@@ -946,12 +979,12 @@
+         def guarded(step, text):
+             require(step["exit_code"] == 2 and "PRIVATE_PROFILE_REQUIRED" in text and not (self.output / CASES[0]).exists(), "negative profile guard failed or wrote regular evidence")
+             require(not list((self.profile / "appdata").rglob("handoff_A.json")), "negative guard wrote continuation handoff")
+-        self.native_phase("profile_guard", ["--headless", "res://tools/daming_admit_cross_process_v24o.tscn"], guard_env, 300, guarded)
++        self.native_phase("profile_guard", ["--headless", "res://tools/daming_admit_cross_process_v24s.tscn"], guard_env, 300, guarded)
+         self.execute_regressions()
+         for case in CASES:
+             env = self.env.copy()
+             env.update(DAMING_ADMIT_CASE=case, DAMING_ADMIT_NONCE=uuid.uuid4().hex)
+-            self.native_phase(case, ["--rendering-method", "gl_compatibility", "--audio-driver", "Dummy", "--resolution", "1280x720", "--position", "30000,30000", "res://tools/daming_admit_cross_process_v24o.tscn"], env, 600,
++            self.native_phase(case, ["--rendering-method", "gl_compatibility", "--audio-driver", "Dummy", "--resolution", "1280x720", "--position", "30000,30000", "res://tools/daming_admit_cross_process_v24s.tscn"], env, 600,
+                               lambda step, text, case=case: self.validate_case(case, step, text))
+         with self.stage("final_source_native_and_slot_audit") as step:
+             self.input_integrity(True)
+@@ -997,7 +1030,7 @@
+     require(args.source_root.is_dir() and (args.source_root / "project.godot").is_file(), "source root not a Godot project")
+     require(not args.work_root.is_relative_to(args.source_root) and args.work_root != args.source_root, "work root must be outside source checkout")
+     args.work_root.mkdir(parents=True, exist_ok=True)
+-    run = args.work_root / ("daming_admit_v24r2_" + uuid.uuid4().hex[:8])
++    run = args.work_root / ("daming_admit_v24s_" + uuid.uuid4().hex[:8])
+     run.mkdir(exist_ok=False)
+     runner = Runner(args, run)
+     code = 0

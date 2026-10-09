@@ -1,0 +1,57 @@
+"""Draw fresh mathematical infantry pose references; never open or transform a bitmap."""
+from pathlib import Path
+from PIL import Image,ImageDraw
+import math,json,hashlib
+base=Path(__file__).parent;out=base/'pose_diagrams_v1';out.mkdir(exist_ok=True)
+def sub(a,b):return tuple(x-y for x,y in zip(a,b))
+def add(a,b):return tuple(x+y for x,y in zip(a,b))
+def mul(a,s):return tuple(x*s for x in a)
+def dot(a,b):return sum(x*y for x,y in zip(a,b))
+def cross(a,b):return(a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0])
+def norm(v):return mul(v,1/math.sqrt(dot(v,v)))
+L='#d93830';R='#245cd6';B='#454c54';W='#ba985d';files=[]
+for pose in ['idle','walk_a','walk_b','windup','strike','hurt','fall','terminal']:
+ parts=[]
+ def line(a,b,r,c):parts.append(('line',a,b,r,c))
+ def ball(p,r,c):parts.append(('ball',p,p,r,c))
+ low=.88;high=1.48;head=1.73;lean=0
+ if pose=='hurt':lean=.16
+ if pose=='fall':low=.50;high=1.0;head=1.25;lean=-.18
+ line((0,low,0),(0,high,lean),.20,B);ball((0,head,lean),.15,'#aa927a');ball((0,head,lean-.16),.04,'#222222')
+ legs=[((-.15,low,0),(-.23,.46,-.12),(-.3,.10,-.18),L),((.15,low,0),(.23,.46,.12),(.3,.10,.20),R)]
+ if pose in ('walk_a','walk_b'):
+  a=1 if pose=='walk_a' else -1
+  legs=[((-.15,low,0),(-.23,.48,-.16*a),(-.25,.10 if a==1 else .20,-.38*a),L),((.15,low,0),(.23,.48,.16*a),(.25,.20 if a==1 else .10,.38*a),R)]
+ if pose=='fall':legs=[((-.15,low,0),(-.23,.1,-.15),(-.24,.12,.30),L),((.15,low,0),(.23,.1,-.15),(.24,.12,.30),R)]
+ for hip,knee,ankle,col in legs:
+  line(hip,knee,.09,col);line(knee,ankle,.075,col);line(add(ankle,(0,0,.06)),add(ankle,(0,0,-.15)),.09,col)
+ lh=(-.08,1.20,-.42);rh=(.32,1.04,.14);le=(-.40,1.23,-.18);re=(.48,1.10,.24)
+ if pose=='windup':lh=(-.12,1.75,-.20);rh=(.30,1.38,.35);le=(-.46,1.56,.06);re=(.53,1.48,.5)
+ if pose=='strike':lh=(-.12,1.18,-.75);rh=(.25,1.05,-.20);le=(-.40,1.25,-.42);re=(.50,1.15,-.05)
+ if pose=='hurt':lh=(-.08,1.08,-.30);rh=(.32,.92,.24);le=(-.4,1.1,-.1);re=(.5,1.02,.34)
+ if pose=='fall':lh=(-.4,.12,-.3);rh=(.30,.38,-.1);le=(-.4,.55,-.25);re=(.46,.65,.1)
+ for shoulder,elbow,hand,col in [((-.25,high,lean),le,lh,L),((.25,high,lean),re,rh,R)]:
+  line(shoulder,elbow,.07,col);line(elbow,hand,.065,col);ball(hand,.085,col)
+ axis=norm(sub(lh,rh)) if pose!='fall' else (0,0,-1)
+ tail=sub(rh,mul(axis,.40));tip=add(rh,mul(axis,1.15));line(tail,tip,.025,W)
+ headstart=sub(tip,mul(axis,.3));line(headstart,tip,.085,'#9e8f75')
+ for t in (.08,.20):
+  p=sub(tip,mul(axis,t));line(add(p,(-.13,0,0)),add(p,(.13,0,0)),.025,'#77726b');line(add(p,(0,-.13,0)),add(p,(0,.13,0)),.025,'#77726b')
+ ball(rh,.09,R)
+ if pose=='terminal':
+  def lying(p):return(p[1]-.82,.25-p[0],p[2])
+  parts=[(typ,lying(a),lying(b),r,c) for typ,a,b,r,c in parts]
+ for name,cam in [('se',(6,5,-6)),('sw',(-6,5,-6)),('ne',(6,5,6)),('nw',(-6,5,6))]:
+  forward=norm(cam);right=norm(cross((0,1,0),forward));up=cross(forward,right)
+  def proj(p):
+   q=sub(p,(0,1.0,0));return(int(384+dot(q,right)*180),int(384-dot(q,up)*180))
+  im=Image.new('RGB',(768,768),'#e2e4df');draw=ImageDraw.Draw(im)
+  for typ,a,b,r,c in sorted(parts,key=lambda row:dot(mul(add(row[1],row[2]),.5),forward)):
+   pa=proj(a);pb=proj(b);rad=max(2,int(r*180))
+   if typ=='line':draw.line([pa,pb],fill=c,width=rad*2)
+   for point in(pa,pb):draw.ellipse((point[0]-rad,point[1]-rad,point[0]+rad,point[1]+rad),fill=c)
+  draw.text((18,18),f'{pose} / {name.upper()} | RED anatomical LEFT, BLUE anatomical RIGHT',fill='#111111')
+  draw.text((18,40),'Standing: RED forward mace grip, BLUE rear grip. New geometry only.',fill='#111111')
+  p=out/(pose+'_'+name+'.png');im.save(p);files.append({'path':p.name,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()})
+(out/'receipt.json').write_text(json.dumps({'complete':True,'method':'orthographic_geometry_diagram','scope':'32 new geometry reference diagrams only. No bitmap read or transformed, no engine/profile/game touched.','generator_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),'artifacts':files},indent=2)+'\n')
+print(json.dumps({'complete':True,'reference_diagrams':len(files)}))

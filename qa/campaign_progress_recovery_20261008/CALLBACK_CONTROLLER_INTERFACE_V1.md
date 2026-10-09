@@ -1,0 +1,15 @@
+# 回调控制器 V1 接入接口与验收边界
+
+当前为源码候选，无原生或执行准入；仅两个实际 mark_dirty 路径。第三个云端写盘失败、真实driver、socket接收适配器、完整报告消费者与producer仍待实现和独立审查。
+
+CallbackController构造必须使用实际 retained subprocess.Popen、同一 suite.batch.child/live PID、CallbackSnapshotConnection包装的实际 loopback socket，以及当前step原output/profile/nonce。来源map路径与SHA须出现在producer pins；所有精确栈来源也须在该封存中。suite须提供read_fixed/freeze_bytes/integrity/persist、完整post-cold身份与原runtime_fields。
+
+驱动发布 campaign_callback_driver_ready_v1 JSON，精确字段schema/pid/nonce/case/identity/user_directory。identity是实际Godot provider返回的完整对象；必须eligible并匹配所有原六个封存字段，不给六字段字典添加虚构eligible。ready原件须由受审runtime按PID/nonce/原SHA marker闭合发布，再传原SHA给控制器。该ready格式本身不授身份或运行资格。
+
+handle只接完整原packet，先exclusive/fsync留存再decode。未来原包接收适配器不得先调用旧peer.receive()并丢弃decode失败包；必须保留长度头、首次原bytes、部分EOF及拒绝证据。socket timeout保留同一连接缓冲，不当终态。当前controller没有receive或process launcher，该接收/EOF路径尚未实现。
+
+当前发送每次先留send_attempt原frame，sendall完成后另留send_complete固定SHA标记。发送失败只保留attempt，不能标为已发送。接收、发送尝试及完成全部入first-byte ledger并持久化；输出目录只在本批owned范围，最多256事件/16MiB，超限失败不授资格。所有生产节点/方法保持，debugger命令仅固定breakpoint/stack/continue及只读快照。
+
+observation_result只返回一个在精确栈中取得的观察与原包索引，actual_case/original19/SDK/overall资格全部false。真正case通过须由未来完整消费者核对实际terminal Popen、正常时钟、before/after进度与CFG/lifecycle、账户夹具来源边界、真实同对象重试及重启；当前33项纯host栈匹配/拒绝检查不证明这些行为。早期24项SOURCE_PREFLIGHT带旧源码SHA，保留历史，不当当前完整controller验证。
+
+V1 eligible+六字段门禁已因 CALLBACK-IDENTITY-001 拒绝，原件保留。后继V2从已核完整安装清单计算Provider15字段精确期望；driver实际identity须完整严格类型相等，含本源码运行source_mode=true及optional存在/缺失、bytes/SHA。该修复仍只源码，原生身份须未来真实driver/host全链另验。

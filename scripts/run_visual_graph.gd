@@ -150,7 +150,7 @@ func configure_presentation(presentation_record: Variant, mission_record: Varian
 	if not MissionState.new()._context(context): return _failure("PARTITION_CONTEXT")
 	for key: String in ["level_id", "content_version", "mission_token", "presentation_token"]:
 		if typeof(context[key]) != TYPE_STRING: return _failure("PARTITION_CONTEXT")
-	if context.level_id not in ["level3", "level1", "level6", "level2", "level7", "level4"]: return _failure("PARTITION_OFFICIAL_LEVEL_REQUIRED")
+	if context.level_id not in ["level3", "level1", "level6", "level2", "level7", "level4", "level5", "level8"]: return _failure("PARTITION_OFFICIAL_LEVEL_REQUIRED")
 	for record: Variant in [presentation_record, mission_record]:
 		if typeof(record) != TYPE_DICTIONARY or not _fields(record, ["schema", "context", "payload"]) or typeof(record.schema) != TYPE_STRING or typeof(record.context) != TYPE_DICTIONARY: return _failure("PARTITION_COMPONENT_ENVELOPE")
 	var checked: Dictionary = Presentation.new().validate(presentation_record, context)
@@ -218,6 +218,8 @@ func _marker_objects(mission: Variant, root: Node2D) -> Dictionary:
 	if _presentation_context.get("level_id") == "level2": chapter_script = preload("res://scripts/levels/level2_jiangzhou_rts.gd")
 	if _presentation_context.get("level_id") == "level4": chapter_script = preload("res://scripts/levels/level4_lianhuanma_rts.gd")
 	if _presentation_context.get("level_id") == "level7": chapter_script = KuaiVisual.Kuai
+	if _presentation_context.get("level_id") == "level5": chapter_script = preload("res://scripts/levels/level5_gao_rts.gd")
+	if _presentation_context.get("level_id") == "level8": chapter_script = preload("res://scripts/levels/level8_daming_rts.gd")
 	if not is_instance_valid(_owner.level) or _owner.level.get_script() != chapter_script: return _failure("PARTITION_INSTALLED_LEVEL")
 	if mission._markers.size() != _marker_rows.size(): return _failure("PARTITION_MARKER_COUNT")
 	var objects: Dictionary = {}
@@ -1111,6 +1113,8 @@ func _reference_fields(kind: String) -> Array:
 	return ["chain_from"] if kind == "bolt" else _linked.REFERENCES.get(kind, [])
 
 func _wire_schema() -> String:
+	if _presentation_context.get("level_id") == "level5": return "level5_visual_graph_partition_v1"
+	if _presentation_context.get("level_id") == "level8": return "level8_visual_graph_partition_v1"
 	if _presentation_context.get("level_id") == "level4": return "level4_visual_graph_partition_v1"
 	if _presentation_context.get("level_id") == "level7": return "level7_visual_graph_partition_v1"
 	if _presentation_context.get("level_id") == "level6": return "level6_visual_graph_partition_v1"

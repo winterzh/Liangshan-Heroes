@@ -1,0 +1,81 @@
+{
+  "schema": "campaign_fx_partition_native_entry_proposal_v24n",
+  "candidate_only": true,
+  "engine_run": false,
+  "runtime_patched": false,
+  "repository_modified": false,
+  "source": "E:\\ChatGPT\\水浒\\tools\\campaign_fx_partition_qa.gd",
+  "candidate": "E:\\ChatGPT\\campaign_fx_v24n_proposal\\campaign_fx_partition_qa.gd",
+  "source_sha256": "09e6e3874951a3b8bc2b2afd318397476c68e80431e997805d7ac2cfaaff61a1",
+  "candidate_sha256": "efae6c04339c9a2385567ba2d9897540fde1bcfd06b3450d7f6275fe1976df70",
+  "original_mutations": [
+    "wrong_adapter",
+    "bind_changed",
+    "bind_extra",
+    "native_ready_flags",
+    "order",
+    "parent",
+    "state",
+    "metadata",
+    "metadata_missing",
+    "alias",
+    "token_missing",
+    "ungated",
+    "extra",
+    "plan",
+    "mission",
+    "clock",
+    "unknown_cleanup"
+  ],
+  "all_original_check_expressions_preserved": true,
+  "unchanged_lines_preserved_byte_for_byte": 444,
+  "changes": [
+    {
+      "operation": "insert",
+      "original_line_start": 282,
+      "original_line_end": 281,
+      "candidate_line_start": 282,
+      "candidate_line_end": 321
+    },
+    {
+      "operation": "insert",
+      "original_line_start": 301,
+      "original_line_end": 300,
+      "candidate_line_start": 341,
+      "candidate_line_end": 341
+    },
+    {
+      "operation": "insert",
+      "original_line_start": 302,
+      "original_line_end": 301,
+      "candidate_line_start": 343,
+      "candidate_line_end": 343
+    },
+    {
+      "operation": "replace",
+      "original_line_start": 313,
+      "original_line_end": 313,
+      "candidate_line_start": 355,
+      "candidate_line_end": 355
+    },
+    {
+      "operation": "replace",
+      "original_line_start": 315,
+      "original_line_end": 317,
+      "candidate_line_start": 357,
+      "candidate_line_end": 367
+    },
+    {
+      "operation": "insert",
+      "original_line_start": 425,
+      "original_line_end": 424,
+      "candidate_line_start": 475,
+      "candidate_line_end": 475
+    }
+  ],
+  "notes": [
+    "Two-step native entry wraps the original owned native mount.",
+    "Wrong ready flags uses a real exact registered Control connection and absence fails.",
+    "Added mounted deferred-binding failure cleanup; original detached cleanup retained."
+  ]
+}

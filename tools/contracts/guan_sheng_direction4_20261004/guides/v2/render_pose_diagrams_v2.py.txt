@@ -1,0 +1,59 @@
+"""New mathematical 3D reference diagrams, never read or alter any bitmap.
+Orthographic depth-sorted projection of labeled horse/rider limb chains.
+Pillow draws only the new diagram canvas. No production sprite generation.
+"""
+from pathlib import Path
+from PIL import Image,ImageDraw
+import math,json,hashlib
+base=Path(__file__).parent;out=base/'pose_diagrams_v2';out.mkdir(exist_ok=True)
+def sub(a,b):return tuple(x-y for x,y in zip(a,b))
+def add(a,b):return tuple(x+y for x,y in zip(a,b))
+def mul(a,s):return tuple(x*s for x in a)
+def dot(a,b):return sum(x*y for x,y in zip(a,b))
+def cross(a,b):return (a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0])
+def norm(v):return mul(v,1/math.sqrt(dot(v,v)))
+L='#d93830';R='#245cd6';H='#998571';B='#454c54';W='#ba985d'
+files=[]
+for pose in ['idle','walk_a','walk_b','windup','strike','hurt']:
+ parts=[]
+ def line(a,b,r,c):parts.append(('line',a,b,r,c))
+ def ball(p,r,c):parts.append(('ball',p,p,r,c))
+ # Horse aligned to negative world Z, anatomical left is negative world X.
+ line((0,1.1,.65),(0,1.1,-.5),.32,H)
+ line((0,1.15,-.55),(0,1.75,-.9),.17,H);line((0,1.77,-.93),(0,1.68,-1.35),.13,H)
+ line((0,1.75,-.95),(0,1.98,-.91),.045,B)
+ line((0,1.2,.6),(0,.55,1.1),.055,B)
+ for x in [-.25,.25]:
+  for z in [-.48,.48]:
+   delta=0
+   if pose in ['walk_a','walk_b']:delta=(.44 if x*z>0 else -.44)*(1 if pose=='walk_a' else -1)
+   col=L if x<0 else R
+   knee=(x,.55,z+delta*.5);hoof=(x,.10 if delta<=0 else .20,z+delta)
+   line((x,1.06,z),knee,.08,col);line(knee,hoof,.065,col);ball(hoof,.09,col)
+ line((0,1.45,.06),(0,2.05,.06),.20,B);ball((0,2.31,.06),.15,'#aa927a');ball((0,2.30,-.09),.05,'#222222')
+ for x in [-1,1]:
+  col=L if x<0 else R
+  line((x*.16,1.5,.08),(x*.38,1.1,-.08),.075,col);line((x*.38,1.1,-.08),(x*.35,.75,-.1),.065,col)
+ lh=(-.15,1.98,-.48);rh=(.35,1.8,.15)
+ le=(-.40,2.0,-.15);re=(.55,1.88,.22)
+ if pose=='windup':lh=(-.18,2.52,-.3);rh=(.37,2.18,.35);le=(-.4,2.3,-.06);re=(.55,2.4,.55)
+ if pose=='strike':lh=(-.25,1.88,-.88);rh=(.23,1.79,-.18);le=(-.40,1.95,-.5);re=(.50,1.9,.06)
+ if pose=='hurt':lh=(-.15,1.88,-.34);rh=(.35,1.70,.28);le=(-.4,1.86,-.16);re=(.55,1.80,.3)
+ for shoulder,elbow,hand,col in [((-.25,2.05,.06),le,lh,L),((.25,2.05,.06),re,rh,R)]:
+  line(shoulder,elbow,.07,col);line(elbow,hand,.065,col);ball(hand,.10,col)
+ axis=norm(sub(lh,rh));tip=add(lh,mul(axis,.85));tail=sub(rh,mul(axis,.65))
+ line(tail,tip,.025,W);line(tip,add(tip,(0,.24,0)),.09,'#c1c7d0');ball(lh,.09,L);ball(rh,.09,R)
+ for name,cam in [('se',(6,5,-6)),('sw',(-6,5,-6)),('ne',(6,5,6)),('nw',(-6,5,6))]:
+  forward=norm(cam);right=norm(cross((0,1,0),forward));up=cross(forward,right)
+  def proj(p):
+   q=sub(p,(0,1.2,0));return (int(384+dot(q,right)*140),int(380-dot(q,up)*140))
+  im=Image.new('RGB',(768,768),'#e2e4df');draw=ImageDraw.Draw(im)
+  for typ,a,b,r,c in sorted(parts,key=lambda row:dot(mul(add(row[1],row[2]),.5),forward)):
+   pa=proj(a);pb=proj(b);rad=max(2,int(r*140))
+   if typ=='line':draw.line([pa,pb],fill=c,width=rad*2)
+   for point in [pa,pb]:draw.ellipse((point[0]-rad,point[1]-rad,point[0]+rad,point[1]+rad),fill=c)
+  draw.text((18,18),f'{pose} / {name.upper()} | RED = anatomical LEFT, BLUE = anatomical RIGHT',fill='#111111')
+  draw.text((18,40),'Forward grip RED near blade; rear grip BLUE near butt. Reference only.',fill='#111111')
+  p=out/(pose+'_'+name+'.png');im.save(p);files.append({'path':p.name,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()})
+(out/'receipt.json').write_text(json.dumps({'complete':True,'method':'deterministic_orthographic_geometry_diagram','scope':'24 newly drawn reference diagrams only; no bitmap was read or transformed; no game, engine or profile touched.','generator_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),'artifacts':files},indent=2)+'\n')
+print(json.dumps({'complete':True,'reference_diagrams':len(files)}))

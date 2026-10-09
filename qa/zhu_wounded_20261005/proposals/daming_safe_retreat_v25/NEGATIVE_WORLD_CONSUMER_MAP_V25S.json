@@ -1,0 +1,852 @@
+{
+  "schema": "v25_world_negative_consumer_map_v1",
+  "status": "static_exact_API_adapter_source_not_native_qualified",
+  "interface_path": "E:\\ChatGPT\\daming_safe_retreat_v25_proposal\\NEGATIVE_WORLD_INTERFACE_V25.json",
+  "interface_sha256": "bb633b1e4774797e271c80f9bbec89f5be5f71ffe55568c9c582997045f896a6",
+  "harness": {
+    "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/daming_safe_retreat_negative_world_v25.gd",
+    "sha256": "c6ce39fe4b36017acbd536b4ba2f7e1959ecc83abed79b0d7cbd50bb0c055a93",
+    "bytes": 28996
+  },
+  "scene": {
+    "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/daming_safe_retreat_negative_world_v25.tscn",
+    "sha256": "7124a546c4b720488a3dba5ff3f46d9c682e44f4ffa9114c023f0702c0b07abb",
+    "bytes": 220
+  },
+  "required_cases": [
+    {
+      "case": "safe_queue_nonempty",
+      "expected_code": "UNIT_LEVEL8_SAFE_RETREAT_QUEUE",
+      "expected_guard_layer": "full_unit_contract",
+      "direct_pair_branch_coverage": false
+    },
+    {
+      "case": "safe_stop__chase_intent",
+      "expected_code": "UNIT_LEVEL8_SAFE_RETREAT_STOP_ANCHOR",
+      "expected_guard_layer": "full_unit_contract",
+      "direct_pair_branch_coverage": false
+    },
+    {
+      "case": "safe_stop__group_cap",
+      "expected_code": "UNIT_LEVEL8_SAFE_RETREAT_STOP_ANCHOR",
+      "expected_guard_layer": "full_unit_contract",
+      "direct_pair_branch_coverage": false
+    },
+    {
+      "case": "safe_stop__has_home",
+      "expected_code": "UNIT_LEVEL8_SAFE_RETREAT_STOP_ANCHOR",
+      "expected_guard_layer": "full_unit_contract",
+      "direct_pair_branch_coverage": false
+    },
+    {
+      "case": "safe_stop__home",
+      "expected_code": "UNIT_LEVEL8_SAFE_RETREAT_STOP_ANCHOR",
+      "expected_guard_layer": "full_unit_contract",
+      "direct_pair_branch_coverage": false
+    },
+    {
+      "case": "safe_stop__hua_lock_shots",
+      "expected_code": "UNIT_LEVEL8_SAFE_RETREAT_STOP_ANCHOR",
+      "expected_guard_layer": "full_unit_contract",
+      "direct_pair_branch_coverage": false
+    },
+    {
+      "case": "other_role_null",
+      "expected_code": "LEVEL8_SAFE_REQUIRED_ACTOR_MISSING",
+      "expected_guard_layer": "paired",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "other_dead_complete_lifetime",
+      "expected_code": "LEVEL8_SAFE_REQUIRED_ACTOR_LIFETIME",
+      "expected_guard_layer": "paired",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "other_alive_missing_active",
+      "expected_code": "LEVEL8_ACTIVE_MEMBERSHIP",
+      "expected_guard_layer": "full_graph_membership",
+      "direct_pair_branch_coverage": false
+    },
+    {
+      "case": "other_missing_root_record",
+      "expected_code": "UNBOUND_UNIT",
+      "expected_guard_layer": "full_level_registry",
+      "direct_pair_branch_coverage": false
+    },
+    {
+      "case": "other_captured_outcome",
+      "expected_code": "UNIT_LEVEL8_UNSUPPORTED_STORY_OUTCOME",
+      "expected_guard_layer": "full_unit_contract",
+      "direct_pair_branch_coverage": false
+    },
+    {
+      "case": "safe_event_missing",
+      "expected_code": "LEVEL8_SAFE_EVENT_OUTCOME_PAIR",
+      "expected_guard_layer": "paired",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "safe_actor_outcome_empty",
+      "expected_code": "LEVEL8_SAFE_EVENT_OUTCOME_PAIR",
+      "expected_guard_layer": "paired",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "other_safe_event_without_retreat",
+      "expected_code": "LEVEL8_SAFE_EVENT_OUTCOME_PAIR",
+      "expected_guard_layer": "paired",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "root_safe_selection",
+      "expected_code": "LEVEL8_SAFE_SELECTED_ROOT",
+      "expected_guard_layer": "paired",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "root_safe__ability_caster",
+      "expected_code": "LEVEL8_SAFE_ARMED_CASTER",
+      "expected_guard_layer": "paired",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "root_safe__item_caster",
+      "expected_code": "LEVEL8_SAFE_ARMED_CASTER",
+      "expected_guard_layer": "paired",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "safe_caster__walk_casts",
+      "expected_code": "LEVEL8_SAFE_CAST_INTENT",
+      "expected_guard_layer": "paired",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "safe_caster__pending_casts",
+      "expected_code": "LEVEL8_SAFE_CAST_INTENT",
+      "expected_guard_layer": "paired",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "safe_caster__channels",
+      "expected_code": "LEVEL8_SAFE_CAST_INTENT",
+      "expected_guard_layer": "paired",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "safe_caster__walk_item_casts",
+      "expected_code": "LEVEL8_SAFE_CAST_INTENT",
+      "expected_guard_layer": "paired",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "safe_caster__pending_item_casts",
+      "expected_code": "LEVEL8_SAFE_CAST_INTENT",
+      "expected_guard_layer": "paired",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "freed_event_missing",
+      "expected_code": "LEVEL8_SAFE_RESCUE_EVENT_PAIR",
+      "expected_guard_layer": "paired",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "rescue_done_false",
+      "expected_code": "LEVEL8_SAFE_RESCUE_EVENT_PAIR",
+      "expected_guard_layer": "paired",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_units_schema_nil",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_units_schema_bool",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_units_schema_int",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_units_schema_float",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_units_schema_array",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_units_schema_dictionary",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_units_content_version_nil",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_units_content_version_bool",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_units_content_version_int",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_units_content_version_float",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_units_content_version_array",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_units_content_version_dictionary",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_schema_nil",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_schema_bool",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_schema_int",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_schema_float",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_schema_array",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_schema_dictionary",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_level_id_nil",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_level_id_bool",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_level_id_int",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_level_id_float",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_level_id_array",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_level_id_dictionary",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_content_version_nil",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_content_version_bool",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_content_version_int",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_content_version_float",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_content_version_array",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_content_version_dictionary",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_mission_token_nil",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_mission_token_bool",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_mission_token_int",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_mission_token_float",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_mission_token_array",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_level_mission_token_dictionary",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_root_schema_nil",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_root_schema_bool",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_root_schema_int",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_root_schema_float",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_root_schema_array",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_root_schema_dictionary",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_root_content_version_nil",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_root_content_version_bool",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_root_content_version_int",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_root_content_version_float",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_root_content_version_array",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_root_content_version_dictionary",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_schema_nil",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_schema_bool",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_schema_int",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_schema_float",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_schema_array",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_schema_dictionary",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_schema_nil",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_schema_bool",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_schema_int",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_schema_float",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_schema_array",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_schema_dictionary",
+      "expected_code": "LEVEL8_SAFE_IDENTITY_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_level_id_nil",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_level_id_bool",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_level_id_int",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_level_id_float",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_level_id_array",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_level_id_dictionary",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_content_version_nil",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_content_version_bool",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_content_version_int",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_content_version_float",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_content_version_array",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_content_version_dictionary",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_mission_token_nil",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_mission_token_bool",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_mission_token_int",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_mission_token_float",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_mission_token_array",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_mission_token_dictionary",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_presentation_token_nil",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_presentation_token_bool",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_presentation_token_int",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_presentation_token_float",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_presentation_token_array",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_mission_context_presentation_token_dictionary",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_level_id_nil",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_level_id_bool",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_level_id_int",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_level_id_float",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_level_id_array",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_level_id_dictionary",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_content_version_nil",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_content_version_bool",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_content_version_int",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_content_version_float",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_content_version_array",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_content_version_dictionary",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_mission_token_nil",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_mission_token_bool",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_mission_token_int",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_mission_token_float",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_mission_token_array",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_mission_token_dictionary",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_presentation_token_nil",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_presentation_token_bool",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_presentation_token_int",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_presentation_token_float",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_presentation_token_array",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    },
+    {
+      "case": "identity_presentation_context_presentation_token_dictionary",
+      "expected_code": "LEVEL8_SAFE_CONTEXT_TEXT_TYPE",
+      "expected_guard_layer": "pair_identity_type",
+      "direct_pair_branch_coverage": true
+    }
+  ],
+  "required_routes": [
+    "source",
+    "json"
+  ],
+  "required_row_fields": [
+    "case",
+    "route",
+    "passed",
+    "expected_code",
+    "actual_code",
+    "expected_guard_layer",
+    "direct_pair_branch_coverage",
+    "core_prepare_called",
+    "initially_empty",
+    "zero_world_before_dispose",
+    "core_battle_null",
+    "core_identity_null",
+    "core_unit_plan_empty",
+    "source_input_type_ieee_exact",
+    "mutated_packet_sha256",
+    "typed_document_sha256",
+    "cached_grids_preserved"
+  ],
+  "qualification_limits": {
+    "passed": true,
+    "pure_matrix_passed": true,
+    "fixture_ready": true,
+    "matrix_complete": true,
+    "complete_named_case_route_set": "exact Cartesian product; all executed_rows and checks pass, no minimum count shortcut",
+    "positives": "exact source and json, actual_A_unmodified, prepared true, detached inert and input_exact true",
+    "overall_v25_qualified": false,
+    "whole_world_dto_negative_only": true,
+    "live_object_capture_negative_implemented": false,
+    "live_object_capture_negative_qualified": false,
+    "separate_component_harness_implemented": false,
+    "future_producer_integration_qualified": false,
+    "log_zero_engine_or_script_errors": "producer must independently check native process/log/exit",
+    "pid_nonce_source_engine": "actual process and same frozen identity, all provenance hashes independently verified"
+  },
+  "native_run": false,
+  "separate_component_implemented": false,
+  "live_capture_implemented": false
+}

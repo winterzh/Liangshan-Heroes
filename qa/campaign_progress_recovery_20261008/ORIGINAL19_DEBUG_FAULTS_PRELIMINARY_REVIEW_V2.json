@@ -1,0 +1,67 @@
+{
+  "schema": "campaign_original19_debug_faults_preliminary_independent_review_v1",
+  "review_version": 2,
+  "independent": true,
+  "reviewer": "office_full_review",
+  "reviewed_at": "2026-10-08T21:10:46.490793+00:00",
+  "helper_sha256": "10aa7439c209eec1956d2d52ad2512097cf2e843f0c9444d41aaa7a77ee02558",
+  "source_spec_file_sha256": "7b89f97c74930345820492cfe2965632fe0e5297fceda350256e20a8b139435b",
+  "helper_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\tools\\campaign_original19_debug_faults_v2.py",
+    "bytes": 19345,
+    "sha256": "10aa7439c209eec1956d2d52ad2512097cf2e843f0c9444d41aaa7a77ee02558"
+  },
+  "source_spec_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\ORIGINAL19_DEBUG_FAULTS_SOURCE_SPEC_V2.json",
+    "bytes": 9015,
+    "sha256": "7b89f97c74930345820492cfe2965632fe0e5297fceda350256e20a8b139435b"
+  },
+  "approved_stages": [],
+  "source_integrity_verified": true,
+  "source_import_closure_verified": true,
+  "source_pins_verified": 23,
+  "python_modules": 9,
+  "static_local_import_edges": 15,
+  "missing_import_pins": [],
+  "synthetic_host_repro_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\ORIGINAL19_DEBUG_FAULTS_SYNTHETIC_HOST_REPRO_V1_V2_R2.json",
+    "bytes": 10873,
+    "sha256": "160d7a5b6904a48f75a757f16de324c610dcca7f95830a4b8fec221da5d481dd"
+  },
+  "synthetic_host_repro_script_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\ORIGINAL19_DEBUG_FAULTS_SYNTHETIC_HOST_REPRO_V1_V2_R2.py",
+    "bytes": 9051,
+    "sha256": "dc0a444b680950916195da60b564b8e3046e196ca21379a51980276175799133"
+  },
+  "initial_host_repro_script_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\ORIGINAL19_DEBUG_FAULTS_SYNTHETIC_HOST_REPRO_V1_V2.py",
+    "bytes": 8987,
+    "sha256": "a53cdc24ee12ba4d4b0fbfe554795cd1ecd005ab9123c6b94503ef66c2304006"
+  },
+  "synthetic": true,
+  "pure_host": true,
+  "real_Popen_and_Godot_debugger_not_exercised": true,
+  "native_started_by_reviewer": false,
+  "native_qualified": false,
+  "producer_implemented": false,
+  "full_original19_qualified": false,
+  "UI_qualified": false,
+  "SDK_qualified": false,
+  "overall_goal_qualified": false,
+  "static_api_closure_passed": true,
+  "approved_static_component_only": true,
+  "findings": [],
+  "resolved_findings": [
+    {
+      "id": "DEBUGFAULT-PENDING-001",
+      "resolved": true,
+      "detail": "validate_pending now rechecks first injection/ready pins, exact immutable disk gen1/gen2 and no gen3, all15 pending fields and type-exact intent/memory/cloud/source prior SHA before filesystem mutation. Candidate faults validate staging/nonzero proposal and original public CFG SHA; prior faults require no prepared proposal/stage."
+    }
+  ],
+  "host_repro_summary": {
+    "seven_V1_counterexamples_refused_before_target_modification": true,
+    "repair_artifact_not_written_for_all_seven": true,
+    "synthetic_negative_nonzero_RefCounted_ID_positive": true
+  },
+  "qualification_note": "Finite component preliminary static compatibility only. Real Popen ownership, loopback debugger/stack behavior, actual Godot error diagnostics, actual source runtime/proposal semantics and complete producer aggregation were not executed by these synthetic tests. Production GD checks its real retained proposal/object before/after repair; this helper cannot inspect debugger object variables. Future producer must independently bind the complete native report, first-byte artifacts/source/owned PID+profile and precise diagnostic budget. No native/all19/fullproducer stage is granted."
+}

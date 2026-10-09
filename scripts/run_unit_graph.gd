@@ -10,6 +10,12 @@ const LEVEL3_SCHEMA := "level3_unit_graph_v1"
 const LEVEL1_SCHEMA := "level1_unit_graph_v1"
 const LEVEL6_SCHEMA := "level6_unit_graph_v1"
 const LEVEL2_SCHEMA := "level2_unit_graph_v1"
+const LEVEL5_SCHEMA := "level5_unit_graph_v1"
+const LEVEL8_SCHEMA := "level8_unit_graph_v1"
+const GAO_CONTEXT := {"mode":"campaign","level_id":"level5","waves":0}
+const DAMING_CONTEXT := {"mode":"campaign","level_id":"level8","waves":0}
+const Gao := preload("res://scripts/levels/level5_gao_rts.gd")
+const Daming := preload("res://scripts/levels/level8_daming_rts.gd")
 const LEVEL4_SCHEMA := "level4_unit_graph_v1"
 const LIAN_CONTEXT := {"mode": "campaign", "level_id": "level4", "waves": 0}
 const Lian := preload("res://scripts/levels/level4_lianhuanma_rts.gd")
@@ -66,12 +72,20 @@ func _configure_context(context: Dictionary) -> void:
 	if not _fields(context, ["mode", "level_id", "waves"]) or typeof(context.mode) != TYPE_STRING or typeof(context.level_id) != TYPE_STRING or typeof(context.waves) not in [TYPE_INT, TYPE_FLOAT]:
 		_scope_error = "GRAPH_CONTEXT_FIELDS"; return
 	if context.mode == "defense" and context.level_id == "" and context.waves == 30: return
-	if context.mode != "campaign" or context.waves != 0 or context.level_id not in ["level3", "level1", "level6", "level2", "level7", "level4"]:
+	if context.mode != "campaign" or context.waves != 0 or context.level_id not in ["level3", "level1", "level6", "level2", "level7", "level4", "level5", "level8"]:
 		_scope_error = "GRAPH_CONTEXT_UNSUPPORTED"; return
 	# Chapter roles may only be derived from this installed Level's checked record.
 	# No injected substitute factory/Unit/host/codec may weaken that contract.
 	if _unit_state_script != preload("res://scripts/run_unit_state.gd") or _identity_script != preload("res://scripts/run_graph_identity.gd") or _codec_script != preload("res://scripts/run_state_value_codec.gd") or _unit_script != preload("res://scripts/unit.gd") or _inventory_script != preload("res://scripts/hero_inventory.gd") or _battle_script != preload("res://scripts/battle.gd") or _map_script != preload("res://scripts/game_map.gd"):
 		_scope_error = "CHAPTER_INSTALLED_SCRIPTS_REQUIRED"; return
+	if context.level_id == "level5":
+		if CampaignScript.LEVELS.size() <= 4 or CampaignScript.LEVELS[4].id != "level5" or CampaignScript.LEVELS[4].script != (Gao as Script).resource_path:
+			_scope_error = "LEVEL5_INSTALLED_CATALOG_REQUIRED"; return
+		_graph_schema = LEVEL5_SCHEMA; _campaign_level_id = "level5"; return
+	if context.level_id == "level8":
+		if CampaignScript.LEVELS.size() <= 7 or CampaignScript.LEVELS[7].id != "level8" or CampaignScript.LEVELS[7].script != (Daming as Script).resource_path:
+			_scope_error = "LEVEL8_INSTALLED_CATALOG_REQUIRED"; return
+		_graph_schema = LEVEL8_SCHEMA; _campaign_level_id = "level8"; return
 	if context.level_id == "level4":
 		if CampaignScript.LEVELS.size() <= 3 or CampaignScript.LEVELS[3].id != "level4" or CampaignScript.LEVELS[3].script != (Lian as Script).resource_path:
 			_scope_error = "LEVEL4_INSTALLED_CATALOG_REQUIRED"; return
@@ -121,7 +135,14 @@ func _select_factory(level_record: Variant, content_version: String, known: Dict
 	var checked: Dictionary = LevelState.new().validate(level_record, _campaign_level_id, content_version, known, next_id, external_tokens, mission_token)
 	if not checked.ok: return _bad("LEVEL_" + String(checked.code), String(checked.get("field", "")))
 	var refs: Dictionary = checked.value.references
-	if _graph_schema == LEVEL4_SCHEMA:
+	if _graph_schema in [LEVEL5_SCHEMA, LEVEL8_SCHEMA]:
+		if _graph_schema == LEVEL5_SCHEMA:
+			var token: Variant = checked.value.external.end_button
+			if token != null and (typeof(token) != TYPE_STRING or token != "level5:end"):return _bad("LEVEL5_END_TOKEN")
+			if external_tokens.size() != (0 if token == null else 1) or (token != null and not external_tokens.has("level5:end")):return _bad("LEVEL5_END_EXTERNAL_SET")
+		var roles := {"values":checked.value.values,"references":refs,"external":checked.value.external}
+		_factory = _unit_state_script.new(_codec_script,_unit_script,_inventory_script,GAO_CONTEXT if _graph_schema == LEVEL5_SCHEMA else DAMING_CONTEXT,roles)
+	elif _graph_schema == LEVEL4_SCHEMA:
 		var lian_roles: Dictionary = refs.duplicate(true)
 		for field in ["broken_count", "lhm_killed", "waves", "drill_complete"]:
 			lian_roles[field] = checked.value.values[field]
@@ -262,12 +283,16 @@ func capture(battle: Variant, object_to_id: Variant, content_version: String,
 	var level_record: Variant = null
 	var mission_token := ""
 	var token_to_external: Dictionary = {}
-	if _graph_schema in [LEVEL3_SCHEMA, LEVEL1_SCHEMA, LEVEL6_SCHEMA, LEVEL2_SCHEMA, LEVEL7_SCHEMA, LEVEL4_SCHEMA]:
+	if _graph_schema in [LEVEL3_SCHEMA, LEVEL1_SCHEMA, LEVEL6_SCHEMA, LEVEL2_SCHEMA, LEVEL7_SCHEMA, LEVEL4_SCHEMA, LEVEL5_SCHEMA, LEVEL8_SCHEMA]:
 		if not _fields(chapter_boundary, ["mission_token", "deferred_drained"]) or typeof(chapter_boundary.mission_token) != TYPE_STRING or typeof(chapter_boundary.deferred_drained) != TYPE_BOOL or not chapter_boundary.deferred_drained:
 			return _bad("LEVEL_EXTERNAL_BOUNDARY_REQUIRED")
 		var external_to_token: Dictionary = {}
 		if _graph_schema == LEVEL1_SCHEMA:
 			external_to_token = _level1_external_tokens(battle.level)
+		elif _graph_schema == LEVEL5_SCHEMA:
+			var external: Dictionary = _level5_external_tokens(battle)
+			if not external.ok:return external
+			external_to_token = external.value
 		elif _graph_schema == LEVEL2_SCHEMA:
 			var external: Dictionary = _level2_external_tokens(battle)
 			if not external.ok: return external
@@ -307,11 +332,11 @@ func capture(battle: Variant, object_to_id: Variant, content_version: String,
 		"root_order": root_order, "active_order": active_order, "records": records, "next_entity_id": str(battle.next_entity_id)}
 	# Capture must enforce the same full-graph membership as file validation.
 	# A held source with a missing live/captured role in Battle.units is not saved.
-	if _graph_schema in [LEVEL3_SCHEMA, LEVEL1_SCHEMA, LEVEL6_SCHEMA, LEVEL2_SCHEMA, LEVEL7_SCHEMA, LEVEL4_SCHEMA]:
+	if _graph_schema in [LEVEL3_SCHEMA, LEVEL1_SCHEMA, LEVEL6_SCHEMA, LEVEL2_SCHEMA, LEVEL7_SCHEMA, LEVEL4_SCHEMA, LEVEL5_SCHEMA, LEVEL8_SCHEMA]:
 		var verified: Dictionary = validate(snapshot, content_version, level_record, mission_token, token_to_external)
 		if not verified.ok: return _capture_failed(verified, identity, owns_identity)
 	var response := {"ok": true, "value": snapshot, "identity": identity, "complete_battle_restore": false}
-	if _graph_schema in [LEVEL3_SCHEMA, LEVEL1_SCHEMA, LEVEL6_SCHEMA, LEVEL2_SCHEMA, LEVEL7_SCHEMA, LEVEL4_SCHEMA]: response["level_record"] = level_record
+	if _graph_schema in [LEVEL3_SCHEMA, LEVEL1_SCHEMA, LEVEL6_SCHEMA, LEVEL2_SCHEMA, LEVEL7_SCHEMA, LEVEL4_SCHEMA, LEVEL5_SCHEMA, LEVEL8_SCHEMA]: response["level_record"] = level_record
 	return response
 
 func _level1_external_tokens(level: Variant) -> Dictionary:
@@ -337,6 +362,28 @@ func _level2_external_tokens(battle: Variant) -> Dictionary:
 		if not is_same(button, found): return _bad("LEVEL2_DEPART_REFERENCE")
 		return {"ok": true, "value": {button: "level2:depart"}}
 	if is_instance_valid(found): return _bad("LEVEL2_DEPART_REFERENCE")
+	return {"ok": true, "value": {}}
+
+func _level5_external_tokens(battle: Variant) -> Dictionary:
+	if typeof(battle.level) != TYPE_OBJECT or not is_instance_valid(battle.level) or battle.level.get_script() != Gao:
+		return _bad("LEVEL5_INSTALLED_LEVEL_REQUIRED")
+	var mission: Variant = battle.mission
+	if typeof(mission) != TYPE_OBJECT or not is_instance_valid(mission) or mission.get_script() != preload("res://scripts/campaign_mission.gd") or not is_instance_valid(mission._buttons) or not mission._buttons is Node or mission._buttons.is_queued_for_deletion():
+		return _bad("LEVEL5_MISSION_BUTTONS")
+	var found: Variant = null
+	for child: Node in mission._buttons.get_children():
+		var meta: Variant = child.get_meta(&"campaign_presentation_v1", null)
+		if typeof(meta) != TYPE_DICTIONARY: continue
+		if typeof(meta.get("kind")) != TYPE_STRING: return _bad("LEVEL5_BUTTON_METADATA")
+		if meta.kind != "level": continue
+		if not child is Button or child.is_queued_for_deletion() or child.get_script() != null or typeof(meta.get("button_id")) != TYPE_STRING or meta.button_id != "gao_end" or is_instance_valid(found):
+			return _bad("LEVEL5_END_BUTTON")
+		found = child
+	var button: Variant = battle.level.end_button
+	if is_instance_valid(button):
+		if not is_same(button, found): return _bad("LEVEL5_END_REFERENCE")
+		return {"ok": true, "value": {button: "level5:end"}}
+	if is_instance_valid(found): return _bad("LEVEL5_END_REFERENCE")
 	return {"ok": true, "value": {}}
 
 func _level7_external_tokens(battle: Variant) -> Dictionary:
@@ -400,7 +447,11 @@ func validate(snapshot: Variant, content_version: String, level_record: Variant 
 			identity.dispose()
 			return _bad("UNIT_" + String(result.get("code", "INVALID")), str(index) + ":" + String(result.get("field", "")))
 		states[record.entity_id] = result
-	if _graph_schema == LEVEL4_SCHEMA:
+	if _graph_schema in [LEVEL5_SCHEMA,LEVEL8_SCHEMA]:
+		var membership: Dictionary = _factory.validate_level5_membership(states,snapshot.active_order) if _graph_schema == LEVEL5_SCHEMA else _factory.validate_level8_membership(states,snapshot.active_order)
+		if not membership.ok:
+			identity.dispose();return membership
+	elif _graph_schema == LEVEL4_SCHEMA:
 		var membership: Dictionary = _factory.validate_level4_membership(states, snapshot.active_order)
 		if not membership.ok:
 			identity.dispose()

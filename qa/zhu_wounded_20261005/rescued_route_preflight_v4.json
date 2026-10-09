@@ -1,0 +1,28 @@
+{
+  "scope": "Read-only production/save route preflight, not integration acceptance",
+  "inputs": [
+    {
+      "path": "scripts/levels/level3_zhujiazhuang_rts.gd",
+      "sha256": "a1e77b29e1e2a5e957179195c9f3fcf74edac7050db6588acf41e39e198f7084"
+    },
+    {
+      "path": "scripts/run_unit_state.gd",
+      "sha256": "bc9567ebe6fbca839c624ced607ff5f6df15c3773e3f1ad1ba1efc2e1a181fc8"
+    },
+    {
+      "path": "scripts/art_db.gd",
+      "sha256": "32ae5000bdf213d2e2bda96d56bf08a7233abb5efef625fb635c94cccdbb22a9"
+    },
+    {
+      "path": "scripts/unit.gd",
+      "sha256": "49d59af30b2e8053b3420d715c02a97982cc91fc4c7af5c38cd36cb19ea1ffec"
+    }
+  ],
+  "findings": [
+    "Rescue callback sets blank art_variant",
+    "Level3 saved freed-prisoner validation requires blank art_variant",
+    "Detached candidate resolver is not production/campaign proof"
+  ],
+  "plan": "docs/RESCUED_ART_INTEGRATION_20261006.md",
+  "production_qualified": false
+}

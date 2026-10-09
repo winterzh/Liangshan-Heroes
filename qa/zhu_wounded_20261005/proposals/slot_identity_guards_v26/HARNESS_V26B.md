@@ -1,0 +1,13 @@
+# v26b 未执行 sibling：字段路径与根 shape 分开审计
+
+已先读取独立 REVIEW_V26.json `3d62f62e3eb4f0f473b306c661ba23d79ac5b434e65d5f62e6ce66aaaff3fde3`。旧GD692ba...、matrix b785...、fixture f01d...、HARNESS_STATIC49e8...以及源码proposal/pins全部保留字节。新GD SHA `9ea9bf99d48373576b6a0864bd09bc4b017c4e4cb4630806dbefa9f3d7ab0500`；scene `8c49935a4df1c19d1bd36d37649d474aad94a6fe42f380db0b955b09ae4a9284`；matrix `84c05409becdf5f5afdadf21feb1a9388507ad3121fa37ccf98c6a31190d556b`；wrapper `77edf4952731204402b05f86543a0bae0470672efc1e21c3f6a9035c5b83e379`。
+
+原全部134拒绝cases、pointer、replacement/value/type、exact expected codes、两route均保留，纠正仅scope：128条非空字段path ×source/JSON共256行，6条整root shape ×两route共12行，总134cases/268行。六root类型Nil/Bool/Int/Float/String/Array原先拒绝SLOT_FIELDS有效；它们不是字段singleleaf，不能称保留整个文档的其他leaf。
+
+Matrix及每原生report row明示mutation_scope=root_shape/single_path与root_shape/single_path/single_leaf flags。Root flags 为true/false/false；字段为false/true/true。`_single_path(empty)` 返回false。Root独立构造并对照exact replacement typeof/value、原good base未变及整个实际测试input before/after完整类型/IEEE fingerprint，报告root_replacement_type_value_audited=true、all_other_fields_audited=false。非root独立全量比较path外字段，反向flags；不把Root控制伪装成字段coverage。
+
+GD/scene未来bytecopy私有tools/，入口res://tools/slot_identity_guards_v26b.tscn。接口继续SLOT_IDENTITY_PROFILE/REPORT/FIXTURES/FIXTURES_SHA256/NONCE/ENGINE_SHA256/EXPECT_CONTENT与原private profile/SteamDisabled/CampaignQA边界。manifest schema=slot_identity_guard_fixtures_v26b；matrix schema=slot_identity_guard_native_matrix_plan_v26b；report schema=slot_identity_guard_report_v26b。新wrapper可只重指向同SHA冻结副本路径，inner matrix/pins/payload SHA仍代码硬pin。SourceSlot候选仍908f8591...，其他fixed source包括原Core未变化；若合并v25需另reviewed pin sibling，不绕过。
+
+报告分别expected/actual single_path_case_count128、single_path_route_count256、root_shape_case_count6、root_shape_route_count12，并校验总数134/268。pure_matrix_passed/exit0只这批组件逻辑；passed=false、overall_qualified=false、qualification_complete=false保留，因为真实current wholeclassic正例/矩阵、原完整OwnedSlot回归、producer整份native零SCRIPTERROR均另stage not_run。
+
+原输入全typeof/IEEE不变、actual历史pending decodedDTO诚实来源、196窄boundary、完整canonical每UTF8、decimal .0与Float0波次、hash/bytes/revision/envelope控制全部保留；没有新的native capture声称，没有factory/restore/tick/Slotdiskwrite。Futureproducer逐134ID两route及scope/code/fingerprint/sourcePIDnonce完整readback，缺整体正例不可标qualified。本轮没有engine/nativeparse/public改动。

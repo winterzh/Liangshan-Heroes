@@ -1,0 +1,77 @@
+{
+  "schema": "durable_campaign_support_host_tests_v2",
+  "tested_utc": "2026-10-08T13:42:38.836727+00:00",
+  "results": [
+    {
+      "command": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "tools/test_durable_campaign_full_support.py"
+      ],
+      "exit_code": 0,
+      "test_methods": 20,
+      "log": "test_durable_campaign_full_support.log",
+      "log_sha256": "b6356c27bf6fdd33ecfa0561d24aa7358ddcdabff852ea9248439c19ef5b5580"
+    },
+    {
+      "command": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "tools/test_durable_campaign_chain_v2.py"
+      ],
+      "exit_code": 0,
+      "test_methods": 3,
+      "log": "test_durable_campaign_chain_v2.log",
+      "log_sha256": "e19e539ff3a02e15390fa5ae613871447e6318e4df35d311c57dd52e317117cd"
+    }
+  ],
+  "test_methods": 23,
+  "source_pins": [
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\durable_campaign_full_runtime.py",
+      "snapshot": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\durable_chain_executor_v2\\durable_campaign_full_runtime.py",
+      "bytes": 13938,
+      "sha256": "0c8ce0b44bd7d4afd8813099f7de16b167c9b4941f99afacbc9208f95ae4e8c1"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\durable_campaign_full_evidence.py",
+      "snapshot": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\durable_chain_executor_v2\\durable_campaign_full_evidence.py",
+      "bytes": 12095,
+      "sha256": "6fc1f581843f1949d702be9e41e3f9fc1544b682c6131e4d284ba6e812b54a4d"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\durable_campaign_full_matrices.py",
+      "snapshot": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\durable_chain_executor_v2\\durable_campaign_full_matrices.py",
+      "bytes": 15976,
+      "sha256": "0cf09e81d27c1ab7068b9286f5e9f8b833ae06d2f0ae22b3e99aa661db8a302a"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\prepare_durable_matrix_validators.py",
+      "snapshot": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\durable_chain_executor_v2\\prepare_durable_matrix_validators.py",
+      "bytes": 4209,
+      "sha256": "62c74c1c9a021ede2efb3dd689bea58c6f6dff46b5e75cc9ffed8203866e9997"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\run_durable_campaign_chain_v2.py",
+      "snapshot": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\durable_chain_executor_v2\\run_durable_campaign_chain_v2.py",
+      "bytes": 32884,
+      "sha256": "04f1bc080ce5d3681eee463410c3b28e45ddb3515dc7446dcf57bb557c1b41d3"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\test_durable_campaign_full_support.py",
+      "snapshot": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\durable_chain_executor_v2\\test_durable_campaign_full_support.py",
+      "bytes": 18743,
+      "sha256": "46e3dd54366081b86ec1329a596e0bdcd5d1b1b8362e7f2c67eedb6faf9b8947"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\test_durable_campaign_chain_v2.py",
+      "snapshot": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\durable_chain_executor_v2\\test_durable_campaign_chain_v2.py",
+      "bytes": 2152,
+      "sha256": "f442c4f0bd481c2161fcaa7ee1867761c7eb4909f433e0f8f586cffbb8266553"
+    }
+  ],
+  "native_started": false,
+  "actual_campaign_fault19_qualified": false,
+  "overall_goal_qualified": false,
+  "scope": "Synthetic temporary data and mocked process faults only; fixed CFG paths and ACK bool alias rejection added."
+}

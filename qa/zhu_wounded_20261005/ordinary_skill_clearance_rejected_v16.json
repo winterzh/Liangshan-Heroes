@@ -1,0 +1,44 @@
+{
+  "qualified": false,
+  "receipt_sha256": "d32bd4e41cc4c87987ab4852438dc2fa9064fea80303e9da65432a34416c8a8f",
+  "report_sha256": "6a0cdf548596a102ca574d4dca884b2a95472576c261e43015c2cad4a35925f2",
+  "checks": 329,
+  "captures": 48,
+  "failures": [
+    "original enemy hero for cast target wu_song",
+    "original enemy hero for cast target wu_song",
+    "original enemy hero for cast target wu_song",
+    "original enemy hero for cast target wu_song"
+  ],
+  "harnesses": [
+    {
+      "path": "qa/zhu_wounded_20261005/harness/ordinary_skill_clearance_v16.gd",
+      "sha256": "eb70981e7735ff2928b9208f81501499c9818476325b3cfd022f7192762c6789"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/harness/run_ordinary_skill_clearance_v16.py",
+      "sha256": "73201c7a603807fd7892c829d6de9c8de95400c9ad51bb26d7c56923b68f2128"
+    }
+  ],
+  "lock_released": true,
+  "viewed_partial": [
+    {
+      "case": "lin_chong_0_se_mid_1440x960",
+      "path": "qa/zhu_wounded_20261005/ordinary_skill_clearance_preview_v16_frames/lin_chong_0_se_mid_1440x960.png",
+      "sha256": "35c838dab65ade581318f182468b24e215e8ac88ac1303abadb4fc9b3dfa04d4"
+    },
+    {
+      "case": "lin_chong_0_se_late_1920x1080",
+      "path": "qa/zhu_wounded_20261005/ordinary_skill_clearance_preview_v16_frames/lin_chong_0_se_late_1920x1080.png",
+      "sha256": "dc4a086659b6e4694b3f163b1892095eb7c7a1cebc0b55f0d1aa5c95e71d5176"
+    },
+    {
+      "case": "lin_chong_1_se_late_1280x720",
+      "path": "qa/zhu_wounded_20261005/ordinary_skill_clearance_preview_v16_frames/lin_chong_1_se_late_1280x720.png",
+      "sha256": "14ecad78759b06e11252ffa2ad94d30675e149fda2686fca480ba2e12145f984"
+    }
+  ],
+  "reason": "All Lin four-heading active mid/late cases completed. Wu four cases stopped before cast: generic fixture demanded an original enemy hero, absent at current Daming opening. Wu active skills are self/AOE/summon and do not have the Lin R hero_only target rule. No full skill qualification.",
+  "fix": "Sibling v16a preserves original enemy hero selection for Lin; Wu selects original living enemy combat unit, excluding buildings/resources/noncombat/workers, using same unaltered chapter roster. No inserted dummy, target stats, ability or production changes.",
+  "scope": "Partial native phase observations only. Complete source drift and full 112-view qualification require new completed run."
+}

@@ -1,0 +1,349 @@
+{
+  "schema": "daming_safe_retreat_capture_static_review_v25",
+  "created_utc": "2026-10-07T17:09:56.157330+00:00",
+  "reviewer": "retreat_qa_design",
+  "reviewed_scope": "Read-only old capture plus invocation-flag-only v25b sibling, actual source call order and ownership; one fresh review file only.",
+  "status": "static_review_complete_native_blocked_failure_cleanup_open",
+  "source_pins": {
+    "old_capture": {
+      "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/daming_safe_retreat_capture_negative_v25.gd",
+      "sha256": "caf638bdf4fb523772ba68967b522eef47890835e65018c33cb8a8ee4c430d4f",
+      "bytes": 35014
+    },
+    "capture_v25b": {
+      "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/daming_safe_retreat_capture_negative_v25b.gd",
+      "sha256": "7deee64c4b99968207821cd54142987ce2503e5b8256f52eda62092bf12abe97",
+      "bytes": 35211
+    },
+    "scene_v25b": {
+      "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/daming_safe_retreat_capture_negative_v25b.tscn",
+      "sha256": "d9a863fef528b8354e0cfdd82fa9393386d3d39fd0371f5e6243f1fe77d55d7c",
+      "bytes": 217
+    },
+    "interface_v25b": {
+      "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/CAPTURE_NEGATIVE_INTERFACE_V25B.json",
+      "sha256": "b9e97ddb6e8b258bb07f00d89b9bca4b1c32f1809cbaf452a4eedcdffde1b0f2",
+      "bytes": 6847
+    },
+    "base_old_v25": {
+      "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/daming_safe_retreat_cross_process_v25.gd",
+      "sha256": "6a70e00e6a7786bdf8791b84e3fdfdbe85159bf5398ec8ab385f2e34a3242940",
+      "bytes": 50763
+    },
+    "hold_v24s": {
+      "path": "E:/ChatGPT/daming_admit_v24o_proposal/daming_admit_cross_process_v24s.gd",
+      "sha256": "76ed6f114de755b398112778ddabf5af820a30237b75070a5a2aaaea188b87db",
+      "bytes": 43390
+    },
+    "proposed_unit_contract": {
+      "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/proposed/scripts/run_level8_unit_contract.gd",
+      "sha256": "b2f52bcce60b27507b498a6d32e45b5cadd3409030fcd2e1024c78dac90e90d5",
+      "bytes": 8211
+    },
+    "proposed_core": {
+      "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/proposed/scripts/run_battle_world_core.gd",
+      "sha256": "92b2bdac0058f9e1642d1b991c3ca353e902481d8daff990388e377597df87b1",
+      "bytes": 49463
+    },
+    "unit_graph": {
+      "path": "E:/ChatGPT/水浒/scripts/run_unit_graph.gd",
+      "sha256": "daf426873cb65970bfc851a41e25d4a157c07efa895ec2050cc59bd0915a297d",
+      "bytes": 32833
+    },
+    "unit_state": {
+      "path": "E:/ChatGPT/水浒/scripts/run_unit_state.gd",
+      "sha256": "6be9f0a5193c1ea32e667419cd2447e3fe44f101cc4c5a50135b949d9085e694",
+      "bytes": 132317
+    },
+    "level_state": {
+      "path": "E:/ChatGPT/水浒/scripts/run_campaign_level_state.gd",
+      "sha256": "ea3e3b14a723d359eeb1a6268ecef03f73ca9cbacf8782451cfcf5e3fdd03db1",
+      "bytes": 20744
+    },
+    "mission_state": {
+      "path": "E:/ChatGPT/水浒/scripts/run_campaign_mission_state.gd",
+      "sha256": "20448a9235e58b9c31b5bf30db485e758c923a1cfc1ac0661aa73557ab4437aa",
+      "bytes": 25797
+    },
+    "presentation_state": {
+      "path": "E:/ChatGPT/水浒/scripts/run_campaign_presentation_state.gd",
+      "sha256": "9ff9b423394a86174ba387e4e7840a9a7f53a9366e18159e580aaa1f4e0cd655",
+      "bytes": 47059
+    },
+    "root_state": {
+      "path": "E:/ChatGPT/水浒/scripts/run_battle_root_state.gd",
+      "sha256": "0a0017050b82a5cef78d54593fe7c08bef21916e23e6980a2d0e0e0f8be06111",
+      "bytes": 39588
+    },
+    "identity": {
+      "path": "E:/ChatGPT/水浒/scripts/run_graph_identity.gd",
+      "sha256": "c16f53cf32dad8e1ef05e17628cb4f846f80ec3873ce562f79f5b4f6372c5e5f",
+      "bytes": 11445
+    },
+    "session": {
+      "path": "E:/ChatGPT/水浒/scripts/run_world_session.gd",
+      "sha256": "b9fdd59cfe65cd5ecfb07a39041a8ad4e96594c85f5fc1fa105d52219e966a88",
+      "bytes": 16547
+    },
+    "codec": {
+      "path": "E:/ChatGPT/水浒/scripts/run_state_value_codec.gd",
+      "sha256": "c8c4a58d1e68e22abb9f8b1abcb1a9cc1dbaa486e51ea5174dd16984aaa35d15",
+      "bytes": 12091
+    },
+    "battle": {
+      "path": "E:/ChatGPT/水浒/scripts/battle.gd",
+      "sha256": "f020f434f755950d41dae9320bcdcb388359835b714f83bbd4592300514172b1",
+      "bytes": 789563
+    },
+    "level8": {
+      "path": "E:/ChatGPT/水浒/scripts/levels/level8_daming_rts.gd",
+      "sha256": "72e57093715ebfb29247aaf332838f233d736936d29d83a4b24ecd90ee677db7",
+      "bytes": 24789
+    }
+  },
+  "static_expected_codes_consistent": true,
+  "reviewed_case_count": 19,
+  "required_roles": [
+    "lu",
+    "shi"
+  ],
+  "required_independent_rows": 38,
+  "static_closure_passed": false,
+  "native_qualified": false,
+  "overall_v25_qualified": false,
+  "godot_parser_executed": false,
+  "godot_parse_verified": false,
+  "engine_started": false,
+  "producer_cli_or_base_import_executed": false,
+  "public_source_modified": false,
+  "findings": [
+    {
+      "id": "CAPTURE_FAILED_RESTORE_HANDOFF_CLEANUP",
+      "priority": "P2",
+      "status": "open_requires_new_immutable_c_sibling",
+      "affected": [
+        "capture_v25b",
+        "base_old_v25"
+      ],
+      "trigger": "Session commit succeeds, then inherited _restore fails HELD, packet, fresh capture, full-world or binding audit and returns null.",
+      "evidence": [
+        {
+          "source": "capture_v25b",
+          "line": 211,
+          "text": "battle = await _restore()"
+        },
+        {
+          "source": "base_old_v25",
+          "line": 279,
+          "text": "retained_identity = installed.identity"
+        },
+        {
+          "source": "base_old_v25",
+          "line": 282,
+          "text": "if not await _hold(b, \"restored complete world\"): return null"
+        },
+        {
+          "source": "session",
+          "line": 241,
+          "text": "var owned: Dictionary = _core.handoff_world()"
+        },
+        {
+          "source": "session",
+          "line": 280,
+          "text": "if _phase != \"installed\":"
+        },
+        {
+          "source": "capture_v25b",
+          "line": 345,
+          "text": "if is_instance_valid(battle):"
+        }
+      ],
+      "impact": "The caller already owns the installed Battle and identity. child battle receives null; finish explicitly disposes identity but does not queue_free the actual handed-off Battle. Session.dispose deliberately avoids freeing an installed world. Cleanup consequently depends on process exit and may cause native leak/error evidence; failure path is not statically closed.",
+      "required_fix": "Track the exact Battle object immediately after successful Session handoff/commit, before any fallible post-commit audit; only free that proven owned object once in finish. Never select arbitrary current_scene/menu or touch another task scene. Preserve old and v25b files and create a new c sibling plus independent review.",
+      "affects_expected_19_codes": false,
+      "native_failure_observed": false
+    }
+  ],
+  "invocation_flag_review": {
+    "old_constant_true_is_historical_evidence_bug": true,
+    "new_flags_initially_false": true,
+    "new_flags_set_only_immediately_before_actual_negative_Core_capture": true,
+    "preflight_does_not_claim_negative_capture": true,
+    "changed_methods_only": [
+      "_exercise",
+      "finish"
+    ],
+    "unchanged_method_count": 24,
+    "all_cases_and_interfaces_unchanged_except_declared_flag_fields": true,
+    "limitations": "Invocation flag records entry to the actual call, not successful native completion; row_completed and passed plus exit/log gate remain required."
+  },
+  "hold_override_review": {
+    "methods": {
+      "_hold_owned_links": {
+        "entire_extracted_text_exact": true,
+        "body_exact_except_trailing_blank_lines": true,
+        "body_sha256_excluding_trailing_blank_lines": "385626575131fb857fbd172e5aa61f03162e6f16cd1187ac35333d77219ad0b6"
+      },
+      "_hold_other_links": {
+        "entire_extracted_text_exact": true,
+        "body_exact_except_trailing_blank_lines": true,
+        "body_sha256_excluding_trailing_blank_lines": "a3a41ab7c2265f3487722b0ddf0c8383eff4573ac26d7add60de35ba3a4bbf20"
+      },
+      "_hold_link_summary": {
+        "entire_extracted_text_exact": true,
+        "body_exact_except_trailing_blank_lines": true,
+        "body_sha256_excluding_trailing_blank_lines": "a465a2b684e505a7dd19a77e3389414501c6a583269b36059b43e760c31fefe7"
+      },
+      "_hold_cleanup": {
+        "entire_extracted_text_exact": true,
+        "body_exact_except_trailing_blank_lines": true,
+        "body_sha256_excluding_trailing_blank_lines": "64fa0dcb38792cbeae6018fb96fef3cac19017eb2b4a9690ca5c0021379e29b2"
+      },
+      "_hold": {
+        "entire_extracted_text_exact": false,
+        "body_exact_except_trailing_blank_lines": true,
+        "body_sha256_excluding_trailing_blank_lines": "3fa144e91f69780ae64f8dcd83a9f5a9b84a218fdb2372e302217d231cf1b6e8"
+      }
+    },
+    "trailing_blank_line_difference": "Child _hold is last function at EOF, while s has one extra separator blank line before its next method; all function body characters otherwise match. Do not call raw full extracted text byteexact for _hold.",
+    "old_broken_hold_unreachable_from_child_entry": true,
+    "entry_overrides": [
+      "_ready",
+      "_load_fixed_scripts",
+      "run",
+      "_retreat_state",
+      "finish",
+      "_hold"
+    ],
+    "no_parent_route_load_or_parent_run_call": true,
+    "dispatch": "Inherited _restore invokes _hold on self; child override plus inherited _on_held/_on_rejected is used. Child own run invokes restore/audits, never A/B/C/D gameplay drivers.",
+    "v24s_full_qualification_is_not_claimed": true
+  },
+  "call_order_and_expected_codes": [
+    {
+      "cases": [
+        "safe_queue_nonempty"
+      ],
+      "expected": "LEVEL8_SAFE_RETREAT_QUEUE",
+      "first_layer": "live Unit capture.parts",
+      "why": "Temporary move row has the original exact kind/pos/group_cap fields and valid Vector2/Float values, so generic _references passes; safe retreated Unit then rejects its nonempty queue before Graph.validate."
+    },
+    {
+      "cases": [
+        "safe_stop__chase_intent",
+        "safe_stop__group_cap",
+        "safe_stop__has_home",
+        "safe_stop__home",
+        "safe_stop__hua_lock_shots"
+      ],
+      "expected": "LEVEL8_SAFE_RETREAT_STOP_ANCHOR",
+      "first_layer": "live Unit capture.values",
+      "why": "All five temporary values keep generic declared types and allowed ranges; _safe_retreat_values sees an original stop anchor mismatch and returns raw LEVEL8 code before whole Graph validation."
+    },
+    {
+      "cases": [
+        "other_hp_zero",
+        "other_dying_true"
+      ],
+      "expected": "LEVEL8_LIFETIME",
+      "first_layer": "live Unit capture.values",
+      "why": "Only one lifetime field is changed on the still-live other actor. (hp<=0)!=_dying fails in Level8 values; Core returns Graph live failure unchanged."
+    },
+    {
+      "cases": [
+        "other_role_null"
+      ],
+      "expected": "LEVEL8_SAFE_REQUIRED_ACTOR_MISSING",
+      "first_layer": "complete Core pair",
+      "why": "The original other actor remains a root/active live Unit with empty story_outcome. Level unit refs encode null; contract.configure skips that named role, _chapter_registry only checks remaining roles. The actor now satisfies ordinary noncaptive faction0 checks. No safe event exists for this null role. The still-safe first actor makes safe_count=1; required-role loop returns missing. No Unit art_variant whitelist supersedes that path."
+    },
+    {
+      "cases": [
+        "other_alive_missing_active"
+      ],
+      "expected": "LEVEL8_ACTIVE_MEMBERSHIP",
+      "first_layer": "Graph.capture full membership validation",
+      "why": "Removing the other actor only from Battle.units preserves a valid root registry. Every Unit capture passes, but Graph.validate invokes Level8 membership; active.has(id)!=(hp>0&&!dying) returns the raw Level8 membership code, before Core pair."
+    },
+    {
+      "cases": [
+        "other_outcome_captured"
+      ],
+      "expected": "LEVEL8_UNSUPPORTED_STORY_OUTCOME",
+      "first_layer": "live Unit capture.values",
+      "why": "The other named lu/shi actor has captured rather than the only accepted retreated terminal value. It fails the story outcome rule before lifetime/identity/pair checks."
+    },
+    {
+      "cases": [
+        "root_safe_selection"
+      ],
+      "expected": "LEVEL8_SAFE_SELECTED_ROOT",
+      "first_layer": "complete Core pair",
+      "why": "Only the Root selection array is changed; safe.selected stays false. Root _tags accepts a registered real Unit. Core full pair subsequently rejects command ownership of a safe actor."
+    },
+    {
+      "cases": [
+        "root_safe__ability_caster",
+        "root_safe__item_caster"
+      ],
+      "expected": "LEVEL8_SAFE_ARMED_CASTER",
+      "first_layer": "complete Core pair",
+      "why": "Root references serialize the registered safe Node as an entity tag; original safe Unit values stay unchanged. Core rejects safe caster ownership after full Root validation."
+    },
+    {
+      "cases": [
+        "safe_event_missing",
+        "other_safe_event_without_retreat",
+        "safe_actor_outcome_empty"
+      ],
+      "expected": "LEVEL8_SAFE_EVENT_OUTCOME_PAIR",
+      "first_layer": "complete Core pair",
+      "why": "Mission true-event encoding remains structurally valid. For safe_actor_outcome_empty, named rescued Unit identity/lifetime remains valid; empty story_outcome skips only safe-specific stopped/visible rules. Pair checks has_safe!=retired before required-role or rescue checks, so this mismatch code wins."
+    },
+    {
+      "cases": [
+        "freed_event_missing",
+        "rescue_done_false"
+      ],
+      "expected": "LEVEL8_SAFE_RESCUE_EVENT_PAIR",
+      "first_layer": "complete Core pair",
+      "why": "Missing event is otherwise a valid event list. done=false stays Boolean; Mission action/presentation schemas do not require done to match disabled/visible. An active rescue action with baseline done=true would already fail baseline capture, so mutation cannot newly trigger ACTIVE_ACTION_PROGRESS via that same action. Original complete baseline proves all earlier schemas. Core pair then checks freed event plus daming_rescue.done before terminal state."
+    }
+  ],
+  "actual_source_capture_review": {
+    "path": "Actual Session.prepare_restore(menu) -> stage_mount -> commit_restore_async -> handed-off full Battle -> corrected real HELD -> complete packet/world/clock/binding audits -> Core.capture baseline -> actual Object.set(single field) -> Core.capture refusal -> synchronous exact original property assignment -> full Core.capture success -> full world/packet/binding audit.",
+    "no_DTO_substitution": true,
+    "mutation_restore_has_no_await_signal_or_gameplay_tick_between_calls": true,
+    "failure_finally_restores_original_property": true,
+    "complete_identity_mutable_fields_audited": true,
+    "identity_mutable_field_count": 14,
+    "caller_owned_identity_is_not_disposed_by_capture_failure": true,
+    "ownership_evidence": "Graph._capture_failed disposes only owns_identity; Core capture errors likewise condition on retained_identity==null. Session.handoff_world removes core identity ownership; installed Session.dispose does not release caller identity. Child explicit retained_identity.dispose occurs once behind finished guard. Post-commit failure Battle tracking remains the P2 above.",
+    "case_actions_clone": "duplicate(true) clones dictionaries/arrays while preserving original Node references; original action map remains unchanged and original property is restored; target object ID recorded.",
+    "exactness": "Complete encoded record/section wrappers and all fields compare after only independently bounded root wall msec and Mission stage_age_ms normalization. Codec stores f64/vector2 IEEE hex strings, so full record comparison includes numeric bits. _exact alone uses equality for direct Vector2 values; the post-undo full Codec world comparison supplies the independent IEEE check.",
+    "root_cache_node_order": "Full simulation/clock_values, cached grid/group fields, recursive node object ID order, engine physics/process counters and logical tick are retained; no clearing caches or broad state reset."
+  },
+  "private_fixture_review": {
+    "actual_five_A_files_with_SHA": true,
+    "actual_A_success_role_PID_nonce_identity_and_packet_bound": true,
+    "exact_A_slot_subtree_including_local_runs_required": true,
+    "all_owned_copies_and_source_inputs_rechecked": true,
+    "raw_handoff_copy_exact": true,
+    "fresh_one_case_profile_required": true,
+    "missing_actual_fixture_controlled_failure": true,
+    "limitation": "No actual A fixture or process executed in this review. Producer must freeze A after its process closes before B can resave, own-copy complete journal and handoff, and enforce report/log/source/process identity independently."
+  },
+  "not_run_or_not_implemented": {
+    "nineteen_live_native_rows": "not_run",
+    "role_case_Cartesian_aggregation_38": "not_run",
+    "five_actual_cast_array_live_negatives": "not_implemented",
+    "record_identity_schema_live_leaf": "no such user-settable native leaf; DTO component route required separately",
+    "separate_component_harness": "not_implemented",
+    "actual_A_native_successor_fixture": "not_present_or_not_qualified_by_this_review",
+    "natural_terminal_rewards_and_native_ticks": "not_run",
+    "zero_ERROR_SCRIPT_ERROR_loggate": "not_run",
+    "passed_successor_full_ABC": "not_claimed",
+    "new_c_failure_cleanup_and_peer_review": "pending"
+  },
+  "producer_policy": "No review flag or harness per-row passed may unlock overall qualification while cleanup P2, missing component/live scopes, actual A fixture, successor proof, parser/native/error-log gates or complete fixed role/case set remain absent. Preserve original failures and all immutable predecessors."
+}

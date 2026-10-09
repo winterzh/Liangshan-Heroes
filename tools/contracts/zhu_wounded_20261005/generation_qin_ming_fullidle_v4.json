@@ -1,0 +1,182 @@
+{
+  "original_reference": {
+    "path": "assets/characters/qin_ming_bound_20261005/bound.png",
+    "sha256": "f1dda9f6ac465a29a42ab4e920d6deb04eec5bd907f883528c67c205078abfc9"
+  },
+  "jobs": [
+    {
+      "key": "baseline_ref_87eac29bd5b1",
+      "method": "retained_identity_reference",
+      "generation_id": null,
+      "repository_path": "assets/characters/shi_qian_bound_20261005/bound.png",
+      "sha256": "08787ccf51041c8e6134999a7dc6e9c6e884631d2feebac3e7df868c9060a108",
+      "baseline_commit": "27f45b245e2b39f1f779fbfa62772e14bb68dd56",
+      "reference_role": "Retained original character identity/anatomy reference; no new generation prompt claimed",
+      "references": [],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "sw_initial_rejected",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-14e9b9ec-b822-445d-b639-37f1b69f93db",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/native_references/sw_initial_rejected.png",
+      "sha256": "0d671be87f60f2bcf662a443765caa39722691be329bf360c5be7b516c2e6ddb",
+      "prompt": "Use case: historical-scene. Native transparent SINGLE FULL BODY wounded Shi Qian opposite walking pose. Output ONLY ONE man, NOT a grid or multiple copies. Reference atlas is IDENTITY and clothes only; REMOVE ropes/bindings. Same slim black masked Chinese man in charcoal cross-over cloth tunic, black headwrap and mask, cloth belt, dark trousers/shin wraps and boots. NO sack/armor/weapons/flags. Free wrists and empty hands, one hand guards sore abdomen, other balances, slight tired hunch. Critical anatomical foot pose: SW FRONT THREEQUARTER facing DOWN-LEFT. Its planted FORWARD boot must be on LOWER-RIGHT side of the silhouette, connected to RIGHT side of the image pelvis. Its trailing lifted boot must be on UPPER-LEFT side, heel raised. Both toes face downLEFT, whole torso/head faces LEFT. Left/right foot lead must visibly differ from standard alternate stride. Leading knee crosses in FRONT of trailing knee with each leg connected to its own pelvis side. Clearly short careful limping STEP, not standing/running/jumping. Foot positions specified are relative to complete silhouette, no twisting hip. Both legs/feet visible and distinct. Elevated isometric historic painterly RTS camera, full silhouette centered and contained, generous empty margin100px each edge, body60-70% canvas height. Native square<=1536, actual transparent alpha, no floor shadow/grid/text/background/extra people.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_step_b_sw.json",
+      "request_sha256": "bcd885b9badf089374d13158f26f7c54cf02127f8928ed9f60386f50d0350a2f",
+      "references": [
+        "baseline_ref_87eac29bd5b1"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_qian_step_b_sw",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-b26411e6-641e-4a9a-a172-1c37a305b869",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/step_b_sw.png",
+      "sha256": "01a2cc521b116e0cff5f2c3c74774ff51cf2517a19c2029e6be6e76baa4a0b0f",
+      "prompt": "Edit this single transparent SW-facing masked man. Keep head, face direction, body, clothes and empty hands. Remove the red/blood stain from abdomen completely: clean dark cloth, NO blood/injury props.\nCHANGE ONLY THE TWO LEGS below the pelvis to the OPPOSITE walking step. Currently the foot at bottom-left is planted, and foot at upper-right is lifted. Swap their gait: the leg on the RIGHT side of the image must now straighten FORWARD with its boot planted at LOWER-RIGHT, approximately(x780,y1100) on this1254canvas; the leg on the LEFT side must bend BACK with boot lifted at UPPER-LEFT approximately(x580,y940). Keep each leg attached to its existing hip. Draw the RIGHT-SIDE IMAGE KNEE in front, LEFT-SIDE knee behind. Both boot toes still point LEFT. Do not keep the original foot placements. The planted boot must move to the OTHER side of the silhouette. This is an alternate short wounded walk step, not running, no new prop.\nSame elevated isometric SW frontthreequarter camera, torso and face pointingLEFT, one man only, native transparent RGBA square<=1536, full figure contained, no text/grid/floor/shadow/weapon/rope/bag. Keep black wrap and mask, charcoal tunic and trousers, shin wraps, painterly clothing identity unchanged.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_sw_leg_edit.json",
+      "request_sha256": "f344a6ee879a3e9ca3740115422156f37a966f35e406b1cb3a5b3f627352bff9",
+      "references": [
+        "sw_initial_rejected"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "shi_qian_proportion_v2",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-c11831c3-8262-4bc1-bc31-4cabd4ac12dd",
+      "repository_path": "assets/characters/shi_qian_wounded_20261005/proportion_reference_v2.png",
+      "sha256": "7f8d1d563e6eff35801bdab942867fb751cc2ccb90ae363ec39b16cf7a582499",
+      "prompt": "Use case: identity-preserve. Redraw this masked black-clothed adult Shi Qian with CORRECT NATURAL ADULT HUMAN PROPORTIONS. Current image is rejected: head and boots too big, legs too short, body too hunched and cartoonish. Keep the same identifiable man, black cloth headwrap/topknot and black mouth/nose mask, charcoal cross-over tunic and plain brown cloth sash, dark trousers/shin wraps/cloth boots, restrained hand-painted Chinese historical RTS rendering. NOT pixel-preservation: redraw anatomy fully as needed.\nNEW BODY: slim athletic normal adult, about7 to7.5 HEADS tall from skull top to sole. Bare head height only about one-seventh total body height; headcloth must not turn it into an oversized head. Natural narrow but adult shoulders, visible neck, proportionate torso, LONGER natural legs with hip-to-floor about half entire figure. Knees correctly midway along legs, normal slender calves, small natural hands, human-sized cloth boots WITHOUT giant bulky feet. Balanced anatomical joints, same believable adult throughout. No chibi/dwarf/oversized-head/short-legged/caricature proportions, no inflated hands or comic boots.\nPOSE: quiet NEUTRAL standing with feet naturally close and both grounded, only slight fatigue in shoulders. Upright spine and level head, no extreme stoop, crouch, furtive peeking, aggressive grimace, exaggerated lifted knee, twisted hip or running pose. Empty arms rest naturally; one empty hand may lightly rest near lower abdomen without squeezing or deep bending. This is a tired rescued adult with calm dignity, NOT a sneaking goblin. No ropes, weapons, sacks, blood/injury props, cape, armor or new accessories.\nView remains SW front three-quarter facing down-left, elevated isometric camera. Exactly ONE full body, all headcloth tails/fingers/feet contained, centered with generous transparent margins. Body about65–70% square canvas height. GENUINE alpha TRANSPARENT background, native square max1536, no floor shadow/background/checkerboard/grid/text/labels. Detailed face retains original identity but at natural smaller anatomical size.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/shi_qian_proportion_v2.json",
+      "request_sha256": "b1e2f2282759fe21f8c79677225a038887290f0321fd728d4ca889b2a34fb232",
+      "references": [
+        "shi_qian_step_b_sw"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_proportion_v2",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-eeea1497-aba0-4b30-b210-0dca5125f911",
+      "repository_path": "assets/characters/qin_ming_wounded_20261005/proportion_v2.png",
+      "sha256": "6057cadecb7e9c153e8da18e178d0dc24d6bb95b4671671d0eed1c45fa59ea73",
+      "prompt": "Use case: identity-preserve. ONE full-body unarmed rescued qin_ming standing proportion reference, NOT an atlas. Reference1 is the sole FACE/HAIR/CLOTHING identity reference; remove ALL bindings/ropes and weapons. Reference2 supplies ONLY the mature natural human anatomy target and painterly elevated isometric camera; DO NOT copy its mask, black costume or face.\nIdentity: Broad powerful middle-aged man, curly black beard, red wrapped headscarf with small gold band, red robe/scarf, dark bronze armor with distinctive gold beast-face shoulders, dark trousers, gold-trim boots and quiet dark-red cloak. FOOT ONLY; NO horse, mace, weapon or rope.\nRedraw the short reference anatomy into a believable mature ADULT: about7–7.5 heads tall, normal small head/hands/boots, natural visible neck and LONG adult legs with hip-to-ground around half height. Broad muscular build and beast-face shoulder armor remain, ornaments fit adult shoulders rather than enlarge head or crush leg length. Each knee naturally midway along the leg, no shortened thighs or giant footwear. Keep costume colors/materials and recognisable face/hair; any armor decoration fits his natural adult body.\nPose: SW front-three-quarter facing down-left, quiet upright tired rescued man with dignity, level head and relaxed empty hands by sides, both feet naturally close and grounded. Only slight fatigue in shoulders, no crouch/stoop/sneaking/high raised knee/running/combat stance. Natural anatomical joints. No weapon, sheath, rope, sack, flag, mount, blood, glow or new props. Preserve original identity, don't make everyone the same slim black masked man. Historic restrained hand-painted Chinese RTS rendering. Exactly one COMPLETE body, all cloth tails/cape/fingers/boots contained with generous margins, about75–80% native square height, max1536. Genuine transparent alpha background, no floor/shadow/grid/text/labels/checkerboard.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/qin_ming_proportion_v2.json",
+      "request_sha256": "38f8ccbf130086d07e438d44fed2af783565d67e9bf2dc1e641643959c6f32e5",
+      "references": [
+        "original",
+        "shi_qian_proportion_v2"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_posture_v3",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-62e91509-6dd4-4876-a430-d6344fc41328",
+      "repository_path": "assets/characters/qin_ming_wounded_20261005/posture_v3.png",
+      "sha256": "8a4e23306fd997d9ce763f88d0d8c385ec69eaf78ceee6fe52031fdbbb0caaf8",
+      "prompt": "Use case: identity-preserve. EDIT the attached ONE full-body character reference. User requires an upright dignified SOLDIER posture: head UP and chest OPEN. Reject lowered chin, forward head, closed shoulders or hunched back. Only improve pose; preserve this SAME individual face, clothes, mature ADULT proportions and painterly rendering.\nPOSE: erect balanced military attention-like stance. Naturally straight stacked spine, neutral pelvis, neck vertical ABOVE torso; head lifted with chin LEVEL, eyes looking toward distant horizon in the SAME front three-quarter SW facing direction, never down at feet. Shoulders gently back and down, broad collarbones, naturally lifted open chest, sternum confidently forward. No stoop, rounded back, shrugged shoulders, forward craned neck, wounded hunch or tired slump. Do not hyperextend neck, flare ribs, thrust belly or arch lower back. Keep the small natural head/hands/boots and adult thighs/calves. Moderately elevated isometric camera does not imply bowed head.\nBoth feet grounded in stable modest hip-width parallel stance, knees straight but not locked. Empty arms straight naturally at sides and open relaxed hands, no fists or combat stance. Keep every existing armor plate/shoulder detail/cloak and beard, same color and body build; don't add extra armor.\nExactly ONE complete full figure with all fingers/tails/cloak/boots contained in generous transparent margins, 75–80% square height, native max1536. No weapons/sheaths/rope/chains/blood/new props. Preserve true transparent alpha; no floor/shadow/background/text/grid/checkerboard.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/qin_ming_posture_v3.json",
+      "request_sha256": "43a056a205a87222fb1b780687ab9536ae2b0f7686c6af6a254bcdd2d740617a",
+      "references": [
+        "qin_ming_proportion_v2"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_idle_v3",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-a178fe65-ed67-4d2a-bb25-99f23ecf950c",
+      "repository_path": "assets/characters/qin_ming_wounded_20261005/idle_v3.png",
+      "sha256": "8bbc90f27031aeb3cac07dee94bc9bce354ec3771f64cb5f3798d4e7cbfd5e94",
+      "prompt": "Use case: identity-preserve. Create native FOUR independently drawn isometric IDLE views of this SAME upright adult soldier. Reference is the selected v3 single-body posture; preserve its face, proportions, clothing and colors. Exactly 2 columns x 2 rows: TOP LEFT SE front three-quarter looking screen DOWN-RIGHT; TOP RIGHT SW front three-quarter looking screen DOWN-LEFT; BOTTOM LEFT NE back three-quarter looking screen UP-RIGHT; BOTTOM RIGHT NW back three-quarter looking screen UP-LEFT. Turn the WHOLE torso, hips and both feet into each direction. SE and SW must be genuinely opposite whole-body views; do not repeat SW in the SE cell. Back views show back clothes and back of head, with only a small far cheek visible. Never mirror a rendered cell. ALL FOUR poses stand dignified and upright like disciplined soldiers: lifted head, LEVEL chin/horizon gaze, neck vertically above torso, stacked natural spine, shoulders back/down, naturally open lifted chest. Elevated camera never means bowed head. NO hunch, forward neck, closed chest, tired shoulder slump, shrug, belly thrust or arched lower back. Empty relaxed hands and naturally straight arms at sides. Stable feet at modest hip width, straight natural knees. Keep mature adult head/hands/boots and adult leg lengths. Body type identity: Broad powerful middle-aged man, curly black beard, red wrapped headscarf with small gold band, red robe/scarf, dark bronze armor with distinctive gold beast-face shoulders, dark trousers, gold-trim boots and quiet dark-red cloak. FOOT ONLY; NO horse, mace, weapon or rope. Preserve v3 body anatomy over any old compact sprite instructions; never chibi. Same front/back clothing hem length and construction, no weapons/sheaths/rope/chains/blood/new props. Each whole figure fits inside its OWN quadrant with wide true-alpha outer margins and wide empty transparent central gutters; no tails/capes/boots cross cell boundaries. Figures equal body height within this character. Native square max1536, painterly reference quality, TRUE RGBA transparent background; no floor/shadows/text/labels/grid/checkerboard. Layout priority: figures occupy only 78–82% of EACH quadrant height, about490–515px tall at1254px native square. Center each figure inside its cell; keep at least45px transparent clearance on every cell edge, including cape/boots/headcloth. The central horizontal gutter should be at least80px. Reduce whole figure size uniformly to leave room; NEVER shorten legs or enlarge heads to fit. Do not nearly touch the two rows.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/qin_ming_idle_v3.json",
+      "request_sha256": "55e07fc89fee7a5d42bf90ea00dcff47b753d54dd15767ea07f13f751db05309",
+      "references": [
+        "qin_ming_posture_v3"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_idle_single_se_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-782153c2-a53f-4be3-a43b-34d00041adff",
+      "repository_path": "assets/characters/qin_ming_wounded_20261005/idle_single_se_v4.png",
+      "sha256": "9a52e77d86708ace9da553d6bcdc8b3a9a355245b1c332f2f94176d778632294",
+      "prompt": "Create exactly ONE full-body native Qin Ming idle sprite from the corresponding SE character in this reference four-view sheet. This is a SINGLE view, not another sheet. Character identity/costume/style invariants: Broad powerful middle-aged Qin Ming, stern curly black beard and long curly black hair, red wrapped headscarf with small GOLD band, red robe/scarf, dark bronze breast/torso armor with gold beast-face shoulders and trim, bracers, gold beast-face knee guards, dark trousers, gold-trim boots and quiet patterned dark-red cloak. Preserve the exact identifiable face, layered armor plates/edges, warm bronze/red palette and fine painterly style from the reference. Same NORMAL ADULT head size, neck length, limb lengths, hands and boots; keep his broad adult shoulders and strong torso, not a short chibi/child body, huge head/boots or skinny substitute.\nCAMERA/FACING: FRONT three-quarter elevated isometric view facing LOWER-RIGHT / southeast. Chest/beard visible. Both boot toes, torso and head face lower-right. Keep corresponding body orientation; never mirror a front view to pretend it is a back view.\nPOSTURE: Qin Ming's own strong forceful military officer bearing: head naturally raised with level gaze, neck aligned over shoulders, broad chest/shoulders comfortably open and upright upper back. Ordinary firm stance with both feet planted, modest natural knee softness and relaxed EMPTY hands near sides; no overarched chest, artificial parade rigidity, limp crouch, rounded hunch or aggressive attack gesture. His exact broad warrior physique is retained rather than stretching/slimming. This is an unarmed rescued FOOT-only candidate, no horse/mace/weapon/sheath/rope/banner/writing or new props. Cloak hangs quietly, same relative length as reference, cape must not obscure both legs/boots or trail beyond figure margins; never inflate like huge sails. Preserve original costume, no extra armor ornaments.\nFULL NATIVE FRAME: ONE complete adult Qin Ming centered on genuine transparent RGBA native square <=1536. At least80px clear margin around entire figure including cloak/headcloth/feet, slightly smaller within canvas rather than squashing body. Whole head, both hands, both boots and cape present and unclipped. No other people/views, grid/labels/text, floor/shadow/background, cropping, mirroring or added weapon. High-detail painterly game sprite consistent with reference.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/qin_ming_idle_single_se_v4.json",
+      "request_sha256": "0df7c2bb68bddbf27afb4ca2a7d2c3a7c6ff70e5ea392fc63452609611bdd225",
+      "references": [
+        "qin_ming_idle_v3"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_idle_single_sw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-67d5aa40-49ff-45f2-8136-3ea96b06124d",
+      "repository_path": "assets/characters/qin_ming_wounded_20261005/idle_single_sw_v4.png",
+      "sha256": "26162fefef32508332f4cb31f62a82574ed686ed5197f94986a7d3c69b3c7bb5",
+      "prompt": "Create exactly ONE full-body native Qin Ming idle sprite from the corresponding SW character in this reference four-view sheet. This is a SINGLE view, not another sheet. Character identity/costume/style invariants: Broad powerful middle-aged Qin Ming, stern curly black beard and long curly black hair, red wrapped headscarf with small GOLD band, red robe/scarf, dark bronze breast/torso armor with gold beast-face shoulders and trim, bracers, gold beast-face knee guards, dark trousers, gold-trim boots and quiet patterned dark-red cloak. Preserve the exact identifiable face, layered armor plates/edges, warm bronze/red palette and fine painterly style from the reference. Same NORMAL ADULT head size, neck length, limb lengths, hands and boots; keep his broad adult shoulders and strong torso, not a short chibi/child body, huge head/boots or skinny substitute.\nCAMERA/FACING: FRONT three-quarter elevated isometric view facing LOWER-LEFT / southwest. Chest/beard visible. Both boot toes, torso and head face lower-left. Keep corresponding body orientation; never mirror a front view to pretend it is a back view.\nPOSTURE: Qin Ming's own strong forceful military officer bearing: head naturally raised with level gaze, neck aligned over shoulders, broad chest/shoulders comfortably open and upright upper back. Ordinary firm stance with both feet planted, modest natural knee softness and relaxed EMPTY hands near sides; no overarched chest, artificial parade rigidity, limp crouch, rounded hunch or aggressive attack gesture. His exact broad warrior physique is retained rather than stretching/slimming. This is an unarmed rescued FOOT-only candidate, no horse/mace/weapon/sheath/rope/banner/writing or new props. Cloak hangs quietly, same relative length as reference, cape must not obscure both legs/boots or trail beyond figure margins; never inflate like huge sails. Preserve original costume, no extra armor ornaments.\nFULL NATIVE FRAME: ONE complete adult Qin Ming centered on genuine transparent RGBA native square <=1536. At least80px clear margin around entire figure including cloak/headcloth/feet, slightly smaller within canvas rather than squashing body. Whole head, both hands, both boots and cape present and unclipped. No other people/views, grid/labels/text, floor/shadow/background, cropping, mirroring or added weapon. High-detail painterly game sprite consistent with reference.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/qin_ming_idle_single_sw_v4.json",
+      "request_sha256": "d7a6113c7c746f8b707b8615ad1578b85326751ffd615f53c56879fff01b3802",
+      "references": [
+        "qin_ming_idle_v3"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_idle_single_ne_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-751a3f40-6a17-4c16-abac-c88a64bd2bb2",
+      "repository_path": "assets/characters/qin_ming_wounded_20261005/idle_single_ne_v4.png",
+      "sha256": "e4d8d90b0bf555e2e2be0e42f7dedd6279bf075a0250d84190d312269d0f9fc4",
+      "prompt": "Create exactly ONE full-body native Qin Ming idle sprite from the corresponding NE character in this reference four-view sheet. This is a SINGLE view, not another sheet. Character identity/costume/style invariants: Broad powerful middle-aged Qin Ming, stern curly black beard and long curly black hair, red wrapped headscarf with small GOLD band, red robe/scarf, dark bronze breast/torso armor with gold beast-face shoulders and trim, bracers, gold beast-face knee guards, dark trousers, gold-trim boots and quiet patterned dark-red cloak. Preserve the exact identifiable face, layered armor plates/edges, warm bronze/red palette and fine painterly style from the reference. Same NORMAL ADULT head size, neck length, limb lengths, hands and boots; keep his broad adult shoulders and strong torso, not a short chibi/child body, huge head/boots or skinny substitute.\nCAMERA/FACING: BACK three-quarter elevated isometric view facing AWAY-UPPER-RIGHT / northeast. Back of shoulders, back of headcloth and cloak visible, just small far-side beard profile; no frontal chest or both eyes. Both boot toes point upper-right. Keep corresponding body orientation; never mirror a front view to pretend it is a back view.\nPOSTURE: Qin Ming's own strong forceful military officer bearing: head naturally raised with level gaze, neck aligned over shoulders, broad chest/shoulders comfortably open and upright upper back. Ordinary firm stance with both feet planted, modest natural knee softness and relaxed EMPTY hands near sides; no overarched chest, artificial parade rigidity, limp crouch, rounded hunch or aggressive attack gesture. His exact broad warrior physique is retained rather than stretching/slimming. This is an unarmed rescued FOOT-only candidate, no horse/mace/weapon/sheath/rope/banner/writing or new props. Cloak hangs quietly, same relative length as reference, cape must not obscure both legs/boots or trail beyond figure margins; never inflate like huge sails. Preserve original costume, no extra armor ornaments.\nFULL NATIVE FRAME: ONE complete adult Qin Ming centered on genuine transparent RGBA native square <=1536. At least80px clear margin around entire figure including cloak/headcloth/feet, slightly smaller within canvas rather than squashing body. Whole head, both hands, both boots and cape present and unclipped. No other people/views, grid/labels/text, floor/shadow/background, cropping, mirroring or added weapon. High-detail painterly game sprite consistent with reference.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/qin_ming_idle_single_ne_v4.json",
+      "request_sha256": "d327c58b08ba9649f1215495009f840592fa1d9d08cce713b18204a9ad0cea7c",
+      "references": [
+        "qin_ming_idle_v3"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "qin_ming_idle_single_nw_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-a94ab351-aeaa-46a3-b5db-8182cd6df332",
+      "repository_path": "assets/characters/qin_ming_wounded_20261005/idle_single_nw_v4.png",
+      "sha256": "626784c3f181c6dd82d6693f85910f75a977c729a48ec48462c9318e8018c7a9",
+      "prompt": "Create exactly ONE full-body native Qin Ming idle sprite from the corresponding NW character in this reference four-view sheet. This is a SINGLE view, not another sheet. Character identity/costume/style invariants: Broad powerful middle-aged Qin Ming, stern curly black beard and long curly black hair, red wrapped headscarf with small GOLD band, red robe/scarf, dark bronze breast/torso armor with gold beast-face shoulders and trim, bracers, gold beast-face knee guards, dark trousers, gold-trim boots and quiet patterned dark-red cloak. Preserve the exact identifiable face, layered armor plates/edges, warm bronze/red palette and fine painterly style from the reference. Same NORMAL ADULT head size, neck length, limb lengths, hands and boots; keep his broad adult shoulders and strong torso, not a short chibi/child body, huge head/boots or skinny substitute.\nCAMERA/FACING: BACK three-quarter elevated isometric view facing AWAY-UPPER-LEFT / northwest. Back of shoulders, back of headcloth and cloak visible, just small far-side beard profile; no frontal chest or both eyes. Both boot toes point upper-left. Keep corresponding body orientation; never mirror a front view to pretend it is a back view.\nPOSTURE: Qin Ming's own strong forceful military officer bearing: head naturally raised with level gaze, neck aligned over shoulders, broad chest/shoulders comfortably open and upright upper back. Ordinary firm stance with both feet planted, modest natural knee softness and relaxed EMPTY hands near sides; no overarched chest, artificial parade rigidity, limp crouch, rounded hunch or aggressive attack gesture. His exact broad warrior physique is retained rather than stretching/slimming. This is an unarmed rescued FOOT-only candidate, no horse/mace/weapon/sheath/rope/banner/writing or new props. Cloak hangs quietly, same relative length as reference, cape must not obscure both legs/boots or trail beyond figure margins; never inflate like huge sails. Preserve original costume, no extra armor ornaments.\nFULL NATIVE FRAME: ONE complete adult Qin Ming centered on genuine transparent RGBA native square <=1536. At least80px clear margin around entire figure including cloak/headcloth/feet, slightly smaller within canvas rather than squashing body. Whole head, both hands, both boots and cape present and unclipped. No other people/views, grid/labels/text, floor/shadow/background, cropping, mirroring or added weapon. High-detail painterly game sprite consistent with reference.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/qin_ming_idle_single_nw_v4.json",
+      "request_sha256": "cc11b161a1b445b8e2d32b9d8bf57ac5873bcc079193dbbab9961dad56847178",
+      "references": [
+        "qin_ming_idle_v3"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    }
+  ],
+  "scope": "Native complete ancestry plus new mathematical geometry references; Four idle candidates only; no production routing"
+}

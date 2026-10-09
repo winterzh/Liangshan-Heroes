@@ -1,0 +1,22 @@
+[gd_resource type="SpriteFrames" load_steps=3 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/zhu_gong_direction4_20261004/hurt.png" id="hurt"]
+
+[sub_resource type="AtlasTexture" id="hurt_sw"]
+atlas = ExtResource("hurt")
+region = Rect2(668, 0, 586, 637)
+margin = Rect2(25, 0, 51, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(12.0, -59.66)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.968538
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("hurt_sw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

@@ -38,6 +38,12 @@ const HALL_CELL := Vector2i(16,30)
 
 
 func setup(game_map: GameMap) -> void:
+	setup_original_decor(game_map, game_map.decor)
+
+
+## Fixed visual factory input only; gameplay map.decor is never changed.
+## Gao retains four old decorative boat nodes after filtering gameplay decor.
+func setup_original_decor(game_map: GameMap, visual_decor: Array) -> void:
 	_map = game_map
 	_battle = _map.get_parent().get_parent()
 	var level_id := _active_campaign_level_id()
@@ -76,7 +82,7 @@ func setup(game_map: GameMap) -> void:
 				_cache_reeds(x,y)
 	_build_reed_mesh()
 	# 从旧装饰列表复制视觉，原列表本身保持不变。
-	for d in _map.decor:
+	for d in visual_decor:
 		var tex: Texture2D = null
 		var flag_rect: Array = []
 		var routed_flag := false
@@ -730,10 +736,10 @@ func draw_unit_shadow(unit: Node2D, death_f: float) -> void:
 	elif unit.setup_def.has("campaign_object"):
 		tex = Art.campaign_object_texture(String(unit.setup_def.campaign_object), String(unit.get_meta("ship_state", "default")), unit.animation_direction)
 	else:
-		tex = Art.unit_texture(unit.key, unit.art_variant, unit.animation_direction)
+		tex = Art.unit_texture(unit.key, unit.visual_art_variant(), unit.animation_direction)
 	if tex == null and unit.is_building:
 		tex = Art.terrain_texture(unit.key)
-	var directional := Art.campaign_object_uses_directional_source(String(unit.setup_def.campaign_object), String(unit.get_meta("ship_state", "default")), unit.animation_direction) if unit.setup_def.has("campaign_object") else Art.unit_anim_uses_directional_source(unit._anim_key(), "idle", unit.animation_direction, unit.art_variant)
+	var directional := Art.campaign_object_uses_directional_source(String(unit.setup_def.campaign_object), String(unit.get_meta("ship_state", "default")), unit.animation_direction) if unit.setup_def.has("campaign_object") else Art.unit_anim_uses_directional_source(unit._anim_key(), "idle", unit.animation_direction, unit.visual_art_variant())
 	WorldShadow.draw_unit(unit, death_f, tex, directional)
 
 

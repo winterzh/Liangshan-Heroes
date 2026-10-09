@@ -1,0 +1,89 @@
+{
+  "schema": "daming_safe_retreat_full_producer_independent_review_correction",
+  "created_utc": "2026-10-07T18:51:38.171420+00:00",
+  "reviewer": "fx_caller_review",
+  "prior_review_pin": {
+    "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/ADAPTER_REVIEW_V25S_R2B_FX.json",
+    "sha256": "ada907585ebdbde19b1bf0177d708ee25331f0400eb208cef5d26530ddc862c3",
+    "bytes": 11008
+  },
+  "producer_pin": {
+    "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/run_daming_safe_retreat_v25s_r2b_full.py",
+    "sha256": "c9791942b0c71d83bcf47fbfb703a2096fd596737f88b2593e8b7fa27d34c0ea",
+    "bytes": 31209
+  },
+  "prior_no_blocker_conclusion_superseded": true,
+  "static_api_closure_passed": false,
+  "approved_stages": [],
+  "blocking": true,
+  "priority": "P2",
+  "finding": "Nullable required evidence keys can be absent and row.get returns None, passing exact None type/value comparison. Mandatory presence must be checked before nullable value equality.",
+  "world_affected_rows": 18,
+  "world_missing_nullable_fields": [
+    "initially_empty",
+    "zero_world_before_dispose",
+    "core_battle_null",
+    "core_identity_null",
+    "core_unit_plan_empty"
+  ],
+  "component_affected_rows": 116,
+  "component_missing_nullable_fields": [
+    "core_zero_before",
+    "core_zero_after"
+  ],
+  "pure_dictionary_missing_key_demonstrators": [
+    {
+      "consumer": "world",
+      "case": "identity_units_schema_int",
+      "route": "json",
+      "missing_keys": [
+        "initially_empty",
+        "zero_world_before_dispose",
+        "core_battle_null",
+        "core_identity_null",
+        "core_unit_plan_empty"
+      ],
+      "old_get_type_value_check_accepts_missing": true,
+      "no_engine_run": true
+    },
+    {
+      "consumer": "component",
+      "case": "unit_full_safe_stop__chase_intent",
+      "route": "source",
+      "missing_keys": [
+        "core_zero_before",
+        "core_zero_after"
+      ],
+      "old_get_type_value_check_accepts_missing": true,
+      "no_engine_run": true
+    }
+  ],
+  "locations": [
+    {
+      "file": "run_daming_safe_retreat_v25s_r2a_explore.py",
+      "lines": [
+        446,
+        448
+      ],
+      "use": "full inherited world consumer; immutable running A explorer does not call this method"
+    },
+    {
+      "file": "run_daming_safe_retreat_v25s_r2b_full.py",
+      "lines": [
+        207,
+        211
+      ],
+      "use": "component emitted mandatory Core-null evidence"
+    }
+  ],
+  "required_fix": "New immutable full sibling: actual world row must contain every expected descriptor key before type/value checks; component row must contain all actual checked emitted fields before type/value checks. Preserve 264/18-null/362/24/52 actual routes, exact null semantics, every original guard and all immutable old files. No change to running explorer.",
+  "capture_presence_already_present": true,
+  "original_GD_emits_expected_null_fields": true,
+  "actual_native_failure_observed": false,
+  "actual_report_corruption_test_executed": false,
+  "engine_started": false,
+  "public_or_original_source_modified": false,
+  "ongoing_A_exploration_affected": false,
+  "old_review_preserved_for_audit": true,
+  "current_launch_allowed": false
+}

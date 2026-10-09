@@ -1,0 +1,147 @@
+{
+  "schema": "campaign_callback_packets_preliminary_independent_review_v1",
+  "reviewed_at_utc": "2026-10-08T23:57:38.382934+00:00",
+  "independent": true,
+  "source_only": true,
+  "static_api_closure_passed": false,
+  "approved_stages": [],
+  "helper_sha256": "2e2f30b18bdc86e87d0e99adc5d23da3eb515a2508da863bd073c201f66e5678",
+  "source_spec_file_sha256": "1c2e6cf145d1a228bbc24459d59c5f6c7ac0b38a9c355de6ae1e172e5e5b8e7e",
+  "helper_pin": {
+    "path": "D:/AI项目/水浒/开发工程/tools/campaign_callback_packets_v1.py",
+    "bytes": 7820,
+    "sha256": "2e2f30b18bdc86e87d0e99adc5d23da3eb515a2508da863bd073c201f66e5678"
+  },
+  "source_spec_pin": {
+    "path": "D:/AI项目/水浒/开发工程/qa/campaign_progress_recovery_20261008/CALLBACK_PACKETS_SOURCE_SPEC_V1.json",
+    "bytes": 3351,
+    "sha256": "1c2e6cf145d1a228bbc24459d59c5f6c7ac0b38a9c355de6ae1e172e5e5b8e7e"
+  },
+  "source_pins": [
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\campaign_callback_packets_v1.py",
+      "bytes": 7820,
+      "sha256": "2e2f30b18bdc86e87d0e99adc5d23da3eb515a2508da863bd073c201f66e5678"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\campaign_callback_snapshot_wire_v1.py",
+      "bytes": 1214,
+      "sha256": "ead7f49ee949a73f302129374c815091910aaade44d5e24f7ade40b34a17726d"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\godot_debug_wire.py",
+      "bytes": 6794,
+      "sha256": "41703c88628a3fa473db00d8eeb79e87e6c2f250b0dc243a951b8295973e0c35"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\callback_observer_candidate_v1\\campaign_callback_snapshot_v1.gd",
+      "bytes": 4363,
+      "sha256": "97105db494a71c3821507092f02550d1d022ea30f082d7e61226646f7576b989"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\callback_observer_candidate_v1\\SOURCE.json",
+      "bytes": 4521,
+      "sha256": "5114054f2f43f18d9522b8d2d66c085c4ccbf8fd1096a8bee11cccf9cce5096d"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\callback_observer_candidate_v1\\CALLBACK_OBSERVER_PRELIMINARY_REVIEW_V1.json",
+      "bytes": 7536,
+      "sha256": "e5dfdd91bfc45731c952ba00bec11b4f652f009dcd9ffa44425947031aed18f3"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\callback_observer_candidate_v1\\ACTUAL_CALLBACK_SOURCE_MAP_V1.json",
+      "bytes": 5847,
+      "sha256": "e14f39d07bb99c8d2224c42b469f5b5de9872bad0e76a668af444d4faf430960"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\CALLBACK_PACKETS_SYNTHETIC_HOST_CHECKS_V1.py",
+      "bytes": 4787,
+      "sha256": "2ffa7b2aee1a85f26b4bf9e4b1ab8c71dace6aaa394b3fe12dda60e342ed5578"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\CALLBACK_PACKETS_SYNTHETIC_HOST_CHECKS_V1.json",
+      "bytes": 5471,
+      "sha256": "bcecee75a0b7dd697ecc6af1fca354d79e07f896289aedb184b3eb6116f5d0ac"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\campaign_callback_packets_v1_source_snapshot.py",
+      "bytes": 7820,
+      "sha256": "2e2f30b18bdc86e87d0e99adc5d23da3eb515a2508da863bd073c201f66e5678"
+    }
+  ],
+  "local_import_closure_passed": true,
+  "all_pinned_local_python_import_edges": 8,
+  "source_pins_match": true,
+  "snapshot_exact": true,
+  "findings": [
+    {
+      "id": "CALLBACK-UNICODE-001",
+      "severity": "blocking",
+      "file": "D:/AI项目/水浒/开发工程/tools/campaign_callback_packets_v1.py",
+      "lines": [
+        55,
+        57,
+        63,
+        138
+      ],
+      "problem": "json_value checks JSON string/key types but not whether the decoded Unicode is strictly UTF-8 encodable. An escaped lone surrogate in a records key or value passes the full snapshot consumer and advances sequence; later UTF-8 serialization of the decoded observation fails.",
+      "independent_reproduction": {
+        "classification": "synthetic pure-host valid wire bytes; no socket/Popen/Godot",
+        "payloads": [
+          {
+            "location": "campaign_memory.records.future.text",
+            "escaped_value": "\\ud800"
+          },
+          {
+            "location": "campaign_memory.records.future JSON key",
+            "escaped_value": "\\udfff"
+          }
+        ],
+        "decoder_accepted": true,
+        "sequence_after": 1,
+        "raw_bytes_retained": true,
+        "subsequent_json_dumps_ensure_ascii_false_utf8": "UnicodeEncodeError",
+        "ownership_proven": false
+      },
+      "minimal_fix": "Validate every decoded JSON key and string with strict UTF-8 encoding inside json_value, converting Unicode failures to WireError before consumer state changes. Retain legal escaped NUL."
+    }
+  ],
+  "verified_unaffected_boundaries": [
+    "Fields and nested Campaign/Cloud scalar type requirements correspond to the current observer output. Supplied identity is compared type-exactly, but is not established as native/source ownership proof by this decoder.",
+    "Original raw payload bytes, original SHA and size remain in results; returned projection does not mutate ready/expected identity. Fixed case and sequence 1..8, requested thread, replay and skipped-sequence checks remain present.",
+    "Duplicate keys, literal NaN/Infinity and overflowing floats, JSON depth/node/byte limits, exact top-level fields, booleans versus integers and invalid wire bytes are rejected before sequence advancement in the independently tested existing paths."
+  ],
+  "independent_host_checks": {
+    "classification": "synthetic/pure-host/no-native",
+    "ordinary_positive_and_negative_checks_passed": 73,
+    "coverage": [
+      "three cases and sequences 1..8",
+      "detached returned projection",
+      "bad ready keeps original state",
+      "every missing top-level snapshot field",
+      "cloud and campaign numeric/bool boundaries",
+      "nested duplicate keys",
+      "NaN/Infinity/-Infinity/1e999",
+      "depth24 accepted/depth25 refused",
+      "JSON byte/node bounds",
+      "nonbytes and trailing packet bytes",
+      "bad thread and skipped sequence",
+      "valid retry after refusals",
+      "replay refusal"
+    ],
+    "additional_unicode_reproductions": 2,
+    "legal_escaped_NUL_accepted_and_UTF8_serializable": true,
+    "referenced_existing_58_check_record": "CALLBACK_PACKETS_SYNTHETIC_HOST_CHECKS_V1.json was read and source-pinned; independent checks above are separate and extend it."
+  },
+  "qualification": {
+    "socket_opened": false,
+    "Popen_started": false,
+    "Godot_started": false,
+    "ownership_proven": false,
+    "actual_callback_qualified": false,
+    "original19_qualified": false,
+    "SDK_qualified": false,
+    "overall_goal_qualified": false
+  },
+  "scope_limit": "Pure packet decoding preliminary only. No current-engine paused capture, complete controller, callback semantics or three-case native qualification is approved."
+}

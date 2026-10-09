@@ -1,0 +1,23 @@
+{
+  "source_review_only": true,
+  "runtime_qualified": false,
+  "finding": "Native scenery owner record includes entrance traversal ID but not original Entrance _map/_gate_parts/_side_gate_parts/_wall_parts. Fixed factory rebuild currently matches node records, yet capture should explicitly reject missing/reordered/foreign internal owner references rather than silently regenerate corrupted ownership.",
+  "required_next": "After live immutable h batch terminal, extend native-only entrance ownership descriptor with traversal IDs and exact new map/child script/parent references; preserve literal original order, uniqueness and complete child coverage. Check source tamper and snapshot tamper negatives; original source restored between fixtures. Normal new-game factory unchanged. Original bank-ridges/texture metrics derived identity should be checked against fixed original factory, never arbitrary snapshot resource selection.",
+  "sources": [
+    {
+      "path": "scripts/run_scenery_state.gd",
+      "sha256": "76a48cfa6c60fd7ba5619b54f618130aa3b84f4bae2bfd298bde1d38e7e2e759"
+    },
+    {
+      "path": "scripts/liangshan_entrance.gd",
+      "sha256": "8246ffc4e1114442bffb273871183b4a48d585cf510d584a5008fad0d0bece09"
+    },
+    {
+      "path": "scripts/liangshan_layout.gd",
+      "sha256": "9512f8c03561d016ee657cca1281ef89c9b69cd65c8abdb0078bdc5929d95ca9"
+    }
+  ],
+  "live_batch_handle": 15376,
+  "current_private_run": "E:/ChatGPT/qa-world-restore-20261007/gao_scenery_v20h_1e6444cf",
+  "constraints": "No edits to frozen inputs while current producer live. No source qualification, cleanup or Git delivery claim."
+}

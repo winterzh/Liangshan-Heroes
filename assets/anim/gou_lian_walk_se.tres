@@ -1,0 +1,34 @@
+[gd_resource type="SpriteFrames" load_steps=5 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/gou_lian_direction4_20261004/walk_a.png" id="walk_a"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/gou_lian_direction4_20261004/walk_b.png" id="walk_b"]
+
+[sub_resource type="AtlasTexture" id="walk_a_se"]
+atlas = ExtResource("walk_a")
+region = Rect2(0, 0, 635, 611)
+margin = Rect2(0, 12, 0, 24)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-79.0, 11.7)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.327882
+
+[sub_resource type="AtlasTexture" id="walk_b_se"]
+atlas = ExtResource("walk_b")
+region = Rect2(0, 0, 653, 618)
+margin = Rect2(0, 17, 0, 35)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-94.5, -63.54)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.004615
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("walk_a_se")},
+{"duration": 1.0, "texture": SubResource("walk_b_se")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

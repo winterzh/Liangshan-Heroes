@@ -347,6 +347,7 @@ const DUST_DUR := 0.36
 # body motion and weapon pose already live in the bitmap, so the legacy whole-
 # sprite swing and procedural weapon trail must not be layered on top.
 const AUTHORED_DIRECTION4_ATTACK_KEYS := {
+	"wu_song": true,
 	"guan_zhanzi": true,
 	"guan_dao": true,
 	"guan_gong": true,
@@ -356,6 +357,22 @@ const AUTHORED_DIRECTION4_ATTACK_KEYS := {
 	"lin_chong": true,
 	"sun_li": true,
 	"hu_sanniang": true,
+	"hu_yanzhuo": true,
+	"wu_yong": true,
+	"hua_rong": true,
+	"yang_zhi": true,
+	"lu_junyi": true,
+	"guan_sheng": true,
+	"qin_ming": true,
+	"chao_gai": true,
+	"siege_cata": true,
+	"zhu_qi": true,
+	"zhu_gong": true,
+	"zhu_keke": true,
+	"gou_lian": true,
+	"lian_huan_ma": true,
+	"xu_ning": true,
+	"han_tao": true,
 }
 
 
@@ -2425,6 +2442,7 @@ func _has_smoke() -> bool:
 func _attack_sfx_name() -> String:
 	match key:
 		"siege_cata": return "atk_catapult"
+		"zhu_qi": return "atk_spear"       # Authored spear appearance; existing hit timing stays unchanged.
 		"guan_gong": return "atk_crossbow"   # 弩手
 		"hu_yanzhuo": return "atk_mace"       # 双鞭
 		"jiang_menshen": return "atk_fist"    # 赤手
@@ -3654,9 +3672,8 @@ func _draw_sprite_animated(tex: Texture2D, tint: Color, death_f: float) -> void:
 		_frame_directional = Art.campaign_object_uses_directional_source(ship_key, ship_state, animation_direction)
 		off.y = sin(_idle_t * 1.4) * 1.2 if story_outcome == "" else 0.0
 	elif story_outcome != "":
-		var down: Array = Art.unit_anim_frames(_anim_key(), "down", animation_direction, art_variant)
+		var down: Array = _story_animation_frames()
 		if not down.is_empty():
-			_frame_directional = Art.unit_anim_uses_directional_source(_anim_key(), "down", animation_direction, art_variant)
 			frame = down[-1]
 		elif story_outcome == "unconscious":
 			frame = _rest_frame(tex)
@@ -3667,9 +3684,9 @@ func _draw_sprite_animated(tex: Texture2D, tint: Color, death_f: float) -> void:
 			sy = 0.70
 			off.y = radius * 0.15
 	elif _dying:
-		var df: Array = Art.unit_anim_frames(_anim_key(), "death", animation_direction, art_variant)
+		var df: Array = Art.unit_anim_frames(_anim_key(), "death", animation_direction, visual_art_variant())
 		if not df.is_empty():
-			_frame_directional = Art.unit_anim_uses_directional_source(_anim_key(), "death", animation_direction, art_variant)
+			_frame_directional = Art.unit_anim_uses_directional_source(_anim_key(), "death", animation_direction, visual_art_variant())
 			# 真·死亡逐帧：按死亡进度播一遍、末帧定格在地；后 30% 才淡出（先看清倒地、再消失），不叠程序化倾倒
 			_real_frames = true
 			frame = df[mini(int(death_f * df.size()), df.size() - 1)]
@@ -3714,6 +3731,13 @@ func _draw_sprite_animated(tex: Texture2D, tint: Color, death_f: float) -> void:
 			var swdamp := _programmatic_swing_scale()
 			off += _swing_offset() * swdamp
 			ang += _swing_rot() * swdamp
+		# Authored catapult wheels and lever already carry all motion. A rigid
+		# timber chassis must not inherit infantry breathing, gait or bow lean.
+		if _authored_catapult_chassis_active():
+			off = Vector2.ZERO
+			ang = 0.0
+			sx_scale = 1.0
+			sy = 1.0
 		if _cast_t > 0.0:                                     # 施法抬手：起身后仰蓄势，结算瞬间回落=「放招」
 			var lift := 1.0 - _cast_t / _cast_dur             # 0→1
 			lift = lift * lift * (3.0 - 2.0 * lift)           # smoothstep
@@ -3810,6 +3834,19 @@ func _campaign_flag_route(for_render := false) -> Dictionary:
 	return route
 
 
+## Use the same exact selection for the real draw and story-pose QA. A captured
+## actor keeps its living outcome; other outcomes and costumes keep their down route.
+func _story_animation_frames() -> Array:
+	if story_outcome == "captured":
+		var captive: Array = Art.unit_captured_frames(_anim_key(), animation_direction, visual_art_variant())
+		if not captive.is_empty():
+			_frame_directional = true
+			return captive
+	var down: Array = Art.unit_anim_frames(_anim_key(), "down", animation_direction, visual_art_variant())
+	_frame_directional = Art.unit_anim_uses_directional_source(_anim_key(), "down", animation_direction, visual_art_variant())
+	return down
+
+
 func _frame_draw_scale(frame: Texture2D) -> float:
 	if frame == null: return 1.0
 	var scale_meta: Variant = frame.get_meta("draw_scale", 1.0)
@@ -3833,6 +3870,10 @@ func _frame_draw_offset(frame: Texture2D, drawn_size: float) -> Vector2:
 func _authored_direction4_attack_active() -> bool:
 	return _lunge > 0.0 and _real_frames and _frame_directional \
 		and art_variant.is_empty() and AUTHORED_DIRECTION4_ATTACK_KEYS.has(key)
+
+
+func _authored_catapult_chassis_active() -> bool:
+	return key == "siege_cata" and art_variant.is_empty() and _real_frames and _frame_directional
 
 
 func _programmatic_swing_scale() -> float:
@@ -3915,9 +3956,20 @@ func _draw_swing_fx() -> void:
 					Color(0.92, 0.96, 1.0, a * 0.7), 2.5)
 
 
-## 当前精灵动画用的美术 key：花荣拔刀近战时切到「<key>_melee」走刀版本（无此美术则回退原 key）。
+## Derived chapter appearance; the persisted variant and gameplay roles stay intact.
+func visual_art_variant() -> String:
+	if not art_variant.is_empty(): return art_variant
+	if not is_noncombat or is_hero or is_captive or faction != FACTION_LIANG \
+			or not CampaignArt.NATIVE_WOUNDED_FAMILIES.has(key): return art_variant
+	if not is_instance_valid(battle) or not is_instance_valid(battle.level): return art_variant
+	if battle.level.get_script().resource_path != "res://scripts/levels/level3_zhujiazhuang_rts.gd": return art_variant
+	# Only the chapter's actual seven actors qualify. Derive after restore from
+	# persisted role flags, preserving the empty-variant legacy save contract.
+	return "zhu_wounded_" + key if battle.level.prisoners.has(self) else art_variant
+
+## 花荣拔刀近战时切到对应美术key（无素材则回退原key）。
 func _anim_key() -> String:
-	if melee_mode and can_melee_switch and not Art.unit_anim_frames(key + "_melee", "walk", animation_direction, art_variant).is_empty():
+	if melee_mode and can_melee_switch and not Art.unit_anim_frames(key + "_melee", "walk", animation_direction, visual_art_variant()).is_empty():
 		return key + "_melee"
 	return key
 
@@ -3935,64 +3987,64 @@ func _campaign_wine_carry_state() -> String:
 func _anim_frame_for_state(fallback: Texture2D) -> Texture2D:
 	_frame_directional = false
 	if story_assistance_active():
-		var assisted: Array = Art.unit_anim_frames(key,"assisted",animation_direction,art_variant)
+		var assisted: Array = Art.unit_anim_frames(key,"assisted",animation_direction,visual_art_variant())
 		if not assisted.is_empty():
 			_real_frames = true
-			_frame_directional = Art.unit_anim_uses_directional_source(key, "assisted", animation_direction, art_variant)
+			_frame_directional = Art.unit_anim_uses_directional_source(key, "assisted", animation_direction, visual_art_variant())
 			var phase := fposmod(_anim_t,TAU)/TAU if _move_blend>0.3 else 0.0
 			return assisted[int(phase*assisted.size())%assisted.size()]
 	var carry_state := _campaign_wine_carry_state()
 	if not carry_state.is_empty():
-		var carried_frames: Array = Art.unit_anim_frames(key, carry_state, animation_direction, art_variant)
+		var carried_frames: Array = Art.unit_anim_frames(key, carry_state, animation_direction, visual_art_variant())
 		if not carried_frames.is_empty():
 			_real_frames = true
-			_frame_directional = Art.unit_anim_uses_directional_source(key, carry_state, animation_direction, art_variant)
+			_frame_directional = Art.unit_anim_uses_directional_source(key, carry_state, animation_direction, visual_art_variant())
 			var carry_phase := fposmod(_anim_t, TAU) / TAU if _move_blend > 0.3 else 0.0
 			return carried_frames[int(carry_phase * carried_frames.size()) % carried_frames.size()]
 	if String(get_meta("story_pose", "")) == "intercept":
-		var intercept: Array = Art.unit_anim_frames(key, "intercept", animation_direction, art_variant)
+		var intercept: Array = Art.unit_anim_frames(key, "intercept", animation_direction, visual_art_variant())
 		if not intercept.is_empty():
-			_frame_directional = Art.unit_anim_uses_directional_source(key, "intercept", animation_direction, art_variant)
+			_frame_directional = Art.unit_anim_uses_directional_source(key, "intercept", animation_direction, visual_art_variant())
 			return intercept[0]
 	if String(get_meta("story_pose", "")) in ["windup", "rush_windup"] \
 			and art_variant == "jiang_menshen_fists":
-		var windup: Array = Art.unit_anim_frames(key, "attack", animation_direction, art_variant)
+		var windup: Array = Art.unit_anim_frames(key, "attack", animation_direction, visual_art_variant())
 		if not windup.is_empty():
-			_frame_directional = Art.unit_anim_uses_directional_source(key, "attack", animation_direction, art_variant)
+			_frame_directional = Art.unit_anim_uses_directional_source(key, "attack", animation_direction, visual_art_variant())
 			return windup[0]
 	var ak := _anim_key()
 	if _flinch.length_squared() > 1.0:
-		var hurt: Array = Art.unit_anim_frames(ak, "hurt", animation_direction, art_variant)
+		var hurt: Array = Art.unit_anim_frames(ak, "hurt", animation_direction, visual_art_variant())
 		if not hurt.is_empty():
-			_frame_directional = Art.unit_anim_uses_directional_source(ak, "hurt", animation_direction, art_variant)
+			_frame_directional = Art.unit_anim_uses_directional_source(ak, "hurt", animation_direction, visual_art_variant())
 			return hurt[0]
 	# 出招优先：若有 attack 帧带就同步挥击进度播放
 	if _lunge > 0.0:
 		# 采矿/采集时：优先用专属「采矿」帧带（如喽啰挥锄凿地），无则退回攻击帧
 		if _state == ST_GATHER:
-			var gf: Array = Art.unit_anim_frames(ak, "gather", animation_direction, art_variant)
+			var gf: Array = Art.unit_anim_frames(ak, "gather", animation_direction, visual_art_variant())
 			if not gf.is_empty():
 				_real_frames = true
-				_frame_directional = Art.unit_anim_uses_directional_source(ak, "gather", animation_direction, art_variant)
+				_frame_directional = Art.unit_anim_uses_directional_source(ak, "gather", animation_direction, visual_art_variant())
 				var gph := clampf(1.0 - _lunge, 0.0, 0.999)
 				return gf[int(gph * gf.size()) % gf.size()]
-		var af: Array = Art.unit_anim_frames(ak, "attack", animation_direction, art_variant)
+		var af: Array = Art.unit_anim_frames(ak, "attack", animation_direction, visual_art_variant())
 		if not af.is_empty():
 			_real_frames = true
-			_frame_directional = Art.unit_anim_uses_directional_source(ak, "attack", animation_direction, art_variant)
+			_frame_directional = Art.unit_anim_uses_directional_source(ak, "attack", animation_direction, visual_art_variant())
 			var ph := clampf(1.0 - _lunge, 0.0, 0.999)       # 0→1 一遍挥击
 			return af[int(ph * af.size()) % af.size()]
 	# 施法抬手：借用攻击帧带做「抬手蓄势」姿（不结算伤害），停在挥击中段=举起待发
 	if _cast_t > 0.0:
-		var ac: Array = Art.unit_anim_frames(ak, "attack", animation_direction, art_variant)
+		var ac: Array = Art.unit_anim_frames(ak, "attack", animation_direction, visual_art_variant())
 		if not ac.is_empty():
 			_real_frames = true
-			_frame_directional = Art.unit_anim_uses_directional_source(ak, "attack", animation_direction, art_variant)
+			_frame_directional = Art.unit_anim_uses_directional_source(ak, "attack", animation_direction, visual_art_variant())
 			var cph := clampf(1.0 - _cast_t / _cast_dur, 0.0, 1.0) * 0.55   # 只播到挥击中段
 			return ac[int(cph * ac.size()) % ac.size()]
 	var moving := _move_blend > 0.3
 	var state := "walk" if moving else "idle"
-	var frames: Array = Art.unit_anim_frames(ak, state, animation_direction, art_variant)
+	var frames: Array = Art.unit_anim_frames(ak, state, animation_direction, visual_art_variant())
 	if frames.is_empty() and not moving:
 		# 无专门 idle 帧时，用走循环里「双腿并拢」的过渡帧当静止姿，
 		# 确保静止与行走是同一套美术（否则会和旧静态图集立绘的大小/画风对不上 → 起停跳变）
@@ -4004,7 +4056,7 @@ func _anim_frame_for_state(fallback: Texture2D) -> Texture2D:
 		_frame_directional = false
 		return fallback
 	_real_frames = true
-	_frame_directional = Art.unit_anim_uses_directional_source(ak, state, animation_direction, art_variant)
+	_frame_directional = Art.unit_anim_uses_directional_source(ak, state, animation_direction, visual_art_variant())
 	var n := frames.size()
 	var t := (fposmod(_anim_t, TAU) / TAU) if moving else (fposmod(_idle_t * 1.4, TAU) / TAU)
 	return frames[int(t * n) % n]
@@ -4012,9 +4064,9 @@ func _anim_frame_for_state(fallback: Texture2D) -> Texture2D:
 
 ## 静止姿：有走循环帧时取「双腿并拢」过渡帧（idle/死亡共用，保证全程一套美术），否则退回静态立绘
 func _rest_frame(fallback: Texture2D) -> Texture2D:
-	var wf: Array = Art.unit_anim_frames(_anim_key(), "walk", animation_direction, art_variant)
+	var wf: Array = Art.unit_anim_frames(_anim_key(), "walk", animation_direction, visual_art_variant())
 	if not wf.is_empty():
-		_frame_directional = Art.unit_anim_uses_directional_source(_anim_key(), "walk", animation_direction, art_variant)
+		_frame_directional = Art.unit_anim_uses_directional_source(_anim_key(), "walk", animation_direction, visual_art_variant())
 		return wf[1 % wf.size()]
 	_frame_directional = false
 	return fallback
@@ -4031,7 +4083,7 @@ func _building_shadow_texture(visible_texture: Texture2D, scoped_texture: Textur
 
 
 func _draw() -> void:
-	var tex: Texture2D = Art.unit_texture(key, art_variant, animation_direction)
+	var tex: Texture2D = Art.unit_texture(key, visual_art_variant(), animation_direction)
 	if setup_def.has("campaign_object"):
 		var prop := Art.campaign_object_texture(String(setup_def.campaign_object), String(get_meta("ship_state", "default")), animation_direction)
 		if prop != null:
@@ -4141,7 +4193,7 @@ func _draw() -> void:
 
 	# 没有静态图集格、但放了逐帧走循环的单位（喽啰、梁山马军）也要走精灵绘制，
 	# 否则会卡在占位符——_anim_frame_for_state 在 tex 为 null 时用走循环帧当静止/行走姿。
-	var has_walk := not Art.unit_anim_frames(_anim_key(), "walk", animation_direction, art_variant).is_empty()
+	var has_walk := not Art.unit_anim_frames(_anim_key(), "walk", animation_direction, visual_art_variant()).is_empty()
 	var as_sprite := not is_building and (tex != null or has_walk)
 	var tint := Color(1.4, 1.2, 1.1) if _flash > 0.0 else Color.WHITE
 	if _hex_t > 0.0 and not is_building and not _dying:
@@ -4181,7 +4233,7 @@ func _draw() -> void:
 		if not is_hero and not is_building and not inspected and movement_profile!="water":
 			status_text = {"unconscious":Localize.text("昏"), "subdued":Localize.text("服"), "captured":Localize.text("俘")}.get(story_outcome,status_text)
 		draw_string(ThemeDB.fallback_font, Vector2(-45,bar_y+12), status_text, HORIZONTAL_ALIGNMENT_CENTER, 90, 13, Color(0.96,0.83,0.53))
-	if is_bound_person():
+	if is_bound_person() and CampaignArt.native_bound_owner(art_variant).is_empty():
 		for rope_y in [-22,-19]: draw_line(Vector2(-7,rope_y),Vector2(7,rope_y),Color(0.65,0.48,0.27),1.7)
 	if hp > 0.0 and story_outcome == "" and Settings.show_healthbars and (not _mass_visuals() or hp < max_hp - 0.5):
 		var w := (radius * 2.6) if (is_hero or is_building) else (radius * 2.1)
@@ -4383,10 +4435,11 @@ func _draw_building() -> void:
 		return
 	# 关卡把俘虏标为building仅为定身/任务判定；外观仍是被缚的人。
 	if is_bound_person() and battle.map.environment_style!="":
-		var captive_tex := Art.unit_texture(key.trim_suffix("_bound"), art_variant, animation_direction)
+		var captive_tex := Art.unit_texture(key.trim_suffix("_bound"), visual_art_variant(), animation_direction)
 		if captive_tex!=null:
 			draw_texture_rect(captive_tex,Rect2(-31,-53,62,62),false,Color(0.84,0.83,0.78))
-			for y in [-24,-21]: draw_line(Vector2(-8,y),Vector2(8,y),Color(0.60,0.44,0.24),2.0)
+			if CampaignArt.native_bound_owner(art_variant).is_empty():
+				for y in [-24,-21]: draw_line(Vector2(-8,y),Vector2(8,y),Color(0.60,0.44,0.24),2.0)
 		return
 	if is_resource:
 		_draw_resource_node()
@@ -4423,13 +4476,13 @@ func _draw_building() -> void:
 		return
 	# 按建筑自身 key 找专属美术：遭遇战建筑在 buildings；treasure_cart 在 units3；其余在 terrain
 	var scoped_tex: Texture2D = _campaign_environment_texture()
-	var tex: Texture2D = Art.unit_texture(key, art_variant, animation_direction) if art_variant != "" else Art.building_texture(key)
+	var tex: Texture2D = Art.unit_texture(key, visual_art_variant(), animation_direction) if art_variant != "" else Art.building_texture(key)
 	if setup_def.has("building_art_key"): tex=battle.building_visual_texture(key)
 	if setup_def.has("campaign_object"):
 		var prop := Art.campaign_object_texture(String(setup_def.campaign_object))
 		if prop != null: tex = prop
 	if tex == null:
-		tex = Art.unit_texture(key, art_variant, animation_direction)
+		tex = Art.unit_texture(key, visual_art_variant(), animation_direction)
 	if tex == null:
 		tex = Art.terrain_texture(key)
 	if tex == null:
@@ -4512,7 +4565,7 @@ func ui_portrait_texture() -> Texture2D:
 		if scoped != null:
 			# Match the live Unit canvas fallback for this native tavern atlas.
 			return LIVE_TAVERN_FALLBACK if key == "tavern" and scoped is AtlasTexture else scoped
-	return Art.ui_portrait_texture(key, art_variant)
+	return Art.ui_portrait_texture(key, visual_art_variant())
 
 
 ## Defense deliberately reuses the static Liangshan hall. Only that exact

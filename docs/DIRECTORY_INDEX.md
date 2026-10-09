@@ -1,3 +1,1130 @@
+## 2026-10-09：完整云用例来源
+
+tools新增固定重启publisher、case runtime包装和完整cloud producer；恢复QA新增三snapshot、CLOUD_CASE完整recipe/准备/scope、11项publication synthetic脚本/结果、第四failed prior原stdout/拒绝及有限独立mainchain初审。原source-only与原拒绝均保留，无成功前置/native准入。
+
+## 2026-10-09：云普通重启来源
+
+恢复QA新增 cloud_restart_driver_candidate_v1/：GD、33来源标签合同、SOURCE、准备脚本、scope、host原snapshot/direct source；tools新增 campaign_cloud_restart_evidence_v1.py。独立review原件纳入本轮白名单，native/完整producer均未通过。
+
+## 2026-10-09：自然callback文本与producer重绑定来源
+
+新增packet_evidence_v3/natural_evidence_v3及两snapshot、NATURAL_CALLBACK_USER_TEXT_SOURCE/准备/SCOPE/19项synthetic与有限独立收据；新增producer_v2与snapshot、190pin recipe、scope、第四failed prior实际CLI拒绝与有限producer review。旧原件全部保留，未有成功prior/native准入。
+
+## 2026-10-09：原native userdata文本后继
+
+新增semantics_v2/arm_packet_evidence_v2/first_evidence_v4/runtime_v5与四snapshot；恢复QA新增原USER-TEXT拒绝、SOURCE/SCOPE/准备、35项Windows表示host脚本/结果、初始fixture script/失败观察及有限独立review。真实LuA报告只是表示证据，不晋升失败full。
+
+## 2026-10-09：完整原生CFG语义来源
+
+恢复QA新增cloud_applying_driver_candidate_v3/：独立原/expected/final wholeCFG投影GD、SOURCE/40-24-27合同/准备脚本；新增四tools与snapshot、CLOUD_CFG_SEMANTICS_SOURCE_SPEC_V1/准备/SCOPE、25项伪造投影host脚本/结果及有限review。当前没有actualGodot解析/运行或整个cloud用例通过。
+
+## 2026-10-09：CFG generation范围后继来源
+
+新增physical_v2/runtime_v3/first_evidence_v2及三snapshot；恢复QA新增原V1拒绝、V2 SOURCE_SPEC/准备/SCOPE、27项synthetic脚本/结果与有限独立delta review。旧225来源和原包重放保持，未取得native资格。
+
+## 2026-10-09：首次云回调中间消费者来源
+
+新增四tools：cloud_arm_packet_evidence_v1、cloud_cfg_physical_v1、cloud_applying_runtime_v2、cloud_apply_first_evidence_v1。恢复QA新增四snapshot、CLOUD_FIRST_EVIDENCE_SOURCE_SPEC_V1、准备/SCOPE、17项synthetic files脚本/结果与有限独立review。完整native semantics/cloud restart/producer仍待完成。
+
+## 2026-10-09：云回调主机arm与phase来源
+
+新增 tools/campaign_cloud_arm_packets_v1.py、campaign_cloud_arm_controller_v1.py、campaign_cloud_arm_raw_receiver_v1.py、campaign_cloud_applying_exports_v1.py、campaign_cloud_applying_runtime_v1.py。恢复QA新增五snapshot、CLOUD_ARM_HOST_SOURCE_SPEC_V1、准备/SCOPE、32/43合成脚本/结果与初始fixture失败script/观察及有限独立review。无原生准入或完整consumer/restart/producer。
+
+## 2026-10-09：云应用回调arm后继来源
+
+cloud_applying_driver_candidate_v1/保留原链/API和追加握手拒绝；cloud_applying_driver_candidate_v2/新增driver、只读observer arm子类、SOURCE/33-20-23合同、准备脚本、范围与有限review。主机接入与原生兼容性未建立。
+
+## 2026-10-09：云应用回调源码与独立收据
+
+恢复QA新增 cloud_applying_driver_candidate_v1/：真实production apply GD、SOURCE、30/20标签合同、可复现准备脚本、REVIEW_SCOPE与有限独立review。自然callback三进程producer的独立原收据另存 NATURAL_CALLBACK_PRODUCER_PRELIMINARY_REVIEW_V1.json；两个范围均没有原生准入。
+
+## 2026-10-09：自然回调完整执行器来源
+
+新增 tools/run_campaign_natural_callback_v1.py；恢复QA新增完整producer源码recipe、原字节snapshot、SCOPE、十项host检查脚本/结果、第四失败prior实际CLI拒绝观察及有限独立review。当前未创建成功前置seal或native batch。
+
+## 2026-10-09：回调消费者尾流修复来源
+
+新增两个 evidence_v2 工具、两份原字节 snapshot、SOURCE_SPEC_V2、原 V1 拒绝及 V2 有限通过收据、六项顺序反例脚本/结果与封存准备脚本。V1 原件保留；没有原生批、成功前置或执行准入。
+
+## 2026-10-09：自然callback完整消费者来源
+
+新增tools/campaign_natural_callback_evidence_v1.py、campaign_callback_packet_evidence_v1.py、prepare_campaign_callback_labels_v1.py；恢复QA新增80/56/21完整标签合同、三snapshot、CALLBACK_EVIDENCE_SOURCE_SPEC_V1、15项synthetic脚本/记录与有限review。当前无真实完整validate/Native/执行准入，物理七方法保持已审原件。
+
+## 2026-10-09：自然回调phase集成来源
+
+新增 tools/campaign_callback_runtime_v1.py；恢复QA新增exact snapshot、CALLBACK_RUNTIME_SOURCE_SPEC_V1/V2、原拒绝及后继有限review、26项synthetic host脚本/结果和可复现全pin AST closure脚本/结果与有限独立review。69pins来源只覆盖phase集成，未有完整consumer/producer或native准入；普通cold/restart保持已审父方法。
+
+## 2026-10-09：包预算与四文件发布器后继
+
+新增tools/campaign_callback_controller_v3.py、campaign_callback_raw_receiver_v3.py、campaign_callback_native_exports_v1.py；恢复QA新增三snapshot、CALLBACK_BUDGET_EXPORTS_SOURCE_SPEC_V1、可复现14项磁盘/70项receiver scripts/results、初始host失败script/观察及有限review。callback_budget_exports_independent_host_v1/保留两份独立fixture结果与原字节来源；4096证据文件保留在CodexTemp合成测试目录，不上传全部临时文件；原预算/源/拒绝都保留。
+
+## 2026-10-09：原包接收与自然回调驱动来源
+
+新增 tools/campaign_callback_raw_receiver_v1/v2.py；恢复QA新增两代exact snapshot、SOURCE_SPEC、可复现67/70项synthetic脚本/记录与有限独立收据。callback_natural_driver_candidate_v1/包含单自然回调GD、SOURCE和有限源码审查，未解析/未运行。旧V1拒绝/后继修复和原生产parent全部保留。
+
+## 2026-10-09：回调控制器来源与接口
+
+新增 tools/campaign_callback_controller_v1/v2.py；恢复QA新增两代 exact snapshot、CALLBACK_CONTROLLER_SOURCE_SPEC_V1/V2、早期SOURCE_PREFLIGHT、可复现33项synthetic脚本/结果及独立有限收据。CALLBACK_CONTROLLER_INTERFACE_V1.md记录后续driver/raw receiver/完整消费者与producer接口，尚无原生准入或两case结果。
+
+## 2026-10-09：回调原包消费者各代证据
+
+新增 tools/campaign_callback_packets_v1/v2.py；恢复QA新增两代snapshot、SOURCE_SPEC、可复现synthetic检查脚本/记录及有限独立收据。V1 Unicode拒绝原件保留，V2差异复审仅源码。callback_observer_candidate_v1/ 新增 CONTROLLER_INTEGRATION_CONTRACT_V1.md，设计未实现，不能计为controller或原生资格。
+
+## 2026-10-09：回调只读观察器来源
+
+新增 tools/campaign_callback_snapshot_wire_v1.py；恢复 QA 的 callback_observer_candidate_v1/ 包含 GD、SOURCE、实际生产调用源码映射、有限独立收据及 protocol_reference_4_4/ 三份官方参考源码；另保留 wire exact snapshot 与21项可复现纯主机脚本/记录。只属 source-only、stages=[]，不是三用例执行器或当前引擎兼容性证明。
+
+## 2026-10-09：首次／重复终局完整producer与来源recipe
+
+新增 tools/run_campaign_first_repeat_v1.py；恢复QA新增 exact snapshot、FIRST_REPEAT_PRODUCER_SOURCE_RECIPE_V1.json、HOST_PREFLIGHT、可复现FAILED_PRIOR_CHECKS脚本/结果和PRELIMINARY_REVIEW。99pins/51Python/178import/27overlay source-only/stages[]，五实际流程未运行；recipe不等于成功prior绑定的seal。
+
+## 2026-10-09：首次／重复完整消费者的各代来源与binary复制
+
+新增 tools/campaign_first_repeat_evidence_v1/v2/v3.py、campaign_original19_binary_files_v1.py；恢复QA新增四份snapshot、FIRST_REPEAT_EVIDENCE_SOURCE_SPEC_V1/V3、V1拒绝/V3预备收据，以及历史V1_V2与纠正V3的两份可复现primitive脚本/结果。V2未封草稿不准入，V3只source static/stages[]；完整producer/真实四流程仍未运行。
+
+## 2026-10-09：首次／重复发布部件、完整标签与第四批终态原档
+
+新增 tools/campaign_natural_terminal_exports_v1.py、campaign_natural_terminal_runtime_v1.py、prepare_campaign_first_repeat_labels_v1.py；恢复QA新增三个snapshot、NATURAL_FIRST_REPEAT_RUNTIME_SOURCE_SPEC/预备收据/可复现人工host脚本及结果、ORIGINAL19_FIRST_REPEAT_COMPLETE_LABEL_CONTRACT_V1.json。新增第四完整批失败索引/六原文件目录和后继拒绝该终态prior的只读记录。部件只source static/stages[]，原完整批已退出1；旧START/A单阶段原件保留，不上传profile。
+
+## 2026-10-09：首次／重复自然终局候选与第四批 Lu A 原件
+
+恢复QA新增 original19_first_repeat_candidate_v1/（GD/SOURCE/17项HOST_SOURCE_PREFLIGHT/独立预备收据），以及 DURABLE_CHAIN_V12_FOURTH_RUN_LU_A_OBSERVATION_V1.json、actual_durable_chain_v12_r4_lu_a/ 原 report/log。前者仅source static/stages[]，后者为本批 A 实际305项通过原件；无profile上传，不替代全61和原19资格。
+
+## 2026-10-09：成功前置收据绑定执行器 V3
+
+新增 tools/run_campaign_file_faults_v3.py；恢复QA新增 exact source snapshot、ORIGINAL19_SIX_FILE_FAULT_V3_HOST_GATE_CHECKS.json 及 ORIGINAL19_SIX_FILE_FAULT_PRODUCER_V3_PRELIMINARY_REVIEW.json。仅有限源码预备通过，无成功 prior 或 V3 seal/native准入；旧 V1/V2 原件保留。
+
+## 2026-10-09：第四完整批历史启动观察
+
+恢复QA新增 `DURABLE_CHAIN_V12_FOURTH_RUN_START_V1.json`，只记录新批8fe7b18b/session14695进入cold_import时的实际进程与原封存SHA，不是终态或通过资格；私有工程/档案不上传。
+
+## 2026-10-09：六故障完整执行器封存与第三批终态原档
+
+tools 新增 `campaign_file_fault_prior_v1/v2.py`、`campaign_original19_fault_runtime_v3.py`、`run_campaign_file_faults_v1/v2.py`；恢复 QA 新增五份 source snapshot、两代 SOURCE_SPEC/HOST_PREFLIGHT/PRIOR_GATE_NEGATIVES/INDEPENDENT_REVIEW，以及 `ACTUAL_FOREIGN_INTERRUPTION_FULL_V12_R3.json` 和 `actual_foreign_interrupted_durable_chain_v12_r3/` 五份原始终态文件。V1拒绝原件保留；V2静态闭合通过但阶段为空，固定失败 prior 使执行阻断。第三批已真实退出1，冷导入通过但全链未通过；旧 START 文件仅保留历史。未上传 private profile、未启动第四批或晋升正式源码。
+
+## 2026-10-09：完整故障报告、seed来源与有序合同
+
+tools新增 file_fault_evidence_v1/v2、file_fault_records_v1、debug_faults_v4/v5、labels builderV1/V2/V3；恢复QA新增其8份source snapshot、完整labels三个合同、SOURCE_SPEC/预检/两次独立收据/32项primitive结果，以及natural_file_faults_candidate_v5/v6（outer错误码/原生提案SHA）。仅后继consumer/GDv6部件静态通过，source stages空；尚无整执行器或新Native资格。
+
+## 2026-10-09：六故障串行部件和完整文件发布来源
+
+tools新增 atomic_files_v1/v2、debug_faults_v3、fault_runtime_v1/v2、native_exports_v1。恢复QA新增六份source snapshot、ORIGINAL19_FAULT_RUNTIME_*封存/两次独立收据/人工host检查脚本结果、natural_file_faults_candidate_v3/v4（仅JSON发布改动）及完整V12第三批历史启动观察。原共享完整runtime不改；全producer/六故障实际验收未完成。
+
+## 2026-10-09：原19文件故障控制器来源与后续开发清单
+
+tools 新增 `campaign_original19_debug_faults_v1.py` / `v2.py`（均无原生启动入口）；恢复 QA 新增对应 SOURCE_SPEC、source snapshot、HOST_SOURCE_PREFLIGHT、纯主机 HOST_GUARD_CHECKS 及独立预审材料。正式游戏源码未晋升，未取得真实六故障资格。新增 `docs/NEXT_DEVELOPMENT_20261009.md` 汇总原定开发顺序与各阶段验收边界。
+
+## 2026-10-09：六文件故障V2独立源码预备收据
+
+V2目录新增PRELIMINARY_REVIEW_V2.json，仅source static/stages[]。六原case仍没有controller/Native结果，旧V1拒绝保留。
+
+## 2026-10-09：六故障V1拒绝与V2first-raw候选
+
+恢复QA的natural_file_faults_candidate_v1/新增拒绝和source preflight；新增original19_natural_file_faults_candidate_v2/修订GD/SOURCE，源码复审中，无controller/Native资格。
+
+## 2026-10-09：原19真实文件故障自然路径候选
+
+恢复QA新增original19_natural_file_faults_candidate_v1/（GD/SOURCE六实际断点和原件控制合同）。只源码预备审查中，无controller/Native/all19资格，原正常完整批输入不变。
+
+## 2026-10-09：GDv5/helperV3独立预备收据
+
+新增GDv5目录预备收据及ORIGINAL19_DATA_EVIDENCE_PRELIMINARY_REVIEW_V3.json，均stages空/source-only，旧V2拒绝保留，无newproducer/Native资格。
+
+## 2026-10-09：原19原生子树语义与严格类型后继
+
+恢复QA新增helperV2拒绝、original19_data_layers_candidate_v5/源/manifest、完整labels V3、evidence SOURCE_SPEC_V3及HOST_SOURCE_PREFLIGHT_V3；tools新增evidence_v3 helper。GDv5/helperV3集中预备复审中、无newproducer/Native资格，旧V2拒绝原样保存。
+
+## 2026-10-09：外部中断原档与原19强证据来源
+
+恢复QA新增两actual_foreign_interrupted_durable_chain_v12/与_v12_r2/共8原文件及两索引、original19_data_layers_candidate_v3/v4/源/manifest/预备收据、ORIGINAL19_COMPLETE_LABEL_CONTRACT_V1/V2及ORIGINAL19_DATA_EVIDENCE_SOURCE_SPEC_V2。tools新增standalone evidence_v2 helper。两GD只static/stages[]，helper复审中，无新Native；当前水浒两完整批均真实失败、无active批。
+
+## 2026-10-09：完整V12限定准入及唯一新批
+
+新增DURABLE_CHAIN_INDEPENDENT_REVIEW_V12.json，仅durable_chain_and_matrices；私有durable_chain_fb1da6e0/session53980为唯一全新完整批，未终态/未资格化，不上传工程/profile。实际审计基准219项通过与此全链边界分开记录。
+
+## 2026-10-09：完整V12封存与有界审计预算
+
+新增tools/run_durable_campaign_chain_v12.py、DURABLE_CHAIN_SOURCE_SPEC_V12.json、durable_chain_executor_v12/三源和完整closure proof。只有audit deadline6000的新候选来源、尚未Native；V11封存保持。
+
+## 2026-10-09：实际审计等价通过与完整候选V11
+
+恢复QA新增actual_passed_audit_benchmark_v4/五原始文件、ACTUAL_COMPONENT_AUDIT_BENCHMARK_PASS_V4.json、DURABLE_FULL_SOURCE_INPUTS_V7、完整SourceSpecV10/V11、durable_chain_executor_v10/静态图拒绝来源与durable_chain_executor_v11/三源和host/source proof。tools新增prepare_full_inputs_v7及fullproducerV10/V11。只有基准219/31实际通过，完整V11复审中/未Native，所有原任务未完成。
+
+## 2026-10-09：V4独立限定收据与新隔离run
+
+新增COMPONENT_AUDIT_BENCHMARK_INDEPENDENT_REVIEW_V4.json，源码准入仅benchmark；私有audit_benchmark_cccd1b29为全新工程/profile，只观察session73354，不上传profile/工程。
+
+## 2026-10-09：实际基准V3失败与V4单点后继
+
+恢复QA新增actual_failed_audit_benchmark_v3/四原始文件、ACTUAL_COMPONENT_AUDIT_BENCHMARK_FAILURE_V3.json、SourceSpecV4和component_audit_benchmark_executor_v4/双源/proof；tools新增producerV4/GDv3。旧批已经实际关闭，无benchmark资格，新后继限定复审中。
+
+## 2026-10-09：基准V3限定准入收据
+
+新增COMPONENT_AUDIT_BENCHMARK_INDEPENDENT_REVIEW_V3.json，仅只读基准。私有audit_benchmark_8279f4e8正在唯一隔离执行，尚无native终态；不上传其profile或工程。
+
+## 2026-10-09：组件审计只读基准V1—V3
+
+恢复QA新增COMPONENT_AUDIT_BENCHMARK_SOURCE_SPEC_V1/V2/V3、V2独立拒绝、component_audit_benchmark_executor_v2/v3/两个源快照及import proof；R6目录新增静态预备收据。tools新增三代producer与两代GD基准。V3限定复审中、无新native资格；完整原私有10GB审计仍保留非缓存，不上传Git。
+
+## 2026-10-09：V9组件超时与完整审计索引，R6及原19四进程候选
+
+恢复QA新增actual_timed_out_durable_chain_v9/（16受控raw）、ACTUAL_COMPONENT_EXECUTION_TIMEOUT_V9.json（含原私有10.06GB/461文件SHA索引，原件保留非缓存）、final_durable_component_audit_v1_r6/（GD/SOURCE，未准入）；ORIGINAL19_DATA_CASES_SOURCE_SPEC_V1.json、INDEPENDENT_REVIEW_V1拒绝、original19_data_executor_v1/四源与图。两个newPython helper在tools/，未Native。当前无active Godot，固定旧V9的所有后继不得运行。
+
+## 2026-10-09：原19数据层与QA兼容源码候选
+
+恢复QA新增 original19_data_layers_candidate_v1/（GD/SOURCE/预备拒绝）、original19_data_layers_candidate_v2/（修正版GD/SOURCE，复审中）、original19_QA_compatibility_candidate_v1/（GD/SOURCE/预备review、stages空）。八原ID只有源码适配，不是原19完整运行或准入，尚无producer。
+
+## 2026-10-09：实际pending UI V5限定收据与三阶段日志原值来源
+
+恢复QA新增PENDING_TERMINAL_UI_INDEPENDENT_REVIEW_V4.json（cold custody拒绝）、PENDING_TERMINAL_UI_SOURCE_SPEC_V5.json、pending_terminal_ui_executor_v5/双源与单点proof、PENDING_TERMINAL_UI_INDEPENDENT_REVIEW_V5.json（仅限定UI）。尚未UI运行，前置V9全61尚不满足。
+
+## 2026-10-09：UI原值固定V4来源与V3拒绝收据
+
+恢复QA新增PENDING_TERMINAL_UI_INDEPENDENT_REVIEW_V3.json（原值custody拒绝）、PENDING_TERMINAL_UI_SOURCE_SPEC_V4.json、pending_terminal_ui_executor_v4/双源快照/完整proof、PENDING_UI_FIXED_EVIDENCE_HOST_CHECKS_V4.json。V4复审中、未native；V9 world264已过，同批component仍运行。
+
+## 2026-10-09：终局错误界面V2拒绝与V3复审来源
+
+恢复QA新增PENDING_TERMINAL_UI_INDEPENDENT_REVIEW_V2.json（五项拒绝）、pending_terminal_ui_candidate_v2/（GD与105/20原检查多重集）、PENDING_TERMINAL_UI_SOURCE_SPEC_V3.json、pending_terminal_ui_executor_v3/双源快照与完整proof、PENDING_UI_TYPED_INTENT_HOST_CHECKS_V3.json（13只读host检查，无native资格）。
+
+## 2026-10-09：原回归V4及真实终局错误界面候选
+
+恢复QA新增ADMISSION_REGRESSION_SOURCE_SPEC_V4.json、限定INDEPENDENT_REVIEW_V4与admission_regression_executor_v4/三工具/完整proof。真实UI源在pending_terminal_ui_candidate_v1/，V1/V2来源spec与pending_terminal_ui_executor_v2/字节快照保留；只准备复审，未原生运行。
+
+## 2026-10-09：V8超时证据与V9新批来源
+
+恢复QA新增 actual_timed_out_durable_chain_v8/（17份受控原始记录）、ACTUAL_COMPONENT_EXECUTION_TIMEOUT_V8.json、DURABLE_CHAIN_SOURCE_SPEC_V9.json、DURABLE_CHAIN_INDEPENDENT_REVIEW_V9.json、durable_chain_executor_v9/（源码快照与差异）和 ACTUAL_DURABLE_CHAIN_LAUNCH_V9.json。新批4eeadd45/session28289尚未完整终态，旧V8/admissionV3不可沿用。
+
+## 2026-10-09：V8实际启动与原回归V3来源
+
+恢复QA新增V8限定独立收据与`ACTUAL_DURABLE_CHAIN_LAUNCH_V8.json`（9a2419c2/session53244）；原回归V3封存spec、三工具字节/import图在`admission_regression_executor_v3/`，静态复审中、未执行。前置V8必须先实际全61闭合，原19/整体未通过。
+
+## 2026-10-09：component真实失败及后继来源
+
+恢复QA新增`actual_failed_durable_chain_v7/`18原始记录、`ACTUAL_COMPONENT_MEMBERSHIP_CODEC_FAILURE_V7.json`、`final_durable_component_transport_v1_r5/`及仅静态review、InputsV6/SourceSpecV8与`durable_chain_executor_v8/`十二源/diff图。原回归候选V1/V2拒绝、两版spec/快照与host-only actual A API证明保留，V3源暂未封存/准入。19原场景当前机制在`ORIGINAL19_R12_ADAPTATION_REQUIREMENTS_V1.json`，未实现/运行新故障矩阵。
+
+## 2026-10-08：半程与原回归后继准备
+
+恢复QA新增`final_executor_candidate_v1_r3/`（固定目录GD/scene/SOURCE/仅静态审查）、`ADMISSION_REGRESSION_SOURCE_SPEC_V1.json`与`admission_regression_executor_v1/`三工具快照/完整旧谓词AST证明。六进程入口尚未准入/启动；当前V7同批A313/world264阶段通过，整批未终态。
+
+## 2026-10-08：URI后继V7实际启动记录
+
+恢复QA保存V5/V6拒绝与V7限定独立准入、三版spec及工具字节快照，V7十一源/import图/CFG API相等证明在`durable_chain_executor_v7/`；`ACTUAL_DURABLE_CHAIN_LAUNCH_V7.json`记录同一新批3cbf11be/session14402。新批正在执行，尚未整批验收；旧A313/native与主机失败raw在V4对应目录。
+
+## 2026-10-08：URI来源补齐与独立拒绝记录
+
+恢复QA保存V5独立拒绝收据、V6 source spec和`durable_chain_executor_v6/`十源字节快照及差异证明。V6仅补host/preparation旧evidence直接pin；当前等待限定复审，未启动原生。
+
+## 2026-10-08：原生A313与主机证据URI后继
+
+`qa/campaign_progress_recovery_20261008/actual_host_failed_durable_chain_v4/`保存原生A313全过但主机URI校验失败的12原记录；`ACTUAL_NATIVE_A_HOST_URI_FAILURE_V4.json`明确原生/主机边界。`durable_chain_executor_v5/`保存九源及21host测试原日志/收据，SourceSpecV5封存新user URI解析helper/producer；新批未准入或执行。
+
+## 2026-10-08：真实单人撤离/gen1部分证据及handoff目录后继
+
+`qa/campaign_progress_recovery_20261008/actual_failed_durable_chain_v3/`保存302检查批11原始记录/受控partial槽与日志；`ACTUAL_SINGLE_SAFE_SAVE_CHECKPOINT_V3.json`明确A整体失败、非fixture。`final_durable_retreat_consumer_v1_r3/`保存仅准备固定handoff目录的consumer/scene/v34 route/SOURCE及目录/继承兼容静态review。InputsV5/SourceSpecV4已封存，`durable_chain_executor_v4/`保存八源与差异证明；新工具已获限定独立准入，`ACTUAL_DURABLE_CHAIN_LAUNCH_V4.json`绑定实际新批8eeef1ab/session2330；未取得整批实际结果。
+
+## 2026-10-08：牢前集火实际诊断与v34普通路线候选
+
+`qa/campaign_progress_recovery_20261008/actual_failed_durable_chain_v2/`保存已终态失败批五份原记录；`PRISON_FOCUS_ROUTE_DIAGNOSIS_V1.json`保存实际20单位集火enemy91及后续退营样本。`qa/office_campaign_route_20261008/v34/`保存只改牢前普通地面落点的route、SOURCE与仅静态审查。新`DURABLE_FULL_SOURCE_INPUTS_V4.json`/`DURABLE_CHAIN_SOURCE_SPEC_V3.json`封存单映射变化，`durable_chain_executor_v3/`保存八工具字节与差异证明；来源预检与新限定独立准入通过，`ACTUAL_DURABLE_CHAIN_LAUNCH_V3.json`记录全新批`38024dd3`/session96977实际启动；未取得整批实测结果。
+
+## 2026-10-08：durable链执行器与host验证
+
+`qa/campaign_progress_recovery_20261008/durable_chain_executor_v1/`保存六个新工具的字节快照、`HOST_TESTS_V1.json`与原20项host测试日志；V1 spec与独立拒绝收据原样保留。后继`durable_chain_executor_v2/`保存七工具快照、23项host测试/日志；`DURABLE_CHAIN_SOURCE_SPEC_V2.json`封存固定CFG/ACK类型后的8+52范围。V2独立审查及`ACTUAL_DURABLE_CHAIN_LAUNCH_V2.json`记录限定准入和同一新批的实际启动，未取得实际A/原生链验收；原19故障与整体目标仍未完成。运行支持、冻结证据、固定谓词和主入口均在`tools/`，不改变正式游戏入口。
+
+## 2026-10-08：durable拒绝矩阵R1至R4与完整输入V1至V3
+
+恢复QA `final_durable_negative_adapters_v1/`、`final_durable_negative_adapters_v1_r2/`、`final_durable_negative_adapters_v1_r3/`保留原适配及两次拒绝/后继静态收据，最后六GD/scene用于264/362/24；`DURABLE_FULL_SOURCE_INPUTS_V3.json`与`DURABLE_FULL_INPUTS_PREPARATION_REVIEW_V3.json`封存source-only 26runtime覆盖。工具`prepare_durable_campaign_full_inputs.py`不启动native。
+
+## 2026-10-08：R12普通三组实际通过与durable full consumer R1/R2
+
+恢复QA新增`actual_normal_fresh_r12_bai_v1/`（阶段9份）、`actual_scoped_recovery_r12_bai_v1/`（完整36份）、`final_durable_retreat_consumer_v1/`和`final_durable_retreat_consumer_v1_r2/`（源码/scene/route及独立拒绝/后继复审）；路线QA `v33/`与两个V33根记录只读观察，未native/full。裸CFG/profile不入Git。
+
+## 2026-10-08：白胜阻挡实际证据与南侧路线候选
+
+`qa/campaign_progress_recovery_20261008/actual_failed_natural_terminal_v5/`、`BAI_BODY_STALL_DIAGNOSIS_V1.json`保存原生身体阻挡读数；`huangnigang_bai_arrival_candidate_v1/`、`natural_terminal_executor_r12_bai_v1/`及同名spec/独立review封存R12加父关卡的110来源组合，尚无full资格。
+
+## 2026-10-08：最终恢复半程候选、R10至R12屏障修正和旧full失败证据
+
+`qa/campaign_progress_recovery_20261008/final_executor_candidate_v1/`、`final_executor_candidate_v1_r2/` 保留五参数v2半程后继及初步拒绝；`integrated_v4_r10/`、`integrated_v4_r12/`、`integrated_source_snapshot_v12/`、`integrated_source_snapshot_v14/`及V12至V14审计封存真实launch上下文和空屏障防线，尚未native/full。`qa/office_campaign_full_20261008/actual_failed_v12/`保留旧Lu A131checks牢前失败43份原记录。V4_R2诊断新实际启动收据同恢复QA目录。
+
+## 2026-10-08：白胜诊断与v32实际启动
+
+- `qa/campaign_progress_recovery_20261008/actual_failed_natural_terminal_v3/`：五份原证据与binding，不含玩家CFG。
+- 同QA `natural_terminal_executor_v4_r2/`、`NATURAL_TERMINAL_SOURCE_SPEC_V4_R2.json`、`NATURAL_TERMINAL_INDEPENDENT_REVIEW_V4_R2.json`：原期限/自然命令不变的只读诊断，尚未native。
+- `qa/office_campaign_route_20261008/ACTUAL_LAUNCH_V12.json`：实际v32旧full新批argv，结果待终态。
+
+## 2026-10-08：v32旧full审查
+
+`qa/office_campaign_route_20261008/OFFICE_FULL_INDEPENDENT_REVIEW_V12.json`是旧full v32单独静态准入，尚未native，不覆盖R9新完整恢复consumer。
+
+## 2026-10-08：普通终局V3独立收据
+
+`qa/campaign_progress_recovery_20261008/NATURAL_TERMINAL_INDEPENDENT_REVIEW_V3.json`：固定延后加载探针、新spec、完整候选组合scoped准入；新批实际已启动，完整资格未授予。
+
+## 2026-10-08：普通终局V2失败与V3源
+
+`qa/campaign_progress_recovery_20261008/actual_failed_natural_terminal_v2/`保留四原证据及binding；`natural_terminal_executor_v3/`与`NATURAL_TERMINAL_SOURCE_SPEC_V3.json`是固定autoload后加载的探针后继，待独立复审、未新native。
+
+## 2026-10-08：普通终局scoped独立审查
+
+`qa/campaign_progress_recovery_20261008/NATURAL_TERMINAL_INDEPENDENT_REVIEW_V2.json`绑定spec V2与11helpers/14R9/80依赖/两项CoreContract组合；仅三组自然终局/restart静态准入，实际新批仍待终态，完整consumer尚未完成。
+
+## 2026-10-08：V11终态与普通终局执行器准备
+
+- `qa/office_campaign_full_20261008/actual_failed_v11/`：42原证据与SOURCE_BINDING，无玩家CFG。
+- `qa/campaign_progress_recovery_20261008/NATURAL_TERMINAL_SOURCE_SPEC_V1.json`/`V2.json`、`natural_terminal_executor_v1/`/`v2/`与`FINAL_EXECUTOR_ADAPTATION.md`：普通自然终局/两个重启窗口工具及静态修正版，完整consumer仍待接入。
+- `tools/run_campaign_natural_terminal_recovery.py`及`campaign_natural_terminal_probe.gd`：source/PID/debugger/普通CFG/冷导入绑定，尚未native。
+- `qa/office_campaign_route_20261008/v32/`、`ROUTE_V32_PREPARATION.json`、`complete_inputs_seal_v12.json`：普通入牢提前、火号仍等待扩军，原矩阵不降；待独立准入。
+
+## 2026-10-08：R9独立源码审查收据
+
+`qa/campaign_progress_recovery_20261008/INTEGRATION_SOURCE_REVIEW_V2.json`：R9十四源/80引用/十三生产来源静态准入；尚无全链执行器/原生资格。原审查范围字节保持，后继范围说明独立保存在`INTEGRATION_REVIEW_SCOPE_V2.md`。
+
+## 2026-10-08：R9规范目标后继
+
+`qa/campaign_progress_recovery_20261008/integrated_v4_r9/`、`integrated_source_snapshot_v11/`和`SOURCE_AUDIT_V11.json`：验证原来源并保留，规范化后冻结唯一配置目标；14源/80引用，未原生资格。
+
+## 2026-10-08：R5实际终态与R6—R8确认后继
+
+- `qa/campaign_progress_recovery_20261008/actual_integration_parse_v4_r5/`：原receipt/import/菜单日志及来源绑定，无玩家CFG。
+- 同QA `integrated_v4_r6/`—`integrated_v4_r8/`、`integrated_source_snapshot_v9/`与`integrated_source_snapshot_v10/`、`SOURCE_AUDIT_V9.json`与`SOURCE_AUDIT_V10.json`：首次binding与最终确认保护的不可变源码后继；R8仍待独立及原生验证。
+- `qa/office_campaign_route_20261008/OFFICE_FULL_INDEPENDENT_REVIEW_V11.json`及`ACTUAL_LAUNCH_V11.json`：v31旧全链静态准入与真实新批argv；完整终态尚待观察。
+
+## 2026-10-08：恢复实际接入与失败后继目录
+
+- `qa/campaign_progress_recovery_20261008/integrated_v4/`、`integrated_v4_r2/`—`integrated_v4_r5/`、`integrated_source_snapshot_v7/`、`integrated_source_snapshot_v8/`：十四源接入及不可变后继；SOURCE_AUDIT_V7/V8分别14/77与14/80引用，十三正式来源不变。
+- 同QA的`failed_integration_parse_v4/`、`actual_integration_parse_v4_r2/`、`actual_integration_startup_v4_r2/`、`ACTUAL_INTEGRATION_STARTUP_PASS_V4_R2.json`、`INTEGRATION_SOURCE_REVIEW_V1.json`：首轮实际解析失败、R2解析/菜单/正常设置16项实际范围及独立拒绝；无CFG/玩家档。
+- `tools/run_campaign_integration_parse.py`、`run_campaign_integration_startup.py`、`campaign_integration_startup_probe.gd`：源与基线绑定、每阶段idle60/确切自有PID、实际状态/普通设置观察，不是全链执行器。
+- `qa/office_campaign_full_20261008/actual_failed_v9/`与`actual_failed_v10/`：每批26原收据/日志/报告；`qa/office_campaign_route_20261008/v30/`与`v31/`、seal_v10/v11、V10独立静态审查和argv：普通付费扩军/东营采集后继，原生产/validator不变。
+
+## 2026-10-08：V9完整批与V3源码候选
+
+- `qa/office_campaign_full_20261008/actual_failed_v8_r3/`：27份实际失败/成功前序的原收据、日志和报告，无CFG/profile存档。
+- `qa/office_campaign_route_20261008/v29/`、`ROUTE_V29_PREPARATION.json`、`complete_inputs_seal_v9.json`、`OFFICE_FULL_INDEPENDENT_REVIEW_V9.json`、`ACTUAL_LAUNCH_V9.json`：普通玩家地形反算目标断言后继、真实独立静态批准和新全批实际argv。
+- `qa/campaign_progress_recovery_20261008/proposed_v3/scripts/`、`combined_source_snapshot_v6/`、`SOURCE_AUDIT_V6.json`：八源候选及来源核对，未原生/集成，原V2组件资格不延伸。
+
+## 新增实际CFG组件与保留式协调器来源
+
+`qa/campaign_progress_recovery_20261008/actual_cfg_component_v6/`与ACTUAL_CFG_COMPONENT_PASS_V6保存真实四案/八PID/36检查通过；failed_cfg_component_v5保留原失败。SOURCE_AUDIT_V5/combined_source_snapshot_v5封存八GD候选（gate/协调器未集成）。`qa/office_campaign_route_20261008/ACTUAL_LAUNCH_V8_R3.json`为同一V8批准来源下新UUID/profile完整批命令。
+
+## 新增六候选源与完整R2原失败
+
+`qa/campaign_progress_recovery_20261008/combined_source_snapshot_v4/`、SOURCE_AUDIT_V4和WORLD_SESSION_DISPATCH_SOURCE_V1记录六GD候选实际字节/API/生产SHA；全部未解析/未native/未生产。`qa/office_campaign_full_20261008/actual_failed_v8_r2/`保留真实ABC与Lu-first A外部竞争失败，原profile在工程外完整保留。
+
+## 当前新增CFG组件与V8-R2来源
+
+- `qa/campaign_progress_recovery_20261008/proposed_v2/`、SOURCE_AUDIT_V3与CFG_COMPONENT_SOURCE_PREFLIGHT_V5：四GD候选及完整固定来源，未native/未生产。
+- `tools/campaign_cfg_transaction_probe.gd`、`tools/run_campaign_cfg_transaction_probe.py`：真实CFG/两处精确中断/外部CAS，四案例八进程；完整续玩活批结束前不启动。
+- `qa/office_campaign_full_20261008/actual_failed_v8/`：外部Godot进入B后的原失败整批/逐阶段/报告。
+- `qa/office_campaign_route_20261008/ACTUAL_LAUNCH_V8_R2.json`：相同V8批准来源下新UUID全链命令。
+
+## 2026-10-08 11:49：新增真实结果与进度恢复候选
+
+- `qa/campaign_persistence_faults_20261008/actual_matrix_v4/`与`ACTUAL_19_COMPONENT_PASS_V4.json`：19案/194检查真实组件通过；旧失败/来源快照保留，没有CFG或玩家profile入Git。
+- `qa/office_campaign_full_20261008/actual_failed_v5/`：完整V5成功前序及Lu-first A实际失败原收据/日志/报告。
+- `qa/office_campaign_route_20261008/`：v26/v27/v28普通守营路线、V6/V7拒绝及V8独立批准、54pins来源封存与新完整批实际argv。
+- `qa/campaign_progress_recovery_20261008/`：v2 terminal/pending→cfg→applied日志/冻结意图基础源码候选，尚未原生资格。
+
+## 2026-10-08 10:40 19案源封存与 Windows 实际proof
+
+`qa/campaign_persistence_faults_20261008/matrix_source_preflight_v2.json`与`matrix_source_snapshot_v2/`封存完整19案GD/producer/7 helper；`windows_actual_v2/`保存真实内核等待与追加/取消收据及执行字节。新的tools矩阵和Windows helper均未覆盖正式Campaign/Battle。Godot协议尚需新UUID成功proof，19案尚未native，完整目标保持。[QA](../qa/campaign_persistence_faults_20261008/README.md)。
+
+## 2026-10-08 10:15 完整续玩 V5 与真实故障协议来源
+
+`qa/office_campaign_full_20261008/actual_failed_v4/`保留实测JSON533/OwnedSlot76及A未启动的整批失败；V5审查、seal、实际argv和source_snapshot_v5封存新UUID全链。`qa/campaign_persistence_faults_20261008/`新增官方标签协议源、首轮真实失败与说明；对应tools调试wire/probe只为未来19案提供协议准备，尚无19案资格。[公司续做](OFFICE_DEVELOPMENT_20261008.md)。
+
+## 2026-10-08 完整续玩独立审查与来源封存
+
+- `qa/office_campaign_full_20261008/`：V1—V3失败审查、V4闭合审查、完整原始来源表、当前工具源码快照和实际启动命令。
+- `tools/align_office_candidate_sources.py`、`tools/seal_office_campaign_inputs.py`：本机完整候选字节桥和不可变QA/fixture来源门禁。
+
+## 2026-10-08 公司本机开发入口
+
+- `docs/OFFICE_DEVELOPMENT_20261008.md`：本机已验证基线、独立候选与完整续玩新批要求。
+- `qa/office_baseline_20261008/`：导入/正常入口/真实菜单原日志与截图、首轮中止、源码快照、准备与来源SHA。
+- `tools/run_workstation_baseline.py` / `workstation_startup_probe.gd`：独立profile本机基线与真实视口。
+- `tools/prepare_office_campaign_qa.py` / `run_office_campaign_restore_qa.py`：新候选准备与保留完整断言的本机续玩执行器；原生资格待后续真实结果。
+
+<!-- night-final-20261008 -->
+## 2026-10-08 06:02：本夜开发截止收尾
+
+已到香港06:00，停止启动新开发批。所有本线程原生后台均真实终态；新六文件单人撤离候选未完成C/双方A/完整负例及BCD，整体资格仍false。最后71d4275a原生导入因共享Godot恢复占用退出1，锁已释放；原failures/profile/五个前序文件全部保留。原四文件JSON修复及限定办理半程ABC资格保留。
+
+06:02实际执行精确最新终态绑定的r4工具，逐文件复原本线程Core/UnitContract两份未资格生产候选；当前before逐字节等于备份/QAoriginal/HEAD，QA proposed与备份完整，JSON四文件SHA不变。没有reset/stash、没有控制其它任务或删除失败数据。原r3编码与自匹配阻断、两次只读审计采集失败均保存为独立记录，r4只排除本工具exact自身PID。
+
+Campaign真实保存回读v27b两文件提案与独立源码/API审查已存QA，current=proposed_b；未应用生产、未native解析、19条故障未执行。玩家失败UI、pending锁/安全重试、章节日志/终局gen2→cfg→ack与跨进程故障恢复仍未完成。完整动态/付费生产/船体运输、自然胜败奖励、九玩法发行程序、美术UI多尺寸、正常时钟长跑性能及Android真机计划全部保留。
+
+公司从 [OFFICE_START_20261008.md](OFFICE_START_20261008.md) 继续；最终实际结果见 [NIGHT_PROGRESS_20261008.md](NIGHT_PROGRESS_20261008.md) 及qa/zhu_wounded_20261005/night_final_wrap_delivery_20261008.json。本收尾只源码/QA/文档同步stable，不发布新Steam/Android、不合并main。最终推送独立回读后暂停一次性心跳6，再关闭本夜有界任务；这些调度操作另以实际收据为准。
+
+<!-- campaign-proposal-v27x1 -->
+## 2026-10-08 05:12：下一计划项源码提案
+
+Campaign真实保存回读收据v27b已实现并独立源码/API审查；仅存QA提案，未应用/未native。19条故障、玩家失败UI和跨进程故障恢复仍待完成。详细当前结果与全部剩余顺序见 [NIGHT_PROGRESS_20261008.md](NIGHT_PROGRESS_20261008.md)。06:00按实际状态最终收尾。
+
+<!-- offline-terminal-v25x16 -->
+## 2026-10-08 04:36：离线准备通过，原生导入仍中断
+
+新F/run71d4275a在实际导入64.42秒后因共享Godot恢复占用终止exit1，锁已释放。原独立复制与完整endpoint审计通过，不能替代未完成的import；profileguard/C/双方单人撤离A均未执行，E1闭合proof不存在、full未启动。完整失败证据见qa/zhu_wounded_20261005/offline_import_interruption_delivery_v25x15.json，原prefix五文件及失败profile保留，editor cache未上传。两生产候选仍未资格，当前没有活跃本线程原生后台。后续独立计划项可继续准备，但06:00按实际结果收尾，完整原计划与公司新基线要求不变。
+
+<!-- night-progress-v25x14 -->
+当前阶段快照与完整续做顺序见 [NIGHT_PROGRESS_20261008.md](NIGHT_PROGRESS_20261008.md)；普通源码启动与原生QA依赖已分开说明。原生结果及06:00终态以最终收据为准。
+
+<!-- offline-prepare-v25x10 -->
+## 2026-10-08 04:19：最新恢复准备
+
+新r2f/run71d4275a已启动；纯文件准备提前，全部原生检查保留，暂无新资格。此前两次导入中断的完整证据均已保留。详细当前状态与公司入口见 [OFFICE_START_20261008.md](OFFICE_START_20261008.md)。完整计划继续保留。
+
+<!-- prefix-interruption-v25x7 -->
+## 2026-10-08 03:46：恢复批导入被共享引擎占用中断
+
+run8f3d393d 实际 exit1、锁已释放；尚未执行C或双方单人撤离A，整体资格仍false。原始收据和完整日志已保留于QA，详见 [当前公司交接](OFFICE_START_20261008.md)。后续仅在更长自然空闲后建全新批，原失败profile不重用；完整计划继续保留。
+
+<!-- office-prefix-v25x6 -->
+## 2026-10-08 公司续做入口
+
+先读 [公司启动与下一步](OFFICE_START_20261008.md)。正常启动、已验证生产四文件、QA 两份未验证候选和不可跨机复用的旧批次分别说明。新恢复批 8f3d393d 已启动并冻结工程，此条仅记录启动状态；实际原生结果以本次最终收据为准。完整开发计划继续保留。
+
+## 2026-10-08 03点后：第三进程被共享引擎恢复占用中断
+
+原run07ad37bf已终止exit1并释放锁。新6路径候选的JSON533、OwnedSlot76、实际办理保存A39/B继续重存351已通过，第三进程C在运行中因foreign_engine_resumed中止；完整ABC仍未资格，Lu/Shi单人撤离尚未执行。原完整profile、producer、收据及日志全部保留，不覆盖或重用失败profile。主证据retreat_explorer_shared_interruption_review_v25x4.json。
+
+后继必须新UUID/新profile并保留所有原源码/原生/packet/时钟/nonce/PID及缺失C实际验证门禁。若复用已完成B前序证据，必须先严格验证并复制原完整slot/journal/handoff到新profile，原失败profile只读保留；不得略过C或假称原批完成。未具备该门禁则全新批完整重跑。仍按用户要求等待共享Godot自然空闲，不控制其他任务。
+
+两个生产候选仍仅本地未资格，Git生产源码继续为已验证版本；候选/工具/失败证据与真实持久进度设计均存QA供公司继续。完整consumer nullable和模块HEX64问题已由新不可变r2b2修复并独立静态闭合，尚未原生/full启动。公开战役继续、自然结局/奖励、真实Campaign写盘、全部后续计划均未由这些前序检查证明；6点按实际状态收尾同步。
+
+## 2026-10-08 03点前：原回归继续，完整接入修复与持久进度设计
+
+当前A探索保留原JSON533、OwnedSlot76和实际办理半程三进程，再分别取得Lu/Shi单人撤离存档。最新已实读JSON533/OwnedSlot76/首次办理保存A39通过，B/C及真实撤离A尚待结果；运行仍限定隔离冻结候选，两份本地生产候选未资格、不纳入生产提交。
+
+完整测试consumer审查发现必需nullable字段缺失被当null接受，已保留旧源和更正收据，新后继加入字段存在与精确type/value门禁。随后复制回调的HEX64模块global遗漏也保留原失败设计，新后继补明确namespace闭合。这些是未执行测试接入的缺口，不是当前A原生失败；完整接入须新独立审查，不沿用旧通过文字。
+
+下一计划项外部设计已存qa/zhu_wounded_20261005/proposals/campaign_local_context_progress_20261008：当前token/rawSHA/active-terminal绑定有效，缺章节context语义；Campaign.record_level_result忽略_save失败，而terminal先于cfg写盘形成恢复窗口。设计保留classic v1字节兼容，未来新campaign日志需要冻结结果与持久进度确认；CAMPAIGN_QA=0正常私有profile真实写盘/新进程回读及失败恢复另测。设计尚未实现/原生，不修改当前冻结批，不宣称Steam奖励或公开续玩入口已合格。
+
+所有后续动态、付费生产/船体运输、自然结局奖励、九玩法发行EXE、美术UI、多尺寸、正常时钟长跑性能及Android真机继续保留。当前run/profiles不得在办公室并行复用；最终6点按实际证据收尾同步。
+
+## 2026-10-08 02:20：真实单人撤离新批次已启动，待原生结果
+
+Git稳定源码最新已回读845c59ca；随后只在本地受控应用v25的Core/UnitContract两文件候选，原字节备份完整、六路径SHA桥固定。它尚未原生资格、未提交为生产；已同步的JSON四文件保持不变。候选声明见safe_retreat_candidate_v25x1.json及safe_retreat_preparation_delivery_v25x1.json。
+
+新r2a实际后台PID217168、run daming_safe_retreat_v25s_r2a_07ad37bf，明确选择Lu先撤离、Shi先撤离两独立profile。当前原生前置自然空闲/私有冻结阶段已完成，import阶段仍按共享Godot自然空闲规则等待/执行；未取得任何新通过结果。该探索保留完整JSON533/OwnedSlot76/办理半程ABC原回归后，才能用普通移动/战斗取得真实单人安全A存档。overall_v25_qualified始终false，不能将拿到A夹具当整个四进程/负例已验收。
+
+独立复核发现旧执行器失败时丢已拥有场景与pending Session引用；新s1显式只记真实launch/commit场景、只释放自身场景，失败待写事务强持到进程退出，不重试/替换或判成功，原文件与原断言保留。新runner/producer独立闭合收据与可执行参数已存QA；48个实际对象负例、264世界DTO路线及362组件路线是准备数量，未运行即不计通过。
+
+本机运行只由本线程观察，办公室不能重复同一run/profile。六点收尾时将把实际完整/失败/中断状态写回；若两文件仍未资格，保留完整候选与证据供公司续做，生产分支继续使用已验证代码。所有原计划、真实战役写盘、自然结局/奖励、九玩法发行EXE、美术/UI、长跑性能及Android真机仍保留；不发布新Steam版本。
+
+## 2026-10-08 同步范围补充：冻结工程与本地完整目录分别记录
+
+三进程通过范围为原冻结输入raw5041/distinct5037及明确补齐依赖、元数据后的隔离runtime5102。四个公开修复文件与该批精确同SHA；不能将这份资格解释为当前本地完整目录的运行资格。独立只读清单发现本地整树5042文件与隔离工程有24个额外草稿素材、84个依赖/元数据缺项及4个UID差异；草稿未混入本轮提交。公司使用既有bootstrap/重新导入后重新建立完整身份与私有profile，不能沿用家里content_version。完整差异见qa/zhu_wounded_20261005/independent_readonly_public_identity_v24s1.json。
+
+额外核对实际active local journal头、原文件SHA、token、世代1/2 binding及存档副本相等，没有writing锁。原LocalLifecycle固定context为defense/空章/30，与本次Slot的campaign/level8/0不同；这是当前API的实际行为，只证明原声明的本地生命周期与binding，不证明逐战役context或奖励语义。原数据保留，未修改ledger。原生profile目录保留作为证据；释放的是进程及写锁。
+
+独立Unit/Contract/Pair组件负例已准备181用例×2路线，尚未解析/运行；不把362计划行计为通过。单人撤离producer、五组实际live cast负例、自然结局/持久战役进度等仍待完成。完整计划继续按办公室交接推进。
+
+## 2026-10-08 凌晨：大名府办理半程三进程磁盘续玩通过
+
+当前 v24s 重新完整执行：固定 JSON 边界 11 案 533 项、原 OwnedSlot 故障事务 76 项通过；实际正常移动办理半程 A 保存退出 39 项、新进程 B 完整 Session 安装/正常办理完成/再保存 351 项、第三进程 C 世代 2 安装和 120 原生物理步无重复效果 342 项全部通过。三个实际 PID/nonce 不同且不重叠，世代 1→2 SHA 链及最终完整 5102 文件源码/原生依赖零漂移核对通过；生产四文件据此纳入 stable 同步。公开战役继续入口仍关闭。
+
+主收据：`qa/zhu_wounded_20261005/daming_admission_continuation_qualified_v24s.json`，含原整批收据、完整 packet/world、原日志和隔离 QA 存档证据。历史 NONCANONICAL_RECORD、wrong-kind 夹具错误、r2 重复 QA 监听错误和共享引擎中断均保留；新 s 只修 QA 自己的监听生命周期，固定 JSON 读取转换仍限 Gao/Daming Map 所有权整数。原 canonical 字节/SHA/修订链保留。证据收集首版将 user:// 当文件系统路径失败，另存失败记录并用新 sibling 正确解析；原生通过结果不受影响。
+
+单个获救者安全撤离提案仍未应用/未原生验收。已准备 world DTO 的 264 路径（246 Core、18 Slot canonical 拒绝）及 19 实际对象 capture 用例；数量是计划，不能称运行通过。组件负例及 producer 接入继续审核；缺真实 A 夹具或未实现门禁仍前置阻断。`CAMPAIGN_QA=1` 不写 campaign.cfg，本批不证明战役进度持久、自然通关或 Steam 奖励。
+
+后续付费生产、船体/运输、其他动态、自然胜败奖励、同版九玩法 EXE、完整美术/UI、多尺寸、正常时钟长跑性能与 Android 真机全部保留。此前 Core 207、Presentation 348、FX 681 是独立组件资格。办公室入口为 [HANDOFF_20261007_OFFICE.md](HANDOFF_20261007_OFFICE.md)。本轮只同步源码、QA 和文档；既有 Steam Build 25768878/四语公告不变。用户要求香港时间 2026-10-08 06:00 最终收尾；下方条目保留历史。
+
+## 2026-10-08 零点后：真实保存通过，独立继续测试修复中
+
+固定JSON边界原生11案533项、原OwnedSlot故障事务76项通过；原失败pending payload逐UTF-8字节还原，错误数据仍受控拒绝。大名府正常移动进入办理半程后，真实Session保存世代1并正常退出，A32项通过。B完成独立安装的完整world/packet/时钟比较，但第二次HELD时QA重复连接capture_rejected导致ERROR，整批失败，B未写报告、C未启动；不能称完整磁盘续玩已验收。修复仅针对QA自己的一次性监听生命周期，生产候选四文件仍未提交为合格版本。原失败producer/profile/日志保留，新sibling另行验收。
+
+主证据：qa/zhu_wounded_20261005/native_ownership_json_component_pass_v24r2.json、daming_admit_signal_failure_review_v24r2.json及各原始报告/完整数据。新helper与UID补明确Git字节属性，避免Windows换行转换破坏冻结SHA；QA目录本来已受-text保护、被Godot忽略。
+
+单人安全撤离的两文件提案、普通指令路线/四进程runner及静态审查已保存于qa/zhu_wounded_20261005/proposals/daming_safe_retreat_v25；详见DAMING_SAFE_RETREAT_DESIGN_20261008.md。它尚未apply/native，旧runner也须采纳上述_hold后继修复。CAMPAIGN_QA=1跳过Campaign写盘，本批不可声称战役进度持久或Steam奖励；未来正常私有profile另测。负例工具和producer实现继续准备，缺门禁前置阻断，不跳过判绿。
+
+此前Core9案207、Presentation348、FX681仍是各自原资格，不替代完整动态/自然结局。后续付费生产、船体运输、旧关动态、自然胜败奖励、同版九玩法EXE、完整美术/UI、正常时钟10分钟性能及Android真机全部保留。用户要求香港时间2026-10-08 06:00最终收尾同步；当前办公室入口为HANDOFF_20261007_OFFICE.md。以下阶段条目是历史。
+
+## 2026-10-07 旧六章整局初态与 FX 组合回归已通过
+
+旧六章完成真实HELD捕获、完整准备、暂停原生挂载、最终激活及再捕获，6案132项零失败；与双关初态/高俅按钮组件合计9案207项。完整非时钟字段精确一致，Mission墙钟年龄及Root逻辑tick/cache/输入重定位有独立边界校验。旧关动态与完整战斗跨进程尚未由这些初态测试证明。
+
+FX组合回归同进程650项、独立重启31项，共681项零失败。原17类负例保留，精确实际ready连接错误flags拒绝、新世界Unit引用/Marker归属及原生布局后的实际新增本地化绑定清理通过；已将公共FX QA调用迁移为该原生已测试源码。5039冻结输入均不变，两个独立Presentation/FX QA调用工具均不在这份5039清单；原错误描述/辅助脚本失败保留并另记纠正。未修改运行时生产逻辑。
+
+主收据：`original_world_qualified_v24l.json`、`original_world_complete_review_v24l.json`、`fx_partition_qualified_v24n1.json`、`fx_partition_caller_migration_v24n1.json`（均位于qa/zhu_wounded_20261005）。下一步准备大名府真实任务办理半程→实际保存退出→独立Session安装/自然tick完成办理→再保存/第三进程回读，尚无通过声明；单个获救者撤离中途保存的校验缺口也待原生复现。公开战役续玩入口保持关闭。
+
+用户要求继续推进到香港时间2026-10-08早上06:00收尾同步GitHub；定时收尾心跳已建立。届时记录实际完成/未完成和办公室续做入口，不把未完成项目称为全项目完成。以下此前阶段保留为历史，以本段及原收据为准。
+
+## 2026-10-07 办公室交接：当前状态
+
+最新续做入口为 [HANDOFF_20261007_OFFICE.md](HANDOFF_20261007_OFFICE.md)。本轮完整世界初态与高俅收兵组件共75项、任务界面218+130项通过；旧关整局初态 case0 另22项通过，其他五关仍待完成。五份生产修复和已测试的独立界面QA调用迁移纳入本轮stable同步，公开战役续玩入口保持关闭。
+
+源码审核发现FX partition独立QA仍需迁移原生入树调用顺序并重新回归，不能沿用它的历史通过结果。5039冻结输入零漂移；较早QA文字误称独立Presentation工具属于这5039输入，现已按清单纠正，原收据不覆盖。具体已完成/未完成边界及办公室启动步骤见交接，证据见 `qa/zhu_wounded_20261005/office_source_review_v24m.json`。
+
+以下保留此前阶段的历史记录，旧后台编号、待验收状态与候选同步描述不代表当前状态。
+
+## 2026-10-07 整局恢复当前复验状态
+
+两关已实际完成完整世界捕获、准备、暂停挂载、最终激活与新世界捕获。v24e原生43项中2项失败，均为隐藏任务面板尺寸；Root全部非时钟数据精确相同，逻辑tick/cache与Mission墙钟边界通过。该批整体仍判失败，不能称整局已验收。
+
+高俅两个静态码头节点入树后处理位重新开启已按原生差异修复，仅允许原工厂登记的永久静态节点；颜色变异/有限生命周期负例证明失败前不改处理位。隐藏Label文字提前写入导致新工厂尺寸与原世界不同；按原构造器“空Label先入树、再填文字”顺序及可见容器布局修正，完整UI字段比较保持。生产Root/Visual/Core/Scenery/Presentation五文件仅本地待验收，没有推送未合格生产候选。
+
+v24f成功导入后因其他任务恢复Godot占用，仅停止自己的引擎子进程，未取得测试结果；原输入/日志/收据保留。当前后台81876复用该已导入冻结工程执行完全相同两案，另建profile/证据，原生结果尚待。高俅实际收兵按钮与损坏描述负例v24g已准备但未启动。全开发目标和所有剩余门槛继续保留，本轮不发布平台。
+
+以下较早阶段条目保留为历史记录，以本段及最新原生收据为准。
+
+2026-10-07：新增当前证据审计 `docs/DEVELOPMENT_AUDIT_20261007.md`，回读已完成场景收据并修正开发计划中的旧发布/分支数字。全目标保持开放，三文件整局候选与后台78966待原生验收；本次来源审计没有运行Godot。
+
+源码与上述验收证据已提交并推送 stable，独立回读 SHA `fcdc10ceef09e9de1aade9be0bbd5d551d7c5e2d` 一致（118个白名单文件、4016025字节）。完整世界三文件 v24a 接入候选仅本地待验收；后台78966等待/执行原生初态测试，不能作为已通过结果。
+
+## 2026-10-07 地图与场景恢复验收完成（当前状态）
+
+高俅两案、经典标准地图一案、大名府五案共221项原生检查通过；其余六章初态回归共60项通过，14案/281项均完成精确地图与场景再捕获。正常时钟1.0，5039个生产输入零漂移，零私有运行时补丁。共享引擎恢复占用时仅停止自己的子进程；原失败/中断证据保留，各章以新独立收据续验。
+
+审核修复了原生入口子节点高度、严格地图身份、原始视觉船只、夜景原生组、灯光资源与新地图归属，以及禁用准备事务的只读捕获。旧六章回归通过。此轮证明禁用/脱离世界的地图与场景组件；完整Units/Mission/时钟/FX、最终激活、独立进程继续和自然结局仍待开发，公开战役继续入口保持关闭。
+
+随后仅移除两个本轮已失败且闲置的私有工程中7476个与保留候选同相对路径、大小、SHA一致的imported文件，释放1803637428字节（约1.68GiB）。10303个受保护文件及保留缓存复核不变；源码、原收据、日志、存档、导出包均保留，旧工程复查需重新导入。
+
+证据：`qa/zhu_wounded_20261005/campaign_scene_closeout_v23h.json`、`full_scenery_qualified_v23f.json`、`official_scene_checkpoint_qualified_v23h.json`及逐章原生报告/日志。源码与文档按白名单同步既定stable分支；不发布新Steam版本。下一步审查整局Root/Visual/Core接入方案，然后验证完整世界、任务回调归属与独立进程续玩；全开发目标仍未完成。
+
+以下条目记录此前阶段状态，以本段为当前验收状态。
+
+<!-- full-scenery-v23a-current -->
+## 2026-10-07 完整双关地图/场景候选已接入，待原生八案验收
+
+灯光 v22 已通过原生113项/四案，代码与QA/交接独立提交 c7192594767df04917d6b73864c35b9caf6e7e60，远端 stable SHA 一致。此提交只资格化灯光组件；既有未验收 Gao 候选没有混入。
+
+随后回读原后台83257已终止成功且锁释放，按审核后的外部 v23a proposal 接入完整 Daming 场景：installed RTS/60×66/town/封闭偏门身份、夜景/有限灯光资源、CityWall派生mesh、Passage新地图引用与原_open缓存、人群/owner/shadow归属，以及翠云楼default/signal原工厂视觉配置。地图存档仅增加原灯市四个crowd坐标与variant/零尺寸专属校验。仍使用 Node2D；灯/夜景不额外抬高。旧生产输入备份及原v23/v23a proposal保留。
+
+全新 full_scenery_v23a producer/harness 包含8案：Gao初态/已发波、原classic标准图，以及Daming初态/放行未救/举火/计时结束/开门获救。要求真实整个 map/nav/height/material/reed/scenery/owner payload 精确再捕获、原世界不变、缺失owner/伪灯主/错误Passage拒绝和惰性激活边界。现有后台 session87812/own Python206660 已确认存活，等待共享引擎自然空闲；不重复运行、不控制或发消息给其他任务。本完整候选尚无通过结果。
+
+当前新增 Scene/Map/lighting方法仅本地待验收，未清理缓存或推送这些完整候选。即使八案全部通过，仍须外层Units/Mission/时钟/FX和最终激活、独立进程继续与自然结局及全开发计划其余验收；公开战役继续仍关闭。本轮不重发 Steam。
+<!-- /full-scenery-v23a-current -->
+
+<!-- daming-lighting-v22-qualified -->
+## 2026-10-07 大名府原生灯光子组件审核通过
+
+run_daming_lighting_state 已完成原初态、入牢放行未救人、原举火回调、原计时过期回调四案图形原生测试：113 项检查通过，正常时钟1.0，5039 输入零漂移、零私有运行时补丁。五灯亮度/有限渐变存储属性精确再捕获；新工厂五灯共享自己的新渐变，旧新世界资源不混用；五套真实导航保持相同，错误 owner/纹理/亮度与失败 apply 负例通过。
+
+该项只交付灯光子组件与测试，原生 map/nav/height 复制是明确的组件夹具，不能证明完整地图/场景/Units/Mission/时钟或独立进程继续；公开战役继续仍关闭。完整 Daming 场景候选在外部 E:/ChatGPT/daming_scenery_v23a_proposal 审核准备中，不覆盖已执行输入。Gao 三个生产候选仍待完整图形复验，未混入本次提交。
+
+证据：`qa/zhu_wounded_20261005/daming_lighting_qualified_v22.json`、`daming_lighting_native_report_v22.json`、`daming_lighting_verified_log_v22.txt`、`daming_lighting_native_review_v22.json`；实现与复查入口：`scripts/run_daming_lighting_state.gd`、`qa/zhu_wounded_20261005/harness/run_daming_lighting_v22.py` 和 `daming_lighting_v22.gd`。私有 producer 仅适用于记录中的本机 QA 路径，不改变公共启动脚本。
+
+完整场景审查发现：CanvasModulate 本身继承 Node2D，保留既有 Node2D 类型；不要对原厂未抬高的灯和夜景额外套用 sync_render_position。固定工厂按已校验的原翠云楼 default/signal 视觉状态配置，再比较完整节点/所有权；不重跑任务/部署/奖励。参见 `docs/DAMING_SCENERY_RESTORE_DESIGN_20261007.md` 和外部候选 manifest。完整目标未完成，缓存清理留待完整候选验收；本轮不发布 Steam。
+<!-- /daming-lighting-v22-qualified -->
+
+<!-- daming-source-audit-v21a -->
+## 2026-10-07 引擎等待期间：大名府源码合同审查完成
+
+按用户“做别的呗”推进无需 Godot 的工作。大名府 RTS 的实际 60×66/town 身份、封闭偏门、五灯共享渐变、113 段原墙源码推算、牢门导航与翠云楼火号状态已核对。39 项来源检查通过，9 种错误来源变体被拒绝，11 个生产输入前后 SHA 相同；没有启动引擎或改动生产源码，不记为运行/恢复合格。
+
+设计与待执行测试矩阵：`docs/DAMING_SCENERY_RESTORE_DESIGN_20261007.md`；检查工具：`qa/zhu_wounded_20261005/harness/audit_daming_scenery_source_v21a.py`；收据：`qa/zhu_wounded_20261005/daming_scenery_source_audit_v21a.json`。初次工具使用错误方法名的失败记录及原 producer 保留。
+
+本轮白名单仅包括检查工具、设计和这些交接增量。既有 Gao 三个生产候选、旧 QA 和原文档待验收部分仍留本地；完整图形往返、Daming 接入、独立进程继续与全部开发计划尚未验收。共享引擎阻塞记录保持；本轮未清理缓存、未发布 Steam，公开战役继续仍关闭。
+<!-- /daming-source-audit-v21a -->
+
+<!-- campaign-units-v19d-current -->
+## 2026-10-07 两关真实Unit图/矿点引用/船体定义复验通过
+
+level5/8专属Unit契约和图schema已本地接入。原高太尉波次/登船、船体/押俘角色，大名府乔装/俘虏/工人与矿点按实际关卡声明校验；高太尉角色/波次不接受重复槽位，大名府死亡援军虽被原调度器移出池仍保留正在死亡的源lane。daming_mine只在level8按entity/expired/none标签保存，完整注册表建立后绑定新对象，不把旧世界Object或保存标签留给游戏逻辑。
+
+当前正式生产脚本复制、零私有运行时补丁、正常时钟1.0：767项通过、5038来源零漂移，7原章状态（Gao初态/付60木刘唐登船/波次已发，Daming初态/暴露/开门救人/付费援军死亡）。原Unit全部值与引用实例化、注册表绑定后再次捕获，完整Unit/Level payload一致；两个工人矿点指向新矿点，失效标签由本任务tombstone绑定/释放；未知或伪矿点、重复波次和遗漏活体俘虏成员拒绝。证据campaign_units_qualified_v19d.json、campaign_units_verified_log_v19d.txt、campaign_units_review_v19d.json和7紧凑原生快照。
+
+保留实际v19b失败：83项/3失败，Gao定义键StringName虽已通过Unit定义规则但通用Codec不支持，大名府初态61真Unit精确重建通过后误调测试_spy_tick。v19c修正新level5 Unit wire，按有界条目保留String/StringName键类型、顺序和值；旧Unit schema/公共Codec未改，测试改用原_cover_tick。另保留v19c终态761项/3失败：三组Gao重捕获正确拒绝测试owner缺Mission按钮容器；四组Daming完整payload重捕获通过，整批仍失败。v19d只补原固定Mission构造器的惰性私有HUD/fx壳，空账本、不调用begin/tick/reward，未放宽生产校验。原producer/失败报告、导入前取消v19和准备工具失败记录均保留，不改写为通过。
+
+脱离场景树的禁用owner/map空壳、保存Node旗标重放、接触和阶段调度均为明确夹具；已证明真实Unit字段与引用恢复，**未证明地图/场景/灯光/FX/时钟/完整Mission/跨进程世界恢复或自然通关**。下一阶段完成原梁山/大名府场景、灯光/通道/地图、表现分区、root/core及Gao按钮延后绑定，再实际保存、退出、独立进程继续/再保存、自然结局/奖励一次。公开战役继续仍关闭；全项目人物拥挤/连续演出、同版九玩法/发行程序、性能/切换清理、Android真机门槛继续。
+
+后续类型/绑定缺口详见remaining_world_restore_audit_v20.json，审计不算运行验收。本轮70白名单文件（31,111,234字节）已提交并推送stable，独立回读00ee0b5b8385388e2dde7aaf933fbac20337d0b8一致；同步收据unit_graph_source_sync_v19.json。收据/文档远端状态另作收尾元数据提交。只清指定取消v19/失败v19b/v19c工程imported中与保留v19d成功批同名、大小、SHA256一致的11214文件、2,705,456,142字节（约2.52GiB），20389受保护文件及保留匹配缓存零漂移。不同缓存保留；收据failed_unit_graph_import_cleanup_v19.json，旧工程复查先重导入。未新增平台发布。
+<!-- /campaign-units-v19d-current -->
+
+<!-- campaign-foundation-v18b-current -->
+## 2026-10-07 第5/8关恢复组件接入与高太尉具名收兵按钮
+
+已补齐已安装level5/level8固定profile、旗标和惰性runtime/Level工厂。高太尉收兵按钮改为Mission.add_level_button("gao_end")及具名activate_mission_button，保留原_finish的战斗阶段、威胁清空、忠义堂/宋江存活条件和原结局；重建不携带旧世界闭包。Gao使用原梁山环境，修正误套其他关卡CampaignEnvironment.enabled条件，未改环境配置或地图。
+
+真实原两关启动后，关卡全部声明字段和任务/表现组件捕获并重建：76项通过、5036输入零漂移，无私有运行时补丁。覆盖高太尉初态/收兵按钮态和大名府初态；重建后Level再次捕获payload一致，事件账本不重放，按钮归属新Mission；内容不匹配/丢失按钮拒绝。原高太尉按钮在明确敌方伤害/0.5秒关卡调度夹具下抵达原基础结局。证据campaign_foundation_qualified_v18b.json、campaign_foundation_verified_log_v18b.txt及campaign_foundation_review_v18b.json。
+
+组件验收使用脱离场景树的ID绑定Unit空壳和只读原地图几何，**不证明Unit/船体/运输/生产/完整世界读档**。两次失败producer/收据保留：v18在autoload初始化前preload导致Localize编译失败；v18a发现Gao环境前提错误、测试HUD类型错误和零delta策略节拍问题；另建v18a/v18b修正。旧level4/official-profile测试的“level5未安装”断言是历史范围，不能当现行九profile验收入口；未改写旧执行工具。
+
+下一阶段完成level5/8专属Unit契约、图成员与对象引用（刘唐登船/押俘、乔装/俘虏/工人矿点），原梁山/大名府场景与灯光/通道、表现分区和world core；高太尉需等Mission按钮重建后再绑定Level。随后实际保存、退出、独立进程继续/再保存、自然结局/奖励一次和既有关卡回归。公开战役继续仍关闭，公开保存仍classic30；九玩法/发行程序、长帧/切换清理、真机及人物拥挤/完整演出等全目标未关闭。
+
+本轮37白名单文件（4,395,215字节）已提交推送stable，独立回读1f5af6e98b2a6d589a01e156a226227651837059一致；同步收据campaign_source_sync_v18.json。收据/文档与两个新工厂的原字节Git属性为独立收尾元数据提交。只清指定失败v18/v18a工程imported中与保留v18b成功批同名、大小、SHA256一致的7476文件、1,803,637,428字节（约1.68GiB）；15315受保护文件及保留匹配缓存零漂移，不同缓存保留。收据failed_campaign_import_cleanup_v18.json，旧工程复查先重导入。未新增平台发布。
+<!-- /campaign-foundation-v18b-current -->
+
+<!-- guard-readability-v17-current -->
+## 2026-10-07 人物特性、技能画面复核与林冲枪架遮挡修正
+
+人物标准按原著区别：武松、林冲普通待机/行走抬头挺胸、成人比例端正；时迁保留机敏警觉。攻击、受击、倒地自然弯曲，不统一成僵硬军姿。已登记36默认资源；715项80图普通战斗/倒地、441项70图连续运动采样的历史资格保留。
+
+技能v16终态329项48图失败（夹具错误要求武松章敌方英雄）；v16a终态733项112图失败（武松E击杀后复用死目标）；v16b761项112图/28实际效果机械通过，但林冲W后R的白色中心枪架遮住上半身，画面判退。三批真实失败/判退收据、固定producer和原生证据保留。v17只改Battle.LinGuardFx._draw外围位置/线段/透明度，生命计时、技能效果、反击、数值及PNG未改。
+
+当前正式源码原样复制、无私有运行时补丁，正常时钟1.0：7主动技能×4向，真实中/后期计时与后期1280×720、1440×960、1920×1080窗口，761项、112图、28实际效果通过，5034来源零漂移。直接复核19张当前原生视口，包括林冲枪架四向及选定中/后期尺寸；上身、头部和血条可辨，外围提示仍可见。证据ordinary_guard_readability_qualified_v17.json、ordinary_guard_readability_visual_review_v17.json及review_v17_frames。武松召唤虎近距离身体/名字/血条重叠仍开放，不能称全部UI无遮挡。合法level6/rank1、接触摆位、冻结非参与者、关雾/镜头和到达相位后冻结截图是明确夹具；不等于无间断演出、自然升级/通关、性能或真机证明。
+
+只删除指定v16/v16a/v16b判退工程imported中与保留v17成功批同名、大小、SHA256一致的11214文件、2,705,456,142字节（约2.52GiB）；20829受保护文件及保留匹配缓存零漂移。不同缓存保留；旧工程复查先重导入，收据rejected_skill_import_cleanup_v17.json。此前6批4.824GiB未删。
+
+新增只读八关声明审计campaign_restore_gap_inventory_v18.json：level5三败高太尉、level8智取大名府缺少已安装恢复profile/factory；高太尉结局按钮仍为匿名回调，需要具名可恢复的任务按钮及对应对象/船体/运输/生产绑定。下一阶段补齐实际恢复并验独立进程保存、继续、再保存、自然结局/奖励一次和既有关卡回归。当前公开继续仍classic30；声明齐全不算功能通过。拥挤编队UI、完整连续演出、同版九玩法/发行程序、约10分钟尾帧及Android2.0.1真机等全项目项仍开放。
+
+本轮61白名单文件（40,287,254字节）已本地提交并推送stable，独立回读984f16448e1ef83eb65f0626cb746e153a886e9e一致；同步收据guard_source_sync_v17.json。收据与文档同步状态另作元数据收尾提交。未合main或发布平台。
+<!-- /guard-readability-v17-current -->
+
+<!-- continuous-gait-v15b-current -->
+## 2026-10-07 普通武松、林冲连续运动采样与三种桌面窗口复核
+
+原祝家庄林冲/大名府武松保持人物物理与正常时钟1.0，各四向实际指令行走，每案8张原生运动采样并遍及全部4步相，位置实际推进；标准头像和人物数值保留。v15b生产脚本原样、无私有补丁，441项/70图通过，5034输入零漂移。直接复核当前14视口（每人每向1运动样本、3种待机窗口）；另保存已直接复核的v15a每人每向前4样本共32图，当前与前批的全部来源输入和逐案4姿态集合一致。证据ordinary_continuous_gait_qualified_v15b.json、ordinary_continuous_gait_visual_review_v15b.json。1280×720、1440×960、1920×1080中资源栏、头像、技能及底栏可见，人物头部、衣装/盔甲和武器保持身份。
+
+审核保留两次真实判退：v15首个新方向采到四次投票转向前的旧姿态，301项中12项失败；v15a机械301项/70图通过但手动镜头跳转后的氛围矩形明暗边界判退。v15b只在采样时等待实际方向，并调用既有_refresh_run_capture_presentation刷新派生几何，逐图验证滤镜原点和完整视口尺寸；不改生产脚本、PNG、动作资源或模拟值。旧producer、失败图/日志/收据不改写。当前资格为正常运动采样和所述桌面视口复核，不是无间断录像或逐像素脚底接触证明；完整攻击/施法连续演出、技能中后期血条间距、多尺寸完整流程和Android真机仍开放。
+
+只清指定判退v15/v15a工程imported中与保留v15b成功批同名、大小、SHA256一致的7476文件、1,803,637,428字节（约1.68GiB）；15517受保护文件和保留匹配缓存零漂移。源码、原生图片、失败证据、私有profile/存档、主缓存、其他任务、成功v14/v15b缓存及平台包保留，旧工程复查先重导入；清单/恢复见rejected_continuous_import_cleanup_v15.json。此前6批4.824GiB清单仍未删除。
+
+本轮79白名单文件（68,443,231字节）已本地提交并推送stable，独立回读远端b22e5efbef31a97e9ce7c2951b81c258b0cef690一致；收据continuous_source_sync_v15.json。同步收据/文档另作收尾元数据提交。下一项ordinary_skill_clearance_v16.gd/run_ordinary_skill_clearance_v16.py核验7个主动技能、4向、中/后期实际计时姿态，后期再核对3种窗口，共计划112图；合法level6/rank1与到达相位后冻结截图均为明确夹具，结果依新完成收据，准备或启动不算通过。被动林冲E无抬手，沿用已有被动命中证据。全项目其他审计门槛仍按DEVELOPMENT_AUDIT_20261006.md推进，未合main或发布平台。
+<!-- /continuous-gait-v15b-current -->
+
+<!-- ordinary-production-v14-qualified -->
+## 2026-10-07 当前正式源码：人物特征动作、受击与倒地复验通过
+
+武松、林冲待机和行走保留端正站姿；时迁等人物保留各自原著特性。ArtDB普通默认取图已登记武松四向death、林冲四向death/hurt；林冲仅西南采用新朝左站立受击和倒地，其他三向为原资源逐字节别名。当前36个默认资源及6份来源清单见ordinary_character_default_routes_v14.json。生产代码本轮只修改ArtDB两行查表，Unit、人物数值、技能、存档、任务回调未改；显式剧情变体继续采用原路由。作者候选清单的历史资格字段不改写。
+
+正式生产脚本原样复制，无私有运行时补丁，正常时钟1.0：近战/非致命反击369项、48图；真实致命战斗/四阶段倒地/影子保留与释放/Unit释放346项、32图，合计715项、80图通过。4904来源、105既有和25新输入零漂移。12张关键原生视口直接复核并原字节保存，林冲SW朝向、成人比例与长枪完整，武松四向落地保持双刀与身体身份。证据ordinary_production_qualified_v14.json及ordinary_production_visual_review_v14.json。接触摆位、非参与者冻结、关雾、镜头和相位仍为明确夹具，不能据此关闭连续步态、血条间距、多尺寸UI、自然通关或性能资格。
+
+只删除指定失败批ordinary_death_pilot_v10_5101dfd0的imported中与保留v14成功批同名、大小、SHA256一致的3738个文件、901,818,714字节（约860.0MiB）；10244个受保护文件及保留匹配缓存零漂移。源码、原图、失败画面、日志、存档、成功批、主缓存、其他工程和平台包保留。旧失败工程复查前须重新导入。范围、完整清单位置与恢复方式见failed_death_import_cleanup_v14.json。先前6批4.824GiB只读清单仍未删除。
+
+本轮66白名单文件（40,255,191字节）已本地提交并推送stable，独立远端SHA回读8c3a584f5b821b4d6a502e37a1145473ba9613e4一致；同步收据ordinary_production_source_sync_v14.json。文档及此同步收据为独立收尾元数据提交。GitHub源码同步不等于Steam发布。完整目标继续依DEVELOPMENT_AUDIT_20261006.md：连续动作与多尺寸UI、八关动态/生产/船体、战役独立进程保存与自然结局/奖励一次、同版九玩法/发行程序、正常时钟约10分钟尾帧/切换清理和Android真机资格。
+<!-- /ordinary-production-v14-qualified -->
+
+以下为历史检查点，状态以本节及最新同步收据为准。
+
+<!-- ordinary-death-hurt-adopted-v14-pending -->
+## 2026-10-07 修正倒地与活体受击已本地登记，正式副本复验进行中
+
+v13原祝家庄林冲/大名府武松普通指令、四向近战/反击与恢复动作369检查/48图通过，正常时钟1.0，4904来源、105既有、25新输入零漂移。林冲SW真实反击前生命311.851851851852，受击后303.703703703704，仍为活人，实际采用站立recoil；直接查看保存SW待机/受击/恢复行走、NE/NW受击及Wu SW受击6图。正确朝左、完整长枪/靴子与成人体型保留；原数值/技能/HUD/头像及其他普通/剧情路由通过。证据ordinary_hurt_pilot_qualified_v13.json和ordinary_hurt_pilot_visual_review_v13.json。v10a倒地/影子346项/32图资格仍保留。接触/冻结/相位/镜头等夹具不等于连续或自然通关。
+
+本地ArtDB普通查表新增Wu death及Lin death/hurt，内容逐字节等于已验证v13私有ArtDB；其余生产输入原样。Lin只改SW死亡与站立受击，其他各三向资源为原TRES字节别名，显式剧情变体不走普通新族。作者候选清单继续保留历史false资格字段，当前实际登记与后验由独立收据记录。v14使用当前生产脚本原样复制，无私有运行时补丁，分近战/受击及倒地/影子两个独立进程继续复验，尚未取得完成收据。生产脚本仅改ArtDB查表，未改Unit、数值、技能、存档或任务回调。
+
+正式资格、完整连续动作/血条间距/多尺寸UI及DEVELOPMENT_AUDIT_20261006.md的其他全项目项继续开放。当前新增文件/文档和本地ArtDB登记尚未提交推送；上一个已同步检查点仍为7ebfe4e3，本轮成功后再白名单同步。未新增清理、打包或平台发布。
+<!-- /ordinary-death-hurt-adopted-v14-pending -->
+
+<!-- death-qualified-hurt-pending-v13-current -->
+## 2026-10-07 倒地/影子候选复验通过，补修林冲西南活体受击
+
+v10a正常时钟下346检查/32原生视口通过；4904来源、105既有、20新输入零漂移，仅私有ArtDB两人death查表。真实原level1战斗伤害、四阶段倒地、离开活体列表、影子批保留/释放与节点释放完成。直接查看并保存林冲SW四阶段和武松四向落地8图；其余死亡取图/姿态与已直接审查的v8a对应值一致。林冲新SW朝左、头脚方向连续、完整长枪与成人比例保留。证据ordinary_death_pilot_qualified_v10a.json、ordinary_death_pilot_visual_review_v10a.json；这是候选资格，生产默认death仍未采纳，非连续/全项目完成。
+
+核对发现旧Lin SW hurt与death首格是同一个错向区域，需修正活体受击。v12只采用已核验新图的站立受击/后仰首姿态，绝不用躺倒尸体表示活人受击；另外三向hurt资源逐字节别名保留。1姿态/4资源，没有新增PNG。清单ordinary_lin_chong_20261007_hurt_v12.json，真实原关卡普通近战/反击及恢复动作的v13私有复验已启动，尚未取得完成收据。生产ArtDB/Unit未修改；该受击资格以及后续正式接入、连续动作/血条间距/多尺寸UI等仍开放。
+
+此前81白名单文件（55,408,917字节）已推送stable，独立回读7ebfe4e3d5f4e87fc25e5d86dda69b4c6ac0eed5一致；death_diagnostic_source_sync_v10.json记录实际同期范围，后续死亡合格收据和受击工作是新的增量，不冒称已包含在该SHA。v10失败脚本/批和v9未执行生成输入保留；本批未新增缓存清理或平台发布。全目标继续按DEVELOPMENT_AUDIT_20261006.md执行。
+<!-- /death-qualified-hurt-pending-v13-current -->
+
+2026-10-07复验入口修正：林冲SW第二版原生导入/1254×1254尺寸回读已通过，PNG字节不变；收据lin_sw_death_native_texture_v10.json。v10影子夹具因提前preload触发Art依赖编译错误，未取得死亡画面；失败源码/批保留，ordinary_death_pilot_rejected_v10.json记录原因。改用run_ordinary_death_pilot_v10a.py（其余参数同前）；它从原关卡实际WorldShadowBatch取保留/释放证据，生产脚本未改。v9未执行；v10已失败，不能再称待验证成功候选。v10a资格依新收据，目前新death未默认接入。
+
+<!-- death-diagnostic-v10-current -->
+## 2026-10-07 技能/真实倒地诊断完成，林冲西南朝向需修正
+
+原关卡武松、林冲的八项技能四向484检查/64图完成；原level1生命与数值下真实致命战斗及四个倒地阶段177检查/32图完成，共661项、96个原生视口。正常时钟1.0，4904来源、105既有与13新输入零漂移，私有ArtDB仅试接武松death。完整机械收据ordinary_final_actions_pilot_v8a.json和直接查看/原字节保留的40图见ordinary_final_actions_pilot_visual_review_v8a.json。合法level6/rank1恢复、接触摆位、冻结非参与者、关雾/镜头/相位冻结仍是明确夹具。敌方近战英雄会保留自然技能使用，资格为原敌人真实战斗伤害，不称“致命一击全是普通近战”。
+
+机械通过不等于整体画面通过：武松四向16个倒地阶段直接审查，成人体型、双刀、前后方向及静止/淡出保留；林冲旧西南fatal转右、fall转左、最终头脚又反向，画面判退。新内置imagegen西南候选两张1254RGBA原生图及精确请求/父图均保存；首版fatal仍转右，第二版定向修正为左。编排四个新SW姿态，其他三向死亡资源为原TRES逐字节别名，不改旧图/旧资源、不本地裁切/缩放/镜像/重绘。清单ordinary_lin_chong_20261007_death_v10.json，来源generation_lin_chong_death_v10.json。原生导入/尺寸资格依独立收据，实际落地点、完整死亡/影子及生产接入仍待新批验证。
+
+v9生产复验脚本仅准备，未执行，保留为v10生成输入；v10在私有ArtDB试接武松四向死亡与林冲西南修正，并新增影子保留/释放与其他普通/剧情路由守卫。共享Godot自然等待，不操作其他任务。生产ArtDB/Unit未改，新death仍未默认采纳。施法中后期血条间距、连续动作、多尺寸UI及DEVELOPMENT_AUDIT_20261006.md的八关动态/保存终局/九模式/性能/Android实际设备等项仍开放；本批未新增清理、打包或平台发布。
+<!-- /death-diagnostic-v10-current -->
+
+2026-10-07同步收据：本轮59白名单文件（24,434,909字节）已提交并推送stable，独立回读远端e51422a73a2981c18838309a117ac2333bcc7801一致；qa/zhu_wounded_20261005/wu_death_candidate_source_sync_v8.json记录候选范围与实际资格。生产源码未改，新death仍未默认接入；完整技能/死亡批继续。文档收尾是后续元数据提交。
+
+<!-- wu-death-candidate-v8-current -->
+## 2026-10-07 武松倒地候选与技能检查进度
+
+人物体态继续按原著身份分别处理：武松魁梧剽悍、林冲沉稳挺拔，普通站立与行走保持健康成人比例；时迁保留轻巧机警。攻击、受击和倒地允许合理发力、屈膝与身体弯曲。衣甲细节属于本项目的美术解释。
+
+武松新增内置imagegen原生倒地来源9张，全部保存原字节与精确请求/父图链。选4张新来源及同人物既有西北受击来源，组成12姿态/4向资源；致命受击、倒下、静止、静止四槽，末槽是终态停留。错误朝向、缺刀、跨格的原图保留，相应错误格不采用；AtlasTexture仅用元数据取样，倒地保持固定成人解剖尺度。5个实际原生来源导入与来源/SHA核验通过，仍为候选，未登记生产默认death。
+
+首轮v8技能画面因旧雾纹理覆盖人物判退，执行脚本、失败收据及两张实际黑屏证据保留。v8a夹具显式隐藏旧雾层并核验人物可见，未为此修改游戏源码。原祝家庄林冲第一技能四向61检查/8原生视口完成，正常时钟1.0；4904来源与105既有输入在本检查点零漂移。直接查看5张，人物/地图、前后视角和原HUD可见，施法后恢复挺拔idle；其余三张保存，连续衔接及完整技能特效不据此判为完成。合法level6/rank1恢复、接触摆位、非参与者冻结、关雾/镜头/相位冻结均为明确夹具，不是自然升级或通关。
+
+完整两人技能及原level1真实致命伤/四向倒地仍在同一v8a私有批继续；共享引擎繁忙时自然等待，不操作其他任务。证据见qa/zhu_wounded_20261005/wu_death_native_review_v8.json、ordinary_final_actions_rejected_v8.json、ordinary_lin_skill0_checkpoint_v8a.json；请求与来源链见tools/contracts/zhu_wounded_20261005/generation_wu_song_death_v8.json。生产脚本和v7已合格默认范围保持本轮输入零漂移。本轮不将候选同步写成默认接入、完整审查、性能或平台发布；全项目未完成项继续按DEVELOPMENT_AUDIT_20261006.md执行。
+<!-- /wu-death-candidate-v8-current -->
+
+<!-- ordinary-default-combat-v7-current -->
+## 2026-10-07 新站姿与武松四向战斗已接入源码默认取图
+
+ArtDB仅对空显式剧情变体的普通武松/林冲登记新idle/walk；普通武松增加四向attack/hurt，Unit将武松加入完整原生攻击绘制白名单，避免重复叠加整图挥动/程序刀影。林冲原四向战斗图继续使用。时迁与其他人物保持各自姿态，孟州武松、押解/囚犯林冲等显式剧情变体仍走原造型。人物数值、技能定义、指令与任务回调未修改。死亡、技能完整演出及连续步态后续继续审核；本轮不将这些未完成项标为合格。
+
+武松斩击西北后腿/后靴修清，新原生actions_nw3_v7.png保留原字节与精确请求/父图。6原生来源（含旧待机）编排20姿态、8战斗资源；attack按蓄势/蓄势/斩击/斩击/收势/同向idle六槽匹配真实命中相位，hurt每向一帧。脚点分别取两只靴子的落地锚点，头部独立测量；正常出手允许身体发力和重心降低，不把斩击拉成直立军姿。原作者候选清单/旧失败来源不改写，当前实际采用范围见qa/zhu_wounded_20261005/ordinary_character_default_routes_v7.json。
+
+私有试接入343项/48截图通过；随后用现行生产脚本原样复制、无私有ArtDB/Unit修改的原祝家庄林冲/大名府武松复验367项/48截图通过。正常时钟1.0，4904来源与105候选/资源输入零漂移，四向正常近战/反击、真实蓄势/命中/收势与恢复行走、原HUD/标准头像/剧情隔离及原数值均核实。直接查看并原字节保留12张实际生产视口；证据ordinary_chapter_combat_production_v7.json及ordinary_combat_production_visual_review_v7.json。显式接触摆位、非参与者冻结、关雾/镜头和阶段冻结是画面夹具，不证明连续播放、技能/死亡、自然通关、存档或性能。
+
+审核本次覆盖状态无阻塞问题后，只清两个指定旧失败批的imported中与保留最新成功生产批同名/大小/SHA256一致的7436个文件，1,780,976,820字节（约1.66GiB）；15274受保护文件与保留缓存匹配SHA零漂移。源图/旧失败图/源码/日志/截图/私有profile/存档和成功批缓存完整保留，两个imported目录保持原处；复查旧失败工程先重新导入。范围及恢复见qa/zhu_wounded_20261005/failed_action_import_cleanup_v7.json。未清主缓存、其他旧批、Git对象或平台包，先前6批只读清单的4.824GiB仍未删除。
+
+下一步按完整DEVELOPMENT_AUDIT_20261006.md继续：连续足底/衣装/武器、两人技能/死亡/多尺寸UI、全库人物、八关动态阶段/生产/船体/身份UI、同版战役保存自然结局/奖励一次、九玩法/发行程序、正常时钟约10分钟尾帧性能与Android实际设备资格。本次是源码默认绘制接入，不是Steam更新或完整目标完成。
+<!-- /ordinary-default-combat-v7-current -->
+
+<!-- ordinary-actions-v6-current -->
+## 2026-10-07 原关卡动作诊断与武松战斗候选
+
+人物按原著特性分别处理：武松魁梧剽悍、林冲沉稳挺拔，普通待机保持健康上背与成人比例；时迁保留轻巧机警。攻击/受击允许合理转胯、屈膝、倾身，不统一成僵硬军姿。
+
+原祝家庄林冲/大名府武松的正常指令、真实近战/反击、恢复行走与原HUD诊断255项、32截图通过，正常时钟1.0；4904原输入及86候选输入零漂移。只有私有ArtDB普通idle/walk查询替换，生产源码四脚本未修改。接触摆位、冻结非参与者、关雾/镜头及命中物理帧冻结是明确夹具；这不是默认接入、技能/死亡、连续步态、自然通关、保存、性能或平台资格。v6类型错误及v6a受击/计时夹具错误原批完整保留。当前证据：qa/zhu_wounded_20261005/ordinary_chapter_actions_v6b.json及ordinary_chapter_actions_review_v6.json。
+
+实际发现武松四向攻击仍取同一旧侧面帧带，后视出手会跳回侧面；无独立hurt图时沿用身体加程序化退缩。新增imagegen原生战斗候选保留7张1254RGBA来源，5张选用来源组成四向蓄势/斩击/收势/受击16姿态，7张实际原生尺寸导入通过。西南首版两帧错向、西南第二版hurt错向、西北首版脚跨格均保留；西南hurt改为独立原生图。清单assets/direction4/ordinary_wu_song_20261007_actions_v6.json，精确请求/父图链tools/contracts/zhu_wounded_20261005/generation_wu_song_actions_v6.json。未本地裁切/缩放/镜像/重绘。
+
+下一步为新战斗图独立编排脚点/头部身高与SpriteFrames，实跑动作与待机/行走衔接；核验双刀握法、后视支撑腿，林冲连续枪长/枪缨与体型。新战斗资源尚未编排，resources=0；普通两人默认路由、完整动作/连续资格仍开放。全项目仍按DEVELOPMENT_AUDIT_20261006.md执行。本轮未清理、打包或发布平台。
+<!-- /ordinary-actions-v6-current -->
+
+<!-- lin-gait-source-sync-v5 -->
+## 2026-10-07 林冲行走候选增量已同步
+
+本轮134个白名单文件已提交/推送stable，独立回读远端源码SHA与4ad961041609e9d6bf431c2e4e8ccb6dc04f765e一致。收据：qa/zhu_wounded_20261005/lin_chong_gait_source_sync_v5.json。17原生来源/20姿态、374来源检查、正常时钟96项/80截图真实Unit动作组件证据已保存，四向四步相全部实际出现，4904旧输入与42候选输入零漂移。此为候选素材与证据同步，普通生产路由、连续/战斗/原关卡资格仍开放。后续文档收尾另见Git历史；以下同步SHA是历史轮次。未清理或发布平台。
+<!-- /lin-gait-source-sync-v5 -->
+
+<!-- lin-full-gait-v5-current -->
+## 2026-10-07 林冲四向待机/四步相行走候选完成独立对照
+
+按沉稳挺拔的教头体态处理，健康上背、自然抬头挺胸、成年比例；保留蓝衣金边甲与长枪低持。17原生来源形成四向idle及每向walk_a/passing_a/walk_b/passing_b，共20姿态/8资源。脚点按独立靴子区域编排，避开伸入下部的长枪与红缨；原v4待机资源不修改。内置imagegen原生生成/编辑，数学参考和已验证武松步相仅作腿姿/镜头参考，不继承武松脸、服装或双刀。所有精确请求、父图和换脚/背景失败原图保留，不本地裁切/缩放/镜像/重绘，不以idle充walk。
+
+17来源原生尺寸导入与374项来源/透明/资源检查通过。真实Unit/正常Defs英雄与四技能、正常时钟1.0的独立起停/反向对照96项、80截图通过，4904旧输入及42候选输入零漂移，四向四步相全部实际出现。直接查看原生1×/4×视口帧5/6/8/11/13/15/35/59/75，体态与主要身高/脚点衔接改善。仍需连续足底/衣装/枪缨/枪长/握法、血条间距、战斗/终态和原Battle/生产取图/UI/存档资格；普通生产路由未替换，production_qualified=false。
+
+清单：assets/direction4/ordinary_lin_chong_20261006_gait_v5.json；来源链：tools/contracts/zhu_wounded_20261005/generation_lin_chong_gait_v5.json；实际对照与审核：qa/zhu_wounded_20261005/ordinary_lin_chong_gait_motion_comparison_v5.json及ordinary_lin_chong_gait_motion_review_v5.json。此前只到idle/SE候选的段落是历史阶段；旧producer与收据不改写。
+
+下一步同时核验武松/林冲的连续与完整动作、原关卡/生产UI路由，再推进完整DEVELOPMENT_AUDIT_20261006.md。八关动态、自然结局/奖励一次、九模式、性能及Android资格仍开放。本轮未清理、打包或发布平台。
+<!-- /lin-full-gait-v5-current -->
+
+<!-- wu-gait-source-sync-v5 -->
+## 2026-10-06 武松行走候选增量已同步
+
+本轮113个白名单文件已提交/推送stable，独立回读远端源码SHA与d9f1cec867be0916f3bd3269c2096cfa1de8cc00一致。同步收据：qa/zhu_wounded_20261005/wu_song_gait_source_sync_v5.json。17原生来源/20姿态、306来源检查、96项/80截图真实Unit动作组件证据已保存；四向四步相全部实际出现。此为候选素材与验证记录同步，普通生产路由和连续/战斗/原关卡资格仍开放。文档收尾提交另见Git历史；以下更早同步SHA为历史轮次。未清理冗余或发布平台。
+<!-- /wu-gait-source-sync-v5 -->
+
+<!-- wu-full-gait-v5-current -->
+## 2026-10-06 武松四向待机/四步相行走候选完成独立对照
+
+按武松魁梧剽悍、健康上背与抬头挺胸的普通体态处理；保留行者衣装、念珠、绑腿与双刀低持，步行允许自然重心转移。原生17来源构成四向idle及每向walk_a/passing_a/walk_b/passing_b，共20姿态/8资源。全部经内置imagegen原生生成/编辑，精确请求、父图、数学腿部producer及三张错误换脚/朝向原图保留；不本地裁切/缩放/镜像/重绘，不以idle充walk。
+
+17张原生尺寸导入、306项来源/透明/取样检查通过。独立实际Unit/正常Defs英雄与四技能起停/反向对照96项、80截图通过，4904旧输入及42候选输入零漂移，四向四步相全部实际出现。直接查看原生视口帧5/6/7/9/10/15/35/59/75的1×/4×：普通行走保持挺拔，背面朝向和主要身高/脚点与idle衔接改善。此为脱离Battle的动作组件证据；未连续播放审查衣装/足底滑动，仍需攻击/受击/终态、血条间距、原关卡/生产取图/UI/存档资格。普通武松生产路由未替换，production_qualified=false。林冲目前仍为idle与SE两步相候选，下一步补同等完整动作。
+
+清单：assets/direction4/ordinary_wu_song_20261006_gait_v5.json；来源链：tools/contracts/zhu_wounded_20261005/generation_wu_song_gait_v5.json；实际对照与审核：qa/zhu_wounded_20261005/ordinary_wu_song_gait_motion_comparison_v5.json及ordinary_wu_song_gait_motion_review_v5.json。旧producer与旧收据不改写。
+
+全目标仍按DEVELOPMENT_AUDIT_20261006.md推进；八关动态阶段、自然胜败/奖励一次、九模式、性能/Android资格尚未关闭。本轮没有清理、打包或平台发布。以下历史状态按对应日期/范围理解。
+<!-- /wu-full-gait-v5-current -->
+
+<!-- source-sync-v5-verified -->
+## 2026-10-06 本轮源码素材已同步GitHub
+
+已提交并推送至winterzh/Liangshan-Heroes的codex/sync-20260905-stable，独立回读远端SHA与源码提交4cfa9902ba2df374e209ebdb206e0670fcb57438一致。白名单1783文件，共236,452,329字节，原生图片、请求/父图/数学参考、限定获救取图源码与QA按原字节保留；仅一份设计矩阵文档发生Git已配置的LF规范化。946项原关卡与410项五进程组件验收的各4904输入再次核对零漂移，未混入缓存、安装包、玩家数据或凭据。同步收据：qa/zhu_wounded_20261005/source_sync_round_20261006_v5.json。
+
+武松/林冲起停对照已运行，旧walk与新idle的画面衔接判退；新增SE两步相静态候选并保留林冲失败及修正。人物完整动作、其余资格仍开放，候选不称已上线。以下“尚未提交/推送”的段落为历史阶段记录；本段和同步收据记录当前源码轮次，后续文档收尾提交另见Git历史。重复缓存本轮未删除。
+<!-- /source-sync-v5-verified -->
+
+<!-- traits-contacts-v5-current -->
+## 2026-10-06 按人物特性修正体态：当前素材与同步范围
+
+用户要求按原著人物特点塑造体态，不能全员统一军姿。武松普通待机/行走强调魁梧、剽悍、抬头挺胸；林冲强调教头的挺拔、沉稳和自然持枪。时迁保留轻巧机警、轻微髋部前倾与自然软膝，不画成病态驼背或深蹲；王英成熟矮壮，秦明强壮端正，石秀精干敏捷，杨林灵活，黄信稳健，邓飞粗犷警觉。攻击、受击、负伤允许动作需要的弯曲，不能强行军姿。具体衣装、甲片、步相和数值比例属于项目美术解释，不冒称原著逐项规定。
+
+内置imagegen新增武松SE两张交替承重候选、林冲SE两张交替承重候选，另保留林冲首版B失败图（重复A承重）和原生B2修正。五张1254×1254 RGBA均原字节保存，精确请求、父图和几何参考producer可核对。只读SHA/透明边界/输入链检查通过；最小透明余量58px，未裁切，但未完全满足请求的100px余量。直接静态观察已记录；尚缺另外三向、过渡步相、导入/采样/足点和真实起停/反向/战斗/UI验收。普通武松/林冲生产取图未替换，production_qualified=false。
+
+本轮同步范围包括已有获救七人取图增量、946项原关卡/16截图与410项五进程续玩组件证据，以及人物候选和完整来源链。五进程资格限定于安装来源的战役组件QA；不等于公开继续入口、全章结局/奖励一次性或完整发布资格。此前“尚未提交/推送”属于历史阶段记录；同步结果以stable分支提交历史与本轮同步收据为准。完整八关动态阶段、九模式、性能、Android及人物完整动作仍按DEVELOPMENT_AUDIT_20261006.md推进。
+
+本次没有清理缓存、打包、Steam发布或main合并。继续遵守共享Godot自然等待策略。
+<!-- /traits-contacts-v5-current -->
+
+新增候选：assets/characters/{wu_song,lin_chong}_traits_20261006/*_v5.png；精确请求/生成来源：tools/contracts/zhu_wounded_20261005/{requests,jobs}/*_v5.json；静态资格/判退：qa/zhu_wounded_20261005/ordinary_contacts_static_review_v5.json。全部为素材与证据，不是运行缓存。
+
+
+## 2026-10-06 武松/林冲起停对照已运行，画面衔接判退
+
+两人各80项/80截图、4904输入零漂移的正常属性、英雄/四技能、真实Unit指令物理与绘制对照通过。分别直接查看1×/4×待机、现有走路与停步帧5/15/35。新待机挺拔且成人比例改善，但武松现有walk仍深屈膝前倾，并将NE/NW沿用前视旧走图；林冲旧持枪角度/屈膝姿势与新直立放低枪待机之间有突然切换。机械断言通过不能代替画面合格，两者production_qualified=false，生产普通取图尚未替换。
+
+下一步按各自身份补匹配四向自然武装行走/真实四步相，上背保持正常直立，动作中允许合理身体发力，不强制攻击军姿。仍沿用imagegen内置原生生成/编辑，保留输入、原图、失败及精确请求，禁止以idle充walk或镜像缺失后视；完成实际衔接、武器/脚点/衣装和原关卡/UI资格后再接入。相关mechanical/review收据位于qa/zhu_wounded_20261005/ordinary_wu_song与ordinary_lin_chong_idle_motion_comparison_*v4.json。首轮Wu夹具foot类型推断失败及精确自有进程终止记录保留。
+
+
+## 2026-10-06 获救七人五个独立进程续玩组件已通过
+
+实际gl_compatibility渲染、正常时钟下，解救前61、解救后127、途中91、到营69、再次到营读档62项共410项通过；五个先后退出的进程nonce/PID/单调时间区间核实。相邻存档与读档对七人真实持久ID、生命值/角色/位置/路径命令/方向、空art_variant及原生造型、任务阶段的IEEE位模式指纹完全一致；无数值或坐标容差。4904生产输入与私有副本零漂移，三份执行helper不变，自己的锁释放。迷雾纹理校验保留，11名原守军正常普攻清除；原囚徒经正常移动命令撤回，庄院未倒不提前结算。收据qa/zhu_wounded_20261005/rescued_seven_cross_process_qualified_v4.json。
+
+这是显式已安装战役profile的保存屏障/Session组件补验，公开玩家续玩入口仍未开放。不是整章自然胜败/奖励一次性、正常保存UI、终态/连续播放/性能/平台或完整八关资格。此前五次失败批/原脚本/原图/存档和独立JSON解析探针保留；生产存档逻辑及游戏HP没有为测试而修改。继续普通武松/林冲起停对照及开发审计中的完整剩余项。尚未清理、暂存/提交/推送、打包或发布。
+
+
+## 2026-10-06 本批冗余缓存只读盘点
+
+6个已结束失败批（首轮原Battle和五轮跨进程批）的imported与保留成功原Battle20261006_152842_60aec8f8逐文件核对，21924个同名/大小/SHA完全一致，5179351872字节约4.824GiB；实际精确字节以qa/zhu_wounded_20261005/readonly_cache_cleanup_candidate_v4.json为准。这里只列候选，删除量0，仍等本批资格与保护后验；最新成功缓存、当前运行批、所有人物bootstrap/Unit/时钟成功批、主缓存、源码/PNG/请求/失败父图/数学producer、存档/日志/截图全部未动。
+
+开发完成审计：docs/DEVELOPMENT_AUDIT_20261006.md（完整目标、实际证据和未闭合门槛）。
+
+
+## 2026-10-06 战役续玩屏障补验边界
+
+首次五进程补验在第一份存档前被屏障拒绝，失败批rescued_role_cross_v4_2b82d4a3及其脚本保留。正常Battle默认将屏障配置为经典30波；既有祝家庄组件测试需显式启用已安装ZHU_CONTEXT。新夹具现先断言真实战斗已经分类为祝家庄，再仅配置保存屏障的战役profile，未修改世界的分类或屏障校验规则，并保留原始拒绝码。组件补验不等于公开续玩入口：ContinueFlow公开入口仍限经典30波，战役profile记录player_entry_enabled=false。五进程通过后也不能据此宣称战役玩家保存按钮、完整胜利/奖励一次性、全部八关续玩或平台验收完成，必须继续按完整计划补齐。
+
+
+## 2026-10-06 普通武松/林冲起停对照准备
+
+qa/zhu_wounded_20261005/harness/ordinary_idle_comparison_actor_v4.gd、ordinary_idle_motion_comparison_v4.gd及对应.py已准备，尚未运行。将用正常Defs的各自生命值/英雄身份/四技能，继承真实Unit指令、物理和绘制，按四向同时比较原待机与新挺拔待机衔接现有走图，记录1×/4×起步、停步和反向。只替换夹具idle取帧，不改生产ArtDB、战斗动作或像素；用于判断成人比例、脚点、衣装、方向和武器在切换时是否连续，不能当原Battle/生产/UI/战斗/存档/连续播放/平台验收。
+
+入口：python -X utf8 -B qa/zhu_wounded_20261005/harness/ordinary_idle_motion_comparison_v4.py --key wu_song --from-receipt <已完成原Battle evidence/receipt.json> --work-root <工程外QA根目录> --run。林冲将参数改为--key lin_chong。无--run为只读预检。主验收仍先完成获救身份五进程续玩，再运行普通角色对照；必要时修正素材/动作，不能只替换站图就宣称完整角色完成。
+
+<!-- original-rescued-health-fixture-correction-v4 -->
+## 2026-10-06 生命值验收边界修正
+
+脱离Battle的七人候选Unit夹具人为设置HP/maxHP=110，仅用来验证候选身份与绘制，不能把110当成原祝家庄七人的游戏数值。原关卡从正常定义生成各角色，解救回调没有改变生命值；新取图源码也没有修改生命值。首次原Battle QA将夹具110误用于原角色断言，七人均在该项报错，失败批和原脚本保留。修复应逐人保存真实解救前HP/maxHP并比较解救后及跨进程读档值；不能改游戏数值迎合夹具。此前“HP110”等记录均指候选夹具，原关卡数值需以新实际运行记录为准。
+<!-- /original-rescued-health-fixture-correction-v4 -->
+
+
+## 2026-10-06 跨进程获救身份补验准备
+
+tools/rescued_seven_cross_process_qa.gd及tools/run_rescued_seven_cross_process_qa.py已准备，尚未执行。将从已完成且零输入漂移的原Battle QA批复制独立私有工程与缓存，在五个真正先后退出的进程中分别保存解救前、解救后、撤回途中、到营，并再次恢复到营存档。记录进程nonce/PID/单调起止区间、原七人的持久实体ID、数值/位置/命令、四向造型、空art_variant字段、任务阶段和未提前结算。接触人与林冲近战位置是明确夹具，囚徒撤离仍由正常玩家移动命令完成；保持正常时钟并冻结非参与者。该补验不代替完整获胜/奖励一次性、常规UI保存按钮、终态、性能或平台验收。
+
+复验：python -X utf8 -B tools/run_rescued_seven_cross_process_qa.py --from-receipt <已完成原Battle evidence/receipt.json> --work-root <工程外新QA根目录> --run。无--run仅检查已验证来源；自然等待共享引擎空闲，不控制或联系其他任务。
+
+<!-- original-rescued-route-v4-current -->
+## 2026-10-06 当前增量：原关卡获救七人取图接入
+
+人物姿态继续按特性分别处理：武松、林冲普通待机挺拔；时迁机警轻身而非病态驼背，秦明强壮端正，王英成熟矮壮，杨林灵活，黄信稳健，邓飞粗犷警觉。七人候选清单与原图/失败父图不改写。
+
+Unit.visual_art_variant仅在现行祝家庄RTS脚本、该关prisoners成员、梁山/非战斗/非英雄/已获救及空显式变体时派生zhu_wounded_人物key。原解救回调及各人真实生命值不变；获救速度82/攻击0/无技能与存档空art_variant校验不变；显式剧情变体优先，旧三日关卡恢复战斗能力后不触发此路由。只说明字段契约兼容，不承诺不同安装来源SHA的旧存档可跨版本恢复。
+
+CampaignArt登记七套原生idle/walk资源；ArtDB本体、来源/方向、精确动作、来源预览与所属人物UI查询一致，错人物/非法方向拒绝。hurt复用站立idle，不称新受伤动作；缺失attack/gather/assisted/death/down拒绝普通武装回退，终态走现有同造型程序化绘制。Unit各实际身体查询及旧scenery影子兼容入口使用派生造型，UI保留标准人物头像。
+
+原Battle回归已通过946项、16张原生视口截图、4904冻结输入零漂移；原七人经真实解救回调并用正常玩家命令撤回前营，姿态取图/标准头像/选择按钮/缺失武装动作拒绝与真实撤离均核验。证据：qa/zhu_wounded_20261005/original_rescued_seven_production_route_v4.json。
+
+独立复验入口：python -X utf8 -B tools/run_rescued_seven_art_qa.py --repo <checkout> --manifest rescued_seven_current=assets/direction4/zhu_wounded_shi_qian_20261006_walk_footclear_declared_v4.json --work-root <工程外QA目录> --cache-from <已核验原关卡QA批> --shared-checks --run。无--run为只读预检。自然等待Godot空闲；不控制或联系其他任务。新QA脚本tools/rescued_seven_art_qa.gd保留旧current_campaign_art_qa及历史收据。
+
+连续步态/衣装、完整终态画面、跨进程保存退出续玩/奖励一次性、旧三日与普通武松/林冲动作衔接仍待进一步资格验证。全计划的八关动态阶段/生产/船体/身份动作UI、九模式、约10分钟性能尾帧与Android真机/平台目标仍开放。production_qualified=false。本批尚未提交/推送、清理、打包或发布。
+<!-- /original-rescued-route-v4-current -->
+<!-- deng-fei-traits-gait-v4-current -->
+## 2026-10-06 邓飞候选资源与收据
+
+- assets/characters/deng_fei_wounded_20261005/idle_single_*_v4.png、walk_a/b_*_v4.png、passing_a/b_*_v4.png及修正版：20选用原生源，失败父图独立保留。
+- assets/direction4/zhu_wounded_deng_fei_20261006_walk_passing_v4.json及assets/anim/zhu_wounded_v4_deng_fei_gait_passing_*：20姿态/8资源，candidate_only，production_qualified=false。
+- tools/contracts/zhu_wounded_20261005/prepare_deng_fei_*、generation_deng_fei_walk_passing_v4.json、requests/、jobs/：精确原生请求与完整来源链。
+- qa/zhu_wounded_20261005/deng_fei_walk_{texture,sources,cycle}_passing_v4.*、review/native_prompt_set及unit_motion_passing_v4收据/审核：真实导入/时钟/自身Unit证据；早期8源partial记录保持原位。
+- 邓飞专用texture_bootstrap/walk_preview/unit_motion及record/update helper：之前角色producer输入保持SHA不变。
+- docs/RESCUED_ART_INTEGRATION_20261006.md：七人原流程、生产查询一致性、存档兼容和跨进程奖励一次性接入计划；候选通过不代表原流程完成。
+- docs/RESCUED_ART_CANDIDATE_MATRIX_20261006.md、rescued_seven_candidate_identity_audit_v4.json：七人候选来源/资源/自身身份的交叉证据；不是原Battle验收。
+- unit_motion_shi_xiu_identity_v4.py/.gd/.tscn与shi_xiu_unit_motion_identity_footclear_v4.json/review：保留旧44项后增加52项逐帧身份复验。
+- merge_candidate_import_cache_v4.py及deng_fei_unit_cache_conflict/descriptor_guard_failure_v4.json：候选缓存选择、引擎前拒绝和修复证据；旧私有缓存及失败批不清理。
+<!-- /deng-fei-traits-gait-v4-current -->
+
+<!-- huang-xin-traits-gait-v4-current -->
+## 2026-10-06 黄信候选资源与QA
+
+- assets/characters/huang_xin_wounded_20261005/idle_single_*_v4.png及walk/passing原生PNG：20选用源，失败变体另保留。
+- assets/direction4/zhu_wounded_huang_xin_20261006_walk_passing_v4.json、assets/anim/zhu_wounded_v4_huang_xin_gait_passing_*：20姿态/8资源，candidate_only及production_qualified=false。
+- tools/contracts/zhu_wounded_20261005/prepare_huang_xin_requests/harnesses/walk_passing_v4.py、generation_huang_xin_walk_passing_v4.json、requests/、jobs/：精确请求与完整原生父图/数学producer来源。
+- qa/zhu_wounded_20261005/huang_xin_walk_{texture,sources,cycle}_passing_v4.*及review/native_prompt_set、huang_xin_unit_motion_passing_v4.json/review：真实导入/时钟/Unit收据。
+- 黄信专用texture_bootstrap、walk_preview、unit_motion及record/update helper：保留原角色生产者，连续动作与原关卡资格仍开放。
+- docs/RESCUED_ART_INTEGRATION_20261006.md及qa/zhu_wounded_20261005/rescued_route_preflight_v4.json：生产解析器/解救回调/存档兼容的只读预检与后续原流程验收计划，未修改生产代码。
+- assets/characters/deng_fei_wounded_20261005/idle_single_*_v4.png、walk_a_*_v4.png及deng_fei_fullidle/contact_a_native_review_v4.json：等待期间推进的8张原生单姿态来源，尚不证明Godot/完整步态/Unit通过。
+<!-- /huang-xin-traits-gait-v4-current -->
+
+<!-- yang-lin-traits-gait-v4-current -->
+## 2026-10-06 杨林候选资源与证据
+
+- assets/characters/yang_lin_wounded_20261005/：20选用全画幅idle/四步相原生PNG；walk_b_sw首版判退保留，walk_b2_sw选用。
+- assets/direction4/zhu_wounded_yang_lin_20261006_walk_passing_v4.json及assets/anim/zhu_wounded_v4_yang_lin_gait_passing_*：20姿态/8资源，candidate_only，production_qualified=false。
+- tools/contracts/zhu_wounded_20261005/prepare_yang_lin_*、generation_yang_lin_walk_passing_v4.json、requests/、jobs/：精确请求、原生父图与数学producer完整来源链。
+- qa/zhu_wounded_20261005/yang_lin_walk_{texture,sources,cycle}_passing_v4.*、walk_passing_review、walk_native_prompt_set及unit_motion_passing收据/审核：实际导入/时钟/Unit证据，连续动作与原流程资格开放。
+- 杨林专用texture_bootstrap/idle_preview/walk_preview/unit_motion及record/update helper；保留之前角色收据所依赖的producer。
+<!-- /yang-lin-traits-gait-v4-current -->
+
+<!-- qin-ming-traits-gait-v4-current -->
+## 2026-10-06 秦明强壮军官四步相新增
+
+- assets/characters/qin_ming_wounded_20261005/idle_single_*_v4.png、walk_a/b_*_v4.png、passing_a/b_*_v4.png及passing_a2_ne_v4.png：20选用原生源；东北首版passing_a_ne保留为失败父图。
+- assets/direction4/zhu_wounded_qin_ming_20261006_walk_passing_v4.json与assets/anim/zhu_wounded_v4_qin_ming_gait_passing_*：20真实姿态/8资源，candidate_only与production_qualified=false。
+- tools/contracts/zhu_wounded_20261005/prepare_qin_ming_walk_passing_v4.py及generation_qin_ming_walk_passing_v4.json：原生来源链/完整数学guide producer依赖。
+- qa/zhu_wounded_20261005/qin_ming_walk_{texture,sources,cycle}_passing_v4.*与review/native_authoring_bundle/native_prompt_set：342来源、64截图/20记录/50输入零漂移；原生请求/首版判退保留。
+- Qin专用texture_bootstrap/idle_preview/walk_preview/unit_motion与record helper：同目录旧角色producer不覆盖；自身Unit最终状态以自身receipt为准。
+- qin_ming_contact_geometry_v4.gd、render_qin_ming_contact_geometry_v4.py、guides/qin_ming_walk_{a,b}_{se,sw,ne,nw}_geometry_v4.*：8新数学参考，每份3 producer SHA输入；无人物位图输入或本地像素编辑。
+- fullidle保留79来源/13输入静态矩阵；原七人/生产/UI/连续步态资格仍开放，不能以该静态矩阵代替。
+<!-- /qin-ming-traits-gait-v4-current -->
+
+<!-- shi-qian-traits-gait-v4-current -->
+## 2026-10-06 当前时迁footclear新增
+
+- walk_footclear_declared_v4清单、gait_footclear资源与walk_a_geometry_ne_v4原生PNG：15源/20姿态；旧A atlas东北格有明确弃用理由，其他三格保留直接采样。
+- shi_qian_walk_sources_footclear_declared_v4.json、shi_qian_footclear_declaration_equivalence_v4.json：294来源检查通过，运行字段/8资源与原footclear清单完全一致；293项漏声明失败记录另保留。
+- shi_qian_walk_{texture,cycle}_footclear_v4.*、shi_qian_walk_footclear_review_v4.json：15源真实导入，64截图/20记录/40输入零漂移。
+- shi_qian_unit_motion_footclear_v4.json及review：52项/80截图/4657运行输入零漂移，自身key的脱离Battle实际Unit；原任务/全七人/生产/UI/连续步态仍不合格。
+- prepare_shi_qian_footclear_declaration_v4.py、prepare/record_shi_qian_walk_footclear_v4.py与专用footclear时钟/Unit夹具：旧来源/夹具/失败记录不覆盖；native_prompt_set_footclear_v4包含15精确请求。
+- NE contact_a几何v7：平落地红脚/低抬蓝脚，独立代码与原生guide/实际receipt；无人物位图输入或本地PNG编辑。
+
+下方14源为初轮阶段记录。
+
+## 2026-10-06 时迁机警轻身真实四步相新增
+
+- assets/direction4/zhu_wounded_shi_qian_20261006_walk_passing_v4.json、assets/anim/zhu_wounded_v4_shi_qian_gait_traits_*：14原生源/20候选姿态，4真实步相，每向独立资源，production_qualified=false。
+- prepare_shi_qian_walk_passing_v4.py、generation_shi_qian_walk_passing_v4.json：两原生quad与十二单向帧的直接采样/完整原生父图和代码几何来源链。
+- qa/zhu_wounded_20261005/shi_qian_walk_{texture,sources,cycle}_passing_v4.*、shi_qian_walk_passing_review_v4.json、shi_qian_walk_native_prompt_set_v4.json、shi_qian_walk_native_rejections_v4.json：281来源、64截图/20记录/38冻结输入零漂移、原生14请求和5类失败保留。未证明自然步态生产合格。
+- 六源12姿态contact_pair另保留153来源/21输入静态对照；不能替代完整步态。
+- harness/shi_qian_walk_preview_v4.*、unit_motion_shi_qian_v4.*、texture_bootstrap_shi_qian_v4.py：时迁独立候选验证，不覆盖被石秀/王英旧收据依赖的producer。Unit最终状态以自身receipt为准。
+- shi_qian_opposite_quad_geometry_v4/v5及opposite_ne_geometry_v6 producer、guides、receipts：v4共享world多腿判退，v5独立world和NE v6新数学腿姿，仅新原生geometry，无人物位图编辑。
+<!-- /shi-qian-traits-gait-v4-current -->
+
+## 2026-10-06 王英真实四步相及实际Unit新增
+
+- assets/characters/wang_ying_wounded_20261005/walk_b3_{se,sw,nw}_v4.png与passing_{a,b}_{se,sw,ne,nw}_v4.png：原生相反支撑及8真实低抬脚过渡，失败B/B2/NE A2保持原位。
+- assets/direction4/zhu_wounded_wang_ying_20261006_walk_passing_v4.json、8份zhu_wounded_v4_wang_ying_gait_passing_*资源及prepare_wang_ying_walk_passing_v4.py/generation_wang_ying_walk_passing_v4.json：完整20源候选，未接生产。
+- QA的wang_ying_walk_{texture,sources,cycle}_passing_v4.*、wang_ying_walk_passing_review_v4.json和wang_ying_walk_native_prompt_set_v4.json：364来源、50输入/64截图、20矩阵、观察范围与20完整请求。record_wang_ying_walk_passing_v4.py保存收据。
+- harness/wang_ying_walk_preview_v4.py/.gd、unit_motion_wang_ying_v4.py/.gd/.tscn及通用unit_candidate_adapter_v4.gd：独立Wang标签、自身key身份与继承原Unit的52项夹具；record_wang_ying_unit_motion_v4.py、wang_ying_unit_motion_passing_v4.json及review记录80截图/4597运行输入零漂移。
+- prepare_wang_ying_contact_pairs_v4.py、generation_wang_ying_contact_pair_v4.json、对应contact_pair manifest/8资源、harness/contact_pair_preview_v4.py/.gd及record_wang_ying_contact_{authoring,preview}_v4.py：12源两接触诊断，236来源/33输入；有独立review/matrix/preview，明确不替代全四步相。
+- guides/wang_ying_walk_b_se_geometry_v5.png、walk_b_{sw,nw}_geometry_v6.png、wang_ying_{passing_a,passing_b}_{se,sw,ne,nw}_geometry_v7.png、geometry_*配置及相应jobs：新数学参考及精确输入，非生产人物位图。harness/render_wang_ying_pose_geometry_v4.py、render_wang_ying_pose_geometry_v6.py、render_wang_ying_passing_geometry_v7.py及其GD源码作为必需来源保留。
+- record_wang_ying_geometry_v5.py、record_wang_ying_geometry_v6.py、record_wang_ying_passing_geometry_v7.py、prepare_wang_ying_geometry_*_v4.py、prepare_wang_ying_passing_requests_v4.py和QA对应geometry review/收据：SE错误初版投影保留，选定参考的接触高度/屏幕侧/低抬脚验证。人物编辑使用内置imagegen。
+
+## 2026-10-06 王英全画幅静态与行走候选新增（历史阶段）
+
+- `assets/direction4/zhu_wounded_wang_ying_20261006_fullidle_v4.json`及4份`zhu_wounded_v4_wang_ying_fullidle_idle_*.tres`：四张全画幅native idle独立候选，实际导入尺寸已核验。
+- `prepare_full_idle_v4.py`、`generation_wang_ying_fullidle_v4.json`、`wang_ying_fullidle_sampling_v4.json`：四源完整来源、体高和脚点元数据；原始PNG不修改。
+- `record_full_idle_v4.py`及QA的`wang_ying_fullidle_{texture,sources,preview,matrix,review}_v4.*`：82来源/13输入零漂移的实际四向静态证据，未接生产。
+- `prepare_wang_ying_contact_requests_v4.py`、requests/jobs中的`wang_ying_walk_a_{se,sw,ne,nw}_v4.json`、`assets/characters/wang_ying_wounded_20261005/walk_a_{se,sw,ne,nw}_v4.png`：四向首步原生候选。
+- `record_wang_ying_walk_a_v4.py`与`wang_ying_walk_a_authoring_v4.json`：字节/请求/父图/透明边界及直接观察；NE步相问题、后脚接触及成对审核明确保留，尚无行走导入/Unit资格。
+- `idle_preview_v3.py/.gd`：QA个别预览显式identity_key及context显示，避免fullidle后缀被误识别为人名，以及获救演员误称ordinary；旧矩阵不覆盖。
+
+- walk_a2_ne_v4.png、walk_b_ne_v4.png及对应requests/jobs；prepare_wang_ying_ne_contact_fix_v4.py、prepare_wang_ying_ne_opposite_v4.py、record_wang_ying_ne_pair_v4.py、wang_ying_ne_support_pair_v4.json：NE文字修正未选中，参考腿姿生成B后可辨相反支撑，仍无运动资格。
+- walk_b_se_v4.png、walk_b2_se_v4.png及对应requests/jobs；prepare_wang_ying_opposite_requests_v4.py、prepare_wang_ying_se_support_transfer_v4.py、record_wang_ying_se_rejections_v4.py、wang_ying_se_opposite_rejections_v4.json：SE重复支撑/绑腿身份漂移判退；SW/NW已准备请求尚未生成。
+
+## 2026-10-06 最新个别体态与脚步证据（历史阶段）
+
+- `assets/characters/shi_xiu_wounded_20261005/passing_b{4,5}_sw_v4.png`及requests/jobs：B4错误支撑腿保留判退，最新B5前脚收回抬起、后脚落地；`shi_xiu_passing_b4_sw_rejection_v4.json`记录原因。
+- `assets/direction4/zhu_wounded_shi_xiu_20261006_walk_footclear_v4.json`、8份对应TRES、`generation_shi_xiu_walk_footclear_v4.json`：20源最新脚步候选，生产资格仍未通过。
+- QA的`shi_xiu_walk_*footclear*_v4.*`、`shi_xiu_unit_motion_footclear_v4.json`和`shi_xiu_unit_motion_footclear_review_v4.json`：348来源/50隔离输入、44项80实际Unit帧/4533运行输入零漂移及观察范围。
+- `assets/direction4/zhu_wounded_wang_ying_20261006_traits_v4.json`、4份对应idle TRES、`selection_idle_wang_ying_traits_v4.json`：保留矮壮成年原生待机，52来源/7输入静态证据位于`wang_ying_traits_{sources,texture,idle_preview,idle_matrix,idle_review}_v4.*`。
+- `assets/characters/wang_ying_wounded_20261005/idle_single_{se,sw,ne,nw}_v4.png`及requests/jobs：内置imagegen四张全画幅模板，原字节保留；尚未实际导入、动作或生产验证。
+- `record_wang_ying_traits_v4.py`：核验保存旧待机实际收据及新原生模板请求/父图/可见透明边界，分别记录不裁切门和请求留白。
+
+## 2026-10-06 人物分别设计与真实步相候选新增
+
+- `assets/characters/shi_xiu_wounded_20261005/passing_b3_sw_v4.png`、`passing_b3_ne_v4.png`及对应requests/jobs：内置imagegen原生低抬脚编辑，保留B2父图。
+- `assets/direction4/zhu_wounded_shi_xiu_20261006_walk_refined_v4.json`、8份`zhu_wounded_v4_shi_xiu_gait_refined_*`资源及`generation_shi_xiu_walk_refined_v4.json`：20源修正版；348来源、50输入/64截图的隔离预览证据位于QA的`shi_xiu_walk_*refined*_v4.*`。
+- `record_unit_motion_v4.py`、`record_unit_review_v4.py`：保存实际Unit测试及观察范围；QA的`shi_xiu_unit_motion_{passing,refined}_v4.json`和`*_review_v4.json`分别记录44项/80帧、4501/4514冻结输入零漂移。仅候选帧解析的脱离Battle测试，未接生产。
+- `assets/direction4/zhu_wounded_shi_xiu_20261006_walk_passing_v4.json`：20张全画幅原生源，4向idle及每向4个独立行走相位；8份`zhu_wounded_v4_shi_xiu_gait_passing_*`候选TRES，尚无生产资格。
+- `assets/characters/shi_xiu_wounded_20261005/`：新增passing与idle_single原生PNG；SW/NE重复支撑腿的首次版本保留来源链，修正版独立命名。
+- `tools/contracts/zhu_wounded_20261005/prepare_passing_requests_v4.py`、`record_passing_v4.py`、`update_passing_progress_v4.py`：精确原生编辑请求、实际收据保存、交接文档更新。
+- `qa/zhu_wounded_20261005/shi_xiu_walk_*passing*_v4.*`：独立导入/342来源/64帧渲染/20姿态矩阵与未合格质量结论。
+- `qa/zhu_wounded_20261005/harness/unit_motion_v4.py`、`unit_motion_v4.gd/.tscn`、`unit_candidate_adapter_v4.gd`：正常Node场景入口的私有实际Unit指令和绘制测试，帧解析适配仅属于测试，不注册生产路由。首次入口失败收据与修正版自然等待状态分别记录于`shi_xiu_unit_motion_entry_failure_v4.json`和`shi_xiu_unit_motion_pending_v4.json`；未完成收据不算移动资格。
+
+## 2026-10-06 按人物特性设计姿态（开发中）
+
+- assets/characters/{wu_song,lin_chong}_traits_20261006/：普通待机原生候选和留白修正父图；与获救伤员分开。ordinary_*_20261006_traits_v4.json及character_traits_v4_*_idle_*.tres：各四向静态候选，未接生产。
+- save_character_traits_v4.py、prepare_ordinary_selection_v4.py、ordinary_identity_references_v4.json、selection_ordinary_traits_v4.json：保留基线身份/原生编辑来源，显式ordinary构建，不改历史七人authoring。
+- record_ordinary_traits_v4.py及QA的{wu_song,lin_chong}_idle_traits_{authoring,sources,texture,preview,matrix,review}_v4*：37/40来源、各7输入零漂移的独立静态证据，不等于动作/原Unit资格。
+- assets/characters/shi_xiu_wounded_20261005/{step_b_body2_*,walk_a_matched_*,idle_spacing_matched_v4}.png、generation_shi_xiu_walk_{body2,matched}_v4.json、walk_*候选manifest：保留全部父图，NW首版/修短步版及idle留白失败来源不覆盖。
+- record_body2_v4.py、record_matched_v4.py及QA的shi_xiu_walk_{texture,cycle,sources}_{body2,matched}_v4*和*_review_v4.json：169/208来源与22/28冻结输入的64截图证据；体态已改善但自然步态未合格。
+- shi_xiu_walk_cycle_cloth_v4.json和*_review.json已是完整lease释放收据；旧pending.json仅历史核验。harness/capture_review.html是64原生帧交互查看器；浏览器连接不可用，未据此宣称连续播放验收。
+
+- docs/CHARACTER_POSTURE_20261006.md、tools/contracts/zhu_wounded_20261005/character_posture_profiles_v4.json：用户最新要求、原著来源、个别姿态与待核对范围。
+- assets/characters/shi_qian_wounded_20261005/idle_traits_v4.png、selection_idle_traits_v4.json及assets/direction4/zhu_wounded_shi_qian_20261006_traits_v4.json：时迁机警轻身四向候选，新旧文件不覆盖。
+- qa/zhu_wounded_20261005/user_character_traits_review_v4.json及shi_qian_idle_traits_bounds_v4.json：个性要求及原生来源/边界门；v3统一军姿生成默认入口已阻止。
+- prepare_shi_xiu_walk_v3.py、generation_shi_xiu_walk_v3.json、zhu_wounded_shi_xiu_20261006_walk_v3.json及harness/walk_preview_v3.py/.gd：隔离石秀步态构建与process-clock起停预览；实际衣装连续性失败记录保留，未接生产。
+- qa/zhu_wounded_20261005/shi_xiu_walk_cycle_first_v3*：64截图运行收据、原生矩阵、视觉判退及第一轮六纹理导入。
+- qa/zhu_wounded_20261005/shi_qian_traits_{texture_import,idle_preview,idle_review,idle_matrix,sources}_v4*：时迁机警轻身四向静态候选实际导入、来源与7输入零漂移预览证据。
+- tools/contracts/zhu_wounded_20261005/record_traits_v4.py：校验并保留公开静态候选证据；assets/characters/shi_xiu_wounded_20261005/step_b_cloth_*_v4.png及对应requests/jobs：石秀四向衣装一致性编辑原图，尚待匹配动作审查。
+- assets/direction4/zhu_wounded_shi_xiu_20261006_walk_v4.json、generation_shi_xiu_walk_v4.json与shi_xiu_walk_sampling_v4.json：新衣装独立候选取样及完整来源，未覆盖v3。
+- record_walk_cloth_v4.py及QA的shi_xiu_walk_{sources,texture_import}_v4.json、shi_xiu_walk_cycle_cloth_v4.png、shi_xiu_walk_cycle_cloth_pending_v4.json：157来源、8资源与64截图/20记录输出，22输入零漂移；匹配矩阵再次视觉判退，最终lease收据等待自然空闲。
+
+## 2026-10-06 七人挺拔待机候选（历史阶段）
+
+- tools/contracts/zhu_wounded_20261005/audit_walk_transfer_v3.py及requests/jobs中的shi_xiu_step_b_transfer*：石秀四张相反步相候选与只读字节/透明度检查。
+- qa/zhu_wounded_20261005/{shi_xiu_walk_transfer_v3.json,authoring_check_v3_transfer.json,portable_idle_metadata_v3.json}：相反腿直接审核、27作业字节/待机输入冻结及另一目录42元数据重建；不算walk/原关卡资格。
+
+- assets/direction4/zhu_wounded_<人物>_20261005_v3.json及assets/anim/zhu_wounded_v3_<人物>_idle_*.tres：七人28独立待机候选，实际导入尺寸已核验，未接生产路由。
+- tools/contracts/zhu_wounded_20261005/selection_idle_v3.json、prepare_idle_v3.py和generation_<人物>_v3.json：选择、只读取样、完整父图/基线来源与初始脚点元数据；audit_idle_v3.py为只读边界门。
+- qa/zhu_wounded_20261005/harness/{texture_bootstrap_v3.py,idle_preview_v3.py,idle_preview_v3.gd}：私有导入和七人静态渲染；seven_idle_*收据/矩阵及逐人source/sampling证据；walk判退记录保留。
+- tools/directional_character_sources.py：新增既有基线参考的Git字节校验；不虚构旧来源的生成请求。
+
+## 2026-10-05 祝家庄获救人物成人比例与挺拔姿态（历史进展）
+
+- assets/characters/{shi_qian,shi_xiu,qin_ming,yang_lin,huang_xin,wang_ying,deng_fei}_wounded_20261005/：七张posture_v3挺拔参考及原生候选/必需父图；石秀idle_spacing_v3为四向留白修正，旧拒绝图保留来源，未接生产。
+- assets/direction4/zhu_wounded_shi_qian_20261005.json与assets/anim/zhu_wounded_shi_qian_*.tres：当前12姿态/8资源候选，production_qualified=false。
+- tools/contracts/zhu_wounded_20261005/：七人身份需求、完整请求/job SHA、新旧比例来源、authoring_v3与prepare_posture_v3只读参考核验；save_v3原字节保存；旧prepare/prepare_v2均已阻止过期候选重新构建。
+- qa/zhu_wounded_20261005/：用户比例纠正、失败/最新静态矩阵、导入/来源/边界证据及隔离预览harness；不代表连续步态/七人解救验收。
+
+## 2026-10-05 当前八关素材开场与真实撤回
+
+- tools/current_campaign_art_qa.gd与run_current_campaign_art_qa.py：当前注册八关开场、石秀和原七人正常移动验收。
+- tools/contracts/current_campaign_opening_20261005/：可核验输入哈希的八关开场子项快照。
+- qa/current_campaign_art_20261005/：final、历次失败、opening_evidence原证据、12张最终画面、源码继承引用、隔离/冻结/缓存来源及受限清理证据。
+- docs/CURRENT_CAMPAIGN_ART_20261005.md：当前入口范围和开场对照；不替代全阶段覆盖率。
+
+## 2026-10-05 祝家庄剩余四名被缚专图
+
+- `assets/characters/{yang_lin,huang_xin,wang_ying,deng_fei}_bound_20261005/`：原生四向透明站姿与导入描述；黄信native_references保留必需编辑父图，禁止当缓存删去。
+- `assets/direction4/bound_<人物>_20261005.json`及`assets/anim/bound_<人物>_idle_*.tres`：只读取样与脚点/身体高度。
+- `tools/contracts/<人物>_bound_20261005/`：完整内置生成/编辑请求、原参考SHA与可复現prepare.py。
+- `tools/zhu_captives_bound_qa.gd`、`run_zhu_captives_bound_qa.py`：整批冻结、四名原演员与七人正常解救。
+- `qa/bound_<人物>_20261005/`：来源/边界/复现；`qa/zhu_captives_bound_20261005/`：最终/失败运行、32张画面及清理证据。
+
+## 2026-10-05 时迁专用被缚四向
+
+- `assets/characters/shi_qian_bound_20261005/`：原生透明站立囚徒图和导入描述。
+- `assets/direction4/bound_shi_qian_20261005.json`与`assets/anim/bound_shi_qian_idle_*.tres`：四取样区、脚点与身体高度；仅待机专用。
+- `tools/contracts/shi_qian_bound_20261005/`：完整生成请求、原参考SHA、来源与可复现元数据脚本。
+- `tools/shi_qian_bound_qa.gd`、`run_shi_qian_bound_qa.py`：原时迁、原七人及正常右键/计时解救、旧通用动画保留。
+- `qa/bound_shi_qian_20261005/`：冻结收据、实际画面、共享契约、导入/来源/重建及清理证据。
+
+## 2026-10-05 秦明专用被缚四向
+
+- `assets/characters/qin_ming_bound_20261005/`：原生透明四向被缚图与原生导入描述；PNG保持原字节。
+- `assets/direction4/bound_qin_ming_20261005.json`、`assets/anim/bound_qin_ming_idle_*.tres`：四个独立取样区域与脚点/身体高度元数据，待机专用。
+- `tools/contracts/qin_ming_bound_20261005/`：生成请求、参考SHA、原图来源及可复现元数据脚本。
+- `tools/qin_ming_bound_qa.gd`、`run_qin_ming_bound_qa.py`：当前RTS原演员与正常右键计时解救；旧三日兼容另列。
+- `qa/bound_qin_ming_20261005/`：最终/失败回归、实际画面审核、原生导入、来源/重建、清理及归档索引。
+
+## 2026-10-05 撤离回归与入口对账
+
+- `tools/hu_yanzhuo_retreat_qa.gd`、`run_hu_yanzhuo_retreat_qa.py`：原关卡、原780血呼延灼、普通攻击及非死亡结果边界验收，复用共享冻结/引擎/私有档守卫。
+- `tools/campaign_art_entrypoint_audit.py`：现行八关注册入口与旧curated台账对账，保留字面引用及源SHA，动态路径另需审核。
+- `qa/hu_yanzhuo_retreat_20261005/`：92项原生、7图审核、公共路由/盘点、入口快照、旧台账诊断、复现与无旧缓存清理记录。
+
+## 2026-10-05 韩滔常态骑乘增量
+
+- `assets/characters/han_tao_direction4_20261005/`：18张原生PNG与导入描述；native_references保留一个必需编辑父图并以.gdignore排除运行导入。
+- `assets/anim/han_tao_{idle,walk,attack,hurt,death}_{se,sw,ne,nw}.tres`、`assets/direction4/han_tao_20261005.json`：20资源、32独立姿态与脚点/取样元数据。
+- `tools/contracts/han_tao_direction4_20261005/`：真实请求、来源/审阅、原生SHA与只读测量重建工具。
+- `tools/run_character_art_qa.py`、`art_character_direction4_qa.gd`：扩展韩滔公共验收、完整请求/父图冻结和实际命中/技能/生擒检查。
+- `qa/han_tao_direction4_20261005/`：640项最终检查、43图审核、来源、纹理、重建、全部失败证据与清理记录。
+- `docs/HAN_TAO_DIRECTION4_20261005.md`：实际交付与夹具/验收边界。
+
+## 2026-10-05 韩滔生擒增量
+
+- `assets/characters/han_tao_captured_20261005/`：一张原生透明四向图及生产导入描述。
+- `assets/anim/han_tao_captured_{se,sw,ne,nw}.tres`、`assets/direction4/han_tao_captured_20261005.json`：四份独立取样的生擒资源/元数据。
+- `tools/contracts/han_tao_captured_20261005/`：完整实际生成请求、来源与只读测量/元数据重建工具。
+- `tools/run_han_tao_capture_qa.py`、`han_tao_capture_direction4_qa.gd`、`han_tao_capture_body_fixture.gd`：复用冻结/锁/私有档保护的专用验收入口。
+- `qa/han_tao_captured_20261005/`：最终105项、公共路由、8张逐图审核、全部失败记录、来源、清理及字节索引。
+- `docs/HAN_TAO_CAPTURED_20261005.md`：范围、夹具及下一批边界。
+
+## 2026-10-05 验收锁修复
+
+`tools/character_art_lock_selftest.py`：五项临时文件锁安全检查；`qa/character_art_lock_20261005/`：验证收据和说明。韩滔生擒候选路径仍为本地准备，待原生验收完成后更新正式目录交接。
+
+## 2026-10-05 徐宁四向已验收
+
+从 stable d27aec26 接续。徐宁完成25张原生RGBA、32独立姿态和20个五状态四向资源的基础验收；按 portraits2 底行左格保留裸顶髻/浅色系带、短须、银鱼鳞甲、白围巾与披风，继续为步战英雄。681/681原生、8/8公共路由、433项来源通过，4140冻结输入及私有副本零漂移，41张最终原生截图全部直接审核。
+
+四向均独立绘制，左手前握、右手后握一根钩镰枪；两步态、起手/短距离身体发力/回位、受击、双手空的倒地及落地终帧分别核对。首轮东北身体偏小，修正6个活体姿态的身体高度元数据和起手脚点后复验，原生像素未裁切、镜像、缩放或重绘。保留HP210、攻击20、冷却0.85秒、射程30、速度80、半径13、反骑倍率2、四技能及现行SPEAR挥击速度2.8/命中相位0.45/atk_spear；新TRES优先路由并去除重复程序挥击。
+
+真实连环马章保留原开场徐宁及12骑。显式死亡夹具释放英雄唯一名额后，正常队列自然等待40.100000秒重新招募，扣金175/木36/人口3；未注入招募演员或修改计时。四技能通过正常选择/施法入口，等级6与目标/站位是显式夹具。已有骑兵的受控站位/减速夹具由正常攻击及关卡tick验证：徐宁单人命中17.60伤害且不破阵，加入原有钩镰手后触发现行协同破阵。瞬时命中探针保持攻击帧后截图。此为美术及局部机制验收，不代表自然波次、整关通关、训练任务完成或战役续玩。
+
+图鉴四向和48/96/192/320头像、HUD、四技能、开场/重新招募演员及无遮挡矩阵均核对。战斗图有地形、数值及目标遮挡，部分帧已进入恢复或终帧；东北/西南攻击是低帧身体发力动作，不声明高帧完整长距离刺击。详细边界见逐图审核，不按截图FPS声明性能/真机通过。
+
+审核后仅清理本批旧隔离工程/纹理探针中3192份与最新成功缓存名称、大小、SHA完全相同的imported文件，共691,261,609字节；15737个受保护文件前后SHA一致。25张生产原图、6份必需原生父图、实际参考/生成器、两轮完整证据、独立测试档和最新成功私有工程/缓存保留。
+
+本批验证收尾按白名单提交同步codex/sync-20260905-stable，远端实际SHA以同步回读收据为准；main保持6085f89f，未打包或发布Steam/Android。完整开发目标仍开放：接续韩滔、剧情败退/生擒及全库美术，再推进战役独立进程续玩、玩法、约10分钟性能/清理、Android真机及平台资格。
+
+新增生产目录assets/characters/xu_ning_direction4_20261005/、20个assets/anim/xu_ning_*.tres、清单assets/direction4/xu_ning_20261005.json、可重建来源tools/contracts/xu_ning_direction4_20261005/、证据qa/xu_ning_direction4_20261005/及docs/XU_NING_DIRECTION4_20261005.md。
+
+## 2026-10-05 连环马四向已验收
+
+从 stable ce5d7d2a 接续。连环马完成16张原生RGBA、32独立姿态和20个五状态四向资源的基础验收。按 portraits9 顶行中格统一铁盔护颈、短须、红缨、暗铁札甲；棕色披甲马保留铁环与下垂链条。活体四向均右手持一根长枪、左手控缰，死亡双手空且只留一根落地枪。613/613原生、8/8公共路由、331项来源通过，4069冻结输入及私有副本零漂移，35张原生截图全部审核（30张最终图直接目检，5张图鉴/头像与已目检前批逐字节相同）。
+
+普通近战骑兵HP300、攻击15、冷却1秒、射程26、速度118、半径13保留；现行按key判定SPEAR、挥击速度2.8、命中相位0.45和atk_spear音效不变。新TRES优先路由并排除重复程序挥击。两帧行走使用骑兵伸展接触与后蹄蹬地/前腿收拢的低帧疾驰姿态，不声明高帧生物力学步态完成。
+
+实际连环马关卡原有12骑和150/270秒波次配置保留。已有演员的受控站位/减速夹具由正常攻击及正常关卡tick验证：一名钩镰手造成30.49伤害且不破阵，两名有效协同后破阵计数1，解除连环减伤并应用原有0.45减速。原有临时broken_cavalry叙事插画自然消退后，同一存活骑兵继续使用新活体身体和原头像，以新刺击帧正常造成11.74伤害；未注入骑兵、直接调用关卡tick或修改波次计时。这是局部机制与美术验收，不代表150/270秒自然冲锋、整关通关或战役续玩通过。
+
+基础四向、即时物理命中、图鉴/HUD和无遮挡矩阵分别核验；战斗截图存在恢复帧、地形/数值遮挡等局限，详细逐图记录见visual_review.json。不按截图FPS声明性能或设备通过。
+
+审核后只清理本批隔离工程中6216份与最新成功缓存名称、大小、SHA完全一致的imported文件，共1,287,831,812字节；16336个受保护文件前后SHA一致。16张生产原图、6张必需原生父图、实际引用的解析参考和生成器、失败记录及最新成功私有工程/缓存保留。 见[实现](LIAN_HUAN_MA_DIRECTION4_20261004.md)、[QA](../qa/lian_huan_ma_direction4_20261004/README.md)。下一批按连环马关卡真实出场补徐宁，再核对韩滔及剧情败退/生擒变体；继续普通兵、旧头像、场景、特效和多尺寸UI。随后推进战役落盘/退出/独立进程继续、玩法试玩、约10分钟性能与清理验收、Android真机后验和平台资格。完整开发目标仍开放。 本轮仅白名单同步codex/sync-20260905-stable；main保持6085f89f，未打包或发布Steam/Android。下方旧批次为历史记录。
+
+新增生产目录assets/characters/lian_huan_ma_direction4_20261004/、清单assets/direction4/lian_huan_ma_20261004.json、来源tools/contracts/lian_huan_ma_direction4_20261004/、证据qa/lian_huan_ma_direction4_20261004/和docs/LIAN_HUAN_MA_DIRECTION4_20261004.md。
+
+## 2026-10-04 钩镰手四向已验收
+
+从 stable 5f7621e7 接续。钩镰手完成 13 张原生 RGBA、32 独立姿态、20 个五状态四向资源的基础验收。按 portraits8 中行右格统一铁盔、短须、灰围领与褐棉衣；一根带侧钩的长枪，四向均独立绘制左手前握、右手后握。594/594 原生、8/8 公共路由、301 项来源通过，4016 冻结输入及私有副本零漂移，33 张截图全部直接审核。
+
+HP105、攻击11、冷却1.1秒、射程30、速度68、反骑倍率3.5及普通近战步兵身份保留；现行射程推断 SPEAR、速度2.8、命中相位0.45、atk_spear 音效不变。新 TRES 优先路由并排除重复程序挥击。原有非致死剧情 down PNG 独立保留，不纳入本批五状态换装。
+
+连环马章正常队列自然训练 20.416667 秒，实际扣金36、木24、人口2；未注入训练演员或修改训练计时。随后同章已有两名钩镰手、两名骑兵的受控站位/减速夹具以正常攻击和正常关卡 tick 验证：单人伤害16.94且不破阵，第二名有效协同后破阵计数1并移除连环减伤。此为训练与协同机制验收，不代表整关通关或战役续玩。
+
+实际训练演员受芦苇遮蔽变暗，东北刺击部分被旗帜/伤害数字遮挡；部分战斗截图已进入恢复，西北倒地截图已进入终帧。无遮挡矩阵和即时物理命中断言补充基础审核；不据截图 FPS 宣称性能或真机通过。
+
+审核后只清理本批隔离工程中 3086 份与最新成功缓存名称、大小、SHA 完全一致的 imported 文件，共 629,793,530 字节；12065 个受保护文件前后 SHA 一致。13 张生产原图、五份必需父图、三份解析参考及生成器、失败源码/记录和最新成功工程/缓存保留。 见[实现](GOU_LIAN_DIRECTION4_20261004.md)、[QA](../qa/gou_lian_direction4_20261004/README.md)。下一批核对连环马 lian_huan_ma 的当前骑兵身份、连环/破阵表现、四向动作和图鉴/HUD，保留既有协同反骑机制。随后继续全库普通兵/剧情变体/头像/场景/特效/UI，再推进战役续玩、玩法、性能、设备及平台资格验收。 本轮只按白名单提交推送 codex/sync-20260905-stable，main 保持6085f89f；未打包或发布 Steam/Android。下方旧批次为历史记录。
+
+新增生产目录 assets/characters/gou_lian_direction4_20261004/、清单 assets/direction4/gou_lian_20261004.json、来源 tools/contracts/gou_lian_direction4_20261004/、证据 qa/gou_lian_direction4_20261004/ 和 docs/GOU_LIAN_DIRECTION4_20261004.md。
+
+## 2026-10-04 祝家庄客四向已验收
+
+- assets/characters/zhu_keke_direction4_20261004/：13张生产原生PNG及import。
+- assets/direction4/zhu_keke_20261004.json、assets/anim/zhu_keke_*_<方向>.tres：32姿态、20资源及脚点/身体比例元数据。
+- tools/contracts/zhu_keke_direction4_20261004/：提示、实际引用、两份父图与复现工具。
+- qa/zhu_keke_direction4_20261004/：来源、留边、复现、最终四步报告、全部画面与清理记录。
+- [实现](ZHU_KEKE_DIRECTION4_20261004.md)。
+
+## 2026-10-04 祝家弓手四向已验收
+
+- assets/characters/zhu_gong_direction4_20261004/：12张生产原生PNG及import。
+- assets/direction4/zhu_gong_20261004.json、assets/anim/zhu_gong_*_<方向>.tres：32姿态、20资源与脚点/身体比例元数据。
+- tools/contracts/zhu_gong_direction4_20261004/：提示、实际引用、四份父图、几何参考/生成器与复现工具。
+- qa/zhu_gong_direction4_20261004/：来源、留边、复现、最终四步报告、全部画面与清理记录。
+- [实现](ZHU_GONG_DIRECTION4_20261004.md)。
+
+## 2026-10-04 祝家马军四向已验收
+
+- assets/characters/zhu_qi_direction4_20261004/：八张原生PNG及import。
+- assets/direction4/zhu_qi_20261004.json、assets/anim/zhu_qi_*_<方向>.tres：32姿态、20资源及脚点元数据。
+- tools/contracts/zhu_qi_direction4_20261004/：原生提示、选择、SHA、引用链及复现工具。
+- qa/zhu_qi_direction4_20261004/：最终四步报告、32截图、首轮迷雾问题及清理记录。
+- [实现](ZHU_QI_DIRECTION4_20261004.md)。
+
+## 2026-10-04 投石车机械四向已验收
+
+- assets/characters/siege_cata_direction4_20261004/：八张原生PNG及import。
+- assets/direction4/siege_cata_20261004.json、assets/anim/siege_cata_*_<方向>.tres：32姿态、16机械资源及脚点元数据。
+- tools/contracts/siege_cata_direction4_20261004/：提示、选择、SHA、必需父图、轮辐参考/生成器及复现工具。
+- qa/siege_cata_direction4_20261004/：最终四步报告/23截图、原始收尾中断收据、认证锁关闭、失败及清理记录。
+- [实现](SIEGE_CATA_DIRECTION4_20261004.md)。
+
+## 2026-10-04 晁盖通用四向已验收
+
+- assets/characters/chao_gai_direction4_20261004/：19原生PNG及import。
+- assets/direction4/chao_gai_20261004.json、assets/anim/chao_gai_*_<方向>.tres：32姿态、20资源及脚点元数据。
+- tools/contracts/chao_gai_direction4_20261004/：提示、选择、必需父图、实际引用几何图/生成器、SHA及复现工具。
+- qa/chao_gai_direction4_20261004/：原生报告/截图、来源/留边/复现与清理记录。
+- [实现](CHAO_GAI_DIRECTION4_20261004.md)。
+
+## 2026-10-04 秦明通用四向已验收
+
+- assets/characters/qin_ming_direction4_20261004/：16原生PNG及import。
+- assets/direction4/qin_ming_20261004.json、assets/anim/qin_ming_*_<方向>.tres：32姿态、20资源与脚点元数据。
+- tools/contracts/qin_ming_direction4_20261004/：提示、选择、必需父图、实际引用几何图/生成源码与可复现元数据。
+- qa/qin_ming_direction4_20261004/：原生报告/截图及来源、留边、复现、清理记录。
+- [实现](QIN_MING_DIRECTION4_20261004.md)。
+
+## 2026-10-04 关胜骑乘四向已验收
+
+- assets/characters/guan_sheng_direction4_20261004/：17原生PNG及import。
+- assets/direction4/guan_sheng_20261004.json、assets/anim/guan_sheng_*_<方向>.tres：32姿态、20资源与脚点元数据。
+- tools/contracts/guan_sheng_direction4_20261004/：提示、选择、必需父图、实际引用几何图/生成源码与可复现元数据。
+- qa/guan_sheng_direction4_20261004/：验收报告/截图、来源/留边/复现/清理及引擎占用记录。
+- [实现](GUAN_SHENG_DIRECTION4_20261004.md)。
+
+## 2026-10-04 卢俊义通用四向已验收
+
+- assets/characters/lu_junyi_direction4_20261004/：19原生PNG及import。
+- assets/direction4/lu_junyi_20261004.json、assets/anim/lu_junyi_*_<方向>.tres：32姿态、20资源与脚点元数据。
+- tools/contracts/lu_junyi_direction4_20261004/：提示、选择、32份3D参考/生成源码及可复现元数据。
+- qa/lu_junyi_direction4_20261004/：验收报告/截图、来源/留边/复现/清理及首轮占用记录。
+- [实现](LU_JUNYI_DIRECTION4_20261004.md)。
+
+## 2026-10-04 杨志通用四向已验收
+
+- assets/characters/yang_zhi_direction4_20261004/：23原生PNG与import。
+- assets/direction4/yang_zhi_20261004.json与assets/anim/yang_zhi_*_<方向>.tres：32姿态、20资源、透明分格/脚点元数据。
+- tools/contracts/yang_zhi_direction4_20261004/：完整提示/来源选择、6必需父图、28份3D参考和源码、复现助手。
+- qa/yang_zhi_direction4_20261004/：final报告/28截图/路由/盘点、首轮返工证据、来源/留边/复现/清理收据。
+- [实现](YANG_ZHI_DIRECTION4_20261004.md)：近战步兵五状态四向。
+
+## 2026-10-04 花荣通用四向已验收
+
+- assets/characters/hua_rong_direction4_20261004/：14 原生 PNG 与 import。
+- assets/direction4/hua_rong_20261004.json 与 assets/anim/hua_rong_*_<方向>.tres：32 姿态、20 资源及采样/脚点元数据。
+- tools/contracts/hua_rong_direction4_20261004/：原提示、生成 SHA/引用链、元数据复现与四份必需拒绝父图。
+- qa/hua_rong_direction4_20261004/：final 原生报告/32 截图/路由/全库盘点，visual_review、source/bounds/reproduction、cleanup；engine_pause 保存历史暂停证据。
+- [实现](HUA_RONG_DIRECTION4_20261004.md)：远程步兵通用四向与独立攻击保护。
+
+## 2026-10-04 吴用通用四向已验收
+
+- assets/characters/wu_yong_direction4_20261003/：十张原生 RGBA 生产源和 import；起手原图下半拒绝采样。
+- assets/direction4/wu_yong_20261003.json 与 assets/anim/wu_yong_*_se/sw/ne/nw.tres：32 姿势与 20 个资源，区域/脚点/尺寸元数据。
+- tools/contracts/wu_yong_direction4_20261003/：完整提示、引用链、哈希、只读图片检查/元数据构建，generated 保留拒绝候选。
+- qa/wu_yong_direction4_20261003/：最终原生/截图、公共路由与盘点、来源/留边/复现，启动失败、引擎暂停与 UID 导入证据。
+- [实现](WU_YONG_DIRECTION4_20261003.md)：两个角色 QA 工具新增远程分支，unit 仅补独立攻击保护名单。
+
+## 2026-10-03 呼延灼身份与四向
+
+- `assets/characters/hu_yanzhuo_direction4_20261003/`：九份原生 RGBA 生产 PNG 及 import 描述符；八张动作源和独立头像。
+- `assets/direction4/hu_yanzhuo_20261003.json`、`assets/anim/hu_yanzhuo_*_<方向>.tres`：32 姿势/20 资源的来源、帧序、脚点和未选区域。
+- `tools/contracts/hu_yanzhuo_direction4_20261003/`：原生生成提示、引用链、SHA、元数据准备入口与拒绝的密排行走图。
+- `docs/HU_YANZHUO_DIRECTION4_20261003.md`、`qa/hu_yanzhuo_direction4_20261003/`：实现范围、导入保护中止、自动通过但目检拒绝的候选、最终报告和真实截图。
+- `tools/run_character_art_qa.py`、`tools/art_character_direction4_qa.gd`：新增呼延灼选择，实际近战/HUD/图鉴/姿态矩阵及尺寸头像复验，保留原有三名角色分支。
+
 ## 2026-10-03 main 合并交接
 
 - `docs/MAIN_MERGE_20261003.md`：本次授权、两分支历史关系、合入范围、内容树和验证边界。
@@ -1310,3 +2437,75 @@ Git 克隆版以仓库根目录为工程根：`project.godot`、`assets/`、`scr
 - `qa/workshop_defense_public_20260924/`: public Defense example, subscription file hashes, callback reproduction and native regression.
 
 - `qa/stockade_boundary_20260924/`：据守围栏缺口复现、修复前后地图寻路检查及独立回读。
+
+
+## 2026-10-07 Steam发布批次
+
+- `docs/STEAM_UPDATE_20261007.md`：上传、分支上线、公告、客户端和Git状态分项记录。
+- `qa/steam_release_20261007/`：原生/候选/EXE证据归档、六文件哈希、SteamCMD白名单预览与上传脱敏日志、服务器清单、等待确认回读及现有四语公告文案。发行包、缓存、玩家和认证数据留在外部/忽略目录。
+
+2026-10-07 Steam正式上线收尾：qa/steam_release_20261007新增default_live_readback.json、announcement_public_readback.json、client_update_pending.json、release_closeout.json与前批pending_git_sync_receipt.json；发行包/认证原日志/页面截图保留外部，不进Git。
+
+2026-10-07第5关场景恢复准备：qa/zhu_wounded_20261005/harness/gao_scenery_v20*.gd、run_gao_scenery_v20*.py和gao_scenery_*v20*.json；原失败/取消批保留，尚非运行资格。私有工程/原日志/缓存在E:/ChatGPT/qa-world-restore-20261007，不同步Git。
+
+第5关v20b真实失败report/哈希证据已原字节归档；v20c/d/e独立诊断/中断记录保留；daming_scenery_requirements_v21.json为原大名府灯光/通道只读实现要求，非运行资格。
+
+第5关v20e原生归属精确诊断原report/log、v20f原布局修复、v20g审查/经典场景回归工具及阶段证据位于qa/zhu_wounded_20261005；均按实际未合格边界保存。
+
+第5关v20g原列表/函数体源码审查、v20h原梁山身份修正和私有地图拒绝用例已归档，运行资格仍须新收据。
+
+第5关v20i原入口内部新对象归属契约、原源/保存lane拒绝用例，及等待批次无引擎步骤取消证据已准备；仍待实际图形资格。
+
+<!-- gao-v20j-daming-v22-current -->
+### 2026-10-07 继续开发：真实坐标类型失败修复，大名府灯光组件待原生验证
+
+共享引擎本次检查自然空闲，v20i 新私有批 717badd5 完成导入并进入真实图形负例。错误类型的 liangshan_hall_cell=Vector2 先与 Level5.HALL 的 Vector2i 比较，引发脚本错误；原 roundtrip.log 字节归档 gao_scenery_type_failure_v20i.txt，收据及运行私有工程保留。生产修复为先检查 TYPE_VECTOR2I 再比较，不减少原负例或完整地图相等门槛；新 v20j producer/harness 使用独立 run/profile，后台 session80562，实际结果仍须回读。
+
+新增 run_daming_lighting_state.gd 子组件：严格已安装 RTS level8/60×66/town/封闭偏门与原 Scenery/Battle/map 身份；原五灯/夜景/翠云楼归属；固定原渐变全部存储属性与 Light2D 默认设置；snapshot 编解码、重复/伪 owner/错误亮度/外来渐变拒绝。恢复只使用新原工厂创建的共享纹理，在所有前置检查完成后应用亮度。尚未接入完整 scenery/map adapter，公开战役继续仍关闭。
+
+独立 daming_lighting_v22 原生 harness/producer 已准备，测试原初态、先放行未救人、原举火回调、原计时过期回调的精确灯光再捕获与新旧资源隔离。原生 map/nav/height 复制是显式组件夹具，不能当作完整地图恢复或自然通关；尚未启动此 producer、无通过声明。另发现地图存档 crowd 条目校验仍仅接江州，完整大名府接入须增加原灯市四点、variant 和零尺寸专属合同，不能泛化允许任意 crowd。
+
+本轮生产候选仍待验收，未清缓存或推送生产代码；最新已核对远端仅为上轮源码审查文档提交 faa9a8fd802ceb17b763c53f7e02203280ab2a33。Gao/Daming 完整场景、外层世界/独立进程继续以及完整开发计划继续。
+<!-- /gao-v20j-daming-v22-current -->
+
+2026-10-07本批状态回读：Gao v20j_aa4122a4 导入退出0，图形运行期间外部 Godot206576 恢复，producer stop_reason=foreign_engine_resumed，仅停止自身且锁已释放；未完成任何完整地图复捕获，原失败证据见 gao_scenery_interrupted_v20j.json。Daming v22 own Python196708/session83257 已确认启动，准备/等待自然空闲后才使用引擎；截至此记录尚无原生结果。只观察现有会话，不能重复启动。灯光组件的失败 apply 不得改变目标状态负例也已纳入未执行 harness。生产源码及新候选尚未提交/推送，公开入口/Steam 包不变，全部长期目标保持 active 未完成。
+
+2026-10-07完整候选实际回读：v23a first3d9d25d7 在导入期间外部引擎恢复，0项资格、原失败收据/日志保留且锁释放。确认原会话87812终止后才使用同一未修改producer重试一次，fresh5844ea60；本次导入退出0，后台88755/own Python207664继续真实图形八案，未修改冻结输入。现无完整地图通过声明，当前远端仍只有已资格化灯光提交c7192594。
+
+<!-- full-scenery-v23b-current -->
+2026-10-07 八案首次完整原生结果：v23a_5844ea60 的78项/7失败已真实报告；classic 标准地图完整复捕获相等，Gao两案均SCENERY_FIXED_STATE_CHANGED/127，Daming五案均CAMPAIGN_NODE_INPUT，不能记为双关场景合格。报告/原日志字节归档full_scenery_failed_report_v23a.json、full_scenery_failed_log_v23a.txt，原run/producer/收据均保留。
+
+v23b按固定Godot4.6.3 CanvasModulate源码确认其可见时原生加入仅当前canvas RID对应的_canvas_modulate_组；严格按本节点实际canvas和可见/挂树阶段接受这一生成组，非任意prefix放行，额外组负例保留。Gao新增fixed/textures/metadata首项差异诊断，严格相等不变，第127项根因尚待新结果。新producer/harness及私有run/profile，后台session38951/ownPython207852已回读存活；只观察本会话，不重复启动或控制其他Godot任务。
+
+当前合格且远端同步的仍为灯光组件113项/四案，stable c7192594767df04917d6b73864c35b9caf6e7e60。完整Scene/Map/追加lighting方法候选仍未资格化/提交，缓存未清，公开战役继续未开放，外层完整世界及全开发计划继续。
+<!-- /full-scenery-v23b-current -->
+
+2026-10-07完整候选最新后台：v23b_5782ec3f 导入0，图形初启外部Godot恢复，仍未取得第127项诊断；原producer/run/收据保持。新独立 frozen-v23c producer 复用此精确哈希核对的已导入冻结工程，5039源/原harness相同、引擎SHA固定，并独立回读原安装native DLL/说明文件全部SHA相同；不是复用失败功能资格。fresh profile/run/log/report/receipt，不覆盖旧执行证据、不做私有运行时补丁。当前 ownPython205368/session88774 与 ownGodot204300已回读真实存活，8案完整图形测试在跑；私有输出442a71df，project引用5782ec3f/project。不能仅因观测超时重启，也不能改冻结输入。全源候选未合格，未清缓存/新提交；已交付远端仍只有灯光组件c7192594。
+
+<!-- full-scenery-v23d-current -->
+2026-10-07原生进一步结果：frozen-v23c_442a71df 的173项/12失败保留，Daming五态均完成真实原固定场景工厂重建且全部map/nav/height/economy/RNG guard相同，但普通新适配器复捕获拒绝旧恢复事务持有的信号屏蔽。Gao精确差异为第127门柱metadata的render_height=4.10399997234344：原首次process对入口门柱同步高度，detached setup未执行此纯视觉步。
+
+v23d仅对新入口gate/side_gate/wall后代同步原高度，不调用会影响Units/FX的整套_sync_elevated_nodes；新增capture_prepared只接本事务持有的SceneryState、相同content/context、精确完整节点注册与子节点顺序、禁用owner/节点和信号屏蔽。普通capture仍拒绝被屏蔽的外部事务，不激活任何处理/信号，也不放宽payload相等。原经典标准图继续普通capture。新harness还拒绝非持有adapter，全部原负例保留。
+
+首次准备助手两条相同recapture前缀断言失败在源修改后发生；保留助手/失败记录，按原冻结前字节恢复before来源，只接续未写出的harness/producer尾段，没有重复源patch。v23d_ec362d49随后导入时外部引擎恢复，0项资格且锁释放；已确认原session18115终止后，才用同一未修改producer全新retry，当前session21837已启动。只读回此会话，不能超时就重启；未改冻结源。仍待本候选完整图形八案结果，当前只有灯光113项/四案已合格并远端c7192594；无缓存清理、无全源候选推送、无公开战役继续开放，全原始目标仍active。
+<!-- /full-scenery-v23d-current -->
+
+<!-- full-scenery-v23e-current -->
+2026-10-07预审继续发现prepared_capture_ready在已持有的map/world被移出父容器时会直接链式访问空父节点。先核对原等待后台Python207404完整CLI、无子进程、无source lock，且仍在首个自然空闲循环，仅取消这一本任务未启动引擎的等待；session21837回读终止1，未控制任何盲盒进程。
+
+v23e在所有父节点访问前验证world/Battle实例与原Battle脚本及map引用，并核对activation order首节点就是原visual。新Gao/Daming harness分别加入map移出父容器、world移出owner、非持有后代插入、process gate改动四组拒绝负例；随后恢复原夹具关系，再作原严格整个payload相等复验。原生产/QA失败证据、v23d已执行producer/harness不改写；v23e为全新producer/harness，后台session39438/ownPython202604已回读真实存活，外部引擎仍占用，0项新资格。
+
+本次还只读核对Android后续门槛：当前PATH未解析到adb，尚未据此判断设备或SDK不存在，不能当真机验证通过；完整开发计划所需Android2.0.1真机资格仍待实际设备/触控/DPI/安全区/持续性能回读。此项未安装工具、未操作设备或发布其他平台。
+
+当前远端仍为合格灯光c7192594；完整Scene/Map/额外lighting方法候选本地待原生八案及负例验收，未清缓存、未推送这些候选。整个原始目标保持active，公开战役继续仍关闭。
+<!-- /full-scenery-v23e-current -->
+
+<!-- full-scene-qualified-regression-v23h -->
+2026-10-07完整地图/场景组件真实通过：frozen-v23f_2fcb3bf2 原生221项/0失败，8案原整个payload精确再捕获（Gao初态/已发波、classic标准图，Daming初态/放行未救/举火/计时结束/开门救人）；正常时钟1.0、5039源码输入root/private零漂移、零私有运行时补丁。qualified receipt/native report/原日志按字节归档full_scenery_qualified_v23f.json、full_scenery_native_report_v23f.json、full_scenery_verified_log_v23f.txt，审核边界见full_scenery_native_review_v23f.json。仍是禁用新owner/Level空壳的完整map/scenery组件，非完整Units/Mission/时钟/最终激活或独立进程继续资格；公开战役继续仍关闭。
+
+共享SceneryState修改须再验旧六关。v23g原六案整批两次因外部引擎恢复中断，原项目/失败收据/日志保留；原函数/门槛不改，v23h按固定0/1/2/3/5/6逐案独立profile/原生报告/收据，聚合仍要求全部六案，已成功案例不重测，仅foreign中断案例等待自然空闲重试，真实SCRIPT/check失败立即结束待修。当前后台session19240/ownPython206132存活，0/1两案已持久原生通过，2案等待；尚不记六案全通过。
+
+缓存只读预审：两个旧且非活跃Gao私有工程imported中7476文件/1803637428字节（约1.68GiB）与保留候选同相对路径/大小/SHA完全相同，10303源码/资源/日志/收据/profile/其他cache保护文件前验SHA一致。manifest与原始逐文件清单在E:/ChatGPT/scene_duplicate_cache_20261007；当前删除0。准备脚本仅逐文件LiteralPath删除上述匹配缓存、先要求六案通过，并验原SHA/keeper，禁止reparse/越界/live目标；完成后再作全部保护与keeper后验。不碰主缓存、候选keeper、Git、玩家、包或任何盲盒目录。
+
+下一阶段campaign_core_v24三文件可审查候选已在工程外生成，不改变当前冻结输入：补原Gao/Daming root与visual安装上下文/schema、Gao结束按钮descriptor在Unit前验证，原level5 shell只提供身份，真正新Mission创建gao_end后才交给纯Level5 factory恢复引用。尚需完整世界原生harness/跨组件/暂停装树最终激活/真实独立进程及自然结局等，未应用/未资格化。完整原始目标继续；当前已推送的仍只有灯光c7192594，整地图候选及该阶段QA尚未提交，六案审核通过后再清理与白名单同步。
+<!-- /full-scene-qualified-regression-v23h -->

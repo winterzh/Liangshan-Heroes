@@ -1,0 +1,44 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/wu_song_traits_20261006/actions_nw3_v7.png" id="combat_nw"]
+[ext_resource type="Texture2D" path="res://assets/characters/wu_song_traits_20261006/death_nw2_v8.png" id="nw2"]
+
+[sub_resource type="AtlasTexture" id="fatal"]
+atlas = ExtResource("combat_nw")
+region = Rect2(627, 627, 627, 627)
+margin = Rect2(0, 0, 0, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-35.75, -56.86)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.958941
+
+[sub_resource type="AtlasTexture" id="fall"]
+atlas = ExtResource("nw2")
+region = Rect2(627, 0, 627, 720)
+margin = Rect2(46.5, 0.0, 93, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0.0, -7.2)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.078963
+
+[sub_resource type="AtlasTexture" id="rest"]
+atlas = ExtResource("nw2")
+region = Rect2(627, 740, 627, 514)
+margin = Rect2(0.0, 56.5, 0, 113)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0.0, 144.1)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.939597
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("fatal")},
+{"duration": 1.0, "texture": SubResource("fall")},
+{"duration": 1.0, "texture": SubResource("rest")},
+{"duration": 1.0, "texture": SubResource("rest")}
+],
+"loop": false,
+"name": &"default",
+"speed": 4.0
+}]

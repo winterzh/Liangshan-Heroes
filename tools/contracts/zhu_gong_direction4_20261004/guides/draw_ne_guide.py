@@ -1,0 +1,21 @@
+from pathlib import Path
+from PIL import Image,ImageDraw
+im=Image.new('RGB',(1024,1024),'white');d=ImageDraw.Draw(im)
+L=(380,440);R=(620,510);N=(555,350);G=(870,210)
+d.polygon([L,R,(610,720),(420,720)],fill='#ddd6c6',outline='black')
+d.ellipse((460,250,600,390),fill='#ddd6c6',outline='black')
+d.line([(575,320),(610,300)],fill='black',width=12)
+d.line([L,(670,310),G],fill='#1266cc',width=24)
+d.line([R,(760,570),N],fill='#db4a32',width=24)
+d.line([(420,710),(350,880),(330,930)],fill='black',width=20)
+d.line([(600,710),(660,790),(700,830)],fill='black',width=20)
+d.line([(815,65),G,(915,435)],fill='#8b572a',width=16)
+d.line([(815,65),N,(915,435)],fill='#555555',width=5)
+d.line([N,(965,150)],fill='#12964d',width=8)
+d.polygon([(965,150),(928,150),(945,174)],fill='#12964d')
+for xy,label,color in [(L,'ANATOMICAL LEFT SHOULDER / far arm','#1266cc'),(R,'ANATOMICAL RIGHT SHOULDER / near arm','#db4a32'),(G,'LEFT hand holds BOW','#1266cc'),(N,'RIGHT hand draws STRING','#db4a32')]:
+ d.ellipse((xy[0]-12,xy[1]-12,xy[0]+12,xy[1]+12),fill=color)
+ d.text((20,40+80*[(L,'a'),(R,'a'),(G,'a'),(N,'a')].index((xy,'a'))),label,fill=color)
+d.text((20,20),'NE BACK VIEW: arrow UP-RIGHT; blue=left bow arm, red=right draw arm',fill='black')
+out=Path(__file__).parent/'ne_hand_geometry.png';im.save(out)
+print(out)

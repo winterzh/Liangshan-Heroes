@@ -1,0 +1,190 @@
+{
+  "run_name": "20261005_014642_d0fe2a5e",
+  "passed": true,
+  "scope": "Basic four-direction cavalry identity, animation, normal melee timing, actual deployed chapter actors and controlled linked/broken fixture; 35 native captures reviewed. Thirty final captures directly viewed; five exact-byte codex/portrait captures reuse the already directly viewed predecessor.",
+  "exact_byte_previous_review_reuse": [
+    {
+      "name": "codex_se",
+      "previous_path": "review_iterations/initial_34_screen_review/lian_huan_ma/codex_se.png",
+      "sha256": "c2c6e88feb8fbf69f0837f91c38512175670ba651f02d33c215e736eca2acfac"
+    },
+    {
+      "name": "codex_sw",
+      "previous_path": "review_iterations/initial_34_screen_review/lian_huan_ma/codex_sw.png",
+      "sha256": "59c650ab29141c12348f8442fd08c469492cb178044f521c9bed087538b7a1a8"
+    },
+    {
+      "name": "codex_ne",
+      "previous_path": "review_iterations/initial_34_screen_review/lian_huan_ma/codex_ne.png",
+      "sha256": "19c561dd37ccdf2613b9957d57586673b73faba1c4fcb35298e84f561fcb67c9"
+    },
+    {
+      "name": "codex_nw",
+      "previous_path": "review_iterations/initial_34_screen_review/lian_huan_ma/codex_nw.png",
+      "sha256": "3512a1a2e2701e0ba36d7c941c79dfde30b1b259d01c7becd5dda884be9fe0d7"
+    },
+    {
+      "name": "portrait_sizes",
+      "previous_path": "review_iterations/initial_34_screen_review/lian_huan_ma/portrait_sizes.png",
+      "sha256": "7356f43bfba8999143622ea9c5ddcc5178834c68d2776522c8750ca8c94d50d6"
+    }
+  ],
+  "findings": [
+    "All 32 independent poses reviewed in three unobstructed matrices. Armored brown horse, rings/sagging chain, red plume, dark riveted armor and portrait identity consistent. No local pixel changes.",
+    "Right sole lance and left reins independently drawn on all four live facings; two low-frame cavalry gallop contact poses visibly distinct. Windup/strike/recovery, recoil, folded collapse and fully grounded terminal silhouette reviewed.",
+    "Actual enemy roster has twelve existing actors with 150/270-second wave config unchanged. Four actual idle facings use new bodies; fixture uses existing hooks and riders.",
+    "One eligible hook causes 30.492 damage without break. Two eligible hooks with contact and explicit impediment fixture trigger existing break through normal chapter tick. Same living rider retains stats/portrait and then deals 11.7391304347826 damage at authored strike phase after the narrative illustration naturally expires.",
+    "All four codex previews and 48/96/192/320 portrait renders preserve portraits9 top-middle exact cell; selected skirmish HUD uses the same portrait."
+  ],
+  "limitations": [
+    "NE walk/melee/hurt/terminal body or spear is partly obscured by the existing banner. Unobstructed native matrices and instantaneous physical hit assertion supplement these captures.",
+    "Several walk/melee/hurt captures have reached idle/recovery; floating damage and HUD can lag a render frame. These stills alone cannot prove every intermediate pose.",
+    "NE/NW fall captures have already advanced to terminal; distinct fall/terminal poses are reviewed in the native matrices.",
+    "First actual SE chapter capture remains in deployment/preparation appearance; later captures and normal chapter process prove fixture behavior. No natural 150/270-second wave was awaited.",
+    "Linked fixture includes controlled positioning, nonparticipant freezes and explicit slow. This is not whole-chapter clearance, natural mission victory, recruitment qualification or campaign save continuation.",
+    "Old temporary broken_cavalry illustration obscures the rider during the broken capture and remains outside this character redraw. New lian_broken_alive capture after natural expiry proves the original living body; lower hooves retain foliage occlusion.",
+    "Low-frame basic art only; screenshot FPS is not measured performance, platform package or device qualification."
+  ],
+  "reviewed": [
+    {
+      "path": "final/lian_huan_ma/walk_se.png",
+      "sha256": "38131a6fc429925b00c8b18b969f4c8b1f7a4da0cb53191dc2e2855e98821b40"
+    },
+    {
+      "path": "final/lian_huan_ma/melee_se.png",
+      "sha256": "e41f83d564ed83b3e2db1fc32192cbe6eac87aaf39e831312c23939df00dbe72"
+    },
+    {
+      "path": "final/lian_huan_ma/hurt_se.png",
+      "sha256": "7ce17dd7d39bd183006b678887956e09a0e4e28c8683e70bc021f21cb5b48691"
+    },
+    {
+      "path": "final/lian_huan_ma/fall_se.png",
+      "sha256": "69dd426836329813af16e410ded8ec26c0038c9676dee11da31b2905cedd7eed"
+    },
+    {
+      "path": "final/lian_huan_ma/terminal_se.png",
+      "sha256": "411effb497e82786b725216258e95eb2a7028697fb48b224f3e3cf2b4d86f7bc"
+    },
+    {
+      "path": "final/lian_huan_ma/walk_sw.png",
+      "sha256": "3a41bf4a9d1396f84662a6b4a7db1398f5966c027e4d697c5b614284ac92314c"
+    },
+    {
+      "path": "final/lian_huan_ma/melee_sw.png",
+      "sha256": "93b26eb0b8e2ffbdfc6d3345161546a174f06ef7c2ec103cbeb77513c5444d11"
+    },
+    {
+      "path": "final/lian_huan_ma/hurt_sw.png",
+      "sha256": "7355ce49d6e585299046ab27c9c69c710de53c608a2d3811d0e9a92039deedc0"
+    },
+    {
+      "path": "final/lian_huan_ma/fall_sw.png",
+      "sha256": "247903e97c846cce0ced120612470b6735f2e265e3718b5e47d1e930847fa4d7"
+    },
+    {
+      "path": "final/lian_huan_ma/terminal_sw.png",
+      "sha256": "afeda0f6c68321ba604a8b7f7038f198bb8f68f3740d85aaa1d77552bb67f611"
+    },
+    {
+      "path": "final/lian_huan_ma/walk_ne.png",
+      "sha256": "ef8c28e0407c4e2d8a019c3d745e688a5b955b018d716fafcade56e415c89299"
+    },
+    {
+      "path": "final/lian_huan_ma/melee_ne.png",
+      "sha256": "b8819578fbfb57e46ce90908bf14b2c66eeaf2af0e7792e98774987e7e2416ee"
+    },
+    {
+      "path": "final/lian_huan_ma/hurt_ne.png",
+      "sha256": "eb0fe97ea4f46946b9d44940158f445674d713e6464012b7181bffa99bdbffa2"
+    },
+    {
+      "path": "final/lian_huan_ma/fall_ne.png",
+      "sha256": "4a7badbbdb2c1b00d9cf9243e7754829ff09d9370c8155e3498159a06b49cbfd"
+    },
+    {
+      "path": "final/lian_huan_ma/terminal_ne.png",
+      "sha256": "6c38a1d8e2328b587655fee78893c36b39f78eb1e39555e0950454499330e8da"
+    },
+    {
+      "path": "final/lian_huan_ma/walk_nw.png",
+      "sha256": "a9eee6d89203617c7df494968f641fc6a1e926f374f6ba415ca20788c429f95d"
+    },
+    {
+      "path": "final/lian_huan_ma/melee_nw.png",
+      "sha256": "4a1d62486aac8b4a4da17a7221e543429dbd2285898b811919a255d25649a0b3"
+    },
+    {
+      "path": "final/lian_huan_ma/hurt_nw.png",
+      "sha256": "d39b52baed8992f10d8f2bd9aa16a348de11eb8a17836d2834e35527940ecd87"
+    },
+    {
+      "path": "final/lian_huan_ma/fall_nw.png",
+      "sha256": "098a233bef3ad0a5660dd0800705b3af72d115d4d1b9a9c3ec37aeffa40eb92e"
+    },
+    {
+      "path": "final/lian_huan_ma/terminal_nw.png",
+      "sha256": "0248c70d30f778fcf3103567fc6b1ccc25bf2b9c3a149d0a5fbca26f429ff501"
+    },
+    {
+      "path": "final/lian_huan_ma/unit_pose_matrix_1.png",
+      "sha256": "f00f5014ab86e8b07efb8afe35d3876e6cffe6501219d5a1f13b0ff61cd21001"
+    },
+    {
+      "path": "final/lian_huan_ma/unit_pose_matrix_2.png",
+      "sha256": "9b5e4c67eacd0ba03869a4ab56ff2e2fbb98044811b2250d1f1a903d6cc5078b"
+    },
+    {
+      "path": "final/lian_huan_ma/unit_pose_matrix_3.png",
+      "sha256": "2aef4545b012dc2cc5f80906ed3388730c911401ca8077e9e51647e8405d684b"
+    },
+    {
+      "path": "final/lian_huan_ma/lian_actual_se.png",
+      "sha256": "904ac6e9783a6d2c3cc9921be97c66399c6bb3d20a06481f4265af5e145f0ca0"
+    },
+    {
+      "path": "final/lian_huan_ma/lian_actual_sw.png",
+      "sha256": "19ef3fb8797bbda6e100cf7716b12102af6241003d310cd8b079e7a3c5c7174b"
+    },
+    {
+      "path": "final/lian_huan_ma/lian_actual_ne.png",
+      "sha256": "c1da4ab15ec996be04ac396f7c46f0c22f0b5b358981c88b72048a11ab6f4150"
+    },
+    {
+      "path": "final/lian_huan_ma/lian_actual_nw.png",
+      "sha256": "dbbb96c56df8261efc4cb56668f34bf0f1019603722232acf2c01321037fbb07"
+    },
+    {
+      "path": "final/lian_huan_ma/lian_linked.png",
+      "sha256": "7be67535819fab03ba53c246e359979886047f07781335c92cd3d9565e4b624e"
+    },
+    {
+      "path": "final/lian_huan_ma/lian_broken.png",
+      "sha256": "bd49abf97484f2229a75fffdd8da8c7eeca28a5a2e743328b0e505c5a79fab30"
+    },
+    {
+      "path": "final/lian_huan_ma/lian_broken_alive.png",
+      "sha256": "424da5073b92ebaf609d8f76e0211eaebc1005e5e53c68efc55609d8e5a12320"
+    },
+    {
+      "path": "final/lian_huan_ma/codex_se.png",
+      "sha256": "c2c6e88feb8fbf69f0837f91c38512175670ba651f02d33c215e736eca2acfac"
+    },
+    {
+      "path": "final/lian_huan_ma/codex_sw.png",
+      "sha256": "59c650ab29141c12348f8442fd08c469492cb178044f521c9bed087538b7a1a8"
+    },
+    {
+      "path": "final/lian_huan_ma/codex_ne.png",
+      "sha256": "19c561dd37ccdf2613b9957d57586673b73faba1c4fcb35298e84f561fcb67c9"
+    },
+    {
+      "path": "final/lian_huan_ma/codex_nw.png",
+      "sha256": "3512a1a2e2701e0ba36d7c941c79dfde30b1b259d01c7becd5dda884be9fe0d7"
+    },
+    {
+      "path": "final/lian_huan_ma/portrait_sizes.png",
+      "sha256": "7356f43bfba8999143622ea9c5ddcc5178834c68d2776522c8750ca8c94d50d6"
+    }
+  ]
+}

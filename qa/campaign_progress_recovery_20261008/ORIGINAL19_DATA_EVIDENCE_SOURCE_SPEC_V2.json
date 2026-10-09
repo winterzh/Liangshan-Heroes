@@ -1,0 +1,93 @@
+{
+  "schema": "campaign_original19_data_evidence_source_spec_v2",
+  "helper_sha256": "8df50fdefbf63f0a4b6319008903701da94ef753405e331fcb937c5c6604fe18",
+  "pins": [
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\campaign_original19_data_evidence_v2.py",
+      "bytes": 20824,
+      "sha256": "8df50fdefbf63f0a4b6319008903701da94ef753405e331fcb937c5c6604fe18"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\durable_campaign_full_runtime.py",
+      "bytes": 13938,
+      "sha256": "0c8ce0b44bd7d4afd8813099f7de16b167c9b4941f99afacbc9208f95ae4e8c1"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\run_workstation_baseline.py",
+      "bytes": 8636,
+      "sha256": "1220817bacea5469035403084c3e4ddc7c23d222440876cd199e650a9b7dd8b2"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\run_steam_integration_qa.py",
+      "bytes": 11766,
+      "sha256": "0673d6ab09904fd653152b127c30ca325dbf791de0b77a5da2a60cd30f0a5ad9"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\durable_campaign_full_matrices.py",
+      "bytes": 15976,
+      "sha256": "0cf09e81d27c1ab7068b9286f5e9f8b833ae06d2f0ae22b3e99aa661db8a302a"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\ORIGINAL19_COMPLETE_LABEL_CONTRACT_V2.json",
+      "bytes": 11463,
+      "sha256": "d79c464e04aed865f089bf61495cad85eee80f2118021c2803d8c4db399ea0d1"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\original19_data_layers_candidate_v4\\SOURCE.json",
+      "bytes": 4578,
+      "sha256": "31e5f04d51db154ddd6e4c1a8bdc8f407a41fe378df23c92f90dc8996a864fe0"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\original19_data_layers_candidate_v4\\campaign_original19_data_layers_v4.gd",
+      "bytes": 24416,
+      "sha256": "afe359b69727d1bdd017468bd0aed3facd12d0ede77780ab7846e9f905cc6dcf"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\original19_data_layers_candidate_v4\\ORIGINAL19_DATA_LAYERS_PRELIMINARY_REVIEW_V4.json",
+      "bytes": 10410,
+      "sha256": "2d073695be7aa06bff385c7d9eb53ee6f83d889564afa0acd174dc9d7cc3bbe8"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\ORIGINAL19_DATA_CASES_INDEPENDENT_REVIEW_V1.json",
+      "bytes": 46872,
+      "sha256": "894ad4caf8bf60f1abc156dc9a9da81ded22d670f76c8992ff8fe9d2d73c462a"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\run_campaign_original19_data_cases_v1.py",
+      "bytes": 15890,
+      "sha256": "5c1bc0c26ed944d0d1a7f1871bde224be22c074e3c80a2a56f9be1a86e0b8603"
+    }
+  ],
+  "import_edges": [
+    [
+      "campaign_original19_data_evidence_v2.py",
+      "durable_campaign_full_matrices.py"
+    ],
+    [
+      "campaign_original19_data_evidence_v2.py",
+      "durable_campaign_full_runtime.py"
+    ],
+    [
+      "durable_campaign_full_runtime.py",
+      "run_steam_integration_qa.py"
+    ],
+    [
+      "durable_campaign_full_runtime.py",
+      "run_workstation_baseline.py"
+    ],
+    [
+      "run_workstation_baseline.py",
+      "run_steam_integration_qa.py"
+    ]
+  ],
+  "imports_closed_for_validator": true,
+  "scope": "standalone strict current109/QA20 labels plus native CFG/typed14 historical journals/current13-14/request/type/progress preservation; no executor or native admission",
+  "old_failure_findings_targeted": [
+    "DATAEXEC-MANDATORY-001",
+    "DATAEXEC-CFG-002"
+  ],
+  "native_started": false,
+  "producer_implemented": false,
+  "full_original19_qualified": false,
+  "overall_goal_qualified": false
+}

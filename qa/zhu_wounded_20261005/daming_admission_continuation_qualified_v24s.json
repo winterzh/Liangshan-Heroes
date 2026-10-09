@@ -1,0 +1,385 @@
+{
+  "schema": "daming_admission_native_continuation_qualified_v24s",
+  "created_utc": "2026-10-07T17:29:12.711283+00:00",
+  "complete": true,
+  "runtime_candidate_qualified": true,
+  "private_runtime_patches": 0,
+  "source_candidate_receipt": "qa/zhu_wounded_20261005/native_ownership_json_candidate_v24q.json",
+  "source_candidate_receipt_sha256": "29e2d5ecdea451d0e2cd2a84da57875ccf693d1c3c42603e4564b3cb5a1bd334",
+  "actual_producer": "E:/ChatGPT/daming_admit_v24o_proposal/run_daming_admit_v24s.py",
+  "actual_producer_sha256": "049dcdc74fab7936d4812f71a9806cee46569163ece4c524043ac7cfdedd8626",
+  "original_run": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70",
+  "original_receipt_sha256": "1c88ad69d16f4dd90b40a399ef645d1acb5218e653ce5a0581a5585618e24d41",
+  "processes": [
+    {
+      "case": "A_half_save",
+      "pid": 202132,
+      "nonce": "aaa5ab54ad6042f6813a247f87f66379",
+      "checks": 39,
+      "generation": 1,
+      "slot_sha256": "8d1e3e98b67c2bf02041d0693fb2561c267d2778550c446df1cdd3120e0790c3",
+      "content_version": "source-v1:3fc1d397f691670f06bdd0478d4180a2de782433673a251d8e3c0b4979a3cf25",
+      "native_started_ns": 569567125000000,
+      "native_finished_ns": 569667515000000
+    },
+    {
+      "case": "B_continue_resave",
+      "pid": 216580,
+      "nonce": "166286d8f7cb4afe9fc1e0b364b01e9c",
+      "checks": 351,
+      "generation": 2,
+      "slot_sha256": "eb5939dbf81bba90ea4f497f483b732a6e73c25677c468d74bdda1e5399ccecd",
+      "content_version": "source-v1:3fc1d397f691670f06bdd0478d4180a2de782433673a251d8e3c0b4979a3cf25",
+      "native_started_ns": 569826781000000,
+      "native_finished_ns": 569905687000000
+    },
+    {
+      "case": "C_verify_resave",
+      "pid": 215764,
+      "nonce": "e8bee37f2f334fbeb182922ad1eac961",
+      "checks": 342,
+      "generation": 2,
+      "slot_sha256": "eb5939dbf81bba90ea4f497f483b732a6e73c25677c468d74bdda1e5399ccecd",
+      "content_version": "source-v1:3fc1d397f691670f06bdd0478d4180a2de782433673a251d8e3c0b4979a3cf25",
+      "native_started_ns": 570065343000000,
+      "native_finished_ns": 570132843000000
+    }
+  ],
+  "native_logs": [
+    {
+      "stage": "import",
+      "pid": 212964,
+      "exit_code": 0,
+      "sha256": "a3d71902445ac536d034c2aa3d66839461d262da1fb6a3bd7a768870c176a9e6",
+      "errors": 0
+    },
+    {
+      "stage": "profile_guard",
+      "pid": 209160,
+      "exit_code": 2,
+      "sha256": "f8692a4c0d8ec0052e58dee6bb2aa99e1dfb048a22a75a3b883bbcf59076645f",
+      "errors": 0
+    },
+    {
+      "stage": "json_boundary",
+      "pid": 212924,
+      "exit_code": 0,
+      "sha256": "dccb17df59e2f3dff287c8e5bdd562285f36c546c70e110b8065b34740a8e290",
+      "errors": 0
+    },
+    {
+      "stage": "owned_slot_retry",
+      "pid": 216828,
+      "exit_code": 0,
+      "sha256": "17a343abfe71fc5816c5322388c48bf54fceaa34a986604eaab365080d5101aa",
+      "errors": 0
+    },
+    {
+      "stage": "A_half_save",
+      "pid": 202132,
+      "exit_code": 0,
+      "sha256": "7d8fc3a70feb6cddd1bf4abff17920ab42e502f479e26d98d1302aa0b980f60f",
+      "errors": 0
+    },
+    {
+      "stage": "B_continue_resave",
+      "pid": 216580,
+      "exit_code": 0,
+      "sha256": "4feb0e2af3013757defeee84a9d36dbd10566d7207721724bcd35aa1c953322d",
+      "errors": 0
+    },
+    {
+      "stage": "C_verify_resave",
+      "pid": 215764,
+      "exit_code": 0,
+      "sha256": "8f0daf451083976b1a28b5c1089a28ababb8ad6bc0820698c1c52f724bd5f1af",
+      "errors": 0
+    }
+  ],
+  "files": [
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_complete_receipt_v24s.json",
+      "bytes": 3902662,
+      "sha256": "1c88ad69d16f4dd90b40a399ef645d1acb5218e653ce5a0581a5585618e24d41",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\receipt.json"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_import_log_v24s.txt",
+      "bytes": 155257,
+      "sha256": "a3d71902445ac536d034c2aa3d66839461d262da1fb6a3bd7a768870c176a9e6",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\steps\\04_import\\native.log"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_profile_guard_log_v24s.txt",
+      "bytes": 114,
+      "sha256": "f8692a4c0d8ec0052e58dee6bb2aa99e1dfb048a22a75a3b883bbcf59076645f",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\steps\\05_profile_guard\\native.log"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_json_boundary_log_v24s.txt",
+      "bytes": 121,
+      "sha256": "dccb17df59e2f3dff287c8e5bdd562285f36c546c70e110b8065b34740a8e290",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\steps\\06_json_boundary\\native.log"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_owned_slot_retry_log_v24s.txt",
+      "bytes": 266,
+      "sha256": "17a343abfe71fc5816c5322388c48bf54fceaa34a986604eaab365080d5101aa",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\steps\\07_owned_slot_retry\\native.log"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_A_half_save_log_v24s.txt",
+      "bytes": 353,
+      "sha256": "7d8fc3a70feb6cddd1bf4abff17920ab42e502f479e26d98d1302aa0b980f60f",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\steps\\08_A_half_save\\native.log"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_B_continue_resave_log_v24s.txt",
+      "bytes": 3784,
+      "sha256": "4feb0e2af3013757defeee84a9d36dbd10566d7207721724bcd35aa1c953322d",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\steps\\09_B_continue_resave\\native.log"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_C_verify_resave_log_v24s.txt",
+      "bytes": 3782,
+      "sha256": "8f0daf451083976b1a28b5c1089a28ababb8ad6bc0820698c1c52f724bd5f1af",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\steps\\10_C_verify_resave\\native.log"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_00_preflight_step_v24s.json",
+      "bytes": 490,
+      "sha256": "90a987e7673f04a37ee2933141c189dd8938d2d9bb4d7dce848882f3e4d5c133",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\steps\\00_preflight\\receipt.json"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_01_wait_fx_terminal_step_v24s.json",
+      "bytes": 451,
+      "sha256": "84dc89330e27e86fe6b5463e4e00b32886241795945d74d6c56f66fad3e3b75b",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\steps\\01_wait_fx_terminal\\receipt.json"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_02_wait_natural_engine_idle_step_v24s.json",
+      "bytes": 388,
+      "sha256": "6405129d1f9c6f494a11ec87e3160e9114947956fb674510f03ed59a38331b3a",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\steps\\02_wait_natural_engine_idle\\receipt.json"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_03_freeze_private_project_step_v24s.json",
+      "bytes": 2058,
+      "sha256": "ff403693d249b9cc8760a79bd7521ef9272df6a6c3037c989294d9f189e1528a",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\steps\\03_freeze_private_project\\receipt.json"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_04_import_step_v24s.json",
+      "bytes": 1156,
+      "sha256": "31dbb46219363ca5ee17f8ff56a506d216b23a825c14af33cced786791ef2ca6",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\steps\\04_import\\receipt.json"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_05_profile_guard_step_v24s.json",
+      "bytes": 1184,
+      "sha256": "cf34736eb2dd2eae18131d86b0757b6129b1f34253dffeab457fbd2d21729aff",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\steps\\05_profile_guard\\receipt.json"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_06_json_boundary_step_v24s.json",
+      "bytes": 3657,
+      "sha256": "f77325068e3bc25ab355e4506186c18422c925d019c6790e394916e68e217032",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\steps\\06_json_boundary\\receipt.json"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_07_owned_slot_retry_step_v24s.json",
+      "bytes": 1567,
+      "sha256": "80e38ac36e5b14fba1c90cd5193fd96390efcd5e5dfb0337bc09552a191fcdae",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\steps\\07_owned_slot_retry\\receipt.json"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_08_A_half_save_step_v24s.json",
+      "bytes": 2317,
+      "sha256": "2ed3d7c654fd6720fb5aa71efecf5016dfb63521d4c46d6d3da5ec518b783f86",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\steps\\08_A_half_save\\receipt.json"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_09_B_continue_resave_step_v24s.json",
+      "bytes": 2343,
+      "sha256": "8de89bebd6c47ff23a285da9e10cb00a86d2f2ce33c161f863559a3ffe6f9ff7",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\steps\\09_B_continue_resave\\receipt.json"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_10_C_verify_resave_step_v24s.json",
+      "bytes": 2335,
+      "sha256": "6424f7628090b328d6012208402d3ac09fb8b6fec5e76c5b45253def796a04c4",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\steps\\10_C_verify_resave\\receipt.json"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_11_final_source_native_and_slot_audit_step_v24s.json",
+      "bytes": 436,
+      "sha256": "9cdef0cc7127ab92727ba5ab768e1438fe1f88e5f1bd619b21e422b810d14dd9",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\steps\\11_final_source_native_and_slot_audit\\receipt.json"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_isolated_slot_and_lifecycle_manifest_v24s.json",
+      "bytes": 1647,
+      "sha256": "62fa09c37864f82946454ba67a5380218178145f1d75e07ffae63e2dcf62578b",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\isolated_slot_and_lifecycle_manifest.json"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_qualified_import_metadata_companions_v24s.json",
+      "bytes": 18900,
+      "sha256": "26840594a6f2dfaa97db342e6835d416a0b49d362f2a6483e141bcc1e4578c54",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\qualified_import_metadata_companions.json"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_A_half_save_report_v24s.json",
+      "bytes": 9499,
+      "sha256": "a38bcf6b633769b838672665d4b95b23bb62101dcfe9b91bb77210f359e583e1",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\native_evidence\\A_half_save\\report.json"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_A_half_save_saved_packet_v24s.json",
+      "bytes": 7510426,
+      "sha256": "c06ed111b0df6ca5c76ba5670ec5e7ed707d266f8d02f55b16a746f373124c2d",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\native_evidence\\A_half_save\\saved_packet.json"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_A_half_save_saved_world_v24s.json",
+      "bytes": 7172127,
+      "sha256": "efb35edafcadad2ec192ed8a0580e9e4b054bf1d43f51e50573d5d9c57c76319",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\native_evidence\\A_half_save\\saved_world.json"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_B_continue_resave_full_world_comparison_v24s.json",
+      "bytes": 811,
+      "sha256": "b3f8de66de6098368c01b3a9fc4dee20d6655b23960dc6441b33d3d874d4ed00",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\native_evidence\\B_continue_resave\\full_world_comparison.json"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_B_continue_resave_input_packet_v24s.json",
+      "bytes": 7510426,
+      "sha256": "c06ed111b0df6ca5c76ba5670ec5e7ed707d266f8d02f55b16a746f373124c2d",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\native_evidence\\B_continue_resave\\input_packet.json"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_B_continue_resave_input_world_v24s.json",
+      "bytes": 7172127,
+      "sha256": "efb35edafcadad2ec192ed8a0580e9e4b054bf1d43f51e50573d5d9c57c76319",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\native_evidence\\B_continue_resave\\input_world.json"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_B_continue_resave_report_v24s.json",
+      "bytes": 47183,
+      "sha256": "51e67172cef79e7b143f84bc63c8c873ab99fd40066bb71529460cb39150e82a",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\native_evidence\\B_continue_resave\\report.json"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_B_continue_resave_restored_world_v24s.json",
+      "bytes": 7172126,
+      "sha256": "e566ed5dde7f2a1cec854bc96a4a838104e2a57166286f853c25aa31a2674d6d",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\native_evidence\\B_continue_resave\\restored_world.json"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_B_continue_resave_saved_packet_v24s.json",
+      "bytes": 7539427,
+      "sha256": "4e7bb175301af3a3a1f7322aa303bea2e21630b26581a0cee1d0a9d62f2ca595",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\native_evidence\\B_continue_resave\\saved_packet.json"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_B_continue_resave_saved_world_v24s.json",
+      "bytes": 7199786,
+      "sha256": "27940ab336655221fee4350397cd0c5ac47e9f80cfdcb33732282178950c8a17",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\native_evidence\\B_continue_resave\\saved_world.json"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_B_continue_resave_session_packet_install_audit_v24s.json",
+      "bytes": 7378,
+      "sha256": "d1571dea0805c5711f6ffb82820e978ca6f8ff4f7c9f7c94c9b75569ed9cbff1",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\native_evidence\\B_continue_resave\\session_packet_install_audit.json"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_C_verify_resave_after_real_ticks_world_v24s.json",
+      "bytes": 7200941,
+      "sha256": "40fe65fda5fe761017a7c1b9c98e4ad1519dff6ab74ebb9163d638451cf042bc",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\native_evidence\\C_verify_resave\\after_real_ticks_world.json"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_C_verify_resave_full_world_comparison_v24s.json",
+      "bytes": 808,
+      "sha256": "c7698cc4b8aa72ef83ca184ece317ee18df03550623eb2941fb718629587c08a",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\native_evidence\\C_verify_resave\\full_world_comparison.json"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_C_verify_resave_input_packet_v24s.json",
+      "bytes": 7539427,
+      "sha256": "4e7bb175301af3a3a1f7322aa303bea2e21630b26581a0cee1d0a9d62f2ca595",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\native_evidence\\C_verify_resave\\input_packet.json"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_C_verify_resave_input_world_v24s.json",
+      "bytes": 7199786,
+      "sha256": "27940ab336655221fee4350397cd0c5ac47e9f80cfdcb33732282178950c8a17",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\native_evidence\\C_verify_resave\\input_world.json"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_C_verify_resave_report_v24s.json",
+      "bytes": 46013,
+      "sha256": "45a0b785da95db924921619c0a909f11cb3f667ee4b11327e7d69a5281340550",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\native_evidence\\C_verify_resave\\report.json"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_C_verify_resave_restored_world_v24s.json",
+      "bytes": 7199784,
+      "sha256": "dd7cadcb62cade983546523ce6fa96aa0623f3e65ba61c3b4283f30a455f1996",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\native_evidence\\C_verify_resave\\restored_world.json"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_C_verify_resave_session_packet_install_audit_v24s.json",
+      "bytes": 7378,
+      "sha256": "975a13d66e7715d5465abe948b6e47960ae92a766a85a1ace97a5465bf7ea2c0",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\native_evidence\\C_verify_resave\\session_packet_install_audit.json"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_handoff_A_v24s.json",
+      "bytes": 7845511,
+      "sha256": "78c261755af03310b97fab3dc02dbec0b72ccf4315aef61d675cba22f3403611",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\profile\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\daming_admit_v24o\\handoff_A.json"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_handoff_B_v24s.json",
+      "bytes": 7876088,
+      "sha256": "73ce5f5a8b4a983868e3c3b07a9994b17ceb49cdd79149b8e6d2ede8c433c252",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\profile\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\daming_admit_v24o\\handoff_B.json"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_generation_1_v24s.json",
+      "bytes": 3279578,
+      "sha256": "8d1e3e98b67c2bf02041d0693fb2561c267d2778550c446df1cdd3120e0790c3",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\retained_slots\\generation_1.json"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_generation_2_v24s.json",
+      "bytes": 3290559,
+      "sha256": "eb5939dbf81bba90ea4f497f483b732a6e73c25677c468d74bdda1e5399ccecd",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\retained_slots\\generation_2.json"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_json_boundary_report_v24s.json",
+      "bytes": 88872,
+      "sha256": "ae97318b6067ba91fe7d59a4dafb4f51c2c1b4848e85809f739e680754d524bd",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\native_evidence\\json_boundary\\report.json"
+    },
+    {
+      "path": "qa/zhu_wounded_20261005/daming_admit_owned_slot_report_v24s.json",
+      "bytes": 5305,
+      "sha256": "f32c368aabd54ffed7087332d98c8ca52a8b8fc1d8800a8f2e69ef27a00f254e",
+      "original": "E:\\ChatGPT\\qa-world-restore-20261007\\daming_admit_v24s_2a817e70\\profile\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\owned_slot_retry_qa\\report.json"
+    }
+  ],
+  "scope": "Actual normal-order admission half-save, distinct full Session install/natural admission/resave, third process generation2 install and 120 native ticks without duplicate effects; fixed JSON boundary and original OwnedSlot regressions.",
+  "public_campaign_continue_qualified": false,
+  "natural_victory_qualified": false,
+  "reward_once_qualified": false,
+  "campaign_persistence_qualified": false,
+  "safe_retreat_qualified": false,
+  "steam_published_this_round": false,
+  "remaining_development_plan_unchanged": true
+}

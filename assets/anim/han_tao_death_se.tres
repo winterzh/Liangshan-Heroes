@@ -1,0 +1,35 @@
+[gd_resource type="SpriteFrames" load_steps=5 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/han_tao_direction4_20261005/fall.png" id="fall"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/han_tao_direction4_20261005/terminal.png" id="terminal"]
+
+[sub_resource type="AtlasTexture" id="fall_se"]
+atlas = ExtResource("fall")
+region = Rect2(0, 0, 633, 686)
+margin = Rect2(26, 0, 53, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-23.5, -56.48)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.790453
+
+[sub_resource type="AtlasTexture" id="terminal_se"]
+atlas = ExtResource("terminal")
+region = Rect2(0, 0, 638, 659)
+margin = Rect2(10, 0, 21, 0)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-3.5, -38.62)
+metadata/authored_direction4 = true
+metadata/draw_scale = 0.941429
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("fall_se")},
+{"duration": 1.0, "texture": SubResource("terminal_se")},
+{"duration": 1.0, "texture": SubResource("terminal_se")}
+],
+"loop": false,
+"name": &"default",
+"speed": 4.0
+}]

@@ -473,10 +473,9 @@ func process(b,delta: float) -> void:
 		core_ready=true
 		b.mission.set_title("主力已退 · 收兵或押俘")
 		b.mission.set_objective("基础目标已达成，可直接收兵通关；也可继续清开座船周围、封港凿船并押俘回堂。")
-		end_button=Button.new()
-		end_button.text="收兵通关 · 已击退高俅"
-		end_button.pressed.connect(func(): _finish(b,b.mission.has_event("gao_captured")))
-		b.mission._buttons.add_child(end_button)
+		end_button=b.mission.add_level_button("gao_end","收兵通关 · 已击退高俅")
+func activate_mission_button(b, button_id: String) -> void:
+	if button_id == "gao_end": _finish(b,b.mission.has_event("gao_captured"))
 func on_unit_resolved(b,u,outcome: String) -> void:
 	if u==flagship and outcome=="subdued":
 		flagship_disabled=true

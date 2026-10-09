@@ -1,0 +1,15 @@
+{
+  "run_name": "20261004_203408_37ea3b6a",
+  "checks": 358,
+  "failed_checks": [
+    "living down cannot borrow death: se",
+    "living down cannot borrow death: sw",
+    "living down cannot borrow death: ne",
+    "living down cannot borrow death: nw"
+  ],
+  "source_changes": [],
+  "private_source_changes": [],
+  "lock_released": true,
+  "cause": "QA assumed every newly authored unit lacks explicit nonfatal down. Hook already has four independent legacy down PNGs; no production death/down routing regression was found. Corrected QA to preserve exact existing nonfatal source and assert separation from new death.",
+  "production_routing_changed_for_failure": false
+}

@@ -1,0 +1,29 @@
+{
+  "schema": "daming_safe_retreat_full_producer_blocked_static_review_v25s_r2b1",
+  "created_utc": "2026-10-07T18:55:26.857845+00:00",
+  "reviewer": "fx_caller_review",
+  "producer_pin": {
+    "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/run_daming_safe_retreat_v25s_r2b1_full.py",
+    "sha256": "f16d9eea15d5cabce5a37f95b21c6272b59342005ecf2a179dee1818e081bd42",
+    "bytes": 35411
+  },
+  "static_api_closure_passed": false,
+  "approved_stages": [],
+  "blocking": true,
+  "priority": "P1",
+  "finding": "Copied world consumer resolves HEX64 in new full module globals, but no global definition/import exists. Both original SHA guards raise NameError on the first valid row. Inheriting a class does not inherit defining-module globals.",
+  "lines": [
+    208,
+    209
+  ],
+  "nullable_presence_fix_valid": true,
+  "needed_fix": "New immutable sibling with exact original HEX64 = re.compile(r\"[0-9a-f]{64}\\Z\") global or equivalent exact fullmatch; keep both original SHA guards and all nullable presence checks.",
+  "AST_parse_only_passed_but_cannot_prove_name_binding": true,
+  "producer_import_or_CLI_executed": false,
+  "engine_started": false,
+  "public_source_modified": false,
+  "old_files_modified": false,
+  "running_A_explorer_affected": false,
+  "native_qualified": false,
+  "overall_v25_qualified": false
+}

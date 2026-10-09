@@ -1,0 +1,335 @@
+{
+  "schema": "campaign_persistence_observability_fault_matrix_v27",
+  "cases": [
+    {
+      "id": "normal_first_full_seal",
+      "scope": "real private CFG",
+      "fixture_or_fault_mechanism": "Private normal non-QA Campaign node, real cfg.save and new cfg.load; same-run full result.",
+      "expected": {
+        "accepted": true,
+        "memory_applied": true,
+        "persisted": true,
+        "suppressed": false,
+        "save_code": "CAMPAIGN_CFG_READBACK_VERIFIED",
+        "cloud_callback_only_not_upload": true,
+        "new_story_seal": true,
+        "durable_new_story_seal": true
+      },
+      "native_harness_implemented": false,
+      "executed": false,
+      "passed": null
+    },
+    {
+      "id": "normal_repeat_full",
+      "scope": "real private CFG",
+      "fixture_or_fault_mechanism": "Second same full run using prior verified private cfg.",
+      "expected": {
+        "accepted": true,
+        "memory_applied": true,
+        "persisted": true,
+        "suppressed": false,
+        "save_code": "CAMPAIGN_CFG_READBACK_VERIFIED",
+        "cloud_callback_only_not_upload": true,
+        "new_story_seal": false,
+        "durable_new_story_seal": false
+      },
+      "native_harness_implemented": false,
+      "executed": false,
+      "passed": null
+    },
+    {
+      "id": "best_single_run_no_union",
+      "scope": "real private CFG",
+      "fixture_or_fault_mechanism": "Two distinct partial goal sets followed by worse/tied run, none same-run complete.",
+      "expected": {
+        "accepted": true,
+        "memory_applied": true,
+        "persisted": true,
+        "suppressed": false,
+        "save_code": "CAMPAIGN_CFG_READBACK_VERIFIED",
+        "cloud_callback_only_not_upload": true,
+        "new_story_seal": false,
+        "durable_new_story_seal": false,
+        "best_ids_from_one_run": true,
+        "goal_union": false
+      },
+      "native_harness_implemented": false,
+      "executed": false,
+      "passed": null
+    },
+    {
+      "id": "invalid_no_unlock",
+      "scope": "logic",
+      "fixture_or_fault_mechanism": "Non-campaign context/unknown level/core_cleared=false; include high next unlock index.",
+      "expected": {
+        "accepted": false,
+        "memory_applied": false,
+        "persisted": false,
+        "new_story_seal": false,
+        "disk_write_attempted": false,
+        "unlocked_unchanged": true
+      },
+      "native_harness_implemented": false,
+      "executed": false,
+      "passed": null
+    },
+    {
+      "id": "QA_memory_only",
+      "scope": "suppression",
+      "fixture_or_fault_mechanism": "CAMPAIGN_QA=1 with seeded cfg sentinel; full same-run outcome. No disk API reached.",
+      "expected": {
+        "accepted": true,
+        "memory_applied": true,
+        "new_story_seal": true,
+        "durable_new_story_seal": false,
+        "persisted": false,
+        "suppressed": true,
+        "legacy_save_bool": true,
+        "sentinel_unchanged": true,
+        "cloud_calls": 0
+      },
+      "native_harness_implemented": false,
+      "executed": false,
+      "passed": null
+    },
+    {
+      "id": "QA_cloud_bool_compatibility",
+      "scope": "legacy caller",
+      "fixture_or_fault_mechanism": "Actual apply_cloud_progress and SteamCloud applying branch under QA; seeded file unchanged.",
+      "expected": {
+        "old_bool": true,
+        "memory_cloud_profile_replaced": true,
+        "persisted": false,
+        "suppressed": true,
+        "cloud_calls": 0
+      },
+      "native_harness_implemented": false,
+      "executed": false,
+      "passed": null
+    },
+    {
+      "id": "bad_existing_cfg_load",
+      "scope": "real prior load failure",
+      "fixture_or_fault_mechanism": "Private existing malformed cfg; budget exact expected native ConfigFile parse diagnostic, never generic ignore ERROR.",
+      "expected": {
+        "save_code": "CAMPAIGN_CFG_PRIOR_LOAD_FAILED",
+        "accepted": true,
+        "memory_applied": false,
+        "write_attempted": false,
+        "persisted": false,
+        "new_story_seal": false,
+        "old_memory_unchanged": true,
+        "file_not_written_by_attempt": true
+      },
+      "native_harness_implemented": false,
+      "executed": false,
+      "passed": null
+    },
+    {
+      "id": "existing_vanished_prior",
+      "scope": "filesystem race",
+      "fixture_or_fault_mechanism": "Read file existence true then remove before prior cfg.load using future controlled private fault injector.",
+      "expected": {
+        "save_code": "CAMPAIGN_CFG_PRIOR_LOAD_FAILED",
+        "write_attempted": false,
+        "persisted": false,
+        "memory_applied": false
+      },
+      "native_harness_implemented": false,
+      "executed": false,
+      "passed": null
+    },
+    {
+      "id": "true_new_missing_cfg",
+      "scope": "real private CFG",
+      "fixture_or_fault_mechanism": "Fresh absent file/parent dir; actual ERR_FILE_NOT_FOUND allowed then real save/readback.",
+      "expected": {
+        "accepted": true,
+        "memory_applied": true,
+        "persisted": true,
+        "suppressed": false,
+        "save_code": "CAMPAIGN_CFG_READBACK_VERIFIED",
+        "cloud_callback_only_not_upload": true
+      },
+      "native_harness_implemented": false,
+      "executed": false,
+      "passed": null
+    },
+    {
+      "id": "write_failure",
+      "scope": "real private filesystem fault",
+      "fixture_or_fault_mechanism": "Seed readable private cfg; deny only write access to SAVE_PATH. Exact native writer diagnostic budget.",
+      "expected": {
+        "save_code": "CAMPAIGN_CFG_WRITE_FAILED",
+        "accepted": true,
+        "memory_applied": false,
+        "persisted": false,
+        "write_attempted": true,
+        "readback_attempted": false,
+        "disk_state_unconfirmed": true,
+        "retry_safe": false,
+        "cloud_calls": 0
+      },
+      "native_harness_implemented": false,
+      "executed": false,
+      "passed": null
+    },
+    {
+      "id": "save_OK_fresh_load_failure",
+      "scope": "real save/readback fault",
+      "fixture_or_fault_mechanism": "Requires future controlled private post-save/pre-load filesystem fault; no production seam or simulated response qualifies real disk QA.",
+      "expected": {
+        "save_code": "CAMPAIGN_CFG_READBACK_FAILED",
+        "write_error": 0,
+        "readback_failed": true,
+        "disk_state_unconfirmed": true,
+        "accepted": true,
+        "memory_applied": false,
+        "persisted": false,
+        "durable_new_story_seal": false,
+        "disk_may_contain_candidate": true,
+        "retry_safe": false,
+        "cloud_calls": 0
+      },
+      "native_harness_implemented": false,
+      "executed": false,
+      "passed": null
+    },
+    {
+      "id": "readback_semantic_mismatch",
+      "scope": "real CFG semantic fault",
+      "fixture_or_fault_mechanism": "Future controlled private mutation between save/read; remove/add/change an unknown key or one known progress field.",
+      "expected": {
+        "save_code": "CAMPAIGN_CFG_READBACK_MISMATCH",
+        "readback_failed": true,
+        "disk_state_unconfirmed": true,
+        "memory_applied": false,
+        "persisted": false,
+        "cloud_calls": 0
+      },
+      "native_harness_implemented": false,
+      "executed": false,
+      "passed": null
+    },
+    {
+      "id": "readback_SHA_changed",
+      "scope": "real read interval race",
+      "fixture_or_fault_mechanism": "Future private helper changes bytes during fresh cfg.load; even semantically equal comment-only change must not claim stable-read SHA.",
+      "expected": {
+        "save_code": "CAMPAIGN_CFG_READBACK_MISMATCH",
+        "disk_state_unconfirmed": true,
+        "persisted": false,
+        "memory_applied": false
+      },
+      "native_harness_implemented": false,
+      "executed": false,
+      "passed": null
+    },
+    {
+      "id": "legal_unknown_variant_preservation",
+      "scope": "real private CFG",
+      "fixture_or_fault_mechanism": "Seed unknown section future]section and keys with Vector2/math, built-in Typed Array/Dictionary, Packed arrays, StringName, NodePath, NaN/INF/-0; real save/readback compare serialization semantics.",
+      "expected": {
+        "accepted": true,
+        "memory_applied": true,
+        "persisted": true,
+        "suppressed": false,
+        "save_code": "CAMPAIGN_CFG_READBACK_VERIFIED",
+        "cloud_callback_only_not_upload": true,
+        "all_unknown_section_keys_retained": true,
+        "ConfigFile_semantics_equal": true,
+        "IEEE_bits_claimed": false
+      },
+      "native_harness_implemented": false,
+      "executed": false,
+      "passed": null
+    },
+    {
+      "id": "unsupported_object_or_script_container",
+      "scope": "component prewrite refusal",
+      "fixture_or_fault_mechanism": "Private cfg/component fixture with Object/RID/Callable/Signal or script/object-typed container; do NOT call encoder on unsupported input.",
+      "expected": {
+        "save_code": "CAMPAIGN_CFG_UNSUPPORTED_VALUE",
+        "write_attempted": false,
+        "memory_applied": false,
+        "persisted": false,
+        "prior_file_not_written_by_attempt": true,
+        "cloud_calls": 0
+      },
+      "native_harness_implemented": false,
+      "executed": false,
+      "passed": null
+    },
+    {
+      "id": "cycle_or_overdepth",
+      "scope": "component prewrite refusal",
+      "fixture_or_fault_mechanism": "Private Dictionary/Array self-reference, alias cycle, depth129; preserve full input and prior file, no encoder ERROR/null fallback.",
+      "expected": {
+        "save_code": "CAMPAIGN_CFG_UNSUPPORTED_VALUE",
+        "write_attempted": false,
+        "persisted": false,
+        "input_unchanged": true
+      },
+      "native_harness_implemented": false,
+      "executed": false,
+      "passed": null
+    },
+    {
+      "id": "callback_sees_new_memory",
+      "scope": "actual callback",
+      "fixture_or_fault_mechanism": "Fake local Cloud counter/mirror node within isolated future harness; real cfg success, callback observes candidate records/unlocked after application.",
+      "expected": {
+        "accepted": true,
+        "memory_applied": true,
+        "persisted": true,
+        "suppressed": false,
+        "save_code": "CAMPAIGN_CFG_READBACK_VERIFIED",
+        "cloud_callback_only_not_upload": true,
+        "callback_observes_candidate_memory": true,
+        "callback_invocations": 1,
+        "cloud_dirty_observed": null,
+        "upload_verified": false
+      },
+      "native_harness_implemented": false,
+      "executed": false,
+      "passed": null
+    },
+    {
+      "id": "cloud_applying_callback_no_upload_claim",
+      "scope": "actual legacy Cloud branch",
+      "fixture_or_fault_mechanism": "Actual SteamCloud.mark_dirty under _applying=true after actual cfg success; observe requested/invoked separate from actual dirty/upload.",
+      "expected": {
+        "persisted": true,
+        "cloud_dirty_requested": true,
+        "cloud_dirty_callback_invoked": true,
+        "cloud_dirty_observed": null,
+        "cloud_upload_verified": false
+      },
+      "native_harness_implemented": false,
+      "executed": false,
+      "passed": null
+    },
+    {
+      "id": "legacy_real_cloud_apply_failure_boundary",
+      "scope": "legacy existing behavior",
+      "fixture_or_fault_mechanism": "Future actual apply_cloud_progress real readback failure; bool false; record that existing pre-save memory cloud replacement persists.",
+      "expected": {
+        "old_bool": false,
+        "persisted": false,
+        "memory_cloud_profile_existing_behavior_not_rolled_back": true,
+        "not_full_account_or_crash_recovery": true
+      },
+      "native_harness_implemented": false,
+      "executed": false,
+      "passed": null
+    }
+  ],
+  "case_count": 19,
+  "native_harness_created": false,
+  "native_executed": false,
+  "native_qualified": false,
+  "readback_race_fault_injector_implemented": false,
+  "source_static_review_is_not_matrix_execution": true,
+  "full_natural_or_crash_qualification": false,
+  "native_log_policy": "Expected C++ ConfigFile malformed/read/write diagnostics need exact per-case path/code budget in future producer; zero SCRIPT ERROR required. No generic all ERROR ignoring, no claim zero all native ERROR on fault tests."
+}

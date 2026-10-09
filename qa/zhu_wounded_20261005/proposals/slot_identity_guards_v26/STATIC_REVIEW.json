@@ -1,0 +1,91 @@
+{
+  "schema": "slot_identity_guard_static_v26",
+  "created_utc": "2026-10-07T15:53:06.215368+00:00",
+  "status": "source_review_only_native_required",
+  "source_sha256": "d67fe7794f23fe1bda3d74c7e284ba6b90d2cb488a5d35cb1a187eea77fa3532",
+  "candidate_sha256": "908f8591f012752b192278362b48a83f212a7e596727214b5b0734dce23bdbde",
+  "changed_methods": [
+    "_validate_document",
+    "_validate_json_document"
+  ],
+  "all_other_methods_bytes_identical": true,
+  "constants_variables_preloads_keys_unchanged": true,
+  "numeric_conversions_not_added": true,
+  "profile_id_String_coercion_removed_after_strict_type_guard": true,
+  "guards_precede_compared_or_typed_leaves": true,
+  "dependency_pins_unchanged": true,
+  "source_risk_sites": [
+    {
+      "source_lines": [
+        29,
+        29
+      ],
+      "operation": "value.schema != SCHEMA / CAMPAIGN_SCHEMA then == campaign selector",
+      "risk": "Non-String identity leaf reaches String comparison before any leaf type check. Added TYPE_STRING guard before both comparisons. Native malformed outcome remains unexecuted."
+    },
+    {
+      "source_lines": [
+        37,
+        37
+      ],
+      "operation": "classic context.mode/level_id comparisons",
+      "risk": "Only parent context Dictionary was checked before classic String comparisons. Added identical Profiles context types before both branches; original INT/FLOAT waves acceptance retained."
+    },
+    {
+      "source_lines": [
+        39,
+        39
+      ],
+      "operation": "binding.get(kind) == uncredited before either binding validator",
+      "risk": "No binding validator precedes the classification. Both underlying validators also compare kind to fixed String after only field checks. Explicit Slot kind String guard required; missing kind returns old STEAM_BINDING_FIELDS."
+    },
+    {
+      "source_lines": [
+        67,
+        73
+      ],
+      "operation": "campaign and classic world.schema comparisons",
+      "risk": "world wrapper shape is guarded but schema primitive had no TYPE_STRING guard before comparison. Added guard independently in each original branch."
+    },
+    {
+      "source_lines": [
+        69,
+        69
+      ],
+      "operation": "profile.schema comparison and String(profile.id) before Profiles.is_official_campaign_profile(profile_id:String)",
+      "risk": "profile schema/id were untyped. Containers can reach unsupported String construction or variant comparison. Guard both Strings and remove the old ID coercion; fixed Profile selector is unchanged."
+    },
+    {
+      "source_lines": [
+        76,
+        79
+      ],
+      "operation": "Profiles normalization and profile.id equality",
+      "risk": "Profiles.normalize_context is already Variant/exact-shape/type safe; Slot guards its profile.context before call. Guarded id is String before later equality. No Profiles helper change."
+    },
+    {
+      "source_lines": [
+        99,
+        106
+      ],
+      "operation": "JSON schema membership and Profiles context call",
+      "risk": "Guard typeof(schema) before fixed String membership; malformed type fallback still dispatches existing _validate_document, including custom FaultSlot. Slot context shape/types guard before normalize; wrong allowed String follows original semantic rejection."
+    }
+  ],
+  "new_error_code": {
+    "SLOT_BINDING_TYPE": "present binding.kind exists and is not String; unknown String kinds keep original routing and errors"
+  },
+  "native_case_count": 134,
+  "planned_route_checks": 268,
+  "native_parse_performed": false,
+  "native_run_performed": false,
+  "native_passed": false,
+  "public_applied": false,
+  "executed_producer_modified": false,
+  "limits": [
+    "Not a native GDScript parse. Text/byte source review cannot establish no SCRIPT ERROR in runtime; exact matrix needs native execution.",
+    "Only listed Slot identity/context leaves are covered; deep Codec/payload/profile-token validators retain their original obligations.",
+    "Original actual pending payload is historical failed save evidence, not a qualified full save.",
+    "Current valid classic whole-slot fixture is still required; old Scenery-only fixture cannot prove classic slot positive."
+  ]
+}

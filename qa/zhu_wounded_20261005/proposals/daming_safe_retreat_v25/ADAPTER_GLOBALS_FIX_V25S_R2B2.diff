@@ -1,0 +1,37 @@
+--- run_daming_safe_retreat_v25s_r2b1_full.py
++++ run_daming_safe_retreat_v25s_r2b2_full.py
+@@ -18,6 +18,7 @@
+ import uuid
+ 
+ sys.dont_write_bytecode = True
++HEX64 = re.compile(r"[0-9a-f]{64}\Z")
+ BASE_SHA = "049dcdc74fab7936d4812f71a9806cee46569163ece4c524043ac7cfdedd8626"
+ PARENT_SHA = "5941315849982fb73d4851c2fcb95a2369d498760a83801427d315dd6a229af5"
+ EXPLORER_SHA = "d2fd596b94b2de563a073c897aa30892212e3f0c1ada2db475aec34ecf22801b"
+@@ -83,7 +84,7 @@
+         require(sha(path) == digest, "exact immutable producer source missing")
+         ast.parse(path.read_text(encoding="utf-8-sig"))
+     approval = read(args.adapter_review)
+-    require(approval.get("schema") == "daming_safe_retreat_adapter_review_v25s_r2b1"
++    require(approval.get("schema") == "daming_safe_retreat_adapter_review_v25s_r2b2"
+             and approval.get("static_api_closure_passed") is True and approval.get("approved_stages") == ["full"]
+             and pin(approval["producer_pin"]) == Path(__file__).resolve(), "full independent producer review missing")
+     runner = read(args.runner_review)
+@@ -134,7 +135,7 @@
+     class Full(Scoped):
+         def __init__(self, args, run, reviewed, matrix, interfaces, extra_pins):
+             super().__init__(args, run, reviewed, matrix, interfaces, extra_pins)
+-            self.receipt.update(schema="daming_safe_retreat_full_adapter_batch_v25s_r2b1",
++            self.receipt.update(schema="daming_safe_retreat_full_adapter_batch_v25s_r2b2",
+                                 producer_sha256=sha(Path(__file__)), explorer_source_sha256=EXPLORER_SHA,
+                                 execution_scope="full", full_matrix_consumer_implemented=True,
+                                 actual_live_cases_per_role=24, all_negatives_qualified=False,
+@@ -393,7 +394,7 @@
+                 "retreat-route": here / "daming_safe_retreat_route_v25.gd",
+                 "capture-base": here / "daming_safe_retreat_cross_process_v25.gd",
+                 "capture-base-scene": here / "daming_safe_retreat_cross_process_v25.tscn",
+-                "negative-matrix": here / "ADAPTER_BUNDLE_MATRIX_V25S_R2B1.json",
++                "negative-matrix": here / "ADAPTER_BUNDLE_MATRIX_V25S_R2B2.json",
+                 "passed-admit-successor-proof": here / "PASSED_SUCCESSOR_PROOF_V25S_ACTUAL_2A817E70.json",
+                 "proof-repository-root": Path("E:/ChatGPT/水浒"),
+                 "world-interface": here / "NEGATIVE_WORLD_INTERFACE_V25B2.json",

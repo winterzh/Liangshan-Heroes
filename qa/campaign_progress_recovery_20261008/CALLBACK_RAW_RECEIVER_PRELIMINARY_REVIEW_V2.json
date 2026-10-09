@@ -1,0 +1,86 @@
+{
+  "schema": "campaign_callback_raw_receiver_preliminary_independent_review_v1",
+  "review_revision": 2,
+  "reviewed_at_utc": "2026-10-09T00:18:11.939062+00:00",
+  "independent": true,
+  "source_only": true,
+  "static_api_closure_passed": true,
+  "approved_stages": [],
+  "helper_sha256": "40dc5bac0a735bf1ce6cc22697a1ade4deaa36f88ead5b8410067a3b1c91e4cf",
+  "source_spec_file_sha256": "a941308828f6a31eafc78b0c9b8ce8fe96b632f9a56aa452f68b5d128fd49751",
+  "helper_pin": {
+    "path": "D:/AI项目/水浒/开发工程/tools/campaign_callback_raw_receiver_v2.py",
+    "bytes": 4212,
+    "sha256": "40dc5bac0a735bf1ce6cc22697a1ade4deaa36f88ead5b8410067a3b1c91e4cf"
+  },
+  "source_spec_pin": {
+    "path": "D:/AI项目/水浒/开发工程/qa/campaign_progress_recovery_20261008/CALLBACK_RAW_RECEIVER_SOURCE_SPEC_V2.json",
+    "bytes": 11967,
+    "sha256": "a941308828f6a31eafc78b0c9b8ce8fe96b632f9a56aa452f68b5d128fd49751"
+  },
+  "previous_rejected_review_pin": {
+    "path": "D:/AI项目/水浒/开发工程/qa/campaign_progress_recovery_20261008/CALLBACK_RAW_RECEIVER_PRELIMINARY_REVIEW_V1.json",
+    "bytes": 12205,
+    "sha256": "fbc273831a0858ad765a817dfa7b182c84f1b9e7842584baef2defc7c9c4282c"
+  },
+  "snapshot_pin": {
+    "path": "D:/AI项目/水浒/开发工程/qa/campaign_progress_recovery_20261008/campaign_callback_raw_receiver_v2_source_snapshot.py",
+    "bytes": 4212,
+    "sha256": "40dc5bac0a735bf1ce6cc22697a1ade4deaa36f88ead5b8410067a3b1c91e4cf"
+  },
+  "blocking_findings": [],
+  "resolved_findings": [
+    {
+      "id": "RAW-STOP-001",
+      "status": "closed_for_this_static_component",
+      "verified_fix": "Entry and each pre-recv gate permanently latch stopped for live/competing-buffer failures. Both original partial buffer and old peer-buffer bytes are retained without clearing, with independent refusal status. Failed custody keeps the stop latch and original error with a note. Only actual recv socket.timeout retains resumable state."
+    }
+  ],
+  "source_delta": {
+    "FrameBuffer_AST_exact_V1": true,
+    "constructor_AST_exact_V1": true,
+    "changed_receiver_methods": [
+      "_failure",
+      "receive_one"
+    ],
+    "added_method": "_gate",
+    "scope": "Only stop/custody gate changes; prior frame-length and original-before-decode conclusions reused."
+  },
+  "closure": {
+    "source_pins_verified": 32,
+    "snapshot_byte_exact": true,
+    "root_local_import_edges": 14,
+    "all_pinned_local_import_edges": 35,
+    "missing_local_import_pins": []
+  },
+  "independent_host_checks": {
+    "classification": "synthetic constructor bypass and in-memory stream/custody fixtures only",
+    "delta_checks_passed": 6,
+    "checks": [
+      "conflict stops and retains both original buffers before any recv",
+      "original clear-peer-buffer counterexample cannot restart",
+      "owner stub recovery cannot restart after refusal",
+      "failed refusal retention preserves original error and both buffers",
+      "actual recv timeout retains same buffer and permits continuation",
+      "post-timeout conflicting old buffer stops with both buffers preserved"
+    ],
+    "existing_reference": "Source-pinned 70-check host proof is reference evidence, not proof of actual ownership or complete native pipeline."
+  },
+  "remaining_boundaries": [
+    "No actual successful receiver/controller construction or socket/Popen ownership was exercised.",
+    "Actual driver, serial runtime, time budget and aggregate final evidence integration are not implemented or approved here.",
+    "Paused debugger compatibility, native callback semantics and full case outcomes remain unverified; EOF is transport state only."
+  ],
+  "qualification": {
+    "socket_opened": false,
+    "Popen_started": false,
+    "Godot_started": false,
+    "actual_constructor_succeeded": false,
+    "actual_owner_proven": false,
+    "controller_pipeline_qualified": false,
+    "actual_case_qualified": false,
+    "original19_qualified": false,
+    "SDK_qualified": false,
+    "overall_goal_qualified": false
+  }
+}

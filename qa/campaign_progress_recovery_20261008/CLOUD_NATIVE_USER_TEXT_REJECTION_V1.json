@@ -1,0 +1,78 @@
+{
+  "schema": "campaign_cloud_native_user_text_independent_rejection_v1",
+  "reviewed_at_utc": "2026-10-09T02:39:39.498815+00:00",
+  "independent": true,
+  "source_only": true,
+  "limited_issue_review": true,
+  "static_api_closure_passed": false,
+  "approved_stages": [],
+  "source_spec_file_sha256": "a9081b50c79c3db8043c2fc8786f7921eaf6f5969fc9ac54ca60a1653aeb8ae0",
+  "previous_finite_source_review_sha256": "dd4ddcffcc04b492f94ccd42b2f288b2eff477dc3b719ac907eacf4ee6f0c729",
+  "reviewed_helpers": {
+    "campaign_cloud_cfg_semantics_v1.py": "e123958441af8d63a69a8ebcc0405c4326e787f9a6bcb977bf050ec85d69ad48",
+    "campaign_cloud_apply_first_evidence_v3.py": "81ea3efd14471ed872c21e81c6a81bab7d7327b8367cff4f7d7ae5331a78b513",
+    "campaign_cloud_arm_packet_evidence_v1.py": "c60187bcfdb4e2eaf7944842b428c08d5990b9ef15cdbf51a40757eb72646aaa"
+  },
+  "confirmed_findings": [
+    {
+      "id": "CLOUD-NATIVE-USER-TEXT-001",
+      "severity": "blocking",
+      "locations": [
+        {
+          "file": "tools/campaign_cloud_cfg_semantics_v1.py",
+          "lines": [
+            53,
+            75,
+            83
+          ]
+        },
+        {
+          "file": "tools/campaign_cloud_apply_first_evidence_v3.py",
+          "lines": [
+            94,
+            100,
+            106,
+            123,
+            133
+          ]
+        },
+        {
+          "file": "tools/campaign_cloud_arm_packet_evidence_v1.py",
+          "lines": [
+            59
+          ]
+        }
+      ],
+      "problem": "Original OS.get_user_data_dir JSON/protocol text uses forward slashes on the actual Windows native run. Converting that original text to pathlib.Path and back to str produces backslashes. Exact JSON/protocol comparisons then reject the legitimate original text.",
+      "earliest_effect": "bind_pre_arm_semantics passes controller.user as Path into ready_projection, whose value user_directory==str(user) check fails before arm/capture. First report ready/apply comparisons and replay/semantics repeat the same representation error.",
+      "existing_native_reference": {
+        "path": "qa/campaign_progress_recovery_20261008/actual_durable_chain_v12_r4_lu_a/report.json",
+        "sha256": "35b1421448a64f72c7a2133e82bd333168429cfb243d813aad75858e505c8107",
+        "field": "actual_user_data_dir",
+        "observed_separator": "forward slash",
+        "use": "Representation evidence only; not a successful cloud run or complete61 prior."
+      },
+      "independent_pure_host_reproduction": {
+        "native_text": "D:/CodexTemp/synthetic-cloud-user/appdata/Godot/app_userdata/fixture",
+        "windows_Path_text": "D:\\CodexTemp\\synthetic-cloud-user\\appdata\\Godot\\app_userdata\\fixture",
+        "tested_function": "ready_projection",
+        "original_string_accepted": true,
+        "Path_argument_rejected": true,
+        "rejection": "Whole original native semantics-ready binding and limited qualification",
+        "scope": "Synthetic projection strings/identity metadata only, no real constructor or complete pipeline."
+      },
+      "minimum_fix": "Preserve the original native user_directory string for exact protocol/JSON comparisons and all packet/semantics helper arguments. Maintain a separate Path only for physical IO, no_links and owned private-directory containment. Do not weaken PID, nonce, full fifteen-field identity or directory boundaries."
+    }
+  ],
+  "native_started": false,
+  "socket_executed": false,
+  "popen_constructed": false,
+  "profile_writes": false,
+  "actual_cloud_case_qualified": false,
+  "full_native_CFG_semantics_verified": false,
+  "ordinary_restart_qualified": false,
+  "original19_qualified": false,
+  "SDK_reward_once_qualified": false,
+  "overall_goal_qualified": false,
+  "scope_note": "Finite source and pure-host Windows-text counterexample rejection. Preserves all earlier source/spec/snapshots/reviews; no native run or expanded matrix. This confirmed finding limits the earlier no-confirmed-blocker static conclusion."
+}

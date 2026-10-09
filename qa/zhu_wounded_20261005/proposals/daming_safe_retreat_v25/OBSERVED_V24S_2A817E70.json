@@ -1,0 +1,1297 @@
+{
+  "schema": "independent_daming_admission_observer_v24s",
+  "created_utc": "2026-10-07T17:50:35.669365+00:00",
+  "observer": "fx_caller_review",
+  "run": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70",
+  "engineering_blocker": false,
+  "current_admission_scope_accepted": true,
+  "original_receipt": {
+    "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/receipt.json",
+    "bytes": 3902662,
+    "sha256": "1c88ad69d16f4dd90b40a399ef645d1acb5218e653ce5a0581a5585618e24d41"
+  },
+  "parent_confirmed_producer_terminal_exit0": true,
+  "parent_terminal_handle_read_by_observer": false,
+  "stages": [
+    {
+      "case": "preflight",
+      "complete": true,
+      "receipt_sha256": "90a987e7673f04a37ee2933141c189dd8938d2d9bb4d7dce848882f3e4d5c133"
+    },
+    {
+      "case": "wait_fx_terminal",
+      "complete": true,
+      "receipt_sha256": "84dc89330e27e86fe6b5463e4e00b32886241795945d74d6c56f66fad3e3b75b"
+    },
+    {
+      "case": "wait_natural_engine_idle",
+      "complete": true,
+      "receipt_sha256": "6405129d1f9c6f494a11ec87e3160e9114947956fb674510f03ed59a38331b3a"
+    },
+    {
+      "case": "freeze_private_project",
+      "complete": true,
+      "receipt_sha256": "ff403693d249b9cc8760a79bd7521ef9272df6a6c3037c989294d9f189e1528a"
+    },
+    {
+      "case": "import",
+      "complete": true,
+      "receipt_sha256": "31dbb46219363ca5ee17f8ff56a506d216b23a825c14af33cced786791ef2ca6",
+      "pid": 212964,
+      "nonce": "c6dae63e6b4e4bdca633053226f311a3",
+      "exit": 0,
+      "process_terminal": true,
+      "stop_reason": null
+    },
+    {
+      "case": "profile_guard",
+      "complete": true,
+      "receipt_sha256": "cf34736eb2dd2eae18131d86b0757b6129b1f34253dffeab457fbd2d21729aff",
+      "pid": 209160,
+      "nonce": "2afd1590b3b749198a209cdd488bce99",
+      "exit": 2,
+      "process_terminal": true,
+      "stop_reason": null
+    },
+    {
+      "case": "json_boundary",
+      "complete": true,
+      "receipt_sha256": "f77325068e3bc25ab355e4506186c18422c925d019c6790e394916e68e217032",
+      "pid": 212924,
+      "nonce": "cd7abeb19db345dea518a716a58e8360",
+      "exit": 0,
+      "process_terminal": true,
+      "stop_reason": null,
+      "checks": 533,
+      "report_sha256": "ae97318b6067ba91fe7d59a4dafb4f51c2c1b4848e85809f739e680754d524bd",
+      "original_report_has_pid": true
+    },
+    {
+      "case": "owned_slot_retry",
+      "complete": true,
+      "receipt_sha256": "80e38ac36e5b14fba1c90cd5193fd96390efcd5e5dfb0337bc09552a191fcdae",
+      "pid": 216828,
+      "nonce": "bfba3315298e4eae92daf6949851ddb8",
+      "exit": 0,
+      "process_terminal": true,
+      "stop_reason": null,
+      "checks": 76,
+      "report_sha256": "f32c368aabd54ffed7087332d98c8ca52a8b8fc1d8800a8f2e69ef27a00f254e",
+      "original_report_has_pid": false
+    },
+    {
+      "case": "A_half_save",
+      "complete": true,
+      "receipt_sha256": "2ed3d7c654fd6720fb5aa71efecf5016dfb63521d4c46d6d3da5ec518b783f86",
+      "pid": 202132,
+      "nonce": "aaa5ab54ad6042f6813a247f87f66379",
+      "exit": 0,
+      "process_terminal": true,
+      "stop_reason": null,
+      "checks": 39,
+      "report_sha256": "a38bcf6b633769b838672665d4b95b23bb62101dcfe9b91bb77210f359e583e1",
+      "original_report_has_pid": true
+    },
+    {
+      "case": "B_continue_resave",
+      "complete": true,
+      "receipt_sha256": "8de89bebd6c47ff23a285da9e10cb00a86d2f2ce33c161f863559a3ffe6f9ff7",
+      "pid": 216580,
+      "nonce": "166286d8f7cb4afe9fc1e0b364b01e9c",
+      "exit": 0,
+      "process_terminal": true,
+      "stop_reason": null,
+      "checks": 351,
+      "report_sha256": "51e67172cef79e7b143f84bc63c8c873ab99fd40066bb71529460cb39150e82a",
+      "original_report_has_pid": true
+    },
+    {
+      "case": "C_verify_resave",
+      "complete": true,
+      "receipt_sha256": "6424f7628090b328d6012208402d3ac09fb8b6fec5e76c5b45253def796a04c4",
+      "pid": 215764,
+      "nonce": "e8bee37f2f334fbeb182922ad1eac961",
+      "exit": 0,
+      "process_terminal": true,
+      "stop_reason": null,
+      "checks": 342,
+      "report_sha256": "45a0b785da95db924921619c0a909f11cb3f667ee4b11327e7d69a5281340550",
+      "original_report_has_pid": true
+    },
+    {
+      "case": "final_source_native_and_slot_audit",
+      "complete": true,
+      "receipt_sha256": "9cdef0cc7127ab92727ba5ab768e1438fe1f88e5f1bd619b21e422b810d14dd9"
+    }
+  ],
+  "check_counts": {
+    "json_boundary": 533,
+    "owned_slot_retry": 76,
+    "A_half_save": 39,
+    "B_continue_resave": 351,
+    "C_verify_resave": 342
+  },
+  "original_full_native_logs": [
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/steps/04_import/native.log",
+      "bytes": 155257,
+      "sha256": "a3d71902445ac536d034c2aa3d66839461d262da1fb6a3bd7a768870c176a9e6",
+      "kind": "original full native log",
+      "ansi_stripped_error_counts": {
+        "SCRIPT ERROR:": 0,
+        "Parse Error:": 0,
+        "ERROR:": 0
+      }
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/steps/05_profile_guard/native.log",
+      "bytes": 114,
+      "sha256": "f8692a4c0d8ec0052e58dee6bb2aa99e1dfb048a22a75a3b883bbcf59076645f",
+      "kind": "original full native log",
+      "ansi_stripped_error_counts": {
+        "SCRIPT ERROR:": 0,
+        "Parse Error:": 0,
+        "ERROR:": 0
+      }
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/steps/06_json_boundary/native.log",
+      "bytes": 121,
+      "sha256": "dccb17df59e2f3dff287c8e5bdd562285f36c546c70e110b8065b34740a8e290",
+      "kind": "original full native log",
+      "ansi_stripped_error_counts": {
+        "SCRIPT ERROR:": 0,
+        "Parse Error:": 0,
+        "ERROR:": 0
+      }
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/steps/07_owned_slot_retry/native.log",
+      "bytes": 266,
+      "sha256": "17a343abfe71fc5816c5322388c48bf54fceaa34a986604eaab365080d5101aa",
+      "kind": "original full native log",
+      "ansi_stripped_error_counts": {
+        "SCRIPT ERROR:": 0,
+        "Parse Error:": 0,
+        "ERROR:": 0
+      }
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/steps/08_A_half_save/native.log",
+      "bytes": 353,
+      "sha256": "7d8fc3a70feb6cddd1bf4abff17920ab42e502f479e26d98d1302aa0b980f60f",
+      "kind": "original full native log",
+      "ansi_stripped_error_counts": {
+        "SCRIPT ERROR:": 0,
+        "Parse Error:": 0,
+        "ERROR:": 0
+      }
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/steps/09_B_continue_resave/native.log",
+      "bytes": 3784,
+      "sha256": "4feb0e2af3013757defeee84a9d36dbd10566d7207721724bcd35aa1c953322d",
+      "kind": "original full native log",
+      "ansi_stripped_error_counts": {
+        "SCRIPT ERROR:": 0,
+        "Parse Error:": 0,
+        "ERROR:": 0
+      }
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/steps/10_C_verify_resave/native.log",
+      "bytes": 3782,
+      "sha256": "8f0daf451083976b1a28b5c1089a28ababb8ad6bc0820698c1c52f724bd5f1af",
+      "kind": "original full native log",
+      "ansi_stripped_error_counts": {
+        "SCRIPT ERROR:": 0,
+        "Parse Error:": 0,
+        "ERROR:": 0
+      }
+    }
+  ],
+  "source_runtime_audit": {
+    "source_raw_rows": 5041,
+    "source_unique_paths": 5037,
+    "all_source_whitelist_SHA_and_bytes_public_and_frozen_verified": true,
+    "frozen_installed_files": 5102,
+    "frozen_installed_bytes": 1250836870,
+    "all_frozen_runtime_SHA_and_bytes_verified": true,
+    "independently_recomputed_frozen_content_version": "source-v1:3fc1d397f691670f06bdd0478d4180a2de782433673a251d8e3c0b4979a3cf25",
+    "rules_sha256": "6b615cda04dae2dc04ba5a994327130a67e9bec735cde015bec1e818f5536221",
+    "public_whole_runtime_equals_frozen_not_claimed": true,
+    "native9_frozen_and_qualified_cached_manifest_SHA_size_verified": true,
+    "native9_public_presence_not_required_or_claimed": true,
+    "helper_and_proposal_files29_rehashed": true
+  },
+  "q1_boundary": {
+    "requested": true,
+    "revision": "v24q1",
+    "exact11_cases": [
+      "actual_v24p_pending",
+      "gao",
+      "daming",
+      "level1",
+      "level2",
+      "level3",
+      "level4",
+      "level6",
+      "level7",
+      "classic_liangshan",
+      "classic_none"
+    ],
+    "checks": 533,
+    "source_pins_rehashed": [
+      {
+        "path": "res://scripts/run_snapshot_store.gd",
+        "sha256": "581e638b8f0ce7cb24d5533b03ee94b99732c5cffcbf373b1a5a69a1618d8251"
+      },
+      {
+        "path": "res://scripts/run_slot_store.gd",
+        "sha256": "d67fe7794f23fe1bda3d74c7e284ba6b90d2cb488a5d35cb1a187eea77fa3532"
+      },
+      {
+        "path": "res://scripts/run_scenery_json_boundary.gd",
+        "sha256": "476ee2ee83a513d29a0db04b5dc08eb5a3dcd6895a036697ed368b28c5d5c6ea"
+      },
+      {
+        "path": "res://scripts/run_scenery_state.gd",
+        "sha256": "93a3744ccaa28f0110098acf34a353b03822e248ddb5d95db2ad312187092f9e"
+      },
+      {
+        "path": "res://scripts/run_state_value_codec.gd",
+        "sha256": "c8c4a58d1e68e22abb9f8b1abcb1a9cc1dbaa486e51ea5174dd16984aaa35d15"
+      }
+    ],
+    "factory_tick_slot_write_calls": 0
+  },
+  "abc_process_chain": [
+    {
+      "case": "A_half_save",
+      "pid": 202132,
+      "nonce": "aaa5ab54ad6042f6813a247f87f66379",
+      "previous_pid": 0,
+      "previous_nonce": ""
+    },
+    {
+      "case": "B_continue_resave",
+      "pid": 216580,
+      "nonce": "166286d8f7cb4afe9fc1e0b364b01e9c",
+      "previous_pid": 202132.0,
+      "previous_nonce": "aaa5ab54ad6042f6813a247f87f66379"
+    },
+    {
+      "case": "C_verify_resave",
+      "pid": 215764,
+      "nonce": "e8bee37f2f334fbeb182922ad1eac961",
+      "previous_pid": 216580.0,
+      "previous_nonce": "166286d8f7cb4afe9fc1e0b364b01e9c"
+    }
+  ],
+  "raw_slot_audit": {
+    "generation1": {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/profile/appdata/Godot/app_userdata/水浒英雄传：八幕战役/daming_admit_v24o/continue/v1/5088120/1/record_0000000001.json",
+      "bytes": 3279578,
+      "sha256": "8d1e3e98b67c2bf02041d0693fb2561c267d2778550c446df1cdd3120e0790c3"
+    },
+    "generation2": {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/profile/appdata/Godot/app_userdata/水浒英雄传：八幕战役/daming_admit_v24o/continue/v1/5088120/1/record_0000000002.json",
+      "bytes": 3290559,
+      "sha256": "eb5939dbf81bba90ea4f497f483b732a6e73c25677c468d74bdda1e5399ccecd"
+    },
+    "headers_payload_hashes_bytes_previous_chain_exact": true,
+    "handoff_whole_packets_equal_raw_payloads": true,
+    "retained_original_records_byte_exact": true,
+    "head_computed_by_original_record_scan_revision": 2,
+    "head_sha256": "eb5939dbf81bba90ea4f497f483b732a6e73c25677c468d74bdda1e5399ccecd",
+    "C_terminal_stage_head_sha_unchanged": true,
+    "no_writer_pending_or_recovery_residue": true,
+    "head_json_is_not_part_of_original_store_protocol": true
+  },
+  "local_journal_audit": {
+    "raw": {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/profile/appdata/Godot/app_userdata/水浒英雄传：八幕战役/daming_admit_v24o/continue/v1/local_runs/80d7fbb3df6355545a0c8e7fbf30063a/5088120/1/record_0000000001.json",
+      "bytes": 513,
+      "sha256": "2e1f2e37b2f7e1527a2fa4f467fcf35cb95e3266bc3077afa569303a39213db9"
+    },
+    "raw_manifest_header_payload_hash_bytes_match": true,
+    "revision": 1,
+    "state": "active",
+    "token": "80d7fbb3df6355545a0c8e7fbf30063a",
+    "both_slot_bindings_exact_journal_hash_token_kind": true,
+    "journal_context": {
+      "level_id": "",
+      "mode": "defense",
+      "waves": 30
+    },
+    "slot_context": {
+      "level_id": "level8",
+      "mode": "campaign",
+      "waves": 0
+    },
+    "contexts_equal": false,
+    "journal_context_exact_original_source_default": true,
+    "lifecycle_source": {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/project/scripts/run_local_lifecycle.gd",
+      "bytes": 6638,
+      "sha256": "e68cb817a6dcc4cc1df91caf29c07c4c4c6cfdca378f6c05335636e6a6617e00"
+    },
+    "no_writer_pending_or_recovery_residue": true,
+    "boundary": "Original lifecycle API stores default defense/empty/30; actual Slot uses campaign/level8/0. No equality or per-campaign lifecycle design qualification."
+  },
+  "actual_hold_audits": [
+    {
+      "case": "A_half_save",
+      "actual_rows": [
+        {
+          "label": "A partial admission",
+          "signals": {
+            "capture_ready": {
+              "bound_counts": [],
+              "flags": [],
+              "flags_after": [],
+              "methods": [],
+              "other_after": 0,
+              "other_before": 0,
+              "other_unchanged": true,
+              "own_after": 0,
+              "own_count": 0,
+              "targets": [],
+              "unbound_counts": []
+            },
+            "capture_rejected": {
+              "bound_counts": [],
+              "flags": [],
+              "flags_after": [],
+              "methods": [],
+              "other_after": 0,
+              "other_before": 0,
+              "other_unchanged": true,
+              "own_after": 0,
+              "own_count": 0,
+              "targets": [],
+              "unbound_counts": []
+            }
+          },
+          "stage": "before_connect"
+        },
+        {
+          "label": "A partial admission",
+          "ready_error": 0,
+          "rejected_error": 0,
+          "signals": {
+            "capture_ready": {
+              "bound_counts": [
+                0
+              ],
+              "flags": [
+                4
+              ],
+              "methods": [
+                "_on_held"
+              ],
+              "own_count": 1,
+              "targets": [
+                225083131376
+              ],
+              "unbound_counts": [
+                0
+              ]
+            },
+            "capture_rejected": {
+              "bound_counts": [
+                0
+              ],
+              "flags": [
+                4
+              ],
+              "methods": [
+                "_on_rejected"
+              ],
+              "own_count": 1,
+              "targets": [
+                225083131376
+              ],
+              "unbound_counts": [
+                0
+              ]
+            }
+          },
+          "stage": "installed"
+        },
+        {
+          "label": "A partial admission",
+          "signals": {
+            "capture_ready": {
+              "bound_counts": [],
+              "flags": [],
+              "flags_after": [],
+              "methods": [],
+              "other_after": 0,
+              "other_before": 0,
+              "other_unchanged": true,
+              "own_after": 0,
+              "own_count": 0,
+              "targets": [],
+              "unbound_counts": []
+            },
+            "capture_rejected": {
+              "bound_counts": [
+                0
+              ],
+              "flags": [
+                4
+              ],
+              "flags_after": [],
+              "methods": [
+                "_on_rejected"
+              ],
+              "other_after": 0,
+              "other_before": 0,
+              "other_unchanged": true,
+              "own_after": 0,
+              "own_count": 1,
+              "targets": [
+                225083131376
+              ],
+              "unbound_counts": [
+                0
+              ]
+            }
+          },
+          "stage": "after_wait"
+        }
+      ]
+    },
+    {
+      "case": "B_continue_resave",
+      "actual_rows": [
+        {
+          "label": "restored complete world",
+          "signals": {
+            "capture_ready": {
+              "bound_counts": [],
+              "flags": [],
+              "flags_after": [],
+              "methods": [],
+              "other_after": 0,
+              "other_before": 0,
+              "other_unchanged": true,
+              "own_after": 0,
+              "own_count": 0,
+              "targets": [],
+              "unbound_counts": []
+            },
+            "capture_rejected": {
+              "bound_counts": [],
+              "flags": [],
+              "flags_after": [],
+              "methods": [],
+              "other_after": 0,
+              "other_before": 0,
+              "other_unchanged": true,
+              "own_after": 0,
+              "own_count": 0,
+              "targets": [],
+              "unbound_counts": []
+            }
+          },
+          "stage": "before_connect"
+        },
+        {
+          "label": "restored complete world",
+          "ready_error": 0,
+          "rejected_error": 0,
+          "signals": {
+            "capture_ready": {
+              "bound_counts": [
+                0
+              ],
+              "flags": [
+                4
+              ],
+              "methods": [
+                "_on_held"
+              ],
+              "own_count": 1,
+              "targets": [
+                225016022512
+              ],
+              "unbound_counts": [
+                0
+              ]
+            },
+            "capture_rejected": {
+              "bound_counts": [
+                0
+              ],
+              "flags": [
+                4
+              ],
+              "methods": [
+                "_on_rejected"
+              ],
+              "own_count": 1,
+              "targets": [
+                225016022512
+              ],
+              "unbound_counts": [
+                0
+              ]
+            }
+          },
+          "stage": "installed"
+        },
+        {
+          "label": "restored complete world",
+          "signals": {
+            "capture_ready": {
+              "bound_counts": [],
+              "flags": [],
+              "flags_after": [],
+              "methods": [],
+              "other_after": 0,
+              "other_before": 0,
+              "other_unchanged": true,
+              "own_after": 0,
+              "own_count": 0,
+              "targets": [],
+              "unbound_counts": []
+            },
+            "capture_rejected": {
+              "bound_counts": [
+                0
+              ],
+              "flags": [
+                4
+              ],
+              "flags_after": [],
+              "methods": [
+                "_on_rejected"
+              ],
+              "other_after": 0,
+              "other_before": 0,
+              "other_unchanged": true,
+              "own_after": 0,
+              "own_count": 1,
+              "targets": [
+                225016022512
+              ],
+              "unbound_counts": [
+                0
+              ]
+            }
+          },
+          "stage": "after_wait"
+        },
+        {
+          "label": "B admitted resave",
+          "signals": {
+            "capture_ready": {
+              "bound_counts": [],
+              "flags": [],
+              "flags_after": [],
+              "methods": [],
+              "other_after": 0,
+              "other_before": 0,
+              "other_unchanged": true,
+              "own_after": 0,
+              "own_count": 0,
+              "targets": [],
+              "unbound_counts": []
+            },
+            "capture_rejected": {
+              "bound_counts": [],
+              "flags": [],
+              "flags_after": [],
+              "methods": [],
+              "other_after": 0,
+              "other_before": 0,
+              "other_unchanged": true,
+              "own_after": 0,
+              "own_count": 0,
+              "targets": [],
+              "unbound_counts": []
+            }
+          },
+          "stage": "before_connect"
+        },
+        {
+          "label": "B admitted resave",
+          "ready_error": 0,
+          "rejected_error": 0,
+          "signals": {
+            "capture_ready": {
+              "bound_counts": [
+                0
+              ],
+              "flags": [
+                4
+              ],
+              "methods": [
+                "_on_held"
+              ],
+              "own_count": 1,
+              "targets": [
+                225016022512
+              ],
+              "unbound_counts": [
+                0
+              ]
+            },
+            "capture_rejected": {
+              "bound_counts": [
+                0
+              ],
+              "flags": [
+                4
+              ],
+              "methods": [
+                "_on_rejected"
+              ],
+              "own_count": 1,
+              "targets": [
+                225016022512
+              ],
+              "unbound_counts": [
+                0
+              ]
+            }
+          },
+          "stage": "installed"
+        },
+        {
+          "label": "B admitted resave",
+          "signals": {
+            "capture_ready": {
+              "bound_counts": [],
+              "flags": [],
+              "flags_after": [],
+              "methods": [],
+              "other_after": 0,
+              "other_before": 0,
+              "other_unchanged": true,
+              "own_after": 0,
+              "own_count": 0,
+              "targets": [],
+              "unbound_counts": []
+            },
+            "capture_rejected": {
+              "bound_counts": [
+                0
+              ],
+              "flags": [
+                4
+              ],
+              "flags_after": [],
+              "methods": [
+                "_on_rejected"
+              ],
+              "other_after": 0,
+              "other_before": 0,
+              "other_unchanged": true,
+              "own_after": 0,
+              "own_count": 1,
+              "targets": [
+                225016022512
+              ],
+              "unbound_counts": [
+                0
+              ]
+            }
+          },
+          "stage": "after_wait"
+        }
+      ]
+    },
+    {
+      "case": "C_verify_resave",
+      "actual_rows": [
+        {
+          "label": "restored complete world",
+          "signals": {
+            "capture_ready": {
+              "bound_counts": [],
+              "flags": [],
+              "flags_after": [],
+              "methods": [],
+              "other_after": 0,
+              "other_before": 0,
+              "other_unchanged": true,
+              "own_after": 0,
+              "own_count": 0,
+              "targets": [],
+              "unbound_counts": []
+            },
+            "capture_rejected": {
+              "bound_counts": [],
+              "flags": [],
+              "flags_after": [],
+              "methods": [],
+              "other_after": 0,
+              "other_before": 0,
+              "other_unchanged": true,
+              "own_after": 0,
+              "own_count": 0,
+              "targets": [],
+              "unbound_counts": []
+            }
+          },
+          "stage": "before_connect"
+        },
+        {
+          "label": "restored complete world",
+          "ready_error": 0,
+          "rejected_error": 0,
+          "signals": {
+            "capture_ready": {
+              "bound_counts": [
+                0
+              ],
+              "flags": [
+                4
+              ],
+              "methods": [
+                "_on_held"
+              ],
+              "own_count": 1,
+              "targets": [
+                225016022512
+              ],
+              "unbound_counts": [
+                0
+              ]
+            },
+            "capture_rejected": {
+              "bound_counts": [
+                0
+              ],
+              "flags": [
+                4
+              ],
+              "methods": [
+                "_on_rejected"
+              ],
+              "own_count": 1,
+              "targets": [
+                225016022512
+              ],
+              "unbound_counts": [
+                0
+              ]
+            }
+          },
+          "stage": "installed"
+        },
+        {
+          "label": "restored complete world",
+          "signals": {
+            "capture_ready": {
+              "bound_counts": [],
+              "flags": [],
+              "flags_after": [],
+              "methods": [],
+              "other_after": 0,
+              "other_before": 0,
+              "other_unchanged": true,
+              "own_after": 0,
+              "own_count": 0,
+              "targets": [],
+              "unbound_counts": []
+            },
+            "capture_rejected": {
+              "bound_counts": [
+                0
+              ],
+              "flags": [
+                4
+              ],
+              "flags_after": [],
+              "methods": [
+                "_on_rejected"
+              ],
+              "other_after": 0,
+              "other_before": 0,
+              "other_unchanged": true,
+              "own_after": 0,
+              "own_count": 1,
+              "targets": [
+                225016022512
+              ],
+              "unbound_counts": [
+                0
+              ]
+            }
+          },
+          "stage": "after_wait"
+        },
+        {
+          "label": "C post-run final audit",
+          "signals": {
+            "capture_ready": {
+              "bound_counts": [],
+              "flags": [],
+              "flags_after": [],
+              "methods": [],
+              "other_after": 0,
+              "other_before": 0,
+              "other_unchanged": true,
+              "own_after": 0,
+              "own_count": 0,
+              "targets": [],
+              "unbound_counts": []
+            },
+            "capture_rejected": {
+              "bound_counts": [],
+              "flags": [],
+              "flags_after": [],
+              "methods": [],
+              "other_after": 0,
+              "other_before": 0,
+              "other_unchanged": true,
+              "own_after": 0,
+              "own_count": 0,
+              "targets": [],
+              "unbound_counts": []
+            }
+          },
+          "stage": "before_connect"
+        },
+        {
+          "label": "C post-run final audit",
+          "ready_error": 0,
+          "rejected_error": 0,
+          "signals": {
+            "capture_ready": {
+              "bound_counts": [
+                0
+              ],
+              "flags": [
+                4
+              ],
+              "methods": [
+                "_on_held"
+              ],
+              "own_count": 1,
+              "targets": [
+                225016022512
+              ],
+              "unbound_counts": [
+                0
+              ]
+            },
+            "capture_rejected": {
+              "bound_counts": [
+                0
+              ],
+              "flags": [
+                4
+              ],
+              "methods": [
+                "_on_rejected"
+              ],
+              "own_count": 1,
+              "targets": [
+                225016022512
+              ],
+              "unbound_counts": [
+                0
+              ]
+            }
+          },
+          "stage": "installed"
+        },
+        {
+          "label": "C post-run final audit",
+          "signals": {
+            "capture_ready": {
+              "bound_counts": [],
+              "flags": [],
+              "flags_after": [],
+              "methods": [],
+              "other_after": 0,
+              "other_before": 0,
+              "other_unchanged": true,
+              "own_after": 0,
+              "own_count": 0,
+              "targets": [],
+              "unbound_counts": []
+            },
+            "capture_rejected": {
+              "bound_counts": [
+                0
+              ],
+              "flags": [
+                4
+              ],
+              "flags_after": [],
+              "methods": [
+                "_on_rejected"
+              ],
+              "other_after": 0,
+              "other_before": 0,
+              "other_unchanged": true,
+              "own_after": 0,
+              "own_count": 1,
+              "targets": [
+                225016022512
+              ],
+              "unbound_counts": [
+                0
+              ]
+            }
+          },
+          "stage": "after_wait"
+        }
+      ]
+    }
+  ],
+  "original_evidence_index_count": 50,
+  "original_evidence_index": [
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/copied_cache_manifest.json",
+      "bytes": 718182,
+      "sha256": "f549892f4de67f78d4248ce855a8d15d65ea61eb4372afd378a1161df8310a55",
+      "kind": "original manifest"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/isolated_slot_and_lifecycle_manifest.json",
+      "bytes": 1647,
+      "sha256": "62fa09c37864f82946454ba67a5380218178145f1d75e07ffae63e2dcf62578b",
+      "kind": "original manifest"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/native_evidence/A_half_save/report.json",
+      "bytes": 9499,
+      "sha256": "a38bcf6b633769b838672665d4b95b23bb62101dcfe9b91bb77210f359e583e1",
+      "kind": "original full native evidence"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/native_evidence/A_half_save/saved_packet.json",
+      "bytes": 7510426,
+      "sha256": "c06ed111b0df6ca5c76ba5670ec5e7ed707d266f8d02f55b16a746f373124c2d",
+      "kind": "original full native evidence"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/native_evidence/A_half_save/saved_world.json",
+      "bytes": 7172127,
+      "sha256": "efb35edafcadad2ec192ed8a0580e9e4b054bf1d43f51e50573d5d9c57c76319",
+      "kind": "original full native evidence"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/native_evidence/B_continue_resave/full_world_comparison.json",
+      "bytes": 811,
+      "sha256": "b3f8de66de6098368c01b3a9fc4dee20d6655b23960dc6441b33d3d874d4ed00",
+      "kind": "original full native evidence"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/native_evidence/B_continue_resave/input_packet.json",
+      "bytes": 7510426,
+      "sha256": "c06ed111b0df6ca5c76ba5670ec5e7ed707d266f8d02f55b16a746f373124c2d",
+      "kind": "original full native evidence"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/native_evidence/B_continue_resave/input_world.json",
+      "bytes": 7172127,
+      "sha256": "efb35edafcadad2ec192ed8a0580e9e4b054bf1d43f51e50573d5d9c57c76319",
+      "kind": "original full native evidence"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/native_evidence/B_continue_resave/report.json",
+      "bytes": 47183,
+      "sha256": "51e67172cef79e7b143f84bc63c8c873ab99fd40066bb71529460cb39150e82a",
+      "kind": "original full native evidence"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/native_evidence/B_continue_resave/restored_world.json",
+      "bytes": 7172126,
+      "sha256": "e566ed5dde7f2a1cec854bc96a4a838104e2a57166286f853c25aa31a2674d6d",
+      "kind": "original full native evidence"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/native_evidence/B_continue_resave/saved_packet.json",
+      "bytes": 7539427,
+      "sha256": "4e7bb175301af3a3a1f7322aa303bea2e21630b26581a0cee1d0a9d62f2ca595",
+      "kind": "original full native evidence"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/native_evidence/B_continue_resave/saved_world.json",
+      "bytes": 7199786,
+      "sha256": "27940ab336655221fee4350397cd0c5ac47e9f80cfdcb33732282178950c8a17",
+      "kind": "original full native evidence"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/native_evidence/B_continue_resave/session_packet_install_audit.json",
+      "bytes": 7378,
+      "sha256": "d1571dea0805c5711f6ffb82820e978ca6f8ff4f7c9f7c94c9b75569ed9cbff1",
+      "kind": "original full native evidence"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/native_evidence/C_verify_resave/after_real_ticks_world.json",
+      "bytes": 7200941,
+      "sha256": "40fe65fda5fe761017a7c1b9c98e4ad1519dff6ab74ebb9163d638451cf042bc",
+      "kind": "original full native evidence"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/native_evidence/C_verify_resave/full_world_comparison.json",
+      "bytes": 808,
+      "sha256": "c7698cc4b8aa72ef83ca184ece317ee18df03550623eb2941fb718629587c08a",
+      "kind": "original full native evidence"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/native_evidence/C_verify_resave/input_packet.json",
+      "bytes": 7539427,
+      "sha256": "4e7bb175301af3a3a1f7322aa303bea2e21630b26581a0cee1d0a9d62f2ca595",
+      "kind": "original full native evidence"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/native_evidence/C_verify_resave/input_world.json",
+      "bytes": 7199786,
+      "sha256": "27940ab336655221fee4350397cd0c5ac47e9f80cfdcb33732282178950c8a17",
+      "kind": "original full native evidence"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/native_evidence/C_verify_resave/report.json",
+      "bytes": 46013,
+      "sha256": "45a0b785da95db924921619c0a909f11cb3f667ee4b11327e7d69a5281340550",
+      "kind": "original full native evidence"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/native_evidence/C_verify_resave/restored_world.json",
+      "bytes": 7199784,
+      "sha256": "dd7cadcb62cade983546523ce6fa96aa0623f3e65ba61c3b4283f30a455f1996",
+      "kind": "original full native evidence"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/native_evidence/C_verify_resave/session_packet_install_audit.json",
+      "bytes": 7378,
+      "sha256": "975a13d66e7715d5465abe948b6e47960ae92a766a85a1ace97a5465bf7ea2c0",
+      "kind": "original full native evidence"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/native_evidence/json_boundary/report.json",
+      "bytes": 88872,
+      "sha256": "ae97318b6067ba91fe7d59a4dafb4f51c2c1b4848e85809f739e680754d524bd",
+      "kind": "original full native evidence"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/profile/appdata/Godot/app_userdata/水浒英雄传：八幕战役/daming_admit_v24o/continue/v1/5088120/1/record_0000000001.json",
+      "bytes": 3279578,
+      "sha256": "8d1e3e98b67c2bf02041d0693fb2561c267d2778550c446df1cdd3120e0790c3",
+      "kind": "actual slot/lifecycle manifest member"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/profile/appdata/Godot/app_userdata/水浒英雄传：八幕战役/daming_admit_v24o/continue/v1/5088120/1/record_0000000002.json",
+      "bytes": 3290559,
+      "sha256": "eb5939dbf81bba90ea4f497f483b732a6e73c25677c468d74bdda1e5399ccecd",
+      "kind": "actual slot/lifecycle manifest member"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/profile/appdata/Godot/app_userdata/水浒英雄传：八幕战役/daming_admit_v24o/continue/v1/local_runs/80d7fbb3df6355545a0c8e7fbf30063a/5088120/1/record_0000000001.json",
+      "bytes": 513,
+      "sha256": "2e1f2e37b2f7e1527a2fa4f467fcf35cb95e3266bc3077afa569303a39213db9",
+      "kind": "actual slot/lifecycle manifest member"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/profile/appdata/Godot/app_userdata/水浒英雄传：八幕战役/daming_admit_v24o/handoff_A.json",
+      "bytes": 7845511,
+      "sha256": "78c261755af03310b97fab3dc02dbec0b72ccf4315aef61d675cba22f3403611",
+      "kind": "actual slot/lifecycle manifest member"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/profile/appdata/Godot/app_userdata/水浒英雄传：八幕战役/daming_admit_v24o/handoff_B.json",
+      "bytes": 7876088,
+      "sha256": "73ce5f5a8b4a983868e3c3b07a9994b17ceb49cdd79149b8e6d2ede8c433c252",
+      "kind": "actual slot/lifecycle manifest member"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/profile/appdata/Godot/app_userdata/水浒英雄传：八幕战役/owned_slot_retry_qa/report.json",
+      "bytes": 5305,
+      "sha256": "f32c368aabd54ffed7087332d98c8ca52a8b8fc1d8800a8f2e69ef27a00f254e",
+      "kind": "original native report"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/qualified_import_metadata_companions.json",
+      "bytes": 18900,
+      "sha256": "26840594a6f2dfaa97db342e6835d416a0b49d362f2a6483e141bcc1e4578c54",
+      "kind": "original manifest"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/receipt.json",
+      "bytes": 3902662,
+      "sha256": "1c88ad69d16f4dd90b40a399ef645d1acb5218e653ce5a0581a5585618e24d41",
+      "kind": "original producer receipt"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/retained_slots/generation_1.json",
+      "bytes": 3279578,
+      "sha256": "8d1e3e98b67c2bf02041d0693fb2561c267d2778550c446df1cdd3120e0790c3",
+      "kind": "original retained raw slot"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/retained_slots/generation_2.json",
+      "bytes": 3290559,
+      "sha256": "eb5939dbf81bba90ea4f497f483b732a6e73c25677c468d74bdda1e5399ccecd",
+      "kind": "original retained raw slot"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/steps/00_preflight/receipt.json",
+      "bytes": 490,
+      "sha256": "90a987e7673f04a37ee2933141c189dd8938d2d9bb4d7dce848882f3e4d5c133",
+      "kind": "original stage receipt"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/steps/01_wait_fx_terminal/receipt.json",
+      "bytes": 451,
+      "sha256": "84dc89330e27e86fe6b5463e4e00b32886241795945d74d6c56f66fad3e3b75b",
+      "kind": "original stage receipt"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/steps/02_wait_natural_engine_idle/receipt.json",
+      "bytes": 388,
+      "sha256": "6405129d1f9c6f494a11ec87e3160e9114947956fb674510f03ed59a38331b3a",
+      "kind": "original stage receipt"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/steps/03_freeze_private_project/receipt.json",
+      "bytes": 2058,
+      "sha256": "ff403693d249b9cc8760a79bd7521ef9272df6a6c3037c989294d9f189e1528a",
+      "kind": "original stage receipt"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/steps/04_import/native.log",
+      "bytes": 155257,
+      "sha256": "a3d71902445ac536d034c2aa3d66839461d262da1fb6a3bd7a768870c176a9e6",
+      "kind": "original full native log",
+      "ansi_stripped_error_counts": {
+        "SCRIPT ERROR:": 0,
+        "Parse Error:": 0,
+        "ERROR:": 0
+      }
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/steps/04_import/receipt.json",
+      "bytes": 1156,
+      "sha256": "31dbb46219363ca5ee17f8ff56a506d216b23a825c14af33cced786791ef2ca6",
+      "kind": "original stage receipt"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/steps/05_profile_guard/native.log",
+      "bytes": 114,
+      "sha256": "f8692a4c0d8ec0052e58dee6bb2aa99e1dfb048a22a75a3b883bbcf59076645f",
+      "kind": "original full native log",
+      "ansi_stripped_error_counts": {
+        "SCRIPT ERROR:": 0,
+        "Parse Error:": 0,
+        "ERROR:": 0
+      }
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/steps/05_profile_guard/receipt.json",
+      "bytes": 1184,
+      "sha256": "cf34736eb2dd2eae18131d86b0757b6129b1f34253dffeab457fbd2d21729aff",
+      "kind": "original stage receipt"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/steps/06_json_boundary/native.log",
+      "bytes": 121,
+      "sha256": "dccb17df59e2f3dff287c8e5bdd562285f36c546c70e110b8065b34740a8e290",
+      "kind": "original full native log",
+      "ansi_stripped_error_counts": {
+        "SCRIPT ERROR:": 0,
+        "Parse Error:": 0,
+        "ERROR:": 0
+      }
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/steps/06_json_boundary/receipt.json",
+      "bytes": 3657,
+      "sha256": "f77325068e3bc25ab355e4506186c18422c925d019c6790e394916e68e217032",
+      "kind": "original stage receipt"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/steps/07_owned_slot_retry/native.log",
+      "bytes": 266,
+      "sha256": "17a343abfe71fc5816c5322388c48bf54fceaa34a986604eaab365080d5101aa",
+      "kind": "original full native log",
+      "ansi_stripped_error_counts": {
+        "SCRIPT ERROR:": 0,
+        "Parse Error:": 0,
+        "ERROR:": 0
+      }
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/steps/07_owned_slot_retry/receipt.json",
+      "bytes": 1567,
+      "sha256": "80e38ac36e5b14fba1c90cd5193fd96390efcd5e5dfb0337bc09552a191fcdae",
+      "kind": "original stage receipt"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/steps/08_A_half_save/native.log",
+      "bytes": 353,
+      "sha256": "7d8fc3a70feb6cddd1bf4abff17920ab42e502f479e26d98d1302aa0b980f60f",
+      "kind": "original full native log",
+      "ansi_stripped_error_counts": {
+        "SCRIPT ERROR:": 0,
+        "Parse Error:": 0,
+        "ERROR:": 0
+      }
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/steps/08_A_half_save/receipt.json",
+      "bytes": 2317,
+      "sha256": "2ed3d7c654fd6720fb5aa71efecf5016dfb63521d4c46d6d3da5ec518b783f86",
+      "kind": "original stage receipt"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/steps/09_B_continue_resave/native.log",
+      "bytes": 3784,
+      "sha256": "4feb0e2af3013757defeee84a9d36dbd10566d7207721724bcd35aa1c953322d",
+      "kind": "original full native log",
+      "ansi_stripped_error_counts": {
+        "SCRIPT ERROR:": 0,
+        "Parse Error:": 0,
+        "ERROR:": 0
+      }
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/steps/09_B_continue_resave/receipt.json",
+      "bytes": 2343,
+      "sha256": "8de89bebd6c47ff23a285da9e10cb00a86d2f2ce33c161f863559a3ffe6f9ff7",
+      "kind": "original stage receipt"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/steps/10_C_verify_resave/native.log",
+      "bytes": 3782,
+      "sha256": "8f0daf451083976b1a28b5c1089a28ababb8ad6bc0820698c1c52f724bd5f1af",
+      "kind": "original full native log",
+      "ansi_stripped_error_counts": {
+        "SCRIPT ERROR:": 0,
+        "Parse Error:": 0,
+        "ERROR:": 0
+      }
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/steps/10_C_verify_resave/receipt.json",
+      "bytes": 2335,
+      "sha256": "6424f7628090b328d6012208402d3ac09fb8b6fec5e76c5b45253def796a04c4",
+      "kind": "original stage receipt"
+    },
+    {
+      "path": "E:/ChatGPT/qa-world-restore-20261007/daming_admit_v24s_2a817e70/steps/11_final_source_native_and_slot_audit/receipt.json",
+      "bytes": 436,
+      "sha256": "9cdef0cc7127ab92727ba5ab768e1438fe1f88e5f1bd619b21e422b810d14dd9",
+      "kind": "original stage receipt"
+    }
+  ],
+  "qualification_excludes": [
+    "v25_safe_retreat",
+    "v26_identity_guard_prototypes",
+    "public_campaign_continue",
+    "natural_victory_or_reward_once",
+    "Steam_or_exported_binary_update",
+    "public_entire_runtime_identity_equal_frozen"
+  ],
+  "review_new_engine_processes": 0,
+  "review_public_or_original_report_modifications": 0
+}

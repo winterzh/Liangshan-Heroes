@@ -1,0 +1,25 @@
+{
+  "scope": "First ordinary transition diagnostic failed before captures; no motion qualification",
+  "receipt": "E:\\ChatGPT\\qa-ordinary-posture-20261006\\ordinary_idle_motion_wu_song_v4_17c89f04\\receipt.json",
+  "receipt_sha256": "e1e7743c393f19c1b69b496ef89f04509f414fbade25ecb90bba89f86ed48e2e",
+  "failure": {
+    "type": "AssertionError",
+    "message": "Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org\nOpenGL API 3.3.0 NVIDIA 616.56 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce RTX 3070 Ti\n\nWARNING: 2D MSAA is not yet supported for GLES3.\n   at: render_target_set_msaa (drivers/gles3/storage/texture_storage.cpp:2934)\nSCRIPT ERROR: Parse Error: Cannot infer the type of \"foot\" variable because the value doesn't have a set type.\n   at: GDScript::reload (res://ordinary_idle_motion_comparison_v4.gd:18)\nERROR: Failed to load script \"res://ordinary_idle_motion_comparison_v4.gd\" with error \"Parse error\".\n   at: load (modules/gdscript/gdscript.cpp:2907)\n"
+  },
+  "steps": [
+    {
+      "name": "import",
+      "pid": 177764,
+      "exit_code": 0,
+      "log_sha256": "0072a6ef14532332c6ef858be88cfcfe683f577280f67963225162f9820f1cb1"
+    },
+    {
+      "name": "render",
+      "pid": 173416,
+      "exit_code": 4294967295,
+      "log_sha256": "a37fcdb05be7386c02c3148117b468ba61958a4e5dd34df74e7d11f57c782e12"
+    }
+  ],
+  "own_exact_parse_stop": "E:\\ChatGPT\\qa-ordinary-posture-20261006\\ordinary_idle_motion_wu_song_v4_17c89f04\\owned_parse_error_stop.json",
+  "repair": "Explicit int type for label foot array lookup; runner polls fatal script errors and stops only its exact own child."
+}

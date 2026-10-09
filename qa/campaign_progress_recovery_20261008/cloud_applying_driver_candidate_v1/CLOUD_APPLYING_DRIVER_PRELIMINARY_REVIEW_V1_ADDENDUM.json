@@ -1,0 +1,37 @@
+{
+  "schema": "campaign_cloud_applying_driver_preliminary_independent_review_v1",
+  "reviewed_at_utc": "2026-10-09T01:44:18.353324+00:00",
+  "independent": true,
+  "source_only": true,
+  "approved_stages": [],
+  "static_api_closure_passed": false,
+  "production_chain_api_closure_passed": true,
+  "callback_observation_readiness_passed": false,
+  "candidate_sha256": "2133f7b5440f56b35b083c8b57be0de16569e559ec9c91c89503871738ed4e87",
+  "source_manifest_sha256": "9e9fe702added80fe83425bc6db00e66f249f027f65c724b1a4925a8f68f5b13",
+  "original_review_sha256": "c584d46378cb681218de3368f8b9943bc677494c78682ac50bc30d29452bb3da",
+  "disposition": "Reject callback-observation readiness; preserve the original finite chain/API review and all source bytes.",
+  "confirmed_findings": [
+    {
+      "id": "CLOUD-ARM-001",
+      "severity": "blocking",
+      "file": "campaign_original19_cloud_applying_v1.gd",
+      "start_line": 34,
+      "end_line": 38,
+      "problem": "After closing cloud_apply_ready, the driver invokes synchronous production _apply_profile without yielding or confirming that the host breakpoint command has been processed. Existing host ordering constructs the controller after publishing driver-ready, then sends the breakpoint. The real writer-complete/mark_dirty callback can occur before the host breakpoint is armed.",
+      "consequence": "Sequence==1 can fail because the required callback was missed. Successful chain/API lookup does not establish observability or a usable actual callback driver.",
+      "minimum_successor_requirement": "Before invoking real apply, require an explicit QA-only observer dispatcher arm acknowledgment received on the same debugger connection after the host breakpoint command. Preserve production apply and the source-only qualification boundary."
+    }
+  ],
+  "GD_parsed": false,
+  "native_started": false,
+  "socket_executed": false,
+  "popen_constructed": false,
+  "actual_callback_qualified": false,
+  "Steam_account_qualified": false,
+  "upload_qualified": false,
+  "SDK_reward_once_qualified": false,
+  "original19_qualified": false,
+  "overall_goal_qualified": false,
+  "scope_note": "New source-order finding only. No Godot, pipeline simulation or source modification; no deterministic runtime outcome is claimed."
+}

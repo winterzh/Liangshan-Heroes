@@ -1,0 +1,36 @@
+{
+  "component": "full_scenery_v23a",
+  "applied_to_working_tree": true,
+  "runtime_qualified": false,
+  "source_changes": [
+    {
+      "path": "scripts/run_scenery_state.gd",
+      "before_sha256": "c859a5a94331c36f4138e828a94851ed3b70bf000f4f8cad2bcccb00b3851eb4",
+      "candidate_sha256": "198e477b09327c4c0bbc2da982ec2d4cc408bf1427ab9914045abed84692008e"
+    },
+    {
+      "path": "scripts/run_map_state.gd",
+      "before_sha256": "f6117801a78edb69eb027bc6b35fa0f7b82519ff700618fe704760312eb011a2",
+      "candidate_sha256": "36b5bfa05faa40c524d05ef46735b054bf042d1f6a724c8dc5e06a79594002ff"
+    },
+    {
+      "path": "scripts/run_daming_lighting_state.gd",
+      "before_sha256": "cb5a6e7a199af4ddfb9d36056a16289c70801a1aa372bdf0c907f7e871e672fd",
+      "candidate_sha256": "8b48ca640d3139090d0da12c2b0e24a6a5ef854b2e9abf19e389a28b326f05a6"
+    }
+  ],
+  "preapply_backup": "E:\\ChatGPT\\daming_scenery_v23a_preapply",
+  "review_fixes": [
+    "CanvasModulate inherits Node2D; retain existing strict Node2D API and reject other CanvasItem subclasses.",
+    "Do not introduce render_height on lamps or night; original source factory/scenery sync does not elevate either.",
+    "top_level remains checked for every accepted node; no default override gap.",
+    "Original generated proposal and producer are immutable and retained."
+  ],
+  "prior_lighting_qualified_commit": "c7192594767df04917d6b73864c35b9caf6e7e60",
+  "suite_cases": 8,
+  "producer": "qa/zhu_wounded_20261005/harness/run_full_scenery_v23a.py",
+  "harness": "qa\\zhu_wounded_20261005\\harness\\full_scenery_v23a.gd",
+  "full_world_qualified": false,
+  "public_campaign_continue_qualified": false,
+  "remaining": "Native whole-map proof, source review/negative fixes, safe duplicate-cache cleanup, stable sync; then outer world and full original development plan."
+}

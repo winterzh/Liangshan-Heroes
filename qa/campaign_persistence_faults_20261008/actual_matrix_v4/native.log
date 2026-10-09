@@ -1,0 +1,49 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+CAMPAIGN_FAULT_CASE_BEGIN normal_first_full_seal
+CAMPAIGN_FAULT_CASE_END normal_first_full_seal
+CAMPAIGN_FAULT_CASE_BEGIN normal_repeat_full
+CAMPAIGN_FAULT_CASE_END normal_repeat_full
+CAMPAIGN_FAULT_CASE_BEGIN best_single_run_no_union
+CAMPAIGN_FAULT_CASE_END best_single_run_no_union
+CAMPAIGN_FAULT_CASE_BEGIN invalid_no_unlock
+CAMPAIGN_FAULT_CASE_END invalid_no_unlock
+CAMPAIGN_FAULT_CASE_BEGIN QA_memory_only
+CAMPAIGN_FAULT_CASE_END QA_memory_only
+CAMPAIGN_FAULT_CASE_BEGIN QA_cloud_bool_compatibility
+CAMPAIGN_FAULT_CASE_END QA_cloud_bool_compatibility
+CAMPAIGN_FAULT_CASE_BEGIN bad_existing_cfg_load
+ERROR: ConfigFile parse error at user://campaign.cfg:0: Unexpected EOF while parsing simple tag.
+   at: _parse (core/io/config_file.cpp:292)
+   GDScript backtrace (most recent call first):
+       [0] _write_config_receipt (res://scripts/campaign.gd:357)
+       [1] _record_level_result_with_progress (res://scripts/campaign.gd:209)
+       [2] record_level_result (res://scripts/campaign.gd:179)
+       [3] _run (res://tools/campaign_persistence_fault_matrix.gd:211)
+       [4] _begin (res://tools/campaign_persistence_fault_matrix.gd:131)
+CAMPAIGN_FAULT_CASE_END bad_existing_cfg_load
+CAMPAIGN_FAULT_CASE_BEGIN existing_vanished_prior
+CAMPAIGN_FAULT_CASE_END existing_vanished_prior
+CAMPAIGN_FAULT_CASE_BEGIN true_new_missing_cfg
+CAMPAIGN_FAULT_CASE_END true_new_missing_cfg
+CAMPAIGN_FAULT_CASE_BEGIN write_failure
+CAMPAIGN_FAULT_CASE_END write_failure
+CAMPAIGN_FAULT_CASE_BEGIN save_OK_fresh_load_failure
+CAMPAIGN_FAULT_CASE_END save_OK_fresh_load_failure
+CAMPAIGN_FAULT_CASE_BEGIN readback_semantic_mismatch
+CAMPAIGN_FAULT_CASE_END readback_semantic_mismatch
+CAMPAIGN_FAULT_CASE_BEGIN readback_SHA_changed
+CAMPAIGN_FAULT_CASE_END readback_SHA_changed
+CAMPAIGN_FAULT_CASE_BEGIN legal_unknown_variant_preservation
+CAMPAIGN_FAULT_CASE_END legal_unknown_variant_preservation
+CAMPAIGN_FAULT_CASE_BEGIN unsupported_object_or_script_container
+CAMPAIGN_FAULT_CASE_END unsupported_object_or_script_container
+CAMPAIGN_FAULT_CASE_BEGIN cycle_or_overdepth
+CAMPAIGN_FAULT_CASE_END cycle_or_overdepth
+CAMPAIGN_FAULT_CASE_BEGIN callback_sees_new_memory
+CAMPAIGN_FAULT_CASE_END callback_sees_new_memory
+CAMPAIGN_FAULT_CASE_BEGIN cloud_applying_callback_no_upload_claim
+CAMPAIGN_FAULT_CASE_END cloud_applying_callback_no_upload_claim
+CAMPAIGN_FAULT_CASE_BEGIN legacy_real_cloud_apply_failure_boundary
+CAMPAIGN_FAULT_CASE_END legacy_real_cloud_apply_failure_boundary
+CAMPAIGN_PERSISTENCE_FAULT_MATRIX_COMPLETE {"cases":19,"checks":194,"failures":0}

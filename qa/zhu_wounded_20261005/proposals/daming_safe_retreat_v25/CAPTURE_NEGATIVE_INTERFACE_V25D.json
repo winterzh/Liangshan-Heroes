@@ -1,0 +1,197 @@
+{
+  "schema": "daming_safe_retreat_capture_bundle_v25d",
+  "status": "prepared_not_executed",
+  "harness": {
+    "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/daming_safe_retreat_capture_negative_v25d.gd",
+    "sha256": "6dc657863bd45768ba42e56e41268087807d6907cb468b0ca85ceee67f968efc",
+    "bytes": 45375
+  },
+  "scene": {
+    "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/daming_safe_retreat_capture_negative_v25d.tscn",
+    "sha256": "8534d6b8eb0b651ee3e952dcc7f7dd55812881d7046a86415d978f3ea3a37197",
+    "bytes": 217
+  },
+  "base_harness": {
+    "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/daming_safe_retreat_cross_process_v25.gd",
+    "sha256": "6a70e00e6a7786bdf8791b84e3fdfdbe85159bf5398ec8ab385f2e34a3242940",
+    "bytes": 50763
+  },
+  "scene_resource": "res://tools/daming_safe_retreat_capture_negative_v25d.tscn",
+  "report_schema": "daming_safe_retreat_capture_report_v25",
+  "manifest_schema": "daming_safe_retreat_capture_inputs_v25",
+  "hold_source": {
+    "path": "E:/ChatGPT/daming_admit_v24o_proposal/daming_admit_cross_process_v24s.gd",
+    "sha256": "76ed6f114de755b398112778ddabf5af820a30237b75070a5a2aaaea188b87db",
+    "bytes": 43390
+  },
+  "hold_source_native_qualified_at_preparation": false,
+  "environment": {
+    "DAMING_CAPTURE_PROFILE": "fresh per-role/per-row private profile; clone exact A slot subtree and handoff",
+    "DAMING_CAPTURE_OUT": "fresh external per-row directory, must not exist",
+    "DAMING_CAPTURE_CASE": "one exact implemented case id",
+    "DAMING_CAPTURE_MANIFEST": "pinned complete actual A input manifest",
+    "DAMING_CAPTURE_MANIFEST_SHA256": "actual manifest SHA",
+    "DAMING_CAPTURE_NONCE": "fresh per-process nonce",
+    "DAMING_CAPTURE_EXPECT_CONTENT": "same complete frozen installed content as A",
+    "DAMING_CAPTURE_EXPECT_ENGINE": "same actual engine SHA as A",
+    "APPDATA/LOCALAPPDATA/TEMP/TMP": "<profile>/<lowercase name>",
+    "STEAM_DISABLED": "1",
+    "CAMPAIGN_QA": "1"
+  },
+  "required_cases": {
+    "safe_queue_nonempty": "LEVEL8_SAFE_RETREAT_QUEUE",
+    "safe_stop__chase_intent": "LEVEL8_SAFE_RETREAT_STOP_ANCHOR",
+    "safe_stop__group_cap": "LEVEL8_SAFE_RETREAT_STOP_ANCHOR",
+    "safe_stop__has_home": "LEVEL8_SAFE_RETREAT_STOP_ANCHOR",
+    "safe_stop__home": "LEVEL8_SAFE_RETREAT_STOP_ANCHOR",
+    "safe_stop__hua_lock_shots": "LEVEL8_SAFE_RETREAT_STOP_ANCHOR",
+    "other_hp_zero": "LEVEL8_LIFETIME",
+    "other_dying_true": "LEVEL8_LIFETIME",
+    "other_role_null": "LEVEL8_SAFE_REQUIRED_ACTOR_MISSING",
+    "other_alive_missing_active": "LEVEL8_ACTIVE_MEMBERSHIP",
+    "other_outcome_captured": "LEVEL8_UNSUPPORTED_STORY_OUTCOME",
+    "root_safe_selection": "LEVEL8_SAFE_SELECTED_ROOT",
+    "root_safe__ability_caster": "LEVEL8_SAFE_ARMED_CASTER",
+    "root_safe__item_caster": "LEVEL8_SAFE_ARMED_CASTER",
+    "safe_event_missing": "LEVEL8_SAFE_EVENT_OUTCOME_PAIR",
+    "other_safe_event_without_retreat": "LEVEL8_SAFE_EVENT_OUTCOME_PAIR",
+    "safe_actor_outcome_empty": "LEVEL8_SAFE_EVENT_OUTCOME_PAIR",
+    "freed_event_missing": "LEVEL8_SAFE_RESCUE_EVENT_PAIR",
+    "rescue_done_false": "LEVEL8_SAFE_RESCUE_EVENT_PAIR",
+    "safe_caster__walk_casts": "LEVEL8_SAFE_CAST_INTENT",
+    "safe_caster__pending_casts": "LEVEL8_SAFE_CAST_INTENT",
+    "safe_caster__channels": "LEVEL8_SAFE_CAST_INTENT",
+    "safe_caster__pending_item_casts": "LEVEL8_SAFE_CAST_INTENT",
+    "safe_caster__walk_item_casts": "LEVEL8_SAFE_CAST_INTENT"
+  },
+  "required_roles": [
+    "lu",
+    "shi"
+  ],
+  "isolation": "EXACTLY one case per process and fresh private A profile snapshot; all role/case processes distinct PID/nonce; never reuse a failed profile",
+  "source_inputs": {
+    "a_report": "qualified actual A report path/SHA",
+    "a_handoff": "actual generation1 handoff path/SHA; copy raw to user://daming_safe_retreat_v25/handoff_A.json",
+    "a_packet": "actual saved_packet JSON path/SHA in report.evidence",
+    "a_world": "actual saved_world JSON path/SHA in report.evidence",
+    "a_slot": "actual closed generation1 raw slot path/SHA matching handoff",
+    "profile_files": "nonempty exact file snapshot of entire A user://daming_safe_retreat_v25/continue/v1 subtree including local_runs; each {path:absolute frozen source copy,sha256,relative:exact suffix under SLOT_ROOT}. Copy each byte to new private profile corresponding subtree before native launch. Capture at A termination before B can resave; no Godot log/root-wide profile copying required."
+  },
+  "required_row_fields": [
+    "case",
+    "first_role",
+    "expected_code",
+    "actual_code",
+    "actual_Core_capture_called",
+    "DTO_substitution",
+    "single_live_field_applied",
+    "temporary_field_unchanged_by_capture",
+    "original_field_type_ieee_restored",
+    "retained_identity_same_live_unchanged",
+    "source_held_no_ticks_no_nodes_added",
+    "original_target_object_id",
+    "field",
+    "original_typed_view",
+    "temporary_typed_view",
+    "refusal_summary",
+    "passed",
+    "cast_component_capture_called",
+    "cast_component_capture_accepted",
+    "cast_component_actual_code",
+    "expected_guard_layer",
+    "actual_guard_layer",
+    "actual_section",
+    "actual_field",
+    "direct_safe_cast_pair_coverage"
+  ],
+  "producer_predicates": {
+    "passed": true,
+    "row_completed": true,
+    "actual_live_object_capture": true,
+    "executed_live_row_passed": true,
+    "DTO_substitution": false,
+    "whole_live_capture_matrix_qualified": false,
+    "overall_v25_qualified": false,
+    "checks": "all actual checks true",
+    "full_role_case_set": "exact Cartesian set, no minimum count shortcut",
+    "source_and_runtime": "all source/harness/scene/base pins, same actual A content/engine, source provenance copied SHA re-read",
+    "native_process": "exit0 plus exact marker, report PID/nonce/user_dir verified, log zero ERROR and SCRIPT ERROR independently checked",
+    "artifacts": "all full raw worlds/packet audits+mutation view kept and independently SHA-read; per-row exact slot subtree and handoff unchanged",
+    "actual_Core_capture_called": true,
+    "successful_handoff_owned_world_tracked": true,
+    "cast_rows": "All five each role: component actual capture accepted, actual Core.capture called, expected+actual layer level8_safe_pair, exact LEVEL8_SAFE_CAST_INTENT and actual_field exact array, native target caster object ID matches safe actor, full undo/whole recapture/identity/slot unchanged."
+  },
+  "base_methods_used": [
+    "_verify_packet_install",
+    "_compare_complete_world",
+    "_audit_bindings",
+    "_healthy",
+    "_same_keys",
+    "_on_held",
+    "_on_rejected",
+    "_read_json"
+  ],
+  "child_overrides": [
+    "_ready",
+    "_load_fixed_scripts",
+    "run",
+    "check",
+    "_write_new_json",
+    "_retreat_state",
+    "finish",
+    "_hold",
+    "_restore"
+  ],
+  "base_native_qualification_claimed": false,
+  "live_cases_not_implemented": [
+    "live record identity/schema type negatives: no such user-settable native leaf"
+  ],
+  "overall_qualified": false,
+  "godot_parse_verified": false,
+  "engine_started": false,
+  "public_source_modified": false,
+  "predecessor": {
+    "path": "E:/ChatGPT/daming_safe_retreat_v25_proposal/daming_safe_retreat_capture_negative_v25c.gd",
+    "sha256": "76f408d298db07cd12c9aa628465be60102628a60d4bad3d1a4f91c9bf43a3f7",
+    "bytes": 40775
+  },
+  "change_scope": "Retain exact original 19 cases and complete install/undo/capture/identity/HELD safeguards; append five native Battle cast-array intent negatives. Static preparation only, 24 cases x 2 independent roles/processes required, no public change or engine launch.",
+  "planned_cases": 24,
+  "planned_role_case_processes": 48,
+  "harness_revision": "v25d",
+  "cast_expected_layer": "level8_safe_pair",
+  "cast_component_proof": "Actual fixed CastFlow or ItemFlow.capture on the temporarily modified actual Battle with complete unit registry must return ok before the exact Core pair refusal may qualify. Earlier refusal retains actual module code/section and makes the row fail.",
+  "item_alias_constraint": "Use next_item_uid - 1 only with actual unchanged TYPE_INT counter > 1; original monotonic allocator and ItemFlow accept already-issued retired aliases. No Unit/Inventory/counter write. Counter1 blocks row before negative capture; never fake a new UID or relax ItemState.",
+  "api_source_pins": [
+    {
+      "path": "E:/ChatGPT/水浒/scripts/run_cast_flow_state.gd",
+      "sha256": "127a230696570b50207fd06a3c4e7a4f33dad7bb24d33a333e4d136343976587",
+      "bytes": 15409
+    },
+    {
+      "path": "E:/ChatGPT/水浒/scripts/run_item_cast_flow_state.gd",
+      "sha256": "cd57ee0c8a536f3f46aca5b7694818d17e06aee1860eb030d55886b8805b12a0",
+      "bytes": 14610
+    },
+    {
+      "path": "E:/ChatGPT/水浒/scripts/run_item_id_state.gd",
+      "sha256": "8bb221e918790ef8e8cd898c7222438cf7316c4ba180c09a8dd5663180ebfae4",
+      "bytes": 3565
+    },
+    {
+      "path": "E:/ChatGPT/水浒/scripts/battle.gd",
+      "sha256": "f020f434f755950d41dae9320bcdcb388359835b714f83bbd4592300514172b1",
+      "bytes": 789563
+    },
+    {
+      "path": "E:/ChatGPT/水浒/scripts/run_battle_world_core.gd",
+      "sha256": "92b2bdac0058f9e1642d1b991c3ca353e902481d8daff990388e377597df87b1",
+      "bytes": 49463
+    },
+    {
+      "path": "E:/ChatGPT/水浒/scripts/run_level8_unit_contract.gd",
+      "sha256": "b2f52bcce60b27507b498a6d32e45b5cadd3409030fcd2e1024c78dac90e90d5",
+      "bytes": 8211
+    }
+  ]
+}

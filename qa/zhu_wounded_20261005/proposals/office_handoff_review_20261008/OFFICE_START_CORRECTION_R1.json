@@ -1,0 +1,41 @@
+{
+  "schema": "office_start_encoding_and_scope_correction_r1_20261008",
+  "created_utc": "2026-10-07T19:43:06.406312+00:00",
+  "original_draft_pin": {
+    "path": "E:/ChatGPT/office_handoff_review_20261008/OFFICE_START_NEXT.md",
+    "sha256": "0f26a2798dbb08e2ec9971ff73021010c531d0ce0dfa57eccacc162fb9150dd3",
+    "bytes": 4960
+  },
+  "original_review_preserved": true,
+  "original_draft_bytes_preserved": true,
+  "new_draft_pin": {
+    "path": "E:/ChatGPT/office_handoff_review_20261008/OFFICE_START_NEXT_R1.md",
+    "sha256": "15b7bb51bbbd5eb322ae7d97b1d877abd0f599894e9ecda535604fe565a864db",
+    "bytes": 5271
+  },
+  "encoding_cause": "Original Python non-raw triple-quoted string interpreted backslash-t and backslash-r as TAB/CR, corrupting both PowerShell paths. R1 constructs the literal path as raw bytes and validates no TAB/CR remain.",
+  "old_bad_path_occurrences": 2,
+  "new_literal_path_occurrences": 2,
+  "control_CR_count": 0,
+  "control_TAB_count": 0,
+  "literal_command_lines": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -File .\\tools\\run_local.ps1 -Mode import",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File .\\tools\\run_local.ps1"
+  ],
+  "run_local_source_pin": {
+    "path": "E:/ChatGPT/水浒/tools/run_local.ps1",
+    "sha256": "806154bad8cf079bedfd29a768fc505da54eff3554d094d87940bef2043f053e",
+    "bytes": 884
+  },
+  "run_local_file_exists": true,
+  "Mode_import_supported_by_ValidateSet": true,
+  "Mode_import_exits_after_ensure_import_cache": true,
+  "authorization_wording": "User already authorized continuing the plan and synchronization. New office sibling/current deadline is technical work, not a new permission flow.",
+  "title": "公司电脑续做入口（2026-10-08）",
+  "latest_full_scope_note": "Root reports latest r2e static peer closure but missing actual A source remains blocked; it inherits e61 full chain. Same-machine source/time window cannot become a fresh-company executable claim.",
+  "public_source_modified": false,
+  "executed_tools_or_receipts_modified": false,
+  "engine_started": false,
+  "commands_executed": false,
+  "native_qualified": false
+}

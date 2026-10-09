@@ -1,0 +1,40 @@
+[gd_resource type="SpriteFrames" load_steps=5 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/lin_chong_direction4_20260906/nw.png" id="nw"]
+
+[sub_resource type="AtlasTexture" id="hurt_nw"]
+atlas = ExtResource("nw")
+region = Rect2(317, 403, 131, 134)
+margin = Rect2(26.5, 25.0, 53, 50)
+filter_clip = true
+metadata/draw_offset_px = Vector2(29.5, -2.12)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="fall_nw"]
+atlas = ExtResource("nw")
+region = Rect2(40, 581, 185, 123)
+margin = Rect2(0.0, 31.0, 0, 62)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-19.5, 16.7)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="down_nw"]
+atlas = ExtResource("nw")
+region = Rect2(292, 620, 186, 78)
+margin = Rect2(0.0, 54.0, 0, 108)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-10.0, 47.52)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("hurt_nw")},
+{"duration": 1.0, "texture": SubResource("fall_nw")},
+{"duration": 1.0, "texture": SubResource("down_nw")},
+{"duration": 1.0, "texture": SubResource("down_nw")}
+],
+"loop": false,
+"name": &"default",
+"speed": 4.0
+}]

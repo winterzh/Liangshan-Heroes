@@ -1,0 +1,54 @@
+{
+  "original_reference": {
+    "path": "assets/anim/wu_song_idle.png",
+    "sha256": "e9539731b0cd7642aba8f6672b63b273f67011dd4d7e753758ece7bddbab15cf"
+  },
+  "jobs": [
+    {
+      "key": "baseline_ref_209d0dce2143",
+      "method": "retained_identity_reference",
+      "generation_id": null,
+      "repository_path": "assets/characters/art_full_20260916/wu_song_portrait_20260916.png",
+      "sha256": "951070d07a02a284f40c3b34b7a179173bc019245c640d55f9634a60793db983",
+      "baseline_commit": "27f45b245e2b39f1f779fbfa62772e14bb68dd56",
+      "reference_role": "Existing committed artwork retained as identity or anatomy ancestry; no new generation prompt claimed.",
+      "references": [],
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wu_song_idle_traits_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-a55b3531-41e9-4648-a7a5-84f88fca1133",
+      "repository_path": "assets/characters/wu_song_traits_20261006/idle_v4.png",
+      "sha256": "3894a54c57036ee9711d830f91b4cdd18dd273336b1fd0fc345a00815a8b3bfc",
+      "prompt": "Use case: identity-preserve. Edit the existing project's Wu Song into an ordinary upright idle character sprite atlas for a Water Margin isometric RTS. Image 1 supplies his existing charcoal/black weathered monk-traveler clothes, large brown prayer beads, head cloth, sash, calf wraps, boots and twin curved daos. Image 2 supplies the established stern strong face, beard and head cloth identity; its paper background is not part of the output. Preserve this same adult Wu Song. Primary change per user: tall powerful adult anatomy, broad natural shoulders and chest, long normal adult legs, head held level, spine upright, grounded steady confidence appropriate to the imposing martial Wu Song; chest open naturally, no hunch or head jut, no tiny torso/big head, no childlike short legs, no exaggerated modern bodybuilder. Ordinary idle: both feet grounded around shoulder width, knees softly extended, shoulders relaxed and squared, arms naturally lowered; retain twin daos held low at the sides with blades safely outward/downward. No crouching lunge or raised attack pose in this idle. Four DISTINCT whole-body camera facings in a 2x2 atlas: top-left SE/front-right; top-right SW/front-left; bottom-left NE/back-right; bottom-right NW/back-left. Each head, torso, hips, knees, toes and blades follows that quadrant direction; genuine back views in bottom row, not merely turned head and not flipped duplicate anatomy. Same adult head/body ratio, face, clothes, beads, weapons and colors in all four. Isometric elevated three-quarter game camera about 30 degrees downward, full figure small enough to leave at least 50 transparent pixels around every quadrant including blade tips and cloth tails; generous clear center gutters. Crisp painterly detailed game sprite consistent with existing source, subdued dark palette, no photoreal background, no text, no grid or labels, no shadow plates, no other character. True transparent RGBA. His tall imposing build is a canon-informed design inference; do not add invented insignia, modern uniform or new equipment.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/wu_song_idle_traits_v4.json",
+      "request_sha256": "a78d1d5ce7d9d4c246f3795c79dce62b96198584e13581504f90601969827b48",
+      "references": [
+        "original",
+        "baseline_ref_209d0dce2143"
+      ],
+      "transparent_background": true,
+      "selected": false,
+      "native_pixel_edits": false
+    },
+    {
+      "key": "wu_song_idle_spacing_traits_v4",
+      "method": "built_in_imagegen",
+      "generation_id": "exec-08c25c34-0a52-43ce-9555-1af246d59542",
+      "repository_path": "assets/characters/wu_song_traits_20261006/idle_spacing_v4.png",
+      "sha256": "2779494857f783d412af53030b918d0694a9b769c38e5054719059eb0f4cee28",
+      "prompt": "Edit this exact four-direction upright Wu Song idle atlas. Preserve his existing strong adult proportions, stern face, beard/headcloth, black weathered monk clothes, brown prayer beads, sash, leg wraps, boots, twin curved daos held low, and all four current ordinary upright standing poses. Correct ONLY layout: uniformly make each complete figure including blade tips smaller and center it in the same quadrant, leaving at least 50 pixels of completely transparent padding on EVERY side of EACH quadrant and wide empty center gutters. Maintain 2x2 whole-body SE/SW/NE/NW order, same face/body ratio in all four, true back views in bottom row. No crop, pose change, extra equipment, text or background. True native transparent RGBA.",
+      "request": "tools/contracts/zhu_wounded_20261005/requests/wu_song_idle_spacing_traits_v4.json",
+      "request_sha256": "f10e0fe5c5b68f3362418dfb6e67258df877affd1f2631e299bf7befe1774335",
+      "references": [
+        "wu_song_idle_traits_v4"
+      ],
+      "transparent_background": true,
+      "selected": true,
+      "native_pixel_edits": false
+    }
+  ],
+  "scope": "Complete required ancestry retained; historical rejected pixels are edit parents only, not selected as runtime frames."
+}

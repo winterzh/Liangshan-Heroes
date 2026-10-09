@@ -1,0 +1,117 @@
+{
+  "schema": "campaign_callback_budget_exports_preliminary_independent_review_v1",
+  "reviewed_at_utc": "2026-10-09T00:31:42.367796+00:00",
+  "independent": true,
+  "source_only": true,
+  "static_api_closure_passed": true,
+  "approved_stages": [],
+  "source_spec_file_sha256": "2c4ed6ee85ee42749d4fafa728a7614296015b854ee9fe410e188c3f238e505b",
+  "source_spec_pin": {
+    "path": "D:/AI项目/水浒/开发工程/qa/campaign_progress_recovery_20261008/CALLBACK_BUDGET_EXPORTS_SOURCE_SPEC_V1.json",
+    "bytes": 19968,
+    "sha256": "2c4ed6ee85ee42749d4fafa728a7614296015b854ee9fe410e188c3f238e505b"
+  },
+  "module_pins": [
+    {
+      "path": "D:/AI项目/水浒/开发工程/tools/campaign_callback_controller_v3.py",
+      "bytes": 14546,
+      "sha256": "19c7683d2dc2c2c7b50774fc8092211b21fafbf6969fed7138e516a797296307"
+    },
+    {
+      "path": "D:/AI项目/水浒/开发工程/tools/campaign_callback_raw_receiver_v3.py",
+      "bytes": 4212,
+      "sha256": "83a8f07c95733a68a0891f40ead4f9df2278d7b75610923beb266519efb54b34"
+    },
+    {
+      "path": "D:/AI项目/水浒/开发工程/tools/campaign_callback_native_exports_v1.py",
+      "bytes": 3287,
+      "sha256": "f38c5eabb00f50929c7f7623945cb0d0686936d3ea2c84e4370996ec3cb85d50"
+    }
+  ],
+  "blocking_findings": [],
+  "source_delta": {
+    "controller_only_changed_method": "_retain",
+    "controller_budget": {
+      "maximum_events": 4096,
+      "maximum_bytes": 67108864,
+      "per_packet_original_limit_unchanged": true
+    },
+    "all_other_controller_methods_AST_exact_V2": true,
+    "raw_receiver_classes_AST_exact_V2": true,
+    "raw_receiver_only_import_binding_changes_to_controllerV3": true,
+    "publisher_constructor_and_publish_AST_exact_reviewed_natural_exports": true,
+    "publisher_fixed_names": [
+      "callback_driver_ready.json",
+      "ready_for_terminal.json",
+      "terminal_handoff.json",
+      "report.json"
+    ],
+    "publisher_complete_case": "callback_sees_new_memory"
+  },
+  "closure": {
+    "source_pins_verified": 57,
+    "three_snapshot_byte_pairs_exact": true,
+    "root_local_import_edges": 19,
+    "all_pinned_local_import_edges": 72,
+    "missing_local_import_pins": []
+  },
+  "verified_boundaries": [
+    "4096-event and 64MiB cumulative limits remain checked before exclusive file creation. Original packet type/per-packet bounds, flush/fsync/close, first SHA ledger, source/identity/stack/ownership gates and command allowlists are unchanged. The budget change is archive capacity, not a game performance acceptance threshold.",
+    "Receiver retains the reviewed permanent stop latch and both original buffers. Source change is only the reviewed controller class import; timeout, original-before-decode and transport EOF semantics are preserved.",
+    "Publisher uses fixed owned-step metadata and native close marker PID/nonce/name/SHA, rejects duplicate names, freezes original stage bytes and publishes Windows no-replace JSON. Four-file final set and original stage/public hashes are required; other case/filename cannot claim completion.",
+    "The parent initial host-script missing RuntimeError catch and observation are retained as historical fixture failure. The corrected fixture evidence is not native compatibility or complete pipeline evidence."
+  ],
+  "independent_host_checks": {
+    "classification": "synthetic source/AST and fabricated PID/nonce/step private disk fixtures only; no Popen/socket/Godot",
+    "checks_passed": 18,
+    "result_pin": {
+      "path": "D:/CodexTemp/lsh-independent-callback-budget-01j703ue/independent_result_v2.json",
+      "bytes": 1499,
+      "sha256": "4c1820f0bbb246e0f88ac69f728858ff3501b7f77d8f3d07a9fa6d50497e01cd"
+    },
+    "coverage": [
+      "budget exact event/byte limits and overflows",
+      "4096 existing synthetic disk bytes reconstructed exactly from pinned fixture source (1967328 bytes)",
+      "four fixed originals published byte-exact",
+      "stable polling hashes",
+      "wrong case and missing set refused",
+      "restart filename refused",
+      "foreign nonce/PID refused",
+      "duplicate and incomplete markers refused",
+      "wrong native SHA refused",
+      "existing public target preserved",
+      "complete-four-file original stage drift refused at final SHA check"
+    ],
+    "fixture_correction_note": "The first independent stage-drift fixture had only report.json and rejected for incomplete set; its result is retained. Referenced v2 result documents the correction and the complete-four-file replay, which specifically rejects original SHA drift.",
+    "actual_constructor_ownership_proven": false,
+    "actual_engine_traffic_verified": false
+  },
+  "historical_budget_reference": {
+    "reference_pin_checked_at_review": {
+      "path": "D:/AI项目/水浒/开发工程/qa/campaign_progress_recovery_20261008/callback_observer_candidate_v1/protocol_reference_4_4/core/debugger/remote_debugger.cpp",
+      "bytes": 24150,
+      "sha256": "93ffffa69e6bda1d4b102aebd0bc488871b266c71189eea2961833b350ab5678"
+    },
+    "reference_version": "4.4-stable",
+    "direct_execution_input": false,
+    "note": "The active source spec pins the budget observation and prior source review, rather than directly pinning this reference copy. Current review confirms its old reference hash, but no current-binary frequency or traffic claim follows. Any later seal relying on the reference as an explicit gate basis should pin that copy directly and separately verify current-engine traffic."
+  },
+  "remaining_boundaries": [
+    "Actual current-engine packet frequencies, long natural-route event/byte use and performance are not verified.",
+    "Serial runtime, complete report consumer and producer are not integrated or approved; future aggregation must retain all original logs/stages/packets and actual ownership checks.",
+    "SDK/original19/whole-goal qualification is not granted by fabricated metadata or private host fixtures."
+  ],
+  "qualification": {
+    "socket_opened": false,
+    "Popen_started": false,
+    "Godot_started": false,
+    "GD_parsed": false,
+    "actual_engine_traffic_verified": false,
+    "performance_qualified": false,
+    "complete_pipeline_qualified": false,
+    "actual_callback_qualified": false,
+    "original19_qualified": false,
+    "SDK_qualified": false,
+    "overall_goal_qualified": false
+  }
+}

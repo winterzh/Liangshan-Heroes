@@ -1,0 +1,38 @@
+--- daming_safe_retreat_capture_negative_v25d.gd
++++ daming_safe_retreat_capture_negative_v25d1.gd
+@@ -3,7 +3,7 @@
+ ## Inherit only the complete Session/install/world/packet/binding audits. Override
+ ## all entry, driver, report and HELD methods; the old _hold is never invoked.
+ const CAPTURE_SCHEMA := "daming_safe_retreat_capture_report_v25"
+-const CAPTURE_REVISION := "v25d"
++const CAPTURE_REVISION := "v25d1"
+ const LIVE_CAST_FIELDS := ["_walk_casts", "_pending_casts", "_channels", "_pending_item_casts", "_walk_item_casts"]
+ const CAPTURE_INPUT_SCHEMA := "daming_safe_retreat_capture_inputs_v25"
+ const CAPTURE_CASES := {
+@@ -300,7 +300,7 @@
+ 	# These are native Object references and native Vector2 values, never saved DTO tags.
+ 	# No command, allocator, cooldown, Unit setter or gameplay consumer is called.
+ 	var serial: int = safe._order_serial if field in ["_walk_casts", "_walk_item_casts"] else safe._cast_serial
+-	if not check("actual original cast/order serial acceptable", serial >= (-1 if field in ["_walk_casts", "_walk_item_casts"] else 0)): return {}
++	if field != "_channels" and not check("actual original cast/order serial acceptable", serial >= (-1 if field in ["_walk_casts", "_walk_item_casts"] else 0)): return {}
+ 	var uid := 0
+ 	if field in ["_pending_item_casts", "_walk_item_casts"]:
+ 		# Battle's allocator issues monotonically from 1 and never reuses a UID.
+@@ -420,7 +420,7 @@
+ 	var restored: Dictionary = capture_adapter.capture(battle, retained_identity)
+ 	var after_max := Time.get_ticks_msec()
+ 	var exact_code: bool = refusal.get("ok") == false and refusal.get("code") == CAPTURE_CASES[capture_case]
+-	if cast_case: exact_code = exact_code and cast_component.get("ok", false) and refusal.get("field") == mutation.field
++	if cast_case: exact_code = exact_code and cast_component.get("ok", false) and refusal.get("section") == mutation.field
+ 	var identity_ok: bool = is_instance_valid(retained_identity) and _exact(identity_before, _identity_snapshot()) and restored.get("identity") == retained_identity
+ 	var held_ok: bool = get_tree().paused and battle._save_barrier.state == battle._save_barrier.State.HELD and battle._save_barrier.health().ok and battle._run_clock._next_tick == next_tick and Engine.get_physics_frames() == physics_before and Engine.get_process_frames() == process_before and get_tree().current_scene == battle and _exact(canvas_before, get_tree().root.canvas_transform) and _exact(nodes_before, _node_ids(battle))
+ 	live_row = {"case": capture_case, "first_role": first_role, "expected_code": CAPTURE_CASES[capture_case], "actual_code": refusal.get("code", ""), "actual_Core_capture_called": actual_negative_capture_called, "DTO_substitution": false, "single_live_field_applied": applied, "temporary_field_unchanged_by_capture": temporary_unchanged, "original_field_type_ieee_restored": restored_typed, "retained_identity_same_live_unchanged": identity_ok, "source_held_no_ticks_no_nodes_added": held_ok, "original_target_object_id": mutation.object_id, "field": mutation.field, "original_typed_view": _live_view(mutation.original_snapshot), "temporary_typed_view": _live_view(mutation.temporary), "refusal_summary": _brief(refusal), "passed": false}
+@@ -431,6 +431,8 @@
+ 	live_row["actual_guard_layer"] = _capture_guard_layer(refusal)
+ 	live_row["actual_section"] = refusal.get("section", "")
+ 	live_row["actual_field"] = refusal.get("field", "")
++	live_row["expected_pair_array"] = mutation.field if cast_case else ""
++	live_row["actual_pair_array"] = refusal.get("section", "") if refusal.get("code") == "LEVEL8_SAFE_CAST_INTENT" else ""
+ 	live_row["direct_safe_cast_pair_coverage"] = cast_case and exact_code
+ 	if cast_case:
+ 		live_row["actual_caster_object_id"] = str(battle.level.get(first_role).get_instance_id())

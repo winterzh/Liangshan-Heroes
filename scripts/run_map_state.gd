@@ -28,6 +28,7 @@ const META_NAMES := ["liangshan_rts_court", "zhongyi_hall_facing_cardinal", "zho
 	"campaign_city_wicket_sealed", "natural_surface_contract"]
 var _content_version: String = ""
 var _trusted_context: Dictionary = {}
+var _prepared_capture_adapter: RefCounted = null
 
 
 func _init(content_version: String, trusted_context: Dictionary = {}) -> void:
@@ -322,6 +323,9 @@ func _capture_height(field: RefCounted) -> Dictionary:
 
 
 func _capture_display(game_map: GameMap) -> Dictionary:
+	if _prepared_capture_adapter != null:
+		if not _prepared_capture_adapter.prepared_capture_ready(game_map, _content_version, _trusted_context): return _fail("PREPARED_DISPLAY_OWNER_REQUIRED", "$/display")
+		return _prepared_capture_adapter.capture(game_map)
 	return SceneryState.new(_content_version, _trusted_context).capture(game_map)
 
 
@@ -349,11 +353,12 @@ func _validate_raw(raw: Dictionary) -> Dictionary:
 		# Authored Jiangzhou crowd markers have an unused zero size. Admit only
 		# that exact fixed layout; ordinary scenery still requires positive size.
 		var crowd: bool = typeof(d[0]) == TYPE_STRING and d[0] == "crowd"
-		if crowd and (_trusted_context != {"mode": "campaign", "level_id": "level2", "waves": 0}
-				or d.size() != 4 or typeof(d[1]) != TYPE_VECTOR2I or d[1] not in JIANG_CROWD_CELLS
-				or typeof(d[2]) != TYPE_FLOAT or d[2] != 0.0
-				or typeof(d[3]) != TYPE_INT or d[3] != d[1].x + d[1].y):
-			return _fail("DECOR_CROWD", "$/header/decor/" + str(index))
+		if crowd:
+			var jiang: bool = _trusted_context == {"mode": "campaign", "level_id": "level2", "waves": 0}
+			var daming: bool = _trusted_context == {"mode": "campaign", "level_id": "level8", "waves": 0}
+			if not (jiang or daming) or typeof(_trusted_context.get("waves")) != TYPE_INT or d.size() != 4 or typeof(d[1]) != TYPE_VECTOR2I or typeof(d[2]) != TYPE_FLOAT or d[2] != 0.0 or typeof(d[3]) != TYPE_INT: return _fail("DECOR_CROWD", "$/header/decor/" + str(index))
+			if jiang and (d[1] not in JIANG_CROWD_CELLS or d[3] != d[1].x + d[1].y): return _fail("DECOR_CROWD", "$/header/decor/" + str(index))
+			if daming and (d[1] not in [Vector2i(28,13),Vector2i(34,21),Vector2i(28,28),Vector2i(35,34)] or d[3] != d[1].y - 1): return _fail("DECOR_CROWD", "$/header/decor/" + str(index))
 		if not _text(d[0], 256) or typeof(d[1]) != TYPE_VECTOR2I or not _number(d[2], 0.0 if crowd else 0.001, 65536.0):
 			return _fail("DECOR_VALUE", "$/header/decor/" + str(index))
 		if d.size() == 4 and not (_text(d[3], 256) or _integer(d[3], 0, 65535)):
@@ -495,3 +500,14 @@ func _codec_failure(result: Dictionary, section: String) -> Dictionary:
 
 func _fail(code: String, path: String) -> Dictionary:
 	return {"ok": false, "code": code, "path": path, "target_changed": false}
+
+## Read-only capture of the exact still-gated transaction returned by
+## finish_display. Ordinary capture keeps rejecting blocked foreign nodes.
+## No snapshot supplies an adapter, no signals/process flags are changed.
+func capture_prepared(game_map: GameMap, adapter: RefCounted) -> Dictionary:
+	if _prepared_capture_adapter != null or not is_instance_valid(adapter) or adapter.get_script() != SceneryState: return _fail("PREPARED_DISPLAY_ADAPTER_REQUIRED", "$/display")
+	if not adapter.prepared_capture_ready(game_map, _content_version, _trusted_context): return _fail("PREPARED_DISPLAY_OWNER_REQUIRED", "$/display")
+	_prepared_capture_adapter = adapter
+	var result: Dictionary = capture(game_map)
+	_prepared_capture_adapter = null
+	return result

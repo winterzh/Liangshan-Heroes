@@ -1,0 +1,42 @@
+{
+  "schema": "pending_UI_fixed_evidence_host_checks_v4",
+  "recorded_utc": "2026-10-08T17:44:01.054300+00:00",
+  "producer": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\tools\\run_campaign_pending_terminal_ui_v4.py",
+    "bytes": 27518,
+    "sha256": "5a66488d84d88209e7bf054e3084871dafc9ef8dab2c12c4635978901e9fc173"
+  },
+  "private_test_directory": "D:\\CodexTemp\\lsh-fixed-evidence-v4-ca67bf53",
+  "original_input_hex": "7b226e6f6e6365223a226f726967696e616c227d0a",
+  "modified_input": {
+    "path": "D:\\CodexTemp\\lsh-fixed-evidence-v4-ca67bf53\\report.json",
+    "bytes": 21,
+    "sha256": "1a4d1abcc8f3f0cb406175710505026b6848086725f6131581c4507135965fd2"
+  },
+  "original_pin_retained": {
+    "path": "D:\\CodexTemp\\lsh-fixed-evidence-v4-ca67bf53\\report.json",
+    "bytes": 21,
+    "sha256": "0378aa7b2ec3cb8c8cc8a4b54822f96e4f5f0fb2568de13e52b8407283f9855b"
+  },
+  "checks": [
+    {
+      "case": "original_read_and_stable_reread",
+      "passed": true
+    },
+    {
+      "case": "modified_report_cannot_rebase",
+      "passed": true
+    },
+    {
+      "case": "native_declared_original_SHA_required",
+      "passed": true
+    },
+    {
+      "case": "original_pin_retained_after_both_refusals",
+      "passed": true
+    }
+  ],
+  "native_started": false,
+  "game_profile_written": false,
+  "UI_or19_orSDK_qualified": false
+}

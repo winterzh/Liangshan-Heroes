@@ -1,0 +1,56 @@
+{
+  "schema": "native_direction4_generation_lineage_v1",
+  "character": "bound_huang_xin",
+  "identity_note": "TOP ROW RIGHT CELL (column3 row1) Huang Xin: stern middle-aged Chinese man, thick dark full beard and moustache, ochre/golden cloth headband and dark top knot, ochre tunic/shoulder scarf, black brown lamellar torso armor with gold rivets and gold shoulder edging, dark trousers and ochre wrapped boots. Preserve ochre/yellow identity. Remove the 镇三山 back-banner entirely; absolutely no flags, writing, flagpole or broad sword. Front wrist-bound unarmed standing foot captive.",
+  "jobs": [
+    {
+      "key": "bound",
+      "method": "built_in_imagegen",
+      "sha256": "93d76a0d3b0dd612d40aa74ffbcdd10e1aa822feb09693ac9054a438eea95f3f",
+      "references": [
+        "original",
+        "body",
+        "first_candidate"
+      ],
+      "prompt": "Edit this native transparent four-view Huang Xin bound prisoner atlas. Fix ONLY the TOP RIGHT QUADRANT's wrong front-facing direction: redraw this top-right full standing prisoner as SW FRONT THREE-QUARTER FACING DOWN-LEFT. His FACE/NOSE/CHEST must point LEFT, toward the center gutter, unlike top-left which correctly faces RIGHT. Viewer sees front and his other side, the opposite shoulder. Do NOT merely turn his head; whole torso, bound front hands, feet, clothing and asymmetric shoulder armor must be the SW view. NOT a horizontal pixel mirror of top-left: redraw preserving same current man, yellow headband/scarf, beard, black gold-riveted lamellar armor, empty front-bound wrists and torso rope. Keep the other THREE quadrants, their facing, clothing, binding and scale as closely unchanged as possible: top-left SE down-right, bottom-left NE rear up-right, bottom-right NW rear up-left. No weapons, banner, flagpole, text, new objects or floor shadow. Maintain independently drawn 2x2 layout, very wide transparent gutters/full silhouette containment; genuinely transparent alpha background, square <=1536 output. Hands tied in front, rear wrists naturally occluded, no wrists tied behind back.",
+      "repository_path": "assets/characters/huang_xin_bound_20261005/bound.png",
+      "status": "selected",
+      "generation_id": "8f06184d-8e3d-4b2c-a771-737161279412"
+    },
+    {
+      "key": "original",
+      "method": "existing_project_reference",
+      "sha256": "4c582335ffbd7af61c607c4c54e28ecd7524d219906a369c1dbed4af0a68f7b8",
+      "references": [],
+      "prompt": "TOP ROW RIGHT CELL (column3 row1) only. Huang Xin: stern middle-aged Chinese man, thick dark full beard and moustache, ochre/golden cloth headband and dark top knot, ochre tunic/shoulder scarf, black brown lamellar torso armor with gold rivets and gold shoulder edging, dark trousers and ochre wrapped boots. Preserve ochre/yellow identity. Remove the 镇三山 back-banner entirely; absolutely no flags, writing, flagpole or broad sword.",
+      "repository_path": "assets/portraits12.png",
+      "status": "required_reference"
+    },
+    {
+      "key": "body",
+      "method": "existing_project_reference",
+      "sha256": "84cf5d8f461fe6723133463169679e8cf6bfc84d4f7142fb0c8933904714ffc6",
+      "references": [],
+      "prompt": "Current existing huang_xin walking body and clothing reference only.",
+      "repository_path": "assets/anim/huang_xin_walk.png",
+      "status": "required_reference"
+    },
+    {
+      "key": "first_candidate",
+      "method": "built_in_imagegen",
+      "sha256": "a36f8c0a1b01177df42ffd2d1bcb669d66de622ca5d7b756461d84c4794065a9",
+      "references": [
+        "original",
+        "body"
+      ],
+      "prompt": "Use case: historical-scene. Asset type: native transparent four-view bound captive sprite atlas for existing Chinese RTS Liangshan Heroes. Input1 is current identity portrait sheet ONLY the specified cell; all other people irrelevant. Input2 is existing walking strip solely current body identity, clothing and painterly style reference. Create a NEW independent square RGBA atlas with exactly FOUR full-body STANDING ALIVE BOUND FOOT PRISONER poses, 2x2 grid. Both wrists tied together IN FRONT of lower chest/upper abdomen, elbows near torso, empty hands. Natural coarse tan torso/upper arm rope joins front binding. Rear views show torso rope; wrists naturally occluded in front, NEVER bound behind back. No fighting, walking, injury, blood, death. Preserve identified current man's face, beard/headwear and clothing. Completely REMOVE all weapons including blades, handles, hilts, sheaths, bows, chains, poles, flags, banners, shields, sack and backpack. No mount or floor shadow. Four separately drawn elevated isometric views at equal body height: TOP LEFT SE front three-quarter down-right, TOP RIGHT SW front three-quarter down-left, BOTTOM LEFT NE rear three-quarter up-right, BOTTOM RIGHT NW rear three-quarter up-left. No mirrored duplication. Full head, cloth tails, empty hands, rope and feet contained in each quadrant. Very wide empty transparent center gutters and at least50px transparent cell edge margins; body 65–72% cell height. Match restrained historical painterly RTS readability at small size. Actual alpha TRANSPARENT background, no black floor, checkerboard, text, labels, border or extra objects. Square native atlas <=1536 ideally1024. Only TOP ROW RIGHT CELL (column3 row1) is huang_xin. Huang Xin: stern middle-aged Chinese man, thick dark full beard and moustache, ochre/golden cloth headband and dark top knot, ochre tunic/shoulder scarf, black brown lamellar torso armor with gold rivets and gold shoulder edging, dark trousers and ochre wrapped boots. Preserve ochre/yellow identity. Remove the 镇三山 back-banner entirely; absolutely no flags, writing, flagpole or broad sword.",
+      "repository_path": "assets/characters/huang_xin_bound_20261005/native_references/first_candidate.png",
+      "status": "required_reference",
+      "generation_id": "4d1eb336-a5e0-4064-871b-e1169eb76290"
+    }
+  ],
+  "original_reference": {
+    "path": "assets/portraits12.png",
+    "sha256": "4c582335ffbd7af61c607c4c54e28ecd7524d219906a369c1dbed4af0a68f7b8"
+  }
+}

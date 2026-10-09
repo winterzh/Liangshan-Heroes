@@ -1,0 +1,46 @@
+{
+  "schema": 1,
+  "character": "wang_ying",
+  "direction": "se",
+  "result": "opposing_pose_attempts_rejected",
+  "rows": [
+    {
+      "state": "walk_a_se",
+      "path": "assets/characters/wang_ying_wounded_20261005/walk_a_se_v4.png",
+      "sha256": "35dd9a37ba51f21d99b6592d97816e6d66def6cee2751ad3d09f62eb772efb41",
+      "job": "tools/contracts/zhu_wounded_20261005/jobs/wang_ying_walk_a_se_v4.json",
+      "job_sha256": "9ee525be34f8762ca10769ed31573dbdc58d9421486fbfc7c027681a2009378c",
+      "selected_as_candidate": true
+    },
+    {
+      "state": "walk_b_se",
+      "path": "assets/characters/wang_ying_wounded_20261005/walk_b_se_v4.png",
+      "sha256": "185e0267a23dad6d875e9188f3065e0449529b8a0947d1e364f87600321506eb",
+      "job": "tools/contracts/zhu_wounded_20261005/jobs/wang_ying_walk_b_se_v4.json",
+      "job_sha256": "2bbcfcfe1eb77dc3dd7e1268bff0ae993cb9c2dc4a24ea2c4a5b8d54d5c79f32",
+      "selected_as_candidate": false
+    },
+    {
+      "state": "walk_b2_se",
+      "path": "assets/characters/wang_ying_wounded_20261005/walk_b2_se_v4.png",
+      "sha256": "258221982a6f86ea84696f97b93ebafbbe72015f5257eb63de14cbd4ed4ecd1f",
+      "job": "tools/contracts/zhu_wounded_20261005/jobs/wang_ying_walk_b2_se_v4.json",
+      "job_sha256": "5906cce8d5669f85a69fd3a50fd2465696f8ac511ffee8c2b5850905605cb410",
+      "selected_as_candidate": false
+    }
+  ],
+  "directly_viewed_native": true,
+  "reasons": {
+    "walk_b_se": [
+      "Still repeats A: image-right foreground boot planted and image-left boot raised"
+    ],
+    "walk_b2_se": [
+      "Pose-first attempt still repeats the same planted foreground boot",
+      "Shin wraps changed from Wang Ying horizontal bands to guide-style crisscross wrapping",
+      "Do not select as a matching opposing walking frame"
+    ]
+  },
+  "next": "Use an explicit short-adult geometry pose guide or different native edit strategy; SW/NW prepared requests have not run",
+  "method": "built-in image_gen attempts; native PNGs/request/parents retained unchanged",
+  "production_qualified": false
+}

@@ -1,0 +1,146 @@
+{
+  "schema": "campaign_callback_packets_preliminary_independent_review_v1",
+  "review_revision": 2,
+  "reviewed_at_utc": "2026-10-08T23:58:53.967340+00:00",
+  "independent": true,
+  "source_only": true,
+  "static_api_closure_passed": true,
+  "approved_stages": [],
+  "helper_sha256": "2c1f52416009f0310f8db1b17ebe1043abe2642e3ccfc26199dbadf21bd66c1c",
+  "source_spec_file_sha256": "88ff59cb61a8a7075bc51816809c2e86eecd1d9cc2921e40cb014c7d66050259",
+  "helper_pin": {
+    "path": "D:/AI项目/水浒/开发工程/tools/campaign_callback_packets_v2.py",
+    "bytes": 8161,
+    "sha256": "2c1f52416009f0310f8db1b17ebe1043abe2642e3ccfc26199dbadf21bd66c1c"
+  },
+  "source_spec_pin": {
+    "path": "D:/AI项目/水浒/开发工程/qa/campaign_progress_recovery_20261008/CALLBACK_PACKETS_SOURCE_SPEC_V2.json",
+    "bytes": 3951,
+    "sha256": "88ff59cb61a8a7075bc51816809c2e86eecd1d9cc2921e40cb014c7d66050259"
+  },
+  "source_pins": [
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\campaign_callback_packets_v2.py",
+      "bytes": 8161,
+      "sha256": "2c1f52416009f0310f8db1b17ebe1043abe2642e3ccfc26199dbadf21bd66c1c"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\campaign_callback_snapshot_wire_v1.py",
+      "bytes": 1214,
+      "sha256": "ead7f49ee949a73f302129374c815091910aaade44d5e24f7ade40b34a17726d"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\godot_debug_wire.py",
+      "bytes": 6794,
+      "sha256": "41703c88628a3fa473db00d8eeb79e87e6c2f250b0dc243a951b8295973e0c35"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\callback_observer_candidate_v1\\campaign_callback_snapshot_v1.gd",
+      "bytes": 4363,
+      "sha256": "97105db494a71c3821507092f02550d1d022ea30f082d7e61226646f7576b989"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\callback_observer_candidate_v1\\SOURCE.json",
+      "bytes": 4521,
+      "sha256": "5114054f2f43f18d9522b8d2d66c085c4ccbf8fd1096a8bee11cccf9cce5096d"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\callback_observer_candidate_v1\\CALLBACK_OBSERVER_PRELIMINARY_REVIEW_V1.json",
+      "bytes": 7536,
+      "sha256": "e5dfdd91bfc45731c952ba00bec11b4f652f009dcd9ffa44425947031aed18f3"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\callback_observer_candidate_v1\\ACTUAL_CALLBACK_SOURCE_MAP_V1.json",
+      "bytes": 5847,
+      "sha256": "e14f39d07bb99c8d2224c42b469f5b5de9872bad0e76a668af444d4faf430960"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\CALLBACK_PACKETS_SYNTHETIC_HOST_CHECKS_V2.py",
+      "bytes": 4937,
+      "sha256": "c9d2505c7afbe217df789c9df8c2cf475beaa7f666f593d9d5580f529a1b1b57"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\CALLBACK_PACKETS_SYNTHETIC_HOST_CHECKS_V2.json",
+      "bytes": 5616,
+      "sha256": "28d847976263626e2dec2e524af467a5323dacc35ce9cc682d442e531992e6d3"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\campaign_callback_packets_v2_source_snapshot.py",
+      "bytes": 8161,
+      "sha256": "2c1f52416009f0310f8db1b17ebe1043abe2642e3ccfc26199dbadf21bd66c1c"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\campaign_callback_packets_v1.py",
+      "bytes": 7820,
+      "sha256": "2e2f30b18bdc86e87d0e99adc5d23da3eb515a2508da863bd073c201f66e5678"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\CALLBACK_PACKETS_SOURCE_SPEC_V1.json",
+      "bytes": 3351,
+      "sha256": "1c2e6cf145d1a228bbc24459d59c5f6c7ac0b38a9c355de6ae1e172e5e5b8e7e"
+    }
+  ],
+  "previous_rejected_review_pin": {
+    "path": "D:/AI项目/水浒/开发工程/qa/campaign_progress_recovery_20261008/CALLBACK_PACKETS_PRELIMINARY_REVIEW_V1.json",
+    "bytes": 7112,
+    "sha256": "8aade94cf2a92236489e24cdd0d09200a07e570fae3d73525e0da2635a5a147f"
+  },
+  "blocking_findings": [],
+  "resolved_findings": [
+    {
+      "id": "CALLBACK-UNICODE-001",
+      "status": "closed_for_this_pure_decoder",
+      "fix_verified": "json_value validates strict UTF-8 encodability of every decoded JSON key and string before returning. Escaped lone high/low surrogates are rejected as WireError; legal escaped NUL and paired surrogate Unicode remain supported.",
+      "independent_complete_snapshot_counterexamples": "Both V1 key/value reproductions now refuse with ready unchanged and sequence still zero. A subsequent legal NUL snapshot succeeds at sequence one and remains UTF-8 serializable."
+    }
+  ],
+  "source_delta": {
+    "only_changed_top_level_function": "json_value",
+    "added_nested_helper": "text_value",
+    "complete_CallbackPackets_class_AST_exact_V1": true,
+    "unchanged_boundaries": [
+      "original raw packet bytes/SHA result",
+      "type-exact supplied identity",
+      "fixed fields/PID/nonce/case/thread/sequence and replay refusal",
+      "nonfinite/duplicate/depth/node/byte limits",
+      "failure-before-sequence-advance",
+      "ownership_proven=false/native_qualified=false"
+    ]
+  },
+  "closure": {
+    "pins_verified": 12,
+    "snapshot_byte_exact": true,
+    "all_pinned_local_python_import_edges": 10,
+    "missing_local_import_pins": []
+  },
+  "independent_host_checks": {
+    "classification": "synthetic/pure-host; no socket, Popen or Godot",
+    "delta_checks_passed": 12,
+    "checks": [
+      "lone high scalar refused",
+      "lone low scalar refused",
+      "lone high key refused",
+      "lone low key refused",
+      "nested surrogate value refused",
+      "array surrogate value refused",
+      "escaped NUL preserved",
+      "paired surrogate preserved",
+      "valid Unicode key preserved",
+      "original full-snapshot high-value counterexample refused without state advancement",
+      "original full-snapshot low-key counterexample refused without state advancement",
+      "valid NUL full snapshot accepted after refusals with original raw SHA and UTF-8 serializable output"
+    ],
+    "ordinary_V1_independent_checks_reference": "73 existing independent boundary checks are recorded in the pinned previous rejection review; unchanged consumer AST permits reuse of those static conclusions. The source-pinned 60-check V2 host script/result was read as reference rather than promoted to native proof."
+  },
+  "qualification": {
+    "socket_opened": false,
+    "Popen_started": false,
+    "Godot_started": false,
+    "ownership_proven": false,
+    "actual_callback_qualified": false,
+    "original19_qualified": false,
+    "SDK_qualified": false,
+    "overall_goal_qualified": false
+  },
+  "scope_limit": "Pure packet decoding source preliminary only. Supplied PID/identity bindings are not independent ownership/source proof, and JSON is an observation projection rather than full Godot Variant preservation. Current-engine paused capture, controller, three-case native assertions and whole-goal admission remain unverified."
+}

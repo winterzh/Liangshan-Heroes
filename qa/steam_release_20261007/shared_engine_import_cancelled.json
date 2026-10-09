@@ -1,0 +1,18 @@
+{
+  "complete": false,
+  "run": ".godot/steam_integration_qa/20261007_084104_ae4e11c7",
+  "source_head": "bf9e192de68e561870881cee27533834d1b55a71",
+  "stage": "import",
+  "checks": 0,
+  "reason": "Another task resumed its test sequence after a brief idle gap. Our import was stopped to preserve the user's wait-for-idle preference.",
+  "owned_import_pid": 196564,
+  "owned_parent_pid": 191484,
+  "owned_command_path_checked_before_stop": true,
+  "foreign_processes_changed": false,
+  "original_receipt_and_logs_retained": true,
+  "original_producer_unchanged": true,
+  "producer_lock_released": true,
+  "retry_producer": "tools/run_steam_release_native_qa_20261007.py",
+  "retry_change": "Require 60 seconds of continuous engine idle immediately before each native QA engine stage.",
+  "steam_uploaded": false
+}

@@ -1,0 +1,8 @@
+{
+  "passed": false,
+  "native_checks_passed": true,
+  "native_checks": 560,
+  "directly_reviewed_screenshots": 32,
+  "reason": "All four naturally trained chapter actor captures are obscured by the already created opaque fog canvas. fog=false stops updates but leaves the canvas visible. Native checks pass but this does not prove chapter appearance.",
+  "correction": "Hide the fog canvas only in the post-natural-training appearance fixture and assert the actual actor remains visible; replay normal training on fresh frozen inputs. Production fog/gameplay and art pixels unchanged."
+}

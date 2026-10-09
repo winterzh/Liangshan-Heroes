@@ -1,0 +1,36 @@
+--- daming_safe_retreat_capture_negative_v25.gd
++++ daming_safe_retreat_capture_negative_v25b.gd
+@@ -33,6 +33,7 @@
+ var mutation: Dictionary = {}
+ var live_row: Dictionary = {}
+ var row_completed := false
++var actual_negative_capture_called := false
+ var evidence_serial := 0
+ 
+ func _brief(value: Variant) -> Dictionary:
+@@ -304,6 +305,7 @@
+ 	var target: Object = mutation.target
+ 	target.set(mutation.field, mutation.temporary)
+ 	var applied := _exact(target.get(mutation.field), mutation.temporary)
++	actual_negative_capture_called = true
+ 	var refusal: Dictionary = capture_adapter.capture(battle, retained_identity)
+ 	var temporary_unchanged := _exact(target.get(mutation.field), mutation.temporary)
+ 	# Synchronous single-field undo: no await, signal, tick, protection or broad reset.
+@@ -315,7 +317,7 @@
+ 	var exact_code: bool = refusal.get("ok") == false and refusal.get("code") == CAPTURE_CASES[capture_case]
+ 	var identity_ok: bool = is_instance_valid(retained_identity) and _exact(identity_before, _identity_snapshot()) and restored.get("identity") == retained_identity
+ 	var held_ok: bool = get_tree().paused and battle._save_barrier.state == battle._save_barrier.State.HELD and battle._save_barrier.health().ok and battle._run_clock._next_tick == next_tick and Engine.get_physics_frames() == physics_before and Engine.get_process_frames() == process_before and get_tree().current_scene == battle and _exact(canvas_before, get_tree().root.canvas_transform) and _exact(nodes_before, _node_ids(battle))
+-	live_row = {"case": capture_case, "first_role": first_role, "expected_code": CAPTURE_CASES[capture_case], "actual_code": refusal.get("code", ""), "actual_Core_capture_called": true, "DTO_substitution": false, "single_live_field_applied": applied, "temporary_field_unchanged_by_capture": temporary_unchanged, "original_field_type_ieee_restored": restored_typed, "retained_identity_same_live_unchanged": identity_ok, "source_held_no_ticks_no_nodes_added": held_ok, "original_target_object_id": mutation.object_id, "field": mutation.field, "original_typed_view": _live_view(mutation.original_snapshot), "temporary_typed_view": _live_view(mutation.temporary), "refusal_summary": _brief(refusal), "passed": false}
++	live_row = {"case": capture_case, "first_role": first_role, "expected_code": CAPTURE_CASES[capture_case], "actual_code": refusal.get("code", ""), "actual_Core_capture_called": actual_negative_capture_called, "DTO_substitution": false, "single_live_field_applied": applied, "temporary_field_unchanged_by_capture": temporary_unchanged, "original_field_type_ieee_restored": restored_typed, "retained_identity_same_live_unchanged": identity_ok, "source_held_no_ticks_no_nodes_added": held_ok, "original_target_object_id": mutation.object_id, "field": mutation.field, "original_typed_view": _live_view(mutation.original_snapshot), "temporary_typed_view": _live_view(mutation.temporary), "refusal_summary": _brief(refusal), "passed": false}
+ 	if not check("actual live capture exact controlled refusal", applied and temporary_unchanged and exact_code, refusal): return false
+ 	if not check("original typed property and caller-owned identity restored", restored_typed and identity_ok): return false
+ 	if not check("source remains exact HELD with no ticks/nodes/scene change", held_ok): return false
+@@ -332,7 +334,7 @@
+ 	if not mutation.is_empty() and is_instance_valid(mutation.get("target")):
+ 		mutation.target.set(mutation.field, mutation.original)
+ 	var passed: bool = row_completed and live_row.get("passed", false) and not checks.is_empty() and checks.all(func(r): return r.passed)
+-	var report := {"schema": CAPTURE_SCHEMA, "passed": passed, "row_completed": row_completed, "case": capture_case, "first_role": first_role, "pid": OS.get_process_id(), "nonce": nonce, "actual_user_data_dir": OS.get_user_data_dir(), "private_profile": profile, "content_version": trusted.get("content_version", ""), "engine_sha256": FileAccess.get_sha256(OS.get_executable_path()), "checks": checks, "observations": observations, "evidence": evidence, "provenance": capture_provenance, "executed_live_row": live_row, "actual_live_object_capture": true, "whole_live_capture_matrix_qualified": false, "overall_v25_qualified": false, "separate_component_harness_implemented": false, "native_log_zero_ERROR_verified": false, "implemented_cases": CAPTURE_CASES.keys(), "not_run_scope": ["five live cast array negatives", "record schema/identity types are DTO-only; no user-settable live identity leaf", "full role/case/process matrix aggregation requires producer", "natural terminal/reward/tick regressions"], "source_row_isolation": "one case per fresh independent process/profile; complete actual A Session installed", "hold_helper_source": "v24s 76ed6f114de755b398112778ddabf5af820a30237b75070a5a2aaaea188b87db", "hold_helper_native_qualified_at_preparation": false, "base_harness_sha256": FileAccess.get_sha256("res://tools/daming_safe_retreat_cross_process_v25.gd"), "harness_sha256": FileAccess.get_sha256(get_script().resource_path), "disk_slot_writes": 0, "gameplay_ticks_injected": 0, "grid_clears": 0, "runtime_patches": 0}
++	var report := {"schema": CAPTURE_SCHEMA, "passed": passed, "row_completed": row_completed, "case": capture_case, "first_role": first_role, "pid": OS.get_process_id(), "nonce": nonce, "actual_user_data_dir": OS.get_user_data_dir(), "private_profile": profile, "content_version": trusted.get("content_version", ""), "engine_sha256": FileAccess.get_sha256(OS.get_executable_path()), "checks": checks, "observations": observations, "evidence": evidence, "provenance": capture_provenance, "executed_live_row": live_row, "actual_Core_capture_called": actual_negative_capture_called, "actual_live_object_capture": actual_negative_capture_called, "whole_live_capture_matrix_qualified": false, "overall_v25_qualified": false, "separate_component_harness_implemented": false, "native_log_zero_ERROR_verified": false, "implemented_cases": CAPTURE_CASES.keys(), "not_run_scope": ["five live cast array negatives", "record schema/identity types are DTO-only; no user-settable live identity leaf", "full role/case/process matrix aggregation requires producer", "natural terminal/reward/tick regressions"], "source_row_isolation": "one case per fresh independent process/profile; complete actual A Session installed", "hold_helper_source": "v24s 76ed6f114de755b398112778ddabf5af820a30237b75070a5a2aaaea188b87db", "hold_helper_native_qualified_at_preparation": false, "base_harness_sha256": FileAccess.get_sha256("res://tools/daming_safe_retreat_cross_process_v25.gd"), "harness_sha256": FileAccess.get_sha256(get_script().resource_path), "disk_slot_writes": 0, "gameplay_ticks_injected": 0, "grid_clears": 0, "runtime_patches": 0}
+ 	if not output.is_empty() and DirAccess.dir_exists_absolute(output) and not FileAccess.file_exists(output.path_join("report.json")):
+ 		var file := FileAccess.open(output.path_join("report.json"), FileAccess.WRITE)
+ 		if file != null: file.store_string(JSON.stringify(report, "\t") + "\n"); file.close()

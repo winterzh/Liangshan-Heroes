@@ -1,0 +1,169 @@
+{
+  "schema": "campaign_persistence_observability_independent_review_v27",
+  "created_utc": "2026-10-07T21:09:53.939538+00:00",
+  "reviewer": "/root/fx_caller_review",
+  "candidate_pins": [
+    {
+      "path": "E:\\ChatGPT\\campaign_persistence_observability_v27_proposal\\proposed\\scripts\\campaign.gd",
+      "bytes": 21958,
+      "sha256": "ff819e38b6a6516feb17e9880b033171ea17cb10937f7004ffd9be8009e71f00"
+    },
+    {
+      "path": "E:\\ChatGPT\\campaign_persistence_observability_v27_proposal\\proposed\\scripts\\battle.gd",
+      "bytes": 790278,
+      "sha256": "6d9ea00b2fe65341af24378507f399456cc3a71bcad582093580b41d514ca381"
+    }
+  ],
+  "original_pins": [
+    {
+      "path": "E:\\ChatGPT\\campaign_persistence_observability_v27_proposal\\original\\scripts\\campaign.gd",
+      "bytes": 14689,
+      "sha256": "db50f6d1c97ca26746f5fbe576487390af5d81f4af708c289155f23cca38ff02"
+    },
+    {
+      "path": "E:\\ChatGPT\\campaign_persistence_observability_v27_proposal\\original\\scripts\\battle.gd",
+      "bytes": 789563,
+      "sha256": "f020f434f755950d41dae9320bcdcb388359835b714f83bbd4592300514172b1"
+    }
+  ],
+  "diff_pin": {
+    "path": "E:\\ChatGPT\\campaign_persistence_observability_v27_proposal\\proposal.diff",
+    "bytes": 12460,
+    "sha256": "b4ec6f746ea843ee06f7566e1291307333fa9f216bc36b32a314e309a2a3c19d"
+  },
+  "official_source_evidence_pin": {
+    "path": "E:\\ChatGPT\\campaign_persistence_observability_v27_proposal\\CONFIGFILE_OFFICIAL_ENGINE_SOURCE_EVIDENCE_FX.json",
+    "bytes": 4367,
+    "sha256": "8c2412415648810fae1e44e81f8f7cf49e665736b1325b00f7419abc9fd03370"
+  },
+  "static_scope_review_complete": true,
+  "static_api_closure_passed": false,
+  "native_qualified": false,
+  "GDScript_native_parse_performed": false,
+  "engine_started": false,
+  "root_applied": false,
+  "review_status": "pending explicit builtin acceptance table and boundary wording; no identified current4.6.3 getter/StringName/typed-parser execution blocker",
+  "required_followup": [
+    {
+      "priority": "P2 scope boundary",
+      "path": "proposed/scripts/campaign.gd",
+      "function": "_cfg_value_supported",
+      "finding": "All non-Dictionary/Array non-identity values currently default to supported. Exact4.6.3 enum audit found no omitted current data writer case; TYPE_MAX is a sentinel not constructible as ordinary GDScript Variant. Root requested explicit fixed data-kind table instead of accepting future unsupported types by default. New sibling must preserve original artifacts.",
+      "native_failure_reproduced": false
+    },
+    {
+      "priority": "documentation",
+      "finding": "Current depth limit applies before kind dispatch to every recursive value node (root depth0), not just containers. At container depth128, child leaf129 is refused. Document value-recursion depth<=128 rather than container depth only."
+    }
+  ],
+  "independent_raw_checks": {
+    "originals_equal_current_ROOT_bytes": true,
+    "best_single_run_raw_bytes": 1032,
+    "best_single_run_raw_sha256": "bbd0ff1efdaad92c6b6d071c297c3ffef70a8c798490b1f5cf7cab128d18a26c",
+    "changed_original_Campaign_functions": [
+      "on_level_won",
+      "record_level_result",
+      "_save"
+    ],
+    "other20_Campaign_functions_raw_equal": true,
+    "Battle_only_inserted_lines": 8,
+    "all_original_Battle_bytes_preserved": true
+  },
+  "checked_behavior": [
+    "Valid result accepted separately from persistence. Candidate records/unlocked staged before write, installed only on receipt.ok. Real write/readback refusal leaves records/unlocked memory unchanged; QA memory/seal semantics retained with persistedfalse and no disk/dirty calls.",
+    "Existing malformed/load-failed cfg is not rebuilt. Unsupported Object/RID/Callable/Signal/scripted/object typed containers/cycles/depth are refused before encoder/save. All current primitive/math/Packed/StringName data types map to exact4.6.3 writer/parser branches; recursive container checks use registered actual getters and identity comparison.",
+    "Full section/key membership represented independently of original ordering/escaping. Each supported value checked by typeof and native safe fixed-name ConfigFile canonical text. Strings includingStringName and built-in typed metadata are retained by actual parser branches; NaN and negativezero follow documented writer canonicalization, not JSON or IEEE equality.",
+    "Fresh ConfigFile readback; source expected document not incrementally reloaded. SaveError/readError/mismatch/hashinterval evidence recorded. Write attempted but unconfirmed readback remains disk_state_unconfirmedtrue, memoryold, no cloud callback. SHA interval is observation, not CAS/locking/fsync/crash transaction.",
+    "Cloud callback requested only after persistedtrue and new result memory installed, since mark_dirty may synchronously read Campaign. Invocation/request does not prove dirty state or upload; _applying may suppress callback body. _save bool retainsQA true; save_prefs void and apply_cloud_progress bodies rawsame.",
+    "Existing apply_cloud_progress replaces memory before _save; false-on-real-failure now propagated but its old cloud memory replacement not rolled back. This limitation is expressly documented, not silently represented as repaired.",
+    "Mission.result_snapshot source233-275 returns deep duplicate. New Battle local receipt fields cannot mutate frozen Mission cache. SteamService.settle163+ and SteamRunReceipt.prepare_settle192-209 use actual victory and story_total/story_done/story_complete; AchievementState.settle18-38 performs win/clear/story unlock. Those original fields/calls remain byteexact and are not conditional on cfg success.",
+    "New local persistence report fields are upward observations only. HUD2819+ ignores receipt and may still show existing seal strings; player-visible failure/retry UI, gen2/cfg/ack crash closure and full source/native/release qualification remain absent.19 planned matrix cases/harness all unexecuted."
+  ],
+  "official_additional_API_evidence": [
+    {
+      "url": "https://raw.githubusercontent.com/godotengine/godot/4.6.3-stable/core/variant/variant_parser.cpp",
+      "lines": [
+        [
+          385,
+          390
+        ],
+        [
+          1531,
+          1539
+        ],
+        [
+          1118,
+          1250
+        ],
+        [
+          1251,
+          1324
+        ],
+        [
+          2027,
+          2030
+        ],
+        [
+          2112,
+          2240
+        ]
+      ],
+      "observation": "Tokenizer creates StringName for ampersand syntax; parser retains token Variant. Typed Dictionary/Array parser sets typed metadata matching native writer syntax."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/godotengine/godot/4.6.3-stable/core/variant/variant_call.cpp",
+      "lines": [
+        [
+          2437,
+          2448
+        ],
+        [
+          2490,
+          2525
+        ]
+      ],
+      "observation": "Dictionary and Array get_typed builtin/script methods registered to actual GDScript-callable Variant APIs."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/godotengine/godot/4.6.3-stable/core/variant/array.cpp",
+      "lines": [
+        [
+          862,
+          872
+        ]
+      ],
+      "observation": "Array typed builtin/script accessors exist with expected return forms."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/godotengine/godot/4.6.3-stable/core/variant/dictionary.cpp",
+      "lines": [
+        [
+          671,
+          692
+        ]
+      ],
+      "observation": "Dictionary key/value builtin/script accessors exist."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/godotengine/godot/4.6.3-stable/drivers/windows/file_access_windows.cpp",
+      "lines": [
+        [
+          203,
+          218
+        ]
+      ],
+      "observation": "Missing file ENOENT maps to ERR_FILE_NOT_FOUND; other open failures stay CANT_OPEN."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/godotengine/godot/4.6.3-stable/core/variant/variant.h",
+      "lines": [
+        [
+          90,
+          143
+        ]
+      ],
+      "observation": "Exact4.6.3 enum contains39 value kinds and VARIANT_MAX sentinel; four identity kinds excluded,33 scalar/math/Packed data kinds plus2 containers remain."
+    }
+  ],
+  "no_native_claim": "Official source lookup and rawline hashing only. No compiler/CLI/native/profile/Cloud/Steam actions. Requested follow-up uses new immutable sibling, not public modifications."
+}

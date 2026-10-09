@@ -1,0 +1,65 @@
+{
+  "schema": "campaign_cloud_CFG_semantics_preliminary_independent_review_v1",
+  "reviewed_at_utc": "2026-10-09T02:32:34.364621+00:00",
+  "independent": true,
+  "source_only": true,
+  "limited_preliminary_review": true,
+  "static_api_closure_passed": true,
+  "approved_stages": [],
+  "source_spec_file_sha256": "a9081b50c79c3db8043c2fc8786f7921eaf6f5969fc9ac54ca60a1653aeb8ae0",
+  "review_scope_sha256": "717029867637f79d8594f0fa989d90f7d83eb4bb8e127e97741aab8fe163d408",
+  "candidate_sha256": "50eccb5f6142065cee2227298d3f79dba16388e67bbcf98e140899b476ad5064",
+  "candidate_source_manifest_sha256": "f21620442f20fa5c819f32657e9f7bbdd4304ff1a69a73b41aa77d0d7977158e",
+  "production_CFG_values_sha256": "8d962715c19f0b9d3c045a25b5f215e9600ceeff204524fc0be630da8598eb27",
+  "reviewed_helpers": {
+    "campaign_cloud_cfg_semantics_v1.py": "e123958441af8d63a69a8ebcc0405c4326e787f9a6bcb977bf050ec85d69ad48",
+    "campaign_cloud_applying_exports_v2.py": "e04dfc0a9b3949652c1b43baee16c3fe65c4d4a9acbea18590bf6a9fd4208009",
+    "campaign_cloud_applying_runtime_v4.py": "ee848f8de8d4cdf04de0abfa5ae6166caef663e1c89e982b48458494e79d3e09",
+    "campaign_cloud_apply_first_evidence_v3.py": "81ea3efd14471ed872c21e81c6a81bab7d7327b8367cff4f7d7ae5331a78b513"
+  },
+  "verified_source_counts": {
+    "unique_pins": 254,
+    "all_pinned_local_python_import_edges": 589,
+    "missing_import_pins": 0,
+    "exact_new_snapshots": 4,
+    "previous_pins_preserved": 236
+  },
+  "source_label_counts": {
+    "complete": 40,
+    "ready": 24,
+    "before_apply": 27
+  },
+  "confirmed_findings": [],
+  "confirmed_limited_conclusions": [
+    "All 254 source pins and 589 all-pinned local-tools import edges independently match with no missing targets. Four new helper snapshots are exact; all 236 prior pins preserve their bytes/SHA.",
+    "GD V3 uses the actual pinned CfgValues.semantics API. It independently loads the original public CFG, obtains complete per-section/key Variant type and canonical single-value probe projections and checks original bytes are stable.",
+    "The expected proposal is an isolated in-memory ConfigFile initialized from that original load; only progress schema, unlocked, records and owner are set. No expected-file save or direct Campaign memory publication is added.",
+    "After the unchanged production cloud apply, a separate ConfigFile freshly loads actual public CFG, computes complete supported projections and requires whole-section equality with expected plus stable actual CFG SHA. These seven added checks form the full 40-check contract.",
+    "The fourth native semantics-ready export preserves original JSON projection strings and their native SHA. Host binding requires original PID/nonce/case/full identity/private user and original physical CFG SHA before original physical capture and receiver/arm dispatch.",
+    "Projection comparison validates original JSON string hashes, exact typed rows and complete original sections/unknown progress-key preservation. Host does not emulate ConfigFile parsing or guess native canonical formatting.",
+    "The first consumer retains actual terminal-Popen/source/environment, four closed native exports, full ordered labels, original packet replay and fourteen-field physical journal checks before comparing complete final native projection to expected and both original journal semantics hashes.",
+    "Owner seam, arm controller, physical generation bounds, packet/tail custody and owned/unknown-child cleanup are retained. The consumer limited semantics-success return is conditional code, not a result obtained in this source review."
+  ],
+  "unverified": [
+    "GD V3 has not been parsed or run; actual Godot ConfigFile load/probe semantics and current-engine debugger compatibility remain untested.",
+    "Actual first consumer with retained Popen, original exports/packet stream and physical journals has not executed.",
+    "Parent 25 fabricated projection/type/hash/journal/fake-owner fixtures are not native ConfigFile proof and were not independently rerun as a full pipeline.",
+    "Ordinary same-profile cloud restart, complete producer, successful V12 prior, exact executable admission and complete original19/SDK/overall qualification remain unestablished."
+  ],
+  "GD_parsed": false,
+  "actual_Godot_semantics_executed": false,
+  "actual_first_consumer_executed": false,
+  "actual_Popen_or_socket_constructed": false,
+  "native_started": false,
+  "native_full_CFG_semantics_verified": false,
+  "ordinary_cloud_restart_implemented": false,
+  "complete_cloud_producer_implemented": false,
+  "successful_prior_bound": false,
+  "complete_case_qualified": false,
+  "Steam_account_qualified": false,
+  "upload_qualified": false,
+  "SDK_reward_once_qualified": false,
+  "original19_qualified": false,
+  "overall_goal_qualified": false,
+  "scope_note": "Finite new-GD/API/original-projection/physical-byte-and-journal binding source review only. No native admission, completed cloud case or broader qualification."
+}
