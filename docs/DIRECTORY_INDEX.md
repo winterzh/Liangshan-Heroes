@@ -1,3 +1,7 @@
+## 2026-10-09：完整云用例来源
+
+tools新增固定重启publisher、case runtime包装和完整cloud producer；恢复QA新增三snapshot、CLOUD_CASE完整recipe/准备/scope、11项publication synthetic脚本/结果、第四failed prior原stdout/拒绝及有限独立mainchain初审。原source-only与原拒绝均保留，无成功前置/native准入。
+
 ## 2026-10-09：云普通重启来源
 
 恢复QA新增 cloud_restart_driver_candidate_v1/：GD、33来源标签合同、SOURCE、准备脚本、scope、host原snapshot/direct source；tools新增 campaign_cloud_restart_evidence_v1.py。独立review原件纳入本轮白名单，native/完整producer均未通过。

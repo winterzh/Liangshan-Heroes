@@ -1,3 +1,13 @@
+## 2026-10-09：云应用与普通重启完整执行器源码接入
+
+新增cloud_restart_exports_v1/case_runtime_v1/run_cloud_case_v1，接齐旧独立审查B1/B2的单report安全发布和完整cold→cloud→同档案restart三进程源码。publisher原stage/marker/SHA和Windows no-replace保持；restart wrapper在Popen前核精确环境、installed GD/parent alias、first report与post-cold identity，终态Popen仍持有时publisher→consumer→integrity，清child/lease和失败cleanup全继承原phase。完整40/33标签、15identity、原arm/packet/tail/wholeCFG/14字段journal/noReplay/SDK禁用边界不放宽。
+
+recipe-only实际exit0，287pins/696全部已pin本地导入边/31运行覆盖，logical202e2644289164cf98043179fd8031d346bcdee0064194ab25df53bd9d11b147。三新source snapshot精确；11项synthetic文件发布检查通过（正确原字节/重复稳定回读、缺/错/重复marker、PID/nonce/filename、hash/stage/原destination不覆盖/非法JSON），未构造nativePopen或完整consumer。第四失败V12 prior实际CLI再次exit1于successfulall61门槛，原stdout与prior pin保存，seal和work root未创建。
+
+有限主链独立初审无新增确定API阻断，原收据SHA 2fea1a8a12e5922a14d984b9305d37c967f68ec0cbb8a5f5b744bd68a29b1a6f；287来源全回核、logical独立重算通过，旧B1/B2仅源码接入完成。stage=[]、完整依赖/API审计未完成，不作运行准入。run仍需成功closed all61前置、精确新seal与fullchain新独立准入；没有actual三个进程/Godot解析/完整validate/整个用例结果。数字owner只为本地SDK禁用输入，不授Steam账号/上传/奖励。
+
+当前另一个聊天仍active且继续原生验收，瞬间无Godot不作整批窗口，第五V12未启动。原19/UI/SDK/八章/资源/多尺寸/九玩法/Windows安装/连续10分钟性能/Android真机全目标保留，正式R12未晋升。
+
 ## 2026-10-09：云恢复后同档案普通重启候选
 
 独立有限源码审查已完成，原驱动收据 SHA c7fc3c75cf9b11b2bd220e1f695ddb88d1bcd229c3716c1bb288f709c3c3930c、consumer收据 SHA 92f3a1501561d0ac2e7d6937d66b3a5bef4dcd107a8ed2cf3f5a845a4a314f9e；14列明来源pin回核一致，未发现确定静态API错误。原B1/B2为已明确尚未接入的单report安全publisher/phase与三进程完整producer，继续实现；stage=[]、无Godot解析或native资格。
