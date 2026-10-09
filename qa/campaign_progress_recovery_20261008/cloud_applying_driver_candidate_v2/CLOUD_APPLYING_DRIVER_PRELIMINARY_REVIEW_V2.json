@@ -1,0 +1,52 @@
+{
+  "schema": "campaign_cloud_applying_driver_preliminary_independent_review_v1",
+  "reviewed_at_utc": "2026-10-09T01:47:01.687486+00:00",
+  "independent": true,
+  "source_only": true,
+  "limited_delta_only": true,
+  "static_api_closure_passed": true,
+  "approved_stages": [],
+  "candidate_sha256": "e9b0608bdc0aa97cdc0a6601d00cc4fffb00dac602f78fcb40d00797cc7d87b9",
+  "observer_sha256": "063dba2b3d4de79fe1acf0ae862a6c60729d9f91e1d8e8f89f9aeaa5332931d5",
+  "source_manifest_sha256": "f3ff23f70d3aad01e5ff2b477b32a7f26bc8b5df53b04a3e381c565728a3dcab",
+  "review_scope_sha256": "5639a8da3bcdb801fba4df6a5de17d15073e289bfbe7fe205e2188204085b82c",
+  "previous_chain_review_sha256": "c584d46378cb681218de3368f8b9943bc677494c78682ac50bc30d29452bb3da",
+  "previous_observation_rejection_sha256": "5a76baeea957d49601236a360e38b6293c58aaeb499e518c9138ce4fcad3355a",
+  "verified_source_rows": 22,
+  "source_complete_label_count": 33,
+  "source_driver_ready_label_count": 20,
+  "source_before_apply_label_count": 23,
+  "confirmed_findings": [],
+  "resolved_finding": {
+    "id": "CLOUD-ARM-001",
+    "resolution_scope": "Finite source-level dispatcher receipt gate only; not executable breakpoint installation proof.",
+    "details": "Driver now waits up to 30 seconds using process_frame for the actual observer arm_received flag and requires sequence zero, unchanged original production objects/memory, no pending writer/shared profile and unchanged original dirty/pending-upload/revision before calling real synchronous _apply_profile."
+  },
+  "confirmed_limited_conclusions": [
+    "All 22 unique manifest source rows match declared byte counts and SHA-256. The ten production API source rows are exact V1 and the driver _write body is byte-identical to V1.",
+    "The observer inherits original install, production-node checks, read-only snapshot and close behavior. Its sole _capture override accepts one arm only while active for the fixed cloud case, exact PID/nonce/case/integer sequence zero, same production objects and SDK-disabled empty CAMPAIGN_QA environment.",
+    "Arm handling changes only QA observer bookkeeping, exports its actual PID/nonce/object IDs/identity acknowledgment and forbids read before arm_received. Original read processing remains super._capture.",
+    "The driver keeps the same production apply path, synthetic local owner seam, original checks and qualification flags; only the bounded wait/rechecks, observer path and arm_ack report/schema additions change.",
+    "The source label contract has 33 complete checks, 20 ready checks and 23 checks before real apply, retaining the original 30 ordered labels with three added arm/state guards."
+  ],
+  "unverified": [
+    "Same-TCP host breakpoint-send followed by arm-send, original send-complete/armed raw custody and exact acknowledgment consumer are not integrated.",
+    "Receipt of arm proves only the QA capture dispatcher handled that message. Current-engine ordering relative to breakpoint installation and paused capture compatibility are unproven.",
+    "GD parsing, live observer registration, actual production-stack snapshot, socket/Popen/native execution have not run.",
+    "New host packets/controller/publisher, full CFG-journal consumer, same-profile restart, complete producer, successful prior and executable admission remain unestablished."
+  ],
+  "GD_parsed": false,
+  "native_started": false,
+  "native_executed": false,
+  "socket_executed": false,
+  "popen_constructed": false,
+  "breakpoint_installation_verified": false,
+  "callback_observation_readiness_passed": false,
+  "actual_callback_qualified": false,
+  "Steam_account_qualified": false,
+  "upload_qualified": false,
+  "SDK_reward_once_qualified": false,
+  "original19_qualified": false,
+  "overall_goal_qualified": false,
+  "scope_note": "Finite CLOUD-ARM-001 source delta/API preliminary review; original V1 rejection remains immutable and no execution stage is approved."
+}

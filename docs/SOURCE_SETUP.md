@@ -1,3 +1,21 @@
+## 2026-10-09：云应用回调等待主机arm的后继源码 V2
+
+V1链/API原收据 c584d46378cb681218de3368f8b9943bc677494c78682ac50bc30d29452bb3da 保留；后续独立追加拒绝 5a76baeea957d49601236a360e38b6293c58aaeb499e518c9138ce4fcad3355a 确认 CLOUD-ARM-001：ready之后同帧同步apply，缺少主机arm实际dispatcher确认，可能早于断点处理而漏掉回调。链/API可闭合不代表具备观察执行资格。
+
+新增 cloud_applying_driver_candidate_v2：QA-only observer继承原read-only capture，只接受精确owned PID/nonce/case/sequence0的arm并记录实际收到/发原ack，不改生产对象；原read要求先arm。driver最多30秒正常process_frame等待实际observer收到arm，重核原对象/内存/writer/shared pending及dirty/pending/revision保持后，才call原正常apply；report附原arm_ack。合同为33完整/20driver-ready/23调用前source标签，10生产alias保持。host必须在same original TCP先发production breakpoint再arm并保留原send/ack，目前host/controller/packet/publisher/完整consumer/restart/producer未接入，current-engine顺序和capture兼容未证明，不将arm自身receipt当断点安装或native资格。
+
+V1原件/拒绝、V2源及可复现准备脚本均保留；两个GD均未Godot解析/原生运行，执行阶段为空。有限差异复审结果另记；完整V12成功前置与全部原目标继续保留。
+
+V2有限独立修复收据已保存，SHA 4b6e5af300c8bc1f34dbb644d629e1f1ee1a1f7b2740eaeacd4fb4de06688e18：只确认CLOUD-ARM-001的源码等待/guard补齐、22行来源及33/20/23合同；收到arm不证明断点已安装，observation_readiness/breakpoint_installation/GD_parsed/native仍未证明，stage=[]。另一聊天当前仍active/inProgress并继续原生全套，未启动水浒第五批。
+
+## 2026-10-09：真实云应用回调驱动源码候选与执行器审查归档
+
+完整自然callback三进程producer的独立原收据已归档，SHA 5ed52a5807bb6903d81685138f3394e710b2487fe61366a1b590be88b21145a6；有限源码/API无确定阻断，175 pins/343边/29覆盖，stage=[]。完整consumer validate/physical/Popen/phase/native、成功V12 prior与完整执行准入仍未证明，不将有限预审当原生结果。
+
+新增 cloud_applying_driver_candidate_v1，继承普通生产menu/private环境/source身份header，仅三个override。固定数字owner1为SDK-disabled本地seam输入，实际调用production _apply_profile -> Campaign cloud正常CFGtransaction -> _writer_complete -> mark_dirty，不替换节点、不改Campaign内存或手动applying。载荷来自真实build_payload，unlocked2/records空为明确云输入，不是自然通关。closed driver/apply ready记录原对象/内存/dirty/pending/revision/CFG SHA与载荷；实际完成后检查生产内存/全量公开CFG进度语义、writer/shared pending关闭、原dirty/pending/revision不变和SDK不可用。
+
+来源准备固定30完整标签/20调用前标签、10生产alias；均只source，不是Godot解析或实际通过数。三export publisher、完整原包/CFG journals消费者、同档案restart与完整producer尚未接入；两回调用例状态分别记录，不能沿用自然callback的publisher/报告合同。独立有限审查结果另记。原云文件失败/其他原19/UI/SDK/内容/性能/Android目标继续保留，未启动第五完整批。
+
 ## 2026-10-09：自然回调三进程完整执行器源码候选
 
 新增 run_campaign_natural_callback_v1，串接原 cold import、真实 callback phase、同 private profile 普通 restart_first 与完整 NaturalCallbackEvidence V2；固定三个实际进程、first80/preterminal56/restart21全部标签，全部原packet/tail/报告/CFG/lifecycle检查保持。来源 recipe 实际准备通过，175 pins/343全AST本地导入边/29 overlays，补齐 child/parent/observer 三GD；源码准备不检查成功prior、不授执行资格。

@@ -1,0 +1,191 @@
+{
+  "schema": "cloud_applying_source_labels_v1",
+  "GD": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\cloud_applying_driver_candidate_v1\\campaign_original19_cloud_applying_v1.gd",
+    "bytes": 7546,
+    "sha256": "2133f7b5440f56b35b083c8b57be0de16569e559ec9c91c89503871738ed4e87"
+  },
+  "parent_GD": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\original19_first_repeat_candidate_v1\\campaign_original19_first_repeat_v1.gd",
+    "bytes": 21899,
+    "sha256": "53e4e3a10ef6107f095ae1df9be355308200a99fee444dc68f912418ac6803ab"
+  },
+  "builder": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\cloud_applying_driver_candidate_v1\\PREPARE_SOURCE_V1.py",
+    "bytes": 4612,
+    "sha256": "0a7df7297a94cb85d3539f9cc424d8e2cf4df0fae982e6522705de09dd2486fe"
+  },
+  "parent_builder": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\tools\\prepare_campaign_first_repeat_labels_v1.py",
+    "bytes": 4129,
+    "sha256": "9070d1f718ff291281a81b5dbdba44f334db027a87777444a2eebd39785b64b4"
+  },
+  "parser": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\tools\\prepare_campaign_file_fault_labels_v3.py",
+    "bytes": 5987,
+    "sha256": "7e8f3325bf2d876dc52f09eb7e5b52d8377384334cc7fcdf7b3b2f2e41345f5f"
+  },
+  "identity_fields_order": [
+    "content_version",
+    "rules_sha256",
+    "file_count",
+    "total_bytes",
+    "engine_binary_sha256",
+    "provider_sha256"
+  ],
+  "complete_labels": [
+    "normal simulation clock",
+    "actual configured menu opens",
+    "immutable controller post cold identity readable",
+    "native complete installed identity field content_version",
+    "native complete installed identity field rules_sha256",
+    "native complete installed identity field file_count",
+    "native complete installed identity field total_bytes",
+    "native complete installed identity field engine_binary_sha256",
+    "native complete installed identity field provider_sha256",
+    "actual installed source identity is eligible",
+    "actual menu remains current",
+    "production startup finishes and opens gate",
+    "single real cloud applying mode",
+    "SDK disabled and unattached production cloud",
+    "fresh ordinary campaign with no pending writer or shared profile",
+    "real validator accepts bounded synthetic local cloud input",
+    "actual read-only cloud callback observer loaded",
+    "read-only observer on original production cloud and campaign",
+    "closed original cloud callback driver ready",
+    "closed original payload and baseline before real cloud apply",
+    "actual production cloud profile applies through CFG writer",
+    "same real production object instances after cloud apply",
+    "new campaign memory published by production writer complete",
+    "fresh independent load of actual cloud CFG",
+    "actual public CFG matches cloud input",
+    "actual writer and shared apply close normally",
+    "applying callback creates no new dirty pending upload or revision",
+    "no Steam attachment or SDK upload claim",
+    "cloud callback cannot substitute ordinary restart",
+    "exactly one actual callback snapshot received"
+  ],
+  "before_real_apply_labels": [
+    "normal simulation clock",
+    "actual configured menu opens",
+    "immutable controller post cold identity readable",
+    "native complete installed identity field content_version",
+    "native complete installed identity field rules_sha256",
+    "native complete installed identity field file_count",
+    "native complete installed identity field total_bytes",
+    "native complete installed identity field engine_binary_sha256",
+    "native complete installed identity field provider_sha256",
+    "actual installed source identity is eligible",
+    "actual menu remains current",
+    "production startup finishes and opens gate",
+    "single real cloud applying mode",
+    "SDK disabled and unattached production cloud",
+    "fresh ordinary campaign with no pending writer or shared profile",
+    "real validator accepts bounded synthetic local cloud input",
+    "actual read-only cloud callback observer loaded",
+    "read-only observer on original production cloud and campaign",
+    "closed original cloud callback driver ready",
+    "closed original payload and baseline before real cloud apply"
+  ],
+  "literal_check_inventory": {
+    "_fresh": [
+      {
+        "label_prefix": "single real cloud applying mode",
+        "label_expression": "\"single real cloud applying mode\"",
+        "check_expression": "mode==\"first\" and OS.get_environment(\"CAMPAIGN_CALLBACK_CASE\")==CALLBACK_CASE"
+      },
+      {
+        "label_prefix": "SDK disabled and unattached production cloud",
+        "label_expression": "\"SDK disabled and unattached production cloud\"",
+        "check_expression": "not steam.available and not cloud.cloud_ready and cloud._owner.is_empty()"
+      },
+      {
+        "label_prefix": "fresh ordinary campaign with no pending writer or shared profile",
+        "label_expression": "\"fresh ordinary campaign with no pending writer or shared profile\"",
+        "check_expression": "campaign.records.is_empty() and campaign.unlocked==1 and campaign.cloud_owner.is_empty() and not campaign.persistence_busy() and not cloud.shared_profile_pending()"
+      },
+      {
+        "label_prefix": "real validator accepts bounded synthetic local cloud input",
+        "label_expression": "\"real validator accepts bounded synthetic local cloud input\"",
+        "check_expression": "cloud._validate_payload(payload,FIXTURE_OWNER)"
+      },
+      {
+        "label_prefix": "actual read-only cloud callback observer loaded",
+        "label_expression": "\"actual read-only cloud callback observer loaded\"",
+        "check_expression": "Observer!=null"
+      },
+      {
+        "label_prefix": "read-only observer on original production cloud and campaign",
+        "label_expression": "\"read-only observer on original production cloud and campaign\"",
+        "check_expression": "callback_observer.install(self,nonce,CALLBACK_CASE,profile,identity)"
+      },
+      {
+        "label_prefix": "closed original cloud callback driver ready",
+        "label_expression": "\"closed original cloud callback driver ready\"",
+        "check_expression": "_write(\"callback_driver_ready.json\",{\"schema\":\"campaign_callback_driver_ready_v1\",\"pid\":OS.get_process_id(),\"nonce\":nonce,\"case\":CALLBACK_CASE,\"identity\":identity.duplicate(true),\"user_directory\":OS.get_user_data_dir()})"
+      },
+      {
+        "label_prefix": "closed original payload and baseline before real cloud apply",
+        "label_expression": "\"closed original payload and baseline before real cloud apply\"",
+        "check_expression": "_write(\"cloud_apply_ready.json\",{\"schema\":\"campaign_cloud_apply_ready_v1\",\"pid\":OS.get_process_id(),\"nonce\":nonce,\"case\":CALLBACK_CASE,\"identity\":identity.duplicate(true),\"user_directory\":OS.get_user_data_dir(),\"campaign_id\":campaign_id,\"cloud_id\":cloud_id,\"original_memory\":original_memory,\"original_cloud\":original_cloud,\"original_cfg_sha256\":original_cfg,\"payload\":payload.duplicate(true),\"synthetic_local_owner\":true,\"SDK_disabled\":true,\"Steam_account_qualified\":false,\"upload_qualified\":false})"
+      },
+      {
+        "label_prefix": "actual production cloud profile applies through CFG writer",
+        "label_expression": "\"actual production cloud profile applies through CFG writer\"",
+        "check_expression": "applied"
+      },
+      {
+        "label_prefix": "same real production object instances after cloud apply",
+        "label_expression": "\"same real production object instances after cloud apply\"",
+        "check_expression": "campaign.get_instance_id()==campaign_id and cloud.get_instance_id()==cloud_id"
+      },
+      {
+        "label_prefix": "new campaign memory published by production writer complete",
+        "label_expression": "\"new campaign memory published by production writer complete\"",
+        "check_expression": "campaign.unlocked==2 and campaign.records.is_empty() and campaign.cloud_owner==FIXTURE_OWNER"
+      },
+      {
+        "label_prefix": "fresh independent load of actual cloud CFG",
+        "label_expression": "\"fresh independent load of actual cloud CFG\"",
+        "check_expression": "cfg.load(\"user://campaign.cfg\")==OK"
+      },
+      {
+        "label_prefix": "actual public CFG matches cloud input",
+        "label_expression": "\"actual public CFG matches cloud input\"",
+        "check_expression": "cfg.get_value(\"progress\",\"schema\",null)==2 and cfg.get_value(\"progress\",\"unlocked\",null)==2 and cfg.get_value(\"progress\",\"records\",null)=={} and cfg.get_value(\"progress\",\"owner\",null)==FIXTURE_OWNER"
+      },
+      {
+        "label_prefix": "actual writer and shared apply close normally",
+        "label_expression": "\"actual writer and shared apply close normally\"",
+        "check_expression": "not campaign.persistence_busy() and not cloud.shared_profile_pending() and not cloud._applying"
+      },
+      {
+        "label_prefix": "applying callback creates no new dirty pending upload or revision",
+        "label_expression": "\"applying callback creates no new dirty pending upload or revision\"",
+        "check_expression": "cloud.dirty==original_cloud.dirty and cloud._pending_upload==original_cloud.pending_upload and cloud._revision==original_cloud.revision"
+      },
+      {
+        "label_prefix": "no Steam attachment or SDK upload claim",
+        "label_expression": "\"no Steam attachment or SDK upload claim\"",
+        "check_expression": "not steam.available and not cloud.cloud_ready"
+      }
+    ],
+    "_write": [],
+    "_finish": [
+      {
+        "label_prefix": "cloud callback cannot substitute ordinary restart",
+        "label_expression": "\"cloud callback cannot substitute ordinary restart\"",
+        "check_expression": "mode==\"first\""
+      },
+      {
+        "label_prefix": "exactly one actual callback snapshot received",
+        "label_expression": "\"exactly one actual callback snapshot received\"",
+        "check_expression": "callback_observer!=null and callback_observer.last_sequence==1"
+      }
+    ]
+  },
+  "scope": "actual production local cloud apply and applying callback only, not natural victory or actual Steam upload",
+  "GD_parsed": false,
+  "native_started": false,
+  "approved_stages": []
+}

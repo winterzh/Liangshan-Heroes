@@ -1,3 +1,11 @@
+## 2026-10-09：云应用回调arm后继来源
+
+cloud_applying_driver_candidate_v1/保留原链/API和追加握手拒绝；cloud_applying_driver_candidate_v2/新增driver、只读observer arm子类、SOURCE/33-20-23合同、准备脚本、范围与有限review。主机接入与原生兼容性未建立。
+
+## 2026-10-09：云应用回调源码与独立收据
+
+恢复QA新增 cloud_applying_driver_candidate_v1/：真实production apply GD、SOURCE、30/20标签合同、可复现准备脚本、REVIEW_SCOPE与有限独立review。自然callback三进程producer的独立原收据另存 NATURAL_CALLBACK_PRODUCER_PRELIMINARY_REVIEW_V1.json；两个范围均没有原生准入。
+
 ## 2026-10-09：自然回调完整执行器来源
 
 新增 tools/run_campaign_natural_callback_v1.py；恢复QA新增完整producer源码recipe、原字节snapshot、SCOPE、十项host检查脚本/结果、第四失败prior实际CLI拒绝观察及有限独立review。当前未创建成功前置seal或native batch。
