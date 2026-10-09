@@ -1,0 +1,7 @@
+# 正常自然终局提交回调：完整直接调用链源码审查
+
+固定现行tools/run_campaign_natural_callback_v2.py及原NATURAL_CALLBACK_PRODUCER_SOURCE_RECIPE_V2.json和精确snapshot。原preliminary V2仅差异审查，complete_consumer_and_phase_reviewed=false，不能替代本次完整直接producer→consumer→runtime审查，更不能授原生资格。原review/checker错误和所有source/prior失败记录保留。
+
+核完整自有Suite实际继承attrs、cold后身份、FirstRepeatSuite.values/validate真实调用、CallbackSerialBatch.callback_phase及普通same-profile restart、controller/raw receiver/packets/native exports/wire、原GD80first/56preterminal/21restart来源标签、SourceMap指定原Campaign提交/Cfg/Cloud源码断点。重点核actual held terminal Popen、真实stack/locals/nonce/pid、原arm/ack/packet/tail/EOF、规范actual userdata原字符串、完整15身份、实际memory/Cloud callback source/三个generation/原CFG和两journal/noReplay，父phase清child/lease和失败cleanup。
+
+静态审查只覆盖完整实际直接call链，其他未调用模块内部不另设穷尽门禁。只读/AST/signature/hash，禁止Godot/Popen/socket、fake holder/prior/full consumer调用、修改旧源或报告。写NATURAL_CALLBACK_COMPLETE_DIRECT_REVIEW_V2.json，说明complete_consumer_and_phase_reviewed仅静态直接链；approved_stages=[]/native/19/UI/SDK/overall全部false。实际source_spec仍要真实成功closed all61 V12后才能封，随后新specific独立准入和真实三个进程缺一不可。

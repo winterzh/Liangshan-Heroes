@@ -1,3 +1,7 @@
+## 2026-10-09：正常提交回调完整直接源码审查
+
+恢复QA新增NATURAL_CALLBACK_COMPLETE_DIRECT_REVIEW_SCOPE_V2.md、NATURAL_CALLBACK_COMPLETE_DIRECT_REVIEW_V2.json和REAL_STEAM_RETRY_LAUNCH_SOURCE_CONSTRAINTS_V1.json；完整直接源码审查已完成，原V2 source recipe/pins实际logical独立回核，未发现确定静态阻断，approved_stages=[]。真实SDK导出入口限制同步记录在WORKLOG/SOURCE_SETUP/DEVELOPMENT_PLAN/恢复README；现行--script/disabled用例没有真实账号授权资格，原producer/GD/consumer未修改。
+
 ## 2026-10-09：当前V12前置的JSON/OwnedSlot/载入ABC来源
 
 恢复QA新增ADMISSION_REGRESSION_SOURCE_RECIPE_V5/PREPARATION_V5/REVIEW_SCOPE_V5/PRIOR_REFUSAL_V5 JSON、真实prior拒绝log、初始preflight失败记录及初始/最终source snapshot；tools新增run_campaign_admission_regressions_v5.py。V4全部原检查不改，新V12 closed prior/native准入独立绑定，当前没有新运行结果。

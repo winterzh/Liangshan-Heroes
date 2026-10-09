@@ -1,3 +1,13 @@
+## 2026-10-09：正常终局提交回调完整直接链审查与真实SDK入口限制
+
+现行run_campaign_natural_callback_v2已绑定当前V12；其原preliminary只审delta，complete_consumer_and_phase_reviewed=false，不等于完整直接链审查。新NATURAL_CALLBACK_COMPLETE_DIRECT_REVIEW_SCOPE_V2.md明确实际producer/Suite/FirstRepeat values-validator/consumer/phase/controller/receiver/packets/publisher/wire/GD/sourceMap全直接调用链。原source recipe logical a77bdcbfccfb274d6580d12a1d0cd56414d59a82ccf576c96530117c2fcfc64e与190pins/387导入边本轮正确从canonical模块独立回算通过；旧review的错误import和所有源/失败证据不覆盖。完整独立直接源码审查已完成：NATURAL_CALLBACK_COMPLETE_DIRECT_REVIEW_V2.json，SHA-256 0d04d543a0eba938d91628d4f4deae348fb212264d757fb65db2f70127980beb；30份直接链源码、190pins、387导入边、80/56/21必需标签已核对，未发现确定API/字段/类型/路径阻断，complete_consumer_and_phase_reviewed=true仅表示静态审查完成。approved_stages=[]；暂停回调兼容性、终局竞争条件和自然路线实际执行仍未验证。没有新native/source_spec准入，不另要求无关模块内部穷尽。
+
+真实SDK账号重试另有实际源码硬限制：steam_service._ready仅OS.has_feature("steam")且SteamRunPolicy.test_environment=false才初始化真Steam singleton。Policy遇editor/headless、--script/-s或任何非空STEAM_DISABLED/CAMPAIGN_QA等标准测试flag即拒绝。因此现行SDK-disabled Godot --script用例不能证明同账号授权重试或真实奖励，不能伪造available/owner/native对象来补资格。后续必须用正常导出的steam-feature程序、清空这些测试flag、真实本机Steam账号/Engine singleton/AppID/getSteamID及ensure_account，另绑定私有profile/安装源/二进制/实际SDK证据并审查候选导出入口。当前尚未实现或执行这份真实SDK导出验收。
+
+R12 Cloud.retry_shared_profile确实要求实际SteamService.available/ensure_account/account==原_owner、完整冻结身份/绑定SHA/原Campaign owner，账号拒绝边界不替代成功same-writer retry。启动真实SteamService会按生产流程读取并可能同步实际SDK状态；Cloud普通startup会尝试attach，后续私有故障测试设计必须具体审查实际scope/账号与云文件边界，不能将正常初始化称为无SDK副作用或上传完成。
+
+完整V12第五批仍未启动、成功closed all61前置未取得；本轮初次实际Godot8740被另一项验收占用，对方active继续正式版/Demo验证，长期协调问题待答复。原19/真实UI同对象重试/SDK一次性/八章动态/九玩法Windows导出/多尺寸/10分钟性能内存/Android真机全范围保持，R12未晋升生产，Steam25821275不变。
+
 ## 2026-10-09：JSON533/OwnedSlot76及战役载入ABC接到当前V12
 
 新增tools/run_campaign_admission_regressions_v5.py。原V4仍固定V9 launch，不能拿当前V12成功前置直接启动；新V5保留V4所有prepare/execute/JSON533/OwnedSlot76/三真实ABC consumer、原native GD/scene、fixture原字节链、默认slot根/v2 lifecycle、whole-world/设置/context/clock、两generation/noReplay、真实one-shot listener清理和异常owned-process清理。自有ctor与source_spec均用verify_closed_prior_v12，成功原receipt pin先于run mkdir及seal，必须新精确source/review准入。
