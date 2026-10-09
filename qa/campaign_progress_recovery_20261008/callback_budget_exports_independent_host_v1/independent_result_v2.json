@@ -1,0 +1,36 @@
+{
+  "classification": "synthetic fabricated PID/nonce/step and private JSON-stage disk fixtures only",
+  "checks": [
+    "budget 4095plusone",
+    "budget 4096_overflow",
+    "budget byte_limit_exact",
+    "budget byte_overflow",
+    "budget empty_packet",
+    "existing4096 disk bytes reconstructed exactly from pinned synthetic fixture source",
+    "four fixed originals published byte-exact",
+    "stable original SHA on repeated polling",
+    "wrong case refused",
+    "missing full set refused",
+    "restart filename refused",
+    "foreign nonce refused",
+    "foreign PID refused",
+    "duplicate marker refused",
+    "wrong native original SHA refused",
+    "existing public destination refused",
+    "original stage drift refused at final",
+    "terminal incomplete marker refused"
+  ],
+  "count": 18,
+  "work": "D:\\CodexTemp\\lsh-independent-callback-budget-01j703ue",
+  "existing4096_records_read_only": "D:\\CodexTemp\\lsh-callback-budget-s05ak7w7\\new\\packets",
+  "forged_metadata_not_ownership_proof": true,
+  "socket_Popen_Godot_started": false,
+  "approved_stages": [],
+  "stage_drift_test_correction": "Initial stage-drift fixture contained only report.json and rejected first for incomplete set; final-stage hash coverage is established only by the complete-four-file replay below.",
+  "complete_stage_drift_replay": {
+    "before_mutation_exact_four_exports": true,
+    "failure": "original SHA mismatch",
+    "original_public_files_retained": true,
+    "no_native": true
+  }
+}

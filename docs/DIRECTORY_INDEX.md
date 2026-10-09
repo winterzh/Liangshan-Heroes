@@ -1,3 +1,7 @@
+## 2026-10-09：包预算与四文件发布器后继
+
+新增tools/campaign_callback_controller_v3.py、campaign_callback_raw_receiver_v3.py、campaign_callback_native_exports_v1.py；恢复QA新增三snapshot、CALLBACK_BUDGET_EXPORTS_SOURCE_SPEC_V1、可复现14项磁盘/70项receiver scripts/results、初始host失败script/观察及有限review。callback_budget_exports_independent_host_v1/保留两份独立fixture结果与原字节来源；4096证据文件保留在CodexTemp合成测试目录，不上传全部临时文件；原预算/源/拒绝都保留。
+
 ## 2026-10-09：原包接收与自然回调驱动来源
 
 新增 tools/campaign_callback_raw_receiver_v1/v2.py；恢复QA新增两代exact snapshot、SOURCE_SPEC、可复现67/70项synthetic脚本/记录与有限独立收据。callback_natural_driver_candidate_v1/包含单自然回调GD、SOURCE和有限源码审查，未解析/未运行。旧V1拒绝/后继修复和原生产parent全部保留。

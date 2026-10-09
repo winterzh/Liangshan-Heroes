@@ -24,6 +24,8 @@
 
 原包receiver V2候选补超时同buffer、非法头/partial EOF留存及拒绝永久停止；V1拒绝证据保留。单自然回调GD已继承原黄泥岗路线，但未解析/运行；下一步接四原export的publisher、串行runtime与完整有序消费者/producer，并另实现两类真实云驱动。源码/合成流检查不能授实际回调资格。
 
+4096/64MiB controller/receiver后继和固定四export publisher已准备，14项synthetic磁盘检查与70项receiver检查通过，当前binary流量与性能未证明。下一步接实际自然callback phase和同档案parent restart，把完整报告/原包/CFG/lifecycle全部接消费者再封完整producer；只有源码部件，尚无串行运行准入。
+
 ## 3. 完成玩家入口与平台集成
 
 验证实际失败界面、继续入口、取消与重试，以及 Steam 奖励一次性边界。只有全部必要恢复验收完成，才将恢复候选接入正式游戏。GitHub 同步与 Steam 发布分别处理，发布仍需单独授权。

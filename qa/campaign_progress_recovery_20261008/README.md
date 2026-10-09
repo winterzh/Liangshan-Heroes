@@ -1,3 +1,15 @@
+## 2026-10-09：长自然回调包预算及四文件发布器候选
+
+新增 controllerV3和raw_receiverV3：只将原包留存上限改4096事件/64MiB，按1800秒一Hz参考流每frame两份证据3600事件加496控制/拒绝事件设计，旧256/16MiB版本保留。controller除_retain预算外其余方法AST exact V2，receiver class AST exact V2只换controller import，不丢原包、不关闭正常时钟/性能。参考来自历史4.4，当前binary频率/真实性能未验证；高于模型或超上限仍失败，不能授实际长路线通过。
+
+新增campaign_callback_native_exports_v1：固定callback_driver_ready/ready_for_terminal/terminal_handoff/report四名和callback_sees_new_memory完成集合；constructor/publish AST与已审natural exports一致。实际日志闭合PID/nonce/原stageSHA标记、原native stage首次bytes、JSON-validating Windows no-replace发布和两份原件回读保持。部件不启动进程，不单独证明marker PID所有权。
+
+首次synthetic主机脚本session57870实际退出1：测试refuse helper漏接RuntimeError，publisher正确拒绝错case；原script snapshot及工具输出失败观察保留，明确不是原stderr字节档案。只修fixture异常类型后session67293整批14项通过：旧预算第129frame拒绝，新3600遥测留存+496reserve达到4096，逐份真实私有磁盘SHA回读一致，事件/字节超限、四JSON发布、重复marker/错nonce/缺file/禁止覆盖拒绝均验。receiverV3另70项memory-stream检查通过。全部明确绕constructor/合成Suite/marker输入，无socket/Popen/Godot或实际ownership/完整pipeline证明，不计游戏性能或原生case资格。
+
+独立组合预备收据SHA `982613ae168d56867602d092518206cc0630cf489ca53577e17346e65b7401c6`，static=true/stages=[]、57pins/全72本地导入边与三snapshot闭合。独立18项synthetic边界/发布检查通过，另原4096host磁盘证据重建并逐字节回读1967328 bytes；第一独立stage-drift夹具因缺集合而先拒绝，原result保留，第二完整四文件结果明确拒绝原SHA漂移，两份结果原字节存callback_budget_exports_independent_host_v1/。历史参考当前SHA回读匹配，但不证明当前binary频率/性能；无完整runtime、native、SDK或原19资格。
+
+组合SOURCE_SPEC_V1固定57pins/19根Python导入边，三个exact snapshots及已审旧来源/自然GD来源保留。独立有限复审结果另记；当前新四file publisher尚未接串行runtime，新driver未解析，完整消费者/producer、两真实云端驱动、完整V12成功前置及原19/正式接入/UI/SDK/内容/性能/Android目标仍待完成。开始时外部Godot PID41732占用，收尾只读回读已无Godot；另一聊天任务仍active/inProgress，整批串行窗口未确认，第五完整批未启动，无main/Steam发布。
+
 ## 2026-10-09：原包接收适配器与自然回调驱动源码候选
 
 新增 campaign_callback_raw_receiver_v1/v2.py 与exact snapshot/source specs。原完整frame在任何decode之前进入已审controller的exclusive/fsync/first-byte ledger；adapter/controller各留一次完整frame，属于重复证据而非两次网络接收。超时保留同一连接/原buffer；非法长度头不分配body，部分EOF/IOError保留收到的原bytes与独立状态marker。EOF只表示transport关闭，不能当Popen终态；适配器不启动/关闭/替换进程或socket，不授原生资格。
