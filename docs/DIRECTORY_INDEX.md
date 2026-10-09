@@ -1,3 +1,7 @@
+## 2026-10-09：SDK私有导出入口准备
+
+新增tools/prepare_campaign_real_sdk_export_inputs_v1/v2.py；恢复QA新增real_sdk_bootstrap_export_inputs_v1/v2/各三个源与SOURCE_INPUTS.json，REAL_SDK_EXPORT_INPUTS_PREPARATION_V1/V2、SOURCE_REGRESSION_V1/V2及对应独立审查JSON。V1 CRLF段解析缺口保留，V2解析副本精确Steam段、生成源相同，独立有限源码审查通过（19pins/20imports）；29overlay，原preset/生产保持，不授export/native。
+
 ## 2026-10-09：SDK原关闭报告与真实四根读回
 
 新增tools/campaign_real_sdk_bootstrap_evidence_v1/v2/v3.py及各selftest、host contractV3/V4及各selftest、恢复QA real_sdk_bootstrap_candidate_v3/、EVIDENCE_SOURCE_INPUTS_V1/V2/V3、各CPU/独立审查JSON及HOST_CONTRACT_CPU_V3/V4。V1拒绝ENV范围，V2记录alias接口限制，V3以hostV4原canonical strings闭合并独立有限审查通过，18pins/7edges、49/40原CPU报告回核；仅组件source/CPU，无launcher/SDK资格。
