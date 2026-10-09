@@ -1,3 +1,7 @@
+## 2026-10-09：原19六数据CFG/两QA后继完整执行器
+
+恢复QA新增ORIGINAL19_DATA_CASES_SOURCE_RECIPE_V2/PREPARATION_V2/REVIEW_SCOPE_V2/PRIOR_REFUSAL_V2 JSON、原CLI log和run_campaign_original19_data_cases_v2_source_snapshot.py；tools新增同名V2。接原data GD V5/DataEvidence V3/完整109、20、20标签及57原件，改为真实closed V12前置。V1拒绝及旧源不变，未授实际八case或全19资格。
+
 ## 2026-10-09：当前V12后继终局错误UI验收来源
 
 恢复QA新增PENDING_TERMINAL_UI_SOURCE_RECIPE_V6.json、PREPARATION_V6.json、REVIEW_SCOPE_V6.md、真实prior拒绝JSON/log和run_campaign_pending_terminal_ui_v6_source_snapshot.py；tools新增同名V6执行器。原V5/probe与所有原105/20检查保留，当前V12真实成功prior与新具体准入独立绑定；尚无原生UI通过。

@@ -1,3 +1,13 @@
+## 2026-10-09：六数据CFG与两QA兼容场景接入完整证据消费者
+
+首次/重复自然通关producer原本已绑定当前V12，不另改。实际剩余缺口是被拒ORIGINAL19_DATA_CASES V1：只有数目/五泛用QA标签和弱物理证据，DATAEXEC-MANDATORY-001、DATAEXEC-CFG-002原拒绝及源/spec/snapshot保留。新tools/run_campaign_original19_data_cases_v2.py接入原GD data V5、DataEvidence V3、full label V3及原QA GD V1，不调用被拒V1 consumer。原全部109数据/各20 QA标签、七真实CFG提交/14原journal代/57原字节复制、四准确invalid request、完整scope/source/token/proposal、十四unknown Variant与future progress/affected/other record native type/canonical、真实final CFG/13、14和空stage完整消费。
+
+V2使用当前V12完整base/26覆盖加两原GD；数据/QA原生产依赖与实际运行映射相同。source_spec成功closed all61 prior先于写seal，Suite再核原成功receipt pin才建外部运行目录。四原生进程cold→normal六data→独立QA_memory_only→独立QA_cloud_bool_compatibility，原runtime只允许后两个label启用QA1；尚未实际执行。完整15身份、真heldterminal Popen/精确命令和env、四独立profile、固定原report字节/closing marker先于DataEvidence及parent清child/租约；QA sentinel SHA绑实际CFG，不将兼容bool当正常持久化。
+
+recipe-only实际exit0，101pins/134导入边/28aliases，logical38c2dca720c6f340e2b7aec503d7a18f35500b6c5457d82ecd6ee24cefce3e2e。来源回核、AST/import/实际signature和GD报告完整字段集匹配、source snapshot精确；均为CPU静态证据。真实第四失败V12 receipt的新CLI exit1，未创建SOURCE_SPEC/work-root或Godot，stdout/拒绝JSON保留。独立完整直接调用链源码审查已完成，原review SHAdefc140689d8d57f0974d93d25980aa9b48376db8fea9d1fd5b7c2bbecfe2ea9，无确定静态API阻断；V1两项缺口在新链修复。stages=[]，没有native准入或八case通过。
+
+成功closed all61/new seal/具体独立准入及实际四进程仍缺。另十一原持久化场景、真实错误UI同对象成功重试、SDK账号/一次性奖励及八章动态、九玩法/Windows导出、多尺寸、连续10分钟性能内存、Android真机完整目标均继续。另项Godot实际运行，长期测试协调问题待答复；R12未晋升生产，Steam25821275保持。
+
 ## 2026-10-09：终局错误UI同对象重试与普通重启接到当前V12
 
 新增tools/run_campaign_pending_terminal_ui_v6.py。原V5及probe V2、mandatory105 fresh/20 restart、同Coordinator/CFG writer/冻结提案/intent/lifecycle、真实RetryTerminal错误再试与修故障成功、两张viewport PNG、原三代生命周期/CFG和普通同档案restart/noReplay检查全部保留。旧V5绑定V9，不直接借用其前置或准入；新V6使用当前V12完整base/26原运行覆盖并附原UI probe，以verify_closed_prior_v12核验真实成功all61。

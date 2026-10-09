@@ -1,0 +1,9 @@
+# 六项数据/CFG与两项QA兼容后继完整producer静态审查
+
+固定tools/run_campaign_original19_data_cases_v2.py、精确snapshot与ORIGINAL19_DATA_CASES_SOURCE_RECIPE_V2.json；recipe-only实际exit0，logical38c2dca720c6f340e2b7aec503d7a18f35500b6c5457d82ecd6ee24cefce3e2e。V1原两项拒绝、源/spec/snapshot、旧GD保持；不调用旧被拒consumer。
+
+V2接入原独立静态审查后的GD data V5、DataEvidence V3、full label contract V3和原QA GD V1，使用当前V12完整base/26覆盖及两个原GD。source_spec先verify_closed_prior_v12成功all61再写seal，Suite重复原pin验真再创建外部运行目录。cold→normal six-data→独立QA_memory_only→独立QA_cloud_bool_compatibility四实际进程；真实terminal Popen持有中消费固定report、原日志marker、完整15身份/精确命令/环境/独立userdata，然后原phase清child与租约。QA仅原runtime固定两个label启用，不改原phase或production。
+
+DATAEXEC-MANDATORY-001：DataEvidence核完整109顺序标签/每case覆盖；每个QA分支核全部20原标签及独有分支检查，不能靠计数/五泛用标签通过。DATAEXEC-CFG-002：实际四拒绝原request/CFG关联、七次真实提交、全部14代原包链/typed record/同prepared-applied提案、原scope/token/source、十四unknown Variant/完整future subtree native type/canonical、实际最后CFG SHA/仅13、14/空stage与精确57原件由DataEvidence V3完整消费。原CFG canonical文本只消费native probe；没有Python ConfigFile parser或IEEE声明。QA sentinel原SHA绑定真正campaign.cfg，QA compatibility不补普通持久化/账号/UI/SDK资格。
+
+独立审查新完整直接producer→继承EvidenceSuite attrs、data runtime/phase/cleanup、DataEvidence全run、原GD/production与source/admission绑定。核对上述两旧阻断是否真正修复，有无确定合法流程误拒/缺API/弱证据。只读/AST/signature，不Godot/Popen/socket，不构造fake prior/holder/fullconsumer，源不改。写ORIGINAL19_DATA_CASES_V2_INDEPENDENT_SOURCE_REVIEW.json，approved_stages=[]、native/8case/19/UI/SDK/overall全部false；完整目标及另十一原案仍独立必需。
