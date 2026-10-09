@@ -1,3 +1,7 @@
+## 2026-10-09：完整原生CFG语义来源
+
+恢复QA新增cloud_applying_driver_candidate_v3/：独立原/expected/final wholeCFG投影GD、SOURCE/40-24-27合同/准备脚本；新增四tools与snapshot、CLOUD_CFG_SEMANTICS_SOURCE_SPEC_V1/准备/SCOPE、25项伪造投影host脚本/结果及有限review。当前没有actualGodot解析/运行或整个cloud用例通过。
+
 ## 2026-10-09：CFG generation范围后继来源
 
 新增physical_v2/runtime_v3/first_evidence_v2及三snapshot；恢复QA新增原V1拒绝、V2 SOURCE_SPEC/准备/SCOPE、27项synthetic脚本/结果与有限独立delta review。旧225来源和原包重放保持，未取得native资格。

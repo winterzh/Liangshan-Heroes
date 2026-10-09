@@ -1,3 +1,13 @@
+## 2026-10-09：原生完整CFG语义投影与首次consumer源码接入
+
+新增cloud GDv3，复用原正常menu/source/private环境/真实cloud writer和arm路径。实际写入前独立ConfigFile.load并用真实CfgValues.semantics逐键记录Variant_type与canonical probe原文本，在不写文件的独立ConfigFile只改四target构完整expected；实际写入后独立fresh load，全sections/key/type/canonical与expected比较，原和final文件SHA稳定。新增closed semantics-ready原件含完整native JSON字符串与各SHA，report含原final JSON/SHA；40完整/24ready/27调用前source标签，不是实际通过数。
+
+新增pure projection helper、四export publisher后继、实际phase V4与first consumer V3。主机不自行ConfigFile.parse/推断canonical formatter；完整expected须保留所有原section/unknown progress key及其类型文本，只允许固定target类型；final全图等于expected且hash等于两原production journal semantics_sha。phase等待三个原ready、实际owned binder闭合原PID/nonce/15identity/user/原CFG SHA后复制原physical CFG/journals，再创建rawreceiver/发arm。原apply-ready/controller/packet/cleanup不改。first consumer仍先actualretained terminal Popen/源身份/原四export/40完整标签/原包与physical journals，才可以给有限first native semantics结果，restart/case/original19/whole保持false。
+
+254pins/589全AST边/四snapshot封存，25项伪造projection字符串/unknown key/type/hash/journal/fake holder拒绝通过，无actualGodot ConfigFile/Popen/socket/phase/完整consumer或native。新GD尚未actual解析/运行；不能将源码接入等同原生语义通过。普通cloud restart/complete producer/成功V12前置/实际准入和原整个目标继续待完成，stage=[]。独立有限source/API结论及发现另记。
+
+有限独立新GD/API/原投影bytes↔physical/journal SHA绑定收据已保存，SHA dd4ddcffcc04b492f94ccd42b2f288b2eff477dc3b719ac907eacf4ee6f0c729；无确定新增阻断，254pins/589边/四snapshot及原236pin保持独立回读。stage=[]，新GD未parse、实际ConfigFile/consumer/Popen/socket/native未跑；普通restart/完整producer/成功prior/原19/SDK/whole仍未建立。
+
 ## 2026-10-09：原生CFG generation边界遗漏拒绝与后继修复
 
 独立V1拒绝原收据 SHA b0bd8ab3b0836417ac7602fa8025b91daeea23ac039676e52488069c67bc7a94，唯一确认 CLOUD-CFG-GENERATION-001：physical helper未限制native generation<=2147483647；实际纯host反例2147483649被原strict_journal接受。原225pins/源码/17项原synthetic与拒绝保留，不能因其source closure/API其他部分闭合而授完整通过。
