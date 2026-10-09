@@ -1,6 +1,6 @@
 # 2026-10-09 公司电脑 Steam 更新准备
 
-当前：新的 Windows 候选本地验证完成，尚未上传、尚未切 default、尚未发布四语说明。匿名 Preview 实际退出6，服务器拒绝 Access Denied；须 App5088120 构建账号登录后重跑 Preview。浏览器与原生电脑控制工具重置后仍报 kernel assets 路径不存在，尚不能自动控制Steamworks页面。
+当前：新Windows候选已成功上传为 Build25821275 / Manifest1831225442917801106，尚未切default、尚未公开四语说明。公司电脑原保存登录已复用，实际Preview与Upload均退出0。上传后权威public回读仍25768878；网页控制不可用，新Manifest回下载两次No connection，后续验收待完成。下方早先匿名拒绝和准备状态为历史记录，以本条及authenticated_upload_receipt.json为准。
 
 用户明确授权“更新steam”，随后说明是公司电脑，另明确允许跨聊天协调盲盒暂时让出Godot。已按授权协调安全保存现场；水浒本地验证全部实际退出/源锁释放后已通知对方恢复，没有直接停止外部进程或把其未完成批记为通过。
 
@@ -20,3 +20,9 @@
 六成员上传副本在 `D:/CodexTemp/lsh-steam-release-company-20261009/transfer`，内容另解压到其content下并逐大小/SHA256/SHA1核对。VDF在同批pipe下，只含Windows Depot与六显式映射、无凭据、无SetLive。原始SteamCMD日志/凭据缓存和导出ZIP/EXE全部留外部，不进Git；匿名拒绝保存独立事实。
 
 四语补丁说明草稿见patch_notes_draft.json，尚未关联新Build或公开。候选验证结果与冻结包足够进行后续发布准备，但上线仍须构建账号Preview成功→Upload成功→新Build/Manifest六文件回读→default/mobile确认与权威回读→四语公开回读→干净客户端/实际运行验收。此文档明确保留待完成状态。
+
+## 2026-10-09：公司电脑已有登录复用，Steam上传成功、正式分支待切换
+
+用户说明公司电脑此前上传过。找到原ContentBuilder，SteamCMD签名Valid/Valve，复用原保存的登录状态，无需收集密码或验证码。实际Preview退出0，六成员名称/大小/SHA1与冻结候选完全一致；正式Upload退出0，Steam返回Build25821275、Windows Depot5088121 / Manifest1831225442917801106。只改变一个EXE，0新增/0删除文件；没有重导出或重压候选。
+
+上传后独立app_info退出0，public仍为25768878，故新包尚未给玩家。新Manifest隔离下载两次实际exit14/No connection，未核成服务器六文件或客户端新版本验收。网页控制工具此前重置后仍路径错误，打开Builds面板返回queued，不代表已操作或上线。正式default切换、手机确认、四语公告公开和新客户端验收仍待完成；四语草稿已关联25821275。匿名Preview拒绝、旧本地准备收据和下载失败事实全部保留，不覆盖历史。当前仍不得说Steam更新已上线。详情qa/steam_release_20261009/authenticated_upload_receipt.json。

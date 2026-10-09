@@ -1,3 +1,9 @@
+## 2026-10-09：公司电脑已有登录复用，Steam上传成功、正式分支待切换
+
+用户说明公司电脑此前上传过。找到原ContentBuilder，SteamCMD签名Valid/Valve，复用原保存的登录状态，无需收集密码或验证码。实际Preview退出0，六成员名称/大小/SHA1与冻结候选完全一致；正式Upload退出0，Steam返回Build25821275、Windows Depot5088121 / Manifest1831225442917801106。只改变一个EXE，0新增/0删除文件；没有重导出或重压候选。
+
+上传后独立app_info退出0，public仍为25768878，故新包尚未给玩家。新Manifest隔离下载两次实际exit14/No connection，未核成服务器六文件或客户端新版本验收。网页控制工具此前重置后仍路径错误，打开Builds面板返回queued，不代表已操作或上线。正式default切换、手机确认、四语公告公开和新客户端验收仍待完成；四语草稿已关联25821275。匿名Preview拒绝、旧本地准备收据和下载失败事实全部保留，不覆盖历史。当前仍不得说Steam更新已上线。详情qa/steam_release_20261009/authenticated_upload_receipt.json。
+
 ## 2026-10-09：公司Steam本地验收
 
 新增qa/steam_release_20261009/：当前来源helpers、native219/包1152/身份20/EXE11原收据、六文件delivery/传输、既有线上版client hash、发布待登录拒绝和四语草稿；新增continue_flow_20260909/20261009_120933_fbd22058/的302项真实回归记录。包/凭据/原认证日志保留外部，未上传Steam。
