@@ -1,3 +1,7 @@
+## 2026-10-09：SDK包探针与身份冻结适配
+
+新增tools/campaign_real_sdk_export_frozen_v1/v2.py；恢复QA sdk_export_package_probe_v1/v2/、REAL_SDK_EXPORT_FROZEN_CPU_REGRESSION_V1.json和FROZEN_PACKAGE_SOURCE_INPUTS_V1/V2/独立审查JSON。V1实际cold证据/未validated输出缺口保留，V2补原step/log与write guard并独立有限审查通过（22pins/37imports）；不构造/运行，不替代完整导出/SDK资格。
+
 ## 2026-10-09：SDK私有导出入口准备
 
 新增tools/prepare_campaign_real_sdk_export_inputs_v1/v2.py；恢复QA新增real_sdk_bootstrap_export_inputs_v1/v2/各三个源与SOURCE_INPUTS.json，REAL_SDK_EXPORT_INPUTS_PREPARATION_V1/V2、SOURCE_REGRESSION_V1/V2及对应独立审查JSON。V1 CRLF段解析缺口保留，V2解析副本精确Steam段、生成源相同，独立有限源码审查通过（19pins/20imports）；29overlay，原preset/生产保持，不授export/native。
