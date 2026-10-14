@@ -1,3 +1,10 @@
+## 当前查找入口（2026-10-14）
+
+- [项目总览](PROJECT_STATUS.md)：当前版本、测试状态、目录用途及后续顺序。
+- [开发计划](DEVELOPMENT_PLAN.md)：完整范围与验收条件。
+- [源码设置](SOURCE_SETUP.md)：启动、两台电脑交接与同步规则。
+- [工作记录](WORKLOG.md)：每批变化；下方索引条目按日期保留。
+
 ## 2026-10-14：完整恢复第五批运行记录
 
 恢复QA新增 DURABLE_V12_FIFTH_RUN_STARTED_20261014.json，指向外部新批 durable_chain_9009283d / 原 session 75405 / host PID 42756。仅冷导入已通过，完整结果仍待同一会话终态；不复制私有存档。

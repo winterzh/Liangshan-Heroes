@@ -1,3 +1,7 @@
+## 当前入口（2026-10-14）
+
+先读 [项目总览](docs/PROJECT_STATUS.md)：开发目录、GitHub/Steam版本、正在运行的恢复测试和剩余工作均在页首。详尽验收条件见 [开发计划](docs/DEVELOPMENT_PLAN.md)，启动与换机见 [源码设置](docs/SOURCE_SETUP.md)。下方日期条目为历史记录。
+
 <!-- office-prefix-v25x6 -->
 ## 2026-10-08 公司继续开发
 
