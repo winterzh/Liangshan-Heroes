@@ -1,3 +1,19 @@
+## 2026-10-14：V13 独立审查完成与项目整理
+
+项目总览重新整理为入口、已交付版本、开发进度、当前卡点、后续顺序及目录用途。第五批中断和第六批超时均已结束，修正旧的“正在运行”描述；本轮核对未发现 Godot 进程。GitHub 整理前本地/stable 同为6ffb9cf4，main为6d3bab21，生产目录无差异。Steam状态引用2026-10-09已完成发布收据，不把本次文档整理写成重新上线。
+
+V13独立审查收据 DURABLE_CHAIN_INDEPENDENT_REVIEW_V13.json 已回核，SHA7e3df062fc76519da1fbccc7e2ee3d1a8fdaaf67bba266a92f97f115da701c15；130固定来源、31 Python模块及83导入关系闭合，只准入durable_chain_and_matrices。原61阶段、264/362/24矩阵、进程/锁所有权及原时限保持。已获得源码准入，尚未实际运行V13；原19/UI/SDK/完整恢复/性能/设备资格仍为false。第一个启动check在run_begin计时基线初始化前，不能与后续elapsed直接比较；日志仅诊断用途。
+
+本轮保留全部历史记录和未跟踪.import，不移动删除数据。完整下一步仍先定位world耗时并完成全新61阶段，再执行19故障/UI、真实SDK、八章九玩法、美术、多尺寸、性能及真机验收。按白名单提交推送stable，实际提交以Git回读为准。
+
+## 2026-10-14：完整 V13 被动 world 耗时观测候选
+
+新增world_matrix_timing_candidate_v1，只输出monotonic时间/PID/nonce/阶段/行/检查计数；移除唯一观测helper、变量和调用后，原R4 GD逐字节重建一致。原全部264谓词、check append/return、report schema、source/json路径和真实A完整来源不变，无新增游戏调用、文件写入、yield或验收断言。原旧候选和第六timeout现场保留。
+
+source-only prepare_durable_world_timing_inputs_v1从精确V7只替换一个world overlay，保留26唯一覆盖、base5132及全部其它来源。新full producer V13仅source_spec绑定、receipt版本及默认外部目录变化；全部执行/校验/CFG/矩阵方法AST与V12相同，idle60/全局锁/原Popen所有权、cold1200/ABCD1800/world与capture1200/component6000/整批21600均不变。完整八ABCD、52负例及61进程仍要求全部成功。
+
+实际只读CLI exit0，V13 logical887d3ba0bc033d028b8108204b39d4ec5933473bd19d837d27a73a9c4527b435；67helper pins回核，完整本地Python引用没有缺失pin。SOURCE_PROOF与REVIEW_SCOPE已保存，按用户既有恢复全链授权派独立world_timing_review_v13审查精确源码及新绑定。尚无新native准入或V13运行，不将静态/预检称完整恢复、原19/UI/SDK/性能/真机通过。
+
 ## 2026-10-14：第六批 world 超时终态失败
 
 新批58bfe30d / session22280实际终态退出1，最终receipt complete=false、lock_released=true。cold及Lu A两阶段成功保留，world31124触及原1200秒阶段时限（最后RUNNING1192秒），原拥有者仅终止自有子进程并wait终态1，引擎错误0、完整world report缺失；不能称264矩阵通过。原批年龄未达六小时总限，失败为原阶段deadline assertion。四份原receipt/checkpoint/log/manifest逐字节封存actual_sixth_v12_world_timeout_20261014/及observation，不复制私有profile或裸CFG。

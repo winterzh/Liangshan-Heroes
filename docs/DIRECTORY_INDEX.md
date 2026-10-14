@@ -1,3 +1,11 @@
+## 当前整理与 V13 审查（2026-10-14）
+
+先读 [项目总览](PROJECT_STATUS.md)。V13独立源码审查已完成，准入收据为 `qa/campaign_progress_recovery_20261008/DURABLE_CHAIN_INDEPENDENT_REVIEW_V13.json`；V13尚未实际运行，第五/第六批已结束。下方按日期保留历史条目。
+
+## 2026-10-14：完整V13耗时观测来源
+
+恢复QA新增world_matrix_timing_candidate_v1/、DURABLE_CHAIN_SOURCE_SPEC_V13.json、WORLD_TIMING_SOURCE_PROOF_V13.json、WORLD_TIMING_V13_REVIEW_SCOPE.md；tools新增prepare_durable_world_timing_inputs_v1.py和run_durable_campaign_chain_v13.py。仅被动stdout及单overlay变化，全61/谓词/时限保留，独立审查进行中，未新native。
+
 ## 2026-10-14：第六批 world 超时原始证据
 
 恢复QA actual_sixth_v12_world_timeout_20261014/ 保存原receipt/checkpoint/native.log/actual_A_manifest和观察摘要。world实际deadline失败、锁释放；原2/61局部通过不构成成功prior。

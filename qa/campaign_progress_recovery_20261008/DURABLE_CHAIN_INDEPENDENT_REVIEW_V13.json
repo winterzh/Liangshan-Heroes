@@ -1,0 +1,207 @@
+{
+  "schema": "daming_durable_chain_independent_review_v1",
+  "review_revision": 13,
+  "independent": true,
+  "reviewer": "world_timing_review_v13",
+  "reviewed_at": "2026-10-14T06:35:28.542533+00:00",
+  "producer_sha256": "d27ebc543accff7c5661002ea7831a003fe57ff8b635c88f4e243c35a79204ec",
+  "source_spec_sha256": "887d3ba0bc033d028b8108204b39d4ec5933473bd19d837d27a73a9c4527b435",
+  "source_spec_file_sha256": "20bf2c8cc04d90f09b4f73492dc72bf0bf8fefe59cc414371d14d91e2b236e8a",
+  "producer_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\tools\\run_durable_campaign_chain_v13.py",
+    "bytes": 31945,
+    "sha256": "d27ebc543accff7c5661002ea7831a003fe57ff8b635c88f4e243c35a79204ec"
+  },
+  "source_spec_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\DURABLE_CHAIN_SOURCE_SPEC_V13.json",
+    "bytes": 1150724,
+    "sha256": "20bf2c8cc04d90f09b4f73492dc72bf0bf8fefe59cc414371d14d91e2b236e8a"
+  },
+  "preparation_tool_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\tools\\prepare_durable_world_timing_inputs_v1.py",
+    "bytes": 3872,
+    "sha256": "eac2b27831ac0e31ee685f343eaa4d73091f4ae436d271ff4ff28c304b369a8e"
+  },
+  "original_v12_producer_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\tools\\run_durable_campaign_chain_v12.py",
+    "bytes": 38922,
+    "sha256": "6309ed4976199a0afc058b0cf3a0bc78f0ba3dcc1bb01193958a19751eb3d7c5"
+  },
+  "original_v12_source_spec_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\DURABLE_CHAIN_SOURCE_SPEC_V12.json",
+    "bytes": 1145765,
+    "sha256": "4bba2b87b74afe93be6e5bd52cc693debe1af505962eecb91709964d5534369e"
+  },
+  "original_v12_review_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\DURABLE_CHAIN_INDEPENDENT_REVIEW_V12.json",
+    "bytes": 8903,
+    "sha256": "0dd6fcaff8773a185872747332b7376b36c72649db312deb072bcf3c9044fc92"
+  },
+  "world_candidate_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\world_matrix_timing_candidate_v1\\daming_campaign_world_negative_v1.gd",
+    "bytes": 33866,
+    "sha256": "79c598e766d092d8f45dec0f881faa24715522ab61aefe4114a5aced3a5cdf77"
+  },
+  "original_world_predecessor_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\final_durable_negative_adapters_v1_r4\\daming_campaign_world_negative_v1.gd",
+    "bytes": 32768,
+    "sha256": "d264a7dad39aec68a686cedaff6f35c2a5b83570b095a136f3c5f8e27e88dcc2"
+  },
+  "static_api_closure_passed": true,
+  "source_integrity_verified": true,
+  "local_import_closure_verified": true,
+  "actual_read_only_prepare_exact_sealed_inputs": true,
+  "actual_read_only_preflight_exact_sealed_spec": true,
+  "approved_stages": [
+    "durable_chain_and_matrices"
+  ],
+  "native_started": false,
+  "durable_chain_and_matrices_qualified": false,
+  "full_chain_qualified": false,
+  "whole_goal_qualified": false,
+  "overall_goal_qualified": false,
+  "ABCD_qualified": false,
+  "negative52_qualified": false,
+  "original19_faults_qualified": false,
+  "admission_JSON_OwnedSlot_qualified": false,
+  "SDK_reward_once_qualified": false,
+  "public_continue_qualified": false,
+  "UI_qualified": false,
+  "game_performance_qualified": false,
+  "device_qualified": false,
+  "physical_write_cost_measured": false,
+  "matrix_runtime_speedup_qualified": false,
+  "world_timeout_cause_proven": false,
+  "source_graph": {
+    "fixed_union_source_pins_verified": 130,
+    "python_modules_AST_compiled": 31,
+    "static_local_import_edges": 83,
+    "missing_local_import_pins": [],
+    "base_files": 5132,
+    "unique_runtime_overlays": 26,
+    "original_complete_base_bridge_and_identity_equal": true,
+    "original_actual_semantic_Core_Contract_equal": true,
+    "original_V12_pins_retained_as_exact_prefix": true,
+    "only_changed_runtime_mapping": "tools/daming_campaign_world_negative_v1.gd",
+    "all_current_sealed_sources_read_and_hash_verified": true
+  },
+  "passive_timing_review": {
+    "original_R4_GD_bytes_exactly_reconstructed": true,
+    "new_timing_call_sites": 17,
+    "helper_body": "Only print and JSON.stringify of schema/PID/nonce/Time.get_ticks_usec elapsed/stage/case/route/rows.size/checks.size",
+    "helper_yields": false,
+    "helper_file_writes": false,
+    "helper_gameplay_mutations": false,
+    "helper_acceptance_checks": false,
+    "original_append_return_guards_routes_report_side_effects_control_flow_exact_after_telemetry_removal": true,
+    "normal_monotonic_clock_used": true,
+    "helper_called_twice_before_original_core_prepare": true,
+    "source_and_JSON_routes_retained": true,
+    "telemetry_is_diagnostic_not_validator": true,
+    "note": "The first startup check occurs before run() initializes the timing baseline, so that one check marker reports ticks since engine start. run_begin resets the baseline; phase/row markers thereafter share that run baseline. Printing has diagnostic overhead and establishes neither speedup nor game performance."
+  },
+  "difference_review": {
+    "changed_V12_functions": [
+      "source_spec",
+      "Chain.__init__",
+      "main"
+    ],
+    "all_execution_validation_functions_AST_exact_after_only_receipt_version_default_workroot_normalization": true,
+    "source_spec_calls_complete_original_V12_source_spec_and_checks_immutable_logical_seal": true,
+    "only_single_world_overlay_replaced": true,
+    "all_original_deadlines_predicates_frozen_A_ownership_CFG_ACK_and_three_generations_retained": true,
+    "full_current_production_not_modified_by_review": true
+  },
+  "scoped_execution_contract": {
+    "expected_native_processes": 61,
+    "cold_import_processes": 1,
+    "roles": [
+      "lu",
+      "shi"
+    ],
+    "role_ABCD_processes": 8,
+    "negative_process_stages": 52,
+    "world_rows_per_role": 264,
+    "component_rows_per_role": 362,
+    "live_cases_per_role": 24,
+    "normal_CAMPAIGN_QA": "",
+    "slot_root": "user://continue/v1",
+    "lifecycle_generations": [
+      1,
+      2,
+      3
+    ],
+    "Steam_disabled": true,
+    "fresh_all_61_distinct_terminal_native_processes_required": true,
+    "prior_green_A_or_world_fixture_reuse_permitted": false
+  },
+  "deadline_review": {
+    "cold_seconds": 1200,
+    "ABCD_seconds": 1800,
+    "world_capture_seconds": 1200,
+    "component_seconds": 6000,
+    "whole_batch_seconds": 21600,
+    "all_deadlines_exact_predecessor": true
+  },
+  "ownership_review": {
+    "original_actual_Popen_held_through_validation_and_integrity": true,
+    "global_lease_exclusive_create_and_inode_content_owner_checks_retained": true,
+    "continuous_idle_seconds": 60,
+    "foreign_engine_refusal_retained": true,
+    "only_owned_child_killed_on_failure": true,
+    "lock_release_requires_terminal_owned_child": true,
+    "earlier_closed_logs_rechecked_against_original_SHA": true,
+    "actual_A_closed_report_handoff_packet_world_slot_and_complete_tree_custody_retained": true,
+    "generation3_CFG_raw_SHA_ack_readback_same_frozen_intent_retained": true
+  },
+  "actual_failed_predecessor_evidence": {
+    "raw_pins": [
+      {
+        "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\actual_sixth_v12_world_timeout_20261014\\receipt.json",
+        "bytes": 3108957,
+        "sha256": "f3c0a4f705a27d70f73c2333137c29183e01b47cb8556f239e5bfb21f68e1707"
+      },
+      {
+        "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\actual_sixth_v12_world_timeout_20261014\\checkpoint.json",
+        "bytes": 3187493,
+        "sha256": "a41fe83a6b63d03fc96054a93a87cec40e0c6986395be1f9a40af7d4140b3031"
+      },
+      {
+        "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\actual_sixth_v12_world_timeout_20261014\\native.log",
+        "bytes": 7251,
+        "sha256": "88b939ca97eaaafe2332578b9563eca0fbb6b2f0239855af5e4a2ff4c9357b72"
+      },
+      {
+        "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\actual_sixth_v12_world_timeout_20261014\\actual_A_manifest.json",
+        "bytes": 1579,
+        "sha256": "48b0ba1f41e9365d1d03d857759bc035d702ead6ce029be53679a56dd4729b55"
+      },
+      {
+        "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\actual_sixth_v12_world_timeout_20261014\\observation.json",
+        "bytes": 2285,
+        "sha256": "ba01879ecee45d97ef61ad6477c6e10b083e82fc5c5e69012513cf723de4865a"
+      }
+    ],
+    "receipt_closed_successful_stages": 2,
+    "world_pid": 31124,
+    "world_exit": 1,
+    "world_engine_errors": 0,
+    "world_failure": "AssertionError()",
+    "original_world_log_SHA_reconciled": true,
+    "lease_released": true,
+    "missing_world_report_does_not_qualify": true,
+    "different_fifth_fixture_does_not_replace_sixth": true,
+    "cause_not_proven": true
+  },
+  "actual_static_checks": {
+    "read_only_V13_CLI_exit_code": 0,
+    "read_only_V13_CLI_logical_SHA": "887d3ba0bc033d028b8108204b39d4ec5933473bd19d837d27a73a9c4527b435",
+    "source_only_prepare_return_equals_sealed_inputs": true,
+    "all_31_python_module_AST_compile_succeeded": true,
+    "actual_import_new_preparation_and_V13_succeeded": true,
+    "world_component_capture_interface_counts_exact": true,
+    "new_receipt_created_exclusively": true
+  },
+  "findings": [],
+  "scope_limit": "Independent static admission for only a fresh complete durable_chain_and_matrices V13 batch. Review performed source/hash/AST/import/read-only preparation and preflight, and reconciled archived sixth V12 failure. No Godot, export, SDK, gameplay runtime or acceptance suite ran during this review. All 61 original stages, full 264/362/24 predicates, original Popen/lease/idle/integrity/CFG/deadlines remain mandatory. Timing and prior A/world green stages confer no runtime success. Original19, admission, UI, Steam account/reward, public continue, game performance, devices and whole goal remain unqualified."
+}
