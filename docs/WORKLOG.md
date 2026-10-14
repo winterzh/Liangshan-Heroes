@@ -1,3 +1,9 @@
+## 2026-10-14：V14新批完整Lu live capture24例实际通过
+
+新批6eed4c82全部24个Lu捕获用例实际通过，共10654项检查，24个独立PID/nonce，全部actual Core.capture/真实live对象/row_completed为true；每个实际终态退出0、引擎错误0，原执行器已逐例登记negative_reports及complete=true。原固定CAPTURE_NEGATIVE_INTERFACE_V25D1原始字节/大小/SHA复核，实际完整24case集合严格相等。前20例归档全部逐字节复核且不重复复制；末4例原report/log/actual_A_manifest和全部24例汇总封存 `actual_v14_background_lu_capture_all24_20261014/`，逐例原大小/SHA/PID/nonce/log/manifest环境SHA一致。裸CFG/私有profile不复制，原现场与所有证据保留。
+
+当前整批28/61，原后台33644/执行器39688继续同一批Lu B/C/D及Shi完整链/矩阵。单角色capture24完成不授双角色完整8链/52负例/61阶段资格，也不授原19/UI/SDK/八章九玩法/美术/性能/真人/Android或全目标资格；原完整范围、时限与实际门槛保持。生产代码、main及Steam未变。
+
 ## 2026-10-14：V14新批Lu capture第17至20例实际通过
 
 新批6eed4c82 safe_actor_outcome_empty、freed_event_missing、rescue_done_false、safe_caster__walk_casts分别由PID2612/10524/23076/24292执行，实际443/443/444/447项全部passed；actual Core.capture、真实live对象、row_completed均true，实际终态退出0、引擎错误0。原执行器已登记negative_reports/complete=true。原report/log/actual_A_manifest逐字节封存 `actual_v14_background_lu_capture_cases17_to20_20261014/`，大小/SHA/PID/nonce/log及manifest环境SHA一致。前16例归档再次逐字节复核且不重复复制，前20例PID/nonce全部不同。检查数据本批原报告登记，不将其它新鲜A批的数目替换为本批证据；裸CFG/私有profile不复制，原现场/证据保留。
