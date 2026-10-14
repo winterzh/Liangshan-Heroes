@@ -1,0 +1,1459 @@
+{
+  "schema": "durable_world_timing_actual_summary_v1",
+  "pid": 19988,
+  "nonce": "1e5c5ad6953c4ad68c793565f03a0fe4",
+  "native_log_sha256": "c5e3857985eefbe9f70f0c79d325c6e4d1cc3ae4fcaedf1ec2007890d9b7ff2f",
+  "markers_after_run_begin": 2572,
+  "pre_run_begin_markers_excluded": 1,
+  "complete_row_pairs": 264,
+  "row_pairs_exact_report_order": true,
+  "elapsed_last_marker_seconds": 1033.726501,
+  "matrix_row_sum_seconds": 979.705292,
+  "by_route": {
+    "source": {
+      "rows": 132,
+      "sum_seconds": 419.414814,
+      "median_seconds": 3.1045059999999998,
+      "max_seconds": 4.310941
+    },
+    "json": {
+      "rows": 132,
+      "sum_seconds": 560.290478,
+      "median_seconds": 4.155367,
+      "max_seconds": 5.432923
+    }
+  },
+  "longest_rows": [
+    {
+      "case": "identity_units_content_version_int",
+      "route": "json",
+      "duration_seconds": 5.432923
+    },
+    {
+      "case": "identity_presentation_context_level_id_array",
+      "route": "json",
+      "duration_seconds": 5.364421
+    },
+    {
+      "case": "identity_level_schema_int",
+      "route": "json",
+      "duration_seconds": 4.868852
+    },
+    {
+      "case": "other_alive_missing_active",
+      "route": "json",
+      "duration_seconds": 4.84699
+    },
+    {
+      "case": "root_safe_selection",
+      "route": "json",
+      "duration_seconds": 4.832832
+    },
+    {
+      "case": "identity_level_content_version_array",
+      "route": "json",
+      "duration_seconds": 4.79869
+    },
+    {
+      "case": "identity_units_content_version_float",
+      "route": "json",
+      "duration_seconds": 4.784666
+    },
+    {
+      "case": "safe_caster__walk_item_casts",
+      "route": "json",
+      "duration_seconds": 4.78371
+    },
+    {
+      "case": "freed_event_missing",
+      "route": "json",
+      "duration_seconds": 4.77986
+    },
+    {
+      "case": "identity_mission_schema_int",
+      "route": "json",
+      "duration_seconds": 4.736494
+    }
+  ],
+  "largest_adjacent_marker_intervals": [
+    {
+      "from_stage": "startup_wait_begin",
+      "to_stage": "check:production startup checked before any matrix factory or world",
+      "seconds": 18.532024
+    },
+    {
+      "from_stage": "identity_begin",
+      "to_stage": "check:actual source and engine match source A and producer",
+      "seconds": 17.103989
+    },
+    {
+      "from_stage": "core_prepare_begin",
+      "to_stage": "check:actual A full-world positive prepare/dispose source",
+      "seconds": 5.493649
+    },
+    {
+      "from_stage": "core_prepare_begin",
+      "to_stage": "check:actual A full-world positive prepare/dispose json",
+      "seconds": 5.42814
+    },
+    {
+      "from_stage": "check:cached grids preserved by mutation identity_level_mission_token_float",
+      "to_stage": "check:negative valid Slot front schema reaches Core identity_level_mission_token_float/json",
+      "seconds": 2.391741
+    },
+    {
+      "from_stage": "check:cached grids preserved by mutation identity_presentation_context_level_id_dictionary",
+      "to_stage": "check:negative valid Slot front schema reaches Core identity_presentation_context_level_id_dictionary/json",
+      "seconds": 2.207532
+    },
+    {
+      "from_stage": "check:cached grids preserved by mutation identity_level_level_id_nil",
+      "to_stage": "check:negative valid Slot front schema reaches Core identity_level_level_id_nil/json",
+      "seconds": 2.14709
+    },
+    {
+      "from_stage": "check:cached grids preserved by mutation identity_units_content_version_int",
+      "to_stage": "check:canonical route actual JSON Dictionary identity_units_content_version_int",
+      "seconds": 2.137286
+    },
+    {
+      "from_stage": "check:cached grids preserved by mutation other_alive_missing_active",
+      "to_stage": "check:negative valid Slot front schema reaches Core other_alive_missing_active/json",
+      "seconds": 2.110921
+    },
+    {
+      "from_stage": "check:cached grids preserved by mutation identity_units_content_version_float",
+      "to_stage": "check:negative valid Slot front schema reaches Core identity_units_content_version_float/json",
+      "seconds": 2.065138
+    }
+  ],
+  "all_row_durations": [
+    {
+      "case": "safe_queue_nonempty",
+      "route": "source",
+      "duration_seconds": 3.292007
+    },
+    {
+      "case": "safe_queue_nonempty",
+      "route": "json",
+      "duration_seconds": 4.279346
+    },
+    {
+      "case": "safe_stop__chase_intent",
+      "route": "source",
+      "duration_seconds": 3.28784
+    },
+    {
+      "case": "safe_stop__chase_intent",
+      "route": "json",
+      "duration_seconds": 4.378067
+    },
+    {
+      "case": "safe_stop__group_cap",
+      "route": "source",
+      "duration_seconds": 3.076222
+    },
+    {
+      "case": "safe_stop__group_cap",
+      "route": "json",
+      "duration_seconds": 4.247888
+    },
+    {
+      "case": "safe_stop__has_home",
+      "route": "source",
+      "duration_seconds": 3.478254
+    },
+    {
+      "case": "safe_stop__has_home",
+      "route": "json",
+      "duration_seconds": 4.05164
+    },
+    {
+      "case": "safe_stop__home",
+      "route": "source",
+      "duration_seconds": 3.288098
+    },
+    {
+      "case": "safe_stop__home",
+      "route": "json",
+      "duration_seconds": 4.189327
+    },
+    {
+      "case": "safe_stop__hua_lock_shots",
+      "route": "source",
+      "duration_seconds": 3.262011
+    },
+    {
+      "case": "safe_stop__hua_lock_shots",
+      "route": "json",
+      "duration_seconds": 4.150468
+    },
+    {
+      "case": "other_role_null",
+      "route": "source",
+      "duration_seconds": 3.749369
+    },
+    {
+      "case": "other_role_null",
+      "route": "json",
+      "duration_seconds": 4.602701
+    },
+    {
+      "case": "other_dead_complete_lifetime",
+      "route": "source",
+      "duration_seconds": 3.766065
+    },
+    {
+      "case": "other_dead_complete_lifetime",
+      "route": "json",
+      "duration_seconds": 4.641348
+    },
+    {
+      "case": "other_alive_missing_active",
+      "route": "source",
+      "duration_seconds": 3.16147
+    },
+    {
+      "case": "other_alive_missing_active",
+      "route": "json",
+      "duration_seconds": 4.84699
+    },
+    {
+      "case": "other_missing_root_record",
+      "route": "source",
+      "duration_seconds": 3.030889
+    },
+    {
+      "case": "other_missing_root_record",
+      "route": "json",
+      "duration_seconds": 4.38435
+    },
+    {
+      "case": "other_captured_outcome",
+      "route": "source",
+      "duration_seconds": 3.118005
+    },
+    {
+      "case": "other_captured_outcome",
+      "route": "json",
+      "duration_seconds": 4.178703
+    },
+    {
+      "case": "safe_event_missing",
+      "route": "source",
+      "duration_seconds": 3.712245
+    },
+    {
+      "case": "safe_event_missing",
+      "route": "json",
+      "duration_seconds": 4.697723
+    },
+    {
+      "case": "safe_actor_outcome_empty",
+      "route": "source",
+      "duration_seconds": 3.711136
+    },
+    {
+      "case": "safe_actor_outcome_empty",
+      "route": "json",
+      "duration_seconds": 4.61241
+    },
+    {
+      "case": "other_safe_event_without_retreat",
+      "route": "source",
+      "duration_seconds": 3.768509
+    },
+    {
+      "case": "other_safe_event_without_retreat",
+      "route": "json",
+      "duration_seconds": 4.707248
+    },
+    {
+      "case": "root_safe_selection",
+      "route": "source",
+      "duration_seconds": 3.90654
+    },
+    {
+      "case": "root_safe_selection",
+      "route": "json",
+      "duration_seconds": 4.832832
+    },
+    {
+      "case": "root_safe__ability_caster",
+      "route": "source",
+      "duration_seconds": 3.856191
+    },
+    {
+      "case": "root_safe__ability_caster",
+      "route": "json",
+      "duration_seconds": 4.660136
+    },
+    {
+      "case": "root_safe__item_caster",
+      "route": "source",
+      "duration_seconds": 3.57809
+    },
+    {
+      "case": "root_safe__item_caster",
+      "route": "json",
+      "duration_seconds": 4.736382
+    },
+    {
+      "case": "safe_caster__walk_casts",
+      "route": "source",
+      "duration_seconds": 3.892827
+    },
+    {
+      "case": "safe_caster__walk_casts",
+      "route": "json",
+      "duration_seconds": 4.60266
+    },
+    {
+      "case": "safe_caster__pending_casts",
+      "route": "source",
+      "duration_seconds": 3.695949
+    },
+    {
+      "case": "safe_caster__pending_casts",
+      "route": "json",
+      "duration_seconds": 4.68847
+    },
+    {
+      "case": "safe_caster__channels",
+      "route": "source",
+      "duration_seconds": 3.714967
+    },
+    {
+      "case": "safe_caster__channels",
+      "route": "json",
+      "duration_seconds": 4.712185
+    },
+    {
+      "case": "safe_caster__walk_item_casts",
+      "route": "source",
+      "duration_seconds": 3.746029
+    },
+    {
+      "case": "safe_caster__walk_item_casts",
+      "route": "json",
+      "duration_seconds": 4.78371
+    },
+    {
+      "case": "safe_caster__pending_item_casts",
+      "route": "source",
+      "duration_seconds": 3.735276
+    },
+    {
+      "case": "safe_caster__pending_item_casts",
+      "route": "json",
+      "duration_seconds": 4.662459
+    },
+    {
+      "case": "freed_event_missing",
+      "route": "source",
+      "duration_seconds": 3.902954
+    },
+    {
+      "case": "freed_event_missing",
+      "route": "json",
+      "duration_seconds": 4.77986
+    },
+    {
+      "case": "rescue_done_false",
+      "route": "source",
+      "duration_seconds": 3.524075
+    },
+    {
+      "case": "rescue_done_false",
+      "route": "json",
+      "duration_seconds": 4.609581
+    },
+    {
+      "case": "identity_units_schema_nil",
+      "route": "source",
+      "duration_seconds": 3.116105
+    },
+    {
+      "case": "identity_units_schema_nil",
+      "route": "json",
+      "duration_seconds": 4.233873
+    },
+    {
+      "case": "identity_units_schema_bool",
+      "route": "source",
+      "duration_seconds": 2.89707
+    },
+    {
+      "case": "identity_units_schema_bool",
+      "route": "json",
+      "duration_seconds": 3.901331
+    },
+    {
+      "case": "identity_units_schema_int",
+      "route": "source",
+      "duration_seconds": 3.081517
+    },
+    {
+      "case": "identity_units_schema_int",
+      "route": "json",
+      "duration_seconds": 4.558927
+    },
+    {
+      "case": "identity_units_schema_float",
+      "route": "source",
+      "duration_seconds": 3.227105
+    },
+    {
+      "case": "identity_units_schema_float",
+      "route": "json",
+      "duration_seconds": 3.939757
+    },
+    {
+      "case": "identity_units_schema_array",
+      "route": "source",
+      "duration_seconds": 3.183756
+    },
+    {
+      "case": "identity_units_schema_array",
+      "route": "json",
+      "duration_seconds": 4.352928
+    },
+    {
+      "case": "identity_units_schema_dictionary",
+      "route": "source",
+      "duration_seconds": 3.380503
+    },
+    {
+      "case": "identity_units_schema_dictionary",
+      "route": "json",
+      "duration_seconds": 4.374833
+    },
+    {
+      "case": "identity_units_content_version_nil",
+      "route": "source",
+      "duration_seconds": 3.402311
+    },
+    {
+      "case": "identity_units_content_version_nil",
+      "route": "json",
+      "duration_seconds": 4.44788
+    },
+    {
+      "case": "identity_units_content_version_bool",
+      "route": "source",
+      "duration_seconds": 3.816213
+    },
+    {
+      "case": "identity_units_content_version_bool",
+      "route": "json",
+      "duration_seconds": 4.344716
+    },
+    {
+      "case": "identity_units_content_version_int",
+      "route": "source",
+      "duration_seconds": 3.316153
+    },
+    {
+      "case": "identity_units_content_version_int",
+      "route": "json",
+      "duration_seconds": 5.432923
+    },
+    {
+      "case": "identity_units_content_version_float",
+      "route": "source",
+      "duration_seconds": 3.246508
+    },
+    {
+      "case": "identity_units_content_version_float",
+      "route": "json",
+      "duration_seconds": 4.784666
+    },
+    {
+      "case": "identity_units_content_version_array",
+      "route": "source",
+      "duration_seconds": 3.236057
+    },
+    {
+      "case": "identity_units_content_version_array",
+      "route": "json",
+      "duration_seconds": 3.979307
+    },
+    {
+      "case": "identity_units_content_version_dictionary",
+      "route": "source",
+      "duration_seconds": 3.117506
+    },
+    {
+      "case": "identity_units_content_version_dictionary",
+      "route": "json",
+      "duration_seconds": 4.160266
+    },
+    {
+      "case": "identity_level_schema_nil",
+      "route": "source",
+      "duration_seconds": 2.878179
+    },
+    {
+      "case": "identity_level_schema_nil",
+      "route": "json",
+      "duration_seconds": 4.167942
+    },
+    {
+      "case": "identity_level_schema_bool",
+      "route": "source",
+      "duration_seconds": 3.214919
+    },
+    {
+      "case": "identity_level_schema_bool",
+      "route": "json",
+      "duration_seconds": 4.269054
+    },
+    {
+      "case": "identity_level_schema_int",
+      "route": "source",
+      "duration_seconds": 3.287962
+    },
+    {
+      "case": "identity_level_schema_int",
+      "route": "json",
+      "duration_seconds": 4.868852
+    },
+    {
+      "case": "identity_level_schema_float",
+      "route": "source",
+      "duration_seconds": 3.184536
+    },
+    {
+      "case": "identity_level_schema_float",
+      "route": "json",
+      "duration_seconds": 4.347385
+    },
+    {
+      "case": "identity_level_schema_array",
+      "route": "source",
+      "duration_seconds": 3.323152
+    },
+    {
+      "case": "identity_level_schema_array",
+      "route": "json",
+      "duration_seconds": 3.997971
+    },
+    {
+      "case": "identity_level_schema_dictionary",
+      "route": "source",
+      "duration_seconds": 3.035863
+    },
+    {
+      "case": "identity_level_schema_dictionary",
+      "route": "json",
+      "duration_seconds": 4.039924
+    },
+    {
+      "case": "identity_level_level_id_nil",
+      "route": "source",
+      "duration_seconds": 2.910594
+    },
+    {
+      "case": "identity_level_level_id_nil",
+      "route": "json",
+      "duration_seconds": 4.374521
+    },
+    {
+      "case": "identity_level_level_id_bool",
+      "route": "source",
+      "duration_seconds": 3.12907
+    },
+    {
+      "case": "identity_level_level_id_bool",
+      "route": "json",
+      "duration_seconds": 3.999713
+    },
+    {
+      "case": "identity_level_level_id_int",
+      "route": "source",
+      "duration_seconds": 3.06923
+    },
+    {
+      "case": "identity_level_level_id_int",
+      "route": "json",
+      "duration_seconds": 4.448142
+    },
+    {
+      "case": "identity_level_level_id_float",
+      "route": "source",
+      "duration_seconds": 3.022418
+    },
+    {
+      "case": "identity_level_level_id_float",
+      "route": "json",
+      "duration_seconds": 3.938997
+    },
+    {
+      "case": "identity_level_level_id_array",
+      "route": "source",
+      "duration_seconds": 3.020469
+    },
+    {
+      "case": "identity_level_level_id_array",
+      "route": "json",
+      "duration_seconds": 3.978375
+    },
+    {
+      "case": "identity_level_level_id_dictionary",
+      "route": "source",
+      "duration_seconds": 3.014668
+    },
+    {
+      "case": "identity_level_level_id_dictionary",
+      "route": "json",
+      "duration_seconds": 3.84616
+    },
+    {
+      "case": "identity_level_content_version_nil",
+      "route": "source",
+      "duration_seconds": 3.146011
+    },
+    {
+      "case": "identity_level_content_version_nil",
+      "route": "json",
+      "duration_seconds": 4.072354
+    },
+    {
+      "case": "identity_level_content_version_bool",
+      "route": "source",
+      "duration_seconds": 2.912057
+    },
+    {
+      "case": "identity_level_content_version_bool",
+      "route": "json",
+      "duration_seconds": 4.077221
+    },
+    {
+      "case": "identity_level_content_version_int",
+      "route": "source",
+      "duration_seconds": 3.09692
+    },
+    {
+      "case": "identity_level_content_version_int",
+      "route": "json",
+      "duration_seconds": 4.414233
+    },
+    {
+      "case": "identity_level_content_version_float",
+      "route": "source",
+      "duration_seconds": 2.9709
+    },
+    {
+      "case": "identity_level_content_version_float",
+      "route": "json",
+      "duration_seconds": 4.043047
+    },
+    {
+      "case": "identity_level_content_version_array",
+      "route": "source",
+      "duration_seconds": 3.119974
+    },
+    {
+      "case": "identity_level_content_version_array",
+      "route": "json",
+      "duration_seconds": 4.79869
+    },
+    {
+      "case": "identity_level_content_version_dictionary",
+      "route": "source",
+      "duration_seconds": 2.938021
+    },
+    {
+      "case": "identity_level_content_version_dictionary",
+      "route": "json",
+      "duration_seconds": 3.968527
+    },
+    {
+      "case": "identity_level_mission_token_nil",
+      "route": "source",
+      "duration_seconds": 4.310941
+    },
+    {
+      "case": "identity_level_mission_token_nil",
+      "route": "json",
+      "duration_seconds": 4.523427
+    },
+    {
+      "case": "identity_level_mission_token_bool",
+      "route": "source",
+      "duration_seconds": 3.498476
+    },
+    {
+      "case": "identity_level_mission_token_bool",
+      "route": "json",
+      "duration_seconds": 3.956703
+    },
+    {
+      "case": "identity_level_mission_token_int",
+      "route": "source",
+      "duration_seconds": 3.276068
+    },
+    {
+      "case": "identity_level_mission_token_int",
+      "route": "json",
+      "duration_seconds": 4.570994
+    },
+    {
+      "case": "identity_level_mission_token_float",
+      "route": "source",
+      "duration_seconds": 2.996712
+    },
+    {
+      "case": "identity_level_mission_token_float",
+      "route": "json",
+      "duration_seconds": 4.684864
+    },
+    {
+      "case": "identity_level_mission_token_array",
+      "route": "source",
+      "duration_seconds": 2.980596
+    },
+    {
+      "case": "identity_level_mission_token_array",
+      "route": "json",
+      "duration_seconds": 4.076753
+    },
+    {
+      "case": "identity_level_mission_token_dictionary",
+      "route": "source",
+      "duration_seconds": 2.90991
+    },
+    {
+      "case": "identity_level_mission_token_dictionary",
+      "route": "json",
+      "duration_seconds": 3.912757
+    },
+    {
+      "case": "identity_root_schema_nil",
+      "route": "source",
+      "duration_seconds": 3.138974
+    },
+    {
+      "case": "identity_root_schema_nil",
+      "route": "json",
+      "duration_seconds": 3.993628
+    },
+    {
+      "case": "identity_root_schema_bool",
+      "route": "source",
+      "duration_seconds": 2.947179
+    },
+    {
+      "case": "identity_root_schema_bool",
+      "route": "json",
+      "duration_seconds": 4.045772
+    },
+    {
+      "case": "identity_root_schema_int",
+      "route": "source",
+      "duration_seconds": 3.109508
+    },
+    {
+      "case": "identity_root_schema_int",
+      "route": "json",
+      "duration_seconds": 4.412489
+    },
+    {
+      "case": "identity_root_schema_float",
+      "route": "source",
+      "duration_seconds": 3.049384
+    },
+    {
+      "case": "identity_root_schema_float",
+      "route": "json",
+      "duration_seconds": 4.003581
+    },
+    {
+      "case": "identity_root_schema_array",
+      "route": "source",
+      "duration_seconds": 3.000462
+    },
+    {
+      "case": "identity_root_schema_array",
+      "route": "json",
+      "duration_seconds": 4.133942
+    },
+    {
+      "case": "identity_root_schema_dictionary",
+      "route": "source",
+      "duration_seconds": 3.104998
+    },
+    {
+      "case": "identity_root_schema_dictionary",
+      "route": "json",
+      "duration_seconds": 3.97355
+    },
+    {
+      "case": "identity_root_content_version_nil",
+      "route": "source",
+      "duration_seconds": 2.995949
+    },
+    {
+      "case": "identity_root_content_version_nil",
+      "route": "json",
+      "duration_seconds": 4.002163
+    },
+    {
+      "case": "identity_root_content_version_bool",
+      "route": "source",
+      "duration_seconds": 3.094156
+    },
+    {
+      "case": "identity_root_content_version_bool",
+      "route": "json",
+      "duration_seconds": 3.989745
+    },
+    {
+      "case": "identity_root_content_version_int",
+      "route": "source",
+      "duration_seconds": 2.89592
+    },
+    {
+      "case": "identity_root_content_version_int",
+      "route": "json",
+      "duration_seconds": 4.657229
+    },
+    {
+      "case": "identity_root_content_version_float",
+      "route": "source",
+      "duration_seconds": 3.083988
+    },
+    {
+      "case": "identity_root_content_version_float",
+      "route": "json",
+      "duration_seconds": 3.852865
+    },
+    {
+      "case": "identity_root_content_version_array",
+      "route": "source",
+      "duration_seconds": 2.989187
+    },
+    {
+      "case": "identity_root_content_version_array",
+      "route": "json",
+      "duration_seconds": 4.127298
+    },
+    {
+      "case": "identity_root_content_version_dictionary",
+      "route": "source",
+      "duration_seconds": 2.919927
+    },
+    {
+      "case": "identity_root_content_version_dictionary",
+      "route": "json",
+      "duration_seconds": 4.003239
+    },
+    {
+      "case": "identity_mission_schema_nil",
+      "route": "source",
+      "duration_seconds": 3.121792
+    },
+    {
+      "case": "identity_mission_schema_nil",
+      "route": "json",
+      "duration_seconds": 4.122049
+    },
+    {
+      "case": "identity_mission_schema_bool",
+      "route": "source",
+      "duration_seconds": 3.608282
+    },
+    {
+      "case": "identity_mission_schema_bool",
+      "route": "json",
+      "duration_seconds": 4.345393
+    },
+    {
+      "case": "identity_mission_schema_int",
+      "route": "source",
+      "duration_seconds": 3.185207
+    },
+    {
+      "case": "identity_mission_schema_int",
+      "route": "json",
+      "duration_seconds": 4.736494
+    },
+    {
+      "case": "identity_mission_schema_float",
+      "route": "source",
+      "duration_seconds": 2.973063
+    },
+    {
+      "case": "identity_mission_schema_float",
+      "route": "json",
+      "duration_seconds": 3.961755
+    },
+    {
+      "case": "identity_mission_schema_array",
+      "route": "source",
+      "duration_seconds": 3.29976
+    },
+    {
+      "case": "identity_mission_schema_array",
+      "route": "json",
+      "duration_seconds": 4.086689
+    },
+    {
+      "case": "identity_mission_schema_dictionary",
+      "route": "source",
+      "duration_seconds": 3.020239
+    },
+    {
+      "case": "identity_mission_schema_dictionary",
+      "route": "json",
+      "duration_seconds": 4.082725
+    },
+    {
+      "case": "identity_presentation_schema_nil",
+      "route": "source",
+      "duration_seconds": 3.269163
+    },
+    {
+      "case": "identity_presentation_schema_nil",
+      "route": "json",
+      "duration_seconds": 4.028314
+    },
+    {
+      "case": "identity_presentation_schema_bool",
+      "route": "source",
+      "duration_seconds": 3.000332
+    },
+    {
+      "case": "identity_presentation_schema_bool",
+      "route": "json",
+      "duration_seconds": 4.233923
+    },
+    {
+      "case": "identity_presentation_schema_int",
+      "route": "source",
+      "duration_seconds": 3.219102
+    },
+    {
+      "case": "identity_presentation_schema_int",
+      "route": "json",
+      "duration_seconds": 4.454399
+    },
+    {
+      "case": "identity_presentation_schema_float",
+      "route": "source",
+      "duration_seconds": 3.283524
+    },
+    {
+      "case": "identity_presentation_schema_float",
+      "route": "json",
+      "duration_seconds": 4.310959
+    },
+    {
+      "case": "identity_presentation_schema_array",
+      "route": "source",
+      "duration_seconds": 3.260199
+    },
+    {
+      "case": "identity_presentation_schema_array",
+      "route": "json",
+      "duration_seconds": 4.391505
+    },
+    {
+      "case": "identity_presentation_schema_dictionary",
+      "route": "source",
+      "duration_seconds": 3.169275
+    },
+    {
+      "case": "identity_presentation_schema_dictionary",
+      "route": "json",
+      "duration_seconds": 4.351846
+    },
+    {
+      "case": "identity_mission_context_level_id_nil",
+      "route": "source",
+      "duration_seconds": 3.434906
+    },
+    {
+      "case": "identity_mission_context_level_id_nil",
+      "route": "json",
+      "duration_seconds": 4.511879
+    },
+    {
+      "case": "identity_mission_context_level_id_bool",
+      "route": "source",
+      "duration_seconds": 3.255245
+    },
+    {
+      "case": "identity_mission_context_level_id_bool",
+      "route": "json",
+      "duration_seconds": 4.289638
+    },
+    {
+      "case": "identity_mission_context_level_id_int",
+      "route": "source",
+      "duration_seconds": 3.254807
+    },
+    {
+      "case": "identity_mission_context_level_id_int",
+      "route": "json",
+      "duration_seconds": 4.664462
+    },
+    {
+      "case": "identity_mission_context_level_id_float",
+      "route": "source",
+      "duration_seconds": 2.952196
+    },
+    {
+      "case": "identity_mission_context_level_id_float",
+      "route": "json",
+      "duration_seconds": 3.961809
+    },
+    {
+      "case": "identity_mission_context_level_id_array",
+      "route": "source",
+      "duration_seconds": 3.12508
+    },
+    {
+      "case": "identity_mission_context_level_id_array",
+      "route": "json",
+      "duration_seconds": 3.99778
+    },
+    {
+      "case": "identity_mission_context_level_id_dictionary",
+      "route": "source",
+      "duration_seconds": 3.021269
+    },
+    {
+      "case": "identity_mission_context_level_id_dictionary",
+      "route": "json",
+      "duration_seconds": 3.961018
+    },
+    {
+      "case": "identity_mission_context_content_version_nil",
+      "route": "source",
+      "duration_seconds": 3.099193
+    },
+    {
+      "case": "identity_mission_context_content_version_nil",
+      "route": "json",
+      "duration_seconds": 3.895753
+    },
+    {
+      "case": "identity_mission_context_content_version_bool",
+      "route": "source",
+      "duration_seconds": 2.99779
+    },
+    {
+      "case": "identity_mission_context_content_version_bool",
+      "route": "json",
+      "duration_seconds": 4.055414
+    },
+    {
+      "case": "identity_mission_context_content_version_int",
+      "route": "source",
+      "duration_seconds": 3.050561
+    },
+    {
+      "case": "identity_mission_context_content_version_int",
+      "route": "json",
+      "duration_seconds": 4.347142
+    },
+    {
+      "case": "identity_mission_context_content_version_float",
+      "route": "source",
+      "duration_seconds": 3.166589
+    },
+    {
+      "case": "identity_mission_context_content_version_float",
+      "route": "json",
+      "duration_seconds": 3.920648
+    },
+    {
+      "case": "identity_mission_context_content_version_array",
+      "route": "source",
+      "duration_seconds": 2.838166
+    },
+    {
+      "case": "identity_mission_context_content_version_array",
+      "route": "json",
+      "duration_seconds": 4.373806
+    },
+    {
+      "case": "identity_mission_context_content_version_dictionary",
+      "route": "source",
+      "duration_seconds": 3.056755
+    },
+    {
+      "case": "identity_mission_context_content_version_dictionary",
+      "route": "json",
+      "duration_seconds": 4.115172
+    },
+    {
+      "case": "identity_mission_context_mission_token_nil",
+      "route": "source",
+      "duration_seconds": 2.804666
+    },
+    {
+      "case": "identity_mission_context_mission_token_nil",
+      "route": "json",
+      "duration_seconds": 3.970746
+    },
+    {
+      "case": "identity_mission_context_mission_token_bool",
+      "route": "source",
+      "duration_seconds": 3.037115
+    },
+    {
+      "case": "identity_mission_context_mission_token_bool",
+      "route": "json",
+      "duration_seconds": 4.070878
+    },
+    {
+      "case": "identity_mission_context_mission_token_int",
+      "route": "source",
+      "duration_seconds": 2.898646
+    },
+    {
+      "case": "identity_mission_context_mission_token_int",
+      "route": "json",
+      "duration_seconds": 4.485425
+    },
+    {
+      "case": "identity_mission_context_mission_token_float",
+      "route": "source",
+      "duration_seconds": 2.977746
+    },
+    {
+      "case": "identity_mission_context_mission_token_float",
+      "route": "json",
+      "duration_seconds": 3.962541
+    },
+    {
+      "case": "identity_mission_context_mission_token_array",
+      "route": "source",
+      "duration_seconds": 3.077138
+    },
+    {
+      "case": "identity_mission_context_mission_token_array",
+      "route": "json",
+      "duration_seconds": 4.01007
+    },
+    {
+      "case": "identity_mission_context_mission_token_dictionary",
+      "route": "source",
+      "duration_seconds": 3.02379
+    },
+    {
+      "case": "identity_mission_context_mission_token_dictionary",
+      "route": "json",
+      "duration_seconds": 4.121247
+    },
+    {
+      "case": "identity_mission_context_presentation_token_nil",
+      "route": "source",
+      "duration_seconds": 3.074575
+    },
+    {
+      "case": "identity_mission_context_presentation_token_nil",
+      "route": "json",
+      "duration_seconds": 3.961319
+    },
+    {
+      "case": "identity_mission_context_presentation_token_bool",
+      "route": "source",
+      "duration_seconds": 2.938748
+    },
+    {
+      "case": "identity_mission_context_presentation_token_bool",
+      "route": "json",
+      "duration_seconds": 4.000243
+    },
+    {
+      "case": "identity_mission_context_presentation_token_int",
+      "route": "source",
+      "duration_seconds": 3.071863
+    },
+    {
+      "case": "identity_mission_context_presentation_token_int",
+      "route": "json",
+      "duration_seconds": 4.440865
+    },
+    {
+      "case": "identity_mission_context_presentation_token_float",
+      "route": "source",
+      "duration_seconds": 2.968527
+    },
+    {
+      "case": "identity_mission_context_presentation_token_float",
+      "route": "json",
+      "duration_seconds": 4.06814
+    },
+    {
+      "case": "identity_mission_context_presentation_token_array",
+      "route": "source",
+      "duration_seconds": 3.277643
+    },
+    {
+      "case": "identity_mission_context_presentation_token_array",
+      "route": "json",
+      "duration_seconds": 3.840377
+    },
+    {
+      "case": "identity_mission_context_presentation_token_dictionary",
+      "route": "source",
+      "duration_seconds": 3.098155
+    },
+    {
+      "case": "identity_mission_context_presentation_token_dictionary",
+      "route": "json",
+      "duration_seconds": 4.042454
+    },
+    {
+      "case": "identity_presentation_context_level_id_nil",
+      "route": "source",
+      "duration_seconds": 2.870914
+    },
+    {
+      "case": "identity_presentation_context_level_id_nil",
+      "route": "json",
+      "duration_seconds": 4.392515
+    },
+    {
+      "case": "identity_presentation_context_level_id_bool",
+      "route": "source",
+      "duration_seconds": 3.208502
+    },
+    {
+      "case": "identity_presentation_context_level_id_bool",
+      "route": "json",
+      "duration_seconds": 4.006958
+    },
+    {
+      "case": "identity_presentation_context_level_id_int",
+      "route": "source",
+      "duration_seconds": 3.01247
+    },
+    {
+      "case": "identity_presentation_context_level_id_int",
+      "route": "json",
+      "duration_seconds": 4.480231
+    },
+    {
+      "case": "identity_presentation_context_level_id_float",
+      "route": "source",
+      "duration_seconds": 3.066345
+    },
+    {
+      "case": "identity_presentation_context_level_id_float",
+      "route": "json",
+      "duration_seconds": 4.13594
+    },
+    {
+      "case": "identity_presentation_context_level_id_array",
+      "route": "source",
+      "duration_seconds": 2.89841
+    },
+    {
+      "case": "identity_presentation_context_level_id_array",
+      "route": "json",
+      "duration_seconds": 5.364421
+    },
+    {
+      "case": "identity_presentation_context_level_id_dictionary",
+      "route": "source",
+      "duration_seconds": 3.315206
+    },
+    {
+      "case": "identity_presentation_context_level_id_dictionary",
+      "route": "json",
+      "duration_seconds": 4.644011
+    },
+    {
+      "case": "identity_presentation_context_content_version_nil",
+      "route": "source",
+      "duration_seconds": 3.096416
+    },
+    {
+      "case": "identity_presentation_context_content_version_nil",
+      "route": "json",
+      "duration_seconds": 3.946639
+    },
+    {
+      "case": "identity_presentation_context_content_version_bool",
+      "route": "source",
+      "duration_seconds": 3.234512
+    },
+    {
+      "case": "identity_presentation_context_content_version_bool",
+      "route": "json",
+      "duration_seconds": 4.180573
+    },
+    {
+      "case": "identity_presentation_context_content_version_int",
+      "route": "source",
+      "duration_seconds": 2.911675
+    },
+    {
+      "case": "identity_presentation_context_content_version_int",
+      "route": "json",
+      "duration_seconds": 4.470323
+    },
+    {
+      "case": "identity_presentation_context_content_version_float",
+      "route": "source",
+      "duration_seconds": 3.104014
+    },
+    {
+      "case": "identity_presentation_context_content_version_float",
+      "route": "json",
+      "duration_seconds": 3.956893
+    },
+    {
+      "case": "identity_presentation_context_content_version_array",
+      "route": "source",
+      "duration_seconds": 3.017148
+    },
+    {
+      "case": "identity_presentation_context_content_version_array",
+      "route": "json",
+      "duration_seconds": 4.094256
+    },
+    {
+      "case": "identity_presentation_context_content_version_dictionary",
+      "route": "source",
+      "duration_seconds": 3.165922
+    },
+    {
+      "case": "identity_presentation_context_content_version_dictionary",
+      "route": "json",
+      "duration_seconds": 4.093727
+    },
+    {
+      "case": "identity_presentation_context_mission_token_nil",
+      "route": "source",
+      "duration_seconds": 3.12543
+    },
+    {
+      "case": "identity_presentation_context_mission_token_nil",
+      "route": "json",
+      "duration_seconds": 4.65209
+    },
+    {
+      "case": "identity_presentation_context_mission_token_bool",
+      "route": "source",
+      "duration_seconds": 3.863344
+    },
+    {
+      "case": "identity_presentation_context_mission_token_bool",
+      "route": "json",
+      "duration_seconds": 3.930844
+    },
+    {
+      "case": "identity_presentation_context_mission_token_int",
+      "route": "source",
+      "duration_seconds": 2.852429
+    },
+    {
+      "case": "identity_presentation_context_mission_token_int",
+      "route": "json",
+      "duration_seconds": 4.510398
+    },
+    {
+      "case": "identity_presentation_context_mission_token_float",
+      "route": "source",
+      "duration_seconds": 3.025376
+    },
+    {
+      "case": "identity_presentation_context_mission_token_float",
+      "route": "json",
+      "duration_seconds": 3.652029
+    },
+    {
+      "case": "identity_presentation_context_mission_token_array",
+      "route": "source",
+      "duration_seconds": 2.735204
+    },
+    {
+      "case": "identity_presentation_context_mission_token_array",
+      "route": "json",
+      "duration_seconds": 3.749362
+    },
+    {
+      "case": "identity_presentation_context_mission_token_dictionary",
+      "route": "source",
+      "duration_seconds": 2.643853
+    },
+    {
+      "case": "identity_presentation_context_mission_token_dictionary",
+      "route": "json",
+      "duration_seconds": 3.705322
+    },
+    {
+      "case": "identity_presentation_context_presentation_token_nil",
+      "route": "source",
+      "duration_seconds": 2.865232
+    },
+    {
+      "case": "identity_presentation_context_presentation_token_nil",
+      "route": "json",
+      "duration_seconds": 4.129382
+    },
+    {
+      "case": "identity_presentation_context_presentation_token_bool",
+      "route": "source",
+      "duration_seconds": 2.817868
+    },
+    {
+      "case": "identity_presentation_context_presentation_token_bool",
+      "route": "json",
+      "duration_seconds": 3.638469
+    },
+    {
+      "case": "identity_presentation_context_presentation_token_int",
+      "route": "source",
+      "duration_seconds": 2.633237
+    },
+    {
+      "case": "identity_presentation_context_presentation_token_int",
+      "route": "json",
+      "duration_seconds": 4.023256
+    },
+    {
+      "case": "identity_presentation_context_presentation_token_float",
+      "route": "source",
+      "duration_seconds": 2.763667
+    },
+    {
+      "case": "identity_presentation_context_presentation_token_float",
+      "route": "json",
+      "duration_seconds": 3.503601
+    },
+    {
+      "case": "identity_presentation_context_presentation_token_array",
+      "route": "source",
+      "duration_seconds": 2.837339
+    },
+    {
+      "case": "identity_presentation_context_presentation_token_array",
+      "route": "json",
+      "duration_seconds": 3.326506
+    },
+    {
+      "case": "identity_presentation_context_presentation_token_dictionary",
+      "route": "source",
+      "duration_seconds": 2.586094
+    },
+    {
+      "case": "identity_presentation_context_presentation_token_dictionary",
+      "route": "json",
+      "duration_seconds": 3.407857
+    }
+  ],
+  "diagnostic_only": true,
+  "timing_intervals_include_every_operation_between_markers_not_atomic_call_cost": true,
+  "first_ready_marker_excluded_due_to_baseline_reset": true,
+  "previous_v12_timeout_cause_proven": false,
+  "speedup_qualified": false,
+  "game_performance_qualified": false,
+  "same_prior_A_fixture_used": false
+}
