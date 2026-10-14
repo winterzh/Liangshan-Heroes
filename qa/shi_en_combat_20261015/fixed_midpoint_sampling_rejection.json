@@ -1,0 +1,9 @@
+{
+  "step": "python -B tools/prepare_shi_en_attack_candidates_20261015.py --prepare",
+  "actual_exit_code_observed": 1,
+  "failure": "AssertionError: ('ne', 'followthrough', (200, 34, 627, 528))",
+  "cause": "Followthrough club crosses the geometric half-width sampling boundary into the native blank gutter; fixed quarter sampling would truncate source art.",
+  "resolution": "Move sampling partitions into the real blank native gutters, keep all source foreground exactly once, keep the same minimum margin checks and original RGBA bytes.",
+  "source_pixel_changes": false,
+  "runtime_qualified": false
+}
