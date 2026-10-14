@@ -1,3 +1,7 @@
+## 2026-10-14：第五批 Lu world 原始证据
+
+恢复QA actual_fifth_v12_lu_world_20261014/ 保存264行/1540check的原report、native.log及observation。仅此world阶段通过；完整批3/61，component正在原session75405执行。
+
 ## 2026-10-14：第五批 Lu A 原始证据
 
 恢复QA actual_fifth_v12_lu_a_20261014/ 保存原report/native.log及observation摘要。实际293项首次保存通过；2/61阶段完成，完整批仍在原session75405运行并等待共享资源。
