@@ -1,0 +1,26 @@
+{
+  "provider": "Web ChatGPT native image generation",
+  "conversation_url": "https://chatgpt.com/c/6acfda54-afcc-83ea-a0c5-4c1932231c1f",
+  "model_name_not_observed": true,
+  "requests": [
+    {
+      "version": 1,
+      "prompt": "请直接生成一张可下载的真正透明RGBA PNG游戏物件图集，不要解释，不要做场景或展示稿。3列×2行，六格均等，每格一个完整独立的北宋孟州城外路边木摊；建议1536×1024，统一写实手绘2D等距RTS、2:1正交视角，朝右下与左下可见前台，统一左上柔和光。画风接近精细中国木构小酒肆：温暖泥褐木料、暗灰瓦与低饱和麻布，工笔厚涂、明确小尺寸轮廓，无现代装饰。\n固定顺序：第一行左：客店接待茶摊A，小木柜台、粗麻色短棚、茶壶与两只碗，小布帘，朴素无楼层；第一行中：酒摊，米色布篷、三个褐釉酒坛、酒碗与木勺；第一行右：杂货摊，褐赭布棚、整齐竹筐、折叠布匹、绳束与小木箱。第二行左：赌摊，暗赭红短篷、低木桌、骰盅和三颗小骰子，不画赌场人物；第二行中：兑钱摊，灰蓝色短篷、木柜台、少量串起的圆孔铜钱和小木匣，不画纸钞；第二行右：客店接待茶摊B，与A同一风格但更窄、棚顶略斜，粗麻茶布、木凳、茶壶与竹篮。客店是简朴路边柜台，不是完整大房屋。六摊都要有木柱与可见脚点，尺寸相近，摆放在各自格内中心，整个物件约占格宽70%、格高70%，脚点约在格高82%，各格四周至少8%透明边距，不能裁掉棚顶、摊脚或串到邻格。\n每格在棚前上部留一个小的、正对镜头的矩形空白麻布/浅木招牌，其表面无任何笔画，方便游戏单独绘制“店/酒/货/赌/兑”。所有牌匾、包装、布料完全不画文字、字母、数字、徽章或伪文字。真alpha透明，无背景、地面、外部投影、棋盘格、边框、格线、水印；无人、无武器、无现代物品、无金币特效。不要用程序绘图或提供代码，直接使用图像生成工具绘制原生PNG。",
+      "source": "native_references/source_v1_rejected.png",
+      "sha256": "272c697e649e069da6ced4dbb1f90c685fa8069f469b4942b71cc9c1746b45de",
+      "accepted": false,
+      "rejection": "Lower-row canopy posts cross y=512 boundary; fixed cell crop truncates them. True alpha exists, but grid spacing fails."
+    },
+    {
+      "version": 2,
+      "prompt": "请用上一张六种摊位作为参考重新生成原生透明PNG，仅修正排版，不改六种造型、顺序、空白招牌和画风。上一张摊位过大：第二行棚顶/立柱越过y=512行边界，固定切片会截掉棚顶，不能采用。新的1536×1024画布严格分3列×2行，每格512×512。把所有摊位缩小到上一版的约70%，每格物件只能落在该格 x=70..442、y=60..440 范围内，即每格四周有至少60像素真透明空隙；第一行所有可见像素必须y<460，第二行所有可见像素必须y>572。两行之间至少110像素完全透明，列边界两侧也有至少60像素完全透明。六个完整摊位不能连在一起或跨格。脚点各格约420。保持真正alpha透明背景，完整棚顶/木柱/凳脚，所有空白招牌无任何文字；无地面/影子/背景/格线，无程序绘图，直接生成新图。",
+      "accepted": true,
+      "status": "source selected after complete geometry, blank signs and alpha inspection; native integration still pending",
+      "source": "native_references/source_v2_selected.png",
+      "sha256": "b2db28b7a810916c55eb33ce8028947148bcdb4a80074d994c159d7bbd94cc57"
+    }
+  ],
+  "local_pixel_repainting": false,
+  "local_background_removal": false,
+  "overall_art_qualified": false
+}

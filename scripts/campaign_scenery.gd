@@ -211,10 +211,34 @@ func _add_story_stall(p: Vector2,size: float,kind: String) -> void:
 	var stall := StoryStall.new()
 	stall.size=size
 	stall.kind=kind
+	if _style=="level7" and kind in ["inn","wine","goods","dice","money"]:
+		var suffix := kind
+		if kind=="inn": suffix="inn_b" if _map.world_to_cell(p)==Vector2i(52,22) else "inn_a"
+		var route := "kuaihuolin_stall_"+suffix
+		var texture := EnvironmentArt.object(_style,route)
+		var metrics := EnvironmentArt.calibrated_visual_metrics("object",_style,route)
+		var surface := "level7_stall_"+suffix+"_sign"
+		var text_rect = EnvironmentArt.calibrated_text_rect("object",_style,route,"default",surface)
+		if texture!=null and not metrics.is_empty() and text_rect is Array:
+			stall.native_texture=texture
+			stall.native_size=size*1.5
+			stall.foot=float(metrics.foot)
+			stall.visible_top=float(metrics.normalized_visible_bbox[1])
+			# Keep the original decor/pathfinding anchor. Only this small booth's
+			# presentation shifts away from the neighbouring main tavern roof.
+			if kind=="money": stall.native_draw_offset=Vector2(-28,12)
+			stall.normalized_text_rect=text_rect
+			stall.set_meta("campaign_environment_route",route)
+			stall.set_meta("campaign_environment_text_surface_id",surface)
+			stall.set_meta("fog_clearance_px",stall.native_size*(stall.foot-float(metrics.normalized_visible_bbox[1])))
+			var shadow_anchor := p+GameMap.ISO_INV.basis_xform(stall.native_draw_offset)
+			_ground_shadows.append({"p":shadow_anchor,"tex":texture,"s":stall.native_size,"foot":stall.foot,"alpha":0.14})
 	stall.position=p
-	stall.z_index=clampi(int(_map.project(p).y),1,3400)
+	stall.z_as_relative=false
+	stall.z_index=clampi(1+int(_map.project(p).y),1,3400)
 	add_child(stall)
 	_sprites.append(stall)
+	_map.sync_render_position(stall)
 
 func _add_story_crowd(p: Vector2,variant: int) -> void:
 	var crowd := StoryCrowd.new()
@@ -327,10 +351,33 @@ static func explicit_environment_fallback(sprite: Node) -> String:
 class StoryStall extends Node2D:
 	var size := 64.0
 	var kind := "wine"
+	var native_texture: Texture2D
+	var native_size := 96.0
+	var foot := 0.82
+	var visible_top := 0.0
+	var native_draw_offset := Vector2.ZERO
+	var normalized_text_rect: Array = []
 	func _draw() -> void:
 		# 素布棚、木案和酒坛：和军帐区别开，表示路边酒肆/市面摊位。
 		draw_set_transform_matrix(GameMap.ISO_INV)
 		var labels := {"wine":"酒","inn":"店","goods":"货","dice":"赌","money":"兑","lantern":"灯"}
+		if native_texture!=null and normalized_text_rect.size()==4:
+			var origin := Vector2(-native_size*0.5,-native_size*foot)+native_draw_offset
+			draw_texture_rect(native_texture,Rect2(origin,Vector2.ONE*native_size),false)
+			var area := Rect2(origin+Vector2(float(normalized_text_rect[0]),float(normalized_text_rect[1]))*native_size,Vector2(float(normalized_text_rect[2]),float(normalized_text_rect[3]))*native_size)
+			var label: String = labels.get(kind,"市")
+			# One original caption, kept outside the painted PNG. The native board
+			# has a small single-character surface; no extra frame or text backdrop.
+			var font_size := 6
+			var at := Vector2(area.position.x+(area.size.x-font_size)*0.5,area.get_center().y+font_size*0.35)
+			draw_string(ThemeDB.fallback_font,at,label,HORIZONTAL_ALIGNMENT_LEFT,-1,font_size,Color("3b2920"))
+			# The small painted plaque keeps its in-world glyph. A short caption
+			# above the roof remains readable at the normal overview zoom.
+			var heading_at := native_draw_offset+Vector2(-6,native_size*(visible_top-foot)-4)
+			draw_string_outline(ThemeDB.fallback_font,heading_at,label,HORIZONTAL_ALIGNMENT_LEFT,-1,12,2,Color(0.12,0.08,0.04,0.9))
+			draw_string(ThemeDB.fallback_font,heading_at,label,HORIZONTAL_ALIGNMENT_LEFT,-1,12,Color("e6d7b1"))
+			draw_set_transform_matrix(Transform2D.IDENTITY)
+			return
 		var colors := {"wine":Color("e6d7b1"),"inn":Color("c8aa7b"),"goods":Color("b98563"),"dice":Color("a9684e"),"money":Color("6f8790"),"lantern":Color("b55536")}
 		var cloth: Color = colors.get(kind,Color("b98563"))
 		var label: String = labels.get(kind,"市")

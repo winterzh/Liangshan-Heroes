@@ -7,6 +7,12 @@ extends RefCounted
 
 const FROZEN_MANIFEST_SHA256 := "162e74544989ce4b89e32db6d1562e10962a1d58fc1c3d39e30c83abdb9430cf"
 const OBJECT_ROUTES: Dictionary = {
+	"kuaihuolin_stall_inn_a": {"levels":["level7"],"paths":{"default":"res://assets/campaign/environment/level7/stall_inn_a.png"}},
+	"kuaihuolin_stall_wine": {"levels":["level7"],"paths":{"default":"res://assets/campaign/environment/level7/stall_wine.png"}},
+	"kuaihuolin_stall_goods": {"levels":["level7"],"paths":{"default":"res://assets/campaign/environment/level7/stall_goods.png"}},
+	"kuaihuolin_stall_dice": {"levels":["level7"],"paths":{"default":"res://assets/campaign/environment/level7/stall_dice.png"}},
+	"kuaihuolin_stall_money": {"levels":["level7"],"paths":{"default":"res://assets/campaign/environment/level7/stall_money.png"}},
+	"kuaihuolin_stall_inn_b": {"levels":["level7"],"paths":{"default":"res://assets/campaign/environment/level7/stall_inn_b.png"}},
 	"cuiyun_tower": {
 		"levels": [
 			"level8"
@@ -581,6 +587,12 @@ const SURFACE_ROUTES: Dictionary = {
 ## No crop, mask, pixel clearing, mirroring, or stitched sampling occurs here.
 const VISUAL_CALIBRATIONS: Dictionary = {
 	"object": {
+		"kuaihuolin_stall_inn_a": {"level_id":"level7","source_sha256":"35bf4c4e23420cfcb2af291ad89150e8cc08535edc2a5d5d4127bf51c23da529","visible_bbox_xywh":[123,101,308,356]},
+		"kuaihuolin_stall_wine": {"level_id":"level7","source_sha256":"4da0967e5626b57987014a21bf888f8f1edc0498b433d4d8f7b81409fc2af7b4","visible_bbox_xywh":[102,104,323,357]},
+		"kuaihuolin_stall_goods": {"level_id":"level7","source_sha256":"d35632903b3d7eb02999b41661cde4b38d0833f42d1a37665f5bcbc99be3c5fb","visible_bbox_xywh":[95,103,323,358]},
+		"kuaihuolin_stall_dice": {"level_id":"level7","source_sha256":"88624ff5af1e329d0eddde7b0ce1f60b80a363cce518ab761957069bd34c61ef","visible_bbox_xywh":[122,65,324,360]},
+		"kuaihuolin_stall_money": {"level_id":"level7","source_sha256":"f8d456b0a7d41e7a97039eb24b240b2900955fbe4b33595182eb5ec2f80f6577","visible_bbox_xywh":[103,68,331,355]},
+		"kuaihuolin_stall_inn_b": {"level_id":"level7","source_sha256":"d8cd9cfffb7168b3df4d433d2950dc15c1ae18ef787d679bf2ffea4ea54d171e","visible_bbox_xywh":[103,65,310,359]},
 		"roadside_tavern_a": {"level_id":"level7", "label_visible_top":true, "source_sha256":"9997e4b9c606dca4252e57d04e14ca1cec50ef35a495b53d230ad9939d485c0f", "visible_bbox_xywh":[67,90,389,355]},
 		"roadside_tavern_b": {"level_id":"level7", "label_visible_top":true, "source_sha256":"098b944308782308806ec9f3b9f7972ad278d14a91cdadfdc49956a41603ffee", "visible_bbox_xywh":[18,100,464,388]},
 		"roadside_tavern_c": {"level_id":"level7", "label_visible_top":true, "source_sha256":"c924592263227b1eca89eb961773b79ea8fc96f38556e0047efa0585c4b77323", "visible_bbox_xywh":[64,54,421,341]},
@@ -610,6 +622,12 @@ const VISUAL_CALIBRATION_CANVAS_SIZE := Vector2(512.0,512.0)
 ## Only the accepted Level 5 source files below have measured blank surfaces.
 ## Every other rect remains null until its own source and runtime captures pass.
 const TEXT_RECTS: Dictionary = {
+	"level7_stall_inn_a_sign": [0.591796875,0.466796875,0.09375,0.0625],
+	"level7_stall_wine_sign": [0.552734375,0.4609375,0.09375,0.0625],
+	"level7_stall_goods_sign": [0.52734375,0.44921875,0.09375,0.0625],
+	"level7_stall_dice_sign": [0.58203125,0.400390625,0.09375,0.0625],
+	"level7_stall_money_sign": [0.552734375,0.376953125,0.09375,0.0625],
+	"level7_stall_inn_b_sign": [0.541015625,0.392578125,0.09375,0.0625],
 	"level3_zhujiazhuang_gate_plaque": null,
 	"level3_zhujiazhuang_hall_plaque": null,
 	"level5_hall_plaque": [0.400390625,0.48828125,0.126953125,0.046875],
@@ -622,6 +640,12 @@ const TEXT_RECTS: Dictionary = {
 	"zhongyi_hall_standard_east": [0.404296875,0.361328125,0.05859375,0.166015625]
 }
 const TEXT_RECT_SOURCE_SHA256: Dictionary = {
+	"level7_stall_inn_a_sign": "35bf4c4e23420cfcb2af291ad89150e8cc08535edc2a5d5d4127bf51c23da529",
+	"level7_stall_wine_sign": "4da0967e5626b57987014a21bf888f8f1edc0498b433d4d8f7b81409fc2af7b4",
+	"level7_stall_goods_sign": "d35632903b3d7eb02999b41661cde4b38d0833f42d1a37665f5bcbc99be3c5fb",
+	"level7_stall_dice_sign": "88624ff5af1e329d0eddde7b0ce1f60b80a363cce518ab761957069bd34c61ef",
+	"level7_stall_money_sign": "f8d456b0a7d41e7a97039eb24b240b2900955fbe4b33595182eb5ec2f80f6577",
+	"level7_stall_inn_b_sign": "d8cd9cfffb7168b3df4d433d2950dc15c1ae18ef787d679bf2ffea4ea54d171e",
 	"level3_zhujiazhuang_gate_plaque": "",
 	"level3_zhujiazhuang_hall_plaque": "",
 	"level5_hall_plaque": "ec1bc1c6a1a4802eac49893994d7c8213db916eb03a27da33afef334c6adc608",
