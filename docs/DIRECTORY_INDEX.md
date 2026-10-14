@@ -1,3 +1,7 @@
+## 2026-10-14：V13 后台新批启动记录
+
+恢复QA actual_v13_background_restart_20261014/ 保存原dispatch/host_started/cold_native.log及观察摘要。新批335e5ef3、外层27392/宿主25716实际存活，冷导入15548实际通过；当前1/61，完整结果待定。下方旧“未启动”及中断条目按日期范围阅读。
+
 ## 2026-10-14：V13 后台宿主观察来源
 
 新增tools/run_durable_v13_background_host_v1/v2.py与恢复QA BACKGROUND_HOST_SOURCE_V1/V2、V1/V2_README和两份独立审查。V1拒绝保留，V2仅准入启动原V13完整批；新native尚未启动。

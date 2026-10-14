@@ -1,3 +1,9 @@
+## 2026-10-14：V13 独立后台新批实际启动，冷导入通过
+
+原完整V13在新私有批 `D:/CodexTemp/lsh-durable-chain-v13-background-20261014/durable_chain_335e5ef3` 启动；后台外层27392保持真实Python宿主25716的Popen，两个PID及实际命令已CIM回核。外层V2/source recipe/独立准入精确绑定，原V13仍执行其完整Native来源/准入及61阶段。冷导入15548实际退出0、错误0，原日志SHA回核；当前1/61阶段通过，全部后继仍待同批完成，不转移旧3/61或复用旧profile。
+
+启动前源码已白名单同步ffa72539，后台以Hidden启动并把持续stdout/stderr、host_started及真实wait后host_exit保存在外部observer目录；此方式不依赖原exec session观察，但不保证外部终止后存活或证明旧中断原因。源QA `actual_v13_background_restart_20261014/` 封存原dispatch/host_started/cold_native.log及观察摘要，未复制裸CFG/私有profile。继续观察27392/25716、producer.stdout与原checkpoint，资格只按完整原执行器/后继实际验收取得；原19/UI/SDK/八章九玩法/美术/性能/真机目标保持。
+
 ## 2026-10-14：V13 独立后台宿主观察入口审查通过
 
 原V13生产者及其Native准入不变。新增后台宿主外层V1/V2，默认无--run只读，不创建进程/私有目录；仅--run在新外层独立准入后用固定原V13完整命令创建Python宿主并保持真实Popen至wait，在外部新私有目录记录stdout/stderr、启动PID/命令与真实终态退出码。原V13仍负责全部61阶段、实际Godot Popen/lease/idle60/来源校验/原时限，无直接Godot或玩家/原报告写入。
