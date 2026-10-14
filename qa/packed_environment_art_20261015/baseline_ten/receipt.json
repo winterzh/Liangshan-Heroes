@@ -1,0 +1,166 @@
+{
+  "complete": true,
+  "run": "D:\\CodexTemp\\packed_environment_art_20261015\\20261015_042637_35f1ddc1",
+  "source_files": [
+    {
+      "path": "qa/roadside_tavern_variants_20261015/source_manifest.json",
+      "sha256": "8e81d3faa7cf69df7ffd4e8d153e876f26928dee348960f52f023cccb19d463a"
+    },
+    {
+      "path": "qa/market_stall_art_20261015/source_manifest.json",
+      "sha256": "18dd3b672d6cfcda06b7b6d0c58d44f28754b481985387c0d5bcc7f2e7d3fbe9"
+    },
+    {
+      "path": "scripts/campaign_environment_art.gd",
+      "sha256": "612f5f243a72b787b091ff757316194fd272b050896e309ca77fb3390ea61b8d"
+    },
+    {
+      "path": "tools/packed_environment_art_probe_20261015.gd",
+      "sha256": "7a9f291f4d25321c94e06474b39e108dad0c3802f674e372036c3d8fd64fd639"
+    },
+    {
+      "path": "tools/run_packed_environment_art_qa_20261015.py",
+      "sha256": "91b36dd60887dff65bdcb1f8cf2a7dfa9272d11cc245f9249e6b2245b576c3d1"
+    },
+    {
+      "path": "assets/campaign/environment/level7/roadside_tavern_a.png",
+      "sha256": "9997e4b9c606dca4252e57d04e14ca1cec50ef35a495b53d230ad9939d485c0f"
+    },
+    {
+      "path": "assets/campaign/environment/level7/roadside_tavern_b.png",
+      "sha256": "098b944308782308806ec9f3b9f7972ad278d14a91cdadfdc49956a41603ffee"
+    },
+    {
+      "path": "assets/campaign/environment/level7/roadside_tavern_c.png",
+      "sha256": "c924592263227b1eca89eb961773b79ea8fc96f38556e0047efa0585c4b77323"
+    },
+    {
+      "path": "assets/campaign/environment/level7/roadside_tavern_d.png",
+      "sha256": "4a68838822a39b8c17f144ed1136ca3e177cd50b329022da85e60770da3442a4"
+    },
+    {
+      "path": "assets/campaign/environment/level7/stall_inn_a.png",
+      "sha256": "35bf4c4e23420cfcb2af291ad89150e8cc08535edc2a5d5d4127bf51c23da529"
+    },
+    {
+      "path": "assets/campaign/environment/level7/stall_wine.png",
+      "sha256": "4da0967e5626b57987014a21bf888f8f1edc0498b433d4d8f7b81409fc2af7b4"
+    },
+    {
+      "path": "assets/campaign/environment/level7/stall_goods.png",
+      "sha256": "d35632903b3d7eb02999b41661cde4b38d0833f42d1a37665f5bcbc99be3c5fb"
+    },
+    {
+      "path": "assets/campaign/environment/level7/stall_dice.png",
+      "sha256": "88624ff5af1e329d0eddde7b0ce1f60b80a363cce518ab761957069bd34c61ef"
+    },
+    {
+      "path": "assets/campaign/environment/level7/stall_money.png",
+      "sha256": "f8d456b0a7d41e7a97039eb24b240b2900955fbe4b33595182eb5ec2f80f6577"
+    },
+    {
+      "path": "assets/campaign/environment/level7/stall_inn_b.png",
+      "sha256": "d8cd9cfffb7168b3df4d433d2950dc15c1ae18ef787d679bf2ffea4ea54d171e"
+    }
+  ],
+  "steps": [
+    {
+      "case": "import",
+      "command": [
+        "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+        "--path",
+        "D:\\CodexTemp\\packed_environment_art_20261015\\20261015_042637_35f1ddc1\\project",
+        "--rendering-method",
+        "gl_compatibility",
+        "--headless",
+        "--editor",
+        "--import",
+        "--quit"
+      ],
+      "passed": true,
+      "errors": [],
+      "pid": 26036,
+      "exit_code": 0,
+      "seconds": 3.531,
+      "stopped_for": null,
+      "log_sha256": "03b9349126f148a3303d05c5fa67d958be4041a07473c34809b4c70d2a46e47b"
+    },
+    {
+      "case": "source_probe",
+      "command": [
+        "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+        "--path",
+        "D:\\CodexTemp\\packed_environment_art_20261015\\20261015_042637_35f1ddc1\\project",
+        "--rendering-method",
+        "gl_compatibility",
+        "--position",
+        "30000,30000",
+        "--script",
+        "res://tools/packed_environment_art_probe_20261015.gd"
+      ],
+      "passed": true,
+      "errors": [],
+      "pid": 9064,
+      "exit_code": 0,
+      "seconds": 1.521,
+      "stopped_for": null,
+      "log_sha256": "64497677afde73204ae442b2baaa87c5d27947f6b0247d9371dd0b844153269f"
+    },
+    {
+      "case": "export_pack",
+      "command": [
+        "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+        "--path",
+        "D:\\CodexTemp\\packed_environment_art_20261015\\20261015_042637_35f1ddc1\\project",
+        "--rendering-method",
+        "gl_compatibility",
+        "--headless",
+        "--editor",
+        "--export-pack",
+        "Art Probe",
+        "D:\\CodexTemp\\packed_environment_art_20261015\\20261015_042637_35f1ddc1\\clean_runtime\\art.pck"
+      ],
+      "passed": true,
+      "errors": [],
+      "pid": 42528,
+      "exit_code": 0,
+      "seconds": 3.018,
+      "stopped_for": null,
+      "log_sha256": "cbdfe73d11a1445d8b938b1e59c04276b723a1fb3f1151601647bb26abc0a11b"
+    },
+    {
+      "case": "packed_probe",
+      "command": [
+        "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+        "--path",
+        "D:\\CodexTemp\\packed_environment_art_20261015\\20261015_042637_35f1ddc1\\clean_runtime",
+        "--rendering-method",
+        "gl_compatibility",
+        "--main-pack",
+        "D:\\CodexTemp\\packed_environment_art_20261015\\20261015_042637_35f1ddc1\\clean_runtime\\art.pck",
+        "--position",
+        "30000,30000",
+        "--script",
+        "res://tools/packed_environment_art_probe_20261015.gd"
+      ],
+      "passed": true,
+      "errors": [],
+      "pid": 26268,
+      "exit_code": 0,
+      "seconds": 1.521,
+      "stopped_for": null,
+      "log_sha256": "781131c266245ed8a9d4a3241309e721efd6e9f1888a7c24eddad873b668c15d"
+    }
+  ],
+  "godot_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+  "scope": "Minimal exported PCK art calibration only; no Steam upload or SDK qualification.",
+  "private_profile": "D:\\CodexTemp\\packed_environment_art_20261015\\profiles\\20261015_042637_35f1ddc1",
+  "template_sha256": "91724f15024a3a545e28ccd83134403d31ce2323a38e51c95e4dfa282f732ab6",
+  "source_calibrated": true,
+  "packed_calibrated": false,
+  "pack_sha256": "a32ffddd9442afdd7b23f5b2ddff65f56dff28d833ea1f05ac15d77cac5fa121",
+  "pack_bytes": 2379612,
+  "source_changes": [],
+  "private_source_changes": [],
+  "lock_released": true
+}
