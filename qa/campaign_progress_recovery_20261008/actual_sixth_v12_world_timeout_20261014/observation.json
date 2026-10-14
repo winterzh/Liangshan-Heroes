@@ -1,0 +1,60 @@
+{
+  "schema": "durable_v12_actual_world_timeout_observation_v1",
+  "observed_utc": "2026-10-14T06:22:21.815856+00:00",
+  "run": "D:\\CodexTemp\\lsh-durable-chain-sixth-20261014\\durable_chain_58bfe30d",
+  "original_exec_session": 22280,
+  "exec_terminal_exit": 1,
+  "host_pid": 24968,
+  "world_pid": 31124,
+  "closed_successful_stages": 2,
+  "expected_stages": 61,
+  "world_terminal_exit": 1,
+  "world_engine_errors": 0,
+  "world_report_missing": true,
+  "last_running_notice_seconds": 1192,
+  "world_phase_budget_seconds": 1200,
+  "whole_batch_budget_seconds": 21600,
+  "failure": "AssertionError()",
+  "classification": "world phase timeout: original phase assertion requires both whole-batch and phase deadline; batch age below six hours, last world notice1192s, then original child killed and wait terminal1",
+  "cause_not_yet_proven": true,
+  "lock_released": true,
+  "actual_fixture_comparison": {
+    "fifth": {
+      "packet_bytes": 6930603,
+      "world_bytes": 6622016,
+      "unit_records": 49,
+      "world_stage_passed": true
+    },
+    "sixth": {
+      "packet_bytes": 8107673,
+      "world_bytes": 7746398,
+      "unit_records": 62,
+      "world_stage_passed": false
+    },
+    "different_valid_natural_A_fixture_is_not_a_failure_cause_proof": true
+  },
+  "archived_original_files": [
+    {
+      "name": "receipt.json",
+      "bytes": 3108957,
+      "sha256": "f3c0a4f705a27d70f73c2333137c29183e01b47cb8556f239e5bfb21f68e1707"
+    },
+    {
+      "name": "checkpoint.json",
+      "bytes": 3187493,
+      "sha256": "a41fe83a6b63d03fc96054a93a87cec40e0c6986395be1f9a40af7d4140b3031"
+    },
+    {
+      "name": "native.log",
+      "bytes": 7251,
+      "sha256": "88b939ca97eaaafe2332578b9563eca0fbb6b2f0239855af5e4a2ff4c9357b72"
+    },
+    {
+      "name": "actual_A_manifest.json",
+      "bytes": 1579,
+      "sha256": "48b0ba1f41e9365d1d03d857759bc035d702ead6ce029be53679a56dd4729b55"
+    }
+  ],
+  "overall_goal_qualified": false,
+  "next_action": "Add passive per-phase/per-row timing to a new immutable full world diagnostic candidate, bind full 264 predicates and same real A custody, independently review before native run; do not trim checks, reuse old green fixtures, or change budget without evidence."
+}

@@ -1,3 +1,7 @@
+## 2026-10-14：第六批 world 超时原始证据
+
+恢复QA actual_sixth_v12_world_timeout_20261014/ 保存原receipt/checkpoint/native.log/actual_A_manifest和观察摘要。world实际deadline失败、锁释放；原2/61局部通过不构成成功prior。
+
 ## 2026-10-14：第六批 Lu A 原始证据
 
 恢复QA actual_sixth_v12_lu_a_20261014/ 保存319项通过的原report/native.log/observation。本批2/61，观察原session22280继续；完整资格未取得。

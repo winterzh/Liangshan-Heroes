@@ -1,3 +1,9 @@
+## 2026-10-14：第六批 world 超时终态失败
+
+新批58bfe30d / session22280实际终态退出1，最终receipt complete=false、lock_released=true。cold及Lu A两阶段成功保留，world31124触及原1200秒阶段时限（最后RUNNING1192秒），原拥有者仅终止自有子进程并wait终态1，引擎错误0、完整world report缺失；不能称264矩阵通过。原批年龄未达六小时总限，失败为原阶段deadline assertion。四份原receipt/checkpoint/log/manifest逐字节封存actual_sixth_v12_world_timeout_20261014/及observation，不复制私有profile或裸CFG。
+
+第五通过world实际A packet6930603字节/49unit；本批8107673字节/62unit，是不同正常路线实际输入。大小/对象数量差异已核实，但不足以单独证明耗时原因。下一步在新的不可变候选加入被动阶段/逐行耗时观测，保留全部264原谓词、真实同批A来源和完整范围，经独立审查后运行诊断；不删检查、不用旧绿色fixture替代、不在证据不足时放宽时限。原19/UI/SDK/八章九玩法/美术/性能/真机全目标保持。
+
 ## 2026-10-14：第六批鲁智深首次保存实际通过
 
 新批durable_chain_58bfe30d / 原session22280 / host24968继续运行。cold29568与Lu A29068均正常退出0、引擎错误0；Lu A原报告319项全部passed，原report大小/SHA/PID/nonce及native.log SHA回核一致。原report/log和观察摘要封存actual_sixth_v12_lu_a_20261014/，不复制私有profile或裸CFG，不复用第五中断批。当前2/61完成，下一world阶段待同一执行器继续；原19/UI/SDK/八章九玩法/美术/性能/真机全目标仍开放。
