@@ -1,3 +1,7 @@
+## 2026-10-14：第六批鲁智深首次保存实际通过
+
+新批durable_chain_58bfe30d / 原session22280 / host24968继续运行。cold29568与Lu A29068均正常退出0、引擎错误0；Lu A原报告319项全部passed，原report大小/SHA/PID/nonce及native.log SHA回核一致。原report/log和观察摘要封存actual_sixth_v12_lu_a_20261014/，不复制私有profile或裸CFG，不复用第五中断批。当前2/61完成，下一world阶段待同一执行器继续；原19/UI/SDK/八章九玩法/美术/性能/真机全目标仍开放。
+
 ## 2026-10-14：第五批意外中断，完整资格未取得
 
 第六批预检实际退出0，logical仍为867bd2d1b78339f357200e4dca344d14fb38a05c39f3e7906fe3f11507b60209，与原准入一致。已启动全新外部批durable_chain_58bfe30d，原session22280 / host24968实际存活；完成状态仍false，全部61阶段待同批闭合。启动观察见DURABLE_V12_SIXTH_RUN_STARTED_20261014.json。

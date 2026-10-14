@@ -1,3 +1,7 @@
+## 2026-10-14：第六批 Lu A 原始证据
+
+恢复QA actual_sixth_v12_lu_a_20261014/ 保存319项通过的原report/native.log/observation。本批2/61，观察原session22280继续；完整资格未取得。
+
 ## 2026-10-14：第五批中断观察
 
 同时新增DURABLE_V12_SIXTH_RUN_STARTED_20261014.json：新批58bfe30d / 原session22280 / host24968，完整结果待定。

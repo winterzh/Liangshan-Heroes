@@ -42,7 +42,7 @@ Steam 发布详情见 [发布收据](../qa/steam_release_20261009/release_closeo
 
 第五批位于 `D:/CodexTemp/lsh-durable-chain-20261014/durable_chain_9009283d`。冷导入、鲁智深首次保存（293项）及world矩阵（264行/1540项）有实际通过记录；组件阶段在576份中间输出后意外中断。原会话75405和宿主42756/子进程34844均已不存在，无组件完整报告或最终收据，退出码与中断原因未知，**本批未通过**。原现场完整保留，自有孤儿锁在精确核对及PID缺失检查后归档。详见 [中断观察](../qa/campaign_progress_recovery_20261008/DURABLE_V12_FIFTH_ABRUPT_INTERRUPTION_20261014.json)。
 
-下一步重新预检原V12，并用全新第六批目录运行全部61个实际进程：冷导入1、两角色各四阶段共8、异常拒绝52。不复用旧存档，不跳过阶段，不把原3/61的局部通过当成功前置。第六批已启动：`D:/CodexTemp/lsh-durable-chain-sixth-20261014/durable_chain_58bfe30d`，原会话22280、宿主24968；重新预检通过，当前未完成。详见[第六批启动记录](../qa/campaign_progress_recovery_20261008/DURABLE_V12_SIXTH_RUN_STARTED_20261014.json)。继续观察同一会话及checkpoint，不因观察超时重启。
+下一步重新预检原V12，并用全新第六批目录运行全部61个实际进程：冷导入1、两角色各四阶段共8、异常拒绝52。不复用旧存档，不跳过阶段，不把原3/61的局部通过当成功前置。第六批已启动：`D:/CodexTemp/lsh-durable-chain-sixth-20261014/durable_chain_58bfe30d`，原会话22280、宿主24968；重新预检通过，冷导入与鲁智深首次保存（319项）已实际退出0、引擎错误0；当前2/61阶段通过，整批未完成。详见[第六批启动记录](../qa/campaign_progress_recovery_20261008/DURABLE_V12_SIXTH_RUN_STARTED_20261014.json)。继续观察同一会话及checkpoint，不因观察超时重启。
 
 ## 接下来的执行顺序
 
