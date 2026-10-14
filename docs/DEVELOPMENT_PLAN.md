@@ -1,3 +1,13 @@
+## 2026-10-15：原19数据负零构造与八个物理快照后继完成源码准备
+
+旧V5 data里negative_zero使用-0.0 literal，前轮原生primitive已出现常量符号折叠反例，因此不能将旧源码里的字样当实际负零覆盖。新 `original19_data_layers_candidate_v6/`按明确IEEE字节0000000000000080运行时构造，原legal builtin语义检查保留before.ok并加强真实TYPE_FLOAT/符号位；原109顺序标签与6cases全部保留，其余23方法rawexact。原fresh ConfigFile load及稳定rawcopy之后新增scalar类型/IEEE观察，与原八个seed/progress/拒绝后/final快照的完整copy对象绑定；原unknown expectation/snapshot字段及57物理copy/14journal/7commit不变，额外数据独立输出signed_zero_evidence，不借JSON float0证明符号。
+
+新 `campaign_original19_data_evidence_v4.py`先执行原V3消费者全部109/57copy/14journal/7commit/完整类型及来源断言，再严格要求fixture与八次实际CFG fresh-read type3+signed-zero hex0000000000000080；每个额外row与原copy typed-exact绑定、文件在原完整已验证集合、首份原bytes/SHA持续回核。新 `ORIGINAL19_COMPLETE_LABEL_CONTRACT_V4.json`仅schema/data_source pin改变，原109/20/20标签原文、顺序、cases/全部契约保持。GD与consumer新初审approved_stages=[]，尚未运行实际ConfigFile往返或证明旧literal唯一原因。
+
+新 `run_campaign_original19_data_cases_v4.py` / `original19_data_v16_candidate_v2/`绑定V6GD/V4consumer/新契约及对应初审、精确新增report key/schema；source-only recipe26afbf5a…实际生成并经独立源码审查。原6data+2独立QA1/4进程、109/20/20检查、原终态Popen/15identity/正常时钟/具体physical证据与时限保留。只有全61成功V16原receipt、实际后台Popen.wait退出0及新exact原生准入才能形成实际spec/run；旧V3 recipe与oldGD/evidence全保留，不改已执行V16来源。没有模拟成功prior或并发占用引擎。
+
+当前完整V16仍3/61，原组件PID35648由同一执行器46780/宿主44296持有，继续362行全scope。后继negative-zero/原19/UI/SDK/public continue/whole-goal资格均未授；实际CFG是否保留符号位还须新原生结果。真实SDK、八章九玩法、美术、多尺寸UI、正常性能/内存、真人试玩和Android真机等仍开放；生产main/Steam未变。
+
 ## 2026-10-15：V16 Lu完整world264行实际通过
 
 同一95e6addc实际Lu world PID28892/nonce58b3a592219244fbb49a0e413646fa75正常退出0/errors0，完整264行/1540项全部通过，原执行器已登记negative_reports及阶段complete。原report SHA9399043f…、native log、actual_A_manifest三份原字节/大小/SHA精确封存 `actual_v16_background_lu_world_20261015/`；manifest原A report/handoff/packet/world/slot五份来源原pin回核，实际本批A SHA440414ce…保持。旧interface仅沿已准入producer固定namespace适配，264完整原typed route/code/positive谓词重新核对无缩减。没有复制裸CFG/private profile或修改原执行来源。

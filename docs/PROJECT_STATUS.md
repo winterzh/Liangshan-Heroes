@@ -51,7 +51,7 @@ Steam 详情见 [2026-10-09 发布收据](../qa/steam_release_20261009/release_c
 
 首次/重复自然通关及同档重启的V16后继入口已准备并经独立源码审查；完整5进程与74/21/80/21检查保持，新的closed prior消费者及后台全部来源持续核验。仍只作源码准备，必须实际61完整成功和后台退出0才可形成原生准入。旧V14入口保留。
 
-后继原19/UI入口的V16完整闭合消费者已独立源码审查，实际拒绝旧V14失败receipt与当前活批checkpoint。六类自然文件故障13进程、真实同对象UI重试/重启3进程、原19数据/QA兼容4进程的新V16 recipe已准备并独立源码审查，原native/全checks和actual原host wait0准入保持。当前仅source-only，均未运行；须完整61成功后才能形成具体原生准入。见 `closed_v16_prior_consumer_v1/`、`six_file_faults_v16_candidate_v1/`、`pending_ui_v16_candidate_v1/`、`original19_data_v16_candidate_v1/`。
+后继原19/UI入口的V16完整闭合消费者已独立源码审查，实际拒绝旧V14失败receipt与当前活批checkpoint。六类自然文件故障13进程、真实同对象UI重试/重启3进程、原19数据/QA兼容4进程的新V16 recipe已准备并独立源码审查，原native/全checks和actual原host wait0准入保持。当前仅source-only，均未运行；须完整61成功后才能形成具体原生准入。见 `closed_v16_prior_consumer_v1/`、`six_file_faults_v16_candidate_v1/`、`pending_ui_v16_candidate_v1/`、`original19_data_v16_candidate_v1/`。 数据负零literal缺口已另建V6GD/V4消费者/V4data生产者，原全部109/20/20保留，并新增明确IEEE fixture与八次物理CFG符号位检查；已源码初审，但实际CFG往返未运行，旧候选全部保留。
 
 **V13 后台新批已在终局读取检查失败，整批未通过。** `durable_chain_335e5ef3` 真实宿主退出1、Popen.wait完成、锁释放；31阶段尝试、30/61通过。鲁智深全24捕获用例10654项及world264/1540、component362/26847、首次保存317、载入再存377、自然终局264项已通过。D PID45928唯一失败是终局文件行相等检查；三个原文件实际大小/SHA与C交接相同，空外部scratch原生诊断已确认整数/JSON浮点数导致Dictionary相等false（退出0、错误0），不涉及玩家档案。见[全24实际记录](../qa/campaign_progress_recovery_20261008/actual_v13_background_lu_capture_all24_20261014/observation.json)和[终局失败记录](../qa/campaign_progress_recovery_20261008/actual_v13_background_lu_terminal_failure_20261014/observation.json)。后继V14只修测试文件行比较，准备后经独立审查再运行新鲜完整批，不修改原失败批或生产模块。
 

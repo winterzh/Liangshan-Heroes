@@ -1,0 +1,3 @@
+# Actual signed-zero data fixture
+
+Immutable source-only successor to V5 literal gap. All original109 ordered labels/cases and physical CFG/journal workflow retained. Explicit IEEE little-endian 0000000000000080 creates negative zero; existing legal-value guard is strengthened to require actual FLOAT and negative-zero bits. Every fresh CFG snapshot that contains the unknown negative_zero records actual FLOAT/IEEE bits tied to its exact original raw CFG copy. Extra evidence is outside existing snapshots/unknown expectations, so original consumers remain intact. Full successor must require fixture and all eight physical snapshots signed negative zero, not just JSON float0. No native run or original19 qualification yet; actual ConfigFile roundtrip must still be proven.
