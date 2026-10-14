@@ -575,12 +575,16 @@ const SURFACE_ROUTES: Dictionary = {
 		"path":"res://assets/campaign/environment/shared/surfaces/surface_wet_bank.png"}
 }
 
-## Source-SHA-bound visible bounds for the accepted Level 5 candidate PNGs.
+## Source-SHA-bound visible bounds for accepted Level 5 and Level 7 PNGs.
 ## The candidate files keep the intake tool's transparent padding byte for byte;
 ## consumers use these bounds only to align/scale the whole texture at runtime.
 ## No crop, mask, pixel clearing, mirroring, or stitched sampling occurs here.
 const VISUAL_CALIBRATIONS: Dictionary = {
 	"object": {
+		"roadside_tavern_a": {"level_id":"level7", "label_visible_top":true, "source_sha256":"9997e4b9c606dca4252e57d04e14ca1cec50ef35a495b53d230ad9939d485c0f", "visible_bbox_xywh":[67,90,389,355]},
+		"roadside_tavern_b": {"level_id":"level7", "label_visible_top":true, "source_sha256":"098b944308782308806ec9f3b9f7972ad278d14a91cdadfdc49956a41603ffee", "visible_bbox_xywh":[18,100,464,388]},
+		"roadside_tavern_c": {"level_id":"level7", "label_visible_top":true, "source_sha256":"c924592263227b1eca89eb961773b79ea8fc96f38556e0047efa0585c4b77323", "visible_bbox_xywh":[64,54,421,341]},
+		"roadside_tavern_d": {"level_id":"level7", "label_visible_top":true, "source_sha256":"4a68838822a39b8c17f144ed1136ca3e177cd50b329022da85e60770da3442a4", "visible_bbox_xywh":[32,74,451,342]},
 		"reeds_short": {"level_id":"level5", "source_sha256":"eacb9d862c1d2d6aafc474290470fb01df13426b85bd8be56f787d4f0e5470e7", "visible_bbox_xywh":[115,145,505,366]},
 		"reeds_tall": {"level_id":"level5", "source_sha256":"96913721db6412806a37841a24e2c4ed18dedca49b44aaf90bde55dba994c885", "visible_bbox_xywh":[129,105,434,405]},
 		"reeds_bent": {"level_id":"level5", "source_sha256":"9632aec3e7634cc15456ceb9a40fcf247cc2b294583e252df9f9918e1091fb5f", "visible_bbox_xywh":[95,139,325,366]},

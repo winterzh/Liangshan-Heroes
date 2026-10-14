@@ -1100,3 +1100,10 @@ tools/run_campaign_pending_terminal_ui_v7.py -text -whitespace
 tools/run_campaign_original19_data_cases_v3.py -text -whitespace
 tools/campaign_original19_data_evidence_v4.py -text
 tools/run_campaign_original19_data_cases_v4.py -text -whitespace
+
+# Keep source-bound art evidence and harness bytes exact across checkouts.
+qa/roadside_tavern_variants_20261015/** -text whitespace=cr-at-eol
+qa/campaign_progress_recovery_20261008/art_priority_stop_20261015/** -text whitespace=cr-at-eol
+tools/prepare_roadside_tavern_variants_20261015.py -text whitespace=cr-at-eol
+tools/roadside_tavern_variants_qa_20261015.gd -text whitespace=cr-at-eol
+tools/run_roadside_tavern_art_qa_20261015.py -text whitespace=cr-at-eol

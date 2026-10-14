@@ -1,3 +1,11 @@
+## 2026-10-15：快活林四间酒肆恢复独立造型
+
+复用已接受原图，固定裁切为四张独立透明 PNG，恢复各自木构酒肆；补充 Unit 持有绘制纹理，实景白色方块消失。脚点/屋顶名称按原 PNG SHA 和可见范围校准，其他已有校准名称规则保留。实际原 Level7 在三种尺寸下189/189检查、16张截图、冷导入/窗口化退出0、错误0及源零漂移通过，已检查四间实景。详见 [实现](ROADSIDE_TAVERN_VARIANTS_20261015.md) 与 [QA](../qa/roadside_tavern_variants_20261015/README.md)。此批不代表整库美术或完整玩法验收。
+
+用户优先改为“先补美术”后，仅结束本任务原V16组件子进程35648，外层44296/执行器46780已正常收束并释放锁；原3个通过阶段保持，完整批未完成，不能当61/61。停止请求、实际host_exit及原终态receipt无损gzip封存于 `qa/campaign_progress_recovery_20261008/art_priority_stop_20261015/`；原工程/日志/档案保留。新的美术生产源码不能沿用旧V16 source pins授予后继测试准入；将来恢复该工作需新来源核对。
+
+后续美术仍按现行实际入口继续核对人物/剧情动作、地表/建筑、特效及多尺寸 UI，不把旧347或开场盘点当全游戏覆盖率。本批按既定白名单同步stable；main及Steam保持原状态。新素材与记录均在现行D开发工程，启动入口不变。
+
 ## 2026-10-15：原19数据负零构造与八个物理快照后继完成源码准备
 
 旧V5 data里negative_zero使用-0.0 literal，前轮原生primitive已出现常量符号折叠反例，因此不能将旧源码里的字样当实际负零覆盖。新 `original19_data_layers_candidate_v6/`按明确IEEE字节0000000000000080运行时构造，原legal builtin语义检查保留before.ok并加强真实TYPE_FLOAT/符号位；原109顺序标签与6cases全部保留，其余23方法rawexact。原fresh ConfigFile load及稳定rawcopy之后新增scalar类型/IEEE观察，与原八个seed/progress/拒绝后/final快照的完整copy对象绑定；原unknown expectation/snapshot字段及57物理copy/14journal/7commit不变，额外数据独立输出signed_zero_evidence，不借JSON float0证明符号。

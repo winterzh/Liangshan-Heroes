@@ -9,6 +9,9 @@ const CampaignArt := preload("res://scripts/campaign_art.gd")
 const CampaignFlagOverlay := preload("res://scripts/campaign_flag_overlay.gd")
 const WorldShadow := preload("res://scripts/world_shadow.gd")
 const LIVE_TAVERN_FALLBACK := preload("res://assets/campaign/objects/roadside_tavern_default.png")
+# Canvas draw commands retain texture RIDs, not a strong Resource reference.
+# Keep the scoped texture alive between redraws instead of showing a white quad.
+var _campaign_environment_render_texture: Texture2D
 
 enum { FACTION_LIANG = 0, FACTION_GUAN = 1 }
 enum { ST_IDLE, ST_MOVE, ST_AMOVE, ST_CHASE, ST_GATHER, ST_RETURN, ST_BUILD, ST_REPAIR, ST_GARRISON }
@@ -4476,6 +4479,7 @@ func _draw_building() -> void:
 		return
 	# 按建筑自身 key 找专属美术：遭遇战建筑在 buildings；treasure_cart 在 units3；其余在 terrain
 	var scoped_tex: Texture2D = _campaign_environment_texture()
+	_campaign_environment_render_texture = scoped_tex
 	var tex: Texture2D = Art.unit_texture(key, visual_art_variant(), animation_direction) if art_variant != "" else Art.building_texture(key)
 	if setup_def.has("building_art_key"): tex=battle.building_visual_texture(key)
 	if setup_def.has("campaign_object"):
@@ -4507,6 +4511,8 @@ func _draw_building() -> void:
 			foot=float(get_meta("campaign_environment_foot",foot))
 			if scoped_tex.has_meta("visible_top"):
 				set_meta("campaign_environment_label_y",s*(float(scoped_tex.get_meta("visible_top"))-foot)-8.0)
+			elif has_meta("campaign_environment_visible_top"):
+				set_meta("campaign_environment_label_y",s*(float(get_meta("campaign_environment_visible_top"))-foot)-8.0)
 		var static_campaign_visual := scoped_tex!=null \
 			and bool(get_meta("campaign_environment_static_visual",false))
 		if not static_campaign_visual:
@@ -4586,7 +4592,9 @@ func _campaign_environment_art_level_id() -> String:
 
 
 func _campaign_environment_texture(update_metadata := true) -> Texture2D:
-	if update_metadata: remove_meta("campaign_environment_foot")
+	if update_metadata:
+		remove_meta("campaign_environment_foot")
+		remove_meta("campaign_environment_visible_top")
 	var route_key := String(get_meta("campaign_environment_route", ""))
 	if route_key.is_empty(): return null
 	var state := String(get_meta("campaign_environment_state", "default"))
@@ -4598,7 +4606,10 @@ func _campaign_environment_texture(update_metadata := true) -> Texture2D:
 		var metrics := CampaignEnvironmentArt.calibrated_visual_metrics("object",
 			art_level_id,route_key,state)
 		if metrics.is_empty(): return null
-		if update_metadata: set_meta("campaign_environment_foot",float(metrics.get("foot",0.78)))
+		if update_metadata:
+			set_meta("campaign_environment_foot",float(metrics.get("foot",0.78)))
+			if bool(metrics.get("label_visible_top",false)):
+				set_meta("campaign_environment_visible_top",float(metrics.normalized_visible_bbox[1]))
 	var text_surface_id := String(get_meta("campaign_environment_text_surface_id",""))
 	if not text_surface_id.is_empty():
 		var normalized = CampaignEnvironmentArt.calibrated_text_rect("object",
