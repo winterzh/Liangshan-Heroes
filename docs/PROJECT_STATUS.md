@@ -45,7 +45,7 @@ Steam 详情见 [2026-10-09 发布收据](../qa/steam_release_20261009/release_c
 
 ## 当前卡点与最新测试状态
 
-**V13 后台新批正在运行。** `durable_chain_335e5ef3`，观察外层27392/原执行器25716，两个进程实际存活。冷导入15548及首次保存43808退出0、引擎错误0；首次保存317项通过，当前2/61阶段通过；不转移旧批局部资格。持续日志与真实宿主退出记录保存在外部observer目录，启动证据见[后台新批记录](../qa/campaign_progress_recovery_20261008/actual_v13_background_restart_20261014/observation.json)，首次保存见[实际结果](../qa/campaign_progress_recovery_20261008/actual_v13_background_lu_a_20261014/observation.json)。
+**V13 后台新批正在运行。** `durable_chain_335e5ef3`，观察外层27392/原执行器25716，两个进程实际存活。冷导入15548、首次保存43808及world32980退出0、引擎错误0；首次保存317项及world264行/1540项通过，当前3/61阶段通过，接续组件；不转移旧批局部资格。持续日志与真实宿主退出记录保存在外部observer目录，启动证据见[后台新批记录](../qa/campaign_progress_recovery_20261008/actual_v13_background_restart_20261014/observation.json)，首次保存见[实际结果](../qa/campaign_progress_recovery_20261008/actual_v13_background_lu_a_20261014/observation.json)，world见[完整矩阵结果](../qa/campaign_progress_recovery_20261008/actual_v13_background_lu_world_20261014/observation.json)。
 
 **此前的 V13 原批在组件阶段意外中断，整批未通过。** `durable_chain_5b7529db` 的原会话69586已不存在，原宿主15388和组件15648多次核对缺失。冷导入、首次保存309项及world264行/1540项的实际通过记录保留；组件有205份中间文件，缺完整报告和最终收据，退出码与原因未知。现场保留，自有孤儿锁已精确核对后归档；后继已用全新后台批重跑全部61阶段。详见[中断记录](../qa/campaign_progress_recovery_20261008/DURABLE_V13_ABRUPT_INTERRUPTION_20261014.json)。
 
@@ -54,9 +54,9 @@ Steam 详情见 [2026-10-09 发布收据](../qa/steam_release_20261009/release_c
 | 第五批 V12 | 冷导入、首次保存及 world 矩阵通过；组件阶段中断，缺完整终态，整批未通过 | [中断记录](../qa/campaign_progress_recovery_20261008/DURABLE_V12_FIFTH_ABRUPT_INTERRUPTION_20261014.json) |
 | 第六批 V12 | 61 阶段中有 2 阶段实际通过；world 检查超过原 1200 秒时限，退出 1、锁已释放，整批未通过 | [超时记录](../qa/campaign_progress_recovery_20261008/actual_sixth_v12_world_timeout_20261014/observation.json) |
 | V13 第一批 | 只读预检和独立源码审查通过；完整检查与原时限保留；**前三阶段通过；组件阶段中断，整批未通过** | [独立审查收据](../qa/campaign_progress_recovery_20261008/DURABLE_CHAIN_INDEPENDENT_REVIEW_V13.json) |
-| V13 后台新批 | 冷导入与首次保存通过，当前2/61；后台宿主实际存活，完整结果待定 | [新批启动记录](../qa/campaign_progress_recovery_20261008/actual_v13_background_restart_20261014/observation.json) |
+| V13 后台新批 | 冷导入、首次保存和world通过，当前3/61；后台宿主实际存活，组件接续，完整结果待定 | [新批启动记录](../qa/campaign_progress_recovery_20261008/actual_v13_background_restart_20261014/observation.json) |
 
-后台宿主观察入口V2已通过独立源码审查，新批已实际启动并完成冷导入与首次保存；旧中断原因仍未知。当前重点是完成剩余恢复矩阵和双角色完整链。上一批V13鲁智深world在原1200秒时限内通过，最后时间标记约1034秒；逐行耗时已保存。此次使用新鲜实际A，尚不能证明第六批超时原因，也不代表完整恢复已通过。
+后台宿主观察入口V2已通过独立源码审查，新批已实际启动并完成冷导入、首次保存与world；world最后标记约754秒，原1200秒时限内通过，旧中断/超时原因仍未知。当前重点是完成剩余恢复矩阵和双角色完整链。上一批V13鲁智深world在原1200秒时限内通过，最后时间标记约1034秒；逐行耗时已保存。此次使用新鲜实际A，尚不能证明第六批超时原因，也不代表完整恢复已通过。
 
 当前后台新批从全新目录运行全部 61 阶段，保留两角色八个保存/恢复阶段与 52 个异常拒绝阶段。旧批次的局部通过不能拼接为新批次成功；只有会话或进程权威状态确认为结束/不存在才启动后继，不因单次观察超时重启。启动及冷导入证据见[新批记录](../qa/campaign_progress_recovery_20261008/DURABLE_V13_RUN_STARTED_20261014.json)，首次保存见[实际结果](../qa/campaign_progress_recovery_20261008/actual_v13_lu_a_20261014/observation.json)，world见[完整结果](../qa/campaign_progress_recovery_20261008/actual_v13_lu_world_20261014/observation.json)。
 
