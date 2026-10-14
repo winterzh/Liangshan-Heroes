@@ -1,3 +1,7 @@
+## 2026-10-14：V14 Lu捕获第9至12例原生记录
+
+- `qa/campaign_progress_recovery_20261008/actual_v14_background_lu_capture_cases9_to12_20261014/`：新增四例每例443项实际通过；原report/log/A清单、观察及前8归档复核。
+
 ## 2026-10-14：V14 Lu捕获第5至8例原生记录
 
 - `qa/campaign_progress_recovery_20261008/actual_v14_background_lu_capture_cases5_to8_20261014/`：四个新增用例每例443项实际通过；原report/log/A清单与观察，前4归档复核且不复制。
