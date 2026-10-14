@@ -40,9 +40,9 @@ Steam 发布详情见 [发布收据](../qa/steam_release_20261009/release_closeo
 
 ### 当前正在运行的测试
 
-第五批完整恢复测试位于 `D:/CodexTemp/lsh-durable-chain-20261014/durable_chain_9009283d`。原执行会话 **75405**，宿主 Python PID **42756**。整理时确认宿主及其 Godot 子进程仍存活；冷导入 PID 41580 已退出 0、引擎错误 0，鲁智深首次保存阶段 PID 41320 已退出 0、引擎错误 0，293 项检查全部通过；鲁智深 world 矩阵 PID 17556 已退出 0、引擎错误 0，264 行和 1540 项检查通过；当前 3/61 阶段完成，组件矩阵 PID 34844 正在执行。状态会随执行变化，须回读同一会话及 `checkpoint.json`，不能依据本页重复启动。
+第五批位于 `D:/CodexTemp/lsh-durable-chain-20261014/durable_chain_9009283d`。冷导入、鲁智深首次保存（293项）及world矩阵（264行/1540项）有实际通过记录；组件阶段在576份中间输出后意外中断。原会话75405和宿主42756/子进程34844均已不存在，无组件完整报告或最终收据，退出码与中断原因未知，**本批未通过**。原现场完整保留，自有孤儿锁在精确核对及PID缺失检查后归档。详见 [中断观察](../qa/campaign_progress_recovery_20261008/DURABLE_V12_FIFTH_ABRUPT_INTERRUPTION_20261014.json)。
 
-本批要求 **61 个实际进程**：冷导入 1 个、两角色各四阶段共 8 个、异常拒绝阶段 52 个。测试完成前不记作整批通过。启动证据见 [第五批记录](../qa/campaign_progress_recovery_20261008/DURABLE_V12_FIFTH_RUN_STARTED_20261014.json)。原四批失败与其存档/日志保留，继续使用共享引擎串行约束。
+下一步重新预检原V12，并用全新第六批目录运行全部61个实际进程：冷导入1、两角色各四阶段共8、异常拒绝52。不复用旧存档，不跳过阶段，不把原3/61的局部通过当成功前置。第六批已启动：`D:/CodexTemp/lsh-durable-chain-sixth-20261014/durable_chain_58bfe30d`，原会话22280、宿主24968；重新预检通过，当前未完成。详见[第六批启动记录](../qa/campaign_progress_recovery_20261008/DURABLE_V12_SIXTH_RUN_STARTED_20261014.json)。继续观察同一会话及checkpoint，不因观察超时重启。
 
 ## 接下来的执行顺序
 

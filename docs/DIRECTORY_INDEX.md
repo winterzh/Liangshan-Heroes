@@ -1,3 +1,9 @@
+## 2026-10-14：第五批中断观察
+
+同时新增DURABLE_V12_SIXTH_RUN_STARTED_20261014.json：新批58bfe30d / 原session22280 / host24968，完整结果待定。
+
+恢复QA DURABLE_V12_FIFTH_ABRUPT_INTERRUPTION_20261014.json 记录原会话/PID缺失、无完整component/final报告及精确自有孤儿锁归档。原现场保留，不能复用为成功prior；重跑须全新批及全部61阶段。
+
 ## 2026-10-14：第五批 Lu world 原始证据
 
 恢复QA actual_fifth_v12_lu_world_20261014/ 保存264行/1540check的原report、native.log及observation。仅此world阶段通过；完整批3/61，component正在原session75405执行。

@@ -1,3 +1,11 @@
+## 2026-10-14：第五批意外中断，完整资格未取得
+
+第六批预检实际退出0，logical仍为867bd2d1b78339f357200e4dca344d14fb38a05c39f3e7906fe3f11507b60209，与原准入一致。已启动全新外部批durable_chain_58bfe30d，原session22280 / host24968实际存活；完成状态仍false，全部61阶段待同批闭合。启动观察见DURABLE_V12_SIXTH_RUN_STARTED_20261014.json。
+
+原会话75405已不存在；两次CIM及Get-Process查询均未见宿主42756或组件Godot34844。原checkpoint停在cold/Lu A/world三个已完成阶段，component只有576份中间输出，无完整report和最终receipt；其退出码及中断原因未知，不能称运行成功或推断机器重启。当前系统启动时间早于本批。原文件、profile和日志均保留，另封存原checkpoint与组件日志副本。
+
+遗留全局锁原字节精确指向durable_chain_9009283d。再次确认两个原PID及所有Godot均不存在、锁inode/大小/mtime/内容未变后，将该单个自有孤儿锁重命名到原外部批次目录orphaned_source_lock_20261014.txt，未停止其它进程。观察记录为恢复QA DURABLE_V12_FIFTH_ABRUPT_INTERRUPTION_20261014.json。没有伪造终态/退出码、重写checkpoint或转移3/61局部资格。下一步重新预检原不可变V12并在全新第六批目录运行全部61阶段；不复用旧profile或跳过已完成阶段。全计划仍开放。
+
 ## 2026-10-14：第五批鲁智深 world 矩阵实际通过
 
 原 session75405 / host42756 在共享资源自然释放后自动继续。lu_world PID17556 正常终态退出0、引擎错误0，264行完整矩阵及1540项check全部通过；原报告大小/SHA/PID/nonce和native.log SHA独立回核一致。两份原字节与观察摘要保存 actual_fifth_v12_lu_world_20261014/，不复制私有profile或裸CFG。当前3/61阶段完成，lu_component PID34844实际运行。下一步观察同一会话；单角色world通过不替代component/live24/另一角色/ABCD后继或原19、UI、SDK、整局、性能与真机。原整体目标保持。
