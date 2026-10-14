@@ -1,3 +1,9 @@
+## 2026-10-14：完整恢复 V12 第五批已启动
+
+另一项目聊天已 idle/completed，实际进程清单无 Godot 或测试 Python；既定 stable 与本地 HEAD 均为 f2ad04ffe7b1ec72c9c5b1ac35d7b42360ac0b02。原 V12 预检实际退出 0，logical SHA 867bd2d1b78339f357200e4dca344d14fb38a05c39f3e7906fe3f11507b60209，与原独立准入完全一致。使用全新外部目录 durable_chain_9009283d 启动第五批，保留原四批失败，不复用旧存档。
+
+原 exec session 75405、host Python PID 42756；连续空闲 60 秒及原全局锁由既有串行器约束。实际 cold_import PID 41580 已终态退出 0、引擎错误 0，完整日志原 SHA 已回核。当前测试未完成；继续观察同一会话/PID/checkpoint，不因观察超时重启。共 61 阶段仍须全部闭合，原19故障、真实UI同对象重试、SDK奖励一次性、八章动态、九玩法与Windows导出、多尺寸、10分钟性能内存及Android真机仍待验收。详见恢复QA DURABLE_V12_FIFTH_RUN_STARTED_20261014.json。
+
 ## 2026-10-09：SDK导出专用包探针与单派生身份冻结适配
 
 独立V1审查指出两个边界：freeze_cold元数据不独自证明实际导入成功，generate缺原cold step/退出/log；包probe首项拒绝输出后仍可能_finish写相对路径。V1源/23pins/四pure反例保持。不可变V2补原继承phase、唯一实际cold_import/complete/terminal0/error0/精确cmd及原pid/nonce集合与原native.log SHA/zeroerror；GD V2首项成功后才设validated-output，之前_finish直接quit2不写。SOURCE_INPUTS_V2封存22pins/37imports，未调用constructor/generation/原生，独立有限V2 delta审查已完成，原SHA30acba8252c9d004e7b2f4e3016eedf30ea955b4427509571f3e40ef45d5ccd2；22pins/37imports、原cold API/固定日志及GD validated-output复核通过。V1原拒绝SHA6607a323aacfe21c03653c7ba4355536afe121c09635593fb89916ba6a361298保留。stages=[]，实际原生/导出/SDK/完整consumer仍缺。

@@ -1,3 +1,7 @@
+## 2026-10-14：完整恢复第五批运行记录
+
+恢复QA新增 DURABLE_V12_FIFTH_RUN_STARTED_20261014.json，指向外部新批 durable_chain_9009283d / 原 session 75405 / host PID 42756。仅冷导入已通过，完整结果仍待同一会话终态；不复制私有存档。
+
 ## 2026-10-09：SDK包探针与身份冻结适配
 
 新增tools/campaign_real_sdk_export_frozen_v1/v2.py；恢复QA sdk_export_package_probe_v1/v2/、REAL_SDK_EXPORT_FROZEN_CPU_REGRESSION_V1.json和FROZEN_PACKAGE_SOURCE_INPUTS_V1/V2/独立审查JSON。V1实际cold证据/未validated输出缺口保留，V2补原step/log与write guard并独立有限审查通过（22pins/37imports）；不构造/运行，不替代完整导出/SDK资格。
