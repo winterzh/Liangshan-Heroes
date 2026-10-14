@@ -1,3 +1,9 @@
+## 2026-10-14：V13 组件阶段意外中断，完整批未通过
+
+原会话69586返回Unknown process id；多次CIM/Get-Process核对原宿主15388及子进程15648均不存在，所有Godot均不存在。原checkpoint仍停在三个已完成阶段和未终态组件，组件有205份中间JSON，无完整组件report或最终receipt。退出码与中断原因未知；系统启动早于本批，不能推断机器重启，也不能将3/61局部通过当完整成功。
+
+完整现场、profile和中间文件保留。原checkpoint/组件native.log另外封存至原批外部目录；核对进程缺失、该单个自有69字节锁的inode/大小/mtime/内容两次一致后，将锁重命名到原批orphaned_source_lock_20261014.txt，未停止其它进程。恢复QA新增DURABLE_V13_ABRUPT_INTERRUPTION_20261014.json。此前cold/Lu A/world成功原件保持，下一步核对原不可变V13来源与准入，使用全新私有批运行全部61阶段；不复用旧profile、不跳过旧绿。完整19/UI/SDK/八章九玩法/美术/性能/真机目标继续开放。
+
 ## 2026-10-14：V13 鲁智深完整 world 矩阵实际通过
 
 原会话69586 / 新批5b7529db的lu_world PID19988正常终态退出0、引擎错误0；264行完整矩阵及1540项检查全部passed，原执行器已校验并登记negative_reports。原report/log/actual_A_manifest逐字节封存 `actual_v13_lu_world_20261014/`，另有观察与完整264行耗时摘要；报告PID/nonce/大小/SHA、原log SHA及264对row时间标记与报告顺序回核一致，不复制私有profile或裸CFG。
