@@ -1,3 +1,9 @@
+## 2026-10-14：V14新批Lu capture第13至16例实际通过
+
+新批6eed4c82 root_safe__ability_caster、root_safe__item_caster、safe_event_missing、other_safe_event_without_retreat分别由PID46200/43472/29636/29756执行，每例443项全部passed，actual Core.capture、真实live对象、row_completed均true；实际终态退出0、引擎错误0，原执行器已登记negative_reports/complete=true。原report/log/actual_A_manifest逐字节封存 `actual_v14_background_lu_capture_cases13_to16_20261014/`，大小/SHA/PID/nonce/log及manifest环境SHA一致。前12例归档再次逐字节复核且不重复复制，前16例PID/nonce全部不同；裸CFG/私有profile不复制，原现场/证据保留。
+
+当前Lu capture16/24、整批20/61，后台33644/执行器39688继续同一批余例和后继ABCD/另一角色。16例局部通过不授完整24例/双角色矩阵/全链、原19/UI/SDK/八章九玩法/美术/性能/真人/Android或全目标资格；生产代码/Steam不变，全部实际门槛保持。
+
 ## 2026-10-14：V14新批Lu capture第9至12例实际通过
 
 新批6eed4c82 other_role_null、other_alive_missing_active、other_outcome_captured、root_safe_selection分别由PID35684/33564/29432/23708执行，每例443项全部passed，actual Core.capture、真实live对象、row_completed均true；实际终态退出0、引擎错误0，原执行器已登记negative_reports/complete=true。原report/log/actual_A_manifest逐字节封存 `actual_v14_background_lu_capture_cases9_to12_20261014/`，大小/SHA/PID/nonce/log及manifest环境SHA一致。前8例归档再次逐字节复核且不重复复制，前12例PID/nonce全部不同；裸CFG/私有profile不复制，原现场/证据保留。
