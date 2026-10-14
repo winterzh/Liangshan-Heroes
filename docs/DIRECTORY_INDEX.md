@@ -1,3 +1,7 @@
+## 2026-10-14：V14完整Lu world实际结果
+
+- `qa/campaign_progress_recovery_20261008/actual_v14_background_lu_world_20261014/`：264行/1540项通过的原report/log/A清单、完整264行被动耗时摘要及观察。
+
 ## 2026-10-14：V14后继完整闭合证据入口
 
 - `tools/campaign_file_fault_prior_v3.py`、`qa/campaign_progress_recovery_20261008/closed_v14_prior_consumer_v1/`：独立源码拒绝的V3保留。

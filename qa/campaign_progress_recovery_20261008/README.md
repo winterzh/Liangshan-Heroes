@@ -1,3 +1,9 @@
+## 2026-10-14：V14新批完整Lu world矩阵实际通过
+
+新批6eed4c82 lu_world PID46172实际终态退出0、引擎错误0，264行及1540项检查全部passed，原执行器已登记negative_reports并complete=true。原report/log/actual_A_manifest逐字节归档 `actual_v14_background_lu_world_20261014/`；完整264对被动时间标记与报告case/route顺序相同，另存完整耗时摘要。原SHA/PID/nonce及各输入来源回核一致，不复制裸CFG/私有profile，原现场保留。
+
+run_begin后最后标记874.422794秒，source132行合计356.606649秒、中位2.632962秒；JSON132行合计472.134041秒、中位3.471016秒。间隔含标记之间全部工作，排除重置前时间，不以不同新鲜实际A比较推导速度优化、旧超时原因或游戏性能。当前3/61，原后台33644/执行器39688接续同一批组件矩阵；双角色8链/52负例/362component/24capture与原19/UI/SDK/八章九玩法/美术/性能/真人/Android完整目标仍开放。
+
 ## 2026-10-14：后继原19/UI的完整V14闭合证据消费者准备
 
 完整V14正在运行，尚未取得61阶段成功。后续原19持久化故障/UI工具原入口严格绑定V12，不能借修改旧封印或使用部分checkpoint放行。新消费者 `campaign_file_fault_prior_v4.py` 保留原全部61终态、8+52报告、原完整evidence及三代journal校验，固定V14并要求原source/native独立准入/producer字节与真实后台Popen.wait退出0。
