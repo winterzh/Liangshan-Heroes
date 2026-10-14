@@ -1,3 +1,7 @@
+## 2026-10-14：V14冷导入实际记录
+
+- `qa/campaign_progress_recovery_20261008/actual_v14_background_cold_20261014/`：PID22536实际cold终态退出0、错误0、原日志SHA与观察；当前1/61。
+
 ## 2026-10-14：V14完整新批入口
 
 - `qa/campaign_progress_recovery_20261008/actual_v14_background_start_20261014/`：真实后台启动原始记录，观察时0/61。

@@ -1,3 +1,7 @@
+## 2026-10-14：V14完整新批冷导入实际通过
+
+新批6eed4c82 cold PID22536实际终态退出0、引擎错误0，原执行器checkpoint记录complete=true，原日志SHA与归档逐字节相等；见 `actual_v14_background_cold_20261014/`。当前1/61，原后台33644/执行器39688继续同一批A及全部双角色链/负例。冷导入不等于保存恢复资格，原V13失败/局部证据不转移；原19/UI/SDK/八章九玩法/美术/性能/真人/Android完整门槛保持。
+
 ## 2026-10-14：终局比较修正经原生诊断和独立审查，V14完整新批启动
 
 Godot空外部scratch实际诊断确认文件大小live整数与JSON浮点数使整Dictionary相等失败；新guard23个类型/边界全部通过，PID35452退出0、引擎错误0、锁释放，精确提取固定候选guard。见 `actual_terminal_row_type_diagnostic_20261014/` 与 `actual_terminal_row_guard_diagnostic_20261014/`。只改QA consumer文件行比较，完整实际路径、大小/SHA及安全非负整数门槛保留；生产代码不变。
