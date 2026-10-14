@@ -53,7 +53,7 @@ Steam 详情见 [2026-10-09 发布收据](../qa/steam_release_20261009/release_c
 | 第六批 V12 | 61 阶段中有 2 阶段实际通过；world 检查超过原 1200 秒时限，退出 1、锁已释放，整批未通过 | [超时记录](../qa/campaign_progress_recovery_20261008/actual_sixth_v12_world_timeout_20261014/observation.json) |
 | 新诊断版 V13 | 只读预检和独立源码审查通过；完整检查与原时限保留；**前三阶段通过；组件阶段中断，整批未通过** | [独立审查收据](../qa/campaign_progress_recovery_20261008/DURABLE_CHAIN_INDEPENDENT_REVIEW_V13.json) |
 
-当前重点是完成剩余恢复矩阵和双角色完整链。V13本批鲁智深world在原1200秒时限内通过，最后时间标记约1034秒；逐行耗时已保存。此次使用新鲜实际A，尚不能证明第六批超时原因，也不代表完整恢复已通过。
+后台宿主观察入口V2已通过独立源码审查，记录真实宿主启动/退出及持续日志；新批尚未启动，旧中断原因仍未知。当前重点是完成剩余恢复矩阵和双角色完整链。V13本批鲁智深world在原1200秒时限内通过，最后时间标记约1034秒；逐行耗时已保存。此次使用新鲜实际A，尚不能证明第六批超时原因，也不代表完整恢复已通过。
 
 下次新批须从全新目录运行全部 61 阶段，保留两角色八个保存/恢复阶段与 52 个异常拒绝阶段。旧批次的局部通过不能拼接为新批次成功；只有会话或进程权威状态确认为结束/不存在才启动后继，不因单次观察超时重启。启动及冷导入证据见[新批记录](../qa/campaign_progress_recovery_20261008/DURABLE_V13_RUN_STARTED_20261014.json)，首次保存见[实际结果](../qa/campaign_progress_recovery_20261008/actual_v13_lu_a_20261014/observation.json)，world见[完整结果](../qa/campaign_progress_recovery_20261008/actual_v13_lu_world_20261014/observation.json)。
 

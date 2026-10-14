@@ -1,0 +1,63 @@
+{
+  "schema": "durable_v13_background_host_independent_review_v1",
+  "independent": true,
+  "reviewer": "world_timing_review_v13",
+  "reviewed_at": "2026-10-14T07:44:45.773342+00:00",
+  "source_review_passed": false,
+  "approved_stages": [],
+  "launcher_sha256": "8d336bfa50a80a96c25f575a51e53607ecd26a6e79a5a649eb87536942d27531",
+  "source_recipe_sha256": "765a2aef29d50abe128db39aa0b964bac0e0be9e4052bc2df71fd71eeb2a5fd6",
+  "launcher_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\tools\\run_durable_v13_background_host_v1.py",
+    "bytes": 5696,
+    "sha256": "8d336bfa50a80a96c25f575a51e53607ecd26a6e79a5a649eb87536942d27531"
+  },
+  "source_recipe_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\BACKGROUND_HOST_SOURCE_V1.json",
+    "bytes": 2204,
+    "sha256": "765a2aef29d50abe128db39aa0b964bac0e0be9e4052bc2df71fd71eeb2a5fd6"
+  },
+  "pins_verified": 8,
+  "original_v13_full_spec_and_admission_bindings_verified": true,
+  "launcher_AST_compiled": true,
+  "default_real_CLI_preflight_exit": 0,
+  "missing_independent_review_real_CLI_exit": 1,
+  "both_real_CLI_checks_created_no_work_or_observation_directory": true,
+  "only_read_only_host_preflight_or_refusal_processes_executed": true,
+  "Godot_started": false,
+  "native_started": false,
+  "durable_chain_and_matrices_qualified": false,
+  "whole_goal_qualified": false,
+  "overall_goal_qualified": false,
+  "SDK_reward_once_qualified": false,
+  "original19_faults_qualified": false,
+  "UI_qualified": false,
+  "game_performance_qualified": false,
+  "device_qualified": false,
+  "findings": [
+    {
+      "priority": "blocking",
+      "locations": [
+        "source_pin = pin(args.source_recipe); recipe = json.loads(plain(args.source_recipe).read_bytes())",
+        "review_pin = pin(args.independent_review); review = json.loads(plain(args.independent_review).read_bytes())"
+      ],
+      "problem": "Each document is hashed from one file read and parsed from a separate later read. The exact raw bytes whose SHA is bound by the admission/host record are not guaranteed to be the bytes supplying recipe command arguments or launcher admission decisions. No after-parse comparison against the first pin occurs. This breaks the required exact first-byte source binding under a change between the two reads.",
+      "required_repair": "Create an immutable successor launcher and recipe. Read each document raw bytes once, derive its pin from that raw buffer, parse json.loads of that same buffer, and recheck the first original pin after parsing. Use those original pins for admission and observation records, without rebasing. Preserve V1 source and this rejection."
+    }
+  ],
+  "other_static_review": {
+    "unchanged_original_V13_command_full_run": true,
+    "original_61_native_stage_contract_deadlines_retained_in_existing_producer": true,
+    "default_no_process_creation_branch": true,
+    "explicit_limited_admission_before_mkdir_Popen": true,
+    "shell_false_CREATE_NO_WINDOW": true,
+    "two_external_fresh_plain_unlinked_nonoverlapping_paths": true,
+    "actual_Popen_owned_until_finally_wait": true,
+    "startup_record_exception_still_finally_wait": true,
+    "terminal_code_record_only_after_real_wait": true,
+    "no_direct_Godot_or_third_party_process_control": true,
+    "no_player_original_receipt_mutation": true,
+    "host_exit_not_full_acceptance": true
+  },
+  "scope_limit": "Finite source/hash/AST/import review of the outer launcher and eight pins, plus actual default CLI preflight and --run-without-review refusal only. No producer/native/Godot/export/SDK execution. Windows background visibility does not prove interruption cause or survival across turns, restart or external termination. No preceding partial 3/61 result becomes qualification."
+}

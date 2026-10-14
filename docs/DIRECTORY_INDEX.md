@@ -1,3 +1,7 @@
+## 2026-10-14：V13 后台宿主观察来源
+
+新增tools/run_durable_v13_background_host_v1/v2.py与恢复QA BACKGROUND_HOST_SOURCE_V1/V2、V1/V2_README和两份独立审查。V1拒绝保留，V2仅准入启动原V13完整批；新native尚未启动。
+
 ## 2026-10-14：V13 组件中断观察
 
 恢复QA新增DURABLE_V13_ABRUPT_INTERRUPTION_20261014.json，记录原会话及进程缺失、组件205份中间输出但无完整终态，以及精确自有孤儿锁的归档。完整原现场保留，3/61不能转为成功前置；重跑须全新完整批。
