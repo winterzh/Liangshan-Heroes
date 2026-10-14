@@ -1,3 +1,21 @@
+## 2026-10-15：V16 Lu完整world264行实际通过
+
+同一95e6addc实际Lu world PID28892/nonce58b3a592219244fbb49a0e413646fa75正常退出0/errors0，完整264行/1540项全部通过，原执行器已登记negative_reports及阶段complete。原report SHA9399043f…、native log、actual_A_manifest三份原字节/大小/SHA精确封存 `actual_v16_background_lu_world_20261015/`；manifest原A report/handoff/packet/world/slot五份来源原pin回核，实际本批A SHA440414ce…保持。旧interface仅沿已准入producer固定namespace适配，264完整原typed route/code/positive谓词重新核对无缩减。没有复制裸CFG/private profile或修改原执行来源。
+
+原log被动时间标记在run_begin后按PID/nonce解析，264唯一row首尾匹配、source/json各132，最后标记834.372967秒，原计时摘要封存。只说明本批观察；不同实际A不作跨批加速/旧超时原因、正常玩法性能或P95/P99结论。当前3/61已完成，外层44296/执行器46780继续同一批component362/live24和双角色ABCD/52矩阵，整批成功仍未证明。后继原19/UI/data/first-repeat入口只有来源准备/独立源码初审，必须实际61完整成功及original后台wait0、新精确原生准入才执行；负零实际数据构造门槛和SDK/八章九玩法/美术/正常性能内存/真人/Android等仍开放。生产main/Steam保持。
+
+## 2026-10-15：原19文件故障、真实UI与数据测试V16入口完成源码准备
+
+保持完整V16活批95e6addc，2/61阶段（cold+Lu A315）已通过，同一执行器46780/外层44296继续Lu world264及component362/live24与双角色后继链，不改已执行来源。等待期间新增source-only公共basis `campaign_v16_closed_source_basis_v1.py`，回核原V16 seal/限域full review、closed prior初审32来源及全部12后台来源；完整runtime overlays/metadata/Python imports纳入各继任recipe持续原pin核验。源码预检不会消费成功prior或启动原生。
+
+六类自然文件故障入口 `run_campaign_file_faults_v4.py` / `six_file_faults_v16_candidate_v1/` recipe3661df…已独立源码审查，原GD V6/label V3/evidence/runtime保持，13进程（cold+6fresh+各自same-profile restart）和全部95/95/98/98/98/98 fresh检查+每档restart20保持，原八个Suite非init方法AST完全相同。实际既有malformedCFG单一预期错误预算保留，不放宽其它错误。只改V16basis/完整closed准入与actual host_exit首次pin持续remember。
+
+真实UI入口 `run_campaign_pending_terminal_ui_v7.py` / `pending_ui_v16_candidate_v1/` recipe525b34…已独立源码审查，继承原V5 GUI probe/详细consumer/screenshots+decoder/原label multiplicities，原V6 validate/execute AST完全相同：原terminal Popen、command/profile、15字段身份、same-original Coordinator/CFG writer/frozen-intent retry与same-profile普通重启全保留，cold+fresh+restart3进程保持；旧V5资料仅保留源码不转移执行准入。
+
+原19数据入口 `run_campaign_original19_data_cases_v3.py` / `original19_data_v16_candidate_v1/` recipe82d01b…已独立源码审查：原data GD V5/compat GD V1/evidence V3、完整109/20/20标签、6真实CFG数据机制+2隔离QA1兼容、cold+data+2compat共4进程保持，原V2 values/validate/execute AST完全相同，原生产依赖与当前overlay精确一致。数据/QA来源准备不代表普通live Battle或全19资格。
+
+三入口均要求实际全61成功V16原receipt+actual original background Popen.wait exit0，失败receipt/运行中checkpoint不授准入；同raw original字节与完整source/evidence/host pin持续检查，形成具体source-spec后仍需新的exact独立原生审查。现approved_stages=[]，未运行六文件故障/UI/data后继，未授原19/UI/SDK/whole-goal资格。数据原V5的negative_zero仍用-0.0 literal，此轮仅保留来源，不证明实际IEEE符号；结合此前primitive真实literal反例，未来负零专项资格需运行时构造与操作数字节证据的受审后继，不能把本次静态通过写成覆盖完成。first/repeat完整5进程已另行准备；其余admission/callback/原19总闭合及真实SDK/八章九玩法/全库美术/正常性能内存/真人/Android仍开放。生产代码/main/Steam保持。
+
 ## 2026-10-15：V16冷导入通过及后继完整首次/重复入口准备
 
 当前95e6addc冷导入实际PID10572/exit0/errors0/process_terminal/complete；原日志SHA5fcbca61…和当时1阶段checkpoint快照逐字节封存 `actual_v16_background_cold_20261015/`，不把可变checkpoint当成功整批收据。Lu A PID23652实际315项全部通过、正常退出0/errors0，真实首次完整保存资格已登记，reportSHA440414ce…/slotSHA351d4e27…及原log逐字节封存 `actual_v16_background_lu_a_20261015/`，不复制裸CFG/private档案。实际本批315检查而不是将旧V14的317套用。外层44296仍持有原执行器46780，同批已完成2/61，继续Lu world/component/live24和其后ABCD/另一角色，完整8+52/61及后续范围不变。
