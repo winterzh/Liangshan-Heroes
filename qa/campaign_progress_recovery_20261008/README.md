@@ -1,3 +1,9 @@
+## 2026-10-14：后继原19/UI的完整V14闭合证据消费者准备
+
+完整V14正在运行，尚未取得61阶段成功。后续原19持久化故障/UI工具原入口严格绑定V12，不能借修改旧封印或使用部分checkpoint放行。新消费者 `campaign_file_fault_prior_v4.py` 保留原全部61终态、8+52报告、原完整evidence及三代journal校验，固定V14并要求原source/native独立准入/producer字节与真实后台Popen.wait退出0。
+
+V3仅部分启动参数绑定及后台来源未闭合，被独立源码审查拒绝，原文件/收据保留。V4以same-raw后台recipe/review、固定路径/schema/limitedstage、完整12pin和typed完整command序列及最后重核修正，独立源码审查通过；记录见 `closed_v14_prior_consumer_v2/`。实际失败V13receipt和运行中V14checkpoint均被拒绝，无假成功/原生执行。准入approved_stages=[]，不授完整恢复、原19、UI、SDK或全目标资格。新消费者尚未接入后继native执行器；完成本批后仍需新来源快照、完整成功收据与独立具体准入。
+
 ## 2026-10-14：V14新批鲁智深首次保存实际通过
 
 新批6eed4c82 Lu A PID10032实际终态退出0、引擎错误0，317项检查全部passed；原执行器complete=true并登记原report大小/SHA/PID/nonce及完整槽SHA。原报告与日志逐字节归档 `actual_v14_background_lu_a_20261014/`，未复制裸CFG/私有profile，原证据及现场保留。当前2/61，原后台33644/执行器39688继续同一批world及后继双角色完整链，不转移旧批资格。原19/UI/SDK/八章九玩法/美术/性能/真人/Android完整目标保持。

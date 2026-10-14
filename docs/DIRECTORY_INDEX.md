@@ -1,3 +1,8 @@
+## 2026-10-14：V14后继完整闭合证据入口
+
+- `tools/campaign_file_fault_prior_v3.py`、`qa/campaign_progress_recovery_20261008/closed_v14_prior_consumer_v1/`：独立源码拒绝的V3保留。
+- `tools/campaign_file_fault_prior_v4.py`、`qa/campaign_progress_recovery_20261008/closed_v14_prior_consumer_v2/`：完整后台来源与唯一命令序列绑定的V4；独立源码通过，尚无actual/native资格。
+
 ## 2026-10-14：V14鲁智深实际保存记录
 
 - `qa/campaign_progress_recovery_20261008/actual_v14_background_lu_a_20261014/`：PID10032，317项原生保存检查通过，原report/log及观察。

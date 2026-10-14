@@ -1,0 +1,1 @@
+V4是完整闭合消费者后继：V3命令部分绑定不足被独立源码审查拒绝，原文件/审查保留。V4新增same-raw后台recipe/review绑定、固定路径/schema/准入与12pin完整集合，将recipe固定Python/-X/utf8/-B/producer/godot/baseline/work/spec/review构造成唯一命令序列严格比较并末尾重核；保留原V2所有61终态/8+52报告/完整evidence/三代journal。只作源码准备，尚未消费完整成功V14，不能使用checkpoint/局部绿灯或模拟成功。
