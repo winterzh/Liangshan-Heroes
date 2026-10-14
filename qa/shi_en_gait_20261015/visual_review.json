@@ -1,0 +1,22 @@
+{
+  "scope": "Native Shi En idle and gait candidates, browser frame review only",
+  "native_source_images_directly_viewed": true,
+  "four_directions_with_front_back_identity_reviewed": true,
+  "opposite_contact_and_passing_legs_visibly_distinct": true,
+  "browser_frames_reviewed": ["contact_a", "passing_a", "contact_b", "passing_b", "idle"],
+  "browser_screenshots": ["preview_contact_a.png", "preview_passing_a.png", "preview_contact_b.png", "preview_passing_b.png", "preview_idle.png"],
+  "source_scale_correction": "Initial NW independent sources too small and NE passing B too large. Adjusted uniform scale by independent source only, with raw RGBA unchanged; retained first preview.",
+  "excluded_native_regions": {
+    "walk_ne_passing_v3_native": "Right half repeats left supporting leg; use single native replacement for opposite passing phase.",
+    "walk_nw_contacts_v3_native": "Right half faces northeast; use true northwest single contact B.",
+    "external_walk_sw_atlas_v3_rejected": "Both contact poses repeat the leading leg; not selected or imported. Original remains external."
+  },
+  "same_source_uniform_scale": true,
+  "native_PNG_pixel_edits": false,
+  "runtime_integrated": false,
+  "runtime_qualified": false,
+  "full_cycle_smoothness_qualified": false,
+  "existing_portrait_identity_qualified": false,
+  "full_character_actions_complete": false,
+  "next": "Import and author SpriteFrames, original Level7 Shi En idle/right-click walk and direction/ground/UI review after shared Godot idle; retain broader action and art scope."
+}
