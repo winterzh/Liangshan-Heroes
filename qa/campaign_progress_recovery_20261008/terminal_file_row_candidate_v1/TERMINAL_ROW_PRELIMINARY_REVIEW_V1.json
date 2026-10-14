@@ -1,0 +1,100 @@
+{
+  "schema": "terminal_file_row_preliminary_review_v1",
+  "review_revision": 1,
+  "independent": true,
+  "reviewer": "world_timing_review_v13",
+  "reviewed_at": "2026-10-14T10:53:31.099189+00:00",
+  "source_review_passed": true,
+  "static_api_closure_passed": true,
+  "approved_stages": [
+    "read_only_json_type_diagnostic"
+  ],
+  "source_manifest_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\terminal_file_row_candidate_v1\\SOURCE.json",
+    "bytes": 1350,
+    "sha256": "f2400fb7fd4bf378278d59d39a0a5906e8bf70c0716e3311d1b0d844135e7a7c"
+  },
+  "source_manifest_sha256": "f2400fb7fd4bf378278d59d39a0a5906e8bf70c0716e3311d1b0d844135e7a7c",
+  "candidate_sha256": "4440c65ab2e8830bd5fcfbdcdad1bf101ddff60b4d08e81b6311730e60448bf9",
+  "diagnostic_sha256": "e74d01d3213d39da37f42dc324f4b8d2cc91bfa20aabef9b40af0d4eeb14c494",
+  "predecessor_sha256": "abb72d8eb8530f4b73431f1f7976789015da9883f1a2e3914995840252c6d721",
+  "source_pins": {
+    "predecessor": {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\final_durable_retreat_consumer_v1_r3\\daming_campaign_durable_cross_process_v1.gd",
+      "bytes": 60712,
+      "sha256": "abb72d8eb8530f4b73431f1f7976789015da9883f1a2e3914995840252c6d721"
+    },
+    "candidate": {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\terminal_file_row_candidate_v1\\daming_campaign_durable_cross_process_v1.gd",
+      "bytes": 61389,
+      "sha256": "4440c65ab2e8830bd5fcfbdcdad1bf101ddff60b4d08e81b6311730e60448bf9"
+    },
+    "diagnostic": {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\terminal_file_row_candidate_v1\\json_file_row_type_probe_v1.gd",
+      "bytes": 715,
+      "sha256": "e74d01d3213d39da37f42dc324f4b8d2cc91bfa20aabef9b40af0d4eeb14c494"
+    },
+    "actual_failure": {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\actual_v13_background_lu_terminal_failure_20261014\\observation.json",
+      "bytes": 8055,
+      "sha256": "a2b9d7214598cc26a4b0840fa403360613715857e46cc93573d8a62598001869"
+    }
+  },
+  "findings": [],
+  "candidate_review": {
+    "only_changed_function": "_verify_relative_profile_file",
+    "all_other_bytes_and_functions_unchanged": true,
+    "exact_three_field_keyset_guard_retained": true,
+    "relative_path_and_full_SHA_guard_retained": true,
+    "non_numeric_and_boolean_refused_by_exact_type": true,
+    "nonfinite_negative_fractional_and_above_2pow53_minus1_values_refused_before_cast": true,
+    "int_cast_only_after_safe_integer_guard": true,
+    "actual_row_must_be_nonempty": true,
+    "relative_user_path_size_and_complete_SHA_all_compared": true,
+    "actual_file_read_and_hash_helper_unchanged": true,
+    "no_save_or_restore_production_mutation": true,
+    "full_chain_native_admission_granted": false
+  },
+  "diagnostic_review": {
+    "extends": "SceneTree",
+    "observes_only_local_in_memory_live_JSON_dictionary_values": true,
+    "no_load_preload_project_or_user_data_APIs": true,
+    "no_FileAccess_DirAccess_writes": true,
+    "fixed_live_int_size": 807,
+    "probe_asserts_actual_Godot_JSON_FLOAT_and_dictionary_inequality": true,
+    "prints_observation_and_exits_without_goal_qualification": true,
+    "execution_boundary": "Run the pinned absolute --script only from a fresh empty external scratch directory with no project.godot, so the actual project and autoloads are not selected. Do not use --path pointing to the game. Preserve original serial engine lease and idle checks."
+  },
+  "actual_failed_evidence_review": {
+    "archived_raw_artifacts_size_SHA_verified": 12,
+    "closed_producer_exit": 1,
+    "real_Popen_wait_completed": true,
+    "lock_released": true,
+    "complete": false,
+    "completed_native_stages": 30,
+    "attempted_native_stages": 31,
+    "expected_native_stages": 61,
+    "failed_D_pid": 45928,
+    "D_checks": 39,
+    "failed_labels": [
+      "fresh process profile file bytes exact"
+    ],
+    "actual_three_journal_files_byte_lengths_and_SHA_verified_equal": true,
+    "failure_hypothesis_native_JSON_type_not_proven_by_this_static_review": true,
+    "partial_30_of_61_not_transferred_to_new_qualification": true
+  },
+  "native_started": false,
+  "diagnostic_native_qualified": false,
+  "durable_chain_and_matrices_qualified": false,
+  "full_chain_qualified": false,
+  "overall_goal_qualified": false,
+  "whole_goal_qualified": false,
+  "original19_faults_qualified": false,
+  "admission_JSON_OwnedSlot_qualified": false,
+  "SDK_reward_once_qualified": false,
+  "public_continue_qualified": false,
+  "UI_qualified": false,
+  "game_performance_qualified": false,
+  "device_qualified": false,
+  "scope_limit": "Source-only preliminary review of immutable one-function candidate and isolated read-only JSON type diagnostic, plus raw predecessor failure reconciliation. No Godot/native process ran during review. Only read_only_json_type_diagnostic is admitted. Its output must establish the actual type hypothesis and cannot qualify repaired terminal restoration or full chain. A complete new V14 source graph and exact producer/spec admission remain required before all 61 native stages."
+}

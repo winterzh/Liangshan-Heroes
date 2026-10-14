@@ -1,0 +1,223 @@
+{
+  "schema": "actual_terminal_row_guard_diagnostic_v1",
+  "complete": true,
+  "full_chain_qualified": false,
+  "overall_goal_qualified": false,
+  "source_pins": [
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\terminal_file_row_candidate_v1\\daming_campaign_durable_cross_process_v1.gd",
+      "bytes": 61389,
+      "sha256": "4440c65ab2e8830bd5fcfbdcdad1bf101ddff60b4d08e81b6311730e60448bf9"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\terminal_file_row_guard_probe_v1\\numeric_guard_probe_v1.gd",
+      "bytes": 1636,
+      "sha256": "655f37cae6327b07ffd470116fcea17d50bcebb74807639c29f549dbe7d2358b"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\terminal_file_row_guard_probe_v1\\SOURCE.json",
+      "bytes": 1119,
+      "sha256": "5fd6ba5f85967b318abc017f3648cf9b856220ac23b8818084be08a3c081fd4b"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\terminal_file_row_guard_probe_v1\\TERMINAL_ROW_GUARD_REVIEW_V1.json",
+      "bytes": 3578,
+      "sha256": "ccc0f3a9cf9fbf751a56ee121ddd182b8e73b09888ba288c5ca807e39493f025"
+    }
+  ],
+  "steps": [
+    {
+      "label": "numeric_guard_diagnostic",
+      "command": [
+        "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+        "--path",
+        "D:\\CodexTemp\\lsh-terminal-row-guard-probe-native-20261014\\empty_scratch",
+        "--headless",
+        "--script",
+        "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\terminal_file_row_guard_probe_v1\\numeric_guard_probe_v1.gd"
+      ],
+      "profile": "D:\\CodexTemp\\lsh-terminal-row-guard-probe-native-20261014\\profiles\\numeric_guard_diagnostic",
+      "output": "D:\\CodexTemp\\lsh-terminal-row-guard-probe-native-20261014\\steps\\numeric_guard_diagnostic",
+      "nonce": "80c2e95be66e4a78ad3f98c548d6179d",
+      "expected_exit": 0,
+      "complete": true,
+      "process_terminal": true,
+      "CAMPAIGN_QA_enabled": false,
+      "environment_overrides": {
+        "APPDATA": "D:\\CodexTemp\\lsh-terminal-row-guard-probe-native-20261014\\profiles\\numeric_guard_diagnostic\\appdata",
+        "LOCALAPPDATA": "D:\\CodexTemp\\lsh-terminal-row-guard-probe-native-20261014\\profiles\\numeric_guard_diagnostic\\localappdata",
+        "TEMP": "D:\\CodexTemp\\lsh-terminal-row-guard-probe-native-20261014\\profiles\\numeric_guard_diagnostic\\temp",
+        "TMP": "D:\\CodexTemp\\lsh-terminal-row-guard-probe-native-20261014\\profiles\\numeric_guard_diagnostic\\tmp",
+        "STEAM_DISABLED": "1"
+      },
+      "pid": 35452,
+      "exit_code": 0,
+      "log_sha256": "5bcfdf2f994715f7fb47c41a16a2d810cba2d3bd8924faffe9c3432a42613797",
+      "engine_errors": 0
+    }
+  ],
+  "actual_observation": [
+    {
+      "actual": true,
+      "expected": true,
+      "id": "int_zero",
+      "passed": true,
+      "type": 2
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "id": "int_positive",
+      "passed": true,
+      "type": 2
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "id": "float_zero",
+      "passed": true,
+      "type": 3
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "id": "float_positive",
+      "passed": true,
+      "type": 3
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "id": "JSON_positive",
+      "passed": true,
+      "type": 3
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "id": "int_max_safe",
+      "passed": true,
+      "type": 2
+    },
+    {
+      "actual": true,
+      "expected": true,
+      "id": "float_max_safe",
+      "passed": true,
+      "type": 3
+    },
+    {
+      "actual": false,
+      "expected": false,
+      "id": "int_unsafe",
+      "passed": true,
+      "type": 2
+    },
+    {
+      "actual": false,
+      "expected": false,
+      "id": "float_unsafe",
+      "passed": true,
+      "type": 3
+    },
+    {
+      "actual": false,
+      "expected": false,
+      "id": "int_max",
+      "passed": true,
+      "type": 2
+    },
+    {
+      "actual": false,
+      "expected": false,
+      "id": "negative_int",
+      "passed": true,
+      "type": 2
+    },
+    {
+      "actual": false,
+      "expected": false,
+      "id": "negative_float",
+      "passed": true,
+      "type": 3
+    },
+    {
+      "actual": false,
+      "expected": false,
+      "id": "fraction",
+      "passed": true,
+      "type": 3
+    },
+    {
+      "actual": false,
+      "expected": false,
+      "id": "tiny_fraction",
+      "passed": true,
+      "type": 3
+    },
+    {
+      "actual": false,
+      "expected": false,
+      "id": "nan",
+      "passed": true,
+      "type": 3
+    },
+    {
+      "actual": false,
+      "expected": false,
+      "id": "positive_inf",
+      "passed": true,
+      "type": 3
+    },
+    {
+      "actual": false,
+      "expected": false,
+      "id": "negative_inf",
+      "passed": true,
+      "type": 3
+    },
+    {
+      "actual": false,
+      "expected": false,
+      "id": "bool_true",
+      "passed": true,
+      "type": 1
+    },
+    {
+      "actual": false,
+      "expected": false,
+      "id": "bool_false",
+      "passed": true,
+      "type": 1
+    },
+    {
+      "actual": false,
+      "expected": false,
+      "id": "null",
+      "passed": true,
+      "type": 0
+    },
+    {
+      "actual": false,
+      "expected": false,
+      "id": "string",
+      "passed": true,
+      "type": 4
+    },
+    {
+      "actual": false,
+      "expected": false,
+      "id": "array",
+      "passed": true,
+      "type": 28
+    },
+    {
+      "actual": false,
+      "expected": false,
+      "id": "dictionary",
+      "passed": true,
+      "type": 27
+    }
+  ],
+  "lock_released": true
+}

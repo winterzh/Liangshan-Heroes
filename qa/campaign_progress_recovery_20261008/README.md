@@ -1,3 +1,17 @@
+## 2026-10-14：终局比较修正经原生诊断和独立审查，V14完整新批启动
+
+Godot空外部scratch实际诊断确认文件大小live整数与JSON浮点数使整Dictionary相等失败；新guard23个类型/边界全部通过，PID35452退出0、引擎错误0、锁释放，精确提取固定候选guard。见 `actual_terminal_row_type_diagnostic_20261014/` 与 `actual_terminal_row_guard_diagnostic_20261014/`。只改QA consumer文件行比较，完整实际路径、大小/SHA及安全非负整数门槛保留；生产代码不变。
+
+V14全来源与后台入口独立审查通过（来源logical `854243beec53c06c730f6d3c7093027035e1542baa8103551a606d038f75c95e`）。后台外层33644/原执行器39688经CIM确认实际存活，新外部目录 `D:/CodexTemp/lsh-durable-chain-v14-background-20261014`，当前启动观察0/61，来源复核/完整冻结及cold阶段待实际结束。启动原始dispatch/host_started见 `actual_v14_background_start_20261014/`。原V13失败批及全24捕获局部证据保留，不转移资格或复用旧档案。执行全部双角色8链+52负例+冷导入共61阶段，原lease/idle60/时限/实际CFG代3/失败停保持。原19/UI/SDK/八章九玩法/美术/性能/真人/Android目标未完成，不更新Steam或main。
+
+## 2026-10-14：Lu 全24捕获通过，V13在终局跨进程文件行核对失败
+
+后台批335e5ef3真实终态：31阶段尝试、30/61通过；外层Popen.wait记录原执行器退出1，自有锁已释放。Lu world264行/1540项、component362行/26847项/8正例、全24 live capture共10654项，以及A317/B377/C264项通过。D PID45928退出1、引擎错误0，39项中唯一失败为fresh process profile file bytes exact。实际三个终局日志的大小和SHA全部与C交接一致；Godot空外部scratch原生诊断已确认JSON浮点数/实际整数导致整Dictionary相等false，逐字段严格数值相等true；退出0、错误0、锁释放。见 `actual_terminal_row_type_diagnostic_20261014/`，不授全链资格。
+
+全24捕获见 `actual_v13_background_lu_capture_all24_20261014/`：先前四例原归档逐字节复核，新增其余20例原report/log/actual_A_manifest；失败批原receipt/checkpoint、真实宿主退出及B/C/D报告日志见 `actual_v13_background_lu_terminal_failure_20261014/`。不复制裸CFG/私有档案，原现场保留。整批未通过、Shi角色未运行，局部通过不能拼接全链资格。
+
+已准备不可变终局文件行候选与V14来源：先严格核对安全非负整数数值，再逐字段比较实际路径、大小和SHA，不修改生产保存恢复模块。原V13代码/封印/失败记录不改。独立审查与原生诊断通过后，后继仍需全新私有批完成双角色全部61阶段；原19故障、真实UI重试、真实SDK/云与奖励一次性、八章九玩法、美术、性能、真人及Android真机门槛保留。此次不合并main或发布Steam。
+
 ## 2026-10-14：V13 后台新批前四个 Lu live capture 实际通过
 
 新批335e5ef3的safe_queue_nonempty、safe_stop__chase_intent、safe_stop__group_cap、safe_stop__has_home分别由独立PID29196/27616/40332/35236执行，每例443项检查全passed，实际Core.capture/真实live对象及row_completed均true，退出0、引擎错误0。原report/native.log/actual_A_manifest按例逐字节封存恢复QA `actual_v13_background_lu_capture_first4_20261014/`；全部原大小/SHA/PID/nonce与log SHA回核一致，不复制裸CFG/私有profile，原完整现场及证据保留。

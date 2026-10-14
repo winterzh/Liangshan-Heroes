@@ -45,7 +45,9 @@ Steam 详情见 [2026-10-09 发布收据](../qa/steam_release_20261009/release_c
 
 ## 当前卡点与最新测试状态
 
-**V13 后台新批正在运行。** `durable_chain_335e5ef3`，观察外层27392/原执行器25716，两个进程实际存活。冷导入15548、首次保存43808及world32980退出0、引擎错误0；首次保存317项、world264行/1540项及component362行/26847项与8组正例通过，前四个capture用例各443项通过，此记录时当前8/61阶段通过，继续其余capture及后继；不转移旧批局部资格。持续日志与真实宿主退出记录保存在外部observer目录，启动证据见[后台新批记录](../qa/campaign_progress_recovery_20261008/actual_v13_background_restart_20261014/observation.json)，首次保存见[实际结果](../qa/campaign_progress_recovery_20261008/actual_v13_background_lu_a_20261014/observation.json)，world见[完整矩阵结果](../qa/campaign_progress_recovery_20261008/actual_v13_background_lu_world_20261014/observation.json)，component见[完整组件结果](../qa/campaign_progress_recovery_20261008/actual_v13_background_lu_component_20261014/observation.json)，前四个capture见[实际记录](../qa/campaign_progress_recovery_20261008/actual_v13_background_lu_capture_first4_20261014/observation.json)。
+**V14完整新批已启动。** 文件行比较只改QA consumer，原生产保存/恢复模块不变；JSON类型及23个数值边界原生诊断均通过，完整执行器与后台入口已独立审查。新外层33644/执行器39688实际存活，启动观察0/61，继续新鲜双角色完整61阶段。见[启动记录](../qa/campaign_progress_recovery_20261008/actual_v14_background_start_20261014/observation.json)。原V13局部通过不转移为V14资格，其他交付门槛不变。
+
+**V13 后台新批已在终局读取检查失败，整批未通过。** `durable_chain_335e5ef3` 真实宿主退出1、Popen.wait完成、锁释放；31阶段尝试、30/61通过。鲁智深全24捕获用例10654项及world264/1540、component362/26847、首次保存317、载入再存377、自然终局264项已通过。D PID45928唯一失败是终局文件行相等检查；三个原文件实际大小/SHA与C交接相同，空外部scratch原生诊断已确认整数/JSON浮点数导致Dictionary相等false（退出0、错误0），不涉及玩家档案。见[全24实际记录](../qa/campaign_progress_recovery_20261008/actual_v13_background_lu_capture_all24_20261014/observation.json)和[终局失败记录](../qa/campaign_progress_recovery_20261008/actual_v13_background_lu_terminal_failure_20261014/observation.json)。后继V14只修测试文件行比较，准备后经独立审查再运行新鲜完整批，不修改原失败批或生产模块。
 
 **此前的 V13 原批在组件阶段意外中断，整批未通过。** `durable_chain_5b7529db` 的原会话69586已不存在，原宿主15388和组件15648多次核对缺失。冷导入、首次保存309项及world264行/1540项的实际通过记录保留；组件有205份中间文件，缺完整报告和最终收据，退出码与原因未知。现场保留，自有孤儿锁已精确核对后归档；后继已用全新后台批重跑全部61阶段。详见[中断记录](../qa/campaign_progress_recovery_20261008/DURABLE_V13_ABRUPT_INTERRUPTION_20261014.json)。
 
@@ -54,15 +56,13 @@ Steam 详情见 [2026-10-09 发布收据](../qa/steam_release_20261009/release_c
 | 第五批 V12 | 冷导入、首次保存及 world 矩阵通过；组件阶段中断，缺完整终态，整批未通过 | [中断记录](../qa/campaign_progress_recovery_20261008/DURABLE_V12_FIFTH_ABRUPT_INTERRUPTION_20261014.json) |
 | 第六批 V12 | 61 阶段中有 2 阶段实际通过；world 检查超过原 1200 秒时限，退出 1、锁已释放，整批未通过 | [超时记录](../qa/campaign_progress_recovery_20261008/actual_sixth_v12_world_timeout_20261014/observation.json) |
 | V13 第一批 | 只读预检和独立源码审查通过；完整检查与原时限保留；**前三阶段通过；组件阶段中断，整批未通过** | [独立审查收据](../qa/campaign_progress_recovery_20261008/DURABLE_CHAIN_INDEPENDENT_REVIEW_V13.json) |
-| V13 后台新批 | 冷导入、首次保存、world、component及前4个capture通过，记录时8/61；后台实际存活，剩余capture继续，完整结果待定 | [新批启动记录](../qa/campaign_progress_recovery_20261008/actual_v13_background_restart_20261014/observation.json) |
+| V13 后台新批 | 30/61通过；Lu全24捕获及A/B/C通过，D文件行核对失败；退出1、锁释放 | [终局失败记录](../qa/campaign_progress_recovery_20261008/actual_v13_background_lu_terminal_failure_20261014/observation.json) |
 
-后台宿主观察入口V2已通过独立源码审查，新批已实际启动并完成冷导入、首次保存、world与component；world最后标记约754秒，原1200秒时限内通过，旧中断/超时原因仍未知。当前重点是完成剩余恢复矩阵和双角色完整链。上一批V13鲁智深world在原1200秒时限内通过，最后时间标记约1034秒；逐行耗时已保存。此次使用新鲜实际A，尚不能证明第六批超时原因，也不代表完整恢复已通过。
-
-当前后台新批从全新目录运行全部 61 阶段，保留两角色八个保存/恢复阶段与 52 个异常拒绝阶段。旧批次的局部通过不能拼接为新批次成功；只有会话或进程权威状态确认为结束/不存在才启动后继，不因单次观察超时重启。启动及冷导入证据见[新批记录](../qa/campaign_progress_recovery_20261008/DURABLE_V13_RUN_STARTED_20261014.json)，首次保存见[实际结果](../qa/campaign_progress_recovery_20261008/actual_v13_lu_a_20261014/observation.json)，world见[完整结果](../qa/campaign_progress_recovery_20261008/actual_v13_lu_world_20261014/observation.json)。
+后台V2已记录原执行器的实际退出，当前没有继续运行该失败批。原V13及前代超时/意外中断证据均保留；后继不转移局部资格、不改变完整谓词或时限。此次结果揭示的是终局读取检查失败，不代表旧超时原因或游戏性能结论。
 
 ## 后续顺序
 
-1. 定位并解决恢复测试超时，取得完整 61 阶段实际通过结果。
+1. 验证并修正终局文件行比较问题，完成独立审查，取得双角色完整61阶段实际通过结果。
 2. 验证原 19 类持久化故障、载入边界和真实错误界面的同对象重试。
 3. 完成真实 Steam 程序、账号、云保存重试与奖励只生效一次的验收。
 4. 回归八章动态玩法、九玩法完整流程、全库美术及多尺寸 UI。

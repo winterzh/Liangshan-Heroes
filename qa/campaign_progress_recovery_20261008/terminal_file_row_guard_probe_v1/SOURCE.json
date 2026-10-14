@@ -1,0 +1,18 @@
+{
+  "schema": "terminal_file_row_guard_probe_source_v1",
+  "candidate": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\terminal_file_row_candidate_v1\\daming_campaign_durable_cross_process_v1.gd",
+    "bytes": 61389,
+    "sha256": "4440c65ab2e8830bd5fcfbdcdad1bf101ddff60b4d08e81b6311730e60448bf9"
+  },
+  "probe": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\terminal_file_row_guard_probe_v1\\numeric_guard_probe_v1.gd",
+    "bytes": 1636,
+    "sha256": "655f37cae6327b07ffd470116fcea17d50bcebb74807639c29f549dbe7d2358b"
+  },
+  "guard_exact_candidate_text": "\tvar size_type := typeof(row.bytes)\n\tvar safe_size := false\n\tif size_type == TYPE_INT:\n\t\tsafe_size = row.bytes >= 0 and row.bytes <= 9007199254740991\n\telif size_type == TYPE_FLOAT:\n\t\tsafe_size = is_finite(row.bytes) and row.bytes >= 0.0 and row.bytes <= 9007199254740991.0 and floor(row.bytes) == row.bytes\n",
+  "expected_cases": 23,
+  "native_started": false,
+  "full_chain_qualified": false,
+  "only_numeric_guard_diagnostic": true
+}

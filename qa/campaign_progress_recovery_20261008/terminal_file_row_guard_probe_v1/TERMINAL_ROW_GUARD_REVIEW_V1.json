@@ -1,0 +1,91 @@
+{
+  "schema": "terminal_file_row_guard_independent_review_v1",
+  "review_revision": 1,
+  "independent": true,
+  "reviewer": "world_timing_review_v13",
+  "reviewed_at": "2026-10-14T10:58:28.748758+00:00",
+  "source_review_passed": true,
+  "static_api_closure_passed": true,
+  "approved_stages": [
+    "read_only_numeric_guard_diagnostic"
+  ],
+  "source_manifest_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\terminal_file_row_guard_probe_v1\\SOURCE.json",
+    "bytes": 1119,
+    "sha256": "5fd6ba5f85967b318abc017f3648cf9b856220ac23b8818084be08a3c081fd4b"
+  },
+  "probe_sha256": "655f37cae6327b07ffd470116fcea17d50bcebb74807639c29f549dbe7d2358b",
+  "candidate_sha256": "4440c65ab2e8830bd5fcfbdcdad1bf101ddff60b4d08e81b6311730e60448bf9",
+  "source_pins": {
+    "candidate": {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\terminal_file_row_candidate_v1\\daming_campaign_durable_cross_process_v1.gd",
+      "bytes": 61389,
+      "sha256": "4440c65ab2e8830bd5fcfbdcdad1bf101ddff60b4d08e81b6311730e60448bf9"
+    },
+    "probe": {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\terminal_file_row_guard_probe_v1\\numeric_guard_probe_v1.gd",
+      "bytes": 1636,
+      "sha256": "655f37cae6327b07ffd470116fcea17d50bcebb74807639c29f549dbe7d2358b"
+    }
+  },
+  "findings": [],
+  "guard_exact_candidate_fragment_verified": true,
+  "guard_function_body_contains_only_exact_fragment_and_return": true,
+  "case_count": 23,
+  "unique_case_ids": [
+    "int_zero",
+    "int_positive",
+    "float_zero",
+    "float_positive",
+    "JSON_positive",
+    "int_max_safe",
+    "float_max_safe",
+    "int_unsafe",
+    "float_unsafe",
+    "int_max",
+    "negative_int",
+    "negative_float",
+    "fraction",
+    "tiny_fraction",
+    "nan",
+    "positive_inf",
+    "negative_inf",
+    "bool_true",
+    "bool_false",
+    "null",
+    "string",
+    "array",
+    "dictionary"
+  ],
+  "coverage": [
+    "valid TYPE_INT and TYPE_FLOAT zero/807",
+    "actual JSON.parse_string 807",
+    "int/float 2^53-1 acceptance",
+    "int/float 2^53 refusal and int64 maximum refusal",
+    "negative integers/floats and fractional values",
+    "NaN and positive/negative infinities",
+    "bool/null/string/Array/Dictionary refusal"
+  ],
+  "script_scope": {
+    "SceneTree_only": true,
+    "no_project_loads_or_user_data_APIs": true,
+    "no_file_reads_writes": true,
+    "no_gameplay_yields": true,
+    "only_stdout_observation_and_exit": true,
+    "run_requires_fresh_external_empty_scratch_without_project_godot": true,
+    "must_use_original_OwnedSerialBatch_idle60_lease_error_terminal_checks": true
+  },
+  "native_started": false,
+  "numeric_guard_diagnostic_qualified": false,
+  "actual_terminal_file_validation_qualified": false,
+  "durable_chain_and_matrices_qualified": false,
+  "full_chain_qualified": false,
+  "overall_goal_qualified": false,
+  "whole_goal_qualified": false,
+  "original19_faults_qualified": false,
+  "SDK_reward_once_qualified": false,
+  "UI_qualified": false,
+  "game_performance_qualified": false,
+  "device_qualified": false,
+  "scope_limit": "Source-only admission for the exact isolated guard diagnostic, not the full candidate consumer. Exact extraction ties predicate text to the pinned candidate; 23 cases observe real native TYPE_INT/FLOAT/JSON and malformed/nonfinite/unsafe boundaries. No native process ran in review. Guard observations do not prove real file IO, path or SHA comparisons, durable restoration or any full goal acceptance."
+}

@@ -1,0 +1,1 @@
+V14独立后台宿主：复用已审查V13观察方法，仅固定指向新V14 producer/spec/review；同一原始JSON字节哈希与解析绑定、执行前全部pin重核、真实Popen持有到wait、隐藏窗口启动及最终退出记录保留。原生owner仍为V14完整执行器，61阶段/lease/idle60/失败停和全部原实际门槛不变。默认source-only，不运行Godot，不授恢复或全目标资格。须新独立宿主审查准入。

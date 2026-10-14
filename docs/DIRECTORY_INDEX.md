@@ -1,3 +1,22 @@
+## 2026-10-14：V14完整新批入口
+
+- `qa/campaign_progress_recovery_20261008/actual_v14_background_start_20261014/`：真实后台启动原始记录，观察时0/61。
+- `qa/campaign_progress_recovery_20261008/actual_terminal_row_guard_diagnostic_20261014/`：23类型/数值边界原生诊断实际通过。
+- `qa/campaign_progress_recovery_20261008/DURABLE_CHAIN_SOURCE_SPEC_V14.json`、`DURABLE_CHAIN_INDEPENDENT_REVIEW_V14.json`：完整来源和独立准入。
+- `qa/campaign_progress_recovery_20261008/BACKGROUND_HOST_SOURCE_V14_V1.json`、`BACKGROUND_HOST_INDEPENDENT_REVIEW_V14_V1.json`、`BACKGROUND_HOST_V14_V1_README.md`：独立后台源码、准入与说明。
+
+## 2026-10-14：终局数值类型诊断
+
+- `qa/campaign_progress_recovery_20261008/actual_terminal_row_type_diagnostic_20261014/`：Godot原生JSON类型差异实际确认，PID3928退出0/错误0/锁释放；原receipt/checkpoint/log与宿主源码逐字节保存。
+- `qa/campaign_progress_recovery_20261008/terminal_file_row_guard_probe_v1/`：23个数值类型/边界拒绝诊断来源；不代替全链资格。
+
+## 2026-10-14：全24捕获、终局失败与后继候选
+
+- `qa/campaign_progress_recovery_20261008/actual_v13_background_lu_capture_all24_20261014/`：新增20例原始报告、日志、实际A清单及全24汇总；首4例原归档复核。
+- `qa/campaign_progress_recovery_20261008/actual_v13_background_lu_terminal_failure_20261014/`：30/61通过后的D失败终态、宿主退出、B/C/D实际记录；不含裸CFG。
+- `qa/campaign_progress_recovery_20261008/terminal_file_row_candidate_v1/`：严格安全整数/逐字段文件行比较候选、来源和只读Godot类型诊断。
+- `tools/prepare_durable_terminal_file_row_inputs_v1.py`、`tools/run_durable_campaign_chain_v14.py`：后继来源准备与完整61阶段执行器；需独立准入。
+
 ## 2026-10-14：V13 后台新批前4个 Lu capture 原始证据
 
 恢复QA actual_v13_background_lu_capture_first4_20261014/ 按例保存原report/native.log/actual_A_manifest与观察摘要。每例443项、退出0/错误0，记录时8/61；全24及完整批仍待实际完成。

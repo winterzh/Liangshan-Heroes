@@ -1,0 +1,139 @@
+{
+  "schema": "durable_v13_background_terminal_failure_observation_v1",
+  "batch": "D:\\CodexTemp\\lsh-durable-chain-v13-background-20261014\\durable_chain_335e5ef3",
+  "complete": false,
+  "overall_goal_qualified": false,
+  "completed_native_stages": 30,
+  "expected_native_stages": 61,
+  "attempted_native_stages": 31,
+  "failed_stage": "lu_d_read_terminal",
+  "failed_pid": 45928,
+  "failed_checks": [
+    {
+      "detail": "continue/v1/local_runs/5c499fb8b669fb4f1d72d0788031e764/5088120/1/record_0000000001.json",
+      "label": "fresh process profile file bytes exact",
+      "passed": false
+    }
+  ],
+  "engine_errors": 0,
+  "producer_exit_code": 1,
+  "real_Popen_wait_completed": true,
+  "lock_released": true,
+  "all24_lu_capture_checks": 10654,
+  "lu_B_checks": 377,
+  "lu_C_checks": 264,
+  "terminal_journal_three_files_actual_bytes_and_sha_equal": [
+    {
+      "expected": {
+        "bytes": 807,
+        "relative_user_path": "continue/v1/local_runs/5c499fb8b669fb4f1d72d0788031e764/5088120/1/record_0000000001.json",
+        "sha256": "d143e21a859d041a6f3c71399fe7a944417ba139cf2830bea00d569ffb818334"
+      },
+      "actual": {
+        "path": "D:\\CodexTemp\\lsh-durable-chain-v13-background-20261014\\durable_chain_335e5ef3\\profiles\\lu_chain\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\continue\\v1\\local_runs\\5c499fb8b669fb4f1d72d0788031e764\\5088120\\1\\record_0000000001.json",
+        "bytes": 807,
+        "sha256": "d143e21a859d041a6f3c71399fe7a944417ba139cf2830bea00d569ffb818334"
+      }
+    },
+    {
+      "expected": {
+        "bytes": 1423,
+        "relative_user_path": "continue/v1/local_runs/5c499fb8b669fb4f1d72d0788031e764/5088120/1/record_0000000002.json",
+        "sha256": "6a583891e97953e020493bf451b6087cc84e303af8a7b54b86dfe8ff7f283bbe"
+      },
+      "actual": {
+        "path": "D:\\CodexTemp\\lsh-durable-chain-v13-background-20261014\\durable_chain_335e5ef3\\profiles\\lu_chain\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\continue\\v1\\local_runs\\5c499fb8b669fb4f1d72d0788031e764\\5088120\\1\\record_0000000002.json",
+        "bytes": 1423,
+        "sha256": "6a583891e97953e020493bf451b6087cc84e303af8a7b54b86dfe8ff7f283bbe"
+      }
+    },
+    {
+      "expected": {
+        "bytes": 1631,
+        "relative_user_path": "continue/v1/local_runs/5c499fb8b669fb4f1d72d0788031e764/5088120/1/record_0000000003.json",
+        "sha256": "edee03f38ea911397cb5aa521bc5b23791f52a90b14937c5a13842e17ac644a3"
+      },
+      "actual": {
+        "path": "D:\\CodexTemp\\lsh-durable-chain-v13-background-20261014\\durable_chain_335e5ef3\\profiles\\lu_chain\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\continue\\v1\\local_runs\\5c499fb8b669fb4f1d72d0788031e764\\5088120\\1\\record_0000000003.json",
+        "bytes": 1631,
+        "sha256": "edee03f38ea911397cb5aa521bc5b23791f52a90b14937c5a13842e17ac644a3"
+      }
+    }
+  ],
+  "hypothesis": "Godot Dictionary equality distinguishes live int file length from JSON parsed float; requires native type diagnostic, not proven yet",
+  "no_bare_CFG_or_private_profile_copied": true,
+  "raw_files": [
+    {
+      "archive_relative": "qa/campaign_progress_recovery_20261008/actual_v13_background_lu_terminal_failure_20261014/receipt.json",
+      "path": "D:\\CodexTemp\\lsh-durable-chain-v13-background-20261014\\durable_chain_335e5ef3\\receipt.json",
+      "bytes": 3206341,
+      "sha256": "a482cd3b98a629faa85a326ddd62f1feedef94433a8fa0182d434884a5521d0f"
+    },
+    {
+      "archive_relative": "qa/campaign_progress_recovery_20261008/actual_v13_background_lu_terminal_failure_20261014/checkpoint.json",
+      "path": "D:\\CodexTemp\\lsh-durable-chain-v13-background-20261014\\durable_chain_335e5ef3\\checkpoint.json",
+      "bytes": 3286372,
+      "sha256": "e90fea9b187ee5a54d0ac2290fc503c1ee56dfdc3759e21fb2def35d069b300e"
+    },
+    {
+      "archive_relative": "qa/campaign_progress_recovery_20261008/actual_v13_background_lu_terminal_failure_20261014/host_exit.json",
+      "path": "D:\\CodexTemp\\lsh-durable-chain-v13-background-observer-20261014\\host_exit.json",
+      "bytes": 1624,
+      "sha256": "87ef1b5e56a926de20d4a5ccee45366b4b647ee355a60c1bd6beee7625d1a654"
+    },
+    {
+      "archive_relative": "qa/campaign_progress_recovery_20261008/actual_v13_background_lu_terminal_failure_20261014/producer.stdout.log",
+      "path": "D:\\CodexTemp\\lsh-durable-chain-v13-background-observer-20261014\\producer.stdout.log",
+      "bytes": 14079,
+      "sha256": "9aff2884d5fa150d9744cae79dc454e8af21b98baac8bf1453e56ca5eb3f1863"
+    },
+    {
+      "archive_relative": "qa/campaign_progress_recovery_20261008/actual_v13_background_lu_terminal_failure_20261014/producer.stderr.log",
+      "path": "D:\\CodexTemp\\lsh-durable-chain-v13-background-observer-20261014\\producer.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "archive_relative": "qa/campaign_progress_recovery_20261008/actual_v13_background_lu_terminal_failure_20261014/lu_b_install_settle_resave/report.json",
+      "path": "D:\\CodexTemp\\lsh-durable-chain-v13-background-20261014\\durable_chain_335e5ef3\\steps\\lu_b_install_settle_resave\\B_install_settle_resave\\report.json",
+      "bytes": 86227,
+      "sha256": "83a86444c31ae51852833825843db1b0e0e6bb759f895c76b51b0228dcdc832b"
+    },
+    {
+      "archive_relative": "qa/campaign_progress_recovery_20261008/actual_v13_background_lu_terminal_failure_20261014/lu_b_install_settle_resave/native.log",
+      "path": "D:\\CodexTemp\\lsh-durable-chain-v13-background-20261014\\durable_chain_335e5ef3\\steps\\lu_b_install_settle_resave\\native.log",
+      "bytes": 5365,
+      "sha256": "a5edd3a4c23d1a6301ca1464a8394019d42adb71461fbe025fa7e58ce82a8a5b"
+    },
+    {
+      "archive_relative": "qa/campaign_progress_recovery_20261008/actual_v13_background_lu_terminal_failure_20261014/lu_c_install_finish/report.json",
+      "path": "D:\\CodexTemp\\lsh-durable-chain-v13-background-20261014\\durable_chain_335e5ef3\\steps\\lu_c_install_finish\\C_install_finish\\report.json",
+      "bytes": 53607,
+      "sha256": "934c402faa3355b33a4f59ebbf4a44f23831bd8b04a20120dca207b95b117a56"
+    },
+    {
+      "archive_relative": "qa/campaign_progress_recovery_20261008/actual_v13_background_lu_terminal_failure_20261014/lu_c_install_finish/native.log",
+      "path": "D:\\CodexTemp\\lsh-durable-chain-v13-background-20261014\\durable_chain_335e5ef3\\steps\\lu_c_install_finish\\native.log",
+      "bytes": 5358,
+      "sha256": "4da67994bb30553cc61bfb10aefa31c2718603a0271b7051c41f08a1bfc622e0"
+    },
+    {
+      "archive_relative": "qa/campaign_progress_recovery_20261008/actual_v13_background_lu_terminal_failure_20261014/lu_d_read_terminal/report.json",
+      "path": "D:\\CodexTemp\\lsh-durable-chain-v13-background-20261014\\durable_chain_335e5ef3\\steps\\lu_d_read_terminal\\D_read_terminal\\report.json",
+      "bytes": 6808,
+      "sha256": "70e383056ff4557d22165b94043e63cffd20e5a77dbb9ac20884cbdbd7fbcd3e"
+    },
+    {
+      "archive_relative": "qa/campaign_progress_recovery_20261008/actual_v13_background_lu_terminal_failure_20261014/lu_d_read_terminal/native.log",
+      "path": "D:\\CodexTemp\\lsh-durable-chain-v13-background-20261014\\durable_chain_335e5ef3\\steps\\lu_d_read_terminal\\native.log",
+      "bytes": 501,
+      "sha256": "1cc3fa1d36c5558d3a75962d964bd5612b1402e112fed642242cc92cb4543203"
+    },
+    {
+      "archive_relative": "qa/campaign_progress_recovery_20261008/actual_v13_background_lu_terminal_failure_20261014/lu_c_install_finish/terminal_observation.json",
+      "path": "D:\\CodexTemp\\lsh-durable-chain-v13-background-20261014\\durable_chain_335e5ef3\\steps\\lu_c_install_finish\\C_install_finish\\terminal_observation.json",
+      "bytes": 6653,
+      "sha256": "4babef4eb0f7ecc790d155f7e31e5881e2b3750f7443c4073ed5bfa0445d1ca9"
+    }
+  ]
+}
