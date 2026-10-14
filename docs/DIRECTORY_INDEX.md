@@ -1,3 +1,7 @@
+## 2026-10-14：V14鲁智深实际保存记录
+
+- `qa/campaign_progress_recovery_20261008/actual_v14_background_lu_a_20261014/`：PID10032，317项原生保存检查通过，原report/log及观察。
+
 ## 2026-10-14：V14冷导入实际记录
 
 - `qa/campaign_progress_recovery_20261008/actual_v14_background_cold_20261014/`：PID22536实际cold终态退出0、错误0、原日志SHA与观察；当前1/61。
