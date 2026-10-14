@@ -1,3 +1,7 @@
+## 2026-10-14：V13 后台新批 Lu A 原始证据
+
+恢复QA actual_v13_background_lu_a_20261014/ 保存317项通过的原report/native.log及观察摘要。当前2/61，观察27392/25716的同批后继world与完整终态。
+
 ## 2026-10-14：V13 后台新批启动记录
 
 恢复QA actual_v13_background_restart_20261014/ 保存原dispatch/host_started/cold_native.log及观察摘要。新批335e5ef3、外层27392/宿主25716实际存活，冷导入15548实际通过；当前1/61，完整结果待定。下方旧“未启动”及中断条目按日期范围阅读。
