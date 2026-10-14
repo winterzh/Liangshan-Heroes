@@ -1,3 +1,9 @@
+## 2026-10-14：V14新批完整Lu component矩阵实际通过
+
+新批6eed4c82 lu_component PID34716实际终态退出0、引擎错误0，181规格×两路线共362行、26847项检查和8组正例全部passed；原执行器已登记negative_reports及complete=true。原report/log/actual_A_manifest逐字节封存 `actual_v14_background_lu_component_20261014/`，大小/SHA/PID/nonce及日志SHA回核一致。724份原中间输入/结果证据与完整私有profile/journal保留原批，未复制裸CFG/私有档案或移动删除原证据。
+
+当前4/61，原后台33644/执行器39688继续同一批live capture及后继双角色完整链。原6000秒时限、完整Unit/Contract/真实直接pair、type/IEEE不变和零分配门槛保持。单角色组件通过不授全链、另一角色、原19/UI/SDK/八章九玩法/美术/性能/真人/Android真机或全目标资格。生产代码及Steam版本不变。
+
 ## 2026-10-14：完整V14后继首次/重复通关入口源码准备完成
 
 原first/repeat执行器固定V12依据，后继 `run_campaign_first_repeat_v3.py` 改为完整V14来源及已审查闭合消费者V4，--write-spec/--run要求全部61阶段实际成功和原后台真实Popen.wait退出0；新增原host_exit pin并在全部阶段持续冻结。仅--write-recipe是source-only，不消费成功/不创建原生批，仍需未来具体完整source_spec和独立原生准入。

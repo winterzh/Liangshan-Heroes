@@ -1,3 +1,7 @@
+## 2026-10-14：V14完整Lu组件实际记录
+
+- `qa/campaign_progress_recovery_20261008/actual_v14_background_lu_component_20261014/`：181规格/362行/26847项/8正例实际通过；原report/log/A清单及观察，724份原输入/结果证据保留外部批次。
+
 ## 2026-10-14：完整V14首次/重复后继入口
 
 - `tools/run_campaign_first_repeat_v2.py`、`FIRST_REPEAT_SOURCE_RECIPE_V2.json`、恢复QA `first_repeat_v14_candidate_v1/`：持续来源遗漏被独立审查拒绝的V2，保留。
