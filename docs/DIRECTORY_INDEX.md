@@ -1,3 +1,7 @@
+## 2026-10-14：V13 后台新批 Lu component 原始证据
+
+恢复QA actual_v13_background_lu_component_20261014/ 保存362行/26847项/8正例通过的原report/native.log/actual_A_manifest及观察摘要。724原证据仍在原私有批；当前4/61，27392/25716接续capture及完整后继，全部资格仍待原对应实际验收。
+
 ## 2026-10-14：V13 后台新批 Lu world 原始证据
 
 恢复QA actual_v13_background_lu_world_20261014/ 保存264行/1540项通过的原report/native.log/actual_A_manifest及观察/完整时间摘要。当前3/61，继续27392/25716原后台完整链；完整资格仍未取得。

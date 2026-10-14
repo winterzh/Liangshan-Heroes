@@ -1,3 +1,9 @@
+## 2026-10-14：V13 后台新批完整 Lu component 矩阵实际通过
+
+新批335e5ef3的lu_component PID38652正常终态退出0、引擎错误0，181规格×两路线共362行、26847项检查及8组正例全部passed；原执行器已校验并登记negative_reports。原report/log/actual_A_manifest逐字节封存恢复QA `actual_v13_background_lu_component_20261014/`，大小/SHA/PID/nonce与原日志SHA全部回核。724份原中间证据及完整private profile/journal仍保留原批，未移动删除或上传裸CFG/私有profile。
+
+后台外层27392/原执行器25716实际存活，当前4/61阶段通过，接续同一原执行器的live capture及后继ABCD/负例/另一角色。原6000秒组件时限和全部Unit/Contract/真实直接pair、完整输入type/IEEE、不可变/零分配检查保留。单角色组件通过不等于全链、原19故障/真实UI重试/SDK一次性、八章九玩法、美术、性能或真机资格；原完整目标保持。
+
 ## 2026-10-14：V13 后台新批完整 Lu world 矩阵实际通过
 
 新批335e5ef3的lu_world PID32980正常终态退出0、引擎错误0，264行及1540项检查全部passed，原执行器已登记negative_reports。原report/log/actual_A_manifest逐字节封存 `actual_v13_background_lu_world_20261014/`，另存完整264行耗时摘要与观察；原大小/SHA/PID/nonce、log SHA及264对时间标记与报告顺序全部回核一致。后台27392/25716实际存活，当前3/61阶段通过，同一原执行器接续组件。
