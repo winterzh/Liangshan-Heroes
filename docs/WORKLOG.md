@@ -1,3 +1,11 @@
+## 2026-10-15：V16冷导入通过及后继完整首次/重复入口准备
+
+当前95e6addc冷导入实际PID10572/exit0/errors0/process_terminal/complete；原日志SHA5fcbca61…和当时1阶段checkpoint快照逐字节封存 `actual_v16_background_cold_20261015/`，不把可变checkpoint当成功整批收据。Lu A PID23652实际315项全部通过、正常退出0/errors0，真实首次完整保存资格已登记，reportSHA440414ce…/slotSHA351d4e27…及原log逐字节封存 `actual_v16_background_lu_a_20261015/`，不复制裸CFG/private档案。实际本批315检查而不是将旧V14的317套用。外层44296仍持有原执行器46780，同批已完成2/61，继续Lu world/component/live24和其后ABCD/另一角色，完整8+52/61及后续范围不变。
+
+新 `tools/campaign_file_fault_prior_v5.py` 和 `closed_v16_prior_consumer_v1/`已独立源码审查：仅V14→V16固定来源标识，61终态/完整8+52/report/evidence/三代journal、same-raw review/spec/hostrecipe、12源pin和全command序列+实际后台wait退出0全保留。32unique sources/15Python/31edges闭合，真实旧V14失败receipt及当前V16 checkpoint均被拒绝；approved_stages=[]，没有消费成功prior。
+
+新 `tools/run_campaign_first_repeat_v5.py` 和 `first_repeat_v16_candidate_v2/`仅升级V16完整基础与已初审closed消费者，原自然first/restart_first/repeat/restart_repeat四模式和cold共5进程、74/21/80/21完整checks、原GD/normal time/同一private profile/真实CFG/journal证据及原Suite方法保持。原V4 source-only预检发现candidatepin路径仍指旧V4prior而真实拒绝，保留未执行源码；新V5只修此pin，不改原生行为。source-only recipe logical771fb184…实际生成并经独立源码审查，137recipe pins/importedges122，加完整inputs/metadata/overlay/Core契约的union202 sources/64Python/228edges闭合核验；closed consumer/background原pin持续采纳，--write-spec/--run仍必须实际V16全61完整成功和original host_exit wait0、exact新原生准入。approved_stages=[]，当前没有运行后继或授完整原19/UI/SDK/全目标资格。生产main/Steam保持，正常性能/美术/八章九玩法/真人/Android仍开放。
+
 ## 2026-10-15：V16全新完整61阶段后台已实际派发
 
 v3运输primitive实际33/33 PASS后，V16全链source seal（logical e46433e0…）及原149来源/API/35模块105import edges已重新独立审查，后台入口12pins、固定command、same-raw JSON/copy来源、CREATE_NO_WINDOW/shellFalse/真实Popen.wait亦独立通过。新外层44296持有原执行器46780；CIM完整CLI/父子关系实际存在，`host_started.json`与派发原文按字节封存 `actual_v16_background_start_20261015/`。全新外部work和observer，原V14/V15失败/停用资料及private现场保留。已启动只表示执行器存在，尚无61成功或实际D资格。

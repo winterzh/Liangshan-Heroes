@@ -1,0 +1,5 @@
+# First/repeat after closed V16
+
+Source-only successor of reviewed V3. New V16 full basis and closed prior consumer; unchanged native first/repeat GD, evidence/runtime/export components and inherited production/native checks. Five fresh private processes include cold import plus first, restart_first, repeat, restart_repeat with complete 74/21/80/21 label sets, same actual private profile, normal time, exact physical CFG and full evidence custody. Source recipe preparation requires the new closed consumer preliminary review, imports it and all source/background pins into continuous integrity. Actual source spec and --run require complete successful original V16 receipt AND real original background host wait exit0, plus new exact independent native admission. A running checkpoint grants no admission; no partial prior transfer. Full original19/UI/SDK/goal remains open.
+
+V2 source-only preflight successor fixes the one candidate file-pin path to the already imported V5 closed consumer. The original V4 failed preflight is retained, never executed native. Five native processes and full conditions unchanged.

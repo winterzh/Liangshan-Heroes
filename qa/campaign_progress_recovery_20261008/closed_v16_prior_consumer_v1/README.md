@@ -1,0 +1,3 @@
+# Closed V16 prior consumer
+
+Source-only successor for later first/repeat, original19 and UI admission. Only fixed V14 version paths become V16. Exact 61 terminal PIDs/nonces, 8+52 reports, whole evidence pins, full three-generation journals, original source spec/admission/producer and actual background Popen.wait exit0, same-raw recipe/review and full 12-pin command binding retained. Running checkpoint or failure receipt is rejected; no synthetic success or partial transfer. All successful-native qualification remains false until actual V16 batch and its host exit complete. New independent consumer review is required before successor admission.
