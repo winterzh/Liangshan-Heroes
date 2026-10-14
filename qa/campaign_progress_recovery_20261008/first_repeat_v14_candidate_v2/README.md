@@ -1,0 +1,1 @@
+首次/重复通关后继V3：原V2独立审查发现闭合消费者初审source_pins只初次复核，未全部纳入后继每阶段完整来源；原V2和拒绝证据保留。V3将闭合consumer全部7 source_pins及其后台recipe全部12固定pins冲突检查后加入返回spec.pins，以继承integrity在每阶段前后持续检查；source-only recipe不能放行native，仍须完整61成功收据+后台真实退出0+具体新独立准入。自然first/repeat/restarts、5进程74/80/21/21检查及原native GD/正常时钟/私有profile/Steam禁用/lease/Popen不变。

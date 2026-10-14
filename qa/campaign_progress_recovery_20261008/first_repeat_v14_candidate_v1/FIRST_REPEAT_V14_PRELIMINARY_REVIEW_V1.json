@@ -1,0 +1,91 @@
+{
+  "schema": "first_repeat_v14_preliminary_review_v1",
+  "review_revision": 1,
+  "independent": true,
+  "reviewer": "world_timing_review_v13",
+  "reviewed_at": "2026-10-14T11:41:21.517679+00:00",
+  "source_review_passed": false,
+  "static_api_closure_passed": false,
+  "approved_stages": [],
+  "source_only": true,
+  "producer_sha256": "a705a229cd359bdc96641f595a24876a9c259d6d0aad622e93ce97fcffc1663c",
+  "source_manifest_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\first_repeat_v14_candidate_v1\\SOURCE.json",
+    "bytes": 1489,
+    "sha256": "aaac1b2827ae7499164afd485608a5d91366fa4715f0dafdc46af93eed3585b6"
+  },
+  "source_recipe_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\FIRST_REPEAT_SOURCE_RECIPE_V2.json",
+    "bytes": 1220272,
+    "sha256": "07e11d190b9f5694c0976baa3b9fa49513e72ed5faaacd8cca4f5fbf047d4e50"
+  },
+  "source_recipe_logical_sha256": "4515153f5a375036239edc0dec3079397f01add7e7e566bc50b3454859bb17b6",
+  "declared_source_pins": {
+    "candidate": {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\run_campaign_first_repeat_v2.py",
+      "bytes": 15990,
+      "sha256": "a705a229cd359bdc96641f595a24876a9c259d6d0aad622e93ce97fcffc1663c"
+    },
+    "predecessor": {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\run_campaign_first_repeat_v1.py",
+      "bytes": 14692,
+      "sha256": "400d431a0597cfb7a57da8d052333a5248837c38136d3fb6d10dd3c40fbf996d"
+    },
+    "closed_prior_consumer": {
+      "path": "D:\\AI项目\\水浒\\开发工程\\tools\\campaign_file_fault_prior_v4.py",
+      "bytes": 10295,
+      "sha256": "2f1d01fbd048bd0d626229e12c87449037ccda0f821587c980dbf9eb774d1ca3"
+    },
+    "closed_prior_review": {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\closed_v14_prior_consumer_v2\\CLOSED_V14_PRIOR_CONSUMER_PRELIMINARY_REVIEW_V2.json",
+      "bytes": 6165,
+      "sha256": "7594599d7aab4b61e768109ae7a371308b2e7979acb6c7227d40a5e1cfd1352b"
+    },
+    "native_candidate_unchanged": {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\original19_first_repeat_candidate_v1\\campaign_original19_first_repeat_v1.gd",
+      "bytes": 21899,
+      "sha256": "53e4e3a10ef6107f095ae1df9be355308200a99fee444dc68f912418ac6803ab"
+    }
+  },
+  "checks_performed": {
+    "actual_source_recipe_recomputed_equal_saved_without_prior_success": true,
+    "source_union_pins_verified": 180,
+    "Python_AST_modules_compiled": 59,
+    "local_import_edges": 212,
+    "missing_local_import_pins": [],
+    "complete_V1_diff_reviewed": true,
+    "all_Suite_methods_except_init_AST_exact_V1": true,
+    "five_process_and_four_mode_sequence_preserved": true,
+    "complete_label_counts": {
+      "first": 74,
+      "repeat": 80,
+      "restart_first": 21,
+      "restart_repeat": 21
+    },
+    "actual_V13_failed_receipt_refused": "Exact prior schema/run/path",
+    "base_files": 5132,
+    "overlays": 27,
+    "same_original_identity_helper_preserved": true,
+    "same_profile_native_Popen_exports_evidence_CFG_journal_clock_noQA_Steam_isolation_idle60_lease_retained": true
+  },
+  "findings": [
+    {
+      "priority": "blocking",
+      "field": "source_recipe prior_review.source_pins -> pins; Suite.integrity evidence closure",
+      "problem": "All seven closed-V14 preliminary review source pins are checked once but are not merged into the returned source pin inventory. The actual sealed recipe union lacks BACKGROUND_HOST_SOURCE_V14_V1.json and BACKGROUND_HOST_INDEPENDENT_REVIEW_V14_V1.json (and declared predecessor V3). Suite remembers only the original host_exit and prior all_evidence/native logs; inherited integrity verifies spec.pins and remembered evidence. The background recipe/admission may therefore change after initial closed-prior validation without detection during the five successor phases, despite the claimed complete continuous source binding.",
+      "evidence": "Recomputed source recipe equals saved logical4515153f...; full union180 pins has neither background recipe nor background admission. Both appear in prior_review.source_pins and are only initially verify_pin checked.",
+      "repair": "Preserve V2/recipe/rejection; create immutable successor that merges every prior_review.source_pins row into the returned pins with conflict checks before using them. Keep their original exact bytes and existing host_exit remember. Recompute successor source recipe and independently review continuous integrity closure."
+    }
+  ],
+  "native_started": false,
+  "successful_V14_prior_consumed": false,
+  "normal_first_repeat_cases_and_restarts_qualified": false,
+  "original19_qualified": false,
+  "SDK_reward_once_qualified": false,
+  "UI_qualified": false,
+  "overall_goal_qualified": false,
+  "whole_goal_qualified": false,
+  "game_performance_qualified": false,
+  "device_qualified": false,
+  "scope_limit": "Finite source-only hash/AST/import/complete-diff/API review and actual recomputation of the source recipe, plus refusal of a real failed V13 receipt. No Godot/native process, fixture or fake success evidence was created. Complete V14 batch is still running and no checkpoint is consumed as success. The five-stage successor cannot receive native admission until its missing background source/admission pins are incorporated into continuous source integrity and the real61-stage prior closes successfully."
+}

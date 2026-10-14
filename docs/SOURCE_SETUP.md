@@ -1,3 +1,11 @@
+## 2026-10-14：完整V14后继首次/重复通关入口源码准备完成
+
+原first/repeat执行器固定V12依据，后继 `run_campaign_first_repeat_v3.py` 改为完整V14来源及已审查闭合消费者V4，--write-spec/--run要求全部61阶段实际成功和原后台真实Popen.wait退出0；新增原host_exit pin并在全部阶段持续冻结。仅--write-recipe是source-only，不消费成功/不创建原生批，仍需未来具体完整source_spec和独立原生准入。
+
+V2初次复核closed review来源后未将其全部加入后继持续核验，被独立审查拒绝；原V2/来源/拒绝保留。V3把全部7闭合来源及后台全部12pins冲突核对后纳入返回pins，source-only预检logical038000c3e1c594e6a60c2435891e10943c202535bb5acfeea5a327e98916179c，独立源码审查通过（union190来源、62Python/217imports），approved_stages=[]。记录见 `first_repeat_v14_candidate_v2/` 与 `FIRST_REPEAT_SOURCE_RECIPE_V3.json`。原GD、全部Suite方法（仅batch schema例外）、自然首次/重复与同profile普通重启、5进程/74/80/21/21完整检查、真实CFG/三代journal/原evidence、正常时钟、Steam禁用/no QA、lease/idle60/Popen保持。真实失败V13receipt拒绝，没有假成功或实际V14成功消费。
+
+当前原V14仍在Lu组件矩阵，3/61完整阶段已通过；局部通过不能执行此后继。生产文件不变；全部双角色/52负例、原19持久化故障/真实UI重试/SDK奖励一次性/八章九玩法/美术/性能/真人/Android完整目标保持。
+
 ## 2026-10-14：V14新批完整Lu world矩阵实际通过
 
 新批6eed4c82 lu_world PID46172实际终态退出0、引擎错误0，264行及1540项检查全部passed，原执行器已登记negative_reports并complete=true。原report/log/actual_A_manifest逐字节归档 `actual_v14_background_lu_world_20261014/`；完整264对被动时间标记与报告case/route顺序相同，另存完整耗时摘要。原SHA/PID/nonce及各输入来源回核一致，不复制裸CFG/私有profile，原现场保留。

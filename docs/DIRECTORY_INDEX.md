@@ -1,3 +1,8 @@
+## 2026-10-14：完整V14首次/重复后继入口
+
+- `tools/run_campaign_first_repeat_v2.py`、`FIRST_REPEAT_SOURCE_RECIPE_V2.json`、恢复QA `first_repeat_v14_candidate_v1/`：持续来源遗漏被独立审查拒绝的V2，保留。
+- `tools/run_campaign_first_repeat_v3.py`、`FIRST_REPEAT_SOURCE_RECIPE_V3.json`、恢复QA `first_repeat_v14_candidate_v2/`：全闭合/后台来源持续核验的V3，独立源码通过，尚未执行native。
+
 ## 2026-10-14：V14完整Lu world实际结果
 
 - `qa/campaign_progress_recovery_20261008/actual_v14_background_lu_world_20261014/`：264行/1540项通过的原report/log/A清单、完整264行被动耗时摘要及观察。

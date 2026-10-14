@@ -1,0 +1,1 @@
+后继首次通关/重复通关与普通重启的5进程执行器V2，固定完整V14依据及已独立审查闭合消费者V4。新增原后台host_exit第一字节pin和运行全程不可变核验；source-only recipe分支不消费成功资格。--write-spec/--run需全部61实际成功+原后台退出0和具体新独立执行准入。原自然路由、74/80/21/21完整标签、真实CFG/三代journal、同一私有profile、正常时钟、Steam隔离/无QA、原lease/idle60及全部原证据保持。生产源码/native harness不变，完整原19和UI/SDK等尚未验收。

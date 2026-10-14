@@ -47,6 +47,8 @@ Steam 详情见 [2026-10-09 发布收据](../qa/steam_release_20261009/release_c
 
 **V14完整新批已启动。** 文件行比较只改QA consumer，原生产保存/恢复模块不变；JSON类型及23个数值边界原生诊断均通过，完整执行器与后台入口已独立审查。新外层33644/执行器39688继续同一批6eed4c82；cold PID22536及Lu A PID10032实际退出0、错误0，首次保存317项及Lu world264行/1540项通过，world PID46172退出0/错误0，当前3/61，同一执行器继续component和双角色完整61阶段。见[启动记录](../qa/campaign_progress_recovery_20261008/actual_v14_background_start_20261014/observation.json)。原V13局部通过不转移为V14资格，其他交付门槛不变。
 
+首次/重复自然通关及同档重启的V14后继入口也已准备并经独立源码审查；完整5进程与74/80/21/21检查保持，所有闭合/后台来源持续核验。只作源码准备，仍需实际61完整成功与具体原生准入。
+
 后继原19/UI入口的V14完整闭合消费者已准备并经独立源码审查通过：要求61阶段成功和实际后台退出0，拒绝运行中checkpoint及失败receipt。当前只作源码准备，尚未执行后继原生测试。见 `closed_v14_prior_consumer_v2/`。
 
 **V13 后台新批已在终局读取检查失败，整批未通过。** `durable_chain_335e5ef3` 真实宿主退出1、Popen.wait完成、锁释放；31阶段尝试、30/61通过。鲁智深全24捕获用例10654项及world264/1540、component362/26847、首次保存317、载入再存377、自然终局264项已通过。D PID45928唯一失败是终局文件行相等检查；三个原文件实际大小/SHA与C交接相同，空外部scratch原生诊断已确认整数/JSON浮点数导致Dictionary相等false（退出0、错误0），不涉及玩家档案。见[全24实际记录](../qa/campaign_progress_recovery_20261008/actual_v13_background_lu_capture_all24_20261014/observation.json)和[终局失败记录](../qa/campaign_progress_recovery_20261008/actual_v13_background_lu_terminal_failure_20261014/observation.json)。后继V14只修测试文件行比较，准备后经独立审查再运行新鲜完整批，不修改原失败批或生产模块。
