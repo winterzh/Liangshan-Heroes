@@ -1,3 +1,9 @@
+## 2026-10-14：第五批鲁智深首次保存通过
+
+当前 durable_chain_9009283d 原 session75405 / host42756 继续存活。cold_import 41580 与 lu_a_single_save 41320 均实际终态退出0、引擎错误0；Lu A 原报告293项全部passed，原PID/nonce/report大小/SHA/native.log SHA独立回核一致。报告与日志原字节封存 actual_fifth_v12_lu_a_20261014/，不复制私有profile或裸CFG。当前仅2/61阶段完成，整批及原19/UI/SDK/八章九玩法/美术/性能/Android仍未完成。
+
+下一步world矩阵按原串行器等待共享锁；实际外部盲盒recovery宿主38232/37504与Godot43328持有资源，未操作对方进程或锁。同一水浒执行器会继续等待，观察超时不重启。
+
 ## 2026-10-14：完整恢复 V12 第五批已启动
 
 另一项目聊天已 idle/completed，实际进程清单无 Godot 或测试 Python；既定 stable 与本地 HEAD 均为 f2ad04ffe7b1ec72c9c5b1ac35d7b42360ac0b02。原 V12 预检实际退出 0，logical SHA 867bd2d1b78339f357200e4dca344d14fb38a05c39f3e7906fe3f11507b60209，与原独立准入完全一致。使用全新外部目录 durable_chain_9009283d 启动第五批，保留原四批失败，不复用旧存档。

@@ -1,3 +1,9 @@
+## 2026-10-14：第五批鲁智深首次保存通过
+
+当前 durable_chain_9009283d 原 session75405 / host42756 继续存活。cold_import 41580 与 lu_a_single_save 41320 均实际终态退出0、引擎错误0；Lu A 原报告293项全部passed，原PID/nonce/report大小/SHA/native.log SHA独立回核一致。报告与日志原字节封存 actual_fifth_v12_lu_a_20261014/，不复制私有profile或裸CFG。当前仅2/61阶段完成，整批及原19/UI/SDK/八章九玩法/美术/性能/Android仍未完成。
+
+下一步world矩阵按原串行器等待共享锁；实际外部盲盒recovery宿主38232/37504与Godot43328持有资源，未操作对方进程或锁。同一水浒执行器会继续等待，观察超时不重启。
+
 ## 2026-10-14：项目现状与导航整理
 
 PROJECT_STATUS.md 置顶简明总览，整理当前开发位置、main/stable/Steam版本、生产与恢复候选边界、61阶段第五批实际运行状态，以及原19/UI/SDK/八章九玩法/美术/性能/真机完整后续顺序。根README与目录索引增加直接入口，保留全部历史正文、来源记录和失败批；不移动删除文件，不改变游戏或发布内容。运行中同一 session75405 / host42756，冷导入已通过，完整结果待定；查当前checkpoint后继续，不重复启动。
