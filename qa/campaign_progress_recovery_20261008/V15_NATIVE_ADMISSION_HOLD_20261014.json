@@ -1,0 +1,94 @@
+{
+  "schema": "durable_v15_native_admission_hold_v1",
+  "independent": true,
+  "reviewer": "world_timing_review_v13",
+  "held_at": "2026-10-14T14:17:00.886419+00:00",
+  "approved_stages": [],
+  "V15_native_admission_held": true,
+  "do_not_use_earlier_V15_review_to_execute": true,
+  "original_V15_review_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\DURABLE_CHAIN_INDEPENDENT_REVIEW_V15.json",
+    "bytes": 8117,
+    "sha256": "75286ccfe4e5294a6a2f0fc1ad762a48efed715f04e01048d2fa788054e61fc1"
+  },
+  "original_V15_source_spec_pin": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\DURABLE_CHAIN_SOURCE_SPEC_V15.json",
+    "bytes": 1158392,
+    "sha256": "2e7a6d0f31505001c31d1620412e26070c6eda870596777bd7ff378894d4121a"
+  },
+  "primitive_failure_pins": [
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\actual_terminal_steam_primitive_literal_failure_20261014\\observation.json",
+      "bytes": 2580,
+      "sha256": "871e4afceec2462760ee5f1616c8210ad6f94ca1bdd02b2ac6a85d813f95c78a"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\actual_terminal_steam_primitive_literal_failure_20261014\\receipt.json",
+      "bytes": 9230,
+      "sha256": "082b38e304806d67f650894daa5a0d0b3906cd8f0e573df9e958c6e1b6542716"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\actual_terminal_steam_primitive_literal_failure_20261014\\checkpoint.json",
+      "bytes": 9407,
+      "sha256": "9b6a0e203d4cf5b8c1afde92287f1edd9a2396e5bd4802e662739366fbe71451"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\actual_terminal_steam_primitive_literal_failure_20261014\\steps\\primitive\\report.json",
+      "bytes": 3413,
+      "sha256": "5924ef12f4a410967fa74f6d5b381721382bc5af204caaf8efc58a6ad31091b3"
+    },
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261008\\actual_terminal_steam_primitive_literal_failure_20261014\\steps\\primitive\\native.log",
+      "bytes": 75,
+      "sha256": "b16651cbedbab0a7b519f9e5b498eea40cb33bfb72252e264a7f4c2412765d58"
+    }
+  ],
+  "verified_failure": {
+    "pid": 7124,
+    "exit_code": 1,
+    "engine_errors": 0,
+    "lock_released": true,
+    "checks": 33,
+    "passed": 29,
+    "failed": [
+      {
+        "actual": false,
+        "expected": true,
+        "id": "negative_safe",
+        "passed": false
+      },
+      {
+        "actual": false,
+        "expected": true,
+        "id": "positive_safe",
+        "passed": false
+      },
+      {
+        "actual": true,
+        "expected": false,
+        "id": "negative_zero",
+        "passed": false
+      },
+      {
+        "actual": true,
+        "expected": false,
+        "id": "float_zero_sign",
+        "passed": false
+      }
+    ],
+    "actual_C_transport_passed": true,
+    "actual_failed_D_live_subconditions_not_known": true
+  },
+  "reason": "The V15 static review was written just before the actual V2 primitive failure arrived. Four real native cases contradict the diagnostic expectations. Prior source-only admission is preserved as historical evidence and must not authorize execution of V15; a new immutable successor and independent review are required.",
+  "cause_not_proven": true,
+  "hypothesis_only": "Possible decimal literal rounding and negative-zero constant folding; old report lacks operands/IEEE bytes. Do not present this as established cause.",
+  "native_V15_started": false,
+  "durable_chain_and_matrices_qualified": false,
+  "full_chain_qualified": false,
+  "overall_goal_qualified": false,
+  "SDK_reward_once_qualified": false,
+  "original19_faults_qualified": false,
+  "UI_qualified": false,
+  "game_performance_qualified": false,
+  "device_qualified": false
+}

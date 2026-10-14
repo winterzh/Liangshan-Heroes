@@ -1,3 +1,21 @@
+## 2026-10-15：V16全新完整61阶段后台已实际派发
+
+v3运输primitive实际33/33 PASS后，V16全链source seal（logical e46433e0…）及原149来源/API/35模块105import edges已重新独立审查，后台入口12pins、固定command、same-raw JSON/copy来源、CREATE_NO_WINDOW/shellFalse/真实Popen.wait亦独立通过。新外层44296持有原执行器46780；CIM完整CLI/父子关系实际存在，`host_started.json`与派发原文按字节封存 `actual_v16_background_start_20261015/`。全新外部work和observer，原V14/V15失败/停用资料及private现场保留。已启动只表示执行器存在，尚无61成功或实际D资格。
+
+V16原61=冷导入1+双角色完整ABCD8+52负例，原时限、每阶段自然idle60/正常时钟/实际CFG、私有APPDATA/Steam禁用、持续源pin/旧证据核验及原Popen终态持有保持。只观察同一活批，观测超时不重启；真实退出后才回读receipt和host_exit。原19/UI/真实SDK/八章九玩法/全库美术/性能内存/真人/Android等完整范围仍开放。源码/QA同步与完整验收/Steam发布分别记录。
+
+## 2026-10-15：终局Steam运输边界实际33项通过
+
+全新外部scratch 005f9aa9只执行source-bound primitive，没有工程autoload/玩家profile：PID30716实际33/33通过，退出0/引擎错误0、OwnedSerialBatch实际终态与锁释放。完整递归树比较保留keys/数组顺序/标量类型，跨int/float仅安全整数；同float逐IEEE相等含负零。实际C raw重读active_run从INT2变FLOAT3，原Dictionary==false、严格运输比较true；运行时INT构造safe边界及显式IEEE负零负例通过。原report含全部操作数type/value_string/float hex，4份receipt/checkpoint/report/log精确封存 `actual_terminal_steam_transport_primitive_20261014/`。这只证明primitive，不证明旧D即时phase/completion/live状态，也不替代全61。
+
+首次primitive真实29/33失败保留于 `actual_terminal_steam_primitive_literal_failure_20261014/`；v1/v2候选、v1/v2宿主及V15 seal/review均保留。V15原静态review写出后出现primitive反例，已另存 `V15_NATIVE_ADMISSION_HOLD_20261014.json`，禁止用旧V15review运行。新v3 candidate+source-bound primitive宿主已初审；V16仅换v3 QA消费者，仍从原V14全sealed basis重构base5132/26overlays，不转移旧批通过。双角色完整61、原19/UI/SDK/八章九玩法/美术/正常性能/真人/Android和全目标仍开放；本轮生产脚本与main6d一致，Steam不变。
+
+## 2026-10-14：V14终局重启失败与Steam运输检查后继准备
+
+V14 fresh 6eed4c82已真实结束：30/61阶段通过，31尝试；Lu B377项/C264项通过，D PID42304退出1、引擎错误0、57项仅“restart startup has no replay or completion capability”失败。四组终局文件类型/安全整数/路径/大小/SHA检查及实际Campaign CFG重载已通过，前代文件行比较修正有效。原后台Popen.wait实际退出1，锁已释放；Shi未启动。12份receipt/checkpoint/host退出/原日志/B-C-D报告及C交接已逐字节保留在 `actual_v14_background_lu_terminal_failure_20261014/`，不复制裸CFG/私有玩家档案，不移动旧现场。
+
+失败时原聚合只记录last_result，未记录即时phase/completion/live Steam，因此尚不能证明唯一原因。生产Steam active_run原int0与C交接JSON float0的完整Dictionary比较是合理嫌疑。新QA-only `terminal_steam_transport_candidate_v2/`保留原五条件及原聚合label，记录原子检查和完整实时状态；完整树比较仅允许安全整数INT/FLOAT运输差异，字典keys/数组顺序/标量类型及同浮点IEEE保持。v1换行归一/宿主来源绑定不足保留为未执行前身；v2目标块外原字节保持。新probe、V15全61执行器及冻结接入仍是源码准备，须独立审查和实际新批，不转移V14局部资格。原19/UI/真实SDK/八章九玩法/美术/性能/真人/Android与完整目标仍开放，生产main/Steam未变。
+
 ## 2026-10-14：V14新批完整Lu live capture24例实际通过
 
 新批6eed4c82全部24个Lu捕获用例实际通过，共10654项检查，24个独立PID/nonce，全部actual Core.capture/真实live对象/row_completed为true；每个实际终态退出0、引擎错误0，原执行器已逐例登记negative_reports及complete=true。原固定CAPTURE_NEGATIVE_INTERFACE_V25D1原始字节/大小/SHA复核，实际完整24case集合严格相等。前20例归档全部逐字节复核且不重复复制；末4例原report/log/actual_A_manifest和全部24例汇总封存 `actual_v14_background_lu_capture_all24_20261014/`，逐例原大小/SHA/PID/nonce/log/manifest环境SHA一致。裸CFG/私有profile不复制，原现场与所有证据保留。

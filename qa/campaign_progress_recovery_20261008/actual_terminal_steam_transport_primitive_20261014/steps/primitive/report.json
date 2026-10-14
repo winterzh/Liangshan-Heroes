@@ -1,0 +1,497 @@
+{
+	"actual_C_direct_dictionary_equal": false,
+	"all_passed": true,
+	"checks": [
+		{
+			"actual": true,
+			"expected": true,
+			"id": "int_float_zero",
+			"left": {
+				"type": 2,
+				"value_string": "0"
+			},
+			"passed": true,
+			"right": {
+				"ieee_hex": "0000000000000000",
+				"type": 3,
+				"value_string": "0.0"
+			}
+		},
+		{
+			"actual": true,
+			"expected": true,
+			"id": "float_int_zero",
+			"left": {
+				"ieee_hex": "0000000000000000",
+				"type": 3,
+				"value_string": "0.0"
+			},
+			"passed": true,
+			"right": {
+				"type": 2,
+				"value_string": "0"
+			}
+		},
+		{
+			"actual": true,
+			"expected": true,
+			"id": "negative_safe",
+			"left": {
+				"type": 2,
+				"value_string": "-9007199254740991"
+			},
+			"passed": true,
+			"right": {
+				"ieee_hex": "ffffffffffff3fc3",
+				"type": 3,
+				"value_string": "-9007199254740991.0"
+			}
+		},
+		{
+			"actual": true,
+			"expected": true,
+			"id": "positive_safe",
+			"left": {
+				"type": 2,
+				"value_string": "9007199254740991"
+			},
+			"passed": true,
+			"right": {
+				"ieee_hex": "ffffffffffff3f43",
+				"type": 3,
+				"value_string": "9007199254740991.0"
+			}
+		},
+		{
+			"actual": false,
+			"expected": false,
+			"id": "unsafe",
+			"left": {
+				"type": 2,
+				"value_string": "9007199254740992"
+			},
+			"passed": true,
+			"right": {
+				"ieee_hex": "0000000000004043",
+				"type": 3,
+				"value_string": "9007199254740992.0"
+			}
+		},
+		{
+			"actual": false,
+			"expected": false,
+			"id": "unsafe_negative",
+			"left": {
+				"type": 2,
+				"value_string": "-9007199254740992"
+			},
+			"passed": true,
+			"right": {
+				"ieee_hex": "00000000000040c3",
+				"type": 3,
+				"value_string": "-9007199254740992.0"
+			}
+		},
+		{
+			"actual": false,
+			"expected": false,
+			"id": "fraction",
+			"left": {
+				"type": 2,
+				"value_string": "1"
+			},
+			"passed": true,
+			"right": {
+				"ieee_hex": "000000000000f83f",
+				"type": 3,
+				"value_string": "1.5"
+			}
+		},
+		{
+			"actual": false,
+			"expected": false,
+			"id": "numeric_mismatch",
+			"left": {
+				"type": 2,
+				"value_string": "1"
+			},
+			"passed": true,
+			"right": {
+				"ieee_hex": "0000000000000040",
+				"type": 3,
+				"value_string": "2.0"
+			}
+		},
+		{
+			"actual": false,
+			"expected": false,
+			"id": "bool_int",
+			"left": {
+				"type": 1,
+				"value_string": "true"
+			},
+			"passed": true,
+			"right": {
+				"type": 2,
+				"value_string": "1"
+			}
+		},
+		{
+			"actual": false,
+			"expected": false,
+			"id": "bool_float",
+			"left": {
+				"type": 1,
+				"value_string": "false"
+			},
+			"passed": true,
+			"right": {
+				"ieee_hex": "0000000000000000",
+				"type": 3,
+				"value_string": "0.0"
+			}
+		},
+		{
+			"actual": false,
+			"expected": false,
+			"id": "string",
+			"left": {
+				"type": 4,
+				"value_string": "1"
+			},
+			"passed": true,
+			"right": {
+				"type": 2,
+				"value_string": "1"
+			}
+		},
+		{
+			"actual": false,
+			"expected": false,
+			"id": "null_zero",
+			"left": {
+				"type": 0,
+				"value_string": "<null>"
+			},
+			"passed": true,
+			"right": {
+				"type": 2,
+				"value_string": "0"
+			}
+		},
+		{
+			"actual": false,
+			"expected": false,
+			"id": "nan",
+			"left": {
+				"ieee_hex": "000000000000f87f",
+				"type": 3,
+				"value_string": "nan"
+			},
+			"passed": true,
+			"right": {
+				"ieee_hex": "000000000000f87f",
+				"type": 3,
+				"value_string": "nan"
+			}
+		},
+		{
+			"actual": false,
+			"expected": false,
+			"id": "infinity",
+			"left": {
+				"ieee_hex": "000000000000f07f",
+				"type": 3,
+				"value_string": "inf"
+			},
+			"passed": true,
+			"right": {
+				"ieee_hex": "000000000000f07f",
+				"type": 3,
+				"value_string": "inf"
+			}
+		},
+		{
+			"actual": false,
+			"expected": false,
+			"id": "cross_infinity",
+			"left": {
+				"type": 2,
+				"value_string": "1"
+			},
+			"passed": true,
+			"right": {
+				"ieee_hex": "000000000000f07f",
+				"type": 3,
+				"value_string": "inf"
+			}
+		},
+		{
+			"actual": false,
+			"expected": false,
+			"id": "negative_zero",
+			"left": {
+				"type": 2,
+				"value_string": "0"
+			},
+			"passed": true,
+			"right": {
+				"ieee_hex": "0000000000000080",
+				"type": 3,
+				"value_string": "0.0"
+			}
+		},
+		{
+			"actual": false,
+			"expected": false,
+			"id": "float_zero_sign",
+			"left": {
+				"ieee_hex": "0000000000000000",
+				"type": 3,
+				"value_string": "0.0"
+			},
+			"passed": true,
+			"right": {
+				"ieee_hex": "0000000000000080",
+				"type": 3,
+				"value_string": "0.0"
+			}
+		},
+		{
+			"actual": true,
+			"expected": true,
+			"id": "negative_zero_same",
+			"left": {
+				"ieee_hex": "0000000000000080",
+				"type": 3,
+				"value_string": "0.0"
+			},
+			"passed": true,
+			"right": {
+				"ieee_hex": "0000000000000080",
+				"type": 3,
+				"value_string": "0.0"
+			}
+		},
+		{
+			"actual": true,
+			"expected": true,
+			"id": "same_float",
+			"left": {
+				"ieee_hex": "000000000000f43f",
+				"type": 3,
+				"value_string": "1.25"
+			},
+			"passed": true,
+			"right": {
+				"ieee_hex": "000000000000f43f",
+				"type": 3,
+				"value_string": "1.25"
+			}
+		},
+		{
+			"actual": false,
+			"expected": false,
+			"id": "changed_float",
+			"left": {
+				"ieee_hex": "000000000000f43f",
+				"type": 3,
+				"value_string": "1.25"
+			},
+			"passed": true,
+			"right": {
+				"ieee_hex": "010000000000f43f",
+				"type": 3,
+				"value_string": "1.25"
+			}
+		},
+		{
+			"actual": true,
+			"expected": true,
+			"id": "same_int_large",
+			"left": {
+				"type": 2,
+				"value_string": "9223372036854775807"
+			},
+			"passed": true,
+			"right": {
+				"type": 2,
+				"value_string": "9223372036854775807"
+			}
+		},
+		{
+			"actual": true,
+			"expected": true,
+			"id": "nil",
+			"left": {
+				"type": 0,
+				"value_string": "<null>"
+			},
+			"passed": true,
+			"right": {
+				"type": 0,
+				"value_string": "<null>"
+			}
+		},
+		{
+			"actual": true,
+			"expected": true,
+			"id": "boolean",
+			"left": {
+				"type": 1,
+				"value_string": "true"
+			},
+			"passed": true,
+			"right": {
+				"type": 1,
+				"value_string": "true"
+			}
+		},
+		{
+			"actual": false,
+			"expected": false,
+			"id": "dictionary_missing",
+			"left": {
+				"type": 27,
+				"value_string": "{ \"a\": 1 }"
+			},
+			"passed": true,
+			"right": {
+				"type": 27,
+				"value_string": "{  }"
+			}
+		},
+		{
+			"actual": false,
+			"expected": false,
+			"id": "dictionary_added",
+			"left": {
+				"type": 27,
+				"value_string": "{  }"
+			},
+			"passed": true,
+			"right": {
+				"type": 27,
+				"value_string": "{ \"a\": 1 }"
+			}
+		},
+		{
+			"actual": false,
+			"expected": false,
+			"id": "dictionary_key_changed",
+			"left": {
+				"type": 27,
+				"value_string": "{ \"a\": 1 }"
+			},
+			"passed": true,
+			"right": {
+				"type": 27,
+				"value_string": "{ \"b\": 1.0 }"
+			}
+		},
+		{
+			"actual": false,
+			"expected": false,
+			"id": "dictionary_nonstring",
+			"left": {
+				"type": 27,
+				"value_string": "{ 1: \"x\" }"
+			},
+			"passed": true,
+			"right": {
+				"type": 27,
+				"value_string": "{ 1: \"x\" }"
+			}
+		},
+		{
+			"actual": false,
+			"expected": false,
+			"id": "array_reordered",
+			"left": {
+				"type": 28,
+				"value_string": "[1, 2]"
+			},
+			"passed": true,
+			"right": {
+				"type": 28,
+				"value_string": "[2.0, 1.0]"
+			}
+		},
+		{
+			"actual": false,
+			"expected": false,
+			"id": "array_length",
+			"left": {
+				"type": 28,
+				"value_string": "[1]"
+			},
+			"passed": true,
+			"right": {
+				"type": 28,
+				"value_string": "[1.0, 2.0]"
+			}
+		},
+		{
+			"actual": true,
+			"expected": true,
+			"id": "nested_exact",
+			"left": {
+				"type": 27,
+				"value_string": "{ \"x\": [true, <null>, { \"n\": -2 }] }"
+			},
+			"passed": true,
+			"right": {
+				"type": 27,
+				"value_string": "{ \"x\": [true, <null>, { \"n\": -2.0 }] }"
+			}
+		},
+		{
+			"actual": false,
+			"expected": false,
+			"id": "nested_changed",
+			"left": {
+				"type": 27,
+				"value_string": "{ \"x\": [true, <null>, { \"n\": -2 }] }"
+			},
+			"passed": true,
+			"right": {
+				"type": 27,
+				"value_string": "{ \"x\": [true, <null>, { \"n\": -3.0 }] }"
+			}
+		},
+		{
+			"actual": false,
+			"expected": false,
+			"id": "unsupported_vector",
+			"left": {
+				"type": 5,
+				"value_string": "(0.0, 0.0)"
+			},
+			"passed": true,
+			"right": {
+				"type": 5,
+				"value_string": "(0.0, 0.0)"
+			}
+		},
+		{
+			"actual": true,
+			"expected": true,
+			"id": "actual_C_empty_private_Steam_transport",
+			"left": {
+				"type": 27,
+				"value_string": "{ \"active_run\": 0, \"settled\": {  }, \"stats\": {  }, \"unlocked\": {  } }"
+			},
+			"passed": true,
+			"right": {
+				"type": 27,
+				"value_string": "{ \"active_run\": 0.0, \"settled\": {  }, \"stats\": {  }, \"unlocked\": {  } }"
+			}
+		}
+	],
+	"full_chain_qualified": false,
+	"nonce": "34cfa052ab4846ddb2abf83673c84c0f",
+	"original_active_run_type": 2,
+	"parsed_active_run_type": 3,
+	"pid": 30716,
+	"schema": "terminal_steam_transport_primitive_v1"
+}

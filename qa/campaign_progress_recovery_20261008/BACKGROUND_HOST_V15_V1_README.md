@@ -1,0 +1,3 @@
+# V15 background host
+
+Fresh full 61-stage V15 only, after exact independent native source admission and separate launcher source admission. Same original V14 observed-host semantics: original source recipe/review parsed from same pinned raw bytes, fixed engine/Python/producer/spec/review paths and full command, shell=False/CREATE_NO_WINDOW, actual producer Popen retained through wait, host exit recorded only after terminal. No-run does not create work/observer directories. Original V14 failure retained; no partial results or profiles reused. Full goal and later SDK/public qualification remain false.

@@ -1,0 +1,66 @@
+{
+  "schema": "terminal_steam_primitive_literal_failure_observation_v1",
+  "complete": false,
+  "pid": 7124,
+  "checks": 33,
+  "passed": 29,
+  "failed": [
+    {
+      "actual": false,
+      "expected": true,
+      "id": "negative_safe",
+      "passed": false
+    },
+    {
+      "actual": false,
+      "expected": true,
+      "id": "positive_safe",
+      "passed": false
+    },
+    {
+      "actual": true,
+      "expected": false,
+      "id": "negative_zero",
+      "passed": false
+    },
+    {
+      "actual": true,
+      "expected": false,
+      "id": "float_zero_sign",
+      "passed": false
+    }
+  ],
+  "engine_errors": 0,
+  "exit_code": 1,
+  "lock_released": true,
+  "actual_C_transport_passed": true,
+  "actual_D_guards_unknown": true,
+  "full_chain_qualified": false,
+  "hypothesis": "Godot decimal safe-limit literal rounding and negative-zero constant folding; prior report lacks operand bits, so use exact runtime integer conversion and explicit IEEE negative zero in successor",
+  "raw_files": [
+    {
+      "source_path": "D:\\CodexTemp\\lsh-terminal-steam-primitive-20261014_c38b506e\\receipt.json",
+      "archive_relative": "qa\\campaign_progress_recovery_20261008\\actual_terminal_steam_primitive_literal_failure_20261014\\receipt.json",
+      "bytes": 9230,
+      "sha256": "082b38e304806d67f650894daa5a0d0b3906cd8f0e573df9e958c6e1b6542716"
+    },
+    {
+      "source_path": "D:\\CodexTemp\\lsh-terminal-steam-primitive-20261014_c38b506e\\checkpoint.json",
+      "archive_relative": "qa\\campaign_progress_recovery_20261008\\actual_terminal_steam_primitive_literal_failure_20261014\\checkpoint.json",
+      "bytes": 9407,
+      "sha256": "9b6a0e203d4cf5b8c1afde92287f1edd9a2396e5bd4802e662739366fbe71451"
+    },
+    {
+      "source_path": "D:\\CodexTemp\\lsh-terminal-steam-primitive-20261014_c38b506e\\steps\\primitive\\report.json",
+      "archive_relative": "qa\\campaign_progress_recovery_20261008\\actual_terminal_steam_primitive_literal_failure_20261014\\steps\\primitive\\report.json",
+      "bytes": 3413,
+      "sha256": "5924ef12f4a410967fa74f6d5b381721382bc5af204caaf8efc58a6ad31091b3"
+    },
+    {
+      "source_path": "D:\\CodexTemp\\lsh-terminal-steam-primitive-20261014_c38b506e\\steps\\primitive\\native.log",
+      "archive_relative": "qa\\campaign_progress_recovery_20261008\\actual_terminal_steam_primitive_literal_failure_20261014\\steps\\primitive\\native.log",
+      "bytes": 75,
+      "sha256": "b16651cbedbab0a7b519f9e5b498eea40cb33bfb72252e264a7f4c2412765d58"
+    }
+  ]
+}

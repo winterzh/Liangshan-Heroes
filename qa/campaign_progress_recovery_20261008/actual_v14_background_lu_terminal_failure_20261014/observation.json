@@ -1,0 +1,113 @@
+{
+  "schema": "actual_v14_background_terminal_failure_observation_v1",
+  "run": "D:\\CodexTemp\\lsh-durable-chain-v14-background-20261014\\durable_chain_6eed4c82",
+  "complete": false,
+  "completed_native_stages": 30,
+  "expected_native_stages": 61,
+  "attempted_native_stages": 31,
+  "failed_stage": "lu_d_read_terminal",
+  "failed_pid": 42304,
+  "failed_checks": [
+    {
+      "detail": {
+        "ok": true,
+        "progress_recovered": 0,
+        "settlement_authorized": false,
+        "startup_checked": true
+      },
+      "label": "restart startup has no replay or completion capability",
+      "passed": false
+    }
+  ],
+  "failed_report_checks": 57,
+  "file_row_safe_integer_and_exact_bytes_checks_passed": true,
+  "confirmed_campaign_records_reload_passed": true,
+  "C_observed_private_Steam": {
+    "active_run": 0,
+    "settled": {},
+    "stats": {},
+    "unlocked": {}
+  },
+  "hypothesis": "Unnormalized live Steam Dictionary active_run int0 vs JSON handoff float0; aggregate assertion lacks each subcondition observations, so phase/capability/Steam actual D state not independently known. Requires split native checks and exact transport comparison.",
+  "producer_exit_code": 1,
+  "real_Popen_wait_completed": true,
+  "lock_released": true,
+  "engine_errors": 0,
+  "overall_goal_qualified": false,
+  "full_chain_qualified": false,
+  "no_bare_CFG_or_private_profile_copied": true,
+  "raw_files": [
+    {
+      "source_path": "D:\\CodexTemp\\lsh-durable-chain-v14-background-20261014\\durable_chain_6eed4c82\\receipt.json",
+      "archive_relative": "qa/campaign_progress_recovery_20261008/actual_v14_background_lu_terminal_failure_20261014/receipt.json",
+      "bytes": 3209687,
+      "sha256": "7777ebd35a8c39ad6222d85afd46fec718735a2db2c93064c31658f3fd573e55"
+    },
+    {
+      "source_path": "D:\\CodexTemp\\lsh-durable-chain-v14-background-20261014\\durable_chain_6eed4c82\\checkpoint.json",
+      "archive_relative": "qa/campaign_progress_recovery_20261008/actual_v14_background_lu_terminal_failure_20261014/checkpoint.json",
+      "bytes": 3289779,
+      "sha256": "84f61829c0d0a63955b9e8de044928ccfa181697fbee300c40385a660ad430fa"
+    },
+    {
+      "source_path": "D:\\CodexTemp\\lsh-durable-chain-v14-background-observer-20261014\\host_exit.json",
+      "archive_relative": "qa/campaign_progress_recovery_20261008/actual_v14_background_lu_terminal_failure_20261014/host_exit.json",
+      "bytes": 1632,
+      "sha256": "d5bd3cc53580204aadba7082e531e06219d3e767efaa59fb678cd40a3443f182"
+    },
+    {
+      "source_path": "D:\\CodexTemp\\lsh-durable-chain-v14-background-observer-20261014\\producer.stdout.log",
+      "archive_relative": "qa/campaign_progress_recovery_20261008/actual_v14_background_lu_terminal_failure_20261014/producer.stdout.log",
+      "bytes": 14285,
+      "sha256": "84b7cac39bd33bdfd276df97480aca0951080fec9c8c215fd2b6d7beed5ed98b"
+    },
+    {
+      "source_path": "D:\\CodexTemp\\lsh-durable-chain-v14-background-observer-20261014\\producer.stderr.log",
+      "archive_relative": "qa/campaign_progress_recovery_20261008/actual_v14_background_lu_terminal_failure_20261014/producer.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_path": "D:\\CodexTemp\\lsh-durable-chain-v14-background-20261014\\durable_chain_6eed4c82\\steps\\lu_b_install_settle_resave\\B_install_settle_resave\\report.json",
+      "archive_relative": "qa/campaign_progress_recovery_20261008/actual_v14_background_lu_terminal_failure_20261014/lu_b_install_settle_resave/report.json",
+      "bytes": 86366,
+      "sha256": "4be56a5ebda4e792137cc5c7b261e97c02515297c9499c02acdd98cebc601e1d"
+    },
+    {
+      "source_path": "D:\\CodexTemp\\lsh-durable-chain-v14-background-20261014\\durable_chain_6eed4c82\\steps\\lu_b_install_settle_resave\\native.log",
+      "archive_relative": "qa/campaign_progress_recovery_20261008/actual_v14_background_lu_terminal_failure_20261014/lu_b_install_settle_resave/native.log",
+      "bytes": 5365,
+      "sha256": "a5edd3a4c23d1a6301ca1464a8394019d42adb71461fbe025fa7e58ce82a8a5b"
+    },
+    {
+      "source_path": "D:\\CodexTemp\\lsh-durable-chain-v14-background-20261014\\durable_chain_6eed4c82\\steps\\lu_c_install_finish\\C_install_finish\\report.json",
+      "archive_relative": "qa/campaign_progress_recovery_20261008/actual_v14_background_lu_terminal_failure_20261014/lu_c_install_finish/report.json",
+      "bytes": 53655,
+      "sha256": "88e58d391cdfbd914ba2434a72f5a152994c753d38ba106160ee1e9ede5f1487"
+    },
+    {
+      "source_path": "D:\\CodexTemp\\lsh-durable-chain-v14-background-20261014\\durable_chain_6eed4c82\\steps\\lu_c_install_finish\\native.log",
+      "archive_relative": "qa/campaign_progress_recovery_20261008/actual_v14_background_lu_terminal_failure_20261014/lu_c_install_finish/native.log",
+      "bytes": 5358,
+      "sha256": "4da67994bb30553cc61bfb10aefa31c2718603a0271b7051c41f08a1bfc622e0"
+    },
+    {
+      "source_path": "D:\\CodexTemp\\lsh-durable-chain-v14-background-20261014\\durable_chain_6eed4c82\\steps\\lu_d_read_terminal\\D_read_terminal\\report.json",
+      "archive_relative": "qa/campaign_progress_recovery_20261008/actual_v14_background_lu_terminal_failure_20261014/lu_d_read_terminal/report.json",
+      "bytes": 8734,
+      "sha256": "3a6ed804af42dee652c615783b69958cc2a5174024f18eda938b1c9bda9e2aa4"
+    },
+    {
+      "source_path": "D:\\CodexTemp\\lsh-durable-chain-v14-background-20261014\\durable_chain_6eed4c82\\steps\\lu_d_read_terminal\\native.log",
+      "archive_relative": "qa/campaign_progress_recovery_20261008/actual_v14_background_lu_terminal_failure_20261014/lu_d_read_terminal/native.log",
+      "bytes": 525,
+      "sha256": "414c45671374c5848cf69a74a132ee94c9d7b3f0d8fd0368a35614191e2fbd97"
+    },
+    {
+      "source_path": "D:\\CodexTemp\\lsh-durable-chain-v14-background-20261014\\durable_chain_6eed4c82\\steps\\lu_c_install_finish\\C_install_finish\\terminal_observation.json",
+      "archive_relative": "qa/campaign_progress_recovery_20261008/actual_v14_background_lu_terminal_failure_20261014/lu_c_install_finish/terminal_observation.json",
+      "bytes": 6655,
+      "sha256": "cd09fce4b8a0e9ebd307edcf02815167f3fcbb0af263f43b734338e9e26a5bb3"
+    }
+  ]
+}
