@@ -1,3 +1,9 @@
+## 2026-10-14：V14新批前四个Lu live capture实际通过
+
+新批6eed4c82 safe_queue_nonempty、safe_stop__chase_intent、safe_stop__group_cap、safe_stop__has_home分别由PID41084/31432/41804/42512执行，每例443项检查全部passed，actual Core.capture、真实live对象及row_completed均true；正常终态退出0、引擎错误0，原执行器均已登记negative_reports/complete=true。原report/log/actual_A_manifest按例逐字节封存 `actual_v14_background_lu_capture_first4_20261014/`，原大小/SHA/PID/nonce/log SHA和实际A清单环境SHA全部核对一致。未复制裸CFG/私有profile，原完整现场及证据保留。
+
+当前8/61，原后台33644/执行器39688继续同一批其余20 capture及ABCD/另一角色。单组四例通过不授整个24例或双角色矩阵/全链/原19/UI/SDK/八章九玩法/美术/性能/真人/Android或全目标资格；原完整范围及全部实际门槛不变。生产代码及Steam版本未变。
+
 ## 2026-10-14：V14新批完整Lu component矩阵实际通过
 
 新批6eed4c82 lu_component PID34716实际终态退出0、引擎错误0，181规格×两路线共362行、26847项检查和8组正例全部passed；原执行器已登记negative_reports及complete=true。原report/log/actual_A_manifest逐字节封存 `actual_v14_background_lu_component_20261014/`，大小/SHA/PID/nonce及日志SHA回核一致。724份原中间输入/结果证据与完整私有profile/journal保留原批，未复制裸CFG/私有档案或移动删除原证据。

@@ -1,3 +1,7 @@
+## 2026-10-14：V14前四个Lu捕获原生记录
+
+- `qa/campaign_progress_recovery_20261008/actual_v14_background_lu_capture_first4_20261014/`：四例每例443项实际通过，独立PID/nonce，原report/log/A清单及观察。
+
 ## 2026-10-14：V14完整Lu组件实际记录
 
 - `qa/campaign_progress_recovery_20261008/actual_v14_background_lu_component_20261014/`：181规格/362行/26847项/8正例实际通过；原report/log/A清单及观察，724份原输入/结果证据保留外部批次。
