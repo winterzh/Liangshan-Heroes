@@ -1,3 +1,9 @@
+## 2026-10-14：V13 后台新批前四个 Lu live capture 实际通过
+
+新批335e5ef3的safe_queue_nonempty、safe_stop__chase_intent、safe_stop__group_cap、safe_stop__has_home分别由独立PID29196/27616/40332/35236执行，每例443项检查全passed，实际Core.capture/真实live对象及row_completed均true，退出0、引擎错误0。原report/native.log/actual_A_manifest按例逐字节封存恢复QA `actual_v13_background_lu_capture_first4_20261014/`；全部原大小/SHA/PID/nonce与log SHA回核一致，不复制裸CFG/私有profile，原完整现场及证据保留。
+
+后台27392/25716实际存活。此观察时前四个capture通过，完整批8/61；Lu全24、另一角色、后继ABCD及全部52负例仍待同批完成。原19/UI/SDK/八章九玩法/美术/性能/真机和全目标不变，不将四例实际通过扩大为整个capture矩阵或完整恢复资格。
+
 ## 2026-10-14：V13 后台新批完整 Lu component 矩阵实际通过
 
 新批335e5ef3的lu_component PID38652正常终态退出0、引擎错误0，181规格×两路线共362行、26847项检查及8组正例全部passed；原执行器已校验并登记negative_reports。原report/log/actual_A_manifest逐字节封存恢复QA `actual_v13_background_lu_component_20261014/`，大小/SHA/PID/nonce与原日志SHA全部回核。724份原中间证据及完整private profile/journal仍保留原批，未移动删除或上传裸CFG/私有profile。
