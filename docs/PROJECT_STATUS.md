@@ -45,17 +45,17 @@ Steam 详情见 [2026-10-09 发布收据](../qa/steam_release_20261009/release_c
 
 ## 当前卡点与最新测试状态
 
-**V13 完整恢复测试已启动。** 新批 `durable_chain_5b7529db`，原会话69586 / 宿主15388核对存活；冷导入实际退出0、引擎错误0，当前1/61阶段通过。完整结果仍待同一批闭合。
+**V13 完整恢复测试已启动。** 新批 `durable_chain_5b7529db`，原会话69586 / 宿主15388核对存活；冷导入及鲁智深首次保存实际退出0、引擎错误0，首次保存309项检查通过，当前2/61阶段通过。接续world耗时观测，完整结果仍待同一批闭合。
 
 | 批次 | 结果 | 证据 |
 | --- | --- | --- |
 | 第五批 V12 | 冷导入、首次保存及 world 矩阵通过；组件阶段中断，缺完整终态，整批未通过 | [中断记录](../qa/campaign_progress_recovery_20261008/DURABLE_V12_FIFTH_ABRUPT_INTERRUPTION_20261014.json) |
 | 第六批 V12 | 61 阶段中有 2 阶段实际通过；world 检查超过原 1200 秒时限，退出 1、锁已释放，整批未通过 | [超时记录](../qa/campaign_progress_recovery_20261008/actual_sixth_v12_world_timeout_20261014/observation.json) |
-| 新诊断版 V13 | 只读预检和独立源码审查通过；完整检查与原时限保留；**已启动，冷导入通过，完整结果待定** | [独立审查收据](../qa/campaign_progress_recovery_20261008/DURABLE_CHAIN_INDEPENDENT_REVIEW_V13.json) |
+| 新诊断版 V13 | 只读预检和独立源码审查通过；完整检查与原时限保留；**冷导入与首次保存通过，完整结果待定** | [独立审查收据](../qa/campaign_progress_recovery_20261008/DURABLE_CHAIN_INDEPENDENT_REVIEW_V13.json) |
 
 当前卡点是定位 world 检查耗时。V13 增加阶段和逐行时间记录，用于找出耗时位置；尚不能证明超时原因，也不代表恢复功能已通过。
 
-当前新批从全新目录运行全部 61 阶段，保留两角色八个保存/恢复阶段与 52 个异常拒绝阶段。旧批次的局部通过不能拼接为新批次成功；观察同一活会话，不因观察超时重启。启动及冷导入证据见[新批记录](../qa/campaign_progress_recovery_20261008/DURABLE_V13_RUN_STARTED_20261014.json)。
+当前新批从全新目录运行全部 61 阶段，保留两角色八个保存/恢复阶段与 52 个异常拒绝阶段。旧批次的局部通过不能拼接为新批次成功；观察同一活会话，不因观察超时重启。启动及冷导入证据见[新批记录](../qa/campaign_progress_recovery_20261008/DURABLE_V13_RUN_STARTED_20261014.json)，首次保存见[实际结果](../qa/campaign_progress_recovery_20261008/actual_v13_lu_a_20261014/observation.json)。
 
 ## 后续顺序
 
