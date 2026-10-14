@@ -1,3 +1,9 @@
+## 2026-10-14：V14新批Lu capture第5至8例实际通过
+
+新批6eed4c82 safe_stop__home、safe_stop__hua_lock_shots、other_hp_zero、other_dying_true分别由PID39008/37256/45320/5848执行，每例443项全部passed，actual Core.capture、真实live对象、row_completed均true；实际终态退出0、引擎错误0，原执行器已登记negative_reports/complete=true。原report/log/actual_A_manifest逐字节封存 `actual_v14_background_lu_capture_cases5_to8_20261014/`，大小/SHA/PID/nonce/log及manifest环境SHA全部一致。前四例原归档再次逐字节复核，不重复复制；前八例PID/nonce全部不同。裸CFG/私有profile未复制，原现场/证据保留。
+
+当前Lu capture8/24、整批12/61，后台33644/执行器39688继续同一批余例及ABCD/另一角色。局部8例不能授24例/双角色矩阵/全链、原19/UI/SDK/八章九玩法/美术/性能/真人/Android或全目标资格；生产代码/Steam不变，完整门槛保持。
+
 ## 2026-10-14：V14新批前四个Lu live capture实际通过
 
 新批6eed4c82 safe_queue_nonempty、safe_stop__chase_intent、safe_stop__group_cap、safe_stop__has_home分别由PID41084/31432/41804/42512执行，每例443项检查全部passed，actual Core.capture、真实live对象及row_completed均true；正常终态退出0、引擎错误0，原执行器均已登记negative_reports/complete=true。原report/log/actual_A_manifest按例逐字节封存 `actual_v14_background_lu_capture_first4_20261014/`，原大小/SHA/PID/nonce/log SHA和实际A清单环境SHA全部核对一致。未复制裸CFG/私有profile，原完整现场及证据保留。
