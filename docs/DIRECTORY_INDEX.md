@@ -1,3 +1,11 @@
+## 2026-10-16：阮小七持枪身份与技能本地采用
+
+- `assets/characters/ruan_xiaoqi_canon_20261016/`：17张原生人物纹理及导入配置。
+- `assets/direction4/ordinary_ruan_xiaoqi_canon_20261016.json`、`assets/anim/character_traits_v2_ruan_xiaoqi_canon_*.tres`：20资源/56姿势。
+- `assets/ui/ruan_xiaoqi_spear_skills_20261016/`及对应`*_sources_20261016/`：四张枪术图标/原始请求与引用SHA。
+- `tools/build_ruan_xiaoqi_canon_20261016.py`、`tools/run_ruan_xiaoqi_spear_20261016.py`、`tools/ruan_xiaoqi_spear_20261016.gd`：只读作者核对、实际完整PCK/动作/技能/UI入口。
+- `qa/ruan_xiaoqi_canon_20261016/`、[实现](RUAN_XIAOQI_SPEAR_20261016.md)：源定义/翻译核对、final_native原始验收与adoption_receipt.json；后视步态自然度/商人身份仍开放。
+
 ## 2026-10-16：阮小七原著美术候选
 
 - `assets/characters/ruan_xiaoqi_canon_sources_20261015/`：22份未采用内置PNG、完整提示词和隔离标记。

@@ -1,0 +1,58 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoqi_canon_20261016/walk_contact_a_weaponfix.png" id="walk_contact_a_weaponfix"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoqi_canon_20261016/walk_passing_a.png" id="walk_passing_a"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoqi_canon_20261016/walk_contact_b_posefirst.png" id="walk_contact_b_posefirst"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoqi_canon_20261016/walk_passing_b_posefirst.png" id="walk_passing_b_posefirst"]
+
+[sub_resource type="AtlasTexture" id="walk_contact_a_ne"]
+atlas = ExtResource("walk_contact_a_weaponfix")
+region = Rect2(0, 630, 636, 624)
+margin = Rect2(0.0, 34.08, 108, 120)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.094118
+
+[sub_resource type="AtlasTexture" id="walk_passing_a_ne"]
+atlas = ExtResource("walk_passing_a")
+region = Rect2(0, 625, 623, 629)
+margin = Rect2(9.0, 0.24, 59, 53)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.002941
+
+[sub_resource type="AtlasTexture" id="walk_contact_b_ne"]
+atlas = ExtResource("walk_contact_b_posefirst")
+region = Rect2(0, 625, 623, 629)
+margin = Rect2(10.5, 0.64, 79, 73)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.032353
+
+[sub_resource type="AtlasTexture" id="walk_passing_b_ne"]
+atlas = ExtResource("walk_passing_b_posefirst")
+region = Rect2(0, 626, 627, 628)
+margin = Rect2(20.0, 0.3, 88, 87)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.051471
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("walk_contact_a_ne")},
+{"duration": 1.0, "texture": SubResource("walk_passing_a_ne")},
+{"duration": 1.0, "texture": SubResource("walk_contact_b_ne")},
+{"duration": 1.0, "texture": SubResource("walk_passing_b_ne")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

@@ -1,3 +1,5 @@
+2026-10-16后继采用见[新QA](../ruan_xiaoqi_canon_20261016/README.md)，本目录仍只记录原始候选制作/来源，不回填新通过资格。
+
 # 阮小七原著身份与动作候选
 
 本目录当前只有作者阶段来源核对，尚未接入生产。22份内置imagegen原始PNG、完整请求和参考SHA已保存于`assets/characters/ruan_xiaoqi_canon_sources_20261015/`，该目录带`.gdignore`，不会被游戏当作已采用资源。所有PNG逐字节匹配内置生成原件；2张RGB头像和20张RGBA人物图记录原生尺寸/透明alpha及引用SHA，见`candidate_sources_20261016.json`。21张为1254×1254，单独NW步态为1240×1269，未重编码或强行缩成方图。

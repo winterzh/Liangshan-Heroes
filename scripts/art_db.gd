@@ -436,6 +436,7 @@ func avatar_texture(key: String, variant := "") -> Texture2D:
 ## Ordinary armed bodies only. Explicit story appearances retain their own routes.
 ## Unlisted actions retain existing art while further action review continues.
 const ORDINARY_CHARACTER_FAMILIES := {
+	"ruan_xiaoqi": {"idle": "character_traits_v2_ruan_xiaoqi_canon", "walk": "character_traits_v2_ruan_xiaoqi_canon", "attack": "character_traits_v2_ruan_xiaoqi_canon", "hurt": "character_traits_v2_ruan_xiaoqi_canon", "death": "character_traits_v2_ruan_xiaoqi_canon"},
 	"zhang_tuanlian": {"idle": "character_traits_v2_zhang_tuanlian_officer", "walk": "character_traits_v2_zhang_tuanlian_officer", "attack": "character_traits_v2_zhang_tuanlian_officer", "hurt": "character_traits_v2_zhang_tuanlian_officer", "death": "character_traits_v2_zhang_tuanlian_officer"},
 	"shi_en": {"idle": "character_traits_v2_shi_en_canon", "walk": "character_traits_v2_shi_en_canon", "attack": "character_traits_v2_shi_en_canon", "hurt": "character_traits_v2_shi_en_canon", "death": "character_traits_v2_shi_en_canon"},
 	"wu_song": {
@@ -619,6 +620,7 @@ func terrain_texture(key: String) -> Texture2D:
 
 # 无专属图集格的英雄，可放一张独立头像图（assets/portrait_<key>.png）——优先于图集与回退链。
 const STANDALONE_PORTRAITS := {
+	"ruan_xiaoqi": "res://assets/characters/ruan_xiaoqi_canon_20261016/portrait.png",
 	"zhang_tuanlian": "res://assets/characters/zhang_tuanlian_officer_20261015/portrait.png",
 	"cai_jiu": "res://assets/characters/officer_portraits_20260927/cai_jiu.png",
 	"shi_wengong": "res://assets/characters/officer_portraits_20260927/shi_wengong.png",

@@ -1,0 +1,62 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoqi_canon_20261016/attack_windup.png" id="attack_windup"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoqi_canon_20261016/attack_strike.png" id="attack_strike"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoqi_canon_20261016/attack_recover.png" id="attack_recover"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoqi_canon_20261016/idle_margin.png" id="idle_margin"]
+
+[sub_resource type="AtlasTexture" id="attack_windup_ne"]
+atlas = ExtResource("attack_windup")
+region = Rect2(0, 635, 633, 619)
+margin = Rect2(51.0, 26.88, 51, 65)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.005882
+
+[sub_resource type="AtlasTexture" id="attack_strike_ne"]
+atlas = ExtResource("attack_strike")
+region = Rect2(0, 638, 628, 616)
+margin = Rect2(88.0, 50.12, 88, 100)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.052941
+
+[sub_resource type="AtlasTexture" id="attack_recover_ne"]
+atlas = ExtResource("attack_recover")
+region = Rect2(0, 622, 642, 632)
+margin = Rect2(53.0, 33.9, 53, 63)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.022059
+
+[sub_resource type="AtlasTexture" id="idle_ne"]
+atlas = ExtResource("idle_margin")
+region = Rect2(0, 633, 627, 621)
+margin = Rect2(0.0, 32.54, 70, 76)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.025
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("attack_windup_ne")},
+{"duration": 1.0, "texture": SubResource("attack_windup_ne")},
+{"duration": 1.0, "texture": SubResource("attack_strike_ne")},
+{"duration": 1.0, "texture": SubResource("attack_strike_ne")},
+{"duration": 1.0, "texture": SubResource("attack_strike_ne")},
+{"duration": 1.0, "texture": SubResource("attack_recover_ne")},
+{"duration": 1.0, "texture": SubResource("attack_recover_ne")},
+{"duration": 1.0, "texture": SubResource("idle_ne")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

@@ -1,0 +1,58 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoqi_canon_20261016/death_buckle.png" id="death_buckle"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoqi_canon_20261016/death_fall.png" id="death_fall"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoqi_canon_20261016/death_settle.png" id="death_settle"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoqi_canon_20261016/death_rest.png" id="death_rest"]
+
+[sub_resource type="AtlasTexture" id="death_buckle_sw"]
+atlas = ExtResource("death_buckle")
+region = Rect2(638, 0, 616, 644)
+margin = Rect2(77.0, 0.54, 131, 103)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.046218
+
+[sub_resource type="AtlasTexture" id="death_fall_sw"]
+atlas = ExtResource("death_fall")
+region = Rect2(646, 0, 608, 674)
+margin = Rect2(111.0, 0.6, 122, 56)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.022409
+
+[sub_resource type="AtlasTexture" id="death_settle_sw"]
+atlas = ExtResource("death_settle")
+region = Rect2(639, 0, 615, 695)
+margin = Rect2(104.0, 0.6, 115, 35)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.022409
+
+[sub_resource type="AtlasTexture" id="death_rest_sw"]
+atlas = ExtResource("death_rest")
+region = Rect2(628, 0, 626, 680)
+margin = Rect2(93.0, 0.6, 104, 50)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.022409
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("death_buckle_sw")},
+{"duration": 1.0, "texture": SubResource("death_fall_sw")},
+{"duration": 1.0, "texture": SubResource("death_settle_sw")},
+{"duration": 1.0, "texture": SubResource("death_rest_sw")}
+],
+"loop": false,
+"name": &"default",
+"speed": 4.0
+}]

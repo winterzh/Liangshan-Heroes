@@ -57,8 +57,8 @@ static func apply(defs: Dictionary, abilities: Dictionary) -> Dictionary:
 				continue
 			ability_count += 1
 			var kind := String(eff.get("active_kind", eff.get("kind", "")))
-			# 施恩枪棒只配贴身尘迹，不自动转换成飞石、符文或法术光环。
-			if aid in ["shi_en_q", "shi_en_w", "shi_en_r"]:
+			# 施恩/阮小七的枪棒只配贴身尘迹，不转换成飞弹、符文或法术光环。
+			if aid in ["shi_en_q", "shi_en_w", "shi_en_r", "ruan_xiaoqi_q", "ruan_xiaoqi_w", "ruan_xiaoqi_r"]:
 				ad["visual"] = {"delivery": "staff", "theme": "staff", "replace_default": true, "face_nearest_foe": true}
 				abilities[aid] = ad
 				visual_count += 1

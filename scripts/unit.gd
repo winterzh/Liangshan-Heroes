@@ -327,7 +327,7 @@ var _hit_at := 0.5         # 挥击进度降到此值时结算伤害（命中瞬
 var _pending_target: Unit = null
 var _pending_done := true  # 本次挥击是否已结算
 var _flinch := Vector2.ZERO # 受击退缩位移（逐帧衰减）
-var _shi_en_hurt_t := 0.0 # 施恩/张团练原生两帧受击；保留原字段名及序列化接口。
+var _shi_en_hurt_t := 0.0 # 施恩/张团练/阮小七两帧受击；保留字段名及序列化接口。
 const SHI_EN_HURT_DUR := 0.18
 var _gather_anim_t := 0.0   # 采集挥击节拍：每隔一拍做一次「砍/凿」动作（纯表演不结算）
 var _harvest_pulse := 0.0   # 资源点被采时的摇晃强度（被工人凿一下→置 1，逐帧衰减）
@@ -352,6 +352,7 @@ const DUST_DUR := 0.36
 # body motion and weapon pose already live in the bitmap, so the legacy whole-
 # sprite swing and procedural weapon trail must not be layered on top.
 const AUTHORED_DIRECTION4_ATTACK_KEYS := {
+	"ruan_xiaoqi": true,
 	"zhang_tuanlian": true,
 	"shi_en": true,
 	"wu_song": true,
@@ -1148,7 +1149,7 @@ func take_damage(d: float, from: Unit = null, crit := false, ignore_reduction :=
 	if from != null and is_instance_valid(from):
 		var fd := _screen_dir(position - from.position)
 		_flinch = fd * 4.0
-		if key in ["shi_en", "zhang_tuanlian"] and art_variant.is_empty():
+		if key in ["shi_en", "zhang_tuanlian", "ruan_xiaoqi"] and art_variant.is_empty():
 			_shi_en_hurt_t = SHI_EN_HURT_DUR
 	_request_redraw()
 	# 被打就还手（仅限当前没有目标的战斗单位）
@@ -3612,8 +3613,21 @@ func _spawn_dust() -> void:
 
 
 ## 施法抬手·蓄能辉光（屏幕对齐空间绘制）：头顶光球渐亮、外环向心收束、几点能量丝上升。
+## Skill damage has already settled. Reuse only serialized swing presentation;
+## never queue an ordinary hit or add a new persistent gameplay field.
+func show_ruan_spear_followthrough() -> void:
+	if key != "ruan_xiaoqi" or not art_variant.is_empty(): return
+	if _lunge > 0.0 and not _pending_done: return
+	_pending_target = null
+	_pending_done = true
+	_swing_kind = WK.SPEAR
+	_swing_speed = 2.8
+	_lunge = 0.45
+	_lunge_dir = {"se": Vector2.RIGHT, "sw": Vector2.DOWN, "ne": Vector2.UP, "nw": Vector2.LEFT}.get(animation_direction, Vector2.RIGHT)
+	_request_redraw()
+
 func _draw_cast_glow() -> void:
-	if key == "shi_en": return   # 枪棒蓄势只播身体动作，不画法术蓄光。
+	if key in ["shi_en", "ruan_xiaoqi"]: return   # 枪棒蓄势只播身体动作，不画法术蓄光。
 	var w := clampf(1.0 - _cast_t / _cast_dur, 0.0, 1.0)   # 0→1 蓄能进度
 	var head := Vector2(0.0, -radius * 1.7)
 	var c := _cast_color
@@ -4036,7 +4050,13 @@ func _anim_frame_for_state(fallback: Texture2D) -> Texture2D:
 			_frame_directional = Art.unit_anim_uses_directional_source(key, "attack", animation_direction, visual_art_variant())
 			return windup[0]
 	var ak := _anim_key()
-	if _shi_en_hurt_t > 0.0 and key in ["shi_en", "zhang_tuanlian"] and art_variant.is_empty():
+	if key == "ruan_xiaoqi" and art_variant.is_empty() and _cast_t > 0.0:
+		var ready: Array = Art.unit_anim_frames(ak, "attack", animation_direction, "")
+		if not ready.is_empty():
+			_real_frames = true
+			_frame_directional = Art.unit_anim_uses_directional_source(ak, "attack", animation_direction, "")
+			return ready[0]
+	if _shi_en_hurt_t > 0.0 and key in ["shi_en", "zhang_tuanlian", "ruan_xiaoqi"] and art_variant.is_empty():
 		var recoil: Array = Art.unit_anim_frames(ak, "hurt", animation_direction, visual_art_variant())
 		if not recoil.is_empty():
 			_real_frames = true

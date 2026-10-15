@@ -1,0 +1,22 @@
+[
+  {
+    "old": "\t\"ruan_xiaoqi\": {\"name\": \"阮小七\", \"hp\": 240, \"atk\": 14, \"cd\": 1.1, \"range\": 200, \"speed\": 80, \"radius\": 13, \"hero\": true, \"ranged\": true, \"proj_kind\": \"magic\", \"abilities\": [\"ruan_xiaoqi_q\", \"ruan_xiaoqi_w\", \"ruan_xiaoqi_e\", \"ruan_xiaoqi_r\"], \"hero_trainable\": true, \"pop\": 3, \"cost_gold\": 186, \"cost_wood\": 30, \"train_time\": 40, \"trained_at\": \"hall\", \"min_age\": 1, \"star\": 31},",
+    "new": "\t\"ruan_xiaoqi\": {\"name\": \"阮小七\", \"hp\": 240, \"atk\": 14, \"cd\": 1.1, \"range\": 28, \"speed\": 80, \"radius\": 13, \"hero\": true, \"ranged\": false, \"weapon_profile\": \"spear\", \"abilities\": [\"ruan_xiaoqi_q\", \"ruan_xiaoqi_w\", \"ruan_xiaoqi_e\", \"ruan_xiaoqi_r\"], \"hero_trainable\": true, \"pop\": 3, \"cost_gold\": 186, \"cost_wood\": 30, \"train_time\": 40, \"trained_at\": \"hall\", \"min_age\": 1, \"star\": 31},"
+  },
+  {
+    "old": "\t\"ruan_xiaoqi_q\": {\"name\": \"亡魂脉冲\", \"cd\": 8, \"targeted\": false, \"radius\": 160, \"color\": Color(\"6a4fb0\"), \"desc\": \"活阎罗放出一圈亡魂之气，灼伤四周敌军{v}。\", \"effect\": {\"kind\": \"smite\", \"dmg\": 48}},",
+    "new": "\t\"ruan_xiaoqi_q\": {\"name\": \"迎面挺枪\", \"cd\": 8, \"targeted\": false, \"radius\": 40, \"color\": Color(\"956c43\"), \"desc\": \"游戏招式：以笔管枪攒刺近身敌军，造成伤害 {v}。\", \"effect\": {\"kind\": \"smite\", \"dmg\": 48, \"fixed_geometry\": true}},"
+  },
+  {
+    "old": "\t\"ruan_xiaoqi_w\": {\"name\": \"心绞之气\", \"cd\": 12, \"targeted\": false, \"radius\": 0, \"color\": Color(\"a0e8c0\"), \"desc\": \"周身弥漫绞心阴气，近身之敌持续掉血、形如索命。\", \"effect\": {\"kind\": \"black_rain\", \"follow\": true, \"dps_ranks\": [8, 12, 16], \"dur_ranks\": [6, 6, 6], \"dmg\": 8, \"dur\": 6}},",
+    "new": "\t\"ruan_xiaoqi_w\": {\"name\": \"临阵抢攻\", \"cd\": 12, \"targeted\": false, \"radius\": 0, \"color\": Color(\"956c43\"), \"desc\": \"游戏招式：握枪抢攻，自身攻速提高25%，持续6秒。\", \"effect\": {\"kind\": \"atkspeed\", \"atkspeed\": 1.25, \"dur\": 6, \"fixed_geometry\": true}},"
+  },
+  {
+    "old": "\t\"ruan_xiaoqi_e\": {\"name\": \"残虐回生\", \"cd\": 0, \"targeted\": false, \"radius\": 0, \"color\": Color(\"a0e8c0\"), \"passive\": true, \"desc\": \"见敌殒命便添己阳寿，气血更厚、伤愈极快。\", \"effect\": {\"kind\": \"passive\", \"regen\": 4, \"hp_add\": 80}},",
+    "new": "\t\"ruan_xiaoqi_e\": {\"name\": \"水军筋骨\", \"cd\": 0, \"targeted\": false, \"radius\": 0, \"color\": Color(\"956c43\"), \"passive\": true, \"desc\": \"游戏被动：水军练就强健筋骨，生命上限随技能等级提高80 / 160 / 240。\", \"effect\": {\"kind\": \"passive\", \"hp_add\": 80}},"
+  },
+  {
+    "old": "\t\"ruan_xiaoqi_r\": {\"name\": \"夺命镰刀\", \"cd\": 45, \"targeted\": true, \"radius\": 40, \"color\": Color(\"ff3322\"), \"desc\": \"挥镰收魂重击一敌，伤{v}并定身{v}秒，残血者难逃。\", \"effect\": {\"kind\": \"smite\", \"dmg\": 130, \"stun\": 2}},",
+    "new": "\t\"ruan_xiaoqi_r\": {\"name\": \"截路重刺\", \"cd\": 45, \"targeted\": false, \"radius\": 44, \"color\": Color(\"956c43\"), \"desc\": \"游戏招式：奋力挺枪截住近身敌军，造成伤害 {v}，使其失衡2秒。\", \"effect\": {\"kind\": \"smite\", \"dmg\": 130, \"stun\": 2, \"fixed_geometry\": true}},"
+  }
+]
