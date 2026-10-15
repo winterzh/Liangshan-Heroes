@@ -1,0 +1,291 @@
+{
+	"checks": [
+		{
+			"name": "native poison, icon and original ward sheet references",
+			"passed": true
+		},
+		{
+			"name": "source PNG absent from actual resource pack assets/fx/poison_ward_20261015/poison_ward.png",
+			"passed": true
+		},
+		{
+			"name": "packed texture loads assets/fx/poison_ward_20261015/poison_ward.png",
+			"passed": true
+		},
+		{
+			"name": "actual texture pixels/mipmaps equal native reference assets/fx/poison_ward_20261015/poison_ward.png",
+			"passed": true
+		},
+		{
+			"name": "packed dimensions assets/fx/poison_ward_20261015/poison_ward.png",
+			"passed": true
+		},
+		{
+			"name": "source PNG absent from actual resource pack assets/ui/shi_en_skills_20261015/shi_en_w.png",
+			"passed": true
+		},
+		{
+			"name": "packed texture loads assets/ui/shi_en_skills_20261015/shi_en_w.png",
+			"passed": true
+		},
+		{
+			"name": "actual texture pixels/mipmaps equal native reference assets/ui/shi_en_skills_20261015/shi_en_w.png",
+			"passed": true
+		},
+		{
+			"name": "packed dimensions assets/ui/shi_en_skills_20261015/shi_en_w.png",
+			"passed": true
+		},
+		{
+			"name": "source PNG absent from actual resource pack assets/wards.png",
+			"passed": true
+		},
+		{
+			"name": "packed texture loads assets/wards.png",
+			"passed": true
+		},
+		{
+			"name": "actual texture pixels/mipmaps equal native reference assets/wards.png",
+			"passed": true
+		},
+		{
+			"name": "packed dimensions assets/wards.png",
+			"passed": true
+		},
+		{
+			"name": "real Art poison route uses new crystal stake",
+			"passed": true
+		},
+		{
+			"name": "only native poison is upright",
+			"passed": true
+		},
+		{
+			"name": "legacy atlas retained heal",
+			"passed": true
+		},
+		{
+			"name": "legacy atlas retained death",
+			"passed": true
+		},
+		{
+			"name": "procedural banner and unknown fallback retained",
+			"passed": true
+		},
+		{
+			"name": "original terrain has clear isolated fixture site",
+			"passed": true
+		},
+		{
+			"name": "real Shi En can learn W at level one",
+			"passed": true
+		},
+		{
+			"name": "original W learning API learns rank one",
+			"passed": true
+		},
+		{
+			"name": "original cast API starts poison ward windup",
+			"passed": true
+		},
+		{
+			"name": "ward not created before actual windup",
+			"passed": true
+		},
+		{
+			"name": "real windup and pending-cast settlement creates one model ward",
+			"passed": true
+		},
+		{
+			"name": "real cast creates actual WardFx",
+			"passed": true
+		},
+		{
+			"name": "original rank-one gameplay parameters retained",
+			"passed": true
+		},
+		{
+			"name": "original visual state and snapped gameplay anchor retained",
+			"passed": true
+		},
+		{
+			"name": "original W cooldown applied",
+			"passed": true
+		},
+		{
+			"name": "actual ward pulse damages and slows in-range enemy",
+			"passed": true
+		},
+		{
+			"name": "out-of-range enemy and ally remain unhurt",
+			"passed": true
+		},
+		{
+			"name": "ordinary fog remains on and nearby enemy is visible",
+			"passed": true
+		},
+		{
+			"name": "capture poison_ward_960_zoom_1.0",
+			"passed": true
+		},
+		{
+			"name": "resize and zoom preserve actual ward anchor 9601.0",
+			"passed": true
+		},
+		{
+			"name": "capture poison_ward_960_zoom_2.8",
+			"passed": true
+		},
+		{
+			"name": "resize and zoom preserve actual ward anchor 9602.8",
+			"passed": true
+		},
+		{
+			"name": "capture poison_ward_1280_zoom_1.0",
+			"passed": true
+		},
+		{
+			"name": "resize and zoom preserve actual ward anchor 12801.0",
+			"passed": true
+		},
+		{
+			"name": "capture poison_ward_1280_zoom_2.8",
+			"passed": true
+		},
+		{
+			"name": "resize and zoom preserve actual ward anchor 12802.8",
+			"passed": true
+		},
+		{
+			"name": "capture poison_ward_1920_zoom_1.0",
+			"passed": true
+		},
+		{
+			"name": "resize and zoom preserve actual ward anchor 19201.0",
+			"passed": true
+		},
+		{
+			"name": "capture poison_ward_1920_zoom_2.8",
+			"passed": true
+		},
+		{
+			"name": "resize and zoom preserve actual ward anchor 19202.8",
+			"passed": true
+		},
+		{
+			"name": "capture poison_ward_lite_1920",
+			"passed": true
+		},
+		{
+			"name": "actual new WardFx uses mipmapped sampling",
+			"passed": true
+		},
+		{
+			"name": "lite rendering retains style and model location",
+			"passed": true
+		},
+		{
+			"name": "capture poison_ward_fade",
+			"passed": true
+		},
+		{
+			"name": "actual visual fade and original eight-second model expire",
+			"passed": true
+		},
+		{
+			"name": "full life keeps outside enemy and ally safe",
+			"passed": true
+		},
+		{
+			"name": "original units, map and scenery unchanged",
+			"passed": true
+		},
+		{
+			"name": "no gameplay RNG fault",
+			"passed": true
+		}
+	],
+	"failures": [],
+	"observations": [
+		{
+			"configured_cd": 14.0,
+			"first_damage": 12.0,
+			"life": 8.0,
+			"radius": 220.0,
+			"remaining_cd": 14.0,
+			"slow": 0.5,
+			"ward_pos": [
+				336.0,
+				336.0
+			]
+		}
+	],
+	"passed": true,
+	"scope": "Actual full resource PCK, ordinary skirmish Shi En learning/cast/windup and autonomous ward pulses. Original world participants and Battle simulation frozen; driver calls original grid, pending-cast, ward and fog passes at real physics delta. Fixture enemies frozen. Three sizes/two zooms, lite render flag and natural eight-second fade. No release EXE, live SDK, Steam, full chapter/restoration/performance/all-art acceptance.",
+	"screenshots": [
+		{
+			"path": "poison_ward_960_zoom_1.0.png",
+			"sha256": "e1bc7df7b2090c04860579e3153dbb0e57c49494c7de8667a692d3a45f28f1bf",
+			"size": [
+				960,
+				540
+			]
+		},
+		{
+			"path": "poison_ward_960_zoom_2.8.png",
+			"sha256": "3f7867e50cddf0ffe1e000b89b54acfdde38d502f3ce0bd75ddac40294d4c5ca",
+			"size": [
+				960,
+				540
+			]
+		},
+		{
+			"path": "poison_ward_1280_zoom_1.0.png",
+			"sha256": "69e4cd433655cd97bcc3a71dd4b1733c677d6066a371d04d3c38124386614534",
+			"size": [
+				1280,
+				720
+			]
+		},
+		{
+			"path": "poison_ward_1280_zoom_2.8.png",
+			"sha256": "5c554d75d6489717dee09608a4d88689b9afcc0e13e1bc4403da27cfdb0c7f25",
+			"size": [
+				1280,
+				720
+			]
+		},
+		{
+			"path": "poison_ward_1920_zoom_1.0.png",
+			"sha256": "333ca792adda4d7c970b37694f276863e13c3945b2733fb4a1b3142cc0d465dd",
+			"size": [
+				1920,
+				1080
+			]
+		},
+		{
+			"path": "poison_ward_1920_zoom_2.8.png",
+			"sha256": "b99e580fbb7c9e3d22631a7cb95a6b4452f3a7311d7c3dde75a1ca234232ab4c",
+			"size": [
+				1920,
+				1080
+			]
+		},
+		{
+			"path": "poison_ward_lite_1920.png",
+			"sha256": "9edd6d1508e7b2182e843ffdabb2595c367818f8189cc6641ef05dd361b52ca9",
+			"size": [
+				1920,
+				1080
+			]
+		},
+		{
+			"path": "poison_ward_fade.png",
+			"sha256": "838ba9b10f6ad180707fa4d083ea33f7f4ba79dfb9e39ff73d032c970beec5a8",
+			"size": [
+				1920,
+				1080
+			]
+		}
+	]
+}

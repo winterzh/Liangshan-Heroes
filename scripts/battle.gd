@@ -16105,12 +16105,26 @@ class WardFx extends TimedFx:
 		var tex: Texture2D = Art.ward_texture(style)
 		var upright_particles := false
 		if tex != null:
-			var ih := maxf(float(tex.get_height()), 1.0)
-			var th := 58.0 + 3.0 * pulse
-			var tw := th * (float(tex.get_width()) / ih)
-			draw_texture_rect(tex, Rect2(-tw * 0.5, -th + 5.0, tw, th), false, Color(1, 1, 1, clampf(env * 1.3, 0.0, 1.0)))
-			draw_circle(Vector2(0, -th * 0.6), 9.0 + 3.0 * pulse, Color(col.r, col.g, col.b, env * 0.20))   # 桩头辉光叠在贴图上
-			topp = Vector2(0, -th + 8.0)
+			if Art.ward_is_upright(style):
+				# 桩身/晶核直立，范围圈与脚下阴影仍在原等距地面空间。
+				upright_particles = true
+				draw_circle(Vector2.ZERO, 10.0, Color(0.08, 0.05, 0.04, env * 0.22))
+				draw_set_transform_matrix(GameMap.ISO_INV)
+				texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+				var th := 44.0 + 1.2 * pulse
+				var tw := th * float(tex.get_width()) / maxf(float(tex.get_height()), 1.0)
+				# 原生1254图的实木脚底y=1237；不裁切或改写原像素。
+				draw_texture_rect(tex, Rect2(-tw * 0.5, -th * (1237.0 / 1254.0), tw, th), false, Color(1, 1, 1, clampf(env * 1.3, 0.0, 1.0)))
+				topp = Vector2(0, -th * 0.80)
+				draw_circle(topp, 4.0 + pulse, Color(col.r, col.g, col.b, env * 0.12))
+				draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+			else:
+				var ih := maxf(float(tex.get_height()), 1.0)
+				var th := 58.0 + 3.0 * pulse
+				var tw := th * (float(tex.get_width()) / ih)
+				draw_texture_rect(tex, Rect2(-tw * 0.5, -th + 5.0, tw, th), false, Color(1, 1, 1, clampf(env * 1.3, 0.0, 1.0)))
+				draw_circle(Vector2(0, -th * 0.6), 9.0 + 3.0 * pulse, Color(col.r, col.g, col.b, env * 0.20))
+				topp = Vector2(0, -th + 8.0)
 		else:
 			if style == "banner":
 				# 忠义旗没有贴图时直接绘制：抵消世界等距变换，让旗杆保持竖直、旗面文字不歪斜。

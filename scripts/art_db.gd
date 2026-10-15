@@ -73,6 +73,7 @@ const TRAP_CELLS := {
 
 # 立桩贴图 2x2（治疗桩/死神桩/毒桩 + 1 备用格）。无图则 WardFx 退回程序化发光图腾。
 const WARDS_SHEET := "res://assets/wards.png"
+const POISON_WARD_TEXTURE := "res://assets/fx/poison_ward_20261015/poison_ward.png"
 const WARD_CELLS := {
 	"heal": Vector2i(0, 0), "death": Vector2i(1, 0), "poison": Vector2i(0, 1),
 }
@@ -263,6 +264,7 @@ var _buildings3_tex: Texture2D
 var _objects_tex: Texture2D
 var _traps_tex: Texture2D
 var _wards_tex: Texture2D
+var _poison_ward_tex: Texture2D
 var _kit2_tex: Texture2D
 var _items_tex: Texture2D
 var _ability_projectiles_tex: Texture2D
@@ -305,6 +307,7 @@ func _ready() -> void:
 	_objects_tex = _try_load(OBJECTS_SHEET)
 	_traps_tex = _try_load(TRAPS_SHEET)
 	_wards_tex = _try_load(WARDS_SHEET)
+	_poison_ward_tex = _try_load(POISON_WARD_TEXTURE)
 	_kit2_tex = _try_load(KIT2_SHEET)
 	_items_tex = _try_load(ITEMS_SHEET)
 	_ability_projectiles_tex = _try_load(ABILITY_PROJECTILES_SHEET)
@@ -503,11 +506,17 @@ func unit_texture(key: String, variant := "", direction := "") -> Texture2D:
 	return null
 
 
-## 立桩贴图：style ∈ heal/death/poison → wards.png 对应格；无图返回 null（WardFx 退回程序化图腾）。
+## 新毒桩优先独立原图；heal/death及旧毒桩回退仍走wards.png。均无图时返回null。
 func ward_texture(style: String) -> Texture2D:
+	if ward_is_upright(style):
+		return _poison_ward_tex
 	if _wards_tex == null or not WARD_CELLS.has(style):
 		return null
 	return _atlas(_wards_tex, WARD_CELLS[style], 2, "ward_" + style)
+
+## 新毒桩为独立直立原图；旧治疗/死亡图集和无图回退保持原空间。
+func ward_is_upright(style: String) -> bool:
+	return style == "poison" and _poison_ward_tex != null
 
 
 ## 技能V2道具贴图（hook/bolt/swap/root）。无图返回 null（调用方程序化兜底）。
