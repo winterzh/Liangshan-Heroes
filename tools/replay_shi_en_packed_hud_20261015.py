@@ -5,7 +5,8 @@ import run_character_art_qa as common
 from run_shi_en_packed_hud_20261015 import file_sha,ROOT,SCRIPT
 SELF='tools/replay_shi_en_packed_hud_20261015.py'
 def main():
-    ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('export_receipt',type=Path);args=ap.parse_args()
+    ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('export_receipt',type=Path)
+    ap.add_argument('--work-root',type=Path,default=Path('D:/CodexTemp/shi_en_packed_hud_20261015'));args=ap.parse_args()
     prior_path=args.export_receipt.resolve();prior=json.loads(prior_path.read_text(encoding='utf-8'))
     assert prior['complete'] and not prior['source_changes'] and not prior['private_source_changes']
     changed=[r['path'] for r in prior['source_files'] if common.sha(ROOT/r['path'])!=r['sha256']]
@@ -17,7 +18,7 @@ def main():
     shared,running=common.load_helpers(ROOT);engine=shared.resolve_godot(None)
     assert common.sha(engine)==prior['godot_sha256']
     if running() or shared.LOCK.exists():raise RuntimeError('Shared Godot slot occupied; no replay launched')
-    work=shared.resolve_profile_root(Path('D:/CodexTemp/shi_en_packed_hud_20261015'))
+    work=shared.resolve_profile_root(args.work_root)
     run=work/('replay_'+time.strftime('%Y%m%d_%H%M%S')+'_'+uuid.uuid4().hex[:8]);evidence=run/'evidence';runtime=run/'clean_runtime'
     receipt={'complete':False,'run':str(run),'steps':[],'original_export_receipt':str(prior_path),
         'original_export_receipt_sha256':common.sha(prior_path),'reused_pack_sha256':prior['pack_sha256'],

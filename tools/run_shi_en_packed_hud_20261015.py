@@ -16,10 +16,12 @@ def main():
         'combat':'assets/direction4/ordinary_shi_en_20261015_combat_v1.json'}.items()}
     inputs['textures']=sorted({row['path'] for key in ('gait','combat') for row in inputs[key]['sources'].values()})
     assert len(inputs['textures'])==25
+    inputs['skill_icons']={f'shi_en_{slot}':f'assets/ui/shi_en_skills_20261015/shi_en_{slot}.png' for slot in 'qwer'}
+    inputs['textures']+=list(inputs['skill_icons'].values())
     for key in ('gait','combat'):
         for row in inputs[key]['sources'].values():assert common.sha(ROOT/row['path'])==row['sha256']
     if not args.run:
-        print(json.dumps({'runtime_textures':25,'shared_engine_busy':bool(running()),'lock_present':shared.LOCK.exists(),'native_launched':False}));return
+        print(json.dumps({'runtime_textures':len(inputs['textures']),'shared_engine_busy':bool(running()),'lock_present':shared.LOCK.exists(),'native_launched':False}));return
     if running() or shared.LOCK.exists():raise RuntimeError('Shared Godot slot occupied; no pack launched')
     work=shared.resolve_profile_root(Path('D:/CodexTemp/shi_en_packed_hud_20261015'))
     run=work/(time.strftime('%Y%m%d_%H%M%S')+'_'+uuid.uuid4().hex[:8])

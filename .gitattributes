@@ -1159,3 +1159,10 @@ tools/shi_en_packed_hud_20261015.gd -text whitespace=cr-at-eol
 tools/run_shi_en_packed_hud_20261015.py -text whitespace=cr-at-eol
 tools/replay_shi_en_packed_hud_20261015.py -text whitespace=cr-at-eol
 qa/shi_en_packed_hud_20261015/**/parse_scene_probe.log -text whitespace=cr-at-eol,-blank-at-eof
+
+# Preserve generated native art, exact prompts and native evidence.
+assets/ui/shi_en_skills_20261015/** -text whitespace=cr-at-eol
+assets/ui/shi_en_skills_sources_20261015/** -text whitespace=cr-at-eol
+qa/shi_en_skill_icons_20261015/** -text whitespace=cr-at-eol
+qa/shi_en_skill_icons_20261015/**/parse_scene_probe.log -text whitespace=cr-at-eol,-blank-at-eof
+tools/recover_shi_en_icon_export_20261015.py -text whitespace=cr-at-eol

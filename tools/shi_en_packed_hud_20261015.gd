@@ -216,7 +216,7 @@ func run() -> void:
 
 func verify_packed_textures() -> void:
 	var references: Dictionary=JSON.parse_string(FileAccess.get_file_as_string(OS.get_environment("SHI_EN_TEXTURE_REFERENCE")))
-	check(references.size()==25,"all 25 runtime native sources referenced")
+	check(references.size()==pack_inputs.textures.size(),"all character and skill native sources referenced")
 	for p in references:
 		check(not FileAccess.file_exists("res://"+String(p)),"native PNG absent from real PCK "+p)
 		var tex: Texture2D=load("res://"+String(p))
@@ -283,6 +283,9 @@ func hud_layout_cases(b,origin: Vector2) -> void:
 				check(fits(button),"all hero commands visible "+str(button.get_index())+label)
 				if button.get_property_list().any(func(property):return String(property.name)=="slot"):
 					slots.append(button.slot)
+					var skill_id: String=String(u.ability_slots[button.slot].id)
+					var icon: Texture2D=button._ability_art_icon(skill_id)
+					check(icon!=null and icon.resource_path=="res://"+String(pack_inputs.skill_icons[skill_id]),"actual HUD uses painted skill icon "+skill_id+label)
 					check(button.hotkey==root.get_node("Settings").command_key_labels()[button.slot],"original command hotkey retained "+label+str(button.slot))
 			check(slots==[0,1,2,3],"all four original skill indices retained "+label)
 			if size.x==960:
@@ -304,6 +307,19 @@ func hud_layout_cases(b,origin: Vector2) -> void:
 	check(int(u.ability_slots[0].rank)==rank+1,"native Q learn hotspot learns exactly one rank")
 	check(is_equal_approx(float(u.ability_slots[0].get("cd_t",0.0)),prior_cd) and b._ability_armed.is_empty(),"learning does not cast or arm the newly learned skill")
 	check(u.entity_id==identity and u.hp==hp,"HUD layout keeps actor identity and health")
+	# Leave the learned-Q hotspot before forcing visual-only fixture ranks.
+	var away:=InputEventMouseMotion.new();away.position=Vector2(450,120);away.global_position=away.position;root.push_input(away,true)
+	await settle();check(not b.hud._tip_panel.visible,"real mouse exit clears the old hover card before icon overlay fixture")
+	# Draw actual learned/passive/cooldown overlays on the production buttons.
+	# Slot rank/timer are fixture inputs; no gameplay definition or cast is changed.
+	for size in [Vector2i(960,540),Vector2i(1280,720)]:
+		root.size=size;root.content_scale_size=size
+		for i in range(4):u.ability_slots[i].rank=1;u.ability_slots[i].cd_t=0.0
+		await settle();await snap("skills_learned_"+str(size.x))
+		for i in [0,1,3]:u.ability_slots[i].cd_t=u.slot_cd(i)*0.6
+		await settle();await snap("skills_cooldown_"+str(size.x))
+		for i in range(4):u.ability_slots[i].cd_t=0.0
+	root.size=Vector2i(960,540);root.content_scale_size=root.size;await settle()
 	var peers: Array=[]
 	for i in range(7):
 		var peer=b.spawn_unit("liang_dao",0,origin+Vector2(32+i*8,32));peer.set_physics_process(false);peers.append(peer)
