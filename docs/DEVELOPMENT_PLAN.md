@@ -1,3 +1,9 @@
+## 2026-10-15 当前优先级：先补美术
+
+按用户要求，当前先推进人物/动作、场景、特效和UI。施恩五类四向动作已接入，真实完整资源PCK的25张纹理和动作、桌面英雄窄窗交互700项通过；960底栏/多选已修正，详见[本轮说明](SHI_EN_PACKED_HUD_20261015.md)。这不是全库美术、全游戏、EXE/SDK或平台完成。
+
+接下来继续未补齐人物/剧情动作、技能辨识、场景遮挡和工人/生产等其余多尺寸UI。旧V16恢复批已按美术优先结束，原3/61和退出记录保留，不能给当前新生产源码授予后继资格。恢复工作将来须重新冻结实际来源；原双角色整链、故障/UI、八章九玩法、真实SDK、性能/内存、真人和Android等完整要求保留。以下按日期保存当时的开发/测试历史，不表示旧进程当前仍在运行。
+
 ## 2026-10-15：原19数据负零构造与八个物理快照后继完成源码准备
 
 旧V5 data里negative_zero使用-0.0 literal，前轮原生primitive已出现常量符号折叠反例，因此不能将旧源码里的字样当实际负零覆盖。新 `original19_data_layers_candidate_v6/`按明确IEEE字节0000000000000080运行时构造，原legal builtin语义检查保留before.ok并加强真实TYPE_FLOAT/符号位；原109顺序标签与6cases全部保留，其余23方法rawexact。原fresh ConfigFile load及稳定rawcopy之后新增scalar类型/IEEE观察，与原八个seed/progress/拒绝后/final快照的完整copy对象绑定；原unknown expectation/snapshot字段及57物理copy/14journal/7commit不变，额外数据独立输出signed_zero_evidence，不借JSON float0证明符号。

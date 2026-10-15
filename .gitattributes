@@ -1151,3 +1151,11 @@ tools/build_shi_en_full_actions_20261015.py -text whitespace=cr-at-eol
 tools/run_shi_en_full_actions_20261015.py -text whitespace=cr-at-eol
 tools/shi_en_full_actions_import_probe_20261015.gd -text whitespace=cr-at-eol
 tools/shi_en_full_actions_scene_qa_20261015.gd -text whitespace=cr-at-eol
+
+# Keep actual packed art/HUD evidence and executed harness bytes exact.
+qa/shi_en_packed_hud_20261015/** -text whitespace=cr-at-eol
+tools/shi_en_texture_reference_20261015.gd -text whitespace=cr-at-eol
+tools/shi_en_packed_hud_20261015.gd -text whitespace=cr-at-eol
+tools/run_shi_en_packed_hud_20261015.py -text whitespace=cr-at-eol
+tools/replay_shi_en_packed_hud_20261015.py -text whitespace=cr-at-eol
+qa/shi_en_packed_hud_20261015/**/parse_scene_probe.log -text whitespace=cr-at-eol,-blank-at-eof

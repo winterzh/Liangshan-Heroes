@@ -34,6 +34,10 @@ var _compact_combat_stats := false
 var minimap: Minimap
 var _bottom_panel: PanelContainer
 var _bottom_margin: MarginContainer
+var _bottom_row: HBoxContainer
+var _command_scroll: ScrollContainer
+var _selection_scroll: ScrollContainer
+var _desktop_hero_dense := false
 var _port_holder: Control
 var _port_tex: TextureRect
 var _port_fallback: ColorRect
@@ -522,6 +526,7 @@ func _apply_safe_area() -> void:
 	_layout_info_panel()
 	_layout_info_dock()
 	_layout_inventory()
+	_layout_desktop_hero()
 	_layout_hero_bar()
 	_layout_skill_rail()
 	_layout_top_status()
@@ -1274,6 +1279,7 @@ func _build_bottom_panel() -> void:
 	_bottom_panel.add_child(_bottom_margin)
 
 	var hbox := HBoxContainer.new()
+	_bottom_row = hbox
 	hbox.add_theme_constant_override("separation", 16)
 	_bottom_margin.add_child(hbox)
 
@@ -1375,7 +1381,12 @@ func _build_bottom_panel() -> void:
 	_skill_bar.add_theme_constant_override("h_separation", 6)
 	_skill_bar.add_theme_constant_override("v_separation", 2)
 	_skill_bar.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	hbox.add_child(_skill_bar)
+	_command_scroll = ScrollContainer.new()
+	_command_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_command_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_command_scroll.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	hbox.add_child(_command_scroll)
+	_command_scroll.add_child(_skill_bar)
 
 	# 生产队列专栏：标题「队列 N」+ 一排小图标（队首=训练中带进度，点击撤单退资源）。仅生产建筑显示。
 	_queue_bar = VBoxContainer.new()
@@ -1394,7 +1405,11 @@ func _build_bottom_panel() -> void:
 	_sel_grid.columns = 12
 	_sel_grid.add_theme_constant_override("h_separation", 3)
 	_sel_grid.add_theme_constant_override("v_separation", 3)
-	grid_wrap.add_child(_sel_grid)
+	_selection_scroll = ScrollContainer.new()
+	_selection_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_selection_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	grid_wrap.add_child(_selection_scroll)
+	_selection_scroll.add_child(_sel_grid)
 
 	# 把最右信息区顶到屏幕右边；命令卡变多时此空白优先收缩。
 	var info_spacer := Control.new()
@@ -2102,6 +2117,47 @@ func update_selection_panel(sel: Array) -> void:
 	_apply_bottom_collapse()
 
 
+## Keep a desktop hero's skills and right-hand controls inside a narrow window.
+## Existing buttons, their order, learn hit areas and inventory actions remain.
+func _layout_desktop_hero() -> void:
+	if _bottom_row == null or _command_scroll == null or _selection_scroll == null:
+		return
+	var actor = battle.active_unit() if battle != null else null
+	var dense: bool = not touch_ui and not _bottom_collapsed and get_viewport().get_visible_rect().size.x < 1100.0 \
+		and actor != null and actor.is_hero and actor.slot_count() > 0
+	_desktop_hero_dense = dense
+	_bottom_row.add_theme_constant_override("separation", 8 if dense else 16)
+	if not _bottom_collapsed:
+		minimap.custom_minimum_size = Vector2(96, 96) if dense else Vector2(132, 132)
+	minimap.size_flags_vertical = Control.SIZE_SHRINK_CENTER if dense else Control.SIZE_FILL
+	_port_holder.custom_minimum_size = Vector2(76, 76) if dense else Vector2(118, 118)
+	var info_width := 156.0 if dense else 248.0
+	_info_box.custom_minimum_size.x = info_width
+	for label in [_info_name, _info_hp, _info_stats]:
+		label.custom_minimum_size.x = info_width
+	_info_name.clip_text = dense
+	_info_name.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS if dense else TextServer.OVERRUN_NO_TRIMMING
+	_info_hp.clip_text = dense
+	_info_name.add_theme_font_size_override("font_size", 18 if dense else 22)
+	_info_hp.add_theme_font_size_override("font_size", 13 if dense else 15)
+	_info_stats.add_theme_font_size_override("font_size", 12 if dense else 13)
+	_command_scroll.custom_minimum_size = Vector2(258, 138) if dense else Vector2.ZERO
+	_command_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO if dense else ScrollContainer.SCROLL_MODE_DISABLED
+	_selection_scroll.custom_minimum_size = Vector2(112, 132) if dense else Vector2.ZERO
+	_selection_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO if dense else ScrollContainer.SCROLL_MODE_DISABLED
+	_sel_grid.columns = mini(2, maxi(1, _sel_grid.get_child_count())) if dense else clampi(_sel_grid.get_child_count(), 1, 12)
+	for button in _skill_bar.get_children():
+		if button.is_queued_for_deletion():continue
+		if button is HeroSlotButton:
+			button.desktop_dense = dense
+		elif button is CmdButton:
+			if not button.has_meta("desktop_wide_compact"):
+				button.set_meta("desktop_wide_compact", button.compact)
+			button.compact = dense or bool(button.get_meta("desktop_wide_compact"))
+	if actor != null and actor.is_hero:
+		_skill_bar.columns = 3 if dense else 99
+
+
 ## 无选中时把底部指挥栏收成矮条（小地图+提示），选中后恢复完整高度。
 ## 触屏始终展开；两种模式走同一恢复路径，避免沿用桌面初始化时的隐藏状态。
 func _apply_bottom_collapse() -> void:
@@ -2141,6 +2197,7 @@ func _apply_bottom_collapse() -> void:
 	_layout_info_panel()
 	_layout_info_dock()
 	_layout_inventory()
+	_layout_desktop_hero()
 	_layout_hero_bar()
 	_layout_skill_rail()
 
@@ -2254,6 +2311,7 @@ func _rebuild_command_card() -> void:
 		eb.spec = {"kind": "eject", "label": Localize.format_text("出击 (%d)", au.passengers.size()),
 			"cost_g": 0, "cost_w": 0, "affordable": true, "sub": Localize.text("驻军全部冲出"), "bld": au}
 		_skill_bar.add_child(eb)
+	call_deferred("_layout_desktop_hero")
 
 
 ## 喽啰分类子页的「返回」键（也可 Esc/右键返回）。
@@ -2335,6 +2393,7 @@ func _rebuild_grid() -> void:
 		icon.count = members.size()
 		icon.hud = self
 		_sel_grid.add_child(icon)
+	call_deferred("_layout_desktop_hero")
 
 
 func _on_icon_clicked(u, additive: bool, same_type := false) -> void:
@@ -3580,6 +3639,7 @@ class HeroSlotButton extends Control:
 	var slot := 0
 	var hotkey := ""
 	var compact := false      # 右侧技能轨用紧凑尺寸
+	var desktop_dense := false
 	var display_only := false # 纯被动本体只读；独立「+」热区仍允许学习
 	var roster_ability_id := "" # 阵亡固定槽的只读技能图标
 	var _press_ms := 0
@@ -3655,7 +3715,7 @@ class HeroSlotButton extends Control:
 		if is_instance_valid(hero) and slot < hero.slot_count():
 			queue_redraw()
 		mouse_default_cursor_shape = Control.CURSOR_ARROW if display_only else Control.CURSOR_POINTING_HAND
-		custom_minimum_size = (hud._skill_rail_cell if compact else Vector2(88, 104)) if (hud != null and hud.touch_ui) else Vector2(76, 88)
+		custom_minimum_size = (hud._skill_rail_cell if compact else Vector2(88, 104)) if (hud != null and hud.touch_ui) else (Vector2(76, 68) if desktop_dense else Vector2(76, 88))
 		# 触屏：长按 ≥400ms 弹技能说明（替代失效的鼠标 hover；松手不施放）。瞄准中不弹说明。
 		if _held and not _aiming and hud != null and hud.touch_ui and not _tip_shown and Time.get_ticks_msec() - _press_ms >= 400:
 			_tip_shown = true
@@ -3779,7 +3839,7 @@ class HeroSlotButton extends Control:
 		elif state_name in ["aiming", "approaching"]:
 			draw_rect(ir, Color("ffe292"), false, 2.5)
 		# 名称（y 随按钮高度）
-		var nm_fs: int = 10 if compact and big else (14 if compact else (15 if big else 13))
+		var nm_fs: int = 12 if desktop_dense else (10 if compact and big else (14 if compact else (15 if big else 13)))
 		var name_y := size.y - (14.0 if compact and big else 19.0)
 		UITheme.draw_compact_label(self, f, Vector2(3, name_y), nm, size.x - 6, nm_fs, Color("ffd866") if learned else Color(0.6, 0.55, 0.45))
 		# 底行状态：未冷却时显示该技能（当前等级）的冷却秒数——让玩家随时看到「CD 多少」
@@ -3990,6 +4050,9 @@ class HeroSlotButton extends Control:
 	## 绘制、按下瞄准和松手加点共用几何，紧凑技能轨缩放后热区仍贴着「+」。
 	func _icon_rect() -> Rect2:
 		var touch: bool = hud != null and hud.touch_ui
+		if desktop_dense and not touch:
+			var side := minf(size.x - 8.0, size.y - 27.0)
+			return Rect2((size.x - side) * 0.5, 3, side, side)
 		if compact:
 			var side := minf(size.x - 8.0, size.y - 25.0)
 			return Rect2((size.x - side) * 0.5, 2, side, side) if touch else Rect2(10, 6, 58, 58)
