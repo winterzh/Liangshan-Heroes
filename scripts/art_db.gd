@@ -451,7 +451,14 @@ func _ordinary_character_frames(key: String, state: String, direction: String, v
 		_anim_cache[cache_key] = _load_generic_directional_frames(path)
 	return _anim_cache[cache_key]
 
+## Jiang Zhong's reviewed white-shirt/yellow-beard family also supplies his
+## ordinary appearance. Keep the stored variant, stats and chapter outcomes intact.
+func _canonical_character_variant(key: String, variant: String) -> String:
+	return "jiang_menshen_fists" if key == "jiang_menshen" and variant.is_empty() else variant
+
+
 func unit_texture(key: String, variant := "", direction := "") -> Texture2D:
+	variant = _canonical_character_variant(key, variant)
 	var ordinary := _ordinary_character_frames(key, "idle", "se" if direction.is_empty() else direction, variant)
 	if not ordinary.is_empty(): return ordinary[0]
 	if not CampaignArt.native_body_owner(variant).is_empty():
@@ -634,6 +641,7 @@ const STANDALONE_PORTRAITS := {
 	"wu_song": "res://assets/characters/art_full_20260916/wu_song_portrait_20260916.png",
 	"gongsun_sheng": "res://assets/characters/art_full_20260916/gongsun_sheng_portrait_20260916.png",
 	"shi_en": "res://assets/characters/shi_en_portrait_20261015/shi_en.png",
+	"jiang_menshen": "res://assets/characters/jiang_menshen_canon_20261015/portrait.png",
 }
 var _standalone_portraits := {}
 
@@ -713,6 +721,8 @@ func portrait_texture(key: String) -> Texture2D:
 ## 选图顺序为：精确四向动作 > 旧同动作帧带 > 同方向idle。这样不会用一张
 ## 四向站姿遮住本来存在的走路/攻击动画；只有真正没有该动作时才保持四向站姿。
 func unit_anim_frames(key: String, state: String, direction := "", variant := "") -> Array:
+	if key == "jiang_menshen" and variant.is_empty() and direction.is_empty(): direction = "se"
+	variant = _canonical_character_variant(key, variant)
 	if not direction.is_empty() and direction not in CampaignArt.DIRECTIONS:
 		return []
 	var ordinary := _ordinary_character_frames(key, state, direction, variant)
@@ -906,6 +916,7 @@ func _slice_anim_strip(tex: Texture2D) -> Array:
 ## 与 unit_anim_frames 使用同一选择顺序，只回答最终帧是否来自真实方向文件。
 ## 绘制层据此决定是否允许旧式水平镜像。
 func unit_anim_uses_directional_source(key: String, state: String, direction: String, variant := "") -> bool:
+	variant = _canonical_character_variant(key, variant)
 	if direction not in CampaignArt.DIRECTIONS:
 		return false
 	if not _ordinary_character_frames(key, state, direction, variant).is_empty(): return true

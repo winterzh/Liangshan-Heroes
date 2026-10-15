@@ -1,3 +1,10 @@
+## 2026-10-15：蒋门神原著外观与图鉴窄窗
+
+- `assets/characters/jiang_menshen_canon_20261015/`：原生RGB生产头像及导入配置。
+- `assets/characters/jiang_menshen_canon_sources_20261015/`：原图、完整提示词、参考SHA与判退理由，`.gdignore`隔离导入。
+- `qa/jiang_menshen_canon_20261015/`：最终316项/41图、252项目检判退批、276项中间批、原著/20张旧身体来源核对及最终冻结绑定。
+- `tools/run_jiang_menshen_canon_20261015.py`、`tools/jiang_menshen_canon_20261015.gd`：实际完整PCK与图鉴/敌方查看/普通身体验证；[实现与范围](JIANG_MENSHEN_CANON_20261015.md)。
+
 ## 2026-10-15：施恩配套头像目录
 
 - `assets/characters/shi_en_portrait_20261015/`：生产头像及原生导入配置。

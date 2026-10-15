@@ -174,15 +174,17 @@ func _ready() -> void:
 	detail.add_child(edition)
 	_sub_lbl = Label.new()
 	_sub_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_sub_lbl.custom_minimum_size = Vector2(660, 0)
 	_sub_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_sub_lbl.add_theme_font_size_override("font_size", 17)
 	_sub_lbl.add_theme_color_override("font_color", UITheme.PAPER_MUTED)
 	detail.add_child(_sub_lbl)
 
 	# 三大图：头像 / 移动 / 攻击
-	var imgs := HBoxContainer.new()
-	imgs.add_theme_constant_override("separation", 18)
+	# The existing vertical detail scroller can show wrapped rows in narrow
+	# windows; fixed three-column minima clipped the attack preview at 960px.
+	var imgs := HFlowContainer.new()
+	imgs.add_theme_constant_override("h_separation", 18)
+	imgs.add_theme_constant_override("v_separation", 18)
 	detail.add_child(imgs)
 	_port = _img_col(imgs, Localize.text("头像"))
 	_walk = _img_col(imgs, Localize.text("移动动画"))
@@ -206,7 +208,6 @@ func _ready() -> void:
 	detail.add_child(_abil_title)
 	_abil_lbl = Label.new()
 	_abil_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_abil_lbl.custom_minimum_size = Vector2(660, 0)
 	_abil_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_abil_lbl.add_theme_font_size_override("font_size", 16)
 	_abil_lbl.add_theme_color_override("font_color", UITheme.PAPER)
@@ -228,7 +229,6 @@ func _ready() -> void:
 	bio_head.add_child(more)
 	_bio_lbl = Label.new()
 	_bio_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_bio_lbl.custom_minimum_size = Vector2(640, 0)
 	_bio_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_bio_lbl.add_theme_font_size_override("font_size", 19)
 	_bio_lbl.add_theme_color_override("font_color", UITheme.PAPER)
@@ -385,7 +385,7 @@ func _add_group(list: VBoxContainer, title: String, keys: Array) -> void:
 
 
 ## 一列：标题 + 动画框
-func _img_col(parent: HBoxContainer, cap: String) -> AnimBox:
+func _img_col(parent: Container, cap: String) -> AnimBox:
 	var col := VBoxContainer.new()
 	col.add_theme_constant_override("separation", 4)
 	parent.add_child(col)

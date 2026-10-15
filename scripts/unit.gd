@@ -3894,6 +3894,9 @@ func _programmatic_swing_scale() -> float:
 
 
 func _should_draw_programmatic_swing_fx() -> bool:
+	# His canonical body punches bare-handed. The ordinary range-based weapon
+	# inference must not paint a spear trail over it; keep hit timing unchanged.
+	if key == "jiang_menshen" and art_variant.is_empty(): return false
 	return not _authored_direction4_attack_active()
 
 

@@ -1,3 +1,9 @@
+## 2026-10-15：蒋门神原著外观与图鉴窄窗验证
+
+生产头像`assets/characters/jiang_menshen_canon_20261015/portrait.png`为原生RGB实底，完整提示词、原图和参考SHA保存在带`.gdignore`的`jiang_menshen_canon_sources_20261015/`。普通身体在Art内映射到既有白衫黄髯四向来源，不改Unit存档variant；普通挥击只去掉错误枪刺特效。图鉴三图支持窄窗自动换行，启动入口不变。
+
+复现：`python -X utf8 -B tools/run_jiang_menshen_canon_20261015.py --run`，可加`--work-root`。最终完整PCK316项/41图通过，5292份输入零变化；[实现与原著边界](JIANG_MENSHEN_CANON_20261015.md)、[原始收据](../qa/jiang_menshen_canon_20261015/README.md)。原包/原生DLL/档案/缓存不进Git，未更新Steam。施恩原著胡须与阶段服饰、毒系改编及其余美术仍待纠正。
+
 ## 2026-10-15：原著核对先于新美术接入
 
 本次回读百二十回本第二十九至三十一回，蒋门神两张新头像候选判退且未接入，张团练新头像暂缓。后续按[人物身份与原著纠偏记录](CHARACTER_IDENTITY_CODEX_20260913.md)制作，旧图与技术验证不能替代原文；施恩毒系既有设计待纠偏，暂停继续扩充。只有合规候选完成身份/动作一致性及实际显示验证后才进入生产白名单。当前启动、资源路由与Steam保持原状；本次没有新的运行测试。
