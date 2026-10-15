@@ -202,6 +202,7 @@ static func native_body_owner(variant: String) -> String:
 static func native_body_path(variant: String, state: String, direction: String) -> String:
 	if variant == "hn_ruan_xiaoqi":
 		if direction not in DIRECTIONS or state not in ["idle", "walk", "attack", "hurt", "death"]: return ""
+		if state == "walk": return "res://assets/anim/character_traits_v2_ruan_xiaoqi_merchant_nw_20261016_walk_%s.tres" % direction
 		return "res://assets/anim/character_traits_v2_ruan_xiaoqi_merchant_%s_%s.tres" % [state, direction]
 	if variant == SHI_EN_RECOVERY_VARIANT:
 		if direction not in DIRECTIONS or state not in ["idle", "walk", "hurt", "death"]: return ""

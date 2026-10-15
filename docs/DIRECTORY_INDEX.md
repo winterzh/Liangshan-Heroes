@@ -1,3 +1,13 @@
+## 2026-10-16：阮小七商人西北交替步与长线测试
+
+- `assets/characters/ruan_xiaoqi_merchant_nw_20261016/contact_b_nw.png`及导入配置：新单幅原生图。
+- `assets/characters/ruan_xiaoqi_merchant_nw_sources_20261016/`：`.gdignore`隔离的原图与完整提示词/两份参考SHA。
+- `assets/direction4/level1_ruan_xiaoqi_merchant_nw_20261016.json`、`assets/anim/character_traits_v2_ruan_xiaoqi_merchant_nw_20261016_walk_*.tres`：只改NW接触B的新walk四资源。
+- `tools/build_ruan_xiaoqi_merchant_nw_20261016.py`、`tools/run_ruan_xiaoqi_merchant_nw_20261016.py`、`tools/ruan_xiaoqi_merchant_nw_20261016.gd`：只读绑定复现和完整PCK短/长/普通三上下文验证。
+- `tools/ruan_xiaoqi_merchant_legacy_battle_20261016.gd`：外部冻结QA辅助入口，选择旧长线并补真实任务服务；不变更正常菜单/官方资格。
+- [实现](RUAN_XIAOQI_MERCHANT_NW_20261016.md)、`qa/ruan_xiaoqi_merchant_nw_20261016/`：最终通过与失败先行批记录。
+- [刘唐身份卡](LIU_TANG_IDENTITY_20261016.md)：下一人物制作前原著核查，尚未新出图/改游戏代码。
+
 ## 2026-10-16：阮小七黄泥冈专用阶段资源
 
 - `assets/characters/ruan_xiaoqi_merchant_sources_20261016/`：20张内置原生图与完整请求/引用SHA，`.gdignore`隔离。

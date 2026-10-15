@@ -1,0 +1,55 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoqi_merchant_20261016/walk_contact_a_spacing.png" id="walk_contact_a_spacing"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoqi_merchant_20261016/walk_passing_a.png" id="walk_passing_a"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoqi_merchant_nw_20261016/contact_b_nw.png" id="contact_b_nw"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoqi_merchant_20261016/walk_passing_b.png" id="walk_passing_b"]
+
+[sub_resource type="AtlasTexture" id="walk_contact_a_nw"]
+atlas = ExtResource("walk_contact_a_spacing")
+region = Rect2(635, 629, 619, 625)
+margin = Rect2(23.0, 0.46, 34, 28)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.054927
+
+[sub_resource type="AtlasTexture" id="walk_passing_a_nw"]
+atlas = ExtResource("walk_passing_a")
+region = Rect2(594, 632, 660, 622)
+margin = Rect2(87.0, 38.14, 117, 155)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="walk_contact_b_nw"]
+atlas = ExtResource("contact_b_nw")
+region = Rect2(0, 0, 1254, 1254)
+margin = Rect2(47.0, 50.2, 256, 256)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="walk_passing_b_nw"]
+atlas = ExtResource("walk_passing_b")
+region = Rect2(643, 622, 611, 632)
+margin = Rect2(89.0, 37.14, 166, 145)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("walk_contact_a_nw")},
+{"duration": 1.0, "texture": SubResource("walk_passing_a_nw")},
+{"duration": 1.0, "texture": SubResource("walk_contact_b_nw")},
+{"duration": 1.0, "texture": SubResource("walk_passing_b_nw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]
