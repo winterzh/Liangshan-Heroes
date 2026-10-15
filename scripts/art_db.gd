@@ -430,7 +430,7 @@ func avatar_texture(key: String, variant := "") -> Texture2D:
 ## Ordinary armed bodies only. Explicit story appearances retain their own routes.
 ## Unlisted actions retain existing art while further action review continues.
 const ORDINARY_CHARACTER_FAMILIES := {
-	"shi_en": {"idle": "character_traits_v1_shi_en_gait", "walk": "character_traits_v1_shi_en_gait", "attack": "character_traits_v1_shi_en_combat", "hurt": "character_traits_v1_shi_en_combat", "death": "character_traits_v1_shi_en_combat"},
+	"shi_en": {"idle": "character_traits_v2_shi_en_canon", "walk": "character_traits_v2_shi_en_canon", "attack": "character_traits_v2_shi_en_canon", "hurt": "character_traits_v2_shi_en_canon", "death": "character_traits_v2_shi_en_canon"},
 	"wu_song": {
 		"idle": "character_traits_v5_wu_song_gait", "walk": "character_traits_v5_wu_song_gait",
 		"attack": "character_traits_v7_wu_song_combat", "hurt": "character_traits_v7_wu_song_combat", "death": "character_traits_v8_wu_song_death"
@@ -640,7 +640,7 @@ const STANDALONE_PORTRAITS := {
 	"lu_zhishen": "res://assets/characters/art_full_20260916/lu_zhishen_portrait_20260916.png",
 	"wu_song": "res://assets/characters/art_full_20260916/wu_song_portrait_20260916.png",
 	"gongsun_sheng": "res://assets/characters/art_full_20260916/gongsun_sheng_portrait_20260916.png",
-	"shi_en": "res://assets/characters/shi_en_portrait_20261015/shi_en.png",
+	"shi_en": "res://assets/characters/shi_en_canon_20261015/portrait.png",
 	"jiang_menshen": "res://assets/characters/jiang_menshen_canon_20261015/portrait.png",
 }
 var _standalone_portraits := {}

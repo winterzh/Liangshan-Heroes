@@ -1,3 +1,11 @@
+## 2026-10-15：施恩有须青衣身份与全动作
+
+- `assets/characters/shi_en_canon_20261015/`：17张原生生产PNG及导入配置。
+- `assets/characters/shi_en_canon_sources_20261015/`：24张原生输出、全部请求/修正提示词与参考SHA，带`.gdignore`；受伤初见仍是候选。
+- `assets/direction4/ordinary_shi_en_canon_20261015.json`、`assets/anim/character_traits_v2_shi_en_canon_*.tres`：20资源/56姿势，保留原命中与受击时序。
+- `qa/shi_en_canon_20261015/`：最终553项/124图原始记录、第一批几何判退、来源/采用收据与完整提示词集。
+- `tools/build_shi_en_canon_20261015.py`、`tools/run_shi_en_canon_20261015.py`、`tools/shi_en_canon_20261015.gd`：几何只读复现和实际完整PCK验证，[实现与边界](SHI_EN_CANON_20261015.md)。
+
 ## 2026-10-15：蒋门神原著外观与图鉴窄窗
 
 - `assets/characters/jiang_menshen_canon_20261015/`：原生RGB生产头像及导入配置。

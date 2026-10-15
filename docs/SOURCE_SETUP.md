@@ -1,3 +1,9 @@
+## 2026-10-15：施恩原著青衣身份与全动作验证
+
+`assets/characters/shi_en_canon_20261015/`为本批17张原生生产PNG，`assets/characters/shi_en_canon_sources_20261015/`保存24张原始输出与完整提示词/参考SHA并以`.gdignore`隔离导入。新清单`assets/direction4/ordinary_shi_en_canon_20261015.json`及20份`character_traits_v2_shi_en_canon_*.tres`绑定56姿势，Art同步五状态与新有须青衣头像；旧资源保留。初见白帕络手只留候选，没有章节路由。启动方式不变。
+
+复现：`python -X utf8 -B tools/run_shi_en_canon_20261015.py --run`，可加`--work-root`。只读资源核对：`python -X utf8 -B tools/build_shi_en_canon_20261015.py`；几何作者工具需要Pillow/NumPy/SciPy，只测量、不画PNG，正常启动不依赖Python。作者清单候选字段保留，以独立采用收据认定当前资格。最终完整PCK553项/124图通过，5378份来源零变化；[实现](SHI_EN_CANON_20261015.md)、[采用与原始QA](../qa/shi_en_canon_20261015/README.md)。包/DLL/缓存/档案不进Git，Steam未更新。毒系技能、受伤阶段章节接入与其余美术继续开放。
+
 ## 2026-10-15：蒋门神原著外观与图鉴窄窗验证
 
 生产头像`assets/characters/jiang_menshen_canon_20261015/portrait.png`为原生RGB实底，完整提示词、原图和参考SHA保存在带`.gdignore`的`jiang_menshen_canon_sources_20261015/`。普通身体在Art内映射到既有白衫黄髯四向来源，不改Unit存档variant；普通挥击只去掉错误枪刺特效。图鉴三图支持窄窗自动换行，启动入口不变。

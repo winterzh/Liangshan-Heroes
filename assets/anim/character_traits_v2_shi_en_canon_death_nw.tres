@@ -1,0 +1,55 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/shi_en_canon_20261015/death_buckle.png" id="death_buckle"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/shi_en_canon_20261015/death_fall.png" id="death_fall"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/shi_en_canon_20261015/death_settle.png" id="death_settle"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/shi_en_canon_20261015/death_rest.png" id="death_rest"]
+
+[sub_resource type="AtlasTexture" id="death_buckle_nw"]
+atlas = ExtResource("death_buckle")
+region = Rect2(695, 637, 559, 617)
+margin = Rect2(217.0, 73.32, 217, 159)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.045822
+
+[sub_resource type="AtlasTexture" id="death_fall_nw"]
+atlas = ExtResource("death_fall")
+region = Rect2(650, 683, 604, 571)
+margin = Rect2(126.0, 88.44, 138, 171)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="death_settle_nw"]
+atlas = ExtResource("death_settle")
+region = Rect2(633, 682, 621, 572)
+margin = Rect2(109.0, 87.44, 121, 170)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="death_rest_nw"]
+atlas = ExtResource("death_rest")
+region = Rect2(633, 666, 621, 588)
+margin = Rect2(109.0, 71.44, 121, 154)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("death_buckle_nw")},
+{"duration": 1.0, "texture": SubResource("death_fall_nw")},
+{"duration": 1.0, "texture": SubResource("death_settle_nw")},
+{"duration": 1.0, "texture": SubResource("death_rest_nw")}
+],
+"loop": false,
+"name": &"default",
+"speed": 4.0
+}]

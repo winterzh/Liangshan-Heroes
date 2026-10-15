@@ -1,0 +1,54 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/shi_en_canon_20261015/walk_contact_a.png" id="walk_contact_a"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/shi_en_canon_20261015/walk_passing_a.png" id="walk_passing_a"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/shi_en_canon_20261015/walk_contact_b_fix2.png" id="walk_contact_b_fix2"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/shi_en_canon_20261015/walk_passing_b_fix.png" id="walk_passing_b_fix"]
+
+[sub_resource type="AtlasTexture" id="walk_contact_a_se"]
+atlas = ExtResource("walk_contact_a")
+region = Rect2(0, 0, 626, 637)
+margin = Rect2(44.0, 30.72, 170, 159)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="walk_passing_a_se"]
+atlas = ExtResource("walk_passing_a")
+region = Rect2(0, 0, 630, 632)
+margin = Rect2(47.5, 33.72, 166, 164)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="walk_contact_b_se"]
+atlas = ExtResource("walk_contact_b_fix2")
+region = Rect2(0, 0, 624, 635)
+margin = Rect2(71.5, 28.72, 172, 161)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="walk_passing_b_se"]
+atlas = ExtResource("walk_passing_b_fix")
+region = Rect2(0, 0, 630, 632)
+margin = Rect2(53.5, 38.72, 166, 164)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("walk_contact_a_se")},
+{"duration": 1.0, "texture": SubResource("walk_passing_a_se")},
+{"duration": 1.0, "texture": SubResource("walk_contact_b_se")},
+{"duration": 1.0, "texture": SubResource("walk_passing_b_se")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]
