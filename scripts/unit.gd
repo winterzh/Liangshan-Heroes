@@ -3896,6 +3896,7 @@ func _programmatic_swing_scale() -> float:
 
 
 func _should_draw_programmatic_swing_fx() -> bool:
+	if visual_art_variant() == CampaignArt.SHI_EN_RECOVERY_VARIANT: return false
 	# His canonical body punches bare-handed. The ordinary range-based weapon
 	# inference must not paint a spear trail over it; keep hit timing unchanged.
 	if key == "jiang_menshen" and art_variant.is_empty(): return false
@@ -3975,6 +3976,12 @@ func _draw_swing_fx() -> void:
 ## Derived chapter appearance; the persisted variant and gameplay roles stay intact.
 func visual_art_variant() -> String:
 	if not art_variant.is_empty(): return art_variant
+	if key == "shi_en" and is_noncombat and faction == FACTION_LIANG \
+			and is_instance_valid(battle) and is_instance_valid(battle.level):
+		var chapter: String = battle.level.get_script().resource_path
+		if chapter in ["res://scripts/levels/level7_kuaihuolin.gd", "res://scripts/levels/level7_kuaihuolin_short.gd"] \
+				and battle.level.shi == self:
+			return CampaignArt.SHI_EN_RECOVERY_VARIANT
 	if not is_noncombat or is_hero or is_captive or faction != FACTION_LIANG \
 			or not CampaignArt.NATIVE_WOUNDED_FAMILIES.has(key): return art_variant
 	if not is_instance_valid(battle) or not is_instance_valid(battle.level): return art_variant
@@ -4030,10 +4037,10 @@ func _anim_frame_for_state(fallback: Texture2D) -> Texture2D:
 			return windup[0]
 	var ak := _anim_key()
 	if _shi_en_hurt_t > 0.0 and key in ["shi_en", "zhang_tuanlian"] and art_variant.is_empty():
-		var recoil: Array = Art.unit_anim_frames(ak, "hurt", animation_direction, "")
+		var recoil: Array = Art.unit_anim_frames(ak, "hurt", animation_direction, visual_art_variant())
 		if not recoil.is_empty():
 			_real_frames = true
-			_frame_directional = Art.unit_anim_uses_directional_source(ak, "hurt", animation_direction, "")
+			_frame_directional = Art.unit_anim_uses_directional_source(ak, "hurt", animation_direction, visual_art_variant())
 			var phase := clampf(1.0 - _shi_en_hurt_t / SHI_EN_HURT_DUR, 0.0, 0.999)
 			return recoil[int(phase * recoil.size())]
 	if _flinch.length_squared() > 1.0:

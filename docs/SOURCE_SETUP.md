@@ -1,3 +1,9 @@
+## 2026-10-15：施恩出城康复阶段外观
+
+生产目录`assets/characters/shi_en_recovering_20261015/`含13原生PNG，来源目录`shi_en_recovering_sources_20261015/`保留全部内置生成请求与引用SHA，带`.gdignore`。`level7_shi_en_recovering_20261015.json`和16份`character_traits_v2_shi_en_recovering_*.tres`绑定44姿势，只在Level7实际非战斗同行角色派生使用；不改存档variant和启动方式。
+
+复现：`python -X utf8 -B tools/run_shi_en_recovering_20261015.py --run`，支持`--work-root`；只读来源/几何核对：`python -X utf8 -B tools/build_shi_en_recovering_20261015.py`，作者工具仅测量PNG。最终523项/105图、5531来源零变化，[实现与边界](SHI_EN_RECOVERING_20261015.md)、[QA](../qa/shi_en_recovering_20261015/README.md)。包、私有档案、DLL和缓存不入Git；Steam未更新。
+
 ## 2026-10-15：张团练普通武官美术与图鉴
 
 生产`assets/characters/zhang_tuanlian_officer_20261015/`为16张原生PNG；来源目录`zhang_tuanlian_officer_sources_20261015/`保存23原始输出/完整提示词/SHA并以`.gdignore`隔离。新清单`assets/direction4/ordinary_zhang_tuanlian_officer_20261015.json`及20份`character_traits_v2_zhang_tuanlian_officer_*.tres`绑定56姿势，图鉴小传简繁英日同步29–31回依据并明确游戏补足。启动方式不变。

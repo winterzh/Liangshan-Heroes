@@ -384,12 +384,18 @@ const SPRITE_ALIAS := {}
 ## 全空才返回 null（此时调用方画占位首字，而非黄圈）。这条链覆盖建筑/资源/特殊单位，
 ## 是消灭「黄色圈圈头像」的单一来源。
 const IDENTITY_PORTRAIT_VARIANTS := {"dong_chao_escort": "dong_chao", "xue_ba_escort": "xue_ba"}
+const CHAPTER_PORTRAITS := {CampaignArt.SHI_EN_RECOVERY_VARIANT: "res://assets/characters/shi_en_recovering_20261015/portrait.png"}
+var _chapter_portrait_cache: Dictionary = {}
 
 ## 图鉴、战斗面板与英雄栏共用入口。先核对人物身份，防止变体借到别人的脸。
 func ui_portrait_texture(key: String, variant := "") -> Texture2D:
 	var owner := CampaignArt.portrait_owner(variant)
 	if not owner.is_empty():
 		if String(ART_ALIAS.get(key, key)) != owner: return null
+		if CHAPTER_PORTRAITS.has(variant):
+			if not _chapter_portrait_cache.has(variant):
+				_chapter_portrait_cache[variant] = _try_load(CHAPTER_PORTRAITS[variant])
+			return _chapter_portrait_cache[variant]
 		return portrait_texture(key)
 	# 平民、建筑和物件仍可使用自己的专用图标。
 	if not variant.is_empty(): return avatar_texture(key, variant)
@@ -398,7 +404,7 @@ func ui_portrait_texture(key: String, variant := "") -> Texture2D:
 
 ## 保留战役变体原图查询，用于素材预览与来源契约；游戏界面用 ui_portrait_texture。
 func avatar_texture(key: String, variant := "") -> Texture2D:
-	if not CampaignArt.native_wounded_owner(variant).is_empty():
+	if variant == CampaignArt.SHI_EN_RECOVERY_VARIANT or not CampaignArt.native_wounded_owner(variant).is_empty():
 		return unit_texture(key, variant, "se")
 	if IDENTITY_PORTRAIT_VARIANTS.has(variant):
 		return portrait_texture(key) if IDENTITY_PORTRAIT_VARIANTS[variant] == key else null
@@ -980,6 +986,7 @@ func campaign_variant_has_animation(variant: String, state: String, direction: S
 	if variant.is_empty() or direction not in CampaignArt.DIRECTIONS: return false
 	if not CampaignArt.native_body_owner(variant).is_empty():
 		var authored_states: Array = ["idle", "walk"] if not CampaignArt.native_wounded_owner(variant).is_empty() else ["idle"]
+		if variant == CampaignArt.SHI_EN_RECOVERY_VARIANT: authored_states = ["idle", "walk", "hurt", "death"]
 		return state in authored_states and not _load_generic_directional_frames(CampaignArt.native_body_path(variant, state, direction)).is_empty()
 	var path := CampaignArt.animation_path(variant, state, direction)
 	var texture := _campaign_texture(path)

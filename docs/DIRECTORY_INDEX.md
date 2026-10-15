@@ -1,3 +1,11 @@
+## 2026-10-15：施恩出城康复阶段美术
+
+- `assets/characters/shi_en_recovering_20261015/`：13原生生产PNG及导入配置。
+- `assets/characters/shi_en_recovering_sources_20261015/`：13原始输出、完整提示词/引用SHA和隔离标记。
+- `assets/direction4/level7_shi_en_recovering_20261015.json`、`assets/anim/character_traits_v2_shi_en_recovering_*.tres`：16资源/44姿势。
+- `tools/build_shi_en_recovering_20261015.py`、`tools/run_shi_en_recovering_20261015.py`、`tools/shi_en_recovering_20261015.gd`：只读作者核对与实际完整PCK验收。
+- `qa/shi_en_recovering_20261015/`、[身份卡](SHI_EN_RECOVERING_IDENTITY_20261015.md)、[实现](SHI_EN_RECOVERING_20261015.md)：原著边界、523项/105图原始记录及独立采用收据。
+
 ## 2026-10-15：张团练普通武官身份与全动作
 
 - `assets/characters/zhang_tuanlian_officer_20261015/`：16原生生产PNG及导入配置。

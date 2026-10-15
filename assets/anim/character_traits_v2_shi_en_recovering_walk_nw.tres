@@ -1,0 +1,54 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/shi_en_recovering_20261015/walk_contact_a.png" id="walk_contact_a"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/shi_en_recovering_20261015/walk_passing_a.png" id="walk_passing_a"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/shi_en_recovering_20261015/walk_contact_b_nw.png" id="walk_contact_b_nw"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/shi_en_recovering_20261015/walk_passing_b.png" id="walk_passing_b"]
+
+[sub_resource type="AtlasTexture" id="walk_contact_a_nw"]
+atlas = ExtResource("walk_contact_a")
+region = Rect2(627, 639, 627, 615)
+margin = Rect2(94.0, 42.18, 122, 134)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="walk_passing_a_nw"]
+atlas = ExtResource("walk_passing_a")
+region = Rect2(627, 634, 627, 620)
+margin = Rect2(88.5, 36.18, 122, 129)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="walk_contact_b_nw"]
+atlas = ExtResource("walk_contact_b_nw")
+region = Rect2(0, 0, 1261, 1247)
+margin = Rect2(60.5, 42.46, 192, 206)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="walk_passing_b_nw"]
+atlas = ExtResource("walk_passing_b")
+region = Rect2(627, 631, 627, 623)
+margin = Rect2(73.5, 33.18, 122, 126)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("walk_contact_a_nw")},
+{"duration": 1.0, "texture": SubResource("walk_passing_a_nw")},
+{"duration": 1.0, "texture": SubResource("walk_contact_b_nw")},
+{"duration": 1.0, "texture": SubResource("walk_passing_b_nw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

@@ -2753,7 +2753,7 @@ func _show_intro_line() -> void:
 	var tex: Texture2D = Art.portrait_texture(String(line.get("key", "narrator")))
 	if battle != null:
 		var actor = battle.find_unit(String(line.get("key", "narrator")))
-		if is_instance_valid(actor) and actor.art_variant != "":
+		if is_instance_valid(actor) and actor.visual_art_variant() != "":
 			tex = actor.ui_portrait_texture()
 	if tex != null:
 		_intro_port_tex.texture = tex

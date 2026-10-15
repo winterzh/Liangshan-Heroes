@@ -194,10 +194,14 @@ static func native_wounded_owner(variant: String) -> String:
 	return owner if NATIVE_WOUNDED_FAMILIES.has(owner) else ""
 
 static func native_body_owner(variant: String) -> String:
+	if variant == SHI_EN_RECOVERY_VARIANT: return "shi_en"
 	var owner := native_bound_owner(variant)
 	return owner if not owner.is_empty() else native_wounded_owner(variant)
 
 static func native_body_path(variant: String, state: String, direction: String) -> String:
+	if variant == SHI_EN_RECOVERY_VARIANT:
+		if direction not in DIRECTIONS or state not in ["idle", "walk", "hurt", "death"]: return ""
+		return "res://assets/anim/character_traits_v2_shi_en_recovering_%s_%s.tres" % [state, direction]
 	var owner := native_wounded_owner(variant)
 	if owner.is_empty(): return native_bound_path(variant, state, direction)
 	if direction not in DIRECTIONS or state not in ["idle", "walk", "hurt"]: return ""
@@ -221,8 +225,11 @@ const OBJECT_ALIASES := {
 }
 
 
-## 界面统一使用所属人物的标准头像；剧情身体、动作和来源预览继续按变体取图。
+const SHI_EN_RECOVERY_VARIANT := "shi_en_kuaihuolin_recovering"
+
+## 界面先核对所属人物；有明确章节阶段头像时再选该阶段。
 const PORTRAIT_OWNERS := {
+	SHI_EN_RECOVERY_VARIANT: "shi_en",
 	"wu_song_mengzhou": "wu_song", "lin_chong_prisoner": "lin_chong",
 	"lin_chong_bound": "lin_chong", "lin_chong_escort": "lin_chong",
 	"jiang_menshen_fists": "jiang_menshen", "li_kui_jiangzhou": "li_kui",
