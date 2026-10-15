@@ -1,3 +1,9 @@
+## 2026-10-15：张团练普通武官美术与图鉴
+
+生产`assets/characters/zhang_tuanlian_officer_20261015/`为16张原生PNG；来源目录`zhang_tuanlian_officer_sources_20261015/`保存23原始输出/完整提示词/SHA并以`.gdignore`隔离。新清单`assets/direction4/ordinary_zhang_tuanlian_officer_20261015.json`及20份`character_traits_v2_zhang_tuanlian_officer_*.tres`绑定56姿势，图鉴小传简繁英日同步29–31回依据并明确游戏补足。启动方式不变。
+
+复现：`python -X utf8 -B tools/run_zhang_tuanlian_officer_20261015.py --run`，支持`--work-root`。只读几何/来源核对：`python -X utf8 -B tools/build_zhang_tuanlian_officer_20261015.py`，作者工具使用Pillow/NumPy/SciPy只测量、不画PNG，正常启动不依赖Python。实际完整PCK604项/152图通过，5472份来源零变化；[实现与边界](ZHANG_TUANLIAN_OFFICER_20261015.md)、[采用与原始记录](../qa/zhang_tuanlian_officer_20261015/README.md)。没有新增交椅/鸳鸯楼剧情、平衡或Steam结论。
+
 ## 2026-10-15：施恩枪棒技能与新图标
 
 新生产图标在`assets/ui/shi_en_staff_skills_20261015/`，四份原生输出/完整提示词/SHA保存在`assets/ui/shi_en_staff_skills_sources_20261015/`并以`.gdignore`隔离。施恩改为Q/R自身近身棒击、W个人攻速、E步法闪避，去除毒桩和持续毒伤；四语言同步且明确游戏招式。启动方式不变。

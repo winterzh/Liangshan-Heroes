@@ -1,0 +1,54 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/zhang_tuanlian_officer_20261015/death_buckle.png" id="death_buckle"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/zhang_tuanlian_officer_20261015/death_fall.png" id="death_fall"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/zhang_tuanlian_officer_20261015/death_settle.png" id="death_settle"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/zhang_tuanlian_officer_20261015/death_rest.png" id="death_rest"]
+
+[sub_resource type="AtlasTexture" id="death_buckle_ne"]
+atlas = ExtResource("death_buckle")
+region = Rect2(0, 652, 629, 602)
+margin = Rect2(38.5, 83.92, 127, 154)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="death_fall_ne"]
+atlas = ExtResource("death_fall")
+region = Rect2(0, 672, 645, 582)
+margin = Rect2(16.5, 89.92, 111, 174)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="death_settle_ne"]
+atlas = ExtResource("death_settle")
+region = Rect2(0, 690, 643, 564)
+margin = Rect2(16.5, 107.92, 113, 192)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="death_rest_ne"]
+atlas = ExtResource("death_rest")
+region = Rect2(0, 671, 636, 583)
+margin = Rect2(16.5, 88.92, 120, 173)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("death_buckle_ne")},
+{"duration": 1.0, "texture": SubResource("death_fall_ne")},
+{"duration": 1.0, "texture": SubResource("death_settle_ne")},
+{"duration": 1.0, "texture": SubResource("death_rest_ne")}
+],
+"loop": false,
+"name": &"default",
+"speed": 4.0
+}]

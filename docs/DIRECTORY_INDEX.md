@@ -1,3 +1,11 @@
+## 2026-10-15：张团练普通武官身份与全动作
+
+- `assets/characters/zhang_tuanlian_officer_20261015/`：16原生生产PNG及导入配置。
+- `assets/characters/zhang_tuanlian_officer_sources_20261015/`：23原始输出、完整提示词/引用SHA，带`.gdignore`。
+- `assets/direction4/ordinary_zhang_tuanlian_officer_20261015.json`、`assets/anim/character_traits_v2_zhang_tuanlian_officer_*.tres`：20资源/56姿势。
+- `tools/build_zhang_tuanlian_officer_20261015.py`、`tools/run_zhang_tuanlian_officer_20261015.py`、`tools/zhang_tuanlian_officer_20261015.gd`：只读作者核对与实际完整PCK验证。
+- `qa/zhang_tuanlian_officer_20261015/`、[身份卡](ZHANG_TUANLIAN_IDENTITY_20261015.md)、[实现](ZHANG_TUANLIAN_OFFICER_20261015.md)：原著/补足边界、604项/152图实际原始证据。
+
 ## 2026-10-15：施恩枪棒技能纠偏
 
 - `assets/ui/shi_en_staff_skills_20261015/`：四张原生生产图标与导入配置。

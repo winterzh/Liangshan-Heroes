@@ -1,0 +1,32 @@
+[gd_resource type="SpriteFrames" load_steps=5 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/zhang_tuanlian_officer_20261015/hurt_recoil.png" id="hurt_recoil"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/zhang_tuanlian_officer_20261015/hurt_recover.png" id="hurt_recover"]
+
+[sub_resource type="AtlasTexture" id="hurt_recoil_sw"]
+atlas = ExtResource("hurt_recoil")
+region = Rect2(632, 0, 622, 628)
+margin = Rect2(110.0, 32.62, 169, 163)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="hurt_recover_sw"]
+atlas = ExtResource("hurt_recover")
+region = Rect2(629, 0, 625, 625)
+margin = Rect2(113.0, 37.62, 166, 166)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("hurt_recoil_sw")},
+{"duration": 1.0, "texture": SubResource("hurt_recover_sw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

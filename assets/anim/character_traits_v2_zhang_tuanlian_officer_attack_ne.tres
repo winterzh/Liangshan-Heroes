@@ -1,0 +1,58 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/zhang_tuanlian_officer_20261015/attack_windup.png" id="attack_windup"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/zhang_tuanlian_officer_20261015/attack_strike.png" id="attack_strike"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/zhang_tuanlian_officer_20261015/attack_recover.png" id="attack_recover"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/zhang_tuanlian_officer_20261015/idle.png" id="idle"]
+
+[sub_resource type="AtlasTexture" id="attack_windup_ne"]
+atlas = ExtResource("attack_windup")
+region = Rect2(0, 636, 638, 618)
+margin = Rect2(102.5, 85.92, 118, 138)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="attack_strike_ne"]
+atlas = ExtResource("attack_strike")
+region = Rect2(0, 633, 628, 621)
+margin = Rect2(120.5, 92.92, 128, 135)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="attack_recover_ne"]
+atlas = ExtResource("attack_recover")
+region = Rect2(0, 630, 627, 624)
+margin = Rect2(116.5, 89.92, 129, 132)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="idle_ne"]
+atlas = ExtResource("idle")
+region = Rect2(0, 631, 626, 623)
+margin = Rect2(16.5, 48.92, 130, 133)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("attack_windup_ne")},
+{"duration": 1.0, "texture": SubResource("attack_windup_ne")},
+{"duration": 1.0, "texture": SubResource("attack_strike_ne")},
+{"duration": 1.0, "texture": SubResource("attack_strike_ne")},
+{"duration": 1.0, "texture": SubResource("attack_strike_ne")},
+{"duration": 1.0, "texture": SubResource("attack_recover_ne")},
+{"duration": 1.0, "texture": SubResource("attack_recover_ne")},
+{"duration": 1.0, "texture": SubResource("idle_ne")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

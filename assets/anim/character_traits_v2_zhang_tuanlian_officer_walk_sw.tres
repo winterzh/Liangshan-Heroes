@@ -1,0 +1,54 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/zhang_tuanlian_officer_20261015/walk_contact_a_posefix.png" id="walk_contact_a_posefix"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/zhang_tuanlian_officer_20261015/walk_passing_a_posefix.png" id="walk_passing_a_posefix"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/zhang_tuanlian_officer_20261015/walk_contact_b_posefix.png" id="walk_contact_b_posefix"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/zhang_tuanlian_officer_20261015/walk_passing_b_posefix.png" id="walk_passing_b_posefix"]
+
+[sub_resource type="AtlasTexture" id="walk_contact_a_sw"]
+atlas = ExtResource("walk_contact_a_posefix")
+region = Rect2(633, 0, 621, 633)
+margin = Rect2(130.0, 24.62, 170, 158)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="walk_passing_a_sw"]
+atlas = ExtResource("walk_passing_a_posefix")
+region = Rect2(628, 0, 626, 628)
+margin = Rect2(109.0, 30.62, 165, 163)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="walk_contact_b_sw"]
+atlas = ExtResource("walk_contact_b_posefix")
+region = Rect2(625, 0, 629, 630)
+margin = Rect2(72.0, 29.62, 162, 161)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="walk_passing_b_sw"]
+atlas = ExtResource("walk_passing_b_posefix")
+region = Rect2(625, 0, 629, 618)
+margin = Rect2(98.0, 40.62, 162, 173)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("walk_contact_a_sw")},
+{"duration": 1.0, "texture": SubResource("walk_passing_a_sw")},
+{"duration": 1.0, "texture": SubResource("walk_contact_b_sw")},
+{"duration": 1.0, "texture": SubResource("walk_passing_b_sw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

@@ -140,7 +140,7 @@ const UNITS := {
 	"jiang_menshen": {"name": "蒋门神", "hp": 1870, "atk": 53, "cd": 0.88, "range": 30, "speed": 76,
 		"hero": true, "aura": "atk", "aura_r": 160, "aura_p": 1.1, "radius": 16, "ability": "jiang_smash", "elite_guard": true},
 	"jiang_thug": {"name": "蒋家打手", "hp": 95, "atk": 11, "cd": 1.0, "range": 24, "speed": 66, "radius": 11},
-	"zhang_tuanlian": {"name": "张团练", "hp": 1000, "atk": 42, "cd": 0.9, "range": 28, "speed": 96, "cavalry": true, "hero": true, "radius": 13},
+	"zhang_tuanlian": {"name": "张团练", "hp": 1000, "atk": 42, "cd": 0.9, "range": 28, "speed": 96, "cavalry": false, "hero": true, "radius": 13},
 	"tavern": {"name": "酒望", "hp": 100000, "atk": 0, "building": true, "radius": 18, "noncombat": true},
 	"signboard": {"name": "蒋家招牌", "hp": 800, "atk": 0, "building": true, "radius": 20, "objective": true},
 
