@@ -1,0 +1,21 @@
+[gd_resource type="SpriteFrames" load_steps=3 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/shi_en_gait_runtime_20261015/idle_v1_native.png" id="idle_v1_native"]
+
+[sub_resource type="AtlasTexture" id="idle_nw"]
+atlas = ExtResource("idle_v1_native")
+region = Rect2(627, 646, 609, 570)
+margin = Rect2(55.5, 30.0, 91, 130)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("idle_nw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

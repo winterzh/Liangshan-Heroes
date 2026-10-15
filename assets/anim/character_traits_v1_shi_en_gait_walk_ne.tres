@@ -1,0 +1,56 @@
+[gd_resource type="SpriteFrames" load_steps=8 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/shi_en_gait_runtime_20261015/walk_ne_contacts_v3_native.png" id="walk_ne_contacts_v3_native"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/shi_en_gait_runtime_20261015/walk_ne_passing_v3_native.png" id="walk_ne_passing_v3_native"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/shi_en_gait_runtime_20261015/walk_ne_passing_b_v4_native.png" id="walk_ne_passing_b_v4_native"]
+
+[sub_resource type="AtlasTexture" id="contact_a_ne"]
+atlas = ExtResource("walk_ne_contacts_v3_native")
+region = Rect2(80, 39, 807, 830)
+margin = Rect2(35.0, 0.58, 162, 139)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.02
+
+[sub_resource type="AtlasTexture" id="passing_a_ne"]
+atlas = ExtResource("walk_ne_passing_v3_native")
+region = Rect2(78, 33, 809, 804)
+margin = Rect2(37.5, 0.4, 161, 166)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.021053
+
+[sub_resource type="AtlasTexture" id="contact_b_ne"]
+atlas = ExtResource("walk_ne_contacts_v3_native")
+region = Rect2(892, 24, 789, 809)
+margin = Rect2(111.5, 0.14, 188, 168)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.028421
+
+[sub_resource type="AtlasTexture" id="passing_b_ne"]
+atlas = ExtResource("walk_ne_passing_b_v4_native")
+region = Rect2(35, 45, 1535, 820)
+margin = Rect2(0.0, 604.5, 190, 905)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.666667
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("contact_a_ne")},
+{"duration": 1.0, "texture": SubResource("passing_a_ne")},
+{"duration": 1.0, "texture": SubResource("contact_b_ne")},
+{"duration": 1.0, "texture": SubResource("passing_b_ne")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

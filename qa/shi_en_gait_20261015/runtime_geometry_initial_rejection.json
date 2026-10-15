@@ -1,0 +1,9 @@
+{
+  "step": "python -B tools/build_shi_en_runtime_candidate_20261015.py --prepare",
+  "actual_exit_code_observed": 1,
+  "failure": "AssertionError: ('idle_sw', 37.0, -5.0, 613, 604, 700)",
+  "cause": "All nonzero-alpha edges exceed the originally authored virtual canvas top; source preview had measured substantial-alpha foot but retained full cell pixels.",
+  "resources_emitted": false,
+  "PNG_pixel_changes": false,
+  "resolution": "Expand only the transparent virtual canvas when needed and compensate draw_scale, retaining the same effective native-pixel scale and source-bound pivot. Actual Godot import and scene checks remain pending."
+}

@@ -1,0 +1,53 @@
+[gd_resource type="SpriteFrames" load_steps=7 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/shi_en_gait_runtime_20261015/walk_sw_contacts_v4_native.png" id="walk_sw_contacts_v4_native"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/shi_en_gait_runtime_20261015/walk_sw_passing_v4_native.png" id="walk_sw_passing_v4_native"]
+
+[sub_resource type="AtlasTexture" id="contact_a_sw"]
+atlas = ExtResource("walk_sw_contacts_v4_native")
+region = Rect2(61, 31, 810, 820)
+margin = Rect2(76.5, 9.0, 140, 130)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="passing_a_sw"]
+atlas = ExtResource("walk_sw_passing_v4_native")
+region = Rect2(39, 27, 844, 808)
+margin = Rect2(0.0, 22.36, 154, 190)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.050526
+
+[sub_resource type="AtlasTexture" id="contact_b_sw"]
+atlas = ExtResource("walk_sw_contacts_v4_native")
+region = Rect2(926, 22, 832, 791)
+margin = Rect2(100.5, 0.56, 126, 167)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.008421
+
+[sub_resource type="AtlasTexture" id="passing_b_sw"]
+atlas = ExtResource("walk_sw_passing_v4_native")
+region = Rect2(888, 25, 801, 818)
+margin = Rect2(143.0, 0.7, 184, 167)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.036842
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("contact_a_sw")},
+{"duration": 1.0, "texture": SubResource("passing_a_sw")},
+{"duration": 1.0, "texture": SubResource("contact_b_sw")},
+{"duration": 1.0, "texture": SubResource("passing_b_sw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

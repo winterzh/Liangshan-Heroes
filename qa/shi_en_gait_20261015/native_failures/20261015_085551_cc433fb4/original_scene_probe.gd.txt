@@ -1,0 +1,116 @@
+extends SceneTree
+var checks: Array=[]
+var failures: Array=[]
+var shots: Array=[]
+var movement: Array=[]
+var out:=""
+func _initialize() -> void:_run.call_deferred()
+func check(ok: bool,label: String) -> void:
+	checks.append({"name":label,"passed":ok})
+	if not ok:failures.append(label)
+func snap(label: String) -> void:
+	await process_frame;await RenderingServer.frame_post_draw
+	var path:=out.path_join(label+".png")
+	check(root.get_texture().get_image().save_png(path)==OK,"capture "+label)
+	shots.append({"path":label+".png","sha256":FileAccess.get_sha256(path),"size":[root.size.x,root.size.y]})
+func others(battle,actor) -> Array:
+	var rows: Array=[]
+	for unit in battle.units:
+		if unit!=actor:rows.append([unit.key,unit.entity_id,unit.position.x,unit.position.y,unit.hp,unit.radius,unit.faction])
+	return rows
+func _run() -> void:
+	out=OS.get_environment("SHI_EN_ART_OUT")
+	if out.is_empty() or OS.get_environment("STEAM_DISABLED")!="1":quit(2);return
+	DirAccess.make_dir_recursive_absolute(out)
+	root.mode=Window.MODE_WINDOWED;root.size=Vector2i(1280,720);root.content_scale_size=root.size
+	AudioServer.set_bus_mute(0,true)
+	var manifest: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://assets/direction4/ordinary_shi_en_20261015_gait_v1.json"))
+	var campaign=root.get_node("Campaign")
+	for mode in ["skirmish","skirmish_ai","arena","custom_defense","scenario","scale_on","ai_friendly"]:campaign.set(mode,false)
+	campaign.current=6
+	root.get_node("Settings").edge_scroll=false;root.get_node("Settings").auto_micro_level=0
+	seed(5088120)
+	var battle=load("res://scenes/main.tscn").instantiate()
+	root.add_child(battle);current_scene=battle
+	await process_frame
+	battle.hud._intro_root.hide();battle._on_intro_done();battle._on_start_battle()
+	await process_frame
+	check(battle.level.id()=="level7","original Level7 deployed")
+	var actor=battle.level.shi
+	check(actor!=null and actor.key=="shi_en" and actor.art_variant.is_empty(),"original generic Shi En")
+	if actor==null:quit(3);return
+	check(int(actor.setup_def.get("atk",-1))==0 and bool(actor.setup_def.get("noncombat",false)),"original noncombat role retained")
+	check(actor.setup_def.get("abilities",["missing"]).is_empty(),"original skill restriction retained")
+	var prior_others: Array=others(battle,actor)
+	var prior_grid: Array=Array(battle.map.grid)
+	var prior_hp: float=actor.hp
+	var prior_identity: int=actor.entity_id
+	for unit in battle.units:unit.set_physics_process(false)
+	battle.camera.set_process(false);battle.camera.set_physics_process(false);battle.camera.position_smoothing_enabled=false
+	battle.camera.zoom=Vector2.ONE*2.0; battle.camera.position=battle.to_screen(actor.position)+Vector2(0,-20);battle.camera.force_update_scroll()
+	battle.select_single(actor,false)
+	await snap("original_opening_selected_shi_en")
+	# Real viewport right-click input and actual original Unit path movement.
+	actor.set_physics_process(true)
+	for row in [{"cell":Vector2i(8,20),"direction":"se"},{"cell":Vector2i(8,22),"direction":"sw"},{"cell":Vector2i(6,22),"direction":"nw"},{"cell":Vector2i(6,20),"direction":"ne"}]:
+		actor.order_stop()
+		var origin: Vector2=actor.position
+		var target: Vector2=battle.map.cell_to_world(row.cell)
+		var point: Vector2=battle.get_canvas_transform()*battle.to_screen(target)
+		check(Rect2(Vector2.ZERO,Vector2(root.size)).has_point(point),"right-click target inside viewport "+row.direction)
+		var motion:=InputEventMouseMotion.new();motion.position=point;root.push_input(motion)
+		for pressed in [true,false]:
+			var event:=InputEventMouseButton.new();event.position=point;event.button_index=MOUSE_BUTTON_RIGHT;event.pressed=pressed;root.push_input(event)
+		var deadline:=Time.get_ticks_msec()+8000
+		var sampled:=false
+		var seen: Array=[]
+		while Time.get_ticks_msec()<deadline:
+			await physics_frame
+			if actor.position.distance_to(origin)>10.0 and actor._move_blend>0.3:
+				if not seen.has(actor.animation_direction):seen.append(actor.animation_direction)
+				if not sampled and actor.animation_direction==row.direction:
+					sampled=true;await snap("actual_right_click_walk_"+row.direction)
+			if actor.position.distance_to(target)<5.0:break
+		check(sampled,"actual right-click walk sampled "+row.direction)
+		check(actor.position.distance_to(origin)>20.0,"original Unit displacement "+row.direction)
+		check(actor.position.distance_to(target)<5.0,"normal path arrived "+row.direction)
+		movement.append({"direction":row.direction,"origin":[origin.x,origin.y],"target":[target.x,target.y],"end":[actor.position.x,actor.position.y],"observed_directions":seen,"sampled":sampled})
+		actor.order_stop()
+		await process_frame
+	actor.set_physics_process(false);battle.set_process(false);battle.set_physics_process(false)
+	# Explicit frozen visual sampling of the original actor, not gameplay proof.
+	for size in [Vector2i(1280,720),Vector2i(1920,1080),Vector2i(960,540)]:
+		root.size=size;root.content_scale_size=size
+		await process_frame
+		var prefix:=str(size.x)+"x"+str(size.y)
+		battle.camera.position=battle.to_screen(actor.position)+Vector2(0,-20);battle.camera.force_update_scroll()
+		for direction in ["se","sw","ne","nw"]:
+			actor.animation_direction=direction;actor.face_left=direction in ["sw","nw"]
+			for state in ["idle","walk"]:
+				var frames: Array=Art.unit_anim_frames("shi_en",state,direction,"")
+				check(frames.size()==(1 if state=="idle" else 4),"exact frame count "+prefix+state+direction)
+				check(Art.unit_anim_uses_directional_source("shi_en",state,direction,""),"native facing no legacy mirror "+prefix+state+direction)
+				var order: Array=manifest.states[state]
+				for index in range(frames.size()):
+					var frame: AtlasTexture=frames[index] as AtlasTexture
+					check(frame!=null,"authored AtlasTexture type "+prefix+state+direction+str(index))
+					if frame==null:continue
+					var pose: Dictionary=manifest.poses[String(order[index])+"_"+direction]
+					var source: Dictionary=manifest.sources[pose.source]
+					check(frame is AtlasTexture and frame.atlas.resource_path=="res://"+String(source.path),"actual native atlas "+prefix+state+direction+str(index))
+					check(frame.region==Rect2(pose.region[0],pose.region[1],pose.region[2],pose.region[3]),"authored sampling rectangle "+prefix+state+direction+str(index))
+					actor._move_blend=0.0 if state=="idle" else 1.0
+					actor._idle_t=0.0;actor._anim_t=TAU*(float(index)+0.125)/float(frames.size())
+					var actual: Texture2D=actor._anim_frame_for_state(Art.unit_texture("shi_en","",direction))
+					check(actual==frame,"original Unit chooses authored frame "+prefix+state+direction+str(index))
+					actor.queue_redraw()
+					await snap(prefix+"_"+state+"_"+direction+"_"+str(index))
+	check(actor.hp==prior_hp and actor.entity_id==prior_identity,"Shi En health and identity unchanged")
+	check(others(battle,actor)==prior_others and Array(battle.map.grid)==prior_grid,"other original units and terrain unchanged")
+	check(actor.ui_portrait_texture()!=null,"original portrait available for direct visual identity review")
+	var report:={"passed":failures.is_empty(),"checks":checks,"failures":failures,"screenshots":shots,"movement":movement,
+		"scope":"Isolated candidate original Level7 actor, actual right-click four-way path movement, explicit frozen idle/4 gait frame sampling at three sizes. No combat/full chapter/SDK/platform/full art acceptance."}
+	FileAccess.open(out.path_join("report.json"),FileAccess.WRITE).store_string(JSON.stringify(report,"\t")+"\n")
+	print("SHI_EN_GAIT_SCENE ",checks.size()," checks; ",failures.size()," failures")
+	battle.queue_free();await process_frame
+	quit(0 if failures.is_empty() else 1)
