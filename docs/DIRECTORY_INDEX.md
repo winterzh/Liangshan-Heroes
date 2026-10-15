@@ -1,3 +1,9 @@
+## 2026-10-16：刘唐普通来源候选
+
+- `assets/characters/liu_tang_canon_sources_20261016/`：19张原生PNG、`prompt_set.json`完整提示词/引用SHA与`.gdignore`，未导入游戏。
+- `tools/verify_liu_tang_candidates_20261016.py`：只读来源/尺寸/透明度/中央分隔带审计，不改像素、不绑定或运行引擎。
+- [身份卡](LIU_TANG_IDENTITY_20261016.md)、[制作说明](LIU_TANG_CANDIDATES_20261016.md)、`qa/liu_tang_candidates_20261016/`：候选质量、原著/补足边界与来源证据；两图极淡alpha残留仍待处理。
+
 ## 2026-10-16：阮小七商人西北交替步与长线测试
 
 - `assets/characters/ruan_xiaoqi_merchant_nw_20261016/contact_b_nw.png`及导入配置：新单幅原生图。
