@@ -1,3 +1,7 @@
+## 2026-10-16：阮小七候选来源与只读核对
+
+`assets/characters/ruan_xiaoqi_canon_sources_20261015/`保存22份内置原生PNG、完整提示词，带`.gdignore`；当前全部为作者候选，无生产路由。只读复现`python -X utf8 -B tools/verify_ruan_xiaoqi_candidates_20261015.py`，核对字节/引用/尺寸/alpha，不画PNG，也不等于实际导入或动画质量通过。原始核对收据在`qa/ruan_xiaoqi_canon_20261015/`。[身份卡](RUAN_XIAOQI_IDENTITY_20261015.md)、[后续采用门槛](RUAN_XIAOQI_CANDIDATES_20261015.md)。游戏启动方式不变。
+
 ## 2026-10-15：施恩出城康复阶段外观
 
 生产目录`assets/characters/shi_en_recovering_20261015/`含13原生PNG，来源目录`shi_en_recovering_sources_20261015/`保留全部内置生成请求与引用SHA，带`.gdignore`。`level7_shi_en_recovering_20261015.json`和16份`character_traits_v2_shi_en_recovering_*.tres`绑定44姿势，只在Level7实际非战斗同行角色派生使用；不改存档variant和启动方式。

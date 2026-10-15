@@ -1,3 +1,10 @@
+## 2026-10-16：阮小七原著美术候选
+
+- `assets/characters/ruan_xiaoqi_canon_sources_20261015/`：22份未采用内置PNG、完整提示词和隔离标记。
+- `tools/verify_ruan_xiaoqi_candidates_20261015.py`：只读来源/尺寸/alpha核对，不生成生产资格。
+- `qa/ruan_xiaoqi_canon_20261015/`：作者核对收据与候选/未完门槛。
+- [身份卡](RUAN_XIAOQI_IDENTITY_20261015.md)、[制作进展](RUAN_XIAOQI_CANDIDATES_20261015.md)：15/19回事实、保守设计、全动作候选及远程魔法/旧技能纠偏待办。
+
 ## 2026-10-15：施恩出城康复阶段美术
 
 - `assets/characters/shi_en_recovering_20261015/`：13原生生产PNG及导入配置。
