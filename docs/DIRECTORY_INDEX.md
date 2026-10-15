@@ -1,3 +1,11 @@
+## 2026-10-16：阮小七黄泥冈专用阶段资源
+
+- `assets/characters/ruan_xiaoqi_merchant_sources_20261016/`：20张内置原生图与完整请求/引用SHA，`.gdignore`隔离。
+- `assets/characters/ruan_xiaoqi_merchant_20261016/`：15运行PNG及原生导入配置；未重编码。
+- `assets/direction4/level1_ruan_xiaoqi_merchant_20261016.json`、`assets/anim/character_traits_v2_ruan_xiaoqi_merchant_*.tres`：20资源/56姿势、间距图比例校准参数。
+- `tools/build_ruan_xiaoqi_merchant_20261016.py`、`tools/run_ruan_xiaoqi_merchant_20261016.py`、`tools/ruan_xiaoqi_merchant_20261016.gd`：作者只读复现与完整PCK实际演员/普通形象回归入口。
+- [身份依据与实现](RUAN_XIAOQI_MERCHANT_20261016.md)、`qa/ruan_xiaoqi_merchant_20261016/`：最终采用、原始证据SHA索引、首轮比例问题与直接目检。
+
 ## 2026-10-16：阮小七后视相反步修正
 
 - `assets/characters/ruan_xiaoqi_gait_20261016/`：两张接触B单幅原生PNG/导入配置。

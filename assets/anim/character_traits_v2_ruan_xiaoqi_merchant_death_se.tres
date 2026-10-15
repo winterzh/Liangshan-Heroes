@@ -1,0 +1,55 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoqi_merchant_20261016/death_buckle.png" id="death_buckle"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoqi_merchant_20261016/death_fall_spacing.png" id="death_fall_spacing"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoqi_merchant_20261016/death_settle.png" id="death_settle"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoqi_merchant_20261016/death_rest.png" id="death_rest"]
+
+[sub_resource type="AtlasTexture" id="death_buckle_se"]
+atlas = ExtResource("death_buckle")
+region = Rect2(0, 0, 645, 622)
+margin = Rect2(76.0, 64.64, 157, 180)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="death_fall_se"]
+atlas = ExtResource("death_fall_spacing")
+region = Rect2(0, 0, 639, 652)
+margin = Rect2(29.5, 0.72, 57, 44)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.080745
+
+[sub_resource type="AtlasTexture" id="death_settle_se"]
+atlas = ExtResource("death_settle")
+region = Rect2(0, 0, 638, 660)
+margin = Rect2(82.5, 87.64, 164, 142)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="death_rest_se"]
+atlas = ExtResource("death_rest")
+region = Rect2(0, 0, 638, 659)
+margin = Rect2(82.5, 87.64, 164, 143)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("death_buckle_se")},
+{"duration": 1.0, "texture": SubResource("death_fall_se")},
+{"duration": 1.0, "texture": SubResource("death_settle_se")},
+{"duration": 1.0, "texture": SubResource("death_rest_se")}
+],
+"loop": false,
+"name": &"default",
+"speed": 4.0
+}]
