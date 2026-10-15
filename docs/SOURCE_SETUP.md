@@ -1,3 +1,7 @@
+## 2026-10-15：施恩配套头像与验证入口
+
+生产图为`assets/characters/shi_en_portrait_20261015/shi_en.png`，完整原图、提示词与身份/画风参考SHA位于带`.gdignore`的`shi_en_portrait_sources_20261015/`。原生RGB按字节保留，不是透明底抠像。Art独立头像表优先取图；启动入口不变。复现用`python -X utf8 -B tools/run_shi_en_portrait_world_20261015.py --run`，可加`--work-root`指定工程外证据位置，实际完整PCK局部66项/13图通过；[范围与收据](SHI_EN_PORTRAIT_WORLD_20261015.md)。包、DLL、缓存和玩家档案不进Git，完整美术继续。
+
 ## 2026-10-15：毒瘴桩场内美术与图标统一
 
 毒桩新增原生铜箍木桩/玉色晶核PNG，直接沿用施恩W图标设计；独立原图与完整提示词保存于`assets/fx/poison_ward_sources_20261015/`，生产目录`assets/fx/poison_ward_20261015/`。Art保留强纹理引用，毒桩桩身直立、脚点固定，范围圈仍贴等距地面；治疗/死亡桩和旧回退保留，技能定义和原施法/毒桩模型未改。见[实现与复现](POISON_WARD_WORLD_20261015.md)及[原始QA](../qa/poison_ward_world_20261015/README.md)。

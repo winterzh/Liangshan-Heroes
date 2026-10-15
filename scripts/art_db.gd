@@ -633,6 +633,7 @@ const STANDALONE_PORTRAITS := {
 	"lu_zhishen": "res://assets/characters/art_full_20260916/lu_zhishen_portrait_20260916.png",
 	"wu_song": "res://assets/characters/art_full_20260916/wu_song_portrait_20260916.png",
 	"gongsun_sheng": "res://assets/characters/art_full_20260916/gongsun_sheng_portrait_20260916.png",
+	"shi_en": "res://assets/characters/shi_en_portrait_20261015/shi_en.png",
 }
 var _standalone_portraits := {}
 
