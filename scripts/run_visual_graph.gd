@@ -17,6 +17,7 @@ const RemainsState := preload("res://scripts/run_death_remains_state.gd")
 const LIMIT := 4096
 const TEX := "res://assets/vfx/gong_beast_charge_run.png"
 const FIELDS := {
+	"staff_motion": ["dur", "t", "rad", "aim", "stance"],
 	"kuai_tell": KuaiVisual.FIELDS.kuai_tell,
 	"hg_cart": HuangVisual.FIELDS.hg_cart,
 	"hg_sign": HuangVisual.FIELDS.hg_sign,

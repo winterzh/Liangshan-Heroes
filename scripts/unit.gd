@@ -3612,6 +3612,7 @@ func _spawn_dust() -> void:
 
 ## 施法抬手·蓄能辉光（屏幕对齐空间绘制）：头顶光球渐亮、外环向心收束、几点能量丝上升。
 func _draw_cast_glow() -> void:
+	if key == "shi_en": return   # 枪棒蓄势只播身体动作，不画法术蓄光。
 	var w := clampf(1.0 - _cast_t / _cast_dur, 0.0, 1.0)   # 0→1 蓄能进度
 	var head := Vector2(0.0, -radius * 1.7)
 	var c := _cast_color

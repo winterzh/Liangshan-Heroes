@@ -3661,10 +3661,10 @@ class HeroSlotButton extends Control:
 	# 核心英雄及施恩的手绘技能图。未覆盖的技能继续走下方矢量图标回退，
 	# 因此升级视觉不改变原有技能注册表，也不会让其他英雄出现空白按钮。
 	const ART_ICON_PATHS := {
-		"shi_en_q": "res://assets/ui/shi_en_skills_20261015/shi_en_q.png",
-		"shi_en_w": "res://assets/ui/shi_en_skills_20261015/shi_en_w.png",
-		"shi_en_e": "res://assets/ui/shi_en_skills_20261015/shi_en_e.png",
-		"shi_en_r": "res://assets/ui/shi_en_skills_20261015/shi_en_r.png",
+		"shi_en_q": "res://assets/ui/shi_en_staff_skills_20261015/shi_en_q.png",
+		"shi_en_w": "res://assets/ui/shi_en_staff_skills_20261015/shi_en_w.png",
+		"shi_en_e": "res://assets/ui/shi_en_staff_skills_20261015/shi_en_e.png",
+		"shi_en_r": "res://assets/ui/shi_en_staff_skills_20261015/shi_en_r.png",
 		"song_rally": "res://assets/ui/skills_v2/song_rally_v2.png",
 		"song_banner": "res://assets/ui/skills_v2/song_banner_v2.png",
 		"song_fire": "res://assets/ui/skills_v2/song_fire_v2.png",
@@ -3905,7 +3905,7 @@ class HeroSlotButton extends Control:
 		_art_icon_tex = null
 		var path := String(ART_ICON_PATHS.get(ability_id, ""))
 		# 原生大图在41/52像素按钮内使用mipmap，避免细纹闪烁；不改其他技能采样。
-		texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS if path.begins_with("res://assets/ui/shi_en_skills_20261015/") else CanvasItem.TEXTURE_FILTER_PARENT_NODE
+		texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS if path.begins_with("res://assets/ui/shi_en_staff_skills_20261015/") else CanvasItem.TEXTURE_FILTER_PARENT_NODE
 		if path != "":
 			_art_icon_tex = load(path) as Texture2D
 		return _art_icon_tex

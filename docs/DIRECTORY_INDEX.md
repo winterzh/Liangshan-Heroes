@@ -1,3 +1,10 @@
+## 2026-10-15：施恩枪棒技能纠偏
+
+- `assets/ui/shi_en_staff_skills_20261015/`：四张原生生产图标与导入配置。
+- `assets/ui/shi_en_staff_skills_sources_20261015/`：内置生成原图、完整提示词及来源SHA，带`.gdignore`。
+- `qa/shi_en_staff_skills_20261015/`：最终1232项/164图原始记录、采用收据、来源/目检与先行批边界。
+- `tools/run_shi_en_staff_skills_20261015.py`、`tools/shi_en_staff_skills_20261015.gd`：实际完整PCK、近身结算与UI验证；[实现](SHI_EN_STAFF_SKILLS_20261015.md)。
+
 ## 2026-10-15：施恩有须青衣身份与全动作
 
 - `assets/characters/shi_en_canon_20261015/`：17张原生生产PNG及导入配置。

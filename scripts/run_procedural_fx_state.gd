@@ -1,6 +1,7 @@
 extends RefCounted
-## Thirty trusted procedural TimedFx classes. No saved Script, resource or callback.
+## Trusted procedural TimedFx classes. No saved Script, resource or callback.
 const TYPES := {
+	"staff_motion": {"dur": TYPE_FLOAT, "t": TYPE_FLOAT, "rad": TYPE_FLOAT, "aim": TYPE_VECTOR2, "stance": TYPE_BOOL},
 	"hua_target_arrow": {"dur": TYPE_FLOAT, "t": TYPE_FLOAT, "end_w": TYPE_VECTOR2, "col": TYPE_COLOR, "snipe": TYPE_BOOL, "lock_shots": TYPE_INT, "travel": TYPE_FLOAT, "_E": TYPE_VECTOR2},
 	"lin_counter": {"dur": TYPE_FLOAT, "t": TYPE_FLOAT, "end_w": TYPE_VECTOR2, "col": TYPE_COLOR, "_end": TYPE_VECTOR2},
 	"lin_duel_resolve": {"dur": TYPE_FLOAT, "t": TYPE_FLOAT},
@@ -35,6 +36,8 @@ var scripts: Dictionary
 
 func _init(battle: Script) -> void:
 	scripts = {"hua_target_arrow": battle.HuaTargetArrowFx, "lin_counter": battle.LinCounterFx, "lin_duel_resolve": battle.LinDuelResolveFx, "lightning": battle.LightningFx, "rally": battle.RallyFx, "haste": battle.HasteFx, "slash_arc": battle.SlashArcFx, "iron_staff_sweep": battle.IronStaffSweepFx, "water_splash": battle.WaterSplashFx, "poison_cloud": battle.PoisonCloudFx, "stone": battle.StoneFx, "stomp": battle.StompFx, "whirl": battle.WhirlFx, "blood": battle.BloodFx, "charge": battle.ChargeFx, "pin": battle.PinFx, "ability_beam": battle.AbilityBeamFx, "ability_sweep": battle.AbilitySweepFx, "spear_sweep": battle.SpearSweepFx, "thrust": battle.ThrustFx, "chrono": battle.ChronoFx, "ice_wall": battle.IceWallFx, "earth_crack": battle.EarthCrackFx, "echo_slam": battle.EchoSlamFx, "split_mirror": battle.SplitMirrorFx, "fire_line": battle.FireLineFx, "shadow_wave": battle.ShadowWaveFx, "amp_cast": battle.AmpCastFx, "silence": battle.SilenceFx, "armor_crack": battle.ArmorCrackFx}
+
+	scripts["staff_motion"] = battle.StaffMotionFx
 
 func kind(node: Node2D) -> String:
 	for key: String in scripts:

@@ -1,3 +1,9 @@
+## 2026-10-15：施恩枪棒技能与新图标
+
+新生产图标在`assets/ui/shi_en_staff_skills_20261015/`，四份原生输出/完整提示词/SHA保存在`assets/ui/shi_en_staff_skills_sources_20261015/`并以`.gdignore`隔离。施恩改为Q/R自身近身棒击、W个人攻速、E步法闪避，去除毒桩和持续毒伤；四语言同步且明确游戏招式。启动方式不变。
+
+复现：`python -X utf8 -B tools/run_shi_en_staff_skills_20261015.py --run`，支持`--work-root`。最终完整PCK1232项/164图通过，5393份来源零变化；[实现与范围](SHI_EN_STAFF_SKILLS_20261015.md)、[采用与原始QA](../qa/shi_en_staff_skills_20261015/README.md)。PCK/DLL/私有档案/缓存不进Git，Steam未更新；初见受伤章节路由及其余美术继续开放。
+
 ## 2026-10-15：施恩原著青衣身份与全动作验证
 
 `assets/characters/shi_en_canon_20261015/`为本批17张原生生产PNG，`assets/characters/shi_en_canon_sources_20261015/`保存24张原始输出与完整提示词/参考SHA并以`.gdignore`隔离导入。新清单`assets/direction4/ordinary_shi_en_canon_20261015.json`及20份`character_traits_v2_shi_en_canon_*.tres`绑定56姿势，Art同步五状态与新有须青衣头像；旧资源保留。初见白帕络手只留候选，没有章节路由。启动方式不变。

@@ -9226,6 +9226,13 @@ func _spawn_ability_visual_fx(caster: Unit, center: Vector2, r: float, ad: Dicti
 	var start := caster.position + Vector2(0, -10)
 	var target := center
 	match delivery:
+		"staff":
+			var motion := StaffMotionFx.new()
+			motion.position = caster.position
+			motion.rad = maxf(16.0, r)
+			motion.aim = {"se": Vector2.RIGHT, "sw": Vector2.DOWN, "ne": Vector2.UP, "nw": Vector2.LEFT}.get(caster.animation_direction, Vector2.RIGHT)
+			motion.stance = cast_kind == "atkspeed"
+			fx_root.add_child(motion)
 		"projectile", "thrown", "lob":
 			if cast_kind != "bolt":
 				if start.distance_to(target) > 18.0:
@@ -13832,6 +13839,28 @@ class TimedFx extends Node2D:
 		if t <= 0.0:
 			queue_free()
 		queue_redraw()
+
+
+## 施恩贴身枪棒短促尘迹；没有独立飞行兵器、光环或扩散伤害域。
+class StaffMotionFx extends TimedFx:
+	var rad := 36.0
+	var aim := Vector2.RIGHT
+	var stance := false
+	func _ready() -> void:
+		if has_meta("_run_restore_prepared"): return
+		dur = 0.28
+		t = dur
+	func _draw() -> void:
+		var f := clampf(t / dur, 0.0, 1.0)
+		var progress := 1.0 - f
+		var a := aim.angle()
+		var reach := minf(rad, 44.0) * (0.55 + 0.2 * progress)
+		if not stance:
+			for i in range(2):
+				draw_arc(Vector2.ZERO, reach - i * 3.0, a - 0.65, a + 0.65, 14, Color(0.55, 0.43, 0.29, f * 0.5), 1.0)
+		for i in range(5):
+			var dust := Vector2.from_angle(a - 0.6 + float(i) * 0.3) * (8.0 + progress * (6.0 if stance else reach * 0.5))
+			draw_circle(dust, 0.6 + float(i % 2) * 0.35, Color(0.5, 0.43, 0.32, f * 0.6))
 
 
 class AbilityFx extends TimedFx:
