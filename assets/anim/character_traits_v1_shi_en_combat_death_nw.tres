@@ -1,0 +1,49 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/shi_en_combat_runtime_20261015/death_nw_v1_native.png" id="death_nw_v1"]
+
+[sub_resource type="AtlasTexture" id="death_stagger_nw"]
+atlas = ExtResource("death_nw_v1")
+region = Rect2(5, 37, 635, 588)
+margin = Rect2(15.0, 0.0, 65, 112)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="death_kneel_nw"]
+atlas = ExtResource("death_nw_v1")
+region = Rect2(644, 7, 574, 644)
+margin = Rect2(86.0, 0.64, 178, 108)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.074286
+
+[sub_resource type="AtlasTexture" id="death_fall_nw"]
+atlas = ExtResource("death_nw_v1")
+region = Rect2(0, 658, 635, 526)
+margin = Rect2(48.5, 84.0, 65, 174)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="death_prone_nw"]
+atlas = ExtResource("death_nw_v1")
+region = Rect2(646, 658, 592, 596)
+margin = Rect2(71.0, 81.0, 108, 104)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("death_stagger_nw")},
+{"duration": 1.0, "texture": SubResource("death_kneel_nw")},
+{"duration": 1.0, "texture": SubResource("death_fall_nw")},
+{"duration": 1.0, "texture": SubResource("death_prone_nw")}
+],
+"loop": false,
+"name": &"default",
+"speed": 4.0
+}]

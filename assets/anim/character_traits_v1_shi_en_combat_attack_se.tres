@@ -1,0 +1,54 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/shi_en_combat_runtime_20261015/attack_se_v1_native.png" id="attack_se"]
+
+[sub_resource type="AtlasTexture" id="windup_se"]
+atlas = ExtResource("attack_se")
+region = Rect2(21, 9, 631, 646)
+margin = Rect2(41.0, 0.58, 88, 73)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.027143
+
+[sub_resource type="AtlasTexture" id="strike_se"]
+atlas = ExtResource("attack_se")
+region = Rect2(652, 18, 600, 640)
+margin = Rect2(134.0, 13.88, 134, 94)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.048571
+
+[sub_resource type="AtlasTexture" id="followthrough_se"]
+atlas = ExtResource("attack_se")
+region = Rect2(0, 661, 652, 593)
+margin = Rect2(0.0, 58.0, 48, 107)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="recover_se"]
+atlas = ExtResource("attack_se")
+region = Rect2(652, 658, 592, 560)
+margin = Rect2(107.5, 54.0, 108, 140)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("windup_se")},
+{"duration": 1.0, "texture": SubResource("windup_se")},
+{"duration": 1.0, "texture": SubResource("strike_se")},
+{"duration": 1.0, "texture": SubResource("strike_se")},
+{"duration": 1.0, "texture": SubResource("strike_se")},
+{"duration": 1.0, "texture": SubResource("followthrough_se")},
+{"duration": 1.0, "texture": SubResource("recover_se")},
+{"duration": 1.0, "texture": SubResource("recover_se")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

@@ -1,0 +1,32 @@
+[gd_resource type="SpriteFrames" load_steps=4 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/shi_en_combat_runtime_20261015/hurt_se_v1_native.png" id="hurt_se_v1"]
+
+[sub_resource type="AtlasTexture" id="hurt_impact_se"]
+atlas = ExtResource("hurt_se_v1")
+region = Rect2(53, 18, 715, 986)
+margin = Rect2(114.5, 0.2, 395, 124)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.032558
+
+[sub_resource type="AtlasTexture" id="hurt_recover_se"]
+atlas = ExtResource("hurt_se_v1")
+region = Rect2(768, 34, 752, 968)
+margin = Rect2(215.5, 0.66, 361, 145)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.035349
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("hurt_impact_se")},
+{"duration": 1.0, "texture": SubResource("hurt_recover_se")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

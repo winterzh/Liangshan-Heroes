@@ -1,0 +1,54 @@
+[gd_resource type="SpriteFrames" load_steps=7 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/shi_en_combat_runtime_20261015/death_ne_v1_native.png" id="death_ne_v1"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/shi_en_combat_runtime_20261015/death_ne_fall_v2_native.png" id="death_ne_fall_v2"]
+
+[sub_resource type="AtlasTexture" id="death_stagger_ne"]
+atlas = ExtResource("death_ne_v1")
+region = Rect2(0, 18, 640, 640)
+margin = Rect2(51.0, 0.18, 109, 109)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.07
+
+[sub_resource type="AtlasTexture" id="death_kneel_ne"]
+atlas = ExtResource("death_ne_v1")
+region = Rect2(640, 0, 604, 658)
+margin = Rect2(97.0, 0.52, 132, 78)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.051429
+
+[sub_resource type="AtlasTexture" id="death_fall_ne"]
+atlas = ExtResource("death_ne_fall_v2")
+region = Rect2(63, 27, 1150, 1193)
+margin = Rect2(0.0, 120.34, 337, 294)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.062143
+
+[sub_resource type="AtlasTexture" id="death_prone_ne"]
+atlas = ExtResource("death_ne_v1")
+region = Rect2(640, 658, 604, 596)
+margin = Rect2(0.0, 87.32, 122, 130)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.037143
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("death_stagger_ne")},
+{"duration": 1.0, "texture": SubResource("death_kneel_ne")},
+{"duration": 1.0, "texture": SubResource("death_fall_ne")},
+{"duration": 1.0, "texture": SubResource("death_prone_ne")}
+],
+"loop": false,
+"name": &"default",
+"speed": 4.0
+}]

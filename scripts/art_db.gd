@@ -427,7 +427,7 @@ func avatar_texture(key: String, variant := "") -> Texture2D:
 ## Ordinary armed bodies only. Explicit story appearances retain their own routes.
 ## Unlisted actions retain existing art while further action review continues.
 const ORDINARY_CHARACTER_FAMILIES := {
-	"shi_en": {"idle": "character_traits_v1_shi_en_gait", "walk": "character_traits_v1_shi_en_gait"},
+	"shi_en": {"idle": "character_traits_v1_shi_en_gait", "walk": "character_traits_v1_shi_en_gait", "attack": "character_traits_v1_shi_en_combat", "hurt": "character_traits_v1_shi_en_combat", "death": "character_traits_v1_shi_en_combat"},
 	"wu_song": {
 		"idle": "character_traits_v5_wu_song_gait", "walk": "character_traits_v5_wu_song_gait",
 		"attack": "character_traits_v7_wu_song_combat", "hurt": "character_traits_v7_wu_song_combat", "death": "character_traits_v8_wu_song_death"

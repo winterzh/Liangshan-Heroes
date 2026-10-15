@@ -1,0 +1,55 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/shi_en_combat_runtime_20261015/attack_ne_v1_native.png" id="attack_ne"]
+
+[sub_resource type="AtlasTexture" id="windup_ne"]
+atlas = ExtResource("attack_ne")
+region = Rect2(0, 27, 652, 626)
+margin = Rect2(5.0, 0.32, 74, 100)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.037143
+
+[sub_resource type="AtlasTexture" id="strike_ne"]
+atlas = ExtResource("attack_ne")
+region = Rect2(652, 29, 594, 629)
+margin = Rect2(50.5, 0.78, 135, 100)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.041429
+
+[sub_resource type="AtlasTexture" id="followthrough_ne"]
+atlas = ExtResource("attack_ne")
+region = Rect2(29, 659, 623, 595)
+margin = Rect2(0.0, 77.34, 114, 142)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.052857
+
+[sub_resource type="AtlasTexture" id="recover_ne"]
+atlas = ExtResource("attack_ne")
+region = Rect2(652, 660, 568, 566)
+margin = Rect2(18.0, 60.0, 132, 134)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("windup_ne")},
+{"duration": 1.0, "texture": SubResource("windup_ne")},
+{"duration": 1.0, "texture": SubResource("strike_ne")},
+{"duration": 1.0, "texture": SubResource("strike_ne")},
+{"duration": 1.0, "texture": SubResource("strike_ne")},
+{"duration": 1.0, "texture": SubResource("followthrough_ne")},
+{"duration": 1.0, "texture": SubResource("recover_ne")},
+{"duration": 1.0, "texture": SubResource("recover_ne")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

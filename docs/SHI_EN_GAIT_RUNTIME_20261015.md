@@ -14,4 +14,4 @@
 
 来源只读复核：`python -X utf8 -B tools/prepare_shi_en_gait_candidates_20261015.py`；运行几何只读复核：`python -X utf8 -B tools/build_shi_en_runtime_candidate_20261015.py`。`run_shi_en_gait_candidate_20261015.py --run`是接入前候选构建入口，拒绝覆盖已有资源；该轮实际输入及源码SHA保存在native收据和外部冻结工程，不能把接入后的工程当作无资源的初始候选重新生成。
 
-攻击、受击和倒地仍为来源候选，尚未接入。本批没有执行完整游戏、完整资源PCK、发布EXE、原生SDK、Steam上传或整套美术验收；七植物及旧环境PCK的既有通过记录保持独立。其他人物、场景、特效、UI和完整美术目标继续开放。
+后续攻击、受击和倒地已完成普通施恩接入及受控真实回调验证，见[三类动作接入](SHI_EN_FULL_ACTIONS_20261015.md)。本待机/行走批本身没有执行完整游戏、完整资源PCK、发布EXE、原生SDK、Steam上传或整套美术验收；七植物及旧环境PCK的既有通过记录保持独立。其他人物、场景、特效、UI和完整美术目标继续开放。
