@@ -1,3 +1,11 @@
+## 2026-10-16：阮小七后视相反步修正
+
+- `assets/characters/ruan_xiaoqi_gait_20261016/`：两张接触B单幅原生PNG/导入配置。
+- `assets/characters/ruan_xiaoqi_gait_sources_20261016/`：八份内置原稿/修正稿与完整提示词，`.gdignore`隔离；仅最终两张采用。
+- `assets/direction4/ordinary_ruan_xiaoqi_gait_20261016.json`、`assets/anim/character_traits_v2_ruan_xiaoqi_gait_20261016_walk_*.tres`：新walk资源与原其他状态的复合清单。
+- `tools/build_ruan_xiaoqi_gait_20261016.py`、`tools/run_ruan_xiaoqi_gait_20261016.py`：只读字节/绑定核对及复用实际动作/UI夹具的完整PCK入口。
+- [实现](RUAN_XIAOQI_GAIT_20261016.md)、`qa/ruan_xiaoqi_gait_20261016/`：验收收据、原始报告、选留后视截图及完整外部证据SHA索引。
+
 ## 2026-10-16：阮小七持枪身份与技能本地采用
 
 - `assets/characters/ruan_xiaoqi_canon_20261016/`：17张原生人物纹理及导入配置。

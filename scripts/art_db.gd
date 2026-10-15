@@ -436,7 +436,7 @@ func avatar_texture(key: String, variant := "") -> Texture2D:
 ## Ordinary armed bodies only. Explicit story appearances retain their own routes.
 ## Unlisted actions retain existing art while further action review continues.
 const ORDINARY_CHARACTER_FAMILIES := {
-	"ruan_xiaoqi": {"idle": "character_traits_v2_ruan_xiaoqi_canon", "walk": "character_traits_v2_ruan_xiaoqi_canon", "attack": "character_traits_v2_ruan_xiaoqi_canon", "hurt": "character_traits_v2_ruan_xiaoqi_canon", "death": "character_traits_v2_ruan_xiaoqi_canon"},
+	"ruan_xiaoqi": {"idle": "character_traits_v2_ruan_xiaoqi_canon", "walk": "character_traits_v2_ruan_xiaoqi_gait_20261016", "attack": "character_traits_v2_ruan_xiaoqi_canon", "hurt": "character_traits_v2_ruan_xiaoqi_canon", "death": "character_traits_v2_ruan_xiaoqi_canon"},
 	"zhang_tuanlian": {"idle": "character_traits_v2_zhang_tuanlian_officer", "walk": "character_traits_v2_zhang_tuanlian_officer", "attack": "character_traits_v2_zhang_tuanlian_officer", "hurt": "character_traits_v2_zhang_tuanlian_officer", "death": "character_traits_v2_zhang_tuanlian_officer"},
 	"shi_en": {"idle": "character_traits_v2_shi_en_canon", "walk": "character_traits_v2_shi_en_canon", "attack": "character_traits_v2_shi_en_canon", "hurt": "character_traits_v2_shi_en_canon", "death": "character_traits_v2_shi_en_canon"},
 	"wu_song": {
