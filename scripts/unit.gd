@@ -327,7 +327,7 @@ var _hit_at := 0.5         # 挥击进度降到此值时结算伤害（命中瞬
 var _pending_target: Unit = null
 var _pending_done := true  # 本次挥击是否已结算
 var _flinch := Vector2.ZERO # 受击退缩位移（逐帧衰减）
-var _shi_en_hurt_t := 0.0 # 施恩/张团练/阮小七两帧受击；保留字段名及序列化接口。
+var _shi_en_hurt_t := 0.0 # 施恩/张团练/阮小七/刘唐两帧受击；保留字段名及序列化接口。
 const SHI_EN_HURT_DUR := 0.18
 var _gather_anim_t := 0.0   # 采集挥击节拍：每隔一拍做一次「砍/凿」动作（纯表演不结算）
 var _harvest_pulse := 0.0   # 资源点被采时的摇晃强度（被工人凿一下→置 1，逐帧衰减）
@@ -352,6 +352,7 @@ const DUST_DUR := 0.36
 # body motion and weapon pose already live in the bitmap, so the legacy whole-
 # sprite swing and procedural weapon trail must not be layered on top.
 const AUTHORED_DIRECTION4_ATTACK_KEYS := {
+	"liu_tang": true,
 	"ruan_xiaoqi": true,
 	"zhang_tuanlian": true,
 	"shi_en": true,
@@ -1149,7 +1150,7 @@ func take_damage(d: float, from: Unit = null, crit := false, ignore_reduction :=
 	if from != null and is_instance_valid(from):
 		var fd := _screen_dir(position - from.position)
 		_flinch = fd * 4.0
-		if ((key in ["shi_en", "zhang_tuanlian", "ruan_xiaoqi"] and art_variant.is_empty()) or (key == "ruan_xiaoqi" and art_variant == "hn_ruan_xiaoqi")):
+		if ((key in ["shi_en", "zhang_tuanlian", "ruan_xiaoqi", "liu_tang"] and art_variant.is_empty()) or (key == "ruan_xiaoqi" and art_variant == "hn_ruan_xiaoqi")):
 			_shi_en_hurt_t = SHI_EN_HURT_DUR
 	_request_redraw()
 	# 被打就还手（仅限当前没有目标的战斗单位）
@@ -3627,8 +3628,20 @@ func show_ruan_spear_followthrough() -> void:
 	_lunge_dir = {"se": Vector2.RIGHT, "sw": Vector2.DOWN, "ne": Vector2.UP, "nw": Vector2.LEFT}.get(animation_direction, Vector2.RIGHT)
 	_request_redraw()
 
+## Presentation only: damage has settled, no queued ordinary hit.
+func show_liu_pudao_followthrough() -> void:
+	if key != "liu_tang" or not art_variant.is_empty(): return
+	if _lunge > 0.0 and not _pending_done: return
+	_pending_target = null
+	_pending_done = true
+	_swing_kind = WK.SWORD
+	_swing_speed = 2.1
+	_lunge = 0.48
+	_lunge_dir = {"se": Vector2.RIGHT, "sw": Vector2.DOWN, "ne": Vector2.UP, "nw": Vector2.LEFT}.get(animation_direction, Vector2.RIGHT)
+	_request_redraw()
+
 func _draw_cast_glow() -> void:
-	if key in ["shi_en", "ruan_xiaoqi"]: return   # 枪棒蓄势只播身体动作，不画法术蓄光。
+	if key in ["shi_en", "ruan_xiaoqi", "liu_tang"]: return   # 枪棒蓄势只播身体动作，不画法术蓄光。
 	var w := clampf(1.0 - _cast_t / _cast_dur, 0.0, 1.0)   # 0→1 蓄能进度
 	var head := Vector2(0.0, -radius * 1.7)
 	var c := _cast_color
@@ -4051,13 +4064,13 @@ func _anim_frame_for_state(fallback: Texture2D) -> Texture2D:
 			_frame_directional = Art.unit_anim_uses_directional_source(key, "attack", animation_direction, visual_art_variant())
 			return windup[0]
 	var ak := _anim_key()
-	if key == "ruan_xiaoqi" and art_variant.is_empty() and _cast_t > 0.0:
+	if key in ["ruan_xiaoqi", "liu_tang"] and art_variant.is_empty() and _cast_t > 0.0:
 		var ready: Array = Art.unit_anim_frames(ak, "attack", animation_direction, "")
 		if not ready.is_empty():
 			_real_frames = true
 			_frame_directional = Art.unit_anim_uses_directional_source(ak, "attack", animation_direction, "")
 			return ready[0]
-	if _shi_en_hurt_t > 0.0 and ((key in ["shi_en", "zhang_tuanlian", "ruan_xiaoqi"] and art_variant.is_empty()) or (key == "ruan_xiaoqi" and art_variant == "hn_ruan_xiaoqi")):
+	if _shi_en_hurt_t > 0.0 and ((key in ["shi_en", "zhang_tuanlian", "ruan_xiaoqi", "liu_tang"] and art_variant.is_empty()) or (key == "ruan_xiaoqi" and art_variant == "hn_ruan_xiaoqi")):
 		var recoil: Array = Art.unit_anim_frames(ak, "hurt", animation_direction, visual_art_variant())
 		if not recoil.is_empty():
 			_real_frames = true
@@ -4172,13 +4185,13 @@ func _draw() -> void:
 		var shp := 0.55 + 0.45 * sin(_idle_t * 4.0)
 		draw_circle(Vector2.ZERO, radius + 5.0, Color(0.45, 0.72, 1.0, 0.10 + 0.05 * shp))
 		draw_arc(Vector2.ZERO, radius + 6.0, 0.0, TAU, 30, Color(0.6, 0.85, 1.0, 0.45 + 0.3 * shp), 2.0)
-	if (temp_atk > 1.01 or temp_atk_add > 0.0) and not _dying:
+	if (temp_atk > 1.01 or temp_atk_add > 0.0) and not _dying and key != "liu_tang":
 		# 临时攻击增益：手部金红辉光粒子（环绕搏动）
 		var gp := _idle_t * 3.0
 		for gi in range(3):
 			var ga := gp + float(gi) * TAU / 3.0
 			draw_circle(Vector2(cos(ga), sin(ga) * 0.6) * (radius * 0.95), 2.0, Color(1.0, 0.68, 0.24, 0.6))
-	if maxf(temp_atkspeed, _aura_atkspeed) > 1.01 and not _dying:
+	if maxf(temp_atkspeed, _aura_atkspeed) > 1.01 and not _dying and key != "liu_tang":
 		# 临时攻速：身侧双手残影短线
 		var asx := radius * 0.85
 		var aso := sin(_idle_t * 14.0) * 3.0

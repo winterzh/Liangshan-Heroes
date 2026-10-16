@@ -1,0 +1,57 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/liu_tang_pudao_20261016/walk_contact_a.png" id="walk_contact_a"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/liu_tang_pudao_20261016/walk_passing_a.png" id="walk_passing_a"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/liu_tang_pudao_20261016/walk_contact_b.png" id="walk_contact_b"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/liu_tang_pudao_20261016/walk_passing_b_ne_canon.png" id="walk_passing_b_ne_canon"]
+
+[sub_resource type="AtlasTexture" id="walk_contact_a_ne"]
+atlas = ExtResource("walk_contact_a")
+region = Rect2(0, 624, 702, 630)
+margin = Rect2(0.0, 121.74, 155, 227)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.104381
+
+[sub_resource type="AtlasTexture" id="walk_passing_a_ne"]
+atlas = ExtResource("walk_passing_a")
+region = Rect2(0, 627, 642, 627)
+margin = Rect2(0.0, 127.32, 234, 249)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.128866
+
+[sub_resource type="AtlasTexture" id="walk_contact_b_ne"]
+atlas = ExtResource("walk_contact_b")
+region = Rect2(0, 626, 692, 628)
+margin = Rect2(0.0, 88.86, 131, 195)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.060567
+
+[sub_resource type="AtlasTexture" id="walk_passing_b_ne"]
+atlas = ExtResource("walk_passing_b_ne_canon")
+region = Rect2(0, 0, 1186, 1327)
+margin = Rect2(94.328608, 59.62, 405, 264)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("walk_contact_a_ne")},
+{"duration": 1.0, "texture": SubResource("walk_passing_a_ne")},
+{"duration": 1.0, "texture": SubResource("walk_contact_b_ne")},
+{"duration": 1.0, "texture": SubResource("walk_passing_b_ne")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

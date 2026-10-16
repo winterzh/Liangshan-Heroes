@@ -1,0 +1,56 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/liu_tang_pudao_20261016/walk_contact_a.png" id="walk_contact_a"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/liu_tang_pudao_20261016/walk_passing_a.png" id="walk_passing_a"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/liu_tang_pudao_20261016/walk_contact_b.png" id="walk_contact_b"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/liu_tang_pudao_20261016/walk_passing_b_opposite.png" id="walk_passing_b_opposite"]
+
+[sub_resource type="AtlasTexture" id="walk_contact_a_se"]
+atlas = ExtResource("walk_contact_a")
+region = Rect2(0, 0, 702, 624)
+margin = Rect2(129.0, 70.42, 129, 207)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.02214
+
+[sub_resource type="AtlasTexture" id="walk_passing_a_se"]
+atlas = ExtResource("walk_passing_a")
+region = Rect2(0, 0, 642, 627)
+margin = Rect2(118.5, 58.66, 171, 186)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="walk_contact_b_se"]
+atlas = ExtResource("walk_contact_b")
+region = Rect2(0, 0, 692, 626)
+margin = Rect2(167.0, 98.38, 167, 233)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.056581
+
+[sub_resource type="AtlasTexture" id="walk_passing_b_se"]
+atlas = ExtResource("walk_passing_b_opposite")
+region = Rect2(0, 0, 642, 627)
+margin = Rect2(122.0, 57.66, 171, 186)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("walk_contact_a_se")},
+{"duration": 1.0, "texture": SubResource("walk_passing_a_se")},
+{"duration": 1.0, "texture": SubResource("walk_contact_b_se")},
+{"duration": 1.0, "texture": SubResource("walk_passing_b_se")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

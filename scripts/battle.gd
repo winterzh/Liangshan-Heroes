@@ -9229,6 +9229,8 @@ func _spawn_ability_visual_fx(caster: Unit, center: Vector2, r: float, ad: Dicti
 		"staff":
 			if caster.key == "ruan_xiaoqi" and cast_kind == "smite":
 				caster.show_ruan_spear_followthrough()
+			if caster.key == "liu_tang" and cast_kind == "smite":
+				caster.show_liu_pudao_followthrough()
 			var motion := StaffMotionFx.new()
 			motion.position = caster.position
 			motion.rad = maxf(16.0, r)

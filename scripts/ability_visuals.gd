@@ -47,7 +47,10 @@ static func apply(defs: Dictionary, abilities: Dictionary) -> Dictionary:
 			continue
 		hero_count += 1
 		var base_theme := _hero_theme(String(key), d)
-		for aid_v in d.get("abilities", []):
+		var art_abilities: Array = d.get("abilities", []).duplicate()
+		if String(key) == "liu_tang" and not art_abilities.has("liu_cleave"):
+			art_abilities.append("liu_cleave")
+		for aid_v in art_abilities:
 			var aid := String(aid_v)
 			if excluded_abilities.has(aid) or not abilities.has(aid):
 				continue
@@ -57,8 +60,8 @@ static func apply(defs: Dictionary, abilities: Dictionary) -> Dictionary:
 				continue
 			ability_count += 1
 			var kind := String(eff.get("active_kind", eff.get("kind", "")))
-			# 施恩/阮小七的枪棒只配贴身尘迹，不转换成飞弹、符文或法术光环。
-			if aid in ["shi_en_q", "shi_en_w", "shi_en_r", "ruan_xiaoqi_q", "ruan_xiaoqi_w", "ruan_xiaoqi_r"]:
+			# 施恩/阮小七/刘唐的枪棒刀法只配贴身尘迹，不转换成飞弹、符文或法术光环。
+			if aid in ["shi_en_q", "shi_en_w", "shi_en_r", "ruan_xiaoqi_q", "ruan_xiaoqi_w", "ruan_xiaoqi_r", "liu_tang_q", "liu_tang_w", "liu_tang_r", "liu_cleave"]:
 				ad["visual"] = {"delivery": "staff", "theme": "staff", "replace_default": true, "face_nearest_foe": true}
 				abilities[aid] = ad
 				visual_count += 1

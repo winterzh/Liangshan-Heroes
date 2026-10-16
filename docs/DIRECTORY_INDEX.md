@@ -1,3 +1,12 @@
+## 2026-10-16：刘唐普通朴刀采用与黄泥冈候选
+
+- `assets/characters/liu_tang_pudao_20261016/`：17份普通身体/肖像原生PNG及导入配置；`assets/ui/liu_tang_pudao_skills_20261016/`：4图标/导入配置。
+- `assets/characters/liu_tang_pudao_sources_20261016/`：本批13份内置原图/完整提示词/引用SHA，连同前批19份保留全部制作历史。
+- `assets/direction4/ordinary_liu_tang_pudao_20261016.json`、`assets/anim/character_traits_v2_liu_tang_pudao_*.tres`：20资源/56姿势、抬脚水平锚校准。
+- `tools/build_liu_tang_pudao_20261016.py`、`tools/run_liu_tang_pudao_20261016.py`、`tools/liu_tang_pudao_20261016.gd`：只读复现、冻结完整PCK实际演员/技能/四语言UI验证。
+- [实现](LIU_TANG_PUDAO_20261016.md)、`qa/liu_tang_pudao_20261016/`：最终1405项/185图，45张原图及原始记录/先行批原因/完整索引。
+- `assets/characters/liu_tang_merchant_sources_20261016/`、`qa/liu_tang_merchant_candidates_20261016/`：本包后保存的两张赤膊头像/站姿来源候选，未导入或绑定。
+
 ## 2026-10-16：刘唐普通来源候选
 
 - `assets/characters/liu_tang_canon_sources_20261016/`：19张原生PNG、`prompt_set.json`完整提示词/引用SHA与`.gdignore`，未导入游戏。
