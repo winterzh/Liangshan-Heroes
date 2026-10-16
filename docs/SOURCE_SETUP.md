@@ -1,3 +1,7 @@
+## 吴用黄泥冈阶段复现（2026-10-17）
+
+`python -X utf8 -B tools/build_wu_yong_merchant_20261017.py`只读核对18图/20资源/56姿势。原图24份与44条引用SHA在工程中，直接复用，不重制。`tools/run_wu_yong_merchant_20261017.py`无参数只预检；完整新批加`--run --work-root <工程外新目录>`，使用本机Godot配置与共享锁串行运行。完整PCK1092项/234图通过，包含真实远敌走近后命中回归；包/缓存/DLL/私有档案不进Git。启动方式不变，旧长章仍仅QA/custom，旧V16恢复准入不由本美术批延续。[范围](WU_YONG_MERCHANT_20261017.md)。
+
 ## 晁盖阶段美术复现（2026-10-17）
 
 `python -X utf8 -B tools/build_chao_gai_merchant_20261017.py`只读核对17图/20资源/56姿势；新clone无需重制原图。`tools/run_chao_gai_merchant_20261017.py`无参数只预检，完整新批加`--run --work-root <工程外新目录>`，沿用本机Godot配置并串行等待共享槽位。17原稿/49引用在工程内，包/缓存/DLL/档案在外，不上传。最终1120项/232图通过，首批目检退回不混计；旧长章仅QA/custom，原启动方式不变，旧V16恢复准入不由新美术批延续。见[说明](CHAO_GAI_MERCHANT_20261017.md)。

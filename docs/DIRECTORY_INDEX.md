@@ -1,3 +1,11 @@
+## 2026-10-17 吴用黄泥冈原生阶段身份
+
+- `assets/characters/wu_yong_merchant_sources_20261017/`：24内置原稿、提示词/44引用SHA、拒用稿及部分格采用说明。
+- `assets/characters/wu_yong_merchant_20261017/`：18张逐字节复制的生产图及导入描述。
+- `assets/direction4/level1_wu_yong_merchant_20261017.json`和`assets/anim/character_traits_v2_wu_yong_merchant_*.tres`：20资源/56姿势。
+- `tools/build_wu_yong_merchant_20261017.py`、`run_wu_yong_merchant_20261017.py`、同名GD：绑定复现和完整PCK/远敌回归。
+- `docs/WU_YONG_MERCHANT_20261017.md`与`qa/wu_yong_merchant_20261017/`：原著依据、设计补足、阶段射程修正、原始收据及代表原图。
+
 ## 2026-10-17 晁盖黄泥冈原生身份
 
 - `assets/characters/chao_gai_merchant_sources_20261017/`：17份内置原稿、提示词/49引用SHA和未采用格说明。

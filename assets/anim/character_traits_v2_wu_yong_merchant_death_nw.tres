@@ -1,0 +1,57 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/wu_yong_merchant_20261017/death_buckle.png" id="death_buckle"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/wu_yong_merchant_20261017/death_fall.png" id="death_fall"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/wu_yong_merchant_20261017/death_settle.png" id="death_settle"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/wu_yong_merchant_20261017/death_rest.png" id="death_rest"]
+
+[sub_resource type="AtlasTexture" id="death_buckle_nw"]
+atlas = ExtResource("death_buckle")
+region = Rect2(712, 655, 542, 599)
+margin = Rect2(192.5, 117.54, 255, 198)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="death_fall_nw"]
+atlas = ExtResource("death_fall")
+region = Rect2(627, 672, 627, 582)
+margin = Rect2(251.0, 244.96, 251, 296)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.103015
+
+[sub_resource type="AtlasTexture" id="death_settle_nw"]
+atlas = ExtResource("death_settle")
+region = Rect2(632, 671, 622, 583)
+margin = Rect2(246.0, 223.76, 246, 285)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.058537
+
+[sub_resource type="AtlasTexture" id="death_rest_nw"]
+atlas = ExtResource("death_rest")
+region = Rect2(641, 659, 613, 595)
+margin = Rect2(306.5, 393.98, 376, 394)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.274485
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("death_buckle_nw")},
+{"duration": 1.0, "texture": SubResource("death_fall_nw")},
+{"duration": 1.0, "texture": SubResource("death_settle_nw")},
+{"duration": 1.0, "texture": SubResource("death_rest_nw")}
+],
+"loop": false,
+"name": &"default",
+"speed": 4.0
+}]

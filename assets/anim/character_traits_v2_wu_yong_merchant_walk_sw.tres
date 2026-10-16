@@ -1,0 +1,54 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/wu_yong_merchant_20261017/walk_contact_a.png" id="walk_contact_a"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/wu_yong_merchant_20261017/walk_passing_a.png" id="walk_passing_a"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/wu_yong_merchant_20261017/walk_contact_b.png" id="walk_contact_b"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/wu_yong_merchant_20261017/walk_passing_b.png" id="walk_passing_b"]
+
+[sub_resource type="AtlasTexture" id="walk_contact_a_sw"]
+atlas = ExtResource("walk_contact_a")
+region = Rect2(628, 0, 626, 627)
+margin = Rect2(145.199257, 26.8, 164, 163)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="walk_passing_a_sw"]
+atlas = ExtResource("walk_passing_a")
+region = Rect2(627, 0, 627, 630)
+margin = Rect2(98.565594, 23.24, 155, 152)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="walk_contact_b_sw"]
+atlas = ExtResource("walk_contact_b")
+region = Rect2(627, 0, 627, 627)
+margin = Rect2(135.550124, 41.02, 184, 184)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="walk_passing_b_sw"]
+atlas = ExtResource("walk_passing_b")
+region = Rect2(647, 0, 607, 628)
+margin = Rect2(114.948639, 25.5, 168, 147)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("walk_contact_a_sw")},
+{"duration": 1.0, "texture": SubResource("walk_passing_a_sw")},
+{"duration": 1.0, "texture": SubResource("walk_contact_b_sw")},
+{"duration": 1.0, "texture": SubResource("walk_passing_b_sw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

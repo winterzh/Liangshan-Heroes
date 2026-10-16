@@ -95,6 +95,9 @@ func apply_overrides(defs: Dictionary, _abilities: Dictionary) -> void:
 		defs[key]["ability"] = ""
 		defs[key]["ranged"] = false
 		defs[key]["aura"] = ""
+	# Wu carries pu-dao here. Clearing ranged alone left the scholar range200,
+	# allowing remote melee damage without approaching the target.
+	defs["wu_yong"]["range"] = 26
 	Art.set_runtime_alias({"ruan_xiaoer": "ruan_brother"})
 	defs["treasure_cart"]["name"] = "生辰纲担"
 	defs["treasure_cart"]["captive"] = true
