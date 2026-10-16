@@ -3662,6 +3662,10 @@ class HeroSlotButton extends Control:
 	# 因此升级视觉不改变原有技能注册表，也不会让其他英雄出现空白按钮。
 	const ART_ICON_PATHS := {
 		"liu_tang_q": "res://assets/ui/liu_tang_pudao_skills_20261016/liu_tang_q.png",
+		"ruan_xiaowu_q": "res://assets/ui/ruan_xiaowu_skills_20261016/ruan_xiaowu_q.png",
+		"ruan_xiaowu_w": "res://assets/ui/ruan_xiaowu_skills_20261016/ruan_xiaowu_w.png",
+		"ruan_xiaowu_e": "res://assets/ui/ruan_xiaowu_skills_20261016/ruan_xiaowu_e.png",
+		"ruan_xiaowu_r": "res://assets/ui/ruan_xiaowu_skills_20261016/ruan_xiaowu_r.png",
 		"liu_tang_w": "res://assets/ui/liu_tang_pudao_skills_20261016/liu_tang_w.png",
 		"liu_tang_e": "res://assets/ui/liu_tang_pudao_skills_20261016/liu_tang_e.png",
 		"liu_tang_r": "res://assets/ui/liu_tang_pudao_skills_20261016/liu_tang_r.png",
@@ -3913,7 +3917,7 @@ class HeroSlotButton extends Control:
 		_art_icon_tex = null
 		var path := String(ART_ICON_PATHS.get(ability_id, ""))
 		# 原生大图在41/52像素按钮内使用mipmap，避免细纹闪烁；不改其他技能采样。
-		texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS if (path.begins_with("res://assets/ui/liu_tang_pudao_skills_20261016/") or path.begins_with("res://assets/ui/shi_en_staff_skills_20261015/") or path.begins_with("res://assets/ui/ruan_xiaoqi_spear_skills_20261016/")) else CanvasItem.TEXTURE_FILTER_PARENT_NODE
+		texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS if (path.begins_with("res://assets/ui/ruan_xiaowu_skills_20261016/") or path.begins_with("res://assets/ui/liu_tang_pudao_skills_20261016/") or path.begins_with("res://assets/ui/shi_en_staff_skills_20261015/") or path.begins_with("res://assets/ui/ruan_xiaoqi_spear_skills_20261016/")) else CanvasItem.TEXTURE_FILTER_PARENT_NODE
 		if path != "":
 			_art_icon_tex = load(path) as Texture2D
 		return _art_icon_tex

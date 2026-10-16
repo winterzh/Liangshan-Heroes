@@ -436,6 +436,7 @@ func avatar_texture(key: String, variant := "") -> Texture2D:
 ## Ordinary armed bodies only. Explicit story appearances retain their own routes.
 ## Unlisted actions retain existing art while further action review continues.
 const ORDINARY_CHARACTER_FAMILIES := {
+	"ruan_xiaowu": {"idle": "character_traits_v2_ruan_xiaowu_canon", "walk": "character_traits_v2_ruan_xiaowu_canon", "attack": "character_traits_v2_ruan_xiaowu_canon", "hurt": "character_traits_v2_ruan_xiaowu_canon", "death": "character_traits_v2_ruan_xiaowu_canon"},
 	"liu_tang": {"idle": "character_traits_v2_liu_tang_ne_hold", "walk": "character_traits_v2_liu_tang_ne_hold", "attack": "character_traits_v2_liu_tang_ne_hold", "hurt": "character_traits_v2_liu_tang_ne_hold", "death": "character_traits_v2_liu_tang_ne_hold"},
 	"ruan_xiaoqi": {"idle": "character_traits_v2_ruan_xiaoqi_canon", "walk": "character_traits_v2_ruan_xiaoqi_gait_20261016", "attack": "character_traits_v2_ruan_xiaoqi_canon", "hurt": "character_traits_v2_ruan_xiaoqi_canon", "death": "character_traits_v2_ruan_xiaoqi_canon"},
 	"zhang_tuanlian": {"idle": "character_traits_v2_zhang_tuanlian_officer", "walk": "character_traits_v2_zhang_tuanlian_officer", "attack": "character_traits_v2_zhang_tuanlian_officer", "hurt": "character_traits_v2_zhang_tuanlian_officer", "death": "character_traits_v2_zhang_tuanlian_officer"},
@@ -621,6 +622,7 @@ func terrain_texture(key: String) -> Texture2D:
 
 # 无专属图集格的英雄，可放一张独立头像图（assets/portrait_<key>.png）——优先于图集与回退链。
 const STANDALONE_PORTRAITS := {
+	"ruan_xiaowu": "res://assets/characters/ruan_xiaowu_canon_20261016/portrait.png",
 	"liu_tang": "res://assets/characters/liu_tang_pudao_20261016/portrait.png",
 	"ruan_xiaoqi": "res://assets/characters/ruan_xiaoqi_canon_20261016/portrait.png",
 	"zhang_tuanlian": "res://assets/characters/zhang_tuanlian_officer_20261015/portrait.png",

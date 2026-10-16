@@ -352,6 +352,7 @@ const DUST_DUR := 0.36
 # body motion and weapon pose already live in the bitmap, so the legacy whole-
 # sprite swing and procedural weapon trail must not be layered on top.
 const AUTHORED_DIRECTION4_ATTACK_KEYS := {
+	"ruan_xiaowu": true,
 	"liu_tang": true,
 	"ruan_xiaoqi": true,
 	"zhang_tuanlian": true,
@@ -1150,7 +1151,7 @@ func take_damage(d: float, from: Unit = null, crit := false, ignore_reduction :=
 	if from != null and is_instance_valid(from):
 		var fd := _screen_dir(position - from.position)
 		_flinch = fd * 4.0
-		if ((key in ["shi_en", "zhang_tuanlian", "ruan_xiaoqi", "liu_tang"] and art_variant.is_empty()) or (key in ["ruan_xiaoqi", "liu_tang"] and art_variant == "hn_" + key)):
+		if ((key in ["shi_en", "zhang_tuanlian", "ruan_xiaoqi", "liu_tang", "ruan_xiaowu"] and art_variant.is_empty()) or (key in ["ruan_xiaoqi", "liu_tang"] and art_variant == "hn_" + key)):
 			_shi_en_hurt_t = SHI_EN_HURT_DUR
 	_request_redraw()
 	# 被打就还手（仅限当前没有目标的战斗单位）
@@ -3630,7 +3631,7 @@ func show_ruan_spear_followthrough() -> void:
 
 ## Presentation only: damage has settled, no queued ordinary hit.
 func show_liu_pudao_followthrough() -> void:
-	if key != "liu_tang" or not art_variant.is_empty(): return
+	if key not in ["liu_tang", "ruan_xiaowu"] or not art_variant.is_empty(): return
 	if _lunge > 0.0 and not _pending_done: return
 	_pending_target = null
 	_pending_done = true
@@ -3641,7 +3642,7 @@ func show_liu_pudao_followthrough() -> void:
 	_request_redraw()
 
 func _draw_cast_glow() -> void:
-	if key in ["shi_en", "ruan_xiaoqi", "liu_tang"]: return   # 枪棒蓄势只播身体动作，不画法术蓄光。
+	if key in ["shi_en", "ruan_xiaoqi", "liu_tang", "ruan_xiaowu"]: return   # 枪棒蓄势只播身体动作，不画法术蓄光。
 	var w := clampf(1.0 - _cast_t / _cast_dur, 0.0, 1.0)   # 0→1 蓄能进度
 	var head := Vector2(0.0, -radius * 1.7)
 	var c := _cast_color
@@ -4064,13 +4065,13 @@ func _anim_frame_for_state(fallback: Texture2D) -> Texture2D:
 			_frame_directional = Art.unit_anim_uses_directional_source(key, "attack", animation_direction, visual_art_variant())
 			return windup[0]
 	var ak := _anim_key()
-	if key in ["ruan_xiaoqi", "liu_tang"] and art_variant.is_empty() and _cast_t > 0.0:
+	if key in ["ruan_xiaoqi", "liu_tang", "ruan_xiaowu"] and art_variant.is_empty() and _cast_t > 0.0:
 		var ready: Array = Art.unit_anim_frames(ak, "attack", animation_direction, "")
 		if not ready.is_empty():
 			_real_frames = true
 			_frame_directional = Art.unit_anim_uses_directional_source(ak, "attack", animation_direction, "")
 			return ready[0]
-	if _shi_en_hurt_t > 0.0 and ((key in ["shi_en", "zhang_tuanlian", "ruan_xiaoqi", "liu_tang"] and art_variant.is_empty()) or (key in ["ruan_xiaoqi", "liu_tang"] and art_variant == "hn_" + key)):
+	if _shi_en_hurt_t > 0.0 and ((key in ["shi_en", "zhang_tuanlian", "ruan_xiaoqi", "liu_tang", "ruan_xiaowu"] and art_variant.is_empty()) or (key in ["ruan_xiaoqi", "liu_tang"] and art_variant == "hn_" + key)):
 		var recoil: Array = Art.unit_anim_frames(ak, "hurt", animation_direction, visual_art_variant())
 		if not recoil.is_empty():
 			_real_frames = true

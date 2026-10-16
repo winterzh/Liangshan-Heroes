@@ -1,3 +1,11 @@
+## 2026-10-16：阮小五普通形象与朴刀
+
+- `assets/characters/ruan_xiaowu_canon_sources_20261016/`：26份内置工具原稿、提示词与引用SHA，含退稿；`.gdignore`隔离。
+- `assets/characters/ruan_xiaowu_canon_20261016/`、`assets/ui/ruan_xiaowu_skills_20261016/`：19份身体肖像与4图标原样PNG/导入配置。
+- `assets/direction4/ordinary_ruan_xiaowu_canon_20261016.json`及`assets/anim/character_traits_v2_ruan_xiaowu_canon_*.tres`：20资源/56姿势。
+- `tools/build_ruan_xiaowu_canon_20261016.py`、`run_ruan_xiaowu_canon_20261016.py`、`ruan_xiaowu_canon_20261016.gd`：来源复核/实际完整PCK动作技能与UI验证。
+- [身份卡](RUAN_XIAOWU_IDENTITY_20261016.md)、[实现](RUAN_XIAOWU_CANON_20261016.md)、`qa/ruan_xiaowu_canon_20261016/`：1284检查/181图，43原图保留、28图直接目检及完整索引。
+
 ## 2026-10-16：刘唐商贩与普通NE持刀
 
 - `assets/characters/liu_tang_merchant_sources_20261016/`：25份商贩原始PNG/完整提示词与引用SHA，含旧候选/退稿，`.gdignore`隔离。

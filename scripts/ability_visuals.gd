@@ -61,7 +61,7 @@ static func apply(defs: Dictionary, abilities: Dictionary) -> Dictionary:
 			ability_count += 1
 			var kind := String(eff.get("active_kind", eff.get("kind", "")))
 			# 施恩/阮小七/刘唐的枪棒刀法只配贴身尘迹，不转换成飞弹、符文或法术光环。
-			if aid in ["shi_en_q", "shi_en_w", "shi_en_r", "ruan_xiaoqi_q", "ruan_xiaoqi_w", "ruan_xiaoqi_r", "liu_tang_q", "liu_tang_w", "liu_tang_r", "liu_cleave"]:
+			if aid in ["shi_en_q", "shi_en_w", "shi_en_r", "ruan_xiaoqi_q", "ruan_xiaoqi_w", "ruan_xiaoqi_r", "liu_tang_q", "liu_tang_w", "liu_tang_r", "liu_cleave", "ruan_xiaowu_q", "ruan_xiaowu_w"]:
 				ad["visual"] = {"delivery": "staff", "theme": "staff", "replace_default": true, "face_nearest_foe": true}
 				abilities[aid] = ad
 				visual_count += 1
