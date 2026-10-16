@@ -1,3 +1,9 @@
+## 2026-10-16：阮小二黄泥冈独立身份当前入口
+
+显式`hn_ruan_xiaoer`同脸赤膊/赤脚身体与肖像已采用，完整PCK1056项/232图、6199输入零漂移；通用`ruan_brother`别名与原资源/技能保持。[原著与实现](RUAN_XIAOER_MERCHANT_20261016.md)、[QA](../qa/ruan_xiaoer_merchant_20261016/README.md)。
+
+来源复核`python -X utf8 -B tools/build_ruan_xiaoer_merchant_20261016.py`；原生预检`python -X utf8 -B tools/run_ruan_xiaoer_merchant_20261016.py`；完整新批加`--run --work-root <工程外新目录>`，自然空闲后串行。本轮原始证据位于`D:/CodexEvidence/shuihu/ruan_xiaoer_merchant_20261016/`，避免C盘容量不足；旧证据未清理。原启动入口/属性/剧情空技能/章节保持，通用组和其他阶段/全战役/续玩/发布仍开放。
+
 ## 2026-10-16：阮小五黄泥冈同脸当前入口
 
 黄泥冈专用赤膊肖像及五状态四向朴刀已采用；完整PCK2239项/392图、6119输入零漂移。[实现/原著边界](RUAN_XIAOWU_MERCHANT_20261016.md)、[QA](../qa/ruan_xiaowu_merchant_20261016/README.md)。普通44项资源、属性/技能/翻译/章节与启动入口保持。

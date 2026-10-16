@@ -1,0 +1,58 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoer_merchant_20261016/death_buckle.png" id="death_buckle"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoer_merchant_20261016/death_fall_clear.png" id="death_fall_clear"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoer_merchant_20261016/death_settle.png" id="death_settle"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoer_merchant_20261016/death_rest.png" id="death_rest"]
+
+[sub_resource type="AtlasTexture" id="death_buckle_ne"]
+atlas = ExtResource("death_buckle")
+region = Rect2(0, 654, 634, 600)
+margin = Rect2(193.0, 171.14, 193, 227)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.089592
+
+[sub_resource type="AtlasTexture" id="death_fall_ne"]
+atlas = ExtResource("death_fall_clear")
+region = Rect2(0, 664, 637, 590)
+margin = Rect2(0.0, 138.22, 234, 281)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.128238
+
+[sub_resource type="AtlasTexture" id="death_settle_ne"]
+atlas = ExtResource("death_settle")
+region = Rect2(0, 648, 637, 606)
+margin = Rect2(0.0, 138.22, 234, 265)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.018713
+
+[sub_resource type="AtlasTexture" id="death_rest_ne"]
+atlas = ExtResource("death_rest")
+region = Rect2(0, 654, 629, 600)
+margin = Rect2(0.0, 138.22, 242, 271)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.112388
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("death_buckle_ne")},
+{"duration": 1.0, "texture": SubResource("death_fall_ne")},
+{"duration": 1.0, "texture": SubResource("death_settle_ne")},
+{"duration": 1.0, "texture": SubResource("death_rest_ne")}
+],
+"loop": false,
+"name": &"default",
+"speed": 4.0
+}]

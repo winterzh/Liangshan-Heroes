@@ -1,0 +1,32 @@
+[gd_resource type="SpriteFrames" load_steps=5 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoer_merchant_20261016/hurt_recoil_clear.png" id="hurt_recoil_clear"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoer_merchant_20261016/hurt_recover.png" id="hurt_recover"]
+
+[sub_resource type="AtlasTexture" id="hurt_recoil_sw"]
+atlas = ExtResource("hurt_recoil_clear")
+region = Rect2(685, 0, 569, 630)
+margin = Rect2(116.0, 55.1, 236, 175)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="hurt_recover_sw"]
+atlas = ExtResource("hurt_recover")
+region = Rect2(691, 0, 563, 633)
+margin = Rect2(113.5, 31.44, 229, 159)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("hurt_recoil_sw")},
+{"duration": 1.0, "texture": SubResource("hurt_recover_sw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

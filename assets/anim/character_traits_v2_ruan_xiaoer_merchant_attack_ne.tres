@@ -1,0 +1,59 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoer_merchant_20261016/attack_windup_spacing.png" id="attack_windup_spacing"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoer_merchant_20261016/attack_strike.png" id="attack_strike"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoer_merchant_20261016/attack_recover_neck_clear.png" id="attack_recover_neck_clear"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoer_merchant_20261016/idle.png" id="idle"]
+
+[sub_resource type="AtlasTexture" id="attack_windup_ne"]
+atlas = ExtResource("attack_windup_spacing")
+region = Rect2(0, 634, 635, 620)
+margin = Rect2(43.0, 59.08, 159, 174)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="attack_strike_ne"]
+atlas = ExtResource("attack_strike")
+region = Rect2(0, 644, 634, 610)
+margin = Rect2(99.0, 65.38, 125, 149)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="attack_recover_ne"]
+atlas = ExtResource("attack_recover_neck_clear")
+region = Rect2(0, 636, 690, 618)
+margin = Rect2(1.5, 47.38, 69, 141)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="idle_ne"]
+atlas = ExtResource("idle")
+region = Rect2(0, 628, 704, 626)
+margin = Rect2(0.0, 138.22, 167, 245)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.147563
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("attack_windup_ne")},
+{"duration": 1.0, "texture": SubResource("attack_windup_ne")},
+{"duration": 1.0, "texture": SubResource("attack_strike_ne")},
+{"duration": 1.0, "texture": SubResource("attack_strike_ne")},
+{"duration": 1.0, "texture": SubResource("attack_strike_ne")},
+{"duration": 1.0, "texture": SubResource("attack_recover_ne")},
+{"duration": 1.0, "texture": SubResource("attack_recover_ne")},
+{"duration": 1.0, "texture": SubResource("idle_ne")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

@@ -1,3 +1,11 @@
+## 2026-10-16：阮小二黄泥冈赤脚同脸资源
+
+- `assets/characters/ruan_xiaoer_merchant_sources_20261016/`：19份内置工具原稿、完整提示词/引用SHA与`.gdignore`。
+- `assets/characters/ruan_xiaoer_merchant_20261016/`：19份身体肖像PNG/导入配置。
+- `assets/direction4/level1_ruan_xiaoer_merchant_20261016.json`、`assets/anim/character_traits_v2_ruan_xiaoer_merchant_*.tres`：20资源56姿势。
+- `tools/build_ruan_xiaoer_merchant_20261016.py`、`run_ruan_xiaoer_merchant_20261016.py`、`ruan_xiaoer_merchant_20261016.gd`：裸肤脚底实测/来源复核、完整PCK两种章节动作及三尺寸四语言HUD/别名分离验证。
+- [身份卡](RUAN_XIAOER_IDENTITY_20261016.md)、[实现](RUAN_XIAOER_MERCHANT_20261016.md)、`qa/ruan_xiaoer_merchant_20261016/`：1056检查/232原图、92代表原图/9运行文件，30图直接目检。
+
 ## 2026-10-16：阮小五黄泥冈专用身体/头像
 
 - `assets/characters/ruan_xiaowu_merchant_sources_20261016/`：25份内置工具原稿及提示词/引用SHA，含退稿，`.gdignore`隔离。
