@@ -1,0 +1,21 @@
+[gd_resource type="SpriteFrames" load_steps=3 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/bai_sheng_carry_20261016/carry_idle.png" id="carry_idle"]
+
+[sub_resource type="AtlasTexture" id="carry_idle_nw"]
+atlas = ExtResource("carry_idle")
+region = Rect2(619, 619, 635, 635)
+margin = Rect2(69.598638, 23.32, 91, 91)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("carry_idle_nw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

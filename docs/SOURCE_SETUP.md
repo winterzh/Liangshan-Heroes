@@ -1,3 +1,7 @@
+## 白胜挑酒美术复现（2026-10-16）
+
+`python -X utf8 -B tools/build_bai_sheng_carry_20261016.py`只读验证5图/8资源/20姿势；`tools/run_bai_sheng_carry_20261016.py`无参数只预检，`--run --work-root <工程外新目录>`才等共享引擎空闲后运行完整私有PCK。使用既有本机Godot配置；新包、缓存和档案不进Git。新批332项/70图已通过，旧解析失败分开保留；启动方式不变，继续美术不恢复旧V16全链准入。见[说明](BAI_SHENG_CARRY_20261016.md)。
+
 ## 2026-10-16：阮小二黄泥冈独立身份当前入口
 
 显式`hn_ruan_xiaoer`同脸赤膊/赤脚身体与肖像已采用，完整PCK1056项/232图、6199输入零漂移；通用`ruan_brother`别名与原资源/技能保持。[原著与实现](RUAN_XIAOER_MERCHANT_20261016.md)、[QA](../qa/ruan_xiaoer_merchant_20261016/README.md)。

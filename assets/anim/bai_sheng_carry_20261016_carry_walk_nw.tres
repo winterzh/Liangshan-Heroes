@@ -1,0 +1,54 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/bai_sheng_carry_20261016/carry_contact_a.png" id="carry_contact_a"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/bai_sheng_carry_20261016/carry_passing_a.png" id="carry_passing_a"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/bai_sheng_carry_20261016/carry_contact_b.png" id="carry_contact_b"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/bai_sheng_carry_20261016/carry_passing_b.png" id="carry_passing_b"]
+
+[sub_resource type="AtlasTexture" id="carry_contact_a_nw"]
+atlas = ExtResource("carry_contact_a")
+region = Rect2(641, 622, 613, 632)
+margin = Rect2(78.511709, 11.32, 113, 94)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="carry_passing_a_nw"]
+atlas = ExtResource("carry_passing_a")
+region = Rect2(626, 623, 628, 631)
+margin = Rect2(79.703251, 19.32, 98, 95)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="carry_contact_b_nw"]
+atlas = ExtResource("carry_contact_b")
+region = Rect2(620, 628, 634, 626)
+margin = Rect2(69.107171, 9.32, 92, 100)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="carry_passing_b_nw"]
+atlas = ExtResource("carry_passing_b")
+region = Rect2(620, 623, 634, 631)
+margin = Rect2(70.040848, 13.32, 92, 95)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("carry_contact_a_nw")},
+{"duration": 1.0, "texture": SubResource("carry_passing_a_nw")},
+{"duration": 1.0, "texture": SubResource("carry_contact_b_nw")},
+{"duration": 1.0, "texture": SubResource("carry_passing_b_nw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

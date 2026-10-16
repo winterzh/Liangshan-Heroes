@@ -4029,7 +4029,7 @@ func _anim_key() -> String:
 
 ## 同一白胜造型的肩挑动作。精确检查不能把普通idle回退误判成挑酒素材。
 func _campaign_wine_carry_state() -> String:
-	if art_variant != "hn_bai_sheng" or not bool(get_meta("carrying_wine", false)) or _dying or story_outcome != "":
+	if key != "bai_sheng" or art_variant != "hn_bai_sheng" or not bool(get_meta("carrying_wine", false)) or _dying or story_outcome != "":
 		return ""
 	var state := "carry_walk" if _move_blend > 0.3 else "carry_idle"
 	return state if Art.campaign_variant_has_animation(art_variant, state, animation_direction) else ""

@@ -1,3 +1,11 @@
+## 2026-10-16 白胜挑酒四向
+
+- `assets/characters/bai_sheng_carry_sources_20261016/`：8份内置原稿、提示词和12引用SHA，含3份未采用稿。
+- `assets/characters/bai_sheng_carry_20261016/`：5张逐字节复制的生产RGBA及导入描述。
+- `assets/direction4/level1_bai_sheng_carry_20261016.json`与`assets/anim/bai_sheng_carry_20261016_*.tres`：20姿势/8动画。
+- `tools/build_bai_sheng_carry_20261016.py`、`run_bai_sheng_carry_20261016.py`及同名GD：只读复现和独立PCK验证。
+- `docs/BAI_SHENG_CARRY_20261016.md`、`qa/bai_sheng_carry_20261016/`：原著/设计边界、332项/70图收据和原失败证据。
+
 ## 2026-10-16：阮小二黄泥冈赤脚同脸资源
 
 - `assets/characters/ruan_xiaoer_merchant_sources_20261016/`：19份内置工具原稿、完整提示词/引用SHA与`.gdignore`。

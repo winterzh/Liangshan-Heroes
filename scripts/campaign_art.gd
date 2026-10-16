@@ -193,6 +193,14 @@ static func native_wounded_owner(variant: String) -> String:
 	var owner := variant.trim_prefix("zhu_wounded_")
 	return owner if NATIVE_WOUNDED_FAMILIES.has(owner) else ""
 
+## Two-bucket shoulder art is restricted to Bai's explicit wine-carry states.
+## His ordinary/unloaded body and every tribute carrier keep their own art.
+static func native_wine_carry_path(key: String, variant: String, state: String, direction: String) -> String:
+	if key != "bai_sheng" or variant != "hn_bai_sheng" or direction not in DIRECTIONS:
+		return ""
+	if state not in ["carry_idle", "carry_walk"]: return ""
+	return "res://assets/anim/bai_sheng_carry_20261016_%s_%s.tres" % [state, direction]
+
 static func native_body_owner(variant: String) -> String:
 	if variant == "hn_ruan_xiaoer": return "ruan_xiaoer"
 	if variant == "hn_ruan_xiaowu": return "ruan_xiaowu"
