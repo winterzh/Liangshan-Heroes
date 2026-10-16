@@ -384,7 +384,7 @@ const SPRITE_ALIAS := {}
 ## 全空才返回 null（此时调用方画占位首字，而非黄圈）。这条链覆盖建筑/资源/特殊单位，
 ## 是消灭「黄色圈圈头像」的单一来源。
 const IDENTITY_PORTRAIT_VARIANTS := {"dong_chao_escort": "dong_chao", "xue_ba_escort": "xue_ba"}
-const CHAPTER_PORTRAITS := {CampaignArt.SHI_EN_RECOVERY_VARIANT: "res://assets/characters/shi_en_recovering_20261015/portrait.png", "hn_ruan_xiaoqi": "res://assets/characters/ruan_xiaoqi_merchant_20261016/portrait.png"}
+const CHAPTER_PORTRAITS := {CampaignArt.SHI_EN_RECOVERY_VARIANT: "res://assets/characters/shi_en_recovering_20261015/portrait.png", "hn_ruan_xiaoqi": "res://assets/characters/ruan_xiaoqi_merchant_20261016/portrait.png", "hn_liu_tang": "res://assets/characters/liu_tang_merchant_20261016/portrait.png"}
 var _chapter_portrait_cache: Dictionary = {}
 
 ## 图鉴、战斗面板与英雄栏共用入口。先核对人物身份，防止变体借到别人的脸。
@@ -436,7 +436,7 @@ func avatar_texture(key: String, variant := "") -> Texture2D:
 ## Ordinary armed bodies only. Explicit story appearances retain their own routes.
 ## Unlisted actions retain existing art while further action review continues.
 const ORDINARY_CHARACTER_FAMILIES := {
-	"liu_tang": {"idle": "character_traits_v2_liu_tang_pudao", "walk": "character_traits_v2_liu_tang_pudao", "attack": "character_traits_v2_liu_tang_pudao", "hurt": "character_traits_v2_liu_tang_pudao", "death": "character_traits_v2_liu_tang_pudao"},
+	"liu_tang": {"idle": "character_traits_v2_liu_tang_ne_hold", "walk": "character_traits_v2_liu_tang_ne_hold", "attack": "character_traits_v2_liu_tang_ne_hold", "hurt": "character_traits_v2_liu_tang_ne_hold", "death": "character_traits_v2_liu_tang_ne_hold"},
 	"ruan_xiaoqi": {"idle": "character_traits_v2_ruan_xiaoqi_canon", "walk": "character_traits_v2_ruan_xiaoqi_gait_20261016", "attack": "character_traits_v2_ruan_xiaoqi_canon", "hurt": "character_traits_v2_ruan_xiaoqi_canon", "death": "character_traits_v2_ruan_xiaoqi_canon"},
 	"zhang_tuanlian": {"idle": "character_traits_v2_zhang_tuanlian_officer", "walk": "character_traits_v2_zhang_tuanlian_officer", "attack": "character_traits_v2_zhang_tuanlian_officer", "hurt": "character_traits_v2_zhang_tuanlian_officer", "death": "character_traits_v2_zhang_tuanlian_officer"},
 	"shi_en": {"idle": "character_traits_v2_shi_en_canon", "walk": "character_traits_v2_shi_en_canon", "attack": "character_traits_v2_shi_en_canon", "hurt": "character_traits_v2_shi_en_canon", "death": "character_traits_v2_shi_en_canon"},
@@ -991,7 +991,7 @@ func campaign_variant_has_animation(variant: String, state: String, direction: S
 	if not CampaignArt.native_body_owner(variant).is_empty():
 		var authored_states: Array = ["idle", "walk"] if not CampaignArt.native_wounded_owner(variant).is_empty() else ["idle"]
 		if variant == CampaignArt.SHI_EN_RECOVERY_VARIANT: authored_states = ["idle", "walk", "hurt", "death"]
-		if variant == "hn_ruan_xiaoqi": authored_states = ["idle", "walk", "attack", "hurt", "death"]
+		if variant in ["hn_ruan_xiaoqi", "hn_liu_tang"]: authored_states = ["idle", "walk", "attack", "hurt", "death"]
 		return state in authored_states and not _load_generic_directional_frames(CampaignArt.native_body_path(variant, state, direction)).is_empty()
 	var path := CampaignArt.animation_path(variant, state, direction)
 	var texture := _campaign_texture(path)

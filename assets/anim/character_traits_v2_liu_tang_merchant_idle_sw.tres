@@ -1,0 +1,21 @@
+[gd_resource type="SpriteFrames" load_steps=3 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/liu_tang_merchant_20261016/idle_posematch.png" id="idle_posematch"]
+
+[sub_resource type="AtlasTexture" id="idle_sw"]
+atlas = ExtResource("idle_posematch")
+region = Rect2(685, 0, 569, 624)
+margin = Rect2(84.0, 43.92, 237, 182)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("idle_sw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

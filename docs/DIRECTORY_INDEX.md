@@ -1,3 +1,12 @@
+## 2026-10-16：刘唐商贩与普通NE持刀
+
+- `assets/characters/liu_tang_merchant_sources_20261016/`：25份商贩原始PNG/完整提示词与引用SHA，含旧候选/退稿，`.gdignore`隔离。
+- `assets/characters/liu_tang_ne_hold_sources_20261016/`：2份普通NE过步修正版与提示词；`assets/characters/liu_tang_ne_hold_20261016/`：2份运行PNG/导入配置。
+- `assets/characters/liu_tang_merchant_20261016/`：17份阶段身体/肖像运行PNG/导入配置。
+- `assets/direction4/level1_liu_tang_merchant_20261016.json`、`ordinary_liu_tang_ne_hold_20261016.json`与各自`assets/anim/character_traits_v2_liu_tang_merchant_*.tres`、`character_traits_v2_liu_tang_ne_hold_*.tres`：40资源/112姿势引用，普通54姿势保持原字典。
+- `tools/build_liu_tang_merchant_20261016.py`、`run_liu_tang_merchant_20261016.py`、`liu_tang_merchant_20261016.gd`：只读复现/完整PCK实际动作和UI验证；复用既有通用旧长章QA适配器。
+- [实现](LIU_TANG_MERCHANT_20261016.md)、`qa/liu_tang_merchant_20261016/`：2356检查/396图，代表原图/原始记录/完整索引及34张直接目检。
+
 ## 2026-10-16：刘唐普通朴刀采用与黄泥冈候选
 
 - `assets/characters/liu_tang_pudao_20261016/`：17份普通身体/肖像原生PNG及导入配置；`assets/ui/liu_tang_pudao_skills_20261016/`：4图标/导入配置。

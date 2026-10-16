@@ -194,12 +194,16 @@ static func native_wounded_owner(variant: String) -> String:
 	return owner if NATIVE_WOUNDED_FAMILIES.has(owner) else ""
 
 static func native_body_owner(variant: String) -> String:
+	if variant == "hn_liu_tang": return "liu_tang"
 	if variant == "hn_ruan_xiaoqi": return "ruan_xiaoqi"
 	if variant == SHI_EN_RECOVERY_VARIANT: return "shi_en"
 	var owner := native_bound_owner(variant)
 	return owner if not owner.is_empty() else native_wounded_owner(variant)
 
 static func native_body_path(variant: String, state: String, direction: String) -> String:
+	if variant == "hn_liu_tang":
+		if direction not in DIRECTIONS or state not in ["idle", "walk", "attack", "hurt", "death"]: return ""
+		return "res://assets/anim/character_traits_v2_liu_tang_merchant_%s_%s.tres" % [state, direction]
 	if variant == "hn_ruan_xiaoqi":
 		if direction not in DIRECTIONS or state not in ["idle", "walk", "attack", "hurt", "death"]: return ""
 		if state == "walk": return "res://assets/anim/character_traits_v2_ruan_xiaoqi_merchant_nw_20261016_walk_%s.tres" % direction

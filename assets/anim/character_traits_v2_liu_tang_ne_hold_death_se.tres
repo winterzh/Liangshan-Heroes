@@ -1,0 +1,54 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/liu_tang_pudao_20261016/death_buckle.png" id="death_buckle"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/liu_tang_pudao_20261016/death_fall_clear.png" id="death_fall_clear"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/liu_tang_pudao_20261016/death_settle_directions.png" id="death_settle_directions"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/liu_tang_pudao_20261016/death_rest_directions.png" id="death_rest_directions"]
+
+[sub_resource type="AtlasTexture" id="death_buckle_se"]
+atlas = ExtResource("death_buckle")
+region = Rect2(0, 0, 630, 664)
+margin = Rect2(157.5, 75.66, 183, 149)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="death_fall_se"]
+atlas = ExtResource("death_fall_clear")
+region = Rect2(0, 0, 628, 651)
+margin = Rect2(152.0, 55.04, 194, 171)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="death_settle_se"]
+atlas = ExtResource("death_settle_directions")
+region = Rect2(0, 0, 636, 646)
+margin = Rect2(180.5, 101.78, 243, 233)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="death_rest_se"]
+atlas = ExtResource("death_rest_directions")
+region = Rect2(0, 0, 625, 647)
+margin = Rect2(156.5, 62.42, 206, 184)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("death_buckle_se")},
+{"duration": 1.0, "texture": SubResource("death_fall_se")},
+{"duration": 1.0, "texture": SubResource("death_settle_se")},
+{"duration": 1.0, "texture": SubResource("death_rest_se")}
+],
+"loop": false,
+"name": &"default",
+"speed": 4.0
+}]
