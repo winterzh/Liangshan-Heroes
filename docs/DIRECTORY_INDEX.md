@@ -1,3 +1,9 @@
+## 2026-10-17 公孙胜日常来源候选
+
+- `assets/characters/gongsun_sheng_daily_sources_20261017/`：18原稿、提示词/31引用SHA；3退回/15当前候选，全部未采用；`.gdignore`隔离。
+- `tools/verify_gongsun_sheng_daily_sources_20261017.py`：只读来源与PNG检查。
+- `docs/GONGSUN_SHENG_DAILY_SOURCES_20261017.md`、`qa/gongsun_sheng_daily_sources_20261017/`：原著阶段区分、修订缺口与静态报告。
+
 ## 2026-10-17 公孙胜黄泥冈原生身份
 
 - `assets/characters/gongsun_sheng_merchant_sources_20261017/`：19份内置原稿、提示词/37引用SHA及未用格说明。
