@@ -1,3 +1,11 @@
+## 2026-10-16：阮小五黄泥冈专用身体/头像
+
+- `assets/characters/ruan_xiaowu_merchant_sources_20261016/`：25份内置工具原稿及提示词/引用SHA，含退稿，`.gdignore`隔离。
+- `assets/characters/ruan_xiaowu_merchant_20261016/`：19份运行身体/肖像PNG与导入配置。
+- `assets/direction4/level1_ruan_xiaowu_merchant_20261016.json`与`assets/anim/character_traits_v2_ruan_xiaowu_merchant_*.tres`：20资源/56姿势。
+- `tools/build_ruan_xiaowu_merchant_20261016.py`、`run_ruan_xiaowu_merchant_20261016.py`、`ruan_xiaowu_merchant_20261016.gd`：来源复核与三上下文完整PCK实际动作/UI/普通技能回归；复用已有QA专用旧长章选择器。
+- [实现](RUAN_XIAOWU_MERCHANT_20261016.md)、`qa/ruan_xiaowu_merchant_20261016/`：2239检查/392原图，107代表截图/9运行文件，30图直接目检。
+
 ## 2026-10-16：阮小五普通形象与朴刀
 
 - `assets/characters/ruan_xiaowu_canon_sources_20261016/`：26份内置工具原稿、提示词与引用SHA，含退稿；`.gdignore`隔离。

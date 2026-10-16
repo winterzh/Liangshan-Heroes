@@ -1,0 +1,59 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaowu_merchant_20261016/attack_windup_spacing.png" id="attack_windup_spacing"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaowu_merchant_20261016/attack_strike.png" id="attack_strike"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaowu_merchant_20261016/attack_recover_neck_clear.png" id="attack_recover_neck_clear"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaowu_merchant_20261016/idle.png" id="idle"]
+
+[sub_resource type="AtlasTexture" id="attack_windup_sw"]
+atlas = ExtResource("attack_windup_spacing")
+region = Rect2(634, 0, 620, 627)
+margin = Rect2(44.5, 0.22, 51, 44)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.0982
+
+[sub_resource type="AtlasTexture" id="attack_strike_sw"]
+atlas = ExtResource("attack_strike")
+region = Rect2(645, 0, 609, 644)
+margin = Rect2(86.5, 60.48, 205, 170)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="attack_recover_sw"]
+atlas = ExtResource("attack_recover_neck_clear")
+region = Rect2(707, 0, 547, 626)
+margin = Rect2(182.5, 51.48, 267, 188)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="idle_sw"]
+atlas = ExtResource("idle")
+region = Rect2(687, 0, 567, 625)
+margin = Rect2(92.5, 47.48, 247, 189)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("attack_windup_sw")},
+{"duration": 1.0, "texture": SubResource("attack_windup_sw")},
+{"duration": 1.0, "texture": SubResource("attack_strike_sw")},
+{"duration": 1.0, "texture": SubResource("attack_strike_sw")},
+{"duration": 1.0, "texture": SubResource("attack_strike_sw")},
+{"duration": 1.0, "texture": SubResource("attack_recover_sw")},
+{"duration": 1.0, "texture": SubResource("attack_recover_sw")},
+{"duration": 1.0, "texture": SubResource("idle_sw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

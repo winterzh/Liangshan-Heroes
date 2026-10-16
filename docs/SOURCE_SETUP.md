@@ -1,3 +1,9 @@
+## 2026-10-16：阮小五黄泥冈同脸当前入口
+
+黄泥冈专用赤膊肖像及五状态四向朴刀已采用；完整PCK2239项/392图、6119输入零漂移。[实现/原著边界](RUAN_XIAOWU_MERCHANT_20261016.md)、[QA](../qa/ruan_xiaowu_merchant_20261016/README.md)。普通44项资源、属性/技能/翻译/章节与启动入口保持。
+
+只读`python -X utf8 -B tools/build_ruan_xiaowu_merchant_20261016.py`；原生预检`python -X utf8 -B tools/run_ruan_xiaowu_merchant_20261016.py`；完整新批加`--run --work-root <工程外新目录>`，共享引擎自然空闲后串行。旧普通批的黄泥冈头像回退断言由当前入口替代；旧长章仍仅QA选取，其他阶段/完整战役/续玩/发布仍开放。
+
 ## 2026-10-16：阮小五普通原著身份当前入口
 
 普通同脸肖像、朴刀五状态四向与四图标已采用，Q/W改近身物理表现；完整PCK1284项/181图通过。[实现与原著边界](RUAN_XIAOWU_CANON_20261016.md)、[QA](../qa/ruan_xiaowu_canon_20261016/README.md)。旧商贩身体/空技能不被普通衣装覆盖，阶段同脸继续待做；启动入口不变。

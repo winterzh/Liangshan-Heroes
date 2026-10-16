@@ -1,0 +1,54 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaowu_merchant_20261016/walk_contact_a_waist.png" id="walk_contact_a_waist"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaowu_merchant_20261016/walk_passing_a_waist.png" id="walk_passing_a_waist"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaowu_merchant_20261016/walk_contact_b.png" id="walk_contact_b"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaowu_merchant_20261016/walk_passing_b.png" id="walk_passing_b"]
+
+[sub_resource type="AtlasTexture" id="walk_contact_a_sw"]
+atlas = ExtResource("walk_contact_a_waist")
+region = Rect2(705, 0, 549, 626)
+margin = Rect2(120.5, 48.48, 265, 188)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="walk_passing_a_sw"]
+atlas = ExtResource("walk_passing_a_waist")
+region = Rect2(720, 0, 534, 628)
+margin = Rect2(109.5, 45.48, 280, 186)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="walk_contact_b_sw"]
+atlas = ExtResource("walk_contact_b")
+region = Rect2(696, 0, 558, 626)
+margin = Rect2(107.5, 48.48, 256, 188)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="walk_passing_b_sw"]
+atlas = ExtResource("walk_passing_b")
+region = Rect2(644, 0, 610, 627)
+margin = Rect2(63.0, 51.48, 204, 187)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("walk_contact_a_sw")},
+{"duration": 1.0, "texture": SubResource("walk_passing_a_sw")},
+{"duration": 1.0, "texture": SubResource("walk_contact_b_sw")},
+{"duration": 1.0, "texture": SubResource("walk_passing_b_sw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]
