@@ -1,3 +1,11 @@
+## 2026-10-17 晁盖黄泥冈原生身份
+
+- `assets/characters/chao_gai_merchant_sources_20261017/`：17份内置原稿、提示词/49引用SHA和未采用格说明。
+- `assets/characters/chao_gai_merchant_20261017/`：17张逐字节复制的生产图/导入描述。
+- `assets/direction4/level1_chao_gai_merchant_20261017.json`与`assets/anim/character_traits_v2_chao_gai_merchant_*.tres`：56姿势/20资源。
+- `tools/build_chao_gai_merchant_20261017.py`、`run_chao_gai_merchant_20261017.py`、同名GD：只读绑定复现与完整私有PCK验证。
+- `docs/CHAO_GAI_MERCHANT_20261017.md`和`qa/chao_gai_merchant_20261017/`：原著/设计/动作profile边界、最终收据/代表原图、首批目检退回记录。
+
 ## 2026-10-16 白胜挑酒四向
 
 - `assets/characters/bai_sheng_carry_sources_20261016/`：8份内置原稿、提示词和12引用SHA，含3份未采用稿。

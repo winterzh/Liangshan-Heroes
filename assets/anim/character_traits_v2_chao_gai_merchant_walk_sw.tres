@@ -1,0 +1,54 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/chao_gai_merchant_20261017/walk_contact_a.png" id="walk_contact_a"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/chao_gai_merchant_20261017/walk_passing_a.png" id="walk_passing_a"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/chao_gai_merchant_20261017/walk_contact_b.png" id="walk_contact_b"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/chao_gai_merchant_20261017/walk_passing_b.png" id="walk_passing_b"]
+
+[sub_resource type="AtlasTexture" id="walk_contact_a_sw"]
+atlas = ExtResource("walk_contact_a")
+region = Rect2(707, 0, 547, 629)
+margin = Rect2(208.678348, 13.12, 219, 137)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="walk_passing_a_sw"]
+atlas = ExtResource("walk_passing_a")
+region = Rect2(711, 0, 543, 628)
+margin = Rect2(187.878598, 19.22, 228, 143)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="walk_contact_b_sw"]
+atlas = ExtResource("walk_contact_b")
+region = Rect2(704, 0, 550, 629)
+margin = Rect2(203.059449, 35.16, 238, 159)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="walk_passing_b_sw"]
+atlas = ExtResource("walk_passing_b")
+region = Rect2(712, 0, 542, 627)
+margin = Rect2(178.317897, 17.74, 215, 130)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("walk_contact_a_sw")},
+{"duration": 1.0, "texture": SubResource("walk_passing_a_sw")},
+{"duration": 1.0, "texture": SubResource("walk_contact_b_sw")},
+{"duration": 1.0, "texture": SubResource("walk_passing_b_sw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

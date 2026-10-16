@@ -1152,7 +1152,7 @@ func take_damage(d: float, from: Unit = null, crit := false, ignore_reduction :=
 	if from != null and is_instance_valid(from):
 		var fd := _screen_dir(position - from.position)
 		_flinch = fd * 4.0
-		if ((key in ["shi_en", "zhang_tuanlian", "ruan_xiaoqi", "liu_tang", "ruan_xiaowu"] and art_variant.is_empty()) or (key in ["ruan_xiaoqi", "liu_tang", "ruan_xiaowu", "ruan_xiaoer"] and art_variant == "hn_" + key)):
+		if ((key in ["shi_en", "zhang_tuanlian", "ruan_xiaoqi", "liu_tang", "ruan_xiaowu"] and art_variant.is_empty()) or (key in ["ruan_xiaoqi", "liu_tang", "ruan_xiaowu", "ruan_xiaoer", "chao_gai"] and art_variant == "hn_" + key)):
 			_shi_en_hurt_t = SHI_EN_HURT_DUR
 	_request_redraw()
 	# 被打就还手（仅限当前没有目标的战斗单位）
@@ -2473,6 +2473,8 @@ func _attack_sfx_name() -> String:
 
 
 func _weapon_kind() -> int:
+	# Chapter16 merchant uses an authored pu-dao cut; range28 alone must not select a spear thrust.
+	if key == "chao_gai" and art_variant == "hn_chao_gai": return WK.SWORD
 	if key == "ruan_xiaoqi" and art_variant == "hn_ruan_xiaoqi": return WK.SWORD # Chapter16 pu-dao cut, not chapter19 spear thrust.
 	if art_variant in ["wu_song_mengzhou", "jiang_menshen_fists"]: return WK.FIST
 	if _weapon >= 0:
@@ -3912,7 +3914,7 @@ func _frame_draw_offset(frame: Texture2D, drawn_size: float) -> Vector2:
 ## their established secondary motion and effects.
 func _authored_direction4_attack_active() -> bool:
 	return _lunge > 0.0 and _real_frames and _frame_directional \
-		and (art_variant.is_empty() or (key in ["ruan_xiaoqi", "liu_tang", "ruan_xiaowu", "ruan_xiaoer"] and art_variant == "hn_" + key)) and AUTHORED_DIRECTION4_ATTACK_KEYS.has(key)
+		and (art_variant.is_empty() or (key in ["ruan_xiaoqi", "liu_tang", "ruan_xiaowu", "ruan_xiaoer", "chao_gai"] and art_variant == "hn_" + key)) and AUTHORED_DIRECTION4_ATTACK_KEYS.has(key)
 
 
 func _authored_catapult_chassis_active() -> bool:
@@ -4072,7 +4074,7 @@ func _anim_frame_for_state(fallback: Texture2D) -> Texture2D:
 			_real_frames = true
 			_frame_directional = Art.unit_anim_uses_directional_source(ak, "attack", animation_direction, "")
 			return ready[0]
-	if _shi_en_hurt_t > 0.0 and ((key in ["shi_en", "zhang_tuanlian", "ruan_xiaoqi", "liu_tang", "ruan_xiaowu"] and art_variant.is_empty()) or (key in ["ruan_xiaoqi", "liu_tang", "ruan_xiaowu", "ruan_xiaoer"] and art_variant == "hn_" + key)):
+	if _shi_en_hurt_t > 0.0 and ((key in ["shi_en", "zhang_tuanlian", "ruan_xiaoqi", "liu_tang", "ruan_xiaowu"] and art_variant.is_empty()) or (key in ["ruan_xiaoqi", "liu_tang", "ruan_xiaowu", "ruan_xiaoer", "chao_gai"] and art_variant == "hn_" + key)):
 		var recoil: Array = Art.unit_anim_frames(ak, "hurt", animation_direction, visual_art_variant())
 		if not recoil.is_empty():
 			_real_frames = true

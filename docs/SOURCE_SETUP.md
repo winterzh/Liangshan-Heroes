@@ -1,3 +1,7 @@
+## 晁盖阶段美术复现（2026-10-17）
+
+`python -X utf8 -B tools/build_chao_gai_merchant_20261017.py`只读核对17图/20资源/56姿势；新clone无需重制原图。`tools/run_chao_gai_merchant_20261017.py`无参数只预检，完整新批加`--run --work-root <工程外新目录>`，沿用本机Godot配置并串行等待共享槽位。17原稿/49引用在工程内，包/缓存/DLL/档案在外，不上传。最终1120项/232图通过，首批目检退回不混计；旧长章仅QA/custom，原启动方式不变，旧V16恢复准入不由新美术批延续。见[说明](CHAO_GAI_MERCHANT_20261017.md)。
+
 ## 白胜挑酒美术复现（2026-10-16）
 
 `python -X utf8 -B tools/build_bai_sheng_carry_20261016.py`只读验证5图/8资源/20姿势；`tools/run_bai_sheng_carry_20261016.py`无参数只预检，`--run --work-root <工程外新目录>`才等共享引擎空闲后运行完整私有PCK。使用既有本机Godot配置；新包、缓存和档案不进Git。新批332项/70图已通过，旧解析失败分开保留；启动方式不变，继续美术不恢复旧V16全链准入。见[说明](BAI_SHENG_CARRY_20261016.md)。

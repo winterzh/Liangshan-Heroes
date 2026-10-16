@@ -1,0 +1,54 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/chao_gai_merchant_20261017/walk_contact_a.png" id="walk_contact_a"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/chao_gai_merchant_20261017/walk_passing_a.png" id="walk_passing_a"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/chao_gai_merchant_20261017/walk_contact_b.png" id="walk_contact_b"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/chao_gai_merchant_20261017/walk_passing_b.png" id="walk_passing_b"]
+
+[sub_resource type="AtlasTexture" id="walk_contact_a_se"]
+atlas = ExtResource("walk_contact_a")
+region = Rect2(0, 0, 707, 629)
+margin = Rect2(6.331665, 10.02, 54, 132)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="walk_passing_a_se"]
+atlas = ExtResource("walk_passing_a")
+region = Rect2(0, 0, 711, 628)
+margin = Rect2(29.331665, 13.02, 50, 133)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="walk_contact_b_se"]
+atlas = ExtResource("walk_contact_b")
+region = Rect2(0, 0, 704, 629)
+margin = Rect2(44.981227, 24.22, 67, 142)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="walk_passing_b_se"]
+atlas = ExtResource("walk_passing_b")
+region = Rect2(0, 0, 712, 627)
+margin = Rect2(5.586358, 31.76, 56, 141)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("walk_contact_a_se")},
+{"duration": 1.0, "texture": SubResource("walk_passing_a_se")},
+{"duration": 1.0, "texture": SubResource("walk_contact_b_se")},
+{"duration": 1.0, "texture": SubResource("walk_passing_b_se")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]
