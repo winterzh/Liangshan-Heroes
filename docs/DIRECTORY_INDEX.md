@@ -1,3 +1,11 @@
+## 2026-10-17 公孙胜黄泥冈原生身份
+
+- `assets/characters/gongsun_sheng_merchant_sources_20261017/`：19份内置原稿、提示词/37引用SHA及未用格说明。
+- `assets/characters/gongsun_sheng_merchant_20261017/`：18张逐字节复制的生产图/导入描述。
+- `assets/direction4/level1_gongsun_sheng_merchant_20261017.json`及`assets/anim/character_traits_v2_gongsun_sheng_merchant_*.tres`：20资源/56姿势。
+- `tools/build_gongsun_sheng_merchant_20261017.py`、`run_gongsun_sheng_merchant_20261017.py`和同名GD：绑定复现、整包原生与远敌回归。
+- `docs/GONGSUN_SHENG_MERCHANT_20261017.md`及`qa/gongsun_sheng_merchant_20261017/`：原著/补足边界、阶段距离修正和原始验收。
+
 ## 2026-10-17 吴用黄泥冈原生阶段身份
 
 - `assets/characters/wu_yong_merchant_sources_20261017/`：24内置原稿、提示词/44引用SHA、拒用稿及部分格采用说明。

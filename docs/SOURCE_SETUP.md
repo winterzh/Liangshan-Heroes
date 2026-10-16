@@ -1,3 +1,7 @@
+## 公孙胜黄泥冈阶段复现（2026-10-17）
+
+`python -X utf8 -B tools/build_gongsun_sheng_merchant_20261017.py`只读核对18图/20资源56姿势；19原稿及37引用SHA保留工程内。`tools/run_gongsun_sheng_merchant_20261017.py`无参数仅预检，完整批加`--run --work-root <工程外新目录>`，使用本机Godot配置及共享锁串行运行。最终1076项/234图通过，包含真实远敌走近后伤害回归；PCK/缓存/DLL/私有档案不进Git。启动方式不变，旧长章仅QA/custom，旧V16恢复准入不由新美术延续。[范围](GONGSUN_SHENG_MERCHANT_20261017.md)。
+
 ## 吴用黄泥冈阶段复现（2026-10-17）
 
 `python -X utf8 -B tools/build_wu_yong_merchant_20261017.py`只读核对18图/20资源/56姿势。原图24份与44条引用SHA在工程中，直接复用，不重制。`tools/run_wu_yong_merchant_20261017.py`无参数只预检；完整新批加`--run --work-root <工程外新目录>`，使用本机Godot配置与共享锁串行运行。完整PCK1092项/234图通过，包含真实远敌走近后命中回归；包/缓存/DLL/私有档案不进Git。启动方式不变，旧长章仍仅QA/custom，旧V16恢复准入不由本美术批延续。[范围](WU_YONG_MERCHANT_20261017.md)。

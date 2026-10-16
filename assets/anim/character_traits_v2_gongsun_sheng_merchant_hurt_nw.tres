@@ -1,0 +1,33 @@
+[gd_resource type="SpriteFrames" load_steps=5 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/gongsun_sheng_merchant_20261017/hurt_recoil.png" id="hurt_recoil"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/gongsun_sheng_merchant_20261017/hurt_recover.png" id="hurt_recover"]
+
+[sub_resource type="AtlasTexture" id="hurt_recoil_nw"]
+atlas = ExtResource("hurt_recoil")
+region = Rect2(709, 660, 545, 594)
+margin = Rect2(107.0, 4.92, 111, 62)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="hurt_recover_nw"]
+atlas = ExtResource("hurt_recover")
+region = Rect2(674, 627, 580, 627)
+margin = Rect2(56.5, 0.66, 83, 36)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.095868
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("hurt_recoil_nw")},
+{"duration": 1.0, "texture": SubResource("hurt_recover_nw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

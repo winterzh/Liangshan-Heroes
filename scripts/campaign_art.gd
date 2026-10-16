@@ -202,6 +202,7 @@ static func native_wine_carry_path(key: String, variant: String, state: String, 
 	return "res://assets/anim/bai_sheng_carry_20261016_%s_%s.tres" % [state, direction]
 
 static func native_body_owner(variant: String) -> String:
+	if variant == "hn_gongsun_sheng": return "gongsun_sheng"
 	if variant == "hn_wu_yong": return "wu_yong"
 	if variant == "hn_chao_gai": return "chao_gai"
 	if variant == "hn_ruan_xiaoer": return "ruan_xiaoer"
@@ -213,6 +214,9 @@ static func native_body_owner(variant: String) -> String:
 	return owner if not owner.is_empty() else native_wounded_owner(variant)
 
 static func native_body_path(variant: String, state: String, direction: String) -> String:
+	if variant == "hn_gongsun_sheng":
+		if direction not in DIRECTIONS or state not in ["idle", "walk", "attack", "hurt", "death"]: return ""
+		return "res://assets/anim/character_traits_v2_gongsun_sheng_merchant_%s_%s.tres" % [state, direction]
 	if variant == "hn_wu_yong":
 		if direction not in DIRECTIONS or state not in ["idle", "walk", "attack", "hurt", "death"]: return ""
 		return "res://assets/anim/character_traits_v2_wu_yong_merchant_%s_%s.tres" % [state, direction]

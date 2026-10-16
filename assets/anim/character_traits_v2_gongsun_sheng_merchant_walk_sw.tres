@@ -1,0 +1,58 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/gongsun_sheng_merchant_20261017/walk_contact_a.png" id="walk_contact_a"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/gongsun_sheng_merchant_20261017/walk_passing_a.png" id="walk_passing_a"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/gongsun_sheng_merchant_20261017/walk_contact_b.png" id="walk_contact_b"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/gongsun_sheng_merchant_20261017/walk_passing_b.png" id="walk_passing_b"]
+
+[sub_resource type="AtlasTexture" id="walk_contact_a_sw"]
+atlas = ExtResource("walk_contact_a")
+region = Rect2(628, 0, 626, 640)
+margin = Rect2(99.785714, 0.0, 124, 110)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.077586
+
+[sub_resource type="AtlasTexture" id="walk_passing_a_sw"]
+atlas = ExtResource("walk_passing_a")
+region = Rect2(627, 0, 627, 632)
+margin = Rect2(80.488095, 0.8, 113, 108)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.037868
+
+[sub_resource type="AtlasTexture" id="walk_contact_b_sw"]
+atlas = ExtResource("walk_contact_b")
+region = Rect2(627, 0, 627, 642)
+margin = Rect2(114.809524, 0.56, 131, 116)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.024324
+
+[sub_resource type="AtlasTexture" id="walk_passing_b_sw"]
+atlas = ExtResource("walk_passing_b")
+region = Rect2(642, 0, 612, 630)
+margin = Rect2(90.892857, 0.78, 117, 99)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.034043
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("walk_contact_a_sw")},
+{"duration": 1.0, "texture": SubResource("walk_passing_a_sw")},
+{"duration": 1.0, "texture": SubResource("walk_contact_b_sw")},
+{"duration": 1.0, "texture": SubResource("walk_passing_b_sw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]
