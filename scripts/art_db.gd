@@ -1045,7 +1045,7 @@ func campaign_variant_has_direction(variant: String, direction: String) -> bool:
 ## 精确动作存在判断；复用纹理缓存，绝不以idle回退冒充双人动作。
 func campaign_variant_has_animation(variant: String, state: String, direction: String) -> bool:
 	if variant.is_empty() or direction not in CampaignArt.DIRECTIONS: return false
-	var push_path := CampaignArt.native_tribute_push_path("liu_tang", variant, state, direction)
+	var push_path := CampaignArt.native_tribute_push_path(CampaignArt.native_body_owner(variant), variant, state, direction)
 	if not push_path.is_empty(): return not _load_generic_directional_frames(push_path).is_empty()
 	var wine_path := CampaignArt.native_wine_carry_path("bai_sheng", variant, state, direction)
 	if not wine_path.is_empty(): return not _load_generic_directional_frames(wine_path).is_empty()

@@ -1,0 +1,40 @@
+{
+  "complete": false,
+  "run": "D:\\CodexEvidence\\shuihu\\chao_gai_pushcart_20261017\\integration\\natural_zoom\\20261017_135734",
+  "qualified_receipt": "D:\\CodexEvidence\\shuihu\\chao_gai_pushcart_20261017\\native\\20261017_135106_7bbf0b4a\\evidence\\receipt.json",
+  "qualified_receipt_sha256": "65030359d3f60148090ffd36e9b27c251a73b6e195574a11014d35d9bdf0ab87",
+  "pack_sha256": "b4726c26815ed89913fbfa1e272f404a57c17659b852875d294aa06063509098",
+  "script_sha256": "f99d7a26d9b6902e43923832ddab93cce92ec0cdec18317f94de9e869095ae18",
+  "runner_sha256": "ed54783a3664a6b81214d7dde8f9de8de386bbf1a7779d5154de519a14604b92",
+  "private_profile": "D:\\CodexEvidence\\shuihu\\chao_gai_pushcart_20261017\\integration\\natural_zoom\\profiles\\20261017_135734",
+  "steps": [
+    {
+      "case": "natural_zoom_views",
+      "command": [
+        "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+        "--path",
+        "C:\\CodexQA\\chao_cart\\20261017_135106_7bbf0b4a\\clean_runtime",
+        "--rendering-method",
+        "gl_compatibility",
+        "--main-pack",
+        "C:\\CodexQA\\chao_cart\\20261017_135106_7bbf0b4a\\clean_runtime\\LiangshanChaoGaiPushcart.pck",
+        "--position",
+        "30000,30000",
+        "--script",
+        "D:\\CodexEvidence\\shuihu\\chao_gai_pushcart_20261017\\integration\\default_zoom.gd"
+      ],
+      "passed": false,
+      "errors": [
+        "\nSCRIPT ERROR: Parse Error: Could not resolve super class path \"res://tools/chao_gai_pushcart_20261017.gd\".",
+        "ERROR: Failed to load script \"D:/CodexEvidence/shuihu/chao_gai_pushcart_20261017/integration/default_zoom.gd\" with error \"Parse error\"."
+      ],
+      "pid": 32736,
+      "exit_code": 1,
+      "seconds": 1.519,
+      "stopped_for": "script_or_engine_error",
+      "log_sha256": "0a87f14863781b4dc92c5fd449b597d588494838d960617fa2aa22f3b9094a46"
+    }
+  ],
+  "error": "RuntimeError('Private character QA step failed: natural_zoom_views')",
+  "lock_released": true
+}

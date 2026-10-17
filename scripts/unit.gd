@@ -4064,7 +4064,8 @@ func _anim_key() -> String:
 
 ## 同一白胜造型的肩挑动作。精确检查不能把普通idle回退误判成挑酒素材。
 func _campaign_tribute_push_active() -> bool:
-	return key == "liu_tang" and art_variant == "hn_liu_tang" and _active_campaign_level_id() == "level1" \
+	return ((key == "liu_tang" and art_variant == "hn_liu_tang") \
+		or (key == "chao_gai" and art_variant == "hn_chao_gai")) and _active_campaign_level_id() == "level1" \
 		and has_meta("carrying_tribute") and not _dying and story_outcome.is_empty()
 
 
@@ -4074,6 +4075,20 @@ func _campaign_tribute_push_state() -> String:
 		return ""
 	var state := "push_walk" if _move_blend > 0.3 else "push_idle"
 	return state if Art.campaign_variant_has_animation(art_variant, state, animation_direction) else ""
+
+
+func _campaign_tribute_label_y(fallback_y: float) -> float:
+	if not _campaign_tribute_push_active(): return fallback_y
+	var label_frame: Texture2D
+	if not _campaign_tribute_push_state().is_empty():
+		label_frame = _anim_frame_for_state(null)
+	else:
+		var parked: Array = Art.unit_anim_frames(key, "parked_cart", animation_direction, art_variant)
+		if not parked.is_empty(): label_frame = parked[0]
+	if label_frame == null or not label_frame.has_meta("visible_top"): return fallback_y
+	var size := radius * 3.7 * visual_scale * _frame_draw_scale(label_frame)
+	return minf(fallback_y, size * (float(label_frame.get_meta("visible_top")) - 0.82) \
+		+ _frame_draw_offset(label_frame, size).y - 8.0)
 
 
 func _campaign_wine_carry_state() -> String:
@@ -4332,6 +4347,7 @@ func _draw() -> void:
 		bar_y = float(get_meta("campaign_environment_label_y", -radius * 1.9))
 	elif as_sprite:
 		bar_y = -radius * 3.3 * visual_scale
+		bar_y = _campaign_tribute_label_y(bar_y)
 	else:
 		bar_y = -radius - 9.0
 

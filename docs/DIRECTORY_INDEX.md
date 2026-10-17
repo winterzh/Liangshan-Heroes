@@ -1,3 +1,10 @@
+## 2026-10-17 晁盖推车运行接入
+
+- `assets/characters/chao_gai_pushcart_20261017/`：7张未改像素运行PNG/导入；独立车沿用刘唐物件原图。
+- `assets/direction4/level1_chao_gai_pushcart_20261017.json`、`assets/anim/chao_gai_pushcart_20261017_*.tres`：24姿势/12资源，轮点/车深校准和visible_top标签轮廓。
+- `tools/build_chao_gai_pushcart_20261017.py`、同批run/GD/identity探针：只读核对、带完整恢复清单的私有工程复用及实际PCK验收。
+- `docs/CHAO_GAI_PUSHCART_20261017.md`、`qa/chao_gai_pushcart_20261017/`：最终854项与同包镜头51项、64直接目检、旧遮挡退回和脚本失败、外置恢复档案索引。下方原稿状态属于接入前。
+
 ## 2026-10-17 晁盖推车原稿
 
 - `assets/characters/chao_gai_pushcart_sources_20261017/`：12原PNG/.gdignore/完整提示词/27引用SHA/20选格。

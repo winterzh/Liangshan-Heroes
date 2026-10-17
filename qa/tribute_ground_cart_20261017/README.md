@@ -1,3 +1,5 @@
+后继复用说明（2026-10-17）：本页628项对应PCK仍保留且SHA未变；其内层私有编译源码树已供[晁盖推车批](../chao_gai_pushcart_20261017/README.md)复用。复用前全部6639个实际输入及生成常量已建立Git 6ccf8f89 blob+359个非Git输入ZIP恢复映射，索引见后继private_restore_archives.json。下方源码零漂移是当批结果；复查旧批须在新私有目录按完整清单恢复并验证，不能把当前内层源码当作原628源码。旧不可变owner仍保持。
+
 # 黄泥冈落地财物车原生验收
 
 最终628项/93图通过，6609份当前冻结输入零漂移，28纹理原生一致，19图直接目检。`receipt.json`绑定实际新PCK/内容identity/私有profile，`report.json`是原生报告，`direct_review.json`列实际打开的原图SHA。
