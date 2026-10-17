@@ -1,3 +1,7 @@
+## 阮小七体量修稿隔离（2026-10-18）
+
+新候选在`assets/characters/ruan_xiaoqi_pushcart_proportion_sources_20261018/`，`.gdignore`隔离，尚无生产引用和原生资格；不要把8a95f674的1417项转记为本稿通过。完整提示和SHA在prompt_set.json，[观察](../qa/ruan_xiaoqi_pushcart_proportion_20261018/README.md)。
+
 ## 阮小七推车接入（2026-10-18）
 
 当前真实4包链原生1417项/118图，168纹理/6842冻结来源核对。只读`python -X utf8 -B tools/build_ruan_xiaoqi_pushcart_20261018.py`重现5原图/24姿势/12资源；新原生批用同名run入口、当前完整收据/保留提交、新工程外工作目录，引擎自然空闲后串行。卸货体量/后视步态等仍未完成，来源167项为独立历史范围。[包链/恢复与限定](RUAN_XIAOQI_PUSHCART_20261018.md)。

@@ -1,3 +1,8 @@
+## 2026-10-18 阮小七体量首稿
+
+- `assets/characters/ruan_xiaoqi_pushcart_proportion_sources_20261018/`：隔离四向待机人物比例候选原图与完整提示/引用SHA。
+- `qa/ruan_xiaoqi_pushcart_proportion_20261018/`：只读几何、四向目检与未采用范围。
+
 ## 2026-10-18 阮小七携货推车
 
 - `assets/characters/ruan_xiaoqi_pushcart_20261018/`、`assets/direction4/level1_ruan_xiaoqi_pushcart_20261018.json`、`assets/anim/ruan_xiaoqi_pushcart_20261018_*.tres`：5原字节PNG/24姿势/12资源，共用原停车车。

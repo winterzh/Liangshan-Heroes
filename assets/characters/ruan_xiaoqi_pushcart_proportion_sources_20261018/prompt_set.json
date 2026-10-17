@@ -1,0 +1,60 @@
+{
+  "tool": "built-in image_gen.imagegen",
+  "request": {
+    "prompt": "Use case: identity-preserve, precise-object-edit. Asset: replacement candidate for a 2D isometric historical game, NOT a poster.\nEdit Image1, the four-direction Ruan Xiaoqi loaded-cart idle atlas. Image2 is the adopted SAME MAN's unloaded body and clothing reference; Image3 is his face identity reference only. Produce ONE transparent-background square 2x2 atlas, ideally 1254x1254, no text or border.\nSingle targeted correction: the pushing man's body is oversized relative to the cart and to his unloaded in-game body. In EACH of the four cells reduce ONLY the man's head-to-ground rendered size to roughly 75 percent of his current head-to-ground size, uniformly including head, torso, arms and legs; retain adult rugged build and the exact same recognizable face, NOT a child, NOT merely a smaller head. Keep the cart's wheel diameter, chassis, bundles, cloth, ropes, view, perspective, colour and detail visually the SAME size as Image1. Do NOT shrink the whole man-plus-cart composition. Reposition the man naturally near the handles so both ordinary anatomically correct hands still grip the two handles at a plausible lowered waist height, normal elbows and leg lengths. Ground contact and believable weight support. Same stable idle stance, no new motion phases. Do not extend his arms unnaturally to reach the cart. Make the facial skin spots and pale uneven beard visible enough at sprite size; keep the coarse knobbly face and prominent eyes of Image2/3.\nThe directions/order are locked: top-left faces southeast/front-right; top-right southwest/front-left; bottom-left northeast/back-right; bottom-right northwest/back-left. Retain BOTH true back views with only slight head turn, not four frontal men. One actor and one complete loaded wooden handcart per cell; no cropped toes, wheels, handles, no overlap between cells. Leave genuinely transparent gutters >=24 pixels around the central horizontal and vertical cell boundaries and outer margins. Do not duplicate extra wheels or hands. Match the original warm hand-painted RTS sprite style and isometric camera, lighting and outline.\nCanon constraints: Huangnigang chapter16 of Water Margin. Ruan Xiaoqi is a living rugged human, shirtless, same dark topknot tied simply, sparse uneven pale yellow beard and naturally scattered dark skin spots. Retain exact existing off-white coarse waist apron, grey sash, grey rolled trousers, bare feet. These colours/garments are established artistic interpretation rather than invented quotes. No headcloth, flower, leopard tattoo, cape, straw hat, pipe spear, magic, skulls, text, signs or borrowed brother identity. Both hands push, no weapon in hands. Covered bundles are visual cargo, not a declaration of the novel's eleven-load count.\nOutput real alpha transparency including gutters; no black, white, checkerboard, scene, cast floor shadow or opaque backdrop. Preserve original artwork detail. This is only a proportion-correction source candidate; no UI or gameplay screenshot.",
+    "referenced_image_paths": [
+      "D:/AI项目/水浒/开发工程/assets/characters/ruan_xiaoqi_pushcart_sources_20261018/push_idle_initial.png",
+      "D:/AI项目/水浒/开发工程/assets/characters/ruan_xiaoqi_merchant_20261016/idle_spacing.png",
+      "D:/AI项目/水浒/开发工程/assets/characters/ruan_xiaoqi_merchant_20261016/portrait.png"
+    ],
+    "transparent_background": true
+  },
+  "references": [
+    {
+      "path": "D:/AI项目/水浒/开发工程/assets/characters/ruan_xiaoqi_pushcart_sources_20261018/push_idle_initial.png",
+      "bytes": 1571029,
+      "sha256": "32e50159ec442da7fedd361a869d395e597cb2d27448df0baa83edaa3465530e"
+    },
+    {
+      "path": "D:/AI项目/水浒/开发工程/assets/characters/ruan_xiaoqi_merchant_20261016/idle_spacing.png",
+      "bytes": 795020,
+      "sha256": "bd2feea85942754b91c87a67058d715a00faee805ebbb2cd95afcc0e583332bb"
+    },
+    {
+      "path": "D:/AI项目/水浒/开发工程/assets/characters/ruan_xiaoqi_merchant_20261016/portrait.png",
+      "bytes": 2804096,
+      "sha256": "216c9271fddfbc3018d56da00c36fc0edb5e259add305fa0ae42a557fc3439c4"
+    }
+  ],
+  "generated_original": "C:\\Users\\rsb\\.codex\\generated_images\\01a11902-b95a-7981-aed1-f143736f8853\\exec-881ae1ea-913b-4197-b8a0-fab1fd829100.png",
+  "workspace_original": "assets/characters/ruan_xiaoqi_pushcart_proportion_sources_20261018/idle_body_candidate_v1.png",
+  "bytes": 1130232,
+  "sha256": "d0985572770b5629cb4c08e30fa4394ba7133e9e846d26f0f19419d6c135be5c",
+  "pixel_edits": false,
+  "review": {
+    "directly_seen_original": true,
+    "views_seen": [
+      "se",
+      "sw",
+      "ne",
+      "nw"
+    ],
+    "requested_actor_scale_relative_to_previous": 0.75,
+    "requested_scale_is_measured_result": false,
+    "native_launched": false,
+    "runtime_adopted": false,
+    "proportion_continuity_accepted": false,
+    "cart_geometry_continuity_accepted": false,
+    "full_alpha_zero_background_accepted": false,
+    "decision": "Keep as isolated first proportion candidate. Do not replace runtime resources.",
+    "findings": [
+      "Actor visibly reduced relative to cart, retains own topknot, bare chest, off-white apron/grey sash/trousers, bare feet and coarse face; no new story event or brother costume.",
+      "Front and rear reduction is visibly unequal. Body size is not measured by whole sprite bbox, which includes cart; requested75percent is not achieved-size evidence.",
+      "Cart wheel/cloth/rope shapes and layout changed during generation. Existing stationary cart continuity is not qualified.",
+      "Whole bottom-left corner alpha1 and low-alpha haze remain original. Strong-alpha geometry alone does not prove full transparent gutters or filtering acceptance.",
+      "One four-view idle candidate only. Walking/contact/passing/hurt/attack/unload continuity, gameplay native checks, seven carts/eleven loads and full art are not qualified."
+    ]
+  },
+  "canon_source": "docs/RUAN_XIAOQI_PUSHCART_SOURCES_20261018.md; existing chapter15 identity/chapter16 shirtless and seven carts eleven loads binding, no new quote or plot claim",
+  "art_interpretation": "Existing exact clothing colours, topknot, bare feet, cart structure and pose are artistic interpretation.0.75 is an art correction target only."
+}
