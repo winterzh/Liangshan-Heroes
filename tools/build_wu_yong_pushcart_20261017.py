@@ -65,7 +65,7 @@ def intended():
     return {'schema':'native_direction4_spriteframes_v1','character':FAMILY,'body_owner':'wu_yong','sources':sources,'poses':poses,'states':STATES,
      'resources':[f'assets/anim/{FAMILY}_{s}_{d}.tres' for s in STATES for d in base.base.DIRS],
      'wheel_offsets_per_body_size':offsets,'canonical_cart_geometry':canonical,'production_qualified':False,'native_dimensions_verified':False,
-     'canon':'Chapter16 Wu Yong Gai is one of seven shirtless merchants who cover tribute goods in seven Jiangzhou carts and push away. Fair refined face/long pointed beard, black cloth/grey sash/trousers/sandals, single wheel, material colours and weapon stowage are existing art interpretations. Current three targets/force branch, four remaining carriers, words, seven-cart/eleven-load mapping and full wheel rotation remain open. Only wu_yong/hn_wu_yong carrying_tribute in level1.'}
+     'canon':'Chapter16 Wu Yong is one of seven shirtless merchants who cover tribute goods in seven Jiangzhou carts and push away. Fair refined face/long pointed beard, black cloth/grey sash/trousers/sandals, single wheel, material colours and weapon stowage are existing art interpretations. Current three targets/force branch, four remaining carriers, words, seven-cart/eleven-load mapping and full wheel rotation remain open. Only wu_yong/hn_wu_yong carrying_tribute in level1.'}
 def render(m):
     outputs=base.base.renderer().render(m)
     for name,text in outputs.items():

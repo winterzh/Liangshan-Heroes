@@ -1,3 +1,10 @@
+## 2026-10-17 公孙胜推车运行接入
+
+- `assets/characters/gongsun_sheng_pushcart_20261017/`：6份原字节PNG及mipmap导入，共用车沿用刘唐物件。
+- `assets/direction4/level1_gongsun_sheng_pushcart_20261017.json`、`assets/anim/gongsun_sheng_pushcart_20261017_*.tres`：24姿势/12资源、真实逐格轮点/车深/visible_top。
+- `tools/build_gongsun_sheng_pushcart_20261017.py`、同批run/GD/identity探针：来源/资源、受保护旧工程复用和完整PCK验证。
+- `docs/GONGSUN_SHENG_PUSHCART_20261017.md`、`qa/gongsun_sheng_pushcart_20261017/`：1107项/118图、64目检索引/4代表图、旧6713实际输入恢复档案及NTFS字节保持记录。
+
 ## 2026-10-17 公孙胜推车原稿
 
 - `assets/characters/gongsun_sheng_pushcart_sources_20261017/`：6原PNG/完整提示词/16引用SHA/20选格，.gdignore隔离。

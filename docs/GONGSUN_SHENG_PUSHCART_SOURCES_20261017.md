@@ -1,3 +1,5 @@
+后继采用（2026-10-17）：选用6份原PNG已接入公孙胜自己的推车资源，[运行批](GONGSUN_SHENG_PUSHCART_20261017.md)完整PCK1107项/118图、64重点图目检通过。原来源152项和`runtime_adopted=false`/整图角点失败字段保留创建时快照；下文“尚未接入”是本来源批的历史范围，当前资格看后继收据，不回写旧报告。
+
 # 公孙胜黄泥冈推车原稿（2026-10-17）
 
 内置imagegen生成6份原PNG，提供待机和四阶段步态的20个选用视图。原PNG、完整提示词、16引用SHA、原始生成位置和逐视图边界在`assets/characters/gongsun_sheng_pushcart_sources_20261017/prompt_set.json`；来源由`.gdignore`隔离，尚未接入游戏。没有用脚本抠底、裁切、翻转、改色或重编码PNG。

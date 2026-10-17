@@ -1,3 +1,5 @@
+后继复用说明（2026-10-17）：公孙胜1107项运行批显式复用本批内层编译工程/缓存，复用前已将旧6713个实际canonical输入和生成常量以6354 Git blob+359非Git ZIP完整归档，[恢复索引](../gongsun_sheng_pushcart_20261017/private_restore_archive.json)保存完整清单/ZIP路径及SHA。吴用旧PCK路径/字节SHA保持（仅NTFS透明压缩），不可变owner保持；内层源码现在是公孙胜，不可称吴用旧树原地未变。下文零漂移为吴用当轮历史验收结果。
+
 # 吴用携货推车原生验收
 
 `receipt.json`对应`20261017_161234_8ddce18f`：完整PCK1001项/118图通过，75张原生纹理保持，6693当前输入/6602旧owner输入零漂移，包内identity与实际内容冻结一致。`report.json`保存逐项原生报告。日志`packed_chao_pushcart_visuals.log`沿用旧工具的case文件名，其收据命令实际执行`tools/wu_yong_pushcart_20261017.gd`，不是借用晁盖结果。

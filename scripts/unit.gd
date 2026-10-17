@@ -4066,7 +4066,8 @@ func _anim_key() -> String:
 func _campaign_tribute_push_active() -> bool:
 	return ((key == "liu_tang" and art_variant == "hn_liu_tang") \
 		or (key == "chao_gai" and art_variant == "hn_chao_gai") \
-		or (key == "wu_yong" and art_variant == "hn_wu_yong")) and _active_campaign_level_id() == "level1" \
+		or (key == "wu_yong" and art_variant == "hn_wu_yong") \
+		or (key == "gongsun_sheng" and art_variant == "hn_gongsun_sheng")) and _active_campaign_level_id() == "level1" \
 		and has_meta("carrying_tribute") and not _dying and story_outcome.is_empty()
 
 

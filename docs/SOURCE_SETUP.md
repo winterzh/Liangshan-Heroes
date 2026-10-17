@@ -1,3 +1,7 @@
+## 公孙胜推车运行复现（2026-10-17）
+
+只读`python -X utf8 -B tools/build_gongsun_sheng_pushcart_20261017.py`核对7图源/24姿势/12资源；同批run工具加`--run --work-root <短绝对证据目录> --pack-root <短绝对包目录>`建立新批，无`--run`只预检99纹理/共享引擎状态。最终1107项/118图、64直接目检含实际默认镜头。显式复用前完整保存旧6713实际输入和生成常量，旧PCK保持，非新冷导入；完整图/恢复ZIP/PCK在C盘受控外置，跨机按索引取回校验。实际身份、复用参数及限制见[实现](GONGSUN_SHENG_PUSHCART_20261017.md)。启动方式不变。
+
 ## 公孙胜推车来源检查（2026-10-17）
 
 `python -X utf8 -B tools/verify_gongsun_sheng_pushcart_sources_20261017.py`只读核对6原PNG/16引用及20选格，当前152项通过；两份整图角点alpha1如实保留，按方向选用不等于整图/mipmap通过。来源由.gdignore隔离，尚未接入或原生验收，启动方式不变。[范围](GONGSUN_SHENG_PUSHCART_SOURCES_20261017.md)。
