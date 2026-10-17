@@ -1,0 +1,56 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/gongsun_sheng_daily_20261017/walk_contact_a.png" id="walk_contact_a"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/gongsun_sheng_daily_20261017/walk_passing_a.png" id="walk_passing_a"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/gongsun_sheng_daily_20261017/walk_contact_b.png" id="walk_contact_b"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/gongsun_sheng_daily_20261017/walk_passing_b.png" id="walk_passing_b"]
+
+[sub_resource type="AtlasTexture" id="walk_contact_a_se"]
+atlas = ExtResource("walk_contact_a")
+region = Rect2(0, 0, 638, 639)
+margin = Rect2(13.727823, 0.74, 119, 118)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.044138
+
+[sub_resource type="AtlasTexture" id="walk_passing_a_se"]
+atlas = ExtResource("walk_passing_a")
+region = Rect2(0, 0, 631, 637)
+margin = Rect2(30.806452, 0.56, 127, 121)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.029891
+
+[sub_resource type="AtlasTexture" id="walk_contact_b_se"]
+atlas = ExtResource("walk_contact_b")
+region = Rect2(0, 0, 634, 628)
+margin = Rect2(27.002016, 6.74, 123, 129)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="walk_passing_b_se"]
+atlas = ExtResource("walk_passing_b")
+region = Rect2(0, 0, 627, 633)
+margin = Rect2(29.814516, 26.16, 161, 155)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("walk_contact_a_se")},
+{"duration": 1.0, "texture": SubResource("walk_passing_a_se")},
+{"duration": 1.0, "texture": SubResource("walk_contact_b_se")},
+{"duration": 1.0, "texture": SubResource("walk_passing_b_se")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

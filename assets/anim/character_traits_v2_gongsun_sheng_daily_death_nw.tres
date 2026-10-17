@@ -1,0 +1,56 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/gongsun_sheng_daily_20261017/death_buckle.png" id="death_buckle"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/gongsun_sheng_daily_20261017/death_fall.png" id="death_fall"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/gongsun_sheng_daily_20261017/death_settle.png" id="death_settle"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/gongsun_sheng_daily_20261017/death_rest.png" id="death_rest"]
+
+[sub_resource type="AtlasTexture" id="death_buckle_nw"]
+atlas = ExtResource("death_buckle")
+region = Rect2(658, 642, 596, 612)
+margin = Rect2(19.0, 49.84, 66, 50)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.02795
+
+[sub_resource type="AtlasTexture" id="death_fall_nw"]
+atlas = ExtResource("death_fall")
+region = Rect2(661, 662, 593, 592)
+margin = Rect2(35.0, 82.8, 97, 98)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="death_settle_nw"]
+atlas = ExtResource("death_settle")
+region = Rect2(622, 662, 632, 592)
+margin = Rect2(168.0, 363.92, 324, 364)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.207071
+
+[sub_resource type="AtlasTexture" id="death_rest_nw"]
+atlas = ExtResource("death_rest")
+region = Rect2(638, 643, 616, 611)
+margin = Rect2(69.0, 137.56, 142, 147)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("death_buckle_nw")},
+{"duration": 1.0, "texture": SubResource("death_fall_nw")},
+{"duration": 1.0, "texture": SubResource("death_settle_nw")},
+{"duration": 1.0, "texture": SubResource("death_rest_nw")}
+],
+"loop": false,
+"name": &"default",
+"speed": 4.0
+}]

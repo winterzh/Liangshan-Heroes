@@ -389,6 +389,11 @@ var _chapter_portrait_cache: Dictionary = {}
 
 ## 图鉴、战斗面板与英雄栏共用入口。先核对人物身份，防止变体借到别人的脸。
 func ui_portrait_texture(key: String, variant := "") -> Texture2D:
+	if variant == GONGSUN_LATER_VARIANT:
+		if key != "gongsun_sheng": return null
+		if not _chapter_portrait_cache.has(variant):
+			_chapter_portrait_cache[variant] = _try_load("res://assets/characters/art_full_20260916/gongsun_sheng_portrait_20260916.png")
+		return _chapter_portrait_cache[variant]
 	var owner := CampaignArt.portrait_owner(variant)
 	if not owner.is_empty():
 		if String(ART_ALIAS.get(key, key)) != owner: return null
@@ -404,6 +409,7 @@ func ui_portrait_texture(key: String, variant := "") -> Texture2D:
 
 ## 保留战役变体原图查询，用于素材预览与来源契约；游戏界面用 ui_portrait_texture。
 func avatar_texture(key: String, variant := "") -> Texture2D:
+	if variant == GONGSUN_LATER_VARIANT: return ui_portrait_texture(key, variant)
 	if variant == CampaignArt.SHI_EN_RECOVERY_VARIANT or not CampaignArt.native_wounded_owner(variant).is_empty():
 		return unit_texture(key, variant, "se")
 	if IDENTITY_PORTRAIT_VARIANTS.has(variant):
@@ -436,6 +442,7 @@ func avatar_texture(key: String, variant := "") -> Texture2D:
 ## Ordinary armed bodies only. Explicit story appearances retain their own routes.
 ## Unlisted actions retain existing art while further action review continues.
 const ORDINARY_CHARACTER_FAMILIES := {
+	"gongsun_sheng": {"idle": "character_traits_v2_gongsun_sheng_daily", "walk": "character_traits_v2_gongsun_sheng_daily", "attack": "character_traits_v2_gongsun_sheng_daily", "hurt": "character_traits_v2_gongsun_sheng_daily", "death": "character_traits_v2_gongsun_sheng_daily"},
 	"ruan_xiaowu": {"idle": "character_traits_v2_ruan_xiaowu_canon", "walk": "character_traits_v2_ruan_xiaowu_canon", "attack": "character_traits_v2_ruan_xiaowu_canon", "hurt": "character_traits_v2_ruan_xiaowu_canon", "death": "character_traits_v2_ruan_xiaowu_canon"},
 	"liu_tang": {"idle": "character_traits_v2_liu_tang_ne_hold", "walk": "character_traits_v2_liu_tang_ne_hold", "attack": "character_traits_v2_liu_tang_ne_hold", "hurt": "character_traits_v2_liu_tang_ne_hold", "death": "character_traits_v2_liu_tang_ne_hold"},
 	"ruan_xiaoqi": {"idle": "character_traits_v2_ruan_xiaoqi_canon", "walk": "character_traits_v2_ruan_xiaoqi_gait_20261016", "attack": "character_traits_v2_ruan_xiaoqi_canon", "hurt": "character_traits_v2_ruan_xiaoqi_canon", "death": "character_traits_v2_ruan_xiaoqi_canon"},
@@ -449,6 +456,17 @@ const ORDINARY_CHARACTER_FAMILIES := {
 		"idle": "character_traits_v5_lin_chong_gait", "walk": "character_traits_v5_lin_chong_gait", "death": "character_traits_v10_lin_chong_death", "hurt": "character_traits_v12_lin_chong_hurt"
 	}
 }
+
+const GONGSUN_LATER_VARIANT := "gongsun_sheng_later_ritual"
+
+func _gongsun_later_frames(key: String, state: String) -> Array:
+	# Preserve the later ritual costume until its separate source-based redraw.
+	# This retention is not a new canon qualification of the old sprite or kit.
+	if key != "gongsun_sheng" or state not in ["idle", "walk", "attack", "death"]: return []
+	var cache_key := "gongsun_later|" + state
+	if not _anim_cache.has(cache_key):
+		_anim_cache[cache_key] = _load_generic_directional_frames("res://assets/anim/gongsun_sheng_%s.png" % state)
+	return _anim_cache[cache_key]
 
 func _ordinary_character_frames(key: String, state: String, direction: String, variant: String) -> Array:
 	if not variant.is_empty() or direction not in CampaignArt.DIRECTIONS:
@@ -468,6 +486,9 @@ func _canonical_character_variant(key: String, variant: String) -> String:
 
 
 func unit_texture(key: String, variant := "", direction := "") -> Texture2D:
+	if variant == GONGSUN_LATER_VARIANT:
+		var later := _gongsun_later_frames(key, "idle")
+		return null if later.is_empty() else later[0]
 	variant = _canonical_character_variant(key, variant)
 	var ordinary := _ordinary_character_frames(key, "idle", "se" if direction.is_empty() else direction, variant)
 	if not ordinary.is_empty(): return ordinary[0]
@@ -653,7 +674,7 @@ const STANDALONE_PORTRAITS := {
 	"chao_gai": "res://assets/characters/art_full_20260916/chao_gai_portrait_20260916.png",
 	"lu_zhishen": "res://assets/characters/art_full_20260916/lu_zhishen_portrait_20260916.png",
 	"wu_song": "res://assets/characters/art_full_20260916/wu_song_portrait_20260916.png",
-	"gongsun_sheng": "res://assets/characters/art_full_20260916/gongsun_sheng_portrait_20260916.png",
+	"gongsun_sheng": "res://assets/characters/gongsun_sheng_daily_20261017/portrait.png",
 	"shi_en": "res://assets/characters/shi_en_canon_20261015/portrait.png",
 	"jiang_menshen": "res://assets/characters/jiang_menshen_canon_20261015/portrait.png",
 }
@@ -735,6 +756,8 @@ func portrait_texture(key: String) -> Texture2D:
 ## 选图顺序为：精确四向动作 > 旧同动作帧带 > 同方向idle。这样不会用一张
 ## 四向站姿遮住本来存在的走路/攻击动画；只有真正没有该动作时才保持四向站姿。
 func unit_anim_frames(key: String, state: String, direction := "", variant := "") -> Array:
+	if variant == GONGSUN_LATER_VARIANT:
+		return [] if not direction.is_empty() and direction not in CampaignArt.DIRECTIONS else _gongsun_later_frames(key, state)
 	if key == "jiang_menshen" and variant.is_empty() and direction.is_empty(): direction = "se"
 	variant = _canonical_character_variant(key, variant)
 	if not direction.is_empty() and direction not in CampaignArt.DIRECTIONS:
@@ -936,6 +959,7 @@ func _slice_anim_strip(tex: Texture2D) -> Array:
 ## 与 unit_anim_frames 使用同一选择顺序，只回答最终帧是否来自真实方向文件。
 ## 绘制层据此决定是否允许旧式水平镜像。
 func unit_anim_uses_directional_source(key: String, state: String, direction: String, variant := "") -> bool:
+	if variant == GONGSUN_LATER_VARIANT: return false
 	variant = _canonical_character_variant(key, variant)
 	if direction not in CampaignArt.DIRECTIONS:
 		return false

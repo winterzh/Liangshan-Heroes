@@ -1,0 +1,68 @@
+[gd_resource type="SpriteFrames" load_steps=11 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/gongsun_sheng_daily_20261017/attack_reach.png" id="attack_reach"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/gongsun_sheng_daily_20261017/attack_windup.png" id="attack_windup"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/gongsun_sheng_daily_20261017/attack_strike.png" id="attack_strike"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/gongsun_sheng_daily_20261017/attack_recover.png" id="attack_recover"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/gongsun_sheng_daily_20261017/idle.png" id="idle"]
+
+[sub_resource type="AtlasTexture" id="attack_reach_nw"]
+atlas = ExtResource("attack_reach")
+region = Rect2(627, 632, 627, 622)
+margin = Rect2(53.0, 20.98, 112, 117)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="attack_windup_nw"]
+atlas = ExtResource("attack_windup")
+region = Rect2(646, 617, 608, 637)
+margin = Rect2(103.5, 31.46, 145, 116)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="attack_strike_nw"]
+atlas = ExtResource("attack_strike")
+region = Rect2(649, 622, 605, 632)
+margin = Rect2(35.5, 59.68, 169, 142)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="attack_recover_nw"]
+atlas = ExtResource("attack_recover")
+region = Rect2(712, 632, 542, 622)
+margin = Rect2(153.0, 7.48, 172, 92)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="idle_nw"]
+atlas = ExtResource("idle")
+region = Rect2(627, 634, 627, 620)
+margin = Rect2(53.5, 15.14, 100, 107)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("attack_reach_nw")},
+{"duration": 1.0, "texture": SubResource("attack_windup_nw")},
+{"duration": 1.0, "texture": SubResource("attack_windup_nw")},
+{"duration": 1.0, "texture": SubResource("attack_strike_nw")},
+{"duration": 1.0, "texture": SubResource("attack_strike_nw")},
+{"duration": 1.0, "texture": SubResource("attack_recover_nw")},
+{"duration": 1.0, "texture": SubResource("attack_reach_nw")},
+{"duration": 1.0, "texture": SubResource("idle_nw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

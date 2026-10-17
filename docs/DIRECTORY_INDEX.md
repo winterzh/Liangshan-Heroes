@@ -1,3 +1,10 @@
+## 2026-10-17 公孙胜日常身体与原生证据
+
+- `assets/characters/gongsun_sheng_daily_integration_sources_20261017/`：6份新原稿及提示词/引用，3选用/3退回；原18来源另存。
+- `assets/characters/gongsun_sheng_daily_20261017/`、`assets/direction4/ordinary_gongsun_sheng_daily_20261017.json`、20个`character_traits_v2_gongsun_sheng_daily_*.tres`：16图/60姿势。
+- `tools/build_gongsun_sheng_daily_20261017.py`、`run_gongsun_sheng_daily_20261017.py`、同名GD：来源/绑定复现、完整包与真实动作。
+- `docs/GONGSUN_SHENG_DAILY_20261017.md`、`qa/gongsun_sheng_daily_20261017/`：678项/164图、34直接目检及首批失败原始记录。
+
 ## 2026-10-17 公孙胜日常来源候选
 
 - `assets/characters/gongsun_sheng_daily_sources_20261017/`：18原稿、提示词/31引用SHA；3退回/15当前候选，全部未采用；`.gdignore`隔离。

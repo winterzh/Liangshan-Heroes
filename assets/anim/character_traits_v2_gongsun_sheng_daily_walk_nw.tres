@@ -1,0 +1,56 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/gongsun_sheng_daily_20261017/walk_contact_a.png" id="walk_contact_a"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/gongsun_sheng_daily_20261017/walk_passing_a.png" id="walk_passing_a"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/gongsun_sheng_daily_20261017/walk_contact_b.png" id="walk_contact_b"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/gongsun_sheng_daily_20261017/walk_passing_b.png" id="walk_passing_b"]
+
+[sub_resource type="AtlasTexture" id="walk_contact_a_nw"]
+atlas = ExtResource("walk_contact_a")
+region = Rect2(626, 639, 628, 615)
+margin = Rect2(90.514443, 21.58, 91, 104)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.046579
+
+[sub_resource type="AtlasTexture" id="walk_passing_a_nw"]
+atlas = ExtResource("walk_passing_a")
+region = Rect2(627, 637, 627, 617)
+margin = Rect2(53.717331, 0.08, 67, 77)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.022091
+
+[sub_resource type="AtlasTexture" id="walk_contact_b_nw"]
+atlas = ExtResource("walk_contact_b")
+region = Rect2(622, 628, 632, 626)
+margin = Rect2(97.337001, 29.66, 131, 137)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[sub_resource type="AtlasTexture" id="walk_passing_b_nw"]
+atlas = ExtResource("walk_passing_b")
+region = Rect2(632, 633, 622, 621)
+margin = Rect2(109.114168, 25.74, 135, 136)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("walk_contact_a_nw")},
+{"duration": 1.0, "texture": SubResource("walk_passing_a_nw")},
+{"duration": 1.0, "texture": SubResource("walk_contact_b_nw")},
+{"duration": 1.0, "texture": SubResource("walk_passing_b_nw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]
