@@ -1,3 +1,9 @@
+## 2026-10-18 阮小五推车接入候选
+
+- `assets/characters/ruan_xiaowu_pushcart_20261017/`、`assets/direction4/level1_ruan_xiaowu_pushcart_20261017.json`、`assets/anim/ruan_xiaowu_pushcart_20261017_*.tres`：5原图/24姿势/12资源，生产未启用。
+- `tools/build_ruan_xiaowu_pushcart_20261017.py`、`tools/run_ruan_xiaowu_pushcart_20261017.py`及两份同名前缀GDScript：只读资源重现和待运行原生入口。
+- `docs/RUAN_XIAOWU_PUSHCART_20261017.md`、`qa/ruan_xiaowu_pushcart_20261017/`：候选路由补丁、真实内存失败、恢复证据及后继执行边界。
+
 ## 2026-10-18 阮小五推车原稿
 
 - `assets/characters/ruan_xiaowu_pushcart_sources_20261017/`：7原PNG、完整提示词/23引用SHA、5候选20视图/2退稿、.gdignore隔离。

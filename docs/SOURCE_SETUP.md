@@ -1,3 +1,7 @@
+## 阮小五推车未启用候选（2026-10-18）
+
+只读`python -X utf8 -B tools/build_ruan_xiaowu_pushcart_20261017.py`核对5原字节PNG/24姿势/12资源。原生入口预检162纹理但当前路由false；须先释放系统虚拟内存，再核对应用QA候选路由补丁，按[恢复入口](RUAN_XIAOWU_PUSHCART_20261017.md)重新完整运行。上次导入内存崩溃、未解析/导出/实景通过；私有输入已恢复6777/6768一致，不使用失败收据继承验收。启动方式不变。
+
 ## 阮小五推车来源检查（2026-10-18）
 
 只读`python -X utf8 -B tools/verify_ruan_xiaowu_pushcart_sources_20261017.py`，193项通过：7原PNG/23引用/20选格与2退稿隔离，原图未重编码。5候选角点alpha0不是全背景/原生步态资格；9—13列间隔与后视支撑腿需后验。由.gdignore隔离，未接入，启动方式不变。[范围](RUAN_XIAOWU_PUSHCART_SOURCES_20261017.md)。

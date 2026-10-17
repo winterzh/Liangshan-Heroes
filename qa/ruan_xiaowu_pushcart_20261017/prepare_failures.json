@@ -1,0 +1,24 @@
+{
+  "native_launched": false,
+  "failures": [
+    {
+      "attempt": 1,
+      "stage": "source provenance read",
+      "error": "MemoryError PIL Image.tobytes during source verification",
+      "runtime_resources_written": false
+    },
+    {
+      "attempt": 2,
+      "stage": "geometry measure of retained cart",
+      "error": "MemoryError PIL Image.tobytes in nested prior measure, full-image allocations",
+      "runtime_resources_written": false
+    },
+    {
+      "attempt": 3,
+      "stage": "source provenance read",
+      "error": "MemoryError from RGBA materialisation while heavyweight predecessor modules loaded",
+      "runtime_resources_written": false
+    }
+  ],
+  "correction": "New builder imports lightweight SpriteFrames renderer directly, reads one authored view for geometry, int16 colour arithmetic/broadcast axes. Existing measured geometry and criteria retained, no PNG output writes. Fourth preparation completed 5 PNG/24 poses/12 resources."
+}
