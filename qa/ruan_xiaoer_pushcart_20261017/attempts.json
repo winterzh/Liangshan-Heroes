@@ -1,0 +1,84 @@
+{
+  "failed_attempts": [
+    {
+      "run": "20261017_212915_437d58ff",
+      "receipt": "C:/CodexEvidence/shuihu/ruan_xiaoer_pushcart_integration_20261017/native/20261017_212915_437d58ff/evidence/receipt.json",
+      "receipt_sha256": "b38a01d40fcea1f1dc6f8cbd35947c6c2456be282c7c31022081cff37dbe97e6",
+      "complete": false,
+      "error": "RuntimeError('Private character QA step failed: base_patch_identity_probe')",
+      "checks": null,
+      "screenshots": null,
+      "pack_path": "C:\\CodexQA\\ruan_er_cart\\20261017_212915_437d58ff\\clean_runtime\\LiangshanRuanXiaoerPushcart.patch.pck",
+      "pack_sha256": "6b5dc47886dfb733751c0f3749d54e03490f730fe2a58e2f908a8023d970974c",
+      "steps": [
+        {
+          "case": "reimport_reused_cache",
+          "passed": true
+        },
+        {
+          "case": "parse_scene_probe",
+          "passed": true
+        },
+        {
+          "case": "source_texture_reference",
+          "passed": true
+        },
+        {
+          "case": "export_patch",
+          "passed": true
+        },
+        {
+          "case": "base_patch_identity_probe",
+          "passed": false
+        }
+      ]
+    },
+    {
+      "run": "20261017_214232_18a8da18",
+      "receipt": "C:/CodexEvidence/shuihu/ruan_xiaoer_pushcart_integration_20261017/native/20261017_214232_18a8da18/evidence/receipt.json",
+      "receipt_sha256": "d30a7eeb3e35d32da423eaf3bbbd8d2ef0cb173e9424336e3afcb39ce6a2afd2",
+      "complete": false,
+      "error": "RuntimeError('Private character QA step failed: export_patch')",
+      "checks": null,
+      "screenshots": null,
+      "pack_path": null,
+      "pack_sha256": null,
+      "steps": [
+        {
+          "case": "reimport_reused_cache",
+          "passed": true
+        },
+        {
+          "case": "parse_scene_probe",
+          "passed": true
+        },
+        {
+          "case": "parse_patch_bootstrap",
+          "passed": true
+        },
+        {
+          "case": "source_texture_reference",
+          "passed": true
+        },
+        {
+          "case": "export_patch",
+          "passed": false
+        }
+      ]
+    },
+    {
+      "run": "20261017_215229_cdb84b39",
+      "receipt": "C:/CodexEvidence/shuihu/ruan_xiaoer_pushcart_integration_20261017/native/20261017_215229_cdb84b39/evidence/receipt.json",
+      "receipt_sha256": "94abea26256de857cfc32a9bfdfd6199f2020098db1c70cd6ff197b611d6d0fd",
+      "complete": false,
+      "error": "RuntimeError('Inputs no longer match generated identity')",
+      "checks": null,
+      "screenshots": null,
+      "pack_path": null,
+      "pack_sha256": null,
+      "steps": []
+    }
+  ],
+  "diagnosis": "First loader wrongly expected --main-pack in OS.get_cmdline_args(); Godot removes it. Release presets exclude tools/*, so bootstrap now loads an explicitly located/SHA-verified external Node probe after mounting production resources. Second export correctly had no changed production files; failure termination left two byte-identical Godot ~DLL copies, which alone caused the third archival identity check to refuse. Those exact two files were preserved outside the private project and original generated identity restored.",
+  "final": "The retained original full base and first exported Ruan patch are both SHA-verified. Final canonical production identity/derived constant/native dependencies exactly match that exported candidate, so final run reused the unchanged chain and independently ran the corrected frozen external probes. No failed attempt is promoted to a native pass; only final 1365/118 GL result qualifies the combined chain."
+}

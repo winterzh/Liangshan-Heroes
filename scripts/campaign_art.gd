@@ -196,7 +196,7 @@ static func native_wounded_owner(variant: String) -> String:
 ## Two-bucket shoulder art is restricted to Bai's explicit wine-carry states.
 ## His ordinary/unloaded body and every tribute carrier keep their own art.
 static func native_tribute_push_path(key: String, variant: String, state: String, direction: String) -> String:
-	var owners := {"hn_liu_tang":"liu_tang", "hn_chao_gai":"chao_gai", "hn_wu_yong":"wu_yong", "hn_gongsun_sheng":"gongsun_sheng"}
+	var owners := {"hn_liu_tang":"liu_tang", "hn_chao_gai":"chao_gai", "hn_wu_yong":"wu_yong", "hn_gongsun_sheng":"gongsun_sheng", "hn_ruan_xiaoer":"ruan_xiaoer"}
 	if not owners.has(variant) or key != owners[variant] or direction not in DIRECTIONS:
 		return ""
 	if state not in ["push_idle", "push_walk", "parked_cart"]: return ""

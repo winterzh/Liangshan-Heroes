@@ -1,3 +1,10 @@
+## 2026-10-17 阮小二推车运行接入
+
+- `assets/characters/ruan_xiaoer_pushcart_20261017/`：5原字节运行PNG/导入，共用车沿用刘唐物件。
+- `assets/direction4/level1_ruan_xiaoer_pushcart_20261017.json`、`assets/anim/ruan_xiaoer_pushcart_20261017_*.tres`：24姿势/12资源，真实选格/固定轮点/车深/visible_top。
+- 同批build/run/GD/identity工具及`tools/pushcart_patch_bootstrap_20261017.gd`：私有上下文归档、真实补丁导出/相同生产链复用、外部QA冻结、挂载生产资源验证。
+- `docs/RUAN_XIAOER_PUSHCART_20261017.md`、`qa/ruan_xiaoer_pushcart_20261017/`：1365项/118图、64目检/4代表图/完整外置图SHA、基包补丁链及前置失败/临时DLL保留/旧输入恢复记录。
+
 ## 2026-10-17 阮小二推车原稿
 
 - `assets/characters/ruan_xiaoer_pushcart_sources_20261017/`：6原PNG、完整提示词/22引用SHA、5候选20选格及1退稿，`.gdignore`隔离。
