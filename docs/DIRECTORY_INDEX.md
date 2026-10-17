@@ -1,3 +1,8 @@
+## 2026-10-17 公孙胜后期衣装来源候选
+
+- `assets/characters/gongsun_sheng_later_sources_20261017/`：2原稿、完整提示词/2引用SHA、`.gdignore`隔离。
+- `docs/GONGSUN_SHENG_LATER_SOURCES_20261017.md`、`qa/gongsun_sheng_later_sources_20261017/`：第54回依据/美术解释与静态来源记录；当前未接入。
+
 ## 2026-10-17 公孙胜日常身体与原生证据
 
 - `assets/characters/gongsun_sheng_daily_integration_sources_20261017/`：6份新原稿及提示词/引用，3选用/3退回；原18来源另存。

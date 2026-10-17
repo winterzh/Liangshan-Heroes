@@ -1,0 +1,144 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "name": "exact original PNG and decodable image idle",
+      "passed": true
+    },
+    {
+      "name": "exact original PNG and decodable image portrait",
+      "passed": true
+    },
+    {
+      "name": "reference SHA idle",
+      "passed": true
+    },
+    {
+      "name": "reference SHA portrait",
+      "passed": true
+    },
+    {
+      "name": "idle native alpha and separated four views",
+      "passed": true
+    }
+  ],
+  "source_count": 2,
+  "reference_count": 2,
+  "geometry": [
+    {
+      "key": "idle",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "clear_cross_rows": [
+        618,
+        619,
+        620,
+        621,
+        622,
+        623,
+        624,
+        625,
+        626,
+        627
+      ],
+      "geometry": {
+        "size": [
+          1254,
+          1254
+        ],
+        "split": {
+          "y": 623,
+          "top_x": 624,
+          "bottom_x": 631
+        },
+        "cells": {
+          "se": {
+            "region": [
+              0,
+              0,
+              624,
+              623
+            ],
+            "strong_bounds": [
+              243,
+              15,
+              529,
+              618
+            ],
+            "measured_pivot": null,
+            "pivot_policy": "Pose binding selects actual body support bottom, preserving horizontal idle x anchor."
+          },
+          "sw": {
+            "region": [
+              624,
+              0,
+              630,
+              623
+            ],
+            "strong_bounds": [
+              720,
+              15,
+              1010,
+              618
+            ],
+            "measured_pivot": null,
+            "pivot_policy": "Pose binding selects actual body support bottom, preserving horizontal idle x anchor."
+          },
+          "ne": {
+            "region": [
+              0,
+              623,
+              631,
+              631
+            ],
+            "strong_bounds": [
+              250,
+              628,
+              547,
+              1225
+            ],
+            "measured_pivot": null,
+            "pivot_policy": "Pose binding selects actual body support bottom, preserving horizontal idle x anchor."
+          },
+          "nw": {
+            "region": [
+              631,
+              623,
+              623,
+              631
+            ],
+            "strong_bounds": [
+              714,
+              629,
+              1018,
+              1228
+            ],
+            "measured_pivot": null,
+            "pivot_policy": "Pose binding selects actual body support bottom, preserving horizontal idle x anchor."
+          }
+        }
+      }
+    },
+    {
+      "key": "portrait",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGB"
+    }
+  ],
+  "mode": "builtin_imagegen",
+  "runtime_adopted": false,
+  "native_launched": false,
+  "scope": "Original SHA/refs/PNG decoding and transparent atlas separator only; not native adoption or full costume animation."
+}

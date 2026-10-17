@@ -1,3 +1,7 @@
+## 公孙胜后期衣装候选（2026-10-17）
+
+2份原稿/完整提示词及2引用SHA保存在`assets/characters/gongsun_sheng_later_sources_20261017/`，`.gdignore`隔离。来源与透明格缝已查，尚未接入，无新Godot/PCK验收。已完成的日常批678项/164图另列，下方启动入口不变。[范围](GONGSUN_SHENG_LATER_SOURCES_20261017.md)。
+
 ## 公孙胜日常身体复现（2026-10-17）
 
 `python -X utf8 -B tools/build_gongsun_sheng_daily_20261017.py`只读复核16图/60姿势/20资源；`tools/run_gongsun_sheng_daily_20261017.py`无参数仅预检，完整新批加`--run --work-root <工程外目录>`，使用原有Godot配置与共享锁。最终678项/164图通过，首批解析失败单列；原稿已在工程内，无需重制。启动方式不变，旧技能/火球与后期重制仍开放。[范围](GONGSUN_SHENG_DAILY_20261017.md)。
