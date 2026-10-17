@@ -1,0 +1,57 @@
+--- a/scripts/unit.gd
++++ b/scripts/unit.gd
+@@ -3811,7 +3811,8 @@
+ 		sy = 1.0
+ 	var body_transform := GameMap.ISO_INV * Transform2D(ang, Vector2(sx, sy), 0.0, off)
+ 	var parked_tribute := _campaign_tribute_push_active() and _campaign_tribute_push_state().is_empty()
+-	if parked_tribute and animation_direction in ["ne", "nw"]:
++	var separate_tribute := parked_tribute or _campaign_tribute_layered_frame(frame)
++	if separate_tribute and animation_direction in ["ne", "nw"]:
+ 		_draw_parked_tribute_cart(s, tint)
+ 	draw_set_transform_matrix(body_transform)
+ 	# A fallen rider beside its horse can exceed the standing frame's square.
+@@ -3842,7 +3843,7 @@
+ 			Art.campaign_object_has_exact_directional_source(flag_object, String(get_meta("ship_state", "default")), animation_direction), tint.a)
+ 	# 肩挑姿态已经画入两桶；只有精确动作缺失时才保留旧物件回退，避免四只桶。
+ 	var wine_overlay := bool(get_meta("carrying_wine", false)) and _campaign_wine_carry_state().is_empty()
+-	if parked_tribute and animation_direction in ["se", "sw"]:
++	if separate_tribute and animation_direction in ["se", "sw"]:
+ 		_draw_parked_tribute_cart(s, tint)
+ 		draw_set_transform_matrix(body_transform)
+ 	var carried_key := "tribute_load" if has_meta("carrying_tribute") and not _campaign_tribute_push_active() else ("wine_buckets" if wine_overlay else "")
+@@ -4074,6 +4075,17 @@
+ 		and has_meta("carrying_tribute") and not _dying and story_outcome.is_empty()
+ 
+ 
++## Only the opt-in Ruan7 actor atlas can ask for a separate loaded cart.
++## Ordinary/foreign/unloaded/terminal bodies must not duplicate that object.
++func _campaign_tribute_layered_frame(frame: Texture2D) -> bool:
++	if not _campaign_tribute_push_active() or key != "ruan_xiaoqi" or art_variant != "hn_ruan_xiaoqi": return false
++	if not frame is AtlasTexture: return false
++	var atlas_frame := frame as AtlasTexture
++	if atlas_frame.atlas == null: return false
++	var independent: Variant = atlas_frame.get_meta("independent_cart", false)
++	return independent is bool and independent and atlas_frame.atlas.resource_path.begins_with("res://assets/characters/ruan_xiaoqi_layered_20261018/")
++
++
+ func _campaign_tribute_push_state() -> String:
+ 	if not _campaign_tribute_push_active() or _lunge > 0.0 or _cast_t > 0.0 \
+ 		or _shi_en_hurt_t > 0.0 or _flinch.length_squared() > 1.0:
+@@ -4092,8 +4104,16 @@
+ 		if not parked.is_empty(): label_frame = parked[0]
+ 	if label_frame == null or not label_frame.has_meta("visible_top"): return fallback_y
+ 	var size := radius * 3.7 * visual_scale * _frame_draw_scale(label_frame)
+-	return minf(fallback_y, size * (float(label_frame.get_meta("visible_top")) - 0.82) \
++	var label_y := minf(fallback_y, size * (float(label_frame.get_meta("visible_top")) - 0.82) \
+ 		+ _frame_draw_offset(label_frame, size).y - 8.0)
++	if _campaign_tribute_layered_frame(label_frame):
++		var cart_frames: Array = Art.unit_anim_frames(key, "parked_cart", animation_direction, art_variant)
++		if not cart_frames.is_empty() and cart_frames[0].has_meta("visible_top"):
++			var cart: Texture2D = cart_frames[0]
++			var cart_size := radius * 3.7 * visual_scale * _frame_draw_scale(cart)
++			label_y = minf(label_y, cart_size * (float(cart.get_meta("visible_top")) - 0.82) \
++				+ _frame_draw_offset(cart, cart_size).y - 8.0)
++	return label_y
+ 
+ 
+ func _campaign_wine_carry_state() -> String:

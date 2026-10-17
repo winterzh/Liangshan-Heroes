@@ -1,3 +1,8 @@
+## 2026-10-18 阮小七接入补丁准备
+
+- `qa/ruan_xiaoqi_layered_integration_prepare_20261018/`：未应用的2生产/4验收候选、可检查补丁、源码SHA/只读180纹理预检、标签原图几何、共享等待快照。
+- `docs/RUAN_XIAOQI_LAYERED_INTEGRATION_PREPARE_20261018.md`：先原prepared资源看图、后启用/全链的限定。
+
 ## 2026-10-18 阮小七分层资源候选
 
 - `assets/characters/ruan_xiaoqi_layer_fixes_20261018/`：9修稿原图/完整请求/15视图观察。

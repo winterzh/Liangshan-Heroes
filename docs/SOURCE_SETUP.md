@@ -1,3 +1,7 @@
+## 阮小七分层接入候选未应用（2026-10-18）
+
+`qa/ruan_xiaoqi_layered_integration_prepare_20261018/candidate/`是2生产脚本+4验收脚本的未来候选，不是当前源码。真实只读入口预检180纹理/route=false，无新原生。先对原[prepared工程](../qa/ruan_xiaoqi_layer_fixes_20261018/native_gate.json)完成导入和看图，再以before SHA核对后启用，详见[接入准备](RUAN_XIAOQI_LAYERED_INTEGRATION_PREPARE_20261018.md)。
+
 ## 阮小七分层资源候选（2026-10-18）
 
 新家族`ruan_xiaoqi_layered_20261018`未注册，生产仍8a95f674。只读`python -X utf8 -B tools/build_ruan_xiaoqi_layered_20261018.py`重现24姿势/12资源；本轮没有新原生通过。独立导入/画面对照工程已冻结，待共享引擎自然空闲按[接续入口](../qa/ruan_xiaoqi_layer_fixes_20261018/native_gate.json)对同一prepared收据运行，不重建、不清别人锁。

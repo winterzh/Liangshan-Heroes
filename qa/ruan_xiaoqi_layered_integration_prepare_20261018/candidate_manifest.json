@@ -1,0 +1,46 @@
+{
+  "scope": "Reviewable future layer integration candidate only. Root game files untouched. Requires imported art review before enabling and fresh full-game native exported-pack evidence afterwards.",
+  "source_commit": "06ef51076d9e16d9827de5a151e8f65c1f17d600",
+  "production_changes": [
+    {
+      "path": "scripts/campaign_art.gd",
+      "root_before_sha256": "6b838c6409042cc69452e7d72c18035b1a7cefeef76af672f6fed6af3dbea283",
+      "candidate_sha256": "d256830b1734be39c0c5aae613b0159cc7dc348b221f62a428bbf58d7c609165"
+    },
+    {
+      "path": "scripts/unit.gd",
+      "root_before_sha256": "fcd67a2059e30c9d90662e401ea43f13b23cce415aa93a80a9307d40c490bc8a",
+      "candidate_sha256": "640df48e4b8d8a79e0dd07ac9959761af507bb6aaf048e51a3ceffddeec14a03"
+    }
+  ],
+  "candidate_files": [
+    {
+      "path": "scripts/campaign_art.gd",
+      "sha256": "d256830b1734be39c0c5aae613b0159cc7dc348b221f62a428bbf58d7c609165"
+    },
+    {
+      "path": "scripts/unit.gd",
+      "sha256": "640df48e4b8d8a79e0dd07ac9959761af507bb6aaf048e51a3ceffddeec14a03"
+    },
+    {
+      "path": "tools/ruan_xiaoqi_layered_20261018.gd",
+      "sha256": "0292fd8b9074eebcf03f9800176a9675418ac652a5943da939b48bbd7c16bc47"
+    },
+    {
+      "path": "tools/ruan_xiaoqi_layered_bootstrap_20261018.gd",
+      "sha256": "88b99aa5548233e2dc98b8787147f3e0242f6e79bc96ef7d4389e6716c190fdc"
+    },
+    {
+      "path": "tools/ruan_xiaoqi_layered_identity_20261018.gd",
+      "sha256": "4657368bd1f440593ae40f4096ba23b7a393ef93203753f8337c1c6d9f46eca2"
+    },
+    {
+      "path": "tools/run_ruan_xiaoqi_layered_20261018.py",
+      "sha256": "81e758630e87235b675cac3f416e7dfd4af6d3aaaefba55d178cacca9387f630"
+    }
+  ],
+  "native_game_launched": false,
+  "runtime_adopted": false,
+  "label_evidence": "Read-only source geometry: NE cart top -.9632 body-size vs actor top -.7389; proposed label takes min of body and separate cart. Existing loader/identity/archive/pack-chain guards retained; no synthetic identity or old pass transferred.",
+  "candidate_preparation": "Explicit AtlasTexture cast; unchanged production lines retain original byte/newline representation."
+}
