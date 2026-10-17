@@ -1,3 +1,9 @@
+## 2026-10-18 阮小五推车接入验收
+
+- `scripts/campaign_art.gd`、`scripts/unit.gd`：严格阮小五/黄泥冈携货资格。
+- `tools/ruan_xiaowu_pushcart_bootstrap_20261017.gd`：仅本人的两份外部冻结QA入口/真实PCK链校验；旧bootstrap不改。
+- `qa/ruan_xiaowu_pushcart_20261017/native/`、`runtime_inventory.json`、`runtime_archive_index.json`、`screenshot_inventory.json`和`visual/`：1389项/118原图索引、48目检/4公开原图、当前冻结与前置失败恢复链。
+
 ## 2026-10-18 阮小五推车接入候选
 
 - `assets/characters/ruan_xiaowu_pushcart_20261017/`、`assets/direction4/level1_ruan_xiaowu_pushcart_20261017.json`、`assets/anim/ruan_xiaowu_pushcart_20261017_*.tres`：5原图/24姿势/12资源，生产未启用。

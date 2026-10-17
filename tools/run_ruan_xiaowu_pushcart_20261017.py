@@ -15,7 +15,7 @@ import run_character_art_qa as common
 ROOT=Path(__file__).resolve().parents[1]
 SELF='tools/run_ruan_xiaowu_pushcart_20261017.py';SCRIPT='tools/ruan_xiaowu_pushcart_20261017.gd'
 PROBE='tools/ruan_xiaowu_pushcart_identity_20261017.gd';REFERENCE='tools/shi_en_texture_reference_20261015.gd'
-BOOTSTRAP='tools/pushcart_patch_bootstrap_20261017.gd'
+BOOTSTRAP='tools/ruan_xiaowu_pushcart_bootstrap_20261017.gd'
 HELPER='tools/contracts/run_content_identity_20260907/build_identity.py'
 def sha(p):
     with p.open('rb') as f:return hashlib.file_digest(f,'sha256').hexdigest()
