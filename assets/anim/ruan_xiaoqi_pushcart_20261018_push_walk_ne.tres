@@ -1,0 +1,62 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoqi_pushcart_20261018/push_contact_a.png" id="push_contact_a"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoqi_pushcart_20261018/push_passing_a.png" id="push_passing_a"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoqi_pushcart_20261018/push_contact_b.png" id="push_contact_b"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoqi_pushcart_20261018/push_passing_b.png" id="push_passing_b"]
+
+[sub_resource type="AtlasTexture" id="push_contact_a_ne"]
+metadata/visible_top = 0.063253425
+atlas = ExtResource("push_contact_a")
+region = Rect2(1, 627, 626, 626)
+margin = Rect2(85.227308, 0.175, 104, 104)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.563504
+
+[sub_resource type="AtlasTexture" id="push_passing_a_ne"]
+metadata/visible_top = 0.059592305
+atlas = ExtResource("push_passing_a")
+region = Rect2(1, 627, 626, 626)
+margin = Rect2(136.423932, 0.124444, 148, 148)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.545253
+
+[sub_resource type="AtlasTexture" id="push_contact_b_ne"]
+metadata/visible_top = 0.038537889
+atlas = ExtResource("push_contact_b")
+region = Rect2(1, 627, 626, 626)
+margin = Rect2(90.684136, 11.631667, 91, 91)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.501152
+
+[sub_resource type="AtlasTexture" id="push_passing_b_ne"]
+metadata/visible_top = 0.074949087
+atlas = ExtResource("push_passing_b")
+region = Rect2(1, 627, 626, 626)
+margin = Rect2(115.974957, 21.612222, 116, 116)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.559333
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("push_contact_a_ne")},
+{"duration": 1.0, "texture": SubResource("push_passing_a_ne")},
+{"duration": 1.0, "texture": SubResource("push_contact_b_ne")},
+{"duration": 1.0, "texture": SubResource("push_passing_b_ne")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

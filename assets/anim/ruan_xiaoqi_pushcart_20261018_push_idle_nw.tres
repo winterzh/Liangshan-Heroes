@@ -1,0 +1,23 @@
+[gd_resource type="SpriteFrames" load_steps=3 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoqi_pushcart_20261018/push_idle_initial.png" id="push_idle_initial"]
+
+[sub_resource type="AtlasTexture" id="push_idle_nw"]
+metadata/visible_top = 0.100007958
+atlas = ExtResource("push_idle_initial")
+region = Rect2(627, 627, 626, 626)
+margin = Rect2(0.137688, 12.405762, 98, 98)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.517661
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("push_idle_nw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

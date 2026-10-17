@@ -1,3 +1,9 @@
+## 2026-10-18 阮小七携货推车
+
+- `assets/characters/ruan_xiaoqi_pushcart_20261018/`、`assets/direction4/level1_ruan_xiaoqi_pushcart_20261018.json`、`assets/anim/ruan_xiaoqi_pushcart_20261018_*.tres`：5原字节PNG/24姿势/12资源，共用原停车车。
+- `tools/build_ruan_xiaoqi_pushcart_20261018.py`、`tools/run_ruan_xiaoqi_pushcart_20261018.py`及同前缀3份GDScript：校准、包链/原生身份与动作验收。
+- `docs/RUAN_XIAOQI_PUSHCART_20261018.md`、`qa/ruan_xiaoqi_pushcart_20261018/`：1417项/118图SHA/48目检/4原代表图、包和旧输入恢复索引、体量与步态待修项。
+
 ## 2026-10-18 阮小七推车原稿/可逆存储压缩
 
 - `assets/characters/ruan_xiaoqi_pushcart_sources_20261018/`：5原PNG与完整prompt_set，11引用/20视图，.gdignore隔离。
