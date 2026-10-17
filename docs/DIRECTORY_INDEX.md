@@ -1,3 +1,9 @@
+## 2026-10-17 阮小二推车原稿
+
+- `assets/characters/ruan_xiaoer_pushcart_sources_20261017/`：6原PNG、完整提示词/22引用SHA、5候选20选格及1退稿，`.gdignore`隔离。
+- `tools/verify_ruan_xiaoer_pushcart_sources_20261017.py`：185项只读来源/选格/强alpha内容保留验证，不作原生资格。
+- `docs/RUAN_XIAOER_PUSHCART_SOURCES_20261017.md`、`qa/ruan_xiaoer_pushcart_sources_20261017/`：原著/美术补足、三张角点失败、3px窄轴、直接目检及生产保护记录。
+
 ## 2026-10-17 公孙胜推车运行接入
 
 - `assets/characters/gongsun_sheng_pushcart_20261017/`：6份原字节PNG及mipmap导入，共用车沿用刘唐物件。

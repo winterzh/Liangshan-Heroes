@@ -1,3 +1,7 @@
+## 阮小二推车来源检查（2026-10-17）
+
+只读`python -X utf8 -B tools/verify_ruan_xiaoer_pushcart_sources_20261017.py`核对6原PNG/22引用和20选格，当前185项通过；1份重复腿型退稿隔离、三份整图角点alpha1保留，过渡A强alpha轴仅3列，不当作原生过滤/步态资格。来源由`.gdignore`隔离，尚未接入，启动方式不变。[范围](RUAN_XIAOER_PUSHCART_SOURCES_20261017.md)。
+
 ## 公孙胜推车运行复现（2026-10-17）
 
 只读`python -X utf8 -B tools/build_gongsun_sheng_pushcart_20261017.py`核对7图源/24姿势/12资源；同批run工具加`--run --work-root <短绝对证据目录> --pack-root <短绝对包目录>`建立新批，无`--run`只预检99纹理/共享引擎状态。最终1107项/118图、64直接目检含实际默认镜头。显式复用前完整保存旧6713实际输入和生成常量，旧PCK保持，非新冷导入；完整图/恢复ZIP/PCK在C盘受控外置，跨机按索引取回校验。实际身份、复用参数及限制见[实现](GONGSUN_SHENG_PUSHCART_20261017.md)。启动方式不变。
