@@ -1,3 +1,7 @@
+## 阮小七独立人物修稿（2026-10-18）
+
+新稿在`assets/characters/ruan_xiaoqi_pushcart_layer_sources_20261018/`隔离，生产仍8a95f674运行家族。只读`python -X utf8 -B tools/inspect_ruan_xiaoqi_pushcart_layers_20261018.py`核12PNG/39格和仓库引用，不能当运行或步态通过。两个独立原生美术预览的配置/脚本/3图绑定/4原图/日志见[QA](../qa/ruan_xiaoqi_pushcart_layer_sources_20261018/README.md)，重现须新工程外目录和串行引擎，不改旧冻结工程。
+
 ## 阮小七体量修稿隔离（2026-10-18）
 
 新候选在`assets/characters/ruan_xiaoqi_pushcart_proportion_sources_20261018/`，`.gdignore`隔离，尚无生产引用和原生资格；不要把8a95f674的1417项转记为本稿通过。完整提示和SHA在prompt_set.json，[观察](../qa/ruan_xiaoqi_pushcart_proportion_20261018/README.md)。

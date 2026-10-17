@@ -1,0 +1,57 @@
+{
+  "runs": [
+    {
+      "run": "20261018_042110_365b85dc",
+      "private_project": "D:\\CodexEvidence\\shuihu\\ruan_xiaoqi_pushcart_layers_20261018\\native_art_preview\\20261018_042110_365b85dc",
+      "receipt": "native_preview/01/receipt.json",
+      "original_screenshots": [
+        {
+          "path": "native_preview/01/idle_layer_alignment.png",
+          "sha256": "bbfea5b54cb66023b57b6cd32756f982eaf6ae4d4423bc13886da6424e32f450",
+          "directly_seen": true
+        },
+        {
+          "path": "native_preview/01/idle_body_comparison.png",
+          "sha256": "0050c8b3b683fe0c61407b99edb1f031a8afbfcda0216c06354673b573e56de2",
+          "directly_seen": true
+        }
+      ],
+      "scope": "Native Godot CanvasItem art preview; same logical body size, raw PNG ImageTextures, idle only. Not normal game, physics, mission, imported/exported texture or final visual acceptance."
+    },
+    {
+      "run": "20261018_042409_04fd54e4",
+      "private_project": "D:\\CodexEvidence\\shuihu\\ruan_xiaoqi_pushcart_layers_20261018\\native_art_preview\\20261018_042409_04fd54e4",
+      "receipt": "native_preview/02/receipt.json",
+      "original_screenshots": [
+        {
+          "path": "native_preview/02/idle_layer_alignment.png",
+          "sha256": "6319777748948c6813ff532ab4800929e89f093875a5764c05796513858f3a46",
+          "directly_seen": true
+        },
+        {
+          "path": "native_preview/02/idle_body_comparison.png",
+          "sha256": "0405543f5533535c02b53348b17c08f841e3aee1ea00791068af3f5072be68f8",
+          "directly_seen": true
+        }
+      ],
+      "scope": "Native Godot CanvasItem art preview; same logical body size, raw PNG ImageTextures, idle only. Not normal game, physics, mission, imported/exported texture or final visual acceptance."
+    }
+  ],
+  "direct_seen_pngs": 4,
+  "native_art_preview_only": true,
+  "native_game": false,
+  "runtime_adopted": false,
+  "findings": [
+    "Fixed one cart PNG keeps wheel/chassis/cloth identical; no per-phase cart redraw in this art preview.",
+    "Idle new body crown-to-ground height is aligned by construction to adopted empty body at same logical draw size. Visual comparison supports continuing layered approach; torso bulk/hand size and full event continuity are not finally accepted.",
+    "First preview front columns/labels overlap at larger scale; original raw captures retained. Second reduces display size and separates labels.",
+    "Front empty grips approach fixed handle endpoints after static offsets. Rear offset iteration is visually closer, but exact finger/bar occlusion and NW small gap remain unaccepted.",
+    "Raw Image.load/ImageTexture with linear filtering only; no project importer/mipmap/exported PCK, normal Battle, pickup/movement/hurt/attack/unload mission, save, performance, seven carts/eleven loads or Steam acceptance.",
+    "Only idle drawn natively. Other source gait phases remain source-only and incomplete."
+  ],
+  "preflight_busy_attempts": 2,
+  "preflight_busy_scope": "Each stopped before project creation/engine launch; later process/lock absence rechecked, no other task terminated or lock removed.",
+  "body_volume_continuity_accepted": false,
+  "hand_contact_accepted": false,
+  "complete_gait_accepted": false
+}

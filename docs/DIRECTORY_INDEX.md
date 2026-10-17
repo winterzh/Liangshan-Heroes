@@ -1,3 +1,9 @@
+## 2026-10-18 阮小七分层人物修稿
+
+- `assets/characters/ruan_xiaoqi_pushcart_layer_sources_20261018/`：12原图含拒收稿、完整提示/31引用与10仓库绑定/逐格边界。
+- `tools/inspect_ruan_xiaoqi_pushcart_layers_20261018.py`：只读原图/引用/几何核对。
+- `docs/RUAN_XIAOQI_PUSHCART_LAYERS_20261018.md`、`qa/ruan_xiaoqi_pushcart_layer_sources_20261018/`：未完成项、两批原生美术对照/4原PNG与冻结配置、生产未变。
+
 ## 2026-10-18 阮小七体量首稿
 
 - `assets/characters/ruan_xiaoqi_pushcart_proportion_sources_20261018/`：隔离四向待机人物比例候选原图与完整提示/引用SHA。
