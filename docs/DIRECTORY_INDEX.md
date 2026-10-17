@@ -1,3 +1,9 @@
+## 2026-10-17 公孙胜推车原稿
+
+- `assets/characters/gongsun_sheng_pushcart_sources_20261017/`：6原PNG/完整提示词/16引用SHA/20选格，.gdignore隔离。
+- `tools/verify_gongsun_sheng_pushcart_sources_20261017.py`：只读来源/选格验证，保留整图角点失败。
+- `docs/GONGSUN_SHENG_PUSHCART_SOURCES_20261017.md`、`qa/gongsun_sheng_pushcart_sources_20261017/`：152项来源报告/直接目检，不作原生资格。
+
 ## 2026-10-17 吴用推车运行接入
 
 - `assets/characters/wu_yong_pushcart_20261017/`：5份原字节运行PNG/导入，共用车沿用刘唐物件。
