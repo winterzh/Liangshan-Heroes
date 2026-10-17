@@ -1,3 +1,10 @@
+## 2026-10-17 刘唐推车运行接入
+
+- `assets/characters/liu_tang_pushcart_20261017/`：6原字节运行PNG/导入；`liu_tang_pushcart_integration_sources_20261017/`：独立车原图/完整提示词/引用SHA、`.gdignore`。
+- `assets/direction4/level1_liu_tang_pushcart_20261017.json`与`assets/anim/liu_tang_pushcart_20261017_*.tres`：24姿势/12资源，含固定车轮向量与独立停车帧。
+- `tools/build_liu_tang_pushcart_20261017.py`、同批run/GD：只读绑定、私有PCK与实际取货/移动/中断/交付/drop。
+- `docs/LIU_TANG_PUSHCART_20261017.md`、`qa/liu_tang_pushcart_20261017/`：514项/79图收据、39重点图、旧失败证据/车轮漂移诊断、仅本轮未启动重复来源的可重建收回摘要。
+
 ## 2026-10-17 刘唐推车来源候选
 
 - `assets/characters/liu_tang_pushcart_sources_20261017/`：11原图、提示词/14引用SHA、`.gdignore`；5候选/2退回/4替代稿。

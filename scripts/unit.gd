@@ -3796,6 +3796,12 @@ func _draw_sprite_animated(tex: Texture2D, tint: Color, death_f: float) -> void:
 			ang += fwd * -0.16 * lift * k                      # 略后仰
 			sy += 0.07 * lift * k                              # 上扬拉伸
 
+	if not _campaign_tribute_push_state().is_empty():
+		# Authored legs already move; a wheeled cart must not squash or bob.
+		off = Vector2.ZERO
+		ang = 0.0
+		sx_scale = 1.0
+		sy = 1.0
 	var sx := (-1.0 if face_left and not _frame_directional else 1.0) * sx_scale
 	if story_assistance_active():
 		# The pair atlas is anchored between both feet. Keep both real units selectable.
@@ -3803,7 +3809,11 @@ func _draw_sprite_animated(tex: Texture2D, tint: Color, death_f: float) -> void:
 		ang = 0.0
 		sx = 1.0
 		sy = 1.0
-	draw_set_transform_matrix(GameMap.ISO_INV * Transform2D(ang, Vector2(sx, sy), 0.0, off))
+	var body_transform := GameMap.ISO_INV * Transform2D(ang, Vector2(sx, sy), 0.0, off)
+	var parked_tribute := _campaign_tribute_push_active() and _campaign_tribute_push_state().is_empty()
+	if parked_tribute and animation_direction in ["ne", "nw"]:
+		_draw_parked_tribute_cart(s, tint)
+	draw_set_transform_matrix(body_transform)
 	# A fallen rider beside its horse can exceed the standing frame's square.
 	# Keep the authored body scale while retaining the same physical ground pivot.
 	var drawn_size := s * _frame_draw_scale(frame)
@@ -3832,7 +3842,10 @@ func _draw_sprite_animated(tex: Texture2D, tint: Color, death_f: float) -> void:
 			Art.campaign_object_has_exact_directional_source(flag_object, String(get_meta("ship_state", "default")), animation_direction), tint.a)
 	# 肩挑姿态已经画入两桶；只有精确动作缺失时才保留旧物件回退，避免四只桶。
 	var wine_overlay := bool(get_meta("carrying_wine", false)) and _campaign_wine_carry_state().is_empty()
-	var carried_key := "tribute_load" if has_meta("carrying_tribute") else ("wine_buckets" if wine_overlay else "")
+	if parked_tribute and animation_direction in ["se", "sw"]:
+		_draw_parked_tribute_cart(s, tint)
+		draw_set_transform_matrix(body_transform)
+	var carried_key := "tribute_load" if has_meta("carrying_tribute") and not _campaign_tribute_push_active() else ("wine_buckets" if wine_overlay else "")
 	if carried_key != "":
 		# 黄泥冈任务物件走关卡隔离路由；源图缺失时保留原有 CampaignArt。
 		var carried := _campaign_carried_texture(carried_key)
@@ -3848,6 +3861,18 @@ func _draw_sprite_animated(tex: Texture2D, tint: Color, death_f: float) -> void:
 	draw_set_transform_matrix(GameMap.ISO_INV)
 	if not _dying and _cast_t > 0.0:
 		_draw_cast_glow()
+
+
+func _draw_parked_tribute_cart(body_size: float, tint: Color) -> void:
+	var frames: Array = Art.unit_anim_frames(key, "parked_cart", animation_direction, art_variant)
+	if frames.is_empty(): return
+	var cart: Texture2D = frames[0]
+	var size := body_size * _frame_draw_scale(cart)
+	var rect := Rect2(-size * 0.5, -size * 0.82, size, size)
+	rect.position += _frame_draw_offset(cart, size)
+	# The cart stays on the ground while the actor recoils or swings a weapon.
+	draw_set_transform_matrix(GameMap.ISO_INV)
+	draw_texture_rect(cart, rect, false, Color(1.0, 1.0, 1.0, tint.a))
 
 
 func _campaign_carried_texture(carried_key: String) -> Texture2D:
@@ -4038,6 +4063,19 @@ func _anim_key() -> String:
 
 
 ## 同一白胜造型的肩挑动作。精确检查不能把普通idle回退误判成挑酒素材。
+func _campaign_tribute_push_active() -> bool:
+	return key == "liu_tang" and art_variant == "hn_liu_tang" and _active_campaign_level_id() == "level1" \
+		and has_meta("carrying_tribute") and not _dying and story_outcome.is_empty()
+
+
+func _campaign_tribute_push_state() -> String:
+	if not _campaign_tribute_push_active() or _lunge > 0.0 or _cast_t > 0.0 \
+		or _shi_en_hurt_t > 0.0 or _flinch.length_squared() > 1.0:
+		return ""
+	var state := "push_walk" if _move_blend > 0.3 else "push_idle"
+	return state if Art.campaign_variant_has_animation(art_variant, state, animation_direction) else ""
+
+
 func _campaign_wine_carry_state() -> String:
 	if key != "bai_sheng" or art_variant != "hn_bai_sheng" or not bool(get_meta("carrying_wine", false)) or _dying or story_outcome != "":
 		return ""
@@ -4056,6 +4094,14 @@ func _anim_frame_for_state(fallback: Texture2D) -> Texture2D:
 			_frame_directional = Art.unit_anim_uses_directional_source(key, "assisted", animation_direction, visual_art_variant())
 			var phase := fposmod(_anim_t,TAU)/TAU if _move_blend>0.3 else 0.0
 			return assisted[int(phase*assisted.size())%assisted.size()]
+	var push_state := _campaign_tribute_push_state()
+	if not push_state.is_empty():
+		var push_frames: Array = Art.unit_anim_frames(key, push_state, animation_direction, art_variant)
+		if not push_frames.is_empty():
+			_real_frames = true
+			_frame_directional = Art.unit_anim_uses_directional_source(key, push_state, animation_direction, art_variant)
+			var push_phase := fposmod(_anim_t, TAU) / TAU if _move_blend > 0.3 else 0.0
+			return push_frames[int(push_phase * push_frames.size()) % push_frames.size()]
 	var carry_state := _campaign_wine_carry_state()
 	if not carry_state.is_empty():
 		var carried_frames: Array = Art.unit_anim_frames(key, carry_state, animation_direction, visual_art_variant())

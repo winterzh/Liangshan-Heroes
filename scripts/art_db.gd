@@ -768,6 +768,12 @@ func unit_anim_frames(key: String, state: String, direction := "", variant := ""
 	variant = _canonical_character_variant(key, variant)
 	if not direction.is_empty() and direction not in CampaignArt.DIRECTIONS:
 		return []
+	var push_path := CampaignArt.native_tribute_push_path(key, variant, state, direction)
+	if not push_path.is_empty():
+		var push_cache_key := "native_tribute|" + push_path
+		if not _anim_cache.has(push_cache_key):
+			_anim_cache[push_cache_key] = _load_generic_directional_frames(push_path)
+		return _anim_cache[push_cache_key]
 	var wine_path := CampaignArt.native_wine_carry_path(key, variant, state, direction)
 	if not wine_path.is_empty():
 		var wine_cache_key := "native_wine|" + wine_path
@@ -969,6 +975,8 @@ func unit_anim_uses_directional_source(key: String, state: String, direction: St
 	variant = _canonical_character_variant(key, variant)
 	if direction not in CampaignArt.DIRECTIONS:
 		return false
+	if not CampaignArt.native_tribute_push_path(key, variant, state, direction).is_empty():
+		return not unit_anim_frames(key, state, direction, variant).is_empty()
 	if not CampaignArt.native_wine_carry_path(key, variant, state, direction).is_empty():
 		return not unit_anim_frames(key, state, direction, variant).is_empty()
 	if not _ordinary_character_frames(key, state, direction, variant).is_empty(): return true
@@ -1028,6 +1036,8 @@ func campaign_variant_has_direction(variant: String, direction: String) -> bool:
 ## 精确动作存在判断；复用纹理缓存，绝不以idle回退冒充双人动作。
 func campaign_variant_has_animation(variant: String, state: String, direction: String) -> bool:
 	if variant.is_empty() or direction not in CampaignArt.DIRECTIONS: return false
+	var push_path := CampaignArt.native_tribute_push_path("liu_tang", variant, state, direction)
+	if not push_path.is_empty(): return not _load_generic_directional_frames(push_path).is_empty()
 	var wine_path := CampaignArt.native_wine_carry_path("bai_sheng", variant, state, direction)
 	if not wine_path.is_empty(): return not _load_generic_directional_frames(wine_path).is_empty()
 	if not CampaignArt.native_body_owner(variant).is_empty():

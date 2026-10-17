@@ -1,3 +1,7 @@
+## 刘唐推车接入复现（2026-10-17）
+
+只读`tools/build_liu_tang_pushcart_20261017.py`核对6PNG/24姿势/12资源。完整新批用`python -X utf8 -B tools/run_liu_tang_pushcart_20261017.py --run --checkout-staging --work-root C:/CodexQA/liu_cart`；无`--run`只预检28纹理。最终514项/79图、6602冻结零漂移、39直接目检；本机必须显式短绝对工作路径，避免MSIX映射过长。原identity目录保护不改，最终编译副本在checkout/.godot，PCK/私有档案在C工作目录。旧生成资格字段保留历史快照，当前采用看收据。下方启动方式不变。[范围](LIU_TANG_PUSHCART_20261017.md)。
+
 ## 刘唐推车来源候选（2026-10-17）
 
 11原稿、完整提示词及14引用SHA在`assets/characters/liu_tang_pushcart_sources_20261017/`，`.gdignore`隔离；5候选/2退回/4替代稿保留。来源检查通过不代表原生采用；只读工具`tools/verify_liu_tang_pushcart_sources_20261017.py`区分当前候选和历史失败。当前肩担运输仍待修正，下方启动入口不变。[范围](LIU_TANG_PUSHCART_SOURCES_20261017.md)。
