@@ -1,3 +1,9 @@
+## 2026-10-18 阮小七分层实际接入
+
+- `tools/run_ruan_xiaoqi_layered_20261018.py`及同批GD/identity/bootstrap：新实际补丁导出、真实身份/纹理/关卡运行与旧输入恢复链。
+- `qa/ruan_xiaoqi_layered_integration_20261018/`：1592项/118图原报告、48直接目检/6代表图、四批资源预览含两次失败、20握点平移及前14文件、16保护/81无关文件和恢复索引。
+- `docs/RUAN_XIAOQI_LAYERED_INTEGRATION_20261018.md`：当前采用/原著依据/最终美术未完成与后继；下方候选目录保留历史记录，不是当前接入状态。
+
 ## 2026-10-18 阮小七接入补丁准备
 
 - `qa/ruan_xiaoqi_layered_integration_prepare_20261018/`：未应用的2生产/4验收候选、可检查补丁、源码SHA/只读180纹理预检、标签原图几何、共享等待快照。

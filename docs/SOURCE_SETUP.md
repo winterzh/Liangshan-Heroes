@@ -1,3 +1,9 @@
+## 阮小七分层现已实际接入（2026-10-18）
+
+当前生产采用`ruan_xiaoqi_layered_20261018`，真实基包+四级补丁1592项/118图通过，48图直接看过。当前[接入说明](RUAN_XIAOQI_LAYERED_INTEGRATION_20261018.md)与[QA](../qa/ruan_xiaoqi_layered_integration_20261018/README.md)优先于下方历史“未应用/等待”记录。握指/自然步态与最终体量连续性仍未接受。
+
+只读`python -X utf8 -B tools/build_ruan_xiaoqi_layered_20261018.py`重现24姿势/12资源；其`runtime_adopted:false`是制作快照，不代表当前路由。接入后禁止重建已采用家族，实际代码守卫拒绝`--rebuild-unrouted`。新原生通过同批run入口使用新工程外目录、完整旧收据和保留提交，遵守串行引擎/真实身份/先归档再复用，不覆盖原测试记录。main/Steam保持，整库美术继续。
+
 ## 阮小七分层接入候选未应用（2026-10-18）
 
 `qa/ruan_xiaoqi_layered_integration_prepare_20261018/candidate/`是2生产脚本+4验收脚本的未来候选，不是当前源码。真实只读入口预检180纹理/route=false，无新原生。先对原[prepared工程](../qa/ruan_xiaoqi_layer_fixes_20261018/native_gate.json)完成导入和看图，再以before SHA核对后启用，详见[接入准备](RUAN_XIAOQI_LAYERED_INTEGRATION_PREPARE_20261018.md)。

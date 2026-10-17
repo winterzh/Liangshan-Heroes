@@ -1,0 +1,66 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoqi_layered_20261018/contact_a_69abf065.png" id="contact_a_69abf065"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoqi_layered_20261018/passing_a_pose_7632648c.png" id="passing_a_pose_7632648c"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoqi_layered_20261018/contact_b_sw_33f17357.png" id="contact_b_sw_33f17357"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoqi_layered_20261018/passing_b_sw_704a39bc.png" id="passing_b_sw_704a39bc"]
+
+[sub_resource type="AtlasTexture" id="push_contact_a_sw"]
+metadata/visible_top = 0.108918206
+metadata/independent_cart = true
+atlas = ExtResource("contact_a_69abf065")
+region = Rect2(627, 0, 627, 627)
+margin = Rect2(66.0, 0.56, 131, 131)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.040014
+
+[sub_resource type="AtlasTexture" id="push_passing_a_sw"]
+metadata/visible_top = 0.081294261
+metadata/independent_cart = true
+atlas = ExtResource("passing_a_pose_7632648c")
+region = Rect2(627, 0, 627, 627)
+margin = Rect2(96.5, 49.58, 192, 192)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.001122
+
+[sub_resource type="AtlasTexture" id="push_contact_b_sw"]
+metadata/visible_top = 0.080926288
+metadata/independent_cart = true
+atlas = ExtResource("contact_b_sw_33f17357")
+region = Rect2(0, 0, 1254, 1254)
+margin = Rect2(66.5, 56.06, 279, 279)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.000624
+
+[sub_resource type="AtlasTexture" id="push_passing_b_sw"]
+metadata/visible_top = 0.080869565
+metadata/independent_cart = true
+atlas = ExtResource("passing_b_sw_704a39bc")
+region = Rect2(0, 0, 1254, 1254)
+margin = Rect2(70.5, 58.62, 287, 287)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.000547
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("push_contact_a_sw")},
+{"duration": 1.0, "texture": SubResource("push_passing_a_sw")},
+{"duration": 1.0, "texture": SubResource("push_contact_b_sw")},
+{"duration": 1.0, "texture": SubResource("push_passing_b_sw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

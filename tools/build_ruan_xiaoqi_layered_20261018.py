@@ -81,8 +81,12 @@ def intended():
             root_y = y + int(yy.max()) + 1
             reference = (root_y-y-int(yy.min())) / ratio
             pose = canvas_pose(binding['region'], [binding['root_x'], root_y], reference, y+int(yy.min()))
+            registration = selection.get('hand_registration', {}).get(state+'_'+d)
+            if registration:
+                pose['draw_offset_px'] = [float(v)*reference for v in registration['translation_per_body_size']]
+                pose['hand_registration'] = registration
             pose.update(source=key, independent_cart=True, body_height_target=ratio,
-                        operations='Untouched independent body PNG; native region/virtual margins/uniform scale. Crown-to-lowest-sole height matched to empty idle by construction; provisional manual ground x. No source pixel edits; not gait or grip acceptance.')
+                        operations='Untouched independent body PNG; native region/virtual margins/uniform scale. Crown-to-lowest-sole height matched to empty idle by construction; optional translation-only manual grip registration moves actor layer, never cart or physics. Foot/root/head variation remains visual QA; no source pixel edits or final gait/grip acceptance.')
             poses[state+'_'+d] = pose
         cp = old['poses']['cart_only_'+d]
         reference = cp['virtual_canvas_reference']
@@ -100,6 +104,7 @@ def intended():
             'canonical_cart_geometry': old['canonical_cart_geometry'],
             'production_qualified': False, 'native_dimensions_verified': False,
             'runtime_adopted': False, 'complete_gait_accepted': False,
+            'registration_revision': selection.get('registration_revision', 1),
             'canon': selection['canon'], 'scope': selection['scope']}
 
 
@@ -116,20 +121,30 @@ def render(manifest):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--prepare', action='store_true')
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument('--prepare', action='store_true')
+    mode.add_argument('--rebuild-unrouted', action='store_true')
     args = parser.parse_args()
     manifest = intended()
-    if args.prepare:
-        assert not RUNTIME.exists() and not MANIFEST.exists()
-        RUNTIME.mkdir()
+    if args.rebuild_unrouted:
+        assert MANIFEST.is_file() and not load(MANIFEST)['runtime_adopted']
+        assert 'res://assets/anim/'+FAMILY+'_' not in (ROOT/'scripts/campaign_art.gd').read_text(encoding='utf-8'), 'Never rebuild enabled family'
+        assert 'func _campaign_tribute_layered_frame' not in (ROOT/'scripts/unit.gd').read_text(encoding='utf-8'), 'Never rebuild after integration'
+    if args.prepare or args.rebuild_unrouted:
+        if args.prepare:
+            assert not RUNTIME.exists() and not MANIFEST.exists()
+            RUNTIME.mkdir()
         for key, row in manifest['sources'].items():
             if key == 'cart_only':
                 continue
             dest = ROOT / row['path']
-            shutil.copyfile(ROOT/row['candidate_origin'], dest)
-            import_descriptor(dest)
+            if dest.exists():
+                assert args.rebuild_unrouted and sha(dest) == row['sha256']
+            else:
+                shutil.copyfile(ROOT/row['candidate_origin'], dest)
+                import_descriptor(dest)
         for name, content in render(manifest).items():
-            assert not (ROOT/name).exists()
+            assert args.rebuild_unrouted or not (ROOT/name).exists()
             (ROOT/name).write_bytes(content.encode())
         MANIFEST.write_bytes((json.dumps(manifest, ensure_ascii=False, indent=2)+'\n').encode())
     assert load(MANIFEST) == manifest
