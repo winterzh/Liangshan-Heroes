@@ -1,3 +1,7 @@
+## 吴用推车原稿检查（2026-10-17）
+
+`python -X utf8 -B tools/verify_wu_yong_pushcart_sources_20261017.py`只读核对8原PNG/24引用和20选格，当前170项通过。来源由.gdignore隔离，没有新增运行路由或原生收据，启动方式不变。分隔轴低alpha、逐稿车体连续性和PCK效果需后继验收。[范围](WU_YONG_PUSHCART_SOURCES_20261017.md)。
+
 ## 晁盖推车接入复现（2026-10-17）
 
 只读`python -X utf8 -B tools/build_chao_gai_pushcart_20261017.py`核对7新PNG/1共用车、24姿势/12资源。完整新批用同批run工具`--run --work-root <短绝对证据目录> --pack-root <短绝对包目录>`；无`--run`只预检。最终854项/93图，同包默认镜头51项/25图，64图直接目检。使用已验证旧工程/导入缓存，复用前Git blob+外置非Git ZIP保存完整旧输入和常量，旧PCK保持，不称新冷导入；复用参数/身份和空间要求见[实现](CHAO_GAI_PUSHCART_20261017.md)。启动方式不变；原稿报告资格字段保留历史，当前采用看新收据。

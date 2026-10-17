@@ -1,3 +1,9 @@
+## 2026-10-17 吴用推车原稿
+
+- `assets/characters/wu_yong_pushcart_sources_20261017/`：8原PNG/完整提示词/24引用SHA/20选格，.gdignore隔离。
+- `tools/verify_wu_yong_pushcart_sources_20261017.py`：只读来源与选格验证，不作为原生资格。
+- `docs/WU_YONG_PUSHCART_SOURCES_20261017.md`、`qa/wu_yong_pushcart_sources_20261017/`：说明/170项来源报告/逐视图目检；运行接入继续。
+
 ## 2026-10-17 晁盖推车运行接入
 
 - `assets/characters/chao_gai_pushcart_20261017/`：7张未改像素运行PNG/导入；独立车沿用刘唐物件原图。
