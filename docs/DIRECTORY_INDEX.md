@@ -1,3 +1,9 @@
+## 2026-10-17 晁盖推车原稿
+
+- `assets/characters/chao_gai_pushcart_sources_20261017/`：12原PNG/.gdignore/完整提示词/27引用SHA/20选格。
+- `tools/verify_chao_gai_pushcart_sources_20261017.py`：只读来源与选格验证，不核准未选视图或原生效果。
+- `docs/CHAO_GAI_PUSHCART_SOURCES_20261017.md`、`qa/chao_gai_pushcart_sources_20261017/`：说明/来源报告/逐视图目检；尚未生产接入。
+
 ## 2026-10-17 地面财物车
 
 - `scripts/campaign_tribute_cart_visual.gd`：实际任务成员及已取货状态派生路由。

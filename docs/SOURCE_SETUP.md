@@ -1,3 +1,7 @@
+## 晁盖推车原稿检查（2026-10-17）
+
+`python -X utf8 -B tools/verify_chao_gai_pushcart_sources_20261017.py`只读核对12原PNG/27引用和20选格；4份整图角点不足仍如实报告，选用视角独立核对。来源由.gdignore隔离，未接入/未原生验证，启动方式不变。[范围](CHAO_GAI_PUSHCART_SOURCES_20261017.md)。
+
 ## 地面财物车复现（2026-10-17）
 
 只读`python -X utf8 -B tools/build_tribute_ground_cart_20261017.py`验证4个物件Atlas和原PNG字节；新批用同批run工具`--run --work-root <短绝对工程外目录>`，可用真实旧owner/对应收据作目录容器。最终628项，修复包因C盘满的执行不算通过；在D新profile/证据中重跑同一未改PCK，实际内容identity回读/冻结输入/包SHA保持。具体阶段/空间要求见[实现](TRIBUTE_GROUND_CART_20261017.md)。启动方式不变。
