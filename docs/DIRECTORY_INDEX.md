@@ -1,3 +1,9 @@
+## 2026-10-18 NW低步幅两步接入
+
+- `assets/characters/ruan_xiaoqi_nw_walk_20261018/`：3内置原PNG/完整提示/引用SHA，2采用1退稿，.gdignore隔离来源；采用原字节另复制入现有分层运行家族，更新两处来源/近侧握点与NW行走资源。
+- `qa/ruan_xiaoqi_nw_walk_20261018/`：来源/alpha、prepared/历史共享等待、138项/4原生资源图、1592项/118图SHA/16直接查看/4实景代表图、前后生产保护与旧输入恢复。
+- `docs/RUAN_XIAOQI_NW_WALK_20261018.md`：当前接入、原著与美术解释、最终自然度/握把未完成及后继。
+
 ## 2026-10-18 阮小七分层实际接入
 
 - `tools/run_ruan_xiaoqi_layered_20261018.py`及同批GD/identity/bootstrap：新实际补丁导出、真实身份/纹理/关卡运行与旧输入恢复链。
