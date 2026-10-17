@@ -1,3 +1,11 @@
+## 刘唐推车来源候选（2026-10-17）
+
+11原稿、完整提示词及14引用SHA在`assets/characters/liu_tang_pushcart_sources_20261017/`，`.gdignore`隔离；5候选/2退回/4替代稿保留。来源检查通过不代表原生采用；只读工具`tools/verify_liu_tang_pushcart_sources_20261017.py`区分当前候选和历史失败。当前肩担运输仍待修正，下方启动入口不变。[范围](LIU_TANG_PUSHCART_SOURCES_20261017.md)。
+
+## 公孙胜金光弹体复现（2026-10-17）
+
+`python -X utf8 -B tools/run_gongsun_gold_light_20261017.py`只预检23纹理；完整新批加`--run --work-root <工程外目录>`，本机配置/共享锁/私有档案沿用。最终PCK741项/169图，6572冻结零漂移，13图直接目检；真实途中飞行和过期发射者工厂恢复命中通过。旧日常工具已随当前弹体类型更新，原678项证据保留。下方启动方式不变，原四技能/全战役/完整UI/性能/Steam不由本批完成。[范围](GONGSUN_GOLD_LIGHT_20261017.md)。
+
 ## 公孙胜后期衣装候选（2026-10-17）
 
 2份原稿/完整提示词及2引用SHA保存在`assets/characters/gongsun_sheng_later_sources_20261017/`，`.gdignore`隔离。来源与透明格缝已查，尚未接入，无新Godot/PCK验收。已完成的日常批678项/164图另列，下方启动入口不变。[范围](GONGSUN_SHENG_LATER_SOURCES_20261017.md)。

@@ -1,4 +1,4 @@
-"""Export the full resource PCK and verify Ruan Xiaowu pu-dao identity, grounded skills, native actions and UI in actual UI contexts."""
+"""Verify current Gongsun daily body/portrait and chapter appearances in a full native resource PCK."""
 import argparse,hashlib,importlib.util,json,os,shutil,time,uuid
 from pathlib import Path
 import run_character_art_qa as common

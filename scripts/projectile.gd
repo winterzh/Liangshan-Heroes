@@ -33,7 +33,9 @@ func setup(p_shooter: Unit, p_target: Unit, p_dmg: float, p_crit := false) -> vo
 		speed = 240.0          # 巨石飞得慢、看得见抛射
 		_life = 5.0
 	elif pk == "fireball":
-		kind = "fireball"      # 公孙胜·火球
+		# Chapter54's sword-directed golden light is this character's visual
+		# reference. Ordinary damage/tracking still belongs to game design.
+		kind = "gong_gold" if p_shooter.key == "gongsun_sheng" else "fireball"
 		speed = 320.0
 		_spin = randf() * TAU
 	elif pk == "bomb":
@@ -46,6 +48,10 @@ func setup(p_shooter: Unit, p_target: Unit, p_dmg: float, p_crit := false) -> vo
 		speed = 360.0
 		_spin = randf() * TAU
 
+
+func _ready() -> void:
+	# Derived rendering state also applies to detached factory-restored shells.
+	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 
 ## Projectile has no owner field; valid shooter/target still identify Battle.
 func _gameplay_rng_fault() -> String:
@@ -138,7 +144,21 @@ func _lob_height() -> float:
 	return sin(prog * PI) * (18.0 + _dist0 * 0.10)
 
 
+func uses_gongsun_gold_art() -> bool:
+	# New kinds survive an expired shooter and factory restore without new
+	# serialized fields. Old fireball records can derive art from a live owner.
+	return kind == "gong_gold" or (kind == "fireball" and is_instance_valid(shooter) and shooter.key == "gongsun_sheng")
+
 func _draw() -> void:
+	if uses_gongsun_gold_art():
+		var texture: Texture2D = Art.gongsun_gold_light_texture()
+		if texture == null: return
+		var screen_angle := GameMap.ISO.basis_xform(_dir).angle()
+		var size := Vector2(36.0, 36.0 * float(texture.get_height()) / float(texture.get_width()))
+		draw_set_transform_matrix(GameMap.ISO_INV * Transform2D(screen_angle, Vector2.ONE, 0.0, Vector2(0, -12)))
+		draw_texture_rect(texture, Rect2(-size * 0.5, size), false)
+		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+		return
 	if kind == "boulder":
 		draw_set_transform_matrix(GameMap.ISO_INV * Transform2D(_spin, Vector2.ONE, 0.0, Vector2(0, -10 - _lob_height())))
 		draw_circle(Vector2(1.5, 2.0), 6.2, Color(0, 0, 0, 0.28))           # 自影

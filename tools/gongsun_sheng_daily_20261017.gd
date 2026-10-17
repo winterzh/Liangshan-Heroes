@@ -185,7 +185,7 @@ func real_walk(b,origin: Vector2) -> void:
 		var deadline:=Time.get_ticks_msec()+4000
 		while not probe.captured and Time.get_ticks_msec()<deadline:await physics_frame
 		u.set_physics_process(false)
-		check(u.position.distance_to(origin)>2.0 and u.animation_direction==row.d,"real physics chooses pudao walking facing "+String(row.d))
+		check(u.position.distance_to(origin)>2.0 and u.animation_direction==row.d,"real physics chooses daily walking facing "+String(row.d))
 		check(probe.captured and probe.seen.size()==4,"real motion traverses all four authored gait phases "+String(row.d))
 		u.queue_redraw();await snap("real_walk_"+String(row.d));check(u._frame_directional,"real walking renderer uses authored facing "+String(row.d))
 		check(u.art_variant.is_empty(),"walking never changes saved variant "+String(row.d))
@@ -241,7 +241,7 @@ func exercise(b,origin: Vector2,direction: String,delta: Vector2) -> void:
 	var attack: Array=art.unit_anim_frames("gongsun_sheng","attack",direction,"")
 	var slot:=clampi(int((1.0-launch.lunge)*attack.size()),0,attack.size()-1)
 	check(launch.captured and launch.frame==attack[slot] and slot==4,"actual projectile release uses sword-extension pose "+direction)
-	check(launch.projectile_kind=="fireball" and is_equal_approx(u._swing_speed,1.9) and is_equal_approx(u._hit_at,.42),"legacy projectile/timing retained outside spell canon qualification "+direction)
+	check(launch.projectile_kind=="gong_gold" and is_equal_approx(u._swing_speed,1.9) and is_equal_approx(u._hit_at,.42),"gold-light visual and retained attack timing "+direction)
 	check(u.animation_direction==direction and u._authored_direction4_attack_active() and is_zero_approx(u._programmatic_swing_scale()) and not u._should_draw_programmatic_swing_fx(),"native facing without extra programmatic swing "+direction)
 	await snap("actual_release_"+direction)
 	deadline=Time.get_ticks_msec()+3500

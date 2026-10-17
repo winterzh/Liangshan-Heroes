@@ -74,6 +74,7 @@ const TRAP_CELLS := {
 # 立桩贴图 2x2（治疗桩/死神桩/毒桩 + 1 备用格）。无图则 WardFx 退回程序化发光图腾。
 const WARDS_SHEET := "res://assets/wards.png"
 const POISON_WARD_TEXTURE := "res://assets/fx/poison_ward_20261015/poison_ward.png"
+const GONGSUN_GOLD_LIGHT_TEXTURE := "res://assets/fx/gongsun_gold_light_20261017/gold_light.png"
 const WARD_CELLS := {
 	"heal": Vector2i(0, 0), "death": Vector2i(1, 0), "poison": Vector2i(0, 1),
 }
@@ -265,6 +266,7 @@ var _objects_tex: Texture2D
 var _traps_tex: Texture2D
 var _wards_tex: Texture2D
 var _poison_ward_tex: Texture2D
+var _gongsun_gold_light_tex: Texture2D
 var _kit2_tex: Texture2D
 var _items_tex: Texture2D
 var _ability_projectiles_tex: Texture2D
@@ -308,6 +310,7 @@ func _ready() -> void:
 	_traps_tex = _try_load(TRAPS_SHEET)
 	_wards_tex = _try_load(WARDS_SHEET)
 	_poison_ward_tex = _try_load(POISON_WARD_TEXTURE)
+	_gongsun_gold_light_tex = _try_load(GONGSUN_GOLD_LIGHT_TEXTURE)
 	_kit2_tex = _try_load(KIT2_SHEET)
 	_items_tex = _try_load(ITEMS_SHEET)
 	_ability_projectiles_tex = _try_load(ABILITY_PROJECTILES_SHEET)
@@ -545,6 +548,9 @@ func unit_texture(key: String, variant := "", direction := "") -> Texture2D:
 
 
 ## 新毒桩优先独立原图；heal/death及旧毒桩回退仍走wards.png。均无图时返回null。
+func gongsun_gold_light_texture() -> Texture2D:
+	return _gongsun_gold_light_tex
+
 func ward_texture(style: String) -> Texture2D:
 	if ward_is_upright(style):
 		return _poison_ward_tex

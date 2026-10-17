@@ -1,3 +1,16 @@
+## 2026-10-17 刘唐推车来源候选
+
+- `assets/characters/liu_tang_pushcart_sources_20261017/`：11原图、提示词/14引用SHA、`.gdignore`；5候选/2退回/4替代稿。
+- `tools/verify_liu_tang_pushcart_sources_20261017.py`：只读来源/当前候选严格角点检查。
+- `docs/LIU_TANG_PUSHCART_SOURCES_20261017.md`、`qa/liu_tang_pushcart_sources_20261017/`：原著推车与现行肩担差异、当前来源记录和10稿时的失败原报告；未接入。
+
+## 公孙胜金光弹体（2026-10-17）
+
+- `assets/fx/gongsun_gold_light_sources_20261017/`：原图、完整提示词/原著边界、`.gdignore`。
+- `assets/fx/gongsun_gold_light_20261017/`：原字节运行图与mipmap导入。
+- `tools/run_gongsun_gold_light_20261017.py`与同名GD：完整包/真实四向途中金光与工厂恢复飞行；最终741项/169图。
+- `docs/GONGSUN_GOLD_LIGHT_20261017.md`、`qa/gongsun_gold_light_20261017/`：最终原始收据/报告、13目检图与首批发射瞬间证据的保留记录。
+
 ## 2026-10-17 公孙胜后期衣装来源候选
 
 - `assets/characters/gongsun_sheng_later_sources_20261017/`：2原稿、完整提示词/2引用SHA、`.gdignore`隔离。

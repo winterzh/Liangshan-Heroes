@@ -61,7 +61,7 @@ func _check_values(values: Variant) -> Dictionary:
 	if typeof(values.crit) != TYPE_BOOL: return _failure("VALUE_BOOL", "crit")
 	for field in ["kind", "damage_ability_id"]:
 		if typeof(values[field]) != TYPE_STRING or values[field].length() > 128: return _failure("VALUE_STRING", field)
-	if values.kind not in ["arrow", "boulder", "fireball", "bomb", "magic"]: return _failure("PROJECTILE_KIND")
+	if values.kind not in ["arrow", "boulder", "fireball", "bomb", "magic", "gong_gold"]: return _failure("PROJECTILE_KIND")
 	if typeof(values._dir) != TYPE_VECTOR2 or not values._dir.is_finite(): return _failure("VALUE_DIRECTION")
 	if values._dist0 <= 0.0: return _failure("INITIAL_DISTANCE")
 	# No normalizing direction, clamping timers or changing remaining flight state.
