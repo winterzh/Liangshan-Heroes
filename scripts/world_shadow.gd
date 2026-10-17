@@ -357,9 +357,13 @@ static func draw_unit(unit, death_f: float, fallback_texture: Texture2D = null, 
 			return
 		var size: float = GameMap.building_visual_px(GameMap.footprint_half_for(unit.radius)) if unit.is_building else unit.radius * 3.7 * unit.visual_scale
 		var foot := 0.78 if unit.is_building else 0.82
+		var tribute_cart := preload("res://scripts/campaign_tribute_cart_visual.gd").enabled(unit)
+		if tribute_cart:
+			size = preload("res://scripts/campaign_tribute_cart_visual.gd").visual_size(tex)
+			foot = 0.82
 		var pair_origin: Vector2 = (unit.story_assist_partner.position - unit.position) * 0.5 if unit.story_assistance_active() else Vector2.ZERO
 		draw_cast(unit, tex, Rect2(-size * 0.5, -size * foot, size, size), pair_origin, 0.25 * opacity,
-			bool(unit.get_meta("building_visual_mirror",false)) if unit.is_building else unit.face_left and not directional, ground)
+			false if tribute_cart else (bool(unit.get_meta("building_visual_mirror",false)) if unit.is_building else unit.face_left and not directional), ground)
 	unit.draw_set_transform_matrix(Transform2D.IDENTITY)
 
 

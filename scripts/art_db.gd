@@ -761,6 +761,15 @@ func portrait_texture(key: String) -> Texture2D:
 ## SpriteFrames .tres（default 动画，正方形 Texture2D 帧）。PNG 优先，旧无方向文件兼容回退。
 ## 选图顺序为：精确四向动作 > 旧同动作帧带 > 同方向idle。这样不会用一张
 ## 四向站姿遮住本来存在的走路/攻击动画；只有真正没有该动作时才保持四向站姿。
+func campaign_tribute_cart_texture(direction: String) -> Texture2D:
+	if direction not in CampaignArt.DIRECTIONS: return null
+	var path := "res://assets/anim/tribute_ground_cart_20261017_idle_%s.tres" % direction
+	var cache_key := "tribute_ground_prop|" + path
+	if not _anim_cache.has(cache_key): _anim_cache[cache_key] = _load_generic_directional_frames(path)
+	var frames: Array = _anim_cache[cache_key]
+	return null if frames.is_empty() else frames[0]
+
+
 func unit_anim_frames(key: String, state: String, direction := "", variant := "") -> Array:
 	if variant == GONGSUN_LATER_VARIANT:
 		return [] if not direction.is_empty() and direction not in CampaignArt.DIRECTIONS else _gongsun_later_frames(key, state)

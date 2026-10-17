@@ -4625,6 +4625,8 @@ func _draw_building() -> void:
 		# 不再出现「预览很大、落成缩水」的落差。
 		var s := GameMap.building_visual_px(GameMap.footprint_half_for(radius))
 		if art_variant in ["tribute_load", "tribute_load_alpha_20260906", "wine_buckets", "jujube_load", "wine_bowls"]: s=62.0
+		if preload("res://scripts/campaign_tribute_cart_visual.gd").enabled(self):
+			s = preload("res://scripts/campaign_tribute_cart_visual.gd").visual_size(tex)
 		var foot := 0.82 if art_variant!="" else 0.78
 		if scoped_tex!=null:
 			foot=float(get_meta("campaign_environment_foot",foot))
@@ -4714,6 +4716,11 @@ func _campaign_environment_texture(update_metadata := true) -> Texture2D:
 	if update_metadata:
 		remove_meta("campaign_environment_foot")
 		remove_meta("campaign_environment_visible_top")
+	if preload("res://scripts/campaign_tribute_cart_visual.gd").enabled(self):
+		var cart_texture := Art.campaign_tribute_cart_texture(animation_direction)
+		if cart_texture != null:
+			if update_metadata: set_meta("campaign_environment_foot", 0.82)
+			return cart_texture
 	var route_key := String(get_meta("campaign_environment_route", ""))
 	if route_key.is_empty(): return null
 	var state := String(get_meta("campaign_environment_state", "default"))

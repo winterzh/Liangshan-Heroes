@@ -1,3 +1,10 @@
+## 2026-10-17 地面财物车
+
+- `scripts/campaign_tribute_cart_visual.gd`：实际任务成员及已取货状态派生路由。
+- `assets/direction4/level1_tribute_ground_cart_20261017.json`、`assets/anim/tribute_ground_cart_20261017_*.tres`：4方向车轮地面锚点，复用上一批cart_only原图。
+- `tools/build_tribute_ground_cart_20261017.py`及run/GD：只读绑定与完整包原生验收。
+- `docs/TRIBUTE_GROUND_CART_20261017.md`、`qa/tribute_ground_cart_20261017/`：最终收据/直接目检/旧失败/恢复助手/重复临时副本回收摘要。
+
 ## 2026-10-17 刘唐推车运行接入
 
 - `assets/characters/liu_tang_pushcart_20261017/`：6原字节运行PNG/导入；`liu_tang_pushcart_integration_sources_20261017/`：独立车原图/完整提示词/引用SHA、`.gdignore`。

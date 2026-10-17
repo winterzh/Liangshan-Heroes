@@ -1,3 +1,7 @@
+## 地面财物车复现（2026-10-17）
+
+只读`python -X utf8 -B tools/build_tribute_ground_cart_20261017.py`验证4个物件Atlas和原PNG字节；新批用同批run工具`--run --work-root <短绝对工程外目录>`，可用真实旧owner/对应收据作目录容器。最终628项，修复包因C盘满的执行不算通过；在D新profile/证据中重跑同一未改PCK，实际内容identity回读/冻结输入/包SHA保持。具体阶段/空间要求见[实现](TRIBUTE_GROUND_CART_20261017.md)。启动方式不变。
+
 ## 刘唐推车接入复现（2026-10-17）
 
 只读`tools/build_liu_tang_pushcart_20261017.py`核对6PNG/24姿势/12资源。完整新批用`python -X utf8 -B tools/run_liu_tang_pushcart_20261017.py --run --checkout-staging --work-root C:/CodexQA/liu_cart`；无`--run`只预检28纹理。最终514项/79图、6602冻结零漂移、39直接目检；本机必须显式短绝对工作路径，避免MSIX映射过长。原identity目录保护不改，最终编译副本在checkout/.godot，PCK/私有档案在C工作目录。旧生成资格字段保留历史快照，当前采用看收据。下方启动方式不变。[范围](LIU_TANG_PUSHCART_20261017.md)。
