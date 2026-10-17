@@ -1,3 +1,7 @@
+## 阮小五推车来源检查（2026-10-18）
+
+只读`python -X utf8 -B tools/verify_ruan_xiaowu_pushcart_sources_20261017.py`，193项通过：7原PNG/23引用/20选格与2退稿隔离，原图未重编码。5候选角点alpha0不是全背景/原生步态资格；9—13列间隔与后视支撑腿需后验。由.gdignore隔离，未接入，启动方式不变。[范围](RUAN_XIAOWU_PUSHCART_SOURCES_20261017.md)。
+
 ## 阮小二推车运行复现（2026-10-17）
 
 只读`python -X utf8 -B tools/build_ruan_xiaoer_pushcart_20261017.py`核对6图源/24姿势/12资源。run工具要求真实当前完成`--reuse-project-receipt`、`--prior-git-commit`、外置`--work-root`和`--pack-root`；无`--run`只预检，完整新批加`--run`。最终1365项/118图、157纹理、64重点目检，用未变完整基包+8MB真实导出补丁及单独冻结的外部QA，非新单体PCK或新冷导入；原身份生成保护不改。复用/失败恢复参数、外置原图和PCK链取回、限制见[实现](RUAN_XIAOER_PUSHCART_20261017.md)。启动方式不变。

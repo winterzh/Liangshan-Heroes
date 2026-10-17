@@ -1,3 +1,9 @@
+## 2026-10-18 阮小五推车原稿
+
+- `assets/characters/ruan_xiaowu_pushcart_sources_20261017/`：7原PNG、完整提示词/23引用SHA、5候选20视图/2退稿、.gdignore隔离。
+- `tools/verify_ruan_xiaowu_pushcart_sources_20261017.py`：193项只读来源/选格验证。
+- `docs/RUAN_XIAOWU_PUSHCART_SOURCES_20261017.md`、`qa/ruan_xiaowu_pushcart_sources_20261017/`：原著/美术解释、退稿与原生待办、直接目检及生产保护记录。
+
 ## 2026-10-17 阮小二推车运行接入
 
 - `assets/characters/ruan_xiaoer_pushcart_20261017/`：5原字节运行PNG/导入，共用车沿用刘唐物件。
