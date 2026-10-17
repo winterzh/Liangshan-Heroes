@@ -1,3 +1,7 @@
+## 吴用推车运行复现（2026-10-17）
+
+只读`python -X utf8 -B tools/build_wu_yong_pushcart_20261017.py`核对5新PNG/1共用车、24姿势/12资源；同批run工具加`--run --work-root <短绝对证据目录> --pack-root <短绝对包目录>`建立完整PCK验收，无`--run`只预检75纹理/引擎状态。最终1001项/118图、64重点目检，含实际默认镜头。当前本机复用既有私有编译工程/缓存前保存旧全部内容输入/常量恢复映射；完整图/包/profile在C盘受控外置路径，避免D盘空间耗尽，非新冷导入。具体资格、复用参数、跨机原图取回和命令见[实现](WU_YONG_PUSHCART_20261017.md)。启动方式不变。
+
 ## 吴用推车原稿检查（2026-10-17）
 
 `python -X utf8 -B tools/verify_wu_yong_pushcart_sources_20261017.py`只读核对8原PNG/24引用和20选格，当前170项通过。来源由.gdignore隔离，没有新增运行路由或原生收据，启动方式不变。分隔轴低alpha、逐稿车体连续性和PCK效果需后继验收。[范围](WU_YONG_PUSHCART_SOURCES_20261017.md)。

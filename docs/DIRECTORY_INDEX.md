@@ -1,3 +1,10 @@
+## 2026-10-17 吴用推车运行接入
+
+- `assets/characters/wu_yong_pushcart_20261017/`：5份原字节运行PNG/导入，共用车沿用刘唐物件。
+- `assets/direction4/level1_wu_yong_pushcart_20261017.json`、`assets/anim/wu_yong_pushcart_20261017_*.tres`：24姿势/12资源，逐格车深和固定轮向量、visible_top。
+- `tools/build_wu_yong_pushcart_20261017.py`、同批run/GD/identity探针：来源/资源核对、可恢复旧源码的私有工程复用、完整包实机。
+- `docs/WU_YONG_PUSHCART_20261017.md`、`qa/wu_yong_pushcart_20261017/`：1001项/118图、64直接目检、4张代表图/完整外置图SHA索引、旧源码恢复映射。
+
 ## 2026-10-17 吴用推车原稿
 
 - `assets/characters/wu_yong_pushcart_sources_20261017/`：8原PNG/完整提示词/24引用SHA/20选格，.gdignore隔离。

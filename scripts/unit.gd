@@ -4065,7 +4065,8 @@ func _anim_key() -> String:
 ## 同一白胜造型的肩挑动作。精确检查不能把普通idle回退误判成挑酒素材。
 func _campaign_tribute_push_active() -> bool:
 	return ((key == "liu_tang" and art_variant == "hn_liu_tang") \
-		or (key == "chao_gai" and art_variant == "hn_chao_gai")) and _active_campaign_level_id() == "level1" \
+		or (key == "chao_gai" and art_variant == "hn_chao_gai") \
+		or (key == "wu_yong" and art_variant == "hn_wu_yong")) and _active_campaign_level_id() == "level1" \
 		and has_meta("carrying_tribute") and not _dying and story_outcome.is_empty()
 
 
