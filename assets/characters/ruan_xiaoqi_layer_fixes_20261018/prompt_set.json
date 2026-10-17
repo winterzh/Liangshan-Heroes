@@ -647,48 +647,48 @@
   "view_bindings": {
     "push_idle": {
       "se": {
-        "path": "assets/characters/ruan_xiaoqi_pushcart_layer_sources_20261018/idle_actor.png",
+        "path": "assets/characters/ruan_xiaoqi_grip_sources_20261018/idle_grips_padded.png",
+        "sha256": "b5ce407bd4e3b948f9703c1e94f4a70ae4b43dd679981d66afa8390d5f2a4f8a",
         "region": [
           0,
           0,
           627,
           627
         ],
-        "root_x": 305,
-        "sha256": "213f9a298d135a3e820f7f5eaef748e4bdec3e8e33383e4f1aa19e3caeab5cbf"
+        "root_x": 305
       },
       "sw": {
-        "path": "assets/characters/ruan_xiaoqi_pushcart_layer_sources_20261018/idle_actor.png",
+        "path": "assets/characters/ruan_xiaoqi_grip_sources_20261018/idle_grips_padded.png",
+        "sha256": "b5ce407bd4e3b948f9703c1e94f4a70ae4b43dd679981d66afa8390d5f2a4f8a",
         "region": [
           627,
           0,
           627,
           627
         ],
-        "root_x": 965,
-        "sha256": "213f9a298d135a3e820f7f5eaef748e4bdec3e8e33383e4f1aa19e3caeab5cbf"
+        "root_x": 965
       },
       "ne": {
-        "path": "assets/characters/ruan_xiaoqi_pushcart_layer_sources_20261018/idle_actor.png",
+        "path": "assets/characters/ruan_xiaoqi_grip_sources_20261018/idle_grips_padded.png",
+        "sha256": "b5ce407bd4e3b948f9703c1e94f4a70ae4b43dd679981d66afa8390d5f2a4f8a",
         "region": [
           0,
           627,
           627,
           627
         ],
-        "root_x": 310,
-        "sha256": "213f9a298d135a3e820f7f5eaef748e4bdec3e8e33383e4f1aa19e3caeab5cbf"
+        "root_x": 310
       },
       "nw": {
-        "path": "assets/characters/ruan_xiaoqi_pushcart_layer_sources_20261018/idle_actor.png",
+        "path": "assets/characters/ruan_xiaoqi_grip_sources_20261018/idle_grips_padded.png",
+        "sha256": "b5ce407bd4e3b948f9703c1e94f4a70ae4b43dd679981d66afa8390d5f2a4f8a",
         "region": [
           627,
           627,
           627,
           627
         ],
-        "root_x": 970,
-        "sha256": "213f9a298d135a3e820f7f5eaef748e4bdec3e8e33383e4f1aa19e3caeab5cbf"
+        "root_x": 970
       }
     },
     "push_contact_a": {
@@ -715,26 +715,26 @@
         "sha256": "69abf065e17fd7154c6faffae60dfe44c35f53cdf2a97d10aea8b4b33e20bd7c"
       },
       "ne": {
-        "path": "assets/characters/ruan_xiaoqi_pushcart_layer_sources_20261018/contact_a_actor.png",
+        "path": "assets/characters/ruan_xiaoqi_grip_sources_20261018/contact_a_rear_reach.png",
+        "sha256": "73307ce8b51844552a09c6b1992eb3a8d44ee6fc22e0782e32f0187f2e79e96d",
         "region": [
           0,
           627,
           627,
           627
         ],
-        "root_x": 315,
-        "sha256": "a915b99f3f5bd192f3e462fea054638c221bb0b9456f87a00c911cae6541d177"
+        "root_x": 315
       },
       "nw": {
-        "path": "assets/characters/ruan_xiaoqi_pushcart_layer_sources_20261018/contact_a_actor.png",
+        "path": "assets/characters/ruan_xiaoqi_grip_sources_20261018/contact_a_rear_reach.png",
+        "sha256": "73307ce8b51844552a09c6b1992eb3a8d44ee6fc22e0782e32f0187f2e79e96d",
         "region": [
           627,
           627,
           627,
           627
         ],
-        "root_x": 970,
-        "sha256": "a915b99f3f5bd192f3e462fea054638c221bb0b9456f87a00c911cae6541d177"
+        "root_x": 970
       }
     },
     "push_passing_a": {
@@ -903,12 +903,12 @@
     "push_idle_se": {
       "manual_source_grip_centres": [
         [
-          345,
-          382
+          377,
+          403
         ],
         [
-          495,
-          354
+          509,
+          356
         ]
       ],
       "manual_cart_grip_targets": [
@@ -922,24 +922,25 @@
         ]
       ],
       "translation_per_body_size": [
-        0.01495349049505753,
-        0.026526468935141434
+        -0.024313509257019267,
+        0.0070309425575094675
       ],
       "estimated_residual_per_body_size": [
-        0.03962744242786756,
-        0.03962744242786757
+        0.0341678650018232,
+        0.03416786500182318
       ],
-      "method": "Manual approximate grip landmarks; translation only, no scale/rotation/bitmap change. Single NE anchor when far grip is visually occluded. Measured residual is annotation fit, not proof of actual fingers touching."
+      "occluded_far_hand": false,
+      "method": "Approximate primary-agent source grip landmarks. Translation-only midpoint/visible-grip registration using (native-pivot)/reference, not draw_scale twice. Rear far grip is occluded and unmeasured; annotation residual is not actual perfect contact proof."
     },
     "push_idle_sw": {
       "manual_source_grip_centres": [
         [
-          789,
-          355
+          752,
+          357
         ],
         [
-          924,
-          390
+          897,
+          405
         ]
       ],
       "manual_cart_grip_targets": [
@@ -953,76 +954,61 @@
         ]
       ],
       "translation_per_body_size": [
-        -0.014479047603693285,
-        0.034908648546345566
+        0.03481091944020674,
+        0.019357488864713973
       ],
       "estimated_residual_per_body_size": [
-        0.02608329902811491,
-        0.026083299028114893
+        0.012229403122588692,
+        0.012229403122588687
       ],
-      "method": "Manual approximate grip landmarks; translation only, no scale/rotation/bitmap change. Single NE anchor when far grip is visually occluded. Measured residual is annotation fit, not proof of actual fingers touching."
+      "occluded_far_hand": false,
+      "method": "Approximate primary-agent source grip landmarks. Translation-only midpoint/visible-grip registration using (native-pivot)/reference, not draw_scale twice. Rear far grip is occluded and unmeasured; annotation residual is not actual perfect contact proof."
     },
     "push_idle_ne": {
       "manual_source_grip_centres": [
         [
-          369,
-          888
-        ],
-        [
-          493,
-          917
+          511,
+          945
         ]
       ],
       "manual_cart_grip_targets": [
-        [
-          53,
-          1010
-        ],
         [
           194,
           1069
         ]
       ],
       "translation_per_body_size": [
-        -0.05170830964317731,
-        -0.0009656737043913233
+        -0.06743871023129866,
+        -0.008357150046362782
       ],
       "estimated_residual_per_body_size": [
-        0.03659464171547347,
-        0.036594641715473476
+        0.0
       ],
-      "method": "Manual approximate grip landmarks; translation only, no scale/rotation/bitmap change. Single NE anchor when far grip is visually occluded. Measured residual is annotation fit, not proof of actual fingers touching."
+      "occluded_far_hand": true,
+      "method": "Approximate primary-agent source grip landmarks. Translation-only midpoint/visible-grip registration using (native-pivot)/reference, not draw_scale twice. Rear far grip is occluded and unmeasured; annotation residual is not actual perfect contact proof."
     },
     "push_idle_nw": {
       "manual_source_grip_centres": [
         [
-          804,
-          917
-        ],
-        [
-          925,
-          889
+          763,
+          943
         ]
       ],
       "manual_cart_grip_targets": [
         [
           1047,
           1088
-        ],
-        [
-          1197,
-          1018
         ]
       ],
       "translation_per_body_size": [
-        -0.01282836109823994,
-        0.07779679641490764
+        0.02153914359768616,
+        0.07954035880718713
       ],
       "estimated_residual_per_body_size": [
-        0.048637912322967665,
-        0.04863791232296766
+        0.0
       ],
-      "method": "Manual approximate grip landmarks; translation only, no scale/rotation/bitmap change. Single NE anchor when far grip is visually occluded. Measured residual is annotation fit, not proof of actual fingers touching."
+      "occluded_far_hand": true,
+      "method": "Approximate primary-agent source grip landmarks. Translation-only midpoint/visible-grip registration using (native-pivot)/reference, not draw_scale twice. Rear far grip is occluded and unmeasured; annotation residual is not actual perfect contact proof."
     },
     "push_contact_a_se": {
       "manual_source_grip_centres": [
@@ -1089,64 +1075,42 @@
     "push_contact_a_ne": {
       "manual_source_grip_centres": [
         [
-          367,
-          885
-        ],
-        [
-          499,
-          918
+          517,
+          929
         ]
       ],
       "manual_cart_grip_targets": [
-        [
-          53,
-          1010
-        ],
         [
           194,
           1069
         ]
       ],
       "translation_per_body_size": [
-        -0.040656421855216916,
-        -0.004417759177941433
+        -0.03897532428922851,
+        0.005818092842372002
       ],
-      "estimated_residual_per_body_size": [
-        0.034308015771766884,
-        0.03430801577176684
-      ],
-      "method": "Manual approximate grip landmarks; translation only, no scale/rotation/bitmap change. Single NE anchor when far grip is visually occluded. Measured residual is annotation fit, not proof of actual fingers touching."
+      "occluded_far_hand": true,
+      "method": "Approximate visible near-grip landmark with translation-only alignment. Far hand is occluded and unmeasured; no exact grip or final gait acceptance."
     },
     "push_contact_a_nw": {
       "manual_source_grip_centres": [
         [
-          787,
-          919
-        ],
-        [
-          925,
-          889
+          779,
+          932
         ]
       ],
       "manual_cart_grip_targets": [
         [
           1047,
           1088
-        ],
-        [
-          1197,
-          1018
         ]
       ],
       "translation_per_body_size": [
-        -0.009398745144939498,
-        0.0693513521769232
+        -0.02816037683925185,
+        0.08936011183785508
       ],
-      "estimated_residual_per_body_size": [
-        0.044066115266236605,
-        0.0440661152662366
-      ],
-      "method": "Manual approximate grip landmarks; translation only, no scale/rotation/bitmap change. Single NE anchor when far grip is visually occluded. Measured residual is annotation fit, not proof of actual fingers touching."
+      "occluded_far_hand": true,
+      "method": "Approximate visible near-grip landmark with translation-only alignment. Far hand is occluded and unmeasured; no exact grip or final gait acceptance."
     },
     "push_passing_a_se": {
       "manual_source_grip_centres": [
@@ -1479,7 +1443,7 @@
       "method": "Translation-only alignment to the prior approximate near-grip anchor. Far grip and natural gait/grounding not accepted; no claim of zero geometric residual or exact source-pixel preservation by generation."
     }
   },
-  "registration_revision": 3,
+  "registration_revision": 4,
   "nw_low_walk_revision": {
     "sources": "assets/characters/ruan_xiaoqi_nw_walk_20261018/prompt_set.json",
     "sha256": "0ec8dbfbb4985a15596d9408a70757c53068997426fbe1422dfdb87627fe790a",
@@ -1492,5 +1456,24 @@
     ],
     "native_resource_receipt": "D:\\CodexEvidence\\shuihu\\ruan_xiaoqi_nw_walk_20261018\\native_comparison\\20261018_061900_f2f96a94\\receipt.json",
     "native_resource_receipt_sha256": "af5ab236973e966d1c67ee2d7ee5de55de319d31490546f926069f6d75b14c35"
+  },
+  "grip_revision": {
+    "source_document": "assets/characters/ruan_xiaoqi_grip_sources_20261018/prompt_set.json",
+    "sha256": "4eb92a1b6fbdbbe9500bffe70c82ceb20e9080389613d2f7692669aaa0f91444",
+    "selected": {
+      "idle_padding": [
+        "se",
+        "sw",
+        "ne",
+        "nw"
+      ],
+      "contact_a_rear": [
+        "ne",
+        "nw"
+      ]
+    },
+    "resource_receipt": "D:\\CodexEvidence\\shuihu\\ruan_xiaoqi_grip_20261018\\native_comparison\\20261018_070646_9e766660\\receipt.json",
+    "resource_receipt_sha256": "de2ff1bc047e50b47710cacfe36257a8f68ddfc0ab9261571157f1511b810c9a",
+    "scope": "Six selected poses; all other18 and fixed cart retained. Other walk grip/gait/continuity remain open. All old generation requests retained."
   }
 }
