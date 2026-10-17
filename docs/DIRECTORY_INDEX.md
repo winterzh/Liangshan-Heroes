@@ -1,3 +1,9 @@
+## 2026-10-18 阮小七分层资源候选
+
+- `assets/characters/ruan_xiaoqi_layer_fixes_20261018/`：9修稿原图/完整请求/15视图观察。
+- `assets/characters/ruan_xiaoqi_layered_20261018/`、`assets/direction4/level1_ruan_xiaoqi_layered_20261018.json`、`assets/anim/ruan_xiaoqi_layered_20261018_*.tres`：未注册的12人物PNG/24姿势/12资源，与原车共13纹理。
+- `tools/build_ruan_xiaoqi_layered_20261018.py`、`docs/RUAN_XIAOQI_LAYER_FIXES_20261018.md`、`qa/ruan_xiaoqi_layer_fixes_20261018/`：只读重现、来源和待验工程接续。
+
 ## 2026-10-18 阮小七分层人物修稿
 
 - `assets/characters/ruan_xiaoqi_pushcart_layer_sources_20261018/`：12原图含拒收稿、完整提示/31引用与10仓库绑定/逐格边界。

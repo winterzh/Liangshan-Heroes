@@ -1,3 +1,7 @@
+## 阮小七分层资源候选（2026-10-18）
+
+新家族`ruan_xiaoqi_layered_20261018`未注册，生产仍8a95f674。只读`python -X utf8 -B tools/build_ruan_xiaoqi_layered_20261018.py`重现24姿势/12资源；本轮没有新原生通过。独立导入/画面对照工程已冻结，待共享引擎自然空闲按[接续入口](../qa/ruan_xiaoqi_layer_fixes_20261018/native_gate.json)对同一prepared收据运行，不重建、不清别人锁。
+
 ## 阮小七独立人物修稿（2026-10-18）
 
 新稿在`assets/characters/ruan_xiaoqi_pushcart_layer_sources_20261018/`隔离，生产仍8a95f674运行家族。只读`python -X utf8 -B tools/inspect_ruan_xiaoqi_pushcart_layers_20261018.py`核12PNG/39格和仓库引用，不能当运行或步态通过。两个独立原生美术预览的配置/脚本/3图绑定/4原图/日志见[QA](../qa/ruan_xiaoqi_pushcart_layer_sources_20261018/README.md)，重现须新工程外目录和串行引擎，不改旧冻结工程。
