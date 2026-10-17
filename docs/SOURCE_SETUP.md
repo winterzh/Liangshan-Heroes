@@ -1,3 +1,7 @@
+## 阮小七推车来源检查（2026-10-18）
+
+只读`python -X utf8 -B tools/verify_ruan_xiaoqi_pushcart_sources_20261018.py`当前167项通过：5原PNG/11引用/20选格，待机整图BL alpha1及5px间隔保留，不代替原生过滤/步态。原稿.gdignore隔离，尚未接入，启动方式不变。NTFS压缩只改变435已列文件的存储表示，SHA/长/mtime均保持，另有两份旧测试模板压缩失败，后改为已验证的同盘硬链接保留原路径/字节；恢复副本须复制到新文件再替换，不得经链接写模板。禁止把外部PCK当新导出；[范围与容量检查](RUAN_XIAOQI_PUSHCART_SOURCES_20261018.md)。
+
 ## 阮小五推车原生接入（2026-10-18）
 
 当前已启用，实际三包链原生1389项/118图通过，162纹理及6806冻结来源核对。只读`python -X utf8 -B tools/build_ruan_xiaowu_pushcart_20261017.py`重现资源；新原生批使用同名run入口及当前完整收据/保留提交，新工作目录、Godot自然空闲串行。原未启用候选/内存失败与恢复为历史，不再重复应用candidate_routes.patch。[真实范围和包链](RUAN_XIAOWU_PUSHCART_20261017.md)。

@@ -1,3 +1,9 @@
+## 2026-10-18 阮小七推车原稿/可逆存储压缩
+
+- `assets/characters/ruan_xiaoqi_pushcart_sources_20261018/`：5原PNG与完整prompt_set，11引用/20视图，.gdignore隔离。
+- `tools/verify_ruan_xiaoqi_pushcart_sources_20261018.py`、`docs/RUAN_XIAOQI_PUSHCART_SOURCES_20261018.md`、`qa/ruan_xiaoqi_pushcart_sources_20261018/`：只读来源检查、原著/补足与原生待办。
+- `qa/art_storage_compression_20261018/`：435文件NTFS压缩前后字节/元数据、快照与外部原日志索引；无删除/移动/像素编辑。
+
 ## 2026-10-18 阮小五推车接入验收
 
 - `scripts/campaign_art.gd`、`scripts/unit.gd`：严格阮小五/黄泥冈携货资格。
