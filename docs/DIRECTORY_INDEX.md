@@ -1,3 +1,9 @@
+## 2026-10-18 江州车独立轮来源
+
+- `assets/characters/tribute_cart_wheel_layers_20261018/`：去轮车身/独立木轮2原PNG/8视图、完整请求/引用SHA、近似轮毂与原车变换，.gdignore隔离，未采用。
+- `qa/tribute_cart_wheel_layers_20261018/`：来源几何/25运行16保护81无关保持、旧未执行快照和当前显式size索引修正版3纹理/10冻结文件待验工程，精确接续native_gate。
+- `docs/TRIBUTE_CART_WHEEL_LAYERS_20261018.md`：原著/解释、非等分轮选区、静态合成/真实滚动及生产接入仍未完成的边界。
+
 ## 2026-10-18 阮小七十四行走握把候选
 
 - `assets/characters/ruan_xiaoqi_walk_grips_20261018/`：11内置原PNG/完整请求与引用SHA，9四向+2单SW共38视图，6原图选择14姿势；退稿保留，.gdignore隔离。

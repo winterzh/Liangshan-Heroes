@@ -1,3 +1,7 @@
+## 江州车独立木轮待验（2026-10-18）
+
+新两份去轮车身/独立轮原稿隔离在`assets/characters/tribute_cart_wheel_layers_20261018/`，无运行引用；旧财物车/人物/启动方式保持。[QA native_gate](../qa/tribute_cart_wheel_layers_20261018/native_gate.json)指定当前显式size索引修正版精确prepared工程，先完成已排队阮小七十四姿势，再串行运行3纹理静态合成并直接看四图。未解析/未运行，不是轮转或实际关卡通过；旧prepared快照不执行，不删外来锁。[说明](TRIBUTE_CART_WHEEL_LAYERS_20261018.md)。main/Steam保持。
+
 ## 十四行走握把候选接续（2026-10-18）
 
 新修稿尚未采用，生产仍上批六姿势/180纹理；只读生成器重现旧24姿势/12资源，不把其历史硬编码false或PNG计数当当前状态。第二版准备40冻结文件/10纹理，具体继续命令在[QA native_gate](../qa/ruan_xiaoqi_walk_grips_20261018/native_gate.json)，等共享Godot自然空闲，不删外来锁。先完成精确prepared原生和四图直看，再执行第二版受控接入，然后新实际游戏/导出补丁/真实身份验收；首版120结构项不能转记第二版或新游戏通过。[实现与原著限定](RUAN_XIAOQI_WALK_GRIPS_20261018.md)。启动方式未变，main/Steam保持。
