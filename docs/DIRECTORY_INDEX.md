@@ -1,3 +1,10 @@
+## 2026-10-18 骑乘来源与独立轮面原生
+
+- `assets/characters/gongsun_sheng_mounted_sources_20261018/`：11原字节PNG、完整提示/19引用SHA、第54回依据、.gdignore隔离；5候选/5退稿/1待修，未采用。
+- `tools/verify_gongsun_sheng_mounted_sources_20261018.py`与`qa/gongsun_sheng_mounted_sources_20261018/`：来源135项/2整格角失败保留，44视图目检与prepared20选区/5纹理/33文件；原生未运行。
+- `qa/tribute_cart_wheel_motion_20261018/native/`：完整新31项/9图/7直看/12冻结与导入设置、实际执行器、2代表图；首CRLF→LF漂移失败另在`native_first_failed/`，未改为通过。
+- `docs/GONGSUN_SHENG_MOUNTED_SOURCES_20261018.md`和轮面说明区分候选、独立原生与实际游戏采用；本地范围圈候选不列为已验生产文件。
+
 ## 2026-10-18 十四行走姿势采用与独立轮辐原型
 
 - `assets/characters/ruan_xiaoqi_layered_20261018/`新增6原字节人物PNG/6导入描述，制作/运行两清单及4行走TRES更新；14新姿势采用，10旧保持。
