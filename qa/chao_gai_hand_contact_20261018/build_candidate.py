@@ -1,4 +1,4 @@
-"""Reproduce the unrouted fixed-scale Chao actor/cart family, without PNG edits."""
+"""Verify the authored fixed-scale Chao family; never rewrite existing PNGs."""
 from pathlib import Path
 import argparse
 import copy
@@ -111,9 +111,13 @@ def main():
         assert sha(ROOT / row['path']) == row['sha256']
     for name, content in outputs.items():
         assert (ROOT / name).read_bytes() == content.encode('utf-8')
+    routed = ('res://assets/anim/' + FAMILY + '_%s_%s.tres') in (
+        ROOT / 'scripts/campaign_art.gd').read_text(encoding='utf-8')
     print(json.dumps({'actor_pngs': len(manifest['sources'])-1, 'shared_cart_pngs': 1,
                       'resources': len(outputs), 'poses': len(manifest['poses']),
-                      'runtime_adopted': False, 'complete_gait_accepted': False}))
+                      'runtime_route_enabled': routed,
+                      'authoring_manifest_runtime_adopted': manifest['runtime_adopted'],
+                      'complete_gait_accepted': False}))
 
 
 if __name__ == '__main__':

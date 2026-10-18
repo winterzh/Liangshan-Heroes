@@ -1,0 +1,26 @@
+extends SceneTree
+## External QA, loaded only after the real package's autoloads are ready.
+func _initialize() -> void:
+	run.call_deferred()
+
+func run() -> void:
+	var path := OS.get_environment("HG_WORKER").replace("\\", "/").simplify_path()
+	var allowed := OS.get_environment("HG_WORKER_ROOT").replace("\\", "/").simplify_path()
+	var manifest_path := OS.get_environment("HG_QA_BINDINGS")
+	if OS.get_environment("STEAM_DISABLED") != "1" or allowed.is_empty() or path.get_base_dir() != allowed:
+		push_error("HG_PRIVATE_WORKER_SCOPE"); quit(2); return
+	var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(manifest_path))
+	for relative in manifest:
+		if relative not in ["base.gd", "legacy.gd", "identity.gd", "live.gd", "world.gd", "cold_carried.gd", "legacy_reject.gd"]:
+			push_error("HG_UNKNOWN_QA_INPUT"); quit(2); return
+		if FileAccess.get_sha256(allowed.path_join(relative)) != manifest[relative]:
+			push_error("HG_QA_INPUT_CHANGED"); quit(2); return
+	if not manifest.has(path.get_file()):
+		push_error("HG_UNBOUND_WORKER"); quit(2); return
+	var script: Script = load(path)
+	if script == null or not script.can_instantiate():
+		push_error("HG_WORKER_LOAD"); quit(2); return
+	var worker: Variant = script.new()
+	if not worker is Node:
+		push_error("HG_REAL_TREE_NODE_REQUIRED"); quit(2); return
+	root.add_child(worker)

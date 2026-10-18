@@ -1,0 +1,132 @@
+extends Node
+## Command driver only. All gameplay, Unit, map, clock and serializers are the
+## actual installed resources; no substitutes or injected content identities.
+var checks: Array = []
+var failures: Array = []
+var orders := 0
+var trusted: Dictionary = {}
+var root: Window:
+	get: return get_tree().root
+var current_scene: Node:
+	get: return get_tree().current_scene
+	set(value): get_tree().current_scene = value
+
+func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	var profile := OS.get_environment("ART_QA_PROFILE").replace("\\", "/").simplify_path()
+	var safe: bool = profile.is_absolute_path() and DirAccess.dir_exists_absolute(profile)
+	for key in ["APPDATA", "LOCALAPPDATA", "TEMP", "TMP"]:
+		safe = safe and OS.get_environment(key).replace("\\", "/").simplify_path().to_lower() == (profile + "/" + key.to_lower()).to_lower()
+	if not safe or OS.get_environment("STEAM_DISABLED") != "1" or OS.get_environment("CAMPAIGN_QA") != "1":
+		push_error("HG_FOUR_PRIVATE_ROOTS_REQUIRED"); quit(2); return
+	_run.call_deferred()
+
+func _run() -> void:
+	push_error("HG_WORKER_NOT_IMPLEMENTED"); quit(2)
+
+func quit(code := 0) -> void:
+	get_tree().quit(code)
+
+func check(ok: bool, label: String) -> void:
+	checks.append({"label": label, "passed": ok})
+	if not ok: failures.append(label)
+	print("HG ", "PASS " if ok else "FAIL ", label)
+
+func alive(unit: Variant) -> bool:
+	return is_instance_valid(unit) and unit.hp > 0.0 and unit.story_outcome == ""
+
+func identity(expected_source_mode := false) -> bool:
+	trusted = load("res://scripts/run_content_identity.gd").new().resolve_runtime_identity()
+	check(trusted.get("ok", false) and trusted.get("save_eligible", false) and trusted.get("source_mode", not expected_source_mode) == expected_source_mode,
+		"real executed identity resolves in requested source/package mode")
+	if not trusted.get("ok", false):
+		print("IDENTITY ", trusted); return false
+	if not expected_source_mode:
+		var expected: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(OS.get_environment("HG_EXPECTED_IDENTITY")))
+		var script: Script = load("res://scripts/run_build_identity.gd")
+		var actual: Dictionary = script.get_script_constant_map().IDENTITY
+		check(not script.has_source_code(), "build identity is actual exported bytecode")
+		check(JSON.parse_string(JSON.stringify(actual)) == expected, "full compiled input manifest matches frozen exporter output")
+		check(trusted.content_version == "source-v1:" + expected.source_sha256, "Provider uses actual exported source identity")
+		check(trusted.engine_binary_sha256 == OS.get_environment("HG_EXPECTED_EXE_SHA"), "executed Windows release EXE matches pinned original template")
+		check(not OS.has_feature("editor"), "actual export release runtime, not editor engine")
+	return failures.is_empty()
+
+func _start(mode := "", index := 0) -> Node:
+	var campaign: Variant = root.get_node("Campaign")
+	campaign.current = index
+	for key in ["skirmish", "skirmish_ai", "arena", "scenario", "custom_defense", "scale_on", "ai_friendly"]:
+		campaign.set(key, false)
+	if mode != "": campaign.set(mode, true)
+	root.get_node("Settings").auto_micro_level = 0
+	seed(5088120)
+	var battle: Variant = load("res://scenes/main.tscn").instantiate()
+	root.add_child(battle); current_scene = battle
+	await get_tree().process_frame
+	battle.hud._intro_root.hide()
+	battle._on_intro_done()
+	battle._on_start_battle()
+	return battle
+
+func _dispose(battle: Node) -> void:
+	battle.queue_free()
+	await get_tree().process_frame
+	await get_tree().process_frame
+
+func _wait(seconds: float) -> void:
+	await get_tree().create_timer(seconds).timeout
+
+func _click(battle: Variant, units: Array, cell: Vector2i, amove := false) -> void:
+	battle.select_members(units, false)
+	battle.minimap_order(battle.map.cell_to_world(cell), amove)
+	orders += 1
+
+func _action(battle: Variant, unit: Variant, action_id: String) -> void:
+	if not alive(unit) or not battle.mission.actions.has(action_id): return
+	if battle.mission.actions[action_id].done or battle.mission.active_action_id == action_id: return
+	_click(battle, [unit], battle.mission.actions[action_id].cell)
+
+func report(extra: Dictionary = {}) -> void:
+	var value := {"passed": failures.is_empty(), "checks": checks, "failures": failures,
+		"orders": orders, "trusted_identity": trusted, "pid": OS.get_process_id(),
+		"native_steam_account_tested": false, "production_updated": false}
+	value.merge(extra, true)
+	var file := FileAccess.open(OS.get_environment("HG_REPORT"), FileAccess.WRITE)
+	if file == null:
+		push_error("HG_REPORT_UNWRITABLE"); quit(2); return
+	file.store_string(JSON.stringify(value, "\t")); file.close()
+	quit(0 if value.passed else 1)
+
+func dump_fixture_slot(slot_name: String, destination: String) -> Array:
+	# Only this task's explicit fixture slot, after a successful complete commit.
+	if slot_name not in ["hg_legacy3", "hg_transport_world"] or not destination.is_absolute_path(): return []
+	var output_root := OS.get_environment("HG_OUTPUT_ROOT").replace("\\", "/").simplify_path()
+	var resolved_destination := destination.replace("\\", "/").simplify_path()
+	if not output_root.is_absolute_path() or not resolved_destination.to_lower().begins_with(output_root.to_lower() + "/"): return []
+	if DirAccess.dir_exists_absolute(resolved_destination) or FileAccess.file_exists(resolved_destination): return []
+	var source := OS.get_user_data_dir().path_join(slot_name)
+	var profile := OS.get_environment("ART_QA_PROFILE").replace("\\", "/").simplify_path()
+	if not source.replace("\\", "/").to_lower().begins_with(profile.to_lower() + "/"): return []
+	var pending: Array[String] = [""]
+	var copied: Array = []
+	while not pending.is_empty():
+		var relative: String = pending.pop_back()
+		var directory := DirAccess.open(source.path_join(relative))
+		if directory == null: return []
+		for name in directory.get_directories():
+			if name == "writing" or name == "recovering": return []
+			pending.append(relative.path_join(name))
+		for name in directory.get_files():
+			if name.get_extension() != "json": return []
+			var item := relative.path_join(name)
+			var target := destination.path_join(item)
+			if DirAccess.make_dir_recursive_absolute(target.get_base_dir()) != OK: return []
+			var data := FileAccess.get_file_as_bytes(source.path_join(item))
+			var file := FileAccess.open(target, FileAccess.WRITE)
+			if file == null: return []
+			file.store_buffer(data); file.close()
+			var before := FileAccess.get_sha256(source.path_join(item))
+			var after := FileAccess.get_sha256(target)
+			if before != after: return []
+			copied.append({"path": item, "bytes": data.size(), "sha256": before})
+	return copied

@@ -1,3 +1,11 @@
+## 2026-10-18 晁盖握把本地采用与新完整包
+
+- scripts/unit.gd、scripts/campaign_art.gd：精确采用已验候选，只扩展晁盖独立人物/固定车，保留阮小七严格所属路径。启动入口不变。
+- qa/chao_gai_layered_full_pack_20261018/：完整导出来源/编译身份、168项/45图、正式程序30帧与480帧正常对照、所有失败原日志、采用SHA与106文件新基线。原80/16/81清单保留，前者只声明2项有意变化。
+- qa/huangnigang_transport_arrival_path_20261018/stale_after_chao_adoption.json及旧完整包同名marker：旧候选须重基，不能覆盖已采用unit。PCK、EXE、DLL、profile仍在工程外。
+
+以下保留历史目录交接。
+
 ## 2026-10-18 晁盖逐阶段握把资源与原生候选
 
 - qa/chao_gai_hand_contact_20261018/：掌心/木杆标注、完整可复现资源builder、两份脚本接入候选、首44/8fail与后继资源48项/8图、真实Unit120项/33图及恢复收据；尚未PCK或生产采用。
