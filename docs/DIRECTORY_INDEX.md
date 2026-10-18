@@ -1,3 +1,10 @@
+## 2026-10-19 分层剑臂浏览器组装与后视姿势调整
+
+- qa/gongsun_sheng_mounted_draw_20261019/browser_models/：v2/v3静态来源模型，只有数据、无Godot驱动；供已执行浏览器重放工具使用。
+- 同目录render_browser_rig.py：隔离浏览器静态来源组装，--model可只依赖已同步canonical_source重放；不是原生执行器。
+- browser_review/：九张目检图及原SVG/PNG/日志/图层精确归档，独立模型重放回执、视觉范围与保护后验；无浏览器profile缓存。
+- rig_v1/v2/v3及Godot准备脚本仍本地待验，不纳入本批同步；当前仅原v2一条原生等待队列。
+
 ## 2026-10-19 公孙胜取剑/回鞘分层原稿
 
 - qa/gongsun_sheng_mounted_draw_20261019/native_originals/：八份内置原稿，六分层候选及两份不选原稿；无生产采用。

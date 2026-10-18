@@ -1,0 +1,70 @@
+{
+  "reviewed_browser_frames": 9,
+  "cases": [
+    {
+      "case": "browser_rig_v2",
+      "directly_viewed": [
+        {
+          "file": "idle.png",
+          "sha256": "e892691be23f2537e8446ed740eb6a6b645a8364193e1ed699ca998cbf6a1b3a"
+        },
+        {
+          "file": "clear.png",
+          "sha256": "f62296ff92fc694ae9a2cfb142d0ba8eb4328bdb8d5c44abd212c9a96760c1c6"
+        },
+        {
+          "file": "point.png",
+          "sha256": "71a7f181277f23c7b86672a32f3926231331e55311d6886cd2cf286e15c7f7d1"
+        }
+      ]
+    },
+    {
+      "case": "browser_rig_v3",
+      "directly_viewed": [
+        {
+          "file": "idle.png",
+          "sha256": "d05dd07e0e8c787761f4b4b36c2a1a30157d5fc92dfe8d720c1ff8cbd31576c9"
+        },
+        {
+          "file": "clear.png",
+          "sha256": "f62296ff92fc694ae9a2cfb142d0ba8eb4328bdb8d5c44abd212c9a96760c1c6"
+        },
+        {
+          "file": "point.png",
+          "sha256": "f0fd0857e01386543b1be0d5362c3cdc679896b990d551b1f3e6b97a28b36024"
+        }
+      ]
+    },
+    {
+      "case": "browser_rig_v3_detail",
+      "directly_viewed": [
+        {
+          "file": "approach.png",
+          "sha256": "a85e810c334a7197a9fadf1022d0ec71199bcd4fdd0437d09cddba8940444d3d"
+        },
+        {
+          "file": "sweep.png",
+          "sha256": "d2829f232217873e113a2b0cd1c6aa6d2cc697875105a56b33157b50e0d22286"
+        },
+        {
+          "file": "release.png",
+          "sha256": "2e54c99c6473f4e743e50dabb5317988f1d4c6b4fd6a7862c885586145f1e95e"
+        }
+      ]
+    }
+  ],
+  "observed": [
+    "v2 rear idle sleeve folds across the back; rear pointed sword close to horse ears.",
+    "v3 moves rear idle hand forward, uses a quadratic grasp/release approach and raises rear pointed sword by 20 source units.",
+    "v3 idle/clear/point and approach/sweep/release frames all directly viewed; no gross body rescaling or extra sword introduced in those frames."
+  ],
+  "scope": "Own isolated browser, static horse, no reins, selected static poses only. The clear.svg timestamp 2.4 may display segment name partial_out because of floating boundary rounding, while its interpolation reaches the clear endpoint; raw files kept unchanged.",
+  "limitations": [
+    "Not Godot parsing/import/native render, moving horse/reins, continuous human motion, physical grip or full swept clearance.",
+    "Joint/cuff appearance, anatomical arm path, hidden hand, actual Unit/chapter/package/performance and adoption remain open."
+  ],
+  "standalone_public_model_replay_images_exactly_match": true,
+  "native_executed": false,
+  "production_adopted": false,
+  "full_goal_complete": false
+}

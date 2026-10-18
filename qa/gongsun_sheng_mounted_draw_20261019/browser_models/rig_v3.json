@@ -1,0 +1,1143 @@
+{
+  "candidate": "rig_v3",
+  "scope": "Static browser source-layer model only; no Godot driver or native acceptance.",
+  "inputs": {
+    "scope": "Articulated sword-draw/return v3: browser-source review led to rear idle hand repositioning, quadratic grasp/release approach and raised rear-view pointed sword. Prior frozen candidates retained. Manual source-anchor model only; not physical grip, full swept clearance, native/Unit/chapter/package/performance or final visual adoption acceptance.",
+    "textures": {
+      "body": {
+        "file": "images/body.png",
+        "canonical_source": "qa/gongsun_sheng_horse_rig_sources_20261019/native_originals/body_no_tail_v1.png",
+        "sha256": "c2a4142bc617acaadc4e9141cde08cdcc09fccdf9c45b57369f9fd5e53ca6c8f",
+        "rgba8_sha256": "85a866ba25fb025bad5f2e3d7fd77389f1a127440eba1023cbe1687f64ee6b17"
+      },
+      "fore_upper": {
+        "file": "images/fore_upper.png",
+        "canonical_source": "qa/gongsun_sheng_horse_rig_sources_20261019/native_originals/fore_upper_v2.png",
+        "sha256": "29e5fb37a1aaeda5ddd208d845674756b142a7df181991d7b58aab3ba95b77ba",
+        "rgba8_sha256": "c934a121eb498154643a2b281eadc0bc328d07074a7d2182baba215c2e05ce24"
+      },
+      "fore_lower": {
+        "file": "images/fore_lower.png",
+        "canonical_source": "qa/gongsun_sheng_horse_rig_sources_20261019/native_originals/fore_shin_v2.png",
+        "sha256": "5cada0adfbc368f57b0c7cc51aed3da56414a4453bbbbe504353640112a66ae4",
+        "rgba8_sha256": "85608928e74efd56fb5603f947b1b4ec01dfd2a4dd20a2dc51525d5f4f5baee0"
+      },
+      "hind_upper": {
+        "file": "images/hind_upper.png",
+        "canonical_source": "qa/gongsun_sheng_horse_rig_sources_20261019/native_originals/hind_upper_v2.png",
+        "sha256": "28e75af6d9249974a0af8dd186460c9d69a4218be173928334b8bbb1c3c70277",
+        "rgba8_sha256": "f17149257af26e0345f466defb54ecfcd647166588e3baf43fcc6b3fe45cbbfd"
+      },
+      "hind_lower": {
+        "file": "images/hind_lower.png",
+        "canonical_source": "qa/gongsun_sheng_horse_rig_sources_20261019/native_originals/hind_shin_v1.png",
+        "sha256": "f698e04458a085b36ebfb47d54fcde2648e0723543cc0c8d18c8407a63b008d4",
+        "rgba8_sha256": "5c29cf2803bb733ed4705c004c38ac2440db6aa5a715334292eb9296ccd5da3f"
+      },
+      "hoof": {
+        "file": "images/hoof.png",
+        "canonical_source": "qa/gongsun_sheng_horse_rig_sources_20261019/native_originals/hoof_v1.png",
+        "sha256": "a4de7c50124d326b6bbe2f2239d66f76ca7f5a0dba051a8edd5218e96aa8ae83",
+        "rgba8_sha256": "72d6194e1ce750dfbd2244c3372e0f64e8d809c64aa9cca7b8b0560b5af4061e"
+      },
+      "tail": {
+        "file": "images/tail.png",
+        "canonical_source": "qa/gongsun_sheng_horse_rig_sources_20261019/native_originals/tail_v1.png",
+        "sha256": "d16c08b88ef47a94953a01f84aee559a639b62117eeaf98847b815cb7f9e84ce",
+        "rgba8_sha256": "d21690be94d23950a021ea85cc315944ce64c6c5ec663c643a2aa6067f626398"
+      },
+      "rein_material_v1": {
+        "canonical_source": "qa/gongsun_sheng_mounted_layers_20261018/native_originals/rein_material_v1.png",
+        "file": "images/rein_material_v1.png",
+        "sha256": "32807c77dca5ef80ed1b1b728d6b5526d4f866ad3a222fe40cccbb49f61d15d1",
+        "rgba8_sha256": "124d6697fc57778c4b4c1c6e6284fe91cb467860e4b0057d195d1b1fde308a22"
+      },
+      "torso": {
+        "canonical_source": "qa/gongsun_sheng_mounted_draw_20261019/native_originals/torso_v1.png",
+        "file": "images/torso.png",
+        "sha256": "192e9cc3e7877f21c350110ea64a48055be3bd827b9d9afa8cfa6c02b97d8da3",
+        "rgba8_sha256": "ce77fcb72b9c19bc050002bb469fc9df1609047ad66dd23a73f295c4d9e01aa3"
+      },
+      "upper_arm": {
+        "canonical_source": "qa/gongsun_sheng_mounted_draw_20261019/native_originals/upper_arm_v2.png",
+        "file": "images/upper_arm.png",
+        "sha256": "0109121257a4de0814b61cf3f6cea0c478a5329c442cbed53442a5090b5e63c4",
+        "rgba8_sha256": "091b84e3387ed121d88602e3bcfcc758b1ae0ec8300d64cc2035f52f808ad9f0"
+      },
+      "forearm": {
+        "canonical_source": "qa/gongsun_sheng_mounted_draw_20261019/native_originals/forearm_v1.png",
+        "file": "images/forearm.png",
+        "sha256": "9cbd0eae93788b33b2e82651f445b44bfff1ff4fe6bb1daf2e4660edee6212ea",
+        "rgba8_sha256": "3cf272df9b5c58a094973365d840ed746c2d23dd9745dc4da534a86a9e662674"
+      },
+      "hand": {
+        "canonical_source": "qa/gongsun_sheng_mounted_draw_20261019/native_originals/hand_v1.png",
+        "file": "images/hand.png",
+        "sha256": "e742213e106c70eb184d80aebb59c4aac367064e155dbc701a81450bab5b5b8b",
+        "rgba8_sha256": "c324f9b6b0ef276daffc87e2eb17c704d6770484a49f11757e7d99bd061f25b0"
+      },
+      "sword": {
+        "canonical_source": "qa/gongsun_sheng_mounted_draw_20261019/native_originals/sword_v1.png",
+        "file": "images/sword.png",
+        "sha256": "5b2a45e2d834b360c9ef3c209c9c7dd9bab4720b97aa482610d9084adadc1884",
+        "rgba8_sha256": "e0bf589d97ac7b0990c78523e2262e877c3086c25e4bedd35efd178f7d18dfd6"
+      },
+      "scabbard": {
+        "canonical_source": "qa/gongsun_sheng_mounted_draw_20261019/native_originals/scabbard_v1.png",
+        "file": "images/scabbard.png",
+        "sha256": "9357b6aba67db223cdc24be768ec72ae4672b90155bcb2cb4f4c33ca3b78ec59",
+        "rgba8_sha256": "e70492d602a3d6b34c9414544998e7691855aafc363e47d44cd6af3e76bcf799"
+      }
+    },
+    "anchors": {
+      "fore_upper": [
+        [
+          [
+            290,
+            140
+          ],
+          [
+            435,
+            555
+          ]
+        ],
+        [
+          [
+            335,
+            140
+          ],
+          [
+            220,
+            555
+          ]
+        ],
+        [
+          [
+            305,
+            140
+          ],
+          [
+            360,
+            545
+          ]
+        ],
+        [
+          [
+            340,
+            140
+          ],
+          [
+            320,
+            545
+          ]
+        ]
+      ],
+      "fore_lower": [
+        [
+          [
+            365,
+            125
+          ],
+          [
+            375,
+            495
+          ]
+        ],
+        [
+          [
+            275,
+            125
+          ],
+          [
+            275,
+            495
+          ]
+        ],
+        [
+          [
+            350,
+            115
+          ],
+          [
+            355,
+            475
+          ]
+        ],
+        [
+          [
+            275,
+            115
+          ],
+          [
+            285,
+            475
+          ]
+        ]
+      ],
+      "hind_upper": [
+        [
+          [
+            325,
+            165
+          ],
+          [
+            312,
+            495
+          ]
+        ],
+        [
+          [
+            305,
+            165
+          ],
+          [
+            350,
+            495
+          ]
+        ],
+        [
+          [
+            315,
+            150
+          ],
+          [
+            325,
+            480
+          ]
+        ],
+        [
+          [
+            330,
+            150
+          ],
+          [
+            325,
+            480
+          ]
+        ]
+      ],
+      "hind_lower": [
+        [
+          [
+            390,
+            125
+          ],
+          [
+            375,
+            510
+          ]
+        ],
+        [
+          [
+            270,
+            125
+          ],
+          [
+            275,
+            510
+          ]
+        ],
+        [
+          [
+            365,
+            120
+          ],
+          [
+            350,
+            480
+          ]
+        ],
+        [
+          [
+            285,
+            120
+          ],
+          [
+            285,
+            480
+          ]
+        ]
+      ]
+    },
+    "views": [
+      {
+        "direction": "se",
+        "near_side": "R",
+        "fore_root": [
+          435,
+          402
+        ],
+        "hind_root": [
+          185,
+          405
+        ],
+        "floor_y": 620
+      },
+      {
+        "direction": "sw",
+        "near_side": "L",
+        "fore_root": [
+          204,
+          402
+        ],
+        "hind_root": [
+          483,
+          405
+        ],
+        "floor_y": 620
+      },
+      {
+        "direction": "ne",
+        "near_side": "R",
+        "fore_root": [
+          465,
+          330
+        ],
+        "hind_root": [
+          188,
+          320
+        ],
+        "floor_y": 550
+      },
+      {
+        "direction": "nw",
+        "near_side": "L",
+        "fore_root": [
+          165,
+          330
+        ],
+        "hind_root": [
+          447,
+          320
+        ],
+        "floor_y": 550
+      }
+    ],
+    "source_basis": "qa/gongsun_sheng_mounted_topology_20261018/source_basis.json",
+    "bbox_fitting_per_phase": false,
+    "native_qualified": false,
+    "production_adopted": false,
+    "hoof_scale": 0.245,
+    "hoof_anchors": [
+      {
+        "attach": [
+          370,
+          480
+        ],
+        "left": [
+          315,
+          590
+        ],
+        "right": [
+          365,
+          590
+        ]
+      },
+      {
+        "attach": [
+          275,
+          485
+        ],
+        "left": [
+          280,
+          590
+        ],
+        "right": [
+          335,
+          590
+        ]
+      },
+      {
+        "attach": [
+          350,
+          455
+        ],
+        "left": [
+          305,
+          560
+        ],
+        "right": [
+          355,
+          560
+        ]
+      },
+      {
+        "attach": [
+          300,
+          460
+        ],
+        "left": [
+          310,
+          563
+        ],
+        "right": [
+          365,
+          563
+        ]
+      }
+    ],
+    "neutral_body_rise": 16.0,
+    "rein": {
+      "texture": "rein_material_v1",
+      "sample_region": [
+        96,
+        600,
+        1060,
+        54
+      ],
+      "width_native": 4,
+      "sag_native": 16,
+      "segments": 24,
+      "paired_reins": true,
+      "note": "Raw PNG retained; faint alpha1 dust outside used strip is not sampled. Material is an imagegen-painted bitmap; canvas/native runtime only deforms that texture."
+    },
+    "torso_scale": 0.7,
+    "hand_scale": 0.1,
+    "blade_length": 136.0,
+    "scabbard_length": 148.0,
+    "upper_length": 100.0,
+    "fore_length": 100.0,
+    "arm_views": [
+      {
+        "direction": "se",
+        "body_waist": [
+          316,
+          298
+        ],
+        "waist_target": [
+          280,
+          260
+        ],
+        "rein_hand": [
+          414,
+          315
+        ],
+        "rein_hand_is_hidden_proxy": false,
+        "manual_registration_uncertainty_source_pixels": 15,
+        "shoulder": [
+          239.4,
+          203.3
+        ],
+        "mouth": [
+          216,
+          185
+        ],
+        "out": [
+          -0.33,
+          -0.9439809320108113
+        ],
+        "sword": {
+          "guard": [
+            333,
+            468
+          ],
+          "tip": [
+            333,
+            42
+          ],
+          "grip": [
+            333,
+            525
+          ]
+        },
+        "scabbard": {
+          "mouth": [
+            314,
+            90
+          ],
+          "tip": [
+            321,
+            550
+          ]
+        },
+        "hand": {
+          "wrist": [
+            250,
+            370
+          ],
+          "grip": [
+            440,
+            340
+          ]
+        },
+        "upper_arm": [
+          [
+            200,
+            280
+          ],
+          [
+            430,
+            480
+          ]
+        ],
+        "forearm": [
+          [
+            200,
+            230
+          ],
+          [
+            460,
+            510
+          ]
+        ],
+        "rest_hand": [
+          350,
+          280
+        ],
+        "bit": [
+          539,
+          288
+        ],
+        "keys": [
+          {
+            "label": "idle",
+            "guard": [
+              216,
+              185
+            ],
+            "angle": 1.2344927516409163
+          },
+          {
+            "label": "grip",
+            "guard": [
+              216,
+              185
+            ],
+            "angle": 1.2344927516409163
+          },
+          {
+            "label": "partial_out",
+            "guard": [
+              196.2,
+              128.36114407935133
+            ],
+            "angle": 1.2344927516409163
+          },
+          {
+            "label": "clear",
+            "guard": [
+              168.48,
+              49.06674579044318
+            ],
+            "angle": 1.2344927516409163
+          },
+          {
+            "label": "carry",
+            "guard": [
+              350,
+              65
+            ],
+            "angle": -0.3489418269508823
+          },
+          {
+            "label": "point",
+            "guard": [
+              402.10053044285075,
+              153.77831764738832
+            ],
+            "angle": -0.3489418269508823
+          },
+          {
+            "label": "return_carry",
+            "guard": [
+              350,
+              65
+            ],
+            "angle": -0.3489418269508823
+          },
+          {
+            "label": "return_clear",
+            "guard": [
+              168.48,
+              49.06674579044318
+            ],
+            "angle": 1.2344927516409163
+          },
+          {
+            "label": "partial_in",
+            "guard": [
+              196.2,
+              128.36114407935133
+            ],
+            "angle": 1.2344927516409163
+          },
+          {
+            "label": "seated_grip",
+            "guard": [
+              216,
+              185
+            ],
+            "angle": 1.2344927516409163
+          },
+          {
+            "label": "idle_return",
+            "guard": [
+              216,
+              185
+            ],
+            "angle": 1.2344927516409163
+          }
+        ],
+        "hand_approach_control": [
+          360,
+          150
+        ]
+      },
+      {
+        "direction": "sw",
+        "body_waist": [
+          311,
+          298
+        ],
+        "waist_target": [
+          354,
+          260
+        ],
+        "rein_hand": [
+          288,
+          327
+        ],
+        "rein_hand_is_hidden_proxy": false,
+        "manual_registration_uncertainty_source_pixels": 15,
+        "shoulder": [
+          393.2,
+          203.3
+        ],
+        "mouth": [
+          416,
+          185
+        ],
+        "out": [
+          0.33,
+          -0.9439809320108113
+        ],
+        "sword": {
+          "guard": [
+            292,
+            468
+          ],
+          "tip": [
+            292,
+            42
+          ],
+          "grip": [
+            292,
+            525
+          ]
+        },
+        "scabbard": {
+          "mouth": [
+            313,
+            90
+          ],
+          "tip": [
+            306,
+            550
+          ]
+        },
+        "hand": {
+          "wrist": [
+            415,
+            380
+          ],
+          "grip": [
+            225,
+            340
+          ]
+        },
+        "upper_arm": [
+          [
+            430,
+            280
+          ],
+          [
+            200,
+            480
+          ]
+        ],
+        "forearm": [
+          [
+            430,
+            230
+          ],
+          [
+            175,
+            510
+          ]
+        ],
+        "rest_hand": [
+          282,
+          280
+        ],
+        "bit": [
+          105,
+          288
+        ],
+        "keys": [
+          {
+            "label": "idle",
+            "guard": [
+              416,
+              185
+            ],
+            "angle": 1.907099901948877
+          },
+          {
+            "label": "grip",
+            "guard": [
+              416,
+              185
+            ],
+            "angle": 1.907099901948877
+          },
+          {
+            "label": "partial_out",
+            "guard": [
+              435.8,
+              128.36114407935133
+            ],
+            "angle": 1.907099901948877
+          },
+          {
+            "label": "clear",
+            "guard": [
+              463.52,
+              49.06674579044318
+            ],
+            "angle": 1.907099901948877
+          },
+          {
+            "label": "carry",
+            "guard": [
+              282,
+              65
+            ],
+            "angle": -2.792650826638911
+          },
+          {
+            "label": "point",
+            "guard": [
+              229.89946955714922,
+              153.77831764738835
+            ],
+            "angle": -2.792650826638911
+          },
+          {
+            "label": "return_carry",
+            "guard": [
+              282,
+              65
+            ],
+            "angle": -2.792650826638911
+          },
+          {
+            "label": "return_clear",
+            "guard": [
+              463.52,
+              49.06674579044318
+            ],
+            "angle": 1.907099901948877
+          },
+          {
+            "label": "partial_in",
+            "guard": [
+              435.8,
+              128.36114407935133
+            ],
+            "angle": 1.907099901948877
+          },
+          {
+            "label": "seated_grip",
+            "guard": [
+              416,
+              185
+            ],
+            "angle": 1.907099901948877
+          },
+          {
+            "label": "idle_return",
+            "guard": [
+              416,
+              185
+            ],
+            "angle": 1.907099901948877
+          }
+        ],
+        "hand_approach_control": [
+          272,
+          150
+        ]
+      },
+      {
+        "direction": "ne",
+        "body_waist": [
+          322,
+          258
+        ],
+        "waist_target": [
+          325,
+          190
+        ],
+        "rein_hand": [
+          403,
+          273
+        ],
+        "rein_hand_is_hidden_proxy": false,
+        "manual_registration_uncertainty_source_pixels": 15,
+        "shoulder": [
+          379.6,
+          133.3
+        ],
+        "mouth": [
+          310,
+          150
+        ],
+        "out": [
+          -0.33,
+          -0.9439809320108113
+        ],
+        "sword": {
+          "guard": [
+            338,
+            425
+          ],
+          "tip": [
+            338,
+            25
+          ],
+          "grip": [
+            338,
+            490
+          ]
+        },
+        "scabbard": {
+          "mouth": [
+            305,
+            80
+          ],
+          "tip": [
+            340,
+            550
+          ]
+        },
+        "hand": {
+          "wrist": [
+            300,
+            360
+          ],
+          "grip": [
+            425,
+            290
+          ]
+        },
+        "upper_arm": [
+          [
+            200,
+            245
+          ],
+          [
+            440,
+            400
+          ]
+        ],
+        "forearm": [
+          [
+            210,
+            190
+          ],
+          [
+            480,
+            470
+          ]
+        ],
+        "rest_hand": [
+          455,
+          210
+        ],
+        "bit": [
+          580,
+          231
+        ],
+        "keys": [
+          {
+            "label": "idle",
+            "guard": [
+              310,
+              150
+            ],
+            "angle": 1.2344927516409163
+          },
+          {
+            "label": "grip",
+            "guard": [
+              310,
+              150
+            ],
+            "angle": 1.2344927516409163
+          },
+          {
+            "label": "partial_out",
+            "guard": [
+              290.2,
+              93.36114407935132
+            ],
+            "angle": 1.2344927516409163
+          },
+          {
+            "label": "clear",
+            "guard": [
+              262.48,
+              14.066745790443179
+            ],
+            "angle": 1.2344927516409163
+          },
+          {
+            "label": "carry",
+            "guard": [
+              405,
+              -5
+            ],
+            "angle": -0.3489418269508823
+          },
+          {
+            "label": "point",
+            "guard": [
+              505.76814420888326,
+              72.44393051123609
+            ],
+            "angle": -0.3489418269508823
+          },
+          {
+            "label": "return_carry",
+            "guard": [
+              405,
+              -5
+            ],
+            "angle": -0.3489418269508823
+          },
+          {
+            "label": "return_clear",
+            "guard": [
+              262.48,
+              14.066745790443179
+            ],
+            "angle": 1.2344927516409163
+          },
+          {
+            "label": "partial_in",
+            "guard": [
+              290.2,
+              93.36114407935132
+            ],
+            "angle": 1.2344927516409163
+          },
+          {
+            "label": "seated_grip",
+            "guard": [
+              310,
+              150
+            ],
+            "angle": 1.2344927516409163
+          },
+          {
+            "label": "idle_return",
+            "guard": [
+              310,
+              150
+            ],
+            "angle": 1.2344927516409163
+          }
+        ],
+        "hand_approach_control": [
+          460,
+          40
+        ]
+      },
+      {
+        "direction": "nw",
+        "body_waist": [
+          312,
+          258
+        ],
+        "waist_target": [
+          315,
+          190
+        ],
+        "rein_hand": [
+          418,
+          280
+        ],
+        "rein_hand_is_hidden_proxy": true,
+        "manual_registration_uncertainty_source_pixels": 15,
+        "shoulder": [
+          266.7,
+          133.3
+        ],
+        "mouth": [
+          335,
+          150
+        ],
+        "out": [
+          0.33,
+          -0.9439809320108113
+        ],
+        "sword": {
+          "guard": [
+            287,
+            425
+          ],
+          "tip": [
+            287,
+            25
+          ],
+          "grip": [
+            287,
+            490
+          ]
+        },
+        "scabbard": {
+          "mouth": [
+            322,
+            80
+          ],
+          "tip": [
+            287,
+            550
+          ]
+        },
+        "hand": {
+          "wrist": [
+            400,
+            350
+          ],
+          "grip": [
+            220,
+            290
+          ]
+        },
+        "upper_arm": [
+          [
+            430,
+            245
+          ],
+          [
+            190,
+            400
+          ]
+        ],
+        "forearm": [
+          [
+            420,
+            190
+          ],
+          [
+            160,
+            470
+          ]
+        ],
+        "rest_hand": [
+          190,
+          210
+        ],
+        "bit": [
+          105,
+          231
+        ],
+        "keys": [
+          {
+            "label": "idle",
+            "guard": [
+              335,
+              150
+            ],
+            "angle": 1.907099901948877
+          },
+          {
+            "label": "grip",
+            "guard": [
+              335,
+              150
+            ],
+            "angle": 1.907099901948877
+          },
+          {
+            "label": "partial_out",
+            "guard": [
+              354.8,
+              93.36114407935132
+            ],
+            "angle": 1.907099901948877
+          },
+          {
+            "label": "clear",
+            "guard": [
+              382.52,
+              14.066745790443179
+            ],
+            "angle": 1.907099901948877
+          },
+          {
+            "label": "carry",
+            "guard": [
+              240,
+              -5
+            ],
+            "angle": -2.792650826638911
+          },
+          {
+            "label": "point",
+            "guard": [
+              139.23185579111674,
+              72.44393051123609
+            ],
+            "angle": -2.792650826638911
+          },
+          {
+            "label": "return_carry",
+            "guard": [
+              240,
+              -5
+            ],
+            "angle": -2.792650826638911
+          },
+          {
+            "label": "return_clear",
+            "guard": [
+              382.52,
+              14.066745790443179
+            ],
+            "angle": 1.907099901948877
+          },
+          {
+            "label": "partial_in",
+            "guard": [
+              354.8,
+              93.36114407935132
+            ],
+            "angle": 1.907099901948877
+          },
+          {
+            "label": "seated_grip",
+            "guard": [
+              335,
+              150
+            ],
+            "angle": 1.907099901948877
+          },
+          {
+            "label": "idle_return",
+            "guard": [
+              335,
+              150
+            ],
+            "angle": 1.907099901948877
+          }
+        ],
+        "hand_approach_control": [
+          180,
+          40
+        ]
+      }
+    ]
+  }
+}
