@@ -1,3 +1,10 @@
+## 2026-10-19 公孙胜取剑/回鞘分层原稿
+
+- qa/gongsun_sheng_mounted_draw_20261019/native_originals/：八份内置原稿，六分层候选及两份不选原稿；无生产采用。
+- 同目录prompt_set.json、source_inspection.json、source_preservation.json：精确参数/输入来源、只读四格边界/RGBA与129/16/81保护后验。
+- native_pending_at_source_sync.json：本次原稿同步时单一等待队列的真实进程快照，不作为后续活跃或原生通过凭据。
+- 本地rig_v1/rig_v2与准备脚本仍在进行中，未完成实际验证，本次源码同步暂不纳入。
+
 ## 2026-10-19 公孙胜骑手/缰绳合成到完整坐骑
 
 - qa/gongsun_sheng_mounted_assembly_20261019/：完整坐骑上的骑手/原绘缰绳首轮四向合成，十张既有来源、固定注册、84项/六图，非生产资源。
