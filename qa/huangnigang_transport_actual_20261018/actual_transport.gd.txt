@@ -1,0 +1,179 @@
+extends SceneTree
+## Native component prototype. The wine sequence is explicitly bypassed by a
+## fixture; every tested load/delivery uses real mission dispatch and callback.
+var checks: Array = []
+var captures: Array = []
+var failures: Array = []
+var trusted: Dictionary = {}
+var battle: Variant = null
+var output := ""
+
+func _initialize() -> void:
+	output = OS.get_environment("HG_ACTUAL_OUT")
+	run.call_deferred()
+
+func check(label: String, passed: bool) -> bool:
+	checks.append({"label": label, "passed": passed})
+	if not passed:
+		failures.append(label)
+		print("FAIL ", label)
+	return passed
+
+func graph_capture(label: String) -> bool:
+	await process_frame
+	var ids: Dictionary = {}
+	for unit in battle.units_root.get_children(true):
+		ids[unit] = str(unit.entity_id)
+	var graph: Variant = load("res://scripts/run_unit_graph.gd").new(
+		load("res://scripts/run_unit_state.gd"), load("res://scripts/run_graph_identity.gd"),
+		load("res://scripts/run_state_value_codec.gd"), load("res://scripts/unit.gd"),
+		load("res://scripts/hero_inventory.gd"), load("res://scripts/battle.gd"),
+		load("res://scripts/game_map.gd"), load("res://scripts/run_official_restore_profile.gd").HG_CONTEXT)
+	var result: Dictionary = graph.capture(battle, ids, trusted.content_version, null,
+		{"mission_token": "mission:level1:component-prototype", "deferred_drained": true})
+	var summary := {"label": label, "ok": result.get("ok", false),
+		"code": result.get("code", "OK"), "field": result.get("field", "")}
+	captures.append(summary)
+	print("CAPTURE ", summary)
+	if result.get("ok", false):
+		var file := FileAccess.open(output.get_base_dir().path_join(label + "_graph.json"), FileAccess.WRITE)
+		file.store_string(JSON.stringify({"graph": result.value, "level_record": result.level_record}, "\t"))
+		file.close()
+	return check(label + ": real graph capture and internal validation", result.get("ok", false))
+
+func perform(action_id: String, actor_key: String) -> bool:
+	var mission: Variant = battle.mission
+	if not check(action_id + ": registered", mission.actions.has(action_id)):
+		return false
+	var actor: Variant = battle.find_unit(actor_key)
+	if not check(action_id + ": real living actor", is_instance_valid(actor) and actor.hp > 0):
+		return false
+	var row: Dictionary = mission.actions[action_id]
+	# Fixture positioning isolates callback semantics from pathfinding. This does
+	# not establish player path reachability or the wine sequence.
+	actor.position = battle.map.cell_to_world(row.cell)
+	battle.select_single(actor, false)
+	if not check(action_id + ": real fixture dispatch accepted", mission.request_action(action_id)):
+		return false
+	mission.tick(1.0)
+	return check(action_id + ": real mission completed before callback", row.done)
+
+func cart_count() -> int:
+	var result: int = 0
+	for cart in battle.level.jujube_carts:
+		if is_instance_valid(cart) and cart.visible:
+			result += 1
+	result += battle.level.cargo.size()
+	for i in range(7):
+		if bool(battle.level.cargo_ready.get(i, false)) and battle.units.has(battle.level.bundles[i]):
+			result += 1
+	return result
+
+func run() -> void:
+	if not check("private Steam-disabled QA environment", OS.get_environment("STEAM_DISABLED") == "1" and OS.get_environment("CAMPAIGN_QA") == "1"):
+		finish(); return
+	trusted = load("res://scripts/run_content_identity.gd").new().resolve_runtime_identity()
+	if not check("actual source identity resolved", trusted.get("ok", false) and trusted.get("save_eligible", false) and trusted.get("source_mode", false)):
+		print("IDENTITY ", trusted); finish(); return
+	var profiles: Variant = load("res://scripts/run_official_restore_profile.gd")
+	var campaign: Variant = root.get_node("Campaign")
+	for key in profiles.HG_FLAGS:
+		campaign.set(key, profiles.HG_FLAGS[key])
+	campaign.ai_friendly = false
+	var menu: Variant = load("res://scenes/menu.tscn").instantiate()
+	root.add_child(menu)
+	current_scene = menu
+	await process_frame
+	menu._launch()
+	for i in range(180):
+		await process_frame
+		if current_scene != null and current_scene.get_script() == load("res://scripts/battle.gd"):
+			battle = current_scene
+			break
+	if not check("real menu launched actual Huangnigang", battle != null and battle.level.get_script() == load("res://scripts/levels/level1_huangnigang_short.gd")):
+		finish(); return
+	battle.hud._intro_root.hide()
+	battle.hud.intro_done.emit()
+	if battle.phase == battle.Phase.DEPLOY:
+		battle.hud.start_battle.emit()
+	for i in range(12):
+		await physics_frame
+	await process_frame
+	if not check("actual fight started", battle.phase == battle.Phase.FIGHT):
+		finish(); return
+	paused = true
+	var level: Variant = battle.level
+	var model: Variant = load("res://scripts/huangnigang_transport.gd")
+	check("eleven independently deployed real load nodes", level.bundles.size() == 11)
+	var seen: Dictionary = {}
+	for i in range(level.bundles.size()):
+		var unit: Variant = level.bundles[i]
+		check("load %d has unique real entity ID and world membership" % i, not seen.has(unit.entity_id) and battle.units.has(unit) and unit.get_parent() == battle.units_root)
+		seen[unit.entity_id] = true
+	check("seven original empty date carts only", level.jujube_carts.size() == 7 and cart_count() == 7)
+	if not await graph_capture("initial_eleven_loads"):
+		finish(); return
+	# Explicit fixture: spawn the remaining authored escort nodes and place them
+	# at their rest points; invoke their real nonlethal outcome. No wine claim.
+	while level.convoy.size() < 15:
+		level._spawn_next_convoy_member(battle)
+	for i in range(15):
+		var guard: Variant = level.convoy[i]
+		guard.position = battle.map.cell_to_world(level._convoy_rest_cell(i))
+		guard.resolve_story("unconscious")
+	for i in range(11):
+		level.bundles[i].position = battle.map.cell_to_world(level.LOAD_REST_CELLS[i])
+	level._ensure_bai(battle, true)
+	level.st = level.CARRY
+	level.drug_done = true
+	level.wine_step = "done"
+	battle.mission.mark("drugged", "QA fixture: wine sequence bypassed; real convoy unconscious")
+	level._begin_cargo_choice(battle)
+	check("seven initial load actions", battle.mission.actions.size() == 7)
+	for i in range(7):
+		check("cart %d only its original Star; excludes Bai Sheng" % i, battle.mission.actions["force_take_%d_0" % i].actors == [model.owner(i)])
+		if not perform("force_take_%d_0" % i, model.owner(i)):
+			finish(); return
+		check("cart %d real carried metadata and conserved cart count" % i, level.cargo.get(i) == battle.find_unit(model.owner(i)) and battle.find_unit(model.owner(i)).get_meta("carrying_tribute", -1) == i and cart_count() == 7)
+	check("all eleven loads stowed, seven separate carriers", level.cargo.size() == 7 and level.bundles.all(func(u): return not battle.units.has(u) and not u.visible and u.process_mode == Node.PROCESS_MODE_DISABLED))
+	if not await graph_capture("seven_carts_carried"):
+		finish(); return
+	# Real damage -> died signal -> Battle callback -> Level drop; no direct
+	# cargo dictionary mutation. This is a failure-recovery branch, not novel plot.
+	var lost: Variant = battle.find_unit("ruan_xiaoqi")
+	lost.take_damage(lost.max_hp * 1000.0, null, false, true)
+	check("real death drops cart six without duplication", lost.hp <= 0 and not level.cargo.has(6) and battle.units.has(level.bundles[6]) and not lost.has_meta("carrying_tribute") and cart_count() == 7)
+	check("drop increments only its attempt, replacement action registered", int(level.force_attempts.get(6, 0)) == 1 and battle.mission.actions.has("force_take_6_1"))
+	if not await graph_capture("cart_six_dropped"):
+		finish(); return
+	if not perform("force_deliver_0_0", "chao_gai"):
+		finish(); return
+	check("first two loads do not finish old three-target route", level.delivered == 2 and level.st == level.CARRY)
+	check("survivor eligible after completing own cart", battle.mission.actions["force_take_6_1"].actors.has("chao_gai") and not battle.mission.actions["force_take_6_1"].actors.has("bai_sheng"))
+	if not perform("force_take_6_1", "chao_gai") or not perform("force_deliver_6_1", "chao_gai"):
+		finish(); return
+	check("three delivered loads still require remaining five carts", level.delivered == 3 and level.st == level.CARRY and level._delivered_cart_indices(battle).size() == 2)
+	check("repeat completed delivery rejected without score change", not battle.mission.request_action("force_deliver_6_1") and level.delivered == 3 and cart_count() == 7)
+	if not await graph_capture("three_loads_not_finished"):
+		finish(); return
+	for i in range(1, 6):
+		if not perform("force_deliver_%d_0" % i, model.owner(i)):
+			finish(); return
+		if i < 5:
+			check("partial delivery %d cannot finish" % i, level.st == level.CARRY and level.delivered < 11)
+	check("exactly seven cart events and eleven loads unlock regroup", level.delivered == 11 and level._delivered_cart_indices(battle).size() == 7 and level.st == level.WITHDRAW and cart_count() == 7)
+	if not await graph_capture("seven_carts_eleven_delivered"):
+		finish(); return
+	finish()
+
+func finish() -> void:
+	var report := {"passed": failures.is_empty(), "checks": checks, "failures": failures,
+		"captures": captures, "trusted_identity": trusted,
+		"fixture_shortcuts": ["convoy rest positioning", "wine bypassed", "actor positioning", "native mission request_action dispatch"],
+		"actual_level_instantiated": battle != null, "full_wine_sequence_tested": false,
+		"full_world_save_restore_tested": false, "player_pathfinding_tested": false,
+		"rendered_ui_tested": false, "new_pack_exported": false}
+	var file := FileAccess.open(output, FileAccess.WRITE)
+	file.store_string(JSON.stringify(report, "\t")); file.close()
+	print("HG_ACTUAL_REPORT ", checks.size(), " checks; failures ", failures.size())
+	quit(0 if failures.is_empty() else 1)
