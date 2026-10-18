@@ -1,3 +1,12 @@
+## 2026-10-19 当前接续入口
+
+- qa/wu_yong_layered_full_pack_20261019/：完整PCK6+174项、45图/25目检、正常release480帧、精确两文件采用、当前129运行基线。
+- qa/wu_yong_push_gait_20261018/actual_unit_v2/：后继实景144项/33图，33张直接查看；原失败保留。
+- qa/gongsun_sheng_mounted_layers_20261018/actual_native_v3/：原生资源59项/四向网格全目检，未Unit/动作采用。
+- qa/gongsun_sheng_mounted_walk_20261019/：5份内置原PNG/精确提示与QA关节图，SE两接触稿暂选，三退稿；未全步态采用。
+
+下方“准备/等待/106不变”等保留原批历史，当前以本节及对应新收据为准。
+
 ## 2026-10-18 吴用首轮失败与后继夹具
 
 - qa/wu_yong_push_gait_20261018/unit_attempt_1/：首轮冷导入日志、实景meta错误、原驱动/生成身份/失败收据，原样留存。

@@ -202,6 +202,7 @@ static func native_tribute_push_path(key: String, variant: String, state: String
 	if state not in ["push_idle", "push_walk", "parked_cart"]: return ""
 	if key == "ruan_xiaoqi": return "res://assets/anim/ruan_xiaoqi_layered_20261018_%s_%s.tres" % [state, direction]
 	if key == "chao_gai": return "res://assets/anim/chao_gai_layered_20261018_%s_%s.tres" % [state, direction]
+	if key == "wu_yong": return "res://assets/anim/wu_yong_layered_20261018_%s_%s.tres" % [state, direction]
 	return "res://assets/anim/%s_pushcart_20261017_%s_%s.tres" % [key, state, direction]
 
 
