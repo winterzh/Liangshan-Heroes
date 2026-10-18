@@ -1,3 +1,9 @@
+## 2026-10-18 吴用握把候选与骑乘恢复原稿
+
+- qa/wu_yong_hand_contact_20261018/：体量标定、掌心标注、43项原生/8图，待机返修原PNG/准确工具提示及19项最终原生/4图；旧准备缺陷、面板显示限制和所有原始记录保留。archive_index绑定原路径/SHA，均未生产采用。
+- qa/gongsun_sheng_mounted_hurt_sources_20261018/native_originals/sheathed_recover_v1.png：第4份原字节骑乘受击家族来源；提示/输入SHA/静态评议见同目录，未原生或接入。
+- qa/wu_yong_layered_sources_20261018/：原11份图及旧14文件准备原样保留，README链接新比较；不可把新43项回填成旧准备通过。
+
 ## 2026-10-18 晁盖握把本地采用与新完整包
 
 - scripts/unit.gd、scripts/campaign_art.gd：精确采用已验候选，只扩展晁盖独立人物/固定车，保留阮小七严格所属路径。启动入口不变。

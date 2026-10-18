@@ -1,0 +1,69 @@
+extends SceneTree
+var checks: Array=[]
+var failures: Array=[]
+func check(ok: bool,label: String)->void:
+	checks.append({"passed":ok,"label":label})
+	if not ok: failures.append(label)
+func _initialize()->void: run.call_deferred()
+func run()->void:
+	if OS.get_environment("STEAM_DISABLED")!="1" or OS.get_environment("CAMPAIGN_QA")!="1": quit(2);return
+	root.size=Vector2i(1024,1024)
+	var stage:=Stage.new();stage.data=JSON.parse_string(FileAccess.get_file_as_string("res://inputs.json"))
+	var native: Dictionary={}
+	for key in stage.data.textures:
+		var row: Dictionary=stage.data.textures[key]
+		var tex: Texture2D=load("res://"+String(row.file))
+		check(tex!=null and tex.get_size()==Vector2(1254,1254),"texture size "+key)
+		check(FileAccess.get_sha256("res://"+String(row.file))==row.sha256,"raw PNG "+key)
+		if tex==null:continue
+		stage.textures[key]=tex
+		var im:=tex.get_image()
+		if im.is_compressed():check(im.decompress()==OK,"decompress "+key)
+		check(im.get_format()==Image.FORMAT_RGBA8,"RGBA8 "+key)
+		var base:=HashingContext.new();base.start(HashingContext.HASH_SHA256);base.update(im.get_data().slice(0,1254*1254*4))
+		var base_hash:=base.finish().hex_encode()
+		check(base_hash==row.rgba8_sha256,"original native pixels "+key)
+		check(im.get_pixel(0,0).a==0 and im.get_pixel(1253,0).a==0 and im.get_pixel(0,1253).a==0 and im.get_pixel(1253,1253).a==0,"transparent native corners "+key)
+		var full:=HashingContext.new();full.start(HashingContext.HASH_SHA256);full.update(im.get_data())
+		native[key]={"rgba8_sha256":base_hash,"data_sha256":full.finish().hex_encode(),"mipmaps":im.has_mipmaps()}
+	root.add_child(stage)
+	var images: Array=[]
+	for direction in ["se","sw","ne","nw"]:
+		stage.direction=direction;stage.queue_redraw()
+		for i in range(4):await process_frame
+		await RenderingServer.frame_post_draw
+		var file: String="idle_repair_"+direction+".png"
+		check(root.get_texture().get_image().save_png("res://"+file)==OK,"capture "+direction);images.append(file)
+	FileAccess.open("res://report.json",FileAccess.WRITE).store_string(JSON.stringify({"resource_preview_complete":failures.is_empty(),"checks":checks,"failures":failures,"screenshots":images,"texture_references":native,"contact_accepted":false,"actual_game_unit_tested":false,"production_adopted":false,"scope":stage.data.scope},"\t"))
+	quit(0 if failures.is_empty() else 1)
+class Stage extends Node2D:
+	var data: Dictionary
+	var textures: Dictionary={}
+	var direction: String="se"
+	func label(at: Vector2,value: String)->void:draw_string(ThemeDB.fallback_font,at,value,HORIZONTAL_ALIGNMENT_LEFT,-1,17,Color.WHITE)
+	func paint(key: String,pose: Dictionary)->void:
+		var rr: Array=pose.region;var r:=Rect2(rr[0],rr[1],rr[2],rr[3]);var pp: Array=pose.pivot_native
+		var sc: float=160.0/float(pose.virtual_canvas_reference)
+		draw_texture_rect_region(textures[key],Rect2((r.position-Vector2(pp[0],pp[1]))*sc,r.size*sc),r)
+	func _draw()->void:
+		draw_rect(Rect2(0,0,1024,1024),Color("24231f"))
+		var view: Dictionary=data.views[direction];var cart: Dictionary=view.cart_pose
+		for row in range(2):
+			for col in range(2):
+				var at:=Vector2(col*512,row*512)
+				label(at+Vector2(14,26),direction+" / "+("OLD REGISTERED IDLE" if col==0 else "EDITED IDLE CANDIDATE"))
+				var fit: Dictionary=view.fit
+				var center:=Vector2.ZERO
+				for t in view.cart_targets:center+=Vector2(t[0]-cart.pivot_native[0],t[1]-cart.pivot_native[1])*160.0/float(cart.virtual_canvas_reference)
+				center/=view.cart_targets.size()
+				if row==0:draw_set_transform(at+Vector2(fit.origin[0],fit.origin[1]),0,Vector2.ONE*float(fit.scale))
+				else:draw_set_transform(at+Vector2(256,250)-center*4.5,0,Vector2.ONE*4.5)
+				if direction in ["ne","nw"]:paint("cart",cart)
+				paint("old" if col==0 else "new",view.old_pose if col==0 else view.new_pose)
+				if direction in ["se","sw"]:paint("cart",cart)
+				for t in view.cart_targets:
+					var pos:=Vector2(t[0]-cart.pivot_native[0],t[1]-cart.pivot_native[1])*160.0/float(cart.virtual_canvas_reference)
+					draw_line(pos-Vector2(2,0),pos+Vector2(2,0),Color(0.1,1,0.3,0.65),0.4);draw_line(pos-Vector2(0,2),pos+Vector2(0,2),Color(0.1,1,0.3,0.65),0.4)
+				draw_set_transform(Vector2.ZERO)
+				if row==1:label(at+Vector2(12,470),"Both fixed cart targets; hidden hand NOT measured")
+				draw_rect(Rect2(at,Vector2(512,512)).grow(-1),Color("6a6555"),false,1)
