@@ -1,0 +1,41 @@
+{
+  "directly_viewed_pngs": [
+    "initial_eleven_loads_zh_CN.png",
+    "seven_carts_carried_zh_CN.png",
+    "seven_carts_carried_restored_zh_CN.png",
+    "two_carts_dropped_restored_zh_CN.png",
+    "seven_carts_eleven_delivered_restored_zh_CN.png",
+    "seven_carts_carried_en.png",
+    "seven_carts_carried_ja.png",
+    "seven_carts_carried_zh_TW.png",
+    "seven_carts_eleven_delivered_en.png"
+  ],
+  "rendered_ui_accepted": false,
+  "findings": [
+    {
+      "id": "CART_NAME_TRUNCATED",
+      "evidence": "seven_carts_eleven_delivered_en.png",
+      "detail": "New long cart names clip/ellipsize before the load count in the actual Unit 100px label."
+    },
+    {
+      "id": "CONCATENATED_NOTICE_MIXED_LANGUAGE",
+      "evidence": "seven_carts_carried_en.png",
+      "detail": "Recent take-cart and delivery action messages concatenate a translated name with separately formatted text and remain Chinese after locale switching."
+    },
+    {
+      "id": "WEST_MAP_BLACK_EDGE",
+      "evidence": "seven_carts_eleven_delivered_restored_zh_CN.png",
+      "detail": "Western exit camera includes a large black region outside the isometric map. Still open."
+    },
+    {
+      "id": "DENSE_NOTICES_AND_LABELS",
+      "evidence": "seven_carts_carried_zh_CN.png",
+      "detail": "Dense escort outcome labels and notice stack remain; fixture rendering does not establish normal play performance."
+    }
+  ],
+  "warnings": {
+    "GLES3_MSAA": true,
+    "restored_control_opposite_anchor_size": true,
+    "scope": "Warnings retained in raw log; no script or engine errors."
+  }
+}
