@@ -1,0 +1,16 @@
+extends Node
+func _ready() -> void:run.call_deferred()
+func run() -> void:
+	var files: Array=["scripts/levels/level1_huangnigang.gd","scripts/levels/level1_huangnigang_short.gd","scripts/run_campaign_level_state.gd","scripts/run_unit_graph.gd","scripts/run_unit_state.gd","scripts/run_official_restore_profile.gd","scripts/run_level1_world_factory.gd","scripts/huangnigang_transport.gd"]
+	var checks: Array=[];var failures: Array=[]
+	var ready:=get_tree().root.has_node("Art") and get_tree().root.has_node("Campaign")
+	checks.append({"name":"actual project autoloads initialized before candidate loads","passed":ready})
+	if not ready:failures.append("autoloads missing")
+	for name in files:
+		var resource=load("res://"+name)
+		var valid: bool=resource is Script and resource.can_instantiate()
+		checks.append({"name":name,"passed":valid})
+		if not valid:failures.append(name)
+	var file:=FileAccess.open(OS.get_environment("HG_TRANSPORT_COMPILE_OUT"),FileAccess.WRITE)
+	file.store_string(JSON.stringify({"checks":checks,"failures":failures,"passed":failures.is_empty(),"actual_level_tested":false,"runtime_classes_instantiated":false,"scope":"Load/compile exact candidate scripts only after actual project's autoload initialization. Not level deployment, save restore, art or exported PCK acceptance."},"  "));file.close()
+	get_tree().quit(0 if failures.is_empty() else 1)

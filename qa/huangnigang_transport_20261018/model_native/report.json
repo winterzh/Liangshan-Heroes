@@ -1,0 +1,86 @@
+{
+  "actual_level_or_save_acceptance": false,
+  "checks": [
+    {
+      "name": "all eleven distinct load identities are assigned exactly once",
+      "passed": true
+    },
+    {
+      "name": "seven named merchants handle carts; wine seller is not substituted",
+      "passed": true
+    },
+    {
+      "name": "all4^7 unloaded/ground/carried/delivered states conserve seven carts and eleven load identities",
+      "passed": true
+    },
+    {
+      "name": "only all seven delivered carts complete the eleven-load objective",
+      "passed": true
+    },
+    {
+      "name": "canonical carrier cannot borrow another cart owner",
+      "passed": true
+    },
+    {
+      "name": "explicit noncanonical survivor relay can retain the same cargo identities",
+      "passed": true
+    },
+    {
+      "name": "one actor cannot carry two carts simultaneously",
+      "passed": true
+    },
+    {
+      "name": "wine seller cannot become an eighth cart operator",
+      "passed": true
+    },
+    {
+      "name": "secondary load cannot masquerade as another cart",
+      "passed": true
+    },
+    {
+      "name": "same cart cannot be both carried and delivered",
+      "passed": true
+    },
+    {
+      "name": "unloaded cart cannot be credited as delivered",
+      "passed": true
+    },
+    {
+      "name": "duplicate delivery cannot double-count two loads",
+      "passed": true
+    },
+    {
+      "name": "false loaded flag is rejected rather than silently treated as packing",
+      "passed": true
+    },
+    {
+      "name": "eighth cart is rejected",
+      "passed": true
+    },
+    {
+      "name": "floating cart key is rejected",
+      "passed": true
+    },
+    {
+      "name": "missing eleventh raw load is rejected",
+      "passed": true
+    },
+    {
+      "name": "duplicate active load cannot stand in for another load",
+      "passed": true
+    },
+    {
+      "name": "packed secondary identities cannot remain visible as extra cargo",
+      "passed": true
+    },
+    {
+      "name": "outside load identity cannot enter the layout",
+      "passed": true
+    }
+  ],
+  "failures": [],
+  "passed": true,
+  "scope": "Pure GDScript transport contract only. No actual world, art, callbacks, save restoration or player entry acceptance.",
+  "state_failure_examples": [],
+  "states_tested": 16384
+}

@@ -1,0 +1,59 @@
+extends SceneTree
+const Model=preload("res://huangnigang_transport.gd")
+var failures: Array=[]
+var checks: Array=[]
+func check(ok: bool,name: String) -> void:
+	checks.append({"name":name,"passed":ok})
+	if not ok:failures.append(name)
+func _initialize() -> void:
+	var unique: Dictionary={}
+	for cart in range(7):
+		for load_index in Model.loads(cart):
+			if unique.has(load_index):failures.append("duplicate declared load")
+			unique[load_index]=true
+	check(unique.size()==11 and range(11).all(func(i):return unique.has(i)),"all eleven distinct load identities are assigned exactly once")
+	check(Model.OWNERS.size()==7 and not Model.OWNERS.has("bai_sheng"),"seven named merchants handle carts; wine seller is not substituted")
+	var state_failures: Array=[];var complete_states:=0
+	for encoded in range(16384):
+		var digits: Array=[];var value:=encoded
+		var loaded: Dictionary={};var carried: Dictionary={};var delivered: Array=[];var empty: Array=[]
+		var expected_delivered:=0;var expected_loaded_weight:=0
+		for cart in range(7):
+			var state: int=value%4;value=value/4;digits.append(state)
+			var independent_weight:=2 if cart<4 else 1
+			if state==0:empty.append(cart)
+			else:loaded[cart]=true;expected_loaded_weight+=independent_weight
+			if state==2:carried[cart]=["chao_gai","wu_yong","gongsun_sheng","liu_tang","ruan_xiaoer","ruan_xiaowu","ruan_xiaoqi"][cart]
+			if state==3:delivered.append(cart);expected_delivered+=independent_weight
+		var active: Array=[]
+		# Independent membership oracle, not calls to Model.loads/cart_for_load.
+		for load_index in range(11):
+			var parent: int=load_index if load_index<7 else load_index-7
+			if digits[parent]==0 or (load_index<7 and digits[parent] in [1,3]):active.append(load_index)
+		var result:=Model.validate_membership(loaded,carried,delivered,active,empty)
+		if not result.ok:state_failures.append(encoded);continue
+		if result.raw_loads.size()+expected_loaded_weight!=11 \
+			or result.empty_carts.size()+result.world_carts.size()+result.carried_carts.size()!=7 \
+			or result.stowed_loads.size()+active.size()!=11 \
+			or result.delivered_loads!=expected_delivered:state_failures.append(encoded)
+		if result.complete:complete_states+=1
+	check(state_failures.is_empty(),"all4^7 unloaded/ground/carried/delivered states conserve seven carts and eleven load identities")
+	check(complete_states==1,"only all seven delivered carts complete the eleven-load objective")
+	check(not Model.ledger({0:true},{0:"wu_yong"},[]).ok,"canonical carrier cannot borrow another cart owner")
+	check(Model.ledger({0:true},{0:"wu_yong"},[],true).ok,"explicit noncanonical survivor relay can retain the same cargo identities")
+	check(not Model.ledger({0:true,1:true},{0:"liu_tang",1:"liu_tang"},[],true).ok,"one actor cannot carry two carts simultaneously")
+	check(not Model.ledger({0:true},{0:"bai_sheng"},[],true).ok,"wine seller cannot become an eighth cart operator")
+	check(not Model.ledger({0:true},{7:"chao_gai"},[]).ok,"secondary load cannot masquerade as another cart")
+	check(not Model.ledger({0:true},{0:"chao_gai"},[0]).ok,"same cart cannot be both carried and delivered")
+	check(not Model.ledger({}, {},[0]).ok,"unloaded cart cannot be credited as delivered")
+	check(not Model.ledger({0:true},{},[0,0]).ok,"duplicate delivery cannot double-count two loads")
+	check(not Model.ledger({0:false},{},[]).ok,"false loaded flag is rejected rather than silently treated as packing")
+	check(not Model.ledger({7:true},{},[]).ok,"eighth cart is rejected")
+	check(not Model.ledger({0.0:true},{},[]).ok,"floating cart key is rejected")
+	check(not Model.validate_membership({}, {},[],range(10),range(7)).ok,"missing eleventh raw load is rejected")
+	check(not Model.validate_membership({}, {},[],range(11)+[0],range(7)).ok,"duplicate active load cannot stand in for another load")
+	check(not Model.validate_membership({0:true},{0:"chao_gai"},[],range(11),range(1,7)).ok,"packed secondary identities cannot remain visible as extra cargo")
+	check(Model.cart_for_load(-1)==-1 and Model.cart_for_load(11)==-1,"outside load identity cannot enter the layout")
+	var file:=FileAccess.open("res://report.json",FileAccess.WRITE)
+	file.store_string(JSON.stringify({"checks":checks,"failures":failures,"states_tested":16384,"state_failure_examples":state_failures.slice(0,12),"passed":failures.is_empty(),"actual_level_or_save_acceptance":false,"scope":"Pure GDScript transport contract only. No actual world, art, callbacks, save restoration or player entry acceptance."},"  "));file.close()
+	quit(0 if failures.is_empty() else 1)

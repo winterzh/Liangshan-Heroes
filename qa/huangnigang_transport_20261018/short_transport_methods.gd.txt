@@ -1,0 +1,144 @@
+func _tribute_load_count() -> int: return Transport.LOAD_COUNT
+func _tribute_load_name(index: int) -> String: return "生辰纲·第%d担" % (index+1)
+func campaign_core_goal() -> String: return "将十一担生辰纲装入七辆江州车，推车出冈并收拢同行好汉。"
+
+func _convoy_cargo_tick(b,delta: float) -> bool:
+	var arrived:=true
+	for index in range(bundles.size()):
+		if not is_instance_valid(bundles[index]):return false
+		if convoy.size()<=index+1:arrived=false;continue
+		var destination: Vector2=b.map.cell_to_world(LOAD_REST_CELLS[index])
+		var target:=destination
+		if bundles[index].position.x>b.map.cell_to_world(Vector2i(40,18)).x+1:target=b.map.cell_to_world(Vector2i(40,18))
+		elif bundles[index].position.x>b.map.cell_to_world(Vector2i(35,18)).x+1:target=b.map.cell_to_world(Vector2i(35,18))
+		bundles[index].position=bundles[index].position.move_toward(target,62.0*delta)
+		arrived=arrived and bundles[index].position.distance_to(destination)<1.0
+	return arrived
+
+func _cart_destination(index: int) -> Vector2i: return CART_EXIT_CELLS[index]
+
+func _transport_candidates(b,index: int) -> Array:
+	if not Transport.is_cart(index):return []
+	var responsible=b.find_unit(Transport.owner(index))
+	if is_instance_valid(responsible) and responsible.hp>0 and responsible.story_outcome=="":
+		return [responsible.key] if not responsible.has_meta("carrying_tribute") else []
+	return _available_force_carriers()
+
+func _available_force_carriers() -> Array:
+	var result: Array=[]
+	for actor in actors:
+		if is_instance_valid(actor) and actor.key in SEVEN and actor.hp>0 and actor.story_outcome=="" and not actor.has_meta("carrying_tribute"):result.append(actor.key)
+	return result
+
+func _bundle_claim_cell(b,index: int) -> Vector2i:
+	var action_id:="force_take_%d_%d" % [index,int(force_attempts.get(index,0))]
+	if b.mission.actions.has(action_id):return b.mission.actions[action_id].cell
+	var origin: Vector2i=b.map.world_to_cell(bundles[index].position)
+	for offset in [Vector2i(-2,0),Vector2i(0,-2),Vector2i(2,0),Vector2i(0,2),Vector2i(-4,0),Vector2i(0,-4),Vector2i(4,0),Vector2i(0,4)]:
+		var cell: Vector2i=b.map.nearest_open(origin+offset,"land")
+		var point: Vector2=b.map.cell_to_world(cell)
+		if b.units.any(func(u):return is_instance_valid(u) and u.position.distance_to(point)<36.0):continue
+		var conflict:=false
+		for pending_id in b.mission.actions:
+			var row: Dictionary=b.mission.actions[pending_id]
+			if not row.done and point.distance_to(b.map.cell_to_world(row.cell))<48.0:conflict=true;break
+		if not conflict:return cell
+	return super._bundle_claim_cell(b,index)
+
+func _set_force_carrier_eligible(b,_actor_key: String,_eligible: bool) -> void:
+	# Recompute exact owners; the inherited free-carrier updater would add a
+	# delivered hero to every other cart's allowed list and break seven operators.
+	for action_id in b.mission.actions:
+		if not String(action_id).begins_with("force_take_") or b.mission.actions[action_id].done:continue
+		var pieces: PackedStringArray=String(action_id).split("_")
+		if pieces.size()!=4:continue
+		var allowed: Array=_transport_candidates(b,int(pieces[2]))
+		if allowed.is_empty():allowed.append(NO_FORCE_CARRIER)
+		b.mission.update_action_actors(String(action_id),allowed)
+
+func _begin_cargo_choice(b) -> void:
+	cargo_plan="free"
+	b.mission.begin("cargo","弃枣装车 · 七车装十一担","七星各领一辆江州车。按车旁标记弃枣、装入指定财物，再右键西口标记推车出冈；白胜同行。车上载担数已标明，合计十一担。")
+	for index in range(Transport.CART_COUNT):_add_force_take(b,index)
+
+func _add_force_take(b,index: int) -> void:
+	if st not in [CARRY,FORCE] or not Transport.is_cart(index) or _cargo_was_delivered(b,index) or cargo.has(index):return
+	if not is_instance_valid(bundles[index]) or not b.units.has(bundles[index]):return
+	var allowed: Array=_transport_candidates(b,index)
+	if allowed.is_empty():allowed.append(NO_FORCE_CARRIER)
+	var verb: String="接手" if bool(cargo_ready.get(index,false)) else "装车"
+	b.mission.add_action("force_take_%d_%d"%[index,int(force_attempts.get(index,0))],Localize.format_text("%s · 第%d车（%d担）%s",[Localize.text(b._defs[Transport.owner(index)].name),index+1,Transport.weight(index),Localize.text(verb)]),_bundle_claim_cell(b,index),allowed,0.6,48)
+
+func _add_force_deliver(b,index: int,actor) -> void:
+	if st not in [CARRY,FORCE] or not Transport.is_cart(index) or not is_instance_valid(actor):return
+	b.mission.add_action("force_deliver_%d_%d"%[index,int(force_attempts.get(index,0))],Localize.text(actor.display_name)+Localize.format_text(" · 推第%d车（%d担）出冈",[index+1,Transport.weight(index)]),_cart_destination(index),[actor.key],0.6,64)
+
+func _force_take_cargo(b,action_id: String,actor,index: int) -> void:
+	if st not in [CARRY,FORCE] or not Transport.is_cart(index) or _cargo_was_delivered(b,index) or cargo.has(index) or not is_instance_valid(actor):return
+	if not _mission_action_done(b,action_id) or not _at(b,actor,_bundle_claim_cell(b,index),50):return
+	if actor.has_meta("carrying_tribute") or actor.key not in _transport_candidates(b,index):
+		_retry_action(b,action_id,"请由此车的七星同伴接手；一人不能同时推两辆车。")
+		return
+	if not bool(cargo_ready.get(index,false)):
+		for load_index in Transport.loads(index):
+			if not is_instance_valid(bundles[load_index]) or not b.units.has(bundles[load_index]):return
+		for load_index in Transport.loads(index):_pick_up_bundle(b,bundles[load_index])
+		cargo_ready[index]=true
+		if index<jujube_carts.size() and is_instance_valid(jujube_carts[index]):
+			var date_cart=jujube_carts[index];date_cart.hide()
+			b.show_campaign_environment_art(id(),"jujube_load","jujube_load",date_cart.position,54.0,-1.0)
+		b.mission.mark("dates_discarded_%d"%index,Localize.format_text("第%d车弃枣，装入%d担财物并遮盖。",[index+1,Transport.weight(index)]))
+	else:_pick_up_bundle(b,bundles[index])
+	cargo[index]=actor;actor.set_meta("carrying_tribute",index);actor.queue_redraw()
+	bundles[index].display_name="江州车·第%d车（%d担）"%[index+1,Transport.weight(index)]
+	_set_force_carrier_eligible(b,actor.key,false);actor.apply_slow(0.78,999)
+	b.mission.mark("force_taken_%d_%d"%[index,int(force_attempts.get(index,0))],Localize.text(actor.display_name)+Localize.format_text("推起第%d车，载%d担财物。",[index+1,Transport.weight(index)]))
+	_add_force_deliver(b,index,actor)
+
+func _force_deliver_cargo(b,action_id: String,actor,index: int) -> void:
+	if st not in [CARRY,FORCE] or not Transport.is_cart(index) or _cargo_was_delivered(b,index):return
+	if not _mission_action_done(b,action_id) or not cargo.has(index) or cargo[index]!=actor or actor.get_meta("carrying_tribute",-1)!=index:return
+	if not _at(b,actor,_cart_destination(index),66):return
+	actor.remove_meta("carrying_tribute");actor.queue_redraw();actor.apply_slow(1,0)
+	bundles[index].position=b.map.cell_to_world(_cart_destination(index));bundles[index].faction=Unit.FACTION_LIANG
+	_put_down_bundle(b,bundles[index]);cargo.erase(index);delivered+=Transport.weight(index)
+	_set_force_carrier_eligible(b,actor.key,true)
+	b.mission.mark("force_delivered_%d"%index,Localize.format_text("第%d车由%s推出黄泥冈，共载%d担。",[index+1,Localize.text(actor.display_name),Transport.weight(index)]))
+	if delivered==Transport.LOAD_COUNT and _delivered_cart_indices(b).size()==Transport.CART_COUNT:_begin_free_withdraw(b)
+
+func _delivered_cart_indices(b) -> Array:
+	var result: Array=[]
+	for index in range(Transport.CART_COUNT):
+		if _cargo_was_delivered(b,index):result.append(index)
+	return result
+
+func _drop_carried_bundle(b,actor) -> void:
+	var index: int=int(actor.get_meta("carrying_tribute",-1))
+	if not Transport.is_cart(index) or not cargo.has(index) or cargo[index]!=actor:return
+	bundles[index].position=b.map.cell_to_world(b.map.nearest_open(b.map.world_to_cell(actor.position),"land"))
+	_put_down_bundle(b,bundles[index]);cargo.erase(index);actor.remove_meta("carrying_tribute");actor.queue_redraw()
+	var notice: String=Localize.text(actor.display_name)+Localize.format_text("倒下，第%d车（%d担）留在原地，可由幸存七星接力。",[index+1,Transport.weight(index)])
+	_retire_cargo_delivery(b,index,int(force_attempts.get(index,0)),notice);force_attempts[index]=int(force_attempts.get(index,0))+1
+	b.mission.mark("force_drop_%d_%d"%[index,int(force_attempts[index])],notice)
+	if st==FORCE:_add_force_take(b,index)
+
+func _begin_free_withdraw(b) -> void:
+	if st==WITHDRAW:return
+	st=WITHDRAW
+	b.mission.begin("withdraw","七车十一担已到 · 收拢同行人","七辆江州车已推出冈口。让七星与白胜一起到西口，可完成全员生还目标；先行收队仍需你实际下令。")
+	b.mission.add_action("withdraw_now","先行收队 · 未到者不计全员生还",GATE_W,[],0.6,64)
+
+func _withdraw_tick(b) -> void:
+	var living: Array=actors.filter(func(u):return is_instance_valid(u) and u.hp>0 and u.story_outcome=="")
+	var all_out: bool=not living.is_empty() and living.all(func(u):return u.position.distance_to(b.map.cell_to_world(GATE_W))<=150)
+	if delivered!=Transport.LOAD_COUNT or _delivered_cart_indices(b).size()!=Transport.CART_COUNT or living.is_empty() or not (all_out or depart_requested):return
+	if all_out and living.size()==8:b.mission.mark("huangnigang_all_safe","七星推七辆江州车带走十一担财物，与白胜一同全身出冈。")
+	else:_story_miss(b,"all_safe","已有同伴倒下。" if living.size()<8 else "先行收队，未等全员到达西冈口。")
+	victory=true;b.mission.mark("escaped","七辆江州车载十一担生辰纲出冈。")
+	b.win("七星与白胜巧施酒计，十五名押送者麻倒，七车十一担已运出黄泥冈。" if drug_done else "好汉击退押队，七车十一担已运出黄泥冈。")
+
+func top_status(b) -> String:
+	var title: String={PREPARE:"商客歇脚",MARCH:"押队上冈",INQUIRY:"杨志盘问",ARRIVAL:"白胜挑酒入场",WINE:"白胜卖酒",CARRY:"装车推行",WITHDRAW:"收拢同行人",FORCE:"身份败露"}.get(st,"")
+	var text: String=Localize.format_text("智取生辰纲 | %s | 推车%d/7 · 财物%d/11担",[Localize.text(title),_delivered_cart_indices(b).size(),delivered])
+	if st==WINE and wine_step=="cooperate":text+=Localize.format_text(" · 引目%d秒 · 配合%d%%",[ceili(attention_left),mini(100,int(team_t/3.0*100))])
+	return text
