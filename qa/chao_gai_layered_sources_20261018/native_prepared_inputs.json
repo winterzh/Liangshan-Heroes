@@ -1,0 +1,1277 @@
+{
+  "scope": "resource comparison only, not game Unit",
+  "phases": [
+    "idle",
+    "contact_a",
+    "passing_a",
+    "contact_b",
+    "passing_b"
+  ],
+  "textures": {
+    "original:cart_only": {
+      "file": "images/original_cart_only.png",
+      "sha256": "9425a1929887df7a6846e831eb064decd023d1510613a8c59211649403597e42",
+      "canonical_source": "assets/characters/liu_tang_pushcart_20261017/cart_only.png"
+    },
+    "original:push_idle_v2": {
+      "file": "images/original_push_idle_v2.png",
+      "sha256": "e11643ea3acd7a9c462ffb131fd5e94287f5435dca6ca9782e75848df4af6e39",
+      "canonical_source": "assets/characters/chao_gai_pushcart_20261017/push_idle_v2.png"
+    },
+    "actor:idle_actor_v2": {
+      "file": "images/actor_idle_actor_v2.png",
+      "sha256": "e7702cc81262849338efba538c15949e293f51ccca6e1c1b2626c8c44f894d92",
+      "canonical_source": "qa/chao_gai_layered_sources_20261018/native_originals/idle_actor_v2.png"
+    },
+    "original:push_contact_a": {
+      "file": "images/original_push_contact_a.png",
+      "sha256": "954d6e35038b8bd81e2d88d593e57a927436e1636e5694749f3bf65b87d5beb8",
+      "canonical_source": "assets/characters/chao_gai_pushcart_20261017/push_contact_a.png"
+    },
+    "actor:contact_a_actor": {
+      "file": "images/actor_contact_a_actor.png",
+      "sha256": "f48071a03c3279b1dc1b6c209d95b4409026b2ffb4c3fcf0ab57b5485edda33c",
+      "canonical_source": "qa/chao_gai_layered_sources_20261018/native_originals/contact_a_actor.png"
+    },
+    "original:push_passing_a": {
+      "file": "images/original_push_passing_a.png",
+      "sha256": "d8d80b804d264d0ace3938fc160b709511fb4b312a1a05b1645a3c0be35c78ee",
+      "canonical_source": "assets/characters/chao_gai_pushcart_20261017/push_passing_a.png"
+    },
+    "actor:passing_a_actor": {
+      "file": "images/actor_passing_a_actor.png",
+      "sha256": "180b9b3da4c0eae18272f1f3873a7a2a7b65aebe9dafce834e66526b75aadb57",
+      "canonical_source": "qa/chao_gai_layered_sources_20261018/native_originals/passing_a_actor.png"
+    },
+    "original:push_contact_b_v3": {
+      "file": "images/original_push_contact_b_v3.png",
+      "sha256": "70d62c159a4d25249fce8da1e69fffa90e6d35ad14c88e19f5135f9800b6bf16",
+      "canonical_source": "assets/characters/chao_gai_pushcart_20261017/push_contact_b_v3.png"
+    },
+    "actor:contact_b_actor_v2": {
+      "file": "images/actor_contact_b_actor_v2.png",
+      "sha256": "19fdf54d59c4d15b8133db679a4fe2b94583a4e5a69dc0f23994b21560cc874a",
+      "canonical_source": "qa/chao_gai_layered_sources_20261018/native_originals/contact_b_actor_v2.png"
+    },
+    "original:push_passing_b_v5": {
+      "file": "images/original_push_passing_b_v5.png",
+      "sha256": "84c766be36174e07502dc285e9fb896e47ac381c2bec8c06d4801a74c881ec2d",
+      "canonical_source": "assets/characters/chao_gai_pushcart_20261017/push_passing_b_v5.png"
+    },
+    "actor:passing_b_actor_v2": {
+      "file": "images/actor_passing_b_actor_v2.png",
+      "sha256": "ed19387875afcf32225836e477c0f51023ab41f820bcbd595b5c792efdd5893b",
+      "canonical_source": "qa/chao_gai_layered_sources_20261018/native_originals/passing_b_actor_v2.png"
+    },
+    "original:push_passing_b_v4": {
+      "file": "images/original_push_passing_b_v4.png",
+      "sha256": "fecf6b6dc208f82837e1315bf2b63901e6b09d975f094cdb93c0972e4b8d48d5",
+      "canonical_source": "assets/characters/chao_gai_pushcart_20261017/push_passing_b_v4.png"
+    },
+    "actor:contact_b_actor_v1": {
+      "file": "images/actor_contact_b_actor_v1.png",
+      "sha256": "bb457d8ce5214442252363e7cb35815fa1451078895673bf29e42b2c89d84e3e",
+      "canonical_source": "qa/chao_gai_layered_sources_20261018/native_originals/contact_b_actor_v1.png"
+    },
+    "original:push_passing_b_v2": {
+      "file": "images/original_push_passing_b_v2.png",
+      "sha256": "8a3c04552a873ec7cd5748c1d3d8c98dff18aaa64e9d35b8421e8cc032ddfc53",
+      "canonical_source": "assets/characters/chao_gai_pushcart_20261017/push_passing_b_v2.png"
+    }
+  },
+  "views": {
+    "se": {
+      "idle": {
+        "original_texture": "original:push_idle_v2",
+        "actor_texture": "actor:idle_actor_v2",
+        "original_pose": {
+          "source": "push_idle_v2",
+          "region": [
+            0,
+            0,
+            644,
+            668
+          ],
+          "margin": [
+            368.30152808839887,
+            427.86121037463965,
+            452,
+            428
+          ],
+          "draw_offset_px": [
+            0,
+            0
+          ],
+          "draw_scale": 2.383474762161417,
+          "virtual_canvas_reference": 459.8328530259366,
+          "pivot_native": [
+            179.69847191160113,
+            470.85878962536026
+          ],
+          "cart_depth_pixels": 323,
+          "operations": "Untouched PNG; explicit accepted view only. Godot region/margins/uniform display. Shared cart-depth scale and fixed wheel-to-root vector; no per-step footwear anchoring or bitmap edits.",
+          "visible_top": 0.4460412503418245
+        },
+        "actor_region": [
+          0,
+          0,
+          627,
+          627
+        ],
+        "original_alpha16_bounds": [
+          42,
+          61,
+          643,
+          622
+        ],
+        "actor_alpha16_bounds": [
+          42,
+          62,
+          344,
+          486
+        ]
+      },
+      "contact_a": {
+        "original_texture": "original:push_contact_a",
+        "actor_texture": "actor:contact_a_actor",
+        "original_pose": {
+          "source": "push_contact_a",
+          "region": [
+            0,
+            0,
+            644,
+            658
+          ],
+          "margin": [
+            344.6347442306132,
+            389.953659942363,
+            404,
+            390
+          ],
+          "draw_offset_px": [
+            0,
+            0
+          ],
+          "draw_scale": 2.2720547808267106,
+          "virtual_canvas_reference": 461.2564841498559,
+          "pivot_native": [
+            179.3652557693868,
+            469.4063400576369
+          ],
+          "cart_depth_pixels": 324,
+          "operations": "Untouched PNG; explicit accepted view only. Godot region/margins/uniform display. Shared cart-depth scale and fixed wheel-to-root vector; no per-step footwear anchoring or bitmap edits.",
+          "visible_top": 0.43029929383813265
+        },
+        "actor_region": [
+          0,
+          0,
+          627,
+          627
+        ],
+        "original_alpha16_bounds": [
+          55,
+          60,
+          644,
+          621
+        ],
+        "actor_alpha16_bounds": [
+          43,
+          59,
+          354,
+          542
+        ]
+      },
+      "passing_a": {
+        "original_texture": "original:push_passing_a",
+        "actor_texture": "actor:passing_a_actor",
+        "original_pose": {
+          "source": "push_passing_a",
+          "region": [
+            0,
+            0,
+            644,
+            657
+          ],
+          "margin": [
+            342.1181387260261,
+            385.8536599423631,
+            399,
+            386
+          ],
+          "draw_offset_px": [
+            0,
+            0
+          ],
+          "draw_scale": 2.261214824811316,
+          "virtual_canvas_reference": 461.2564841498559,
+          "pivot_native": [
+            179.38186127397393,
+            469.4063400576369
+          ],
+          "cart_depth_pixels": 324,
+          "operations": "Untouched PNG; explicit accepted view only. Godot region/margins/uniform display. Shared cart-depth scale and fixed wheel-to-root vector; no per-step footwear anchoring or bitmap edits.",
+          "visible_top": 0.4265135761671746
+        },
+        "actor_region": [
+          0,
+          0,
+          627,
+          627
+        ],
+        "original_alpha16_bounds": [
+          81,
+          59,
+          643,
+          621
+        ],
+        "actor_alpha16_bounds": [
+          77,
+          58,
+          364,
+          565
+        ]
+      },
+      "contact_b": {
+        "original_texture": "original:push_contact_b_v3",
+        "actor_texture": "actor:contact_b_actor_v2",
+        "original_pose": {
+          "source": "push_contact_b_v3",
+          "region": [
+            0,
+            0,
+            628,
+            635
+          ],
+          "margin": [
+            377.212380751267,
+            431.8910086455331,
+            439,
+            432
+          ],
+          "draw_offset_px": [
+            0,
+            0
+          ],
+          "draw_scale": 2.292024167688098,
+          "virtual_canvas_reference": 465.52737752161386,
+          "pivot_native": [
+            156.28761924873297,
+            443.04899135446686
+          ],
+          "cart_depth_pixels": 327,
+          "operations": "Untouched PNG; explicit accepted view only. Godot region/margins/uniform display. Shared cart-depth scale and fixed wheel-to-root vector; no per-step footwear anchoring or bitmap edits.",
+          "visible_top": 0.45256889282617907
+        },
+        "actor_region": [
+          0,
+          0,
+          627,
+          627
+        ],
+        "original_alpha16_bounds": [
+          34,
+          51,
+          623,
+          611
+        ],
+        "actor_alpha16_bounds": [
+          24,
+          49,
+          400,
+          512
+        ]
+      },
+      "passing_b": {
+        "original_texture": "original:push_passing_b_v5",
+        "actor_texture": "actor:passing_b_actor_v2",
+        "original_pose": {
+          "source": "push_passing_b_v5",
+          "region": [
+            0,
+            0,
+            627,
+            642
+          ],
+          "margin": [
+            344.2268044652026,
+            405.9277233429394,
+            421,
+            406
+          ],
+          "draw_offset_px": [
+            0,
+            0
+          ],
+          "draw_scale": 2.512442829310083,
+          "virtual_canvas_reference": 417.12391930835736,
+          "pivot_native": [
+            179.77319553479742,
+            453.4322766570605
+          ],
+          "cart_depth_pixels": 293,
+          "operations": "Untouched PNG; explicit accepted view only. Godot region/margins/uniform display. Shared cart-depth scale and fixed wheel-to-root vector; no per-step footwear anchoring or bitmap edits.",
+          "visible_top": 0.4818012627318124
+        },
+        "actor_region": [
+          0,
+          0,
+          627,
+          627
+        ],
+        "original_alpha16_bounds": [
+          82,
+          99,
+          606,
+          594
+        ],
+        "actor_alpha16_bounds": [
+          25,
+          50,
+          400,
+          513
+        ]
+      }
+    },
+    "sw": {
+      "idle": {
+        "original_texture": "original:push_idle_v2",
+        "actor_texture": "actor:idle_actor_v2",
+        "original_pose": {
+          "source": "push_idle_v2",
+          "region": [
+            644,
+            0,
+            610,
+            668
+          ],
+          "margin": [
+            90.70334869906264,
+            392.98883852691216,
+            451,
+            393
+          ],
+          "draw_offset_px": [
+            0,
+            0
+          ],
+          "draw_scale": 2.2941594438148907,
+          "virtual_canvas_reference": 462.4787535410765,
+          "pivot_native": [
+            1083.7966513009374,
+            477.0311614730878
+          ],
+          "cart_depth_pixels": 317,
+          "operations": "Untouched PNG; explicit accepted view only. Godot region/margins/uniform display. Shared cart-depth scale and fixed wheel-to-root vector; no per-step footwear anchoring or bitmap edits.",
+          "visible_top": 0.4307152106756948
+        },
+        "actor_region": [
+          627,
+          0,
+          627,
+          627
+        ],
+        "original_alpha16_bounds": [
+          646,
+          64,
+          1219,
+          646
+        ],
+        "actor_alpha16_bounds": [
+          921,
+          64,
+          1221,
+          507
+        ]
+      },
+      "contact_a": {
+        "original_texture": "original:push_contact_a",
+        "actor_texture": "actor:contact_a_actor",
+        "original_pose": {
+          "source": "push_contact_a",
+          "region": [
+            644,
+            0,
+            610,
+            658
+          ],
+          "margin": [
+            65.80986170151982,
+            352.9350141643059,
+            401,
+            353
+          ],
+          "draw_offset_px": [
+            0,
+            0
+          ],
+          "draw_scale": 2.1723407493076055,
+          "virtual_canvas_reference": 465.39660056657226,
+          "pivot_native": [
+            1083.6901382984802,
+            476.08498583569406
+          ],
+          "cart_depth_pixels": 319,
+          "operations": "Untouched PNG; explicit accepted view only. Godot region/margins/uniform display. Shared cart-depth scale and fixed wheel-to-root vector; no per-step footwear anchoring or bitmap edits.",
+          "visible_top": 0.41042038987567353
+        },
+        "actor_region": [
+          627,
+          0,
+          627,
+          627
+        ],
+        "original_alpha16_bounds": [
+          645,
+          62,
+          1226,
+          646
+        ],
+        "actor_alpha16_bounds": [
+          903,
+          60,
+          1233,
+          552
+        ]
+      },
+      "passing_a": {
+        "original_texture": "original:push_passing_a",
+        "actor_texture": "actor:passing_a_actor",
+        "original_pose": {
+          "source": "push_passing_a",
+          "region": [
+            644,
+            0,
+            610,
+            657
+          ],
+          "margin": [
+            65.1970360347234,
+            353.8811898016997,
+            401,
+            354
+          ],
+          "draw_offset_px": [
+            0,
+            0
+          ],
+          "draw_scale": 2.1588059159785864,
+          "virtual_canvas_reference": 468.314447592068,
+          "pivot_native": [
+            1084.3029639652766,
+            475.1388101983003
+          ],
+          "cart_depth_pixels": 321,
+          "operations": "Untouched PNG; explicit accepted view only. Godot region/margins/uniform display. Shared cart-depth scale and fixed wheel-to-root vector; no per-step footwear anchoring or bitmap edits.",
+          "visible_top": 0.40937803145568713
+        },
+        "actor_region": [
+          627,
+          0,
+          627,
+          627
+        ],
+        "original_alpha16_bounds": [
+          645,
+          59,
+          1169,
+          646
+        ],
+        "actor_alpha16_bounds": [
+          895,
+          58,
+          1176,
+          571
+        ]
+      },
+      "contact_b": {
+        "original_texture": "original:push_contact_b_v3",
+        "actor_texture": "actor:contact_b_actor_v2",
+        "original_pose": {
+          "source": "push_contact_b_v3",
+          "region": [
+            628,
+            0,
+            626,
+            635
+          ],
+          "margin": [
+            70.22707565936003,
+            419.8960339943342,
+            429,
+            420
+          ],
+          "draw_offset_px": [
+            0,
+            0
+          ],
+          "draw_scale": 2.1144325214330326,
+          "virtual_canvas_reference": 498.95184135977337,
+          "pivot_native": [
+            1085.27292434064,
+            445.20396600566573
+          ],
+          "cart_depth_pixels": 342,
+          "operations": "Untouched PNG; explicit accepted view only. Godot region/margins/uniform display. Shared cart-depth scale and fixed wheel-to-root vector; no per-step footwear anchoring or bitmap edits.",
+          "visible_top": 0.44824268625055375
+        },
+        "actor_region": [
+          627,
+          0,
+          627,
+          627
+        ],
+        "original_alpha16_bounds": [
+          633,
+          53,
+          1224,
+          614
+        ],
+        "actor_alpha16_bounds": [
+          856,
+          49,
+          1230,
+          512
+        ]
+      },
+      "passing_b": {
+        "original_texture": "original:push_passing_b_v4",
+        "actor_texture": "actor:passing_b_actor_v2",
+        "original_pose": {
+          "source": "push_passing_b_v4",
+          "region": [
+            627,
+            0,
+            627,
+            628
+          ],
+          "margin": [
+            102.50414689921149,
+            471.90368271954674,
+            473,
+            472
+          ],
+          "draw_offset_px": [
+            0,
+            0
+          ],
+          "draw_scale": 2.230711782616189,
+          "virtual_canvas_reference": 493.1161473087819,
+          "pivot_native": [
+            1074.4958531007885,
+            430.09631728045326
+          ],
+          "cart_depth_pixels": 338,
+          "operations": "Untouched PNG; explicit accepted view only. Godot region/margins/uniform display. Shared cart-depth scale and fixed wheel-to-root vector; no per-step footwear anchoring or bitmap edits.",
+          "visible_top": 0.47718516610867884
+        },
+        "actor_region": [
+          627,
+          0,
+          627,
+          627
+        ],
+        "original_alpha16_bounds": [
+          631,
+          53,
+          1212,
+          595
+        ],
+        "actor_alpha16_bounds": [
+          856,
+          50,
+          1230,
+          513
+        ]
+      }
+    },
+    "ne": {
+      "idle": {
+        "original_texture": "original:push_idle_v2",
+        "actor_texture": "actor:idle_actor_v2",
+        "original_pose": {
+          "source": "push_idle_v2",
+          "region": [
+            0,
+            668,
+            644,
+            586
+          ],
+          "margin": [
+            198.5114876414877,
+            145.13222222222225,
+            199,
+            257
+          ],
+          "draw_offset_px": [
+            0,
+            0
+          ],
+          "draw_scale": 1.5604047550491549,
+          "virtual_canvas_reference": 540.2444444444444,
+          "pivot_native": [
+            222.9885123585123,
+            1214.1277777777777
+          ],
+          "cart_depth_pixels": 302,
+          "operations": "Untouched PNG; explicit accepted view only. Godot region/margins/uniform display. Shared cart-depth scale and fixed wheel-to-root vector; no per-step footwear anchoring or bitmap edits.",
+          "visible_top": 0.20063134308685915
+        },
+        "actor_region": [
+          0,
+          627,
+          627,
+          627
+        ],
+        "original_alpha16_bounds": [
+          38,
+          692,
+          610,
+          1179
+        ],
+        "actor_alpha16_bounds": [
+          37,
+          692,
+          380,
+          1179
+        ]
+      },
+      "contact_a": {
+        "original_texture": "original:push_contact_a",
+        "actor_texture": "actor:contact_a_actor",
+        "original_pose": {
+          "source": "push_contact_a",
+          "region": [
+            0,
+            658,
+            644,
+            596
+          ],
+          "margin": [
+            193.9151014957265,
+            130.51277777777784,
+            194,
+            242
+          ],
+          "draw_offset_px": [
+            0,
+            0
+          ],
+          "draw_scale": 1.5563030065413426,
+          "virtual_canvas_reference": 538.4555555555555,
+          "pivot_native": [
+            225.0848985042735,
+            1214.6472222222221
+          ],
+          "cart_depth_pixels": 301,
+          "operations": "Untouched PNG; explicit accepted view only. Godot region/margins/uniform display. Shared cart-depth scale and fixed wheel-to-root vector; no per-step footwear anchoring or bitmap edits.",
+          "visible_top": 0.1724496154866084
+        },
+        "actor_region": [
+          0,
+          627,
+          627,
+          627
+        ],
+        "original_alpha16_bounds": [
+          44,
+          672,
+          611,
+          1163
+        ],
+        "actor_alpha16_bounds": [
+          39,
+          663,
+          402,
+          1176
+        ]
+      },
+      "passing_a": {
+        "original_texture": "original:push_passing_a",
+        "actor_texture": "actor:passing_a_actor",
+        "original_pose": {
+          "source": "push_passing_a",
+          "region": [
+            0,
+            657,
+            644,
+            597
+          ],
+          "margin": [
+            197.75473088473092,
+            132.3122222222222,
+            198,
+            245
+          ],
+          "draw_offset_px": [
+            0,
+            0
+          ],
+          "draw_scale": 1.5585537411048498,
+          "virtual_canvas_reference": 540.2444444444444,
+          "pivot_native": [
+            223.24526911526908,
+            1215.1277777777777
+          ],
+          "cart_depth_pixels": 302,
+          "operations": "Untouched PNG; explicit accepted view only. Godot region/margins/uniform display. Shared cart-depth scale and fixed wheel-to-root vector; no per-step footwear anchoring or bitmap edits.",
+          "visible_top": 0.17139218791237792
+        },
+        "actor_region": [
+          0,
+          627,
+          627,
+          627
+        ],
+        "original_alpha16_bounds": [
+          93,
+          669,
+          611,
+          1144
+        ],
+        "actor_alpha16_bounds": [
+          86,
+          669,
+          386,
+          1160
+        ]
+      },
+      "contact_b": {
+        "original_texture": "original:push_contact_b_v3",
+        "actor_texture": "actor:contact_b_actor_v1",
+        "original_pose": {
+          "source": "push_contact_b_v3",
+          "region": [
+            0,
+            635,
+            628,
+            619
+          ],
+          "margin": [
+            226.8114354855319,
+            169.12777777777774,
+            227,
+            236
+          ],
+          "draw_offset_px": [
+            0,
+            0
+          ],
+          "draw_scale": 1.541775195351633,
+          "virtual_canvas_reference": 554.5555555555555,
+          "pivot_native": [
+            200.6885645144681,
+            1166.9722222222222
+          ],
+          "cart_depth_pixels": 310,
+          "operations": "Untouched PNG; explicit accepted view only. Godot region/margins/uniform display. Shared cart-depth scale and fixed wheel-to-root vector; no per-step footwear anchoring or bitmap edits.",
+          "visible_top": 0.22354126055880438
+        },
+        "actor_region": [
+          0,
+          627,
+          627,
+          627
+        ],
+        "original_alpha16_bounds": [
+          73,
+          656,
+          612,
+          1193
+        ],
+        "actor_alpha16_bounds": [
+          88,
+          635,
+          416,
+          1214
+        ]
+      },
+      "passing_b": {
+        "original_texture": "original:push_passing_b_v5",
+        "actor_texture": "actor:passing_b_actor_v2",
+        "original_pose": {
+          "source": "push_passing_b_v5",
+          "region": [
+            0,
+            642,
+            627,
+            612
+          ],
+          "margin": [
+            98.7900644035152,
+            85.8172222222222,
+            99,
+            114
+          ],
+          "draw_offset_px": [
+            0,
+            0
+          ],
+          "draw_scale": 1.579138168547744,
+          "virtual_canvas_reference": 459.74444444444447,
+          "pivot_native": [
+            264.2099355964848,
+            1151.5027777777777
+          ],
+          "cart_depth_pixels": 257,
+          "operations": "Untouched PNG; explicit accepted view only. Godot region/margins/uniform display. Shared cart-depth scale and fixed wheel-to-root vector; no per-step footwear anchoring or bitmap edits.",
+          "visible_top": 0.18707606366697271
+        },
+        "actor_region": [
+          0,
+          627,
+          627,
+          627
+        ],
+        "original_alpha16_bounds": [
+          111,
+          691,
+          599,
+          1161
+        ],
+        "actor_alpha16_bounds": [
+          85,
+          635,
+          417,
+          1115
+        ]
+      }
+    },
+    "nw": {
+      "idle": {
+        "original_texture": "original:push_idle_v2",
+        "actor_texture": "actor:idle_actor_v2",
+        "original_pose": {
+          "source": "push_idle_v2",
+          "region": [
+            644,
+            668,
+            610,
+            586
+          ],
+          "margin": [
+            0.11085040064631357,
+            117.54653739612172,
+            155,
+            179
+          ],
+          "draw_offset_px": [
+            0,
+            0
+          ],
+          "draw_scale": 1.4464959145191703,
+          "virtual_canvas_reference": 528.8642659279778,
+          "pivot_native": [
+            1026.3891495993537,
+            1177.7534626038782
+          ],
+          "cart_depth_pixels": 296,
+          "operations": "Untouched PNG; explicit accepted view only. Godot region/margins/uniform display. Shared cart-depth scale and fixed wheel-to-root vector; no per-step footwear anchoring or bitmap edits.",
+          "visible_top": 0.18372096391649897
+        },
+        "actor_region": [
+          627,
+          627,
+          627,
+          627
+        ],
+        "original_alpha16_bounds": [
+          647,
+          690,
+          1238,
+          1201
+        ],
+        "actor_alpha16_bounds": [
+          888,
+          691,
+          1240,
+          1202
+        ]
+      },
+      "contact_a": {
+        "original_texture": "original:push_contact_a",
+        "actor_texture": "actor:contact_a_actor",
+        "original_pose": {
+          "source": "push_contact_a",
+          "region": [
+            644,
+            658,
+            610,
+            596
+          ],
+          "margin": [
+            0.3515249662618771,
+            122.87157894736833,
+            172,
+            186
+          ],
+          "draw_offset_px": [
+            0,
+            0
+          ],
+          "draw_scale": 1.4397286821705426,
+          "virtual_canvas_reference": 543.1578947368421,
+          "pivot_native": [
+            1034.6484750337381,
+            1176.3684210526317
+          ],
+          "cart_depth_pixels": 304,
+          "operations": "Untouched PNG; explicit accepted view only. Godot region/margins/uniform display. Shared cart-depth scale and fixed wheel-to-root vector; no per-step footwear anchoring or bitmap edits.",
+          "visible_top": 0.17374882218333546
+        },
+        "actor_region": [
+          627,
+          627,
+          627,
+          627
+        ],
+        "original_alpha16_bounds": [
+          645,
+          671,
+          1191,
+          1193
+        ],
+        "actor_alpha16_bounds": [
+          858,
+          665,
+          1201,
+          1200
+        ]
+      },
+      "passing_a": {
+        "original_texture": "original:push_passing_a",
+        "actor_texture": "actor:passing_a_actor",
+        "original_pose": {
+          "source": "push_passing_a",
+          "region": [
+            644,
+            657,
+            610,
+            597
+          ],
+          "margin": [
+            0.1928921494018141,
+            125.48409972299157,
+            178,
+            191
+          ],
+          "draw_offset_px": [
+            0,
+            0
+          ],
+          "draw_scale": 1.431933957515353,
+          "virtual_canvas_reference": 550.3047091412742,
+          "pivot_native": [
+            1037.8071078505982,
+            1177.6759002770084
+          ],
+          "cart_depth_pixels": 308,
+          "operations": "Untouched PNG; explicit accepted view only. Godot region/margins/uniform display. Shared cart-depth scale and fixed wheel-to-root vector; no per-step footwear anchoring or bitmap edits.",
+          "visible_top": 0.1757412433032888
+        },
+        "actor_region": [
+          627,
+          627,
+          627,
+          627
+        ],
+        "original_alpha16_bounds": [
+          646,
+          669,
+          1168,
+          1161
+        ],
+        "actor_alpha16_bounds": [
+          869,
+          669,
+          1181,
+          1181
+        ]
+      },
+      "contact_b": {
+        "original_texture": "original:push_contact_b_v3",
+        "actor_texture": "actor:contact_b_actor_v1",
+        "original_pose": {
+          "source": "push_contact_b_v3",
+          "region": [
+            628,
+            635,
+            626,
+            619
+          ],
+          "margin": [
+            0.2739911411745197,
+            205.29036011080336,
+            215,
+            222
+          ],
+          "draw_offset_px": [
+            0,
+            0
+          ],
+          "draw_scale": 1.5183845961490372,
+          "virtual_canvas_reference": 553.8781163434903,
+          "pivot_native": [
+            1048.2260088588255,
+            1119.3296398891966
+          ],
+          "cart_depth_pixels": 310,
+          "operations": "Untouched PNG; explicit accepted view only. Godot region/margins/uniform display. Shared cart-depth scale and fixed wheel-to-root vector; no per-step footwear anchoring or bitmap edits.",
+          "visible_top": 0.26907296089275073
+        },
+        "actor_region": [
+          627,
+          627,
+          627,
+          627
+        ],
+        "original_alpha16_bounds": [
+          641,
+          656,
+          1182,
+          1201
+        ],
+        "actor_alpha16_bounds": [
+          841,
+          636,
+          1169,
+          1214
+        ]
+      },
+      "passing_b": {
+        "original_texture": "original:push_passing_b_v2",
+        "actor_texture": "actor:passing_b_actor_v2",
+        "original_pose": {
+          "source": "push_passing_b_v2",
+          "region": [
+            627,
+            627,
+            627,
+            627
+          ],
+          "margin": [
+            0.30126644669599045,
+            141.89584487534614,
+            143,
+            143
+          ],
+          "draw_offset_px": [
+            0,
+            0
+          ],
+          "draw_scale": 1.5228312378447968,
+          "virtual_canvas_reference": 505.6371191135734,
+          "pivot_native": [
+            1011.698733553304,
+            1116.5041551246538
+          ],
+          "cart_depth_pixels": 283,
+          "operations": "Untouched PNG; explicit accepted view only. Godot region/margins/uniform display. Shared cart-depth scale and fixed wheel-to-root vector; no per-step footwear anchoring or bitmap edits.",
+          "visible_top": 0.2349296686692807
+        },
+        "actor_region": [
+          627,
+          627,
+          627,
+          627
+        ],
+        "original_alpha16_bounds": [
+          645,
+          666,
+          1183,
+          1188
+        ],
+        "actor_alpha16_bounds": [
+          838,
+          636,
+          1171,
+          1106
+        ]
+      }
+    }
+  },
+  "cart_poses": {
+    "se": {
+      "source": "cart_only",
+      "region": [
+        0,
+        0,
+        635,
+        661
+      ],
+      "margin": [
+        605.6781609195402,
+        772.8799999999999,
+        799,
+        773
+      ],
+      "draw_offset_px": [
+        0,
+        0
+      ],
+      "draw_scale": 2.902834008097166,
+      "virtual_canvas_reference": 494.0,
+      "pivot_native": [
+        111.32183908045977,
+        403.0
+      ],
+      "cart_depth_pixels": 347,
+      "operations": "Untouched PNG; explicit accepted view only. Godot region/margins/uniform display. Shared cart-depth scale and fixed wheel-to-root vector; no per-step footwear anchoring or bitmap edits.",
+      "visible_top": 0.6317154811715481
+    },
+    "sw": {
+      "source": "cart_only",
+      "region": [
+        635,
+        0,
+        619,
+        661
+      ],
+      "margin": [
+        174.13123080557534,
+        694.9199999999998,
+        737,
+        695
+      ],
+      "draw_offset_px": [
+        0,
+        0
+      ],
+      "draw_scale": 2.633009708737864,
+      "virtual_canvas_reference": 515.0,
+      "pivot_native": [
+        1138.8687691944247,
+        417.0
+      ],
+      "cart_depth_pixels": 353,
+      "operations": "Untouched PNG; explicit accepted view only. Godot region/margins/uniform display. Shared cart-depth scale and fixed wheel-to-root vector; no per-step footwear anchoring or bitmap edits.",
+      "visible_top": 0.6179351032448377
+    },
+    "ne": {
+      "source": "cart_only",
+      "region": [
+        0,
+        661,
+        635,
+        593
+      ],
+      "margin": [
+        339.5575733544806,
+        237.5,
+        340,
+        382
+      ],
+      "draw_offset_px": [
+        0,
+        0
+      ],
+      "draw_scale": 1.513975155279503,
+      "virtual_canvas_reference": 644.0,
+      "pivot_native": [
+        147.9424266455194,
+        1223.0
+      ],
+      "cart_depth_pixels": 360,
+      "operations": "Untouched PNG; explicit accepted view only. Godot region/margins/uniform display. Shared cart-depth scale and fixed wheel-to-root vector; no per-step footwear anchoring or bitmap edits.",
+      "visible_top": 0.2630769230769231
+    },
+    "nw": {
+      "source": "cart_only",
+      "region": [
+        635,
+        661,
+        619,
+        593
+      ],
+      "margin": [
+        0.01571546732839124,
+        279.05999999999995,
+        364,
+        390
+      ],
+      "draw_offset_px": [
+        0,
+        0
+      ],
+      "draw_scale": 1.524031007751938,
+      "virtual_canvas_reference": 645.0,
+      "pivot_native": [
+        1126.4842845326716,
+        1188.0
+      ],
+      "cart_depth_pixels": 361,
+      "operations": "Untouched PNG; explicit accepted view only. Godot region/margins/uniform display. Shared cart-depth scale and fixed wheel-to-root vector; no per-step footwear anchoring or bitmap edits.",
+      "visible_top": 0.33271617497456757
+    }
+  },
+  "placement": {
+    "se": {
+      "common_scale": 1.0,
+      "origin": [
+        74.36775653294796,
+        189.74817261057606
+      ],
+      "all_phase_union": [
+        -59.36775653294796,
+        -154.74817261057606,
+        166.6973800549118,
+        57.724126830838564
+      ],
+      "body_size": 160,
+      "same_scale_and_origin_all_phases_and_rows": true,
+      "per_frame_auto_fit": false
+    },
+    "sw": {
+      "common_scale": 1.0,
+      "origin": [
+        166.460934522538,
+        178.04702194357367
+      ],
+      "all_phase_union": [
+        -151.460934522538,
+        -143.04702194357367,
+        51.33165528746897,
+        58.456770083611524
+      ],
+      "body_size": 160,
+      "same_scale_and_origin_all_phases_and_rows": true,
+      "per_frame_auto_fit": false
+    },
+    "ne": {
+      "common_scale": 1.0,
+      "origin": [
+        77.36853983105061,
+        214.7530028759939
+      ],
+      "all_phase_union": [
+        -62.36853983105061,
+        -179.7530028759939,
+        119.02051511912562,
+        13.568423161691058
+      ],
+      "body_size": 160,
+      "same_scale_and_origin_all_phases_and_rows": true,
+      "per_frame_auto_fit": false
+    },
+    "nw": {
+      "common_scale": 1.0,
+      "origin": [
+        132.63628042853594,
+        187.04711425206128
+      ],
+      "all_phase_union": [
+        -117.63628042853594,
+        -152.04711425206128,
+        64.62477854149031,
+        27.347636909227315
+      ],
+      "body_size": 160,
+      "same_scale_and_origin_all_phases_and_rows": true,
+      "per_frame_auto_fit": false
+    }
+  },
+  "production_adopted": false,
+  "pixel_writes": false,
+  "source_manifest_sha256": "7d98cfe3eeb4389f8e1d849f647f643d63bcc674f6e89ddb79de46103a45c14a",
+  "cart_texture": "original:cart_only",
+  "cart_source": "assets/characters/liu_tang_pushcart_20261017/cart_only.png"
+}

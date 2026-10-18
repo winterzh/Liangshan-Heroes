@@ -5,7 +5,9 @@ import run_character_art_qa as common
 import run_ruan_xiaoqi_layered_20261018 as previous_runner
 shared,running=common.load_helpers(R)
 M=Path(r'D:/CodexEvidence/shuihu/gongsun_mounted_idle_mass_20261018')
-assert json.loads((M/'queue_status.json').read_text(encoding='utf-8'))['state']=='complete','finish the existing mounted comparison first'
+assert (M/"latest.json").is_file(),"mounted native comparison has not completed"
+_mounted_path=Path(json.loads((M/"latest.json").read_text(encoding="utf-8"))["receipt"])
+assert _mounted_path.resolve().is_relative_to((M/"native_resources").resolve()) and json.loads(_mounted_path.read_text(encoding="utf-8"))["complete"],"finish the actual mounted comparison first"
 assert not running() and not shared.LOCK.exists(),'shared Godot lane occupied'
 old_path=R/'qa/tribute_cart_wheel_unit_20261018/actual_native/receipt.json'
 old=json.loads(old_path.read_text());assert old['complete'] and old['lock_released']

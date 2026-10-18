@@ -12,3 +12,6 @@ prepare_export_source.py只做私有复制与身份种子，读取全部Root规�
 实际私有复制已完成：prepared_source_current.json指向20261018_153917_4c10b0cd，复制6967个Root规范文件、2383771999字节，前后Root规范快照完全相同；候选9份和vendor来源SHA逐项核对。这个已成功的复制入口不应重复运行。生成的派生身份仍只是种子，未启动Godot导入/导出。
 
 串行顺序：先回读已有骑乘72882并直看其对照PNG；再按需要执行头像实景诊断。之后真实旧三目标fixture（run_legacy_fixture.py）、新完整导出与release身份（run_export_identity.py）、同包玩家路径/世界保存/携车重启/旧档拒绝（run_package_phases.py）。每入口重新检查真正空闲及独占锁，不另建竞争watcher。已完成的收据不可覆盖或重复计数，失败保留后先修来源再继续。
+
+
+准入修正：旧观察72882已结束且未启动子引擎，不再以queue complete作后继门槛。空闲后运行原骑乘比较，后继检查实际latest成功native收据；所有旧观察/未运行状态保留，不因超时重新启动watcher。

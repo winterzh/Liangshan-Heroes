@@ -12,7 +12,7 @@ def save(p,d):
  with p.open("x",encoding="utf-8") as f:f.write(json.dumps(d,ensure_ascii=False,indent=2)+"\n")
 # Existing mounted comparison must finish successfully before this second native job.
 M=Path(r"D:/CodexEvidence/shuihu/gongsun_mounted_idle_mass_20261018")
-queue=json.loads((M/"queue_status.json").read_text(encoding="utf-8"));assert queue["state"]=="complete",queue
+assert (M/"latest.json").is_file(),"mounted native comparison has not completed"
 mounted=json.loads((M/"latest.json").read_text(encoding="utf-8"))
 assert json.loads(Path(mounted["receipt"]).read_text(encoding="utf-8"))["complete"]
 assert not running() and not shared.LOCK.exists(),"shared engine lane occupied"
