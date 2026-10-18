@@ -1,3 +1,9 @@
+## 2026-10-18 阮小七十四行走握把候选
+
+- `assets/characters/ruan_xiaoqi_walk_grips_20261018/`：11内置原PNG/完整请求与引用SHA，9四向+2单SW共38视图，6原图选择14姿势；退稿保留，.gdignore隔离。
+- `qa/ruan_xiaoqi_walk_grips_20261018/`：首版120结构项/4原生图及前视脚步退回；第二版40冻结文件/10纹理的prepared配置、6文件未来接入/12新增文件计划和before SHA，尚未应用；精确接续见native_gate。
+- `docs/RUAN_XIAOQI_WALK_GRIPS_20261018.md`：候选/当前生产的区别、原著与补足、未完成项及后继原生入口。
+
 ## 2026-10-18 握把六姿势接入
 
 - `assets/characters/ruan_xiaoqi_grip_sources_20261018/`：4内置原PNG/完整提示/引用SHA/16视图，2图选6视图，其余/退稿保留；采用图原字节复制入既有分层运行家族。

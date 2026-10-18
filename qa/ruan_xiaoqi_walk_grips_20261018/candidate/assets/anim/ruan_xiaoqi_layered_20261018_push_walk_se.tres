@@ -1,0 +1,66 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoqi_layered_20261018/contact_a_front_464503cc.png" id="contact_a_front_464503cc"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoqi_layered_20261018/passing_a_padded_dcf97443.png" id="passing_a_padded_dcf97443"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoqi_layered_20261018/contact_b_9692df6a.png" id="contact_b_9692df6a"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoqi_layered_20261018/passing_b_padded_7c1907de.png" id="passing_b_padded_7c1907de"]
+
+[sub_resource type="AtlasTexture" id="push_contact_a_se"]
+metadata/visible_top = 0.109156627
+metadata/independent_cart = true
+atlas = ExtResource("contact_a_front_464503cc")
+region = Rect2(0, 0, 627, 627)
+margin = Rect2(68.5, 0.54, 120, 120)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-46.622014, 32.484814)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.039888
+
+[sub_resource type="AtlasTexture" id="push_passing_a_se"]
+metadata/visible_top = 0.119300699
+metadata/independent_cart = true
+atlas = ExtResource("passing_a_padded_dcf97443")
+region = Rect2(0, 0, 627, 627)
+margin = Rect2(52.5, 0.3, 88, 88)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-36.036025, 17.838779)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.054943
+
+[sub_resource type="AtlasTexture" id="push_contact_b_se"]
+metadata/visible_top = 0.081138614
+metadata/independent_cart = true
+atlas = ExtResource("contact_b_9692df6a")
+region = Rect2(0, 0, 627, 627)
+margin = Rect2(99.0, 38.56, 181, 181)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-30.911191, 33.20609)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.000455
+
+[sub_resource type="AtlasTexture" id="push_passing_b_se"]
+metadata/visible_top = 0.129333333
+metadata/independent_cart = true
+atlas = ExtResource("passing_b_padded_7c1907de")
+region = Rect2(0, 0, 627, 627)
+margin = Rect2(70.0, 0.0, 123, 123)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-36.118085, 31.054865)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.070267
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("push_contact_a_se")},
+{"duration": 1.0, "texture": SubResource("push_passing_a_se")},
+{"duration": 1.0, "texture": SubResource("push_contact_b_se")},
+{"duration": 1.0, "texture": SubResource("push_passing_b_se")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

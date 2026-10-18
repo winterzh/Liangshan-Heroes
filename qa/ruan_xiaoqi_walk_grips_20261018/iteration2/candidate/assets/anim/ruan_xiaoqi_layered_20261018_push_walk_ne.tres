@@ -1,0 +1,66 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoqi_layered_20261018/contact_a_rear_reach_73307ce8.png" id="contact_a_rear_reach_73307ce8"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoqi_layered_20261018/passing_a_padded_dcf97443.png" id="passing_a_padded_dcf97443"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoqi_layered_20261018/contact_b_9692df6a.png" id="contact_b_9692df6a"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/ruan_xiaoqi_layered_20261018/passing_b_padded_7c1907de.png" id="passing_b_padded_7c1907de"]
+
+[sub_resource type="AtlasTexture" id="push_contact_a_ne"]
+metadata/visible_top = 0.081597938
+metadata/independent_cart = true
+atlas = ExtResource("contact_a_rear_reach_73307ce8")
+region = Rect2(0, 627, 627, 627)
+margin = Rect2(73.0, 51.32, 149, 149)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-30.223486, 4.511651)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.000707
+
+[sub_resource type="AtlasTexture" id="push_passing_a_ne"]
+metadata/visible_top = 0.092727273
+metadata/independent_cart = true
+atlas = ExtResource("passing_a_padded_dcf97443")
+region = Rect2(0, 627, 627, 627)
+margin = Rect2(36.5, 0.26, 66, 66)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-50.908616, -12.953103)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.016021
+
+[sub_resource type="AtlasTexture" id="push_contact_b_ne"]
+metadata/visible_top = 0.081786600
+metadata/independent_cart = true
+atlas = ExtResource("contact_b_9692df6a")
+region = Rect2(0, 627, 627, 627)
+margin = Rect2(93.0, 63.92, 179, 179)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-48.628227, 1.819253)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.000963
+
+[sub_resource type="AtlasTexture" id="push_passing_b_ne"]
+metadata/visible_top = 0.082008734
+metadata/independent_cart = true
+atlas = ExtResource("passing_b_padded_7c1907de")
+region = Rect2(0, 627, 627, 627)
+margin = Rect2(33.5, 6.34, 60, 60)
+filter_clip = true
+metadata/draw_offset_px = Vector2(-61.009263, 3.588843)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.001264
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("push_contact_a_ne")},
+{"duration": 1.0, "texture": SubResource("push_passing_a_ne")},
+{"duration": 1.0, "texture": SubResource("push_contact_b_ne")},
+{"duration": 1.0, "texture": SubResource("push_passing_b_ne")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]
