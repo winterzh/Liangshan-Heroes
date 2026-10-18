@@ -1,3 +1,9 @@
+## 2026-10-18 公孙胜骑乘三层候选
+
+- qa/gongsun_sheng_mounted_layers_20261018/native_originals/：13份原字节PNG；最新prompt_set_v2.json绑定10份比较用来源、准确提示与输入SHA，其他3份保留。
+- 同QA的layer_bindings_v2.json、layer_data.js、layer_preview.html：固定马身/腰鞍定位/绘制缰绳的自有网页比较；旧版本及失败诊断保留。actual_browser/归档46份原始截图/日志/收据，最新9图全部查看，profiles留在工程外。
+- 同QA的native_prepared_v3_binding.json、native_selected_regions_v3.json、run_native_v3.py：25文件/11PNG原生准备未运行，透明选区不改PNG/比例；只能在原吴用队列终结、实际引擎和lease空闲后运行，未起第二个watcher。
+
 ## 2026-10-18 吴用四阶段候选与持剑反馈稿
 
 - qa/wu_yong_push_gait_20261018/：6原PNG/4选用、准确提示/来源SHA、固定体量注册、68项原生/8图、源码接线候选、7016文件全新私有源准备、单一排队执行入口；未实际Unit或生产接入。

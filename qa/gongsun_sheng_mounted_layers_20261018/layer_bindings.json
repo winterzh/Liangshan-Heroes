@@ -1,0 +1,669 @@
+{
+  "scope": "Fixed standing horse plus rider pose layers, translation registration only. Browser composition checked for first two rider states; complete arm/weapon/feet continuity and native/Unit/chapter acceptance remain open.",
+  "textures": {
+    "horse_idle_v1": {
+      "canonical_source": "qa/gongsun_sheng_mounted_layers_20261018/native_originals/horse_idle_v1.png",
+      "file": "images/horse_idle_v1.png",
+      "sha256": "28ac794d2535226180e739c59e584d8e031a35b5202cc435294392e569e4b1e4",
+      "rgba8_sha256": "033f84ea46b970d873cfaaa820b6a522debbd380092a6893fbf94c9b6990ba05"
+    },
+    "rider_sheathed_idle_v2": {
+      "canonical_source": "qa/gongsun_sheng_mounted_layers_20261018/native_originals/rider_sheathed_idle_v2.png",
+      "file": "images/rider_sheathed_idle_v2.png",
+      "sha256": "aafb7de2b76e1a4af25585ce5008571a283919750cbdd33225f218ec8906336b",
+      "rgba8_sha256": "ecc40630946ff7ff4bc276c08f13115ad2a8c4b053e09bd040de4b411756c871"
+    },
+    "rider_reach_v2": {
+      "canonical_source": "qa/gongsun_sheng_mounted_layers_20261018/native_originals/rider_reach_v2.png",
+      "file": "images/rider_reach_v2.png",
+      "sha256": "71d39295f876005e7928c445a81159f1fc049eb8625cb4c28947fb0b8f146339",
+      "rgba8_sha256": "9e59b80ed67fa1a04c5c9a57a652e8523e3a046c833750e1f41e6454b0635591"
+    },
+    "rider_draw_mid_v1": {
+      "canonical_source": "qa/gongsun_sheng_mounted_layers_20261018/native_originals/rider_draw_mid_v1.png",
+      "file": "images/rider_draw_mid_v1.png",
+      "sha256": "978904d91d6cfaf188a38190c7437b820a1e6fa912ffc367b37a6ddfc75eea82",
+      "rgba8_sha256": "8a33d0916a134b7d2bf5581509bffc200d30bc5331a310e081997c648ede2b74"
+    },
+    "rider_point_v1": {
+      "canonical_source": "qa/gongsun_sheng_mounted_layers_20261018/native_originals/rider_point_v1.png",
+      "file": "images/rider_point_v1.png",
+      "sha256": "2f050b40b1764aa215d712f541c2f4bc80c960d74045d9d97416106adefb9616",
+      "rgba8_sha256": "3323dd036eb0415903c2f0b1e75161203875be62f329b8989ff6d8281a869645"
+    },
+    "rider_drawn_recoil_v1": {
+      "canonical_source": "qa/gongsun_sheng_mounted_layers_20261018/native_originals/rider_drawn_recoil_v1.png",
+      "file": "images/rider_drawn_recoil_v1.png",
+      "sha256": "5000a2737a8411047d1ce78bc4c687944e2661baa7589b446af2f593f0688a20",
+      "rgba8_sha256": "c81b6995a0d2de724c277cbac5bbd56aac7143912aee5d420cfb112893f44c85"
+    },
+    "rider_drawn_recover_v1": {
+      "canonical_source": "qa/gongsun_sheng_mounted_layers_20261018/native_originals/rider_drawn_recover_v1.png",
+      "file": "images/rider_drawn_recover_v1.png",
+      "sha256": "4c07b6117bf89e5f27fea214185f296b6188ab3d4e08b95b81da0765a556f94e",
+      "rgba8_sha256": "36486872a8cd7b38ded5a4b139224a5756c2e38e0dc6629acea32b5aca9b9379"
+    },
+    "rider_sheathed_recoil_v1": {
+      "canonical_source": "qa/gongsun_sheng_mounted_layers_20261018/native_originals/rider_sheathed_recoil_v1.png",
+      "file": "images/rider_sheathed_recoil_v1.png",
+      "sha256": "506931cf7df68d4cd7274380585d7ee03f6aef32bf60ed4e6f10f0a4c925bf3f",
+      "rgba8_sha256": "4d725cd9dc1420e2536fb7a4c6958b6e99d1b9bc38a233ba12575724b9e11f65"
+    },
+    "rider_sheathed_recover_v1": {
+      "canonical_source": "qa/gongsun_sheng_mounted_layers_20261018/native_originals/rider_sheathed_recover_v1.png",
+      "file": "images/rider_sheathed_recover_v1.png",
+      "sha256": "28edc3783556678a93d08986fb35f414dab1e230329a429694e329f212ce8ab1",
+      "rgba8_sha256": "aa4fb6e44b43b59d23d82b39dd3230abdccceb317543ebf584b16df7ddd7b97c"
+    },
+    "original_recoil": {
+      "canonical_source": "qa/gongsun_sheng_mounted_hurt_sources_20261018/native_originals/drawn_recoil_v1.png",
+      "file": "images/original_recoil.png",
+      "sha256": "d4a452a9cdcd88e844c2beb5c32ca1c6ae24aa26c20594dd7203a365d47629ce",
+      "rgba8_sha256": "8ddcfa343bf5f185ee0eb973d79b5b362b17724e4edb12b9705473dd0ba14d7e"
+    }
+  },
+  "states": {
+    "sheathed_idle": "rider_sheathed_idle_v2",
+    "reach": "rider_reach_v2",
+    "draw_mid": "rider_draw_mid_v1",
+    "point": "rider_point_v1",
+    "drawn_recoil": "rider_drawn_recoil_v1",
+    "drawn_recover": "rider_drawn_recover_v1",
+    "sheathed_recoil": "rider_sheathed_recoil_v1",
+    "sheathed_recover": "rider_sheathed_recover_v1"
+  },
+  "views": {
+    "se": {
+      "region": [
+        0,
+        0,
+        627,
+        627
+      ],
+      "horse": {
+        "scale": 0.97,
+        "offset": [
+          9.61,
+          3.43
+        ],
+        "rein": [
+          348,
+          266
+        ]
+      },
+      "rider_scale": 0.8,
+      "target_rein": [
+        347.17,
+        261.45
+      ],
+      "phases": {
+        "sheathed_idle": {
+          "texture": "rider_sheathed_idle_v2",
+          "scale": 0.8,
+          "offset": [
+            55.170000000000016,
+            23.049999999999983
+          ],
+          "manual_visible_rein_hand": [
+            365,
+            298
+          ],
+          "manual_uncertainty_source_pixels": 5,
+          "hidden_hand_measured": false,
+          "physical_contact_accepted": false
+        },
+        "reach": {
+          "texture": "rider_reach_v2",
+          "scale": 0.8,
+          "offset": [
+            45.56999999999999,
+            19.849999999999966
+          ],
+          "manual_visible_rein_hand": [
+            377,
+            302
+          ],
+          "manual_uncertainty_source_pixels": 5,
+          "hidden_hand_measured": false,
+          "physical_contact_accepted": false
+        },
+        "draw_mid": {
+          "texture": "rider_draw_mid_v1",
+          "scale": 0.8,
+          "offset": [
+            45.56999999999999,
+            19.849999999999966
+          ],
+          "manual_visible_rein_hand": [
+            377,
+            302
+          ],
+          "manual_uncertainty_source_pixels": 5,
+          "hidden_hand_measured": false,
+          "physical_contact_accepted": false
+        },
+        "point": {
+          "texture": "rider_point_v1",
+          "scale": 0.8,
+          "offset": [
+            47.97000000000003,
+            19.849999999999966
+          ],
+          "manual_visible_rein_hand": [
+            374,
+            302
+          ],
+          "manual_uncertainty_source_pixels": 5,
+          "hidden_hand_measured": false,
+          "physical_contact_accepted": false
+        },
+        "drawn_recoil": {
+          "texture": "rider_drawn_recoil_v1",
+          "scale": 0.8,
+          "offset": [
+            55.170000000000016,
+            28.649999999999977
+          ],
+          "manual_visible_rein_hand": [
+            365,
+            291
+          ],
+          "manual_uncertainty_source_pixels": 5,
+          "hidden_hand_measured": false,
+          "physical_contact_accepted": false
+        },
+        "drawn_recover": {
+          "texture": "rider_drawn_recover_v1",
+          "scale": 0.8,
+          "offset": [
+            51.170000000000016,
+            19.849999999999966
+          ],
+          "manual_visible_rein_hand": [
+            370,
+            302
+          ],
+          "manual_uncertainty_source_pixels": 5,
+          "hidden_hand_measured": false,
+          "physical_contact_accepted": false
+        },
+        "sheathed_recoil": {
+          "texture": "rider_sheathed_recoil_v1",
+          "scale": 0.8,
+          "offset": [
+            55.170000000000016,
+            28.649999999999977
+          ],
+          "manual_visible_rein_hand": [
+            365,
+            291
+          ],
+          "manual_uncertainty_source_pixels": 5,
+          "hidden_hand_measured": false,
+          "physical_contact_accepted": false
+        },
+        "sheathed_recover": {
+          "texture": "rider_sheathed_recover_v1",
+          "scale": 0.8,
+          "offset": [
+            55.170000000000016,
+            31.049999999999983
+          ],
+          "manual_visible_rein_hand": [
+            365,
+            288
+          ],
+          "manual_uncertainty_source_pixels": 5,
+          "hidden_hand_measured": false,
+          "physical_contact_accepted": false
+        }
+      }
+    },
+    "sw": {
+      "region": [
+        627,
+        0,
+        627,
+        627
+      ],
+      "horse": {
+        "scale": 0.97,
+        "offset": [
+          35.23,
+          3.43
+        ],
+        "rein": [
+          936,
+          267
+        ]
+      },
+      "rider_scale": 0.8,
+      "target_rein": [
+        943.15,
+        262.42
+      ],
+      "phases": {
+        "sheathed_idle": {
+          "texture": "rider_sheathed_idle_v2",
+          "scale": 0.8,
+          "offset": [
+            191.14999999999998,
+            18.420000000000016
+          ],
+          "manual_visible_rein_hand": [
+            940,
+            305
+          ],
+          "manual_uncertainty_source_pixels": 5,
+          "hidden_hand_measured": false,
+          "physical_contact_accepted": false
+        },
+        "reach": {
+          "texture": "rider_reach_v2",
+          "scale": 0.8,
+          "offset": [
+            241.54999999999995,
+            20.02000000000001
+          ],
+          "manual_visible_rein_hand": [
+            877,
+            303
+          ],
+          "manual_uncertainty_source_pixels": 5,
+          "hidden_hand_measured": false,
+          "physical_contact_accepted": false
+        },
+        "draw_mid": {
+          "texture": "rider_draw_mid_v1",
+          "scale": 0.8,
+          "offset": [
+            241.54999999999995,
+            20.02000000000001
+          ],
+          "manual_visible_rein_hand": [
+            877,
+            303
+          ],
+          "manual_uncertainty_source_pixels": 5,
+          "hidden_hand_measured": false,
+          "physical_contact_accepted": false
+        },
+        "point": {
+          "texture": "rider_point_v1",
+          "scale": 0.8,
+          "offset": [
+            172.7499999999999,
+            15.219999999999999
+          ],
+          "manual_visible_rein_hand": [
+            963,
+            309
+          ],
+          "manual_uncertainty_source_pixels": 5,
+          "hidden_hand_measured": false,
+          "physical_contact_accepted": false
+        },
+        "drawn_recoil": {
+          "texture": "rider_drawn_recoil_v1",
+          "scale": 0.8,
+          "offset": [
+            175.14999999999998,
+            20.819999999999993
+          ],
+          "manual_visible_rein_hand": [
+            960,
+            302
+          ],
+          "manual_uncertainty_source_pixels": 5,
+          "hidden_hand_measured": false,
+          "physical_contact_accepted": false
+        },
+        "drawn_recover": {
+          "texture": "rider_drawn_recover_v1",
+          "scale": 0.8,
+          "offset": [
+            175.14999999999998,
+            12.819999999999993
+          ],
+          "manual_visible_rein_hand": [
+            960,
+            312
+          ],
+          "manual_uncertainty_source_pixels": 5,
+          "hidden_hand_measured": false,
+          "physical_contact_accepted": false
+        },
+        "sheathed_recoil": {
+          "texture": "rider_sheathed_recoil_v1",
+          "scale": 0.8,
+          "offset": [
+            194.3499999999999,
+            27.22
+          ],
+          "manual_visible_rein_hand": [
+            936,
+            294
+          ],
+          "manual_uncertainty_source_pixels": 5,
+          "hidden_hand_measured": false,
+          "physical_contact_accepted": false
+        },
+        "sheathed_recover": {
+          "texture": "rider_sheathed_recover_v1",
+          "scale": 0.8,
+          "offset": [
+            194.3499999999999,
+            32.02000000000001
+          ],
+          "manual_visible_rein_hand": [
+            936,
+            288
+          ],
+          "manual_uncertainty_source_pixels": 5,
+          "hidden_hand_measured": false,
+          "physical_contact_accepted": false
+        }
+      }
+    },
+    "ne": {
+      "region": [
+        0,
+        627,
+        627,
+        627
+      ],
+      "horse": {
+        "scale": 0.91,
+        "offset": [
+          42.03,
+          112.96
+        ],
+        "rein": [
+          370,
+          829
+        ]
+      },
+      "rider_scale": 0.8,
+      "target_rein": [
+        378.73,
+        867.35
+      ],
+      "phases": {
+        "sheathed_idle": {
+          "texture": "rider_sheathed_idle_v2",
+          "scale": 0.8,
+          "offset": [
+            95.53000000000003,
+            140.94999999999993
+          ],
+          "manual_visible_rein_hand": [
+            354,
+            908
+          ],
+          "manual_uncertainty_source_pixels": 8,
+          "hidden_hand_measured": false,
+          "physical_contact_accepted": false
+        },
+        "reach": {
+          "texture": "rider_reach_v2",
+          "scale": 0.8,
+          "offset": [
+            94.73000000000002,
+            145.75
+          ],
+          "manual_visible_rein_hand": [
+            355,
+            902
+          ],
+          "manual_uncertainty_source_pixels": 8,
+          "hidden_hand_measured": false,
+          "physical_contact_accepted": false
+        },
+        "draw_mid": {
+          "texture": "rider_draw_mid_v1",
+          "scale": 0.8,
+          "offset": [
+            94.73000000000002,
+            145.75
+          ],
+          "manual_visible_rein_hand": [
+            355,
+            902
+          ],
+          "manual_uncertainty_source_pixels": 8,
+          "hidden_hand_measured": false,
+          "physical_contact_accepted": false
+        },
+        "point": {
+          "texture": "rider_point_v1",
+          "scale": 0.8,
+          "offset": [
+            93.93,
+            136.14999999999998
+          ],
+          "manual_visible_rein_hand": [
+            356,
+            914
+          ],
+          "manual_uncertainty_source_pixels": 8,
+          "hidden_hand_measured": false,
+          "physical_contact_accepted": false
+        },
+        "drawn_recoil": {
+          "texture": "rider_drawn_recoil_v1",
+          "scale": 0.8,
+          "offset": [
+            95.53000000000003,
+            140.94999999999993
+          ],
+          "manual_visible_rein_hand": [
+            354,
+            908
+          ],
+          "manual_uncertainty_source_pixels": 8,
+          "hidden_hand_measured": false,
+          "physical_contact_accepted": false
+        },
+        "drawn_recover": {
+          "texture": "rider_drawn_recover_v1",
+          "scale": 0.8,
+          "offset": [
+            93.93,
+            135.35000000000002
+          ],
+          "manual_visible_rein_hand": [
+            356,
+            915
+          ],
+          "manual_uncertainty_source_pixels": 8,
+          "hidden_hand_measured": false,
+          "physical_contact_accepted": false
+        },
+        "sheathed_recoil": {
+          "texture": "rider_sheathed_recoil_v1",
+          "scale": 0.8,
+          "offset": [
+            95.53000000000003,
+            149.75
+          ],
+          "manual_visible_rein_hand": [
+            354,
+            897
+          ],
+          "manual_uncertainty_source_pixels": 8,
+          "hidden_hand_measured": false,
+          "physical_contact_accepted": false
+        },
+        "sheathed_recover": {
+          "texture": "rider_sheathed_recover_v1",
+          "scale": 0.8,
+          "offset": [
+            95.53000000000003,
+            149.75
+          ],
+          "manual_visible_rein_hand": [
+            354,
+            897
+          ],
+          "manual_uncertainty_source_pixels": 8,
+          "hidden_hand_measured": false,
+          "physical_contact_accepted": false
+        }
+      }
+    },
+    "nw": {
+      "region": [
+        627,
+        627,
+        627,
+        627
+      ],
+      "horse": {
+        "scale": 0.91,
+        "offset": [
+          103.31,
+          112.96
+        ],
+        "rein": [
+          935,
+          833
+        ]
+      },
+      "rider_scale": 0.8,
+      "target_rein": [
+        954.1600000000001,
+        870.99
+      ],
+      "phases": {
+        "sheathed_idle": {
+          "texture": "rider_sheathed_idle_v2",
+          "scale": 0.8,
+          "offset": [
+            234.96000000000004,
+            144.58999999999992
+          ],
+          "manual_visible_rein_hand": [
+            899,
+            908
+          ],
+          "manual_uncertainty_source_pixels": 8,
+          "hidden_hand_measured": false,
+          "physical_contact_accepted": false
+        },
+        "reach": {
+          "texture": "rider_reach_v2",
+          "scale": 0.8,
+          "offset": [
+            234.96000000000004,
+            148.58999999999992
+          ],
+          "manual_visible_rein_hand": [
+            899,
+            903
+          ],
+          "manual_uncertainty_source_pixels": 8,
+          "hidden_hand_measured": false,
+          "physical_contact_accepted": false
+        },
+        "draw_mid": {
+          "texture": "rider_draw_mid_v1",
+          "scale": 0.8,
+          "offset": [
+            234.96000000000004,
+            148.58999999999992
+          ],
+          "manual_visible_rein_hand": [
+            899,
+            903
+          ],
+          "manual_uncertainty_source_pixels": 8,
+          "hidden_hand_measured": false,
+          "physical_contact_accepted": false
+        },
+        "point": {
+          "texture": "rider_point_v1",
+          "scale": 0.8,
+          "offset": [
+            220.56000000000006,
+            134.99
+          ],
+          "manual_visible_rein_hand": [
+            917,
+            920
+          ],
+          "manual_uncertainty_source_pixels": 8,
+          "hidden_hand_measured": false,
+          "physical_contact_accepted": false
+        },
+        "drawn_recoil": {
+          "texture": "rider_drawn_recoil_v1",
+          "scale": 0.8,
+          "offset": [
+            220.56000000000006,
+            143.78999999999996
+          ],
+          "manual_visible_rein_hand": [
+            917,
+            909
+          ],
+          "manual_uncertainty_source_pixels": 8,
+          "hidden_hand_measured": false,
+          "physical_contact_accepted": false
+        },
+        "drawn_recover": {
+          "texture": "rider_drawn_recover_v1",
+          "scale": 0.8,
+          "offset": [
+            220.56000000000006,
+            135.78999999999996
+          ],
+          "manual_visible_rein_hand": [
+            917,
+            919
+          ],
+          "manual_uncertainty_source_pixels": 8,
+          "hidden_hand_measured": false,
+          "physical_contact_accepted": false
+        },
+        "sheathed_recoil": {
+          "texture": "rider_sheathed_recoil_v1",
+          "scale": 0.8,
+          "offset": [
+            234.96000000000004,
+            153.39
+          ],
+          "manual_visible_rein_hand": [
+            899,
+            897
+          ],
+          "manual_uncertainty_source_pixels": 8,
+          "hidden_hand_measured": false,
+          "physical_contact_accepted": false
+        },
+        "sheathed_recover": {
+          "texture": "rider_sheathed_recover_v1",
+          "scale": 0.8,
+          "offset": [
+            234.96000000000004,
+            153.39
+          ],
+          "manual_visible_rein_hand": [
+            899,
+            897
+          ],
+          "manual_uncertainty_source_pixels": 8,
+          "hidden_hand_measured": false,
+          "physical_contact_accepted": false
+        }
+      }
+    }
+  },
+  "canon_basis": "qa/gongsun_sheng_mounted_topology_20261018/source_basis.json",
+  "canon_basis_sha256": "b825eb9424a99a3b706ae5dbb0e759ef0b6c070b66431dec076e7138cc7cec53",
+  "horse_transform_fixed_across_states": true,
+  "rider_scale_fixed_across_states": true,
+  "source_png_pixel_writes": false,
+  "production_adopted": false,
+  "native_executed": false,
+  "full_draw_recovery_accepted": false
+}

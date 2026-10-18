@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><title>公孙胜骑乘分层检查</title>
+<style>
+body{margin:20px;background:#24231f;color:#eee9dc;font:16px system-ui}h1{font-size:20px}button,select,input{font:inherit}button,select{margin-right:12px;padding:7px}label{display:inline-flex;gap:8px;align-items:center;margin-right:16px}.grid{display:grid;grid-template-columns:repeat(4,minmax(240px,1fr));gap:8px}.cell{background:#302e27}.cell h2{font-size:16px;padding:8px;margin:0}.cell canvas{display:block;width:100%;height:auto}.controls{margin:12px 0}pre{white-space:pre-wrap;font-size:12px}#status{min-height:24px;color:#e9d8a1}body.single .grid{grid-template-columns:minmax(400px,560px)}
+</style>
+<h1>公孙胜 · 固定马身与骑手层</h1>
+<div class="controls"><label>方向 <select id="direction"><option value="all">四向</option><option value="se">东南</option><option value="sw">西南</option><option value="ne">东北</option><option value="nw">西北</option></select></label><label>画面 <select id="mode"><option value="drawn_recoil">持剑受击</option><option value="drawn_recover">持剑恢复</option><option value="sheathed_idle">藏剑待机</option><option value="reach">取剑起手</option><option value="draw_mid">部分出鞘</option><option value="point">指剑</option><option value="sheathed_recoil">藏剑受击</option><option value="sheathed_recover">藏剑恢复</option><option value="original">原合图受击参考</option><option value="horse">仅固定马身</option></select></label><button id="play" type="button" aria-pressed="false">播放受击 / 恢复</button><label><input id="anchors" type="checkbox" checked>定位点</label></div>
+<div id="status">载入原始 PNG…</div>
+<div class="grid" id="grid"></div>
+<div class="controls"><label>当前方向骑手统一比例 <input id="scale" type="number" min="0.5" max="1.2" step="0.01"></label><label>横向偏移 <input id="offset_x" type="number" step="1"></label><label>纵向偏移 <input id="offset_y" type="number" step="1"></label></div>
+<p>浏览器合成检查；不是 Godot、实际单位或整套动画验收。马身固定；骑手比例对同方向八状态固定，按鞍位定位；皮革缰绳纹理连接到手。原 PNG 未修改。</p><pre id="settings"></pre>
+<script src="layer_data.js"></script>
+<script>
+'use strict';
+const dirs=['se','sw','ne','nw'],labels={se:'东南',sw:'西南',ne:'东北',nw:'西北'};
+const layerData=window.GSLayers;
+const sourceFiles={horse:layerData.textures.horse_no_reins_v2.file,rein:layerData.textures.rein_material_v1.file,original:layerData.textures.original_recoil.file};
+for(const [state,key] of Object.entries(layerData.states))sourceFiles[state]=layerData.textures[key].file;
+const calibration=structuredClone(layerData.views);
+for(const c of Object.values(calibration))c.rider={scale:c.rider_scale,offset:[0,0]};
+const images={},canvases={},root=document.getElementById('grid');let timer=null;
+for(const d of dirs){const cell=document.createElement('div');cell.className='cell';cell.dataset.direction=d;const title=document.createElement('h2');title.textContent=labels[d];const canvas=document.createElement('canvas');canvas.width=420;canvas.height=440;canvas.setAttribute('aria-label',labels[d]+'骑乘分层预览');cell.append(title,canvas);root.append(cell);canvases[d]=canvas;}
+function point(d,p,s,offset){return[p[0]*s+offset[0],p[1]*s+offset[1]];}
+function riderTransform(d,phase){const c=calibration[d],p=c.phases[phase],sc=c.rider.scale;return{scale:sc,offset:c.seat_waist_target.map((value,i)=>value-p.manual_seat_waist_source[i]*sc+c.rider.offset[i])};}
+function ribbon(ctx,a,b,width,sag){const sample=layerData.rein.sample_region,n=layerData.rein.segments,control=[(a[0]+b[0])/2,(a[1]+b[1])/2+2*sag];let prev=a;for(let i=1;i<=n;i++){const t=i/n,u=1-t,p=[u*u*a[0]+2*u*t*control[0]+t*t*b[0],u*u*a[1]+2*u*t*control[1]+t*t*b[1]],dx=p[0]-prev[0],dy=p[1]-prev[1],length=Math.hypot(dx,dy);ctx.save();ctx.translate(prev[0],prev[1]);ctx.rotate(Math.atan2(dy,dx));ctx.drawImage(images.rein,sample[0],sample[1],sample[2],sample[3],-.3,-width/2,length+.6,width);ctx.restore();prev=p;}}
+function paintReins(ctx,d,phase,pose){const c=calibration[d],i=dirs.indexOf(d),origin=[(i%2)*627,Math.floor(i/2)*627],hand=c.phases[phase].manual_visible_rein_hand,a=point(d,c.horse.bit_source,c.horse.scale,c.horse.offset).map((value,j)=>value-origin[j]),b=point(d,hand,pose.scale,pose.offset).map((value,j)=>value-origin[j]);ribbon(ctx,a,b,layerData.rein.width_native,layerData.rein.sag_native);ribbon(ctx,[a[0]+3,a[1]+2],[b[0]+2,b[1]+1],layerData.rein.width_native,layerData.rein.sag_native+3);}
+function drawImage(ctx,img,d,s,offset){const i=dirs.indexOf(d),sx=(i%2)*627,sy=Math.floor(i/2)*627;ctx.drawImage(img,sx,sy,627,627,(s-1)*sx+offset[0],(s-1)*sy+offset[1],627*s,627*s);}
+function cross(ctx,x,y,color){ctx.strokeStyle=color;ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(x-8,y);ctx.lineTo(x+8,y);ctx.moveTo(x,y-8);ctx.lineTo(x,y+8);ctx.stroke();}
+function currentDirection(){const d=document.getElementById('direction').value;return d==='all'?'se':d;}
+function syncInputs(){const r=calibration[currentDirection()].rider;document.getElementById('scale').value=r.scale;document.getElementById('offset_x').value=r.offset[0];document.getElementById('offset_y').value=r.offset[1];}
+function render(){const mode=document.getElementById('mode').value,chosen=document.getElementById('direction').value;document.body.classList.toggle('single',chosen!=='all');
+for(const d of dirs){const canvas=canvases[d],ctx=canvas.getContext('2d');canvas.parentElement.hidden=chosen!=='all'&&chosen!==d;ctx.clearRect(0,0,420,440);ctx.save();ctx.translate(16,25);ctx.scale(.61,.61);
+if(mode==='original')drawImage(ctx,images[mode],d,1,[0,0]);else{const c=calibration[d];drawImage(ctx,images.horse,d,c.horse.scale,c.horse.offset);if(mode!=='horse'){const pose=riderTransform(d,mode);paintReins(ctx,d,mode,pose);drawImage(ctx,images[mode],d,pose.scale,pose.offset);}if(document.getElementById('anchors').checked){const i=dirs.indexOf(d),origin=[(i%2)*627,Math.floor(i/2)*627],p=point(d,c.horse.bit_source,c.horse.scale,c.horse.offset);cross(ctx,p[0]-origin[0],p[1]-origin[1],'#78db9e');}}
+ctx.restore();}document.getElementById('settings').textContent=JSON.stringify(calibration,null,2);document.getElementById('status').textContent=Object.keys(sourceFiles).length+' 张原始 PNG 已载入 · '+document.getElementById('mode').selectedOptions[0].textContent;}
+for(const id of ['direction','mode','anchors'])document.getElementById(id).addEventListener('change',()=>{syncInputs();render();});
+for(const id of ['scale','offset_x','offset_y'])document.getElementById(id).addEventListener('input',()=>{const r=calibration[currentDirection()].rider;r.scale=Number(document.getElementById('scale').value);r.offset=[Number(document.getElementById('offset_x').value),Number(document.getElementById('offset_y').value)];render();});
+document.getElementById('play').addEventListener('click',()=>{if(timer){clearInterval(timer);timer=null;}else{timer=setInterval(()=>{const s=document.getElementById('mode');const family=s.value.startsWith('sheathed')?'sheathed':'drawn';s.value=s.value===family+'_recover'?family+'_recoil':family+'_recover';render();},500);}document.getElementById('play').setAttribute('aria-pressed',String(Boolean(timer)));});
+Promise.all(Object.entries(sourceFiles).map(([key,src])=>new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>{images[key]=im;resolve();};im.onerror=()=>reject(new Error(src));im.src=src;}))).then(()=>{const query=new URLSearchParams(location.search);if(sourceFiles[query.get('mode')])document.getElementById('mode').value=query.get('mode');if(dirs.includes(query.get('direction')))document.getElementById('direction').value=query.get('direction');syncInputs();render();}).catch(e=>{document.getElementById('status').textContent='载入失败：'+e.message;});
+</script></html>

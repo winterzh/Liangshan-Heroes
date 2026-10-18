@@ -1,0 +1,27 @@
+"""Archive exact local-browser captures; keep profiles and caches outside Git."""
+from pathlib import Path
+import hashlib,json,shutil
+Q=Path(__file__).resolve().parent;R=Q.parents[1]
+E=Path('D:/CodexEvidence/shuihu/gongsun_sheng_mounted_layers_20261018/browser')
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def save(p,x):
+    with p.open('x',encoding='utf-8') as f:f.write(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+archive=[]
+for run in sorted((E/'captures').iterdir()):
+    if not run.is_dir() or not (run/'receipt.json').is_file():continue
+    dest=Q/'actual_browser'/run.name;dest.mkdir(parents=True)
+    for src in sorted(run.iterdir()):
+        if not src.is_file():continue
+        dst=dest/src.name;shutil.copyfile(src,dst);assert sha(src)==sha(dst)
+        archive.append({'original':str(src),'archive':dst.relative_to(Q).as_posix(),'bytes':dst.stat().st_size,'sha256':sha(dst)})
+save(Q/'browser_archive_index.json',archive)
+latest=Path(json.loads((E/'latest_browser_capture.json').read_text())['receipt']);receipt=json.loads(latest.read_text());assert receipt['complete'] and len(receipt['steps'])==9
+viewed=[step['mode']+'.png' for step in receipt['steps']]
+save(Q/'browser_review_v2.json',{'scope':'Headless Edge screenshots of own localhost canvas, not native Godot, real Unit, PCK, full sequence, performance or production acceptance.','receipt':str(latest),'directly_viewed_screenshots':viewed,'directions_per_image':4,'loaded_raw_pngs_visible_in_all_status_labels':11,'observations':['Horse body is one exact bitmap and one transform for all eight states; muzzle/tail/hooves no longer redraw per phase.','Rider remains fixed in scale and registered at a provisional seat/waist proxy. Visible foot/robe motion and rear hand/arm occlusion still need temporal/native scrutiny.','Independent imagegen-painted leather ribbons connect bit to moving rein hand, avoiding translating the whole rider to touch a static rein.','Sheathed states have one solid hilt in the back scabbard; drawn point/reaction states have one held sword and empty scabbard.','Reach v2 rear arm and partial draw improve continuity; enlarged fingers/occlusion and the complete draw/return trajectory are not accepted.','Partial draw to fully pointed sword still needs complete intermediate/return motion validation, not an automatic seamless-sequence pass.'],'native_executed':False,'actual_unit_tested':False,'full_draw_return_accepted':False,'production_adopted':False})
+save(Q/'capture_diagnostics.json',{'iab_webview':'createBrowserTab timed out attaching; getState timed out and reset kernel. No existing Steam tab operated.','node_playwright_import':'The requested module ./index.js does not provide an export named default. No user browser profile accessed.','fallback':'Existing Edge CLI, fresh task-only user-data directories, own localhost page, GPU disabled. Source PNGs unchanged.','first_capture':'Original screenshot was created, but empty --dump-dom stdout caused an overbroad assertion. Failed receipt unchanged.','second_capture':'Edge launcher exited before screenshot file was written. The same pending file later appeared; original failed receipt unchanged.','later_capture':'V3/V4 observe the same pending screenshot until a complete PNG exists, rather than restarting because the launcher returned. Final nine captures all viewed.','setup_only_failure':'Seat-binding author initially matched source_review.json as a PNG record; now skips records without a file. Existing identical bindings verified on resume.','native_preparation':'First unexecuted full-image corner check would fail for two original alpha1 corners. Equal padding could not find zero selected corners in one rear sprite; asymmetric transparent selections succeeded. Material UV sampling is opaque by design, so material visibility is checked separately from sprite transparent corners. None of these setup diagnostics are native game failures or passes.'})
+pins=[]
+for rel in ['qa/chao_gai_layered_full_pack_20261018/runtime_after_adoption.json','qa/tribute_cart_wheel_unit_20261018/protected_next.json','qa/ruan_xiaoqi_walk_grips_20261018/preservation/unrelated_before.json']:
+    rows=json.loads((R/rel).read_text());changed=[x['path'] for x in rows if sha(R/x['path'])!=x['sha256']];assert not changed;pins.append({'manifest':rel,'files':len(rows),'changed':changed})
+save(Q/'preservation.json',{'pins':pins,'hud_sha256':sha(R/'scripts/hud.gd'),'production_script_changes':False,'native_executed':False})
+save(Q/'native_gate.json',{'new_originals':13,'latest_source_manifest':'prompt_set_v2.json','comparison_selected_originals':10,'rider_states':8,'browser_latest_screenshots':9,'browser_latest_directly_viewed':9,'browser_scope':'Four directions in each of eight state images plus original reference. Static own-page canvas only.','native_prepared_files':25,'native_prepared_pngs':11,'native_binding':'native_prepared_v3_binding.json','native_runner':'run_native_v3.py','native_executed':False,'expected_native_checks_if_uncompressed':59,'expected_native_checks_are_not_a_pass':True,'must_observe_existing_wu_queue_until_terminal':True,'no_second_native_queue_started':True,'actual_unit_tested':False,'complete_draw_return_accepted':False,'production_adopted':False})
+print(json.dumps({'archived_browser_files':len(archive),'latest_viewed':len(viewed),'runtime_preserved':106,'native_executed':False}))

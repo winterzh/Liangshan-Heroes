@@ -1,0 +1,76 @@
+extends SceneTree
+var checks: Array=[]
+var failures: Array=[]
+func check(ok: bool,label: String)->void:
+	checks.append({"passed":ok,"label":label})
+	if not ok:failures.append(label)
+func _initialize()->void:run.call_deferred()
+func run()->void:
+	if OS.get_environment("STEAM_DISABLED")!="1" or OS.get_environment("CAMPAIGN_QA")!="1":quit(2);return
+	root.size=Vector2i(1920,1280)
+	var stage:=Stage.new();stage.data=JSON.parse_string(FileAccess.get_file_as_string("res://inputs.json"));var native: Dictionary={}
+	for key in stage.data.textures:
+		var row: Dictionary=stage.data.textures[key];var tex: Texture2D=load("res://"+String(row.file))
+		check(tex!=null and tex.get_size()==Vector2(1254,1254),"native size "+key)
+		check(FileAccess.get_sha256("res://"+String(row.file))==row.sha256,"original PNG "+key)
+		if tex==null:continue
+		stage.textures[key]=tex;var im:=tex.get_image()
+		if im.is_compressed():check(im.decompress()==OK,"decompress "+key)
+		check(im.get_format()==Image.FORMAT_RGBA8,"RGBA8 "+key)
+		var base:=HashingContext.new();base.start(HashingContext.HASH_SHA256);base.update(im.get_data().slice(0,1254*1254*4));var base_hash:=base.finish().hex_encode()
+		check(base_hash==row.rgba8_sha256,"original native RGBA "+key)
+		var used_corners_ok:=true
+		if key==String(stage.data.rein.texture):
+			var sample: Array=stage.data.rein.sample_region
+			check(im.get_pixel(int(sample[0])+int(sample[2])/2,int(sample[1])+int(sample[3])/2).a>.9,"painted rein material sample visible "+key)
+		else:
+			for rr in row.used_regions.values():
+				for p in [Vector2i(rr[0],rr[1]),Vector2i(rr[0]+rr[2]-1,rr[1]),Vector2i(rr[0],rr[1]+rr[3]-1),Vector2i(rr[0]+rr[2]-1,rr[1]+rr[3]-1)]:
+					if im.get_pixelv(p).a!=0:used_corners_ok=false
+			check(used_corners_ok,"actual selected sprite corners transparent "+key)
+		var full:=HashingContext.new();full.start(HashingContext.HASH_SHA256);full.update(im.get_data());native[key]={"rgba8_sha256":base_hash,"data_sha256":full.finish().hex_encode(),"mipmaps":im.has_mipmaps(),"raw_full_corner_alpha":row.raw_full_corner_alpha,"used_regions":row.used_regions}
+	root.add_child(stage);var captures: Array=[]
+	for direction in ["se","sw","ne","nw"]:
+		stage.direction=direction;stage.queue_redraw()
+		for i in range(4):await process_frame
+		await RenderingServer.frame_post_draw
+		var name: String="layers_"+direction+".png";check(root.get_texture().get_image().save_png("res://"+name)==OK,"capture "+direction);captures.append(name)
+	FileAccess.open("res://report.json",FileAccess.WRITE).store_string(JSON.stringify({"resource_preview_complete":failures.is_empty(),"checks":checks,"failures":failures,"screenshots":captures,"texture_references":native,"actual_unit_tested":false,"whole_draw_return_accepted":false,"production_adopted":false,"scope":stage.data.scope},"\t"))
+	quit(0 if failures.is_empty() else 1)
+class Stage extends Node2D:
+	var data: Dictionary
+	var textures: Dictionary={}
+	var direction: String="se"
+	func vec(p: Array)->Vector2:return Vector2(p[0],p[1])
+	func mapped(p: Array,sc: float,offset: Array)->Vector2:return vec(p)*sc+vec(offset)
+	func paint(key: String,sc: float,offset: Array)->void:
+		var rr: Array=data.textures[key].used_regions[direction];var region:=Rect2(rr[0],rr[1],rr[2],rr[3]);var origin: Array=data.views[direction].region;draw_texture_rect_region(textures[key],Rect2(region.position*sc+vec(offset)-Vector2(origin[0],origin[1]),region.size*sc),region)
+	func ribbon(a: Vector2,b: Vector2,width: float,sag: float)->void:
+		var points: Array[Vector2]=[];var upper: Array[Vector2]=[];var lower: Array[Vector2]=[]
+		var control: Vector2=(a+b)*.5+Vector2(0,2*sag);var count: int=int(data.rein.segments)
+		for i in range(count+1):
+			var t: float=float(i)/count;var u: float=1.0-t;points.append(a*u*u+control*2*u*t+b*t*t)
+		for i in range(count+1):
+			var tangent: Vector2=points[mini(i+1,count)]-points[maxi(i-1,0)];var normal:=Vector2(-tangent.y,tangent.x).normalized()*width*.5;upper.append(points[i]+normal);lower.append(points[i]-normal)
+		var polygon:=PackedVector2Array();var uv:=PackedVector2Array();var colors:=PackedColorArray();var sample: Array=data.rein.sample_region
+		for i in range(count+1):
+			polygon.append(upper[i]);uv.append(Vector2(float(sample[0])+float(sample[2])*i/count,float(sample[1]))/1254.0);colors.append(Color.WHITE)
+		for i in range(count,-1,-1):
+			polygon.append(lower[i]);uv.append(Vector2(float(sample[0])+float(sample[2])*i/count,float(sample[1])+float(sample[3]))/1254.0);colors.append(Color.WHITE)
+		draw_polygon(polygon,colors,uv,textures[String(data.rein.texture)])
+	func reins(phase: Dictionary)->void:
+		var view: Dictionary=data.views[direction];var rr: Array=view.region;var origin:=Vector2(rr[0],rr[1]);var h: Dictionary=view.horse
+		var a: Vector2=mapped(h.bit_source,float(h.scale),h.offset)-origin;var b: Vector2=mapped(phase.manual_visible_rein_hand,float(phase.scale),phase.offset)-origin
+		ribbon(a,b,float(data.rein.width_native),float(data.rein.sag_native));ribbon(a+Vector2(3,2),b+Vector2(2,1),float(data.rein.width_native),float(data.rein.sag_native)+3)
+	func _draw()->void:
+		draw_rect(Rect2(0,0,1920,1280),Color("24231f"));var names: Array=["original_recoil","sheathed_idle","reach","draw_mid","point","drawn_recoil","drawn_recover","sheathed_recoil","sheathed_recover"]
+		for i in range(names.size()):
+			var at:=Vector2((i%3)*640,floori(float(i)/3.0)*400);draw_string(ThemeDB.fallback_font,at+Vector2(15,25),direction+" / "+String(names[i]),HORIZONTAL_ALIGNMENT_LEFT,-1,18,Color.WHITE)
+			draw_set_transform(at+Vector2(147,30),0,Vector2.ONE*.55)
+			if i==0:paint("original_recoil",1.0,[0,0])
+			else:
+				var view: Dictionary=data.views[direction];var phase: Dictionary=view.phases[names[i]]
+				paint(view.horse_texture,float(view.horse.scale),view.horse.offset);reins(phase);paint(phase.texture,float(phase.scale),phase.offset)
+			draw_set_transform(Vector2.ZERO);draw_rect(Rect2(at,Vector2(640,400)).grow(-1),Color("6a6555"),false,1)
+		draw_string(ThemeDB.fallback_font,Vector2(18,1230),"Fixed horse / fixed directional rider scale / provisional seat anchors / imagegen-painted flexible rein texture",HORIZONTAL_ALIGNMENT_LEFT,-1,19,Color.WHITE)
+		draw_string(ThemeDB.fallback_font,Vector2(18,1260),"Source/render comparison only. No Unit/chapter or complete draw/return acceptance.",HORIZONTAL_ALIGNMENT_LEFT,-1,18,Color.WHITE)

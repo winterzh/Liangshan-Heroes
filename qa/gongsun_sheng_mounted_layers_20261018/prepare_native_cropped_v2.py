@@ -1,0 +1,54 @@
+"""Use transparent sprite selections; preserve original PNGs including faint unused alpha."""
+from pathlib import Path
+import copy,hashlib,json,re,shutil
+import numpy as np
+from PIL import Image
+R=Path(__file__).resolve().parents[2];Q=Path(__file__).resolve().parent
+E=Path('D:/CodexEvidence/shuihu/gongsun_sheng_mounted_layers_20261018');P=E/'prepared_v2'
+assert not P.exists();(P/'images').mkdir(parents=True)
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def save(p,x):
+    with p.open('x',encoding='utf-8') as f:f.write(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+data=json.loads((Q/'layer_bindings_v2.json').read_text());diagnostics={}
+for key,row in data['textures'].items():
+    src=R/row['canonical_source'];a=np.asarray(Image.open(src))[:,:,3];row['raw_full_corner_alpha']=[int(a[0,0]),int(a[0,-1]),int(a[-1,0]),int(a[-1,-1])]
+    if any(row['raw_full_corner_alpha']):diagnostics[key]=row['raw_full_corner_alpha']
+    regions={}
+    if key=='rein_material_v1':
+        sample=data['rein']['sample_region'];x,y,w,h=sample;assert not any(int(a[yy,xx]) for xx,yy in [(x,y),(x+w-1,y),(x,y+h-1),(x+w-1,y+h-1)]);regions['material']=sample
+    else:
+        for i,direction in enumerate(['se','sw','ne','nw']):
+            ox=(i%2)*627;oy=(i//2)*627;yy,xx=np.nonzero(a[oy:oy+627,ox:ox+627]>=8);assert len(xx)>1000
+            found=None
+            for margin in range(4,17):
+                x=max(ox,ox+int(xx.min())-margin);y=max(oy,oy+int(yy.min())-margin);right=min(ox+627,ox+int(xx.max())+1+margin);bottom=min(oy+627,oy+int(yy.max())+1+margin)
+                if not any(int(a[v,u]) for u,v in [(x,y),(right-1,y),(x,bottom-1),(right-1,bottom-1)]):found=[x,y,right-x,bottom-y];break
+            assert found,(key,direction);regions[direction]=found
+    row['used_regions']=regions
+    dst=P/row['file'];shutil.copyfile(src,dst);assert sha(dst)==row['sha256']
+    template=(R/'assets/characters/liu_tang_pushcart_20261017/cart_only.png.import').read_text();resource='res://'+row['file'];cache='res://.godot/imported/'+dst.name+'-'+hashlib.md5(resource.encode()).hexdigest()+'.ctex'
+    descriptor=template.replace('res://assets/characters/liu_tang_pushcart_20261017/cart_only.png',resource);descriptor=re.sub(r'res://\.godot/imported/[^"\n]+\.ctex',cache,descriptor);descriptor='\n'.join(line for line in descriptor.splitlines() if not line.startswith('uid='))+'\n';Path(str(dst)+'.import').write_text(descriptor,encoding='utf-8')
+script=(Q/'native_preview.gd.txt').read_text()
+needle='\t\tcheck(im.get_pixel(0,0).a==0 and im.get_pixel(1253,0).a==0 and im.get_pixel(0,1253).a==0 and im.get_pixel(1253,1253).a==0,"native outer corner alpha "+key)'
+assert script.count(needle)==1
+replacement='''		var used_corners_ok:=true
+		for rr in row.used_regions.values():
+			for p in [Vector2i(rr[0],rr[1]),Vector2i(rr[0]+rr[2]-1,rr[1]),Vector2i(rr[0],rr[1]+rr[3]-1),Vector2i(rr[0]+rr[2]-1,rr[1]+rr[3]-1)]:
+				if im.get_pixelv(p).a!=0:used_corners_ok=false
+		check(used_corners_ok,"actual selected sprite corners transparent "+key)'''
+script=script.replace(needle,replacement)
+script=script.replace('"mipmaps":im.has_mipmaps()}','"mipmaps":im.has_mipmaps(),"raw_full_corner_alpha":row.raw_full_corner_alpha,"used_regions":row.used_regions}')
+needle='\t\tvar rr: Array=data.views[direction].region;var region:=Rect2(rr[0],rr[1],rr[2],rr[3]);draw_texture_rect_region(textures[key],Rect2(region.position*(sc-1)+vec(offset),region.size*sc),region)'
+replacement='\t\tvar rr: Array=data.textures[key].used_regions[direction];var region:=Rect2(rr[0],rr[1],rr[2],rr[3]);var origin: Array=data.views[direction].region;draw_texture_rect_region(textures[key],Rect2(region.position*sc+vec(offset)-Vector2(origin[0],origin[1]),region.size*sc),region)'
+assert script.count(needle)==1;script=script.replace(needle,replacement)
+script=script.replace('(i/3)*400','floori(float(i)/3.0)*400')
+(P/'preview.gd').write_text(script,encoding='utf-8');shutil.copyfile(E/'prepared/project.godot',P/'project.godot');save(P/'inputs.json',data)
+with (Q/'native_preview_v2.gd.txt').open('x',encoding='utf-8') as f:f.write(script)
+save(Q/'native_selected_regions.json',data)
+frozen=[{'path':p.relative_to(P).as_posix(),'sha256':sha(p),'bytes':p.stat().st_size} for p in sorted(P.rglob('*')) if p.is_file()]
+binding={'prepared':True,'native_executed':False,'project':str(P),'frozen':frozen,'textures':11,'expected_captures':4,'scope':data['scope'],'raw_corner_alpha_diagnostics':diagnostics,'supersedes_unexecuted_preparation':str(E/'prepared'),'selection_changes_only':True,'source_png_pixel_writes':False}
+save(E/'prepared_binding_v2.json',binding);save(Q/'native_prepared_v2_binding.json',binding)
+save(Q/'raw_corner_diagnostics.json',{'raw_full_corner_alpha':diagnostics,'old_full_image_zero_corner_criterion_satisfied':False,'old_preparation_native_executed':False,'handling':'Transparent source-region selections with unchanged global source-pixel transforms. Whole PNG alpha1 remains preserved and diagnosed. Native v2 checks zero alpha at corners of actual selected sprite regions, plus full raw native pixel identity. No source PNG edited or phase rescaled.','native_v2_executed':False})
+runner=(Q/'run_native.py').read_text().replace("E/'prepared_binding.json'","E/'prepared_binding_v2.json'")
+with (Q/'run_native_v2.py').open('x',encoding='utf-8') as f:f.write(runner)
+print(json.dumps({'prepared':str(P),'files':len(frozen),'raw_alpha1_corner_sources':diagnostics,'all_used_region_corners_zero':True,'native_executed':False}))

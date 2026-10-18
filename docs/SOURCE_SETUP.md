@@ -1,3 +1,9 @@
+## 2026-10-18 公孙胜骑乘三层来源接续
+
+[三层QA](../qa/gongsun_sheng_mounted_layers_20261018/README.md)最新来源为prompt_set_v2.json（13份内置原稿/10选用），固定腰鞍与柔性纹理缰绳绑定在layer_bindings_v2.json。浏览器9图均已看；native_selected_regions_v3.json仅增加实际绘制选区、保持原像素变换/比例，原生25文件/11PNG尚未执行，不能把预期59项计作通过。原始边角alpha1、失败准备/截图断言与旧source-binding均保留。
+
+后继先核实既有吴用unit/queue/state.json和实际进程，原会话仍有活句柄时只回读，不重开；公孙胜run_native_v3.py须该队列终结及共享引擎/lease空闲才准入，未另起watcher。当前游戏运行代码与106基线保持，所有新增公孙胜图/代码均QA隔离，不影响已冻结吴用规范源。完整动作、实际Unit/章回与包内验证仍待验；游戏启动/main/Steam不变。
+
 ## 2026-10-18 吴用新步态候选与单一实景队列
 
 [新四阶段QA](../qa/wu_yong_push_gait_20261018/README.md)保存6原稿、4选用、68项原生纹理/8图、12资源/24姿势只读作者校验、两份未接线源码和完整新私有工程准备；实际Unit尚未执行。一次准入因外来Godot与lease占用而退出前置检查，wait_then_run_unit.py只启动一个等待进程（工程外unit/queue/state.json）。续作先核实该实际进程/会话，空闲后由原队列运行；不得删外来锁、重复开队列或把等待当作通过。
