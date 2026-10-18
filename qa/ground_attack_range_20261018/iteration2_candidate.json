@@ -1,0 +1,90 @@
+{
+  "base_commit": "983e4fe7a68735db0d4cdd12d8d25d3f921b4395",
+  "files": [
+    {
+      "path": "scripts/battle.gd",
+      "sha256": "d2fb2f1715044d7c7f50eb17dd118b94def81d3521bcca8cc36dcb3def662f0d"
+    },
+    {
+      "path": "scripts/ground_range_visual.gd",
+      "sha256": "838cb1cee3c893e538761b45521762e91f77f17b5a3eec0150442a0ad8cb1fd8"
+    },
+    {
+      "path": "scripts/ground_range_visual.gd.uid",
+      "sha256": "3c4876aa668b24a3373f9c766e8a66cab63535edcf712bc6ffd0d32645aa7d92"
+    },
+    {
+      "path": "tools/ruan_xiaoqi_layered_20261018.gd",
+      "sha256": "938bae77b45b12c46c2f3d261eb7a4a80f075e25442c1b1f11a6a590c71a6287"
+    },
+    {
+      "path": "assets/characters/gongsun_sheng_mounted_sources_20261018/.gdignore",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "assets/characters/gongsun_sheng_mounted_sources_20261018/contact_a.png",
+      "sha256": "624151c9cd37b8f39e38a6e219a3089f0d9d6f8e4d5b4b0ed926a3d480ea2a94"
+    },
+    {
+      "path": "assets/characters/gongsun_sheng_mounted_sources_20261018/contact_b.png",
+      "sha256": "7513dec90a601b0ea83c1b149bc0dcf71d4890db19d41cef5f9ecf44f271c434"
+    },
+    {
+      "path": "assets/characters/gongsun_sheng_mounted_sources_20261018/idle_first.png",
+      "sha256": "2fda7ec537f8cd397ce9476f6f2781e4190bc974fd07826fcf9a5fe3689e01b2"
+    },
+    {
+      "path": "assets/characters/gongsun_sheng_mounted_sources_20261018/idle_padded.png",
+      "sha256": "565d072bb82e2db899848d0224812df27cbde31a58ed5a4f341bf2a5963d57ea"
+    },
+    {
+      "path": "assets/characters/gongsun_sheng_mounted_sources_20261018/passing_a.png",
+      "sha256": "9597bb0948bc38b575d230b924b801889cb662714a53a9bbb368a56927c0b89b"
+    },
+    {
+      "path": "assets/characters/gongsun_sheng_mounted_sources_20261018/passing_b_rejected.png",
+      "sha256": "7cde37ae1502349a2447ff32df7f3a4ae689892101e2cb86f86b27d8d6e7343d"
+    },
+    {
+      "path": "assets/characters/gongsun_sheng_mounted_sources_20261018/passing_b_v2.png",
+      "sha256": "362d304432c0d876352e6d5e884a40994e9a42ab707e723539aea76bafa2a528"
+    },
+    {
+      "path": "assets/characters/gongsun_sheng_mounted_sources_20261018/point_first.png",
+      "sha256": "382e1a06acefdbb2bc99d5570c665d7391ba8faf04b6ea100305f47dd875e61a"
+    },
+    {
+      "path": "assets/characters/gongsun_sheng_mounted_sources_20261018/point_v2.png",
+      "sha256": "06f917c048cccb94b583cccc89d9cb780b04c2a162d9a4abe72e7c1bfd0adb1e"
+    },
+    {
+      "path": "assets/characters/gongsun_sheng_mounted_sources_20261018/prompt_set.json",
+      "sha256": "5118508f03f1e9e3e94325e341abcc02169e342b441a6a13bb50613d421a9527"
+    },
+    {
+      "path": "assets/characters/gongsun_sheng_mounted_sources_20261018/reach_first.png",
+      "sha256": "530f165b07c0a0656cfb6ae8272d9a866be044ac9467301a6ce4432a1c67a37e"
+    },
+    {
+      "path": "assets/characters/gongsun_sheng_mounted_sources_20261018/reach_v2.png",
+      "sha256": "4e57e22dc1eda380e8ab7ea94eb6aa203e55b683f5d4b6bf9acc69348d29ec85"
+    },
+    {
+      "path": "assets/characters/gongsun_sheng_mounted_sources_20261018/source_basis.json",
+      "sha256": "b825eb9424a99a3b706ae5dbb0e759ef0b6c070b66431dec076e7138cc7cec53"
+    },
+    {
+      "path": "tools/verify_gongsun_sheng_mounted_sources_20261018.py",
+      "sha256": "c9430a58daf05e5691b4f254867cfd73ce436b15a87c9094b74180160403b3f9"
+    }
+  ],
+  "native_complete": false,
+  "static_review_notes": [
+    "Overlay still owns no scene children; helper uses an ephemeral RenderingServer canvas below units_root and frees it on exit/destruction.",
+    "Attack radius/actor/colour and setting unchanged. Top cast/order/selection UI remains unchanged.",
+    "Existing1576-check base fixture retained, with new three-size/four-direction opaque-pixel comparisons, deliberately top-layer negative control and actual scene-exit/reentry tests.",
+    "Dictionary size field uses explicit index. Sidecar is stable before private import; source generator itself is unchanged.",
+    "11 unbound mounted Gongsun source PNGs plus .gdignore/manifests and readonly audit tool were added before any native run; they are not animation/adoption evidence. Own prelaunch waiter was intentionally stopped, no child or engine interrupted, to pin complete input scope.",
+    "Iteration2 removes direct GameMap global reference from external QA. It obtains exact ISO_INV through already-running b.map, preserving actual transform oracle while allowing standalone check-only parse. First failed candidate/restore evidence retained."
+  ]
+}

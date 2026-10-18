@@ -13511,10 +13511,19 @@ func _front_combat() -> int:
 
 class Overlay extends Node2D:
 	var b = null
+	var _ground_ranges := preload("res://scripts/ground_range_visual.gd").new()
 
 	func _process(_delta: float) -> void:
+		_update_ground_range()
 		if b != null:
 			queue_redraw()
+
+	func _exit_tree() -> void:
+		_ground_ranges.release()
+
+	func _notification(what: int) -> void:
+		if what == NOTIFICATION_VISIBILITY_CHANGED and _ground_ranges != null and not is_visible_in_tree():
+			_ground_ranges.clear()
 
 	func _draw() -> void:
 		if b == null:
@@ -13558,8 +13567,7 @@ class Overlay extends Node2D:
 			_draw_selected_orders()
 		if Settings.show_target_lines and detail_orders:
 			_draw_selected_targets()
-		if Settings.show_range_rings:
-			_draw_selected_ranges()
+		# Selected attack range is rendered by the derived ground canvas.
 		# 指向施法预览：按下技能即在地面显示「作用范围指示器」（跟随鼠标，等距投影）。
 		# 形状随技能：闪现/突刺/冲锋=直线箭头(封顶最大射程)；箭雨=前方扇形；其余点目标=圆圈。
 		if b._ability_armed != "":
@@ -13690,12 +13698,26 @@ class Overlay extends Node2D:
 			draw_arc(p, maxf(8.0, tgt.radius * 0.35), 0.0, TAU, 18, col, 1.6)
 
 
-	func _draw_selected_ranges() -> void:
+	func _update_ground_range() -> void:
+		_ground_ranges.clear()
+		if b == null or not is_visible_in_tree() or not Settings.show_range_rings:
+			return
 		var act = b.active_unit()
 		if act == null or not is_instance_valid(act) or act.atk <= 0.0:
 			return
+		if not is_instance_valid(b.units_root) or not b.units_root.is_inside_tree(): return
 		var col := Color(1.0, 0.82, 0.28, 0.72) if act.faction == Unit.FACTION_LIANG else Color(1.0, 0.35, 0.25, 0.7)
-		_draw_world_ring(act.position, act.atk_range + act.radius, col, Color(col.r, col.g, col.b, 0.045))
+		var radius: float = act.atk_range + act.radius
+		if not is_finite(radius) or radius <= 0.0: return
+		var points := PackedVector2Array()
+		for i in range(48):
+			var angle := TAU * float(i) / 48.0
+			points.append(b.to_screen(act.position + Vector2(cos(angle), sin(angle)) * radius))
+		var parent_transform: Transform2D = b.units_root.get_global_transform()
+		if absf(parent_transform.determinant()) < 0.000001: return
+		var local_transform: Transform2D = parent_transform.affine_inverse() * get_global_transform()
+		var overlay_tint := modulate * self_modulate
+		_ground_ranges.draw_ring(b.units_root, local_transform, points, col * overlay_tint, Color(col.r, col.g, col.b, 0.045) * overlay_tint)
 
 
 	func _order_world_pos(o: Dictionary) -> Vector2:

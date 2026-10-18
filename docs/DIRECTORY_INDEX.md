@@ -1,3 +1,12 @@
+## 2026-10-18 当前范围圈修正与骑乘原生比较
+
+- scripts/battle.gd、scripts/ground_range_visual.gd及UID：攻击圈绘制移到单位下方，原地形投影/半径/线宽保留；tools/ruan_xiaoqi_layered_20261018.gd追加45项实际采样/坏例/生命周期验证。
+- qa/ground_attack_range_20261018/：1621项/132图真实10包链、7图直看/3代表原PNG、70项保护清单、旧16项/81外来保持、三批失败/恢复映射和5项清理探针。PCK/ZIP/缓存保留外部，只提交来源索引/SHA。
+- qa/gongsun_sheng_mounted_sources_20261018/first_clipped和native_wide：各99结构项；首批构图退回，新1920×720四图直接看过、两图保存，体量/步态待修，未实际采用；原135项2失败保持。
+- docs/GROUND_ATTACK_RANGE_20261018.md及骑乘说明记录原著、实际采用与未完成的区别。真实Unit轮转候选仍在工程外准备，本轮未改Unit/原PNG/任务参数；main/Steam保持。
+
+以下保留此前目录交接历史，其待验描述以当前新收据为准。
+
 ## 2026-10-18 骑乘来源与独立轮面原生
 
 - `assets/characters/gongsun_sheng_mounted_sources_20261018/`：11原字节PNG、完整提示/19引用SHA、第54回依据、.gdignore隔离；5候选/5退稿/1待修，未采用。

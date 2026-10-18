@@ -241,7 +241,7 @@ func run() -> void:
 		root.get_node("Localize").set_language(locale,false);b.select_single(u,false);await snap("unloaded_hud_"+locale)
 		check(b.hud._port_tex.texture==portrait,"original portrait HUD "+locale)
 	root.get_node("Localize").set_language("zh_CN",false)
-	await take(b,u,1);var prior_cargo: int=b.level.cargo.size();u.take_damage(u.max_hp*20.0,null,false,true);await get_tree().process_frame
+	await take(b,u,1);await ground_range_matrix(b,u);var prior_cargo: int=b.level.cargo.size();u.take_damage(u.max_hp*20.0,null,false,true);await get_tree().process_frame
 	check(u._dying and not u.has_meta("carrying_tribute") and not u._campaign_tribute_push_active(),"actual defeat drops cart metadata before death art")
 	check(b.level.cargo.size()==prior_cargo-1 and is_instance_valid(b.level.bundles[1]),"original death callback restores dropped mission cargo")
 	var dropped=b.level.bundles[1]
@@ -297,5 +297,144 @@ func ground_matrix(b,ground) -> void:
 	check(GroundCart.enabled(ground),"actual mission ownership restored after negative probes")
 func finish() -> void:
 	var report:={"passed":failures.is_empty(),"checks":checks,"failures":failures,"screenshots":shots,"observations":observations,
-		"scope":"Claimed tribute ground prop in current Huangnigang, strict pre-seizure negatives, three sizes/four directions and actual delivered/defeat-drop callbacks; retained real Ruan Xiaoqi merchant loaded-cart art, actual mission pickup/movement/delivery/drop, interrupted hurt/attack; four directions and three sizes, actual startup camera and1.6 passing-B views. CARRY/drug prerequisites and sampling positions are explicit QA fixtures, unrelated actors frozen and fog off. No full wine sequence, original seven carts/eleven loads migration, other carriers, all-art/campaign/save/performance/Steam qualification. Runtime is the retained full base PCK plus hash-verified exported patch, not a newly exported monolithic full PCK."}
+		"scope":"Claimed tribute ground prop in current Huangnigang, strict pre-seizure negatives, three sizes/four directions and actual delivered/defeat-drop callbacks; retained real Ruan Xiaoqi merchant loaded-cart art, actual mission pickup/movement/delivery/drop, interrupted hurt/attack; four directions and three sizes, actual startup camera and1.6 passing-B views. CARRY/drug prerequisites and sampling positions are explicit QA fixtures, unrelated actors frozen and fog off. Includes selected attack-range ground ordering with real opaque actor/cart/companion pixel comparisons, three sizes/four directions, old-top-layer negative control and canvas lifecycle. No full wine sequence, original seven carts/eleven loads migration, other carriers, all-art/campaign/save/performance/Steam qualification. Runtime is the retained full base PCK plus hash-verified exported patch, not a newly exported monolithic full PCK."}
 	var f:=FileAccess.open(out.path_join("report.json"),FileAccess.WRITE);f.store_string(JSON.stringify(report,"\t"));f.close();quit(0 if failures.is_empty() else 1)
+
+# Extra real packed-game probes. Existing carrier/mission checks remain intact.
+var _range_alpha_cache: Dictionary={}
+
+func _range_core_data(texture: Texture2D) -> Dictionary:
+	var key: int=texture.get_instance_id()
+	if _range_alpha_cache.has(key):return _range_alpha_cache[key]
+	var image:=texture.get_image()
+	if image.is_compressed():image.decompress()
+	if image.get_format()!=Image.FORMAT_RGBA8:image.convert(Image.FORMAT_RGBA8)
+	var width:=image.get_width();var height:=image.get_height();var pitch:=width+1
+	var data:=image.get_data();var prefix:=PackedInt32Array();prefix.resize(pitch*(height+1))
+	# Prefix sums reject ANY alpha<253 in the full25x25 native neighborhood.
+	# The old sparse25-sample alpha255 mask had zero samples on these originals,
+	# whose painted interiors are predominantly253/255, not255/255.
+	for y in range(height):
+		var row_total:=0
+		for x in range(width):
+			if data[(y*width+x)*4+3]<253:row_total+=1
+			prefix[(y+1)*pitch+x+1]=prefix[y*pitch+x+1]+row_total
+	var result: Dictionary={"pitch":pitch,"prefix":prefix,"size":Vector2i(width,height)}
+	_range_alpha_cache[key]=result
+	return result
+
+func _range_blend_bound(before: Color) -> float:
+	# Maximum composite ring alpha: fill .045 then edge .72. The residual
+	# contribution through alpha>=253/255 is bounded by (1-alpha)*.7326.
+	# Cover either direct RGB or linear blending followed by sRGB encoding,
+	# including half a8-bit quantum at each capture. Never infer exact opacity.
+	var quantum:=1.0/255.0;var epsilon: float=(2.0/255.0)*(1.0-(1.0-.045)*(1.0-.72))
+	var low:=Color(maxf(0,before.r-quantum*.5),maxf(0,before.g-quantum*.5),maxf(0,before.b-quantum*.5)).srgb_to_linear()
+	var high:=Color(minf(1,before.r+quantum*.5),minf(1,before.g+quantum*.5),minf(1,before.b+quantum*.5)).srgb_to_linear()
+	low=Color(maxf(0,low.r-epsilon),maxf(0,low.g-epsilon),maxf(0,low.b-epsilon)).linear_to_srgb()
+	high=Color(minf(1,high.r+epsilon),minf(1,high.g+epsilon),minf(1,high.b+epsilon)).linear_to_srgb()
+	var gamma_bound: float=maxf(maxf(maxf(before.r-low.r,high.r-before.r),maxf(before.g-low.g,high.g-before.g)),maxf(before.b-low.b,high.b-before.b))
+	return maxf(epsilon+quantum,gamma_bound+quantum*.5)+.00001
+
+func _range_chain_opacity(unit) -> float:
+	var result: float=unit.self_modulate.a
+	var node: Node=unit
+	while node is CanvasItem:
+		var canvas:=node as CanvasItem;result*=canvas.modulate.a;node=node.get_parent()
+	return result
+
+func _range_pixels(before: Image, after: Image, map_owner, unit, frames: Array) -> Dictionary:
+	var covered:=0;var altered:=0;var raw_changed:=0;var max_delta:=0.0;var max_bound:=0.0
+	var to_view: Transform2D=unit.get_global_transform_with_canvas()*map_owner.map.ISO_INV
+	# GameMap.sync_render_position applies terrain lift only to RenderingServer.
+	# Node2D transforms remain logical; reproduce the actual stored paint lift.
+	var parent_to_view: Transform2D=unit.get_parent().get_global_transform_with_canvas()
+	to_view.origin-=(parent_to_view.x+parent_to_view.y)*float(unit.get_meta("render_height",0.0))
+	var inverse:=to_view.affine_inverse();var body_size: float=unit.radius*3.7*unit.visual_scale
+	for frame_texture: AtlasTexture in frames:
+		var core:=_range_core_data(frame_texture.atlas);var pitch: int=core.pitch;var prefix: PackedInt32Array=core.prefix
+		var size: float=body_size*float(frame_texture.get_meta("draw_scale",1.0))
+		var rect:=Rect2(Vector2(-size*.5,-size*.82)+Vector2(frame_texture.get_meta("draw_offset_px",Vector2.ZERO))*size/float(frame_texture.get_height()),Vector2.ONE*size)
+		var region: Rect2=frame_texture.region
+		var corner0:=to_view*rect.position;var corner1:=to_view*rect.end
+		var bounds:=Rect2i(Vector2i(corner0.floor()),Vector2i((corner1-corner0).ceil())).intersection(Rect2i(Vector2i.ZERO,before.get_size()))
+		for y in range(bounds.position.y,bounds.end.y):
+			for x in range(bounds.position.x,bounds.end.x):
+				var local:=inverse*Vector2(x+.5,y+.5)
+				var native: Vector2=(local-rect.position)/rect.size*Vector2(frame_texture.get_width(),frame_texture.get_height())-frame_texture.margin.position+region.position
+				var p:=Vector2i(native.floor())
+				if not Rect2i(region).grow(-12).has_point(p):continue
+				var left:=p.x-12;var top:=p.y-12;var right:=p.x+13;var bottom:=p.y+13
+				if prefix[bottom*pitch+right]-prefix[top*pitch+right]-prefix[bottom*pitch+left]+prefix[top*pitch+left]!=0:continue
+				covered+=1
+				var original:=before.get_pixel(x,y);var current:=after.get_pixel(x,y)
+				var delta: float=maxf(maxf(absf(original.r-current.r),absf(original.g-current.g)),absf(original.b-current.b))
+				var bound:=_range_blend_bound(original);max_delta=maxf(max_delta,delta);max_bound=maxf(max_bound,bound)
+				if delta>0.0:raw_changed+=1
+				if delta>bound:altered+=1
+	return {"near_opaque_samples":covered,"exceeded_blend_bound":altered,"raw_changed_samples":raw_changed,"max_channel_delta":max_delta,"max_allowed_blend_bound":max_bound,"minimum_native_alpha":253.0/255.0,"full_native_core_radius":12}
+
+func _range_capture(b, enabled: bool, label: String) -> Image:
+	root.get_node("Settings").show_range_rings=enabled
+	b.overlay._update_ground_range();b.overlay.queue_redraw()
+	await snap(label)
+	return root.get_texture().get_image()
+
+func ground_range_matrix(b,u) -> void:
+	var settings=root.get_node("Settings");var old_setting: bool=settings.show_range_rings
+	var old_mode: int=b.process_mode;var old_pos: Vector2=u.position;var old_direction: String=u.animation_direction;var old_zoom: Vector2=b.camera.zoom
+	var other=b.find_unit("liu_tang");var other_pos: Vector2=other.position;var other_direction: String=other.animation_direction
+	var visual_fields: Array=["_idle_t","_move_blend","_flinch","_flash","_lunge","_shi_en_hurt_t","_cast_t","face_left"]
+	var own_visual: Dictionary={};var other_visual: Dictionary={}
+	for field in visual_fields:own_visual[field]=u.get(field);other_visual[field]=other.get(field)
+	var old_height: Dictionary={"own_present":u.has_meta("render_height"),"own_value":u.get_meta("render_height",0.0),"other_present":other.has_meta("render_height"),"other_value":other.get_meta("render_height",0.0)}
+	for actor in [u,other]:
+		actor._flinch=Vector2.ZERO;actor._flash=0.0;actor._lunge=0.0;actor._shi_en_hurt_t=0.0;actor._cast_t=0.0
+	var origin: Vector2=b.map.cell_to_world(clear_cell(b));u.position=origin;u.order_stop();u._move_blend=0;u._idle_t=0;other.position=origin-Vector2(14,14);other.animation_direction="se";other._move_blend=0;other._idle_t=0;other.queue_redraw()
+	b.map.sync_render_position(u);b.map.sync_render_position(other)
+	b.process_mode=Node.PROCESS_MODE_DISABLED;b.camera.zoom=Vector2.ONE*2.8;b.select_single(u,false)
+	check(is_equal_approx(_range_chain_opacity(u),1.0) and is_equal_approx(_range_chain_opacity(other),1.0),"range fixture actor/ancestor modulations have unit alpha")
+	var stats: Array=[u.atk,u.atk_range,u.radius,u.hp,b.level.cargo.duplicate()]
+	check(b.overlay.get_child_count(true)==0,"ground range keeps overlay scene-child schema unchanged")
+	check(load("res://scripts/run_environment_state.gd").new()._environment_safe(b.overlay),"ground range retains trusted overlay node safety")
+	for row in [{"size":Vector2i(1280,720),"d":"se"},{"size":Vector2i(1280,720),"d":"sw"},{"size":Vector2i(1280,720),"d":"ne"},{"size":Vector2i(1280,720),"d":"nw"},{"size":Vector2i(960,540),"d":"se"},{"size":Vector2i(1920,1080),"d":"se"}]:
+		root.size=row["size"];root.content_scale_size=root.size;u.animation_direction=row.d;u.face_left=row.d in ["sw","nw"];u.queue_redraw();stage_camera(b,u)
+		var body: Texture2D=frame(u);var cart: Texture2D=art.unit_anim_frames(u.key,"parked_cart",row.d,u.art_variant)[0]
+		check(u._campaign_tribute_layered_frame(body),"range probe uses actual separated carrier "+str(root.size.x)+row.d)
+		var tag: String="range_"+str(root.size.x)+"_"+row.d
+		var off: Image=await _range_capture(b,false,tag+"_off");var on: Image=await _range_capture(b,true,tag+"_ground")
+		var own:=_range_pixels(off,on,b,u,[body,cart]);var rear:=_range_pixels(off,on,b,other,[frame(other)])
+		check(own.near_opaque_samples>100 and own.exceeded_blend_bound==0,"range stays within paint-opacity blend bound on carrier and cart "+tag)
+		check(rear.near_opaque_samples>50 and rear.exceeded_blend_bound==0,"range stays within paint-opacity blend bound on rear companion "+tag)
+		var difference:=0
+		var center: Vector2=b.get_canvas_transform()*b.to_screen(u.position)
+		var r: float=(u.atk_range+u.radius)*b.camera.zoom.x
+		var bounds:=Rect2i(Vector2i(center-Vector2(r*1.42+6,r*.72+6)),Vector2i(r*2.84+12,r*1.44+12)).intersection(Rect2i(Vector2i.ZERO,on.get_size()))
+		for y in range(bounds.position.y,bounds.end.y):
+			for x in range(bounds.position.x,bounds.end.x):
+				if off.get_pixel(x,y)!=on.get_pixel(x,y):difference+=1
+		check(difference>30,"ground range remains visible around units "+tag)
+		observations.append({"ground_range":tag,"carrier":own,"rear_companion":rear,"changed_ground_region_pixels":difference})
+		if root.size.x==1280 and row.d=="se":
+			# A deliberately topmost copy of the OLD projected ring validates that
+			# the solid-pixel oracle catches the original occlusion symptom.
+			await _range_capture(b,false,tag+"_negative_off")
+			var bad:=RenderingServer.canvas_item_create();RenderingServer.canvas_item_set_parent(bad,b.overlay.get_canvas_item())
+			var pts:=PackedVector2Array()
+			for i in range(49):pts.append(b.to_screen(u.position+Vector2(cos(TAU*i/48.0),sin(TAU*i/48.0))*(u.atk_range+u.radius)))
+			RenderingServer.canvas_item_add_polyline(bad,pts,PackedColorArray([Color(1,.82,.28,.72)]),1.6,false)
+			await snap(tag+"_top_negative");var wrong:=root.get_texture().get_image();var hit:=_range_pixels(off,wrong,b,u,[body,cart]);var rear_hit:=_range_pixels(off,wrong,b,other,[frame(other)])
+			check(hit.exceeded_blend_bound+rear_hit.exceeded_blend_bound>0,"negative top-layer control reproduces body occlusion")
+			observations.append({"top_layer_negative_carrier":hit,"top_layer_negative_companion":rear_hit});RenderingServer.free_rid(bad)
+	var overlay_index: int=b.overlay.get_index();var overlay=b.overlay;b.remove_child(overlay)
+	check(not overlay._ground_ranges._item.is_valid(),"leaving scene releases derived ground canvas")
+	b.add_child(overlay);b.move_child(overlay,overlay_index);settings.show_range_rings=true;overlay._update_ground_range()
+	check(overlay._ground_ranges._item.is_valid() and overlay.get_child_count(true)==0,"reattaching reconstructs ground canvas without scene children")
+	check(stats==[u.atk,u.atk_range,u.radius,u.hp,b.level.cargo.duplicate()],"range presentation preserves combat/cargo state")
+	root.size=Vector2i(1280,720);root.content_scale_size=root.size;u.position=old_pos;u.animation_direction=old_direction;other.position=other_pos;other.animation_direction=other_direction;u.queue_redraw();other.queue_redraw();b.map.sync_render_position(u);b.map.sync_render_position(other);b.camera.zoom=old_zoom;settings.show_range_rings=old_setting;b.process_mode=old_mode;stage_camera(b,u);overlay._update_ground_range();_range_alpha_cache.clear()
+	for field in visual_fields:u.set(field,own_visual[field]);other.set(field,other_visual[field])
+	if old_height.own_present:u.set_meta("render_height",old_height.own_value)
+	elif is_zero_approx(float(u.get_meta("render_height",0.0))):u.remove_meta("render_height")
+	if old_height.other_present:other.set_meta("render_height",old_height.other_value)
+	elif is_zero_approx(float(other.get_meta("render_height",0.0))):other.remove_meta("render_height")
+	u.queue_redraw();other.queue_redraw()

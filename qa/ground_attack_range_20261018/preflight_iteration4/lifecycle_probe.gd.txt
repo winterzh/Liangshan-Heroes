@@ -1,0 +1,26 @@
+extends SceneTree
+var checks: Array=[]
+func check(ok: bool,label: String) -> void:
+	checks.append({"label":label,"passed":ok})
+func _initialize() -> void:run.call_deferred()
+func run() -> void:
+	var helper_script=load(OS.get_environment("GROUND_RANGE_HELPER"))
+	var parent:=Node2D.new();root.add_child(parent)
+	await process_frame
+	var points:=PackedVector2Array()
+	for i in range(48):points.append(Vector2(cos(TAU*i/48.0),sin(TAU*i/48.0))*30.0)
+	var helper=helper_script.new()
+	helper.draw_ring(parent,Transform2D.IDENTITY,points,Color(1,.82,.28,.72),Color(1,.82,.28,.045))
+	check(helper._item.is_valid(),"derived canvas created under live parent")
+	helper.release();check(not helper._item.is_valid(),"explicit release clears owned RID")
+	helper.release();check(not helper._item.is_valid(),"explicit release is idempotent")
+	helper.draw_ring(parent,Transform2D.IDENTITY,points,Color.WHITE,Color.TRANSPARENT)
+	check(helper._item.is_valid(),"released helper recreates canvas")
+	var weak_reference: WeakRef=weakref(helper)
+	helper=null
+	check(weak_reference.get_ref()==null,"active helper destruction completes without method dispatch on null self")
+	parent.free()
+	var passed:=true
+	for row in checks:passed=passed and row.passed
+	FileAccess.open(OS.get_environment("GROUND_RANGE_LIFECYCLE_REPORT"),FileAccess.WRITE).store_string(JSON.stringify({"passed":passed,"checks":checks,"scope":"Derived RID creation/explicit release/recreation/active RefCounted destruction only, no game visuals or broad resource leak qualification."},"  ")+"\n")
+	quit(0 if passed else 1)

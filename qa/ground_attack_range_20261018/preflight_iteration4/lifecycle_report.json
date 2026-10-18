@@ -1,0 +1,26 @@
+{
+  "checks": [
+    {
+      "label": "derived canvas created under live parent",
+      "passed": true
+    },
+    {
+      "label": "explicit release clears owned RID",
+      "passed": true
+    },
+    {
+      "label": "explicit release is idempotent",
+      "passed": true
+    },
+    {
+      "label": "released helper recreates canvas",
+      "passed": true
+    },
+    {
+      "label": "active helper destruction completes without method dispatch on null self",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "scope": "Derived RID creation/explicit release/recreation/active RefCounted destruction only, no game visuals or broad resource leak qualification."
+}
