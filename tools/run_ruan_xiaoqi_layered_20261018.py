@@ -72,7 +72,8 @@ def main():
         d=json.loads((ROOT/'assets/direction4'/(name+'.json')).read_text(encoding='utf-8'));retained.extend(row['path'] for row in d['sources'].values())
         if 'portrait' in d:retained.append(d['portrait']['path'])
     inputs={'manifest':m,'ground_manifest':json.loads((ROOT/'assets/direction4/level1_tribute_ground_cart_20261017.json').read_text(encoding='utf-8')),
-      'textures':sorted({r['path'] for r in m['sources'].values()}|set(retained))}
+      'textures':sorted({r['path'] for r in m['sources'].values()}|set(retained)|{
+        'assets/characters/tribute_cart_wheel_runtime_20261018/'+name+'.png' for name in ['cart_body','rim_hub','spokes']})}
     route_enabled = ('res://assets/anim/ruan_xiaoqi_layered_20261018_%s_%s.tres' in (ROOT/'scripts/campaign_art.gd').read_text(encoding='utf-8')
                      and 'var separate_tribute := parked_tribute or _campaign_tribute_layered_frame(frame)' in (ROOT/'scripts/unit.gd').read_text(encoding='utf-8'))
     if not args.run:

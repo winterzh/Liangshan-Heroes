@@ -1,0 +1,43 @@
+diff --git a/scripts/unit.gd b/scripts/unit.gd
+index 0cf8057d..6e31fc1b 100644
+--- a/scripts/unit.gd
++++ b/scripts/unit.gd
+@@ -6,6 +6,7 @@ const CampaignEnvironmentArt := preload("res://scripts/campaign_environment_art.
+ ## 单位：梁山好汉 / 官军。有图集贴图就用贴图，否则绘制占位图形。
+ 
+ const CampaignArt := preload("res://scripts/campaign_art.gd")
++const TributeCartWheel := preload("res://scripts/tribute_cart_wheel_visual.gd")
+ const CampaignFlagOverlay := preload("res://scripts/campaign_flag_overlay.gd")
+ const WorldShadow := preload("res://scripts/world_shadow.gd")
+ const LIVE_TAVERN_FALLBACK := preload("res://assets/campaign/objects/roadside_tavern_default.png")
+@@ -1316,6 +1317,8 @@ func _mass_status_visuals() -> bool:
+ 
+ func _phys_body(delta: float) -> void:
+ 	if not _gameplay_rng_fault().is_empty(): return
++	var tribute_roll := TributeCartWheel.enabled(self)
++	var tribute_motion_origin := position
+ 	if _story_pose_t > 0.0:
+ 		_story_pose_t -= delta
+ 		if _story_pose_t <= 0.0:
+@@ -1702,7 +1705,10 @@ func _phys_body(delta: float) -> void:
+ 	if _move_blend > 0.01:
+ 		var prev := _anim_t
+ 		# 步频与「实际移速」(含 MOVE_SCALE 减速) 挂钩：腿不再比身体快、不再刨地（原来没乘 MOVE_SCALE→偏快）
+-		_anim_t += delta * (13.0 if is_cavalry else 9.5) * MOVE_SCALE * (base_speed / 72.0)
++		if tribute_roll:
++			_anim_t += TributeCartWheel.phase_delta(self, position - tribute_motion_origin, radius * 3.7 * visual_scale)
++		else:
++			_anim_t += delta * (13.0 if is_cavalry else 9.5) * MOVE_SCALE * (base_speed / 72.0)
+ 		# 每半个步频相位 = 一次落脚 → 扬尘
+ 		if floori(_anim_t / PI) != floori(prev / PI):
+ 			_spawn_dust()
+@@ -3865,6 +3871,9 @@ func _draw_sprite_animated(tex: Texture2D, tint: Color, death_f: float) -> void:
+ 
+ 
+ func _draw_parked_tribute_cart(body_size: float, tint: Color) -> void:
++	if TributeCartWheel.enabled(self):
++		TributeCartWheel.draw_cart(self, body_size, tint)
++		return
+ 	var frames: Array = Art.unit_anim_frames(key, "parked_cart", animation_direction, art_variant)
+ 	if frames.is_empty(): return
+ 	var cart: Texture2D = frames[0]

@@ -6,8 +6,11 @@ class WalkProbe extends Node:
 	var frames: Array=[]
 	var seen: Array=[]
 	var captured:=false
+	var wheel_last_angle:=0.0
+	var wheel_angular_distance:=0.0
 	func _physics_process(_delta: float) -> void:
 		if captured or not is_instance_valid(actor):return
+		wheel_angular_distance+=fposmod(float(actor._tribute_wheel_angle)-wheel_last_angle,TAU);wheel_last_angle=actor._tribute_wheel_angle
 		var art=get_tree().root.get_node("Art")
 		var index: int=frames.find(actor._anim_frame_for_state(art.unit_texture(actor.key,actor.visual_art_variant(),actor.animation_direction)))
 		if index>=0 and not seen.has(index):seen.append(index)
@@ -112,6 +115,7 @@ func run() -> void:
 	var grid: Array=Array(b.map.grid).duplicate();var decor: Array=b.map.decor.duplicate(true)
 	u.animation_direction="se"
 	check(not u._campaign_tribute_push_active() and frame(u)==old_idle[0],"unloaded Ruan Xiaoqi keeps adopted merchant body")
+	check(not load("res://scripts/tribute_cart_wheel_visual.gd").enabled(u),"unloaded actor does not draw rolling cart")
 	var own_layer: Texture2D=art.unit_anim_frames(u.key,"push_idle","se",u.art_variant)[0]
 	check(not u._campaign_tribute_layered_frame(own_layer),"unloaded actor rejects even its own layered frame")
 	for bundle in b.level.bundles:
@@ -188,16 +192,30 @@ func run() -> void:
 	root.size=Vector2i(1280,720);root.content_scale_size=root.size
 	for row in [{"d":"se","delta":Vector2.RIGHT},{"d":"sw","delta":Vector2.DOWN},{"d":"ne","delta":Vector2.UP},{"d":"nw","delta":Vector2.LEFT}]:
 		u.position=origin;u.order_stop();stage_camera(b,u)
-		var probe:=WalkProbe.new();probe.actor=u;probe.frames=art.unit_anim_frames(u.key,"push_walk",row.d,u.art_variant);probe.process_physics_priority=1000;root.add_child(probe)
+		var probe:=WalkProbe.new();probe.actor=u;probe.wheel_last_angle=u._tribute_wheel_angle;probe.frames=art.unit_anim_frames(u.key,"push_walk",row.d,u.art_variant);probe.process_physics_priority=1000;root.add_child(probe)
+		var wheel_phase_start: float=u._anim_t
 		u.set_physics_process(true);u.order_move(origin+row.delta*82.0)
 		var deadline:=Time.get_ticks_msec()+6000
 		while not probe.captured and Time.get_ticks_msec()<deadline:await get_tree().physics_frame
 		u.set_physics_process(false)
 		check(probe.captured and probe.seen.size()==4 and u.position.distance_to(origin)>2 and u.animation_direction==row.d,"real physics traverses four push phases "+String(row.d))
 		observations.append({"actual_push_direction":row.d,"phase_indices":probe.seen,"distance":u.position.distance_to(origin)})
+		check(u._anim_t>wheel_phase_start and probe.wheel_angular_distance>0.0,"actual displacement advances wheel/gait phase "+String(row.d))
+		observations.append({"wheel_actual_movement":row.d,"gait_phase_delta":u._anim_t-wheel_phase_start,"independent_wheel_angle_traveled":probe.wheel_angular_distance,"distance":u.position.distance_to(origin)})
 		stage_camera(b,u);await snap("actual_push_walk_"+String(row.d));probe.queue_free();await get_tree().process_frame
+		# Keep residual walk blend while stopped: elapsed time and camera motion
+		# must not advance the wheel even before the body blend decays to zero.
+		u.order_stop();var stopped_phase: float=u._tribute_wheel_angle;var residual_gait_phase: float=u._anim_t;var stopped_position: Vector2=u.position
+		var before_zoom: Vector2=b.camera.zoom;b.camera.zoom=before_zoom*1.1;b.camera.position+=Vector2(9,-7);b.camera.force_update_scroll()
+		u.set_physics_process(true)
+		for tick in range(36):await get_tree().physics_frame
+		u.set_physics_process(false);b.camera.zoom=before_zoom;stage_camera(b,u)
+		check(u.position.is_equal_approx(stopped_position) and is_equal_approx(u._tribute_wheel_angle,stopped_phase),"actual stop and camera motion do not spin wheel "+String(row.d))
+		check(u._anim_t>residual_gait_phase,"original residual gait clock continues independently of stopped wheel "+String(row.d))
+		await snap("wheel_actual_stopped_"+String(row.d))
 		# Actual Unit damage/attack mechanics; a separate cart remains grounded.
 		u.order_stop();u._move_blend=0;u.animation_direction=row.d
+		var before_hurt_phase: float=u._tribute_wheel_angle
 		var before_hp: float=u.hp;u.take_damage(7,b.level.yang,false,true)
 		var hurt: Array=art.unit_anim_frames(u.key,"hurt",row.d,u.art_variant)
 		check(u.hp<before_hp and u._campaign_tribute_push_state().is_empty() and frame(u)==hurt[0],"real recoil uses original body with parked cart "+String(row.d))
@@ -209,7 +227,8 @@ func run() -> void:
 		while u._shi_en_hurt_t>0 or u._flinch.length_squared()>1:
 			if Time.get_ticks_msec()>deadline:break
 			await get_tree().physics_frame
-		u.set_physics_process(false);check(not u._campaign_tribute_push_state().is_empty(),"recoil returns to loaded push pose "+String(row.d))
+		u.set_physics_process(false);check(is_equal_approx(u._tribute_wheel_angle,before_hurt_phase),"actual parked recoil keeps wheel phase "+String(row.d))
+		check(not u._campaign_tribute_push_state().is_empty(),"recoil returns to loaded push pose "+String(row.d))
 		var enemy=b.spawn_unit("guan_dao",1,u.position+row.delta*20.0);enemy.set_physics_process(false);var enemy_hp: float=enemy.hp
 		u.set_physics_process(true);u.order_attack(enemy,false,true);deadline=Time.get_ticks_msec()+4000
 		while u._lunge<=0 and Time.get_ticks_msec()<deadline:await get_tree().physics_frame
@@ -231,6 +250,7 @@ func run() -> void:
 	u.set_physics_process(false);u._move_blend=0;u.animation_direction="se";stage_camera(b,u);await snap("original_delivery_unloaded")
 	check(b.level.delivered==1 and not u.has_meta("carrying_tribute") and not b.level.cargo.has(0),"original real path and callback unload once")
 	check(not u._campaign_tribute_push_active() and frame(u)==old_idle[0],"delivery restores original empty-handed body")
+	check(not load("res://scripts/tribute_cart_wheel_visual.gd").enabled(u),"actual delivery disables rolling cart renderer")
 	check(art.unit_anim_frames(u.key,"walk","se",u.art_variant)==old_walk and u.ui_portrait_texture()==portrait,"unloaded walk and portrait retained")
 	b.camera.zoom=startup_zoom;stage_camera(b,u);await snap("default_unloaded_body");b.camera.zoom=Vector2.ONE*2.8
 	var ground=b.level.bundles[0]
@@ -241,7 +261,7 @@ func run() -> void:
 		root.get_node("Localize").set_language(locale,false);b.select_single(u,false);await snap("unloaded_hud_"+locale)
 		check(b.hud._port_tex.texture==portrait,"original portrait HUD "+locale)
 	root.get_node("Localize").set_language("zh_CN",false)
-	await take(b,u,1);await ground_range_matrix(b,u);var prior_cargo: int=b.level.cargo.size();u.take_damage(u.max_hp*20.0,null,false,true);await get_tree().process_frame
+	await take(b,u,1);await wheel_render_matrix(b,u);await ground_range_matrix(b,u);var prior_cargo: int=b.level.cargo.size();u.take_damage(u.max_hp*20.0,null,false,true);await get_tree().process_frame
 	check(u._dying and not u.has_meta("carrying_tribute") and not u._campaign_tribute_push_active(),"actual defeat drops cart metadata before death art")
 	check(b.level.cargo.size()==prior_cargo-1 and is_instance_valid(b.level.bundles[1]),"original death callback restores dropped mission cargo")
 	var dropped=b.level.bundles[1]
@@ -403,7 +423,7 @@ func ground_range_matrix(b,u) -> void:
 		check(u._campaign_tribute_layered_frame(body),"range probe uses actual separated carrier "+str(root.size.x)+row.d)
 		var tag: String="range_"+str(root.size.x)+"_"+row.d
 		var off: Image=await _range_capture(b,false,tag+"_off");var on: Image=await _range_capture(b,true,tag+"_ground")
-		var own:=_range_pixels(off,on,b,u,[body,cart]);var rear:=_range_pixels(off,on,b,other,[frame(other)])
+		var own:=_range_pixels(off,on,b,u,[body]+wheel_cart_mask_frames(u));var rear:=_range_pixels(off,on,b,other,[frame(other)])
 		check(own.near_opaque_samples>100 and own.exceeded_blend_bound==0,"range stays within paint-opacity blend bound on carrier and cart "+tag)
 		check(rear.near_opaque_samples>50 and rear.exceeded_blend_bound==0,"range stays within paint-opacity blend bound on rear companion "+tag)
 		var difference:=0
@@ -423,7 +443,7 @@ func ground_range_matrix(b,u) -> void:
 			var pts:=PackedVector2Array()
 			for i in range(49):pts.append(b.to_screen(u.position+Vector2(cos(TAU*i/48.0),sin(TAU*i/48.0))*(u.atk_range+u.radius)))
 			RenderingServer.canvas_item_add_polyline(bad,pts,PackedColorArray([Color(1,.82,.28,.72)]),1.6,false)
-			await snap(tag+"_top_negative");var wrong:=root.get_texture().get_image();var hit:=_range_pixels(off,wrong,b,u,[body,cart]);var rear_hit:=_range_pixels(off,wrong,b,other,[frame(other)])
+			await snap(tag+"_top_negative");var wrong:=root.get_texture().get_image();var hit:=_range_pixels(off,wrong,b,u,[body]+wheel_cart_mask_frames(u));var rear_hit:=_range_pixels(off,wrong,b,other,[frame(other)])
 			check(hit.exceeded_blend_bound+rear_hit.exceeded_blend_bound>0,"negative top-layer control reproduces body occlusion")
 			observations.append({"top_layer_negative_carrier":hit,"top_layer_negative_companion":rear_hit});RenderingServer.free_rid(bad)
 	var overlay_index: int=b.overlay.get_index();var overlay=b.overlay;b.remove_child(overlay)
@@ -438,3 +458,76 @@ func ground_range_matrix(b,u) -> void:
 	if old_height.other_present:other.set_meta("render_height",old_height.other_value)
 	elif is_zero_approx(float(other.get_meta("render_height",0.0))):other.remove_meta("render_height")
 	u.queue_redraw();other.queue_redraw()
+
+
+# Real Unit tests; the independent CartPaint preview is not used here.
+func wheel_cart_mask_frames(unit) -> Array:
+	var wheel=load("res://scripts/tribute_cart_wheel_visual.gd")
+	var row: Dictionary=wheel.FIT[unit.animation_direction]
+	var result: Array=[]
+	var pivot:=Vector2(row.pose.pivot_native[0],row.pose.pivot_native[1])
+	var tr:=Vector2(row.rim_translation_original_native[0],row.rim_translation_original_native[1])
+	for part in [{"texture":wheel.BODY,"region":row.body_region,"scale":1.0,"translation":Vector2.ZERO},{"texture":wheel.RIM,"region":row.region,"scale":float(row.rim_uniform_scale),"translation":tr}]:
+		var values: Array=part.region
+		var region:=Rect2(values[0],values[1],values[2],values[3])
+		var side: float=maxf(region.size.x,region.size.y)
+		var source_scale: float=part.scale
+		var frame_texture:=AtlasTexture.new();frame_texture.atlas=part.texture;frame_texture.region=region
+		frame_texture.margin=Rect2(Vector2.ZERO,Vector2.ONE*side-region.size)
+		frame_texture.set_meta("draw_scale",source_scale*side/float(row.pose.virtual_canvas_reference))
+		frame_texture.set_meta("draw_offset_px",region.position+(part.translation-pivot)/source_scale+Vector2(.5,.82)*side)
+		result.append(frame_texture)
+	return result
+
+func wheel_clip_view_bounds(b,unit) -> Rect2i:
+	var wheel=load("res://scripts/tribute_cart_wheel_visual.gd")
+	var row: Dictionary=wheel.FIT[unit.animation_direction]
+	var scale_native: float=unit.radius*3.7*unit.visual_scale/float(row.pose.virtual_canvas_reference)
+	var tr:=Vector2(row.rim_translation_original_native[0],row.rim_translation_original_native[1])
+	var rc:=Vector2(row.rim_plane_center[0],row.rim_plane_center[1])
+	var ar: Transform2D=wheel._matrix(row.rim_inner_plane_axes)
+	var to_view: Transform2D=unit.get_global_transform_with_canvas()*b.map.ISO_INV
+	var parent_to_view: Transform2D=unit.get_parent().get_global_transform_with_canvas()
+	to_view.origin-=(parent_to_view.x+parent_to_view.y)*float(unit.get_meta("render_height",0.0))
+	var center: Vector2=to_view*wheel._point(row,tr+float(row.rim_uniform_scale)*rc,scale_native)
+	var result:=Rect2(center,Vector2.ZERO)
+	for i in range(64):
+		var angle:=TAU*float(i)/64.0
+		var q:=Vector2(cos(angle),sin(angle))*float(row.clip_inner_radius)
+		result=result.expand(to_view*wheel._point(row,tr+float(row.rim_uniform_scale)*(rc+ar*q),scale_native))
+	return Rect2i(result.position.floor(),result.size.ceil()).grow(3).intersection(Rect2i(Vector2i.ZERO,root.size))
+
+func wheel_render_matrix(b,u) -> void:
+	var wheel=load("res://scripts/tribute_cart_wheel_visual.gd")
+	var saved: Dictionary={}
+	var fields: Array=["_tribute_wheel_angle","_anim_t","_idle_t","_move_blend","animation_direction","face_left","_flinch","_flash","_lunge","_shi_en_hurt_t","_cast_t"]
+	for field in fields:saved[field]=u.get(field)
+	var old_mode: int=b.process_mode;var old_pos: Vector2=u.position;var old_zoom: Vector2=b.camera.zoom
+	var old_size: Vector2i=root.size;var old_scale: Vector2i=root.content_scale_size
+	var settings=root.get_node("Settings");var old_ring: bool=settings.show_range_rings;settings.show_range_rings=false
+	root.size=Vector2i(1280,720);root.content_scale_size=root.size;b.process_mode=Node.PROCESS_MODE_DISABLED
+	u.position=b.map.cell_to_world(clear_cell(b));u._idle_t=0;u._move_blend=1.0;u._flinch=Vector2.ZERO;u._flash=0;u._lunge=0;u._shi_en_hurt_t=0;u._cast_t=0
+	b.map.sync_render_position(u);b.camera.zoom=Vector2.ONE*2.8;b.select_single(u,false);stage_camera(b,u)
+	for direction in ["se","sw","ne","nw"]:
+		u.animation_direction=direction;u.face_left=direction in ["sw","nw"];u._anim_t=.1;u._tribute_wheel_angle=.1;u.queue_redraw()
+		check(wheel.enabled(u),"wheel renderer selects actual loaded chapter16 Ruan7 "+direction)
+		var first_frame: Texture2D=frame(u)
+		await snap("wheel_actual_"+direction+"_phase_a");var before:=root.get_texture().get_image()
+		u._tribute_wheel_angle=.8;u.queue_redraw();await snap("wheel_actual_"+direction+"_phase_b");var after:=root.get_texture().get_image()
+		check(frame(u)==first_frame,"wheel phase comparison keeps same authored body frame "+direction)
+		var bounds:=wheel_clip_view_bounds(b,u);var changed:=0
+		for y in range(bounds.position.y,bounds.end.y):
+			for x in range(bounds.position.x,bounds.end.x):
+				if before.get_pixel(x,y)!=after.get_pixel(x,y):changed+=1
+		check(changed>4,"actual Unit polygon wheel changes rendered pixels "+direction)
+		observations.append({"actual_unit_wheel":direction,"wheel_clip_changed_pixels":changed,"clip":[bounds.position.x,bounds.position.y,bounds.size.x,bounds.size.y]})
+	var codec=load("res://scripts/run_unit_state.gd").new(null,null,null)
+	var raw: Dictionary=codec._read_explicit(u)
+	check(codec.OMITTED_VISUAL_FIELDS.has("_tribute_wheel_angle") and not raw.has("_tribute_wheel_angle"),"independent wheel is explicitly classified outside saved unit values")
+	var gait_before: float=u._anim_t;u._tribute_wheel_angle=1.27;codec._assign_values(u,raw)
+	check(u._tribute_wheel_angle==0.0 and u._anim_t==gait_before,"explicit unit assignment rebuilds visual wheel at zero and preserves saved gait")
+	for actor in b.units:
+		if actor!=u:check(not wheel.enabled(actor),"wheel renderer rejects actual foreign actor "+str(actor.key))
+	u.position=old_pos
+	for field in fields:u.set(field,saved[field])
+	b.map.sync_render_position(u);b.process_mode=old_mode;b.camera.zoom=old_zoom;root.size=old_size;root.content_scale_size=old_scale;settings.show_range_rings=old_ring;stage_camera(b,u);u.queue_redraw()

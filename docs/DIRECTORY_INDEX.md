@@ -1,3 +1,14 @@
+## 2026-10-18 实际Unit独立轮角
+
+- scripts/tribute_cart_wheel_visual.gd及UID、scripts/unit.gd：第16回阮小七分层车按实际位移转动，原人物步频/扬尘不改；无新增节点/RID/材质，新增1个省略视觉缓存。
+- scripts/run_unit_state.gd：该缓存分类为不保存并在赋值时清零，持久化字段/版本未改；完整恢复链未重验。
+- assets/characters/tribute_cart_wheel_runtime_20261018/：原字节车身/轮缘/轮辐3PNG+导入设置和来源清单；其他6车/地面车保持旧图。
+- tools/run_ruan_xiaoqi_layered_20261018.py与对应.gd：保留原176纹理/1621项，加3纹理与独立轮角实际验证，范围圈像素掩码改为实际新车身/轮缘。
+- qa/tribute_cart_wheel_unit_20261018/：独立21几何项、首1680项设计退回、新实际1686项/144图/20直看/6代表图、80项清单/修订16项保护基线、原始归档恢复映射；大包/ZIP留外部。
+- docs/TRIBUTE_CART_WHEEL_UNIT_20261018.md：当前采用、原著与美术解释、显式读档清零/原著数量文字等未完成项。整库美术、main/Steam状态不由局部轮转通过扩张。
+
+以下保留此前目录交接历史。
+
 ## 2026-10-18 当前范围圈修正与骑乘原生比较
 
 - scripts/battle.gd、scripts/ground_range_visual.gd及UID：攻击圈绘制移到单位下方，原地形投影/半径/线宽保留；tools/ruan_xiaoqi_layered_20261018.gd追加45项实际采样/坏例/生命周期验证。

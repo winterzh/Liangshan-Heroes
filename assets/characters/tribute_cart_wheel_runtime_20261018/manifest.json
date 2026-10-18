@@ -1,0 +1,80 @@
+{
+  "scope": "Source provenance for exact Ruan Xiaoqi chapter16 separated cart; actual adoption is determined by Unit and Wheel.enabled, and actual native QA.",
+  "sources": [
+    {
+      "key": "cart_body",
+      "original": "assets/characters/tribute_cart_wheel_layers_20261018/cart_body_without_wheel.png",
+      "runtime": "assets/characters/tribute_cart_wheel_runtime_20261018/cart_body.png",
+      "sha256": "7d834f06ddca3dbe847e8b6e99860275dab79dcc9ea26911c6387ff81ceaf5f5",
+      "size": [
+        1254,
+        1254
+      ]
+    },
+    {
+      "key": "rim_hub",
+      "original": "assets/characters/tribute_cart_wheel_motion_20261018/rim_hub.png",
+      "runtime": "assets/characters/tribute_cart_wheel_runtime_20261018/rim_hub.png",
+      "sha256": "19ce759ff2d2fb4dd4d5646e5fe902bd1af7c41d2b8758411784dececc18e2c8",
+      "size": [
+        1254,
+        1254
+      ]
+    },
+    {
+      "key": "spokes",
+      "original": "assets/characters/tribute_cart_wheel_motion_20261018/spokes.png",
+      "runtime": "assets/characters/tribute_cart_wheel_runtime_20261018/spokes.png",
+      "sha256": "c838a504734f191dac756f8259835e226af63e658ede052ad6d392bc97e85a00",
+      "size": [
+        1254,
+        1254
+      ]
+    }
+  ],
+  "fit_source": {
+    "path": "assets/characters/tribute_cart_wheel_motion_20261018/projection_fit.json",
+    "sha256": "c33065784cf8b1099526f09ae8003aca25bf218fad7225c58cf68bece66108a3"
+  },
+  "component_layout": {
+    "path": "assets/characters/tribute_cart_wheel_layers_20261018/component_layout.json",
+    "sha256": "735ecf1164e4275148e77ed78f22ea267049b4252964b234198c7e1d12a6cbb9"
+  },
+  "geometry": [
+    {
+      "direction": "se",
+      "measured_outer_radius_original_native": 105.82866043613707,
+      "phases": 16,
+      "clip_vertices_per_phase": 64,
+      "all_source_uvs_inside_own_region": true
+    },
+    {
+      "direction": "sw",
+      "measured_outer_radius_original_native": 103.8254716981132,
+      "phases": 16,
+      "clip_vertices_per_phase": 64,
+      "all_source_uvs_inside_own_region": true
+    },
+    {
+      "direction": "ne",
+      "measured_outer_radius_original_native": 102.5,
+      "phases": 16,
+      "clip_vertices_per_phase": 64,
+      "all_source_uvs_inside_own_region": true
+    },
+    {
+      "direction": "nw",
+      "measured_outer_radius_original_native": 102.5,
+      "phases": 16,
+      "clip_vertices_per_phase": 64,
+      "all_source_uvs_inside_own_region": true
+    }
+  ],
+  "phase": "Independent transient _tribute_wheel_angle follows actual terrain-lifted displacement / rendered outer rim radius; no camera clock. Original gait/dust code remains exact. Explicit omitted visual cache resets to0 on restore; no persistent payload change.",
+  "limitations": [
+    "Other6 cart carriers still need body separation and rolling wheel acceptance.",
+    "Wheel angle rebuilds at0 on loading a saved game; logical cargo and original saved gait retain their existing schema.",
+    "Fixed rim grain/light, fit/physical radius, drop/delivery visual angle continuity and cloth inertia remain provisional.",
+    "Existing three cargo goals, seven-cart/eleven-load migration and whole-art acceptance remain open."
+  ]
+}

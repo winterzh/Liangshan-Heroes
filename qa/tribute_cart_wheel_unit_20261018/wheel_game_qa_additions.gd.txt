@@ -1,0 +1,67 @@
+
+# Real Unit tests; the independent CartPaint preview is not used here.
+func wheel_cart_mask_frames(unit) -> Array:
+	var wheel=load("res://scripts/tribute_cart_wheel_visual.gd")
+	var row: Dictionary=wheel.FIT[unit.animation_direction]
+	var result: Array=[]
+	var pivot:=Vector2(row.pose.pivot_native[0],row.pose.pivot_native[1])
+	var tr:=Vector2(row.rim_translation_original_native[0],row.rim_translation_original_native[1])
+	for part in [{"texture":wheel.BODY,"region":row.body_region,"scale":1.0,"translation":Vector2.ZERO},{"texture":wheel.RIM,"region":row.region,"scale":float(row.rim_uniform_scale),"translation":tr}]:
+		var values: Array=part.region
+		var region:=Rect2(values[0],values[1],values[2],values[3])
+		var side: float=maxf(region.size.x,region.size.y)
+		var source_scale: float=part.scale
+		var frame_texture:=AtlasTexture.new();frame_texture.atlas=part.texture;frame_texture.region=region
+		frame_texture.margin=Rect2(Vector2.ZERO,Vector2.ONE*side-region.size)
+		frame_texture.set_meta("draw_scale",source_scale*side/float(row.pose.virtual_canvas_reference))
+		frame_texture.set_meta("draw_offset_px",region.position+(part.translation-pivot)/source_scale+Vector2(.5,.82)*side)
+		result.append(frame_texture)
+	return result
+
+func wheel_clip_view_bounds(b,unit) -> Rect2i:
+	var wheel=load("res://scripts/tribute_cart_wheel_visual.gd")
+	var row: Dictionary=wheel.FIT[unit.animation_direction]
+	var scale_native: float=unit.radius*3.7*unit.visual_scale/float(row.pose.virtual_canvas_reference)
+	var tr:=Vector2(row.rim_translation_original_native[0],row.rim_translation_original_native[1])
+	var rc:=Vector2(row.rim_plane_center[0],row.rim_plane_center[1])
+	var ar: Transform2D=wheel._matrix(row.rim_inner_plane_axes)
+	var to_view: Transform2D=unit.get_global_transform_with_canvas()*b.map.ISO_INV
+	var parent_to_view: Transform2D=unit.get_parent().get_global_transform_with_canvas()
+	to_view.origin-=(parent_to_view.x+parent_to_view.y)*float(unit.get_meta("render_height",0.0))
+	var center: Vector2=to_view*wheel._point(row,tr+float(row.rim_uniform_scale)*rc,scale_native)
+	var result:=Rect2(center,Vector2.ZERO)
+	for i in range(64):
+		var angle:=TAU*float(i)/64.0
+		var q:=Vector2(cos(angle),sin(angle))*float(row.clip_inner_radius)
+		result=result.expand(to_view*wheel._point(row,tr+float(row.rim_uniform_scale)*(rc+ar*q),scale_native))
+	return Rect2i(result.position.floor(),result.size.ceil()).grow(3).intersection(Rect2i(Vector2i.ZERO,root.size))
+
+func wheel_render_matrix(b,u) -> void:
+	var wheel=load("res://scripts/tribute_cart_wheel_visual.gd")
+	var saved: Dictionary={}
+	var fields: Array=["_anim_t","_idle_t","_move_blend","animation_direction","face_left","_flinch","_flash","_lunge","_shi_en_hurt_t","_cast_t"]
+	for field in fields:saved[field]=u.get(field)
+	var old_mode: int=b.process_mode;var old_pos: Vector2=u.position;var old_zoom: Vector2=b.camera.zoom
+	var old_size: Vector2i=root.size;var old_scale: Vector2i=root.content_scale_size
+	var settings=root.get_node("Settings");var old_ring: bool=settings.show_range_rings;settings.show_range_rings=false
+	root.size=Vector2i(1280,720);root.content_scale_size=root.size;b.process_mode=Node.PROCESS_MODE_DISABLED
+	u.position=b.map.cell_to_world(clear_cell(b));u._idle_t=0;u._move_blend=1.0;u._flinch=Vector2.ZERO;u._flash=0;u._lunge=0;u._shi_en_hurt_t=0;u._cast_t=0
+	b.map.sync_render_position(u);b.camera.zoom=Vector2.ONE*2.8;b.select_single(u,false);stage_camera(b,u)
+	for direction in ["se","sw","ne","nw"]:
+		u.animation_direction=direction;u.face_left=direction in ["sw","nw"];u._anim_t=.1;u.queue_redraw()
+		check(wheel.enabled(u),"wheel renderer selects actual loaded chapter16 Ruan7 "+direction)
+		var first_frame: Texture2D=frame(u)
+		await snap("wheel_actual_"+direction+"_phase_a");var before:=root.get_texture().get_image()
+		u._anim_t=.8;u.queue_redraw();await snap("wheel_actual_"+direction+"_phase_b");var after:=root.get_texture().get_image()
+		check(frame(u)==first_frame,"wheel phase comparison keeps same authored body frame "+direction)
+		var bounds:=wheel_clip_view_bounds(b,u);var changed:=0
+		for y in range(bounds.position.y,bounds.end.y):
+			for x in range(bounds.position.x,bounds.end.x):
+				if before.get_pixel(x,y)!=after.get_pixel(x,y):changed+=1
+		check(changed>4,"actual Unit polygon wheel changes rendered pixels "+direction)
+		observations.append({"actual_unit_wheel":direction,"wheel_clip_changed_pixels":changed,"clip":[bounds.position.x,bounds.position.y,bounds.size.x,bounds.size.y]})
+	for actor in b.units:
+		if actor!=u:check(not wheel.enabled(actor),"wheel renderer rejects actual foreign actor "+str(actor.key))
+	u.position=old_pos
+	for field in fields:u.set(field,saved[field])
+	b.map.sync_render_position(u);b.process_mode=old_mode;b.camera.zoom=old_zoom;root.size=old_size;root.content_scale_size=old_scale;settings.show_range_rings=old_ring;stage_camera(b,u);u.queue_redraw()

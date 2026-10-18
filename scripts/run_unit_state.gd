@@ -6,7 +6,7 @@ extends RefCounted
 ## bind every graph, connect Battle signals, attach while paused, then activate.
 ## Never calls setup/spawn_at/order/Inventory.restore or recomputes gameplay stats.
 ## Only art_variant's existing setter runs: signals are blocked, detached redraw only.
-## Five draw caches are regenerated; draw cadence is not gameplay state.
+## Six visual caches are regenerated; wheel angle is not gameplay/save state.
 const SCHEMA := "defense_unit_state_v2"
 const LEVEL3_SCHEMA := "level3_unit_state_v1"
 const LEVEL1_SCHEMA := "level1_unit_state_v1"
@@ -368,7 +368,7 @@ const INT_RANGES := {
   ]
 }
 const DEFERRED_FIELDS := ["story_assist_partner", "story_assist_owner", "battle", "map", "_gold_miner", "_gold_waiters", "_queue", "_gather_node", "_drop", "_build_site", "garrison_holder", "_garrison_dest", "passengers", "rally_node", "inventory", "_lin_spear_target_id", "_taunt_src", "_aura_atkspeed_sources", "_damage_reduction_sources", "_charge_hit", "_hua_lock_target", "_target", "_chase_last_id", "_giveup_id", "_pending_target", "_killer"]
-const OMITTED_VISUAL_FIELDS := ["_animated_redraw_t", "_dust", "_frame_directional", "_queued_redraw_frame", "_real_frames"]
+const OMITTED_VISUAL_FIELDS := ["_tribute_wheel_angle", "_animated_redraw_t", "_dust", "_frame_directional", "_queued_redraw_frame", "_real_frames"]
 
 const MAX_ENTITIES := 4096
 const MAX_ARRAY_ITEMS := 4096
@@ -853,6 +853,7 @@ func _assign_values(unit: Variant, values: Dictionary) -> void:
 	unit._stepped = values["_stepped"]
 	unit._move_blend = values["_move_blend"]
 	unit._anim_t = values["_anim_t"]
+	unit._tribute_wheel_angle = 0.0 # Same rebuild policy as other omitted visual caches.
 	unit._lunge = values["_lunge"]
 	unit._lunge_dir = values["_lunge_dir"]
 	unit._swing_kind = values["_swing_kind"]

@@ -6,6 +6,7 @@ const CampaignEnvironmentArt := preload("res://scripts/campaign_environment_art.
 ## 单位：梁山好汉 / 官军。有图集贴图就用贴图，否则绘制占位图形。
 
 const CampaignArt := preload("res://scripts/campaign_art.gd")
+const TributeCartWheel := preload("res://scripts/tribute_cart_wheel_visual.gd")
 const CampaignFlagOverlay := preload("res://scripts/campaign_flag_overlay.gd")
 const WorldShadow := preload("res://scripts/world_shadow.gd")
 const LIVE_TAVERN_FALLBACK := preload("res://assets/campaign/objects/roadside_tavern_default.png")
@@ -318,6 +319,7 @@ const GIVEUP_COOLDOWN := 2.5    # 放弃后多久内不再重锁同一目标
 # 程序化动画：行走起伏/摇摆 + 攻击突刺 + 待机呼吸 + 死亡倒地 + 脚步扬尘
 var _stepped := false      # 本物理帧是否实际位移
 var _move_blend := 0.0     # 行走动画权重（平滑启停）
+var _tribute_wheel_angle := 0.0 # Transient visual phase; reset on restore, never a gameplay/save value.
 var _anim_t := 0.0         # 步频相位
 var _lunge := 0.0          # 攻击挥击进度（1→0），驱动出招动作
 var _lunge_dir := Vector2.RIGHT
@@ -1316,6 +1318,8 @@ func _mass_status_visuals() -> bool:
 
 func _phys_body(delta: float) -> void:
 	if not _gameplay_rng_fault().is_empty(): return
+	var tribute_roll := TributeCartWheel.enabled(self)
+	var tribute_motion_origin := position
 	if _story_pose_t > 0.0:
 		_story_pose_t -= delta
 		if _story_pose_t <= 0.0:
@@ -1696,6 +1700,8 @@ func _phys_body(delta: float) -> void:
 
 	# 动画状态推进：步频随移速，骑兵更快；停下时平滑收势
 	if not _gameplay_rng_fault().is_empty(): return
+	if tribute_roll:
+		_tribute_wheel_angle = fposmod(_tribute_wheel_angle + TributeCartWheel.phase_delta(self, position - tribute_motion_origin, radius * 3.7 * visual_scale), TAU)
 	_move_blend = move_toward(_move_blend, 1.0 if _stepped else 0.0, delta * 6.0)
 	_stepped = false
 	_idle_t += delta
@@ -3865,6 +3871,9 @@ func _draw_sprite_animated(tex: Texture2D, tint: Color, death_f: float) -> void:
 
 
 func _draw_parked_tribute_cart(body_size: float, tint: Color) -> void:
+	if TributeCartWheel.enabled(self):
+		TributeCartWheel.draw_cart(self, body_size, tint)
+		return
 	var frames: Array = Art.unit_anim_frames(key, "parked_cart", animation_direction, art_variant)
 	if frames.is_empty(): return
 	var cart: Texture2D = frames[0]
