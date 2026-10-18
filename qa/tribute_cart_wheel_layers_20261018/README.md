@@ -1,12 +1,10 @@
-# 江州车分层木轮来源QA
+# 江州车车身与完整木轮静态原生QA
 
-两份内置原PNG、8个直接观察视图已保留，未生产接入，无轮转/原生/实际游戏通过。[原著、解释与后继](../../docs/TRIBUTE_CART_WHEEL_LAYERS_20261018.md)。
+两份内置原PNG/8直接观察视图保持。当前独立原生居中批13项/3纹理/4原图通过，四图直接看过，未生产采用，没有轮转或实际游戏资格。[说明](../../docs/TRIBUTE_CART_WHEEL_LAYERS_20261018.md)。
 
-- `source_audit.json`：原件/引用SHA、完整请求、实测尺寸与8个原生选区强alpha边界。脚本没有改PNG，SW轮越名义中线通过非等分资源选区保全，不能写成原稿严格四格合格。
-- 来源目录`component_layout.json`：旧车固定变换/轮底与近似轮毂配准，显示均匀缩放/平移候选，无实际轮轴接触资格。
-- `production_preservation.json`：25运行文件、16保护文件、81无关未跟踪文件逐字节保持；生产原车SHA为`9425a1929887df7a6846e831eb064decd023d1510613a8c59211649403597e42`。新增隔离来源影响未来身份，不称完整旧身份不变。
-- `prepared/`：第一份未执行候选。`preview.gd`使用Dictionary `.size`访问，执行前检查发现冲突风险后废止；保留快照，不执行此批。
-- `prepared_index_size_fix/`：显式字段索引/整数比较后的当前3纹理/10冻结文件工程配置、脚本/收据；未解析或运行。源PNG完整原件在来源目录，工程外有冻结副本。
-- `prepare_sources.py`、两份prepare_native脚本：实际过程原件，不是启动工具，也不可在QA目录重跑改写旧证据。
+- 来源/几何与原始25运行、16保护、81无关保持记录保留。原稿SW轮越名义y627中线，以y730非等分选区保全；不改PNG。轴心/轮底与旧轮细差仍开放。
+- `prepared`是未执行的Dictionary.size访问风险快照。`prepared_index_size_fix`是显式索引后的已执行第一批；`native_comparison/first_frame`保留13项/4图/日志，实际直接看SE/SW两图，SW左侧原车明显越界，NW同固定原点按几何有越界风险但首版NW图未直接查看。
+- `prepared_centered`与`native_comparison/centered`是另冻结的新批：按原区域中心摆两栏，13项/3纹理/4图通过，四图全新直接查看。修的是预览构图，不是PNG或游戏变换，未继承旧静态通过。两个13不能合并成26项新资格。
+- 原始prepared复制收据保留准备时状态，当前完成以native_comparison原收据和根native_gate为准。`historical_gate_before_centered_completion`保留最近待验快照，不能当当前仍等待。
 
-当前精确接续以`native_gate.json`为准，先完成已排队的阮小七十四姿势对照，再等共享引擎自然空闲运行该prepared批；不并行启动Godot、不删外来锁。资源批仅比较原车和静态分层合成，完成后仍须直接看四图，再实现/验证真实滚动、停车/受击/卸载、人物遮挡与实际关卡/PCK。本批没有这些资格，不继承旧运行结果。main/Steam保持。
+本批纹理是原车/去轮车身/完整轮；后来的新轮缘/轮辐是另一组4纹理[浏览器原型QA](../tribute_cart_wheel_motion_20261018/README.md)，尚无原生动态或Unit位移资格。不得重跑complete资源批；新动态原生须全新工程外目录/来源与串行引擎。main/Steam未改，整库美术继续。

@@ -1,3 +1,11 @@
+## 2026-10-18 十四行走姿势采用与独立轮辐原型
+
+- `assets/characters/ruan_xiaoqi_layered_20261018/`新增6原字节人物PNG/6导入描述，制作/运行两清单及4行走TRES更新；14新姿势采用，10旧保持。
+- `qa/ruan_xiaoqi_walk_grips_20261018/`新增126项资源/4图、1576项实际8包链/118图索引/32直看/6代表图、6文件前版本、旧6923输入恢复映射、170纹理/6原稿运行配对和67项后继清单。
+- `assets/characters/tribute_cart_wheel_motion_20261018/`为2轮缘/轮辐内置原PNG/提示SHA和只读投影拟合，隔离未采用；`qa/tribute_cart_wheel_motion_20261018/`保留浏览器模板/7Canvas图索引/控制观测/2代表图，非原生动态或游戏通过。
+- `qa/tribute_cart_wheel_layers_20261018/`新增首个原生构图越界与新居中13项/4图，当前静态完成，未采用。
+- `docs/TRIBUTE_CART_WHEEL_MOTION_20261018.md`与已更新十四姿势说明区分真实采用、静态原生及浏览器原型资格；整体美术继续。
+
 ## 2026-10-18 江州车独立轮来源
 
 - `assets/characters/tribute_cart_wheel_layers_20261018/`：去轮车身/独立木轮2原PNG/8视图、完整请求/引用SHA、近似轮毂与原车变换，.gdignore隔离，未采用。

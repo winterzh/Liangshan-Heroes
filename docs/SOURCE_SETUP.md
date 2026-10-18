@@ -1,3 +1,9 @@
+## 当前十四行走姿势已采用（2026-10-18）
+
+阮小七14新步相已采用，126资源项和实际8包链1576项/118图通过，32直看；以[当前实现](RUAN_XIAOQI_WALK_GRIPS_20261018.md)和[QA native_gate](../qa/ruan_xiaoqi_walk_grips_20261018/native_gate.json)优先于下方历史候选/等待记录。只读生成器重现24姿势/12资源，其硬编码PNG计数/false不是当前采用状态；现活动8身体+1车。已complete资源不可run-existing或重应用候选，新实景用当前完整真实收据/保留提交、新目录、先归档再复用和串行引擎。后继保护清单扩展67项，精确握指/完整步态仍开放。
+
+江州车去轮车身+完整轮已完成居中静态原生13项/4图，未采用；新轮缘/轮辐仅[浏览器动态原型](TRIBUTE_CART_WHEEL_MOTION_20261018.md)，需全新4纹理原生和真实Unit位移/停车/卸载验收，不能转记旧3纹理通过。启动方式不变，main/Steam保持。
+
 ## 江州车独立木轮待验（2026-10-18）
 
 新两份去轮车身/独立轮原稿隔离在`assets/characters/tribute_cart_wheel_layers_20261018/`，无运行引用；旧财物车/人物/启动方式保持。[QA native_gate](../qa/tribute_cart_wheel_layers_20261018/native_gate.json)指定当前显式size索引修正版精确prepared工程，先完成已排队阮小七十四姿势，再串行运行3纹理静态合成并直接看四图。未解析/未运行，不是轮转或实际关卡通过；旧prepared快照不执行，不删外来锁。[说明](TRIBUTE_CART_WHEEL_LAYERS_20261018.md)。main/Steam保持。
