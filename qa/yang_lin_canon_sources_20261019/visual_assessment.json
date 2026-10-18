@@ -1,0 +1,26 @@
+{
+  "reviewed_originals": [
+    "native_originals/portrait_v1.png",
+    "native_originals/idle_v1.png",
+    "native_originals/idle_v2.png"
+  ],
+  "reviewed_browser_captures": [
+    "review.png",
+    "registered.png"
+  ],
+  "observations": [
+    "Portrait and armed idle preserve headwrap, neat beard, cloth colors and adult human identity; no curved sword or ninja weapon in the candidates.",
+    "Four spear idle views show front SE/SW and authored rear NE/NW; selected rectangles retain full heads, boots and spear silhouettes.",
+    "Registered preview uses one common scale and manually chosen two-boot midpoint per direction; no bounding-box size normalization.",
+    "Portrait face is clearer than old torso-heavy region at 64px; 32px does not support fine facial-detail acceptance."
+  ],
+  "limits": [
+    "idle_v1 and idle_v2 nominal equal-cell raw-alpha boundary checks remain unaccepted.",
+    "idle_v2 is a spatial sampling candidate, not a perfectly clean whole atlas; 408 omitted isolated source pixels have alpha1, original file unchanged.",
+    "Manual boot points retain about 10-source-pixel uncertainty; this does not prove physical floor contact.",
+    "Rear spear shaft is occluded by torso/legs; its full motion/length and grip require subsequent action-chain checks.",
+    "No Godot import, ordinary Unit, rescued/bound regression, HUD, codex, animation, package or performance acceptance."
+  ],
+  "production_adopted": false,
+  "native_accepted": false
+}

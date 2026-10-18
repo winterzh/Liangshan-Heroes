@@ -1,0 +1,109 @@
+{
+  "scope": "Independent browser replay, not native/UI or game qualification.",
+  "prior_strict_recorder": "record_replay.py",
+  "prior_strict_recorder_exit_code": 1,
+  "prior_failure": "AssertionError at sha(output/png) == sha(Q/png) == receipt['png_sha256']",
+  "prior_failure_reclassified_as_pass": false,
+  "replays": [
+    {
+      "case": "source_review",
+      "png_byte_identical": false,
+      "rgb_pixels_identical": false,
+      "svg_byte_identical": true,
+      "pixel_difference_bbox": [
+        1192,
+        682,
+        1224,
+        714
+      ],
+      "first_png_sha256": "16744960f4c97fc46ec0d79e28d8d4abeff260fe104eaa9cc9c98de15527871d",
+      "replay_png_sha256": "3587de87503fac39f0bf67e1ea1f1902aeb75789b22d4191b44b906c14b12462",
+      "receipt": "source_review_replay_receipt.json",
+      "helper": "render_review.py",
+      "helper_sha256": "fc74957f043cd97a8e87390c82efeaeae4e9a1558409e7087ae572242124e757",
+      "assessment": "Difference is confined to the new portrait 32px box. Cause unestablished; strict image replay equality is not accepted. 32px detail already unqualified."
+    },
+    {
+      "case": "registered_review",
+      "png_byte_identical": true,
+      "rgb_pixels_identical": true,
+      "svg_byte_identical": true,
+      "pixel_difference_bbox": null,
+      "first_png_sha256": "3a734f7c0f31cafff1f77cb5b8ae86fdc300a30b94e6b4140e5177c0f6944701",
+      "replay_png_sha256": "3a734f7c0f31cafff1f77cb5b8ae86fdc300a30b94e6b4140e5177c0f6944701",
+      "receipt": "registered_review_replay_receipt.json",
+      "helper": "render_registered.py",
+      "helper_sha256": "5ac565e9d4468e34991df561843291073b7f2c634fc59715a7713135719db006"
+    }
+  ],
+  "first_executed_tools": [
+    {
+      "file": "first_executed_tools/render_registered.py",
+      "sha256": "dcfe472b1e58b86e647ce3319ba659648717eda3db8c7cfdc3a329819bb64eb2"
+    },
+    {
+      "file": "first_executed_tools/render_review.py",
+      "sha256": "e53df92fd0a89d486d8dd4a0914cda351eac83087d4a42b749c164623e907384"
+    }
+  ],
+  "python_ast_current": [
+    {
+      "file": "closeout_sources.py",
+      "sha256": "c0033db9f1f255887a974037f64576141260654cc15e7f48804b56cb79ab6a88"
+    },
+    {
+      "file": "inspect_components_v2.py",
+      "sha256": "288cdba1352622b88a0bdb0d7d0c80373f7d09a82b1ce598f44f9230495a091c"
+    },
+    {
+      "file": "inspect_idle_v2.py",
+      "sha256": "75432f713c771c667a4d71b0795debdb49e1da22a09b9970a31c542ad66259b3"
+    },
+    {
+      "file": "inspect_sources.py",
+      "sha256": "a4d0cf426a1b91ed03f6a4fb2a60b3fe0d4b20b30a5c24c0f5dfe249c66e8876"
+    },
+    {
+      "file": "prepare_regions_v2.py",
+      "sha256": "cf20e7569600d546207e45608748a31c61773cf7755b8d1f3fa6568dd606c8c1"
+    },
+    {
+      "file": "prepare_regions_v3.py",
+      "sha256": "f91886bda73710eceac8a83aff9a7bf3d3ff8de18487e9746c8cae8f9d87ec70"
+    },
+    {
+      "file": "record_edit.py",
+      "sha256": "8d91281d1a29035914c55a4a0f9f3d3161efa7318f466f397bd47bf864c6d5e6"
+    },
+    {
+      "file": "record_replay.py",
+      "sha256": "378058fdcaaa6baec6225b209f4c317d25843f66890d388bec10f25d4ee471f9"
+    },
+    {
+      "file": "record_replay_result.py",
+      "sha256": "30999a82aabccd8c2a50ef115fb90c17a0fb2c13c1341101a82f22eccc4a294f"
+    },
+    {
+      "file": "record_source.py",
+      "sha256": "d7438b42e29b08e735b7dc2a4285d8021c026b8b560ecc64d6af894e06bb36cd"
+    },
+    {
+      "file": "render_registered.py",
+      "sha256": "5ac565e9d4468e34991df561843291073b7f2c634fc59715a7713135719db006"
+    },
+    {
+      "file": "render_review.py",
+      "sha256": "fc74957f043cd97a8e87390c82efeaeae4e9a1558409e7087ae572242124e757"
+    },
+    {
+      "file": "first_executed_tools/render_registered.py",
+      "sha256": "dcfe472b1e58b86e647ce3319ba659648717eda3db8c7cfdc3a329819bb64eb2"
+    },
+    {
+      "file": "first_executed_tools/render_review.py",
+      "sha256": "e53df92fd0a89d486d8dd4a0914cda351eac83087d4a42b749c164623e907384"
+    }
+  ],
+  "production_adopted": false,
+  "native_accepted": false
+}

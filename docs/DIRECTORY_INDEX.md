@@ -1,3 +1,11 @@
+## 2026-10-19 杨林普通肖像与笔管枪待机候选
+
+- `qa/yang_lin_canon_sources_20261019/native_originals/`：头像与两版四向持枪待机，三份原PNG未改像素，生产采用0。
+- 同目录`prompt_set.json`、`canon_basis.json`：精确参数/角色引用、第44回复用书证与美术解释；`skill_review_pending.json`单列未获书证批准的既有技能描述。
+- `source_inspection_v1/v2.json`保留均分格未通过结果；`selected_regions_v2/v3.json`记录取图区边缘发现、扩展与虚拟margin；`components_v2.json`是全alpha>0诊断，无阈值掩码。
+- `review.png`、`registered.png`及两份回执：已目检浏览器来源/人工靴点对比；不是游戏画面。重放入口和单次记录器边界见目录README。
+- `docs/YANG_LIN_CANON_SOURCES_20261019.md`：普通武装/获救状态边界及其余动作、原生/包内未完成范围。
+
 ## 2026-10-19 邓飞普通头像候选
 
 - `qa/deng_fei_portrait_20261019/native_originals/`：三份1254 RGB内置原稿；v3仅选为后继原生比较候选，未生产采用。

@@ -1,0 +1,103 @@
+{
+  "mode": "builtin_imagegen",
+  "originals": [
+    {
+      "key": "portrait_v1",
+      "mode": "builtin_imagegen",
+      "intent": "new_generation_from_references",
+      "file": "native_originals/portrait_v1.png",
+      "generated_original": "C:\\Users\\rsb\\.codex\\generated_images\\01a11902-b95a-7981-aed1-f143736f8853\\exec-08899029-8248-4a90-b6d2-4a67029282c5.png",
+      "sha256": "03b59145eca682a47bfdfc5f72b2a38ac2cb7f325b538847be27f627543886dc",
+      "bytes": 2976446,
+      "pixel_mode": "RGB",
+      "size": [
+        1254,
+        1254
+      ],
+      "exact_tool_arguments": "tool_prompt_portrait_v1.json",
+      "prompt_sha256": "1b2f62faf822a712780c4eeff554de10d90e3893b39fe6b8f05df25644edad2d",
+      "transparent_background_requested": false,
+      "references": [
+        {
+          "path": "D:/AI项目/水浒/开发工程/assets/characters/yang_lin_wounded_20261005/idle_single_se_v4.png",
+          "sha256": "599295cb108c5de8b0c20125569785a980f3c1e7b2f50d0195a16f1678c3c5b9",
+          "role": "identity_and_existing_body_clothing_reference"
+        },
+        {
+          "path": "D:/AI项目/水浒/开发工程/qa/deng_fei_portrait_20261019/native_originals/portrait_v3.png",
+          "sha256": "c4bec34a3f1ec1473c9061e816cdd79ffdb56ab9bb81d25e61768059a3c6e1f0",
+          "role": "different_character_style_only"
+        }
+      ],
+      "local_pixel_writes": false,
+      "production_adopted": false,
+      "recorded_at": "2026-10-19T06:04:52.814900"
+    },
+    {
+      "key": "idle_v1",
+      "mode": "builtin_imagegen",
+      "intent": "new_generation_from_references",
+      "file": "native_originals/idle_v1.png",
+      "generated_original": "C:\\Users\\rsb\\.codex\\generated_images\\01a11902-b95a-7981-aed1-f143736f8853\\exec-ebeba2aa-91da-4fe6-99da-03744d148093.png",
+      "sha256": "fb101eef1aed76b1d6dfceafad5cb98bd77a620ca474ff5307753dd8e851092a",
+      "bytes": 991955,
+      "pixel_mode": "RGBA",
+      "size": [
+        1254,
+        1254
+      ],
+      "exact_tool_arguments": "tool_prompt_idle_v1.json",
+      "prompt_sha256": "ddf007b52ad345ea433c5c58df97f1c7ef848e3311e4f154384590edf6563196",
+      "transparent_background_requested": true,
+      "references": [
+        {
+          "path": "D:/AI项目/水浒/开发工程/assets/characters/yang_lin_wounded_20261005/idle_single_se_v4.png",
+          "sha256": "599295cb108c5de8b0c20125569785a980f3c1e7b2f50d0195a16f1678c3c5b9",
+          "role": "identity_and_existing_body_clothing_reference"
+        },
+        {
+          "path": "D:/AI项目/水浒/开发工程/qa/yang_lin_canon_sources_20261019/native_originals/portrait_v1.png",
+          "sha256": "03b59145eca682a47bfdfc5f72b2a38ac2cb7f325b538847be27f627543886dc",
+          "role": "same_character_portrait_identity_reference"
+        }
+      ],
+      "local_pixel_writes": false,
+      "production_adopted": false,
+      "recorded_at": "2026-10-19T06:06:35.228934"
+    },
+    {
+      "key": "idle_v2",
+      "mode": "builtin_imagegen",
+      "intent": "atlas_framing_edit",
+      "file": "native_originals/idle_v2.png",
+      "generated_original": "C:\\Users\\rsb\\.codex\\generated_images\\01a11902-b95a-7981-aed1-f143736f8853\\exec-b1d123e4-1dd6-4ce8-9c43-8adbef3446e7.png",
+      "sha256": "1206955ca68cec6165072f91ec7dc2403a9a365b8e6d03ec367ac26ba94dfb81",
+      "bytes": 661792,
+      "pixel_mode": "RGBA",
+      "size": [
+        1254,
+        1254
+      ],
+      "exact_tool_arguments": "tool_prompt_idle_v2.json",
+      "prompt_sha256": "870a1e9c8119421f9b873690d7c08b5d7efe99d22f233472c02953886640fb27",
+      "transparent_background_requested": true,
+      "references": [
+        {
+          "path": "D:/AI项目/水浒/开发工程/qa/yang_lin_canon_sources_20261019/native_originals/idle_v1.png",
+          "sha256": "fb101eef1aed76b1d6dfceafad5cb98bd77a620ca474ff5307753dd8e851092a",
+          "role": "edit_target"
+        }
+      ],
+      "local_pixel_writes": false,
+      "production_adopted": false,
+      "recorded_at": "2026-10-19T06:08:43.369865"
+    }
+  ],
+  "canon_basis": "canon_basis.json",
+  "portrait_candidate": "portrait_v1",
+  "idle_candidate": "idle_v2 with selected_regions_v3.json and registration_v1.json",
+  "idle_v1_selection": "rejected: meaningful foreground reaches nominal center sampling boundaries",
+  "production_adopted": false,
+  "native_accepted": false,
+  "full_goal_complete": false
+}
