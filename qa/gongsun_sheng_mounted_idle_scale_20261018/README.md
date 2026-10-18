@@ -1,3 +1,7 @@
+当前实际：原观察窗口结束后，在真正空闲时直接运行原比较，118项通过、6纹理24选区/40冻结文件/4图并已直接查看。旧待机偏小，新原待机偏大，未采用；统一539/590校准另准备但未运行。原观察到期不改记引擎失败，旧135项2失败保持。
+
+以下为历史准备说明；当前状态以上方及最新收据为准。
+
 # 新骑乘待机体量候选：原始来源待验
 
 实际内置image_gen输出已看过并原字节保存于assets/characters/gongsun_sheng_mounted_idle_scale_20261018/idle_mass_v1.png，输入两图与章节来源的SHA在source_receipt。原prompt随来源保存。raw_metrics只读alpha/尺寸和alpha128包围盒；没有编辑图像，也未降低旧阈值。四向站姿完整，仍需同引擎固定尺度比较。原稿.gdignore隔离，暂无游戏接线、SpriteFrames/PCK或Steam采用。

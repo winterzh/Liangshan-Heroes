@@ -1,0 +1,82 @@
+extends SceneTree
+## Resource comparison only, not an actual game Unit or production adoption.
+var data: Dictionary = {}
+var checks: Array = []
+var failures: Array = []
+
+func _initialize() -> void:
+	run.call_deferred()
+
+func check(value: bool, label: String) -> void:
+	checks.append({"label": label, "passed": value})
+	if not value: failures.append(label)
+
+func run() -> void:
+	if OS.get_environment("STEAM_DISABLED") != "1" or OS.get_environment("CAMPAIGN_QA") != "1": quit(2); return
+	data = JSON.parse_string(FileAccess.get_file_as_string("res://inputs.json"))
+	root.size = Vector2i(1920, 960)
+	var canvas := CompareCanvas.new()
+	canvas.data = data
+	for key in data.textures:
+		var row: Dictionary = data.textures[key]
+		var texture: Texture2D = load("res://" + row.file)
+		check(texture != null and texture.get_width() == 1254 and texture.get_height() == 1254, "native full texture " + key)
+		check(FileAccess.get_sha256("res://" + row.file) == row.sha256, "exact raw source " + key)
+		if texture == null: continue
+		canvas.textures[key] = texture
+		var image := texture.get_image()
+		if image.is_compressed(): image.decompress()
+		check(image.get_pixel(0, 0).a == 0 and image.get_pixel(1253, 0).a == 0 and image.get_pixel(0, 1253).a == 0 and image.get_pixel(1253, 1253).a == 0, "whole native corners transparent " + key)
+	root.add_child(canvas)
+	var screenshots: Array = []
+	for direction in ["se", "sw", "ne", "nw"]:
+		canvas.direction = direction
+		canvas.queue_redraw()
+		await process_frame
+		await RenderingServer.frame_post_draw
+		var name := "compare_" + direction + ".png"
+		check(root.get_texture().get_image().save_png("res://" + name) == OK, "saved complete comparison " + direction)
+		screenshots.append(name)
+	var report := {"resource_preview_complete": failures.is_empty(), "checks": checks, "failures": failures,
+		"screenshots": screenshots, "production_adopted": false, "actual_game_unit_tested": false,
+		"wheel_rotation_tested": false, "animation_naturalness_accepted": false,
+		"fixed_cart_source": data.cart_source, "placement": data.placement}
+	FileAccess.open("res://report.json", FileAccess.WRITE).store_string(JSON.stringify(report, "\t"))
+	quit(0 if failures.is_empty() else 1)
+
+class CompareCanvas extends Node2D:
+	var data: Dictionary = {}
+	var textures: Dictionary = {}
+	var direction := "se"
+
+	func paint_pose(texture_key: String, pose: Dictionary, region: Array) -> void:
+		if not textures.has(texture_key): return
+		var texture: Texture2D = textures[texture_key]
+		var scale_native: float = 160.0 / float(pose.virtual_canvas_reference)
+		var source := Rect2(region[0], region[1], region[2], region[3])
+		var pivot := Vector2(pose.pivot_native[0], pose.pivot_native[1])
+		draw_texture_rect_region(texture, Rect2((source.position - pivot) * scale_native, source.size * scale_native), source)
+
+	func _draw() -> void:
+		var phases: Array = data.phases
+		var fit: Dictionary = data.placement[direction]
+		var font := ThemeDB.fallback_font
+		for row in range(3):
+			for column in range(phases.size()):
+				var rect := Rect2(column * 384.0, row * 320.0, 384.0, 320.0)
+				draw_rect(rect.grow(-1), Color(0.12, 0.11, 0.09) if row != 1 else Color(0.30, 0.29, 0.25))
+				draw_rect(rect.grow(-1), Color(0.45, 0.40, 0.29), false, 1)
+				var phase: String = phases[column]
+				var item: Dictionary = data.views[direction][phase]
+				var label: String = ["ORIGINAL COMPOSITE", "ISOLATED ACTOR", "ACTOR + FIXED CART"][row]
+				draw_string(font, rect.position + Vector2(8, 20), direction + " / " + phase + " / " + label, HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color(0.92, 0.87, 0.72))
+				var origin := rect.position + Vector2(fit.origin[0], fit.origin[1])
+				draw_set_transform(origin, 0, Vector2.ONE * float(fit.common_scale))
+				if row == 0:
+					paint_pose(item.original_texture, item.original_pose, item.original_pose.region)
+				else:
+					var cart: Dictionary = data.cart_poses[direction]
+					if row == 2 and direction in ["ne", "nw"]: paint_pose(data.cart_texture, cart, cart.region)
+					paint_pose(item.actor_texture, item.original_pose, item.actor_region)
+					if row == 2 and direction in ["se", "sw"]: paint_pose(data.cart_texture, cart, cart.region)
+				draw_set_transform(Vector2.ZERO)

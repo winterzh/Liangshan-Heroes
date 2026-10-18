@@ -1,0 +1,119 @@
+{
+  "directly_viewed": [
+    "compare_se.png",
+    "compare_sw.png",
+    "compare_ne.png",
+    "compare_nw.png"
+  ],
+  "native_checks": 46,
+  "passed": 43,
+  "failed": [
+    "whole native corners transparent original:push_passing_b_v5",
+    "whole native corners transparent original:push_passing_b_v4",
+    "whole native corners transparent original:push_passing_b_v2"
+  ],
+  "whole_run_complete": false,
+  "new_PNGs_modified": false,
+  "legacy_comparator_raw_corner_values": [
+    {
+      "path": "assets/characters/chao_gai_pushcart_20261017/push_passing_b_v5.png",
+      "sha256": "84c766be36174e07502dc285e9fb896e47ac381c2bec8c06d4801a74c881ec2d",
+      "raw_corner_rgba": [
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "path": "assets/characters/chao_gai_pushcart_20261017/push_passing_b_v4.png",
+      "sha256": "fecf6b6dc208f82837e1315bf2b63901e6b09d975f094cdb93c0972e4b8d48d5",
+      "raw_corner_rgba": [
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "path": "assets/characters/chao_gai_pushcart_20261017/push_passing_b_v2.png",
+      "sha256": "8a3c04552a873ec7cd5748c1d3d8c98dff18aaa64e9d35b8421e8cc032ddfc53",
+      "raw_corner_rgba": [
+        [
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    }
+  ],
+  "art_accepted": false,
+  "production_adopted": false,
+  "actual_game_unit_tested": false,
+  "findings": [
+    "Actor-only raw layers load and all four comparison PNGs were rendered; this is not a whole passing run.",
+    "Old composite pivots/scales do not register new hands onto fixed cart handles.",
+    "SE/SW some handles cross torso/shoulder; NE/NW near grip is detached or hand meets cover, especially passing phases.",
+    "New actor body mass/foot root varies across phase; need body/hand registration without moving cart or warping pixels."
+  ],
+  "next": "Keep strict corner failures and both original parse/render receipts; next fix actor registration and compare exact geometry. No production adoption."
+}

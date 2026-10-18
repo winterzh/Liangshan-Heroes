@@ -2225,8 +2225,10 @@ func _rebuild_command_card() -> void:
 		return
 	_skill_keys = sig
 	for c in _skill_bar.get_children():
+		if c is Control: c.hide()
 		c.queue_free()
 	for c in _queue_bar.get_children():
+		if c is Control: c.hide()
 		c.queue_free()
 	_queue_bar.visible = false
 	_skill_bar.columns = 99   # 默认单排；生产建筑下面会改成多列分两排
@@ -2371,6 +2373,7 @@ func _rebuild_grid() -> void:
 		return
 	_grid_keys = keys
 	for c in _sel_grid.get_children():
+		if c is Control: c.hide()
 		c.queue_free()
 	var display: Array = []
 	if alive.size() > 24:

@@ -1,3 +1,15 @@
+## 2026-10-18 底栏修复及分层美术比较接续
+
+- scripts/hud.gd：3行先隐藏后延迟释放，避免底栏图标累计撑高；七车真实路径60项/实际截图通过，额外技能栏两宽检查待验。
+- qa/huangnigang_hud_rebuild_fix_20261018/：精确候选/差异/采用SHA、60项实景原日志与布局/截图。qa/hud_pending_controls_classic_probe_20261018/保留首次入口配置失败及修正准备。
+- qa/huangnigang_hud_diagnosis_20261018/actual_native/：57项诊断和前后控件尺寸，排除底栏offset推测。
+- qa/gongsun_sheng_mounted_idle_scale_20261018/actual_native/：118项/4原生图；qa/gongsun_sheng_mounted_idle_calibration_20261018/：39文件统一尺度准备，未运行/采用。
+- qa/chao_gai_layered_sources_20261018/actual_native_comparison/：实际4图/46项/3旧角点FAIL和手把错位记录；首解析失败原始来源独立保留。
+- qa/wu_yong_layered_sources_20261018/：11原字节PNG/20候选视图、提示/来源、准备入口与原生未执行边界，.gdignore隔离。
+- qa/huangnigang_transport_package_20261018/stale_after_hud_fix.json：旧规范副本已过期，禁止冒充新HUD来源导出。包/玩家存档/缓存保留外部不入Git。
+
+以下目录历史描述以本次新收据为准。
+
 当前美术接续（2026-10-18）：[晁盖人物分层候选](../qa/chao_gai_layered_sources_20261018/README.md)新增8原字节RGBA PNG、待机及四阶段步态共20选区；待机移位、接触B平站与过渡B重复支撑腿的原稿/修稿均保留。原生三行对照17文件/14PNG已准备，尚未运行或生产采用，手把/体量/完整步态与轮转继续。原骑乘session72882已真实结束观察且没有启动引擎；后继改认实际成功收据，不能把观察到期算测试失败或重新起竞争watcher。新图QA隔离，不改变已冻结规范生产输入；main/Steam不变，所有内容遵从适用原著。
 
 当前接续补充（2026-10-18）：原骑乘比较session72882仍因共享引擎占用而等待，须回读已有句柄，禁止重复启动或清外来锁。本轮只完成[私有完整包准备](../qa/huangnigang_transport_package_20261018/README.md)与[底栏诊断准备](../qa/huangnigang_hud_diagnosis_20261018/README.md)：独立复制6967规范文件/2383771999字节，Root前后零差异；8份GD与4份Python入口准备，GD原生解析/新导出及实际运行均未完成。头像与小地图一起向下溢出，Art仍取本章阮小七头像；根因待实际控件尺寸前后比较，未接入推测修复。此为QA准备，不计新增美术或玩家功能，main/Steam不变；全库美术及原著约束继续。
