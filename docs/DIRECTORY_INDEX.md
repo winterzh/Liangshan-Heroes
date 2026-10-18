@@ -1,3 +1,9 @@
+## 2026-10-19 公孙胜骑手/缰绳合成到完整坐骑
+
+- qa/gongsun_sheng_mounted_assembly_20261019/：完整坐骑上的骑手/原绘缰绳首轮四向合成，十张既有来源、固定注册、84项/六图，非生产资源。
+- mounted_v1/actual/：原日志/报告/PNG/脚本/导入描述按原字节归档；visual_assessment.json单列六图目检范围。
+- 同目录DRAW_TRANSITION_NEXT.md：取剑、出鞘、指敌、回鞘衔接的下一步，当前仅两个固定骑手姿势，完整动作未接受。
+
 ## 2026-10-19 坐骑独立蹄/尾图层与停走预览
 
 - qa/gongsun_sheng_horse_rig_sources_20261019/prompt_set_v3.json：累计14原PNG、本轮新增6，当前七层组装比较基线。
