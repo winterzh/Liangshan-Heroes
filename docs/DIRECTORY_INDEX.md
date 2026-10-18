@@ -1,3 +1,11 @@
+## 2026-10-19 杨林换腿尝试与双腿分层
+
+- `qa/yang_lin_walk_sources_20261019/`：七份整人行走尝试原稿、精确请求、关节参考图/来源及未接受结论；不是合格循环。
+- `qa/yang_lin_leg_rig_sources_20261019/native_originals/`：五份技术层原稿，固定上身/裤腿/绑腿/两版靴子，无生产采用。
+- 同目录`preview_sources_v2/v3.json`保存原alpha边缘失败与仅预览取图区；`browser_rig_v1/v2/v3/`保存三轮十二张实际静态图/模型/日志/回执/索引，全部目检。
+- `replay_static.py`只写全新工程外目录重放冻结SVG与原PNG，已执行v3相位0；`preservation.json`核对129/16/81与HUD不变。
+- `docs/YANG_LIN_WALK_LAYERS_20261019.md`：原著/技术部件/获救状态边界，以及完整自然步态、速度/接地/Unit/包内等未完范围。
+
 ## 2026-10-19 杨林普通肖像与笔管枪待机候选
 
 - `qa/yang_lin_canon_sources_20261019/native_originals/`：头像与两版四向持枪待机，三份原PNG未改像素，生产采用0。

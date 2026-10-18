@@ -1,0 +1,44 @@
+{
+  "reviewed_originals": [
+    "native_originals/torso_v1.png",
+    "native_originals/thighs_v1.png",
+    "native_originals/shins_v1.png",
+    "native_originals/boots_v1.png",
+    "native_originals/boots_v2.png"
+  ],
+  "reviewed_browser_frames": {
+    "v1": [
+      "browser_rig_v1/phase_00.png",
+      "browser_rig_v1/phase_01.png",
+      "browser_rig_v1/phase_02.png",
+      "browser_rig_v1/phase_03.png"
+    ],
+    "v2": [
+      "browser_rig_v2/phase_00.png",
+      "browser_rig_v2/phase_01.png",
+      "browser_rig_v2/phase_02.png",
+      "browser_rig_v2/phase_03.png"
+    ],
+    "v3": [
+      "browser_rig_v3/phase_00.png",
+      "browser_rig_v3/phase_01.png",
+      "browser_rig_v3/phase_02.png",
+      "browser_rig_v3/phase_03.png"
+    ]
+  },
+  "v1": "Four frames reviewed; torso too large/long relative to legs, not accepted.",
+  "v2": "Fixed uniform torso scale .75 improves proportion; old boot shaft creates overlapping blue tube/cap at ankle, not accepted.",
+  "v3": "Low boots remove extra shaft and improve ankle overlap. Independent leg identities/half-cycle control are visible in static comparison, not a final natural gait acceptance.",
+  "limits": [
+    "Strict raw alpha-edge source preparation failed and remains failed; faint source pixels are not cleaned or masked.",
+    "Only four static phases were rendered per variant; no continuous real-time or human-playtest acceptance.",
+    "Manual source joint/sole anchors retain about15source-pixel uncertainty; no physical contact claim.",
+    "Knee/cap seams, silhouette, depth ordering, carried-spear clearance, gait amplitude and foot sliding still require work.",
+    "Stride/cycle must be matched to actual Unit speed/draw scale before movement acceptance.",
+    "No native Godot import, ordinary Unit, rescued/bound regression, HUD/codex, package or performance acceptance."
+  ],
+  "next_comparison_candidate": "browser_rig_v3 only; no production selection",
+  "walking_cycle_accepted": false,
+  "production_adopted": false,
+  "native_accepted": false
+}
