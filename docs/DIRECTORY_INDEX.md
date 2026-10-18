@@ -1,3 +1,9 @@
+## 2026-10-18 吴用首轮失败与后继夹具
+
+- qa/wu_yong_push_gait_20261018/unit_attempt_1/：首轮冷导入日志、实景meta错误、原驱动/生成身份/失败收据，原样留存。
+- 同QA的unit_v2_binding.json、unit_driver_v2.gd.txt、unit_bootstrap_v2.gd.txt、prepare_unit_v2.py、run_unit_v2.py、wait_then_run_unit_v2.py：相同已核对私有源，新外部夹具和独立profile；一个后继等待进程，未生产采用。
+- qa/gongsun_sheng_mounted_layers_20261018/run_native_v3.py：准入器优先观察吴用后继队列；此前前置占用退出未启动原生。
+
 ## 2026-10-18 公孙胜骑乘三层候选
 
 - qa/gongsun_sheng_mounted_layers_20261018/native_originals/：13份原字节PNG；最新prompt_set_v2.json绑定10份比较用来源、准确提示与输入SHA，其他3份保留。

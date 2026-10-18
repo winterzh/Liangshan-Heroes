@@ -8,7 +8,9 @@ shared,running=common.load_helpers(R)
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def save(p,x):
     with p.open('x',encoding='utf-8') as f:f.write(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
-state=json.loads(Path('D:/CodexEvidence/shuihu/wu_yong_push_gait_20261018/unit/queue/state.json').read_text())
+queue=Path('D:/CodexEvidence/shuihu/wu_yong_push_gait_20261018/unit_v2/queue/state.json')
+if not queue.exists():queue=Path('D:/CodexEvidence/shuihu/wu_yong_push_gait_20261018/unit/queue/state.json')
+state=json.loads(queue.read_text())
 assert state['state']=='terminal','Existing Wu queue must finish first; never start another watcher'
 assert not running() and not shared.LOCK.exists(),'shared Godot lane occupied'
 assert not (E/'native_resources').exists(),'Never rerun a native attempted candidate'

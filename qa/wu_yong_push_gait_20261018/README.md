@@ -1,5 +1,7 @@
 # 吴用推车四阶段：新原稿与真实单位候选
 
+最新接续：原队列已真实终结，首轮冷导入通过，但外部回归夹具在读取不存在的carrying_tribute元数据时发出2条ERROR，观察器中止，未形成实景报告/截图，不能算游戏美术通过。unit_attempt_1/保存原日志、命令、生成身份、失败收据和旧驱动。后继只将该可选字段读取改成has_meta后的条件表达式，没有删减美术/移动/所属断言；原私有工程的生成身份和Root规范源已重新逐项核对一致，不改旧源、不重新生成身份。unit_v2_binding.json绑定新外部驱动和新profile；wait_then_run_unit_v2.py仅在原队列退出后启动一个后继等待进程，续作回读它，禁止重复开队列。以下“尚未执行/原队列”等为先前准备阶段语境，以失败收据和后继实际状态为准；生产采用仍为false。
+
 内置imagegen新增6份1254方形原字节RGBA PNG，完整实际工具参数/提示/输入SHA见prompt_set.json及tool_prompt_*.json。选用native_originals/contact_a_v2.png、passing_a_v1.png、contact_b_v2.png、passing_b_v1.png；复用上一批idle_rear_grip_v2.png作待机。contact_a_v1因上身/手距/体量漂移退回，contact_b_v1因重复A的支撑腿退回，原图保留。没有本地绘画、镜像或PNG像素修改。
 
 四向固定体量原生比较68项通过：12张纹理各5项尺寸/原PNG SHA/RGBA格式/原生像素/角点检查，加8项截图保存，不是68个游戏场景。actual_preview/原收据、日志、驱动、报告、8张图全部原样保存；直接查看4张compare，grid四图未逐张查看。新四帧均可辨别A/B相反支撑腿及过渡阶段，背面远拳不再露在腰后。背面远手遮挡不冒称已测接触；整循环自然步态、脚底滑动与实际单位仍未接受。

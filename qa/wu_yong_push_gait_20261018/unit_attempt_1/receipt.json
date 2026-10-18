@@ -1,0 +1,84 @@
+{
+  "complete": false,
+  "project": "D:\\AI项目\\水浒\\开发工程\\.godot\\wu_yong_gait_unit\\20261018_220551_307c2379\\project",
+  "preparation": "D:\\CodexEvidence\\shuihu\\wu_yong_push_gait_20261018\\unit\\preparation\\receipt.json",
+  "steps": [
+    {
+      "case": "import",
+      "command": [
+        "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+        "--path",
+        "D:\\AI项目\\水浒\\开发工程\\.godot\\wu_yong_gait_unit\\20261018_220551_307c2379\\project",
+        "--rendering-method",
+        "gl_compatibility",
+        "--headless",
+        "--editor",
+        "--import",
+        "--quit"
+      ],
+      "passed": true,
+      "errors": [],
+      "pid": 31052,
+      "exit_code": 0,
+      "seconds": 62.466,
+      "stopped_for": null,
+      "log_sha256": "a47d5c6890f0aaf25d3174d2b0a400f3d8c1b9388472f399a7cacab4c450ff79"
+    },
+    {
+      "case": "actual_unit",
+      "command": [
+        "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+        "--path",
+        "D:\\AI项目\\水浒\\开发工程\\.godot\\wu_yong_gait_unit\\20261018_220551_307c2379\\project",
+        "--rendering-method",
+        "gl_compatibility",
+        "--resolution",
+        "1280x720",
+        "--position",
+        "30000,30000",
+        "--script",
+        "D:\\CodexEvidence\\shuihu\\wu_yong_push_gait_20261018\\unit\\bootstrap.gd"
+      ],
+      "passed": false,
+      "errors": [
+        "ERROR: The object does not have any 'meta' values with the key 'carrying_tribute'.",
+        "ERROR: The object does not have any 'meta' values with the key 'carrying_tribute'."
+      ],
+      "pid": 44488,
+      "exit_code": 1,
+      "seconds": 28.648,
+      "stopped_for": "script_or_engine_error",
+      "log_sha256": "7445ec5395d6084e535788c15397428f6093d733b79eaf676367fb9a1eabd0d3"
+    }
+  ],
+  "actual_unit_tested": false,
+  "compiled_package_tested": false,
+  "production_adopted": false,
+  "full_wine_sequence_tested": false,
+  "explicit_post_drug_fixture": true,
+  "runner_sha256": "1532fd540de707ab9dd1178d467fa421dae926aa6bff54864235e6eefadba35d",
+  "profile": "D:\\CodexQA\\wugait_unit_profiles\\20261018_233625_a9eaf895",
+  "engine_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+  "driver_sha256": "046d54d2a217ae69e9c6683c58cb8b216d5abd892a22fb6d5b63f59c5876e7d6",
+  "runtime_inputs_sha256": "04ade6817f2478b9de0d4ddd4a8553a3dd507168650448290cd7cc9a83763adb",
+  "bootstrap_sha256": "a0626ee975bc088bbf721a7656694cba1f32dd561604763ce50d26b4ec0d62c0",
+  "error": "RuntimeError('Private character QA step failed: actual_unit')",
+  "preservation": [
+    {
+      "manifest": "qa/chao_gai_layered_full_pack_20261018/runtime_after_adoption.json",
+      "files": 106,
+      "changed": []
+    },
+    {
+      "manifest": "qa/tribute_cart_wheel_unit_20261018/protected_next.json",
+      "files": 16,
+      "changed": []
+    },
+    {
+      "manifest": "qa/ruan_xiaoqi_walk_grips_20261018/preservation/unrelated_before.json",
+      "files": 81,
+      "changed": []
+    }
+  ],
+  "lock_released": true
+}

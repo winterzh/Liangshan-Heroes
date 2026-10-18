@@ -1,3 +1,9 @@
+## 2026-10-18 吴用实景后继：复用精确源，修外部夹具
+
+原unit队列已terminal/exit1；冷导入通过，外部夹具的可选携货meta取值触发ERROR，原实景报告未生成，失败不能回填通过。原私有工程生成身份与Root源重新核对一致；最新unit_v2_binding.json、unit_driver_v2.gd.txt、run_unit_v2.py及wait_then_run_unit_v2.py只改受has_meta保护的读取，保留全部断言和同一源/纹理，另用新profile。
+
+续作读工程外wu_yong_push_gait_20261018/unit_v2/queue/state.json并核实实际进程/既有会话；原队列已关闭，后继最多一个，禁止重复开队列或重生成已冻结身份。公孙胜run_native_v3.py优先等后继terminal且实际Godot和lease空闲再运行。两组新候选仍未生产采用；启动方式/main/Steam不变。
+
 ## 2026-10-18 公孙胜骑乘三层来源接续
 
 [三层QA](../qa/gongsun_sheng_mounted_layers_20261018/README.md)最新来源为prompt_set_v2.json（13份内置原稿/10选用），固定腰鞍与柔性纹理缰绳绑定在layer_bindings_v2.json。浏览器9图均已看；native_selected_regions_v3.json仅增加实际绘制选区、保持原像素变换/比例，原生25文件/11PNG尚未执行，不能把预期59项计作通过。原始边角alpha1、失败准备/截图断言与旧source-binding均保留。

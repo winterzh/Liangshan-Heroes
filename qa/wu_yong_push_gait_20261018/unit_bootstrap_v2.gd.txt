@@ -1,0 +1,4 @@
+extends SceneTree
+func _initialize()->void:
+	var runner=load("D:/CodexEvidence/shuihu/wu_yong_push_gait_20261018/unit_v2/unit_driver.gd").new()
+	root.add_child.call_deferred(runner)
