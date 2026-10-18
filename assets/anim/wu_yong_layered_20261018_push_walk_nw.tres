@@ -1,0 +1,66 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/wu_yong_layered_20261018/contact_a_v2_54ed6fba.png" id="contact_a_v2_54ed6fba"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/wu_yong_layered_20261018/passing_a_v1_99f79b4e.png" id="passing_a_v1_99f79b4e"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/wu_yong_layered_20261018/contact_b_v2_e771645e.png" id="contact_b_v2_e771645e"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/wu_yong_layered_20261018/passing_b_v1_846f37f1.png" id="passing_b_v1_846f37f1"]
+
+[sub_resource type="AtlasTexture" id="push_contact_a_nw"]
+metadata/visible_top = 0.572126374
+metadata/independent_cart = true
+atlas = ExtResource("contact_a_v2_54ed6fba")
+region = Rect2(627, 627, 627, 627)
+margin = Rect2(341.071983, 737.9525, 738, 738)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.946255
+
+[sub_resource type="AtlasTexture" id="push_passing_a_nw"]
+metadata/visible_top = 0.563195587
+metadata/independent_cart = true
+atlas = ExtResource("passing_a_v1_99f79b4e")
+region = Rect2(627, 627, 627, 627)
+margin = Rect2(328.071983, 709.9925, 710, 710)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.906331
+
+[sub_resource type="AtlasTexture" id="push_contact_b_nw"]
+metadata/visible_top = 0.561699701
+metadata/independent_cart = true
+atlas = ExtResource("contact_b_v2_e771645e")
+region = Rect2(627, 627, 627, 627)
+margin = Rect2(329.071983, 709.9925, 710, 710)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.906331
+
+[sub_resource type="AtlasTexture" id="push_passing_b_nw"]
+metadata/visible_top = 0.560203815
+metadata/independent_cart = true
+atlas = ExtResource("passing_b_v1_846f37f1")
+region = Rect2(627, 627, 627, 627)
+margin = Rect2(328.071983, 709.9925, 710, 710)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.906331
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("push_contact_a_nw")},
+{"duration": 1.0, "texture": SubResource("push_passing_a_nw")},
+{"duration": 1.0, "texture": SubResource("push_contact_b_nw")},
+{"duration": 1.0, "texture": SubResource("push_passing_b_nw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

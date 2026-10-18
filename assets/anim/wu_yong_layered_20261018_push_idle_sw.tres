@@ -1,0 +1,24 @@
+[gd_resource type="SpriteFrames" load_steps=3 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/wu_yong_layered_20261018/idle_rear_grip_v2_c394c3e7.png" id="idle_rear_grip_v2_c394c3e7"]
+
+[sub_resource type="AtlasTexture" id="push_idle_sw"]
+metadata/visible_top = 0.228328789
+metadata/independent_cart = true
+atlas = ExtResource("idle_rear_grip_v2_c394c3e7")
+region = Rect2(627, 0, 627, 627)
+margin = Rect2(0.038783, 145.472677, 251, 251)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.428899
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("push_idle_sw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

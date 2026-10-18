@@ -1,3 +1,10 @@
+## 2026-10-18 吴用四阶段候选与持剑反馈稿
+
+- qa/wu_yong_push_gait_20261018/：6原PNG/4选用、准确提示/来源SHA、固定体量注册、68项原生/8图、源码接线候选、7016文件全新私有源准备、单一排队执行入口；未实际Unit或生产接入。
+- assets/characters/wu_yong_layered_20261018/、assets/direction4/level1_wu_yong_layered_20261018.json、assets/anim/wu_yong_layered_20261018_*.tres：5人物原图副本及导入描述、12资源/24姿势，未接线。
+- qa/gongsun_sheng_mounted_hurt_sources_20261018/native_originals/drawn_recoil_v1.png、drawn_recover_v1.png：两份持剑状态原图与对应准确提示/静态退回限制，未原生。
+- qa/chao_gai_layered_full_pack_20261018/source_identity_drift_after_wu_preparation.json：当前新增23输入、旧私有23输入及共同输入零差异，旧包不代表新吴用或当前完整来源。
+
 ## 2026-10-18 吴用握把候选与骑乘恢复原稿
 
 - qa/wu_yong_hand_contact_20261018/：体量标定、掌心标注、43项原生/8图，待机返修原PNG/准确工具提示及19项最终原生/4图；旧准备缺陷、面板显示限制和所有原始记录保留。archive_index绑定原路径/SHA，均未生产采用。
