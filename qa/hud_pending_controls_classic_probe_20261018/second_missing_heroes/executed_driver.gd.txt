@@ -1,0 +1,41 @@
+extends "res://tools/zhujiazhuang_rts_test.gd"
+var captures: Array = []
+func _run() -> void:
+	if OS.get_environment("STEAM_DISABLED") != "1" or OS.get_environment("CAMPAIGN_QA") != "1": quit(2); return
+	root.size = Vector2i(1280, 720)
+	DisplayServer.window_set_size(root.size)
+	root.get_node("Settings").edge_scroll = false
+	var b: Variant = await _start("skirmish", 0)
+	check(b.level.id() == "skirmish" and b.mission == null, "actual classic skirmish resolved without chapter fallback")
+	for i in range(12): await physics_frame
+	var heroes: Array = b.units.filter(func(u): return is_instance_valid(u) and u.is_hero and u.faction == 0 and u.slot_count() > 0)
+	check(heroes.size() >= 2, "real classic skirmish supplies two distinct heroes with actual skill slots")
+	if heroes.size() < 2: finish(); return
+	var hero: Variant = heroes[0]
+	for width in [1280, 960]:
+		root.size = Vector2i(width, 720)
+		DisplayServer.window_set_size(root.size)
+		for i in range(8): await process_frame
+		b.select_members([hero], false)
+		b.hud.refresh_command()
+		b.select_members([heroes[1]], false)
+		b.hud.refresh_command()
+		b.select_members([hero], false)
+		b.hud.refresh_command()
+		var retired: Array = b.hud._skill_bar.get_children().filter(func(c): return c.is_queued_for_deletion())
+		check(not retired.is_empty() and retired.all(func(c): return c is Control and not c.visible and c.is_inside_tree()), "retired skill buttons hidden immediately but remain safely tree-owned at " + str(width))
+		for i in range(8): await process_frame
+		await RenderingServer.frame_post_draw
+		var panel: Rect2 = b.hud._bottom_panel.get_global_rect()
+		var margin: Rect2 = b.hud._bottom_margin.get_global_rect()
+		var row: Rect2 = b.hud._bottom_row.get_global_rect()
+		check(margin.end.y <= panel.end.y + 0.5 and row.end.y <= panel.end.y - 6, "actual classic hero row remains inside viewport at " + str(width))
+		check(b.hud._port_tex.get_global_rect().end.y <= 720 and b.hud.minimap.get_global_rect().end.y <= 720, "hero portrait and minimap fully visible at " + str(width))
+		var name: String = "classic_hero_" + str(width) + ".png"
+		check(root.get_texture().get_image().save_png(OS.get_environment("HG_UI_OUT") + "/" + name) == OK, "saved " + name)
+		captures.append({"width": width, "hero": hero.key, "slots": hero.slot_count(), "retired_buttons": retired.size(), "panel": str(panel), "margin": str(margin), "row": str(row), "png": name})
+	await _dispose(b)
+	finish()
+func finish() -> void:
+	FileAccess.open(OS.get_environment("HG_UI_OUT") + "/report.json", FileAccess.WRITE).store_string(JSON.stringify({"passed": failures.is_empty(), "checks": checks, "failures": failures, "captures": captures, "real_classic_battle": true, "physical_mouse_acceptance": false, "all_modes_accepted": false, "native_steam_account_tested": false}, "\t"))
+	quit(0 if failures.is_empty() else 1)

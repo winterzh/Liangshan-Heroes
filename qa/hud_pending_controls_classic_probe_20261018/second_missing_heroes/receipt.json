@@ -1,0 +1,81 @@
+{
+  "complete": false,
+  "phase": "classic_hero_pending_skill_controls_two_widths",
+  "previous_complete_receipt": "D:\\AI项目\\水浒\\开发工程\\qa\\tribute_cart_wheel_unit_20261018\\actual_native\\receipt.json",
+  "project": "C:\\CodexQA\\liu_cart\\20261017_110740_a1de3a5e\\source_owner\\.godot\\tribute_cart\\20261017_120824_67def0b3\\project",
+  "candidate_files": [
+    {
+      "path": "scripts/hud.gd",
+      "before_sha256": "0f06076b8f0aec2be6b3669fce18d345f10cce149c9adfc321230355e4ef9e36",
+      "candidate_sha256": "3d500f5bdd8f7e687fca06b473580e94df454167a5ebe63ca3d2e8530f35ff31"
+    }
+  ],
+  "actual_level_tested": false,
+  "new_pack_exported": false,
+  "steps": [
+    {
+      "case": "import_candidate",
+      "command": [
+        "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+        "--path",
+        "C:\\CodexQA\\liu_cart\\20261017_110740_a1de3a5e\\source_owner\\.godot\\tribute_cart\\20261017_120824_67def0b3\\project",
+        "--rendering-method",
+        "gl_compatibility",
+        "--headless",
+        "--editor",
+        "--import",
+        "--quit"
+      ],
+      "passed": true,
+      "errors": [],
+      "pid": 40192,
+      "exit_code": 0,
+      "seconds": 8.039,
+      "stopped_for": null,
+      "log_sha256": "8607ad3bf76b6d9c0e1eda1e1d07abfe330e46a302d86421f04accd7dd8a53dc"
+    },
+    {
+      "case": "actual_callbacks",
+      "command": [
+        "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+        "--path",
+        "C:\\CodexQA\\liu_cart\\20261017_110740_a1de3a5e\\source_owner\\.godot\\tribute_cart\\20261017_120824_67def0b3\\project",
+        "--rendering-method",
+        "gl_compatibility",
+        "--resolution",
+        "1280x720",
+        "--position",
+        "30000,30000",
+        "--script",
+        "D:\\CodexEvidence\\shuihu\\hud_pending_controls_classic_probe_v2_20261018\\actual_native\\20261018_185520_6c3a1722\\actual_transport.gd"
+      ],
+      "passed": false,
+      "errors": [],
+      "pid": 46708,
+      "exit_code": 1,
+      "seconds": 34.072,
+      "stopped_for": null,
+      "log_sha256": "2222d3084cb98559dc2769c789d4b65f956d18f4ad924dfafb0f867bfd1063ac"
+    }
+  ],
+  "engine_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+  "runner_sha256": "f2987909ea9a1f4fa632a06c08a3f0f443cef149f67aee3f7a3d73ac4a9cdd4b",
+  "prior_archive": {
+    "restore_manifest": "D:\\CodexEvidence\\shuihu\\hud_pending_controls_classic_probe_v2_20261018\\actual_native\\20261018_185520_6c3a1722\\prior_inputs_restore.json",
+    "restore_manifest_sha256": "8b7fd3650b40487111e1ba6230bb098244eebf2e93f0b4f0cc8914284cab13ff",
+    "zip_sha256": "bcb89fca31e071bd500b4c142b97f687f4edb603d140dee57b6607a0df53c8c9",
+    "zip_bytes": 3719728,
+    "git_commit": "cb290a564e894cb589395ac46a406dc9dea5bd5b",
+    "git_files": 6624,
+    "zip_files": 359,
+    "input_files": 6983,
+    "extra_frozen_sources": 54
+  },
+  "private_profile": "D:\\CodexQA\\hhp2_profiles\\20261018_185520_6c3a1722",
+  "wrapper_sha256": "26a5afd15bf4ffbbc45ef842219ff3eafdd76684811876a85046f085df4ec67c",
+  "error": "RuntimeError('Private character QA step failed: actual_callbacks')",
+  "private_old_frozen_changes": [],
+  "root_pin_changes": [],
+  "old_source_restored_exact": true,
+  "lock_released": true
+}

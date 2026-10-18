@@ -1,0 +1,65 @@
+extends "res://tools/zhujiazhuang_rts_test.gd"
+var captures: Array = []
+var recruitment: Dictionary = {}
+func _run() -> void:
+	if OS.get_environment("STEAM_DISABLED") != "1" or OS.get_environment("CAMPAIGN_QA") != "1": quit(2); return
+	root.size=Vector2i(1280,720)
+	DisplayServer.window_set_size(root.size)
+	root.get_node("Settings").edge_scroll=false
+	var b: Variant=await _start("skirmish",0)
+	check(b.level.id()=="skirmish" and b.mission==null,"real classic skirmish starts without chapter fallback")
+	var halls: Array=b.units.filter(func(u): return is_instance_valid(u) and u.key=="hall" and u.faction==0 and u.hp>0)
+	check(halls.size()==1,"real opening hall exists")
+	if halls.size()!=1: await _dispose(b);finish();return
+	var hall: Variant=halls[0]
+	var chosen: String=""
+	for attempt in range(100):
+		for key in b._trainable_keys(hall):
+			if bool(b._defs[key].get("hero",false)) and b.train_block_reason(hall,key).is_empty():chosen=key;break
+		if chosen!="":break
+		await _wait(0.25)
+	check(chosen!="","opening economy supplies an affordable legal hero")
+	if chosen=="": await _dispose(b);finish();return
+	var gold_before: float=float(b.gold)
+	var wood_before: float=float(b.wood)
+	var cost_g: int=int(b._defs[chosen].get("cost_gold",0))
+	var cost_w: int=int(b._defs[chosen].get("cost_wood",0))
+	var queued: bool=b.queue_train(hall,chosen,false)
+	check(queued,"hero recruited through actual production queue")
+	check(queued and is_equal_approx(gold_before-float(b.gold),float(cost_g)) and is_equal_approx(wood_before-float(b.wood),float(cost_w)),"normal hero recruitment pays its real resource cost")
+	if not queued: await _dispose(b);finish();return
+	var waited: float=0
+	while b.find_unit(chosen)==null and waited<60:
+		await _wait(0.25)
+		waited+=0.25
+	var hero: Variant=b.find_unit(chosen)
+	check(is_instance_valid(hero) and hero.is_hero and hero.slot_count()>0,"normal training completes into an actual skill-bearing hero")
+	if not is_instance_valid(hero): await _dispose(b);finish();return
+	recruitment={"hero":chosen,"paid_gold":cost_g,"paid_wood":cost_w,"wait_seconds":waited,"roster_or_resources_injected":false,"production_queue_used":true}
+	for width in [1280, 960]:
+		root.size = Vector2i(width, 720)
+		DisplayServer.window_set_size(root.size)
+		for i in range(8): await process_frame
+		b.select_members([hero], false)
+		b.hud.refresh_command()
+		b.select_members([hall], false)
+		b.hud.refresh_command()
+		b.select_members([hero], false)
+		b.hud.refresh_command()
+		var retired: Array = b.hud._skill_bar.get_children().filter(func(c): return c.is_queued_for_deletion())
+		check(not retired.is_empty() and retired.all(func(c): return c is Control and not c.visible and c.is_inside_tree()), "retired skill buttons hidden immediately but remain safely tree-owned at " + str(width))
+		for i in range(8): await process_frame
+		await RenderingServer.frame_post_draw
+		var panel: Rect2 = b.hud._bottom_panel.get_global_rect()
+		var margin: Rect2 = b.hud._bottom_margin.get_global_rect()
+		var row: Rect2 = b.hud._bottom_row.get_global_rect()
+		check(margin.end.y <= panel.end.y + 0.5 and row.end.y <= panel.end.y - 6, "actual classic hero row remains inside viewport at " + str(width))
+		check(b.hud._port_tex.get_global_rect().end.y <= 720 and b.hud.minimap.get_global_rect().end.y <= 720, "hero portrait and minimap fully visible at " + str(width))
+		var name: String = "classic_hero_" + str(width) + ".png"
+		check(root.get_texture().get_image().save_png(OS.get_environment("HG_UI_OUT") + "/" + name) == OK, "saved " + name)
+		captures.append({"width": width, "hero": hero.key, "slots": hero.slot_count(), "retired_buttons": retired.size(), "panel": str(panel), "margin": str(margin), "row": str(row), "png": name})
+	await _dispose(b)
+	finish()
+func finish() -> void:
+	FileAccess.open(OS.get_environment("HG_UI_OUT") + "/report.json", FileAccess.WRITE).store_string(JSON.stringify({"passed": failures.is_empty(), "checks": checks, "failures": failures, "captures": captures, "recruitment": recruitment, "real_classic_battle": true, "physical_mouse_acceptance": false, "all_modes_accepted": false, "native_steam_account_tested": false}, "\t"))
+	quit(0 if failures.is_empty() else 1)

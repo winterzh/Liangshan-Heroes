@@ -1,0 +1,10 @@
+--- before/scripts/hud.gd
++++ after/scripts/hud.gd
+@@ -1263,6 +1263,7 @@
+ func _build_bottom_panel() -> void:
+ 	_bottom_panel = PanelContainer.new()
+ 	_bottom_panel.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
++	_bottom_panel.grow_vertical = Control.GROW_DIRECTION_BEGIN
+ 	_bottom_panel.offset_top = -RTSCamera.PANEL_H
+ 	var sb := StyleBoxFlat.new()
+ 	sb.bg_color = Color(UITheme.PANEL, 0.97)

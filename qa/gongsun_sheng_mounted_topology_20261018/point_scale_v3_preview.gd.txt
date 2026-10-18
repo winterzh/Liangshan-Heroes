@@ -1,0 +1,86 @@
+extends SceneTree
+var checks: Array = []
+var failures: Array = []
+func check(ok: bool, label: String) -> void:
+	checks.append({"label": label, "passed": ok})
+	if not ok: failures.append(label)
+
+class Stage extends Node2D:
+	var data: Dictionary
+	var frames: Dictionary
+	var direction := "se"
+	func _draw() -> void:
+		draw_rect(Rect2(0,0,2560,800),Color("292824"))
+		draw_string(ThemeDB.fallback_font,Vector2(20,35),"CH54 / SWORD + SHORT-FRINGED CORD / STATIC SOURCE COMPARISON / "+direction,HORIZONTAL_ALIGNMENT_LEFT,-1,21,Color.WHITE)
+		var items: Array = data.views[direction]
+		var scale_native: float = 300.0 / float(data.placement[direction].idle_reference_height)
+		for i in range(items.size()):
+			var row: Dictionary = items[i]
+			var x: float = 256.0+i*512.0
+			# A changed source uses its OLD phase's ground anchor, not a new bbox fit.
+			var frame_scale: float = scale_native * float(row.family_scale)
+			var origin := Vector2(x-313.5*frame_scale,600.0-float(row.original_ground_y)*frame_scale)
+			draw_texture_rect(frames[row.resource],Rect2(origin,Vector2.ONE*627.0*frame_scale),false)
+			draw_line(Vector2(x-145,601),Vector2(x+145,601),Color("5a5548"),1)
+			draw_string(ThemeDB.fallback_font,Vector2(x-165,650),String(row.label),HORIZONTAL_ALIGNMENT_LEFT,-1,17,Color.WHITE)
+		draw_string(ThemeDB.fallback_font,Vector2(20,735),"One base scale; all point views multiply1.25. Old/new pairs keep original anchors. No per-frame fit or PNG edits.",HORIZONTAL_ALIGNMENT_LEFT,-1,16,Color("d3c5a9"))
+		draw_string(ThemeDB.fallback_font,Vector2(20,770),"Not actual Unit, complete sword draw/recovery, mounted gait, damage/death, chapter binding or final art acceptance.",HORIZONTAL_ALIGNMENT_LEFT,-1,16,Color("d3c5a9"))
+
+func _initialize() -> void: run.call_deferred()
+func run() -> void:
+	if OS.get_environment("STEAM_DISABLED") != "1" or OS.get_environment("CAMPAIGN_QA") != "1": quit(2); return
+	root.size = Vector2i(2560,800)
+	var data: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://inputs.json"))
+	var native: Dictionary = {}
+	var images: Dictionary = {}
+	var frames: Dictionary = {}
+	for key in data.textures:
+		var row: Dictionary = data.textures[key]
+		var texture: Texture2D = load("res://"+String(row.file))
+		check(texture != null,"native texture "+key)
+		check(FileAccess.get_sha256("res://"+String(row.file)) == row.sha256,"original PNG bytes "+key)
+		if texture == null: continue
+		var image := texture.get_image()
+		if image.is_compressed(): check(image.decompress() == OK,"decompress "+key)
+		check(image.get_size() == Vector2i(1254,1254),"native source dimensions "+key)
+		check(image.get_format() == Image.FORMAT_RGBA8,"native RGBA8 "+key)
+		check(image.has_mipmaps(),"native mipmaps "+key)
+		var full_hash := HashingContext.new(); full_hash.start(HashingContext.HASH_SHA256); full_hash.update(image.get_data())
+		var base_hash := HashingContext.new(); base_hash.start(HashingContext.HASH_SHA256); base_hash.update(image.get_data().slice(0,1254*1254*4))
+		var full: String = full_hash.finish().hex_encode()
+		var base: String = base_hash.finish().hex_encode()
+		check(base == row.rgba8_sha256,"native source pixels unchanged "+key)
+		native[key] = {"size":[1254,1254],"mipmaps":image.has_mipmaps(),"format":image.get_format(),"data_sha256":full,"rgba8_sha256":base}
+		images[key] = image
+	check(native.has("idle_reference") and native.idle_reference.data_sha256 == data.previous_idle_native_hash,"previous mounted idle full native pixels/mipmaps unchanged")
+	for direction in data.views:
+		for row: Dictionary in data.views[direction]:
+			var texture: AtlasTexture = load("res://"+String(row.resource))
+			check(texture != null,"selected frame loads "+String(row.resource))
+			if texture == null: continue
+			var region: Array = row.region
+			check(texture.region == Rect2(region[0],region[1],region[2],region[3]) and texture.margin == Rect2(1,1,2,2) and texture.get_size() == Vector2(627,627),"fixed inset and original virtual canvas "+String(row.resource))
+			var image: Image = images[row.source_key]
+			var transparent := true
+			for pt in [Vector2i(region[0],region[1]),Vector2i(region[0]+region[2]-1,region[1]),Vector2i(region[0],region[1]+region[3]-1),Vector2i(region[0]+region[2]-1,region[1]+region[3]-1)]:
+				transparent = transparent and image.get_pixelv(pt).a == 0.0
+			check(transparent,"native selected-region corners transparent "+String(row.resource))
+			frames[row.resource] = texture
+	for key in native:
+		check(native[key].data_sha256 == data.previous_native_textures[key].data_sha256 and native[key].rgba8_sha256 == data.previous_native_textures[key].rgba8_sha256,"previous complete native texture/mipmap payload unchanged "+String(key))
+	check(float(data.point_family_factor) == 1.25,"one point-family factor for all four directions")
+	for direction in data.views:
+		for row: Dictionary in data.views[direction]:
+			check(float(row.family_scale) == (1.25 if String(row.resource).contains("point_") else 1.0),"fixed family scale "+String(row.resource))
+	var screenshots: Array = []
+	if frames.size() == 20:
+		var stage := Stage.new(); stage.data=data; stage.frames=frames; stage.texture_filter=CanvasItem.TEXTURE_FILTER_LINEAR;root.add_child(stage)
+		for direction in ["se","sw","ne","nw"]:
+			stage.direction=direction;stage.queue_redraw()
+			for i in range(8): await process_frame
+			await RenderingServer.frame_post_draw
+			var name: String = "topology_"+direction+".png"
+			check(root.get_texture().get_image().save_png("res://"+name) == OK,"capture topology "+direction);screenshots.append(name)
+	var report := {"resource_preview_complete":failures.is_empty(),"checks":checks,"failures":failures,"screenshots":screenshots,"texture_references":native,"candidate_views":8,"new_source_selected_views":5,"retained_old_point_views":3,"production_adopted":false,"actual_game_unit_tested":false,"complete_attack_animation_accepted":false,"chapter_route_accepted":false,"whole_cell_corner_failures_preserved":data.whole_cell_corner_audit.failures,"scope":data.scope}
+	FileAccess.open("res://report.json",FileAccess.WRITE).store_string(JSON.stringify(report,"\t"))
+	quit(0 if failures.is_empty() else 1)

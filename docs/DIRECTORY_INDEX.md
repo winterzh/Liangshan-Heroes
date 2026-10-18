@@ -1,3 +1,12 @@
+## 2026-10-18 当前目录接续
+
+- qa/huangnigang_hud_bottom_anchor_20261018/：精确1行底边修复、生产SHA、实际经典两宽18项及酒计60项、4+2截图、旧工程外备份索引。qa/hud_pending_controls_classic_probe_20261018/新增两次失败原始记录。
+- qa/gongsun_sheng_mounted_idle_calibration_20261018/actual_native/：实际118项/4图；qa/gongsun_sheng_mounted_topology_20261018/actual_native/实际107项/4图，actual_point_scale_v3/实际统一指剑尺度135项/4图；均非生产/完整动画通过。
+- qa/chao_gai_grip_registration_20261018/actual_native/：实际49项中3项旧角点失败、4图，手位漂移未过。qa/gongsun_sheng_mounted_hurt_sources_20261018/：3原PNG/提示/SHA，1退稿2静态候选，全套未完成，.gdignore隔离。
+- qa/huangnigang_transport_package_20261018/stale_after_hud_bottom_anchor.json：旧完整包来源继续过期，须新建身份。scripts/hud.gd新增底栏向上增长1行；不改变启动入口或Steam。
+
+以下保留此前目录交接；旧等待状态以上述新证据为准。
+
 ## 2026-10-18 公孙胜单剑与短须绦接续
 
 - qa/gongsun_sheng_mounted_topology_20261018/：4内置原PNG、完整提示/输入/SHA、第54回依据、取剑/指剑8静态选区（5新/3旧保持）、只读几何/原格角点失败与37文件/7PNG原生准备；源码和图均未生产采用。
