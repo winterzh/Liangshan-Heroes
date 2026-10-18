@@ -1,0 +1,82 @@
+extends "base.gd"
+## Fresh release-process consumer of the frozen first carried checkpoint.
+var restored: Variant = null
+var slot_before := ""
+var slot_after := ""
+var canonical_expected: Array = []
+var canonical_actual: Array = []
+
+func _run() -> void:
+	if not identity(false): report(); return
+	var expected: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(OS.get_environment("HG_COLD_EXPECTED")))
+	check(expected.get("passed", false) and expected.get("session_roundtrips", []).size() == 3, "new-package producer completed all three real world installations")
+	check(int(expected.get("pid", 0)) > 0 and OS.get_process_id() != int(expected.get("pid", 0)), "fresh actual release process differs from world writer")
+	check(expected.get("trusted_identity", {}).get("content_version", "") == trusted.content_version, "writer and cold consumer use identical real package content")
+	if not failures.is_empty(): report(); return
+	var first: Dictionary = expected.session_roundtrips[0]
+	check(first.label == "seven_carts_carried" and first.delivered_loads == 0 and first.carried.size() == 7, "exact first active-carried checkpoint selected, not completed delivery")
+	if not failures.is_empty(): report(); return
+	var installed_runtime: Dictionary = load("res://scripts/run_level1_world_factory.gd").prepare_runtime(trusted)
+	check(installed_runtime.get("ok", false), "fresh process prepares actual installed runtime")
+	var store: Variant = load("res://scripts/run_slot_store.gd").new("user://hg_transport_world/v1")
+	var saved: Dictionary = store.read_slot()
+	check(saved.get("ok", false), "exact first writer slot independently readable")
+	if not failures.is_empty(): print("READ ", saved); report(); return
+	slot_before = saved.file_sha256
+	check(slot_before == first.saved_sha256, "frozen carried slot bytes match original first save")
+	if not failures.is_empty(): report(); return
+	var menu: Node = load("res://scenes/menu.tscn").instantiate()
+	root.add_child(menu); current_scene = menu
+	await get_tree().process_frame
+	get_tree().paused = true
+	var session: Variant = load("res://scripts/run_world_session.gd").new(trusted, installed_runtime.runtime, "user://hg_transport_world/v1")
+	var prepared: Dictionary = session.prepare_restore(menu)
+	check(prepared.get("ok", false), "fresh process prepares complete active-carried world")
+	if not failures.is_empty(): print("PREPARE ", prepared); session.dispose(); report(); return
+	var installed: Dictionary = await session.commit_restore_async()
+	check(installed.get("ok", false), "fresh process actually installs active-carried world")
+	if not failures.is_empty(): print("INSTALL ", installed); session.dispose(); report(); return
+	restored = installed.battle
+	var level: Variant = restored.level
+	var ids: Array = first.eleven_entity_ids
+	var integral: bool = ids.size() == 11 and ids.all(func(v): return typeof(v) in [TYPE_INT, TYPE_FLOAT] and is_finite(float(v)) and float(v) == floor(float(v)) and v > 0 and v < 2147483647)
+	check(integral, "writer JSON entity IDs are integral and bounded without lossy coercion")
+	if integral:
+		canonical_expected = ids.map(func(v): return str(int(v)))
+		canonical_actual = level.bundles.map(func(u): return str(u.entity_id))
+	check(integral and canonical_expected == canonical_actual, "all eleven original load identities retained after restart")
+	check(level.cargo.size() == 7 and level.delivered == 0 and level.st == level.CARRY and get_tree().paused, "all seven active carriers and zero-delivery carry stage restored paused")
+	for i in range(7):
+		var value: Variant = first.carried.get(str(i), null)
+		var valid: bool = typeof(value) in [TYPE_INT, TYPE_FLOAT] and is_finite(float(value)) and float(value) == floor(float(value)) and value > 0 and value < 2147483647
+		var actor: Variant = level.cargo.get(i)
+		check(valid and is_instance_valid(actor) and actor.entity_id == int(value) and actor.get_meta("carrying_tribute", -1) == i,
+			"cold cart %d retains exact living owner ID and cart metadata" % i)
+	check(level.cargo_ready.size() == 7 and range(7).all(func(i): return level.cargo_ready.get(i, false)), "all seven loaded flags including cart six retained")
+	check(level.bundles.all(func(u): return not restored.units.has(u) and not u.visible and u.get_parent() == restored.units_root and u.process_mode == Node.PROCESS_MODE_DISABLED), "all eleven real loads stay scene-owned and stowed")
+	check(level.jujube_carts.size() == 7 and level.jujube_carts.all(func(u): return not u.visible), "no duplicate empty date carts reappear after restart")
+	check(store.read_slot().file_sha256 == slot_before, "active-carried slot unchanged by installation")
+	if not failures.is_empty(): session.dispose(); report(); return
+	get_tree().paused = false
+	Engine.time_scale = 1.0
+	var actor: Variant = level.cargo[6]
+	var start_position: Vector2 = actor.position
+	_action(restored, actor, "force_deliver_6_0")
+	var elapsed := 0.0
+	while level.delivered == 0 and restored.phase == restored.Phase.FIGHT and elapsed < 85.0:
+		await _wait(0.1); elapsed += 0.1
+	check(actor.position.distance_to(start_position) > 30.0, "restored cart six genuinely walks through player order")
+	check(level.delivered == 1 and level.cargo.size() == 6 and not level.cargo.has(6) and level._delivered_cart_indices(restored) == [6], "freshly restored seventh cart physically delivers exactly one load")
+	check(level.st == level.CARRY and restored.units.has(level.bundles[6]) and level.bundles[6].visible, "one delivered cart remains in carry stage and original ground node appears")
+	check(range(7, 11).all(func(i): return not restored.units.has(level.bundles[i]) and not level.bundles[i].visible), "four secondary loads remain packed after cold live delivery")
+	check(level.bundles.map(func(u): return str(u.entity_id)) == canonical_expected, "live post-restart delivery creates no replacement load identities")
+	var reread: Dictionary = store.read_slot()
+	slot_after = reread.file_sha256 if reread.get("ok", false) else ""
+	check(slot_after == slot_before, "original carried checkpoint bytes unchanged after live resumed gameplay")
+	session.dispose()
+	report({"scope": "Fresh actual release process active-carried checkpoint and real seventh-cart delivery",
+		"writer_pid": expected.pid, "checkpoint": "seven carts carried, zero delivered",
+		"expected_entity_ids": canonical_expected, "actual_entity_ids": canonical_actual,
+		"slot_sha256_before": slot_before, "slot_sha256_after": slot_after,
+		"normal_simulation_speed": 1.0, "delivery_wait_seconds": elapsed,
+		"ordinary_player_continue_entry_tested": false, "full_art_accepted": false})
