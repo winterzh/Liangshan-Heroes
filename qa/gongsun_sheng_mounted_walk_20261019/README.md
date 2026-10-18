@@ -1,3 +1,9 @@
+## 2026-10-19 西南诊断尚未解决自然步态，转专用图层
+
+最新prompt_set_v3.json累计17份原PNG，本轮新增5份；SW passing A v2仍未按前腿角色修正，v3进入诊断但蹄过低，v4未明显改善，单视角v1又移动马身，均不算抬蹄已修好。passing B v1仅为诊断候选。西南原生45项/4图全目检；整图蒙皮48项关键相位可见拉扯、整图裁片49项关键相位可见接缝/碎片，两案均视觉拒绝，其他3图未逐张查看。不能从报告passed推出自然步态或功能通过。原冻结项目和原字节证据均留存actual/。
+
+后继来源转到相邻gongsun_sheng_horse_rig_sources_20261019：已绘马身/前后腿上下段五候选，先做完整四腿与四向组装，不能再用整图裁片或单点数学补签。旧预览/失败的范围不回写，129/16/81与HUD保持、生产接入0。
+
 ## 2026-10-19 本轮新增7原稿，单向四阶段进入原生比较
 
 当前以prompt_set_v2.json为准：12份内置原PNG，SE选contact_a_se_v3/passing_a_se_v4/contact_b_se_v1/passing_b_se_v1进入比较；SW只选contact_a_sw_v1/contact_b_sw_v1继续。共6份原稿退回，SE passing A经历错误前腿、缺腿后修正；SW passing A前腿相位仍反，下一步须返修，passing B仅已准备关节图、未生成。NE/NW仍未资格化。

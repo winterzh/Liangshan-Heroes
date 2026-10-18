@@ -1,3 +1,10 @@
+## 2026-10-19 专用马身与肢段组装入口
+
+- qa/gongsun_sheng_horse_rig_sources_20261019/：8内置原PNG、五候选、精确提示/来源、只读边界，尚未组装/原生/采用。
+- 同目录RIG_ASSEMBLY_NEXT.md：完整四腿/四向、固定关节标定、地面参照、骑手/尾部遮挡及下一步实际验证范围。
+- qa/gongsun_sheng_mounted_walk_20261019/prompt_set_v3.json：17原PNG；新增5份和西南45/48/49项的原生诊断分别留档；后两案均视觉拒绝。
+- 同目录native_sw_v1/actual、native_sw_rig_v1/actual、native_sw_rig_v2/actual：原日志/报告/PNG/驱动/导入描述精确归档；文件名se_phase为复制驱动历史前缀，实际方向SW。
+
 ## 2026-10-19 坐骑前向来源与原生比较
 
 - qa/gongsun_sheng_mounted_walk_20261019/prompt_set_v2.json：12原PNG，SE四阶段比较/SW两接触稿暂选，6退稿；最新准确提示与来源SHA。

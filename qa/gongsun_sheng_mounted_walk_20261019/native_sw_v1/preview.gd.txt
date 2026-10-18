@@ -1,0 +1,85 @@
+extends SceneTree
+var checks: Array=[]
+var failures: Array=[]
+func check(ok: bool,label: String)->void:
+	checks.append({"label":label,"passed":ok})
+	if not ok:failures.append(label)
+func _initialize()->void:run.call_deferred()
+func run()->void:
+	root.size=Vector2i(2560,1440);root.content_scale_size=root.size;root.position=Vector2i(30000,30000)
+	var stage:=Stage.new();stage.data=JSON.parse_string(FileAccess.get_file_as_string("res://inputs.json"))
+	var refs: Dictionary={}
+	for key in stage.data.textures:
+		var row: Dictionary=stage.data.textures[key];var tex: Texture2D=load("res://"+String(row.file))
+		check(tex!=null,"native texture loads "+key)
+		if tex==null:continue
+		stage.textures[key]=tex;var im:=tex.get_image()
+		if im.is_compressed():check(im.decompress()==OK,"decompress "+key)
+		check(im.get_size()==Vector2i(1254,1254) and im.get_format()==Image.FORMAT_RGBA8,"exact source size and RGBA8 "+key)
+		check(FileAccess.get_sha256("res://"+String(row.file))==row.sha256,"original PNG bytes "+key)
+		var h:=HashingContext.new();h.start(HashingContext.HASH_SHA256);h.update(im.get_data().slice(0,1254*1254*4))
+		var base:=h.finish().hex_encode();check(base==row.rgba8_sha256,"native original RGBA "+key)
+		var rr: Array=row.selected_region;var selected_ok:=true
+		if key==String(stage.data.rein.texture):selected_ok=im.get_pixel(int(rr[0])+100,int(rr[1])+20).a>.9
+		else:
+			for p in [Vector2i(rr[0],rr[1]),Vector2i(rr[0]+rr[2]-1,rr[1]),Vector2i(rr[0],rr[1]+rr[3]-1),Vector2i(rr[0]+rr[2]-1,rr[1]+rr[3]-1)]:
+				if im.get_pixelv(p).a!=0:selected_ok=false
+		check(selected_ok,"selected region transparency or painted material "+key)
+		var full:=HashingContext.new();full.start(HashingContext.HASH_SHA256);full.update(im.get_data());refs[key]={"rgba8_sha256":base,"data_sha256":full.finish().hex_encode(),"mipmaps":im.has_mipmaps()}
+	root.add_child(stage)
+	var captures: Array=[]
+	for wanted in range(4):
+		var deadline:=Time.get_ticks_msec()+5000
+		while stage.phase!=wanted and Time.get_ticks_msec()<deadline:await process_frame
+		await RenderingServer.frame_post_draw
+		var actual:=stage.drawn_phase;check(actual==wanted,"natural process rendered requested phase "+str(wanted))
+		var name:="se_phase_"+str(wanted)+".png";check(root.get_texture().get_image().save_png("res://"+name)==OK,"capture "+name)
+		captures.append({"file":name,"sha256":FileAccess.get_sha256("res://"+name),"actual_phase":actual})
+	var deadline:=Time.get_ticks_msec()+6000
+	while stage.transitions.size()<16 and Time.get_ticks_msec()<deadline:await process_frame
+	check(stage.transitions.size()>=16,"normal process loops through at least sixteen phase transitions")
+	check(stage.data.bbox_fitting_per_phase==false,"one fixed horse scale/translation and unchanged rider across all four phases")
+	FileAccess.open("res://report.json",FileAccess.WRITE).store_string(JSON.stringify({"passed":failures.is_empty(),"checks":checks,"failures":failures,"screenshots":captures,"texture_references":refs,"phase_transitions":stage.transitions,"scope":stage.data.scope,"native_animation_rendered":failures.is_empty(),"continuous_gait_quality_accepted":false,"actual_unit_tested":false,"production_adopted":false,"full_goal_complete":false},"\t"))
+	quit(0 if failures.is_empty() else 1)
+class Stage extends Node2D:
+	var data: Dictionary
+	var textures: Dictionary={}
+	var phase: int=0
+	var drawn_phase: int=-1
+	var elapsed: float=0
+	var transitions: Array=[]
+	func _process(delta: float)->void:
+		elapsed+=delta;var next:=floori(elapsed*float(data.fps))%4
+		if phase!=next:phase=next;transitions.append({"phase":phase,"elapsed":elapsed})
+		queue_redraw()
+	func vec(p: Array)->Vector2:return Vector2(p[0],p[1])
+	func paint(key: String,sc: float,offset: Array)->void:
+		var rr: Array=data.textures[key].selected_region;var source:=Rect2(rr[0],rr[1],rr[2],rr[3]);draw_texture_rect_region(textures[key],Rect2(source.position*sc+vec(offset)-vec(data.origin),source.size*sc),source)
+	func ribbon(a: Vector2,b: Vector2,sag: float)->void:
+		var points: Array[Vector2]=[];var hi: Array[Vector2]=[];var lo: Array[Vector2]=[];var count: int=data.rein.segments
+		var control: Vector2=(a+b)*.5+Vector2(0,2*sag)
+		for i in range(count+1):
+			var t:=float(i)/count;var u:=1.0-t;points.append(a*u*u+control*2*u*t+b*t*t)
+		for i in range(count+1):
+			var tangent: Vector2=points[mini(i+1,count)]-points[maxi(i-1,0)];var normal:=Vector2(-tangent.y,tangent.x).normalized()*float(data.rein.width_native)*.5;hi.append(points[i]+normal);lo.append(points[i]-normal)
+		var poly:=PackedVector2Array();var uv:=PackedVector2Array();var colors:=PackedColorArray();var sample: Array=data.rein.sample_region
+		for i in range(count+1):poly.append(hi[i]);uv.append(Vector2(float(sample[0])+float(sample[2])*i/count,float(sample[1]))/1254.0);colors.append(Color.WHITE)
+		for i in range(count,-1,-1):poly.append(lo[i]);uv.append(Vector2(float(sample[0])+float(sample[2])*i/count,float(sample[1])+float(sample[3]))/1254.0);colors.append(Color.WHITE)
+		draw_polygon(poly,colors,uv,textures[String(data.rein.texture)])
+	func mounted(key: String)->void:
+		paint(key,float(data.horse.scale),data.horse.offset)
+		var a: Vector2=vec(data.horse.bit_source)*float(data.horse.scale)+vec(data.horse.offset)-vec(data.origin);var b: Vector2=vec(data.rider.manual_visible_rein_hand)*float(data.rider.scale)+vec(data.rider.offset)-vec(data.origin)
+		ribbon(a,b,float(data.rein.sag_native));ribbon(a+Vector2(3,2),b+Vector2(2,1),float(data.rein.sag_native)+3)
+		paint(String(data.rider.texture),float(data.rider.scale),data.rider.offset)
+	func _draw()->void:
+		drawn_phase=phase;draw_rect(Rect2(0,0,2560,1440),Color("24231f"))
+		for i in range(5):
+			var selected: int=phase if i==4 else i;var key: String=data.phases[selected];var at:=Vector2(i*512,0)
+			draw_string(ThemeDB.fallback_font,at+Vector2(20,35),("LIVE PROCESS / " if i==4 else "FIXED PHASE / ")+str(selected),HORIZONTAL_ALIGNMENT_LEFT,-1,23,Color.WHITE)
+			draw_string(ThemeDB.fallback_font,at+Vector2(20,65),["contact A","passing A","contact B","passing B"][selected],HORIZONTAL_ALIGNMENT_LEFT,-1,23,Color("e7cd9c"))
+			draw_set_transform(at+Vector2(28,80),0,Vector2.ONE*.72);paint(key,float(data.horse.scale),data.horse.offset)
+			draw_set_transform(Vector2.ZERO);draw_string(ThemeDB.fallback_font,at+Vector2(20,705),"Same rider / fixed scale and position",HORIZONTAL_ALIGNMENT_LEFT,-1,22,Color.WHITE)
+			draw_set_transform(at+Vector2(28,750),0,Vector2.ONE*.72);mounted(key)
+			draw_set_transform(Vector2.ZERO);draw_rect(Rect2(at,Vector2(512,1280)).grow(-1),Color("6a6555"),false,1)
+		draw_string(ThemeDB.fallback_font,Vector2(20,1320),"SW source comparison only. Horse/rider PNG bytes unchanged; runtime rein uses original painted leather material.",HORIZONTAL_ALIGNMENT_LEFT,-1,24,Color.WHITE)
+		draw_string(ThemeDB.fallback_font,Vector2(20,1360),"6 fps standalone preview, not actual Unit/chapter/full gait/performance/production acceptance. Anatomy and clearance remain unqualified.",HORIZONTAL_ALIGNMENT_LEFT,-1,24,Color.WHITE)

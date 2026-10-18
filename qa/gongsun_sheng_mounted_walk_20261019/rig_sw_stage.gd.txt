@@ -1,0 +1,38 @@
+	var use_rig: bool=false
+	var rig_mesh: ArrayMesh
+	var rig_info: Dictionary={}
+	func rig_point(p: Vector2)->Vector2:
+		var cfg: Dictionary=data.rig
+		var boundary:=PackedVector2Array()
+		for row in cfg.mask:boundary.append(vec(row))
+		if not Geometry2D.is_point_in_polygon(p,boundary):return p
+		var shoulder: Vector2=vec(cfg.shoulder);var knee: Vector2=vec(cfg.knee);var knee_new:=Vector2(rig_info.knee_new[0],rig_info.knee_new[1])
+		var upper: Vector2=shoulder+(p-shoulder).rotated(float(rig_info.upper_rotation))
+		var lower: Vector2=knee_new+(p-knee).rotated(float(rig_info.lower_rotation))
+		var blend:=smoothstep(470.0,510.0,p.y);var root_blend:=smoothstep(415.0,452.0,p.y)
+		return p.lerp(upper.lerp(lower,blend),root_blend)
+	func prepare_rig()->Dictionary:
+		var cfg: Dictionary=data.rig;var shoulder:=vec(cfg.shoulder);var knee:=vec(cfg.knee);var hoof:=vec(cfg.hoof);var target:=vec(cfg.target)
+		var upper_length:=shoulder.distance_to(knee);var lower_length:=knee.distance_to(hoof);var distance:=shoulder.distance_to(target)
+		var cosine:=clampf((upper_length*upper_length+distance*distance-lower_length*lower_length)/(2*upper_length*distance),-1,1)
+		var knee_new: Vector2=shoulder+Vector2.RIGHT.rotated((target-shoulder).angle()+acos(cosine))*upper_length
+		rig_info={"knee_new":[knee_new.x,knee_new.y],"upper_rotation":(knee_new-shoulder).angle()-(knee-shoulder).angle(),"lower_rotation":(target-knee_new).angle()-(hoof-knee).angle(),"upper_length_error":absf(shoulder.distance_to(knee_new)-upper_length),"lower_length_error":absf(knee_new.distance_to(target)-lower_length),"manual_anchor_uncertainty_source_pixels":5}
+		var rr: Array=data.textures[String(cfg.texture)].selected_region;var spacing: float=cfg.spacing
+		var cols:=ceili(float(rr[2])/spacing);var rows:=ceili(float(rr[3])/spacing)
+		var vertices:=PackedVector2Array();var uv:=PackedVector2Array();var indices:=PackedInt32Array();var moved:=0;var outside_changed:=0
+		var boundary:=PackedVector2Array()
+		for row in cfg.mask:boundary.append(vec(row))
+		for y in range(rows+1):
+			for x in range(cols+1):
+				var source:=Vector2(float(rr[0])+minf(x*spacing,float(rr[2])),float(rr[1])+minf(y*spacing,float(rr[3])))
+				var posed:=rig_point(source)
+				if not posed.is_equal_approx(source):moved+=1
+				if not Geometry2D.is_point_in_polygon(source,boundary) and not posed.is_equal_approx(source):outside_changed+=1
+				vertices.append(posed*float(data.horse.scale)+vec(data.horse.offset)-vec(data.origin));uv.append(source/1254.0)
+		for y in range(rows):
+			for x in range(cols):
+				var a:=y*(cols+1)+x;var b:=a+1;var c:=a+cols+1;var d:=c+1;indices.append_array(PackedInt32Array([a,c,b,b,c,d]))
+		var arrays:=[];arrays.resize(Mesh.ARRAY_MAX);arrays[Mesh.ARRAY_VERTEX]=vertices;arrays[Mesh.ARRAY_TEX_UV]=uv;arrays[Mesh.ARRAY_INDEX]=indices
+		rig_mesh=ArrayMesh.new();rig_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,arrays)
+		var mapped_hoof:=rig_point(hoof);rig_info.merge({"mapped_hoof":[mapped_hoof.x,mapped_hoof.y],"hoof_target_error":mapped_hoof.distance_to(target),"moved_vertices":moved,"outside_mask_changed_vertices":outside_changed,"vertices":vertices.size(),"triangles":indices.size()/3,"source_png_changed":false})
+		return rig_info

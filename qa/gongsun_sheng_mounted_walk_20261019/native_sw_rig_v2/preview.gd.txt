@@ -1,0 +1,138 @@
+extends SceneTree
+var checks: Array=[]
+var failures: Array=[]
+func check(ok: bool,label: String)->void:
+	checks.append({"label":label,"passed":ok})
+	if not ok:failures.append(label)
+func _initialize()->void:run.call_deferred()
+func run()->void:
+	root.size=Vector2i(2560,1440);root.content_scale_size=root.size;root.position=Vector2i(30000,30000)
+	var stage:=Stage.new();stage.data=JSON.parse_string(FileAccess.get_file_as_string("res://inputs.json"))
+	var refs: Dictionary={}
+	for key in stage.data.textures:
+		var row: Dictionary=stage.data.textures[key];var tex: Texture2D=load("res://"+String(row.file))
+		check(tex!=null,"native texture loads "+key)
+		if tex==null:continue
+		stage.textures[key]=tex;var im:=tex.get_image()
+		if im.is_compressed():check(im.decompress()==OK,"decompress "+key)
+		check(im.get_size()==Vector2i(1254,1254) and im.get_format()==Image.FORMAT_RGBA8,"exact source size and RGBA8 "+key)
+		check(FileAccess.get_sha256("res://"+String(row.file))==row.sha256,"original PNG bytes "+key)
+		var h:=HashingContext.new();h.start(HashingContext.HASH_SHA256);h.update(im.get_data().slice(0,1254*1254*4))
+		var base:=h.finish().hex_encode();check(base==row.rgba8_sha256,"native original RGBA "+key)
+		var rr: Array=row.selected_region;var selected_ok:=true
+		if key==String(stage.data.rein.texture):selected_ok=im.get_pixel(int(rr[0])+100,int(rr[1])+20).a>.9
+		else:
+			for p in [Vector2i(rr[0],rr[1]),Vector2i(rr[0]+rr[2]-1,rr[1]),Vector2i(rr[0],rr[1]+rr[3]-1),Vector2i(rr[0]+rr[2]-1,rr[1]+rr[3]-1)]:
+				if im.get_pixelv(p).a!=0:selected_ok=false
+		check(selected_ok,"selected region transparency or painted material "+key)
+		var full:=HashingContext.new();full.start(HashingContext.HASH_SHA256);full.update(im.get_data());refs[key]={"rgba8_sha256":base,"data_sha256":full.finish().hex_encode(),"mipmaps":im.has_mipmaps()}
+	var rig: Dictionary=stage.prepare_rig()
+	check(float(rig.upper_length_error)<.001 and float(rig.lower_length_error)<.001,"two bone segment lengths retained")
+	check(float(rig.hoof_target_error)<.001,"manual hoof anchor reaches target")
+	check(float(rig.body_area_partition_error)<.1 and int(rig.body_polygons)>0,"source body clip partitions exact quadrant area")
+	check(float(rig.piece_edge_length_error)<.001,"rigid painted piece edge lengths retained")
+	root.add_child(stage)
+	var captures: Array=[]
+	for wanted in range(4):
+		var deadline:=Time.get_ticks_msec()+5000
+		while stage.phase!=wanted and Time.get_ticks_msec()<deadline:await process_frame
+		await RenderingServer.frame_post_draw
+		var actual:=stage.drawn_phase;check(actual==wanted,"natural process rendered requested phase "+str(wanted))
+		var name:="se_phase_"+str(wanted)+".png";check(root.get_texture().get_image().save_png("res://"+name)==OK,"capture "+name)
+		captures.append({"file":name,"sha256":FileAccess.get_sha256("res://"+name),"actual_phase":actual})
+	var deadline:=Time.get_ticks_msec()+6000
+	while stage.transitions.size()<16 and Time.get_ticks_msec()<deadline:await process_frame
+	check(stage.transitions.size()>=16,"normal process loops through at least sixteen phase transitions")
+	check(stage.data.bbox_fitting_per_phase==false,"one fixed horse scale/translation and unchanged rider across all four phases")
+	FileAccess.open("res://report.json",FileAccess.WRITE).store_string(JSON.stringify({"passed":failures.is_empty(),"checks":checks,"failures":failures,"screenshots":captures,"texture_references":refs,"rig_diagnostics":stage.rig_info,"phase_transitions":stage.transitions,"scope":stage.data.scope,"native_animation_rendered":failures.is_empty(),"continuous_gait_quality_accepted":false,"actual_unit_tested":false,"production_adopted":false,"full_goal_complete":false},"\t"))
+	quit(0 if failures.is_empty() else 1)
+class Stage extends Node2D:
+	var data: Dictionary
+	var textures: Dictionary={}
+	var phase: int=0
+	var drawn_phase: int=-1
+	var elapsed: float=0
+	var transitions: Array=[]
+	func _process(delta: float)->void:
+		elapsed+=delta;var next:=floori(elapsed*float(data.fps))%4
+		if phase!=next:phase=next;transitions.append({"phase":phase,"elapsed":elapsed})
+		queue_redraw()
+	func vec(p: Array)->Vector2:return Vector2(p[0],p[1])
+	func paint(key: String,sc: float,offset: Array)->void:
+		if use_rig and key==String(data.rig.texture):paint_rig();return
+		var rr: Array=data.textures[key].selected_region;var source:=Rect2(rr[0],rr[1],rr[2],rr[3]);draw_texture_rect_region(textures[key],Rect2(source.position*sc+vec(offset)-vec(data.origin),source.size*sc),source)
+	func ribbon(a: Vector2,b: Vector2,sag: float)->void:
+		var points: Array[Vector2]=[];var hi: Array[Vector2]=[];var lo: Array[Vector2]=[];var count: int=data.rein.segments
+		var control: Vector2=(a+b)*.5+Vector2(0,2*sag)
+		for i in range(count+1):
+			var t:=float(i)/count;var u:=1.0-t;points.append(a*u*u+control*2*u*t+b*t*t)
+		for i in range(count+1):
+			var tangent: Vector2=points[mini(i+1,count)]-points[maxi(i-1,0)];var normal:=Vector2(-tangent.y,tangent.x).normalized()*float(data.rein.width_native)*.5;hi.append(points[i]+normal);lo.append(points[i]-normal)
+		var poly:=PackedVector2Array();var uv:=PackedVector2Array();var colors:=PackedColorArray();var sample: Array=data.rein.sample_region
+		for i in range(count+1):poly.append(hi[i]);uv.append(Vector2(float(sample[0])+float(sample[2])*i/count,float(sample[1]))/1254.0);colors.append(Color.WHITE)
+		for i in range(count,-1,-1):poly.append(lo[i]);uv.append(Vector2(float(sample[0])+float(sample[2])*i/count,float(sample[1])+float(sample[3]))/1254.0);colors.append(Color.WHITE)
+		draw_polygon(poly,colors,uv,textures[String(data.rein.texture)])
+	func mounted(key: String)->void:
+		paint(key,float(data.horse.scale),data.horse.offset)
+		var a: Vector2=vec(data.horse.bit_source)*float(data.horse.scale)+vec(data.horse.offset)-vec(data.origin);var b: Vector2=vec(data.rider.manual_visible_rein_hand)*float(data.rider.scale)+vec(data.rider.offset)-vec(data.origin)
+		ribbon(a,b,float(data.rein.sag_native));ribbon(a+Vector2(3,2),b+Vector2(2,1),float(data.rein.sag_native)+3)
+		paint(String(data.rider.texture),float(data.rider.scale),data.rider.offset)
+	func _draw()->void:
+		drawn_phase=phase;draw_rect(Rect2(0,0,2560,1440),Color("24231f"))
+		for i in range(5):
+			use_rig=i==4
+			var selected: int=phase if i==4 else i;var key: String=data.phases[selected];var at:=Vector2(i*512,0)
+			draw_string(ThemeDB.fallback_font,at+Vector2(20,35),("LIVE + RIGID LEG / " if i==4 else "RAW SOURCE / ")+str(selected),HORIZONTAL_ALIGNMENT_LEFT,-1,23,Color.WHITE)
+			draw_string(ThemeDB.fallback_font,at+Vector2(20,65),["contact A","passing A","contact B","passing B"][selected],HORIZONTAL_ALIGNMENT_LEFT,-1,23,Color("e7cd9c"))
+			draw_set_transform(at+Vector2(28,80),0,Vector2.ONE*.72);paint(key,float(data.horse.scale),data.horse.offset)
+			draw_set_transform(Vector2.ZERO);draw_string(ThemeDB.fallback_font,at+Vector2(20,705),"Same rider / fixed scale and position",HORIZONTAL_ALIGNMENT_LEFT,-1,22,Color.WHITE)
+			draw_set_transform(at+Vector2(28,750),0,Vector2.ONE*.72);mounted(key)
+			draw_set_transform(Vector2.ZERO);draw_rect(Rect2(at,Vector2(512,1280)).grow(-1),Color("6a6555"),false,1)
+		draw_string(ThemeDB.fallback_font,Vector2(20,1320),"SW rigid-piece diagnostic. LIVE passing A uses original painted upper/lower leg pieces; body and chest cover are original texture.",HORIZONTAL_ALIGNMENT_LEFT,-1,24,Color.WHITE)
+		draw_string(ThemeDB.fallback_font,Vector2(20,1360),"6 fps standalone preview, not actual Unit/chapter/full gait/performance/production acceptance. Anatomy and clearance remain unqualified.",HORIZONTAL_ALIGNMENT_LEFT,-1,24,Color.WHITE)
+
+	var use_rig: bool=false
+	var rig_info: Dictionary={}
+	var body_polygons: Array=[]
+	func area(poly: PackedVector2Array)->float:
+		var result:=0.0
+		for i in range(poly.size()):result+=poly[i].cross(poly[(i+1)%poly.size()])*.5
+		return absf(result)
+	func bone_point(p: Vector2,lower: bool)->Vector2:
+		var cfg: Dictionary=data.rig
+		if lower:return Vector2(rig_info.knee_new[0],rig_info.knee_new[1])+(p-vec(cfg.knee)).rotated(float(rig_info.lower_rotation))
+		return vec(cfg.shoulder)+(p-vec(cfg.shoulder)).rotated(float(rig_info.upper_rotation))
+	func prepare_rig()->Dictionary:
+		var cfg: Dictionary=data.rig;var shoulder:=vec(cfg.shoulder);var knee:=vec(cfg.knee);var hoof:=vec(cfg.hoof);var target:=vec(cfg.target)
+		var l1:=shoulder.distance_to(knee);var l2:=knee.distance_to(hoof);var distance:=shoulder.distance_to(target)
+		var cosine:=clampf((l1*l1+distance*distance-l2*l2)/(2*l1*distance),-1,1)
+		var knee_new: Vector2=shoulder+Vector2.RIGHT.rotated((target-shoulder).angle()+acos(cosine))*l1
+		rig_info={"knee_new":[knee_new.x,knee_new.y],"upper_rotation":(knee_new-shoulder).angle()-(knee-shoulder).angle(),"lower_rotation":(target-knee_new).angle()-(hoof-knee).angle(),"upper_length_error":absf(shoulder.distance_to(knee_new)-l1),"lower_length_error":absf(knee_new.distance_to(target)-l2),"manual_anchor_uncertainty_source_pixels":5}
+		var rr: Array=data.textures[String(cfg.texture)].selected_region
+		var quad:=PackedVector2Array([Vector2(rr[0],rr[1]),Vector2(rr[0]+rr[2],rr[1]),Vector2(rr[0]+rr[2],rr[1]+rr[3]),Vector2(rr[0],rr[1]+rr[3])])
+		var mask:=PackedVector2Array()
+		for p in cfg.body_cut:mask.append(vec(p))
+		body_polygons=Geometry2D.clip_polygons(quad,mask)
+		var kept_area:=0.0;var removed_area:=0.0;var vertices:=0
+		for poly in body_polygons:kept_area+=area(poly);vertices+=poly.size()
+		for poly in Geometry2D.intersect_polygons(quad,mask):removed_area+=area(poly)
+		var edge_error:=0.0
+		for key in ["upper_piece","lower_piece"]:
+			var pts: Array=cfg[key];vertices+=pts.size()
+			for i in range(pts.size()):
+				var a:=vec(pts[i]);var b:=vec(pts[(i+1)%pts.size()]);edge_error=maxf(edge_error,absf(a.distance_to(b)-bone_point(a,key=="lower_piece").distance_to(bone_point(b,key=="lower_piece"))))
+		var mapped:=bone_point(hoof,true)
+		rig_info.merge({"hoof_target_error":mapped.distance_to(target),"mapped_hoof":[mapped.x,mapped.y],"body_area_partition_error":absf(area(quad)-kept_area-removed_area),"body_polygons":body_polygons.size(),"piece_edge_length_error":edge_error,"render_vertices":vertices+4,"source_png_changed":false,"scope":"Rigid painted pieces, clipped original body and unchanged source chest cover; no texture-pixel write. Joint seam/occlusion/quality still requires visual review."})
+		return rig_info
+	func textured_poly(points: PackedVector2Array,uv_points: PackedVector2Array)->void:
+		var mapped:=PackedVector2Array();var uv:=PackedVector2Array();var colors:=PackedColorArray()
+		for i in range(points.size()):mapped.append(points[i]*float(data.horse.scale)+vec(data.horse.offset)-vec(data.origin));uv.append(uv_points[i]/1254.0);colors.append(Color.WHITE)
+		draw_polygon(mapped,colors,uv,textures[String(data.rig.texture)])
+	func paint_rig()->void:
+		for poly in body_polygons:textured_poly(poly,poly)
+		for key in ["lower_piece","upper_piece"]:
+			var points:=PackedVector2Array();var uv:=PackedVector2Array()
+			for p in data.rig[key]:uv.append(vec(p));points.append(bone_point(vec(p),key=="lower_piece"))
+			textured_poly(points,uv)
+		var cover: Array=data.rig.chest_cover;var source:=Rect2(cover[0],cover[1],cover[2],cover[3]);var sc: float=data.horse.scale
+		draw_texture_rect_region(textures[String(data.rig.texture)],Rect2(source.position*sc+vec(data.horse.offset)-vec(data.origin),source.size*sc),source)
