@@ -1,0 +1,24 @@
+<!doctype html><meta charset="utf-8"><title>Chao fixed registration — browser QA only</title>
+<style>body{margin:16px;background:#26251f;color:#eee4c8;font:15px system-ui}button{padding:7px 18px;margin:4px;background:#514b3d;color:inherit;border:1px solid #928263;cursor:pointer}canvas{display:block;max-width:100%;height:auto;margin-top:12px}small{color:#c6b99c}#status{display:inline-block;margin-left:16px}</style>
+<h2>晁盖固定注册对照 · 浏览器原PNG预览</h2>
+<p>仅绘制原始透明PNG，未经过Godot导入，不代表实际Unit、轮转或步态已通过。每方向五帧共用固定人物比例与偏移，车保持不动。</p>
+<div id="controls"><button data-dir="se">东南 SE</button><button data-dir="sw">西南 SW</button><button data-dir="ne">东北 NE</button><button data-dir="nw">西北 NW</button><button id="play">暂停动画</button><button id="guides">显示握把参考点</button><span id="status">正在载入</span></div>
+<small>上方动画：旧摆放 / 固定注册；下方静态：旧合图 / 旧摆放+固定车 / 固定注册人物 / 固定注册+固定车。握把点为人工估计，仅用于定位，未作为接触通过证据。</small>
+<button id="step">下一帧</button><button id="save">下载静态对照PNG</button><canvas id="motion" width="1152" height="480"></canvas><canvas id="grid" width="1920" height="1280"></canvas>
+<script type="module">
+const data=await (await fetch('prepared/inputs.json')).json();
+const images={};await Promise.all(Object.entries(data.textures).map(async([k,v])=>{const im=new Image();im.src='prepared/'+v.file;await im.decode();images[k]=im}));
+let direction='se',frame=0,playing=true,guides=false;const phases=data.phases;
+const grid=document.querySelector('#grid'),g=grid.getContext('2d');const motion=document.querySelector('#motion'),m=motion.getContext('2d');
+function pose(ctx,key,p,region){const s=160/p.virtual_canvas_reference;ctx.drawImage(images[key],...region,(region[0]-p.pivot_native[0])*s,(region[1]-p.pivot_native[1])*s,region[2]*s,region[3]*s)}
+function layers(ctx,item,registered,cart){const cp=data.cart_poses[direction];if(cart&&['ne','nw'].includes(direction))pose(ctx,data.cart_texture,cp,cp.region);pose(ctx,item.actor_texture,registered?item.actor_pose:item.original_pose,item.actor_region);if(cart&&['se','sw'].includes(direction))pose(ctx,data.cart_texture,cp,cp.region);if(guides&&cart){const points=data.registration[direction].manual_cart_targets;for(const q of points){const s=160/cp.virtual_canvas_reference,x=(q[0]-cp.pivot_native[0])*s,y=(q[1]-cp.pivot_native[1])*s;ctx.strokeStyle='#00ffff';ctx.lineWidth=1.2;ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.stroke()}}}
+function redraw(){const fit=data.placement[direction];g.clearRect(0,0,grid.width,grid.height);for(let r=0;r<4;r++)for(let c=0;c<5;c++){const x=c*384,y=r*320;g.fillStyle=r===2?'#4e4b40':'#211f19';g.fillRect(x,y,383,319);g.fillStyle='#efe5c8';g.font='13px system-ui';g.fillText(`${direction} / ${phases[c]} / ${['ORIGINAL COMPOSITE','PREVIOUS ACTOR + CART','REGISTERED ACTOR','REGISTERED ACTOR + CART'][r]}`,x+7,y+20);g.save();g.translate(x+fit.origin[0],y+fit.origin[1]);g.scale(fit.common_scale,fit.common_scale);const v=data.views[direction][phases[c]];if(r===0)pose(g,v.original_texture,v.original_pose,v.original_pose.region);else layers(g,v,r>=2,r!==2);g.restore()}
+drawMotion()}
+function drawMotion(){const fit=data.placement[direction],v=data.views[direction][phases[frame]];m.clearRect(0,0,motion.width,motion.height);for(let i=0;i<2;i++){m.fillStyle='#171712';m.fillRect(i*576,0,575,480);m.fillStyle='#efe5c8';m.font='19px system-ui';m.fillText(`${i?'FIXED REGISTRATION':'PREVIOUS PLACEMENT'} — ${direction} ${phases[frame]}`,i*576+16,28);m.save();m.translate(i*576+fit.origin[0]*1.45,fit.origin[1]*1.45);m.scale(fit.common_scale*1.45,fit.common_scale*1.45);layers(m,v,i===1,true);m.restore()}document.querySelector('#status').textContent=`已载入 ${Object.keys(images).length} 原PNG · ${direction} · ${phases[frame]} · 浏览器对照`}
+for(const b of document.querySelectorAll('[data-dir]'))b.onclick=()=>{direction=b.dataset.dir;frame=0;redraw()};
+document.querySelector('#play').onclick=e=>{playing=!playing;e.target.textContent=playing?'暂停动画':'播放动画'};
+document.querySelector('#guides').onclick=e=>{guides=!guides;e.target.textContent=guides?'隐藏握把参考点':'显示握把参考点';redraw()};
+document.querySelector('#step').onclick=()=>{frame=(frame+1)%phases.length;drawMotion()};
+document.querySelector('#save').onclick=()=>grid.toBlob(blob=>{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='browser_registered_'+direction+'.png';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000)});
+window.setInterval(()=>{if(playing){frame=(frame+1)%phases.length;drawMotion()}},250);redraw();
+</script>

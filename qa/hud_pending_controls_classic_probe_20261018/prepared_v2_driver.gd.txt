@@ -9,8 +9,8 @@ func _run() -> void:
 	check(b.level.id() == "skirmish" and b.mission == null, "actual classic skirmish resolved without chapter fallback")
 	for i in range(12): await physics_frame
 	var heroes: Array = b.units.filter(func(u): return is_instance_valid(u) and u.is_hero and u.faction == 0 and u.slot_count() > 0)
-	check(not heroes.is_empty(), "real classic skirmish supplies a hero with actual skill slots")
-	if heroes.is_empty(): finish(); return
+	check(heroes.size() >= 2, "real classic skirmish supplies two distinct heroes with actual skill slots")
+	if heroes.size() < 2: finish(); return
 	var hero: Variant = heroes[0]
 	for width in [1280, 960]:
 		root.size = Vector2i(width, 720)
@@ -18,6 +18,9 @@ func _run() -> void:
 		for i in range(8): await process_frame
 		b.select_members([hero], false)
 		b.hud.refresh_command()
+		b.select_members([heroes[1]], false)
+		b.hud.refresh_command()
+		b.select_members([hero], false)
 		b.hud.refresh_command()
 		var retired: Array = b.hud._skill_bar.get_children().filter(func(c): return c.is_queued_for_deletion())
 		check(not retired.is_empty() and retired.all(func(c): return c is Control and not c.visible and c.is_inside_tree()), "retired skill buttons hidden immediately but remain safely tree-owned at " + str(width))

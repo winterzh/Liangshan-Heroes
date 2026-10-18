@@ -1,0 +1,248 @@
+{
+  "mode": "builtin_imagegen",
+  "chapter": 16,
+  "source_basis": "qa/chao_gai_layered_sources_20261018/prompt_set.json",
+  "source_basis_sha256": "c27a5d62e63411461583cdf48674bb7e8dee881fa549914ec3d32c7b7a2553e8",
+  "canon_boundary": "Existing chapter16 shirtless jujube-merchant identity. Brown headcloth, grey trousers, tan sash and exact stance are established art interpretation, not additional story or weapon. Ruan reference gives pose only, not Chao identity.",
+  "production_adopted": false,
+  "jobs": [
+    {
+      "mode": "builtin_imagegen",
+      "file": "native_originals/idle_grip_v1_rejected_scale.png",
+      "sha256": "80b22af5ffb337a5cb42e93f72d5f9ed1297903e90d3773bef4bb93755b8ad9a",
+      "generated_original": "C:\\Users\\rsb\\.codex\\generated_images\\01a11902-b95a-7981-aed1-f143736f8853\\exec-01c27572-c1e9-4d20-ad96-3f29edc388be.png",
+      "prompt_file": "prompt_idle_grip_v1.txt",
+      "prompt_sha256": "4b957e0078f0bb9e20b5062ef338d150ffa28920a8d9128ceca423ea6ba032eb",
+      "references": [
+        {
+          "path": "qa/chao_gai_layered_sources_20261018/native_originals/idle_actor_v2.png",
+          "sha256": "e7702cc81262849338efba538c15949e293f51ccca6e1c1b2626c8c44f894d92",
+          "role": "edit_target"
+        },
+        {
+          "path": "assets/characters/liu_tang_pushcart_20261017/cart_only.png",
+          "sha256": "9425a1929887df7a6846e831eb064decd023d1510613a8c59211649403597e42",
+          "role": "cart_handle_reference_only"
+        }
+      ],
+      "directly_viewed": true,
+      "accepted": false,
+      "reason": "Fist separation narrowed but whole figures enlarged/repositioned; fails the requested size/placement invariant. Rear figures changed although requested unchanged. No production use.",
+      "pixels_edited_after_generation": false,
+      "metrics": [
+        {
+          "direction": "se",
+          "before": {
+            "bbox": [
+              42,
+              62,
+              344,
+              486
+            ],
+            "height": 424
+          },
+          "new": {
+            "bbox": [
+              50,
+              54,
+              384,
+              528
+            ],
+            "height": 474
+          },
+          "height_ratio": 1.1179245283018868
+        },
+        {
+          "direction": "sw",
+          "before": {
+            "bbox": [
+              921,
+              64,
+              1221,
+              506
+            ],
+            "height": 442
+          },
+          "new": {
+            "bbox": [
+              870,
+              54,
+              1205,
+              536
+            ],
+            "height": 482
+          },
+          "height_ratio": 1.090497737556561
+        },
+        {
+          "direction": "ne",
+          "before": {
+            "bbox": [
+              37,
+              692,
+              380,
+              1179
+            ],
+            "height": 487
+          },
+          "new": {
+            "bbox": [
+              39,
+              673,
+              426,
+              1200
+            ],
+            "height": 527
+          },
+          "height_ratio": 1.0821355236139631
+        },
+        {
+          "direction": "nw",
+          "before": {
+            "bbox": [
+              888,
+              691,
+              1240,
+              1202
+            ],
+            "height": 511
+          },
+          "new": {
+            "bbox": [
+              828,
+              672,
+              1216,
+              1199
+            ],
+            "height": 527
+          },
+          "height_ratio": 1.0313111545988258
+        }
+      ]
+    },
+    {
+      "mode": "builtin_imagegen",
+      "file": "native_originals/idle_se_grip_v2_candidate.png",
+      "sha256": "76afa7b2e0b2b9f1b0f60a582d48c5cceefaca34b5f83d8a5793014162f2a4b6",
+      "generated_original": "C:\\Users\\rsb\\.codex\\generated_images\\01a11902-b95a-7981-aed1-f143736f8853\\exec-b1e86306-ac16-4032-84e3-546aa080f351.png",
+      "prompt_file": "prompt_idle_se_grip_v2.txt",
+      "prompt_sha256": "359956054ce7192236ebc1ea6d6db310eb213fc6c8dc4e945e8a04e62f6f2c93",
+      "references": [
+        {
+          "path": "qa/chao_gai_layered_sources_20261018/native_originals/idle_actor_v2.png",
+          "sha256": "e7702cc81262849338efba538c15949e293f51ccca6e1c1b2626c8c44f894d92",
+          "role": "edit_target"
+        }
+      ],
+      "candidate_direction_only": "se",
+      "production_adopted": false,
+      "directly_viewed": true,
+      "alpha64_se_bbox": [
+        48,
+        62,
+        343,
+        489
+      ],
+      "manual_source_grips_approx": [
+        [
+          178,
+          304
+        ],
+        [
+          287,
+          285
+        ]
+      ],
+      "review": "Whole figure size now close to original, fists narrower and near fist remains left of waist; vertical stagger too flat for fixed cart handles, needs targeted correction and actual comparison. Other three views not adopted from this output.",
+      "pixels_edited_after_generation": false
+    },
+    {
+      "file": "native_originals/idle_se_grip_v3_rejected_stagger.png",
+      "sha256": "f14d2ab7068f668f15816fc99b0e87cfac827e3874fbd17f4c87d3b7c55cdb9e",
+      "generated_original": "C:\\Users\\rsb\\.codex\\generated_images\\01a11902-b95a-7981-aed1-f143736f8853\\exec-052f0002-d3e8-4e7a-8cd6-85002113997e.png",
+      "mode": "builtin_imagegen",
+      "accepted": false,
+      "reason": "Vertical correction overshot: far arm/fist raised too high; no further coordinate-only retries. Preserve original bytes as rejected source.",
+      "production_adopted": false,
+      "prompt_file": "prompt_idle_se_grip_v3.txt",
+      "prompt_sha256": "304de122f8cd01f7890581ecce089db1bdd6a3f90a23e82b2f1d0bcd48c47fa4",
+      "references": [
+        {
+          "path": "qa/chao_gai_grip_registration_20261018/native_originals/idle_se_grip_v2_candidate.png",
+          "sha256": "76afa7b2e0b2b9f1b0f60a582d48c5cceefaca34b5f83d8a5793014162f2a4b6",
+          "role": "edit_target"
+        }
+      ],
+      "directly_viewed": true,
+      "pixels_edited_after_generation": false
+    },
+    {
+      "mode": "builtin_imagegen",
+      "file": "native_originals/idle_template_grip_v4_candidate.png",
+      "sha256": "1f5b8a79010600531afb65d88e27c80158746f917572c25aebcd4fbd6a203482",
+      "generated_original": "C:\\Users\\rsb\\.codex\\generated_images\\01a11902-b95a-7981-aed1-f143736f8853\\exec-2474fa44-1fc0-4c11-8ea5-620b949dc7a3.png",
+      "prompt_file": "prompt_idle_template_grip_v4.txt",
+      "prompt_sha256": "1333f43940b80f571231ba07c5ee8ff44c5fde01883ab2ee1991d2a9c5a2810a",
+      "references": [
+        {
+          "path": "assets/characters/ruan_xiaoqi_layered_20261018/idle_grips_padded_b5ce407b.png",
+          "sha256": "b5ce407bd4e3b948f9703c1e94f4a70ae4b43dd679981d66afa8390d5f2a4f8a",
+          "role": "pose_edit_target"
+        },
+        {
+          "path": "qa/chao_gai_layered_sources_20261018/native_originals/idle_actor_v2.png",
+          "sha256": "e7702cc81262849338efba538c15949e293f51ccca6e1c1b2626c8c44f894d92",
+          "role": "Chao_identity_reference_only"
+        }
+      ],
+      "candidate_directions": [
+        "se",
+        "sw",
+        "ne",
+        "nw"
+      ],
+      "production_adopted": false,
+      "directly_viewed": true,
+      "metrics": [
+        {
+          "direction": "se",
+          "alpha64_bbox": [
+            106,
+            105,
+            561,
+            611
+          ]
+        },
+        {
+          "direction": "sw",
+          "alpha64_bbox": [
+            745,
+            103,
+            1186,
+            613
+          ]
+        },
+        {
+          "direction": "ne",
+          "alpha64_bbox": [
+            111,
+            680,
+            570,
+            1197
+          ]
+        },
+        {
+          "direction": "nw",
+          "alpha64_bbox": [
+            757,
+            682,
+            1209,
+            1198
+          ]
+        }
+      ],
+      "review": "Identity changed to Chao: brown headcloth/full black beard/muscular shirtless torso/grey trousers/straw sandals, no Ruan white apron/topknot/bare feet. Four grips follow existing production pose template. New native size and grip registration pending; no full gait/Unit qualification.",
+      "pixels_edited_after_generation": false
+    }
+  ]
+}

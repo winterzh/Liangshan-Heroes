@@ -1,0 +1,378 @@
+{
+  "prepared": true,
+  "native_executed": false,
+  "project": "D:\\CodexEvidence\\shuihu\\chao_gai_shaft_contact_v3_20261018\\prepared",
+  "frozen": [
+    {
+      "path": "images/actor_contact_a_actor.png",
+      "sha256": "f48071a03c3279b1dc1b6c209d95b4409026b2ffb4c3fcf0ab57b5485edda33c",
+      "bytes": 835917
+    },
+    {
+      "path": "images/actor_contact_b_actor_v1.png",
+      "sha256": "bb457d8ce5214442252363e7cb35815fa1451078895673bf29e42b2c89d84e3e",
+      "bytes": 905416
+    },
+    {
+      "path": "images/actor_contact_b_actor_v2.png",
+      "sha256": "19fdf54d59c4d15b8133db679a4fe2b94583a4e5a69dc0f23994b21560cc874a",
+      "bytes": 885055
+    },
+    {
+      "path": "images/actor_idle_actor_v2.png",
+      "sha256": "e7702cc81262849338efba538c15949e293f51ccca6e1c1b2626c8c44f894d92",
+      "bytes": 933855
+    },
+    {
+      "path": "images/actor_passing_a_actor.png",
+      "sha256": "180b9b3da4c0eae18272f1f3873a7a2a7b65aebe9dafce834e66526b75aadb57",
+      "bytes": 800452
+    },
+    {
+      "path": "images/actor_passing_b_actor_v2.png",
+      "sha256": "ed19387875afcf32225836e477c0f51023ab41f820bcbd595b5c792efdd5893b",
+      "bytes": 817565
+    },
+    {
+      "path": "images/original_cart_only.png",
+      "sha256": "9425a1929887df7a6846e831eb064decd023d1510613a8c59211649403597e42",
+      "bytes": 1329130
+    },
+    {
+      "path": "images/original_push_contact_a.png",
+      "sha256": "954d6e35038b8bd81e2d88d593e57a927436e1636e5694749f3bf65b87d5beb8",
+      "bytes": 1591968
+    },
+    {
+      "path": "images/original_push_contact_b_v3.png",
+      "sha256": "70d62c159a4d25249fce8da1e69fffa90e6d35ad14c88e19f5135f9800b6bf16",
+      "bytes": 1564432
+    },
+    {
+      "path": "images/original_push_idle_v2.png",
+      "sha256": "e11643ea3acd7a9c462ffb131fd5e94287f5435dca6ca9782e75848df4af6e39",
+      "bytes": 1565249
+    },
+    {
+      "path": "images/original_push_passing_a.png",
+      "sha256": "d8d80b804d264d0ace3938fc160b709511fb4b312a1a05b1645a3c0be35c78ee",
+      "bytes": 1532717
+    },
+    {
+      "path": "images/original_push_passing_b_v2.png",
+      "sha256": "8a3c04552a873ec7cd5748c1d3d8c98dff18aaa64e9d35b8421e8cc032ddfc53",
+      "bytes": 1589060
+    },
+    {
+      "path": "images/original_push_passing_b_v4.png",
+      "sha256": "fecf6b6dc208f82837e1315bf2b63901e6b09d975f094cdb93c0972e4b8d48d5",
+      "bytes": 1565656
+    },
+    {
+      "path": "images/original_push_passing_b_v5.png",
+      "sha256": "84c766be36174e07502dc285e9fb896e47ac381c2bec8c06d4801a74c881ec2d",
+      "bytes": 1356450
+    },
+    {
+      "path": "images/reference_empty_idle.png",
+      "sha256": "873d57c40caa9ca91f15f00fbce4ae77a4744f6a0035be2e958252d03ad1a392",
+      "bytes": 1331636
+    },
+    {
+      "path": "inputs.json",
+      "sha256": "c06be396d4bcaa79c0355ddde83ead4549cf3c3cd105f2a5bbd54d64a4ff2aae",
+      "bytes": 65625
+    },
+    {
+      "path": "preview.gd",
+      "sha256": "4975fc191dadee27a085d23661b62b93f844d61b64b4b4dabff80ec5e6e16596",
+      "bytes": 4638
+    },
+    {
+      "path": "project.godot",
+      "sha256": "2eca3f3df834ffd1710a86683fda04c81ea66e4ce877bfc4bf817d49f1c2d01c",
+      "bytes": 247
+    }
+  ],
+  "preparer_sha256": "d2648273dbcd2c5706628de8cf109ab8036dfc3c728780864de459b4b2305f59",
+  "body_scale_binding_sha256": "41b3c8a05ffe295d7f921523019340f478a9ac7d25545c1da9bd50eb640775ac",
+  "png_count": 15,
+  "pixel_writes": false,
+  "registration": {
+    "se": {
+      "manual_idle_source_grips": [
+        [
+          150,
+          321
+        ],
+        [
+          315,
+          282
+        ]
+      ],
+      "manual_cart_targets": [
+        [
+          52.0,
+          194.0
+        ],
+        [
+          195.67689723272235,
+          158.27382806290566
+        ]
+      ],
+      "constant_reference_all_phases": 573.2250423011844,
+      "constant_pivot_all_phases": [
+        217.97604447229858,
+        564.7461579977686
+      ],
+      "rear_far_hand_occluded": false,
+      "contact_accepted": false,
+      "note": "Approximate idle-only landmarks. Translation-only midpoint/front or visible-near-grip/rear. Zero residual for one point is arithmetic, not proof of physical contact. Same transform for all five phases; no frame fit or per-phase hand anchoring.",
+      "target_selection": {
+        "method": "Bounded least-squares against two manually annotated existing shaft segments, using idle grips only. Same actor transform for all five phases; no per-frame contact fitting.",
+        "segments": [
+          [
+            [
+              52,
+              194
+            ],
+            [
+              158,
+              276
+            ]
+          ],
+          [
+            [
+              171,
+              141
+            ],
+            [
+              271,
+              211
+            ]
+          ]
+        ],
+        "max_fraction": 0.45,
+        "fractions": [
+          0.0,
+          0.2467689723272237
+        ],
+        "source_rgba_at_targets": [
+          [
+            1,
+            0,
+            0,
+            254
+          ],
+          [
+            204,
+            128,
+            69,
+            252
+          ]
+        ],
+        "estimated_pair_residual_per_body_size": [
+          [
+            0.0014994278787797688,
+            -0.0021420398268282015
+          ],
+          [
+            -0.001499427878779741,
+            0.002142039826828257
+          ]
+        ],
+        "source_annotation_uncertainty_pixels": 3,
+        "actual_contact_accepted": false
+      },
+      "historical_shift_native_v2": [
+        -52.59479468629386,
+        -103.90942386032587
+      ]
+    },
+    "sw": {
+      "manual_idle_source_grips": [
+        [
+          925,
+          285
+        ],
+        [
+          1097,
+          325
+        ]
+      ],
+      "manual_cart_targets": [
+        [
+          1041.45,
+          188.75
+        ],
+        [
+          1181.4069062089118,
+          212.87447503287066
+        ]
+      ],
+      "constant_reference_all_phases": 597.5600676818951,
+      "constant_pivot_all_phases": [
+        1042.8392954173482,
+        555.8449980226726
+      ],
+      "rear_far_hand_occluded": false,
+      "contact_accepted": false,
+      "note": "Approximate idle-only landmarks. Translation-only midpoint/front or visible-near-grip/rear. Zero residual for one point is arithmetic, not proof of physical contact. Same transform for all five phases; no frame fit or per-phase hand anchoring.",
+      "target_selection": {
+        "method": "Bounded least-squares against two manually annotated existing shaft segments, using idle grips only. Same actor transform for all five phases; no per-frame contact fitting.",
+        "segments": [
+          [
+            [
+              1086,
+              155
+            ],
+            [
+              987,
+              230
+            ]
+          ],
+          [
+            [
+              1200,
+              198
+            ],
+            [
+              1100,
+              278
+            ]
+          ]
+        ],
+        "max_fraction": 0.45,
+        "fractions": [
+          0.45,
+          0.18593093791088333
+        ],
+        "source_rgba_at_targets": [
+          [
+            104,
+            55,
+            24,
+            253
+          ],
+          [
+            110,
+            55,
+            23,
+            252
+          ]
+        ],
+        "estimated_pair_residual_per_body_size": [
+          [
+            -0.008038094550361807,
+            -0.0100476181879523
+          ],
+          [
+            0.008038094550361655,
+            0.01004761818795219
+          ]
+        ],
+        "source_annotation_uncertainty_pixels": 3,
+        "actual_contact_accepted": false
+      },
+      "historical_shift_native_v2": [
+        77.59016306751823,
+        -107.02358858030206
+      ]
+    },
+    "ne": {
+      "manual_idle_source_grips": [
+        [
+          355,
+          940
+        ]
+      ],
+      "manual_cart_targets": [
+        [
+          194,
+          1069
+        ]
+      ],
+      "desired_grips_in_idle_source_coordinates": [
+        [
+          270.1531243064964,
+          1056.4262379227052
+        ]
+      ],
+      "constant_actor_shift_native": [
+        -84.84687569350359,
+        116.42623792270524
+      ],
+      "constant_reference_all_phases": 659.4791666666666,
+      "constant_pivot_all_phases": [
+        307.8353880520159,
+        1097.7015398550725
+      ],
+      "source_residuals_after_translation": [
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "rear_far_hand_occluded": true,
+      "contact_accepted": false,
+      "note": "Approximate idle-only landmarks. Translation-only midpoint/front or visible-near-grip/rear. Zero residual for one point is arithmetic, not proof of physical contact. Same transform for all five phases; no frame fit or per-phase hand anchoring."
+    },
+    "nw": {
+      "manual_idle_source_grips": [
+        [
+          910,
+          943
+        ]
+      ],
+      "manual_cart_targets": [
+        [
+          1047,
+          1088
+        ]
+      ],
+      "desired_grips_in_idle_source_coordinates": [
+        [
+          941.1862828915954,
+          1070.5588552563893
+        ]
+      ],
+      "constant_actor_shift_native": [
+        31.186282891595397,
+        127.55885525638928
+      ],
+      "constant_reference_all_phases": 691.4052173913043,
+      "constant_pivot_all_phases": [
+        995.2028667077583,
+        1050.194607347489
+      ],
+      "source_residuals_after_translation": [
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "rear_far_hand_occluded": true,
+      "contact_accepted": false,
+      "note": "Approximate idle-only landmarks. Translation-only midpoint/front or visible-near-grip/rear. Zero residual for one point is arithmetic, not proof of physical contact. Same transform for all five phases; no frame fit or per-phase hand anchoring."
+    }
+  },
+  "source_hashes": {
+    "assets/characters/liu_tang_pushcart_20261017/cart_only.png": "9425a1929887df7a6846e831eb064decd023d1510613a8c59211649403597e42",
+    "assets/characters/chao_gai_pushcart_20261017/push_idle_v2.png": "e11643ea3acd7a9c462ffb131fd5e94287f5435dca6ca9782e75848df4af6e39",
+    "qa/chao_gai_layered_sources_20261018/native_originals/idle_actor_v2.png": "e7702cc81262849338efba538c15949e293f51ccca6e1c1b2626c8c44f894d92",
+    "assets/characters/chao_gai_pushcart_20261017/push_contact_a.png": "954d6e35038b8bd81e2d88d593e57a927436e1636e5694749f3bf65b87d5beb8",
+    "qa/chao_gai_layered_sources_20261018/native_originals/contact_a_actor.png": "f48071a03c3279b1dc1b6c209d95b4409026b2ffb4c3fcf0ab57b5485edda33c",
+    "assets/characters/chao_gai_pushcart_20261017/push_passing_a.png": "d8d80b804d264d0ace3938fc160b709511fb4b312a1a05b1645a3c0be35c78ee",
+    "qa/chao_gai_layered_sources_20261018/native_originals/passing_a_actor.png": "180b9b3da4c0eae18272f1f3873a7a2a7b65aebe9dafce834e66526b75aadb57",
+    "assets/characters/chao_gai_pushcart_20261017/push_contact_b_v3.png": "70d62c159a4d25249fce8da1e69fffa90e6d35ad14c88e19f5135f9800b6bf16",
+    "qa/chao_gai_layered_sources_20261018/native_originals/contact_b_actor_v2.png": "19fdf54d59c4d15b8133db679a4fe2b94583a4e5a69dc0f23994b21560cc874a",
+    "assets/characters/chao_gai_pushcart_20261017/push_passing_b_v5.png": "84c766be36174e07502dc285e9fb896e47ac381c2bec8c06d4801a74c881ec2d",
+    "qa/chao_gai_layered_sources_20261018/native_originals/passing_b_actor_v2.png": "ed19387875afcf32225836e477c0f51023ab41f820bcbd595b5c792efdd5893b",
+    "assets/characters/chao_gai_pushcart_20261017/push_passing_b_v4.png": "fecf6b6dc208f82837e1315bf2b63901e6b09d975f094cdb93c0972e4b8d48d5",
+    "qa/chao_gai_layered_sources_20261018/native_originals/contact_b_actor_v1.png": "bb457d8ce5214442252363e7cb35815fa1451078895673bf29e42b2c89d84e3e",
+    "assets/characters/chao_gai_pushcart_20261017/push_passing_b_v2.png": "8a3c04552a873ec7cd5748c1d3d8c98dff18aaa64e9d35b8421e8cc032ddfc53",
+    "assets\\characters\\chao_gai_merchant_20261017\\idle.png": "873d57c40caa9ca91f15f00fbce4ae77a4744f6a0035be2e958252d03ad1a392"
+  },
+  "native_old_corner_failures_not_relaxed": true,
+  "production_adopted": false
+}
