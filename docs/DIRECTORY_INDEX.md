@@ -1,3 +1,8 @@
+## 2026-10-19 四方向完整四腿首轮组装预览
+
+- qa/gongsun_sheng_horse_rig_sources_20261019/assembly_v1/：独立四向四腿首轮组装，准备绑定、54项原生收据、四相全目检与未接受原因；actual保存原报告、日志、来源/驱动和截图，非生产资源。
+- 同层assembly_preview.gd.txt与prepare_assembly.py：固定关节、四独立腿、对角循环与移动数学参照；不含骑手、Unit、碰撞或采用。
+
 ## 2026-10-19 专用马身与肢段组装入口
 
 - qa/gongsun_sheng_horse_rig_sources_20261019/：8内置原PNG、五候选、精确提示/来源、只读边界，尚未组装/原生/采用。
