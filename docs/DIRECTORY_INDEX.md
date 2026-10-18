@@ -1,3 +1,10 @@
+## 2026-10-19 坐骑前向来源与原生比较
+
+- qa/gongsun_sheng_mounted_walk_20261019/prompt_set_v2.json：12原PNG，SE四阶段比较/SW两接触稿暂选，6退稿；最新准确提示与来源SHA。
+- 同目录native_se_v1/actual_failed/：默认透明边缘导入导致7个原始RGBA校验失败，原记录不改写。
+- 同目录native_se_v2/actual/：无损导入后45项、4图全目检、16次process相位切换；非实际Unit/完整步态。
+- 同目录sw_passing_a_pose_guide与sw_passing_b_pose_guide：仅QA矢量关节图，前者已生成退稿，后者尚未生成；不能当生产绘画。
+
 ## 2026-10-19 当前接续入口
 
 - qa/wu_yong_layered_full_pack_20261019/：完整PCK6+174项、45图/25目检、正常release480帧、精确两文件采用、当前129运行基线。
