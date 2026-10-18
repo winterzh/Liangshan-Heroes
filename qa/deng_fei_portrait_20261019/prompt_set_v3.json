@@ -1,0 +1,100 @@
+{
+  "mode": "builtin_imagegen",
+  "originals": [
+    {
+      "key": "portrait_v1",
+      "mode": "builtin_imagegen",
+      "intent": "new_portrait_from_references_not_edit",
+      "file": "native_originals/portrait_v1.png",
+      "generated_original": "C:\\Users\\rsb\\.codex\\generated_images\\01a11902-b95a-7981-aed1-f143736f8853\\exec-1f0637a7-3a3d-4104-b1e6-dec9cd94bb68.png",
+      "sha256": "b41e0b2dadd6840153172cb33cf5b0c5273d75c7721f018fb0379b4997bf897d",
+      "bytes": 3022994,
+      "pixel_mode": "RGB",
+      "size": [
+        1254,
+        1254
+      ],
+      "rgba8_readonly_sha256": "060135ebbf5b840f9fb3adfb52d07fc3f8c517b1739fe415fcaa78726f40e4f2",
+      "paper_background_intended": true,
+      "exact_tool_arguments": "tool_prompt_portrait_v1.json",
+      "prompt_sha256": "0668a8a7c2bc34145a3134c70c02c5cdc50c81c324c002644531aef95a987492",
+      "references": [
+        {
+          "path": "D:/AI项目/水浒/开发工程/assets/characters/deng_fei_wounded_20261005/idle_v3.png",
+          "role": "identity_reference_only",
+          "sha256": "8bd30a7ae0cc9a37e27d734c335e9e11233870d14e4d0d0fc26dc0583cbb5cd8"
+        },
+        {
+          "path": "D:/AI项目/水浒/开发工程/assets/characters/shi_en_canon_20261015/portrait.png",
+          "role": "style_reference_only_different_character",
+          "sha256": "42537123882bc6a579d212daff577c34da0737a1804ffb75b407d8da2c5886eb"
+        }
+      ],
+      "local_pixel_writes": false,
+      "production_adopted": false,
+      "recorded_at": "2026-10-19T05:49:13.884701"
+    },
+    {
+      "key": "portrait_v2",
+      "mode": "builtin_imagegen",
+      "intent": "portrait_composition_edit",
+      "file": "native_originals/portrait_v2.png",
+      "generated_original": "C:\\Users\\rsb\\.codex\\generated_images\\01a11902-b95a-7981-aed1-f143736f8853\\exec-c14d5561-d353-4c6b-aebb-73dba9b967fe.png",
+      "sha256": "9312b3eff89d1e6b304d879f4c8fac886c7c1b7d65bbbe66813dcb50340eeaf2",
+      "bytes": 2981655,
+      "pixel_mode": "RGB",
+      "size": [
+        1254,
+        1254
+      ],
+      "rgba8_readonly_sha256": "2ef41d5d7f3375f284884bedc7299208540ea03113fa0ff31c73aa195ffb1263",
+      "paper_background_intended": true,
+      "exact_tool_arguments": "tool_prompt_portrait_v2.json",
+      "prompt_sha256": "95705750b6c723d775e17ffd6f3507e5fecb1a147f747f8c492fa42f2a3f2bd6",
+      "references": [
+        {
+          "path": "D:/AI项目/水浒/开发工程/qa/deng_fei_portrait_20261019/native_originals/portrait_v1.png",
+          "role": "edit_target",
+          "sha256": "b41e0b2dadd6840153172cb33cf5b0c5273d75c7721f018fb0379b4997bf897d"
+        }
+      ],
+      "local_pixel_writes": false,
+      "production_adopted": false,
+      "recorded_at": "2026-10-19T05:57:02.091890"
+    },
+    {
+      "key": "portrait_v3",
+      "mode": "builtin_imagegen",
+      "intent": "portrait_composition_edit",
+      "file": "native_originals/portrait_v3.png",
+      "generated_original": "C:\\Users\\rsb\\.codex\\generated_images\\01a11902-b95a-7981-aed1-f143736f8853\\exec-dbe74bc9-fe2e-4662-b214-cce139a6fbb8.png",
+      "sha256": "c4bec34a3f1ec1473c9061e816cdd79ffdb56ab9bb81d25e61768059a3c6e1f0",
+      "bytes": 2840178,
+      "pixel_mode": "RGB",
+      "size": [
+        1254,
+        1254
+      ],
+      "rgba8_readonly_sha256": "8a1fcef319e423c136e0fd4131a0bc421b255520591697e5d6833a0cbfd4a6df",
+      "paper_background_intended": true,
+      "exact_tool_arguments": "tool_prompt_portrait_v3.json",
+      "prompt_sha256": "c8361b60fe91a70564d253ef32f06e860080fb0975d35a43c7187b662144027d",
+      "references": [
+        {
+          "path": "D:/AI项目/水浒/开发工程/qa/deng_fei_portrait_20261019/native_originals/portrait_v2.png",
+          "role": "edit_target",
+          "sha256": "9312b3eff89d1e6b304d879f4c8fac886c7c1b7d65bbbe66813dcb50340eeaf2"
+        }
+      ],
+      "local_pixel_writes": false,
+      "production_adopted": false,
+      "recorded_at": "2026-10-19T05:58:16.109651"
+    }
+  ],
+  "canon_basis": "canon_basis.json",
+  "candidate_for_native_comparison": "portrait_v3",
+  "selection_reason": "Closer face than v1; v3 restores a thin paper margin above the hair cropped in v2.",
+  "production_adopted": false,
+  "native_accepted": false,
+  "full_goal_complete": false
+}

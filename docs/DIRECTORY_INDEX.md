@@ -1,3 +1,11 @@
+## 2026-10-19 邓飞普通头像候选
+
+- `qa/deng_fei_portrait_20261019/native_originals/`：三份1254 RGB内置原稿；v3仅选为后继原生比较候选，未生产采用。
+- 同目录`prompt_set_v3.json`、`canon_basis.json`、`chapter44_source.json`：精确提示/编辑目标、原著第44回依据及美术解释边界。
+- `readability*.png`、`visual_assessment.json`：两张已目检浏览器静态对比及256至32px阅读限制；不是游戏画面。
+- `render_portrait_variant.py`及README：私有浏览器重放入口；`preservation.json`核对129/16/81与HUD不变。
+- `docs/DENG_FEI_PORTRAIT_SOURCES_20261019.md`：普通头像后继接入范围；不改变被缚/获救状态。
+
 ## 2026-10-19 分层剑臂浏览器组装与后视姿势调整
 
 - qa/gongsun_sheng_mounted_draw_20261019/browser_models/：v2/v3静态来源模型，只有数据、无Godot驱动；供已执行浏览器重放工具使用。
