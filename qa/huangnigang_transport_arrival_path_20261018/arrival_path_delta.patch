@@ -1,0 +1,14 @@
+--- before/scripts/levels/level1_huangnigang.gd
++++ after/scripts/levels/level1_huangnigang.gd
+@@ -264,7 +264,10 @@
+ 			b.mission.mark("bai_arrived", "盘问已过，远处传来山歌，白胜从东侧另挑两桶酒上冈。")
+ 			b.mission.begin("wine_arrival", "远处歌声 · 白胜挑酒上冈", "白胜正从东侧山路自行挑酒入松阴，停稳后落担；七星仍作不相识的贩枣客。你可随时接管白胜，改令后需右键落担旗标继续。酒桶要等落担后才摆出。")
+ 			b.mission.add_action("bring_wine", "白胜 · 挑酒入松阴并落担", WINE_UNLOAD, ["bai_sheng"], 1.5, 40.0)
+-			bai.order_move(b.map.cell_to_world(WINE_UNLOAD))
++			# Walk behind the resting escort rather than steering through its last row.
++			# Both legs remain one owned NPC queue; any real player order still cancels it.
++			bai.order_move(b.map.cell_to_world(Vector2i(24,26)))
++			bai.order_move(b.map.cell_to_world(WINE_UNLOAD),true)
+ 			bai_arrival_serial = bai._order_serial
+ 			bai_arrival_auto = true
+ 			bai_unload_t = 0.0

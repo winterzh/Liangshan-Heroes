@@ -1,3 +1,5 @@
+后继体量修稿（2026-10-18）：[新待机原PNG](../assets/characters/gongsun_sheng_mounted_idle_scale_20261018/README.md)已生成并原字节保存，仍未原生比较或采用；新前视整体包围盒可能偏大，不把“更大”当作匹配。下方旧99/135检查与失败保持原范围。
+
 # 公孙胜第54回骑乘来源与待验状态
 
 新增11份内置imagegen原PNG、44原稿视图与19来源引用，保存于`assets/characters/gongsun_sheng_mounted_sources_20261018/`，`.gdignore`隔离。5份待机/慢步候选、5退稿、1待修订指剑稿；游戏未采用。[QA](../qa/gongsun_sheng_mounted_sources_20261018/README.md)保留检查与实际退稿原因。

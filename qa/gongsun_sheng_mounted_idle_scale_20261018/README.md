@@ -1,0 +1,7 @@
+# 新骑乘待机体量候选：原始来源待验
+
+实际内置image_gen输出已看过并原字节保存于assets/characters/gongsun_sheng_mounted_idle_scale_20261018/idle_mass_v1.png，输入两图与章节来源的SHA在source_receipt。原prompt随来源保存。raw_metrics只读alpha/尺寸和alpha128包围盒；没有编辑图像，也未降低旧阈值。四向站姿完整，仍需同引擎固定尺度比较。原稿.gdignore隔离，暂无游戏接线、SpriteFrames/PCK或Steam采用。
+
+旧idle整体偏小，新前视alpha128高度约1.095倍contact_a，可能又偏大；这不是已接受的尺寸修复。后继用旧比较器公共每方向缩放/接地点对比，检查马躯干/骑者真实尺寸及四蹄支撑，再决定是否采用或继续修稿。旧135项/2角点FAIL和99项原生资源比较均保留原资格，不转记为新图通过。原著依据仅第54回，衣色/冠形/鞍具为美术解释，不核准其他技能/情节。
+
+固定尺度原生比较执行器已准备并按共享通道排队。native_prepared保存实际脚本、6份导入设置、24份选区资源文本与输入；6张原PNG按inputs中的canonical_source与SHA引用，不在QA重复复制。准备39文件SHA在prepared_binding，现有工具句柄/实时队列见native_gate。先回读原有句柄和实际进程，不能另开重复Godot或移除外来锁。尺寸比较图会固定原old_idle每方向300px/627虚拟画布，再逐图落脚对齐，所有6姿态共用同一缩放；不逐帧拟合大小。当前仍未运行完成或美术采用。
