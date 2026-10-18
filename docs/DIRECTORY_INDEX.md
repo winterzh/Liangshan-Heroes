@@ -1,3 +1,10 @@
+## 2026-10-19 坐骑独立蹄/尾图层与停走预览
+
+- qa/gongsun_sheng_horse_rig_sources_20261019/prompt_set_v3.json：累计14原PNG、本轮新增6，当前七层组装比较基线。
+- assembly_v2/：准备后因引擎繁忙未原生；冻结输入保留。
+- assembly_v3/：68项/六图，直接目检四图后因矩形切边和停姿拒绝；actual保留原报告/日志/六图。
+- assembly_v4/：72项/六图全目检，独立原绘尾层及独立蹄、停走预览，可继续合成骑手，非生产采用；actual与visual_assessment.json分别保留机器原结果和人眼范围。
+
 ## 2026-10-19 四方向完整四腿首轮组装预览
 
 - qa/gongsun_sheng_horse_rig_sources_20261019/assembly_v1/：独立四向四腿首轮组装，准备绑定、54项原生收据、四相全目检与未接受原因；actual保存原报告、日志、来源/驱动和截图，非生产资源。

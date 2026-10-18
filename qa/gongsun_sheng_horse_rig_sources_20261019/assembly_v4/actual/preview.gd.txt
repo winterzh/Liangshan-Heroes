@@ -1,0 +1,182 @@
+extends SceneTree
+var checks: Array=[]
+var failures: Array=[]
+func check(ok: bool,label: String)->void:
+	checks.append({"label":label,"passed":ok})
+	if not ok:failures.append(label)
+func _initialize()->void:run.call_deferred()
+func run()->void:
+	root.size=Vector2i(2560,1440);root.content_scale_size=root.size;root.position=Vector2i(30000,30000)
+	var stage:=Stage.new();stage.data=JSON.parse_string(FileAccess.get_file_as_string("res://inputs.json"))
+	for key in stage.data.textures:
+		var row: Dictionary=stage.data.textures[key];var tex: Texture2D=load("res://"+String(row.file))
+		check(tex!=null,"native texture loaded "+key)
+		if tex==null:continue
+		stage.textures[key]=tex;var im: Image=tex.get_image()
+		if im.is_compressed():check(im.decompress()==OK,"decompress "+key)
+		check(im.get_size()==Vector2i(1254,1254) and im.get_format()==Image.FORMAT_RGBA8,"size and original RGBA8 "+key)
+		check(FileAccess.get_sha256("res://"+String(row.file))==row.sha256,"original PNG bytes "+key)
+		var h:=HashingContext.new();h.start(HashingContext.HASH_SHA256);h.update(im.get_data().slice(0,1254*1254*4))
+		check(h.finish().hex_encode()==row.rgba8_sha256,"native original RGBA "+key)
+	root.add_child(stage)
+	for d in range(4):
+		var poses: Array=stage.legs(d,0.2)
+		check(poses.size()==4,"four independent legs "+str(d))
+		check(poses[0].id!=poses[1].id and poses[2].id!=poses[3].id,"distinct anatomical sides "+str(d))
+		var max_error: float=0.0
+		for sample in range(240):
+			for leg in stage.legs(d,float(sample)/240.0*stage.cycle):
+				max_error=maxf(max_error,maxf(absf(leg.root.distance_to(leg.joint)-leg.upper),absf(leg.joint.distance_to(leg.ankle)-leg.lower)))
+		check(max_error<0.001,"fixed bone lengths throughout cycle "+str(d))
+		var axis: Vector2=stage.axis_for(d);var v: float=stage.stride/(stage.stance*stage.cycle)
+		var a: Array=stage.legs(d,stage.cycle*0.10);var b: Array=stage.legs(d,stage.cycle*0.15)
+		var stance_checks: int=0
+		for i in range(4):
+			if a[i].stance and b[i].stance:
+				check((a[i].foot+axis*v*stage.cycle*.10).distance_to(b[i].foot+axis*v*stage.cycle*.15)<0.001,"model stance foot world position invariant "+str(d)+" "+a[i].id);stance_checks+=1
+		check(stance_checks==2,"one diagonal support pair sampled "+str(d))
+	for d in range(4):
+		var sole_error: float=0.0
+		for sample in range(240):
+			for leg in stage.legs(d,float(sample)/240.0*stage.cycle):
+				if leg.stance:sole_error=maxf(sole_error,absf(leg.sole_l.y-leg.sole_r.y))
+		check(sole_error<.001,"selected painted sole anchor line level during stance "+str(d))
+	var captures: Array=[]
+	for wanted in range(4):
+		var deadline: int=Time.get_ticks_msec()+5000
+		while stage.phase!=wanted and Time.get_ticks_msec()<deadline:await process_frame
+		await RenderingServer.frame_post_draw
+		check(stage.drawn_phase==wanted,"normal process rendered phase "+str(wanted))
+		var name: String="assembled_phase_"+str(wanted)+".png"
+		check(root.get_texture().get_image().save_png("res://"+name)==OK,"capture "+name)
+		captures.append({"file":name,"sha256":FileAccess.get_sha256("res://"+name),"phase":stage.drawn_phase,"elapsed":stage.drawn_time})
+	for wanted_mode in ["hold","restart"]:
+		var mode_deadline: int=Time.get_ticks_msec()+9000
+		while stage.mode!=wanted_mode and Time.get_ticks_msec()<mode_deadline:await process_frame
+		await RenderingServer.frame_post_draw
+		check(stage.mode==wanted_mode,"normal process reached "+wanted_mode)
+		var mode_name: String="assembled_"+wanted_mode+".png"
+		check(root.get_texture().get_image().save_png("res://"+mode_name)==OK,"capture "+mode_name)
+		captures.append({"file":mode_name,"sha256":FileAccess.get_sha256("res://"+mode_name),"mode":stage.mode,"elapsed":stage.elapsed,"motion_time":stage.motion_time})
+		if wanted_mode=="hold":
+			var frozen_time: float=stage.motion_time
+			for i in range(8):await process_frame
+			check(stage.motion_time==frozen_time and stage.speed==0.0,"motion clock stays fixed while stopped")
+			var stopped_ok: bool=true
+			for d in range(4):
+				for leg in stage.legs(d,stage.motion_time):
+					if leg.lift!=0.0 or not leg.stance:stopped_ok=false
+			check(stopped_ok,"all sixteen modeled hooves settle during hold")
+	var deadline: int=Time.get_ticks_msec()+8000
+	while stage.transitions.size()<16 and Time.get_ticks_msec()<deadline:await process_frame
+	check(stage.transitions.size()>=16,"at least sixteen normal phase transitions")
+	check(stage.max_bone_error<0.001,"rendered poses preserve bone lengths")
+	FileAccess.open("res://report.json",FileAccess.WRITE).store_string(JSON.stringify({"passed":failures.is_empty(),"checks":checks,"failures":failures,"screenshots":captures,"phase_transitions":stage.transitions,"max_bone_error":stage.max_bone_error,"motion_controls":stage.controls,"scope":stage.data.scope,"visual_accepted":false,"actual_unit_tested":false,"physical_collision_tested":false,"production_adopted":false,"full_goal_complete":false},"\t"))
+	quit(0 if failures.is_empty() else 1)
+class Stage extends Node2D:
+	var data: Dictionary
+	var textures: Dictionary={}
+	var elapsed: float=0.0
+	var phase: int=0
+	var drawn_phase: int=-1
+	var drawn_time: float=0.0
+	var transitions: Array=[]
+	var max_bone_error: float=0.0
+	var motion_time: float=0.0
+	var speed: float=1.0
+	var mode: String="moving"
+	var controls: Array=[]
+	var cycle: float=1.6
+	var stance: float=0.46
+	var stride: float=48.0
+	func vec(a: Array)->Vector2:return Vector2(a[0],a[1])
+	func axis_for(d: int)->Vector2:return Vector2(0.866 if d%2==0 else -0.866,0.5 if d<2 else -0.5).normalized()
+	func _process(delta: float)->void:
+		elapsed+=delta
+		var next_mode: String="moving"
+		if elapsed<3.2:speed=1.0
+		elif elapsed<3.8:speed=1.0-smoothstep(3.2,3.8,elapsed);next_mode="slowing"
+		elif elapsed<5.0:speed=0.0;next_mode="hold"
+		elif elapsed<5.6:speed=smoothstep(5.0,5.6,elapsed);next_mode="starting"
+		else:speed=1.0;next_mode="restart"
+		if next_mode!=mode:mode=next_mode;controls.append({"mode":mode,"elapsed":elapsed,"motion_time":motion_time,"speed":speed})
+		motion_time+=delta*speed
+		var next: int=floori(motion_time/cycle*4.0)%4
+		if next!=phase:phase=next;transitions.append({"phase":phase,"elapsed":elapsed,"motion_time":motion_time})
+		queue_redraw()
+	func hoof_info(d: int,foot: Vector2,angle: float)->Dictionary:
+		var row: Dictionary=data.hoof_anchors[d];var left: Vector2=vec(row.left);var right: Vector2=vec(row.right);var sole: Vector2=(left+right)*.5
+		var factor: float=data.hoof_scale;var rotation: float=angle-(right-left).angle()
+		return {"ankle":foot+(vec(row.attach)-sole).rotated(rotation)*factor,"sole_l":foot+(left-sole).rotated(rotation)*factor,"sole_r":foot+(right-sole).rotated(rotation)*factor,"sole":sole,"rotation":rotation,"scale":factor}
+	func legs(d: int,t: float)->Array:
+		var result: Array=[];var view: Dictionary=data.views[d];var facing: float=1.0 if d%2==0 else -1.0
+		var bob: float=2.0*cos(t/cycle*TAU*2.0)*speed-float(data.neutral_body_rise)*(1.0-speed);var axis: Vector2=axis_for(d)
+		for i in range(4):
+			var fore: bool=i<2;var near: bool=i%2==0
+			var side: String=String(view.near_side) if near else ("L" if view.near_side=="R" else "R")
+			var id: String=side+("F" if fore else "H")
+			var offset: float=0.0 if id in ["LF","RH"] else 0.5
+			var p: float=fposmod(t/cycle+offset,1.0);var supporting: bool=p<stance
+			var travel: float=stride*(0.5-p/stance) if supporting else stride*(-0.5+(p-stance)/(1.0-stance))
+			var lift: float=0.0 if supporting else sin((p-stance)/(1.0-stance)*PI)*38.0
+			travel*=speed;lift*=speed;supporting=supporting or speed==0.0
+			var root: Vector2=vec(view.fore_root if fore else view.hind_root)
+			if not near:root+=Vector2(facing*24.0,-12.0)
+			var rest: Vector2=Vector2(root.x+facing*(12.0 if fore else -15.0),float(view.floor_y)-(0.0 if near else 18.0))
+			var foot: Vector2=rest+axis*travel-Vector2(0,lift);root.y+=bob
+			var upper: float=120.0 if fore else 130.0;var lower: float=95.0
+			var roll: float=0.0 if supporting else facing*.22*sin((p-stance)/(1.0-stance)*PI)*speed
+			var hoof: Dictionary=hoof_info(d,foot,roll);var ankle: Vector2=hoof.ankle
+			var delta: Vector2=ankle-root;var distance: float=delta.length();var u: Vector2=delta/distance
+			var along: float=(upper*upper-lower*lower+distance*distance)/(2.0*distance)
+			var height: float=sqrt(maxf(0.0,upper*upper-along*along));var pole: float=-facing if fore else facing
+			var joint: Vector2=root+u*along+Vector2(-u.y,u.x)*height*pole
+			result.append({"id":id,"fore":fore,"near":near,"root":root,"joint":joint,"foot":foot,"ankle":ankle,"hoof":hoof,"sole_l":hoof.sole_l,"sole_r":hoof.sole_r,"rest":rest,"upper":upper,"lower":lower,"phase":p,"stance":supporting,"lift":lift})
+		return result
+	func cell(d: int)->Vector2:return Vector2((d%2)*627,floori(float(d)/2.0)*627)
+	func paint_source(key: String,d: int,at: Vector2,source_at: Vector2,factor: float,angle: float,tint: Color)->void:
+		var polygon:=PackedVector2Array()
+		for corner in [Vector2.ZERO,Vector2(627,0),Vector2(627,627),Vector2(0,627)]:polygon.append(at+(corner-source_at).rotated(angle)*factor)
+		var pieces: Array[PackedVector2Array]=[polygon]
+		for piece in pieces:
+			var uv:=PackedVector2Array();var colors:=PackedColorArray()
+			for point in piece:uv.append(((point-at).rotated(-angle)/factor+source_at+cell(d))/1254.0);colors.append(tint)
+			draw_polygon(piece,colors,uv,textures[key])
+	func part(key: String,d: int,a: Vector2,b: Vector2,tint: Color)->void:
+		var pair: Array=data.anchors[key][d];var s0: Vector2=vec(pair[0]);var s1: Vector2=vec(pair[1])
+		paint_source(key,d,a,s0,(b-a).length()/(s1-s0).length(),(b-a).angle()-(s1-s0).angle(),tint)
+	func paint_leg(d: int,leg: Dictionary)->void:
+		var tint: Color=Color.WHITE if leg.near else Color(.79,.78,.76,1.0)
+		var prefix: String="fore" if leg.fore else "hind"
+		paint_source("hoof",d,leg.foot,leg.hoof.sole,leg.hoof.scale,leg.hoof.rotation,tint)
+		part(prefix+"_lower",d,leg.joint,leg.ankle,tint);part(prefix+"_upper",d,leg.root,leg.joint,tint)
+		max_bone_error=maxf(max_bone_error,maxf(absf(leg.root.distance_to(leg.joint)-leg.upper),absf(leg.joint.distance_to(leg.ankle)-leg.lower)))
+	func horse(d: int,t: float,debug: bool)->void:
+		var poses: Array=legs(d,t);var axis: Vector2=axis_for(d)
+		for leg in poses:
+			var shift: float=fposmod(t*stride/(stance*cycle),20.0)
+			for j in range(-4,5):draw_circle(leg.rest+axis*(float(j)*20.0-shift),1.8,Color(.42,.45,.38,.65))
+			draw_circle(leg.foot+Vector2(0,leg.lift),5.0,Color(.18,.18,.14,.8))
+		var source:=Rect2(cell(d),Vector2(627,627));var bob: float=2.0*cos(t/cycle*TAU*2.0)*speed-float(data.neutral_body_rise)*(1.0-speed)
+		draw_texture_rect_region(textures.tail,Rect2(Vector2(0,bob),Vector2(627,627)),source)
+		for i in [1,3,0,2]:paint_leg(d,poses[i])
+		draw_texture_rect_region(textures.body,Rect2(Vector2(0,bob),Vector2(627,627)),source)
+		if debug:
+			for leg in poses:
+				var color:=Color("9be5c5") if leg.stance else Color("e9b37c")
+				draw_line(leg.root,leg.joint,color,2.0);draw_line(leg.joint,leg.ankle,color,2.0);draw_line(leg.sole_l,leg.sole_r,Color.WHITE,2.0)
+				for point in [leg.root,leg.joint,leg.foot]:draw_circle(point,4.0,color)
+				draw_string(ThemeDB.fallback_font,leg.foot+Vector2(7,-5),leg.id,HORIZONTAL_ALIGNMENT_LEFT,-1,17,color)
+	func _draw()->void:
+		drawn_phase=phase;drawn_time=elapsed;draw_rect(Rect2(0,0,2560,1440),Color("292923"))
+		for d in range(4):
+			var panel:=Vector2((d%2)*1280,floori(float(d)/2.0)*650)
+			draw_set_transform(Vector2.ZERO);draw_rect(Rect2(panel,Vector2(1280,650)).grow(-2),Color("656555"),false,1.0)
+			draw_string(ThemeDB.fallback_font,panel+Vector2(20,32),String(data.views[d].direction).to_upper()+" / separate tail + hoof / "+mode+" / phase "+str(phase),HORIZONTAL_ALIGNMENT_LEFT,-1,24,Color.WHITE)
+			for debug in [false,true]:
+				var at: Vector2=panel+Vector2(55 if not debug else 690,70)
+				draw_set_transform(at,0,Vector2.ONE*.8);horse(d,motion_time,debug)
+				draw_set_transform(Vector2.ZERO);draw_string(ThemeDB.fallback_font,at+Vector2(0,555),"Clean painted layers" if not debug else "Joint / stance model overlay",HORIZONTAL_ALIGNMENT_LEFT,-1,21,Color("ddcba6"))
+		draw_set_transform(Vector2.ZERO)
+		draw_string(ThemeDB.fallback_font,Vector2(20,1340),"Independent tail, shin and hoof layers. Raised neutral body pose; normal slowdown / hold / restart.",HORIZONTAL_ALIGNMENT_LEFT,-1,24,Color.WHITE)
+		draw_string(ThemeDB.fallback_font,Vector2(20,1380),"Standalone seam / ground-anchor model diagnostic. Not full sole silhouette contact, collision, rider, Unit or adoption acceptance.",HORIZONTAL_ALIGNMENT_LEFT,-1,24,Color.WHITE)
