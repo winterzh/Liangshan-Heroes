@@ -1,0 +1,72 @@
+extends SceneTree
+var checks: Array = []
+var failures: Array = []
+func check(ok: bool, label: String) -> void:
+	checks.append({"passed":ok,"label":label})
+	if not ok: failures.append(label)
+func _initialize() -> void: run.call_deferred()
+func run() -> void:
+	if OS.get_environment("STEAM_DISABLED") != "1" or OS.get_environment("CAMPAIGN_QA") != "1": quit(2); return
+	root.size=Vector2i(1920,1080)
+	var data: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://inputs.json"))
+	var stage:=Stage.new();stage.data=data
+	var native: Dictionary={}
+	for key in data.textures:
+		var row: Dictionary=data.textures[key]
+		var texture: Texture2D=load("res://"+String(row.file))
+		check(texture != null and texture.get_size()==Vector2(1254,1254),"native full texture "+key)
+		check(FileAccess.get_sha256("res://"+String(row.file))==row.sha256,"original PNG bytes "+key)
+		if texture==null: continue
+		stage.textures[key]=texture
+		var im:=texture.get_image()
+		if im.is_compressed(): check(im.decompress()==OK,"decompress "+key)
+		check(im.get_format()==Image.FORMAT_RGBA8,"native RGBA8 "+key)
+		var hash:=HashingContext.new();hash.start(HashingContext.HASH_SHA256);hash.update(im.get_data())
+		var base:=HashingContext.new();base.start(HashingContext.HASH_SHA256);base.update(im.get_data().slice(0,1254*1254*4))
+		var full_hash:=hash.finish().hex_encode();var rgba_hash:=base.finish().hex_encode()
+		check(rgba_hash==row.rgba8_sha256,"native pixels unchanged "+key)
+		check(im.get_pixel(0,0).a==0 and im.get_pixel(1253,0).a==0 and im.get_pixel(0,1253).a==0 and im.get_pixel(1253,1253).a==0,"full native corners transparent "+key)
+		native[key]={"data_sha256":full_hash,"rgba8_sha256":rgba_hash,"mipmaps":im.has_mipmaps()}
+	root.add_child(stage)
+	var screenshots: Array=[]
+	for direction in ["se","sw","ne","nw"]:
+		stage.direction=direction;stage.queue_redraw()
+		for i in range(4):await process_frame
+		await RenderingServer.frame_post_draw
+		var name: String="hands_"+direction+".png"
+		check(root.get_texture().get_image().save_png("res://"+name)==OK,"capture source landmark grid "+direction);screenshots.append(name)
+	FileAccess.open("res://report.json",FileAccess.WRITE).store_string(JSON.stringify({"resource_preview_complete":failures.is_empty(),"checks":checks,"failures":failures,"screenshots":screenshots,"texture_references":native,"contact_accepted":false,"actual_game_unit_tested":false,"production_adopted":false},"\t"))
+	quit(0 if failures.is_empty() else 1)
+class Stage extends Node2D:
+	var data: Dictionary
+	var textures: Dictionary={}
+	var direction: String="se"
+	func label(at: Vector2,s: String,size: int=15) -> void:draw_string(ThemeDB.fallback_font,at,s,HORIZONTAL_ALIGNMENT_LEFT,-1,size,Color.WHITE)
+	func grid(key: String,region: Array,at: Vector2,sc: float) -> void:
+		var r:=Rect2(region[0],region[1],region[2],region[3]);draw_texture_rect_region(textures[key],Rect2(at,r.size*sc),r)
+		for x in range(int(r.position.x/10)*10,int(r.end.x),10):
+			if x<r.position.x:continue
+			var pos: float=at.x+(x-r.position.x)*sc
+			draw_line(Vector2(pos,at.y),Vector2(pos,at.y+r.size.y*sc),Color(0.7,0.8,1,0.22),1)
+			if x%40==0:label(Vector2(pos,at.y-3),str(x),12)
+		for y in range(int(r.position.y/10)*10,int(r.end.y),10):
+			if y<r.position.y:continue
+			var pos: float=at.y+(y-r.position.y)*sc
+			draw_line(Vector2(at.x,pos),Vector2(at.x+r.size.x*sc,pos),Color(0.7,0.8,1,0.22),1)
+			if y%40==0:label(Vector2(at.x,pos),str(y),12)
+	func _draw() -> void:
+		draw_rect(Rect2(0,0,1920,1080),Color("24231f"))
+		label(Vector2(16,25),"CH16 / CHAO GAI / "+direction+" / SOURCE HAND GRID (10px) / NO PNG EDITS",21)
+		var crops: Array=data.hand_crops[direction]
+		for col in range(5):
+			var phase: String=data.phases[col];var item: Dictionary=data.views[direction][phase]
+			for side in range(crops.size()):
+				var at:=Vector2(col*384+22,80+side*360)
+				label(at+Vector2(0,-24),phase+" / "+("NEAR" if side==0 else "FAR"))
+				grid(item.actor_texture,crops[side],at,1.9)
+		var cart: Dictionary=data.cart_poses[direction];var targets: Array=data.registration[direction].manual_cart_targets
+		for i in range(targets.size()):
+			var point:=Vector2(targets[i][0],targets[i][1]);var region: Array=[point.x-75,point.y-75,150,150];var at:=Vector2(30+i*410,775)
+			label(at+Vector2(0,-25),"CART TARGET "+str(i)+" / "+str(point));grid(data.cart_texture,region,at,1.8)
+			var center:=at+Vector2(135,135);draw_line(center-Vector2(8,0),center+Vector2(8,0),Color.GREEN,2);draw_line(center-Vector2(0,8),center+Vector2(0,8),Color.GREEN,2)
+		label(Vector2(900,1040),"Rear far hand is occluded; one-point residual does not prove grip.")

@@ -1,0 +1,24 @@
+[gd_resource type="SpriteFrames" load_steps=3 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/chao_gai_layered_20261018/idle_actor_v2_e7702cc8.png" id="idle_actor_v2_e7702cc8"]
+
+[sub_resource type="AtlasTexture" id="push_idle_sw"]
+metadata/visible_top = 0.23179467
+metadata/independent_cart = true
+atlas = ExtResource("idle_actor_v2_e7702cc8")
+region = Rect2(627, 0, 627, 627)
+margin = Rect2(0.404032, 135.111622, 232, 232)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 1.437512
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("push_idle_sw")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

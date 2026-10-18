@@ -1,0 +1,8 @@
+{
+  "first_probe_checks": 44,
+  "first_probe_failures": 8,
+  "first_probe_failure_preserved": true,
+  "cause": "Old comparison default descriptors fixed transparent-edge RGB and omitted mipmaps; comparison against raw RGBA bytes was invalid under those import transformations.",
+  "correction": "New immutable candidate uses the canonical shared cart import policy: lossless, mipmaps true, fix_alpha_border false. Raw PNG bytes unchanged; all8 RGBA/mip-capable native loads now pass.",
+  "scope": "This changes private QA descriptors only; production source/imported files were not overwritten."
+}

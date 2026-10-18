@@ -1,3 +1,10 @@
+## 2026-10-18 晁盖逐阶段握把资源与原生候选
+
+- qa/chao_gai_hand_contact_20261018/：掌心/木杆标注、完整可复现资源builder、两份脚本接入候选、首44/8fail与后继资源48项/8图、真实Unit120项/33图及恢复收据；尚未PCK或生产采用。
+- assets/characters/chao_gai_layered_20261018/：6份既有原PNG原字节复用及正式导入描述；assets/direction4/level1_chao_gai_layered_20261018.json、assets/anim/chao_gai_layered_20261018_*.tres共12资源/24姿势，未启用。
+
+以下保留此前目录交接。
+
 ## 2026-10-18 当前目录接续
 
 - qa/huangnigang_hud_bottom_anchor_20261018/：精确1行底边修复、生产SHA、实际经典两宽18项及酒计60项、4+2截图、旧工程外备份索引。qa/hud_pending_controls_classic_probe_20261018/新增两次失败原始记录。

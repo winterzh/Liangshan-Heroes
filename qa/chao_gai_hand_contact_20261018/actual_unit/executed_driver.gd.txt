@@ -1,0 +1,107 @@
+extends Node
+const CampaignArt=preload("res://scripts/campaign_art.gd")
+var checks: Array=[]
+var failures: Array=[]
+var screenshots: Array=[]
+var observations: Array=[]
+var out: String
+var art
+func _ready() -> void:run.call_deferred()
+func check(ok: bool,label: String) -> void:
+	checks.append({"passed":ok,"label":label})
+	if not ok:failures.append(label)
+func frame(u) -> Texture2D:
+	return u._anim_frame_for_state(art.unit_texture(u.key,u.visual_art_variant(),u.animation_direction))
+func snap(b,u,label: String) -> void:
+	b.camera.position=b.to_screen(u.position)+Vector2(0,-22);b.camera.force_update_scroll();u.queue_redraw()
+	for i in range(4):await get_tree().process_frame
+	await RenderingServer.frame_post_draw
+	var p:=out.path_join(label+".png")
+	check(get_tree().root.get_texture().get_image().save_png(p)==OK,"capture actual Unit "+label)
+	screenshots.append({"path":label+".png","sha256":FileAccess.get_sha256(p)})
+func clear_cell(b) -> Vector2i:
+	for x in range(8,b.map.w-8):
+		for y in range(8,b.map.h-8):
+			var c:=Vector2i(x,y);var valid:=true
+			for dx in range(-3,4):
+				for dy in range(-3,4):
+					if not b.map.is_open_world(b.map.cell_to_world(c+Vector2i(dx,dy))) or b.map.t_at(x+dx,y+dy) in [b.map.T.FOREST,b.map.T.REEDS,b.map.T.MARSH]:valid=false
+			if valid:
+				var p: Vector2=b.map.cell_to_world(c)
+				if b.map.decor.any(func(row):return b.map.cell_to_world(row[1]).distance_to(p)<maxf(220.0,float(row[2]))):continue
+				if not b.units.any(func(u):return is_instance_valid(u) and u.position.distance_to(p)<180):return c
+	return Vector2i(-1,-1)
+func finish() -> void:
+	FileAccess.open(out.path_join("report.json"),FileAccess.WRITE).store_string(JSON.stringify({"passed":failures.is_empty(),"checks":checks.size(),"check_results":checks,"failures":failures,"screenshots":screenshots,"observations":observations,"actual_unit_tested":true,"actual_motion_tested":true,"explicit_post_drug_cargo_fixture":true,"full_wine_sequence_tested":false,"new_pack_exported":false,"complete_gait_accepted":false,"production_adopted":false},"\t"))
+	get_tree().quit(0 if failures.is_empty() else 1)
+func run() -> void:
+	out=OS.get_environment("CHAO_ART_OUT")
+	if out.is_empty() or OS.get_environment("STEAM_DISABLED")!="1" or OS.get_environment("CAMPAIGN_QA")!="1":get_tree().quit(2);return
+	DirAccess.make_dir_recursive_absolute(out)
+	var root:=get_tree().root;root.mode=Window.MODE_WINDOWED;root.size=Vector2i(1280,720);root.content_scale_size=root.size
+	AudioServer.set_bus_mute(0,true);art=root.get_node("Art");root.get_node("Settings").edge_scroll=false;root.get_node("Settings").auto_micro_level=0
+	var inputs: Dictionary=JSON.parse_string(FileAccess.get_file_as_string(OS.get_environment("CHAO_ART_INPUTS")))
+	for path in inputs.native_refs:
+		var texture: Texture2D=load("res://"+String(path));check(texture!=null,"native candidate texture loads "+path)
+		if texture==null:continue
+		var im:=texture.get_image()
+		if im.is_compressed():check(im.decompress()==OK,"decompress "+path)
+		var h:=HashingContext.new();h.start(HashingContext.HASH_SHA256);h.update(im.get_data())
+		check(h.finish().hex_encode()==inputs.native_refs[path].data_sha256,"candidate full native pixels and mipmaps match reviewed source "+path)
+	for d in ["se","sw","ne","nw"]:
+		for state in ["push_idle","push_walk","parked_cart"]:
+			var fs: Array=art.unit_anim_frames("chao_gai",state,d,"hn_chao_gai")
+			check(fs.size()==(4 if state=="push_walk" else 1),"candidate exact frame count "+state+d)
+			check(CampaignArt.native_tribute_push_path("chao_gai","hn_chao_gai",state,d).contains("chao_gai_layered_20261018"),"exact Chao route "+state+d)
+		for foreign in ["liu_tang","wu_yong","gongsun_sheng","ruan_xiaoer","ruan_xiaowu","ruan_xiaoqi"]:
+			check(CampaignArt.native_tribute_push_path(foreign,"hn_chao_gai","push_walk",d).is_empty(),"foreign owner rejected "+foreign+d)
+	var campaign=root.get_node("Campaign")
+	for mode in ["skirmish","skirmish_ai","arena","custom_defense","scenario","scale_on","ai_friendly"]:campaign.set(mode,false)
+	campaign.current=0;seed(5088120)
+	var b=load("res://scenes/main.tscn").instantiate();root.add_child(b);get_tree().current_scene=b;await get_tree().process_frame
+	b.hud._intro_root.hide();b._on_intro_done();b._on_start_battle();await get_tree().process_frame
+	for u0 in b.units:u0.set_physics_process(false)
+	b.set_process(false);b.set_physics_process(false);b.camera.set_process(false);b.camera.set_physics_process(false);b.camera.position_smoothing_enabled=false;b.camera.zoom=Vector2.ONE*2.8;b.fog=false
+	check(b.level.get_script().resource_path=="res://scripts/levels/level1_huangnigang_short.gd","actual current Huangnigang map")
+	var u=b.find_unit("chao_gai");check(is_instance_valid(u) and u.art_variant=="hn_chao_gai","original Chao merchant actor")
+	if not is_instance_valid(u):finish();return
+	var old_idle: Array=art.unit_anim_frames(u.key,"idle","se",u.art_variant);var portrait: Texture2D=u.ui_portrait_texture()
+	var stats: Array=[u.max_hp,u.atk,u.atk_cd,u.base_speed,u.setup_def.abilities]
+	u.animation_direction="se";check(not u._campaign_tribute_push_active() and frame(u)==old_idle[0],"unloaded Chao keeps adopted merchant and pu-dao")
+	# An explicit QA cargo-stage fixture, not a natural wine-sequence pass.
+	b.level.st=b.level.CARRY;b.level.drug_done=true;b.level._begin_cargo_choice(b)
+	u.order_stop();u.position=b.map.cell_to_world(b.level._bundle_claim_cell(b,0));b.select_single(u,false)
+	var action_id:="force_take_0_%d"%int(b.level.force_attempts.get(0,0))
+	check(b.mission.request_action(action_id),"actual cargo pickup request");b.mission.tick(1.0);u.set_physics_process(false)
+	check(b.level.cargo.get(0)==u and u.has_meta("carrying_tribute"),"actual callback owns original cargo")
+	check(u._campaign_tribute_layered_frame(frame(u)),"loaded actual Unit requests actor plus one cart")
+	var cell:=clear_cell(b);check(cell.x>=0,"open native map cell for controlled art sampling")
+	if cell.x<0:finish();return
+	var origin: Vector2=b.map.cell_to_world(cell)
+	for row in [{"d":"se","delta":Vector2.RIGHT},{"d":"sw","delta":Vector2.DOWN},{"d":"ne","delta":Vector2.UP},{"d":"nw","delta":Vector2.LEFT}]:
+		u.position=origin;u.order_stop();u._move_blend=0;u.animation_direction=row.d
+		await snap(b,u,"loaded_idle_"+row.d)
+		var fs: Array=art.unit_anim_frames(u.key,"push_walk",row.d,u.art_variant);var seen: Array=[]
+		u.set_physics_process(true);u.order_move(origin+row.delta*82.0)
+		var deadline:=Time.get_ticks_msec()+9000
+		while seen.size()<4 and Time.get_ticks_msec()<deadline:
+			await get_tree().physics_frame
+			var index: int=fs.find(frame(u))
+			if index>=0 and not seen.has(index):
+				u.set_physics_process(false);seen.append(index);await snap(b,u,"actual_walk_"+row.d+"_"+str(index));u.set_physics_process(true)
+		u.set_physics_process(false)
+		check(seen.size()==4 and u.position.distance_to(origin)>2 and u.animation_direction==row.d,"actual physics traverses all four push phases "+row.d)
+		observations.append({"direction":row.d,"phase_indices":seen,"distance":u.position.distance_to(origin),"sampling_pauses_for_captures":true})
+		u.order_stop();u.set_physics_process(true)
+		for tick in range(40):await get_tree().physics_frame
+		u.set_physics_process(false);check(u._campaign_tribute_push_state()=="push_idle","actual stop returns to fixed-cart idle "+row.d);await snap(b,u,"actual_stop_"+row.d)
+		u.animation_direction=row.d;var old_hp: float=u.hp;u.take_damage(7,b.level.yang,false,true)
+		check(u.hp<old_hp and u._campaign_tribute_push_state().is_empty() and not u._campaign_tribute_layered_frame(frame(u)),"actual damage restores adopted armed hurt body and parked cart "+row.d);await snap(b,u,"actual_hurt_"+row.d)
+		u.set_physics_process(true);deadline=Time.get_ticks_msec()+2500
+		while (u._shi_en_hurt_t>0 or u._flinch.length_squared()>1) and Time.get_ticks_msec()<deadline:await get_tree().physics_frame
+		u.set_physics_process(false);check(not u._campaign_tribute_push_state().is_empty(),"actual recovery returns to pushing "+row.d);await snap(b,u,"actual_recovered_"+row.d)
+	check(u.ui_portrait_texture()==portrait and stats==[u.max_hp,u.atk,u.atk_cd,u.base_speed,u.setup_def.abilities],"identity portrait and combat values unchanged")
+	var saved_meta=u.get_meta("carrying_tribute");u.remove_meta("carrying_tribute");u.order_stop();u._move_blend=0;u._flinch=Vector2.ZERO;u._shi_en_hurt_t=0;u.animation_direction="se"
+	check(not u._campaign_tribute_push_active() and frame(u)==old_idle[0],"unloading restores original armed merchant body");await snap(b,u,"unloaded_original_body")
+	u.set_meta("carrying_tribute",saved_meta)
+	finish()
