@@ -1,0 +1,156 @@
+{
+  "scope": "Raw alpha>0 complete body ownership and selected sampling edges only. No thresholding, source edits or anatomical/motion acceptance.",
+  "source_sha256": "f4834e1531149de82071eceeaa79082e436414547b00f209f3a9c9bcc77ffea0",
+  "raw_body_components": [
+    {
+      "id": 17,
+      "pixels": 121893,
+      "bbox": [
+        154,
+        64,
+        552,
+        597
+      ],
+      "max_alpha": 255
+    },
+    {
+      "id": 40,
+      "pixels": 119820,
+      "bbox": [
+        694,
+        79,
+        1186,
+        613
+      ],
+      "max_alpha": 255
+    },
+    {
+      "id": 336,
+      "pixels": 116951,
+      "bbox": [
+        767,
+        671,
+        1164,
+        1192
+      ],
+      "max_alpha": 255
+    },
+    {
+      "id": 340,
+      "pixels": 108808,
+      "bbox": [
+        146,
+        676,
+        695,
+        1190
+      ],
+      "max_alpha": 255
+    }
+  ],
+  "frames": [
+    {
+      "phase": "ready",
+      "cell": [
+        0,
+        0,
+        627,
+        627
+      ],
+      "owned_body_components": 1,
+      "body": {
+        "id": 17,
+        "pixels": 121893,
+        "bbox": [
+          154,
+          64,
+          552,
+          597
+        ],
+        "max_alpha": 255
+      },
+      "sampling_region": [
+        142,
+        52,
+        422,
+        557
+      ],
+      "strict_sampling_edge_clear": true
+    },
+    {
+      "phase": "windup",
+      "cell": [
+        627,
+        0,
+        627,
+        627
+      ],
+      "owned_body_components": 1,
+      "body": {
+        "id": 40,
+        "pixels": 119820,
+        "bbox": [
+          694,
+          79,
+          1186,
+          613
+        ],
+        "max_alpha": 255
+      },
+      "sampling_region": [
+        682,
+        67,
+        517,
+        559
+      ],
+      "strict_sampling_edge_clear": true
+    },
+    {
+      "phase": "cut",
+      "cell": [
+        0,
+        627,
+        627,
+        627
+      ],
+      "owned_body_components": 0
+    },
+    {
+      "phase": "recover",
+      "cell": [
+        627,
+        627,
+        627,
+        627
+      ],
+      "owned_body_components": 1,
+      "body": {
+        "id": 336,
+        "pixels": 116951,
+        "bbox": [
+          767,
+          671,
+          1164,
+          1192
+        ],
+        "max_alpha": 255
+      },
+      "sampling_region": [
+        755,
+        659,
+        421,
+        545
+      ],
+      "strict_sampling_edge_clear": true
+    }
+  ],
+  "failures": [
+    {
+      "phase": "cut",
+      "reason": "Body crosses uniform frame boundary or is missing"
+    }
+  ],
+  "frame_source_qualified": false,
+  "extra_components": 674,
+  "extra_max_alpha": 1,
+  "production_adopted": false
+}

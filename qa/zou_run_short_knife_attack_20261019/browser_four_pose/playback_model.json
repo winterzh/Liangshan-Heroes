@@ -1,0 +1,108 @@
+{
+  "scope": "SE-facing source animation preview. Artist-authored timing and rear-shoe registration samples, not game combat timing or physical contact acceptance. Same pixel scale for idle and all attack poses; no per-frame rescaling.",
+  "idle": "qa/zou_run_canon_body_refine_20261019/native_originals/idle_v7.png",
+  "attack": "native_originals/attack_se_v2.png",
+  "rear_shoe_references": {
+    "idle": [
+      244,
+      545
+    ],
+    "ready": [
+      220,
+      539
+    ],
+    "windup": [
+      831,
+      550
+    ],
+    "cut": [
+      183,
+      1134
+    ],
+    "recover": [
+      832,
+      1131
+    ]
+  },
+  "timeline": [
+    {
+      "pose": "idle",
+      "ms": 320
+    },
+    {
+      "pose": "ready",
+      "ms": 160
+    },
+    {
+      "pose": "windup",
+      "ms": 160
+    },
+    {
+      "pose": "cut",
+      "ms": 120
+    },
+    {
+      "pose": "recover",
+      "ms": 200
+    },
+    {
+      "pose": "idle",
+      "ms": 320
+    }
+  ],
+  "large_scale": 0.7,
+  "small_scale": 0.07671451355661882,
+  "loop_ms": 1280,
+  "production_adopted": false,
+  "frames": {
+    "idle": {
+      "sampling_region": [
+        163,
+        85,
+        334,
+        509
+      ],
+      "source": "idle"
+    },
+    "ready": {
+      "sampling_region": [
+        179,
+        129,
+        344,
+        437
+      ],
+      "source": "attack"
+    },
+    "windup": {
+      "sampling_region": [
+        742,
+        148,
+        410,
+        429
+      ],
+      "source": "attack"
+    },
+    "cut": {
+      "sampling_region": [
+        133,
+        729,
+        468,
+        426
+      ],
+      "source": "attack"
+    },
+    "recover": {
+      "sampling_region": [
+        792,
+        725,
+        355,
+        432
+      ],
+      "source": "attack"
+    }
+  },
+  "hashes": {
+    "idle": "8d5d6da3e2882ad3f8882230b08bba63beef77d74cdf7b83f1cbb476528a7400",
+    "attack": "6112ea349d6cf08f6e70422cd0443769fd082bee973b73f831ba5148cd9ec931"
+  }
+}

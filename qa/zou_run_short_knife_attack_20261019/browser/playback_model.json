@@ -1,0 +1,178 @@
+{
+  "scope": "SE-facing source animation preview. Artist-authored timing and rear-shoe registration samples, not game combat timing or physical contact acceptance. Same pixel scale for idle and all attack poses; no per-frame rescaling.",
+  "idle": "qa/zou_run_canon_body_refine_20261019/native_originals/idle_v7.png",
+  "attack": "native_originals/attack_se_v2.png",
+  "rear_shoe_references": {
+    "idle": [
+      244,
+      545
+    ],
+    "ready": [
+      220,
+      539
+    ],
+    "windup": [
+      831,
+      550
+    ],
+    "cut": [
+      183,
+      1134
+    ],
+    "recover": [
+      832,
+      1131
+    ],
+    "settle": [
+      196,
+      567
+    ],
+    "drive": [
+      754,
+      568
+    ],
+    "withdraw": [
+      186,
+      1148
+    ],
+    "rise": [
+      797,
+      1150
+    ]
+  },
+  "timeline": [
+    {
+      "pose": "idle",
+      "ms": 280
+    },
+    {
+      "pose": "settle",
+      "ms": 100
+    },
+    {
+      "pose": "ready",
+      "ms": 120
+    },
+    {
+      "pose": "windup",
+      "ms": 120
+    },
+    {
+      "pose": "drive",
+      "ms": 80
+    },
+    {
+      "pose": "cut",
+      "ms": 100
+    },
+    {
+      "pose": "withdraw",
+      "ms": 100
+    },
+    {
+      "pose": "recover",
+      "ms": 120
+    },
+    {
+      "pose": "rise",
+      "ms": 100
+    },
+    {
+      "pose": "idle",
+      "ms": 280
+    }
+  ],
+  "large_scale": 0.7,
+  "small_scale": 0.07671451355661882,
+  "loop_ms": 1400,
+  "production_adopted": false,
+  "transition": "native_originals/transition_se_v2.png",
+  "frames": {
+    "idle": {
+      "sampling_region": [
+        163,
+        85,
+        334,
+        509
+      ],
+      "source": "idle"
+    },
+    "ready": {
+      "sampling_region": [
+        179,
+        129,
+        344,
+        437
+      ],
+      "source": "attack"
+    },
+    "windup": {
+      "sampling_region": [
+        742,
+        148,
+        410,
+        429
+      ],
+      "source": "attack"
+    },
+    "cut": {
+      "sampling_region": [
+        133,
+        729,
+        468,
+        426
+      ],
+      "source": "attack"
+    },
+    "recover": {
+      "sampling_region": [
+        792,
+        725,
+        355,
+        432
+      ],
+      "source": "attack"
+    },
+    "settle": {
+      "sampling_region": [
+        148,
+        128,
+        422,
+        467
+      ],
+      "source": "transition"
+    },
+    "drive": {
+      "sampling_region": [
+        709,
+        149,
+        434,
+        447
+      ],
+      "source": "transition"
+    },
+    "withdraw": {
+      "sampling_region": [
+        136,
+        732,
+        446,
+        442
+      ],
+      "source": "transition"
+    },
+    "rise": {
+      "sampling_region": [
+        705,
+        674,
+        454,
+        510
+      ],
+      "source": "transition"
+    }
+  },
+  "hashes": {
+    "idle": "8d5d6da3e2882ad3f8882230b08bba63beef77d74cdf7b83f1cbb476528a7400",
+    "attack": "6112ea349d6cf08f6e70422cd0443769fd082bee973b73f831ba5148cd9ec931",
+    "transition": "d4631f4c652f4173ade2b26366d462f46814157ddf33697253b4f4933c9eb09f"
+  }
+}

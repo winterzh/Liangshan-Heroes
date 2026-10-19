@@ -1,3 +1,7 @@
+## 2026-10-19 邹润SE短刀攻击来源与预览
+
+新增[短刀八帧候选](../qa/zou_run_short_knife_attack_20261019/README.md)：四份内置原PNG/精确提示、两套人工鞋底点/时序模型、四/八姿势真实时钟浏览器预览和原失败索引。render_attack.py保留四姿势入口，render_attack_with_transitions.py为八姿势与预热录画布入口；依赖、profile、失败批次在受控工程外目录，成功证据/来源在QA。生产启动方式不变，不把浏览器预览当游戏运行。
+
 ## 2026-10-19 邹润后脑与脚底参照返修
 
 新增[返修四稿与静态配准预览](../qa/zou_run_canon_body_refine_20261019/README.md)：四份内置原PNG/精确参数、原alpha检查、人工鞋底参照、三页实际浏览器比较和矩阵记录。render_registered.py用工程外全新目录及既有私有浏览器依赖，原图不变；record_and_check.py新增可选--intent正确记录v6独立构图。生产/启动方式未变，非Godot或动作验收。
