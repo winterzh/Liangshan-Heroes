@@ -1,3 +1,7 @@
+## 2026-10-19 双人头像返修来源
+
+新增[李云帽型/邹润脑后轮廓返修](../qa/li_yun_zou_run_portrait_refine_20261019/README.md)：两份内置编辑原PNG、精确参数/父图引用、复用书证摘要与实际四列静态比较。render_comparison.py按--hero选择，4源图/14实例；依赖/profile在工程外，原图及首稿不覆盖。生产/启动方式未改，原生UI和全库美术继续。
+
 ## 2026-10-19 李云与邹润头像来源
 
 新增[双人头像来源](../qa/li_yun_zou_run_portraits_20261019/README.md)：两份内置imagegen原PNG/精确提示、第43/49回原文和公开HTML、当前路由/技能待审、分别执行的静态比较HTML/截图/收据。通用render_readability.py按--hero选择，独立已有Edge/工程外profile，依赖/profile不进Git；不覆盖旧输出。无生产或启动方式修改，原生UI/全库美术继续。
