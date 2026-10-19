@@ -1,0 +1,150 @@
+{
+  "scope": "Raw alpha>0 complete body ownership and selected sampling edges only. No thresholding, source edits or anatomical/motion acceptance.",
+  "source_sha256": "a2bbeaa06ec11429060bac11a4a027ebd473590761d813099aa9c950d4a5b5ff",
+  "raw_body_components": [
+    {
+      "id": 3,
+      "pixels": 131803,
+      "bbox": [
+        720,
+        23,
+        1080,
+        619
+      ],
+      "max_alpha": 255
+    },
+    {
+      "id": 1,
+      "pixels": 128017,
+      "bbox": [
+        178,
+        19,
+        547,
+        621
+      ],
+      "max_alpha": 255
+    },
+    {
+      "id": 115,
+      "pixels": 124470,
+      "bbox": [
+        209,
+        623,
+        611,
+        1199
+      ],
+      "max_alpha": 255
+    },
+    {
+      "id": 118,
+      "pixels": 123760,
+      "bbox": [
+        724,
+        624,
+        1071,
+        1200
+      ],
+      "max_alpha": 255
+    }
+  ],
+  "frames": [
+    {
+      "direction": "se",
+      "cell": [
+        0,
+        0,
+        627,
+        627
+      ],
+      "owned_body_components": 1,
+      "body": {
+        "id": 1,
+        "pixels": 128017,
+        "bbox": [
+          178,
+          19,
+          547,
+          621
+        ],
+        "max_alpha": 255
+      },
+      "sampling_region": [
+        166,
+        7,
+        393,
+        619
+      ],
+      "strict_sampling_edge_clear": false
+    },
+    {
+      "direction": "sw",
+      "cell": [
+        627,
+        0,
+        627,
+        627
+      ],
+      "owned_body_components": 1,
+      "body": {
+        "id": 3,
+        "pixels": 131803,
+        "bbox": [
+          720,
+          23,
+          1080,
+          619
+        ],
+        "max_alpha": 255
+      },
+      "sampling_region": [
+        708,
+        11,
+        384,
+        615
+      ],
+      "strict_sampling_edge_clear": false
+    },
+    {
+      "direction": "ne",
+      "cell": [
+        0,
+        627,
+        627,
+        627
+      ],
+      "owned_body_components": 0
+    },
+    {
+      "direction": "nw",
+      "cell": [
+        627,
+        627,
+        627,
+        627
+      ],
+      "owned_body_components": 0
+    }
+  ],
+  "failures": [
+    {
+      "direction": "se",
+      "reason": "Raw-alpha sampling edge cannot clear inside its frame"
+    },
+    {
+      "direction": "sw",
+      "reason": "Raw-alpha sampling edge cannot clear inside its frame"
+    },
+    {
+      "direction": "ne",
+      "reason": "Body crosses uniform frame boundary or is missing"
+    },
+    {
+      "direction": "nw",
+      "reason": "Body crosses uniform frame boundary or is missing"
+    }
+  ],
+  "frame_source_qualified": false,
+  "extra_components": 344,
+  "extra_max_alpha": 1,
+  "production_adopted": false
+}

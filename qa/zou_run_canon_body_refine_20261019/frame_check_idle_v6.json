@@ -1,0 +1,132 @@
+{
+  "scope": "Raw alpha>0 complete body ownership and selected sampling edges only. No thresholding, source edits or anatomical/motion acceptance.",
+  "source_sha256": "d5635e9752bde1ef439497a3d98b7935c3d39d16e42552d3ad8bbcf79446732c",
+  "raw_body_components": [
+    {
+      "id": 1,
+      "pixels": 135946,
+      "bbox": [
+        139,
+        10,
+        532,
+        633
+      ],
+      "max_alpha": 255
+    },
+    {
+      "id": 2,
+      "pixels": 131387,
+      "bbox": [
+        740,
+        11,
+        1098,
+        643
+      ],
+      "max_alpha": 255
+    },
+    {
+      "id": 316,
+      "pixels": 128918,
+      "bbox": [
+        740,
+        620,
+        1101,
+        1239
+      ],
+      "max_alpha": 255
+    },
+    {
+      "id": 318,
+      "pixels": 125421,
+      "bbox": [
+        192,
+        627,
+        578,
+        1238
+      ],
+      "max_alpha": 255
+    }
+  ],
+  "frames": [
+    {
+      "direction": "se",
+      "cell": [
+        0,
+        0,
+        627,
+        627
+      ],
+      "owned_body_components": 0
+    },
+    {
+      "direction": "sw",
+      "cell": [
+        627,
+        0,
+        627,
+        627
+      ],
+      "owned_body_components": 0
+    },
+    {
+      "direction": "ne",
+      "cell": [
+        0,
+        627,
+        627,
+        627
+      ],
+      "owned_body_components": 1,
+      "body": {
+        "id": 318,
+        "pixels": 125421,
+        "bbox": [
+          192,
+          627,
+          578,
+          1238
+        ],
+        "max_alpha": 255
+      },
+      "sampling_region": [
+        180,
+        628,
+        410,
+        622
+      ],
+      "strict_sampling_edge_clear": false
+    },
+    {
+      "direction": "nw",
+      "cell": [
+        627,
+        627,
+        627,
+        627
+      ],
+      "owned_body_components": 0
+    }
+  ],
+  "failures": [
+    {
+      "direction": "se",
+      "reason": "Body crosses uniform frame boundary or is missing"
+    },
+    {
+      "direction": "sw",
+      "reason": "Body crosses uniform frame boundary or is missing"
+    },
+    {
+      "direction": "ne",
+      "reason": "Raw-alpha sampling edge cannot clear inside its frame"
+    },
+    {
+      "direction": "nw",
+      "reason": "Body crosses uniform frame boundary or is missing"
+    }
+  ],
+  "frame_source_qualified": false,
+  "extra_components": 583,
+  "extra_max_alpha": 1,
+  "production_adopted": false
+}

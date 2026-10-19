@@ -1,3 +1,7 @@
+## 2026-10-19 邹润后脑与脚底参照返修
+
+新增[返修四稿与静态配准预览](../qa/zou_run_canon_body_refine_20261019/README.md)：四份内置原PNG/精确参数、原alpha检查、人工鞋底参照、三页实际浏览器比较和矩阵记录。render_registered.py用工程外全新目录及既有私有浏览器依赖，原图不变；record_and_check.py新增可选--intent正确记录v6独立构图。生产/启动方式未变，非Godot或动作验收。
+
 ## 2026-10-19 邹润四向身体来源
 
 新增[邹润四向短刀待机来源](../qa/zou_run_canon_body_20261019/README.md)：三份内置原PNG/精确参数、原alpha分格失败/通过、复用第49回书证、实际比较/历史HTML与截图。record_and_check.py逐原稿只写一次，render_intake.py仅写全新工程外目录；依赖/profile留外，无本地绘图。来源只有待机，生产与启动方式不变，原生/全库美术继续。
