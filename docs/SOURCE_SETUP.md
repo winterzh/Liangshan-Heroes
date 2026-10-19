@@ -1,3 +1,7 @@
+## 2026-10-19 杨林停步收脚后继
+
+新增[连续预览v2](../qa/yang_lin_continuous_preview_v2_20261019/README.md)，单文件HTML支持依次抬脚收回站姿，三次四向停止均有实际运行/独立记录。8图及6张视频中途图全目检；私有依赖/profile在工程外，冻结证据不覆盖首轮。生产和启动方式不变，真实Unit/原生与自然步态仍待验收。
+
 ## 2026-10-19 杨林连续预览
 
 新增[四向浏览器候选](../qa/yang_lin_continuous_preview_20261019/README.md)，双击其中viewer.html即可看停走/变速；原PNG已嵌入，无需安装。自动检查的Playwright依赖、独立profile留工程外，不改系统配置。冻结构建、两次失败与第三次实际运行证据均保留，构建器不覆盖已有runtime_receipt。
