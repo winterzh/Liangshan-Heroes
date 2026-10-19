@@ -1,3 +1,9 @@
+## 2026-10-19 杨林连续预览
+
+新增[四向浏览器候选](../qa/yang_lin_continuous_preview_20261019/README.md)，双击其中viewer.html即可看停走/变速；原PNG已嵌入，无需安装。自动检查的Playwright依赖、独立profile留工程外，不改系统配置。冻结构建、两次失败与第三次实际运行证据均保留，构建器不覆盖已有runtime_receipt。
+
+连续浏览器12.4秒与数学/视频解码复核已完成，原生Godot和自然步态未通过，生产采用0。原游戏启动方式不变，129/16/81与HUD不变；原单一原生等待队列继续，共享外来标记未改。
+
 ## 2026-10-19 杨林双腿分层候选
 
 新增[整人换腿尝试](../qa/yang_lin_walk_sources_20261019/README.md)和[双腿分层来源/预览](../qa/yang_lin_leg_rig_sources_20261019/README.md)：十二份内置原PNG、完整提示、关节调试参考图、原alpha准备失败及三轮十二张静态画面均保留。后继只写工程外的`replay_static.py`可重放冻结画面，已执行v3相位0且PNG字节相同；首次归档执行器不覆盖旧输出，浏览器profile不进入Git。

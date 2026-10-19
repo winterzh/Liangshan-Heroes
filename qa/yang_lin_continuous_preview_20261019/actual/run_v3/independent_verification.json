@@ -1,0 +1,89 @@
+{
+  "scope": "Independent replay of recorded 3D joints, actual Canvas matrices and media decoding. Single painted sole reference point only; no whole sole/terrain/native/game qualification.",
+  "trace_rows": 1544,
+  "ground_contact_groups": 196,
+  "states_observed": [
+    "held",
+    "settling",
+    "stance",
+    "swing"
+  ],
+  "max_source_bone_length_error": 1.2505552149377763e-12,
+  "max_painted_reference_mapping_error_world": 2.3437142008433856e-13,
+  "max_ground_reference_drift_world": 1.2710574864626038e-13,
+  "max_ground_height_world": 0,
+  "max_camera_reference_error_world": 1.2710574864626038e-13,
+  "max_motion_distance_error_world": 1.1254996934439987e-11,
+  "minimum_reach_margin_source": 2.999999999999943,
+  "direction_source": {
+    "path": "scripts/campaign_art.gd",
+    "sha256": "7b9ca428e0e3131399ce8b2d20affa18fda97b815e88a2e5e7c2857c8d809357",
+    "logical_deltas": {
+      "se": [
+        1,
+        0
+      ],
+      "sw": [
+        0,
+        1
+      ],
+      "ne": [
+        0,
+        -1
+      ],
+      "nw": [
+        -1,
+        0
+      ]
+    }
+  },
+  "video_media": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "index": 0,
+        "codec_name": "vp8",
+        "codec_type": "video",
+        "width": 1600,
+        "height": 520,
+        "avg_frame_rate": "0/0",
+        "nb_read_frames": "356"
+      }
+    ],
+    "format": {
+      "size": "1747802"
+    }
+  },
+  "video_timestamp_span_seconds": 12.313,
+  "media_commands": [
+    [
+      "ffprobe",
+      "-v",
+      "error",
+      "-count_frames",
+      "-show_entries",
+      "stream=index,codec_type,codec_name,width,height,nb_read_frames,avg_frame_rate:format=duration,size",
+      "-of",
+      "json",
+      "D:\\CodexEvidence\\shuihu\\yang_lin_continuous_preview_20261019\\run_v3\\continuous_canvas.webm"
+    ],
+    [
+      "ffprobe",
+      "-v",
+      "error",
+      "-select_streams",
+      "v:0",
+      "-show_entries",
+      "packet=pts_time",
+      "-of",
+      "json",
+      "D:\\CodexEvidence\\shuihu\\yang_lin_continuous_preview_20261019\\run_v3\\continuous_canvas.webm"
+    ]
+  ],
+  "numeric_and_media_checks_passed": true,
+  "source_alpha_accepted": false,
+  "natural_gait_accepted": false,
+  "native_accepted": false,
+  "production_adopted": false
+}
