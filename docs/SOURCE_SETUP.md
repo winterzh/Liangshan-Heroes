@@ -1,3 +1,7 @@
+## 2026-10-19 李云与邹润头像来源
+
+新增[双人头像来源](../qa/li_yun_zou_run_portraits_20261019/README.md)：两份内置imagegen原PNG/精确提示、第43/49回原文和公开HTML、当前路由/技能待审、分别执行的静态比较HTML/截图/收据。通用render_readability.py按--hero选择，独立已有Edge/工程外profile，依赖/profile不进Git；不覆盖旧输出。无生产或启动方式修改，原生UI/全库美术继续。
+
 ## 2026-10-19 杜兴近景头像来源
 
 新增[杜兴头像来源](../qa/du_xing_portrait_20261019/README.md)：内置imagegen原PNG/精确提示、第47回书证及公开原始HTML、现用路由/技能待审快照、实际静态HTML/截图/收据。每源只嵌入一次；隔离已有Edge/工程外profile，依赖/profile不进Git。没有修改生产或启动方式，原生UI/全库美术继续。

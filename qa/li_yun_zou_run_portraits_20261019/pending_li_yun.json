@@ -1,0 +1,11 @@
+{
+  "source": "scripts/defs.gd",
+  "source_sha256": "5917932c5b7204f4f86975850ab98fe2f47f35b4db9c3ce83a018b1e6e63588a",
+  "actual_skill_definition_lines": [
+    "\t\"li_yun_q\": {\"name\": \"暗噬\", \"cd\": 9, \"targeted\": true, \"target\": \"unit\", \"radius\": 0, \"color\": Color(\"3a2f6a\"), \"desc\": \"青眼虎掷出暗影毒囊咬定一将（单体指向）：{v} 伤、大幅迟滞并短暂呆立。\", \"effect\": {\"kind\": \"bolt\", \"dmg\": 50, \"slow\": 0.5, \"slow_dur\": 3, \"stun\": 0.6, \"proj_speed\": 480, \"bolt_art\": \"dark\"}},",
+    "\t\"li_yun_w\": {\"name\": \"夺魄威\", \"cd\": 12, \"targeted\": false, \"radius\": 200, \"color\": Color(\"5a4a8a\"), \"desc\": \"身周敌军被青眼虎的杀气慑住，受 {v} 伤并被噤声无法施技。\", \"effect\": {\"kind\": \"smite\", \"dmg\": 28, \"silence\": 3}},",
+    "\t\"li_yun_e\": {\"name\": \"夜行猎手\", \"cd\": 0, \"targeted\": false, \"radius\": 0, \"color\": Color(\"2e2752\"), \"passive\": true, \"desc\": \"惯于夜里行猎，被动提升移速与攻速。\", \"effect\": {\"kind\": \"passive\", \"speed_mult\": 1.06, \"atkspeed_add\": 0.12}},",
+    "\t\"li_yun_r\": {\"name\": \"黑天罩\", \"cd\": 40, \"targeted\": false, \"radius\": 170, \"color\": Color(\"1b1638\"), \"desc\": \"青眼虎唤来无边黑夜随身而行：夜幕罩中之敌持续遭暗噬 {v}，猎手在自己的夜里从不落空。\", \"effect\": {\"kind\": \"black_rain\", \"follow\": true, \"dps_ranks\": [16, 20, 24], \"dur_ranks\": [8, 10, 12], \"dmg\": 40, \"dur\": 10}},"
+  ],
+  "status": "Current dark-magic/black-rain skills and detailed outfit/weapon mapping require separate cross-chapter and behavior review."
+}
