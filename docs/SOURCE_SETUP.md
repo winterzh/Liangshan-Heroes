@@ -1,3 +1,7 @@
+## 2026-10-19 邹润八帧材质统一来源
+
+新增[两张内置v3原稿与双列对照](../qa/zou_run_attack_style_20261019/README.md)：精确参数/父图、原alpha检查、整组比例来源、人工鞋点、新旧共时钟浏览器与矩阵/媒体记录。render_compare.py只输出全新工程外目录，依赖/profile在外，角色PNG不改像素。生产启动方式不变；整组比例只为候选显示，不是Unit接入或物理体量通过。
+
 ## 2026-10-19 邹润SE短刀攻击来源与预览
 
 新增[短刀八帧候选](../qa/zou_run_short_knife_attack_20261019/README.md)：四份内置原PNG/精确提示、两套人工鞋底点/时序模型、四/八姿势真实时钟浏览器预览和原失败索引。render_attack.py保留四姿势入口，render_attack_with_transitions.py为八姿势与预热录画布入口；依赖、profile、失败批次在受控工程外目录，成功证据/来源在QA。生产启动方式不变，不把浏览器预览当游戏运行。
