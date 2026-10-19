@@ -1,3 +1,7 @@
+## 2026-10-19 邹润四向身体来源
+
+新增[邹润四向短刀待机来源](../qa/zou_run_canon_body_20261019/README.md)：三份内置原PNG/精确参数、原alpha分格失败/通过、复用第49回书证、实际比较/历史HTML与截图。record_and_check.py逐原稿只写一次，render_intake.py仅写全新工程外目录；依赖/profile留外，无本地绘图。来源只有待机，生产与启动方式不变，原生/全库美术继续。
+
 ## 2026-10-19 双人头像返修来源
 
 新增[李云帽型/邹润脑后轮廓返修](../qa/li_yun_zou_run_portrait_refine_20261019/README.md)：两份内置编辑原PNG、精确参数/父图引用、复用书证摘要与实际四列静态比较。render_comparison.py按--hero选择，4源图/14实例；依赖/profile在工程外，原图及首稿不覆盖。生产/启动方式未改，原生UI和全库美术继续。
