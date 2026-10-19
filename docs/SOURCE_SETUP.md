@@ -1,3 +1,7 @@
+## 2026-10-19 邹润撤刀与SW来源入口
+
+新增[SE撤刀v4/SW两稿](../qa/zou_run_attack_recovery_20261019/README.md)的内置原PNG/精确参数/原alpha检查、规格失败、SE同尺度真实时钟预览及SW静态来源比较。render_recovery.py与render_sw_intake.py仅写全新工程外目录；依赖/profile在外，原图不改像素。生产启动方式不变，SW只有四主姿势，非完整动画接入。
+
 ## 2026-10-19 邹润八帧材质统一来源
 
 新增[两张内置v3原稿与双列对照](../qa/zou_run_attack_style_20261019/README.md)：精确参数/父图、原alpha检查、整组比例来源、人工鞋点、新旧共时钟浏览器与矩阵/媒体记录。render_compare.py只输出全新工程外目录，依赖/profile在外，角色PNG不改像素。生产启动方式不变；整组比例只为候选显示，不是Unit接入或物理体量通过。

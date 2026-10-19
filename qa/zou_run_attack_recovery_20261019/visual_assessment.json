@@ -1,0 +1,36 @@
+{
+  "reviewed_originals": [
+    "native_originals/transition_se_v4.png",
+    "native_originals/attack_sw_v1.png",
+    "native_originals/attack_sw_v2.png"
+  ],
+  "reviewed_se_captures": [
+    "idle_entry.png",
+    "settle.png",
+    "ready.png",
+    "windup.png",
+    "drive.png",
+    "cut.png",
+    "withdraw.png",
+    "recover.png",
+    "rise.png",
+    "idle_exit.png"
+  ],
+  "reviewed_other_captures": [
+    "browser/video_305.png",
+    "sw_browser/sw.png"
+  ],
+  "observations": [
+    "SE v4 deeper knee bend reduces the immediate upward pop during withdrawal; same scale on both sides, no per-frame rescale.",
+    "Requested 28-32px change was not literal: raw body upper bound moved 48px and other poses also have small changes; no exact preservation claim.",
+    "Hands, feet, weight transfer and discrete transitions remain pending; deeper crouch is a direction of improvement, not natural-motion acceptance.",
+    "SW first source was 1388x1133, preserved as a failed-layout candidate; v2 square complete sampling passes but 65px padding was not achieved at every edge.",
+    "SW four main poses visibly face left, with one short knife attached to the same right-side arm and the other hand empty; source/grip/anatomy/motion not fully accepted. No local mirroring.",
+    "SW still lacks intermediate poses and material/size matching to SE/idle; no direction-transition or full action-chain pass.",
+    "Only generic game choreography, costume and pose interpretation; novel human/short-knife basis unchanged, existing skill issues not approved."
+  ],
+  "withdraw_crouch_direction_improved": true,
+  "natural_action_accepted": false,
+  "native_accepted": false,
+  "production_adopted": false
+}
