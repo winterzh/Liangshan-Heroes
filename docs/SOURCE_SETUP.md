@@ -1,3 +1,7 @@
+## 2026-10-19 杜兴近景头像来源
+
+新增[杜兴头像来源](../qa/du_xing_portrait_20261019/README.md)：内置imagegen原PNG/精确提示、第47回书证及公开原始HTML、现用路由/技能待审快照、实际静态HTML/截图/收据。每源只嵌入一次；隔离已有Edge/工程外profile，依赖/profile不进Git。没有修改生产或启动方式，原生UI/全库美术继续。
+
 ## 2026-10-19 陶宗旺头像来源
 
 新增[陶宗旺头像来源](../qa/tao_zongwang_portrait_20261019/README.md)：内置imagegen原PNG/完整提示、第41回原文与原始HTML、实际静态阅读HTML/截图/收据。来源只按原字节复制，独立已有Edge和工程外私有profile执行，依赖/profile不进Git；可打开已嵌入源图的比较页。无生产/启动方式修改，原生UI与全库美术继续。
