@@ -1,0 +1,8 @@
+{
+  "collector_first_invocation_started": false,
+  "error": "TypeError: expected str, bytes or os.PathLike object, not dict",
+  "cause": "external coordinator reused smoke key for receipt status and smoke path",
+  "correction": "separate smoke_path from smoke status; retry uses a new log",
+  "native_results_or_frozen_candidate_changed": false,
+  "actual_smoke_receipt_preserved": "smoke_20261019_201049_200349ef/receipt.json"
+}

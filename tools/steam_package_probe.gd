@@ -120,8 +120,24 @@ func _check_localization() -> void:
 	var constants: Dictionary = lore_script.get_script_constant_map()
 	var lore: Dictionary = constants.get("LORE", {})
 	var chapters: Dictionary = constants.get("CHAPTERS", {})
-	check("packed 108 complete biographies", lore.size() == 108)
-	check("packed 108 chapter reference entries", chapters.size() == 108)
+	var bios_script: GDScript = load("res://scripts/bios.gd")
+	var stars: Dictionary = bios_script.get_script_constant_map().get("STAR", {}) if bios_script != null else {}
+	check("packed Liangshan star roster remains exactly 108", stars.size() == 108)
+	var complete_biographies := stars.size() == 108
+	var complete_chapters := stars.size() == 108
+	for key in stars:
+		complete_biographies = complete_biographies and lore.has(key)
+		complete_chapters = complete_chapters and chapters.has(key)
+	check("packed 108 complete biographies", complete_biographies)
+	check("packed 108 chapter reference entries", complete_chapters)
+	var lore_keys: Array = lore.keys()
+	var chapter_keys: Array = chapters.keys()
+	lore_keys.sort()
+	chapter_keys.sort()
+	check("packed biography and chapter keys exactly match", lore_keys == chapter_keys)
+	var supporting: Array = lore.keys().filter(func(key): return not stars.has(key))
+	supporting.sort()
+	check("packed named supporting-character roster", supporting == ["zhang_tuanlian"])
 	for key in lore:
 		var source: String = lore[key]
 		check("packed biography has complete paragraphs: " + key, source.split("\n\n", false).size() >= 2)
