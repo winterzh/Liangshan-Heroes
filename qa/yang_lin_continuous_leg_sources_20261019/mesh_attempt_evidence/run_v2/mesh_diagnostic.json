@@ -1,0 +1,38 @@
+{
+  "scope": "Independent diagnostic of recorded WebGL mesh, not native/game/art acceptance. Negative triangles are rejected by this candidate topology check; this does not diagnose all physical cloth occlusion.",
+  "trace_rows": 808,
+  "submitted_triangles_checked": 71508,
+  "nonpositive_triangles": 1304,
+  "minimum_signed_canvas_area": -498.2775557897985,
+  "maximum_sole_reference_mapping_error_world": 9.39562310460093e-06,
+  "float32_uv_used": true,
+  "video_decode": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "vp8",
+        "codec_type": "video",
+        "width": 1600,
+        "height": 520,
+        "nb_read_frames": "377"
+      }
+    ]
+  },
+  "media_command": [
+    "ffprobe",
+    "-v",
+    "error",
+    "-count_frames",
+    "-show_entries",
+    "stream=codec_type,codec_name,width,height,nb_read_frames",
+    "-of",
+    "json",
+    "D:\\CodexEvidence\\shuihu\\yang_lin_continuous_leg_preview_20261019\\run_v2\\continuous_canvas.webm"
+  ],
+  "browser_self_check_passed": true,
+  "topology_check_passed": false,
+  "mesh_accepted": false,
+  "production_adopted": false,
+  "source_hashes_match": true
+}

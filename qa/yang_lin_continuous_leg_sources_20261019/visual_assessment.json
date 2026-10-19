@@ -1,0 +1,35 @@
+{
+  "source_originals_directly_viewed": [
+    "native_originals/full_leg_v1.png",
+    "native_originals/full_leg_v2.png"
+  ],
+  "observations": [
+    "Continuous cloth knee removes duplicate detached end caps from source art.",
+    "v2 changes some fold/texture pixels as well as background; treated independently, not an exact alpha-only edit.",
+    "Eight selected source sampling edges clear in v2; faint outside components remain.",
+    "First mesh runtime sole references too high; successor moved them near the opaque lower edge.",
+    "Four successor runtime captures normal/first stop/fast/final stop viewed; pinched/buckled knee deformation remains."
+  ],
+  "runtime_attempts": [
+    {
+      "run": "run_v1",
+      "seconds": 13,
+      "render_frames": 810,
+      "trace_rows": 808,
+      "nonpositive_triangles": 1255,
+      "accepted": false
+    },
+    {
+      "run": "run_v2",
+      "seconds": 13,
+      "render_frames": 809,
+      "trace_rows": 808,
+      "nonpositive_triangles": 1304,
+      "accepted": false
+    }
+  ],
+  "source_alpha_scope": "Eight selected rectangles only, not globally perfect alpha.",
+  "natural_gait_accepted": false,
+  "mesh_accepted": false,
+  "production_adopted": false
+}
