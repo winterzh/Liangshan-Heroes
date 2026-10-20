@@ -1,0 +1,58 @@
+	func draw_state(d: int,t: float)->Dictionary:
+		var row: Dictionary=data.arm_views[d];var keys: Array=row.keys
+		var clock: float=fposmod(t,float(keys.size())*.8)/.8;var index: int=floori(clock);var u: float=smoothstep(0.0,1.0,clock-float(index))
+		var a: Dictionary=keys[index];var b: Dictionary=keys[(index+1)%keys.size()]
+		var guard: Vector2=vec(a.guard).lerp(vec(b.guard),u);var angle: float=lerp_angle(float(a.angle),float(b.angle),u)
+		var sw: Dictionary=row.sword;var src_guard: Vector2=vec(sw.guard);var src_tip: Vector2=vec(sw.tip);var factor: float=float(data.blade_length)/(src_tip-src_guard).length()
+		var rotation: float=angle-(src_tip-src_guard).angle();var grip: Vector2=guard+(vec(sw.grip)-src_guard).rotated(rotation)*factor
+		var palm: Vector2=grip
+		if index==0:palm=vec(row.rest_hand).lerp(grip,u)
+		elif index==9:palm=grip.lerp(vec(row.rest_hand),u)
+		elif index==10:palm=vec(row.rest_hand)
+		var hand_angle: float=angle+PI*.5;var hand_row: Dictionary=row.hand
+		var wrist: Vector2=palm-(vec(hand_row.grip)-vec(hand_row.wrist)).rotated(hand_angle)*float(data.hand_scale)
+		var root: Vector2=vec(row.shoulder);var delta: Vector2=wrist-root;var distance: float=delta.length();var direction: Vector2=delta/maxf(distance,.001)
+		var upper: float=data.upper_length;var lower: float=data.fore_length;var along: float=(upper*upper-lower*lower+distance*distance)/(2.0*maxf(distance,.001))
+		var height: float=sqrt(maxf(0.0,upper*upper-along*along));var facing: float=1.0 if d%2==0 else -1.0
+		var elbow: Vector2=root+direction*along+Vector2(-direction.y,direction.x)*height*facing
+		var constrained: bool=index in [0,1,2,8,9,10]
+		return {"index":index,"label":a.label,"guard":guard,"angle":angle,"sword_rotation":rotation,"sword_scale":factor,"grip":grip,"palm":palm,"wrist":wrist,"root":root,"elbow":elbow,"hand_angle":hand_angle,"clip_at_mouth":constrained,"reach_error":maxf(0.0,distance-upper-lower),"tip":guard+(src_tip-src_guard).rotated(rotation)*factor}
+	func clip_plane(poly: PackedVector2Array,at: Vector2,normal: Vector2)->PackedVector2Array:
+		var result:=PackedVector2Array()
+		for i in range(poly.size()):
+			var a: Vector2=poly[i];var b: Vector2=poly[(i+1)%poly.size()];var da: float=(a-at).dot(normal);var db: float=(b-at).dot(normal)
+			if da>=0.0:result.append(a)
+			if (da>=0.0)!=(db>=0.0):result.append(a.lerp(b,da/(da-db)))
+		return result
+	func sprite_part(key: String,d: int,at: Vector2,source_at: Vector2,factor: float,angle: float,clip_at: Vector2=Vector2.ZERO,clip_normal: Vector2=Vector2.ZERO)->void:
+		var poly:=PackedVector2Array()
+		for p in [Vector2.ZERO,Vector2(627,0),Vector2(627,627),Vector2(0,627)]:poly.append(at+(p-source_at).rotated(angle)*factor)
+		if clip_normal!=Vector2.ZERO:poly=clip_plane(poly,clip_at,clip_normal)
+		if poly.size()<3:return
+		var uv:=PackedVector2Array();var colors:=PackedColorArray()
+		for p in poly:uv.append(((p-at).rotated(-angle)/factor+source_at+cell(d))/1254.0);colors.append(Color.WHITE)
+		draw_polygon(poly,colors,uv,textures[key])
+	func sleeve(key: String,d: int,at: Vector2,end: Vector2,shift: Vector2)->void:
+		var row: Dictionary=data.arm_views[d];var pair: Array=row[key];var a: Vector2=vec(pair[0]);var b: Vector2=vec(pair[1]);var source_axis: Vector2=(b-a).normalized();var source_normal:=Vector2(-source_axis.y,source_axis.x)
+		var axis: Vector2=(end-at).normalized();var normal:=Vector2(-axis.y,axis.x);var factor: float=(end-at).length()/(b-a).length();var width: float=.60 if key=="upper_arm" else .67
+		var poly:=PackedVector2Array();var uv:=PackedVector2Array();var colors:=PackedColorArray()
+		for p in [Vector2.ZERO,Vector2(627,0),Vector2(627,627),Vector2(0,627)]:
+			var delta: Vector2=p-a;poly.append(at+shift+axis*delta.dot(source_axis)*factor+normal*delta.dot(source_normal)*factor*width);uv.append((p+cell(d))/1254.0);colors.append(Color.WHITE)
+		draw_polygon(poly,colors,uv,textures[key])
+	func articulated_rider(d: int,t: float,debug: bool)->void:
+		horse(d,motion_time,false)
+		var row: Dictionary=data.arm_views[d];var pose: Dictionary=draw_state(d,t)
+		var bob: float=2.0*cos(motion_time/cycle*TAU*2.0)*speed-float(data.neutral_body_rise)*(1.0-speed);var shift:=Vector2(0,bob)
+		var body_offset: Vector2=vec(row.waist_target)-vec(row.body_waist)*float(data.torso_scale)+shift
+		var bit: Vector2=vec(row.bit)+shift;var hand: Vector2=vec(row.rein_hand)*float(data.torso_scale)+body_offset
+		ribbon(bit,hand,float(data.rein.sag_native));ribbon(bit+Vector2(3,2),hand+Vector2(2,1),float(data.rein.sag_native)+3.0)
+		draw_texture_rect_region(textures.torso,Rect2(body_offset,Vector2(627,627)*float(data.torso_scale)),Rect2(cell(d),Vector2(627,627)))
+		var sw: Dictionary=row.sword;var clip_at: Vector2=vec(row.mouth)+shift;var out: Vector2=vec(row.out)
+		sprite_part("sword",d,pose.guard+shift,vec(sw.guard),pose.sword_scale,pose.sword_rotation,clip_at if pose.clip_at_mouth else Vector2.ZERO,out if pose.clip_at_mouth else Vector2.ZERO)
+		var sc: Dictionary=row.scabbard;var source_axis: Vector2=vec(sc.tip)-vec(sc.mouth)
+		sprite_part("scabbard",d,vec(row.mouth)+shift,vec(sc.mouth),float(data.scabbard_length)/source_axis.length(),(-out).angle()-source_axis.angle())
+		sleeve("upper_arm",d,pose.root,pose.elbow,shift);sleeve("forearm",d,pose.elbow,pose.wrist,shift)
+		sprite_part("hand",d,pose.palm+shift,vec(row.hand.grip),float(data.hand_scale),pose.hand_angle)
+		if debug:
+			draw_line(pose.root+shift,pose.elbow+shift,Color("9cdbc9"),1.5);draw_line(pose.elbow+shift,pose.wrist+shift,Color("9cdbc9"),1.5)
+			draw_circle(clip_at,3.0,Color("edbc82"));draw_circle(pose.grip+shift,3.0,Color("edbc82"));draw_circle(pose.tip+shift,3.0,Color("edbc82"))
