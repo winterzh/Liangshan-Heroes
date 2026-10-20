@@ -1,3 +1,9 @@
+## 2026-10-20 GitHub主线合并与本地分支纠正
+
+复核发现：远端 main/stable 内容均已到 ddba3aee，但本地 main 仍停在 e3fed84f，工作区停在 classic30 分支；本地 stable 另有旧合并提交 e65eae2b 未纳入主线。现已通过正常合并形成 `48042d844bb4c41c44d77debe0af8c8217e4c3ea`，推送 main/stable 并回读一致；所有现存本地分支提交均已包含于 main。当前工作区为 main，跟踪 origin/main，补齐 main 的正常抓取配置。
+
+合并前后 Git 内容树均为 `6267a28eeb6d792a0ffe2596fd6c0170a4380c5f`，未改变游戏文件；107个未跟踪文件清单保持，不纳入提交。Steam Build26048429及四语公告保持此前发布状态，本次只整理Git历史与交接文档。
+
 ## 2026-10-20 Steam人物与场景更新发布
 
 Windows default Build `26048429` / Manifest `697009053566575953`；[四语更新说明](https://steamcommunity.com/games/5088120/announcements/detail/669505296465397048)已公开回读。生产来源0083b47a，原生整合219、包内1169、身份20及实际EXE十一场景通过；六文件服务器清单、全新下载、Steam客户端更新与库内启动分别核实。QA工具修正108星将加张团练的旧总数断言，生产人物数据不变，首个失败批保留。详见[本批文档](STEAM_UPDATE_20261019.md)及[发布收据](../qa/steam_release_20261019/README.md)。完整战役续玩、全流程真人接受和长期性能仍未完成。

@@ -1,3 +1,9 @@
+## 2026-10-20 GitHub分支与交接状态
+
+本次收尾工作区已切换到 `main`，跟踪 `origin/main`；远端 main 与 codex/sync-20260905-stable 已同步包含合并提交 `48042d844bb4c41c44d77debe0af8c8217e4c3ea`。本地旧 main 已快进更新，main 的远端抓取配置已补齐。后续开工先核对 `git status --short --branch` 与远端；既有开发分支约定仍以 AGENTS.md 和当次用户授权为准。
+
+旧 stable 唯一遗漏的历史合并提交已并入，所有现存本地分支提交均在 main 中。合并不改变游戏内容，107个未跟踪文件保持本地；实际Steam包仍来自0083b47a，后继Git文档提交不代表重新打包或再次发布。
+
 ## 2026-10-20 Steam人物与场景更新发布
 
 Windows default Build `26048429` / Manifest `697009053566575953`；[四语更新说明](https://steamcommunity.com/games/5088120/announcements/detail/669505296465397048)已公开回读。生产来源0083b47a，原生整合219、包内1169、身份20及实际EXE十一场景通过；六文件服务器清单、全新下载、Steam客户端更新与库内启动分别核实。QA工具修正108星将加张团练的旧总数断言，生产人物数据不变，首个失败批保留。详见[本批文档](STEAM_UPDATE_20261019.md)及[发布收据](../qa/steam_release_20261019/README.md)。完整战役续玩、全流程真人接受和长期性能仍未完成。
