@@ -1,3 +1,7 @@
+## 2026-10-20 首页文档入口同步
+
+GitHub首页[README](../README.md)、[项目总览](PROJECT_STATUS.md)和[开发计划](DEVELOPMENT_PLAN.md)已统一当前日期及发布状态。启动和分支操作方式不变；旧入口条目及过程日志保留为历史，当前版本与未完成项以上述页首为准。
+
 ## 2026-10-20 GitHub分支与交接状态
 
 本次收尾工作区已切换到 `main`，跟踪 `origin/main`；远端 main 与 codex/sync-20260905-stable 已同步包含合并提交 `48042d844bb4c41c44d77debe0af8c8217e4c3ea`。本地旧 main 已快进更新，main 的远端抓取配置已补齐。后续开工先核对 `git status --short --branch` 与远端；既有开发分支约定仍以 AGENTS.md 和当次用户授权为准。

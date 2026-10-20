@@ -1,3 +1,9 @@
+## 2026-10-20 GitHub首页与总览纠正
+
+用户截图指出GitHub首页README仍标2026-10-14。复核后同步纠正首页、PROJECT_STATUS当前版本表与DEVELOPMENT_PLAN页首：Steam Build26048429/四语公告已交付，main/stable已同步，当前工作区main。旧总览中25821275、main 6d3bab21及“未合并/Steam未更新”移入明确标注的历史快照；右侧Android2.0为历史GitHub Release，与本次Steam发布分开说明。
+
+当前入口同时保留全库美术、完整战役续玩、真人/性能/设备未完成边界及原著要求。此批只改六份Markdown，原运行文件与107个未跟踪文件保持；新增链接、版本字段、Git差异与精确提交范围核对后同步main/stable。
+
 ## 2026-10-20 GitHub主线合并与本地分支纠正
 
 复核发现：远端 main/stable 内容均已到 ddba3aee，但本地 main 仍停在 e3fed84f，工作区停在 classic30 分支；本地 stable 另有旧合并提交 e65eae2b 未纳入主线。现已通过正常合并形成 `48042d844bb4c41c44d77debe0af8c8217e4c3ea`，推送 main/stable 并回读一致；所有现存本地分支提交均已包含于 main。当前工作区为 main，跟踪 origin/main，补齐 main 的正常抓取配置。
