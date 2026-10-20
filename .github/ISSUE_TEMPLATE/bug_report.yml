@@ -11,7 +11,18 @@ body:
     attributes:
       label: 游戏版本或提交号
       description: Steam Build、测试标记或 Git commit
-      placeholder: "例如：Build 25498721"
+      placeholder: "例如：Steam Build 26048429，或源码提交号"
+    validations:
+      required: true
+  - type: dropdown
+    id: distribution
+    attributes:
+      label: 运行来源
+      options:
+        - Steam正式版
+        - GitHub历史Release安装包
+        - Godot编辑器 / 源码
+        - QA候选 / 独立预览
     validations:
       required: true
   - type: dropdown

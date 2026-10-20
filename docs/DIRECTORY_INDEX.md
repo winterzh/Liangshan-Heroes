@@ -41,3 +41,11 @@
 - `qa/pending_source_sync_20261020/`：原107个文件清单、SHA与只读检查。
 - [公孙胜原型](../qa/gongsun_sheng_mounted_draw_20261019/README.md)：补齐剑臂与rig_v1/v2/v3候选源码。
 - [杨林连续腿预览](../qa/yang_lin_continuous_leg_preview_20261019/README.md)：补齐构建/诊断/HTML/JS，候选未采用。
+
+## GitHub导航与协作文件
+
+- [CHANGELOG](../CHANGELOG.md)：Steam更新及15个历史GitHub Release索引。
+- [CONTRIBUTING](../CONTRIBUTING.md)：协作与反馈入口。
+- [docs导航](README.md)、[QA导航](../qa/README.md)：当前文档与证据分工。
+- [仓库约定](GITHUB_REPOSITORY.md)：两个分支、38个标签、Release与管理员字段。
+- `qa/github_organization_20261020/`：本次平台快照与整理检查。

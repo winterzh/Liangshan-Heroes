@@ -39,3 +39,7 @@ git fetch origin
 ## 2026-10-20 待提交候选已全部保存
 
 原81份资源导入配置及26份候选工具/预览源码已补交，详见[入库记录](../qa/pending_source_sync_20261020/README.md)。`.import`设置随原资源入库，`.godot`生成缓存仍不上传；候选绝对路径与冻结绑定只作原批快照，换机执行前重新核对，不据源码同步授予生产资格。
+
+## GitHub入口
+
+当前版本与历史安装包见[更新记录](../CHANGELOG.md)，分支和管理字段见[仓库约定](GITHUB_REPOSITORY.md)，源码参与方式见[协作说明](../CONTRIBUTING.md)。专题资料从[文档导航](README.md)和[QA导航](../qa/README.md)进入，不移动原有工具/素材路径。

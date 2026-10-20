@@ -1,5 +1,9 @@
 # 开发日志
 
+## 2026-10-20 GitHub仓库入口整理
+
+首页改为游戏入口与当前版本表，新增CHANGELOG、协作说明、docs/QA导航和仓库约定；问题模板更新Build示例、运行来源及原著依据。回读main/stable同源、无开放PR/Issue，15个历史Release/38个标签建索引并保留，AndroidLatest与SteamWindows区分。当前协作者无管理员权限，About建议字段已列明但未应用。运行代码/生产资源和Steam不变，详见[整理收据](../qa/github_organization_20261020/README.md)。
+
 ## 2026-10-20 全部待提交文件补交
 
 按用户明确要求，将原107个待提交文件全部入库：81份已有资源的导入配置、26份公孙胜/杨林候选工具和预览源码。14份Python AST、4份JSON、JS语法、44条原图SHA及HTML/fixture绑定检查通过；候选未运行、未采用，不更新Steam。新增候选README和[入库清单](../qa/pending_source_sync_20261020/README.md)，原文件字节保持。提交后以Git状态和远端回读确认不再遗留未跟踪文件。
