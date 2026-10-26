@@ -1,0 +1,22 @@
+--- 941c/scripts/run_world_session.gd
++++ daming_candidate/scripts/run_world_session.gd
+@@ -14,6 +14,7 @@
+ const Profiles = preload("res://scripts/run_official_restore_profile.gd")
+ const Level4Factory = preload("res://scripts/run_level4_world_factory.gd")
+ const Level5Factory = preload("res://scripts/run_level5_world_factory.gd")
++const Level8Factory = preload("res://scripts/run_level8_world_factory.gd")
+ const FLAGS := {"skirmish": true, "skirmish_ai": false, "arena": false, "custom_defense": false, "scenario": false, "defense_waves": 30, "defense_random": false}
+ const ALL_CAMPAIGN_FLAGS := ["current", "skirmish", "skirmish_ai", "arena", "custom_defense", "scenario", "defense_waves", "defense_random"]
+ var _core: RefCounted
+@@ -260,6 +261,11 @@
+ 		if not gao_runtime.ok: return gao_runtime
+ 		_core.dispose()
+ 		_core = Core.new(_trusted, gao_runtime.runtime)
++	elif _packet.context == Profiles.DAMING_CONTEXT:
++		var daming_runtime: Dictionary = Level8Factory.prepare_runtime(_trusted)
++		if not daming_runtime.ok: return daming_runtime
++		_core.dispose()
++		_core = Core.new(_trusted, daming_runtime.runtime)
+ 	var prepared: Dictionary = _core.prepare(_packet.world)
+ 	if not prepared.ok: return prepared
+ 	if _packet.binding.kind == "steam":

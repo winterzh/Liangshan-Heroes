@@ -1,0 +1,195 @@
+{
+  "schema": "gaoqiu_loss_complete_summary_v1",
+  "complete": true,
+  "source_loss_chain_passed": true,
+  "execution_kind": "source_project_offscreen_gl",
+  "content_version": "source-v1:941c4786569d5886efbd3537238df853026cc50d0c98d0a1cdb1516c8a8f7964",
+  "candidate_manifest_sha256": "c5c1052c4797d760a52d15176c0d79bbc7ea7aaa23003ba429108be507ca753b",
+  "host_sha256": "0a940a81550fd8c6549d0d2ffa27e483e967158a4ee08005865be8a63e7c84bf",
+  "formal_checks": 200,
+  "stage_checks": [
+    50,
+    92,
+    58
+  ],
+  "stage_pids": [
+    60988,
+    74832,
+    74456
+  ],
+  "native_exit_codes": [
+    0,
+    0,
+    0
+  ],
+  "stage_wall_seconds": [
+    132.274,
+    323.091,
+    106.71
+  ],
+  "all_errors_empty": true,
+  "all_stopped_for_null": true,
+  "three_stage_chain": [
+    "normal Level5 menu and actual SaveAndExit, production continue_saved exit",
+    "actual menu Continue, ordinary stance/move and enemy combat cause original Song Jiang death, natural loss closes same-token lifecycle",
+    "independent actual menu Continue rejects terminal token, error closes to original menu without restoring Battle or changing saved bytes"
+  ],
+  "save_exit_reasons": [
+    "continue_saved",
+    "",
+    ""
+  ],
+  "physics_hz": 60,
+  "time_scale": 1.0,
+  "original_song_entity_id": "3",
+  "original_hall_entity_id": "1",
+  "song_natural_death": {
+    "entity_id": "3",
+    "hp": 0.0,
+    "killer_entity_id": "71",
+    "killer_faction": 1,
+    "killer_in_original_land_groups": false,
+    "killer_key": "guan_dao",
+    "killer_registered": true,
+    "killer_source_id": "",
+    "killer_valid": true,
+    "phase": 3,
+    "position": "(1104.0, 848.0001)",
+    "same_original_actor": true,
+    "story_outcome": "",
+    "tick": 8596
+  },
+  "ordinary_order_target": {
+    "entity_id": "42",
+    "key": "guan_gong",
+    "belongs_to_original_land_groups": true,
+    "wave_sent_at_order": false
+  },
+  "killer_is_original_land_group_member": false,
+  "killer_causal_boundary": "Final registered enemy killer is guan_dao entity71 produced during normal gameplay, not the original land-group target42. No damage/position/stage injection.",
+  "original_hall_survives_assertion_passed": true,
+  "last_observed_hall_hp": 1500.0,
+  "observed_real_hp_drop_count": 65,
+  "slot_generations": [
+    1,
+    1,
+    1
+  ],
+  "lifecycle_generations": [
+    1,
+    2,
+    3
+  ],
+  "same_lifecycle_token": "0f60521a91d823db70b1e57b3360c6a3",
+  "lifecycle_state": "terminal",
+  "progress_state": "applied",
+  "victory": false,
+  "full_result": {
+    "contract_version": 3,
+    "core_cleared": false,
+    "core_goal": "守住忠义堂和宋江，击退三批水陆主力，打停高俅座船。可直接收兵通关；生擒并押回堂前是可选演义目标。",
+    "done_ids": [],
+    "goals": [
+      {
+        "id": "gao_lure",
+        "label": "阮小七引活官船进入港汊伏区",
+        "note": "",
+        "reason": "",
+        "state": "pending"
+      },
+      {
+        "id": "gao_fire",
+        "label": "公孙胜祭风、刘唐登船举火，护两艘接应船撤离",
+        "note": "",
+        "reason": "",
+        "state": "pending"
+      },
+      {
+        "id": "gao_land",
+        "label": "击退岸军并拔除山前补给营",
+        "note": "",
+        "reason": "",
+        "state": "pending"
+      },
+      {
+        "id": "gao_capture",
+        "label": "封港凿船、水上接俘、返航后实际押至忠义堂",
+        "note": "",
+        "reason": "",
+        "state": "pending"
+      }
+    ],
+    "missed_ids": [],
+    "pending_ids": [
+      "gao_lure",
+      "gao_fire",
+      "gao_land",
+      "gao_capture"
+    ],
+    "story_complete": false,
+    "story_done": 0,
+    "story_total": 4
+  },
+  "metrics": [
+    {
+      "accepted_task_commands": 0,
+      "automatic_repaths": 0,
+      "end_reason": "defeat",
+      "game_seconds": 142.966666666673,
+      "stage": "gao_rts",
+      "task_interruptions": 0,
+      "wall_seconds": 239.448
+    }
+  ],
+  "ack": {
+    "code": "CAMPAIGN_PROGRESS_NOT_REQUIRED",
+    "file_sha256": "",
+    "persisted": false,
+    "schema": "campaign_progress_ack_v2",
+    "steam_handoff": {
+      "context": {
+        "level_id": "level5",
+        "mode": "campaign",
+        "waves": 0
+      },
+      "intent_sha256": "626823d13ee19bedc0f3101d417e322a4ce8620aebfb4859ddfac2e279b4fb98",
+      "schema": "campaign_uncredited_handoff_v1",
+      "token": "0f60521a91d823db70b1e57b3360c6a3"
+    },
+    "suppressed": false
+  },
+  "independent_service_proof": {
+    "context": {
+      "level_id": "level5",
+      "mode": "campaign",
+      "waves": 0
+    },
+    "intent_sha256": "626823d13ee19bedc0f3101d417e322a4ce8620aebfb4859ddfac2e279b4fb98",
+    "schema": "campaign_uncredited_handoff_v1",
+    "token": "0f60521a91d823db70b1e57b3360c6a3"
+  },
+  "terminal_flow_campaign_progress_committed_flag": true,
+  "terminal_flow_flag_meaning": "Loss transaction closed; NOT_REQUIRED ack and absent CFG show no campaign record was persisted.",
+  "cfg_created": false,
+  "campaign_progress_added": false,
+  "rewards_added": false,
+  "terminal_refusal": {
+    "code": "LOCAL_RUN_TERMINAL",
+    "ok": false
+  },
+  "slot_and_lc_payloads_excluded": true,
+  "all_431_pins_match": true,
+  "child_terminal": true,
+  "final_identity_passed": true,
+  "lock_released": true,
+  "qualification": "Private uncredited source941/offscreen-GL natural defeat, actual SaveAndExit/Continue, terminal ledger and independent menu old-slot refusal only",
+  "sdk_qualified": false,
+  "public_continue_qualified": false,
+  "native_release_tested": false,
+  "human_acceptance": false,
+  "rewards_qualified": false,
+  "victory_chain_qualified": false,
+  "full_19_61_acceptance": false,
+  "performance_benchmark": false,
+  "published": false
+}

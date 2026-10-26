@@ -30,6 +30,8 @@
 
 ## 本批索引与新增规则
 
+`qa/campaign_progress_recovery_20261026/daming_continue_candidate/`：基于941c的Session/Core/UnitContract三脚本候选、精确diff和来源；补章节定义装配与严格单囚安全撤离；`integration_941/`为只替三个已有文件的新冻结准备器，默认34项轻量来源检查，未执行完整冻结/编译/运行。
+
 `qa/campaign_progress_recovery_20261026/recovery_readset_candidate/`：只对原Slot启用的严格读集优化候选、固定d7来源的新工程准备器、原Flow适配器与原生替换专项；768b6e59已导入，真实保存/恢复两案88项及12类异常/旧4MB副本285项通过。`VALIDATION.md`维护当前资格，创建时来源清单和工具README保持原字节，未采用生产。
 
 `qa/campaign_progress_recovery_20261026/continue_binding_candidate/tests/classic_recovery_timing/`为原档只读、隔离副本原API计时工具；`evidence/classic_recovery_timing_20261027_031418/`保留15项诊断检查、原始来源/日志与文件不变证据，首次inspect超时，未执行恢复。
@@ -92,7 +94,7 @@
 
 `evidence/classic_recovery_baseline_20261027_022930/`保存旧源两案82项缺陷复现；`evidence/classic_recovery_fixed_partial_20261027_023731/`保存新源pending成功/record超时、实际helper查询和完整失败输入。均位于`qa/campaign_progress_recovery_20261026/`，后者整体未通过。
 
-`qa/campaign_progress_recovery_20261026/gaoqiu_continue_candidate/`保存高俅章节runtime单文件候选、相对d7差异和13项来源；`integration_768/`准备器已创建941c4786完整冻结并独立导入。`tests/gaoqiu_training/`及`run_gaoqiu_training.py`为三进程正常造船续玩工具；`tests/gaoqiu_loss/`及`run_gaoqiu_loss.py`为尚未原生运行的自然失败/终局拒槽工具；`evidence/full_freeze_20261027_050851/`保留准备/导入原件，`evidence/training_complete_20261027_052101/`保留实际造船三进程190项原件。当前资格统一见该目录`VALIDATION.md`，未采用生产。
+`qa/campaign_progress_recovery_20261026/gaoqiu_continue_candidate/`保存高俅章节runtime单文件候选、相对d7差异和13项来源；`integration_768/`准备器已创建941c4786完整冻结并独立导入。`tests/gaoqiu_training/`及`run_gaoqiu_training.py`为三进程正常造船续玩工具；`tests/gaoqiu_loss/`及`run_gaoqiu_loss.py`为已通过三进程200项的自然失败/终局拒槽工具；`evidence/full_freeze_20261027_050851/`保留准备/导入原件，`evidence/training_complete_20261027_052101/`保留实际造船三进程190项原件；`evidence/loss_complete_20261027_054801/`保留自然失败200项原件；`tests/gaoqiu_terminal/`为核心胜利四进程工具，首次语法失败与修复后的原生加载检查分开保留，完整玩法仍待验证。当前资格统一见该目录`VALIDATION.md`，未采用生产。
 
 `evidence/lianhuanma_victory_20261027_014835/`与`evidence/lianhuanma_loss_20261027_020834/`分别保存当前d7源自然胜利345项、自然失败205项原件、来源映射与SHA清单。`continue_binding_candidate/tests/classic_recovery/`是独立的中断保存源码分支诊断工具，初始私有gate与公开入口资格分开，实际结果统一见下方VALIDATION。以上路径均相对`qa/campaign_progress_recovery_20261026/`。
 
