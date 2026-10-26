@@ -1,0 +1,95 @@
+{
+  "mode": "A",
+  "command": [
+    "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+    "--path",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261026_211212_dd3104df\\project",
+    "--headless",
+    "--remote-debug",
+    "tcp://127.0.0.1:62047",
+    "--script",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_store_delayed_io_20261026\\20261026_223919_4ffc4c0b\\workers\\delayed_bootstrap.gd"
+  ],
+  "stops": [
+    {
+      "point": {
+        "source": "res://scripts/steam_receipt_store.gd",
+        "line": 181,
+        "function": "acquire",
+        "statement": "if DirAccess.make_dir_absolute(directory.path_join(\"writing\")) != OK: return bad(\"WRITER_BUSY\")",
+        "source_sha256": "11bf6cae5968baa6c740c3c6be1fc954376048cbbe9a81a77b6cf4588518f9f1"
+      },
+      "frames": [
+        {
+          "source": "res://scripts/steam_receipt_store.gd",
+          "line": 181,
+          "function": "acquire"
+        },
+        {
+          "source": "res://scripts/steam_run_ledger.gd",
+          "line": 104,
+          "function": "_drive_pending"
+        },
+        {
+          "source": "res://scripts/steam_run_ledger.gd",
+          "line": 75,
+          "function": "_persist"
+        },
+        {
+          "source": "res://scripts/steam_run_ledger.gd",
+          "line": 238,
+          "function": "apply_campaign_handoff"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/campaign_store_delayed_io_20261026/20261026_223919_4ffc4c0b/workers/delayed_worker.gd",
+          "line": 120,
+          "function": "writer_a"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/campaign_store_delayed_io_20261026/20261026_223919_4ffc4c0b/workers/delayed_worker.gd",
+          "line": 52,
+          "function": "gate"
+        }
+      ],
+      "pid": 57600,
+      "status": "breakpoint_matched",
+      "packet_sha256": "6a112c48f917877bb9e83c2ee05f401be35b15a768cfc26909a8b82e6883019a"
+    }
+  ],
+  "gates": [
+    {
+      "case": "retry_under_barrier",
+      "directory": "D:/CodexQA/campspdelay/b202be3d8fd2/appdata/Godot/app_userdata/水浒英雄传：八幕战役/steam_receipts/v1/5088120/76561198000000001",
+      "index": 0,
+      "kind": "a_apply",
+      "mode": "A",
+      "nonce": "b202be3d8fd24a9b9812782370275816",
+      "owner": "76561198000000001",
+      "pid": 57600,
+      "schema": "handoff_delayed_gate_v1"
+    }
+  ],
+  "pid": 57600,
+  "primary_case_error": "RuntimeError('Worker exited before gate: B/b_begin')",
+  "primary_case_traceback": "Traceback (most recent call last):\n  File \"D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\tests\\io\\run_delayed_acquire.py\", line 217, in execute_case\n    pair.gate(\"B\", \"b_begin\"); pair.arm(\"B\", points[\"B\"]); pair.ack(\"B\"); pair.stopped(\"B\")\n    ~~~~~~~~~^^^^^^^^^^^^^^^^\n  File \"D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\tests\\io\\run_delayed_acquire.py\", line 141, in gate\n    self.wait(ready, role + \"/\" + kind)\n    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\tests\\io\\run_delayed_acquire.py\", line 128, in wait\n    while not predicate():\n              ~~~~~~~~~^^\n  File \"D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\tests\\io\\run_delayed_acquire.py\", line 139, in ready\n    require(c[\"child\"].poll() is None, \"Worker exited before gate: \" + role + \"/\" + kind)\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\tests\\io\\run_io.py\", line 85, in require\n    raise RuntimeError(message)\nRuntimeError: Worker exited before gate: B/b_begin\n",
+  "aborted_owned_child": true,
+  "exit_code": 1,
+  "process_terminal": true,
+  "log_sha256": "c21ea9c40e93c58ec3ac2ef1ae8b3a3a9228a1a879708faf86e353656b5edbdf",
+  "final_inventory": {
+    "exists": true,
+    "files": {
+      "record_0000000002.json": {
+        "sha256": "7b321893cd5546084799cd846d7e5adc680bd8a4b82955e302071755daa47682",
+        "bytes": 1553
+      },
+      "record_0000000003.json": {
+        "sha256": "e366c644e9dd375e13d37dc6682a2bfabffecfdf29ebd58207d6c26fc8d76402",
+        "bytes": 1553
+      }
+    },
+    "directories": [
+      "."
+    ]
+  }
+}

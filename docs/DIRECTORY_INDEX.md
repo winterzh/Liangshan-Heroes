@@ -32,7 +32,7 @@
 
 `qa/lianhuanma_resume_20261026/`：连环马自然付费训练、同槽同token三进程接续的外部驱动、执行器、成功及失败收据；私有存档与运行缓存留本机，100项只属于内部活动期专项。新的事务集成图在该目录。
 
-`qa/campaign_progress_recovery_20261026/`：重基14文件候选、新context生命周期的135项训练证据、自然终局/重启旧槽拒绝1364项成功与首轮失败；`rebased_candidate/`尚未采用生产，`handoff_candidate/`的23c源码已通过99项模型、尾账/纠正回归、13阶段真实文件专项（含两类预期拒绝）及黄泥冈1386项；同源经典30波六进程443项也已通过。`store_protocol_candidate/`为仅替Store的后继候选和独立原生工具，修复唯一目录释放与首次重试CAS冲突，已另冻导入并通过14项模型，原生文件故障/并发专项执行中，尚无完整恢复或生产资格。当前资格见[本批README](../qa/campaign_progress_recovery_20261026/README.md)。
+`qa/campaign_progress_recovery_20261026/`：重基14文件候选、新context生命周期的135项训练证据、自然终局/重启旧槽拒绝1364项成功与首轮失败；`rebased_candidate/`尚未采用生产，`handoff_candidate/`的23c源码已通过99项模型、尾账/纠正回归、13阶段真实文件专项（含两类预期拒绝）及黄泥冈1386项；同源经典30波六进程443项也已通过。`store_protocol_candidate/`为仅替Store的后继候选和独立原生工具，修复唯一目录释放与首次重试CAS冲突，已另冻导入，14项模型及23进程/370项真实文件专项符合预期，延迟写入首批暴露外部PID判死问题，须先修统一恢复准入，尚无完整恢复或生产资格。当前资格见[本批README](../qa/campaign_progress_recovery_20261026/README.md)。
 
 `qa/huangnigang_production_20261020/`：当前七车十一担生产接入、真实路线和内部冷恢复驱动；源码快照、导出程序及原始运行日志存于被忽略的`.godot`同名批次目录。隔离用户目录使用同盘短路径`D:/CodexQA/hngp/<唯一标识>`，具体位置见每次收据；完成证据以本批README为准。
 
@@ -69,3 +69,5 @@
 `qa/campaign_progress_recovery_20261026/handoff_candidate/`：20文件独立候选、精确清单、模型/尾账回归/真实I/O/经典30波外部驱动及后继恢复协议设计。`evidence/` 保留每版来源、原始失败和成功worker收据；`generated_uids/` 是绑定冻结身份的少量文本证据，不能作为普通缓存忽略。当前范围和未验证门槛以[候选说明](../qa/campaign_progress_recovery_20261026/handoff_candidate/README.md)为准。
 
 `qa/campaign_progress_recovery_20261026/tests/lianhuanma/`与`run_lianhuanma_terminal.py`：实际菜单/Flow的四进程自然胜利驱动，独立绑定当前20文件候选；只读身份预检通过，尚未编译或原生验收。使用方式及不授予的资格见[执行器说明](../qa/campaign_progress_recovery_20261026/tests/lianhuanma/README.md)。
+
+`qa/campaign_progress_recovery_20261026/tests/lianhuanma_loss/`与`run_lianhuanma_loss.py`：真实Flow自然失败三进程代码，尚未原生运行。`evidence/store_protocol_io_20261026_220853/`保存23进程/370项已退出前提的真实文件证据；`store_delayed_first_failed_20261026_223919/`及`process_liveness_api_20261026_225300/`保留外部PID判断失败、最小原生API复现和官方来源。

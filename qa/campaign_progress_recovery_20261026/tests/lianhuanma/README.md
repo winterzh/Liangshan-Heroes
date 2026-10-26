@@ -25,6 +25,8 @@ python -B qa/campaign_progress_recovery_20261026/run_lianhuanma_terminal.py --ba
 
 每批新建短 profile 与输出目录 `.godot/lianhuanma_natural_terminal_20261026/<batch>`，四个 profile 环境根由共享助手隔离。外部 bootstrap 绑定五个 GD 文件 SHA，离开 physics frame 后加载，`can_instantiate()` 失败快退。环境为 `LT_MODE / LT_PROFILE / LT_PROJECT / LT_WORKERS / LT_BINDINGS / LT_BINDINGS_SHA256 / LT_REPORT / LT_NONCE / LT_PROCESS_NONCE / LT_CANDIDATE_SHA256`，后三阶段另有 `LT_PREVIOUS / LT_PREVIOUS_SHA256`。`STEAM_DISABLED=1`、`CAMPAIGN_QA` 为空；既有 `LSH_CONTINUE_FLOW_QA=1` 与 `LSH_CONTINUE_FLOW_PROFILE` 仅在严格匹配的隔离 profile 内启用实际 Flow UI。A/B 成功必须观察生产退出理由 `continue_saved`，测试不自行替代保存后的正常退出。
 
-公开战役保存/继续门槛保持原状。离线 uncredited、私有 Flow UI 不授真实 Steam SDK、credited 账本、导出 EXE、发布、人工体验或全战役资格。自然失败两进程链尚未实现：后续另用新 profile 保存活动槽，让宋江以普通移动遭真实敌军击杀，验证 loss ACK `CAMPAIGN_PROGRESS_NOT_REQUIRED / persisted=false / 空 CFG SHA`、不新增通关记录，再独立菜单继续拒旧槽。
+公开战役保存/继续门槛保持原状。离线 uncredited、私有 Flow UI 不授真实 Steam SDK、credited 账本、导出 EXE、发布、人工体验或全战役资格。独立[自然失败三进程链](../lianhuanma_loss/README.md)已完成代码和静态复核，尚未编译或原生执行：新profile实际保存退出，独立继续后让宋江以普通移动遭真实敌军击杀，验证loss ACK `CAMPAIGN_PROGRESS_NOT_REQUIRED / persisted=false / 空 CFG SHA`、不新增通关记录，再独立菜单继续拒旧槽。真实保存退出语义要求三进程，旧两进程设想不再采用。
+
+当前先修外部PID恢复准入，再以新候选重新绑定运行。`static_audit.json`保留提交`47849190`时的初始准备快照；本页和计划之后的状态修订不改六份执行源码，不把原f6ef身份预检转授后继源码。
 
 复用来源为当前 `tests/training.gd` 的训练观察、`tests/huang/` 的终局读取、`handoff_candidate/tests/classic/driver.gd` 的实际 Flow UI/退出观察，以及旧 RTS 工具中的普通经营策略；没有复用旧工具的开场捷径、4 倍速、种子重置、教场或 contracts 注入。`static_audit.json` 只记录本次 Python AST/帮助入口与源级复核、SHA；不等于 GDScript 编译或自然路线通过。

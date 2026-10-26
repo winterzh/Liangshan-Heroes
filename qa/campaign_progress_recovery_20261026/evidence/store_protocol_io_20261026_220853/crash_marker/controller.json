@@ -1,0 +1,219 @@
+{
+  "mode": "crash_marker",
+  "command": [
+    "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+    "--path",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261026_211212_dd3104df\\project",
+    "--headless",
+    "--remote-debug",
+    "tcp://127.0.0.1:53785",
+    "--script",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_store_protocol_io_20261026\\20261026_220853_bcbb8766\\workers\\bootstrap.gd"
+  ],
+  "profile": "D:\\CodexQA\\campspio\\31bbf8a554cd",
+  "nonce": "31bbf8a554cd4deb8cdba5bddd1e6227",
+  "complete": true,
+  "faults": [
+    {
+      "kind": "crash_marker",
+      "point": {
+        "source": "res://scripts/steam_receipt_store.gd",
+        "line": 314,
+        "function": "release",
+        "source_sha256": "11bf6cae5968baa6c740c3c6be1fc954376048cbbe9a81a77b6cf4588518f9f1",
+        "statement": "_checkpoint(\"release_marker_published\")",
+        "kind": "crash_marker"
+      },
+      "frames": [
+        {
+          "source": "res://scripts/steam_receipt_store.gd",
+          "line": 314,
+          "function": "release"
+        },
+        {
+          "source": "res://scripts/steam_run_ledger.gd",
+          "line": 138,
+          "function": "_drive_pending"
+        },
+        {
+          "source": "res://scripts/steam_run_ledger.gd",
+          "line": 75,
+          "function": "_persist"
+        },
+        {
+          "source": "res://scripts/steam_run_ledger.gd",
+          "line": 238,
+          "function": "apply_campaign_handoff"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/campaign_store_protocol_io_20261026/20261026_220853_bcbb8766/workers/worker.gd",
+          "line": 111,
+          "function": "normal_or_fault"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/campaign_store_protocol_io_20261026/20261026_220853_bcbb8766/workers/worker.gd",
+          "line": 63,
+          "function": "gate"
+        }
+      ],
+      "pid": 65256,
+      "status": "owned_process_terminated",
+      "actual_native_operation": true,
+      "before_inventory": {
+        "exists": true,
+        "files": {
+          "record_0000000003.json": {
+            "sha256": "8bd4613c19ccafb4207837661fc14466b53ebaec9f45c2bdb5f5582e8c01ec3c",
+            "bytes": 1553
+          },
+          "record_0000000004.json": {
+            "sha256": "a95ca631451fe77bb33f77e44e82ab0b36c3ee73c9d34ab9ac60660ebec0e2fc",
+            "bytes": 2363
+          },
+          "release_v1_65256_fa62716912f6d9984e65df87d99408fd_65256_c2a7491ceec24a98b6df0f0132f39ca1_4_a95ca631451fe77bb33f77e44e82ab0b36c3ee73c9d34ab9ac60660ebec0e2fc.json": {
+            "sha256": "9d347f490351f7e537edcdf62857128c3a53fd6f68a33d01da902d8ee318c6ba",
+            "bytes": 100
+          }
+        },
+        "directories": [
+          ".",
+          "cleanup_v1_65256_c2a7491ceec24a98b6df0f0132f39ca1"
+        ]
+      },
+      "externally_terminated_pid": 65256,
+      "exit_code": 1,
+      "terminated_inventory": {
+        "exists": true,
+        "files": {
+          "record_0000000003.json": {
+            "sha256": "8bd4613c19ccafb4207837661fc14466b53ebaec9f45c2bdb5f5582e8c01ec3c",
+            "bytes": 1553
+          },
+          "record_0000000004.json": {
+            "sha256": "a95ca631451fe77bb33f77e44e82ab0b36c3ee73c9d34ab9ac60660ebec0e2fc",
+            "bytes": 2363
+          },
+          "release_v1_65256_fa62716912f6d9984e65df87d99408fd_65256_c2a7491ceec24a98b6df0f0132f39ca1_4_a95ca631451fe77bb33f77e44e82ab0b36c3ee73c9d34ab9ac60660ebec0e2fc.json": {
+            "sha256": "9d347f490351f7e537edcdf62857128c3a53fd6f68a33d01da902d8ee318c6ba",
+            "bytes": 100
+          }
+        },
+        "directories": [
+          ".",
+          "cleanup_v1_65256_c2a7491ceec24a98b6df0f0132f39ca1"
+        ]
+      }
+    }
+  ],
+  "debug_stops": [
+    {
+      "frames": [
+        {
+          "source": "res://scripts/steam_receipt_store.gd",
+          "line": 314,
+          "function": "release"
+        },
+        {
+          "source": "res://scripts/steam_run_ledger.gd",
+          "line": 138,
+          "function": "_drive_pending"
+        },
+        {
+          "source": "res://scripts/steam_run_ledger.gd",
+          "line": 75,
+          "function": "_persist"
+        },
+        {
+          "source": "res://scripts/steam_run_ledger.gd",
+          "line": 238,
+          "function": "apply_campaign_handoff"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/campaign_store_protocol_io_20261026/20261026_220853_bcbb8766/workers/worker.gd",
+          "line": 111,
+          "function": "normal_or_fault"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/campaign_store_protocol_io_20261026/20261026_220853_bcbb8766/workers/worker.gd",
+          "line": 63,
+          "function": "gate"
+        }
+      ],
+      "packet_sha256": "bcd586a25ce81e99040d33011fa837226d393390f1502ce0f196aadfd63f081b"
+    }
+  ],
+  "synthetic_account_and_token": true,
+  "production_method_overrides": 0,
+  "sdk_qualified": false,
+  "pid": 65256,
+  "active_breakpoint": {
+    "status": "matched_before_inventory",
+    "pid": 65256,
+    "point": {
+      "source": "res://scripts/steam_receipt_store.gd",
+      "line": 314,
+      "function": "release",
+      "source_sha256": "11bf6cae5968baa6c740c3c6be1fc954376048cbbe9a81a77b6cf4588518f9f1",
+      "statement": "_checkpoint(\"release_marker_published\")",
+      "kind": "crash_marker"
+    },
+    "frames": [
+      {
+        "source": "res://scripts/steam_receipt_store.gd",
+        "line": 314,
+        "function": "release"
+      },
+      {
+        "source": "res://scripts/steam_run_ledger.gd",
+        "line": 138,
+        "function": "_drive_pending"
+      },
+      {
+        "source": "res://scripts/steam_run_ledger.gd",
+        "line": 75,
+        "function": "_persist"
+      },
+      {
+        "source": "res://scripts/steam_run_ledger.gd",
+        "line": 238,
+        "function": "apply_campaign_handoff"
+      },
+      {
+        "source": "D:/AI项目/水浒/开发工程/.godot/campaign_store_protocol_io_20261026/20261026_220853_bcbb8766/workers/worker.gd",
+        "line": 111,
+        "function": "normal_or_fault"
+      },
+      {
+        "source": "D:/AI项目/水浒/开发工程/.godot/campaign_store_protocol_io_20261026/20261026_220853_bcbb8766/workers/worker.gd",
+        "line": 63,
+        "function": "gate"
+      }
+    ],
+    "packet_sha256": "bcd586a25ce81e99040d33011fa837226d393390f1502ce0f196aadfd63f081b"
+  },
+  "original_pid_terminal": true,
+  "exit_code": 1,
+  "process_terminal": true,
+  "log_sha256": "4874e82f983be56897f32b6ccb511e60063a5b8560e1e533b74718ae280bb956",
+  "final_inventory": {
+    "exists": true,
+    "files": {
+      "record_0000000003.json": {
+        "sha256": "8bd4613c19ccafb4207837661fc14466b53ebaec9f45c2bdb5f5582e8c01ec3c",
+        "bytes": 1553
+      },
+      "record_0000000004.json": {
+        "sha256": "a95ca631451fe77bb33f77e44e82ab0b36c3ee73c9d34ab9ac60660ebec0e2fc",
+        "bytes": 2363
+      },
+      "release_v1_65256_fa62716912f6d9984e65df87d99408fd_65256_c2a7491ceec24a98b6df0f0132f39ca1_4_a95ca631451fe77bb33f77e44e82ab0b36c3ee73c9d34ab9ac60660ebec0e2fc.json": {
+        "sha256": "9d347f490351f7e537edcdf62857128c3a53fd6f68a33d01da902d8ee318c6ba",
+        "bytes": 100
+      }
+    },
+    "directories": [
+      ".",
+      "cleanup_v1_65256_c2a7491ceec24a98b6df0f0132f39ca1"
+    ]
+  }
+}

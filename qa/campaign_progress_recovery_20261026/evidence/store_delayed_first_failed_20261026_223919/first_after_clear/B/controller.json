@@ -1,0 +1,21 @@
+{
+  "mode": "B",
+  "command": [
+    "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+    "--path",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261026_211212_dd3104df\\project",
+    "--headless",
+    "--remote-debug",
+    "tcp://127.0.0.1:58340",
+    "--script",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_store_delayed_io_20261026\\20261026_223919_4ffc4c0b\\workers\\delayed_bootstrap.gd"
+  ],
+  "stops": [],
+  "gates": [],
+  "pid": 33428,
+  "primary_case_error": "RuntimeError('Worker exited before gate: B/b_begin')",
+  "primary_case_traceback": "Traceback (most recent call last):\n  File \"D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\tests\\io\\run_delayed_acquire.py\", line 217, in execute_case\n    pair.gate(\"B\", \"b_begin\"); pair.arm(\"B\", points[\"B\"]); pair.ack(\"B\"); pair.stopped(\"B\")\n    ~~~~~~~~~^^^^^^^^^^^^^^^^\n  File \"D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\tests\\io\\run_delayed_acquire.py\", line 141, in gate\n    self.wait(ready, role + \"/\" + kind)\n    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\tests\\io\\run_delayed_acquire.py\", line 128, in wait\n    while not predicate():\n              ~~~~~~~~~^^\n  File \"D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\tests\\io\\run_delayed_acquire.py\", line 139, in ready\n    require(c[\"child\"].poll() is None, \"Worker exited before gate: \" + role + \"/\" + kind)\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\tests\\io\\run_io.py\", line 85, in require\n    raise RuntimeError(message)\nRuntimeError: Worker exited before gate: B/b_begin\n",
+  "exit_code": 1,
+  "process_terminal": true,
+  "log_sha256": "95f0e77bd95977584d6f13ad2f67730a9ccc57df16cf1c45262956d65fadd325"
+}

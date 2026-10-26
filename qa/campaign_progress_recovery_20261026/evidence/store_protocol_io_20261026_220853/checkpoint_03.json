@@ -1,0 +1,1692 @@
+{
+  "schema": "campaign_store_protocol_io_runner_v1",
+  "complete": false,
+  "base_run": "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261026_211212_dd3104df",
+  "source_points": {
+    "write_retry": {
+      "source": "res://scripts/run_snapshot_store.gd",
+      "line": 169,
+      "function": "_write_new",
+      "source_sha256": "581e638b8f0ce7cb24d5533b03ee94b99732c5cffcbf373b1a5a69a1618d8251",
+      "statement": "var file := FileAccess.open(path, FileAccess.WRITE)"
+    },
+    "rename_writing_retry": {
+      "source": "res://scripts/steam_receipt_store.gd",
+      "line": 295,
+      "function": "release",
+      "source_sha256": "11bf6cae5968baa6c740c3c6be1fc954376048cbbe9a81a77b6cf4588518f9f1",
+      "statement": "if DirAccess.rename_absolute(directory.path_join(\"writing\"),directory.path_join(cleanup)) != OK: return bad(\"RENAME\")"
+    },
+    "rename_owner_retry": {
+      "source": "res://scripts/steam_receipt_store.gd",
+      "line": 312,
+      "function": "release",
+      "source_sha256": "11bf6cae5968baa6c740c3c6be1fc954376048cbbe9a81a77b6cf4588518f9f1",
+      "statement": "if DirAccess.rename_absolute(directory.path_join(lock.name).path_join(\"owner.json\"),directory.path_join(name)) != OK: return bad(\"RENAME\")"
+    },
+    "cleanup_delete_retry": {
+      "source": "res://scripts/steam_receipt_store.gd",
+      "line": 274,
+      "function": "_finish_release",
+      "source_sha256": "11bf6cae5968baa6c740c3c6be1fc954376048cbbe9a81a77b6cf4588518f9f1",
+      "statement": "if DirAccess.remove_absolute(directory.path_join(marker.cleanup)) != OK: return bad(\"LOCK_RELEASE\")"
+    },
+    "marker_delete_retry": {
+      "source": "res://scripts/steam_receipt_store.gd",
+      "line": 278,
+      "function": "_finish_release",
+      "source_sha256": "11bf6cae5968baa6c740c3c6be1fc954376048cbbe9a81a77b6cf4588518f9f1",
+      "statement": "if DirAccess.remove_absolute(directory.path_join(marker.name)) != OK: return bad(\"LOCK_RELEASE\")"
+    },
+    "crash_pending": {
+      "source": "res://scripts/run_snapshot_store.gd",
+      "line": 310,
+      "function": "commit_locked",
+      "source_sha256": "581e638b8f0ce7cb24d5533b03ee94b99732c5cffcbf373b1a5a69a1618d8251",
+      "statement": "_checkpoint(\"pending_verified\")"
+    },
+    "crash_record": {
+      "source": "res://scripts/run_snapshot_store.gd",
+      "line": 314,
+      "function": "commit_locked",
+      "source_sha256": "581e638b8f0ce7cb24d5533b03ee94b99732c5cffcbf373b1a5a69a1618d8251",
+      "statement": "_checkpoint(\"record_renamed\")"
+    },
+    "crash_half": {
+      "source": "res://scripts/run_snapshot_store.gd",
+      "line": 176,
+      "function": "_write_new",
+      "source_sha256": "581e638b8f0ce7cb24d5533b03ee94b99732c5cffcbf373b1a5a69a1618d8251",
+      "statement": "_checkpoint(\"pending_half\")"
+    },
+    "crash_cleanup": {
+      "source": "res://scripts/steam_receipt_store.gd",
+      "line": 297,
+      "function": "release",
+      "source_sha256": "11bf6cae5968baa6c740c3c6be1fc954376048cbbe9a81a77b6cf4588518f9f1",
+      "statement": "_checkpoint(\"release_directory_claimed\")"
+    },
+    "crash_marker": {
+      "source": "res://scripts/steam_receipt_store.gd",
+      "line": 314,
+      "function": "release",
+      "source_sha256": "11bf6cae5968baa6c740c3c6be1fc954376048cbbe9a81a77b6cf4588518f9f1",
+      "statement": "_checkpoint(\"release_marker_published\")"
+    },
+    "crash_cleanup_removed": {
+      "source": "res://scripts/steam_receipt_store.gd",
+      "line": 275,
+      "function": "_finish_release",
+      "source_sha256": "11bf6cae5968baa6c740c3c6be1fc954376048cbbe9a81a77b6cf4588518f9f1",
+      "statement": "_checkpoint(\"release_directory_removed\")"
+    },
+    "crash_marker_removed": {
+      "source": "res://scripts/steam_receipt_store.gd",
+      "line": 280,
+      "function": "_finish_release",
+      "source_sha256": "11bf6cae5968baa6c740c3c6be1fc954376048cbbe9a81a77b6cf4588518f9f1",
+      "statement": "_checkpoint(\"release_marker_removed\")"
+    },
+    "recover_claim_crash": {
+      "source": "res://scripts/steam_receipt_store.gd",
+      "line": 371,
+      "function": "recover",
+      "source_sha256": "11bf6cae5968baa6c740c3c6be1fc954376048cbbe9a81a77b6cf4588518f9f1",
+      "statement": "_checkpoint(\"unique_release_recovery_claimed\")"
+    }
+  },
+  "stages": [
+    {
+      "mode": "normal",
+      "command": [
+        "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+        "--path",
+        "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261026_211212_dd3104df\\project",
+        "--headless",
+        "--remote-debug",
+        "tcp://127.0.0.1:53006",
+        "--script",
+        "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_store_protocol_io_20261026\\20261026_220853_bcbb8766\\workers\\bootstrap.gd"
+      ],
+      "profile": "D:\\CodexQA\\campspio\\51bc40bcab08",
+      "nonce": "51bc40bcab084e64b959df0ae6a54c9c",
+      "complete": true,
+      "faults": [],
+      "debug_stops": [],
+      "synthetic_account_and_token": true,
+      "production_method_overrides": 0,
+      "sdk_qualified": false,
+      "pid": 40880,
+      "exit_code": 0,
+      "process_terminal": true,
+      "log_sha256": "04805da271bddf5fac42ab0366b27b2e1500fa7932fef4b324a79bc24f7b6229",
+      "report": {
+        "actual_user_dir": "D:/CodexQA/campspio/51bc40bcab08/appdata/Godot/app_userdata/水浒英雄传：八幕战役",
+        "checks": [
+          {
+            "label": "private profile, fixed source project, SDK disabled",
+            "passed": true
+          },
+          {
+            "label": "actual installed candidate source identity",
+            "passed": true
+          },
+          {
+            "label": "native transactions run outside the physics frame",
+            "passed": true
+          },
+          {
+            "label": "open new synthetic ledger at fixed production root: COMMITTED",
+            "passed": true
+          },
+          {
+            "label": "ordinary ledger begin creates synthetic local token",
+            "passed": true
+          },
+          {
+            "label": "ordinary progress persists five eligible fixture kills",
+            "passed": true
+          },
+          {
+            "label": "persist pre-fault descriptor and basis outside ledger",
+            "passed": true
+          },
+          {
+            "label": "campaign handoff returns verified durable proof: CAMPAIGN_HANDOFF_READBACK_VERIFIED",
+            "passed": true
+          },
+          {
+            "label": "ledger durable capture after handoff",
+            "passed": true
+          },
+          {
+            "label": "independent native Store reads closed head",
+            "passed": true
+          },
+          {
+            "label": "model matches independent on-disk document and SHA",
+            "passed": true
+          },
+          {
+            "label": "one handoff adds exactly one generation",
+            "passed": true
+          },
+          {
+            "label": "one final kill delta and one win persisted",
+            "passed": true
+          },
+          {
+            "label": "clear and full-story fixture awards are persisted",
+            "passed": true
+          },
+          {
+            "label": "terminal source and final kills persisted",
+            "passed": true
+          },
+          {
+            "label": "frozen descriptor still has strict canonical shape",
+            "passed": true
+          },
+          {
+            "label": "exact nine-field disk proof and fixed outer envelope",
+            "passed": true
+          },
+          {
+            "label": "duplicate handoff is exact proof with no file or counter mutation",
+            "passed": true
+          },
+          {
+            "label": "different intent cannot use terminal shortcut",
+            "passed": true
+          }
+        ],
+        "evidence": {
+          "applied": {
+            "code": "CAMPAIGN_HANDOFF_READBACK_VERIFIED",
+            "ok": true,
+            "proof": {
+              "context": {
+                "level_id": "level4",
+                "mode": "campaign",
+                "waves": 0
+              },
+              "correction_epoch": 0,
+              "descriptor_sha256": "c7fcbf9e9ab174d91126ee9ac7fb5cb6c5a940c9ce40eefb9ee4a614aeae7cc3",
+              "intent_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "ledger_document_generation": 3,
+              "ledger_file_sha256": "c92c30749fc46de8ae068f9aa2d09a51586b67a641b342b60113531afa47755d",
+              "owner": "76561198000000001",
+              "schema": "campaign_steam_handoff_proof_v1",
+              "token": "c235b872346c30fc150f73150054802b"
+            }
+          },
+          "durable": {
+            "file_sha256": "c92c30749fc46de8ae068f9aa2d09a51586b67a641b342b60113531afa47755d",
+            "ok": true,
+            "record": {
+              "correction_epoch": 0,
+              "generation": 3,
+              "owner": "76561198000000001",
+              "requires_correction": false,
+              "runs": {
+                "c235b872346c30fc150f73150054802b": {
+                  "context": {
+                    "level_id": "level4",
+                    "mode": "campaign",
+                    "waves": 0
+                  },
+                  "credited_kills": 8,
+                  "settlement": {
+                    "descriptor_sha256": "c7fcbf9e9ab174d91126ee9ac7fb5cb6c5a940c9ce40eefb9ee4a614aeae7cc3",
+                    "handoff": {
+                      "basis_credited_kills": 5,
+                      "basis_generation": 2,
+                      "basis_sha256": "3234e684d8afd79ed97f9e2cbefc0d2124932aeb4ba9dcb9338b8803704abae7",
+                      "context": {
+                        "level_id": "level4",
+                        "mode": "campaign",
+                        "waves": 0
+                      },
+                      "correction_epoch": 0,
+                      "final_credited_kills": 8,
+                      "intent_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "owner": "76561198000000001",
+                      "result": {
+                        "contract_version": 2,
+                        "core_cleared": true,
+                        "done_ids": [
+                          "lhm_training",
+                          "lhm_hooks",
+                          "lhm_han",
+                          "lhm_hu"
+                        ],
+                        "story_complete": true,
+                        "story_done": 4,
+                        "story_total": 4
+                      },
+                      "schema": "campaign_steam_handoff_v1",
+                      "token": "c235b872346c30fc150f73150054802b",
+                      "victory": true
+                    },
+                    "schema": "campaign_steam_handoff_v1"
+                  },
+                  "terminal": true,
+                  "terminal_reason": "settled",
+                  "victory": true
+                }
+              },
+              "stats": {
+                "AI_WINS": 0,
+                "DEFENSE_WINS": 0,
+                "TOTAL_KILLS": 8,
+                "TOTAL_WINS": 1
+              },
+              "unlocked": {
+                "ACH_AI_WINS_1": false,
+                "ACH_AI_WINS_10": false,
+                "ACH_ALL_CLEAR": false,
+                "ACH_ALL_STORY": false,
+                "ACH_CLEAR_LEVEL_1": false,
+                "ACH_CLEAR_LEVEL_2": false,
+                "ACH_CLEAR_LEVEL_3": false,
+                "ACH_CLEAR_LEVEL_4": true,
+                "ACH_CLEAR_LEVEL_5": false,
+                "ACH_CLEAR_LEVEL_6": false,
+                "ACH_CLEAR_LEVEL_7": false,
+                "ACH_CLEAR_LEVEL_8": false,
+                "ACH_DEFENSE_30": false,
+                "ACH_DEFENSE_60": false,
+                "ACH_DEFENSE_WINS_10": false,
+                "ACH_DEFENSE_WINS_50": false,
+                "ACH_KILLS_1000": false,
+                "ACH_KILLS_10000": false,
+                "ACH_KILLS_100000": false,
+                "ACH_STORY_LEVEL_1": false,
+                "ACH_STORY_LEVEL_2": false,
+                "ACH_STORY_LEVEL_3": false,
+                "ACH_STORY_LEVEL_4": true,
+                "ACH_STORY_LEVEL_5": false,
+                "ACH_STORY_LEVEL_6": false,
+                "ACH_STORY_LEVEL_7": false,
+                "ACH_STORY_LEVEL_8": false,
+                "ACH_WINS_10": false,
+                "ACH_WINS_100": false,
+                "ACH_WINS_50": false
+              },
+              "version": 3
+            }
+          },
+          "inventory": {
+            "items": {
+              "record_0000000003.json": "3234e684d8afd79ed97f9e2cbefc0d2124932aeb4ba9dcb9338b8803704abae7",
+              "record_0000000004.json": "c92c30749fc46de8ae068f9aa2d09a51586b67a641b342b60113531afa47755d"
+            },
+            "ok": true
+          },
+          "inventory_after_apply": {
+            "items": {
+              "record_0000000003.json": "3234e684d8afd79ed97f9e2cbefc0d2124932aeb4ba9dcb9338b8803704abae7",
+              "record_0000000004.json": "c92c30749fc46de8ae068f9aa2d09a51586b67a641b342b60113531afa47755d"
+            },
+            "ok": true
+          },
+          "open_physics_frame": false,
+          "opened": {
+            "changed": true,
+            "code": "COMMITTED",
+            "generation": 0,
+            "ok": true,
+            "upgrade_required": false,
+            "version": 3
+          },
+          "pending_after_apply": {
+            "kind": "",
+            "ok": true,
+            "pending": false
+          },
+          "prepared": {
+            "before": {
+              "file_sha256": "3234e684d8afd79ed97f9e2cbefc0d2124932aeb4ba9dcb9338b8803704abae7",
+              "ok": true,
+              "record": {
+                "correction_epoch": 0,
+                "generation": 2,
+                "owner": "76561198000000001",
+                "requires_correction": false,
+                "runs": {
+                  "c235b872346c30fc150f73150054802b": {
+                    "context": {
+                      "level_id": "level4",
+                      "mode": "campaign",
+                      "waves": 0
+                    },
+                    "credited_kills": 5,
+                    "settlement": {},
+                    "terminal": false,
+                    "terminal_reason": "active",
+                    "victory": false
+                  }
+                },
+                "stats": {
+                  "AI_WINS": 0,
+                  "DEFENSE_WINS": 0,
+                  "TOTAL_KILLS": 5,
+                  "TOTAL_WINS": 0
+                },
+                "unlocked": {
+                  "ACH_AI_WINS_1": false,
+                  "ACH_AI_WINS_10": false,
+                  "ACH_ALL_CLEAR": false,
+                  "ACH_ALL_STORY": false,
+                  "ACH_CLEAR_LEVEL_1": false,
+                  "ACH_CLEAR_LEVEL_2": false,
+                  "ACH_CLEAR_LEVEL_3": false,
+                  "ACH_CLEAR_LEVEL_4": false,
+                  "ACH_CLEAR_LEVEL_5": false,
+                  "ACH_CLEAR_LEVEL_6": false,
+                  "ACH_CLEAR_LEVEL_7": false,
+                  "ACH_CLEAR_LEVEL_8": false,
+                  "ACH_DEFENSE_30": false,
+                  "ACH_DEFENSE_60": false,
+                  "ACH_DEFENSE_WINS_10": false,
+                  "ACH_DEFENSE_WINS_50": false,
+                  "ACH_KILLS_1000": false,
+                  "ACH_KILLS_10000": false,
+                  "ACH_KILLS_100000": false,
+                  "ACH_STORY_LEVEL_1": false,
+                  "ACH_STORY_LEVEL_2": false,
+                  "ACH_STORY_LEVEL_3": false,
+                  "ACH_STORY_LEVEL_4": false,
+                  "ACH_STORY_LEVEL_5": false,
+                  "ACH_STORY_LEVEL_6": false,
+                  "ACH_STORY_LEVEL_7": false,
+                  "ACH_STORY_LEVEL_8": false,
+                  "ACH_WINS_10": false,
+                  "ACH_WINS_100": false,
+                  "ACH_WINS_50": false
+                },
+                "version": 3
+              }
+            },
+            "directory": "D:/CodexQA/campspio/51bc40bcab08/appdata/Godot/app_userdata/水浒英雄传：八幕战役/steam_receipts/v1/5088120/76561198000000001",
+            "handoff": {
+              "basis_credited_kills": 5,
+              "basis_generation": 2,
+              "basis_sha256": "3234e684d8afd79ed97f9e2cbefc0d2124932aeb4ba9dcb9338b8803704abae7",
+              "context": {
+                "level_id": "level4",
+                "mode": "campaign",
+                "waves": 0
+              },
+              "correction_epoch": 0,
+              "final_credited_kills": 8,
+              "intent_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "owner": "76561198000000001",
+              "result": {
+                "contract_version": 2,
+                "core_cleared": true,
+                "done_ids": [
+                  "lhm_training",
+                  "lhm_hooks",
+                  "lhm_han",
+                  "lhm_hu"
+                ],
+                "story_complete": true,
+                "story_done": 4,
+                "story_total": 4
+              },
+              "schema": "campaign_steam_handoff_v1",
+              "token": "c235b872346c30fc150f73150054802b",
+              "victory": true
+            },
+            "identity": {
+              "content_version": "source-v1:f6ef8398f297af3a9be64ca376b9f2a940951d9b93b0512808e3f4275afc32e4",
+              "engine_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+              "source_mode": true
+            },
+            "mode": "normal",
+            "nonce": "51bc40bcab084e64b959df0ae6a54c9c",
+            "owner": "76561198000000001",
+            "pid": 40880,
+            "profile": "D:\\CodexQA\\campspio\\51bc40bcab08",
+            "schema": "handoff_io_prepared_v1",
+            "synthetic_account_and_token": true
+          },
+          "proof": {
+            "code": "CAMPAIGN_HANDOFF_READBACK_VERIFIED",
+            "ok": true,
+            "proof": {
+              "context": {
+                "level_id": "level4",
+                "mode": "campaign",
+                "waves": 0
+              },
+              "correction_epoch": 0,
+              "descriptor_sha256": "c7fcbf9e9ab174d91126ee9ac7fb5cb6c5a940c9ce40eefb9ee4a614aeae7cc3",
+              "intent_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "ledger_document_generation": 3,
+              "ledger_file_sha256": "c92c30749fc46de8ae068f9aa2d09a51586b67a641b342b60113531afa47755d",
+              "owner": "76561198000000001",
+              "schema": "campaign_steam_handoff_proof_v1",
+              "token": "c235b872346c30fc150f73150054802b"
+            }
+          }
+        },
+        "failures": [],
+        "gameplay_or_power_loss_qualified": false,
+        "identity": {
+          "content_version": "source-v1:f6ef8398f297af3a9be64ca376b9f2a940951d9b93b0512808e3f4275afc32e4",
+          "engine_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+          "source_mode": true
+        },
+        "mode": "normal",
+        "nonce": "51bc40bcab084e64b959df0ae6a54c9c",
+        "owner": "76561198000000001",
+        "passed": true,
+        "pid": 40880,
+        "production_root": "user://steam_receipts/v1",
+        "profile": "D:\\CodexQA\\campspio\\51bc40bcab08",
+        "schema": "campaign_handoff_native_io_v1",
+        "sdk_or_real_account_qualified": false,
+        "synthetic_account_and_token": true
+      },
+      "report_sha256": "4d826d82050ea780270cda5ae9e5574ecdcc6745c72bdbf430121c23b3d9762b"
+    },
+    {
+      "mode": "legacy_upgrade",
+      "command": [
+        "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+        "--path",
+        "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261026_211212_dd3104df\\project",
+        "--headless",
+        "--remote-debug",
+        "tcp://127.0.0.1:50769",
+        "--script",
+        "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_store_protocol_io_20261026\\20261026_220853_bcbb8766\\workers\\bootstrap.gd"
+      ],
+      "profile": "D:\\CodexQA\\campspio\\e27d7bc2ebc0",
+      "nonce": "e27d7bc2ebc041c498ec1900f4204d78",
+      "complete": true,
+      "faults": [],
+      "debug_stops": [],
+      "synthetic_account_and_token": true,
+      "production_method_overrides": 0,
+      "sdk_qualified": false,
+      "pid": 65796,
+      "exit_code": 0,
+      "process_terminal": true,
+      "log_sha256": "f0c43d201206e603797c255d7d3ec9ab35e36ee305737951611b4ff5b0cd7160",
+      "report": {
+        "actual_user_dir": "D:/CodexQA/campspio/e27d7bc2ebc0/appdata/Godot/app_userdata/水浒英雄传：八幕战役",
+        "checks": [
+          {
+            "label": "private profile, fixed source project, SDK disabled",
+            "passed": true
+          },
+          {
+            "label": "actual installed candidate source identity",
+            "passed": true
+          },
+          {
+            "label": "native transactions run outside the physics frame",
+            "passed": true
+          },
+          {
+            "label": "construct explicit synthetic legacy fixture",
+            "passed": true
+          },
+          {
+            "label": "legacy fixture passes unchanged strict v2 reader",
+            "passed": true
+          },
+          {
+            "label": "initialize native legacy account directory",
+            "passed": true
+          },
+          {
+            "label": "acquire empty legacy journal",
+            "passed": true
+          },
+          {
+            "label": "write canonical v2 envelope with actual Store API",
+            "passed": true
+          },
+          {
+            "label": "ledger identifies existing v2 without implicit upgrade",
+            "passed": true
+          },
+          {
+            "label": "opening v2 preserves original native chain",
+            "passed": true
+          },
+          {
+            "label": "v2 write refuses before explicit upgrade",
+            "passed": true
+          },
+          {
+            "label": "explicit upgrade commits through native ledger transaction",
+            "passed": true
+          },
+          {
+            "label": "upgrade adds one generation and preserves targets",
+            "passed": true
+          },
+          {
+            "label": "v3 links to original v2 file SHA and original bytes remain",
+            "passed": true
+          },
+          {
+            "label": "repeat upgrade is native-file no-op",
+            "passed": true
+          }
+        ],
+        "evidence": {
+          "inventory": {
+            "items": {
+              "record_0000000001.json": "5f46657c86f251f5f10de8691ea390c47ce024f76d7dae054ed762eb4ce68d80",
+              "record_0000000002.json": "6785389327d96b2ce1948b82b878c2603a061c79c22f23d7e157dc4b4fa3c6c9"
+            },
+            "ok": true
+          },
+          "legacy": {
+            "generation": 0,
+            "owner": "76561198000000001",
+            "requires_correction": false,
+            "runs": {},
+            "stats": {
+              "AI_WINS": 0,
+              "DEFENSE_WINS": 0,
+              "TOTAL_KILLS": 0,
+              "TOTAL_WINS": 0
+            },
+            "unlocked": {
+              "ACH_AI_WINS_1": false,
+              "ACH_AI_WINS_10": false,
+              "ACH_ALL_CLEAR": false,
+              "ACH_ALL_STORY": false,
+              "ACH_CLEAR_LEVEL_1": false,
+              "ACH_CLEAR_LEVEL_2": false,
+              "ACH_CLEAR_LEVEL_3": false,
+              "ACH_CLEAR_LEVEL_4": false,
+              "ACH_CLEAR_LEVEL_5": false,
+              "ACH_CLEAR_LEVEL_6": false,
+              "ACH_CLEAR_LEVEL_7": false,
+              "ACH_CLEAR_LEVEL_8": false,
+              "ACH_DEFENSE_30": false,
+              "ACH_DEFENSE_60": false,
+              "ACH_DEFENSE_WINS_10": false,
+              "ACH_DEFENSE_WINS_50": false,
+              "ACH_KILLS_1000": false,
+              "ACH_KILLS_10000": false,
+              "ACH_KILLS_100000": false,
+              "ACH_STORY_LEVEL_1": false,
+              "ACH_STORY_LEVEL_2": false,
+              "ACH_STORY_LEVEL_3": false,
+              "ACH_STORY_LEVEL_4": false,
+              "ACH_STORY_LEVEL_5": false,
+              "ACH_STORY_LEVEL_6": false,
+              "ACH_STORY_LEVEL_7": false,
+              "ACH_STORY_LEVEL_8": false,
+              "ACH_WINS_10": false,
+              "ACH_WINS_100": false,
+              "ACH_WINS_50": false
+            },
+            "version": 2
+          },
+          "original_inventory": {
+            "items": {
+              "record_0000000001.json": "5f46657c86f251f5f10de8691ea390c47ce024f76d7dae054ed762eb4ce68d80"
+            },
+            "ok": true
+          },
+          "seed": {
+            "document": {
+              "generation": 0,
+              "owner": "76561198000000001",
+              "requires_correction": false,
+              "runs": {},
+              "stats": {
+                "AI_WINS": 0,
+                "DEFENSE_WINS": 0,
+                "TOTAL_KILLS": 0,
+                "TOTAL_WINS": 0
+              },
+              "unlocked": {
+                "ACH_AI_WINS_1": false,
+                "ACH_AI_WINS_10": false,
+                "ACH_ALL_CLEAR": false,
+                "ACH_ALL_STORY": false,
+                "ACH_CLEAR_LEVEL_1": false,
+                "ACH_CLEAR_LEVEL_2": false,
+                "ACH_CLEAR_LEVEL_3": false,
+                "ACH_CLEAR_LEVEL_4": false,
+                "ACH_CLEAR_LEVEL_5": false,
+                "ACH_CLEAR_LEVEL_6": false,
+                "ACH_CLEAR_LEVEL_7": false,
+                "ACH_CLEAR_LEVEL_8": false,
+                "ACH_DEFENSE_30": false,
+                "ACH_DEFENSE_60": false,
+                "ACH_DEFENSE_WINS_10": false,
+                "ACH_DEFENSE_WINS_50": false,
+                "ACH_KILLS_1000": false,
+                "ACH_KILLS_10000": false,
+                "ACH_KILLS_100000": false,
+                "ACH_STORY_LEVEL_1": false,
+                "ACH_STORY_LEVEL_2": false,
+                "ACH_STORY_LEVEL_3": false,
+                "ACH_STORY_LEVEL_4": false,
+                "ACH_STORY_LEVEL_5": false,
+                "ACH_STORY_LEVEL_6": false,
+                "ACH_STORY_LEVEL_7": false,
+                "ACH_STORY_LEVEL_8": false,
+                "ACH_WINS_10": false,
+                "ACH_WINS_100": false,
+                "ACH_WINS_50": false
+              },
+              "version": 2
+            },
+            "file_sha256": "5f46657c86f251f5f10de8691ea390c47ce024f76d7dae054ed762eb4ce68d80",
+            "ok": true,
+            "payload_sha256": "3d8841ecf75cb85eba165e0b15ad611d96fc486e1747f82f0bfa2557234f8da5",
+            "previous": "0000000000000000000000000000000000000000000000000000000000000000",
+            "revision": 1
+          },
+          "upgraded": {
+            "file_sha256": "6785389327d96b2ce1948b82b878c2603a061c79c22f23d7e157dc4b4fa3c6c9",
+            "ok": true,
+            "record": {
+              "correction_epoch": 0,
+              "generation": 1,
+              "owner": "76561198000000001",
+              "requires_correction": false,
+              "runs": {},
+              "stats": {
+                "AI_WINS": 0,
+                "DEFENSE_WINS": 0,
+                "TOTAL_KILLS": 0,
+                "TOTAL_WINS": 0
+              },
+              "unlocked": {
+                "ACH_AI_WINS_1": false,
+                "ACH_AI_WINS_10": false,
+                "ACH_ALL_CLEAR": false,
+                "ACH_ALL_STORY": false,
+                "ACH_CLEAR_LEVEL_1": false,
+                "ACH_CLEAR_LEVEL_2": false,
+                "ACH_CLEAR_LEVEL_3": false,
+                "ACH_CLEAR_LEVEL_4": false,
+                "ACH_CLEAR_LEVEL_5": false,
+                "ACH_CLEAR_LEVEL_6": false,
+                "ACH_CLEAR_LEVEL_7": false,
+                "ACH_CLEAR_LEVEL_8": false,
+                "ACH_DEFENSE_30": false,
+                "ACH_DEFENSE_60": false,
+                "ACH_DEFENSE_WINS_10": false,
+                "ACH_DEFENSE_WINS_50": false,
+                "ACH_KILLS_1000": false,
+                "ACH_KILLS_10000": false,
+                "ACH_KILLS_100000": false,
+                "ACH_STORY_LEVEL_1": false,
+                "ACH_STORY_LEVEL_2": false,
+                "ACH_STORY_LEVEL_3": false,
+                "ACH_STORY_LEVEL_4": false,
+                "ACH_STORY_LEVEL_5": false,
+                "ACH_STORY_LEVEL_6": false,
+                "ACH_STORY_LEVEL_7": false,
+                "ACH_STORY_LEVEL_8": false,
+                "ACH_WINS_10": false,
+                "ACH_WINS_100": false,
+                "ACH_WINS_50": false
+              },
+              "version": 3
+            }
+          }
+        },
+        "failures": [],
+        "gameplay_or_power_loss_qualified": false,
+        "identity": {
+          "content_version": "source-v1:f6ef8398f297af3a9be64ca376b9f2a940951d9b93b0512808e3f4275afc32e4",
+          "engine_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+          "source_mode": true
+        },
+        "mode": "legacy_upgrade",
+        "nonce": "e27d7bc2ebc041c498ec1900f4204d78",
+        "owner": "76561198000000001",
+        "passed": true,
+        "pid": 65796,
+        "production_root": "user://steam_receipts/v1",
+        "profile": "D:\\CodexQA\\campspio\\e27d7bc2ebc0",
+        "schema": "campaign_handoff_native_io_v1",
+        "sdk_or_real_account_qualified": false,
+        "synthetic_account_and_token": true
+      },
+      "report_sha256": "62a7701c9227ebc7d966ddce29795bf7c6895d1686d5c839c67781aaeb74c6aa"
+    },
+    {
+      "mode": "write_retry",
+      "command": [
+        "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+        "--path",
+        "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261026_211212_dd3104df\\project",
+        "--headless",
+        "--remote-debug",
+        "tcp://127.0.0.1:53030",
+        "--script",
+        "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_store_protocol_io_20261026\\20261026_220853_bcbb8766\\workers\\bootstrap.gd"
+      ],
+      "profile": "D:\\CodexQA\\campspio\\a718ab809928",
+      "nonce": "a718ab8099284d6e968ae3b77c751caa",
+      "complete": true,
+      "faults": [
+        {
+          "kind": "write_retry",
+          "point": {
+            "source": "res://scripts/run_snapshot_store.gd",
+            "line": 169,
+            "function": "_write_new",
+            "source_sha256": "581e638b8f0ce7cb24d5533b03ee94b99732c5cffcbf373b1a5a69a1618d8251",
+            "statement": "var file := FileAccess.open(path, FileAccess.WRITE)",
+            "kind": "write_retry"
+          },
+          "frames": [
+            {
+              "source": "res://scripts/run_snapshot_store.gd",
+              "line": 169,
+              "function": "_write_new"
+            },
+            {
+              "source": "res://scripts/run_snapshot_store.gd",
+              "line": 308,
+              "function": "commit_locked"
+            },
+            {
+              "source": "res://scripts/steam_receipt_store.gd",
+              "line": 230,
+              "function": "commit_locked"
+            },
+            {
+              "source": "res://scripts/steam_run_ledger.gd",
+              "line": 123,
+              "function": "_drive_pending"
+            },
+            {
+              "source": "res://scripts/steam_run_ledger.gd",
+              "line": 75,
+              "function": "_persist"
+            },
+            {
+              "source": "res://scripts/steam_run_ledger.gd",
+              "line": 238,
+              "function": "apply_campaign_handoff"
+            },
+            {
+              "source": "D:/AI项目/水浒/开发工程/.godot/campaign_store_protocol_io_20261026/20261026_220853_bcbb8766/workers/worker.gd",
+              "line": 111,
+              "function": "normal_or_fault"
+            },
+            {
+              "source": "D:/AI项目/水浒/开发工程/.godot/campaign_store_protocol_io_20261026/20261026_220853_bcbb8766/workers/worker.gd",
+              "line": 63,
+              "function": "gate"
+            }
+          ],
+          "pid": 43792,
+          "status": "native_denial_acquired",
+          "actual_native_operation": true,
+          "before_inventory": {
+            "exists": true,
+            "files": {
+              "record_0000000002.json": {
+                "sha256": "1746403496a6c238d4ebb608bd6bdde80a28c6d9ef82bfbab3e391f665e25c67",
+                "bytes": 1553
+              },
+              "record_0000000003.json": {
+                "sha256": "a605f25475c7d38161c2114e7e14e1b73457f081fe1753afd544dd843ba27f03",
+                "bytes": 1553
+              },
+              "writing/owner.json": {
+                "sha256": "6c2331aeb35a03bb87fed62033f81c62fb70f03bdda424437202b7e96d9f649b",
+                "bytes": 100
+              }
+            },
+            "directories": [
+              ".",
+              "writing"
+            ]
+          },
+          "target": "D:\\CodexQA\\campspio\\a718ab809928\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\steam_receipts\\v1\\5088120\\76561198000000001\\receipt.pending",
+          "native_sharing_denial_acquired": true,
+          "failed_inventory": {
+            "exists": true,
+            "files": {
+              "receipt.pending": {
+                "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                "bytes": 0
+              },
+              "record_0000000002.json": {
+                "sha256": "1746403496a6c238d4ebb608bd6bdde80a28c6d9ef82bfbab3e391f665e25c67",
+                "bytes": 1553
+              },
+              "record_0000000003.json": {
+                "sha256": "a605f25475c7d38161c2114e7e14e1b73457f081fe1753afd544dd843ba27f03",
+                "bytes": 1553
+              },
+              "writing/owner.json": {
+                "sha256": "6c2331aeb35a03bb87fed62033f81c62fb70f03bdda424437202b7e96d9f649b",
+                "bytes": 100
+              }
+            },
+            "directories": [
+              ".",
+              "writing"
+            ]
+          },
+          "removed_own_empty_placeholder_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "denial_released": true
+        }
+      ],
+      "debug_stops": [
+        {
+          "frames": [
+            {
+              "source": "res://scripts/run_snapshot_store.gd",
+              "line": 169,
+              "function": "_write_new"
+            },
+            {
+              "source": "res://scripts/steam_receipt_store.gd",
+              "line": 184,
+              "function": "acquire"
+            },
+            {
+              "source": "res://scripts/steam_run_ledger.gd",
+              "line": 104,
+              "function": "_drive_pending"
+            },
+            {
+              "source": "res://scripts/steam_run_ledger.gd",
+              "line": 75,
+              "function": "_persist"
+            },
+            {
+              "source": "res://scripts/steam_run_ledger.gd",
+              "line": 238,
+              "function": "apply_campaign_handoff"
+            },
+            {
+              "source": "D:/AI项目/水浒/开发工程/.godot/campaign_store_protocol_io_20261026/20261026_220853_bcbb8766/workers/worker.gd",
+              "line": 111,
+              "function": "normal_or_fault"
+            },
+            {
+              "source": "D:/AI项目/水浒/开发工程/.godot/campaign_store_protocol_io_20261026/20261026_220853_bcbb8766/workers/worker.gd",
+              "line": 63,
+              "function": "gate"
+            }
+          ],
+          "packet_sha256": "d3050c9d784b651bbf0a3ad915a762cb2380b6a55d702b6b1dab016ce2420f7d"
+        },
+        {
+          "frames": [
+            {
+              "source": "res://scripts/run_snapshot_store.gd",
+              "line": 169,
+              "function": "_write_new"
+            },
+            {
+              "source": "res://scripts/run_snapshot_store.gd",
+              "line": 308,
+              "function": "commit_locked"
+            },
+            {
+              "source": "res://scripts/steam_receipt_store.gd",
+              "line": 230,
+              "function": "commit_locked"
+            },
+            {
+              "source": "res://scripts/steam_run_ledger.gd",
+              "line": 123,
+              "function": "_drive_pending"
+            },
+            {
+              "source": "res://scripts/steam_run_ledger.gd",
+              "line": 75,
+              "function": "_persist"
+            },
+            {
+              "source": "res://scripts/steam_run_ledger.gd",
+              "line": 238,
+              "function": "apply_campaign_handoff"
+            },
+            {
+              "source": "D:/AI项目/水浒/开发工程/.godot/campaign_store_protocol_io_20261026/20261026_220853_bcbb8766/workers/worker.gd",
+              "line": 111,
+              "function": "normal_or_fault"
+            },
+            {
+              "source": "D:/AI项目/水浒/开发工程/.godot/campaign_store_protocol_io_20261026/20261026_220853_bcbb8766/workers/worker.gd",
+              "line": 63,
+              "function": "gate"
+            }
+          ],
+          "packet_sha256": "e2e80c4a8b6d94fe6977dff66f5cc0834bbad8d53f6da570a805c2edf0ffdaad"
+        }
+      ],
+      "synthetic_account_and_token": true,
+      "production_method_overrides": 0,
+      "sdk_qualified": false,
+      "pid": 43792,
+      "active_breakpoint": {
+        "status": "matched_before_inventory",
+        "pid": 43792,
+        "point": {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 169,
+          "function": "_write_new",
+          "source_sha256": "581e638b8f0ce7cb24d5533b03ee94b99732c5cffcbf373b1a5a69a1618d8251",
+          "statement": "var file := FileAccess.open(path, FileAccess.WRITE)",
+          "kind": "write_retry"
+        },
+        "frames": [
+          {
+            "source": "res://scripts/run_snapshot_store.gd",
+            "line": 169,
+            "function": "_write_new"
+          },
+          {
+            "source": "res://scripts/run_snapshot_store.gd",
+            "line": 308,
+            "function": "commit_locked"
+          },
+          {
+            "source": "res://scripts/steam_receipt_store.gd",
+            "line": 230,
+            "function": "commit_locked"
+          },
+          {
+            "source": "res://scripts/steam_run_ledger.gd",
+            "line": 123,
+            "function": "_drive_pending"
+          },
+          {
+            "source": "res://scripts/steam_run_ledger.gd",
+            "line": 75,
+            "function": "_persist"
+          },
+          {
+            "source": "res://scripts/steam_run_ledger.gd",
+            "line": 238,
+            "function": "apply_campaign_handoff"
+          },
+          {
+            "source": "D:/AI项目/水浒/开发工程/.godot/campaign_store_protocol_io_20261026/20261026_220853_bcbb8766/workers/worker.gd",
+            "line": 111,
+            "function": "normal_or_fault"
+          },
+          {
+            "source": "D:/AI项目/水浒/开发工程/.godot/campaign_store_protocol_io_20261026/20261026_220853_bcbb8766/workers/worker.gd",
+            "line": 63,
+            "function": "gate"
+          }
+        ],
+        "packet_sha256": "e2e80c4a8b6d94fe6977dff66f5cc0834bbad8d53f6da570a805c2edf0ffdaad"
+      },
+      "exit_code": 0,
+      "process_terminal": true,
+      "log_sha256": "479c12e6b8896af87d7d6d95ba3362eb12eeb87bb0082c60d0d38d4d6f89693b",
+      "report": {
+        "actual_user_dir": "D:/CodexQA/campspio/a718ab809928/appdata/Godot/app_userdata/水浒英雄传：八幕战役",
+        "checks": [
+          {
+            "label": "private profile, fixed source project, SDK disabled",
+            "passed": true
+          },
+          {
+            "label": "actual installed candidate source identity",
+            "passed": true
+          },
+          {
+            "label": "native transactions run outside the physics frame",
+            "passed": true
+          },
+          {
+            "label": "open new synthetic ledger at fixed production root: COMMITTED",
+            "passed": true
+          },
+          {
+            "label": "ordinary ledger begin creates synthetic local token",
+            "passed": true
+          },
+          {
+            "label": "ordinary progress persists five eligible fixture kills",
+            "passed": true
+          },
+          {
+            "label": "persist pre-fault descriptor and basis outside ledger",
+            "passed": true
+          },
+          {
+            "label": "write controller request",
+            "passed": true
+          },
+          {
+            "label": "bounded controller handshake",
+            "passed": true
+          },
+          {
+            "label": "controller handshake identity",
+            "passed": true
+          },
+          {
+            "label": "real native file operation fails at requested boundary",
+            "passed": true
+          },
+          {
+            "label": "same ledger retains exact handoff and owned retry",
+            "passed": true
+          },
+          {
+            "label": "foreign retry cannot replace original proposal or CAS",
+            "passed": true
+          },
+          {
+            "label": "write controller request",
+            "passed": true
+          },
+          {
+            "label": "bounded controller handshake",
+            "passed": true
+          },
+          {
+            "label": "controller handshake identity",
+            "passed": true
+          },
+          {
+            "label": "native handle repair retains same Store object, original proposal and original CAS",
+            "passed": true
+          },
+          {
+            "label": "owned retry completes and clears pending",
+            "passed": true
+          },
+          {
+            "label": "disk commits original retained proposal exactly",
+            "passed": true
+          },
+          {
+            "label": "campaign handoff returns verified durable proof: CAMPAIGN_HANDOFF_READBACK_VERIFIED",
+            "passed": true
+          },
+          {
+            "label": "ledger durable capture after handoff",
+            "passed": true
+          },
+          {
+            "label": "independent native Store reads closed head",
+            "passed": true
+          },
+          {
+            "label": "model matches independent on-disk document and SHA",
+            "passed": true
+          },
+          {
+            "label": "one handoff adds exactly one generation",
+            "passed": true
+          },
+          {
+            "label": "one final kill delta and one win persisted",
+            "passed": true
+          },
+          {
+            "label": "clear and full-story fixture awards are persisted",
+            "passed": true
+          },
+          {
+            "label": "terminal source and final kills persisted",
+            "passed": true
+          },
+          {
+            "label": "frozen descriptor still has strict canonical shape",
+            "passed": true
+          },
+          {
+            "label": "exact nine-field disk proof and fixed outer envelope",
+            "passed": true
+          },
+          {
+            "label": "duplicate handoff is exact proof with no file or counter mutation",
+            "passed": true
+          },
+          {
+            "label": "different intent cannot use terminal shortcut",
+            "passed": true
+          }
+        ],
+        "evidence": {
+          "applied": {
+            "code": "WRITE_OPEN",
+            "ok": false,
+            "pending_kind": "handoff",
+            "pending_save": true,
+            "restart_required": false,
+            "retryable": true,
+            "unsafe": false
+          },
+          "durable": {
+            "file_sha256": "cc7ba5622f5cc2ee08a18278476b3858c8ae2c1a50bc2e665309dcc55875cd4e",
+            "ok": true,
+            "record": {
+              "correction_epoch": 0,
+              "generation": 3,
+              "owner": "76561198000000001",
+              "requires_correction": false,
+              "runs": {
+                "5daeb013dfa40cfb4faa735321acaebe": {
+                  "context": {
+                    "level_id": "level4",
+                    "mode": "campaign",
+                    "waves": 0
+                  },
+                  "credited_kills": 8,
+                  "settlement": {
+                    "descriptor_sha256": "4c4cb4f032bd7aab2bd0fe1c4c0fe5c7296dc3cca3591f389fddf5916a77fd0b",
+                    "handoff": {
+                      "basis_credited_kills": 5,
+                      "basis_generation": 2,
+                      "basis_sha256": "a605f25475c7d38161c2114e7e14e1b73457f081fe1753afd544dd843ba27f03",
+                      "context": {
+                        "level_id": "level4",
+                        "mode": "campaign",
+                        "waves": 0
+                      },
+                      "correction_epoch": 0,
+                      "final_credited_kills": 8,
+                      "intent_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "owner": "76561198000000001",
+                      "result": {
+                        "contract_version": 2,
+                        "core_cleared": true,
+                        "done_ids": [
+                          "lhm_training",
+                          "lhm_hooks",
+                          "lhm_han",
+                          "lhm_hu"
+                        ],
+                        "story_complete": true,
+                        "story_done": 4,
+                        "story_total": 4
+                      },
+                      "schema": "campaign_steam_handoff_v1",
+                      "token": "5daeb013dfa40cfb4faa735321acaebe",
+                      "victory": true
+                    },
+                    "schema": "campaign_steam_handoff_v1"
+                  },
+                  "terminal": true,
+                  "terminal_reason": "settled",
+                  "victory": true
+                }
+              },
+              "stats": {
+                "AI_WINS": 0,
+                "DEFENSE_WINS": 0,
+                "TOTAL_KILLS": 8,
+                "TOTAL_WINS": 1
+              },
+              "unlocked": {
+                "ACH_AI_WINS_1": false,
+                "ACH_AI_WINS_10": false,
+                "ACH_ALL_CLEAR": false,
+                "ACH_ALL_STORY": false,
+                "ACH_CLEAR_LEVEL_1": false,
+                "ACH_CLEAR_LEVEL_2": false,
+                "ACH_CLEAR_LEVEL_3": false,
+                "ACH_CLEAR_LEVEL_4": true,
+                "ACH_CLEAR_LEVEL_5": false,
+                "ACH_CLEAR_LEVEL_6": false,
+                "ACH_CLEAR_LEVEL_7": false,
+                "ACH_CLEAR_LEVEL_8": false,
+                "ACH_DEFENSE_30": false,
+                "ACH_DEFENSE_60": false,
+                "ACH_DEFENSE_WINS_10": false,
+                "ACH_DEFENSE_WINS_50": false,
+                "ACH_KILLS_1000": false,
+                "ACH_KILLS_10000": false,
+                "ACH_KILLS_100000": false,
+                "ACH_STORY_LEVEL_1": false,
+                "ACH_STORY_LEVEL_2": false,
+                "ACH_STORY_LEVEL_3": false,
+                "ACH_STORY_LEVEL_4": true,
+                "ACH_STORY_LEVEL_5": false,
+                "ACH_STORY_LEVEL_6": false,
+                "ACH_STORY_LEVEL_7": false,
+                "ACH_STORY_LEVEL_8": false,
+                "ACH_WINS_10": false,
+                "ACH_WINS_100": false,
+                "ACH_WINS_50": false
+              },
+              "version": 3
+            }
+          },
+          "failure": {
+            "code": "WRITE_OPEN",
+            "ok": false,
+            "pending_kind": "handoff",
+            "pending_save": true,
+            "restart_required": false,
+            "retryable": true,
+            "unsafe": false
+          },
+          "inventory": {
+            "items": {
+              "record_0000000003.json": "a605f25475c7d38161c2114e7e14e1b73457f081fe1753afd544dd843ba27f03",
+              "record_0000000004.json": "cc7ba5622f5cc2ee08a18278476b3858c8ae2c1a50bc2e665309dcc55875cd4e"
+            },
+            "ok": true
+          },
+          "inventory_after_apply": {
+            "code": "READ_SIZE",
+            "ok": false
+          },
+          "open_physics_frame": false,
+          "opened": {
+            "changed": true,
+            "code": "COMMITTED",
+            "generation": 0,
+            "ok": true,
+            "upgrade_required": false,
+            "version": 3
+          },
+          "original_proposal": {
+            "record": {
+              "correction_epoch": 0,
+              "generation": 3,
+              "owner": "76561198000000001",
+              "requires_correction": false,
+              "runs": {
+                "5daeb013dfa40cfb4faa735321acaebe": {
+                  "context": {
+                    "level_id": "level4",
+                    "mode": "campaign",
+                    "waves": 0
+                  },
+                  "credited_kills": 8,
+                  "settlement": {
+                    "descriptor_sha256": "4c4cb4f032bd7aab2bd0fe1c4c0fe5c7296dc3cca3591f389fddf5916a77fd0b",
+                    "handoff": {
+                      "basis_credited_kills": 5,
+                      "basis_generation": 2,
+                      "basis_sha256": "a605f25475c7d38161c2114e7e14e1b73457f081fe1753afd544dd843ba27f03",
+                      "context": {
+                        "level_id": "level4",
+                        "mode": "campaign",
+                        "waves": 0
+                      },
+                      "correction_epoch": 0,
+                      "final_credited_kills": 8,
+                      "intent_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "owner": "76561198000000001",
+                      "result": {
+                        "contract_version": 2,
+                        "core_cleared": true,
+                        "done_ids": [
+                          "lhm_training",
+                          "lhm_hooks",
+                          "lhm_han",
+                          "lhm_hu"
+                        ],
+                        "story_complete": true,
+                        "story_done": 4,
+                        "story_total": 4
+                      },
+                      "schema": "campaign_steam_handoff_v1",
+                      "token": "5daeb013dfa40cfb4faa735321acaebe",
+                      "victory": true
+                    },
+                    "schema": "campaign_steam_handoff_v1"
+                  },
+                  "terminal": true,
+                  "terminal_reason": "settled",
+                  "victory": true
+                }
+              },
+              "stats": {
+                "AI_WINS": 0,
+                "DEFENSE_WINS": 0,
+                "TOTAL_KILLS": 8,
+                "TOTAL_WINS": 1
+              },
+              "unlocked": {
+                "ACH_AI_WINS_1": false,
+                "ACH_AI_WINS_10": false,
+                "ACH_ALL_CLEAR": false,
+                "ACH_ALL_STORY": false,
+                "ACH_CLEAR_LEVEL_1": false,
+                "ACH_CLEAR_LEVEL_2": false,
+                "ACH_CLEAR_LEVEL_3": false,
+                "ACH_CLEAR_LEVEL_4": true,
+                "ACH_CLEAR_LEVEL_5": false,
+                "ACH_CLEAR_LEVEL_6": false,
+                "ACH_CLEAR_LEVEL_7": false,
+                "ACH_CLEAR_LEVEL_8": false,
+                "ACH_DEFENSE_30": false,
+                "ACH_DEFENSE_60": false,
+                "ACH_DEFENSE_WINS_10": false,
+                "ACH_DEFENSE_WINS_50": false,
+                "ACH_KILLS_1000": false,
+                "ACH_KILLS_10000": false,
+                "ACH_KILLS_100000": false,
+                "ACH_STORY_LEVEL_1": false,
+                "ACH_STORY_LEVEL_2": false,
+                "ACH_STORY_LEVEL_3": false,
+                "ACH_STORY_LEVEL_4": true,
+                "ACH_STORY_LEVEL_5": false,
+                "ACH_STORY_LEVEL_6": false,
+                "ACH_STORY_LEVEL_7": false,
+                "ACH_STORY_LEVEL_8": false,
+                "ACH_WINS_10": false,
+                "ACH_WINS_100": false,
+                "ACH_WINS_50": false
+              },
+              "version": 3
+            },
+            "sha256": "a942d1750011ef30f8b780a6e06ad171601f601970f902450ce564dd14baff66"
+          },
+          "pending": {
+            "error": {
+              "code": "WRITE_OPEN",
+              "ok": false,
+              "pending_kind": "handoff",
+              "pending_save": true,
+              "restart_required": false,
+              "retryable": true,
+              "unsafe": false
+            },
+            "expected_revision": 3,
+            "expected_sha256": "a605f25475c7d38161c2114e7e14e1b73457f081fe1753afd544dd843ba27f03",
+            "handoff": {
+              "basis_credited_kills": 5,
+              "basis_generation": 2,
+              "basis_sha256": "a605f25475c7d38161c2114e7e14e1b73457f081fe1753afd544dd843ba27f03",
+              "context": {
+                "level_id": "level4",
+                "mode": "campaign",
+                "waves": 0
+              },
+              "correction_epoch": 0,
+              "final_credited_kills": 8,
+              "intent_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "owner": "76561198000000001",
+              "result": {
+                "contract_version": 2,
+                "core_cleared": true,
+                "done_ids": [
+                  "lhm_training",
+                  "lhm_hooks",
+                  "lhm_han",
+                  "lhm_hu"
+                ],
+                "story_complete": true,
+                "story_done": 4,
+                "story_total": 4
+              },
+              "schema": "campaign_steam_handoff_v1",
+              "token": "5daeb013dfa40cfb4faa735321acaebe",
+              "victory": true
+            },
+            "kind": "handoff",
+            "model_committed": false,
+            "ok": true,
+            "owned_lock": true,
+            "pending": true,
+            "phase": "commit",
+            "unsafe": false
+          },
+          "pending_after_apply": {
+            "error": {
+              "code": "WRITE_OPEN",
+              "ok": false,
+              "pending_kind": "handoff",
+              "pending_save": true,
+              "restart_required": false,
+              "retryable": true,
+              "unsafe": false
+            },
+            "expected_revision": 3,
+            "expected_sha256": "a605f25475c7d38161c2114e7e14e1b73457f081fe1753afd544dd843ba27f03",
+            "handoff": {
+              "basis_credited_kills": 5,
+              "basis_generation": 2,
+              "basis_sha256": "a605f25475c7d38161c2114e7e14e1b73457f081fe1753afd544dd843ba27f03",
+              "context": {
+                "level_id": "level4",
+                "mode": "campaign",
+                "waves": 0
+              },
+              "correction_epoch": 0,
+              "final_credited_kills": 8,
+              "intent_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "owner": "76561198000000001",
+              "result": {
+                "contract_version": 2,
+                "core_cleared": true,
+                "done_ids": [
+                  "lhm_training",
+                  "lhm_hooks",
+                  "lhm_han",
+                  "lhm_hu"
+                ],
+                "story_complete": true,
+                "story_done": 4,
+                "story_total": 4
+              },
+              "schema": "campaign_steam_handoff_v1",
+              "token": "5daeb013dfa40cfb4faa735321acaebe",
+              "victory": true
+            },
+            "kind": "handoff",
+            "model_committed": false,
+            "ok": true,
+            "owned_lock": true,
+            "pending": true,
+            "phase": "commit",
+            "unsafe": false
+          },
+          "prepared": {
+            "before": {
+              "file_sha256": "a605f25475c7d38161c2114e7e14e1b73457f081fe1753afd544dd843ba27f03",
+              "ok": true,
+              "record": {
+                "correction_epoch": 0,
+                "generation": 2,
+                "owner": "76561198000000001",
+                "requires_correction": false,
+                "runs": {
+                  "5daeb013dfa40cfb4faa735321acaebe": {
+                    "context": {
+                      "level_id": "level4",
+                      "mode": "campaign",
+                      "waves": 0
+                    },
+                    "credited_kills": 5,
+                    "settlement": {},
+                    "terminal": false,
+                    "terminal_reason": "active",
+                    "victory": false
+                  }
+                },
+                "stats": {
+                  "AI_WINS": 0,
+                  "DEFENSE_WINS": 0,
+                  "TOTAL_KILLS": 5,
+                  "TOTAL_WINS": 0
+                },
+                "unlocked": {
+                  "ACH_AI_WINS_1": false,
+                  "ACH_AI_WINS_10": false,
+                  "ACH_ALL_CLEAR": false,
+                  "ACH_ALL_STORY": false,
+                  "ACH_CLEAR_LEVEL_1": false,
+                  "ACH_CLEAR_LEVEL_2": false,
+                  "ACH_CLEAR_LEVEL_3": false,
+                  "ACH_CLEAR_LEVEL_4": false,
+                  "ACH_CLEAR_LEVEL_5": false,
+                  "ACH_CLEAR_LEVEL_6": false,
+                  "ACH_CLEAR_LEVEL_7": false,
+                  "ACH_CLEAR_LEVEL_8": false,
+                  "ACH_DEFENSE_30": false,
+                  "ACH_DEFENSE_60": false,
+                  "ACH_DEFENSE_WINS_10": false,
+                  "ACH_DEFENSE_WINS_50": false,
+                  "ACH_KILLS_1000": false,
+                  "ACH_KILLS_10000": false,
+                  "ACH_KILLS_100000": false,
+                  "ACH_STORY_LEVEL_1": false,
+                  "ACH_STORY_LEVEL_2": false,
+                  "ACH_STORY_LEVEL_3": false,
+                  "ACH_STORY_LEVEL_4": false,
+                  "ACH_STORY_LEVEL_5": false,
+                  "ACH_STORY_LEVEL_6": false,
+                  "ACH_STORY_LEVEL_7": false,
+                  "ACH_STORY_LEVEL_8": false,
+                  "ACH_WINS_10": false,
+                  "ACH_WINS_100": false,
+                  "ACH_WINS_50": false
+                },
+                "version": 3
+              }
+            },
+            "directory": "D:/CodexQA/campspio/a718ab809928/appdata/Godot/app_userdata/水浒英雄传：八幕战役/steam_receipts/v1/5088120/76561198000000001",
+            "handoff": {
+              "basis_credited_kills": 5,
+              "basis_generation": 2,
+              "basis_sha256": "a605f25475c7d38161c2114e7e14e1b73457f081fe1753afd544dd843ba27f03",
+              "context": {
+                "level_id": "level4",
+                "mode": "campaign",
+                "waves": 0
+              },
+              "correction_epoch": 0,
+              "final_credited_kills": 8,
+              "intent_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "owner": "76561198000000001",
+              "result": {
+                "contract_version": 2,
+                "core_cleared": true,
+                "done_ids": [
+                  "lhm_training",
+                  "lhm_hooks",
+                  "lhm_han",
+                  "lhm_hu"
+                ],
+                "story_complete": true,
+                "story_done": 4,
+                "story_total": 4
+              },
+              "schema": "campaign_steam_handoff_v1",
+              "token": "5daeb013dfa40cfb4faa735321acaebe",
+              "victory": true
+            },
+            "identity": {
+              "content_version": "source-v1:f6ef8398f297af3a9be64ca376b9f2a940951d9b93b0512808e3f4275afc32e4",
+              "engine_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+              "source_mode": true
+            },
+            "mode": "write_retry",
+            "nonce": "a718ab8099284d6e968ae3b77c751caa",
+            "owner": "76561198000000001",
+            "pid": 43792,
+            "profile": "D:\\CodexQA\\campspio\\a718ab809928",
+            "schema": "handoff_io_prepared_v1",
+            "synthetic_account_and_token": true
+          },
+          "proof": {
+            "code": "CAMPAIGN_HANDOFF_READBACK_VERIFIED",
+            "ok": true,
+            "proof": {
+              "context": {
+                "level_id": "level4",
+                "mode": "campaign",
+                "waves": 0
+              },
+              "correction_epoch": 0,
+              "descriptor_sha256": "4c4cb4f032bd7aab2bd0fe1c4c0fe5c7296dc3cca3591f389fddf5916a77fd0b",
+              "intent_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "ledger_document_generation": 3,
+              "ledger_file_sha256": "cc7ba5622f5cc2ee08a18278476b3858c8ae2c1a50bc2e665309dcc55875cd4e",
+              "owner": "76561198000000001",
+              "schema": "campaign_steam_handoff_proof_v1",
+              "token": "5daeb013dfa40cfb4faa735321acaebe"
+            }
+          },
+          "retried": {
+            "code": "CAMPAIGN_HANDOFF_READBACK_VERIFIED",
+            "ok": true,
+            "proof": {
+              "context": {
+                "level_id": "level4",
+                "mode": "campaign",
+                "waves": 0
+              },
+              "correction_epoch": 0,
+              "descriptor_sha256": "4c4cb4f032bd7aab2bd0fe1c4c0fe5c7296dc3cca3591f389fddf5916a77fd0b",
+              "intent_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "ledger_document_generation": 3,
+              "ledger_file_sha256": "cc7ba5622f5cc2ee08a18278476b3858c8ae2c1a50bc2e665309dcc55875cd4e",
+              "owner": "76561198000000001",
+              "schema": "campaign_steam_handoff_proof_v1",
+              "token": "5daeb013dfa40cfb4faa735321acaebe"
+            }
+          }
+        },
+        "failures": [],
+        "gameplay_or_power_loss_qualified": false,
+        "identity": {
+          "content_version": "source-v1:f6ef8398f297af3a9be64ca376b9f2a940951d9b93b0512808e3f4275afc32e4",
+          "engine_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+          "source_mode": true
+        },
+        "mode": "write_retry",
+        "nonce": "a718ab8099284d6e968ae3b77c751caa",
+        "owner": "76561198000000001",
+        "passed": true,
+        "pid": 43792,
+        "production_root": "user://steam_receipts/v1",
+        "profile": "D:\\CodexQA\\campspio\\a718ab809928",
+        "schema": "campaign_handoff_native_io_v1",
+        "sdk_or_real_account_qualified": false,
+        "synthetic_account_and_token": true
+      },
+      "report_sha256": "bff7759501043cca61f923c23eefdb8272348caf6cc386017e7eb20d8ec3cf47",
+      "final_inventory": {
+        "exists": true,
+        "files": {
+          "record_0000000003.json": {
+            "sha256": "a605f25475c7d38161c2114e7e14e1b73457f081fe1753afd544dd843ba27f03",
+            "bytes": 1553
+          },
+          "record_0000000004.json": {
+            "sha256": "cc7ba5622f5cc2ee08a18278476b3858c8ae2c1a50bc2e665309dcc55875cd4e",
+            "bytes": 2363
+          }
+        },
+        "directories": [
+          "."
+        ]
+      }
+    }
+  ],
+  "sdk_or_real_account_qualified": false,
+  "production_method_overrides": 0,
+  "power_loss_durability_qualified": false,
+  "known_gaps": [
+    "No competing live writers/recoverers in this slice",
+    "No legacy recovering/owner-removed redesign",
+    "No full mutation/foreign-owner negative matrix",
+    "No SDK, gameplay or power-loss qualification"
+  ],
+  "expected_processes": 23,
+  "engine_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+  "project": "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261026_211212_dd3104df\\project",
+  "content_version": "source-v1:f6ef8398f297af3a9be64ca376b9f2a940951d9b93b0512808e3f4275afc32e4"
+}

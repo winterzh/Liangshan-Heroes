@@ -28,9 +28,9 @@ git fetch origin
 
 基础[20文件奖励交接候选](../qa/campaign_progress_recovery_20261026/handoff_candidate/README.md)为独立冻结`20261026_194542_27c8aea9`、身份`source-v1:23c0b07fcba83a9d7938ed338a9775559b6041be61d048db619c31fd5edc2a80`，已导入并通过99项模型和纠正/尾账逻辑回归。真实I/O已完成13阶段专项（含两类预期拒绝），同源黄泥冈自然终局/重启拒旧槽另通过1386项，经典30波六进程443项也已通过（30波778敌、三次保存独立恢复、两次终局拒旧槽）；不能把旧811源75/135项或14文件源1364项转授新版。原脚本、原worker和失败证据保留；准备/模型/文件故障/经典30波执行器及未运行范围在该目录说明。
 
-后继[唯一目录释放候选](../qa/campaign_progress_recovery_20261026/store_protocol_candidate/README.md)必须用自己的20文件清单另建冻结；19文件与23c原字节一致，仅替Steam Store。新冻结`20261026_211212_dd3104df`的f6ef源码已导入、14项模型通过，真实文件和并发执行中；旧23c经典通过不授予f6ef完整回归资格。模型、23进程真实文件故障及[两种延迟写入交错](../qa/campaign_progress_recovery_20261026/store_protocol_candidate/tests/io/README_delayed.md)均有独立宿主，不能套用旧23c或旧199c冻结的结果。经典回归运行时固定其外部worker/README；不要边跑边改。
+后继[唯一目录释放候选](../qa/campaign_progress_recovery_20261026/store_protocol_candidate/README.md)必须用自己的20文件清单另建冻结；19文件与23c原字节一致，仅替Steam Store。新冻结`20261026_211212_dd3104df`的f6ef源码已导入、14项模型及23进程/370项真实文件专项通过（含半pending预期拒绝），延迟写入首批因外部PID存活查询限制停止，须先修统一恢复准入再另冻验证；旧23c经典通过不授予f6ef完整回归资格。模型、23进程真实文件故障及[两种延迟写入交错](../qa/campaign_progress_recovery_20261026/store_protocol_candidate/tests/io/README_delayed.md)均有独立宿主，不能套用旧23c或旧199c冻结的结果。经典回归运行时固定其外部worker/README；不要边跑边改。
 
-连环马新增[四进程自然胜利执行器](../qa/campaign_progress_recovery_20261026/tests/lianhuanma/README.md)：默认只读预检，必须显式`--run`才启动引擎。本轮f6ef实际20文件及身份预检通过，尚未编译/原生运行；待Store文件和交错专项结束后按共享通道串行运行。保存退出走真实Flow，前两阶段由生产AppLifecycle正常退出，不能用Session直调替代。失败路线将独立验证。
+连环马新增[四进程自然胜利执行器](../qa/campaign_progress_recovery_20261026/tests/lianhuanma/README.md)：默认只读预检，必须显式`--run`才启动引擎。本轮f6ef实际20文件及身份预检通过，尚未编译/原生运行；当前先修外部PID恢复准入，再以新候选清单重新绑定运行；f6ef预检不转授后继源码。保存退出走真实Flow，前两阶段由生产AppLifecycle正常退出，不能用Session直调替代。失败路线将独立验证。
 
 新的[战役context候选](../qa/campaign_progress_recovery_20261026/README.md)有独立准备/导入及训练执行器；连环马135项验证新生命周期活动期，黄泥冈1364项验证正常离线终局和重启旧槽拒绝。使用同一已导入冻结根、外部驱动和新隔离profile，`CAMPAIGN_QA`须为空，不能对旧候选或下一奖励交接草稿转授结果。
 
@@ -63,3 +63,5 @@ git fetch origin
 ## 旧快照恢复状态更新（2026-10-26）
 
 上一轮54快照ZIP及9月7日7z已按用户在另一聊天的明确要求删除，不能再依赖旧归档路径恢复。第二轮三个旧快照只去掉与现有文件和Git原始blob一致的副本，按[本轮映射与恢复器](../qa/storage_cleanup_20261026_round2/README.md)补齐；未列入映射的独有文件和私有缓存保持。
+
+连环马[自然失败三进程执行器](../qa/campaign_progress_recovery_20261026/tests/lianhuanma_loss/README.md)已完成代码和静态复核，尚未编译或原生执行；与胜利驱动各自保留独立来源和报告，不共享通过资格。

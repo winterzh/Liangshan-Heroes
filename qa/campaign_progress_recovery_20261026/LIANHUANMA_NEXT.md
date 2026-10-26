@@ -6,7 +6,9 @@
 2. B在新进程点击ContinueBattle，原槽同token恢复；正常完成原20秒训练，观察21秒无重复，再通过实际SaveAndExit及覆盖确认保存原槽gen2，生产再次退出。
 3. C再独立点击ContinueBattle恢复gen2，以普通教场诱入/撤步/协同攻击、经营、技能和守两路反攻，要求四目标全部完成和自然异步胜利；核对当前LCv3、Intentv2、ACKv2、完整结果、CFG与离线proof。
 4. D独立重启并点击实际菜单继续，验证战役lifecycle gen3已应用历史及旧活动槽明确拒绝、可见错误返回菜单；槽原字节、CFG、奖励和终局记录不再变化。保存、继续和拒绝不以直接Session调用代替Flow UI。
-5. 独立自然失败两进程链仍待后继：新profile先保存活动槽，再以普通移动令宋江遭真实敌军击杀；第二进程菜单继续拒旧槽。不得直接调用lose或写血量。
+5. 独立[自然失败三进程链](tests/lianhuanma_loss/README.md)已完成代码和静态复核，尚未编译或原生执行：新profile实际保存退出，第二进程菜单继续后以普通移动令宋江遭真实敌军击杀，第三进程菜单继续拒旧槽。不能为名义两进程绕过保存后的生产退出，也不得直接调用lose或写血量。
+
+当前先修[Windows外部PID恢复准入](evidence/process_liveness_api_20261026_225300/README.md)，再以新候选清单重新绑定两条路线。四进程驱动的`static_audit.json`记录提交`47849190`时的初始源码/文档快照；本计划后续状态更新不改其六份执行源码，也不转授f6ef预检给后继候选。
 
 复用来源：`tools/lianhuanma_rts_test.gd`的普通经济/付费建造/训练及守路反攻策略；本批`tests/training.gd`的实际训练、费用、Codec；`tests/huang/`的终局读取；`handoff_candidate/tests/classic/driver.gd`的可见按钮、Viewport Esc和生产保存退出观察。新驱动与runner均独立，不修改已冻结worker。旧RTS入口使用4倍速、CAMPAIGN_QA=1并跳过教场，不直接运行它作本轮验收。`tools/level4_world_restore_qa.gd`和`lianhuanma_drill_test.gd`含状态/伤害夹具，也不算自然路线。
 

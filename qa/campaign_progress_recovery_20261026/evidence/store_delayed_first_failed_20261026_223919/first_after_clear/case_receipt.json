@@ -1,0 +1,88 @@
+{
+  "case": "first_after_clear",
+  "expected": "fixed",
+  "complete": false,
+  "reports": [],
+  "profile": "D:\\CodexQA\\campspdelay\\efe587518e15",
+  "nonce": "efe587518e154b87bad77b2eb13df324",
+  "prepared_sha256": "e968733137be5fbf5c1bea3b3f7802c6643c95a68d20a0609f2f219deb22848f",
+  "error": "RuntimeError('Worker exited before gate: B/b_begin')",
+  "traceback": "Traceback (most recent call last):\n  File \"D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\tests\\io\\run_delayed_acquire.py\", line 217, in execute_case\n    pair.gate(\"B\", \"b_begin\"); pair.arm(\"B\", points[\"B\"]); pair.ack(\"B\"); pair.stopped(\"B\")\n    ~~~~~~~~~^^^^^^^^^^^^^^^^\n  File \"D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\tests\\io\\run_delayed_acquire.py\", line 141, in gate\n    self.wait(ready, role + \"/\" + kind)\n    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\tests\\io\\run_delayed_acquire.py\", line 128, in wait\n    while not predicate():\n              ~~~~~~~~~^^\n  File \"D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\tests\\io\\run_delayed_acquire.py\", line 139, in ready\n    require(c[\"child\"].poll() is None, \"Worker exited before gate: \" + role + \"/\" + kind)\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\tests\\io\\run_io.py\", line 85, in require\n    raise RuntimeError(message)\nRuntimeError: Worker exited before gate: B/b_begin\n",
+  "trace": [
+    {
+      "event": "launched",
+      "role": "A",
+      "pid": 76680
+    },
+    {
+      "event": "gate",
+      "role": "A",
+      "kind": "a_apply",
+      "inventory": {
+        "exists": true,
+        "files": {
+          "record_0000000002.json": {
+            "sha256": "22be8dd3c5c24d8daf79ef1e418199fd99c1c57d2d3795f7d0de0b3c4d529f82",
+            "bytes": 1553
+          },
+          "record_0000000003.json": {
+            "sha256": "b6b6e55ccc80b335af7393a11e4b0b5f4115810e63f5d5520e217b2a29f8297a",
+            "bytes": 1553
+          }
+        },
+        "directories": [
+          "."
+        ]
+      }
+    },
+    {
+      "event": "breakpoint_matched",
+      "role": "A",
+      "pid": 76680,
+      "point": {
+        "source": "res://scripts/steam_receipt_store.gd",
+        "line": 181,
+        "function": "acquire",
+        "statement": "if DirAccess.make_dir_absolute(directory.path_join(\"writing\")) != OK: return bad(\"WRITER_BUSY\")",
+        "source_sha256": "11bf6cae5968baa6c740c3c6be1fc954376048cbbe9a81a77b6cf4588518f9f1"
+      },
+      "frames": [
+        {
+          "source": "res://scripts/steam_receipt_store.gd",
+          "line": 181,
+          "function": "acquire"
+        },
+        {
+          "source": "res://scripts/steam_run_ledger.gd",
+          "line": 104,
+          "function": "_drive_pending"
+        },
+        {
+          "source": "res://scripts/steam_run_ledger.gd",
+          "line": 75,
+          "function": "_persist"
+        },
+        {
+          "source": "res://scripts/steam_run_ledger.gd",
+          "line": 238,
+          "function": "apply_campaign_handoff"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/campaign_store_delayed_io_20261026/20261026_223919_4ffc4c0b/workers/delayed_worker.gd",
+          "line": 120,
+          "function": "writer_a"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/campaign_store_delayed_io_20261026/20261026_223919_4ffc4c0b/workers/delayed_worker.gd",
+          "line": 52,
+          "function": "gate"
+        }
+      ]
+    },
+    {
+      "event": "launched",
+      "role": "B",
+      "pid": 33428
+    }
+  ]
+}

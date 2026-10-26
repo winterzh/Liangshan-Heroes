@@ -1,0 +1,102 @@
+{
+  "schema": "lianhuanma_loss_external_sources_v1",
+  "created_utc": "2026-10-26T14:46:21.200493+00:00",
+  "scope": "Independent natural Level4 loss: real SaveAndExit -> independent menu Continue and enemy-caused Song Jiang death -> independent menu terminal refusal.",
+  "files": [
+    {
+      "path": "qa/campaign_progress_recovery_20261026/run_lianhuanma_loss.py",
+      "sha256": "0216292f9833700e71a088493b45bd7401b52a121684aa8551f8f2cee8789315",
+      "bytes": 15888
+    },
+    {
+      "path": "qa/campaign_progress_recovery_20261026/tests/lianhuanma_loss/README.md",
+      "sha256": "99e6d780fc4dc52b3c2a770094a0abbef822b40a6ee212c0c454c78196f1cc4a",
+      "bytes": 5377
+    },
+    {
+      "path": "qa/campaign_progress_recovery_20261026/tests/lianhuanma_loss/bootstrap.gd",
+      "sha256": "60cd4e421ed1c0796d4c0a944c9961c139f778bf243e4277d69dc4b27b554c12",
+      "bytes": 1124
+    },
+    {
+      "path": "qa/campaign_progress_recovery_20261026/tests/lianhuanma_loss/base.gd",
+      "sha256": "dd547afe35dce121de3c58d7144fc7021868cac5e5eba1c8e4b5f51aefe0c2ab",
+      "bytes": 24310
+    },
+    {
+      "path": "qa/campaign_progress_recovery_20261026/tests/lianhuanma_loss/terminal.gd",
+      "sha256": "cc7808dfd1285187951444593f3b7a6e3d675c889ffbc7109bac535b136d39fe",
+      "bytes": 18425
+    },
+    {
+      "path": "qa/campaign_progress_recovery_20261026/tests/lianhuanma_loss/driver.gd",
+      "sha256": "9d3f83a36e8ef9350e8e4f4212acafb8e07d2491f23291f7281def4c926c4875",
+      "bytes": 9421
+    }
+  ],
+  "derived_from": [
+    {
+      "path": "qa/campaign_progress_recovery_20261026/tests/lianhuanma/base.gd",
+      "sha256": "f55c3854d90701672f64e2e6fe8530a20982c8dbbf91dd9e89a600d41a9c165f",
+      "bytes": 28446,
+      "changes": "Independent copy of actual menu/Flow/Codec/training-save helpers; LL namespace and three loss modes; removed training-completion observer and second save.",
+      "runtime_dependency": false
+    },
+    {
+      "path": "qa/campaign_progress_recovery_20261026/tests/lianhuanma/terminal.gd",
+      "sha256": "be5aab40bc3f2fff28af6e54e5aa5df17b83cd663a131725b6aa6ecf3d849709",
+      "bytes": 17083,
+      "changes": "Copied read-only CFG/reward/lifecycle helpers, menu terminal-refusal path and report export; added separate loss ACK/baseline/full result/metrics validation.",
+      "runtime_dependency": false
+    },
+    {
+      "path": "qa/campaign_progress_recovery_20261026/tests/lianhuanma/bootstrap.gd",
+      "sha256": "0cd8829fd57ea8ea40c69c9a64644ca34d3e6b1f6ce3e7ea2bd84c2c970c5484",
+      "bytes": 1112,
+      "changes": "Independent copy; LL namespace and exact four local workers.",
+      "runtime_dependency": false
+    },
+    {
+      "path": "qa/campaign_progress_recovery_20261026/run_lianhuanma_terminal.py",
+      "sha256": "0588952f80bf10fa23f41b522b95711fe3b247fde60be4909b13bbcdfa4c4c74",
+      "bytes": 14397,
+      "changes": "Independent run_lianhuanma_loss.py; three phases, loss schema/flags, distinct profile/output, explicit source provenance pins, bounded 600 second phase default.",
+      "runtime_dependency": false
+    }
+  ],
+  "production_api_read_sources": [
+    {
+      "path": "qa/campaign_progress_recovery_20261026/store_protocol_candidate/integrated_candidate/scripts/run_campaign_progress_coordinator.gd",
+      "sha256": "4fa8c42a7c288c7384bb1254c67fe94946aa12b981315ce4753e1aeeedaab018",
+      "bytes": 13362
+    },
+    {
+      "path": "scripts/levels/level4_lianhuanma_rts.gd",
+      "sha256": "81aa370ec7387b7eeaf28b57864972ff875067fcf121a686e9b498a46cbe20c1",
+      "bytes": 19110
+    },
+    {
+      "path": "scripts/unit.gd",
+      "sha256": "9346d0e0fb1f0c4006027b66f9a6c8e3d598f84e2bdc2aaf1f01e9910ec7bf5d",
+      "bytes": 225944
+    }
+  ],
+  "validation": {
+    "python_ast_parsed": true,
+    "help_exit_code": 0,
+    "gdscript_compiled": false,
+    "engine_started": false,
+    "engine_lane_acquired": false,
+    "native_preflight_performed": false,
+    "native_route_tested": false,
+    "independent_read_review": "No definite blocker found in new loss GD, Flow, terminal contracts and host. Natural route and compilation remain untested.",
+    "victory_source_pins_unchanged": true
+  },
+  "boundaries": [
+    "No production, candidate, frozen project or shared victory file modified.",
+    "Three processes are required by actual production save-and-exit semantics; no internal Session substitute.",
+    "Route has a 240 second wall-clock bound, never forced loss or gameplay state injection.",
+    "Loss keeps actual pending/missed/done states and requires strict NOT_REQUIRED ACK with persisted=false and empty CFG SHA.",
+    "No SDK, real credited account, public campaign Continue, native release or human/OS-mouse qualification."
+  ]
+}
