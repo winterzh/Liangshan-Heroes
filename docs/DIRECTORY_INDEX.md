@@ -53,3 +53,7 @@
 ## 2026-10-26 历史测试快照
 
 `qa/storage_cleanup_20261026/` 保存54个旧project的归档索引、逐文件清单、SHA校验、保护结果和恢复工具；本机ZIP位于外层`归档/`，不入Git。旧批次原目录保留恢复提示及原有`.godot`，需要复验时先按[恢复说明](../qa/storage_cleanup_20261026/README.md)还原对应快照。
+
+## 2026-10-26 第二轮与失效归档入口
+
+`qa/storage_cleanup_20261026_round2/`：三个旧project的重复文件->当前保留文件/Git blob映射、独有文件索引、恢复器和保护检查。上一轮ZIP及9月7日7z已在其他聊天按用户要求删除，旧QA顶部已有现状提示；最新入口见[第二轮说明](../qa/storage_cleanup_20261026_round2/README.md)。
