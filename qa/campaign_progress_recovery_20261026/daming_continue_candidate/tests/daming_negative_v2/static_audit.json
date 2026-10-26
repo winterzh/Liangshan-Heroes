@@ -1,0 +1,123 @@
+{
+  "schema": "daming_negative_static_audit_v2",
+  "passed": true,
+  "python_ast_passed": true,
+  "commands": [
+    {
+      "command": [
+        "C:\\Python314\\python.exe",
+        "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\daming_continue_candidate\\tests\\daming_negative_v2\\plan_negative.py",
+        "--help"
+      ],
+      "exit_code": 0,
+      "stdout": "usage: plan_negative.py [-h] [--flow-receipt FLOW_RECEIPT] [--role {lu,shi}]\n                        [--request-output REQUEST_OUTPUT]\n\nRead-only source/52-stage planning and closed-A admission request drafting. No\nengine launcher, profile creation, payload copying, source freeze or complete\nidentity audit is implemented. Default checks only named small source files.\nThe future native host MUST call integration_941.prepared_state before\nexecution.\n\noptions:\n  -h, --help            show this help message and exit\n  --flow-receipt FLOW_RECEIPT\n                        Original completed actual eight-process receipt\n  --role {lu,shi}\n  --request-output REQUEST_OUTPUT\n                        Write a new admission request only; no profiles or\n                        engine\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "C:\\Python314\\python.exe",
+        "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\daming_continue_candidate\\tests\\daming_negative_v2\\plan_negative.py"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"planned_processes\": 52, \"world\": 2, \"component\": 2, \"capture\": 48, \"fixed_world_specs_per_role\": 132, \"fixed_component_specs_per_role\": 181, \"capture_cases_per_role\": 24, \"source_tables_preserved\": true, \"implemented_scope\": \"admission_and_case_catalog_only\", \"native_compiled\": false, \"negative_execution_implemented\": false, \"engine_started\": false, \"full_source_verified\": false, \"profile_created\": false, \"cold_import_qualified\": false, \"full_61_qualified\": false}\n",
+      "stderr": ""
+    }
+  ],
+  "named_candidate_preloads": [
+    {
+      "worker": "admission_worker.gd",
+      "res_path": "res://scripts/run_content_identity.gd",
+      "exists_in_named_candidate": true
+    },
+    {
+      "worker": "admission_worker.gd",
+      "res_path": "res://scripts/run_campaign_progress_gate.gd",
+      "exists_in_named_candidate": true
+    },
+    {
+      "worker": "fixture_reader.gd",
+      "res_path": "res://scripts/run_slot_store.gd",
+      "exists_in_named_candidate": true
+    },
+    {
+      "worker": "fixture_reader.gd",
+      "res_path": "res://scripts/run_campaign_local_lifecycle.gd",
+      "exists_in_named_candidate": true
+    },
+    {
+      "worker": "fixture_reader.gd",
+      "res_path": "res://scripts/run_official_restore_profile.gd",
+      "exists_in_named_candidate": true
+    },
+    {
+      "worker": "fixture_reader.gd",
+      "res_path": "res://scripts/run_state_value_codec.gd",
+      "exists_in_named_candidate": true
+    },
+    {
+      "worker": "fixture_reader.gd",
+      "res_path": "res://scripts/run_campaign_progress_intent.gd",
+      "exists_in_named_candidate": true
+    }
+  ],
+  "input_files": [
+    {
+      "path": "qa/campaign_progress_recovery_20261026/daming_continue_candidate/tests/daming_negative_v2/admission_worker.gd",
+      "bytes": 6655,
+      "sha256": "c302b36df324f3bb38778751421461c7f5ad751a388338abc7165cbce30e05d9"
+    },
+    {
+      "path": "qa/campaign_progress_recovery_20261026/daming_continue_candidate/tests/daming_negative_v2/bootstrap.gd",
+      "bytes": 1393,
+      "sha256": "33b3c3fba7af914e41151b109c03d4eeedfe9365add736ecc05183e7d26b3afc"
+    },
+    {
+      "path": "qa/campaign_progress_recovery_20261026/daming_continue_candidate/tests/daming_negative_v2/case_catalog.gd",
+      "bytes": 9524,
+      "sha256": "05fbad015ebabae358ac39fadac258c1ee090c2f168cd01dbe29313146625e24"
+    },
+    {
+      "path": "qa/campaign_progress_recovery_20261026/daming_continue_candidate/tests/daming_negative_v2/case_plan.json",
+      "bytes": 4078,
+      "sha256": "22f6587861031d2e260002746f04df678891df847f0d88be62a467f21a5efe78"
+    },
+    {
+      "path": "qa/campaign_progress_recovery_20261026/daming_continue_candidate/tests/daming_negative_v2/fixture_reader.gd",
+      "bytes": 15263,
+      "sha256": "7d557d2790b29b48721b2f8d29559f944666444d6a17883a54c54d7db2d6ed5e"
+    },
+    {
+      "path": "qa/campaign_progress_recovery_20261026/daming_continue_candidate/tests/daming_negative_v2/plan_negative.py",
+      "bytes": 14365,
+      "sha256": "f896cc2e67e9d130b7533593622aa48b67bd6742048f82455c11995335288979"
+    },
+    {
+      "path": "qa/campaign_progress_recovery_20261026/daming_continue_candidate/tests/daming_negative_v2/README.md",
+      "bytes": 9459,
+      "sha256": "888628bffda7a67d23e32cfd785c88a7596e0b155fd7ff194ab3c79bba3d4bec"
+    },
+    {
+      "path": "qa/campaign_progress_recovery_20261026/daming_continue_candidate/tests/daming_negative_v2/sources.json",
+      "bytes": 4287,
+      "sha256": "9845d8b84d0e517940db3a4a6d2566a97ecd5990e529f8328d7244c70a4d7896"
+    }
+  ],
+  "source_tables_reconstructed_exactly": true,
+  "native_gd_parser_executed": false,
+  "engine_started": false,
+  "full_source_verified": false,
+  "actual_fixture_admission_executed": false,
+  "negative_execution_implemented": false,
+  "negative_matrix_passed": false,
+  "cold_import_qualified": false,
+  "full_61_qualified": false,
+  "independent_review": "Only static review of current entry, fixed catalogue and actual Lu A descriptor fields; no native compile, complete-flow admission, or matrix execution.",
+  "untouched_scope": [
+    "active daming_flow inputs",
+    "existing candidate creation sources",
+    "production",
+    "frozen projects",
+    "shared docs",
+    "Git"
+  ]
+}

@@ -1,5 +1,17 @@
 # 开发日志
 
+## 2026-10-27 箭矢视觉合同组件44项通过
+
+最小Graph修复只按projectile种类要求正常_ready的MIP过滤，其余种类和所有其他渲染保护保持。第三次原生PID50952退出0/错误0，44项与12负例全部通过；capture→prepare→挂载_ready→activate→recapture直接wire为19,832字节，结构、解码后类型值及UTF8完全一致。额外双编码本次明确DEPTH_LIMIT，前两次失败仍保留各自原始事实。命名输入后验、无业务文件及锁释放通过，只授组件范围。[证据](../qa/campaign_progress_recovery_20261026/projectile_filter_candidate/evidence/component_complete_20261027_075227/README.md)。
+
+26脚本加helper的新完整无缓存工程已启动准备；首次冷导入器在锁内、实际启动前核完整缓存库存，并拒绝失败后热重试冒充cold。准备、冷导入、真实高俅四进程与最终全回归分别记录；当前未采用生产或发布。
+
+## 2026-10-27 大名府两次保存恢复通过，后续护送失败
+
+3365首轮实际Lu-first A202/B104通过：正常救援后卢俊义先safe，真实SaveAndExit→独立Continue→自然120tick无重放→真实二次SaveAndExit。原件冻结2文件6目录在B推进活profile后保持。C67中66过/1失败：石秀自然阵亡，大厅1500，具体击杀者未记录；完整双角色路线尚未通过，D和Shi-first未运行。完整后验、进程终态与锁释放通过，失败原件保留。后继调整普通集结与护卫命令，原断言不降。
+
+箭矢视觉合同最小候选及147命名输入组件工具已准备；首次原生模型因测试worker调用不存在的can_launch_new_run失败，保留原始证据后改为实际can_launch并加方法存在性检查，Graph不变。冷准备/首次冷导入工具和新高俅复跑宿主已完成静态检查，尚无新完整源资格；实际后续结果见专题VALIDATION。
+
 ## 2026-10-27 首波真实保存发现箭矢合同缺口
 
 高俅普通点目标策略112项中110过/2失败：正常首波派发与清场已通过，实际SaveAndExit在视觉检查返回TIMED_RENDER_OVERRIDE/projectile，无保存检查点。正常箭矢_ready的LINEAR_WITH_MIPMAPS与合同统一PARENT_NODE不符，后继最小修复单独准备；不改正常战斗或等待箭矢消失规避。

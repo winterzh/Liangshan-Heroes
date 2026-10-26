@@ -20,9 +20,17 @@ preimport身份为`source-v1:3365e369ba351e9d9593d2324391c7b042a967144df85f1c35f
 
 ## 首次保存原件留存与运行门槛
 
-Python宿主新增闭合A原件留存：实际A进程正常保存退出并通过报告验证后、B创建前，只读核对同token的slot/LC gen1原件与精确2文件6目录，将副本和独立descriptor加入后续pins。活profile可由B/C正常推进，不长期pin；每阶段及最终重新检查冻结库存。模型53项通过，实际junction/reparse拒绝通过，symlink因创建权限不足明确跳过；[模型原件](evidence/fixture_model_20261027/README.md)不授原生A或解码资格。宿主AST/帮助及26项轻量来源检查通过，五GD保持上述实际加载字节；双角色八进程正在独立新profile执行，终态以原始receipt为准。
+Python宿主新增闭合A原件留存：实际A进程正常保存退出并通过报告验证后、B创建前，只读核对同token的slot/LC gen1原件与精确2文件6目录，将副本和独立descriptor加入后续pins。活profile可由B/C正常推进，不长期pin；每阶段及最终重新检查冻结库存。模型53项通过，实际junction/reparse拒绝通过，symlink因创建权限不足明确跳过；[模型原件](evidence/fixture_model_20261027/README.md)不授原生A或解码资格。宿主AST/帮助及26项轻量来源检查通过，五GD保持上述实际加载字节；首轮真实批次已结束，结果如下。
 
 3365已有导入使用缓存种子，不计作旧61阶段要求的冷导入。完整61须新鲜无导入/编辑器/着色器缓存种子的完整工程，自行注册native扩展后独立导入，再完成8条Flow及52负例；52为每角色world/component各1与capture24，capture的19字段案例不等于原19类持久化故障。后继工具须严格消费当前LC3/Intent2/ACK2和新descriptor，不把旧V16结果转授。
+
+## 首次双路线实跑的实际结果
+
+批次20261027_072035_807401ae只运行Lu-first前三阶段：A PID43448实际保存退出202项通过，slot/LC均gen1；B PID40420实际菜单继续、自然120tick、第二次保存退出104项通过，slot gen2而原LC仍gen1。两次均为生产continue_saved退出；原安全角色、停驻状态、任务与报告次数保持，未重复获救。A闭合原件实际留存为2文件6目录，后续B推进活profile后冻结副本复验通过。
+
+C PID28156有67项，66通过/1失败：原卢俊义28仍安全离场，石秀29在后续自然护送中HP归零；大厅仍1500。原路线将主力送往出口，另一伤员留在牢内，B期间生命已从230降到148.4；报告没有具体击杀者，不能指定追兵或牢塔。C未取得正常胜利资格，D及Shi-first四阶段均未运行。宿主complete=false，但完整来源后验、三个实际进程终态、冻结库存与自有锁释放全部通过，cleanup_errors为空。[原始失败与已通过部分](evidence/flow_first_failure_20261027_072035/README.md)。
+
+后继只修普通护送策略，先清理实际威胁，再共同集结到出口触发区之外，给第二伤员保留近距护卫。真实单safe、两次保存、B的120tick、自然双safe胜利及八独立进程门槛不变；原失败worker和证据不覆盖。新的[52负例准入草案](tests/daming_negative_v2/README.md)只完成原表提取、规划与原生admission源码，完整执行宿主/循环尚未实现或运行；本轮失败不能解锁该资格。
 
 ## 后续验收
 

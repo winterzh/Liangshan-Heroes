@@ -1,0 +1,101 @@
+{
+  "schema": "daming_negative_fixed_case_plan_v2",
+  "historical_sources": [
+    {
+      "kind": "world",
+      "path": "qa/campaign_progress_recovery_20261008/final_durable_negative_adapters_v1_r4/daming_campaign_world_negative_v1.gd",
+      "bytes": 32768,
+      "sha256": "d264a7dad39aec68a686cedaff6f35c2a5b83570b095a136f3c5f8e27e88dcc2",
+      "retained_blocks_sha256": [
+        "b95a9b46788f0338436996b07815025c53147f5b2bd65607cb068a0b0e2c89d8",
+        "05f493b555ba7f28da692a95a5f45374fae8b609e58410c21fc81ee9ce4d7a31",
+        "0547a3cffba57bcb6046e67d5bd9950bb17e5fcb75f9a9e18622b5098b325e64",
+        "c369562d535a7deee4d93c92db6a123cf174ba85fbfa4ad81e69df82c3b43e82",
+        "c36eabf06f6e7e992ac2b91ede0cfb599dfc213efa289c03abf1c95b79beb8e8"
+      ]
+    },
+    {
+      "kind": "component",
+      "path": "qa/campaign_progress_recovery_20261008/final_durable_component_audit_v1_r6/daming_campaign_component_negative_v1.gd",
+      "bytes": 50113,
+      "sha256": "e4f3b46cfc99ae8a738d6ddc3e53b242315c3810f423a5bf66d80ba22b778ceb",
+      "retained_blocks_sha256": [
+        "1803b14e4d6cfc721bb48757f4837dbdacac1f5f5e0d46ec9ede97a8d4af6fb1",
+        "714a125289abf29829e38dd9ef30fb4ccf2a78355ddd25683b1bd9874b3913e8"
+      ]
+    },
+    {
+      "kind": "capture",
+      "path": "qa/campaign_progress_recovery_20261008/final_durable_negative_adapters_v1_r4/daming_campaign_capture_negative_v1.gd",
+      "bytes": 46265,
+      "sha256": "2b8d8be629a9803994de0c83b583eab5cb73c18705f3a160b38be6dd0f47fc28",
+      "retained_blocks_sha256": [
+        "e078d3704dbdcccdd669868f0d357c292d5892d86e9669147714afb41f792141"
+      ]
+    }
+  ],
+  "catalog_sha256": "05fbad015ebabae358ac39fadac258c1ee090c2f168cd01dbe29313146625e24",
+  "roles": [
+    "lu",
+    "shi"
+  ],
+  "processes_per_role": 26,
+  "total_planned_processes": 52,
+  "world": {
+    "specs_per_role": 132,
+    "routes": [
+      "source",
+      "json"
+    ],
+    "rows_per_role": 264,
+    "planned_processes": 2
+  },
+  "component": {
+    "specs_per_role": 181,
+    "routes": [
+      "source",
+      "json"
+    ],
+    "rows_per_role": 362,
+    "planned_processes": 2
+  },
+  "capture": {
+    "cases": {
+      "safe_queue_nonempty": "LEVEL8_SAFE_RETREAT_QUEUE",
+      "safe_stop__chase_intent": "LEVEL8_SAFE_RETREAT_STOP_ANCHOR",
+      "safe_stop__group_cap": "LEVEL8_SAFE_RETREAT_STOP_ANCHOR",
+      "safe_stop__has_home": "LEVEL8_SAFE_RETREAT_STOP_ANCHOR",
+      "safe_stop__home": "LEVEL8_SAFE_RETREAT_STOP_ANCHOR",
+      "safe_stop__hua_lock_shots": "LEVEL8_SAFE_RETREAT_STOP_ANCHOR",
+      "other_hp_zero": "LEVEL8_LIFETIME",
+      "other_dying_true": "LEVEL8_LIFETIME",
+      "other_role_null": "LEVEL8_SAFE_REQUIRED_ACTOR_MISSING",
+      "other_alive_missing_active": "LEVEL8_ACTIVE_MEMBERSHIP",
+      "other_outcome_captured": "LEVEL8_UNSUPPORTED_STORY_OUTCOME",
+      "root_safe_selection": "LEVEL8_SAFE_SELECTED_ROOT",
+      "root_safe__ability_caster": "LEVEL8_SAFE_ARMED_CASTER",
+      "root_safe__item_caster": "LEVEL8_SAFE_ARMED_CASTER",
+      "safe_event_missing": "LEVEL8_SAFE_EVENT_OUTCOME_PAIR",
+      "other_safe_event_without_retreat": "LEVEL8_SAFE_EVENT_OUTCOME_PAIR",
+      "safe_actor_outcome_empty": "LEVEL8_SAFE_EVENT_OUTCOME_PAIR",
+      "freed_event_missing": "LEVEL8_SAFE_RESCUE_EVENT_PAIR",
+      "rescue_done_false": "LEVEL8_SAFE_RESCUE_EVENT_PAIR",
+      "safe_caster__walk_casts": "LEVEL8_SAFE_CAST_INTENT",
+      "safe_caster__pending_casts": "LEVEL8_SAFE_CAST_INTENT",
+      "safe_caster__channels": "LEVEL8_SAFE_CAST_INTENT",
+      "safe_caster__pending_item_casts": "LEVEL8_SAFE_CAST_INTENT",
+      "safe_caster__walk_item_casts": "LEVEL8_SAFE_CAST_INTENT"
+    },
+    "cases_per_role": 24,
+    "planned_processes": 48,
+    "renderer": "gl_compatibility",
+    "one_case_per_fresh_profile_and_pid": true
+  },
+  "implemented_scope": "fixture_admission_and_exact_case_catalog_only",
+  "negative_execution_implemented": false,
+  "native_compiled": false,
+  "engine_started": false,
+  "cold_import_qualified": false,
+  "full_61_qualified": false,
+  "original_19_faults_qualified": false
+}

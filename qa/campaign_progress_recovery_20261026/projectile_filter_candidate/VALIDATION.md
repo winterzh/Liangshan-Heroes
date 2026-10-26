@@ -1,0 +1,15 @@
+# 箭矢过滤合同：当前验证状态
+
+2026-10-27。候选尚未采用生产，原版桌面键鼠按用户选择暂停。README、sources及source_manifest保留创建时字节；本页维护后续验证状态。
+
+高俅941c的实际批次070648已正常派发并清完首波，实际SaveAndExit在visual/projectile返回TIMED_RENDER_OVERRIDE。正常Projectile._ready设置LINEAR_WITH_MIPMAPS，原Graph却统一要求PARENT_NODE；[原始失败证据](../gaoqiu_continue_candidate/evidence/terminal_projectile_failure_20261027_070648/README.md)完整保留，不能将预期拒绝算作保存成功。
+
+新候选以3365完整源的Graph为底，仅按确切projectile种类校验正常creator的MIP过滤；其他种类仍要求PARENT，材质、repeat、光罩、可见层与裁剪保护保留。最小diff逆向恢复原字节，候选SHA为feca8481000d8edb1bab5b00ad6f7c03ffeb9802637a92c714b795eee3a64582。候选不增加存档字段，不改变弹道或游戏数值。
+
+组件宿主AST、帮助和147个命名来源检查已通过，其中129项GD依赖逐项匹配已保存3365 generation；没有重新核完整工程。首次实际组件PID30272退出1：worker调用不存在的can_launch_new_run，尚未进入捕获；[原件](evidence/component_startup_failure_20261027_074153/README.md)保留。修为实际can_launch并加方法存在性检查后，第二次PID66268退出1、脚本错误为空，44项中43通过/1失败：正常Graph拒绝、候选capture→prepare→暂停挂载_ready→activate→recapture结构相等和12异常值全部通过，额外复合编码断言失败。[第二次原件](evidence/component_roundtrip_failure_20261027_074642/README.md)保留；旧报告没有两个再次encode的中间结果，不能追认具体错误码。
+
+Graph返回的wire.records已是Codec编码数据，后继测试按实际存储合同直接比完整wire的UTF8序列化字节，并保留原结构相等及records独立解码检查；重复encode仅记录诊断，Graph候选不变。
+
+第三次实际批次20261027_075227_ab78cc12已完整通过：PID50952退出0、错误0、40.083秒，44项全部通过，12个异常值均按精确码拒绝。两份wire均19,832字节，直接UTF8逐字相等，SHA为195988118131a8a0013d8d5b3984721ff37aa8bb59dc0f90fb0af215cd32261d；两份records均由原Codec成功解码，688 nodes、80,202字节上界。两次额外重复编码本次均实际返回DEPTH_LIMIT，该诊断不回推旧报告。159个命名pins后验、实际进程终态、自有锁和业务文件不存在检查通过。[完整组件原件](evidence/component_complete_20261027_075227/README.md)。合成组件模型不能授自然战斗或完整组合资格。
+
+[高俅复跑宿主](tests/gaoqiu_replay/README.md)的AST、帮助及默认轻量检查已通过，五份旧GD保持原字节与全部原断言；仅改新26脚本加helper的完整准入及冷导入要求。[独立准备与冷导入器](integration_3365/README.md)也已通过AST、帮助和159项命名来源检查，冷导入前会在自有锁内再次检查完整缓存库存，并拒绝将失败后的重试当首次冷导入。完整新工程正在独立准备，终态以本次preparation收据为准；尚无新冷导入或真实四进程通过结果。大名府61阶段、原19类故障、所有章节统一源回归、SDK、公开入口和发行程序仍分别待验。

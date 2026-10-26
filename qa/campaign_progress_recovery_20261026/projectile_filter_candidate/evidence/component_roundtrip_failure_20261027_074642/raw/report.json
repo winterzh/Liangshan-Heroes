@@ -1,0 +1,355 @@
+{
+  "bindings_sha256": "619a621b88feaa8e1f7cbb8904b1b24cc442cc45f58b8ed32c4f443496e3cf26",
+  "candidate_sha256": "feca8481000d8edb1bab5b00ad6f7c03ffeb9802637a92c714b795eee3a64582",
+  "checks": [
+    {
+      "label": "component environment keeps SDK and private campaign gate disabled",
+      "passed": true
+    },
+    {
+      "label": "installed ContinueFlow exposes actual can_launch startup API",
+      "passed": true
+    },
+    {
+      "label": "normal isolated autoload startup completed without a game world",
+      "passed": true
+    },
+    {
+      "label": "native bindings exact bytes",
+      "passed": true
+    },
+    {
+      "label": "native bindings match isolated process nonce and profile",
+      "passed": true
+    },
+    {
+      "label": "fresh profile has no campaign slot or reward business files",
+      "passed": true
+    },
+    {
+      "label": "external candidate exact SHA before loading",
+      "passed": true
+    },
+    {
+      "label": "candidate graph compiles with installed autoload dependencies",
+      "passed": true
+    },
+    {
+      "label": "native projectile creator derives MIP filter",
+      "passed": true
+    },
+    {
+      "label": "other native timed creator retains PARENT filter",
+      "passed": true
+    },
+    {
+      "label": "baseline reproduces exact native projectile filter rejection",
+      "passed": true
+    },
+    {
+      "label": "candidate captures real ready mixed graph",
+      "passed": true
+    },
+    {
+      "label": "candidate validates and prepares exact detached graph",
+      "passed": true
+    },
+    {
+      "label": "detached factory shell has not run _ready or received a fabricated filter",
+      "passed": true
+    },
+    {
+      "label": "paused native attach executes original _ready and preserves derived MIP filter",
+      "passed": true
+    },
+    {
+      "detail": {
+        "ok": true
+      },
+      "label": "original graph activation succeeds while paused",
+      "passed": true
+    },
+    {
+      "label": "capture prepare attach activate recapture preserves exact typed wire",
+      "passed": false
+    },
+    {
+      "detail": {
+        "code": "TIMED_RENDER_OVERRIDE",
+        "field": "projectile",
+        "ok": false
+      },
+      "label": "projectile rejects PARENT",
+      "passed": true
+    },
+    {
+      "label": "fixture restored exactly after projectile rejects PARENT",
+      "passed": true
+    },
+    {
+      "detail": {
+        "code": "TIMED_RENDER_OVERRIDE",
+        "field": "projectile",
+        "ok": false
+      },
+      "label": "projectile rejects NEAREST",
+      "passed": true
+    },
+    {
+      "label": "fixture restored exactly after projectile rejects NEAREST",
+      "passed": true
+    },
+    {
+      "detail": {
+        "code": "TIMED_RENDER_OVERRIDE",
+        "field": "projectile",
+        "ok": false
+      },
+      "label": "projectile rejects LINEAR",
+      "passed": true
+    },
+    {
+      "label": "fixture restored exactly after projectile rejects LINEAR",
+      "passed": true
+    },
+    {
+      "detail": {
+        "code": "TIMED_RENDER_OVERRIDE",
+        "field": "projectile",
+        "ok": false
+      },
+      "label": "projectile rejects nearest MIP",
+      "passed": true
+    },
+    {
+      "label": "fixture restored exactly after projectile rejects nearest MIP",
+      "passed": true
+    },
+    {
+      "detail": {
+        "code": "TIMED_RENDER_OVERRIDE",
+        "field": "projectile",
+        "ok": false
+      },
+      "label": "projectile rejects material",
+      "passed": true
+    },
+    {
+      "label": "fixture restored exactly after projectile rejects material",
+      "passed": true
+    },
+    {
+      "detail": {
+        "code": "TIMED_RENDER_OVERRIDE",
+        "field": "projectile",
+        "ok": false
+      },
+      "label": "projectile rejects inherited material override",
+      "passed": true
+    },
+    {
+      "label": "fixture restored exactly after projectile rejects inherited material override",
+      "passed": true
+    },
+    {
+      "detail": {
+        "code": "TIMED_RENDER_OVERRIDE",
+        "field": "projectile",
+        "ok": false
+      },
+      "label": "projectile rejects repeat override",
+      "passed": true
+    },
+    {
+      "label": "fixture restored exactly after projectile rejects repeat override",
+      "passed": true
+    },
+    {
+      "detail": {
+        "code": "TIMED_RENDER_OVERRIDE",
+        "field": "projectile",
+        "ok": false
+      },
+      "label": "projectile rejects light mask override",
+      "passed": true
+    },
+    {
+      "label": "fixture restored exactly after projectile rejects light mask override",
+      "passed": true
+    },
+    {
+      "detail": {
+        "code": "TIMED_RENDER_OVERRIDE",
+        "field": "projectile",
+        "ok": false
+      },
+      "label": "projectile rejects visibility layer override",
+      "passed": true
+    },
+    {
+      "label": "fixture restored exactly after projectile rejects visibility layer override",
+      "passed": true
+    },
+    {
+      "detail": {
+        "code": "TIMED_RENDER_OVERRIDE",
+        "field": "projectile",
+        "ok": false
+      },
+      "label": "projectile rejects clipping override",
+      "passed": true
+    },
+    {
+      "label": "fixture restored exactly after projectile rejects clipping override",
+      "passed": true
+    },
+    {
+      "detail": {
+        "code": "TIMED_RENDER_OVERRIDE",
+        "field": "blink_shot",
+        "ok": false
+      },
+      "label": "other timed kind still rejects MIP filter",
+      "passed": true
+    },
+    {
+      "label": "fixture restored exactly after other timed kind still rejects MIP filter",
+      "passed": true
+    },
+    {
+      "detail": {
+        "code": "TIMED_RENDER_OVERRIDE",
+        "field": "blink_shot",
+        "ok": false
+      },
+      "label": "other timed kind still rejects material",
+      "passed": true
+    },
+    {
+      "label": "fixture restored exactly after other timed kind still rejects material",
+      "passed": true
+    },
+    {
+      "label": "all twelve independent render negatives reject",
+      "passed": true
+    },
+    {
+      "label": "entire component transaction has no await physics or damage tick",
+      "passed": true
+    },
+    {
+      "label": "component created no campaign slot or reward business files",
+      "passed": true
+    }
+  ],
+  "failures": [
+    "capture prepare attach activate recapture preserves exact typed wire"
+  ],
+  "gameplay_state_modified": false,
+  "native_gameplay_qualified": false,
+  "negative_cases": [
+    {
+      "code": "TIMED_RENDER_OVERRIDE",
+      "field": "texture_filter",
+      "kind": "projectile",
+      "label": "projectile rejects PARENT",
+      "passed": true
+    },
+    {
+      "code": "TIMED_RENDER_OVERRIDE",
+      "field": "texture_filter",
+      "kind": "projectile",
+      "label": "projectile rejects NEAREST",
+      "passed": true
+    },
+    {
+      "code": "TIMED_RENDER_OVERRIDE",
+      "field": "texture_filter",
+      "kind": "projectile",
+      "label": "projectile rejects LINEAR",
+      "passed": true
+    },
+    {
+      "code": "TIMED_RENDER_OVERRIDE",
+      "field": "texture_filter",
+      "kind": "projectile",
+      "label": "projectile rejects nearest MIP",
+      "passed": true
+    },
+    {
+      "code": "TIMED_RENDER_OVERRIDE",
+      "field": "material",
+      "kind": "projectile",
+      "label": "projectile rejects material",
+      "passed": true
+    },
+    {
+      "code": "TIMED_RENDER_OVERRIDE",
+      "field": "use_parent_material",
+      "kind": "projectile",
+      "label": "projectile rejects inherited material override",
+      "passed": true
+    },
+    {
+      "code": "TIMED_RENDER_OVERRIDE",
+      "field": "texture_repeat",
+      "kind": "projectile",
+      "label": "projectile rejects repeat override",
+      "passed": true
+    },
+    {
+      "code": "TIMED_RENDER_OVERRIDE",
+      "field": "light_mask",
+      "kind": "projectile",
+      "label": "projectile rejects light mask override",
+      "passed": true
+    },
+    {
+      "code": "TIMED_RENDER_OVERRIDE",
+      "field": "visibility_layer",
+      "kind": "projectile",
+      "label": "projectile rejects visibility layer override",
+      "passed": true
+    },
+    {
+      "code": "TIMED_RENDER_OVERRIDE",
+      "field": "clip_children",
+      "kind": "projectile",
+      "label": "projectile rejects clipping override",
+      "passed": true
+    },
+    {
+      "code": "TIMED_RENDER_OVERRIDE",
+      "field": "texture_filter",
+      "kind": "blink_shot",
+      "label": "other timed kind still rejects MIP filter",
+      "passed": true
+    },
+    {
+      "code": "TIMED_RENDER_OVERRIDE",
+      "field": "material",
+      "kind": "blink_shot",
+      "label": "other timed kind still rejects material",
+      "passed": true
+    }
+  ],
+  "nonce": "94596d12801444d7aca91d9591502a78",
+  "observations": {
+    "baseline_result": {
+      "code": "TIMED_RENDER_OVERRIDE",
+      "field": "projectile",
+      "ok": false
+    },
+    "record_count": 3,
+    "restored_filter": 4,
+    "roundtrip_exact": true
+  },
+  "passed": false,
+  "pid": 66268,
+  "profile": "D:\\CodexQA\\projectilefilter\\dec4731d7e39",
+  "public_continue_qualified": false,
+  "schema": "projectile_filter_component_v1",
+  "sdk_qualified": false,
+  "synthetic_fixture": true,
+  "user_data_dir": "D:/CodexQA/projectilefilter/dec4731d7e39/appdata/Godot/app_userdata/水浒英雄传：八幕战役/"
+}

@@ -1,0 +1,451 @@
+{
+  "bindings_sha256": "2e811d66c61ba8e91408160b8a90810650f70a38e6d44de68a5aa199ce24946e",
+  "candidate_sha256": "feca8481000d8edb1bab5b00ad6f7c03ffeb9802637a92c714b795eee3a64582",
+  "checks": [
+    {
+      "label": "component environment keeps SDK and private campaign gate disabled",
+      "passed": true
+    },
+    {
+      "label": "installed ContinueFlow exposes actual can_launch startup API",
+      "passed": true
+    },
+    {
+      "label": "normal isolated autoload startup completed without a game world",
+      "passed": true
+    },
+    {
+      "label": "native bindings exact bytes",
+      "passed": true
+    },
+    {
+      "label": "native bindings match isolated process nonce and profile",
+      "passed": true
+    },
+    {
+      "label": "fresh profile has no campaign slot or reward business files",
+      "passed": true
+    },
+    {
+      "label": "external candidate exact SHA before loading",
+      "passed": true
+    },
+    {
+      "label": "candidate graph compiles with installed autoload dependencies",
+      "passed": true
+    },
+    {
+      "label": "native projectile creator derives MIP filter",
+      "passed": true
+    },
+    {
+      "label": "other native timed creator retains PARENT filter",
+      "passed": true
+    },
+    {
+      "label": "baseline reproduces exact native projectile filter rejection",
+      "passed": true
+    },
+    {
+      "label": "candidate captures real ready mixed graph",
+      "passed": true
+    },
+    {
+      "label": "candidate validates and prepares exact detached graph",
+      "passed": true
+    },
+    {
+      "label": "detached factory shell has not run _ready or received a fabricated filter",
+      "passed": true
+    },
+    {
+      "label": "paused native attach executes original _ready and preserves derived MIP filter",
+      "passed": true
+    },
+    {
+      "detail": {
+        "ok": true
+      },
+      "label": "original graph activation succeeds while paused",
+      "passed": true
+    },
+    {
+      "detail": {
+        "structure_equal": true,
+        "typed_records_decode": {
+          "original": {
+            "budget_reported": true,
+            "code": "OK",
+            "json_bytes_upper_bound": 80202,
+            "limits": {
+              "bytes": 1048576,
+              "depth": 32,
+              "nodes": 32768
+            },
+            "nodes": 688,
+            "ok": true,
+            "path": ""
+          },
+          "recaptured": {
+            "budget_reported": true,
+            "code": "OK",
+            "json_bytes_upper_bound": 80202,
+            "limits": {
+              "bytes": 1048576,
+              "depth": 32,
+              "nodes": 32768
+            },
+            "nodes": 688,
+            "ok": true,
+            "path": ""
+          }
+        },
+        "utf8_exact": true
+      },
+      "label": "capture prepare attach activate recapture preserves exact typed wire",
+      "passed": true
+    },
+    {
+      "detail": {
+        "code": "TIMED_RENDER_OVERRIDE",
+        "field": "projectile",
+        "ok": false
+      },
+      "label": "projectile rejects PARENT",
+      "passed": true
+    },
+    {
+      "label": "fixture restored exactly after projectile rejects PARENT",
+      "passed": true
+    },
+    {
+      "detail": {
+        "code": "TIMED_RENDER_OVERRIDE",
+        "field": "projectile",
+        "ok": false
+      },
+      "label": "projectile rejects NEAREST",
+      "passed": true
+    },
+    {
+      "label": "fixture restored exactly after projectile rejects NEAREST",
+      "passed": true
+    },
+    {
+      "detail": {
+        "code": "TIMED_RENDER_OVERRIDE",
+        "field": "projectile",
+        "ok": false
+      },
+      "label": "projectile rejects LINEAR",
+      "passed": true
+    },
+    {
+      "label": "fixture restored exactly after projectile rejects LINEAR",
+      "passed": true
+    },
+    {
+      "detail": {
+        "code": "TIMED_RENDER_OVERRIDE",
+        "field": "projectile",
+        "ok": false
+      },
+      "label": "projectile rejects nearest MIP",
+      "passed": true
+    },
+    {
+      "label": "fixture restored exactly after projectile rejects nearest MIP",
+      "passed": true
+    },
+    {
+      "detail": {
+        "code": "TIMED_RENDER_OVERRIDE",
+        "field": "projectile",
+        "ok": false
+      },
+      "label": "projectile rejects material",
+      "passed": true
+    },
+    {
+      "label": "fixture restored exactly after projectile rejects material",
+      "passed": true
+    },
+    {
+      "detail": {
+        "code": "TIMED_RENDER_OVERRIDE",
+        "field": "projectile",
+        "ok": false
+      },
+      "label": "projectile rejects inherited material override",
+      "passed": true
+    },
+    {
+      "label": "fixture restored exactly after projectile rejects inherited material override",
+      "passed": true
+    },
+    {
+      "detail": {
+        "code": "TIMED_RENDER_OVERRIDE",
+        "field": "projectile",
+        "ok": false
+      },
+      "label": "projectile rejects repeat override",
+      "passed": true
+    },
+    {
+      "label": "fixture restored exactly after projectile rejects repeat override",
+      "passed": true
+    },
+    {
+      "detail": {
+        "code": "TIMED_RENDER_OVERRIDE",
+        "field": "projectile",
+        "ok": false
+      },
+      "label": "projectile rejects light mask override",
+      "passed": true
+    },
+    {
+      "label": "fixture restored exactly after projectile rejects light mask override",
+      "passed": true
+    },
+    {
+      "detail": {
+        "code": "TIMED_RENDER_OVERRIDE",
+        "field": "projectile",
+        "ok": false
+      },
+      "label": "projectile rejects visibility layer override",
+      "passed": true
+    },
+    {
+      "label": "fixture restored exactly after projectile rejects visibility layer override",
+      "passed": true
+    },
+    {
+      "detail": {
+        "code": "TIMED_RENDER_OVERRIDE",
+        "field": "projectile",
+        "ok": false
+      },
+      "label": "projectile rejects clipping override",
+      "passed": true
+    },
+    {
+      "label": "fixture restored exactly after projectile rejects clipping override",
+      "passed": true
+    },
+    {
+      "detail": {
+        "code": "TIMED_RENDER_OVERRIDE",
+        "field": "blink_shot",
+        "ok": false
+      },
+      "label": "other timed kind still rejects MIP filter",
+      "passed": true
+    },
+    {
+      "label": "fixture restored exactly after other timed kind still rejects MIP filter",
+      "passed": true
+    },
+    {
+      "detail": {
+        "code": "TIMED_RENDER_OVERRIDE",
+        "field": "blink_shot",
+        "ok": false
+      },
+      "label": "other timed kind still rejects material",
+      "passed": true
+    },
+    {
+      "label": "fixture restored exactly after other timed kind still rejects material",
+      "passed": true
+    },
+    {
+      "label": "all twelve independent render negatives reject",
+      "passed": true
+    },
+    {
+      "label": "entire component transaction has no await physics or damage tick",
+      "passed": true
+    },
+    {
+      "label": "component created no campaign slot or reward business files",
+      "passed": true
+    }
+  ],
+  "failures": [],
+  "gameplay_state_modified": false,
+  "native_gameplay_qualified": false,
+  "negative_cases": [
+    {
+      "code": "TIMED_RENDER_OVERRIDE",
+      "field": "texture_filter",
+      "kind": "projectile",
+      "label": "projectile rejects PARENT",
+      "passed": true
+    },
+    {
+      "code": "TIMED_RENDER_OVERRIDE",
+      "field": "texture_filter",
+      "kind": "projectile",
+      "label": "projectile rejects NEAREST",
+      "passed": true
+    },
+    {
+      "code": "TIMED_RENDER_OVERRIDE",
+      "field": "texture_filter",
+      "kind": "projectile",
+      "label": "projectile rejects LINEAR",
+      "passed": true
+    },
+    {
+      "code": "TIMED_RENDER_OVERRIDE",
+      "field": "texture_filter",
+      "kind": "projectile",
+      "label": "projectile rejects nearest MIP",
+      "passed": true
+    },
+    {
+      "code": "TIMED_RENDER_OVERRIDE",
+      "field": "material",
+      "kind": "projectile",
+      "label": "projectile rejects material",
+      "passed": true
+    },
+    {
+      "code": "TIMED_RENDER_OVERRIDE",
+      "field": "use_parent_material",
+      "kind": "projectile",
+      "label": "projectile rejects inherited material override",
+      "passed": true
+    },
+    {
+      "code": "TIMED_RENDER_OVERRIDE",
+      "field": "texture_repeat",
+      "kind": "projectile",
+      "label": "projectile rejects repeat override",
+      "passed": true
+    },
+    {
+      "code": "TIMED_RENDER_OVERRIDE",
+      "field": "light_mask",
+      "kind": "projectile",
+      "label": "projectile rejects light mask override",
+      "passed": true
+    },
+    {
+      "code": "TIMED_RENDER_OVERRIDE",
+      "field": "visibility_layer",
+      "kind": "projectile",
+      "label": "projectile rejects visibility layer override",
+      "passed": true
+    },
+    {
+      "code": "TIMED_RENDER_OVERRIDE",
+      "field": "clip_children",
+      "kind": "projectile",
+      "label": "projectile rejects clipping override",
+      "passed": true
+    },
+    {
+      "code": "TIMED_RENDER_OVERRIDE",
+      "field": "texture_filter",
+      "kind": "blink_shot",
+      "label": "other timed kind still rejects MIP filter",
+      "passed": true
+    },
+    {
+      "code": "TIMED_RENDER_OVERRIDE",
+      "field": "material",
+      "kind": "blink_shot",
+      "label": "other timed kind still rejects material",
+      "passed": true
+    }
+  ],
+  "nonce": "8860ba9bdcdc4806837b80f8c8f6c69e",
+  "observations": {
+    "baseline_result": {
+      "code": "TIMED_RENDER_OVERRIDE",
+      "field": "projectile",
+      "ok": false
+    },
+    "double_encode_diagnostic": {
+      "original": {
+        "budget_reported": false,
+        "code": "DEPTH_LIMIT",
+        "json_bytes_upper_bound": null,
+        "limits": {
+          "bytes": 1048576,
+          "depth": 32,
+          "nodes": 32768
+        },
+        "nodes": null,
+        "ok": false,
+        "path": "$/value2/value1/1/value1/5/1/value1/0/1/value1/2/1/value1/1/1/value1/1/value1/1/value1/1/1/value1/12/value1/1/value1/1/1/value1/0/value1/0"
+      },
+      "qualifies_roundtrip": false,
+      "recaptured": {
+        "budget_reported": false,
+        "code": "DEPTH_LIMIT",
+        "json_bytes_upper_bound": null,
+        "limits": {
+          "bytes": 1048576,
+          "depth": 32,
+          "nodes": 32768
+        },
+        "nodes": null,
+        "ok": false,
+        "path": "$/value2/value1/1/value1/5/1/value1/0/1/value1/2/1/value1/1/1/value1/1/value1/1/value1/1/1/value1/12/value1/1/value1/1/1/value1/0/value1/0"
+      }
+    },
+    "record_count": 3,
+    "restored_filter": 4,
+    "roundtrip_exact": true,
+    "serialized_wire": {
+      "original_bytes": 19832,
+      "original_json": "{\"content_version\":\"synthetic-projectile-filter-component-v1\",\"records\":{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"id\"},{\"t\":\"string\",\"v\":\"1\"}],[{\"t\":\"string\",\"v\":\"parent\"},{\"t\":\"string\",\"v\":\"\"}],[{\"t\":\"string\",\"v\":\"index\"},{\"t\":\"int64\",\"v\":\"0\"}],[{\"t\":\"string\",\"v\":\"kind\"},{\"t\":\"string\",\"v\":\"container\"}],[{\"t\":\"string\",\"v\":\"node\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"name\"},{\"t\":\"string\",\"v\":\"FxRoot\"}],[{\"t\":\"string\",\"v\":\"position\"},{\"t\":\"vector2\",\"v\":[\"0000000000000000\",\"0000000000000000\"]}],[{\"t\":\"string\",\"v\":\"modulate\"},{\"t\":\"color_f32\",\"v\":[\"0000803f\",\"0000803f\",\"0000803f\",\"0000803f\"]}],[{\"t\":\"string\",\"v\":\"basis_x\"},{\"t\":\"vector2\",\"v\":[\"000000000000f03f\",\"0000000000000000\"]}],[{\"t\":\"string\",\"v\":\"basis_y\"},{\"t\":\"vector2\",\"v\":[\"0000000000000000\",\"000000000000f03f\"]}],[{\"t\":\"string\",\"v\":\"visible\"},{\"t\":\"bool\",\"v\":true}],[{\"t\":\"string\",\"v\":\"self_modulate\"},{\"t\":\"color_f32\",\"v\":[\"0000803f\",\"0000803f\",\"0000803f\",\"0000803f\"]}],[{\"t\":\"string\",\"v\":\"z_index\"},{\"t\":\"int64\",\"v\":\"0\"}],[{\"t\":\"string\",\"v\":\"z_as_relative\"},{\"t\":\"bool\",\"v\":true}],[{\"t\":\"string\",\"v\":\"show_behind_parent\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"top_level\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"y_sort_enabled\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"activation\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"mode\"},{\"t\":\"int64\",\"v\":\"0\"}],[{\"t\":\"string\",\"v\":\"priority\"},{\"t\":\"int64\",\"v\":\"0\"}],[{\"t\":\"string\",\"v\":\"physics_priority\"},{\"t\":\"int64\",\"v\":\"0\"}],[{\"t\":\"string\",\"v\":\"process\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"physics\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"input\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"shortcut\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"unhandled_input\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"unhandled_key\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"signals_blocked\"},{\"t\":\"bool\",\"v\":false}]],\"t\":\"dictionary\"}]],\"t\":\"dictionary\"}],[{\"t\":\"string\",\"v\":\"values\"},{\"entries\":[],\"t\":\"dictionary\"}],[{\"t\":\"string\",\"v\":\"references\"},{\"entries\":[],\"t\":\"dictionary\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"id\"},{\"t\":\"string\",\"v\":\"2\"}],[{\"t\":\"string\",\"v\":\"parent\"},{\"t\":\"string\",\"v\":\"1\"}],[{\"t\":\"string\",\"v\":\"index\"},{\"t\":\"int64\",\"v\":\"0\"}],[{\"t\":\"string\",\"v\":\"kind\"},{\"t\":\"string\",\"v\":\"projectile\"}],[{\"t\":\"string\",\"v\":\"node\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"name\"},{\"t\":\"string\",\"v\":\"Projectile\"}],[{\"t\":\"string\",\"v\":\"position\"},{\"t\":\"vector2\",\"v\":[\"0000000000000000\",\"0000000000000000\"]}],[{\"t\":\"string\",\"v\":\"modulate\"},{\"t\":\"color_f32\",\"v\":[\"0000803f\",\"0000803f\",\"0000803f\",\"0000803f\"]}],[{\"t\":\"string\",\"v\":\"basis_x\"},{\"t\":\"vector2\",\"v\":[\"000000000000f03f\",\"0000000000000000\"]}],[{\"t\":\"string\",\"v\":\"basis_y\"},{\"t\":\"vector2\",\"v\":[\"0000000000000000\",\"000000000000f03f\"]}],[{\"t\":\"string\",\"v\":\"visible\"},{\"t\":\"bool\",\"v\":true}],[{\"t\":\"string\",\"v\":\"self_modulate\"},{\"t\":\"color_f32\",\"v\":[\"0000803f\",\"0000803f\",\"0000803f\",\"0000803f\"]}],[{\"t\":\"string\",\"v\":\"z_index\"},{\"t\":\"int64\",\"v\":\"0\"}],[{\"t\":\"string\",\"v\":\"z_as_relative\"},{\"t\":\"bool\",\"v\":true}],[{\"t\":\"string\",\"v\":\"show_behind_parent\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"top_level\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"y_sort_enabled\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"activation\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"mode\"},{\"t\":\"int64\",\"v\":\"0\"}],[{\"t\":\"string\",\"v\":\"priority\"},{\"t\":\"int64\",\"v\":\"0\"}],[{\"t\":\"string\",\"v\":\"physics_priority\"},{\"t\":\"int64\",\"v\":\"0\"}],[{\"t\":\"string\",\"v\":\"process\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"physics\"},{\"t\":\"bool\",\"v\":true}],[{\"t\":\"string\",\"v\":\"input\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"shortcut\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"unhandled_input\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"unhandled_key\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"signals_blocked\"},{\"t\":\"bool\",\"v\":false}]],\"t\":\"dictionary\"}]],\"t\":\"dictionary\"}],[{\"t\":\"string\",\"v\":\"values\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"state\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"schema\"},{\"t\":\"string\",\"v\":\"defense_projectile_state_v1\"}],[{\"t\":\"string\",\"v\":\"content_version\"},{\"t\":\"string\",\"v\":\"synthetic-projectile-filter-component-v1\"}],[{\"t\":\"string\",\"v\":\"payload\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"dictionary\"}],[{\"t\":\"string\",\"v\":\"entries\"},{\"t\":\"array\",\"v\":[{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"values\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"dictionary\"}],[{\"t\":\"string\",\"v\":\"entries\"},{\"t\":\"array\",\"v\":[{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"dmg\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"f64\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"0000000000002040\"}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"crit\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"bool\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"bool\",\"v\":false}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"damage_ability_id\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"\"}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"speed\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"f64\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"0000000000407a40\"}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"_dir\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"vector2\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"array\",\"v\":[{\"t\":\"string\",\"v\":\"000000000000f03f\"},{\"t\":\"string\",\"v\":\"0000000000000000\"}]}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"_life\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"f64\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"0000000000000840\"}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"kind\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"arrow\"}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"splash\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"f64\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"0000000000000000\"}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"on_slow_mult\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"f64\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"000000000000f03f\"}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"on_slow_dur\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"f64\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"0000000000000000\"}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"_dist0\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"f64\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"000000000000f03f\"}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"_spin\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"f64\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"0000000000000000\"}]],\"t\":\"dictionary\"}]}]}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"node\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"dictionary\"}],[{\"t\":\"string\",\"v\":\"entries\"},{\"t\":\"array\",\"v\":[{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"name\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"Projectile\"}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"position\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"vector2\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"array\",\"v\":[{\"t\":\"string\",\"v\":\"0000000000000000\"},{\"t\":\"string\",\"v\":\"0000000000000000\"}]}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"modulate\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"color_f32\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"array\",\"v\":[{\"t\":\"string\",\"v\":\"0000803f\"},{\"t\":\"string\",\"v\":\"0000803f\"},{\"t\":\"string\",\"v\":\"0000803f\"},{\"t\":\"string\",\"v\":\"0000803f\"}]}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"basis_x\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"vector2\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"array\",\"v\":[{\"t\":\"string\",\"v\":\"000000000000f03f\"},{\"t\":\"string\",\"v\":\"0000000000000000\"}]}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"basis_y\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"vector2\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"array\",\"v\":[{\"t\":\"string\",\"v\":\"0000000000000000\"},{\"t\":\"string\",\"v\":\"000000000000f03f\"}]}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"visible\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"bool\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"bool\",\"v\":true}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"self_modulate\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"color_f32\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"array\",\"v\":[{\"t\":\"string\",\"v\":\"0000803f\"},{\"t\":\"string\",\"v\":\"0000803f\"},{\"t\":\"string\",\"v\":\"0000803f\"},{\"t\":\"string\",\"v\":\"0000803f\"}]}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"z_index\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"int64\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"0\"}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"z_as_relative\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"bool\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"bool\",\"v\":true}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"show_behind_parent\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"bool\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"bool\",\"v\":false}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"top_level\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"bool\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"bool\",\"v\":false}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"y_sort_enabled\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"bool\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"bool\",\"v\":false}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"activation\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"dictionary\"}],[{\"t\":\"string\",\"v\":\"entries\"},{\"t\":\"array\",\"v\":[{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"mode\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"int64\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"0\"}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"priority\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"int64\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"0\"}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"physics_priority\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"int64\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"0\"}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"process\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"bool\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"bool\",\"v\":false}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"physics\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"bool\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"bool\",\"v\":true}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"input\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"bool\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"bool\",\"v\":false}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"shortcut\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"bool\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"bool\",\"v\":false}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"unhandled_input\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"bool\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"bool\",\"v\":false}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"unhandled_key\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"bool\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"bool\",\"v\":false}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"signals_blocked\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"bool\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"bool\",\"v\":false}]],\"t\":\"dictionary\"}]}]}]],\"t\":\"dictionary\"}]}]}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"references\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"dictionary\"}],[{\"t\":\"string\",\"v\":\"entries\"},{\"t\":\"array\",\"v\":[{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"target\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"dictionary\"}],[{\"t\":\"string\",\"v\":\"entries\"},{\"t\":\"array\",\"v\":[{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"state\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"none\"}]],\"t\":\"dictionary\"}]}]}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"shooter\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"dictionary\"}],[{\"t\":\"string\",\"v\":\"entries\"},{\"t\":\"array\",\"v\":[{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"state\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"none\"}]],\"t\":\"dictionary\"}]}]}]],\"t\":\"dictionary\"}]}]}]],\"t\":\"dictionary\"}]}]}]],\"t\":\"dictionary\"}]],\"t\":\"dictionary\"}]],\"t\":\"dictionary\"}],[{\"t\":\"string\",\"v\":\"references\"},{\"entries\":[],\"t\":\"dictionary\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"id\"},{\"t\":\"string\",\"v\":\"3\"}],[{\"t\":\"string\",\"v\":\"parent\"},{\"t\":\"string\",\"v\":\"1\"}],[{\"t\":\"string\",\"v\":\"index\"},{\"t\":\"int64\",\"v\":\"1\"}],[{\"t\":\"string\",\"v\":\"kind\"},{\"t\":\"string\",\"v\":\"blink_shot\"}],[{\"t\":\"string\",\"v\":\"node\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"name\"},{\"t\":\"string\",\"v\":\"Blink\"}],[{\"t\":\"string\",\"v\":\"position\"},{\"t\":\"vector2\",\"v\":[\"0000000000000000\",\"0000000000000000\"]}],[{\"t\":\"string\",\"v\":\"modulate\"},{\"t\":\"color_f32\",\"v\":[\"0000803f\",\"0000803f\",\"0000803f\",\"0000803f\"]}],[{\"t\":\"string\",\"v\":\"basis_x\"},{\"t\":\"vector2\",\"v\":[\"000000000000f03f\",\"0000000000000000\"]}],[{\"t\":\"string\",\"v\":\"basis_y\"},{\"t\":\"vector2\",\"v\":[\"0000000000000000\",\"000000000000f03f\"]}],[{\"t\":\"string\",\"v\":\"visible\"},{\"t\":\"bool\",\"v\":true}],[{\"t\":\"string\",\"v\":\"self_modulate\"},{\"t\":\"color_f32\",\"v\":[\"0000803f\",\"0000803f\",\"0000803f\",\"0000803f\"]}],[{\"t\":\"string\",\"v\":\"z_index\"},{\"t\":\"int64\",\"v\":\"0\"}],[{\"t\":\"string\",\"v\":\"z_as_relative\"},{\"t\":\"bool\",\"v\":true}],[{\"t\":\"string\",\"v\":\"show_behind_parent\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"top_level\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"y_sort_enabled\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"activation\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"mode\"},{\"t\":\"int64\",\"v\":\"0\"}],[{\"t\":\"string\",\"v\":\"priority\"},{\"t\":\"int64\",\"v\":\"0\"}],[{\"t\":\"string\",\"v\":\"physics_priority\"},{\"t\":\"int64\",\"v\":\"0\"}],[{\"t\":\"string\",\"v\":\"process\"},{\"t\":\"bool\",\"v\":true}],[{\"t\":\"string\",\"v\":\"physics\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"input\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"shortcut\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"unhandled_input\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"unhandled_key\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"signals_blocked\"},{\"t\":\"bool\",\"v\":false}]],\"t\":\"dictionary\"}]],\"t\":\"dictionary\"}],[{\"t\":\"string\",\"v\":\"values\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"dur\"},{\"t\":\"f64\",\"v\":\"e17a14ae47e1da3f\"}],[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"f64\",\"v\":\"e17a14ae47e1da3f\"}],[{\"t\":\"string\",\"v\":\"start_w\"},{\"t\":\"vector2\",\"v\":[\"0000000000000000\",\"0000000000000000\"]}],[{\"t\":\"string\",\"v\":\"end_w\"},{\"t\":\"vector2\",\"v\":[\"0000000000000000\",\"0000000000000000\"]}],[{\"t\":\"string\",\"v\":\"col\"},{\"t\":\"color_f32\",\"v\":[\"a1a0203f\",\"e9e8683f\",\"c1c0403f\",\"0000803f\"]}],[{\"t\":\"string\",\"v\":\"_S\"},{\"t\":\"vector2\",\"v\":[\"0000000000000000\",\"0000000000000000\"]}],[{\"t\":\"string\",\"v\":\"_E\"},{\"t\":\"vector2\",\"v\":[\"0000000000000000\",\"0000000000000000\"]}]],\"t\":\"dictionary\"}],[{\"t\":\"string\",\"v\":\"references\"},{\"entries\":[],\"t\":\"dictionary\"}]],\"t\":\"dictionary\"}]},\"schema\":\"defense_visual_graph_subset_v1\"}",
+      "original_sha256": "195988118131a8a0013d8d5b3984721ff37aa8bb59dc0f90fb0af215cd32261d",
+      "recaptured_bytes": 19832,
+      "recaptured_json": "{\"content_version\":\"synthetic-projectile-filter-component-v1\",\"records\":{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"id\"},{\"t\":\"string\",\"v\":\"1\"}],[{\"t\":\"string\",\"v\":\"parent\"},{\"t\":\"string\",\"v\":\"\"}],[{\"t\":\"string\",\"v\":\"index\"},{\"t\":\"int64\",\"v\":\"0\"}],[{\"t\":\"string\",\"v\":\"kind\"},{\"t\":\"string\",\"v\":\"container\"}],[{\"t\":\"string\",\"v\":\"node\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"name\"},{\"t\":\"string\",\"v\":\"FxRoot\"}],[{\"t\":\"string\",\"v\":\"position\"},{\"t\":\"vector2\",\"v\":[\"0000000000000000\",\"0000000000000000\"]}],[{\"t\":\"string\",\"v\":\"modulate\"},{\"t\":\"color_f32\",\"v\":[\"0000803f\",\"0000803f\",\"0000803f\",\"0000803f\"]}],[{\"t\":\"string\",\"v\":\"basis_x\"},{\"t\":\"vector2\",\"v\":[\"000000000000f03f\",\"0000000000000000\"]}],[{\"t\":\"string\",\"v\":\"basis_y\"},{\"t\":\"vector2\",\"v\":[\"0000000000000000\",\"000000000000f03f\"]}],[{\"t\":\"string\",\"v\":\"visible\"},{\"t\":\"bool\",\"v\":true}],[{\"t\":\"string\",\"v\":\"self_modulate\"},{\"t\":\"color_f32\",\"v\":[\"0000803f\",\"0000803f\",\"0000803f\",\"0000803f\"]}],[{\"t\":\"string\",\"v\":\"z_index\"},{\"t\":\"int64\",\"v\":\"0\"}],[{\"t\":\"string\",\"v\":\"z_as_relative\"},{\"t\":\"bool\",\"v\":true}],[{\"t\":\"string\",\"v\":\"show_behind_parent\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"top_level\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"y_sort_enabled\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"activation\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"mode\"},{\"t\":\"int64\",\"v\":\"0\"}],[{\"t\":\"string\",\"v\":\"priority\"},{\"t\":\"int64\",\"v\":\"0\"}],[{\"t\":\"string\",\"v\":\"physics_priority\"},{\"t\":\"int64\",\"v\":\"0\"}],[{\"t\":\"string\",\"v\":\"process\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"physics\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"input\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"shortcut\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"unhandled_input\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"unhandled_key\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"signals_blocked\"},{\"t\":\"bool\",\"v\":false}]],\"t\":\"dictionary\"}]],\"t\":\"dictionary\"}],[{\"t\":\"string\",\"v\":\"values\"},{\"entries\":[],\"t\":\"dictionary\"}],[{\"t\":\"string\",\"v\":\"references\"},{\"entries\":[],\"t\":\"dictionary\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"id\"},{\"t\":\"string\",\"v\":\"2\"}],[{\"t\":\"string\",\"v\":\"parent\"},{\"t\":\"string\",\"v\":\"1\"}],[{\"t\":\"string\",\"v\":\"index\"},{\"t\":\"int64\",\"v\":\"0\"}],[{\"t\":\"string\",\"v\":\"kind\"},{\"t\":\"string\",\"v\":\"projectile\"}],[{\"t\":\"string\",\"v\":\"node\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"name\"},{\"t\":\"string\",\"v\":\"Projectile\"}],[{\"t\":\"string\",\"v\":\"position\"},{\"t\":\"vector2\",\"v\":[\"0000000000000000\",\"0000000000000000\"]}],[{\"t\":\"string\",\"v\":\"modulate\"},{\"t\":\"color_f32\",\"v\":[\"0000803f\",\"0000803f\",\"0000803f\",\"0000803f\"]}],[{\"t\":\"string\",\"v\":\"basis_x\"},{\"t\":\"vector2\",\"v\":[\"000000000000f03f\",\"0000000000000000\"]}],[{\"t\":\"string\",\"v\":\"basis_y\"},{\"t\":\"vector2\",\"v\":[\"0000000000000000\",\"000000000000f03f\"]}],[{\"t\":\"string\",\"v\":\"visible\"},{\"t\":\"bool\",\"v\":true}],[{\"t\":\"string\",\"v\":\"self_modulate\"},{\"t\":\"color_f32\",\"v\":[\"0000803f\",\"0000803f\",\"0000803f\",\"0000803f\"]}],[{\"t\":\"string\",\"v\":\"z_index\"},{\"t\":\"int64\",\"v\":\"0\"}],[{\"t\":\"string\",\"v\":\"z_as_relative\"},{\"t\":\"bool\",\"v\":true}],[{\"t\":\"string\",\"v\":\"show_behind_parent\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"top_level\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"y_sort_enabled\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"activation\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"mode\"},{\"t\":\"int64\",\"v\":\"0\"}],[{\"t\":\"string\",\"v\":\"priority\"},{\"t\":\"int64\",\"v\":\"0\"}],[{\"t\":\"string\",\"v\":\"physics_priority\"},{\"t\":\"int64\",\"v\":\"0\"}],[{\"t\":\"string\",\"v\":\"process\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"physics\"},{\"t\":\"bool\",\"v\":true}],[{\"t\":\"string\",\"v\":\"input\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"shortcut\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"unhandled_input\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"unhandled_key\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"signals_blocked\"},{\"t\":\"bool\",\"v\":false}]],\"t\":\"dictionary\"}]],\"t\":\"dictionary\"}],[{\"t\":\"string\",\"v\":\"values\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"state\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"schema\"},{\"t\":\"string\",\"v\":\"defense_projectile_state_v1\"}],[{\"t\":\"string\",\"v\":\"content_version\"},{\"t\":\"string\",\"v\":\"synthetic-projectile-filter-component-v1\"}],[{\"t\":\"string\",\"v\":\"payload\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"dictionary\"}],[{\"t\":\"string\",\"v\":\"entries\"},{\"t\":\"array\",\"v\":[{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"values\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"dictionary\"}],[{\"t\":\"string\",\"v\":\"entries\"},{\"t\":\"array\",\"v\":[{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"dmg\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"f64\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"0000000000002040\"}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"crit\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"bool\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"bool\",\"v\":false}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"damage_ability_id\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"\"}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"speed\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"f64\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"0000000000407a40\"}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"_dir\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"vector2\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"array\",\"v\":[{\"t\":\"string\",\"v\":\"000000000000f03f\"},{\"t\":\"string\",\"v\":\"0000000000000000\"}]}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"_life\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"f64\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"0000000000000840\"}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"kind\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"arrow\"}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"splash\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"f64\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"0000000000000000\"}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"on_slow_mult\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"f64\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"000000000000f03f\"}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"on_slow_dur\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"f64\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"0000000000000000\"}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"_dist0\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"f64\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"000000000000f03f\"}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"_spin\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"f64\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"0000000000000000\"}]],\"t\":\"dictionary\"}]}]}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"node\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"dictionary\"}],[{\"t\":\"string\",\"v\":\"entries\"},{\"t\":\"array\",\"v\":[{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"name\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"Projectile\"}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"position\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"vector2\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"array\",\"v\":[{\"t\":\"string\",\"v\":\"0000000000000000\"},{\"t\":\"string\",\"v\":\"0000000000000000\"}]}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"modulate\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"color_f32\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"array\",\"v\":[{\"t\":\"string\",\"v\":\"0000803f\"},{\"t\":\"string\",\"v\":\"0000803f\"},{\"t\":\"string\",\"v\":\"0000803f\"},{\"t\":\"string\",\"v\":\"0000803f\"}]}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"basis_x\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"vector2\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"array\",\"v\":[{\"t\":\"string\",\"v\":\"000000000000f03f\"},{\"t\":\"string\",\"v\":\"0000000000000000\"}]}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"basis_y\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"vector2\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"array\",\"v\":[{\"t\":\"string\",\"v\":\"0000000000000000\"},{\"t\":\"string\",\"v\":\"000000000000f03f\"}]}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"visible\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"bool\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"bool\",\"v\":true}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"self_modulate\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"color_f32\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"array\",\"v\":[{\"t\":\"string\",\"v\":\"0000803f\"},{\"t\":\"string\",\"v\":\"0000803f\"},{\"t\":\"string\",\"v\":\"0000803f\"},{\"t\":\"string\",\"v\":\"0000803f\"}]}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"z_index\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"int64\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"0\"}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"z_as_relative\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"bool\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"bool\",\"v\":true}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"show_behind_parent\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"bool\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"bool\",\"v\":false}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"top_level\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"bool\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"bool\",\"v\":false}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"y_sort_enabled\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"bool\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"bool\",\"v\":false}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"activation\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"dictionary\"}],[{\"t\":\"string\",\"v\":\"entries\"},{\"t\":\"array\",\"v\":[{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"mode\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"int64\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"0\"}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"priority\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"int64\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"0\"}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"physics_priority\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"int64\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"0\"}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"process\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"bool\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"bool\",\"v\":false}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"physics\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"bool\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"bool\",\"v\":true}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"input\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"bool\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"bool\",\"v\":false}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"shortcut\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"bool\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"bool\",\"v\":false}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"unhandled_input\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"bool\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"bool\",\"v\":false}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"unhandled_key\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"bool\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"bool\",\"v\":false}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"signals_blocked\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"bool\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"bool\",\"v\":false}]],\"t\":\"dictionary\"}]}]}]],\"t\":\"dictionary\"}]}]}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"references\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"dictionary\"}],[{\"t\":\"string\",\"v\":\"entries\"},{\"t\":\"array\",\"v\":[{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"target\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"dictionary\"}],[{\"t\":\"string\",\"v\":\"entries\"},{\"t\":\"array\",\"v\":[{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"state\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"none\"}]],\"t\":\"dictionary\"}]}]}]],\"t\":\"dictionary\"}]},{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"shooter\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"dictionary\"}],[{\"t\":\"string\",\"v\":\"entries\"},{\"t\":\"array\",\"v\":[{\"t\":\"array\",\"v\":[{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"state\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"string\",\"v\":\"string\"}],[{\"t\":\"string\",\"v\":\"v\"},{\"t\":\"string\",\"v\":\"none\"}]],\"t\":\"dictionary\"}]}]}]],\"t\":\"dictionary\"}]}]}]],\"t\":\"dictionary\"}]}]}]],\"t\":\"dictionary\"}]],\"t\":\"dictionary\"}]],\"t\":\"dictionary\"}],[{\"t\":\"string\",\"v\":\"references\"},{\"entries\":[],\"t\":\"dictionary\"}]],\"t\":\"dictionary\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"id\"},{\"t\":\"string\",\"v\":\"3\"}],[{\"t\":\"string\",\"v\":\"parent\"},{\"t\":\"string\",\"v\":\"1\"}],[{\"t\":\"string\",\"v\":\"index\"},{\"t\":\"int64\",\"v\":\"1\"}],[{\"t\":\"string\",\"v\":\"kind\"},{\"t\":\"string\",\"v\":\"blink_shot\"}],[{\"t\":\"string\",\"v\":\"node\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"name\"},{\"t\":\"string\",\"v\":\"Blink\"}],[{\"t\":\"string\",\"v\":\"position\"},{\"t\":\"vector2\",\"v\":[\"0000000000000000\",\"0000000000000000\"]}],[{\"t\":\"string\",\"v\":\"modulate\"},{\"t\":\"color_f32\",\"v\":[\"0000803f\",\"0000803f\",\"0000803f\",\"0000803f\"]}],[{\"t\":\"string\",\"v\":\"basis_x\"},{\"t\":\"vector2\",\"v\":[\"000000000000f03f\",\"0000000000000000\"]}],[{\"t\":\"string\",\"v\":\"basis_y\"},{\"t\":\"vector2\",\"v\":[\"0000000000000000\",\"000000000000f03f\"]}],[{\"t\":\"string\",\"v\":\"visible\"},{\"t\":\"bool\",\"v\":true}],[{\"t\":\"string\",\"v\":\"self_modulate\"},{\"t\":\"color_f32\",\"v\":[\"0000803f\",\"0000803f\",\"0000803f\",\"0000803f\"]}],[{\"t\":\"string\",\"v\":\"z_index\"},{\"t\":\"int64\",\"v\":\"0\"}],[{\"t\":\"string\",\"v\":\"z_as_relative\"},{\"t\":\"bool\",\"v\":true}],[{\"t\":\"string\",\"v\":\"show_behind_parent\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"top_level\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"y_sort_enabled\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"activation\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"mode\"},{\"t\":\"int64\",\"v\":\"0\"}],[{\"t\":\"string\",\"v\":\"priority\"},{\"t\":\"int64\",\"v\":\"0\"}],[{\"t\":\"string\",\"v\":\"physics_priority\"},{\"t\":\"int64\",\"v\":\"0\"}],[{\"t\":\"string\",\"v\":\"process\"},{\"t\":\"bool\",\"v\":true}],[{\"t\":\"string\",\"v\":\"physics\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"input\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"shortcut\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"unhandled_input\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"unhandled_key\"},{\"t\":\"bool\",\"v\":false}],[{\"t\":\"string\",\"v\":\"signals_blocked\"},{\"t\":\"bool\",\"v\":false}]],\"t\":\"dictionary\"}]],\"t\":\"dictionary\"}],[{\"t\":\"string\",\"v\":\"values\"},{\"entries\":[[{\"t\":\"string\",\"v\":\"dur\"},{\"t\":\"f64\",\"v\":\"e17a14ae47e1da3f\"}],[{\"t\":\"string\",\"v\":\"t\"},{\"t\":\"f64\",\"v\":\"e17a14ae47e1da3f\"}],[{\"t\":\"string\",\"v\":\"start_w\"},{\"t\":\"vector2\",\"v\":[\"0000000000000000\",\"0000000000000000\"]}],[{\"t\":\"string\",\"v\":\"end_w\"},{\"t\":\"vector2\",\"v\":[\"0000000000000000\",\"0000000000000000\"]}],[{\"t\":\"string\",\"v\":\"col\"},{\"t\":\"color_f32\",\"v\":[\"a1a0203f\",\"e9e8683f\",\"c1c0403f\",\"0000803f\"]}],[{\"t\":\"string\",\"v\":\"_S\"},{\"t\":\"vector2\",\"v\":[\"0000000000000000\",\"0000000000000000\"]}],[{\"t\":\"string\",\"v\":\"_E\"},{\"t\":\"vector2\",\"v\":[\"0000000000000000\",\"0000000000000000\"]}]],\"t\":\"dictionary\"}],[{\"t\":\"string\",\"v\":\"references\"},{\"entries\":[],\"t\":\"dictionary\"}]],\"t\":\"dictionary\"}]},\"schema\":\"defense_visual_graph_subset_v1\"}",
+      "recaptured_sha256": "195988118131a8a0013d8d5b3984721ff37aa8bb59dc0f90fb0af215cd32261d",
+      "utf8_exact": true
+    },
+    "typed_records_decode": {
+      "original": {
+        "budget_reported": true,
+        "code": "OK",
+        "json_bytes_upper_bound": 80202,
+        "limits": {
+          "bytes": 1048576,
+          "depth": 32,
+          "nodes": 32768
+        },
+        "nodes": 688,
+        "ok": true,
+        "path": ""
+      },
+      "recaptured": {
+        "budget_reported": true,
+        "code": "OK",
+        "json_bytes_upper_bound": 80202,
+        "limits": {
+          "bytes": 1048576,
+          "depth": 32,
+          "nodes": 32768
+        },
+        "nodes": 688,
+        "ok": true,
+        "path": ""
+      }
+    }
+  },
+  "passed": true,
+  "pid": 50952,
+  "profile": "D:\\CodexQA\\projectilefilter\\e2c07dbf1e94",
+  "public_continue_qualified": false,
+  "schema": "projectile_filter_component_v1",
+  "sdk_qualified": false,
+  "synthetic_fixture": true,
+  "user_data_dir": "D:/CodexQA/projectilefilter/e2c07dbf1e94/appdata/Godot/app_userdata/水浒英雄传：八幕战役/"
+}

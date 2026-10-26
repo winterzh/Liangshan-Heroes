@@ -1,0 +1,214 @@
+{
+  "schema": "daming_first_flow_failure_archive_v1",
+  "original_run": "D:\\AI项目\\水浒\\开发工程\\.godot\\daming_flow_20261027\\20261027_072035_807401ae",
+  "original_receipt_sha256": "039ccee136cc8d25ddc70cc0cf7b41854e3e54d341fedd068d4565abaf9eeaab",
+  "complete": false,
+  "executed_processes": 3,
+  "planned_processes": 8,
+  "reports": [
+    {
+      "mode": "save_single",
+      "first_role": "lu",
+      "pid": 43448,
+      "exit_code": 0,
+      "seconds": 498.559,
+      "errors": [],
+      "stopped_for": null,
+      "passed": true,
+      "stage_completed": true,
+      "checks": {
+        "total": 202,
+        "passed": 202,
+        "failed": 0
+      },
+      "failures": [],
+      "report_sha256": "7246653f5b1e374ca37c58f6b57b3cc6ee2de3e3f7f1cd8edaa1372f50c5d0d1",
+      "log_sha256": "d21259f0d2a2256ea9c20a70d34a554572df83a6108e7458bce48fce7c7e8101",
+      "save_exit_observed": true,
+      "exit_reason": "continue_saved",
+      "slot_generation": 1,
+      "lifecycle_generation": 1,
+      "binding": {
+        "kind": "uncredited",
+        "receipt_sha256": "f784baa6b496f0db9fa0ec3ac26628a5543ab9b4ac4755e7cd5d5cc46c6e11ec",
+        "token": "67917387e354f6da93f3832dae5167e2"
+      },
+      "terminal_checkpoint_empty": true,
+      "simulation_time_scale": 1.0,
+      "physics_hz": 60
+    },
+    {
+      "mode": "resume_settle_save",
+      "first_role": "lu",
+      "pid": 40420,
+      "exit_code": 0,
+      "seconds": 159.918,
+      "errors": [],
+      "stopped_for": null,
+      "passed": true,
+      "stage_completed": true,
+      "checks": {
+        "total": 104,
+        "passed": 104,
+        "failed": 0
+      },
+      "failures": [],
+      "report_sha256": "b3c2e1729c0fa42a539d370d785b6e733f83df6253880d0e4b5b849054a47927",
+      "log_sha256": "1c300053311fc6e02ff00b7f3bce56e2be9ee4632b3aecbbe6801e66a4e6bf32",
+      "save_exit_observed": true,
+      "exit_reason": "continue_saved",
+      "slot_generation": 2,
+      "lifecycle_generation": 1,
+      "binding": {
+        "kind": "uncredited",
+        "receipt_sha256": "f784baa6b496f0db9fa0ec3ac26628a5543ab9b4ac4755e7cd5d5cc46c6e11ec",
+        "token": "67917387e354f6da93f3832dae5167e2"
+      },
+      "terminal_checkpoint_empty": true,
+      "simulation_time_scale": 1.0,
+      "physics_hz": 60
+    },
+    {
+      "mode": "resume_finish",
+      "first_role": "lu",
+      "pid": 28156,
+      "exit_code": 1,
+      "seconds": 191.901,
+      "errors": [],
+      "stopped_for": null,
+      "passed": false,
+      "stage_completed": false,
+      "checks": {
+        "total": 67,
+        "passed": 66,
+        "failed": 1
+      },
+      "failures": [
+        "actual Level natural victory state"
+      ],
+      "report_sha256": "3e4701bc392695ebef38737978080fc6649a1fed85a4eaff317832d794f460fb",
+      "log_sha256": "88c38b0fec5aa3ea01445200999a9531aef5606dbb82ecd85a289630c0fb8564",
+      "save_exit_observed": false,
+      "exit_reason": "",
+      "slot_generation": 2,
+      "lifecycle_generation": 1,
+      "binding": {
+        "kind": "uncredited",
+        "receipt_sha256": "f784baa6b496f0db9fa0ec3ac26628a5543ab9b4ac4755e7cd5d5cc46c6e11ec",
+        "token": "67917387e354f6da93f3832dae5167e2"
+      },
+      "terminal_checkpoint_empty": true,
+      "simulation_time_scale": 1.0,
+      "physics_hz": 60
+    }
+  ],
+  "total_checks": 373,
+  "passed_checks": 372,
+  "failed_checks": 1,
+  "failure_label": "actual Level natural victory state",
+  "failure_evidence": {
+    "actors": {
+      "lu": {
+        "active": true,
+        "dying": false,
+        "exists": true,
+        "hp": 360.0,
+        "id": "28",
+        "in_root": true,
+        "outcome": "retreated",
+        "position": [
+          979.386047363281,
+          1462.00073242188
+        ],
+        "selected": false,
+        "visible": false
+      },
+      "shi": {
+        "active": false,
+        "dying": true,
+        "exists": true,
+        "hp": 0.0,
+        "id": "29",
+        "in_root": true,
+        "outcome": "",
+        "position": [
+          665.632263183594,
+          736.154357910156
+        ],
+        "selected": false,
+        "visible": true
+      }
+    },
+    "phase": 3,
+    "failure": "",
+    "camp": {
+      "dying": false,
+      "exists": true,
+      "hp": 1500.0,
+      "outcome": ""
+    },
+    "events": {
+      "action:daming_rts:daming_admit": true,
+      "action:daming_rts:daming_fire": true,
+      "action:daming_rts:daming_gate": true,
+      "action:daming_rts:daming_rescue": true,
+      "daming_fire_lit": true,
+      "daming_gate_opened": true,
+      "daming_inner_ready": true,
+      "daming_inner_unlock": true,
+      "daming_lu_safe": true,
+      "daming_prison_admitted": true,
+      "daming_prisoners_freed": true,
+      "daming_pursuit": true,
+      "daming_response_arrived": true
+    },
+    "logical_tick": "22317",
+    "first_role": "lu"
+  },
+  "qualification": {
+    "eight_stage_flow_passed": false,
+    "source_flow_chain_passed": false,
+    "dual_first_role_routes_qualified": false,
+    "terminal_or_rewards_qualified": false,
+    "full_61_qualified": false,
+    "original_19_faults_qualified": false,
+    "public_continue_qualified": false,
+    "native_sdk_qualified": false,
+    "native_release_tested": false,
+    "human_acceptance": false,
+    "published": false
+  },
+  "unexecuted": [
+    "lu/reject_terminal",
+    "shi/save_single",
+    "shi/resume_settle_save",
+    "shi/resume_finish",
+    "shi/reject_terminal"
+  ],
+  "closed_a_metadata": {
+    "path": "raw/closed_a/lu/descriptor.json",
+    "sha256": "ff595ebb17e12e2c176a8658dfa90d8f737a5ce8d13f50018bf2aa84ec951a2d",
+    "file_count": 2,
+    "directory_count": 6,
+    "payload_copied": false,
+    "native_slot_decode_still_required": true
+  },
+  "source": {
+    "content_version": "source-v1:3365e369ba351e9d9593d2324391c7b042a967144df85f1c35f7cb9aad932539",
+    "candidate_manifest_sha256": "940ff7d43838f6ebfbe061a795e34f401711156023b9047d2ba5e394a554fd4d",
+    "engine_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+    "source_head": "355fd9099f2bcdd2112413ac0a7b19c11d3c2e8c",
+    "recorded_pin_count": 546,
+    "archiver_rehashed_all_pins": false
+  },
+  "terminal_guards": {
+    "initial_identity_passed": true,
+    "final_identity_passed": true,
+    "child_process_terminal": true,
+    "lock_ownership_confirmed": true,
+    "engine_lane_idle": true,
+    "lock_released": true,
+    "cleanup_errors": []
+  },
+  "scope": "Native source-private Lu-first A and B passed; C second-prisoner escort failed. Not a proven production restore defect. No LC3 terminal/ACK2/CFG verification completed."
+}

@@ -1,0 +1,15 @@
+--- 3365/project/scripts/run_visual_graph.gd
++++ candidate/scripts/run_visual_graph.gd
+@@ -1039,8 +1039,10 @@
+ 	if kind == "death_remains":
+ 		var checked: Dictionary = _remains.capture_node(node)
+ 		if not checked.ok: return checked
+-	# The supported timed and authority creators use these inherited defaults. Reject overrides.
+-	if node.material != null or node.use_parent_material or node.texture_filter != CanvasItem.TEXTURE_FILTER_PARENT_NODE or node.texture_repeat != CanvasItem.TEXTURE_REPEAT_PARENT_NODE or node.light_mask != 1 or node.visibility_layer != 1 or node.clip_children != CanvasItem.CLIP_CHILDREN_DISABLED: return _failure("TIMED_RENDER_OVERRIDE", kind)
++	# Projectile._ready derives LINEAR_WITH_MIPMAPS both for live shots and restored shells.
++	# Every other supported creator retains PARENT; arbitrary render overrides still fail.
++	var expected_filter: int = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS if kind == "projectile" else CanvasItem.TEXTURE_FILTER_PARENT_NODE
++	if node.material != null or node.use_parent_material or node.texture_filter != expected_filter or node.texture_repeat != CanvasItem.TEXTURE_REPEAT_PARENT_NODE or node.light_mask != 1 or node.visibility_layer != 1 or node.clip_children != CanvasItem.CLIP_CHILDREN_DISABLED: return _failure("TIMED_RENDER_OVERRIDE", kind)
+ 	if kind == "building_collapse":
+ 		var texture: Dictionary = _texture_token(node.tex)
+ 		if not texture.ok: return texture

@@ -1,0 +1,37 @@
+{
+  "schema": "component_roundtrip_failure_summary_v1",
+  "complete": false,
+  "run": "D:\\AI项目\\水浒\\开发工程\\.godot\\projectile_filter_component_20261027\\20261027_074642_8df2abc7",
+  "pid": 66268,
+  "exit_code": 1,
+  "seconds": 38.58,
+  "errors": [],
+  "stopped_for": null,
+  "checks": 44,
+  "passed_checks": 43,
+  "failed_checks": [
+    {
+      "label": "capture prepare attach activate recapture preserves exact typed wire",
+      "passed": false
+    }
+  ],
+  "observations": {
+    "baseline_result": {
+      "code": "TIMED_RENDER_OVERRIDE",
+      "field": "projectile",
+      "ok": false
+    },
+    "record_count": 3,
+    "restored_filter": 4,
+    "roundtrip_exact": true
+  },
+  "negative_cases": 12,
+  "all_negative_cases_passed": true,
+  "candidate_sha256": "feca8481000d8edb1bab5b00ad6f7c03ffeb9802637a92c714b795eee3a64582",
+  "worker_sha256": "9006b85f66bf07f0bc6f9a7fbb8ae32654e7ca2b78aa49ac174e28bf0044d4cb",
+  "end_to_end_component_qualified": false,
+  "named_inputs_unchanged": true,
+  "child_terminal": true,
+  "lock_released": true,
+  "qualification": "Failed compound typed-wire assertion. Capture, prepare, attach_ready, activate, recapture equality and twelve negatives were observed; double-encode sub-results were not recorded, so exact failing cause is not asserted from this receipt."
+}

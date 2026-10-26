@@ -101,3 +101,5 @@
 qa/campaign_progress_recovery_20261026/continue_binding_candidate/：Flow/Session/本地生命周期修复、新独立冻结准备器、baseline/fixed真实磁盘模型及来源。当前资格集中于 [VALIDATION](../qa/campaign_progress_recovery_20261026/continue_binding_candidate/VALIDATION.md)，原README与source_manifest保持准备时字节；新增分支诊断工具未运行时仍不得当公开入口验收。
 
 `qa/campaign_progress_recovery_20261026/daming_continue_candidate/evidence/flow_load_20261027_065614/`保留五GD原生加载原件；`evidence/fixture_model_20261027/`保留A闭合原件留存的53项隔离模型。`tests/daming_flow/fixture_freeze.py`只冻结已退出A的两份原件，后续只pin副本；未复制业务存档至Git。高俅`terminal_guard_failure_20261027_064112/`和`terminal_focus_load_20261027_070450/`分别保留纯H实跑失败与点目标策略加载证据。
+
+`qa/campaign_progress_recovery_20261026/projectile_filter_candidate/`保存正常箭矢MIP过滤与Graph合同的最小修复、组件工具、无缓存完整准备/首次冷导入器，以及仅更新准入的新高俅复跑宿主。`VALIDATION.md`记录当前边界。大名府`tests/daming_negative_v2/`只包含52负例的准入与规划草案，完整负例执行循环尚未实现；`evidence/flow_first_failure_20261027_072035/`保留首轮A/B通过、C伤员阵亡的失败原件，业务存档载荷留本机。

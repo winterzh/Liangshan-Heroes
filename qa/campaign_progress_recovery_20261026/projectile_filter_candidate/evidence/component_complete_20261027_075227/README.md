@@ -1,0 +1,11 @@
+# Projectile component complete — 2026-10-27 07:52:27
+
+This named-input synthetic component attempt passed all 44 checks and all 12 render negatives. Actual Godot PID 50952 exited 0 after 40.083 seconds with no engine/script errors. It reproduced the baseline projectile filter rejection, captured the candidate graph, prepared a detached graph, attached it while paused so original Projectile._ready derived filter 4, activated it, and recaptured exactly three records.
+
+Original and recaptured encoded wire structures match. Their independently decoded records are valid typed values. The original direct JSON UTF-8 payloads preserved in the report were independently reconstructed as identical 19,832-byte sequences, SHA-256 `195988118131a8a0013d8d5b3984721ff37aa8bb59dc0f90fb0af215cd32261d`. Twelve invalid render overrides rejected and each fixture restoration matched the original wire.
+
+Only this third report actually records both extra Codec.encode(wire) calls returning DEPTH_LIMIT, with exact paths and configured limits. Failed calls do not expose consumed node/byte budgets; those fields remain null with budget_reported=false. These extra calls are diagnostic only and do not qualify the roundtrip. The preceding 07:46:42 report did not record their return codes; its actual code must not be retroactively asserted.
+
+All 12 run originals are byte-exact under raw. The source map covers all 159 receipt pins with embedded bytes or individually verified named references; native binaries retain only recorded SHA. No private profile, business payload, executable, DLL, project assets or cache was copied. The successful receipt binds actual PID/nonce/profile/report/source, confirms no campaign business paths after exit, unchanged named inputs, terminal child, owned lock and idle lane, and lock_released=true.
+
+Qualification is limited to this synthetic native component capture/prepare/ready/activate/recapture and render-guard matrix. It does not qualify whole-project source, the later combined cold freeze/import, natural battle/SaveAndExit, public continue, native SDK, exported release or human acceptance. The Graph, worker and parent source metadata were not edited by this archive.
