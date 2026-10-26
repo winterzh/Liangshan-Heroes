@@ -160,9 +160,29 @@ func attack(b: Node, army: Array, enemy: Variant, cell: Vector2i) -> void:
 	if alive(enemy) and b.is_visible_world(enemy.position): target(b, army, enemy)
 	else: move(b, army, cell, true)
 
+func guard(b: Node, units: Array, cell: Vector2i) -> void:
+	# A-move can autonomously acquire predeployed unsent groups. Use ordinary
+	# movement to the inner camp/harbour, then the real H command; no chase.
+	var center: Vector2 = b.map.cell_to_world(cell)
+	var moving: Array = units.filter(func(u): return u.position.distance_to(center) > 90.0)
+	if not moving.is_empty(): move(b, moving, cell, false)
+	var holding: Array = units.filter(func(u): return u.position.distance_to(center) <= 90.0 and not u._hold_order_active)
+	if not holding.is_empty():
+		b.select_members(holding, false)
+		b._order_hold_position()
+		orders += 1
+		driver.record_action("hold_position", holding, {"cell":cell, "all_waves_sent":b.level.waves.all(func(row): return row.sent)})
+
 func fight(b: Node) -> void:
 	var level: Variant = b.level
 	var army: Array = b.units.filter(func(u): return alive(u) and u.faction == 0 and u != level.song and u != level.embarked_liu and not u.garrisoned and not u.is_worker and not u.is_building and not u.is_noncombat and u.movement_profile == "land" and b.mission._actor != u)
+	var fleet: Array = b.units.filter(func(u): return alive(u) and u.faction == 0 and u.key in level.SHIP_KEYS and u.key != "zhang_shun_boat" and not u.garrisoned and b.mission._actor != u)
+	if not level.waves[2].sent:
+		# The chosen timed-defence route keeps every original dispatch observable.
+		# Enemy guard AI, paid reinforcements and all wave clocks remain live.
+		guard(b, army, Vector2i(25,33))
+		guard(b, fleet, Vector2i(39,47))
+		return
 	var land_foes: Array = b.units.filter(func(u): return alive(u) and u.faction == 1 and not u.is_building and u.movement_profile == "land" and dispatched(level,u))
 	land_foes.sort_custom(func(a,z): return a.position.distance_squared_to(level.hall.position) < z.position.distance_squared_to(level.hall.position))
 	var land_target: Variant = null
@@ -172,7 +192,6 @@ func fight(b: Node) -> void:
 	elif level.waves[2].sent and army.size() >= 12 and alive(level.posts[0]): land_target = level.posts[0]; land_cell = level.LAND_POST
 	attack(b,army,land_target,land_cell)
 	skills(b,army)
-	var fleet: Array = b.units.filter(func(u): return alive(u) and u.faction == 0 and u.key in level.SHIP_KEYS and u.key != "zhang_shun_boat" and not u.garrisoned and b.mission._actor != u)
 	var sea_front: Vector2 = b.map.cell_to_world(level.SEA_FRONT)
 	var naval_foes: Array = b.units.filter(func(u): return alive(u) and u.faction == 1 and u.movement_profile == "water" and dispatched(level,u))
 	naval_foes.sort_custom(func(a,z): return a.position.distance_squared_to(sea_front) < z.position.distance_squared_to(sea_front))
