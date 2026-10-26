@@ -1,0 +1,184 @@
+{
+  "mode": "crash_pending",
+  "command": [
+    "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+    "--path",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261026_194542_27c8aea9\\project",
+    "--headless",
+    "--remote-debug",
+    "tcp://127.0.0.1:61110",
+    "--script",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_handoff_io_20261026\\20261026_200759_741207e6\\workers\\bootstrap.gd"
+  ],
+  "profile": "D:\\CodexQA\\campio\\e3d5856a8b3c",
+  "nonce": "e3d5856a8b3c402abbc72ce7286596be",
+  "complete": true,
+  "faults": [
+    {
+      "kind": "crash_pending",
+      "point": {
+        "source": "res://scripts/run_snapshot_store.gd",
+        "line": 310,
+        "function": "commit_locked",
+        "source_sha256": "581e638b8f0ce7cb24d5533b03ee94b99732c5cffcbf373b1a5a69a1618d8251",
+        "statement": "_checkpoint(\"pending_verified\")",
+        "kind": "crash_pending"
+      },
+      "frames": [
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 310,
+          "function": "commit_locked"
+        },
+        {
+          "source": "res://scripts/steam_run_ledger.gd",
+          "line": 123,
+          "function": "_drive_pending"
+        },
+        {
+          "source": "res://scripts/steam_run_ledger.gd",
+          "line": 75,
+          "function": "_persist"
+        },
+        {
+          "source": "res://scripts/steam_run_ledger.gd",
+          "line": 238,
+          "function": "apply_campaign_handoff"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/campaign_handoff_io_20261026/20261026_200759_741207e6/workers/worker.gd",
+          "line": 111,
+          "function": "normal_or_fault"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/campaign_handoff_io_20261026/20261026_200759_741207e6/workers/worker.gd",
+          "line": 63,
+          "function": "gate"
+        }
+      ],
+      "before_inventory": {
+        "exists": true,
+        "files": {
+          "receipt.pending": {
+            "sha256": "cf2c125e3bc70595a45a33712b88b56527c96a57533020106c66f90491a7027d",
+            "bytes": 2363
+          },
+          "record_0000000002.json": {
+            "sha256": "b8bf63575f70daebdfc055f3b0176147880881538ceeb58e354758f052d8c76a",
+            "bytes": 1553
+          },
+          "record_0000000003.json": {
+            "sha256": "cdf05838c3693aa9c319a5b3d71c34e2f96f2887f0a6e88b8366daa4ff6bf50d",
+            "bytes": 1553
+          },
+          "writing/owner.json": {
+            "sha256": "9f8983f6c52fd6d2c5c4abfdf571b339f6d938a428bb0c43c6cd76c2a0274744",
+            "bytes": 100
+          }
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      },
+      "actual_native_operation": true,
+      "externally_terminated_pid": 67284,
+      "exit_code": 1,
+      "terminated_inventory": {
+        "exists": true,
+        "files": {
+          "receipt.pending": {
+            "sha256": "cf2c125e3bc70595a45a33712b88b56527c96a57533020106c66f90491a7027d",
+            "bytes": 2363
+          },
+          "record_0000000002.json": {
+            "sha256": "b8bf63575f70daebdfc055f3b0176147880881538ceeb58e354758f052d8c76a",
+            "bytes": 1553
+          },
+          "record_0000000003.json": {
+            "sha256": "cdf05838c3693aa9c319a5b3d71c34e2f96f2887f0a6e88b8366daa4ff6bf50d",
+            "bytes": 1553
+          },
+          "writing/owner.json": {
+            "sha256": "9f8983f6c52fd6d2c5c4abfdf571b339f6d938a428bb0c43c6cd76c2a0274744",
+            "bytes": 100
+          }
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      }
+    }
+  ],
+  "debug_stops": [
+    {
+      "frames": [
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 310,
+          "function": "commit_locked"
+        },
+        {
+          "source": "res://scripts/steam_run_ledger.gd",
+          "line": 123,
+          "function": "_drive_pending"
+        },
+        {
+          "source": "res://scripts/steam_run_ledger.gd",
+          "line": 75,
+          "function": "_persist"
+        },
+        {
+          "source": "res://scripts/steam_run_ledger.gd",
+          "line": 238,
+          "function": "apply_campaign_handoff"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/campaign_handoff_io_20261026/20261026_200759_741207e6/workers/worker.gd",
+          "line": 111,
+          "function": "normal_or_fault"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/campaign_handoff_io_20261026/20261026_200759_741207e6/workers/worker.gd",
+          "line": 63,
+          "function": "gate"
+        }
+      ],
+      "packet_sha256": "1a1095e7fc7e4939ec0ccc9880d51be237b0e39834040a5f8761fb0f901b57f1"
+    }
+  ],
+  "synthetic_account_and_token": true,
+  "production_method_overrides": 0,
+  "sdk_qualified": false,
+  "pid": 67284,
+  "original_pid_terminal": true,
+  "exit_code": 1,
+  "process_terminal": true,
+  "log_sha256": "4507f4c6594cc003e4607f3da9d75a8f86f7ebae486821ab76147cf89fe81081",
+  "final_inventory": {
+    "exists": true,
+    "files": {
+      "receipt.pending": {
+        "sha256": "cf2c125e3bc70595a45a33712b88b56527c96a57533020106c66f90491a7027d",
+        "bytes": 2363
+      },
+      "record_0000000002.json": {
+        "sha256": "b8bf63575f70daebdfc055f3b0176147880881538ceeb58e354758f052d8c76a",
+        "bytes": 1553
+      },
+      "record_0000000003.json": {
+        "sha256": "cdf05838c3693aa9c319a5b3d71c34e2f96f2887f0a6e88b8366daa4ff6bf50d",
+        "bytes": 1553
+      },
+      "writing/owner.json": {
+        "sha256": "9f8983f6c52fd6d2c5c4abfdf571b339f6d938a428bb0c43c6cd76c2a0274744",
+        "bytes": 100
+      }
+    },
+    "directories": [
+      ".",
+      "writing"
+    ]
+  }
+}

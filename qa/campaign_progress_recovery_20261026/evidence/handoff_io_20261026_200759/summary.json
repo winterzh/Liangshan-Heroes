@@ -1,0 +1,162 @@
+{
+  "complete": true,
+  "source": "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_handoff_io_20261026\\20261026_200759_741207e6",
+  "content_version": "source-v1:23c0b07fcba83a9d7938ed338a9775559b6041be61d048db619c31fd5edc2a80",
+  "process_stages": 13,
+  "cases": 9,
+  "worker_assertions": 178,
+  "stage_results": [
+    {
+      "mode": "normal",
+      "pid": 46772,
+      "complete": true,
+      "exit_code": 0,
+      "checks": 19,
+      "passed": true,
+      "crash_writer": false,
+      "expected_refusal": false,
+      "case": "normal"
+    },
+    {
+      "mode": "legacy_upgrade",
+      "pid": 5180,
+      "complete": true,
+      "exit_code": 0,
+      "checks": 15,
+      "passed": true,
+      "crash_writer": false,
+      "expected_refusal": false,
+      "case": "legacy_upgrade"
+    },
+    {
+      "mode": "write_retry",
+      "pid": 41920,
+      "complete": true,
+      "exit_code": 0,
+      "checks": 30,
+      "passed": true,
+      "crash_writer": false,
+      "expected_refusal": false,
+      "case": "write_retry"
+    },
+    {
+      "mode": "release_owner_retry",
+      "pid": 17296,
+      "complete": true,
+      "exit_code": 0,
+      "checks": 30,
+      "passed": true,
+      "crash_writer": false,
+      "expected_refusal": false,
+      "case": "release_owner_retry"
+    },
+    {
+      "mode": "release_directory_retry",
+      "pid": 34480,
+      "complete": true,
+      "exit_code": 0,
+      "checks": 30,
+      "passed": true,
+      "crash_writer": false,
+      "expected_refusal": false,
+      "case": "release_directory_retry"
+    },
+    {
+      "mode": "crash_pending",
+      "pid": 67284,
+      "complete": true,
+      "exit_code": 1,
+      "checks": 0,
+      "passed": null,
+      "crash_writer": true,
+      "expected_refusal": false,
+      "case": "crash_pending"
+    },
+    {
+      "mode": "recover",
+      "pid": 43280,
+      "complete": true,
+      "exit_code": 0,
+      "checks": 19,
+      "passed": true,
+      "crash_writer": false,
+      "expected_refusal": false,
+      "case": "crash_pending"
+    },
+    {
+      "mode": "crash_record",
+      "pid": 66492,
+      "complete": true,
+      "exit_code": 1,
+      "checks": 0,
+      "passed": null,
+      "crash_writer": true,
+      "expected_refusal": false,
+      "case": "crash_record"
+    },
+    {
+      "mode": "recover",
+      "pid": 59144,
+      "complete": true,
+      "exit_code": 0,
+      "checks": 19,
+      "passed": true,
+      "crash_writer": false,
+      "expected_refusal": false,
+      "case": "crash_record"
+    },
+    {
+      "mode": "crash_half",
+      "pid": 16460,
+      "complete": true,
+      "exit_code": 1,
+      "checks": 0,
+      "passed": null,
+      "crash_writer": true,
+      "expected_refusal": false,
+      "case": "crash_half"
+    },
+    {
+      "mode": "recover",
+      "pid": 41640,
+      "complete": true,
+      "exit_code": 0,
+      "checks": 8,
+      "passed": true,
+      "crash_writer": false,
+      "expected_refusal": true,
+      "case": "crash_half"
+    },
+    {
+      "mode": "crash_owner_removed",
+      "pid": 57828,
+      "complete": true,
+      "exit_code": 1,
+      "checks": 0,
+      "passed": null,
+      "crash_writer": true,
+      "expected_refusal": false,
+      "case": "crash_owner_removed"
+    },
+    {
+      "mode": "recover",
+      "pid": 5780,
+      "complete": true,
+      "exit_code": 0,
+      "checks": 8,
+      "passed": true,
+      "crash_writer": false,
+      "expected_refusal": true,
+      "case": "crash_owner_removed"
+    }
+  ],
+  "known_refusals": [
+    "ENVELOPE_JSON for torn pending",
+    "UNKNOWN_OR_MISSING_LOCK after owner removed before directory removal"
+  ],
+  "full_recovery_qualified": false,
+  "real_SDK_or_account_qualified": false,
+  "power_loss_qualified": false,
+  "source_and_pins_verified_after": true,
+  "lock_released": true
+}

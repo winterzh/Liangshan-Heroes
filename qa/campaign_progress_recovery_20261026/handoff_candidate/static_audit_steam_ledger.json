@@ -1,0 +1,139 @@
+{
+  "schema": "steam_ledger_source_audit_v1",
+  "passed": true,
+  "checks": [
+    {
+      "label": "production unchanged scripts/steam_run_receipt.gd",
+      "passed": true
+    },
+    {
+      "label": "candidate pin scripts/steam_run_receipt.gd",
+      "passed": true
+    },
+    {
+      "label": "production unchanged scripts/steam_receipt_store.gd",
+      "passed": true
+    },
+    {
+      "label": "candidate pin scripts/steam_receipt_store.gd",
+      "passed": true
+    },
+    {
+      "label": "production unchanged scripts/steam_run_ledger.gd",
+      "passed": true
+    },
+    {
+      "label": "candidate pin scripts/steam_run_ledger.gd",
+      "passed": true
+    },
+    {
+      "label": "balanced lexical delimiters steam_run_receipt.gd",
+      "passed": true
+    },
+    {
+      "label": "unique top-level methods steam_run_receipt.gd",
+      "passed": true
+    },
+    {
+      "label": "balanced lexical delimiters steam_receipt_store.gd",
+      "passed": true
+    },
+    {
+      "label": "unique top-level methods steam_receipt_store.gd",
+      "passed": true
+    },
+    {
+      "label": "balanced lexical delimiters steam_run_ledger.gd",
+      "passed": true
+    },
+    {
+      "label": "unique top-level methods steam_run_ledger.gd",
+      "passed": true
+    },
+    {
+      "label": "separate v2/v3 model versions",
+      "passed": true
+    },
+    {
+      "label": "reader preserves input version",
+      "passed": true
+    },
+    {
+      "label": "store validator never upgrades",
+      "passed": true
+    },
+    {
+      "label": "explicit upgrade never guesses terminal source",
+      "passed": true
+    },
+    {
+      "label": "single handoff proposal and settlement reduction",
+      "passed": true
+    },
+    {
+      "label": "terminal path uses precise proof",
+      "passed": true
+    },
+    {
+      "label": "proof rejects invalidated and legacy terminal",
+      "passed": true
+    },
+    {
+      "label": "invalidation advances persistent epoch",
+      "passed": true
+    },
+    {
+      "label": "correction never resets epoch",
+      "passed": true
+    },
+    {
+      "label": "twelve fixed handoff fields",
+      "passed": true
+    },
+    {
+      "label": "retained retry uses original store proposal",
+      "passed": true
+    },
+    {
+      "label": "retry does not reprepare reward",
+      "passed": true
+    },
+    {
+      "label": "retry cannot replace token",
+      "passed": true
+    },
+    {
+      "label": "model commit is stage guarded",
+      "passed": true
+    },
+    {
+      "label": "partial release verifies retained ownership",
+      "passed": true
+    },
+    {
+      "label": "required existing ledger cannot seed after recovery",
+      "passed": true
+    },
+    {
+      "label": "open retry preserves original seed",
+      "passed": true
+    },
+    {
+      "label": "handoff retry refuses other pending",
+      "passed": true
+    },
+    {
+      "label": "handoff retry refuses changed descriptor",
+      "passed": true
+    },
+    {
+      "label": "nine exact proof fields in declared order",
+      "passed": true
+    }
+  ],
+  "source_manifest_sha256": "8961e9cba764397293a7f7280ea45e72eda4c7e27bead72ff7a001732c94fc37",
+  "gdscript_compiled": false,
+  "pure_model_tests_executed": false,
+  "native_store_exercised": false,
+  "sdk_exercised": false
+}

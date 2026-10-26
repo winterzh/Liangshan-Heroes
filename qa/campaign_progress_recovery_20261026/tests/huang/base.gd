@@ -303,6 +303,69 @@ func wait_natural_terminal(battle: Variant) -> bool:
 	if not failures.is_empty(): print("CH_TERMINAL_FLOW ", flow.last_result)
 	return failures.is_empty()
 
+func verify_terminal_ack(life: Dictionary, cfg: Dictionary, label: String) -> Dictionary:
+	var document: Dictionary = life.get("document", {})
+	var intent: Dictionary = document.get("intent", {})
+	var acknowledgement: Dictionary = document.get("progress_receipt", {})
+	var model: String = String(document.get("schema", ""))
+	var intent_schema := ""
+	var ack_schema := ""
+	var intent_fields: Array = ["schema", "token", "context", "profile_id", "owner", "content_version", "engine_sha256", "victory", "result"]
+	match model:
+		"local_campaign_continue_lifecycle_v2":
+			intent_schema = "campaign_progress_intent_v1"
+			ack_schema = "campaign_progress_ack_v1"
+		"local_campaign_continue_lifecycle_v3":
+			intent_schema = "campaign_progress_intent_v2"
+			ack_schema = "campaign_progress_ack_v2"
+			intent_fields.append("credit")
+		_:
+			check(false, label + ": known exact lifecycle/intent/ACK version contract")
+			return {}
+	var bound: bool = model == Lifecycle.CAMPAIGN_SCHEMA and document.get("generation") == 3 \
+		and document.get("state") == "terminal" and document.get("progress_state") == "applied" \
+		and document.get("victory") == true and Intent.fields(intent, intent_fields) \
+		and intent.get("schema") == intent_schema and intent.get("token") == life.get("token") \
+		and intent.get("context") == Profiles.HG_CONTEXT and intent.get("profile_id") == Profiles.HG_ID \
+		and intent.get("owner") == "" and intent.get("victory") == true \
+		and intent.get("content_version") == trusted.content_version and intent.get("engine_sha256") == trusted.engine_binary_sha256
+	check(bound, label + ": exact installed lifecycle and offline terminal intent contract")
+	if not bound: return {}
+	if model == "local_campaign_continue_lifecycle_v3":
+		var uncredited: bool = intent.get("credit") == {"kind":"uncredited"}
+		check(uncredited, label + ": offline credit is exactly uncredited with no synthetic binding")
+		if not uncredited: return {}
+	var cfg_ok: bool = cfg.get("exists", false) and Intent.hex(cfg.get("sha256"), 64)
+	check(cfg_ok, label + ": independently read durable CFG has a complete SHA")
+	if not cfg_ok: return {}
+	var intent_sha256: String = JSON.stringify(intent).sha256_text()
+	var expected_ack := {"schema":ack_schema, "code":"CAMPAIGN_CFG_READBACK_VERIFIED",
+		"persisted":true, "suppressed":false, "file_sha256":cfg.sha256}
+	var expected_proof: Dictionary = {}
+	if model == "local_campaign_continue_lifecycle_v3":
+		expected_proof = {"schema":"campaign_uncredited_handoff_v1", "token":life.token,
+			"context":Profiles.HG_CONTEXT.duplicate(true), "intent_sha256":intent_sha256}
+		expected_ack["steam_handoff"] = expected_proof
+	var exact_ack: bool = acknowledgement == expected_ack
+	check(exact_ack, label + ": exact versioned ACK fields bind CFG SHA and same-token handoff")
+	if not exact_ack: return {}
+	var inspected: Dictionary = {}
+	if model == "local_campaign_continue_lifecycle_v3":
+		var service: Node = root.get_node("SteamService")
+		var inspectable: bool = service.has_method("inspect_campaign_handoff")
+		check(inspectable, label + ": actual SteamService exposes independent handoff inspection")
+		if not inspectable: return {}
+		# Dynamic call keeps the LCv2 worker compatible with its older service API.
+		# This uncredited proof validates the frozen intent; it is not an SDK ledger.
+		inspected = service.call("inspect_campaign_handoff", intent)
+		var exact_inspection: bool = inspected == {"ok":true, "proof":expected_proof}
+		check(exact_inspection, label + ": independent service inspection matches the complete uncredited proof")
+		if not exact_inspection: return {}
+	check(FileAccess.get_sha256(cfg.path) == cfg.sha256, label + ": handoff inspection preserves exact CFG bytes")
+	return {"lifecycle_schema":model, "intent_schema":intent_schema, "intent_sha256":intent_sha256,
+		"acknowledgement":acknowledgement.duplicate(true), "service_inspection":inspected.duplicate(true),
+		"native_steam_account_tested":false}
+
 func verify_terminal(battle: Variant, full_result: Dictionary) -> bool:
 	check(battle._continue_receipt == terminal_receipt and battle._continue_receipt.token == checkpoint.binding.token,
 		"natural terminal uses the original saved lifecycle object and token")
@@ -333,11 +396,8 @@ func verify_terminal(battle: Variant, full_result: Dictionary) -> bool:
 		and full_result.goals.size() == 4 and full_result.missed_ids.is_empty() and full_result.pending_ids.is_empty(),
 		"full frozen Mission result retains goal detail beyond the durable six-field projection")
 	var cfg: Dictionary = cfg_snapshot()
-	var acknowledgement: Dictionary = life.document.progress_receipt
-	check(cfg.exists and acknowledgement.schema == "campaign_progress_ack_v1"
-		and acknowledgement.code == "CAMPAIGN_CFG_READBACK_VERIFIED" and acknowledgement.persisted
-		and not acknowledgement.suppressed and acknowledgement.file_sha256 == cfg.sha256,
-		"gen3 acknowledgement binds independently reread durable CFG bytes")
+	var handoff_validation: Dictionary = verify_terminal_ack(life, cfg, "natural terminal gen3")
+	if handoff_validation.is_empty(): return false
 	var cfg_reader := ConfigFile.new()
 	check(cfg_reader.load(cfg.path) == OK and Intent.cfg_dominates(cfg_reader, intent), "actual CFG contains this natural campaign outcome")
 	var progress: Dictionary = cfg.sections.get("progress", {})
@@ -356,7 +416,7 @@ func verify_terminal(battle: Variant, full_result: Dictionary) -> bool:
 	var rewards: Dictionary = rewards_snapshot()
 	check(rewards == initial_rewards, "Steam-disabled terminal adds no native reward or ledger run")
 	terminal_checkpoint = {"slot_root":SLOT, "slot_sha256":slot.file_sha256, "slot_binding":slot.document.binding.duplicate(true),
-		"lifecycle":life, "chain":chain, "cfg":cfg, "rewards":rewards,
+		"lifecycle":life, "chain":chain, "cfg":cfg, "rewards":rewards, "handoff_validation":handoff_validation,
 		"campaign_memory":{"unlocked":campaign.unlocked, "records":campaign.records.duplicate(true), "owner":campaign.cloud_owner},
 		"full_frozen_result":full_result.duplicate(true), "initial_cfg":initial_progress,
 		"flow_result":root.get_node("ContinueFlow").last_result.duplicate(true)}

@@ -1,0 +1,58 @@
+{
+  "schema": "steam_ledger_handoff_source_v1",
+  "date": "2026-10-26",
+  "files": [
+    {
+      "runtime_path": "scripts/steam_run_receipt.gd",
+      "production_base": "scripts/steam_run_receipt.gd",
+      "production_base_sha256": "acd21358de698c9a6c8e3806873439fe90abdc6ed3bc9b2a7153263de719cc66",
+      "candidate_path": "qa/campaign_progress_recovery_20261026/handoff_candidate/scripts/steam_run_receipt.gd",
+      "candidate_sha256": "580bd7e33e857147cdc09ac3f2cba9ea60ab68b9641ce35fb216b782b0159a1d",
+      "changes": [
+        "Strict v2/v3 validation without read-time migration; explicit prepare_upgrade proposal.",
+        "Correction epoch, terminal provenance, exact model-owned campaign descriptor.",
+        "Single-proposal campaign kills/outcome/terminal, exact replay proof, classic behavior retained."
+      ]
+    },
+    {
+      "runtime_path": "scripts/steam_receipt_store.gd",
+      "production_base": "scripts/steam_receipt_store.gd",
+      "production_base_sha256": "7fb5ad82a04a1922de07e00b358d5bc5e263e0e53ad4361ae88048a06289e4bb",
+      "candidate_path": "qa/campaign_progress_recovery_20261026/handoff_candidate/scripts/steam_receipt_store.gd",
+      "candidate_sha256": "5886eaa4fc8344da3c34b1b62167155394715e6dc4d444273f162455d76608c8",
+      "changes": [
+        "Keep envelope v1 and canonical superclass validation.",
+        "Retained exact-owner release supporting owner-file removal followed by directory removal failure."
+      ]
+    },
+    {
+      "runtime_path": "scripts/steam_run_ledger.gd",
+      "production_base": "scripts/steam_run_ledger.gd",
+      "production_base_sha256": "0160098d2efe0efd93d72cb57fe8d49bafc68ff34553c2e4279a9be9e6e2463a",
+      "candidate_path": "qa/campaign_progress_recovery_20261026/handoff_candidate/scripts/steam_run_ledger.gd",
+      "candidate_sha256": "da60d5481a25f3588db2b2c6815a728f5deef45969a951d3416d3d43a53094e1",
+      "changes": [
+        "Pinned open/retry_open with optional require_existing; v2 upgrade is explicit.",
+        "Retain original proposal/CAS/phase/handoff through owned retry and release failure.",
+        "Strict campaign handoff, exact readback proof with nine fields, reject other pending writes."
+      ]
+    }
+  ],
+  "owned_release_reference": {
+    "path": "qa/campaign_progress_recovery_20261026/rebased_candidate/scripts/run_campaign_cfg_transaction.gd",
+    "sha256": "71803fc42a6bef59479db5b8cf70a953716a3968e45ba1fb391eed5726a51d17",
+    "member": "OwnedRelease"
+  },
+  "tests": [
+    {
+      "path": "qa/campaign_progress_recovery_20261026/handoff_candidate/tests/receipt_model.gd",
+      "sha256": "c93a526a0869b48d2f608e08fbd6dc42ee419c1829bd2cff10e780f46625208f",
+      "executed": false
+    }
+  ],
+  "production_modified": false,
+  "engine_started": false,
+  "gdscript_compiled": false,
+  "native_store_qualified": false,
+  "steam_exactly_once_qualified": false
+}

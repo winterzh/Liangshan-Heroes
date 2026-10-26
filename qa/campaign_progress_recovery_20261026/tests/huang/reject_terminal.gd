@@ -34,6 +34,9 @@ func _run() -> void:
 	var life_before: Dictionary = lifecycle_row(receipt)
 	var cfg_before: Dictionary = cfg_snapshot()
 	var rewards_before: Dictionary = rewards_snapshot()
+	var handoff_before: Dictionary = verify_terminal_ack(life_before, cfg_before, "independent restart gen3")
+	check(not handoff_before.is_empty() and handoff_before == expected.get("handoff_validation", {}),
+		"restart independently inspects the exact predecessor ACK and uncredited handoff proof")
 	check(life_before == expected.lifecycle and cfg_before == expected.cfg and rewards_before == expected.rewards,
 		"restart preserves lifecycle CFG and native reward state exactly")
 	check(campaign.records == expected.campaign_memory.records and campaign.unlocked == expected.campaign_memory.unlocked
@@ -61,8 +64,13 @@ func _run() -> void:
 	var slot_after: Dictionary = store.read_slot()
 	check(slot_after.ok and slot_after.file_sha256 == slot_before.file_sha256 and slot_after.document == slot_before.document,
 		"rejected restore does not rewrite or migrate the old slot")
-	check(lifecycle_row(receipt) == life_before and cfg_snapshot() == cfg_before and rewards_snapshot() == rewards_before,
+	var life_after: Dictionary = lifecycle_row(receipt)
+	var cfg_after: Dictionary = cfg_snapshot()
+	check(life_after == life_before and cfg_after == cfg_before and rewards_snapshot() == rewards_before,
 		"rejected restore preserves lifecycle inventory CFG and reward state")
+	var handoff_after: Dictionary = verify_terminal_ack(life_after, cfg_after, "after rejected restore gen3")
+	check(not handoff_after.is_empty() and handoff_after == handoff_before,
+		"terminal refusal preserves independently re-inspected ACK and uncredited handoff proof")
 	check(campaign.records == expected.campaign_memory.records and campaign.unlocked == expected.campaign_memory.unlocked,
 		"terminal rejection adds no record progress or unlock reward")
 	check(not root.get_node("ContinueFlow").last_result.get("terminal_completed", false)

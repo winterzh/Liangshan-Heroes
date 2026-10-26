@@ -1,0 +1,101 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+HANDOFF_MODEL PASS campaign_level1_v1/contract2 historical applied gen3 reads
+HANDOFF_MODEL PASS campaign_level1_v1/contract2 preserves historical model without migration
+HANDOFF_MODEL PASS campaign_level1_v1/contract2 never fabricates credit or handoff
+HANDOFF_MODEL PASS campaign_level1_v1/contract2 gen2 is readable data only
+HANDOFF_MODEL PASS campaign_level1_v1/contract2 rejects crossed profile/contract
+HANDOFF_MODEL PASS campaign_level1_v1/contract2 rejects extra document field
+HANDOFF_MODEL PASS campaign_level1_v1/contract2 rejects extra context field
+HANDOFF_MODEL PASS campaign_level1_v1/contract2 rejects extra intent field
+HANDOFF_MODEL PASS campaign_level1_v1/contract2 rejects extra result field
+HANDOFF_MODEL PASS campaign_level1_v2/contract3 historical applied gen3 reads
+HANDOFF_MODEL PASS campaign_level1_v2/contract3 preserves historical model without migration
+HANDOFF_MODEL PASS campaign_level1_v2/contract3 never fabricates credit or handoff
+HANDOFF_MODEL PASS campaign_level1_v2/contract3 gen2 is readable data only
+HANDOFF_MODEL PASS campaign_level1_v2/contract3 rejects crossed profile/contract
+HANDOFF_MODEL PASS campaign_level1_v2/contract3 rejects extra document field
+HANDOFF_MODEL PASS campaign_level1_v2/contract3 rejects extra context field
+HANDOFF_MODEL PASS campaign_level1_v2/contract3 rejects extra intent field
+HANDOFF_MODEL PASS campaign_level1_v2/contract3 rejects extra result field
+HANDOFF_MODEL PASS synthetic uncredited lifecycle gen3 JSON strict Intent v2 fixture validates
+HANDOFF_MODEL PASS synthetic uncredited lifecycle gen3 JSON synthetic proof has valid strict data shape
+HANDOFF_MODEL PASS synthetic uncredited lifecycle gen3 JSON strict v3 document validates before serialization
+HANDOFF_MODEL PASS synthetic uncredited lifecycle gen3 JSON rejects proof context_extra
+HANDOFF_MODEL PASS synthetic uncredited lifecycle gen3 JSON rejects proof context_level
+HANDOFF_MODEL PASS synthetic uncredited lifecycle gen3 JSON rejects proof context_fractional_waves
+HANDOFF_MODEL PASS synthetic uncredited lifecycle gen3 JSON rejects proof intent_digest
+HANDOFF_MODEL PASS synthetic uncredited lifecycle gen3 JSON canonical string parses
+HANDOFF_MODEL PASS synthetic uncredited lifecycle gen3 JSON parsed document validates: OK
+HANDOFF_MODEL PASS synthetic uncredited lifecycle gen3 JSON stringify parse validate stringify preserves exact original bytes
+HANDOFF_MODEL PASS synthetic steam lifecycle gen3 JSON strict Intent v2 fixture validates
+HANDOFF_MODEL PASS synthetic steam lifecycle gen3 JSON synthetic proof has valid strict data shape
+HANDOFF_MODEL PASS synthetic steam lifecycle gen3 JSON strict v3 document validates before serialization
+HANDOFF_MODEL PASS synthetic steam lifecycle gen3 JSON rejects proof context_extra
+HANDOFF_MODEL PASS synthetic steam lifecycle gen3 JSON rejects proof context_level
+HANDOFF_MODEL PASS synthetic steam lifecycle gen3 JSON rejects proof context_fractional_waves
+HANDOFF_MODEL PASS synthetic steam lifecycle gen3 JSON rejects proof intent_digest
+HANDOFF_MODEL PASS synthetic steam lifecycle gen3 JSON rejects fractional proof epoch
+HANDOFF_MODEL PASS synthetic steam lifecycle gen3 JSON canonical string parses
+HANDOFF_MODEL PASS synthetic steam lifecycle gen3 JSON parsed document validates: OK
+HANDOFF_MODEL PASS synthetic steam lifecycle gen3 JSON stringify parse validate stringify preserves exact original bytes
+HANDOFF_MODEL PASS create version3 model
+HANDOFF_MODEL PASS begin ordinary run prepare
+HANDOFF_MODEL PASS begin ordinary run model commit
+HANDOFF_MODEL PASS five real-model eligible kills prepare
+HANDOFF_MODEL PASS five real-model eligible kills model commit
+HANDOFF_MODEL PASS prepare has no committed mutation
+HANDOFF_MODEL PASS one campaign handoff prepare
+HANDOFF_MODEL PASS one campaign handoff model commit
+HANDOFF_MODEL PASS synthetic handoff receipt JSON read validates: OK
+HANDOFF_MODEL PASS synthetic handoff receipt JSON roundtrip preserves exact canonical bytes
+HANDOFF_MODEL PASS JSON-read receipt proves exact handoff and rejects wrong intent digest
+HANDOFF_MODEL PASS kills and outcome share one proposal generation
+HANDOFF_MODEL PASS only final three kill delta and one win
+HANDOFF_MODEL PASS clear and story flags present
+HANDOFF_MODEL PASS explicit normal terminal source
+HANDOFF_MODEL PASS identical handoff is exact no-op
+HANDOFF_MODEL PASS precise model proof present
+HANDOFF_MODEL PASS other intent cannot use terminal shortcut
+HANDOFF_MODEL PASS changed final highwater refused
+HANDOFF_MODEL PASS unknown descriptor field refused
+HANDOFF_MODEL PASS uppercase digest outside canonical descriptor domain
+HANDOFF_MODEL PASS duplicate result ID refused
+HANDOFF_MODEL PASS fractional result counter refused
+HANDOFF_MODEL PASS create version3 model
+HANDOFF_MODEL PASS begin loss run prepare
+HANDOFF_MODEL PASS begin loss run model commit
+HANDOFF_MODEL PASS losing handoff prepare
+HANDOFF_MODEL PASS losing handoff model commit
+HANDOFF_MODEL PASS loss records final kills without win
+HANDOFF_MODEL PASS loss has proof without clear award
+HANDOFF_MODEL PASS v2 read remains byte-model schema2
+HANDOFF_MODEL PASS v2 events require explicit upgrade
+HANDOFF_MODEL PASS explicit legacy upgrade prepare
+HANDOFF_MODEL PASS explicit legacy upgrade model commit
+HANDOFF_MODEL PASS upgrade adds exactly one generation
+HANDOFF_MODEL PASS upgrade preserves aggregate targets
+HANDOFF_MODEL PASS ambiguous v2 terminal never guessed settled
+HANDOFF_MODEL PASS legacy terminal is not handoff proof
+HANDOFF_MODEL PASS repeated upgrade no-op
+HANDOFF_MODEL PASS authoritative invalidation prepare
+HANDOFF_MODEL PASS authoritative invalidation model commit
+HANDOFF_MODEL PASS correction increments epoch and keeps explicit tombstone
+HANDOFF_MODEL PASS pending correction blocks prior proof
+HANDOFF_MODEL PASS same pending correction does not increment epoch twice
+HANDOFF_MODEL PASS authoritative correction prepare
+HANDOFF_MODEL PASS authoritative correction model commit
+HANDOFF_MODEL PASS correction preserves epoch and authoritative lowered target
+HANDOFF_MODEL PASS old epoch cannot resurrect reward
+HANDOFF_MODEL PASS matching epoch still cannot resurrect invalidated token
+HANDOFF_MODEL PASS tampered tombstone cannot become matching settled receipt
+HANDOFF_MODEL PASS create version3 model
+HANDOFF_MODEL PASS classic begin prepare
+HANDOFF_MODEL PASS classic begin model commit
+HANDOFF_MODEL PASS classic progress prepare
+HANDOFF_MODEL PASS classic progress model commit
+HANDOFF_MODEL PASS classic settlement prepare
+HANDOFF_MODEL PASS classic settlement model commit
+HANDOFF_MODEL PASS classic counters preserved
+HANDOFF_MODEL PASS classic duplicate behavior preserved
+HANDOFF_MODEL PASS v3 ordinary terminal validates

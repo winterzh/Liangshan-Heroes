@@ -1,0 +1,194 @@
+{
+  "mode": "crash_half",
+  "command": [
+    "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+    "--path",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261026_194542_27c8aea9\\project",
+    "--headless",
+    "--remote-debug",
+    "tcp://127.0.0.1:49803",
+    "--script",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_handoff_io_20261026\\20261026_200759_741207e6\\workers\\bootstrap.gd"
+  ],
+  "profile": "D:\\CodexQA\\campio\\ce43cdf86661",
+  "nonce": "ce43cdf866614c25a40754b10a0f315c",
+  "complete": true,
+  "faults": [
+    {
+      "kind": "crash_half",
+      "point": {
+        "source": "res://scripts/run_snapshot_store.gd",
+        "line": 176,
+        "function": "_write_new",
+        "source_sha256": "581e638b8f0ce7cb24d5533b03ee94b99732c5cffcbf373b1a5a69a1618d8251",
+        "statement": "_checkpoint(\"pending_half\")",
+        "kind": "crash_half"
+      },
+      "frames": [
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 176,
+          "function": "_write_new"
+        },
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 308,
+          "function": "commit_locked"
+        },
+        {
+          "source": "res://scripts/steam_run_ledger.gd",
+          "line": 123,
+          "function": "_drive_pending"
+        },
+        {
+          "source": "res://scripts/steam_run_ledger.gd",
+          "line": 75,
+          "function": "_persist"
+        },
+        {
+          "source": "res://scripts/steam_run_ledger.gd",
+          "line": 238,
+          "function": "apply_campaign_handoff"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/campaign_handoff_io_20261026/20261026_200759_741207e6/workers/worker.gd",
+          "line": 111,
+          "function": "normal_or_fault"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/campaign_handoff_io_20261026/20261026_200759_741207e6/workers/worker.gd",
+          "line": 63,
+          "function": "gate"
+        }
+      ],
+      "before_inventory": {
+        "exists": true,
+        "files": {
+          "receipt.pending": {
+            "sha256": "6fb26d385254fe9af8f357b70d90b4cf8de24bf99e1ffe20b8db0608007e2d46",
+            "bytes": 1181
+          },
+          "record_0000000002.json": {
+            "sha256": "0ddaf6c3017b97ddd8c9b7a66641d727bd42a0548048c6afdb7f82fe8ede4031",
+            "bytes": 1553
+          },
+          "record_0000000003.json": {
+            "sha256": "c2d0f704e2a33639d892ef4a4ac8d801b69179bd429cf7fb7ac42194056f591a",
+            "bytes": 1553
+          },
+          "writing/owner.json": {
+            "sha256": "6634280a505149f0925255a04ce5cb7ab5a3d728b40655df6243c5ec24e5a4b9",
+            "bytes": 100
+          }
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      },
+      "actual_native_operation": true,
+      "externally_terminated_pid": 16460,
+      "exit_code": 1,
+      "terminated_inventory": {
+        "exists": true,
+        "files": {
+          "receipt.pending": {
+            "sha256": "6fb26d385254fe9af8f357b70d90b4cf8de24bf99e1ffe20b8db0608007e2d46",
+            "bytes": 1181
+          },
+          "record_0000000002.json": {
+            "sha256": "0ddaf6c3017b97ddd8c9b7a66641d727bd42a0548048c6afdb7f82fe8ede4031",
+            "bytes": 1553
+          },
+          "record_0000000003.json": {
+            "sha256": "c2d0f704e2a33639d892ef4a4ac8d801b69179bd429cf7fb7ac42194056f591a",
+            "bytes": 1553
+          },
+          "writing/owner.json": {
+            "sha256": "6634280a505149f0925255a04ce5cb7ab5a3d728b40655df6243c5ec24e5a4b9",
+            "bytes": 100
+          }
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      }
+    }
+  ],
+  "debug_stops": [
+    {
+      "frames": [
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 176,
+          "function": "_write_new"
+        },
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 308,
+          "function": "commit_locked"
+        },
+        {
+          "source": "res://scripts/steam_run_ledger.gd",
+          "line": 123,
+          "function": "_drive_pending"
+        },
+        {
+          "source": "res://scripts/steam_run_ledger.gd",
+          "line": 75,
+          "function": "_persist"
+        },
+        {
+          "source": "res://scripts/steam_run_ledger.gd",
+          "line": 238,
+          "function": "apply_campaign_handoff"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/campaign_handoff_io_20261026/20261026_200759_741207e6/workers/worker.gd",
+          "line": 111,
+          "function": "normal_or_fault"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/campaign_handoff_io_20261026/20261026_200759_741207e6/workers/worker.gd",
+          "line": 63,
+          "function": "gate"
+        }
+      ],
+      "packet_sha256": "c57e5a68f4f6cfec30ff428647284b753883140b146c412ebf49ecca8b8be2e8"
+    }
+  ],
+  "synthetic_account_and_token": true,
+  "production_method_overrides": 0,
+  "sdk_qualified": false,
+  "pid": 16460,
+  "original_pid_terminal": true,
+  "exit_code": 1,
+  "process_terminal": true,
+  "log_sha256": "4507f4c6594cc003e4607f3da9d75a8f86f7ebae486821ab76147cf89fe81081",
+  "final_inventory": {
+    "exists": true,
+    "files": {
+      "receipt.pending": {
+        "sha256": "6fb26d385254fe9af8f357b70d90b4cf8de24bf99e1ffe20b8db0608007e2d46",
+        "bytes": 1181
+      },
+      "record_0000000002.json": {
+        "sha256": "0ddaf6c3017b97ddd8c9b7a66641d727bd42a0548048c6afdb7f82fe8ede4031",
+        "bytes": 1553
+      },
+      "record_0000000003.json": {
+        "sha256": "c2d0f704e2a33639d892ef4a4ac8d801b69179bd429cf7fb7ac42194056f591a",
+        "bytes": 1553
+      },
+      "writing/owner.json": {
+        "sha256": "6634280a505149f0925255a04ce5cb7ab5a3d728b40655df6243c5ec24e5a4b9",
+        "bytes": 100
+      }
+    },
+    "directories": [
+      ".",
+      "writing"
+    ]
+  }
+}

@@ -63,3 +63,7 @@
 ## 2026-10-26 第二轮与失效归档入口
 
 `qa/storage_cleanup_20261026_round2/`：三个旧project的重复文件->当前保留文件/Git blob映射、独有文件索引、恢复器和保护检查。上一轮ZIP及9月7日7z已在其他聊天按用户要求删除，旧QA顶部已有现状提示；最新入口见[第二轮说明](../qa/storage_cleanup_20261026_round2/README.md)。
+
+## 2026-10-26 战役奖励交接候选与故障证据
+
+`qa/campaign_progress_recovery_20261026/handoff_candidate/`：20文件独立候选、精确清单、模型/尾账回归/真实I/O/经典30波外部驱动及后继恢复协议设计。`evidence/` 保留每版来源、原始失败和成功worker收据；`generated_uids/` 是绑定冻结身份的少量文本证据，不能作为普通缓存忽略。当前范围和未验证门槛以[候选说明](../qa/campaign_progress_recovery_20261026/handoff_candidate/README.md)为准。
