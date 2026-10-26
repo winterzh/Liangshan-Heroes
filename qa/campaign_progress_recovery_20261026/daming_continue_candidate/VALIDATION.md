@@ -16,7 +16,13 @@ preimport身份为`source-v1:3365e369ba351e9d9593d2324391c7b042a967144df85f1c35f
 
 该工程自己的Godot导入`import__20261027_063649_9d5c7e79`已完整通过：PID14016，退出0、错误0、50.151秒，完整来源后验及共享锁释放通过。生成身份保持3365，generation SHA为`3ea36a4f6cc81c210fcc349daa70999479c64acd0380deb6a6c23b71fcbfe9a7`。这只授新工程的准备和导入资格。随后运行两条实际Flow路线：Lu-first与Shi-first各用独立profile，每条4个进程，依次单囚safe后保存退出、菜单继续与再次保存退出、菜单继续后第二囚自然出城终局、独立重启拒旧槽。当前没有新源玩法、完整61/19、SDK、发行包或人工资格。
 
-[完整准备与本批导入原件](evidence/full_freeze_20261027_063133/README.md)保存新资料并按精确SHA引用已提交旧来源，不重复复制旧链。新增[八进程外部工具](tests/daming_flow/README.md)的AST、帮助和默认24项来源检查已通过；外部GD仅独立静态检查，尚未加载、编译或运行。候选工程导入通过不覆盖这些外部脚本，也不计作八进程成功。
+[完整准备与本批导入原件](evidence/full_freeze_20261027_063133/README.md)保存新资料并按精确SHA引用已提交旧来源，不重复复制旧链。新增[八进程外部工具](tests/daming_flow/README.md)的AST、帮助和默认24项来源检查已通过。最终静态复核补上driver对异步verify_terminal的await后，五份外部GD已在3365工程上独立原生加载通过：PID74076、退出0、错误0、81.516秒，30项命名来源后验及锁释放通过。[加载原件](evidence/flow_load_20261027_065614/README.md)只证明autoload后load/can_instantiate成功，没有实例化驱动或运行八进程；Python宿主后继与真实Flow仍须各自验证。
+
+## 首次保存原件留存与运行门槛
+
+Python宿主新增闭合A原件留存：实际A进程正常保存退出并通过报告验证后、B创建前，只读核对同token的slot/LC gen1原件与精确2文件6目录，将副本和独立descriptor加入后续pins。活profile可由B/C正常推进，不长期pin；每阶段及最终重新检查冻结库存。模型53项通过，实际junction/reparse拒绝通过，symlink因创建权限不足明确跳过；[模型原件](evidence/fixture_model_20261027/README.md)不授原生A或解码资格。宿主AST/帮助及26项轻量来源检查通过，五GD保持上述实际加载字节；双角色八进程正在独立新profile执行，终态以原始receipt为准。
+
+3365已有导入使用缓存种子，不计作旧61阶段要求的冷导入。完整61须新鲜无导入/编辑器/着色器缓存种子的完整工程，自行注册native扩展后独立导入，再完成8条Flow及52负例；52为每角色world/component各1与capture24，capture的19字段案例不等于原19类持久化故障。后继工具须严格消费当前LC3/Intent2/ACK2和新descriptor，不把旧V16结果转授。
 
 ## 后续验收
 

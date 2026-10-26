@@ -30,7 +30,7 @@
 
 ## 本批索引与新增规则
 
-`qa/campaign_progress_recovery_20261026/daming_continue_candidate/`：基于941c的Session/Core/UnitContract三脚本候选、精确diff和来源；补章节定义装配与严格单囚安全撤离；`integration_941/`为只替三个已有文件的新冻结准备器，默认34项轻量来源检查；新3365完整准备及独立导入已完成；`evidence/full_freeze_20261027_063133/`为紧凑原件及旧来源SHA引用，`tests/daming_flow/`与`run_daming_flow.py`为尚未编译/运行的双角色八进程工具，实际资格集中在`VALIDATION.md`。
+`qa/campaign_progress_recovery_20261026/daming_continue_candidate/`：基于941c的Session/Core/UnitContract三脚本候选、精确diff和来源；补章节定义装配与严格单囚安全撤离；`integration_941/`为只替三个已有文件的新冻结准备器，默认34项轻量来源检查；新3365完整准备及独立导入已完成；`evidence/full_freeze_20261027_063133/`为紧凑原件及旧来源SHA引用，`tests/daming_flow/`与`run_daming_flow.py`为五GD已原生加载、八进程尚未运行的双角色工具，实际资格集中在`VALIDATION.md`。
 
 `qa/campaign_progress_recovery_20261026/recovery_readset_candidate/`：只对原Slot启用的严格读集优化候选、固定d7来源的新工程准备器、原Flow适配器与原生替换专项；768b6e59已导入，真实保存/恢复两案88项及12类异常/旧4MB副本285项通过。`VALIDATION.md`维护当前资格，创建时来源清单和工具README保持原字节，未采用生产。
 
@@ -99,3 +99,5 @@
 `evidence/lianhuanma_victory_20261027_014835/`与`evidence/lianhuanma_loss_20261027_020834/`分别保存当前d7源自然胜利345项、自然失败205项原件、来源映射与SHA清单。`continue_binding_candidate/tests/classic_recovery/`是独立的中断保存源码分支诊断工具，初始私有gate与公开入口资格分开，实际结果统一见下方VALIDATION。以上路径均相对`qa/campaign_progress_recovery_20261026/`。
 
 qa/campaign_progress_recovery_20261026/continue_binding_candidate/：Flow/Session/本地生命周期修复、新独立冻结准备器、baseline/fixed真实磁盘模型及来源。当前资格集中于 [VALIDATION](../qa/campaign_progress_recovery_20261026/continue_binding_candidate/VALIDATION.md)，原README与source_manifest保持准备时字节；新增分支诊断工具未运行时仍不得当公开入口验收。
+
+`qa/campaign_progress_recovery_20261026/daming_continue_candidate/evidence/flow_load_20261027_065614/`保留五GD原生加载原件；`evidence/fixture_model_20261027/`保留A闭合原件留存的53项隔离模型。`tests/daming_flow/fixture_freeze.py`只冻结已退出A的两份原件，后续只pin副本；未复制业务存档至Git。高俅`terminal_guard_failure_20261027_064112/`和`terminal_focus_load_20261027_070450/`分别保留纯H实跑失败与点目标策略加载证据。

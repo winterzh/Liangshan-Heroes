@@ -3,13 +3,13 @@
   "files": [
     {
       "path": "qa/campaign_progress_recovery_20261026/daming_continue_candidate/run_daming_flow.py",
-      "bytes": 20385,
-      "sha256": "85bfcc0206a3219aa84c1f501b915805c02870bf9064416f502fb6877622b141"
+      "bytes": 22248,
+      "sha256": "19eaea8c0ae8b2d82d57c916340794fc7ee808aa735ab095dcecd7ac20ae859c"
     },
     {
       "path": "qa/campaign_progress_recovery_20261026/daming_continue_candidate/tests/daming_flow/README.md",
-      "bytes": 6998,
-      "sha256": "93ca2f732ded56cdf8c45eab2caa85df64da964126b72c6ecec1a24bb11a05a2"
+      "bytes": 10160,
+      "sha256": "1fc4a8ac9e5ef8ca4d91d4fd69b042777ac57bf79252a12c6d21db6e84c0481b"
     },
     {
       "path": "qa/campaign_progress_recovery_20261026/daming_continue_candidate/tests/daming_flow/bootstrap.gd",
@@ -28,13 +28,23 @@
     },
     {
       "path": "qa/campaign_progress_recovery_20261026/daming_continue_candidate/tests/daming_flow/driver.gd",
-      "bytes": 8371,
-      "sha256": "4d5d3dfad563e2ed93d16e7b3973f0407c2c32496b757de35e26048bf763331d"
+      "bytes": 8377,
+      "sha256": "52e5eb8448eb1f7087262b253c83fc7c2625f60bd245d8c0efd33f3875dcff77"
     },
     {
       "path": "qa/campaign_progress_recovery_20261026/daming_continue_candidate/tests/daming_flow/route.gd",
       "bytes": 26855,
       "sha256": "b422e09b4346b673b8572dba643480dcace0639cc07fcc84c91ea93c9840d902"
+    },
+    {
+      "path": "qa/campaign_progress_recovery_20261026/daming_continue_candidate/tests/daming_flow/fixture_freeze.py",
+      "bytes": 16064,
+      "sha256": "7695a3aab1d946fd7e62ba004bf30da712e8cacfb40d24a5cbad3f50be02673e"
+    },
+    {
+      "path": "qa/campaign_progress_recovery_20261026/daming_continue_candidate/tests/daming_flow/test_fixture_freeze.py",
+      "bytes": 15143,
+      "sha256": "8a5a2b9f2eee9fff182772d7ab818397b662d77880d492c1fd5c960ef85e0ab7"
     }
   ],
   "derived_from": [
@@ -147,5 +157,32 @@
     "native_release_tested": false,
     "human_acceptance": false,
     "published": false
+  },
+  "closed_a_fixture_contract": {
+    "schema": "daming_flow_closed_a_fixture_v1",
+    "hook_after": "validated save_single terminal exit0 continue_saved",
+    "hook_before": "resume_settle_save child launch",
+    "original_files": 2,
+    "original_directories": 6,
+    "slot_generation": 1,
+    "lifecycle_schema": "local_campaign_continue_lifecycle_v3",
+    "lifecycle_generation": 1,
+    "same_token": true,
+    "live_profile_pinned_beyond_freeze_window": false,
+    "frozen_inventory_checked_each_stage_and_final": true,
+    "native_slot_decode_still_required": true,
+    "world_or_codec_reconstructed": false,
+    "business_payload_git_sync": false
+  },
+  "python_fixture_model": {
+    "receipt_path": "D:/CodexQA/daming_fixture_model/69a3ca286750484eaf3b03cd18bffcff/receipt.json",
+    "receipt_sha256": "6d1d0afbdaa48f58db13501845b87d5254cafb447e0273428ce8c1e94b6e5b8b",
+    "checks": 53,
+    "synthetic_reports_and_pids": true,
+    "engine_started": false,
+    "actual_a_qualified": false,
+    "native_slot_decode_qualified": false,
+    "symlink_creation_skipped_privilege": true,
+    "actual_junction_reparse_rejected": true
   }
 }

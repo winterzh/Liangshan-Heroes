@@ -125,12 +125,14 @@ func play_until_save(to_core: bool) -> void:
 			var sample: Dictionary = {"elapsed":level.elapsed, "waves":level.waves.duplicate(true),
 				"land_remaining":level.land_groups.map(func(g): return level._count(g)),
 				"water_remaining":level.water_groups.map(func(g): return level._count(g)),
+				"original_survivors":policy.wave_survivors(battle),
 				"flagship_hp":level.flagship.hp, "flagship_outcome":level.flagship.story_outcome,
 				"gold":battle.gold, "wood":battle.wood, "population":battle.population_summary(), "hall_hp":hall.hp}
 			observations.get_or_add("battle_samples", []).append(sample)
 			print("GAO_CORE_PROGRESS ", JSON.stringify(sample))
 		await get_tree().process_frame
 	observe_waves()
+	observations["final_original_survivors"] = policy.wave_survivors(battle)
 	if to_core and level.flagship.story_resolved.is_connected(on_flagship_resolved):
 		level.flagship.story_resolved.disconnect(on_flagship_resolved)
 	check(healthy() and alive(hall) and alive(song) and level.hall == hall and level.song == song

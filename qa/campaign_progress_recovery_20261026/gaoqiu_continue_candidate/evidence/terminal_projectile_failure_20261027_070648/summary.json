@@ -1,0 +1,365 @@
+{
+  "schema": "gaoqiu_terminal_projectile_failure_summary_v1",
+  "original_run": "D:\\AI项目\\水浒\\开发工程\\.godot\\gaoqiu_terminal_20261027\\20261027_070648_7b48f352",
+  "receipt_sha256": "1fb90bbf8d77e9c6d39c6641795ce56298620d228051e26a44b4eb1aa26d0ac0",
+  "report_sha256": "2c6736f508882811a1448f91c8263dd504e61ae6fa15085e8db65788db7116ed",
+  "log_sha256": "41f2fe3cf943029a7fbc3b1bcec2993f4a5f4ff193331043f8fbd39878e4aadc",
+  "complete": false,
+  "source_core_victory_chain_passed": false,
+  "failure_classification": "Actual SaveAndExit capture rejected visual/projectile with TIMED_RENDER_OVERRIDE after natural first-wave cleanup passed; this archive does not establish a full diagnosis or any later-stage qualification.",
+  "actual_process": {
+    "case": "save_after_wave1",
+    "command": [
+      "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+      "--path",
+      "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_050851_9bd328cf\\project",
+      "--rendering-method",
+      "gl_compatibility",
+      "--resolution",
+      "1280x720",
+      "--position",
+      "30000,30000",
+      "--script",
+      "D:\\AI项目\\水浒\\开发工程\\.godot\\gaoqiu_terminal_20261027\\20261027_070648_7b48f352\\workers\\bootstrap.gd"
+    ],
+    "passed": false,
+    "errors": [],
+    "pid": 38288,
+    "exit_code": 1,
+    "seconds": 301.03,
+    "stopped_for": null,
+    "log_sha256": "41f2fe3cf943029a7fbc3b1bcec2993f4a5f4ff193331043f8fbd39878e4aadc"
+  },
+  "executed_stages": [
+    "save_after_wave1"
+  ],
+  "checks": {
+    "total": 112,
+    "passed": 110,
+    "failed": 2,
+    "failed_labels": [
+      "actual SaveAndExit operation succeeds",
+      "save did not reach production-owned exit"
+    ]
+  },
+  "save_failure": {
+    "cause": {
+      "code": "TIMED_RENDER_OVERRIDE",
+      "field": "projectile",
+      "ok": false
+    },
+    "code": "TIMED_RENDER_OVERRIDE",
+    "complete_world": false,
+    "ok": false,
+    "section": "visual"
+  },
+  "first_wave_dispatch": {
+    "index": 0,
+    "land_alive_at_dispatch": 4,
+    "observed_elapsed": 140.01666666667,
+    "scheduled": 140.0,
+    "tick": 8420,
+    "water_alive_at_dispatch": 3
+  },
+  "first_natural_expedition_cleanup_check_passed": true,
+  "final_original_survivor_counts": {
+    "0_land": 0,
+    "0_water": 0,
+    "1_land": 6,
+    "1_water": 5,
+    "2_land": 8,
+    "2_water": 6
+  },
+  "battle_sample_count": 6,
+  "battle_sample_summaries": [
+    {
+      "elapsed": 0.483333333333333,
+      "flagship_hp": 2100.0,
+      "flagship_outcome": "",
+      "gold": 206,
+      "hall_hp": 1500.0,
+      "land_remaining": [
+        4,
+        6,
+        8
+      ],
+      "population": {
+        "active": 36,
+        "cap": 44,
+        "queued": 2
+      },
+      "water_remaining": [
+        3,
+        5,
+        6
+      ],
+      "waves": [
+        {
+          "sent": false,
+          "time": 140.0,
+          "warned": false
+        },
+        {
+          "sent": false,
+          "time": 330.0,
+          "warned": false
+        },
+        {
+          "sent": false,
+          "time": 540.0,
+          "warned": false
+        }
+      ],
+      "wood": 146
+    },
+    {
+      "elapsed": 30.4999999999995,
+      "flagship_hp": 2100.0,
+      "flagship_outcome": "",
+      "gold": 262,
+      "hall_hp": 1500.0,
+      "land_remaining": [
+        4,
+        6,
+        8
+      ],
+      "population": {
+        "active": 39,
+        "cap": 44,
+        "queued": 1
+      },
+      "water_remaining": [
+        3,
+        5,
+        6
+      ],
+      "waves": [
+        {
+          "sent": false,
+          "time": 140.0,
+          "warned": false
+        },
+        {
+          "sent": false,
+          "time": 330.0,
+          "warned": false
+        },
+        {
+          "sent": false,
+          "time": 540.0,
+          "warned": false
+        }
+      ],
+      "wood": 282
+    },
+    {
+      "elapsed": 60.5166666666645,
+      "flagship_hp": 2100.0,
+      "flagship_outcome": "",
+      "gold": 363,
+      "hall_hp": 1500.0,
+      "land_remaining": [
+        4,
+        6,
+        8
+      ],
+      "population": {
+        "active": 42,
+        "cap": 44,
+        "queued": 1
+      },
+      "water_remaining": [
+        3,
+        5,
+        6
+      ],
+      "waves": [
+        {
+          "sent": false,
+          "time": 140.0,
+          "warned": false
+        },
+        {
+          "sent": false,
+          "time": 330.0,
+          "warned": false
+        },
+        {
+          "sent": false,
+          "time": 540.0,
+          "warned": false
+        }
+      ],
+      "wood": 430
+    },
+    {
+      "elapsed": 90.5333333333295,
+      "flagship_hp": 2100.0,
+      "flagship_outcome": "",
+      "gold": 314,
+      "hall_hp": 1500.0,
+      "land_remaining": [
+        4,
+        6,
+        8
+      ],
+      "population": {
+        "active": 44,
+        "cap": 54,
+        "queued": 4
+      },
+      "water_remaining": [
+        3,
+        5,
+        6
+      ],
+      "waves": [
+        {
+          "sent": false,
+          "time": 140.0,
+          "warned": false
+        },
+        {
+          "sent": false,
+          "time": 330.0,
+          "warned": false
+        },
+        {
+          "sent": false,
+          "time": 540.0,
+          "warned": false
+        }
+      ],
+      "wood": 498
+    },
+    {
+      "elapsed": 120.549999999994,
+      "flagship_hp": 2100.0,
+      "flagship_outcome": "",
+      "gold": 356,
+      "hall_hp": 1500.0,
+      "land_remaining": [
+        4,
+        6,
+        8
+      ],
+      "population": {
+        "active": 49,
+        "cap": 54,
+        "queued": 5
+      },
+      "water_remaining": [
+        3,
+        5,
+        6
+      ],
+      "waves": [
+        {
+          "sent": false,
+          "time": 140.0,
+          "warned": true
+        },
+        {
+          "sent": false,
+          "time": 330.0,
+          "warned": false
+        },
+        {
+          "sent": false,
+          "time": 540.0,
+          "warned": false
+        }
+      ],
+      "wood": 562
+    },
+    {
+      "elapsed": 150.550000000012,
+      "flagship_hp": 2100.0,
+      "flagship_outcome": "",
+      "gold": 436,
+      "hall_hp": 1500.0,
+      "land_remaining": [
+        0,
+        6,
+        8
+      ],
+      "population": {
+        "active": 54,
+        "cap": 64,
+        "queued": 5
+      },
+      "water_remaining": [
+        3,
+        5,
+        6
+      ],
+      "waves": [
+        {
+          "sent": true,
+          "time": 140.0,
+          "warned": true
+        },
+        {
+          "sent": false,
+          "time": 330.0,
+          "warned": false
+        },
+        {
+          "sent": false,
+          "time": 540.0,
+          "warned": false
+        }
+      ],
+      "wood": 637
+    }
+  ],
+  "save_exit_observed": false,
+  "checkpoint_empty": true,
+  "terminal_checkpoint_empty": true,
+  "successful_save_or_later_process_qualification": false,
+  "simulation_time_scale": 1,
+  "physics_hz": 60,
+  "no_gameplay_state_injection_reported": true,
+  "actions_count": 169,
+  "strategy": {
+    "buildings_started": 5,
+    "orders": 124,
+    "skill_orders": 0,
+    "units_queued": 21,
+    "units_queued_by_key": {
+      "liang_dao": 6,
+      "liang_gong": 3,
+      "liang_qiang": 5,
+      "liangshan_warship": 4,
+      "lou_luo": 3
+    }
+  },
+  "source_identity": {
+    "base_run": "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_050851_9bd328cf",
+    "source_head": "355fd9099f2bcdd2112413ac0a7b19c11d3c2e8c",
+    "content_version": "source-v1:941c4786569d5886efbd3537238df853026cc50d0c98d0a1cdb1516c8a8f7964",
+    "engine_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+    "candidate_manifest_sha256": "c5c1052c4797d760a52d15176c0d79bbc7ea7aaa23003ba429108be507ca753b",
+    "candidate_script_count": 23,
+    "native_asset_count": 1
+  },
+  "terminal_flags": {
+    "initial_identity_passed": true,
+    "final_identity_passed": true,
+    "child_process_terminal": true,
+    "lock_ownership_confirmed": true,
+    "engine_lane_idle": true,
+    "lock_released": true
+  },
+  "qualification": {
+    "native_sdk_qualified": false,
+    "public_continue_qualified": false,
+    "human_acceptance": false,
+    "native_release_tested": false,
+    "credited_rewards_qualified": false,
+    "defeat_chain_qualified": false
+  },
+  "pins_recorded": 436,
+  "all_436_pins_rehashed_by_archiver": false,
+  "archive_scope": "20 selected raw originals; exact old dependency references, no profile/Slot/LC payload access or engine execution."
+}

@@ -173,6 +173,75 @@ func guard(b: Node, units: Array, cell: Vector2i) -> void:
 		orders += 1
 		driver.record_action("hold_position", holding, {"cell":cell, "all_waves_sent":b.level.waves.all(func(row): return row.sent)})
 
+func command_stance(b: Node, units: Array, wanted: int, reason: String) -> bool:
+	var changing: Array = units.filter(func(u): return u.stance != wanted or u._hold_order_active)
+	if changing.is_empty(): return true
+	b.select_members(changing, false)
+	var cycles := 0
+	for attempt: int in range(4):
+		if changing.all(func(u): return u.stance == wanted and not u._hold_order_active): break
+		b._cycle_stance()
+		cycles += 1
+		orders += 1
+	driver.record_action("stance_command", changing, {"cycles":cycles, "wanted":wanted, "reason":reason})
+	return driver.check(changing.all(func(u): return u.stance == wanted and not u._hold_order_active),
+		"ordinary stance command reaches requested mode without residual H: " + reason)
+
+func focus_dispatched(b: Node, units: Array, groups: Array, anchor: Vector2i) -> bool:
+	# PASSIVE is selected through the real G command. Explicit A+unit attacks
+	# still chase that target, but do not acquire a different unit after it dies.
+	if units.is_empty(): return false
+	var candidates: Array = []
+	for index: int in range(3):
+		if not b.level.waves[index].sent: continue
+		for enemy: Variant in groups[index]:
+			if alive(enemy) and b.is_visible_world(enemy.position) and b._enemy_at(b.to_screen(enemy.position)) == enemy:
+				candidates.append(enemy)
+	if candidates.is_empty(): return false
+	var center: Vector2 = b.map.cell_to_world(anchor)
+	candidates.sort_custom(func(a,z): return a.position.distance_squared_to(center) < z.position.distance_squared_to(center))
+	var enemy: Variant = candidates[0]
+	if not command_stance(b, units, 3, "passive_dispatched_attack"): return true # STANCE_PASSIVE
+	var attackers: Array = units.filter(func(u): return u._target != enemy or u._chase_intent != 2 or u._state != 3) # CHASE_EXPLICIT / ST_CHASE
+	if attackers.is_empty(): return true
+	var point: Vector2 = b.to_screen(enemy.position)
+	if not driver.check(b._enemy_at(point) == enemy and dispatched(b.level, enemy),
+		"visible dispatched original unit is exact click target; never fall back to A-ground"): return true
+	b.select_members(attackers, false)
+	b._order_amove_at(point, false) # Production A+unit branch calls order_attack(..., explicit=true).
+	orders += 1
+	driver.record_action("explicit_dispatched_wave_attack", attackers, {"target_entity_id":str(enemy.entity_id),
+		"target_position":[enemy.position.x,enemy.position.y], "target_hp":enemy.hp, "stance":3})
+	driver.check(attackers.all(func(u): return u.stance == 3 and u._target == enemy and u._chase_intent == 2 and u._state == 3 and not u._resume_amove and not u._hold_order_active),
+		"real target command retains passive stance and exact explicit chase without attack-move")
+	return true
+
+func wave_survivors(b: Node) -> Array:
+	# Bounded read-only diagnosis: at most the 32 original land/water members.
+	var rows: Array = []
+	for lane: int in range(2):
+		var profile: String = "land" if lane == 0 else "water"
+		var groups: Array = b.level.land_groups if lane == 0 else b.level.water_groups
+		var anchor: Vector2 = b.map.cell_to_world(Vector2i(25,33) if lane == 0 else Vector2i(39,47))
+		var friendly: Array = b.units.filter(func(u): return alive(u) and u.faction == 0 and not u.is_worker and not u.is_building and not u.garrisoned and not u.is_noncombat and u.movement_profile == profile)
+		for index: int in range(3):
+			for enemy: Variant in groups[index]:
+				if not alive(enemy): continue
+				var nearest: Variant = null
+				var distance := -1.0
+				for own: Variant in friendly:
+					var current: float = own.position.distance_to(enemy.position)
+					if nearest == null or current < distance: nearest = own; distance = current
+				rows.append({"wave":index, "sent":b.level.waves[index].sent, "lane":profile,
+					"entity_id":str(enemy.entity_id), "key":enemy.key, "hp":enemy.hp,
+					"position":[enemy.position.x,enemy.position.y], "state":enemy._state, "stance":enemy.stance,
+					"target_entity_id":str(enemy._target.entity_id) if is_instance_valid(enemy._target) else "",
+					"attack_range":enemy.atk_range, "distance_to_guard":enemy.position.distance_to(anchor),
+					"nearest_friendly_id":str(nearest.entity_id) if nearest != null else "", "nearest_friendly_distance":distance,
+					"nearest_friendly_reach":nearest.atk_range+nearest.radius+enemy.radius if nearest != null else -1.0,
+					"visible":b.is_visible_world(enemy.position)})
+	return rows
+
 func fight(b: Node) -> void:
 	var level: Variant = b.level
 	var army: Array = b.units.filter(func(u): return alive(u) and u.faction == 0 and u != level.song and u != level.embarked_liu and not u.garrisoned and not u.is_worker and not u.is_building and not u.is_noncombat and u.movement_profile == "land" and b.mission._actor != u)
@@ -180,9 +249,15 @@ func fight(b: Node) -> void:
 	if not level.waves[2].sent:
 		# The chosen timed-defence route keeps every original dispatch observable.
 		# Enemy guard AI, paid reinforcements and all wave clocks remain live.
-		guard(b, army, Vector2i(25,33))
-		guard(b, fleet, Vector2i(39,47))
+		if not focus_dispatched(b, army, level.land_groups, Vector2i(25,33)):
+			guard(b, army, Vector2i(25,33))
+		if not driver.failures.is_empty(): return
+		if not focus_dispatched(b, fleet, level.water_groups, Vector2i(39,47)):
+			guard(b, fleet, Vector2i(39,47))
 		return
+	# H and the previous explicit-wave orders can retain PASSIVE. Restore the
+	# original assault mode through ordinary G before post-third A-ground orders.
+	if not command_stance(b, army + fleet, 0, "all_dispatched_assault"): return # STANCE_AGGRO
 	var land_foes: Array = b.units.filter(func(u): return alive(u) and u.faction == 1 and not u.is_building and u.movement_profile == "land" and dispatched(level,u))
 	land_foes.sort_custom(func(a,z): return a.position.distance_squared_to(level.hall.position) < z.position.distance_squared_to(level.hall.position))
 	var land_target: Variant = null

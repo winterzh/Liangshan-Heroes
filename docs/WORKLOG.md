@@ -1,5 +1,17 @@
 # 开发日志
 
+## 2026-10-27 首波真实保存发现箭矢合同缺口
+
+高俅普通点目标策略112项中110过/2失败：正常首波派发与清场已通过，实际SaveAndExit在视觉检查返回TIMED_RENDER_OVERRIDE/projectile，无保存检查点。正常箭矢_ready的LINEAR_WITH_MIPMAPS与合同统一PARENT_NODE不符，后继最小修复单独准备；不改正常战斗或等待箭矢消失规避。
+
+大名府A闭合后原件留存已接入，53项隔离文件模型通过，真实junction拒绝通过，symlink创建明确跳过。每阶段复验冻结副本，不阻止活profile合法第二次保存；五GD加载资格保持，双路线真实运行另记。模型、加载、真实Flow、冷导入及完整61/19分别记资格。
+
+## 2026-10-27 外部Flow加载与高俅正常波次复验
+
+大名府driver补上异步终局检查等待，后继五GD实际autoload加载PID74076退出0、错误0，81.516秒，30来源pins后验和锁释放通过；仅load/can_instantiate，尚未执行双角色八进程。[原件](../qa/campaign_progress_recovery_20261026/daming_continue_candidate/evidence/flow_load_20261027_065614/README.md)。
+
+高俅纯H策略实际90项中89过/1失败：首波原陆4/水3正常派发已通过，但320秒前仍有2名第一批岸军未清，未保存，其他三进程未执行。后继只用普通G姿态与精确点选已派发原组，并增加有限只读观察；原门槛保持。新GD加载PID28052退出0、错误0，89.1秒；完整路线另跑。[当前原始失败与边界](../qa/campaign_progress_recovery_20261026/gaoqiu_continue_candidate/VALIDATION.md)。原版键鼠暂停，公开入口与Steam不变。
+
 ## 2026-10-27 大名府统一新工程准备与导入通过
 
 新3365源完整7062文件仅替Session/Core/UnitContract三件，增加10,293字节，总2,402,358,078字节；25条脚本清单只是补追踪两个已有资源，未增删游戏文件。218准备pins、完整前后来源通过；自有导入PID14016正常退出0、错误0，50.151秒，完整宿主后验与共享锁释放通过。双角色实际Flow八进程工具已完成代码和默认24项轻量来源检查，外部GD尚未编译或运行，当前没有新源玩法结果。[当前证据和剩余范围](../qa/campaign_progress_recovery_20261026/daming_continue_candidate/VALIDATION.md)。

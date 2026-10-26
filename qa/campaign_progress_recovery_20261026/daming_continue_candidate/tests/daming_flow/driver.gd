@@ -120,6 +120,6 @@ func finish_second() -> void:
 	observations["natural_terminal_state"] = route.observe(battle)
 	observations["terminal_signals"] = terminal_signals.duplicate(true)
 	if not failures.is_empty(): return
-	if not verify_terminal(original_receipt, result, metrics_before): return
+	if not await verify_terminal(original_receipt, result, metrics_before): return
 	check(terminal_signals.size() == 1, "settled frames add no terminal notification")
 	stage_completed = failures.is_empty()

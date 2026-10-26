@@ -1,6 +1,6 @@
 # 大名府双角色八进程真实 Flow 外部工具
 
-本目录只提供新 Daming 候选的源码私有 QA。当前已完成源码编写和静态复核，尚未加载、编译或原生运行这些外部 GD。旧路线、Gao/LHM 结果以及候选自身 editor import 都不转授本工具资格。
+本目录只提供新 Daming 候选的源码私有 QA。五份 GD 已在 `.godot/daming_flow_parse_20261027/20261027_065614_aa8e6ae3` 由原生进程加载通过（PID74076、exit0、errors[]）；没有实例化或运行八进程路线。后续 A 冻结 hook 只完成 Python 文件模型验证，尚无真实 A 保存夹具；旧路线、Gao/LHM 结果及工程 editor import 不转授本工具玩法资格。
 
 ## 来源与执行边界
 
@@ -53,3 +53,21 @@ Daming 仍是 contract2：daming_infiltration / daming_signal / daming_response 
 本片不执行原 1+8+52 的完整 61 阶段，也不执行原 19 类故障；不覆盖败局、存储崩溃恢复、credited Steam SDK、公开 Continue、发行 EXE、性能、四语目检、人工接受或发布。即使八进程将来全过，也只授当次新源的私有离线双路线 Flow 资格。新玩法/公开入口/生产采用均不由本工具改变。
 
 宿主保存实际 Popen PID/exit/log、每个报告 SHA、运行输入副本、初末完整 source/engine/pin 核对，并只在所有自有进程已终态、共享 lane 空闲且锁 owner 相同后释放锁。错误和 finally 取证/清理错误分别保存；不得把安全拒绝或失败阶段当完成。归档时排除 profile、完整槽/LC 世界载荷、EXE/assets/cache；报告中的有限 typed QA 状态保留来源链。
+
+## A 正常退出后的原始夹具冻结
+
+宿主先核对 A 的实际 `process_step`、独立报告与日志：exit0、errors[]、未强停、`continue_saved`、同角色/PID/批次/角色/进程三个 nonce、精确 source/engine/manifest。仅在这些原生结果全部通过后，才调用 `fixture_freeze.py`；hook 成功后才允许 B 启动。五份 GD 保持上述原生加载时的原字节，没有插入测试状态。
+
+每条路线写入当次私有 run 的 `closed_a/<lu|shi>/descriptor.json`，schema 为 `daming_flow_closed_a_fixture_v1`。原 `user://continue/v1` 必须恰为两个 genesis 记录与六个目录：slot `5088120/1/record_0000000001.json`，LC `local_runs/<token>/5088120/1/record_0000000001.json`。必须同 uncredited token、slot gen1、LC v3 active gen1、实际 Level8 context、同 source/engine、paused；拒绝 gen2、其他 token/owner、pending/writing/recovering、任何额外文件或空目录、路径越界、symlink/reparse 与已存在输出。
+
+先比完整库存、原 envelope/payload SHA 和报告中的原文件 SHA，再以新目录及 `xb` 独占写入原两份字节；复制后再次比原完整库存与副本，原报告/日志也须未变。任何失败保留局部证据并停止，不启动 B。只有原 A 报告/日志、冻结副本、descriptor 加入长期 pins；原 profile 的“两文件/六目录”仅在冻结窗口核对，B/C 后续合法推进不受误拦。每阶段前及最终审计另核冻结目录完整库存，添加空目录也会失败。
+
+描述文件保留原来源路径/大小/SHA、原 A 报告/日志引用、实际完整步骤、PID、三个 nonce、身份与目录清单。Python 只验证信封、关键头与原字节绑定，不生成 packet/world/Codec 数据，也不把这一新 schema 伪装为旧五件套。未来 52 负例必须重新核库存和来源，再由同候选原生 `Slot._decode` 读取冻结的原记录；不能从本 hook 推导已完成 52/61 或 19 故障。两份业务载荷只留本机私有 run，不提交 Git。
+
+独立模型入口：
+
+```powershell
+python qa/campaign_progress_recovery_20261026/daming_continue_candidate/tests/daming_flow/test_fixture_freeze.py
+```
+
+实际模型收据：`D:/CodexQA/daming_fixture_model/69a3ca286750484eaf3b03cd18bffcff/receipt.json`，SHA `6d1d0afbdaa48f58db13501845b87d5254cafb447e0273428ce8c1e94b6e5b8b`。53 项通过，全部使用合成报告/PID与新隔离文件；覆盖双角色原字节复制、错误退出/PID/nonce/source/报告 hash、gen2/错上下文/错误 payload、额外 owner/记录/pending/空 writing、输出碰撞、源复制中变化、冻结后目录变化与后续活 profile 追加不误伤。Windows 创建 symlink 权限不足，明确跳过该创建用例；另以实际新建私有 junction 验证 reparse 拒绝通过。模型目录同时保留当时执行的四份 Python 来源原字节。未启动 Godot、未验证实际 A 或原生 Slot 解码；53 不计入八进程玩法检查数。

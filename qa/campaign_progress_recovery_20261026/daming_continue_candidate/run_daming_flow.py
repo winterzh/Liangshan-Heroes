@@ -30,17 +30,21 @@ spec = importlib.util.spec_from_file_location("daming_flow_prepare", HERE / "int
 prep = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(prep)
 p, h, require = prep.p, prep.h, prep.require
+fixture_spec = importlib.util.spec_from_file_location("daming_closed_a_fixture", WORKER_ROOT / "fixture_freeze.py")
+fixture = importlib.util.module_from_spec(fixture_spec)
+fixture_spec.loader.exec_module(fixture)
 
 
 def source_pins():
     path = WORKER_ROOT / "sources.json"
     document = h.read(p.fs(path))
     expected = {str(item.relative_to(ROOT)).replace("\\", "/") for item in
-                (Path(__file__).resolve(), WORKER_ROOT / "README.md", *(WORKER_ROOT / name for name in WORKERS))}
+                (Path(__file__).resolve(), WORKER_ROOT / "README.md", WORKER_ROOT / "fixture_freeze.py",
+                 WORKER_ROOT / "test_fixture_freeze.py", *(WORKER_ROOT / name for name in WORKERS))}
     rows = document.get("files", [])
     require(document.get("schema") == "daming_flow_external_sources_v1"
             and len(rows) == len(expected) and {row["path"] for row in rows} == expected,
-            "Exact Daming host/README/five-worker source list required")
+            "Exact Daming host/README/fixture helper/model/five-worker source list required")
     pins = {}
     for row in rows + document.get("derived_from", []) + document.get("dependencies", []):
         p.pin(prep.inside(ROOT, row["path"]), pins, row["sha256"])
@@ -234,6 +238,9 @@ def execute(args):
             previous = None
             for mode in MODES:
                 p.verify_pins(pins)
+                for completed_role in receipt["roles"].values():
+                    if "closed_a_fixture" in completed_role:
+                        fixture.verify_frozen(p=p, output=output, reference=completed_role["closed_a_fixture"], pins=pins)
                 stage = output / role / mode
                 p.fs(stage).mkdir(parents=True, exist_ok=False)
                 report_path, log_path = stage / "report.json", stage / (mode + ".log")
@@ -264,6 +271,19 @@ def execute(args):
                                 state, manifest_sha, pins, receipt["steps"][-1], log_path, pids, nonces)
                 role_row["process_ids"].append(report["pid"])
                 role_row["process_nonces"].append(process_nonce)
+                if mode == "save_single":
+                    # A is already terminal/validated; freeze before any B launch.
+                    # Only immutable copies join long-lived pins, never the live
+                    # profile scope which B/C are authorized to advance.
+                    role_row["closed_a_attempt"] = str(output / "closed_a" / role)
+                    role_row["closed_a_fixture"] = fixture.freeze(p=p, output=output, profile=profile,
+                        role=role, report_path=report_path, log_path=log_path,
+                        step=receipt["steps"][-1], pins=pins,
+                        expected={"batch_nonce": batch_nonce, "role_nonce": role_nonce,
+                                  "process_nonce": process_nonce, "content_version": state["content_version"],
+                                  "engine_sha256": state["engine_sha256"],
+                                  "candidate_manifest_sha256": manifest_sha,
+                                  "sources_sha256": pins[str(WORKER_ROOT / "sources.json")]})
                 previous = report_path
             role_row["complete"] = len(role_row["process_ids"]) == 4
         receipt["eight_stages_passed"] = len(pids) == 8 and len(nonces) == 8 and len(role_nonces) == 2
@@ -276,6 +296,9 @@ def execute(args):
             h.assert_runtime_current(state["run_base"])
             h.identity.verify_generated(state["project"], state["generation"])
             p.verify_pins(pins)
+            for completed_role in receipt["roles"].values():
+                if "closed_a_fixture" in completed_role:
+                    fixture.verify_frozen(p=p, output=output, reference=completed_role["closed_a_fixture"], pins=pins)
             require(h.sha(p.fs(state["engine"])) == state["engine_sha256"], "Engine bytes changed")
             receipt["final_identity_passed"] = True
         except BaseException as error:

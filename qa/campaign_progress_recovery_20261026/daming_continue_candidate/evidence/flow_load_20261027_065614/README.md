@@ -1,0 +1,11 @@
+# 大名府外部验证脚本加载检查（2026-10-27 06:56）
+
+原批 `20261027_065614_aa8e6ae3` 已正常终态：PID74076、退出0、错误0、81.516秒，实际引擎保持原SHA，30个命名来源pins前后通过，自有共享锁已释放。
+
+此前最终静态复核发现driver调用异步verify_terminal少了await；修订只补此等待并更新来源，原355fd909版本保留在Git。此批实际加载的是修后driver52e5eb84与来源3729b501。SceneTree在autoload注册后load/can_instantiate外部driver及bootstrap；driver的继承和preload同时编译base、terminal和route。加载器没有实例化worker或Battle，没有执行保存、续玩或通关。
+
+所用工程是已独立导入的3365组合；本批没有重新做完整资源树验证，不能把命名来源检查算成新的完整源码准入。完整八进程执行仍须自己的prepared_state。后续只改Python宿主或来源描述，也不能把这里的旧host运行资格转授后继；本批始终只有这五份GD的加载结论。
+
+24份外部命名来源在后继宿主修改前已原字节保存到本run的source_inputs；另外5个worker和loader直接取本run冻结文件。raw receipt、原生log、实际检查器及全部30pins可由source_map解析到本包原字节。相同worker与来源字节按SHA去重，未修改原receipt，未复制EXE、缓存、完整工程、私有profile或业务存档。
+
+不授实际Flow八进程、完整61阶段、原19类持久化故障、SDK、公开入口、发行程序、性能或人工键鼠资格。manifest覆盖除自身外的完整集合。
