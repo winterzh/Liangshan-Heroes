@@ -1,0 +1,139 @@
+{
+  "schema": "classic_recovery_observer_failed_evidence_v1",
+  "archived_at_utc": "2026-10-26T18:27:20.605552+00:00",
+  "run": "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_021555_ab13c0d1",
+  "archive": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\evidence\\classic_recovery_observer_failed_20261027_021555",
+  "original_receipt_sha256": "95e1baf8c418d1564982f3cd2a1a15dcdb149e9d6969611ad76e53ad76bd2382",
+  "execution_complete": false,
+  "error": "RuntimeError('Actual HELD observer failed')",
+  "expected": "baseline",
+  "actual_source_content": "source-v1:e97a07b9ff04b677fbc1934a40976cc6e1f82479855cf39f305147ae4f6d1eea",
+  "actual_engine_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+  "actual_project": "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project",
+  "attempted_processes": 1,
+  "terminal_processes": 1,
+  "writer_pid": 5256,
+  "writer_exit_code": 1,
+  "writer_process_terminal": true,
+  "writer_step_complete": false,
+  "completed_recovery_cases": 0,
+  "reader_started": false,
+  "record_case_started": false,
+  "prepared_checks": {
+    "executed": 22,
+    "passed": 21,
+    "failed": 1,
+    "failure": {
+      "detail": null,
+      "name": "one read-only observer precedes original Flow capture",
+      "passed": false
+    }
+  },
+  "capture_observer": {
+    "calls": 1,
+    "clock_next": "12",
+    "flow_callback_connected": false,
+    "flow_session_absent": true,
+    "held": true,
+    "observer_disconnected": true,
+    "outside_physics": true
+  },
+  "exact_typed_snapshot_retained": true,
+  "actual_host_ack_matches_writer_scope": true,
+  "actual_earlier_lifecycle_breakpoint_stack": [
+    {
+      "source": "res://scripts/run_snapshot_store.gd",
+      "line": 313,
+      "function": "commit_locked"
+    },
+    {
+      "source": "res://scripts/run_local_lifecycle.gd",
+      "line": 73,
+      "function": "_commit"
+    },
+    {
+      "source": "res://scripts/run_local_lifecycle.gd",
+      "line": 90,
+      "function": "begin"
+    },
+    {
+      "source": "res://scripts/run_local_lifecycle.gd",
+      "line": 109,
+      "function": "binding"
+    },
+    {
+      "source": "res://scripts/run_world_session.gd",
+      "line": 129,
+      "function": "save_held"
+    },
+    {
+      "source": "res://scripts/continue_flow.gd",
+      "line": 252,
+      "function": "_capture_ready"
+    },
+    {
+      "source": "res://scripts/run_battle_barrier.gd",
+      "line": 196,
+      "function": "_idle_boundary"
+    }
+  ],
+  "actual_slot_breakpoint_stack_persisted": false,
+  "fault_envelope_ownership_and_termination_invariants_accepted": false,
+  "failure_classification": "QA observer false assumption about one-shot connection visibility; recovery reader not reached. No product recovery failure or fix result obtained.",
+  "source_evidence": {
+    "runtime_driver": {
+      "source": "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_021555_ab13c0d1\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\continue_binding_candidate\\tests\\classic_recovery\\driver.gd",
+      "sha256": "cc0478e9d9da464db0c91ba518f952f7e3c1a6ac7e0adcce46063aea2af37e3f",
+      "line": 142,
+      "condition": "order.flow_callback_connected"
+    },
+    "runtime_host": {
+      "source": "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_021555_ab13c0d1\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\continue_binding_candidate\\tests\\classic_recovery\\run_recovery.py",
+      "sha256": "b68f90982956017f206159fc1b9831752188ddc45ae29f8ddf0c2140be8ca860",
+      "line": 155,
+      "error": "Actual HELD observer failed"
+    },
+    "production_flow": {
+      "source": "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\continue_flow.gd",
+      "sha256": "a180034ff34237a5161cedef8309b27903c953676c4100f30c1d0f9f97e6c4b0",
+      "line": 222,
+      "connection": "CONNECT_ONE_SHOT"
+    },
+    "owned_child_finally_cleanup": {
+      "runtime_host_line": 197,
+      "actual_native_exit_code": 1
+    }
+  },
+  "final_guards": {
+    "final_identity_passed": true,
+    "lock_ownership_confirmed": true,
+    "lock_released": true
+  },
+  "runtime_pin_verification": {
+    "total": 191,
+    "verified_from_runtime_frozen_or_unchanged_original": 191,
+    "all_current_mutable_sources_claimed_unchanged": false
+  },
+  "qualification": {
+    "qa_tool_failure_preserved": true,
+    "baseline_game_recovery_defect_reproduced": false,
+    "fixed_game_recovery_verified": false,
+    "source_restore_branch_qualified": false,
+    "public_entry_qualified": false,
+    "original_release_qualified": false,
+    "sdk_qualified": false,
+    "os_input": false,
+    "human_acceptance": false,
+    "release_qualified": false
+  },
+  "scope_notes": [
+    "A true final identity check or released shared lock does not turn this incomplete diagnostic into a pass.",
+    "The retained earlier production stack contains ContinueFlow._capture_ready then Session.save_held after the observer saw flow_callback_connected=false.",
+    "Production uses CONNECT_ONE_SHOT. The old observer/host wrongly require that connection to remain visible inside signal emission.",
+    "No reader process or pending/record recovery result was obtained. The slot envelope/owner/controlled termination checks after the failing host line were not accepted.",
+    "The writer was terminated by the host finally block after the host assertion; exit1 is not evidence of a native game crash.",
+    "Raw prepared.json is the requested QA report with selected typed observations; standalone original save/profile/lifecycle payloads are excluded.",
+    "Current classic QA scripts may be corrected after this completed run; frozen runner_inputs remains the authority for these bytes.",
+    "No engine, Git operation, source modification, shared-lock mutation or profile mutation was performed while archiving."
+  ]
+}

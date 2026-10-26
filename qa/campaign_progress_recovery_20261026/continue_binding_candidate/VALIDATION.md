@@ -16,10 +16,16 @@
 - [新源回归](evidence/disk_fixed_20261027_014439/README.md)：d7f2258b，进程 68316，3 项夹具前置＋3 项旧 cold binding 对照＋30 项修复回归，正常退出 0。实际本地 gen1 只读采用、重复绑定、错误 token/account/context/content/engine、absence→present 变化、空目录以及 gen2/gen3 拒绝均符合预期；前后来源和锁终态核对通过。
 - 这使用真实私有文件系统，但 credit、terminal 与 gen3 ACK 为明确的合成模型输入。gen2 由正常 LC API 写入，gen3 是直接 Store 写入的严格数据夹具；不是 Steam 结算、真实账号、自然胜败或公开玩家入口验收。
 
-## 正在推进与未覆盖
+## 连环马自然胜败已完成
 
 [连环马前次真实入口失败](../evidence/lianhuanma_victory_failed_20261027_011539/README.md)保留原件：保存53项通过，恢复40项中2项失败；人口预留2→1为实际缺陷，LC标签失败为测试连带结果，原槽和LC SHA未变。旧训练135项直接提供专用Factory，不能替代真实Flow。
 
-两个自然胜败宿主已通过新冻结的[只读绑定预检](evidence/lhm_binding_preflight_20261027_013339/receipt.json)，九份 GDScript 保持原字节。新源胜利四进程已开始完整重跑；没有完整终态前不授自然胜利资格，失败三进程随后独立执行。
+两个自然胜败宿主绑定同一 d7f2258b 冻结，九份 GDScript 保持原字节。新源[自然胜利四进程](../evidence/lianhuanma_victory_20261027_014835/README.md)共345项通过（53/76/151/65）：两次真实保存退出与独立继续，原20秒付费训练仅生成一兵，人口预留保持2；正常1倍速/60Hz完成四目标、12骑先破阵、韩滔被擒和呼延灼退走，宋江与中军存活；本地生命周期1→2→3，独立重启拒绝原终态旧槽，CFG、记录及奖励不变。
+
+[自然失败三进程](../evidence/lianhuanma_loss_20261027_020834/README.md)另有205项通过（55/92/58）：实际保存退出、独立继续后以普通命令自然阵亡，中军仍存活；真实败局仅结算一次，无胜利进度或奖励增长，第三进程拒绝原旧槽。两批实际进程均退出0，完整来源后验和锁释放通过。这只授当前私有源码、屏幕外GL的连环马胜败接续资格；不是公开入口、发行版、Steam奖励或人工验收。
+
+## 正在推进与未覆盖
+
+独立[classic中断保存诊断](tests/classic_recovery/README.md)验证完整pending与已提交record两处原生断点，每种两进程；先在旧e97a复现提前读槽拒绝，再用d7新源复验。首批20261027_021555_ab13c0d1仅运行一个writer，因测试错误要求一次性Flow信号在发射时仍显示已连接而退出1；真实HELD与后续原Flow保存栈已观察到，reader未运行，不判游戏恢复成功或失败。[工具失败原件](../evidence/classic_recovery_observer_failed_20261027_021555/README.md)保留，修正观察时序后另批重跑。初始Continue使用私有gate，同步清标志后由原process_frame进入恢复分支，只验证源码分支。
 
 公开 classic 死 writer 恢复、拒绝前字节保护和玩家失败/重试仍需实际验证。源码 QA 的私有入口与发行版 public gate 不等价；任何清 QA 标志后的单分支诊断必须另标范围，不能宣称公开入口或原版键鼠通过。原19类、61阶段、v2超时隔离、Steam SDK/云边界与全游戏验收继续保留。

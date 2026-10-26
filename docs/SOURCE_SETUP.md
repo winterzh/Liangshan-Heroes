@@ -26,7 +26,7 @@ git fetch origin
 
 ## 验证与共享引擎
 
-新增[继续入口三脚本候选](../qa/campaign_progress_recovery_20261026/continue_binding_candidate/VALIDATION.md)必须用自己的d7f2258b完整冻结与新manifest，不能套用e97a的恢复专项资格。已导入并通过独立本地绑定模型，连环马实际Flow重跑中。prepare_continue默认只读，--prepare只建新目录；磁盘模型的baseline/fixed模式和真实胜败执行器分别记资格，禁止复用同一结果混算。
+新增[继续入口三脚本候选](../qa/campaign_progress_recovery_20261026/continue_binding_candidate/VALIDATION.md)必须用自己的d7f2258b完整冻结与新manifest，不能套用e97a的恢复专项资格。已导入并通过独立本地绑定模型，连环马实际Flow自然胜利345项及独立自然失败205项通过。prepare_continue默认只读，--prepare只建新目录；磁盘模型的baseline/fixed模式和真实胜败执行器分别记资格，禁止复用同一结果混算。
 
 当前新增[进程存活三态组件](../qa/campaign_progress_recovery_20261026/process_liveness_candidate/README.md)，已有13例原生helper、22项报告模型、49项Godot组件及独立19项超时证据；未集成生产。构建exe只留忽略产物，换机必须按源码构建并核对本次SHA；Godot组件执行器默认只读预检，显式`--execute`才持共享锁运行。[同步恢复桥接](../qa/campaign_progress_recovery_20261026/process_liveness_integration_candidate/README.md)另行验证，不能把独立组件通过当成存档修复完成。
 
@@ -36,7 +36,7 @@ git fetch origin
 
 后继[唯一目录释放候选](../qa/campaign_progress_recovery_20261026/store_protocol_candidate/README.md)必须用自己的20文件清单另建冻结；19文件与23c原字节一致，仅替Steam Store。新冻结`20261026_211212_dd3104df`的f6ef源码已导入、14项模型及23进程/370项真实文件专项通过（含半pending预期拒绝），延迟写入首批因外部PID存活查询限制停止，须先修统一恢复准入再另冻验证；旧23c经典通过不授予f6ef完整回归资格。模型、23进程真实文件故障及[两种延迟写入交错](../qa/campaign_progress_recovery_20261026/store_protocol_candidate/tests/io/README_delayed.md)均有独立宿主，不能套用旧23c或旧199c冻结的结果。经典回归运行时固定其外部worker/README；不要边跑边改。
 
-连环马新增[四进程自然胜利执行器](../qa/campaign_progress_recovery_20261026/tests/lianhuanma/README.md)：默认只读预检，必须显式`--run`才启动引擎。原f6ef预检保留为历史准备。宿主现已显式支持e97a的23脚本和固定helper，胜利四流程及失败三流程各自串行运行、各自取得资格；实际终态以执行器收据为准，旧源预检不转授新版。保存退出走真实Flow，前两阶段由生产AppLifecycle正常退出，不能用Session直调替代。失败路线将独立验证。
+连环马新增[四进程自然胜利执行器](../qa/campaign_progress_recovery_20261026/tests/lianhuanma/README.md)：默认只读预检，必须显式`--run`才启动引擎。原f6ef预检保留为历史准备。宿主现已分别绑定e97a与d7f2258b的23脚本和固定helper，胜利四流程及失败三流程各自串行运行、各自取得资格；实际终态以执行器收据为准，旧源预检不转授新版。保存退出走真实Flow，前两阶段由生产AppLifecycle正常退出，不能用Session直调替代。最新d7源胜败终态已分别通过，当前结果以[继续入口验证](../qa/campaign_progress_recovery_20261026/continue_binding_candidate/VALIDATION.md)为准；原执行器README保留准备时输入。
 
 新的[战役context候选](../qa/campaign_progress_recovery_20261026/README.md)有独立准备/导入及训练执行器；连环马135项验证新生命周期活动期，黄泥冈1364项验证正常离线终局和重启旧槽拒绝。使用同一已导入冻结根、外部驱动和新隔离profile，`CAMPAIGN_QA`须为空，不能对旧候选或下一奖励交接草稿转授结果。
 

@@ -86,4 +86,6 @@
 
 ## 2026-10-27 继续入口三脚本候选
 
+`evidence/lianhuanma_victory_20261027_014835/`与`evidence/lianhuanma_loss_20261027_020834/`分别保存当前d7源自然胜利345项、自然失败205项原件、来源映射与SHA清单。`continue_binding_candidate/tests/classic_recovery/`是独立的中断保存源码分支诊断工具，初始私有gate与公开入口资格分开，实际结果统一见下方VALIDATION。以上路径均相对`qa/campaign_progress_recovery_20261026/`。
+
 qa/campaign_progress_recovery_20261026/continue_binding_candidate/：Flow/Session/本地生命周期修复、新独立冻结准备器、baseline/fixed真实磁盘模型及来源。当前资格集中于 [VALIDATION](../qa/campaign_progress_recovery_20261026/continue_binding_candidate/VALIDATION.md)，原README与source_manifest保持准备时字节；新增分支诊断工具未运行时仍不得当公开入口验收。
