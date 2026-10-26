@@ -165,7 +165,14 @@ func _source_checks(label: String) -> void:
 	_check("actual candidate identity " + label, valid)
 	if trusted.is_empty() and valid: trusted = actual.duplicate(true)
 	elif valid: _check("same installed identity " + label, actual == trusted)
-	if state.has("identity"): _check("predecessor has exact candidate identity", state.identity == actual)
+	if state.has("identity"):
+		# Plain JSON turns Godot integers into floats. Keep the exact typed
+		# identity separately, just as the gameplay/terminal observations do.
+		var exact_identity: Dictionary = Codec.new().encode(actual)
+		_check("predecessor has exact typed candidate identity", exact_identity.ok \
+			and exact_identity.get("value") == state.get("exact_identity"))
+		_check("predecessor identity summary matches actual provider", \
+			JSON.parse_string(JSON.stringify(actual, "", true, true)) == JSON.parse_string(JSON.stringify(state.identity, "", true, true)))
 
 func _press(button: Variant, purpose: String) -> bool:
 	if not _check("usable button " + purpose, is_instance_valid(button) and button is Button and button.is_visible_in_tree() and not button.disabled): return false
@@ -647,6 +654,9 @@ func _stamp_state() -> void:
 	state.profile = OS.get_environment("CC_PROFILE")
 	state.slot_root = SLOT_ROOT
 	state.identity = trusted.duplicate(true)
+	var exact_identity: Dictionary = Codec.new().encode(trusted)
+	_check("candidate identity encodes with production lossless value codec", exact_identity.ok)
+	state.exact_identity = exact_identity.get("value", {})
 
 func _classic_receipt(token: String) -> Dictionary:
 	var receipt := LocalLifecycle.new(token, SLOT_ROOT)

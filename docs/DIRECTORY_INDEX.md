@@ -32,7 +32,7 @@
 
 `qa/lianhuanma_resume_20261026/`：连环马自然付费训练、同槽同token三进程接续的外部驱动、执行器、成功及失败收据；私有存档与运行缓存留本机，100项只属于内部活动期专项。新的事务集成图在该目录。
 
-`qa/campaign_progress_recovery_20261026/`：重基14文件候选、新context生命周期的135项训练证据、自然终局/重启旧槽拒绝1364项成功与首轮失败；`rebased_candidate/`尚未采用生产，`handoff_candidate/`为独立奖励交接实现草稿，尚未运行。当前资格见[本批README](../qa/campaign_progress_recovery_20261026/README.md)。
+`qa/campaign_progress_recovery_20261026/`：重基14文件候选、新context生命周期的135项训练证据、自然终局/重启旧槽拒绝1364项成功与首轮失败；`rebased_candidate/`尚未采用生产，`handoff_candidate/`的23c源码已通过99项模型、尾账/纠正回归、13阶段真实文件专项（含两类预期拒绝）及黄泥冈1386项；经典30波另跑六进程回归。`store_protocol_candidate/`为仅替Store的后继候选和独立原生工具，修复唯一目录释放与首次重试CAS冲突，尚未获得运行资格。当前资格见[本批README](../qa/campaign_progress_recovery_20261026/README.md)。
 
 `qa/huangnigang_production_20261020/`：当前七车十一担生产接入、真实路线和内部冷恢复驱动；源码快照、导出程序及原始运行日志存于被忽略的`.godot`同名批次目录。隔离用户目录使用同盘短路径`D:/CodexQA/hngp/<唯一标识>`，具体位置见每次收据；完成证据以本批README为准。
 

@@ -1,0 +1,55 @@
+{
+  "schema": "steam_unique_release_candidate_v1",
+  "production_adopted": false,
+  "revision": "first_commit_stale_cas_release_v2_20261026",
+  "previous_source_manifest_sha256": "0293cdc57b587034c1bb98649946a9d6fa56d993c1339ef358ada64fcc545340",
+  "previous_store_sha256": "199c4f925f3e9d054b50571744d74d14fcf66425d9eade9c95448a682854a864",
+  "previous_evidence": "qa/campaign_progress_recovery_20261026/evidence/store_protocol_first_retry_static_20261026",
+  "integration_files": [
+    "scripts/steam_receipt_store.gd"
+  ],
+  "base_dependencies": [
+    {
+      "role": "original_handoff_store",
+      "path": "qa/campaign_progress_recovery_20261026/handoff_candidate/scripts/steam_receipt_store.gd",
+      "sha256": "5886eaa4fc8344da3c34b1b62167155394715e6dc4d444273f162455d76608c8"
+    },
+    {
+      "role": "unchanged_shared_snapshot_store",
+      "path": "scripts/run_snapshot_store.gd",
+      "sha256": "581e638b8f0ce7cb24d5533b03ee94b99732c5cffcbf373b1a5a69a1618d8251"
+    },
+    {
+      "role": "current_handoff_receipt",
+      "path": "qa/campaign_progress_recovery_20261026/handoff_candidate/scripts/steam_run_receipt.gd",
+      "sha256": "13a277c20617ba5777d1287cc16e639441cae3cd938a550e088a2fa119a05958"
+    },
+    {
+      "role": "current_handoff_ledger",
+      "path": "qa/campaign_progress_recovery_20261026/handoff_candidate/scripts/steam_run_ledger.gd",
+      "sha256": "da60d5481a25f3588db2b2c6815a728f5deef45969a951d3416d3d43a53094e1"
+    }
+  ],
+  "candidate_files": [
+    {
+      "path": "scripts/steam_receipt_store.gd",
+      "sha256": "11bf6cae5968baa6c740c3c6be1fc954376048cbbe9a81a77b6cf4588518f9f1"
+    },
+    {
+      "path": "tests/protocol_model.gd",
+      "sha256": "647aaf774fa83acedbf1466ad2cf0d40f6e879d50f8a883589366373e314ed1a"
+    },
+    {
+      "path": "README.md",
+      "sha256": "c363d732bb0dfe0439c132d325d8aac974290a492b7f53b514deae9d5d4c9090"
+    },
+    {
+      "path": "static_audit.py",
+      "sha256": "dd54274f96512d30938953f7aad7aadea971118dbcb52119e9ee9ea0fe9a1f74"
+    }
+  ],
+  "legacy_recovery_changed": false,
+  "campaign_cfg_or_lifecycle_release_fixed": false,
+  "half_pending_reconstruction": false,
+  "max_runs_changed": false
+}

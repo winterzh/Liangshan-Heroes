@@ -1,0 +1,129 @@
+{
+  "schema": "steam_unique_release_static_audit_v1",
+  "passed": true,
+  "checks": [
+    {
+      "label": "lexical delimiters steam_receipt_store.gd",
+      "passed": true
+    },
+    {
+      "label": "lexical delimiters protocol_bootstrap.gd",
+      "passed": true
+    },
+    {
+      "label": "lexical delimiters protocol_model.gd",
+      "passed": true
+    },
+    {
+      "label": "lexical delimiters protocol_worker.gd",
+      "passed": true
+    },
+    {
+      "label": "Python AST",
+      "passed": true
+    },
+    {
+      "label": "legacy inspect delegated",
+      "passed": true
+    },
+    {
+      "label": "legacy recover delegated",
+      "passed": true
+    },
+    {
+      "label": "exact plan recheck",
+      "passed": true
+    },
+    {
+      "label": "new protocol pending refused",
+      "passed": true
+    },
+    {
+      "label": "marker head CAS",
+      "passed": true
+    },
+    {
+      "label": "live PID refusal",
+      "passed": true
+    },
+    {
+      "label": "owner bytes retained by rename",
+      "passed": true
+    },
+    {
+      "label": "fixed writing only renamed by live release",
+      "passed": true
+    },
+    {
+      "label": "unique cleanup only deleted",
+      "passed": true
+    },
+    {
+      "label": "commit barrier",
+      "passed": true
+    },
+    {
+      "label": "stale abort proposal scope retained",
+      "passed": true
+    },
+    {
+      "label": "stale abort scope rechecked",
+      "passed": true
+    },
+    {
+      "label": "layout enumeration stability",
+      "passed": true
+    },
+    {
+      "label": "first commit CAS_CHANGED retains original scope",
+      "passed": true
+    },
+    {
+      "label": "first commit repeats only original stale-abort scope",
+      "passed": true
+    },
+    {
+      "label": "bound base CAS refusal precedes first pending write",
+      "passed": true
+    },
+    {
+      "label": "new code never deletes reusable writing",
+      "passed": true
+    },
+    {
+      "label": "new code never deletes reusable recovering",
+      "passed": true
+    },
+    {
+      "label": "acquire, cleanup, marker and recovery get fresh nonce",
+      "passed": true
+    }
+  ],
+  "revision": "first_commit_stale_cas_release_v2_20261026",
+  "previous_store_sha256": "199c4f925f3e9d054b50571744d74d14fcf66425d9eade9c95448a682854a864",
+  "candidate_files": [
+    {
+      "path": "scripts/steam_receipt_store.gd",
+      "sha256": "11bf6cae5968baa6c740c3c6be1fc954376048cbbe9a81a77b6cf4588518f9f1"
+    },
+    {
+      "path": "tests/protocol_model.gd",
+      "sha256": "647aaf774fa83acedbf1466ad2cf0d40f6e879d50f8a883589366373e314ed1a"
+    },
+    {
+      "path": "README.md",
+      "sha256": "c363d732bb0dfe0439c132d325d8aac974290a492b7f53b514deae9d5d4c9090"
+    },
+    {
+      "path": "static_audit.py",
+      "sha256": "dd54274f96512d30938953f7aad7aadea971118dbcb52119e9ee9ea0fe9a1f74"
+    }
+  ],
+  "gdscript_compiled": false,
+  "model_tests_executed": false,
+  "native_io_exercised": false,
+  "engine_started": false,
+  "sdk_qualified": false,
+  "integration_qualified": false,
+  "scope": "source shape and lexical guards only"
+}

@@ -1,0 +1,107 @@
+{
+  "schema": "steam_unique_release_static_audit_v1",
+  "passed": true,
+  "checks": [
+    {
+      "label": "lexical delimiters steam_receipt_store.gd",
+      "passed": true
+    },
+    {
+      "label": "lexical delimiters protocol_model.gd",
+      "passed": true
+    },
+    {
+      "label": "Python AST",
+      "passed": true
+    },
+    {
+      "label": "legacy inspect delegated",
+      "passed": true
+    },
+    {
+      "label": "legacy recover delegated",
+      "passed": true
+    },
+    {
+      "label": "exact plan recheck",
+      "passed": true
+    },
+    {
+      "label": "new protocol pending refused",
+      "passed": true
+    },
+    {
+      "label": "marker head CAS",
+      "passed": true
+    },
+    {
+      "label": "live PID refusal",
+      "passed": true
+    },
+    {
+      "label": "owner bytes retained by rename",
+      "passed": true
+    },
+    {
+      "label": "fixed writing only renamed by live release",
+      "passed": true
+    },
+    {
+      "label": "unique cleanup only deleted",
+      "passed": true
+    },
+    {
+      "label": "commit barrier",
+      "passed": true
+    },
+    {
+      "label": "stale abort proposal scope retained",
+      "passed": true
+    },
+    {
+      "label": "stale abort scope rechecked",
+      "passed": true
+    },
+    {
+      "label": "layout enumeration stability",
+      "passed": true
+    },
+    {
+      "label": "new code never deletes reusable writing",
+      "passed": true
+    },
+    {
+      "label": "new code never deletes reusable recovering",
+      "passed": true
+    },
+    {
+      "label": "acquire, cleanup, marker and recovery get fresh nonce",
+      "passed": true
+    }
+  ],
+  "candidate_files": [
+    {
+      "path": "scripts/steam_receipt_store.gd",
+      "sha256": "199c4f925f3e9d054b50571744d74d14fcf66425d9eade9c95448a682854a864"
+    },
+    {
+      "path": "tests/protocol_model.gd",
+      "sha256": "647aaf774fa83acedbf1466ad2cf0d40f6e879d50f8a883589366373e314ed1a"
+    },
+    {
+      "path": "README.md",
+      "sha256": "e90bd62b0925f2800bec897b2c3bdd6aa249233099ae8f6ab74003ec82ad327a"
+    },
+    {
+      "path": "static_audit.py",
+      "sha256": "f8cd126c5419c273b805dd5467190e526dfb1603eceb23eddc9b249aa3e2ca17"
+    }
+  ],
+  "gdscript_compiled": false,
+  "model_tests_executed": false,
+  "native_io_exercised": false,
+  "engine_started": false,
+  "sdk_qualified": false,
+  "integration_qualified": false,
+  "scope": "source shape and lexical guards only"
+}

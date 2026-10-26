@@ -1,0 +1,196 @@
+{
+  "schema": "steam_store_protocol_integration_static_audit_v1",
+  "revision": "first_commit_stale_cas_release_v2_20261026",
+  "created_at": "2026-10-26T13:11:30.636139+00:00",
+  "checks": [
+    {
+      "label": "exact 20 integration members",
+      "passed": true
+    },
+    {
+      "label": "19 previous frozen byte copies",
+      "passed": true
+    },
+    {
+      "label": "only Steam Store replacement",
+      "passed": true
+    },
+    {
+      "label": "current full production snapshot unchanged",
+      "passed": true
+    },
+    {
+      "label": "parent manifest matches previous frozen manifest",
+      "passed": true
+    },
+    {
+      "label": "Python AST and --help import",
+      "passed": true
+    },
+    {
+      "label": "old 23c freeze rejected before launch",
+      "passed": true
+    },
+    {
+      "label": "previous 199c prepared freeze rejected and untouched",
+      "passed": true
+    },
+    {
+      "label": "runner bootstrap worker and 14-check model SHA unchanged",
+      "passed": true
+    },
+    {
+      "label": "first retry fix source audit only; native interleaving untested",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "scope": "Host byte/manifest/Python entry checks only",
+  "godot_started": false,
+  "engine_lane_acquired": false,
+  "gdscript_compiled": false,
+  "model_executed": false,
+  "native_io_exercised": false,
+  "native_sdk_qualified": false,
+  "prior_qualification_inherited": false,
+  "previous_audit_sha256": "b9947eb01c2217170e050bb14dbd814647dc5036f0e411da9a3b56a1c993845f",
+  "previous_protocol_revision": {
+    "revision": "steam_unique_cleanup_release_v1_20261026",
+    "manifest_sha256": "8ba0e38c28f83cd8b255bfba1830f4e1eed575ab5da1b04182941332b4792fe2",
+    "store_sha256": "199c4f925f3e9d054b50571744d74d14fcf66425d9eade9c95448a682854a864",
+    "prepared_freeze": ".godot/campaign_progress_recovery_20261026/20261026_210350_189c0290",
+    "freeze_imported": false,
+    "evidence_directory": "qa/campaign_progress_recovery_20261026/evidence/store_protocol_first_retry_static_20261026",
+    "qualification_inherited": false
+  },
+  "adapted_runner": {
+    "path": "qa/campaign_progress_recovery_20261026/run_model.py",
+    "sha256": "775b76601edb03e0a158ea301a3fc00295bd46c9732355e934e0520b5134161c"
+  },
+  "files": [
+    {
+      "path": "integrated_candidate/manifest.json",
+      "sha256": "8dfa8791b181319179fb27b284c4d5e9e34031d5c616a53616fe2a40da62400f"
+    },
+    {
+      "path": "integrated_candidate/README.md",
+      "sha256": "e278a414308adeb146526ca3f079582c6aaf0c7bedd95646719f4387a9bfba1c"
+    },
+    {
+      "path": "run_protocol_model.py",
+      "sha256": "429c5ddfd79539433dfb34c76dfd2e3da0639f1db6104272bdcf1a75d779da71"
+    },
+    {
+      "path": "MODEL_RUNNER.md",
+      "sha256": "a418f3cc6b5e4a74ce498992f8c251f545c18b5abc7b32c9024938962e7f0d4c"
+    },
+    {
+      "path": "README.md",
+      "sha256": "c363d732bb0dfe0439c132d325d8aac974290a492b7f53b514deae9d5d4c9090"
+    },
+    {
+      "path": "source_manifest.json",
+      "sha256": "703a740499415620f950c519a7060e0781ba5942d63f1b420aac5c76320966f6"
+    },
+    {
+      "path": "static_audit.py",
+      "sha256": "dd54274f96512d30938953f7aad7aadea971118dbcb52119e9ee9ea0fe9a1f74"
+    },
+    {
+      "path": "static_audit.json",
+      "sha256": "917691b9351dfc92f60d36ac303940f34ac7b15129ce779a927bf6013ece47a0"
+    },
+    {
+      "path": "tests/protocol_bootstrap.gd",
+      "sha256": "4563aadca72c6ac74493c8bcc787cfe6c0b61dae1f5f2cb93a31d7251c27ca09"
+    },
+    {
+      "path": "tests/protocol_worker.gd",
+      "sha256": "baa84a51c1a2615aa29c0dd0ffb8faca0c830f2b7d3abab2e40ef025b301006c"
+    },
+    {
+      "path": "tests/protocol_model.gd",
+      "sha256": "647aaf774fa83acedbf1466ad2cf0d40f6e879d50f8a883589366373e314ed1a"
+    },
+    {
+      "path": "integrated_candidate/scripts/battle.gd",
+      "sha256": "30c722e17e49c90224f44e4254569e89de277b3316eb6cafb2f8f98f35d9ef12"
+    },
+    {
+      "path": "integrated_candidate/scripts/campaign.gd",
+      "sha256": "911e97602524fae9f7e8f9ff07b84b6d8179a574c12a233cdf2798c92625db6a"
+    },
+    {
+      "path": "integrated_candidate/scripts/continue_flow.gd",
+      "sha256": "a180034ff34237a5161cedef8309b27903c953676c4100f30c1d0f9f97e6c4b0"
+    },
+    {
+      "path": "integrated_candidate/scripts/menu.gd",
+      "sha256": "cd2a444f8fe4748fc2e49ead3283613daa2285f5176a04e9347c6b3955052792"
+    },
+    {
+      "path": "integrated_candidate/scripts/run_campaign_cfg_transaction.gd",
+      "sha256": "71803fc42a6bef59479db5b8cf70a953716a3968e45ba1fb391eed5726a51d17"
+    },
+    {
+      "path": "integrated_candidate/scripts/run_campaign_cfg_values.gd",
+      "sha256": "ebf78b673a99ea847b72aa7b897f1aede34c99f1e6cc873f66f69611929ef081"
+    },
+    {
+      "path": "integrated_candidate/scripts/run_campaign_legacy_data.gd",
+      "sha256": "2ab0ea51afb1ede869022ec2877c75f6c395080ad34ab1a9c40aca2d5f76f93e"
+    },
+    {
+      "path": "integrated_candidate/scripts/run_campaign_local_lifecycle.gd",
+      "sha256": "db00c4a92094737b22f2706afa1c9e975c4b899afa30c245457ad4ec1deecd76"
+    },
+    {
+      "path": "integrated_candidate/scripts/run_campaign_progress_coordinator.gd",
+      "sha256": "4fa8c42a7c288c7384bb1254c67fe94946aa12b981315ce4753e1aeeedaab018"
+    },
+    {
+      "path": "integrated_candidate/scripts/run_campaign_progress_gate.gd",
+      "sha256": "2303bf6b25eaf83c915bbfd88d09a58072174780f3d9397d23f9086b76d0c29f"
+    },
+    {
+      "path": "integrated_candidate/scripts/run_campaign_progress_intent.gd",
+      "sha256": "0b04412ba4203fb93f3113d7633c753f238d5a383a62e291ca8c917f290a63ff"
+    },
+    {
+      "path": "integrated_candidate/scripts/run_campaign_progress_projection.gd",
+      "sha256": "6c627f95c44f6876895f012b5e6a6859500b73d391f92d7bf46f41f4b0d1e68b"
+    },
+    {
+      "path": "integrated_candidate/scripts/run_campaign_startup_scan.gd",
+      "sha256": "2f4fbebbaa4c6035e8111e70215042f91ff60d69723169da011849a187954c0d"
+    },
+    {
+      "path": "integrated_candidate/scripts/run_world_session.gd",
+      "sha256": "8223f5b64fc1472422c89b33876a43dc7e8462bb55b46f8f7351c4a888867365"
+    },
+    {
+      "path": "integrated_candidate/scripts/steam_cloud.gd",
+      "sha256": "ee793d71e6ab757b8605fa2c3c3675493b5a52e9503dd34bb102785f93d0b986"
+    },
+    {
+      "path": "integrated_candidate/scripts/steam_local_run_session.gd",
+      "sha256": "10198f06b28cad4a4d3c8423be426f3fbd6901654ff1dadf8d3d3ea2a40ef3f1"
+    },
+    {
+      "path": "integrated_candidate/scripts/steam_receipt_store.gd",
+      "sha256": "11bf6cae5968baa6c740c3c6be1fc954376048cbbe9a81a77b6cf4588518f9f1"
+    },
+    {
+      "path": "integrated_candidate/scripts/steam_run_ledger.gd",
+      "sha256": "da60d5481a25f3588db2b2c6815a728f5deef45969a951d3416d3d43a53094e1"
+    },
+    {
+      "path": "integrated_candidate/scripts/steam_run_receipt.gd",
+      "sha256": "13a277c20617ba5777d1287cc16e639441cae3cd938a550e088a2fa119a05958"
+    },
+    {
+      "path": "integrated_candidate/scripts/steam_service.gd",
+      "sha256": "42498690141f36cb4898ea2a645b2d31a4305d8e9a239a505d4a126069a22984"
+    }
+  ]
+}
