@@ -19,6 +19,7 @@
 - [奖励交接设计](STEAM_HANDOFF_DESIGN.md)、[下一候选说明](handoff_candidate/README.md)。
 - [经典30波六进程回归](handoff_candidate/tests/classic/README.md)：首批QA身份JSON类型失败原件保留；外部驱动使用生产无损Codec修正后，新profile从第一阶段重新运行，完整结果以终态收据为准。
 - [唯一目录释放后继候选](store_protocol_candidate/README.md)：19文件保持23c原字节，只替换Steam Store。针对正常释放中断和首次重试CAS冲突，另建独立模型、23进程原生I/O及延迟写入者交错验证；尚无生产采用或完整恢复资格，运行状态见[独立记录](store_protocol_candidate/VALIDATION.md)。
+- [连环马下一片接线](LIANHUANMA_NEXT.md)：三进程自然胜利及独立自然失败链，记录可复用普通命令、所需新断言和旧61阶段的不同范围；尚未执行。
 
 ## 运行与来源
 

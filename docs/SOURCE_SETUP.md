@@ -28,7 +28,7 @@ git fetch origin
 
 最新[20文件奖励交接候选](../qa/campaign_progress_recovery_20261026/handoff_candidate/README.md)为独立冻结`20261026_194542_27c8aea9`、身份`source-v1:23c0b07fcba83a9d7938ed338a9775559b6041be61d048db619c31fd5edc2a80`，已导入并通过99项模型和纠正/尾账逻辑回归。真实I/O已完成13阶段专项（含两类预期拒绝），同源黄泥冈自然终局/重启拒旧槽另通过1386项；不能把旧811源75/135项或14文件源1364项转授新版。原脚本、原worker和失败证据保留；准备/模型/文件故障/经典30波执行器及未运行范围在该目录说明。
 
-后继[唯一目录释放候选](../qa/campaign_progress_recovery_20261026/store_protocol_candidate/README.md)必须用自己的20文件清单另建冻结；19文件与23c原字节一致，仅替Steam Store。模型、23进程真实文件故障及并发交错均有独立宿主，不能套用旧23c或旧199c冻结的结果。经典回归运行时固定其外部worker/README；不要边跑边改。
+后继[唯一目录释放候选](../qa/campaign_progress_recovery_20261026/store_protocol_candidate/README.md)必须用自己的20文件清单另建冻结；19文件与23c原字节一致，仅替Steam Store。模型、23进程真实文件故障及[两种延迟写入交错](../qa/campaign_progress_recovery_20261026/store_protocol_candidate/tests/io/README_delayed.md)均有独立宿主，不能套用旧23c或旧199c冻结的结果。经典回归运行时固定其外部worker/README；不要边跑边改。
 
 新的[战役context候选](../qa/campaign_progress_recovery_20261026/README.md)有独立准备/导入及训练执行器；连环马135项验证新生命周期活动期，黄泥冈1364项验证正常离线终局和重启旧槽拒绝。使用同一已导入冻结根、外部驱动和新隔离profile，`CAMPAIGN_QA`须为空，不能对旧候选或下一奖励交接草稿转授结果。
 
