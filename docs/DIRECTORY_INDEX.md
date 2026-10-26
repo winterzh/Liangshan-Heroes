@@ -30,6 +30,8 @@
 
 ## 本批索引与新增规则
 
+`qa/campaign_progress_recovery_20261026/continue_binding_candidate/tests/classic_recovery_timing/`为原档只读、隔离副本原API计时工具；`evidence/classic_recovery_timing_20261027_031418/`保留15项诊断检查、原始来源/日志与文件不变证据，首次inspect超时，未执行恢复。
+
 `qa/lianhuanma_resume_20261026/`：连环马自然付费训练、同槽同token三进程接续的外部驱动、执行器、成功及失败收据；私有存档与运行缓存留本机，100项只属于内部活动期专项。新的事务集成图在该目录。
 
 `qa/campaign_progress_recovery_20261026/`：重基14文件候选、新context生命周期的135项训练证据、自然终局/重启旧槽拒绝1364项成功与首轮失败；`rebased_candidate/`尚未采用生产，`handoff_candidate/`的23c源码已通过99项模型、尾账/纠正回归、13阶段真实文件专项（含两类预期拒绝）及黄泥冈1386项；同源经典30波六进程443项也已通过。`store_protocol_candidate/`为仅替Store的后继候选和独立原生工具，修复唯一目录释放与首次重试CAS冲突，已另冻导入，14项模型及23进程/370项真实文件专项符合预期，延迟写入首批暴露外部PID判死问题，须先修统一恢复准入，尚无完整恢复或生产资格。当前资格见[本批README](../qa/campaign_progress_recovery_20261026/README.md)。

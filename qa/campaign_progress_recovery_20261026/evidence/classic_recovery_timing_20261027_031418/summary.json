@@ -1,0 +1,173 @@
+{
+  "schema": "classic_recovery_timing_evidence_v1",
+  "archived_at_utc": "2026-10-26T19:28:05.506038+00:00",
+  "original_run": "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_timing_20261027\\20261027_031418_1f3a2756",
+  "archive": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\evidence\\classic_recovery_timing_20261027_031418",
+  "original_receipt_sha256": "a85313e912f7a9e5f31de48f134e1b2a27df360d92bb5f7df86052840cff100d",
+  "original_report_sha256": "bda797753d55602fbb037ab34b778300f49d06ba25e3c12e98b787b3b4d936fb",
+  "actual_content_version": "source-v1:d7f2258b8be6f77e3577ff9c3b018427c805c84385e86f1daa54aaa49cc30dac",
+  "engine_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+  "base_run": "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720",
+  "diagnostic_complete": true,
+  "native_process": {
+    "case": "timing",
+    "command": [
+      "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+      "--path",
+      "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project",
+      "--rendering-method",
+      "gl_compatibility",
+      "--headless",
+      "--script",
+      "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_timing_20261027\\20261027_031418_1f3a2756\\workers\\bootstrap.gd"
+    ],
+    "passed": true,
+    "errors": [],
+    "pid": 71048,
+    "exit_code": 0,
+    "seconds": 78.627,
+    "stopped_for": null,
+    "log_sha256": "b16651cbedbab0a7b519f9e5b498eea40cb33bfb72252e264a7f4c2412765d58"
+  },
+  "worker_checks": {
+    "executed": 15,
+    "passed": 15,
+    "failed": 0,
+    "host_assertions_not_added_to_count": true
+  },
+  "actual_timed_calls": 4,
+  "timings": [
+    {
+      "label": "independent.inventory",
+      "elapsed_us": 359302,
+      "elapsed_ms": 359.302,
+      "result": {
+        "items": {
+          "record_0000000001.json": "2a4513329433fa76973cff28fd6d95044d3b9b8e7accb275969a7510580eb1f5",
+          "writing/": "directory",
+          "writing/owner.json": "7240f05ccdc4176fcf3fc8a575d63720048c52544db389aee9ada3ddc660d60c"
+        },
+        "ok": true
+      },
+      "business_unchanged": true
+    },
+    {
+      "label": "independent._chain",
+      "elapsed_us": 1479211,
+      "elapsed_ms": 1479.211,
+      "result": {
+        "document_generation": 1,
+        "document_schema": "classic_continue_slot_v3",
+        "file_sha256": "2a4513329433fa76973cff28fd6d95044d3b9b8e7accb275969a7510580eb1f5",
+        "ok": true,
+        "previous": "0000000000000000000000000000000000000000000000000000000000000000",
+        "revision": 1
+      },
+      "business_unchanged": true
+    },
+    {
+      "label": "independent._verified.record1",
+      "elapsed_us": 1512568,
+      "elapsed_ms": 1512.568,
+      "result": {
+        "document_generation": 1,
+        "document_schema": "classic_continue_slot_v3",
+        "file_sha256": "2a4513329433fa76973cff28fd6d95044d3b9b8e7accb275969a7510580eb1f5",
+        "ok": true,
+        "previous": "0000000000000000000000000000000000000000000000000000000000000000",
+        "revision": 1
+      },
+      "business_unchanged": true
+    },
+    {
+      "label": "initial.inspect_recovery",
+      "elapsed_us": 3807554,
+      "elapsed_ms": 3807.554,
+      "result": {
+        "code": "PROCESS_LIVENESS_TIMEOUT",
+        "liveness_detail": {},
+        "ok": false,
+        "restart_required": false,
+        "retryable": true,
+        "unsafe": false
+      },
+      "business_unchanged": true
+    }
+  ],
+  "budget_ms": 3000,
+  "initial_inspection": {
+    "code": "PROCESS_LIVENESS_TIMEOUT",
+    "liveness_detail": {},
+    "ok": false,
+    "restart_required": false,
+    "retryable": true,
+    "unsafe": false
+  },
+  "preclaim_attempted": false,
+  "preclaim_result": {},
+  "whole_preclaim_result": {},
+  "recovery_called": false,
+  "claim_created": false,
+  "actual_provider_count": 1,
+  "provider": {
+    "pid": 21436,
+    "target_pid": 12488,
+    "state": "dead",
+    "code": "PID_ABSENT_87",
+    "own_child_exit_code": 0,
+    "own_child_running": false,
+    "helper_cleanup_confirmed": true,
+    "observation_interval_ms": 119,
+    "interval_definition": "Oracle observed_ms minus started_ms",
+    "raw_result_sha256": "bfce8c32082fc0070c92fc34bdee959f0bee9d2c2e87d36e5a39c2150abd70f1"
+  },
+  "original_and_clone_business_inventory": {
+    "files_each": 3,
+    "directories_each": 8,
+    "all_bytes_sizes_and_paths_equal": true,
+    "original_used_by_engine": false,
+    "reference": "inventory_audit.json"
+  },
+  "final_guards": {
+    "initial_identity_passed": true,
+    "final_identity_passed": true,
+    "original_unchanged": true,
+    "clone_unchanged": true,
+    "child_terminal_confirmed": true,
+    "helpers_terminal_confirmed": true,
+    "lock_ownership_confirmed": true,
+    "lock_released": true
+  },
+  "runtime_pins": {
+    "total": 229,
+    "verified": 229,
+    "preferred_frozen_input_bytes": true
+  },
+  "qualification": {
+    "same_byte_isolated_diagnostic": true,
+    "initial_inspection_succeeded": false,
+    "preclaim_instrumented_measured": false,
+    "preclaim_whole_measured": false,
+    "recovery_qualified": false,
+    "production_qualified": false,
+    "public_entry_qualified": false,
+    "original_release_qualified": false,
+    "sdk_qualified": false,
+    "os_input": false,
+    "human_acceptance": false,
+    "performance_acceptance": false,
+    "release_qualified": false
+  },
+  "scope_notes": [
+    "15 checks validate this read-only diagnostic and byte preservation, not successful recovery.",
+    "Only four original API calls were timed. The initial inspect failed, so its contract skipped both instrumented and whole preclaim; no plan, claim or recover was executed.",
+    "Independent inventory/chain/verified timings are separate calls, not additive substeps measured inside the initial inspect.",
+    "Initial inspect elapsed 3807.554 ms under the original 3000 ms scope. The only helper actually returned dead and terminated; do not claim absent result or helper hang.",
+    "The 119 ms value is Oracle observation interval, not an independently measured Win32 duration.",
+    "Native report observation confirms this diagnostic helper result and cleanup. This does not independently locate the earlier 023731 timeout branch.",
+    "Earlier reads may warm caches; report includes guard/sampling overhead outside each call. This is not general game performance acceptance.",
+    "Original and clone continue/v1 full inventories are equal before/after and at archival recheck; only hashes and directories are archived.",
+    "Run-local frozen host/workers/provenance/source/import/full-freeze metadata and original native IPC are preserved. Three external business payload copies and two frozen helper binaries are excluded.",
+    "No engine run, source edit, shared-lock mutation, or Git operation occurred during archiving."
+  ]
+}

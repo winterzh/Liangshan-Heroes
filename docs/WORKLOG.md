@@ -1,5 +1,11 @@
 # 开发日志
 
+## 2026-10-27 驻守战恢复超时只读计时
+
+在原失败档的逐字隔离副本上运行原API，15项诊断检查通过；inventory 359.302ms、完整chain 1479.211ms，首次inspect 3807.554ms后返回原3000ms预算超时。实际helper正常退出并报告writer已退出，Oracle观察间隔119ms。首次inspect失败后未执行preclaim或recover；原件与副本各3文件/8目录完全保持。重复严格校验的成本已实测，下一步通过完整已验证字节读集绑定减少重复解析，仍保留身份、独立查询、目录和文件替换检查，不调大预算。
+
+[原始计时及来源](../qa/campaign_progress_recovery_20261026/evidence/classic_recovery_timing_20261027_031418/README.md)。本批只是诊断完成，恢复尚未修复，不授生产、公开入口或键鼠资格。
+
 ## 2026-10-27 驻守战中断保存基线与部分恢复结果
 
 观察器改为发射前记录真实ONE_SHOT注册后，旧e97a四进程82项完整复现两类提前读槽拒绝。d7后继四进程只有完整pending恢复成功；record案返回PROCESS_LIVENESS_TIMEOUT，整体83项中82过/1失败，完整来源后验与锁释放通过。独立核对确认record槽、owner和LC原3文件/8目录无增删改，5份实际helper JSON均确认各自writer已退出；已有查询结果不能解释总scope为何超时。保留失败及原4MB数据，下一步只读计时定位，不加大预算或降低断言。

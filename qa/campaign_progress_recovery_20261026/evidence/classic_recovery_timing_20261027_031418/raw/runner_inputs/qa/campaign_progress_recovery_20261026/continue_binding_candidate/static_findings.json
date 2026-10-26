@@ -1,0 +1,207 @@
+{
+  "schema": "continue_binding_static_source_findings_v1",
+  "engine_started": false,
+  "runtime_reproduction": false,
+  "findings": [
+    {
+      "id": "public_recovery_preread",
+      "basis": "Source control-flow proof only",
+      "trigger": "Public non-QA classic slot with a valid closed journal and confirmed-dead writer residue",
+      "chain": [
+        "Flow read_slot default false returns RECOVERY_REQUIRED",
+        "Flow returns before Session.prepare_restore",
+        "Session read_slot(true) is unreachable through that public attempt"
+      ],
+      "normal_clean_resume_affected": false
+    },
+    {
+      "id": "credited_sidejournal_binding",
+      "basis": "Source control-flow proof only",
+      "trigger": "Internal credited official-campaign restore with existing strict gen1 active sidejournal",
+      "chain": [
+        "Session only inspect_campaign_marker on fresh LC",
+        "same LC assigned to Battle without _binding adoption",
+        "later binding/terminal enters begin and rejects existing token with LOCAL_TOKEN_EXISTS"
+      ],
+      "public_classic_affected": false,
+      "uncredited_lianhuanma_affected": false
+    },
+    {
+      "id": "lianhuanma_flow_runtime_overrides",
+      "basis": "Source control-flow proof; parent reported native Flow queue population mismatch, not executed by this child",
+      "chain": [
+        "Flow._runtime applies base/content_pack/visual only",
+        "Core copies the caller runtime without chapter overrides",
+        "Level4 normal overrides gou_lian pop=2 cost_gold=36 cost_wood=24 train_time=20",
+        "fixed Session selects only installed fixed Level4Factory before Core.prepare"
+      ],
+      "flow_runtime_tested": false,
+      "baseline_excerpt": [
+        {
+          "path": ".godot/campaign_progress_recovery_20261026/20261027_000821_ba1f231b/project/scripts/continue_flow.gd",
+          "sha256": "a180034ff34237a5161cedef8309b27903c953676c4100f30c1d0f9f97e6c4b0",
+          "first_line": 264,
+          "last_line": 269,
+          "text": "func _runtime() -> Dictionary:\n\tvar defs: Dictionary = Defs.UNITS.duplicate(true)\n\tvar abilities: Dictionary = Defs.ABILITIES.duplicate(true)\n\tDefs.apply_content_pack(defs, abilities)\n\tAbilityVisuals.apply(defs, abilities)\n\treturn {\"defs\": defs, \"abilities\": abilities, \"items\": Defs.ITEMS.duplicate(true)}"
+        },
+        {
+          "path": ".godot/campaign_progress_recovery_20261026/20261027_000821_ba1f231b/project/scripts/run_battle_world_core.gd",
+          "sha256": "45c8e613c6b2356333551bf399cdb3327cfe3a304ab5c5c84fc98236bb218f51",
+          "first_line": 67,
+          "last_line": 70,
+          "text": "func _init(trusted_identity: Dictionary, trusted_runtime: Dictionary, textures: Dictionary = {}, axe_texture: Texture2D = null, trusted_context: Dictionary = {}) -> void:\n\t_trusted = trusted_identity.duplicate(true)\n\t_runtime = trusted_runtime.duplicate(true)\n\t_textures = textures.duplicate()"
+        },
+        {
+          "path": ".godot/campaign_progress_recovery_20261026/20261027_000821_ba1f231b/project/scripts/run_battle_world_core.gd",
+          "sha256": "45c8e613c6b2356333551bf399cdb3327cfe3a304ab5c5c84fc98236bb218f51",
+          "first_line": 330,
+          "last_line": 335,
+          "text": "\t_battle.scene_file_path = \"res://scenes/main.tscn\" # Trusted restart route, never a saved path.\n\t_battle.process_mode = Node.PROCESS_MODE_DISABLED\n\t_battle.set_block_signals(true)\n\t_battle._defs = _runtime.defs.duplicate(true)\n\t_battle._abilities = _runtime.abilities.duplicate(true)\n\t_battle._items = _runtime.items.duplicate(true)"
+        },
+        {
+          "path": ".godot/campaign_progress_recovery_20261026/20261027_000821_ba1f231b/project/scripts/run_level4_world_factory.gd",
+          "sha256": "558f67b4578fef03a012f699393dfbe10e60e8a3d1bb3f27b581220ffd5669fd",
+          "first_line": 19,
+          "last_line": 35,
+          "text": "static func prepare_runtime(identity: Dictionary) -> Dictionary:\n\tvar selected: Dictionary = _context(identity)\n\tif not selected.ok: return selected\n\tvar audit: Dictionary = LevelState.new().audit_declarations(\"level4\")\n\tif not audit.ok: return audit\n\t# Exact normal-launch content order. Only private dictionaries are written.\n\t# Level4.apply_overrides does not inspect its instance state or call gameplay.\n\tvar level: Variant = Lian.new()\n\tvar defs: Dictionary = DefinitionSource.UNITS.duplicate(true)\n\tvar abilities: Dictionary = DefinitionSource.ABILITIES.duplicate(true)\n\tDefinitionSource.apply_content_pack(defs, abilities)\n\tlevel.apply_overrides(defs, abilities)\n\tVisualRules.apply(defs, abilities)\n\treturn {\"ok\": true, \"runtime\": {\"defs\": defs, \"abilities\": abilities,\n\t\t\"items\": DefinitionSource.ITEMS.duplicate(true)},\n\t\t\"environment_buildings\": CampaignEnvironment.buildings(\"level4\").duplicate(true),\n\t\t\"profile\": selected, \"complete_world\": false,"
+        },
+        {
+          "path": ".godot/campaign_progress_recovery_20261026/20261027_000821_ba1f231b/project/scripts/levels/level4_lianhuanma_rts.gd",
+          "sha256": "81aa370ec7387b7eeaf28b57864972ff875067fcf121a686e9b498a46cbe20c1",
+          "first_line": 78,
+          "last_line": 86,
+          "text": "\t\t{\"who\":\"宋江\",\"key\":\"song_jiang\",\"text\":\"先经营中军。北、南草林可伏兵，外侧辎重营可断援；守住冲锋后再反攻，营地和已经打下的战果都留在这里。\"},\n\t]\nfunc apply_overrides(defs: Dictionary, _abilities: Dictionary) -> void:\n\tdefs.hall.produces=[\"lou_luo\",\"song_jiang\",\"xu_ning\",\"lin_chong\",\"hua_rong\"]\n\tdefs.barracks.produces=[\"liang_dao\",\"liang_qiang\",\"liang_gong\",\"liang_ma\",\"gou_lian\"]\n\t# The shared hook soldier had no economic fields; combat stats stay shared.\n\tvar recruitment := {\"pop\":2,\"cost_gold\":36,\"cost_wood\":24,\"train_time\":20.0,\"trained_at\":\"barracks\",\"min_age\":1}\n\tfor field in recruitment: defs.gou_lian[field]=recruitment[field]\n\tdefs[\"hook_training_dummy\"]={\"name\":\"教场演练骑\",\"hp\":120,\"atk\":0,\"speed\":60,\"cavalry\":true,\"radius\":13,\"defeat_outcome\":\"subdued\",\"art_variant\":\"hook_training_dummy\",\"pop\":0}"
+        }
+      ]
+    }
+  ],
+  "original_source_blocks": [
+    {
+      "path": ".godot/campaign_progress_recovery_20261026/20261027_000821_ba1f231b/project/scripts/continue_flow.gd",
+      "sha256": "a180034ff34237a5161cedef8309b27903c953676c4100f30c1d0f9f97e6c4b0",
+      "first_line": 300,
+      "last_line": 310,
+      "source": [
+        "func _restore() -> void:",
+        "\tif phase != Phase.RESTORING: return",
+        "\tif not _private_qa_enabled():",
+        "\t\tvar slot: Dictionary = Slot.new().read_slot()",
+        "\t\tif not slot.ok: _fail(slot, true); return",
+        "\t\tif slot.document.context != Slot.CONTEXT: _fail(_bad(\"CLASSIC_30_REQUIRED\"), true); return",
+        "\tvar trusted := ContentIdentity.new().resolve_runtime_identity()",
+        "\tif not trusted.ok: _fail(trusted, true); return",
+        "\t_session = Session.new(trusted, _runtime())",
+        "\tvar prepared: Dictionary = _session.prepare_restore(_source)",
+        "\tif not prepared.ok: _fail(prepared, true); return"
+      ]
+    },
+    {
+      "path": ".godot/campaign_progress_recovery_20261026/20261027_000821_ba1f231b/project/scripts/run_slot_store.gd",
+      "sha256": "d67fe7794f23fe1bda3d74c7e284ba6b90d2cb488a5d35cb1a187eea77fa3532",
+      "first_line": 118,
+      "last_line": 128,
+      "source": [
+        "func read_slot(recover_dead_writer := false) -> Dictionary:",
+        "\tif directory.is_empty(): return bad(\"USER_PATH\")",
+        "\tif not DirAccess.dir_exists_absolute(directory): return bad(\"NO_SLOT\")",
+        "\tvar head := open_head()",
+        "\tif not head.ok and head.code == \"RECOVERY_REQUIRED\" and recover_dead_writer:",
+        "\t\tvar plan := inspect_recovery()",
+        "\t\tif not plan.ok: return plan",
+        "\t\thead = recover(plan)",
+        "\tif not head.ok: return head",
+        "\tif head.revision == 0: return bad(\"NO_SLOT\")",
+        "\treturn head"
+      ]
+    },
+    {
+      "path": ".godot/campaign_progress_recovery_20261026/20261027_000821_ba1f231b/project/scripts/run_world_session.gd",
+      "sha256": "8223f5b64fc1472422c89b33876a43dc7e8462bb55b46f8f7351c4a888867365",
+      "first_line": 182,
+      "last_line": 195,
+      "source": [
+        "\tvar read: Dictionary = _store.read_slot(true)",
+        "\tif not read.ok: return read",
+        "\t_packet = read.document; _slot_sha = read.file_sha256",
+        "\tif _packet.binding.kind == \"steam\" and Profiles.is_official_campaign_context(_packet.context):",
+        "\t\tif _packet.binding.owner != _campaign().cloud_owner: return _bad(\"CAMPAIGN_STEAM_PROFILE_OWNER_REQUIRED\")",
+        "\t\t_local_receipt = _new_local_receipt(_packet.binding.token, _packet.context)",
+        "\t\tvar marker: Dictionary = _local_receipt.inspect_campaign_marker()",
+        "\t\tif not marker.ok: return marker",
+        "\tif _packet.binding.kind == \"uncredited\":",
+        "\t\t_local_receipt = _new_local_receipt(_packet.binding.token, _packet.context)",
+        "\t\tvar receipt_check: Dictionary = _local_scope(_local_receipt, _packet.context)",
+        "\t\tif not receipt_check.ok: return receipt_check",
+        "\t\tvar local_plan: Dictionary = _local_receipt.prepare_resume(_packet.binding)",
+        "\t\tif not local_plan.ok: return local_plan"
+      ]
+    },
+    {
+      "path": ".godot/campaign_progress_recovery_20261026/20261027_000821_ba1f231b/project/scripts/run_world_session.gd",
+      "sha256": "8223f5b64fc1472422c89b33876a43dc7e8462bb55b46f8f7351c4a888867365",
+      "first_line": 255,
+      "last_line": 260,
+      "source": [
+        "\tvar mounted: Dictionary = _core.mount_disabled(_tree().root)",
+        "\tif not mounted.ok: return _rollback(mounted)",
+        "\tvar battle: Node = _core._battle",
+        "\tbattle._official_context = _packet.context.duplicate(true)",
+        "\tbattle._steam_run_id = 0",
+        "\tbattle._continue_receipt = _local_receipt"
+      ]
+    },
+    {
+      "path": ".godot/campaign_progress_recovery_20261026/20261027_000821_ba1f231b/project/scripts/run_campaign_local_lifecycle.gd",
+      "sha256": "db00c4a92094737b22f2706afa1c9e975c4b899afa30c245457ad4ec1deecd76",
+      "first_line": 127,
+      "last_line": 146,
+      "source": [
+        "func begin() -> Dictionary:",
+        "\tif not _init_issue.is_empty(): return bad(_init_issue)",
+        "\tif Engine.is_in_physics_frame(): return bad(\"LOCAL_LIFECYCLE_PHYSICS_WRITE\")",
+        "\tif not _binding.is_empty(): return binding()",
+        "\tvar ready: Dictionary = initialize_directory()",
+        "\tif not ready.ok: return ready",
+        "\tvar head: Dictionary = _head()",
+        "\tif not head.ok: return head",
+        "\tif head.revision != 0 and not _creating: return bad(\"LOCAL_TOKEN_EXISTS\")",
+        "\tif head.revision == 0:",
+        "\t\t_creating = true",
+        "\t\thead = _commit(head, {\"schema\":CAMPAIGN_SCHEMA, \"generation\":1, \"token\":token,",
+        "\t\t\t\"context\":_expected.context.duplicate(), \"scope\":_expected.scope.duplicate(), \"state\":\"active\",",
+        "\t\t\t\"victory\":false, \"progress_state\":\"none\", \"intent\":{}, \"progress_receipt\":{}})",
+        "\t\tif not head.ok:",
+        "\t\t\tif not _locked and not _lock_created: _creating = false",
+        "\t\t\treturn head",
+        "\tif head.document.state == \"terminal\": return bad(\"LOCAL_RUN_TERMINAL\")",
+        "\t_binding = {\"kind\":\"uncredited\", \"token\":token, \"receipt_sha256\":head.file_sha256}",
+        "\treturn {\"ok\":true, \"binding\":_binding.duplicate()}"
+      ]
+    },
+    {
+      "path": ".godot/campaign_progress_recovery_20261026/20261027_000821_ba1f231b/project/scripts/run_local_lifecycle.gd",
+      "sha256": "e68cb817a6dcc4cc1df91caf29c07c4c4c6cfdca378f6c05335636e6a6617e00",
+      "first_line": 96,
+      "last_line": 112,
+      "source": [
+        "func prepare_resume(value: Variant) -> Dictionary:",
+        "\tvar checked := validate_binding(value)",
+        "\tif not checked.ok: return checked",
+        "\tif checked.binding.token != token: return bad(\"LOCAL_BINDING_TOKEN\")",
+        "\tvar head := _head()",
+        "\tif not head.ok: return head",
+        "\tif head.revision == 0: return bad(\"LOCAL_LIFECYCLE_MISSING\")",
+        "\tif head.document.state == \"terminal\": return bad(\"LOCAL_RUN_TERMINAL\")",
+        "\tif head.revision != 1 or head.file_sha256 != checked.binding.receipt_sha256: return bad(\"LOCAL_LIFECYCLE_CHANGED\")",
+        "\t_binding = checked.binding.duplicate(true)",
+        "\treturn {\"ok\": true}",
+        "",
+        "func binding() -> Dictionary:",
+        "\tif _binding.is_empty(): return begin()",
+        "\tvar checked := prepare_resume(_binding)",
+        "\tif not checked.ok: return checked",
+        "\treturn {\"ok\": true, \"binding\": _binding.duplicate(true)}"
+      ]
+    }
+  ]
+}

@@ -6,7 +6,7 @@
 
 | 项目 | 当前状态 |
 | --- | --- |
-| GitHub | [winterzh/Liangshan-Heroes / stable](https://github.com/winterzh/Liangshan-Heroes/tree/codex/sync-20260905-stable)；黄泥冈实现、连环马胜败及恢复候选/QA已推送，前批远端回读`8ad798dece7b41f56f6fd7deedec28cc27c01f08`；本批候选和证据以本次提交后回读为准，main保持`1598c7c0cdccdc0bf1be8968608f79f0c43dcfc9`，未合并 |
+| GitHub | [winterzh/Liangshan-Heroes / stable](https://github.com/winterzh/Liangshan-Heroes/tree/codex/sync-20260905-stable)；黄泥冈实现、连环马胜败及恢复候选/QA已推送，前批远端回读`1170283b9238c36e51cff89e07972f191cd21ba6`；本批候选和证据以本次提交后回读为准，main保持`1598c7c0cdccdc0bf1be8968608f79f0c43dcfc9`，未合并 |
 | 主线合并 | 48042d84补齐旧stable合并历史，ffa625de补齐交接文档；本页修订随本次文档提交同步，以分支最新提交为准 |
 | Steam Windows | default Build **26048429** / Manifest **697009053566575953**，2026-10-20完成发布验收 |
 | 冻结生产来源 | 0083b47abac098c5ebd7231e327085c4ba3299cd；后继QA工具和文档提交未改变游戏包 |
@@ -26,7 +26,7 @@
 ## 后续顺序
 
 1. [黄泥冈七车十一担](../qa/huangnigang_production_20261020/README.md)实现及自动证据已同步stable `f5325c25`：最终编译包普通路线1206项、九阶段1768项与四语三尺寸24图目检通过。原版EXE仅启动/退出通过；按用户选择暂不恢复键鼠，完整实操待办。第一批整体未完成，main/Steam未更新，公开战役续玩未开放。
-2. 完整战役续玩仍在候选阶段。当前d7f2258b已修复实际继续后的连环马招募人口遗漏；自然胜利四进程345项、自然失败三进程205项均通过，包含真实保存退出、独立继续、正常胜败和终局重启拒旧槽。独立本地绑定模型30项也已通过。驻守战完整pending已恢复，但record案遇到存活查询scope超时且原数据保持，需先定位。高俅最小接线候选已准备，后续验证高俅、大名府双角色61阶段、原19类故障与实际界面重试、云同步和奖励仅一次；未采用生产。[当前实现与资格](../qa/campaign_progress_recovery_20261026/continue_binding_candidate/VALIDATION.md)，[历史各源证据](../qa/campaign_progress_recovery_20261026/README.md)。
+2. 完整战役续玩仍在候选阶段。当前d7f2258b已修复实际继续后的连环马招募人口遗漏；自然胜利四进程345项、自然失败三进程205项均通过，包含真实保存退出、独立继续、正常胜败和终局重启拒旧槽。独立本地绑定模型30项也已通过。驻守战完整pending已恢复，record案仍超时；隔离副本计时确认完整chain约1.48秒、首次inspect约3.81秒，helper正常返回，下一步减少重复严格解析并保留文件替换保护。高俅最小接线候选已准备，后续验证高俅、大名府双角色61阶段、原19类故障与实际界面重试、云同步和奖励仅一次；未采用生产。[当前实现与资格](../qa/campaign_progress_recovery_20261026/continue_binding_candidate/VALIDATION.md)，[历史各源证据](../qa/campaign_progress_recovery_20261026/README.md)。
 3. 接续剩余人物/剧情变体、自然动作、六车轮转、场景、特效及界面美术。
 4. 回归八章与九玩法完整流程，完成真人试玩、性能/内存、切换清理和设备验收。详细条件保留在[开发计划](DEVELOPMENT_PLAN.md)，不由已发布批次替代。
 
