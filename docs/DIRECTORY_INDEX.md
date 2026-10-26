@@ -30,6 +30,8 @@
 
 ## 本批索引与新增规则
 
+`qa/lianhuanma_resume_20261026/`：连环马自然付费训练、同槽同token三进程接续的外部驱动、执行器、成功及失败收据；私有存档与运行缓存留本机，100项只属于内部活动期专项。新的事务集成图在该目录，未验证候选位于`qa/campaign_progress_recovery_20261026/rebased_candidate/`，尚未采用或取得运行资格。
+
 `qa/huangnigang_production_20261020/`：当前七车十一担生产接入、真实路线和内部冷恢复驱动；源码快照、导出程序及原始运行日志存于被忽略的`.godot`同名批次目录。隔离用户目录使用同盘短路径`D:/CodexQA/hngp/<唯一标识>`，具体位置见每次收据；完成证据以本批README为准。
 
 `qa/storage_cleanup_20261020/`记录六份入口文档归档、哈希、重复缓存映射、实际删除流水和保护后验。10月19日旧缓存清理见[原记录](../qa/storage_cleanup_20261019/README.md)，本次Steam交付见[发布QA](../qa/steam_release_20261019/README.md)。

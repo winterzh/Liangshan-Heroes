@@ -1,0 +1,66 @@
+{
+  "schema": "lian_training_headless_failure_scope_v1",
+  "archived_on": "2026-10-26",
+  "run": "20261026_174132_583f4391",
+  "execution_kind": "source_project_headless",
+  "terminal": {
+    "complete": false,
+    "exit_code": 1,
+    "stopped_for": null,
+    "initial_identity_passed": true,
+    "final_identity_passed": true,
+    "lock_released": true
+  },
+  "checks": {
+    "total": 20,
+    "passed": 19,
+    "failed": 1,
+    "failure_labels": [
+      "real Session commits with expected-slot compare-and-swap"
+    ]
+  },
+  "covered_before_failure": [
+    "真实已安装source identity和Level4开局",
+    "一次正常招募：36金、24木、2人口预留，原20秒队列",
+    "自然推进至少5秒且训练尚未完成",
+    "实际捕获屏障成功进入HELD并检查原槽代次"
+  ],
+  "failure": {
+    "cause": {
+      "code": "TEXTURE_IMAGE_MISMATCH",
+      "complete_battle": false,
+      "field": "",
+      "ok": false
+    },
+    "code": "TEXTURE_IMAGE_MISMATCH",
+    "complete_world": false,
+    "ok": false,
+    "section": "fog"
+  },
+  "classification": "headless_rendering_mode_difference_requires_real_gl_retest",
+  "interpretation": "本次headless首轮在Session捕获fog纹理一致性校验时因TEXTURE_IMAGE_MISMATCH拒绝保存。记录提示测试渲染模式差异，应以真实GL屏幕外复验确认；本证据不足以认定生产存档损坏。不得放宽生产纹理校验以把本轮改记通过。",
+  "unstarted_modes": [
+    "resume_complete",
+    "verify_resave"
+  ],
+  "successful_save_checkpoint_recorded": false,
+  "three_process_resume_verified": false,
+  "report_provenance": {
+    "pid_nonce_profile_identity_match_receipt": true,
+    "log_sha256_bound_by_receipt": true,
+    "report_hash_bound_by_original_receipt": false,
+    "reason": "process_step因exit1先抛异常，原receipt.reports为空；本归档独立计算并绑定report SHA，不追改原收据。"
+  },
+  "gl_retest_result_included": false,
+  "scope_note": "只归档该已终态首轮；不读取、修改或接纳进行中的GL批次结果。",
+  "profile_or_slot_copied": false,
+  "production_modified": false,
+  "runner_or_drivers_modified": false,
+  "engine_started_or_controlled": false,
+  "public_continue_qualified": false,
+  "original_release_gui_tested": false,
+  "human_acceptance": false,
+  "performance_accepted": false,
+  "published": false,
+  "batch_complete": false
+}

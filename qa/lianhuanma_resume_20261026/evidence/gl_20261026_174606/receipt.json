@@ -1,0 +1,112 @@
+{
+  "schema": "lian_training_three_process_run_v1",
+  "complete": false,
+  "execution_kind": "source_project_offscreen_gl",
+  "base_run": "D:\\AI项目\\水浒\\开发工程\\.godot\\huangnigang_production_20261020\\20261026_162550_230a5af6",
+  "source_head": "c9bcca234f11ef40ee6400b6826c03655ddf8fbb",
+  "runner_sha256": "76567db07e9111484621cb2f1ead440f5b7c18fb83a0ac0578311998f3ad867c",
+  "steps": [
+    {
+      "case": "save_training",
+      "command": [
+        "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+        "--path",
+        "D:\\AI项目\\水浒\\开发工程\\.godot\\huangnigang_production_20261020\\20261026_162550_230a5af6\\project",
+        "--rendering-method",
+        "gl_compatibility",
+        "--resolution",
+        "1280x720",
+        "--position",
+        "30000,30000",
+        "--script",
+        "D:\\AI项目\\水浒\\开发工程\\.godot\\lianhuanma_resume_20261026\\20261026_174606_8c000c7a\\workers\\bootstrap.gd"
+      ],
+      "passed": true,
+      "errors": [],
+      "pid": 62964,
+      "exit_code": 0,
+      "seconds": 74.223,
+      "stopped_for": null,
+      "log_sha256": "4daf22448e18999b39fe737400be12d2b0c63b490e60db3a3f99889276ca678a"
+    },
+    {
+      "case": "resume_complete",
+      "command": [
+        "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+        "--path",
+        "D:\\AI项目\\水浒\\开发工程\\.godot\\huangnigang_production_20261020\\20261026_162550_230a5af6\\project",
+        "--rendering-method",
+        "gl_compatibility",
+        "--resolution",
+        "1280x720",
+        "--position",
+        "30000,30000",
+        "--script",
+        "D:\\AI项目\\水浒\\开发工程\\.godot\\lianhuanma_resume_20261026\\20261026_174606_8c000c7a\\workers\\bootstrap.gd"
+      ],
+      "passed": false,
+      "errors": [],
+      "pid": 46524,
+      "exit_code": 1,
+      "seconds": 45.158,
+      "stopped_for": null,
+      "log_sha256": "601a2912bab6ff7381a32ef60d94538c88ea4154192adb14e723656cd941efbf"
+    }
+  ],
+  "reports": [
+    {
+      "mode": "save_training",
+      "path": "D:\\AI项目\\水浒\\开发工程\\.godot\\lianhuanma_resume_20261026\\20261026_174606_8c000c7a\\save_training\\report.json",
+      "sha256": "0cd522ed4b54aebce32eb81ecfdbbc4a441793281ac1c03b9aa6badee1ac444e",
+      "checks": 26,
+      "passed": true,
+      "failures": []
+    },
+    {
+      "mode": "resume_complete",
+      "path": "D:\\AI项目\\水浒\\开发工程\\.godot\\lianhuanma_resume_20261026\\20261026_174606_8c000c7a\\resume_complete\\report.json",
+      "sha256": "ff20379e15085ef3eea0fb80d0ebec8af86121d0463cffd2d637483b879849ec",
+      "checks": 21,
+      "passed": false,
+      "failures": [
+        "exact queue timer resources population entity IDs and simulation tick restored",
+        "same actual lifecycle journal schema context generation and hash"
+      ]
+    }
+  ],
+  "original_release_gui_tested": false,
+  "public_continue_qualified": false,
+  "project": "D:\\AI项目\\水浒\\开发工程\\.godot\\huangnigang_production_20261020\\20261026_162550_230a5af6\\project",
+  "engine_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+  "content_version": "source-v1:4c4c566d73e6d767e33936efcff2f33d0c2895c93d20409763645db4ee1fe511",
+  "initial_identity_passed": true,
+  "profile": "D:\\CodexQA\\liantrain\\a1707721e6a3",
+  "batch_nonce": "a1707721e6a343468503015492898b21",
+  "workers": [
+    {
+      "path": "bootstrap.gd",
+      "sha256": "a3ccdb4053999a9019bdddf3c71ade00c8cb6a20d5afb1b24cde4e9d45b97e31"
+    },
+    {
+      "path": "training.gd",
+      "sha256": "8f9f1a6423a55018f5010860fa01ebe85df1dea3e2f73b76e7896754c8ba61c5"
+    }
+  ],
+  "error": "RuntimeError('Private character QA step failed: resume_complete')",
+  "final_identity_passed": true,
+  "lock_ownership_confirmed": true,
+  "lock_released": true,
+  "pinned_files": {
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\huangnigang_production_20261020\\20261026_162550_230a5af6\\preparation.json": "07354b0b3a67b0bbb0d57daf112f1210b1c9752e863b269568e78c517fc55d80",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\huangnigang_production_20261020\\20261026_162550_230a5af6\\root_source.json": "fc8be051b3f219bf5ca9468fc08730956aea17b6e5f1b114874a37ceeba3a9cb",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\huangnigang_production_20261020\\20261026_162550_230a5af6\\generation.json": "0d79f0eccba7cfd32cab8d7b506b9aad3c89ff3d4909508c31f3401ff7178461",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\lianhuanma_resume_20261026\\run_training.py": "76567db07e9111484621cb2f1ead440f5b7c18fb83a0ac0578311998f3ad867c",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\huangnigang_production_20261020\\run_batch.py": "ab5825a9c4041c95ec31c62c3abf18b390a1affac05121f5d24ad8e42af6f768",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\lianhuanma_resume_20261026\\bootstrap.gd": "a3ccdb4053999a9019bdddf3c71ade00c8cb6a20d5afb1b24cde4e9d45b97e31",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\lianhuanma_resume_20261026\\20261026_174606_8c000c7a\\workers\\bootstrap.gd": "a3ccdb4053999a9019bdddf3c71ade00c8cb6a20d5afb1b24cde4e9d45b97e31",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\lianhuanma_resume_20261026\\training.gd": "8f9f1a6423a55018f5010860fa01ebe85df1dea3e2f73b76e7896754c8ba61c5",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\lianhuanma_resume_20261026\\20261026_174606_8c000c7a\\workers\\training.gd": "8f9f1a6423a55018f5010860fa01ebe85df1dea3e2f73b76e7896754c8ba61c5",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\lianhuanma_resume_20261026\\20261026_174606_8c000c7a\\save_training\\report.json": "0cd522ed4b54aebce32eb81ecfdbbc4a441793281ac1c03b9aa6badee1ac444e",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\lianhuanma_resume_20261026\\20261026_174606_8c000c7a\\resume_complete\\report.json": "ff20379e15085ef3eea0fb80d0ebec8af86121d0463cffd2d637483b879849ec"
+  }
+}
