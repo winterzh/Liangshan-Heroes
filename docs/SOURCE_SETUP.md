@@ -28,11 +28,11 @@ git fetch origin
 
 后继[恢复读集候选](../qa/campaign_progress_recovery_20261026/recovery_readset_candidate/VALIDATION.md)使用新768b6e59完整冻结，仅替Store；已独立导入并通过新源真实Flow两处中断/恢复的四进程88项。prepare_readset默认只读，--prepare仅复制新工程；测试必须使用新完整清单及同引擎的独立成功导入，不能复用d7运行资格。原失败档仅在逐字新副本验证，content不改写；该Store诊断不能替代新源正常Flow。
 
-readset专项执行器已修复ACK数值核对与同profile环境重复创建，Python隔离检查30项通过。原生专项尚未完整通过；后续必须使用修订宿主和全新profile从producer开始，不能续用两次失败目录或把环境检查当恢复资格。
+readset专项在全新profile已完整通过：12类案例248项、旧4MB逐字副本37项，共285项；3个实际进程及25次helper查询终态、来源后验和锁释放通过。两次执行器失败原件保留，正式计数只取各reader最终report，不累加case快照或prepared检查。旧档恢复只授Store协议资格，不授跨版本世界加载；原件和本次证据见候选VALIDATION。
 
 新增[classic只读计时工具](../qa/campaign_progress_recovery_20261026/continue_binding_candidate/tests/classic_recovery_timing/README.md)固定d7源与原失败批次；默认只读预检，显式执行时仅对逐字隔离副本运行原API，原profile不得交给引擎。[本次诊断](../qa/campaign_progress_recovery_20261026/evidence/classic_recovery_timing_20261027_031418/README.md)15项检查通过，首次inspect仍超时；诊断完成不等于恢复通过。
 
-[高俅单文件runtime候选](../qa/campaign_progress_recovery_20261026/gaoqiu_continue_candidate/README.md)只完成代码准备与来源检查，无执行入口；后续必须另建冻结并独立导入、运行，不覆盖当前d7或把其连环马结果当高俅验收。
+[高俅单文件runtime候选](../qa/campaign_progress_recovery_20261026/gaoqiu_continue_candidate/README.md)新增[768组合准备器](../qa/campaign_progress_recovery_20261026/gaoqiu_continue_candidate/integration_768/README.md)：默认仅核指定元数据和来源，不能作为运行准入；--prepare先核完整768再新建仅Session变化的冻结，后续还须独立导入。当前只有代码/轻量检查，不能沿用连环马、classic或readset运行资格。
 
 新增[继续入口三脚本候选](../qa/campaign_progress_recovery_20261026/continue_binding_candidate/VALIDATION.md)必须用自己的d7f2258b完整冻结与新manifest，不能套用e97a的恢复专项资格。已导入并通过独立本地绑定模型，连环马实际Flow自然胜利345项及独立自然失败205项通过。prepare_continue默认只读，--prepare只建新目录；磁盘模型的baseline/fixed模式和真实胜败执行器分别记资格，禁止复用同一结果混算。
 

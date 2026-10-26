@@ -1,5 +1,11 @@
 # 开发日志
 
+## 2026-10-27 恢复异常专项285项通过
+
+修订执行器从全新profile完整跑完：真实producer在原pending_verified断点中断，独立reader的12类案例248项通过；旧4MB原档逐字副本37项通过，共285项。文件/目录/owner替换、ABA、超时和伪造计划按具体错误安全拒绝，合法record/pending恢复及派生/CFG原路径符合预期。25份实际helper报告、3个进程终态、完整来源、原档不变与共享锁释放通过。旧4MB槽和LC的SHA保持，只清副本的死owner/writing；Store-only资格与新Flow88项分别记录。
+
+高俅新增768组合准备器，保留原6行Session候选，默认轻量检查不授完整来源资格；完整准备、独立导入和自然造船续玩另行执行。原版键鼠继续暂停，生产/公开入口/Steam不变。[恢复原件及边界](../qa/campaign_progress_recovery_20261026/recovery_readset_candidate/VALIDATION.md)、[高俅准备入口](../qa/campaign_progress_recovery_20261026/gaoqiu_continue_candidate/integration_768/README.md)。
+
 ## 2026-10-27 驻守战恢复读集优化与真实Flow回归
 
 后继候选只对exact原Slot复用已验证字节，完整读集与最初文件/目录库存逐项绑定，保留原owner、两相独立存活查询、每scope的3000ms预算及claim后完整验证；原recover函数未改。新完整768b6e59冻结7062文件仅Store一处变化，导入PID75344退出0/错误0。随后正常保存流程的新批四进程88项通过，完整pending和此前超时的已提交record均恢复成功，来源后验与锁释放通过。异常替换专项正在单独执行，尚未采用生产。

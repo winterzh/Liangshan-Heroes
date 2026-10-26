@@ -16,7 +16,7 @@
 
 [原Flow四进程工具](tests/classic_flow/README.md)的新批次 `20261027_035441_ec3aea99` 已完整通过：pending为writer14040/reader19676，record为writer61920/reader70208，两writer在指定真实保存断点计划终止，两个reader正常退出0。检查分别23/21/23/21，共88项；两案均fixed_branch_restored，完整暂停世界、资源、队列、原槽SHA/token和LC一致。宿主complete=true，来源后验、4个实际进程终态和共享锁释放通过。[原始证据](evidence/classic_flow_20261027_035441/README.md)。原d7的record超时仍保留；本批证明新源的两处分支恢复通过，不授公开入口或发行程序资格。
 
-[读集专项工具](tests/readset/README.md)尚未完整通过，执行器两处问题已修复，待全新profile完整复跑。覆盖12个具体case及旧4MB原档逐字clone；合成小夹具只验证文件协议，旧内容identity的clone不改写身份、不授新Flow世界恢复资格。原档仅由宿主只读核对，传给引擎的seed和profile均为新副本。
+[读集专项工具](tests/readset/README.md)已在全新profile完整通过，批次`20261027_045053_04fe0749`：producer56416在原pending_verified断点计划终止；reader14108退出0，12类案例248项通过；旧4MB副本reader74016退出0，37项通过，共285项。25份真实helper报告、所有实际进程终态、原档不变、完整来源后验及共享锁释放均通过。[本批原件](evidence/readset_complete_20261027_045053/README.md)。旧副本inspect用时2.674秒、recover总墙钟11.690秒；原每scope的3000ms预算不变，总调用时间不等于单scope预算。只移除副本的死owner/writing，原槽和LC字节保持。覆盖12个具体case及旧4MB原档逐字clone；合成小夹具只验证文件协议，旧内容identity的clone不改写身份、不授新Flow世界恢复资格。原档仅由宿主只读核对，传给引擎的seed和profile均为新副本。
 
 专项[首轮工具失败](evidence/readset_gate_failed_20261027_040714/README.md)保留：producer66668退出1，105项中104过/1个握手检查失败，零断点，reader和clone均未启动。确认消息四字段值完全一致，原测试却将JSON数值与原生整数直接做字典比较；后继仅修为严格字段/字符串与有界、有限、整值的数值核对，未改游戏源码或恢复断言。旧输入和原收据lock_released=false不变；另存的终态审计确认无引擎/helper、无IPC目录后释放精确自有锁。修订driver为3ce3ab64，已从全新目录重跑，结果另记。
 

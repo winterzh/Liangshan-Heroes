@@ -1,0 +1,665 @@
+{
+  "schema": "classic_recovery_branch_run_v1",
+  "complete": false,
+  "expected": "fixed",
+  "steps": [
+    {
+      "case": "pending_writer",
+      "complete": true,
+      "process_terminal": true,
+      "command": [
+        "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+        "--path",
+        "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project",
+        "--rendering-method",
+        "gl_compatibility",
+        "--resolution",
+        "1280x720",
+        "--position",
+        "30000,30000",
+        "--remote-debug",
+        "tcp://127.0.0.1:60313",
+        "--script",
+        "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\workers\\bootstrap.gd"
+      ],
+      "nonce": "395908afd49f42578a9f2ed1f098ec43",
+      "process_nonce": "2f759c37e69348c1a322a8dbf8593a8c",
+      "initial_private_gate_used": true,
+      "public_entry_qualified": false,
+      "production_method_overrides": 0,
+      "pid": 54152,
+      "ignored_local_lifecycle_stops": [
+        [
+          {
+            "source": "res://scripts/run_snapshot_store.gd",
+            "line": 313,
+            "function": "commit_locked"
+          },
+          {
+            "source": "res://scripts/run_local_lifecycle.gd",
+            "line": 73,
+            "function": "_commit"
+          },
+          {
+            "source": "res://scripts/run_local_lifecycle.gd",
+            "line": 90,
+            "function": "begin"
+          },
+          {
+            "source": "res://scripts/run_local_lifecycle.gd",
+            "line": 109,
+            "function": "binding"
+          },
+          {
+            "source": "res://scripts/run_world_session.gd",
+            "line": 130,
+            "function": "save_held"
+          },
+          {
+            "source": "res://scripts/continue_flow.gd",
+            "line": 252,
+            "function": "_capture_ready"
+          },
+          {
+            "source": "res://scripts/run_battle_barrier.gd",
+            "line": 196,
+            "function": "_idle_boundary"
+          }
+        ]
+      ],
+      "point": {
+        "source": "res://scripts/run_snapshot_store.gd",
+        "line": 313,
+        "function": "commit_locked",
+        "statement": "_checkpoint(\"pending_verified\")",
+        "sha256": "7052bc687a26ef9edb155465e070bcedf1ae86a3e8f19b0553bb7757b8ad9b0c"
+      },
+      "frames": [
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 313,
+          "function": "commit_locked"
+        },
+        {
+          "source": "res://scripts/run_slot_store.gd",
+          "line": 173,
+          "function": "write_slot"
+        },
+        {
+          "source": "res://scripts/run_world_session.gd",
+          "line": 137,
+          "function": "save_held"
+        },
+        {
+          "source": "res://scripts/continue_flow.gd",
+          "line": 252,
+          "function": "_capture_ready"
+        },
+        {
+          "source": "res://scripts/run_battle_barrier.gd",
+          "line": 196,
+          "function": "_idle_boundary"
+        }
+      ],
+      "stack_packet_sha256": "78152d56d65a61daef93dcf2108f60714c21fd7bf759dd300afdcdf28e894c9c",
+      "slot_sha256": "743083a6409d9107ad66f99983ee018d843aee3dc8ba1b83d742fc6f05809256",
+      "slot_target": "receipt.pending",
+      "slot_binding": {
+        "kind": "uncredited",
+        "receipt_sha256": "f012ca3269d55f51831d1324f3cc602d2d0a894a0797e9a6c82d51ce73467051",
+        "token": "ea6649787cb6bb0c13a85983e0161b38"
+      },
+      "head_revision": 1,
+      "previous_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "original_owner": {
+        "owner": "1",
+        "pid": "54152",
+        "token": "92918d53c4d2e8d963fc09b1999ff033",
+        "version": "1"
+      },
+      "before_termination": {
+        "exists": true,
+        "files": {
+          "5088120/1/receipt.pending": {
+            "sha256": "743083a6409d9107ad66f99983ee018d843aee3dc8ba1b83d742fc6f05809256",
+            "bytes": 3961695
+          },
+          "5088120/1/writing/owner.json": {
+            "sha256": "efdb5b3526ecf61c57ba3095e088fc5c00f6edf4f93cd1499cfa65144982b108",
+            "bytes": 84
+          },
+          "local_runs/ea6649787cb6bb0c13a85983e0161b38/5088120/1/record_0000000001.json": {
+            "sha256": "f012ca3269d55f51831d1324f3cc602d2d0a894a0797e9a6c82d51ce73467051",
+            "bytes": 513
+          }
+        },
+        "directories": [
+          ".",
+          "5088120",
+          "5088120/1",
+          "5088120/1/writing",
+          "local_runs",
+          "local_runs/ea6649787cb6bb0c13a85983e0161b38",
+          "local_runs/ea6649787cb6bb0c13a85983e0161b38/5088120",
+          "local_runs/ea6649787cb6bb0c13a85983e0161b38/5088120/1"
+        ]
+      },
+      "after_termination": {
+        "exists": true,
+        "files": {
+          "5088120/1/receipt.pending": {
+            "sha256": "743083a6409d9107ad66f99983ee018d843aee3dc8ba1b83d742fc6f05809256",
+            "bytes": 3961695
+          },
+          "5088120/1/writing/owner.json": {
+            "sha256": "efdb5b3526ecf61c57ba3095e088fc5c00f6edf4f93cd1499cfa65144982b108",
+            "bytes": 84
+          },
+          "local_runs/ea6649787cb6bb0c13a85983e0161b38/5088120/1/record_0000000001.json": {
+            "sha256": "f012ca3269d55f51831d1324f3cc602d2d0a894a0797e9a6c82d51ce73467051",
+            "bytes": 513
+          }
+        },
+        "directories": [
+          ".",
+          "5088120",
+          "5088120/1",
+          "5088120/1/writing",
+          "local_runs",
+          "local_runs/ea6649787cb6bb0c13a85983e0161b38",
+          "local_runs/ea6649787cb6bb0c13a85983e0161b38/5088120",
+          "local_runs/ea6649787cb6bb0c13a85983e0161b38/5088120/1"
+        ]
+      },
+      "exit_code": 1,
+      "log_sha256": "8006887eb3ea1a2689f77bab9794be95e0d270f60062c4f2878f20d732ddaf3a"
+    },
+    {
+      "case": "reader",
+      "command": [
+        "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+        "--path",
+        "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project",
+        "--rendering-method",
+        "gl_compatibility",
+        "--resolution",
+        "1280x720",
+        "--position",
+        "30000,30000",
+        "--script",
+        "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\workers\\bootstrap.gd"
+      ],
+      "passed": true,
+      "errors": [],
+      "pid": 21868,
+      "exit_code": 0,
+      "seconds": 93.13,
+      "stopped_for": null,
+      "log_sha256": "8006887eb3ea1a2689f77bab9794be95e0d270f60062c4f2878f20d732ddaf3a"
+    },
+    {
+      "case": "record_writer",
+      "complete": true,
+      "process_terminal": true,
+      "command": [
+        "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+        "--path",
+        "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project",
+        "--rendering-method",
+        "gl_compatibility",
+        "--resolution",
+        "1280x720",
+        "--position",
+        "30000,30000",
+        "--remote-debug",
+        "tcp://127.0.0.1:63832",
+        "--script",
+        "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\workers\\bootstrap.gd"
+      ],
+      "nonce": "6aca21242d4b4cc7bfbe551e559b493a",
+      "process_nonce": "6dd31fc41f7740e8a0c2d008fbe81e9a",
+      "initial_private_gate_used": true,
+      "public_entry_qualified": false,
+      "production_method_overrides": 0,
+      "pid": 12488,
+      "point": {
+        "source": "res://scripts/run_slot_store.gd",
+        "line": 175,
+        "function": "write_slot",
+        "statement": "var released := release()",
+        "sha256": "d67fe7794f23fe1bda3d74c7e284ba6b90d2cb488a5d35cb1a187eea77fa3532"
+      },
+      "frames": [
+        {
+          "source": "res://scripts/run_slot_store.gd",
+          "line": 175,
+          "function": "write_slot"
+        },
+        {
+          "source": "res://scripts/run_world_session.gd",
+          "line": 137,
+          "function": "save_held"
+        },
+        {
+          "source": "res://scripts/continue_flow.gd",
+          "line": 252,
+          "function": "_capture_ready"
+        },
+        {
+          "source": "res://scripts/run_battle_barrier.gd",
+          "line": 196,
+          "function": "_idle_boundary"
+        }
+      ],
+      "stack_packet_sha256": "1d0d34e29f3b4a867cbfbb223d34be99b11763fefc85a09c48d5999f0c43b307",
+      "slot_sha256": "2a4513329433fa76973cff28fd6d95044d3b9b8e7accb275969a7510580eb1f5",
+      "slot_target": "record_0000000001.json",
+      "slot_binding": {
+        "kind": "uncredited",
+        "receipt_sha256": "56a55a073523c561328a6758fbe36f964275c822d416c37f29e5038f89a674c5",
+        "token": "2813dccd010d2b93538d806fd29c4dab"
+      },
+      "head_revision": 1,
+      "previous_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "original_owner": {
+        "owner": "1",
+        "pid": "12488",
+        "token": "b37e5132339534fe179a1d93de7aa97a",
+        "version": "1"
+      },
+      "before_termination": {
+        "exists": true,
+        "files": {
+          "5088120/1/record_0000000001.json": {
+            "sha256": "2a4513329433fa76973cff28fd6d95044d3b9b8e7accb275969a7510580eb1f5",
+            "bytes": 3961694
+          },
+          "5088120/1/writing/owner.json": {
+            "sha256": "7240f05ccdc4176fcf3fc8a575d63720048c52544db389aee9ada3ddc660d60c",
+            "bytes": 84
+          },
+          "local_runs/2813dccd010d2b93538d806fd29c4dab/5088120/1/record_0000000001.json": {
+            "sha256": "56a55a073523c561328a6758fbe36f964275c822d416c37f29e5038f89a674c5",
+            "bytes": 513
+          }
+        },
+        "directories": [
+          ".",
+          "5088120",
+          "5088120/1",
+          "5088120/1/writing",
+          "local_runs",
+          "local_runs/2813dccd010d2b93538d806fd29c4dab",
+          "local_runs/2813dccd010d2b93538d806fd29c4dab/5088120",
+          "local_runs/2813dccd010d2b93538d806fd29c4dab/5088120/1"
+        ]
+      },
+      "after_termination": {
+        "exists": true,
+        "files": {
+          "5088120/1/record_0000000001.json": {
+            "sha256": "2a4513329433fa76973cff28fd6d95044d3b9b8e7accb275969a7510580eb1f5",
+            "bytes": 3961694
+          },
+          "5088120/1/writing/owner.json": {
+            "sha256": "7240f05ccdc4176fcf3fc8a575d63720048c52544db389aee9ada3ddc660d60c",
+            "bytes": 84
+          },
+          "local_runs/2813dccd010d2b93538d806fd29c4dab/5088120/1/record_0000000001.json": {
+            "sha256": "56a55a073523c561328a6758fbe36f964275c822d416c37f29e5038f89a674c5",
+            "bytes": 513
+          }
+        },
+        "directories": [
+          ".",
+          "5088120",
+          "5088120/1",
+          "5088120/1/writing",
+          "local_runs",
+          "local_runs/2813dccd010d2b93538d806fd29c4dab",
+          "local_runs/2813dccd010d2b93538d806fd29c4dab/5088120",
+          "local_runs/2813dccd010d2b93538d806fd29c4dab/5088120/1"
+        ]
+      },
+      "exit_code": 1,
+      "log_sha256": "8006887eb3ea1a2689f77bab9794be95e0d270f60062c4f2878f20d732ddaf3a"
+    },
+    {
+      "case": "reader",
+      "command": [
+        "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+        "--path",
+        "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project",
+        "--rendering-method",
+        "gl_compatibility",
+        "--resolution",
+        "1280x720",
+        "--position",
+        "30000,30000",
+        "--script",
+        "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\workers\\bootstrap.gd"
+      ],
+      "passed": false,
+      "errors": [],
+      "pid": 38344,
+      "exit_code": 1,
+      "seconds": 84.634,
+      "stopped_for": null,
+      "log_sha256": "be315e346596c728268150bd84c8cd047e1ba8b0425c0ce8de4021144170af60"
+    }
+  ],
+  "cases": [
+    {
+      "case": "pending",
+      "complete": true,
+      "profile": "D:\\CodexQA\\cslot\\395908afd49f",
+      "writer_pid": 54152,
+      "reader_pid": 21868,
+      "report": "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\pending\\reader\\report.json",
+      "report_sha256": "f1c93851e95895086d0e7bc14328f25fe6f631f1641094a9eb10ce2e7755fb91",
+      "reader_checks": 21,
+      "slot_sha256": "743083a6409d9107ad66f99983ee018d843aee3dc8ba1b83d742fc6f05809256"
+    }
+  ],
+  "initial_private_gate_used": true,
+  "source_restore_branch_only": true,
+  "public_entry_qualified": false,
+  "original_release_qualified": false,
+  "sdk_qualified": false,
+  "os_input": false,
+  "base_run": "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720",
+  "project": "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project",
+  "content_version": "source-v1:d7f2258b8be6f77e3577ff9c3b018427c805c84385e86f1daa54aaa49cc30dac",
+  "engine_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+  "points": {
+    "pending": {
+      "source": "res://scripts/run_snapshot_store.gd",
+      "line": 313,
+      "function": "commit_locked",
+      "statement": "_checkpoint(\"pending_verified\")",
+      "sha256": "7052bc687a26ef9edb155465e070bcedf1ae86a3e8f19b0553bb7757b8ad9b0c"
+    },
+    "record": {
+      "source": "res://scripts/run_slot_store.gd",
+      "line": 175,
+      "function": "write_slot",
+      "statement": "var released := release()",
+      "sha256": "d67fe7794f23fe1bda3d74c7e284ba6b90d2cb488a5d35cb1a187eea77fa3532"
+    }
+  },
+  "error": "RuntimeError('Private character QA step failed: reader')",
+  "final_identity_passed": true,
+  "attempted_processes": 4,
+  "terminal_processes": 4,
+  "lock_released": true,
+  "lock_ownership_confirmed": true,
+  "pinned_files": {
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\manifest.json": "8dfa8791b181319179fb27b284c4d5e9e34031d5c616a53616fe2a40da62400f",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\process_liveness_integration_candidate\\source_manifest.json": "0149f7a5b41fdfc04362bcf8e6823ed000092b28538ef08c646056b3923d34ac",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\scripts\\battle.gd": "30c722e17e49c90224f44e4254569e89de277b3316eb6cafb2f8f98f35d9ef12",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\scripts\\campaign.gd": "911e97602524fae9f7e8f9ff07b84b6d8179a574c12a233cdf2798c92625db6a",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\scripts\\continue_flow.gd": "a180034ff34237a5161cedef8309b27903c953676c4100f30c1d0f9f97e6c4b0",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\scripts\\menu.gd": "cd2a444f8fe4748fc2e49ead3283613daa2285f5176a04e9347c6b3955052792",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\scripts\\run_campaign_cfg_transaction.gd": "71803fc42a6bef59479db5b8cf70a953716a3968e45ba1fb391eed5726a51d17",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\scripts\\run_campaign_cfg_values.gd": "ebf78b673a99ea847b72aa7b897f1aede34c99f1e6cc873f66f69611929ef081",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\scripts\\run_campaign_legacy_data.gd": "2ab0ea51afb1ede869022ec2877c75f6c395080ad34ab1a9c40aca2d5f76f93e",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\scripts\\run_campaign_local_lifecycle.gd": "db00c4a92094737b22f2706afa1c9e975c4b899afa30c245457ad4ec1deecd76",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\scripts\\run_campaign_progress_coordinator.gd": "4fa8c42a7c288c7384bb1254c67fe94946aa12b981315ce4753e1aeeedaab018",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\scripts\\run_campaign_progress_gate.gd": "2303bf6b25eaf83c915bbfd88d09a58072174780f3d9397d23f9086b76d0c29f",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\scripts\\run_campaign_progress_intent.gd": "0b04412ba4203fb93f3113d7633c753f238d5a383a62e291ca8c917f290a63ff",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\scripts\\run_campaign_progress_projection.gd": "6c627f95c44f6876895f012b5e6a6859500b73d391f92d7bf46f41f4b0d1e68b",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\scripts\\run_campaign_startup_scan.gd": "2f4fbebbaa4c6035e8111e70215042f91ff60d69723169da011849a187954c0d",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\scripts\\run_world_session.gd": "8223f5b64fc1472422c89b33876a43dc7e8462bb55b46f8f7351c4a888867365",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\scripts\\steam_cloud.gd": "ee793d71e6ab757b8605fa2c3c3675493b5a52e9503dd34bb102785f93d0b986",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\scripts\\steam_local_run_session.gd": "10198f06b28cad4a4d3c8423be426f3fbd6901654ff1dadf8d3d3ea2a40ef3f1",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\scripts\\steam_receipt_store.gd": "11bf6cae5968baa6c740c3c6be1fc954376048cbbe9a81a77b6cf4588518f9f1",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\scripts\\steam_run_ledger.gd": "da60d5481a25f3588db2b2c6815a728f5deef45969a951d3416d3d43a53094e1",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\scripts\\steam_run_receipt.gd": "13a277c20617ba5777d1287cc16e639441cae3cd938a550e088a2fa119a05958",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\scripts\\steam_service.gd": "42498690141f36cb4898ea2a645b2d31a4305d8e9a239a505d4a126069a22984",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\process_liveness_integration_candidate\\scripts\\run_snapshot_store.gd": "7052bc687a26ef9edb155465e070bcedf1ae86a3e8f19b0553bb7757b8ad9b0c",
+    "D:\\AI项目\\水浒\\开发工程\\scripts\\run_snapshot_store.gd": "581e638b8f0ce7cb24d5533b03ee94b99732c5cffcbf373b1a5a69a1618d8251",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\process_liveness_integration_candidate\\scripts\\steam_receipt_store.gd": "10f7cd3cd77c9c5322c991c63c11bc2c85151b1fc03dbf9ceef55d698ebb90b7",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\process_liveness_integration_candidate\\scripts\\process_liveness_oracle.gd": "2224516ffd215d6d0e45d3254f7071aacc0357180a0500b6ad6b889593a8b6bd",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\process_liveness_candidate\\scripts\\process_liveness_oracle.gd": "4ae3335c7463705cc7df70b3ee441be83794adb7db629226a6c36711f9558122",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\process_liveness_integration_candidate\\scripts\\run_process_liveness_manager.gd": "644531a889b554be5187b60d47e15b5c9331839360293ef14aa79a978a9a2976",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\process_liveness_candidate\\native\\ProcessLivenessProbe.cs": "2d01e9ced42ba25b243e79e7f847334eee66f210d5c5fcc916e4eeb00396f8a1",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\process_liveness_candidate\\evidence\\build_20261026_231111_062ae286.json": "5685db4cb6e92fa67f79622e2e1b131811a7b6e0e75813cee517dc543384e255",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\process_liveness_candidate\\.artifacts\\20261026_231111_062ae286\\ProcessLivenessProbe.exe": "012354b1cf0376712f97e19362d91b2ef7f51775c6797c862c513df1e2f1936c",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\prepare_liveness.py": "1c4a84063e6686be78a0e1df67a17f18f7a83f8b4a234921764cdee5c97fecdc",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\prepare_handoff.py": "f961ff8fabefc49e1f99c9fe714400eea542490ec7ec45ad1f9b785f334995c1",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\huangnigang_production_20261020\\run_batch.py": "ab5825a9c4041c95ec31c62c3abf18b390a1affac05121f5d24ad8e42af6f768",
+    "D:\\AI项目\\水浒\\开发工程\\tools\\contracts\\run_content_identity_20260907\\build_identity.py": "818f280d3c8518348566e9986bd5bb6dd0b05f18a4ffdcc0bcd30efd398e946a",
+    "D:\\AI项目\\水浒\\开发工程\\tools\\run_character_art_qa.py": "84d019c93da597ab500aa9258f63d71a027de9624529cc3cb997b0eb30fb54c9",
+    "D:\\AI项目\\水浒\\开发工程\\tools\\run_steam_integration_qa.py": "0673d6ab09904fd653152b127c30ca325dbf791de0b77a5da2a60cd30f0a5ad9",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\candidate_manifest.json": "f4b83220e4990d2823bc2c5393c6383ebec33b06dc6aa9ccd7186ebdccbd1e0d",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\generation.json": "fa750bcedf60b9c9f7150e5306eb96b3e681d26fa57fbc1419e15a3875d0161a",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\preparation.json": "7dad3c4a96d2177cb3e59eab0be3f580a15bda04b0f364e856394f2b8b52a306",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\battle.gd": "30c722e17e49c90224f44e4254569e89de277b3316eb6cafb2f8f98f35d9ef12",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\campaign.gd": "911e97602524fae9f7e8f9ff07b84b6d8179a574c12a233cdf2798c92625db6a",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\continue_flow.gd": "a180034ff34237a5161cedef8309b27903c953676c4100f30c1d0f9f97e6c4b0",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\menu.gd": "cd2a444f8fe4748fc2e49ead3283613daa2285f5176a04e9347c6b3955052792",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\process_liveness_oracle.gd": "2224516ffd215d6d0e45d3254f7071aacc0357180a0500b6ad6b889593a8b6bd",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\run_campaign_cfg_transaction.gd": "71803fc42a6bef59479db5b8cf70a953716a3968e45ba1fb391eed5726a51d17",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\run_campaign_cfg_values.gd": "ebf78b673a99ea847b72aa7b897f1aede34c99f1e6cc873f66f69611929ef081",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\run_campaign_legacy_data.gd": "2ab0ea51afb1ede869022ec2877c75f6c395080ad34ab1a9c40aca2d5f76f93e",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\run_campaign_local_lifecycle.gd": "db00c4a92094737b22f2706afa1c9e975c4b899afa30c245457ad4ec1deecd76",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\run_campaign_progress_coordinator.gd": "4fa8c42a7c288c7384bb1254c67fe94946aa12b981315ce4753e1aeeedaab018",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\run_campaign_progress_gate.gd": "2303bf6b25eaf83c915bbfd88d09a58072174780f3d9397d23f9086b76d0c29f",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\run_campaign_progress_intent.gd": "0b04412ba4203fb93f3113d7633c753f238d5a383a62e291ca8c917f290a63ff",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\run_campaign_progress_projection.gd": "6c627f95c44f6876895f012b5e6a6859500b73d391f92d7bf46f41f4b0d1e68b",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\run_campaign_startup_scan.gd": "2f4fbebbaa4c6035e8111e70215042f91ff60d69723169da011849a187954c0d",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\run_process_liveness_manager.gd": "644531a889b554be5187b60d47e15b5c9331839360293ef14aa79a978a9a2976",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\run_snapshot_store.gd": "7052bc687a26ef9edb155465e070bcedf1ae86a3e8f19b0553bb7757b8ad9b0c",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\run_world_session.gd": "8223f5b64fc1472422c89b33876a43dc7e8462bb55b46f8f7351c4a888867365",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\steam_cloud.gd": "ee793d71e6ab757b8605fa2c3c3675493b5a52e9503dd34bb102785f93d0b986",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\steam_local_run_session.gd": "10198f06b28cad4a4d3c8423be426f3fbd6901654ff1dadf8d3d3ea2a40ef3f1",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\steam_receipt_store.gd": "10f7cd3cd77c9c5322c991c63c11bc2c85151b1fc03dbf9ceef55d698ebb90b7",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\steam_run_ledger.gd": "da60d5481a25f3588db2b2c6815a728f5deef45969a951d3416d3d43a53094e1",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\steam_run_receipt.gd": "13a277c20617ba5777d1287cc16e639441cae3cd938a550e088a2fa119a05958",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\steam_service.gd": "42498690141f36cb4898ea2a645b2d31a4305d8e9a239a505d4a126069a22984",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\addons\\process_liveness\\windows\\ProcessLivenessProbe.exe": "012354b1cf0376712f97e19362d91b2ef7f51775c6797c862c513df1e2f1936c",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\continue_binding_candidate\\scripts\\continue_flow.gd": "91d3af35cb5128073c72af0d879b2ce14496b7b3609d09c55f0da2524b0380a1",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\continue_binding_candidate\\scripts\\run_world_session.gd": "fbea69f28d74b9d4372a93cdcc933ead129f3bbbc8b1c89c51fdca43965e5427",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\continue_binding_candidate\\scripts\\run_campaign_local_lifecycle.gd": "c14aee4e9fa6bf75242850a86302722ca48b0f2f6de4fcf2882acfba6ca18dda",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\continue_binding_candidate\\check_sources.py": "4ebaacb9eef0d928f0b20e7f65bc45228bbc7afd85098fdf9862a19610257730",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\continue_binding_candidate\\prepare_continue.py": "68fefe17129521d6b3de212de33978e444f4a94fcaf25ee0dcb6fb891b72c02a",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\continue_binding_candidate\\tests\\run_disk.py": "aeacc19688afa3083e2f4abf3e0d396ee6ff687930eb7a860d5cde42ba07533e",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\continue_binding_candidate\\README.md": "c0609ed445b7449d159a498b1099e5d0049bc6d4c777b88e7ccf432006b4ea49",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\continue_binding_candidate\\candidate.diff": "610f662f489c30be384d77f4f172976cf407e9957257e5b79796005a7014dbb8",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\continue_binding_candidate\\static_findings.json": "4613df1ba733849f3ed9b06384f0b51b934ea95fbb554294e4b6293cc72869ac",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\continue_binding_candidate\\tests\\bootstrap.gd": "ac79f8839fa9757b86ec667a3f7cd1d4ac0f0fef8c3499e38e48a7a8e42f269d",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\continue_binding_candidate\\tests\\binding_disk.gd": "d83d20f9420b70f33940022edb5657a02a3a3c91e19e25c16e926854760d7bda",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\root_source.json": "fc8be051b3f219bf5ca9468fc08730956aea17b6e5f1b114874a37ceeba3a9cb",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\preimport_source.json": "6a30d8f658493ebbfe0242e68e92dde307426d7985ba5eb074f1a22ecf54cd14",
+    "D:\\AI项目\\水浒\\开发工程\\tools\\run_campaign_level_state_qa.py": "973e1f83cdec8863a45dc4835ad53cf9777e8a54fa9cfdbe0c58aacbd7aca3ba",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\continue_binding_candidate\\source_manifest.json": "fc9e5d40dd772900f637615da6c1e453d9aaed88489a0747ce36b02b7f39f247",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\battle.gd": "30c722e17e49c90224f44e4254569e89de277b3316eb6cafb2f8f98f35d9ef12",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\campaign.gd": "911e97602524fae9f7e8f9ff07b84b6d8179a574c12a233cdf2798c92625db6a",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\continue_flow.gd": "91d3af35cb5128073c72af0d879b2ce14496b7b3609d09c55f0da2524b0380a1",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\menu.gd": "cd2a444f8fe4748fc2e49ead3283613daa2285f5176a04e9347c6b3955052792",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\process_liveness_oracle.gd": "2224516ffd215d6d0e45d3254f7071aacc0357180a0500b6ad6b889593a8b6bd",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\run_campaign_cfg_transaction.gd": "71803fc42a6bef59479db5b8cf70a953716a3968e45ba1fb391eed5726a51d17",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\run_campaign_cfg_values.gd": "ebf78b673a99ea847b72aa7b897f1aede34c99f1e6cc873f66f69611929ef081",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\run_campaign_legacy_data.gd": "2ab0ea51afb1ede869022ec2877c75f6c395080ad34ab1a9c40aca2d5f76f93e",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\run_campaign_local_lifecycle.gd": "c14aee4e9fa6bf75242850a86302722ca48b0f2f6de4fcf2882acfba6ca18dda",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\run_campaign_progress_coordinator.gd": "4fa8c42a7c288c7384bb1254c67fe94946aa12b981315ce4753e1aeeedaab018",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\run_campaign_progress_gate.gd": "2303bf6b25eaf83c915bbfd88d09a58072174780f3d9397d23f9086b76d0c29f",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\run_campaign_progress_intent.gd": "0b04412ba4203fb93f3113d7633c753f238d5a383a62e291ca8c917f290a63ff",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\run_campaign_progress_projection.gd": "6c627f95c44f6876895f012b5e6a6859500b73d391f92d7bf46f41f4b0d1e68b",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\run_campaign_startup_scan.gd": "2f4fbebbaa4c6035e8111e70215042f91ff60d69723169da011849a187954c0d",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\run_process_liveness_manager.gd": "644531a889b554be5187b60d47e15b5c9331839360293ef14aa79a978a9a2976",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\run_snapshot_store.gd": "7052bc687a26ef9edb155465e070bcedf1ae86a3e8f19b0553bb7757b8ad9b0c",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\run_world_session.gd": "fbea69f28d74b9d4372a93cdcc933ead129f3bbbc8b1c89c51fdca43965e5427",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\steam_cloud.gd": "ee793d71e6ab757b8605fa2c3c3675493b5a52e9503dd34bb102785f93d0b986",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\steam_local_run_session.gd": "10198f06b28cad4a4d3c8423be426f3fbd6901654ff1dadf8d3d3ea2a40ef3f1",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\steam_receipt_store.gd": "10f7cd3cd77c9c5322c991c63c11bc2c85151b1fc03dbf9ceef55d698ebb90b7",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\steam_run_ledger.gd": "da60d5481a25f3588db2b2c6815a728f5deef45969a951d3416d3d43a53094e1",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\steam_run_receipt.gd": "13a277c20617ba5777d1287cc16e639441cae3cd938a550e088a2fa119a05958",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\steam_service.gd": "42498690141f36cb4898ea2a645b2d31a4305d8e9a239a505d4a126069a22984",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\addons\\process_liveness\\windows\\ProcessLivenessProbe.exe": "012354b1cf0376712f97e19362d91b2ef7f51775c6797c862c513df1e2f1936c",
+    "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\import__20261027_013835_6fc1dc02\\import.log": "a9d5503833036b42c87d0cf06d711632c8ad60b38de0038787cfafce2424027f",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\import__20261027_013835_6fc1dc02\\receipt.json": "bd262fb991f476c8d99a33cde23302491e4f9260b65c236eae25dc5177cb5f35",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\candidate_manifest.json": "06f2aa5b50e30b4c711a0ea22e1d01253b3fed4d06db47b706abeb74bac771f0",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\preparation.json": "3cb64d22737c9e7a331ac9847dcc0e513f5ef2d19c87886e0829ee2d565435f3",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\root_source.json": "fc8be051b3f219bf5ca9468fc08730956aea17b6e5f1b114874a37ceeba3a9cb",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\preimport_source.json": "d69a5b3e384f85df0b5ffeb063fa0ab5a3f5203d0c50574e1354b44de1c67b70",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\generation.json": "43e95ef78c3fc7389ad2057bbcbb355c72f9964cc7272e05fc6c948659fa60be",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\continue_binding_candidate\\tests\\classic_recovery\\run_recovery.py": "b46f8644470d98234c5a9fb9580203341a4d14f03918b8b01455b066bcb8083c",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\continue_binding_candidate\\tests\\classic_recovery\\driver.gd": "456fc3bcf6a5be63f6b22587da5feb17c0a11ebab95eb5de4a6a0785f500337d",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\continue_binding_candidate\\tests\\classic_recovery\\bootstrap.gd": "0de2d25f193ed8d90543e866fbf6ab1f8bef356b48cc52d7373cb298a0a60d29",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\continue_binding_candidate\\tests\\classic_recovery\\README.md": "b18f866198a7f21eae5c7210929853f66e02a01b989de32d8bc68dafd26ec4f3",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\handoff_candidate\\tests\\classic\\driver.gd": "d0a366aeae0b8a6689545966dbe5750dd7a4ae98d7b276aabf8b4274a0119014",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\handoff_candidate\\tests\\classic\\policy.gd": "51bc7583e8c3ecf4a36d6cfd5339a6fab0bdee9515bf568a4b2b1c52a1588297",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\handoff_candidate\\tests\\classic\\inflight.gd": "0549d6f2eca39aa9ed1aaf4b24eb07ae635c67cd307effbd178ceefe6a8c177c",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\tests\\io\\run_io.py": "ef437cc2fa4f602b0ae26a429ba03453b305d72ad4ba1b3451fa03186c60b1bb",
+    "D:\\AI项目\\水浒\\开发工程\\tools\\godot_debug_wire.py": "41703c88628a3fa473db00d8eeb79e87e6c2f250b0dc243a951b8295973e0c35",
+    "D:\\AI项目\\水浒\\开发工程\\tools\\run_workstation_baseline.py": "1220817bacea5469035403084c3e4ddc7c23d222440876cd199e650a9b7dd8b2",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\continue_binding_candidate\\tests\\classic_recovery\\sources.json": "ed26fb8624ec742421bcbe5b114c07189ee777c023a1f2afffab496d65bfb318",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\manifest.json": "8dfa8791b181319179fb27b284c4d5e9e34031d5c616a53616fe2a40da62400f",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\process_liveness_integration_candidate\\source_manifest.json": "0149f7a5b41fdfc04362bcf8e6823ed000092b28538ef08c646056b3923d34ac",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\scripts\\battle.gd": "30c722e17e49c90224f44e4254569e89de277b3316eb6cafb2f8f98f35d9ef12",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\scripts\\campaign.gd": "911e97602524fae9f7e8f9ff07b84b6d8179a574c12a233cdf2798c92625db6a",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\scripts\\continue_flow.gd": "a180034ff34237a5161cedef8309b27903c953676c4100f30c1d0f9f97e6c4b0",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\scripts\\menu.gd": "cd2a444f8fe4748fc2e49ead3283613daa2285f5176a04e9347c6b3955052792",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\scripts\\run_campaign_cfg_transaction.gd": "71803fc42a6bef59479db5b8cf70a953716a3968e45ba1fb391eed5726a51d17",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\scripts\\run_campaign_cfg_values.gd": "ebf78b673a99ea847b72aa7b897f1aede34c99f1e6cc873f66f69611929ef081",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\scripts\\run_campaign_legacy_data.gd": "2ab0ea51afb1ede869022ec2877c75f6c395080ad34ab1a9c40aca2d5f76f93e",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\scripts\\run_campaign_local_lifecycle.gd": "db00c4a92094737b22f2706afa1c9e975c4b899afa30c245457ad4ec1deecd76",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\scripts\\run_campaign_progress_coordinator.gd": "4fa8c42a7c288c7384bb1254c67fe94946aa12b981315ce4753e1aeeedaab018",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\scripts\\run_campaign_progress_gate.gd": "2303bf6b25eaf83c915bbfd88d09a58072174780f3d9397d23f9086b76d0c29f",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\scripts\\run_campaign_progress_intent.gd": "0b04412ba4203fb93f3113d7633c753f238d5a383a62e291ca8c917f290a63ff",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\scripts\\run_campaign_progress_projection.gd": "6c627f95c44f6876895f012b5e6a6859500b73d391f92d7bf46f41f4b0d1e68b",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\scripts\\run_campaign_startup_scan.gd": "2f4fbebbaa4c6035e8111e70215042f91ff60d69723169da011849a187954c0d",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\scripts\\run_world_session.gd": "8223f5b64fc1472422c89b33876a43dc7e8462bb55b46f8f7351c4a888867365",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\scripts\\steam_cloud.gd": "ee793d71e6ab757b8605fa2c3c3675493b5a52e9503dd34bb102785f93d0b986",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\scripts\\steam_local_run_session.gd": "10198f06b28cad4a4d3c8423be426f3fbd6901654ff1dadf8d3d3ea2a40ef3f1",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\scripts\\steam_receipt_store.gd": "11bf6cae5968baa6c740c3c6be1fc954376048cbbe9a81a77b6cf4588518f9f1",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\scripts\\steam_run_ledger.gd": "da60d5481a25f3588db2b2c6815a728f5deef45969a951d3416d3d43a53094e1",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\scripts\\steam_run_receipt.gd": "13a277c20617ba5777d1287cc16e639441cae3cd938a550e088a2fa119a05958",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\integrated_candidate\\scripts\\steam_service.gd": "42498690141f36cb4898ea2a645b2d31a4305d8e9a239a505d4a126069a22984",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\process_liveness_integration_candidate\\scripts\\run_snapshot_store.gd": "7052bc687a26ef9edb155465e070bcedf1ae86a3e8f19b0553bb7757b8ad9b0c",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\scripts\\run_snapshot_store.gd": "581e638b8f0ce7cb24d5533b03ee94b99732c5cffcbf373b1a5a69a1618d8251",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\process_liveness_integration_candidate\\scripts\\steam_receipt_store.gd": "10f7cd3cd77c9c5322c991c63c11bc2c85151b1fc03dbf9ceef55d698ebb90b7",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\process_liveness_integration_candidate\\scripts\\process_liveness_oracle.gd": "2224516ffd215d6d0e45d3254f7071aacc0357180a0500b6ad6b889593a8b6bd",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\process_liveness_candidate\\scripts\\process_liveness_oracle.gd": "4ae3335c7463705cc7df70b3ee441be83794adb7db629226a6c36711f9558122",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\process_liveness_integration_candidate\\scripts\\run_process_liveness_manager.gd": "644531a889b554be5187b60d47e15b5c9331839360293ef14aa79a978a9a2976",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\process_liveness_candidate\\native\\ProcessLivenessProbe.cs": "2d01e9ced42ba25b243e79e7f847334eee66f210d5c5fcc916e4eeb00396f8a1",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\process_liveness_candidate\\evidence\\build_20261026_231111_062ae286.json": "5685db4cb6e92fa67f79622e2e1b131811a7b6e0e75813cee517dc543384e255",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\process_liveness_candidate\\.artifacts\\20261026_231111_062ae286\\ProcessLivenessProbe.exe": "012354b1cf0376712f97e19362d91b2ef7f51775c6797c862c513df1e2f1936c",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\prepare_liveness.py": "1c4a84063e6686be78a0e1df67a17f18f7a83f8b4a234921764cdee5c97fecdc",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\prepare_handoff.py": "f961ff8fabefc49e1f99c9fe714400eea542490ec7ec45ad1f9b785f334995c1",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\huangnigang_production_20261020\\run_batch.py": "ab5825a9c4041c95ec31c62c3abf18b390a1affac05121f5d24ad8e42af6f768",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\tools\\contracts\\run_content_identity_20260907\\build_identity.py": "818f280d3c8518348566e9986bd5bb6dd0b05f18a4ffdcc0bcd30efd398e946a",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\tools\\run_character_art_qa.py": "84d019c93da597ab500aa9258f63d71a027de9624529cc3cb997b0eb30fb54c9",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\tools\\run_steam_integration_qa.py": "0673d6ab09904fd653152b127c30ca325dbf791de0b77a5da2a60cd30f0a5ad9",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\candidate_manifest.json": "f4b83220e4990d2823bc2c5393c6383ebec33b06dc6aa9ccd7186ebdccbd1e0d",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\generation.json": "fa750bcedf60b9c9f7150e5306eb96b3e681d26fa57fbc1419e15a3875d0161a",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\preparation.json": "7dad3c4a96d2177cb3e59eab0be3f580a15bda04b0f364e856394f2b8b52a306",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\battle.gd": "30c722e17e49c90224f44e4254569e89de277b3316eb6cafb2f8f98f35d9ef12",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\campaign.gd": "911e97602524fae9f7e8f9ff07b84b6d8179a574c12a233cdf2798c92625db6a",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\continue_flow.gd": "a180034ff34237a5161cedef8309b27903c953676c4100f30c1d0f9f97e6c4b0",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\menu.gd": "cd2a444f8fe4748fc2e49ead3283613daa2285f5176a04e9347c6b3955052792",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\process_liveness_oracle.gd": "2224516ffd215d6d0e45d3254f7071aacc0357180a0500b6ad6b889593a8b6bd",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\run_campaign_cfg_transaction.gd": "71803fc42a6bef59479db5b8cf70a953716a3968e45ba1fb391eed5726a51d17",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\run_campaign_cfg_values.gd": "ebf78b673a99ea847b72aa7b897f1aede34c99f1e6cc873f66f69611929ef081",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\run_campaign_legacy_data.gd": "2ab0ea51afb1ede869022ec2877c75f6c395080ad34ab1a9c40aca2d5f76f93e",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\run_campaign_local_lifecycle.gd": "db00c4a92094737b22f2706afa1c9e975c4b899afa30c245457ad4ec1deecd76",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\run_campaign_progress_coordinator.gd": "4fa8c42a7c288c7384bb1254c67fe94946aa12b981315ce4753e1aeeedaab018",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\run_campaign_progress_gate.gd": "2303bf6b25eaf83c915bbfd88d09a58072174780f3d9397d23f9086b76d0c29f",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\run_campaign_progress_intent.gd": "0b04412ba4203fb93f3113d7633c753f238d5a383a62e291ca8c917f290a63ff",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\run_campaign_progress_projection.gd": "6c627f95c44f6876895f012b5e6a6859500b73d391f92d7bf46f41f4b0d1e68b",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\run_campaign_startup_scan.gd": "2f4fbebbaa4c6035e8111e70215042f91ff60d69723169da011849a187954c0d",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\run_process_liveness_manager.gd": "644531a889b554be5187b60d47e15b5c9331839360293ef14aa79a978a9a2976",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\run_snapshot_store.gd": "7052bc687a26ef9edb155465e070bcedf1ae86a3e8f19b0553bb7757b8ad9b0c",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\run_world_session.gd": "8223f5b64fc1472422c89b33876a43dc7e8462bb55b46f8f7351c4a888867365",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\steam_cloud.gd": "ee793d71e6ab757b8605fa2c3c3675493b5a52e9503dd34bb102785f93d0b986",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\steam_local_run_session.gd": "10198f06b28cad4a4d3c8423be426f3fbd6901654ff1dadf8d3d3ea2a40ef3f1",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\steam_receipt_store.gd": "10f7cd3cd77c9c5322c991c63c11bc2c85151b1fc03dbf9ceef55d698ebb90b7",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\steam_run_ledger.gd": "da60d5481a25f3588db2b2c6815a728f5deef45969a951d3416d3d43a53094e1",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\steam_run_receipt.gd": "13a277c20617ba5777d1287cc16e639441cae3cd938a550e088a2fa119a05958",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\scripts\\steam_service.gd": "42498690141f36cb4898ea2a645b2d31a4305d8e9a239a505d4a126069a22984",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project\\addons\\process_liveness\\windows\\ProcessLivenessProbe.exe": "012354b1cf0376712f97e19362d91b2ef7f51775c6797c862c513df1e2f1936c",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\continue_binding_candidate\\scripts\\continue_flow.gd": "91d3af35cb5128073c72af0d879b2ce14496b7b3609d09c55f0da2524b0380a1",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\continue_binding_candidate\\scripts\\run_world_session.gd": "fbea69f28d74b9d4372a93cdcc933ead129f3bbbc8b1c89c51fdca43965e5427",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\continue_binding_candidate\\scripts\\run_campaign_local_lifecycle.gd": "c14aee4e9fa6bf75242850a86302722ca48b0f2f6de4fcf2882acfba6ca18dda",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\continue_binding_candidate\\check_sources.py": "4ebaacb9eef0d928f0b20e7f65bc45228bbc7afd85098fdf9862a19610257730",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\continue_binding_candidate\\prepare_continue.py": "68fefe17129521d6b3de212de33978e444f4a94fcaf25ee0dcb6fb891b72c02a",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\continue_binding_candidate\\tests\\run_disk.py": "aeacc19688afa3083e2f4abf3e0d396ee6ff687930eb7a860d5cde42ba07533e",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\continue_binding_candidate\\README.md": "c0609ed445b7449d159a498b1099e5d0049bc6d4c777b88e7ccf432006b4ea49",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\continue_binding_candidate\\candidate.diff": "610f662f489c30be384d77f4f172976cf407e9957257e5b79796005a7014dbb8",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\continue_binding_candidate\\static_findings.json": "4613df1ba733849f3ed9b06384f0b51b934ea95fbb554294e4b6293cc72869ac",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\continue_binding_candidate\\tests\\bootstrap.gd": "ac79f8839fa9757b86ec667a3f7cd1d4ac0f0fef8c3499e38e48a7a8e42f269d",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\continue_binding_candidate\\tests\\binding_disk.gd": "d83d20f9420b70f33940022edb5657a02a3a3c91e19e25c16e926854760d7bda",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\root_source.json": "fc8be051b3f219bf5ca9468fc08730956aea17b6e5f1b114874a37ceeba3a9cb",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\preimport_source.json": "6a30d8f658493ebbfe0242e68e92dde307426d7985ba5eb074f1a22ecf54cd14",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\tools\\run_campaign_level_state_qa.py": "973e1f83cdec8863a45dc4835ad53cf9777e8a54fa9cfdbe0c58aacbd7aca3ba",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\continue_binding_candidate\\source_manifest.json": "fc9e5d40dd772900f637615da6c1e453d9aaed88489a0747ce36b02b7f39f247",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\battle.gd": "30c722e17e49c90224f44e4254569e89de277b3316eb6cafb2f8f98f35d9ef12",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\campaign.gd": "911e97602524fae9f7e8f9ff07b84b6d8179a574c12a233cdf2798c92625db6a",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\continue_flow.gd": "91d3af35cb5128073c72af0d879b2ce14496b7b3609d09c55f0da2524b0380a1",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\menu.gd": "cd2a444f8fe4748fc2e49ead3283613daa2285f5176a04e9347c6b3955052792",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\process_liveness_oracle.gd": "2224516ffd215d6d0e45d3254f7071aacc0357180a0500b6ad6b889593a8b6bd",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\run_campaign_cfg_transaction.gd": "71803fc42a6bef59479db5b8cf70a953716a3968e45ba1fb391eed5726a51d17",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\run_campaign_cfg_values.gd": "ebf78b673a99ea847b72aa7b897f1aede34c99f1e6cc873f66f69611929ef081",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\run_campaign_legacy_data.gd": "2ab0ea51afb1ede869022ec2877c75f6c395080ad34ab1a9c40aca2d5f76f93e",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\run_campaign_local_lifecycle.gd": "c14aee4e9fa6bf75242850a86302722ca48b0f2f6de4fcf2882acfba6ca18dda",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\run_campaign_progress_coordinator.gd": "4fa8c42a7c288c7384bb1254c67fe94946aa12b981315ce4753e1aeeedaab018",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\run_campaign_progress_gate.gd": "2303bf6b25eaf83c915bbfd88d09a58072174780f3d9397d23f9086b76d0c29f",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\run_campaign_progress_intent.gd": "0b04412ba4203fb93f3113d7633c753f238d5a383a62e291ca8c917f290a63ff",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\run_campaign_progress_projection.gd": "6c627f95c44f6876895f012b5e6a6859500b73d391f92d7bf46f41f4b0d1e68b",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\run_campaign_startup_scan.gd": "2f4fbebbaa4c6035e8111e70215042f91ff60d69723169da011849a187954c0d",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\run_process_liveness_manager.gd": "644531a889b554be5187b60d47e15b5c9331839360293ef14aa79a978a9a2976",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\run_snapshot_store.gd": "7052bc687a26ef9edb155465e070bcedf1ae86a3e8f19b0553bb7757b8ad9b0c",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\run_world_session.gd": "fbea69f28d74b9d4372a93cdcc933ead129f3bbbc8b1c89c51fdca43965e5427",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\steam_cloud.gd": "ee793d71e6ab757b8605fa2c3c3675493b5a52e9503dd34bb102785f93d0b986",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\steam_local_run_session.gd": "10198f06b28cad4a4d3c8423be426f3fbd6901654ff1dadf8d3d3ea2a40ef3f1",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\steam_receipt_store.gd": "10f7cd3cd77c9c5322c991c63c11bc2c85151b1fc03dbf9ceef55d698ebb90b7",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\steam_run_ledger.gd": "da60d5481a25f3588db2b2c6815a728f5deef45969a951d3416d3d43a53094e1",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\steam_run_receipt.gd": "13a277c20617ba5777d1287cc16e639441cae3cd938a550e088a2fa119a05958",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\scripts\\steam_service.gd": "42498690141f36cb4898ea2a645b2d31a4305d8e9a239a505d4a126069a22984",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project\\addons\\process_liveness\\windows\\ProcessLivenessProbe.exe": "012354b1cf0376712f97e19362d91b2ef7f51775c6797c862c513df1e2f1936c",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\import__20261027_013835_6fc1dc02\\import.log": "a9d5503833036b42c87d0cf06d711632c8ad60b38de0038787cfafce2424027f",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\import__20261027_013835_6fc1dc02\\receipt.json": "bd262fb991f476c8d99a33cde23302491e4f9260b65c236eae25dc5177cb5f35",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\candidate_manifest.json": "06f2aa5b50e30b4c711a0ea22e1d01253b3fed4d06db47b706abeb74bac771f0",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\preparation.json": "3cb64d22737c9e7a331ac9847dcc0e513f5ef2d19c87886e0829ee2d565435f3",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\root_source.json": "fc8be051b3f219bf5ca9468fc08730956aea17b6e5f1b114874a37ceeba3a9cb",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\preimport_source.json": "d69a5b3e384f85df0b5ffeb063fa0ab5a3f5203d0c50574e1354b44de1c67b70",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\generation.json": "43e95ef78c3fc7389ad2057bbcbb355c72f9964cc7272e05fc6c948659fa60be",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\continue_binding_candidate\\tests\\classic_recovery\\run_recovery.py": "b46f8644470d98234c5a9fb9580203341a4d14f03918b8b01455b066bcb8083c",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\continue_binding_candidate\\tests\\classic_recovery\\driver.gd": "456fc3bcf6a5be63f6b22587da5feb17c0a11ebab95eb5de4a6a0785f500337d",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\continue_binding_candidate\\tests\\classic_recovery\\bootstrap.gd": "0de2d25f193ed8d90543e866fbf6ab1f8bef356b48cc52d7373cb298a0a60d29",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\continue_binding_candidate\\tests\\classic_recovery\\README.md": "b18f866198a7f21eae5c7210929853f66e02a01b989de32d8bc68dafd26ec4f3",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\handoff_candidate\\tests\\classic\\driver.gd": "d0a366aeae0b8a6689545966dbe5750dd7a4ae98d7b276aabf8b4274a0119014",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\handoff_candidate\\tests\\classic\\policy.gd": "51bc7583e8c3ecf4a36d6cfd5339a6fab0bdee9515bf568a4b2b1c52a1588297",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\handoff_candidate\\tests\\classic\\inflight.gd": "0549d6f2eca39aa9ed1aaf4b24eb07ae635c67cd307effbd178ceefe6a8c177c",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\tests\\io\\run_io.py": "ef437cc2fa4f602b0ae26a429ba03453b305d72ad4ba1b3451fa03186c60b1bb",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\tools\\godot_debug_wire.py": "41703c88628a3fa473db00d8eeb79e87e6c2f250b0dc243a951b8295973e0c35",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\tools\\run_workstation_baseline.py": "1220817bacea5469035403084c3e4ddc7c23d222440876cd199e650a9b7dd8b2",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\runner_inputs\\qa\\campaign_progress_recovery_20261026\\continue_binding_candidate\\tests\\classic_recovery\\sources.json": "ed26fb8624ec742421bcbe5b114c07189ee777c023a1f2afffab496d65bfb318",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\workers\\bootstrap.gd": "0de2d25f193ed8d90543e866fbf6ab1f8bef356b48cc52d7373cb298a0a60d29",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\workers\\driver.gd": "456fc3bcf6a5be63f6b22587da5feb17c0a11ebab95eb5de4a6a0785f500337d",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\workers\\classic_base.gd": "d0a366aeae0b8a6689545966dbe5750dd7a4ae98d7b276aabf8b4274a0119014",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\workers\\policy.gd": "51bc7583e8c3ecf4a36d6cfd5339a6fab0bdee9515bf568a4b2b1c52a1588297",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\workers\\inflight.gd": "0549d6f2eca39aa9ed1aaf4b24eb07ae635c67cd307effbd178ceefe6a8c177c",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\workers\\bindings.json": "f58ec7282726f31a537b02b08880d617341cae308c7798538962ff7d1f983b78",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\pending\\writer\\ack.json": "6052aa166a781614bfc2c0a3896276dc642f75f21be2d8166c6f7f6599383f74",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\pending\\writer\\prepared.json": "526b46aa1b99b5ea14b97717fe31009d54d60b5e069f8b1739534b9953a1a278",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\pending\\writer\\receipt.json": "cff215fda9c89afb4d8eb6f400bdde7ad8e14330057c0818bfabb659b9a1d4a5",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\pending\\writer\\request.json": "c8d27117e17142d24341cd652c8f465a25dddcc2e81ca51d7e73c3872f05c2f0",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\pending\\writer\\writer.log": "8006887eb3ea1a2689f77bab9794be95e0d270f60062c4f2878f20d732ddaf3a",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\pending\\writer\\terminated_continue_copy\\5088120\\1\\receipt.pending": "743083a6409d9107ad66f99983ee018d843aee3dc8ba1b83d742fc6f05809256",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\pending\\writer\\terminated_continue_copy\\5088120\\1\\writing\\owner.json": "efdb5b3526ecf61c57ba3095e088fc5c00f6edf4f93cd1499cfa65144982b108",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\pending\\writer\\terminated_continue_copy\\local_runs\\ea6649787cb6bb0c13a85983e0161b38\\5088120\\1\\record_0000000001.json": "f012ca3269d55f51831d1324f3cc602d2d0a894a0797e9a6c82d51ce73467051",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\pending\\reader\\report.json": "f1c93851e95895086d0e7bc14328f25fe6f631f1641094a9eb10ce2e7755fb91",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\pending\\reader\\reader.log": "8006887eb3ea1a2689f77bab9794be95e0d270f60062c4f2878f20d732ddaf3a",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\record\\writer\\ack.json": "060ab5593c73d78df387b9e81ba09ea2c4910914c216b1b67dbaf1289f87a563",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\record\\writer\\prepared.json": "1693f420189dbda40c8f0112a9867aa5ec5d371aaafdb536ebe4dae388a208d2",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\record\\writer\\receipt.json": "3a36bf1f9d9b689e345656ddb21a54b90ec919f272a924c18122423f3e75f55b",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\record\\writer\\request.json": "48b33b57cfb7884b703c5049e8c0ab00fb056adf917f212bc06c32940f66393c",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\record\\writer\\writer.log": "8006887eb3ea1a2689f77bab9794be95e0d270f60062c4f2878f20d732ddaf3a",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\record\\writer\\terminated_continue_copy\\5088120\\1\\record_0000000001.json": "2a4513329433fa76973cff28fd6d95044d3b9b8e7accb275969a7510580eb1f5",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\record\\writer\\terminated_continue_copy\\5088120\\1\\writing\\owner.json": "7240f05ccdc4176fcf3fc8a575d63720048c52544db389aee9ada3ddc660d60c",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\record\\writer\\terminated_continue_copy\\local_runs\\2813dccd010d2b93538d806fd29c4dab\\5088120\\1\\record_0000000001.json": "56a55a073523c561328a6758fbe36f964275c822d416c37f29e5038f89a674c5"
+  }
+}

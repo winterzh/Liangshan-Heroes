@@ -1,0 +1,86 @@
+{
+  "pid": 14108,
+  "nonce": "7cbaee26e9eb4035b9325acbcb66e3a9",
+  "process_nonce": "b9aa435bccb345ad97cd3f3953f88840",
+  "case": "derived_fallback",
+  "index": 10,
+  "point": {
+    "source": "res://scripts/run_snapshot_store.gd",
+    "line": 493,
+    "function": "_base_recovery_readback",
+    "statement": "var head := _chain()",
+    "source_sha256": "f222e8b3798355164ab29da4d0dc534362e2bea680ec7f7dbe7462b86df8959f"
+  },
+  "frames": [
+    {
+      "source": "res://scripts/run_snapshot_store.gd",
+      "line": 493,
+      "function": "_base_recovery_readback"
+    },
+    {
+      "source": "res://scripts/run_snapshot_store.gd",
+      "line": 526,
+      "function": "_inspect_base_recovery"
+    },
+    {
+      "source": "res://scripts/run_snapshot_store.gd",
+      "line": 338,
+      "function": "inspect_recovery"
+    },
+    {
+      "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_045053_04fe0749/workers/driver.gd",
+      "line": 365,
+      "function": "attack_reader"
+    },
+    {
+      "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_045053_04fe0749/workers/driver.gd",
+      "line": 93,
+      "function": "gate"
+    }
+  ],
+  "stack_packet_sha256": "aed77cd79b3428474f9f7400bc9654961d8bd9184178c14876668d72fe5252af",
+  "before": {
+    "exists": true,
+    "files": {
+      "record_0000000001.json": {
+        "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+        "bytes": 4239
+      },
+      "record_0000000002.json": {
+        "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+        "bytes": 4238
+      },
+      "writing/owner.json": {
+        "sha256": "f31bfcc616af9ee2d2861dacf0b4286aca4f6f76387a3e44e5a07ed31041c65c",
+        "bytes": 84
+      }
+    },
+    "directories": [
+      ".",
+      "writing"
+    ]
+  },
+  "operation": "fallback",
+  "fallback_chain_observed": true,
+  "after": {
+    "exists": true,
+    "files": {
+      "record_0000000001.json": {
+        "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+        "bytes": 4239
+      },
+      "record_0000000002.json": {
+        "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+        "bytes": 4238
+      },
+      "writing/owner.json": {
+        "sha256": "f31bfcc616af9ee2d2861dacf0b4286aca4f6f76387a3e44e5a07ed31041c65c",
+        "bytes": 84
+      }
+    },
+    "directories": [
+      ".",
+      "writing"
+    ]
+  }
+}

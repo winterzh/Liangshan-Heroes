@@ -1,0 +1,75 @@
+{
+  "schema": "recovery_readset_static_audit_v1",
+  "base_store_sha256": "7052bc687a26ef9edb155465e070bcedf1ae86a3e8f19b0553bb7757b8ad9b0c",
+  "candidate_store_sha256": "f222e8b3798355164ab29da4d0dc534362e2bea680ec7f7dbe7462b86df8959f",
+  "checks": {
+    "recover": {
+      "same_bytes": true,
+      "method_sha256": "7d5f6eb1b44f0f57e32b39d52eb6832921b08cae3ad49f0e07cdcb10591764c0"
+    },
+    "_recover_base": {
+      "same_bytes": true,
+      "method_sha256": "9fb2f416d9ae6c0b1c640036cea42c5d31bd80c196e2ff6e18983facbc6fde9c"
+    },
+    "_read": {
+      "same_bytes": true,
+      "method_sha256": "21e4f0fd64dc9faa2d5ad6d1ae44e3a57b9a9987b10f5bffe9486723150b574d"
+    },
+    "_decode": {
+      "same_bytes": true,
+      "method_sha256": "759b6c0119128bf45ad6b8908a4983eda284318a75018942a85049e8d00554a4"
+    },
+    "inventory": {
+      "same_bytes": true,
+      "method_sha256": "1cbb7adbca0bed1bd04dc70063834c6919e51a85a6e59d005152338d7b9d4dbe"
+    },
+    "_chain": {
+      "same_bytes": true,
+      "method_sha256": "798e41765dbf830bfe38cdafc150eceae01cd06dc5fbd85cfa37a98f23494188"
+    },
+    "open_head": {
+      "same_bytes": true,
+      "method_sha256": "b9546b53b0e1c2f778227a449cbf2910a020fde5f29d66e4bc8fd14273fa94d8"
+    },
+    "_prune": {
+      "same_bytes": true,
+      "method_sha256": "e997a69f2e08c8bfbd013a1fcb3881baa9857d95f69218380d47e528d9474c4b"
+    },
+    "acquire": {
+      "same_bytes": true,
+      "method_sha256": "dbf8f3f679026f42fd3d1ecac5d48cf543aab38b4fa6902fb68e61421120f34a"
+    },
+    "release": {
+      "same_bytes": true,
+      "method_sha256": "ba5da8494e0fce46fcfc6e20f3ceb028eb4e17e0a8a99c625e94871a17e9a1f9"
+    },
+    "commit_locked": {
+      "same_bytes": true,
+      "method_sha256": "d5aa33cd9f1a4f7a5ea14b3ba052843e66ea4ba67d38c726052b6f599f5f7fb7"
+    },
+    "retry_owned_commit": {
+      "same_bytes": true,
+      "method_sha256": "e7f40381e15dd78ed9b7541fe335d8e298a2600caf1ae2465869e2048e7bef02"
+    }
+  },
+  "existing_methods_changed": [
+    "_verified",
+    "inspect_recovery",
+    "_enter_recovery_scope",
+    "_leave_recovery_scope",
+    "_base_recovery_readback",
+    "_inspect_base_recovery"
+  ],
+  "new_methods": [
+    "_readset_begin",
+    "_readset_clear",
+    "_readset_native_inventory",
+    "_readset_note",
+    "_readset_readback",
+    "_readset_seal"
+  ],
+  "actual_engine_started": false,
+  "compiled": false,
+  "runtime_qualified": false,
+  "scope": "Static exact source comparison only; native tests require a new frozen identity."
+}

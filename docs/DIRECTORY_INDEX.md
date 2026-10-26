@@ -30,7 +30,7 @@
 
 ## 本批索引与新增规则
 
-`qa/campaign_progress_recovery_20261026/recovery_readset_candidate/`：只对原Slot启用的严格读集优化候选、固定d7来源的新工程准备器、原Flow适配器与原生替换专项；768b6e59已导入，真实保存/恢复两案88项通过。`VALIDATION.md`维护当前资格，创建时来源清单和工具README保持原字节，未采用生产。
+`qa/campaign_progress_recovery_20261026/recovery_readset_candidate/`：只对原Slot启用的严格读集优化候选、固定d7来源的新工程准备器、原Flow适配器与原生替换专项；768b6e59已导入，真实保存/恢复两案88项及12类异常/旧4MB副本285项通过。`VALIDATION.md`维护当前资格，创建时来源清单和工具README保持原字节，未采用生产。
 
 `qa/campaign_progress_recovery_20261026/continue_binding_candidate/tests/classic_recovery_timing/`为原档只读、隔离副本原API计时工具；`evidence/classic_recovery_timing_20261027_031418/`保留15项诊断检查、原始来源/日志与文件不变证据，首次inspect超时，未执行恢复。
 
@@ -92,7 +92,7 @@
 
 `evidence/classic_recovery_baseline_20261027_022930/`保存旧源两案82项缺陷复现；`evidence/classic_recovery_fixed_partial_20261027_023731/`保存新源pending成功/record超时、实际helper查询和完整失败输入。均位于`qa/campaign_progress_recovery_20261026/`，后者整体未通过。
 
-`qa/campaign_progress_recovery_20261026/gaoqiu_continue_candidate/`保存高俅章节runtime单文件候选、相对d7差异和13项来源；只有静态准备，未冻结或运行，未采用生产。
+`qa/campaign_progress_recovery_20261026/gaoqiu_continue_candidate/`保存高俅章节runtime单文件候选、相对d7差异和13项来源；新增`integration_768/`为完整后继冻结准备器，默认轻量核验不授运行资格。尚未验证高俅自然续玩，未采用生产。
 
 `evidence/lianhuanma_victory_20261027_014835/`与`evidence/lianhuanma_loss_20261027_020834/`分别保存当前d7源自然胜利345项、自然失败205项原件、来源映射与SHA清单。`continue_binding_candidate/tests/classic_recovery/`是独立的中断保存源码分支诊断工具，初始私有gate与公开入口资格分开，实际结果统一见下方VALIDATION。以上路径均相对`qa/campaign_progress_recovery_20261026/`。
 

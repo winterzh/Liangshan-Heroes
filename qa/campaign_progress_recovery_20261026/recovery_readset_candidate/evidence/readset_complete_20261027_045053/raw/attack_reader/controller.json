@@ -1,0 +1,1930 @@
+{
+  "mode": "attack_reader",
+  "complete": true,
+  "process_terminal": true,
+  "profile": "D:\\CodexQA\\readset\\7cbaee26e9eb",
+  "nonce": "7cbaee26e9eb4035b9325acbcb66e3a9",
+  "process_nonce": "b9aa435bccb345ad97cd3f3953f88840",
+  "cases": [
+    {
+      "case": "aba",
+      "index": 0,
+      "result": {
+        "code": "RECOVERY_READSET_CHANGED",
+        "ok": false
+      },
+      "before": {
+        "directories": [
+          ".",
+          "writing"
+        ],
+        "exists": true,
+        "files": {
+          "record_0000000001.json": {
+            "bytes": 4238,
+            "sha256": "0851cbee601979d0d94d5060cac76cbf3a06e2aae5038e75021901074bd5e96a"
+          },
+          "record_0000000002.json": {
+            "bytes": 4238,
+            "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139"
+          },
+          "writing/owner.json": {
+            "bytes": 84,
+            "sha256": "3a438e57db59c6d075697ecf045ea11c9d3b2d7f823ada409ab79d1afe99d4d7"
+          }
+        }
+      },
+      "after": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": {
+            "sha256": "0851cbee601979d0d94d5060cac76cbf3a06e2aae5038e75021901074bd5e96a",
+            "bytes": 4238
+          },
+          "record_0000000002.json": {
+            "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+            "bytes": 4238
+          },
+          "writing/owner.json": {
+            "sha256": "3a438e57db59c6d075697ecf045ea11c9d3b2d7f823ada409ab79d1afe99d4d7",
+            "bytes": 84
+          }
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      },
+      "report_sha256": "b8880d2b92b8f750a27ff27d24f3c9b805e38d670386673854ddb6b6266b060d"
+    },
+    {
+      "case": "file_content",
+      "index": 1,
+      "result": {
+        "code": "RECOVERY_CAS_CHANGED",
+        "ok": false
+      },
+      "before": {
+        "directories": [
+          ".",
+          "writing"
+        ],
+        "exists": true,
+        "files": {
+          "record_0000000001.json": {
+            "bytes": 4239,
+            "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629"
+          },
+          "record_0000000002.json": {
+            "bytes": 4238,
+            "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139"
+          },
+          "writing/owner.json": {
+            "bytes": 84,
+            "sha256": "1f77e2b1d1da40c696273c013cd1f531f1458965f37d10b6dffbf8fe39e0d24d"
+          }
+        }
+      },
+      "after": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": {
+            "sha256": "0851cbee601979d0d94d5060cac76cbf3a06e2aae5038e75021901074bd5e96a",
+            "bytes": 4238
+          },
+          "record_0000000002.json": {
+            "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+            "bytes": 4238
+          },
+          "writing/owner.json": {
+            "sha256": "1f77e2b1d1da40c696273c013cd1f531f1458965f37d10b6dffbf8fe39e0d24d",
+            "bytes": 84
+          }
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      },
+      "report_sha256": "b02a3053d4044e98f9ea6cb43e87693abbb567a5ce6fd79d43c9979a0b9f089a"
+    },
+    {
+      "case": "pending_changed",
+      "index": 2,
+      "result": {
+        "code": "RECOVERY_CAS_CHANGED",
+        "ok": false
+      },
+      "before": {
+        "directories": [
+          ".",
+          "writing"
+        ],
+        "exists": true,
+        "files": {
+          "receipt.pending": {
+            "bytes": 4238,
+            "sha256": "7fea5480ce955b0406a3089c549b0a6d75bc573b8bb60b7d9f29fcf1e797fe98"
+          },
+          "record_0000000001.json": {
+            "bytes": 4239,
+            "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629"
+          },
+          "record_0000000002.json": {
+            "bytes": 4238,
+            "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139"
+          },
+          "writing/owner.json": {
+            "bytes": 84,
+            "sha256": "772b8287cf46bc2c92312b220c07c17aac6099c2704959ae8a50deaf50929479"
+          }
+        }
+      },
+      "after": {
+        "exists": true,
+        "files": {
+          "receipt.pending": {
+            "sha256": "0851cbee601979d0d94d5060cac76cbf3a06e2aae5038e75021901074bd5e96a",
+            "bytes": 4238
+          },
+          "record_0000000001.json": {
+            "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+            "bytes": 4239
+          },
+          "record_0000000002.json": {
+            "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+            "bytes": 4238
+          },
+          "writing/owner.json": {
+            "sha256": "772b8287cf46bc2c92312b220c07c17aac6099c2704959ae8a50deaf50929479",
+            "bytes": 84
+          }
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      },
+      "report_sha256": "1d75de8de0ad184c6d1c822657bd1576b2b2661203ee9221db5b399e9a5085cc"
+    },
+    {
+      "case": "file_rename",
+      "index": 3,
+      "result": {
+        "code": "RECOVERY_CAS_CHANGED",
+        "ok": false
+      },
+      "before": {
+        "directories": [
+          ".",
+          "writing"
+        ],
+        "exists": true,
+        "files": {
+          "record_0000000001.json": {
+            "bytes": 4239,
+            "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629"
+          },
+          "record_0000000002.json": {
+            "bytes": 4238,
+            "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139"
+          },
+          "writing/owner.json": {
+            "bytes": 84,
+            "sha256": "ab5de63a46e9a5d0275d3c51dea6f3602f3f6decc85b8656f70f330039ae6a08"
+          }
+        }
+      },
+      "after": {
+        "exists": true,
+        "files": {
+          "record_0000000002.json": {
+            "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+            "bytes": 4238
+          },
+          "record_0000000009.json": {
+            "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+            "bytes": 4239
+          },
+          "writing/owner.json": {
+            "sha256": "ab5de63a46e9a5d0275d3c51dea6f3602f3f6decc85b8656f70f330039ae6a08",
+            "bytes": 84
+          }
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      },
+      "report_sha256": "2cf7910b251bcf5a43091ea4111bf1fed9f86939aed6aa7e9bfd56dc181dd928"
+    },
+    {
+      "case": "directory_set",
+      "index": 4,
+      "result": {
+        "code": "RECOVERY_CAS_CHANGED",
+        "ok": false
+      },
+      "before": {
+        "directories": [
+          ".",
+          "writing"
+        ],
+        "exists": true,
+        "files": {
+          "record_0000000001.json": {
+            "bytes": 4239,
+            "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629"
+          },
+          "record_0000000002.json": {
+            "bytes": 4238,
+            "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139"
+          },
+          "writing/owner.json": {
+            "bytes": 84,
+            "sha256": "0eb514ec89c442f854f0395994aa9976fc5a42cbf3db4e84c7d102b06e2f5bfe"
+          }
+        }
+      },
+      "after": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": {
+            "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+            "bytes": 4239
+          },
+          "record_0000000002.json": {
+            "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+            "bytes": 4238
+          },
+          "writing/owner.json": {
+            "sha256": "0eb514ec89c442f854f0395994aa9976fc5a42cbf3db4e84c7d102b06e2f5bfe",
+            "bytes": 84
+          }
+        },
+        "directories": [
+          ".",
+          "recovering",
+          "writing"
+        ]
+      },
+      "report_sha256": "568080f88e929fe687341c3a25c9da16f42d900f380e1e6ce53057379783872f"
+    },
+    {
+      "case": "owner_replace",
+      "index": 5,
+      "result": {
+        "code": "RECOVERY_CAS_CHANGED",
+        "ok": false
+      },
+      "before": {
+        "directories": [
+          ".",
+          "writing"
+        ],
+        "exists": true,
+        "files": {
+          "record_0000000001.json": {
+            "bytes": 4239,
+            "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629"
+          },
+          "record_0000000002.json": {
+            "bytes": 4238,
+            "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139"
+          },
+          "writing/owner.json": {
+            "bytes": 84,
+            "sha256": "6a21aec918c496725977afc336e46c66a977369b291e1dea77e87fda92fe1b5a"
+          }
+        }
+      },
+      "after": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": {
+            "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+            "bytes": 4239
+          },
+          "record_0000000002.json": {
+            "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+            "bytes": 4238
+          },
+          "writing/owner.json": {
+            "sha256": "09e627110b2b301659b413d272770554f8de34a013fc6dc33d8b4b46ff3c973e",
+            "bytes": 84
+          }
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      },
+      "report_sha256": "32b290e4b7081752d2a6633b356733ff0a9a7db597e9ef5c36c373d066550516"
+    },
+    {
+      "case": "scope_expiry",
+      "index": 6,
+      "result": {
+        "code": "PROCESS_LIVENESS_TIMEOUT",
+        "liveness_detail": {},
+        "ok": false,
+        "restart_required": false,
+        "retryable": true,
+        "unsafe": false
+      },
+      "before": {
+        "directories": [
+          ".",
+          "writing"
+        ],
+        "exists": true,
+        "files": {
+          "record_0000000001.json": {
+            "bytes": 4239,
+            "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629"
+          },
+          "record_0000000002.json": {
+            "bytes": 4238,
+            "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139"
+          },
+          "writing/owner.json": {
+            "bytes": 84,
+            "sha256": "9c2c537e814ac742d71b13fe255f3bab122f63f7a1bb526d9f6bd7d760212a85"
+          }
+        }
+      },
+      "after": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": {
+            "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+            "bytes": 4239
+          },
+          "record_0000000002.json": {
+            "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+            "bytes": 4238
+          },
+          "writing/owner.json": {
+            "sha256": "9c2c537e814ac742d71b13fe255f3bab122f63f7a1bb526d9f6bd7d760212a85",
+            "bytes": 84
+          }
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      },
+      "report_sha256": "1eb4f31991ffffc9a425d8106d0281d14789e7e80452da1f846952928d40d30f"
+    },
+    {
+      "case": "forged_plan",
+      "index": 7,
+      "result": {
+        "file_sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+        "ok": true,
+        "payload_sha256": "daf3b7c652062e7f9e59a474856a02e7323bc80805195092b2b87d916d76d0cf",
+        "previous": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+        "revision": 2
+      },
+      "before": {
+        "directories": [
+          ".",
+          "writing"
+        ],
+        "exists": true,
+        "files": {
+          "record_0000000001.json": {
+            "bytes": 4239,
+            "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629"
+          },
+          "record_0000000002.json": {
+            "bytes": 4238,
+            "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139"
+          },
+          "writing/owner.json": {
+            "bytes": 84,
+            "sha256": "d188198575f7e831110652b2aa5718b1ca860b1d04a218dd9453a9e1109a0564"
+          }
+        }
+      },
+      "after": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": {
+            "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+            "bytes": 4239
+          },
+          "record_0000000002.json": {
+            "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+            "bytes": 4238
+          }
+        },
+        "directories": [
+          "."
+        ]
+      },
+      "report_sha256": "675919ae61ceceabbcd1931b3c7284a80d9c93e9d2023b4afcac9171c42b008f"
+    },
+    {
+      "case": "record",
+      "index": 8,
+      "result": {
+        "file_sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+        "ok": true,
+        "payload_sha256": "daf3b7c652062e7f9e59a474856a02e7323bc80805195092b2b87d916d76d0cf",
+        "previous": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+        "revision": 2
+      },
+      "before": {
+        "directories": [
+          ".",
+          "writing"
+        ],
+        "exists": true,
+        "files": {
+          "record_0000000001.json": {
+            "bytes": 4239,
+            "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629"
+          },
+          "record_0000000002.json": {
+            "bytes": 4238,
+            "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139"
+          },
+          "writing/owner.json": {
+            "bytes": 84,
+            "sha256": "3c1ea4d20d248fb0204189f848c1f58bafe1bc44cee25fd209618afa39403958"
+          }
+        }
+      },
+      "after": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": {
+            "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+            "bytes": 4239
+          },
+          "record_0000000002.json": {
+            "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+            "bytes": 4238
+          }
+        },
+        "directories": [
+          "."
+        ]
+      },
+      "report_sha256": "1dd1db1a114ce4d7267c9e9572875b15dd5b9da4f8f0fa583040185c46c2e79e"
+    },
+    {
+      "case": "pending",
+      "index": 9,
+      "result": {
+        "file_sha256": "7fea5480ce955b0406a3089c549b0a6d75bc573b8bb60b7d9f29fcf1e797fe98",
+        "ok": true,
+        "payload_sha256": "9c7cc7b19d1bb957f18d8ff917451ba7d1575d48cff90b0125d079ba988088dc",
+        "previous": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+        "revision": 3
+      },
+      "before": {
+        "directories": [
+          ".",
+          "writing"
+        ],
+        "exists": true,
+        "files": {
+          "receipt.pending": {
+            "bytes": 4238,
+            "sha256": "7fea5480ce955b0406a3089c549b0a6d75bc573b8bb60b7d9f29fcf1e797fe98"
+          },
+          "record_0000000001.json": {
+            "bytes": 4239,
+            "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629"
+          },
+          "record_0000000002.json": {
+            "bytes": 4238,
+            "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139"
+          },
+          "writing/owner.json": {
+            "bytes": 84,
+            "sha256": "978197fa4e4c04d77071d3eddf25933a8cd14e8f1fae2eb802fe581040e43a48"
+          }
+        }
+      },
+      "after": {
+        "exists": true,
+        "files": {
+          "record_0000000002.json": {
+            "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+            "bytes": 4238
+          },
+          "record_0000000003.json": {
+            "sha256": "7fea5480ce955b0406a3089c549b0a6d75bc573b8bb60b7d9f29fcf1e797fe98",
+            "bytes": 4238
+          }
+        },
+        "directories": [
+          "."
+        ]
+      },
+      "report_sha256": "402e86fe17973b90e6ebc596c591899f779a9e9e2cc7845e22625f0c342837a9"
+    },
+    {
+      "case": "derived_fallback",
+      "index": 10,
+      "result": {
+        "action": "release_committed_lock",
+        "dead_pid": 56416,
+        "head_revision": 2,
+        "head_sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+        "inventory": {
+          "record_0000000001.json": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+          "record_0000000002.json": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+          "writing/": "directory",
+          "writing/owner.json": "f31bfcc616af9ee2d2861dacf0b4286aca4f6f76387a3e44e5a07ed31041c65c"
+        },
+        "ok": true
+      },
+      "before": {
+        "directories": [
+          ".",
+          "writing"
+        ],
+        "exists": true,
+        "files": {
+          "record_0000000001.json": {
+            "bytes": 4239,
+            "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629"
+          },
+          "record_0000000002.json": {
+            "bytes": 4238,
+            "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139"
+          },
+          "writing/owner.json": {
+            "bytes": 84,
+            "sha256": "f31bfcc616af9ee2d2861dacf0b4286aca4f6f76387a3e44e5a07ed31041c65c"
+          }
+        }
+      },
+      "after": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": {
+            "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+            "bytes": 4239
+          },
+          "record_0000000002.json": {
+            "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+            "bytes": 4238
+          },
+          "writing/owner.json": {
+            "sha256": "f31bfcc616af9ee2d2861dacf0b4286aca4f6f76387a3e44e5a07ed31041c65c",
+            "bytes": 84
+          }
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      },
+      "report_sha256": "3069b840fc1fc9c1e0b4130d74586da813325615371e7c8dde1791486197a9e4"
+    },
+    {
+      "case": "cfg_fallback",
+      "index": 11,
+      "result": {
+        "code": "CFG_PREPARED_GENESIS_REQUIRED",
+        "ok": false
+      },
+      "before": {
+        "directories": [
+          ".",
+          "writing"
+        ],
+        "exists": true,
+        "files": {
+          "record_0000000001.json": {
+            "bytes": 1003,
+            "sha256": "d7de3b251d34be138377892f2706827243ab8ec8f37f956552ec5aa26a26ac1c"
+          },
+          "writing/owner.json": {
+            "bytes": 84,
+            "sha256": "b80407539beb3961423166bd61cbf8fc959ff91262dfb055507795529bd5c2ee"
+          }
+        }
+      },
+      "after": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": {
+            "sha256": "d7de3b251d34be138377892f2706827243ab8ec8f37f956552ec5aa26a26ac1c",
+            "bytes": 1003
+          },
+          "writing/owner.json": {
+            "sha256": "b80407539beb3961423166bd61cbf8fc959ff91262dfb055507795529bd5c2ee",
+            "bytes": 84
+          }
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      },
+      "report_sha256": "62463cc4bcc3a3a4a8691ae41ea011764840ff84335b4c376ada45bde2eba888"
+    }
+  ],
+  "debug_stops": [
+    {
+      "pid": 14108,
+      "nonce": "7cbaee26e9eb4035b9325acbcb66e3a9",
+      "process_nonce": "b9aa435bccb345ad97cd3f3953f88840",
+      "case": "aba",
+      "index": 0,
+      "point": {
+        "source": "res://scripts/run_snapshot_store.gd",
+        "line": 507,
+        "function": "_inspect_base_recovery",
+        "statement": "var current := _chain()",
+        "source_sha256": "f222e8b3798355164ab29da4d0dc534362e2bea680ec7f7dbe7462b86df8959f"
+      },
+      "frames": [
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 507,
+          "function": "_inspect_base_recovery"
+        },
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 338,
+          "function": "inspect_recovery"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_045053_04fe0749/workers/driver.gd",
+          "line": 372,
+          "function": "attack_reader"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_045053_04fe0749/workers/driver.gd",
+          "line": 93,
+          "function": "gate"
+        }
+      ],
+      "stack_packet_sha256": "5131a7f6855f5948621437478195a7bd007f29c3553f1a5c2d52e6f67cfb400b"
+    },
+    {
+      "pid": 14108,
+      "nonce": "7cbaee26e9eb4035b9325acbcb66e3a9",
+      "process_nonce": "b9aa435bccb345ad97cd3f3953f88840",
+      "case": "aba",
+      "index": 0,
+      "point": {
+        "source": "res://scripts/run_snapshot_store.gd",
+        "line": 508,
+        "function": "_inspect_base_recovery",
+        "statement": "if not current.ok: return current",
+        "source_sha256": "f222e8b3798355164ab29da4d0dc534362e2bea680ec7f7dbe7462b86df8959f"
+      },
+      "frames": [
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 508,
+          "function": "_inspect_base_recovery"
+        },
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 338,
+          "function": "inspect_recovery"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_045053_04fe0749/workers/driver.gd",
+          "line": 372,
+          "function": "attack_reader"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_045053_04fe0749/workers/driver.gd",
+          "line": 93,
+          "function": "gate"
+        }
+      ],
+      "stack_packet_sha256": "eab1fc11aba170e2e5198ccec814d13665ef8a463c22f979f486a252f530068d"
+    },
+    {
+      "pid": 14108,
+      "nonce": "7cbaee26e9eb4035b9325acbcb66e3a9",
+      "process_nonce": "b9aa435bccb345ad97cd3f3953f88840",
+      "case": "file_content",
+      "index": 1,
+      "point": {
+        "source": "res://scripts/run_snapshot_store.gd",
+        "line": 526,
+        "function": "_inspect_base_recovery",
+        "statement": "var readback := _base_recovery_readback(plan)",
+        "source_sha256": "f222e8b3798355164ab29da4d0dc534362e2bea680ec7f7dbe7462b86df8959f"
+      },
+      "frames": [
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 526,
+          "function": "_inspect_base_recovery"
+        },
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 338,
+          "function": "inspect_recovery"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_045053_04fe0749/workers/driver.gd",
+          "line": 372,
+          "function": "attack_reader"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_045053_04fe0749/workers/driver.gd",
+          "line": 93,
+          "function": "gate"
+        }
+      ],
+      "stack_packet_sha256": "c574f5636cbd0c3c3146370d621cd5e41477f661223ba27d5ae02529a4541207"
+    },
+    {
+      "pid": 14108,
+      "nonce": "7cbaee26e9eb4035b9325acbcb66e3a9",
+      "process_nonce": "b9aa435bccb345ad97cd3f3953f88840",
+      "case": "pending_changed",
+      "index": 2,
+      "point": {
+        "source": "res://scripts/run_snapshot_store.gd",
+        "line": 526,
+        "function": "_inspect_base_recovery",
+        "statement": "var readback := _base_recovery_readback(plan)",
+        "source_sha256": "f222e8b3798355164ab29da4d0dc534362e2bea680ec7f7dbe7462b86df8959f"
+      },
+      "frames": [
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 526,
+          "function": "_inspect_base_recovery"
+        },
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 338,
+          "function": "inspect_recovery"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_045053_04fe0749/workers/driver.gd",
+          "line": 372,
+          "function": "attack_reader"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_045053_04fe0749/workers/driver.gd",
+          "line": 93,
+          "function": "gate"
+        }
+      ],
+      "stack_packet_sha256": "c574f5636cbd0c3c3146370d621cd5e41477f661223ba27d5ae02529a4541207"
+    },
+    {
+      "pid": 14108,
+      "nonce": "7cbaee26e9eb4035b9325acbcb66e3a9",
+      "process_nonce": "b9aa435bccb345ad97cd3f3953f88840",
+      "case": "file_rename",
+      "index": 3,
+      "point": {
+        "source": "res://scripts/run_snapshot_store.gd",
+        "line": 526,
+        "function": "_inspect_base_recovery",
+        "statement": "var readback := _base_recovery_readback(plan)",
+        "source_sha256": "f222e8b3798355164ab29da4d0dc534362e2bea680ec7f7dbe7462b86df8959f"
+      },
+      "frames": [
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 526,
+          "function": "_inspect_base_recovery"
+        },
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 338,
+          "function": "inspect_recovery"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_045053_04fe0749/workers/driver.gd",
+          "line": 372,
+          "function": "attack_reader"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_045053_04fe0749/workers/driver.gd",
+          "line": 93,
+          "function": "gate"
+        }
+      ],
+      "stack_packet_sha256": "c574f5636cbd0c3c3146370d621cd5e41477f661223ba27d5ae02529a4541207"
+    },
+    {
+      "pid": 14108,
+      "nonce": "7cbaee26e9eb4035b9325acbcb66e3a9",
+      "process_nonce": "b9aa435bccb345ad97cd3f3953f88840",
+      "case": "directory_set",
+      "index": 4,
+      "point": {
+        "source": "res://scripts/run_snapshot_store.gd",
+        "line": 526,
+        "function": "_inspect_base_recovery",
+        "statement": "var readback := _base_recovery_readback(plan)",
+        "source_sha256": "f222e8b3798355164ab29da4d0dc534362e2bea680ec7f7dbe7462b86df8959f"
+      },
+      "frames": [
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 526,
+          "function": "_inspect_base_recovery"
+        },
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 338,
+          "function": "inspect_recovery"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_045053_04fe0749/workers/driver.gd",
+          "line": 372,
+          "function": "attack_reader"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_045053_04fe0749/workers/driver.gd",
+          "line": 93,
+          "function": "gate"
+        }
+      ],
+      "stack_packet_sha256": "c574f5636cbd0c3c3146370d621cd5e41477f661223ba27d5ae02529a4541207"
+    },
+    {
+      "pid": 14108,
+      "nonce": "7cbaee26e9eb4035b9325acbcb66e3a9",
+      "process_nonce": "b9aa435bccb345ad97cd3f3953f88840",
+      "case": "owner_replace",
+      "index": 5,
+      "point": {
+        "source": "res://scripts/run_snapshot_store.gd",
+        "line": 526,
+        "function": "_inspect_base_recovery",
+        "statement": "var readback := _base_recovery_readback(plan)",
+        "source_sha256": "f222e8b3798355164ab29da4d0dc534362e2bea680ec7f7dbe7462b86df8959f"
+      },
+      "frames": [
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 526,
+          "function": "_inspect_base_recovery"
+        },
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 338,
+          "function": "inspect_recovery"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_045053_04fe0749/workers/driver.gd",
+          "line": 372,
+          "function": "attack_reader"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_045053_04fe0749/workers/driver.gd",
+          "line": 93,
+          "function": "gate"
+        }
+      ],
+      "stack_packet_sha256": "c574f5636cbd0c3c3146370d621cd5e41477f661223ba27d5ae02529a4541207"
+    },
+    {
+      "pid": 14108,
+      "nonce": "7cbaee26e9eb4035b9325acbcb66e3a9",
+      "process_nonce": "b9aa435bccb345ad97cd3f3953f88840",
+      "case": "scope_expiry",
+      "index": 6,
+      "point": {
+        "source": "res://scripts/run_snapshot_store.gd",
+        "line": 524,
+        "function": "_inspect_base_recovery",
+        "statement": "var observed := _confirmed_dead([int(metadata.pid)], _base_recovery_binding(plan, lock.raw), \"inspect\")",
+        "source_sha256": "f222e8b3798355164ab29da4d0dc534362e2bea680ec7f7dbe7462b86df8959f"
+      },
+      "frames": [
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 524,
+          "function": "_inspect_base_recovery"
+        },
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 338,
+          "function": "inspect_recovery"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_045053_04fe0749/workers/driver.gd",
+          "line": 372,
+          "function": "attack_reader"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_045053_04fe0749/workers/driver.gd",
+          "line": 93,
+          "function": "gate"
+        }
+      ],
+      "stack_packet_sha256": "b471a54e8b40a413610fa451297665fcca29286c9ea254da0e523760aa5e75cd"
+    },
+    {
+      "pid": 14108,
+      "nonce": "7cbaee26e9eb4035b9325acbcb66e3a9",
+      "process_nonce": "b9aa435bccb345ad97cd3f3953f88840",
+      "case": "derived_fallback",
+      "index": 10,
+      "point": {
+        "source": "res://scripts/run_snapshot_store.gd",
+        "line": 493,
+        "function": "_base_recovery_readback",
+        "statement": "var head := _chain()",
+        "source_sha256": "f222e8b3798355164ab29da4d0dc534362e2bea680ec7f7dbe7462b86df8959f"
+      },
+      "frames": [
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 493,
+          "function": "_base_recovery_readback"
+        },
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 526,
+          "function": "_inspect_base_recovery"
+        },
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 338,
+          "function": "inspect_recovery"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_045053_04fe0749/workers/driver.gd",
+          "line": 365,
+          "function": "attack_reader"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_045053_04fe0749/workers/driver.gd",
+          "line": 93,
+          "function": "gate"
+        }
+      ],
+      "stack_packet_sha256": "aed77cd79b3428474f9f7400bc9654961d8bd9184178c14876668d72fe5252af"
+    }
+  ],
+  "faults": [
+    {
+      "pid": 14108,
+      "nonce": "7cbaee26e9eb4035b9325acbcb66e3a9",
+      "process_nonce": "b9aa435bccb345ad97cd3f3953f88840",
+      "case": "aba",
+      "index": 0,
+      "point": {
+        "source": "res://scripts/run_snapshot_store.gd",
+        "line": 507,
+        "function": "_inspect_base_recovery",
+        "statement": "var current := _chain()",
+        "source_sha256": "f222e8b3798355164ab29da4d0dc534362e2bea680ec7f7dbe7462b86df8959f"
+      },
+      "frames": [
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 507,
+          "function": "_inspect_base_recovery"
+        },
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 338,
+          "function": "inspect_recovery"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_045053_04fe0749/workers/driver.gd",
+          "line": 372,
+          "function": "attack_reader"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_045053_04fe0749/workers/driver.gd",
+          "line": 93,
+          "function": "gate"
+        }
+      ],
+      "stack_packet_sha256": "5131a7f6855f5948621437478195a7bd007f29c3553f1a5c2d52e6f67cfb400b",
+      "before": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": {
+            "sha256": "0851cbee601979d0d94d5060cac76cbf3a06e2aae5038e75021901074bd5e96a",
+            "bytes": 4238
+          },
+          "record_0000000002.json": {
+            "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+            "bytes": 4238
+          },
+          "writing/owner.json": {
+            "sha256": "3a438e57db59c6d075697ecf045ea11c9d3b2d7f823ada409ab79d1afe99d4d7",
+            "bytes": 84
+          }
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      },
+      "operation": "aba_before",
+      "after": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": {
+            "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+            "bytes": 4239
+          },
+          "record_0000000002.json": {
+            "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+            "bytes": 4238
+          },
+          "writing/owner.json": {
+            "sha256": "3a438e57db59c6d075697ecf045ea11c9d3b2d7f823ada409ab79d1afe99d4d7",
+            "bytes": 84
+          }
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      }
+    },
+    {
+      "pid": 14108,
+      "nonce": "7cbaee26e9eb4035b9325acbcb66e3a9",
+      "process_nonce": "b9aa435bccb345ad97cd3f3953f88840",
+      "case": "aba",
+      "index": 0,
+      "point": {
+        "source": "res://scripts/run_snapshot_store.gd",
+        "line": 508,
+        "function": "_inspect_base_recovery",
+        "statement": "if not current.ok: return current",
+        "source_sha256": "f222e8b3798355164ab29da4d0dc534362e2bea680ec7f7dbe7462b86df8959f"
+      },
+      "frames": [
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 508,
+          "function": "_inspect_base_recovery"
+        },
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 338,
+          "function": "inspect_recovery"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_045053_04fe0749/workers/driver.gd",
+          "line": 372,
+          "function": "attack_reader"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_045053_04fe0749/workers/driver.gd",
+          "line": 93,
+          "function": "gate"
+        }
+      ],
+      "stack_packet_sha256": "eab1fc11aba170e2e5198ccec814d13665ef8a463c22f979f486a252f530068d",
+      "before": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": {
+            "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+            "bytes": 4239
+          },
+          "record_0000000002.json": {
+            "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+            "bytes": 4238
+          },
+          "writing/owner.json": {
+            "sha256": "3a438e57db59c6d075697ecf045ea11c9d3b2d7f823ada409ab79d1afe99d4d7",
+            "bytes": 84
+          }
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      },
+      "operation": "aba_after",
+      "full_B_H_chain_validation_claimed": false,
+      "after": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": {
+            "sha256": "0851cbee601979d0d94d5060cac76cbf3a06e2aae5038e75021901074bd5e96a",
+            "bytes": 4238
+          },
+          "record_0000000002.json": {
+            "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+            "bytes": 4238
+          },
+          "writing/owner.json": {
+            "sha256": "3a438e57db59c6d075697ecf045ea11c9d3b2d7f823ada409ab79d1afe99d4d7",
+            "bytes": 84
+          }
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      }
+    },
+    {
+      "pid": 14108,
+      "nonce": "7cbaee26e9eb4035b9325acbcb66e3a9",
+      "process_nonce": "b9aa435bccb345ad97cd3f3953f88840",
+      "case": "file_content",
+      "index": 1,
+      "point": {
+        "source": "res://scripts/run_snapshot_store.gd",
+        "line": 526,
+        "function": "_inspect_base_recovery",
+        "statement": "var readback := _base_recovery_readback(plan)",
+        "source_sha256": "f222e8b3798355164ab29da4d0dc534362e2bea680ec7f7dbe7462b86df8959f"
+      },
+      "frames": [
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 526,
+          "function": "_inspect_base_recovery"
+        },
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 338,
+          "function": "inspect_recovery"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_045053_04fe0749/workers/driver.gd",
+          "line": 372,
+          "function": "attack_reader"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_045053_04fe0749/workers/driver.gd",
+          "line": 93,
+          "function": "gate"
+        }
+      ],
+      "stack_packet_sha256": "c574f5636cbd0c3c3146370d621cd5e41477f661223ba27d5ae02529a4541207",
+      "before": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": {
+            "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+            "bytes": 4239
+          },
+          "record_0000000002.json": {
+            "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+            "bytes": 4238
+          },
+          "writing/owner.json": {
+            "sha256": "1f77e2b1d1da40c696273c013cd1f531f1458965f37d10b6dffbf8fe39e0d24d",
+            "bytes": 84
+          }
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      },
+      "operation": "readback",
+      "after": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": {
+            "sha256": "0851cbee601979d0d94d5060cac76cbf3a06e2aae5038e75021901074bd5e96a",
+            "bytes": 4238
+          },
+          "record_0000000002.json": {
+            "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+            "bytes": 4238
+          },
+          "writing/owner.json": {
+            "sha256": "1f77e2b1d1da40c696273c013cd1f531f1458965f37d10b6dffbf8fe39e0d24d",
+            "bytes": 84
+          }
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      }
+    },
+    {
+      "pid": 14108,
+      "nonce": "7cbaee26e9eb4035b9325acbcb66e3a9",
+      "process_nonce": "b9aa435bccb345ad97cd3f3953f88840",
+      "case": "pending_changed",
+      "index": 2,
+      "point": {
+        "source": "res://scripts/run_snapshot_store.gd",
+        "line": 526,
+        "function": "_inspect_base_recovery",
+        "statement": "var readback := _base_recovery_readback(plan)",
+        "source_sha256": "f222e8b3798355164ab29da4d0dc534362e2bea680ec7f7dbe7462b86df8959f"
+      },
+      "frames": [
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 526,
+          "function": "_inspect_base_recovery"
+        },
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 338,
+          "function": "inspect_recovery"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_045053_04fe0749/workers/driver.gd",
+          "line": 372,
+          "function": "attack_reader"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_045053_04fe0749/workers/driver.gd",
+          "line": 93,
+          "function": "gate"
+        }
+      ],
+      "stack_packet_sha256": "c574f5636cbd0c3c3146370d621cd5e41477f661223ba27d5ae02529a4541207",
+      "before": {
+        "exists": true,
+        "files": {
+          "receipt.pending": {
+            "sha256": "7fea5480ce955b0406a3089c549b0a6d75bc573b8bb60b7d9f29fcf1e797fe98",
+            "bytes": 4238
+          },
+          "record_0000000001.json": {
+            "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+            "bytes": 4239
+          },
+          "record_0000000002.json": {
+            "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+            "bytes": 4238
+          },
+          "writing/owner.json": {
+            "sha256": "772b8287cf46bc2c92312b220c07c17aac6099c2704959ae8a50deaf50929479",
+            "bytes": 84
+          }
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      },
+      "operation": "readback",
+      "after": {
+        "exists": true,
+        "files": {
+          "receipt.pending": {
+            "sha256": "0851cbee601979d0d94d5060cac76cbf3a06e2aae5038e75021901074bd5e96a",
+            "bytes": 4238
+          },
+          "record_0000000001.json": {
+            "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+            "bytes": 4239
+          },
+          "record_0000000002.json": {
+            "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+            "bytes": 4238
+          },
+          "writing/owner.json": {
+            "sha256": "772b8287cf46bc2c92312b220c07c17aac6099c2704959ae8a50deaf50929479",
+            "bytes": 84
+          }
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      }
+    },
+    {
+      "pid": 14108,
+      "nonce": "7cbaee26e9eb4035b9325acbcb66e3a9",
+      "process_nonce": "b9aa435bccb345ad97cd3f3953f88840",
+      "case": "file_rename",
+      "index": 3,
+      "point": {
+        "source": "res://scripts/run_snapshot_store.gd",
+        "line": 526,
+        "function": "_inspect_base_recovery",
+        "statement": "var readback := _base_recovery_readback(plan)",
+        "source_sha256": "f222e8b3798355164ab29da4d0dc534362e2bea680ec7f7dbe7462b86df8959f"
+      },
+      "frames": [
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 526,
+          "function": "_inspect_base_recovery"
+        },
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 338,
+          "function": "inspect_recovery"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_045053_04fe0749/workers/driver.gd",
+          "line": 372,
+          "function": "attack_reader"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_045053_04fe0749/workers/driver.gd",
+          "line": 93,
+          "function": "gate"
+        }
+      ],
+      "stack_packet_sha256": "c574f5636cbd0c3c3146370d621cd5e41477f661223ba27d5ae02529a4541207",
+      "before": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": {
+            "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+            "bytes": 4239
+          },
+          "record_0000000002.json": {
+            "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+            "bytes": 4238
+          },
+          "writing/owner.json": {
+            "sha256": "ab5de63a46e9a5d0275d3c51dea6f3602f3f6decc85b8656f70f330039ae6a08",
+            "bytes": 84
+          }
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      },
+      "operation": "readback",
+      "after": {
+        "exists": true,
+        "files": {
+          "record_0000000002.json": {
+            "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+            "bytes": 4238
+          },
+          "record_0000000009.json": {
+            "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+            "bytes": 4239
+          },
+          "writing/owner.json": {
+            "sha256": "ab5de63a46e9a5d0275d3c51dea6f3602f3f6decc85b8656f70f330039ae6a08",
+            "bytes": 84
+          }
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      }
+    },
+    {
+      "pid": 14108,
+      "nonce": "7cbaee26e9eb4035b9325acbcb66e3a9",
+      "process_nonce": "b9aa435bccb345ad97cd3f3953f88840",
+      "case": "directory_set",
+      "index": 4,
+      "point": {
+        "source": "res://scripts/run_snapshot_store.gd",
+        "line": 526,
+        "function": "_inspect_base_recovery",
+        "statement": "var readback := _base_recovery_readback(plan)",
+        "source_sha256": "f222e8b3798355164ab29da4d0dc534362e2bea680ec7f7dbe7462b86df8959f"
+      },
+      "frames": [
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 526,
+          "function": "_inspect_base_recovery"
+        },
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 338,
+          "function": "inspect_recovery"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_045053_04fe0749/workers/driver.gd",
+          "line": 372,
+          "function": "attack_reader"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_045053_04fe0749/workers/driver.gd",
+          "line": 93,
+          "function": "gate"
+        }
+      ],
+      "stack_packet_sha256": "c574f5636cbd0c3c3146370d621cd5e41477f661223ba27d5ae02529a4541207",
+      "before": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": {
+            "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+            "bytes": 4239
+          },
+          "record_0000000002.json": {
+            "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+            "bytes": 4238
+          },
+          "writing/owner.json": {
+            "sha256": "0eb514ec89c442f854f0395994aa9976fc5a42cbf3db4e84c7d102b06e2f5bfe",
+            "bytes": 84
+          }
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      },
+      "operation": "readback",
+      "after": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": {
+            "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+            "bytes": 4239
+          },
+          "record_0000000002.json": {
+            "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+            "bytes": 4238
+          },
+          "writing/owner.json": {
+            "sha256": "0eb514ec89c442f854f0395994aa9976fc5a42cbf3db4e84c7d102b06e2f5bfe",
+            "bytes": 84
+          }
+        },
+        "directories": [
+          ".",
+          "recovering",
+          "writing"
+        ]
+      }
+    },
+    {
+      "pid": 14108,
+      "nonce": "7cbaee26e9eb4035b9325acbcb66e3a9",
+      "process_nonce": "b9aa435bccb345ad97cd3f3953f88840",
+      "case": "owner_replace",
+      "index": 5,
+      "point": {
+        "source": "res://scripts/run_snapshot_store.gd",
+        "line": 526,
+        "function": "_inspect_base_recovery",
+        "statement": "var readback := _base_recovery_readback(plan)",
+        "source_sha256": "f222e8b3798355164ab29da4d0dc534362e2bea680ec7f7dbe7462b86df8959f"
+      },
+      "frames": [
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 526,
+          "function": "_inspect_base_recovery"
+        },
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 338,
+          "function": "inspect_recovery"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_045053_04fe0749/workers/driver.gd",
+          "line": 372,
+          "function": "attack_reader"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_045053_04fe0749/workers/driver.gd",
+          "line": 93,
+          "function": "gate"
+        }
+      ],
+      "stack_packet_sha256": "c574f5636cbd0c3c3146370d621cd5e41477f661223ba27d5ae02529a4541207",
+      "before": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": {
+            "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+            "bytes": 4239
+          },
+          "record_0000000002.json": {
+            "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+            "bytes": 4238
+          },
+          "writing/owner.json": {
+            "sha256": "6a21aec918c496725977afc336e46c66a977369b291e1dea77e87fda92fe1b5a",
+            "bytes": 84
+          }
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      },
+      "operation": "readback",
+      "after": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": {
+            "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+            "bytes": 4239
+          },
+          "record_0000000002.json": {
+            "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+            "bytes": 4238
+          },
+          "writing/owner.json": {
+            "sha256": "09e627110b2b301659b413d272770554f8de34a013fc6dc33d8b4b46ff3c973e",
+            "bytes": 84
+          }
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      }
+    },
+    {
+      "pid": 14108,
+      "nonce": "7cbaee26e9eb4035b9325acbcb66e3a9",
+      "process_nonce": "b9aa435bccb345ad97cd3f3953f88840",
+      "case": "scope_expiry",
+      "index": 6,
+      "point": {
+        "source": "res://scripts/run_snapshot_store.gd",
+        "line": 524,
+        "function": "_inspect_base_recovery",
+        "statement": "var observed := _confirmed_dead([int(metadata.pid)], _base_recovery_binding(plan, lock.raw), \"inspect\")",
+        "source_sha256": "f222e8b3798355164ab29da4d0dc534362e2bea680ec7f7dbe7462b86df8959f"
+      },
+      "frames": [
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 524,
+          "function": "_inspect_base_recovery"
+        },
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 338,
+          "function": "inspect_recovery"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_045053_04fe0749/workers/driver.gd",
+          "line": 372,
+          "function": "attack_reader"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_045053_04fe0749/workers/driver.gd",
+          "line": 93,
+          "function": "gate"
+        }
+      ],
+      "stack_packet_sha256": "b471a54e8b40a413610fa451297665fcca29286c9ea254da0e523760aa5e75cd",
+      "before": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": {
+            "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+            "bytes": 4239
+          },
+          "record_0000000002.json": {
+            "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+            "bytes": 4238
+          },
+          "writing/owner.json": {
+            "sha256": "9c2c537e814ac742d71b13fe255f3bab122f63f7a1bb526d9f6bd7d760212a85",
+            "bytes": 84
+          }
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      },
+      "operation": "expiry",
+      "real_sleep_ms": 3200.530100031756,
+      "after": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": {
+            "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+            "bytes": 4239
+          },
+          "record_0000000002.json": {
+            "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+            "bytes": 4238
+          },
+          "writing/owner.json": {
+            "sha256": "9c2c537e814ac742d71b13fe255f3bab122f63f7a1bb526d9f6bd7d760212a85",
+            "bytes": 84
+          }
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      }
+    },
+    {
+      "pid": 14108,
+      "nonce": "7cbaee26e9eb4035b9325acbcb66e3a9",
+      "process_nonce": "b9aa435bccb345ad97cd3f3953f88840",
+      "case": "derived_fallback",
+      "index": 10,
+      "point": {
+        "source": "res://scripts/run_snapshot_store.gd",
+        "line": 493,
+        "function": "_base_recovery_readback",
+        "statement": "var head := _chain()",
+        "source_sha256": "f222e8b3798355164ab29da4d0dc534362e2bea680ec7f7dbe7462b86df8959f"
+      },
+      "frames": [
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 493,
+          "function": "_base_recovery_readback"
+        },
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 526,
+          "function": "_inspect_base_recovery"
+        },
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 338,
+          "function": "inspect_recovery"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_045053_04fe0749/workers/driver.gd",
+          "line": 365,
+          "function": "attack_reader"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_045053_04fe0749/workers/driver.gd",
+          "line": 93,
+          "function": "gate"
+        }
+      ],
+      "stack_packet_sha256": "aed77cd79b3428474f9f7400bc9654961d8bd9184178c14876668d72fe5252af",
+      "before": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": {
+            "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+            "bytes": 4239
+          },
+          "record_0000000002.json": {
+            "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+            "bytes": 4238
+          },
+          "writing/owner.json": {
+            "sha256": "f31bfcc616af9ee2d2861dacf0b4286aca4f6f76387a3e44e5a07ed31041c65c",
+            "bytes": 84
+          }
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      },
+      "operation": "fallback",
+      "fallback_chain_observed": true,
+      "after": {
+        "exists": true,
+        "files": {
+          "record_0000000001.json": {
+            "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+            "bytes": 4239
+          },
+          "record_0000000002.json": {
+            "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+            "bytes": 4238
+          },
+          "writing/owner.json": {
+            "sha256": "f31bfcc616af9ee2d2861dacf0b4286aca4f6f76387a3e44e5a07ed31041c65c",
+            "bytes": 84
+          }
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      }
+    }
+  ],
+  "production_method_overrides": 0,
+  "helpers_terminal_confirmed": true,
+  "command": [
+    "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+    "--path",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_034810_ed1bdef8\\project",
+    "--headless",
+    "--remote-debug",
+    "tcp://127.0.0.1:56437",
+    "--script",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\recovery_readset_20261027\\20261027_045053_04fe0749\\workers\\bootstrap.gd"
+  ],
+  "pid": 14108,
+  "providers": [
+    {
+      "path": "D:\\CodexQA\\readset\\7cbaee26e9eb\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\process_liveness\\v2\\0eadb3c78d1092d70a6dc11ae4ea9472\\result.json",
+      "sha256": "38ce5abb2510191558c8b319d87d459a3766267b6209dea58739465a65f954c5",
+      "provider_pid": 65192,
+      "target_pid": 56416,
+      "nonce": "0eadb3c78d1092d70a6dc11ae4ea9472",
+      "state": "dead",
+      "code": "HANDLE_SIGNALED"
+    },
+    {
+      "path": "D:\\CodexQA\\readset\\7cbaee26e9eb\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\process_liveness\\v2\\1ed37a84ce147a5187216ddf6797306a\\result.json",
+      "sha256": "4ec56153391ca82556f9ed1ead33a543e97933f679f91fc55bb64efd4d091382",
+      "provider_pid": 56840,
+      "target_pid": 56416,
+      "nonce": "1ed37a84ce147a5187216ddf6797306a",
+      "state": "dead",
+      "code": "HANDLE_SIGNALED"
+    },
+    {
+      "path": "D:\\CodexQA\\readset\\7cbaee26e9eb\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\process_liveness\\v2\\22b62dedbd9b3c18e63c160f8ad3e377\\result.json",
+      "sha256": "e17042a93b4db47579278ca1880148101bd45de3ac5e60c854a8ea48e2dcb07b",
+      "provider_pid": 36420,
+      "target_pid": 56416,
+      "nonce": "22b62dedbd9b3c18e63c160f8ad3e377",
+      "state": "dead",
+      "code": "HANDLE_SIGNALED"
+    },
+    {
+      "path": "D:\\CodexQA\\readset\\7cbaee26e9eb\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\process_liveness\\v2\\3df6f998204c657893031f60355a3e20\\result.json",
+      "sha256": "66352b831ad7b52a081f8da6b6e7563857a08c6eb3d05a86fe829e9e91d7aa89",
+      "provider_pid": 26468,
+      "target_pid": 56416,
+      "nonce": "3df6f998204c657893031f60355a3e20",
+      "state": "dead",
+      "code": "HANDLE_SIGNALED"
+    },
+    {
+      "path": "D:\\CodexQA\\readset\\7cbaee26e9eb\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\process_liveness\\v2\\3f24d83d31f6028503a87af675820234\\result.json",
+      "sha256": "2987f74dd08f70636c005e7ba9362bb03758d796e7efe72da1c5d71ea3af9bd8",
+      "provider_pid": 56720,
+      "target_pid": 56416,
+      "nonce": "3f24d83d31f6028503a87af675820234",
+      "state": "dead",
+      "code": "HANDLE_SIGNALED"
+    },
+    {
+      "path": "D:\\CodexQA\\readset\\7cbaee26e9eb\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\process_liveness\\v2\\3f99c70e33bd720c740982585862db63\\result.json",
+      "sha256": "a44a4f25520038190ebf52463b997d32b7ff8d79a347b76e12ff415e4e2cce27",
+      "provider_pid": 15536,
+      "target_pid": 56416,
+      "nonce": "3f99c70e33bd720c740982585862db63",
+      "state": "dead",
+      "code": "HANDLE_SIGNALED"
+    },
+    {
+      "path": "D:\\CodexQA\\readset\\7cbaee26e9eb\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\process_liveness\\v2\\62409d48b978869087e16b0596077d48\\result.json",
+      "sha256": "0d099d3bb9d5e6aa0bf35939f05bc64d638f10179ff538767e90641b9e838770",
+      "provider_pid": 3456,
+      "target_pid": 56416,
+      "nonce": "62409d48b978869087e16b0596077d48",
+      "state": "dead",
+      "code": "HANDLE_SIGNALED"
+    },
+    {
+      "path": "D:\\CodexQA\\readset\\7cbaee26e9eb\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\process_liveness\\v2\\70a77ce1b0faadd8b27b0075386521b4\\result.json",
+      "sha256": "313d00b335024e9f767aa146d0d03e7bfde142d24453b817cbcaea19689a3181",
+      "provider_pid": 50168,
+      "target_pid": 56416,
+      "nonce": "70a77ce1b0faadd8b27b0075386521b4",
+      "state": "dead",
+      "code": "HANDLE_SIGNALED"
+    },
+    {
+      "path": "D:\\CodexQA\\readset\\7cbaee26e9eb\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\process_liveness\\v2\\82074170eeacffc73f2557dff5c9810c\\result.json",
+      "sha256": "da4fad915b1ae6646a14f7415fb38bd9755737832b7c8d4a7ab8bf9d50775de1",
+      "provider_pid": 2632,
+      "target_pid": 56416,
+      "nonce": "82074170eeacffc73f2557dff5c9810c",
+      "state": "dead",
+      "code": "HANDLE_SIGNALED"
+    },
+    {
+      "path": "D:\\CodexQA\\readset\\7cbaee26e9eb\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\process_liveness\\v2\\8c79bdefe366d7c8e73573f7f717e36c\\result.json",
+      "sha256": "e70b7fc8d4eae76f19556d4f31dbe69263b105812be069fffd7d2362003f0f50",
+      "provider_pid": 63024,
+      "target_pid": 56416,
+      "nonce": "8c79bdefe366d7c8e73573f7f717e36c",
+      "state": "dead",
+      "code": "HANDLE_SIGNALED"
+    },
+    {
+      "path": "D:\\CodexQA\\readset\\7cbaee26e9eb\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\process_liveness\\v2\\8ca8afddc67896373b20e78e4fee4be1\\result.json",
+      "sha256": "93d22fe6bba45e2be21b24801bd8ee9ab821624ee554a86caca7fa6312b2e8d3",
+      "provider_pid": 53584,
+      "target_pid": 56416,
+      "nonce": "8ca8afddc67896373b20e78e4fee4be1",
+      "state": "dead",
+      "code": "HANDLE_SIGNALED"
+    },
+    {
+      "path": "D:\\CodexQA\\readset\\7cbaee26e9eb\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\process_liveness\\v2\\8cda1f3d32d92349ccfb64514fadad5b\\result.json",
+      "sha256": "3651ae5d0d13c34f1873d0333faf4f6680fc873d65b7880e121ef0fc26258463",
+      "provider_pid": 69828,
+      "target_pid": 56416,
+      "nonce": "8cda1f3d32d92349ccfb64514fadad5b",
+      "state": "dead",
+      "code": "HANDLE_SIGNALED"
+    },
+    {
+      "path": "D:\\CodexQA\\readset\\7cbaee26e9eb\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\process_liveness\\v2\\93317f1b556a26d80f41d7ea8af8f27a\\result.json",
+      "sha256": "f313b3d3ec56a78de77df76f9cc394642786106d1e4d70212ce0cddedf59b5d2",
+      "provider_pid": 38500,
+      "target_pid": 56416,
+      "nonce": "93317f1b556a26d80f41d7ea8af8f27a",
+      "state": "dead",
+      "code": "HANDLE_SIGNALED"
+    },
+    {
+      "path": "D:\\CodexQA\\readset\\7cbaee26e9eb\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\process_liveness\\v2\\979ad73ad93b2157f561637a1b75256b\\result.json",
+      "sha256": "24629e5f198779e78ca9732a10139c63dccd7b8fffb873e03d3d0fa2eb34b36d",
+      "provider_pid": 67276,
+      "target_pid": 56416,
+      "nonce": "979ad73ad93b2157f561637a1b75256b",
+      "state": "dead",
+      "code": "HANDLE_SIGNALED"
+    },
+    {
+      "path": "D:\\CodexQA\\readset\\7cbaee26e9eb\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\process_liveness\\v2\\9d3007d1fd8a0d71c6e4c9a19cc13da2\\result.json",
+      "sha256": "9109e759fc17fbe676d6cd98ac37af4739d53079ee216bdba178fd6d1d766922",
+      "provider_pid": 14080,
+      "target_pid": 56416,
+      "nonce": "9d3007d1fd8a0d71c6e4c9a19cc13da2",
+      "state": "dead",
+      "code": "HANDLE_SIGNALED"
+    },
+    {
+      "path": "D:\\CodexQA\\readset\\7cbaee26e9eb\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\process_liveness\\v2\\b1e2b7880162b2e3947901dc935526d9\\result.json",
+      "sha256": "8784aafaec428c54d5b3e3c22810d3e44f04ca567cd759c8cf73b8429c4da166",
+      "provider_pid": 72196,
+      "target_pid": 56416,
+      "nonce": "b1e2b7880162b2e3947901dc935526d9",
+      "state": "dead",
+      "code": "HANDLE_SIGNALED"
+    },
+    {
+      "path": "D:\\CodexQA\\readset\\7cbaee26e9eb\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\process_liveness\\v2\\bd1c70d2f63851fb60f8fa5053978476\\result.json",
+      "sha256": "3d5b178c324fab04e71f28fbbad24f5b5410bde1dddd66f1c2c322f9bb8cb613",
+      "provider_pid": 47240,
+      "target_pid": 56416,
+      "nonce": "bd1c70d2f63851fb60f8fa5053978476",
+      "state": "dead",
+      "code": "HANDLE_SIGNALED"
+    },
+    {
+      "path": "D:\\CodexQA\\readset\\7cbaee26e9eb\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\process_liveness\\v2\\caa8c8da4bf07b59446f9280c07baa6f\\result.json",
+      "sha256": "e8724e3d91d4074c5154746cbba8fe5a9ebcf69f62303a1297e42cd330eba513",
+      "provider_pid": 55064,
+      "target_pid": 56416,
+      "nonce": "caa8c8da4bf07b59446f9280c07baa6f",
+      "state": "dead",
+      "code": "HANDLE_SIGNALED"
+    },
+    {
+      "path": "D:\\CodexQA\\readset\\7cbaee26e9eb\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\process_liveness\\v2\\d8f62483b1c4e69bc95283d9b9104c00\\result.json",
+      "sha256": "a9de31261951969d64c4e3f7598112b6d1de66b3e224860467e988822266ddd1",
+      "provider_pid": 63012,
+      "target_pid": 56416,
+      "nonce": "d8f62483b1c4e69bc95283d9b9104c00",
+      "state": "dead",
+      "code": "HANDLE_SIGNALED"
+    },
+    {
+      "path": "D:\\CodexQA\\readset\\7cbaee26e9eb\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\process_liveness\\v2\\e254deb473a77b634032a1b0a45ec3ff\\result.json",
+      "sha256": "4d1d7542edc8ec793f05d4efe98b6e2361a0a37c332b1a7d607fffd9439452ae",
+      "provider_pid": 11788,
+      "target_pid": 56416,
+      "nonce": "e254deb473a77b634032a1b0a45ec3ff",
+      "state": "dead",
+      "code": "HANDLE_SIGNALED"
+    },
+    {
+      "path": "D:\\CodexQA\\readset\\7cbaee26e9eb\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\process_liveness\\v2\\e56121548bd3a7b46006dd96172408ec\\result.json",
+      "sha256": "ecf34010887e0ceae3b212a2d3c0edcd61d353899df85bcbe6c6d7cc9b7304e1",
+      "provider_pid": 47424,
+      "target_pid": 14108,
+      "nonce": "e56121548bd3a7b46006dd96172408ec",
+      "state": "alive",
+      "code": "HANDLE_NONSIGNALED"
+    },
+    {
+      "path": "D:\\CodexQA\\readset\\7cbaee26e9eb\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\process_liveness\\v2\\f0a2fc6ee52af5da0613252f2f433047\\result.json",
+      "sha256": "cec3be4c636b2c22b3bd597aa4611f653cda8cfbd85c1bc6b4e3991eb7626fdd",
+      "provider_pid": 20228,
+      "target_pid": 56416,
+      "nonce": "f0a2fc6ee52af5da0613252f2f433047",
+      "state": "dead",
+      "code": "HANDLE_SIGNALED"
+    }
+  ],
+  "report_sha256": "25fec07fd5dbd745da3423c58e8c2a55de9336b01a0078d9fb547d51dd4284c4",
+  "checks": 248,
+  "exit_code": 0,
+  "log_sha256": "b16651cbedbab0a7b519f9e5b498eea40cb33bfb72252e264a7f4c2412765d58"
+}
