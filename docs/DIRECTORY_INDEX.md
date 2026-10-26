@@ -49,3 +49,7 @@
 - [docs导航](README.md)、[QA导航](../qa/README.md)：当前文档与证据分工。
 - [仓库约定](GITHUB_REPOSITORY.md)：两个分支、38个标签、Release与管理员字段。
 - `qa/github_organization_20261020/`：本次平台快照与整理检查。
+
+## 2026-10-26 历史测试快照
+
+`qa/storage_cleanup_20261026/` 保存54个旧project的归档索引、逐文件清单、SHA校验、保护结果和恢复工具；本机ZIP位于外层`归档/`，不入Git。旧批次原目录保留恢复提示及原有`.godot`，需要复验时先按[恢复说明](../qa/storage_cleanup_20261026/README.md)还原对应快照。

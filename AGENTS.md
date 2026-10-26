@@ -56,3 +56,7 @@
 开始前检查 `git status --short --branch` 并确认目标分支，工作区干净且本地未分叉时才 `git pull --ff-only origin codex/sync-20260905-stable`。有未提交修改或分叉时先核对来源，不自动 stash、reset 或覆盖。离开前验证、更新文档、按文件提交并推送；避免两台电脑同时修改同一批文件。
 
 本机 Godot 路径写入被忽略的 `godot.local.txt`，或通过 `GODOT_PATH` / 启动脚本参数提供。不要把本机路径写死进公共启动脚本。完整入口见 `docs/SOURCE_SETUP.md`。
+
+## 2026-10-26 旧私有测试工程归档
+
+54 个 10 月 15—17 日旧测试工程的非 `.godot` 文件已完整去重归档并验证恢复；旧批次复验前须先按 [恢复说明](qa/storage_cleanup_20261026/README.md) 还原所需 project。当前源码、黄泥冈进行中工程、Steam 批次、主缓存及旧私有缓存恢复链保留。不要把旧 project 缺失直接判作来源丢失。

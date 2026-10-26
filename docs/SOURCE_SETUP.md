@@ -43,3 +43,7 @@ git fetch origin
 ## GitHub入口
 
 当前版本与历史安装包见[更新记录](../CHANGELOG.md)，分支和管理字段见[仓库约定](GITHUB_REPOSITORY.md)，源码参与方式见[协作说明](../CONTRIBUTING.md)。专题资料从[文档导航](README.md)和[QA导航](../qa/README.md)进入，不移动原有工具/素材路径。
+
+## 旧测试工程恢复（2026-10-26）
+
+54 个旧人物测试 project 已转为本机去重归档；历史 receipt/重放需要这些路径时，先按[本批说明](../qa/storage_cleanup_20261026/README.md)恢复所选 prefix，再使用原绑定的引擎与数据。当前游戏启动方式不变；主缓存、旧私有缓存、当前黄泥冈和Steam批次保留。
