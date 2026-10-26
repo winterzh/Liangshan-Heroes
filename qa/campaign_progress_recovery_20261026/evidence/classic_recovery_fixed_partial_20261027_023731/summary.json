@@ -1,0 +1,371 @@
+{
+  "schema": "classic_recovery_fixed_partial_evidence_v1",
+  "archived_at_utc": "2026-10-26T18:53:56.138678+00:00",
+  "run": "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912",
+  "archive": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\evidence\\classic_recovery_fixed_partial_20261027_023731",
+  "original_receipt_sha256": "67e58ec2dcea94a334eb91f06ba37983bdb0016819f70ed64e35a693fae33c4a",
+  "execution_complete": false,
+  "expected": "fixed",
+  "host_error": "RuntimeError('Private character QA step failed: reader')",
+  "actual_source_content": "source-v1:d7f2258b8be6f77e3577ff9c3b018427c805c84385e86f1daa54aaa49cc30dac",
+  "actual_engine_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+  "actual_project": "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project",
+  "completed_recovery_cases": 1,
+  "attempted_cases": 2,
+  "attempted_processes": 4,
+  "terminal_processes": 4,
+  "writer_planned_nonzero_exits": 2,
+  "reader_zero_exits": 1,
+  "reader_failed_exit1": 1,
+  "checks": {
+    "executed": 83,
+    "passed": 82,
+    "failed": 1,
+    "writer_preparation_passed": 46,
+    "pending_reader_passed": 21,
+    "record_reader_executed": 16,
+    "record_reader_passed": 15,
+    "record_reader_failed": 1,
+    "host_assertions_not_added_to_count": true
+  },
+  "cases": [
+    {
+      "case": "pending",
+      "completed_recovery_case": true,
+      "writer_pid": 54152,
+      "writer_exit_code": 1,
+      "writer_checks": 23,
+      "reader_pid": 21868,
+      "reader_exit_code": 0,
+      "reader_checks": 21,
+      "reader_passed_checks": 21,
+      "reader_passed": true,
+      "reader_report_sha256": "f1c93851e95895086d0e7bc14328f25fe6f631f1641094a9eb10ce2e7755fb91",
+      "reader_report_accepted_in_main_cases": true,
+      "reader_outcome": "fixed_branch_restored",
+      "operation": {
+        "generation": 1,
+        "ok": true,
+        "paused": true,
+        "steam_credit": false
+      },
+      "slot_sha256": "743083a6409d9107ad66f99983ee018d843aee3dc8ba1b83d742fc6f05809256",
+      "slot_payload_sha256": "2bbb1521df0ae59e31f88a95b69214824731d09a361db7204ef34b82c1eb6926",
+      "slot_schema": "classic_continue_slot_v3",
+      "slot_context": {
+        "level_id": "",
+        "mode": "defense",
+        "waves": 30
+      },
+      "slot_binding": {
+        "kind": "uncredited",
+        "receipt_sha256": "f012ca3269d55f51831d1324f3cc602d2d0a894a0797e9a6c82d51ce73467051",
+        "token": "ea6649787cb6bb0c13a85983e0161b38"
+      },
+      "local_lifecycle_sha256": "f012ca3269d55f51831d1324f3cc602d2d0a894a0797e9a6c82d51ce73467051",
+      "local_lifecycle_schema": "local_continue_lifecycle_v1",
+      "local_lifecycle_state": "active",
+      "local_lifecycle_generation": 1,
+      "capture_registration": {
+        "barrier_state": 1,
+        "before_button": {
+          "capture_calls": 0,
+          "flow_callback_absent": true,
+          "frame": "18",
+          "observer_registered": true
+        },
+        "capture_calls": 0,
+        "connection_count": 2,
+        "connections": [
+          {
+            "flags": 4,
+            "index": 0,
+            "is_flow": false,
+            "is_observer": true,
+            "method": "capture_witness",
+            "object_id": "256120981327",
+            "valid": true
+          },
+          {
+            "flags": 4,
+            "index": 1,
+            "is_flow": true,
+            "is_observer": false,
+            "method": "_capture_ready",
+            "object_id": "240316843520",
+            "valid": true
+          }
+        ],
+        "flow_object_id": "240316843520",
+        "frame": "18",
+        "observer_object_id": "256120981327",
+        "one_shot_flag": 4,
+        "phase": 2,
+        "requested": true,
+        "saving": true,
+        "session_absent": true,
+        "source_is_battle": true
+      },
+      "capture_observer": {
+        "calls": 1,
+        "clock_next": "13",
+        "flow_callback_connected": false,
+        "flow_session_absent": true,
+        "held": true,
+        "observer_disconnected": true,
+        "outside_physics": true
+      },
+      "actual_stack": [
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 313,
+          "function": "commit_locked"
+        },
+        {
+          "source": "res://scripts/run_slot_store.gd",
+          "line": 173,
+          "function": "write_slot"
+        },
+        {
+          "source": "res://scripts/run_world_session.gd",
+          "line": 137,
+          "function": "save_held"
+        },
+        {
+          "source": "res://scripts/continue_flow.gd",
+          "line": 252,
+          "function": "_capture_ready"
+        },
+        {
+          "source": "res://scripts/run_battle_barrier.gd",
+          "line": 196,
+          "function": "_idle_boundary"
+        }
+      ],
+      "breakpoint": {
+        "source": "res://scripts/run_snapshot_store.gd",
+        "line": 313,
+        "function": "commit_locked",
+        "statement": "_checkpoint(\"pending_verified\")",
+        "sha256": "7052bc687a26ef9edb155465e070bcedf1ae86a3e8f19b0553bb7757b8ad9b0c"
+      },
+      "gate": {
+        "after_clear": {
+          "operation_received": false,
+          "phase": 3,
+          "restoring": true,
+          "session_absent": true,
+          "source_is_menu": true
+        },
+        "after_frame": 1,
+        "before_frame": 1,
+        "initial_private_gate_used": true,
+        "private_gate_after_clear": false,
+        "request": {
+          "operation_received": false,
+          "phase": 3,
+          "restoring": true,
+          "session_absent": true,
+          "source_is_menu": true
+        }
+      },
+      "current_business_inventory_ref": "inventory_audit.json#pending",
+      "native_result_files": 3
+    },
+    {
+      "case": "record",
+      "completed_recovery_case": false,
+      "writer_pid": 12488,
+      "writer_exit_code": 1,
+      "writer_checks": 23,
+      "reader_pid": 38344,
+      "reader_exit_code": 1,
+      "reader_checks": 16,
+      "reader_passed_checks": 15,
+      "reader_passed": false,
+      "reader_report_sha256": "3e29afb4d11eb55f0a9b06e5cfe8d782dcc08e9de968f58588021ba953d7cd4c",
+      "reader_report_accepted_in_main_cases": false,
+      "reader_outcome": "restore_refused",
+      "operation": {
+        "code": "PROCESS_LIVENESS_TIMEOUT",
+        "liveness_detail": {},
+        "ok": false,
+        "restart_required": false,
+        "retryable": true,
+        "unsafe": false
+      },
+      "slot_sha256": "2a4513329433fa76973cff28fd6d95044d3b9b8e7accb275969a7510580eb1f5",
+      "slot_payload_sha256": "ce7575a13a83ececb59380e60a9159f1f37371bbbcb95a20c36ad3ee6ad09329",
+      "slot_schema": "classic_continue_slot_v3",
+      "slot_context": {
+        "level_id": "",
+        "mode": "defense",
+        "waves": 30
+      },
+      "slot_binding": {
+        "kind": "uncredited",
+        "receipt_sha256": "56a55a073523c561328a6758fbe36f964275c822d416c37f29e5038f89a674c5",
+        "token": "2813dccd010d2b93538d806fd29c4dab"
+      },
+      "local_lifecycle_sha256": "56a55a073523c561328a6758fbe36f964275c822d416c37f29e5038f89a674c5",
+      "local_lifecycle_schema": "local_continue_lifecycle_v1",
+      "local_lifecycle_state": "active",
+      "local_lifecycle_generation": 1,
+      "capture_registration": {
+        "barrier_state": 1,
+        "before_button": {
+          "capture_calls": 0,
+          "flow_callback_absent": true,
+          "frame": "53",
+          "observer_registered": true
+        },
+        "capture_calls": 0,
+        "connection_count": 2,
+        "connections": [
+          {
+            "flags": 4,
+            "index": 0,
+            "is_flow": false,
+            "is_observer": true,
+            "method": "capture_witness",
+            "object_id": "256120981327",
+            "valid": true
+          },
+          {
+            "flags": 4,
+            "index": 1,
+            "is_flow": true,
+            "is_observer": false,
+            "method": "_capture_ready",
+            "object_id": "240316843520",
+            "valid": true
+          }
+        ],
+        "flow_object_id": "240316843520",
+        "frame": "53",
+        "observer_object_id": "256120981327",
+        "one_shot_flag": 4,
+        "phase": 2,
+        "requested": true,
+        "saving": true,
+        "session_absent": true,
+        "source_is_battle": true
+      },
+      "capture_observer": {
+        "calls": 1,
+        "clock_next": "12",
+        "flow_callback_connected": false,
+        "flow_session_absent": true,
+        "held": true,
+        "observer_disconnected": true,
+        "outside_physics": true
+      },
+      "actual_stack": [
+        {
+          "source": "res://scripts/run_slot_store.gd",
+          "line": 175,
+          "function": "write_slot"
+        },
+        {
+          "source": "res://scripts/run_world_session.gd",
+          "line": 137,
+          "function": "save_held"
+        },
+        {
+          "source": "res://scripts/continue_flow.gd",
+          "line": 252,
+          "function": "_capture_ready"
+        },
+        {
+          "source": "res://scripts/run_battle_barrier.gd",
+          "line": 196,
+          "function": "_idle_boundary"
+        }
+      ],
+      "breakpoint": {
+        "source": "res://scripts/run_slot_store.gd",
+        "line": 175,
+        "function": "write_slot",
+        "statement": "var released := release()",
+        "sha256": "d67fe7794f23fe1bda3d74c7e284ba6b90d2cb488a5d35cb1a187eea77fa3532"
+      },
+      "gate": {
+        "after_clear": {
+          "operation_received": false,
+          "phase": 3,
+          "restoring": true,
+          "session_absent": true,
+          "source_is_menu": true
+        },
+        "after_frame": 1,
+        "before_frame": 1,
+        "initial_private_gate_used": true,
+        "private_gate_after_clear": false,
+        "request": {
+          "operation_received": false,
+          "phase": 3,
+          "restoring": true,
+          "session_absent": true,
+          "source_is_menu": true
+        }
+      },
+      "current_business_inventory_ref": "inventory_audit.json#record",
+      "native_result_files": 2
+    }
+  ],
+  "final_guards": {
+    "final_identity_passed": true,
+    "lock_ownership_confirmed": true,
+    "lock_released": true
+  },
+  "runtime_pin_verification": {
+    "total": 267,
+    "verified_from_runtime_frozen_or_unchanged_original": 267,
+    "all_current_mutable_sources_claimed_unchanged": false
+  },
+  "native_IPC": {
+    "raw_result_count": 5,
+    "pending_target_pid": 54152,
+    "pending_provider_pids": [
+      19536,
+      39468,
+      44852
+    ],
+    "record_target_pid": 12488,
+    "record_provider_pids": [
+      9668,
+      47596
+    ],
+    "all_states": "dead",
+    "all_codes": "PID_ABSENT_87",
+    "raw_query_request_files_present": false,
+    "timeout_root_cause_identified": false,
+    "consumer_deadline_acceptance_or_child_handle_lifecycle_proven_by_result_files": false,
+    "index": "ipc_index.json"
+  },
+  "qualification": {
+    "pending_source_branch_restoration_verified": true,
+    "record_source_branch_restoration_verified": false,
+    "full_two_case_fixed_regression_passed": false,
+    "record_timeout_preserved_business_bytes_verified": true,
+    "public_entry_qualified": false,
+    "original_release_qualified": false,
+    "sdk_qualified": false,
+    "os_input": false,
+    "human_acceptance": false,
+    "release_qualified": false,
+    "source_restore_branch_only": true,
+    "initial_private_gate_used": true
+  },
+  "scope_notes": [
+    "Pending actually restores paused classic30 world with exact typed resource/queue observations; pending bytes promote to record unchanged, original active LC stays unchanged, writing is released.",
+    "Record fails candidate branch restores with PROCESS_LIVENESS_TIMEOUT, empty liveness_detail, retryable=true, unsafe=false, restart_required=false. It is not a successful recovery.",
+    "Archival readonly full inventory proves record retains exactly 3 files and 8 directories, including original slot, writing owner and active LC, identical to both writer before/after snapshots.",
+    "Five native IPC result JSONs exist and report dead. Do not describe the helper as producing no result, or infer which query/deadline/consumer branch timed out. Timing diagnosis is separate and not yet a result of this batch.",
+    "Native provider_pid is a field in the actual helper result, not a newly observed retained host HANDLE in this archive.",
+    "Both readers initially use the private QA gate, then synchronously clear only that gate before the real restore callback. This is a source-branch diagnostic, not public-release qualification.",
+    "The incomplete record reader report was not accepted into main cases; it is preserved with an archive-computed SHA alongside its bound native log.",
+    "Private continue/slot/lifecycle payloads and EXEs are excluded. Only the two explicitly authorized process_liveness/v2 IPC result subtrees are copied from private profiles.",
+    "No engine run, source edit, Git operation or shared-lock mutation occurred during archiving."
+  ]
+}

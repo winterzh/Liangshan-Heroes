@@ -1,0 +1,171 @@
+{
+  "case": "pending_writer",
+  "complete": true,
+  "process_terminal": true,
+  "command": [
+    "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+    "--path",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\project",
+    "--rendering-method",
+    "gl_compatibility",
+    "--resolution",
+    "1280x720",
+    "--position",
+    "30000,30000",
+    "--remote-debug",
+    "tcp://127.0.0.1:60313",
+    "--script",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_023731_c180a912\\workers\\bootstrap.gd"
+  ],
+  "nonce": "395908afd49f42578a9f2ed1f098ec43",
+  "process_nonce": "2f759c37e69348c1a322a8dbf8593a8c",
+  "initial_private_gate_used": true,
+  "public_entry_qualified": false,
+  "production_method_overrides": 0,
+  "pid": 54152,
+  "ignored_local_lifecycle_stops": [
+    [
+      {
+        "source": "res://scripts/run_snapshot_store.gd",
+        "line": 313,
+        "function": "commit_locked"
+      },
+      {
+        "source": "res://scripts/run_local_lifecycle.gd",
+        "line": 73,
+        "function": "_commit"
+      },
+      {
+        "source": "res://scripts/run_local_lifecycle.gd",
+        "line": 90,
+        "function": "begin"
+      },
+      {
+        "source": "res://scripts/run_local_lifecycle.gd",
+        "line": 109,
+        "function": "binding"
+      },
+      {
+        "source": "res://scripts/run_world_session.gd",
+        "line": 130,
+        "function": "save_held"
+      },
+      {
+        "source": "res://scripts/continue_flow.gd",
+        "line": 252,
+        "function": "_capture_ready"
+      },
+      {
+        "source": "res://scripts/run_battle_barrier.gd",
+        "line": 196,
+        "function": "_idle_boundary"
+      }
+    ]
+  ],
+  "point": {
+    "source": "res://scripts/run_snapshot_store.gd",
+    "line": 313,
+    "function": "commit_locked",
+    "statement": "_checkpoint(\"pending_verified\")",
+    "sha256": "7052bc687a26ef9edb155465e070bcedf1ae86a3e8f19b0553bb7757b8ad9b0c"
+  },
+  "frames": [
+    {
+      "source": "res://scripts/run_snapshot_store.gd",
+      "line": 313,
+      "function": "commit_locked"
+    },
+    {
+      "source": "res://scripts/run_slot_store.gd",
+      "line": 173,
+      "function": "write_slot"
+    },
+    {
+      "source": "res://scripts/run_world_session.gd",
+      "line": 137,
+      "function": "save_held"
+    },
+    {
+      "source": "res://scripts/continue_flow.gd",
+      "line": 252,
+      "function": "_capture_ready"
+    },
+    {
+      "source": "res://scripts/run_battle_barrier.gd",
+      "line": 196,
+      "function": "_idle_boundary"
+    }
+  ],
+  "stack_packet_sha256": "78152d56d65a61daef93dcf2108f60714c21fd7bf759dd300afdcdf28e894c9c",
+  "slot_sha256": "743083a6409d9107ad66f99983ee018d843aee3dc8ba1b83d742fc6f05809256",
+  "slot_target": "receipt.pending",
+  "slot_binding": {
+    "kind": "uncredited",
+    "receipt_sha256": "f012ca3269d55f51831d1324f3cc602d2d0a894a0797e9a6c82d51ce73467051",
+    "token": "ea6649787cb6bb0c13a85983e0161b38"
+  },
+  "head_revision": 1,
+  "previous_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "original_owner": {
+    "owner": "1",
+    "pid": "54152",
+    "token": "92918d53c4d2e8d963fc09b1999ff033",
+    "version": "1"
+  },
+  "before_termination": {
+    "exists": true,
+    "files": {
+      "5088120/1/receipt.pending": {
+        "sha256": "743083a6409d9107ad66f99983ee018d843aee3dc8ba1b83d742fc6f05809256",
+        "bytes": 3961695
+      },
+      "5088120/1/writing/owner.json": {
+        "sha256": "efdb5b3526ecf61c57ba3095e088fc5c00f6edf4f93cd1499cfa65144982b108",
+        "bytes": 84
+      },
+      "local_runs/ea6649787cb6bb0c13a85983e0161b38/5088120/1/record_0000000001.json": {
+        "sha256": "f012ca3269d55f51831d1324f3cc602d2d0a894a0797e9a6c82d51ce73467051",
+        "bytes": 513
+      }
+    },
+    "directories": [
+      ".",
+      "5088120",
+      "5088120/1",
+      "5088120/1/writing",
+      "local_runs",
+      "local_runs/ea6649787cb6bb0c13a85983e0161b38",
+      "local_runs/ea6649787cb6bb0c13a85983e0161b38/5088120",
+      "local_runs/ea6649787cb6bb0c13a85983e0161b38/5088120/1"
+    ]
+  },
+  "after_termination": {
+    "exists": true,
+    "files": {
+      "5088120/1/receipt.pending": {
+        "sha256": "743083a6409d9107ad66f99983ee018d843aee3dc8ba1b83d742fc6f05809256",
+        "bytes": 3961695
+      },
+      "5088120/1/writing/owner.json": {
+        "sha256": "efdb5b3526ecf61c57ba3095e088fc5c00f6edf4f93cd1499cfa65144982b108",
+        "bytes": 84
+      },
+      "local_runs/ea6649787cb6bb0c13a85983e0161b38/5088120/1/record_0000000001.json": {
+        "sha256": "f012ca3269d55f51831d1324f3cc602d2d0a894a0797e9a6c82d51ce73467051",
+        "bytes": 513
+      }
+    },
+    "directories": [
+      ".",
+      "5088120",
+      "5088120/1",
+      "5088120/1/writing",
+      "local_runs",
+      "local_runs/ea6649787cb6bb0c13a85983e0161b38",
+      "local_runs/ea6649787cb6bb0c13a85983e0161b38/5088120",
+      "local_runs/ea6649787cb6bb0c13a85983e0161b38/5088120/1"
+    ]
+  },
+  "exit_code": 1,
+  "log_sha256": "8006887eb3ea1a2689f77bab9794be95e0d270f60062c4f2878f20d732ddaf3a"
+}

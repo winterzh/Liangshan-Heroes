@@ -26,6 +26,10 @@
 
 ## 正在推进与未覆盖
 
-独立[classic中断保存诊断](tests/classic_recovery/README.md)验证完整pending与已提交record两处原生断点，每种两进程；先在旧e97a复现提前读槽拒绝，再用d7新源复验。首批20261027_021555_ab13c0d1仅运行一个writer，因测试错误要求一次性Flow信号在发射时仍显示已连接而退出1；真实HELD与后续原Flow保存栈已观察到，reader未运行，不判游戏恢复成功或失败。[工具失败原件](../evidence/classic_recovery_observer_failed_20261027_021555/README.md)保留，修正观察时序后另批重跑。初始Continue使用私有gate，同步清标志后由原process_frame进入恢复分支，只验证源码分支。
+独立[classic中断保存诊断](tests/classic_recovery/README.md)使用完整pending与已提交record两处真实断点。首批因一次性信号观察器错误停止，[失败原件](../evidence/classic_recovery_observer_failed_20261027_021555/README.md)保留；工具改为发射前真实注册取证。随后[e97a基线四进程](../evidence/classic_recovery_baseline_20261027_022930/README.md)82项通过，仅证明两案均复现RECOVERY_REQUIRED、保留菜单和原文件。两writer在指定真实断点计划终止，两个reader正常退出。
+
+[d7修复批](../evidence/classic_recovery_fixed_partial_20261027_023731/README.md)整体未通过：完整pending恢复成功，暂停世界、资源、队列、原槽SHA/token及LC字节一致；record案返回PROCESS_LIVENESS_TIMEOUT，原槽、owner及LC共3文件/8目录逐字保持。四进程83项中82过、1失败，complete=false。record实际已生成两份目标writer的dead查询结果，不能据此把失败归因于helper未返回；约3.96MB记录的重复严格验证是否耗尽scope预算仍待只读计时。不得通过加大预算、降低世界检查或重跑掩盖此次失败。
+
+初始Continue使用私有gate，同步清标志后由原process_frame进入恢复分支；以上只证明源码分支情况，不授公开入口、SDK或原版键鼠资格。
 
 公开 classic 死 writer 恢复、拒绝前字节保护和玩家失败/重试仍需实际验证。源码 QA 的私有入口与发行版 public gate 不等价；任何清 QA 标志后的单分支诊断必须另标范围，不能宣称公开入口或原版键鼠通过。原19类、61阶段、v2超时隔离、Steam SDK/云边界与全游戏验收继续保留。

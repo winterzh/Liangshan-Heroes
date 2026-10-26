@@ -1,0 +1,448 @@
+{
+  "schema": "classic_recovery_baseline_evidence_v1",
+  "archived_at_utc": "2026-10-26T18:41:44.566350+00:00",
+  "run": "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_recovery_branch_20261027\\20261027_022930_07257df1",
+  "archive": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\evidence\\classic_recovery_baseline_20261027_022930",
+  "original_receipt_sha256": "5cb3fd54ca3f7ba33e13dc30aeffa4168e8af82337f79ee88677df93c9c7eddf",
+  "execution_complete": true,
+  "expected": "baseline",
+  "actual_source_content": "source-v1:e97a07b9ff04b677fbc1934a40976cc6e1f82479855cf39f305147ae4f6d1eea",
+  "actual_engine_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+  "actual_project": "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project",
+  "actual_cases": 2,
+  "attempted_processes": 4,
+  "terminal_processes": 4,
+  "writer_planned_nonzero_exits": 2,
+  "reader_normal_zero_exits": 2,
+  "checks": {
+    "executed": 82,
+    "passed": 82,
+    "failed": 0,
+    "writer_preparation": 46,
+    "reader_baseline_assertions": 36,
+    "host_assertions_not_added_to_check_count": true
+  },
+  "cases": [
+    {
+      "case": "pending",
+      "writer_pid": 52624,
+      "writer_exit_code": 1,
+      "writer_checks": 23,
+      "reader_pid": 38908,
+      "reader_exit_code": 0,
+      "reader_checks": 18,
+      "report_sha256": "886a43cdec90ebed8c025feec10e2664deeaf1e89f7ed69fe8e51483caaa1f20",
+      "writer_prepared_sha256": "6411ef39d3dc4be29c426eed791b6a96b203527b16c77d46bd8daa347992b45b",
+      "breakpoint": {
+        "source": "res://scripts/run_snapshot_store.gd",
+        "line": 313,
+        "function": "commit_locked",
+        "statement": "_checkpoint(\"pending_verified\")",
+        "sha256": "7052bc687a26ef9edb155465e070bcedf1ae86a3e8f19b0553bb7757b8ad9b0c"
+      },
+      "actual_stack": [
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 313,
+          "function": "commit_locked"
+        },
+        {
+          "source": "res://scripts/run_slot_store.gd",
+          "line": 173,
+          "function": "write_slot"
+        },
+        {
+          "source": "res://scripts/run_world_session.gd",
+          "line": 136,
+          "function": "save_held"
+        },
+        {
+          "source": "res://scripts/continue_flow.gd",
+          "line": 252,
+          "function": "_capture_ready"
+        },
+        {
+          "source": "res://scripts/run_battle_barrier.gd",
+          "line": 196,
+          "function": "_idle_boundary"
+        }
+      ],
+      "stack_packet_sha256": "708a2c7b1b8943a6786181242cc02053cec3d9a961d355fabb141336638fc300",
+      "capture_registration": {
+        "barrier_state": 1,
+        "before_button": {
+          "capture_calls": 0,
+          "flow_callback_absent": true,
+          "frame": "59",
+          "observer_registered": true
+        },
+        "capture_calls": 0,
+        "connection_count": 2,
+        "connections": [
+          {
+            "flags": 4,
+            "index": 0,
+            "is_flow": false,
+            "is_observer": true,
+            "method": "capture_witness",
+            "object_id": "255131125582",
+            "valid": true
+          },
+          {
+            "flags": 4,
+            "index": 1,
+            "is_flow": true,
+            "is_observer": false,
+            "method": "_capture_ready",
+            "object_id": "239326987776",
+            "valid": true
+          }
+        ],
+        "flow_object_id": "239326987776",
+        "frame": "59",
+        "observer_object_id": "255131125582",
+        "one_shot_flag": 4,
+        "phase": 2,
+        "requested": true,
+        "saving": true,
+        "session_absent": true,
+        "source_is_battle": true
+      },
+      "capture_observer": {
+        "calls": 1,
+        "clock_next": "13",
+        "flow_callback_connected": false,
+        "flow_session_absent": true,
+        "held": true,
+        "observer_disconnected": true,
+        "outside_physics": true
+      },
+      "slot_target": "receipt.pending",
+      "slot_sha256": "27d6cab9f367325a72ea87162de84e5f963992507184419a9567e10beadc4fca",
+      "slot_payload_sha256": "008afa9ca68c268a7ba5c5c8e4d49b500e46180b24fb47f37c871d1f0f6cd6ac",
+      "slot_schema": "classic_continue_slot_v3",
+      "slot_context": {
+        "level_id": "",
+        "mode": "defense",
+        "waves": 30
+      },
+      "slot_generation": 1,
+      "slot_binding": {
+        "kind": "uncredited",
+        "receipt_sha256": "fa9358741fe4abb124e17f1a526df3ece8807366db9fcfcf1c2e47edda4625dd",
+        "token": "2f9a0984f6029cd7f013421b60c21180"
+      },
+      "local_lifecycle_schema": "local_continue_lifecycle_v1",
+      "local_lifecycle_generation": 1,
+      "local_lifecycle_state": "active",
+      "local_lifecycle_sha256": "fa9358741fe4abb124e17f1a526df3ece8807366db9fcfcf1c2e47edda4625dd",
+      "reader_observation": {
+        "after_inventory": {
+          "items": {
+            "receipt.pending": "27d6cab9f367325a72ea87162de84e5f963992507184419a9567e10beadc4fca",
+            "writing/": "directory",
+            "writing/owner.json": "c0452c20ea78eedddf13110011c6b44c112e69ef09a3b514a0f0e600f551d4fd"
+          },
+          "ok": true
+        },
+        "before_inventory": {
+          "items": {
+            "receipt.pending": "27d6cab9f367325a72ea87162de84e5f963992507184419a9567e10beadc4fca",
+            "writing/": "directory",
+            "writing/owner.json": "c0452c20ea78eedddf13110011c6b44c112e69ef09a3b514a0f0e600f551d4fd"
+          },
+          "ok": true
+        },
+        "binding": {
+          "kind": "uncredited",
+          "receipt_sha256": "fa9358741fe4abb124e17f1a526df3ece8807366db9fcfcf1c2e47edda4625dd",
+          "token": "2f9a0984f6029cd7f013421b60c21180"
+        },
+        "candidate_sha256": "27d6cab9f367325a72ea87162de84e5f963992507184419a9567e10beadc4fca",
+        "local_inventory": {
+          "items": {
+            "record_0000000001.json": "fa9358741fe4abb124e17f1a526df3ece8807366db9fcfcf1c2e47edda4625dd"
+          },
+          "ok": true
+        },
+        "operation": {
+          "code": "RECOVERY_REQUIRED",
+          "ok": false
+        }
+      },
+      "reader_gate": {
+        "after_clear": {
+          "operation_received": false,
+          "phase": 3,
+          "restoring": true,
+          "session_absent": true,
+          "source_is_menu": true
+        },
+        "after_frame": 1,
+        "before_frame": 1,
+        "initial_private_gate_used": true,
+        "private_gate_after_clear": false,
+        "request": {
+          "operation_received": false,
+          "phase": 3,
+          "restoring": true,
+          "session_absent": true,
+          "source_is_menu": true
+        }
+      },
+      "refusal_retains_menu_and_no_world_assertion_passed": true,
+      "actual_private_data_readonly_verification": [
+        {
+          "relative_path": "5088120/1/receipt.pending",
+          "bytes": 3961695,
+          "sha256": "27d6cab9f367325a72ea87162de84e5f963992507184419a9567e10beadc4fca",
+          "original_readonly_verified": true,
+          "terminated_copy_readonly_verified": true,
+          "copied_into_archive": false
+        },
+        {
+          "relative_path": "5088120/1/writing/owner.json",
+          "bytes": 84,
+          "sha256": "c0452c20ea78eedddf13110011c6b44c112e69ef09a3b514a0f0e600f551d4fd",
+          "original_readonly_verified": true,
+          "terminated_copy_readonly_verified": true,
+          "copied_into_archive": false
+        },
+        {
+          "relative_path": "local_runs/2f9a0984f6029cd7f013421b60c21180/5088120/1/record_0000000001.json",
+          "bytes": 513,
+          "sha256": "fa9358741fe4abb124e17f1a526df3ece8807366db9fcfcf1c2e47edda4625dd",
+          "original_readonly_verified": true,
+          "terminated_copy_readonly_verified": true,
+          "copied_into_archive": false
+        }
+      ],
+      "recovery_succeeded": false,
+      "baseline_defect_reproduced": true
+    },
+    {
+      "case": "record",
+      "writer_pid": 61544,
+      "writer_exit_code": 1,
+      "writer_checks": 23,
+      "reader_pid": 74420,
+      "reader_exit_code": 0,
+      "reader_checks": 18,
+      "report_sha256": "8031896177e8fed63e869358c2440d06dce8d8c68d975288719bdc61099224ba",
+      "writer_prepared_sha256": "e31e4b3e5af4e8d79983290540f12a843d627f83d25195c1160e0f6f0bb2ebe7",
+      "breakpoint": {
+        "source": "res://scripts/run_slot_store.gd",
+        "line": 175,
+        "function": "write_slot",
+        "statement": "var released := release()",
+        "sha256": "d67fe7794f23fe1bda3d74c7e284ba6b90d2cb488a5d35cb1a187eea77fa3532"
+      },
+      "actual_stack": [
+        {
+          "source": "res://scripts/run_slot_store.gd",
+          "line": 175,
+          "function": "write_slot"
+        },
+        {
+          "source": "res://scripts/run_world_session.gd",
+          "line": 136,
+          "function": "save_held"
+        },
+        {
+          "source": "res://scripts/continue_flow.gd",
+          "line": 252,
+          "function": "_capture_ready"
+        },
+        {
+          "source": "res://scripts/run_battle_barrier.gd",
+          "line": 196,
+          "function": "_idle_boundary"
+        }
+      ],
+      "stack_packet_sha256": "efeb16a3a5d68b036525405e87903c33f66e1c080791a84df97ff68ecb57d53e",
+      "capture_registration": {
+        "barrier_state": 1,
+        "before_button": {
+          "capture_calls": 0,
+          "flow_callback_absent": true,
+          "frame": "55",
+          "observer_registered": true
+        },
+        "capture_calls": 0,
+        "connection_count": 2,
+        "connections": [
+          {
+            "flags": 4,
+            "index": 0,
+            "is_flow": false,
+            "is_observer": true,
+            "method": "capture_witness",
+            "object_id": "255131125582",
+            "valid": true
+          },
+          {
+            "flags": 4,
+            "index": 1,
+            "is_flow": true,
+            "is_observer": false,
+            "method": "_capture_ready",
+            "object_id": "239326987776",
+            "valid": true
+          }
+        ],
+        "flow_object_id": "239326987776",
+        "frame": "55",
+        "observer_object_id": "255131125582",
+        "one_shot_flag": 4,
+        "phase": 2,
+        "requested": true,
+        "saving": true,
+        "session_absent": true,
+        "source_is_battle": true
+      },
+      "capture_observer": {
+        "calls": 1,
+        "clock_next": "12",
+        "flow_callback_connected": false,
+        "flow_session_absent": true,
+        "held": true,
+        "observer_disconnected": true,
+        "outside_physics": true
+      },
+      "slot_target": "record_0000000001.json",
+      "slot_sha256": "9878e90467a28efc1d7b59a53e1f631b1f8e7af4b64d043e4db1d243a3ec6c98",
+      "slot_payload_sha256": "d8fc9188e4dad76ffb4a30c48c1760894d0af7da07d6ddf30849f3bc520885c5",
+      "slot_schema": "classic_continue_slot_v3",
+      "slot_context": {
+        "level_id": "",
+        "mode": "defense",
+        "waves": 30
+      },
+      "slot_generation": 1,
+      "slot_binding": {
+        "kind": "uncredited",
+        "receipt_sha256": "497f513e256f2e386d6a46a9aeb264b1a798a0905affd2c2d257fc1dddf04c5c",
+        "token": "c8ce832d73c4370c418fe2b02920f00c"
+      },
+      "local_lifecycle_schema": "local_continue_lifecycle_v1",
+      "local_lifecycle_generation": 1,
+      "local_lifecycle_state": "active",
+      "local_lifecycle_sha256": "497f513e256f2e386d6a46a9aeb264b1a798a0905affd2c2d257fc1dddf04c5c",
+      "reader_observation": {
+        "after_inventory": {
+          "items": {
+            "record_0000000001.json": "9878e90467a28efc1d7b59a53e1f631b1f8e7af4b64d043e4db1d243a3ec6c98",
+            "writing/": "directory",
+            "writing/owner.json": "f6dc00afa15a3cfb915731229598679ca3485aedab10289eb6ed158aaf5bb33a"
+          },
+          "ok": true
+        },
+        "before_inventory": {
+          "items": {
+            "record_0000000001.json": "9878e90467a28efc1d7b59a53e1f631b1f8e7af4b64d043e4db1d243a3ec6c98",
+            "writing/": "directory",
+            "writing/owner.json": "f6dc00afa15a3cfb915731229598679ca3485aedab10289eb6ed158aaf5bb33a"
+          },
+          "ok": true
+        },
+        "binding": {
+          "kind": "uncredited",
+          "receipt_sha256": "497f513e256f2e386d6a46a9aeb264b1a798a0905affd2c2d257fc1dddf04c5c",
+          "token": "c8ce832d73c4370c418fe2b02920f00c"
+        },
+        "candidate_sha256": "9878e90467a28efc1d7b59a53e1f631b1f8e7af4b64d043e4db1d243a3ec6c98",
+        "local_inventory": {
+          "items": {
+            "record_0000000001.json": "497f513e256f2e386d6a46a9aeb264b1a798a0905affd2c2d257fc1dddf04c5c"
+          },
+          "ok": true
+        },
+        "operation": {
+          "code": "RECOVERY_REQUIRED",
+          "ok": false
+        }
+      },
+      "reader_gate": {
+        "after_clear": {
+          "operation_received": false,
+          "phase": 3,
+          "restoring": true,
+          "session_absent": true,
+          "source_is_menu": true
+        },
+        "after_frame": 1,
+        "before_frame": 1,
+        "initial_private_gate_used": true,
+        "private_gate_after_clear": false,
+        "request": {
+          "operation_received": false,
+          "phase": 3,
+          "restoring": true,
+          "session_absent": true,
+          "source_is_menu": true
+        }
+      },
+      "refusal_retains_menu_and_no_world_assertion_passed": true,
+      "actual_private_data_readonly_verification": [
+        {
+          "relative_path": "5088120/1/record_0000000001.json",
+          "bytes": 3961694,
+          "sha256": "9878e90467a28efc1d7b59a53e1f631b1f8e7af4b64d043e4db1d243a3ec6c98",
+          "original_readonly_verified": true,
+          "terminated_copy_readonly_verified": true,
+          "copied_into_archive": false
+        },
+        {
+          "relative_path": "5088120/1/writing/owner.json",
+          "bytes": 84,
+          "sha256": "f6dc00afa15a3cfb915731229598679ca3485aedab10289eb6ed158aaf5bb33a",
+          "original_readonly_verified": true,
+          "terminated_copy_readonly_verified": true,
+          "copied_into_archive": false
+        },
+        {
+          "relative_path": "local_runs/c8ce832d73c4370c418fe2b02920f00c/5088120/1/record_0000000001.json",
+          "bytes": 513,
+          "sha256": "497f513e256f2e386d6a46a9aeb264b1a798a0905affd2c2d257fc1dddf04c5c",
+          "original_readonly_verified": true,
+          "terminated_copy_readonly_verified": true,
+          "copied_into_archive": false
+        }
+      ],
+      "recovery_succeeded": false,
+      "baseline_defect_reproduced": true
+    }
+  ],
+  "final_guards": {
+    "final_identity_passed": true,
+    "lock_ownership_confirmed": true,
+    "lock_released": true
+  },
+  "runtime_pin_verification": {
+    "total": 211,
+    "verified_from_runtime_frozen_or_unchanged_original": 211,
+    "all_current_mutable_sources_claimed_unchanged": false
+  },
+  "qualification": {
+    "baseline_game_recovery_defect_reproduced": true,
+    "fixed_game_recovery_verified": false,
+    "public_entry_qualified": false,
+    "original_release_qualified": false,
+    "sdk_qualified": false,
+    "os_input": false,
+    "human_acceptance": false,
+    "release_qualified": false,
+    "source_restore_branch_only": true,
+    "initial_private_gate_used": true
+  },
+  "scope_notes": [
+    "Diagnostic complete=true means the old preread refusal was reproduced; neither case restored a world.",
+    "Both writers came from real classic30 menu gameplay, ordinary paid build/train and actual viewport Escape SaveAndExit. Host matched exact production Flow/Session/Slot stack before terminating its own original child.",
+    "Both readers used a new native process and the same per-case private profile. Actual Continue accepted under a private QA gate, then only that gate was cleared synchronously before the original restore callback. This tests a source branch, not public release availability.",
+    "Signal pre-emission registration/order/ONE_SHOT flags were observed. Inside HELD flow_callback_connected=false is retained as raw observation rather than misclassified.",
+    "Current original slot/owner and active LC bytes still match both the writer interrupted snapshot and the reader unchanged inventory.",
+    "Standalone terminated_continue_copy, profile/slot/lifecycle business files and executables are not archived; their hashes remain in original receipts and source_map.",
+    "Current classic tools may later change; frozen runner_inputs is authoritative.",
+    "No new engine execution, source edit, Git operation or shared-lock mutation occurred during archiving."
+  ]
+}

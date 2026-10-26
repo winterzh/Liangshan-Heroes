@@ -1,5 +1,15 @@
 # 开发日志
 
+## 2026-10-27 驻守战中断保存基线与部分恢复结果
+
+观察器改为发射前记录真实ONE_SHOT注册后，旧e97a四进程82项完整复现两类提前读槽拒绝。d7后继四进程只有完整pending恢复成功；record案返回PROCESS_LIVENESS_TIMEOUT，整体83项中82过/1失败，完整来源后验与锁释放通过。独立核对确认record槽、owner和LC原3文件/8目录无增删改，5份实际helper JSON均确认各自writer已退出；已有查询结果不能解释总scope为何超时。保留失败及原4MB数据，下一步只读计时定位，不加大预算或降低断言。
+
+[基线原件](../qa/campaign_progress_recovery_20261026/evidence/classic_recovery_baseline_20261027_022930/README.md)、[部分成功与超时原件](../qa/campaign_progress_recovery_20261026/evidence/classic_recovery_fixed_partial_20261027_023731/README.md)。仅私有源码恢复分支诊断，公开入口/SDK/发行版均未验收。
+
+## 2026-10-27 高俅章节runtime最小候选准备
+
+在d7原Session上仅新增固定Level5Factory及严格GAO_CONTEXT分支，补正常章节定义装配；原槽/账号/本地生命周期校验顺序、失败返回和成功后释放旧Core保持。独立审查、13项来源SHA及逆去新增片段逐字还原检查通过。候选Session为420b5936，尚未冻结、导入或运行，实际高俅影响尚未原生复现，不能沿用连环马结果。[代码与来源](../qa/campaign_progress_recovery_20261026/gaoqiu_continue_candidate/README.md)。
+
 ## 2026-10-27 连环马自然胜败接续完成
 
 当前d7f2258b候选的胜利四进程20261027_014835_c6004ced共345项通过，失败三进程20261027_020834_fe953cf1另有205项通过；所有实际子进程退出0，完整来源后验及共享锁释放均通过。两次实际保存退出与继续后，原20秒训练只产生一兵、预留人口保持2；自然四目标胜利与宋江自然阵亡分别结算，独立终局重启均拒旧槽，记录/进度/奖励不重复。原人口2→1失败继续保留。
