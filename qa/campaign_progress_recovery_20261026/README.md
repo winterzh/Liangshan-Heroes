@@ -1,0 +1,34 @@
+# 战役进度恢复：当前生产重基候选
+
+2026-10-26。正式 `scripts/` 未采用本候选，公开战役继续入口仍关闭。`rebased_candidate/` 的14文件已冻结、导入，并通过连环马三个独立进程的135项活动期检查，以及黄泥冈自然终局/重启旧槽拒绝1364项；下一版 `handoff_candidate/` 正在独立编译验证可靠奖励交接，不能沿用这份通过结果。
+
+| 切片 | 当前证据 |
+| --- | --- |
+| 14文件重基与导入 | 保留当前黄泥冈七车v2、contract3、完整Mission结算目标、现有Esc与classic30公开门槛；冻结 `20261026_180935_fa774d1f` 导入成功。 |
+| 连环马普通训练 | `20261026_181919_3fc4b901`，35/57/43共135项通过。训练中保存→独立进程恢复成军→同token同槽再存→第三进程21秒防重复；正常付费一次、训练20秒、唯一新兵56。 |
+| 真实战役生命周期 | 固定 `user://continue/v1`，槽代际1→2→2；lifecycle是`local_campaign_continue_lifecycle_v2`、实际level4 context和本机内容/引擎/离线owner，保持active gen1。 |
+| 黄泥冈自然终局 | `20261026_184609_83566d26` 两进程1327/37共1364项通过：普通酒计七车终局、同token gen1→gen2→CFG→gen3、四语完整结算、重启拒绝终态旧槽，CFG/记录/奖励不再增长。 |
+| 下一版可靠奖励交接 | 独立20文件候选已接线；首次编译发现两处常量数组写法错误，修正后另冻结待验证，不授予SDK或生产资格。 |
+
+训练结果只覆盖连环马活动期；黄泥冈覆盖离线正常终局和重启拒绝，**不等于全连环马路线、终局故障恢复、Steam账号/SDK、完整61阶段、公开入口或原版EXE键鼠验收通过**。原版键鼠按用户选择暂停，屏幕外GL测试没有调用桌面键鼠。
+
+- [训练原始收据与135项汇总](evidence/training_20261026_181919/summary.json)、[逐文件原始SHA](evidence/training_20261026_181919/manifest.json)。
+- [终局成功汇总](evidence/terminal_success_20261026_184609/summary.json)、[原始收据索引](evidence/terminal_success_20261026_184609/manifest.json)。
+- [首轮终局失败](evidence/terminal_first_20261026_183614/summary.json)，完整旧驱动和日志保留，不覆盖失败结果。后继驱动只把固定两帧滚动等待改为有界的完整布局稳定等待，原可见条件和真实viewport点击保持；20次布局观测均记录原始矩形和等待耗时。
+- [重基实现范围](rebased_candidate/README_campaign_slice.md)、[14文件清单](rebased_candidate/manifest.json)。
+- [奖励交接设计](STEAM_HANDOFF_DESIGN.md)、[下一候选说明](handoff_candidate/README.md)。
+
+## 运行与来源
+
+本次测试内容身份为 `source-v1:db6bc7886752137a212a74537751655036ce3885e07aaef11f5920b8e2d6c14c`。宿主真实Godot4.6.3、实际GL、60Hz和正常倍率；`STEAM_DISABLED=1`，`CAMPAIGN_QA`为空，让CFG在全新隔离profile真实写入。原始训练前后源码、驱动、引擎身份均通过，共享锁已释放。profile存档、缓存、截图和二进制留本机；Git保存报告、来源清单与实现。
+
+```powershell
+python qa/campaign_progress_recovery_20261026/prepare_candidate.py
+python qa/huangnigang_production_20261020/run_batch.py import --run <新冻结根> --wait-lane 1800
+python qa/campaign_progress_recovery_20261026/run_training.py --base-run <同一已导入冻结根> --timeout 360 --wait-lane 1800
+python qa/campaign_progress_recovery_20261026/run_terminal.py --base-run <同一已导入冻结根> --timeout 900 --wait-lane 1800
+```
+
+工具检查实际base identity和逐文件候选清单。测试驱动从工程外冻结，不向canonical输入注入QA；失败停止后继阶段并保留原日志。连环马跨进程对比沿用生产无损Codec，不放宽值精度、费用、正常计时或唯一成军断言。
+
+当前14文件版本仍有已知限制：Steam本地奖励交接晚于gen3、有漏记窗口；启动扫描256个历史journal上限；CFG恢复不证明断电原子性。新交接草稿修第一项，旧v2缺信用信息的pending拒绝并保留，不能猜测补奖。其它缺口与真实故障/账号/SDK验收仍需逐项推进。

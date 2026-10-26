@@ -1,0 +1,418 @@
+{
+  "schema": "campaign_rebase_owned_slice_v1",
+  "date": "2026-10-26",
+  "scope": "8 new components plus battle/campaign/continue_flow/menu only",
+  "production_modified": false,
+  "engine_started": false,
+  "native_qualified": false,
+  "public_campaign_continue_enabled": false,
+  "steam_exactly_once_qualified": false,
+  "files": [
+    {
+      "runtime_path": "scripts/run_campaign_cfg_values.gd",
+      "candidate_path": "qa/campaign_progress_recovery_20261026/rebased_candidate/scripts/run_campaign_cfg_values.gd",
+      "candidate_sha256": "ebf78b673a99ea847b72aa7b897f1aede34c99f1e6cc873f66f69611929ef081",
+      "r12_source": "qa/campaign_progress_recovery_20261008/integrated_v4_r12/scripts/run_campaign_cfg_values.gd",
+      "r12_sha256": "8d962715c19f0b9d3c045a25b5f215e9600ceeff204524fc0be630da8598eb27",
+      "method": "new component from pinned R12 source",
+      "changes": [
+        "R12 component logic retained; LF serialization only."
+      ]
+    },
+    {
+      "runtime_path": "scripts/run_campaign_cfg_transaction.gd",
+      "candidate_path": "qa/campaign_progress_recovery_20261026/rebased_candidate/scripts/run_campaign_cfg_transaction.gd",
+      "candidate_sha256": "71803fc42a6bef59479db5b8cf70a953716a3968e45ba1fb391eed5726a51d17",
+      "r12_source": "qa/campaign_progress_recovery_20261008/integrated_v4_r12/scripts/run_campaign_cfg_transaction.gd",
+      "r12_sha256": "71803fc42a6bef59479db5b8cf70a953716a3968e45ba1fb391eed5726a51d17",
+      "method": "new component from pinned R12 source",
+      "changes": [
+        "R12 component logic retained; LF serialization only."
+      ]
+    },
+    {
+      "runtime_path": "scripts/run_campaign_progress_intent.gd",
+      "candidate_path": "qa/campaign_progress_recovery_20261026/rebased_candidate/scripts/run_campaign_progress_intent.gd",
+      "candidate_sha256": "f9a6c469733b9f949a18d263a16a32c513cf7976b7888270ebbf89307880970a",
+      "r12_source": "qa/campaign_progress_recovery_20261008/integrated_v4_r12/scripts/run_campaign_progress_intent.gd",
+      "r12_sha256": "a64add7d20999f0c306006a08a7fad7d263e252d8aae430424bd97ff4049f894",
+      "method": "new component from pinned R12 source",
+      "changes": [
+        "Align level1 contract 2 to current short chapter contract 3; preserve four optional story IDs."
+      ]
+    },
+    {
+      "runtime_path": "scripts/run_campaign_progress_projection.gd",
+      "candidate_path": "qa/campaign_progress_recovery_20261026/rebased_candidate/scripts/run_campaign_progress_projection.gd",
+      "candidate_sha256": "6c627f95c44f6876895f012b5e6a6859500b73d391f92d7bf46f41f4b0d1e68b",
+      "r12_source": "qa/campaign_progress_recovery_20261008/integrated_v4_r12/scripts/run_campaign_progress_projection.gd",
+      "r12_sha256": "6c627f95c44f6876895f012b5e6a6859500b73d391f92d7bf46f41f4b0d1e68b",
+      "method": "new component from pinned R12 source",
+      "changes": [
+        "R12 component logic retained; LF serialization only."
+      ]
+    },
+    {
+      "runtime_path": "scripts/run_campaign_progress_gate.gd",
+      "candidate_path": "qa/campaign_progress_recovery_20261026/rebased_candidate/scripts/run_campaign_progress_gate.gd",
+      "candidate_sha256": "129bd0a9cd6ee5b41595b294494681125accfa1bf9906cebd41fe905c15e5460",
+      "r12_source": "qa/campaign_progress_recovery_20261008/integrated_v4_r12/scripts/run_campaign_progress_gate.gd",
+      "r12_sha256": "129bd0a9cd6ee5b41595b294494681125accfa1bf9906cebd41fe905c15e5460",
+      "method": "new component from pinned R12 source",
+      "changes": [
+        "R12 component logic retained; LF serialization only."
+      ]
+    },
+    {
+      "runtime_path": "scripts/run_campaign_local_lifecycle.gd",
+      "candidate_path": "qa/campaign_progress_recovery_20261026/rebased_candidate/scripts/run_campaign_local_lifecycle.gd",
+      "candidate_sha256": "ee2d3fb936dfe8e1a4f8e129733fad8fbb5a6598df666d83024046cd0d878ed2",
+      "r12_source": "qa/campaign_progress_recovery_20261008/integrated_v4_r12/scripts/run_campaign_local_lifecycle.gd",
+      "r12_sha256": "ee2d3fb936dfe8e1a4f8e129733fad8fbb5a6598df666d83024046cd0d878ed2",
+      "method": "new component from pinned R12 source",
+      "changes": [
+        "R12 component logic retained; LF serialization only."
+      ]
+    },
+    {
+      "runtime_path": "scripts/run_campaign_progress_coordinator.gd",
+      "candidate_path": "qa/campaign_progress_recovery_20261026/rebased_candidate/scripts/run_campaign_progress_coordinator.gd",
+      "candidate_sha256": "23193509d2e1d7f367cbfe3c06a2a479276c7eefb31e987136db635945d1417e",
+      "r12_source": "qa/campaign_progress_recovery_20261008/integrated_v4_r12/scripts/run_campaign_progress_coordinator.gd",
+      "r12_sha256": "23193509d2e1d7f367cbfe3c06a2a479276c7eefb31e987136db635945d1417e",
+      "method": "new component from pinned R12 source",
+      "changes": [
+        "R12 component logic retained; LF serialization only."
+      ]
+    },
+    {
+      "runtime_path": "scripts/run_campaign_startup_scan.gd",
+      "candidate_path": "qa/campaign_progress_recovery_20261026/rebased_candidate/scripts/run_campaign_startup_scan.gd",
+      "candidate_sha256": "a0860555b5960e6ce59c8946788d23e6bdb1c119ebb4fa8920c177faf0625dfc",
+      "r12_source": "qa/campaign_progress_recovery_20261008/integrated_v4_r12/scripts/run_campaign_startup_scan.gd",
+      "r12_sha256": "a0860555b5960e6ce59c8946788d23e6bdb1c119ebb4fa8920c177faf0625dfc",
+      "method": "new component from pinned R12 source",
+      "changes": [
+        "R12 component logic retained; LF serialization only."
+      ]
+    },
+    {
+      "runtime_path": "scripts/campaign.gd",
+      "candidate_path": "qa/campaign_progress_recovery_20261026/rebased_candidate/scripts/campaign.gd",
+      "candidate_sha256": "911e97602524fae9f7e8f9ff07b84b6d8179a574c12a233cdf2798c92625db6a",
+      "r12_source": "qa/campaign_progress_recovery_20261008/integrated_v4_r12/scripts/campaign.gd",
+      "r12_sha256": "3e7257e412e65ffc012d3dfd5d0392d4d96a5ce32cbdf1634caf221d2e88060b",
+      "method": "current production base plus reviewed semantic hunks",
+      "changes": [
+        "Apply reviewed R12 transaction/startup/retry hunks to current production base."
+      ],
+      "production_base": "scripts/campaign.gd",
+      "production_base_sha256": "db50f6d1c97ca26746f5fbe576487390af5d81f4af708c289155f23cca38ff02",
+      "reviewed_hunks": [
+        {
+          "operation": "insert",
+          "base_start": 28,
+          "base_end": 27,
+          "r12_start": 28,
+          "r12_end": 35
+        },
+        {
+          "operation": "insert",
+          "base_start": 163,
+          "base_end": 162,
+          "r12_start": 171,
+          "r12_end": 172
+        },
+        {
+          "operation": "insert",
+          "base_start": 177,
+          "base_end": 176,
+          "r12_start": 187,
+          "r12_end": 188
+        },
+        {
+          "operation": "replace",
+          "base_start": 252,
+          "base_end": 252,
+          "r12_start": 264,
+          "r12_end": 285
+        },
+        {
+          "operation": "insert",
+          "base_start": 255,
+          "base_end": 254,
+          "r12_start": 288,
+          "r12_end": 296
+        },
+        {
+          "operation": "insert",
+          "base_start": 256,
+          "base_end": 255,
+          "r12_start": 298,
+          "r12_end": 384
+        },
+        {
+          "operation": "insert",
+          "base_start": 257,
+          "base_end": 256,
+          "r12_start": 386,
+          "r12_end": 388
+        },
+        {
+          "operation": "delete",
+          "base_start": 258,
+          "base_end": 275,
+          "r12_start": 390,
+          "r12_end": 389
+        },
+        {
+          "operation": "replace",
+          "base_start": 277,
+          "base_end": 279,
+          "r12_start": 391,
+          "r12_end": 396
+        },
+        {
+          "operation": "replace",
+          "base_start": 281,
+          "base_end": 288,
+          "r12_start": 398,
+          "r12_end": 405
+        },
+        {
+          "operation": "insert",
+          "base_start": 326,
+          "base_end": 325,
+          "r12_start": 443,
+          "r12_end": 456
+        }
+      ]
+    },
+    {
+      "runtime_path": "scripts/continue_flow.gd",
+      "candidate_path": "qa/campaign_progress_recovery_20261026/rebased_candidate/scripts/continue_flow.gd",
+      "candidate_sha256": "58a039d97a948b2b013c3f49e4f9d16461b8ec058cfa4f58df389559c73ecc4a",
+      "r12_source": "qa/campaign_progress_recovery_20261008/integrated_v4_r12/scripts/continue_flow.gd",
+      "r12_sha256": "20674da5a412db0cc41cc48dacfcbf619e91009a81026c735fd80e7cb5a9a16d",
+      "method": "current production base plus reviewed semantic hunks",
+      "changes": [
+        "Apply reviewed R12 transaction/startup/retry hunks to current production base.",
+        "Preserve current public classic-30 context selection and both non-private save/restore guards; campaign remains internal QA only."
+      ],
+      "production_base": "scripts/continue_flow.gd",
+      "production_base_sha256": "a169690ba69adbc436355dfce45d5373f0f0c18ca013c09d57fbd552156df172",
+      "reviewed_hunks": [
+        {
+          "operation": "insert",
+          "base_start": 10,
+          "base_end": 9,
+          "r12_start": 10,
+          "r12_end": 14
+        },
+        {
+          "operation": "insert",
+          "base_start": 22,
+          "base_end": 21,
+          "r12_start": 27,
+          "r12_end": 38
+        },
+        {
+          "operation": "insert",
+          "base_start": 28,
+          "base_end": 27,
+          "r12_start": 45,
+          "r12_end": 47
+        },
+        {
+          "operation": "insert",
+          "base_start": 42,
+          "base_end": 41,
+          "r12_start": 62,
+          "r12_end": 63
+        },
+        {
+          "operation": "replace",
+          "base_start": 109,
+          "base_end": 109,
+          "r12_start": 131,
+          "r12_end": 147
+        },
+        {
+          "operation": "replace",
+          "base_start": 148,
+          "base_end": 148,
+          "r12_start": 186,
+          "r12_end": 188
+        },
+        {
+          "operation": "insert",
+          "base_start": 178,
+          "base_end": 177,
+          "r12_start": 218,
+          "r12_end": 218
+        },
+        {
+          "operation": "insert",
+          "base_start": 194,
+          "base_end": 193,
+          "r12_start": 235,
+          "r12_end": 235
+        },
+        {
+          "operation": "replace",
+          "base_start": 265,
+          "base_end": 265,
+          "r12_start": 307,
+          "r12_end": 307
+        },
+        {
+          "operation": "replace",
+          "base_start": 271,
+          "base_end": 271,
+          "r12_start": 313,
+          "r12_end": 317
+        },
+        {
+          "operation": "replace",
+          "base_start": 306,
+          "base_end": 306,
+          "r12_start": 352,
+          "r12_end": 355
+        },
+        {
+          "operation": "replace",
+          "base_start": 333,
+          "base_end": 333,
+          "r12_start": 382,
+          "r12_end": 382
+        },
+        {
+          "operation": "replace",
+          "base_start": 340,
+          "base_end": 340,
+          "r12_start": 389,
+          "r12_end": 389
+        },
+        {
+          "operation": "insert",
+          "base_start": 357,
+          "base_end": 356,
+          "r12_start": 406,
+          "r12_end": 409
+        },
+        {
+          "operation": "replace",
+          "base_start": 395,
+          "base_end": 395,
+          "r12_start": 448,
+          "r12_end": 448
+        },
+        {
+          "operation": "replace",
+          "base_start": 403,
+          "base_end": 403,
+          "r12_start": 456,
+          "r12_end": 459
+        },
+        {
+          "operation": "insert",
+          "base_start": 406,
+          "base_end": 405,
+          "r12_start": 462,
+          "r12_end": 463
+        },
+        {
+          "operation": "replace",
+          "base_start": 408,
+          "base_end": 408,
+          "r12_start": 466,
+          "r12_end": 479
+        },
+        {
+          "operation": "insert",
+          "base_start": 411,
+          "base_end": 410,
+          "r12_start": 482,
+          "r12_end": 485
+        },
+        {
+          "operation": "replace",
+          "base_start": 418,
+          "base_end": 418,
+          "r12_start": 493,
+          "r12_end": 494
+        },
+        {
+          "operation": "insert",
+          "base_start": 434,
+          "base_end": 433,
+          "r12_start": 510,
+          "r12_end": 640
+        }
+      ]
+    },
+    {
+      "runtime_path": "scripts/menu.gd",
+      "candidate_path": "qa/campaign_progress_recovery_20261026/rebased_candidate/scripts/menu.gd",
+      "candidate_sha256": "cd2a444f8fe4748fc2e49ead3283613daa2285f5176a04e9347c6b3955052792",
+      "r12_source": "qa/campaign_progress_recovery_20261008/integrated_v4_r12/scripts/menu.gd",
+      "r12_sha256": "63b945585bc0b4a9a1f92d0a1b7576b139bee6083c8d62bc4378a9abe0d6406c",
+      "method": "current production base plus reviewed semantic hunks",
+      "changes": [
+        "Apply reviewed R12 transaction/startup/retry hunks to current production base."
+      ],
+      "production_base": "scripts/menu.gd",
+      "production_base_sha256": "73bf7f40328aede2fc064b5ad5f503fb6e13a4fc26bba3a2f338253a1baf7381",
+      "reviewed_hunks": [
+        {
+          "operation": "insert",
+          "base_start": 8,
+          "base_end": 7,
+          "r12_start": 8,
+          "r12_end": 8
+        },
+        {
+          "operation": "insert",
+          "base_start": 17,
+          "base_end": 16,
+          "r12_start": 18,
+          "r12_end": 18
+        },
+        {
+          "operation": "insert",
+          "base_start": 32,
+          "base_end": 31,
+          "r12_start": 34,
+          "r12_end": 37
+        },
+        {
+          "operation": "insert",
+          "base_start": 991,
+          "base_end": 990,
+          "r12_start": 997,
+          "r12_end": 999
+        }
+      ]
+    },
+    {
+      "runtime_path": "scripts/battle.gd",
+      "candidate_path": "qa/campaign_progress_recovery_20261026/rebased_candidate/scripts/battle.gd",
+      "candidate_sha256": "6a401f7de1fba0f169d5b39a22b976309f13ad5d622ffd99ad4ddfd9b405bcb4",
+      "r12_source": "qa/campaign_progress_recovery_20261008/integrated_v4_r12/scripts/battle.gd",
+      "r12_sha256": "e3b9314d3442dbf90683736388170258756338d279a47e4f157b830c1378ea63",
+      "method": "three explicit transaction edits on current production; never copy R12 battle",
+      "changes": [
+        "Configure barrier after actual context classification.",
+        "Route all campaign endings through retained Coordinator.",
+        "Consume one completion claim, check six durable result fields against complete frozen Mission snapshot, preserve goal rows and multilingual renderer.",
+        "Remove direct on_level_won progress write; retain all other current production code."
+      ],
+      "production_base": "scripts/battle.gd",
+      "production_base_sha256": "2bf03f44290708b2f13687aa46e677ebbc19afe9625f7f52f06e84278070fd2c"
+    }
+  ],
+  "separate_agent_files": [
+    "scripts/run_world_session.gd",
+    "scripts/steam_cloud.gd"
+  ]
+}
