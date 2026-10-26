@@ -32,7 +32,7 @@ readset专项在全新profile已完整通过：12类案例248项、旧4MB逐字�
 
 新增[classic只读计时工具](../qa/campaign_progress_recovery_20261026/continue_binding_candidate/tests/classic_recovery_timing/README.md)固定d7源与原失败批次；默认只读预检，显式执行时仅对逐字隔离副本运行原API，原profile不得交给引擎。[本次诊断](../qa/campaign_progress_recovery_20261026/evidence/classic_recovery_timing_20261027_031418/README.md)15项检查通过，首次inspect仍超时；诊断完成不等于恢复通过。
 
-[高俅单文件runtime候选](../qa/campaign_progress_recovery_20261026/gaoqiu_continue_candidate/README.md)新增[768组合准备器](../qa/campaign_progress_recovery_20261026/gaoqiu_continue_candidate/integration_768/README.md)：默认仅核指定元数据和来源，不能作为运行准入；--prepare先核完整768再新建仅Session变化的冻结，后续还须独立导入。当前只有代码/轻量检查，不能沿用连环马、classic或readset运行资格。
+[高俅当前验证](../qa/campaign_progress_recovery_20261026/gaoqiu_continue_candidate/VALIDATION.md)使用新的941c4786完整冻结及其独立成功导入，完整7062文件只换Session；[准备器](../qa/campaign_progress_recovery_20261026/gaoqiu_continue_candidate/integration_768/README.md)默认轻量检查不授运行准入。新[造船三进程工具](../qa/campaign_progress_recovery_20261026/gaoqiu_continue_candidate/tests/gaoqiu_training/README.md)无参数仅核代码来源，--base-run核完整新源，--run才占共享锁启动；真实运行时直接一次完整准入，不预先重复。当前只有冻结/编译资格，不能沿用连环马、classic或readset运行结果。
 
 新增[继续入口三脚本候选](../qa/campaign_progress_recovery_20261026/continue_binding_candidate/VALIDATION.md)必须用自己的d7f2258b完整冻结与新manifest，不能套用e97a的恢复专项资格。已导入并通过独立本地绑定模型，连环马实际Flow自然胜利345项及独立自然失败205项通过。prepare_continue默认只读，--prepare只建新目录；磁盘模型的baseline/fixed模式和真实胜败执行器分别记资格，禁止复用同一结果混算。
 
