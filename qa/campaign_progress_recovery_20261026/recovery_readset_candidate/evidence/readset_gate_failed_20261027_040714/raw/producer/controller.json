@@ -1,0 +1,28 @@
+{
+  "mode": "producer",
+  "complete": false,
+  "process_terminal": true,
+  "profile": "D:\\CodexQA\\readset\\3f8441ac14fe",
+  "nonce": "3f8441ac14fe499f805a74b4af02ad9b",
+  "process_nonce": "89f1938c6a0c48e1b009f62c77902bc6",
+  "cases": [],
+  "debug_stops": [],
+  "faults": [],
+  "production_method_overrides": 0,
+  "helpers_terminal_confirmed": false,
+  "command": [
+    "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+    "--path",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_034810_ed1bdef8\\project",
+    "--headless",
+    "--remote-debug",
+    "tcp://127.0.0.1:61492",
+    "--script",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\recovery_readset_20261027\\20261027_040714_122b1aa3\\workers\\bootstrap.gd"
+  ],
+  "pid": 66668,
+  "error": "RuntimeError('Exact producer stop was not observed')",
+  "traceback": "Traceback (most recent call last):\n  File \"D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\recovery_readset_candidate\\tests\\readset\\run_readset.py\", line 446, in run_process\n    require(row.get(\"planned_termination\") is True and len(row[\"debug_stops\"]) == 1, \"Exact producer stop was not observed\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\prepare_liveness.py\", line 35, in require\n    raise RuntimeError(message)\nRuntimeError: Exact producer stop was not observed\n",
+  "exit_code": 1,
+  "log_sha256": "b16651cbedbab0a7b519f9e5b498eea40cb33bfb72252e264a7f4c2412765d58"
+}

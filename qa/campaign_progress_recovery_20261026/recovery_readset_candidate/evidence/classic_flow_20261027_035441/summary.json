@@ -1,0 +1,431 @@
+{
+  "schema": "classic_readset_flow_evidence_v1",
+  "archived_at_utc": "2026-10-26T20:12:21.827608+00:00",
+  "run": "D:\\AI项目\\水浒\\开发工程\\.godot\\classic_readset_branch_20261027\\20261027_035441_ec3aea99",
+  "archive": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\recovery_readset_candidate\\evidence\\classic_flow_20261027_035441",
+  "original_receipt_sha256": "9361009a94d23536a6cf1954973d642446a95005563a6dbe705885edab5cf796",
+  "execution_complete": true,
+  "expected": "fixed",
+  "actual_source_content": "source-v1:768b6e5937321126b4c927fce6b5565459610aa13ccb556f695837a814eb74c2",
+  "actual_engine_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+  "actual_project": "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_034810_ed1bdef8\\project",
+  "store_sha256": "f222e8b3798355164ab29da4d0dc534362e2bea680ec7f7dbe7462b86df8959f",
+  "completed_recovery_cases": 2,
+  "attempted_processes": 4,
+  "terminal_processes": 4,
+  "writer_planned_nonzero_exits": 2,
+  "reader_zero_exits": 2,
+  "checks": {
+    "executed": 88,
+    "passed": 88,
+    "failed": 0,
+    "pending_writer": 23,
+    "pending_reader": 21,
+    "record_writer": 23,
+    "record_reader": 21,
+    "host_assertions_not_added_to_count": true
+  },
+  "cases": [
+    {
+      "case": "pending",
+      "writer_pid": 14040,
+      "writer_exit_code": 1,
+      "writer_checks": 23,
+      "reader_pid": 19676,
+      "reader_exit_code": 0,
+      "reader_checks": 21,
+      "reader_seconds": 95.147,
+      "reader_report_sha256": "ac379e3c4a107579796e2c1366c195b1684c6079ba6919fe685264f674fb4924",
+      "outcome": "fixed_branch_restored",
+      "operation": {
+        "generation": 1,
+        "ok": true,
+        "paused": true,
+        "steam_credit": false
+      },
+      "profile": "D:\\CodexQA\\cslot\\f77b9799e521",
+      "slot_sha256": "cebcd8932b381acb33c0e992208c056cb206f2b883c130e19ed5a5bf0abb72c5",
+      "slot_bytes": 3961693,
+      "binding": {
+        "kind": "uncredited",
+        "receipt_sha256": "71564edb058b6533ab1aa0cb2558db342dc1f81fb52468adb98670f87c51337b",
+        "token": "9c4554c3e43598b93d1b4124634cd5a4"
+      },
+      "local_lifecycle_state": "active",
+      "prepared_snapshot_sha256": "832cd5b6bdde0c781f04ab712cc7892a811da0c0a73bd601c07c4478f9d181fe",
+      "independent_saved_snapshot_comparison": {
+        "gold": 94,
+        "wood": 58,
+        "unit_observations": 28,
+        "clock_next": "13",
+        "resources_training_units_and_level_match": true,
+        "full_runtime_typed_equality_is_original_executed_assertion": true
+      },
+      "capture_registration": {
+        "barrier_state": 1,
+        "before_button": {
+          "capture_calls": 0,
+          "flow_callback_absent": true,
+          "frame": "54",
+          "observer_registered": true
+        },
+        "capture_calls": 0,
+        "connection_count": 2,
+        "connections": [
+          {
+            "flags": 4,
+            "index": 0,
+            "is_flow": false,
+            "is_observer": true,
+            "method": "capture_witness",
+            "object_id": "256120981327",
+            "valid": true
+          },
+          {
+            "flags": 4,
+            "index": 1,
+            "is_flow": true,
+            "is_observer": false,
+            "method": "_capture_ready",
+            "object_id": "240316843520",
+            "valid": true
+          }
+        ],
+        "flow_object_id": "240316843520",
+        "frame": "54",
+        "observer_object_id": "256120981327",
+        "one_shot_flag": 4,
+        "phase": 2,
+        "requested": true,
+        "saving": true,
+        "session_absent": true,
+        "source_is_battle": true
+      },
+      "capture_observer": {
+        "calls": 1,
+        "clock_next": "13",
+        "flow_callback_connected": false,
+        "flow_session_absent": true,
+        "held": true,
+        "observer_disconnected": true,
+        "outside_physics": true
+      },
+      "gate": {
+        "after_clear": {
+          "operation_received": false,
+          "phase": 3,
+          "restoring": true,
+          "session_absent": true,
+          "source_is_menu": true
+        },
+        "after_frame": 1,
+        "before_frame": 1,
+        "initial_private_gate_used": true,
+        "private_gate_after_clear": false,
+        "request": {
+          "operation_received": false,
+          "phase": 3,
+          "restoring": true,
+          "session_absent": true,
+          "source_is_menu": true
+        }
+      },
+      "actual_stack": [
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 323,
+          "function": "commit_locked"
+        },
+        {
+          "source": "res://scripts/run_slot_store.gd",
+          "line": 173,
+          "function": "write_slot"
+        },
+        {
+          "source": "res://scripts/run_world_session.gd",
+          "line": 137,
+          "function": "save_held"
+        },
+        {
+          "source": "res://scripts/continue_flow.gd",
+          "line": 252,
+          "function": "_capture_ready"
+        },
+        {
+          "source": "res://scripts/run_battle_barrier.gd",
+          "line": 196,
+          "function": "_idle_boundary"
+        }
+      ],
+      "breakpoint": {
+        "source": "res://scripts/run_snapshot_store.gd",
+        "line": 323,
+        "function": "commit_locked",
+        "statement": "_checkpoint(\"pending_verified\")",
+        "sha256": "f222e8b3798355164ab29da4d0dc534362e2bea680ec7f7dbe7462b86df8959f"
+      },
+      "native_results": [
+        {
+          "source_path": "D:\\CodexQA\\cslot\\f77b9799e521\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\process_liveness\\v2\\2ffe8314a27879384d2af76f6e553474\\result.json",
+          "sha256": "17b1ff78831be83cfc7f5ade5203c35048c67a17e4475bfdc040e7a5a8b28585",
+          "value": {
+            "code": "PID_ABSENT_87",
+            "creation_filetime": "",
+            "handle_opened": false,
+            "nonce": "2ffe8314a27879384d2af76f6e553474",
+            "provider_pid": "41080",
+            "query_utc_filetime": "134375184599939234",
+            "schema": "windows_process_liveness_v1",
+            "state": "dead",
+            "target_pid": "14040",
+            "wait_result": "not_queried",
+            "win32_error": "87"
+          }
+        },
+        {
+          "source_path": "D:\\CodexQA\\cslot\\f77b9799e521\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\process_liveness\\v2\\b74f2971808202c3e860a279df65a00f\\result.json",
+          "sha256": "ca0ce0fccbd75ae619650806ae1859bdd313226d3b5f442be189bb4eb422e5ac",
+          "value": {
+            "code": "PID_ABSENT_87",
+            "creation_filetime": "",
+            "handle_opened": false,
+            "nonce": "b74f2971808202c3e860a279df65a00f",
+            "provider_pid": "13612",
+            "query_utc_filetime": "134375184600864543",
+            "schema": "windows_process_liveness_v1",
+            "state": "dead",
+            "target_pid": "14040",
+            "wait_result": "not_queried",
+            "win32_error": "87"
+          }
+        },
+        {
+          "source_path": "D:\\CodexQA\\cslot\\f77b9799e521\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\process_liveness\\v2\\daaf60caab0136fbba8843b8d777739a\\result.json",
+          "sha256": "087a5f6f1426366a6dc8e7b4bcb0487870065e0bb48a9403223919f02ac65418",
+          "value": {
+            "code": "PID_ABSENT_87",
+            "creation_filetime": "",
+            "handle_opened": false,
+            "nonce": "daaf60caab0136fbba8843b8d777739a",
+            "provider_pid": "62980",
+            "query_utc_filetime": "134375184574574217",
+            "schema": "windows_process_liveness_v1",
+            "state": "dead",
+            "target_pid": "14040",
+            "wait_result": "not_queried",
+            "win32_error": "87"
+          }
+        }
+      ]
+    },
+    {
+      "case": "record",
+      "writer_pid": 61920,
+      "writer_exit_code": 1,
+      "writer_checks": 23,
+      "reader_pid": 70208,
+      "reader_exit_code": 0,
+      "reader_checks": 21,
+      "reader_seconds": 92.129,
+      "reader_report_sha256": "501f19071ff47e2f1e5d28ca85d93c58860e7e6d340773e4968c6bae0ea448bd",
+      "outcome": "fixed_branch_restored",
+      "operation": {
+        "generation": 1,
+        "ok": true,
+        "paused": true,
+        "steam_credit": false
+      },
+      "profile": "D:\\CodexQA\\cslot\\a4dcd1bf64ed",
+      "slot_sha256": "b63a33a6eb3af76087ef7b4c38b468878afc3a2954c8720a9c927f9f9c6b7372",
+      "slot_bytes": 3961694,
+      "binding": {
+        "kind": "uncredited",
+        "receipt_sha256": "29d5cefdb7e5f0c627f1ff45be5a086b4a6aab6dc798cf5a71c995d7a58e2ee8",
+        "token": "a05a3d672e461433c93790fdc4ccf618"
+      },
+      "local_lifecycle_state": "active",
+      "prepared_snapshot_sha256": "6fe076839e3a7fcc3309a660f001eebc253ccc317cfc9b6cc66b4ae05986e581",
+      "independent_saved_snapshot_comparison": {
+        "gold": 94,
+        "wood": 58,
+        "unit_observations": 28,
+        "clock_next": "12",
+        "resources_training_units_and_level_match": true,
+        "full_runtime_typed_equality_is_original_executed_assertion": true
+      },
+      "capture_registration": {
+        "barrier_state": 1,
+        "before_button": {
+          "capture_calls": 0,
+          "flow_callback_absent": true,
+          "frame": "54",
+          "observer_registered": true
+        },
+        "capture_calls": 0,
+        "connection_count": 2,
+        "connections": [
+          {
+            "flags": 4,
+            "index": 0,
+            "is_flow": false,
+            "is_observer": true,
+            "method": "capture_witness",
+            "object_id": "256120981327",
+            "valid": true
+          },
+          {
+            "flags": 4,
+            "index": 1,
+            "is_flow": true,
+            "is_observer": false,
+            "method": "_capture_ready",
+            "object_id": "240316843520",
+            "valid": true
+          }
+        ],
+        "flow_object_id": "240316843520",
+        "frame": "54",
+        "observer_object_id": "256120981327",
+        "one_shot_flag": 4,
+        "phase": 2,
+        "requested": true,
+        "saving": true,
+        "session_absent": true,
+        "source_is_battle": true
+      },
+      "capture_observer": {
+        "calls": 1,
+        "clock_next": "12",
+        "flow_callback_connected": false,
+        "flow_session_absent": true,
+        "held": true,
+        "observer_disconnected": true,
+        "outside_physics": true
+      },
+      "gate": {
+        "after_clear": {
+          "operation_received": false,
+          "phase": 3,
+          "restoring": true,
+          "session_absent": true,
+          "source_is_menu": true
+        },
+        "after_frame": 1,
+        "before_frame": 1,
+        "initial_private_gate_used": true,
+        "private_gate_after_clear": false,
+        "request": {
+          "operation_received": false,
+          "phase": 3,
+          "restoring": true,
+          "session_absent": true,
+          "source_is_menu": true
+        }
+      },
+      "actual_stack": [
+        {
+          "source": "res://scripts/run_slot_store.gd",
+          "line": 175,
+          "function": "write_slot"
+        },
+        {
+          "source": "res://scripts/run_world_session.gd",
+          "line": 137,
+          "function": "save_held"
+        },
+        {
+          "source": "res://scripts/continue_flow.gd",
+          "line": 252,
+          "function": "_capture_ready"
+        },
+        {
+          "source": "res://scripts/run_battle_barrier.gd",
+          "line": 196,
+          "function": "_idle_boundary"
+        }
+      ],
+      "breakpoint": {
+        "source": "res://scripts/run_slot_store.gd",
+        "line": 175,
+        "function": "write_slot",
+        "statement": "var released := release()",
+        "sha256": "d67fe7794f23fe1bda3d74c7e284ba6b90d2cb488a5d35cb1a187eea77fa3532"
+      },
+      "native_results": [
+        {
+          "source_path": "D:\\CodexQA\\cslot\\a4dcd1bf64ed\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\process_liveness\\v2\\3cd60cfbe566e26486bc870649bbbd80\\result.json",
+          "sha256": "11fd0183f366c02cd6b4498dadcfd0ef22a54eff6186764e224ed768e02fad7f",
+          "value": {
+            "code": "PID_ABSENT_87",
+            "creation_filetime": "",
+            "handle_opened": false,
+            "nonce": "3cd60cfbe566e26486bc870649bbbd80",
+            "provider_pid": "21796",
+            "query_utc_filetime": "134375186679626870",
+            "schema": "windows_process_liveness_v1",
+            "state": "dead",
+            "target_pid": "61920",
+            "wait_result": "not_queried",
+            "win32_error": "87"
+          }
+        },
+        {
+          "source_path": "D:\\CodexQA\\cslot\\a4dcd1bf64ed\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\process_liveness\\v2\\6d9c8932ab0d4c5d5f44c4b08713697e\\result.json",
+          "sha256": "8684d7af134926d9ee3f43c5872a8007491e2136f1ca3f2eab1cd5a18ecb94e9",
+          "value": {
+            "code": "PID_ABSENT_87",
+            "creation_filetime": "",
+            "handle_opened": false,
+            "nonce": "6d9c8932ab0d4c5d5f44c4b08713697e",
+            "provider_pid": "58896",
+            "query_utc_filetime": "134375186653368665",
+            "schema": "windows_process_liveness_v1",
+            "state": "dead",
+            "target_pid": "61920",
+            "wait_result": "not_queried",
+            "win32_error": "87"
+          }
+        },
+        {
+          "source_path": "D:\\CodexQA\\cslot\\a4dcd1bf64ed\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\process_liveness\\v2\\e5fe80c6472815fdee07811b1e6a411f\\result.json",
+          "sha256": "4ee054035c9d9fdec046022835bf84f1f38c45ceed0d20b19c54b51288563e7d",
+          "value": {
+            "code": "PID_ABSENT_87",
+            "creation_filetime": "",
+            "handle_opened": false,
+            "nonce": "e5fe80c6472815fdee07811b1e6a411f",
+            "provider_pid": "62352",
+            "query_utc_filetime": "134375186678051047",
+            "schema": "windows_process_liveness_v1",
+            "state": "dead",
+            "target_pid": "61920",
+            "wait_result": "not_queried",
+            "win32_error": "87"
+          }
+        }
+      ]
+    }
+  ],
+  "host_final_identity_passed": true,
+  "own_lock_ownership_confirmed": true,
+  "own_lock_released": true,
+  "runtime_pins_verified": 357,
+  "native_ipc_result_count": 6,
+  "full_project_rehash_repeated": false,
+  "full_freeze_manifest_sha256": "2738d6bf6f29c15d66a72997df042038ed8d4ee9ef7ab5a0fad08af905d3b966",
+  "full_freeze_summary_sha256": "12c781bd388294fcedee713decaa6fa4d65c9f1d0aebf5f3c5ecae09a8d9227f",
+  "qualification": {
+    "private_source_restore_branch": true,
+    "normal_public_entry": false,
+    "SDK": false,
+    "OS_input": false,
+    "original_release_EXE": false,
+    "artificial_method_override": false,
+    "ABA_rejection_matrix": false,
+    "general_performance": false,
+    "original_61_stages": false,
+    "production_adoption": false,
+    "human_acceptance": false,
+    "publication": false
+  }
+}

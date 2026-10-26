@@ -1,6 +1,6 @@
 # 战役进度恢复：当前生产重基候选
 
-最新后继为[继续入口三脚本修复](continue_binding_candidate/VALIDATION.md)：d7f2258b已独立导入并通过本地绑定模型，连环马真实Flow自然胜利345项和独立自然失败205项通过；classic完整pending已恢复，record案scope超时未通过，原数据保持。[隔离副本只读计时](evidence/classic_recovery_timing_20261027_031418/README.md)15项诊断检查通过，完整chain约1.48秒、首次inspect约3.81秒，helper正常返回；下一步减少重复严格解析，保留原恢复保护与预算。下方14/20/e97a各批继续按各自来源和范围阅读，不转授后继。后续[高俅runtime单文件候选](gaoqiu_continue_candidate/README.md)已完成代码准备，尚未冻结或运行。
+最新后继为[严格读集恢复优化](recovery_readset_candidate/VALIDATION.md)：768b6e59已独立导入，新源驻守战两处中断/恢复四进程88项通过，异常替换专项进行中，未采用生产。此前[继续入口三脚本修复](continue_binding_candidate/VALIDATION.md)的各项资格仍按d7来源阅读：d7f2258b已独立导入并通过本地绑定模型，连环马真实Flow自然胜利345项和独立自然失败205项通过；classic完整pending已恢复，record案scope超时未通过，原数据保持。[隔离副本只读计时](evidence/classic_recovery_timing_20261027_031418/README.md)15项诊断检查通过，完整chain约1.48秒、首次inspect约3.81秒，helper正常返回；后继768b6e59保留原保护和预算，修复该重复解析成本。下方14/20/e97a各批继续按各自来源和范围阅读，不转授后继。后续[高俅runtime单文件候选](gaoqiu_continue_candidate/README.md)已完成代码准备，尚未冻结或运行。
 
 2026-10-26。正式 `scripts/` 未采用本候选，公开战役继续入口仍关闭。`rebased_candidate/` 的14文件已冻结、导入，并通过连环马三个独立进程的135项活动期检查，以及黄泥冈自然终局/重启旧槽拒绝1364项。下一版 `handoff_candidate/` 已独立导入并完成模型与尾账/纠正逻辑回归，真实文件专项13阶段已符合预期（含两类拒绝诊断），同版黄泥冈自然终局/重启拒旧槽1386项通过；不能沿用14文件的通过结果。
 

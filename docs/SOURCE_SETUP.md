@@ -26,6 +26,8 @@ git fetch origin
 
 ## 验证与共享引擎
 
+后继[恢复读集候选](../qa/campaign_progress_recovery_20261026/recovery_readset_candidate/VALIDATION.md)使用新768b6e59完整冻结，仅替Store；已独立导入并通过新源真实Flow两处中断/恢复的四进程88项。prepare_readset默认只读，--prepare仅复制新工程；测试必须使用新完整清单及同引擎的独立成功导入，不能复用d7运行资格。原失败档仅在逐字新副本验证，content不改写；该Store诊断不能替代新源正常Flow。
+
 新增[classic只读计时工具](../qa/campaign_progress_recovery_20261026/continue_binding_candidate/tests/classic_recovery_timing/README.md)固定d7源与原失败批次；默认只读预检，显式执行时仅对逐字隔离副本运行原API，原profile不得交给引擎。[本次诊断](../qa/campaign_progress_recovery_20261026/evidence/classic_recovery_timing_20261027_031418/README.md)15项检查通过，首次inspect仍超时；诊断完成不等于恢复通过。
 
 [高俅单文件runtime候选](../qa/campaign_progress_recovery_20261026/gaoqiu_continue_candidate/README.md)只完成代码准备与来源检查，无执行入口；后续必须另建冻结并独立导入、运行，不覆盖当前d7或把其连环马结果当高俅验收。

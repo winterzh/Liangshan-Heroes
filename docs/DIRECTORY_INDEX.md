@@ -30,6 +30,8 @@
 
 ## 本批索引与新增规则
 
+`qa/campaign_progress_recovery_20261026/recovery_readset_candidate/`：只对原Slot启用的严格读集优化候选、固定d7来源的新工程准备器、原Flow适配器与原生替换专项；768b6e59已导入，真实保存/恢复两案88项通过。`VALIDATION.md`维护当前资格，创建时来源清单和工具README保持原字节，未采用生产。
+
 `qa/campaign_progress_recovery_20261026/continue_binding_candidate/tests/classic_recovery_timing/`为原档只读、隔离副本原API计时工具；`evidence/classic_recovery_timing_20261027_031418/`保留15项诊断检查、原始来源/日志与文件不变证据，首次inspect超时，未执行恢复。
 
 `qa/lianhuanma_resume_20261026/`：连环马自然付费训练、同槽同token三进程接续的外部驱动、执行器、成功及失败收据；私有存档与运行缓存留本机，100项只属于内部活动期专项。新的事务集成图在该目录。

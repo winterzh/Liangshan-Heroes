@@ -1,0 +1,73 @@
+{
+  "schema": "readset_gate_harness_failure_evidence_v1",
+  "archived_at_utc": "2026-10-26T20:21:11.133420+00:00",
+  "original_run": "D:\\AI项目\\水浒\\开发工程\\.godot\\recovery_readset_20261027\\20261027_040714_122b1aa3",
+  "original_receipt_sha256": "eec40087e576f23f14ff6589ca9de7cc49d39fad2c7827c8deda6b299c709743",
+  "complete": false,
+  "classification": "QA control-channel JSON numeric-type dictionary comparison failure; no Store recovery result",
+  "producer_pid": 66668,
+  "producer_exit_code": 1,
+  "checks": {
+    "executed": 105,
+    "passed": 104,
+    "failed": 1,
+    "failed_label": "exact host gate",
+    "prepared_checks": 102,
+    "prepared_are_prior_cumulative_checks_not_added_again": true
+  },
+  "debug_stops": 0,
+  "reader_started": false,
+  "clone_started": false,
+  "request_ack_exact_value_match": true,
+  "ack": {
+    "pid": 66668,
+    "nonce": "3f8441ac14fe499f805a74b4af02ad9b",
+    "process_nonce": "89f1938c6a0c48e1b009f62c77902bc6",
+    "index": 0
+  },
+  "original_gate_source_sha256": "3ab35682a677fafa3cb6d382bb9eec7bed3bfd38279af44f45d43c6dbf10f77e",
+  "original_host_source_sha256": "468b3f56806a49e920d5ccf7444b11a177e4a66f60e8b8c12dbdb703238cc2b2",
+  "cause_evidence": {
+    "frozen_gate_compares_whole_dictionary": true,
+    "JSON_numeric_fields_match_native_expected_values": true,
+    "numeric_Variant_type_not_instrumented_in_original_run": true,
+    "interpretation": "Godot JSON numbers are floating-point Variants; the original whole-Dictionary comparison used native integer pid/index. Raw request/ACK values match, but the gate assertion fails before its planned production breakpoint."
+  },
+  "runtime_content_version": "source-v1:768b6e5937321126b4c927fce6b5565459610aa13ccb556f695837a814eb74c2",
+  "engine_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+  "original_flags": {
+    "initial_identity_passed": true,
+    "final_identity_passed": true,
+    "original_unchanged": true,
+    "children_terminal_confirmed": true,
+    "helpers_terminal_confirmed": false,
+    "lock_ownership_confirmed": true,
+    "lock_released": false
+  },
+  "later_cleanup": {
+    "path": "raw/postflight_cleanup.json",
+    "sha256": "b9efd69cb79797f437b72fae33c172b203657ed4ae2bbe2b306b718d9d6f96bb",
+    "original_receipt_not_modified": true,
+    "no_engine_or_helper_at_audit": true,
+    "provider_count": 0,
+    "lock_released": true,
+    "does_not_change_original_run_result": true
+  },
+  "worker_providers": {},
+  "worker_providers_terminal": true,
+  "runtime_pins_verified": 338,
+  "qualifications": {
+    "readset_suite_passed": false,
+    "Store_recovery_failure_proven": false,
+    "Flow_recovery_failure_proven": false,
+    "reader_or_clone_exercised": false,
+    "public_entry": false,
+    "SDK": false,
+    "OS_input": false,
+    "original_release": false,
+    "human_acceptance": false,
+    "production_adoption": false,
+    "general_performance": false,
+    "publication": false
+  }
+}

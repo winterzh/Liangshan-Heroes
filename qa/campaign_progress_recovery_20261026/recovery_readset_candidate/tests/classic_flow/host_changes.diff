@@ -1,0 +1,71 @@
+--- original/run_recovery.py
++++ readset/run_recovery.py
+@@ -1,4 +1,4 @@
+-"""Four-process classic dead-writer SOURCE BRANCH diagnostic; default preflight.
++"""New readset freeze; original four-process classic SOURCE BRANCH diagnostic.
+ 
+ Initial visible buttons use the private QA gate. Reader clears only that flag
+ after synchronous request admission, before the original deferred _restore.
+@@ -29,12 +29,13 @@
+     return module
+ 
+ 
+-disk = load("classic_recovery_disk_binding", HERE.parent / "run_disk.py")
+-p, h, ROOT, require = disk.p, disk.h, disk.ROOT, disk.require
++candidate = load("classic_readset_binding", HERE.parents[1] / "prepare_readset.py")
++p, h, ROOT, require = candidate.p, candidate.h, candidate.ROOT, candidate.require
+ QA = HERE.parents[2]
++ORIGINAL = QA / "continue_binding_candidate/tests/classic_recovery"
+ CLASSIC = QA / "handoff_candidate/tests/classic"
+ io = load("classic_recovery_debug_helpers", QA / "store_protocol_candidate/tests/io/run_io.py")
+-WORKERS = {"bootstrap.gd": HERE / "bootstrap.gd", "driver.gd": HERE / "driver.gd",
++WORKERS = {"bootstrap.gd": ORIGINAL / "bootstrap.gd", "driver.gd": ORIGINAL / "driver.gd",
+            "classic_base.gd": CLASSIC / "driver.gd", "policy.gd": CLASSIC / "policy.gd",
+            "inflight.gd": CLASSIC / "inflight.gd"}
+ POINTS = {"pending": ("scripts/run_snapshot_store.gd", '_checkpoint("pending_verified")', "commit_locked"),
+@@ -55,14 +56,15 @@
+ 
+ 
+ def preflight(base, expected):
+-    state = disk.preflight(base, expected)
+-    provenance = h.read(HERE / "sources.json")
++    require(expected == "fixed", "This adapter only accepts the new readset candidate")
++    state = candidate.prepared_state(base)
++    provenance = h.read(ORIGINAL / "sources.json")
+     require(provenance.get("schema") == "classic_recovery_branch_sources_v1", "Unknown sources")
+     for row in provenance["files"]:
+         relative = Path(row["path"])
+         require(not relative.is_absolute() and ".." not in relative.parts, "Repository-relative provenance only")
+         p.pin(ROOT / relative, state["pins"], row["sha256"])
+-    for path in [HERE / "sources.json", *WORKERS.values()]:
++    for path in [ORIGINAL / "sources.json", Path(__file__), HERE / "README.md", *WORKERS.values()]:
+         p.pin(path, state["pins"])
+     state["points"] = points(state["project"])
+     p.verify_pins(state["pins"])
+@@ -234,7 +236,7 @@
+ 
+ 
+ def execute(args):
+-    output = ROOT / ".godot/classic_recovery_branch_20261027" / h.stamp()
++    output = ROOT / ".godot/classic_readset_branch_20261027" / h.stamp()
+     output.mkdir(parents=True, exist_ok=False)
+     receipt = {"schema":"classic_recovery_branch_run_v1","complete":False,"expected":args.expect,"steps":[],"cases":[],
+                "initial_private_gate_used":True,"source_restore_branch_only":True,"public_entry_qualified":False,
+@@ -272,7 +274,7 @@
+             h.identity.no_links(profile); profile.mkdir(parents=True,exist_ok=False)
+             env = h.common.private_environment(profile)
+             for key in list(env):
+-                if key.startswith(("SC_","CB_","CC_","MR_","HG_","LR_")): env.pop(key)
++                if key.startswith(("SC_","CB_","CC_","CT_","MR_","HG_","LR_","LHM_","LSH_CONTINUE_FLOW_")): env.pop(key)
+             env.update(STEAM_DISABLED="1",CAMPAIGN_QA="",LSH_CONTINUE_FLOW_QA="1",LSH_CONTINUE_FLOW_PROFILE=str(profile),
+                        SC_WORKERS=str(workers),SC_BINDINGS=str(workers/"bindings.json"),SC_PROFILE=str(profile),
+                        SC_PROJECT=str(state["project"]),SC_RUN=str(output),
+@@ -343,7 +345,7 @@
+ def main():
+     parser = argparse.ArgumentParser(description=__doc__)
+     parser.add_argument("--base-run",type=Path,required=True)
+-    parser.add_argument("--expect",choices=("baseline","fixed"),required=True)
++    parser.add_argument("--expect",choices=("fixed",),default="fixed")
+     parser.add_argument("--execute",action="store_true")
+     parser.add_argument("--timeout",type=int,default=180)
+     parser.add_argument("--wait-lane",type=int,default=0)
