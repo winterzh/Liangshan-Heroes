@@ -1,0 +1,117 @@
+--- upstream/worker.gd
++++ io_v2/worker.gd
+@@ -1,4 +1,25 @@
+ extends Node
++
++# External QA adaptation only. Query the installed, hash-bound native bridge;
++# never infer external process death from Godot's own child-process map.
++const Liveness = preload("res://scripts/run_process_liveness_manager.gd")
++var liveness_observations: Array = []
++
++func observe_pid(target_pid: int, wanted: String) -> bool:
++	var binding: String = JSON.stringify({"fixture":"store_io_v2","nonce":nonce,"mode":mode,"pid":target_pid})
++	var opened: Dictionary = Liveness.open_scope(binding)
++	if not opened.ok: return false
++	var result: Dictionary = Liveness.query_dead(int(opened.scope_id),target_pid,binding.sha256_text(),"inspect")
++	var closed: Dictionary = Liveness.close_scope(int(opened.scope_id))
++	liveness_observations.append({"expected_state":wanted,"target_pid":target_pid,"result":result.duplicate(true),"scope_closed":closed.ok})
++	if not closed.ok: return false
++	if wanted == "dead":
++		return result.ok and result.get("code") == "PROCESS_CONFIRMED_DEAD" \
++			and result.get("pid") == target_pid and result.get("observation",{}).get("state") == "dead"
++	return not result.ok and result.get("code") == "WRITER_ALIVE" \
++		and result.get("liveness_detail",{}).get("state") == "alive" \
++		and result.get("liveness_detail",{}).get("target_pid") == target_pid
++
+ ## Candidate-only native files through the actual Store/Ledger APIs. Synthetic account
+ ## and outcome fixtures qualify local transactions only, never SDK/gameplay.
+ const Ledger := preload("res://scripts/steam_run_ledger.gd")
+@@ -212,11 +233,11 @@
+ 		and previous.get("nonce") == nonce and previous.get("profile") == profile \
+ 		and previous.get("identity") == identity and previous.get("owner") == OWNER \
+ 		and int(previous.get("pid",0)) > 0 and int(previous.get("pid",0)) != OS.get_process_id() \
+-		and not OS.is_process_running(int(previous.get("pid",0))), "same profile and identity with predecessor PID terminal"): return
++		and observe_pid(int(previous.get("pid",0)),"dead"), "same profile and identity with predecessor PID terminal"): return
+ 	var origin_writer_pid: int = int(previous.get("origin_writer_pid", previous.pid))
+ 	var origin_mode: String = String(previous.get("origin_mode", previous.mode))
+ 	if not check(origin_writer_pid > 0 and origin_writer_pid != OS.get_process_id() \
+-		and not OS.is_process_running(origin_writer_pid), "original writer PID is also terminal"): return
++		and observe_pid(origin_writer_pid,"dead"), "original writer PID is also terminal"): return
+ 	var store := Store.new(OWNER, ROOT_PATH)
+ 	if not check(store.directory == previous.directory, "recovery uses original account directory"): return
+ 	var inventory: Dictionary = store.inventory()
+@@ -270,6 +291,7 @@
+ 		if not check(is_unique and previous.mode in ["crash_cleanup","crash_marker"], "bounded second claimant stage starts at a supported unique source"): return
+ 		var prepared: Dictionary = previous.duplicate(true)
+ 		prepared["pid"] = OS.get_process_id(); prepared["mode"] = mode
++		prepared["liveness_observations"] = liveness_observations.duplicate(true)
+ 		prepared["origin_writer_pid"] = origin_writer_pid; prepared["origin_mode"] = origin_mode
+ 		prepared["predecessor_pid"] = int(previous.pid); prepared["claim_plan"] = plan.duplicate(true)
+ 		prepared["origin_owner_raw"] = plan.source.raw
+@@ -344,6 +366,7 @@
+ 		if not row.passed: failures.append(row.label)
+ 	var report := {"schema":"campaign_handoff_native_io_v1", "mode":mode, "passed":failures.is_empty(),
+ 		"checks":checks, "failures":failures, "evidence":evidence, "identity":identity,
++		"liveness_observations":liveness_observations,
+ 		"pid":OS.get_process_id(), "nonce":nonce, "profile":profile, "actual_user_dir":OS.get_user_data_dir(),
+ 		"synthetic_account_and_token":true, "owner":OWNER, "sdk_or_real_account_qualified":false,
+ 		"gameplay_or_power_loss_qualified":false, "production_root":ROOT_PATH}
+--- upstream/delayed_worker.gd
++++ io_v2/delayed_worker.gd
+@@ -1,4 +1,25 @@
+ extends Node
++
++# External QA adaptation only. Query the installed, hash-bound native bridge;
++# never infer external process death from Godot's own child-process map.
++const Liveness = preload("res://scripts/run_process_liveness_manager.gd")
++var liveness_observations: Array = []
++
++func observe_pid(target_pid: int, wanted: String) -> bool:
++	var binding: String = JSON.stringify({"fixture":"store_io_v2","nonce":nonce,"mode":mode,"pid":target_pid})
++	var opened: Dictionary = Liveness.open_scope(binding)
++	if not opened.ok: return false
++	var result: Dictionary = Liveness.query_dead(int(opened.scope_id),target_pid,binding.sha256_text(),"inspect")
++	var closed: Dictionary = Liveness.close_scope(int(opened.scope_id))
++	liveness_observations.append({"expected_state":wanted,"target_pid":target_pid,"result":result.duplicate(true),"scope_closed":closed.ok})
++	if not closed.ok: return false
++	if wanted == "dead":
++		return result.ok and result.get("code") == "PROCESS_CONFIRMED_DEAD" \
++			and result.get("pid") == target_pid and result.get("observation",{}).get("state") == "dead"
++	return not result.ok and result.get("code") == "WRITER_ALIVE" \
++		and result.get("liveness_detail",{}).get("state") == "alive" \
++		and result.get("liveness_detail",{}).get("target_pid") == target_pid
++
+ ## Native two-process ordering fixture. A uses Ledger; B uses Store + Receipt.
+ ## The controller pauses unmodified source statements through the debugger.
+ const Ledger := preload("res://scripts/steam_run_ledger.gd")
+@@ -199,7 +220,7 @@
+ 		and previous.get("nonce") == nonce and previous.get("profile") == profile and previous.get("identity") == identity \
+ 		and previous.get("case") == case_name and previous.get("expected") == expected and previous.get("owner") == OWNER \
+ 		and int(previous.get("pid",0)) > 0 and int(previous.pid) != OS.get_process_id() \
+-		and OS.is_process_running(int(previous.pid)),"B shares the exact private profile and identity with live A"): return
++		and observe_pid(int(previous.pid),"alive"),"B shares the exact private profile and identity with live A"): return
+ 	var store := Store.new(OWNER,ROOT_PATH)
+ 	if not check(store.directory == previous.directory,"B uses A original account directory"): return
+ 	var original: Dictionary = store.open_head()
+@@ -235,11 +256,12 @@
+ 	if not check(write_json(output.path_join("b_committed.json"),receipt),"B persists its native transaction evidence before waiting for A"): return
+ 	evidence["committed"] = receipt
+ 	if not await gate("b_done",store.directory): return
++	if not check(observe_pid(int(previous.pid),"alive"),"B confirms real A remains alive at independent final verification"): return
+ 	var independent := Store.new(OWNER,ROOT_PATH)
+ 	var final: Dictionary = independent.open_head()
+ 	var final_inventory: Dictionary = independent.inventory()
+ 	if expected == "defects":
+-		check(not final.ok and final.get("code") == "RECOVERY_REQUIRED" and OS.is_process_running(int(previous.pid)) \
++		check(not final.ok and final.get("code") == "RECOVERY_REQUIRED" and observe_pid(int(previous.pid),"alive") \
+ 			and final_inventory.ok and final_inventory.items.has("writing/owner.json") \
+ 			and FileAccess.get_file_as_string(owner_path) == owner_raw,
+ 			"B confirms known defect retains live A lock and cannot be called clean recovery")
+@@ -284,6 +306,7 @@
+ 	var report := {"schema":"handoff_delayed_io_v1","mode":mode,"case":case_name,"expected":expected,"passed":passed,
+ 		"slice_passed":passed and expected == "fixed","diagnostic_only":expected == "defects","production_qualified":false,
+ 		"checks":checks,"failures":failures,"evidence":evidence,"identity":identity,"pid":OS.get_process_id(),
++		"liveness_observations":liveness_observations,
+ 		"nonce":nonce,"profile":profile,"actual_user_dir":OS.get_user_data_dir(),"owner":OWNER,"production_root":ROOT_PATH,
+ 		"synthetic_account_and_token":true,"sdk_or_real_account_qualified":false,"gameplay_or_power_loss_qualified":false,
+ 		"fixture_api":"Ledger A; Store+Receipt B","workers":OS.get_environment("DA_WORKERS")}

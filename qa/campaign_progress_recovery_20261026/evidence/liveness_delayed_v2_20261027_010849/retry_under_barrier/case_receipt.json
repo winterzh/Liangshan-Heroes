@@ -1,0 +1,272 @@
+{
+  "case": "retry_under_barrier",
+  "expected": "fixed",
+  "complete": true,
+  "reports": [
+    {
+      "role": "A",
+      "path": "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_liveness_io_v2_20261027\\20261027_010849_dd205bef\\retry_under_barrier\\A\\report.json",
+      "sha256": "919d6db6017066dfa564fbcb897fb3de5c5ed3170a46a4c857d37561ca0ad71d",
+      "passed": true,
+      "checks": 43,
+      "failures": [],
+      "pid": 49560
+    },
+    {
+      "role": "B",
+      "path": "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_liveness_io_v2_20261027\\20261027_010849_dd205bef\\retry_under_barrier\\B\\report.json",
+      "sha256": "fcb4ef380a7df13f97cabd22e82c2609a930c4f09869a446f9b5dbc609f2b14a",
+      "passed": true,
+      "checks": 25,
+      "failures": [],
+      "pid": 22800
+    }
+  ],
+  "profile": "D:\\CodexQA\\lhmdelay2\\8e365fe0f016",
+  "nonce": "f0391cc8f53e40ecb923213d34039e81",
+  "prepared_sha256": "982e89f46a36a2329ad3390ac4f6cbb6451b1c95260b7d3efd4a28fa38396b1d",
+  "trace": [
+    {
+      "event": "launched",
+      "role": "A",
+      "pid": 49560
+    },
+    {
+      "event": "gate",
+      "role": "A",
+      "kind": "a_apply",
+      "inventory": {
+        "exists": true,
+        "files": {
+          "record_0000000002.json": {
+            "sha256": "aa5e4596378c3c873f2d4664510b029a41640dab8ed849814774677992780cb4",
+            "bytes": 1553
+          },
+          "record_0000000003.json": {
+            "sha256": "74dce684517bb501fe52165a7a54b0c5aabac287935a0ee7823037d68257e472",
+            "bytes": 1553
+          }
+        },
+        "directories": [
+          "."
+        ]
+      }
+    },
+    {
+      "event": "breakpoint_matched",
+      "role": "A",
+      "pid": 49560,
+      "point": {
+        "source": "res://scripts/steam_receipt_store.gd",
+        "line": 181,
+        "function": "acquire",
+        "statement": "if DirAccess.make_dir_absolute(directory.path_join(\"writing\")) != OK: return bad(\"WRITER_BUSY\")",
+        "source_sha256": "10f7cd3cd77c9c5322c991c63c11bc2c85151b1fc03dbf9ceef55d698ebb90b7"
+      },
+      "frames": [
+        {
+          "source": "res://scripts/steam_receipt_store.gd",
+          "line": 181,
+          "function": "acquire"
+        },
+        {
+          "source": "res://scripts/steam_run_ledger.gd",
+          "line": 104,
+          "function": "_drive_pending"
+        },
+        {
+          "source": "res://scripts/steam_run_ledger.gd",
+          "line": 75,
+          "function": "_persist"
+        },
+        {
+          "source": "res://scripts/steam_run_ledger.gd",
+          "line": 238,
+          "function": "apply_campaign_handoff"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/campaign_liveness_io_v2_20261027/20261027_010849_dd205bef/workers/delayed_worker.gd",
+          "line": 141,
+          "function": "writer_a"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/campaign_liveness_io_v2_20261027/20261027_010849_dd205bef/workers/delayed_worker.gd",
+          "line": 73,
+          "function": "gate"
+        }
+      ]
+    },
+    {
+      "event": "launched",
+      "role": "B",
+      "pid": 22800
+    },
+    {
+      "event": "gate",
+      "role": "B",
+      "kind": "b_begin",
+      "inventory": {
+        "exists": true,
+        "files": {
+          "record_0000000002.json": {
+            "sha256": "aa5e4596378c3c873f2d4664510b029a41640dab8ed849814774677992780cb4",
+            "bytes": 1553
+          },
+          "record_0000000003.json": {
+            "sha256": "74dce684517bb501fe52165a7a54b0c5aabac287935a0ee7823037d68257e472",
+            "bytes": 1553
+          }
+        },
+        "directories": [
+          "."
+        ]
+      }
+    },
+    {
+      "event": "breakpoint_matched",
+      "role": "B",
+      "pid": 22800,
+      "point": {
+        "source": "res://scripts/steam_receipt_store.gd",
+        "line": 314,
+        "function": "release",
+        "statement": "_checkpoint(\"release_marker_published\")",
+        "source_sha256": "10f7cd3cd77c9c5322c991c63c11bc2c85151b1fc03dbf9ceef55d698ebb90b7"
+      },
+      "frames": [
+        {
+          "source": "res://scripts/steam_receipt_store.gd",
+          "line": 314,
+          "function": "release"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/campaign_liveness_io_v2_20261027/20261027_010849_dd205bef/workers/delayed_worker.gd",
+          "line": 239,
+          "function": "writer_b"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/campaign_liveness_io_v2_20261027/20261027_010849_dd205bef/workers/delayed_worker.gd",
+          "line": 73,
+          "function": "gate"
+        }
+      ]
+    },
+    {
+      "event": "resumed",
+      "role": "A"
+    },
+    {
+      "event": "gate",
+      "role": "A",
+      "kind": "a_retry",
+      "inventory": {
+        "exists": true,
+        "files": {
+          "record_0000000003.json": {
+            "sha256": "74dce684517bb501fe52165a7a54b0c5aabac287935a0ee7823037d68257e472",
+            "bytes": 1553
+          },
+          "record_0000000004.json": {
+            "sha256": "e22822e7c72a0550878dd8f2774beddc4ed9253b694f9659922c20e6dc6fbd1e",
+            "bytes": 1771
+          },
+          "release_v1_22800_788a93c9eb9db632d0dbc0d134ded57f_22800_4d35269698103796b99d3a976b63988b_4_e22822e7c72a0550878dd8f2774beddc4ed9253b694f9659922c20e6dc6fbd1e.json": {
+            "sha256": "dcc78ef8f59c416ee11d298acdbbd463c1dbd52d90e8d36392e1282bb6f699e9",
+            "bytes": 100
+          },
+          "writing/owner.json": {
+            "sha256": "190a4919f05bfdca3e3bcd6c7d5c0b2398b6333bdd3e35635cebf4dcbcd5d917",
+            "bytes": 100
+          }
+        },
+        "directories": [
+          ".",
+          "cleanup_v1_22800_4d35269698103796b99d3a976b63988b",
+          "writing"
+        ]
+      }
+    },
+    {
+      "event": "gate",
+      "role": "A",
+      "kind": "a_final_retry",
+      "inventory": {
+        "exists": true,
+        "files": {
+          "record_0000000003.json": {
+            "sha256": "74dce684517bb501fe52165a7a54b0c5aabac287935a0ee7823037d68257e472",
+            "bytes": 1553
+          },
+          "record_0000000004.json": {
+            "sha256": "e22822e7c72a0550878dd8f2774beddc4ed9253b694f9659922c20e6dc6fbd1e",
+            "bytes": 1771
+          },
+          "release_v1_22800_788a93c9eb9db632d0dbc0d134ded57f_22800_4d35269698103796b99d3a976b63988b_4_e22822e7c72a0550878dd8f2774beddc4ed9253b694f9659922c20e6dc6fbd1e.json": {
+            "sha256": "dcc78ef8f59c416ee11d298acdbbd463c1dbd52d90e8d36392e1282bb6f699e9",
+            "bytes": 100
+          },
+          "writing/owner.json": {
+            "sha256": "190a4919f05bfdca3e3bcd6c7d5c0b2398b6333bdd3e35635cebf4dcbcd5d917",
+            "bytes": 100
+          }
+        },
+        "directories": [
+          ".",
+          "cleanup_v1_22800_4d35269698103796b99d3a976b63988b",
+          "writing"
+        ]
+      }
+    },
+    {
+      "event": "resumed",
+      "role": "B"
+    },
+    {
+      "event": "gate",
+      "role": "B",
+      "kind": "b_done",
+      "inventory": {
+        "exists": true,
+        "files": {
+          "record_0000000003.json": {
+            "sha256": "74dce684517bb501fe52165a7a54b0c5aabac287935a0ee7823037d68257e472",
+            "bytes": 1553
+          },
+          "record_0000000004.json": {
+            "sha256": "e22822e7c72a0550878dd8f2774beddc4ed9253b694f9659922c20e6dc6fbd1e",
+            "bytes": 1771
+          },
+          "writing/owner.json": {
+            "sha256": "190a4919f05bfdca3e3bcd6c7d5c0b2398b6333bdd3e35635cebf4dcbcd5d917",
+            "bytes": 100
+          }
+        },
+        "directories": [
+          ".",
+          "writing"
+        ]
+      }
+    },
+    {
+      "event": "gate",
+      "role": "A",
+      "kind": "a_verified",
+      "inventory": {
+        "exists": true,
+        "files": {
+          "record_0000000003.json": {
+            "sha256": "74dce684517bb501fe52165a7a54b0c5aabac287935a0ee7823037d68257e472",
+            "bytes": 1553
+          },
+          "record_0000000004.json": {
+            "sha256": "e22822e7c72a0550878dd8f2774beddc4ed9253b694f9659922c20e6dc6fbd1e",
+            "bytes": 1771
+          }
+        },
+        "directories": [
+          "."
+        ]
+      }
+    }
+  ]
+}

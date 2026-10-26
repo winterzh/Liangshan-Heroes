@@ -1,0 +1,103 @@
+{
+  "schema": "lianhuanma_victory_failure_evidence_v1",
+  "verification_utc": "2026-10-26T17:25:35.454094+00:00",
+  "original_run": "D:\\AI项目\\水浒\\开发工程\\.godot\\lianhuanma_natural_terminal_20261026\\20261027_011539_12cfec3e",
+  "original_receipt_sha256": "2dec6a7e019532c59b97d89c01c0a2e7cd6f4f6f94ded507b999f1f7b6737fb8",
+  "batch_passed": false,
+  "complete": false,
+  "execution_kind": "source_project_offscreen_gl",
+  "candidate_schema": "campaign_liveness_integrated_manifest_v1",
+  "candidate_script_count": 23,
+  "native_asset_count": 1,
+  "content_version": "source-v1:e97a07b9ff04b677fbc1934a40976cc6e1f82479855cf39f305147ae4f6d1eea",
+  "engine_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+  "candidate_manifest_sha256": "f4b83220e4990d2823bc2c5393c6383ebec33b06dc6aa9ccd7186ebdccbd1e0d",
+  "source_head_at_runtime": "694f5bc8959654d1f6131616aa646d2d891d41d6",
+  "stage_results": [
+    {
+      "mode": "save_training",
+      "pid": 42516,
+      "exit_code": 0,
+      "native_errors": [],
+      "checks_total": 53,
+      "checks_passed": 53,
+      "checks_failed": 0,
+      "failures": [],
+      "stage_completed": true,
+      "save_exit_observed": true,
+      "exit_reason": "continue_saved",
+      "process_nonce": "31daafad08f041b2b96c3e5cba26d287"
+    },
+    {
+      "mode": "resume_training",
+      "pid": 22192,
+      "exit_code": 1,
+      "native_errors": [],
+      "checks_total": 40,
+      "checks_passed": 38,
+      "checks_failed": 2,
+      "failures": [
+        "exact queue timer resources population entity IDs and simulation tick restored",
+        "same actual lifecycle journal schema context generation and hash"
+      ],
+      "stage_completed": false,
+      "save_exit_observed": false,
+      "exit_reason": "",
+      "process_nonce": "9accad9db0d2430c873ca6263443f845"
+    }
+  ],
+  "total_checks_executed": 93,
+  "checks_passed": 91,
+  "checks_failed": 2,
+  "unrun_modes": [
+    "resume_victory",
+    "reject_terminal"
+  ],
+  "terminal_error": "RuntimeError('Private character QA step failed: resume_training')",
+  "failure_scope": "Second-process exact restore assertion failed. The lifecycle label is also false in the original report; archive does not treat it as proof of an independent lifecycle corruption. Root source diagnosis says lifecycle_row returned an empty result after the first failure. Source repair and successor qualification are separate.",
+  "initial_final_identity_passed": true,
+  "runtime_pins": 91,
+  "current_paths_matched": 91,
+  "post_terminal_changes": [],
+  "all_runtime_pins_resolved": true,
+  "all_children_terminal": true,
+  "lock_ownership_confirmed": true,
+  "lock_released": true,
+  "original_files": 67,
+  "original_bytes": 3434461,
+  "existing_source_inventory_references": [
+    {
+      "original_path": "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\root_source.json",
+      "existing_evidence_path": "qa\\campaign_progress_recovery_20261026\\process_liveness_integration_candidate\\evidence\\full_freeze_20261027_000821\\root_source.json",
+      "sha256": "fc8be051b3f219bf5ca9468fc08730956aea17b6e5f1b114874a37ceeba3a9cb",
+      "bytes": 1374573,
+      "reason": "Existing full-freeze original is already preserved; avoid duplicating full-tree inventory."
+    },
+    {
+      "original_path": "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\preimport_source.json",
+      "existing_evidence_path": "qa\\campaign_progress_recovery_20261026\\process_liveness_integration_candidate\\evidence\\full_freeze_20261027_000821\\preimport_source.json",
+      "sha256": "6a30d8f658493ebbfe0242e68e92dde307426d7985ba5eb074f1a22ecf54cd14",
+      "bytes": 1379780,
+      "reason": "Existing full-freeze original is already preserved; avoid duplicating full-tree inventory."
+    }
+  ],
+  "source_preservation_note": "All QA inputs in receipt pins copied before author edits. Three authorized loss companion files are separately marked not pinned/executed by this victory batch. Frozen workers and bindings are exact originals.",
+  "excluded": [
+    "private profiles/player or synthetic save payload files",
+    "screenshots",
+    "executables",
+    "Godot cache"
+  ],
+  "qualifications": {
+    "full_victory_chain": false,
+    "defeat_chain": false,
+    "public_continue": false,
+    "native_release_exe": false,
+    "native_sdk": false,
+    "human_acceptance": false,
+    "performance": false,
+    "production_adoption": false,
+    "publication": false
+  },
+  "host_modes_definition": "MODES = (\"save_training\", \"resume_training\", \"resume_victory\", \"reject_terminal\")"
+}

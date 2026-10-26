@@ -1,0 +1,157 @@
+{
+  "schema": "liveness_delayed_v2_evidence_summary_v1",
+  "verification_utc": "2026-10-26T17:22:04.511524+00:00",
+  "original_run": "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_liveness_io_v2_20261027\\20261027_010849_dd205bef",
+  "original_receipt_sha256": "3db55b1e9319d4da0fe0af9bd4c25f30a3b8ad78a6a8de7d37cc950fc35e9772",
+  "native_slice_passed": true,
+  "complete": true,
+  "identity": {
+    "content_version": "source-v1:e97a07b9ff04b677fbc1934a40976cc6e1f82479855cf39f305147ae4f6d1eea",
+    "engine_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+    "source_mode": true
+  },
+  "manifest_sha256": "f4b83220e4990d2823bc2c5393c6383ebec33b06dc6aa9ccd7186ebdccbd1e0d",
+  "native_assets": [
+    {
+      "path": "addons/process_liveness/windows/ProcessLivenessProbe.exe",
+      "source_path": "qa/campaign_progress_recovery_20261026/process_liveness_candidate/.artifacts/20261026_231111_062ae286/ProcessLivenessProbe.exe",
+      "candidate_sha256": "012354b1cf0376712f97e19362d91b2ef7f51775c6797c862c513df1e2f1936c",
+      "source_sha256": "2d01e9ced42ba25b243e79e7f847334eee66f210d5c5fcc916e4eeb00396f8a1",
+      "build_receipt_sha256": "5685db4cb6e92fa67f79622e2e1b131811a7b6e0e75813cee517dc543384e255"
+    }
+  ],
+  "actual_processes": 4,
+  "pids": [
+    67388,
+    68900,
+    49560,
+    22800
+  ],
+  "all_exit_codes": 0,
+  "worker_checks_passed": 129,
+  "case_results": [
+    {
+      "case": "first_after_clear",
+      "A_pid": 67388,
+      "B_pid": 68900,
+      "checks_passed": 61,
+      "A_checks": 36,
+      "B_checks": 25,
+      "original_scope_preserved": true,
+      "A_final_code": "OWNED_HEAD_CHANGED",
+      "own_stale_lock_released": true,
+      "A_handoff_applied": false,
+      "B_api": "Ledger A; Store+Receipt B",
+      "B_head_sha256": "fc10356fc7951bcbbe93f6189571f6894a59bcc34d69fa543f93596a2b332fcc",
+      "A_creation_filetime": "134375081521036140",
+      "final_total_kills": 5,
+      "final_total_wins": 0
+    },
+    {
+      "case": "retry_under_barrier",
+      "A_pid": 49560,
+      "B_pid": 22800,
+      "checks_passed": 68,
+      "A_checks": 43,
+      "B_checks": 25,
+      "original_scope_preserved": true,
+      "A_final_code": "OWNED_HEAD_CHANGED",
+      "own_stale_lock_released": true,
+      "A_handoff_applied": false,
+      "B_api": "Ledger A; Store+Receipt B",
+      "B_head_sha256": "e22822e7c72a0550878dd8f2774beddc4ed9253b694f9659922c20e6dc6fbd1e",
+      "A_creation_filetime": "134375082985631388",
+      "final_total_kills": 5,
+      "final_total_wins": 0
+    }
+  ],
+  "runtime_pins": 191,
+  "current_paths_sha_matched": 190,
+  "post_terminal_document_changes": [
+    {
+      "path": "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\process_liveness_integration_candidate\\tests\\io_v2\\README.md",
+      "runtime_sha256": "0345621e60befbd2bcf5b6b3b36ce4b9243b0dc4d0621b43a05f68ef63dc0d4e",
+      "current_sha256": "03160a24c8957ab50d3ba7e42de4cd992661b0e3ec13ad2188d4cbb5cbd19e7a",
+      "runtime_original": "runner_inputs/qa/campaign_progress_recovery_20261026/process_liveness_integration_candidate/tests/io_v2/README.md",
+      "reason": "Root confirmed README result update after terminal; frozen original remains unchanged."
+    }
+  ],
+  "runtime_copy_pins_all_match": true,
+  "case_receipts_match_terminal_receipt": true,
+  "source_statement_and_stack_match": true,
+  "source_breakpoints": 4,
+  "actual_provider_reports": [
+    {
+      "path": "provider_reports/6b15e715000cb69dbd43f18f944a598b.json",
+      "source_path": "D:\\CodexQA\\lhmdelay2\\ad75217f603c\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\process_liveness\\v2\\6b15e715000cb69dbd43f18f944a598b\\result.json",
+      "sha256": "5b870a6ad3d070e69ddc1a5f1a013be2dee1320768cd0c0e0da092ecd479dbff",
+      "target_pid": 67388,
+      "provider_pid": 47492,
+      "creation_filetime": "134375081521036140",
+      "state": "alive",
+      "code": "HANDLE_NONSIGNALED"
+    },
+    {
+      "path": "provider_reports/2402f5f4a855be27bc0cec2e6fc2789d.json",
+      "source_path": "D:\\CodexQA\\lhmdelay2\\ad75217f603c\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\process_liveness\\v2\\2402f5f4a855be27bc0cec2e6fc2789d\\result.json",
+      "sha256": "8209ef6f6fe31231fe581de5efbcccd438118e82db516bf36f1d56f49d66cb0d",
+      "target_pid": 67388,
+      "provider_pid": 65192,
+      "creation_filetime": "134375081521036140",
+      "state": "alive",
+      "code": "HANDLE_NONSIGNALED"
+    },
+    {
+      "path": "provider_reports/ea9db4e371fcc4c25b9018ae78211a85.json",
+      "source_path": "D:\\CodexQA\\lhmdelay2\\8e365fe0f016\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\process_liveness\\v2\\ea9db4e371fcc4c25b9018ae78211a85\\result.json",
+      "sha256": "2e0e700cdfab81ba838f4ad6fb5fc9628049ecb7391c1be7e108fc4593e9eb92",
+      "target_pid": 49560,
+      "provider_pid": 56496,
+      "creation_filetime": "134375082985631388",
+      "state": "alive",
+      "code": "HANDLE_NONSIGNALED"
+    },
+    {
+      "path": "provider_reports/84137fbd4acdfa08d45433919d14cad4.json",
+      "source_path": "D:\\CodexQA\\lhmdelay2\\8e365fe0f016\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\process_liveness\\v2\\84137fbd4acdfa08d45433919d14cad4\\result.json",
+      "sha256": "6b5d69c53381a1aed55f97a52e1c75c0caf934557ff742d6c5fcf95b0a6926b2",
+      "target_pid": 49560,
+      "provider_pid": 5160,
+      "creation_filetime": "134375082985631388",
+      "state": "alive",
+      "code": "HANDLE_NONSIGNALED"
+    }
+  ],
+  "provider_data_classification": "Strict bounded 11-field Win32 process query metadata only; no credentials or player data.",
+  "terminal_lock_ownership_confirmed": true,
+  "terminal_lock_released": true,
+  "lock_scope": "Original receipt and frozen host finally; no current shared lock mutation.",
+  "original_files": 106,
+  "original_bytes": 1966533,
+  "excluded": [
+    "private profile/save/ledger files",
+    "binary/cache",
+    "cumulative delayed_checkpoint_*.json"
+  ],
+  "known_gaps": [
+    "Half-pending remains expected ENVELOPE_JSON refusal",
+    "Legacy ownerless/recovering crash windows unchanged",
+    "Delayed B uses Store+Receipt, not a second Ledger",
+    "No full mutation/foreign-owner refusal matrix"
+  ],
+  "qualifications": {
+    "synthetic_account_and_token": true,
+    "production_method_overrides": 0,
+    "two_ledger_concurrency": false,
+    "handoff_success_or_once_only_settlement": false,
+    "original_19_fault_cases": false,
+    "original_61_stages": false,
+    "player_ui_retry": false,
+    "actual_steam_sdk": false,
+    "full_campaign_resume": false,
+    "native_release_exe": false,
+    "human_acceptance": false,
+    "performance": false,
+    "publication": false
+  }
+}

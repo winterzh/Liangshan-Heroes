@@ -21,12 +21,27 @@
 python -B qa/campaign_progress_recovery_20261026/run_lianhuanma_terminal.py --base-run <已导入的独立冻结目录> --candidate-manifest <该冻结实际绑定的候选manifest.json>
 ```
 
-由主线程安排串行通道，显式添加 `--run --timeout 1500 --wait-lane 1800` 才运行。宿主动态核对实际 20 文件清单、当前生产基线、生成身份与引擎，四进程使用真实 `gl_compatibility` 屏外窗口、正常 1x/60 Hz。首波仍为 150/270 秒，每阶段默认 1500 秒，战斗策略自身上限 1000 秒；超时不是通过。记录原 Popen PID、独立 process nonce、共同 batch nonce、前序 report SHA、前后源/生成/worker/helper/引擎 pins；只释放自己持有且子进程已终态的共享锁。
+由主线程安排串行通道，显式添加 `--run --timeout 1500 --wait-lane 1800` 才运行。宿主按明确 schema 动态核对实际 20 脚本或 23 脚本＋helper 清单、当前生产基线、生成身份与引擎，四进程使用真实 `gl_compatibility` 屏外窗口、正常 1x/60 Hz。首波仍为 150/270 秒，每阶段默认 1500 秒，战斗策略自身上限 1000 秒；超时不是通过。记录原 Popen PID、独立 process nonce、共同 batch nonce、前序 report SHA、前后源/生成/worker/helper/引擎 pins；只释放自己持有且子进程已终态的共享锁。
 
 每批新建短 profile 与输出目录 `.godot/lianhuanma_natural_terminal_20261026/<batch>`，四个 profile 环境根由共享助手隔离。外部 bootstrap 绑定五个 GD 文件 SHA，离开 physics frame 后加载，`can_instantiate()` 失败快退。环境为 `LT_MODE / LT_PROFILE / LT_PROJECT / LT_WORKERS / LT_BINDINGS / LT_BINDINGS_SHA256 / LT_REPORT / LT_NONCE / LT_PROCESS_NONCE / LT_CANDIDATE_SHA256`，后三阶段另有 `LT_PREVIOUS / LT_PREVIOUS_SHA256`。`STEAM_DISABLED=1`、`CAMPAIGN_QA` 为空；既有 `LSH_CONTINUE_FLOW_QA=1` 与 `LSH_CONTINUE_FLOW_PROFILE` 仅在严格匹配的隔离 profile 内启用实际 Flow UI。A/B 成功必须观察生产退出理由 `continue_saved`，测试不自行替代保存后的正常退出。
 
 公开战役保存/继续门槛保持原状。离线 uncredited、私有 Flow UI 不授真实 Steam SDK、credited 账本、导出 EXE、发布、人工体验或全战役资格。独立[自然失败三进程链](../lianhuanma_loss/README.md)已完成代码和静态复核，尚未编译或原生执行：新profile实际保存退出，独立继续后让宋江以普通移动遭真实敌军击杀，验证loss ACK `CAMPAIGN_PROGRESS_NOT_REQUIRED / persisted=false / 空 CFG SHA`、不新增通关记录，再独立菜单继续拒旧槽。真实保存退出语义要求三进程，旧两进程设想不再采用。
 
-当前先修外部PID恢复准入，再以新候选重新绑定运行。`static_audit.json`保留提交`47849190`时的初始准备快照；本页和计划之后的状态修订不改六份执行源码，不把原f6ef身份预检转授后继源码。
+`static_audit.json`保留提交`47849190`时的初始准备快照。2026-10-27 仅更新宿主的候选绑定，五份 GDScript 保持原字节；不把原 f6ef 身份预检转授后继源码。
 
 复用来源为当前 `tests/training.gd` 的训练观察、`tests/huang/` 的终局读取、`handoff_candidate/tests/classic/driver.gd` 的实际 Flow UI/退出观察，以及旧 RTS 工具中的普通经营策略；没有复用旧工具的开场捷径、4 倍速、种子重置、教场或 contracts 注入。`static_audit.json` 只记录本次 Python AST/帮助入口与源级复核、SHA；不等于 GDScript 编译或自然路线通过。
+
+
+## 2026-10-27 候选绑定适配（未原生运行新绑定）
+
+宿主新增明确 schema 分支：原 `campaign_steam_handoff_candidate_manifest_v1` 与 `campaign_steam_store_protocol_integrated_manifest_v1` 仍要求精确 20 脚本集合、manifest 邻接源码和冻结副本的逐项 SHA；不把缺失邻接源码降级为其它路径。新 `campaign_liveness_integrated_manifest_v1` 经公共 `../../lianhuanma_candidate_binding.py` 调用只读 `prepare_liveness.preflight()` 重建精确 23 脚本＋1 helper 清单，要求与传入清单及冻结清单字节 SHA 一致。所有 source_path 必须是仓库内无链接的严格相对路径；helper 源码、构建收据、实际 EXE、完整 generation/expected_identity、成功 import 收据／日志与实际引擎均被绑定。
+
+新候选的 manifest 实参使用 QA 中已归档原字节清单，无需在归档目录旁复制 scripts。下面命令仍仅只读预检，不占锁、不创建 profile、不启动引擎：
+
+```powershell
+python -B qa/campaign_progress_recovery_20261026/run_lianhuanma_terminal.py --base-run .godot/campaign_progress_recovery_20261026/20261027_000821_ba1f231b --candidate-manifest qa/campaign_progress_recovery_20261026/process_liveness_integration_candidate/evidence/full_freeze_20261027_000821/candidate_manifest.json
+```
+
+本次仅调整宿主绑定、README 和 provenance；全部胜败 GDScript、自然命令策略、终局断言、保存退出链保持原字节。历史 static_audit / derived_from 原 SHA 保留，不改写成新宿主 SHA。新绑定尚未进行 Godot 编译或原生路线运行；e97a 的冻结导入、组件及活写者测试不转授连环马胜败链资格。首次引擎执行仍由根任务串行安排。
+
+本轮已实际完成新宿主 Python AST、`--help`（exit 0）和上述 e97a 清单的只读预检（exit 0）：23 脚本、1 helper、成功 import 绑定均通过，`engine_started=false`、`lane_acquired=false`、`native_qualified=false`。仅证明宿主能接受并严格识别该冻结，不能替代 GDScript 编译或自然胜败路线运行。

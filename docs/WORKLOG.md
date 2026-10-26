@@ -1,5 +1,19 @@
 # 开发日志
 
+## 2026-10-27 连环马实际继续入口发现章节参数遗漏
+
+连环马真实菜单继续首批 20261027_011539_12cfec3e 已退出 1并释放共享锁：首次保存退出53项通过，恢复阶段40项中2项失败，胜利与终局拒槽尚未执行。实际训练队列预留人口从2变1；来源确认 Flow 通用 runtime 缺少 Level4.apply_overrides，而旧直接 Session 测试传入了专用 Factory runtime。本地记录比较的第二个失败由已有失败使 lifecycle_row 返回空字典连带产生，不能另判生命周期损坏。后继 Session 候选将按已验证的 Level4 context 装配固定 Factory runtime，再另冻验证，不放宽人口或保存断言。
+
+[原始失败及执行输入](../qa/campaign_progress_recovery_20261026/evidence/lianhuanma_victory_failed_20261027_011539/README.md)。原生产与 e97a 冻结保持不变，原版键鼠仍暂停。
+
+## 2026-10-27 新源文件恢复与写入交错专项通过
+
+2026-10-27：同一 e97a 冻结已完成 23 进程／370 项真实文件故障专项，以及两种延迟写入交错共 4 进程／129 项检查。所有实际 PID、前后源码与引擎、原始 helper 结果、共享锁释放均通过独立回读。半 pending 的 ENVELOPE_JSON 仍是保留原件的安全拒绝；B 使用 Store+Receipt，不能据此声称双 Ledger 全并发或自动修复所有坏档。
+
+23 进程批 20261027_003556_2423499b 为 14 个正常退出和 9 个指定断点中断，235 个最终 pin 不变；4 进程批 20261027_010849_dd205bef 的 first_after_clear 为 61 项，retry_under_barrier 为 68 项，191 个最终 pin 不变。两批终态完整，未覆盖 19 类／61 阶段、v2 超时隔离、完整战役或 SDK。
+
+[文件故障原件](../qa/campaign_progress_recovery_20261026/evidence/liveness_io_v2_20261027_003556/README.md)、[写入交错原件](../qa/campaign_progress_recovery_20261026/evidence/liveness_delayed_v2_20261027_010849/README.md)、[独立执行入口](../qa/campaign_progress_recovery_20261026/process_liveness_integration_candidate/tests/io_v2/README.md)。连环马胜败宿主已显式绑定同一 23 脚本＋固定 helper，保持原自然路线和真实 Flow 保存退出；后续按实际运行结果独立记录，不沿用旧源资格。用户仍选择暂不恢复原版键鼠验收。
+
 ## 2026-10-27 活写者保护双进程专项通过
 
 23脚本和固定helper的新冻结`20261027_000821_ba1f231b`导入退出0/错误0，实际身份`source-v1:e97a07b9ff04b677fbc1934a40976cc6e1f82479855cf39f305147ae4f6d1eea`。真实双Ledger批`20261027_001429_a52fb5dc`45项通过（A24/B21）、双退出0、完整来源后验通过、共享锁释放。A仍在写入时，B普通open明确返回WRITER_ALIVE且可重试，业务目录及全部文件原字节不变；A按原提案正常提交，B保留同Ledger/Store再打开并读到同一九字段proof，重复handoff无重复记奖或文件变更。

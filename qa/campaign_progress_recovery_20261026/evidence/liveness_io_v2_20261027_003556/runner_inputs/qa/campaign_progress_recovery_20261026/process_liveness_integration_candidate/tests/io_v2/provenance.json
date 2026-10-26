@@ -1,0 +1,66 @@
+{
+  "schema": "liveness_io_adapter_sources_v1",
+  "engine_started": false,
+  "qualification_inherited": false,
+  "upstream_files": [
+    {
+      "path": "qa/campaign_progress_recovery_20261026/store_protocol_candidate/tests/io/run_io.py",
+      "sha256": "ef437cc2fa4f602b0ae26a429ba03453b305d72ad4ba1b3451fa03186c60b1bb"
+    },
+    {
+      "path": "qa/campaign_progress_recovery_20261026/store_protocol_candidate/tests/io/run_delayed_acquire.py",
+      "sha256": "2046fdddf1d37d89539a717827ed968a7200326ac0ecfde80ea5909c51c0f3ae"
+    },
+    {
+      "path": "qa/campaign_progress_recovery_20261026/store_protocol_candidate/tests/io/bootstrap.gd",
+      "sha256": "c1c97ba51487d9ff7a7cb37b051ef4a8c65e5d8195cdeca44ed1ef3448896680"
+    },
+    {
+      "path": "qa/campaign_progress_recovery_20261026/store_protocol_candidate/tests/io/delayed_bootstrap.gd",
+      "sha256": "145902f4ac7977e984f652c13cf4783c39a432404d777f82bd231806f6a639ca"
+    },
+    {
+      "path": "qa/campaign_progress_recovery_20261026/store_protocol_candidate/tests/io/worker.gd",
+      "sha256": "605489cd879ef90cdde954d5a0ae23d58e134168afd5d2fd065b3c9f195ce394"
+    },
+    {
+      "path": "qa/campaign_progress_recovery_20261026/store_protocol_candidate/tests/io/delayed_worker.gd",
+      "sha256": "da0e83c753327e8d121876189723e2c2f9ae8f31483a200cde42167d5beb57ca"
+    },
+    {
+      "path": "qa/campaign_progress_recovery_20261026/store_protocol_candidate/tests/io/README.md",
+      "sha256": "b159221dd901539c507f606089b81a26df7cb4f4bcfed6d3815244d4ef228987"
+    },
+    {
+      "path": "qa/campaign_progress_recovery_20261026/store_protocol_candidate/tests/io/README_delayed.md",
+      "sha256": "b004089321efdf3607fb7d91ee41a02b23cd72b1ead963013d314f2a592e62d5"
+    },
+    {
+      "path": "qa/campaign_progress_recovery_20261026/prepare_liveness.py",
+      "sha256": "1c4a84063e6686be78a0e1df67a17f18f7a83f8b4a234921764cdee5c97fecdc"
+    },
+    {
+      "path": "qa/campaign_progress_recovery_20261026/prepare_handoff.py",
+      "sha256": "f961ff8fabefc49e1f99c9fe714400eea542490ec7ec45ad1f9b785f334995c1"
+    }
+  ],
+  "adapted_workers": [
+    {
+      "path": "worker.gd",
+      "sha256": "a07a7dfc316641f83070ca33aae5c0de548f12972c9c58e17ca08d306d5b7c5c",
+      "upstream_sha256": "605489cd879ef90cdde954d5a0ae23d58e134168afd5d2fd065b3c9f195ce394"
+    },
+    {
+      "path": "delayed_worker.gd",
+      "sha256": "b038b92d6c9d5453661ca2b3ce1898055d75e67252daa483643746ee47298f62",
+      "upstream_sha256": "da0e83c753327e8d121876189723e2c2f9ae8f31483a200cde42167d5beb57ca"
+    }
+  ],
+  "changes": [
+    "Explicit strict 23-script plus native helper source/build/exe binding; unchanged legacy stage APIs imported.",
+    "Unique recovery breakpoint keeps the exact statement but checks _recover_unique stack function.",
+    "Only copied workers change: replace external-PID booleans with bounded installed-manager observations; preserve all transaction assertions.",
+    "B additionally confirms A alive during independent final verification. Native reports retained and pinned.",
+    "No production changes, no method overrides, no successful-runtime qualification."
+  ]
+}

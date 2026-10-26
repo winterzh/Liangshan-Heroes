@@ -11,9 +11,11 @@ import importlib.util
 import json
 from pathlib import Path
 import subprocess
+import sys
 import time
 import uuid
 
+sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parents[2]
 QA = Path(__file__).resolve().parent
 HERE = QA / "tests/lianhuanma"
@@ -31,6 +33,11 @@ spec = importlib.util.spec_from_file_location(
 helper = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(helper)
 
+binding_spec = importlib.util.spec_from_file_location(
+    "lianhuanma_candidate_binding", QA / "lianhuanma_candidate_binding.py")
+candidate_binding = importlib.util.module_from_spec(binding_spec)
+binding_spec.loader.exec_module(candidate_binding)
+
 
 def preflight(base, manifest_path):
     helper.identity.no_links(base)
@@ -38,28 +45,43 @@ def preflight(base, manifest_path):
     if not base.is_relative_to(ROOT / ".godot/campaign_progress_recovery_20261026") or not manifest_path.is_relative_to(QA):
         raise RuntimeError("Only a local QA candidate and its independent freeze are accepted")
     manifest = helper.read(manifest_path)
-    rows = manifest["files"]
-    if len(rows) != 20 or {r["path"] for r in rows} != {"scripts/" + n for n in EXPECTED_FILES}:
-        raise RuntimeError("Exact twenty-script candidate required")
-    pins = {}
-    for path in (manifest_path, base / "candidate_manifest.json", base / "preparation.json",
-                 base / "root_source.json", base / "generation.json", Path(__file__)):
+    schema = manifest.get("schema")
+    if schema == candidate_binding.LIVENESS_SCHEMA:
+        bound = candidate_binding.bind_liveness(base, manifest_path, helper)
+        project, generation, pins = bound["project"], bound["generation"], bound["pins"]
+        binding_info = {key: bound[key] for key in
+                        ("candidate_schema", "candidate_script_count", "native_asset_count", "import_receipts")}
+    elif schema in candidate_binding.LEGACY_SCHEMAS:
+        # Keep the original 20-file adjacent-source contract; no source_path fallback.
+        rows = manifest["files"]
+        if len(rows) != 20 or {r["path"] for r in rows} != {"scripts/" + n for n in EXPECTED_FILES}:
+            raise RuntimeError("Exact twenty-script candidate required")
+        pins = {}
+        for path in (manifest_path, base / "candidate_manifest.json", base / "preparation.json",
+                     base / "root_source.json", base / "generation.json", Path(__file__)):
+            pins[str(path)] = helper.sha(path)
+        if pins[str(manifest_path)] != pins[str(base / "candidate_manifest.json")]:
+            raise RuntimeError("Candidate manifest differs from the actual frozen manifest")
+        preparation = helper.read(base / "preparation.json")
+        if preparation.get("candidate_manifest_sha256") != pins[str(manifest_path)]:
+            raise RuntimeError("Preparation does not bind the requested candidate")
+        project = helper.assert_runtime_current(base)
+        helper.identity.no_links(project)
+        generation = helper.read(base / "generation.json")
+        helper.identity.verify_generated(project, generation)
+        for row in rows:
+            for path in (manifest_path.parent / row["path"], project / row["path"]):
+                helper.identity.no_links(path)
+                if helper.sha(path) != row["candidate_sha256"]:
+                    raise RuntimeError("Candidate source mismatch: " + row["path"])
+                pins[str(path)] = row["candidate_sha256"]
+        binding_info = {"candidate_schema": schema, "candidate_script_count": 20,
+                        "native_asset_count": 0, "import_receipts": []}
+    else:
+        raise RuntimeError("Unsupported explicit candidate manifest schema")
+    for path in (Path(__file__), Path(candidate_binding.__file__), HERE / "README.md"):
+        helper.identity.no_links(path)
         pins[str(path)] = helper.sha(path)
-    if pins[str(manifest_path)] != pins[str(base / "candidate_manifest.json")]:
-        raise RuntimeError("Candidate manifest differs from the actual frozen manifest")
-    preparation = helper.read(base / "preparation.json")
-    if preparation.get("candidate_manifest_sha256") != pins[str(manifest_path)]:
-        raise RuntimeError("Preparation does not bind the requested candidate")
-    project = helper.assert_runtime_current(base)
-    helper.identity.no_links(project)
-    generation = helper.read(base / "generation.json")
-    helper.identity.verify_generated(project, generation)
-    for row in rows:
-        for path in (manifest_path.parent / row["path"], project / row["path"]):
-            helper.identity.no_links(path)
-            if helper.sha(path) != row["candidate_sha256"]:
-                raise RuntimeError("Candidate source mismatch: " + row["path"])
-            pins[str(path)] = row["candidate_sha256"]
     for module in (helper, helper.common, helper.shared, helper.identity):
         pins[str(Path(module.__file__))] = helper.sha(module.__file__)
     running_helper = ROOT / "tools/run_campaign_level_state_qa.py"
@@ -67,8 +89,26 @@ def preflight(base, manifest_path):
     for name in WORKERS:
         helper.identity.no_links(HERE / name)
         pins[str(HERE / name)] = helper.sha(HERE / name)
+    provenance_path = HERE / "provenance.json"
+    helper.identity.no_links(provenance_path)
+    provenance = helper.read(provenance_path)
+    expected_inputs = {str(path.relative_to(ROOT)).replace("\\", "/")
+                       for path in (Path(__file__).resolve(), Path(candidate_binding.__file__).resolve(),
+                                    HERE / "README.md", *(HERE / name for name in WORKERS))}
+    provenance_rows = provenance.get("files", [])
+    if (provenance.get("schema") != "lianhuanma_terminal_external_binding_sources_v1"
+            or len(provenance_rows) != len(expected_inputs)
+            or {row.get("path") for row in provenance_rows} != expected_inputs):
+        raise RuntimeError("Exact victory host binding provenance required")
+    for row in provenance_rows:
+        path = ROOT / row["path"]
+        helper.identity.no_links(path)
+        if helper.sha(path) != row["sha256"]:
+            raise RuntimeError("Victory binding source changed: " + row["path"])
+        pins[str(path)] = row["sha256"]
+    pins[str(provenance_path)] = helper.sha(provenance_path)
     engine = helper.shared.resolve_godot(None)
-    return {"project": project, "engine": engine, "pins": pins,
+    return {**binding_info, "project": project, "engine": engine, "pins": pins,
             "candidate_manifest_sha256": pins[str(manifest_path)], "engine_sha256": helper.sha(engine),
             "content_version": "source-v1:" + generation["identity"]["source_sha256"]}
 
@@ -90,6 +130,10 @@ def main():
     if not args.run:
         print(json.dumps({"preflight_passed": True, "engine_started": False, "lane_acquired": False,
                           "native_qualified": False, "modes": MODES,
+                          "candidate_schema": initial["candidate_schema"],
+                          "candidate_script_count": initial["candidate_script_count"],
+                          "native_asset_count": initial["native_asset_count"],
+                          "import_receipts": initial["import_receipts"],
                           "content_version": initial["content_version"],
                           "candidate_manifest_sha256": initial["candidate_manifest_sha256"],
                           "worker_sha256": {name: initial["pins"][str(HERE / name)] for name in WORKERS}}, indent=2))
@@ -99,6 +143,8 @@ def main():
     output.mkdir(parents=True, exist_ok=False)
     receipt = {"schema": "lianhuanma_natural_terminal_four_process_v1", "complete": False,
                "execution_kind": "source_project_offscreen_gl", "base_run": str(base),
+               "candidate_schema": initial["candidate_schema"], "candidate_script_count": initial["candidate_script_count"],
+               "native_asset_count": initial["native_asset_count"], "import_receipts": initial["import_receipts"],
                "candidate_manifest": str(manifest_path), "candidate_manifest_sha256": initial["candidate_manifest_sha256"],
                "source_head": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
                "runner_sha256": helper.sha(__file__), "steps": [], "reports": [], "attempted_modes": [],

@@ -1,0 +1,88 @@
+{
+  "mode": "B",
+  "command": [
+    "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+    "--path",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project",
+    "--headless",
+    "--remote-debug",
+    "tcp://127.0.0.1:54542",
+    "--script",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_liveness_io_v2_20261027\\20261027_010849_dd205bef\\workers\\delayed_bootstrap.gd"
+  ],
+  "stops": [
+    {
+      "point": {
+        "source": "res://scripts/steam_receipt_store.gd",
+        "line": 314,
+        "function": "release",
+        "statement": "_checkpoint(\"release_marker_published\")",
+        "source_sha256": "10f7cd3cd77c9c5322c991c63c11bc2c85151b1fc03dbf9ceef55d698ebb90b7"
+      },
+      "frames": [
+        {
+          "source": "res://scripts/steam_receipt_store.gd",
+          "line": 314,
+          "function": "release"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/campaign_liveness_io_v2_20261027/20261027_010849_dd205bef/workers/delayed_worker.gd",
+          "line": 239,
+          "function": "writer_b"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/campaign_liveness_io_v2_20261027/20261027_010849_dd205bef/workers/delayed_worker.gd",
+          "line": 73,
+          "function": "gate"
+        }
+      ],
+      "pid": 22800,
+      "status": "breakpoint_matched",
+      "packet_sha256": "0b198abd669cac36c79b6ef225e440d191a5f8f0db90950412dd81aa14c0fa90"
+    }
+  ],
+  "gates": [
+    {
+      "case": "retry_under_barrier",
+      "directory": "D:/CodexQA/lhmdelay2/8e365fe0f016/appdata/Godot/app_userdata/水浒英雄传：八幕战役/steam_receipts/v1/5088120/76561198000000001",
+      "index": 0,
+      "kind": "b_begin",
+      "mode": "B",
+      "nonce": "f0391cc8f53e40ecb923213d34039e81",
+      "owner": "76561198000000001",
+      "pid": 22800,
+      "schema": "handoff_delayed_gate_v1"
+    },
+    {
+      "case": "retry_under_barrier",
+      "directory": "D:/CodexQA/lhmdelay2/8e365fe0f016/appdata/Godot/app_userdata/水浒英雄传：八幕战役/steam_receipts/v1/5088120/76561198000000001",
+      "index": 1,
+      "kind": "b_done",
+      "mode": "B",
+      "nonce": "f0391cc8f53e40ecb923213d34039e81",
+      "owner": "76561198000000001",
+      "pid": 22800,
+      "schema": "handoff_delayed_gate_v1"
+    }
+  ],
+  "pid": 22800,
+  "exit_code": 0,
+  "process_terminal": true,
+  "log_sha256": "733b1246d8bb3506ad930f4aad49fe9e8808034b474afac01407df3f3525b2c5",
+  "final_inventory": {
+    "exists": true,
+    "files": {
+      "record_0000000003.json": {
+        "sha256": "74dce684517bb501fe52165a7a54b0c5aabac287935a0ee7823037d68257e472",
+        "bytes": 1553
+      },
+      "record_0000000004.json": {
+        "sha256": "e22822e7c72a0550878dd8f2774beddc4ed9253b694f9659922c20e6dc6fbd1e",
+        "bytes": 1771
+      }
+    },
+    "directories": [
+      "."
+    ]
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "mode": "A",
+  "command": [
+    "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+    "--path",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_000821_ba1f231b\\project",
+    "--headless",
+    "--remote-debug",
+    "tcp://127.0.0.1:53203",
+    "--script",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_liveness_io_v2_20261027\\20261027_010849_dd205bef\\workers\\delayed_bootstrap.gd"
+  ],
+  "stops": [
+    {
+      "point": {
+        "source": "res://scripts/steam_receipt_store.gd",
+        "line": 181,
+        "function": "acquire",
+        "statement": "if DirAccess.make_dir_absolute(directory.path_join(\"writing\")) != OK: return bad(\"WRITER_BUSY\")",
+        "source_sha256": "10f7cd3cd77c9c5322c991c63c11bc2c85151b1fc03dbf9ceef55d698ebb90b7"
+      },
+      "frames": [
+        {
+          "source": "res://scripts/steam_receipt_store.gd",
+          "line": 181,
+          "function": "acquire"
+        },
+        {
+          "source": "res://scripts/steam_run_ledger.gd",
+          "line": 104,
+          "function": "_drive_pending"
+        },
+        {
+          "source": "res://scripts/steam_run_ledger.gd",
+          "line": 75,
+          "function": "_persist"
+        },
+        {
+          "source": "res://scripts/steam_run_ledger.gd",
+          "line": 238,
+          "function": "apply_campaign_handoff"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/campaign_liveness_io_v2_20261027/20261027_010849_dd205bef/workers/delayed_worker.gd",
+          "line": 141,
+          "function": "writer_a"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/campaign_liveness_io_v2_20261027/20261027_010849_dd205bef/workers/delayed_worker.gd",
+          "line": 73,
+          "function": "gate"
+        }
+      ],
+      "pid": 49560,
+      "status": "breakpoint_matched",
+      "packet_sha256": "aa8a3c3e0dcaa74e36f8bd855281e7ed765a7a056cc248e33487eb2874b42f15"
+    }
+  ],
+  "gates": [
+    {
+      "case": "retry_under_barrier",
+      "directory": "D:/CodexQA/lhmdelay2/8e365fe0f016/appdata/Godot/app_userdata/水浒英雄传：八幕战役/steam_receipts/v1/5088120/76561198000000001",
+      "index": 0,
+      "kind": "a_apply",
+      "mode": "A",
+      "nonce": "f0391cc8f53e40ecb923213d34039e81",
+      "owner": "76561198000000001",
+      "pid": 49560,
+      "schema": "handoff_delayed_gate_v1"
+    },
+    {
+      "case": "retry_under_barrier",
+      "directory": "D:/CodexQA/lhmdelay2/8e365fe0f016/appdata/Godot/app_userdata/水浒英雄传：八幕战役/steam_receipts/v1/5088120/76561198000000001",
+      "index": 1,
+      "kind": "a_retry",
+      "mode": "A",
+      "nonce": "f0391cc8f53e40ecb923213d34039e81",
+      "owner": "76561198000000001",
+      "pid": 49560,
+      "schema": "handoff_delayed_gate_v1"
+    },
+    {
+      "case": "retry_under_barrier",
+      "directory": "D:/CodexQA/lhmdelay2/8e365fe0f016/appdata/Godot/app_userdata/水浒英雄传：八幕战役/steam_receipts/v1/5088120/76561198000000001",
+      "index": 2,
+      "kind": "a_final_retry",
+      "mode": "A",
+      "nonce": "f0391cc8f53e40ecb923213d34039e81",
+      "owner": "76561198000000001",
+      "pid": 49560,
+      "schema": "handoff_delayed_gate_v1"
+    },
+    {
+      "case": "retry_under_barrier",
+      "directory": "D:/CodexQA/lhmdelay2/8e365fe0f016/appdata/Godot/app_userdata/水浒英雄传：八幕战役/steam_receipts/v1/5088120/76561198000000001",
+      "index": 3,
+      "kind": "a_verified",
+      "mode": "A",
+      "nonce": "f0391cc8f53e40ecb923213d34039e81",
+      "owner": "76561198000000001",
+      "pid": 49560,
+      "schema": "handoff_delayed_gate_v1"
+    }
+  ],
+  "pid": 49560,
+  "exit_code": 0,
+  "process_terminal": true,
+  "log_sha256": "d80ed1f219f6b016825dd4ec94b499ea687b133af5561cdca7c800e561360d6c",
+  "final_inventory": {
+    "exists": true,
+    "files": {
+      "record_0000000003.json": {
+        "sha256": "74dce684517bb501fe52165a7a54b0c5aabac287935a0ee7823037d68257e472",
+        "bytes": 1553
+      },
+      "record_0000000004.json": {
+        "sha256": "e22822e7c72a0550878dd8f2774beddc4ed9253b694f9659922c20e6dc6fbd1e",
+        "bytes": 1771
+      }
+    },
+    "directories": [
+      "."
+    ]
+  }
+}

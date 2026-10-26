@@ -21,7 +21,9 @@
 
 该新源的双进程批`20261027_001429_a52fb5dc`共45项通过（A24/B21），双exit0、来源后验通过、共享锁释放。A停在真实acquire断点且由宿主持有HANDLE证明存活；B普通Ledger.open明确返回WRITER_ALIVE，可重试且未标unsafe/restart，业务目录和每个文件原字节不变。A原提案随后正常提交，B保留原Ledger/Store重开并得到同一九字段proof；重复handoff不重复计奖或改写文件。[独立活写者收据](../evidence/live_owner_fixed_20261027_001429/README.md)。
 
-这只授予上述时序的活写者保护，不等于活claimant、全部死亡恢复/真实文件故障、v2超时隔离、上层继续流程或游戏通关通过。旧f6ef误清理基线与所有失败记录继续保留，未采用生产。
+活写者保护仅覆盖上述双 Ledger 时序。后继同源专项已完成：2026-10-27：同一 e97a 冻结已完成 23 进程／370 项真实文件故障专项，以及两种延迟写入交错共 4 进程／129 项检查。所有实际 PID、前后源码与引擎、原始 helper 结果、共享锁释放均通过独立回读。半 pending 的 ENVELOPE_JSON 仍是保留原件的安全拒绝；B 使用 Store+Receipt，不能据此声称双 Ledger 全并发或自动修复所有坏档。
+
+[23 进程文件故障原件](../evidence/liveness_io_v2_20261027_003556/README.md)覆盖五处真实文件拒绝的原对象重试、完整 pending/record 重启、cleanup/marker 中断及恢复者再次中断、删除尾段重启；[4 进程交错原件](../evidence/liveness_delayed_v2_20261027_010849/README.md)确认旧 CAS 不覆盖 B 新记录、释放屏障下仍保留原 Store/提案，清理后独立读取同一原字节。v2 超时隔离、活 claimant、上层继续及完整游戏路线仍需另验；旧 f6ef 缺陷与失败原件保留，未采用生产。
 
 ## 本次实际发现并修复
 

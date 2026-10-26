@@ -1,0 +1,176 @@
+{
+  "schema": "lianhuanma_loss_external_sources_v1",
+  "created_utc": "2026-10-26T14:46:21.200493+00:00",
+  "scope": "Independent natural Level4 loss: real SaveAndExit -> independent menu Continue and enemy-caused Song Jiang death -> independent menu terminal refusal.",
+  "files": [
+    {
+      "path": "qa/campaign_progress_recovery_20261026/run_lianhuanma_loss.py",
+      "sha256": "8747c98f320a0fc3e36faa445d03f8c6b7e9ffa09c4dd61cd6c60dcbacd6c175",
+      "bytes": 17915
+    },
+    {
+      "path": "qa/campaign_progress_recovery_20261026/lianhuanma_candidate_binding.py",
+      "sha256": "72a1cc7b681e7619f30eb072b1d4fd605e53c9bbd76ba47624c787d259739557",
+      "bytes": 6082
+    },
+    {
+      "path": "qa/campaign_progress_recovery_20261026/tests/lianhuanma_loss/README.md",
+      "sha256": "f7fccc472519cc211e482023c858cc526d52f11814e7f92bfc2d7adc38103754",
+      "bytes": 7698
+    },
+    {
+      "path": "qa/campaign_progress_recovery_20261026/tests/lianhuanma_loss/bootstrap.gd",
+      "sha256": "60cd4e421ed1c0796d4c0a944c9961c139f778bf243e4277d69dc4b27b554c12",
+      "bytes": 1124
+    },
+    {
+      "path": "qa/campaign_progress_recovery_20261026/tests/lianhuanma_loss/base.gd",
+      "sha256": "dd547afe35dce121de3c58d7144fc7021868cac5e5eba1c8e4b5f51aefe0c2ab",
+      "bytes": 24310
+    },
+    {
+      "path": "qa/campaign_progress_recovery_20261026/tests/lianhuanma_loss/terminal.gd",
+      "sha256": "cc7808dfd1285187951444593f3b7a6e3d675c889ffbc7109bac535b136d39fe",
+      "bytes": 18425
+    },
+    {
+      "path": "qa/campaign_progress_recovery_20261026/tests/lianhuanma_loss/driver.gd",
+      "sha256": "9d3f83a36e8ef9350e8e4f4212acafb8e07d2491f23291f7281def4c926c4875",
+      "bytes": 9421
+    }
+  ],
+  "derived_from": [
+    {
+      "path": "qa/campaign_progress_recovery_20261026/tests/lianhuanma/base.gd",
+      "sha256": "f55c3854d90701672f64e2e6fe8530a20982c8dbbf91dd9e89a600d41a9c165f",
+      "bytes": 28446,
+      "changes": "Independent copy of actual menu/Flow/Codec/training-save helpers; LL namespace and three loss modes; removed training-completion observer and second save.",
+      "runtime_dependency": false
+    },
+    {
+      "path": "qa/campaign_progress_recovery_20261026/tests/lianhuanma/terminal.gd",
+      "sha256": "be5aab40bc3f2fff28af6e54e5aa5df17b83cd663a131725b6aa6ecf3d849709",
+      "bytes": 17083,
+      "changes": "Copied read-only CFG/reward/lifecycle helpers, menu terminal-refusal path and report export; added separate loss ACK/baseline/full result/metrics validation.",
+      "runtime_dependency": false
+    },
+    {
+      "path": "qa/campaign_progress_recovery_20261026/tests/lianhuanma/bootstrap.gd",
+      "sha256": "0cd8829fd57ea8ea40c69c9a64644ca34d3e6b1f6ce3e7ea2bd84c2c970c5484",
+      "bytes": 1112,
+      "changes": "Independent copy; LL namespace and exact four local workers.",
+      "runtime_dependency": false
+    },
+    {
+      "path": "qa/campaign_progress_recovery_20261026/run_lianhuanma_terminal.py",
+      "sha256": "0588952f80bf10fa23f41b522b95711fe3b247fde60be4909b13bbcdfa4c4c74",
+      "bytes": 14397,
+      "changes": "Independent run_lianhuanma_loss.py; three phases, loss schema/flags, distinct profile/output, explicit source provenance pins, bounded 600 second phase default.",
+      "runtime_dependency": false
+    }
+  ],
+  "production_api_read_sources": [
+    {
+      "path": "qa/campaign_progress_recovery_20261026/store_protocol_candidate/integrated_candidate/scripts/run_campaign_progress_coordinator.gd",
+      "sha256": "4fa8c42a7c288c7384bb1254c67fe94946aa12b981315ce4753e1aeeedaab018",
+      "bytes": 13362
+    },
+    {
+      "path": "scripts/levels/level4_lianhuanma_rts.gd",
+      "sha256": "81aa370ec7387b7eeaf28b57864972ff875067fcf121a686e9b498a46cbe20c1",
+      "bytes": 19110
+    },
+    {
+      "path": "scripts/unit.gd",
+      "sha256": "9346d0e0fb1f0c4006027b66f9a6c8e3d598f84e2bdc2aaf1f01e9910ec7bf5d",
+      "bytes": 225944
+    }
+  ],
+  "validation": {
+    "python_ast_parsed": true,
+    "help_exit_code": 0,
+    "gdscript_compiled": false,
+    "engine_started": false,
+    "engine_lane_acquired": false,
+    "native_preflight_performed": false,
+    "native_route_tested": false,
+    "independent_read_review": "No definite blocker found in new loss GD, Flow, terminal contracts and host. Natural route and compilation remain untested.",
+    "victory_source_pins_unchanged": true
+  },
+  "boundaries": [
+    "No production, candidate, frozen project or shared victory file modified.",
+    "Three processes are required by actual production save-and-exit semantics; no internal Session substitute.",
+    "Route has a 240 second wall-clock bound, never forced loss or gameplay state injection.",
+    "Loss keeps actual pending/missed/done states and requires strict NOT_REQUIRED ACK with persisted=false and empty CFG SHA.",
+    "No SDK, real credited account, public campaign Continue, native release or human/OS-mouse qualification."
+  ],
+  "binding_update": {
+    "schema": "lianhuanma_candidate_binding_update_v1",
+    "created_utc": "2026-10-26T16:40:24.677251+00:00",
+    "previous_provenance_sha256": "0e3cda9a276d0a73dd6201159217c2d70e65be9947c9855f5454c655b1e73f33",
+    "previous_files": [
+      {
+        "path": "qa/campaign_progress_recovery_20261026/run_lianhuanma_loss.py",
+        "sha256": "0216292f9833700e71a088493b45bd7401b52a121684aa8551f8f2cee8789315",
+        "bytes": 15888
+      },
+      {
+        "path": "qa/campaign_progress_recovery_20261026/tests/lianhuanma_loss/README.md",
+        "sha256": "99e6d780fc4dc52b3c2a770094a0abbef822b40a6ee212c0c454c78196f1cc4a",
+        "bytes": 5377
+      },
+      {
+        "path": "qa/campaign_progress_recovery_20261026/tests/lianhuanma_loss/bootstrap.gd",
+        "sha256": "60cd4e421ed1c0796d4c0a944c9961c139f778bf243e4277d69dc4b27b554c12",
+        "bytes": 1124
+      },
+      {
+        "path": "qa/campaign_progress_recovery_20261026/tests/lianhuanma_loss/base.gd",
+        "sha256": "dd547afe35dce121de3c58d7144fc7021868cac5e5eba1c8e4b5f51aefe0c2ab",
+        "bytes": 24310
+      },
+      {
+        "path": "qa/campaign_progress_recovery_20261026/tests/lianhuanma_loss/terminal.gd",
+        "sha256": "cc7808dfd1285187951444593f3b7a6e3d675c889ffbc7109bac535b136d39fe",
+        "bytes": 18425
+      },
+      {
+        "path": "qa/campaign_progress_recovery_20261026/tests/lianhuanma_loss/driver.gd",
+        "sha256": "9d3f83a36e8ef9350e8e4f4212acafb8e07d2491f23291f7281def4c926c4875",
+        "bytes": 9421
+      }
+    ],
+    "scope": "Host-only explicit 20/23 script candidate binding; all four loss GD files unchanged. Existing derived_from remains the original historical source.",
+    "python_ast_parsed": true,
+    "help_exit_code": 0,
+    "godot_compiled": false,
+    "engine_started": false,
+    "native_route_tested": false,
+    "production_modified": false,
+    "independent_source_review": "No definite candidate binding/API blocker found. Legacy 20 adjacent sources remain strict; 23 sources resolve strictly inside repository.",
+    "qualification_inherited": false,
+    "historical_lf_preflight": {
+      "readonly_preflight_passed": true,
+      "readonly_preflight_exit_code": 0,
+      "readonly_preflight_content_version": "source-v1:e97a07b9ff04b677fbc1934a40976cc6e1f82479855cf39f305147ae4f6d1eea",
+      "readonly_preflight_manifest_sha256": "f4b83220e4990d2823bc2c5393c6383ebec33b06dc6aa9ccd7186ebdccbd1e0d",
+      "readonly_preflight_scripts": 23,
+      "readonly_preflight_native_assets": 1,
+      "readonly_preflight_engine_started": false,
+      "readonly_preflight_lane_acquired": false,
+      "tested_runner_sha256": "60e33705f6b986e18c0f5d3e4d5328f76f6c44261829924b796569320cb3a11a",
+      "tested_binding_sha256": "72a1cc7b681e7619f30eb072b1d4fd605e53c9bbd76ba47624c787d259739557",
+      "record_scope": "Historical first LF-runner preparation; not final restored-byte native qualification."
+    },
+    "line_endings_restoration": {
+      "git_head_runner_style": "CRLF",
+      "git_head_readme_style": "LF",
+      "git_head_provenance_style": "CRLF",
+      "previous_lf_runner_sha256": "60e33705f6b986e18c0f5d3e4d5328f76f6c44261829924b796569320cb3a11a",
+      "previous_converted_readme_sha256": "9fb7abf73c92b76f46afe045114a9ea69c8b8b8fd5bbef512f8d20224b426fa3",
+      "logic_unchanged": true,
+      "final_byte_readonly_preflight_result": "Reported separately by the task after this metadata is finalized; no native qualification."
+    }
+  },
+  "historical_sections_note": "Original validation, derived_from, production_api_read_sources and previous_files describe the initial source preparation; current host binding validation is in binding_update. Original source SHA values are preserved."
+}

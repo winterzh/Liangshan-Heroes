@@ -79,3 +79,7 @@
 `qa/campaign_progress_recovery_20261026/tests/lianhuanma/`与`run_lianhuanma_terminal.py`：实际菜单/Flow的四进程自然胜利驱动，独立绑定当前20文件候选；只读身份预检通过，尚未编译或原生验收。使用方式及不授予的资格见[执行器说明](../qa/campaign_progress_recovery_20261026/tests/lianhuanma/README.md)。
 
 `qa/campaign_progress_recovery_20261026/tests/lianhuanma_loss/`与`run_lianhuanma_loss.py`：真实Flow自然失败三进程代码，尚未原生运行。`evidence/store_protocol_io_20261026_220853/`保存23进程/370项已退出前提的真实文件证据；`store_delayed_first_failed_20261026_223919/`及`process_liveness_api_20261026_225300/`保留外部PID判断失败、最小原生API复现和官方来源。
+
+## 2026-10-27 存档恢复与交错专项
+
+`qa/campaign_progress_recovery_20261026/process_liveness_integration_candidate/tests/io_v2/`：严格23脚本＋helper的独立执行适配；23进程370项文件故障、4进程129项延迟写入已通过。原始输入、宿主、断点、helper JSON与逐文件SHA分别保存在 [文件专项](../qa/campaign_progress_recovery_20261026/evidence/liveness_io_v2_20261027_003556/README.md)、[交错专项](../qa/campaign_progress_recovery_20261026/evidence/liveness_delayed_v2_20261027_010849/README.md)，合成账号目录、exe与缓存留本机。半pending拒绝与成功恢复分别记录，不授全战役或SDK资格。
