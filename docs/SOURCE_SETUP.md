@@ -2,7 +2,7 @@
 
 ## 当前入口
 
-本机开发目录：`D:/AI项目/水浒/开发工程`；打开其中 `project.godot`。桌面旧目录为历史兼容入口。黄泥冈首批开发已切回 `codex/sync-20260905-stable`，从main/stable同源的1598c7c0开始；实际SHA以Git回读为准。[当前版本](PROJECT_STATUS.md)、[开发计划](DEVELOPMENT_PLAN.md)。
+本机开发目录：`D:/AI项目/水浒/开发工程`；打开其中 `project.godot`。桌面旧目录为历史兼容入口。黄泥冈首批开发已切回 `codex/sync-20260905-stable`，从main/stable同源的1598c7c0开始；已验证实现及证据提交`f5325c25`已推送并回读一致，后续交接文档独立同步，最新SHA仍以Git回读为准。[当前版本](PROJECT_STATUS.md)、[开发计划](DEVELOPMENT_PLAN.md)。
 
 ## 启动与导入
 
