@@ -92,7 +92,7 @@
 
 `evidence/classic_recovery_baseline_20261027_022930/`保存旧源两案82项缺陷复现；`evidence/classic_recovery_fixed_partial_20261027_023731/`保存新源pending成功/record超时、实际helper查询和完整失败输入。均位于`qa/campaign_progress_recovery_20261026/`，后者整体未通过。
 
-`qa/campaign_progress_recovery_20261026/gaoqiu_continue_candidate/`保存高俅章节runtime单文件候选、相对d7差异和13项来源；`integration_768/`准备器已创建941c4786完整冻结并独立导入。`tests/gaoqiu_training/`及`run_gaoqiu_training.py`为三进程正常造船续玩工具；`evidence/full_freeze_20261027_050851/`保留准备/导入原件。当前资格统一见该目录`VALIDATION.md`，运行与编译分开，未采用生产。
+`qa/campaign_progress_recovery_20261026/gaoqiu_continue_candidate/`保存高俅章节runtime单文件候选、相对d7差异和13项来源；`integration_768/`准备器已创建941c4786完整冻结并独立导入。`tests/gaoqiu_training/`及`run_gaoqiu_training.py`为三进程正常造船续玩工具；`tests/gaoqiu_loss/`及`run_gaoqiu_loss.py`为尚未原生运行的自然失败/终局拒槽工具；`evidence/full_freeze_20261027_050851/`保留准备/导入原件，`evidence/training_complete_20261027_052101/`保留实际造船三进程190项原件。当前资格统一见该目录`VALIDATION.md`，未采用生产。
 
 `evidence/lianhuanma_victory_20261027_014835/`与`evidence/lianhuanma_loss_20261027_020834/`分别保存当前d7源自然胜利345项、自然失败205项原件、来源映射与SHA清单。`continue_binding_candidate/tests/classic_recovery/`是独立的中断保存源码分支诊断工具，初始私有gate与公开入口资格分开，实际结果统一见下方VALIDATION。以上路径均相对`qa/campaign_progress_recovery_20261026/`。
 

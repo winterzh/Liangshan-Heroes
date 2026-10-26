@@ -1,0 +1,22 @@
+--- a/scripts/run_world_session.gd
++++ b/scripts/run_world_session.gd
+@@ -13,6 +13,7 @@
+ const CampaignLifecycle = preload("res://scripts/run_campaign_local_lifecycle.gd")
+ const Profiles = preload("res://scripts/run_official_restore_profile.gd")
+ const Level4Factory = preload("res://scripts/run_level4_world_factory.gd")
++const Level5Factory = preload("res://scripts/run_level5_world_factory.gd")
+ const FLAGS := {"skirmish": true, "skirmish_ai": false, "arena": false, "custom_defense": false, "scenario": false, "defense_waves": 30, "defense_random": false}
+ const ALL_CAMPAIGN_FLAGS := ["current", "skirmish", "skirmish_ai", "arena", "custom_defense", "scenario", "defense_waves", "defense_random"]
+ var _core: RefCounted
+@@ -254,6 +255,11 @@
+ 		if not chapter_runtime.ok: return chapter_runtime
+ 		_core.dispose()
+ 		_core = Core.new(_trusted, chapter_runtime.runtime)
++	elif _packet.context == Profiles.GAO_CONTEXT:
++		var gao_runtime: Dictionary = Level5Factory.prepare_runtime(_trusted)
++		if not gao_runtime.ok: return gao_runtime
++		_core.dispose()
++		_core = Core.new(_trusted, gao_runtime.runtime)
+ 	var prepared: Dictionary = _core.prepare(_packet.world)
+ 	if not prepared.ok: return prepared
+ 	if _packet.binding.kind == "steam":
