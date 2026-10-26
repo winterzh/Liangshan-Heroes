@@ -19,7 +19,7 @@
 - [奖励交接设计](STEAM_HANDOFF_DESIGN.md)、[下一候选说明](handoff_candidate/README.md)。
 - [经典30波六进程回归](handoff_candidate/tests/classic/README.md)：首批QA身份JSON类型失败原件保留；外部驱动使用生产无损Codec修正后，新profile从第一阶段重新运行，新批六阶段443项已全部通过，见[完整终态收据](evidence/handoff_classic_20261026_205941/summary.json)；该结果只属于23c源码。
 - [唯一目录释放后继候选](store_protocol_candidate/README.md)：19文件保持23c原字节，只替换Steam Store。针对正常释放中断和首次重试CAS冲突，另建独立模型、23进程原生I/O及延迟写入者交错验证；尚无生产采用或完整恢复资格，运行状态见[独立记录](store_protocol_candidate/VALIDATION.md)。
-- [连环马下一片接线](LIANHUANMA_NEXT.md)：三进程自然胜利及独立自然失败链，记录可复用普通命令、所需新断言和旧61阶段的不同范围；尚未执行。
+- [连环马下一片接线](LIANHUANMA_NEXT.md)：新增[四进程自然胜利驱动](tests/lianhuanma/README.md)，覆盖两次实际保存退出、两次独立菜单继续、四目标完整自然胜利及终局旧槽拒绝。Python AST、帮助入口和f6ef候选身份预检通过，尚未编译或原生执行。失败路线须按实际保存退出语义另用三进程验证；旧文档中的两进程设想不能绕过Flow。
 
 ## 运行与来源
 

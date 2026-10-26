@@ -1,13 +1,14 @@
 # 连环马自然终局：下一片接线
 
-2026-10-26只读核对，尚未实现新的完整驱动。先完成当前Store原生专项，再做三进程自然胜利链及独立两进程自然失败链；不以旧训练专项代替终局验收。
+2026-10-26已准备新的外部自然胜利四进程驱动，见`tests/lianhuanma/README.md`；尚未编译或运行。先完成当前Store原生专项，再由主线程串行验证；不以旧训练专项代替终局验收。三进程草稿未运行，现按真实保存退出行为改为四进程。
 
-1. A从真实菜单启动连环马，普通付费训练钩镰手：36金、24木、2人口预留；训练中保存固定槽并退出。
-2. B恢复原槽、同token，正常完成20秒训练并观察21秒无重复，再保存槽代际2。以普通建造、训练、技能、攻击命令完成守两路反攻，等待真实异步终局。教场若纳入范围，需新增正常调度，不能摆位/冻结敌军/注入伤害。
-3. C独立重启，验证战役lifecycle gen3及旧活动槽明确拒绝，槽原字节、CFG、奖励和终局记录不再变化。
-4. 另一个新profile先保存活动槽，再以普通移动令宋江遭真实敌军击杀；第二进程拒绝旧槽。不得直接调用lose或写血量。
+1. A点击实际剧情模块和连环马卡出征；当前八幕全部可选，不写入解锁或前章记录。普通训练钩镰手扣36金、24木、预留2人口，训练中通过Viewport Esc、SaveAndExit保存固定槽gen1，由AppLifecycle以continue_saved正常退出。
+2. B在新进程点击ContinueBattle，原槽同token恢复；正常完成原20秒训练，观察21秒无重复，再通过实际SaveAndExit及覆盖确认保存原槽gen2，生产再次退出。
+3. C再独立点击ContinueBattle恢复gen2，以普通教场诱入/撤步/协同攻击、经营、技能和守两路反攻，要求四目标全部完成和自然异步胜利；核对当前LCv3、Intentv2、ACKv2、完整结果、CFG与离线proof。
+4. D独立重启并点击实际菜单继续，验证战役lifecycle gen3已应用历史及旧活动槽明确拒绝、可见错误返回菜单；槽原字节、CFG、奖励和终局记录不再变化。保存、继续和拒绝不以直接Session调用代替Flow UI。
+5. 独立自然失败两进程链仍待后继：新profile先保存活动槽，再以普通移动令宋江遭真实敌军击杀；第二进程菜单继续拒旧槽。不得直接调用lose或写血量。
 
-可复用来源：`tools/lianhuanma_rts_test.gd`的普通经济/付费建造/训练及守路反攻策略；本批`tests/training.gd`的实际训练、费用、Codec和同槽交接；`tests/huang/base.gd`与`reject_terminal.gd`的终局事务核对。需要新外部driver和runner，不能修改已冻结worker。旧RTS入口使用4倍速、CAMPAIGN_QA=1并跳过教场，不直接运行它作本轮验收。`tools/level4_world_restore_qa.gd`和`lianhuanma_drill_test.gd`含状态/伤害夹具，也不算自然路线。
+复用来源：`tools/lianhuanma_rts_test.gd`的普通经济/付费建造/训练及守路反攻策略；本批`tests/training.gd`的实际训练、费用、Codec；`tests/huang/`的终局读取；`handoff_candidate/tests/classic/driver.gd`的可见按钮、Viewport Esc和生产保存退出观察。新驱动与runner均独立，不修改已冻结worker。旧RTS入口使用4倍速、CAMPAIGN_QA=1并跳过教场，不直接运行它作本轮验收。`tools/level4_world_restore_qa.gd`和`lianhuanma_drill_test.gd`含状态/伤害夹具，也不算自然路线。
 
 当前严格契约：level4 context、campaign_level4_v1、contract2，实际目标为lhm_training/hooks/han/hu。胜利核对真实lhm_victory、十二骑与大营、宋江及原中军存活、ContinueFlow完成、HUD出现；连环马不存在黄泥冈的level.victory字段。保留完整goals/missed，不把Intent六字段投影冒充完整结算或自动补齐未完成可选目标。胜利新profile解锁值为5；失败ACK必须CAMPAIGN_PROGRESS_NOT_REQUIRED、persisted=false、空CFG SHA且不新增通关记录。离线只授uncredited proof及不重放资格，不授真实SDK/credited账本资格。
 

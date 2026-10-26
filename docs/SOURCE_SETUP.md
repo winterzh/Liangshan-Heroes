@@ -30,6 +30,8 @@ git fetch origin
 
 后继[唯一目录释放候选](../qa/campaign_progress_recovery_20261026/store_protocol_candidate/README.md)必须用自己的20文件清单另建冻结；19文件与23c原字节一致，仅替Steam Store。新冻结`20261026_211212_dd3104df`的f6ef源码已导入、14项模型通过，真实文件和并发执行中；旧23c经典通过不授予f6ef完整回归资格。模型、23进程真实文件故障及[两种延迟写入交错](../qa/campaign_progress_recovery_20261026/store_protocol_candidate/tests/io/README_delayed.md)均有独立宿主，不能套用旧23c或旧199c冻结的结果。经典回归运行时固定其外部worker/README；不要边跑边改。
 
+连环马新增[四进程自然胜利执行器](../qa/campaign_progress_recovery_20261026/tests/lianhuanma/README.md)：默认只读预检，必须显式`--run`才启动引擎。本轮f6ef实际20文件及身份预检通过，尚未编译/原生运行；待Store文件和交错专项结束后按共享通道串行运行。保存退出走真实Flow，前两阶段由生产AppLifecycle正常退出，不能用Session直调替代。失败路线将独立验证。
+
 新的[战役context候选](../qa/campaign_progress_recovery_20261026/README.md)有独立准备/导入及训练执行器；连环马135项验证新生命周期活动期，黄泥冈1364项验证正常离线终局和重启旧槽拒绝。使用同一已导入冻结根、外部驱动和新隔离profile，`CAMPAIGN_QA`须为空，不能对旧候选或下一奖励交接草稿转授结果。
 
 连环马新增[三进程训练执行器](../qa/lianhuanma_resume_20261026/README.md)，复用已导入且身份匹配的冻结工程，在独立短profile、屏幕外真实GL上运行，最终100项通过。它只证明旧内部活动期同槽接续；新的战役context事务候选须重新冻结，不能沿用这份结果。真实迷雾存档不能用headless dummy渲染替代，跨进程报告使用无损Codec保留整数类型和浮点位。
