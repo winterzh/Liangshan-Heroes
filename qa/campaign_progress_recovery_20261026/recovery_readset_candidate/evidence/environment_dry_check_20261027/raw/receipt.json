@@ -1,0 +1,195 @@
+{
+  "schema": "readset_environment_host_dry_check_v1",
+  "complete": true,
+  "engine_started": false,
+  "original_profile_accessed": false,
+  "synthetic_payload_only": true,
+  "profile_root": "D:\\CodexQA\\readset_env_probe\\b65b84eafb53",
+  "checks": [
+    {
+      "name": "Python AST parses",
+      "passed": true
+    },
+    {
+      "name": "Actual Python --help exits zero without executing engine",
+      "passed": true
+    },
+    {
+      "name": "Stage creation leaves original base_env unchanged",
+      "passed": true
+    },
+    {
+      "name": "Each stage has an independent copied environment",
+      "passed": true
+    },
+    {
+      "name": "One stage mutation does not leak to another",
+      "passed": true
+    },
+    {
+      "name": "Producer and reader share exact fresh profile",
+      "passed": true
+    },
+    {
+      "name": "Producer and reader retain exact batch nonce",
+      "passed": true
+    },
+    {
+      "name": "Same profile receives distinct process nonce per stage",
+      "passed": true
+    },
+    {
+      "name": "Shared profile exact owned directory APPDATA",
+      "passed": true
+    },
+    {
+      "name": "Shared profile exact owned directory LOCALAPPDATA",
+      "passed": true
+    },
+    {
+      "name": "Shared profile exact owned directory TEMP",
+      "passed": true
+    },
+    {
+      "name": "Shared profile exact owned directory TMP",
+      "passed": true
+    },
+    {
+      "name": "TEMP and TMP remain distinct private directories",
+      "passed": true
+    },
+    {
+      "name": "Producer receives only host-copied private seed",
+      "passed": true
+    },
+    {
+      "name": "Reader receives no seed path or seed digest",
+      "passed": true
+    },
+    {
+      "name": "Host source seed is not exposed in worker environment",
+      "passed": true
+    },
+    {
+      "name": "Clone private environment exists before copying business tree",
+      "passed": true
+    },
+    {
+      "name": "Clone final continue/v1 destination is absent before copy",
+      "passed": true
+    },
+    {
+      "name": "Real no-overwrite business-tree copy succeeds after environment creation",
+      "passed": true
+    },
+    {
+      "name": "Clone profile exact directory APPDATA",
+      "passed": true
+    },
+    {
+      "name": "Clone profile exact directory LOCALAPPDATA",
+      "passed": true
+    },
+    {
+      "name": "Clone profile exact directory TEMP",
+      "passed": true
+    },
+    {
+      "name": "Clone profile exact directory TMP",
+      "passed": true
+    },
+    {
+      "name": "Clone receives no original or private seed path",
+      "passed": true
+    },
+    {
+      "name": "All three staged process nonces are independent",
+      "passed": true
+    },
+    {
+      "name": "Clone uses independent batch nonce",
+      "passed": true
+    },
+    {
+      "name": "All stage environments keep Steam disabled and CAMPAIGN_QA empty",
+      "passed": true
+    },
+    {
+      "name": "Base environment from another profile is rejected",
+      "passed": true
+    },
+    {
+      "name": "TMP incorrectly aliased to TEMP is rejected",
+      "passed": true
+    },
+    {
+      "name": "Exactly one actual private_environment call per new profile",
+      "passed": true
+    }
+  ],
+  "host_sha256": "6cb8fa5b4a5c7b381be4b2c3642b31411b31f308cd5b222c5baff4fef6da1e42",
+  "helper_sha256": "84d019c93da597ab500aa9258f63d71a027de9624529cc3cb997b0eb30fb54c9",
+  "private_environment_calls": 2,
+  "help_exit_code": 0,
+  "nonces": {
+    "batch": "b65b84eafb534bdfaf75946af3dcefe9",
+    "clone_batch": "8409079ad4c04e8a90f4012aa91c3d66",
+    "producer_process": "67b95cd793c546e1835dca2f47981586",
+    "reader_process": "6a7569ceaac54a028377ef9534232fac",
+    "clone_process": "63810a20264b46d4a65b9dac98313d61"
+  },
+  "profile_environment": {
+    "producer": {
+      "APPDATA": "D:\\CodexQA\\readset_env_probe\\b65b84eafb53\\shared_profile\\appdata",
+      "LOCALAPPDATA": "D:\\CodexQA\\readset_env_probe\\b65b84eafb53\\shared_profile\\localappdata",
+      "TEMP": "D:\\CodexQA\\readset_env_probe\\b65b84eafb53\\shared_profile\\temp",
+      "TMP": "D:\\CodexQA\\readset_env_probe\\b65b84eafb53\\shared_profile\\tmp",
+      "RS_SEED_PATH": "D:\\CodexQA\\readset_env_probe\\b65b84eafb53\\shared_profile\\inputs\\seed.json",
+      "RS_SEED_SHA": "8154b72d57288a6a2ca5e88171416ba4c0384c2e5701083e416e5eade57cb1f7"
+    },
+    "reader": {
+      "APPDATA": "D:\\CodexQA\\readset_env_probe\\b65b84eafb53\\shared_profile\\appdata",
+      "LOCALAPPDATA": "D:\\CodexQA\\readset_env_probe\\b65b84eafb53\\shared_profile\\localappdata",
+      "TEMP": "D:\\CodexQA\\readset_env_probe\\b65b84eafb53\\shared_profile\\temp",
+      "TMP": "D:\\CodexQA\\readset_env_probe\\b65b84eafb53\\shared_profile\\tmp",
+      "RS_SEED_PATH": "",
+      "RS_SEED_SHA": ""
+    },
+    "clone": {
+      "APPDATA": "D:\\CodexQA\\readset_env_probe\\b65b84eafb53\\clone_profile\\appdata",
+      "LOCALAPPDATA": "D:\\CodexQA\\readset_env_probe\\b65b84eafb53\\clone_profile\\localappdata",
+      "TEMP": "D:\\CodexQA\\readset_env_probe\\b65b84eafb53\\clone_profile\\temp",
+      "TMP": "D:\\CodexQA\\readset_env_probe\\b65b84eafb53\\clone_profile\\tmp",
+      "RS_SEED_PATH": "",
+      "RS_SEED_SHA": ""
+    }
+  },
+  "synthetic_clone_inventory": {
+    "exists": true,
+    "files": {
+      "5088120/1/record_0000000001.json": {
+        "sha256": "0deec375ebaee5e5ba3f9a4bc0750557f76e9e4bf53520005dbe624b4a7eab4d",
+        "bytes": 23
+      },
+      "5088120/1/writing/owner.json": {
+        "sha256": "d0dd04d3fef9b85c205e8c2f52df99b5bbdd79e0fac6672b155721b7bc5220ea",
+        "bytes": 22
+      },
+      "local_runs/synthetic/5088120/1/record_0000000001.json": {
+        "sha256": "fdb67c682f99101ddac9527094c3acbc5f3c50c52d558d50efef4a98b508031c",
+        "bytes": 26
+      }
+    },
+    "directories": [
+      ".",
+      "5088120",
+      "5088120/1",
+      "5088120/1/writing",
+      "local_runs",
+      "local_runs/synthetic",
+      "local_runs/synthetic/5088120",
+      "local_runs/synthetic/5088120/1"
+    ]
+  },
+  "check_count": 30
+}

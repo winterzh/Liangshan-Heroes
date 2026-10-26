@@ -16,9 +16,13 @@
 
 [原Flow四进程工具](tests/classic_flow/README.md)的新批次 `20261027_035441_ec3aea99` 已完整通过：pending为writer14040/reader19676，record为writer61920/reader70208，两writer在指定真实保存断点计划终止，两个reader正常退出0。检查分别23/21/23/21，共88项；两案均fixed_branch_restored，完整暂停世界、资源、队列、原槽SHA/token和LC一致。宿主complete=true，来源后验、4个实际进程终态和共享锁释放通过。[原始证据](evidence/classic_flow_20261027_035441/README.md)。原d7的record超时仍保留；本批证明新源的两处分支恢复通过，不授公开入口或发行程序资格。
 
-[读集专项工具](tests/readset/README.md)已完成代码和静态检查，原生执行进行中，尚无终态资格。覆盖12个具体case及旧4MB原档逐字clone；合成小夹具只验证文件协议，旧内容identity的clone不改写身份、不授新Flow世界恢复资格。原档仅由宿主只读核对，传给引擎的seed和profile均为新副本。
+[读集专项工具](tests/readset/README.md)尚未完整通过，执行器两处问题已修复，待全新profile完整复跑。覆盖12个具体case及旧4MB原档逐字clone；合成小夹具只验证文件协议，旧内容identity的clone不改写身份、不授新Flow世界恢复资格。原档仅由宿主只读核对，传给引擎的seed和profile均为新副本。
 
 专项[首轮工具失败](evidence/readset_gate_failed_20261027_040714/README.md)保留：producer66668退出1，105项中104过/1个握手检查失败，零断点，reader和clone均未启动。确认消息四字段值完全一致，原测试却将JSON数值与原生整数直接做字典比较；后继仅修为严格字段/字符串与有界、有限、整值的数值核对，未改游戏源码或恢复断言。旧输入和原收据lock_released=false不变；另存的终态审计确认无引擎/helper、无IPC目录后释放精确自有锁。修订driver为3ce3ab64，已从全新目录重跑，结果另记。
+
+[第二轮工具失败](evidence/readset_environment_failed_20261027_042044/README.md)中，producer16900的握手及原pending_verified断点通过，prepared102项全真，原闭合pending和owner逐字保持，按计划终止；但宿主为同一profile第二次创建appdata而报FileExistsError，reader和clone尚未启动。原件、来源后验和锁释放通过。后继宿主改为每profile只建一次基础环境，各阶段复制环境并生成独立process nonce；clone先建环境再复制业务树。真实隔离目录的Python检查30项通过，宿主SHA为6cb8fa5b4a5c7b381be4b2c3642b31411b31f308cd5b222c5baff4fef6da1e42，driver仍3ce3ab64。该检查只授环境准备资格，不能算原生攻击或Store恢复通过。
+
+[环境修复的30项检查收据与实际执行源码](evidence/environment_dry_check_20261027/README.md)独立保存；原stdin源码由执行后的工具输入提取，未把它冒充运行前冻结的脚本文件。
 
 ## 剩余范围
 

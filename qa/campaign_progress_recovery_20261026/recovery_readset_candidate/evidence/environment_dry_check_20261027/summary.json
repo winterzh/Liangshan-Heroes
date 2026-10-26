@@ -1,0 +1,37 @@
+{
+  "schema": "readset_environment_dry_archive_v1",
+  "original_receipt_sha256": "93aa05401a91208437939690d461fa4dabc628e9d83d6a3088937b63224ceb03",
+  "checks": 30,
+  "passed": 30,
+  "host_before_sha256": "468b3f56806a49e920d5ccf7444b11a177e4a66f60e8b8c12dbdb703238cc2b2",
+  "host_after_sha256": "6cb8fa5b4a5c7b381be4b2c3642b31411b31f308cd5b222c5baff4fef6da1e42",
+  "common_private_environment_source_sha256": "84d019c93da597ab500aa9258f63d71a027de9624529cc3cb997b0eb30fb54c9",
+  "private_environment_definition_lines": [
+    155,
+    172
+  ],
+  "helper_modified": false,
+  "source_delivery": "PowerShell literal here-string piped to python -",
+  "source_extraction": "Exact Python source body and shell command from prior tool input; saved after original execution, no rerun. Actual PowerShell-transmitted stdin byte encoding/line-ending stream was not separately captured.",
+  "stdin_python_sha256": "c4eb2ab55cdba66f3291f9eeb3f07324ed401ce6c9ada7f582ac360fa8322f9b",
+  "environment_protocol_passed": true,
+  "engine_started": false,
+  "godot_validation": false,
+  "store_recovery_validation": false,
+  "flow_validation": false,
+  "sdk_validation": false,
+  "human_acceptance": false,
+  "release": false,
+  "original_profile_accessed": false,
+  "rerun_during_archive": false,
+  "scope": [
+    "Two fresh private profiles, one actual helper call per profile",
+    "Producer/reader independent env dicts and process nonces on same profile",
+    "Four exact existing owned env directories; mismatched profile and TMP alias rejected",
+    "Clone environment created before real no-overwrite copytree of synthetic text fixtures",
+    "Seed path restricted to producer private copy; reader/clone empty",
+    "Python AST and actual --help exit0"
+  ],
+  "not_a_full_reproducible_source_closure": "Only requested host, actual helper, prior host and executed dry-check source are copied; transitively imported QA modules, 3 GD files and project are not bundled. Receipt binds original host/helper only; no new full-source qualification.",
+  "payloads_copied": false
+}

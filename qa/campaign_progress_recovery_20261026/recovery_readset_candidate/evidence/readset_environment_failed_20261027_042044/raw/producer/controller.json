@@ -1,0 +1,556 @@
+{
+  "mode": "producer",
+  "complete": true,
+  "process_terminal": true,
+  "profile": "D:\\CodexQA\\readset\\2ab7490e22a1",
+  "nonce": "2ab7490e22a14b0188684417ae502c4a",
+  "process_nonce": "cace08a8a3284161a0fb2c4095e2dd79",
+  "cases": [],
+  "debug_stops": [
+    {
+      "pid": 16900,
+      "nonce": "2ab7490e22a14b0188684417ae502c4a",
+      "process_nonce": "cace08a8a3284161a0fb2c4095e2dd79",
+      "case": "pending",
+      "index": 0,
+      "point": {
+        "source": "res://scripts/run_snapshot_store.gd",
+        "line": 323,
+        "function": "commit_locked",
+        "statement": "_checkpoint(\"pending_verified\")",
+        "source_sha256": "f222e8b3798355164ab29da4d0dc534362e2bea680ec7f7dbe7462b86df8959f"
+      },
+      "frames": [
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 323,
+          "function": "commit_locked"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_042044_b52e6b2c/workers/driver.gd",
+          "line": 216,
+          "function": "prepare_fixture"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_042044_b52e6b2c/workers/driver.gd",
+          "line": 93,
+          "function": "gate"
+        }
+      ],
+      "stack_packet_sha256": "50f4269e50a21342655459a27ac37338d984b2a294562a56a92f2f39de918ed5"
+    }
+  ],
+  "faults": [],
+  "production_method_overrides": 0,
+  "helpers_terminal_confirmed": true,
+  "command": [
+    "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+    "--path",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_034810_ed1bdef8\\project",
+    "--headless",
+    "--remote-debug",
+    "tcp://127.0.0.1:53390",
+    "--script",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\recovery_readset_20261027\\20261027_042044_b52e6b2c\\workers\\bootstrap.gd"
+  ],
+  "pid": 16900,
+  "producer_ipc_inventory": {
+    "exists": false,
+    "files": {},
+    "directories": []
+  },
+  "before_termination": {
+    "aba": {
+      "exists": true,
+      "files": {
+        "record_0000000001.json": {
+          "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+          "bytes": 4239
+        },
+        "record_0000000002.json": {
+          "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+          "bytes": 4238
+        },
+        "writing/owner.json": {
+          "sha256": "c4373fff003d4d179ac8f4abefb1a4afef8961c6f271598f4bdeb1c5e9471254",
+          "bytes": 84
+        }
+      },
+      "directories": [
+        ".",
+        "writing"
+      ]
+    },
+    "cfg_fallback": {
+      "exists": false,
+      "files": {},
+      "directories": []
+    },
+    "derived_fallback": {
+      "exists": true,
+      "files": {
+        "record_0000000001.json": {
+          "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+          "bytes": 4239
+        },
+        "record_0000000002.json": {
+          "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+          "bytes": 4238
+        },
+        "writing/owner.json": {
+          "sha256": "cc7c4d16b7d5e1580ef0332a8a594af0150a5c2f945ffe0df284942c3e2cf2ec",
+          "bytes": 84
+        }
+      },
+      "directories": [
+        ".",
+        "writing"
+      ]
+    },
+    "directory_set": {
+      "exists": true,
+      "files": {
+        "record_0000000001.json": {
+          "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+          "bytes": 4239
+        },
+        "record_0000000002.json": {
+          "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+          "bytes": 4238
+        },
+        "writing/owner.json": {
+          "sha256": "12ff20e626dee7e194605d3856c42c0d7f0b1b92f36e275d49bada0bb5226d5e",
+          "bytes": 84
+        }
+      },
+      "directories": [
+        ".",
+        "writing"
+      ]
+    },
+    "file_content": {
+      "exists": true,
+      "files": {
+        "record_0000000001.json": {
+          "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+          "bytes": 4239
+        },
+        "record_0000000002.json": {
+          "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+          "bytes": 4238
+        },
+        "writing/owner.json": {
+          "sha256": "ec1585781a8ae09d4736317711da50fae0d2fc069ea57a891d9f01f7ce206c4e",
+          "bytes": 84
+        }
+      },
+      "directories": [
+        ".",
+        "writing"
+      ]
+    },
+    "file_rename": {
+      "exists": true,
+      "files": {
+        "record_0000000001.json": {
+          "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+          "bytes": 4239
+        },
+        "record_0000000002.json": {
+          "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+          "bytes": 4238
+        },
+        "writing/owner.json": {
+          "sha256": "cfaa31639760cdefada200be86fff83c1e322cc77c1789a0befcdd5c6487d2ed",
+          "bytes": 84
+        }
+      },
+      "directories": [
+        ".",
+        "writing"
+      ]
+    },
+    "forged_plan": {
+      "exists": true,
+      "files": {
+        "record_0000000001.json": {
+          "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+          "bytes": 4239
+        },
+        "record_0000000002.json": {
+          "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+          "bytes": 4238
+        },
+        "writing/owner.json": {
+          "sha256": "58fb5d8f0ae20cb78ee649897ec1fe2bfc8c069d9994470f5f728f5ce58a7d75",
+          "bytes": 84
+        }
+      },
+      "directories": [
+        ".",
+        "writing"
+      ]
+    },
+    "owner_replace": {
+      "exists": true,
+      "files": {
+        "record_0000000001.json": {
+          "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+          "bytes": 4239
+        },
+        "record_0000000002.json": {
+          "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+          "bytes": 4238
+        },
+        "writing/owner.json": {
+          "sha256": "411d27bf70996636fdd361e70278c80ea7d3a88084d69407a26d2ac6f6c3403b",
+          "bytes": 84
+        }
+      },
+      "directories": [
+        ".",
+        "writing"
+      ]
+    },
+    "pending": {
+      "exists": true,
+      "files": {
+        "receipt.pending": {
+          "sha256": "7fea5480ce955b0406a3089c549b0a6d75bc573b8bb60b7d9f29fcf1e797fe98",
+          "bytes": 4238
+        },
+        "record_0000000001.json": {
+          "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+          "bytes": 4239
+        },
+        "record_0000000002.json": {
+          "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+          "bytes": 4238
+        },
+        "writing/owner.json": {
+          "sha256": "6df9eac041a3feedce0e723a85ddc3bb4bc480819dd1b3e258ddbaf0ab2d84fd",
+          "bytes": 84
+        }
+      },
+      "directories": [
+        ".",
+        "writing"
+      ]
+    },
+    "pending_changed": {
+      "exists": true,
+      "files": {
+        "record_0000000001.json": {
+          "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+          "bytes": 4239
+        },
+        "record_0000000002.json": {
+          "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+          "bytes": 4238
+        },
+        "writing/owner.json": {
+          "sha256": "1fc1d7180a21bf15da28914a7aaf52fd3b2df201568dd8f46e07247db8074fb9",
+          "bytes": 84
+        }
+      },
+      "directories": [
+        ".",
+        "writing"
+      ]
+    },
+    "record": {
+      "exists": true,
+      "files": {
+        "record_0000000001.json": {
+          "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+          "bytes": 4239
+        },
+        "record_0000000002.json": {
+          "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+          "bytes": 4238
+        },
+        "writing/owner.json": {
+          "sha256": "827bb9a85650d2f99681def193ce4bf64f7a42511a4d41031aace8cd4b2f2a96",
+          "bytes": 84
+        }
+      },
+      "directories": [
+        ".",
+        "writing"
+      ]
+    },
+    "scope_expiry": {
+      "exists": true,
+      "files": {
+        "record_0000000001.json": {
+          "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+          "bytes": 4239
+        },
+        "record_0000000002.json": {
+          "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+          "bytes": 4238
+        },
+        "writing/owner.json": {
+          "sha256": "3173cd10a27629551ea2968e30467af7fc32e182186da92106fc21e265c32e4c",
+          "bytes": 84
+        }
+      },
+      "directories": [
+        ".",
+        "writing"
+      ]
+    }
+  },
+  "original_owner": {
+    "owner": "1",
+    "pid": "16900",
+    "token": "f4a91aab4e80a55396cbbf93ccc1cccf",
+    "version": "1"
+  },
+  "prepared_sha256": "18e3c9ac92b40d14fa2921a3ffe80e816bb3f062e3b985c11ba7e5420ecf158d",
+  "after_termination": {
+    "aba": {
+      "exists": true,
+      "files": {
+        "record_0000000001.json": {
+          "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+          "bytes": 4239
+        },
+        "record_0000000002.json": {
+          "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+          "bytes": 4238
+        },
+        "writing/owner.json": {
+          "sha256": "c4373fff003d4d179ac8f4abefb1a4afef8961c6f271598f4bdeb1c5e9471254",
+          "bytes": 84
+        }
+      },
+      "directories": [
+        ".",
+        "writing"
+      ]
+    },
+    "cfg_fallback": {
+      "exists": false,
+      "files": {},
+      "directories": []
+    },
+    "derived_fallback": {
+      "exists": true,
+      "files": {
+        "record_0000000001.json": {
+          "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+          "bytes": 4239
+        },
+        "record_0000000002.json": {
+          "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+          "bytes": 4238
+        },
+        "writing/owner.json": {
+          "sha256": "cc7c4d16b7d5e1580ef0332a8a594af0150a5c2f945ffe0df284942c3e2cf2ec",
+          "bytes": 84
+        }
+      },
+      "directories": [
+        ".",
+        "writing"
+      ]
+    },
+    "directory_set": {
+      "exists": true,
+      "files": {
+        "record_0000000001.json": {
+          "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+          "bytes": 4239
+        },
+        "record_0000000002.json": {
+          "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+          "bytes": 4238
+        },
+        "writing/owner.json": {
+          "sha256": "12ff20e626dee7e194605d3856c42c0d7f0b1b92f36e275d49bada0bb5226d5e",
+          "bytes": 84
+        }
+      },
+      "directories": [
+        ".",
+        "writing"
+      ]
+    },
+    "file_content": {
+      "exists": true,
+      "files": {
+        "record_0000000001.json": {
+          "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+          "bytes": 4239
+        },
+        "record_0000000002.json": {
+          "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+          "bytes": 4238
+        },
+        "writing/owner.json": {
+          "sha256": "ec1585781a8ae09d4736317711da50fae0d2fc069ea57a891d9f01f7ce206c4e",
+          "bytes": 84
+        }
+      },
+      "directories": [
+        ".",
+        "writing"
+      ]
+    },
+    "file_rename": {
+      "exists": true,
+      "files": {
+        "record_0000000001.json": {
+          "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+          "bytes": 4239
+        },
+        "record_0000000002.json": {
+          "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+          "bytes": 4238
+        },
+        "writing/owner.json": {
+          "sha256": "cfaa31639760cdefada200be86fff83c1e322cc77c1789a0befcdd5c6487d2ed",
+          "bytes": 84
+        }
+      },
+      "directories": [
+        ".",
+        "writing"
+      ]
+    },
+    "forged_plan": {
+      "exists": true,
+      "files": {
+        "record_0000000001.json": {
+          "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+          "bytes": 4239
+        },
+        "record_0000000002.json": {
+          "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+          "bytes": 4238
+        },
+        "writing/owner.json": {
+          "sha256": "58fb5d8f0ae20cb78ee649897ec1fe2bfc8c069d9994470f5f728f5ce58a7d75",
+          "bytes": 84
+        }
+      },
+      "directories": [
+        ".",
+        "writing"
+      ]
+    },
+    "owner_replace": {
+      "exists": true,
+      "files": {
+        "record_0000000001.json": {
+          "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+          "bytes": 4239
+        },
+        "record_0000000002.json": {
+          "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+          "bytes": 4238
+        },
+        "writing/owner.json": {
+          "sha256": "411d27bf70996636fdd361e70278c80ea7d3a88084d69407a26d2ac6f6c3403b",
+          "bytes": 84
+        }
+      },
+      "directories": [
+        ".",
+        "writing"
+      ]
+    },
+    "pending": {
+      "exists": true,
+      "files": {
+        "receipt.pending": {
+          "sha256": "7fea5480ce955b0406a3089c549b0a6d75bc573b8bb60b7d9f29fcf1e797fe98",
+          "bytes": 4238
+        },
+        "record_0000000001.json": {
+          "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+          "bytes": 4239
+        },
+        "record_0000000002.json": {
+          "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+          "bytes": 4238
+        },
+        "writing/owner.json": {
+          "sha256": "6df9eac041a3feedce0e723a85ddc3bb4bc480819dd1b3e258ddbaf0ab2d84fd",
+          "bytes": 84
+        }
+      },
+      "directories": [
+        ".",
+        "writing"
+      ]
+    },
+    "pending_changed": {
+      "exists": true,
+      "files": {
+        "record_0000000001.json": {
+          "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+          "bytes": 4239
+        },
+        "record_0000000002.json": {
+          "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+          "bytes": 4238
+        },
+        "writing/owner.json": {
+          "sha256": "1fc1d7180a21bf15da28914a7aaf52fd3b2df201568dd8f46e07247db8074fb9",
+          "bytes": 84
+        }
+      },
+      "directories": [
+        ".",
+        "writing"
+      ]
+    },
+    "record": {
+      "exists": true,
+      "files": {
+        "record_0000000001.json": {
+          "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+          "bytes": 4239
+        },
+        "record_0000000002.json": {
+          "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+          "bytes": 4238
+        },
+        "writing/owner.json": {
+          "sha256": "827bb9a85650d2f99681def193ce4bf64f7a42511a4d41031aace8cd4b2f2a96",
+          "bytes": 84
+        }
+      },
+      "directories": [
+        ".",
+        "writing"
+      ]
+    },
+    "scope_expiry": {
+      "exists": true,
+      "files": {
+        "record_0000000001.json": {
+          "sha256": "d8e4a8b3145575ee348ba963afdaeb9a57f9f3d9647c2deed56e267ec08d5629",
+          "bytes": 4239
+        },
+        "record_0000000002.json": {
+          "sha256": "747504e73fc5c0ad7e71afc37ce7cb19675e9e0fe92bffb53d5b95a880d29139",
+          "bytes": 4238
+        },
+        "writing/owner.json": {
+          "sha256": "3173cd10a27629551ea2968e30467af7fc32e182186da92106fc21e265c32e4c",
+          "bytes": 84
+        }
+      },
+      "directories": [
+        ".",
+        "writing"
+      ]
+    }
+  },
+  "planned_termination": true,
+  "exit_code": 1,
+  "log_sha256": "b16651cbedbab0a7b519f9e5b498eea40cb33bfb72252e264a7f4c2412765d58"
+}

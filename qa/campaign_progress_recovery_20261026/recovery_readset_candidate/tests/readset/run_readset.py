@@ -487,8 +487,12 @@ def run_process(state, workers, profile, env, stage, timeout, steps, children, p
     return row, prepared
 
 
-def environment(state, workers, profile, nonce, mode):
-    env = h.common.private_environment(profile)
+def environment(state, workers, profile, nonce, mode, base_env):
+    env = dict(base_env)
+    for key in ("APPDATA", "LOCALAPPDATA", "TEMP", "TMP"):
+        target = io.owned(profile / key.lower(), profile)
+        require(env.get(key) == str(target) and io.fs_path(target).is_dir(),
+                "Private environment directory differs: " + key)
     for key in list(env):
         if key.startswith(("RS_", "CT_", "SC_", "CB_", "CC_", "SP_", "IO_", "DA_", "MR_", "HG_", "LR_", "LSH_CONTINUE_FLOW_")):
             env.pop(key)
@@ -542,6 +546,7 @@ def execute(args):
         nonce = uuid.uuid4().hex
         profile = Path(ROOT.anchor) / "CodexQA/readset" / nonce[:12]
         h.identity.no_links(profile); io.fs_path(profile).mkdir(parents=True, exist_ok=False)
+        base_env = h.common.private_environment(profile)
         private_seed = io.owned(profile / "inputs/seed.json", profile)
         seed_sha = state["original_inventory"]["files"]["5088120/1/record_0000000001.json"]["sha256"]
         p.copy(state["seed"], private_seed, seed_sha)
@@ -550,12 +555,12 @@ def execute(args):
         receipt.update(profile=str(profile), nonce=nonce)
         receipt["private_seed"] = {"path": str(private_seed), "sha256": seed_sha,
                                    "copied_from_original_by_host_only": True, "archive_payload_allowed": False}
-        env = environment(state, workers, profile, nonce, "producer")
+        env = environment(state, workers, profile, nonce, "producer", base_env)
         p.verify_pins(pins)
         producer, prepared = run_process(state, workers, profile, env, output / "producer", args.timeout, receipt["steps"], children)
         pin_tree(output / "producer", pins)
         prepared_path = output / "producer/prepared.json"
-        env = environment(state, workers, profile, nonce, "attack_reader")
+        env = environment(state, workers, profile, nonce, "attack_reader", base_env)
         env.update(RS_PREPARED_PATH=str(prepared_path), RS_PREPARED_SHA=pins[str(prepared_path)])
         p.verify_pins(pins)
         reader, _ = run_process(state, workers, profile, env, output / "attack_reader", args.timeout, receipt["steps"],
@@ -567,6 +572,7 @@ def execute(args):
         clone_nonce = uuid.uuid4().hex
         clone_profile = Path(ROOT.anchor) / "CodexQA/readset" / clone_nonce[:12]
         h.identity.no_links(clone_profile); io.fs_path(clone_profile).mkdir(parents=True, exist_ok=False)
+        clone_base_env = h.common.private_environment(clone_profile)
         clone = clone_profile / "appdata/Godot/app_userdata" / state["userdata_name"] / "continue/v1"
         io.fs_path(clone.parent).mkdir(parents=True, exist_ok=False)
         io.copy_account_tree(state["original"], clone)
@@ -574,7 +580,7 @@ def execute(args):
                 "Exact historical three-file/eight-directory clone required")
         inventory_path = output / "original_inventory.json"
         save(inventory_path, state["original_inventory"]); p.pin(inventory_path, pins)
-        env = environment(state, workers, clone_profile, clone_nonce, "clone_record")
+        env = environment(state, workers, clone_profile, clone_nonce, "clone_record", clone_base_env)
         env.update(RS_EXPECTED_INVENTORY=str(inventory_path), RS_EXPECTED_INVENTORY_SHA=pins[str(inventory_path)],
                    RS_CLONE_BUSINESS=str(clone))
         receipt.update(clone_profile=str(clone_profile), clone_business=str(clone), clone_nonce=clone_nonce)

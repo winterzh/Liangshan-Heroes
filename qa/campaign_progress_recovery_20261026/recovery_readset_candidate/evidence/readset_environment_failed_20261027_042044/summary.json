@@ -1,0 +1,89 @@
+{
+  "schema": "readset_environment_harness_failure_evidence_v1",
+  "archived_at_utc": "2026-10-26T20:35:01.845197+00:00",
+  "original_run": "D:\\AI项目\\水浒\\开发工程\\.godot\\recovery_readset_20261027\\20261027_042044_b52e6b2c",
+  "original_receipt_sha256": "e5499f2180704a43b17d9a0153767dca823db5ac894bf9175f869b51dbf23016",
+  "complete": false,
+  "classification": "Host private environment recreated for an existing same-profile reader; FileExistsError before reader process creation",
+  "producer_pid": 16900,
+  "producer_complete": true,
+  "producer_planned_termination": true,
+  "producer_exit_code": 1,
+  "prepared_checks": {
+    "recorded": 102,
+    "passed": 102,
+    "failed": 0,
+    "only_persisted_prepared_snapshot_counted": true
+  },
+  "final_producer_report_exists": false,
+  "gate_passage_proven_by_subsequent_original_breakpoint": true,
+  "request_ack_exact_values_match": true,
+  "actual_debug_stops": 1,
+  "actual_stop": {
+    "pid": 16900,
+    "nonce": "2ab7490e22a14b0188684417ae502c4a",
+    "process_nonce": "cace08a8a3284161a0fb2c4095e2dd79",
+    "case": "pending",
+    "index": 0,
+    "point": {
+      "source": "res://scripts/run_snapshot_store.gd",
+      "line": 323,
+      "function": "commit_locked",
+      "statement": "_checkpoint(\"pending_verified\")",
+      "source_sha256": "f222e8b3798355164ab29da4d0dc534362e2bea680ec7f7dbe7462b86df8959f"
+    },
+    "frames": [
+      {
+        "source": "res://scripts/run_snapshot_store.gd",
+        "line": 323,
+        "function": "commit_locked"
+      },
+      {
+        "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_042044_b52e6b2c/workers/driver.gd",
+        "line": 216,
+        "function": "prepare_fixture"
+      },
+      {
+        "source": "D:/AI项目/水浒/开发工程/.godot/recovery_readset_20261027/20261027_042044_b52e6b2c/workers/driver.gd",
+        "line": 93,
+        "function": "gate"
+      }
+    ],
+    "stack_packet_sha256": "50f4269e50a21342655459a27ac37338d984b2a294562a56a92f2f39de918ed5"
+  },
+  "reader_started": false,
+  "clone_started": false,
+  "closed_pending_sha256": "7fea5480ce955b0406a3089c549b0a6d75bc573b8bb60b7d9f29fcf1e797fe98",
+  "producer_ipc_directory_absent": true,
+  "original_host_sha256": "468b3f56806a49e920d5ccf7444b11a177e4a66f60e8b8c12dbdb703238cc2b2",
+  "original_driver_sha256": "3ce3ab64346277f8330cc9a3f04ae9472e1083ff75810588cef126445282dcf7",
+  "host_error": "FileExistsError(17, '当文件已存在时，无法创建该文件。')",
+  "host_traceback": "Traceback (most recent call last):\n  File \"D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\recovery_readset_candidate\\tests\\readset\\run_readset.py\", line 558, in execute\n    env = environment(state, workers, profile, nonce, \"attack_reader\")\n  File \"D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\recovery_readset_candidate\\tests\\readset\\run_readset.py\", line 491, in environment\n    env = h.common.private_environment(profile)\n  File \"D:\\AI项目\\水浒\\开发工程\\tools\\run_character_art_qa.py\", line 168, in private_environment\n    target.mkdir(exist_ok=False)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^\n  File \"C:\\Python314\\Lib\\pathlib\\__init__.py\", line 1011, in mkdir\n    os.mkdir(self, mode)\n    ~~~~~~~~^^^^^^^^^^^^\nFileExistsError: [WinError 183] 当文件已存在时，无法创建该文件。: 'D:\\\\CodexQA\\\\readset\\\\2ab7490e22a1\\\\appdata'\n",
+  "runtime_content_version": "source-v1:768b6e5937321126b4c927fce6b5565459610aa13ccb556f695837a814eb74c2",
+  "engine_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+  "original_flags": {
+    "initial_identity_passed": true,
+    "final_identity_passed": true,
+    "original_unchanged": true,
+    "children_terminal_confirmed": true,
+    "helpers_terminal_confirmed": true,
+    "lock_ownership_confirmed": true,
+    "lock_released": true
+  },
+  "runtime_pins_verified": 350,
+  "qualification": {
+    "readset_suite_passed": false,
+    "Store_recovery_failure_proven": false,
+    "Flow_recovery_failure_proven": false,
+    "reader_or_clone_exercised": false,
+    "ABA_matrix_exercised": false,
+    "public_entry": false,
+    "SDK": false,
+    "OS_input": false,
+    "original_release": false,
+    "human_acceptance": false,
+    "production_adoption": false,
+    "general_performance": false,
+    "publication": false
+  }
+}

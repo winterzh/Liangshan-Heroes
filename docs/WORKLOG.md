@@ -6,6 +6,8 @@
 
 专项首轮在测试ACK的JSON数字/原生整数字典比较处停止，105项中仅该工具检查失败，恢复攻击尚未执行。原件及后续自有锁清理审计保留；仅修测试字段类型核对后从新profile重跑，未改Store或降低恢复断言。
 
+第二轮已正确命中原保存断点，prepared102项全真；宿主随后重复创建同一profile环境而停止，reader/clone未启动，原件及来源后验、锁释放通过。环境准备现改为每profile一次、各阶段复制并用独立nonce，clone先建环境再复制；真实Python隔离检查30项通过，原生专项待从全新profile完整复跑。
+
 [实现、原件与剩余范围](../qa/campaign_progress_recovery_20261026/recovery_readset_candidate/VALIDATION.md)。私有源码分支结果与公开入口、发行程序、SDK和原版键鼠资格分开；旧d7失败现场保留。
 
 ## 2026-10-27 驻守战恢复超时只读计时
