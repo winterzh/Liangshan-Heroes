@@ -51,6 +51,11 @@ def preflight(base, manifest_path):
         project, generation, pins = bound["project"], bound["generation"], bound["pins"]
         binding_info = {key: bound[key] for key in
                         ("candidate_schema", "candidate_script_count", "native_asset_count", "import_receipts")}
+    elif schema == candidate_binding.CONTINUE_SCHEMA:
+        bound = candidate_binding.bind_continue(base, manifest_path, helper)
+        project, generation, pins = bound["project"], bound["generation"], bound["pins"]
+        binding_info = {key: bound[key] for key in
+                        ("candidate_schema", "candidate_script_count", "native_asset_count", "import_receipts")}
     elif schema in candidate_binding.LEGACY_SCHEMAS:
         # Keep the original 20-file adjacent-source contract; no source_path fallback.
         rows = manifest["files"]

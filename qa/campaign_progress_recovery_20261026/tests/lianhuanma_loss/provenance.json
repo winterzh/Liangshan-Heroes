@@ -5,18 +5,18 @@
   "files": [
     {
       "path": "qa/campaign_progress_recovery_20261026/run_lianhuanma_loss.py",
-      "sha256": "8747c98f320a0fc3e36faa445d03f8c6b7e9ffa09c4dd61cd6c60dcbacd6c175",
-      "bytes": 17915
+      "sha256": "afc80a5a3abfdf596436054233ebb508aa05ce13030124e11233da34d81f8daa",
+      "bytes": 18304
     },
     {
       "path": "qa/campaign_progress_recovery_20261026/lianhuanma_candidate_binding.py",
-      "sha256": "72a1cc7b681e7619f30eb072b1d4fd605e53c9bbd76ba47624c787d259739557",
-      "bytes": 6082
+      "sha256": "dfbeeda85b4a2a5c0cd9c53aa734a2e37a40185eb6454836220b7e7847c5aab2",
+      "bytes": 13485
     },
     {
       "path": "qa/campaign_progress_recovery_20261026/tests/lianhuanma_loss/README.md",
-      "sha256": "f7fccc472519cc211e482023c858cc526d52f11814e7f92bfc2d7adc38103754",
-      "bytes": 7698
+      "sha256": "b950f42b997dd2c15639383b69bb616a7c091689ca5a97377ffab8f7d3212a39",
+      "bytes": 10068
     },
     {
       "path": "qa/campaign_progress_recovery_20261026/tests/lianhuanma_loss/bootstrap.gd",
@@ -172,5 +172,80 @@
       "final_byte_readonly_preflight_result": "Reported separately by the task after this metadata is finalized; no native qualification."
     }
   },
-  "historical_sections_note": "Original validation, derived_from, production_api_read_sources and previous_files describe the initial source preparation; current host binding validation is in binding_update. Original source SHA values are preserved."
+  "historical_sections_note": "Existing original source/derived_from/static audit and prior binding validation describe their historical bytes. Current host branch validation is continue_binding_update; files binds current source bytes.",
+  "continue_binding_update": {
+    "created_utc": "2026-10-26T17:35:26.359142+00:00",
+    "scope": "Host-only explicit continue_binding_integrated_manifest_v1 branch; prior legacy-20 and e97a branches unchanged. All nine victory/loss GD files unchanged.",
+    "previous_files": [
+      {
+        "path": "qa/campaign_progress_recovery_20261026/run_lianhuanma_loss.py",
+        "sha256": "8747c98f320a0fc3e36faa445d03f8c6b7e9ffa09c4dd61cd6c60dcbacd6c175",
+        "bytes": 17915
+      },
+      {
+        "path": "qa/campaign_progress_recovery_20261026/lianhuanma_candidate_binding.py",
+        "sha256": "72a1cc7b681e7619f30eb072b1d4fd605e53c9bbd76ba47624c787d259739557",
+        "bytes": 6082
+      },
+      {
+        "path": "qa/campaign_progress_recovery_20261026/tests/lianhuanma_loss/README.md",
+        "sha256": "f7fccc472519cc211e482023c858cc526d52f11814e7f92bfc2d7adc38103754",
+        "bytes": 7698
+      },
+      {
+        "path": "qa/campaign_progress_recovery_20261026/tests/lianhuanma_loss/bootstrap.gd",
+        "sha256": "60cd4e421ed1c0796d4c0a944c9961c139f778bf243e4277d69dc4b27b554c12",
+        "bytes": 1124
+      },
+      {
+        "path": "qa/campaign_progress_recovery_20261026/tests/lianhuanma_loss/base.gd",
+        "sha256": "dd547afe35dce121de3c58d7144fc7021868cac5e5eba1c8e4b5f51aefe0c2ab",
+        "bytes": 24310
+      },
+      {
+        "path": "qa/campaign_progress_recovery_20261026/tests/lianhuanma_loss/terminal.gd",
+        "sha256": "cc7808dfd1285187951444593f3b7a6e3d675c889ffbc7109bac535b136d39fe",
+        "bytes": 18425
+      },
+      {
+        "path": "qa/campaign_progress_recovery_20261026/tests/lianhuanma_loss/driver.gd",
+        "sha256": "9d3f83a36e8ef9350e8e4f4212acafb8e07d2491f23291f7281def4c926c4875",
+        "bytes": 9421
+      }
+    ],
+    "manifest_schema": "continue_binding_integrated_manifest_v1",
+    "preparation_schema": "continue_binding_preparation_v1",
+    "preparer": "qa/campaign_progress_recovery_20261026/continue_binding_candidate/prepare_continue.py",
+    "preparer_inputs_policy": "Pin every preflight-returned source, baseline and source_manifest supporting file including run_disk; do not modify them.",
+    "old_state_is_baseline_only": true,
+    "new_freeze_full_tree_required": true,
+    "readonly_preflight_passed": false,
+    "python_ast_parsed": true,
+    "help_exit_code": 0,
+    "engine_started": false,
+    "engine_lane_acquired": false,
+    "native_route_tested": false,
+    "qualification_inherited": false,
+    "production_modified": false,
+    "preserved_failure_evidence": "qa/campaign_progress_recovery_20261026/evidence/lianhuanma_victory_failed_20261027_011539",
+    "failure_checks": {
+      "save_training": {
+        "passed": 53,
+        "failed": 0
+      },
+      "resume_training": {
+        "passed": 38,
+        "failed": 2
+      },
+      "unrun": [
+        "resume_victory",
+        "reject_terminal"
+      ]
+    },
+    "legacy_branch_text_preserved": true,
+    "nine_gd_sha_unchanged": true,
+    "independent_static_review": "No definite API or scope blocker; actual new frozen import/preflight is still required.",
+    "tested_runner_sha256": "afc80a5a3abfdf596436054233ebb508aa05ce13030124e11233da34d81f8daa",
+    "tested_binding_sha256": "dfbeeda85b4a2a5c0cd9c53aa734a2e37a40185eb6454836220b7e7847c5aab2"
+  }
 }

@@ -31,7 +31,7 @@ python -B qa/campaign_progress_recovery_20261026/run_lianhuanma_loss.py --base-r
 当前已做 Python AST/`--help` 和独立只读接口审查；不是引擎编译、自然败局、公开战役继续、真实 Steam SDK/账号账本、导出 EXE 或人工鼠标键盘验收。此处按钮使用可见启用校验后的真实回调，Viewport Esc 走游戏输入分发；不声称 OS 鼠标命中测试。首次保存的训练只证明非空真实进行中状态，完整 20 秒成军防重复仍由独立胜利/训练专项承担。
 
 
-## 2026-10-27 候选绑定适配（未原生运行新绑定）
+## 2026-10-27 e97a 绑定准备历史（未运行败局链）
 
 宿主新增明确 schema 分支：原 `campaign_steam_handoff_candidate_manifest_v1` 与 `campaign_steam_store_protocol_integrated_manifest_v1` 仍要求精确 20 脚本集合、manifest 邻接源码和冻结副本的逐项 SHA；不把缺失邻接源码降级为其它路径。新 `campaign_liveness_integrated_manifest_v1` 经公共 `../../lianhuanma_candidate_binding.py` 调用只读 `prepare_liveness.preflight()` 重建精确 23 脚本＋1 helper 清单，要求与传入清单及冻结清单字节 SHA 一致。所有 source_path 必须是仓库内无链接的严格相对路径；helper 源码、构建收据、实际 EXE、完整 generation/expected_identity、成功 import 收据／日志与实际引擎均被绑定。
 
@@ -44,3 +44,21 @@ python -B qa/campaign_progress_recovery_20261026/run_lianhuanma_loss.py --base-r
 本次仅调整宿主绑定、README 和 provenance；全部胜败 GDScript、自然命令策略、终局断言、保存退出链保持原字节。历史 static_audit / derived_from 原 SHA 保留，不改写成新宿主 SHA。新绑定尚未进行 Godot 编译或原生路线运行；e97a 的冻结导入、组件及活写者测试不转授连环马胜败链资格。首次引擎执行仍由根任务串行安排。
 
 首次 LF 宿主准备已完成 Python AST、`--help` 和 e97a 只读预检（exit 0）；该结果保留为历史准备记录。随后按 Git HEAD 恢复原有字节风格：失败宿主 CRLF、本 README LF、provenance CRLF；逻辑不变，当前源 SHA 以 provenance.files 为准。最终字节的 AST、帮助入口与同一 23 脚本预检由任务另行复查，不把首次 LF 预检转授为新字节的原生资格。全部 GDScript、自然路线及生产源码未变，仍未进行本胜败链的引擎编译或原生运行。
+
+## 2026-10-27 后继 Continue 绑定（本分支未执行）
+
+新增 `continue_binding_integrated_manifest_v1` 独立分支，调用 `continue_binding_candidate/prepare_continue.py` 的只读 `preflight()` 重建完整清单。该返回值中的 base/project/generation 属于旧 e97a；宿主从命令行选择的新冻结另读 preparation/generation/expected_identity 和本批成功 import，绝不把旧工程当新候选运行。
+
+新 preparation 必须为 `continue_binding_preparation_v1` 并绑定旧 base/身份、完整 23 脚本、未改变的 1 个原生 helper、三份明确覆盖及全部 pinned_candidates（包括 run_disk 和 source_manifest 声明的支持文件）。新 preimport 全树必须等于旧已导入 7062 输入，仅替换 Flow/Session/lifecycle 三脚本；本次新导入不得再改变已有全树输入。全部源码、helper、原生构建来源、引擎和导入日志继续精确 SHA 绑定。旧 20 邻接源码与旧 e97a 分支均保留。
+
+首次 e97a 胜利路线已实际失败：[原始失败证据](../../evidence/lianhuanma_victory_failed_20261027_011539/README.md)。save_training 53/53 通过；resume_training 40 条中 38 通过、2 失败，后两阶段未运行。源码诊断定位恢复 runtime 漏 Level4 覆盖导致排队人口 2→1；LC 标签因前一失败触发空返回而连带失败，不能据此声称 LC 坏档。原检查不放宽，原失败及宿主字节完整保留。
+
+本轮仅改两个宿主、共享 binding、两 README/provenance；九份胜败 GDScript 与正常路线/严格断言均未改。下面仍是只读预检，不创建 profile、不占 lane、不启动引擎：
+
+```powershell
+python -B qa/campaign_progress_recovery_20261026/run_lianhuanma_loss.py --base-run <新候选已导入冻结目录> --candidate-manifest <QA归档的新完整candidate_manifest.json>
+```
+
+当前分支等待新冻结后的只读预检和另行调度的原生胜败链。旧 e97a 的存储切片、冻结导入与失败前已过阶段不转授该后继资格，不能据源码绑定宣称恢复问题已修复通过。
+
+本分支已完成三个 Python 文件 AST、两个宿主 `--help`（exit 0）、旧分支精确保留及九份 GD 原 SHA 核对；独立静态复核未发现确定 API 阻断。尚未读取新冻结完成态或启动引擎，后续只读预检与实际运行须分别记录。

@@ -83,3 +83,7 @@
 ## 2026-10-27 存档恢复与交错专项
 
 `qa/campaign_progress_recovery_20261026/process_liveness_integration_candidate/tests/io_v2/`：严格23脚本＋helper的独立执行适配；23进程370项文件故障、4进程129项延迟写入已通过。原始输入、宿主、断点、helper JSON与逐文件SHA分别保存在 [文件专项](../qa/campaign_progress_recovery_20261026/evidence/liveness_io_v2_20261027_003556/README.md)、[交错专项](../qa/campaign_progress_recovery_20261026/evidence/liveness_delayed_v2_20261027_010849/README.md)，合成账号目录、exe与缓存留本机。半pending拒绝与成功恢复分别记录，不授全战役或SDK资格。
+
+## 2026-10-27 继续入口三脚本候选
+
+qa/campaign_progress_recovery_20261026/continue_binding_candidate/：Flow/Session/本地生命周期修复、新独立冻结准备器、baseline/fixed真实磁盘模型及来源。当前资格集中于 [VALIDATION](../qa/campaign_progress_recovery_20261026/continue_binding_candidate/VALIDATION.md)，原README与source_manifest保持准备时字节；新增分支诊断工具未运行时仍不得当公开入口验收。

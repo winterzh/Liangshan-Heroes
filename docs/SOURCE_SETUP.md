@@ -26,6 +26,8 @@ git fetch origin
 
 ## 验证与共享引擎
 
+新增[继续入口三脚本候选](../qa/campaign_progress_recovery_20261026/continue_binding_candidate/VALIDATION.md)必须用自己的d7f2258b完整冻结与新manifest，不能套用e97a的恢复专项资格。已导入并通过独立本地绑定模型，连环马实际Flow重跑中。prepare_continue默认只读，--prepare只建新目录；磁盘模型的baseline/fixed模式和真实胜败执行器分别记资格，禁止复用同一结果混算。
+
 当前新增[进程存活三态组件](../qa/campaign_progress_recovery_20261026/process_liveness_candidate/README.md)，已有13例原生helper、22项报告模型、49项Godot组件及独立19项超时证据；未集成生产。构建exe只留忽略产物，换机必须按源码构建并核对本次SHA；Godot组件执行器默认只读预检，显式`--execute`才持共享锁运行。[同步恢复桥接](../qa/campaign_progress_recovery_20261026/process_liveness_integration_candidate/README.md)另行验证，不能把独立组件通过当成存档修复完成。
 
 后继23脚本候选已独立冻结/导入，活写者保护双进程45项、同源23进程文件故障370项及两种延迟写入交错4进程129项通过；半 pending 明确安全拒绝，未授完整恢复或双 Ledger 全并发资格。`prepare_liveness.py`默认只读，`--prepare`只准备新私有工程，实际导入及原生运行分别占共享引擎；当前运行命令和精确身份集中在[桥接入口](../qa/campaign_progress_recovery_20261026/process_liveness_integration_candidate/README.md)，不采用到生产或沿用旧冻结资格。

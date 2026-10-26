@@ -1,5 +1,11 @@
 # 开发日志
 
+## 2026-10-27 继续入口三脚本修复另冻与磁盘模型通过
+
+公开 classic 的提前读槽、credited 本地 gen1 绑定及连环马章节 runtime 三处接线已在独立候选修正。新 d7f2258b 冻结完整 7,062 文件仅三 GD 变化，导入进程46284退出0/错误0。旧 e97a 的独立磁盘模型复现 cold binding 拒绝；新源进程68316的30项修复回归通过，另外3项夹具与3项旧路径对照分别计数。此项是实际文件＋合成 credit/terminal 模型，不授 SDK 或自然结算资格。
+
+原连环马人口2→1失败及旧源码保持。胜败宿主严格绑定新23脚本＋helper，两次默认只读预检通过；新的胜利四流程已开始，完整自然胜败与公开 classic 分支仍待独立结果。未接入生产，原版键鼠仍暂停。[当前实现、原始证据与剩余边界](../qa/campaign_progress_recovery_20261026/continue_binding_candidate/VALIDATION.md)。
+
 ## 2026-10-27 连环马实际继续入口发现章节参数遗漏
 
 连环马真实菜单继续首批 20261027_011539_12cfec3e 已退出 1并释放共享锁：首次保存退出53项通过，恢复阶段40项中2项失败，胜利与终局拒槽尚未执行。实际训练队列预留人口从2变1；来源确认 Flow 通用 runtime 缺少 Level4.apply_overrides，而旧直接 Session 测试传入了专用 Factory runtime。本地记录比较的第二个失败由已有失败使 lifecycle_row 返回空字典连带产生，不能另判生命周期损坏。后继 Session 候选将按已验证的 Level4 context 装配固定 Factory runtime，再另冻验证，不放宽人口或保存断言。

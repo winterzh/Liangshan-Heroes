@@ -1,0 +1,186 @@
+--- e97a/scripts/continue_flow.gd
++++ candidate/scripts/continue_flow.gd
+@@ -299,14 +299,12 @@
+ 
+ func _restore() -> void:
+ 	if phase != Phase.RESTORING: return
+-	if not _private_qa_enabled():
+-		var slot: Dictionary = Slot.new().read_slot()
+-		if not slot.ok: _fail(slot, true); return
+-		if slot.document.context != Slot.CONTEXT: _fail(_bad("CLASSIC_30_REQUIRED"), true); return
+ 	var trusted := ContentIdentity.new().resolve_runtime_identity()
+ 	if not trusted.ok: _fail(trusted, true); return
+ 	_session = Session.new(trusted, _runtime())
+-	var prepared: Dictionary = _session.prepare_restore(_source)
++	# Enforce public scope on the Session's actual recovered packet, before Core
++	# allocation. A separate read_slot(false) would block dead-writer recovery.
++	var prepared: Dictionary = _session.prepare_restore(_source, not _private_qa_enabled())
+ 	if not prepared.ok: _fail(prepared, true); return
+ 	var installed: Dictionary
+ 	if Session.Profiles.is_official_campaign_context(_session._packet.context):
+--- e97a/scripts/run_world_session.gd
++++ candidate/scripts/run_world_session.gd
+@@ -12,6 +12,7 @@
+ const LocalLifecycle = preload("res://scripts/run_local_lifecycle.gd")
+ const CampaignLifecycle = preload("res://scripts/run_campaign_local_lifecycle.gd")
+ const Profiles = preload("res://scripts/run_official_restore_profile.gd")
++const Level4Factory = preload("res://scripts/run_level4_world_factory.gd")
+ const FLAGS := {"skirmish": true, "skirmish_ai": false, "arena": false, "custom_defense": false, "scenario": false, "defense_waves": 30, "defense_random": false}
+ const ALL_CAMPAIGN_FLAGS := ["current", "skirmish", "skirmish_ai", "arena", "custom_defense", "scenario", "defense_waves", "defense_random"]
+ var _core: RefCounted
+@@ -170,7 +171,58 @@
+ 	_save_source = null; _save_lease.clear(); _save_clock.clear()
+ 	return {"ok": true, "generation": written.generation, "file_sha256": written.file_sha256, "source_retained": true, "source_held": true, "owned_retry": true}
+ 
+-func prepare_restore(menu: Node) -> Dictionary:
++func _restore_packet_scope(packet: Dictionary, require_classic: bool, lease: Dictionary) -> Dictionary:
++	if require_classic and packet.context != Store.CONTEXT: return _bad("CLASSIC_30_REQUIRED")
++	if not Profiles.trusted_identity(_trusted) or packet.world.content_version != _trusted.content_version \
++		or packet.world.engine_sha256 != _trusted.engine_binary_sha256: return _bad("WORLD_CORE_IDENTITY")
++	if packet.binding.kind == "steam":
++		if not lease.available or packet.binding.owner != lease.account or not _steam().ensure_account(): return _bad("ACCOUNT_MISMATCH")
++		if Profiles.is_official_campaign_context(packet.context) and packet.binding.owner != _campaign().cloud_owner:
++			return _bad("CAMPAIGN_STEAM_PROFILE_OWNER_REQUIRED")
++	return {"ok":true}
++
++func _read_restore_slot(require_classic: bool, lease: Dictionary) -> Dictionary:
++	if not Profiles.trusted_identity(_trusted): return _bad("WORLD_CORE_IDENTITY")
++	var read: Dictionary = _store.read_slot()
++	if not read.ok and read.code == "RECOVERY_REQUIRED":
++		# Inspect only, then authorize the exact verified head/pending document.
++		# Neither the public scope gate nor account/install rejection may claim a
++		# foreign slot. recover(plan) still performs its own fresh owner/CAS checks.
++		var plan: Dictionary = _store.inspect_recovery()
++		if not plan.ok: return plan
++		var candidate: Dictionary = _store._verified("receipt.pending") if plan.action == "forward_pending" else _store._chain()
++		if not candidate.ok: return candidate
++		if candidate.revision == 0:
++			# A first-save owner can die before any packet exists. Preserve the
++			# original read_slot(true) cleanup contract without inventing a scope:
++			# only this exact empty head + owner-only inventory may be reclaimed.
++			if plan.action != "release_committed_lock" or plan.head_revision != 0 \
++				or plan.head_sha256 != Store.ZERO or candidate.file_sha256 != Store.ZERO \
++				or not candidate.document.is_empty() or plan.inventory.size() != 2 \
++				or not plan.inventory.has_all(["writing/", "writing/owner.json"]): return _bad("SLOT_CHANGED")
++			var empty_recovered: Dictionary = _store.recover(plan)
++			if not empty_recovered.ok: return empty_recovered
++			if empty_recovered.revision != 0 or empty_recovered.file_sha256 != Store.ZERO \
++				or not empty_recovered.document.is_empty(): return _bad("SLOT_CHANGED")
++			return _bad("NO_SLOT")
++		if plan.action == "forward_pending":
++			if candidate.revision != plan.head_revision + 1 or candidate.previous != plan.head_sha256 \
++				or candidate.file_sha256 != plan.inventory.get("receipt.pending", ""): return _bad("SLOT_CHANGED")
++		elif plan.action == "release_committed_lock":
++			if candidate.revision != plan.head_revision or candidate.file_sha256 != plan.head_sha256 \
++				or candidate.file_sha256 != plan.inventory.get("record_%010d.json" % candidate.revision, ""): return _bad("SLOT_CHANGED")
++		else: return _bad("SLOT_RECOVERY_ACTION")
++		var admitted: Dictionary = _restore_packet_scope(candidate.document,require_classic,lease)
++		if not admitted.ok: return admitted
++		read = _store.recover(plan)
++		if not read.ok: return read
++		if read.revision != candidate.revision or read.file_sha256 != candidate.file_sha256 \
++			or read.document != candidate.document: return _bad("SLOT_CHANGED")
++	if not read.ok: return read
++	var final_scope: Dictionary = _restore_packet_scope(read.document,require_classic,lease)
++	return read if final_scope.ok else final_scope
++
++func prepare_restore(menu: Node, require_classic := false) -> Dictionary:
+ 	if _phase != "new": return _bad("SESSION_ALREADY_USED")
+ 	if not is_instance_valid(menu) or menu.get_script() != MenuScript or not menu.is_inside_tree() or menu != _tree().current_scene or menu.get_parent() != _tree().root or menu.is_queued_for_deletion(): return _bad("CURRENT_MENU_REQUIRED")
+ 	if not _tree().paused or Engine.is_in_physics_frame(): return _bad("PAUSED_RESTORE_REQUIRED")
+@@ -179,13 +231,15 @@
+ 	if lease.active != 0: return _bad("ACTIVE_STEAM_RUN")
+ 	if _campaign().get_script() != CampaignScript: return _bad("CAMPAIGN_REQUIRED")
+ 	if _settings().get_script() != SettingsScript: return _bad("SETTINGS_REQUIRED")
+-	var read: Dictionary = _store.read_slot(true)
++	var read: Dictionary = _read_restore_slot(require_classic,lease)
+ 	if not read.ok: return read
+ 	_packet = read.document; _slot_sha = read.file_sha256
++	# Public scope and account/install identity were checked before any recovery
++	# mutation. Mount still rechecks this complete packet and its original SHA.
+ 	if _packet.binding.kind == "steam" and Profiles.is_official_campaign_context(_packet.context):
+ 		if _packet.binding.owner != _campaign().cloud_owner: return _bad("CAMPAIGN_STEAM_PROFILE_OWNER_REQUIRED")
+ 		_local_receipt = _new_local_receipt(_packet.binding.token, _packet.context)
+-		var marker: Dictionary = _local_receipt.inspect_campaign_marker()
++		var marker: Dictionary = _local_receipt.prepare_credited_resume(_packet.binding.token, _packet.binding.owner)
+ 		if not marker.ok: return marker
+ 	if _packet.binding.kind == "uncredited":
+ 		_local_receipt = _new_local_receipt(_packet.binding.token, _packet.context)
+@@ -193,6 +247,13 @@
+ 		if not receipt_check.ok: return receipt_check
+ 		var local_plan: Dictionary = _local_receipt.prepare_resume(_packet.binding)
+ 		if not local_plan.ok: return local_plan
++	if _packet.context == Profiles.LIAN_CONTEXT:
++		# Use the installed chapter's normal definition order, including its
++		# recruitment population/cost overrides. Never derive runtime from a slot.
++		var chapter_runtime: Dictionary = Level4Factory.prepare_runtime(_trusted)
++		if not chapter_runtime.ok: return chapter_runtime
++		_core.dispose()
++		_core = Core.new(_trusted, chapter_runtime.runtime)
+ 	var prepared: Dictionary = _core.prepare(_packet.world)
+ 	if not prepared.ok: return prepared
+ 	if _packet.binding.kind == "steam":
+@@ -229,7 +290,7 @@
+ 	if _local_receipt != null and _packet.binding.kind == "steam":
+ 		var receipt_check: Dictionary = _local_scope(_local_receipt, _packet.context)
+ 		if not receipt_check.ok: return _rollback(receipt_check)
+-		var marker: Dictionary = _local_receipt.inspect_campaign_marker()
++		var marker: Dictionary = _local_receipt.prepare_credited_resume(_packet.binding.token, _packet.binding.owner)
+ 		if not marker.ok: return _rollback(marker)
+ 	if _local_receipt != null and _packet.binding.kind == "uncredited":
+ 		var receipt_check: Dictionary = _local_scope(_local_receipt, _packet.context)
+--- e97a/scripts/run_campaign_local_lifecycle.gd
++++ candidate/scripts/run_campaign_local_lifecycle.gd
+@@ -12,6 +12,7 @@
+ var _progress_recovery: Dictionary = {}
+ var _progress_acknowledged := false
+ var _owns_terminal_intent := false
++var _credited_resume_marker: Dictionary = {}
+ 
+ func _init(run_token: Variant, slot_root: String, expected_context: Variant,
+ 		installed_identity: Variant, profile_owner: Variant) -> void:
+@@ -232,6 +233,29 @@
+ 	return {"ok":true, "already_applied":false, "local_terminal_committed":true,
+ 		"campaign_progress_committed":true, "settlement_authorized":_owns_terminal_intent}
+ 
++func prepare_credited_resume(credited_token: String, credited_owner: String) -> Dictionary:
++	# This adopts only the local sidejournal's own active digest. The six-field
++	# Steam slot binding and its independently verified ledger digest stay intact.
++	if not _init_issue.is_empty(): return bad(_init_issue)
++	if Engine.is_in_physics_frame(): return bad("LOCAL_LIFECYCLE_PHYSICS_WRITE")
++	if credited_token != token or not _valid_owner(credited_owner) or credited_owner != _expected.scope.owner:
++		return bad("LOCAL_CAMPAIGN_CREDITED_SCOPE_CHANGED")
++	var marker: Dictionary = inspect_campaign_marker()
++	if not marker.ok: return marker
++	var observed := {"absent":marker.absent, "file_sha256":marker.get("file_sha256", "")}
++	if not _credited_resume_marker.is_empty() and _credited_resume_marker != observed:
++		return bad("LOCAL_CAMPAIGN_MARKER_CHANGED")
++	if marker.absent:
++		# Legacy credited saves may lack this journal. Restore remains read-only;
++		# the original normal save/terminal path may create genesis later.
++		if not _binding.is_empty(): return bad("LOCAL_CAMPAIGN_MARKER_CHANGED")
++	else:
++		var local_binding := {"kind":"uncredited", "token":token, "receipt_sha256":marker.file_sha256}
++		if not _binding.is_empty() and _binding != local_binding: return bad("LOCAL_CAMPAIGN_MARKER_CHANGED")
++		_binding = local_binding
++	_credited_resume_marker = observed
++	return marker
++
+ func inspect_campaign_marker() -> Dictionary:
+ 	# A credited slot must be refused before Core allocation after local terminal,
+ 	# including a crash after campaign ACK but before the independent Steam ledger.
+@@ -256,9 +280,13 @@
+ 		if pending.revision >= 2: return bad("LOCAL_RUN_TERMINAL")
+ 	if before.items.has("writing/") or before.items.has("recovering/") or before.items.has("receipt.pending"):
+ 		return bad("RECOVERY_REQUIRED")
++	# An existing empty directory is not proof of an active sidejournal. Only
++	# actual absence takes the legacy path; a present journal needs strict gen1.
++	if head.revision != 1 or head.document.state != "active": return bad("LOCAL_LIFECYCLE_MISSING")
++	if before.items.get("record_0000000001.json", "") != head.file_sha256: return bad("LOCAL_CAMPAIGN_MARKER_CHANGED")
+ 	var after: Dictionary = inventory()
+ 	if not after.ok or before.items != after.items: return bad("LOCAL_CAMPAIGN_MARKER_CHANGED")
+-	return {"ok":true, "absent":false, "read_only":true}
++	return {"ok":true, "absent":false, "read_only":true, "file_sha256":head.file_sha256}
+ 
+ func release() -> Dictionary:
+ 	return _owned_release.release_store(self)

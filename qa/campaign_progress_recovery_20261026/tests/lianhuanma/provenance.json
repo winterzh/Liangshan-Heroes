@@ -4,18 +4,18 @@
   "files": [
     {
       "path": "qa/campaign_progress_recovery_20261026/run_lianhuanma_terminal.py",
-      "sha256": "97fbb984604e2017441ab93bea73b6257be387d807ba40727f61a1d33d35f94a",
-      "bytes": 17410
+      "sha256": "7c0433b7f27e3a4c0117010d76cf945d170dd0e7b20e2062dd2a57ad15f26693",
+      "bytes": 17794
     },
     {
       "path": "qa/campaign_progress_recovery_20261026/lianhuanma_candidate_binding.py",
-      "sha256": "72a1cc7b681e7619f30eb072b1d4fd605e53c9bbd76ba47624c787d259739557",
-      "bytes": 6082
+      "sha256": "dfbeeda85b4a2a5c0cd9c53aa734a2e37a40185eb6454836220b7e7847c5aab2",
+      "bytes": 13485
     },
     {
       "path": "qa/campaign_progress_recovery_20261026/tests/lianhuanma/README.md",
-      "sha256": "4b2483cfdebbb1612244647fca3c0551e2491ac7722bbeda56ecde5c0f17bff2",
-      "bytes": 8721
+      "sha256": "a2e9b1d19518732dce1cea210456d198739a2437a7fe535d969f6735e4ca2c18",
+      "bytes": 11214
     },
     {
       "path": "qa/campaign_progress_recovery_20261026/tests/lianhuanma/bootstrap.gd",
@@ -54,8 +54,88 @@
     "bytes": 14397,
     "runtime_dependency": false
   },
-  "scope": "Host-only explicit legacy 20 / liveness 23 plus helper binding. Five victory GDScript files, route and assertions unchanged. No qualification inherited.",
-  "validation": {
+  "scope": "Explicit legacy-20 / e97a / continue-overlay host bindings. Five victory GDScripts unchanged; no inherited runtime qualification.",
+  "continue_binding_update": {
+    "created_utc": "2026-10-26T17:35:26.342249+00:00",
+    "scope": "Host-only explicit continue_binding_integrated_manifest_v1 branch; prior legacy-20 and e97a branches unchanged. All nine victory/loss GD files unchanged.",
+    "previous_files": [
+      {
+        "path": "qa/campaign_progress_recovery_20261026/run_lianhuanma_terminal.py",
+        "sha256": "97fbb984604e2017441ab93bea73b6257be387d807ba40727f61a1d33d35f94a",
+        "bytes": 17410
+      },
+      {
+        "path": "qa/campaign_progress_recovery_20261026/lianhuanma_candidate_binding.py",
+        "sha256": "72a1cc7b681e7619f30eb072b1d4fd605e53c9bbd76ba47624c787d259739557",
+        "bytes": 6082
+      },
+      {
+        "path": "qa/campaign_progress_recovery_20261026/tests/lianhuanma/README.md",
+        "sha256": "4b2483cfdebbb1612244647fca3c0551e2491ac7722bbeda56ecde5c0f17bff2",
+        "bytes": 8721
+      },
+      {
+        "path": "qa/campaign_progress_recovery_20261026/tests/lianhuanma/bootstrap.gd",
+        "sha256": "0cd8829fd57ea8ea40c69c9a64644ca34d3e6b1f6ce3e7ea2bd84c2c970c5484",
+        "bytes": 1112
+      },
+      {
+        "path": "qa/campaign_progress_recovery_20261026/tests/lianhuanma/base.gd",
+        "sha256": "f55c3854d90701672f64e2e6fe8530a20982c8dbbf91dd9e89a600d41a9c165f",
+        "bytes": 28446
+      },
+      {
+        "path": "qa/campaign_progress_recovery_20261026/tests/lianhuanma/terminal.gd",
+        "sha256": "be5aab40bc3f2fff28af6e54e5aa5df17b83cd663a131725b6aa6ecf3d849709",
+        "bytes": 17083
+      },
+      {
+        "path": "qa/campaign_progress_recovery_20261026/tests/lianhuanma/policy.gd",
+        "sha256": "116bbb1257700c4ae591e79f4130c396137d200817ae711675ec91055bd51191",
+        "bytes": 6593
+      },
+      {
+        "path": "qa/campaign_progress_recovery_20261026/tests/lianhuanma/driver.gd",
+        "sha256": "1c758b85424fa6c98e17a6b418698aa0ec2ca61b90ce5c245195f6218730c423",
+        "bytes": 14030
+      }
+    ],
+    "manifest_schema": "continue_binding_integrated_manifest_v1",
+    "preparation_schema": "continue_binding_preparation_v1",
+    "preparer": "qa/campaign_progress_recovery_20261026/continue_binding_candidate/prepare_continue.py",
+    "preparer_inputs_policy": "Pin every preflight-returned source, baseline and source_manifest supporting file including run_disk; do not modify them.",
+    "old_state_is_baseline_only": true,
+    "new_freeze_full_tree_required": true,
+    "readonly_preflight_passed": false,
+    "python_ast_parsed": true,
+    "help_exit_code": 0,
+    "engine_started": false,
+    "engine_lane_acquired": false,
+    "native_route_tested": false,
+    "qualification_inherited": false,
+    "production_modified": false,
+    "preserved_failure_evidence": "qa/campaign_progress_recovery_20261026/evidence/lianhuanma_victory_failed_20261027_011539",
+    "failure_checks": {
+      "save_training": {
+        "passed": 53,
+        "failed": 0
+      },
+      "resume_training": {
+        "passed": 38,
+        "failed": 2
+      },
+      "unrun": [
+        "resume_victory",
+        "reject_terminal"
+      ]
+    },
+    "legacy_branch_text_preserved": true,
+    "nine_gd_sha_unchanged": true,
+    "independent_static_review": "No definite API or scope blocker; actual new frozen import/preflight is still required.",
+    "tested_runner_sha256": "7c0433b7f27e3a4c0117010d76cf945d170dd0e7b20e2062dd2a57ad15f26693",
+    "tested_binding_sha256": "dfbeeda85b4a2a5c0cd9c53aa734a2e37a40185eb6454836220b7e7847c5aab2"
+  },
+  "historical_liveness_binding_validation": {
     "python_ast_parsed": true,
     "help_exit_code": 0,
     "readonly_preflight_passed": true,
@@ -74,5 +154,6 @@
     "tested_binding_sha256": "72a1cc7b681e7619f30eb072b1d4fd605e53c9bbd76ba47624c787d259739557",
     "independent_source_review": "No definite candidate binding/API blocker found. Legacy 20 adjacent sources remain strict; 23 sources resolve strictly inside repository.",
     "qualification_inherited": false
-  }
+  },
+  "historical_sections_note": "Existing original source/derived_from/static audit and prior binding validation describe their historical bytes. Current host branch validation is continue_binding_update; files binds current source bytes."
 }

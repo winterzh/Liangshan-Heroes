@@ -1,0 +1,155 @@
+{
+  "schema": "lianhuanma_continue_binding_preflight_v1",
+  "commands": [
+    {
+      "role": "victory",
+      "session_id": 25999,
+      "argv": [
+        "python",
+        "-X",
+        "utf8",
+        "-B",
+        "qa/campaign_progress_recovery_20261026/run_lianhuanma_terminal.py",
+        "--base-run",
+        ".godot/campaign_progress_recovery_20261026/20261027_013339_8495b720",
+        "--candidate-manifest",
+        "qa/campaign_progress_recovery_20261026/continue_binding_candidate/evidence/full_freeze_20261027_013339/candidate_manifest.json"
+      ],
+      "exit_code": 0,
+      "stdout_path": "victory_stdout.txt",
+      "stdout_sha256": "5b6b70fccaa39af266ff658f6d98dd7ca3265fa6e77d0f1bb0151ba838a80a8b",
+      "result": {
+        "preflight_passed": true,
+        "engine_started": false,
+        "lane_acquired": false,
+        "native_qualified": false,
+        "modes": [
+          "save_training",
+          "resume_training",
+          "resume_victory",
+          "reject_terminal"
+        ],
+        "candidate_schema": "continue_binding_integrated_manifest_v1",
+        "candidate_script_count": 23,
+        "native_asset_count": 1,
+        "import_receipts": [
+          "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\import__20261027_013835_6fc1dc02\\receipt.json"
+        ],
+        "content_version": "source-v1:d7f2258b8be6f77e3577ff9c3b018427c805c84385e86f1daa54aaa49cc30dac",
+        "candidate_manifest_sha256": "06f2aa5b50e30b4c711a0ea22e1d01253b3fed4d06db47b706abeb74bac771f0",
+        "worker_sha256": {
+          "bootstrap.gd": "0cd8829fd57ea8ea40c69c9a64644ca34d3e6b1f6ce3e7ea2bd84c2c970c5484",
+          "base.gd": "f55c3854d90701672f64e2e6fe8530a20982c8dbbf91dd9e89a600d41a9c165f",
+          "terminal.gd": "be5aab40bc3f2fff28af6e54e5aa5df17b83cd663a131725b6aa6ecf3d849709",
+          "policy.gd": "116bbb1257700c4ae591e79f4130c396137d200817ae711675ec91055bd51191",
+          "driver.gd": "1c758b85424fa6c98e17a6b418698aa0ec2ca61b90ce5c245195f6218730c423"
+        }
+      }
+    },
+    {
+      "role": "loss",
+      "session_id": 83951,
+      "argv": [
+        "python",
+        "-X",
+        "utf8",
+        "-B",
+        "qa/campaign_progress_recovery_20261026/run_lianhuanma_loss.py",
+        "--base-run",
+        ".godot/campaign_progress_recovery_20261026/20261027_013339_8495b720",
+        "--candidate-manifest",
+        "qa/campaign_progress_recovery_20261026/continue_binding_candidate/evidence/full_freeze_20261027_013339/candidate_manifest.json"
+      ],
+      "exit_code": 0,
+      "stdout_path": "loss_stdout.txt",
+      "stdout_sha256": "bbe7990fa7eaad05b28672442c22cde0af404f64c1961386805f7061700837f3",
+      "result": {
+        "preflight_passed": true,
+        "engine_started": false,
+        "lane_acquired": false,
+        "native_qualified": false,
+        "modes": [
+          "save_before_loss",
+          "resume_loss",
+          "reject_terminal"
+        ],
+        "candidate_schema": "continue_binding_integrated_manifest_v1",
+        "candidate_script_count": 23,
+        "native_asset_count": 1,
+        "import_receipts": [
+          "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_013339_8495b720\\import__20261027_013835_6fc1dc02\\receipt.json"
+        ],
+        "content_version": "source-v1:d7f2258b8be6f77e3577ff9c3b018427c805c84385e86f1daa54aaa49cc30dac",
+        "candidate_manifest_sha256": "06f2aa5b50e30b4c711a0ea22e1d01253b3fed4d06db47b706abeb74bac771f0",
+        "worker_sha256": {
+          "bootstrap.gd": "60cd4e421ed1c0796d4c0a944c9961c139f778bf243e4277d69dc4b27b554c12",
+          "base.gd": "dd547afe35dce121de3c58d7144fc7021868cac5e5eba1c8e4b5f51aefe0c2ab",
+          "terminal.gd": "cc7808dfd1285187951444593f3b7a6e3d675c889ffbc7109bac535b136d39fe",
+          "driver.gd": "9d3f83a36e8ef9350e8e4f4212acafb8e07d2491f23291f7281def4c926c4875"
+        }
+      }
+    }
+  ],
+  "verified_utc": "2026-10-26T17:45:46.699645+00:00",
+  "complete": true,
+  "source_files": [
+    {
+      "path": "qa/campaign_progress_recovery_20261026/lianhuanma_candidate_binding.py",
+      "sha256": "dfbeeda85b4a2a5c0cd9c53aa734a2e37a40185eb6454836220b7e7847c5aab2",
+      "bytes": 13485,
+      "newline": "LF"
+    },
+    {
+      "path": "qa/campaign_progress_recovery_20261026/run_lianhuanma_terminal.py",
+      "sha256": "7c0433b7f27e3a4c0117010d76cf945d170dd0e7b20e2062dd2a57ad15f26693",
+      "bytes": 17794,
+      "newline": "LF"
+    },
+    {
+      "path": "qa/campaign_progress_recovery_20261026/run_lianhuanma_loss.py",
+      "sha256": "afc80a5a3abfdf596436054233ebb508aa05ce13030124e11233da34d81f8daa",
+      "bytes": 18304,
+      "newline": "CRLF"
+    },
+    {
+      "path": "qa/campaign_progress_recovery_20261026/tests/lianhuanma/README.md",
+      "sha256": "a2e9b1d19518732dce1cea210456d198739a2437a7fe535d969f6735e4ca2c18",
+      "bytes": 11214,
+      "newline": "CRLF"
+    },
+    {
+      "path": "qa/campaign_progress_recovery_20261026/tests/lianhuanma_loss/README.md",
+      "sha256": "b950f42b997dd2c15639383b69bb616a7c091689ca5a97377ffab8f7d3212a39",
+      "bytes": 10068,
+      "newline": "LF"
+    },
+    {
+      "path": "qa/campaign_progress_recovery_20261026/tests/lianhuanma/provenance.json",
+      "sha256": "6b5d793def27e5d413202be72218289fed4734072ec60278e69cb4c458feda63",
+      "bytes": 7397,
+      "newline": "CRLF"
+    },
+    {
+      "path": "qa/campaign_progress_recovery_20261026/tests/lianhuanma_loss/provenance.json",
+      "sha256": "948ce214c1ded3e649dc5bdffa825330c1b5dda362310b5e14418b4d459ab4e4",
+      "bytes": 12246,
+      "newline": "CRLF"
+    }
+  ],
+  "source_files_unchanged_after_preflight": true,
+  "nine_worker_sha_match": true,
+  "python_ast_passed": true,
+  "help_exit_codes": [
+    0,
+    0
+  ],
+  "old_branch_logic_preserved": true,
+  "engine_started": false,
+  "lane_acquired": false,
+  "native_qualified": false,
+  "gameplay_or_save_resume_qualified": false,
+  "provenance_modified": false,
+  "qualification_inherited": false,
+  "production_modified": false,
+  "stdout_note": "Captured exact text returned by exec tool, stored UTF-8 preserving CRLF. Not a pre-existing runner output file."
+}
