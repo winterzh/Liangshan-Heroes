@@ -118,7 +118,10 @@ class Pair:
                         "Actual delayed source/stack mismatch")
                 c["paused"] = True
                 c["row"]["stops"].append({"point": point, "frames": frames,
+                                               "pid": c["child"].pid, "status": "breakpoint_matched",
                                                "packet_sha256": io.hashlib.sha256(packet).hexdigest()})
+                self.trace.append({"event": "breakpoint_matched", "role": c["role"],
+                                   "pid": c["child"].pid, "point": dict(point), "frames": frames})
 
     def wait(self, predicate, label):
         deadline = time.monotonic() + self.timeout
@@ -150,8 +153,8 @@ class Pair:
 
     def ack(self, role):
         c = self.children[role]
-        helper.save(c["folder"] / ("ack_%02d.json" % c["gate_index"]),
-                    {"nonce": self.nonce, "pid": c["child"].pid, "index": c["gate_index"]})
+        io.publish_ack(c["folder"] / ("ack_%02d.json" % c["gate_index"]),
+                       {"nonce": self.nonce, "pid": c["child"].pid, "index": c["gate_index"]})
         c["gate_index"] += 1
 
     def arm(self, role, point):
@@ -175,20 +178,28 @@ class Pair:
 
     def close(self):
         # Popen objects, never process-name termination or foreign PID killing.
+        errors = []
         for c in self.children.values():
             child = c.get("child")
-            if child is not None and child.poll() is None:
-                child.terminate(); child.wait(timeout=20); c["row"]["aborted_owned_child"] = True
+            def finish_owned_child():
+                if child is not None:
+                    if child.poll() is None:
+                        child.terminate(); child.wait(timeout=20); c["row"]["aborted_owned_child"] = True
+                    c["row"].update(exit_code=child.returncode, process_terminal=child.poll() is not None)
+            io.post_step(c["row"], "finish owned child", finish_owned_child)
             if c["connection"] is not None:
-                c["connection"].close()
+                io.post_step(c["row"], "close debugger connection", c["connection"].close)
             if c["listener"] is not None:
-                c["listener"].close()
-            c["stream"].close()
-            c["row"]["exit_code"] = child.returncode if child is not None else None
-            c["row"]["log_sha256"] = helper.sha(c["folder"] / "native.log")
+                io.post_step(c["row"], "close debugger listener", c["listener"].close)
+            io.post_step(c["row"], "close native log stream", c["stream"].close)
+            okay, digest = io.post_step(c["row"], "hash native log", lambda: helper.sha(io.fs_path(c["folder"] / "native.log")))
+            if okay: c["row"]["log_sha256"] = digest
             if c.get("directory") is not None:
-                c["row"]["final_inventory"] = io.snapshot(c["directory"])
-            helper.save(c["folder"] / "controller.json", c["row"])
+                okay, inventory = io.post_step(c["row"], "final inventory", lambda: io.snapshot(c["directory"]))
+                if okay: c["row"]["final_inventory"] = inventory
+            io.persist_result(c["folder"] / "controller.json", c["row"])
+            errors.extend({"role": c["role"], **error} for error in c["row"].get("post_errors", []))
+        return errors
 
 
 def execute_case(engine, project, workers, profile, nonce, case, expected, output, timeout, points, identity):
@@ -237,15 +248,24 @@ def execute_case(engine, project, workers, profile, nonce, case, expected, outpu
         result["complete"] = len(pids) == 2 and all(row["passed"] for row in result["reports"])
     except BaseException as error:
         result["error"] = repr(error)
-    finally:
-        pair.close()
+        result["traceback"] = io.traceback.format_exc()
+        result["complete"] = False
         for c in pair.children.values():
-            log = (c["folder"] / "native.log").read_text(encoding="utf-8", errors="replace")
-            if io.re.search(r"SCRIPT ERROR:|Parse Error:|Compile Error:", log):
-                result["complete"] = False
-                result["error"] = "Script failures are not interleaving evidence: " + c["role"]
+            c["row"]["primary_case_error"] = result["error"]
+            c["row"]["primary_case_traceback"] = result["traceback"]
+    finally:
+        okay, errors = io.post_step(result, "close owned pair", pair.close)
+        if okay and errors:
+            result.setdefault("post_errors", []).extend(errors)
+            result["complete"] = False
+        for c in pair.children.values():
+            def check_log():
+                log = io.fs_path(c["folder"] / "native.log").read_text(encoding="utf-8", errors="replace")
+                require(not io.re.search(r"SCRIPT ERROR:|Parse Error:|Compile Error:", log),
+                        "Script failures are not interleaving evidence: " + c["role"])
+            io.post_step(result, "scan native log " + c["role"], check_log)
         result["trace"] = pair.trace
-        helper.save(output / "case_receipt.json", result)
+        io.persist_result(output / "case_receipt.json", result)
     return result
 
 
@@ -323,22 +343,31 @@ def main():
         receipt["expectation_passed"] = len(receipt["cases"]) == len(cases) and all(row["complete"] for row in receipt["cases"])
     except BaseException as error:
         receipt["error"] = repr(error)
+        receipt["traceback"] = io.traceback.format_exc()
     finally:
-        try:
+        def verify_final_identity():
             helper.assert_runtime_current(base); helper.identity.verify_generated(project, generation)
-            helper.suite_verify_pins(pins); receipt["final_identity_passed"] = True
-        except BaseException as error:
-            receipt.update(final_identity_passed=False, final_identity_error=repr(error))
-        own_lock = locked and helper.shared.LOCK.exists() and helper.shared.LOCK.read_text(encoding="utf-8") == str(output)
-        idle = not io.engines()
-        receipt["complete"] = bool(receipt.get("expectation_passed") and receipt.get("final_identity_passed") and own_lock and idle and "error" not in receipt)
+            helper.suite_verify_pins(pins)
+        receipt["final_identity_passed"], _ = io.post_step(receipt, "final identity", verify_final_identity)
+        def lane_state():
+            own_lock = locked and helper.shared.LOCK.exists() and helper.shared.LOCK.read_text(encoding="utf-8") == str(output)
+            return own_lock, not io.engines()
+        okay, lane = io.post_step(receipt, "read final lane ownership", lane_state)
+        own_lock, idle = lane if okay else (False, False)
+        receipt["lock_ownership_confirmed"] = own_lock
+        if own_lock and idle:
+            io.post_step(receipt, "release own shared lock", helper.shared.LOCK.unlink)
+        okay, released = io.post_step(receipt, "confirm shared lock release", lambda: locked and not helper.shared.LOCK.exists())
+        receipt["lock_released"] = bool(okay and released)
+        receipt["complete"] = bool(receipt.get("expectation_passed") and receipt.get("final_identity_passed")
+                                   and own_lock and idle and receipt["lock_released"]
+                                   and "error" not in receipt and not receipt.get("post_errors"))
         receipt["defect_reproduced"] = receipt["complete"] and args.expect == "defects"
         receipt["slice_passed"] = receipt["complete"] and args.expect == "fixed"
-        if own_lock and idle: helper.shared.LOCK.unlink()
-        receipt["lock_ownership_confirmed"] = own_lock
-        receipt["lock_released"] = locked and not helper.shared.LOCK.exists()
         receipt["pinned_files"] = pins
-        helper.save(output / "receipt.json", receipt)
+        io.persist_result(output / "receipt.json", receipt)
+        if not receipt["complete"]:
+            receipt["defect_reproduced"] = receipt["slice_passed"] = False
     print(json.dumps({"output": str(output), "complete": receipt["complete"], "expected": args.expect,
                       "slice_passed": receipt["slice_passed"], "error": receipt.get("error")}, ensure_ascii=False), flush=True)
     if not receipt["complete"]: raise SystemExit(1)

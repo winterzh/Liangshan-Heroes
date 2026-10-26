@@ -10,7 +10,7 @@
 - [旧源99项/7失败](../evidence/handoff_json_receipt_failed_20261026_194345/receipt.json)、[两个逻辑缺陷成功复现](../evidence/handoff_regressions_defects_20261026_194925/receipt.json)。复现成功不等于候选验收通过。
 - [被修订四脚本的原811字节](../evidence/source_revision_811c0a12/manifest.json)；其余16脚本可依旧manifest与当前候选核对。当前逐文件清单见[manifest](manifest.json)。底座初始32项静态报告描述其当时SHA，不替代当前运行证据。
 
-外部纯模型、独立尾账/纠正回归、真实文件I/O、经典30波驱动分别在`tests/`、`tests/regressions/`、`tests/io/`、`tests/classic/`。新源尾账/纠正回归通过（8项宿主、14项Receipt、27项Session；内存Ledger夹具），[原始收据](../evidence/handoff_regressions_fixed_20261026_195508/summary.json)；实际I/O已完成[9案例/13阶段/178项断言](../evidence/handoff_io_20261026_200759/summary.json)，其中两类残留按预期拒绝；同版[黄泥冈自然终局/独立重启拒旧槽1386项](../evidence/handoff_terminal_20261026_201649/summary.json)通过（1333+53），包含精确ACKv2和Service独立未记账proof检查；经典30波、连环马完整路线和全61阶段尚未通过。模型及合成账号I/O不能授予真实SDK资格。原版界面键鼠按用户选择暂停，公开战役入口保持关闭。
+外部纯模型、独立尾账/纠正回归、真实文件I/O、经典30波驱动分别在`tests/`、`tests/regressions/`、`tests/io/`、`tests/classic/`。新源尾账/纠正回归通过（8项宿主、14项Receipt、27项Session；内存Ledger夹具），[原始收据](../evidence/handoff_regressions_fixed_20261026_195508/summary.json)；实际I/O已完成[9案例/13阶段/178项断言](../evidence/handoff_io_20261026_200759/summary.json)，其中两类残留按预期拒绝；同版[黄泥冈自然终局/独立重启拒旧槽1386项](../evidence/handoff_terminal_20261026_201649/summary.json)通过（1333+53），包含精确ACKv2和Service独立未记账proof检查；同源[经典30波六进程443项](../evidence/handoff_classic_20261026_205941/summary.json)已通过；连环马完整路线和全61阶段尚未通过。模型及合成账号I/O不能授予真实SDK资格。原版界面键鼠按用户选择暂停，公开战役入口保持关闭。
 
 半份pending及无owner空writing目录当前仍拒绝自动恢复；不能因预期拒绝测试通过就标成已恢复。后继释放/恢复所有权、写入staging与历史退休方案见[后继设计](STORE_RECOVERY_NEXT.md)。
 

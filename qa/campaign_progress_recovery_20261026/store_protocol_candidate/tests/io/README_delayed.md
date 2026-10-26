@@ -27,6 +27,10 @@ python qa/campaign_progress_recovery_20261026/store_protocol_candidate/tests/io/
 
 原始prepared、a_blocked、barrier_retry（仅第二时序）、a_result、b_committed、双进程report/log/controller与全部断点栈保留。每案例case_receipt唯一创建，checkpoint_NN按案例数量独立创建；总receipt仅finally写一次，未放宽helper排他创建。
 
+两进程的 ACK 均调用 `run_io.publish_ack`：同 stage 唯一临时 JSON 经排他写入并关闭后，以同卷 `os.link` 原子发布正式 ACK，拒绝覆盖已有目标，成功后仅删除自身临时目录项，失败保留证据。nonce/PID/index、严格 worker 校验与 gate 顺序保持不变；没有通过放宽身份校验规避空文件发布竞态。
+
+共享 `run_io` 的 Win32 扩展绝对路径 snapshot/私有根与 no-link 检查，普通路径仅用于证据展示。已匹配断点先写入各 PID 的 stops 与总 trace，再做可能失败的 inventory。两个自有进程及其连接、日志、后置 snapshot 分别清理和收错；原始异常/traceback 保留，`post_errors` 不覆盖原因。任一后置错误使 case/总 receipt 不通过，仍尽力排他保存各 controller 和 case receipt；证据写失败只另建唯一备用文件，不覆盖原文件，不终止外部进程。
+
 ENV：DA_PROFILE、DA_PROJECT、DA_WORKERS、DA_WORKER_SHA256、DA_NONCE、DA_MODE(A/B)、DA_CASE、DA_EXPECT、DA_OUTPUT；B另读DA_PREVIOUS/SHA(A原prepared)。STEAM_DISABLED=1、CAMPAIGN_QA为空；保留最多四帧的非physics启动守卫。report schema为handoff_delayed_io_v1；production_qualified始终false，slice_passed只表示fixed本切片；defects明确diagnostic_only。
 
 ## 资格边界与待办

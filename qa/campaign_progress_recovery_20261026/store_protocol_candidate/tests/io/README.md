@@ -1,6 +1,6 @@
 # 唯一 cleanup/marker 原生 I/O 首个切片
 
-本目录从已完成的旧 `handoff_candidate/tests/io` 工具独立复制、适配。**尚未启动 Godot，未编译或运行本切片。** 不修改旧工具、当前 20 文件冻结、生产或经典回归。Python AST/`--help` 与断点唯一性检查不构成原生通过。
+本目录从已完成的旧 `handoff_candidate/tests/io` 工具独立复制、适配。首轮 `20261026_214029_e8825c44` 已完成 normal/legacy/write_retry/rename_writing/rename_owner 共132项；第六阶段遇宿主长 marker 路径读取失败，**完整23进程未通过**。原始失败保留在 `../../../evidence/store_protocol_io_host_failed_20261026_214029/`，不回填缺失断点记录。此次只修外部宿主，旧工具、冻结源码、生产和经典回归保持不变。Python AST/`--help` 与宿主 probe 不构成 Store 原生通过。
 
 ## 宿主与冻结契约
 
@@ -16,6 +16,14 @@ python qa/campaign_progress_recovery_20261026/store_protocol_candidate/tests/io/
 输出为 `.godot/campaign_store_protocol_io_20261026/<batch>/`。每案例独立短 profile `D:/CodexQA/campspio/<nonce>/`；同一 crash 案例的第二/第三进程复用原四目录隔离 profile。保留失败目录、原始中断目录副本、owner/marker/record SHA。不要把这些私有 profile、账本副本或二进制加入源码提交。
 
 宿主每完成一组写唯一 `checkpoint_NN.json`，最终 `receipt.json` 仅写一次；保留 helper 的排他创建语义。worker 在真实 I/O 前最多等待四个 process_frame，断言已退出初始 physics frame，不关闭生产物理写保护。
+
+控制通道 ACK 通过共用 `publish_ack` 发布：先用 `helper.save` 在同 stage 排他创建唯一临时 JSON，写完并关闭，再以 Windows 同卷 `os.link` 原子创建正式 ACK 目录项；目标已存在则失败，不覆盖旧 ACK。发布成功后仅删除自己的临时目录项；写入或发布失败保留临时证据。若链接已成功而临时目录项删除失败，错误明确记录 `ACK published=true`，不重发；不支持硬链接时直接失败，不退回原地写 ACK。nonce/PID/index 及 worker 的严格校验不变，worker 不会再因正式 ACK 刚创建但未写完而读取空或半份 JSON。这只修复宿主控制通道，不授予 Store 原生通过。
+
+宿主对账本的实际文件访问统一使用规范 Win32 扩展绝对路径，包括 marker 枚举/类型判断/读取/哈希、原生 `CreateFileW` 和中断副本复制；记录仍保存可读的普通路径。私有根范围比较在同一命名空间进行，原 `no_links` 在扩展路径及祖先上执行，避免长路径 `exists()` 假阴性漏查。复制仍拒绝既有目标。
+
+已匹配的 PID/source/line/function/stack 在取 inventory 前存入 controller 的 `active_breakpoint`，fault 的状态区分仅命中、取证完成、目标解析及实际持有拒绝句柄/终止自有进程；仅命中不算故障已注入。宿主保留最初异常与 traceback，各项自有进程/句柄/socket 清理、日志哈希及后置取证独立收集 `post_errors`。任何后置失败均禁止通过，并尽力排他保存 controller/receipt；原写失败时只新建带唯一名字的备用证据，不覆盖残留。旧失败现场不回填断点或改写结果。
+
+宿主 probe `host_probe_20261026_220422_3703ef68` 的16项检查通过：死 profile 的275字符 marker 可读；原 cleanup/marker 的只读拒 DELETE 句柄可打开关闭；原文件前后逐字节 SHA 相同；新私有目录长路径复制一致且拒绝覆盖；越界路径被拒绝；合成后置异常/证据碰撞保留原错误和备用证据。收据位于 `.godot/campaign_store_protocol_io_20261026/<probe>/receipt.json`，复制仅写新的 `D:/CodexQA/campsp_host_probe/`；未启动 Godot，下一轮仍须新 profile 全23阶段复跑。
 
 ## 23 进程范围
 

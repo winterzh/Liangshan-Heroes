@@ -1,0 +1,19 @@
+{
+  "complete": false,
+  "slice_passed": false,
+  "error": "synthetic original failure",
+  "traceback": "synthetic original traceback",
+  "post_errors": [
+    {
+      "operation": "synthetic secondary failure",
+      "error": "OSError('synthetic post-inventory failure')",
+      "traceback": "Traceback (most recent call last):\n  File \"D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\tests\\io\\run_io.py\", line 148, in post_step\n    return True, callback()\n                 ~~~~~~~~^^\n  File \"D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_store_protocol_io_20261026\\host_longpath_probe_20261026.py\", line 91, in failed_snapshot\n    raise OSError(\"synthetic post-inventory failure\")\nOSError: synthetic post-inventory failure\n"
+    },
+    {
+      "operation": "write D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_store_protocol_io_20261026\\host_probe_20261026_220422_3703ef68\\exclusive_existing.json",
+      "error": "FileExistsError(17, 'File exists')",
+      "traceback": "Traceback (most recent call last):\n  File \"D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\tests\\io\\run_io.py\", line 148, in post_step\n    return True, callback()\n                 ~~~~~~~~^^\n  File \"D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\tests\\io\\run_io.py\", line 160, in <lambda>\n    saved, _ = post_step(row, \"write \" + str(path), lambda: helper.save(fs_path(path), row))\n                                                            ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\AI项目\\水浒\\开发工程\\qa\\huangnigang_production_20261020\\run_batch.py\", line 45, in save\n    with Path(path).open(\"x\", encoding=\"utf-8\") as handle:\n         ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Python314\\Lib\\pathlib\\__init__.py\", line 771, in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nFileExistsError: [Errno 17] File exists: '\\\\\\\\?\\\\D:\\\\AI项目\\\\水浒\\\\开发工程\\\\.godot\\\\campaign_store_protocol_io_20261026\\\\host_probe_20261026_220422_3703ef68\\\\exclusive_existing.json'\n"
+    }
+  ],
+  "fallback_evidence_path": "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_store_protocol_io_20261026\\host_probe_20261026_220422_3703ef68\\exclusive_existing_write_failed_a2cf19f28dd54dfca59a39408563391e.json"
+}

@@ -20,6 +20,7 @@ import socket
 import subprocess
 import sys
 import time
+import traceback
 import uuid
 
 sys.dont_write_bytecode = True
@@ -59,6 +60,7 @@ def is_crash(mode):
 
 
 def fault_target(directory, profile, mode):
+    directory = fs_path(owned(directory, profile))
     if mode == "write_retry":
         return owned(directory / "receipt.pending", profile)
     if mode == "rename_writing_retry":
@@ -84,19 +86,53 @@ def require(condition, message):
 
 
 def owned(path, root):
-    path, root = Path(path), Path(root)
-    helper.identity.no_links(path)
-    require(path.resolve().is_relative_to(root.resolve()), "Path outside this private profile: " + str(path))
+    path, root = plain_path(path), plain_path(root)
+    helper.identity.no_links(fs_path(path))
+    helper.identity.no_links(fs_path(root))
+    require(fs_path(path).resolve().is_relative_to(fs_path(root).resolve()), "Path outside this private profile: " + str(path))
     return path
 
 
+def plain_path(path):
+    value = os.fspath(path)
+    if os.name == "nt":
+        value = value.replace("/", "\\")
+        if value.startswith("\\\\?\\UNC\\"):
+            value = "\\\\" + value[8:]
+        elif value.startswith("\\\\?\\"):
+            value = value[4:]
+        require(not value.startswith("\\\\.\\"), "Device namespace is not a filesystem path")
+    return Path(os.path.abspath(value))
+
+
+def fs_path(path):
+    """Absolute Win32 extended path for I/O; metadata keeps plain_path()."""
+    path = plain_path(path)
+    if os.name != "nt":
+        return path
+    value = str(path)
+    return Path("\\\\?\\UNC\\" + value[2:] if value.startswith("\\\\") else "\\\\?\\" + value)
+
+
+def raise_walk_error(error):
+    raise error
+
+
+def copy_account_tree(source, destination):
+    source, destination = fs_path(source), fs_path(destination)
+    helper.identity.no_links(source)
+    helper.identity.no_links(destination)
+    require(not destination.exists(), "Evidence copy must not overwrite a destination")
+    shutil.copytree(source, destination)
+
+
 def snapshot(directory):
-    directory = Path(directory)
+    directory = fs_path(directory)
     helper.identity.no_links(directory)
     if not directory.exists():
         return {"exists": False, "files": {}, "directories": []}
     files, directories = {}, []
-    for parent, dirs, names in os.walk(directory, followlinks=False):
+    for parent, dirs, names in os.walk(directory, followlinks=False, onerror=raise_walk_error):
         for name in dirs + names:
             helper.identity.no_links(Path(parent) / name)
         directories.append(Path(parent).relative_to(directory).as_posix())
@@ -106,6 +142,32 @@ def snapshot(directory):
     return {"exists": True, "files": files, "directories": sorted(directories)}
 
 
+def post_step(row, operation, callback):
+    """Collect cleanup/evidence errors without replacing the primary failure."""
+    try:
+        return True, callback()
+    except BaseException as error:
+        row["complete"] = False
+        for qualification in ("slice_passed", "defect_reproduced"):
+            if qualification in row: row[qualification] = False
+        row.setdefault("post_errors", []).append({"operation": operation, "error": repr(error),
+                                                  "traceback": traceback.format_exc()})
+        return False, None
+
+
+def persist_result(path, row):
+    path = plain_path(path)
+    saved, _ = post_step(row, "write " + str(path), lambda: helper.save(fs_path(path), row))
+    if saved:
+        return
+    # A failed exclusive write may have left a partial original. Never replace it.
+    fallback = path.with_name(path.stem + "_write_failed_" + uuid.uuid4().hex + path.suffix)
+    row["fallback_evidence_path"] = str(fallback)
+    saved, _ = post_step(row, "write fallback " + str(fallback), lambda: helper.save(fs_path(fallback), row))
+    if not saved:
+        print(json.dumps({"evidence_write_failed": row}, ensure_ascii=False), file=sys.stderr, flush=True)
+
+
 def read_if_closed(path):
     if not path.exists():
         return None
@@ -113,6 +175,20 @@ def read_if_closed(path):
         return helper.read(path)
     except (json.JSONDecodeError, UnicodeDecodeError, PermissionError):
         return None
+
+
+def publish_ack(path, value):
+    # Publish only a closed JSON file. os.link atomically creates the final
+    # directory entry and refuses an existing ACK; it never replaces one.
+    path = Path(path)
+    temporary = path.with_name("." + path.name + "." + uuid.uuid4().hex + ".tmp")
+    helper.save(temporary, value)
+    os.link(temporary, path)
+    # On write/link failure retain the unique temporary file as evidence.
+    try:
+        temporary.unlink()
+    except OSError as error:
+        raise RuntimeError("ACK published=true; temporary cleanup failed: " + str(temporary)) from error
 
 
 def pin_stage(stage, pins):
@@ -126,6 +202,7 @@ class NativeSharingDenial:
     """One owned native handle, preserving the actual file bytes; no ACL changes."""
     def __init__(self, path, profile, kind):
         self.path = owned(path, profile)
+        native_path = fs_path(self.path)
         self.kind = kind
         self.handle = None
         require(os.name == "nt", "Windows sharing-fault runner required")
@@ -135,14 +212,14 @@ class NativeSharingDenial:
         self.api.CloseHandle.argtypes = [wt.HANDLE]
         self.api.CloseHandle.restype = wt.BOOL
         if kind == "write_retry":
-            require(not self.path.exists(), "Pending file must be absent before owned denial")
+            require(not native_path.exists(), "Pending file must be absent before owned denial")
             # CREATE_NEW after production's existence check; readers/deletion
             # may proceed, but the upcoming FileAccess.WRITE is denied.
             share, disposition, flags = 1 | 4, 1, 0x80
         else:
-            require(self.path.exists(), "Deletion-denial target missing")
-            share, disposition, flags = 1 | 2, 3, 0x02000000 if self.path.is_dir() else 0x80
-        self.handle = self.api.CreateFileW(str(self.path), 0x80000000, share, None, disposition, flags, None)
+            require(native_path.exists(), "Deletion-denial target missing")
+            share, disposition, flags = 1 | 2, 3, 0x02000000 if native_path.is_dir() else 0x80
+        self.handle = self.api.CreateFileW(str(native_path), 0x80000000, share, None, disposition, flags, None)
         if self.handle == ct.c_void_p(-1).value:
             self.handle = None
             raise ct.WinError(ct.get_last_error())
@@ -187,6 +264,7 @@ def run_stage(engine, project, workers, profile, base_env, nonce, mode, stage, p
     pending = None
     observer = None
     directory = None
+    primary_error = None
     try:
         require(not helper.running(), "Foreign engine appeared before this owned launch")
         with (stage / "native.log").open("wb") as log:
@@ -227,7 +305,7 @@ def run_stage(engine, project, workers, profile, base_env, nonce, mode, stage, p
                         if mode == "crash_marker_removed":
                             observer = dict(points["crash_marker"])
                             peer.command("breakpoint", thread_id, [observer["source"], observer["line"], True])
-                    helper.save(stage / ("ack_%02d.json" % issued), {"nonce": nonce, "pid": child.pid, "index": issued})
+                    publish_ack(stage / ("ack_%02d.json" % issued), {"nonce": nonce, "pid": child.pid, "index": issued})
                     issued += 1
                 try:
                     message, packet = peer.receive()
@@ -247,15 +325,18 @@ def run_stage(engine, project, workers, profile, base_env, nonce, mode, stage, p
                     if observer is not None and frames[0] == {k: observer[k] for k in ("source", "line", "function")}:
                         require(directory is not None and "preterminal_marker_observation" not in row,
                                 "Unique earlier marker observation required")
-                        markers = [p for p in directory.iterdir() if p.is_file() and p.name.startswith("release_v1_")]
+                        row["active_breakpoint"] = {"status": "matched_before_observation", "pid": child.pid,
+                                                    "point": dict(observer), "frames": frames,
+                                                    "packet_sha256": hashlib.sha256(packet).hexdigest()}
+                        markers = [p for p in fs_path(directory).iterdir() if p.is_file() and p.name.startswith("release_v1_")]
                         require(len(markers) == 1, "One published marker before terminal removal required")
                         marker = owned(markers[0], profile)
-                        metadata = helper.read(marker)
+                        metadata = helper.read(fs_path(marker))
                         require(metadata.get("owner") == OWNER and metadata.get("pid") == str(child.pid),
                                 "Observed marker is not the actual owned writer")
                         row["preterminal_marker_observation"] = {
                             "point": dict(observer), "frames": frames, "marker_name": marker.name,
-                            "marker_raw": marker.read_text(encoding="utf-8"), "marker_sha256": helper.sha(marker),
+                            "marker_raw": fs_path(marker).read_text(encoding="utf-8"), "marker_sha256": helper.sha(fs_path(marker)),
                             "inventory": snapshot(directory), "packet_sha256": hashlib.sha256(packet).hexdigest()}
                         peer.command("breakpoint", thread, [observer["source"], observer["line"], False])
                         observer = None
@@ -263,6 +344,9 @@ def run_stage(engine, project, workers, profile, base_env, nonce, mode, stage, p
                         continue
                     require(pending is not None and frames[0] == {k: pending[k] for k in ("source", "line", "function")}, "Native boundary stack mismatch")
                     row["debug_stops"].append({"frames": frames, "packet_sha256": hashlib.sha256(packet).hexdigest()})
+                    row["active_breakpoint"] = {"status": "matched_before_inventory", "pid": child.pid,
+                                                "point": dict(pending), "frames": frames,
+                                                "packet_sha256": hashlib.sha256(packet).hexdigest()}
                     if mode == "write_retry" and not any(frame["function"] == "commit_locked" for frame in frames[1:]):
                         # acquire() writes owner.json through the same helper;
                         # only the later commit_locked pending write is targeted.
@@ -271,24 +355,29 @@ def run_stage(engine, project, workers, profile, base_env, nonce, mode, stage, p
                         continue
                     require(not stop_verified and directory is not None, "Fault boundary must be unique")
                     stop_verified = True
-                    event = {"kind": mode, "point": dict(pending), "frames": frames,
-                             "before_inventory": snapshot(directory), "actual_native_operation": True}
+                    event = {"kind": mode, "point": dict(pending), "frames": frames, "pid": child.pid,
+                             "status": "breakpoint_matched", "actual_native_operation": False}
                     row["faults"].append(event)
+                    event["before_inventory"] = snapshot(directory)
+                    event["status"] = "inventory_captured"
                     if is_crash(mode):
                         require((stage / "prepared.json").is_file(), "Original handoff descriptor absent before termination")
                         child.kill(); child.wait(timeout=20)
                         require(child.returncode != 0, "Deliberate crash must have a non-success process exit")
                         event["externally_terminated_pid"] = child.pid
                         event["exit_code"] = child.returncode
+                        event.update(status="owned_process_terminated", actual_native_operation=True)
                         event["terminated_inventory"] = snapshot(directory)
                         backup = stage / "terminated_account_copy"
-                        shutil.copytree(directory, backup)
+                        copy_account_tree(directory, backup)
                         require(snapshot(backup) == event["terminated_inventory"], "Terminated original bytes copy differs")
                         row["original_pid_terminal"] = True
                         break
                     target = fault_target(directory, profile, mode)
+                    event.update(target=str(target), status="target_resolved")
                     handle = NativeSharingDenial(target, profile, mode)
-                    event.update(target=str(target), native_sharing_denial_acquired=True)
+                    event.update(status="native_denial_acquired", actual_native_operation=True,
+                                 native_sharing_denial_acquired=True)
                     peer.command("breakpoint", thread, [pending["source"], pending["line"], False])
                     pending = None
                     peer.command("continue", thread)
@@ -316,24 +405,36 @@ def run_stage(engine, project, workers, profile, base_env, nonce, mode, stage, p
             if mode.endswith("_retry"):
                 require(stop_verified and len(row["faults"]) == 1 and row["faults"][0].get("denial_released"), "Native denial was not observed and released")
             row.update(complete=True, report=report, report_sha256=helper.sha(stage / "report.json"))
-        return row
     except BaseException as exc:
         row["error"] = repr(exc)
-        raise
+        row["traceback"] = traceback.format_exc()
+        row["complete"] = False
+        primary_error = exc
     finally:
         # Only this stage's child and handles. Failed disk state is never repaired.
-        if child is not None and child.poll() is None:
-            child.terminate(); child.wait(timeout=20)
-            row["aborted_owned_child"] = True
+        def finish_owned_child():
+            if child is not None:
+                if child.poll() is None:
+                    child.terminate(); child.wait(timeout=20)
+                    row["aborted_owned_child"] = True
+                row.update(exit_code=child.returncode, process_terminal=child.poll() is not None)
+        post_step(row, "finish owned child", finish_owned_child)
         if handle is not None:
-            handle.close()
+            post_step(row, "close owned denial handle", handle.close)
         if connection is not None:
-            connection.close()
+            post_step(row, "close debugger connection", connection.close)
         if listener is not None:
-            listener.close()
+            post_step(row, "close debugger listener", listener.close)
+        okay, digest = post_step(row, "hash native log", lambda: helper.sha(fs_path(stage / "native.log")))
+        if okay: row["log_sha256"] = digest
         if directory is not None:
-            row["final_inventory"] = snapshot(directory)
-        helper.save(stage / "controller.json", row)
+            okay, inventory = post_step(row, "final inventory", lambda: snapshot(directory))
+            if okay: row["final_inventory"] = inventory
+        persist_result(stage / "controller.json", row)
+    if primary_error is not None:
+        raise primary_error
+    require(not row.get("post_errors"), "Stage cleanup/evidence failed; see " + str(stage / "controller.json"))
+    return row
 
 
 def main():
@@ -440,22 +541,28 @@ def main():
         receipt["all_stages_passed"] = True
     except BaseException as exc:
         receipt["error"] = repr(exc)
+        receipt["traceback"] = traceback.format_exc()
     finally:
-        try:
+        def verify_final_identity():
             helper.assert_runtime_current(base)
             helper.identity.verify_generated(project, generation)
             helper.suite_verify_pins(pins)
-            receipt["final_identity_passed"] = True
-        except BaseException as exc:
-            receipt.update(final_identity_passed=False, final_identity_error=repr(exc))
-        receipt["lock_ownership_confirmed"] = locked and helper.shared.LOCK.exists() and helper.shared.LOCK.read_text(encoding="utf-8") == str(output)
+        receipt["final_identity_passed"], _ = post_step(receipt, "final identity", verify_final_identity)
+        def lane_state():
+            own_lock = locked and helper.shared.LOCK.exists() and helper.shared.LOCK.read_text(encoding="utf-8") == str(output)
+            return own_lock, not helper.running()
+        okay, lane = post_step(receipt, "read final lane ownership", lane_state)
+        own_lock, idle = lane if okay else (False, False)
+        receipt["lock_ownership_confirmed"] = own_lock
+        if own_lock and idle:
+            post_step(receipt, "release own shared lock", helper.shared.LOCK.unlink)
+        okay, released = post_step(receipt, "confirm shared lock release", lambda: locked and not helper.shared.LOCK.exists())
+        receipt["lock_released"] = bool(okay and released)
         receipt["complete"] = bool(receipt.get("all_stages_passed") and receipt.get("final_identity_passed")
-                                   and receipt["lock_ownership_confirmed"] and not helper.running() and "error" not in receipt)
-        if receipt["lock_ownership_confirmed"] and not helper.running():
-            helper.shared.LOCK.unlink()
-        receipt["lock_released"] = locked and not helper.shared.LOCK.exists()
+                                   and own_lock and idle and receipt["lock_released"]
+                                   and "error" not in receipt and not receipt.get("post_errors"))
         receipt["pinned_files"] = pins
-        helper.save(output / "receipt.json", receipt)
+        persist_result(output / "receipt.json", receipt)
     print(json.dumps({"output": str(output), "complete": receipt["complete"], "error": receipt.get("error")}, ensure_ascii=False))
     if not receipt["complete"]:
         raise SystemExit(1)
