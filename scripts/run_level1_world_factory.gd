@@ -37,7 +37,7 @@ static func restore_level(record: Variant, identity: Dictionary, id_to_unit: Dic
 		next_entity_id: int, mission_token: String) -> Dictionary:
 	var selected: Dictionary = _context(identity)
 	if not selected.ok: return selected
-	# Level1 declarations cover stage/economy/convoy/wine and three named bundle refs.
+	# Level1 declarations cover eleven distinct load refs and seven cart groups.
 	var restored: Dictionary = LevelState.new().restore(record, "level1",
 		identity.content_version, id_to_unit, next_entity_id, {}, mission_token)
 	if not restored.ok: return restored

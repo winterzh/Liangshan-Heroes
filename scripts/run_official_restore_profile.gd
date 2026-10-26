@@ -20,7 +20,9 @@ const DAMING_FLAGS := {"current": 7, "skirmish": false, "skirmish_ai": false, "a
 const SCHEMA := "official_restore_profile_v1"
 const CLASSIC_ID := "classic_30_v1"
 const ZHU_ID := "campaign_level3_v1"
-const HG_ID := "campaign_level1_v1"
+# Eleven distinct loads cannot be inferred from the old three-load profile.
+# The old profile is rejected by the existing slot/core gates, never migrated.
+const HG_ID := "campaign_level1_v2"
 const YEZHU_ID := "campaign_level6_v1"
 const JIANG_ID := "campaign_level2_v1"
 const LIAN_ID := "campaign_level4_v1"

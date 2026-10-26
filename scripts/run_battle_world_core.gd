@@ -290,8 +290,9 @@ func capture(source: Variant, retained_identity: Variant = null) -> Dictionary:
 	return {"ok": true, "record": {"schema": SCHEMA, "content_version": version, "engine_sha256": _trusted.engine_binary_sha256, "sections": sections}, "identity": identity, "complete_world": false, "display_ui_and_steam_pending": true}
 
 func _abort(result: Dictionary, section: String) -> Dictionary:
+	var code := String(result.get("code", "SECTION_PREPARE"))
 	dispose()
-	return _bad(String(result.get("code", "SECTION_PREPARE")), section)
+	return _bad(code, section)
 
 func prepare(record: Variant) -> Dictionary:
 	if is_instance_valid(_battle): return _bad("ALREADY_PREPARED")
@@ -347,6 +348,7 @@ func prepare(record: Variant) -> Dictionary:
 	var is_jiang: bool = is_campaign and _campaign_level_id() == "level2"
 	var is_kuai: bool = is_campaign and _campaign_level_id() == "level7"
 	var hg_external: Dictionary = {}
+	var hg_mission_events: Variant = null
 	var jiang_external: Dictionary = {}
 	var kuai_external: Dictionary = {}
 	var gao_external: Dictionary = {}
@@ -378,6 +380,9 @@ func prepare(record: Variant) -> Dictionary:
 			"mission_token": m_token, "presentation_token": record.profile.presentation_token}, indexed.known_ids, indexed.next_entity_id)
 		if not checked.ok: return _abort(checked, "visual_partition")
 		if is_huang:
+			# configure_presentation has validated and decoded this Mission record.
+			# Check delivery events against the same Level/Unit snapshot before allocation.
+			hg_mission_events = _visual._mission_raw.events
 			checked = _visual.huang_external_registry(s.visual, version, indexed.known_ids)
 			if not checked.ok: return _abort(checked, "chapter_visual")
 			hg_external = checked.tokens
@@ -386,7 +391,7 @@ func prepare(record: Variant) -> Dictionary:
 			if not checked.ok: return _abort(checked, "chapter_visual")
 			kuai_external = checked.tokens
 	var chapter_external: Dictionary = gao_external if is_gao else jiang_external if is_jiang else (kuai_external if is_kuai else hg_external)
-	_unit_plan = _graph().prepare(s.units, version, _battle, _battle.map, lvl_rec, m_token, chapter_external)
+	_unit_plan = _graph().prepare(s.units, version, _battle, _battle.map, lvl_rec, m_token, chapter_external, hg_mission_events)
 	if not _unit_plan.ok: return _abort(_unit_plan, "units")
 	_identity = _unit_plan.identity
 	_battle.units_root = Node2D.new()

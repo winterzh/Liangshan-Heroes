@@ -1,0 +1,134 @@
+{
+  "schema": "huangnigang_agent_visual_review_v1",
+  "reviewed_at": "2026-10-26T15:29:32+08:00",
+  "review_method": "Codex agent directly opened each of the 12 original PNG files with view_image; 1920x1080 files were viewed at original resolution.",
+  "scope": "Simplified and Traditional Chinese task panel, bottom command panel, selection portraits, information and inventory entry visibility across three physical resolutions and two selection states.",
+  "review_outcome": "no_blocking_visual_issue_in_reviewed_layout_scope",
+  "agent_visual_review_completed_for_listed_images": true,
+  "human_acceptance": false,
+  "human_user_acceptance": false,
+  "full_art_accepted": false,
+  "native_release_exe_tested_by_this_review": false,
+  "execution_kind": "compiled_pck_editor_loader",
+  "content_version": "source-v1:9dcc11698617999ae3a6886828fb2e93f228a240ad8b93eb31e7eee80595fbb2",
+  "source_report": {
+    "path": "D:/AI项目/水浒/开发工程/.godot/huangnigang_production_20261020/20261026_151333_c1c6356d/packed_suite_20261026_152413_d2309f43/ui_20261026_152441_d7d36ee0/report.json",
+    "sha256": "e3a81dc65ddf3cb7190d12cede3d9bc6aa5e5f2be9f8e511ab827987e1b43133",
+    "passed": true,
+    "checks": 930,
+    "matrix_samples": 24
+  },
+  "image_directory": "D:/AI项目/水浒/开发工程/.godot/huangnigang_production_20261020/20261026_151333_c1c6356d/packed_suite_20261026_152413_d2309f43/ui_20261026_152441_d7d36ee0/screenshots",
+  "images_reviewed": 12,
+  "observations_common": [
+    "所有已查看图的任务面板、底栏和最右侧信息/物品入口均完整处于画面内，没有重现群选标题撑宽导致右侧按钮被裁切的问题。",
+    "群选标题按设计显示省略号；七张选择头像及当前人物高亮仍可辨认。完整标题的悬停提示未出现在这些截图中，需单独验证。",
+    "任务区域为滚动视口，当前截图位于顶部，显示目标、操作说明及已完成的取车按钮；下方实际交付按钮不在这些截图的可见部分。不能以静态截图代替滚动和点击验收。",
+    "960x720物理分辨率下文字比1280x720小，但任务标题、指令及底栏信息仍可辨认；未将截图表现认定为Android触控/DPI验收。",
+    "场景中仍有部分人物名称互相接近及芦苇中人物变淡，未遮住本次审查的底栏或物品入口；全库美术接受不在本记录范围。"
+  ],
+  "boundaries": [
+    "这是代理对指定原图的直接视觉检查，不是用户真人接受。",
+    "本记录没有点击运行窗口，没有测试标题悬停、任务滚动、物品弹窗和交付旗标点击。",
+    "编译PCK图像不构成原版发行EXE、Steam账号、完整通关或性能验收。截图中的FPS值不是正常时钟长测结果。",
+    "所有图像SHA在审查时从原PNG读取；图片文件没有编辑或重生成。"
+  ],
+  "images": [
+    {
+      "file": "zh_CN_1280x720_ruan_xiaoqi_selected.png",
+      "language": "zh_CN",
+      "dimensions": [1280, 720],
+      "selection": "ruan_xiaoqi_selected",
+      "sha256": "1335038c54fbfd346b2070fc74e0f70703c8da4e86641f2ac4bea5a6bd92145a",
+      "observations": ["简体任务标题、四项目标和完整运输指令可读；面板下缘与底栏留有间隔。", "阮小七姓名、生命、属性及单人头像正常；展开信息和物品按钮完整，没有被通知遮挡。"]
+    },
+    {
+      "file": "zh_CN_1280x720_seven_selected.png",
+      "language": "zh_CN",
+      "dimensions": [1280, 720],
+      "selection": "seven_selected",
+      "sha256": "8f20fcfcfcad4aa02a4dd7091d2c48da8905abca549556fb0f8ff129ada64866",
+      "observations": ["群选标题显示阮小七、当前及总数开头后以省略号收束，没有撑宽信息栏。", "七张选择头像、当前金框、任务面板和最右信息/物品入口均在画面内，未互相覆盖。"]
+    },
+    {
+      "file": "zh_CN_1920x1080_ruan_xiaoqi_selected.png",
+      "language": "zh_CN",
+      "dimensions": [1920, 1080],
+      "selection": "ruan_xiaoqi_selected",
+      "sha256": "ce3771063a94715f581ba2ef518813e22bbe12fc042b4cff782d9282d2eb9022",
+      "observations": ["按原始1920x1080图查看，任务指令、目标和底栏姓名/数值字形清楚，无越界。", "底栏单人头像及右侧展开信息、物品按钮均完整，任务区与底栏保持间隔。"]
+    },
+    {
+      "file": "zh_CN_1920x1080_seven_selected.png",
+      "language": "zh_CN",
+      "dimensions": [1920, 1080],
+      "selection": "seven_selected",
+      "sha256": "da460dcd3ff41c9452f3da157a3c1d2fc001851661d168a665020a55ef2735cc",
+      "observations": ["群选长标题以省略号限定在信息栏内；七张头像整齐显示，当前头像金框明确。", "右侧信息和物品入口完整，底栏没有向右越出，任务区没有覆盖底栏。"]
+    },
+    {
+      "file": "zh_CN_960x720_ruan_xiaoqi_selected.png",
+      "language": "zh_CN",
+      "dimensions": [960, 720],
+      "selection": "ruan_xiaoqi_selected",
+      "sha256": "e37c9e4690f4c43b8b28d56e6c55c5c1458cb568b8e9bb9abf97f66b26f7be73",
+      "observations": ["窄物理画面中的文字较小但可辨，任务说明在滚动视口内正常换行，未碰到底栏。", "阮小七姓名、生命、属性、单人头像和最右两个入口完整；通知位于底栏上方。"]
+    },
+    {
+      "file": "zh_CN_960x720_seven_selected.png",
+      "language": "zh_CN",
+      "dimensions": [960, 720],
+      "selection": "seven_selected",
+      "sha256": "98b25b9d67887962b2fc678cb88f7034b8c53077f0ecf4d105d385d371f83151",
+      "observations": ["群选标题以省略号结束，七张小头像均可见；未出现右侧信息按钮被裁掉。", "任务面板与底栏没有重叠，物品入口完整；正在淡出的世界通知不影响这些控件。"]
+    },
+    {
+      "file": "zh_TW_1280x720_ruan_xiaoqi_selected.png",
+      "language": "zh_TW",
+      "dimensions": [1280, 720],
+      "selection": "ruan_xiaoqi_selected",
+      "sha256": "d24df7f543a000fc1bd5f8f2f0cac290b95d3d6ef4c7056c0997860cc0ff3478",
+      "observations": ["繁体任务标题、指令和目标正常显示，无缺字方框；滚动面板下缘与底栏分开。", "單人姓名、生命、属性与头像正常，展开资讯及物品入口完整。"]
+    },
+    {
+      "file": "zh_TW_1280x720_seven_selected.png",
+      "language": "zh_TW",
+      "dimensions": [1280, 720],
+      "selection": "seven_selected",
+      "sha256": "86742f877f67199740881e4d511583d4f3abbf8a3cab49871b439494e686dbfc",
+      "observations": ["繁体群选标题用省略号收束，没有挤出七人头像或右侧控件。", "七张选择头像、当前金框、展开资讯和物品按钮均完整，任务面板与底栏不重叠。"]
+    },
+    {
+      "file": "zh_TW_1920x1080_ruan_xiaoqi_selected.png",
+      "language": "zh_TW",
+      "dimensions": [1920, 1080],
+      "selection": "ruan_xiaoqi_selected",
+      "sha256": "af1b3c0c0f6ada3521efb3c75eee43a57e8e1756f4879e552babddad7e6a0712",
+      "observations": ["原始分辨率下繁体标题、目标、长指令以及姓名/数值清楚，字形和换行正常。", "单人头像与最右展开资讯/物品按钮完整，面板边缘均未越出或相互重叠。"]
+    },
+    {
+      "file": "zh_TW_1920x1080_seven_selected.png",
+      "language": "zh_TW",
+      "dimensions": [1920, 1080],
+      "selection": "seven_selected",
+      "sha256": "568b9a6ebec6f82f8ef2c9be28916d29919fcb19111a208eb6fda9b2e8bbb305",
+      "observations": ["群选标题省略号表现正常，七张头像和当前人物金框完整可辨。", "最右展开资讯及物品入口保持在屏内，任务区域与底栏留有间隔，没有大字号导致的新溢出。"]
+    },
+    {
+      "file": "zh_TW_960x720_ruan_xiaoqi_selected.png",
+      "language": "zh_TW",
+      "dimensions": [960, 720],
+      "selection": "ruan_xiaoqi_selected",
+      "sha256": "6b6a596d6cb0c4ac4dcc995aae8222ab20f344fc29fbefd72affaac75138133d",
+      "observations": ["繁体任务文本在窄物理画面较小但可辨，说明和上部取车按钮正常留在滚动视口内。", "单人姓名、生命和头像没有被裁切，右侧展开资讯及物品按钮完整，底栏未与任务面板重叠。"]
+    },
+    {
+      "file": "zh_TW_960x720_seven_selected.png",
+      "language": "zh_TW",
+      "dimensions": [960, 720],
+      "selection": "seven_selected",
+      "sha256": "6df16941503ecacd02d34045197e6e6662372eda5c64053f776854521371d684",
+      "observations": ["繁体群选标题在当前/总数提示后显示省略号，七张头像及当前高亮仍全部可见。", "任务面板、底栏和右侧资讯/物品入口没有溢出或互相覆盖；静图未证明下方交付按钮的滚动点击行为。"]
+    }
+  ]
+}

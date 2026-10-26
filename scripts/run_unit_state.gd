@@ -9,7 +9,7 @@ extends RefCounted
 ## Six visual caches are regenerated; wheel angle is not gameplay/save state.
 const SCHEMA := "defense_unit_state_v2"
 const LEVEL3_SCHEMA := "level3_unit_state_v1"
-const LEVEL1_SCHEMA := "level1_unit_state_v1"
+const LEVEL1_SCHEMA := "level1_unit_state_v2"
 const LEVEL6_SCHEMA := "level6_unit_state_v1"
 const LEVEL2_SCHEMA := "level2_unit_state_v1"
 const LEVEL5_SCHEMA := "level5_unit_state_v1"
@@ -22,7 +22,8 @@ const LEVEL7_SCHEMA := "level7_unit_state_v1"
 const CLASSIC_CONTEXT := {"mode": "defense", "level_id": "", "waves": 30}
 const ZHU_PRISONERS := ["shi_qian", "shi_xiu", "qin_ming", "yang_lin", "huang_xin", "wang_ying", "deng_fei"]
 const HG_CONTEXT := {"mode": "campaign", "level_id": "level1", "waves": 0}
-const HG_BUNDLE_COUNT := 3
+const Transport := preload("res://scripts/huangnigang_transport.gd")
+const HG_BUNDLE_COUNT := Transport.LOAD_COUNT
 const HG_ACTOR_KEYS := ["chao_gai", "wu_yong", "gongsun_sheng", "liu_tang", "ruan_xiaoer", "ruan_xiaowu", "ruan_xiaoqi", "bai_sheng"]
 const PINE_ESCORT_KEYS := ["dong_chao", "xue_ba"]
 const PINE_ROLE_FIELDS := ["lin_bound", "lin_freed", "lu", "escorts", "stage", "rescued", "treated", "escort_orders", "escort_player_token", "escort_player_target"]
@@ -936,10 +937,12 @@ func _configure_context(context: Dictionary, roles: Dictionary) -> void:
 		_unit_schema = LEVEL3_SCHEMA
 		return
 	if context.mode == "campaign" and context.level_id == "level1" and context.waves == 0:
-		if not _fields(roles, ["cart", "yang", "bundles", "convoy", "actors", "cargo"]): _scope_error = "LEVEL1_ROLES"; return
+		if not _fields(roles, ["cart", "yang", "bundles", "convoy", "actors", "cargo", "cart_loaded", "delivered_loads", "empty_cargo"]): _scope_error = "LEVEL1_ROLES"; return
 		if typeof(roles.bundles) != TYPE_ARRAY or roles.bundles.size() != HG_BUNDLE_COUNT: _scope_error = "LEVEL1_ROLES"; return
 		if typeof(roles.convoy) != TYPE_ARRAY or typeof(roles.actors) != TYPE_ARRAY: _scope_error = "LEVEL1_ROLES"; return
 		if typeof(roles.cargo) != TYPE_DICTIONARY or roles.cart != roles.bundles[0]: _scope_error = "LEVEL1_ROLES"; return
+		if typeof(roles.empty_cargo) != TYPE_DICTIONARY: _scope_error = "LEVEL1_ROLES"; return
+		if not Transport.valid_loaded(roles.cart_loaded) or typeof(roles.delivered_loads) != TYPE_INT or roles.delivered_loads < 0 or roles.delivered_loads > Transport.LOAD_COUNT: _scope_error = "LEVEL1_TRANSPORT_VALUES"; return
 		_huang_roles = roles.duplicate(true)
 		var pending: Dictionary = {}
 		for field: String in ["cart", "yang"]:
@@ -952,7 +955,7 @@ func _configure_context(context: Dictionary, roles: Dictionary) -> void:
 			if id == null: continue
 			# cart aliases bundles[0] after assignment; one entity, one role entry.
 			if pending.has(id):
-				if pending[id].key != "treasure_cart": _scope_error = "LEVEL1_ROLE_ID"; return
+				if index != 0 or id != roles.cart or pending[id].key != "treasure_cart": _scope_error = "LEVEL1_ROLE_ID"; return
 				continue
 			if not _id(id): _scope_error = "LEVEL1_ROLE_ID"; return
 			pending[id] = {"role": "bundle", "key": "treasure_cart"}
@@ -1377,7 +1380,7 @@ func _check_level7_parts(v: Dictionary, refs: Dictionary, meta: Dictionary, node
 	for field: String in ["story_assist_partner", "story_assist_owner"]:
 		if refs[field].state != "none": return _failure("LEVEL7_ASSISTANCE_UNSUPPORTED", field)
 	# captive spawn_at does not register a footprint, even with mission_solid.
-	for field: String in ["fcell", "fhalf", "footprint_blocked", "resource_footprint", "carrying_tribute", "tribute_process_mode", "jiangzhou_pressure"]:
+	for field: String in ["fcell", "fhalf", "footprint_blocked", "resource_footprint", "carrying_tribute", "pushing_empty_tribute", "tribute_process_mode", "jiangzhou_pressure"]:
 		if meta.has(field): return _failure("LEVEL7_FOREIGN_METADATA", field)
 	var winding: bool = role.role == "menshen" and _kuai_roles.fist_windup > 0.0
 	if meta.has("story_pose"):
@@ -1506,7 +1509,7 @@ func _check_level2_values(v: Dictionary) -> Dictionary:
 func _check_level2_parts(v: Dictionary, refs: Dictionary, meta: Dictionary, node: Dictionary) -> Dictionary:
 	for field: String in ["story_assist_partner", "story_assist_owner"]:
 		if refs[field].state != "none": return _failure("LEVEL2_ASSISTANCE_UNSUPPORTED", field)
-	for field: String in ["story_pose", "carrying_tribute", "tribute_process_mode", "jiangzhou_pressure"]:
+	for field: String in ["story_pose", "carrying_tribute", "pushing_empty_tribute", "tribute_process_mode", "jiangzhou_pressure"]:
 		if meta.has(field): return _failure("LEVEL2_FOREIGN_CHAPTER_METADATA", field)
 	var role: Dictionary = _chapter_roles.get(str(v.entity_id), {})
 	var solid: bool = not role.is_empty() and role.role in ["camps", "caches", "post", "towers"]
@@ -1614,7 +1617,7 @@ func _check_level6_parts(v: Dictionary, refs: Dictionary, meta: Dictionary) -> D
 		if refs[field].state != "none": return _failure("LEVEL6_ASSISTANCE_UNSUPPORTED", field)
 	if meta.has("footprint_blocked") and (typeof(meta.footprint_blocked) != TYPE_BOOL or meta.footprint_blocked):
 		return _failure("LEVEL6_ACTOR_FOOTPRINT")
-	for field: String in ["carrying_tribute", "tribute_process_mode"]:
+	for field: String in ["carrying_tribute", "pushing_empty_tribute", "tribute_process_mode"]:
 		if meta.has(field): return _failure("LEVEL6_FOREIGN_CHAPTER_METADATA", field)
 	var role: Dictionary = _chapter_roles[str(v.entity_id)]
 	if meta.has("story_pose"):
@@ -1701,8 +1704,29 @@ func validate_level3_membership(states: Dictionary, active_ids: Array) -> Dictio
 		if active.has(id) != (value.hp > 0.0 and not value._dying): return _failure("LEVEL3_ROLE_ACTIVE_MEMBERSHIP", id)
 	return {"ok": true, "complete_world": false, "root_and_effect_validation_required": true}
 
-func validate_level1_membership(states: Dictionary, active_ids: Array) -> Dictionary:
+func _level1_delivery_events(events: Variant) -> Dictionary:
+	# Delivery flags drive the installed chapter. Never infer that gameplay
+	# progress from Unit faction alone, or accept the old three-load event alias.
+	if typeof(events) != TYPE_ARRAY or events.size() > MAX_ARRAY_ITEMS:
+		return _failure("LEVEL1_MISSION_EVENTS_REQUIRED")
+	var seen: Dictionary = {}
+	var delivered: Array = []
+	for event: Variant in events:
+		if typeof(event) != TYPE_STRING or event.is_empty() or event.length() > 4096 or seen.has(event):
+			return _failure("LEVEL1_MISSION_EVENT")
+		seen[event] = true
+		if event.begins_with("deliver_"): return _failure("LEVEL1_DELIVERY_EVENT", event)
+		if not event.begins_with("force_delivered_"): continue
+		var index: int = String(event).trim_prefix("force_delivered_").to_int()
+		if not Transport.is_cart(index) or event != "force_delivered_%d" % index:
+			return _failure("LEVEL1_DELIVERY_EVENT", event)
+		delivered.append(index)
+	return {"ok": true, "value": delivered}
+
+func validate_level1_membership(states: Dictionary, active_ids: Array, mission_events: Variant = null) -> Dictionary:
 	if _unit_schema != LEVEL1_SCHEMA or not _scope_error.is_empty(): return _failure("LEVEL1_CONTEXT_REQUIRED")
+	var delivery_events: Dictionary = _level1_delivery_events(mission_events)
+	if not delivery_events.ok: return delivery_events
 	var known: Dictionary = {}
 	for id: Variant in states:
 		if not _id(id) or typeof(states[id]) != TYPE_DICTIONARY or states[id].get("ok") != true or states[id].get("entity_id") != id or typeof(states[id].get("values")) != TYPE_DICTIONARY: return _failure("VALIDATED_LEVEL1_STATES_REQUIRED")
@@ -1713,23 +1737,54 @@ func validate_level1_membership(states: Dictionary, active_ids: Array) -> Dictio
 	for id: Variant in active_ids:
 		if not _id(id) or not known.has(id) or active.has(id): return _failure("LEVEL1_ACTIVE_REGISTRY")
 		active[id] = true
-	var carried := {}
+	var carried_keys: Dictionary = {}
+	var empty_carried_keys: Dictionary = {}
+	var delivered: Array = delivery_events.value
+	var active_loads: Array = []
 	for index in _huang_roles.cargo:
 		var carrier: Variant = _huang_roles.cargo[index]
-		if typeof(index) != TYPE_INT or index < 0 or index >= HG_BUNDLE_COUNT or not states.has(carrier) or carrier not in _huang_roles.actors or not active.has(carrier): return _failure("LEVEL1_CARRIER_REFERENCE")
+		if not Transport.is_cart(index) or not states.has(carrier) or carrier not in _huang_roles.actors or not active.has(carrier): return _failure("LEVEL1_CARRIER_REFERENCE")
 		var actor: Dictionary = states[carrier]
-		if typeof(actor.metadata.get("carrying_tribute")) != TYPE_INT or actor.metadata.get("carrying_tribute") != index or actor.values.hp <= 0.0 or actor.values.story_outcome != "": return _failure("LEVEL1_CARRIER_STATE")
-		var bundle: Variant = _huang_roles.bundles[index]
-		if not states.has(bundle) or carried.has(bundle): return _failure("LEVEL1_CARRIED_BUNDLE")
-		carried[bundle] = true
+		if typeof(actor.metadata.get("carrying_tribute")) != TYPE_INT or actor.metadata.carrying_tribute != index or actor.values.hp <= 0.0 or actor.values._dying or actor.values.story_outcome != "": return _failure("LEVEL1_CARRIER_STATE")
+		carried_keys[index] = actor.values.key
+		if actor.values.key != Transport.owner(index):
+			for owner_id in _huang_roles.actors:
+				if states.has(owner_id) and states[owner_id].values.key == Transport.owner(index) and states[owner_id].values.hp > 0.0 and not states[owner_id].values._dying and states[owner_id].values.story_outcome == "": return _failure("LEVEL1_CART_OWNER")
+	for index in _huang_roles.empty_cargo:
+		var carrier: Variant = _huang_roles.empty_cargo[index]
+		if not Transport.is_cart(index) or _huang_roles.cart_loaded.has(index) or not states.has(carrier) or carrier not in _huang_roles.actors or not active.has(carrier): return _failure("LEVEL1_EMPTY_CARRIER_REFERENCE")
+		var actor: Dictionary = states[carrier]
+		if typeof(actor.metadata.get("pushing_empty_tribute")) != TYPE_INT or actor.metadata.pushing_empty_tribute != index or actor.metadata.has("carrying_tribute") or actor.values.hp <= 0.0 or actor.values._dying or actor.values.story_outcome != "": return _failure("LEVEL1_EMPTY_CARRIER_STATE")
+		empty_carried_keys[index] = actor.values.key
+		if actor.values.key != Transport.owner(index):
+			for owner_id in _huang_roles.actors:
+				if states.has(owner_id) and states[owner_id].values.key == Transport.owner(index) and states[owner_id].values.hp > 0.0 and not states[owner_id].values._dying and states[owner_id].values.story_outcome == "": return _failure("LEVEL1_CART_OWNER")
+	for index in range(HG_BUNDLE_COUNT):
+		var id: Variant = _huang_roles.bundles[index]
+		if not states.has(id): return _failure("LEVEL1_LOAD_REFERENCE")
+		if active.has(id): active_loads.append(index)
+		if index < Transport.CART_COUNT:
+			var was_delivered: bool = delivered.has(index)
+			if states[id].values.faction != (0 if was_delivered else 1):
+				return _failure("LEVEL1_DELIVERY_FACTION", str(index))
+		elif states[id].values.faction != 1: return _failure("LEVEL1_LOAD_FACTION")
+	var expected: Dictionary = Transport.ledger(_huang_roles.cart_loaded, carried_keys, delivered, true, empty_carried_keys)
+	if not expected.ok or expected.delivered_loads != _huang_roles.delivered_loads: return _failure("LEVEL1_TRANSPORT_LEDGER")
+	var checked_membership: Dictionary = Transport.validate_membership(_huang_roles.cart_loaded, carried_keys, delivered, active_loads, expected.empty_carts, true, empty_carried_keys)
+	if not checked_membership.ok: return _failure("LEVEL1_TRANSPORT_MEMBERSHIP")
+	var stowed: Dictionary = {}
+	for index in expected.stowed_loads: stowed[_huang_roles.bundles[index]] = true
 	for id: String in states:
 		if states[id].metadata.has("carrying_tribute"):
 			var index: Variant = states[id].metadata.carrying_tribute
-			if typeof(index) != TYPE_INT or _huang_roles.cargo.get(index) != id: return _failure("LEVEL1_ORPHAN_CARRIER")
+			if not Transport.is_cart(index) or _huang_roles.cargo.get(index) != id: return _failure("LEVEL1_ORPHAN_CARRIER")
+		if states[id].metadata.has("pushing_empty_tribute"):
+			var index: Variant = states[id].metadata.pushing_empty_tribute
+			if not Transport.is_cart(index) or _huang_roles.empty_cargo.get(index) != id: return _failure("LEVEL1_ORPHAN_EMPTY_CARRIER")
 	for id: String in _chapter_roles:
 		var state: Dictionary = states[id]
 		var value: Dictionary = state.values
-		if carried.has(id):
+		if stowed.has(id):
 			if active.has(id) or state.node.visible or state.node.activation.mode != Node.PROCESS_MODE_DISABLED or value.hp <= 0.0 or value._dying: return _failure("LEVEL1_CARRIED_MEMBERSHIP", id)
 			if typeof(state.metadata.get("tribute_process_mode")) != TYPE_INT or state.metadata.tribute_process_mode < 0 or state.metadata.tribute_process_mode > 4: return _failure("LEVEL1_CARRIED_PROCESS_MODE")
 		elif active.has(id) != (value.hp > 0.0 and not value._dying) or state.metadata.has("tribute_process_mode"): return _failure("LEVEL1_ROLE_ACTIVE_MEMBERSHIP", id)

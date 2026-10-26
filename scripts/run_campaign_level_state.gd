@@ -3,6 +3,7 @@ extends RefCounted
 ## externally owned. Never calls deploy/on_start or activates a world.
 const Codec := preload("res://scripts/run_state_value_codec.gd")
 const U := preload("res://scripts/unit.gd")
+const Transport := preload("res://scripts/huangnigang_transport.gd")
 const SCHEMA := "campaign_level_component_v1"
 const SCRIPTS := {
 	"level1": preload("res://scripts/levels/level1_huangnigang_short.gd"),
@@ -21,7 +22,7 @@ const FIELDS := {
 		"float": "rest_t exposure smoke_t attention_left team_t convoy_entry_t bai_unload_t",
 		"text": "cargo_plan cargo_objective_cache wine_step", "strings": "suspicious_keys",
 		"index_text": "cargo_assignments", "index_bool": "cargo_ready", "index_int": "force_attempts",
-		"unit": "cart yang", "units": "convoy bundles actors", "index_unit": "cargo",
+		"unit": "cart yang", "units": "convoy bundles actors", "index_unit": "cargo empty_cargo",
 		"external": "good_sign sale_sign suspicion_sign", "externals": "field_signs jujube_carts"},
 	"level2": {
 		"int": "enemy_produced enemy_spent_gold enemy_spent_wood", "bools": "cache_taken",
@@ -69,7 +70,7 @@ const MAX_REFERENCES := 4096
 # deleting a slot is not. Only arrays with fixed production consumers/layouts
 # are listed. Trained troops, reserves, support and similar pools stay variable.
 const REFERENCE_SHAPES := {
-	"level1": {"bundles": 3},
+	"level1": {"bundles": Transport.LOAD_COUNT},
 	"level2": {"caches": 2, "executioners": 2},
 	"level3": {"prisoners": 7},
 	"level4": {"posts": 2, "riders": 12},
@@ -160,7 +161,7 @@ func _map_refs(v: Variant, kind: String, ids: Dictionary, encode: bool) -> Dicti
 	var mapped := {}
 	for key: Variant in v:
 		if kind == "index_unit":
-			if typeof(key) != TYPE_INT or key < 0 or key > 2: return _bad("CARGO_INDEX")
+			if typeof(key) != TYPE_INT or key < 0 or key >= Transport.CART_COUNT: return _bad("CARGO_INDEX")
 		elif not _token(key): return _bad("NAMED_UNIT_KEY")
 		var row := _map_refs(v[key], "unit", ids, encode)
 		if not row.ok: return row
@@ -186,7 +187,7 @@ func _value(v: Variant, kind: String, field: String, next_id: int) -> bool:
 		"index_text", "index_bool", "index_int", "orders":
 			if typeof(v) != TYPE_DICTIONARY or v.size() > MAX_REFERENCES: return false
 			for key: Variant in v:
-				if typeof(key) != TYPE_INT or (key <= 0 or key >= next_id if kind == "orders" else key < 0 or key > 2): return false
+				if typeof(key) != TYPE_INT or (key <= 0 or key >= next_id if kind == "orders" else key < 0 or key >= Transport.CART_COUNT): return false
 				if not _value(v[key], "int" if kind in ["index_int", "orders"] else "bool" if kind == "index_bool" else "text", field, next_id): return false
 			return true
 	return false
@@ -198,7 +199,7 @@ func _checks(level_id: String, values: Dictionary) -> bool:
 	if level_id == "level3" and values.stage not in ["scout", "contest", "siege"]: return false
 	if level_id in ["level4", "level5"] and values.waves.size() != (2 if level_id == "level4" else 3): return false
 	if level_id == "level5" and (values.production_t.size() != 2 or values.produced.size() != 2): return false
-	if level_id == "level1" and (values.delivered < 0 or values.delivered > 3): return false
+	if level_id == "level1" and (values.delivered < 0 or values.delivered > Transport.LOAD_COUNT or not Transport.valid_loaded(values.cargo_ready) or values.cargo_plan not in ["", "free"]): return false
 	if level_id == "level4" and (values.broken_count < 0 or values.broken_count > 12 or values.lhm_killed < 0 or values.lhm_killed > 12): return false
 	if level_id == "level7" and values.special_kind not in ["heavy", "rush"]: return false
 	return true
@@ -217,6 +218,16 @@ func _reference_shapes(level_id: String, references: Dictionary) -> Dictionary:
 			if rows.size() != expected.size(): return _bad("REFERENCE_DIMENSION", field)
 			for index in range(expected.size()):
 				if typeof(rows[index]) != TYPE_ARRAY or rows[index].size() != expected[index]: return _bad("REFERENCE_DIMENSION", field)
+	return {"ok": true}
+
+func _external_shapes(level_id: String, external: Dictionary) -> Dictionary:
+	if level_id != "level1": return {"ok": true}
+	var carts: Variant = external.get("jujube_carts")
+	if typeof(carts) != TYPE_ARRAY or carts.size() != Transport.CART_COUNT: return _bad("LEVEL1_CART_REFERENCES", "jujube_carts")
+	# The same original cart survives pickup, travel, loading and a dropped load.
+	# Reject missing, duplicated or reordered bindings instead of making a new cart.
+	for index in range(Transport.CART_COUNT):
+		if typeof(carts[index]) != TYPE_STRING or carts[index] != "ext:level1:jujube_carts:%d" % index: return _bad("LEVEL1_CART_REFERENCE_IDENTITY", "jujube_carts")
 	return {"ok": true}
 
 func _external_types(field: String, value: Variant) -> bool:
@@ -260,6 +271,8 @@ func capture(level: Variant, level_id: String, content_version: String, id_to_un
 	if not _checks(level_id, values): return _bad("LEVEL_INVARIANT")
 	var dimensions := _reference_shapes(level_id, refs)
 	if not dimensions.ok: return dimensions
+	var external_dimensions := _external_shapes(level_id, external)
+	if not external_dimensions.ok: return external_dimensions
 	var packed := _codec.encode({"values": values, "references": refs, "external": external})
 	if not packed.ok: return packed
 	return {"ok": true, "record": {"schema": SCHEMA, "level_id": level_id, "content_version": content_version, "mission_token": boundary.mission_token, "payload": packed.value}, "complete_world": false}
@@ -303,6 +316,8 @@ func validate(record: Variant, level_id: String, content_version: String, known_
 	if not _checks(level_id, data.values): return _bad("LEVEL_INVARIANT")
 	var dimensions := _reference_shapes(level_id, data.references)
 	if not dimensions.ok: return dimensions
+	var external_dimensions := _external_shapes(level_id, data.external)
+	if not external_dimensions.ok: return external_dimensions
 	return {"ok": true, "value": data, "complete_world": false, "mission_and_visuals_owned_by_caller": true}
 
 func restore(record: Variant, level_id: String, content_version: String, id_to_unit: Dictionary,

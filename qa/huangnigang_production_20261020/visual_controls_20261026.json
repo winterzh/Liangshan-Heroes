@@ -1,0 +1,96 @@
+{
+  "schema": "huangnigang_controls_visual_review_v1",
+  "reviewed_on": "2026-10-26",
+  "review_type": "agent_direct_visual_review_of_five_original_pngs",
+  "scope": "controls worker only; no conclusion for the complete packed suite or release EXE",
+  "execution_kind": "compiled_pck_editor_loader",
+  "content_version": "source-v1:feb9b4a1ff7aea9294aabcb02e04a317770c87fa9b80ce56e848ae1023cd71b4",
+  "worker_result": {
+    "worker": "controls",
+    "passed": true,
+    "checks": 64,
+    "failures": 0,
+    "receipt_complete": true,
+    "exit_code": 0,
+    "child_process_terminal": true
+  },
+  "original_report": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\.godot\\huangnigang_production_20261020\\20261026_155609_17e6bdbb\\packed_suite_20261026_161356_519eb81e\\controls_20261026_161435_6d49dfbd\\report.json",
+    "sha256": "b5c8acd8ffc27e9db17851530930a4333c54e293a562bb82ede0912b2a62eec3"
+  },
+  "original_receipt": {
+    "path": "D:\\AI项目\\水浒\\开发工程\\.godot\\huangnigang_production_20261020\\20261026_155609_17e6bdbb\\packed_suite_20261026_161356_519eb81e\\controls_20261026_161435_6d49dfbd\\receipt.json",
+    "sha256": "f8ab8aa91db7ea9bb67455fe458f2da72f38417bdfd40b1cd490bea1baf252d3"
+  },
+  "screenshots": [
+    {
+      "label": "mission_tooltip",
+      "path": "D:\\AI项目\\水浒\\开发工程\\.godot\\huangnigang_production_20261020\\20261026_155609_17e6bdbb\\packed_suite_20261026_161356_519eb81e\\controls_20261026_161435_6d49dfbd/screenshots/mission_tooltip.png",
+      "sha256": "0fffb7ba6d7a748daaab9f1cbc2da9e390e90907bb73e2793ad70d3ab33ebf02",
+      "original_report_sha_matches": true,
+      "directly_viewed_original": true,
+      "observation": "直接目检原图：任务按钮为 Objectives，悬浮提示完整显示英文 Show this chapter's objectives and location buttons.。report 的中文是原始 tooltip/Label.text，不能据此判定漏译。",
+      "controls_visual_blocker_observed": false
+    },
+    {
+      "label": "mission_tooltip_paused",
+      "path": "D:\\AI项目\\水浒\\开发工程\\.godot\\huangnigang_production_20261020\\20261026_155609_17e6bdbb\\packed_suite_20261026_161356_519eb81e\\controls_20261026_161435_6d49dfbd/screenshots/mission_tooltip_paused.png",
+      "sha256": "2e3ad6c53af06ee4657bff422c18c80c0110100ff16bae314c7771407c19af82",
+      "original_report_sha_matches": true,
+      "directly_viewed_original": true,
+      "observation": "直接目检原图：首次 Esc 后 Paused 菜单完整可见，Resume/Restart/Main Menu/Quit/Settings/Fullscreen 按钮均未被旧任务提示遮挡；旧 tooltip 仍停留在左上原位置。",
+      "controls_visual_blocker_observed": false
+    },
+    {
+      "label": "group_title_tooltip",
+      "path": "D:\\AI项目\\水浒\\开发工程\\.godot\\huangnigang_production_20261020\\20261026_155609_17e6bdbb\\packed_suite_20261026_161356_519eb81e\\controls_20261026_161435_6d49dfbd/screenshots/group_title_tooltip.png",
+      "sha256": "8b7cd93aca6860e3c53d1da73f9f1505386e51c1c95a5b1663a87e4740f05b88",
+      "original_report_sha_matches": true,
+      "directly_viewed_original": true,
+      "observation": "直接目检原图：底栏群选标题使用省略号，真实悬浮提示完整显示 Chao Gai (Current · 7 total · Tab to cycle)，物品入口可见。",
+      "controls_visual_blocker_observed": false
+    },
+    {
+      "label": "group_title_tooltip_paused",
+      "path": "D:\\AI项目\\水浒\\开发工程\\.godot\\huangnigang_production_20261020\\20261026_155609_17e6bdbb\\packed_suite_20261026_161356_519eb81e\\controls_20261026_161435_6d49dfbd/screenshots/group_title_tooltip_paused.png",
+      "sha256": "102a901254bc262aedb5c0a09ec76597a66c9794e5a08e1385ce8be184c9d025",
+      "original_report_sha_matches": true,
+      "directly_viewed_original": true,
+      "observation": "直接目检原图：群选标题悬浮时按 Esc 后暂停菜单可见且文字完整；旧群选 tooltip 留在底部原位置，未遮挡暂停按钮。",
+      "controls_visual_blocker_observed": false
+    },
+    {
+      "label": "returned_menu",
+      "path": "D:\\AI项目\\水浒\\开发工程\\.godot\\huangnigang_production_20261020\\20261026_155609_17e6bdbb\\packed_suite_20261026_161356_519eb81e\\controls_20261026_161435_6d49dfbd/screenshots/returned_menu.png",
+      "sha256": "615aae41dc8aeb16898dbac90a1dcb22891969f32e3ff45d78c8e24acd2d64ce",
+      "original_report_sha_matches": true,
+      "directly_viewed_original": true,
+      "observation": "直接目检原图：已返回英文生产主菜单，Campaign、Defense、1v1 Skirmish、Arena、Hero Compendium、More 与语言选择入口均在画面内。",
+      "controls_visual_blocker_observed": false
+    }
+  ],
+  "localization_note": {
+    "raw_tooltip_source": "展开本关目标与任务定位按钮",
+    "rendered_english_observed": "Show this chapter's objectives and location buttons.",
+    "catalog_values": {
+      "zh_CN": "展开本关目标与任务定位按钮",
+      "zh_TW": "展開本關目標與任務定位按鈕",
+      "en": "Show this chapter's objectives and location buttons.",
+      "ja": "この章の目標と現場確認ボタンを表示します。"
+    },
+    "explanation": "campaign_mission.gd:78 initially assigns the source string. localization.gd:270-294 loads catalog entries into Godot TranslationServer, and default Control/Label automatic translation renders the English text without replacing Label.text. Raw-property equality is evidence of a real tooltip, not a language-rendering assertion.",
+    "rendered_language_missing": false,
+    "expanded_mission_selection_button_labels_reviewed": false
+  },
+  "limitations": [
+    "Only the five listed English controls screenshots were visually reviewed; this is not a four-language full-chapter visual acceptance.",
+    "No FPS or performance conclusion is inferred from screenshot counters.",
+    "Static images show retained tooltip placement after pause; they do not independently prove pointer-move dismissal.",
+    "The parent reported force_departure was still running when this review was requested. This file does not assert whole-batch completion."
+  ],
+  "native_release_tested": false,
+  "os_input_tested": false,
+  "desktop_os_keyboard_tested": false,
+  "human_acceptance": false,
+  "complete_batch_acceptance": false
+}

@@ -4492,23 +4492,44 @@ func _complete_end(victory: bool, line: String) -> void:
 		campaign_result["new_story_seal"] = bool(saved_result.get("new_story_seal", false))
 	SteamService.settle(_steam_run_id, victory, campaign_result)
 	_update_steam_presence()
-	var report := _hero_end_tally()
+	# Freeze the display inputs after the one settlement. Language changes may
+	# rebuild text, but cannot settle, award, close metrics or alter these rows.
+	var frozen_result: Dictionary = campaign_result.duplicate(true)
+	var saved_rows: Array = []
+	var saved_heroes := {"track_combat": track_hero_combat_stats,
+		"kills": hero_kills.duplicate(true), "combat": hero_combat_stats.duplicate(true)}
+	var has_mission: bool = mission != null
 	if mission != null:
 		mission.finish_metrics(victory)
-		var report_sections: Array[String] = [mission.result_report(campaign_result)]
-		if not mission.report.is_empty(): report_sections.append("\n".join(mission.report))
-		if report != "": report_sections.append(report)
-		report = Localize.text("任务战报\n") + "\n".join(report_sections)
+		saved_rows = mission.report.duplicate()
 		mission._panel.hide()
-	hud.show_end(victory, line, kills, mission != null and camp != null and victory and camp.has_next(), report, campaign_result)
+	var render_report: Callable = func() -> String:
+		return _end_report_text(frozen_result, saved_rows, saved_heroes, has_mission)
+	var report: String = render_report.call()
+	hud.show_end(victory, line, kills, mission != null and camp != null and victory and camp.has_next(), report, frozen_result, render_report)
 	if _smoke:
 		print("[end] victory=%s kills=%d | %s" % [victory, kills, line])
 		print("[end] hero_kills: %s" % _hero_kill_tally())
 
 
+func _end_report_text(result: Dictionary, rows: Array, heroes: Dictionary, has_mission: bool) -> String:
+	var hero_report := _hero_end_tally(heroes)
+	if not has_mission:
+		return hero_report
+	var report_sections: Array[String] = [mission.result_report(result)]
+	var translated_rows: Array[String] = []
+	for row: String in rows:
+		# Each authored log entry retains its existing source/provenance lookup.
+		# Never guess translations for a concatenated multiline report.
+		translated_rows.append(Localize.current_text(row))
+	if not translated_rows.is_empty(): report_sections.append("\n".join(translated_rows))
+	if hero_report != "": report_sections.append(hero_report)
+	return Localize.text("任务战报\n") + "\n".join(report_sections)
+
+
 ## 战后按英雄歼敌排行（多→少），用于结算面板「各路好汉战功」
-func _hero_kill_tally() -> String:
-	var arr: Array = hero_kills.values()
+func _hero_kill_tally(snapshot: Dictionary = {}) -> String:
+	var arr: Array = snapshot.get("kills", hero_kills).values()
 	arr.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return int(a["n"]) > int(b["n"]))
 	var parts: Array = []
 	for r in arr:
@@ -4518,10 +4539,10 @@ func _hero_kill_tally() -> String:
 
 
 ## 驻守战结算展示完整英雄战绩；其他模式保持原有击杀摘要。
-func _hero_end_tally() -> String:
-	if not track_hero_combat_stats:
-		return _hero_kill_tally()
-	var arr: Array = hero_combat_stats.values()
+func _hero_end_tally(snapshot: Dictionary = {}) -> String:
+	if not bool(snapshot.get("track_combat", track_hero_combat_stats)):
+		return _hero_kill_tally(snapshot)
+	var arr: Array = snapshot.get("combat", hero_combat_stats).values()
 	arr.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
 		var ak := int(a.get("kills", 0))
 		var bk := int(b.get("kills", 0))
@@ -5949,6 +5970,25 @@ func _item_slot_for_event_compat(event: InputEventKey) -> int:
 	return legacy_keys.find(event.keycode)
 
 
+func _input(event: InputEvent) -> void:
+	# GUI tooltips consume ui_cancel before _unhandled_input. Keep the battle's
+	# cancel/pause command available even while a mission tooltip is showing.
+	# Paused menus retain their own Escape handling in HUD/SettingsPanel.
+	if not (event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE):
+		return
+	if get_tree().paused or _run_capture_input_closed() or not _gameplay_rng_issue.is_empty():
+		return
+	if phase != Phase.FIGHT:
+		return
+	if is_armed():
+		cancel_armed()
+	elif economy and _worker_cat != "":
+		_worker_back()   # 先退回命令卡根页，再按 Esc 才弹暂停菜单。
+	else:
+		_open_pause()
+	get_viewport().set_input_as_handled()
+
+
 func _unhandled_input(event: InputEvent) -> void:
 	if _run_capture_input_closed(): return
 	if not _gameplay_rng_issue.is_empty(): return
@@ -6192,13 +6232,6 @@ func _unhandled_input(event: InputEvent) -> void:
 		elif Settings.key_matches(event, "idle_worker") \
 				or (Settings.key_for("idle_worker") == KEY_PERIOD and kc == KEY_COMMA):
 			_cycle_idle_worker()
-		elif kc == KEY_ESCAPE:
-			if is_armed():
-				cancel_armed()
-			elif economy and _worker_cat != "":
-				_worker_back()   # 先退回命令卡根页，再按 Esc 才弹暂停菜单
-			else:
-				_open_pause()
 
 
 ## 「圈中带点」指向光标：注册到 CURSOR_CROSS 形状上。攻击移动(A)与指向施法

@@ -163,6 +163,76 @@ func current_text(display: String) -> String:
 	return text(_display_sources.get(display, display))
 
 
+## Installed, finite phrase families only; never pass player text or save data.
+## Register every rendered language as a lookup key in every language table.
+## This survives process-local format-history eviction and needs no save fields.
+func register_fixed_phrases(rows: Array) -> Dictionary:
+	if rows.is_empty() or rows.size() > 256 or _translations.size() != LOCALES.size():
+		return {"ok": false, "code": "FIXED_PHRASE_INPUTS"}
+	var aliases: Dictionary = {}
+	for raw: Variant in rows:
+		if typeof(raw) != TYPE_DICTIONARY or raw.size() != 2 or not raw.has_all(["source", "args"]) or typeof(raw.source) != TYPE_STRING or typeof(raw.args) != TYPE_ARRAY:
+			return {"ok": false, "code": "FIXED_PHRASE_ROW"}
+		var rendered: Array[String] = []
+		for table: Translation in _translations:
+			var template := String(table.get_message(raw.source))
+			if template.is_empty(): return {"ok": false, "code": "FIXED_PHRASE_TEMPLATE", "source": raw.source}
+			var args: Array = []
+			for value: Variant in raw.args:
+				if typeof(value) == TYPE_STRING:
+					var translated := String(table.get_message(value))
+					args.append(value if translated.is_empty() else translated)
+				elif typeof(value) == TYPE_INT:
+					args.append(value)
+				else: return {"ok": false, "code": "FIXED_PHRASE_ARGUMENT"}
+			if not _fixed_phrase_format_valid(template, args):
+				return {"ok": false, "code": "FIXED_PHRASE_FORMAT", "source": raw.source}
+			rendered.append(template % args)
+		for alias: String in rendered:
+			if aliases.has(alias) and aliases[alias] != rendered:
+				return {"ok": false, "code": "FIXED_PHRASE_ALIAS_CONFLICT"}
+			aliases[alias] = rendered
+	# Check the complete batch before writing anything. Existing catalog keys
+	# and reverse lookups are retained; identical registrations are idempotent.
+	for alias: String in aliases:
+		var rendered: Array = aliases[alias]
+		if _display_sources.has(alias) and _display_sources[alias] != rendered[0]:
+			return {"ok": false, "code": "FIXED_PHRASE_SOURCE_CONFLICT"}
+		for index: int in range(_translations.size()):
+			var existing := String(_translations[index].get_message(alias))
+			if not existing.is_empty() and existing != rendered[index]:
+				return {"ok": false, "code": "FIXED_PHRASE_CATALOG_CONFLICT"}
+	var added := 0
+	for alias: String in aliases:
+		var rendered: Array = aliases[alias]
+		for index: int in range(_translations.size()):
+			if String(_translations[index].get_message(alias)).is_empty():
+				_translations[index].add_message(alias, rendered[index])
+				added += 1
+		if alias != rendered[0] and not _display_sources.has(alias):
+			_display_sources[alias] = rendered[0]
+	return {"ok": true, "phrases": rows.size(), "aliases": aliases.size(), "messages_added": added}
+
+
+func _fixed_phrase_format_valid(template: String, args: Array) -> bool:
+	var index := 0
+	var argument := 0
+	while index < template.length():
+		if template[index] != "%": index += 1; continue
+		index += 1
+		if index >= template.length(): return false
+		if template[index] == "%": index += 1; continue
+		if argument >= args.size(): return false
+		if template[index] == "s":
+			if typeof(args[argument]) != TYPE_STRING: return false
+		elif template[index] == "d":
+			if typeof(args[argument]) != TYPE_INT: return false
+		else: return false
+		argument += 1
+		index += 1
+	return argument == args.size()
+
+
 func bind_format(target: Object, source: String, args: Variant, property: StringName = &"text", translate_arguments := true) -> void:
 	var kept_args: Variant = args.duplicate(true) if args is Array or args is Dictionary else args
 	_bind(target, property, {"source": source, "args": kept_args, "translate_arguments": translate_arguments})

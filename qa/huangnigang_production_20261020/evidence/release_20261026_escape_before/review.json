@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "reviewed_at": "2026-10-26T16:01:45.4568003+08:00",
+  "title": "原版发行EXE普通键鼠实操：Esc暂停缺陷修复前证据",
+  "freeze_run": "20261026_151333_c1c6356d",
+  "release_run": "release__20261026_153408_7c9ffd1f",
+  "execution_kind": "original_release_gui",
+  "input_method": "主线程通过普通鼠标与键盘操作原版Windows发行EXE",
+  "screenshot_review_method": "reviewer已使用view_image逐张查看5张原始截图；本归档未启动引擎或操作窗口",
+  "source_directory_retained": true,
+  "observations_json_preserved_byte_for_byte": true,
+  "session_observations": [
+    "本次普通键鼠实操已操作任务面板滚动、选中人物与定位；连续操作结论来自主线程操作记录，不由单张截图替代。",
+    "鼠标停在任务提示区域时，Esc曾未打开暂停，游戏时间继续流逝；移到战场canvas并点击后，Esc正常打开暂停。",
+    "004截图可见任务收起按钮的tooltip和未暂停场景；005截图显示点击canvas后出现暂停菜单。",
+    "Godot 4.6.3 Viewport的GUI阶段会在ui_cancel时取消tooltip，并可将输入标为handled；战斗暂停入口在_unhandled_input，该路径能够解释现象。",
+    "未逐次记录每个被忽略Esc事件的tooltip存在状态，不能宣称已逐次证明因果。"
+  ],
+  "tooltip_presence_proven_for_every_ignored_escape": false,
+  "engine_source_reference": "https://github.com/godotengine/godot/blob/4.6.3-stable/scene/main/viewport.cpp#L2272",
+  "image_observations": [
+    {
+      "path": "001_opening_first.png",
+      "observation": "发行程序已进入黄泥冈开场对白，显示继续入口。"
+    },
+    {
+      "path": "002_paused_after_wine_timeout.png",
+      "observation": "酒计等待超时后的场景已打开暂停菜单；不能据此认定酒计路线完成。"
+    },
+    {
+      "path": "003_pause_without_task_focus.png",
+      "observation": "任务面板收起、未悬停任务提示区域时显示暂停菜单。"
+    },
+    {
+      "path": "004_escape_ignored_over_task_toggle.png",
+      "observation": "任务展开且收起任务按钮tooltip可见，画面未显示暂停菜单；只证明该保存画面的tooltip状态。"
+    },
+    {
+      "path": "005_pause_after_canvas_click.png",
+      "observation": "战场canvas点击后的场景显示暂停菜单，与主线程Esc恢复暂停的操作记录一致。"
+    }
+  ],
+  "release_process_receipt": {
+    "path": ".godot/huangnigang_production_20261020/20261026_151333_c1c6356d/release__20261026_153408_7c9ffd1f/receipt.json",
+    "sha256": "fb5f1b3d8047cfa47f34db1de7aa55fdd2bdaa0cb1c234ae9e67311741cc2697",
+    "complete": true,
+    "exit_code": 0,
+    "errors": [],
+    "execution_kind": "original_release_gui",
+    "release_exe_sha256": "91724f15024a3a545e28ccd83134403d31ce2323a38e51c95e4dfa282f732ab6",
+    "acceptance_scope": "仅证明原版发行程序启动与正常菜单退出；不等于完整玩法、暂停缺陷修复或体验验收通过。"
+  },
+  "full_wine_transport_route_accepted": false,
+  "seven_cart_route_accepted": false,
+  "pause_defect_fixed": false,
+  "human_acceptance": false,
+  "performance_accepted": false,
+  "published": false,
+  "batch_complete": false,
+  "manifest": [
+    {
+      "path": "observations.json",
+      "source_path": ".godot/huangnigang_production_20261020/20261026_151333_c1c6356d/release__20261026_153408_7c9ffd1f/ui_evidence/observations.json",
+      "bytes": 3431,
+      "sha256": "3068c98e93b78c7765f3cbdbf22f85d8b480880fec191272cacfc1145c4b7674",
+      "source_sha256_after_copy": "3068c98e93b78c7765f3cbdbf22f85d8b480880fec191272cacfc1145c4b7674",
+      "copy_sha256": "3068c98e93b78c7765f3cbdbf22f85d8b480880fec191272cacfc1145c4b7674",
+      "byte_identical": true
+    },
+    {
+      "path": "001_opening_first.png",
+      "source_path": ".godot/huangnigang_production_20261020/20261026_151333_c1c6356d/release__20261026_153408_7c9ffd1f/ui_evidence/001_opening_first.png",
+      "bytes": 72256,
+      "sha256": "028de38b7f49d184cdf81fe861a406a0af9ab227b288c425fc255a929b785d75",
+      "source_sha256_after_copy": "028de38b7f49d184cdf81fe861a406a0af9ab227b288c425fc255a929b785d75",
+      "copy_sha256": "028de38b7f49d184cdf81fe861a406a0af9ab227b288c425fc255a929b785d75",
+      "byte_identical": true
+    },
+    {
+      "path": "002_paused_after_wine_timeout.png",
+      "source_path": ".godot/huangnigang_production_20261020/20261026_151333_c1c6356d/release__20261026_153408_7c9ffd1f/ui_evidence/002_paused_after_wine_timeout.png",
+      "bytes": 86882,
+      "sha256": "f43ea660e0b1b745ca4fb0ab2e7139886e521c4d98413f202c87eb2e232c9abe",
+      "source_sha256_after_copy": "f43ea660e0b1b745ca4fb0ab2e7139886e521c4d98413f202c87eb2e232c9abe",
+      "copy_sha256": "f43ea660e0b1b745ca4fb0ab2e7139886e521c4d98413f202c87eb2e232c9abe",
+      "byte_identical": true
+    },
+    {
+      "path": "003_pause_without_task_focus.png",
+      "source_path": ".godot/huangnigang_production_20261020/20261026_151333_c1c6356d/release__20261026_153408_7c9ffd1f/ui_evidence/003_pause_without_task_focus.png",
+      "bytes": 81502,
+      "sha256": "bb241c51c1a8ca6a25940f3a477d2f14169bcd590630d441a166681f5f4091d8",
+      "source_sha256_after_copy": "bb241c51c1a8ca6a25940f3a477d2f14169bcd590630d441a166681f5f4091d8",
+      "copy_sha256": "bb241c51c1a8ca6a25940f3a477d2f14169bcd590630d441a166681f5f4091d8",
+      "byte_identical": true
+    },
+    {
+      "path": "004_escape_ignored_over_task_toggle.png",
+      "source_path": ".godot/huangnigang_production_20261020/20261026_151333_c1c6356d/release__20261026_153408_7c9ffd1f/ui_evidence/004_escape_ignored_over_task_toggle.png",
+      "bytes": 351653,
+      "sha256": "938a0b314dd4b21c0cac459cfbdd840b106e73b8faf8c0269bd4ecd66f4353ef",
+      "source_sha256_after_copy": "938a0b314dd4b21c0cac459cfbdd840b106e73b8faf8c0269bd4ecd66f4353ef",
+      "copy_sha256": "938a0b314dd4b21c0cac459cfbdd840b106e73b8faf8c0269bd4ecd66f4353ef",
+      "byte_identical": true
+    },
+    {
+      "path": "005_pause_after_canvas_click.png",
+      "source_path": ".godot/huangnigang_production_20261020/20261026_151333_c1c6356d/release__20261026_153408_7c9ffd1f/ui_evidence/005_pause_after_canvas_click.png",
+      "bytes": 84074,
+      "sha256": "718c5841edadd64830da88849b1e95dd487edfd88424b8462456c9312eadb549",
+      "source_sha256_after_copy": "718c5841edadd64830da88849b1e95dd487edfd88424b8462456c9312eadb549",
+      "copy_sha256": "718c5841edadd64830da88849b1e95dd487edfd88424b8462456c9312eadb549",
+      "byte_identical": true
+    }
+  ]
+}

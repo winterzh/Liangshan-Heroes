@@ -7,7 +7,7 @@ extends RefCounted
 ## prepare() never installs Battle fields, connects signals, attaches or activates.
 const SCHEMA := "defense_unit_graph_v2"
 const LEVEL3_SCHEMA := "level3_unit_graph_v1"
-const LEVEL1_SCHEMA := "level1_unit_graph_v1"
+const LEVEL1_SCHEMA := "level1_unit_graph_v2"
 const LEVEL6_SCHEMA := "level6_unit_graph_v1"
 const LEVEL2_SCHEMA := "level2_unit_graph_v1"
 const LEVEL5_SCHEMA := "level5_unit_graph_v1"
@@ -187,7 +187,9 @@ func _select_factory(level_record: Variant, content_version: String, known: Dict
 		_factory = _unit_state_script.new(_codec_script, _unit_script, _inventory_script, KUAI_CONTEXT, kuai_roles)
 	else:
 		var hg_roles := {"cart": refs.cart, "yang": refs.yang, "bundles": refs.bundles,
-			"convoy": refs.convoy if refs.has("convoy") else [], "actors": refs.actors if refs.has("actors") else [], "cargo": refs.cargo}
+			"convoy": refs.convoy if refs.has("convoy") else [], "actors": refs.actors if refs.has("actors") else [], "cargo": refs.cargo,
+			"cart_loaded": checked.value.values.cargo_ready, "delivered_loads": checked.value.values.delivered,
+			"empty_cargo": refs.empty_cargo}
 		_factory = _unit_state_script.new(_codec_script, _unit_script, _inventory_script, HG_CONTEXT, hg_roles)
 	# Membership also rejects a malformed/empty role set before Unit allocation.
 	return {"ok": true}
@@ -282,12 +284,20 @@ func capture(battle: Variant, object_to_id: Variant, content_version: String,
 		id_to_unit[entity_id] = unit
 	var level_record: Variant = null
 	var mission_token := ""
+	var mission_events: Variant = null
 	var token_to_external: Dictionary = {}
 	if _graph_schema in [LEVEL3_SCHEMA, LEVEL1_SCHEMA, LEVEL6_SCHEMA, LEVEL2_SCHEMA, LEVEL7_SCHEMA, LEVEL4_SCHEMA, LEVEL5_SCHEMA, LEVEL8_SCHEMA]:
 		if not _fields(chapter_boundary, ["mission_token", "deferred_drained"]) or typeof(chapter_boundary.mission_token) != TYPE_STRING or typeof(chapter_boundary.deferred_drained) != TYPE_BOOL or not chapter_boundary.deferred_drained:
 			return _bad("LEVEL_EXTERNAL_BOUNDARY_REQUIRED")
 		var external_to_token: Dictionary = {}
 		if _graph_schema == LEVEL1_SCHEMA:
+			var mission: Variant = battle.mission
+			if typeof(mission) != TYPE_OBJECT or not is_instance_valid(mission) or mission.get_script() != preload("res://scripts/campaign_mission.gd") or typeof(mission.events) != TYPE_DICTIONARY:
+				return _bad("LEVEL1_MISSION_EVENTS_REQUIRED")
+			for event_id: Variant in mission.events:
+				if typeof(mission.events[event_id]) != TYPE_BOOL or not mission.events[event_id]:
+					return _bad("LEVEL1_MISSION_EVENT")
+			mission_events = mission.events.keys()
 			external_to_token = _level1_external_tokens(battle.level)
 		elif _graph_schema == LEVEL5_SCHEMA:
 			var external: Dictionary = _level5_external_tokens(battle)
@@ -333,7 +343,7 @@ func capture(battle: Variant, object_to_id: Variant, content_version: String,
 	# Capture must enforce the same full-graph membership as file validation.
 	# A held source with a missing live/captured role in Battle.units is not saved.
 	if _graph_schema in [LEVEL3_SCHEMA, LEVEL1_SCHEMA, LEVEL6_SCHEMA, LEVEL2_SCHEMA, LEVEL7_SCHEMA, LEVEL4_SCHEMA, LEVEL5_SCHEMA, LEVEL8_SCHEMA]:
-		var verified: Dictionary = validate(snapshot, content_version, level_record, mission_token, token_to_external)
+		var verified: Dictionary = validate(snapshot, content_version, level_record, mission_token, token_to_external, mission_events)
 		if not verified.ok: return _capture_failed(verified, identity, owns_identity)
 	var response := {"ok": true, "value": snapshot, "identity": identity, "complete_battle_restore": false}
 	if _graph_schema in [LEVEL3_SCHEMA, LEVEL1_SCHEMA, LEVEL6_SCHEMA, LEVEL2_SCHEMA, LEVEL7_SCHEMA, LEVEL4_SCHEMA, LEVEL5_SCHEMA, LEVEL8_SCHEMA]: response["level_record"] = level_record
@@ -422,7 +432,7 @@ func validate_index(snapshot: Variant, content_version: String) -> Dictionary:
 	return {"ok": true, "known_ids": known, "next_entity_id": next_id, "index_only": true}
 
 func validate(snapshot: Variant, content_version: String, level_record: Variant = null,
-		mission_token: String = "", external_tokens: Dictionary = {}) -> Dictionary:
+		mission_token: String = "", external_tokens: Dictionary = {}, mission_events: Variant = null) -> Dictionary:
 	var indexed: Dictionary = validate_index(snapshot, content_version)
 	if not indexed.ok: return indexed
 	var known: Dictionary = indexed.known_ids
@@ -462,7 +472,7 @@ func validate(snapshot: Variant, content_version: String, level_record: Variant 
 			identity.dispose()
 			return membership
 	elif _graph_schema == LEVEL1_SCHEMA:
-		var hg_membership: Dictionary = _factory.validate_level1_membership(states, snapshot.active_order)
+		var hg_membership: Dictionary = _factory.validate_level1_membership(states, snapshot.active_order, mission_events)
 		if not hg_membership.ok:
 			identity.dispose()
 			return hg_membership
@@ -497,10 +507,10 @@ func _restore_failed(error: Dictionary, created: Array, identity: Variant = null
 		"created_count": created.size(), "freed_count": freed, "battle_modified": false}
 
 func prepare(snapshot: Variant, content_version: String, battle: Variant, game_map: Variant,
-		level_record: Variant = null, mission_token: String = "", external_tokens: Dictionary = {}) -> Dictionary:
+		level_record: Variant = null, mission_token: String = "", external_tokens: Dictionary = {}, mission_events: Variant = null) -> Dictionary:
 	var destination: Dictionary = _destination(battle, game_map)
 	if not destination.ok: return _restore_failed(destination, [])
-	var checked: Dictionary = validate(snapshot, content_version, level_record, mission_token, external_tokens)
+	var checked: Dictionary = validate(snapshot, content_version, level_record, mission_token, external_tokens, mission_events)
 	if not checked.ok: return _restore_failed(checked, [])
 	var saved: Dictionary = checked.value
 	var identity: Variant = _identity_script.new(_unit_script)

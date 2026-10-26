@@ -1363,6 +1363,7 @@ func _build_bottom_panel() -> void:
 	_info_name.add_theme_font_size_override("font_size", 22)
 	_info_name.add_theme_color_override("font_color", UITheme.PAPER_DARK)
 	_info_name.custom_minimum_size = Vector2(248, 0)
+	_info_name.mouse_filter = Control.MOUSE_FILTER_PASS
 	info.add_child(_info_name)
 	_info_hp = Label.new()
 	_info_hp.add_theme_font_size_override("font_size", 15)
@@ -2125,7 +2126,7 @@ func _layout_desktop_hero() -> void:
 		return
 	var actor = battle.active_unit() if battle != null else null
 	var dense: bool = not touch_ui and not _bottom_collapsed and get_viewport().get_visible_rect().size.x < 1100.0 \
-		and actor != null and actor.is_hero and actor.slot_count() > 0
+		and actor != null and actor.is_hero
 	_desktop_hero_dense = dense
 	_bottom_row.add_theme_constant_override("separation", 8 if dense else 16)
 	if not _bottom_collapsed:
@@ -2136,13 +2137,15 @@ func _layout_desktop_hero() -> void:
 	_info_box.custom_minimum_size.x = info_width
 	for label in [_info_name, _info_hp, _info_stats]:
 		label.custom_minimum_size.x = info_width
-	_info_name.clip_text = dense
-	_info_name.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS if dense else TextServer.OVERRUN_NO_TRIMMING
+	# A translated group title must not enlarge the whole command bar. Keep
+	# its complete current-unit/count/Tab hint available on hover.
+	_info_name.clip_text = not touch_ui
+	_info_name.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS if not touch_ui else TextServer.OVERRUN_NO_TRIMMING
 	_info_hp.clip_text = dense
 	_info_name.add_theme_font_size_override("font_size", 18 if dense else 22)
 	_info_hp.add_theme_font_size_override("font_size", 13 if dense else 15)
 	_info_stats.add_theme_font_size_override("font_size", 12 if dense else 13)
-	_command_scroll.custom_minimum_size = Vector2(258, 138) if dense else Vector2.ZERO
+	_command_scroll.custom_minimum_size = Vector2(258, 138) if dense and actor.slot_count() > 0 else Vector2.ZERO
 	_command_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO if dense else ScrollContainer.SCROLL_MODE_DISABLED
 	_selection_scroll.custom_minimum_size = Vector2(112, 132) if dense else Vector2.ZERO
 	_selection_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO if dense else ScrollContainer.SCROLL_MODE_DISABLED
@@ -2430,6 +2433,7 @@ func _refresh_panel() -> void:
 		_arena_random_btn.offset_top = _arena_random_btn.offset_bottom - 38.0
 	if alive.is_empty():
 		_info_name.text = ""
+		_info_name.tooltip_text = ""
 		_info_hp.text = ""
 		_info_stats.text = ""
 		_port_tex.visible = false
@@ -2457,6 +2461,7 @@ func _refresh_panel() -> void:
 	if multi:
 		title = "▸ " + title + Localize.format_text("  (当前 ｜ 共 %d ｜ Tab 切换)", alive.size())
 	_info_name.text = title
+	_info_name.tooltip_text = title
 	_info_hp.text = Localize.format_text("生命  %d / %d", [int(prim.hp), int(prim.max_hp)])
 	if prim.is_building:
 		if prim.is_constructing:
@@ -2879,9 +2884,8 @@ func set_autocam_button(show: bool, on: bool) -> void:
 		_autocam_btn.modulate.a = 1.0
 
 
-func show_end(victory: bool, line: String, kills: int, has_next := false, hero_tally := "", campaign_result: Dictionary = {}) -> void:
-	Localize.bind_render(_end_title, func() -> String: return Localize.text("旗开得胜！") if victory else Localize.text("功败垂成……"))
-	_end_title.add_theme_color_override("font_color", UITheme.PAPER_DARK if victory else UITheme.DANGER)
+func _end_campaign_text(victory: bool, campaign_result: Dictionary) -> String:
+	# Display only: the caller already froze the result and awarded its seal.
 	var campaign_line := ""
 	if not campaign_result.is_empty():
 		campaign_line = Localize.format_text("\n基础通关：%s", (Localize.text("完成") if victory else Localize.text("未完成")))
@@ -2898,7 +2902,7 @@ func show_end(victory: bool, line: String, kills: int, has_next := false, hero_t
 					for raw_goal in result_goals:
 						if raw_goal is Dictionary and String(raw_goal.get("state", "")) == "missed":
 							var missed_label := String(raw_goal.get("label", "")).strip_edges()
-							if missed_label != "": missed_labels.append(missed_label)
+							if missed_label != "": missed_labels.append(Localize.current_text(missed_label))
 				if not missed_labels.is_empty():
 					# Keep settlement compact beside the fixed-height battle report. One
 					# concrete missing goal plus the remaining count is enough to guide replay.
@@ -2906,8 +2910,19 @@ func show_end(victory: bool, line: String, kills: int, has_next := false, hero_t
 					campaign_line += Localize.text("\n待补演义：") + "；".join(preview)
 					if missed_labels.size() > preview.size():
 						campaign_line += Localize.format_text("；另%d项", (missed_labels.size() - preview.size()))
-	Localize.bind_render(_end_sub, func() -> String: return Localize.format_text("%s\n此役歼灭敌军 %d 人。%s", [line, kills, campaign_line]))
-	Localize.bind_render(_end_tally, func() -> String: return (Localize.text("⚔ 各路好汉战绩 ⚔\n") + hero_tally) if hero_tally != "" else "")
+	return campaign_line
+
+
+func show_end(victory: bool, line: String, kills: int, has_next := false, hero_tally := "", campaign_result: Dictionary = {}, report_renderer: Callable = Callable()) -> void:
+	var saved_result: Dictionary = campaign_result.duplicate(true)
+	Localize.bind_render(_end_title, func() -> String: return Localize.text("旗开得胜！") if victory else Localize.text("功败垂成……"))
+	_end_title.add_theme_color_override("font_color", UITheme.PAPER_DARK if victory else UITheme.DANGER)
+	Localize.bind_render(_end_sub, func() -> String:
+		return Localize.format_text("%s\n此役歼灭敌军 %d 人。%s",
+			[Localize.current_text(line), kills, _end_campaign_text(victory, saved_result)], false))
+	Localize.bind_render(_end_tally, func() -> String:
+		var body: String = report_renderer.call() if report_renderer.is_valid() else hero_tally
+		return (Localize.text("⚔ 各路好汉战绩 ⚔\n") + body) if body != "" else "")
 	_end_tally.visible = hero_tally != ""
 	_end_tally_scroll.visible = hero_tally != ""
 	_end_next.visible = victory and has_next

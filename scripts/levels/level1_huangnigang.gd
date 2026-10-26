@@ -158,12 +158,12 @@ func deploy(b) -> void:
 		u.stance = Unit.STANCE_PASSIVE
 		u.set_meta("merchant_disguise", true)
 		actors.append(u)
-	for i in range(3):
+	for i in range(_tribute_load_count()):
 		var bundle: Unit = b.spawn_at("treasure_cart", Unit.FACTION_GUAN, GATE_E + Vector2i(0,i-1))
 		if bundle == null:
 			b._gameplay_rng_stop("ENTITY_REQUIRED_UNIT")
 			return
-		bundle.display_name = "生辰纲担·" + ["金银", "绸缎", "礼物"][i]
+		bundle.display_name = _tribute_load_name(i)
 		bundle.art_variant = "tribute_load"
 		bundle.set_meta("campaign_environment_route","tribute_load")
 		bundle.set_meta("campaign_environment_state","default")
@@ -264,7 +264,10 @@ func on_mission_action(b, action_id: String, actor) -> void:
 			b.mission.mark("bai_arrived", "盘问已过，远处传来山歌，白胜从东侧另挑两桶酒上冈。")
 			b.mission.begin("wine_arrival", "远处歌声 · 白胜挑酒上冈", "白胜正从东侧山路自行挑酒入松阴，停稳后落担；七星仍作不相识的贩枣客。你可随时接管白胜，改令后需右键落担旗标继续。酒桶要等落担后才摆出。")
 			b.mission.add_action("bring_wine", "白胜 · 挑酒入松阴并落担", WINE_UNLOAD, ["bai_sheng"], 1.5, 40.0)
-			bai.order_move(b.map.cell_to_world(WINE_UNLOAD))
+			# Walk behind the resting escort rather than steering through its last row.
+			# Both legs remain one owned NPC queue; any real player order still cancels it.
+			bai.order_move(b.map.cell_to_world(Vector2i(24,26)))
+			bai.order_move(b.map.cell_to_world(WINE_UNLOAD),true)
 			bai_arrival_serial = bai._order_serial
 			bai_arrival_auto = true
 			bai_unload_t = 0.0
@@ -1211,3 +1214,7 @@ class FieldSign extends Node2D:
 		draw_arc(Vector2.ZERO, radius, 0.0, TAU, 48, Color(tint, 0.55), 1.4)
 		draw_set_transform_matrix(GameMap.ISO_INV)
 		draw_string(ThemeDB.fallback_font, Vector2(-104, -36), Localize.text(label), HORIZONTAL_ALIGNMENT_CENTER, 208, 12, tint)
+
+
+func _tribute_load_count() -> int: return 3
+func _tribute_load_name(index: int) -> String: return "生辰纲担·" + ["金银", "绸缎", "礼物"][index]
