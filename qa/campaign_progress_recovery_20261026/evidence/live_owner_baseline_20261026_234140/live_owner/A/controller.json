@@ -1,0 +1,103 @@
+{
+  "mode": "A",
+  "command": [
+    "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+    "--path",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261026_211212_dd3104df\\project",
+    "--headless",
+    "--remote-debug",
+    "tcp://127.0.0.1:62084",
+    "--script",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_live_owner_io_20261026\\20261026_234140_40126e64\\workers\\bootstrap.gd"
+  ],
+  "stops": [
+    {
+      "point": {
+        "source": "res://scripts/steam_receipt_store.gd",
+        "line": 187,
+        "function": "acquire",
+        "statement": "_checkpoint(\"lock_acquired\")",
+        "source_sha256": "11bf6cae5968baa6c740c3c6be1fc954376048cbbe9a81a77b6cf4588518f9f1"
+      },
+      "frames": [
+        {
+          "source": "res://scripts/steam_receipt_store.gd",
+          "line": 187,
+          "function": "acquire"
+        },
+        {
+          "source": "res://scripts/steam_run_ledger.gd",
+          "line": 104,
+          "function": "_drive_pending"
+        },
+        {
+          "source": "res://scripts/steam_run_ledger.gd",
+          "line": 75,
+          "function": "_persist"
+        },
+        {
+          "source": "res://scripts/steam_run_ledger.gd",
+          "line": 238,
+          "function": "apply_campaign_handoff"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/campaign_live_owner_io_20261026/20261026_234140_40126e64/workers/worker.gd",
+          "line": 123,
+          "function": "writer_a"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/campaign_live_owner_io_20261026/20261026_234140_40126e64/workers/worker.gd",
+          "line": 53,
+          "function": "gate"
+        }
+      ],
+      "pid": 12164,
+      "status": "breakpoint_matched",
+      "packet_sha256": "fcbdfb2e7850e9c94b568d41c039655c891989dc07ffa175455eb43dd7ec99a2"
+    }
+  ],
+  "gates": [
+    {
+      "case": "live_owner",
+      "directory": "D:/CodexQA/liveowner/53a157c89909/appdata/Godot/app_userdata/水浒英雄传：八幕战役/steam_receipts/v1/5088120/76561198000000001",
+      "index": 0,
+      "kind": "a_apply",
+      "mode": "A",
+      "nonce": "53a157c899094fdf899139c82411ad3c",
+      "owner": "76561198000000001",
+      "pid": 12164,
+      "schema": "live_owner_gate_v1"
+    },
+    {
+      "case": "live_owner",
+      "directory": "D:/CodexQA/liveowner/53a157c89909/appdata/Godot/app_userdata/水浒英雄传：八幕战役/steam_receipts/v1/5088120/76561198000000001",
+      "index": 1,
+      "kind": "a_verified",
+      "mode": "A",
+      "nonce": "53a157c899094fdf899139c82411ad3c",
+      "owner": "76561198000000001",
+      "pid": 12164,
+      "schema": "live_owner_gate_v1"
+    }
+  ],
+  "pid": 12164,
+  "exit_code": 0,
+  "process_terminal": true,
+  "log_sha256": "942ac2e0c95f6130c16a6750f19d4d9cacff31be5e6d137c8cf0a53380c2b2b3",
+  "final_inventory": {
+    "exists": true,
+    "files": {
+      "record_0000000002.json": {
+        "sha256": "f93d4fb6717a522a30351288b2db533e6ccd388bbdf5f947e0b460857f30a94b",
+        "bytes": 1553
+      },
+      "record_0000000003.json": {
+        "sha256": "18676fa346250ddd3cdb3ee6787715ef8017bc6a1ece594a14e818ea11cd26f1",
+        "bytes": 1553
+      }
+    },
+    "directories": [
+      "."
+    ]
+  }
+}

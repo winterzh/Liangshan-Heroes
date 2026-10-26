@@ -22,6 +22,8 @@
 - [连环马下一片接线](LIANHUANMA_NEXT.md)：新增[四进程自然胜利驱动](tests/lianhuanma/README.md)，覆盖两次实际保存退出、两次独立菜单继续、四目标完整自然胜利及终局旧槽拒绝。Python AST、帮助入口和f6ef候选身份预检通过，尚未编译或原生执行。失败路线须按实际保存退出语义另用三进程验证；旧文档中的两进程设想不能绕过Flow。
 - [自然失败三进程驱动](tests/lianhuanma_loss/README.md)现已准备，实际保存退出→独立恢复后普通命令令宋江自然阵亡→独立菜单拒旧槽。Python AST/帮助入口及只读复核通过，尚未编译或原生运行；完整四目标保留真实done/missed/pending分类，失败不会擅自全改missed。
 - 当前下一步先修[外部进程存活查询](evidence/process_liveness_api_20261026_225300/README.md)：延迟写入首批暴露Windows Godot API不能用于外部PID判死，SnapshotStore与Steam Store恢复路径均须统一三态判定。胜/败驱动保留，待新候选冻结后重新绑定运行。
+- 独立[三态查询组件](process_liveness_candidate/README.md)已有13例实际helper、22项报告模型、49项Godot组件及独立19项超时证据。f6ef新批已[实际复现活写者误清理](evidence/live_owner_baseline_20261026_234140/README.md)；基础Store、Steam Store与进程级manager的[恢复桥接候选](process_liveness_integration_candidate/README.md)另行验证，不能据独立组件通过称存档修复完成。
+- 后继桥接最小组件22项模型/60项检查、7次真实查询通过；修复退出生命周期后另冻为23脚本e97a源，导入退出0。新源[双进程活写者保护](evidence/live_owner_fixed_20261027_001429/README.md)45项通过：B明确WRITER_ALIVE且业务目录零变更，A正常提交、B同对象重开且无重复奖励。此项不转授全部死亡恢复、活claimant、超时隔离、连环马或完整战役资格。
 
 ## 运行与来源
 

@@ -1,0 +1,141 @@
+{
+  "schema": "live_owner_fixed_evidence_summary_v1",
+  "source_run": "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_live_owner_io_20261026\\20261027_001429_a52fb5dc",
+  "archived_utc": "2026-10-26T16:21:55.563461+00:00",
+  "expected": "fixed",
+  "complete": true,
+  "slice_passed": true,
+  "defect_reproduced": false,
+  "checks": 45,
+  "per_process": [
+    {
+      "role": "A",
+      "pid": 49012,
+      "checks": 24,
+      "exit_code": 0,
+      "process_terminal": true
+    },
+    {
+      "role": "B",
+      "pid": 50780,
+      "checks": 21,
+      "exit_code": 0,
+      "process_terminal": true
+    }
+  ],
+  "identity": {
+    "content_version": "source-v1:e97a07b9ff04b677fbc1934a40976cc6e1f82479855cf39f305147ae4f6d1eea",
+    "engine_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+    "source_mode": true
+  },
+  "candidate_manifest_sha256": "f4b83220e4990d2823bc2c5393c6383ebec33b06dc6aa9ccd7186ebdccbd1e0d",
+  "breakpoint": {
+    "source": "res://scripts/steam_receipt_store.gd",
+    "line": 187,
+    "function": "acquire",
+    "statement": "_checkpoint(\"lock_acquired\")",
+    "source_sha256": "10f7cd3cd77c9c5322c991c63c11bc2c85151b1fc03dbf9ceef55d698ebb90b7"
+  },
+  "a_liveness": {
+    "pid": 49012,
+    "creation_filetime": "134375048930193933",
+    "retained_handle": true,
+    "samples": 569,
+    "all_samples_wait_timeout_258": true,
+    "all_samples_still_active_259": true,
+    "all_samples_popen_none": true,
+    "a_paused_during_b_open": true,
+    "foreign_godot_pid_query_used": false
+  },
+  "b_refusal": {
+    "code": "WRITER_ALIVE",
+    "retryable": true,
+    "unsafe": false,
+    "restart_required": false,
+    "business_inventory_before_after_exact_match": true,
+    "native_provider_pid": 59752,
+    "native_target_pid": 49012,
+    "native_creation_matches_host": true,
+    "provider_cleanup_confirmed": true,
+    "unknown_or_pending_not_accepted": true,
+    "private_probe_ipc_is_outside_business_inventory": true
+  },
+  "a_completion": {
+    "original_frozen_proposal_record_exactly_persisted": true,
+    "same_store_retained": true,
+    "generation_before": 2,
+    "generation_after": 3,
+    "kills_before": 5,
+    "kills_after": 8,
+    "wins_before": 0,
+    "wins_after": 1,
+    "pending": false,
+    "proof_field_count": 9,
+    "proof": {
+      "context": {
+        "level_id": "level4",
+        "mode": "campaign",
+        "waves": 0
+      },
+      "correction_epoch": 0,
+      "descriptor_sha256": "543a63680396c91ed23264e4f8c8d2859cc0e6c359511ed552999b82c68ec5a7",
+      "intent_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "ledger_document_generation": 3,
+      "ledger_file_sha256": "1857de31d37e9612ace50ef766a4f94701a4628d0dbc2b8357694e8d08b8c643",
+      "owner": "76561198000000001",
+      "schema": "campaign_steam_handoff_proof_v1",
+      "token": "34bf3b3acc32b5f1bb1c6eb76c495bcc"
+    },
+    "a_and_b_independent_proof_and_durable_equal": true,
+    "b_same_ledger_store_retry_open": true,
+    "both_repeated_handoffs_preserved_proof_rewards_and_inventory": true,
+    "a_b_final_business_inventory_exact_match": true
+  },
+  "verification": {
+    "receipt_case_exact_match": true,
+    "report_log_prepared_observed_sha_bindings_match": true,
+    "runtime_pins_rehashed": 43,
+    "runtime_pins_all_match": true,
+    "final_identity_passed": true,
+    "both_native_godot_processes_terminal_exit0": true,
+    "recorded_lock_ownership_confirmed": true,
+    "recorded_lock_released": true,
+    "raw_copies_verified": 24
+  },
+  "qualification": {
+    "this_live_writer_negative_slice": true,
+    "general_two_ledger_concurrency": false,
+    "dead_writer_recovery": false,
+    "live_cleanup_claimant_or_marker": false,
+    "quarantine_timeout_and_pid_reuse": false,
+    "production_integrated": false,
+    "native_steam_sdk": false,
+    "real_steam_account": false,
+    "native_release_gui": false,
+    "human_acceptance": false,
+    "performance": false,
+    "publication": false
+  },
+  "fixture": "Real Ledger APIs in two native Godot processes; private synthetic owner/token and handoff descriptor, no SDK login or natural gameplay. Host debugger only pauses/resumes its own A.",
+  "archive": {
+    "raw_files": 25,
+    "raw_bytes": 503639,
+    "excluded_private_account_payload_files": 6,
+    "generated_metadata_files": 3,
+    "total_files_including_manifest": 28,
+    "runtime_readme": "runner_inputs/README.md",
+    "external_harness_readme_modified": false,
+    "provider_result_exactly_matches_observed_evidence": true
+  },
+  "not_covered": [
+    "full game regressions",
+    "death/recovery cleanup or marker stages",
+    "P2 two-Ledger readback after unrelated active writer",
+    "CFG/LC/slot real recovery",
+    "real account/SDK",
+    "native release GUI",
+    "human acceptance",
+    "performance",
+    "release"
+  ]
+}

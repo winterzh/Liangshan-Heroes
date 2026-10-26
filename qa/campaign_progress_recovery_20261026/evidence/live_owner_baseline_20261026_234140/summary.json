@@ -1,0 +1,116 @@
+{
+  "schema": "live_owner_baseline_evidence_summary_v1",
+  "source_run": "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_live_owner_io_20261026\\20261026_234140_40126e64",
+  "archived_utc": "2026-10-26T15:58:49.629552+00:00",
+  "expected": "defects",
+  "diagnosis_complete": true,
+  "defect_reproduced": true,
+  "slice_passed": false,
+  "fix_verified": false,
+  "diagnostic_only": true,
+  "checks": 37,
+  "processes": 2,
+  "per_process": [
+    {
+      "role": "A",
+      "pid": 12164,
+      "checks": 21,
+      "exit_code": 0,
+      "process_terminal": true
+    },
+    {
+      "role": "B",
+      "pid": 35608,
+      "checks": 16,
+      "exit_code": 0,
+      "process_terminal": true
+    }
+  ],
+  "identity": {
+    "content_version": "source-v1:f6ef8398f297af3a9be64ca376b9f2a940951d9b93b0512808e3f4275afc32e4",
+    "engine_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+    "source_mode": true
+  },
+  "candidate_manifest_sha256": "8dfa8791b181319179fb27b284c4d5e9e34031d5c616a53616fe2a40da62400f",
+  "breakpoint": {
+    "source": "res://scripts/steam_receipt_store.gd",
+    "line": 187,
+    "function": "acquire",
+    "statement": "_checkpoint(\"lock_acquired\")",
+    "source_sha256": "11bf6cae5968baa6c740c3c6be1fc954376048cbbe9a81a77b6cf4588518f9f1"
+  },
+  "a_liveness": {
+    "pid": 12164,
+    "creation_filetime": "134375029229108374",
+    "retained_handle": true,
+    "samples": 555,
+    "all_samples_wait_timeout_258": true,
+    "all_samples_still_active_259": true,
+    "all_samples_popen_none": true,
+    "a_paused_during_b_open": true,
+    "foreign_godot_pid_query_used": false
+  },
+  "observed_failure": {
+    "b_open_code": "OPENED",
+    "removed_files": [
+      "writing/owner.json"
+    ],
+    "removed_directories": [
+      "writing"
+    ],
+    "owner_sha256": "92c2fc61b62629ab486de2c0de7e60b53c290ad8d5d15c12372e99455d243060",
+    "other_record_bytes_unchanged": true,
+    "a_resume_code": "LOCK_CHANGED",
+    "unsafe": true,
+    "restart_required": true,
+    "model_committed": false,
+    "original_scope_proposal_cas_retained": true,
+    "durable_generation": 2,
+    "durable_kills": 5,
+    "durable_wins": 0,
+    "pending_owned_lock_is_stale_in_memory_flag": true
+  },
+  "verification": {
+    "receipt_case_exact_match": true,
+    "report_and_log_sha_bindings_match": true,
+    "prepared_and_b_observed_sha_bindings_match": true,
+    "runtime_pins_rehashed_before_readme_append": 41,
+    "runtime_pins_all_match": true,
+    "final_identity_passed": true,
+    "both_native_processes_terminal_exit0": true,
+    "recorded_lock_ownership_confirmed": true,
+    "recorded_lock_released": true,
+    "raw_copies_verified": 24
+  },
+  "qualification": {
+    "fixed_live_writer_protection": false,
+    "general_two_ledger_concurrency": false,
+    "production": false,
+    "native_steam_sdk": false,
+    "real_steam_account": false,
+    "native_release_gui": false,
+    "human_acceptance": false,
+    "performance": false,
+    "publication": false
+  },
+  "scope": "Real native Godot A/B Ledger calls against a private synthetic owner/token fixture; host debugger only pauses/resumes its own A. This successful diagnostic demonstrates the f6ef defect, not a repaired candidate.",
+  "not_covered": [
+    "fixed successor",
+    "live claimant or unique marker takeover",
+    "dead process cleanup",
+    "PID reuse",
+    "permission UNKNOWN",
+    "CFG/LC/slot recovery",
+    "real account or SDK",
+    "natural gameplay",
+    "release"
+  ],
+  "archive": {
+    "raw_files": 24,
+    "excluded_private_account_payload_files": 5,
+    "generated_metadata_files": 3,
+    "total_files_including_manifest": 27,
+    "original_runtime_readme": "runner_inputs/README.md",
+    "readme_after_runtime_is_documentation_only": true
+  }
+}

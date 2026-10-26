@@ -1,0 +1,4750 @@
+{
+  "schema": "live_owner_runner_v1",
+  "complete": true,
+  "expected": "defects",
+  "base_run": "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261026_211212_dd3104df",
+  "identity": {
+    "content_version": "source-v1:f6ef8398f297af3a9be64ca376b9f2a940951d9b93b0512808e3f4275afc32e4",
+    "engine_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+    "source_mode": true
+  },
+  "point": {
+    "source": "res://scripts/steam_receipt_store.gd",
+    "line": 187,
+    "function": "acquire",
+    "statement": "_checkpoint(\"lock_acquired\")",
+    "source_sha256": "11bf6cae5968baa6c740c3c6be1fc954376048cbbe9a81a77b6cf4588518f9f1"
+  },
+  "candidate_manifest_sha256": "8dfa8791b181319179fb27b284c4d5e9e34031d5c616a53616fe2a40da62400f",
+  "production_qualified": false,
+  "sdk_qualified": false,
+  "two_ledger_general_concurrency_qualified": false,
+  "defect_reproduced": true,
+  "slice_passed": false,
+  "diagnostic_only": true,
+  "profile": "D:\\CodexQA\\liveowner\\53a157c89909",
+  "nonce": "53a157c899094fdf899139c82411ad3c",
+  "case": {
+    "schema": "live_owner_case_v1",
+    "complete": true,
+    "expected": "defects",
+    "profile": "D:\\CodexQA\\liveowner\\53a157c89909",
+    "nonce": "53a157c899094fdf899139c82411ad3c",
+    "reports": [
+      {
+        "role": "A",
+        "path": "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_live_owner_io_20261026\\20261026_234140_40126e64\\live_owner\\A\\report.json",
+        "sha256": "9c2154850ef6065d2cb287ce68192ab0dfac4180edfb2c3f0f4f002fd32aafb5",
+        "pid": 12164,
+        "checks": 21,
+        "exit_code": 0,
+        "passed": true
+      },
+      {
+        "role": "B",
+        "path": "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_live_owner_io_20261026\\20261026_234140_40126e64\\live_owner\\B\\report.json",
+        "sha256": "527e9686eb97275ec30f26cc8b09283848e6d7d858bb691ac1473eae91931a15",
+        "pid": 35608,
+        "checks": 16,
+        "exit_code": 0,
+        "passed": true
+      }
+    ],
+    "production_qualified": false,
+    "prepared_sha256": "4cf10829590001342c5d04a43c50b6cba47a2a2e6ff6dd4b74d54180659272f0",
+    "before": {
+      "exists": true,
+      "files": {
+        "record_0000000002.json": {
+          "sha256": "f93d4fb6717a522a30351288b2db533e6ccd388bbdf5f947e0b460857f30a94b",
+          "bytes": 1553
+        },
+        "record_0000000003.json": {
+          "sha256": "18676fa346250ddd3cdb3ee6787715ef8017bc6a1ece594a14e818ea11cd26f1",
+          "bytes": 1553
+        },
+        "writing/owner.json": {
+          "sha256": "92c2fc61b62629ab486de2c0de7e60b53c290ad8d5d15c12372e99455d243060",
+          "bytes": 100
+        }
+      },
+      "directories": [
+        ".",
+        "writing"
+      ]
+    },
+    "owner_raw": "{\"owner\":\"76561198000000001\",\"pid\":\"12164\",\"token\":\"6c4d7596ea0b848915ba2eb34b9bee9d\",\"version\":\"1\"}",
+    "owner_sha256": "92c2fc61b62629ab486de2c0de7e60b53c290ad8d5d15c12372e99455d243060",
+    "after_b": {
+      "exists": true,
+      "files": {
+        "record_0000000002.json": {
+          "sha256": "f93d4fb6717a522a30351288b2db533e6ccd388bbdf5f947e0b460857f30a94b",
+          "bytes": 1553
+        },
+        "record_0000000003.json": {
+          "sha256": "18676fa346250ddd3cdb3ee6787715ef8017bc6a1ece594a14e818ea11cd26f1",
+          "bytes": 1553
+        }
+      },
+      "directories": [
+        "."
+      ]
+    },
+    "b_open_result": {
+      "code": "OPENED",
+      "generation": 2,
+      "ok": true,
+      "upgrade_required": false,
+      "version": 3
+    },
+    "b_observed_sha256": "24ced7ec3845cef5fba3412d31a2070d7b8e8d2ea47e1d05a020df1275b3130f",
+    "a_liveness": {
+      "schema": "owned_process_liveness_v1",
+      "pid": 12164,
+      "image": "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+      "creation_filetime": "134375029229108374",
+      "retained_handle": true,
+      "samples": [
+        {
+          "label": "bound_handle",
+          "monotonic_ns": 568033116685800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "before_B_launch",
+          "monotonic_ns": 568033123841900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "B_debugger_connect",
+          "monotonic_ns": 568033417790100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568033461292700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568033808726700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568033869888300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568033991159200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568034115303600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568034240487200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568034364616500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568034488713000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568034611944400,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568034736173100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568034861104000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568035279324000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568035401966800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568035525603800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568035649062600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568035774402900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568035896824300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568036020471800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568036143632300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568036267385500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568036671046100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568036795299800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568036918507100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568037042592200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568037165257800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568037290412000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568037414549100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568037538185000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568037600431500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568037926312900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568037989415800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568038050564400,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568038113226200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568038176091600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568038237117800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568038299230000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568038360499500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568038422866000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568038486352900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568038548467300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568038610447600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568038672581100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568038734432400,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568038796132600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568038859540500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568038922327700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568039248823900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568039310659800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568039372404500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568039432811500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568039494951900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568039556620200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568039619677100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568039681992600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568039744321500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568039805952900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568039866767200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568039929206000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568039991192900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568040052734900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568040115767300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568040177352700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568040240756300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568040629150900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568040691178300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568040753910200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568040815643600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568040878464700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568040940997500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568041003316500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568041065759500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568041128008600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568041189446300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568041251393500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568041312393900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568041374516400,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568041436218200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568041498159800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568041561179600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568041624128900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568041992436800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568042054608100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568042117407700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568042179109200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568042240620500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568042302215600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568042364617100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568042427059100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568042489608100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568042551637500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568042615605500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568042677590900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568042739639000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568042801647200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568042863088000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568042924482100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568042987492700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568043393022100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568043455285600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568043516837900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568043578407600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568043639970300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568043701805000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568043763798300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568043825769100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568043886316300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568043947352700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568044009250800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568044070745800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568044132036400,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568044194787300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568044256043200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568044318869600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568044380380200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568044708037200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568044770188100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568044832237000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568044892722300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568044954119800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568045016960300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568045079510100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568045141838400,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568045202991100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568045264988800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568045327890400,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568045390000400,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568045451883900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568045513328100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568045576117900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568045639763600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568045700600500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568046042253100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568046105475300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568046167303900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568046229030100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568046290029500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568046352865700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568046414814800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568046476165700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568046537702200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568046600059500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568046662085900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568046723703800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568046785254500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568046847392900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568046910659700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568046972152400,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568047034024500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568047358818200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568047421079900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568047482003500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568047542913600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568047605204000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568047666075700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568047728367400,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568047790166100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568047850841100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568047913090700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568047974650400,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568048036297400,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568048097772600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568048160403500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568048222030700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568048282804800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568048345064900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568048682126700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568048743403800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568048803767100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568048865110500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568048927117900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568048988735100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568049050659100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568049111861700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568049173729600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568049236322800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568049297827300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568049360139000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568049423230900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568049486193800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568049548487200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568049610707600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568049671746900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568050058039100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568050119197900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568050181520800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568050243403300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568050305552600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568050366835500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568050428896800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568050490038800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568050551066600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568050614288100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568050676281900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568050738055200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568050800040200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568050860194600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568050920847100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568050983096800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568051106455500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568051526255500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568051649562900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568051774540400,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568051899113900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568052022908000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568052145553900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568052269096900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568052392263800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568052516163000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568052918837900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568053042836700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568053167894500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568053291345200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568053415699900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568053539525000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568053662920300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568053785057600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568053909351400,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568054311075500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568054434630700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568054559344500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568054682928200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568054807423500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568054930089300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568055055459100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568055180299200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568055303222600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568055737192200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568055860191100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568055984653800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568056107757500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568056232574500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568056358225800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568056482016700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568056606719700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568056731303900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568057135397500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568057259144500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568057384400200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568057505383600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568057630033000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568057753826000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568057877809700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568058001832800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568058126286400,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568058531371100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568058653870700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568058777541400,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568058899332100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568059022317000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568059144758500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568059269451000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568059392748100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568059517456000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568060056226100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568060180677900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568060304769200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568060429904300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568060553989200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568060676831300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568060799821500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568060922995100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568061046735700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568061512113200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568061634637400,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568061759297700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568061884087100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568062007400700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568062130596000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568062254268100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568062378269900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568062502707900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568062938455000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568063059832800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568063182878100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568063307115300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568063431844300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568063555319900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568063679499300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568063802449700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568063925442100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568064326482400,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568064450332200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568064575337500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568064697751200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568064822239300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568064945713800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568065068905200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568065193191600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568065313994100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568065730901900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568065854300800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568065977910400,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568066103712200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568066226783200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568066352022600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568066477143500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568066600631500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568066724003300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568067141638400,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568067267018600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568067392019800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568067516220000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568067641332500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568067765077900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568067889334400,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568068011495000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568068134905100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568068569165300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568068693184700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568068817521800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568068940989800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568069065166700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568069190085200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568069312800900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568069438116700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568069560019900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568069978302000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568070102036300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568070223520600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568070347990800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568070469964100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568070595049100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568070717139900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568070840300400,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568070964107700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568071430444600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568071555709300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568071681009600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568071804775000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568071865912500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568071990041000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568072114119800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568072236494200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568072361495900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568072763531700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568072887487700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568073009165500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568073133866000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568073255738300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568073381527000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568073504492900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568073629245900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568073754231700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568074173379200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568074297856500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568074420808200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568074545064100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568074667355200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568074791707400,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568074914146900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568075036891700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568075162416600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568075562964400,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568075686395200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568075810808600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568075933851100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568076059110800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568076181604100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568076305307100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568076431043500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568076556379700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568076990482500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568077115598900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568077238605600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568077362287300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568077486790900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568077609943200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568077734111800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568077856594600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568077980085600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568078385717700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568078510615600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568078632925400,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568078756782600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568078879677400,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568079003078000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568079125499000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568079249572300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568079372019000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568079773697600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568079895826200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568080018951400,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568080140566500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568080263083100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568080386878400,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568080510033600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568080634397500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568080759572700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568081163593700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568081287541800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568081410111000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568081533264700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568081657139000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568081781865200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568081906753500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568082028573100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568082151100400,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568082567575300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568082692101800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568082816942100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568082941437800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568083066089400,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568083190496300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568083313789700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568083437965000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568083564063200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568083996051900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568084119204300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568084243248300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568084366195400,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568084490092100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568084614593600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568084740838700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568084863937300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568084987294300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568085387283800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568085509753600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568085632849000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568085757774700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568085881871800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568086005785100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568086130798900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568086255636200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568086379172400,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568086764511100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568086888882300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568087012043300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568087136266000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568087258005700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568087383132800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568087507390200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568087630584100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568087756409500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568088203026700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568088326108900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568088449927900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568088575407800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568088698866500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568088823589700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568088948315400,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568089071443100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568089195115200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568089584559600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568089708455000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568089830700900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568089956062100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568090080367200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568090205019100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568090326885600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568090451150500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568090574455900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568090977182200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568091102172700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568091225507100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568091348684900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568091474379500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568091598169500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568091724263500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568091848605100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568091971801500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568092465642500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568092589370600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568092714542400,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568092837518000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568092960697900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568093083603300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568093208181600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568093333187300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568093455395000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568093869476900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568093994311600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568094118827800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568094242226200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568094366707000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568094490679600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568094612776000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568094736376100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568094859351700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568095247627500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568095373486900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568095494751100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568095618337300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568095741123900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568095864918900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568095987862100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568096112553800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568096236331600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568096700443900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568096824274900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568096948643500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568097072832100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568097196491000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568097320186700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568097443991100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568097567981600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568097689141400,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568098154103000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568098278480800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568098402747200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568098527663700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568098651388700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568098775092700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568098900499300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568099025405800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568099148852300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568099565321200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568099689650800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568099813100800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568099936806900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568100061199800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568100185158600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568100308829200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568100432264900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568100557466800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568100963069000,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568101086300600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568101210185900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568101335042400,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568101458586300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568101582485100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568101708335800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568101833524800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568101956538600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568102388410600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568102511533600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568102637806700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568102762957100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568102886999600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568103010010400,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568103133505400,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568103258670700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568103381326100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "before_B_open",
+          "monotonic_ns": 568103727602500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568103729581100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568103785402600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568103847712200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568103909381600,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568103988689100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "after_B_open",
+          "monotonic_ns": 568104053175100,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "before_A_resume",
+          "monotonic_ns": 568104058826500,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568104058971400,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "A_outcome_verified",
+          "monotonic_ns": 568104160851200,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568104162706900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568104189567300,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568104250874700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568104312505400,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568104374415800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568104437071700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568104559671800,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568104622266700,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "pump",
+          "monotonic_ns": 568104684228400,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        },
+        {
+          "label": "B_finished_A_still_alive",
+          "monotonic_ns": 568105006990900,
+          "pid": 12164,
+          "wait_result": 258,
+          "exit_code": 259,
+          "popen_returncode": null
+        }
+      ],
+      "method": "Popen.poll + retained OpenProcess handle + WaitForSingleObject + GetExitCodeProcess + GetProcessTimes",
+      "foreign_godot_pid_query_used": false
+    },
+    "trace": [
+      {
+        "event": "launched",
+        "role": "A",
+        "pid": 12164
+      },
+      {
+        "event": "gate",
+        "role": "A",
+        "kind": "a_apply",
+        "inventory": {
+          "exists": true,
+          "files": {
+            "record_0000000002.json": {
+              "sha256": "f93d4fb6717a522a30351288b2db533e6ccd388bbdf5f947e0b460857f30a94b",
+              "bytes": 1553
+            },
+            "record_0000000003.json": {
+              "sha256": "18676fa346250ddd3cdb3ee6787715ef8017bc6a1ece594a14e818ea11cd26f1",
+              "bytes": 1553
+            }
+          },
+          "directories": [
+            "."
+          ]
+        }
+      },
+      {
+        "event": "breakpoint_matched",
+        "role": "A",
+        "pid": 12164,
+        "point": {
+          "source": "res://scripts/steam_receipt_store.gd",
+          "line": 187,
+          "function": "acquire",
+          "statement": "_checkpoint(\"lock_acquired\")",
+          "source_sha256": "11bf6cae5968baa6c740c3c6be1fc954376048cbbe9a81a77b6cf4588518f9f1"
+        },
+        "frames": [
+          {
+            "source": "res://scripts/steam_receipt_store.gd",
+            "line": 187,
+            "function": "acquire"
+          },
+          {
+            "source": "res://scripts/steam_run_ledger.gd",
+            "line": 104,
+            "function": "_drive_pending"
+          },
+          {
+            "source": "res://scripts/steam_run_ledger.gd",
+            "line": 75,
+            "function": "_persist"
+          },
+          {
+            "source": "res://scripts/steam_run_ledger.gd",
+            "line": 238,
+            "function": "apply_campaign_handoff"
+          },
+          {
+            "source": "D:/AI项目/水浒/开发工程/.godot/campaign_live_owner_io_20261026/20261026_234140_40126e64/workers/worker.gd",
+            "line": 123,
+            "function": "writer_a"
+          },
+          {
+            "source": "D:/AI项目/水浒/开发工程/.godot/campaign_live_owner_io_20261026/20261026_234140_40126e64/workers/worker.gd",
+            "line": 53,
+            "function": "gate"
+          }
+        ]
+      },
+      {
+        "event": "launched",
+        "role": "B",
+        "pid": 35608
+      },
+      {
+        "event": "gate",
+        "role": "B",
+        "kind": "b_open",
+        "inventory": {
+          "exists": true,
+          "files": {
+            "record_0000000002.json": {
+              "sha256": "f93d4fb6717a522a30351288b2db533e6ccd388bbdf5f947e0b460857f30a94b",
+              "bytes": 1553
+            },
+            "record_0000000003.json": {
+              "sha256": "18676fa346250ddd3cdb3ee6787715ef8017bc6a1ece594a14e818ea11cd26f1",
+              "bytes": 1553
+            },
+            "writing/owner.json": {
+              "sha256": "92c2fc61b62629ab486de2c0de7e60b53c290ad8d5d15c12372e99455d243060",
+              "bytes": 100
+            }
+          },
+          "directories": [
+            ".",
+            "writing"
+          ]
+        }
+      },
+      {
+        "event": "gate",
+        "role": "B",
+        "kind": "b_observed",
+        "inventory": {
+          "exists": true,
+          "files": {
+            "record_0000000002.json": {
+              "sha256": "f93d4fb6717a522a30351288b2db533e6ccd388bbdf5f947e0b460857f30a94b",
+              "bytes": 1553
+            },
+            "record_0000000003.json": {
+              "sha256": "18676fa346250ddd3cdb3ee6787715ef8017bc6a1ece594a14e818ea11cd26f1",
+              "bytes": 1553
+            }
+          },
+          "directories": [
+            "."
+          ]
+        }
+      },
+      {
+        "event": "resumed",
+        "role": "A"
+      },
+      {
+        "event": "gate",
+        "role": "A",
+        "kind": "a_verified",
+        "inventory": {
+          "exists": true,
+          "files": {
+            "record_0000000002.json": {
+              "sha256": "f93d4fb6717a522a30351288b2db533e6ccd388bbdf5f947e0b460857f30a94b",
+              "bytes": 1553
+            },
+            "record_0000000003.json": {
+              "sha256": "18676fa346250ddd3cdb3ee6787715ef8017bc6a1ece594a14e818ea11cd26f1",
+              "bytes": 1553
+            }
+          },
+          "directories": [
+            "."
+          ]
+        }
+      }
+    ]
+  },
+  "expectation_passed": true,
+  "final_identity_passed": true,
+  "lock_ownership_confirmed": true,
+  "lock_released": true,
+  "pinned_files": {
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261026_211212_dd3104df\\project\\scripts\\battle.gd": "30c722e17e49c90224f44e4254569e89de277b3316eb6cafb2f8f98f35d9ef12",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261026_211212_dd3104df\\project\\scripts\\campaign.gd": "911e97602524fae9f7e8f9ff07b84b6d8179a574c12a233cdf2798c92625db6a",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261026_211212_dd3104df\\project\\scripts\\continue_flow.gd": "a180034ff34237a5161cedef8309b27903c953676c4100f30c1d0f9f97e6c4b0",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261026_211212_dd3104df\\project\\scripts\\menu.gd": "cd2a444f8fe4748fc2e49ead3283613daa2285f5176a04e9347c6b3955052792",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261026_211212_dd3104df\\project\\scripts\\run_campaign_cfg_transaction.gd": "71803fc42a6bef59479db5b8cf70a953716a3968e45ba1fb391eed5726a51d17",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261026_211212_dd3104df\\project\\scripts\\run_campaign_cfg_values.gd": "ebf78b673a99ea847b72aa7b897f1aede34c99f1e6cc873f66f69611929ef081",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261026_211212_dd3104df\\project\\scripts\\run_campaign_legacy_data.gd": "2ab0ea51afb1ede869022ec2877c75f6c395080ad34ab1a9c40aca2d5f76f93e",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261026_211212_dd3104df\\project\\scripts\\run_campaign_local_lifecycle.gd": "db00c4a92094737b22f2706afa1c9e975c4b899afa30c245457ad4ec1deecd76",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261026_211212_dd3104df\\project\\scripts\\run_campaign_progress_coordinator.gd": "4fa8c42a7c288c7384bb1254c67fe94946aa12b981315ce4753e1aeeedaab018",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261026_211212_dd3104df\\project\\scripts\\run_campaign_progress_gate.gd": "2303bf6b25eaf83c915bbfd88d09a58072174780f3d9397d23f9086b76d0c29f",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261026_211212_dd3104df\\project\\scripts\\run_campaign_progress_intent.gd": "0b04412ba4203fb93f3113d7633c753f238d5a383a62e291ca8c917f290a63ff",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261026_211212_dd3104df\\project\\scripts\\run_campaign_progress_projection.gd": "6c627f95c44f6876895f012b5e6a6859500b73d391f92d7bf46f41f4b0d1e68b",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261026_211212_dd3104df\\project\\scripts\\run_campaign_startup_scan.gd": "2f4fbebbaa4c6035e8111e70215042f91ff60d69723169da011849a187954c0d",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261026_211212_dd3104df\\project\\scripts\\run_world_session.gd": "8223f5b64fc1472422c89b33876a43dc7e8462bb55b46f8f7351c4a888867365",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261026_211212_dd3104df\\project\\scripts\\steam_cloud.gd": "ee793d71e6ab757b8605fa2c3c3675493b5a52e9503dd34bb102785f93d0b986",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261026_211212_dd3104df\\project\\scripts\\steam_local_run_session.gd": "10198f06b28cad4a4d3c8423be426f3fbd6901654ff1dadf8d3d3ea2a40ef3f1",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261026_211212_dd3104df\\project\\scripts\\steam_receipt_store.gd": "11bf6cae5968baa6c740c3c6be1fc954376048cbbe9a81a77b6cf4588518f9f1",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261026_211212_dd3104df\\project\\scripts\\steam_run_ledger.gd": "da60d5481a25f3588db2b2c6815a728f5deef45969a951d3416d3d43a53094e1",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261026_211212_dd3104df\\project\\scripts\\steam_run_receipt.gd": "13a277c20617ba5777d1287cc16e639441cae3cd938a550e088a2fa119a05958",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261026_211212_dd3104df\\project\\scripts\\steam_service.gd": "42498690141f36cb4898ea2a645b2d31a4305d8e9a239a505d4a126069a22984",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\live_owner_candidate_tests\\run_live_owner.py": "07b8360dd0d6747a559a2d307615ccbdbb86e07857ade960958f3062850f2de9",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\live_owner_candidate_tests\\bootstrap.gd": "220ba4d156d9a7501efa57ee1e5f3ac4cf4b587eb2985ed12065c218c401b4df",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\live_owner_candidate_tests\\worker.gd": "8555d95b02ab6125727d89d63b06a570b7bf07205d69e395bd616c79fbc88e28",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\live_owner_candidate_tests\\README.md": "4d00c017dd890effa72b6a700278badb380974b3d73165e1bf216ac292108388",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\tests\\io\\run_delayed_acquire.py": "2046fdddf1d37d89539a717827ed968a7200326ac0ecfde80ea5909c51c0f3ae",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\store_protocol_candidate\\tests\\io\\run_io.py": "ef437cc2fa4f602b0ae26a429ba03453b305d72ad4ba1b3451fa03186c60b1bb",
+    "D:\\AI项目\\水浒\\开发工程\\qa\\huangnigang_production_20261020\\run_batch.py": "ab5825a9c4041c95ec31c62c3abf18b390a1affac05121f5d24ad8e42af6f768",
+    "D:\\AI项目\\水浒\\开发工程\\tools\\run_character_art_qa.py": "84d019c93da597ab500aa9258f63d71a027de9624529cc3cb997b0eb30fb54c9",
+    "D:\\AI项目\\水浒\\开发工程\\tools\\contracts\\run_content_identity_20260907\\build_identity.py": "818f280d3c8518348566e9986bd5bb6dd0b05f18a4ffdcc0bcd30efd398e946a",
+    "D:\\AI项目\\水浒\\开发工程\\tools\\run_steam_integration_qa.py": "0673d6ab09904fd653152b127c30ca325dbf791de0b77a5da2a60cd30f0a5ad9",
+    "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+    "D:\\AI项目\\水浒\\开发工程\\tools\\godot_debug_wire.py": "41703c88628a3fa473db00d8eeb79e87e6c2f250b0dc243a951b8295973e0c35",
+    "D:\\AI项目\\水浒\\开发工程\\tools\\run_workstation_baseline.py": "1220817bacea5469035403084c3e4ddc7c23d222440876cd199e650a9b7dd8b2",
+    "D:\\AI项目\\水浒\\开发工程\\tools\\run_campaign_level_state_qa.py": "973e1f83cdec8863a45dc4835ad53cf9777e8a54fa9cfdbe0c58aacbd7aca3ba",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261026_211212_dd3104df\\project\\scripts\\run_snapshot_store.gd": "581e638b8f0ce7cb24d5533b03ee94b99732c5cffcbf373b1a5a69a1618d8251",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261026_211212_dd3104df\\generation.json": "8a9dc58ad1d5d2f0e7d0f38199ccf3fec46883a1ebf0d8fcbc197498a79ed0ea",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261026_211212_dd3104df\\preparation.json": "9b813a9267e67acebd6e6fa6d065964b3d869b4d3f4825857cc28b3b98628047",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261026_211212_dd3104df\\root_source.json": "fc8be051b3f219bf5ca9468fc08730956aea17b6e5f1b114874a37ceeba3a9cb",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261026_211212_dd3104df\\candidate_manifest.json": "8dfa8791b181319179fb27b284c4d5e9e34031d5c616a53616fe2a40da62400f",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_live_owner_io_20261026\\20261026_234140_40126e64\\workers\\bootstrap.gd": "220ba4d156d9a7501efa57ee1e5f3ac4cf4b587eb2985ed12065c218c401b4df",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_live_owner_io_20261026\\20261026_234140_40126e64\\workers\\worker.gd": "8555d95b02ab6125727d89d63b06a570b7bf07205d69e395bd616c79fbc88e28"
+  }
+}

@@ -1,0 +1,96 @@
+--- qa/campaign_progress_recovery_20261026/store_protocol_candidate/integrated_candidate/scripts/steam_receipt_store.gd
++++ candidate/scripts/steam_receipt_store.gd
+@@ -1,6 +1,6 @@
+ extends "res://scripts/run_snapshot_store.gd"
+ ## Candidate only: normal release uses unique cleanup paths. Legacy fixed
+-## writing/recovering recovery remains the unchanged base implementation.
++## writing/recovering recovery uses the shared candidate's bounded liveness bridge.
+ const Receipt = preload("res://scripts/steam_run_receipt.gd")
+ const CLEANUP_PREFIX := "cleanup_v1_"
+ const RELEASE_PREFIX := "release_v1_"
+@@ -315,6 +315,13 @@
+ 	return _finish_release()
+ 
+ func inspect_recovery() -> Dictionary:
++	var entered: Dictionary = _enter_recovery_scope()
++	if not entered.ok: return entered
++	var result: Dictionary = _inspect_unique_recovery()
++	_leave_recovery_scope()
++	return result
++
++func _inspect_unique_recovery() -> Dictionary:
+ 	var layout: Dictionary = _layout()
+ 	if not layout.ok: return layout
+ 	if not layout.barrier: return super.inspect_recovery()
+@@ -324,14 +331,34 @@
+ 	if not head.ok: return head
+ 	var source: Dictionary = state.marker if state.kind == "release" else state.lock
+ 	var owned: bool = _owns(state.kind,source.name,source.raw)
+-	if not owned and (OS.is_process_running(source.claim_pid) or OS.is_process_running(int(source.metadata.pid))): return bad("WRITER_ALIVE")
+ 	if state.kind == "release" and (head.revision != source.head_revision or head.file_sha256 != source.head_sha256): return bad("RELEASE_HEAD_CHANGED")
+ 	if owned:
+ 		var guard: Dictionary = _owned_retry_guard()
+ 		if not guard.ok: return guard
+-	return {"ok":true,"protocol":"steam_unique_release_v1","kind":state.kind,"owned":owned,"source":source,
++	var plan := {"ok":true,"protocol":"steam_unique_release_v1","kind":state.kind,"owned":owned,"source":source,
+ 		"inventory":layout.items,"head_revision":head.revision,"head_sha256":head.file_sha256,
+ 		"action":"finish_unique_release","dead_pid":int(source.metadata.pid)}
++	if not owned:
++		var observed := _confirmed_dead([int(source.claim_pid), int(source.metadata.pid)], plan, "inspect")
++		if not observed.ok: return observed
++		var readback := _unique_recovery_readback(plan)
++		if not readback.ok: return readback
++	var budget: Dictionary = LivenessManager.check_budget(_liveness_scope_id)
++	return plan if budget.ok else budget
++
++func _unique_recovery_readback(plan: Dictionary) -> Dictionary:
++	var layout: Dictionary = _layout()
++	if not layout.ok: return layout
++	if layout.items != plan.inventory: return bad("RECOVERY_CAS_CHANGED")
++	var state: Dictionary = _protocol_state(layout)
++	if not state.ok: return state
++	if state.kind != plan.kind: return bad("RECOVERY_CAS_CHANGED")
++	var source: Dictionary = state.marker if state.kind == "release" else state.lock
++	if source != plan.source: return bad("RECOVERY_CAS_CHANGED")
++	var head: Dictionary = _chain()
++	if not head.ok: return head
++	if head.revision != plan.head_revision or head.file_sha256 != plan.head_sha256: return bad("RECOVERY_CAS_CHANGED")
++	return {"ok": true}
+ 
+ func _renamed_inventory(items: Dictionary, old_name: String, new_name: String, is_directory: bool) -> Dictionary:
+ 	var expected: Dictionary = {}
+@@ -342,6 +369,13 @@
+ 	return expected
+ 
+ func recover(plan: Dictionary) -> Dictionary:
++	var entered: Dictionary = _enter_recovery_scope()
++	if not entered.ok: return entered
++	var result: Dictionary = _recover_unique(plan)
++	_leave_recovery_scope()
++	return result
++
++func _recover_unique(plan: Dictionary) -> Dictionary:
+ 	var fresh: Dictionary = inspect_recovery()
+ 	if not fresh.ok: return fresh
+ 	if fresh != plan: return bad("RECOVERY_PLAN_CHANGED")
+@@ -351,6 +385,11 @@
+ 		return super.recover(plan)
+ 	if not plan.owned:
+ 		var source: Dictionary = plan.source
++		# Both identities must have a fresh claim-phase death observation before any rename.
++		var observed := _confirmed_dead([int(source.claim_pid), int(source.metadata.pid)], plan, "claim")
++		if not observed.ok: return observed
++		var readback := _unique_recovery_readback(plan)
++		if not readback.ok: return readback
+ 		var nonce: String = Crypto.new().generate_random_bytes(16).hex_encode()
+ 		var name: String
+ 		var extra: Dictionary = {}
+@@ -359,6 +398,8 @@
+ 			name = _release_name(OS.get_process_id(),nonce,source.cleanup_pid,source.cleanup_nonce,source.head_revision,source.head_sha256)
+ 			extra = {"cleanup":source.cleanup,"head_revision":source.head_revision,"head_sha256":source.head_sha256}
+ 		if FileAccess.file_exists(directory.path_join(name)) or DirAccess.dir_exists_absolute(directory.path_join(name)): return bad("RECOVERY_CLAIM_COLLISION")
++		var budget: Dictionary = LivenessManager.check_budget(_liveness_scope_id)
++		if not budget.ok: return budget
+ 		# Only a non-reused fresh-nonce source is claimed, never fixed writing.
+ 		if DirAccess.rename_absolute(directory.path_join(source.name),directory.path_join(name)) != OK: return bad("RECOVERY_BUSY")
+ 		_remember(plan.kind,name,source.raw,extra)

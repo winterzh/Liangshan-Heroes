@@ -1,0 +1,123 @@
+--- qa/campaign_progress_recovery_20261026/process_liveness_candidate/scripts/process_liveness_oracle.gd
++++ candidate/scripts/process_liveness_oracle.gd
+@@ -18,6 +18,7 @@
+ var _nonce := ""
+ var _directory := ""
+ var _started_ms := 0
++var _deadline_ms := 0
+ var _pending := false
+ var _kill_attempted := false
+ var _cleanup_confirmed := true
+@@ -101,11 +102,31 @@
+ 	if digest.start(HashingContext.HASH_SHA256) != OK or digest.update(bytes) != OK: return ""
+ 	return digest.finish().hex_encode()
+ 
++static func guard_native_path(path: String, directory_leaf: bool) -> bool:
++	# Godot Windows is_link tests all FILE_ATTRIBUTE_REPARSE_POINT, including junctions.
++	# Reject unsupported path forms instead of normalizing away an unsafe parent.
++	if OS.get_name() != "Windows": return false
++	var clean := path.replace("\\", "/")
++	if clean.length() < 3 or clean.substr(1, 2) != ":/" or clean.substr(0, 1).to_upper() < "A" or clean.substr(0, 1).to_upper() > "Z": return false
++	if clean != clean.simplify_path() or ":" in clean.substr(3): return false
++	var current := clean.substr(0, 3)
++	if not DirAccess.dir_exists_absolute(current): return false
++	var parts := clean.substr(3).split("/", false)
++	for index in range(parts.size()):
++		var parent := DirAccess.open(current)
++		if parent == null or parent.is_link(parts[index]): return false
++		current = current.path_join(parts[index])
++		if index == parts.size() - 1 and not directory_leaf:
++			if not FileAccess.file_exists(current): return false
++		elif not DirAccess.dir_exists_absolute(current): return false
++	return directory_leaf or not parts.is_empty()
++
+ func configure(helper_path: String, expected_sha256: String, private_root: String) -> Dictionary:
+ 	if _pending or not _cleanup_confirmed: return _invalid("PROVIDER_STILL_OWNED")
+ 	if OS.get_name() != "Windows": return _invalid("UNSUPPORTED_PLATFORM")
+ 	if not helper_path.is_absolute_path() or helper_path.get_file() != HELPER_NAME or not _hex(expected_sha256, 64): return _invalid("HELPER_CONFIG")
+ 	if not private_root.is_absolute_path() or private_root.begins_with("res:") or private_root.begins_with("user:"): return _invalid("PRIVATE_ROOT")
++	if not guard_native_path(helper_path, false) or not guard_native_path(private_root, true): return _invalid("PATH_REPARSE_OR_MISSING")
+ 	if _file_digest(helper_path) != expected_sha256: return _invalid("HELPER_SHA")
+ 	if not DirAccess.dir_exists_absolute(private_root): return _invalid("PRIVATE_ROOT_MISSING")
+ 	_helper = helper_path
+@@ -124,7 +145,7 @@
+ 	_result = _envelope(state, code, evidence)
+ 	return _result.duplicate(true)
+ 
+-func begin(target_pid: Variant, expected_creation_filetime: String = "") -> Dictionary:
++func begin(target_pid: Variant, expected_creation_filetime: String = "", scope_deadline_ms: int = 0) -> Dictionary:
+ 	# Repeated begin does not replace or forget a live child/proposal. Call poll on the same instance.
+ 	if _pending or not _cleanup_confirmed:
+ 		return _envelope("unknown", "PROVIDER_STILL_OWNED", {"requested_pid": str(target_pid)})
+@@ -134,11 +155,15 @@
+ 	_nonce = ""
+ 	_result = {}
+ 	_started_ms = Time.get_ticks_msec()
++	_deadline_ms = _started_ms + TIMEOUT_MS
++	if scope_deadline_ms > 0: _deadline_ms = mini(_deadline_ms, scope_deadline_ms)
++	if _started_ms >= _deadline_ms: return _finish("unknown", "PROVIDER_SCOPE_TIMEOUT")
+ 	if typeof(target_pid) != TYPE_INT or target_pid < 1 or target_pid > 2147483647: return _finish("unknown", "INVALID_PID")
+ 	_target = target_pid
+ 	if expected_creation_filetime != "" and not _decimal(expected_creation_filetime, "18446744073709551615"): return _finish("unknown", "INVALID_CREATION")
+ 	_expected_creation = expected_creation_filetime
+ 	if OS.get_name() != "Windows": return _finish("unknown", "UNSUPPORTED_PLATFORM")
++	if not guard_native_path(_helper, false) or not guard_native_path(_root, true): return _finish("unknown", "PATH_REPARSE_OR_MISSING")
+ 	if _helper.is_empty() or _file_digest(_helper) != _helper_sha: return _finish("unknown", "HELPER_SHA")
+ 	var random := Crypto.new().generate_random_bytes(16)
+ 	if random.size() != 16: return _finish("unknown", "NONCE_UNAVAILABLE")
+@@ -146,6 +171,8 @@
+ 	_directory = _root.path_join(_nonce)
+ 	# mkdir is exclusive: any existing directory/file collision fails without changing its contents.
+ 	if DirAccess.make_dir_absolute(_directory) != OK: return _finish("unknown", "PROBE_DIRECTORY_COLLISION")
++	if not guard_native_path(_directory, true) or not guard_native_path(_helper, false): return _finish("unknown", "PATH_REPARSE_OR_MISSING")
++	if Time.get_ticks_msec() >= _deadline_ms: return _finish("unknown", "PROVIDER_SCOPE_TIMEOUT")
+ 	_kill_attempted = false
+ 	_provider_pid = OS.create_process(_helper, PackedStringArray([str(_target), _nonce, _directory.replace("/", "\\")]), false)
+ 	if _provider_pid <= 0: return _finish("unknown", "PROVIDER_START_FAILED")
+@@ -159,11 +186,14 @@
+ 		return _envelope("unknown", "NO_QUERY")
+ 	# This PID came from this very OS.create_process call, unlike an external lock owner PID.
+ 	var exit_code := OS.get_process_exit_code(_provider_pid)
++	if Time.get_ticks_msec() >= _deadline_ms: return cancel("PROVIDER_SCOPE_TIMEOUT")
+ 	if exit_code >= 0:
+ 		_cleanup_confirmed = true
+ 		if exit_code != 0: return _finish("unknown", "PROVIDER_EXIT", {"exit_code": exit_code})
++		if not guard_native_path(_helper, false) or not guard_native_path(_directory, true): return _finish("unknown", "PATH_REPARSE_OR_MISSING")
+ 		if _file_digest(_helper) != _helper_sha: return _finish("unknown", "HELPER_CHANGED")
+ 		var final_path := _directory.path_join("result.json")
++		if not guard_native_path(final_path, false): return _finish("unknown", "REPORT_REPARSE_OR_MISSING")
+ 		if FileAccess.file_exists(_directory.path_join("pending.json")): return _finish("unknown", "PROVIDER_PENDING_FILE")
+ 		var file := FileAccess.open(final_path, FileAccess.READ)
+ 		if file == null: return _finish("unknown", "REPORT_MISSING")
+@@ -178,15 +208,24 @@
+ 			if byte < 32 or byte > 126: return _finish("unknown", "REPORT_ENCODING")
+ 		var validated := validate_report(bytes.get_string_from_ascii(), _nonce, _target, _provider_pid)
+ 		if not validated.ok: return _finish("unknown", validated.code)
++		if Time.get_ticks_msec() >= _deadline_ms: return _finish("unknown", "PROVIDER_SCOPE_TIMEOUT")
+ 		var row: Dictionary = validated.record
+ 		if _expected_creation != "" and row.handle_opened and row.creation_filetime != _expected_creation:
+ 			return _finish("unknown", "PID_IDENTITY_MISMATCH", row)
+ 		return _finish(row.state, row.code, row)
+-	if Time.get_ticks_msec() - _started_ms >= TIMEOUT_MS:
+-		# kill removes the Windows Godot process_map entry even on failure. Never retry by raw PID.
+-		# TerminateProcess is asynchronous: keep ownership quarantined; do not assert terminal.
+-		if not _kill_attempted:
+-			_kill_attempted = true
+-			var kill_error := OS.kill(_provider_pid)
+-			return _finish("unknown", "PROVIDER_TIMEOUT", {"kill_requested_once": true, "kill_error": kill_error, "cleanup_unconfirmed": true})
+ 	return _envelope("unknown", "PENDING")
++
++func cancel(reason: String = "PROVIDER_CANCELLED") -> Dictionary:
++	if not _pending:
++		if not _result.is_empty(): return _result.duplicate(true)
++		return _envelope("unknown", "NO_QUERY")
++	var exit_code := OS.get_process_exit_code(_provider_pid)
++	if exit_code >= 0:
++		_cleanup_confirmed = true
++		return _finish("unknown", reason, {"exit_code": exit_code})
++	# kill removes the owned map entry, even if it fails. Exactly one attempt, no raw-PID retry.
++	if not _kill_attempted:
++		_kill_attempted = true
++		var kill_error := OS.kill(_provider_pid)
++		return _finish("unknown", reason, {"kill_requested_once": true, "kill_error": kill_error, "cleanup_unconfirmed": true})
++	return _finish("unknown", reason, {"cleanup_unconfirmed": true})

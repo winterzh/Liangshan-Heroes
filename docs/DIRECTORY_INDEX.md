@@ -66,6 +66,14 @@
 
 ## 2026-10-26 战役奖励交接候选与故障证据
 
+`qa/campaign_progress_recovery_20261026/process_liveness_candidate/`：独立C# Windows进程查询helper、Godot三态适配器和构建/模型/原生组件证据。已有13例helper、22项模型、49项Godot组件及独立19项超时检查通过；exe在忽略产物中，后继Store恢复准入另验。
+
+`qa/campaign_progress_recovery_20261026/live_owner_candidate_tests/`：真实双进程活写者保护驱动；f6ef基线已复现活锁误清理，原始证据见同级`evidence/live_owner_baseline_20261026_234140/`。诊断成功不等于修复通过。
+
+`qa/campaign_progress_recovery_20261026/process_liveness_integration_candidate/`：base/Steam Store、进程级manager和oracle v2的独立恢复候选、来源清单及专项验证；资格以该目录实测收据为准，未采用生产。
+
+`qa/campaign_progress_recovery_20261026/prepare_liveness.py`：23脚本及固定native helper的独立冻结入口；默认预检，`--prepare`只创建新的私有工程，不启动引擎或改生产。导入和运行需另占共享通道。
+
 `qa/campaign_progress_recovery_20261026/handoff_candidate/`：20文件独立候选、精确清单、模型/尾账回归/真实I/O/经典30波外部驱动及后继恢复协议设计。`evidence/` 保留每版来源、原始失败和成功worker收据；`generated_uids/` 是绑定冻结身份的少量文本证据，不能作为普通缓存忽略。当前范围和未验证门槛以[候选说明](../qa/campaign_progress_recovery_20261026/handoff_candidate/README.md)为准。
 
 `qa/campaign_progress_recovery_20261026/tests/lianhuanma/`与`run_lianhuanma_terminal.py`：实际菜单/Flow的四进程自然胜利驱动，独立绑定当前20文件候选；只读身份预检通过，尚未编译或原生验收。使用方式及不授予的资格见[执行器说明](../qa/campaign_progress_recovery_20261026/tests/lianhuanma/README.md)。

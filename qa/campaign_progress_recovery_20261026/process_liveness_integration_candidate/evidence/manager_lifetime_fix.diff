@@ -1,0 +1,74 @@
+--- failed-frozen-manager-647dd572.gd
++++ root-viewport-manager-644531a8.gd
+@@ -1,10 +1,12 @@
+ extends RefCounted
+ ## Process-owned, synchronous recovery bridge. No SceneTree pumping or callbacks.
+-## Candidate only: metadata retains the oracle even after every temporary Store is freed.
++## Root-viewport metadata retains the oracle across scenes, but releases it before the script VM.
+ 
+ const Oracle = preload("res://scripts/process_liveness_oracle.gd")
+ const SCRIPT_PATH := "res://scripts/run_process_liveness_manager.gd"
+ const META_KEY := &"_lh_process_liveness_manager_v2"
++const ROOT_ID_KEY := &"_lh_process_liveness_root_id_v2"
++const SHUTDOWN_KEY := &"_lh_process_liveness_shutdown_v2"
+ const SCHEMA := "process_liveness_manager_v2"
+ const HELPER_PATH := "res://addons/process_liveness/windows/ProcessLivenessProbe.exe"
+ const HELPER_SHA := "012354b1cf0376712f97e19362d91b2ef7f51775c6797c862c513df1e2f1936c"
+@@ -14,6 +16,8 @@
+ 
+ var _schema := SCHEMA
+ var _process_pid := OS.get_process_id()
++var _root_id := 0
++var _tree_id := 0
+ var _configuration := {"helper_path": HELPER_PATH, "helper_sha256": HELPER_SHA, "private_root": PRIVATE_ROOT, "budget_ms": BUDGET_MS}
+ var _oracle: RefCounted
+ var _quarantine: Dictionary = {}
+@@ -27,20 +31,45 @@
+ 
+ static func _instance() -> Dictionary:
+ 	if OS.get_thread_caller_id() != OS.get_main_thread_id(): return _bad("PROCESS_LIVENESS_THREAD")
++	# Engine metadata may contain primitives only: it outlives the GDScript VM on shutdown.
++	if Engine.has_meta(SHUTDOWN_KEY): return _bad("PROCESS_LIVENESS_SHUTDOWN", true)
++	var main_loop := Engine.get_main_loop()
++	if not main_loop is SceneTree: return _bad("PROCESS_LIVENESS_SCENE_TREE")
++	var root: Window = main_loop.root
++	if not is_instance_valid(root) or not root.is_inside_tree() or root.is_queued_for_deletion(): return _bad("PROCESS_LIVENESS_ROOT_UNAVAILABLE")
+ 	var script: Script = load(SCRIPT_PATH)
+ 	if script == null or not script.can_instantiate(): return _bad("PROCESS_LIVENESS_MANAGER_SCRIPT", true)
+ 	var manager: Variant
+-	if Engine.has_meta(META_KEY):
+-		manager = Engine.get_meta(META_KEY)
++	if root.has_meta(META_KEY):
++		manager = root.get_meta(META_KEY)
+ 		if not manager is RefCounted or not is_instance_valid(manager) or manager.get_script() != script:
+ 			return _bad("PROCESS_LIVENESS_MANAGER_IDENTITY", true)
++		if manager._root_id != root.get_instance_id() or manager._tree_id != main_loop.get_instance_id() \
++			or Engine.get_meta(ROOT_ID_KEY, 0) != manager._root_id: return _bad("PROCESS_LIVENESS_ROOT_IDENTITY", true)
+ 		if manager._schema != SCHEMA or manager._process_pid != OS.get_process_id() or manager._configuration != {
+ 			"helper_path": HELPER_PATH, "helper_sha256": HELPER_SHA, "private_root": PRIVATE_ROOT, "budget_ms": BUDGET_MS}:
+ 			return _bad("PROCESS_LIVENESS_MANAGER_CONFIG", true)
+ 	else:
++		# Never replace a lost process anchor (which could otherwise discard a quarantined child).
++		if Engine.has_meta(ROOT_ID_KEY): return _bad("PROCESS_LIVENESS_ANCHOR_LOST", true)
+ 		manager = script.new()
+-		Engine.set_meta(META_KEY, manager)
++		manager._root_id = root.get_instance_id()
++		manager._tree_id = main_loop.get_instance_id()
++		Engine.set_meta(ROOT_ID_KEY, manager._root_id)
++		root.set_meta(META_KEY, manager)
++		if root.tree_exiting.connect(manager._on_root_exiting, CONNECT_ONE_SHOT) != OK:
++			Engine.set_meta(SHUTDOWN_KEY, true)
++			return _bad("PROCESS_LIVENESS_SHUTDOWN_HOOK", true)
+ 	return {"ok": true, "manager": manager}
++
++func _on_root_exiting() -> void:
++	# This is the process root viewport, not current_scene. Do not clear runtime quarantine,
++	# reset ownership, or attempt a second raw-PID kill. Root destruction releases script
++	# references while the VM is alive; only this primitive tombstone reaches Engine teardown.
++	Engine.set_meta(SHUTDOWN_KEY, {"schema": "process_liveness_shutdown_v2", "process_pid": _process_pid,
++		"quarantined": not _quarantine.is_empty(), "in_query": _in_query,
++		"provider_pid": 0 if _oracle == null else int(_oracle.get("_provider_pid")),
++		"provider_pending": false if _oracle == null else bool(_oracle.get("_pending"))})
+ 
+ static func open_scope(binding: String) -> Dictionary:
+ 	var found := _instance()

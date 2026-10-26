@@ -1768,3 +1768,6 @@ qa/lianhuanma_resume_20261026/evidence/**/*.log -text -whitespace
 
 qa/campaign_progress_recovery_20261026/** -text whitespace=cr-at-eol,-blank-at-eof
 qa/campaign_progress_recovery_20261026/evidence/**/*.log -text -whitespace
+
+# Preserve raw unified-diff evidence, including its context prefixes and tabs.
+qa/campaign_progress_recovery_20261026/process_liveness_integration_candidate/evidence/*.diff -text -whitespace

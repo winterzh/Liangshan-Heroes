@@ -1,0 +1,12 @@
+{
+  "schema": "process_liveness_path_api_v1",
+  "url": "https://github.com/godotengine/godot/blob/4.6.3-stable/drivers/windows/dir_access_windows.cpp",
+  "ref": "4.6.3-stable",
+  "git_blob_sha": "73df578cf8262901e659811ee5a2e78ef4f0b5d3",
+  "lines": [
+    433,
+    442
+  ],
+  "excerpt": "bool DirAccessWindows::is_link(String p_file) {\n\tString f = fix_path(p_file);\n\n\tDWORD attr = GetFileAttributesW((LPCWSTR)(f.utf16().get_data()));\n\tif (attr == INVALID_FILE_ATTRIBUTES) {\n\t\treturn false;\n\t}\n\n\treturn (attr & FILE_ATTRIBUTE_REPARSE_POINT);\n}",
+  "note": "Static official-source evidence only. Native junction/path rejection remains untested for this candidate."
+}

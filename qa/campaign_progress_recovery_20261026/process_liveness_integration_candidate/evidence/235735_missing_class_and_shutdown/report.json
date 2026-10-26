@@ -1,0 +1,574 @@
+{
+	"actual_native_helper": true,
+	"checks": [
+		{
+			"label": "host fixture nonce matches",
+			"passed": true
+		},
+		{
+			"label": "actual candidate compiles: process_liveness_oracle",
+			"passed": true
+		},
+		{
+			"label": "actual candidate compiles: run_process_liveness_manager",
+			"passed": true
+		},
+		{
+			"label": "actual candidate compiles: run_snapshot_store",
+			"passed": true
+		},
+		{
+			"label": "actual candidate compiles: steam_receipt_store",
+			"passed": true
+		},
+		{
+			"label": "strict report model compiles",
+			"passed": true
+		},
+		{
+			"label": "v2 independently passes all 22 synthetic strict report cases",
+			"passed": true
+		},
+		{
+			"label": "loading Store scripts alone creates no manager instance",
+			"passed": true
+		},
+		{
+			"label": "normal empty directory opens: run_snapshot_store",
+			"passed": true
+		},
+		{
+			"label": "normal empty directory opens: steam_receipt_store",
+			"passed": true
+		},
+		{
+			"label": "normal empty Store path starts no helper or manager",
+			"passed": true
+		},
+		{
+			"label": "real helper matches fixed manager pin",
+			"passed": true
+		},
+		{
+			"label": "real local non-reparse parent chains accepted",
+			"passed": true
+		},
+		{
+			"label": "actual Windows directory junction rejected",
+			"passed": true
+		},
+		{
+			"label": "helper reached through junction ancestor rejected",
+			"passed": true
+		},
+		{
+			"label": "configure refuses private root junction before launching",
+			"passed": true
+		},
+		{
+			"label": "configure refuses helper ancestor junction despite matching bytes",
+			"passed": true
+		},
+		{
+			"label": "v2 oracle configures exact actual helper",
+			"passed": true
+		},
+		{
+			"label": "expired supplied scope starts no helper",
+			"passed": true
+		},
+		{
+			"label": "first synchronous manager scope opens",
+			"passed": true
+		},
+		{
+			"label": "actual manager classifies external sibling alive",
+			"passed": true
+		},
+		{
+			"label": "only confirmed-dead admits external sibling alive",
+			"passed": true
+		},
+		{
+			"label": "manager closes its actual helper: external sibling alive",
+			"passed": true
+		},
+		{
+			"label": "native target creation FILETIME retained: external sibling alive",
+			"passed": true
+		},
+		{
+			"label": "completed result is non-consuming within scope: external sibling alive",
+			"passed": true
+		},
+		{
+			"label": "same phase binding cache launches no extra helper: external sibling alive",
+			"passed": true
+		},
+		{
+			"label": "actual manager classifies retained exit259",
+			"passed": true
+		},
+		{
+			"label": "only confirmed-dead admits retained exit259",
+			"passed": true
+		},
+		{
+			"label": "manager closes its actual helper: retained exit259",
+			"passed": true
+		},
+		{
+			"label": "native target creation FILETIME retained: retained exit259",
+			"passed": true
+		},
+		{
+			"label": "completed result is non-consuming within scope: retained exit259",
+			"passed": true
+		},
+		{
+			"label": "same phase binding cache launches no extra helper: retained exit259",
+			"passed": true
+		},
+		{
+			"label": "actual manager classifies released PID",
+			"passed": true
+		},
+		{
+			"label": "only confirmed-dead admits released PID",
+			"passed": true
+		},
+		{
+			"label": "manager closes its actual helper: released PID",
+			"passed": true
+		},
+		{
+			"label": "completed result is non-consuming within scope: released PID",
+			"passed": true
+		},
+		{
+			"label": "same phase binding cache launches no extra helper: released PID",
+			"passed": true
+		},
+		{
+			"label": "actual manager classifies permission denied",
+			"passed": true
+		},
+		{
+			"label": "only confirmed-dead admits permission denied",
+			"passed": true
+		},
+		{
+			"label": "manager closes its actual helper: permission denied",
+			"passed": true
+		},
+		{
+			"label": "completed result is non-consuming within scope: permission denied",
+			"passed": true
+		},
+		{
+			"label": "same phase binding cache launches no extra helper: permission denied",
+			"passed": true
+		},
+		{
+			"label": "claim phase obtains a fresh native observation",
+			"passed": true
+		},
+		{
+			"label": "claim phase does not reuse inspect helper evidence",
+			"passed": true
+		},
+		{
+			"label": "closing scope releases cache while retaining process manager",
+			"passed": true
+		},
+		{
+			"label": "closed scope cannot reuse old death evidence",
+			"passed": true
+		},
+		{
+			"label": "new public scope has independent identity",
+			"passed": true
+		},
+		{
+			"label": "new scope does not permanently cache old alive result",
+			"passed": true
+		},
+		{
+			"label": "second scope closes",
+			"passed": true
+		},
+		{
+			"label": "deadline scope opens",
+			"passed": true
+		},
+		{
+			"label": "deadline scope first obtains genuine dead handle result",
+			"passed": true
+		},
+		{
+			"label": "expired shared budget rejects even an existing completed cache entry",
+			"passed": true
+		},
+		{
+			"label": "expired scope launches no new helper",
+			"passed": true
+		},
+		{
+			"label": "expired scope closes without losing process manager",
+			"passed": true
+		},
+		{
+			"label": "normal test completion leaves no pending query or quarantine",
+			"passed": true
+		},
+		{
+			"label": "real helper count equals uncached native query evidence",
+			"passed": true
+		}
+	],
+	"engine": {
+		"build": "official",
+		"hash": "7d41c59c457bd5a245092b4e7eb2d833e3b3f8c3",
+		"hex": 263683,
+		"major": 4,
+		"minor": 6,
+		"patch": 3,
+		"status": "stable",
+		"string": "4.6.3-stable (official)",
+		"timestamp": 0
+	},
+	"fixture_scope_labels": true,
+	"gameplay_qualified": false,
+	"model": {
+		"checks": [
+			{
+				"name": "synthetic live handle",
+				"passed": true
+			},
+			{
+				"name": "synthetic signaled handle",
+				"passed": true
+			},
+			{
+				"name": "synthetic absent nonzero PID",
+				"passed": true
+			},
+			{
+				"name": "synthetic access denied is unknown",
+				"passed": true
+			},
+			{
+				"name": "reject extra field",
+				"passed": true
+			},
+			{
+				"name": "reject fractional PID",
+				"passed": true
+			},
+			{
+				"name": "reject numeric PID",
+				"passed": true
+			},
+			{
+				"name": "reject other PID",
+				"passed": true
+			},
+			{
+				"name": "reject other child",
+				"passed": true
+			},
+			{
+				"name": "reject wrong nonce",
+				"passed": true
+			},
+			{
+				"name": "reject unknown schema",
+				"passed": true
+			},
+			{
+				"name": "reject false death",
+				"passed": true
+			},
+			{
+				"name": "reject missing creation",
+				"passed": true
+			},
+			{
+				"name": "reject leading zero time",
+				"passed": true
+			},
+			{
+				"name": "reject overflow time",
+				"passed": true
+			},
+			{
+				"name": "reject fake wait",
+				"passed": true
+			},
+			{
+				"name": "reject unexpected error",
+				"passed": true
+			},
+			{
+				"name": "reject missing handle",
+				"passed": true
+			},
+			{
+				"name": "reject idle PID",
+				"passed": true
+			},
+			{
+				"name": "reject trailing whitespace",
+				"passed": true
+			},
+			{
+				"name": "reject duplicate keys",
+				"passed": true
+			},
+			{
+				"name": "reject oversized",
+				"passed": true
+			}
+		],
+		"native_process_qualified": false,
+		"ok": true,
+		"schema": "process_liveness_report_model_v1",
+		"sdk_qualified": false,
+		"store_recovery_qualified": false,
+		"synthetic_only": true
+	},
+	"nonce": "2916e7bcd73c412a9b2b531c5a236b12",
+	"passed": true,
+	"paths": {
+		"helper": "D:/AI项目/水浒/开发工程/.godot/process_liveness_integration_20261026/20261026_235735_800fba5b/project/addons/process_liveness/windows/ProcessLivenessProbe.exe",
+		"junction": "D:\\CodexQA\\procliveint\\2916e7bcd73c\\junction_parent",
+		"junction_helper": "D:\\CodexQA\\procliveint\\2916e7bcd73c\\junction_parent\\ProcessLivenessProbe.exe",
+		"real_private": "D:\\CodexQA\\procliveint\\2916e7bcd73c\\oracle_private"
+	},
+	"pid": 70112,
+	"production_integrated": false,
+	"queries": [
+		{
+			"code": "WRITER_ALIVE",
+			"liveness_detail": {
+				"code": "HANDLE_NONSIGNALED",
+				"evidence": {
+					"code": "HANDLE_NONSIGNALED",
+					"creation_filetime": "134375038563009116",
+					"handle_opened": true,
+					"nonce": "f473a4f0030fd114389dc30c093dfca8",
+					"provider_pid": "11312",
+					"query_utc_filetime": "134375038569494739",
+					"schema": "windows_process_liveness_v1",
+					"state": "alive",
+					"target_pid": "16116",
+					"wait_result": "258",
+					"win32_error": "0"
+				},
+				"helper_cleanup_confirmed": true,
+				"helper_sha256": "012354b1cf0376712f97e19362d91b2ef7f51775c6797c862c513df1e2f1936c",
+				"observed_ms": 470,
+				"pending": false,
+				"probe_directory": "D:/CodexQA/procliveint/2916e7bcd73c/appdata/Godot/app_userdata/Liveness Integration Component/process_liveness/v2/f473a4f0030fd114389dc30c093dfca8",
+				"provider_pid": 11312,
+				"started_ms": 291,
+				"state": "alive",
+				"target_pid": 16116
+			},
+			"ok": false,
+			"restart_required": false,
+			"retryable": true,
+			"unsafe": false
+		},
+		{
+			"code": "PROCESS_CONFIRMED_DEAD",
+			"observation": {
+				"code": "HANDLE_SIGNALED",
+				"evidence": {
+					"code": "HANDLE_SIGNALED",
+					"creation_filetime": "134375038563086873",
+					"handle_opened": true,
+					"nonce": "51bb1ccd4d2e4a1eca8bca870e024c8c",
+					"provider_pid": "2840",
+					"query_utc_filetime": "134375038570364945",
+					"schema": "windows_process_liveness_v1",
+					"state": "dead",
+					"target_pid": "72192",
+					"wait_result": "0",
+					"win32_error": "0"
+				},
+				"helper_cleanup_confirmed": true,
+				"helper_sha256": "012354b1cf0376712f97e19362d91b2ef7f51775c6797c862c513df1e2f1936c",
+				"observed_ms": 557,
+				"pending": false,
+				"probe_directory": "D:/CodexQA/procliveint/2916e7bcd73c/appdata/Godot/app_userdata/Liveness Integration Component/process_liveness/v2/51bb1ccd4d2e4a1eca8bca870e024c8c",
+				"provider_pid": 2840,
+				"started_ms": 491,
+				"state": "dead",
+				"target_pid": 72192
+			},
+			"ok": true,
+			"pid": 72192
+		},
+		{
+			"code": "PROCESS_CONFIRMED_DEAD",
+			"observation": {
+				"code": "PID_ABSENT_87",
+				"evidence": {
+					"code": "PID_ABSENT_87",
+					"creation_filetime": "",
+					"handle_opened": false,
+					"nonce": "82dc405a8df705f46c80801f8a3a96d2",
+					"provider_pid": "59824",
+					"query_utc_filetime": "134375038571261717",
+					"schema": "windows_process_liveness_v1",
+					"state": "dead",
+					"target_pid": "29808",
+					"wait_result": "not_queried",
+					"win32_error": "87"
+				},
+				"helper_cleanup_confirmed": true,
+				"helper_sha256": "012354b1cf0376712f97e19362d91b2ef7f51775c6797c862c513df1e2f1936c",
+				"observed_ms": 646,
+				"pending": false,
+				"probe_directory": "D:/CodexQA/procliveint/2916e7bcd73c/appdata/Godot/app_userdata/Liveness Integration Component/process_liveness/v2/82dc405a8df705f46c80801f8a3a96d2",
+				"provider_pid": 59824,
+				"started_ms": 579,
+				"state": "dead",
+				"target_pid": 29808
+			},
+			"ok": true,
+			"pid": 29808
+		},
+		{
+			"code": "PROCESS_LIVENESS_UNKNOWN",
+			"liveness_detail": {
+				"code": "OPEN_FAILED",
+				"evidence": {
+					"code": "OPEN_FAILED",
+					"creation_filetime": "",
+					"handle_opened": false,
+					"nonce": "5d07b0abb7bfd2afdc78b8dbef3ba066",
+					"provider_pid": "26168",
+					"query_utc_filetime": "134375038572063476",
+					"schema": "windows_process_liveness_v1",
+					"state": "unknown",
+					"target_pid": "4",
+					"wait_result": "not_queried",
+					"win32_error": "5"
+				},
+				"helper_cleanup_confirmed": true,
+				"helper_sha256": "012354b1cf0376712f97e19362d91b2ef7f51775c6797c862c513df1e2f1936c",
+				"observed_ms": 730,
+				"pending": false,
+				"probe_directory": "D:/CodexQA/procliveint/2916e7bcd73c/appdata/Godot/app_userdata/Liveness Integration Component/process_liveness/v2/5d07b0abb7bfd2afdc78b8dbef3ba066",
+				"provider_pid": 26168,
+				"started_ms": 662,
+				"state": "unknown",
+				"target_pid": 4
+			},
+			"ok": false,
+			"restart_required": false,
+			"retryable": true,
+			"unsafe": false
+		},
+		{
+			"code": "WRITER_ALIVE",
+			"liveness_detail": {
+				"code": "HANDLE_NONSIGNALED",
+				"evidence": {
+					"code": "HANDLE_NONSIGNALED",
+					"creation_filetime": "134375038563009116",
+					"handle_opened": true,
+					"nonce": "7d994a3c82564688b0a61585a97f8bbc",
+					"provider_pid": "69516",
+					"query_utc_filetime": "134375038572838436",
+					"schema": "windows_process_liveness_v1",
+					"state": "alive",
+					"target_pid": "16116",
+					"wait_result": "258",
+					"win32_error": "0"
+				},
+				"helper_cleanup_confirmed": true,
+				"helper_sha256": "012354b1cf0376712f97e19362d91b2ef7f51775c6797c862c513df1e2f1936c",
+				"observed_ms": 805,
+				"pending": false,
+				"probe_directory": "D:/CodexQA/procliveint/2916e7bcd73c/appdata/Godot/app_userdata/Liveness Integration Component/process_liveness/v2/7d994a3c82564688b0a61585a97f8bbc",
+				"provider_pid": 69516,
+				"started_ms": 746,
+				"state": "alive",
+				"target_pid": 16116
+			},
+			"ok": false,
+			"restart_required": false,
+			"retryable": true,
+			"unsafe": false
+		},
+		{
+			"code": "WRITER_ALIVE",
+			"liveness_detail": {
+				"code": "HANDLE_NONSIGNALED",
+				"evidence": {
+					"code": "HANDLE_NONSIGNALED",
+					"creation_filetime": "134375038563009116",
+					"handle_opened": true,
+					"nonce": "92614f8350fab09b2456374b25762e75",
+					"provider_pid": "49864",
+					"query_utc_filetime": "134375038573558663",
+					"schema": "windows_process_liveness_v1",
+					"state": "alive",
+					"target_pid": "16116",
+					"wait_result": "258",
+					"win32_error": "0"
+				},
+				"helper_cleanup_confirmed": true,
+				"helper_sha256": "012354b1cf0376712f97e19362d91b2ef7f51775c6797c862c513df1e2f1936c",
+				"observed_ms": 876,
+				"pending": false,
+				"probe_directory": "D:/CodexQA/procliveint/2916e7bcd73c/appdata/Godot/app_userdata/Liveness Integration Component/process_liveness/v2/92614f8350fab09b2456374b25762e75",
+				"provider_pid": 49864,
+				"started_ms": 822,
+				"state": "alive",
+				"target_pid": 16116
+			},
+			"ok": false,
+			"restart_required": false,
+			"retryable": true,
+			"unsafe": false
+		},
+		{
+			"code": "PROCESS_CONFIRMED_DEAD",
+			"observation": {
+				"code": "HANDLE_SIGNALED",
+				"evidence": {
+					"code": "HANDLE_SIGNALED",
+					"creation_filetime": "134375038563086873",
+					"handle_opened": true,
+					"nonce": "f8ab91cb9e4ad49bde5e402735d16f16",
+					"provider_pid": "42364",
+					"query_utc_filetime": "134375038574282112",
+					"schema": "windows_process_liveness_v1",
+					"state": "dead",
+					"target_pid": "72192",
+					"wait_result": "0",
+					"win32_error": "0"
+				},
+				"helper_cleanup_confirmed": true,
+				"helper_sha256": "012354b1cf0376712f97e19362d91b2ef7f51775c6797c862c513df1e2f1936c",
+				"observed_ms": 946,
+				"pending": false,
+				"probe_directory": "D:/CodexQA/procliveint/2916e7bcd73c/appdata/Godot/app_userdata/Liveness Integration Component/process_liveness/v2/f8ab91cb9e4ad49bde5e402735d16f16",
+				"provider_pid": 42364,
+				"started_ms": 892,
+				"state": "dead",
+				"target_pid": 72192
+			},
+			"ok": true,
+			"pid": 72192
+		}
+	],
+	"schema": "process_liveness_integration_component_v1",
+	"sdk_qualified": false,
+	"store_dead_writer_recovery_qualified": false,
+	"timeout_termination_qualified": false
+}

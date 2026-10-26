@@ -1,0 +1,444 @@
+{
+	"checks": [
+		{
+			"label": "copied candidate and model source hashes match",
+			"passed": true
+		},
+		{
+			"label": "candidate and model compile",
+			"passed": true
+		},
+		{
+			"label": "all 22 strict report model cases pass",
+			"passed": true
+		},
+		{
+			"label": "host fixture nonce matches",
+			"passed": true
+		},
+		{
+			"label": "exact compiled helper configures",
+			"passed": true
+		},
+		{
+			"label": "query starts its own helper for alive",
+			"passed": true
+		},
+		{
+			"label": "repeated begin preserves original owned helper",
+			"passed": true
+		},
+		{
+			"label": "normal helper terminal is confirmed",
+			"passed": true
+		},
+		{
+			"label": "actual query yields alive",
+			"passed": true
+		},
+		{
+			"label": "result retains target and actual child PID",
+			"passed": true
+		},
+		{
+			"label": "terminal poll is non-consuming and stable",
+			"passed": true
+		},
+		{
+			"label": "actual native result code: external sibling alive",
+			"passed": true
+		},
+		{
+			"label": "held target creation FILETIME matches host",
+			"passed": true
+		},
+		{
+			"label": "query starts its own helper for dead",
+			"passed": true
+		},
+		{
+			"label": "repeated begin preserves original owned helper",
+			"passed": true
+		},
+		{
+			"label": "normal helper terminal is confirmed",
+			"passed": true
+		},
+		{
+			"label": "actual query yields dead",
+			"passed": true
+		},
+		{
+			"label": "result retains target and actual child PID",
+			"passed": true
+		},
+		{
+			"label": "terminal poll is non-consuming and stable",
+			"passed": true
+		},
+		{
+			"label": "actual native result code: retained exited 259",
+			"passed": true
+		},
+		{
+			"label": "held target creation FILETIME matches host",
+			"passed": true
+		},
+		{
+			"label": "query starts its own helper for dead",
+			"passed": true
+		},
+		{
+			"label": "repeated begin preserves original owned helper",
+			"passed": true
+		},
+		{
+			"label": "normal helper terminal is confirmed",
+			"passed": true
+		},
+		{
+			"label": "actual query yields dead",
+			"passed": true
+		},
+		{
+			"label": "result retains target and actual child PID",
+			"passed": true
+		},
+		{
+			"label": "terminal poll is non-consuming and stable",
+			"passed": true
+		},
+		{
+			"label": "actual native result code: released absent PID",
+			"passed": true
+		},
+		{
+			"label": "query starts its own helper for unknown",
+			"passed": true
+		},
+		{
+			"label": "repeated begin preserves original owned helper",
+			"passed": true
+		},
+		{
+			"label": "normal helper terminal is confirmed",
+			"passed": true
+		},
+		{
+			"label": "actual query yields unknown",
+			"passed": true
+		},
+		{
+			"label": "result retains target and actual child PID",
+			"passed": true
+		},
+		{
+			"label": "terminal poll is non-consuming and stable",
+			"passed": true
+		},
+		{
+			"label": "actual native result code: permission denied",
+			"passed": true
+		},
+		{
+			"label": "query starts its own helper for unknown",
+			"passed": true
+		},
+		{
+			"label": "repeated begin preserves original owned helper",
+			"passed": true
+		},
+		{
+			"label": "normal helper terminal is confirmed",
+			"passed": true
+		},
+		{
+			"label": "actual query yields unknown",
+			"passed": true
+		},
+		{
+			"label": "result retains target and actual child PID",
+			"passed": true
+		},
+		{
+			"label": "terminal poll is non-consuming and stable",
+			"passed": true
+		},
+		{
+			"label": "different creation identity never becomes dead",
+			"passed": true
+		},
+		{
+			"label": "invalid PID starts no helper: 0",
+			"passed": true
+		},
+		{
+			"label": "invalid PID starts no helper: -1",
+			"passed": true
+		},
+		{
+			"label": "invalid PID starts no helper: 1.5",
+			"passed": true
+		},
+		{
+			"label": "invalid PID starts no helper: 12",
+			"passed": true
+		},
+		{
+			"label": "invalid PID starts no helper: 2147483648",
+			"passed": true
+		},
+		{
+			"label": "unmatched helper bytes are refused",
+			"passed": true
+		},
+		{
+			"label": "unconfigured helper cannot produce a death decision",
+			"passed": true
+		}
+	],
+	"engine": {
+		"build": "official",
+		"hash": "7d41c59c457bd5a245092b4e7eb2d833e3b3f8c3",
+		"hex": 263683,
+		"major": 4,
+		"minor": 6,
+		"patch": 3,
+		"status": "stable",
+		"string": "4.6.3-stable (official)",
+		"timestamp": 0
+	},
+	"gameplay_qualified": false,
+	"model": {
+		"checks": [
+			{
+				"name": "synthetic live handle",
+				"passed": true
+			},
+			{
+				"name": "synthetic signaled handle",
+				"passed": true
+			},
+			{
+				"name": "synthetic absent nonzero PID",
+				"passed": true
+			},
+			{
+				"name": "synthetic access denied is unknown",
+				"passed": true
+			},
+			{
+				"name": "reject extra field",
+				"passed": true
+			},
+			{
+				"name": "reject fractional PID",
+				"passed": true
+			},
+			{
+				"name": "reject numeric PID",
+				"passed": true
+			},
+			{
+				"name": "reject other PID",
+				"passed": true
+			},
+			{
+				"name": "reject other child",
+				"passed": true
+			},
+			{
+				"name": "reject wrong nonce",
+				"passed": true
+			},
+			{
+				"name": "reject unknown schema",
+				"passed": true
+			},
+			{
+				"name": "reject false death",
+				"passed": true
+			},
+			{
+				"name": "reject missing creation",
+				"passed": true
+			},
+			{
+				"name": "reject leading zero time",
+				"passed": true
+			},
+			{
+				"name": "reject overflow time",
+				"passed": true
+			},
+			{
+				"name": "reject fake wait",
+				"passed": true
+			},
+			{
+				"name": "reject unexpected error",
+				"passed": true
+			},
+			{
+				"name": "reject missing handle",
+				"passed": true
+			},
+			{
+				"name": "reject idle PID",
+				"passed": true
+			},
+			{
+				"name": "reject trailing whitespace",
+				"passed": true
+			},
+			{
+				"name": "reject duplicate keys",
+				"passed": true
+			},
+			{
+				"name": "reject oversized",
+				"passed": true
+			}
+		],
+		"native_process_qualified": false,
+		"ok": true,
+		"schema": "process_liveness_report_model_v1",
+		"sdk_qualified": false,
+		"store_recovery_qualified": false,
+		"synthetic_only": true
+	},
+	"nonce": "9384acdb7c5e4aaeae6549bf81a8bb15",
+	"passed": true,
+	"pid": 59408,
+	"production_integrated": false,
+	"queries": [
+		{
+			"code": "HANDLE_NONSIGNALED",
+			"evidence": {
+				"code": "HANDLE_NONSIGNALED",
+				"creation_filetime": "134375017835565570",
+				"handle_opened": true,
+				"nonce": "aeebddba4cd66f6476a738e9bdd2ae98",
+				"provider_pid": "3888",
+				"query_utc_filetime": "134375017839509344",
+				"schema": "windows_process_liveness_v1",
+				"state": "alive",
+				"target_pid": "56068",
+				"wait_result": "258",
+				"win32_error": "0"
+			},
+			"helper_cleanup_confirmed": true,
+			"helper_sha256": "012354b1cf0376712f97e19362d91b2ef7f51775c6797c862c513df1e2f1936c",
+			"observed_ms": 223,
+			"pending": false,
+			"probe_directory": "D:\\CodexQA\\processcomponent\\9384acdb7c5e\\probes/aeebddba4cd66f6476a738e9bdd2ae98",
+			"provider_pid": 3888,
+			"started_ms": 161,
+			"state": "alive",
+			"target_pid": 56068
+		},
+		{
+			"code": "HANDLE_SIGNALED",
+			"evidence": {
+				"code": "HANDLE_SIGNALED",
+				"creation_filetime": "134375017835649414",
+				"handle_opened": true,
+				"nonce": "210e448b0e8f4d90d80472b71d077bab",
+				"provider_pid": "9908",
+				"query_utc_filetime": "134375017840306941",
+				"schema": "windows_process_liveness_v1",
+				"state": "dead",
+				"target_pid": "27160",
+				"wait_result": "0",
+				"win32_error": "0"
+			},
+			"helper_cleanup_confirmed": true,
+			"helper_sha256": "012354b1cf0376712f97e19362d91b2ef7f51775c6797c862c513df1e2f1936c",
+			"observed_ms": 300,
+			"pending": false,
+			"probe_directory": "D:\\CodexQA\\processcomponent\\9384acdb7c5e\\probes/210e448b0e8f4d90d80472b71d077bab",
+			"provider_pid": 9908,
+			"started_ms": 240,
+			"state": "dead",
+			"target_pid": 27160
+		},
+		{
+			"code": "PID_ABSENT_87",
+			"evidence": {
+				"code": "PID_ABSENT_87",
+				"creation_filetime": "",
+				"handle_opened": false,
+				"nonce": "ad380f432135a977aa0901f4f29e01c6",
+				"provider_pid": "50772",
+				"query_utc_filetime": "134375017841134957",
+				"schema": "windows_process_liveness_v1",
+				"state": "dead",
+				"target_pid": "15716",
+				"wait_result": "not_queried",
+				"win32_error": "87"
+			},
+			"helper_cleanup_confirmed": true,
+			"helper_sha256": "012354b1cf0376712f97e19362d91b2ef7f51775c6797c862c513df1e2f1936c",
+			"observed_ms": 386,
+			"pending": false,
+			"probe_directory": "D:\\CodexQA\\processcomponent\\9384acdb7c5e\\probes/ad380f432135a977aa0901f4f29e01c6",
+			"provider_pid": 50772,
+			"started_ms": 316,
+			"state": "dead",
+			"target_pid": 15716
+		},
+		{
+			"code": "OPEN_FAILED",
+			"evidence": {
+				"code": "OPEN_FAILED",
+				"creation_filetime": "",
+				"handle_opened": false,
+				"nonce": "9d9a9c14a3f0e2993fc595ac277514bc",
+				"provider_pid": "6212",
+				"query_utc_filetime": "134375017842070115",
+				"schema": "windows_process_liveness_v1",
+				"state": "unknown",
+				"target_pid": "4",
+				"wait_result": "not_queried",
+				"win32_error": "5"
+			},
+			"helper_cleanup_confirmed": true,
+			"helper_sha256": "012354b1cf0376712f97e19362d91b2ef7f51775c6797c862c513df1e2f1936c",
+			"observed_ms": 483,
+			"pending": false,
+			"probe_directory": "D:\\CodexQA\\processcomponent\\9384acdb7c5e\\probes/9d9a9c14a3f0e2993fc595ac277514bc",
+			"provider_pid": 6212,
+			"started_ms": 406,
+			"state": "unknown",
+			"target_pid": 4
+		},
+		{
+			"code": "PID_IDENTITY_MISMATCH",
+			"evidence": {
+				"code": "HANDLE_NONSIGNALED",
+				"creation_filetime": "134375017835565570",
+				"handle_opened": true,
+				"nonce": "ad76cf68975ca479eda4ad1bf62c0bdd",
+				"provider_pid": "39752",
+				"query_utc_filetime": "134375017842907997",
+				"schema": "windows_process_liveness_v1",
+				"state": "alive",
+				"target_pid": "56068",
+				"wait_result": "258",
+				"win32_error": "0"
+			},
+			"helper_cleanup_confirmed": true,
+			"helper_sha256": "012354b1cf0376712f97e19362d91b2ef7f51775c6797c862c513df1e2f1936c",
+			"observed_ms": 572,
+			"pending": false,
+			"probe_directory": "D:\\CodexQA\\processcomponent\\9384acdb7c5e\\probes/ad76cf68975ca479eda4ad1bf62c0bdd",
+			"provider_pid": 39752,
+			"started_ms": 492,
+			"state": "unknown",
+			"target_pid": 56068
+		}
+	],
+	"schema": "process_liveness_godot_component_v1",
+	"store_recovery_qualified": false,
+	"timeout_path_qualified": false
+}

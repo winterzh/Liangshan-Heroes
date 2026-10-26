@@ -1,5 +1,27 @@
 # 开发日志
 
+## 2026-10-27 活写者保护双进程专项通过
+
+23脚本和固定helper的新冻结`20261027_000821_ba1f231b`导入退出0/错误0，实际身份`source-v1:e97a07b9ff04b677fbc1934a40976cc6e1f82479855cf39f305147ae4f6d1eea`。真实双Ledger批`20261027_001429_a52fb5dc`45项通过（A24/B21）、双退出0、完整来源后验通过、共享锁释放。A仍在写入时，B普通open明确返回WRITER_ALIVE且可重试，业务目录及全部文件原字节不变；A按原提案正常提交，B保留同Ledger/Store再打开并读到同一九字段proof，重复handoff无重复记奖或文件变更。
+
+本结果仅修复并验证该活写者时序，尚未覆盖活claimant、全部死亡恢复/文件故障、v2超时隔离或战役路线；生产与公开继续入口保持原状态。旧f6ef误清理基线、manager退出崩溃及宿主失败全部保留。[完整来源与导入](../qa/campaign_progress_recovery_20261026/process_liveness_integration_candidate/evidence/full_freeze_20261027_000821/README.md)、[活写者保护收据](../qa/campaign_progress_recovery_20261026/evidence/live_owner_fixed_20261027_001429/README.md)。下一片继续死亡恢复与延迟写入专项，再推进连环马自然胜败。
+
+## 2026-10-27 恢复桥接组件与退出生命周期修复
+
+四文件桥接的真实组件测试发现Engine metadata强持有脚本对象会在退出时崩溃；独立三例对照确认原生RefCounted正常、Engine持脚本对象崩溃、根viewport持脚本对象正常。manager改由进程根viewport持有，跨场景保留oracle及quarantine，退出仅在Engine留下不含对象引用的状态，禁止退出后再建查询。旧失败源码、原生日志和宿主失败全部保留，没有在测试worker中手动清对象掩盖问题。
+
+最终最小批`20261027_000715_3a07df82`正常导入及运行均exit0，22项报告模型、60项组件检查、7次真实helper查询通过；实际current_scene替换后manager和oracle同引用，前后目标创建身份一致、源码pin一致、共享锁释放。仅证明组件接线和正常退出，不授活锁/死者恢复或战役资格。新增`prepare_liveness.py`将原20文件与4文件覆盖合成23脚本，helper单独绑定源码/构建收据/实际exe并进入完整内容身份，默认只读预检；新完整候选另冻后验证。[详细范围及证据](../qa/campaign_progress_recovery_20261026/process_liveness_integration_candidate/README.md)。
+
+## 2026-10-26 活写者误清理原生复现与超时控制
+
+f6ef冻结的新批`20261026_234140_40126e64`已实际复现：A仍存活且停在真实acquire之后，B普通Ledger.open删除A的writing/owner；A继续原提案后返回LOCK_CHANGED，已提交记录未变。宿主绑定Win32 HANDLE/创建身份确认A存活，两进程退出0、诊断complete=true，slice_passed=false；这是缺陷复现，不是修复通过。[原始证据](../qa/campaign_progress_recovery_20261026/evidence/live_owner_baseline_20261026_234140/README.md)。
+
+独立v1适配器超时批`20261026_233903_cf27b0b5`19项通过，实际3013毫秒超时，仅终止自己创建的休眠测试助手一次；宿主确认助手退出，目标全程存活且创建身份不变后自然退出。首轮宿主在退出后查询映像路径失败的原件、旧脚本均保留。此项只覆盖超时控制，不授Store或真实查询助手故障资格。[组件收据](../qa/campaign_progress_recovery_20261026/process_liveness_candidate/README.md)。基础Store、Steam Store与进程级manager的同步恢复候选已另存，运行状态见[独立入口](../qa/campaign_progress_recovery_20261026/process_liveness_integration_candidate/README.md)；生产、旧冻结和原版键鼠状态不变。
+
+## 2026-10-26 三态查询组件原生验证
+
+新增独立Windows C# helper和Godot begin/poll适配器，使用持有的Win32进程句柄、WaitForSingleObject和创建FILETIME，异常/权限不足保留unknown；不再用Godot的外部PID布尔查询判死。助手编译退出0，Python宿主13例通过；最小Godot批`20261026_232303_95fc2aac`另通过22项报告模型和49项组件检查，5次真实查询、exit0、pin前后不变、共享锁释放。原始provider JSON、worker、宿主和收据保留，exe仅忽略产物；没有修改Store、生产或旧冻结。timeout及恢复接线仍待独立验证，[组件状态与命令](../qa/campaign_progress_recovery_20261026/process_liveness_candidate/README.md)。
+
 ## 2026-10-26 外部进程判死风险复现与后继代码准备
 
 延迟写入首批`20261026_223919_4ffc4c0b`两时序均在B检查活A时停止，整体exit1、来源后验通过、锁释放，目标交错尚未执行。官方4.6.3源码及同引擎最小原生探针确认：Godot只识别自身process_map进程，外部兄弟进程由Win32及Popen前后证实仍存活，Godot却返回false。基类SnapshotStore与候选Steam Store据false接管的路径存在正确性风险，优先修统一alive/dead/unknown准入；未运行夺锁或观察数据丢失。23IO已知退出前提的结果保留，不授活写者保护。39份失败原件及探针/官方来源保留于[诊断记录](../qa/campaign_progress_recovery_20261026/evidence/process_liveness_api_20261026_225300/README.md)，生产与旧冻结未修改。

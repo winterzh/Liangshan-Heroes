@@ -1,0 +1,342 @@
+{
+  "schema": "process_liveness_native_helper_tests_v1",
+  "complete": true,
+  "pins": {
+    "helper": "012354b1cf0376712f97e19362d91b2ef7f51775c6797c862c513df1e2f1936c",
+    "source": "2d01e9ced42ba25b243e79e7f847334eee66f210d5c5fcc916e4eeb00396f8a1",
+    "build_receipt": "5685db4cb6e92fa67f79622e2e1b131811a7b6e0e75813cee517dc543384e255",
+    "native_runner": "c95ead9158bb06210b920df96306aa307f405a7971725cd6861a7fc2dd3b2fc8"
+  },
+  "output": "D:\\AI\u9879\u76ee\\\u6c34\u6d52\\\u5f00\u53d1\u5de5\u7a0b\\qa\\campaign_progress_recovery_20261026\\process_liveness_candidate\\.artifacts\\native_20261026_231118_bd1dae8d",
+  "cases": [
+    {
+      "name": "actual external observer process alive",
+      "target_pid": 38700,
+      "nonce": "4c0afea11064448db1fa6f7ad325eb49",
+      "directory": "D:\\AI\u9879\u76ee\\\u6c34\u6d52\\\u5f00\u53d1\u5de5\u7a0b\\qa\\campaign_progress_recovery_20261026\\process_liveness_candidate\\.artifacts\\native_20261026_231118_bd1dae8d\\4c0afea11064448db1fa6f7ad325eb49",
+      "passed": true,
+      "host_before": {
+        "state": "alive",
+        "error": 0,
+        "wait": 258
+      },
+      "provider_pid": 11196,
+      "exit_code": 0,
+      "elapsed_seconds": 0.04066549998242408,
+      "row": {
+        "code": "HANDLE_NONSIGNALED",
+        "creation_filetime": "134375010780782599",
+        "handle_opened": true,
+        "nonce": "4c0afea11064448db1fa6f7ad325eb49",
+        "provider_pid": "11196",
+        "query_utc_filetime": "134375010783218932",
+        "schema": "windows_process_liveness_v1",
+        "state": "alive",
+        "target_pid": "38700",
+        "wait_result": "258",
+        "win32_error": "0"
+      },
+      "report_sha256": "7a974c39e470ed05960f8022e5224f17203f43a7225e033da7a8da8b44b4544b",
+      "host_after": {
+        "state": "alive",
+        "error": 0,
+        "wait": 258
+      },
+      "owned_provider_terminal": true
+    },
+    {
+      "name": "actual external sibling process alive",
+      "target_pid": 20944,
+      "nonce": "bc394607945a4aa3a4458448af8db835",
+      "directory": "D:\\AI\u9879\u76ee\\\u6c34\u6d52\\\u5f00\u53d1\u5de5\u7a0b\\qa\\campaign_progress_recovery_20261026\\process_liveness_candidate\\.artifacts\\native_20261026_231118_bd1dae8d\\bc394607945a4aa3a4458448af8db835",
+      "passed": true,
+      "host_before": {
+        "state": "alive",
+        "error": 0,
+        "wait": 258
+      },
+      "provider_pid": 61388,
+      "exit_code": 0,
+      "elapsed_seconds": 0.04059099999722093,
+      "row": {
+        "code": "HANDLE_NONSIGNALED",
+        "creation_filetime": "134375010783417267",
+        "handle_opened": true,
+        "nonce": "bc394607945a4aa3a4458448af8db835",
+        "provider_pid": "61388",
+        "query_utc_filetime": "134375010783883819",
+        "schema": "windows_process_liveness_v1",
+        "state": "alive",
+        "target_pid": "20944",
+        "wait_result": "258",
+        "win32_error": "0"
+      },
+      "report_sha256": "c9a415ac958ae9c8ff6ba40518f7bd88c598e46a177b813b0017af15a1c256fd",
+      "host_after": {
+        "state": "alive",
+        "error": 0,
+        "wait": 258
+      },
+      "owned_provider_terminal": true
+    },
+    {
+      "name": "actual exited process retained handle exit 7",
+      "target_pid": 12432,
+      "nonce": "ea1bce276f624f91a76522692f20484a",
+      "directory": "D:\\AI\u9879\u76ee\\\u6c34\u6d52\\\u5f00\u53d1\u5de5\u7a0b\\qa\\campaign_progress_recovery_20261026\\process_liveness_candidate\\.artifacts\\native_20261026_231118_bd1dae8d\\ea1bce276f624f91a76522692f20484a",
+      "passed": true,
+      "host_before": {
+        "state": "dead",
+        "error": 0,
+        "wait": 0
+      },
+      "provider_pid": 67196,
+      "exit_code": 0,
+      "elapsed_seconds": 0.04121049994137138,
+      "row": {
+        "code": "HANDLE_SIGNALED",
+        "creation_filetime": "134375010784011366",
+        "handle_opened": true,
+        "nonce": "ea1bce276f624f91a76522692f20484a",
+        "provider_pid": "67196",
+        "query_utc_filetime": "134375010784905789",
+        "schema": "windows_process_liveness_v1",
+        "state": "dead",
+        "target_pid": "12432",
+        "wait_result": "0",
+        "win32_error": "0"
+      },
+      "report_sha256": "abf9f81d7c3981add892a6267046a3ef4bf47fde09d778fa73827dc244a9565d",
+      "host_after": {
+        "state": "dead",
+        "error": 0,
+        "wait": 0
+      },
+      "owned_provider_terminal": true
+    },
+    {
+      "name": "actual exited process retained handle exit 259",
+      "target_pid": 9912,
+      "nonce": "7a04d00edfac4e2782a99462646e4e93",
+      "directory": "D:\\AI\u9879\u76ee\\\u6c34\u6d52\\\u5f00\u53d1\u5de5\u7a0b\\qa\\campaign_progress_recovery_20261026\\process_liveness_candidate\\.artifacts\\native_20261026_231118_bd1dae8d\\7a04d00edfac4e2782a99462646e4e93",
+      "passed": true,
+      "host_before": {
+        "state": "dead",
+        "error": 0,
+        "wait": 0
+      },
+      "provider_pid": 13624,
+      "exit_code": 0,
+      "elapsed_seconds": 0.04546870000194758,
+      "row": {
+        "code": "HANDLE_SIGNALED",
+        "creation_filetime": "134375010785027914",
+        "handle_opened": true,
+        "nonce": "7a04d00edfac4e2782a99462646e4e93",
+        "provider_pid": "13624",
+        "query_utc_filetime": "134375010786006781",
+        "schema": "windows_process_liveness_v1",
+        "state": "dead",
+        "target_pid": "9912",
+        "wait_result": "0",
+        "win32_error": "0"
+      },
+      "report_sha256": "2b79e5abedbdbcf8d6fa93bd8803e4379f3ace069e17f4d1ff309c86dd5fec22",
+      "host_after": {
+        "state": "dead",
+        "error": 0,
+        "wait": 0
+      },
+      "owned_provider_terminal": true
+    },
+    {
+      "name": "actual exited and released PID absent",
+      "target_pid": 15256,
+      "nonce": "105920da092848a5a98e2fed329d5d72",
+      "directory": "D:\\AI\u9879\u76ee\\\u6c34\u6d52\\\u5f00\u53d1\u5de5\u7a0b\\qa\\campaign_progress_recovery_20261026\\process_liveness_candidate\\.artifacts\\native_20261026_231118_bd1dae8d\\105920da092848a5a98e2fed329d5d72",
+      "passed": true,
+      "host_before": {
+        "state": "dead",
+        "error": 0,
+        "wait": 0
+      },
+      "provider_pid": 68456,
+      "exit_code": 0,
+      "elapsed_seconds": 0.04757539997808635,
+      "row": {
+        "code": "PID_ABSENT_87",
+        "creation_filetime": "",
+        "handle_opened": false,
+        "nonce": "105920da092848a5a98e2fed329d5d72",
+        "provider_pid": "68456",
+        "query_utc_filetime": "134375010787127630",
+        "schema": "windows_process_liveness_v1",
+        "state": "dead",
+        "target_pid": "15256",
+        "wait_result": "not_queried",
+        "win32_error": "87"
+      },
+      "report_sha256": "149ffbb691c1bd757eb7738db715d0a9c9900bd30742338183831e3b003f9a56",
+      "host_after": {
+        "state": "dead",
+        "error": 87,
+        "wait": null
+      },
+      "owned_provider_terminal": true
+    },
+    {
+      "name": "actual System process permission denied",
+      "target_pid": 4,
+      "nonce": "89ec184f15d44091878444ee7cc164da",
+      "directory": "D:\\AI\u9879\u76ee\\\u6c34\u6d52\\\u5f00\u53d1\u5de5\u7a0b\\qa\\campaign_progress_recovery_20261026\\process_liveness_candidate\\.artifacts\\native_20261026_231118_bd1dae8d\\89ec184f15d44091878444ee7cc164da",
+      "passed": true,
+      "host_before": {
+        "state": "unknown",
+        "error": 5,
+        "wait": null
+      },
+      "provider_pid": 62884,
+      "exit_code": 0,
+      "elapsed_seconds": 0.04205230006482452,
+      "row": {
+        "code": "OPEN_FAILED",
+        "creation_filetime": "",
+        "handle_opened": false,
+        "nonce": "89ec184f15d44091878444ee7cc164da",
+        "provider_pid": "62884",
+        "query_utc_filetime": "134375010787646822",
+        "schema": "windows_process_liveness_v1",
+        "state": "unknown",
+        "target_pid": "4",
+        "wait_result": "not_queried",
+        "win32_error": "5"
+      },
+      "report_sha256": "a15fb4bee94127b7ea40a91fb4971d6a3707508ad0c18dc5cafb0b0100d76bca",
+      "host_after": {
+        "state": "unknown",
+        "error": 5,
+        "wait": null
+      },
+      "owned_provider_terminal": true
+    },
+    {
+      "name": "reject invalid PID 0",
+      "target_pid": 0,
+      "nonce": "0f92701692ba47dd8845489ef48d2585",
+      "directory": "D:\\AI\u9879\u76ee\\\u6c34\u6d52\\\u5f00\u53d1\u5de5\u7a0b\\qa\\campaign_progress_recovery_20261026\\process_liveness_candidate\\.artifacts\\native_20261026_231118_bd1dae8d\\0f92701692ba47dd8845489ef48d2585",
+      "passed": true,
+      "host_before": null,
+      "provider_pid": 67040,
+      "exit_code": 64,
+      "elapsed_seconds": 0.03898370009846985,
+      "host_after": null,
+      "owned_provider_terminal": true
+    },
+    {
+      "name": "reject invalid PID -1",
+      "target_pid": 0,
+      "nonce": "d90abe6b4f00415f97b141570b160522",
+      "directory": "D:\\AI\u9879\u76ee\\\u6c34\u6d52\\\u5f00\u53d1\u5de5\u7a0b\\qa\\campaign_progress_recovery_20261026\\process_liveness_candidate\\.artifacts\\native_20261026_231118_bd1dae8d\\d90abe6b4f00415f97b141570b160522",
+      "passed": true,
+      "host_before": null,
+      "provider_pid": 39016,
+      "exit_code": 64,
+      "elapsed_seconds": 0.037745899986475706,
+      "host_after": null,
+      "owned_provider_terminal": true
+    },
+    {
+      "name": "reject invalid PID 1.0",
+      "target_pid": 0,
+      "nonce": "0f6960b1a98f46ee8ae36e5f39bb55dd",
+      "directory": "D:\\AI\u9879\u76ee\\\u6c34\u6d52\\\u5f00\u53d1\u5de5\u7a0b\\qa\\campaign_progress_recovery_20261026\\process_liveness_candidate\\.artifacts\\native_20261026_231118_bd1dae8d\\0f6960b1a98f46ee8ae36e5f39bb55dd",
+      "passed": true,
+      "host_before": null,
+      "provider_pid": 59100,
+      "exit_code": 64,
+      "elapsed_seconds": 0.04094670002814382,
+      "host_after": null,
+      "owned_provider_terminal": true
+    },
+    {
+      "name": "reject invalid PID 01",
+      "target_pid": 0,
+      "nonce": "9f3f82698acb4f15bb58c66fdcc86da7",
+      "directory": "D:\\AI\u9879\u76ee\\\u6c34\u6d52\\\u5f00\u53d1\u5de5\u7a0b\\qa\\campaign_progress_recovery_20261026\\process_liveness_candidate\\.artifacts\\native_20261026_231118_bd1dae8d\\9f3f82698acb4f15bb58c66fdcc86da7",
+      "passed": true,
+      "host_before": null,
+      "provider_pid": 40576,
+      "exit_code": 64,
+      "elapsed_seconds": 0.04288079997058958,
+      "host_after": null,
+      "owned_provider_terminal": true
+    },
+    {
+      "name": "reject invalid PID 2147483648",
+      "target_pid": 0,
+      "nonce": "6a15d4840127435e80b71175ade1f97c",
+      "directory": "D:\\AI\u9879\u76ee\\\u6c34\u6d52\\\u5f00\u53d1\u5de5\u7a0b\\qa\\campaign_progress_recovery_20261026\\process_liveness_candidate\\.artifacts\\native_20261026_231118_bd1dae8d\\6a15d4840127435e80b71175ade1f97c",
+      "passed": true,
+      "host_before": null,
+      "provider_pid": 39284,
+      "exit_code": 64,
+      "elapsed_seconds": 0.042248499928973615,
+      "host_after": null,
+      "owned_provider_terminal": true
+    },
+    {
+      "name": "do not replace existing pending evidence",
+      "target_pid": 38700,
+      "nonce": "a77648f4957f463ab1a1a47bd21cee01",
+      "directory": "D:\\AI\u9879\u76ee\\\u6c34\u6d52\\\u5f00\u53d1\u5de5\u7a0b\\qa\\campaign_progress_recovery_20261026\\process_liveness_candidate\\.artifacts\\native_20261026_231118_bd1dae8d\\a77648f4957f463ab1a1a47bd21cee01",
+      "passed": true,
+      "host_before": {
+        "state": "alive",
+        "error": 0,
+        "wait": 258
+      },
+      "provider_pid": 74812,
+      "exit_code": 70,
+      "elapsed_seconds": 0.04902480007149279,
+      "host_after": {
+        "state": "alive",
+        "error": 0,
+        "wait": 258
+      },
+      "owned_provider_terminal": true
+    },
+    {
+      "name": "do not replace existing final evidence",
+      "target_pid": 38700,
+      "nonce": "b025d22cf6f44209a66cfc2d295bba19",
+      "directory": "D:\\AI\u9879\u76ee\\\u6c34\u6d52\\\u5f00\u53d1\u5de5\u7a0b\\qa\\campaign_progress_recovery_20261026\\process_liveness_candidate\\.artifacts\\native_20261026_231118_bd1dae8d\\b025d22cf6f44209a66cfc2d295bba19",
+      "passed": true,
+      "host_before": {
+        "state": "alive",
+        "error": 0,
+        "wait": 258
+      },
+      "provider_pid": 65836,
+      "exit_code": 73,
+      "elapsed_seconds": 0.045190999982878566,
+      "host_after": {
+        "state": "alive",
+        "error": 0,
+        "wait": 258
+      },
+      "owned_provider_terminal": true
+    }
+  ],
+  "godot_started": false,
+  "store_recovery_qualified": false,
+  "godot_adapter_qualified": false,
+  "production_integrated": false,
+  "sdk_qualified": false,
+  "owned_children_terminal": true,
+  "current_pins": {
+    "helper": "012354b1cf0376712f97e19362d91b2ef7f51775c6797c862c513df1e2f1936c",
+    "source": "2d01e9ced42ba25b243e79e7f847334eee66f210d5c5fcc916e4eeb00396f8a1",
+    "build_receipt": "5685db4cb6e92fa67f79622e2e1b131811a7b6e0e75813cee517dc543384e255",
+    "native_runner": "c95ead9158bb06210b920df96306aa307f405a7971725cd6861a7fc2dd3b2fc8"
+  }
+}

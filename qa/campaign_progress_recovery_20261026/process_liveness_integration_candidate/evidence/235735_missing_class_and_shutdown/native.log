@@ -1,0 +1,83 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+LIVENESS_INTEGRATION PASS host fixture nonce matches
+LIVENESS_INTEGRATION PASS actual candidate compiles: process_liveness_oracle
+LIVENESS_INTEGRATION PASS actual candidate compiles: run_process_liveness_manager
+LIVENESS_INTEGRATION PASS actual candidate compiles: run_snapshot_store
+SCRIPT ERROR: Parse Error: Identifier "SteamAchievementCatalog" not declared in the current scope.
+   at: GDScript::reload (res://scripts/steam_achievement_state.gd:41)
+   GDScript backtrace (most recent call first):
+       [0] run (res://component.gd:28)
+       [1] start_component (res://bootstrap.gd:15)
+SCRIPT ERROR: Parse Error: Identifier "SteamAchievementCatalog" not declared in the current scope.
+   at: GDScript::reload (res://scripts/steam_achievement_state.gd:44)
+   GDScript backtrace (most recent call first):
+       [0] run (res://component.gd:28)
+       [1] start_component (res://bootstrap.gd:15)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/steam_run_receipt.gd:0)
+   GDScript backtrace (most recent call first):
+       [0] run (res://component.gd:28)
+       [1] start_component (res://bootstrap.gd:15)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/steam_receipt_store.gd:0)
+   GDScript backtrace (most recent call first):
+       [0] run (res://component.gd:28)
+       [1] start_component (res://bootstrap.gd:15)
+ERROR: Failed to load script "res://scripts/steam_receipt_store.gd" with error "Compilation failed".
+   at: load (modules/gdscript/gdscript.cpp:2907)
+   GDScript backtrace (most recent call first):
+       [0] run (res://component.gd:28)
+       [1] start_component (res://bootstrap.gd:15)
+LIVENESS_INTEGRATION PASS actual candidate compiles: steam_receipt_store
+LIVENESS_INTEGRATION PASS strict report model compiles
+LIVENESS_INTEGRATION PASS v2 independently passes all 22 synthetic strict report cases
+LIVENESS_INTEGRATION PASS loading Store scripts alone creates no manager instance
+LIVENESS_INTEGRATION PASS normal empty directory opens: run_snapshot_store
+LIVENESS_INTEGRATION PASS normal empty directory opens: steam_receipt_store
+LIVENESS_INTEGRATION PASS normal empty Store path starts no helper or manager
+LIVENESS_INTEGRATION PASS real helper matches fixed manager pin
+LIVENESS_INTEGRATION PASS real local non-reparse parent chains accepted
+LIVENESS_INTEGRATION PASS actual Windows directory junction rejected
+LIVENESS_INTEGRATION PASS helper reached through junction ancestor rejected
+LIVENESS_INTEGRATION PASS configure refuses private root junction before launching
+LIVENESS_INTEGRATION PASS configure refuses helper ancestor junction despite matching bytes
+LIVENESS_INTEGRATION PASS v2 oracle configures exact actual helper
+LIVENESS_INTEGRATION PASS expired supplied scope starts no helper
+LIVENESS_INTEGRATION PASS first synchronous manager scope opens
+LIVENESS_INTEGRATION PASS actual manager classifies external sibling alive
+LIVENESS_INTEGRATION PASS only confirmed-dead admits external sibling alive
+LIVENESS_INTEGRATION PASS manager closes its actual helper: external sibling alive
+LIVENESS_INTEGRATION PASS native target creation FILETIME retained: external sibling alive
+LIVENESS_INTEGRATION PASS completed result is non-consuming within scope: external sibling alive
+LIVENESS_INTEGRATION PASS same phase binding cache launches no extra helper: external sibling alive
+LIVENESS_INTEGRATION PASS actual manager classifies retained exit259
+LIVENESS_INTEGRATION PASS only confirmed-dead admits retained exit259
+LIVENESS_INTEGRATION PASS manager closes its actual helper: retained exit259
+LIVENESS_INTEGRATION PASS native target creation FILETIME retained: retained exit259
+LIVENESS_INTEGRATION PASS completed result is non-consuming within scope: retained exit259
+LIVENESS_INTEGRATION PASS same phase binding cache launches no extra helper: retained exit259
+LIVENESS_INTEGRATION PASS actual manager classifies released PID
+LIVENESS_INTEGRATION PASS only confirmed-dead admits released PID
+LIVENESS_INTEGRATION PASS manager closes its actual helper: released PID
+LIVENESS_INTEGRATION PASS completed result is non-consuming within scope: released PID
+LIVENESS_INTEGRATION PASS same phase binding cache launches no extra helper: released PID
+LIVENESS_INTEGRATION PASS actual manager classifies permission denied
+LIVENESS_INTEGRATION PASS only confirmed-dead admits permission denied
+LIVENESS_INTEGRATION PASS manager closes its actual helper: permission denied
+LIVENESS_INTEGRATION PASS completed result is non-consuming within scope: permission denied
+LIVENESS_INTEGRATION PASS same phase binding cache launches no extra helper: permission denied
+LIVENESS_INTEGRATION PASS claim phase obtains a fresh native observation
+LIVENESS_INTEGRATION PASS claim phase does not reuse inspect helper evidence
+LIVENESS_INTEGRATION PASS closing scope releases cache while retaining process manager
+LIVENESS_INTEGRATION PASS closed scope cannot reuse old death evidence
+LIVENESS_INTEGRATION PASS new public scope has independent identity
+LIVENESS_INTEGRATION PASS new scope does not permanently cache old alive result
+LIVENESS_INTEGRATION PASS second scope closes
+LIVENESS_INTEGRATION PASS deadline scope opens
+LIVENESS_INTEGRATION PASS deadline scope first obtains genuine dead handle result
+LIVENESS_INTEGRATION PASS expired shared budget rejects even an existing completed cache entry
+LIVENESS_INTEGRATION PASS expired scope launches no new helper
+LIVENESS_INTEGRATION PASS expired scope closes without losing process manager
+LIVENESS_INTEGRATION PASS normal test completion leaves no pending query or quarantine
+LIVENESS_INTEGRATION PASS real helper count equals uncached native query evidence
