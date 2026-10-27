@@ -1,5 +1,13 @@
 # 开发日志
 
+## 2026-10-27 大名府新首保存396项与61证据核验器
+
+144758_3472ff46首Lu A PID43840已通过396项，原六追兵在普通指令／自然交战中清除，两伤员原近卫保护、单人safe及实际SaveAndExit gen1闭合；第二实际进程正在从菜单Continue恢复，整批八流程未完成。原始报告留活动run，未把首阶段冒充完整终态归档。
+
+新增qualification61只读证据核验器，复用原八Flow／closed-A准入和52执行器逐报告验证，绑定同base／source／26+1／自身cold、全部request／nonce／case／rows／冻结SHA，最终再核来源。默认33命名输入／10Python AST／帮助通过；缺收据CLI、实际旧Lu四流程633项但整批部分的094353均被拒，原件SHA不变，未创建proof目录、profile或引擎。完整正向消费尚未可验，full_61仍未授；61只限定大名府1+8+52，原19、SDK、公开入口、发行包、真人及全战役保持独立。
+
+上一批79文件已推stable并回读4481a54b9ced502ab640099dcf67bf269d2176e6，main未变；本批工具与文档按白名单收尾，键鼠仍暂停，无Steam发布。
+
 ## 2026-10-27 C自然终局重试737项完整通过及高俅同源加载
 
 新profile141329_f6e4c555实际四PID75344／49388／19448／59836，125／129／419／64共737项完整通过，全部退出0／原生错误0。两次原SaveAndExit同槽1→2，自然核心终局两次真实CFG_STAGE_PARENT后解除自有blocker，同Coordinator／CFG／owner／CAS／frozen事务prepared1→applied2、LC3／ACK2；独立重启拒旧槽、正常空checkpoint引用C保留槽的实际磁盘读回全过。完整来源／句柄／helper／子进程／锁终态通过。[21文件／6,507,254字节原件](../qa/campaign_progress_recovery_20261026/projectile_filter_candidate/evidence/ui_terminal_retry_complete_20261027_141329/README.md)保留905pins分类，旧131330失败收据保持false。

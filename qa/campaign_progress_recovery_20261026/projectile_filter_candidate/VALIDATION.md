@@ -66,3 +66,8 @@ Graph返回的wire.records已是Codec编码数据，后继测试按实际存储�
 ## b22高俅造船与自然败局复跑入口
 
 [外部适配](tests/gaoqiu_aux_replay/VALIDATION.md)已实现，两宿主25／27命名来源和全部Python AST／帮助通过；组合36唯一输入。原训练3GD／败局4GD逐字匹配固定7e6f6ea1，原来源合同／派生链／依赖和全部自然玩法断言保留，只适配完整b22／自身cold、26脚本计数及独立输出。[七GD原生加载](evidence/gaoqiu_aux_replay_load_20261027_144549/README.md)PID73744、42.362秒、退出0／错误0、83pins通过，只load／can_instantiate；两个独立三进程待验；旧941训练190／败局200不转授。
+
+
+## 大名府最新首保存与61核验工具
+
+新八流程144758_3472ff46首Lu A PID43840／396项通过，六名原追兵正常交战清除，原单安全条件和真实SaveAndExit gen1闭合；后继进程仍在运行，整批八流程未授资格。新[61原件核验器](../daming_continue_candidate/tests/qualification61/VALIDATION.md)33命名来源／10AST／帮助和实际旧部分批拒绝通过；只准备未来同源1+8+52的完整取证，当前不授61或52运行资格。

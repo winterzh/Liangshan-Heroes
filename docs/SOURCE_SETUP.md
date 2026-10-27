@@ -105,3 +105,6 @@ readset专项在全新profile已完整通过：12类案例248项、旧4MB逐字�
 
 
 [高俅b22训练／败局复跑](../qa/campaign_progress_recovery_20261026/projectile_filter_candidate/tests/gaoqiu_aux_replay/VALIDATION.md)使用独立run_gaoqiu_training.py与run_gaoqiu_loss.py；默认25／27命名来源及全部Python AST，组合36唯一命名输入。原造船3GD／败局4GD及旧来源链逐字不变；--run仅以完整26+1／自身cold及新profile执行，各三进程独立取得资格。当前七GD原生加载PID73744／42.362秒／退出0、错误0／83pins通过，仅load／can_instantiate，实际两条三进程待验，旧941训练190／败局200不转授；公开入口与生产仍未采用。
+
+
+[大名府61证据核验](../qa/campaign_progress_recovery_20261026/daming_continue_candidate/tests/qualification61/VALIDATION.md)默认只核33命名来源／10Python AST，不读live profile或启动引擎；--verify --flow-receipt <完整八Flow/receipt.json> --negative-receipt <完整52负例/receipt.json>才回核同一b22／base／26+1／自身cold及全部原件。--write-proof只在全组通过后写ignored元数据，不复制业务载荷。实际旧部分Flow已被拒；当前完整正向消费待验，full_61_qualified仍未授予，原19、全战役及SDK继续单列。

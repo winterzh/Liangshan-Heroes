@@ -158,3 +158,6 @@ qa/campaign_progress_recovery_20261026/continue_binding_candidate/：Flow/Sessio
 
 
 `projectile_filter_candidate/evidence/gaoqiu_aux_replay_load_20261027_144549/`保存高俅造船3GD／自然败局4GD在b22上的纯加载原件（45文件／83pins），只授加载；同源实际三进程仍分别待跑。路径相对`qa/campaign_progress_recovery_20261026/`。
+
+
+`qa/campaign_progress_recovery_20261026/daming_continue_candidate/tests/qualification61/`保存1+8+52同源原件核验器、来源合同、README和独立VALIDATION；复用原八Flow／closed-A准入及52报告验证，默认不启动引擎／profile，原部分批已实证拒绝，完整正向证据尚缺。该工具不运行或补造61阶段，不授原19／全战役／SDK资格。
