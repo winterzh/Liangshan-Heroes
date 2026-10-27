@@ -1,0 +1,11 @@
+# C 自然终局重试：原四报告通过、宿主末阶段取证失败
+
+原批131330_47834e1e完整收尾，原receipt.complete=false。四实际PID33732／50468／72508／59692全部退出0，原生错误0；四份GD原报告125／129／419／64，共737项全通过。宿主只累计成功阶段，receipt.actual_checks=673；不能把原收据改成四流程完整通过。
+
+前两进程真实两次SaveAndExit，原槽1→2；第三进程恢复后用原gao_end回调自然核心胜利，LC2／Intent2后真实CFG_STAGE_PARENT；原RetryTerminal保留故障再次失败，两次完整pending观察相同，解除宿主blocker后同原Coordinator／CFG／owner／CAS／transaction完成CFG prepared1→applied2与LC3／ACK2。第四进程原startup及实际菜单拒LOCAL_RUN_TERMINAL均通过，原typed终局检查点未变。
+
+最后失败由宿主validate_checkpoint把D报告的checkpoint空字典当成新的战斗存档检查点，触发Original uncredited slot binding required；D没有恢复Battle，原报告checkpoint={}是正常结构，已有C报告保留完整gen2检查点。原错宿主／来源和全部报告日志保持原字节；后继修正和重新验收另记，不回填本原receipt。
+
+902pins逐项分为原冻结文本、8EXE终态hash元数据及1个160B自有blocker排除元数据。物理profile／CFG／Settings／Slot／LC／owner及EXE不由归档读取或复制；blocker原始载荷也不打开、不复制。文本重复来源逐blob核固定9939346d1fa9704f1406a959d03dff9723eff57c。原始typed QA观察保留于report／blocked_pending，不复制物理存档文件。
+
+仅记录本批真实发生的内部source-private行为，完整四流程资格仍false；不授公开入口、完整剧情、SDK、OS键鼠、真人、19／61或发布。

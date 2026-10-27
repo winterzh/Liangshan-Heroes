@@ -79,3 +79,10 @@ AST、帮助及30命名来源检查通过。纯加载批20261027_084545_37422b03
 [本批原件](evidence/flow_inner_failure_20261027_122311/README.md)：20261027_122311_f2da6497仅Lu首A，PID31552，579.25秒，退出1／引擎错误0；307项306通过，唯一first actual safety callback completed fight remains healthy。三名原近卫85／75／89实际普通move，双伤员各3人≤100，H后清障的原140条件通过。两伤员抵出口外仍HP360／230、九护卫活；tick22332仅给Lu28向出口的普通移动，tick24604 Shi29自然HP0／dying，Lu仍HP360，未任一safe／未保存。原观察未记录killer或这次完整movement状态，不能指定杀伤者或阻塞原因。后续七进程未跑；来源、自有子进程和锁终态通过，cleanup_errors=[]。
 
 后继仅改QA路线：新增普通侧向脱离，再到原EXIT；两命令核实际唯一actor／ST_MOVE／home／非空path／无target／独立速度，增加移动前后证据。另一伤员保留至少三护卫，单safe、原人数距离、自然回调、保存和完整八流程门槛保留。旧route9c1df93b逐字逆向恢复通过：只新增两helper和修改原first_exit，其余原函数及CRLF字节保持；新routef338b3b8及30命名来源检查通过；[五GD原生加载](../projectile_filter_candidate/evidence/daming_first_exit_load_20261027_125222/README.md)实际PID50460，40.188秒，退出0／错误0、69pins后验通过，未实例化worker。新完整八流程20261027_125326_b7c20f07已开始，尚无终态。当前52与61仍无前置资格。
+
+
+## 侧向移动和真实出口路径已证实，追兵战术修订待验
+
+[125326失败原件](evidence/flow_flank_failure_20261027_125326/README.md)：PID74732，588.709秒，退出1／引擎错误0；307项306通过。Lu28由[957.525,1231.482]普通侧向移动至[839.697,1231.453]，再收到实际出口ST_MOVE／home=[976.000061,1584]／非空path；失败时仍ST_MOVE／无target、Lu HP360，Shi29 HP0／dying，无safe／未保存。原追兵事件已触发，友军射手当时正攻击附近存活官军57；未记录最后杀伤者。motion.waypoint.map_open是整段_segment_open诊断，不是终点格自身封闭。
+
+当前移除未解决后段失败的侧向helper／调用，保留真正的移动核验和取证；仅新增一个原追兵截击helper及到(30,34)后的调用。双伤员仍由原近卫保持至少三人100／140保护，其余实际field crew普通A截击；可见后逐个实际A+原敌军，六原pursuit槽在总120秒及原全局时限内自然解除，再集合继续单safe／SaveAndExit。原HP／位置／时钟／RNG／任务及pool不直接写入，不清除敌军。30命名来源通过；[组合14GD加载](../projectile_filter_candidate/evidence/pursuit_lian_load_20261027_134543/README.md)PID59876、44.415秒、退出0／错误0、118pins通过，只授加载。新八流程135845_aab0f8af已开始，终态待验；52／61无新资格。

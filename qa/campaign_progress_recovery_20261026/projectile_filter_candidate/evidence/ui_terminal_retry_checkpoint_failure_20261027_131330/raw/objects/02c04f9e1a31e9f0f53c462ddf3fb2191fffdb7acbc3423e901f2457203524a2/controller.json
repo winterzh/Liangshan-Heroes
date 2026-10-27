@@ -1,0 +1,187 @@
+{
+  "mode": "reject_terminal",
+  "profile": "D:\\CodexQA\\ui_terminal_retry\\898ffbca7998",
+  "process_nonce": "0d22aa9e55a14d59bc406dea1228ef8d",
+  "complete": false,
+  "process_terminal": true,
+  "gates": [],
+  "faults": [],
+  "post_errors": [],
+  "debugger_used": false,
+  "host_production_object_injection": false,
+  "before_business": {
+    "cfg": {
+      "path": "D:/CodexQA/ui_terminal_retry/898ffbca7998/appdata/Godot/app_userdata/水浒英雄传：八幕战役/campaign.cfg",
+      "exists": true,
+      "bytes": 196,
+      "sha256": "374d2eb263bf20b8133ab41b8de802af965802d99bfc2c0cbfa4088fa317dd2b"
+    },
+    "settings": {
+      "path": "D:/CodexQA/ui_terminal_retry/898ffbca7998/appdata/Godot/app_userdata/水浒英雄传：八幕战役/settings.cfg",
+      "exists": false,
+      "bytes": 0,
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "journal": {
+      "exists": true,
+      "files": {
+        "record_0000000001.json": {
+          "sha256": "4027d34cf12cc044404dff9b7f0be8af5b6f159cfd5d906b315b1dbfc0cb298d",
+          "bytes": 1103
+        },
+        "record_0000000002.json": {
+          "sha256": "f0128c054794fb1ea7f20ae28bea95bd622e1e2b496998bb790be23b7ebb82c5",
+          "bytes": 1102
+        }
+      },
+      "directories": [
+        "."
+      ]
+    },
+    "candidate_parent": {
+      "kind": "directory",
+      "tree": {
+        "exists": true,
+        "files": {},
+        "directories": [
+          ".",
+          "v1"
+        ]
+      }
+    },
+    "continue": {
+      "exists": true,
+      "files": {
+        "5088120/1/record_0000000001.json": {
+          "sha256": "295ef602798819af316d7a9c477055b49aae35f0cad23c627e41771e4ba2970d",
+          "bytes": 5336024
+        },
+        "5088120/1/record_0000000002.json": {
+          "sha256": "0a0f24cb6382bb6abb4fa9c009c4c93bea4dd3f4b5eda28260a77c1433301fd8",
+          "bytes": 4160598
+        },
+        "local_runs/89342ba1cfd3f5e638a7bb221f284535/5088120/1/record_0000000001.json": {
+          "sha256": "b618ef8a3f6286c7509e1084ed0ef5dd27c40f0621a3cc2540feec460b1602a9",
+          "bytes": 807
+        },
+        "local_runs/89342ba1cfd3f5e638a7bb221f284535/5088120/1/record_0000000002.json": {
+          "sha256": "1b053876b94073dbd535ff1021e14fbfb6c3bff43a449fd73a35acd6fd40a646",
+          "bytes": 1412
+        },
+        "local_runs/89342ba1cfd3f5e638a7bb221f284535/5088120/1/record_0000000003.json": {
+          "sha256": "e36e8a21f1112b9de28f8c1521c8f65a23c777086a0798fdcfb0b4ca7416ef64",
+          "bytes": 1892
+        }
+      },
+      "directories": [
+        ".",
+        "5088120",
+        "5088120/1",
+        "local_runs",
+        "local_runs/89342ba1cfd3f5e638a7bb221f284535",
+        "local_runs/89342ba1cfd3f5e638a7bb221f284535/5088120",
+        "local_runs/89342ba1cfd3f5e638a7bb221f284535/5088120/1"
+      ]
+    }
+  },
+  "command": [
+    "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+    "--path",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_075456_3e4a48ab\\project",
+    "--rendering-method",
+    "gl_compatibility",
+    "--resolution",
+    "1280x720",
+    "--position",
+    "30000,30000",
+    "--script",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\ui_terminal_retry_20261027\\20261027_131330_47834e1e\\workers\\bootstrap.gd"
+  ],
+  "pid": 59692,
+  "exit_code": 0,
+  "seconds": 112.01,
+  "native_errors": [],
+  "error": "RuntimeError('Original uncredited slot binding required')",
+  "traceback": "Traceback (most recent call last):\n  File \"D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\projectile_filter_candidate\\tests\\ui_terminal_retry\\run_ui_terminal_retry.py\", line 603, in execute_stage\n    lifecycle, journals = validate_checkpoint(report, mode, profile, state, previous)\n                          ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\projectile_filter_candidate\\tests\\ui_terminal_retry\\run_ui_terminal_retry.py\", line 429, in validate_checkpoint\n    slot, life, binding = scope_paths(profile, checkpoint)\n                          ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\projectile_filter_candidate\\tests\\ui_terminal_retry\\run_ui_terminal_retry.py\", line 170, in scope_paths\n    require(type(binding) is dict and set(binding) == {'kind', 'token', 'receipt_sha256'}\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n            and binding['kind'] == 'uncredited' and re.fullmatch(r'[0-9a-f]{32}', binding['token'])\n            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n            and re.fullmatch(r'[0-9a-f]{64}', binding['receipt_sha256']), 'Original uncredited slot binding required')\n            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\projectile_filter_candidate\\tests\\ui_config_retry\\run_ui_config_retry.py\", line 62, in require\n    raise RuntimeError(message)\nRuntimeError: Original uncredited slot binding required\n",
+  "owned_handles_closed": true,
+  "owned_blocker_released": true,
+  "after_business": {
+    "cfg": {
+      "path": "D:/CodexQA/ui_terminal_retry/898ffbca7998/appdata/Godot/app_userdata/水浒英雄传：八幕战役/campaign.cfg",
+      "exists": true,
+      "bytes": 196,
+      "sha256": "374d2eb263bf20b8133ab41b8de802af965802d99bfc2c0cbfa4088fa317dd2b"
+    },
+    "settings": {
+      "path": "D:/CodexQA/ui_terminal_retry/898ffbca7998/appdata/Godot/app_userdata/水浒英雄传：八幕战役/settings.cfg",
+      "exists": false,
+      "bytes": 0,
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "journal": {
+      "exists": true,
+      "files": {
+        "record_0000000001.json": {
+          "sha256": "4027d34cf12cc044404dff9b7f0be8af5b6f159cfd5d906b315b1dbfc0cb298d",
+          "bytes": 1103
+        },
+        "record_0000000002.json": {
+          "sha256": "f0128c054794fb1ea7f20ae28bea95bd622e1e2b496998bb790be23b7ebb82c5",
+          "bytes": 1102
+        }
+      },
+      "directories": [
+        "."
+      ]
+    },
+    "candidate_parent": {
+      "kind": "directory",
+      "tree": {
+        "exists": true,
+        "files": {},
+        "directories": [
+          ".",
+          "v1"
+        ]
+      }
+    },
+    "continue": {
+      "exists": true,
+      "files": {
+        "5088120/1/record_0000000001.json": {
+          "sha256": "295ef602798819af316d7a9c477055b49aae35f0cad23c627e41771e4ba2970d",
+          "bytes": 5336024
+        },
+        "5088120/1/record_0000000002.json": {
+          "sha256": "0a0f24cb6382bb6abb4fa9c009c4c93bea4dd3f4b5eda28260a77c1433301fd8",
+          "bytes": 4160598
+        },
+        "local_runs/89342ba1cfd3f5e638a7bb221f284535/5088120/1/record_0000000001.json": {
+          "sha256": "b618ef8a3f6286c7509e1084ed0ef5dd27c40f0621a3cc2540feec460b1602a9",
+          "bytes": 807
+        },
+        "local_runs/89342ba1cfd3f5e638a7bb221f284535/5088120/1/record_0000000002.json": {
+          "sha256": "1b053876b94073dbd535ff1021e14fbfb6c3bff43a449fd73a35acd6fd40a646",
+          "bytes": 1412
+        },
+        "local_runs/89342ba1cfd3f5e638a7bb221f284535/5088120/1/record_0000000003.json": {
+          "sha256": "e36e8a21f1112b9de28f8c1521c8f65a23c777086a0798fdcfb0b4ca7416ef64",
+          "bytes": 1892
+        }
+      },
+      "directories": [
+        ".",
+        "5088120",
+        "5088120/1",
+        "local_runs",
+        "local_runs/89342ba1cfd3f5e638a7bb221f284535",
+        "local_runs/89342ba1cfd3f5e638a7bb221f284535/5088120",
+        "local_runs/89342ba1cfd3f5e638a7bb221f284535/5088120/1"
+      ]
+    }
+  },
+  "raw_pins": {
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\ui_terminal_retry_20261027\\20261027_131330_47834e1e\\03_reject_terminal\\native.log": "598e0cd9e167091b2504770747e1cbfadf4b5db0676fdd7a2da51f4b43d48c46",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\ui_terminal_retry_20261027\\20261027_131330_47834e1e\\03_reject_terminal\\report.json": "17a5e2f4b49f30cbfe0e6cb7adbeff434e6e0990474ff6f73b8cdeaa992c7400"
+  }
+}

@@ -129,6 +129,7 @@ def named_state():
             and [row.get('expected_slot_generation') for row in stages] == [1, 2, 2, 2]
             and [row.get('expected_lifecycle_generation') for row in stages] == [1, 1, 3, 3]
             and stages[2].get('gate_phases') == list(PHASES)
+            and stages[3].get('checkpoint_source') == 'validated_C_retained_slot_with_independent_D_disk_readback'
             and all(cases.get('qualification', {}).get(flag) is False for flag in FALSE_FLAGS),
             'Four-stage order, generation bounds, real C gates, or qualification changed')
     return cases, pins
@@ -424,7 +425,15 @@ def validate_route_report(report, mode, child, profile, state, batch, nonce):
 
 
 def validate_checkpoint(report, mode, profile, state, previous):
-    checkpoint = report['checkpoint']
+    if mode == MODES[3]:
+        # Refusal creates no Battle or new save checkpoint. Bind its independent
+        # native disk readback to the original C report's validated retained slot.
+        require(report.get('checkpoint') == {} and previous is not None
+                and type(previous.get('checkpoint')) is dict and previous['checkpoint'],
+                'Menu refusal must retain an empty current checkpoint and a validated C predecessor')
+        checkpoint = previous['checkpoint']
+    else:
+        checkpoint = report['checkpoint']
     generation = 1 if mode == MODES[0] else 2
     slot, life, binding = scope_paths(profile, checkpoint)
     require(integer(checkpoint.get('generation'), generation)
@@ -448,6 +457,7 @@ def validate_checkpoint(report, mode, profile, state, previous):
                 and not io.snapshot(paths(profile)['journal'])['exists'], 'Active saves must precede any durable CFG settlement')
         return rows, []
     terminal = report['terminal_checkpoint']
+    require(terminal.get('slot_binding') == binding, 'Original terminal and retained slot must use exactly the same binding')
     require(terminal['lifecycle']['file_sha256'] == rows[2]['sha256']
             and terminal['lifecycle']['document'] == rows[2]['document']
             and terminal['slot_sha256'] == checkpoint['file_sha256'], 'Native terminal must bind actual LC3 and unchanged saved slot')

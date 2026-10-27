@@ -81,3 +81,12 @@ python -B qa/campaign_progress_recovery_20261026/projectile_filter_candidate/tes
 ## 仍未实现
 
 本片不覆盖 credited Steam 终局、其它 CFG/ACK 失败阶段和未知 layout。RetryRelease 的合法完整 HELD 路径仍未找到外部可解除 I/O 故障；后续只可另行验证真实 clock.abort_step 持久故障模型、RetryRelease 持续拒绝和 LeaveHeldBattle 取消/确认，不得清 fault 或捏造成功分支。
+
+
+## 2026-10-27 独立终局拒槽的检查点来源修订
+
+131330原四份GD报告125／129／419／64项全真、四进程均exit0；宿主在D处理正常的checkpoint={}时误当作新Battle检查点而报Original uncredited slot binding required，整批仍失败，原receipt.actual_checks=673只含前三个宿主成功阶段。原737报告、673宿主累计及来源均保留，不回填原件为通过。
+
+D未恢复Battle，不应新造战斗checkpoint。后继宿主只在D显式要求当前checkpoint为空、C前驱检查点存在，再用已经通过C验证的原gen2检查点核本进程原槽落盘；原两文件库存、同token binding、LC3／Intent2／ACK2、CFG hash和两条journal仍实际读取校验，D终局检查点仍须与C完全相同。另增terminal.slot_binding与该原槽binding直接相等，未跳过磁盘或状态检查。
+
+仅四份QA宿主／文档／契约／来源表变更；六GD和生产不改。只读事后诊断不授新四进程运行资格，正式修订仍须新profile完整四流程，不能继续失败profile冒充新通过。

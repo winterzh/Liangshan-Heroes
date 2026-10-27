@@ -369,6 +369,48 @@ func _convoy_move(b: Node, prisoners: Array, cell: Vector2i, before_exit: bool) 
 		if not _check("convoy actual ordinary move preserves intended formation target", movers[index]._state == movers[index].ST_MOVE and movers[index]._target == null and movers[index]._home.distance_to(targets[index]) <= 0.01 and not movers[index]._path.is_empty()): return false
 	return true
 
+func _secure_first_crossing(b: Node, prisoners: Array) -> bool:
+	# Intercept only the six authored pursuers while both wounded remain
+	# outside the exit with their original close guards. No enemy is spawned,
+	# removed, reset or teleported by this route.
+	var original_pool: Array = b.level.pursuit.duplicate()
+	if not _check("first crossing reads the six original pursuit slots", _fight(b) and b.level.rescued and original_pool.size() == 6 and prisoners.all(func(u): return _alive(u) and _outside_exit(b,u.position))): return false
+	if not original_pool.any(func(u): return _alive(u)):
+		driver.route_observations.append({"first_crossing_pursuit_already_clear":{"pool":original_pool.map(func(u): return _motion_state(b,u)),"logical_tick":str(b._run_clock._next_tick)}})
+		return true
+	if not _stop_wounded_and_hold_guards(b,prisoners): return false
+	var reserved: Array = []
+	for actor: Node in prisoners:
+		var close: Array = _near_escort_guards(b,actor)
+		close.sort_custom(func(a,c): return a.position.distance_squared_to(actor.position) < c.position.distance_squared_to(actor.position))
+		for guard: Node in close.slice(0,3):
+			if not reserved.has(guard): reserved.append(guard)
+	if not await _tighten_reserved_guards(b,prisoners,reserved): return false
+	var attackers: Array = _crew(b).filter(func(u): return not reserved.has(u))
+	if not _check("ordinary pursuit interception preserves original close H guards", attackers.size() >= 3 and _reserved_guard_cover(prisoners,reserved) and b.level.pursuit_warned): return false
+	var before: Dictionary = {"pool":original_pool.map(func(u): return _motion_state(b,u)),"reserved_ids":reserved.map(func(u): return str(u.entity_id)),"attackers":attackers.map(func(u): return _motion_state(b,u)),"warned":b.level.pursuit_warned,"sent":b.level.pursuit_sent,"logical_tick":str(b._run_clock._next_tick)}
+	# Ordinary A-ground intercepts their existing authored southbound route.
+	if not _order(b,attackers,Vector2i(30,30),true): return false
+	var deadline: int = Time.get_ticks_msec() + 120000
+	for attempt in range(original_pool.size()):
+		if not original_pool.any(func(u): return _alive(u)): break
+		if not await _step_wait(b,"original pursuer enters actual visible interception",func(): return not original_pool.any(func(u): return _alive(u)) or original_pool.any(func(u): return _alive(u) and b._enemy_at(b.to_screen(u.position)) == u),maxi(1,deadline-Time.get_ticks_msec())): return false
+		var threats: Array = original_pool.filter(func(u): return _alive(u) and b._enemy_at(b.to_screen(u.position)) == u)
+		if threats.is_empty(): break
+		attackers = _crew(b).filter(func(u): return not reserved.has(u))
+		if not _check("visible pursuit engagement retains original held protection", attackers.size() >= 3 and _reserved_guard_cover(prisoners,reserved)): return false
+		var target: Node = threats[0]
+		var label: String = "visible original pursuer " + str(target.entity_id)
+		if not _attack_visible(b,target,label,attackers): return false
+		if not await _step_wait(b,label + " defeated normally",Callable(self,"_target_gone").bind(target),maxi(1,deadline-Time.get_ticks_msec())): return false
+	var cleared: bool = not original_pool.any(func(u): return _alive(u))
+	driver.route_observations.append({"first_crossing_pursuit_intercept":{"before":before,"cleared":cleared,"after_pool":original_pool.map(func(u): return _motion_state(b,u)),"sent":b.level.pursuit_sent,"event":b.mission.has_event("daming_pursuit"),"state":observe(b)}})
+	if not cleared: return false
+	if not _check("interception retains original pursuit slots and living protected wounded", b.level.pursuit == original_pool and _reserved_guard_cover(prisoners,reserved) and prisoners.all(func(u): return _alive(u) and _outside_exit(b,u.position)),observe(b)): return false
+	if not _order(b,_escort_group(b),Vector2i(30,34),false): return false
+	if not await _step_wait(b,"original escort regroups after pursuit interception",Callable(self,"_escort_assembled").bind(b,prisoners)): return false
+	return _stop_wounded_and_hold_guards(b,prisoners)
+
 func _escort_to_rally(b: Node) -> bool:
 	var prisoners: Array = [b.level.lu,b.level.shi]
 	if not _choose_escort(b,prisoners,false): return false
@@ -387,6 +429,8 @@ func _escort_to_rally(b: Node) -> bool:
 		if not await _step_wait(b,"wounded and guards reach escort waypoint %d,%d" % [cell.x,cell.y],Callable(self,"_convoy_arrived").bind(b,prisoners,cell)): return false
 		if not _stop_wounded_and_hold_guards(b,prisoners): return false
 		driver.route_observations.append({"escort_waypoint":[cell.x,cell.y],"state":observe(b)})
+		if cell == Vector2i(30,34):
+			if not await _secure_first_crossing(b,prisoners): return false
 	return true
 
 func _first_ground_move(b: Node, actor: Node, cell: Vector2i, label: String) -> bool:
@@ -400,39 +444,6 @@ func _first_ground_move(b: Node, actor: Node, cell: Vector2i, label: String) -> 
 	driver.route_observations.append({"first_exit_ground_order":{"label":label,"requested":[requested.x,requested.y],"api_target":[target.x,target.y],"motion":actual,"logical_tick":str(b._run_clock._next_tick)}})
 	return _check(label + " installs one real independent move path", selected.size() == 1 and selected[0] == actor and actor._state == actor.ST_MOVE and actor._target == null and actor._home.distance_to(target) <= 0.01 and not actor._path.is_empty() and actor._group_cap == 0.0, actual)
 
-func _first_escape_flank(b: Node, first: Node, other: Node) -> bool:
-	# The convoy stops with H guards ahead of the wounded. Leave the group
-	# laterally through ordinary ground clicks before crossing the exit alone.
-	# This is a route choice, never a position/HP/path/state assignment.
-	var initial: Vector2 = first.position
-	var initial_cell: Vector2i = b.map.world_to_cell(initial)
-	var direction: int = -1 if first.position.x < other.position.x else 1
-	var chosen := Vector2i(-1,-1)
-	var target := Vector2.ZERO
-	for width: int in [4,5,3]:
-		for vertical: int in [0,-1,1]:
-			var cell: Vector2i = initial_cell + Vector2i(direction * width,vertical)
-			var point: Vector2 = b.to_logic(b.to_screen(b.map.cell_to_world(cell)))
-			if not _outside_exit(b,point) or not b.map.is_open_world(point,first.movement_profile): continue
-			if b._enemy_at(b.to_screen(point)) != null or b._garrisonable_at(b.to_screen(point)) != null: continue
-			if _escort_group(b).any(func(u): return u.position.distance_to(point) < u.radius + first.radius + 8.0): continue
-			var path: PackedVector2Array = b.map.find_path(first.position,point,first.faction,first.movement_profile)
-			if path.is_empty(): continue
-			var length := 0.0
-			var previous: Vector2 = first.position
-			for next: Vector2 in path:
-				length += previous.distance_to(next); previous = next
-			if length > 256.0: continue
-			chosen = cell; target = point
-			break
-		if chosen.x >= 0: break
-	if not _check("single first escape has a reachable outside-exit flank", chosen.x >= 0, {"first":_motion_state(b,first),"other":_motion_state(b,other),"initial_cell":[initial_cell.x,initial_cell.y],"direction":direction}): return false
-	if not _first_ground_move(b,first,chosen,"first wounded ordinary lateral escape"): return false
-	var reached: bool = await _step_wait(b,"first wounded clears held convoy laterally",func(): return first.position.distance_to(target) <= 24.0 and first.position.distance_to(initial) >= 64.0,20000)
-	driver.route_observations.append({"first_exit_flank_result":{"reached":reached,"initial":[initial.x,initial.y],"target":[target.x,target.y],"first":_motion_state(b,first),"other":_motion_state(b,other),"state":observe(b)}})
-	if not reached: return false
-	return _check("lateral escape preserves both living wounded and original held protection", _alive(first) and _alive(other) and _outside_exit(b,first.position) and _outside_exit(b,other.position) and _near_escort_guards(b,other).size() >= 3,observe(b))
-
 func first_exit(b: Node) -> bool:
 	var first: Node = b.level.get(first_role)
 	var other_role: String = "shi" if first_role == "lu" else "lu"
@@ -442,7 +453,6 @@ func first_exit(b: Node) -> bool:
 	if not _check("both wounded assembled outside exit with close held guards", _outside_exit(b,first.position) and _outside_exit(b,other.position) and _near_escort_guards(b,other).size() >= 3,observe(b)): return false
 	# Only the chosen first prisoner crosses. The other is no longer abandoned
 	# in the prison; the selected normal H guards remain with that actor.
-	if not await _first_escape_flank(b,first,other): return false
 	if not _first_ground_move(b,first,level_script.EXIT_CELL,"first wounded ordinary exit crossing"): return false
 	var safe: bool = await _step_wait(b, "first actual safety callback completed", func(): return first.story_outcome == "retreated" and b.mission.has_event("daming_" + first_role + "_safe"))
 	driver.route_observations.append({"first_exit_crossing_result":{"safe":safe,"first":_motion_state(b,first),"other":_motion_state(b,other),"state":observe(b)}})

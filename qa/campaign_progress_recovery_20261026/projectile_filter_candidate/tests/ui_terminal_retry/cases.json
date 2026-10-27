@@ -18,7 +18,14 @@
   "host_receipt_schema": "ui_terminal_retry_four_process_v1",
   "worker_report_schema": "campaign_gaoqiu_terminal_v1",
   "retry_observation_schema": "ui_terminal_retry_observation_v1",
-  "worker_files": ["bootstrap.gd", "driver.gd", "source_driver.gd", "base.gd", "terminal.gd", "policy.gd"],
+  "worker_files": [
+    "bootstrap.gd",
+    "driver.gd",
+    "source_driver.gd",
+    "base.gd",
+    "terminal.gd",
+    "policy.gd"
+  ],
   "natural_core_victory_required": true,
   "full_story_required": false,
   "stages": [
@@ -66,7 +73,10 @@
       "fault": "host_owned_nonce_regular_file_at_originally_absent_candidate_parent",
       "fault_path": "user://campaign_cfg_candidates",
       "fault_creation": "CREATE_NEW_no_overwrite_no_v1",
-      "gate_phases": ["arm_terminal_stage_parent", "release_terminal_stage_parent"],
+      "gate_phases": [
+        "arm_terminal_stage_parent",
+        "release_terminal_stage_parent"
+      ],
       "required": [
         "independent_typed_restore_of_original_second_paused_checkpoint",
         "arm_host_fault_before_real_resume_without_pre_freezing_mission_result",
@@ -102,8 +112,10 @@
         "menu_retained_no_battle_and_original_slot_lifecycle_cfg_bytes_unchanged",
         "current_ack_and_handoff_still_bind_original_intent_and_cfg",
         "no_additional_unlock_records_rewards_metrics_or_journal_generation",
+        "empty_D_current_checkpoint_C_retained_gen2_native_slot_readback_same_binding_lc3_ack2",
         "actual_process_exit_0"
-      ]
+      ],
+      "checkpoint_source": "validated_C_retained_slot_with_independent_D_disk_readback"
     }
   ],
   "deferred_not_implemented": [

@@ -121,7 +121,7 @@ qa/campaign_progress_recovery_20261026/continue_binding_candidate/：Flow/Sessio
 
 `qa/campaign_progress_recovery_20261026/projectile_filter_candidate/tests/ui_config_retry/`与`tests/ui_startup_retry/`分别为B1设置重试、B2启动恢复重试工具，B1修订后实际两进程406项通过，B2实际三进程387项通过，各自VALIDATION维护当前资格。三GD纯加载原件位于同候选`evidence/ui_config_retry_load_20261027_111841/`（36运行pins）与`evidence/ui_startup_retry_load_20261027_111956/`（40运行pins）；均未实例化worker。
 
-`qa/campaign_progress_recovery_20261026/projectile_filter_candidate/tests/ui_terminal_retry/`：自然核心终局四进程的6GD、宿主、契约与来源，新C不继承旧高俅416项；当前六GD已原生加载，实际四进程待运行。`evidence/ui_save_retry_breakpoint_failure_20261027_112148/`、`ui_config_retry_codec_failure_20261027_113510/`分别保存两次未完成首跑；`ui_save_retry_rearm_load_20261027_114727/`保存A修订加载，`config_active_key_probe_20261027_114911/`保存StringName语言模型与原Codec结果，均位于同候选evidence下。模型、加载与完整UI链分开记资格，业务载荷与host blocker不入Git。
+`qa/campaign_progress_recovery_20261026/projectile_filter_candidate/tests/ui_terminal_retry/`：自然核心终局四进程的6GD、宿主、契约与来源，新C不继承旧高俅416项；原六GD已加载、四份GD报告737项通过但宿主末阶段取证失败；Python宿主修正后新四进程仍待跑。`evidence/ui_save_retry_breakpoint_failure_20261027_112148/`、`ui_config_retry_codec_failure_20261027_113510/`分别保存两次未完成首跑；`ui_save_retry_rearm_load_20261027_114727/`保存A修订加载，`config_active_key_probe_20261027_114911/`保存StringName语言模型与原Codec结果，均位于同候选evidence下。模型、加载与完整UI链分开记资格，业务载荷与host blocker不入Git。
 
 
 `projectile_filter_candidate/evidence/ui_retry_tools_load_20261027_121008/`保留B1/B2/C修订组合12GD原生加载原件：129运行pins、62文件，实际流程资格仍分别维护于各工具VALIDATION。
@@ -140,3 +140,9 @@ qa/campaign_progress_recovery_20261026/continue_binding_candidate/：Flow/Sessio
 
 
 同一`projectile_filter_candidate/evidence/`下：`daming_first_exit_load_20261027_125222/`为新侧向路线五GD纯加载原件（69pins，39文件）；`ui_startup_retry_complete_20261027_124055/`为B2中断写入后的启动恢复387项原件（871pins，28文件）。三份private_prepared_scope物理业务副本只保descriptor，不入Git。
+
+
+`projectile_filter_candidate/run_lianhuanma_replay.py`及`tests/lianhuanma_replay/`保存b22胜4／败3同源复跑适配、README／来源表与当前VALIDATION；原九GD仍从原tests目录逐字冻结。同QA下`daming_continue_candidate/evidence/flow_flank_failure_20261027_125326/`保存侧向移动已生效、首次safe前仍自然失败的13文件原件，未复制业务profile／EXE。
+
+
+`projectile_filter_candidate/evidence/pursuit_lian_load_20261027_134543/`保存大名府五GD与连环马九GD组合原生加载原件（59文件、118pins），只授加载。`ui_terminal_retry_checkpoint_failure_20261027_131330/`保存C四报告737项通过但宿主D取证失败的24文件原件，原整批资格false；`ui_release_fault_model_complete_20261027_134727/`保存D永久故障模型两进程154项完整原件（15文件、854pins），模型注入与自然运行资格分开。以上均位于`qa/campaign_progress_recovery_20261026/projectile_filter_candidate/evidence/`；物理业务profile、blocker原载荷及EXE均未复制。
