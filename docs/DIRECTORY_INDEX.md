@@ -161,3 +161,6 @@ qa/campaign_progress_recovery_20261026/continue_binding_candidate/：Flow/Sessio
 
 
 `qa/campaign_progress_recovery_20261026/daming_continue_candidate/tests/qualification61/`保存1+8+52同源原件核验器、来源合同、README和独立VALIDATION；复用原八Flow／closed-A准入及52报告验证，默认不启动引擎／profile，原部分批已实证拒绝，完整正向证据尚缺。该工具不运行或补造61阶段，不授原19／全战役／SDK资格。
+
+
+`daming_continue_candidate/evidence/flow_pursuit_guard_failure_20261027_144758/`为Lu四报告746项通过、Shi首A近卫损失失败的18文件原件（875pins、整批933项932通过）；`projectile_filter_candidate/evidence/daming_guard_reserve_load_20261027_153202/`为普通预留护卫选择修订后的五GD纯加载原件（39文件／69pins）。路径均相对`qa/campaign_progress_recovery_20261026/`；两份Lu closed-A业务record及EXE仅保留hash元数据，原件不入Git。

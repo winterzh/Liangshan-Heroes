@@ -215,12 +215,8 @@ func _clear_visible_corridor(b: Node, cell: Vector2i, prisoners: Array) -> bool:
 		var threats: Array = _visible_corridor_enemies(b, cell)
 		if threats.is_empty(): return true
 		if not _stop_wounded_and_hold_guards(b,prisoners): return false
-		var reserved: Array = []
-		for actor: Node in prisoners:
-			var close: Array = _near_escort_guards(b,actor)
-			close.sort_custom(func(a,c): return a.position.distance_squared_to(actor.position) < c.position.distance_squared_to(actor.position))
-			for guard: Node in close.slice(0,3):
-				if not reserved.has(guard): reserved.append(guard)
+		var reserved: Array = _reserve_escort_guards(b,prisoners,threats)
+		if reserved.size() < 3: return false
 		if not await _tighten_reserved_guards(b,prisoners,reserved): return false
 		# Normal H guards can finish an enemy while the inner move is underway.
 		threats = _visible_corridor_enemies(b,cell)
@@ -234,6 +230,30 @@ func _clear_visible_corridor(b: Node, cell: Vector2i, prisoners: Array) -> bool:
 		if not _check("corridor clearing leaves the original held guards with wounded", _reserved_guard_cover(prisoners,reserved),observe(b)): return false
 	return _check("visible escort corridor bounded targets", false, observe(b))
 
+func _reserve_escort_guards(b: Node, prisoners: Array, threats: Array) -> Array:
+	# Read original allies and visible threats, then use ordinary move/H orders.
+	# Keep the assault heroes available for the clicked threat; a guard already
+	# being targeted is not a reliable reserve at this boundary.
+	var pool: Array = _escort_group(b)
+	var visible: Array = threats.filter(func(u): return _alive(u) and b._enemy_at(b.to_screen(u.position)) == u)
+	var candidates: Array = pool.filter(func(u): return not visible.any(func(enemy): return enemy._target == u))
+	var center := Vector2.ZERO
+	for actor: Node in prisoners: center += actor.position
+	center /= float(prisoners.size())
+	candidates.sort_custom(func(a,c):
+		var a_assault: bool = a.key in ["lu_zhishen","wu_song"]
+		var c_assault: bool = c.key in ["lu_zhishen","wu_song"]
+		if a_assault != c_assault: return not a_assault
+		if a.hp != c.hp: return a.hp > c.hp
+		return a.position.distance_squared_to(center) < c.position.distance_squared_to(center))
+	# Four actual guards tolerate one ordinary casualty while preserving the
+	# original three/140px check. A smaller surviving group may still use three.
+	var count: int = mini(4,mini(pool.size()-3,candidates.size()))
+	if not _check("reserve original un-targeted guards while retaining three attackers", count >= 3 and candidates.size() >= count and pool.size()-count >= 3, {"pool":pool.map(func(u): return str(u.entity_id)),"visible_targets":visible.map(func(u): return {"id":str(u.entity_id),"target":str(u._target.entity_id) if is_instance_valid(u._target) else ""})}): return []
+	var reserved: Array = candidates.slice(0,count)
+	commands.append({"kind":"reserve_original_escort_cover","ids":reserved.map(func(u): return str(u.entity_id)),"hp":reserved.map(func(u): return u.hp),"reserve_count":count,"original_minimum_close_guards":3,"original_protection_distance":ESCORT_NEAR,"logical_tick":str(b._run_clock._next_tick)})
+	return reserved
+
 func _reserved_inner_cover(prisoners: Array, reserved: Array) -> bool:
 	if not reserved.all(func(u): return _alive(u)): return false
 	for actor: Node in prisoners:
@@ -241,7 +261,7 @@ func _reserved_inner_cover(prisoners: Array, reserved: Array) -> bool:
 		var close := 0
 		for guard: Node in reserved:
 			if guard.position.distance_to(actor.position) <= 100.0: close += 1
-		if close < 3: return false
+		if close < reserved.size(): return false
 	return true
 
 func _tighten_reserved_guards(b: Node, prisoners: Array, reserved: Array) -> bool:
@@ -379,12 +399,8 @@ func _secure_first_crossing(b: Node, prisoners: Array) -> bool:
 		driver.route_observations.append({"first_crossing_pursuit_already_clear":{"pool":original_pool.map(func(u): return _motion_state(b,u)),"logical_tick":str(b._run_clock._next_tick)}})
 		return true
 	if not _stop_wounded_and_hold_guards(b,prisoners): return false
-	var reserved: Array = []
-	for actor: Node in prisoners:
-		var close: Array = _near_escort_guards(b,actor)
-		close.sort_custom(func(a,c): return a.position.distance_squared_to(actor.position) < c.position.distance_squared_to(actor.position))
-		for guard: Node in close.slice(0,3):
-			if not reserved.has(guard): reserved.append(guard)
+	var reserved: Array = _reserve_escort_guards(b,prisoners,original_pool)
+	if reserved.size() < 3: return false
 	if not await _tighten_reserved_guards(b,prisoners,reserved): return false
 	var attackers: Array = _crew(b).filter(func(u): return not reserved.has(u))
 	if not _check("ordinary pursuit interception preserves original close H guards", attackers.size() >= 3 and _reserved_guard_cover(prisoners,reserved) and b.level.pursuit_warned): return false
