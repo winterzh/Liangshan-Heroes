@@ -49,3 +49,9 @@ C:\Python314\python.exe -B qa/campaign_progress_recovery_20261026/daming_continu
 耗时观测批164910_c355d10c已通过完整来源及原fixture准入，两个原正例完成；首Lu world实际完成177／264行后在900.252秒触发宿主超时，exit1、errors空、无最终GD报告。最后完整行是identity_mission_context_level_id_array/source，后继JSON行在执行中被超时结束。原件与来源／私有树／子进程／锁后验保留；177行不能授world、52或61通过。
 
 实测前32行平均5.062秒、最慢7.862秒，900秒不足以覆盖完整矩阵。本次完整执行使用既有CLI的`--timeout 3600 --wait-lane 0`，给单进程数据校验预留一小时有限等待预算；不改宿主、GD、132×2／181×2完整矩阵、两角色各24独立capture、原正例、任何拒绝码、输入不变及节点／时钟断言。该参数仅控制测试宿主等待进程终态，不调整游戏时间、物理频率、Flow原900秒或capture内既有等待条件。仍从全新批次／profile按全部52进程执行，遇实际失败保留原批并停止定位，不拼接部分运行授资格。
+
+## 2026-10-27 Windows无响应与暂停态事件处理
+
+完整预算批172552_ea00c9d2首Lu world在255／264行后进程退出：PID9808、838.227秒、exit0xCFFFFFFF，宿主stopped_for为空，未到3600秒期限；无ERROR或最终GD报告。Windows Application Hang事件1002明确记录ProcessId=0x2650（9808），同ReportId的1001事件为AppHangB1。原同步矩阵在整组循环中不让出主循环，窗口消息长时间不被处理。原批保留为失败，255行不授阶段资格。
+
+后继只在world/component每个完整正例路由和负例行执行、核验、dispose结束后，调用共享pump_paused_window等待一次process_frame。调用前后均断言SceneTree保持paused、time_scale=1、physics_ticks_per_second=60，且原生process_frames实际递增；不安装或tick战斗，不在单行负例调用和不变性检查中途yield。完整报告另核world恰好266次、component恰好364次暂停态窗口帧；capture保持原流程。原132×2／181×2、正例、拒绝码和全部原断言函数逐字保留。三个GD修改可逐项逆还原到前批原字节；新字节须原生加载及全新52进程完整执行。宿主仍采用3600秒有限等待。

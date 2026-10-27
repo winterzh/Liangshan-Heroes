@@ -208,6 +208,7 @@ func run() -> void:
 		print("DN_TIMING ", Time.get_ticks_msec(), " component positive begin ", route)
 		if not _positive(route): finish(); return
 		print("DN_TIMING ", Time.get_ticks_msec(), " component positive end ", route)
+		if not await support.pump_paused_window(): finish(); return
 	fixture_ready = true
 	_build_specs()
 	if not check("exact separate component planned cases", specs.size() == 181): finish(); return
@@ -216,6 +217,7 @@ func run() -> void:
 			print("DN_TIMING ", Time.get_ticks_msec(), " component row begin ", spec.id, "/", route)
 			if not _negative(spec, route): finish(); return
 			print("DN_TIMING ", Time.get_ticks_msec(), " component row end ", spec.id, "/", route)
+			if not await support.pump_paused_window(): finish(); return
 	for row: Dictionary in provenance:
 		if not check("all actual A frozen source bytes unchanged " + row.label, FileAccess.get_sha256(row.path) == row.sha256): finish(); return
 	if not _profile_proof() or not check("original journal entire subtree unchanged", _sha_map_equal(proof_before, _scan(ProjectSettings.globalize_path(SLOT_ROOT)))): finish(); return

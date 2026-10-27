@@ -1,0 +1,7 @@
+# 大名府52负例完整预算批：255行后的Windows无响应终止
+
+原批172552_ea00c9d2首Lu world PID9808在255／264行后退出，838.227秒、exit0xCFFFFFFF，stopped_for为空；尚未达到3600秒宿主期限。两个原正例完成，最后完整行identity_presentation_context_presentation_token_bool/source，其JSON行执行中进程关闭。没有V25_NEGATIVE_FAIL、ERROR或最终GD报告；255行不授world／52／61资格。来源／原件／私有树／子进程／通道／锁后验闭合。
+
+Windows事件1002精确指向ProcessId=0x2650（9808），同ReportId的1001为AppHangB1，系统记录程序停止交互并被关闭。定向事件原XML仅本地保留并记录SHA；本包只含必要事件元数据，不上传系统SID、主机名或其他系统日志。同步矩阵整组循环没有yield，后继在每个完整正例路由和负例行执行／断言／dispose结束后等待一帧，同时验证SceneTree始终paused、1x／60Hz不变及process_frames实际增加，world应266帧、component应364帧。原断言函数和所有52进程保持。
+
+1810pins逐项分类：892外部文本、902内部文本；8EXE仅终态hash，8份原closed-A及嵌套业务record只descriptor大小／SHA，不读取或复制。其他文本逐Git blob核固定391d48d7；原失败数据保持，不拼接部分行授资格。

@@ -118,6 +118,7 @@ func run() -> void:
 		print("DN_TIMING ", Time.get_ticks_msec(), " world positive begin ", positive_route)
 		if not _positive(positive_route): finish(); return
 		print("DN_TIMING ", Time.get_ticks_msec(), " world positive end ", positive_route)
+		if not await support.pump_paused_window(): finish(); return
 	var levels: Dictionary = _body(base, "level")
 	var mission: Dictionary = _body(base, "mission")
 	if levels.is_empty() or mission.is_empty(): finish(); return
@@ -136,6 +137,7 @@ func run() -> void:
 			print("DN_TIMING ", Time.get_ticks_msec(), " world row begin ", spec.id, "/", route_name)
 			if not _negative(spec, route_name): finish(); return
 			print("DN_TIMING ", Time.get_ticks_msec(), " world row end ", spec.id, "/", route_name)
+			if not await support.pump_paused_window(): finish(); return
 	for row: Dictionary in provenance:
 		if not check("all actual source input bytes unchanged " + row.label, FileAccess.get_sha256(row.path) == row.sha256): finish(); return
 	finish()

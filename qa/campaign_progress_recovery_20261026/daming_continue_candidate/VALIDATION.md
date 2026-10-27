@@ -116,3 +116,9 @@ AST、帮助及30命名来源检查通过。纯加载批20261027_084545_37422b03
 耗时观测批164910首Lu world完成177／264行后在900.252秒达到宿主期限，原两个正例完成、无脚本错误，未生成最终报告，整批失败原件保留。依据实测每行约5秒，172552_ea00c9d2新批采用既有CLI的3600秒有限单进程等待，宿主及8GD原字节、完整52进程与所有断言／游戏时钟保持；完整来源准入已通过，首world PID9808正在执行，52及61尚未通过。
 
 `daming_continue_candidate/evidence/negative_timed_timeout_20261027_164910/`（相对`qa/campaign_progress_recovery_20261026/`）保存8文件完整原件，1810pins／1795文本映射／301对象；298对象逐Git blob核固定aa0f8050，8EXE及8份业务原件／嵌套复制只hash元数据。前32行平均5.062秒、最长7.862秒，最后完整行identity_mission_context_level_id_array/source；此后JSON行被宿主期限终止。新预算只控制宿主等待，不放宽GD内游戏时钟、拒绝码、typed／IEEE不变或节点分配断言。完整52从全新profile执行，不拼接177行。
+
+## 2026-10-27 同步矩阵Windows事件循环修复
+
+172552完整预算批首Lu world完成255／264行后被关闭：PID9808、838.227秒、exit0xCFFFFFFF、stopped_for为空，无最终GD报告。Windows事件1002精确匹配PID9808，同ReportId的1001为AppHangB1；同步矩阵长期未让出窗口主循环。后继仅在每个完整正例路由／负例行断言及dispose之后等待一次窗口帧，前后检查游戏仍paused、1x／60Hz不变，完整world／component分别须266／364次；原负例函数逐字保持。8GD新加载PID41148／29.719秒／退出0、错误0／72pins通过，175238_2c6e89e9新完整52批正在来源准入，单进程宿主等待仍3600秒。
+
+失败源包`daming_continue_candidate/evidence/negative_apphang_20261027_172552/`保存9文件／1810pins；298文本对象逐Git blob核固定391d48d7，8EXE和8份原closed-A／嵌套业务复制只hash。定向Windows事件元数据精确匹配0x2650，原XML只保留本地SHA，不扩展到其他系统日志。新加载原件`projectile_filter_candidate/evidence/daming_event_pump_load_20261027_175125/`保存39文件／72pins。路径相对`qa/campaign_progress_recovery_20261026/`。新helper只在单行结束后yield，不进入原组件验证和typed／IEEE检查之间；原132×2、181×2及各24独立capture、失败短路、完整profile／来源后验保持。完整报告新增并核paused_window_event_frames；当前仅加载通过，实际窗口帧及全52待验。

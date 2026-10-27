@@ -6,7 +6,7 @@
 
 | 项目 | 当前状态 |
 | --- | --- |
-| GitHub | [winterzh/Liangshan-Heroes / stable](https://github.com/winterzh/Liangshan-Heroes/tree/codex/sync-20260905-stable)：前批远端回读`aa0f8050ad5e9569fde198b2a67afc599fea0c24`；本批177行后超时原件和实测等待预算随白名单同步，52新批首world执行中；main仍为`1598c7c0cdccdc0bf1be8968608f79f0c43dcfc9`，未合并 |
+| GitHub | [winterzh/Liangshan-Heroes / stable](https://github.com/winterzh/Liangshan-Heroes/tree/codex/sync-20260905-stable)：前批远端回读`391d48d787c4593bd4ab660fce9ef058af3697cf`；本批Windows无响应原件、暂停态逐行让帧修复及加载证据随白名单同步，52暂停态逐行让帧版完整重跑准入中；main仍为`1598c7c0cdccdc0bf1be8968608f79f0c43dcfc9`，未合并 |
 | 主线合并 | 48042d84补齐旧stable合并历史，ffa625de补齐交接文档；本页修订随本次文档提交同步，以分支最新提交为准 |
 | Steam Windows | default Build **26048429** / Manifest **697009053566575953**，2026-10-20完成发布验收 |
 | 冻结生产来源 | 0083b47abac098c5ebd7231e327085c4ba3299cd；后继QA工具和文档提交未改变游戏包 |
@@ -50,3 +50,5 @@
 本次负例状态：52负例首轮162116_c86e8835首Lu world（PID65816）在900.655秒超时，exit1、errors空、无最终报告；来源／私有树／子进程／锁后验闭合，整批未通过。后继仅给QA增加准入／runtime／正例／每行开始与完成的单调耗时标准输出，原负例函数／断言逐字保留，全部52进程及900秒期限保持。新8GD加载PID58156／68.429秒／退出0、错误0／72pins通过；重跑164910_c355d10c已启动，完整来源准入中，52与61仍未授。 失败及加载证据分别见[首轮超时原件](../qa/campaign_progress_recovery_20261026/daming_continue_candidate/evidence/negative_timeout_20261027_162116/README.md)、[耗时观测版加载原件](../qa/campaign_progress_recovery_20261026/projectile_filter_candidate/evidence/daming_negative_timing_load_20261027_164702/README.md)。
 
 最新完整执行：耗时观测批164910首Lu world完成177／264行后在900.252秒达到宿主期限，原两个正例完成、无脚本错误，未生成最终报告，整批失败原件保留。依据实测每行约5秒，172552_ea00c9d2新批采用既有CLI的3600秒有限单进程等待，宿主及8GD原字节、完整52进程与所有断言／游戏时钟保持；完整来源准入已通过，首world PID9808正在执行，52及61尚未通过。 详见[177行后超时原件](../qa/campaign_progress_recovery_20261026/daming_continue_candidate/evidence/negative_timed_timeout_20261027_164910/README.md)。
+
+最新负例执行：172552完整预算批首Lu world完成255／264行后被关闭：PID9808、838.227秒、exit0xCFFFFFFF、stopped_for为空，无最终GD报告。Windows事件1002精确匹配PID9808，同ReportId的1001为AppHangB1；同步矩阵长期未让出窗口主循环。后继仅在每个完整正例路由／负例行断言及dispose之后等待一次窗口帧，前后检查游戏仍paused、1x／60Hz不变，完整world／component分别须266／364次；原负例函数逐字保持。8GD新加载PID41148／29.719秒／退出0、错误0／72pins通过，175238_2c6e89e9新完整52批正在来源准入，单进程宿主等待仍3600秒。 52及61尚未通过，原件分别见[Windows无响应原件](../qa/campaign_progress_recovery_20261026/daming_continue_candidate/evidence/negative_apphang_20261027_172552/README.md)、[暂停态让帧版加载原件](../qa/campaign_progress_recovery_20261026/projectile_filter_candidate/evidence/daming_event_pump_load_20261027_175125/README.md)。

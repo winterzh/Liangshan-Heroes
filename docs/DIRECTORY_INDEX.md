@@ -171,3 +171,5 @@ qa/campaign_progress_recovery_20261026/continue_binding_candidate/：Flow/Sessio
 `daming_continue_candidate/evidence/negative_timeout_20261027_162116/`保留首次52负例首world超时原件：8文件／1810pins，原业务record只hash；`projectile_filter_candidate/evidence/daming_negative_timing_load_20261027_164702/`保存仅增加耗时输出的8GD纯加载原件：39文件／72pins。两路径相对`qa/campaign_progress_recovery_20261026/`，不授52／61通过。
 
 `qa/campaign_progress_recovery_20261026/daming_continue_candidate/evidence/negative_timed_timeout_20261027_164910/`保存耗时版首world完成177／264行后900.252秒超时原件：8文件／1810pins，177行不授world／52／61；后继172552以既有CLI的3600秒宿主等待预算重新完整执行，原worker与断言保持。
+
+`daming_continue_candidate/evidence/negative_apphang_20261027_172552/`保存首world在255行后Windows Application Hang关闭原件：9文件／1810pins，系统事件原XML只本地保留；`projectile_filter_candidate/evidence/daming_event_pump_load_20261027_175125/`保存暂停态逐行让帧版8GD纯加载：39文件／72pins。两路径相对`qa/campaign_progress_recovery_20261026/`；完整52／61待新批实际结果。

@@ -12,6 +12,7 @@ var runtime: Dictionary = {}
 var checks: Array = []
 var family := ""
 var finished := false
+var window_event_frames := 0
 
 func check(ok: bool, label: String) -> bool:
 	checks.append({"passed":ok,"label":label})
@@ -80,6 +81,18 @@ func begin(node: Node, expected_family: String) -> Dictionary:
 	runtime = pack.runtime
 	return admitted
 
+func pump_paused_window() -> bool:
+	# Whole rows remain synchronous. Yield only after their validation/disposal;
+	# no live World is installed by either matrix and the SceneTree stays paused.
+	if not check(runner.get_tree().paused and Engine.time_scale == 1.0 and Engine.physics_ticks_per_second == 60,
+		"paused window pump begins with unchanged 1x/60Hz clock"): return false
+	var before_frame: int = Engine.get_process_frames()
+	await runner.get_tree().process_frame
+	if not check(runner.get_tree().paused and Engine.time_scale == 1.0 and Engine.physics_ticks_per_second == 60
+		and Engine.get_process_frames() > before_frame, "window frame advanced while gameplay remains paused at 1x/60Hz"): return false
+	window_event_frames += 1
+	return true
+
 func profile_unchanged() -> bool:
 	return not admitted.is_empty() and reader.inventory_matches(ProjectSettings.globalize_path("user://continue/v1"), admitted.descriptor.frozen_inventory, admitted.packet.binding.token)
 
@@ -88,12 +101,15 @@ func finish(payload: Dictionary, passed: bool) -> void:
 	finished = true
 	check(reader != null and reader.unchanged(), "all original pinned fixture bytes unchanged at finish")
 	check(profile_unchanged(), "whole private slot/journal bytes and directories unchanged at finish")
+	if passed and family in ["world", "component"]:
+		check(window_event_frames == (266 if family == "world" else 364), "each complete positive route and original negative row yielded exactly once while paused")
 	var all_checks: Array = checks.duplicate(true)
 	if reader != null: all_checks.append_array(reader.checks)
 	all_checks.append_array(payload.get("checks", []))
 	passed = passed and not admitted.is_empty() and not all_checks.is_empty() and all_checks.all(func(row): return row is Dictionary and row.get("passed") == true)
 	var result: Dictionary = payload.duplicate(true)
 	result.merge({"schema":"daming_negative_stage_report_v2","passed":passed,"checks":all_checks,
+		"paused_window_event_frames":window_event_frames,
 		"family":family,"case":request.get("case", ""),"first_role":request.get("first_role", ""),
 		"pid":OS.get_process_id(),"profile":OS.get_environment("DN_PROFILE"),"actual_user_data_dir":OS.get_user_data_dir(),
 		"batch_nonce":OS.get_environment("DN_BATCH_NONCE"),"process_nonce":OS.get_environment("DN_PROCESS_NONCE"),

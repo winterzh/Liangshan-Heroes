@@ -1,5 +1,13 @@
 # 开发日志
 
+## 2026-10-27 负例同步矩阵窗口事件循环修复
+
+172552完整预算批首Lu world完成255／264行后被关闭：PID9808、838.227秒、exit0xCFFFFFFF、stopped_for为空，无最终GD报告。Windows事件1002精确匹配PID9808，同ReportId的1001为AppHangB1；同步矩阵长期未让出窗口主循环。后继仅在每个完整正例路由／负例行断言及dispose之后等待一次窗口帧，前后检查游戏仍paused、1x／60Hz不变，完整world／component分别须266／364次；原负例函数逐字保持。8GD新加载PID41148／29.719秒／退出0、错误0／72pins通过，175238_2c6e89e9新完整52批正在来源准入，单进程宿主等待仍3600秒。
+
+[Windows无响应原件](../qa/campaign_progress_recovery_20261026/daming_continue_candidate/evidence/negative_apphang_20261027_172552/README.md)：9文件／2,883,887字节、1810pins，Windows事件只保留必要元数据及本地原XML SHA；系统SID等原事件内容不入Git。[暂停态让帧版加载原件](../qa/campaign_progress_recovery_20261026/projectile_filter_candidate/evidence/daming_event_pump_load_20261027_175125/README.md)：39文件／771,507字节、72pins。来源／私有树／子进程／通道／锁后验均闭合；新三个GD可逆还原前批原字节，30命名来源／原断言逐字审计和61核验器33命名来源通过。当前仅授新字节纯加载，暂停态让帧实际完整运行及52／61待验。
+
+上一批stable已回读391d48d7。本批QA修复、失败原件和交接白名单同步；无生产采用、main／Steam、桌面键鼠或人工资格变更。
+
 ## 2026-10-27 完整负例批次的实测等待预算
 
 耗时观测批164910首Lu world完成177／264行后在900.252秒达到宿主期限，原两个正例完成、无脚本错误，未生成最终报告，整批失败原件保留。依据实测每行约5秒，172552_ea00c9d2新批采用既有CLI的3600秒有限单进程等待，宿主及8GD原字节、完整52进程与所有断言／游戏时钟保持；完整来源准入已通过，首world PID9808正在执行，52及61尚未通过。
