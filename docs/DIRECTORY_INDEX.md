@@ -1,4 +1,4 @@
-# 项目目录索引（2026-10-20）
+# 项目目录索引（2026-10-27）
 
 ## 当前文档入口
 
@@ -9,6 +9,7 @@
 | 后续顺序与完整验收条件 | [开发计划](DEVELOPMENT_PLAN.md) |
 | 启动、换机、共享引擎与源码同步 | [源码设置](SOURCE_SETUP.md) |
 | 按批次记录完成事项 | [开发日志](WORKLOG.md) |
+| 10月27日取消全量测试及27个进程结果 | [停止原件](../qa/campaign_progress_recovery_20261026/daming_continue_candidate/evidence/negative_user_stop_20261027_183950/README.md)、[等待预算重规划原件](../qa/campaign_progress_recovery_20261026/daming_continue_candidate/evidence/negative_budget_cancel_20261027_175238/README.md) |
 | 本次Steam更新 | [更新文档](STEAM_UPDATE_20261019.md) |
 | Steam交付步骤 | [发布指南](STEAM_RELEASE_GUIDE.md) |
 | 美术缺口与来源 | [全量美术台账](ART_COMPLETION_20260926.md)及各人物/场景实现说明 |

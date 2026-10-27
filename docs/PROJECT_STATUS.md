@@ -1,12 +1,16 @@
 # 当前项目总览
 
+## 本轮全量测试已按用户要求停止
+
+全量负例按用户要求停止：27个进程39383项通过，1个取消、24个未启动；完整52／61未通过。当前无测试进程，自有锁已释放。后续采用针对修改的必要测试。[本批原件](../qa/campaign_progress_recovery_20261026/daming_continue_candidate/evidence/negative_user_stop_20261027_183950/README.md)。当前源码未采用生产，公开战役继续仍关闭。
+
 核对日期：2026-10-27（北京时间）。**10月20日Steam Windows更新及当批GitHub主线合并已交付；当前黄泥冈批次和完整开发计划尚未完成。** 人物、兵器、服饰和剧情状态先核对《水浒传》百二十回本，具体配色、动作编排与招式数值明示为游戏设计。
 
 ## 当前版本与交付
 
 | 项目 | 当前状态 |
 | --- | --- |
-| GitHub | [winterzh/Liangshan-Heroes / stable](https://github.com/winterzh/Liangshan-Heroes/tree/codex/sync-20260905-stable)：前批远端回读`391d48d787c4593bd4ab660fce9ef058af3697cf`；本批Windows无响应原件、暂停态逐行让帧修复及加载证据随白名单同步，52暂停态逐行让帧版完整重跑准入中；main仍为`1598c7c0cdccdc0bf1be8968608f79f0c43dcfc9`，未合并 |
+| GitHub | [winterzh/Liangshan-Heroes / stable](https://github.com/winterzh/Liangshan-Heroes/tree/codex/sync-20260905-stable)：前批远端回读`9225c727946a41369b07abe49310b78d2ac7fdb0`；本批用户停止全量测试、27个进程通过结果及QA核验器修正按白名单同步，最终SHA以远端回读为准；main未合并 |
 | 主线合并 | 48042d84补齐旧stable合并历史，ffa625de补齐交接文档；本页修订随本次文档提交同步，以分支最新提交为准 |
 | Steam Windows | default Build **26048429** / Manifest **697009053566575953**，2026-10-20完成发布验收 |
 | 冻结生产来源 | 0083b47abac098c5ebd7231e327085c4ba3299cd；后继QA工具和文档提交未改变游戏包 |

@@ -43,12 +43,13 @@ def strict_receipt(path,parent):
  h.identity.no_links(p.fs(path));return path,a.document(path)
 
 
-def frozen_pin_map(run,pins):
+def frozen_pin_map(run,pins,engine_sha256):
  """Verify immutable runner inputs/raw reports; never the advancing profiles."""
  mapped={};binary=[]
  require(type(pins) is dict and pins,'Nonempty actual run pins required')
  for name,digest in pins.items():
-  original=Path(name);require(original.is_absolute() and original.is_relative_to(ROOT) and a.fixture.hex_text(digest,64),'Strict original pin path/hash')
+  original=Path(name);require(original.is_absolute() and '..' not in original.parts and a.fixture.hex_text(digest,64),'Strict original pin path/hash')
+  require(original.is_relative_to(ROOT) or (original.suffix.lower()=='.exe' and digest==engine_sha256),'Only the admitted engine hash may identify an external binary')
   if original.suffix.lower()=='.exe':binary.append({'source':name,'sha256':digest,'metadata_only':True,'read':False});continue
   frozen=original if original.is_relative_to(run) else run/'runner_inputs'/original.relative_to(ROOT)
   require(p.fs(frozen).is_file(),'Frozen run input missing: '+str(frozen));p.pin(frozen,mapped,digest)
@@ -69,7 +70,7 @@ def verify(flow_path,negative_path,named):
  require(neg.get('candidate_script_count')==26 and neg.get('native_asset_count')==1 and neg.get('actual_process_count')==52,'Exact native cohort shape required')
  plan=a.static_plan();steps=neg.get('steps',[]);reports=neg.get('reports',[]);attempts=neg.get('attempts',[])
  require(len(steps)==len(reports)==len(attempts)==len(plan)==52 and a.fixture.hex_text(neg.get('batch_nonce'),32),'All actual 52 native stages required')
- pins=dict(named);producer_pins,binary_producer=frozen_pin_map(flow_path.parent,flow['pinned_files']);consumer_pins,binary_consumer=frozen_pin_map(run,neg['pinned_files'])
+ pins=dict(named);producer_pins,binary_producer=frozen_pin_map(flow_path.parent,flow['pinned_files'],flow['engine_sha256']);consumer_pins,binary_consumer=frozen_pin_map(run,neg['pinned_files'],flow['engine_sha256'])
  n.prep.merge_pins(pins,producer_pins);n.prep.merge_pins(pins,consumer_pins);p.pin(flow_path,pins);p.pin(negative_path,pins)
  # Reuse the exact frozen consumer implementation whose validation is called.
  for name,digest in n.source_pins().items():require(neg['pinned_files'].get(name)==digest,'Current consumer contract differs from actual frozen consumer')

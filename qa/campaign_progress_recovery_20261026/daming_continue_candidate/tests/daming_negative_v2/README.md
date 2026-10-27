@@ -1,5 +1,9 @@
 # 大名府 52 进程负例迁移工具（v2）
 
+## 当前执行策略
+
+2026-10-27用户明确“不用完整测试”。183950批27个进程39383项通过后停止，1个取消、24个未执行；自有锁及子进程已闭合。后续采用针对修改的必要测试，不自动恢复全量52或61。下文完整执行命令和等待预算仅保留工具说明；当前结果见[停止原件](../../evidence/negative_user_stop_20261027_183950/README.md)。
+
 本文记录工具准备时状态：已实现外部执行入口，尚未编译、未运行 52 进程。后续实测以本目录原始运行收据和 [候选验证记录](../../VALIDATION.md) 为准。此前 `static_audit.json` 是旧“准入与表目录”草稿的历史静态记录，不能给本轮新字节授予资格。
 
 本工具只消费新 projectile 组合冻结（26 个脚本与原生 helper）自己的首次 cold import，以及**同一冻结完整八阶段大名府 Flow 成功收据**。两个角色均必须已有 A 实际 SaveAndExit、B 独立 Continue 后再次 SaveAndExit、C 自然终局、D 独立菜单拒旧槽。缺失、失败、部分批次、旧 3365 收据一律在创建测试 profile 或启动引擎前拒绝。默认只核命名小文件，不创建冻结、不复制业务档案、不取得引擎锁。
@@ -55,3 +59,9 @@ C:\Python314\python.exe -B qa/campaign_progress_recovery_20261026/daming_continu
 完整预算批172552_ea00c9d2首Lu world在255／264行后进程退出：PID9808、838.227秒、exit0xCFFFFFFF，宿主stopped_for为空，未到3600秒期限；无ERROR或最终GD报告。Windows Application Hang事件1002明确记录ProcessId=0x2650（9808），同ReportId的1001事件为AppHangB1。原同步矩阵在整组循环中不让出主循环，窗口消息长时间不被处理。原批保留为失败，255行不授阶段资格。
 
 后继只在world/component每个完整正例路由和负例行执行、核验、dispose结束后，调用共享pump_paused_window等待一次process_frame。调用前后均断言SceneTree保持paused、time_scale=1、physics_ticks_per_second=60，且原生process_frames实际递增；不安装或tick战斗，不在单行负例调用和不变性检查中途yield。完整报告另核world恰好266次、component恰好364次暂停态窗口帧；capture保持原流程。原132×2／181×2、正例、拒绝码和全部原断言函数逐字保留。三个GD修改可逐项逆还原到前批原字节；新字节须原生加载及全新52进程完整执行。宿主仍采用3600秒有限等待。
+
+## 2026-10-27 组件全矩阵实测后的等待预算
+
+175238_2c6e89e9 的 Lu world 已完整通过264行、2152检查和266次暂停态窗口帧。Lu component完成130／362行时，14个配对行平均14.211秒，估算全矩阵4557.51秒，超过3600秒宿主期限。因此root按实际PID23740／父PID38060和完整命令核验后，以exit99主动结束这一批以重新规划等待预算；这是有记录的测试取消，不是原生断言失败或超时。取消记录和终态收据保留于原批及`.godot/daming_negative_event_pump_20261027/budget_replan_cancellation.json`，不拼接此批授予52通过。
+
+后继全新52进程使用既有CLI的`--timeout 14400 --wait-lane 0`，单进程上限四小时。宿主与全部8个GD字节不变，沿用175125_f33a6ea7的原生纯加载结果；完整矩阵、输入、拒绝码、正例、时钟、暂停态事件帧和全部来源/私有树/锁后验不变。只有宿主有限等待预算变化，须重跑全部52，并在成功后另做61证据核验。

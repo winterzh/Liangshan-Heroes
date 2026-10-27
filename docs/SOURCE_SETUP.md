@@ -1,5 +1,9 @@
 # 源码设置与换机（2026-10-27）
 
+## 本轮全量测试已按用户要求停止
+
+全量负例按用户要求停止，27个进程39383项通过，剩余取消/未启动；测试进程已结束、锁已释放。后续默认按修改做必要的针对性测试，不自动续跑52／61。[本批收据](../qa/campaign_progress_recovery_20261026/daming_continue_candidate/evidence/negative_user_stop_20261027_183950/README.md)。本批仅QA核验器、证据及交接文档同步stable，具体提交SHA以远端回读为准。
+
 ## 当前入口
 
 本机开发目录：`D:/AI项目/水浒/开发工程`；打开其中 `project.godot`。桌面旧目录为历史兼容入口。黄泥冈首批开发已切回 `codex/sync-20260905-stable`，从main/stable同源的1598c7c0开始；已验证实现及证据提交`f5325c25`已推送并回读一致，后续交接文档独立同步，最新SHA仍以Git回读为准。[当前版本](PROJECT_STATUS.md)、[开发计划](DEVELOPMENT_PLAN.md)。

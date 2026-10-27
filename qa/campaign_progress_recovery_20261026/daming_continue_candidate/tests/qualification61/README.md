@@ -11,3 +11,5 @@
 示例：python qa/campaign_progress_recovery_20261026/daming_continue_candidate/tests/qualification61/run_qualification.py --verify --flow-receipt <完整八Flow/receipt.json> --negative-receipt <完整52负例/receipt.json> --write-proof
 
 实际验证状态单独维护于VALIDATION.md；来源／README封定后不边跑边改。
+
+工程外的引擎EXE允许仅按已准入八Flow的engine_sha256匹配并保留元数据；其他工程外路径、非EXE或哈希不符仍拒绝。工程内helper EXE仍只取终态元数据，文本仍须在工程内并从实际冻结副本读取。

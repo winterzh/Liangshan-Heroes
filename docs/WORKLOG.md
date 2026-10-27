@@ -1,5 +1,11 @@
 # 开发日志
 
+## 本轮全量测试已按用户要求停止
+
+2026-10-27用户明确“不用完整测试”，183950批已停止：Lu world264行／2152项、component362行／24017项、24个capture／11062项，以及Shi world264行／2152项，27个进程合计39383项全部通过。第28个Shi component（PID31660）按用户要求以exit99取消、无报告；其余24个capture未启动。来源／私有树／子进程／通道／锁后验闭合，complete、52和61均为false。后续针对实际修改执行必要测试，不自动重跑全量52／61；原版键鼠验收继续按原选择暂不恢复。
+
+[停止记录及完整已过结果](../qa/campaign_progress_recovery_20261026/daming_continue_candidate/evidence/negative_user_stop_20261027_183950/README.md)；[前批等待预算重规划](../qa/campaign_progress_recovery_20261026/daming_continue_candidate/evidence/negative_budget_cancel_20261027_175238/README.md)。61核验器修正工程外引擎EXE路径校验，仍必须匹配已准入Flow的engine_sha256；实际8个EXE pins只取元数据，4类错误路径/哈希拒绝，默认33命名来源通过。没有执行完整61正向核验。本批已验证QA修正和证据按白名单同步stable。
+
 ## 2026-10-27 负例同步矩阵窗口事件循环修复
 
 172552完整预算批首Lu world完成255／264行后被关闭：PID9808、838.227秒、exit0xCFFFFFFF、stopped_for为空，无最终GD报告。Windows事件1002精确匹配PID9808，同ReportId的1001为AppHangB1；同步矩阵长期未让出窗口主循环。后继仅在每个完整正例路由／负例行断言及dispose之后等待一次窗口帧，前后检查游戏仍paused、1x／60Hz不变，完整world／component分别须266／364次；原负例函数逐字保持。8GD新加载PID41148／29.719秒／退出0、错误0／72pins通过，175238_2c6e89e9新完整52批正在来源准入，单进程宿主等待仍3600秒。
