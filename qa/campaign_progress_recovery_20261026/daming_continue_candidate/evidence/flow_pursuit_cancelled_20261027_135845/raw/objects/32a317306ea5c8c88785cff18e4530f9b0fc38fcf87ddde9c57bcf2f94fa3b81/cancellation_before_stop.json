@@ -1,0 +1,20 @@
+{
+  "schema": "owned_QA_route_static_defect_cancellation_v1",
+  "time": "2026-10-27T06:10:34.477326+00:00",
+  "original_run": "D:\\AI项目\\水浒\\开发工程\\.godot\\daming_projectile_flow_20261027\\20261027_135845_aab0f8af",
+  "owned_pid": 19756,
+  "owned_host_pid": 59532,
+  "verified_process": {
+    "ProcessId": 19756,
+    "ParentProcessId": 59532,
+    "Name": "Godot_v4.6.3-stable_win64.exe",
+    "CommandLine": "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe --path D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_075456_3e4a48ab\\project --rendering-method gl_compatibility --resolution 1280x720 --position 30000,30000 --script D:\\AI项目\\水浒\\开发工程\\.godot\\daming_projectile_flow_20261027\\20261027_135845_aab0f8af\\workers\\bootstrap.gd"
+  },
+  "route_sha256": "6edc2c115b3f5ffe6436cb55258b3cf76e0d6bd030d135a6967663b500005dcc",
+  "reason": "Post-intercept _escort_assembled still checks PRISON_INSIDE(18,18) while ordinary command targets (30,34); route predicate belongs to initial prison assembly.",
+  "planned_fix": "Use existing _convoy_arrived with explicit (30,34) at post-intercept assembly; retain original initial prison assertion.",
+  "natural_gameplay_failure": false,
+  "aborted_by_root_for_confirmed_QA_defect": true,
+  "report_existed_before_stop": false,
+  "production_source_changed": false
+}

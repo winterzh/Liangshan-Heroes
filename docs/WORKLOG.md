@@ -1,5 +1,11 @@
 # 开发日志
 
+## 2026-10-27 追兵QA集合点窄修与终局新批复验
+
+追兵截击135845批因QA误用牢内集结判定被根任务主动中断，exit99、无最终报告；后验／子进程／锁正常闭合，不作自然失败或通过。只将城南集结调用改为既有_convoy_arrived的(30,34)判断，保留初次牢内检查；五GD重新加载PID39100／33.123秒／退出0、错误0、69pins通过，新八流程待重跑。 [中断原件](../qa/campaign_progress_recovery_20261026/daming_continue_candidate/evidence/flow_pursuit_cancelled_20261027_135845/README.md)为9文件／1,033,538字节，863pins、8EXE元数据；[新加载原件](../qa/campaign_progress_recovery_20261026/projectile_filter_candidate/evidence/daming_pursuit_regroup_load_20261027_141224/README.md)为39文件／664,390字节。生产未改，未复制物理profile或存档。
+
+C宿主修正后的新profile四进程141329_f6e4c555复验已开始，终态待验。上一批132文件已推stable并于北京时间14:08回读4d1feccfd1e3bb4dfeb1bf2e8981adc112f2c892，main1598c7c0未变；键鼠验收继续暂停，无Steam发布。
+
 ## 2026-10-27 大名府运动取证与同源连环马复跑入口
 
 125326首Lu A PID74732／588.709秒／退出1、引擎错误0，307项306通过。普通侧向移动实际成功，出口命令安装ST_MOVE／home／非空path；仍在首次safe前Shi29自然阵亡，未保存。完整来源与自有进程／锁后验通过；13文件运动原件保留。友军射手目标中有存活官军57，未记录killer，不指定最后杀伤来源；map_open为整段可通行诊断。

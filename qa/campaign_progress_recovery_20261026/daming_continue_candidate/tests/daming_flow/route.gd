@@ -408,7 +408,7 @@ func _secure_first_crossing(b: Node, prisoners: Array) -> bool:
 	if not cleared: return false
 	if not _check("interception retains original pursuit slots and living protected wounded", b.level.pursuit == original_pool and _reserved_guard_cover(prisoners,reserved) and prisoners.all(func(u): return _alive(u) and _outside_exit(b,u.position)),observe(b)): return false
 	if not _order(b,_escort_group(b),Vector2i(30,34),false): return false
-	if not await _step_wait(b,"original escort regroups after pursuit interception",Callable(self,"_escort_assembled").bind(b,prisoners)): return false
+	if not await _step_wait(b,"original escort regroups after pursuit interception",Callable(self,"_convoy_arrived").bind(b,prisoners,Vector2i(30,34))): return false
 	return _stop_wounded_and_hold_guards(b,prisoners)
 
 func _escort_to_rally(b: Node) -> bool:

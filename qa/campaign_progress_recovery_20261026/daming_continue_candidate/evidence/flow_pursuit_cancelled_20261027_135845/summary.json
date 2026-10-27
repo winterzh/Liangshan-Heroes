@@ -1,0 +1,49 @@
+{
+  "schema": "daming_pursuit_cancelled_summary_v1",
+  "original_run": "D:\\AI项目\\水浒\\开发工程\\.godot\\daming_projectile_flow_20261027\\20261027_135845_aab0f8af",
+  "receipt_sha256": "97b102be7a58f2f937794d12ad61ed5a37c921b8648487d509bef91ac4a0e437",
+  "complete": false,
+  "aborted_by_root_for_confirmed_QA_defect": true,
+  "natural_gameplay_failure": false,
+  "actual_process_count": 1,
+  "pid": 19756,
+  "exit_code": 99,
+  "native_errors": [],
+  "seconds": 341.681,
+  "final_reports": 0,
+  "formal_report_check_count": 0,
+  "source_identity": "source-v1:b22f76f7bf4b8309f9257829364f4afdd6c9262282a25cb6aefacce5aa916132",
+  "static_defect": {
+    "old_predicate": "_escort_assembled checks PRISON_INSIDE(18,18), radius180",
+    "actual_post_intercept_move_destination": [
+      30,
+      34
+    ],
+    "new_predicate": "existing _convoy_arrived bound to (30,34)",
+    "initial_prison_assembly_preserved": true
+  },
+  "qualification": {
+    "source_flow_chain_passed": false,
+    "credited_rewards_qualified": false,
+    "native_sdk_qualified": false,
+    "public_continue_qualified": false,
+    "human_acceptance": false,
+    "native_release_tested": false,
+    "defeat_chain_qualified": false,
+    "full_61_qualified": false,
+    "original_19_faults_qualified": false
+  },
+  "terminal_checks": {
+    "initial_identity_passed": true,
+    "cold_import_qualified": true,
+    "final_identity_passed": true,
+    "child_process_terminal": true,
+    "engine_lane_idle": true,
+    "lock_ownership_confirmed": true,
+    "lock_released": true
+  },
+  "cleanup_errors": [],
+  "physical_business_payload_read": false,
+  "physical_business_payload_copied": false,
+  "runtime_pass_or_natural_failure_not_inferred_from_static_review": true
+}

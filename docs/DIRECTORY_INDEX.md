@@ -146,3 +146,6 @@ qa/campaign_progress_recovery_20261026/continue_binding_candidate/：Flow/Sessio
 
 
 `projectile_filter_candidate/evidence/pursuit_lian_load_20261027_134543/`保存大名府五GD与连环马九GD组合原生加载原件（59文件、118pins），只授加载。`ui_terminal_retry_checkpoint_failure_20261027_131330/`保存C四报告737项通过但宿主D取证失败的24文件原件，原整批资格false；`ui_release_fault_model_complete_20261027_134727/`保存D永久故障模型两进程154项完整原件（15文件、854pins），模型注入与自然运行资格分开。以上均位于`qa/campaign_progress_recovery_20261026/projectile_filter_candidate/evidence/`；物理业务profile、blocker原载荷及EXE均未复制。
+
+
+`daming_continue_candidate/evidence/flow_pursuit_cancelled_20261027_135845/`为根任务确认QA集合点缺陷后主动中断的9文件原件，非自然失败、无最终GD报告；`projectile_filter_candidate/evidence/daming_pursuit_regroup_load_20261027_141224/`为该单调用修正后五GD加载原件（39文件／69pins）。两者均位于`qa/campaign_progress_recovery_20261026/`下。
