@@ -169,3 +169,5 @@ qa/campaign_progress_recovery_20261026/continue_binding_candidate/：Flow/Sessio
 `qa/campaign_progress_recovery_20261026/daming_continue_candidate/evidence/flow_complete_20261027_153316/`保存双角色八进程1398项完整原件：23文件／884pins，完整来源／自身cold／子进程／锁终态通过；四份原closed-A业务record及8EXE仅hash元数据，不入Git。后续52执行器固定消费这批完整原件；8通过不等于52／61已完成。
 
 `daming_continue_candidate/evidence/negative_timeout_20261027_162116/`保留首次52负例首world超时原件：8文件／1810pins，原业务record只hash；`projectile_filter_candidate/evidence/daming_negative_timing_load_20261027_164702/`保存仅增加耗时输出的8GD纯加载原件：39文件／72pins。两路径相对`qa/campaign_progress_recovery_20261026/`，不授52／61通过。
+
+`qa/campaign_progress_recovery_20261026/daming_continue_candidate/evidence/negative_timed_timeout_20261027_164910/`保存耗时版首world完成177／264行后900.252秒超时原件：8文件／1810pins，177行不授world／52／61；后继172552以既有CLI的3600秒宿主等待预算重新完整执行，原worker与断言保持。
