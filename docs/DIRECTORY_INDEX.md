@@ -119,7 +119,7 @@ qa/campaign_progress_recovery_20261026/continue_binding_candidate/：Flow/Sessio
 
 `projectile_filter_candidate/evidence/persistence19_protocol_20261027_101914/`为实际9／12故障证明60项原件；`ui_save_retry_load_20261027_102958/`与`guard_margin_load_20261027_103329/`为对应外部GD加载原件，均位于同候选evidence下。A修订后实际三进程216项已通过；新大名府双角色八流程未完成，加载不授实际流程资格。
 
-`qa/campaign_progress_recovery_20261026/projectile_filter_candidate/tests/ui_config_retry/`与`tests/ui_startup_retry/`分别为B1设置重试、B2启动恢复重试工具，B1修订后实际两进程406项通过，B2实际三进程待跑，各自VALIDATION维护当前资格。三GD纯加载原件位于同候选`evidence/ui_config_retry_load_20261027_111841/`（36运行pins）与`evidence/ui_startup_retry_load_20261027_111956/`（40运行pins）；均未实例化worker。
+`qa/campaign_progress_recovery_20261026/projectile_filter_candidate/tests/ui_config_retry/`与`tests/ui_startup_retry/`分别为B1设置重试、B2启动恢复重试工具，B1修订后实际两进程406项通过，B2实际三进程387项通过，各自VALIDATION维护当前资格。三GD纯加载原件位于同候选`evidence/ui_config_retry_load_20261027_111841/`（36运行pins）与`evidence/ui_startup_retry_load_20261027_111956/`（40运行pins）；均未实例化worker。
 
 `qa/campaign_progress_recovery_20261026/projectile_filter_candidate/tests/ui_terminal_retry/`：自然核心终局四进程的6GD、宿主、契约与来源，新C不继承旧高俅416项；当前六GD已原生加载，实际四进程待运行。`evidence/ui_save_retry_breakpoint_failure_20261027_112148/`、`ui_config_retry_codec_failure_20261027_113510/`分别保存两次未完成首跑；`ui_save_retry_rearm_load_20261027_114727/`保存A修订加载，`config_active_key_probe_20261027_114911/`保存StringName语言模型与原Codec结果，均位于同候选evidence下。模型、加载与完整UI链分开记资格，业务载荷与host blocker不入Git。
 
@@ -134,3 +134,9 @@ qa/campaign_progress_recovery_20261026/continue_binding_candidate/：Flow/Sessio
 
 
 `projectile_filter_candidate/evidence/ui_config_retry_complete_20261027_121110/`保存B1设置重试两进程406项原件：17文件、849pins分类闭合；不包含私有业务profile、blocker载荷或EXE。
+
+
+`qa/campaign_progress_recovery_20261026/daming_continue_candidate/evidence/flow_inner_failure_20261027_122311/`保存内圈修订首A307项的失败原件与冻结源码映射：13文件，未safe／未保存，实际伤员自然阵亡；物理profile和EXE未复制。侧向脱离修订与新执行资格见同候选VALIDATION。
+
+
+同一`projectile_filter_candidate/evidence/`下：`daming_first_exit_load_20261027_125222/`为新侧向路线五GD纯加载原件（69pins，39文件）；`ui_startup_retry_complete_20261027_124055/`为B2中断写入后的启动恢复387项原件（871pins，28文件）。三份private_prepared_scope物理业务副本只保descriptor，不入Git。

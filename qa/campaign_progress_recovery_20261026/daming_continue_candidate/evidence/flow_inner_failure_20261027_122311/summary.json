@@ -1,0 +1,57 @@
+{
+  "schema": "daming_current_flow_archive_summary_v1",
+  "original_run": "D:\\AI项目\\水浒\\开发工程\\.godot\\daming_projectile_flow_20261027\\20261027_122311_f2da6497",
+  "complete": false,
+  "source_flow_chain_passed": false,
+  "actual_reports": [
+    {
+      "role": "lu",
+      "mode": "save_single",
+      "pid": 31552,
+      "checks": 307,
+      "passed": false,
+      "failures": [
+        "first actual safety callback completed fight remains healthy"
+      ],
+      "exit_reason": "",
+      "report_sha256": "45832962d6b5a6e9fc616bf6cc7e0b20b5f0521310b672dcde00a38282f67883"
+    }
+  ],
+  "actual_checks": 307,
+  "actual_passed_checks": 306,
+  "steps": [
+    {
+      "case": "save_single",
+      "passed": false,
+      "errors": [],
+      "pid": 31552,
+      "exit_code": 1,
+      "seconds": 579.25,
+      "stopped_for": null,
+      "log_sha256": "3712df529edce3a2ab29e33957a3b6363a60a1cb6cbd0e736f2e8bcfe9e743bc",
+      "first_role": "lu",
+      "mode": "save_single",
+      "process_nonce": "cf65f3d4c1144476a01b36e9b4249892"
+    }
+  ],
+  "closed_a_roles": [],
+  "receipt_pin_count": 864,
+  "native_or_business_payload_read_or_copied": false,
+  "original_19_faults_qualified": false,
+  "full_61_qualified": false,
+  "public_continue_qualified": false,
+  "native_sdk_qualified": false,
+  "human_acceptance": false,
+  "error": "RuntimeError('Private character QA step failed: save_single')",
+  "failure_boundary": {
+    "first_role": "lu",
+    "selected_first_id": "28",
+    "dead_other_id": "29",
+    "before_first_exit_tick": "22332",
+    "failed_tick": "24604",
+    "no_first_safe": true,
+    "no_save": true,
+    "original_100_and_140_checks_passed": true,
+    "actual_killer_not_recorded": true
+  }
+}

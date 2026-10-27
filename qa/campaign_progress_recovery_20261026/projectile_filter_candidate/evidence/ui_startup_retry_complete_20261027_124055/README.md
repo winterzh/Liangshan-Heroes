@@ -1,0 +1,11 @@
+# B2 中断写入后的启动恢复、真实重试与独立读回
+
+固定b22新profile实际三进程完成387项：producer PID61396在真实cfg_before_install完整prepared边界通过27项后由宿主计划终止（退出1）；reader PID33368启动恢复277项与第三进程PID44324独立读回83项均通过、退出0。预定中断不能写成三个正常退出。
+
+原Windows liveness helper实际核原owner PID61396为dead/HANDLE_SIGNALED，宿主保留原Popen进程HANDLE贯穿后续，防止PID重用。第二进程持有真实candidate的no-DELETE句柄，原启动与RetryCampaignStartup均实际得到CFG_INSTALL_RENAME，完整pending观察一致。释放宿主句柄后同writer/record/scope/owner/CAS恢复，原事务仅prepared1→applied2；settlement_authorized=false。
+
+第三进程原生启动及60正常帧后typed checkpoint、偏好、业务库存和两条journal均不增长；只有原startup_checked信号，无新增UI动作。三进程完整来源／自身cold／pins／子进程、故障及进程HANDLE、native helper与lane/锁终态均闭合。
+
+原receipt/controller/producer的prepared与提交元数据、两份完整reader报告、日志、gate/ACK及native helper结果保留；全部文本pin按本次冻结原字节存放或引用固定66d2cd7662a0d87daa6a83ccec16d75722dcb800的逐blob实核来源。EXE只保实际终态hash元数据；private_prepared_scope中的record/candidate.cfg/owner三份业务载荷仅保原收据descriptor，不打开、不复制。物理profile/CFG/Settings/Slot/LC/缓存不入Git。
+
+仅授本来源的B2三进程启动恢复切片；自然终局重试、释放失败模型、完整战役、61阶段、公开入口、发行程序、SDK、OS键鼠、人工验收或发布仍待各自证据。

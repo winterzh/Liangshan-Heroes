@@ -79,3 +79,10 @@ python qa/campaign_progress_recovery_20261026/daming_continue_candidate/tests/da
 ```
 
 实际模型收据：`D:/CodexQA/daming_fixture_model/69a3ca286750484eaf3b03cd18bffcff/receipt.json`，SHA `6d1d0afbdaa48f58db13501845b87d5254cafb447e0273428ce8c1e94b6e5b8b`。53 项通过，全部使用合成报告/PID与新隔离文件；覆盖双角色原字节复制、错误退出/PID/nonce/source/报告 hash、gen2/错上下文/错误 payload、额外 owner/记录/pending/空 writing、输出碰撞、源复制中变化、冻结后目录变化与后续活 profile 追加不误伤。Windows 创建 symlink 权限不足，明确跳过该创建用例；另以实际新建私有 junction 验证 reparse 拒绝通过。模型目录同时保留当时执行的四份 Python 来源原字节。未启动 Godot、未验证实际 A 或原生 Slot 解码；53 不计入八进程玩法检查数。
+
+
+## 2026-10-27 单人撤离的普通侧向脱离与运动证据
+
+内圈修订首跑`20261027_122311_f2da6497`：Lu首A307项306通过；三名原近卫实际≤100且清障后原140保护通过。随后仅令Lu28向出口普通移动，2272tick后Shi29真实阵亡；Lu仍活、九近卫仍活，未safe／未保存。报告没有killer或该次完整运动状态，不能断言攻击来源或具体阻塞原因。原件保留，不将这次失败转称整体通过。
+
+后继只修QA玩家路线：第一伤员先选朝另一伤员外侧的3—5格可达空地，实际普通move走出至少64px后，再普通move到原EXIT。侧向点仍严格在出口外，≤256px有效路径且不点敌人／驻军／护卫重叠；两次命令均核唯一原actor、ST_MOVE、实际home、非空path、空target和独立速度上限。新增前后运动取证，便于区分实际指令与笼统健康失败。另一伤员保留至少三原护卫，原自然safe事件、单safe、首次保存、双角色八流程、时限与业务断言保留；不写HP／位置／时钟／寻路／任务状态。本修订尚待原生加载和新的完整八流程，不继承旧Lu四阶段成功。

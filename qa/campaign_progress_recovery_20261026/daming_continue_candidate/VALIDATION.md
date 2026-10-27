@@ -72,3 +72,10 @@ AST、帮助及30命名来源检查通过。纯加载批20261027_084545_37422b03
 875个pins已分账核对：865冻结文本、8EXE只保原哈希、2closed-A物理业务文件只保descriptor元数据。归档不读取或复制物理Slot／LC，原报告完整保留。该批不授八流程、52负例、61阶段或原19类故障资格。
 
 内圈修订已实现并通过[原生加载](../projectile_filter_candidate/evidence/guard_margin_load_20261027_103329/README.md)：新route9c1df93b先固定原reserved IDs，运行时选可达／无敌或驻入点击／半径间距合法的内圈点，逐人普通move，实际每伤员至少3人≤100后H；原140、同ID和清障后检查保持。新增等待后重新取得当前活敌，避免旧引用过期。仅两helper和清障调用发生逻辑变化，统一行尾后35个原函数正文相同；本轮route和README实际LF转CRLF，不能称原始字节不变。PID59700加载退出0／错误0，40.213秒；新八流程仍待执行。
+
+
+## 内圈实跑通过距离保护，单人撤离前自然失败
+
+[本批原件](evidence/flow_inner_failure_20261027_122311/README.md)：20261027_122311_f2da6497仅Lu首A，PID31552，579.25秒，退出1／引擎错误0；307项306通过，唯一first actual safety callback completed fight remains healthy。三名原近卫85／75／89实际普通move，双伤员各3人≤100，H后清障的原140条件通过。两伤员抵出口外仍HP360／230、九护卫活；tick22332仅给Lu28向出口的普通移动，tick24604 Shi29自然HP0／dying，Lu仍HP360，未任一safe／未保存。原观察未记录killer或这次完整movement状态，不能指定杀伤者或阻塞原因。后续七进程未跑；来源、自有子进程和锁终态通过，cleanup_errors=[]。
+
+后继仅改QA路线：新增普通侧向脱离，再到原EXIT；两命令核实际唯一actor／ST_MOVE／home／非空path／无target／独立速度，增加移动前后证据。另一伤员保留至少三护卫，单safe、原人数距离、自然回调、保存和完整八流程门槛保留。旧route9c1df93b逐字逆向恢复通过：只新增两helper和修改原first_exit，其余原函数及CRLF字节保持；新routef338b3b8及30命名来源检查通过；[五GD原生加载](../projectile_filter_candidate/evidence/daming_first_exit_load_20261027_125222/README.md)实际PID50460，40.188秒，退出0／错误0、69pins后验通过，未实例化worker。新完整八流程20261027_125326_b7c20f07已开始，尚无终态。当前52与61仍无前置资格。

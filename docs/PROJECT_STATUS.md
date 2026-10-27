@@ -6,7 +6,7 @@
 
 | 项目 | 当前状态 |
 | --- | --- |
-| GitHub | [winterzh/Liangshan-Heroes / stable](https://github.com/winterzh/Liangshan-Heroes/tree/codex/sync-20260905-stable)：黄泥冈实现、连环马胜败及恢复候选/QA已同步；前批远端回读`d5cc7b34c45d713352b346e27eb1c04cd8f1f220`，保存重试216项、验证器修订及12GD加载证据已同步；本批设置重试406项、释放失败模型工具及加载原件随本次提交，远端状态以回读为准；main仍为`1598c7c0cdccdc0bf1be8968608f79f0c43dcfc9`，未合并 |
+| GitHub | [winterzh/Liangshan-Heroes / stable](https://github.com/winterzh/Liangshan-Heroes/tree/codex/sync-20260905-stable)：黄泥冈实现、连环马胜败及恢复候选/QA已同步；前批远端回读`66d2cd7662a0d87daa6a83ccec16d75722dcb800`，保存216项、设置406项、恢复工具及加载证据已同步；本批启动恢复387项、大名府新失败原件、侧向路线修订及五GD加载随本次提交，远端状态以回读为准；main仍为`1598c7c0cdccdc0bf1be8968608f79f0c43dcfc9`，未合并 |
 | 主线合并 | 48042d84补齐旧stable合并历史，ffa625de补齐交接文档；本页修订随本次文档提交同步，以分支最新提交为准 |
 | Steam Windows | default Build **26048429** / Manifest **697009053566575953**，2026-10-20完成发布验收 |
 | 冻结生产来源 | 0083b47abac098c5ebd7231e327085c4ba3299cd；后继QA工具和文档提交未改变游戏包 |
