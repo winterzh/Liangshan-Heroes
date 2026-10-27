@@ -37,6 +37,12 @@
 
 checkpoint 保留实际 disk / prefs / journal 及对应 exact_disk / exact_prefs / exact_journal。跨进程对比使用生产 Codec 的 typed 结果和原文件 SHA，不以 JSON int/float 的松散或错误比较代替精确状态。最终 journal 记录真实 prepared1/applied2 和原 transaction；初次失败的 revision 0 不表示存在 generation 0 记录。
 
+CFG staging 的 _active 是内部 Dictionary，新增 semantics_sha256 键实际为 StringName，不能直接当成生产存档 Codec 支持的 Dictionary 编码。QA 的 exact_active 使用 qa_cfg_staging_active_observation_v1：只接受原六字段，按实际键顺序记录 index、原 key_type（String 或 StringName）、key_text 和每个原值的生产 Codec 编码。未知、重复或非预期键以及任一值编码失败都拒绝；不改原 _active、不把 StringName 隐式降为 String、不放宽生产 Codec。原 is_same 引用、冻结 ConfigFile、事务、文件与语义断言继续保留。
+
+对象 instance_id 是 Godot 返回的非零 signed-int64 十进制文本，实际 RefCounted 可以为负。宿主严格校验规范表示、范围与同进程前后相等，拒绝 +号、前导零、-0、零和越界；PID、provider PID 与创建时间等原正数约束不变，也不把不同进程的对象 ID 当成同一对象。
+
+首跑 [20261027_113510 失败原件](../../evidence/ui_config_retry_codec_failure_20261027_113510/README.md) 保留 144 项中的 139 项通过、4 次 UNSUPPORTED_TYPE 观察失败及最终阶段未完成。只有 PID25204，解除故障后的成功重试和第二进程均未发生。这证明旧 QA 观察器不支持上述实际键类型，不证明生产写入损坏；当前观察契约修订仍需重新加载和新批次实跑，不能继承首跑资格。
+
 宿主独立验证 journal 原 envelope、payload 字节数与 SHA、1→2 前驱关系和同事务字段，并将原 owner 文件/PID、首失败/再次失败对象观察及最后 transaction 交叉绑定。GD 报告不自行授予整链资格；只有两个原 Popen 终态、完整来源后验和本宿主锁释放都成立，host receipt 才可将 two_process_config_retry_qualified 设为 true。
 
 ## 命令

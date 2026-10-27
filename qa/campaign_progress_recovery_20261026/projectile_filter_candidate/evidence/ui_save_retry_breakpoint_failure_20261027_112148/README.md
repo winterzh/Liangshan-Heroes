@@ -1,0 +1,7 @@
+# 保存界面三进程首跑：调用栈验证中止
+
+第一进程 PID3428 的真实保存退出已通过30项。第二进程 PID32836正常恢复并完成确认/取消观察；原ConfirmSave已追加gen2并到达Snapshot.release:219，宿主持有真实owner.json的no-DELETE句柄。随后再次在同一原保存调用栈暂停，宿主误按RetrySave调用栈检查而拒绝并终止自己的子进程。两次原stack packet SHA一致，尚未有第二进程最终报告，第三进程未启动。
+
+整体complete=false/three_process_flow_qualified=false，不把日志中的局部PASS累加为完成报告。此记录只证明首保存成功及验证器在重试检查前停止，不证明游戏重试路径失败或成功。完整来源后验、两子进程终态、自有句柄关闭和锁释放均通过。
+
+全部原始文本、失败时精确工具及来源均以SHA映射到本目录原字节或固定0217595e Git blob。物理Slot/LC/CFG/owner和私有profile未读取或复制进归档；EXE仅核SHA。后继修订须重新加载并重跑完整三进程，不能续用此profile冒充新通过。

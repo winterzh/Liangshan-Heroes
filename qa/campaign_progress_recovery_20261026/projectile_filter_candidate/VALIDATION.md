@@ -52,3 +52,12 @@ Graph返回的wire.records已是Codec编码数据，后继测试按实际存储�
 [B1](tests/ui_config_retry/VALIDATION.md)三GD原生加载PID28348，32.059秒，退出0／错误0，36运行pins；[B2](tests/ui_startup_retry/VALIDATION.md)三GD原生加载PID23472，37.853秒，退出0／错误0，40运行pins。两者只load／can_instantiate，未实例化worker，实际两／三进程尚未执行；B1父路径阻塞和B2死owner完整prepared恢复也未获运行资格。A实际保存重试三进程正在运行，尚无终态。
 
 高俅核心胜利416项继续有效；大名府卢先四进程633项通过、石先首A失败的原件保持，内圈站位修订只授加载。双角色八流程、52负例、完整61阶段、剩余UI终局／释放路径、云同步、真实SDK、奖励仅一次与桌面人工验收仍待完成。本批未发布或合并main。
+
+## 2026-10-27 UI首跑失败与观察器修订
+
+[A首跑](tests/ui_save_retry/VALIDATION.md)只有第一进程真实保存30项通过，第二进程被验证器的重复初始调用栈检查中止，第三未启动；修订后四GD加载PID74964退出0，已另起新profile完整三进程。[B1首跑](tests/ui_config_retry/VALIDATION.md)实际144项报告139通过／5失败，原因是QA将StringName键交给原Codec；实际负RefCounted ID也不能按正数校验。旧原件和[原生小模型](evidence/config_active_key_probe_20261027_114911/README.md)均保留，生产Codec／事务不变。B1、[B2](tests/ui_startup_retry/VALIDATION.md)、[C](tests/ui_terminal_retry/VALIDATION.md)相应观察与实例ID窄修后，组合57命名输入／18Python AST已过，12GD和实际两／三／四进程仍须各自完成。未恢复OS键鼠、未采用生产或发布。
+
+
+## 当前A保存重试216项通过，修订12GD加载完成
+
+新profile`20261027_115057_81aa46a4`的保存／取消／同事务重试／读取失败关闭再继续已完成三进程30／137／49项，共216项，全部退出0；来源、自有句柄、子进程和锁后验通过。详见[A当前资格](tests/ui_save_retry/VALIDATION.md)。[B1/B2/C修订加载原件](evidence/ui_retry_tools_load_20261027_121008/README.md)PID40988、39.065秒、退出0／错误0，57命名输入／18AST／129运行pins；只load及can_instantiate。B1新profile完整两进程正在执行，B2与C各自完整三／四进程待验。前述旧条目保留当时状态，不替代本段当前结果。

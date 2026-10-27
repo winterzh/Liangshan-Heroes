@@ -117,6 +117,14 @@ qa/campaign_progress_recovery_20261026/continue_binding_candidate/：Flow/Sessio
 
 大名府双路线部分结果原件：`qa/campaign_progress_recovery_20261026/daming_continue_candidate/evidence/flow_escort_partial_20261027_094353/`。原七GD修正后加载：同QA下`projectile_filter_candidate/evidence/tools_load_complete_20261027_101643/`；真实保存／取消／文件占用重试三进程外部工具：`projectile_filter_candidate/tests/ui_save_retry/`。
 
-`projectile_filter_candidate/evidence/persistence19_protocol_20261027_101914/`为实际9／12故障证明60项原件；`ui_save_retry_load_20261027_102958/`与`guard_margin_load_20261027_103329/`为对应外部GD加载原件，均位于同候选evidence下。A保存重试实际三进程正在运行，尚无终态；新大名府双角色八流程未完成，加载不授实际流程资格。
+`projectile_filter_candidate/evidence/persistence19_protocol_20261027_101914/`为实际9／12故障证明60项原件；`ui_save_retry_load_20261027_102958/`与`guard_margin_load_20261027_103329/`为对应外部GD加载原件，均位于同候选evidence下。A修订后实际三进程216项已通过；新大名府双角色八流程未完成，加载不授实际流程资格。
 
 `qa/campaign_progress_recovery_20261026/projectile_filter_candidate/tests/ui_config_retry/`与`tests/ui_startup_retry/`分别为B1设置重试、B2启动恢复重试工具，实际两／三进程待跑，各自VALIDATION维护当前资格。三GD纯加载原件位于同候选`evidence/ui_config_retry_load_20261027_111841/`（36运行pins）与`evidence/ui_startup_retry_load_20261027_111956/`（40运行pins）；均未实例化worker。
+
+`qa/campaign_progress_recovery_20261026/projectile_filter_candidate/tests/ui_terminal_retry/`：自然核心终局四进程的6GD、宿主、契约与来源，新C不继承旧高俅416项；当前六GD已原生加载，实际四进程待运行。`evidence/ui_save_retry_breakpoint_failure_20261027_112148/`、`ui_config_retry_codec_failure_20261027_113510/`分别保存两次未完成首跑；`ui_save_retry_rearm_load_20261027_114727/`保存A修订加载，`config_active_key_probe_20261027_114911/`保存StringName语言模型与原Codec结果，均位于同候选evidence下。模型、加载与完整UI链分开记资格，业务载荷与host blocker不入Git。
+
+
+`projectile_filter_candidate/evidence/ui_retry_tools_load_20261027_121008/`保留B1/B2/C修订组合12GD原生加载原件：129运行pins、62文件，实际流程资格仍分别维护于各工具VALIDATION。
+
+
+`projectile_filter_candidate/evidence/ui_save_retry_complete_20261027_115057/`保存修订后A三进程216项完整原件与来源引用：31文件，864运行pins；其旧失败档继续保留。

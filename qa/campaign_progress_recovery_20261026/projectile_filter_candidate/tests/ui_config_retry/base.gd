@@ -76,6 +76,27 @@ func exact(value: Variant) -> Variant:
 	check("native typed Codec observation",encoded.get("ok",false),encoded.get("code",""))
 	return encoded.get("value",{})
 
+func active_observation(value: Dictionary) -> Dictionary:
+	# QA evidence only: preserve native key type/order; encode each real value
+	# with the unchanged production Codec. Never rewrite the retained dictionary.
+	var expected: Array[String] = ["request","original_sha256","original_owner","transaction","stage","semantics_sha256"]
+	var keys: Array = value.keys()
+	if not check("staging active has exactly six original fields", keys.size() == expected.size()): return {}
+	var entries: Array = []
+	var seen: Array[String] = []
+	for index: int in range(keys.size()):
+		var key: Variant = keys[index]
+		var key_type: int = typeof(key)
+		if not check("staging active key is String or StringName", key_type in [TYPE_STRING, TYPE_STRING_NAME], {"index":index,"key_type":key_type}): return {}
+		var key_text: String = String(key)
+		if not check("staging active key belongs to exact unique field set", key_text in expected and key_text not in seen, {"index":index,"key_type":key_type,"key_text":key_text}): return {}
+		seen.append(key_text)
+		var encoded: Dictionary = Codec.new().encode(value[key])
+		if not check("staging active value retains original typed Codec", encoded.get("ok",false), {"key_text":key_text,"code":encoded.get("code",""),"path":encoded.get("path","")}): return {}
+		entries.append({"index":index,"key_type":key_type,"key_text":key_text,"value":encoded.value})
+	if not check("staging active observation covers every original field", seen.size() == expected.size()): return {}
+	return {"schema":"qa_cfg_staging_active_observation_v1","entries":entries}
+
 func identity_row() -> Dictionary:
 	return {"content_version":trusted.get("content_version",""),"engine_sha256":trusted.get("engine_binary_sha256",""),"source_mode":trusted.get("source_mode",false)}
 
@@ -183,7 +204,7 @@ func pending_observation() -> Dictionary:
 	var head: Dictionary = writer._chain()
 	var semantics: Dictionary = Values.semantics(writer._frozen_cfg)
 	var owner_path: String = writer.directory.path_join("writing/owner.json")
-	return {"writer_instance_id":str(writer.get_instance_id()),"frozen_cfg_instance_id":str(writer._frozen_cfg.get_instance_id()),"transaction":writer._active.transaction,"stage":writer._active.stage,"directory":writer.directory,"owner_path":owner_path,"owner_raw":writer._lock_raw,"owner_sha256":FileAccess.get_sha256(owner_path),"locked":writer._locked,"lock_created":writer._lock_created,"head_ok":head.get("ok",false),"head_revision":head.get("revision",-1),"head_sha256":head.get("file_sha256",""),"original_sha256":writer._active.original_sha256,"exact_active":exact(writer._active),"exact_request_scope":exact(Campaign._cfg_writer_scope),"exact_frozen_semantics":exact(semantics),"exact_failed_prefs":exact(Campaign._prefs_failed),"exact_failed_scope":exact(Campaign._prefs_failed_scope),"frozen_text_sha256":writer._frozen_cfg.encode_to_text().sha256_text(),"pending_record_empty":writer._pending_record.is_empty(),"inventory":writer.inventory(),"disk":disk_row(),"tree_paused":get_tree().paused,"flow_phase":int(flow.phase)}
+	return {"writer_instance_id":str(writer.get_instance_id()),"frozen_cfg_instance_id":str(writer._frozen_cfg.get_instance_id()),"transaction":writer._active.transaction,"stage":writer._active.stage,"directory":writer.directory,"owner_path":owner_path,"owner_raw":writer._lock_raw,"owner_sha256":FileAccess.get_sha256(owner_path),"locked":writer._locked,"lock_created":writer._lock_created,"head_ok":head.get("ok",false),"head_revision":head.get("revision",-1),"head_sha256":head.get("file_sha256",""),"original_sha256":writer._active.original_sha256,"exact_active":active_observation(writer._active),"exact_request_scope":exact(Campaign._cfg_writer_scope),"exact_frozen_semantics":exact(semantics),"exact_failed_prefs":exact(Campaign._prefs_failed),"exact_failed_scope":exact(Campaign._prefs_failed_scope),"frozen_text_sha256":writer._frozen_cfg.encode_to_text().sha256_text(),"pending_record_empty":writer._pending_record.is_empty(),"inventory":writer.inventory(),"disk":disk_row(),"tree_paused":get_tree().paused,"flow_phase":int(flow.phase)}
 
 func failure_valid() -> bool:
 	return check("actual settings failure is retained CFG_STAGE_PARENT",flow.phase == flow.Phase.ERROR and flow.last_result.get("code") == "CFG_STAGE_PARENT" and not flow.last_result.get("ok",true) and flow.last_result.get("config_pending",false) and Campaign._cfg_writer != null and Campaign._cfg_writer.busy() and Campaign._cfg_writer._frozen_cfg != null and Campaign._cfg_writer._active.get("stage") == "staging" and get_tree().paused and flow.find_child("RetryCampaignConfig",true,false) != null and no_world(),flow.last_result)

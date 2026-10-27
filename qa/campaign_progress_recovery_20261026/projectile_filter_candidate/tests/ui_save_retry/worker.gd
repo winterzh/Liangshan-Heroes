@@ -107,6 +107,8 @@ func retry_run() -> void:
 	for index in range(3): await get_tree().process_frame
 	check("error modal keeps actual HELD world and clock",exact(snapshot(true)) == held_exact and exact(battle._run_clock.capture().get("record",{})) == held_clock and same_pending())
 	if not passed(): finish_failure("held_error"); return
+	if not await gate("arm_retry_release",{"owner_path":owner_path,"expected_code":"LOCK_RELEASE","expected_revision":retained_pending.expected_revision,"expected_sha256":retained_pending.expected_sha256}): finish_failure("retry_owner_arm"); return
+	if not same_pending(): finish_failure("retry_rearmed_pending_scope"); return
 	received = false
 	if not press(named(flow,"RetrySave"),"actual RetrySave while native owner fault remains"): finish_failure("first_retry_button"); return
 	if not await wait_operation() or not failure_is_owned() or not same_pending(): finish_failure("blocked_retry"); return

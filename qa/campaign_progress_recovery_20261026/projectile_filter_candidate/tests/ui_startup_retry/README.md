@@ -12,6 +12,8 @@
 
 三阶段只创建一次私有环境，后续进程复制环境字典。每进程有不同 process_nonce，全批 batch_nonce/profile 相同。新进程不能继承上一进程的对象标识；同对象断言只用于第二进程内部两个失败和最终重试。
 
+宿主按 Godot 实际返回值，将 instance_id 严格视为非零 signed-int64 的规范十进制文本；RefCounted ID 可以为负，不能以只准正数误拒真实对象。拒绝 +号、前导零、-0、零及越界，保留同进程同对象检查；PID、provider PID、创建时间的原正数约束不变。此宿主校验修订不改变本片三份 GD、真实 recovery active 结构或 candidate/record 断言，也不继承 B1 失败批次的运行资格。
+
 “三个进程”指三个实际 Godot 主进程；生产恢复链另外启动的原 ProcessLivenessProbe 不冒充这三阶段。宿主保留原生产者的 Popen/HANDLE 至读者完成，并保存真实 process_liveness/v2 查询原件，逐项核 nonce、目标生产者 PID、provider PID 与当前原生 dead 结果。unknown、超时或迟到报告不能当作已接受的死亡证明。第三次启动不得新增这些恢复查询；宿主只观察 helper 终态，不能按外部 PID 强杀它们来制造收尾通过。
 
 ## 当前生产链的精确边界

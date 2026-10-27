@@ -1,0 +1,284 @@
+{
+  "mode": "retry_save",
+  "profile": "D:\\CodexQA\\ui_save_retry\\06de75bf1fe6",
+  "process_nonce": "dde3323acc8b42a48fc331450becd49b",
+  "complete": false,
+  "process_terminal": true,
+  "gates": [
+    {
+      "request": {
+        "batch_nonce": "06de75bf1fe64a8bbc8503f8c4bf3136",
+        "content_version": "source-v1:b22f76f7bf4b8309f9257829364f4afdd6c9262282a25cb6aefacce5aa916132",
+        "detail": {
+          "expected_revision": 1,
+          "expected_sha256": "6417ff015cb1c58f577802080c3713fd3e2e461cb026a18c24b9f9b183d0985f",
+          "owner_path": "D:/CodexQA/ui_save_retry/06de75bf1fe6/appdata/Godot/app_userdata/水浒英雄传：八幕战役/continue/v1/5088120/1/writing/owner.json",
+          "slot_directory": "D:/CodexQA/ui_save_retry/06de75bf1fe6/appdata/Godot/app_userdata/水浒英雄传：八幕战役/continue/v1/5088120/1"
+        },
+        "engine_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+        "mode": "retry_save",
+        "phase": "arm_owner_release",
+        "pid": 32836,
+        "process_nonce": "dde3323acc8b42a48fc331450becd49b",
+        "profile": "D:\\CodexQA\\ui_save_retry\\06de75bf1fe6",
+        "schema": "ui_save_retry_gate_v1"
+      },
+      "request_path": "D:\\AI项目\\水浒\\开发工程\\.godot\\ui_save_retry_20261027\\20261027_112148_90dff64d\\01_retry_save\\arm_owner_release.request.json",
+      "request_sha256": "ed1e76bb8272f9568c22ae668ec15d8918ab96192c64450f721c156d968194f4",
+      "monotonic_ns": 610562729059900,
+      "ack_sha256": "527f7a64057ec38c660711015701cb7d85a3f8ac92389c6590f08708923aee6d"
+    }
+  ],
+  "debug_stops": [
+    {
+      "pid": 32836,
+      "process_nonce": "dde3323acc8b42a48fc331450becd49b",
+      "frames": [
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 219,
+          "function": "release"
+        },
+        {
+          "source": "res://scripts/run_slot_store.gd",
+          "line": 175,
+          "function": "write_slot"
+        },
+        {
+          "source": "res://scripts/run_world_session.gd",
+          "line": 139,
+          "function": "save_held"
+        },
+        {
+          "source": "res://scripts/continue_flow.gd",
+          "line": 252,
+          "function": "_capture_ready"
+        },
+        {
+          "source": "res://scripts/run_battle_barrier.gd",
+          "line": 196,
+          "function": "_idle_boundary"
+        }
+      ],
+      "source_sha256": "f222e8b3798355164ab29da4d0dc534362e2bea680ec7f7dbe7462b86df8959f",
+      "stack_packet_sha256": "6695a7b0020a8ab931cd31c3ba05de54884e8c7433ca14f87d456f4c330cf337",
+      "monotonic_ns": 610608401567600,
+      "owner": {
+        "path": "D:\\CodexQA\\ui_save_retry\\06de75bf1fe6\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\continue\\v1\\5088120\\1\\writing\\owner.json",
+        "raw": "{\"owner\":\"1\",\"pid\":\"32836\",\"token\":\"c06797e90bfb165163480f9a8eb1d919\",\"version\":\"1\"}",
+        "sha256": "1b635efa6829803076e0c7f86c6d862f07e7f4d4b59eec3cfb9467ef04c3f36b",
+        "bytes": 84,
+        "metadata": {
+          "owner": "1",
+          "pid": "32836",
+          "token": "c06797e90bfb165163480f9a8eb1d919",
+          "version": "1"
+        }
+      },
+      "committed_record": {
+        "path": "D:\\CodexQA\\ui_save_retry\\06de75bf1fe6\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\continue\\v1\\5088120\\1\\record_0000000002.json",
+        "bytes": 3931662,
+        "sha256": "9ab69b6a70197aa51f2de95da77eb0057d4bd687d686740ec1ebbfc2e4b16d88",
+        "generation": 2,
+        "previous_sha256": "6417ff015cb1c58f577802080c3713fd3e2e461cb026a18c24b9f9b183d0985f",
+        "payload_sha256": "ef2d17a287db1e5e230b35d87b3f9205b0c7958ccb80fb669c070a8aafb83e57",
+        "binding": {
+          "kind": "uncredited",
+          "receipt_sha256": "1a59f250c6d1ca88f786e9e40ae387ff34ade36233ed424e563c92ea83ae8e42",
+          "token": "917ef49c741832ad0096ad431a53c791"
+        }
+      },
+      "business_inventory": {
+        "continue": {
+          "exists": true,
+          "files": {
+            "5088120/1/record_0000000001.json": {
+              "sha256": "6417ff015cb1c58f577802080c3713fd3e2e461cb026a18c24b9f9b183d0985f",
+              "bytes": 3932843
+            },
+            "5088120/1/record_0000000002.json": {
+              "sha256": "9ab69b6a70197aa51f2de95da77eb0057d4bd687d686740ec1ebbfc2e4b16d88",
+              "bytes": 3931662
+            },
+            "5088120/1/writing/owner.json": {
+              "sha256": "1b635efa6829803076e0c7f86c6d862f07e7f4d4b59eec3cfb9467ef04c3f36b",
+              "bytes": 84
+            },
+            "local_runs/917ef49c741832ad0096ad431a53c791/5088120/1/record_0000000001.json": {
+              "sha256": "1a59f250c6d1ca88f786e9e40ae387ff34ade36233ed424e563c92ea83ae8e42",
+              "bytes": 513
+            }
+          },
+          "directories": [
+            ".",
+            "5088120",
+            "5088120/1",
+            "5088120/1/writing",
+            "local_runs",
+            "local_runs/917ef49c741832ad0096ad431a53c791",
+            "local_runs/917ef49c741832ad0096ad431a53c791/5088120",
+            "local_runs/917ef49c741832ad0096ad431a53c791/5088120/1"
+          ]
+        },
+        "campaign.cfg": {
+          "exists": false
+        }
+      },
+      "expected_cas": {
+        "revision": 1,
+        "file_sha256": "6417ff015cb1c58f577802080c3713fd3e2e461cb026a18c24b9f9b183d0985f"
+      }
+    },
+    {
+      "pid": 32836,
+      "process_nonce": "dde3323acc8b42a48fc331450becd49b",
+      "frames": [
+        {
+          "source": "res://scripts/run_snapshot_store.gd",
+          "line": 219,
+          "function": "release"
+        },
+        {
+          "source": "res://scripts/run_slot_store.gd",
+          "line": 175,
+          "function": "write_slot"
+        },
+        {
+          "source": "res://scripts/run_world_session.gd",
+          "line": 139,
+          "function": "save_held"
+        },
+        {
+          "source": "res://scripts/continue_flow.gd",
+          "line": 252,
+          "function": "_capture_ready"
+        },
+        {
+          "source": "res://scripts/run_battle_barrier.gd",
+          "line": 196,
+          "function": "_idle_boundary"
+        }
+      ],
+      "source_sha256": "f222e8b3798355164ab29da4d0dc534362e2bea680ec7f7dbe7462b86df8959f",
+      "stack_packet_sha256": "6695a7b0020a8ab931cd31c3ba05de54884e8c7433ca14f87d456f4c330cf337",
+      "monotonic_ns": 610609419009900
+    }
+  ],
+  "faults": [
+    {
+      "kind": "existing_owner_delete_denial",
+      "path": "D:\\CodexQA\\ui_save_retry\\06de75bf1fe6\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\continue\\v1\\5088120\\1\\writing\\owner.json",
+      "native_share_mode": 3,
+      "open_existing": true,
+      "owner_sha256": "1b635efa6829803076e0c7f86c6d862f07e7f4d4b59eec3cfb9467ef04c3f36b",
+      "armed_ns": 610608455531800,
+      "only_owner_file_not_writing_directory": true
+    }
+  ],
+  "post_errors": [],
+  "debugger_locals_read": false,
+  "host_production_object_injection": false,
+  "before_business": {
+    "continue": {
+      "exists": true,
+      "files": {
+        "5088120/1/record_0000000001.json": {
+          "sha256": "6417ff015cb1c58f577802080c3713fd3e2e461cb026a18c24b9f9b183d0985f",
+          "bytes": 3932843
+        },
+        "local_runs/917ef49c741832ad0096ad431a53c791/5088120/1/record_0000000001.json": {
+          "sha256": "1a59f250c6d1ca88f786e9e40ae387ff34ade36233ed424e563c92ea83ae8e42",
+          "bytes": 513
+        }
+      },
+      "directories": [
+        ".",
+        "5088120",
+        "5088120/1",
+        "local_runs",
+        "local_runs/917ef49c741832ad0096ad431a53c791",
+        "local_runs/917ef49c741832ad0096ad431a53c791/5088120",
+        "local_runs/917ef49c741832ad0096ad431a53c791/5088120/1"
+      ]
+    },
+    "campaign.cfg": {
+      "exists": false
+    }
+  },
+  "before_local_lifecycle": {
+    "exists": true,
+    "files": {
+      "917ef49c741832ad0096ad431a53c791/5088120/1/record_0000000001.json": {
+        "sha256": "1a59f250c6d1ca88f786e9e40ae387ff34ade36233ed424e563c92ea83ae8e42",
+        "bytes": 513
+      }
+    },
+    "directories": [
+      ".",
+      "917ef49c741832ad0096ad431a53c791",
+      "917ef49c741832ad0096ad431a53c791/5088120",
+      "917ef49c741832ad0096ad431a53c791/5088120/1"
+    ]
+  },
+  "command": [
+    "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+    "--path",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_075456_3e4a48ab\\project",
+    "--rendering-method",
+    "gl_compatibility",
+    "--resolution",
+    "1280x720",
+    "--position",
+    "30000,30000",
+    "--remote-debug",
+    "tcp://127.0.0.1:49680",
+    "--script",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\ui_save_retry_20261027\\20261027_112148_90dff64d\\workers\\bootstrap.gd"
+  ],
+  "pid": 32836,
+  "error": "RuntimeError('Wrong Store/Session/Flow release call chain')",
+  "traceback": "Traceback (most recent call last):\n  File \"D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\projectile_filter_candidate\\tests\\ui_save_retry\\run_ui_save_retry.py\", line 462, in execute_stage\n    require(expected in ordered[cursor:], 'Wrong Store/Session/Flow release call chain')\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\AI项目\\水浒\\开发工程\\qa\\campaign_progress_recovery_20261026\\projectile_filter_candidate\\tests\\ui_save_retry\\run_ui_save_retry.py\", line 61, in require\n    raise RuntimeError(message)\nRuntimeError: Wrong Store/Session/Flow release call chain\n",
+  "exit_code": 1,
+  "owned_handles_closed": true,
+  "after_business": {
+    "continue": {
+      "exists": true,
+      "files": {
+        "5088120/1/record_0000000001.json": {
+          "sha256": "6417ff015cb1c58f577802080c3713fd3e2e461cb026a18c24b9f9b183d0985f",
+          "bytes": 3932843
+        },
+        "5088120/1/record_0000000002.json": {
+          "sha256": "9ab69b6a70197aa51f2de95da77eb0057d4bd687d686740ec1ebbfc2e4b16d88",
+          "bytes": 3931662
+        },
+        "5088120/1/writing/owner.json": {
+          "sha256": "1b635efa6829803076e0c7f86c6d862f07e7f4d4b59eec3cfb9467ef04c3f36b",
+          "bytes": 84
+        },
+        "local_runs/917ef49c741832ad0096ad431a53c791/5088120/1/record_0000000001.json": {
+          "sha256": "1a59f250c6d1ca88f786e9e40ae387ff34ade36233ed424e563c92ea83ae8e42",
+          "bytes": 513
+        }
+      },
+      "directories": [
+        ".",
+        "5088120",
+        "5088120/1",
+        "5088120/1/writing",
+        "local_runs",
+        "local_runs/917ef49c741832ad0096ad431a53c791",
+        "local_runs/917ef49c741832ad0096ad431a53c791/5088120",
+        "local_runs/917ef49c741832ad0096ad431a53c791/5088120/1"
+      ]
+    },
+    "campaign.cfg": {
+      "exists": false
+    }
+  },
+  "raw_pins": {
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\ui_save_retry_20261027\\20261027_112148_90dff64d\\01_retry_save\\native.log": "2ca54b6f982709ac8152bb46e067bc54c593fe6c55c4bcdaf78e8aeb98a48b02",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\ui_save_retry_20261027\\20261027_112148_90dff64d\\01_retry_save\\arm_owner_release.request.json": "ed1e76bb8272f9568c22ae668ec15d8918ab96192c64450f721c156d968194f4",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\ui_save_retry_20261027\\20261027_112148_90dff64d\\01_retry_save\\arm_owner_release.ack.json": "527f7a64057ec38c660711015701cb7d85a3f8ac92389c6590f08708923aee6d"
+  }
+}

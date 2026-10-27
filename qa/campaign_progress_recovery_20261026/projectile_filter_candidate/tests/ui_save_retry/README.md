@@ -14,7 +14,9 @@
 
 `cases.json` 是范围和断言契约，不是通过报告。阶段报告中的本地断言、宿主断点/原生句柄证据、实际进程退出及最终来源/锁检查必须一起通过，才可给本片资格。累计检查不得跨报告重复相加；预期拒绝本身不等于整阶段通过。
 
-外部四个 GD 为 `bootstrap.gd`、`base.gd`、`worker.gd`、`inflight.gd`；最后一项复用旧经典夹具的只读 typed 观察，不制造战斗状态。报告 schema 为 `ui_save_retry_three_process_v1`，环境前缀为 `USR_`。当前 gate 顺序为阶段1 `arm_owner_release` → `release_retry_handles`，阶段2 `arm_record_read` → `release_record_read`；ACK 绑定实际 request SHA、mode/phase/PID、batch/process nonce、profile 和源码/引擎身份，JSON PID 必须逐字段规范为有限整数。运行时生成的 `bindings.json` 是宿主与 worker 的冻结接口，不是开发期来源表。
+外部四个 GD 为 `bootstrap.gd`、`base.gd`、`worker.gd`、`inflight.gd`；最后一项复用旧经典夹具的只读 typed 观察，不制造战斗状态。报告 schema 为 `ui_save_retry_three_process_v1`，环境前缀为 `USR_`。当前 gate 顺序为阶段1 `arm_owner_release` → `arm_retry_release` → `release_retry_handles`，阶段2 `arm_record_read` → `release_record_read`；ACK 绑定实际 request SHA、mode/phase/PID、batch/process nonce、profile 和源码/引擎身份，JSON PID 必须逐字段规范为有限整数。运行时生成的 `bindings.json` 是宿主与 worker 的冻结接口，不是开发期来源表。
+
+每次原219行暂停都先移除本次断点再继续，并一直持有原owner句柄。首次实际LOCK_RELEASE及同对象/HELD观察已完成后，worker才发布`arm_retry_release`；宿主核同owner原字节和业务清单，再重新设断点并ACK，随后才由原RetrySave触发独立重试调用栈。不能把尚在首次保存栈内的再次暂停算作重试。
 
 阶段1精确世界比较只用于取消的同栈暂停边界及第二次保存的 HELD 边界；最终恢复基准取实际第二次 HELD 检查点，不能沿用经过120 ticks之前的旧 clock。
 

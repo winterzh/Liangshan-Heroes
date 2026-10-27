@@ -1,0 +1,66 @@
+{
+  "schema": "ui_save_retry_breakpoint_failure_summary_v1",
+  "original_run": "D:\\AI项目\\水浒\\开发工程\\.godot\\ui_save_retry_20261027\\20261027_112148_90dff64d",
+  "receipt_sha256": "8aceae396c92004d580e4a6ded6e881481d4fe834ace98f703fa68e042a7c4d0",
+  "complete": false,
+  "three_process_flow_qualified": false,
+  "actual_process_count": 2,
+  "completed_process_count": 1,
+  "completed_report_checks": 30,
+  "first_save_pid": 3428,
+  "interrupted_pid": 32836,
+  "host_failure": "RuntimeError('Wrong Store/Session/Flow release call chain')",
+  "observed_release_frames": [
+    {
+      "source": "res://scripts/run_snapshot_store.gd",
+      "line": 219,
+      "function": "release"
+    },
+    {
+      "source": "res://scripts/run_slot_store.gd",
+      "line": 175,
+      "function": "write_slot"
+    },
+    {
+      "source": "res://scripts/run_world_session.gd",
+      "line": 139,
+      "function": "save_held"
+    },
+    {
+      "source": "res://scripts/continue_flow.gd",
+      "line": 252,
+      "function": "_capture_ready"
+    },
+    {
+      "source": "res://scripts/run_battle_barrier.gd",
+      "line": 196,
+      "function": "_idle_boundary"
+    }
+  ],
+  "same_stack_packet_seen_twice": true,
+  "second_process_has_no_final_report": true,
+  "third_process_started": false,
+  "owned_child_terminated_by_finally": true,
+  "fault_handle_closed": true,
+  "source_identity": "source-v1:b22f76f7bf4b8309f9257829364f4afdd6c9262282a25cb6aefacce5aa916132",
+  "qualification": {
+    "three_process_flow_qualified": false,
+    "public_continue_qualified": false,
+    "native_sdk_qualified": false,
+    "native_release_tested": false,
+    "desktop_os_input": false,
+    "human_acceptance": false,
+    "full_campaign_qualified": false,
+    "full_61_qualified": false,
+    "published": false
+  },
+  "terminal_checks": {
+    "final_identity_passed": true,
+    "all_owned_children_terminal": true,
+    "all_owned_handles_closed": true,
+    "engine_lane_idle": true,
+    "lock_owner_verified": true,
+    "lock_released": true,
+    "post_errors": []
+  }
+}

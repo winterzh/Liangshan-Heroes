@@ -1,0 +1,137 @@
+{
+  "schema": "ui_config_retry_codec_failure_summary_v1",
+  "original_run": "D:\\AI项目\\水浒\\开发工程\\.godot\\ui_config_retry_20261027\\20261027_113510_63e310e9",
+  "receipt_sha256": "d7d049faa65d110e9aebdf9bc23e714d42a3190c3f5aa09fa00dcb8e9e1b737d",
+  "report_sha256": "1347ba7c6f75426f79c0f42088b5b89a6308e0e501d138514f0d8e4d0f821519",
+  "complete": false,
+  "two_process_config_retry_qualified": false,
+  "actual_process_count": 1,
+  "completed_process_count": 0,
+  "report_check_count": 144,
+  "report_passed_checks": 139,
+  "report_failed_checks": 5,
+  "host_successful_stage_check_total": 0,
+  "pid": 25204,
+  "exit_code": 1,
+  "seconds": 100.509,
+  "actual_native_log_errors": [],
+  "observer_codec_failures": [
+    {
+      "detail": "UNSUPPORTED_TYPE",
+      "name": "native typed Codec observation",
+      "passed": false
+    },
+    {
+      "detail": "UNSUPPORTED_TYPE",
+      "name": "native typed Codec observation",
+      "passed": false
+    },
+    {
+      "detail": "UNSUPPORTED_TYPE",
+      "name": "native typed Codec observation",
+      "passed": false
+    },
+    {
+      "detail": "UNSUPPORTED_TYPE",
+      "name": "native typed Codec observation",
+      "passed": false
+    }
+  ],
+  "completion_failure": {
+    "detail": null,
+    "name": "stage completion blocked_retry_observation",
+    "passed": false
+  },
+  "failure_boundary": "blocked_retry_observation",
+  "second_process_started": false,
+  "first_and_blocked_pending_observations_equal": true,
+  "exact_active_observation_failed": true,
+  "actual_operation_results": [
+    {
+      "frame": "23",
+      "phase": 4,
+      "result": {
+        "code": "CFG_STAGE_PARENT",
+        "config_pending": true,
+        "ok": false
+      }
+    }
+  ],
+  "actual_last_ui_action": {
+    "connections": 1,
+    "frame": "23",
+    "kind": "original_button_callback",
+    "purpose": "actual RetryCampaignConfig while parent still blocked",
+    "text": "重试保存设置"
+  },
+  "only_arm_gate_completed": true,
+  "release_gate_reached": false,
+  "successful_retry_not_reached": true,
+  "settings_change_is_legal_before_campaign_atomic_commit": true,
+  "business_after_from_original_controller": {
+    "cfg": {
+      "path": "D:/CodexQA/ui_config_retry/fc876d3727c7/appdata/Godot/app_userdata/水浒英雄传：八幕战役/campaign.cfg",
+      "exists": false,
+      "bytes": 0,
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "settings": {
+      "path": "D:/CodexQA/ui_config_retry/fc876d3727c7/appdata/Godot/app_userdata/水浒英雄传：八幕战役/settings.cfg",
+      "exists": true,
+      "bytes": 516,
+      "sha256": "57160e7432e39e39eb62d41dccec3c092bbb7ad51502ce5ef807934bad0d57c2"
+    },
+    "journal": {
+      "exists": true,
+      "files": {
+        "writing/owner.json": {
+          "sha256": "abf033c3ff80b83bb5c2b370a0480ed9940876fdddfb227486d048515891f9e3",
+          "bytes": 84
+        }
+      },
+      "directories": [
+        ".",
+        "writing"
+      ]
+    },
+    "candidate_parent": {
+      "kind": "absent",
+      "tree": {
+        "exists": false,
+        "files": {},
+        "directories": []
+      }
+    },
+    "continue": {
+      "exists": false,
+      "files": {},
+      "directories": []
+    }
+  },
+  "blocker_finally_moved_after_child_terminal": true,
+  "blocker_payload_excluded": true,
+  "source_identity": "source-v1:b22f76f7bf4b8309f9257829364f4afdd6c9262282a25cb6aefacce5aa916132",
+  "qualification": {
+    "two_process_config_retry_qualified": false,
+    "startup_prepared_recovery_qualified": false,
+    "public_continue_qualified": false,
+    "native_sdk_qualified": false,
+    "native_release_tested": false,
+    "desktop_os_input": false,
+    "human_acceptance": false,
+    "full_campaign_qualified": false,
+    "full_61_qualified": false,
+    "published": false
+  },
+  "terminal_checks": {
+    "initial_identity_passed": true,
+    "cold_import_qualified": true,
+    "final_identity_passed": true,
+    "all_owned_children_terminal": true,
+    "all_owned_handles_closed": true,
+    "engine_lane_idle": true,
+    "lock_owner_verified": true,
+    "lock_released": true,
+    "post_errors": []
+  }
+}

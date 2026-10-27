@@ -1,0 +1,9 @@
+# A：保存确认、同事务重试与菜单拒绝后恢复通过
+
+原批次20261027_115057_81aa46a4已完整终态：PID37500/75876/73876均退出0，30+137+49=216项全部通过。前两进程经原AppLifecycle continue_saved实际退出，槽gen1→gen2；第三进程只测试退出，不再保存。完整来源后验、自有child/HANDLE终态、lane与锁释放全部通过。
+
+第二进程真实取消覆盖提示后恢复正常运行120ticks，再真实ConfirmSave。宿主在Snapshot.release219持有原owner no-DELETE句柄：初次调用栈为write_slot→save_held→_capture_ready，重新布置断点后的独立RetrySave栈为retry_owned_commit→retry_pending_write→retry_pending_save→retry_save。两stop的原owner、已提交gen2、inventory与旧CAS完全相同；三gate与disable→实际首失败→rearm→独立retry→disable→关闭句柄时序闭合。两个真实LOCK_RELEASE保留原Session/Store/proposal/HELD世界，解除自己的句柄后原重试成功，没有再次提交gen3。
+
+第三进程先在原菜单实际Continue遇到文件READ_OPEN，点击CloseError保持菜单及原Slot/LC，再解除宿主只读拒绝，正常Continue精确恢复第二次HELD typed检查点。完整业务inventory不变，没有重放或额外保存。这里是source-private经典保存界面/引擎内原回调及Viewport输入资格，不是OS桌面、真人体验、自然战役、公开入口、Steam SDK、完整61阶段或发布资格。
+
+864项原receipt pins分为实际逐字核验的冻结文本与8项仅沿原终态收据保留的EXE metadata；不复制或重hashEXE，不打开物理profile/CFG/Settings/Slot/LC/owner/host_backup。报告内已有typed观察与metadata保持原字节。修订的README/cases/host/worker/sources五输入强制保存本run冻结原件，不借旧GitSHA冒充；其余相同内容可引用固定0217595e2d2aedebb12a9299b2397627304c5bfa的实际验证Gitblob。

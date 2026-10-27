@@ -1,0 +1,97 @@
+{
+  "schema": "ui_save_retry_cases_v1",
+  "scope": "actual_private_continue_flow_three_process_save_retry_and_menu_refusal",
+  "base_run": ".godot/campaign_progress_recovery_20261026/20261027_075456_3e4a48ab",
+  "source_identity": "source-v1:b22f76f7bf4b8309f9257829364f4afdd6c9262282a25cb6aefacce5aa916132",
+  "required_script_count": 26,
+  "required_native_count": 1,
+  "requires_own_cold_import": true,
+  "requires_persistence19_protocol_proof": false,
+  "native_process_count": 3,
+  "profile_count": 1,
+  "preflight_creates_profile": false,
+  "preflight_starts_engine": false,
+  "native_executed": false,
+  "passed": null,
+  "stages": [
+    {
+      "index": 0,
+      "mode": "save_initial",
+      "required": [
+        "actual_menu_and_classic_battle",
+        "actual_save_and_exit_callback",
+        "slot_generation_1_and_typed_checkpoint",
+        "actual_lifecycle_continue_saved_and_process_exit_0"
+      ],
+      "expected_generation": 1,
+      "exit_kind": "production_continue_saved"
+    },
+    {
+      "index": 1,
+      "mode": "retry_save",
+      "required": [
+        "new_process_restore_original_generation_1",
+        "visible_confirm_save_and_cancel_save",
+        "cancel_preserves_battle_identity_slot_lifecycle_and_pause_intent",
+        "elapsed_running_world_time_is_bounded_not_required_static",
+        "after_cancel_actual_resume_button_advances_at_least_120_normal_ticks_then_viewport_escape_pause_before_confirm",
+        "actual_snapshot_release_owner_delete_rejected_by_host_handle",
+        "one_breakpoint_arm_per_actual_save_or_retry_call_chain_rearmed_only_after_observed_first_failure",
+        "exact_same_session_store_cas_proposal_held_clock_and_lease",
+        "first_retry_save_with_handle_retained_fails_again",
+        "second_retry_save_after_host_handle_release_completes_same_transaction",
+        "only_generation_2_no_duplicate_commit_or_reward",
+        "actual_lifecycle_continue_saved_and_process_exit_0"
+      ],
+      "expected_generation": 2,
+      "fault": "actual_writing_owner_share_delete_denial",
+      "expected_initial_error": "LOCK_RELEASE",
+      "exit_kind": "production_continue_saved"
+    },
+    {
+      "index": 2,
+      "mode": "reject_then_resume",
+      "required": [
+        "new_process_starts_on_actual_menu",
+        "actual_continue_file_refusal_before_any_successful_mount",
+        "close_error_retains_menu_no_battle_and_exact_slot_lifecycle_inventory",
+        "only_host_owned_denial_removed",
+        "actual_continue_then_restores_generation_2_typed_checkpoint",
+        "no_additional_slot_lifecycle_generation_or_replay",
+        "test_quit_without_another_save_and_actual_process_exit_0"
+      ],
+      "expected_generation": 2,
+      "exit_kind": "test_quit_without_save",
+      "fault": "actual_existing_gen2_record_read_share_zero_denial",
+      "expected_initial_error": "READ_OPEN"
+    }
+  ],
+  "deferred_not_implemented": [
+    "settings_config_retry_and_restart",
+    "startup_prepared_transaction_retry_and_restart",
+    "natural_terminal_same_object_retry_and_no_replay_restart",
+    "retry_release_failure_model_and_unproven_repairable_success"
+  ],
+  "qualification": {
+    "public_continue_qualified": false,
+    "desktop_os_input": false,
+    "native_sdk_qualified": false,
+    "human_acceptance": false,
+    "full_30_waves_qualified": false,
+    "natural_campaign_terminal_qualified": false,
+    "original_19_faults_qualified": false,
+    "full_52_negatives_qualified": false,
+    "full_61_qualified": false,
+    "published": false,
+    "native_release_tested": false,
+    "full_campaign_qualified": false
+  },
+  "report_schema": "ui_save_retry_three_process_v1",
+  "environment_prefix": "USR_",
+  "worker_files": [
+    "bootstrap.gd",
+    "base.gd",
+    "worker.gd",
+    "inflight.gd"
+  ]
+}

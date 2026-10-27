@@ -1,0 +1,151 @@
+{
+  "schema": "ui_save_retry_complete_summary_v1",
+  "original_run": "D:\\AI项目\\水浒\\开发工程\\.godot\\ui_save_retry_20261027\\20261027_115057_81aa46a4",
+  "receipt_sha256": "5f1db9d357f8b3111da11e0d4f9a8aac00b8bdd989e69899e3d7887b6de9d48e",
+  "complete": true,
+  "three_process_flow_qualified": true,
+  "actual_process_count": 3,
+  "pids": [
+    37500,
+    75876,
+    73876
+  ],
+  "exit_codes": [
+    0,
+    0,
+    0
+  ],
+  "checks_by_process": [
+    30,
+    137,
+    49
+  ],
+  "actual_checks": 216,
+  "seconds_by_process": [
+    116.915,
+    197.467,
+    130.939
+  ],
+  "reports": [
+    {
+      "mode": "save_initial",
+      "sha256": "a1cdbd28fa5ae41a72c2b02b7c7874b9d7f0763a0af4a1016dfd38d035bf6fd6"
+    },
+    {
+      "mode": "retry_save",
+      "sha256": "b1c464ef502c4d67b1cc8854e01a16a5398fcdf12117113c83f30682e3ee08c8"
+    },
+    {
+      "mode": "reject_then_resume",
+      "sha256": "c1d7adec6b0a5ba166dcc1fb81cd5aea0b13ab42320e321eb076bc7d815a75b3"
+    }
+  ],
+  "production_save_exit_count": 2,
+  "slot_generations": [
+    1,
+    2,
+    2
+  ],
+  "same_original_active_lifecycle_binding": {
+    "kind": "uncredited",
+    "receipt_sha256": "d9382d1a5fd3703b72c9fae6ed5482462a1b53e8d09d1f082c16238d5768a915",
+    "token": "0b36929017ab94712f6419df1ce5512d"
+  },
+  "retry_gate_count": 3,
+  "actual_release_stops": 2,
+  "release_stack_functions": [
+    [
+      "release",
+      "write_slot",
+      "save_held",
+      "_capture_ready",
+      "_idle_boundary"
+    ],
+    [
+      "release",
+      "retry_owned_commit",
+      "retry_pending_write",
+      "retry_pending_save",
+      "retry_save",
+      "press",
+      "retry_run",
+      "gate"
+    ]
+  ],
+  "two_release_stops_same_original_owner_proposal_inventory_cas": true,
+  "breakpoint_disable_rearm_order_verified": true,
+  "actual_pending_errors": [
+    {
+      "battle_held": true,
+      "code": "LOCK_RELEASE",
+      "ok": false,
+      "pending_save": true,
+      "restart_required": false,
+      "retryable": true,
+      "unsafe": false
+    },
+    {
+      "battle_held": true,
+      "code": "LOCK_RELEASE",
+      "ok": false,
+      "pending_save": true,
+      "restart_required": false,
+      "retryable": true,
+      "unsafe": false
+    }
+  ],
+  "actual_owned_retry_success": {
+    "file_sha256": "7db1ee0b5346931c345df5c354d1cf1d93fbcce574b211ba19d1d0fad8f65bd9",
+    "generation": 2,
+    "ok": true,
+    "owned_retry": true,
+    "source_held": true,
+    "source_retained": true
+  },
+  "cancel_normal_running_interval": {
+    "after_tick": "254",
+    "before_tick": "134",
+    "paused": false,
+    "world_instance_id": "12603967408226"
+  },
+  "third_process_refusal_then_close_then_restore": true,
+  "third_process_business_bytes_unchanged": true,
+  "final_exact_checkpoint_matches_second_save": true,
+  "source_identity": "source-v1:b22f76f7bf4b8309f9257829364f4afdd6c9262282a25cb6aefacce5aa916132",
+  "forced_frozen_revised_source_files": [
+    "README.md",
+    "cases.json",
+    "run_ui_save_retry.py",
+    "worker.gd",
+    "sources.json"
+  ],
+  "forced_frozen_revised_source_hashes": [
+    "43ff036b63deca43c4bc400532f8f6dbc2ee7cf2115d7e65b3665534a57da218",
+    "523161e852df363b8f40f18576e0f0a0246e0c40df0ad50cb36b60a2d282c0bf",
+    "7069f813087e3735243c326deff79817553352103ecf2a172ca1d7f2ed51468f",
+    "cf9fb69cf2027289726634908abc2935d428ce92841f92ab969ab6e088d03863",
+    "f63af9c90e3d62d829349eca67538c87917d81fdc71a83a6e0d9cad397493195"
+  ],
+  "qualification": {
+    "three_process_flow_qualified": true,
+    "public_continue_qualified": false,
+    "native_sdk_qualified": false,
+    "native_release_tested": false,
+    "desktop_os_input": false,
+    "human_acceptance": false,
+    "full_campaign_qualified": false,
+    "full_61_qualified": false,
+    "published": false
+  },
+  "terminal_checks": {
+    "initial_identity_passed": true,
+    "cold_import_qualified": true,
+    "final_identity_passed": true,
+    "all_owned_children_terminal": true,
+    "all_owned_handles_closed": true,
+    "engine_lane_idle": true,
+    "lock_owner_verified": true,
+    "lock_released": true,
+    "post_errors": []
+  }
+}

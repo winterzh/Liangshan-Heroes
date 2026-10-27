@@ -38,7 +38,7 @@ FALSE_FLAGS = ('public_continue_qualified', 'native_sdk_qualified', 'native_rele
                'full_61_qualified', 'published')
 GATE_KEYS = {'schema', 'mode', 'phase', 'pid', 'batch_nonce', 'process_nonce', 'profile',
              'content_version', 'engine_sha256', 'detail'}
-PHASES = {'save_initial': (), 'retry_save': ('arm_owner_release', 'release_retry_handles'),
+PHASES = {'save_initial': (), 'retry_save': ('arm_owner_release', 'arm_retry_release', 'release_retry_handles'),
           'reject_then_resume': ('arm_record_read', 'release_record_read')}
 
 
@@ -391,6 +391,19 @@ def execute_stage(mode, state, workers, profile, env, stage, batch, nonce, previ
                                     and business(profile) == before, 'Cancel/Confirm may not change original business files')
                             expected_cas = {'revision': 1, 'file_sha256': detail['expected_sha256']}
                             set_release(True)
+                        elif phase == 'arm_retry_release':
+                            require(release_hits == 1 and not release_armed and handle is not None
+                                    and detail.get('expected_code') == 'LOCK_RELEASE'
+                                    and io.owned(detail['owner_path'], profile) == slot_directory(profile) / 'writing/owner.json'
+                                    and integer(detail.get('expected_revision'), expected_cas['revision'])
+                                    and detail.get('expected_sha256') == expected_cas['file_sha256'],
+                                    'Actual first failure must precede arming the separate UI retry stop')
+                            require(actual_owner(detail['owner_path'], profile, child.pid) == held_owner
+                                    and business(profile) == held_inventory,
+                                    'The first failed save must retain the same original owner and committed proposal')
+                            observation['first_failure_boundary_with_original_handle'] = True
+                            set_release(True)
+                            observation['retry_breakpoint_rearmed_ns'] = time.monotonic_ns()
                         elif phase == 'release_retry_handles':
                             require(release_hits == 2 and not release_armed and handle is not None
                                     and detail.get('expected_code') == 'LOCK_RELEASE'
@@ -479,10 +492,12 @@ def execute_stage(mode, state, workers, profile, env, stage, batch, nonce, previ
                         require(handle is not None and current_owner == held_owner and inventory == held_inventory,
                                 'Retry must reach same retained owner and already committed gen2 without rewriting')
                         row['faults'][-1]['second_release_reached_with_original_handle'] = True
-                        # Remove while the original debugger is still paused. The ordered
-                        # command precedes continue, so the later successful UI RetrySave
-                        # cannot race an asynchronous remove command against its gate ACK.
-                        set_release(False)
+                    # One arm accepts one original call chain. Disable before resuming
+                    # either stop; the first native failure must reach the separate GD
+                    # arm_retry_release gate before the real RetrySave is armed again.
+                    set_release(False)
+                    stop['breakpoint_removed_before_continue'] = True
+                    stop['breakpoint_removed_ns'] = time.monotonic_ns()
                     release_hits += 1
                     peer.command('continue', thread)
             child.wait(timeout=20)

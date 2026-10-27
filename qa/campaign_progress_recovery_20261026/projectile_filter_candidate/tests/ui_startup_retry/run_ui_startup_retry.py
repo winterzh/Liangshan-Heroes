@@ -117,6 +117,12 @@ def module_paths():
     return [Path(b1.__file__), *b1.module_paths(), Path(wire.__file__)]
 
 
+def valid_instance_id(value):
+    """Godot RefCounted ObjectID is a nonzero signed int64 when exposed to GDScript."""
+    return (type(value) is str and re.fullmatch(r'-?[1-9][0-9]{0,18}', value) is not None
+            and -(1 << 63) <= int(value) < (1 << 63))
+
+
 def named_state():
     sources = read(HERE / 'sources.json')
     require(sources.get('schema') == 'ui_startup_retry_sources_v1', 'Explicit B2 source schema required')
@@ -631,7 +637,7 @@ def validate_blocked(first, actual, profile):
             and first.get('tree_paused') is False and first.get('startup_scanned') is False
             and integer(first.get('startup_index'), 0) and first.get('coordinator_absent') is True
             and first.get('lifecycle_absent') is True and first.get('campaign_writer_absent') is True
-            and type(first.get('writer_instance_id')) is str and re.fullmatch(r'[1-9][0-9]*', first['writer_instance_id'])
+            and valid_instance_id(first.get('writer_instance_id'))
             and first.get('inventory') == {'ok': True, 'items': {'record_0000000001.json': actual['sha256'],
                                           'writing/': 'directory', 'writing/owner.json': actual['owner']['sha256']}}
             and first.get('disk') == actual['disk'], 'Actual retained startup writer must bind original proposal and newly owned recovered lock')

@@ -120,6 +120,12 @@ def module_paths():
     return [Path(module.__file__) for module in (prep, p, h, h.common, h.shared, h.identity, io, baseline)]
 
 
+def valid_instance_id(value):
+    """Godot RefCounted ObjectID is a nonzero signed int64 when exposed to GDScript."""
+    return (type(value) is str and re.fullmatch(r'-?[1-9][0-9]{0,18}', value) is not None
+            and -(1 << 63) <= int(value) < (1 << 63))
+
+
 def named_state():
     sources = read(HERE / 'sources.json')
     require(sources.get('schema') == 'ui_config_retry_sources_v1', 'Explicit settings retry source schema required')
@@ -530,7 +536,7 @@ def execute_stage(mode, state, workers, profile, env, stage, batch, nonce, previ
                     and first.get('original_sha256') == arm['cfg']['sha256']
                     and first.get('transaction') == records[1]['document']['transaction']
                     and all(first.get(key) is True for key in ('locked', 'lock_created', 'pending_record_empty', 'tree_paused'))
-                    and all(type(first.get(key)) is str and re.fullmatch(r'[1-9][0-9]*', first[key])
+                    and all(valid_instance_id(first.get(key))
                             for key in ('writer_instance_id', 'frozen_cfg_instance_id'))
                     and first['writer_instance_id'] != first['frozen_cfg_instance_id']
                     and io.owned(first.get('directory', ''), profile) == paths(profile)['journal']

@@ -1,5 +1,13 @@
 # 开发日志
 
+## 2026-10-27 保存重试断点与配置观察器修订
+
+保存首跑第一进程PID3428真实保存退出30项通过，第二进程在同一初始保存栈的再次暂停处被宿主误判为Retry链，整体未通过；自有句柄／子进程／来源和锁均收尾。新增真实首失败后的arm_retry_release握手，每次断点先disable再continue，保留两次实际失败与同事务全部约束。修订四GD加载PID74964／39.481秒／退出0、错误0，43pins通过；新profile三进程20261027_115057_81aa46a4实际PID37500／75876／73876、30／137／49项，共216项全部通过。初次保存、取消继续、两次真实删除占用失败后同事务完成gen2、读取失败关闭后再恢复均闭合，来源／自有句柄／子进程和锁后验通过。[当前资格](../qa/campaign_progress_recovery_20261026/projectile_filter_candidate/tests/ui_save_retry/VALIDATION.md)。
+
+设置首跑PID25204退出1，144项报告139通过／5失败（4次观察Codec拒绝与阶段未完成），第二进程未启动，不能写成整体通过。原生小模型PID43256证实新dot字典键为StringName、原Codec拒绝$/key5；实际RefCounted ID也可为负。只修QA观察器，保留六字段原键type／文本／顺序与逐值原Codec；三个宿主仅实例ID改为非零signed int64，PID与生产协议不改。设置／启动恢复／自然终局工具已同步来源绑定，57唯一命名输入及18Python AST组合检查通过，12GD新组合实际PID40988／39.065秒／退出0、错误0，129pins通过，仅授加载；设置新profile两进程已启动，各自实际流程另验。
+
+前批stable已回读0217595e，main未合并、Steam未更新、候选未采用；桌面键鼠继续暂停。新失败原件、模型、工具及交接文档以本次白名单提交和远端回读为准。
+
 ## 2026-10-27 原19故障矩阵566项与B1／B2原生加载
 
 固定b22的原19故障矩阵已实际完成：19个独立Godot进程、566项检查全部通过，退出码均为0，`complete=true/component_matrix_qualified=true`。case6仅有本案坏CFG的一条预期`Unexpected EOF while parsing simple tag.`诊断，其余18案原生错误为0；Script／Parse错误不作豁免。960项来源pins、完整来源、子进程终态和自有锁释放通过。[99文件／1,711,797字节原件](../qa/campaign_progress_recovery_20261026/projectile_filter_candidate/evidence/persistence19_matrix_20261027_103731/README.md)保留19报告、日志和固定来源映射；仅授组件矩阵，不转授自然战斗、SDK、云同步或奖励仅一次。

@@ -6,7 +6,7 @@
 
 | 项目 | 当前状态 |
 | --- | --- |
-| GitHub | [winterzh/Liangshan-Heroes / stable](https://github.com/winterzh/Liangshan-Heroes/tree/codex/sync-20260905-stable)：黄泥冈实现、连环马胜败及恢复候选/QA已同步；前批远端回读`aed8b5010f568a57e7fcb1a9414b7f3f2e9587dc`，本批19案矩阵、B1/B2加载证据与文档纳入本次提交，远端状态以同步回读为准；main仍为`1598c7c0cdccdc0bf1be8968608f79f0c43dcfc9`，未合并 |
+| GitHub | [winterzh/Liangshan-Heroes / stable](https://github.com/winterzh/Liangshan-Heroes/tree/codex/sync-20260905-stable)：黄泥冈实现、连环马胜败及恢复候选/QA已同步；前批远端回读`0217595e2d2aedebb12a9299b2397627304c5bfa`，19案矩阵与原B1/B2加载证据已同步；本批验证器修订、失败原件和新工具随本次提交，远端状态以回读为准；main仍为`1598c7c0cdccdc0bf1be8968608f79f0c43dcfc9`，未合并 |
 | 主线合并 | 48042d84补齐旧stable合并历史，ffa625de补齐交接文档；本页修订随本次文档提交同步，以分支最新提交为准 |
 | Steam Windows | default Build **26048429** / Manifest **697009053566575953**，2026-10-20完成发布验收 |
 | 冻结生产来源 | 0083b47abac098c5ebd7231e327085c4ba3299cd；后继QA工具和文档提交未改变游戏包 |
@@ -26,7 +26,7 @@
 ## 后续顺序
 
 1. [黄泥冈七车十一担](../qa/huangnigang_production_20261020/README.md)实现及自动证据已同步stable `f5325c25`：最终编译包普通路线1206项、九阶段1768项与四语三尺寸24图目检通过。原版EXE仅启动/退出通过；按用户选择暂不恢复键鼠，完整实操待办。第一批整体未完成，main/Steam未更新，公开战役续玩未开放。
-2. 完整战役续玩仍在候选阶段。[b22统一源](../qa/campaign_progress_recovery_20261026/projectile_filter_candidate/VALIDATION.md)已通过完整冻结、首次冷导入、44项视觉合同组件检查及高俅核心胜利四进程416项。原19类持久化故障已由19个独立进程完成566项组件检查，不授自然战斗奖励仅一次资格。大名府卢先四进程633项通过，石先首A因近卫距离失败；内圈站位修订只通过加载，双角色八流程、52负例及完整61阶段尚未完成。A确认／取消／同事务保存重试三进程正在运行，尚无终态；[B1设置重试](../qa/campaign_progress_recovery_20261026/projectile_filter_candidate/tests/ui_config_retry/VALIDATION.md)和[B2启动恢复重试](../qa/campaign_progress_recovery_20261026/projectile_filter_candidate/tests/ui_startup_retry/VALIDATION.md)均只通过三GD原生加载，实际两／三进程待跑。其余Terminal／Release界面路径、云同步、奖励仅一次及最终同源回归仍保留，候选未采用生产或公开开放。
+2. 完整战役续玩仍在候选阶段。[b22当前验证](../qa/campaign_progress_recovery_20261026/projectile_filter_candidate/VALIDATION.md)已有高俅核心胜利416项和持久化19案566项；大名府完整双路线、52负例／61阶段仍未完成。保存与设置重试的首跑原件已保留，确认是验证器的阶段识别与类型／对象ID校验需要修正，未据此认定游戏重试失败。保存三进程修订后正在复跑；设置、启动恢复及自然终局重试工具已完成对应静态修复，待新加载和实际流程。其余章节、真实云同步、奖励仅一次与最终同源回归保持待办，候选未采用或公开开放。
 3. 接续剩余人物/剧情变体、自然动作、六车轮转、场景、特效及界面美术。
 4. 回归八章与九玩法完整流程，完成真人试玩、性能/内存、切换清理和设备验收。详细条件保留在[开发计划](DEVELOPMENT_PLAN.md)，不由已发布批次替代。
 
