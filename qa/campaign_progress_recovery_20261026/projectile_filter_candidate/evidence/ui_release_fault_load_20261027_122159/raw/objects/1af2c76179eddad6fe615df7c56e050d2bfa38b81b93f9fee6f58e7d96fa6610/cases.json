@@ -1,0 +1,101 @@
+{
+  "schema": "ui_release_fault_model_cases_v1",
+  "scope": "explicit_permanent_clock_fault_real_retry_release_leave_and_restart_no_slot",
+  "base_run": ".godot/campaign_progress_recovery_20261026/20261027_075456_3e4a48ab",
+  "source_identity": "source-v1:b22f76f7bf4b8309f9257829364f4afdd6c9262282a25cb6aefacce5aa916132",
+  "required_script_count": 26,
+  "required_native_count": 1,
+  "requires_own_cold_import": true,
+  "requires_persistence19_protocol_proof": false,
+  "native_process_count": 2,
+  "profile_count": 1,
+  "preflight_creates_profile": false,
+  "preflight_starts_engine": false,
+  "native_executed": false,
+  "passed": null,
+  "environment_prefix": "URF_",
+  "report_schema": "ui_release_fault_model_v1",
+  "receipt_schema": "ui_release_fault_model_two_process_v1",
+  "worker_files": ["bootstrap.gd", "base.gd", "worker.gd"],
+  "fault_model": true,
+  "fault_model_code": "QA_INJECTED_CLOCK_FAULT",
+  "no_gameplay_state_injection": false,
+  "no_hp_position_resource_injection": true,
+  "production_method_overrides": 0,
+  "host_business_mutation": false,
+  "debugger_used": false,
+  "stages": [
+    {
+      "index": 0,
+      "mode": "fault_exit",
+      "expected_capture_error": "QA_INJECTED_CLOCK_FAULT",
+      "expected_original_error": "QA_INJECTED_CLOCK_FAULT",
+      "expected_retry_release_error": "QA_INJECTED_CLOCK_FAULT",
+      "expected_operation_count": 1,
+      "expected_fault_call_count": 1,
+      "required": [
+        "actual_classic_menu_ordinary_1x_60hz_at_least_120_ticks",
+        "real_pause_and_save_and_exit_callback",
+        "observer_registered_before_flow_callback_same_stack_requested_session_absent",
+        "complete_unique_valid_one_shot_connections_without_role_order_assumption",
+        "actual_nonphysics_healthy_held_signal_clock_and_original_object_identity",
+        "one_original_abort_step_only_fault_field_changes",
+        "original_nonpending_capture_failure_disposes_session_before_any_business_write",
+        "real_retry_release_retains_fault_and_same_held_scope_without_new_operation_signal",
+        "real_viewport_escape_cannot_dismiss_held_error",
+        "real_leave_cancel_retains_exact_scope_in_same_frame",
+        "real_leave_confirm_original_applifecycle_continue_failed_exit",
+        "typed_world_subset_clock_lease_expected_slot_progress_and_business_unchanged",
+        "actual_own_popen_exit_0_then_closed_handle"
+      ],
+      "exit_kind": "production_applifecycle",
+      "exit_reason": "continue_failed"
+    },
+    {
+      "index": 1,
+      "mode": "restart_no_slot",
+      "expected_error": "NO_SLOT",
+      "expected_operation_count": 1,
+      "expected_fault_call_count": 0,
+      "required": [
+        "independent_pid_same_private_profile_normal_startup",
+        "sha_bound_predecessor_report_and_production_codec_typed_checkpoint",
+        "actual_slot_probe_absent_revision_0_zero_sha_no_gen0_record",
+        "actual_menu_continue_no_slot_no_battle_no_session",
+        "actual_close_error_same_menu_no_replay",
+        "all_named_business_inventories_absent_and_typed_progress_unchanged",
+        "diagnostic_no_slot_separate_from_business_state",
+        "actual_own_popen_exit_0_without_save_or_new_fault"
+      ],
+      "exit_kind": "test_quit_without_save",
+      "exit_reason": "ui_release_fault_model_verified"
+    }
+  ],
+  "business_scope": [
+    "user://continue/v1",
+    "user://campaign.cfg",
+    "user://campaign_cfg_transactions/v1",
+    "user://campaign_cfg_candidates",
+    "user://steam_receipts/v1"
+  ],
+  "separate_diagnostic": "user://continue_error.json",
+  "not_implemented": [
+    "repairable_retry_release_success_no_verified_legal_trigger",
+    "natural_permanent_fault_reproduction",
+    "complete_world_capture_restore_or_campaign_acceptance"
+  ],
+  "qualification": {
+    "public_continue_qualified": false,
+    "native_sdk_qualified": false,
+    "native_release_tested": false,
+    "desktop_os_input": false,
+    "human_acceptance": false,
+    "full_campaign_qualified": false,
+    "full_61_qualified": false,
+    "original_19_faults_qualified": false,
+    "published": false,
+    "natural_fault_reproduced": false,
+    "retry_release_success_qualified": false,
+    "two_process_release_fault_model_qualified": false
+  }
+}

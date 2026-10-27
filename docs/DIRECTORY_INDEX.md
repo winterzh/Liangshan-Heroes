@@ -119,7 +119,7 @@ qa/campaign_progress_recovery_20261026/continue_binding_candidate/：Flow/Sessio
 
 `projectile_filter_candidate/evidence/persistence19_protocol_20261027_101914/`为实际9／12故障证明60项原件；`ui_save_retry_load_20261027_102958/`与`guard_margin_load_20261027_103329/`为对应外部GD加载原件，均位于同候选evidence下。A修订后实际三进程216项已通过；新大名府双角色八流程未完成，加载不授实际流程资格。
 
-`qa/campaign_progress_recovery_20261026/projectile_filter_candidate/tests/ui_config_retry/`与`tests/ui_startup_retry/`分别为B1设置重试、B2启动恢复重试工具，实际两／三进程待跑，各自VALIDATION维护当前资格。三GD纯加载原件位于同候选`evidence/ui_config_retry_load_20261027_111841/`（36运行pins）与`evidence/ui_startup_retry_load_20261027_111956/`（40运行pins）；均未实例化worker。
+`qa/campaign_progress_recovery_20261026/projectile_filter_candidate/tests/ui_config_retry/`与`tests/ui_startup_retry/`分别为B1设置重试、B2启动恢复重试工具，B1修订后实际两进程406项通过，B2实际三进程待跑，各自VALIDATION维护当前资格。三GD纯加载原件位于同候选`evidence/ui_config_retry_load_20261027_111841/`（36运行pins）与`evidence/ui_startup_retry_load_20261027_111956/`（40运行pins）；均未实例化worker。
 
 `qa/campaign_progress_recovery_20261026/projectile_filter_candidate/tests/ui_terminal_retry/`：自然核心终局四进程的6GD、宿主、契约与来源，新C不继承旧高俅416项；当前六GD已原生加载，实际四进程待运行。`evidence/ui_save_retry_breakpoint_failure_20261027_112148/`、`ui_config_retry_codec_failure_20261027_113510/`分别保存两次未完成首跑；`ui_save_retry_rearm_load_20261027_114727/`保存A修订加载，`config_active_key_probe_20261027_114911/`保存StringName语言模型与原Codec结果，均位于同候选evidence下。模型、加载与完整UI链分开记资格，业务载荷与host blocker不入Git。
 
@@ -128,3 +128,9 @@ qa/campaign_progress_recovery_20261026/continue_binding_candidate/：Flow/Sessio
 
 
 `projectile_filter_candidate/evidence/ui_save_retry_complete_20261027_115057/`保存修订后A三进程216项完整原件与来源引用：31文件，864运行pins；其旧失败档继续保留。
+
+
+`qa/campaign_progress_recovery_20261026/projectile_filter_candidate/tests/ui_release_fault_model/`保存D永久时钟故障下的真实RetryRelease／Leave／NO_SLOT两进程工具；同候选`evidence/ui_release_fault_load_20261027_122159/`保存44pins的三GD原生加载原件。模型实际执行资格见VALIDATION，加载未注入故障。
+
+
+`projectile_filter_candidate/evidence/ui_config_retry_complete_20261027_121110/`保存B1设置重试两进程406项原件：17文件、849pins分类闭合；不包含私有业务profile、blocker载荷或EXE。
