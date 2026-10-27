@@ -221,6 +221,10 @@ func _clear_visible_corridor(b: Node, cell: Vector2i, prisoners: Array) -> bool:
 			close.sort_custom(func(a,c): return a.position.distance_squared_to(actor.position) < c.position.distance_squared_to(actor.position))
 			for guard: Node in close.slice(0,3):
 				if not reserved.has(guard): reserved.append(guard)
+		if not await _tighten_reserved_guards(b,prisoners,reserved): return false
+		# Normal H guards can finish an enemy while the inner move is underway.
+		threats = _visible_corridor_enemies(b,cell)
+		if threats.is_empty(): return true
 		var attackers: Array = _escort_group(b).filter(func(u): return not reserved.has(u))
 		if not _check("corridor attack preserves three held close guards per wounded", attackers.size() >= 3 and _reserved_guard_cover(prisoners,reserved)): return false
 		var target: Node = threats[0]
@@ -229,6 +233,67 @@ func _clear_visible_corridor(b: Node, cell: Vector2i, prisoners: Array) -> bool:
 		if not await _step_wait(b, label + " cleared normally", Callable(self,"_target_gone").bind(target)): return false
 		if not _check("corridor clearing leaves the original held guards with wounded", _reserved_guard_cover(prisoners,reserved),observe(b)): return false
 	return _check("visible escort corridor bounded targets", false, observe(b))
+
+func _reserved_inner_cover(prisoners: Array, reserved: Array) -> bool:
+	if not reserved.all(func(u): return _alive(u)): return false
+	for actor: Node in prisoners:
+		if not _alive(actor): return false
+		var close := 0
+		for guard: Node in reserved:
+			if guard.position.distance_to(actor.position) <= 100.0: close += 1
+		if close < 3: return false
+	return true
+
+func _tighten_reserved_guards(b: Node, prisoners: Array, reserved: Array) -> bool:
+	# H permits small ordinary separation. Move inward before H instead of
+	# reserving a guard at the original 140 px boundary. No world value is set.
+	if not _check("reserved regroup uses original live guards and stopped wounded", _fight(b) and not driver.get_tree().paused and not Engine.is_in_physics_frame() and reserved.size() >= 3 and reserved.all(func(u): return _escort_group(b).has(u)) and prisoners.all(func(u): return _alive(u) and u._state == u.ST_IDLE and u._target == null and u._path.is_empty())): return false
+	var original_ids: Array = reserved.map(func(u): return str(u.entity_id))
+	var center := Vector2.ZERO
+	for actor: Node in prisoners: center += actor.position
+	center /= float(prisoners.size())
+	var candidates: Array[Vector2] = []
+	for y in range(-3,4):
+		for x in range(-3,4): candidates.append(center + Vector2(x,y) * 24.0)
+	candidates.sort_custom(func(a,c): return a.distance_squared_to(center) < c.distance_squared_to(center))
+	var plans: Array = []
+	for guard: Node in reserved:
+		var chosen: Dictionary = {}
+		for requested: Vector2 in candidates:
+			var screen: Vector2 = b.to_screen(requested)
+			var target: Vector2 = b.to_logic(screen)
+			if b._enemy_at(screen) != null or b._garrisonable_at(screen) != null: continue
+			if not b.map.is_open_world(target,guard.movement_profile): continue
+			var clear := true
+			for actor: Node in prisoners:
+				var distance: float = target.distance_to(actor.position)
+				if distance > 90.0 or distance < guard.radius + actor.radius + 2.0: clear = false
+			for plan: Dictionary in plans:
+				if target.distance_to(plan.target) < guard.radius + plan.guard.radius + 2.0: clear = false
+			if not clear: continue
+			if b.map.find_path(guard.position,target,guard.faction,guard.movement_profile).is_empty(): continue
+			chosen = {"guard":guard,"requested":requested,"target":target}
+			break
+		if not _check("reserved guard has a reachable inner ground point", not chosen.is_empty(), {"id":str(guard.entity_id),"center":[center.x,center.y],"state":_motion_state(b,guard)}): return false
+		plans.append(chosen)
+	for plan: Dictionary in plans:
+		var guard: Node = plan.guard
+		var requested: Vector2 = plan.requested
+		var target: Vector2 = plan.target
+		var screen: Vector2 = b.to_screen(requested)
+		b.select_members([guard],false)
+		var movers: Array = b._selected_movers()
+		if not _check("inner regroup click selects exactly the original guard and ground", movers.size() == 1 and movers[0] == guard and b._enemy_at(screen) == null and b._garrisonable_at(screen) == null and b.to_logic(screen) == target): return false
+		b.minimap_order(requested,false)
+		commands.append({"kind":"player_reserved_guard_move","ids":[str(guard.entity_id)],"reserved_ids":original_ids.duplicate(),"requested":[requested.x,requested.y],"api_target":[target.x,target.y],"logical_tick":str(b._run_clock._next_tick)})
+		if not _check("inner regroup actual ordinary command retains exact move target", guard._state == guard.ST_MOVE and guard._target == null and guard._home.distance_to(target) <= 0.01 and not guard._path.is_empty(),_motion_state(b,guard)): return false
+	if not await _step_wait(b,"original reserved guards reach actual inner protection",Callable(self,"_reserved_inner_cover").bind(prisoners,reserved)): return false
+	if not _check("inner regroup retains original selected escort identities", reserved.map(func(u): return str(u.entity_id)) == original_ids and reserved.all(func(u): return _escort_group(b).has(u))): return false
+	b.select_members(reserved,false)
+	b._order_hold_position()
+	commands.append({"kind":"player_reserved_guard_hold","ids":original_ids.duplicate(),"logical_tick":str(b._run_clock._next_tick)})
+	driver.route_observations.append({"reserved_inner_hold":{"ids":original_ids.duplicate(),"guards":reserved.map(func(u): return _motion_state(b,u)),"wounded":prisoners.map(func(u): return _motion_state(b,u)),"preparation_distance":100.0,"original_protection_distance":ESCORT_NEAR}})
+	return _check("original reserved guards hold with actual inner margin before attack", _reserved_inner_cover(prisoners,reserved) and _reserved_guard_cover(prisoners,reserved) and reserved.all(func(u): return u._hold_order_active and u.stance == u.STANCE_HOLD and u._state == u.ST_IDLE and u._target == null and u._path.is_empty()))
 
 func _near_guards(b: Node, actor: Node) -> Array:
 	return _crew(b).filter(func(u): return u.position.distance_to(actor.position) <= ESCORT_NEAR)

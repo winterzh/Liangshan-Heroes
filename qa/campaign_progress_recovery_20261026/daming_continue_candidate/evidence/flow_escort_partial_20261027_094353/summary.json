@@ -1,0 +1,140 @@
+{
+  "schema": "daming_current_flow_archive_summary_v1",
+  "original_run": "D:\\AI项目\\水浒\\开发工程\\.godot\\daming_projectile_flow_20261027\\20261027_094353_fe54a884",
+  "complete": false,
+  "source_flow_chain_passed": false,
+  "actual_reports": [
+    {
+      "role": "lu",
+      "mode": "save_single",
+      "pid": 59764,
+      "checks": 325,
+      "passed": true,
+      "failures": [],
+      "exit_reason": "continue_saved",
+      "report_sha256": "edb79804c06a408b7581ebb22027fe0f868f4ec861b193bce6d9ea0746bbfac1"
+    },
+    {
+      "role": "lu",
+      "mode": "resume_settle_save",
+      "pid": 74444,
+      "checks": 104,
+      "passed": true,
+      "failures": [],
+      "exit_reason": "continue_saved",
+      "report_sha256": "df0f177e687ad93b538fbd2ee252f6750f35dcefacaf8ebc0c028f3645fde06e"
+    },
+    {
+      "role": "lu",
+      "mode": "resume_finish",
+      "pid": 51600,
+      "checks": 139,
+      "passed": true,
+      "failures": [],
+      "exit_reason": "",
+      "report_sha256": "013f9884c77bd2167f207d71f68e2bbade01cf13c5378e03f5411d7ed0a07aeb"
+    },
+    {
+      "role": "lu",
+      "mode": "reject_terminal",
+      "pid": 48668,
+      "checks": 65,
+      "passed": true,
+      "failures": [],
+      "exit_reason": "",
+      "report_sha256": "7be48c842be46b6eae4edbe302605e9762f81830ea963d336386c68a75aa4ccd"
+    },
+    {
+      "role": "shi",
+      "mode": "save_single",
+      "pid": 67084,
+      "checks": 175,
+      "passed": false,
+      "failures": [
+        "corridor clearing leaves the original held guards with wounded"
+      ],
+      "exit_reason": "",
+      "report_sha256": "65e13e743ec8591dd946fb14413cff67677477c08bfd043c49eda0e5b70a2322"
+    }
+  ],
+  "actual_checks": 808,
+  "actual_passed_checks": 807,
+  "steps": [
+    {
+      "case": "save_single",
+      "passed": true,
+      "errors": [],
+      "pid": 59764,
+      "exit_code": 0,
+      "seconds": 505.135,
+      "stopped_for": null,
+      "log_sha256": "c5c556aad68e6c14363230f8c622aa107123f1c5d1bbf110fd484248260bee4e",
+      "first_role": "lu",
+      "mode": "save_single",
+      "process_nonce": "de6ca4f321f34743b87bf8b25ca285a0"
+    },
+    {
+      "case": "resume_settle_save",
+      "passed": true,
+      "errors": [],
+      "pid": 74444,
+      "exit_code": 0,
+      "seconds": 168.985,
+      "stopped_for": null,
+      "log_sha256": "f4a888b8bce5df664efd2b1fa6fb7e70ba49861e87581b6efca21359aff36554",
+      "first_role": "lu",
+      "mode": "resume_settle_save",
+      "process_nonce": "6b76e5e5e514496fb36bf0808c394eb4"
+    },
+    {
+      "case": "resume_finish",
+      "passed": true,
+      "errors": [],
+      "pid": 51600,
+      "exit_code": 0,
+      "seconds": 195.926,
+      "stopped_for": null,
+      "log_sha256": "5a8efc5ed167ea9e41c356ef7ae03656a3018fdb4d053ac5823ec9f860fc90fc",
+      "first_role": "lu",
+      "mode": "resume_finish",
+      "process_nonce": "52ac59951e684d46a1d22997520bcf78"
+    },
+    {
+      "case": "reject_terminal",
+      "passed": true,
+      "errors": [],
+      "pid": 48668,
+      "exit_code": 0,
+      "seconds": 108.241,
+      "stopped_for": null,
+      "log_sha256": "14cff88e9ae9d1e3841c42aaf779562779cf77a2152aff21a615ba37f133928b",
+      "first_role": "lu",
+      "mode": "reject_terminal",
+      "process_nonce": "13fc77a8b9254e65b4016a9f66a24045"
+    },
+    {
+      "case": "save_single",
+      "passed": false,
+      "errors": [],
+      "pid": 67084,
+      "exit_code": 1,
+      "seconds": 498.653,
+      "stopped_for": null,
+      "log_sha256": "ffda3258116d0357670fcc0aff80fc04682248d55a11283d2fa6c11e7813791b",
+      "first_role": "shi",
+      "mode": "save_single",
+      "process_nonce": "cb97f5869cb241218a83eeea8bd5326c"
+    }
+  ],
+  "closed_a_roles": [
+    "lu"
+  ],
+  "receipt_pin_count": 875,
+  "native_or_business_payload_read_or_copied": false,
+  "original_19_faults_qualified": false,
+  "full_61_qualified": false,
+  "public_continue_qualified": false,
+  "native_sdk_qualified": false,
+  "human_acceptance": false,
+  "error": "RuntimeError('Private character QA step failed: save_single')"
+}

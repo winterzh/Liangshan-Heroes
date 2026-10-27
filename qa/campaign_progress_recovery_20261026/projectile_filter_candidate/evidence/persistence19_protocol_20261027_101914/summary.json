@@ -1,0 +1,108 @@
+{
+  "schema": "persistence19_native_protocol_summary_v1",
+  "original_run": "D:\\AI项目\\水浒\\开发工程\\.godot\\persistence19_protocol_20261027\\20261027_101914_d5fdb00e",
+  "receipt_sha256": "501a02345b7c298a5dee25a4f87d8f8bacb78efa3e9210a8c9f986b3b317926b",
+  "complete": true,
+  "protocol_proved": true,
+  "actual_process_count": 2,
+  "actual_checks": 60,
+  "cases": [
+    {
+      "index": 9,
+      "id": "write_failure",
+      "pid": 6324,
+      "exit_code": 0,
+      "checks": 30,
+      "report_sha256": "c9756714ddaf3f292ac4bc28bf596d53789bd4893df221120c10126b3e032c27",
+      "actual_result": {
+        "code": "CFG_STAGE_WRITE",
+        "native_error": 12,
+        "ok": false,
+        "owned_pending": true
+      },
+      "debug_phases": [
+        "candidate_save",
+        "save_return"
+      ],
+      "mutation_evidence": {
+        "kind": "candidate_write_denial",
+        "path": "D:\\CodexQA\\p19\\e1d706c657ba\\09\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\campaign_cfg_candidates\\v1\\1342d0462f2c040e32b3790071946590\\candidate.cfg",
+        "native_share_mode": 0,
+        "create_new": true,
+        "host_sentinel_sha256": "c97c9b1237585ab598af831211e228e7c1806a7c2e87ae1996e7091dfc76901a",
+        "not_production_candidate": true,
+        "armed_ns": 606647685304000,
+        "from": "D:\\CodexQA\\p19\\e1d706c657ba\\09\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\campaign_cfg_candidates\\v1\\1342d0462f2c040e32b3790071946590\\candidate.cfg",
+        "backup": "D:\\AI项目\\水浒\\开发工程\\.godot\\persistence19_protocol_20261027\\20261027_101914_d5fdb00e\\09_write_failure\\host_write_denial_sentinel.cfg",
+        "sha256": "c97c9b1237585ab598af831211e228e7c1806a7c2e87ae1996e7091dfc76901a",
+        "source_absent": true,
+        "save_return_reached_with_handle_held": true
+      },
+      "original_cfg_runtime_metadata": {
+        "exists": true,
+        "sha256": "16e936ca2cdf95640e2fae26266ff429e6ba1c10658e097f40a30797eb96ea95",
+        "bytes": 84
+      },
+      "original_cfg_metadata_unchanged": true,
+      "memory_and_cloud_metadata_unchanged": true
+    },
+    {
+      "index": 12,
+      "id": "readback_SHA_changed",
+      "pid": 28424,
+      "exit_code": 0,
+      "checks": 30,
+      "report_sha256": "6826321030d1e998b02e1acb0d487b38fb72ba9d9d9d2addf40f409ea099c965",
+      "actual_result": {
+        "code": "CFG_STAGE_READBACK",
+        "ok": false
+      },
+      "debug_phases": [
+        "candidate_save",
+        "candidate_load"
+      ],
+      "mutation_evidence": {
+        "kind": "candidate_oplock_interval",
+        "path": "D:\\CodexQA\\p19\\e1d706c657ba\\12\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\campaign_cfg_candidates\\v1\\c1e9fbb3895360903123e722e52a35ff\\candidate.cfg",
+        "before_sha256": "31b535911e23236629147047227efe6d1565a59f18f94d7eefc76ecc2ad121da",
+        "armed_ns": 606741201525700,
+        "kernel_break_observed_ns": 606741503519800,
+        "child_alive_at_break": true,
+        "after_sha256": "82103270f3e918b4a09ed53c20ce8d31190e53bb1e93b21c1169dc78b6a21ac5",
+        "released_ns": 606741520446600,
+        "actual_native_opener_interval": true
+      },
+      "original_cfg_runtime_metadata": {
+        "exists": true,
+        "sha256": "16e936ca2cdf95640e2fae26266ff429e6ba1c10658e097f40a30797eb96ea95",
+        "bytes": 84
+      },
+      "original_cfg_metadata_unchanged": true,
+      "memory_and_cloud_metadata_unchanged": true
+    }
+  ],
+  "source_identity": "source-v1:b22f76f7bf4b8309f9257829364f4afdd6c9262282a25cb6aefacce5aa916132",
+  "engine_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+  "qualification": {
+    "only_actual_candidate_write_denial_and_oplock_interval": true,
+    "component_matrix_qualified": false,
+    "all_19_qualified": false,
+    "natural_battle_qualified": false,
+    "reward_once_qualified": false,
+    "native_sdk_qualified": false,
+    "public_continue_qualified": false,
+    "native_release_tested": false,
+    "human_acceptance": false,
+    "full_61_qualified": false,
+    "published": false
+  },
+  "historical_terminal_source_lock_checks": {
+    "initial_identity_passed": true,
+    "final_identity_passed": true,
+    "all_owned_children_terminal": true,
+    "engine_lane_idle": true,
+    "lock_owner_verified": true,
+    "lock_released": true,
+    "post_errors": []
+  }
+}

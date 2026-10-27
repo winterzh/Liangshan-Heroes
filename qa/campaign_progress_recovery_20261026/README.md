@@ -44,3 +44,5 @@ python qa/campaign_progress_recovery_20261026/run_terminal.py --base-run <同一
 `b22`后继大名府首A在新增全军集合条件处停止，守卫已清但尚未解救/保存；实际166项165通过，普通护送策略继续修订，完整八Flow与52负例均未通过。
 
 当前b22高俅核心胜利四进程416项全部通过，两次保存／独立继续、正常结算及终局拒旧槽闭合；原失败证据保留。[当前资格](projectile_filter_candidate/VALIDATION.md)。大名府修订五GD加载通过、双路线实跑中；52负例仍待正向资格，原19故障仍待原生复验。
+
+后继大名府当前批次卢先四流程633项通过，石先首A175项中1项近卫距离失败，整批808／807而非完整八流程通过。[部分原件](daming_continue_candidate/evidence/flow_escort_partial_20261027_094353/README.md)。原19工具七GD加载已通过，实际协议证明进行中；保存重试三进程工具仍待原生验证。

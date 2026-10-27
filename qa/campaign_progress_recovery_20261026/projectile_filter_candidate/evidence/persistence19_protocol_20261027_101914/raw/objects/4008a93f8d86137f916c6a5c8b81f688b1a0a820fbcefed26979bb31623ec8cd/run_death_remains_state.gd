@@ -1,0 +1,165 @@
+extends RefCounted
+## Explicit DeathRemains values and owner list. No death replay, merging or allocation.
+const FLOATS := ["remaining", "lifetime", "fade_duration", "reveal_delay", "reveal_fade_duration", "age", "visual_size", "frame_scale"]
+const NATIVE := ["remaining", "lifetime", "fade_duration", "reveal_delay", "reveal_fade_duration", "age", "visual_size", "frame_scale", "merge_count", "frame_index", "frame_anchor", "captured_direction", "fall_offset", "ground_basis"]
+const FIELDS := ["remaining", "lifetime", "fade_duration", "reveal_delay", "reveal_fade_duration", "age", "visual_size", "frame_scale", "merge_count", "frame_index", "frame_anchor", "captured_direction", "fall_offset", "ground_basis", "texture", "metadata"]
+const META := ["death_remains", "death_remains_frame", "death_remains_direction", "death_remains_fall_offset", "death_remains_merge_count", "death_remains_last_direction", "render_height"]
+const DIRECTIONS := ["se", "sw", "ne", "nw"]
+var _battle: Script
+var _signature: Callable
+
+func _init(battle: Script, texture_signature: Callable) -> void:
+	_battle = battle
+	_signature = texture_signature
+
+func _bad(code: String) -> Dictionary:
+	return {"ok": false, "code": code}
+
+func _fields(value: Variant, keys: Array) -> bool:
+	return typeof(value) == TYPE_DICTIONARY and value.size() == keys.size() and value.has_all(keys)
+
+func _atlas() -> Texture2D:
+	var tree: Variant = Engine.get_main_loop()
+	if not tree is SceneTree: return null
+	var art: Variant = tree.root.get_node_or_null("Art")
+	if art == null or art.get_script().resource_path != "res://scripts/art_db.gd": return null
+	return art.campaign_object_texture("death_remains")
+
+func _atlas_token(atlas: Variant) -> Dictionary:
+	if atlas == null: return {"ok": true, "value": {"state": "none"}}
+	if not atlas is Texture2D or atlas != _atlas(): return _bad("REMAINS_UNTRUSTED_ATLAS")
+	var signature: Dictionary = _signature.call(atlas)
+	if not signature.ok: return signature
+	return {"ok": true, "value": {"state": "content", "signature": signature.value}}
+
+func _check_atlas(token: Variant) -> Dictionary:
+	if _fields(token, ["state"]) and token.state == "none": return {"ok": true}
+	if not _fields(token, ["state", "signature"]) or token.state != "content": return _bad("REMAINS_ATLAS_TOKEN")
+	var texture: Texture2D = _atlas()
+	if texture == null: return _bad("REMAINS_ATLAS_MISSING")
+	var current: Dictionary = _atlas_token(texture)
+	if not current.ok or current.value != token: return _bad("REMAINS_ATLAS_CHANGED")
+	return {"ok": true}
+
+func capture_node(node: Node2D) -> Dictionary:
+	var values: Dictionary = {}
+	for key: String in NATIVE: values[key] = node.get(key)
+	values["ground_basis"] = {"x": node.ground_basis.x, "y": node.ground_basis.y, "origin": node.ground_basis.origin}
+	var texture: Variant = node.frame_texture
+	if texture == null: values["texture"] = {"state": "none"}
+	else:
+		if not texture is AtlasTexture or texture.get_script() != null: return _bad("REMAINS_SLICE_TYPE")
+		var token: Dictionary = _atlas_token(texture.atlas)
+		if not token.ok: return token
+		values["texture"] = {"state": "slice", "atlas": token.value, "region_position": texture.region.position, "region_size": texture.region.size, "margin_position": texture.margin.position, "margin_size": texture.margin.size, "filter_clip": texture.filter_clip}
+	var meta: Dictionary = {}
+	for key: StringName in node.get_meta_list():
+		if String(key) not in META: return _bad("REMAINS_UNKNOWN_METADATA")
+		meta[String(key)] = node.get_meta(key)
+	values["metadata"] = meta
+	var checked: Dictionary = validate_node(values)
+	if not checked.ok: return checked
+	return {"ok": true, "value": values}
+
+func validate_node(v: Variant) -> Dictionary:
+	if not _fields(v, FIELDS): return _bad("REMAINS_FIELDS")
+	for key: String in FLOATS:
+		if typeof(v[key]) != TYPE_FLOAT or not is_finite(v[key]): return _bad("REMAINS_FLOAT")
+	if v.lifetime < 0.1 or v.remaining <= 0.0 or v.remaining > v.lifetime or v.age < 0.0: return _bad("REMAINS_LIFETIME")
+	if v.fade_duration < 0.1 or v.fade_duration > v.lifetime or v.reveal_delay < 0.0 or v.reveal_delay > v.lifetime or v.reveal_fade_duration < 0.01 or v.reveal_fade_duration > v.lifetime: return _bad("REMAINS_FADE")
+	if v.visual_size <= 0.0 or v.visual_size > 8192.0 or v.frame_scale < 0.1 or v.frame_scale > 100.0: return _bad("REMAINS_SIZE")
+	if typeof(v.merge_count) != TYPE_INT or v.merge_count < 1 or v.merge_count > 6 or typeof(v.frame_index) != TYPE_INT or v.frame_index < 0 or v.frame_index > 7: return _bad("REMAINS_FRAME_OR_MERGE")
+	if typeof(v.captured_direction) != TYPE_STRING or v.captured_direction not in DIRECTIONS: return _bad("REMAINS_DIRECTION")
+	for key: String in ["frame_anchor", "fall_offset"]:
+		if typeof(v[key]) != TYPE_VECTOR2 or not v[key].is_finite(): return _bad("REMAINS_POINT")
+	if not _fields(v.ground_basis, ["x", "y", "origin"]): return _bad("REMAINS_GROUND_BASIS")
+	for part: Variant in v.ground_basis.values():
+		if typeof(part) != TYPE_VECTOR2 or not part.is_finite(): return _bad("REMAINS_GROUND_BASIS")
+	var tex: Variant = v.texture
+	if not (_fields(tex, ["state"]) and tex.state == "none"):
+		if not _fields(tex, ["state", "atlas", "region_position", "region_size", "margin_position", "margin_size", "filter_clip"]) or tex.state != "slice": return _bad("REMAINS_TEXTURE")
+		var checked: Dictionary = _check_atlas(tex.atlas)
+		if not checked.ok: return checked
+		if tex.atlas.state != "content" or typeof(tex.filter_clip) != TYPE_BOOL: return _bad("REMAINS_SLICE")
+		for key: String in ["region_position", "region_size", "margin_position", "margin_size"]:
+			if typeof(tex[key]) != TYPE_VECTOR2 or not tex[key].is_finite(): return _bad("REMAINS_SLICE")
+		var atlas: Texture2D = _atlas()
+		var cell: int = floori(float(atlas.get_width()) / 4.0)
+		if cell <= 0 or atlas.get_width() % 4 != 0 or atlas.get_height() != cell * 2 or Rect2(tex.region_position, tex.region_size) != Rect2((v.frame_index % 4) * cell, floori(float(v.frame_index) / 4.0) * cell, cell, cell) or tex.margin_position != Vector2.ZERO or tex.margin_size != Vector2.ZERO: return _bad("REMAINS_SLICE_REGION")
+	if typeof(v.metadata) != TYPE_DICTIONARY or v.metadata.size() > META.size(): return _bad("REMAINS_METADATA")
+	for key: Variant in v.metadata:
+		if typeof(key) != TYPE_STRING or key not in META: return _bad("REMAINS_METADATA_KEY")
+		var item: Variant = v.metadata[key]
+		match key:
+			"death_remains":
+				if typeof(item) != TYPE_BOOL or not item: return _bad("REMAINS_META_MARKER")
+			"death_remains_frame":
+				if typeof(item) != TYPE_INT or item != v.frame_index: return _bad("REMAINS_META_FRAME")
+			"death_remains_merge_count":
+				if typeof(item) != TYPE_INT or item != v.merge_count: return _bad("REMAINS_META_MERGE")
+			"death_remains_direction", "death_remains_last_direction":
+				if typeof(item) != TYPE_STRING or item not in DIRECTIONS: return _bad("REMAINS_META_DIRECTION")
+			"death_remains_fall_offset":
+				if typeof(item) != TYPE_VECTOR2 or item != v.fall_offset: return _bad("REMAINS_META_OFFSET")
+			"render_height":
+				if typeof(item) != TYPE_FLOAT or not is_finite(item): return _bad("REMAINS_META_HEIGHT")
+	return {"ok": true}
+
+func restore_node(node: Node2D, values: Dictionary) -> void:
+	for key: String in NATIVE:
+		if key != "ground_basis": node.set(key, values[key])
+	node.ground_basis = Transform2D(values.ground_basis.x, values.ground_basis.y, values.ground_basis.origin)
+	if values.texture.state == "slice":
+		var texture := AtlasTexture.new()
+		texture.atlas = _atlas(); texture.region = Rect2(values.texture.region_position, values.texture.region_size)
+		texture.margin = Rect2(values.texture.margin_position, values.texture.margin_size); texture.filter_clip = values.texture.filter_clip
+		node.frame_texture = texture
+	for key: String in values.metadata: node.set_meta(key, values.metadata[key])
+
+func restore_render_transform(node: Node2D) -> void:
+	# GameMap stores this elevation in RenderingServer, not Node2D.transform.
+	var transform: Transform2D = node.transform
+	transform.origin -= Vector2.ONE * float(node.get_meta("render_height", 0.0))
+	RenderingServer.canvas_item_set_transform(node.get_canvas_item(), transform)
+	node.queue_redraw()
+
+func capture_owner(owner: Variant, objects: Dictionary) -> Dictionary:
+	if not is_instance_valid(owner) or owner.get_script() != _battle: return _bad("REMAINS_OWNER_REQUIRED")
+	var order: Array = []
+	var expected := Callable(owner, "_on_death_remains_expired")
+	for mark: Variant in owner._death_remains:
+		if not is_instance_valid(mark) or mark.is_queued_for_deletion() or mark.get_script() != _battle.DeathRemains or not objects.has(mark) or order.has(objects[mark]): return _bad("REMAINS_OWNER_LIST")
+		for info: Dictionary in mark.get_signal_list():
+			var connections: Array = mark.get_signal_connection_list(info.name)
+			if info.name == "expired":
+				if connections.size() != 1 or connections[0].callable != expected or connections[0].flags != 0: return _bad("REMAINS_EXPIRED_CONNECTION")
+			elif not connections.is_empty(): return _bad("REMAINS_UNKNOWN_CONNECTION")
+		order.append(objects[mark])
+	for mark: Variant in objects:
+		if not is_instance_valid(mark): return _bad("REMAINS_INVALID_GRAPH_NODE")
+		if mark.get_script() == _battle.DeathRemains and not owner._death_remains.has(mark): return _bad("REMAINS_UNTRACKED_NODE")
+	var atlas: Dictionary = _atlas_token(owner._death_remains_atlas)
+	if not atlas.ok: return atlas
+	if not owner._death_remains_atlas_checked and (atlas.value.state != "none" or not order.is_empty()): return _bad("REMAINS_CACHE_STATE")
+	return {"ok": true, "value": {"order": order, "atlas_checked": owner._death_remains_atlas_checked, "atlas": atlas.value}}
+
+func bind_owner(owner: Variant, record: Variant, nodes: Dictionary) -> Dictionary:
+	if not is_instance_valid(owner) or owner.get_script() != _battle or owner.is_inside_tree() or not owner._death_remains.is_empty() or owner._death_remains_atlas_checked or owner._death_remains_atlas != null: return _bad("REMAINS_FRESH_OWNER_REQUIRED")
+	if not _fields(record, ["order", "atlas_checked", "atlas"]) or typeof(record.order) != TYPE_ARRAY or typeof(record.atlas_checked) != TYPE_BOOL or record.order.size() > 4096: return _bad("REMAINS_OWNER_RECORD")
+	var checked: Dictionary = _check_atlas(record.atlas)
+	if not checked.ok: return checked
+	if not record.atlas_checked and (record.atlas.state != "none" or not record.order.is_empty()): return _bad("REMAINS_CACHE_STATE")
+	var marks: Array = []
+	for id: Variant in record.order:
+		if typeof(id) != TYPE_STRING or not nodes.has(id) or nodes[id].get_script() != _battle.DeathRemains or marks.has(nodes[id]): return _bad("REMAINS_OWNER_ID")
+		var mark: Node2D = nodes[id]
+		for info: Dictionary in mark.get_signal_list():
+			if not mark.get_signal_connection_list(info.name).is_empty(): return _bad("REMAINS_ALREADY_CONNECTED")
+		marks.append(mark)
+	for node: Node2D in nodes.values():
+		if node.get_script() == _battle.DeathRemains and not marks.has(node): return _bad("REMAINS_UNTRACKED_NODE")
+	owner._death_remains = marks
+	owner._death_remains_atlas_checked = record.atlas_checked
+	owner._death_remains_atlas = _atlas() if record.atlas.state == "content" else null
+	for mark: Node2D in marks: mark.expired.connect(Callable(owner, "_on_death_remains_expired"))
+	return {"ok": true}

@@ -114,3 +114,7 @@ qa/campaign_progress_recovery_20261026/continue_binding_candidate/：Flow/Sessio
 原19类故障当前协议适配：`qa/campaign_progress_recovery_20261026/projectile_filter_candidate/tests/persistence19/`，含19案映射、GD worker、只读默认计划器及实际9／12协议证明和19案宿主。首次加载失败与修订未赋予运行资格；实际结果由专题VALIDATION记录。
 
 高俅完整胜利416项原件：`qa/campaign_progress_recovery_20261026/projectile_filter_candidate/evidence/terminal_core_success_20261027_091102/`。外部七GD加载的seed冲突失败及最小修正：同候选`evidence/tools_load_seed_failure_20261027_094230/`；原19工具当前资格见`tests/persistence19/VALIDATION.md`。
+
+大名府双路线部分结果原件：`qa/campaign_progress_recovery_20261026/daming_continue_candidate/evidence/flow_escort_partial_20261027_094353/`。原七GD修正后加载：同QA下`projectile_filter_candidate/evidence/tools_load_complete_20261027_101643/`；真实保存／取消／文件占用重试三进程外部工具：`projectile_filter_candidate/tests/ui_save_retry/`。
+
+`projectile_filter_candidate/evidence/persistence19_protocol_20261027_101914/`为实际9／12故障证明60项原件；`ui_save_retry_load_20261027_102958/`及`guard_margin_load_20261027_103329/`为对应外部GD纯加载原件，均位于同候选evidence下。加载不授实际三进程或八流程。

@@ -1,0 +1,1080 @@
+class_name CampaignEnvironmentArt
+extends RefCounted
+## Frozen, level-scoped resolver for Web ChatGPT campaign environment art.
+## The source PNGs are intentionally absent until browser generation and intake pass.
+## Never register these routes in ArtDB: every object/overlay/flag lookup must include
+## the active campaign level, and a missing or out-of-scope resource returns null.
+
+const FROZEN_MANIFEST_SHA256 := "162e74544989ce4b89e32db6d1562e10962a1d58fc1c3d39e30c83abdb9430cf"
+const OBJECT_ROUTES: Dictionary = {
+	"kuaihuolin_stall_inn_a": {"levels":["level7"],"paths":{"default":"res://assets/campaign/environment/level7/stall_inn_a.png"}},
+	"kuaihuolin_stall_wine": {"levels":["level7"],"paths":{"default":"res://assets/campaign/environment/level7/stall_wine.png"}},
+	"kuaihuolin_stall_goods": {"levels":["level7"],"paths":{"default":"res://assets/campaign/environment/level7/stall_goods.png"}},
+	"kuaihuolin_stall_dice": {"levels":["level7"],"paths":{"default":"res://assets/campaign/environment/level7/stall_dice.png"}},
+	"kuaihuolin_stall_money": {"levels":["level7"],"paths":{"default":"res://assets/campaign/environment/level7/stall_money.png"}},
+	"kuaihuolin_stall_inn_b": {"levels":["level7"],"paths":{"default":"res://assets/campaign/environment/level7/stall_inn_b.png"}},
+	"cuiyun_tower": {
+		"levels": [
+			"level8"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level8/cuiyun_tower_default.png",
+			"signal": "res://assets/campaign/environment/level8/cuiyun_tower_signal.png"
+		}
+	},
+	"daming_shop_house": {
+		"levels": [
+			"level8"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level8/shop_house.png"
+		}
+	},
+	"dock_head_t": {
+		"levels": [
+			"level5"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level5/dock_head_t.png"
+		}
+	},
+	"dock_straight": {
+		"levels": [
+			"level5"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level5/dock_straight.png"
+		}
+	},
+	"heyang_wine_sign": {
+		"levels": [
+			"level7"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level7/heyang_wine_sign_blank.png"
+		}
+	},
+	"huangnigang_dry_verge": {
+		"levels": [
+			"level1"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level1/huangnigang_dry_verge.png"
+		}
+	},
+	"huangnigang_pine_double": {
+		"levels": [
+			"level1"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level1/huangnigang_pine_double.png"
+		}
+	},
+	"huangnigang_pine_old": {
+		"levels": [
+			"level1"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level1/huangnigang_pine_old.png"
+		}
+	},
+	"huangnigang_pine_young_lean": {
+		"levels": [
+			"level1"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level1/huangnigang_pine_young_lean.png"
+		}
+	},
+	"huangnigang_seven_pudao": {
+		"levels": [
+			"level1"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level1/huangnigang_seven_pudao.png"
+		}
+	},
+	"jujube_cart_01": {
+		"levels": [
+			"level1"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level1/jujube_cart_01.png"
+		}
+	},
+	"jujube_cart_02": {
+		"levels": [
+			"level1"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level1/jujube_cart_02.png"
+		}
+	},
+	"jujube_cart_03": {
+		"levels": [
+			"level1"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level1/jujube_cart_03.png"
+		}
+	},
+	"jujube_cart_04": {
+		"levels": [
+			"level1"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level1/jujube_cart_04.png"
+		}
+	},
+	"jujube_cart_05": {
+		"levels": [
+			"level1"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level1/jujube_cart_05.png"
+		}
+	},
+	"jujube_cart_06": {
+		"levels": [
+			"level1"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level1/jujube_cart_06.png"
+		}
+	},
+	"jujube_cart_07": {
+		"levels": [
+			"level1"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level1/jujube_cart_07.png"
+		}
+	},
+	"jujube_load": {
+		"levels": [
+			"level1"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level1/jujube_load.png"
+		}
+	},
+	"kuaihuolin_main_tavern": {
+		"levels": [
+			"level7"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level7/main_tavern.png"
+		}
+	},
+	"lantern_stall": {
+		"levels": [
+			"level8"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level8/lantern_stall.png"
+		}
+	},
+	"main_gate": {
+		"levels": [
+			"level5"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level5/main_gate.png"
+		}
+	},
+	"reeds_bent": {
+		"levels": [
+			"level5"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level5/reeds_bent.png"
+		}
+	},
+	"reeds_seeded": {
+		"levels": [
+			"level5"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level5/reeds_seeded.png"
+		}
+	},
+	"reeds_short": {
+		"levels": [
+			"level5"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level5/reeds_short.png"
+		}
+	},
+	"reeds_tall": {
+		"levels": [
+			"level5"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level5/reeds_tall.png"
+		}
+	},
+	"roadside_tavern_a": {
+		"levels": [
+			"level7"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level7/roadside_tavern_a.png"
+		}
+	},
+	"roadside_tavern_b": {
+		"levels": [
+			"level7"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level7/roadside_tavern_b.png"
+		}
+	},
+	"roadside_tavern_c": {
+		"levels": [
+			"level7"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level7/roadside_tavern_c.png"
+		}
+	},
+	"roadside_tavern_d": {
+		"levels": [
+			"level7"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level7/roadside_tavern_d.png"
+		}
+	},
+	"stockade_segment": {
+		"levels": [
+			"level3",
+			"level5"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level5/stockade_segment.png"
+		}
+	},
+	"tree_broad": {
+		"levels": [
+			"level5"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level5/tree_broad.png"
+		}
+	},
+	"tree_young": {
+		"levels": [
+			"level5"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level5/tree_young.png"
+		}
+	},
+	"tribute_load": {
+		"levels": [
+			"level1"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level1/tribute_load.png"
+		}
+	},
+	"watchtower": {
+		"levels": [
+			"level5"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level5/watchtower.png"
+		}
+	},
+	"willow_old": {
+		"levels": [
+			"level5"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level5/willow_old.png"
+		}
+	},
+	"wine_bowls": {
+		"levels": [
+			"level1"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level1/wine_bowls_scoop.png"
+		}
+	},
+	"wine_buckets": {
+		"levels": [
+			"level1"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level1/wine_buckets.png"
+		}
+	},
+	"zhongyi_hall": {
+		"levels": [
+			"level5"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level5/zhongyi_hall.png"
+		}
+	},
+	"zhujiazhuang_hall": {
+		"levels": [
+			"level3"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level3/zhujiazhuang_hall.png"
+		}
+	},
+	"zhujiazhuang_main_gate": {
+		"levels": [
+			"level3"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level3/zhujiazhuang_main_gate.png"
+		}
+	}
+}
+const OVERLAY_ROUTES: Dictionary = {
+	"dry_grass_leaves": {
+		"levels": [
+			"level1",
+			"level3",
+			"level4",
+			"level7",
+			"level8"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/shared/overlays/dry_grass_leaves.png"
+		}
+	},
+	"field_edge_bank": {
+		"levels": [
+			"level3"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level3/field_edge_bank.png"
+		}
+	},
+	"field_edge_ditch": {
+		"levels": [
+			"level3"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level3/field_edge_ditch.png"
+		}
+	},
+	"field_edge_stubble": {
+		"levels": [
+			"level3"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level3/field_edge_stubble.png"
+		}
+	},
+	"field_edge_willow": {
+		"levels": [
+			"level3"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level3/field_edge_willow.png"
+		}
+	},
+	"flattened_reeds": {
+		"levels": [
+			"level2",
+			"level4",
+			"level5"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/shared/overlays/flattened_reeds.png"
+		}
+	},
+	"gravel_clods": {
+		"levels": [
+			"level1",
+			"level3",
+			"level4",
+			"level6",
+			"level7",
+			"level8"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/shared/overlays/gravel_clods.png"
+		}
+	},
+	"low_aquatic_plants": {
+		"levels": [
+			"level2",
+			"level5"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/shared/overlays/low_aquatic_plants.png"
+		}
+	},
+	"mud_spots_wet_marks": {
+		"levels": [
+			"level2",
+			"level4",
+			"level5"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/shared/overlays/mud_spots_wet_marks.png"
+		}
+	},
+	"old_brick_fragments": {
+		"levels": [
+			"level2",
+			"level8"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/shared/overlays/old_brick_fragments.png"
+		}
+	},
+	"pine_needles_leaves": {
+		"levels": [
+			"level1",
+			"level6"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/shared/overlays/pine_needles_leaves.png"
+		}
+	},
+	"pole_wheel_marks": {
+		"levels": [
+			"level1",
+			"level2",
+			"level7",
+			"level8"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/shared/overlays/pole_wheel_marks.png"
+		}
+	},
+	"roots_moss": {
+		"levels": [
+			"level3",
+			"level5",
+			"level6"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/shared/overlays/roots_moss.png"
+		}
+	},
+	"rounded_stones": {
+		"levels": [
+			"level1",
+			"level4",
+			"level6"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/shared/overlays/rounded_stones.png"
+		}
+	},
+	"scattered_footprints": {
+		"levels": [
+			"level1",
+			"level2",
+			"level3",
+			"level4",
+			"level5",
+			"level6",
+			"level7",
+			"level8"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/shared/overlays/scattered_footprints.png"
+		}
+	},
+	"shallow_cart_ruts": {
+		"levels": [
+			"level1",
+			"level4",
+			"level6",
+			"level7"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/shared/overlays/shallow_cart_ruts.png"
+		}
+	},
+	"sparse_wet_grass": {
+		"levels": [
+			"level2",
+			"level4",
+			"level5"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/shared/overlays/sparse_wet_grass.png"
+		}
+	},
+	"trampled_mud": {
+		"levels": [
+			"level2",
+			"level3",
+			"level4",
+			"level5"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/shared/overlays/trampled_mud.png"
+		}
+	},
+	"twigs_bark": {
+		"levels": [
+			"level3",
+			"level5",
+			"level6",
+			"level7"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/shared/overlays/twigs_bark.png"
+		}
+	},
+	"weathered_slabs": {
+		"levels": [
+			"level2",
+			"level5",
+			"level7",
+			"level8"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/shared/overlays/weathered_slabs.png"
+		}
+	}
+}
+const STATIC_FLAG_ROUTES: Dictionary = {
+	"liangshan_hilltop_standard": {
+		"levels": [
+			"level5"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level5/liangshan_hilltop_standard_blank.png"
+		}
+	},
+	"zhongyi_hall_standard_east": {
+		"levels": [
+			"level5"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level5/zhongyi_hall_standard_east_blank.png"
+		}
+	},
+	"zhongyi_hall_standard_west": {
+		"levels": [
+			"level5"
+		],
+		"paths": {
+			"default": "res://assets/campaign/environment/level5/zhongyi_hall_standard_west_blank.png"
+		}
+	}
+}
+const SURFACE_ROUTES: Dictionary = {
+	"surface_compacted_stone": {"levels":["level2","level5","level7","level8"],
+		"path":"res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png"},
+	"surface_dry_earth": {"levels":["level1","level4","level6"],
+		"path":"res://assets/campaign/environment/shared/surfaces/surface_dry_earth.png"},
+	"surface_field": {"levels":["level3","level8"],
+		"path":"res://assets/campaign/environment/shared/surfaces/surface_field.png"},
+	"surface_forest_earth": {"levels":["level1","level3","level5","level6","level7"],
+		"path":"res://assets/campaign/environment/shared/surfaces/surface_forest_earth.png"},
+	"surface_wet_bank": {"levels":["level2","level4","level5"],
+		"path":"res://assets/campaign/environment/shared/surfaces/surface_wet_bank.png"}
+}
+
+## Source-SHA-bound visible bounds for accepted Level 5 and Level 7 PNGs.
+## The candidate files keep the intake tool's transparent padding byte for byte;
+## consumers use these bounds only to align/scale the whole texture at runtime.
+## No crop, mask, pixel clearing, mirroring, or stitched sampling occurs here.
+## Exact imported RGBA identity for accepted PNGs, including remapped PCKs.
+const PNG_TEXTURE_CALIBRATIONS: Dictionary = {
+  "res://assets/campaign/environment/level7/stall_inn_a.png": {
+    "source_sha256": "35bf4c4e23420cfcb2af291ad89150e8cc08535edc2a5d5d4127bf51c23da529",
+    "pixel_sha256": "0122bdab08f34c452fded3ee1566fed7db262073b90bd4839603743702980408",
+    "imported_pixel_sha256": "12e2c9aa315a74c716701154535c45981a1875bc794a7966c47f625dba431c82",
+    "size": [
+      512,
+      512
+    ]
+  },
+  "res://assets/campaign/environment/level7/stall_wine.png": {
+    "source_sha256": "4da0967e5626b57987014a21bf888f8f1edc0498b433d4d8f7b81409fc2af7b4",
+    "pixel_sha256": "f568fa651108f0195acfff7082ab4746d10c6d78051e7704ee7538affa7204c5",
+    "imported_pixel_sha256": "8e81940b6fefc057aa1039ac60d75a28c34eb0c4fb78fe3ac5e03affe31a27a3",
+    "size": [
+      512,
+      512
+    ]
+  },
+  "res://assets/campaign/environment/level7/stall_goods.png": {
+    "source_sha256": "d35632903b3d7eb02999b41661cde4b38d0833f42d1a37665f5bcbc99be3c5fb",
+    "pixel_sha256": "f5126cc0b0adad2a818b3fcb5757c45fcec8c35ea80d9d8361305c59a7fc2fad",
+    "imported_pixel_sha256": "1fa1ef1e6235b71e9ae6c29cc7351f88db7cc5ef39a2bf5e4f0da9d98fea8819",
+    "size": [
+      512,
+      512
+    ]
+  },
+  "res://assets/campaign/environment/level7/stall_dice.png": {
+    "source_sha256": "88624ff5af1e329d0eddde7b0ce1f60b80a363cce518ab761957069bd34c61ef",
+    "pixel_sha256": "d3c0005c46a090800a1049a3a7af933a9aa27c083ba2627a3944d5656f8afc6e",
+    "imported_pixel_sha256": "056fd74f5e2cf1befbe952bee538163b8e9bd2f59bc1a6ff593214d7f4de35fc",
+    "size": [
+      512,
+      512
+    ]
+  },
+  "res://assets/campaign/environment/level7/stall_money.png": {
+    "source_sha256": "f8d456b0a7d41e7a97039eb24b240b2900955fbe4b33595182eb5ec2f80f6577",
+    "pixel_sha256": "a8c06fcf8b0fbc45d69ec266bf2d848f4c8787d8dae1114c315ba115c6d933df",
+    "imported_pixel_sha256": "6e2fc6e70590262f1278ce73845246c9a12a45a89d099b5356a8f2a8879e6ab1",
+    "size": [
+      512,
+      512
+    ]
+  },
+  "res://assets/campaign/environment/level7/stall_inn_b.png": {
+    "source_sha256": "d8cd9cfffb7168b3df4d433d2950dc15c1ae18ef787d679bf2ffea4ea54d171e",
+    "pixel_sha256": "711bf243a16b7db9c66a021422c1941a058ce171df0c99aaa5ddc8b5439ba9cb",
+    "imported_pixel_sha256": "c711c9ca26636bd7394549c6c172c15b5dda0fc5ca37a57ff821cc831e419314",
+    "size": [
+      512,
+      512
+    ]
+  },
+  "res://assets/campaign/environment/level7/roadside_tavern_a.png": {
+    "source_sha256": "9997e4b9c606dca4252e57d04e14ca1cec50ef35a495b53d230ad9939d485c0f",
+    "pixel_sha256": "9224beeebed51bb31dd0a2eb5887772864acab9904f0e39b6afbd3027aa20f18",
+    "imported_pixel_sha256": "351da907bf88c854dbd1e7ae74f0b4da1b7e4f0a9a39e9542512e13f16b6606f",
+    "size": [
+      512,
+      512
+    ]
+  },
+  "res://assets/campaign/environment/level7/roadside_tavern_b.png": {
+    "source_sha256": "098b944308782308806ec9f3b9f7972ad278d14a91cdadfdc49956a41603ffee",
+    "pixel_sha256": "d8d6134156fdc3b8749db733f1e819a6557ec85fb736c23dac23ff8373b0f13b",
+    "imported_pixel_sha256": "f827c9e111e4a693642979496d79e181fe438c1b942ceb45abf80ba01cfb67a0",
+    "size": [
+      512,
+      512
+    ]
+  },
+  "res://assets/campaign/environment/level7/roadside_tavern_c.png": {
+    "source_sha256": "c924592263227b1eca89eb961773b79ea8fc96f38556e0047efa0585c4b77323",
+    "pixel_sha256": "91808582fcdef365cc2514c1bdb4c16703fbfab3b9c9c4c3cc07b19f9458154a",
+    "imported_pixel_sha256": "76dea5321280259125bad4d72ee57e04fef18bdcf6f49e1dfb88d9b5a94e41ad",
+    "size": [
+      512,
+      512
+    ]
+  },
+  "res://assets/campaign/environment/level7/roadside_tavern_d.png": {
+    "source_sha256": "4a68838822a39b8c17f144ed1136ca3e177cd50b329022da85e60770da3442a4",
+    "pixel_sha256": "9583d6c0712e16a22a171cf454f4a1a70fedf305c3dcff6ea737e6d77e575447",
+    "imported_pixel_sha256": "b895758e484ec780497ca5a31c2938a9e6896b9f27d356651e3c1316860dab25",
+    "size": [
+      512,
+      512
+    ]
+  },
+  "res://assets/campaign/environment/level5/reeds_short.png": {
+    "source_sha256": "eacb9d862c1d2d6aafc474290470fb01df13426b85bd8be56f787d4f0e5470e7",
+    "pixel_sha256": "485b86c2472569324a364d2d0746628ec31006fde822f4605602d1828f5e43d5",
+    "imported_pixel_sha256": "4ee22f3ace995c0614e02ef3654b6431c09b754782786de54b4d84f8cfed6dbb",
+    "size": [
+      512,
+      512
+    ]
+  },
+  "res://assets/campaign/environment/level5/reeds_tall.png": {
+    "source_sha256": "96913721db6412806a37841a24e2c4ed18dedca49b44aaf90bde55dba994c885",
+    "pixel_sha256": "37854589150e80e693431c1180db9883431b475036c2c8acc0b17ca9f0ecea7b",
+    "imported_pixel_sha256": "c4aa4c4db72c6eb21b7387defb31728766f7c497ffb489d3ce9128c1a9ff17cc",
+    "size": [
+      512,
+      512
+    ]
+  },
+  "res://assets/campaign/environment/level5/reeds_bent.png": {
+    "source_sha256": "9632aec3e7634cc15456ceb9a40fcf247cc2b294583e252df9f9918e1091fb5f",
+    "pixel_sha256": "162b3c529801803b4b2a85089a2323e56f380afe74172b5577cff2583880a3e9",
+    "imported_pixel_sha256": "f7b4b2fe0331173482daae3028d7058687bfb05a4387d2be84758a529c97679d",
+    "size": [
+      512,
+      512
+    ]
+  },
+  "res://assets/campaign/environment/level5/reeds_seeded.png": {
+    "source_sha256": "40e9817c206cdabea9c092759a5215c579277966262e33e28bda17fb3ff217c9",
+    "pixel_sha256": "29cf13bcaef0e7dd45cc248a8a9141d2665473ef457e32029b344e0d5940d92d",
+    "imported_pixel_sha256": "8fd85496f2acac731e61d329b611103b1dd75e0f1224be2e88b72ba5a862453c",
+    "size": [
+      512,
+      512
+    ]
+  },
+  "res://assets/campaign/environment/level5/willow_old.png": {
+    "source_sha256": "732aed950e4038773e189a9299f3befe66b36b7eb3fc8b66ceb9e538ce36879e",
+    "pixel_sha256": "58a6dcd7c91a4a52cae7a04d26b71577dd459468e2228287366e06c746c862e5",
+    "imported_pixel_sha256": "65e76a4998b2737519906f64de68000ab5b38ec7830c31a5ae2b55ece64a482a",
+    "size": [
+      512,
+      512
+    ]
+  },
+  "res://assets/campaign/environment/level5/tree_broad.png": {
+    "source_sha256": "f7c85ba56bb2030430f6771dbd106c82729581c576d33a0da046ec2cb43f94e7",
+    "pixel_sha256": "8069355a678183a298dffaf417e184e62592b5dcf4cd9e95d20b864bd822bc1c",
+    "imported_pixel_sha256": "5d2ed8e6c089dc67123b7d96aa481f1fe7afb19ce25f5e8ceba3677392719993",
+    "size": [
+      512,
+      512
+    ]
+  },
+  "res://assets/campaign/environment/level5/tree_young.png": {
+    "source_sha256": "8e0c1e7786a1a8fc133e354d5a01d8e65578ad1a7371ad960e337bc51bd05dcd",
+    "pixel_sha256": "2fb07a3968864115bf1f36ae12c334462218ce0621155955c7146c3959cc1692",
+    "imported_pixel_sha256": "1ff5af898588d67a0d4384ad04f4a455520a9ee69ceb690c220445fa11042b67",
+    "size": [
+      512,
+      512
+    ]
+  },
+  "res://assets/campaign/environment/level5/dock_straight.png": {
+    "source_sha256": "633cba86c77ac76e9cfd023d816939d5ec2b691e256c2aa917a1a9c01d9889d8",
+    "pixel_sha256": "cd206b609f2db623dc7466737c73dfb5a97ae91da4334398d5fe32a79cfb0fe7",
+    "imported_pixel_sha256": "67d4e15d734efe8d784eb8711eb1cf7ea127ce691546e93e19b9d091121ef793",
+    "size": [
+      512,
+      512
+    ]
+  },
+  "res://assets/campaign/environment/level5/dock_head_t.png": {
+    "source_sha256": "8d327ee3cdcceb71fca6ded2b2b27755b9905cfc7da14d64b80308bdb691624f",
+    "pixel_sha256": "20dafce0dd6b241c8283e489aa911e005da1b862ce94f0e6b3a6d91d6889ec3c",
+    "imported_pixel_sha256": "c3f6976cbf3b0a1e8f66f35e19994032d84fdfa820733a9cb743acd09da0948d",
+    "size": [
+      512,
+      512
+    ]
+  },
+  "res://assets/campaign/environment/level5/watchtower.png": {
+    "source_sha256": "23ab85096e6d15a9a55ace23960f053a660ca5fe0e43a6b93d682e354d2782c4",
+    "pixel_sha256": "eef952b755aa51f71b6bc118fab1fbcc52a7317a1a479627f1be3f9aed176fec",
+    "imported_pixel_sha256": "63e48819406abd95dfacab24486e55fb0630ab0967104fc85a86a8285d816aa1",
+    "size": [
+      512,
+      512
+    ]
+  },
+  "res://assets/campaign/environment/level5/stockade_segment.png": {
+    "source_sha256": "e1f807ef74b32a7bd16bc14705a1436938b6942da34018f96294d11a834a0c44",
+    "pixel_sha256": "2310e9f70de00a14887732dcf980c579316fab7548b835b03022f39ea7e7ed4f",
+    "imported_pixel_sha256": "41d8f4f48540e4df7898bb11142285bfcbe9473cab3b538228a663c5230a034b",
+    "size": [
+      512,
+      512
+    ]
+  },
+  "res://assets/campaign/environment/level5/main_gate.png": {
+    "source_sha256": "de94c246d3a0729bd8991c2b6236a6b4bc6de1d32c7531fd29dcf09ae7b2c997",
+    "pixel_sha256": "e489436765e0ba88a5cb2feb2b3717d2874951d8f505e29b016f8c7e598efff2",
+    "imported_pixel_sha256": "7e3b1938506124dd2b19300f61b199d36d19193b881a50010d148e0b7aa28c1c",
+    "size": [
+      512,
+      512
+    ]
+  },
+  "res://assets/campaign/environment/level5/zhongyi_hall.png": {
+    "source_sha256": "ec1bc1c6a1a4802eac49893994d7c8213db916eb03a27da33afef334c6adc608",
+    "pixel_sha256": "f9c2606094a45d84f364aa4ee2b7a460ba977aae7f507aababd0771213ffc278",
+    "imported_pixel_sha256": "8319ac43b8f52cf33a073f457ac7da32f6c1898f53ff2418ff00705db3b76dc3",
+    "size": [
+      512,
+      512
+    ]
+  },
+  "res://assets/campaign/environment/level5/zhongyi_hall_standard_west_blank.png": {
+    "source_sha256": "22e4f07042e6f3d21c23ad01b24051c2828fb07c8024ba026d4c115adf21f1bc",
+    "pixel_sha256": "7bc778f2e65c9240e574c4c0699db0563ff82d12b5e7cd99ef489eea96ecc46a",
+    "imported_pixel_sha256": "10932e8d113c4495a69c918eeeb8caa68902372bc43acefc3988366bd4cc6e57",
+    "size": [
+      512,
+      512
+    ]
+  },
+  "res://assets/campaign/environment/level5/zhongyi_hall_standard_east_blank.png": {
+    "source_sha256": "5cdadd67978d96b13d5fab3022126716969272b89d526e7e94f59b19bbfa2347",
+    "pixel_sha256": "68f9bbd1498849440e70b9859743176d584a28b52207e862d018fc171c32f692",
+    "imported_pixel_sha256": "19a8866a836d0792f35013ee62ba896692933aabf48bf9e44f76b95ac8be0624",
+    "size": [
+      512,
+      512
+    ]
+  },
+  "res://assets/campaign/environment/level5/liangshan_hilltop_standard_blank.png": {
+    "source_sha256": "d7e2f02fb7feaf54c714c06b325745a9670a491eb5c381c5341e99c575b24d9b",
+    "pixel_sha256": "68d2faefc4b73606573f6be71e86fe789acd04c654c12a4d0c8a82a7b2dc3805",
+    "imported_pixel_sha256": "c2f067231c8f07421870f834444054639f25846751a7ff72eafe3ce870ed1c43",
+    "size": [
+      512,
+      512
+    ]
+  }
+}
+
+const VISUAL_CALIBRATIONS: Dictionary = {
+	"object": {
+		"kuaihuolin_stall_inn_a": {"level_id":"level7","source_sha256":"35bf4c4e23420cfcb2af291ad89150e8cc08535edc2a5d5d4127bf51c23da529","visible_bbox_xywh":[123,101,308,356]},
+		"kuaihuolin_stall_wine": {"level_id":"level7","source_sha256":"4da0967e5626b57987014a21bf888f8f1edc0498b433d4d8f7b81409fc2af7b4","visible_bbox_xywh":[102,104,323,357]},
+		"kuaihuolin_stall_goods": {"level_id":"level7","source_sha256":"d35632903b3d7eb02999b41661cde4b38d0833f42d1a37665f5bcbc99be3c5fb","visible_bbox_xywh":[95,103,323,358]},
+		"kuaihuolin_stall_dice": {"level_id":"level7","source_sha256":"88624ff5af1e329d0eddde7b0ce1f60b80a363cce518ab761957069bd34c61ef","visible_bbox_xywh":[122,65,324,360]},
+		"kuaihuolin_stall_money": {"level_id":"level7","source_sha256":"f8d456b0a7d41e7a97039eb24b240b2900955fbe4b33595182eb5ec2f80f6577","visible_bbox_xywh":[103,68,331,355]},
+		"kuaihuolin_stall_inn_b": {"level_id":"level7","source_sha256":"d8cd9cfffb7168b3df4d433d2950dc15c1ae18ef787d679bf2ffea4ea54d171e","visible_bbox_xywh":[103,65,310,359]},
+		"roadside_tavern_a": {"level_id":"level7", "label_visible_top":true, "source_sha256":"9997e4b9c606dca4252e57d04e14ca1cec50ef35a495b53d230ad9939d485c0f", "visible_bbox_xywh":[67,90,389,355]},
+		"roadside_tavern_b": {"level_id":"level7", "label_visible_top":true, "source_sha256":"098b944308782308806ec9f3b9f7972ad278d14a91cdadfdc49956a41603ffee", "visible_bbox_xywh":[18,100,464,388]},
+		"roadside_tavern_c": {"level_id":"level7", "label_visible_top":true, "source_sha256":"c924592263227b1eca89eb961773b79ea8fc96f38556e0047efa0585c4b77323", "visible_bbox_xywh":[64,54,421,341]},
+		"roadside_tavern_d": {"level_id":"level7", "label_visible_top":true, "source_sha256":"4a68838822a39b8c17f144ed1136ca3e177cd50b329022da85e60770da3442a4", "visible_bbox_xywh":[32,74,451,342]},
+		"reeds_short": {"level_id":"level5", "source_sha256":"eacb9d862c1d2d6aafc474290470fb01df13426b85bd8be56f787d4f0e5470e7", "visible_bbox_xywh":[126,148,379,218]},
+		"reeds_tall": {"level_id":"level5", "source_sha256":"96913721db6412806a37841a24e2c4ed18dedca49b44aaf90bde55dba994c885", "visible_bbox_xywh":[129,107,299,298]},
+		"reeds_bent": {"level_id":"level5", "source_sha256":"9632aec3e7634cc15456ceb9a40fcf247cc2b294583e252df9f9918e1091fb5f", "visible_bbox_xywh":[97,153,228,210]},
+		"reeds_seeded": {"level_id":"level5", "source_sha256":"40e9817c206cdabea9c092759a5215c579277966262e33e28bda17fb3ff217c9", "visible_bbox_xywh":[121,104,319,297]},
+		"willow_old": {"level_id":"level5", "source_sha256":"732aed950e4038773e189a9299f3befe66b36b7eb3fc8b66ceb9e538ce36879e", "visible_bbox_xywh":[161,107,241,276]},
+		"tree_broad": {"level_id":"level5", "source_sha256":"f7c85ba56bb2030430f6771dbd106c82729581c576d33a0da046ec2cb43f94e7", "visible_bbox_xywh":[140,130,286,286]},
+		"tree_young": {"level_id":"level5", "source_sha256":"8e0c1e7786a1a8fc133e354d5a01d8e65578ad1a7371ad960e337bc51bd05dcd", "visible_bbox_xywh":[141,153,191,255]},
+		"dock_straight": {"level_id":"level5", "source_sha256":"633cba86c77ac76e9cfd023d816939d5ec2b691e256c2aa917a1a9c01d9889d8", "visible_bbox_xywh":[132,148,249,217]},
+		"dock_head_t": {"level_id":"level5", "source_sha256":"8d327ee3cdcceb71fca6ded2b2b27755b9905cfc7da14d64b80308bdb691624f", "visible_bbox_xywh":[159,175,193,163]},
+		"watchtower": {"level_id":"level5", "source_sha256":"23ab85096e6d15a9a55ace23960f053a660ca5fe0e43a6b93d682e354d2782c4", "visible_bbox_xywh":[200,152,111,208]},
+		"stockade_segment": {"level_id":"level5", "source_sha256":"e1f807ef74b32a7bd16bc14705a1436938b6942da34018f96294d11a834a0c44", "visible_bbox_xywh":[167,161,177,186]},
+		"main_gate": {"level_id":"level5", "source_sha256":"de94c246d3a0729bd8991c2b6236a6b4bc6de1d32c7531fd29dcf09ae7b2c997", "visible_bbox_xywh":[153,156,203,199]},
+		"zhongyi_hall": {"level_id":"level5", "source_sha256":"ec1bc1c6a1a4802eac49893994d7c8213db916eb03a27da33afef334c6adc608", "visible_bbox_xywh":[129,143,257,229]},
+	},
+	"static_flag": {
+		"zhongyi_hall_standard_west": {"level_id":"level5", "source_sha256":"22e4f07042e6f3d21c23ad01b24051c2828fb07c8024ba026d4c115adf21f1bc", "visible_bbox_xywh":[176,141,159,226]},
+		"zhongyi_hall_standard_east": {"level_id":"level5", "source_sha256":"5cdadd67978d96b13d5fab3022126716969272b89d526e7e94f59b19bbfa2347", "visible_bbox_xywh":[171,141,170,228]},
+		"liangshan_hilltop_standard": {"level_id":"level5", "source_sha256":"d7e2f02fb7feaf54c714c06b325745a9670a491eb5c381c5341e99c575b24d9b", "visible_bbox_xywh":[170,131,167,247]},
+	},
+}
+const VISUAL_CALIBRATION_CANVAS_SIZE := Vector2(512.0,512.0)
+
+## Only the accepted Level 5 source files below have measured blank surfaces.
+## Every other rect remains null until its own source and runtime captures pass.
+const TEXT_RECTS: Dictionary = {
+	"level7_stall_inn_a_sign": [0.591796875,0.466796875,0.09375,0.0625],
+	"level7_stall_wine_sign": [0.552734375,0.4609375,0.09375,0.0625],
+	"level7_stall_goods_sign": [0.52734375,0.44921875,0.09375,0.0625],
+	"level7_stall_dice_sign": [0.58203125,0.400390625,0.09375,0.0625],
+	"level7_stall_money_sign": [0.552734375,0.376953125,0.09375,0.0625],
+	"level7_stall_inn_b_sign": [0.541015625,0.392578125,0.09375,0.0625],
+	"level3_zhujiazhuang_gate_plaque": null,
+	"level3_zhujiazhuang_hall_plaque": null,
+	"level5_hall_plaque": [0.400390625,0.48828125,0.126953125,0.046875],
+	"level5_main_gate_plaque": null,
+	"level7_heyang_wine_sign": null,
+	"level7_main_tavern_plaque": null,
+	"level8_shop_house_plaque": null,
+	"liangshan_hilltop_standard": [0.41015625,0.359375,0.060546875,0.16796875],
+	"zhongyi_hall_standard_west": [0.41796875,0.361328125,0.05859375,0.166015625],
+	"zhongyi_hall_standard_east": [0.404296875,0.361328125,0.05859375,0.166015625]
+}
+const TEXT_RECT_SOURCE_SHA256: Dictionary = {
+	"level7_stall_inn_a_sign": "35bf4c4e23420cfcb2af291ad89150e8cc08535edc2a5d5d4127bf51c23da529",
+	"level7_stall_wine_sign": "4da0967e5626b57987014a21bf888f8f1edc0498b433d4d8f7b81409fc2af7b4",
+	"level7_stall_goods_sign": "d35632903b3d7eb02999b41661cde4b38d0833f42d1a37665f5bcbc99be3c5fb",
+	"level7_stall_dice_sign": "88624ff5af1e329d0eddde7b0ce1f60b80a363cce518ab761957069bd34c61ef",
+	"level7_stall_money_sign": "f8d456b0a7d41e7a97039eb24b240b2900955fbe4b33595182eb5ec2f80f6577",
+	"level7_stall_inn_b_sign": "d8cd9cfffb7168b3df4d433d2950dc15c1ae18ef787d679bf2ffea4ea54d171e",
+	"level3_zhujiazhuang_gate_plaque": "",
+	"level3_zhujiazhuang_hall_plaque": "",
+	"level5_hall_plaque": "ec1bc1c6a1a4802eac49893994d7c8213db916eb03a27da33afef334c6adc608",
+	"level5_main_gate_plaque": "",
+	"level7_heyang_wine_sign": "",
+	"level7_main_tavern_plaque": "",
+	"level8_shop_house_plaque": "",
+	"liangshan_hilltop_standard": "d7e2f02fb7feaf54c714c06b325745a9670a491eb5c381c5341e99c575b24d9b",
+	"zhongyi_hall_standard_west": "22e4f07042e6f3d21c23ad01b24051c2828fb07c8024ba026d4c115adf21f1bc",
+	"zhongyi_hall_standard_east": "5cdadd67978d96b13d5fab3022126716969272b89d526e7e94f59b19bbfa2347"
+}
+
+
+const ATLAS_TEXT_CALIBRATIONS := {
+	"level7_heyang_wine_sign": {"route": "heyang_wine_sign", "level": "level7", "resource_sha256": "1ad2d48f8c77768c123700be9d6bf16205d6a4fdfb890bbb0b95aae4c3ef4c80", "source_sha256": "c8f487a92ff1e5639e154dad3ca1944fc22cf62e794e77d9807892377d726c4b", "rect": [0.3968633540372671, 0.37180124223602484, 0.08658385093167702, 0.2215527950310559], "source_path": "res://assets/campaign/environment/art_full_20260915/market.png", "pixel_sha256": "99c8073e8cecfe81a03c9eb6c803020a37bd4fa7e2b9681b1e460ed24f77ebd0", "imported_pixel_sha256": "6a707814ca8d084fcf72fe00289d8004db3e39ae175c23e77a6280b7a275769b", "size": [1254, 1254], "region": [796, 0, 458, 698], "margin": [163.6829268292683, 0, 327.3658536585366, 87.3658536585366]}
+}
+
+static func _route_path(table: Dictionary, active_level_id: String, route_key: String,
+		state: String = "default") -> String:
+	if active_level_id.is_empty() or route_key.is_empty() or not table.has(route_key):
+		return ""
+	var record: Dictionary = table[route_key]
+	var levels: Array = record.get("levels", [])
+	if active_level_id not in levels:
+		return ""
+	var paths: Dictionary = record.get("paths", {})
+	return String(paths.get(state, ""))
+
+
+static func _load_texture(path: String) -> Texture2D:
+	if path.is_empty(): return null
+	if not ResourceLoader.exists(path):
+		# A scoped atlas can sample native web PNG bytes without re-encoding them.
+		path = path.get_basename() + ".tres"
+		if not ResourceLoader.exists(path): return null
+	return ResourceLoader.load(path, "Texture2D") as Texture2D
+
+
+static func object(active_level_id: String, route_key: String,
+		state: String = "default") -> Texture2D:
+	return _load_texture(_route_path(OBJECT_ROUTES, active_level_id, route_key, state))
+
+
+static func overlay(active_level_id: String, route_key: String) -> Texture2D:
+	return _load_texture(_route_path(OVERLAY_ROUTES, active_level_id, route_key))
+
+
+static func static_flag(active_level_id: String, route_key: String) -> Texture2D:
+	return _load_texture(_route_path(STATIC_FLAG_ROUTES, active_level_id, route_key))
+
+
+## The five surface paths are production targets, not ArtDB aliases. GameMap/coast
+## materials may ask for one and keep their current atlas texture when this returns null.
+static func surface(active_level_id: String, surface_key: String) -> Texture2D:
+	return _load_texture(surface_path(active_level_id,surface_key))
+
+
+static func surface_path(active_level_id: String, surface_key: String) -> String:
+	if active_level_id.is_empty() or not SURFACE_ROUTES.has(surface_key): return ""
+	var record: Dictionary = SURFACE_ROUTES[surface_key]
+	if active_level_id not in record.get("levels",[]): return ""
+	return String(record.get("path",""))
+
+
+## Read-only helpers are used by intake contracts; they never bypass level scope.
+static func route_path(resolver: String, active_level_id: String, route_key: String,
+		state: String = "default") -> String:
+	match resolver:
+		"object": return _route_path(OBJECT_ROUTES, active_level_id, route_key, state)
+		"overlay": return _route_path(OVERLAY_ROUTES, active_level_id, route_key, state)
+		"static_flag": return _route_path(STATIC_FLAG_ROUTES, active_level_id, route_key, state)
+	return ""
+
+
+static func registered_levels(resolver: String, route_key: String) -> Array:
+	var table: Dictionary = {}
+	match resolver:
+		"object": table = OBJECT_ROUTES
+		"overlay": table = OVERLAY_ROUTES
+		"static_flag": table = STATIC_FLAG_ROUTES
+		_: return []
+	if not table.has(route_key):
+		return []
+	var record: Dictionary = table[route_key]
+	return record.get("levels", []).duplicate()
+
+
+static func text_rect(surface_id: String, accepted_source_sha256: String) -> Variant:
+	# A rect measured on one source must never be reused after that PNG changes.
+	if accepted_source_sha256.is_empty() \
+			or String(TEXT_RECT_SOURCE_SHA256.get(surface_id,"")) != accepted_source_sha256:
+		return null
+	return TEXT_RECTS.get(surface_id)
+
+
+## Runtime text is enabled only for the exact accepted source file whose SHA was
+## used to measure the rectangle. Missing files and stale measurements fail closed.
+static var _atlas_pixel_hashes: Dictionary = {}
+static var _png_pixel_hashes: Dictionary = {}
+
+## PCKs keep imported textures rather than original PNG files. Verify their exact
+## accepted pixels; in source projects also require the original encoded bytes.
+static func _verified_png_source_sha(path: String) -> String:
+	if not PNG_TEXTURE_CALIBRATIONS.has(path):
+		return FileAccess.get_sha256(path) if FileAccess.file_exists(path) else ""
+	var record: Dictionary = PNG_TEXTURE_CALIBRATIONS[path]
+	if FileAccess.file_exists(path) and FileAccess.get_sha256(path)!=record.source_sha256:
+		return ""
+	var texture := _load_texture(path)
+	if not texture is CompressedTexture2D or texture.resource_path!=path: return ""
+	var dimensions: Array = record.size
+	if texture.get_size()!=Vector2(dimensions[0],dimensions[1]): return ""
+	var cache_key := texture.get_instance_id()
+	if not _png_pixel_hashes.has(cache_key):
+		var pixels := texture.get_image()
+		if pixels==null or pixels.is_empty(): return ""
+		if pixels.is_compressed() and pixels.decompress()!=OK: return ""
+		pixels.convert(Image.FORMAT_RGBA8)
+		var digest := HashingContext.new()
+		digest.start(HashingContext.HASH_SHA256)
+		digest.update(pixels.get_data())
+		# Keep the Resource alive, so instance IDs cannot be recycled underneath
+		# this cache and Canvas commands keep a valid texture between redraws.
+		_png_pixel_hashes[cache_key]={"texture":texture,"sha256":digest.finish().hex_encode()}
+	var pixel_sha: String = _png_pixel_hashes[cache_key].sha256
+	if pixel_sha!=record.pixel_sha256 and pixel_sha!=record.imported_pixel_sha256:
+		return ""
+	return String(record.source_sha256)
+
+static func _atlas_calibration_matches(path: String, texture: Texture2D, record: Dictionary) -> bool:
+	if not texture is AtlasTexture or texture.atlas == null: return false
+	var atlas_is_native: bool = texture.atlas.resource_path == record.source_path
+	var region: Array = record.region
+	var margin: Array = record.margin
+	if not texture.region.is_equal_approx(Rect2(region[0],region[1],region[2],region[3])): return false
+	if not texture.margin.is_equal_approx(Rect2(margin[0],margin[1],margin[2],margin[3])): return false
+	# Source projects retain native bytes. Exported PCKs remap TRES/PNG resources;
+	# bind those to the same sampled geometry and decoded RGBA pixels instead.
+	if FileAccess.file_exists(path) and FileAccess.get_sha256(path) != record.resource_sha256: return false
+	var source_path: String = texture.atlas.resource_path
+	if atlas_is_native and FileAccess.file_exists(source_path):
+		return FileAccess.get_sha256(source_path) == record.source_sha256
+	if texture.atlas.get_size() != Vector2(record.size[0],record.size[1]): return false
+	var cache_key: int = texture.atlas.get_instance_id()
+	if not _atlas_pixel_hashes.has(cache_key):
+		var pixels: Image = texture.atlas.get_image()
+		if pixels == null or pixels.is_empty(): return false
+		if pixels.is_compressed() and pixels.decompress() != OK: return false
+		pixels.convert(Image.FORMAT_RGBA8)
+		var digest := HashingContext.new()
+		digest.start(HashingContext.HASH_SHA256)
+		digest.update(pixels.get_data())
+		_atlas_pixel_hashes[cache_key] = {"texture": texture.atlas, "sha256": digest.finish().hex_encode()}
+	var pixel_sha: String = _atlas_pixel_hashes[cache_key].sha256
+	return pixel_sha == record.pixel_sha256 or pixel_sha == record.get("imported_pixel_sha256", "")
+
+
+static func calibrated_text_rect(resolver: String, active_level_id: String,
+		route_key: String, state: String, surface_id: String) -> Variant:
+	var path := route_path(resolver,active_level_id,route_key,state)
+	if path.is_empty(): return null
+	if not ResourceLoader.exists(path):
+		var record: Dictionary = ATLAS_TEXT_CALIBRATIONS.get(surface_id,{})
+		var atlas_path := path.get_basename()+".tres"
+		if record.is_empty() or record.route!=route_key or record.level!=active_level_id or state!="default": return null
+		var texture = _load_texture(path)
+		if not _atlas_calibration_matches(atlas_path, texture, record): return null
+		return record.rect
+	var source_sha := _verified_png_source_sha(path)
+	if source_sha.is_empty(): return null
+	return text_rect(surface_id,source_sha)
+
+
+## Returns alignment metadata only when the active scoped route and exact disk
+## bytes still match the accepted candidate. The PNG itself is always rendered
+## whole; visible_bbox_xywh is never used as a crop or mask.
+static func calibrated_visual_metrics(resolver: String, active_level_id: String,
+		route_key: String, state := "default") -> Dictionary:
+	var path := route_path(resolver,active_level_id,route_key,state)
+	if path.is_empty() or not ResourceLoader.exists(path): return {}
+	var resolver_table: Dictionary = VISUAL_CALIBRATIONS.get(resolver,{})
+	if not resolver_table.has(route_key): return {}
+	var record: Dictionary = resolver_table[route_key]
+	if String(record.get("level_id",""))!=active_level_id: return {}
+	var source_sha := _verified_png_source_sha(path)
+	if source_sha.is_empty() or source_sha!=String(record.get("source_sha256","")): return {}
+	var bbox: Array = record.get("visible_bbox_xywh",[])
+	if bbox.size()!=4 or float(bbox[2])<=0.0 or float(bbox[3])<=0.0: return {}
+	var result := record.duplicate(true)
+	result["foot"]=(float(bbox[1])+float(bbox[3]))/VISUAL_CALIBRATION_CANVAS_SIZE.y
+	result["normalized_visible_bbox"]=[float(bbox[0])/VISUAL_CALIBRATION_CANVAS_SIZE.x,
+		float(bbox[1])/VISUAL_CALIBRATION_CANVAS_SIZE.y,float(bbox[2])/VISUAL_CALIBRATION_CANVAS_SIZE.x,
+		float(bbox[3])/VISUAL_CALIBRATION_CANVAS_SIZE.y]
+	return result

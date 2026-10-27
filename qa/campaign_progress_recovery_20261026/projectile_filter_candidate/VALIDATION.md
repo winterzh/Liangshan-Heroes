@@ -38,3 +38,9 @@ Graph返回的wire.records已是Codec编码数据，后继测试按实际存储�
 宿主complete=true、source_core_victory_chain_passed=true，完整来源后验、四个进程终态、锁所有权及释放均通过。source仍为b22f76f7；无HP、敌军、计时或世界状态注入。Steam关闭，credited_rewards_qualified=false；此结果仅授该源码屏幕外GL胜利续玩链，不授公开入口、SDK、发行版、桌面键鼠或全游戏资格。之前失败批次保留原结果，不以本次成功回写。
 
 原19故障工具的首次加载失败、最小修正及待验证步骤见[当前状态](tests/persistence19/VALIDATION.md)；组合加载原始输入见[失败收据](evidence/tools_load_seed_failure_20261027_094230/README.md)。
+
+## 大名府部分路线与后续工具
+
+[大名府本批](../daming_continue_candidate/evidence/flow_escort_partial_20261027_094353/README.md)卢先四进程633项全部通过，石先首A175项中1项近卫距离失败，完整八流程及52／61仍未通过。[修正后七GD加载](evidence/tools_load_complete_20261027_101643/README.md)PID512退出0、错误0，74pins通过，只授加载。原19实际协议证明进行中；[界面保存重试三进程工具](tests/ui_save_retry/README.md)代码和18命名输入检查已通过，仍待原生加载／执行。
+
+[原19实际9／12机制](evidence/persistence19_protocol_20261027_101914/README.md)已通过两进程60项，原CFG不变，完整19案正在运行。[界面四GD加载](evidence/ui_save_retry_load_20261027_102958/README.md)PID74924退出0／错误0、35.626秒、43pins；[大名府内圈护卫加载](evidence/guard_margin_load_20261027_103329/README.md)PID59700退出0／错误0、40.213秒、74pins。两者均未实例化worker，实际三进程／八流程仍待完成。
