@@ -110,3 +110,7 @@ qa/campaign_progress_recovery_20261026/continue_binding_candidate/：Flow/Sessio
 新52执行代码及8GD加载清单：`daming_continue_candidate/tests/daming_negative_v2/`；加载原件：同候选`evidence/negative_load_20261027_084545/`。高俅b22失败原件：`projectile_filter_candidate/evidence/terminal_toggle_failure_20261027_081838/`。以上均位于`qa/campaign_progress_recovery_20261026/`下。
 
 高俅真实Viewport toggle修订加载原件：`qa/campaign_progress_recovery_20261026/projectile_filter_candidate/evidence/terminal_toggle_load_20261027_090855/`。
+
+原19类故障当前协议适配：`qa/campaign_progress_recovery_20261026/projectile_filter_candidate/tests/persistence19/`，含19案映射、GD worker、只读默认计划器及实际9／12协议证明和19案宿主。首次加载失败与修订未赋予运行资格；实际结果由专题VALIDATION记录。
+
+高俅完整胜利416项原件：`qa/campaign_progress_recovery_20261026/projectile_filter_candidate/evidence/terminal_core_success_20261027_091102/`。外部七GD加载的seed冲突失败及最小修正：同候选`evidence/tools_load_seed_failure_20261027_094230/`；原19工具当前资格见`tests/persistence19/VALIDATION.md`。

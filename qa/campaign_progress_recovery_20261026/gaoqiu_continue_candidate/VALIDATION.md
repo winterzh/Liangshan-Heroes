@@ -1,5 +1,7 @@
 # 高俅续玩候选：当前验证状态
 
+当前最新结果：b22高俅核心胜利四进程416项全部通过；[原始成功证据](../projectile_filter_candidate/evidence/terminal_core_success_20261027_091102/README.md)。下方旧失败批次保留当时结果，最新细节见文末。候选未采用生产、公开入口未开放，桌面键鼠验收暂停。
+
 2026-10-27。候选尚未采用生产，公开战役续玩仍关闭，原版键鼠保持暂停。父目录README和integration_768来源文件保留创建时原字节；当前进展以本页及实际收据为准。
 
 ## 实现和独立编译
@@ -45,3 +47,11 @@
 唯一失败为按钮未完全显现。原QA的press_button仅发pressed，而实际任务_toggle启用toggle_mode且只以toggled连接_set_expanded；报告已记录展开动作，但这不会改变button_pressed或显示详情。按钮rect在1280×720内且enabled，这次不足以证实恢复布局坏。后继只修Viewport内部真实按下/释放，核pressed/toggled及祖先可见性，不写游戏HP、状态、面板visible或_expanded，不减少原滚动/裁剪/终局断言，也不恢复OS桌面键鼠。原失败报告、日志和冻结worker完整保留，来源后验及锁释放通过。
 
 后继Viewport真实toggle修订已通过新五GD纯加载PID26204（退出0/错误0，40.938秒）；新四流程已启动，实际结果见[统一源专项](../projectile_filter_candidate/VALIDATION.md)。
+
+## b22核心胜利四进程416项已通过
+
+批次20261027_091102_664dc55f实际四进程均退出0、错误0：A PID56416为125项／308.052秒，B PID14084为131项／596.913秒，C PID36516为96项／192.362秒，D PID51424为64项／113.724秒，共416项全部通过。两次生产SaveAndExit以continue_saved退出，独立菜单Continue恢复原检查点；原140／330／540三波正常派发清场，旗舰自然降服，实际Viewport点击任务toggle后由原收兵按钮闭合核心胜利。独立读取真实CFG验证当前目标与第六章解锁，LC／Intent／ACK严格匹配；第四进程实际拒绝终态旧槽，保持LC、CFG和奖励不变。
+
+宿主complete=true、source_core_victory_chain_passed=true，完整来源后验、四个进程终态、锁所有权及释放均通过。source仍为b22f76f7；无HP、敌军、计时或世界状态注入。Steam关闭，credited_rewards_qualified=false；此结果仅授该源码屏幕外GL胜利续玩链，不授公开入口、SDK、发行版、桌面键鼠或全游戏资格。之前失败批次保留原结果，不以本次成功回写。
+
+统一源工具和后继资格见[箭矢合同专项](../projectile_filter_candidate/VALIDATION.md)。

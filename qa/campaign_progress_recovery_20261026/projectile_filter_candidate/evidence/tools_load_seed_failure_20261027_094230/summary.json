@@ -1,0 +1,69 @@
+{
+  "schema": "combined_tools_seed_load_failure_v1",
+  "run": "D:\\AI项目\\水浒\\开发工程\\.godot\\continue_tools_load_20261027\\20261027_094230_b03fa2f1",
+  "run_complete": false,
+  "actual_step": {
+    "pid": 13644,
+    "command": [
+      "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+      "--headless",
+      "--path",
+      "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_075456_3e4a48ab\\project",
+      "--script",
+      "D:\\AI项目\\水浒\\开发工程\\.godot\\continue_tools_load_20261027\\20261027_094230_b03fa2f1\\loader.gd"
+    ],
+    "exit_code": 2,
+    "seconds": 29.883,
+    "errors": [
+      "SCRIPT ERROR: Parse Error: Cannot get return value of call to \"seed()\" because it returns \"void\".",
+      "SCRIPT ERROR: Parse Error: Too few arguments for \"seed()\" call. Expected at least 1 but received 0.",
+      "SCRIPT ERROR: Parse Error: Cannot get return value of call to \"seed()\" because it returns \"void\".",
+      "SCRIPT ERROR: Parse Error: Invalid argument for \"seed()\" function: argument 1 should be \"int\" but is \"Dictionary\".",
+      "ERROR: Failed to load script \"D:/AI项目/水浒/开发工程/.godot/continue_tools_load_20261027/20261027_094230_b03fa2f1/workers/persistence19/worker.gd\" with error \"Parse error\".",
+      "ERROR: LOAD_ONLY_INVALID: D:\\AI项目\\水浒\\开发工程\\.godot\\continue_tools_load_20261027\\20261027_094230_b03fa2f1\\workers\\persistence19\\worker.gd"
+    ],
+    "stopped_for": null,
+    "log_sha256": "d47c8a5aca90d8944682eef621d050b988ad437c59e9d5b938ac0ac51aa8445b",
+    "loaded_lines": [
+      "LOAD_ONLY_PASS D:\\AI项目\\水浒\\开发工程\\.godot\\continue_tools_load_20261027\\20261027_094230_b03fa2f1\\workers\\daming\\bootstrap.gd",
+      "LOAD_ONLY_PASS D:\\AI项目\\水浒\\开发工程\\.godot\\continue_tools_load_20261027\\20261027_094230_b03fa2f1\\workers\\daming\\base.gd",
+      "LOAD_ONLY_PASS D:\\AI项目\\水浒\\开发工程\\.godot\\continue_tools_load_20261027\\20261027_094230_b03fa2f1\\workers\\daming\\terminal.gd",
+      "LOAD_ONLY_PASS D:\\AI项目\\水浒\\开发工程\\.godot\\continue_tools_load_20261027\\20261027_094230_b03fa2f1\\workers\\daming\\driver.gd",
+      "LOAD_ONLY_PASS D:\\AI项目\\水浒\\开发工程\\.godot\\continue_tools_load_20261027\\20261027_094230_b03fa2f1\\workers\\daming\\route.gd",
+      "LOAD_ONLY_PASS D:\\AI项目\\水浒\\开发工程\\.godot\\continue_tools_load_20261027\\20261027_094230_b03fa2f1\\workers\\persistence19\\bootstrap.gd"
+    ]
+  },
+  "daming_five_scripts_loaded_and_can_instantiate": true,
+  "persistence19_bootstrap_loaded_and_can_instantiate": true,
+  "persistence19_worker_load_failed": true,
+  "cause": "Unqualified seed() calls resolve to Godot built-in seed(int)->void instead of the fixture helper.",
+  "qualification": {
+    "native_failure_preserved": true,
+    "worker_instantiated": false,
+    "gameplay_executed": false,
+    "full_source_qualified": false,
+    "protocol_9_12_qualified": false,
+    "persistence19_qualified": false,
+    "daming_eight_process_qualified": false,
+    "native_sdk_qualified": false,
+    "desktop_os_input": false,
+    "human_acceptance": false,
+    "published": false
+  },
+  "historical_terminal_and_source_checks": {
+    "final_pins_passed": true,
+    "engine_unchanged": true,
+    "child_terminal": true,
+    "lane_idle": true,
+    "owner_confirmed": true,
+    "lock_released": true,
+    "post_errors": []
+  },
+  "correction": {
+    "only_identifier_sites_changed": 3,
+    "name": "_seed_private_campaign_fixture",
+    "worker_sha256": "31c650c5f1ea1b27b8226fe3728981dd15041608bc3db5030da032d55152a48c",
+    "sources_sha256": "dd78ee15d245fef6763e84bd57560b6e993aeabbf64e72f0e1afd6f6b5cc8608",
+    "native_retested_at_archive": false
+  }
+}

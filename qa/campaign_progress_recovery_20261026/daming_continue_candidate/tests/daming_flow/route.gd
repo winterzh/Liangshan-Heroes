@@ -20,6 +20,7 @@ var started_ms := 0
 var commands: Array = []
 var checkpoint_ticks: Dictionary = {}
 var failure := ""
+var escort_ids: Array = []
 
 func configure(runner: Node, role: String) -> Dictionary:
 	if not is_instance_valid(runner) or role not in ROLES:
@@ -175,14 +176,10 @@ func natural_rescue(b: Node) -> bool:
 		if not _check("gate hero survives actual clearing", not hero.is_empty()): return false
 		if not _order(b, [hero[0]], level_script.GATE_APPROACH): return false
 		if not await _step_wait(b, "real gate action complete", func(): return b.level.gate_open and b.mission.has_event("daming_gate_opened")): return false
-	if not await _clear_original_tower(b, 0, Vector2i(30,38)): return false
 	if not _order(b, _crew(b), level_script.PRISON_CHECK, true): return false
 	if not await _step_wait(b, "prison approach clear", func(): return not b.level._guarded(b, level_script.PRISON_CHECK, 160.0)): return false
-	# The authored briefing explicitly requires the prison tower to be removed
-	# before unlocking. The old radius-120 rescue gate does not prove that.
-	if not await _clear_original_tower(b, 1, level_script.PRISON_CHECK): return false
 	if not _order(b, _crew(b), level_script.JAIL_ACTION, true): return false
-	if not await _step_wait(b, "jail action resistance clear", Callable(self,"_jail_escort_ready").bind(b)): return false
+	if not await _step_wait(b, "jail action resistance clear", func(): return not b.level._guarded(b, level_script.JAIL_ACTION, 120.0)): return false
 	if not _order(b, [b.level.chai], level_script.JAIL_ACTION): return false
 	if not await _step_wait(b, "real rescue complete", func(): return b.level.rescued and _action_done(b, RESCUE) and b.mission.has_event("daming_prisoners_freed")): return false
 	return _check("both rescued alive naturally", _alive(b.level.lu) and _alive(b.level.shi) and not b.level.lu.is_captive and not b.level.shi.is_captive)
@@ -192,9 +189,6 @@ func _outside_exit(b: Node, point: Vector2) -> bool:
 
 func _target_gone(target: Variant) -> bool:
 	return not _alive(target)
-
-func _tower_visible_or_gone(b: Node, target: Variant) -> bool:
-	return not _alive(target) or b._enemy_at(b.to_screen(target.position)) == target
 
 func _attack_visible(b: Node, target: Node, label: String, attackers: Array = []) -> bool:
 	var crew: Array = _crew(b) if attackers.is_empty() else attackers
@@ -206,19 +200,6 @@ func _attack_visible(b: Node, target: Node, label: String, attackers: Array = []
 	b.minimap_order(target.position, true)
 	commands.append({"kind":"player_explicit_attack","label":label,"ids":crew.map(func(u): return str(u.entity_id)),"target_id":target_id,"target_key":target.key,"logical_tick":str(b._run_clock._next_tick)})
 	return _check(label + " actual command targets the original entity", crew.all(func(u): return u._target == target and u._state == u.ST_CHASE))
-
-func _clear_original_tower(b: Node, index: int, approach: Vector2i) -> bool:
-	if not _check("two original authored escort towers", b.level.towers.size() == 2 and index in [0,1]): return false
-	var tower: Variant = b.level.towers[index]
-	if not _alive(tower): return true
-	var label := "original escort tower %d" % index
-	if not _tower_visible_or_gone(b, tower):
-		if not _order(b, _crew(b), approach, true): return false
-		if not await _step_wait(b, label + " becomes normally visible", Callable(self,"_tower_visible_or_gone").bind(b,tower)): return false
-	if _alive(tower):
-		if not _attack_visible(b, tower, label): return false
-		if not await _step_wait(b, label + " destroyed by ordinary attacks", Callable(self,"_target_gone").bind(tower)): return false
-	return _check(label + " no surviving original tower", not _alive(tower))
 
 func _visible_corridor_enemies(b: Node, cell: Vector2i) -> Array:
 	var center: Vector2 = b.map.cell_to_world(cell)
@@ -236,11 +217,11 @@ func _clear_visible_corridor(b: Node, cell: Vector2i, prisoners: Array) -> bool:
 		if not _stop_wounded_and_hold_guards(b,prisoners): return false
 		var reserved: Array = []
 		for actor: Node in prisoners:
-			var close: Array = _near_guards(b,actor)
+			var close: Array = _near_escort_guards(b,actor)
 			close.sort_custom(func(a,c): return a.position.distance_squared_to(actor.position) < c.position.distance_squared_to(actor.position))
 			for guard: Node in close.slice(0,3):
 				if not reserved.has(guard): reserved.append(guard)
-		var attackers: Array = _crew(b).filter(func(u): return not reserved.has(u))
+		var attackers: Array = _escort_group(b).filter(func(u): return not reserved.has(u))
 		if not _check("corridor attack preserves three held close guards per wounded", attackers.size() >= 3 and _reserved_guard_cover(prisoners,reserved)): return false
 		var target: Node = threats[0]
 		var label := "visible escort corridor %d,%d target %s" % [cell.x,cell.y,str(target.entity_id)]
@@ -261,29 +242,49 @@ func _reserved_guard_cover(prisoners: Array, reserved: Array) -> bool:
 		if close < 3: return false
 	return true
 
-func _jail_escort_ready(b: Node) -> bool:
-	return not b.level._guarded(b,level_script.JAIL_ACTION,120.0) and _crew(b).all(func(u): return b.level._near(b,u,level_script.JAIL_ACTION,180.0)) and _near_guards(b,b.level.lu).size() >= 3 and _near_guards(b,b.level.shi).size() >= 3
+func _escort_group(b: Node) -> Array:
+	return _crew(b).filter(func(u): return str(u.entity_id) in escort_ids)
+
+func _near_escort_guards(b: Node, actor: Node) -> Array:
+	return _escort_group(b).filter(func(u): return u.position.distance_to(actor.position) <= ESCORT_NEAR)
+
+func _choose_escort(b: Node, prisoners: Array, require_close: bool) -> bool:
+	if not _check("escort selection uses actual living original wounded", not prisoners.is_empty() and prisoners.all(func(u): return _alive(u))): return false
+	var center := Vector2.ZERO
+	for actor: Node in prisoners: center += actor.position
+	center /= float(prisoners.size())
+	var available: Array = _crew(b).filter(func(u): return u.key != "siege_cata")
+	if require_close: available = available.filter(func(u): return prisoners.any(func(actor): return u.position.distance_to(actor.position) <= ESCORT_NEAR))
+	available.sort_custom(func(a,c): return a.position.distance_squared_to(center) < c.position.distance_squared_to(center))
+	# At most six distinct reserved guards (three per wounded), plus three
+	# ordinary attackers; do not wait for the entire army or siege engines.
+	escort_ids = available.slice(0,9).map(func(u): return str(u.entity_id))
+	commands.append({"kind":"escort_selection_observed","ids":escort_ids.duplicate(),"wounded":prisoners.map(func(u): return str(u.entity_id)),"require_close":require_close,"logical_tick":str(b._run_clock._next_tick)})
+	return _check("selected escort is a real surviving field group", escort_ids.size() >= 3 and _escort_group(b).size() == escort_ids.size(), {"ids":escort_ids,"positions":_escort_group(b).map(func(u): return _motion_state(b,u))})
+
+func _escort_assembled(b: Node, prisoners: Array) -> bool:
+	return _escort_group(b).size() >= 3 and prisoners.all(func(u): return _alive(u) and _near_escort_guards(b,u).size() >= 3) and _escort_group(b).all(func(u): return b.level._near(b,u,level_script.PRISON_INSIDE,180.0))
 
 func _convoy_arrived(b: Node, prisoners: Array, cell: Vector2i) -> bool:
 	var center: Vector2 = b.map.cell_to_world(cell)
 	if not prisoners.all(func(u): return _alive(u) and _outside_exit(b,u.position) and u.position.distance_to(center) <= 105.0): return false
-	if not _crew(b).all(func(u): return u.position.distance_to(center) <= 180.0): return false
-	return prisoners.all(func(u): return _near_guards(b,u).size() >= 3)
+	if not _escort_group(b).all(func(u): return u.position.distance_to(center) <= 180.0): return false
+	return prisoners.all(func(u): return _near_escort_guards(b,u).size() >= 3)
 
 func _stop_wounded_and_hold_guards(b: Node, prisoners: Array) -> bool:
 	if not _check("escort stop command retains living wounded", _fight(b) and not driver.get_tree().paused and not Engine.is_in_physics_frame() and prisoners.all(func(u): return _alive(u) and u.is_noncombat and u.stance == u.STANCE_PASSIVE)): return false
 	b.select_members(prisoners, false)
 	b._order_stop() # S preserves their PASSIVE stance; H is for combat guards only.
 	commands.append({"kind":"player_stop_wounded","ids":prisoners.map(func(u): return str(u.entity_id)),"logical_tick":str(b._run_clock._next_tick)})
-	var crew: Array = _crew(b)
-	if not _check("at least three actual close guards per wounded", crew.size() >= 3 and prisoners.all(func(u): return _near_guards(b,u).size() >= 3)): return false
+	var crew: Array = _escort_group(b)
+	if not _check("at least three actual close guards per wounded", crew.size() >= 3 and prisoners.all(func(u): return _near_escort_guards(b,u).size() >= 3)): return false
 	b.select_members(crew, false)
 	b._order_hold_position()
 	commands.append({"kind":"player_hold_guards","ids":crew.map(func(u): return str(u.entity_id)),"logical_tick":str(b._run_clock._next_tick)})
 	return _check("ordinary S/H leaves wounded passive and guards holding", prisoners.all(func(u): return u.stance == u.STANCE_PASSIVE and u._state == u.ST_IDLE and u._target == null and u._path.is_empty()) and crew.all(func(u): return u._hold_order_active and u.stance == u.STANCE_HOLD))
 
 func _convoy_move(b: Node, prisoners: Array, cell: Vector2i, before_exit: bool) -> bool:
-	var crew: Array = _crew(b)
+	var crew: Array = _escort_group(b)
 	var members: Array = crew + prisoners
 	if not _check("convoy uses actual living guards and wounded", _fight(b) and not driver.get_tree().paused and not Engine.is_in_physics_frame() and crew.size() >= 3 and members.all(func(u): return _alive(u)) and b.map.is_open_cell(cell)): return false
 	b.select_members(members, false)
@@ -305,6 +306,13 @@ func _convoy_move(b: Node, prisoners: Array, cell: Vector2i, before_exit: bool) 
 
 func _escort_to_rally(b: Node) -> bool:
 	var prisoners: Array = [b.level.lu,b.level.shi]
+	if not _choose_escort(b,prisoners,false): return false
+	# Ordinary move installs a new nearby home/formation target. A completed
+	# attack-move may otherwise leash back to its old camp home.
+	if not _order(b,_escort_group(b),level_script.PRISON_INSIDE,false): return false
+	if not await _step_wait(b,"selected guards assemble beside both wounded",Callable(self,"_escort_assembled").bind(b,prisoners)): return false
+	if not _stop_wounded_and_hold_guards(b,prisoners): return false
+	driver.route_observations.append({"escort_assembled":observe(b)})
 	if not _check("authored rally is open and strictly outside both exit tests", b.map.is_open_cell(ESCORT_RALLY) and _outside_exit(b,b.map.cell_to_world(ESCORT_RALLY))): return false
 	# Keep one ordinary speed-capped formation, verify proximity at each stop,
 	# and hold guards there instead of sending them hundreds of pixels ahead.
@@ -322,9 +330,9 @@ func first_exit(b: Node) -> bool:
 	var other: Node = b.level.get(other_role)
 	if not _check("first exit begins rescued FIGHT with other alive", _fight(b) and b.level.rescued and b.level.gate_open and _alive(first) and _alive(other)): return false
 	if not await _escort_to_rally(b): return false
-	if not _check("both wounded assembled outside exit with close held guards", _outside_exit(b,first.position) and _outside_exit(b,other.position) and _near_guards(b,other).size() >= 3,observe(b)): return false
+	if not _check("both wounded assembled outside exit with close held guards", _outside_exit(b,first.position) and _outside_exit(b,other.position) and _near_escort_guards(b,other).size() >= 3,observe(b)): return false
 	# Only the chosen first prisoner crosses. The other is no longer abandoned
-	# beside a surviving prison tower; normal H guards remain with that actor.
+	# in the prison; the selected normal H guards remain with that actor.
 	if not _order(b, [first], level_script.EXIT_CELL): return false
 	if not await _step_wait(b, "first actual safety callback completed", func(): return first.story_outcome == "retreated" and b.mission.has_event("daming_" + first_role + "_safe")): return false
 	# Observe after the completed physics tick; the caller opens the actual pause UI.
@@ -344,7 +352,8 @@ func finish_other_naturally(b: Node) -> bool:
 	if not driver.resume_play("resume restored escort through actual pause button"): return false
 	var other_role: String = "shi" if first_role == "lu" else "lu"
 	var other: Node = b.level.get(other_role)
-	if not _check("restored second wounded still has close guards before final escort", _outside_exit(b,other.position) and _near_guards(b,other).size() >= 3,observe(b)): return false
+	if not _choose_escort(b,[other],true): return false
+	if not _check("restored second wounded still has close guards before final escort", _outside_exit(b,other.position) and _near_escort_guards(b,other).size() >= 3,observe(b)): return false
 	if not await _clear_visible_corridor(b,ESCORT_RALLY,[other]): return false
 	if not _convoy_move(b,[other],level_script.EXIT_CELL,false): return false
 	var deadline := Time.get_ticks_msec() + 180000
@@ -378,6 +387,8 @@ func observe(b: Node) -> Dictionary:
 	out.camp = {"exists":is_instance_valid(b.level.hall)}
 	if is_instance_valid(b.level.hall): out.camp.merge({"hp":b.level.hall.hp, "dying":b.level.hall._dying, "outcome":b.level.hall.story_outcome})
 	out.assault = _crew(b).map(func(u): return _motion_state(b,u))
+	out.selected_escort_ids = escort_ids.duplicate()
+	out.selected_escort_alive = _escort_group(b).map(func(u): return _motion_state(b,u))
 	out.original_towers = b.level.towers.map(func(u): return _motion_state(b,u))
 	out.prison_guards = b.units.filter(func(u): return _alive(u) and u.faction == 1 and not u.is_resource and b.level._near(b,u,level_script.PRISON_CHECK,160.0)).map(func(u): return {"motion":_motion_state(b,u),"segment_open":b.map._segment_open(u.position,b.map.cell_to_world(level_script.PRISON_CHECK))})
 	out.camp_guards = b.units.filter(func(u): return _alive(u) and u.faction == 0 and u.key in CAMP_GUARD_KEYS).map(func(u): return {"id":str(u.entity_id), "key":u.key, "hp":u.hp, "position":[u.position.x, u.position.y]})

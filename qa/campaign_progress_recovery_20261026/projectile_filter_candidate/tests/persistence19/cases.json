@@ -1,0 +1,643 @@
+{
+  "schema": "persistence19_b22_adaptation_plan_v1",
+  "base_run": ".godot/campaign_progress_recovery_20261026/20261027_075456_3e4a48ab",
+  "source_sha256": "b22f76f7bf4b8309f9257829364f4afdd6c9262282a25cb6aefacce5aa916132",
+  "worker_implemented": true,
+  "native_executed": false,
+  "original_ids_unchanged": true,
+  "current_protocol_proof": false,
+  "cases": [
+    {
+      "index": 0,
+      "id": "normal_first_full_seal",
+      "old_worker_lines": "170-175",
+      "old_expected": {
+        "accepted": true,
+        "memory_applied": true,
+        "persisted": true,
+        "suppressed": false,
+        "save_code": "CAMPAIGN_CFG_READBACK_VERIFIED",
+        "cloud_callback_only_not_upload": true,
+        "new_story_seal": true,
+        "durable_new_story_seal": true
+      },
+      "semantic_target": "First full result persists one seal and unlocks level8 successor.",
+      "status": "current_protocol_mapped_unexecuted",
+      "new_entry": [
+        "actual Lifecycle.begin -> terminal_with_intent",
+        "fresh Lifecycle + actual Coordinator.begin_recovery",
+        "actual CFG -> ACK2/uncredited handoff -> Campaign._load -> progress_committed"
+      ],
+      "fault": null,
+      "must_observe": [
+        "Pure expected Projection new_story_seal=true; actual committed CFG and published Campaign have fullseal/unlocked9.",
+        "Actual LC gen1/gen2/fresh recovery/ACK2 and strict uncredited handoff proof; same original intent token and SHA.",
+        "Actual recovery settlement_authorized=false; no synthetic live settlement or legacy durable_new_story_seal field."
+      ],
+      "passed": null,
+      "native_executed": false,
+      "oracle_version": "b22_synthetic_component_v2"
+    },
+    {
+      "index": 1,
+      "id": "normal_repeat_full",
+      "old_worker_lines": "176-180",
+      "old_expected": {
+        "accepted": true,
+        "memory_applied": true,
+        "persisted": true,
+        "suppressed": false,
+        "save_code": "CAMPAIGN_CFG_READBACK_VERIFIED",
+        "cloud_callback_only_not_upload": true,
+        "new_story_seal": false,
+        "durable_new_story_seal": false
+      },
+      "semantic_target": "Same prior full result never grants another seal.",
+      "status": "current_protocol_mapped_unexecuted",
+      "new_entry": [
+        "actual Lifecycle.begin -> terminal_with_intent",
+        "fresh Lifecycle + actual Coordinator.begin_recovery",
+        "actual CFG -> ACK2/uncredited handoff -> Campaign._load -> progress_committed"
+      ],
+      "fault": null,
+      "must_observe": [
+        "Second real process uses exact prior report SHA/profile/batch and closed original CFG from case0.",
+        "A new token and new LC traverse real commit again; same-token already_applied is not this case.",
+        "Pure Projection new_story_seal=false; actual fullseal retained; no Steam reward-once claim."
+      ],
+      "passed": null,
+      "native_executed": false,
+      "oracle_version": "b22_synthetic_component_v2"
+    },
+    {
+      "index": 2,
+      "id": "best_single_run_no_union",
+      "old_worker_lines": "181-185",
+      "old_expected": {
+        "accepted": true,
+        "memory_applied": true,
+        "persisted": true,
+        "suppressed": false,
+        "save_code": "CAMPAIGN_CFG_READBACK_VERIFIED",
+        "cloud_callback_only_not_upload": true,
+        "new_story_seal": false,
+        "durable_new_story_seal": false,
+        "best_ids_from_one_run": true,
+        "goal_union": false
+      },
+      "semantic_target": "Best single result never unions IDs; tied and weaker runs do not replace best.",
+      "status": "current_protocol_mapped_unexecuted",
+      "new_entry": [
+        "actual Lifecycle.begin -> terminal_with_intent",
+        "fresh Lifecycle + actual Coordinator.begin_recovery",
+        "actual CFG -> ACK2/uncredited handoff -> Campaign._load -> progress_committed"
+      ],
+      "fault": null,
+      "must_observe": [
+        "Actual Daming goals A/BC/AC/A each use a distinct real token and completed LC/CFG/ACK2 transaction.",
+        "Actual Campaign/CFG best remains BC, never a union or tied/weaker replacement; no fullseal.",
+        "The legacy invalid d singleton is explicitly replaced by valid A, preserving weaker-run semantics."
+      ],
+      "passed": null,
+      "native_executed": false,
+      "oracle_version": "b22_synthetic_component_v2"
+    },
+    {
+      "index": 3,
+      "id": "invalid_no_unlock",
+      "old_worker_lines": "187-192",
+      "old_expected": {
+        "accepted": false,
+        "memory_applied": false,
+        "persisted": false,
+        "new_story_seal": false,
+        "disk_write_attempted": false,
+        "unlocked_unchanged": true
+      },
+      "semantic_target": "Invalid context, unknown level and non-victory cannot unlock or write progress.",
+      "status": "current_protocol_mapped_unexecuted",
+      "new_entry": [
+        "actual Intent.scope(custom/unknown)",
+        "actual Intent.validate_result(core=false, victory=true)"
+      ],
+      "fault": null,
+      "must_observe": [
+        "Exact OFFICIAL_CONTEXT_NOT_SUPPORTED for custom and unknown chapter.",
+        "Exact CAMPAIGN_INTENT_OUTCOME_MISMATCH for victory/core mismatch.",
+        "Actual Campaign memory and named business inventory unchanged; no unified CoordinatorRequired substitution. This is explicit current validation-component scope."
+      ],
+      "passed": null,
+      "native_executed": false,
+      "oracle_version": "b22_synthetic_component_v2"
+    },
+    {
+      "index": 4,
+      "id": "QA_memory_only",
+      "old_worker_lines": "193-198",
+      "old_expected": {
+        "accepted": true,
+        "memory_applied": true,
+        "new_story_seal": true,
+        "durable_new_story_seal": false,
+        "persisted": false,
+        "suppressed": true,
+        "legacy_save_bool": true,
+        "sentinel_unchanged": true,
+        "cloud_calls": 0
+      },
+      "semantic_target": "QA changes only compatible memory; no durable file or cloud notification.",
+      "status": "current_protocol_mapped_unexecuted",
+      "new_entry": [
+        "Campaign.record_level_result with CAMPAIGN_QA=1",
+        "Campaign._save"
+      ],
+      "fault": null,
+      "must_observe": [
+        "Check actual accepted/new_story_seal and _save bool with current return schema.",
+        "Compare campaign.cfg and CFG journal/candidate inventory before/after; cloud callback absent.",
+        "Removed save_receipt/suppressed/durable_new_story_seal fields are not recreated by adapter."
+      ],
+      "passed": null,
+      "native_executed": false,
+      "oracle_version": "b22_synthetic_component_v2"
+    },
+    {
+      "index": 5,
+      "id": "QA_cloud_bool_compatibility",
+      "old_worker_lines": "199-206",
+      "old_expected": {
+        "old_bool": true,
+        "memory_cloud_profile_replaced": true,
+        "persisted": false,
+        "suppressed": true,
+        "cloud_calls": 0
+      },
+      "semantic_target": "Real Cloud QA application keeps bool compatibility without CFG durability/upload.",
+      "status": "current_protocol_mapped_unexecuted",
+      "new_entry": [
+        "SteamCloud._apply_profile",
+        "Campaign.apply_cloud_progress QA branch"
+      ],
+      "fault": null,
+      "must_observe": [
+        "Real exact SteamCloud object, validated owner/payload and actual installed identity; await normal startup readiness.",
+        "Campaign memory becomes expected QA values, original CFG remains byte-identical, dirty/upload remain false.",
+        "Settings/language may have their existing separate writes; do not claim entire profile zero-mutation."
+      ],
+      "passed": null,
+      "native_executed": false,
+      "oracle_version": "b22_synthetic_component_v2"
+    },
+    {
+      "index": 6,
+      "id": "bad_existing_cfg_load",
+      "old_worker_lines": "208-214",
+      "old_expected": {
+        "save_code": "CAMPAIGN_CFG_PRIOR_LOAD_FAILED",
+        "accepted": true,
+        "memory_applied": false,
+        "write_attempted": false,
+        "persisted": false,
+        "new_story_seal": false,
+        "old_memory_unchanged": true,
+        "file_not_written_by_attempt": true
+      },
+      "semantic_target": "Malformed existing CFG is never overwritten.",
+      "status": "current_protocol_mapped_unexecuted",
+      "new_entry": [
+        "strict synthetic uncredited Intent v2",
+        "actual LC3 gen1 -> gen2",
+        "fresh LC + Coordinator.begin_recovery -> actual CFG; success only continues ACK2/_load"
+      ],
+      "fault": {
+        "function": "_stable_cfg",
+        "phase": "prior",
+        "anchor": "var loaded: int = cfg.load(path)",
+        "line": 146,
+        "target": "actual private campaign.cfg",
+        "mutation": "write [broken before begin_write",
+        "outer_code": "CFG_READBACK_LOAD"
+      },
+      "must_observe": [
+        "Exact native_error != OK and original malformed SHA unchanged.",
+        "Actual original load, no candidate save, unchanged Campaign memory; observe lock release separately."
+      ],
+      "passed": null,
+      "native_executed": false,
+      "oracle_version": "b22_synthetic_component_v2"
+    },
+    {
+      "index": 7,
+      "id": "existing_vanished_prior",
+      "old_worker_lines": "215-225",
+      "old_expected": {
+        "save_code": "CAMPAIGN_CFG_PRIOR_LOAD_FAILED",
+        "write_attempted": false,
+        "persisted": false,
+        "memory_applied": false
+      },
+      "semantic_target": "Existing file vanishes after observed existence; never rebuild it as a new profile.",
+      "status": "current_protocol_mapped_unexecuted",
+      "new_entry": [
+        "strict synthetic uncredited Intent v2",
+        "actual LC3 gen1 -> gen2",
+        "fresh LC + Coordinator.begin_recovery -> actual CFG; success only continues ACK2/_load"
+      ],
+      "fault": {
+        "function": "_stable_cfg",
+        "phase": "prior",
+        "anchor": "var loaded: int = cfg.load(path)",
+        "line": 146,
+        "target": "actual private campaign.cfg after initial original SHA and before cfg.load",
+        "mutation": "move to new owned evidence path while own child paused",
+        "outer_code": "CFG_READBACK_LOAD"
+      },
+      "must_observe": [
+        "Before hash proves original existed; current path absent and exact backup bytes retained.",
+        "No candidate write, no durable result; refusal at actual load, not prior SHA check."
+      ],
+      "passed": null,
+      "native_executed": false,
+      "oracle_version": "b22_synthetic_component_v2"
+    },
+    {
+      "index": 8,
+      "id": "true_new_missing_cfg",
+      "old_worker_lines": "215-225",
+      "old_expected": {
+        "accepted": true,
+        "memory_applied": true,
+        "persisted": true,
+        "suppressed": false,
+        "save_code": "CAMPAIGN_CFG_READBACK_VERIFIED",
+        "cloud_callback_only_not_upload": true
+      },
+      "semantic_target": "Truly missing CFG may create a new durable file.",
+      "status": "current_protocol_mapped_unexecuted",
+      "new_entry": [
+        "strict synthetic uncredited Intent v2",
+        "actual LC3 gen1 -> gen2",
+        "fresh LC + Coordinator.begin_recovery -> actual CFG; success only continues ACK2/_load"
+      ],
+      "fault": null,
+      "must_observe": [
+        "Observed original_sha256==ZERO and actual prior path absent.",
+        "No prior cfg.load occurs in current branch; old ERR_FILE_NOT_FOUND receipt assertion is explicitly retired.",
+        "Exact success CAMPAIGN_CFG_READBACK_VERIFIED with actual installed CFG, closed journal and released owner."
+      ],
+      "passed": null,
+      "native_executed": false,
+      "oracle_version": "b22_synthetic_component_v2"
+    },
+    {
+      "index": 9,
+      "id": "write_failure",
+      "old_worker_lines": "215-225",
+      "old_expected": {
+        "save_code": "CAMPAIGN_CFG_WRITE_FAILED",
+        "accepted": true,
+        "memory_applied": false,
+        "persisted": false,
+        "write_attempted": true,
+        "readback_attempted": false,
+        "disk_state_unconfirmed": true,
+        "retry_safe": false,
+        "cloud_calls": 0
+      },
+      "semantic_target": "Actual save failure cannot be reported as persisted or fresh-load success.",
+      "status": "current_protocol_mapped_unexecuted",
+      "new_entry": [
+        "strict synthetic uncredited Intent v2",
+        "actual LC3 gen1 -> gen2",
+        "fresh LC + Coordinator.begin_recovery -> actual CFG; success only continues ACK2/_load"
+      ],
+      "fault": {
+        "function": "retry_write",
+        "phase": "candidate_save",
+        "anchor": "var saved: int = _frozen_cfg.save(candidate)",
+        "line": 292,
+        "target": "current transaction candidate.cfg after nonexistent-path check at 288",
+        "mutation": "real owned Windows write denial; protocol probe required",
+        "outer_code": "CFG_STAGE_WRITE"
+      },
+      "must_observe": [
+        "native_error != OK and owned_pending=true; prove candidate save was attempted and fresh readback was not.",
+        "Original campaign.cfg unchanged; actual frozen scope retained.",
+        "A read-only original CFG or a later rename error is not this case; host-created sentinel must be labelled external fault artifact."
+      ],
+      "passed": null,
+      "native_executed": false,
+      "oracle_version": "b22_synthetic_component_v2"
+    },
+    {
+      "index": 10,
+      "id": "save_OK_fresh_load_failure",
+      "old_worker_lines": "215-225",
+      "old_expected": {
+        "save_code": "CAMPAIGN_CFG_READBACK_FAILED",
+        "write_error": 0,
+        "readback_failed": true,
+        "disk_state_unconfirmed": true,
+        "accepted": true,
+        "memory_applied": false,
+        "persisted": false,
+        "durable_new_story_seal": false,
+        "disk_may_contain_candidate": true,
+        "retry_safe": false,
+        "cloud_calls": 0
+      },
+      "semantic_target": "Successful save followed by failed fresh load is not confirmed durable.",
+      "status": "current_protocol_mapped_unexecuted",
+      "new_entry": [
+        "strict synthetic uncredited Intent v2",
+        "actual LC3 gen1 -> gen2",
+        "fresh LC + Coordinator.begin_recovery -> actual CFG; success only continues ACK2/_load"
+      ],
+      "fault": {
+        "function": "_stable_cfg",
+        "phase": "candidate_readback",
+        "anchor": "var loaded: int = cfg.load(path)",
+        "line": 146,
+        "target": "current candidate.cfg after saved OK and candidate SHA",
+        "mutation": "move actual closed candidate to owned evidence path",
+        "outer_code": "CFG_STAGE_READBACK",
+        "inner_code": "CFG_READBACK_LOAD"
+      },
+      "must_observe": [
+        "Observe saved==OK and actual candidate SHA before injection, actual load failure after injection.",
+        "Original CFG byte-identical, no install/ACK, retained transaction.",
+        "An earlier hash rejection, another _stable_cfg phase or timeout is failure of the test."
+      ],
+      "passed": null,
+      "native_executed": false,
+      "oracle_version": "b22_synthetic_component_v2"
+    },
+    {
+      "index": 11,
+      "id": "readback_semantic_mismatch",
+      "old_worker_lines": "215-225",
+      "old_expected": {
+        "save_code": "CAMPAIGN_CFG_READBACK_MISMATCH",
+        "readback_failed": true,
+        "disk_state_unconfirmed": true,
+        "memory_applied": false,
+        "persisted": false,
+        "cloud_calls": 0
+      },
+      "semantic_target": "Freshly loaded candidate semantics differ from frozen expected semantics.",
+      "status": "current_protocol_mapped_unexecuted",
+      "new_entry": [
+        "strict synthetic uncredited Intent v2",
+        "actual LC3 gen1 -> gen2",
+        "fresh LC + Coordinator.begin_recovery -> actual CFG; success only continues ACK2/_load"
+      ],
+      "fault": {
+        "function": "retry_write",
+        "phase": "after_save_before_first_digest",
+        "anchor": "var digest: Dictionary = _cfg_sha(candidate)",
+        "line": 294,
+        "target": "closed current candidate.cfg",
+        "mutation": "exactly one valid unlocked=9 to unlocked=7 replacement before first digest",
+        "outer_code": "CFG_STAGE_READBACK"
+      },
+      "must_observe": [
+        "save OK; first candidate digest and stable-read before/after digests all equal modified bytes.",
+        "Actual loaded semantics differ from frozen semantics; original CFG unchanged and no ACK.",
+        "Mutation after first digest only proves SHA rejection, not this case."
+      ],
+      "passed": null,
+      "native_executed": false,
+      "oracle_version": "b22_synthetic_component_v2"
+    },
+    {
+      "index": 12,
+      "id": "readback_SHA_changed",
+      "old_worker_lines": "215-225",
+      "old_expected": {
+        "save_code": "CAMPAIGN_CFG_READBACK_MISMATCH",
+        "disk_state_unconfirmed": true,
+        "persisted": false,
+        "memory_applied": false
+      },
+      "semantic_target": "Bytes change inside the actual native read interval even though semantics remain equal.",
+      "status": "current_protocol_mapped_unexecuted",
+      "new_entry": [
+        "strict synthetic uncredited Intent v2",
+        "actual LC3 gen1 -> gen2",
+        "fresh LC + Coordinator.begin_recovery -> actual CFG; success only continues ACK2/_load"
+      ],
+      "fault": {
+        "function": "_stable_cfg",
+        "phase": "candidate_readback",
+        "anchor": "var loaded: int = cfg.load(path)",
+        "line": 146,
+        "target": "current candidate.cfg",
+        "mutation": "OwnedOplock actual opener break; append semantic-neutral comment then release handle",
+        "outer_code": "CFG_STAGE_READBACK",
+        "inner_code": "CFG_READBACK_CHANGED"
+      },
+      "must_observe": [
+        "Actual native read blocked before release, exact path/transaction and source stack matched.",
+        "Before and after SHA differ while actual ConfigFile semantics equal; no install/ACK.",
+        "A timer-only race or wrong-phase failure does not satisfy this case."
+      ],
+      "passed": null,
+      "native_executed": false,
+      "oracle_version": "b22_synthetic_component_v2"
+    },
+    {
+      "index": 13,
+      "id": "legal_unknown_variant_preservation",
+      "old_worker_lines": "226-240",
+      "old_expected": {
+        "accepted": true,
+        "memory_applied": true,
+        "persisted": true,
+        "suppressed": false,
+        "save_code": "CAMPAIGN_CFG_READBACK_VERIFIED",
+        "cloud_callback_only_not_upload": true,
+        "all_unknown_section_keys_retained": true,
+        "ConfigFile_semantics_equal": true,
+        "IEEE_bits_claimed": false
+      },
+      "semantic_target": "Supported unknown Variant/section/key data survives the real CFG transaction.",
+      "status": "current_protocol_mapped_unexecuted",
+      "new_entry": [
+        "strict synthetic uncredited Intent v2",
+        "actual LC3 gen1 -> gen2",
+        "fresh LC + Coordinator.begin_recovery -> actual CFG; success only continues ACK2/_load"
+      ],
+      "fault": null,
+      "must_observe": [
+        "Keep original legal vector/transform/projection/packed/typed/StringName/NodePath/NaN/INF/negative-zero fixtures.",
+        "Compare data using actual per-value ConfigFile semantics before and after new load, including future]section.",
+        "No JSON equality or full IEEE bit claim; mutate only intended progress keys."
+      ],
+      "passed": null,
+      "native_executed": false,
+      "oracle_version": "b22_synthetic_component_v2"
+    },
+    {
+      "index": 14,
+      "id": "unsupported_object_or_script_container",
+      "old_worker_lines": "242-252",
+      "old_expected": {
+        "save_code": "CAMPAIGN_CFG_UNSUPPORTED_VALUE",
+        "write_attempted": false,
+        "memory_applied": false,
+        "persisted": false,
+        "prior_file_not_written_by_attempt": true,
+        "cloud_calls": 0
+      },
+      "semantic_target": "Identity values and object/script-typed containers are refused before encoding/writing.",
+      "status": "current_protocol_mapped_unexecuted",
+      "new_entry": [
+        "CFG.commit_prepared:231-232",
+        "Values.supported/semantics"
+      ],
+      "fault": null,
+      "must_observe": [
+        "Exact CAMPAIGN_CFG_UNSUPPORTED_VALUE for every original Object/RID/Callable/Signal/script/Object container.",
+        "No candidate encode/save; original CFG and Campaign memory unchanged; observe actual lock release.",
+        "Do not call ConfigFile.encode_to_text on unsupported values to fabricate diagnostics."
+      ],
+      "passed": null,
+      "native_executed": false,
+      "oracle_version": "b22_synthetic_component_v2"
+    },
+    {
+      "index": 15,
+      "id": "cycle_or_overdepth",
+      "old_worker_lines": "253-264",
+      "old_expected": {
+        "save_code": "CAMPAIGN_CFG_UNSUPPORTED_VALUE",
+        "write_attempted": false,
+        "persisted": false,
+        "input_unchanged": true
+      },
+      "semantic_target": "Cycle and depth >128 are refused before encoding; alias input unchanged.",
+      "status": "current_protocol_mapped_unexecuted",
+      "new_entry": [
+        "CFG.commit_prepared:231-232",
+        "Values.supported/semantics"
+      ],
+      "fault": null,
+      "must_observe": [
+        "Exact CAMPAIGN_CFG_UNSUPPORTED_VALUE for real self-cycle and 129-level data.",
+        "Cycle still same aliased object after refusal, then test may safely clear its own fixture.",
+        "Original CFG and Campaign memory unchanged; no encoding fallback."
+      ],
+      "passed": null,
+      "native_executed": false,
+      "oracle_version": "b22_synthetic_component_v2"
+    },
+    {
+      "index": 16,
+      "id": "callback_sees_new_memory",
+      "old_worker_lines": "266-270",
+      "old_expected": {
+        "accepted": true,
+        "memory_applied": true,
+        "persisted": true,
+        "suppressed": false,
+        "save_code": "CAMPAIGN_CFG_READBACK_VERIFIED",
+        "cloud_callback_only_not_upload": true,
+        "callback_observes_candidate_memory": true,
+        "callback_invocations": 1,
+        "cloud_dirty_observed": null,
+        "upload_verified": false
+      },
+      "semantic_target": "Actual local dirty callback sees the newly published Campaign memory.",
+      "status": "current_protocol_mapped_unexecuted",
+      "new_entry": [
+        "actual Lifecycle.begin -> terminal_with_intent",
+        "fresh Lifecycle + actual Coordinator.begin_recovery",
+        "actual CFG -> ACK2/uncredited handoff -> Campaign._load -> progress_committed"
+      ],
+      "fault": null,
+      "must_observe": [
+        "Actual coordinator and strict ACK2 complete before Campaign.progress_committed calls the original local-counter fixture.",
+        "Exactly one callback sees actual newly loaded records/unlocked9 and same closed CFG SHA.",
+        "Counter is local-only observation, not real SteamCloud/SDK; no direct Campaign-memory assignment or fake coordinator."
+      ],
+      "passed": null,
+      "native_executed": false,
+      "oracle_version": "b22_synthetic_component_v2"
+    },
+    {
+      "index": 17,
+      "id": "cloud_applying_callback_no_upload_claim",
+      "old_worker_lines": "271-275",
+      "old_expected": {
+        "persisted": true,
+        "cloud_dirty_requested": true,
+        "cloud_dirty_callback_invoked": true,
+        "cloud_dirty_observed": null,
+        "cloud_upload_verified": false
+      },
+      "semantic_target": "Actual SteamCloud applying branch suppresses dirty/upload despite a genuine callback.",
+      "status": "current_protocol_mapped_unexecuted",
+      "new_entry": [
+        "actual Lifecycle.begin -> terminal_with_intent",
+        "fresh Lifecycle + actual Coordinator.begin_recovery",
+        "actual CFG -> ACK2/uncredited handoff -> Campaign._load -> progress_committed"
+      ],
+      "fault": null,
+      "must_observe": [
+        "Actual exact SteamCloud applying fixture; host proves real mark_dirty entry with Campaign.progress_committed/Coordinator retry stack.",
+        "Actual ACK2/CFG proves persistence; dirty/pending_upload/revision unchanged while _applying=true.",
+        "Removed receipt flags are not fabricated; no SDK/upload claim."
+      ],
+      "passed": null,
+      "native_executed": false,
+      "oracle_version": "b22_synthetic_component_v2"
+    },
+    {
+      "index": 18,
+      "id": "legacy_real_cloud_apply_failure_boundary",
+      "old_worker_lines": "276-283",
+      "old_expected": {
+        "old_bool": false,
+        "persisted": false,
+        "memory_cloud_profile_existing_behavior_not_rolled_back": true,
+        "not_full_account_or_crash_recovery": true
+      },
+      "semantic_target": "Actual legacy Cloud apply reports readback failure and its memory boundary honestly.",
+      "status": "current_protocol_mapped_unexecuted",
+      "new_entry": [
+        "SteamCloud._apply_profile:387-418",
+        "Campaign.apply_cloud_progress:384-396",
+        "Campaign._writer_complete:340-350"
+      ],
+      "fault": {
+        "function": "_stable_cfg",
+        "phase": "candidate_readback",
+        "anchor": "var loaded: int = cfg.load(path)",
+        "line": 146,
+        "target": "actual cloud transaction candidate.cfg",
+        "mutation": "same real post-save move as case 10",
+        "outer_code": "CFG_STAGE_READBACK",
+        "inner_code": "CFG_READBACK_LOAD"
+      },
+      "must_observe": [
+        "Actual Cloud bool false and actual retained CFG_STAGE_READBACK dictionary; original Campaign memory and original CFG bytes unchanged.",
+        "Actual CFG writer and Cloud shared pending preserve source/original-owner/target-owner scope.",
+        "Settings/language before/after are observed separately; their preceding writes are not declared atomic with Campaign.",
+        "Historical old_expected remains unchanged but failed-memory-replacement assertion is explicitly superseded by current atomic Campaign semantics."
+      ],
+      "passed": null,
+      "native_executed": false,
+      "oracle_version": "b22_synthetic_component_v2"
+    }
+  ],
+  "current_oracle": "b22_synthetic_component_v2",
+  "historical_oracle_changes": [
+    0,
+    1,
+    2,
+    3,
+    16,
+    17,
+    18
+  ]
+}

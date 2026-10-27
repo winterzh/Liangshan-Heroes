@@ -1,0 +1,25 @@
+--- failed/worker.gd
++++ corrected_unretested/worker.gd
+@@ -155,7 +155,7 @@
+ 	await nonphysics()
+ 	return check(Engine.time_scale == 1.0, "normal 1x clock before synchronous production operation")
+ 
+-func seed(extra: Dictionary = {}) -> bool:
++func _seed_private_campaign_fixture(extra: Dictionary = {}) -> bool:
+ 	var cfg := ConfigFile.new()
+ 	cfg.set_value("progress", "schema", 2)
+ 	cfg.set_value("progress", "unlocked", 1)
+@@ -477,11 +477,11 @@
+ 			and not DirAccess.dir_exists_absolute("user://campaign_cfg_transactions/v1")
+ 			and not DirAccess.dir_exists_absolute("user://continue/v1"), "case begins in a fresh actual business profile"): finish(); return
+ 		if index not in [0, 8, 13]:
+-			if not seed(): finish(); return
++			if not _seed_private_campaign_fixture(): finish(); return
+ 	if index == 13:
+ 		var typed_array: Array[String] = ["known", "future"]
+ 		var typed_dict: Dictionary[String, Vector2] = {"position":Vector2(2.25, -3.5)}
+-		if not seed({"vector":Vector2(1.25, -2.5), "transform":Transform3D.IDENTITY, "projection":Projection.IDENTITY,
++		if not _seed_private_campaign_fixture({"vector":Vector2(1.25, -2.5), "transform":Transform3D.IDENTITY, "projection":Projection.IDENTITY,
+ 			"bytes":PackedByteArray([1,128,255]), "integers":PackedInt64Array([9223372036854775807]),
+ 			"vectors":PackedVector4Array([Vector4(1,2,3,4)]), "colors":PackedColorArray([Color(0.1,0.2,0.3)]),
+ 			"typed_array":typed_array, "typed_dict":typed_dict, "string_name":&"future_name", "node_path":NodePath("root/child"),
