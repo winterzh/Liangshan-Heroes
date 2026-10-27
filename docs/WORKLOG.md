@@ -1,5 +1,11 @@
 # 开发日志
 
+## 2026-10-27 护送策略加载与b22首次冷导入
+
+大名府外部策略补正常清塔、双伤员同编队分段集结、S伤员/H近卫与第一人独自撤离；所有原时限、120tick、保存及终局断言保持。新五GD原生加载PID46944退出0/错误0，41.701秒，32命名pins及锁释放通过；未运行新路线。新Daming宿主只换严格26+1及own cold准入，原fixture/八流程保持，AST/help/light通过。
+
+新统一完整工程20261027_075456_3e4a48ab准备完成，source b22f76f7，7062文件2,402,358,281字节，较3365只Graph+203字节，374pins后验通过；缓存只有fresh extension_list98字节。自己的首次冷导入PID55952退出0/错误0，77.656秒；锁内完整冷库存、前后来源和锁释放通过，cold_import_qualified=true。新源高俅真实四进程复跑已启动，路线终态另记。原版键鼠继续暂停，公开入口与发布状态保持。
+
 ## 2026-10-27 箭矢视觉合同组件44项通过
 
 最小Graph修复只按projectile种类要求正常_ready的MIP过滤，其余种类和所有其他渲染保护保持。第三次原生PID50952退出0/错误0，44项与12负例全部通过；capture→prepare→挂载_ready→activate→recapture直接wire为19,832字节，结构、解码后类型值及UTF8完全一致。额外双编码本次明确DEPTH_LIMIT，前两次失败仍保留各自原始事实。命名输入后验、无业务文件及锁释放通过，只授组件范围。[证据](../qa/campaign_progress_recovery_20261026/projectile_filter_candidate/evidence/component_complete_20261027_075227/README.md)。

@@ -103,3 +103,6 @@ qa/campaign_progress_recovery_20261026/continue_binding_candidate/：Flow/Sessio
 `qa/campaign_progress_recovery_20261026/daming_continue_candidate/evidence/flow_load_20261027_065614/`保留五GD原生加载原件；`evidence/fixture_model_20261027/`保留A闭合原件留存的53项隔离模型。`tests/daming_flow/fixture_freeze.py`只冻结已退出A的两份原件，后续只pin副本；未复制业务存档至Git。高俅`terminal_guard_failure_20261027_064112/`和`terminal_focus_load_20261027_070450/`分别保留纯H实跑失败与点目标策略加载证据。
 
 `qa/campaign_progress_recovery_20261026/projectile_filter_candidate/`保存正常箭矢MIP过滤与Graph合同的最小修复、组件工具、无缓存完整准备/首次冷导入器，以及仅更新准入的新高俅复跑宿主。`VALIDATION.md`记录当前边界。大名府`tests/daming_negative_v2/`只包含52负例的准入与规划草案，完整负例执行循环尚未实现；`evidence/flow_first_failure_20261027_072035/`保留首轮A/B通过、C伤员阵亡的失败原件，业务存档载荷留本机。
+
+大名府`evidence/flow_escort_load_20261027_080320/`保留新护送策略五GD独立加载的32命名pins；新统一源宿主位于`projectile_filter_candidate/run_daming_flow.py`及`tests/daming_replay/`，只改26+1/cold准入，尚无新实跑结果。
+新统一源完整准备与首次冷导入原件：`qa/campaign_progress_recovery_20261026/projectile_filter_candidate/evidence/full_freeze_20261027_075456/`，只授该源准备和冷导入资格。

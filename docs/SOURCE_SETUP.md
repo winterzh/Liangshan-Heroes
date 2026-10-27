@@ -83,3 +83,5 @@ readset专项在全新profile已完整通过：12类案例248项、旧4MB逐字�
 连环马[自然失败三进程执行器](../qa/campaign_progress_recovery_20261026/tests/lianhuanma_loss/README.md)已完成代码和静态复核，尚未编译或原生执行；与胜利驱动各自保留独立来源和报告，不共享通过资格。
 
 [箭矢视觉合同候选](../qa/campaign_progress_recovery_20261026/projectile_filter_candidate/VALIDATION.md)以3365为底，只替VisualGraph。组件模型仅命名来源范围；integration_3365默认只读，--prepare才另建无导入缓存种子的完整工程，--import-cold在自有锁内再次核完整冷库存后首次导入，失败不能热重试冒充冷导入。新高俅宿主只接受其完整冷导入资格，原941c五GD/断言保留。大名府实际A/B两次保存恢复已通过，C护送失败；[52草案](../qa/campaign_progress_recovery_20261026/daming_continue_candidate/tests/daming_negative_v2/README.md)尚无完整执行循环，不能按目录存在宣称通过。
+
+大名府普通护送修订已通过3365上的五GD加载，真实双角色下一轮改用projectile_filter_candidate/run_daming_flow.py，严格消费b22完整冻结及自己的首次cold成功收据。DF_SOURCES继续绑定原五GD/fixture清单，新宿主和README另有独立replay清单；两者均进入运行pins，不将新宿主误充旧worker来源。当前b22完整准备和自有首次冷导入均通过（PID55952，退出0/错误0，77.656秒）；generation e4caa656、expected identity c1386aae。高俅新源实跑已启动，大名府等待同一引擎通道，资格以各自新收据为准。

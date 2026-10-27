@@ -1,6 +1,6 @@
 # 大名府双角色八进程真实 Flow 外部工具
 
-本目录只提供新 Daming 候选的源码私有 QA。五份 GD 已在 `.godot/daming_flow_parse_20261027/20261027_065614_aa8e6ae3` 由原生进程加载通过（PID74076、exit0、errors[]）；没有实例化或运行八进程路线。后续 A 冻结 hook 只完成 Python 文件模型验证，尚无真实 A 保存夹具；旧路线、Gao/LHM 结果及工程 editor import 不转授本工具玩法资格。
+本目录只提供新 Daming 候选的源码私有 QA。旧五份 GD 在 `.godot/daming_flow_parse_20261027/20261027_065614_aa8e6ae3` 加载通过；随后首批 `.godot/daming_flow_20261027/20261027_072035_807401ae` 的 Lu-first A 202 项、B 104 项通过并形成真实 closed-A 夹具，C 的石秀自然阵亡，八流程未完成。该批原件保留；本次只修改普通护送 `route.gd`，其新字节尚未原生加载或复跑。旧路线、Gao/LHM 结果及工程 editor import 不转授本工具玩法资格。
 
 ## 来源与执行边界
 
@@ -18,6 +18,10 @@ python qa/campaign_progress_recovery_20261026/daming_continue_candidate/run_dami
 ```
 
 默认每个进程最多 1320 秒，普通路线自身保持旧 900 秒总界和分步期限，任何真实战损/路线超时都保留失败，不补资源、复活、搬角色或加速。
+
+2026-10-27 护送修订：首批 A/B 的石秀仍停在牢区，而最近护兵已距 715/747 像素，原牢塔仍存活；C 没有记录实际 killer，不把塔直接认定为击杀者。新路线先以正常 A+可见原实体攻击清除两座原箭楼，再核牢前无抵抗和两囚犯旁的实际护兵，随后正常开枷。救出后按 `PRISON_CHECK → (30,25) → (30,34) → (30,41)` 分段同编队移动，逐个核实际 `find_path`、普通命令形成的目标、到达位置与每名伤员 140 像素内至少三名护卫。遇当前可见沿途敌人，伤员用 S 停止、近卫用 H 留守，只让其余至少三名战斗单位执行普通显式攻击；不扫全城，不猜击杀原因。
+
+集结点依据 `level8_daming_rts.gd:472` 的原安全判定：同时满足距 EXIT≤130 且格 y≥45 才撤离。(30,41) 在原南路、距 EXIT 中心 256 像素；代码仍逐个验证伤员真实阵型落点和到达位置均 y<45、距 EXIT>130，不能只凭中心点推断。最终 S 停伤员、H 只用于战斗护卫；第一人单独进入出口，其余伤员和近卫留在界外。B 原 120 ticks 无命令验证不变；C 恢复后按普通同编队命令护送第二人。新增观察仅记录原塔状态、实际近卫 ID 和出口距离。宿主、其余四份 GD、A fixture helper、世界源码与全部原通过门槛均未修改；新策略仍待重新原生加载及两条路线实测。
 
 ## 两条路线与八个进程
 
@@ -48,7 +52,7 @@ Daming 仍是 contract2：daming_infiltration / daming_signal / daming_response 
 
 ## 来源和未覆盖范围
 
-`route.gd` 源自旧 v34 自然命令路线。变化仅是 runner/check/观察接口、移除直接 paused/_hold、改真实 Resume，并把终局等待移到当前严格 terminal。旧 fullGD 的 Session.save_held/prepare_restore/stage_mount/commit_restore 以及直接拒槽均未复制为执行入口。Flow 基类与终局协议借鉴已封存的 Gao 外部工具源码；`sources.json` 保存其原始路径/SHA，旧结果不继承。
+`route.gd` 源自旧 v34 自然命令路线；初版适配 runner/check/观察接口、移除直接 paused/_hold、改真实 Resume，并把终局等待移到当前严格 terminal。本次再修正上述普通清塔/近距护送策略。旧 fullGD 的 Session.save_held/prepare_restore/stage_mount/commit_restore 以及直接拒槽均未复制为执行入口。Flow 基类与终局协议借鉴已封存的 Gao 外部工具源码；`sources.json` 保存其原始路径/SHA，旧结果不继承。
 
 本片不执行原 1+8+52 的完整 61 阶段，也不执行原 19 类故障；不覆盖败局、存储崩溃恢复、credited Steam SDK、公开 Continue、发行 EXE、性能、四语目检、人工接受或发布。即使八进程将来全过，也只授当次新源的私有离线双路线 Flow 资格。新玩法/公开入口/生产采用均不由本工具改变。
 
@@ -56,7 +60,7 @@ Daming 仍是 contract2：daming_infiltration / daming_signal / daming_response 
 
 ## A 正常退出后的原始夹具冻结
 
-宿主先核对 A 的实际 `process_step`、独立报告与日志：exit0、errors[]、未强停、`continue_saved`、同角色/PID/批次/角色/进程三个 nonce、精确 source/engine/manifest。仅在这些原生结果全部通过后，才调用 `fixture_freeze.py`；hook 成功后才允许 B 启动。五份 GD 保持上述原生加载时的原字节，没有插入测试状态。
+宿主先核对 A 的实际 `process_step`、独立报告与日志：exit0、errors[]、未强停、`continue_saved`、同角色/PID/批次/角色/进程三个 nonce、精确 source/engine/manifest。仅在这些原生结果全部通过后，才调用 `fixture_freeze.py`；hook 成功后才允许 B 启动。hook 本身没有修改 GD 或插入测试状态；上述后续护送修订仅限 `route.gd`。
 
 每条路线写入当次私有 run 的 `closed_a/<lu|shi>/descriptor.json`，schema 为 `daming_flow_closed_a_fixture_v1`。原 `user://continue/v1` 必须恰为两个 genesis 记录与六个目录：slot `5088120/1/record_0000000001.json`，LC `local_runs/<token>/5088120/1/record_0000000001.json`。必须同 uncredited token、slot gen1、LC v3 active gen1、实际 Level8 context、同 source/engine、paused；拒绝 gen2、其他 token/owner、pending/writing/recovering、任何额外文件或空目录、路径越界、symlink/reparse 与已存在输出。
 
