@@ -10,7 +10,7 @@
 
 | 项目 | 当前状态 |
 | --- | --- |
-| GitHub | [winterzh/Liangshan-Heroes / stable](https://github.com/winterzh/Liangshan-Heroes/tree/codex/sync-20260905-stable)：前批远端回读`9225c727946a41369b07abe49310b78d2ac7fdb0`；本批用户停止全量测试、27个进程通过结果及QA核验器修正按白名单同步，最终SHA以远端回读为准；main未合并 |
+| GitHub | [winterzh/Liangshan-Heroes / stable](https://github.com/winterzh/Liangshan-Heroes/tree/codex/sync-20260905-stable)：停止全量测试及27个通过进程的记录已同步`5837d1bd`；本轮文档/缓存收尾另按白名单同步，以远端最新提交为准 |
 | 主线合并 | 48042d84补齐旧stable合并历史，ffa625de补齐交接文档；本页修订随本次文档提交同步，以分支最新提交为准 |
 | Steam Windows | default Build **26048429** / Manifest **697009053566575953**，2026-10-20完成发布验收 |
 | 冻结生产来源 | 0083b47abac098c5ebd7231e327085c4ba3299cd；后继QA工具和文档提交未改变游戏包 |
@@ -30,7 +30,7 @@
 ## 后续顺序
 
 1. [黄泥冈七车十一担](../qa/huangnigang_production_20261020/README.md)实现及自动证据已同步stable `f5325c25`：最终编译包普通路线1206项、九阶段1768项与四语三尺寸24图目检通过。原版EXE仅启动/退出通过；按用户选择暂不恢复键鼠，完整实操待办。第一批整体未完成，main/Steam未更新，公开战役续玩未开放。
-2. 完整战役续玩仍在候选阶段。[b22当前验证](../qa/campaign_progress_recovery_20261026/projectile_filter_candidate/VALIDATION.md)已有高俅核心416项、持久化19案566项及保存216／设置406／启动恢复387／终局重试737项通过；释放失败154项是明确QA永久故障模型。大名府153316双角色八进程1398项完整通过，完整来源、子进程和锁后验闭合；52负例执行器162116_c86e8835已通过完整准入并进入原生执行，61尚未取得。连环马七进程、高俅造船／败局各三进程、其余章节、云同步与奖励仅一次仍待验；候选未采用或公开开放。
+2. 完整战役续玩仍在候选阶段。[b22当前验证](../qa/campaign_progress_recovery_20261026/projectile_filter_candidate/VALIDATION.md)已有高俅核心416项、持久化19案566项及保存216／设置406／启动恢复387／终局重试737项通过；释放失败154项是明确QA永久故障模型。大名府153316双角色八进程1398项完整通过，完整来源、子进程和锁后验闭合；全量负例按用户要求停止，27个进程39383项通过；52／61整组未取得，后续按修改做针对性测试。连环马七进程、高俅造船／败局各三进程、其余章节、云同步与奖励仅一次仍待验；候选未采用或公开开放。
 3. 接续剩余人物/剧情变体、自然动作、六车轮转、场景、特效及界面美术。
 4. 回归八章与九玩法完整流程，完成真人试玩、性能/内存、切换清理和设备验收。详细条件保留在[开发计划](DEVELOPMENT_PLAN.md)，不由已发布批次替代。
 
@@ -51,8 +51,4 @@
 
 旧批次总览已完整归档，[历史全文与恢复说明](../qa/storage_cleanup_20261020/README.md)；历史版本结论不覆盖本页当前状态。
 
-本次负例状态：52负例首轮162116_c86e8835首Lu world（PID65816）在900.655秒超时，exit1、errors空、无最终报告；来源／私有树／子进程／锁后验闭合，整批未通过。后继仅给QA增加准入／runtime／正例／每行开始与完成的单调耗时标准输出，原负例函数／断言逐字保留，全部52进程及900秒期限保持。新8GD加载PID58156／68.429秒／退出0、错误0／72pins通过；重跑164910_c355d10c已启动，完整来源准入中，52与61仍未授。 失败及加载证据分别见[首轮超时原件](../qa/campaign_progress_recovery_20261026/daming_continue_candidate/evidence/negative_timeout_20261027_162116/README.md)、[耗时观测版加载原件](../qa/campaign_progress_recovery_20261026/projectile_filter_candidate/evidence/daming_negative_timing_load_20261027_164702/README.md)。
-
-最新完整执行：耗时观测批164910首Lu world完成177／264行后在900.252秒达到宿主期限，原两个正例完成、无脚本错误，未生成最终报告，整批失败原件保留。依据实测每行约5秒，172552_ea00c9d2新批采用既有CLI的3600秒有限单进程等待，宿主及8GD原字节、完整52进程与所有断言／游戏时钟保持；完整来源准入已通过，首world PID9808正在执行，52及61尚未通过。 详见[177行后超时原件](../qa/campaign_progress_recovery_20261026/daming_continue_candidate/evidence/negative_timed_timeout_20261027_164910/README.md)。
-
-最新负例执行：172552完整预算批首Lu world完成255／264行后被关闭：PID9808、838.227秒、exit0xCFFFFFFF、stopped_for为空，无最终GD报告。Windows事件1002精确匹配PID9808，同ReportId的1001为AppHangB1；同步矩阵长期未让出窗口主循环。后继仅在每个完整正例路由／负例行断言及dispose之后等待一次窗口帧，前后检查游戏仍paused、1x／60Hz不变，完整world／component分别须266／364次；原负例函数逐字保持。8GD新加载PID41148／29.719秒／退出0、错误0／72pins通过，175238_2c6e89e9新完整52批正在来源准入，单进程宿主等待仍3600秒。 52及61尚未通过，原件分别见[Windows无响应原件](../qa/campaign_progress_recovery_20261026/daming_continue_candidate/evidence/negative_apphang_20261027_172552/README.md)、[暂停态让帧版加载原件](../qa/campaign_progress_recovery_20261026/projectile_filter_candidate/evidence/daming_event_pump_load_20261027_175125/README.md)。
+本轮旧缓存去重及入口文档归并见[清理与恢复](../qa/storage_cleanup_20261027/README.md)。
