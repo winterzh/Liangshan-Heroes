@@ -174,7 +174,9 @@ func _load() -> void:
 	Lifecycle = load("res://scripts/run_campaign_local_lifecycle.gd")
 
 func run() -> void:
+	print("DN_TIMING ", Time.get_ticks_msec(), " component admission begin")
 	admitted = await support.begin(self, "component")
+	print("DN_TIMING ", Time.get_ticks_msec(), " component admission end")
 	if admitted.is_empty(): finish(); return
 	_load()
 	trusted = support.trusted; runtime = support.runtime; role = admitted.first_role
@@ -203,13 +205,17 @@ func run() -> void:
 	proof_before = _scan(ProjectSettings.globalize_path(SLOT_ROOT))
 	get_tree().paused = true
 	for route: String in ROUTES:
+		print("DN_TIMING ", Time.get_ticks_msec(), " component positive begin ", route)
 		if not _positive(route): finish(); return
+		print("DN_TIMING ", Time.get_ticks_msec(), " component positive end ", route)
 	fixture_ready = true
 	_build_specs()
 	if not check("exact separate component planned cases", specs.size() == 181): finish(); return
 	for spec: Dictionary in specs:
 		for route: String in ROUTES:
+			print("DN_TIMING ", Time.get_ticks_msec(), " component row begin ", spec.id, "/", route)
 			if not _negative(spec, route): finish(); return
+			print("DN_TIMING ", Time.get_ticks_msec(), " component row end ", spec.id, "/", route)
 	for row: Dictionary in provenance:
 		if not check("all actual A frozen source bytes unchanged " + row.label, FileAccess.get_sha256(row.path) == row.sha256): finish(); return
 	if not _profile_proof() or not check("original journal entire subtree unchanged", _sha_map_equal(proof_before, _scan(ProjectSettings.globalize_path(SLOT_ROOT)))): finish(); return

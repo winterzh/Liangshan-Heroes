@@ -79,3 +79,9 @@ Graph返回的wire.records已是Codec编码数据，后继测试按实际存储�
 ## 大名府双角色八流程完整终态
 
 153316_d6a3cb06已完整通过八实际进程／1398项，Lu698／Shi700，全部退出0／原生错误0；两次原SaveAndExit、独立Continue、自然双伤员终局及重启拒旧槽均闭合，本批三项剧情目标实际全done。884pins、完整来源／自身cold、子进程／锁后验通过。[完整23文件原件](../daming_continue_candidate/evidence/flow_complete_20261027_153316/README.md)保留原始报告与固定8e9973ad来源引用；四份closed-A业务原载荷及8EXE不复制。只授当次源码私有Flow，旧失败不回填。52执行器162116_c86e8835已通过完整准入并进入原生执行，整批负例尚无终态；完整61、其余章节、真实SDK／云端奖励、公开入口及人工仍待验。
+
+## 2026-10-27 52首轮超时与观测版重跑
+
+52负例首轮162116_c86e8835首Lu world（PID65816）在900.655秒超时，exit1、errors空、无最终报告；来源／私有树／子进程／锁后验闭合，整批未通过。后继仅给QA增加准入／runtime／正例／每行开始与完成的单调耗时标准输出，原负例函数／断言逐字保留，全部52进程及900秒期限保持。新8GD加载PID58156／68.429秒／退出0、错误0／72pins通过；重跑164910_c355d10c已启动，完整来源准入中，52与61仍未授。
+
+首轮完整证据位于`daming_continue_candidate/evidence/negative_timeout_20261027_162116/`：8文件、1810pins、8份业务原件／嵌套复制只元数据、8EXE只hash。耗时版纯加载位于`projectile_filter_candidate/evidence/daming_negative_timing_load_20261027_164702/`：39文件、72pins。路径相对`qa/campaign_progress_recovery_20261026/`。首轮原日志没有ERROR或SCRIPT ERROR；原A/C报告Infinity观察哨兵产生解析警告，不能据此断定Slot失败。未缩减原矩阵、原正例或完整输入不变断言；静态逐函数比较全部通过。当前完整运行结果待验。

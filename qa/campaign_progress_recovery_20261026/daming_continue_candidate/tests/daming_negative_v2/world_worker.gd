@@ -89,7 +89,9 @@ func _parse(raw: String, label: String) -> Dictionary:
 	return parser.data
 
 func run() -> void:
+	print("DN_TIMING ", Time.get_ticks_msec(), " world admission begin")
 	admitted = await support.begin(self, "world")
+	print("DN_TIMING ", Time.get_ticks_msec(), " world admission end")
 	if admitted.is_empty(): finish(); return
 	trusted = support.trusted; runtime = support.runtime; role = admitted.first_role
 	nonce = OS.get_environment("DN_PROCESS_NONCE"); output = OS.get_environment("DN_REPORT")
@@ -105,12 +107,17 @@ func run() -> void:
 	probe.dispose()
 	if not check("installed original safe pair API and zero state", installed): finish(); return
 	var slot: RefCounted = Store.new("user://negative_data_only_no_disk")
+	print("DN_TIMING ", Time.get_ticks_msec(), " world native base validation begin")
 	var native_base: Dictionary = slot._validate_document(base)
+	print("DN_TIMING ", Time.get_ticks_msec(), " world native base validation end")
 	if not check("actual A recovered native source document strictly valid", native_base.get("ok", false) and _exact(base, native_base.document), native_base): finish(); return
 	# First validate the complete actual positive through Core. Only its accepted
 	# Level/Graph may supply typed role IDs; no malformed fixture is cast to String.
 	get_tree().paused = true
-	if not _positive("source") or not _positive("json"): finish(); return
+	for positive_route: String in ["source", "json"]:
+		print("DN_TIMING ", Time.get_ticks_msec(), " world positive begin ", positive_route)
+		if not _positive(positive_route): finish(); return
+		print("DN_TIMING ", Time.get_ticks_msec(), " world positive end ", positive_route)
 	var levels: Dictionary = _body(base, "level")
 	var mission: Dictionary = _body(base, "mission")
 	if levels.is_empty() or mission.is_empty(): finish(); return
@@ -126,7 +133,9 @@ func run() -> void:
 	if not check("exact preserved world specs", specs.size() == 132): finish(); return
 	for spec: Dictionary in specs:
 		for route_name: String in ["source", "json"]:
+			print("DN_TIMING ", Time.get_ticks_msec(), " world row begin ", spec.id, "/", route_name)
 			if not _negative(spec, route_name): finish(); return
+			print("DN_TIMING ", Time.get_ticks_msec(), " world row end ", spec.id, "/", route_name)
 	for row: Dictionary in provenance:
 		if not check("all actual source input bytes unchanged " + row.label, FileAccess.get_sha256(row.path) == row.sha256): finish(); return
 	finish()

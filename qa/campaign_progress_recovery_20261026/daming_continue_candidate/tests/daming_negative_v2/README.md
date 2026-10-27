@@ -37,3 +37,9 @@ C:\Python314\python.exe -B qa/campaign_progress_recovery_20261026/daming_continu
 统一 `daming_negative_stage_report_v2` 记录实际 PID/nonce/profile、完整 request SHA、命名脚本、原 fixture 取证和具体 rows。宿主逐项检查实际进程 exit/log、矩阵计数、原 expected/actual code 和 capture 调用证据；`complete` 取决于实际全部 52 行进程完成以及前后源码/原件/私有业务树/锁后验。`source_flow_chain_passed` 不由负例 worker 新授予；只有既有八 Flow 原收据作为准入来源。
 
 本片不包含原 19 个故障流程，不授全 61 阶段、公开菜单、原版 EXE、OS 键鼠、人工体验、真实 SDK/账号/奖励或发布资格。capture 虽有真实 GL 和 Session，也只是原生组件负例，不等于自然通关。首次编译及性能时限均待 root 独占引擎运行。
+
+## 2026-10-27 首次实际执行与耗时观测
+
+162116_c86e8835 已通过完整八 Flow／原 closed-A／b22 自身 cold 准入；首 Lu world 原生 PID65816 在900.655秒触发宿主超时，exit1、errors空、无最终报告。来源／子进程／通道／锁后验全部通过；失败原件保留，52与61均未授予。日志含原A/C报告非有限观察值的解析警告，不能据此推断Slot解码失败。
+
+后继仅增加 DN_TIMING 标准输出：记录原生准入、runtime、原正例和每个负例开始／完成的单调毫秒时间。仍执行原132×2、181×2和两角色各24独立capture；不减少用例、不改任何原断言函数、输入、时钟或900秒期限。正例循环顺序及失败短路保持source后json。新字节须重新原生加载并完整执行；耗时日志本身不授资格。

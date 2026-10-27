@@ -6,7 +6,7 @@
 
 | 项目 | 当前状态 |
 | --- | --- |
-| GitHub | [winterzh/Liangshan-Heroes / stable](https://github.com/winterzh/Liangshan-Heroes/tree/codex/sync-20260905-stable)：前批远端回读`8e9973ad6730733a559feff75ca0fa7f51da5569`；本批大名府双角色八进程1398项完整原件及文档随本次白名单提交，52负例原生执行中；main仍为`1598c7c0cdccdc0bf1be8968608f79f0c43dcfc9`，未合并 |
+| GitHub | [winterzh/Liangshan-Heroes / stable](https://github.com/winterzh/Liangshan-Heroes/tree/codex/sync-20260905-stable)：前批远端回读`bcd2f5531666f9a1869fad130181af2474dfe875`；本批负例超时原件、耗时日志修订及加载证据随白名单同步，52完整重跑准入中；main仍为`1598c7c0cdccdc0bf1be8968608f79f0c43dcfc9`，未合并 |
 | 主线合并 | 48042d84补齐旧stable合并历史，ffa625de补齐交接文档；本页修订随本次文档提交同步，以分支最新提交为准 |
 | Steam Windows | default Build **26048429** / Manifest **697009053566575953**，2026-10-20完成发布验收 |
 | 冻结生产来源 | 0083b47abac098c5ebd7231e327085c4ba3299cd；后继QA工具和文档提交未改变游戏包 |
@@ -46,3 +46,5 @@
 ## 历史与恢复
 
 旧批次总览已完整归档，[历史全文与恢复说明](../qa/storage_cleanup_20261020/README.md)；历史版本结论不覆盖本页当前状态。
+
+本次负例状态：52负例首轮162116_c86e8835首Lu world（PID65816）在900.655秒超时，exit1、errors空、无最终报告；来源／私有树／子进程／锁后验闭合，整批未通过。后继仅给QA增加准入／runtime／正例／每行开始与完成的单调耗时标准输出，原负例函数／断言逐字保留，全部52进程及900秒期限保持。新8GD加载PID58156／68.429秒／退出0、错误0／72pins通过；重跑164910_c355d10c已启动，完整来源准入中，52与61仍未授。 失败及加载证据分别见[首轮超时原件](../qa/campaign_progress_recovery_20261026/daming_continue_candidate/evidence/negative_timeout_20261027_162116/README.md)、[耗时观测版加载原件](../qa/campaign_progress_recovery_20261026/projectile_filter_candidate/evidence/daming_negative_timing_load_20261027_164702/README.md)。

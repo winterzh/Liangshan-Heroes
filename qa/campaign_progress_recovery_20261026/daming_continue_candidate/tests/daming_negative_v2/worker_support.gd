@@ -63,7 +63,9 @@ func begin(node: Node, expected_family: String) -> Dictionary:
 	if not check(Engine.time_scale == 1.0 and Engine.physics_ticks_per_second == 60
 		and runner.get_node("/root/Settings").game_speed == 1.0, "unchanged 1x/60Hz clock"): return {}
 	trusted = Provider.new().resolve_runtime_identity()
+	print("DN_TIMING ", Time.get_ticks_msec(), " ", family, " reader admission begin")
 	admitted = reader.admit(request, trusted)
+	print("DN_TIMING ", Time.get_ticks_msec(), " ", family, " reader admission end")
 	if not check(not admitted.is_empty(), "original closed A native Slot/LC admitted"): return {}
 	if not check(profile_unchanged(), "private slot/journal exact after ordinary startup"): return {}
 	var sources: Variant = request.get("source_pins")
@@ -71,7 +73,9 @@ func begin(node: Node, expected_family: String) -> Dictionary:
 	for source: Variant in sources:
 		if not check(typeof(source) == TYPE_STRING and source.begins_with("res://scripts/") and source.ends_with(".gd")
 			and not ".." in source and FileAccess.get_sha256(source) == sources[source], "actual installed source " + str(source)): return {}
+	print("DN_TIMING ", Time.get_ticks_msec(), " ", family, " runtime begin")
 	var pack: Dictionary = Factory.prepare_runtime(trusted)
+	print("DN_TIMING ", Time.get_ticks_msec(), " ", family, " runtime end")
 	if not check(pack.get("ok", false), "fixed trusted Level8 runtime"): return {}
 	runtime = pack.runtime
 	return admitted

@@ -1,5 +1,13 @@
 # 开发日志
 
+## 2026-10-27 大名府负例首次超时及耗时定位
+
+52负例首轮162116_c86e8835首Lu world（PID65816）在900.655秒超时，exit1、errors空、无最终报告；来源／私有树／子进程／锁后验闭合，整批未通过。后继仅给QA增加准入／runtime／正例／每行开始与完成的单调耗时标准输出，原负例函数／断言逐字保留，全部52进程及900秒期限保持。新8GD加载PID58156／68.429秒／退出0、错误0／72pins通过；重跑164910_c355d10c已启动，完整来源准入中，52与61仍未授。
+
+[首轮超时原件](../qa/campaign_progress_recovery_20261026/daming_continue_candidate/evidence/negative_timeout_20261027_162116/README.md)：8文件／2,843,354字节，1810pins逐项映射；892外部文本、902内部文本、8EXE仅hash元数据、8份closed-A原件／嵌套复制仅descriptor大小和SHA，业务载荷不入Git。[耗时观测版加载原件](../qa/campaign_progress_recovery_20261026/projectile_filter_candidate/evidence/daming_negative_timing_load_20261027_164702/README.md)：39文件／767,014字节、72pins完整原字节。30命名来源与迁移断言逐字审计、61核验器33命名来源均通过；纯加载不授负例或玩法资格。
+
+上一批stable已回读bcd2f5531666f9a1869fad130181af2474dfe875，本批仍按明确白名单提交并回读。不改生产、main或Steam；键鼠验收继续暂停。
+
 ## 2026-10-27 大名府双角色八进程1398项完整通过
 
 153316_d6a3cb06实际八PID49896／14468／30088／70400／23572／8620／5180／14904，388／104／141／65／396／104／135／65共1398项全部通过，退出0／原生错误0；Lu698／Shi700，完整b22／自身cold、884pins、完整来源后验、自有子进程／锁owner／释放均通过，complete=true／source_flow_chain_passed=true，cleanup_errors=[]。两角色各真实单安全SaveAndExit gen1、独立Continue及gen2、另一伤员自然撤离的LC3／Intent2／ACK2终局、独立重启拒旧槽闭合。本批三项当前剧情目标实际全done。原三人140px保护、单safe、900／180秒、1x／60Hz和不注入条件保持；之前失败收据原资格不变。
