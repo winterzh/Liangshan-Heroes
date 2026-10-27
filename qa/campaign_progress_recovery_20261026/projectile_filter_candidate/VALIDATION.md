@@ -70,4 +70,4 @@ Graph返回的wire.records已是Codec编码数据，后继测试按实际存储�
 
 ## 大名府最新首保存与61核验工具
 
-新八流程144758_3472ff46首Lu A PID43840／396项通过，六名原追兵正常交战清除，原单安全条件和真实SaveAndExit gen1闭合；后继进程仍在运行，整批八流程未授资格。新[61原件核验器](../daming_continue_candidate/tests/qualification61/VALIDATION.md)33命名来源／10AST／帮助和实际旧部分批拒绝通过；只准备未来同源1+8+52的完整取证，当前不授61或52运行资格。
+新八流程144758_3472ff46首Lu A PID43840／396项通过，六名原追兵正常交战清除，原单安全条件和真实SaveAndExit gen1闭合；Lu后继B／C／D报告104／181／65项通过，四报告共746项；Shi先首A正在运行，整批最终来源／子进程／锁后验未完成，八流程仍未授资格。新[61原件核验器](../daming_continue_candidate/tests/qualification61/VALIDATION.md)33命名来源／10AST／帮助和实际旧部分批拒绝通过；只准备未来同源1+8+52的完整取证，当前不授61或52运行资格。
