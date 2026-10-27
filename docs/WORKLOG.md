@@ -1,5 +1,13 @@
 # 开发日志
 
+## 2026-10-27 大名府双角色八进程1398项完整通过
+
+153316_d6a3cb06实际八PID49896／14468／30088／70400／23572／8620／5180／14904，388／104／141／65／396／104／135／65共1398项全部通过，退出0／原生错误0；Lu698／Shi700，完整b22／自身cold、884pins、完整来源后验、自有子进程／锁owner／释放均通过，complete=true／source_flow_chain_passed=true，cleanup_errors=[]。两角色各真实单安全SaveAndExit gen1、独立Continue及gen2、另一伤员自然撤离的LC3／Intent2／ACK2终局、独立重启拒旧槽闭合。本批三项当前剧情目标实际全done。原三人140px保护、单safe、900／180秒、1x／60Hz和不注入条件保持；之前失败收据原资格不变。
+
+[23文件／4,878,200字节完整原件](../qa/campaign_progress_recovery_20261026/daming_continue_candidate/evidence/flow_complete_20261027_153316/README.md)保留884pins分类，四份原closed-A业务record只descriptor大小／SHA，8EXE仅hash，不读取或复制；其他文本逐Git blob核固定8e9973ad。
+
+52负例执行器162116_c86e8835已消费该完整8原件，通过完整准入并进入原生执行，整批负例尚无终态。完整61仍需52全部通过及原件核验；连环马／高俅其余同源流程与全战役／SDK／公开入口／人工均未授。本批按白名单提交回读，上一批远端8e9973ad已核；无生产采用、main合并或Steam发布，键鼠继续暂停。
+
 ## 2026-10-27 大名府近卫损失原件与预留策略修订
 
 144758批最终五进程933项932通过，complete=false；Lu四报告746项仍成立，Shi首A PID55768／444.349秒／退出1、错误0，187项186通过。清掉牢区箭楼后原预留4不在存活组，仅75／89两近卫，双伤员仍满血、未保存；不是原140边缘漂移。初始箭楼38正持有低血4为目标，未记录最终killer，不指定最后击杀来源。完整来源、自有子进程和锁后验通过。[18文件／3,330,308字节原件](../qa/campaign_progress_recovery_20261026/daming_continue_candidate/evidence/flow_pursuit_guard_failure_20261027_144758/README.md)保留875pins，Lu两份物理业务record只descriptor元数据、8EXE仅hash，不读取或复制。

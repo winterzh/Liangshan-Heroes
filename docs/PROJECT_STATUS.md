@@ -6,7 +6,7 @@
 
 | 项目 | 当前状态 |
 | --- | --- |
-| GitHub | [winterzh/Liangshan-Heroes / stable](https://github.com/winterzh/Liangshan-Heroes/tree/codex/sync-20260905-stable)：前批远端回读`6d6da8ecde68a8db8f325c535a33296602faeb8e`，黄泥冈实现、恢复候选及既有QA已同步；本批保留大名府五进程部分失败原件、修订护卫预留并完成五GD加载，新八流程153316_d6a3cb06进行中，随本次白名单提交；main仍为`1598c7c0cdccdc0bf1be8968608f79f0c43dcfc9`，未合并 |
+| GitHub | [winterzh/Liangshan-Heroes / stable](https://github.com/winterzh/Liangshan-Heroes/tree/codex/sync-20260905-stable)：前批远端回读`8e9973ad6730733a559feff75ca0fa7f51da5569`；本批大名府双角色八进程1398项完整原件及文档随本次白名单提交，52负例原生执行中；main仍为`1598c7c0cdccdc0bf1be8968608f79f0c43dcfc9`，未合并 |
 | 主线合并 | 48042d84补齐旧stable合并历史，ffa625de补齐交接文档；本页修订随本次文档提交同步，以分支最新提交为准 |
 | Steam Windows | default Build **26048429** / Manifest **697009053566575953**，2026-10-20完成发布验收 |
 | 冻结生产来源 | 0083b47abac098c5ebd7231e327085c4ba3299cd；后继QA工具和文档提交未改变游戏包 |
@@ -26,7 +26,7 @@
 ## 后续顺序
 
 1. [黄泥冈七车十一担](../qa/huangnigang_production_20261020/README.md)实现及自动证据已同步stable `f5325c25`：最终编译包普通路线1206项、九阶段1768项与四语三尺寸24图目检通过。原版EXE仅启动/退出通过；按用户选择暂不恢复键鼠，完整实操待办。第一批整体未完成，main/Steam未更新，公开战役续玩未开放。
-2. 完整战役续玩仍在候选阶段。[b22当前验证](../qa/campaign_progress_recovery_20261026/projectile_filter_candidate/VALIDATION.md)已有高俅核心416项、持久化19案566项及保存216／设置406／启动恢复387／终局重试737项通过；释放失败154项是明确QA永久故障模型。大名府144758批Lu四报告746项通过、Shi首A近卫不足失败，整批未通过；已按实际原件调整普通护卫选择，加载通过，新153316八流程进行中，52／61仍待验。连环马七进程及高俅造船／败局各三进程、其余章节、云同步与奖励仅一次仍待验；候选未采用或公开开放。
+2. 完整战役续玩仍在候选阶段。[b22当前验证](../qa/campaign_progress_recovery_20261026/projectile_filter_candidate/VALIDATION.md)已有高俅核心416项、持久化19案566项及保存216／设置406／启动恢复387／终局重试737项通过；释放失败154项是明确QA永久故障模型。大名府153316双角色八进程1398项完整通过，完整来源、子进程和锁后验闭合；52负例执行器162116_c86e8835已通过完整准入并进入原生执行，61尚未取得。连环马七进程、高俅造船／败局各三进程、其余章节、云同步与奖励仅一次仍待验；候选未采用或公开开放。
 3. 接续剩余人物/剧情变体、自然动作、六车轮转、场景、特效及界面美术。
 4. 回归八章与九玩法完整流程，完成真人试玩、性能/内存、切换清理和设备验收。详细条件保留在[开发计划](DEVELOPMENT_PLAN.md)，不由已发布批次替代。
 

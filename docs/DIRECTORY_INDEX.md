@@ -164,3 +164,6 @@ qa/campaign_progress_recovery_20261026/continue_binding_candidate/：Flow/Sessio
 
 
 `daming_continue_candidate/evidence/flow_pursuit_guard_failure_20261027_144758/`为Lu四报告746项通过、Shi首A近卫损失失败的18文件原件（875pins、整批933项932通过）；`projectile_filter_candidate/evidence/daming_guard_reserve_load_20261027_153202/`为普通预留护卫选择修订后的五GD纯加载原件（39文件／69pins）。路径均相对`qa/campaign_progress_recovery_20261026/`；两份Lu closed-A业务record及EXE仅保留hash元数据，原件不入Git。
+
+
+`qa/campaign_progress_recovery_20261026/daming_continue_candidate/evidence/flow_complete_20261027_153316/`保存双角色八进程1398项完整原件：23文件／884pins，完整来源／自身cold／子进程／锁终态通过；四份原closed-A业务record及8EXE仅hash元数据，不入Git。后续52执行器固定消费这批完整原件；8通过不等于52／61已完成。

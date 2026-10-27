@@ -73,4 +73,9 @@ Graph返回的wire.records已是Codec编码数据，后继测试按实际存储�
 新八流程144758_3472ff46首Lu A PID43840／396项通过，六名原追兵正常交战清除，原单安全条件和真实SaveAndExit gen1闭合；Lu后继B／C／D报告104／181／65项通过，四报告共746项；Shi首A187项中近卫不足失败，两伤员仍满血，预留护卫4已不在存活组，未保存。整批933项932通过，最终来源／子进程／锁后验通过但complete=false；[18文件原件](../daming_continue_candidate/evidence/flow_pursuit_guard_failure_20261027_144758/README.md)保留875pins及两份业务载荷排除元数据，八流程仍未授资格。新[61原件核验器](../daming_continue_candidate/tests/qualification61/VALIDATION.md)33命名来源／10AST／帮助和实际旧部分批拒绝通过；只准备未来同源1+8+52的完整取证，当前不授61或52运行资格。
 
 
-[预留护卫修订加载](evidence/daming_guard_reserve_load_20261027_153202/README.md)PID29648／30.749秒／退出0、错误0／69pins通过，只授五GD加载；普通选择优先未被当前可见敌军瞄准的健康普通护卫、可选四人余量，全预留者先到100px，原三人140px保护不变。新八流程153316_d6a3cb06进行中；52／61尚无完整前置资格。
+[预留护卫修订加载](evidence/daming_guard_reserve_load_20261027_153202/README.md)PID29648／30.749秒／退出0、错误0／69pins通过，只授五GD加载；普通选择优先未被当前可见敌军瞄准的健康普通护卫、可选四人余量，全预留者先到100px，原三人140px保护不变。新八流程153316_d6a3cb06已完整通过1398项；52已取得本次8原收据前置，实际负例和61仍待完成。
+
+
+## 大名府双角色八流程完整终态
+
+153316_d6a3cb06已完整通过八实际进程／1398项，Lu698／Shi700，全部退出0／原生错误0；两次原SaveAndExit、独立Continue、自然双伤员终局及重启拒旧槽均闭合，本批三项剧情目标实际全done。884pins、完整来源／自身cold、子进程／锁后验通过。[完整23文件原件](../daming_continue_candidate/evidence/flow_complete_20261027_153316/README.md)保留原始报告与固定8e9973ad来源引用；四份closed-A业务原载荷及8EXE不复制。只授当次源码私有Flow，旧失败不回填。52执行器162116_c86e8835已通过完整准入并进入原生执行，整批负例尚无终态；完整61、其余章节、真实SDK／云端奖励、公开入口及人工仍待验。

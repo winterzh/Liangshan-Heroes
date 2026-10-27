@@ -94,4 +94,13 @@ AST、帮助及30命名来源检查通过。纯加载批20261027_084545_37422b03
 
 ## 预留护卫选择修订（加载通过，新八流程待终态）
 
-仅新增一个普通护卫选择helper并替换两处原选择块；优先未被当前可见敌军瞄准、血量较高的普通护卫，突击英雄继续清障。有余量时预留四名、较小存活组仍可三名，始终保留三名攻击者；全体预留者须实际进入100px后再H，原三人／140px、单safe／自然终局／900与180秒均保持。逆向恢复原f1cfa568字节完全一致，生产未改。新route0fee9eec／30命名来源通过；[五GD加载原件](../projectile_filter_candidate/evidence/daming_guard_reserve_load_20261027_153202/README.md)PID29648、30.749秒、退出0／错误0，69pins与锁后验通过，39文件／666,178字节。只load／can_instantiate，未实例化worker；新profile八流程153316_d6a3cb06已开始，不复用旧Lu部分资格。
+仅新增一个普通护卫选择helper并替换两处原选择块；优先未被当前可见敌军瞄准、血量较高的普通护卫，突击英雄继续清障。有余量时预留四名、较小存活组仍可三名，始终保留三名攻击者；全体预留者须实际进入100px后再H，原三人／140px、单safe／自然终局／900与180秒均保持。逆向恢复原f1cfa568字节完全一致，生产未改。新route0fee9eec／30命名来源通过；[五GD加载原件](../projectile_filter_candidate/evidence/daming_guard_reserve_load_20261027_153202/README.md)PID29648、30.749秒、退出0／错误0，69pins与锁后验通过，39文件／666,178字节。只load／can_instantiate，未实例化worker；新profile八流程153316_d6a3cb06已完整通过，详情见下方终态，不复用旧Lu部分资格。
+
+
+## 双角色八流程1398项完整通过
+
+153316_d6a3cb06的八个实际进程均退出0／原生错误0：Lu PID49896／14468／30088／70400，388／104／141／65共698项；Shi PID23572／8620／5180／14904，396／104／135／65共700项。complete=true／eight_stages_passed=true／source_flow_chain_passed=true；完整b22／自身cold、884pins、完整来源后验、八子进程终态、自有锁owner及释放全部通过，cleanup_errors=[]。两角色各自实际SaveAndExit gen1、菜单Continue后gen2、另一伤员自然撤离的LC3／Intent2／ACK2终局，以及独立重启LOCAL_RUN_TERMINAL拒旧槽闭合；本批实际三项当前剧情目标也均done，无待定或漏项。
+
+[23文件／4,878,200字节完整原件](evidence/flow_complete_20261027_153316/README.md)保留八报告／日志、宿主收据、两份closed-A descriptor及逐pin来源映射；四份原业务record只保留大小／SHA元数据，8EXE仅终态hash，不打开或复制。原保护三人140px、单safe、900／180秒、1x／60Hz和不注入条件保留。旧失败933／932等收据不改写。此片只授源码私有双路线Flow，52负例、完整61、SDK、公开入口、发行程序、OS键鼠、真人和发布仍未授。
+
+52负例执行器162116_c86e8835已消费本次完整八流程及原closed-A，通过完整来源／自身cold准入并进入原生执行，整批负例尚无终态。它必须完成两角色world／component及各24个独立capture进程，共52；全部通过并另行核1+8+52原件后才能给61资格。
