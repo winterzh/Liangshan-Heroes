@@ -1,0 +1,240 @@
+--- qa/campaign_progress_recovery_20261008/final_durable_negative_adapters_v1_r4/daming_campaign_world_negative_v1.gd
++++ qa/campaign_progress_recovery_20261026/daming_continue_candidate/tests/daming_negative_v2/world_worker.gd
+@@ -1,5 +1,8 @@
+ extends Node
+-## External, unexecuted fixed DTO negative suite. Actual A source files are mandatory.
++const Support := preload("worker_support.gd")
++var support := Support.new()
++var admitted: Dictionary = {}
++## Migrated fixed DTO matrix. New closed-A native decode supplies the original packet.
+ ## Each real route verifies its actual layer; bare JSON Int fails exact Slot bytes before Core.
+ ## No capture/live-object negative is implemented, and no saved data is written.
+ const INPUT_SCHEMA := "daming_campaign_world_negative_inputs_v1"
+@@ -68,18 +71,6 @@
+ 
+ func _ready() -> void:
+ 	process_mode = Node.PROCESS_MODE_ALWAYS
+-	var profile := OS.get_environment("DAMING_NEGATIVE_PROFILE").replace("\\", "/").simplify_path().trim_suffix("/")
+-	output = OS.get_environment("DAMING_NEGATIVE_REPORT").replace("\\", "/").simplify_path()
+-	nonce = OS.get_environment("DAMING_NEGATIVE_NONCE")
+-	var project := ProjectSettings.globalize_path("res://").replace("\\", "/").simplify_path().trim_suffix("/")
+-	var safe: bool = profile.is_absolute_path() and DirAccess.dir_exists_absolute(profile)
+-	for name: String in ["APPDATA", "LOCALAPPDATA", "TEMP", "TMP"]:
+-		safe = safe and OS.get_environment(name).replace("\\", "/").simplify_path().trim_suffix("/").to_lower() == profile.path_join(name.to_lower()).to_lower()
+-	safe = safe and OS.get_user_data_dir().replace("\\", "/").simplify_path().to_lower().begins_with(profile.path_join("appdata").to_lower() + "/")
+-	safe = safe and OS.get_environment("STEAM_DISABLED") == "1" and OS.get_environment("CAMPAIGN_QA").is_empty()
+-	if not safe:
+-		print("V25_NEGATIVE PRIVATE_PROFILE_REQUIRED"); get_tree().quit(2); return
+-	if not check("fresh external report and nonce", not nonce.is_empty() and output.is_absolute_path() and DirAccess.dir_exists_absolute(output.get_base_dir()) and not FileAccess.file_exists(output) and not output.to_lower().begins_with(project.to_lower() + "/")): finish(); return
+ 	run.call_deferred()
+ 
+ func _read_pinned(row: Variant, label: String) -> String:
+@@ -98,48 +89,22 @@
+ 	return parser.data
+ 
+ func run() -> void:
+-	var input := OS.get_environment("DAMING_NEGATIVE_MANIFEST").replace("\\", "/").simplify_path()
+-	if not check("V25_NEGATIVE_PREFLIGHT_FIXTURE_MISSING", input.is_absolute_path() and FileAccess.file_exists(input)): finish(); return
+-	manifest = _parse(_read_pinned({"path": input, "sha256": OS.get_environment("DAMING_NEGATIVE_MANIFEST_SHA256")}, "input manifest"), "input manifest")
+-	if not check("fixed complete A input manifest", typeof(manifest.get("schema")) == TYPE_STRING and manifest.get("schema") == INPUT_SCHEMA and manifest.has_all(FIXTURES + ["first_role", "content_version", "engine_sha256"]) and typeof(manifest.first_role) == TYPE_STRING and manifest.first_role in ROLES and typeof(manifest.content_version) == TYPE_STRING and typeof(manifest.engine_sha256) == TYPE_STRING): finish(); return
+-	role = manifest.first_role
+-	var raw := {}
+-	for name: String in FIXTURES:
+-		raw[name] = _read_pinned(manifest[name], name)
+-		if raw[name].is_empty(): finish(); return
++	admitted = await support.begin(self, "world")
++	if admitted.is_empty(): finish(); return
++	trusted = support.trusted; runtime = support.runtime; role = admitted.first_role
++	nonce = OS.get_environment("DN_PROCESS_NONCE"); output = OS.get_environment("DN_REPORT")
+ 	Core = load("res://scripts/run_battle_world_core.gd")
+ 	Store = load("res://scripts/run_slot_store.gd")
+ 	Codec = load("res://scripts/run_state_value_codec.gd")
+ 	Factory = load("res://scripts/run_level8_world_factory.gd")
+ 	Profiles = load("res://scripts/run_official_restore_profile.gd")
+-	var startup_flow: Node = get_node("/root/ContinueFlow")
+-	var gate: Script = load("res://scripts/run_campaign_progress_gate.gd")
+-	for frame in range(180): await get_tree().process_frame
+-	while Engine.is_in_physics_frame(): await get_tree().process_frame
+-	if not check("production startup checked before any matrix factory or world", startup_flow.phase == startup_flow.Phase.IDLE and startup_flow.last_result.get("startup_checked",false) and gate.background_allowed(),startup_flow.last_result.duplicate(true)): finish(); return
+-	trusted = load("res://scripts/run_content_identity.gd").new().resolve_runtime_identity()
+-	if not check("actual source and engine match source A and producer", trusted.get("ok", false) and trusted.get("save_eligible", false) and trusted.get("content_version") == manifest.content_version and trusted.get("engine_binary_sha256") == manifest.engine_sha256 and trusted.get("content_version") == OS.get_environment("DAMING_NEGATIVE_EXPECT_CONTENT") and FileAccess.get_sha256(OS.get_executable_path()) == manifest.engine_sha256 and manifest.engine_sha256 == OS.get_environment("DAMING_NEGATIVE_EXPECT_ENGINE"), trusted): finish(); return
+-	var pack: Dictionary = Factory.prepare_runtime(trusted)
+-	if not check("fixed installed read-only Daming runtime", pack.get("ok", false), pack): finish(); return
+-	runtime = pack.runtime
++	base = admitted.packet
++	base_envelope = admitted.slot_envelope
+ 	var probe: RefCounted = Core.new(trusted, runtime, {}, null, Profiles.DAMING_CONTEXT)
+-	var candidate_ok: bool = probe.has_method("_validate_daming_safe_pair") and probe._battle == null and probe._identity == null and probe._unit_plan.is_empty()
++	var installed: bool = probe.has_method("_validate_daming_safe_pair") and _zero(probe)
+ 	probe.dispose()
+-	if not check("v25 Core pairing implementation actually installed", candidate_ok): finish(); return
+-	var report: Dictionary = _parse(raw.a_report, "actual A report")
+-	var handoff: Dictionary = _parse(raw.a_handoff, "actual A handoff")
+-	var packet: Dictionary = _parse(raw.a_packet, "actual saved packet")
+-	var world: Dictionary = _parse(raw.a_world, "actual saved world")
+-	base_envelope = _parse(raw.a_slot, "actual raw slot envelope")
+-	if not check("actual A native success evidence declared", report.get("schema") == "daming_campaign_durable_cross_process_report_v1" and report.get("case") == "A_single_save" and report.get("passed") == true and report.get("single_safe_disk_case_qualified") == true and report.get("first_role") == role and report.get("checks") is Array and not report.checks.is_empty() and report.checks.all(func(r): return r is Dictionary and r.get("passed") == true)): finish(); return
+-	if not check("actual A report frozen version/engine and distinct source process", report.get("trusted") is Dictionary and report.trusted.get("content_version") == trusted.content_version and report.trusted.get("engine_binary_sha256") == manifest.engine_sha256 and typeof(report.get("pid")) in [TYPE_INT, TYPE_FLOAT] and int(report.pid) > 0 and int(report.pid) != OS.get_process_id() and typeof(report.get("nonce")) == TYPE_STRING and not report.nonce.is_empty() and report.nonce != nonce): finish(); return
+-	if not check("actual A packet/world SHA recorded in native report", report.get("evidence") is Array and report.evidence.any(func(r): return r is Dictionary and r.get("sha256") == manifest.a_packet.sha256) and report.evidence.any(func(r): return r is Dictionary and r.get("sha256") == manifest.a_world.sha256)): finish(); return
+-	if not check("actual A handoff source/slot/role/pid/nonce agree", handoff.get("schema") == "daming_safe_retreat_cross_process_handoff_v25" and handoff.get("mode") == "A_single_save" and handoff.get("first_role") == role and handoff.get("pid") == report.pid and handoff.get("nonce") == report.nonce and handoff.get("generation") == 1 and handoff.get("file_sha256") == manifest.a_slot.sha256 and handoff.get("content_version") == trusted.content_version and handoff.get("engine_sha256") == manifest.engine_sha256 and handoff.get("packet") == packet and packet.get("world") == world): finish(); return
+-	var slot: RefCounted = Store.new("user://v25_negative_data_only_no_disk")
+-	var decoded: Dictionary = slot._decode(raw.a_slot)
+-	if not check("actual raw closed slot canonical chain model decode", decoded.get("ok", false) and decoded.get("revision") == 1 and decoded.get("file_sha256") == manifest.a_slot.sha256, decoded): finish(); return
+-	base = decoded.document
+-	if not check("source A typed packet is exact declared JSON snapshot", JSON.parse_string(JSON.stringify(base)) == packet and base.context == Profiles.DAMING_CONTEXT and base.world.content_version == trusted.content_version): finish(); return
++	if not check("installed original safe pair API and zero state", installed): finish(); return
++	var slot: RefCounted = Store.new("user://negative_data_only_no_disk")
+ 	var native_base: Dictionary = slot._validate_document(base)
+ 	if not check("actual A recovered native source document strictly valid", native_base.get("ok", false) and _exact(base, native_base.document), native_base): finish(); return
+ 	# First validate the complete actual positive through Core. Only its accepted
+@@ -158,6 +123,7 @@
+ 	if not check("actual single-safe actor/event fixture", typeof(safe_id) == TYPE_STRING and typeof(other_id) == TYPE_STRING and safe_id != other_id and safe.get("values", {}).get("story_outcome") == "retreated" and other.get("values", {}).get("story_outcome") == "" and mission.events.has("daming_" + role + "_safe") and not mission.events.has("daming_" + ("shi" if role == "lu" else "lu") + "_safe")): finish(); return
+ 	fixture_ready = true
+ 	_build_specs()
++	if not check("exact preserved world specs", specs.size() == 132): finish(); return
+ 	for spec: Dictionary in specs:
+ 		for route_name: String in ["source", "json"]:
+ 			if not _negative(spec, route_name): finish(); return
+@@ -392,7 +358,7 @@
+ func finish() -> void:
+ 	if finished: return
+ 	finished = true
+-	var matrix_complete: bool = fixture_ready and positives.size() == 2 and not specs.is_empty() and rows.size() == specs.size() * 2 and rows.all(func(r): return r.passed)
++	var matrix_complete: bool = fixture_ready and positives.size() == 2 and specs.size() == 132 and rows.size() == specs.size() * 2 and rows.all(func(r): return r.passed)
+ 	var passed: bool = matrix_complete and not checks.is_empty() and checks.all(func(r): return r.passed)
+ 	var names: Array = specs.map(func(s): return s.id)
+ 	var source_pins: Array = []
+@@ -404,11 +370,4 @@
+ 		"disk_slot_writes": 0, "direct_gameplay_calls": 0, "cached_grids_cleared": 0, "future_producer_integration_qualified": false,
+ 		"not_implemented": ["live object capture negatives", "separate Unit/Pair component harness", "two-safe full coherent DTO and terminal/result branches beyond this fixed matrix", "all other packet/payload leaf types outside fixed five-record identity leaves"],
+ 		"scope": "Actual qualified A raw source pinned. Bare JSON Int identity routes reject at exact Slot canonical bytes with no Core created. Other source/JSON routes call independent complete Core.prepare and audit pre-dispose no-world states. No live capture negative, activation, ticks, save IO or feature qualification."}
+-	if not output.is_empty() and DirAccess.dir_exists_absolute(output.get_base_dir()) and not FileAccess.file_exists(output):
+-		var file := FileAccess.open(output, FileAccess.WRITE)
+-		if file != null: file.store_string(JSON.stringify(report, "\t") + "\n"); file.close()
+-		else: passed = false
+-	else: passed = false
+-	print("DAMING_SAFE_NEGATIVE_WORLD_V25_COMPLETE ", passed, " executed_rows=", rows.size())
+-	get_node("/root/Sfx").shutdown(); get_node("/root/Music").shutdown()
+-	get_tree().quit(0 if passed else 1)
++	support.finish(report, passed)
+--- qa/campaign_progress_recovery_20261008/final_durable_component_audit_v1_r6/daming_campaign_component_negative_v1.gd
++++ qa/campaign_progress_recovery_20261026/daming_continue_candidate/tests/daming_negative_v2/component_worker.gd
+@@ -1,10 +1,12 @@
+ extends Node
+-## External UNEXECUTED independent components; actual A source and journal only.
++const Support := preload("worker_support.gd")
++var support := Support.new()
++var admitted: Dictionary = {}
++## Migrated independent component matrix; actual closed-A source and journal only.
+ ## No Core.prepare/capture, Unit/Battle allocation, ticks or slot/journal writes.
+ const INPUT_SCHEMA := "daming_campaign_component_inputs_v1"
+ const REPORT_SCHEMA := "daming_campaign_component_report_v1"
+ const SLOT_ROOT := "user://continue/v1"
+-const HANDOFF_A := "user://daming_safe_retreat_v25/handoff_A.json"
+ const ROUTES := ["source", "json"]
+ const FIXTURES := ["a_report", "a_handoff", "a_packet", "a_world", "a_slot"]
+ const SOURCE_PATHS := ["res://scripts/run_battle_world_core.gd","res://scripts/run_level8_unit_contract.gd","res://scripts/run_unit_state.gd","res://scripts/run_unit_graph.gd","res://scripts/run_graph_identity.gd","res://scripts/run_campaign_level_state.gd","res://scripts/run_campaign_mission_state.gd","res://scripts/run_campaign_presentation_state.gd","res://scripts/run_battle_root_state.gd","res://scripts/run_state_value_codec.gd","res://scripts/run_slot_store.gd","res://scripts/run_snapshot_store.gd","res://scripts/run_local_lifecycle.gd","res://scripts/run_cast_flow_state.gd","res://scripts/run_item_cast_flow_state.gd","res://scripts/unit.gd","res://scripts/hero_inventory.gd","res://scripts/run_official_restore_profile.gd","res://scripts/battle.gd","res://scripts/campaign.gd","res://scripts/continue_flow.gd","res://scripts/menu.gd","res://scripts/run_campaign_cfg_transaction.gd","res://scripts/run_campaign_cfg_values.gd","res://scripts/run_campaign_local_lifecycle.gd","res://scripts/run_campaign_progress_coordinator.gd","res://scripts/run_campaign_progress_gate.gd","res://scripts/run_campaign_progress_intent.gd","res://scripts/run_campaign_progress_projection.gd","res://scripts/run_campaign_startup_scan.gd","res://scripts/run_world_session.gd","res://scripts/steam_cloud.gd"]
+@@ -158,29 +160,10 @@
+ 	return true
+ 
+ func _profile_proof() -> bool:
+-	if not check("actual A full slot/journal source set exists", manifest.get("profile_files") is Array and not manifest.profile_files.is_empty()): return false
+-	var expected := {}; var scope: String = ProjectSettings.globalize_path(SLOT_ROOT).replace("\\", "/").simplify_path().trim_suffix("/")
+-	for row: Variant in manifest.profile_files:
+-		if not check("exact nonalias relative profile file", row is Dictionary and row.has_all(["path", "sha256", "relative"]) and typeof(row.relative) == TYPE_STRING and not row.relative.is_empty() and not row.relative.is_absolute_path() and row.relative.replace("\\", "/").simplify_path() == row.relative and not row.relative.begins_with("../") and not expected.has(row.relative)): return false
+-		if _read_pinned(row, "original A journal/slot " + row.relative).is_empty(): return false
+-		expected[row.relative] = row.sha256
+-		if not check("owned A profile exact bytes " + row.relative, FileAccess.get_sha256(scope.path_join(row.relative)) == row.sha256): return false
+-	if not check("complete owned A journal/slot keyset SHA", _sha_map_equal(_scan(scope), expected)): return false
+-	return check("owned raw A handoff bytes", FileAccess.get_sha256(HANDOFF_A) == manifest.a_handoff.sha256)
++	return check("whole original closed A slot/journal exact, no synthetic handoff", support.profile_unchanged() and support.reader.unchanged())
+ 
+ func _ready() -> void:
+ 	process_mode = Node.PROCESS_MODE_ALWAYS
+-	var profile := OS.get_environment("DAMING_COMPONENT_PROFILE").replace("\\", "/").simplify_path().trim_suffix("/")
+-	output = OS.get_environment("DAMING_COMPONENT_OUT").replace("\\", "/").simplify_path().trim_suffix("/")
+-	nonce = OS.get_environment("DAMING_COMPONENT_NONCE")
+-	var project: String = ProjectSettings.globalize_path("res://").replace("\\", "/").simplify_path().trim_suffix("/")
+-	var safe: bool = profile.is_absolute_path() and DirAccess.dir_exists_absolute(profile)
+-	for f: String in ["APPDATA", "LOCALAPPDATA", "TEMP", "TMP"]:
+-		safe = safe and OS.get_environment(f).replace("\\", "/").simplify_path().trim_suffix("/").to_lower() == profile.path_join(f.to_lower()).to_lower()
+-	safe = safe and OS.get_user_data_dir().replace("\\", "/").simplify_path().to_lower().begins_with(profile.path_join("appdata").to_lower() + "/") and OS.get_environment("STEAM_DISABLED") == "1" and OS.get_environment("CAMPAIGN_QA").is_empty()
+-	if not safe: print("V25_COMPONENT PRIVATE_PROFILE_REQUIRED"); get_tree().quit(2); return
+-	if not check("fresh external component output and nonce", not nonce.is_empty() and output.is_absolute_path() and not DirAccess.dir_exists_absolute(output) and not output.to_lower().begins_with(project.to_lower() + "/") and output.to_lower() != project.to_lower()): finish(); return
+-	if not check("new component output created", DirAccess.make_dir_recursive_absolute(output) == OK): finish(); return
+ 	run.call_deferred()
+ 
+ func _load() -> void:
+@@ -191,44 +174,24 @@
+ 	Lifecycle = load("res://scripts/run_campaign_local_lifecycle.gd")
+ 
+ func run() -> void:
+-	var path: String = OS.get_environment("DAMING_COMPONENT_MANIFEST")
+-	if not check("V25_COMPONENT_PREFLIGHT_ACTUAL_A_REQUIRED", path.is_absolute_path() and FileAccess.file_exists(path)): finish(); return
++	admitted = await support.begin(self, "component")
++	if admitted.is_empty(): finish(); return
+ 	_load()
+-	var startup_flow: Node = get_node("/root/ContinueFlow")
+-	var gate: Script = load("res://scripts/run_campaign_progress_gate.gd")
+-	for frame in range(180): await get_tree().process_frame
+-	while Engine.is_in_physics_frame(): await get_tree().process_frame
+-	if not check("production startup checked before any matrix factory or world", startup_flow.phase == startup_flow.Phase.IDLE and startup_flow.last_result.get("startup_checked",false) and gate.background_allowed(), startup_flow.last_result.duplicate(true)): finish(); return
+-	manifest = _parse(_read_pinned({"path": path, "sha256": OS.get_environment("DAMING_COMPONENT_MANIFEST_SHA256")}, "component manifest"), "component manifest")
+-	if not check("component exact actual A manifest", manifest.get("schema") == INPUT_SCHEMA and manifest.has_all(FIXTURES + ["first_role", "content_version", "engine_sha256", "profile_files", "source_pins"]) and typeof(manifest.first_role) == TYPE_STRING and manifest.first_role in ["lu", "shi"] and typeof(manifest.content_version) == TYPE_STRING and not manifest.content_version.is_empty() and typeof(manifest.engine_sha256) == TYPE_STRING and manifest.engine_sha256.length() == 64 and manifest.engine_sha256.is_valid_hex_number()): finish(); return
+-	role = manifest.first_role
+-	if not check("exact fixed installed component source pin keyset", manifest.source_pins is Dictionary and manifest.source_pins.size() == SOURCE_PATHS.size() and manifest.source_pins.has_all(SOURCE_PATHS)): finish(); return
++	trusted = support.trusted; runtime = support.runtime; role = admitted.first_role
++	nonce = OS.get_environment("DN_PROCESS_NONCE"); output = OS.get_environment("DN_EVIDENCE")
++	base = admitted.packet; base_raw = admitted.slot_raw
++	manifest = {"source_pins":{}, "a_slot":support.request.slot}
+ 	for src: String in SOURCE_PATHS:
+-		if not check("actual installed component source " + src, typeof(manifest.source_pins[src]) == TYPE_STRING and manifest.source_pins[src].length() == 64 and FileAccess.get_sha256(src) == manifest.source_pins[src]): finish(); return
+-	var raw := {}
+-	for f: String in FIXTURES:
+-		raw[f] = _read_pinned(manifest[f], f)
+-		if raw[f].is_empty(): finish(); return
+-	base_raw = raw.a_slot
+-	trusted = load("res://scripts/run_content_identity.gd").new().resolve_runtime_identity()
+-	if not check("actual A and component source engine content identity", trusted.get("ok", false) and trusted.get("save_eligible", false) and trusted.get("content_version") == manifest.content_version and trusted.get("engine_binary_sha256") == manifest.engine_sha256 and trusted.get("content_version") == OS.get_environment("DAMING_COMPONENT_EXPECT_CONTENT") and manifest.engine_sha256 == FileAccess.get_sha256(OS.get_executable_path()) and manifest.engine_sha256 == OS.get_environment("DAMING_COMPONENT_EXPECT_ENGINE"), trusted): finish(); return
+-	var pack: Dictionary = load("res://scripts/run_level8_world_factory.gd").prepare_runtime(trusted)
+-	if not check("original installed read-only definitions available", pack.get("ok", false), pack): finish(); return
+-	runtime = pack.runtime
++		if not check("required installed component binding " + src, support.request.source_pins.has(src)): finish(); return
++		manifest.source_pins[src] = support.request.source_pins[src]
++	if not check("exact fixed installed component source pin keyset", manifest.source_pins.size() == SOURCE_PATHS.size() and manifest.source_pins.has_all(SOURCE_PATHS)): finish(); return
++	for src: String in SOURCE_PATHS:
++		if not check("actual installed component source " + src, FileAccess.get_sha256(src) == manifest.source_pins[src]): finish(); return
+ 	var probe: RefCounted = Core.new(trusted, runtime, {}, null, Profiles.DAMING_CONTEXT)
+ 	var contract_probe: RefCounted = Contract.new()
+ 	var installed: bool = probe.has_method("_validate_daming_safe_pair") and contract_probe.has_method("_safe_retreat_values") and _zero(probe)
+ 	probe.dispose()
+ 	if not check("actual new pair and safe Unit component APIs installed", installed): finish(); return
+-	var a_report := _parse(raw.a_report, "actual A report"); var handoff := _parse(raw.a_handoff, "actual A handoff")
+-	var packet := _parse(raw.a_packet, "actual A packet"); var world := _parse(raw.a_world, "actual A world")
+-	if not check("actual A successful single-safe source", a_report.get("schema") == "daming_campaign_durable_cross_process_report_v1" and a_report.get("case") == "A_single_save" and a_report.get("first_role") == role and a_report.get("passed") == true and a_report.get("single_safe_disk_case_qualified") == true and a_report.get("checks") is Array and not a_report.checks.is_empty() and a_report.checks.all(func(r): return r is Dictionary and r.get("passed") == true)): finish(); return
+-	if not check("source actual PID nonce content engine", a_report.get("trusted") is Dictionary and a_report.trusted.get("content_version") == manifest.content_version and a_report.trusted.get("engine_binary_sha256") == manifest.engine_sha256 and typeof(a_report.get("pid")) in [TYPE_INT, TYPE_FLOAT] and int(a_report.pid) > 0 and int(a_report.pid) != OS.get_process_id() and typeof(a_report.get("nonce")) == TYPE_STRING and not a_report.nonce.is_empty() and a_report.nonce != nonce): finish(); return
+-	if not check("A report authentic full packet/world hashes", a_report.get("evidence") is Array and a_report.evidence.any(func(r): return r is Dictionary and r.get("sha256") == manifest.a_packet.sha256) and a_report.evidence.any(func(r): return r is Dictionary and r.get("sha256") == manifest.a_world.sha256)): finish(); return
+-	if not check("A five original files consistent", handoff.get("schema") == "daming_safe_retreat_cross_process_handoff_v25" and handoff.get("mode") == "A_single_save" and handoff.get("pid") == a_report.pid and handoff.get("nonce") == a_report.nonce and handoff.get("first_role") == role and handoff.get("generation") == 1 and handoff.get("file_sha256") == manifest.a_slot.sha256 and handoff.get("content_version") == manifest.content_version and handoff.get("engine_sha256") == manifest.engine_sha256 and handoff.get("packet") == packet and packet.get("world") == world): finish(); return
+-	var opened: Dictionary = Store.new(SLOT_ROOT)._decode(base_raw)
+-	if not check("actual canonical A slot full typed packet", opened.get("ok", false) and opened.get("revision") == 1 and opened.get("file_sha256") == manifest.a_slot.sha256 and JSON.parse_string(JSON.stringify(opened.document)) == packet, opened): finish(); return
+-	base = opened.document
+ 	if not _profile_proof(): finish(); return
+ 	var owned: Dictionary = Store.new(SLOT_ROOT).read_slot()
+ 	if not check("owned actual A slot full head unchanged", owned.get("ok", false) and owned.file_sha256 == manifest.a_slot.sha256 and owned.revision == 1 and _fingerprint(owned.document) == _fingerprint(base), owned): finish(); return
+@@ -648,15 +611,4 @@
+ 	var sources := {}
+ 	for path: String in SOURCE_PATHS: sources[path] = FileAccess.get_sha256(path)
+ 	var report := {"schema": REPORT_SCHEMA, "passed": passed, "pure_matrix_passed": passed, "component_matrix_complete": complete, "fixture_ready": fixture_ready, "first_role": role, "pid": OS.get_process_id(), "nonce": nonce, "actual_user_data_dir": OS.get_user_data_dir(), "content_version": trusted.get("content_version", ""), "engine_sha256": FileAccess.get_sha256(OS.get_executable_path()), "harness_sha256": FileAccess.get_sha256(get_script().resource_path), "source_pins": sources, "planned_specs": specs, "expected_case_count": 181, "expected_row_count": 362, "executed_rows": rows, "positives": positives, "checks": checks, "provenance": provenance, "evidence": evidence, "independent_component_calls_implemented": true, "whole_world_DTO_prepare_substitution": false, "actual_Core_prepare_calls": 0, "actual_Core_capture_calls": 0, "disk_slot_writes": 0, "local_journal_writes": 0, "gameplay_ticks_injected": 0, "cached_grids_cleared": 0, "whole_v25_qualified": false, "overall_v25_qualified": false, "future_producer_integration_qualified": false, "native_zero_ERROR_log_verified": false, "actual_two_unretreated_whole_fixture_qualified": false, "not_run_scope": ["Actual two-unretreated whole-world positive fixture absent; original A other Unit positive is narrower and never fabricated", "Actual live five cast-array negatives remain separate not_implemented", "38 live capture rows and full A/B/C/D natural terminal/reward qualification not_run", "Successor parser/native/error-log and independent producer aggregate not_run"], "scope": "Actual original single-safe A closed slot plus full original local journal; independent full UnitState and direct Level8Contract calls, separate real pure Core fixedpair. Component source/JSON boundaries do not claim mutated whole Slot canonical coverage."}
+-	if not output.is_empty() and DirAccess.dir_exists_absolute(output):
+-		var path: String = output.path_join("report.json")
+-		if not FileAccess.file_exists(path):
+-			var file := FileAccess.open(path, FileAccess.WRITE)
+-			if file != null: file.store_string(JSON.stringify(report, "\t") + "\n"); file.close()
+-			else: passed = false
+-		else: passed = false
+-	else: passed = false
+-	print("DAMING_SAFE_COMPONENT_V25_COMPLETE ", passed, " rows=", rows.size())
+-	if get_node_or_null("/root/Sfx") != null: get_node("/root/Sfx").shutdown()
+-	if get_node_or_null("/root/Music") != null: get_node("/root/Music").shutdown()
+-	get_tree().quit(0 if passed else 1)
++	support.finish(report, passed)

@@ -104,7 +104,7 @@ func unchanged() -> bool:
 
 func admit(request: Dictionary, trusted: Dictionary) -> Dictionary:
 	if not check(request.get("schema") == "daming_negative_admission_request_v2"
-		and request.get("scope") == "admission_only_not_52_execution"
+		and request.get("scope") == "negative_matrix_52"
 		and request.get("first_role") in ["lu","shi"]
 		and request.has_all(["flow_receipt","closed_a_descriptor","a_report","a_log","slot","lifecycle",
 			"producer_terminal_report","producer_pid","binding","context","consumer_process_nonce"]), "new fixture admission protocol"): return {}
@@ -119,8 +119,15 @@ func admit(request: Dictionary, trusted: Dictionary) -> Dictionary:
 	if flow.is_empty() or descriptor.is_empty() or report.is_empty() or terminal.is_empty(): return {}
 	if not check(flow.get("schema") == "daming_flow_eight_process_v1" and flow.get("complete") == true
 		and flow.get("eight_stages_passed") == true and flow.get("final_identity_passed") == true
-		and flow.get("lock_released") == true and flow.get("content_version") == trusted.content_version
+		and flow.get("lock_released") == true and flow.get("cold_import_qualified") == true
+		and integer(flow.get("candidate_script_count"), 26) and integer(flow.get("native_asset_count"), 1)
+		and flow.get("content_version") == trusted.content_version
 		and flow.get("engine_sha256") == trusted.engine_binary_sha256, "actual completed producer receipt"): return {}
+	var cold: Dictionary = parse(read_pin(request.get("cold_import_receipt"), "own cold import"), "own cold import")
+	if not check(cold.get("schema") == "projectile_3365_cold_import_v1" and cold.get("complete") == true
+		and cold.get("lock_released") == true and request.get("cold_import_qualified") == true
+		and request.get("base_run") == flow.get("base_run")
+		and flow.get("import_receipts", []).has(request.cold_import_receipt.path), "new producer own cold import required"): return {}
 	var role: String = request.first_role
 	var producer_pins: Variant = flow.get("pinned_files")
 	if not check(typeof(producer_pins) == TYPE_DICTIONARY, "producer original pin map"): return {}
@@ -212,6 +219,6 @@ func admit(request: Dictionary, trusted: Dictionary) -> Dictionary:
 		and not mission.value.events.has("daming_" + ("shi" if role == "lu" else "lu") + "_safe"), "typed original single-safe role/event fixture"): return {}
 	if not check(unchanged() and inventory_matches(frozen_root, descriptor.frozen_inventory, binding.token),
 		"all input bytes and frozen directories unchanged after native decode"): return {}
-	return {"packet":packet,"world":packet.world,"slot_raw":slot_raw,"lifecycle":active,
+	return {"packet":packet,"world":packet.world,"slot_raw":slot_raw,"slot_envelope":parse(slot_raw, "original envelope"),"lifecycle_raw":life_raw,"lifecycle":active,
 		"first_role":role,"safe_id":first,"other_id":other,"descriptor":descriptor,
 		"source_report":report,"trusted":trusted,"mission":mission.value,"level":level.value}

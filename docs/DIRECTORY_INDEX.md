@@ -106,3 +106,7 @@ qa/campaign_progress_recovery_20261026/continue_binding_candidate/：Flow/Sessio
 
 大名府`evidence/flow_escort_load_20261027_080320/`保留新护送策略五GD独立加载的32命名pins；新统一源宿主位于`projectile_filter_candidate/run_daming_flow.py`及`tests/daming_replay/`，只改26+1/cold准入，尚无新实跑结果。
 新统一源完整准备与首次冷导入原件：`qa/campaign_progress_recovery_20261026/projectile_filter_candidate/evidence/full_freeze_20261027_075456/`，只授该源准备和冷导入资格。
+
+新52执行代码及8GD加载清单：`daming_continue_candidate/tests/daming_negative_v2/`；加载原件：同候选`evidence/negative_load_20261027_084545/`。高俅b22失败原件：`projectile_filter_candidate/evidence/terminal_toggle_failure_20261027_081838/`。以上均位于`qa/campaign_progress_recovery_20261026/`下。
+
+高俅真实Viewport toggle修订加载原件：`qa/campaign_progress_recovery_20261026/projectile_filter_candidate/evidence/terminal_toggle_load_20261027_090855/`。

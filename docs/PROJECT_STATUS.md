@@ -6,7 +6,7 @@
 
 | 项目 | 当前状态 |
 | --- | --- |
-| GitHub | [winterzh/Liangshan-Heroes / stable](https://github.com/winterzh/Liangshan-Heroes/tree/codex/sync-20260905-stable)；黄泥冈实现、连环马胜败及恢复候选/QA已推送，前批远端回读`167e9f4202aa3479d11398c7851baf28d2c3e370`；本批候选和证据以本次提交后回读为准，main保持`1598c7c0cdccdc0bf1be8968608f79f0c43dcfc9`，未合并 |
+| GitHub | [winterzh/Liangshan-Heroes / stable](https://github.com/winterzh/Liangshan-Heroes/tree/codex/sync-20260905-stable)；黄泥冈实现、连环马胜败及恢复候选/QA已推送，前批远端回读`d55efdf43110315dafecf8f848d8eae7108881a1`；本批候选和证据以本次提交后回读为准，main保持`1598c7c0cdccdc0bf1be8968608f79f0c43dcfc9`，未合并 |
 | 主线合并 | 48042d84补齐旧stable合并历史，ffa625de补齐交接文档；本页修订随本次文档提交同步，以分支最新提交为准 |
 | Steam Windows | default Build **26048429** / Manifest **697009053566575953**，2026-10-20完成发布验收 |
 | 冻结生产来源 | 0083b47abac098c5ebd7231e327085c4ba3299cd；后继QA工具和文档提交未改变游戏包 |
@@ -26,7 +26,7 @@
 ## 后续顺序
 
 1. [黄泥冈七车十一担](../qa/huangnigang_production_20261020/README.md)实现及自动证据已同步stable `f5325c25`：最终编译包普通路线1206项、九阶段1768项与四语三尺寸24图目检通过。原版EXE仅启动/退出通过；按用户选择暂不恢复键鼠，完整实操待办。第一批整体未完成，main/Steam未更新，公开战役续玩未开放。
-2. 完整战役续玩仍在候选阶段。当前d7f2258b已修复实际继续后的连环马招募人口遗漏；自然胜利四进程345项、自然失败三进程205项均通过，包含真实保存退出、独立继续、正常胜败和终局重启拒旧槽。独立本地绑定模型30项也已通过。后继[读集优化候选](../qa/campaign_progress_recovery_20261026/recovery_readset_candidate/VALIDATION.md)已修复驻守战record恢复超时，新源两处中断/恢复四进程88项通过；异常专项12类案例及旧4MB逐字副本共285项已通过，原档保持。[高俅最小接线](../qa/campaign_progress_recovery_20261026/gaoqiu_continue_candidate/VALIDATION.md)已另冻941c4786并独立导入，实际造船保存/继续三进程190项、自然失败及终局拒旧槽三进程200项通过；核心胜利测试已正常派发并清完首波，实际保存却因正常箭矢纹理过滤与视觉存档合同不一致而被拒绝；[最小视觉合同修复](../qa/campaign_progress_recovery_20261026/projectile_filter_candidate/VALIDATION.md)已通过44项原生组件检查，b22完整新工程及自己的首次冷导入均已通过，高俅真实四进程复跑已启动，尚无完整胜利结果。[大名府三脚本修复](../qa/campaign_progress_recovery_20261026/daming_continue_candidate/VALIDATION.md)已完成3365完整准备与导入；卢俊义先撤离路线两次实际保存退出及独立恢复已通过，最终护送时石秀自然阵亡，双角色完整路线未通过；后继普通集结/近卫策略已原生加载通过，待在新统一源实跑；后续还有高俅完整胜利、大名府双角色61阶段、原19类故障与实际界面重试、云同步和奖励仅一次；未采用生产。[当前实现与资格](../qa/campaign_progress_recovery_20261026/continue_binding_candidate/VALIDATION.md)，[历史各源证据](../qa/campaign_progress_recovery_20261026/README.md)。
+2. 完整战役续玩仍在候选阶段。当前d7f2258b已修复实际继续后的连环马招募人口遗漏；自然胜利四进程345项、自然失败三进程205项均通过，包含真实保存退出、独立继续、正常胜败和终局重启拒旧槽。独立本地绑定模型30项也已通过。后继[读集优化候选](../qa/campaign_progress_recovery_20261026/recovery_readset_candidate/VALIDATION.md)已修复驻守战record恢复超时，新源两处中断/恢复四进程88项通过；异常专项12类案例及旧4MB逐字副本共285项已通过，原档保持。[高俅最小接线](../qa/campaign_progress_recovery_20261026/gaoqiu_continue_candidate/VALIDATION.md)已另冻941c4786并独立导入，实际造船保存/继续三进程190项、自然失败及终局拒旧槽三进程200项通过；核心胜利测试已正常派发并清完首波，实际保存却因正常箭矢纹理过滤与视觉存档合同不一致而被拒绝；[最小视觉合同修复](../qa/campaign_progress_recovery_20261026/projectile_filter_candidate/VALIDATION.md)已通过44项原生组件检查，b22完整新工程及自己的首次冷导入均已通过，高俅真实两次保存退出分别127/133项通过；第三进程正确恢复核心胜利状态，但测试未真正切换任务面板，结束按钮仍隐藏，完整胜利未通过。[大名府三脚本修复](../qa/campaign_progress_recovery_20261026/daming_continue_candidate/VALIDATION.md)已完成3365完整准备与导入；卢俊义先撤离路线两次实际保存退出及独立恢复已通过，最终护送时石秀自然阵亡，双角色完整路线未通过；后继普通集结/近卫策略已原生加载通过，新统一源首A因新增全军集合条件未满足而停止，尚未保存，后继普通护送修订待实跑；52负例已实现并通过8GD原生加载，仍待完整双路线资格；后续还有高俅完整胜利、大名府双角色61阶段、原19类故障与实际界面重试、云同步和奖励仅一次；未采用生产。[当前实现与资格](../qa/campaign_progress_recovery_20261026/continue_binding_candidate/VALIDATION.md)，[历史各源证据](../qa/campaign_progress_recovery_20261026/README.md)。
 3. 接续剩余人物/剧情变体、自然动作、六车轮转、场景、特效及界面美术。
 4. 回归八章与九玩法完整流程，完成真人试玩、性能/内存、切换清理和设备验收。详细条件保留在[开发计划](DEVELOPMENT_PLAN.md)，不由已发布批次替代。
 

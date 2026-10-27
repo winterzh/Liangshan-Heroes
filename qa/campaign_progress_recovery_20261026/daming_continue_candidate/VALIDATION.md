@@ -30,7 +30,7 @@ Python宿主新增闭合A原件留存：实际A进程正常保存退出并通过
 
 C PID28156有67项，66通过/1失败：原卢俊义28仍安全离场，石秀29在后续自然护送中HP归零；大厅仍1500。原路线将主力送往出口，另一伤员留在牢内，B期间生命已从230降到148.4；报告没有具体击杀者，不能指定追兵或牢塔。C未取得正常胜利资格，D及Shi-first四阶段均未运行。宿主complete=false，但完整来源后验、三个实际进程终态、冻结库存与自有锁释放全部通过，cleanup_errors为空。[原始失败与已通过部分](evidence/flow_first_failure_20261027_072035/README.md)。
 
-后继只修普通护送策略，先清理实际威胁，再共同集结到出口触发区之外，给第二伤员保留近距护卫。真实单safe、两次保存、B的120tick、自然双safe胜利及八独立进程门槛不变；原失败worker和证据不覆盖。新的[52负例准入草案](tests/daming_negative_v2/README.md)只完成原表提取、规划与原生admission源码，完整执行宿主/循环尚未实现或运行；本轮失败不能解锁该资格。
+后继只修普通护送策略，先清理实际威胁，再共同集结到出口触发区之外，给第二伤员保留近距护卫。真实单safe、两次保存、B的120tick、自然双safe胜利及八独立进程门槛不变；原失败worker和证据不覆盖。当时[52负例工具](tests/daming_negative_v2/README.md)仅有准入草案；现已完成执行代码及独立加载，见后继记录。旧失败不能解锁该资格。
 
 ## 后续验收
 
@@ -44,4 +44,17 @@ C PID28156有67项，66通过/1失败：原卢俊义28仍安全离场，石秀29
 
 五份GD在3365工程上再次独立加载通过：PID46944退出0、错误0，41.701秒，32个命名pins后验及自有锁释放通过。[冻结原件](evidence/flow_escort_load_20261027_080320/README.md)保留原route dc3c538f、README25975893、sources59aa53b7及其余未变输入；只load/can_instantiate，没有实例化路线，不授完整实跑。
 
-后续实际双角色流程使用[新统一源宿主](../projectile_filter_candidate/tests/daming_replay/README.md)，严格要求新26脚本加helper及本次独立首次冷导入；五GD、A原件hook和全部八流程判据复用。宿主AST、帮助和30项轻量来源检查通过，未运行新八流程。旧52草案不会自动接受新源或新输出目录，须显式增加当前来源绑定后再执行。
+后续实际双角色流程使用[新统一源宿主](../projectile_filter_candidate/tests/daming_replay/README.md)，严格要求新26脚本加helper及本次独立首次冷导入；五GD、A原件hook和全部八流程判据复用。宿主AST、帮助和30项轻量来源检查通过，b22新冷导入源首A已结束失败，见后继记录。52工具已显式增加严格b22来源和新输出目录绑定，仍须实际完整八流程成功后才能执行。
+
+## 新52工具实现与纯加载
+
+新宿主保留每角色132×source/json world、181×source/json component和24个独立capture进程，共52实际进程。真实raw closed-A经Slot/LC原生解码；严格要求b22自有首次cold及同源双角色八Flow整体成功，失败/旧源收据在创建profile前拒绝。capture继续实际Session恢复、HELD、Core.capture、typed/IEEE还原及完整业务库存核验；不是正常玩家操作或原19持久化故障的替代。
+
+AST、帮助及30命名来源检查通过。纯加载批20261027_084545_37422b03的PID68484退出0、错误0，38.425秒，8GD全部load/can_instantiate；未new/执行worker，未授52或61。[加载证据](evidence/negative_load_20261027_084545/README.md)。本次首A未通过，正向双路线仍待新实际结果。
+
+## b22首A护送准备失败及策略修订
+
+20261027_084726_b6b52c01仅Lu-first A：PID69952，642.309秒，退出1/脚本错误0；166项165通过/1失败，未解救/未保存，剩余七阶段未运行。完整来源、实际终态及自有锁释放通过，cleanup_errors为空。失败标签为jail action resistance clear natural deadline，但当时prison_guards实际为空，伤员健康且各有近卫；未满足的是新增_jail_escort_ready全_crew距牢门180px条件，84弓手已返营，不能把标签解读为仍有牢门敌军。
+
+新增全军逐塔点攻也削弱了队伍：20人起始，第二塔后可用突击队只剩8名远程/投石单位。后继恢复旧072035已成功的natural_rescue原函数及原120秒条件，删除全军强制清塔；再通过普通move选定真实近卫护送组共同集合，保留每伤员140px至少3近卫的实际到达验证，不等待返营弓手或慢投石车。原全局/分步/终局时限、120tick、单safe和八流程门槛保持。新策略尚待加载及实跑，不授成功资格。
+[b22首A原件、诊断及后继静态差异](evidence/flow_escort_failure_20261027_084726/README.md)分别保留，后继源码尚待原生加载。

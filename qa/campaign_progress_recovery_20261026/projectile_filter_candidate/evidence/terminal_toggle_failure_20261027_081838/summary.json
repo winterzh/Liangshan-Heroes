@@ -1,0 +1,160 @@
+{
+  "schema": "gaoqiu_terminal_toggle_failure_summary_v1",
+  "original_run": "D:\\AI项目\\水浒\\开发工程\\.godot\\gaoqiu_projectile_terminal_20261027\\20261027_081838_4be25b3b",
+  "base_run": "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_075456_3e4a48ab",
+  "source_content_version": "source-v1:b22f76f7bf4b8309f9257829364f4afdd6c9262282a25cb6aefacce5aa916132",
+  "candidate_manifest_sha256": "baa4677d1b862845c321dd08c8b01d047934c92dbcb71917daf4b6b9f6c96001",
+  "source_head_recorded_by_host": "167e9f4202aa3479d11398c7851baf28d2c3e370",
+  "reference_commit": "d55efdf43110315dafecf8f848d8eae7108881a1",
+  "complete": false,
+  "actual_process_count": 3,
+  "planned_process_count": 4,
+  "checks_total": 306,
+  "checks_passed": 305,
+  "checks_failed": 1,
+  "steps": [
+    {
+      "mode": "save_after_wave1",
+      "pid": 52992,
+      "exit_code": 0,
+      "seconds": 312.071,
+      "checks": 127,
+      "passed_checks": 127,
+      "errors": [],
+      "stopped_for": null
+    },
+    {
+      "mode": "resume_core_save",
+      "pid": 13612,
+      "exit_code": 0,
+      "seconds": 592.461,
+      "checks": 133,
+      "passed_checks": 133,
+      "errors": [],
+      "stopped_for": null
+    },
+    {
+      "mode": "resume_finish",
+      "pid": 26468,
+      "exit_code": 1,
+      "seconds": 116.211,
+      "checks": 46,
+      "passed_checks": 45,
+      "errors": [],
+      "stopped_for": null
+    }
+  ],
+  "total_native_seconds": 1020.743,
+  "slot_generations": [
+    1,
+    2,
+    2
+  ],
+  "same_actual_uncredited_binding": {
+    "kind": "uncredited",
+    "receipt_sha256": "a27c16054a8fad251059badb6906ab1026db0ce63c0f9870be3907a61f2f654e",
+    "token": "7e257b8e09a8899c3598610ff96cf3da"
+  },
+  "lifecycle_generations": [
+    1,
+    1,
+    1
+  ],
+  "b_restored_state_equals_a_checkpoint": true,
+  "c_restored_state_equals_b_checkpoint": true,
+  "c_complete_typed_checkpoint_equals_b": true,
+  "c_complete_typed_opening_equals_b": true,
+  "wave_dispatch_observations": [
+    {
+      "index": 0,
+      "land_alive_at_dispatch": 4,
+      "observed_elapsed": 140.01666666667,
+      "scheduled": 140.0,
+      "tick": 8421,
+      "water_alive_at_dispatch": 3
+    },
+    {
+      "index": 1,
+      "land_alive_at_dispatch": 6,
+      "observed_elapsed": 330.150000000028,
+      "scheduled": 330.0,
+      "tick": 19829,
+      "water_alive_at_dispatch": 5
+    },
+    {
+      "index": 2,
+      "land_alive_at_dispatch": 8,
+      "observed_elapsed": 540.016666666504,
+      "scheduled": 540.0,
+      "tick": 32421,
+      "water_alive_at_dispatch": 6
+    }
+  ],
+  "second_save_elapsed": 597.083333333119,
+  "second_save_core_ready": true,
+  "second_save_flagship_disabled": true,
+  "second_save_end_button": {
+    "disabled": false,
+    "exists": true,
+    "presentation": {
+      "button_id": "gao_end",
+      "kind": "level",
+      "label": "收兵通关 · 已击退高俅",
+      "tooltip": ""
+    }
+  },
+  "third_process_unrevealed_button": {
+    "disabled": false,
+    "name": "@Button@308",
+    "rect": "[P: (104.0, 88.0), S: (181.0, 37.0)]",
+    "text": "收兵通关 · 已击退高俅",
+    "viewport": "[P: (0.0, 0.0), S: (1280.0, 720.0)]"
+  },
+  "failure": "normal scroll exposes requested enabled button within clipping bounds",
+  "diagnosis": {
+    "kind": "QA_toggle_operation_defect",
+    "frozen_driver_call": "driver.gd:178 press_button(battle.mission._toggle,...)",
+    "frozen_base_operation": "base.gd:85 button.pressed.emit()",
+    "production_contract": "campaign_mission.gd:82-83 toggle_mode=true; toggled.connect(_set_expanded)",
+    "conclusion": "Emitting pressed alone does not invoke the actual toggle state/handler; this run does not prove a production UI fault. Scroll visibility assertion remained strict and failed.",
+    "production_source": {
+      "source": "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_075456_3e4a48ab\\project\\scripts\\campaign_mission.gd",
+      "sha256": "c4694973f9abce06792ad9eab6e3c37450d4c6138679c446c7a112ecc3db06c7",
+      "generation_sha256": "e4caa656a8d17ee4304c638bddb4b910a259fefb3b14788f86b92571edf0d1be",
+      "generation_row": {
+        "path": "scripts/campaign_mission.gd",
+        "bytes": 36624,
+        "sha256": "c4694973f9abce06792ad9eab6e3c37450d4c6138679c446c7a112ecc3db06c7"
+      },
+      "resolution_object_sha256": "c4694973f9abce06792ad9eab6e3c37450d4c6138679c446c7a112ecc3db06c7",
+      "lines": [
+        75,
+        82,
+        83,
+        134,
+        135,
+        136,
+        137
+      ]
+    }
+  },
+  "fourth_process_started": false,
+  "native_terminal_or_reward_completed": false,
+  "script_errors": [],
+  "host_error": "RuntimeError('Private character QA step failed: resume_finish')",
+  "postcheck": {
+    "initial_identity_passed": true,
+    "final_identity_passed": true,
+    "child_process_terminal": true,
+    "lock_ownership_confirmed": true,
+    "engine_lane_idle": true,
+    "lock_released": true
+  },
+  "source_core_victory_chain_passed": false,
+  "native_sdk_qualified": false,
+  "public_continue_qualified": false,
+  "credited_rewards_qualified": false,
+  "native_release_tested": false,
+  "human_acceptance": false,
+  "published": false
+}

@@ -28,3 +28,11 @@ C:\Python314\python.exe -B qa/campaign_progress_recovery_20261026/gaoqiu_continu
 无参数默认仅命名来源/工具 pins 的轻量核对，不完整工程哈希/创建 profile/锁/引擎。带 base 而无 run 才做完整只读准入；显式 `--run` 在自身共享锁内调用固定 Gao `prepared_state(new_run)`，要求该工程自己的完整 23 脚本/helper 来源、生成身份与独立 import。示例941c只授已存在的来源/编译资格，本胜利路线必须另跑。
 
 宿主记录4个不同原 Popen PID与nonce，只有实际 exit0、无日志错误、全部报告检查通过、前后完整 pins/生成/引擎身份一致和 owned-lock 安全释放才 complete。单 profile 仅创建一次；失败保留每阶段原报告/日志/外部输入。五个 GD 外部 bootstrap 检查 SHA，can_instantiate 失败快退。`sources.json` 逐项绑定本批8文件中除清单自身的7项，以及原派生/固定依赖来源；不改旧工具、生产或冻结工程。
+
+## 2026-10-27 任务展开输入修复（尚未复跑）
+
+b22 批 `20261027_081838_4be25b3b` 的 A 127 项与 B 133 项通过；C 45/46 项通过，停在任务终局按钮可见性检查。外部工具原先只发 `_toggle.pressed`，但生产 toggle 通过 `toggled` 驱动展开；这不是一次完整的原生按钮点击，未证明恢复 UI 布局损坏。原运行输入和失败证据保留。
+
+本次仅把 C 的任务展开操作改为 `Window.push_input` 内部鼠标移动、左键按下/释放，观察原 `pressed`/`toggled` 各一次、`button_pressed` 从 false 到 true、原 Mission 回调和详情/滚动区实际可见；不直接设置展开状态、visible 或游戏状态。保存/波次/自然目标/终局/奖励断言及原 6 次滚动与全部裁剪边界保持。报告增加输入 PID/nonce/帧/坐标/按键边缘、展开前后状态，以及失败时所有 Control 祖先可见性/矩形/裁剪和滚动范围。此内部 Viewport 派发不授桌面 OS 键鼠或人工验收资格。
+
+修改后的五个外部 GD 仍须独立加载，再重跑真实四流程；静态差异检查不转授 C 点击成功、完整胜利或 52/61 验收。

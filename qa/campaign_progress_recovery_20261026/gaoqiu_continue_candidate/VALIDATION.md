@@ -36,4 +36,12 @@
 
 当前190项和200项都是941c私有源码屏幕外GL路线。它们不能代替完整核心胜利、大名府双角色61阶段、原19类故障及真实重试界面、Steam云、SDK、发行程序和人工验收。连环马、驻守战Flow88项与readset285项均保留各自原来源，不转授941c高俅组合。大名府3365后继已完整冻结、独立导入并加载五份外部GD，双角色真实运行另记；最终统一源回归仍未完成。
 
-后继[箭矢视觉合同候选](../projectile_filter_candidate/VALIDATION.md)以3365组合为底，仅将projectile的过滤要求与正常creator一致，其余保护保留。组件第三批原生44项与12负例全部通过，19,832字节wire往返完全一致；前两次工具失败原件独立保留。新完整工程正在准备，尚无新源冷导入或高俅四进程资格，不能将组件结果转授941c自然战斗。
+后继[箭矢视觉合同候选](../projectile_filter_candidate/VALIDATION.md)以3365组合为底，仅将projectile的过滤要求与正常creator一致，其余保护保留。组件第三批原生44项与12负例全部通过，19,832字节wire往返完全一致；前两次工具失败原件独立保留。后继b22完整工程及自己的首次冷导入已通过；实际两次保存/继续已通过，第三阶段因QA未实际切换任务展开按钮而停止，详见后继记录。仍无完整四进程资格。
+
+## b22实际两次保存通过，终局测试toggle操作失败
+
+20261027_081838_4be25b3b实际运行三进程：A PID52992为127/127，B PID13612为133/133，均由生产SaveAndExit以continue_saved退出，slot gen1→2；原140/330/540三波正常派发并清完，旗舰通过正常战斗降服。C PID26468为46项45通过/1失败，已由独立Continue恢复原核心就绪状态、原唯一gao_end及其Mission回调；未完成结算，D未运行。总306项305通过不能称完整胜利。
+
+唯一失败为按钮未完全显现。原QA的press_button仅发pressed，而实际任务_toggle启用toggle_mode且只以toggled连接_set_expanded；报告已记录展开动作，但这不会改变button_pressed或显示详情。按钮rect在1280×720内且enabled，这次不足以证实恢复布局坏。后继只修Viewport内部真实按下/释放，核pressed/toggled及祖先可见性，不写游戏HP、状态、面板visible或_expanded，不减少原滚动/裁剪/终局断言，也不恢复OS桌面键鼠。原失败报告、日志和冻结worker完整保留，来源后验及锁释放通过。
+
+后继Viewport真实toggle修订已通过新五GD纯加载PID26204（退出0/错误0，40.938秒）；新四流程已启动，实际结果见[统一源专项](../projectile_filter_candidate/VALIDATION.md)。

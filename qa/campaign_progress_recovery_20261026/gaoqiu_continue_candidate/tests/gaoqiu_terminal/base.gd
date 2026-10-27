@@ -64,9 +64,82 @@ func control_visible(control: Control) -> bool:
 		parent = parent.get_parent()
 	return true
 
+func control_diagnostic(control: Control) -> Dictionary:
+	var rows: Array = []
+	var node: Node = control
+	while node != null:
+		if node is Control:
+			var row: Dictionary = {"path":str(node.get_path()), "class":node.get_class(),
+				"visible":node.visible, "visible_in_tree":node.is_visible_in_tree(),
+				"rect":str(node.get_global_rect()), "clip_contents":node.clip_contents,
+				"mouse_filter":node.mouse_filter, "signals_blocked":node.is_blocking_signals()}
+			if node is ScrollContainer:
+				var vertical: VScrollBar = node.get_v_scroll_bar()
+				var horizontal: HScrollBar = node.get_h_scroll_bar()
+				row["scroll"] = {"vertical":node.scroll_vertical, "horizontal":node.scroll_horizontal,
+					"v_min":vertical.min_value, "v_max":vertical.max_value, "v_page":vertical.page,
+					"h_min":horizontal.min_value, "h_max":horizontal.max_value, "h_page":horizontal.page}
+			rows.append(row)
+		node = node.get_parent()
+	return {"viewport":str(get_viewport().get_visible_rect()), "control_and_ancestors":rows}
+
+func mission_toggle_diagnostic(button: Button) -> Dictionary:
+	var connections: Array = button.toggled.get_connections()
+	var original: Array = connections.filter(func(row): return row.callable == Callable(battle.mission, "_set_expanded"))
+	return {"button_pressed":button.button_pressed, "toggle_mode":button.toggle_mode,
+		"expanded":battle.mission._expanded, "details_visible":battle.mission._details.is_visible_in_tree(),
+		"scroll_visible":battle.mission._detail_scroll.is_visible_in_tree(),
+		"original_toggled_callbacks":original.size(), "geometry":control_diagnostic(button)}
+
+func click_mission_toggle_via_viewport(button: Button) -> bool:
+	# Internal Window dispatch exercises BaseButton's own press/release/toggle path.
+	# This is not desktop OS input and does not set gameplay or panel state.
+	if not check(button_visible(button) and button == battle.mission._toggle and button.toggle_mode
+		and not button.button_pressed and not battle.mission._expanded,
+		"visible original mission toggle begins unpressed and collapsed"): return false
+	var before: Dictionary = mission_toggle_diagnostic(button)
+	if not check(before.original_toggled_callbacks == 1 and not button.is_blocking_signals(),
+		"original mission toggled callback is connected and enabled"): return false
+	var seen: Dictionary = {"pressed":0, "toggled":[]}
+	var on_pressed: Callable = func(): seen.pressed += 1
+	var on_toggled: Callable = func(value: bool): seen.toggled.append(value)
+	button.pressed.connect(on_pressed)
+	button.toggled.connect(on_toggled)
+	var point: Vector2 = button.get_global_rect().get_center()
+	var window: Window = get_tree().root
+	var motion := InputEventMouseMotion.new()
+	motion.position = point; motion.global_position = point
+	window.push_input(motion, true)
+	await get_tree().process_frame
+	var events: Array = []
+	for pressed: bool in [true, false]:
+		var event := InputEventMouseButton.new()
+		event.position = point; event.global_position = point
+		event.button_index = MOUSE_BUTTON_LEFT
+		event.button_mask = MOUSE_BUTTON_MASK_LEFT if pressed else 0
+		event.pressed = pressed
+		window.push_input(event, true)
+		events.append({"pressed":pressed, "button_index":event.button_index, "button_mask":event.button_mask,
+			"position":[point.x,point.y], "process_frame":Engine.get_process_frames(), "paused":get_tree().paused,
+			"pid":OS.get_process_id(), "process_nonce":OS.get_environment("GVT_PROCESS_NONCE")})
+		await get_tree().process_frame
+	if is_instance_valid(button):
+		if button.pressed.is_connected(on_pressed): button.pressed.disconnect(on_pressed)
+		if button.toggled.is_connected(on_toggled): button.toggled.disconnect(on_toggled)
+	var after: Dictionary = mission_toggle_diagnostic(button) if is_instance_valid(button) else {"freed":true}
+	observations["mission_toggle_viewport_input"] = {"route":"Window.push_input", "desktop_os_input":false,
+		"before":before, "after":after, "events":events, "pressed_count":seen.pressed, "toggled_values":seen.toggled}
+	action_evidence.append({"kind":"viewport_mouse_toggle", "purpose":"expand actual mission panel",
+		"route":"Window.push_input", "desktop_os_input":false, "events":events})
+	return check(seen.pressed == 1 and seen.toggled == [true] and after.get("button_pressed") == true
+		and after.get("expanded") == true and after.get("details_visible") == true
+		and after.get("scroll_visible") == true and after.get("original_toggled_callbacks") == 1,
+		"native viewport click toggles original mission once and exposes real details")
+
 func reveal_button(button: Variant, anchor: Variant = null) -> bool:
 	if not is_instance_valid(button) or not button is Button: return check(false, "requested menu button exists")
 	var target: Control = button if anchor == null else anchor
+	var attempts: Array = []
 	for attempt: int in range(6):
 		await get_tree().process_frame
 		var parent: Node = button.get_parent()
@@ -75,8 +148,10 @@ func reveal_button(button: Variant, anchor: Variant = null) -> bool:
 			parent = parent.get_parent()
 		await get_tree().process_frame
 		if button_visible(button): return true
+		attempts.append({"attempt":attempt, "button_visible_in_tree":button.is_visible_in_tree(), "geometry":control_diagnostic(button)})
 	observations["unrevealed_button"] = {"name":str(button.name), "text":button.text,
-		"rect":str(button.get_global_rect()), "viewport":str(get_viewport().get_visible_rect()), "disabled":button.disabled}
+		"rect":str(button.get_global_rect()), "viewport":str(get_viewport().get_visible_rect()), "disabled":button.disabled,
+		"visible_in_tree":button.is_visible_in_tree(), "attempts":attempts, "geometry":control_diagnostic(button)}
 	return check(button_visible(button), "normal scroll exposes requested enabled button within clipping bounds")
 
 func press_button(button: Variant, purpose: String) -> bool:

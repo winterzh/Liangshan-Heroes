@@ -12,7 +12,19 @@ Graph返回的wire.records已是Codec编码数据，后继测试按实际存储�
 
 第三次实际批次20261027_075227_ab78cc12已完整通过：PID50952退出0、错误0、40.083秒，44项全部通过，12个异常值均按精确码拒绝。两份wire均19,832字节，直接UTF8逐字相等，SHA为195988118131a8a0013d8d5b3984721ff37aa8bb59dc0f90fb0af215cd32261d；两份records均由原Codec成功解码，688 nodes、80,202字节上界。两次额外重复编码本次均实际返回DEPTH_LIMIT，该诊断不回推旧报告。159个命名pins后验、实际进程终态、自有锁和业务文件不存在检查通过。[完整组件原件](evidence/component_complete_20261027_075227/README.md)。合成组件模型不能授自然战斗或完整组合资格。
 
-[高俅复跑宿主](tests/gaoqiu_replay/README.md)的AST、帮助及默认轻量检查已通过，五份旧GD保持原字节与全部原断言；仅改新26脚本加helper的完整准入及冷导入要求。[独立准备与冷导入器](integration_3365/README.md)也已通过AST、帮助和159项命名来源检查，冷导入前会在自有锁内再次检查完整缓存库存，并拒绝将失败后的重试当首次冷导入。完整新工程20261027_075456_3e4a48ab已准备通过：7062文件/2,402,358,281字节，只替Graph并增加203字节，source-v1:b22f76f7bf4b8309f9257829364f4afdd6c9262282a25cb6aefacce5aa916132；374个准备pins后验通过。准备时缓存目录只有新生成的98字节extension_list.cfg，无旧import/editor/shader种子。自己的首次冷导入20261027_080446_b18740e4已通过：实际PID55952退出0、错误0、77.656秒；锁内完整冷库存、首次尝试、前后来源、自己的generation/expected identity和锁释放均通过，cold_import_qualified=true。generation SHA为e4caa656a8d17ee4304c638bddb4b910a259fefb3b14788f86b92571edf0d1be。高俅真实四进程复跑已启动，尚无新完整胜利结果。大名府61阶段、原19类故障、所有章节统一源回归、SDK、公开入口和发行程序仍分别待验。
+[高俅复跑宿主](tests/gaoqiu_replay/README.md)的AST、帮助及默认轻量检查已通过，五份旧GD保持原字节与全部原断言；仅改新26脚本加helper的完整准入及冷导入要求。[独立准备与冷导入器](integration_3365/README.md)也已通过AST、帮助和159项命名来源检查，冷导入前会在自有锁内再次检查完整缓存库存，并拒绝将失败后的重试当首次冷导入。完整新工程20261027_075456_3e4a48ab已准备通过：7062文件/2,402,358,281字节，只替Graph并增加203字节，source-v1:b22f76f7bf4b8309f9257829364f4afdd6c9262282a25cb6aefacce5aa916132；374个准备pins后验通过。准备时缓存目录只有新生成的98字节extension_list.cfg，无旧import/editor/shader种子。自己的首次冷导入20261027_080446_b18740e4已通过：实际PID55952退出0、错误0、77.656秒；锁内完整冷库存、首次尝试、前后来源、自己的generation/expected identity和锁释放均通过，cold_import_qualified=true。generation SHA为e4caa656a8d17ee4304c638bddb4b910a259fefb3b14788f86b92571edf0d1be。高俅新源实跑已完成前三进程，A/B两次真实保存通过，C在任务按钮展开处失败，未运行D；详见下方实际记录。大名府61阶段、原19类故障、所有章节统一源回归、SDK、公开入口和发行程序仍分别待验。
 
-新增[大名府统一源双路线宿主](tests/daming_replay/README.md)只更新严格26+1/新schema/own first cold准入和新宿主pins；原五GD、两个profile、八个独立进程、首次存档原件留存及全部Flow/终局断言保持。AST、帮助及30项轻量来源检查通过，尚未运行；新普通护送route已在原3365工程上通过独立原生加载，该加载不转授b22整条路线。
+新增[大名府统一源双路线宿主](tests/daming_replay/README.md)只更新严格26+1/新schema/own first cold准入和新宿主pins；原五GD、两个profile、八个独立进程、首次存档原件留存及全部Flow/终局断言保持。AST、帮助及30项轻量来源检查通过，新源首A未保存：新增全军牢门集合条件未满足，后继策略另记；新普通护送route已在原3365工程上通过独立原生加载，该加载不转授b22整条路线。
 `full_freeze_20261027_075456`的准备和首次冷导入已按[紧凑原件清单](evidence/full_freeze_20261027_075456/README.md)归档；39份原件、已提交原字节引用及固定Git blob共同保留命名来源链。归档不含引擎、缓存或业务存档。
+
+## b22实际两次保存通过，终局测试toggle操作失败
+
+20261027_081838_4be25b3b实际运行三进程：A PID52992为127/127，B PID13612为133/133，均由生产SaveAndExit以continue_saved退出，slot gen1→2；原140/330/540三波正常派发并清完，旗舰通过正常战斗降服。C PID26468为46项45通过/1失败，已由独立Continue恢复原核心就绪状态、原唯一gao_end及其Mission回调；未完成结算，D未运行。总306项305通过不能称完整胜利。
+
+唯一失败为按钮未完全显现。原QA的press_button仅发pressed，而实际任务_toggle启用toggle_mode且只以toggled连接_set_expanded；报告已记录展开动作，但这不会改变button_pressed或显示详情。按钮rect在1280×720内且enabled，这次不足以证实恢复布局坏。后继只修Viewport内部真实按下/释放，核pressed/toggled及祖先可见性，不写游戏HP、状态、面板visible或_expanded，不减少原滚动/裁剪/终局断言，也不恢复OS桌面键鼠。原失败报告、日志和冻结worker完整保留，来源后验及锁释放通过。
+
+## 高俅原生toggle输入修订已加载
+
+仅外部base新增Window.push_input鼠标按下/释放及可见性诊断，driver只改任务展开调用；原生产toggled→_set_expanded回调负责改变状态，核pressed/toggled各一次、button_pressed、实际详情/滚动容器可见。其他按钮、六次滚动、完整裁剪、波次/保存/终局检查均保持。没有OS桌面键鼠输入。
+
+新五GD纯加载批20261027_090855_44c1779b实际PID26204退出0/错误0，40.938秒，35个pins后验/锁释放通过。[加载原件](evidence/terminal_toggle_load_20261027_090855/README.md)。未在加载中点击按钮；新完整四流程批20261027_091102_664dc55f已启动，终态另记。

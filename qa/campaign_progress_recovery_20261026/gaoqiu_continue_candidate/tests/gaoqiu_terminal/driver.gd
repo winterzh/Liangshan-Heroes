@@ -175,7 +175,7 @@ func finish_restored_core() -> void:
 	if not press_button(battle.hud._pause_resume_button, "resume restored core-ready battle"): return
 	await get_tree().process_frame
 	if not battle.mission._expanded:
-		if not press_button(battle.mission._toggle, "expand actual mission panel"): return
+		if not await click_mission_toggle_via_viewport(battle.mission._toggle): return
 		await get_tree().process_frame
 	if not await reveal_button(button) or not press_button(button, "actual restored gao_end core victory"): return
 	if not await await_terminal(): return
