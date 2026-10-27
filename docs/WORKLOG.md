@@ -1,5 +1,17 @@
 # 开发日志
 
+## 2026-10-27 C自然终局重试737项完整通过及高俅同源加载
+
+新profile141329_f6e4c555实际四PID75344／49388／19448／59836，125／129／419／64共737项完整通过，全部退出0／原生错误0。两次原SaveAndExit同槽1→2，自然核心终局两次真实CFG_STAGE_PARENT后解除自有blocker，同Coordinator／CFG／owner／CAS／frozen事务prepared1→applied2、LC3／ACK2；独立重启拒旧槽、正常空checkpoint引用C保留槽的实际磁盘读回全过。完整来源／句柄／helper／子进程／锁终态通过。[21文件／6,507,254字节原件](../qa/campaign_progress_recovery_20261026/projectile_filter_candidate/evidence/ui_terminal_retry_complete_20261027_141329/README.md)保留905pins分类，旧131330失败收据保持false。
+
+高俅造船／败局外部b22适配的两host25／27命名来源、13Python AST及两份帮助通过，原七GD与执行断言保持；组合七GD原生加载PID73744／42.362秒／退出0、错误0，36命名来源／83运行pins及终态通过。[45文件／602,395字节加载原件](../qa/campaign_progress_recovery_20261026/projectile_filter_candidate/evidence/gaoqiu_aux_replay_load_20261027_144549/README.md)仅授load／can_instantiate，两条实际三进程待跑。
+
+修正集合点后的大名府新八流程144758_3472ff46已开始，终态待验；52／61前置仍未满足。前批stable远端7e6f6ea1已核，本批按白名单提交与回读；生产未采用、公开入口未开、main／Steam未更新，真人键鼠继续暂停。
+
+## 2026-10-27 高俅b22训练／败局适配（静态阶段）
+
+新增两个外部宿主与共同README／来源／VALIDATION，原造船三GD、败局四GD逐字匹配固定7e6f6ea1；未变更原建造／付费队列、正常训练完成、两保存、自然主将敌伤死亡、LC／CFG终局与旧槽拒绝断言。两个入口25／27命名来源、全部Python AST／帮助和组合36唯一命名输入通过；默认未开引擎或profile。原生七GD加载和两个独立三进程仍待验。C新批首进程PID75344实际保存125项通过，第二PID49388仍在自然战斗阶段，整体未授资格。
+
 ## 2026-10-27 追兵QA集合点窄修与终局新批复验
 
 追兵截击135845批因QA误用牢内集结判定被根任务主动中断，exit99、无最终报告；后验／子进程／锁正常闭合，不作自然失败或通过。只将城南集结调用改为既有_convoy_arrived的(30,34)判断，保留初次牢内检查；五GD重新加载PID39100／33.123秒／退出0、错误0、69pins通过，新八流程待重跑。 [中断原件](../qa/campaign_progress_recovery_20261026/daming_continue_candidate/evidence/flow_pursuit_cancelled_20261027_135845/README.md)为9文件／1,033,538字节，863pins、8EXE元数据；[新加载原件](../qa/campaign_progress_recovery_20261026/projectile_filter_candidate/evidence/daming_pursuit_regroup_load_20261027_141224/README.md)为39文件／664,390字节。生产未改，未复制物理profile或存档。

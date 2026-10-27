@@ -121,7 +121,7 @@ qa/campaign_progress_recovery_20261026/continue_binding_candidate/：Flow/Sessio
 
 `qa/campaign_progress_recovery_20261026/projectile_filter_candidate/tests/ui_config_retry/`与`tests/ui_startup_retry/`分别为B1设置重试、B2启动恢复重试工具，B1修订后实际两进程406项通过，B2实际三进程387项通过，各自VALIDATION维护当前资格。三GD纯加载原件位于同候选`evidence/ui_config_retry_load_20261027_111841/`（36运行pins）与`evidence/ui_startup_retry_load_20261027_111956/`（40运行pins）；均未实例化worker。
 
-`qa/campaign_progress_recovery_20261026/projectile_filter_candidate/tests/ui_terminal_retry/`：自然核心终局四进程的6GD、宿主、契约与来源，新C不继承旧高俅416项；原六GD已加载、四份GD报告737项通过但宿主末阶段取证失败；Python宿主修正后新四进程仍待跑。`evidence/ui_save_retry_breakpoint_failure_20261027_112148/`、`ui_config_retry_codec_failure_20261027_113510/`分别保存两次未完成首跑；`ui_save_retry_rearm_load_20261027_114727/`保存A修订加载，`config_active_key_probe_20261027_114911/`保存StringName语言模型与原Codec结果，均位于同候选evidence下。模型、加载与完整UI链分开记资格，业务载荷与host blocker不入Git。
+`qa/campaign_progress_recovery_20261026/projectile_filter_candidate/tests/ui_terminal_retry/`：自然核心终局四进程的6GD、宿主、契约与来源，新C不继承旧高俅416项；原六GD已加载，首跑宿主末阶段取证失败原件保留；Python宿主修正后新profile四进程737项完整通过。`evidence/ui_save_retry_breakpoint_failure_20261027_112148/`、`ui_config_retry_codec_failure_20261027_113510/`分别保存两次未完成首跑；`ui_save_retry_rearm_load_20261027_114727/`保存A修订加载，`config_active_key_probe_20261027_114911/`保存StringName语言模型与原Codec结果，均位于同候选evidence下。模型、加载与完整UI链分开记资格，业务载荷与host blocker不入Git。
 
 
 `projectile_filter_candidate/evidence/ui_retry_tools_load_20261027_121008/`保留B1/B2/C修订组合12GD原生加载原件：129运行pins、62文件，实际流程资格仍分别维护于各工具VALIDATION。
@@ -149,3 +149,12 @@ qa/campaign_progress_recovery_20261026/continue_binding_candidate/：Flow/Sessio
 
 
 `daming_continue_candidate/evidence/flow_pursuit_cancelled_20261027_135845/`为根任务确认QA集合点缺陷后主动中断的9文件原件，非自然失败、无最终GD报告；`projectile_filter_candidate/evidence/daming_pursuit_regroup_load_20261027_141224/`为该单调用修正后五GD加载原件（39文件／69pins）。两者均位于`qa/campaign_progress_recovery_20261026/`下。
+
+
+`qa/campaign_progress_recovery_20261026/projectile_filter_candidate/run_gaoqiu_training.py`、`run_gaoqiu_loss.py`与`tests/gaoqiu_aux_replay/`保存高俅造船／自然败局到b22的外部复跑适配；原七GD继续取自gaoqiu_continue_candidate/tests，不重复复制为新的玩法实现。当前资格单独维护于[VALIDATION](../qa/campaign_progress_recovery_20261026/projectile_filter_candidate/tests/gaoqiu_aux_replay/VALIDATION.md)。
+
+
+`projectile_filter_candidate/evidence/ui_terminal_retry_complete_20261027_141329/`为C宿主修正后的新profile实际四进程737项原件：21文件、905pins、完整来源／句柄／helper／子进程／锁终态通过；独立重启正常空checkpoint的实际磁盘读回已通过。该路径相对`qa/campaign_progress_recovery_20261026/`，旧取证失败档保持原资格。
+
+
+`projectile_filter_candidate/evidence/gaoqiu_aux_replay_load_20261027_144549/`保存高俅造船3GD／自然败局4GD在b22上的纯加载原件（45文件／83pins），只授加载；同源实际三进程仍分别待跑。路径相对`qa/campaign_progress_recovery_20261026/`。
