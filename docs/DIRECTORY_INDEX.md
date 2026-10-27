@@ -111,10 +111,12 @@ qa/campaign_progress_recovery_20261026/continue_binding_candidate/：Flow/Sessio
 
 高俅真实Viewport toggle修订加载原件：`qa/campaign_progress_recovery_20261026/projectile_filter_candidate/evidence/terminal_toggle_load_20261027_090855/`。
 
-原19类故障当前协议适配：`qa/campaign_progress_recovery_20261026/projectile_filter_candidate/tests/persistence19/`，含19案映射、GD worker、只读默认计划器及实际9／12协议证明和19案宿主。首次加载失败与修订未赋予运行资格；实际结果由专题VALIDATION记录。
+原19类故障当前协议适配：`qa/campaign_progress_recovery_20261026/projectile_filter_candidate/tests/persistence19/`保留19案映射、GD worker、只读默认计划、真实9／12协议证明和19进程宿主。当前19个独立进程／566项组件矩阵已通过；原失败和协议证明仍单独保留。[矩阵原件](../qa/campaign_progress_recovery_20261026/projectile_filter_candidate/evidence/persistence19_matrix_20261027_103731/README.md)为99文件紧凑归档，当前资格以专属VALIDATION为准。
 
 高俅完整胜利416项原件：`qa/campaign_progress_recovery_20261026/projectile_filter_candidate/evidence/terminal_core_success_20261027_091102/`。外部七GD加载的seed冲突失败及最小修正：同候选`evidence/tools_load_seed_failure_20261027_094230/`；原19工具当前资格见`tests/persistence19/VALIDATION.md`。
 
 大名府双路线部分结果原件：`qa/campaign_progress_recovery_20261026/daming_continue_candidate/evidence/flow_escort_partial_20261027_094353/`。原七GD修正后加载：同QA下`projectile_filter_candidate/evidence/tools_load_complete_20261027_101643/`；真实保存／取消／文件占用重试三进程外部工具：`projectile_filter_candidate/tests/ui_save_retry/`。
 
-`projectile_filter_candidate/evidence/persistence19_protocol_20261027_101914/`为实际9／12故障证明60项原件；`ui_save_retry_load_20261027_102958/`及`guard_margin_load_20261027_103329/`为对应外部GD纯加载原件，均位于同候选evidence下。加载不授实际三进程或八流程。
+`projectile_filter_candidate/evidence/persistence19_protocol_20261027_101914/`为实际9／12故障证明60项原件；`ui_save_retry_load_20261027_102958/`与`guard_margin_load_20261027_103329/`为对应外部GD加载原件，均位于同候选evidence下。A保存重试实际三进程正在运行，尚无终态；新大名府双角色八流程未完成，加载不授实际流程资格。
+
+`qa/campaign_progress_recovery_20261026/projectile_filter_candidate/tests/ui_config_retry/`与`tests/ui_startup_retry/`分别为B1设置重试、B2启动恢复重试工具，实际两／三进程待跑，各自VALIDATION维护当前资格。三GD纯加载原件位于同候选`evidence/ui_config_retry_load_20261027_111841/`（36运行pins）与`evidence/ui_startup_retry_load_20261027_111956/`（40运行pins）；均未实例化worker。

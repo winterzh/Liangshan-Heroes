@@ -1,0 +1,83 @@
+{
+  "schema": "ui_config_retry_cases_v1",
+  "scope": "actual_settings_campaign_preferences_retry_and_independent_readback",
+  "base_run": ".godot/campaign_progress_recovery_20261026/20261027_075456_3e4a48ab",
+  "source_identity": "source-v1:b22f76f7bf4b8309f9257829364f4afdd6c9262282a25cb6aefacce5aa916132",
+  "required_script_count": 26,
+  "required_native_count": 1,
+  "requires_own_cold_import": true,
+  "requires_persistence19_protocol_proof": false,
+  "native_process_count": 2,
+  "profile_count": 1,
+  "preflight_creates_profile": false,
+  "preflight_starts_engine": false,
+  "native_executed": false,
+  "passed": null,
+  "environment_prefix": "UCR_",
+  "report_schema": "ui_config_retry_two_process_v1",
+  "worker_files": ["bootstrap.gd", "base.gd", "worker.gd"],
+  "stages": [
+    {
+      "index": 0,
+      "mode": "save_retry",
+      "expected_initial_error": "CFG_STAGE_PARENT",
+      "expected_blocked_retry_error": "CFG_STAGE_PARENT",
+      "expected_journal_generation": 2,
+      "fault": "host_owned_nonce_regular_file_at_originally_absent_candidate_parent",
+      "fault_path": "user://campaign_cfg_candidates",
+      "fault_creation": "CREATE_NEW_no_overwrite_no_v1",
+      "required": [
+        "actual_menu_settings_controls_and_back_save_callback",
+        "separate_ui_before_edited_before_submit_failure_and_retry_observations",
+        "edited_preference_memory_matches_frozen_cfg_not_pre_edit_full_memory",
+        "unedited_progress_records_unlock_and_owner_remain_unchanged",
+        "actual_settings_save_is_accounted_separately_from_campaign_cfg",
+        "fresh_cfg_existence_and_journal_revision_are_observed_not_seeded",
+        "same_cfg_writer_frozen_config_request_transaction_owner_and_cas",
+        "real_retry_campaign_config_with_blocker_retained_fails_again",
+        "only_host_owned_blocker_moved_after_type_nonce_sha_bytes_check",
+        "real_retry_campaign_config_completes_same_frozen_transaction",
+        "one_transaction_prepared_generation_1_applied_generation_2",
+        "exact_final_metadata_and_actual_process_exit_0"
+      ],
+      "gate_phases": ["arm_stage_parent", "release_stage_parent"],
+      "exit_kind": "test_quit_without_another_save",
+      "exit_reason": "ui_config_retry_verified"
+    },
+    {
+      "index": 1,
+      "mode": "readback",
+      "expected_journal_generation": 2,
+      "required": [
+        "independent_process_same_private_profile_normal_startup",
+        "actual_settings_and_campaign_preferences_read_back",
+        "same_applied_transaction_semantics_and_file_sha",
+        "exact_business_inventory_unchanged_after_previous_success",
+        "no_pending_no_additional_journal_generation_no_slot_or_lifecycle_write",
+        "actual_process_exit_0_without_another_save"
+      ],
+      "exit_kind": "test_quit_without_another_save",
+      "exit_reason": "ui_config_retry_verified"
+    }
+  ],
+  "deferred_not_implemented": [
+    "startup_prepared_transaction_retry_and_restart",
+    "natural_terminal_same_object_retry_and_no_replay_restart",
+    "retry_release_persistent_clock_fault_model_and_leave_dialog",
+    "unproven_repairable_retry_release_success_branch"
+  ],
+  "qualification": {
+    "public_continue_qualified": false,
+    "desktop_os_input": false,
+    "native_sdk_qualified": false,
+    "native_release_tested": false,
+    "human_acceptance": false,
+    "full_campaign_qualified": false,
+    "full_61_qualified": false,
+    "startup_prepared_recovery_qualified": false,
+    "terminal_retry_qualified": false,
+    "release_retry_qualified": false,
+    "original_19_faults_qualified": false,
+    "published": false
+  }
+}

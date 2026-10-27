@@ -1,0 +1,176 @@
+{
+  "index": 7,
+  "id": "existing_vanished_prior",
+  "profile": "D:\\CodexQA\\p19\\0842b1bc4a56\\07",
+  "complete": true,
+  "process_nonce": "3b07a88ceeb54e3fbff95786ffab4d7e",
+  "post_errors": [],
+  "debug_stops": [
+    {
+      "pid": 64652,
+      "process_nonce": "3b07a88ceeb54e3fbff95786ffab4d7e",
+      "phase": "prior_load",
+      "frames": [
+        {
+          "source": "res://scripts/run_campaign_cfg_transaction.gd",
+          "line": 146,
+          "function": "_stable_cfg"
+        },
+        {
+          "source": "res://scripts/run_campaign_cfg_transaction.gd",
+          "line": 176,
+          "function": "begin_write"
+        },
+        {
+          "source": "res://scripts/run_campaign_progress_coordinator.gd",
+          "line": 150,
+          "function": "_drive_cfg"
+        },
+        {
+          "source": "res://scripts/run_campaign_progress_coordinator.gd",
+          "line": 177,
+          "function": "retry"
+        },
+        {
+          "source": "res://scripts/run_campaign_progress_coordinator.gd",
+          "line": 112,
+          "function": "begin_recovery"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/persistence19_b22_20261027/20261027_103731_9d856aa2/workers/worker.gd",
+          "line": 208,
+          "function": "run_recovery"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/persistence19_b22_20261027/20261027_103731_9d856aa2/workers/worker.gd",
+          "line": 311,
+          "function": "fault_cases"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/persistence19_b22_20261027/20261027_103731_9d856aa2/workers/worker.gd",
+          "line": 514,
+          "function": "run"
+        },
+        {
+          "source": "D:/AI项目/水浒/开发工程/.godot/persistence19_b22_20261027/20261027_103731_9d856aa2/workers/worker.gd",
+          "line": 156,
+          "function": "gate"
+        }
+      ],
+      "source_sha256": "71803fc42a6bef59479db5b8cf70a953716a3968e45ba1fb391eed5726a51d17",
+      "monotonic_ns": 608704588717900,
+      "file": "D:\\CodexQA\\p19\\0842b1bc4a56\\07\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\campaign.cfg"
+    }
+  ],
+  "mutations": [
+    {
+      "kind": "prior_vanished",
+      "from": "D:\\CodexQA\\p19\\0842b1bc4a56\\07\\appdata\\Godot\\app_userdata\\水浒英雄传：八幕战役\\campaign.cfg",
+      "backup": "D:\\AI项目\\水浒\\开发工程\\.godot\\persistence19_b22_20261027\\20261027_103731_9d856aa2\\07_existing_vanished_prior\\prior_moved.cfg",
+      "sha256": "16e936ca2cdf95640e2fae26266ff429e6ba1c10658e097f40a30797eb96ea95",
+      "source_absent": true
+    }
+  ],
+  "gate": {
+    "batch_nonce": "0842b1bc4a564e5d9a0d9c1dec772917",
+    "cfg_expected_unlock": 9,
+    "cfg_path": "D:/CodexQA/p19/0842b1bc4a56/07/appdata/Godot/app_userdata/水浒英雄传：八幕战役/campaign.cfg",
+    "cfg_source_sha256": "16e936ca2cdf95640e2fae26266ff429e6ba1c10658e097f40a30797eb96ea95",
+    "fault": "prior_vanished",
+    "id": "existing_vanished_prior",
+    "index": 7,
+    "output": "D:/AI项目/水浒/开发工程/.godot/persistence19_b22_20261027/20261027_103731_9d856aa2/07_existing_vanished_prior",
+    "phase": "before_operation",
+    "pid": 64652,
+    "process_nonce": "3b07a88ceeb54e3fbff95786ffab4d7e",
+    "profile": "D:/CodexQA/p19/0842b1bc4a56/07",
+    "schema": "persistence19_gate_v1",
+    "userdata": "D:/CodexQA/p19/0842b1bc4a56/07/appdata/Godot/app_userdata/水浒英雄传：八幕战役/"
+  },
+  "command": [
+    "C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe",
+    "--path",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\campaign_progress_recovery_20261026\\20261027_075456_3e4a48ab\\project",
+    "--headless",
+    "--remote-debug",
+    "tcp://127.0.0.1:56588",
+    "--script",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\persistence19_b22_20261027\\20261027_103731_9d856aa2\\workers\\bootstrap.gd"
+  ],
+  "pid": 64652,
+  "before_business": {
+    "campaign.cfg": {
+      "exists": true,
+      "sha256": "16e936ca2cdf95640e2fae26266ff429e6ba1c10658e097f40a30797eb96ea95",
+      "bytes": 84
+    },
+    "campaign_cfg_candidates": {
+      "exists": false,
+      "files": {},
+      "directories": []
+    },
+    "campaign_cfg_transactions": {
+      "exists": false,
+      "files": {},
+      "directories": []
+    },
+    "continue": {
+      "exists": false,
+      "files": {},
+      "directories": []
+    }
+  },
+  "exit_code": 0,
+  "process_terminal": true,
+  "native_errors": [],
+  "report_path": "D:\\AI项目\\水浒\\开发工程\\.godot\\persistence19_b22_20261027\\20261027_103731_9d856aa2\\07_existing_vanished_prior\\report.json",
+  "report_sha256": "03aa23de41e3426618520e9db5f18c0c1e4c9e632ab2890e27592a9d3202a61d",
+  "actual_checks": 28,
+  "after_business": {
+    "campaign.cfg": {
+      "exists": false
+    },
+    "campaign_cfg_candidates": {
+      "exists": false,
+      "files": {},
+      "directories": []
+    },
+    "campaign_cfg_transactions": {
+      "exists": true,
+      "files": {},
+      "directories": [
+        ".",
+        "v1",
+        "v1/5088120",
+        "v1/5088120/1"
+      ]
+    },
+    "continue": {
+      "exists": true,
+      "files": {
+        "v1/local_runs/b226f2da7d843f25f59ae8d8c577a5de/5088120/1/record_0000000001.json": {
+          "sha256": "53234281b52951da4564eaf51ea9dc60457ec8497f95168f88f48c09850df45c",
+          "bytes": 807
+        },
+        "v1/local_runs/b226f2da7d843f25f59ae8d8c577a5de/5088120/1/record_0000000002.json": {
+          "sha256": "8377bab634bb64eb3cf7843e1984a970f794f32f2159fff34f1fb765d97e873f",
+          "bytes": 1460
+        }
+      },
+      "directories": [
+        ".",
+        "v1",
+        "v1/local_runs",
+        "v1/local_runs/b226f2da7d843f25f59ae8d8c577a5de",
+        "v1/local_runs/b226f2da7d843f25f59ae8d8c577a5de/5088120",
+        "v1/local_runs/b226f2da7d843f25f59ae8d8c577a5de/5088120/1"
+      ]
+    }
+  },
+  "raw_pins": {
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\persistence19_b22_20261027\\20261027_103731_9d856aa2\\07_existing_vanished_prior\\native.log": "15f68442125c859f817f1fd863e9b18194257a107d5cc46986bf25e56528aa02",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\persistence19_b22_20261027\\20261027_103731_9d856aa2\\07_existing_vanished_prior\\report.json": "03aa23de41e3426618520e9db5f18c0c1e4c9e632ab2890e27592a9d3202a61d",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\persistence19_b22_20261027\\20261027_103731_9d856aa2\\07_existing_vanished_prior\\gate_request.json": "9d053128abb1e62acab2da3cfb6006e3bed16eab4db41c727e480accb392a7a2",
+    "D:\\AI项目\\水浒\\开发工程\\.godot\\persistence19_b22_20261027\\20261027_103731_9d856aa2\\07_existing_vanished_prior\\gate_ack.json": "483f6606713c87e5d9c93f1aa2aa3f2ada91b96211c5dde52cd556ca15429041"
+  }
+}

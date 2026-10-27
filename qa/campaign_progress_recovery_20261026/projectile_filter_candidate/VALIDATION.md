@@ -1,6 +1,6 @@
 # 箭矢过滤合同：当前验证状态
 
-当前最新结果：b22高俅核心胜利四进程416项全部通过；[原始成功证据](evidence/terminal_core_success_20261027_091102/README.md)。下方旧失败批次保留当时结果，最新细节见文末。候选未采用生产、公开入口未开放，桌面键鼠验收暂停。
+当前最新结果：b22高俅核心胜利四进程416项与原19故障矩阵19个独立进程／566项组件检查均已通过。A确认／取消／同事务保存重试三进程正在运行，尚无终态；B1设置重试、B2启动恢复重试各自三GD原生加载成功，实际两／三进程待跑。下方旧失败和进行中记录保留当时状态，当前范围见文末。候选未采用生产、公开战役续玩未开放，桌面键鼠验收暂停。
 
 2026-10-27。候选尚未采用生产，原版桌面键鼠按用户选择暂停。README、sources及source_manifest保留创建时字节；本页维护后续验证状态。
 
@@ -44,3 +44,11 @@ Graph返回的wire.records已是Codec编码数据，后继测试按实际存储�
 [大名府本批](../daming_continue_candidate/evidence/flow_escort_partial_20261027_094353/README.md)卢先四进程633项全部通过，石先首A175项中1项近卫距离失败，完整八流程及52／61仍未通过。[修正后七GD加载](evidence/tools_load_complete_20261027_101643/README.md)PID512退出0、错误0，74pins通过，只授加载。原19实际协议证明进行中；[界面保存重试三进程工具](tests/ui_save_retry/README.md)代码和18命名输入检查已通过，仍待原生加载／执行。
 
 [原19实际9／12机制](evidence/persistence19_protocol_20261027_101914/README.md)已通过两进程60项，原CFG不变，完整19案正在运行。[界面四GD加载](evidence/ui_save_retry_load_20261027_102958/README.md)PID74924退出0／错误0、35.626秒、43pins；[大名府内圈护卫加载](evidence/guard_margin_load_20261027_103329/README.md)PID59700退出0／错误0、40.213秒、74pins。两者均未实例化worker，实际三进程／八流程仍待完成。
+
+## 当前19案矩阵已完整通过，B1／B2只授加载
+
+批次`20261027_103731_9d856aa2`已完成19个独立Godot进程／566项组件检查，全部退出0；`complete=true/component_matrix_qualified=true`。case6仅有本案原坏CFG的一条预期EOF解析诊断，实际`CFG_READBACK_LOAD/native_error=43`；其余18案原生错误0，不豁免Script／Parse错误。完整b22、自身cold、960pins、全部子进程终态及自有锁释放均通过。[99文件矩阵原件](evidence/persistence19_matrix_20261027_103731/README.md)保留原始报告与日志；[专属边界](tests/persistence19/VALIDATION.md)区分恢复组件与自然奖励，不把旧19／194或实际9／12证明直接算作本次矩阵通过。
+
+[B1](tests/ui_config_retry/VALIDATION.md)三GD原生加载PID28348，32.059秒，退出0／错误0，36运行pins；[B2](tests/ui_startup_retry/VALIDATION.md)三GD原生加载PID23472，37.853秒，退出0／错误0，40运行pins。两者只load／can_instantiate，未实例化worker，实际两／三进程尚未执行；B1父路径阻塞和B2死owner完整prepared恢复也未获运行资格。A实际保存重试三进程正在运行，尚无终态。
+
+高俅核心胜利416项继续有效；大名府卢先四进程633项通过、石先首A失败的原件保持，内圈站位修订只授加载。双角色八流程、52负例、完整61阶段、剩余UI终局／释放路径、云同步、真实SDK、奖励仅一次与桌面人工验收仍待完成。本批未发布或合并main。

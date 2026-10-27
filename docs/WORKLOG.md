@@ -1,5 +1,13 @@
 # 开发日志
 
+## 2026-10-27 原19故障矩阵566项与B1／B2原生加载
+
+固定b22的原19故障矩阵已实际完成：19个独立Godot进程、566项检查全部通过，退出码均为0，`complete=true/component_matrix_qualified=true`。case6仅有本案坏CFG的一条预期`Unexpected EOF while parsing simple tag.`诊断，其余18案原生错误为0；Script／Parse错误不作豁免。960项来源pins、完整来源、子进程终态和自有锁释放通过。[99文件／1,711,797字节原件](../qa/campaign_progress_recovery_20261026/projectile_filter_candidate/evidence/persistence19_matrix_20261027_103731/README.md)保留19报告、日志和固定来源映射；仅授组件矩阵，不转授自然战斗、SDK、云同步或奖励仅一次。
+
+B1三GD纯加载：PID28348，32.059秒，退出0／错误0，36运行pins；B2三GD纯加载：PID23472，37.853秒，退出0／错误0，40运行pins。两者仅load／can_instantiate，未实例化worker，实际两／三进程待跑。分别见[B1当前验证](../qa/campaign_progress_recovery_20261026/projectile_filter_candidate/tests/ui_config_retry/VALIDATION.md)与[B2当前验证](../qa/campaign_progress_recovery_20261026/projectile_filter_candidate/tests/ui_startup_retry/VALIDATION.md)。A确认／取消／同事务保存重试三进程正在运行，尚无终态；大名府仍须新双角色八流程及随后52负例，未授完整61阶段资格。
+
+前批stable远端回读`aed8b5010f568a57e7fcb1a9414b7f3f2e9587dc`，本批原件与文档纳入本次提交，远端状态以同步回读为准；main仍为`1598c7c0cdccdc0bf1be8968608f79f0c43dcfc9`。未采用候选到生产、未开放战役续玩、未发布Steam；原版键鼠与人工验收继续暂停。
+
 ## 2026-10-27 大名府单路线633项通过与19工具加载
 
 大名府b22批次20261027_094353_fe54a884：卢俊义先撤离四进程325／104／139／65，共633项全部通过；真实两次保存、自然双伤员胜利、终局重启拒旧槽闭合。石秀先撤离首A175项中174通过，近卫85驻守时从距卢139.956744移至140.252071px而未满足原三近卫条件；两伤员及九护卫均存活。整批808项807通过，complete=false，52负例尚无正向前置资格。原140距离／人数不放宽，后继以普通move预先收拢留足余量；失败原件和两文件六目录closed-A元数据保留，物理存档未入Git。

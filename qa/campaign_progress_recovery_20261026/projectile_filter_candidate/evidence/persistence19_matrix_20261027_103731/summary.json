@@ -1,0 +1,366 @@
+{
+  "schema": "persistence19_native_matrix_summary_v1",
+  "original_run": "D:\\AI项目\\水浒\\开发工程\\.godot\\persistence19_b22_20261027\\20261027_103731_9d856aa2",
+  "receipt_sha256": "6d2e5d438fce90510454aa9c9195ddec0647947c073586875575c4ea7adfe979",
+  "complete": true,
+  "component_matrix_qualified": true,
+  "actual_process_count": 19,
+  "actual_checks": 566,
+  "cases": [
+    {
+      "index": 0,
+      "id": "normal_first_full_seal",
+      "pid": 30180,
+      "checks": 28,
+      "expected_native_diagnostics": [],
+      "report_sha256": "aa5114b17f49e3a201f8c2d22c2ae3604302e5f1b31b3fa39588143afddbcbb8",
+      "result": {
+        "campaign_progress_committed": true,
+        "local_terminal_committed": true,
+        "ok": true,
+        "progress_recovery_only": true,
+        "settlement_authorized": false,
+        "steam_local_handoff_complete": true
+      },
+      "exit_code": 0
+    },
+    {
+      "index": 1,
+      "id": "normal_repeat_full",
+      "pid": 14600,
+      "checks": 29,
+      "expected_native_diagnostics": [],
+      "report_sha256": "249e55e2a83cd76feb87931bad9bd5e48a2990eea7090c78cfbbdec6335e3ffc",
+      "result": {
+        "campaign_progress_committed": true,
+        "local_terminal_committed": true,
+        "ok": true,
+        "progress_recovery_only": true,
+        "settlement_authorized": false,
+        "steam_local_handoff_complete": true
+      },
+      "exit_code": 0
+    },
+    {
+      "index": 2,
+      "id": "best_single_run_no_union",
+      "pid": 11748,
+      "checks": 62,
+      "expected_native_diagnostics": [],
+      "report_sha256": "a052ee0e24d04f053c6f4347380849f1d528a3cdbb81dd83ae672b7034d6d8d6",
+      "result": {
+        "campaign_progress_committed": true,
+        "local_terminal_committed": true,
+        "ok": true,
+        "progress_recovery_only": true,
+        "settlement_authorized": false,
+        "steam_local_handoff_complete": true
+      },
+      "exit_code": 0
+    },
+    {
+      "index": 3,
+      "id": "invalid_no_unlock",
+      "pid": 6140,
+      "checks": 21,
+      "expected_native_diagnostics": [],
+      "report_sha256": "1a77a95384296ece08d0c834d35caf274573459ffb67f966260eda1a341fa650",
+      "result": {
+        "core_mismatch": {
+          "code": "CAMPAIGN_INTENT_OUTCOME_MISMATCH",
+          "ok": false
+        },
+        "custom": {
+          "code": "OFFICIAL_CONTEXT_NOT_SUPPORTED",
+          "complete_world": false,
+          "ok": false,
+          "player_entry_enabled": false
+        },
+        "unknown": {
+          "code": "OFFICIAL_CONTEXT_NOT_SUPPORTED",
+          "complete_world": false,
+          "ok": false,
+          "player_entry_enabled": false
+        }
+      },
+      "exit_code": 0
+    },
+    {
+      "index": 4,
+      "id": "QA_memory_only",
+      "pid": 15656,
+      "checks": 22,
+      "expected_native_diagnostics": [],
+      "report_sha256": "c64985e8f93deb3d06cd11f69227d5ee8743d760a6dd83a2ace4fcd916dc76f7",
+      "result": {
+        "accepted": true,
+        "best_done": 3,
+        "best_goal_ids": [
+          "daming_infiltration",
+          "daming_signal",
+          "daming_response"
+        ],
+        "cleared": true,
+        "contract_version": 2,
+        "new_story_seal": true,
+        "story_complete": true,
+        "story_total": 3
+      },
+      "exit_code": 0
+    },
+    {
+      "index": 5,
+      "id": "QA_cloud_bool_compatibility",
+      "pid": 15516,
+      "checks": 21,
+      "expected_native_diagnostics": [],
+      "report_sha256": "daba11614498ec9fa0de66b2cc9ac5ec59329cba857934a9b12257f3d946a5f0",
+      "result": {
+        "ok": true,
+        "returned_type": "bool"
+      },
+      "exit_code": 0
+    },
+    {
+      "index": 6,
+      "id": "bad_existing_cfg_load",
+      "pid": 68536,
+      "checks": 30,
+      "expected_native_diagnostics": [
+        "ERROR: ConfigFile parse error at D:/CodexQA/p19/0842b1bc4a56/06/appdata/Godot/app_userdata/水浒英雄传：八幕战役/campaign.cfg:0: Unexpected EOF while parsing simple tag."
+      ],
+      "report_sha256": "c4ff54a3940fe03bfff5be186759f8a1cf15eefaa4c7a0281d46f860de1c7960",
+      "result": {
+        "code": "CFG_READBACK_LOAD",
+        "native_error": 43,
+        "ok": false
+      },
+      "exit_code": 0
+    },
+    {
+      "index": 7,
+      "id": "existing_vanished_prior",
+      "pid": 64652,
+      "checks": 28,
+      "expected_native_diagnostics": [],
+      "report_sha256": "03aa23de41e3426618520e9db5f18c0c1e4c9e632ab2890e27592a9d3202a61d",
+      "result": {
+        "code": "CFG_READBACK_LOAD",
+        "native_error": 7,
+        "ok": false
+      },
+      "exit_code": 0
+    },
+    {
+      "index": 8,
+      "id": "true_new_missing_cfg",
+      "pid": 18036,
+      "checks": 26,
+      "expected_native_diagnostics": [],
+      "report_sha256": "745659de077dbbb54c2dbd9d8f0a93b2a828b6f41825b857ecddeb1f424aa2ce",
+      "result": {
+        "campaign_progress_committed": true,
+        "local_terminal_committed": true,
+        "ok": true,
+        "progress_recovery_only": true,
+        "settlement_authorized": false,
+        "steam_local_handoff_complete": true
+      },
+      "exit_code": 0
+    },
+    {
+      "index": 9,
+      "id": "write_failure",
+      "pid": 47592,
+      "checks": 30,
+      "expected_native_diagnostics": [],
+      "report_sha256": "d98fb13283077753558ae4191b9e347bf65220f1221ba8ee7ceefbde455d783e",
+      "result": {
+        "code": "CFG_STAGE_WRITE",
+        "native_error": 12,
+        "ok": false,
+        "owned_pending": true
+      },
+      "exit_code": 0
+    },
+    {
+      "index": 10,
+      "id": "save_OK_fresh_load_failure",
+      "pid": 45732,
+      "checks": 28,
+      "expected_native_diagnostics": [],
+      "report_sha256": "3018f82fb25c90bd659109e9a59d6ba6c8ee3d406f9726ddd2b5ca44562d3c16",
+      "result": {
+        "code": "CFG_STAGE_READBACK",
+        "ok": false
+      },
+      "exit_code": 0
+    },
+    {
+      "index": 11,
+      "id": "readback_semantic_mismatch",
+      "pid": 49468,
+      "checks": 30,
+      "expected_native_diagnostics": [],
+      "report_sha256": "8df84174faf34c35a4454987f59743e3b2c1efddb9682b3ffda2017e9ba03e04",
+      "result": {
+        "code": "CFG_STAGE_READBACK",
+        "ok": false
+      },
+      "exit_code": 0
+    },
+    {
+      "index": 12,
+      "id": "readback_SHA_changed",
+      "pid": 60420,
+      "checks": 30,
+      "expected_native_diagnostics": [],
+      "report_sha256": "4821020edce2ed73a6d942d5f2ae72e8e92d276fc1af2b7b705d581ef252e68e",
+      "result": {
+        "code": "CFG_STAGE_READBACK",
+        "ok": false
+      },
+      "exit_code": 0
+    },
+    {
+      "index": 13,
+      "id": "legal_unknown_variant_preservation",
+      "pid": 57676,
+      "checks": 31,
+      "expected_native_diagnostics": [],
+      "report_sha256": "c7f026c2cdfc182d04d89196a8eeb40a797f2d603f3f5422fa36058a53caa8dc",
+      "result": {
+        "campaign_progress_committed": true,
+        "local_terminal_committed": true,
+        "ok": true,
+        "progress_recovery_only": true,
+        "settlement_authorized": false,
+        "steam_local_handoff_complete": true
+      },
+      "exit_code": 0
+    },
+    {
+      "index": 14,
+      "id": "unsupported_object_or_script_container",
+      "pid": 33884,
+      "checks": 40,
+      "expected_native_diagnostics": [],
+      "report_sha256": "3c3e350cb5c1fe32fcece38980395e9c8317bed33f2f1b45ddbe878f25c06dd4",
+      "result": {
+        "outcomes": [
+          {
+            "code": "CAMPAIGN_CFG_UNSUPPORTED_VALUE",
+            "ok": false
+          },
+          {
+            "code": "CAMPAIGN_CFG_UNSUPPORTED_VALUE",
+            "ok": false
+          },
+          {
+            "code": "CAMPAIGN_CFG_UNSUPPORTED_VALUE",
+            "ok": false
+          },
+          {
+            "code": "CAMPAIGN_CFG_UNSUPPORTED_VALUE",
+            "ok": false
+          },
+          {
+            "code": "CAMPAIGN_CFG_UNSUPPORTED_VALUE",
+            "ok": false
+          },
+          {
+            "code": "CAMPAIGN_CFG_UNSUPPORTED_VALUE",
+            "ok": false
+          },
+          {
+            "code": "CAMPAIGN_CFG_UNSUPPORTED_VALUE",
+            "ok": false
+          }
+        ]
+      },
+      "exit_code": 0
+    },
+    {
+      "index": 15,
+      "id": "cycle_or_overdepth",
+      "pid": 42848,
+      "checks": 26,
+      "expected_native_diagnostics": [],
+      "report_sha256": "57b61570b26165d5c9b2758978eb53b2989920a0add124696b85880047ea440f",
+      "result": {
+        "outcomes": [
+          {
+            "code": "CAMPAIGN_CFG_UNSUPPORTED_VALUE",
+            "ok": false
+          },
+          {
+            "code": "CAMPAIGN_CFG_UNSUPPORTED_VALUE",
+            "ok": false
+          }
+        ]
+      },
+      "exit_code": 0
+    },
+    {
+      "index": 16,
+      "id": "callback_sees_new_memory",
+      "pid": 45284,
+      "checks": 31,
+      "expected_native_diagnostics": [],
+      "report_sha256": "2b9b9d6a31f393372ef41ca5640266118962305205010da7c25345cd41a9ea2f",
+      "result": {
+        "campaign_progress_committed": true,
+        "local_terminal_committed": true,
+        "ok": true,
+        "progress_recovery_only": true,
+        "settlement_authorized": false,
+        "steam_local_handoff_complete": true
+      },
+      "exit_code": 0
+    },
+    {
+      "index": 17,
+      "id": "cloud_applying_callback_no_upload_claim",
+      "pid": 73792,
+      "checks": 31,
+      "expected_native_diagnostics": [],
+      "report_sha256": "f2eff50318d65e62dab307916b650acb2aff64bd43e4f9720af616dd7f171e61",
+      "result": {
+        "campaign_progress_committed": true,
+        "local_terminal_committed": true,
+        "ok": true,
+        "progress_recovery_only": true,
+        "settlement_authorized": false,
+        "steam_local_handoff_complete": true
+      },
+      "exit_code": 0
+    },
+    {
+      "index": 18,
+      "id": "legacy_real_cloud_apply_failure_boundary",
+      "pid": 53256,
+      "checks": 22,
+      "expected_native_diagnostics": [],
+      "report_sha256": "248e4d85ec4c1d1c640ca38df1639f49c430ada1e683d480cc74dea5ca7d4eb0",
+      "result": {
+        "code": "CFG_STAGE_READBACK",
+        "ok": false
+      },
+      "exit_code": 0
+    }
+  ],
+  "source_identity": "source-v1:b22f76f7bf4b8309f9257829364f4afdd6c9262282a25cb6aefacce5aa916132",
+  "engine_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+  "qualification": {
+    "synthetic_component_matrix_only": true,
+    "natural_battle_qualified": false,
+    "reward_once_qualified": false,
+    "native_sdk_qualified": false,
+    "cloud_upload_qualified": false,
+    "public_continue_qualified": false,
+    "native_release_tested": false,
+    "human_acceptance": false,
+    "full_61_qualified": false,
+    "published": false
+  }
+}
