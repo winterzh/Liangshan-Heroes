@@ -4,7 +4,7 @@ QA目录包含已完成验证、候选、失败与原著/美术来源。文件�
 
 | 当前查询入口 | 范围 |
 | --- | --- |
-| [Steam发行包2026-10-28](steam_release_20261028/README.md) | 本地原生／包内／实际EXE验收通过；上传登录与新Build交付状态分别记录 |
+| [Steam发布2026-10-28](steam_release_20261028/README.md) | Build26260970、四语公告、服务器／全新下载／库内哈希与实际客户端启动退出均已核验；首次错误映射原件保留 |
 | [Steam发布2026-10-20](steam_release_20261019/README.md) | Build26048429、公告、下载/客户端与本批验证 |
 | [完整战役恢复记录](campaign_progress_recovery_20261008/) | 原始恢复工具/阶段证据；完整入口未开放，当前计划见[总览](../docs/PROJECT_STATUS.md) |
 | [公孙胜取剑/回鞘原型](gongsun_sheng_mounted_draw_20261019/README.md) | 候选源码已补交，未授予生产采用或完整原生资格 |

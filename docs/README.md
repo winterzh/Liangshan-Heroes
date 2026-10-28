@@ -13,7 +13,7 @@
 | 文件和目录用途 | [目录索引](DIRECTORY_INDEX.md) |
 | 人物原著身份与实现依据 | [人物身份说明](CHARACTER_IDENTITY_CODEX_20260913.md)及人物专题 |
 | 美术缺口及逐批记录 | [美术台账](ART_COMPLETION_20260926.md)及当前总览；旧覆盖数字不直接当当前全库完成率 |
-| Steam更新内容 | [2026-10-20更新](STEAM_UPDATE_20261019.md) |
+| Steam更新内容 | [2026-10-28黄泥冈运输与任务界面](STEAM_UPDATE_20261028.md) |
 | Steam发布步骤 | [发布指南](STEAM_RELEASE_GUIDE.md) |
 | 平台功能顺序 | [Steam功能优先级](STEAM_FEATURE_PRIORITY_20260921.md) |
 | 实际验证、候选及失败证据 | [QA导航](../qa/README.md) |

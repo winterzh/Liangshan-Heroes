@@ -239,7 +239,7 @@ steamcmd.exe +login "<Steamworks账号>" `
   +quit
 ```
 
-必须满足：Preview 退出码为 0、映射范围正确、正式上传退出码为 0，并取得新的 BuildID / ManifestID。上传日志只保留脱敏副本；原始凭据和 Steam 缓存不进 Git。
+必须满足：Preview退出码为0，并逐一解析预览manifest，确认六个根文件名称、大小与SHA1都匹配候选，随后正式上传退出码为0并取得新BuildID／ManifestID。`DepotPath`表示目标目录；逐文件映射到根目录使用`.`，不能填文件名，否则可能产生`filename/filename`嵌套路径。仅凭Preview退出0不得上传。上传日志只保留脱敏副本；原始凭据和Steam缓存不进Git。
 
 ## 9. 将新 Build 切换到 `default`
 

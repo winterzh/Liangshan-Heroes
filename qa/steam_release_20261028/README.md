@@ -6,8 +6,8 @@
 
 实际EXE普通键鼠观察覆盖主菜单、八章菜单、黄泥冈进入／布阵、人物选择、刘唐右键应答与白胜入场卸酒、任务面板查看／选中／滚动、F11和任务提示悬浮时Esc暂停、正常退出。源码、玩家目录、EXE前后不变，子进程退出、锁释放、日志无目标错误。[实操观察](gui_observations.json)明确保留因自动操作等待过久而失败的一次游玩，第二次停在酒计阶段；**未完成普通键鼠整关运输或真人完整通关，不把退出0计作通关**。运输逻辑仍引用[已有生产专项](../huangnigang_production_20261020/README.md)的编译包普通路线1206、九阶段1768项及24张界面图，与本批EXE观察分别记账。
 
-四语补丁说明草稿 `680765564125184330` 已保存并重载核对标题、摘要及正文；封面使用已有已批准图片。草稿未公开，须待新Build上线后关联并发布。
+四语补丁说明 `680765564125184330` 已关联Build26260970并公开发布；简中、繁中、英语、日语各9段标题／正文片段与图片加载均通过回读。封面使用已有已批准的通用图片，非英语使用英语封面回退。[公开公告](https://store.steampowered.com/news/app/5088120/view/680765564125184330)、[四语收据](announcement_public_verified.json)。
 
-网页上传两次停在0字节；第一次上传页在工具更新后失去控制连接，新构建列表仍为旧Build26048429。备用SteamCMD已从Valve官方下载并验证签名，ASCII内容目录仅从同一冻结ZIP解出六个成员并逐一验SHA；[上传映射准备](steampipe_mapping_prepared.json)不等于Preview或上传通过。SteamCMD无缓存登录，已打开本机登录窗口等待用户完成，凭据不进入工程或Git。
+网页上传两次停在0字节后改用官方签名SteamCMD。用户本机完成登录和手机发布确认，凭据未进入工程或Git。首次SteamPipe预览退出0，但DepotPath误用文件名，实际清单多套一层目录；该Build26260938未激活，旧预览与日志保留，不能计为语义通过。`correct_steampipe_mapping.py`生成新的目录`.`映射，修正预览的六个根文件名称、大小和SHA1与候选完全相同，随后上传Build26260970。[映射修正](steampipe_mapping_correction.json)、[修正预览](steamcmd_preview_corrected.json)、[上传收据](steamcmd_upload.json)。旧准备脚本及其收据只代表首次尝试，不作为后续发布模板。
 
-当前Steam正式分支仍以实际回读为准；本地候选通过不表示已上传、切换default或公开公告。后续只执行这一个冻结候选的上传、清单／default／四语公告与下载／客户端回验，不追加全量测试。
+**正式交付完成：default Build26260970／Manifest7760891311054131368。** 服务器六文件、全新SteamCMD下载、库内六文件的哈希一致；隔离下载版EXE主菜单启动和退出0。Steam客户端自动更新后实际库进程PID66752（父进程Steam PID27168）主菜单目检、正常关闭及Steam日志退出0已验。客户端原有进度不变，云档仅`updated_at`变化，另产生五份着色器缓存；184个原文件私有备份保留。日志有既有GLES3不支持2D MSAA警告，无目标错误。[最终交付](delivery_complete.json)、[下载](server_download_verified.json)、[下载版启动](server_runtime_verified.json)、[客户端](client_acceptance.json)。原候选／准备收据不重写，其uploaded=false仍保留当时语境，以本最终收据为本批发布状态。
