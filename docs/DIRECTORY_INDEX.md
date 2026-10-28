@@ -1,4 +1,4 @@
-# 项目目录索引（2026-10-27）
+# 项目目录索引（2026-10-28）
 
 ## 当前文档入口
 
@@ -11,7 +11,8 @@
 | 按批次记录完成事项 | [开发日志](WORKLOG.md) |
 | 本轮重复缓存清理与恢复 | [清理收据与恢复器](../qa/storage_cleanup_20261027/README.md) |
 | 10月27日取消全量测试及27个进程结果 | [停止原件](../qa/campaign_progress_recovery_20261026/daming_continue_candidate/evidence/negative_user_stop_20261027_183950/README.md)、[等待预算重规划原件](../qa/campaign_progress_recovery_20261026/daming_continue_candidate/evidence/negative_budget_cancel_20261027_175238/README.md) |
-| 本次Steam更新 | [更新文档](STEAM_UPDATE_20261019.md) |
+| 本次Steam更新准备与状态 | [10月28日更新](STEAM_UPDATE_20261028.md)、[发行包验收原件](../qa/steam_release_20261028/README.md) |
+| 上次已交付Steam更新 | [10月20日更新](STEAM_UPDATE_20261019.md) |
 | Steam交付步骤 | [发布指南](STEAM_RELEASE_GUIDE.md) |
 | 美术缺口与来源 | [全量美术台账](ART_COMPLETION_20260926.md)及各人物/场景实现说明 |
 | 入口文档历史与本次清理 | [QA及恢复说明](../qa/storage_cleanup_20261020/README.md) |

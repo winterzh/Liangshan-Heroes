@@ -1,0 +1,97 @@
+{
+  "source_head": "47168f003cb860271ce8e09e1d4a1fca5a282d58",
+  "candidate_exe_sha256": "79f320d4a25d76230a3b1330691913a2eb3ec239899ac614675add6f486f6bf4",
+  "execution": "actual embedded-PCK release EXE, ordinary OS input; no gameplay driver",
+  "scoped_interaction_passed": true,
+  "observed": [
+    "main menu and eight-chapter menu",
+    "Huangnigang intro and deployment",
+    "F-key hero selection",
+    "right-click Liu Tang answer order and completion",
+    "Bai Sheng natural arrival and wine unloading",
+    "task view/select controls and task scroll",
+    "F11 fullscreen",
+    "Escape pause with task tooltip visible",
+    "normal quit confirmation and process exit"
+  ],
+  "attempts": [
+    {
+      "result": "in-game defeat",
+      "reason": "Automation left the game running while editing the Steam announcement; rest timeout caused force route, then heroes fell. Result screen explicitly recorded the timeout. Retained as observed, not counted as a gameplay pass."
+    },
+    {
+      "result": "stopped normally while paused in wine phase",
+      "reason": "Scoped menu/input observations complete; no full manual wine/cargo completion claimed."
+    }
+  ],
+  "manual_wine_and_seven_cart_completion_passed": false,
+  "full_human_playthrough_passed": false,
+  "transport_logic_evidence": "Existing Huangnigang production targeted PCK route and nine-phase suite, recorded separately; not relabelled as ordinary EXE playthrough.",
+  "files": [
+    {
+      "path": "gui_101022_4032b476/receipt.json",
+      "bytes": 1123,
+      "sha256": "3e34e08a1a0f48cb1bde4b32b1010320b3162101d8edd10150c887202c5c0399"
+    },
+    {
+      "path": "gui_101022_4032b476/launch.json",
+      "bytes": 928,
+      "sha256": "ee01c7c2269c5118bed3d5044368558e0c3d624c534272216ac1a5164badd564"
+    },
+    {
+      "path": "gui_101022_4032b476/gui.console.log",
+      "bytes": 313,
+      "sha256": "0beca3dac829f2f4b34285425d67f64686f0199a60326f75e2107e6561229cc4"
+    },
+    {
+      "path": "gui_101022_4032b476/gui.godot.log",
+      "bytes": 308,
+      "sha256": "c570982d3fa7ba152dfd873161e62e621208eaca81922e9103ee4a33a4c49959"
+    },
+    {
+      "path": "gui_101022_4032b476/screenshots/01_main_menu.png",
+      "bytes": 64269,
+      "sha256": "fbdccb5387670663ad7768cf67ad1d14d8c2c2f4d0129b1c37fc5335d85fc560"
+    },
+    {
+      "path": "gui_101022_4032b476/screenshots/02_chapter_menu.png",
+      "bytes": 49274,
+      "sha256": "cee0dfe0d814d8d84f3fac103e4d62062c1732a07c9ef895e4fbbb9be4e25d00"
+    },
+    {
+      "path": "gui_101022_4032b476/screenshots/03_huangnigang_intro.png",
+      "bytes": 75073,
+      "sha256": "e52bc63e0d2af0cbd618384b78a200bdf357bd8d4505f7cec0a39620ed20420b"
+    },
+    {
+      "path": "gui_101022_4032b476/screenshots/04_preparation.png",
+      "bytes": 112694,
+      "sha256": "e70b491fe453561548b98c7aa6395ac4f5f02e000ca8eb8af27795f1d8038ce9"
+    },
+    {
+      "path": "gui_101022_4032b476/screenshots/05_escape_pause.png",
+      "bytes": 32207,
+      "sha256": "67d14c985f5d1532490f9578d6773b0c0896ab6dd88af42501f16d00d9863c34"
+    },
+    {
+      "path": "gui_101022_4032b476/screenshots/06_task_scroll.png",
+      "bytes": 368526,
+      "sha256": "86e41b14d6eaa026c1dcc4cc5edb5512f99c26dc602f70d695e11840ad597478"
+    },
+    {
+      "path": "gui_101022_4032b476/screenshots/07_force_branch_observed.png",
+      "bytes": 375120,
+      "sha256": "81921a0f18c392aefe312326af355130848c8a58ee7ed6c883d1d38a921648f4"
+    },
+    {
+      "path": "gui_101022_4032b476/screenshots/08_delayed_play_failure_reason.png",
+      "bytes": 161635,
+      "sha256": "4207631db1d410c89456e01ad759011cb12fe7a0fe545a23f361c22adf8f49b6"
+    },
+    {
+      "path": "gui_101022_4032b476/screenshots/09_escape_tooltip_pause.png",
+      "bytes": 88073,
+      "sha256": "abe53e6422f26b41546724713e3b492fe821ad45ff10cb38c7cd1a07d16a4b13"
+    }
+  ]
+}
