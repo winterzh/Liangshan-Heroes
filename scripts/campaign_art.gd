@@ -200,6 +200,9 @@ const NATIVE_TRIBUTE_LAYERED_FAMILIES := {
 	"chao_gai": "chao_gai_layered_20261018",
 	"wu_yong": "wu_yong_layered_20261018",
 	"liu_tang": "liu_tang_layered_20261030",
+	"gongsun_sheng": "gongsun_sheng_layered_20261030",
+	"ruan_xiaoer": "ruan_xiaoer_layered_20261030",
+	"ruan_xiaowu": "ruan_xiaowu_layered_20261030",
 }
 
 static func native_tribute_push_path(key: String, variant: String, state: String, direction: String) -> String:

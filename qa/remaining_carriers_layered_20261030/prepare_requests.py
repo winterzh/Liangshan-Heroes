@@ -1,0 +1,44 @@
+"""Record exact references/prompts for the three remaining carrier owners."""
+import hashlib
+import json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+HERE = Path(__file__).resolve().parent
+IDENTITIES = {
+    "gongsun_sheng": "Gongsun Sheng: tall muscular bare torso, his own broad face and full black beard, loose messy black hair with TWO topknots, grey loose trousers, brown waist tie and straw sandals. No headcloth, Daoist crown/robe, sword, spell, tattoo, flower or Liu Tang birthmark.",
+    "ruan_xiaoer": "Ruan Xiaoer: own broad face, upright eyebrows, short black beard, brown cloth headwrap, strong bare torso with natural YELLOW CHEST HAIR (not a tattoo), grey loose trousers, olive grey sash and BARE FEET. No flower, leopard tattoo, pale yellow beard, black facial spots or straw sandals.",
+    "ruan_xiaowu": "Ruan Xiaowu: own slanted broken navy headcloth, short black beard, pomegranate flower on anatomical RIGHT temple (visible in SE/NE only), muscular bare torso with ONE subdued blue leopard on FRONT CHEST ONLY; clean back/arms; tan loose trousers, grey checked waist cloth, light shin wraps and dark cloth shoes. No yellow chest hair, bare feet, yellow beard or black facial spots. Do not mirror the flower onto his left temple.",
+}
+
+def sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+def main():
+    records = []
+    for owner, identity in IDENTITIES.items():
+        manifest = json.loads((ROOT / f"assets/direction4/level1_{owner}_pushcart_20261017.json").read_text())
+        references = [{"source": key, "path": value["path"], "sha256": sha(ROOT / value["path"])}
+                      for key, value in manifest["sources"].items() if key != "cart_only"]
+        prompt = f"""Edit the attached production sprite atlases for {owner}. Make {len(references)} SEPARATE transparent RGBA PNG images, one per attached image, keeping the corresponding attachment filename/state. Do not combine the states into one contact sheet. Each output remains a native 1254 x 1254 atlas with FOUR existing views: SE upper left, SW upper right, NE lower left, NW lower right.
+
+This is precise ACTOR/CART LAYER SEPARATION, not a redesign. Remove ALL cart wood, handles/rods, wheel, cargo cloth, rope, cast shadow and detached fragments. Leave ONLY the SAME actor. Preserve each source's visible pose, left/right limb assignment, head/body proportions, hand grip centres, feet, scale and exact position within its original cell. Do not recenter or enlarge him into the removed cart space. Naturally complete only the anatomy previously hidden by the cart, with empty curled hands around the same invisible handles, continuous wrists/thumbs/fingers and no wooden fragments.
+
+Identity: {identity}
+
+State/attachment association: push_idle is steady grounded idle; push_contact_a, push_passing_a, push_contact_b and push_passing_b retain the EXACT distinct leg/support/raised-sole assignments of their own source image. Never reuse one state's body as another state. A and B retain opposing lead legs. No text, grid, matte, checkerboard pixels, scenery, weapons or effects. Alpha transparency is required. Render all attached images separately and provide each native original PNG for download. Do not paint a black/white background. Keep the same game illustration style and clean alpha edges.
+"""
+        if owner == "gongsun_sheng":
+            prompt += "\nThe sixth attachment push_passing_b_v2 is also required as a separate actor-only PNG. The game uses its SE view and uses the original push_passing_b for the other three directions. Preserve BOTH versions separately; do not replace all four views with v2.\n"
+        folder = HERE / owner
+        folder.mkdir(parents=True, exist_ok=True)
+        (folder / "prompt.txt").write_text(prompt, encoding="utf-8")
+        records.append({"owner": owner, "variant": "hn_" + owner,
+                        "references": references, "prompt": str((folder / "prompt.txt").relative_to(ROOT)),
+                        "prompt_sha256": sha(folder / "prompt.txt"), "runtime_adopted": False})
+    (HERE / "requests.json").write_text(json.dumps({"provider": "ChatGPT web in Codex sidebar", "local_pixel_edits": False,
+        "base_commit": "eafc2d5f0a7b8f3557d2a4bb406c16545866230a", "owners": records}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(json.dumps({r["owner"]: [str(ROOT / p["path"]) for p in r["references"]] for r in records}, ensure_ascii=False))
+
+if __name__ == "__main__":
+    main()
