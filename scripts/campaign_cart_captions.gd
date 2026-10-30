@@ -83,11 +83,17 @@ func _story_body_rect(unit) -> Rect2:
 	rect.position += unit._frame_draw_offset(frame, size)
 	return (Transform2D(angle, Vector2(mirror, vertical), 0.0, offset) * rect).grow(2.0)
 
-func _label_bar(unit) -> float:
+func _story_rect_cached(unit, rects: Dictionary) -> Rect2:
+	var key: int = unit.get_instance_id()
+	if not rects.has(key): rects[key] = _story_body_rect(unit)
+	return rects[key]
+
+func _label_bar(unit, story_rects: Variant = null) -> float:
 	if unit.is_building: return float(unit.get_meta("campaign_environment_label_y", -unit.radius * 1.9))
 	var bar: float = unit._campaign_tribute_label_y(-unit.radius * 3.3 * unit.visual_scale)
 	if unit.story_outcome in ["unconscious", "subdued", "captured"]:
-		return minf(bar, _story_body_rect(unit).position.y - 8.0)
+		var rect: Rect2 = _story_body_rect(unit) if story_rects == null else _story_rect_cached(unit, story_rects)
+		return minf(bar, rect.position.y - 8.0)
 	# Accepted native frames can extend above the ordinary standing silhouette.
 	# Reuse their measured top/offset instead of covering a raised weapon.
 	var frame: Texture2D = unit._anim_frame_for_state(null)
@@ -96,18 +102,19 @@ func _label_bar(unit) -> float:
 		bar = minf(bar, size * (float(frame.get_meta("visible_top")) - 0.82) + unit._frame_draw_offset(frame, size).y - 8.0)
 	return bar
 
-func _obstacles(b) -> Array:
+func _obstacles(b, story_rects: Variant = null) -> Array:
+	if story_rects == null: story_rects = {} # New local memo for standalone callers.
 	var result: Array = []
 	for actor in b.units:
 		if not is_instance_valid(actor) or not is_instance_valid(actor.map) or actor._dying or not actor.is_visible_in_tree(): continue
 		var body: float = actor.radius * 3.7 * actor.visual_scale
-		var bar: float = _label_bar(actor)
+		var bar: float = _label_bar(actor, story_rects)
 		var owns_name: bool = person_owned(actor)
 		var width: float = body + 6.0 if owns_name else maxf(body, minf(100, ThemeDB.fallback_font.get_string_size(Localize.text(actor.display_name), HORIZONTAL_ALIGNMENT_LEFT, -1, 13).x)) + 6.0
 		var top: float = bar if owns_name else (bar - 22.0 if actor.is_hero or actor.is_building else bar - 2.0)
 		result.append((_to_overlay(actor) * Rect2(-width * 0.5, top, width, -top + 32)).grow(GAP))
 		if actor.story_outcome in ["unconscious", "subdued", "captured"]:
-			result.append((_to_overlay(actor) * _story_body_rect(actor)).grow(GAP))
+			result.append((_to_overlay(actor) * _story_rect_cached(actor, story_rects)).grow(GAP))
 		if Wheel.enabled(actor):
 			# Loaded carts are painted inside their carrier's command list, not
 			# in b.units. Reserve their real body/rim rectangles as well.
@@ -142,8 +149,9 @@ func _fit(origin: Vector2, area: Rect2) -> Vector2:
 		clampf(origin.y, area.position.y, area.end.y - CARD_SIZE.y))
 
 func _free(rect: Rect2, obstacles: Array) -> bool:
+	var padded := rect.grow(GAP)
 	for obstacle: Rect2 in obstacles:
-		if rect.grow(GAP).intersects(obstacle): return false
+		if padded.intersects(obstacle): return false
 	return true
 
 func _nearest_slot(desired: Vector2, points: Array[Vector2], obstacles: Array) -> Rect2:
@@ -160,17 +168,25 @@ func _place(desired: Vector2, area: Rect2, obstacles: Array) -> Rect2:
 	var initial := Rect2(_fit(desired, area), CARD_SIZE)
 	if _free(initial, obstacles): return initial
 	var candidates: Array[Vector2] = []
+	var seen: Dictionary = {initial.position: true} # This candidate is already blocked.
 	for obstacle: Rect2 in obstacles:
 		for point: Vector2 in [Vector2(desired.x, obstacle.position.y - CARD_SIZE.y - GAP * 2),
 			Vector2(desired.x, obstacle.end.y + GAP * 2), Vector2(obstacle.position.x - CARD_SIZE.x - GAP * 2, desired.y),
-			Vector2(obstacle.end.x + GAP * 2, desired.y)]: candidates.append(_fit(point, area))
+			Vector2(obstacle.end.x + GAP * 2, desired.y)]:
+			var fitted := _fit(point, area)
+			if not seen.has(fitted):
+				seen[fitted] = true
+				candidates.append(fitted) # Preserve first occurrence and equal-distance ties.
 	var best := _nearest_slot(desired, candidates, obstacles)
 	if best.has_area(): return best
 	# Build the finite grid only when obstacle-edge candidates cannot fit.
 	candidates.clear()
 	for y in range(int(area.position.y), int(area.end.y - CARD_SIZE.y) + int(CARD_SIZE.y + GAP), int(CARD_SIZE.y + GAP)):
 		for x in range(int(area.position.x), int(area.end.x - CARD_SIZE.x) + int(CARD_SIZE.x + GAP), int(CARD_SIZE.x + GAP)):
-			candidates.append(_fit(Vector2(x, y), area))
+			var fitted := _fit(Vector2(x, y), area)
+			if not seen.has(fitted):
+				seen[fitted] = true
+				candidates.append(fitted)
 	return _nearest_slot(desired, candidates, obstacles)
 
 func _entry(unit, kind: String, anchor: Vector2, desired: Vector2) -> Dictionary:
@@ -187,10 +203,13 @@ func compute_layout() -> Array:
 	var area: Rect2 = get_global_transform_with_canvas().affine_inverse() * get_viewport_rect().grow(-8)
 	if area.size.x < CARD_SIZE.x or area.size.y < CARD_SIZE.y: return []
 	var entries: Array = []
+	# Rectangles are shared only within this calculation, never across frames.
+	# Pose/camera/state changes therefore require no invalidation policy.
+	var story_rects: Dictionary = {}
 	for hero in b.units:
 		if not is_instance_valid(hero) or not person_owned(hero) or not hero.is_visible_in_tree(): continue
 		var tr := _to_overlay(hero)
-		var bar: float = _label_bar(hero)
+		var bar: float = _label_bar(hero, story_rects)
 		var anchor: Vector2 = tr * Vector2(0, bar)
 		if not area.grow(24).has_point(anchor): continue
 		entries.append(_entry(hero, "person", anchor, anchor - Vector2(CARD_SIZE.x * 0.5, CARD_SIZE.y + GAP * 2)))
@@ -205,7 +224,7 @@ func compute_layout() -> Array:
 	if entries.is_empty(): return []
 	entries.sort_custom(func(left, right):
 		return int(left.priority) < int(right.priority) if left.priority != right.priority else int(left.entity_id) < int(right.entity_id))
-	var obstacles := _obstacles(b)
+	var obstacles := _obstacles(b, story_rects)
 	for obstacle: Rect2 in obstacles:
 		if obstacle.encloses(area): return [] # A full-screen menu owns the whole surface.
 	var result: Array = []

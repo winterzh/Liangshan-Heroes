@@ -1,0 +1,139 @@
+{
+  "base_commit": "3c5f7bd4ab322535ae76ee3a926eae51f3eb5060",
+  "production_adopted": true,
+  "checks": 173,
+  "screenshots": 6,
+  "passed": true,
+  "paired_contexts": 5,
+  "exact_layout_equality_pairs": 45,
+  "baseline": {
+    "commit": "3c5f7bd4ab322535ae76ee3a926eae51f3eb5060",
+    "path": "scripts/campaign_cart_captions.gd",
+    "copied_baseline": "baseline_caption.gd",
+    "sha256": "fa3f07b59dde983e5ee6bb3f9344b61cc6621ad240aeedb17abeed840af35966",
+    "execution_scope": "exact prior caption module only, same current dependencies and actual scene; not an old build execution"
+  },
+  "summary": [
+    {
+      "label": "live_9_1280_zh_CN",
+      "old_median_us": 1696,
+      "new_median_us": 1664,
+      "median_reduction": 0.0188679245283019,
+      "rendered_cards": 9,
+      "pairs": 9,
+      "old_min_us": 1488,
+      "old_max_us": 1808,
+      "new_min_us": 1589,
+      "new_max_us": 1900
+    },
+    {
+      "label": "delivered_cart_1280_en",
+      "old_median_us": 1977,
+      "new_median_us": 2071,
+      "median_reduction": -0.0475467880627214,
+      "rendered_cards": 10,
+      "pairs": 9,
+      "old_min_us": 1854,
+      "old_max_us": 2219,
+      "new_min_us": 1913,
+      "new_max_us": 2463
+    },
+    {
+      "label": "resolved_12_1280_ja",
+      "old_median_us": 4587,
+      "new_median_us": 3941,
+      "median_reduction": 0.140832788314803,
+      "rendered_cards": 12,
+      "pairs": 9,
+      "old_min_us": 4118,
+      "old_max_us": 5635,
+      "new_min_us": 3513,
+      "new_max_us": 5380
+    },
+    {
+      "label": "dense_21_960_en",
+      "old_median_us": 17840,
+      "new_median_us": 14090,
+      "median_reduction": 0.210201793721973,
+      "rendered_cards": 13,
+      "pairs": 9,
+      "old_min_us": 16671,
+      "old_max_us": 20794,
+      "new_min_us": 13557,
+      "new_max_us": 16426
+    },
+    {
+      "label": "paused_21_960_ja",
+      "old_median_us": 14977,
+      "new_median_us": 11495,
+      "median_reduction": 0.232489817720505,
+      "rendered_cards": 17,
+      "pairs": 9,
+      "old_min_us": 14391,
+      "old_max_us": 19605,
+      "new_min_us": 10931,
+      "new_max_us": 12927
+    }
+  ],
+  "source_and_private_postchecks_complete": true,
+  "children_gone": true,
+  "owned_lock_released": true,
+  "report": "qa/caption_layout_cost_20261030/evidence/caption_layout_cost_20261030_235225_17edf4e5/report.json",
+  "report_sha256": "cad0cd82a701ca8a76886272dded1ad58a58656970d29a6055f085a67a5abfff",
+  "trusted_content_version": "source-v1:ca6e4340565f2afa3158572ba4b429217189ddc94fbb4bf386d4a3ce40409445",
+  "visual_review": {
+    "viewports_reviewed": 6,
+    "method": "Two labelled contact sheets plus full English dense and delivered-cart originals",
+    "same_scene_old_and_new_dense_full_PNG_SHA_identical": true,
+    "card_pixel_comparison": {
+      "comparison": "exact old caption module versus current caption module on same frozen current scene; underlying world shader time may differ",
+      "mask": "rendered card rectangles grown 2 logical/native screenshot pixels",
+      "sampled_pixels": 62474,
+      "different_pixels": 0,
+      "above_two_levels": 0,
+      "max_channel_delta": 0,
+      "old_sha256": "3917f7bec05592559b719b04bf7fd38b694af61f881a3c61d52eb5523a15bb18",
+      "current_sha256": "3917f7bec05592559b719b04bf7fd38b694af61f881a3c61d52eb5523a15bb18"
+    },
+    "artifacts": [
+      {
+        "path": "qa/caption_layout_cost_20261030/visual/actual_contexts.jpg",
+        "bytes": 389306,
+        "sha256": "fa8252703e5ce3e13890fb6f71851dba31df9d6bc7cad2a5cc2b2d7b28884e43"
+      },
+      {
+        "path": "qa/caption_layout_cost_20261030/visual/delivered_cart_1280_en.png",
+        "bytes": 1035307,
+        "sha256": "f682f6fbc80afe5a80b9e596e745b8a9d7fff627765eacb1b211ce8ebadfb11d"
+      },
+      {
+        "path": "qa/caption_layout_cost_20261030/visual/dense_21_960_en.png",
+        "bytes": 741305,
+        "sha256": "3917f7bec05592559b719b04bf7fd38b694af61f881a3c61d52eb5523a15bb18"
+      },
+      {
+        "path": "qa/caption_layout_cost_20261030/visual/dense_old_new.jpg",
+        "bytes": 200959,
+        "sha256": "b910e8fe2ef3aea50157b1acb1adc31b1f94217c81597964c3c20fc47255ac21"
+      }
+    ]
+  },
+  "small_cart_median_regression_recorded": true,
+  "no_claim_all_contexts_faster": true,
+  "original_20_756_us_was_single_different_fixture_sample_not_paired_baseline": true,
+  "unit_or_native_art_changed": false,
+  "local_geometry_memo_only": true,
+  "full_regression_run": false,
+  "full_game_P95_P99_accepted": false,
+  "ordinary_keyboard_mouse_playthrough": false,
+  "physical_DPI_device_accepted": false,
+  "old_whole_build_executed": false,
+  "main_merged": false,
+  "steam_updated": false,
+  "remaining": [
+    "Normal approximately ten-minute same-load full-frame P95/P99, memory and device acceptance",
+    "Web date-cart four views and own empty-cart grip/loading transition",
+    "All-seven natural gait/grip and different-physique relay registration",
+    "Other chapter/battle readability, complete campaign resume and human playthrough"
+  ]
+}
