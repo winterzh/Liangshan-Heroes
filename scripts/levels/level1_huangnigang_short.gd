@@ -73,6 +73,7 @@ func intro_lines() -> Array:
 func on_start(b) -> void:
 	super.on_start(b)
 	if not b._gameplay_rng_issue.is_empty(): return
+	preload("res://scripts/campaign_cart_captions.gd").ensure(b)
 	team_t=0; distraction_serial=-1; controls_generation=-1
 	victory=false; depart_requested=false
 	empty_cargo.clear()
@@ -355,6 +356,7 @@ func on_unit_died(b, u) -> void:
 		b.lose("七星全部倒下，无人能够推出剩余江州车。")
 
 func process(b, delta: float) -> void:
+	preload("res://scripts/campaign_cart_captions.gd").ensure(b)
 	_update_empty_cart_positions(b,delta)
 	for index in range(jujube_carts.size()):
 		if is_instance_valid(jujube_carts[index]):jujube_carts[index].visible=not bool(cargo_ready.get(index,false))
