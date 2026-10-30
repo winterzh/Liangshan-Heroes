@@ -4400,7 +4400,7 @@ func _draw() -> void:
 			draw_string(f, Vector2(-50.0, gy), gt, HORIZONTAL_ALIGNMENT_CENTER, 100.0, 12, Color("9fe8b0"))
 
 	# 极端兵海下满血普通单位省略血条；受伤/英雄/选中单位仍完整显示，减少每帧上千次矩形绘制。
-	if story_outcome != "":
+	if story_outcome != "" and not preload("res://scripts/campaign_cart_captions.gd").person_owned(self):
 		var status_text := story_label()
 		if not is_hero and not is_building and not inspected and movement_profile!="water":
 			status_text = {"unconscious":Localize.text("昏"), "subdued":Localize.text("服"), "captured":Localize.text("俘")}.get(story_outcome,status_text)

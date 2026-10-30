@@ -1,5 +1,5 @@
 extends Node2D
-## Screen-space labels for live short-chapter heroes/Bai and delivered tribute carts.
+## Screen-space names/status for short-chapter people and delivered tribute carts.
 ## The world Unit keeps its real position, hit target, health and selection.
 const Ground = preload("res://scripts/campaign_tribute_cart_visual.gd")
 const Wheel = preload("res://scripts/tribute_cart_wheel_visual.gd")
@@ -21,13 +21,15 @@ static func wants_info(unit) -> bool:
 
 static func person_owned(unit) -> bool:
 	var named: bool = unit.is_hero or (unit.key == "bai_sheng" and unit.art_variant == "hn_bai_sheng")
-	if not named or unit.is_building or unit.hp <= 0.0 or unit._dying \
-		or unit.garrisoned or unit.story_outcome != "": return false
+	var resolved: bool = unit.story_outcome in ["unconscious", "subdued", "captured"]
+	if (not named and not resolved) or unit.is_building or unit.is_resource or unit.hp <= 0.0 or unit._dying \
+		or unit.garrisoned or unit.movement_profile == "water" \
+		or unit.story_outcome in ["retreated", "embarked"]: return false
 	var b = unit.battle
 	return is_instance_valid(b) and is_instance_valid(b.level) and is_instance_valid(b.hud) \
 		and b.level.get_script().resource_path == "res://scripts/levels/level1_huangnigang_short.gd" \
 		and is_instance_valid(unit.map) and unit.map == b.map and b.units.has(unit) and b.hud.has_node(NODE_NAME) \
-		and (unit.is_hero or b.level.actors.has(unit))
+		and (unit.is_hero or resolved or b.level.actors.has(unit))
 
 static func world_labels_owned(unit) -> bool:
 	return owns(unit) or person_owned(unit)
@@ -42,7 +44,7 @@ static func ensure(b) -> void:
 	# Unit draw commands may still contain deployment labels. Invalidate them
 	# when the overlay starts owning names; no game state or orders are changed.
 	for unit in b.units:
-		if is_instance_valid(unit) and (unit.is_hero or unit.key == "bai_sheng"): unit.queue_redraw()
+		if is_instance_valid(unit) and person_owned(unit): unit.queue_redraw()
 
 func _process(_delta: float) -> void:
 	if _battle == null or not is_instance_valid(_battle.get_ref()):
@@ -60,9 +62,32 @@ func _control_rect(control) -> Rect2:
 	var tr: Transform2D = get_global_transform_with_canvas().affine_inverse() * control.get_global_transform_with_canvas()
 	return tr * Rect2(Vector2.ZERO, control.size)
 
+func _story_body_rect(unit) -> Rect2:
+	# Match the real story frame, its authored scale/offset and fallback tilt.
+	# Frame lookup sets this render cache; restore it so a layout query is inert.
+	var directional: bool = unit._frame_directional
+	var frames: Array = unit._story_animation_frames()
+	var frame: Texture2D
+	var angle := 0.0
+	var vertical := 1.0
+	var offset := Vector2.ZERO
+	if not frames.is_empty(): frame = frames[-1]
+	else:
+		frame = unit._rest_frame(Art.unit_texture(unit.key, unit.visual_art_variant(), unit.animation_direction))
+		if unit.story_outcome == "unconscious": angle = 1.42; offset.y = unit.radius * 0.4
+		else: vertical = 0.70; offset.y = unit.radius * 0.15
+	var mirror := -1.0 if unit.face_left and not unit._frame_directional else 1.0
+	unit._frame_directional = directional
+	var size: float = unit.radius * 3.7 * unit.visual_scale * unit._frame_draw_scale(frame)
+	var rect := Rect2(-size * 0.5, -size * 0.82, size, size)
+	rect.position += unit._frame_draw_offset(frame, size)
+	return (Transform2D(angle, Vector2(mirror, vertical), 0.0, offset) * rect).grow(2.0)
+
 func _label_bar(unit) -> float:
 	if unit.is_building: return float(unit.get_meta("campaign_environment_label_y", -unit.radius * 1.9))
 	var bar: float = unit._campaign_tribute_label_y(-unit.radius * 3.3 * unit.visual_scale)
+	if unit.story_outcome in ["unconscious", "subdued", "captured"]:
+		return minf(bar, _story_body_rect(unit).position.y - 8.0)
 	# Accepted native frames can extend above the ordinary standing silhouette.
 	# Reuse their measured top/offset instead of covering a raised weapon.
 	var frame: Texture2D = unit._anim_frame_for_state(null)
@@ -81,6 +106,8 @@ func _obstacles(b) -> Array:
 		var width: float = body + 6.0 if owns_name else maxf(body, minf(100, ThemeDB.fallback_font.get_string_size(Localize.text(actor.display_name), HORIZONTAL_ALIGNMENT_LEFT, -1, 13).x)) + 6.0
 		var top: float = bar if owns_name else (bar - 22.0 if actor.is_hero or actor.is_building else bar - 2.0)
 		result.append((_to_overlay(actor) * Rect2(-width * 0.5, top, width, -top + 32)).grow(GAP))
+		if actor.story_outcome in ["unconscious", "subdued", "captured"]:
+			result.append((_to_overlay(actor) * _story_body_rect(actor)).grow(GAP))
 		if Wheel.enabled(actor):
 			# Loaded carts are painted inside their carrier's command list, not
 			# in b.units. Reserve their real body/rim rectangles as well.
@@ -147,9 +174,12 @@ func _place(desired: Vector2, area: Rect2, obstacles: Array) -> Rect2:
 	return _nearest_slot(desired, candidates, obstacles)
 
 func _entry(unit, kind: String, anchor: Vector2, desired: Vector2) -> Dictionary:
+	var priority := 2
+	if kind == "person" and not unit.is_hero and unit.key != "bai_sheng": priority = 3
+	if unit.story_outcome.is_empty() and unit.hp < unit.max_hp: priority = 1
+	if unit.selected or unit.inspected: priority = 0
 	return {"unit": unit, "kind": kind, "anchor": anchor, "desired": desired,
-		"entity_id": unit.entity_id,
-		"priority": 0 if unit.selected or unit.inspected else (1 if unit.hp < unit.max_hp else 2)}
+		"entity_id": unit.entity_id, "priority": priority}
 
 func compute_layout() -> Array:
 	var b = _battle.get_ref() if _battle != null else null
@@ -185,6 +215,7 @@ func compute_layout() -> Array:
 		var unit = entry.unit
 		obstacles.append(rect.grow(GAP))
 		result.append({"entity_id": unit.entity_id, "kind": entry.kind, "rect": rect, "anchor": entry.anchor,
+			"status": unit.story_label() if entry.kind == "person" else "",
 			"text": Localize.text(unit.display_name), "health": clampf(unit.hp / unit.max_hp, 0, 1),
 			"friendly": unit.faction == unit.FACTION_LIANG, "hostile": unit.faction == unit.FACTION_GUAN, "priority": entry.priority,
 			"selected": unit.selected, "inspected": unit.inspected})
@@ -207,7 +238,9 @@ func _draw() -> void:
 		draw_style_box(_style(border), rect)
 		var name_color: Color = (Color("ffd866") if item.friendly else Color("ff8866")) if item.kind == "person" else UITheme.PAPER
 		UITheme.draw_compact_label(self, ThemeDB.fallback_font, rect.position + Vector2(6, 16), item.text, CARD_SIZE.x - 12, 13, name_color)
-		if Settings.show_healthbars:
+		if not item.status.is_empty():
+			UITheme.draw_compact_label(self, ThemeDB.fallback_font, rect.position + Vector2(6, 29), item.status, CARD_SIZE.x - 12, 11, Color(0.96, 0.83, 0.53))
+		elif Settings.show_healthbars:
 			var bar := Rect2(rect.position + Vector2(8, 24), Vector2(CARD_SIZE.x - 16, 5))
 			draw_rect(bar, UITheme.INK)
 			var health_color := Color(0.85, 0.2, 0.15).lerp(Color(0.3, 0.85, 0.3), item.health)
