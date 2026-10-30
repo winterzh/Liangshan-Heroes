@@ -1,4 +1,4 @@
-# 源码设置与换机（2026-10-28）
+# 源码设置与换机（2026-10-30）
 
 本机开发目录为 `D:/AI项目/水浒/开发工程`，打开其中 `project.godot`；桌面旧目录仅为历史兼容入口。当前进度见[项目总览](PROJECT_STATUS.md)，开发顺序及完整要求见[开发计划](DEVELOPMENT_PLAN.md)，逐批证据见[开发日志](WORKLOG.md)和[目录索引](DIRECTORY_INDEX.md)。
 
@@ -24,6 +24,8 @@ git fetch origin
 
 ## 验证与共享引擎
 
+10月30日继续推车小批次开发，采用[三人轮转和运输提示专项](../qa/transport_visuals_20261030/README.md)，不新增导出或平台发布；其余四人分层素材和完整战役续玩仍在计划中。
+
 用户已取消全量52／61测试，后续按修改做必要的针对性检查；不自动恢复全量矩阵。现有27个进程39383项通过、取消及未运行范围见[原始收据](../qa/campaign_progress_recovery_20261026/daming_continue_candidate/evidence/negative_user_stop_20261027_183950/README.md)。10月28日用户另行授权发行包验收并更新Steam，已完成必要EXE与键鼠入口检查、Build26260970正式上线、四语公告、下载哈希及Steam库启动／退出验收；人工整关仍未计通过。[发布收据与原件](../qa/steam_release_20261028/README.md)。
 
 调用Godot前检查已有进程和共享锁，等通道自然空闲并串行执行，不控制其他聊天的进程。使用与候选精确绑定的冻结、清单及自己的成功导入；默认命名来源检查只授静态结果。原失败存档和证据保留，复验使用逐字新副本，不把旧冻结的通过转授新源码。当前b22及大名府、持久化与各章节边界统一见[当前验证](../qa/campaign_progress_recovery_20261026/projectile_filter_candidate/VALIDATION.md)，具体执行命令留在相应QA目录。
@@ -36,6 +38,6 @@ git fetch origin
 
 ## 发布与历史
 
-当前Steam Windows为Build26048429，冻结生产来源0083b47a；见[更新记录](STEAM_UPDATE_20261019.md)及[发布指南](STEAM_RELEASE_GUIDE.md)。公开战役续玩未开放，经典固定30波保存/继续保留。源码同步、发行程序验证、平台上线与人工验收各自记录。
+当前Steam Windows为Build26260970，冻结生产来源47168f00；见[更新记录](STEAM_UPDATE_20261028.md)及[发布指南](STEAM_RELEASE_GUIDE.md)。公开战役续玩未开放，经典固定30波保存/继续保留。源码同步、发行程序验证、平台上线与人工验收各自记录。
 
 整理前的完整设置和历史工具状态保留于[Git提交5837d1bd](https://github.com/winterzh/Liangshan-Heroes/blob/5837d1bdc769f2847888a074f41b5c3d629c5529/docs/SOURCE_SETUP.md)，原10月20日文档归档说明见[历史全文与恢复](../qa/storage_cleanup_20261020/README.md)。专题入口见[文档导航](README.md)、[QA导航](../qa/README.md)及[GitHub约定](GITHUB_REPOSITORY.md)。

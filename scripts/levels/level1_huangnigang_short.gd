@@ -382,13 +382,26 @@ func _sync_controls(b) -> void:
 	if st in [CARRY,FORCE,WITHDRAW]:
 		b.mission.add_level_button("hg_empty_hands", "选中 · 空手同伴",
 			Localize.text("只选中未推车的同伴；按取车、装车、出冈标记分别下令。"))
+	if st in [CARRY,FORCE]:
+		b.mission.add_level_button("hg_transport_next", "下一步 · 当前所选",
+			Localize.text("选中一位七星后，定位他当前的取车、装车或出冈标记；仍需右键下令。"))
 	b.mission.add_map_locator("西冈口 · 推车退路",GATE_W)
 	if st in [MARCH,INQUIRY]: b.mission.add_map_locator("另一片松阴 · 七星与枣车",SHADE)
 
 func activate_mission_button(b, button_id: String) -> void:
 	if b.phase != b.Phase.FIGHT: return
+	if button_id == "hg_transport_next":
+		if st not in [CARRY,FORCE]: return
+		var action_id := _selected_transport_action(b)
+		if action_id.is_empty():
+			b.mission.set_status(Localize.text("请单独选中一位可推车的七星；白胜负责同行。"))
+			return
+		var action: Dictionary=b.mission.actions[action_id]
+		b.center_camera_cell(action.cell)
+		b.mission.set_status(Localize.format_text("下一步：请右键“%s”标记。", [Localize.text(action.label)]))
+		return
 	if button_id == "hg_empty_hands":
-		var members := actors.filter(func(u): return is_instance_valid(u) and u.hp>0 and u.story_outcome=="" and not u.has_meta("carrying_tribute") and not u.has_meta("pushing_empty_tribute"))
+		var members := actors.filter(func(u): return is_instance_valid(u) and u.hp>0 and u.story_outcome=="" and (st==WITHDRAW or u.key in SEVEN) and not u.has_meta("carrying_tribute") and not u.has_meta("pushing_empty_tribute"))
 		if members.is_empty():
 			b.mission.set_status(Localize.text("当前没有可选的空手同伴。"))
 			return
@@ -407,6 +420,19 @@ func activate_mission_button(b, button_id: String) -> void:
 		b.mission.set_status(Localize.format_text("已选中%s；请右键目标标记。", [Localize.text(u.display_name)]))
 	else:
 		b.mission.set_status(Localize.text("该人物当前无法行动。"))
+
+func _selected_transport_action(b) -> String:
+	# Navigation only: never requests an action, moves an actor or changes cargo.
+	if b.selection.size()!=1: return ""
+	var actor=b.selection[0]
+	if not is_instance_valid(actor) or actor not in actors or not b.units.has(actor) \
+		or actor.key not in SEVEN or actor.hp<=0 or actor.story_outcome!="": return ""
+	for action_id in b.mission.actions:
+		var name:=String(action_id)
+		if not name.begins_with("force_take_") and not name.begins_with("force_load_") and not name.begins_with("force_deliver_"): continue
+		var action: Dictionary=b.mission.actions[action_id]
+		if not action.done and actor.key in action.actors: return name
+	return ""
 
 func top_status(b) -> String:
 	var title: String={PREPARE:"商客歇脚",MARCH:"押队上冈",INQUIRY:"杨志盘问",ARRIVAL:"白胜挑酒入场",WINE:"白胜卖酒",CARRY:"装车推行",WITHDRAW:"收拢同行人",FORCE:"身份败露"}.get(st,"")

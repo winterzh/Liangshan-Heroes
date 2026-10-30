@@ -5,7 +5,7 @@ const STORY_DONE := "done"
 const STORY_MISSED := "missed"
 const PRESENTATION_META := &"campaign_presentation_v1"
 const LEVEL_BUTTON_IDS := {
-	"level1": ["hg_chao_gai", "hg_liu_tang", "hg_bai_sheng", "hg_wu_yong", "hg_empty_hands"],
+	"level1": ["hg_chao_gai", "hg_liu_tang", "hg_bai_sheng", "hg_wu_yong", "hg_empty_hands", "hg_transport_next"],
 	"level2": ["jiang_depart"], "level3": ["zhu_select_shi_qian", "zhu_select_rescued"],
 	"level4": [], "level5": ["gao_end"], "level6": ["pine_lu", "pine_group"],
 	"level7": ["forest_wu", "forest_shi"], "level8": []}
