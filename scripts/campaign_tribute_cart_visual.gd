@@ -39,6 +39,23 @@ static func layered(unit) -> bool:
 static func draw(unit, tint: Color) -> void:
 	Wheel.draw_ground_cart(unit, BASE_BODY_SIZE * unit.visual_scale, tint)
 
+static func receive_wheel_phase(cart, actor) -> bool:
+	# The same cart keeps its visual wheel angle when loaded or relayed. The
+	# receiver's previous vehicle must not supply this vehicle's spoke phase.
+	if not is_instance_valid(cart) or not Wheel.enabled(actor) or cart.map != actor.map \
+		or cart.battle != actor.battle or cart.key != "treasure_cart": return false
+	var b = actor.battle
+	if b == null or b.level == null or b.level.get_script().resource_path != "res://scripts/levels/level1_huangnigang_short.gd": return false
+	var index: Variant = actor.get_meta("carrying_tribute", -1)
+	if not preload("res://scripts/huangnigang_transport.gd").is_cart(index) or index >= b.level.bundles.size() \
+		or b.level.bundles[index] != cart or b.level.cargo.get(index) != actor \
+		or b.level._cargo_was_delivered(b, index): return false
+	if cart.art_variant != "tribute_load_alpha_20260906" \
+		or String(cart.setup_def.get("campaign_object", "")) != "tribute_load_alpha_20260906" \
+		or cart.has_meta("campaign_environment_route") or not is_finite(cart._tribute_wheel_angle): return false
+	actor._tribute_wheel_angle = fposmod(cart._tribute_wheel_angle, TAU)
+	return true
+
 static func place_from_carrier(cart, actor) -> bool:
 	# A dying carrier also releases the same vehicle. Registration ownership
 	# is separate from the live-body drawing gate; no terminal body is rendered.

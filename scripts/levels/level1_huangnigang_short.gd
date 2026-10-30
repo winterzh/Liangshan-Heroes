@@ -292,7 +292,9 @@ func _load_tribute_cart(b,action_id: String,actor,index: int) -> void:
 	_assign_loaded_cart(b,index,actor)
 
 func _assign_loaded_cart(b,index: int,actor) -> void:
-	cargo[index]=actor;actor.set_meta("carrying_tribute",index);actor.queue_redraw()
+	cargo[index]=actor;actor.set_meta("carrying_tribute",index)
+	preload("res://scripts/campaign_tribute_cart_visual.gd").receive_wheel_phase(bundles[index],actor)
+	actor.queue_redraw()
 	bundles[index].display_name="第%d车·%d担"%[index+1,Transport.weight(index)]
 	_set_force_carrier_eligible(b,actor.key,false);actor.apply_slow(0.78,999)
 	b.mission.mark("force_taken_%d_%d"%[index,int(force_attempts.get(index,0))],Localize.format_text("%s推起第%d车，载%d担财物。",[actor.display_name,index+1,Transport.weight(index)]))
@@ -503,17 +505,37 @@ func _empty_cart_claim_cell(b,index: int) -> Vector2i:
 
 func _empty_cart_anchor(actor) -> Vector2:
 	var direction: Vector2={"se":Vector2.RIGHT,"sw":Vector2.DOWN,"ne":Vector2.UP,"nw":Vector2.LEFT}.get(actor.animation_direction,Vector2.RIGHT)
-	return actor.position+direction*24.0
+	return actor.map.limit_displacement(actor.position,actor.position+direction*24.0,"land")
+
+func _empty_cart_step(actor,origin: Vector2,delta: float) -> Vector2:
+	if not is_finite(delta) or delta<=0.0:return origin
+	var anchor:=_empty_cart_anchor(actor)
+	if not actor.map.is_open_world(anchor,"land"):return origin
+	var start:=origin
+	if not actor.map.is_open_world(start,"land"):
+		# Recover an old prop already inside a wall to the actor's reachable
+		# side, never to an unrelated nearest tile across the obstruction.
+		start=actor.map.limit_displacement(actor.position,start,"land")
+		if not actor.map.is_open_world(start,"land"):return origin
+	var target:=anchor
+	if not actor.map._segment_open(start,anchor,"land"):
+		var path: PackedVector2Array=actor.map.find_path(start,anchor,0,"land")
+		if path.is_empty():return start
+		target=path[0]
+	# Follow the existing land path at the original speed. Exact segment
+	# checks prevent corner/shoreline cuts even with a long frame delta.
+	return actor.map.limit_displacement(start,start.move_toward(target,delta*120.0),"land")
 
 func _update_empty_cart_positions(b,delta: float) -> void:
 	for index in empty_cargo:
 		var actor=empty_cargo[index]
 		if not is_instance_valid(actor) or actor.hp<=0 or actor.story_outcome!="":continue
+		if actor.map!=b.map or actor.get_meta("pushing_empty_tribute",-1)!=index:continue
 		if index>=jujube_carts.size() or not is_instance_valid(jujube_carts[index]):continue
 		var date_cart=jujube_carts[index]
 		# The original prop travels continuously, including during the short
 		# handoff from its parked position and changes of direction.
-		date_cart.position=date_cart.position.move_toward(_empty_cart_anchor(actor),maxf(0.0,delta)*120.0)
+		date_cart.position=_empty_cart_step(actor,date_cart.position,delta)
 		b.map.sync_render_position(date_cart)
 		date_cart.z_index=clampi(1+int(b.map.project(date_cart.position).y),1,3400)
 

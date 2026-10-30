@@ -1,0 +1,316 @@
+extends "base.gd"
+## One original scene. Real map/callbacks/movement; authored cliff plus explicitly restored footprint fixtures; no unit/map substitute.
+const Ground=preload("res://scripts/campaign_tribute_cart_visual.gd")
+const Wheel=preload("res://scripts/tribute_cart_wheel_visual.gd")
+const Transport=preload("res://scripts/huangnigang_transport.gd")
+var out := ""
+var screenshots: Array=[]
+var samples: Array=[]
+var injected_footprint_fixture := false
+func _frames(n := 2) -> void:
+	for i in range(n): await get_tree().process_frame
+
+func _snapshot(name: String) -> Image:
+	await _frames()
+	RenderingServer.force_draw(false)
+	var image := root.get_texture().get_image()
+	var path := out.path_join(name + ".png")
+	check(image != null and not image.is_empty() and image.save_png(path) == OK, "original viewport " + name)
+	screenshots.append({"path": name + ".png", "sha256": FileAccess.get_sha256(path)})
+	return image
+
+func _start_once():
+	var campaign = root.get_node("Campaign")
+	campaign.current = 0
+	for key in ["skirmish", "skirmish_ai", "arena", "scenario", "custom_defense", "scale_on", "ai_friendly"]: campaign.set(key, false)
+	root.get_node("Settings").auto_micro_level = 0
+	seed(5088120)
+	var b = load("res://scenes/main.tscn").instantiate()
+	# Production new-game API consumes the actual provider result resolved above.
+	# This avoids a duplicate full source scan in Battle._ready; no provider,
+	# gameplay, art, RNG or callback is stubbed and no identity is fabricated.
+	var configured: Dictionary = b.configure_new_gameplay_rng(trusted, 5088120)
+	check(configured.ok and b._gameplay_content_identity == trusted, "production new-game binding uses this process's actual provider identity")
+	root.add_child(b); current_scene = b
+	await get_tree().process_frame
+	b.hud._intro_root.hide(); b._on_intro_done(); b._on_start_battle()
+	check(b.phase == b.Phase.FIGHT, "actual new-game entry reaches fight")
+	b.set_process(false); b.set_physics_process(false); b.fog = false
+	b.camera.set_process(false); b.camera.set_physics_process(false); b.camera.position_smoothing_enabled = false
+	for unit in b.units: unit.set_physics_process(false)
+	b.level._ensure_bai(b, false).set_physics_process(false)
+	b.level.st = b.level.CARRY; b.level.drug_done = true
+	b.level._begin_cargo_choice(b); b.level._sync_controls(b); b.mission.tick(0)
+	b.process_mode = Node.PROCESS_MODE_DISABLED
+	return b
+
+func _arrive(b, actor, prefix: String) -> String:
+	b.select_single(actor, false)
+	var id: String = b.level._selected_transport_action(b)
+	check(id.begins_with(prefix), "original next action " + actor.key + prefix)
+	if id.is_empty(): return ""
+	actor.order_stop(); actor.position = b.map.cell_to_world(b.mission.actions[id].cell)
+	if prefix == "force_load_":
+		var index: int = actor.get_meta("pushing_empty_tribute", -1)
+		b.level.jujube_carts[index].position = b.level._empty_cart_anchor(actor)
+	check(b.mission.request_action(id), "original mission accepts " + id)
+	b.mission.tick(1.0)
+	check(b.mission.actions[id].done, "original callback completes " + id)
+	return id
+
+
+
+func _photo(b,unit) -> void:
+	b.camera.zoom=Vector2.ONE*2.8
+	b.map.sync_render_position(unit)
+	b.camera.position=b.to_screen(unit.position)+Vector2(0,-22)
+	b.camera.force_update_scroll();unit.queue_redraw()
+
+func _ledger(b) -> Array:
+	return [b.level.delivered,b.level.cargo_ready.duplicate(),b.level.cargo.duplicate(),b.level.empty_cargo.duplicate(),
+		b.level.force_attempts.duplicate(),b.map.navigation_revision()]
+
+func _barrier_case(b,actor) -> Dictionary:
+	for y in range(1,b.map.h-1):
+		for x in range(1,b.map.w-1):
+			var wall:=Vector2i(x,y)
+			if b.map.is_open_cell(wall,"land"):continue
+			for axis: Vector2i in [Vector2i.RIGHT,Vector2i.DOWN]:
+				if not b.map.is_open_cell(wall-axis,"land") or not b.map.is_open_cell(wall+axis,"land"):continue
+				var start: Vector2=b.map.cell_to_world(wall-axis)
+				actor.position=b.map.cell_to_world(wall+axis)
+				actor.animation_direction="nw" if axis==Vector2i.RIGHT else "ne"
+				var anchor: Vector2=b.level._empty_cart_anchor(actor)
+				var path: PackedVector2Array=b.map.find_path(start,anchor,0,"land")
+				if path.is_empty():continue
+				var length:=0.0;var previous:=start
+				for point: Vector2 in path:length+=point.distance_to(previous);previous=point
+				if length<=256.0:return {"start":start,"wall":b.map.cell_to_world(wall),"anchor":anchor,"path":path,"direction":actor.animation_direction,"injected":false}
+	# Current chapter may have only continuous cliff walls. Exercise detour
+	# using one explicit temporary footprint on the SAME original GameMap.
+	for y in range(9,b.map.h-2):
+		for x in range(2,b.map.w-2):
+			var cell:=Vector2i(x,y)
+			if not b.map.area_buildable(cell,1):continue
+			b.map.block_footprint(cell,0,true)
+			actor.position=b.map.cell_to_world(cell+Vector2i.RIGHT);actor.animation_direction="nw"
+			var anchor: Vector2=b.level._empty_cart_anchor(actor)
+			var start: Vector2=b.map.cell_to_world(cell-Vector2i.RIGHT)
+			var path: PackedVector2Array=b.map.find_path(start,anchor,0,"land")
+			if path.is_empty():b.map.block_footprint(cell,0,false);continue
+			injected_footprint_fixture=true
+			return {"start":start,"wall":b.map.cell_to_world(cell),"anchor":anchor,"path":path,"direction":"nw","injected":true,"footprint_cell":cell}
+	return {}
+
+func _empty_nav(b,actor,index: int) -> void:
+	var prop=b.level.jujube_carts[index]
+	var original_blocks: PackedInt32Array=b.map._block_count.duplicate()
+	# An actual authored cliff boundary, with no terrain edits.
+	var natural_found:=false
+	for y in range(1,b.map.h-1):
+		for x in range(1,b.map.w-1):
+			var cell:=Vector2i(x,y)
+			if b.map.is_open_cell(cell,"land") and not b.map.is_open_cell(cell+Vector2i.UP,"land"):
+				actor.position=b.map.cell_to_world(cell);actor.animation_direction="ne"
+				var raw: Vector2=actor.position+Vector2.UP*24.0
+				var clipped: Vector2=b.level._empty_cart_anchor(actor)
+				check(not b.map.is_open_world(raw,"land") and b.map.is_open_world(clipped,"land") and b.map._segment_open(actor.position,clipped,"land"),"authored chapter cliff clips forward cart anchor without navigation edits")
+				natural_found=true;break
+		if natural_found:break
+	check(natural_found,"actual authored cliff boundary sampled")
+	var example:=_barrier_case(b,actor)
+	check(not example.is_empty(),"original GameMap provides an explicit documented detour case")
+	if example.is_empty():return
+	var before:=_ledger(b)
+	var direction: Vector2=Vector2.LEFT if example.direction=="nw" else Vector2.UP
+	var raw_anchor: Vector2=actor.position+direction*24.0
+	check(not b.map.is_open_world(raw_anchor,"land") and b.map.is_open_world(example.anchor,"land"),"original 24px anchor crossed obstruction; new anchor stops on reachable side")
+	check(b.map._segment_open(actor.position,example.anchor,"land") and actor.position.distance_to(example.anchor)<=24.01,"clipped anchor remains directly reachable from original actor")
+	var legacy_step: Vector2=example.start.move_toward(raw_anchor,36.0)
+	check(not b.map._segment_open(example.start,legacy_step,"land"),"explicit legacy straight-step formula reproduces the obstruction cut")
+	prop.position=example.start
+	var segments_ok:=true;var speed_ok:=true
+	var trace: Array=[prop.position]
+	for i in range(240):
+		var previous: Vector2=prop.position
+		b.level._update_empty_cart_positions(b,1.0/60.0)
+		segments_ok=segments_ok and b.map.is_open_world(prop.position,"land") and b.map._segment_open(previous,prop.position,"land")
+		speed_ok=speed_ok and prop.position.distance_to(previous)<=2.001
+		trace.append(prop.position)
+		if prop.position.distance_to(example.anchor)<.01:break
+	check(segments_ok and speed_ok,"actual original prop follows legal segments at unchanged 120px/s")
+	check(prop.position.distance_to(example.anchor)<.01,"original cart reaches actor around the documented original-map obstruction")
+	check(before==_ledger(b),"land following changes no cargo identity count command or navigation revision")
+	check(b.level.jujube_carts[index]==prop,"detour never replaces original cart node")
+	for delta: float in [0.0,-0.1,INF,NAN]:
+		check(b.level._empty_cart_step(actor,example.start,delta)==example.start,"nonpositive or nonfinite delta cannot move original prop "+str(delta))
+	var long_step: Vector2=b.level._empty_cart_step(actor,example.start,5.0)
+	check(b.map.is_open_world(long_step,"land") and b.map._segment_open(example.start,long_step,"land"),"long frame follows checked land path rather than skipping wall")
+	var recovery: Vector2=b.level._empty_cart_step(actor,example.wall,1.0/60.0)
+	check(b.map.is_open_world(recovery,"land") and b.map._segment_open(actor.position,recovery,"land"),"explicit old invalid prop fixture recovers on actor's reachable side")
+	var position: Vector2=prop.position
+	actor.remove_meta("pushing_empty_tribute")
+	b.level._update_empty_cart_positions(b,1.0)
+	check(prop.position==position,"stale dictionary cannot move cart without exact owner metadata")
+	actor.set_meta("pushing_empty_tribute",index)
+	samples.append({"kind":"original_map_detour","case":example,"trace":trace,"invalid_old_prop_recovery_is_fixture":true})
+	# A closed ring is an explicit temporary no-route fixture, not authored terrain.
+	var enclosed: Vector2i=b.map.world_to_cell(example.start)
+	var ring: Array[Vector2i]=[]
+	for dy in range(-1,2):
+		for dx in range(-1,2):
+			if dx!=0 or dy!=0:ring.append(enclosed+Vector2i(dx,dy))
+	for cell: Vector2i in ring:b.map.block_footprint(cell,0,true)
+	check(b.level._empty_cart_step(actor,example.start,1.0)==example.start,"unreachable target leaves original cart pending without a wall-crossing fallback")
+	for cell: Vector2i in ring:b.map.block_footprint(cell,0,false)
+	if example.injected:b.map.block_footprint(example.footprint_cell,0,false)
+	check(b.map._block_count==original_blocks,"all temporary footprint fixtures restore original navigation block counts")
+	_photo(b,actor);await _snapshot("empty_cart_after_detour")
+
+func _empty_walk(b,actor,index: int) -> void:
+	var prop=b.level.jujube_carts[index]
+	actor.position=b.map.cell_to_world(b.map.nearest_open(Vector2i(12,12),"land"))
+	actor.animation_direction="se";actor.face_left=false;actor.order_stop()
+	prop.position=b.level._empty_cart_anchor(actor)
+	var origin: Vector2=actor.position;var angle: float=actor._tribute_wheel_angle
+	var same_cart: int=prop.get_instance_id()
+	b.process_mode=Node.PROCESS_MODE_INHERIT;actor.set_physics_process(true)
+	actor.order_move(b.map.cell_to_world(b.map.nearest_open(Vector2i(16,12),"land")))
+	var legal:=true;var speed:=true
+	for i in range(120):
+		await get_tree().physics_frame
+		var previous: Vector2=prop.position
+		b.level._update_empty_cart_positions(b,1.0/60.0)
+		legal=legal and b.map._segment_open(previous,prop.position,"land")
+		speed=speed and prop.position.distance_to(previous)<=2.001
+	actor.set_physics_process(false);actor.order_stop();b.process_mode=Node.PROCESS_MODE_DISABLED
+	check(actor.position.distance_to(origin)>16.0 and legal and speed,"real original Unit movement advances the same empty cart on legal bounded steps")
+	check(prop.get_instance_id()==same_cart and actor.get_meta("pushing_empty_tribute",-1)==index and actor._tribute_wheel_angle==angle and not Wheel.enabled(actor),"empty trip preserves identity and never spins loaded-cart visual cache")
+	_photo(b,actor);await _snapshot("empty_cart_after_real_walk")
+
+func _angle_distance(a: float,c: float) -> float:return absf(wrapf(a-c,-PI,PI))
+
+func _loaded_walk(b,actor,forbidden: Array) -> void:
+	actor.position=b.map.cell_to_world(b.map.nearest_open(Vector2i(12,12),"land"))
+	actor.animation_direction="se";actor.face_left=false;actor.order_stop()
+	var origin: Vector2=actor.position
+	b.process_mode=Node.PROCESS_MODE_INHERIT;actor.set_physics_process(true)
+	actor.order_move(b.map.cell_to_world(b.map.nearest_open(Vector2i(16,12),"land")))
+	for i in range(150):
+		await get_tree().physics_frame
+		var distinct: bool=forbidden.all(func(value):return _angle_distance(actor._tribute_wheel_angle,value)>.45)
+		if i>=30 and actor.position.distance_to(origin)>16.0 and distinct:break
+	actor.set_physics_process(false);actor.order_stop();b.process_mode=Node.PROCESS_MODE_DISABLED
+	check(actor.position.distance_to(origin)>16.0 and forbidden.all(func(value):return _angle_distance(actor._tribute_wheel_angle,value)>.45),"actual loaded movement establishes a distinct live phase "+actor.key)
+
+func _wheel_bounds(b,actor) -> Rect2i:
+	var row: Dictionary=Wheel.FIT[actor.animation_direction]
+	var pose: Dictionary=Wheel._pose(actor)
+	var scale_native: float=actor.radius*3.7*actor.visual_scale/float(pose.virtual_canvas_reference)
+	var translation:=Vector2(row.rim_translation_original_native[0],row.rim_translation_original_native[1])
+	var center_native:=Vector2(row.rim_plane_center[0],row.rim_plane_center[1])
+	var axes: Transform2D=Wheel._matrix(row.rim_inner_plane_axes)
+	var tr: Transform2D=actor.get_global_transform_with_canvas()*b.map.ISO_INV
+	var parent_view: Transform2D=actor.get_parent().get_global_transform_with_canvas()
+	tr.origin-=(parent_view.x+parent_view.y)*float(actor.get_meta("render_height",0.0))
+	var center: Vector2=tr*Wheel._point(pose,translation+float(row.rim_uniform_scale)*center_native,scale_native)
+	var bounds:=Rect2(center,Vector2.ZERO)
+	for i in range(64):
+		var a:=TAU*float(i)/64.0
+		bounds=bounds.expand(tr*Wheel._point(pose,translation+float(row.rim_uniform_scale)*(center_native+axes*Vector2(cos(a),sin(a))*.7),scale_native))
+	return Rect2i(bounds.position.floor(),bounds.size.ceil()).intersection(Rect2i(Vector2i.ZERO,root.size))
+
+func _relay(b,source,receiver,direction: String) -> void:
+	source.animation_direction=direction;source.face_left=direction in ["sw","nw"]
+	var expected: float=source._tribute_wheel_angle
+	var previous_phase: float=receiver._tribute_wheel_angle
+	var cart=b.level.bundles[0];var cart_instance: int=cart.get_instance_id()
+	source.take_damage(100000.0,null,false,true)
+	check(source.hp<=0 and not source.has_meta("carrying_tribute") and b.units.has(cart) and is_equal_approx(cart._tribute_wheel_angle,expected),"real death drops original cart and live wheel phase "+source.key)
+	_photo(b,cart);await _snapshot("drop_"+source.key)
+	receiver.animation_direction=direction;receiver.face_left=direction in ["sw","nw"]
+	# The receiver may also have its own empty-cart task. Select the exact
+	# dropped first-cart marker, as the player would, rather than Next Step.
+	var take_id: String="force_take_0_%d"%int(b.level.force_attempts.get(0,0))
+	b.select_single(receiver,false)
+	check(b.mission.actions.has(take_id),"exact original dropped-cart action exists "+take_id)
+	receiver.order_stop();receiver.position=b.map.cell_to_world(b.mission.actions[take_id].cell)
+	check(b.mission.request_action(take_id),"actual surviving receiver requests exact dropped cart "+receiver.key)
+	b.mission.tick(1.0)
+	check(b.mission.actions[take_id].done,"actual original relay callback completes "+take_id)
+	check(receiver.get_meta("carrying_tribute",-1)==0 and cart.get_instance_id()==cart_instance and not b.units.has(cart),"original take callback relays the exact same cart "+receiver.key)
+	check(_angle_distance(receiver._tribute_wheel_angle,expected)<.0001,"receiver inherits original cart phase rather than previous own vehicle "+receiver.key)
+	check(not Ground.receive_wheel_phase(b.level.bundles[1],receiver),"another cargo identity cannot replace receiver phase")
+	var inherited: float=receiver._tribute_wheel_angle
+	var variant: String=receiver.art_variant
+	receiver.art_variant="hn_bai_sheng"
+	check(not Ground.receive_wheel_phase(cart,receiver) and receiver._tribute_wheel_angle==inherited,"foreign actor variant cannot receive this wheel")
+	receiver.art_variant=variant
+	_photo(b,receiver)
+	var bounds: Rect2i=_wheel_bounds(b,receiver)
+	# The old receiver cache is an explicit diagnostic fixture, not old-source execution.
+	receiver._tribute_wheel_angle=previous_phase;receiver.queue_redraw()
+	var old_image: Image=await _snapshot("receiver_old_cache_"+receiver.key)
+	receiver._tribute_wheel_angle=inherited;receiver.queue_redraw()
+	var current_image: Image=await _snapshot("receiver_inherited_"+receiver.key)
+	var changed:=0
+	for y in range(bounds.position.y,bounds.end.y):
+		for x in range(bounds.position.x,bounds.end.x):
+			if old_image.get_pixel(x,y)!=current_image.get_pixel(x,y):changed+=1
+	check(changed>4,"phase inheritance changes actual wheel-region pixels "+receiver.key)
+	samples.append({"kind":"real_death_relay","from":source.key,"to":receiver.key,"previous_receiver_phase":previous_phase,"inherited_cart_phase":inherited,"direction":direction,"wheel_region_changed_pixels":changed,"wheel_bbox_xywh":[bounds.position.x,bounds.position.y,bounds.size.x,bounds.size.y],"entity_id":cart.entity_id})
+
+func _run() -> void:
+	out=OS.get_environment("HG_OUTPUT_ROOT");root.size=Vector2i(1280,720);root.content_scale_size=root.size
+	AudioServer.set_bus_mute(0,true)
+	if not identity(true):report();return
+	var b = await _start_once()
+	var ruan=b.find_unit("ruan_xiaoqi")
+	_arrive(b,ruan,"force_take_")
+	await _empty_nav(b,ruan,6)
+	await _empty_walk(b,ruan,6)
+	ruan.animation_direction="nw";ruan.face_left=true
+	_arrive(b,ruan,"force_load_")
+	check(is_equal_approx(ruan._tribute_wheel_angle,b.level.bundles[6]._tribute_wheel_angle),"initial loading receives original seventh cart phase")
+	await _loaded_walk(b,ruan,[0.0])
+	_arrive(b,ruan,"force_deliver_")
+	var previous_ruan_phase: float=ruan._tribute_wheel_angle
+	check(b.level.delivered==1 and not Wheel.enabled(ruan),"receiver genuinely delivered its prior own vehicle")
+	var chao=b.find_unit("chao_gai")
+	_arrive(b,chao,"force_take_");_arrive(b,chao,"force_load_")
+	check(is_equal_approx(chao._tribute_wheel_angle,b.level.bundles[0]._tribute_wheel_angle),"initial loading receives original first cart phase")
+	await _loaded_walk(b,chao,[0.0,previous_ruan_phase])
+	await _relay(b,chao,ruan,"se")
+	await _loaded_walk(b,ruan,[0.0])
+	var gong=b.find_unit("gongsun_sheng")
+	await _relay(b,ruan,gong,"sw")
+	await _loaded_walk(b,gong,[0.0])
+	var wu=b.find_unit("wu_yong")
+	await _relay(b,gong,wu,"ne")
+	var cart=b.level.bundles[0]
+	var before: Array=[wu.position,wu._order_serial,b.level.delivered,b.level.cargo_ready.duplicate()]
+	var phase: float=wu._tribute_wheel_angle
+	var source_phase: float=cart._tribute_wheel_angle
+	cart._tribute_wheel_angle=NAN
+	check(not Ground.receive_wheel_phase(cart,wu) and wu._tribute_wheel_angle==phase,"invalid transient cart phase cannot poison receiver")
+	cart._tribute_wheel_angle=source_phase
+	check(before==[wu.position,wu._order_serial,b.level.delivered,b.level.cargo_ready.duplicate()],"wheel transfer touches no positions orders counts or cargo membership")
+	_arrive(b,wu,"force_deliver_")
+	check(b.level.delivered==3 and _angle_distance(cart._tribute_wheel_angle,phase)<.0001 and not wu.has_meta("carrying_tribute"),"original final delivery retains inherited phase and counts only three actual loads")
+	var delivered_position: Vector2=cart.position
+	b.level._force_deliver_cargo(b,"force_deliver_0_3",wu,0)
+	check(b.level.delivered==3 and cart.position==delivered_position and not Ground.receive_wheel_phase(cart,wu),"duplicate or delivered cart cannot be re-assigned or double-counted")
+	var ledger: Dictionary=Transport.ledger(b.level.cargo_ready,{},b.level._delivered_cart_indices(b),true,{})
+	check(ledger.ok and ledger.delivered_loads==3 and not ledger.complete and not b.level.victory,"partial real ledger remains partial; no automatic completion")
+	_photo(b,cart);await _snapshot("final_original_cart")
+	var codec = load("res://scripts/run_unit_state.gd").new(null,null,null)
+	var saved: Dictionary=codec._read_explicit(wu)
+	var ground_saved: Dictionary=codec._read_explicit(cart)
+	check(not saved.has("_tribute_wheel_angle") and not ground_saved.has("_tribute_wheel_angle"),"receiver and ground wheel remain omitted visual caches")
+	codec._assign_values(wu,saved);codec._assign_values(cart,ground_saved)
+	check(wu._tribute_wheel_angle==0.0 and cart._tribute_wheel_angle==0.0,"existing explicit restore policy still rebuilds visual phases at zero")
+	await _dispose(b)
+	report({"scope":"empty-cart land following and same-original-cart live wheel-phase relay", "screenshots":screenshots,"samples":samples,
+		"no_map_or_unit_substitutes":true,"detour_uses_temporary_footprint_if_needed":injected_footprint_fixture,"unreachable_ring_is_temporary_fixture":true,"temporary_block_counts_restored":true,"old_receiver_phase_is_explicit_visual_fixture":true,
+		"wine_arrival_and_sampling_positions_and_stopped_simulation_are_fixtures":true,"full_playthrough":false,"full_regression_run":false,
+		"complete_empty_cart_art_or_loading_transition_accepted":false,"different_physique_grip_fit_accepted":false})
