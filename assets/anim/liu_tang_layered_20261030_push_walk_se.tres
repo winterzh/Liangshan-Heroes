@@ -1,0 +1,66 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/liu_tang_layered_20261030/push_contact_a.png" id="push_contact_a"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/liu_tang_layered_20261030/push_passing_a.png" id="push_passing_a"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/liu_tang_layered_20261030/push_contact_b.png" id="push_contact_b"]
+
+[ext_resource type="Texture2D" path="res://assets/characters/liu_tang_layered_20261030/push_passing_b.png" id="push_passing_b"]
+
+[sub_resource type="AtlasTexture" id="push_contact_a_se"]
+metadata/visible_top = 0.544163569
+metadata/independent_cart = true
+atlas = ExtResource("push_contact_a")
+region = Rect2(0, 0, 636, 658)
+margin = Rect2(515.247468, 686.9, 709, 687)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 2.722672
+
+[sub_resource type="AtlasTexture" id="push_passing_a_se"]
+metadata/visible_top = 0.524441041
+metadata/independent_cart = true
+atlas = ExtResource("push_passing_a")
+region = Rect2(0, 0, 634, 657)
+margin = Rect2(508.819575, 648.92, 672, 649)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 2.643725
+
+[sub_resource type="AtlasTexture" id="push_contact_b_se"]
+metadata/visible_top = 0.491615721
+metadata/independent_cart = true
+atlas = ExtResource("push_contact_b")
+region = Rect2(0, 0, 625, 641)
+margin = Rect2(425.578161, 503.9, 520, 504)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 2.317814
+
+[sub_resource type="AtlasTexture" id="push_passing_b_se"]
+metadata/visible_top = 0.523098107
+metadata/independent_cart = true
+atlas = ExtResource("push_passing_b")
+region = Rect2(0, 0, 628, 639)
+margin = Rect2(415.601238, 522.84, 534, 523)
+filter_clip = true
+metadata/draw_offset_px = Vector2(0, 0)
+metadata/authored_direction4 = true
+metadata/draw_scale = 2.352227
+
+[resource]
+animations = [{
+"frames": [
+{"duration": 1.0, "texture": SubResource("push_contact_a_se")},
+{"duration": 1.0, "texture": SubResource("push_passing_a_se")},
+{"duration": 1.0, "texture": SubResource("push_contact_b_se")},
+{"duration": 1.0, "texture": SubResource("push_passing_b_se")}
+],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}]

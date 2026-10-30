@@ -4084,15 +4084,15 @@ func _campaign_tribute_push_active() -> bool:
 		and has_meta("carrying_tribute") and not _dying and story_outcome.is_empty()
 
 
-## Only the exact opt-in Ruan7, Chao or Wu actor atlas can request its own loaded cart.
+## Only the exact opt-in owner and its registered actor atlas can request its loaded cart.
 ## Ordinary/foreign/unloaded/terminal bodies must not duplicate that object.
 func _campaign_tribute_layered_frame(frame: Texture2D) -> bool:
-	if not _campaign_tribute_push_active() or key not in ["ruan_xiaoqi", "chao_gai", "wu_yong"] or art_variant != "hn_" + key: return false
+	if not _campaign_tribute_push_active() or not CampaignArt.NATIVE_TRIBUTE_LAYERED_FAMILIES.has(key) or art_variant != "hn_" + key: return false
 	if not frame is AtlasTexture: return false
 	var atlas_frame := frame as AtlasTexture
 	if atlas_frame.atlas == null: return false
 	var independent: Variant = atlas_frame.get_meta("independent_cart", false)
-	return independent is bool and independent and atlas_frame.atlas.resource_path.begins_with("res://assets/characters/" + key + "_layered_20261018/")
+	return independent is bool and independent and atlas_frame.atlas.resource_path.begins_with("res://assets/characters/" + String(CampaignArt.NATIVE_TRIBUTE_LAYERED_FAMILIES[key]) + "/")
 
 
 func _campaign_tribute_push_state() -> String:

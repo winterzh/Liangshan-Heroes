@@ -195,14 +195,20 @@ static func native_wounded_owner(variant: String) -> String:
 
 ## Two-bucket shoulder art is restricted to Bai's explicit wine-carry states.
 ## His ordinary/unloaded body and every tribute carrier keep their own art.
+const NATIVE_TRIBUTE_LAYERED_FAMILIES := {
+	"ruan_xiaoqi": "ruan_xiaoqi_layered_20261018",
+	"chao_gai": "chao_gai_layered_20261018",
+	"wu_yong": "wu_yong_layered_20261018",
+	"liu_tang": "liu_tang_layered_20261030",
+}
+
 static func native_tribute_push_path(key: String, variant: String, state: String, direction: String) -> String:
 	var owners := {"hn_liu_tang":"liu_tang", "hn_chao_gai":"chao_gai", "hn_wu_yong":"wu_yong", "hn_gongsun_sheng":"gongsun_sheng", "hn_ruan_xiaoer":"ruan_xiaoer", "hn_ruan_xiaowu":"ruan_xiaowu", "hn_ruan_xiaoqi":"ruan_xiaoqi"}
 	if not owners.has(variant) or key != owners[variant] or direction not in DIRECTIONS:
 		return ""
 	if state not in ["push_idle", "push_walk", "parked_cart"]: return ""
-	if key == "ruan_xiaoqi": return "res://assets/anim/ruan_xiaoqi_layered_20261018_%s_%s.tres" % [state, direction]
-	if key == "chao_gai": return "res://assets/anim/chao_gai_layered_20261018_%s_%s.tres" % [state, direction]
-	if key == "wu_yong": return "res://assets/anim/wu_yong_layered_20261018_%s_%s.tres" % [state, direction]
+	if NATIVE_TRIBUTE_LAYERED_FAMILIES.has(key):
+		return "res://assets/anim/%s_%s_%s.tres" % [NATIVE_TRIBUTE_LAYERED_FAMILIES[key], state, direction]
 	return "res://assets/anim/%s_pushcart_20261017_%s_%s.tres" % [key, state, direction]
 
 
