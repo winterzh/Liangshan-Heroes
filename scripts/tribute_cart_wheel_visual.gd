@@ -9,11 +9,28 @@ const FIT: Dictionary = {"se":{"region":[0,0,627,730],"rim_uniform_scale":0.6573
 
 const CART_POSES: Dictionary = {"chao_gai":{"se":{"pivot_native":[111.32183908045977,403.0],"virtual_canvas_reference":494.0,"draw_offset_px":[0,0]},"sw":{"pivot_native":[1138.8687691944247,417.0],"virtual_canvas_reference":515.0,"draw_offset_px":[0,0]},"ne":{"pivot_native":[147.9424266455194,1223.0],"virtual_canvas_reference":644.0,"draw_offset_px":[0,0]},"nw":{"pivot_native":[1126.4842845326716,1188.0],"virtual_canvas_reference":645.0,"draw_offset_px":[0,0]}},"wu_yong":{"se":{"pivot_native":[111.32183908045977,403.0],"virtual_canvas_reference":494.0,"draw_offset_px":[0,0]},"sw":{"pivot_native":[1138.8687691944247,417.0],"virtual_canvas_reference":515.0,"draw_offset_px":[0,0]},"ne":{"pivot_native":[147.9424266455194,1223.0],"virtual_canvas_reference":644.0,"draw_offset_px":[0,0]},"nw":{"pivot_native":[1126.4842845326716,1188.0],"virtual_canvas_reference":645.0,"draw_offset_px":[0,0]}},"liu_tang":{"se":{"pivot_native":[111.32183908045977,403.0],"virtual_canvas_reference":494,"draw_offset_px":[0,0]},"sw":{"pivot_native":[1138.8687691944247,417.0],"virtual_canvas_reference":515,"draw_offset_px":[0,0]},"ne":{"pivot_native":[147.9424266455194,1223.0],"virtual_canvas_reference":644,"draw_offset_px":[0,0]},"nw":{"pivot_native":[1126.4842845326716,1188.0],"virtual_canvas_reference":645,"draw_offset_px":[0,0]}},"gongsun_sheng":{"se":{"pivot_native":[111.32183908045977,403.0],"virtual_canvas_reference":494.0,"draw_offset_px":[0,0]},"sw":{"pivot_native":[1138.8687691944247,417.0],"virtual_canvas_reference":515.0,"draw_offset_px":[0,0]},"ne":{"pivot_native":[147.9424266455194,1223.0],"virtual_canvas_reference":644.0,"draw_offset_px":[0,0]},"nw":{"pivot_native":[1126.4842845326716,1188.0],"virtual_canvas_reference":645.0,"draw_offset_px":[0,0]}},"ruan_xiaoer":{"se":{"pivot_native":[111.32183908045977,403.0],"virtual_canvas_reference":494.0,"draw_offset_px":[0,0]},"sw":{"pivot_native":[1138.8687691944247,417.0],"virtual_canvas_reference":515.0,"draw_offset_px":[0,0]},"ne":{"pivot_native":[147.9424266455194,1223.0],"virtual_canvas_reference":644.0,"draw_offset_px":[0,0]},"nw":{"pivot_native":[1126.4842845326716,1188.0],"virtual_canvas_reference":645.0,"draw_offset_px":[0,0]}},"ruan_xiaowu":{"se":{"pivot_native":[111.32183908045977,403.0],"virtual_canvas_reference":494.0,"draw_offset_px":[0,0]},"sw":{"pivot_native":[1138.8687691944247,417.0],"virtual_canvas_reference":515.0,"draw_offset_px":[0,0]},"ne":{"pivot_native":[147.9424266455194,1223.0],"virtual_canvas_reference":644.0,"draw_offset_px":[0,0]},"nw":{"pivot_native":[1126.4842845326716,1188.0],"virtual_canvas_reference":645.0,"draw_offset_px":[0,0]}}}
 
-static func enabled(unit) -> bool:
+const GROUND_POSES: Dictionary = {
+	"se": {"pivot_native": [307.0, 560.0], "virtual_canvas_reference": 494.0, "draw_offset_px": [0, 0]},
+	"sw": {"pivot_native": [950.3627450980392, 584.0], "virtual_canvas_reference": 515.0, "draw_offset_px": [0, 0]},
+	"ne": {"pivot_native": [473.77319587628864, 1050.0], "virtual_canvas_reference": 644.0, "draw_offset_px": [0, 0]},
+	"nw": {"pivot_native": [799.2150537634409, 1070.0], "virtual_canvas_reference": 645.0, "draw_offset_px": [0, 0]},
+}
+
+static func owns_registration(unit) -> bool:
 	return is_instance_valid(unit) and (unit.key == "ruan_xiaoqi" or CART_POSES.has(unit.key)) \
 		and unit.art_variant == "hn_" + unit.key \
-		and is_instance_valid(unit.map) and unit._campaign_tribute_push_active() \
+		and is_instance_valid(unit.map) \
 		and FIT.has(unit.animation_direction)
+
+static func enabled(unit) -> bool:
+	return owns_registration(unit) and unit._campaign_tribute_push_active()
+
+static func ground_contact(unit, body_size: float) -> Vector2:
+	# Native wheel-ground registration from the adopted ground-cart manifest.
+	# Rebase the same cart from the carrier's feet to its own wheel contact.
+	var ground: Array = GROUND_POSES[unit.animation_direction].pivot_native
+	var pose: Dictionary = _pose(unit)
+	return _point(pose, Vector2(ground[0], ground[1]), body_size / float(pose.virtual_canvas_reference))
 
 static func _pose(unit) -> Dictionary:
 	# Each actor retains its authored cart-to-hand registration. Shared wheel
@@ -55,8 +72,13 @@ static func _point(geometry: Dictionary, native: Vector2, scale_native: float) -
 	return (native-Vector2(pivot[0],pivot[1])+Vector2(offset[0],offset[1]))*scale_native
 
 static func draw_cart(unit, body_size: float, tint: Color) -> void:
+	_draw_cart(unit, body_size, tint, _pose(unit))
+
+static func draw_ground_cart(unit, body_size: float, tint: Color) -> void:
+	_draw_cart(unit, body_size, tint, GROUND_POSES[unit.animation_direction])
+
+static func _draw_cart(unit, body_size: float, tint: Color, pose: Dictionary) -> void:
 	var row: Dictionary=FIT[unit.animation_direction]
-	var pose: Dictionary=_pose(unit)
 	var scale_native: float=body_size/float(pose.virtual_canvas_reference)
 	var alpha:=Color(1,1,1,tint.a)
 	unit.draw_set_transform_matrix(unit.map.ISO_INV)

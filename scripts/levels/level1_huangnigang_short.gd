@@ -305,8 +305,10 @@ func _force_deliver_cargo(b,action_id: String,actor,index: int) -> void:
 	if not cargo.has(index) or cargo[index]!=actor or actor.get_meta("carrying_tribute",-1)!=index:return
 	if not bool(cargo_ready.get(index,false)) or index>=bundles.size() or not is_instance_valid(bundles[index]) or bundles[index].hp<=0:return
 	if not _transport_action_arrived(b,action_id,actor):return
+	var placed := preload("res://scripts/campaign_tribute_cart_visual.gd").place_from_carrier(bundles[index],actor)
+	if not placed:bundles[index].position=b.map.cell_to_world(_cart_destination(index))
 	actor.remove_meta("carrying_tribute");actor.queue_redraw();actor.apply_slow(1,0)
-	bundles[index].position=b.map.cell_to_world(_cart_destination(index));bundles[index].faction=Unit.FACTION_LIANG
+	bundles[index].faction=Unit.FACTION_LIANG
 	_put_down_bundle(b,bundles[index]);cargo.erase(index);delivered+=Transport.weight(index)
 	_set_force_carrier_eligible(b,actor.key,true)
 	b.mission.mark("force_delivered_%d"%index,Localize.format_text("第%d车由%s推出黄泥冈，共载%d担。",[index+1,Localize.text(actor.display_name),Transport.weight(index)]))
@@ -576,7 +578,8 @@ func _delivered_cart_indices(b) -> Array:
 func _drop_carried_bundle(b,actor) -> void:
 	var index: int=int(actor.get_meta("carrying_tribute",-1))
 	if not Transport.is_cart(index) or not cargo.has(index) or cargo[index]!=actor:return
-	bundles[index].position=b.map.cell_to_world(b.map.nearest_open(b.map.world_to_cell(actor.position),"land"))
+	if not preload("res://scripts/campaign_tribute_cart_visual.gd").place_from_carrier(bundles[index],actor):
+		bundles[index].position=b.map.cell_to_world(b.map.nearest_open(b.map.world_to_cell(actor.position),"land"))
 	_put_down_bundle(b,bundles[index]);cargo.erase(index);actor.remove_meta("carrying_tribute");actor.queue_redraw()
 	var notice: String=Localize.format_text("%s倒下，第%d车（%d担）留在原地，可由幸存七星接力。",[actor.display_name,index+1,Transport.weight(index)])
 	_retire_cargo_delivery(b,index,int(force_attempts.get(index,0)),notice);force_attempts[index]=int(force_attempts.get(index,0))+1

@@ -24,7 +24,7 @@ git fetch origin
 
 ## 验证与共享引擎
 
-10月30日推车小批次已补晁盖/吴用轮转与[运输提示专项](../qa/transport_visuals_20261030/README.md)，后继补[刘唐分层](../qa/liu_tang_layered_20261030/README.md)。后继[其余三人分层与轮转](../qa/remaining_carriers_layered_20261030/README.md)合并做一次必要专项，保留21份网页原图/16份选用及各版本来源。只验证对应改动，不新增导出或平台发布；自然动作、空车/地面车衔接和完整战役续玩继续。
+10月30日推车小批次已补晁盖/吴用轮转与[运输提示专项](../qa/transport_visuals_20261030/README.md)，后继补[刘唐分层](../qa/liu_tang_layered_20261030/README.md)。后继[其余三人分层与轮转](../qa/remaining_carriers_layered_20261030/README.md)合并做一次必要专项，保留21份网页原图/16份选用及各版本来源。只验证对应改动，不新增导出或平台发布；后继[交付/掉车衔接](../qa/cart_handoff_20261030/README.md)使用既有位置/朝向/尺寸字段，492项/22图及20项边界补验通过；该批同一局检查七车，将本进程实际身份提供器结果交给生产新游戏API，减少重复来源扫描。自然动作、初次空车/装载、接力配准、密集标签和完整战役续玩继续，组件字段恢复不等于完整重启续玩通过。
 
 用户已取消全量52／61测试，后续按修改做必要的针对性检查；不自动恢复全量矩阵。现有27个进程39383项通过、取消及未运行范围见[原始收据](../qa/campaign_progress_recovery_20261026/daming_continue_candidate/evidence/negative_user_stop_20261027_183950/README.md)。10月28日用户另行授权发行包验收并更新Steam，已完成必要EXE与键鼠入口检查、Build26260970正式上线、四语公告、下载哈希及Steam库启动／退出验收；人工整关仍未计通过。[发布收据与原件](../qa/steam_release_20261028/README.md)。
 

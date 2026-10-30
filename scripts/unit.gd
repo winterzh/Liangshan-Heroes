@@ -4676,7 +4676,7 @@ func _draw_building() -> void:
 		var s := GameMap.building_visual_px(GameMap.footprint_half_for(radius))
 		if art_variant in ["tribute_load", "tribute_load_alpha_20260906", "wine_buckets", "jujube_load", "wine_bowls"]: s=62.0
 		if preload("res://scripts/campaign_tribute_cart_visual.gd").enabled(self):
-			s = preload("res://scripts/campaign_tribute_cart_visual.gd").visual_size(tex)
+			s = preload("res://scripts/campaign_tribute_cart_visual.gd").visual_size(tex, visual_scale)
 		var foot := 0.82 if art_variant!="" else 0.78
 		if scoped_tex!=null:
 			foot=float(get_meta("campaign_environment_foot",foot))
@@ -4689,7 +4689,9 @@ func _draw_building() -> void:
 		if not static_campaign_visual:
 			# A wall-facing gate can mirror its authored isometric axis without
 			# rotating the roof, collision footprint, health bar or name.
-			if preload("res://scripts/campaign_gate_visual.gd").enabled(self):
+			if preload("res://scripts/campaign_tribute_cart_visual.gd").layered(self):
+				preload("res://scripts/campaign_tribute_cart_visual.gd").draw(self, tint)
+			elif preload("res://scripts/campaign_gate_visual.gd").enabled(self):
 				var gate_transform := preload("res://scripts/campaign_gate_visual.gd").source_transform(self, tex.get_size())
 				draw_set_transform_matrix(GameMap.ISO_INV * gate_transform)
 				draw_texture_rect(tex, Rect2(Vector2.ZERO, tex.get_size()), false, preload("res://scripts/campaign_gate_visual.gd").source_tint(self,tint))
