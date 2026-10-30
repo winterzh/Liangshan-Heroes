@@ -4386,7 +4386,7 @@ func _draw() -> void:
 		bar_y = -radius - 9.0
 
 	# 名字（头领与建筑）
-	if (is_hero or is_building) and not _dying and not preload("res://scripts/campaign_cart_captions.gd").owns(self):
+	if (is_hero or is_building) and not _dying and not preload("res://scripts/campaign_cart_captions.gd").world_labels_owned(self):
 		var f := ThemeDB.fallback_font
 		var ty := bar_y - 6.0
 		UITheme.draw_compact_label(self, f, Vector2(-49.0, ty + 1.0), Localize.text(display_name), 100.0, 13, Color(0, 0, 0, 0.8))
@@ -4408,7 +4408,7 @@ func _draw() -> void:
 	if is_bound_person() and CampaignArt.native_bound_owner(art_variant).is_empty():
 		for rope_y in [-22,-19]: draw_line(Vector2(-7,rope_y),Vector2(7,rope_y),Color(0.65,0.48,0.27),1.7)
 	if hp > 0.0 and story_outcome == "" and Settings.show_healthbars and (not _mass_visuals() or hp < max_hp - 0.5) \
-		and not preload("res://scripts/campaign_cart_captions.gd").owns(self):
+		and not preload("res://scripts/campaign_cart_captions.gd").world_labels_owned(self):
 		var w := (radius * 2.6) if (is_hero or is_building) else (radius * 2.1)
 		var bh := 5.0 if (is_hero or is_building) else 4.0
 		var frac := clampf(hp / max_hp, 0.0, 1.0)

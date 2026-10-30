@@ -1,0 +1,37 @@
+extends "probe.gd"
+## Only the narrow English saturated-message boundary; original 20 views are not rerun.
+func _run() -> void:
+	out=OS.get_environment("HG_OUTPUT_ROOT");root.size=Vector2i(960,540);root.content_scale_size=root.size
+	AudioServer.set_bus_mute(0,true)
+	if not identity(true):report();return
+	var b=await _start_once()
+	var overlay=b.hud.get_node(Captions.NODE_NAME)
+	people=b.units.filter(func(unit):return Captions.person_owned(unit))
+	people.sort_custom(func(left,right):return left.entity_id<right.entity_id)
+	var bai=b.find_unit("bai_sheng")
+	Localize.set_language("en",false)
+	var center: Vector2=b.map.cell_to_world(Vector2i(12,12))
+	_formation(b,center,2.8);b._set_selection([])
+	var rows: Array=await _audit(b,overlay,"saturated_english_960",people.filter(func(unit):return unit!=bai))
+	var obstacles: Array=overlay._obstacles(b)
+	for row in rows:obstacles.append(row.rect.grow(Captions.GAP))
+	var anchor: Vector2=overlay._to_overlay(bai)*Vector2(0,overlay._label_bar(bai))
+	var area: Rect2=overlay.get_viewport_rect().grow(-8)
+	check(not overlay._place(anchor-Vector2(Captions.CARD_SIZE.x*.5,Captions.CARD_SIZE.y+Captions.GAP*2),area,obstacles).has_area(),"saturated visible messages leave no collision-free candidate for lowest priority Bai")
+	await _snapshot("saturated_english_960")
+	b.select_single(bai,false);await _frames(4)
+	var visible: Array=people.filter(func(unit):return overlay.last_layout.any(func(row):return row.entity_id==unit.entity_id))
+	rows=await _audit(b,overlay,"selected_bai_960",visible)
+	check(not rows.is_empty() and rows[0].entity_id==bai.entity_id and rows[0].selected and rows[0].priority==0 and b.hud._sel_ref==[bai],"original Bai selection takes first slot and keeps real information panel under message saturation")
+	check(rows.all(func(row):return people.any(func(unit):return unit.entity_id==row.entity_id)),"saturation never fabricates person identities")
+	await _snapshot("selected_bai_960")
+	b._set_selection([]);b.hud.msg_box.hide()
+	rows=await _audit(b,overlay,"english_960_messages_hidden",people)
+	var catalog: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://assets/localization/catalog.json"))
+	for unit in people:
+		var matching: Array=rows.filter(func(row):return row.entity_id==unit.entity_id)
+		check(matching.size()==1 and matching[0].text==catalog[unit.display_name]["en"],"messages hidden restores exact authored English name "+unit.key)
+	await _snapshot("english_960_messages_hidden")
+	var weak_overlay: WeakRef=weakref(overlay);await _dispose(b)
+	check(not is_instance_valid(weak_overlay.get_ref()),"focused capacity fixture releases its actual overlay")
+	report({"scope":"supplement only narrow English saturated-message capacity, actual selection priority and room recovery", "screenshots":screenshots,"layouts":layouts,"supersedes_only_primary_assertions":["dense_en_960: actual rendered identities include every wanted live person","dense_en_960: exact authored locale name bai_sheng"],"messages_hidden_is_explicit_fixture":true,"full_playthrough":false,"full_regression_run":false,"performance_acceptance":false})

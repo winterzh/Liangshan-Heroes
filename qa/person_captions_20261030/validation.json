@@ -1,0 +1,115 @@
+{
+  "adopted_in_production_source": true,
+  "base_commit": "58fafe1ed290c60eb5bcb459ad844d2ab7cd9e5a",
+  "trusted_content_version": "source-v1:80547cb8698aee4013b1bdc2c0ffa0488fa788202a97273f4b3072356b3cdb6c",
+  "passed": true,
+  "qualification": "771 positive checks in original 20-view run plus 103 focused capacity checks; original overall failures are retained, not rewritten",
+  "primary": {
+    "checks": 773,
+    "positive_checks": 771,
+    "overall_passed": false,
+    "failures": [
+      "dense_en_960: actual rendered identities include every wanted live person",
+      "dense_en_960: exact authored locale name bai_sheng"
+    ],
+    "report": "qa/person_captions_20261030/evidence/person_captions_20261030_225356_1688c624/report.json",
+    "report_sha256": "38b575ba29cb1f32a8fe34afaa48ca0bdb872bb48411cb7d28d4202a46ba4b62"
+  },
+  "first_capacity_attempt": {
+    "checks": 103,
+    "overall_passed": false,
+    "failures": [
+      "original Bai selection takes first slot and keeps real information panel under message saturation"
+    ],
+    "reason": "driver incorrectly required at least eight cards even after original selected-unit information panel expanded; priority/Bai identity were already correct",
+    "preserved": true
+  },
+  "focused_capacity": {
+    "checks": 103,
+    "passed": true,
+    "report": "qa/person_captions_20261030/evidence/person_captions_20261030_225819_aa273972/report.json",
+    "report_sha256": "74da94359a166b51572d07a4e80752f59f3b872413414c003887bc9b0d68aa09",
+    "source_unchanged": true,
+    "children_gone": true,
+    "owned_lock_released": true
+  },
+  "original_and_final_trusted_identity_equal": true,
+  "production_scope": [
+    "scripts/campaign_cart_captions.gd",
+    "scripts/unit.gd"
+  ],
+  "viewports_reviewed": 23,
+  "visual_review": {
+    "method": "Six labelled contact sheets covering all 23 qualified viewports plus full English 960 and people/cart originals",
+    "observed": "Live names remain readable without duplicate cached world labels. Cards avoid reserved people/cart/HUD regions. Narrow English message saturation shows eight regular cards; actual Bai selection shows Bai first with seven total as original info panel expands; hiding message container restores all nine. Story-unconscious labels retain the original world status route and remain outside full UI acceptance.",
+    "artifacts": [
+      {
+        "path": "qa/person_captions_20261030/visual/before_after.jpg",
+        "bytes": 190199,
+        "sha256": "a0d53228cf4d5734f4086a3ca104904fae4a9e02a8c285529f7ffbc2ab29c376"
+      },
+      {
+        "path": "qa/person_captions_20261030/visual/capacity_supplement.jpg",
+        "bytes": 283410,
+        "sha256": "def2544a9960ee1573914a14f24d5812419eedd1044e41488fefb566a699b6ee"
+      },
+      {
+        "path": "qa/person_captions_20261030/visual/cart_and_status.jpg",
+        "bytes": 286768,
+        "sha256": "b6d61b049f53fc1d22e8a0811ab97e3de6fc1cca4c77251ebe87977e33bb447e"
+      },
+      {
+        "path": "qa/person_captions_20261030/visual/dense_1280.jpg",
+        "bytes": 381194,
+        "sha256": "85dad0952e51a41a00ab19438824b4c5365d8866d05fd76a1b4fa722b1c312bc"
+      },
+      {
+        "path": "qa/person_captions_20261030/visual/dense_960.jpg",
+        "bytes": 382255,
+        "sha256": "c649192fc87baad102e8c32c5b3b2cb75843769bdd888edc9dc1d2b4cb66ed12"
+      },
+      {
+        "path": "qa/person_captions_20261030/visual/dense_en_960.png",
+        "bytes": 610061,
+        "sha256": "6153613ad9dc42881b31f5578c70d13de0257634571bbff67002e785afbaf7d9"
+      },
+      {
+        "path": "qa/person_captions_20261030/visual/people_and_cart.png",
+        "bytes": 1042217,
+        "sha256": "69a5e31654e44165c36136da5057fba4cba5e2afefa4e3b0fcba22eb9317b03b"
+      },
+      {
+        "path": "qa/person_captions_20261030/visual/zoom_and_controls.jpg",
+        "bytes": 626616,
+        "sha256": "dbfa1fa805245029be15c5ba2a0f8b286e7484edbe02a55e5eb7e95405603e45"
+      }
+    ]
+  },
+  "component_timing_diagnostic_us": {
+    "min": 1902,
+    "max": 6424,
+    "samples": 24,
+    "not_performance_acceptance": true
+  },
+  "fixtures": [
+    "Dense actor positions and camera settings; stopped battle simulation",
+    "Overlay temporarily removed for same-source world-label fallback, not old build execution",
+    "Wine prerequisites and direct arrival for actual original take/load/deliver callbacks",
+    "Actual one-point damage and explicit original story unconscious API",
+    "Messages explicitly hidden only in focused recovery fixture"
+  ],
+  "native_pixels_changed": false,
+  "full_regression_run": false,
+  "ordinary_keyboard_mouse_playthrough": false,
+  "performance_accepted": false,
+  "physical_DPI_or_device_accepted": false,
+  "main_merged": false,
+  "steam_updated": false,
+  "web_art_status": "User reported entered ChatGPT; this source-only batch creates no art and does not re-verify browser state",
+  "remaining": [
+    "Other chapters and resolved/story label battle readability",
+    "Date-cart four views, empty-cart grip and loading transitions",
+    "All-seven natural gait/grip and cross-physique relay registration",
+    "Complete campaign resume and human/performance/device acceptance"
+  ]
+}
