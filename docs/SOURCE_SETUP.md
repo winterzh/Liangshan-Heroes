@@ -1,5 +1,9 @@
 # 源码设置与换机（2026-10-30）
 
+## 本机生成副本自动淘汰（2026-11-02）
+
+旧生成版本已由用户退役，各类只留最新有效载荷及当前必需依赖。Windows换机后运行`powershell.exe -NoProfile -File tools/install_artifact_retention_startup.ps1`，为当前用户安装隐藏的成功记录观察程序；它每60秒检测新完成批次，按验证结果自动清理，不修改冻结生成器或真实存档。清单预览与手动命令见[规则](GENERATED_ARTIFACT_RETENTION.md)，本机状态在`.godot/artifact_retention/`。历史文档的旧完整副本路径可能已退役，不代表目前仍可复验；暂停的开发状态保持。
+
 本机开发目录为 `D:/AI项目/水浒/开发工程`，打开其中 `project.godot`；桌面旧目录仅为历史兼容入口。当前进度见[项目总览](PROJECT_STATUS.md)，开发顺序及完整要求见[开发计划](DEVELOPMENT_PLAN.md)，逐批证据见[开发日志](WORKLOG.md)和[目录索引](DIRECTORY_INDEX.md)。
 
 ## 启动与导入

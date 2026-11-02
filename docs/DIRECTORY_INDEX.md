@@ -1,5 +1,9 @@
 # 项目目录索引（2026-10-30）
 
+## 生成副本自动清理（2026-11-02）
+
+[保留规则](GENERATED_ARTIFACT_RETENTION.md)说明最新有效版、开发依赖保护、当前用户启动项和安全退役；实现为`tools/generated_artifact_retention.py`、`tools/artifact_retirement_windows.py`及安装脚本。验证见[专项](../qa/generated_artifact_retention_20261102/README.md)，本机大清单/日志位于被忽略的`.godot/artifact_retention/`。
+
 ## 当前文档入口
 
 | 用途 | 文件 |
