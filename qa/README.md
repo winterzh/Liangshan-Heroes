@@ -18,6 +18,7 @@ QA目录包含已完成验证、候选、失败与原著/美术来源。文件�
 | [Steam发布2026-10-28](steam_release_20261028/README.md) | Build26260970、四语公告、服务器／全新下载／库内哈希与实际客户端启动退出均已核验；首次错误映射原件保留 |
 | [Steam发布2026-10-20](steam_release_20261019/README.md) | Build26048429、公告、下载/客户端与本批验证 |
 | [完整战役恢复记录](campaign_progress_recovery_20261008/) | 原始恢复工具/阶段证据；完整入口未开放，当前计划见[总览](../docs/PROJECT_STATUS.md) |
+| [战役阶段任务提示](campaign_briefing_20261113/) | 连环马阶段和地图定位、江州解缚及四语显示的隔离原生验收 |
 | [公孙胜取剑/回鞘原型](gongsun_sheng_mounted_draw_20261019/README.md) | 候选源码已补交，未授予生产采用或完整原生资格 |
 | [杨林连续腿预览](yang_lin_continuous_leg_preview_20261019/README.md) | 原候选工具、HTML/JS与来源绑定，未采用 |
 | [107个文件补交](pending_source_sync_20261020/README.md) | 81份导入配置和26份候选源码的完整清单及哈希 |

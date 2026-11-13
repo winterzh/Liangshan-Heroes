@@ -402,6 +402,7 @@ func process(b,delta: float) -> void:
 			execution_halted=true
 			b.mission.mark("execution_halted","两名刽子手均被打倒，行刑已中断。")
 			b.mission.set_title("救人 · 分别解缚")
+			b.mission.set_objective("行刑已停。选中好汉，分别右键宋江和戴宗身旁的解缚旗标，留兵挡住官军。")
 			for rec in [["free_song",-1,"宋江"],["free_dai",1,"戴宗"]]:
 				b.mission.add_action(rec[0],Localize.text("好汉 · 救下")+rec[2],SCAFFOLD+Vector2i(rec[1],1),RESCUERS,1.3,130,22)
 		elif exec_left<=0:

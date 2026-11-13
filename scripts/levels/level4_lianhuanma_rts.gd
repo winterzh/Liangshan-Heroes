@@ -43,6 +43,11 @@ var drill_lure: Unit
 var drill_lure_origin := Vector2.ZERO
 var phase_title := ""
 
+const PREPARE_BRIEFING := {"title":"扎营 · 准备迎击北路","objective":"训练钩镰手，在北侧芦苇地迎骑。也可派兵先拆辎重营，断掉该路援军。徐宁的教场演练可选。"}
+const DEFEND_BRIEFING := {"title":"迎骑 · 守住中军","objective":"守住中军和宋江。把甲马引进芦苇地或沼泽，让两名钩镰手协同破阵。留兵拦住随骑而来的护军。"}
+const COUNTER_BRIEFING := {"title":"反攻 · 攻破官军大营","objective":"十二骑已击溃。集结步军保护攻城器械，攻破大营即可取胜。想生擒韩滔，先击败他再拆大营。"}
+const FINISH_BRIEFING := {"title":"大营已破 · 击溃余骑","objective":"官军已停止补兵。沿地图标出的踪迹击溃剩余甲马，守住中军和宋江即可取胜。"}
+
 func id() -> String: return "level4"
 func title() -> String: return "大破连环马"
 func subtitle() -> String: return "扎营练枪·断粮破骑·反攻主阵"
@@ -223,9 +228,15 @@ func on_start(b) -> void:
 		var node=b.nearest_free_gold(workers[i].position,null,workers[i]) if i<3 else b.nearest_resource(workers[i].position,"wood")
 		if node!=null: workers[i].order_gather(node)
 	for i in range(enemy_workers.size()): enemy_workers[i].order_gather(enemy_nodes[i])
-	b.mission.begin("lhm_rts","扎营 · 枪阵迎骑","经营前营、兵营补充钩镰与弓手；两路草林可迎骑，北南辎重营可断援。教场演练可选。")
+	phase_title = PREPARE_BRIEFING.title
+	b.mission.begin("lhm_rts", phase_title, PREPARE_BRIEFING.objective)
 	b.mission.add_action("lhm_drill_reset",Localize.text("摆好教场演练骑（可选）"),DRILL+Vector2i(-2,0),["xu_ning"],1,64)
 	b.mission.add_actor_locator("lhm_drill_reset","xu_ning")
+	b.mission.add_map_locator("北侧芦苇地", LANES[0])
+	b.mission.add_map_locator("南侧芦苇地", LANES[1])
+	b.mission.add_map_locator("北路辎重营", NORTH_POST)
+	b.mission.add_map_locator("南路辎重营", SOUTH_POST)
+	b.mission.add_map_locator("官军大营", ENEMY_CAMP)
 	for cell in [LANES[0],LANES[1],NORTH_POST,SOUTH_POST]: b.lit_cells[cell]=20.0
 	b.msg("首队甲马约150秒后沿北草林进军，后队约270秒走南路。兵营已能训练钩镰手；派军争辎重营可断护军并延迟该路骑队。",10)
 func on_mission_action(b,action_id: String,_actor) -> void:
@@ -350,10 +361,7 @@ func process(b,delta: float) -> void:
 			b.msg((Localize.text("北路") if lane==0 else Localize.text("南路"))+Localize.text("甲马正在集结，约25秒后出发。"),6)
 		if elapsed>=float(waves[lane].time):
 			_send_wave(b,lane)
-	var new_title: String="反攻 · 拔除官军大营" if lhm_killed>=12 else "迎骑 · 经营与两路作战"
-	if new_title!=phase_title:
-		phase_title=new_title
-		b.mission.set_title(phase_title)
+	_update_briefing(b)
 	if manor_fallen:
 		for u in riders:
 			if alive(u):
@@ -363,6 +371,20 @@ func process(b,delta: float) -> void:
 			hu.resolve_story("retreated")
 		b.mission.mark("lhm_victory","十二骑连环马与官军大营均已解除，中军守住")
 		b.win("官军大营已破，十二骑连环马尽数击溃；梁山中军守住。呼延灼败走青州。")
+func _update_briefing(b) -> void:
+	var briefing: Dictionary = PREPARE_BRIEFING
+	if manor_fallen:
+		briefing = FINISH_BRIEFING
+	elif lhm_killed >= 12:
+		briefing = COUNTER_BRIEFING
+	elif waves[0].sent or waves[1].sent:
+		briefing = DEFEND_BRIEFING
+	if phase_title == briefing.title:
+		return
+	phase_title = briefing.title
+	b.mission.set_title(phase_title)
+	b.mission.set_objective(briefing.objective)
+
 func on_unit_died(b,u) -> void:
 	if u==hall or u==song:
 		b.lose(Localize.format_text("%s失守。可重开本局，先补枪兵、拒马与人口，再安排两路防守。", u.display_name))

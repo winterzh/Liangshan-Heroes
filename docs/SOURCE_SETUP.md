@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+连环马阶段任务文案由关卡脚本提供。翻译维护在 `assets/localization/campaign.json`，运行时加载 `assets/localization/catalog.json`。任务提示改动会改变生产来源，须用新的冻结候选验收。
+
 ## 本机生成副本自动淘汰（2026-11-02）
 
 旧生成版本已由用户退役，各类只留最新有效载荷及当前必需依赖。Windows换机后运行`powershell.exe -NoProfile -File tools/install_artifact_retention_startup.ps1`，为当前用户安装隐藏的成功记录观察程序；它每60秒检测新完成批次，按验证结果自动清理，不修改冻结生成器或真实存档。清单预览与手动命令见[规则](GENERATED_ARTIFACT_RETENTION.md)，本机状态在`.godot/artifact_retention/`。历史文档的旧完整副本路径可能已退役，不代表目前仍可复验；暂停的开发状态保持。
