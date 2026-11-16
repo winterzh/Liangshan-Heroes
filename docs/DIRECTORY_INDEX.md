@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[祝家庄分兵纯强攻](../qa/campaign_siege_20261116/rush_split_force/)保存实际来源哈希、战报、引擎日志和宿主回执。
+
 [祝家庄快速强攻](../qa/campaign_siege_20261116/README.md#跳过外围的快速强攻)的 `rush_first_attempt/` 和 `rush_central_road/` 分别保留首跑与中路复跑原件。
 
 [连环马原槽反攻](../qa/campaign_resume_current_20261116/evidence/protected_drill_candidate/east_flank_not_reached/)保存第二次攻营复跑的原始报告、日志和宿主回执，涵盖未触发侧翼的反攻失利。

@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+祝家庄 `--route rush` 驾驶把前营留守与投石车推进分组，仍用原生产、采集、攻击和修理命令，应从独立隔离目录复跑。[分兵实跑原件](../qa/campaign_siege_20261116/rush_split_force/)。
+
 祝家庄快速强攻验证复用 `direct_runner.py --route rush`，独立写入 `.godot/zhu-rush/`。首跑和中路复跑保留原报告、日志、回执及驱动哈希。生产关卡、档案字段与玩家资源成本无变更。[复跑原件及范围](../qa/campaign_siege_20261116/README.md#跳过外围的快速强攻)。
 
 原槽侧翼复跑在韩滔未擒、官军大营仍完整时结束，侧翼策略未进入。后段中军附近金矿余量固定在2890。保留原候选、再保存档链和现有终局断言，先据实战日志排查采集与攻城预算。[本轮原始回执](../qa/campaign_resume_current_20261116/evidence/protected_drill_candidate/east_flank_not_reached/)。

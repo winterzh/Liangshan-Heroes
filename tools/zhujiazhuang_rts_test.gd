@@ -11,6 +11,9 @@ var route := "contracts"
 var out_dir := "res://qa/zhujiazhuang_rts_20260905"
 var build_cells := [Vector2i(49,36),Vector2i(50,41),Vector2i(60,29),Vector2i(48,45),Vector2i(55,13),Vector2i(60,14),Vector2i(47,14)]
 var play_metrics := {}
+var rush_guards: Array = []
+var rush_guard_peak := 0
+var rush_camp_low := INF
 
 func _initialize() -> void: _run.call_deferred()
 func check(ok: bool, label: String) -> void:
@@ -101,7 +104,11 @@ func _economy(b) -> void:
 				key = ["liang_qiang","liang_gong","liang_dao","liang_gong"][units_queued % 4]
 		elif building.key == "siege_workshop":
 			var siege: Array = b.units.filter(func(u): return alive(u) and u.faction == 0 and u.key in ["siege_ram","siege_cata"])
-			if siege.size() < 3: key = "siege_ram" if siege.size() < 2 else "siege_cata"
+			if siege.size() < 3:
+				if route == "rush":
+					key = "siege_cata" if siege.any(func(u): return u.key == "siege_ram") else "siege_ram"
+				else:
+					key = "siege_ram" if siege.size() < 2 else "siege_cata"
 		if key != "" and b.queue_train(building,key,false):
 			units_queued += 1
 			units_queued_by_key[key] = int(units_queued_by_key.get(key,0)) + 1
@@ -174,6 +181,46 @@ func _contracts(b) -> void:
 	await process_frame
 	check(b.phase == b.Phase.END and not b.mission.has_event("zhu_victory"),"camp loss terminates with defeat")
 
+func _rush_field_army(b, army: Array) -> Array:
+	var hall = b.level.hall
+	if not alive(hall): return army
+	rush_camp_low = minf(rush_camp_low, hall.hp)
+	rush_guards = rush_guards.filter(alive)
+	for soldier in army:
+		if rush_guards.size() >= 4: break
+		if not soldier.is_hero and soldier.key in ["liang_qiang", "liang_gong", "liang_dao"] \
+				and soldier not in rush_guards and soldier.position.distance_to(hall.position) < 240.0:
+			rush_guards.append(soldier)
+	rush_guard_peak = maxi(rush_guard_peak, rush_guards.size())
+	var guard_post: Vector2 = b.map.cell_to_world(b.level.CAMP + Vector2i(-2, 4))
+	var out_of_position: Array = rush_guards.filter(func(u): return u.position.distance_to(guard_post) > 110.0)
+	if not out_of_position.is_empty():
+		_click(b, out_of_position, b.level.CAMP + Vector2i(-2, 4))
+	if hall.hp < hall.max_hp * 0.8:
+		var workers: Array = b.units.filter(func(u): return alive(u) and u.faction == 0 and u.is_worker)
+		if not workers.any(func(u): return u._state == u.ST_REPAIR):
+			for worker in workers:
+				if worker._state != worker.ST_GATHER or worker.position.distance_to(hall.position) >= 220.0: continue
+				b.select_single(worker, false)
+				b._issue_order(b.to_screen(hall.position), false)
+				orders += 1
+				break
+	return army.filter(func(u): return u not in rush_guards)
+
+func _rush_assault(b, army: Array, target, screen_cell: Vector2i) -> void:
+	var engines: Array = army.filter(func(u): return u.key in ["siege_ram", "siege_cata"])
+	var screen: Array = army.filter(func(u): return u not in engines)
+	var screen_point: Vector2 = b.map.cell_to_world(screen_cell)
+	var off: Array = screen.filter(func(u): return u.position.distance_to(screen_point) > 76.0)
+	if not off.is_empty(): _click(b, off, screen_cell, alive(target) and target.visible)
+	if engines.is_empty(): return
+	if alive(target) and target.visible:
+		b.select_members(engines, false)
+		b._issue_order(b.to_screen(target.position), false)
+		orders += 1
+	else:
+		_click(b, engines, screen_cell)
+
 func _play(b) -> void:
 	var l = b.level
 	var entrance_towers: Array = b.units.filter(func(u): return alive(u) and u.faction == 1 and u.key == "arrow_tower")
@@ -189,12 +236,18 @@ func _play(b) -> void:
 		clock = l.elapsed
 		_economy(b)
 		var army: Array = b.units.filter(func(u): return alive(u) and u.faction == 0 and not u.is_worker and not u.is_building and not u.is_captive and not u.is_noncombat and u.key not in ["song_jiang","sun_li"])
+		if route == "rush": army = _rush_field_army(b, army)
 		if l.inside_open and not l.main_breached and army.any(func(u): return b.map.world_to_cell(u.position).x < 19):
 			entered_with_main_intact = true
 		if clock >= next_print:
 			next_print = clock+60.0
 			print("[rts-play] t=",int(clock)," stage=",target_stage," army=",army.size()," g=",b.gold," w=",b.wood," pop=",b.used_pop(),"/",b.pop_cap," buildings=",buildings_started," gate_hp=",l.gate.hp if alive(l.gate) else 0)
-		if army.size() >= 14: mobilized = true
+		if route == "rush":
+			if army.size() < 6: mobilized = false
+			var siege_count: int = army.filter(func(u): return u.key in ["siege_ram", "siege_cata"]).size()
+			if army.size() >= 12 and siege_count >= 2 and rush_guards.size() >= 3: mobilized = true
+		elif army.size() >= 14:
+			mobilized = true
 		if not mobilized or army.size() < 6:
 			_click(b,army,Vector2i(50,28) if route == "rush" else Vector2i(50,32),route != "rush")
 			continue
@@ -210,11 +263,13 @@ func _play(b) -> void:
 				_action(b,l.sun,"zhu_rts_inside")
 				if l.inside_open: target_stage = "tower"
 			else:
-				if alive(l.gate) and l.gate.visible:
+				if route == "rush":
+					_rush_assault(b, army, l.gate, Vector2i(25,28))
+				elif alive(l.gate) and l.gate.visible:
 					b.select_members(army,false)
 					b._issue_order(b.to_screen(l.gate.position),false)
 					orders += 1
-				else: _click(b,army,Vector2i(25,28),route != "rush")
+				else: _click(b,army,Vector2i(25,28),true)
 				if l.main_breached:
 					first_breach = {"game_seconds":l.elapsed,"expansion_secured":l.expansion_secured,
 						"supply_cut":l.supply_cut,"outpost_alive":alive(l.outpost),"raids_sent":l.raids_sent}
@@ -231,13 +286,15 @@ func _play(b) -> void:
 					tower_cell = candidate_cell
 					break
 			if towers.is_empty(): target_stage = "manor"
+			elif route == "rush": _rush_assault(b, army, towers[0], Vector2i(19,28))
 			elif towers[0].visible:
 				b.select_members(army,false)
 				b._issue_order(b.to_screen(towers[0].position),false)
 				orders += 1
 			else: _click(b,army,tower_cell,true)
 		elif target_stage == "manor":
-			if alive(l.enemy_base) and l.enemy_base.visible:
+			if route == "rush": _rush_assault(b, army, l.enemy_base, Vector2i(13,26))
+			elif alive(l.enemy_base) and l.enemy_base.visible:
 				b.select_members(army,false)
 				b._issue_order(b.to_screen(l.enemy_base.position),false)
 				orders += 1
@@ -262,7 +319,7 @@ func _play(b) -> void:
 	if route == "rush":
 		check(not first_breach.is_empty() and first_breach.outpost_alive and not first_breach.expansion_secured
 			and not first_breach.supply_cut and not l.expansion_secured and not l.supply_cut,
-			"rush breaches main gate and wins without taking northern gold or cutting the outpost")
+			"rush keeps the outpost and northern expansion untouched at main breach and at finish")
 		check(l.prisoners.size() == 7 and l.prisoners.all(
 			func(u): return alive(u) and u.position.distance_to(l.hall.position) < 190.0),
 			"all seven original rescued characters return before the rush ends")
@@ -273,6 +330,12 @@ func _play(b) -> void:
 	if route in ["direct", "rush"]: check(l.main_breached and not l.inside_open,"direct route needs no inside agent")
 	else: check(l.inside_open and entered_with_main_intact,"inside route enters manor while main gate remains intact")
 	play_metrics = {"game_seconds":l.elapsed,"first_main_breach":first_breach,"stage":target_stage,"orders":orders,"buildings_started":buildings_started,"units_queued":units_queued,"units_queued_by_key":units_queued_by_key,"towers_destroyed":towers_destroyed,"ai_trained":l.ai_trained,"raids_sent":l.raids_sent,"entered_with_main_intact":entered_with_main_intact,"events":b.mission.events.keys(),"result":b.mission.result_snapshot(b.mission.has_event("zhu_victory"))}
+
+	if route == "rush":
+		play_metrics["guard_peak"] = rush_guard_peak
+		play_metrics["camp_low_hp"] = rush_camp_low
+		play_metrics["camp_alive"] = alive(l.hall)
+		play_metrics["song_alive"] = alive(l.song)
 
 func _mode_regression() -> void:
 	for mode in ["skirmish","skirmish_ai"]:
