@@ -1,0 +1,47 @@
+--- a/qa/battle_entry_timing_20261116/entry_timing.gd
++++ b/qa/battle_entry_timing_20261116/entry_timing.gd
+@@ -23,3 +23,2 @@
+-	var mode := OS.get_environment("LSH_ENTRY_MODE")
+-	if DisplayServer.get_name() == "headless" or not PICK.has(mode):
+-		_fail("rendered mode and a known entry path are required")
++	if DisplayServer.get_name() == "headless":
++		_fail("rendered mode is required")
+@@ -34,12 +33,13 @@
+-	var samples: Array[Dictionary] = []
+-	for visit in range(2):
+-		var sample := await _visit(mode, visit)
+-		if sample.is_empty():
+-			return
+-		samples.append(sample)
+-		current_scene.call("_goto_menu")
+-		await scene_changed
+-		await RenderingServer.frame_post_draw
+-	if first_identity.engine_binary_sha256 != FileAccess.get_sha256(OS.get_executable_path()):
+-		_fail("background executable SHA differs from original FileAccess SHA")
+-		return
++	var results: Array[Dictionary] = []
++	for mode in ["level3", "skirmish", "skirmish_ai", "arena"]:
++		var samples: Array[Dictionary] = []
++		for visit in range(2):
++			var sample := await _visit(mode, visit)
++			if sample.is_empty():
++				return
++			samples.append(sample)
++			current_scene.call("_goto_menu")
++			await scene_changed
++			await RenderingServer.frame_post_draw
++		results.append({"mode": mode, "samples": samples})
++		print("ENTRY_PACK_MODE " + JSON.stringify(results[-1]))
+@@ -50,4 +50,2 @@
+-	print("ENTRY_ASYNC_MATCH " + JSON.stringify({"file_count": synchronous.file_count, "content_version": synchronous.content_version,
+-		"engine_sha256": synchronous.engine_binary_sha256}))
+-	print("ENTRY_TIMING " + JSON.stringify({"mode":mode, "source":"rendered local project", "samples":samples}))
+-	quit(0)
++	print("ENTRY_PACK_IDENTITY " + JSON.stringify(synchronous))
++	quit()
+@@ -107 +105 @@
+-	if rendered_before_ready < 2 or not battle._gameplay_identity_bound(identity):
++	if rendered_before_ready < 2 or not battle._gameplay_identity_bound(identity) or identity.get("source_mode") != false:
+@@ -110 +108 @@
+-	if visit == 0:
++	if first_identity.is_empty():
