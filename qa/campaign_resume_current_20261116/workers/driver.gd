@@ -3,7 +3,7 @@ const Policy := preload("policy.gd")
 var policy: RefCounted
 var next_economy_tick := 0
 var combat_samples: Array = []
-var flank_siege_stage: Dictionary = {}
+var next_siege_sample_tick := 0
 
 func run() -> void:
 	while Engine.is_in_physics_frame(): await get_tree().process_frame
@@ -66,33 +66,14 @@ func record_action(kind: String, actors: Array, detail: Dictionary = {}) -> void
 func economy_step() -> void:
 	if battle._run_clock._next_tick < next_economy_tick: return
 	next_economy_tick = battle._run_clock._next_tick + 75
-	if not siege_finisher_active():
-		if await_counter_support():
-			policy._mine_idle_workers(battle)
-			return
-		if needs_counter_ram_budget():
-			policy._mine_idle_workers(battle)
-		else:
-			policy._economy_lhm(battle)
+	if siege_finisher_active():
+		staff_counter_mines(battle.level)
+		policy._economy_lhm(battle)
 		return
-	# Keep workers gathering, but reserve the next gold and wood for the workshop.
-	policy._mine_idle_workers(battle)
-	var artillery := siege_artillery()
-	if artillery.size() >= 2: return
-	var definition: Dictionary = battle._defs["siege_cata"]
-	if battle.gold < int(definition.cost_gold) or battle.wood < int(definition.cost_wood): return
-	for workshop: Variant in battle.units:
-		if not alive(workshop) or workshop.faction != 0 or workshop.key != "siege_workshop": continue
-		if workshop.is_constructing or not workshop._train_queue.is_empty(): continue
-		var gold: int = battle.gold
-		var wood: int = battle.wood
-		if battle.queue_train(workshop, "siege_cata", false):
-			check(gold - battle.gold == int(definition.cost_gold) and wood - battle.wood == int(definition.cost_wood),
-				"flank artillery pays actual workshop costs")
-			record_action("train_flank_artillery", [workshop], {"key":"siege_cata", "gold_spent":gold-battle.gold, "wood_spent":wood-battle.wood})
-			policy.units_queued += 1
-			policy.units_queued_by_key["siege_cata"] = int(policy.units_queued_by_key.get("siege_cata", 0)) + 1
-		return
+	if await_counter_support() or needs_counter_ram_budget():
+		policy._mine_idle_workers(battle)
+	else:
+		policy._economy_lhm(battle)
 
 func await_counter_support() -> bool:
 	var level: Variant = battle.level
@@ -158,39 +139,42 @@ func siege_finisher_active() -> bool:
 	var level: Variant = battle.level
 	return level.lhm_killed == 12 and battle.mission.has_event("lhm_han_captured") and alive(level.enemy_base)
 
-func siege_artillery() -> Array:
-	return battle.units.filter(func(u): return alive(u) and u.faction == 0 and u.key == "siege_cata")
-
-func flank_siege(army: Array, manor: Variant) -> void:
-	var artillery := siege_artillery()
-	var screen: Array = army.filter(func(u): return u not in artillery and u.key != "siege_ram")
-	var threat: Variant = null
-	var screen_point: Vector2 = battle.map.cell_to_world(Vector2i(37, 30))
-	for enemy: Variant in battle.units:
-		if alive(enemy) and enemy.faction == 1 and not enemy.is_building and enemy.fog_visible \
-				and enemy.position.distance_to(screen_point) < 170.0:
-			threat = enemy
-			break
-	if alive(threat):
-		policy.target(battle, screen, threat, "flank_west_screen")
-	else:
-		var off: Array = screen.filter(func(u): return u.position.distance_to(screen_point) > 95.0)
-		policy.move(battle, off, Vector2i(37, 30))
-	var route: Array[Vector2i] = [Vector2i(58,48), Vector2i(60,35)]
-	for engine: Variant in artillery:
-		var id: int = engine.entity_id
-		var waypoint: int = int(flank_siege_stage.get(id, 0))
-		if waypoint < route.size() and engine.position.distance_to(battle.map.cell_to_world(route[waypoint])) <= 70.0:
-			waypoint += 1
-			flank_siege_stage[id] = waypoint
-			print("LIAN_FLANK ", {"engine": id, "waypoint": waypoint, "elapsed": battle.level.elapsed})
-		if waypoint < route.size():
-			policy.move(battle, [engine], route[waypoint])
-		elif battle.is_visible_world(manor.position):
-			policy.target(battle, [engine], manor, "east_flank_manor")
+func push_south_siege(army: Array, camp: Variant) -> void:
+	var rams: Array = army.filter(func(u): return u.key == "siege_ram")
+	var cover: Array = army.filter(func(u): return u.key != "siege_ram")
+	var assembly := Vector2i(46, 41)
+	var breach := Vector2i(49, 35)
+	var assembly_world: Vector2 = battle.map.cell_to_world(assembly)
+	var breach_world: Vector2 = battle.map.cell_to_world(breach)
+	var nearby: Array = cover.filter(func(u): return u.position.distance_to(assembly_world) <= 280.0)
+	var advancing: bool = nearby.size() >= 10
+	var camp_visible: bool = battle.is_visible_world(camp.position)
+	var target: Variant = null
+	if advancing:
+		for foe: Variant in battle.units:
+			if not alive(foe) or foe.faction != 1 or foe.is_building or not foe.fog_visible: continue
+			if foe.position.distance_to(breach_world) > 225.0: continue
+			if target == null or foe.position.distance_squared_to(breach_world) < target.position.distance_squared_to(breach_world):
+				target = foe
+		if target != null:
+			policy.target(battle, nearby, target, "southern_ram_escort")
 		else:
-			policy.move(battle, [engine], Vector2i(59,35))
-	policy._skills_lhm(battle, screen)
+			policy.move(battle, nearby.filter(func(u):return u.position.distance_to(breach_world)>75.0), breach, true)
+	var reserve: Array = cover if not advancing else cover.filter(func(u): return u not in nearby)
+	policy.move(battle, reserve.filter(func(u):return u.position.distance_to(assembly_world)>84.0), assembly)
+	for ram: Variant in rams:
+		var near_cover: bool = cover.any(func(u): return u.position.distance_to(ram.position)<=180.0)
+		if advancing and near_cover and camp_visible and ram.position.distance_to(assembly_world)<=240.0:
+			if ram._target != camp: policy.target(battle, [ram], camp, "southern_ram_camp")
+		elif ram._target != camp and ram.position.distance_to(assembly_world)>92.0:
+			policy.move(battle, [ram], assembly)
+	policy._skills_lhm(battle, cover)
+	if battle._run_clock._next_tick >= next_siege_sample_tick:
+		next_siege_sample_tick = battle._run_clock._next_tick + 720
+		var engines: Array = rams.map(func(ram): return {"id":ram.entity_id,"hp":ram.hp,
+			"camp_distance":ram.position.distance_to(camp.position),"targeting_camp":ram._target==camp})
+		print("LIAN_SOUTH_SIEGE ", {"elapsed":battle.level.elapsed,"camp_hp":camp.hp,
+			"camp_visible":camp_visible,"cover":cover.size(),"cover_ready":nearby.size(),"rams":engines})
 
 func wait_live(predicate: Callable, seconds: float) -> bool:
 	var limit: int = Time.get_ticks_msec() + int(seconds * 1000.0)
@@ -342,13 +326,13 @@ func natural_victory() -> void:
 		var army: Array = battle.units.filter(func(u): return alive(u) and u.faction == 0 and u != level.song \
 			and not u.is_worker and not u.is_building and not u.is_noncombat and not u.garrisoned)
 		if siege_finisher_active():
-			if not has_meta("counter_artillery_started"):
-				set_meta("counter_artillery_started", true)
+			if not has_meta("counter_ram_started"):
+				set_meta("counter_ram_started", true)
 				print("LIAN_SOUTH_COUNTER ", {"event":"han_captured", "elapsed":level.elapsed,
 					"camp_hp":level.enemy_base.hp})
-			flank_siege(army, level.enemy_base)
-			var flank_tick: int = battle._run_clock._next_tick + 180
-			await wait_live(func(): return battle._run_clock._next_tick >= flank_tick, 8.0)
+			push_south_siege(army, level.enemy_base)
+			var siege_tick: int = battle._run_clock._next_tick + 150
+			await wait_live(func(): return battle._run_clock._next_tick >= siege_tick, 8.0)
 			continue
 		var cell: Vector2i = level.LANES[0]
 		var target: Variant = null

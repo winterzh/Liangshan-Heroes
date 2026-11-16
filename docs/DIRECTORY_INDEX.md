@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[同档胜利与旧档拒绝原件](../qa/campaign_resume_current_20261116/evidence/protected_drill_candidate/ram_escort_terminal/)含全过程胜利、独立进程拒绝及来源核对收据。
+
 [战役进场文案验收](../qa/battle_entry_localization_20261116/README.md) 记录四语新增范围与词库校验。进场停顿复现和量测计划见[开发计划](DEVELOPMENT_PLAN.md#2026-11-16-出征与模式进场卡顿)。
 
 [Steam 2026-11-16 正式更新](STEAM_UPDATE_20261116.md) 与 [发布验收收据](../qa/steam_release_20261116/README.md) 记录 Build、服务端清单、客户端安装和四语公告。

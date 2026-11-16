@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+连环马 `--retry-south-tail` 固定原南路攻营报告与同一再保存档。验证策略通过原攻营命令护送撞车执行，归档与冻结身份见[同档胜利与旧档拒绝原件](../qa/campaign_resume_current_20261116/evidence/protected_drill_candidate/ram_escort_terminal/)。
+
 四语词库重新生成后包含战役进场文案和既有 115 条运行词条的源分片，按 [本地化维护步骤](LOCALIZATION_20260908.md#维护与复现) 严格重建并执行覆盖检查。
 
 Steam Windows Build `26699320` 由稳定分支提交 `9b9ca6a96f7004bd4ce8e36b5f972e4fc6ed2587` 的独立检出生成。Windows Depot `5088121` 和 Manifest `3231099744923356430` 已核对。[构建与客户端验收](../qa/steam_release_20261116/README.md)
