@@ -222,3 +222,16 @@ Windows 源码从实际高俅剧情按钮出征。在战场第一次绘制回调
 三次均走实际剧情按钮、剧情、开战和刘唐移动。Windows 源码、Godot 4.6.3 Compatibility、独立离线档案，退出 0、脚本错误 0。传统梁山布局、驻守战和 Steam 安装版本轮未单独运行。[分段、门轴与布景摘要](gao_scenery_gate_and_coast.json)
 
 本机原日志和探针位于 `D:/CodexTemp/lsh-entry-profile-1116/gao-scenery-gate-assets/`、`gao-scenery-coast-stages/` 及父目录。
+
+## 进场地表贴图后台读取
+
+Windows 剧情和驻守入口用实际关卡的地表路由，先在加载提示下准备贴图，再由战场材质取得同一资源。经典驻守使用梁山美术路由。1v1 和竞技场入口没有梁山地表路由。
+
+| 区间 | 高俅先前 | 高俅改后 | 经典驻守 30 关 |
+| --- | ---: | ---: | ---: |
+| 地表贴图加载与绑定循环 | 260.36 ms | 7.86 ms | 7.92 ms |
+| 地表材质设置合计 | 294.46 ms | 42.86 ms | 43.66 ms |
+
+两次候选样本均从实际菜单进入并开战，退出 0，引擎错误 0。每次三张纹理均在挂载战场前完成，首次材质绑定取得同一路径且命中资源缓存。高俅的地表数据、树木和投影摘要与前一轮一致。本轮为 Windows 源码定向对照，正式包和其余战役入口待验证，表内未计入完整出征等待。[路径、缓存与时间戳](battle_entry_surface_prefetch.json)
+
+原日志和探针保存在本机 `D:/CodexTemp/lsh-entry-profile-1116/battle-entry-surface-prefetch-final/` 及父目录。

@@ -913,13 +913,19 @@ static func _route_path(table: Dictionary, active_level_id: String, route_key: S
 	return String(paths.get(state, ""))
 
 
+static func _texture_resource_path(path: String) -> String:
+	if path.is_empty() or ResourceLoader.exists(path):
+		return path
+	# A scoped atlas can sample native web PNG bytes without re-encoding them.
+	var atlas := path.get_basename() + ".tres"
+	return atlas if ResourceLoader.exists(atlas) else ""
+
+
 static func _load_texture(path: String) -> Texture2D:
-	if path.is_empty(): return null
-	if not ResourceLoader.exists(path):
-		# A scoped atlas can sample native web PNG bytes without re-encoding them.
-		path = path.get_basename() + ".tres"
-		if not ResourceLoader.exists(path): return null
-	return ResourceLoader.load(path, "Texture2D") as Texture2D
+	var resource_path := _texture_resource_path(path)
+	if resource_path.is_empty():
+		return null
+	return ResourceLoader.load(resource_path, "Texture2D") as Texture2D
 
 
 static func object(active_level_id: String, route_key: String,
@@ -939,6 +945,15 @@ static func static_flag(active_level_id: String, route_key: String) -> Texture2D
 ## materials may ask for one and keep their current atlas texture when this returns null.
 static func surface(active_level_id: String, surface_key: String) -> Texture2D:
 	return _load_texture(surface_path(active_level_id,surface_key))
+
+
+static func surface_texture_paths(active_level_id: String) -> Array[String]:
+	var paths: Array[String] = []
+	for surface_key: String in SURFACE_ROUTES:
+		var path := _texture_resource_path(surface_path(active_level_id, surface_key))
+		if not path.is_empty() and path not in paths:
+			paths.append(path)
+	return paths
 
 
 static func surface_path(active_level_id: String, surface_key: String) -> String:

@@ -7,6 +7,7 @@ var _update_label: Label
 var _update_overlay: Control
 var _entry_overlay: ColorRect
 var _entry_scan: RefCounted
+var _entry_surface_requests: Array[String] = []
 var _entry_previous_max_fps := -1
 
 
@@ -42,7 +43,7 @@ func _notification(what: int) -> void:
 		AppLifecycle.request_quit("menu_back")
 
 
-func _launch(prefetch_gao := false) -> void:
+func _launch(campaign_level_id := "") -> void:
 	var flow := get_node_or_null("/root/ContinueFlow")
 	if _entry_overlay != null or AppLifecycle.quit_started() or (flow != null and flow.busy()):
 		return
@@ -50,8 +51,10 @@ func _launch(prefetch_gao := false) -> void:
 		_launch_immediately()
 		return
 	_show_battle_loading()
-	if prefetch_gao and OS.get_name() == "Windows":
-		Art.prefetch_gao_opening_art()
+	if OS.get_name() == "Windows":
+		_request_battle_surfaces(campaign_level_id)
+		if campaign_level_id == "level5":
+			Art.prefetch_gao_opening_art()
 	# Continue on the main thread. The worker returns only verified file data.
 	_finish_battle_launch.call_deferred()
 
@@ -106,6 +109,18 @@ func _begin_battle_scan(prewarm := false) -> void:
 		_entry_scan = null
 
 
+func _request_battle_surfaces(campaign_level_id: String) -> void:
+	var surface_level := "level5" if Campaign.skirmish or Campaign.custom_defense else campaign_level_id
+	if surface_level.is_empty():
+		return
+	var baseline := "LIANGSHAN_VISUAL_BASELINE" if surface_level == "level5" else "CAMPAIGN_ENV_BASELINE"
+	if OS.get_environment(baseline) == "1":
+		return
+	for path in CampaignEnvironmentArt.surface_texture_paths(surface_level):
+		if ResourceLoader.load_threaded_request(path, "Texture2D") == OK:
+			_entry_surface_requests.append(path)
+
+
 func _finish_battle_launch() -> void:
 	if _entry_scan == null:
 		_begin_battle_scan()
@@ -121,21 +136,37 @@ func _finish_battle_launch() -> void:
 			return
 	if AppLifecycle.quit_started():
 		return
+	var ground_textures: Array[Texture2D] = []
+	for path in _entry_surface_requests:
+		var status := ResourceLoader.load_threaded_get_status(path)
+		while status == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+			await get_tree().process_frame
+			if AppLifecycle.quit_started():
+				return
+			status = ResourceLoader.load_threaded_get_status(path)
+		if status == ResourceLoader.THREAD_LOAD_LOADED:
+			var texture := ResourceLoader.load_threaded_get(path) as Texture2D
+			if texture != null:
+				ground_textures.append(texture)
+	_entry_surface_requests.clear()
 	# process_frame runs before this frame's drawing. Let the loading view paint
 	# before the synchronous scene installation, even when the worker ends early.
 	await RenderingServer.frame_post_draw
 	if AppLifecycle.quit_started():
 		return
-	_install_battle.call_deferred(identity)
+	_install_battle.call_deferred(identity, ground_textures)
 
 
-func _install_battle(identity: Dictionary) -> void:
+func _install_battle(identity: Dictionary, ground_textures: Array[Texture2D]) -> void:
 	if AppLifecycle.quit_started():
 		return
 	var scene: PackedScene = load("res://scenes/main.tscn")
 	if scene != null:
 		var battle := scene.instantiate()
 		battle.prepare_new_gameplay_identity(identity)
+		if not ground_textures.is_empty():
+			# Keep Godot's cached textures alive through the battle's _ready.
+			battle.ready.connect(func(): ground_textures.clear(), CONNECT_ONE_SHOT)
 		if get_tree().change_scene_to_node(battle) == OK:
 			return
 		battle.free()
@@ -987,7 +1018,7 @@ func _make_card(i: int) -> Control:
 			Campaign.custom_defense = false
 			Campaign.scenario = false
 			Campaign.ai_friendly = false   # AI友好模式仅限驻守战
-			_launch(Campaign.LEVELS[i]["id"] == "level5"))
+			_launch(Campaign.LEVELS[i]["id"]))
 	btn.add_theme_font_size_override("font_size", 18)
 	vb.add_child(btn)
 

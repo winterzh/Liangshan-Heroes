@@ -1,5 +1,8 @@
 # 项目目录索引（2026-10-30）
 
+[进场地表贴图后台读取](../qa/battle_entry_timing_20261116/battle_entry_surface_prefetch.json)记录高俅和经典驻守各三张贴图的实际路径、缓存与绑定时点。
+
+
 [梁山门楼与地表材质](../qa/battle_entry_timing_20261116/gao_scenery_gate_and_coast.json)保存门楼材质调用、两轴门架和地表加载分段。
 
 
