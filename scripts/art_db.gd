@@ -927,24 +927,39 @@ func _resolve_generic_directional_path(key: String, state: String, direction: St
 	# atlas sequences. All other units retain their existing PNG-first routing.
 	if key in ["guan_zhanzi", "siege_cata", "zhu_qi", "zhu_gong", "zhu_keke", "gou_lian", "lian_huan_ma", "xu_ning", "han_tao"]:
 		var authored_path := path.get_basename() + ".tres"
-		if ResourceLoader.exists(authored_path) and not _load_generic_directional_frames(authored_path).is_empty():
+		if _prepare_directional_frames(authored_path):
 			_generic_directional_path_cache[cache_key] = authored_path
 			return authored_path
 	if not ResourceLoader.exists(path):
 		# Native transparent cutouts retain their original pixels. SpriteFrames
 		# resources provide frame order and AtlasTexture padding at draw time.
 		path = path.get_basename() + ".tres"
-		if not ResourceLoader.exists(path):
-			path = ""
-		elif _load_generic_directional_frames(path).is_empty():
+		if not _prepare_directional_frames(path):
 			path = ""
 	_generic_directional_path_cache[cache_key] = path
 	return path
 
 
+func _prepare_directional_frames(path: String) -> bool:
+	if not ResourceLoader.exists(path):
+		return false
+	var frames := _load_generic_directional_frames(path)
+	if frames.is_empty():
+		return false
+	# Path resolution already decoded these frames. Keep them until the
+	# normal animation lookup claims them, then let its own cache own them.
+	_anim_cache["validated|" + path] = frames
+	return true
+
+
 func _load_generic_directional_frames(path: String) -> Array:
 	if path.is_empty():
 		return []
+	var prepared_key := "validated|" + path
+	if _anim_cache.has(prepared_key):
+		var prepared: Array = _anim_cache[prepared_key]
+		_anim_cache.erase(prepared_key)
+		return prepared
 	var source: Resource = load(path)
 	if source is Texture2D:
 		return _slice_anim_strip(source)

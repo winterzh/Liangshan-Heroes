@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+四向 `.tres` 动画通过路径验证后，将已解码帧交给原动画缓存。验收对照实际读取次数、帧源及元数据。[慢帧与动画读取记录](../qa/campaign_sustained_performance_20261116/README.md#慢帧归因与动画重复读取)
+
 高俅关两轮 600 秒对照复用原探针、标准特效和固定镜头，复测绑定源码 dde14ad3。[高俅关十分钟复测](../qa/campaign_sustained_performance_20261116/README.md#局部优化后的同负载复测)
 
 固定梁山与通用战役景物在创建和渲染树挂载时同步高度，动态单位与特效沿用原逐帧投影。[固定景物高度短测](../qa/campaign_sustained_performance_20261116/README.md#固定景物高度短测)

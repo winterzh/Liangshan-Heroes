@@ -1,0 +1,251 @@
+{
+  "base_source": "a1c2b699f1b92ca8ba4845a69f719b961b4d14db",
+  "trace_checks": 13,
+  "trace_seconds": 165.006033,
+  "renderer": "gl_compatibility",
+  "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+  "resolution": [
+    1440,
+    900
+  ],
+  "matched_peaks": [
+    {
+      "draw_calls": 1052.0,
+      "draw_us": 5439,
+      "frame": 11410,
+      "idle_to_physics_us": 89,
+      "physics_ticks": 1,
+      "physics_to_process_us": 2590,
+      "process_to_draw_us": 108824,
+      "qa_driver_us": 12,
+      "tick": 6454,
+      "wall_begin_us": 137229293,
+      "wall_end_us": 137346235,
+      "wall_us": 116942,
+      "loads": [
+        {
+          "end_us": 137286255,
+          "frame": 11410,
+          "path": "res://assets/anim/wu_yong_attack_ne.tres",
+          "physics_frame": 6566,
+          "start_us": 137234809,
+          "us": 51446
+        },
+        {
+          "end_us": 137331610,
+          "frame": 11410,
+          "path": "res://assets/anim/wu_yong_attack_ne.tres",
+          "physics_frame": 6566,
+          "start_us": 137288532,
+          "us": 43078
+        }
+      ],
+      "load_sum_us": 94524,
+      "game_seconds": 107.567
+    },
+    {
+      "draw_calls": 1097.0,
+      "draw_us": 5321,
+      "frame": 12810,
+      "idle_to_physics_us": 98,
+      "physics_ticks": 1,
+      "physics_to_process_us": 16377,
+      "process_to_draw_us": 92260,
+      "qa_driver_us": 9542,
+      "tick": 7441,
+      "wall_begin_us": 153700896,
+      "wall_end_us": 153814952,
+      "wall_us": 114056,
+      "loads": [
+        {
+          "end_us": 153799424,
+          "frame": 12810,
+          "path": "res://assets/anim/character_traits_v2_liu_tang_ne_hold_attack_nw.tres",
+          "physics_frame": 7553,
+          "start_us": 153718407,
+          "us": 81017
+        }
+      ],
+      "load_sum_us": 81017,
+      "game_seconds": 124.017
+    },
+    {
+      "draw_calls": 1166.0,
+      "draw_us": 6650,
+      "frame": 15167,
+      "idle_to_physics_us": 87,
+      "physics_ticks": 1,
+      "physics_to_process_us": 3662,
+      "process_to_draw_us": 64815,
+      "qa_driver_us": 14,
+      "tick": 9388,
+      "wall_begin_us": 186132899,
+      "wall_end_us": 186208113,
+      "wall_us": 75214,
+      "loads": [
+        {
+          "end_us": 186165812,
+          "frame": 15167,
+          "path": "res://assets/anim/wu_yong_attack_se.tres",
+          "physics_frame": 9500,
+          "start_us": 186139478,
+          "us": 26334
+        },
+        {
+          "end_us": 186190464,
+          "frame": 15167,
+          "path": "res://assets/anim/wu_yong_attack_se.tres",
+          "physics_frame": 9500,
+          "start_us": 186166924,
+          "us": 23540
+        }
+      ],
+      "load_sum_us": 49874,
+      "game_seconds": 156.467
+    }
+  ],
+  "trace_art_sha256": "c350627948d30294733378abbbc2732492b608975e43ce82fd58036b4384f22c",
+  "trace_probe_sha256": "66ed57a6e3526b807c171c04d1f1014be7163c97a62882641cf0fa44c504cf4d",
+  "trace_log_sha256": "7264240239dfa514f4fac8c3d7e3de78e356cc3cb9e38a09f18821931e44f4e1",
+  "focused_exact_frames_match": true,
+  "before": {
+    "tested_source_lf_sha256": "3fec6f54190c3249be38bf74505bc39734a1ae3bf45fce3561c026ce2bcbc24f",
+    "instrumented_sha256": "6c6d50052f4cc12f9f99b0a86be73139de53319a30347ed5456d3cb7623f1408",
+    "log_sha256": "df06c61e2549f21acfa112700ea1bd6cc45d361def2ec36b58664bd91466c1dc",
+    "actual_loads": {
+      "res://assets/anim/wu_yong_attack_ne.tres": 2,
+      "res://assets/anim/wu_yong_attack_se.tres": 2,
+      "res://assets/anim/guan_zhanzi_attack_ne.tres": 2,
+      "res://assets/anim/guan_dao_idle_se.png": 1
+    },
+    "exit_code": 0,
+    "errors": [],
+    "routes": [
+      {
+        "route": [
+          "wu_yong",
+          "attack",
+          "ne"
+        ],
+        "path": "res://assets/anim/wu_yong_attack_ne.tres",
+        "elapsed_us": 108478,
+        "resolved_frames": 3,
+        "ordered_frames_sha256": "6637c83dda2111db35185c32e51d9fdda404aa8d6c0f0ead055b7effebcf3445"
+      },
+      {
+        "route": [
+          "wu_yong",
+          "attack",
+          "se"
+        ],
+        "path": "res://assets/anim/wu_yong_attack_se.tres",
+        "elapsed_us": 44103,
+        "resolved_frames": 3,
+        "ordered_frames_sha256": "5656cca236f6c195c573440a8412b15a8192571d4cbd1cbc6b207907306b9912"
+      },
+      {
+        "route": [
+          "guan_zhanzi",
+          "attack",
+          "ne"
+        ],
+        "path": "res://assets/anim/guan_zhanzi_attack_ne.tres",
+        "elapsed_us": 30006,
+        "resolved_frames": 5,
+        "ordered_frames_sha256": "1273dcc9b59ecb835fa2acc553388218721516fcca991e7250b3dfe3331f2fd7"
+      },
+      {
+        "route": [
+          "guan_dao",
+          "idle",
+          "se"
+        ],
+        "path": "res://assets/anim/guan_dao_idle_se.png",
+        "elapsed_us": 4585,
+        "resolved_frames": 1,
+        "ordered_frames_sha256": "0ed6c4384de0ad5e4b5a4d5e4e390a430ebbeef8a8ac9e2b291c27d33a7a5350"
+      },
+      {
+        "route": [
+          "missing_qa_actor",
+          "attack",
+          "ne"
+        ],
+        "path": "",
+        "elapsed_us": 505,
+        "resolved_frames": 0,
+        "ordered_frames_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    ]
+  },
+  "after": {
+    "tested_source_lf_sha256": "89ac31f3b0472bd0309ef4b99340ae6af17fab0791f91b812c6b71b7ab67b7c8",
+    "instrumented_sha256": "751c4e28d62594450d0a8feaea0879d293da74addbbf4d74ef26e1a51eca4648",
+    "log_sha256": "0fca8fcb0c13af181bcc3b0da21d0d5543b20be598bf4cd3310a0e4255d2af42",
+    "actual_loads": {
+      "res://assets/anim/wu_yong_attack_ne.tres": 1,
+      "res://assets/anim/wu_yong_attack_se.tres": 1,
+      "res://assets/anim/guan_zhanzi_attack_ne.tres": 1,
+      "res://assets/anim/guan_dao_idle_se.png": 1
+    },
+    "exit_code": 0,
+    "errors": [],
+    "routes": [
+      {
+        "route": [
+          "wu_yong",
+          "attack",
+          "ne"
+        ],
+        "path": "res://assets/anim/wu_yong_attack_ne.tres",
+        "elapsed_us": 48706,
+        "resolved_frames": 3,
+        "ordered_frames_sha256": "6637c83dda2111db35185c32e51d9fdda404aa8d6c0f0ead055b7effebcf3445"
+      },
+      {
+        "route": [
+          "wu_yong",
+          "attack",
+          "se"
+        ],
+        "path": "res://assets/anim/wu_yong_attack_se.tres",
+        "elapsed_us": 21061,
+        "resolved_frames": 3,
+        "ordered_frames_sha256": "5656cca236f6c195c573440a8412b15a8192571d4cbd1cbc6b207907306b9912"
+      },
+      {
+        "route": [
+          "guan_zhanzi",
+          "attack",
+          "ne"
+        ],
+        "path": "res://assets/anim/guan_zhanzi_attack_ne.tres",
+        "elapsed_us": 13418,
+        "resolved_frames": 5,
+        "ordered_frames_sha256": "1273dcc9b59ecb835fa2acc553388218721516fcca991e7250b3dfe3331f2fd7"
+      },
+      {
+        "route": [
+          "guan_dao",
+          "idle",
+          "se"
+        ],
+        "path": "res://assets/anim/guan_dao_idle_se.png",
+        "elapsed_us": 4064,
+        "resolved_frames": 1,
+        "ordered_frames_sha256": "0ed6c4384de0ad5e4b5a4d5e4e390a430ebbeef8a8ac9e2b291c27d33a7a5350"
+      },
+      {
+        "route": [
+          "missing_qa_actor",
+          "attack",
+          "ne"
+        ],
+        "path": "",
+        "elapsed_us": 462,
+        "resolved_frames": 0,
+        "ordered_frames_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    ]
+  }
+}
