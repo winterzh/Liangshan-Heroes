@@ -1,5 +1,8 @@
 # 项目目录索引（2026-10-30）
 
+[本批来源与限定验证](../qa/campaign_naval_recovery_20261116/README.md)。定向入口`tools/gao_naval_recovery_qa.gd`，实际路线复用`tools/gao_rts_play.gd`；QA含fixtures/和live/两份运行器/原件，翻译来源`assets/localization/campaign_naval_recovery.json`。
+
+
 [大名府内外接应](../qa/campaign_coordination_20261116/README.md)记录M4第二批及失败/最终原件；定向入口`tools/daming_coordination_qa.gd`复用既有渲染捕获，翻译来源`assets/localization/campaign_coordination.json`，六张实际截图在QA的`screens/`。
 
 

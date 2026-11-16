@@ -1,5 +1,8 @@
 # 源码设置与换机（2026-10-30）
 
+2026-11-16 高俅保存profile为`campaign_level5_v2`，新增`fire_abandoned`及载客引用一致性约束；生产身份改变，旧候选不沿用。翻译来源`campaign_naval_recovery.json`同步catalog。[本批来源与限定验证](../qa/campaign_naval_recovery_20261116/README.md)。
+
+
 2026-11-16 大名府接应/撤离反馈新增`assets/localization/campaign_coordination.json`并同步catalog；关卡沿用level8 v1字段结构，状态均实时派生，不新增档案字段。本批源码改变生产身份，旧续玩候选资格不沿用。[定向验证及恢复边界](../qa/campaign_coordination_20261116/README.md)。
 
 

@@ -45,7 +45,7 @@ const FIELDS := {
 		"units": "riders posts workers enemy_workers enemy_nodes escorts"},
 	"level5": {
 		"int": "ai_spent_gold ai_spent_wood", "ints": "produced", "floats": "production_t",
-		"bool": "lure_started fire_prepared fire_lit port_sealed flagship_disabled recovered landed capture_lost core_ready escort_warning",
+		"bool": "lure_started fire_prepared fire_lit fire_abandoned port_sealed flagship_disabled recovered landed capture_lost core_ready escort_warning",
 		"float": "elapsed strategy_t", "cell": "lure_cell", "waves": "waves",
 		"unit": "hall song flagship fireboat embarked_liu liu_carrier prisoner carrier",
 		"units": "workers posts support", "groups": "water_groups land_groups", "external": "end_button"},
@@ -209,6 +209,7 @@ func _checks(level_id: String, values: Dictionary) -> bool:
 		if values.defense_state not in ["watch", "moving", "guard"] or values.defense_elapsed < 0.0: return false
 	if level_id in ["level4", "level5"] and values.waves.size() != (2 if level_id == "level4" else 3): return false
 	if level_id == "level5" and (values.production_t.size() != 2 or values.produced.size() != 2): return false
+	if level_id == "level5" and values.fire_abandoned and not values.fire_prepared: return false
 	if level_id == "level1" and (values.delivered < 0 or values.delivered > Transport.LOAD_COUNT or not Transport.valid_loaded(values.cargo_ready) or values.cargo_plan not in ["", "free"]): return false
 	if level_id == "level4" and (values.broken_count < 0 or values.broken_count > 12 or values.lhm_killed < 0 or values.lhm_killed > 12): return false
 	if level_id == "level7" and values.special_kind not in ["heavy", "rush"]: return false

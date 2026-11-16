@@ -17,9 +17,10 @@ func configure(value: Dictionary) -> Dictionary:
 	if not _fields(value,["values","references","external"]):return bad("ROLES")
 	var refs: Variant=value.references;var values: Variant=value.values
 	if not _fields(refs,["hall","song","flagship","fireboat","embarked_liu","liu_carrier","prisoner","carrier","workers","posts","support","water_groups","land_groups"]):return bad("REFERENCE_FIELDS")
-	if typeof(values)!=TYPE_DICTIONARY or not values.has_all(["fire_prepared","fire_lit","recovered","landed","flagship_disabled","capture_lost","core_ready","produced","waves"]):return bad("STAGE_FIELDS")
-	for field in ["fire_prepared","fire_lit","recovered","landed","flagship_disabled","capture_lost","core_ready"]:
+	if typeof(values)!=TYPE_DICTIONARY or not values.has_all(["fire_prepared","fire_lit","fire_abandoned","recovered","landed","flagship_disabled","capture_lost","core_ready","produced","waves"]):return bad("STAGE_FIELDS")
+	for field in ["fire_prepared","fire_lit","fire_abandoned","recovered","landed","flagship_disabled","capture_lost","core_ready"]:
 		if typeof(values[field])!=TYPE_BOOL:return bad("STAGE_TYPE")
+	if values.fire_abandoned and (not values.fire_prepared or refs.embarked_liu!=null or refs.liu_carrier!=null):return bad("ABANDONED_CREW")
 	if typeof(values.produced)!=TYPE_ARRAY or values.produced.size()!=2:return bad("PRODUCTION")
 	for i in range(2):
 		if typeof(values.produced[i])!=TYPE_INT or values.produced[i]<0 or values.produced[i]>[10,4][i]:return bad("PRODUCTION")

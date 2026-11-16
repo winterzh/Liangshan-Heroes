@@ -12,6 +12,7 @@ const LAND_FRONT := Vector2i(34,31)
 const SEA_FRONT := Vector2i(39,44)
 const LANDING := Vector2i(20,49)
 const LANDING_WATER := Vector2i(22,52)
+const LIU_RETURN := Vector2i(20,52) # Separate from the prisoner handover marker.
 const WIND := Vector2i(29,38)
 const FIRE_POINTS := [Vector2i(42,29),Vector2i(39,41)]
 const FIRE_SAFE := Vector2i(32,50)
@@ -40,6 +41,7 @@ var lure_started := false
 var lure_cell := Vector2i(39,41)
 var fire_prepared := false
 var fire_lit := false
+var fire_abandoned := false
 var port_sealed := false
 var flagship_disabled := false
 var recovered := false
@@ -302,8 +304,59 @@ func _near(b,u,cell: Vector2i,radius: float) -> bool:
 	return alive(u) and u.position.distance_to(b.map.cell_to_world(cell))<=radius
 func _enemy_near(b,p: Vector2,radius: float) -> bool:
 	return b.units.any(func(u): return alive(u) and u.faction==1 and not u.is_resource and not u.is_building and u.position.distance_to(p)<radius)
+func _fire_unavailable(b,reason: String) -> void:
+	if b.mission.has_event("fire_escort_safe"): return
+	b.mission.miss_story_goal("gao_fire",reason)
+	for action in ["gao_wind","gao_prepare","gao_fire_0","gao_fire_1","gao_fire_withdraw"]:
+		b.mission.block_action(action,reason)
+func _liu_landing_cell(b) -> Vector2i:
+	# Local dock transfer only. A blocked shore must be cleared, never search the
+	# whole map and teleport the original hero to a distant free cell.
+	if not is_instance_valid(embarked_liu): return Naval.INVALID
+	for r in range(3):
+		for y in range(-r,r+1):
+			for x in range(-r,r+1):
+				if maxi(absi(x),absi(y))!=r: continue
+				var cell := LANDING+Vector2i(x,y)
+				var point: Vector2=b.map.cell_to_world(cell)
+				if not b.map.is_open_cell(cell,"land"): continue
+				if b.units.any(func(u): return alive(u) and not u.garrisoned and u.position.distance_to(point)<u.radius+embarked_liu.radius+4): continue
+				return cell
+	return Naval.INVALID
+func _disembark_liu(b,actor) -> void:
+	var current_ship=liu_carrier if fire_lit else fireboat
+	if not is_instance_valid(embarked_liu) or embarked_liu.story_outcome!="embarked": return
+	if actor!=current_ship or not _near(b,actor,LIU_RETURN,64) or _enemy_near(b,b.map.cell_to_world(LANDING),180):
+		_retry(b,"gao_liu_return","请把搭载刘唐的原船驶到返港标记，先清开码头附近官军。")
+		return
+	var cell := _liu_landing_cell(b)
+	if cell==Naval.INVALID:
+		_retry(b,"gao_liu_return","码头岸上没有安全空位，请移开部队或清理阻挡后再下船。")
+		return
+	var hero=embarked_liu
+	embarked_liu=null
+	liu_carrier=null
+	hero.story_outcome=""
+	hero.position=b.map.cell_to_world(cell)
+	hero.order_stop()
+	hero.passive=false
+	hero.set_stance(Unit.STANCE_DEFEND)
+	hero.show()
+	hero.queue_redraw()
+	actor.remove_meta("carried_story_person")
+	if not fire_lit:
+		actor.remove_meta("story_commander")
+		actor.resolve_story("retreated")
+	if not b.mission.has_event("fire_escort_safe"):
+		fire_abandoned=true
+		_fire_unavailable(b,"刘唐已返港放弃本次火攻；火具耗材不退，可继续指挥岸军、造普通战船。")
+	b.mission.mark("gao_liu_returned","刘唐已由原船返港下船，保留生命、成长和装备，可重新指挥岸军。")
+	b.hud.update_selection_panel(b.selection)
 func on_mission_action(b,key: String,actor) -> void:
+	if fire_abandoned and key in ["gao_wind","gao_prepare","gao_fire_0","gao_fire_1","gao_fire_withdraw"]: return
 	match key:
+		"gao_liu_return":
+			_disembark_liu(b,actor)
 		"gao_lure_main","gao_lure_side":
 			if lure_started or _count(water_groups[0])==0:
 				return
@@ -334,6 +387,8 @@ func on_mission_action(b,key: String,actor) -> void:
 			b.mission.mark("fireboat_prepared","小船备好火具，消耗60木；护它接近第二批连船再举火。")
 			for i in range(2):
 				b.mission.add_action("gao_fire_%d"%i,Localize.text("刘唐：")+(Localize.text("外港") if i==0 else Localize.text("内港"))+Localize.text("举火"),FIRE_POINTS[i],["liu_tang_fireboat"],1.5,48)
+			b.mission.add_action("gao_liu_return","刘唐：原船返港下船",LIU_RETURN,["liu_tang_fireboat","ruan_xiaoer_boat"],1.5,48)
+			b.msg("火攻可自选放弃：把搭载刘唐的原船开回返港标记下船，已耗60木不退。若已完成两船安全撤离，下船保留该演义成果。",7)
 		"gao_fire_0","gao_fire_1":
 			if fire_lit or actor!=fireboat:
 				return
@@ -417,6 +472,7 @@ func _capture_failed(b,reason: String) -> void:
 	capture_lost=true
 	b.mission.mark("gao_escaped",reason+Localize.text("；仍可打停座船、击退三批主力取得基础通关。"))
 	for key in ["gao_seal","gao_scuttle","gao_land"]: b.mission.block_action(key,reason)
+	if core_ready: b.mission.set_objective("基础目标已达成，生擒路线已失去条件。可直接点击收兵通关，无需寻找替代专船或清扫全图。")
 func _core_threats_clear() -> bool:
 	return flagship_disabled and water_groups.all(func(group): return _count(group)==0) and land_groups.all(func(group): return _count(group)==0)
 func _finish(b,captured := false) -> void:
@@ -448,9 +504,7 @@ func process(b,delta: float) -> void:
 		for key in ["gao_lure_main","gao_lure_side"]:
 			b.mission.block_action(key,"第一批官船已击退，继续经营和进攻即可。")
 	if _count(water_groups[1])==0 and not fire_lit:
-		b.mission.miss_story_goal("gao_fire","第二批官船已正面击退，本局不再需要举火。")
-		for key in ["gao_wind","gao_prepare","gao_fire_0","gao_fire_1"]:
-			b.mission.block_action(key,"第二批连船已击退，可继续用现存舰队进攻。")
+		_fire_unavailable(b,"第二批连船已击退，可继续用现存舰队进攻；已登船的刘唐可由原船返港下船。")
 	if land_groups.all(func(group): return _count(group)==0):
 		b.mission.mark("gao_land_cleared","三批岸上主力均已击退。")
 	if flagship_disabled and not capture_lost and not b.mission.actions.has("gao_seal"):
@@ -472,7 +526,7 @@ func process(b,delta: float) -> void:
 	if _core_threats_clear() and not core_ready:
 		core_ready=true
 		b.mission.set_title("主力已退 · 收兵或押俘")
-		b.mission.set_objective("基础目标已达成，可直接收兵通关；也可继续清开座船周围、封港凿船并押俘回堂。")
+		b.mission.set_objective("基础目标已达成，生擒路线已失去条件。可直接点击收兵通关，无需寻找替代专船或清扫全图。" if capture_lost else "基础目标已达成，可直接收兵通关；也可继续清开座船周围、封港凿船并押俘回堂。")
 		end_button=b.mission.add_level_button("gao_end","收兵通关 · 已击退高俅")
 func activate_mission_button(b, button_id: String) -> void:
 	if button_id == "gao_end": _finish(b,b.mission.has_event("gao_captured"))
@@ -490,6 +544,7 @@ func on_unit_died(b,u) -> void:
 		embarked_liu.queue_free()
 		embarked_liu=null
 		b.mission.mark("liu_tang_lost","搭载刘唐的船只损失，刘唐失散；可在忠义堂正常付费重新集结，火攻不再能补办。")
+		b.mission.block_action("gao_liu_return","载船已损失，刘唐失散；可在忠义堂付费重新集结。")
 	if u==posts[0]: b.mission.mark("gao_land_post_destroyed","山前补给营被拆，停止该处所有陆军补充，北侧资源可争取。")
 	if u==posts[1]: b.mission.mark("gao_sea_post_destroyed","东岸官军船坞被拆，停止该处所有战船补充。")
 	if u==flagship: flagship_disabled=true; _capture_failed(b,"座船已沉，未能生擒高俅")
@@ -499,8 +554,8 @@ func on_unit_died(b,u) -> void:
 		if not port_sealed and not alive(b.find_unit("ruan_xiaoer_boat")) and not alive(b.find_unit("ruan_xiaowu_boat")):
 			_capture_failed(b,"两艘封港专船均已损失")
 		if not b.mission.has_event("fire_escort_safe"):
-			b.mission.miss_story_goal("gao_fire","接应船损失，可继续用普通舰队正面作战。")
-	if u==fireboat and not fire_lit: b.mission.miss_story_goal("gao_fire","火船损失，可建船坞补普通战船继续进攻。")
+			_fire_unavailable(b,"接应船损失，可继续用普通舰队作战；刘唐若仍在原船上，可返港下船。")
+	if u==fireboat and not fire_lit: _fire_unavailable(b,"火船损失，可建船坞补普通战船继续进攻。")
 func top_status(_b) -> String:
 	var sent: int=waves.filter(func(w): return w.sent).size()
 	return Localize.format_text("三败高太尉 · 已出发%d/3批 · 水陆营地持续保留 · 官军补充 陆%d/10 船%d/4", [sent,produced[0],produced[1]])
