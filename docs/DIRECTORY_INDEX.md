@@ -1,5 +1,8 @@
 # 项目目录索引（2026-10-30）
 
+[连环马诱骑采样](../qa/campaign_resume_current_20261116/evidence/protected_drill_candidate/)新增 lure_baseline 和 lure_staged，分别保存原走位失败和并行预走位实际完成教场的日志、采样与回执。
+
+
 [教场修正候选来源与首段回执](../qa/campaign_resume_current_20261116/evidence/protected_drill_candidate/)保存输入变化、冷导入、策略预检和首个保存阶段，含下阶段未启动的占用记录。
 
 

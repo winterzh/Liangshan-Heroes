@@ -1,4 +1,5 @@
 from pathlib import Path
+import argparse
 import os
 import shutil
 import sys
@@ -9,9 +10,26 @@ qa = Path(__file__).resolve().parent
 sys.path.insert(0, str(qa))
 from prepare import common, running, read, save, sha, need
 
-run, engine, lock = map(Path, sys.argv[1:])
-old = run / 'lianhuanma_131719_3269c6ec'
+parser = argparse.ArgumentParser(description='Observe the actual restored drill on an isolated save copy.')
+parser.add_argument('run', type=Path)
+parser.add_argument('engine', type=Path)
+parser.add_argument('lock', type=Path)
+parser.add_argument('--batch', default='lianhuanma_131719_3269c6ec')
+parser.add_argument('--resave-tail')
+parser.add_argument('--current-strategy', action='store_true',
+                    help='Observe the current pinned ordinary-order strategy on the same save copy.')
+args = parser.parse_args()
+run, engine, lock = args.run, args.engine, args.lock
+old = run / args.batch
 batch = read(old / 'receipt.json')
+resave = read(run / args.resave_tail / 'receipt.json') if args.resave_tail else batch
+if args.resave_tail:
+    need(resave['previous_batch'] == str(old) and resave['previous_receipt_sha256'] == sha(old / 'receipt.json')
+         and resave['profile'] == batch['profile'] and resave['source_identity'] == batch['source_identity'],
+         'Resave tail belongs to a different batch')
+prior_row, = [row for row in resave['reports'] if row['mode'] == 'resume_training' and row['passed']]
+prior_path = Path(prior_row['path'])
+need(sha(prior_path) == prior_row['sha256'], 'Original restore report changed')
 source = old / 'workers'
 out = run / ('drill_observation_' + uuid.uuid4().hex[:8])
 out.mkdir()
@@ -20,7 +38,24 @@ shutil.copytree(source, workers)
 for name, expected in read(source / 'bindings.json').items():
     need(sha(workers / name) == expected, 'Worker bytes changed')
 driver = workers / 'driver.gd'
+if args.current_strategy:
+    import run_lianhuanma as host
+    host.worker_pins()
+    shutil.copyfile(qa / 'workers/driver.gd', driver)
+strategy_sha = sha(driver)
 raw = driver.read_text(encoding='utf8')
+lure_wait = '\tif not check(await wait_live(func(): return level.drill_entered and level.drill_lure == lure, 55.0), "ordinary non-hook infantry actually enters lure radius"): return false'
+lure_trace = '''	var last_lure_tick := {"value": -600}
+	var check_lure := func() -> bool:
+		if battle._run_clock._next_tick >= last_lure_tick.value + 120:
+			observe_lure(level, lure)
+			last_lure_tick.value = battle._run_clock._next_tick
+		return level.drill_entered and level.drill_lure == lure
+	var entered := await wait_live(check_lure, 55.0)
+	observe_lure(level, lure)
+	if not check(entered, "ordinary non-hook infantry actually enters lure radius"): return false'''
+need(raw.count(lure_wait) == 1, 'Lure wait mismatch')
+raw = raw.replace(lure_wait, lure_trace)
 old_call = '\tpolicy.target(battle, [instructor, hook], level.dummy, "drill_attack")\n\tif not check(await wait_live(func(): return level.drill_complete, 45.0), "real two-person attacks complete optional teaching"): return false'
 new_call = '''	var practice: Variant = level.dummy
 	observations["drill_samples"] = []
@@ -45,6 +80,21 @@ raw = raw.replace(old_call, new_call)
 stop = '\tif not await natural_drill(): return\n'
 need(raw.count(stop) == 1, 'Stop boundary mismatch')
 raw = raw.split(stop)[0] + '''	stage_completed = await natural_drill()
+
+func observe_lure(level: Variant, intended: Variant) -> void:
+	var accepted: Variant = level.drill_lure
+	var dummy: Variant = level.dummy
+	var row := {"tick": battle._run_clock._next_tick, "entered": level.drill_entered,
+		"accepted_id": accepted.entity_id if is_instance_valid(accepted) else 0,
+		"accepted_key": accepted.key if is_instance_valid(accepted) else "",
+		"intended_id": intended.entity_id, "intended_hp": intended.hp,
+		"intended_position": str(intended.position), "intended_state": intended._state,
+		"path_index": intended._path_i, "path_size": intended._path.size(),
+		"dummy_position": str(dummy.position) if is_instance_valid(dummy) else "",
+		"distance": intended.position.distance_to(dummy.position) if is_instance_valid(dummy) else -1.0}
+	if not observations.has("lure_samples"): observations["lure_samples"] = []
+	observations.lure_samples.append(row)
+	print("LURE_OBSERVATION ", JSON.stringify(row))
 
 func observe_drill(label: String, dummy: Variant, actors: Array) -> void:
 	var point: Vector2 = battle.to_screen(dummy.position)
@@ -75,8 +125,6 @@ profile.mkdir()
 shutil.copytree(Path(batch['profile'])/'appdata',profile/'appdata')
 for name in ('localappdata','temp','tmp'):
     (profile/name).mkdir()
-prior_path = old/'resume_training/report.json'
-need(sha(prior_path) == batch['reports'][1]['sha256'], 'Original restore report changed')
 prior = read(prior_path)
 old_prefix = Path(batch['profile']).as_posix() + '/'
 new_prefix = profile.as_posix() + '/'
@@ -109,8 +157,9 @@ env.update(STEAM_DISABLED='1', CAMPAIGN_QA='', LSH_CONTINUE_FLOW_QA='1', LSH_CON
            LT_PROVENANCE_SHA256=sha(qa/'workers/provenance.json'),
            LT_MODE='resume_victory', LT_REPORT=str(out/'report.json'), LT_PROCESS_NONCE=uuid.uuid4().hex,
            LT_PREVIOUS=str(out/'predecessor_rebound.json'), LT_PREVIOUS_SHA256=sha(out/'predecessor_rebound.json'))
-receipt = {'scope':'restored teaching observation only', 'steps':[], 'profile':str(profile), 'source_report_sha256':sha(old/'resume_training/report.json'),
-           'driver_sha256':sha(driver),'original_driver_sha256':sha(source/'driver.gd'),'source_identity':batch['source_identity']}
+receipt = {'scope':'restored teaching observation only', 'steps':[], 'profile':str(profile), 'source_report_sha256':sha(prior_path),
+           'driver_sha256':sha(driver),'original_driver_sha256':sha(source/'driver.gd'),
+           'strategy_sha256':strategy_sha, 'source_identity':batch['source_identity']}
 print(str(out), flush=True)
 start = time.monotonic()
 while running():

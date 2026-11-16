@@ -96,10 +96,15 @@ func natural_drill() -> bool:
 	# These actors receive only drill orders until completion. Economy continues;
 	# no whole-army order, enemy pause, geometry assignment or early damage.
 	policy.move(battle, [hook], level.DRILL + Vector2i(-2, -2))
+	# Stage the lure outside trigger range while Xu Ning sets up the drill.
+	var staging_cell: Vector2i = level.DRILL_ENTRY + Vector2i(-4, -4)
+	var staging_position: Vector2 = battle.map.cell_to_world(staging_cell)
+	policy.move(battle, [lure], staging_cell)
 	policy.move(battle, [instructor], battle.mission.actions.lhm_drill_reset.cell)
 	if not check(await wait_live(func(): return alive(level.dummy), 80.0), "instructor walks to actual mission action and completes one-second setup"): return false
 	check(battle.mission.actions.lhm_drill_reset.actors.has("xu_ning") and not level.drill_complete \
 		and not level.drill_entered, "authored practice starts without pre-awarded goal")
+	if not check(await wait_live(func(): return alive(lure) and lure.position.distance_to(staging_position) <= 32.0, 85.0), "ordinary lure reaches the staging lane outside trigger range"): return false
 	var dummy_id: String = str(level.dummy.entity_id)
 	policy.move(battle, [lure], level.DRILL_ENTRY + Vector2i(0, 2))
 	if not check(await wait_live(func(): return level.drill_entered and level.drill_lure == lure, 55.0), "ordinary non-hook infantry actually enters lure radius"): return false

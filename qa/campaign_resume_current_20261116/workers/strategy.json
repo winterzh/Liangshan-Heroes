@@ -4,7 +4,7 @@
   "original_commit": "f23e3b287fd66973abcbc74f4b4f537c1ec0ff5f",
   "original_sha256": "1c758b85424fa6c98e17a6b418698aa0ec2ca61b90ce5c245195f6218730c423",
   "derived_path": "driver_strategy.gd",
-  "derived_sha256": "bf8390c57469659e1fece50401aa4a8e1cc5f934b4e3883d62de457660786163",
+  "derived_sha256": "5de1ae1ec151f1c1b944ba7dbd5e9ade9e14380b74094e807a4331df615e95b8",
   "patches": [
     {
       "before": "\t\teconomy_step()\n\t\tvar army: Array = battle.units.filter",
@@ -61,6 +61,14 @@
     {
       "before": "\t\t\t\t\tvar can_pull: bool = hr_pull != null\n\t\t\t\t\tif can_pull:\n\t\t\t\t\t\tpullers = defenders.duplicate()\n\t\t\t\t\t\tpullers.sort_custom(func(a, z): return a.hp > z.hp)\n\t\t\t\t\t\tpullers = pullers.slice(0, 2)\n\t\t\t\t\t\trest_d = defenders.filter(func(u): return u not in pullers)\n\t\t\t\t\t\tpolicy.target(battle, pullers, hr_pull, \"v24_hall_rider_pull\")\n\t\t\t\t\t\tdef_note = \"pull_\" + str(hr_pull.entity_id)\n\t\t\t\t\tif not rest_d.is_empty():\n\t\t\t\t\t\tvar escort_click_ok: bool = esc != null\n\t\t\t\t\t\tif handoff_defense and escort_click_ok:\n\t\t\t\t\t\t\tvar point: Vector2 = battle.to_screen(esc.position)\n\t\t\t\t\t\t\tescort_click_ok = battle._garrisonable_at(point) == null and battle._enemy_at(point) == esc\n\t\t\t\t\t\tif escort_click_ok:\n\t\t\t\t\t\t\tpolicy.target(battle, rest_d, esc, \"v24_hall_escort\")",
       "after": "\t\t\t\t\tvar can_pull: bool = false\n\t\t\t\t\tif hr_pull != null:\n\t\t\t\t\t\tpullers = defenders.duplicate()\n\t\t\t\t\t\tpullers.sort_custom(func(a, z): return a.hp > z.hp)\n\t\t\t\t\t\tvar pull_limit: int = 1 if handoff_defense and not hall_attackers.is_empty() else 2\n\t\t\t\t\t\tpullers = pullers.slice(0, pull_limit)\n\t\t\t\t\t\tcan_pull = focus_hall_target.call(pullers, hr_pull, \"v24_hall_rider_pull\")\n\t\t\t\t\t\tif can_pull:\n\t\t\t\t\t\t\trest_d = defenders.filter(func(u): return u not in pullers)\n\t\t\t\t\t\t\tdef_note = \"pull_\" + str(hr_pull.entity_id)\n\t\t\t\t\tif not rest_d.is_empty():\n\t\t\t\t\t\tif focus_hall_target.call(rest_d, esc, \"v24_hall_escort\"):"
+    },
+    {
+      "before": "\tpolicy.move(battle, [instructor], battle.mission.actions.lhm_drill_reset.cell)",
+      "after": "\t# Stage the lure outside trigger range while Xu Ning sets up the drill.\n\tvar staging_cell: Vector2i = level.DRILL_ENTRY + Vector2i(-4, -4)\n\tvar staging_position: Vector2 = battle.map.cell_to_world(staging_cell)\n\tpolicy.move(battle, [lure], staging_cell)\n\tpolicy.move(battle, [instructor], battle.mission.actions.lhm_drill_reset.cell)"
+    },
+    {
+      "before": "\tvar dummy_id: String = str(level.dummy.entity_id)\n\tpolicy.move(battle, [lure], level.DRILL_ENTRY + Vector2i(0, 2))",
+      "after": "\tif not check(await wait_live(func(): return alive(lure) and lure.position.distance_to(staging_position) <= 32.0, 85.0), \"ordinary lure reaches the staging lane outside trigger range\"): return false\n\tvar dummy_id: String = str(level.dummy.entity_id)\n\tpolicy.move(battle, [lure], level.DRILL_ENTRY + Vector2i(0, 2))"
     }
   ],
   "original_all_goal_save_clock_typed_assertions_unchanged": true,
