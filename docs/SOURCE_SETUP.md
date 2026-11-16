@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+续玩候选 `ad20ef6c` 基于 `07df0d96`，临时补入 25 个经核对的 `.gd.uid`，复建条目见[候选与校验记录](../qa/campaign_resume_current_20261116/evidence/current_stable_07df0d96/README.md)。
+
 连环马 `--retry-south-tail` 固定原南路攻营报告与同一再保存档。验证策略通过原攻营命令护送撞车执行，归档与冻结身份见[同档胜利与旧档拒绝原件](../qa/campaign_resume_current_20261116/evidence/protected_drill_candidate/ram_escort_terminal/)。
 
 四语词库重新生成后包含战役进场文案和既有 115 条运行词条的源分片，按 [本地化维护步骤](LOCALIZATION_20260908.md#维护与复现) 严格重建并执行覆盖检查。

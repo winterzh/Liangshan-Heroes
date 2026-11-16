@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[最新续玩候选导入记录](../qa/campaign_resume_current_20261116/evidence/current_stable_07df0d96/README.md) 含冷导入收据、内容身份和复建所用的脚本 UID。
+
 [同档胜利与旧档拒绝原件](../qa/campaign_resume_current_20261116/evidence/protected_drill_candidate/ram_escort_terminal/)含全过程胜利、独立进程拒绝及来源核对收据。
 
 [战役进场文案验收](../qa/battle_entry_localization_20261116/README.md) 记录四语新增范围与词库校验。进场停顿复现和量测计划见[开发计划](DEVELOPMENT_PLAN.md#2026-11-16-出征与模式进场卡顿)。
