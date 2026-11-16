@@ -4258,22 +4258,27 @@ func _building_shadow_texture(visible_texture: Texture2D, scoped_texture: Textur
 
 
 func _draw() -> void:
-	var variant := visual_art_variant()
-	var tex: Texture2D
-	var ship_art: Dictionary
-	if setup_def.has("campaign_object"):
-		var object_key := String(setup_def.campaign_object)
-		var state := String(get_meta("ship_state", "default"))
-		if movement_profile == "water" and not is_building:
-			ship_art = Art.campaign_object_art(object_key, state, animation_direction)
-			tex = ship_art.texture
-		else:
-			tex = Art.campaign_object_texture(object_key, state, animation_direction)
-	if tex == null:
-		tex = Art.unit_texture(key, variant, animation_direction)
 	var scoped_environment_tex := _campaign_environment_texture()
-	if scoped_environment_tex != null:
-		tex = scoped_environment_tex
+	var local_shadow := (is_building or is_resource) and not bool(get_meta("campaign_environment_static_visual", false))
+	# Buildings resolve their body art in _draw_building. Only the gate's special
+	# shadow can need the animated Unit texture instead of the building atlas.
+	var gate_unit_shadow := local_shadow and is_building and scoped_environment_tex == null \
+		and not art_variant.is_empty() and preload("res://scripts/campaign_gate_visual.gd").enabled(self)
+	var variant := visual_art_variant() if not is_building or gate_unit_shadow else ""
+	var tex := scoped_environment_tex
+	var ship_art: Dictionary
+	if not is_building or gate_unit_shadow:
+		if setup_def.has("campaign_object"):
+			var object_key := String(setup_def.campaign_object)
+			var state := String(get_meta("ship_state", "default"))
+			if movement_profile == "water" and not is_building:
+				ship_art = Art.campaign_object_art(object_key, state, animation_direction)
+				if tex == null:
+					tex = ship_art.texture
+			elif tex == null:
+				tex = Art.campaign_object_texture(object_key, state, animation_direction)
+		if tex == null:
+			tex = Art.unit_texture(key, variant, animation_direction)
 
 	if story_outcome in ["embarked", "retreated"]:
 		return
@@ -4284,7 +4289,7 @@ func _draw() -> void:
 	# A static campaign building can delegate its bitmap and single shared shadow
 	# to the map scenery layer while this Unit retains collision, health and text.
 	# This is opt-in metadata; every ordinary building keeps the existing route.
-	if (is_building or is_resource) and not bool(get_meta("campaign_environment_static_visual",false)):
+	if local_shadow:
 		var shadow_tex := tex
 		if is_building:
 			shadow_tex = _building_shadow_texture(tex,scoped_environment_tex)
@@ -4384,7 +4389,7 @@ func _draw() -> void:
 	elif as_sprite:
 		_draw_sprite_animated(tex, tint, death_f, ship_art)
 	elif is_building:
-		_draw_building()
+		_draw_building(scoped_environment_tex)
 	else:
 		_draw_placeholder()
 
@@ -4397,8 +4402,13 @@ func _draw() -> void:
 	else:
 		bar_y = -radius - 9.0
 
+	var show_name := (is_hero or is_building) and not _dying
+	var show_hp := hp > 0.0 and story_outcome == "" and Settings.show_healthbars \
+		and (not _mass_visuals() or hp < max_hp - 0.5)
+	var uses_screen_labels := (show_name or show_hp) \
+		and preload("res://scripts/campaign_cart_captions.gd").world_labels_owned(self)
 	# 名字（头领与建筑）
-	if (is_hero or is_building) and not _dying and not preload("res://scripts/campaign_cart_captions.gd").world_labels_owned(self):
+	if show_name and not uses_screen_labels:
 		var f := ThemeDB.fallback_font
 		var ty := bar_y - 6.0
 		var nc := Color("ffd866") if faction == FACTION_LIANG else Color("ff8866")
@@ -4419,8 +4429,7 @@ func _draw() -> void:
 		draw_string(ThemeDB.fallback_font, Vector2(-45,bar_y+12), status_text, HORIZONTAL_ALIGNMENT_CENTER, 90, 13, Color(0.96,0.83,0.53))
 	if is_bound_person() and CampaignArt.native_bound_owner(art_variant).is_empty():
 		for rope_y in [-22,-19]: draw_line(Vector2(-7,rope_y),Vector2(7,rope_y),Color(0.65,0.48,0.27),1.7)
-	if hp > 0.0 and story_outcome == "" and Settings.show_healthbars and (not _mass_visuals() or hp < max_hp - 0.5) \
-		and not preload("res://scripts/campaign_cart_captions.gd").world_labels_owned(self):
+	if show_hp and not uses_screen_labels:
 		var w := (radius * 2.6) if (is_hero or is_building) else (radius * 2.1)
 		var bh := 5.0 if (is_hero or is_building) else 4.0
 		var frac := clampf(hp / max_hp, 0.0, 1.0)
@@ -4612,7 +4621,7 @@ func is_bound_person() -> bool:
 	return is_captive and (is_hero or key.ends_with("_bound"))
 
 
-func _draw_building() -> void:
+func _draw_building(scoped_tex: Texture2D) -> void:
 	remove_meta("campaign_environment_label_y")
 	# 某些关卡建筑由场景层绘制完整外观（例如梁山寨门）；Unit 只保留生命值、名字、受击与寻路占地。
 	# 提前返回只跳过建筑本体，调用方后续仍会绘制名字和血条。
@@ -4660,22 +4669,21 @@ func _draw_building() -> void:
 			_draw_build_progress()
 		return
 	# 按建筑自身 key 找专属美术：遭遇战建筑在 buildings；treasure_cart 在 units3；其余在 terrain
-	var scoped_tex: Texture2D = _campaign_environment_texture()
 	_campaign_environment_render_texture = scoped_tex
-	var tex: Texture2D = Art.unit_texture(key, visual_art_variant(), animation_direction) if art_variant != "" else Art.building_texture(key)
-	if setup_def.has("building_art_key"): tex=battle.building_visual_texture(key)
-	if setup_def.has("campaign_object"):
-		var prop := Art.campaign_object_texture(String(setup_def.campaign_object))
-		if prop != null: tex = prop
+	var tex := scoped_tex
+	# Use the legacy body routes only when an accepted scoped texture is absent.
 	if tex == null:
-		tex = Art.unit_texture(key, visual_art_variant(), animation_direction)
-	if tex == null:
-		tex = Art.terrain_texture(key)
-	if tex == null:
-		tex = Art.terrain_texture("hall")
-	# The explicit scoped route wins only when its accepted file exists. All
-	# legacy fallbacks above stay untouched while Web source files are absent.
-	if scoped_tex != null: tex = scoped_tex
+		tex = Art.unit_texture(key, visual_art_variant(), animation_direction) if art_variant != "" else Art.building_texture(key)
+		if setup_def.has("building_art_key"): tex=battle.building_visual_texture(key)
+		if setup_def.has("campaign_object"):
+			var prop := Art.campaign_object_texture(String(setup_def.campaign_object))
+			if prop != null: tex = prop
+		if tex == null:
+			tex = Art.unit_texture(key, visual_art_variant(), animation_direction)
+		if tex == null:
+			tex = Art.terrain_texture(key)
+		if tex == null:
+			tex = Art.terrain_texture("hall")
 	var tint := (Color(0.5, 0.72, 1.0, 0.34) if _pending_build else Color(0.62, 0.66, 0.78, 0.82)) if is_constructing else Color.WHITE
 	tint.a *= float(get_meta("environment_roof_alpha",1.0))
 	if key == "tavern" and tex is AtlasTexture:
