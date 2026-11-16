@@ -1,5 +1,8 @@
 # 项目目录索引（2026-10-30）
 
+[树冠遮挡筛选收据](../qa/campaign_sustained_performance_20261116/canopy_unit_partition.json)记录实际场景和生成布局的透明度对照及 55 秒样本。
+
+
 [静止单位复用阴影坡面](../qa/campaign_sustained_performance_20261116/stationary_shadow_geometry.json)包含定点坡面计算次数、缓冲复核和标准退出证据。
 
 

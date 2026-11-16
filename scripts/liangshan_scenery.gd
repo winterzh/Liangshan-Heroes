@@ -690,31 +690,56 @@ func _process(delta: float) -> void:
 	_refresh_canopy_visibility()
 
 
+const CANOPY_CELL_SIZE := 96.0
+const CANOPY_BODY_SIZE := Vector2(24, 40)
+
+
 func _refresh_canopy_visibility() -> void:
-	# Reuse one projection per eligible unit for this synchronous visibility pass.
-	# Nothing is cached across ticks, so movement, fog and depth changes stay live.
 	if _trees.is_empty() and _guard_posts.is_empty():
 		return
 	var bodies: Array[Rect2] = []
 	var depths := PackedInt32Array()
+	var body_cells: Dictionary[Vector2i, Array] = {}
 	for unit in _battle.units:
 		if not is_instance_valid(unit) or unit.hp <= 0 or unit.is_building or not unit.visible:
 			continue
-		bodies.append(Rect2(_map.project(unit.position) + Vector2(-12, -38), Vector2(24, 40)))
+		var body := Rect2(_map.project(unit.position) + Vector2(-12, -38), CANOPY_BODY_SIZE)
+		var cell := _canopy_cell(body.position)
+		if not body_cells.has(cell):
+			body_cells[cell] = []
+		body_cells[cell].append(bodies.size())
+		bodies.append(body)
 		depths.append(unit.z_index)
 	for tree in _trees + _guard_posts:
-		var fade := false
 		var tree_screen := _map.project(tree.position)
 		var canopy := Rect2(tree_screen + Vector2(-tree.size * 0.37, -tree.size * 0.87), Vector2(tree.size * 0.74, tree.size * 0.82))
-		for i in range(bodies.size()):
-			if depths[i] >= tree.z_index:
-				continue
-			if canopy.intersects(bodies[i]):
-				fade = true
-				break
+		var fade := _canopy_overlaps_units(canopy, tree.z_index, body_cells, bodies, depths)
 		var alpha := 0.40 if fade else 1.0
 		if not is_equal_approx(tree.modulate.a, alpha):
 			tree.modulate.a = alpha
+
+
+func _canopy_cell(position: Vector2) -> Vector2i:
+	return Vector2i((position / CANOPY_CELL_SIZE).floor())
+
+
+func _canopy_overlaps_units(canopy: Rect2, depth: int, body_cells: Dictionary[Vector2i, Array],
+		bodies: Array[Rect2], depths: PackedInt32Array) -> bool:
+	if body_cells.is_empty():
+		return false
+	# Each body is indexed by its top-left corner. Search one body size
+	# past the top-left edge, with a pixel of padding for cell boundaries.
+	var first := _canopy_cell(canopy.position - CANOPY_BODY_SIZE - Vector2.ONE)
+	var last := _canopy_cell(canopy.end + Vector2.ONE)
+	for y in range(first.y, last.y + 1):
+		for x in range(first.x, last.x + 1):
+			var entries: Variant = body_cells.get(Vector2i(x, y))
+			if entries == null:
+				continue
+			for index: int in entries:
+				if depths[index] < depth and canopy.intersects(bodies[index]):
+					return true
+	return false
 
 
 func _notification(what: int) -> void:
