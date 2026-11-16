@@ -1,5 +1,7 @@
 # 当前项目总览
 
+长时间切换工具接入正式菜单和 HUD 返回。首轮六条路线已回收关键节点，30 分钟总结果继续量测。[30 分钟模式切换验收](CAMPAIGN_MODE_SOAK_QA.md)
+
 本地 Windows 候选 `7ef55d27` 已导出并原生启动，包含十分钟源码验收通过的绘制改动。[Windows 本地候选 7ef55d27](../qa/battle_entry_timing_20261116/README.md#windows-本地候选-7ef55d27)
 
 ## 2026-11-17 高俅十分钟整帧

@@ -2,6 +2,10 @@ extends SceneTree
 ## Real-renderer, long-running lifecycle fixture for campaign and free-play modes.
 ## It deliberately uses the normal Battle + HUD start path, never a synthetic scene.
 
+const MENU_SCENE := "res://scenes/menu.tscn"
+const BATTLE_SCENE := "res://scenes/main.tscn"
+const SCENE_TIMEOUT_USEC := 120_000_000
+
 const ROUTE := [
 	{"mode": "campaign", "level_id": "level1"},
 	{"mode": "arena", "level_id": "arena"},
@@ -389,14 +393,16 @@ func _activity_evidence(battle, initial: Dictionary) -> Dictionary:
 	return evidence
 
 
-func _release_cursor_textures(battle) -> void:
-	Input.set_custom_mouse_cursor(null, Input.CURSOR_ARROW)
-	Input.set_custom_mouse_cursor(null, Input.CURSOR_CROSS)
-	for property in ["_target_cursor", "_cur_attack", "_cur_gather_wood", "_cur_gather_gold", "_cur_repair", "_cur_select", "_cur_garrison"]:
-		battle.set(property, null)
+func _await_scene(path: String) -> bool:
+	var deadline := Time.get_ticks_usec() + SCENE_TIMEOUT_USEC
+	while Time.get_ticks_usec() < deadline:
+		await _render_tick()
+		if is_instance_valid(current_scene) and current_scene.scene_file_path == path and current_scene.is_node_ready():
+			return true
+	return false
 
 
-func _dispose_battle(battle, transition: Dictionary) -> void:
+func _dispose_battle(battle, transition: Dictionary) -> bool:
 	var scene_ref: WeakRef = weakref(battle)
 	var level_ref: WeakRef = weakref(battle.level)
 	var mission_ref: WeakRef = weakref(battle.mission) if battle.mission != null else null
@@ -406,16 +412,14 @@ func _dispose_battle(battle, transition: Dictionary) -> void:
 	var camera_ref: WeakRef = weakref(battle.camera)
 	var units_root_ref: WeakRef = weakref(battle.units_root)
 	var unit_ref: WeakRef = weakref(battle.units[0]) if not battle.units.is_empty() else null
-	paused = false
-	current_scene = null
-	_release_cursor_textures(battle)
 	_current_battle = null
 	_current_mode = "cleanup"
-	battle.queue_free()
+	battle.hud.to_menu.emit()
 	battle = null
-	await process_frame
-	await _render_tick()
-	await process_frame
+	var menu_ready := await _await_scene(MENU_SCENE)
+	_check(menu_ready and not paused and Engine.time_scale == 1.0, "return reaches the original unpaused menu")
+	if not menu_ready:
+		return false
 	await _render_tick()
 	var released := scene_ref.get_ref() == null and level_ref.get_ref() == null \
 		and (mission_ref == null or mission_ref.get_ref() == null) and map_ref.get_ref() == null \
@@ -438,21 +442,27 @@ func _dispose_battle(battle, transition: Dictionary) -> void:
 	transition["post_cleanup"] = cleanup
 	_cleanup_samples.append(cleanup)
 	_check(released, "%s transition %d releases scene and key nodes" % [transition.mode, _transitions.size() + 1], JSON.stringify(transition.release))
+	return true
 
 
-func _run_fixture(fixture: Dictionary) -> void:
+func _run_fixture(fixture: Dictionary) -> bool:
 	_configure_mode(fixture)
 	var mode := String(fixture.mode)
 	_current_mode = "building:" + mode
 	_current_level_id = String(fixture.level_id)
 	var began := Time.get_ticks_usec()
 	seed(5_088_120 + _transitions.size())
-	var battle = load("res://scenes/main.tscn").instantiate()
-	root.add_child(battle)
-	current_scene = battle
+	current_scene.call("_launch", _current_level_id if mode == "campaign" else "")
+	var battle_ready := await _await_scene(BATTLE_SCENE)
+	_check(battle_ready, "%s enters the battle scene through the menu" % mode)
+	if not battle_ready:
+		return false
+	var battle = current_scene
+	var battle_initialized: bool = battle.hud != null and battle.level != null and battle.gameplay_rng_fault().is_empty()
+	_check(battle_initialized, "%s has an initialized HUD, level and gameplay RNG" % mode)
+	if not battle_initialized:
+		return false
 	_current_battle = battle
-	await process_frame
-	await _render_tick()
 	if battle.hud._intro_root != null:
 		battle.hud._intro_root.hide()
 	battle._on_intro_done()
@@ -496,7 +506,8 @@ func _run_fixture(fixture: Dictionary) -> void:
 	transition["units_at_end"] = _unit_counts()
 	transition["activity"] = _activity_evidence(battle, activity_start)
 	_check(bool(transition.activity.passed), "%s/%s executes live simulation activity" % [mode, expected_id], JSON.stringify(transition.activity))
-	await _dispose_battle(battle, transition)
+	if not await _dispose_battle(battle, transition):
+		return false
 	_transitions.append(transition)
 	print("[soak-transition] ", JSON.stringify({
 		"index": transition.index,
@@ -506,6 +517,7 @@ func _run_fixture(fixture: Dictionary) -> void:
 		"live_seconds": transition.live_seconds,
 		"released": transition.release.passed,
 	}))
+	return true
 
 
 func _series_for(metric: String, source: Array) -> Array[float]:
@@ -644,6 +656,7 @@ func _early_exit(reason: String, code: int) -> void:
 		"failures": _failures,
 		"checks": _checks,
 		"reason": reason,
+		"transition_count": _transitions.size(),
 		"renderer": {
 			"display": DisplayServer.get_name(),
 			"driver": RenderingServer.get_current_rendering_driver_name(),
@@ -691,6 +704,14 @@ func _run() -> void:
 
 	_save_existed_before = FileAccess.file_exists("user://campaign.cfg")
 	_save_before_bytes = _save_bytes()
+	_reset_campaign_flags()
+	if change_scene_to_file(MENU_SCENE) != OK:
+		_early_exit("Could not open the game menu.", 2)
+		return
+	await scene_changed
+	if not is_instance_valid(current_scene) or current_scene.scene_file_path != MENU_SCENE:
+		_early_exit("The game did not reach the main menu.", 2)
+		return
 	_started_at = Time.get_datetime_string_from_system(false, true)
 	_start_usec = Time.get_ticks_usec()
 	_end_usec = _start_usec + int(_duration_seconds * 1_000_000.0)
@@ -704,7 +725,9 @@ func _run() -> void:
 		for fixture in ROUTE:
 			if Time.get_ticks_usec() >= _end_usec:
 				break
-			await _run_fixture(fixture)
+			if not await _run_fixture(fixture):
+				_early_exit("Mode transition failed: %s/%s." % [fixture.mode, fixture.level_id], 2)
+				return
 		if _cycle == 1 and _warm_baseline.is_empty():
 			_current_mode = "warm_cleanup"
 			_current_level_id = ""
