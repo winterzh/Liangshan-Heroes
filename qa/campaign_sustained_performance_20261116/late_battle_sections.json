@@ -1,0 +1,1575 @@
+{
+  "source": "69bb69577384a07a1353ffb4b0d829113cf19eef",
+  "scope": "diagnostic, instrumented, real-time, fixed camera, Windows source; no release frame-time gate claim",
+  "reference_source": "9f94f0f33637f41473f45ada1c3a267269cc3fd2",
+  "duration_seconds": 548.015,
+  "game_seconds": 548.017,
+  "checks_passed": 13,
+  "initial_units_match": true,
+  "trajectory_rows_matched": 553,
+  "trajectory_rows_compared": 553,
+  "exit_code": 0,
+  "engine_errors": [],
+  "renderer": "gl_compatibility",
+  "resolution": [
+    1440,
+    900
+  ],
+  "device": "NVIDIA GeForce RTX 4060 Laptop GPU",
+  "three_waves_sent": [
+    true,
+    true,
+    true
+  ],
+  "ships_queued": 17,
+  "sample_windows": {
+    "around_previous_cluster": {
+      "wall_seconds": [
+        397,
+        412
+      ],
+      "frames": 1317,
+      "game_ticks": [
+        24121,
+        25021
+      ],
+      "over_33_3_ms": 0,
+      "negative_marker_frames": 0,
+      "segment_ms": {
+        "frame_us": {
+          "p50": 12.539,
+          "p95": 17.267,
+          "p99": 20.272,
+          "max": 26.289
+        },
+        "prior_postdraw_to_process_us": {
+          "p50": 2.277,
+          "p95": 3.462,
+          "p99": 4.938,
+          "max": 12.979
+        },
+        "process_to_predraw_us": {
+          "p50": 5.834,
+          "p95": 8.215,
+          "p99": 9.782,
+          "max": 15.032
+        },
+        "predraw_to_postdraw_us": {
+          "p50": 4.331,
+          "p95": 5.861,
+          "p99": 6.916,
+          "max": 9.926
+        },
+        "unit_draw": {
+          "p50": 3.98,
+          "p95": 5.112,
+          "p99": 5.594,
+          "max": 10.528
+        },
+        "sprite_draw": {
+          "p50": 0.452,
+          "p95": 0.579,
+          "p99": 0.672,
+          "max": 1.2
+        },
+        "building_draw": {
+          "p50": 1.105,
+          "p95": 1.373,
+          "p99": 1.484,
+          "max": 5.22
+        },
+        "unit_physics": {
+          "p50": 1.117,
+          "p95": 1.529,
+          "p99": 1.937,
+          "max": 4.06
+        },
+        "battle_physics": {
+          "p50": 0.944,
+          "p95": 1.732,
+          "p99": 2.113,
+          "max": 3.394
+        },
+        "battle_process": {
+          "p50": 0.236,
+          "p95": 0.379,
+          "p99": 0.476,
+          "max": 0.718
+        },
+        "grid_build": {
+          "p50": 0.261,
+          "p95": 0.456,
+          "p99": 0.596,
+          "max": 0.994
+        },
+        "separation": {
+          "p50": 0.35,
+          "p95": 0.411,
+          "p99": 0.571,
+          "max": 1.439
+        },
+        "aura": {
+          "p50": 0.141,
+          "p95": 0.203,
+          "p99": 0.244,
+          "max": 0.518
+        },
+        "scenery_process": {
+          "p50": 0.106,
+          "p95": 1.192,
+          "p99": 1.333,
+          "max": 1.941
+        },
+        "entrance_process": {
+          "p50": 0.002,
+          "p95": 0.483,
+          "p99": 0.543,
+          "max": 1.245
+        },
+        "hud_process": {
+          "p50": 0.098,
+          "p95": 0.197,
+          "p99": 0.756,
+          "max": 1.104
+        },
+        "map_draw": {
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0,
+          "max": 0.0
+        },
+        "unit_draw_outside_sprite_and_building": {
+          "p50": 2.416,
+          "p95": 3.19,
+          "p99": 3.485,
+          "max": 6.738
+        }
+      },
+      "segment_ms_on_slowest_5_pct_of_frames": {
+        "frame_us": {
+          "p50": 18.466,
+          "p95": 23.756,
+          "p99": 26.289,
+          "max": 26.289
+        },
+        "prior_postdraw_to_process_us": {
+          "p50": 3.468,
+          "p95": 9.449,
+          "p99": 12.979,
+          "max": 12.979
+        },
+        "process_to_predraw_us": {
+          "p50": 8.522,
+          "p95": 11.671,
+          "p99": 15.032,
+          "max": 15.032
+        },
+        "predraw_to_postdraw_us": {
+          "p50": 5.731,
+          "p95": 8.237,
+          "p99": 9.926,
+          "max": 9.926
+        },
+        "unit_draw": {
+          "p50": 5.234,
+          "p95": 6.878,
+          "p99": 10.528,
+          "max": 10.528
+        },
+        "sprite_draw": {
+          "p50": 0.579,
+          "p95": 0.854,
+          "p99": 1.2,
+          "max": 1.2
+        },
+        "building_draw": {
+          "p50": 1.373,
+          "p95": 1.902,
+          "p99": 5.22,
+          "max": 5.22
+        },
+        "unit_physics": {
+          "p50": 1.468,
+          "p95": 2.836,
+          "p99": 4.06,
+          "max": 4.06
+        },
+        "battle_physics": {
+          "p50": 1.332,
+          "p95": 2.428,
+          "p99": 3.394,
+          "max": 3.394
+        },
+        "battle_process": {
+          "p50": 0.351,
+          "p95": 0.506,
+          "p99": 0.695,
+          "max": 0.695
+        },
+        "grid_build": {
+          "p50": 0.414,
+          "p95": 0.76,
+          "p99": 0.994,
+          "max": 0.994
+        },
+        "separation": {
+          "p50": 0.386,
+          "p95": 0.666,
+          "p99": 1.439,
+          "max": 1.439
+        },
+        "aura": {
+          "p50": 0.186,
+          "p95": 0.304,
+          "p99": 0.518,
+          "max": 0.518
+        },
+        "scenery_process": {
+          "p50": 0.149,
+          "p95": 1.346,
+          "p99": 1.941,
+          "max": 1.941
+        },
+        "entrance_process": {
+          "p50": 0.003,
+          "p95": 0.553,
+          "p99": 1.245,
+          "max": 1.245
+        },
+        "hud_process": {
+          "p50": 0.132,
+          "p95": 0.747,
+          "p99": 0.994,
+          "max": 0.994
+        },
+        "map_draw": {
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0,
+          "max": 0.0
+        }
+      },
+      "median_calls_per_frame": {
+        "unit_draw": 46.0,
+        "sprite_draw": 32.0,
+        "building_draw": 14.0,
+        "unit_physics": 74.0,
+        "battle_physics": 1.0,
+        "battle_process": 1.0,
+        "grid_build": 1.0,
+        "separation": 1.0,
+        "aura": 1.0,
+        "scenery_process": 1.0,
+        "entrance_process": 1.0,
+        "hud_process": 1.0,
+        "map_draw": 0.0
+      },
+      "slowest_frames": [
+        {
+          "aura": 180,
+          "aura_calls": 1,
+          "battle_physics": 1341,
+          "battle_physics_calls": 1,
+          "battle_process": 256,
+          "battle_process_calls": 1,
+          "building_draw": 1116,
+          "building_draw_calls": 15,
+          "elapsed_us": 397028873,
+          "entrance_process": 2,
+          "entrance_process_calls": 1,
+          "frame_us": 26289,
+          "grid_build": 411,
+          "grid_build_calls": 1,
+          "hud_process": 106,
+          "hud_process_calls": 1,
+          "physics_tick": 24121,
+          "predraw_to_postdraw_us": 6723,
+          "prior_postdraw_to_process_us": 12979,
+          "process_to_predraw_us": 6587,
+          "scenery_process": 120,
+          "scenery_process_calls": 1,
+          "separation": 383,
+          "separation_calls": 1,
+          "sprite_draw": 588,
+          "sprite_draw_calls": 37,
+          "unit_draw": 4511,
+          "unit_draw_calls": 52,
+          "unit_physics": 1529,
+          "unit_physics_calls": 76
+        },
+        {
+          "aura": 150,
+          "aura_calls": 1,
+          "battle_physics": 979,
+          "battle_physics_calls": 1,
+          "battle_process": 633,
+          "battle_process_calls": 1,
+          "building_draw": 2590,
+          "building_draw_calls": 14,
+          "elapsed_us": 405657438,
+          "entrance_process": 5,
+          "entrance_process_calls": 1,
+          "frame_us": 24990,
+          "grid_build": 290,
+          "grid_build_calls": 1,
+          "hud_process": 257,
+          "hud_process_calls": 1,
+          "physics_tick": 24639,
+          "predraw_to_postdraw_us": 5938,
+          "prior_postdraw_to_process_us": 4020,
+          "process_to_predraw_us": 15032,
+          "scenery_process": 166,
+          "scenery_process_calls": 1,
+          "separation": 354,
+          "separation_calls": 1,
+          "sprite_draw": 1200,
+          "sprite_draw_calls": 31,
+          "unit_draw": 10528,
+          "unit_draw_calls": 45,
+          "unit_physics": 2574,
+          "unit_physics_calls": 74
+        },
+        {
+          "aura": 155,
+          "aura_calls": 1,
+          "battle_physics": 1788,
+          "battle_physics_calls": 1,
+          "battle_process": 506,
+          "battle_process_calls": 1,
+          "building_draw": 1347,
+          "building_draw_calls": 14,
+          "elapsed_us": 405504493,
+          "entrance_process": 26,
+          "entrance_process_calls": 1,
+          "frame_us": 24758,
+          "grid_build": 303,
+          "grid_build_calls": 1,
+          "hud_process": 239,
+          "hud_process_calls": 1,
+          "physics_tick": 24629,
+          "predraw_to_postdraw_us": 9926,
+          "prior_postdraw_to_process_us": 3468,
+          "process_to_predraw_us": 11364,
+          "scenery_process": 215,
+          "scenery_process_calls": 1,
+          "separation": 358,
+          "separation_calls": 1,
+          "sprite_draw": 980,
+          "sprite_draw_calls": 33,
+          "unit_draw": 6878,
+          "unit_draw_calls": 47,
+          "unit_physics": 1257,
+          "unit_physics_calls": 74
+        },
+        {
+          "aura": 177,
+          "aura_calls": 1,
+          "battle_physics": 1192,
+          "battle_physics_calls": 1,
+          "battle_process": 321,
+          "battle_process_calls": 1,
+          "building_draw": 1357,
+          "building_draw_calls": 14,
+          "elapsed_us": 401009115,
+          "entrance_process": 3,
+          "entrance_process_calls": 1,
+          "frame_us": 23756,
+          "grid_build": 324,
+          "grid_build_calls": 1,
+          "hud_process": 121,
+          "hud_process_calls": 1,
+          "physics_tick": 24361,
+          "predraw_to_postdraw_us": 5692,
+          "prior_postdraw_to_process_us": 10128,
+          "process_to_predraw_us": 7936,
+          "scenery_process": 143,
+          "scenery_process_calls": 1,
+          "separation": 356,
+          "separation_calls": 1,
+          "sprite_draw": 655,
+          "sprite_draw_calls": 38,
+          "unit_draw": 5406,
+          "unit_draw_calls": 52,
+          "unit_physics": 1746,
+          "unit_physics_calls": 76
+        },
+        {
+          "aura": 240,
+          "aura_calls": 1,
+          "battle_physics": 1696,
+          "battle_physics_calls": 1,
+          "battle_process": 279,
+          "battle_process_calls": 1,
+          "building_draw": 2452,
+          "building_draw_calls": 14,
+          "elapsed_us": 405583299,
+          "entrance_process": 1,
+          "entrance_process_calls": 1,
+          "frame_us": 23175,
+          "grid_build": 486,
+          "grid_build_calls": 1,
+          "hud_process": 115,
+          "hud_process_calls": 1,
+          "physics_tick": 24634,
+          "predraw_to_postdraw_us": 5322,
+          "prior_postdraw_to_process_us": 4952,
+          "process_to_predraw_us": 12901,
+          "scenery_process": 124,
+          "scenery_process_calls": 1,
+          "separation": 609,
+          "separation_calls": 1,
+          "sprite_draw": 854,
+          "sprite_draw_calls": 31,
+          "unit_draw": 9963,
+          "unit_draw_calls": 45,
+          "unit_physics": 2836,
+          "unit_physics_calls": 74
+        },
+        {
+          "aura": 171,
+          "aura_calls": 1,
+          "battle_physics": 1215,
+          "battle_physics_calls": 1,
+          "battle_process": 384,
+          "battle_process_calls": 1,
+          "building_draw": 1145,
+          "building_draw_calls": 14,
+          "elapsed_us": 399028438,
+          "entrance_process": 2,
+          "entrance_process_calls": 1,
+          "frame_us": 22939,
+          "grid_build": 331,
+          "grid_build_calls": 1,
+          "hud_process": 113,
+          "hud_process_calls": 1,
+          "physics_tick": 24241,
+          "predraw_to_postdraw_us": 5256,
+          "prior_postdraw_to_process_us": 10502,
+          "process_to_predraw_us": 7181,
+          "scenery_process": 135,
+          "scenery_process_calls": 1,
+          "separation": 357,
+          "separation_calls": 1,
+          "sprite_draw": 563,
+          "sprite_draw_calls": 36,
+          "unit_draw": 4563,
+          "unit_draw_calls": 50,
+          "unit_physics": 1374,
+          "unit_physics_calls": 76
+        },
+        {
+          "aura": 143,
+          "aura_calls": 1,
+          "battle_physics": 1091,
+          "battle_physics_calls": 1,
+          "battle_process": 234,
+          "battle_process_calls": 1,
+          "building_draw": 1149,
+          "building_draw_calls": 14,
+          "elapsed_us": 403029294,
+          "entrance_process": 481,
+          "entrance_process_calls": 1,
+          "frame_us": 22497,
+          "grid_build": 280,
+          "grid_build_calls": 1,
+          "hud_process": 122,
+          "hud_process_calls": 1,
+          "physics_tick": 24481,
+          "predraw_to_postdraw_us": 5620,
+          "prior_postdraw_to_process_us": 8419,
+          "process_to_predraw_us": 8458,
+          "scenery_process": 1291,
+          "scenery_process_calls": 1,
+          "separation": 349,
+          "separation_calls": 1,
+          "sprite_draw": 556,
+          "sprite_draw_calls": 35,
+          "unit_draw": 4321,
+          "unit_draw_calls": 49,
+          "unit_physics": 1257,
+          "unit_physics_calls": 74
+        },
+        {
+          "aura": 238,
+          "aura_calls": 1,
+          "battle_physics": 2090,
+          "battle_physics_calls": 1,
+          "battle_process": 456,
+          "battle_process_calls": 1,
+          "building_draw": 1274,
+          "building_draw_calls": 14,
+          "elapsed_us": 405679814,
+          "entrance_process": 1245,
+          "entrance_process_calls": 1,
+          "frame_us": 22376,
+          "grid_build": 374,
+          "grid_build_calls": 1,
+          "hud_process": 197,
+          "hud_process_calls": 1,
+          "physics_tick": 24640,
+          "predraw_to_postdraw_us": 7350,
+          "prior_postdraw_to_process_us": 3791,
+          "process_to_predraw_us": 11235,
+          "scenery_process": 1939,
+          "scenery_process_calls": 1,
+          "separation": 389,
+          "separation_calls": 1,
+          "sprite_draw": 470,
+          "sprite_draw_calls": 31,
+          "unit_draw": 4539,
+          "unit_draw_calls": 45,
+          "unit_physics": 1370,
+          "unit_physics_calls": 74
+        }
+      ],
+      "reference_uninstrumented": {
+        "frames": 1103,
+        "over_33_3_ms": 10,
+        "frame_ms": {
+          "p50": 13.72,
+          "p95": 21.961,
+          "p99": 32.753,
+          "max": 46.083
+        }
+      }
+    },
+    "ninth_minute": {
+      "wall_seconds": [
+        480,
+        540
+      ],
+      "frames": 4781,
+      "game_ticks": [
+        29101,
+        32700
+      ],
+      "over_33_3_ms": 1,
+      "negative_marker_frames": 0,
+      "segment_ms": {
+        "frame_us": {
+          "p50": 13.442,
+          "p95": 18.13,
+          "p99": 20.861,
+          "max": 33.563
+        },
+        "prior_postdraw_to_process_us": {
+          "p50": 2.444,
+          "p95": 3.551,
+          "p99": 5.519,
+          "max": 17.498
+        },
+        "process_to_predraw_us": {
+          "p50": 6.293,
+          "p95": 8.812,
+          "p99": 10.424,
+          "max": 14.734
+        },
+        "predraw_to_postdraw_us": {
+          "p50": 4.58,
+          "p95": 6.122,
+          "p99": 7.0,
+          "max": 10.883
+        },
+        "unit_draw": {
+          "p50": 4.204,
+          "p95": 5.308,
+          "p99": 5.943,
+          "max": 9.472
+        },
+        "sprite_draw": {
+          "p50": 0.488,
+          "p95": 0.609,
+          "p99": 0.701,
+          "max": 1.297
+        },
+        "building_draw": {
+          "p50": 1.141,
+          "p95": 1.418,
+          "p99": 1.584,
+          "max": 4.984
+        },
+        "unit_physics": {
+          "p50": 1.216,
+          "p95": 1.613,
+          "p99": 1.95,
+          "max": 4.125
+        },
+        "battle_physics": {
+          "p50": 1.02,
+          "p95": 1.835,
+          "p99": 2.294,
+          "max": 4.758
+        },
+        "battle_process": {
+          "p50": 0.246,
+          "p95": 0.385,
+          "p99": 0.509,
+          "max": 0.842
+        },
+        "grid_build": {
+          "p50": 0.281,
+          "p95": 0.474,
+          "p99": 0.642,
+          "max": 1.167
+        },
+        "separation": {
+          "p50": 0.385,
+          "p95": 0.453,
+          "p99": 0.596,
+          "max": 1.012
+        },
+        "aura": {
+          "p50": 0.148,
+          "p95": 0.212,
+          "p99": 0.293,
+          "max": 0.476
+        },
+        "scenery_process": {
+          "p50": 0.108,
+          "p95": 1.224,
+          "p99": 1.378,
+          "max": 1.876
+        },
+        "entrance_process": {
+          "p50": 0.002,
+          "p95": 0.475,
+          "p99": 0.535,
+          "max": 0.999
+        },
+        "hud_process": {
+          "p50": 0.102,
+          "p95": 0.259,
+          "p99": 0.849,
+          "max": 1.724
+        },
+        "map_draw": {
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0,
+          "max": 0.0
+        },
+        "unit_draw_outside_sprite_and_building": {
+          "p50": 2.57,
+          "p95": 3.307,
+          "p99": 3.721,
+          "max": 5.589
+        }
+      },
+      "segment_ms_on_slowest_5_pct_of_frames": {
+        "frame_us": {
+          "p50": 19.414,
+          "p95": 24.705,
+          "p99": 28.015,
+          "max": 33.563
+        },
+        "prior_postdraw_to_process_us": {
+          "p50": 3.707,
+          "p95": 9.44,
+          "p99": 13.306,
+          "max": 17.498
+        },
+        "process_to_predraw_us": {
+          "p50": 9.406,
+          "p95": 11.442,
+          "p99": 13.821,
+          "max": 14.734
+        },
+        "predraw_to_postdraw_us": {
+          "p50": 5.937,
+          "p95": 8.126,
+          "p99": 9.827,
+          "max": 10.883
+        },
+        "unit_draw": {
+          "p50": 5.357,
+          "p95": 6.54,
+          "p99": 8.146,
+          "max": 9.472
+        },
+        "sprite_draw": {
+          "p50": 0.598,
+          "p95": 0.783,
+          "p99": 0.923,
+          "max": 1.297
+        },
+        "building_draw": {
+          "p50": 1.395,
+          "p95": 1.693,
+          "p99": 2.618,
+          "max": 4.984
+        },
+        "unit_physics": {
+          "p50": 1.561,
+          "p95": 2.787,
+          "p99": 3.551,
+          "max": 4.125
+        },
+        "battle_physics": {
+          "p50": 1.454,
+          "p95": 2.736,
+          "p99": 3.166,
+          "max": 4.758
+        },
+        "battle_process": {
+          "p50": 0.366,
+          "p95": 0.542,
+          "p99": 0.627,
+          "max": 0.755
+        },
+        "grid_build": {
+          "p50": 0.446,
+          "p95": 0.809,
+          "p99": 0.938,
+          "max": 1.167
+        },
+        "separation": {
+          "p50": 0.426,
+          "p95": 0.83,
+          "p99": 0.95,
+          "max": 1.012
+        },
+        "aura": {
+          "p50": 0.196,
+          "p95": 0.35,
+          "p99": 0.459,
+          "max": 0.476
+        },
+        "scenery_process": {
+          "p50": 0.168,
+          "p95": 1.449,
+          "p99": 1.727,
+          "max": 1.876
+        },
+        "entrance_process": {
+          "p50": 0.004,
+          "p95": 0.573,
+          "p99": 0.663,
+          "max": 0.999
+        },
+        "hud_process": {
+          "p50": 0.138,
+          "p95": 1.008,
+          "p99": 1.282,
+          "max": 1.724
+        },
+        "map_draw": {
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0,
+          "max": 0.0
+        }
+      },
+      "median_calls_per_frame": {
+        "unit_draw": 49.0,
+        "sprite_draw": 35.0,
+        "building_draw": 14.0,
+        "unit_physics": 76.0,
+        "battle_physics": 1.0,
+        "battle_process": 1.0,
+        "grid_build": 1.0,
+        "separation": 1.0,
+        "aura": 1.0,
+        "scenery_process": 1.0,
+        "entrance_process": 1.0,
+        "hud_process": 1.0,
+        "map_draw": 0.0
+      },
+      "slowest_frames": [
+        {
+          "aura": 386,
+          "aura_calls": 2,
+          "battle_physics": 2831,
+          "battle_physics_calls": 2,
+          "battle_process": 472,
+          "battle_process_calls": 1,
+          "building_draw": 1439,
+          "building_draw_calls": 14,
+          "elapsed_us": 491031288,
+          "entrance_process": 620,
+          "entrance_process_calls": 1,
+          "frame_us": 33563,
+          "grid_build": 750,
+          "grid_build_calls": 2,
+          "hud_process": 160,
+          "hud_process_calls": 1,
+          "physics_tick": 29761,
+          "predraw_to_postdraw_us": 5363,
+          "prior_postdraw_to_process_us": 17498,
+          "process_to_predraw_us": 10702,
+          "scenery_process": 1300,
+          "scenery_process_calls": 1,
+          "separation": 929,
+          "separation_calls": 2,
+          "sprite_draw": 659,
+          "sprite_draw_calls": 39,
+          "unit_draw": 5515,
+          "unit_draw_calls": 53,
+          "unit_physics": 4125,
+          "unit_physics_calls": 152
+        },
+        {
+          "aura": 313,
+          "aura_calls": 1,
+          "battle_physics": 3471,
+          "battle_physics_calls": 1,
+          "battle_process": 593,
+          "battle_process_calls": 1,
+          "building_draw": 1918,
+          "building_draw_calls": 14,
+          "elapsed_us": 493143352,
+          "entrance_process": 2,
+          "entrance_process_calls": 1,
+          "frame_us": 28157,
+          "grid_build": 820,
+          "grid_build_calls": 1,
+          "hud_process": 245,
+          "hud_process_calls": 1,
+          "physics_tick": 29887,
+          "predraw_to_postdraw_us": 9121,
+          "prior_postdraw_to_process_us": 6407,
+          "process_to_predraw_us": 12629,
+          "scenery_process": 232,
+          "scenery_process_calls": 1,
+          "separation": 551,
+          "separation_calls": 1,
+          "sprite_draw": 910,
+          "sprite_draw_calls": 36,
+          "unit_draw": 8141,
+          "unit_draw_calls": 50,
+          "unit_physics": 2306,
+          "unit_physics_calls": 76
+        },
+        {
+          "aura": 144,
+          "aura_calls": 1,
+          "battle_physics": 4758,
+          "battle_physics_calls": 1,
+          "battle_process": 242,
+          "battle_process_calls": 1,
+          "building_draw": 1132,
+          "building_draw_calls": 14,
+          "elapsed_us": 535025102,
+          "entrance_process": 1,
+          "entrance_process_calls": 1,
+          "frame_us": 28015,
+          "grid_build": 277,
+          "grid_build_calls": 1,
+          "hud_process": 99,
+          "hud_process_calls": 1,
+          "physics_tick": 32401,
+          "predraw_to_postdraw_us": 4919,
+          "prior_postdraw_to_process_us": 16327,
+          "process_to_predraw_us": 6769,
+          "scenery_process": 108,
+          "scenery_process_calls": 1,
+          "separation": 397,
+          "separation_calls": 1,
+          "sprite_draw": 588,
+          "sprite_draw_calls": 40,
+          "unit_draw": 4509,
+          "unit_draw_calls": 54,
+          "unit_physics": 1423,
+          "unit_physics_calls": 77
+        },
+        {
+          "aura": 184,
+          "aura_calls": 1,
+          "battle_physics": 1257,
+          "battle_physics_calls": 1,
+          "battle_process": 353,
+          "battle_process_calls": 1,
+          "building_draw": 3521,
+          "building_draw_calls": 14,
+          "elapsed_us": 509031212,
+          "entrance_process": 2,
+          "entrance_process_calls": 1,
+          "frame_us": 27787,
+          "grid_build": 371,
+          "grid_build_calls": 1,
+          "hud_process": 136,
+          "hud_process_calls": 1,
+          "physics_tick": 30841,
+          "predraw_to_postdraw_us": 5572,
+          "prior_postdraw_to_process_us": 11330,
+          "process_to_predraw_us": 10885,
+          "scenery_process": 128,
+          "scenery_process_calls": 1,
+          "separation": 387,
+          "separation_calls": 1,
+          "sprite_draw": 619,
+          "sprite_draw_calls": 39,
+          "unit_draw": 7186,
+          "unit_draw_calls": 53,
+          "unit_physics": 1553,
+          "unit_physics_calls": 76
+        },
+        {
+          "aura": 178,
+          "aura_calls": 1,
+          "battle_physics": 1384,
+          "battle_physics_calls": 1,
+          "battle_process": 483,
+          "battle_process_calls": 1,
+          "building_draw": 1565,
+          "building_draw_calls": 14,
+          "elapsed_us": 493115195,
+          "entrance_process": 606,
+          "entrance_process_calls": 1,
+          "frame_us": 26982,
+          "grid_build": 421,
+          "grid_build_calls": 1,
+          "hud_process": 989,
+          "hud_process_calls": 1,
+          "physics_tick": 29886,
+          "predraw_to_postdraw_us": 9400,
+          "prior_postdraw_to_process_us": 3761,
+          "process_to_predraw_us": 13821,
+          "scenery_process": 1535,
+          "scenery_process_calls": 1,
+          "separation": 412,
+          "separation_calls": 1,
+          "sprite_draw": 797,
+          "sprite_draw_calls": 36,
+          "unit_draw": 6412,
+          "unit_draw_calls": 50,
+          "unit_physics": 2024,
+          "unit_physics_calls": 76
+        },
+        {
+          "aura": 179,
+          "aura_calls": 1,
+          "battle_physics": 1393,
+          "battle_physics_calls": 1,
+          "battle_process": 386,
+          "battle_process_calls": 1,
+          "building_draw": 1247,
+          "building_draw_calls": 14,
+          "elapsed_us": 533030579,
+          "entrance_process": 3,
+          "entrance_process_calls": 1,
+          "frame_us": 26321,
+          "grid_build": 386,
+          "grid_build_calls": 1,
+          "hud_process": 134,
+          "hud_process_calls": 1,
+          "physics_tick": 32281,
+          "predraw_to_postdraw_us": 5430,
+          "prior_postdraw_to_process_us": 13306,
+          "process_to_predraw_us": 7585,
+          "scenery_process": 139,
+          "scenery_process_calls": 1,
+          "separation": 414,
+          "separation_calls": 1,
+          "sprite_draw": 598,
+          "sprite_draw_calls": 40,
+          "unit_draw": 4892,
+          "unit_draw_calls": 54,
+          "unit_physics": 1628,
+          "unit_physics_calls": 77
+        },
+        {
+          "aura": 172,
+          "aura_calls": 1,
+          "battle_physics": 1376,
+          "battle_physics_calls": 1,
+          "battle_process": 325,
+          "battle_process_calls": 1,
+          "building_draw": 1309,
+          "building_draw_calls": 14,
+          "elapsed_us": 519019233,
+          "entrance_process": 2,
+          "entrance_process_calls": 1,
+          "frame_us": 26320,
+          "grid_build": 321,
+          "grid_build_calls": 1,
+          "hud_process": 123,
+          "hud_process_calls": 1,
+          "physics_tick": 31441,
+          "predraw_to_postdraw_us": 5710,
+          "prior_postdraw_to_process_us": 12561,
+          "process_to_predraw_us": 8049,
+          "scenery_process": 125,
+          "scenery_process_calls": 1,
+          "separation": 387,
+          "separation_calls": 1,
+          "sprite_draw": 711,
+          "sprite_draw_calls": 40,
+          "unit_draw": 5211,
+          "unit_draw_calls": 54,
+          "unit_physics": 1590,
+          "unit_physics_calls": 77
+        },
+        {
+          "aura": 219,
+          "aura_calls": 1,
+          "battle_physics": 2650,
+          "battle_physics_calls": 1,
+          "battle_process": 617,
+          "battle_process_calls": 1,
+          "building_draw": 2586,
+          "building_draw_calls": 14,
+          "elapsed_us": 525582696,
+          "entrance_process": 4,
+          "entrance_process_calls": 1,
+          "frame_us": 26013,
+          "grid_build": 445,
+          "grid_build_calls": 1,
+          "hud_process": 208,
+          "hud_process_calls": 1,
+          "physics_tick": 31834,
+          "predraw_to_postdraw_us": 6438,
+          "prior_postdraw_to_process_us": 5128,
+          "process_to_predraw_us": 14447,
+          "scenery_process": 241,
+          "scenery_process_calls": 1,
+          "separation": 511,
+          "separation_calls": 1,
+          "sprite_draw": 1297,
+          "sprite_draw_calls": 37,
+          "unit_draw": 9472,
+          "unit_draw_calls": 51,
+          "unit_physics": 2072,
+          "unit_physics_calls": 77
+        }
+      ],
+      "reference_uninstrumented": {
+        "frames": 4978,
+        "over_33_3_ms": 0,
+        "frame_ms": {
+          "p50": 12.842,
+          "p95": 18.269,
+          "p99": 21.34,
+          "max": 30.658
+        }
+      }
+    },
+    "previous_cluster": {
+      "wall_seconds": [
+        405.3,
+        406.4
+      ],
+      "frames": 85,
+      "game_ticks": [
+        24619,
+        24684
+      ],
+      "over_33_3_ms": 0,
+      "negative_marker_frames": 0,
+      "segment_ms": {
+        "frame_us": {
+          "p50": 13.089,
+          "p95": 22.256,
+          "p99": 24.99,
+          "max": 24.99
+        },
+        "prior_postdraw_to_process_us": {
+          "p50": 2.42,
+          "p95": 4.952,
+          "p99": 8.359,
+          "max": 8.359
+        },
+        "process_to_predraw_us": {
+          "p50": 6.052,
+          "p95": 11.235,
+          "p99": 15.032,
+          "max": 15.032
+        },
+        "predraw_to_postdraw_us": {
+          "p50": 4.626,
+          "p95": 7.35,
+          "p99": 9.926,
+          "max": 9.926
+        },
+        "unit_draw": {
+          "p50": 4.054,
+          "p95": 6.051,
+          "p99": 10.528,
+          "max": 10.528
+        },
+        "sprite_draw": {
+          "p50": 0.456,
+          "p95": 0.771,
+          "p99": 1.2,
+          "max": 1.2
+        },
+        "building_draw": {
+          "p50": 1.126,
+          "p95": 1.472,
+          "p99": 2.59,
+          "max": 2.59
+        },
+        "unit_physics": {
+          "p50": 1.184,
+          "p95": 2.689,
+          "p99": 4.06,
+          "max": 4.06
+        },
+        "battle_physics": {
+          "p50": 0.991,
+          "p95": 2.09,
+          "p99": 3.394,
+          "max": 3.394
+        },
+        "battle_process": {
+          "p50": 0.236,
+          "p95": 0.456,
+          "p99": 0.633,
+          "max": 0.633
+        },
+        "grid_build": {
+          "p50": 0.274,
+          "p95": 0.621,
+          "p99": 0.994,
+          "max": 0.994
+        },
+        "separation": {
+          "p50": 0.353,
+          "p95": 0.666,
+          "p99": 1.439,
+          "max": 1.439
+        },
+        "aura": {
+          "p50": 0.15,
+          "p95": 0.304,
+          "p99": 0.518,
+          "max": 0.518
+        },
+        "scenery_process": {
+          "p50": 0.109,
+          "p95": 1.243,
+          "p99": 1.941,
+          "max": 1.941
+        },
+        "entrance_process": {
+          "p50": 0.002,
+          "p95": 0.49,
+          "p99": 1.245,
+          "max": 1.245
+        },
+        "hud_process": {
+          "p50": 0.1,
+          "p95": 0.257,
+          "p99": 0.821,
+          "max": 0.821
+        },
+        "map_draw": {
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0,
+          "max": 0.0
+        },
+        "unit_draw_outside_sprite_and_building": {
+          "p50": 2.451,
+          "p95": 3.726,
+          "p99": 6.738,
+          "max": 6.738
+        }
+      },
+      "segment_ms_on_slowest_5_pct_of_frames": {
+        "frame_us": {
+          "p50": 23.175,
+          "p95": 24.99,
+          "p99": 24.99,
+          "max": 24.99
+        },
+        "prior_postdraw_to_process_us": {
+          "p50": 4.02,
+          "p95": 8.359,
+          "p99": 8.359,
+          "max": 8.359
+        },
+        "process_to_predraw_us": {
+          "p50": 11.364,
+          "p95": 15.032,
+          "p99": 15.032,
+          "max": 15.032
+        },
+        "predraw_to_postdraw_us": {
+          "p50": 6.293,
+          "p95": 9.926,
+          "p99": 9.926,
+          "max": 9.926
+        },
+        "unit_draw": {
+          "p50": 6.878,
+          "p95": 10.528,
+          "p99": 10.528,
+          "max": 10.528
+        },
+        "sprite_draw": {
+          "p50": 0.854,
+          "p95": 1.2,
+          "p99": 1.2,
+          "max": 1.2
+        },
+        "building_draw": {
+          "p50": 1.347,
+          "p95": 2.59,
+          "p99": 2.59,
+          "max": 2.59
+        },
+        "unit_physics": {
+          "p50": 2.574,
+          "p95": 4.06,
+          "p99": 4.06,
+          "max": 4.06
+        },
+        "battle_physics": {
+          "p50": 1.788,
+          "p95": 3.394,
+          "p99": 3.394,
+          "max": 3.394
+        },
+        "battle_process": {
+          "p50": 0.456,
+          "p95": 0.633,
+          "p99": 0.633,
+          "max": 0.633
+        },
+        "grid_build": {
+          "p50": 0.374,
+          "p95": 0.994,
+          "p99": 0.994,
+          "max": 0.994
+        },
+        "separation": {
+          "p50": 0.389,
+          "p95": 1.439,
+          "p99": 1.439,
+          "max": 1.439
+        },
+        "aura": {
+          "p50": 0.238,
+          "p95": 0.364,
+          "p99": 0.364,
+          "max": 0.364
+        },
+        "scenery_process": {
+          "p50": 0.166,
+          "p95": 1.939,
+          "p99": 1.939,
+          "max": 1.939
+        },
+        "entrance_process": {
+          "p50": 0.005,
+          "p95": 1.245,
+          "p99": 1.245,
+          "max": 1.245
+        },
+        "hud_process": {
+          "p50": 0.197,
+          "p95": 0.257,
+          "p99": 0.257,
+          "max": 0.257
+        },
+        "map_draw": {
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0,
+          "max": 0.0
+        }
+      },
+      "median_calls_per_frame": {
+        "unit_draw": 45.0,
+        "sprite_draw": 31.0,
+        "building_draw": 14.0,
+        "unit_physics": 74.0,
+        "battle_physics": 1.0,
+        "battle_process": 1.0,
+        "grid_build": 1.0,
+        "separation": 1.0,
+        "aura": 1.0,
+        "scenery_process": 1.0,
+        "entrance_process": 1.0,
+        "hud_process": 1.0,
+        "map_draw": 0.0
+      },
+      "slowest_frames": [
+        {
+          "aura": 150,
+          "aura_calls": 1,
+          "battle_physics": 979,
+          "battle_physics_calls": 1,
+          "battle_process": 633,
+          "battle_process_calls": 1,
+          "building_draw": 2590,
+          "building_draw_calls": 14,
+          "elapsed_us": 405657438,
+          "entrance_process": 5,
+          "entrance_process_calls": 1,
+          "frame_us": 24990,
+          "grid_build": 290,
+          "grid_build_calls": 1,
+          "hud_process": 257,
+          "hud_process_calls": 1,
+          "physics_tick": 24639,
+          "predraw_to_postdraw_us": 5938,
+          "prior_postdraw_to_process_us": 4020,
+          "process_to_predraw_us": 15032,
+          "scenery_process": 166,
+          "scenery_process_calls": 1,
+          "separation": 354,
+          "separation_calls": 1,
+          "sprite_draw": 1200,
+          "sprite_draw_calls": 31,
+          "unit_draw": 10528,
+          "unit_draw_calls": 45,
+          "unit_physics": 2574,
+          "unit_physics_calls": 74
+        },
+        {
+          "aura": 155,
+          "aura_calls": 1,
+          "battle_physics": 1788,
+          "battle_physics_calls": 1,
+          "battle_process": 506,
+          "battle_process_calls": 1,
+          "building_draw": 1347,
+          "building_draw_calls": 14,
+          "elapsed_us": 405504493,
+          "entrance_process": 26,
+          "entrance_process_calls": 1,
+          "frame_us": 24758,
+          "grid_build": 303,
+          "grid_build_calls": 1,
+          "hud_process": 239,
+          "hud_process_calls": 1,
+          "physics_tick": 24629,
+          "predraw_to_postdraw_us": 9926,
+          "prior_postdraw_to_process_us": 3468,
+          "process_to_predraw_us": 11364,
+          "scenery_process": 215,
+          "scenery_process_calls": 1,
+          "separation": 358,
+          "separation_calls": 1,
+          "sprite_draw": 980,
+          "sprite_draw_calls": 33,
+          "unit_draw": 6878,
+          "unit_draw_calls": 47,
+          "unit_physics": 1257,
+          "unit_physics_calls": 74
+        },
+        {
+          "aura": 240,
+          "aura_calls": 1,
+          "battle_physics": 1696,
+          "battle_physics_calls": 1,
+          "battle_process": 279,
+          "battle_process_calls": 1,
+          "building_draw": 2452,
+          "building_draw_calls": 14,
+          "elapsed_us": 405583299,
+          "entrance_process": 1,
+          "entrance_process_calls": 1,
+          "frame_us": 23175,
+          "grid_build": 486,
+          "grid_build_calls": 1,
+          "hud_process": 115,
+          "hud_process_calls": 1,
+          "physics_tick": 24634,
+          "predraw_to_postdraw_us": 5322,
+          "prior_postdraw_to_process_us": 4952,
+          "process_to_predraw_us": 12901,
+          "scenery_process": 124,
+          "scenery_process_calls": 1,
+          "separation": 609,
+          "separation_calls": 1,
+          "sprite_draw": 854,
+          "sprite_draw_calls": 31,
+          "unit_draw": 9963,
+          "unit_draw_calls": 45,
+          "unit_physics": 2836,
+          "unit_physics_calls": 74
+        },
+        {
+          "aura": 238,
+          "aura_calls": 1,
+          "battle_physics": 2090,
+          "battle_physics_calls": 1,
+          "battle_process": 456,
+          "battle_process_calls": 1,
+          "building_draw": 1274,
+          "building_draw_calls": 14,
+          "elapsed_us": 405679814,
+          "entrance_process": 1245,
+          "entrance_process_calls": 1,
+          "frame_us": 22376,
+          "grid_build": 374,
+          "grid_build_calls": 1,
+          "hud_process": 197,
+          "hud_process_calls": 1,
+          "physics_tick": 24640,
+          "predraw_to_postdraw_us": 7350,
+          "prior_postdraw_to_process_us": 3791,
+          "process_to_predraw_us": 11235,
+          "scenery_process": 1939,
+          "scenery_process_calls": 1,
+          "separation": 389,
+          "separation_calls": 1,
+          "sprite_draw": 470,
+          "sprite_draw_calls": 31,
+          "unit_draw": 4539,
+          "unit_draw_calls": 45,
+          "unit_physics": 1370,
+          "unit_physics_calls": 74
+        },
+        {
+          "aura": 364,
+          "aura_calls": 2,
+          "battle_physics": 3394,
+          "battle_physics_calls": 2,
+          "battle_process": 310,
+          "battle_process_calls": 1,
+          "building_draw": 1299,
+          "building_draw_calls": 14,
+          "elapsed_us": 405734602,
+          "entrance_process": 2,
+          "entrance_process_calls": 1,
+          "frame_us": 22256,
+          "grid_build": 994,
+          "grid_build_calls": 2,
+          "hud_process": 129,
+          "hud_process_calls": 1,
+          "physics_tick": 24644,
+          "predraw_to_postdraw_us": 6293,
+          "prior_postdraw_to_process_us": 8359,
+          "process_to_predraw_us": 7604,
+          "scenery_process": 129,
+          "scenery_process_calls": 1,
+          "separation": 1439,
+          "separation_calls": 2,
+          "sprite_draw": 508,
+          "sprite_draw_calls": 31,
+          "unit_draw": 4859,
+          "unit_draw_calls": 45,
+          "unit_physics": 4060,
+          "unit_physics_calls": 148
+        },
+        {
+          "aura": 164,
+          "aura_calls": 1,
+          "battle_physics": 988,
+          "battle_physics_calls": 1,
+          "battle_process": 352,
+          "battle_process_calls": 1,
+          "building_draw": 1350,
+          "building_draw_calls": 14,
+          "elapsed_us": 405448392,
+          "entrance_process": 826,
+          "entrance_process_calls": 1,
+          "frame_us": 20821,
+          "grid_build": 279,
+          "grid_build_calls": 1,
+          "hud_process": 179,
+          "hud_process_calls": 1,
+          "physics_tick": 24626,
+          "predraw_to_postdraw_us": 6818,
+          "prior_postdraw_to_process_us": 2332,
+          "process_to_predraw_us": 11671,
+          "scenery_process": 1941,
+          "scenery_process_calls": 1,
+          "separation": 347,
+          "separation_calls": 1,
+          "sprite_draw": 771,
+          "sprite_draw_calls": 33,
+          "unit_draw": 5691,
+          "unit_draw_calls": 47,
+          "unit_physics": 1113,
+          "unit_physics_calls": 74
+        },
+        {
+          "aura": 207,
+          "aura_calls": 1,
+          "battle_physics": 1208,
+          "battle_physics_calls": 1,
+          "battle_process": 462,
+          "battle_process_calls": 1,
+          "building_draw": 1296,
+          "building_draw_calls": 14,
+          "elapsed_us": 405369520,
+          "entrance_process": 6,
+          "entrance_process_calls": 1,
+          "frame_us": 20272,
+          "grid_build": 351,
+          "grid_build_calls": 1,
+          "hud_process": 190,
+          "hud_process_calls": 1,
+          "physics_tick": 24622,
+          "predraw_to_postdraw_us": 7263,
+          "prior_postdraw_to_process_us": 3113,
+          "process_to_predraw_us": 9896,
+          "scenery_process": 193,
+          "scenery_process_calls": 1,
+          "separation": 390,
+          "separation_calls": 1,
+          "sprite_draw": 927,
+          "sprite_draw_calls": 33,
+          "unit_draw": 6222,
+          "unit_draw_calls": 47,
+          "unit_physics": 1438,
+          "unit_physics_calls": 74
+        },
+        {
+          "aura": 304,
+          "aura_calls": 2,
+          "battle_physics": 1989,
+          "battle_physics_calls": 2,
+          "battle_process": 319,
+          "battle_process_calls": 1,
+          "building_draw": 1472,
+          "building_draw_calls": 14,
+          "elapsed_us": 405524583,
+          "entrance_process": 4,
+          "entrance_process_calls": 1,
+          "frame_us": 20090,
+          "grid_build": 621,
+          "grid_build_calls": 2,
+          "hud_process": 135,
+          "hud_process_calls": 1,
+          "physics_tick": 24631,
+          "predraw_to_postdraw_us": 6454,
+          "prior_postdraw_to_process_us": 4938,
+          "process_to_predraw_us": 8698,
+          "scenery_process": 132,
+          "scenery_process_calls": 1,
+          "separation": 707,
+          "separation_calls": 2,
+          "sprite_draw": 661,
+          "sprite_draw_calls": 33,
+          "unit_draw": 5346,
+          "unit_draw_calls": 47,
+          "unit_physics": 2535,
+          "unit_physics_calls": 148
+        }
+      ],
+      "reference_uninstrumented": {
+        "frames": 39,
+        "over_33_3_ms": 10,
+        "frame_ms": {
+          "p50": 26.79,
+          "p95": 44.759,
+          "p99": 46.083,
+          "max": 46.083
+        }
+      }
+    }
+  },
+  "source_lf_sha256": {
+    "unit.gd": "54c16560b7ed2a6ae36c3e78ce3775bc0bb1bac9efcb171f99285846a848965d",
+    "battle.gd": "9c8f47c1acaedeff53f764b27071a21daaf2d226c4b2928969dcb95153a721d0",
+    "hud.gd": "6f0962f33dbe7626b09b0499ab91219d6a8578081ec631117229f4d66a490a06",
+    "liangshan_scenery.gd": "ed5ead1504bb1e5820ab26848bcf2dcc9780dc4296fa70c7f9cc9999532fd2a7",
+    "liangshan_entrance.gd": "bbe1ecf8f252dc1683c633178dff9983f43b1f6692c944fd14115e38da15fccd",
+    "game_map.gd": "8a850e5434a8547fe9f07662327ac974ae3e7e11401ec9e2fe3e9e87e11aefe4",
+    "ui_theme.gd": "b3c5a1e06805a0362cef36db47c628494267e6341657af938d7e443e0b7db136"
+  },
+  "probe_lf_sha256": "46c46e036ca0935a9c0ca72266d79502f5e2b7e638b54f0a29e6a8922cea4c99",
+  "runner_lf_sha256": "7bf9f182124f9a79c50a09972f105cac717197a13395595896f1879a58256208",
+  "artifacts_sha256": {
+    "report.json": "41806cf37ee3b4e2a655e0cf93d2663230658226dab33d7ccb332f0c644682a6",
+    "game.log": "8b83934432adb84c802f7ad0ec14bfa0fb4281bd5407fe648540baaa3a6c80f5",
+    "run.json": "e76e02da460f8e328284feaa3b45a210d7a8b37b368df998748acd3387469f84",
+    "report.png": "07bf05a30674b1ecc28866c6c022104f074df959993c73ce4b289fec268da95c"
+  },
+  "reference_report_sha256": "671dbe1c00f6a94180bedd6828ee5434da79094950395245241667f44d27970d"
+}
