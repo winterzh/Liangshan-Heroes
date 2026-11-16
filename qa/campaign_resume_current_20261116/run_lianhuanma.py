@@ -44,8 +44,14 @@ def execute(args):
     pins = worker_pins()
     run, project, preparation = p.admission(args.candidate)
     cold = p.read(run / 'cold_import/receipt.json')
-    p.need(all(cold.get(k) is True for k in ('complete', 'cold_import_qualified', 'children_gone', 'lock_released')),
-           'Own complete cold import required')
+    p.need(cold.get('complete') is True and cold.get('cold_import_qualified') is True
+           and 'error' not in cold, 'Own complete cold import required')
+    recover_cold_lock = not (cold.get('children_gone') is True and cold.get('lock_released') is True)
+    if recover_cold_lock:
+        p.need(args.recover_cold_lock and cold.get('lock_released') is False,
+               'The completed cold import left its lock; use --recover-cold-lock when the engine is idle')
+        p.need(args.lock.is_file() and args.lock.read_text(encoding='utf-8') == str(run / 'cold_import'),
+               "Never recover another run's engine lock")
     p.need(cold['preparation_sha256'] == p.sha(run / 'preparation.json')
            and cold['runner_sha256'] == p.sha(HERE / 'prepare.py')
            and cold['generation_sha256'] == p.sha(run / 'generation.json'), 'Cold binding changed')
@@ -73,7 +79,15 @@ def execute(args):
     previous = None
     pids = set()
     try:
-        p.need(not p.running(), 'Engine lane busy; no child started')
+        engine_busy = p.running()
+        p.need(not engine_busy, 'Engine lane busy; no child started')
+        if recover_cold_lock:
+            p.need(p.common.release_owned_lock(args.lock, run / 'cold_import', cold, engine_busy),
+                   'The cold import no longer owns this lock')
+            receipt['recovered_cold_lock'] = {
+                'receipt_sha256': pins[str(run / 'cold_import/receipt.json')],
+                'import_pid': steps[0]['pid'],
+            }
         with args.lock.open('x', encoding='utf-8') as handle:
             handle.write(str(output))
         locked = True
@@ -181,6 +195,8 @@ def main():
     parser.add_argument('--candidate', type=Path, required=True)
     parser.add_argument('--godot', type=Path, required=True)
     parser.add_argument('--lock', type=Path, required=True)
+    parser.add_argument('--recover-cold-lock', action='store_true',
+                        help="Recover the completed cold import's own lock after the shared engine is idle")
     args = parser.parse_args()
     p.need(args.candidate.is_absolute() and args.lock.is_absolute(), 'Absolute candidate and shared lock required')
     execute(args)

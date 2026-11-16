@@ -9,3 +9,9 @@
 复建时在干净的独立源码检出中，以 [UID 清单](uid_inputs.json) 的 `ascii_bytes` 原字节补入对应路径。每个条目列出预期 SHA-256。此前首份未导入装配与本次装配相比，只少这 25 个脚本标识文件。
 
 [冷导入收据](cold_import_receipt.json) · [原始导入日志](import.log) · [实际内容身份](expected_identity.json)
+
+## 首次导入锁恢复
+
+在原 `run_lianhuanma.py --candidate ... --godot ... --lock ...` 命令追加 `--recover-cold-lock`。宿主核对首次导入已通过、原收据和日志仍匹配、候选身份一致，再确认锁确属该候选且引擎空闲。回收记录绑定原冷导入收据的 SHA-256 和导入进程 PID。
+
+临时目录夹具覆盖未传显式参数、锁属于其他任务、引擎仍占用，以及空闲时回收本候选的锁。夹具在启动引擎前终止，完整续玩实跑另行留证。
