@@ -14,6 +14,11 @@ var play_metrics := {}
 var rush_guards: Array = []
 var rush_guard_peak := 0
 var rush_camp_low := INF
+var rush_home_mines: Array = []
+var rush_economy_samples: Array = []
+var rush_income_gold := 0
+var rush_trade_gold := 0
+var rush_trades := 0
 
 func _initialize() -> void: _run.call_deferred()
 func check(ok: bool, label: String) -> void:
@@ -84,6 +89,40 @@ func _mine_idle_workers(b) -> void:
 			b.select_single(u,false)
 			b._issue_order(b.to_screen(node.position),false)
 			orders += 1
+func _rush_observe_income(kind: String, gold: int, _wood: int) -> void:
+	if kind == "income": rush_income_gold += gold
+
+func _rush_trade(b, own: Array) -> void:
+	if b.gold >= 105 or b.wood < 280: return
+	for building in own:
+		if building.key != "market" or building.is_constructing: continue
+		var before_gold: int = b.gold
+		var before_wood: int = b.wood
+		b.select_single(building, false)
+		b._command_hotkey(0)
+		var paid: bool = b.wood == before_wood - b.TRADE_AMT and b.gold == before_gold + b.TRADE_GET
+		if not paid:
+			check(false, "normal market hotkey exchanges at the live rate")
+			return
+		rush_trades += 1
+		rush_trade_gold += b.gold - before_gold
+		orders += 1
+		return
+
+func _rush_economy_sample(b) -> void:
+	var home: Array = []
+	for row in rush_home_mines:
+		var mine = row.unit
+		var present: bool = is_instance_valid(mine) and mine.res_left > 0.0
+		var assigned: int = b.units.filter(func(u): return alive(u) and u.faction == 0 and u.is_worker \
+			and present and u._gather_node == mine and u._state in [u.ST_GATHER, u.ST_RETURN]).size()
+		home.append({"cell": str(row.cell), "remaining": int(mine.res_left) if present else 0, "assigned": assigned,
+			"blocked": b._resource_blocked(mine) if present else false})
+	var record := {"elapsed": b.level.elapsed, "home_mines": home, "gold": b.gold, "wood": b.wood,
+		"non_trade_gold_income": rush_income_gold - rush_trade_gold, "trade_gold": rush_trade_gold}
+	rush_economy_samples.append(record)
+	print("[rush-economy] ", record)
+
 func _economy(b) -> void:
 	_mine_idle_workers(b)
 	var own: Array = b.units.filter(func(u): return alive(u) and u.faction == 0 and u.is_building)
@@ -92,6 +131,9 @@ func _economy(b) -> void:
 		if b.pop_cap - b.used_pop() - b._queued_pop() < 6 and b.pop_cap < 70: _place(b,"house")
 		elif not own.any(func(u): return u.key == "siege_workshop"): _place(b,"siege_workshop")
 		elif own.filter(func(u): return u.key == "barracks").size() < 2: _place(b,"barracks")
+		elif route == "rush" and b.gold < 120 and b.wood >= 280 and not own.any(func(u): return u.key == "market"):
+			_place(b,"market")
+	if route == "rush": _rush_trade(b, own)
 	own.sort_custom(func(a,z): return a.key == "siege_workshop" and z.key != "siege_workshop")
 	var siege_count: int = b.units.filter(func(u): return alive(u) and u.faction == 0 and u.key in ["siege_ram","siege_cata"]).size()
 	var field_count: int = b.units.filter(func(u): return alive(u) and u.faction == 0 and not u.is_worker and not u.is_building and not u.is_noncombat and u.key not in ["song_jiang","sun_li"]).size()
@@ -223,6 +265,12 @@ func _rush_assault(b, army: Array, target, screen_cell: Vector2i) -> void:
 
 func _play(b) -> void:
 	var l = b.level
+	if route == "rush":
+		b.qa_resource_observer = _rush_observe_income
+		var home: Vector2 = b.map.cell_to_world(l.CAMP)
+		for mine in b.units:
+			if mine.is_resource and mine.res_kind == "gold" and mine.faction == 0 and mine.position.distance_to(home) < 420.0:
+				rush_home_mines.append({"unit": mine, "cell": b.map.world_to_cell(mine.position)})
 	var entrance_towers: Array = b.units.filter(func(u): return alive(u) and u.faction == 1 and u.key == "arrow_tower")
 	var target_stage := "gate" if route == "rush" else "north"
 	var first_breach: Dictionary = {}
@@ -241,6 +289,7 @@ func _play(b) -> void:
 			entered_with_main_intact = true
 		if clock >= next_print:
 			next_print = clock+60.0
+			if route == "rush": _rush_economy_sample(b)
 			print("[rts-play] t=",int(clock)," stage=",target_stage," army=",army.size()," g=",b.gold," w=",b.wood," pop=",b.used_pop(),"/",b.pop_cap," buildings=",buildings_started," gate_hp=",l.gate.hp if alive(l.gate) else 0)
 		if route == "rush":
 			if army.size() < 6: mobilized = false
@@ -336,6 +385,9 @@ func _play(b) -> void:
 		play_metrics["camp_low_hp"] = rush_camp_low
 		play_metrics["camp_alive"] = alive(l.hall)
 		play_metrics["song_alive"] = alive(l.song)
+		_rush_economy_sample(b)
+		play_metrics["market_trades"] = rush_trades
+		play_metrics["economy_samples"] = rush_economy_samples
 
 func _mode_regression() -> void:
 	for mode in ["skirmish","skirmish_ai"]:
