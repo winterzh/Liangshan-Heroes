@@ -1,5 +1,8 @@
 # 源码设置与换机（2026-10-30）
 
+连环马续接工具接受原流程至少一个已通过的保存阶段，下一进程须因引擎占用而未打开日志或报告。后续启动遇相同抢占时等待，已启动的战斗失败继续保留原结果。[来源和首段回执](../qa/campaign_resume_current_20261116/evidence/protected_drill_candidate/)。
+
+
 2026-11-16 连环马演练骑复用Unit已有的 campaign_no_auto_target 标记。Unit通用元数据保存和恢复按原方式保留该布尔值，无新增结构字段。本次生产内容身份变化，后续续玩验证须绑定当前来源。[教场诊断与定向验证](../qa/campaign_resume_current_20261116/README.md)。
 
 

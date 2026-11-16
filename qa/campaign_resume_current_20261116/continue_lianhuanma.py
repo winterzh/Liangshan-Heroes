@@ -1,4 +1,4 @@
-"""Continue only an unstarted third process after the two verified saved stages.
+"""Continue the first unstarted stage after a verified saved prefix.
 
 The original runner, workers, assertions, private profile and slot are retained.
 This accepts only the exact pre-step engine-occupancy stop, never a failed battle.
@@ -29,6 +29,24 @@ def wait_idle():
         time.sleep(1)
 
 
+def run_stage_when_idle(engine, project, env, stage, mode, steps, bootstrap):
+    deadline = time.monotonic() + 600
+    previous_count = len(steps)
+    while True:
+        wait_idle()
+        try:
+            p.common.process_step(engine, project, env, stage, mode,
+                                  ['--resolution', '1280x720', '--position', '30000,30000',
+                                   '--script', str(bootstrap)], 1500,
+                                  'gl_compatibility', p.running, steps)
+            return
+        except RuntimeError as error:
+            if (str(error) != 'Godot/Liangshan engine appeared before step ' + mode
+                    or len(steps) != previous_count or (stage / (mode + '.log')).exists()
+                    or time.monotonic() >= deadline):
+                raise
+
+
 def execute(args):
     old = args.batch.absolute()
     p.identity.no_links(old)
@@ -37,16 +55,22 @@ def execute(args):
         p.identity.no_links(prior_path)
         prior = p.read(prior_path)
         if prior.get('previous_batch') == str(old):
-            p.need(not prior.get('steps'), 'Third process already attempted; use an explicit diagnostic batch, not this occupancy continuation')
+            p.need(not prior.get('steps'), 'A continuation process already started for this batch')
     run, project, preparation = p.admission(old.parent)
+    completed_modes = tuple(s['case'] for s in original['steps'])
+    p.need(completed_modes in (host.MODES[:1], host.MODES[:2]),
+           'Expected one or two completed save stages')
+    remaining_modes = host.MODES[len(completed_modes):]
+    first_mode = remaining_modes[0]
+    occupancy = RuntimeError('Godot/Liangshan engine appeared before step ' + first_mode)
     p.need(original['candidate'] == str(run) and original.get('post_source_unchanged') is True
-           and original.get('error') == "RuntimeError('Godot/Liangshan engine appeared before step resume_victory')"
-           and original['complete'] is False, 'Only the explicit unstarted-third-process stop is resumable')
-    p.need([s['case'] for s in original['steps']] == ['save_training', 'resume_training']
-           and all(s['passed'] and s['exit_code'] == 0 and not s['errors'] for s in original['steps']),
-           'Exactly two completed actual processes required')
-    p.need(not (old / 'resume_victory/resume_victory.log').exists()
-           and not (old / 'resume_victory/report.json').exists(), 'Never restart a started third process')
+           and original.get('error') == repr(occupancy)
+           and original['complete'] is False, 'Expected an explicit pre-launch occupancy stop')
+    p.need(all(s['passed'] and s['exit_code'] == 0 and not s['errors'] for s in original['steps']),
+           'Saved prefix processes must have passed')
+    for mode in remaining_modes:
+        p.need(not (old / mode / (mode + '.log')).exists()
+               and not (old / mode / 'report.json').exists(), 'Remaining stage already started: ' + mode)
     pins = dict(original['pins'])
     p.check_pins(pins)
     p.check_pins(host.worker_pins())
@@ -75,7 +99,8 @@ def execute(args):
                and report['identity']['content_version'] == identity and report['identity']['engine_sha256'] == cold['engine_sha256']
                and report['full_story_required'] is True and report['save_exit_observed'] is True
                and report['exit_reason'] == 'continue_saved', 'Original saved-stage evidence changed')
-    p.need(len(pids) == 2 and all(type(pid) is int and pid > 0 for pid in pids), 'Distinct earlier PIDs required')
+    p.need(len(pids) == len(completed_modes) and all(type(pid) is int and pid > 0 for pid in pids),
+           'Distinct earlier PIDs required')
     previous = Path(original['reports'][-1]['path'])
     output = run / ('lian_tail_' + time.strftime('%H%M%S') + '_' + uuid.uuid4().hex[:8])
     output.mkdir()
@@ -90,7 +115,7 @@ def execute(args):
         if args.lock.exists():
             p.need(args.lock.read_text(encoding='utf-8') == str(old) and original['lock_released'] is False,
                    'Never remove another owner lock')
-            # Old host is terminal, its two child handles exited 0, current engine inventory is empty.
+            # The old host and its verified saved prefix have exited.
             args.lock.unlink()
             receipt['recovered_previous_owned_lock'] = True
         with args.lock.open('x', encoding='utf-8') as handle:
@@ -114,8 +139,7 @@ def execute(args):
                    LT_BINDINGS=str(workers / 'bindings.json'), LT_BINDINGS_SHA256=p.sha(workers / 'bindings.json'),
                    LT_NONCE=nonce, LT_CANDIDATE_SHA256=manifest_sha,
                    LT_PROVENANCE_SHA256=p.sha(HERE / 'workers/provenance.json'))
-        for mode in ('resume_victory', 'reject_terminal'):
-            wait_idle()
+        for mode in remaining_modes:
             p.check_pins(pins)
             stage = output / mode
             stage.mkdir()
@@ -124,10 +148,8 @@ def execute(args):
             child_env = dict(env, LT_MODE=mode, LT_REPORT=str(report_path), LT_PROCESS_NONCE=process_nonce,
                              LT_PREVIOUS=str(previous), LT_PREVIOUS_SHA256=p.sha(previous))
             try:
-                p.common.process_step(engine, project, child_env, stage, mode,
-                                      ['--resolution', '1280x720', '--position', '30000,30000',
-                                       '--script', str(workers / 'bootstrap.gd')], 1500,
-                                      'gl_compatibility', p.running, receipt['steps'])
+                run_stage_when_idle(engine, project, child_env, stage, mode,
+                                    receipt['steps'], workers / 'bootstrap.gd')
             finally:
                 if report_path.is_file():
                     report = p.read(report_path)
@@ -149,6 +171,9 @@ def execute(args):
             pid = report.get('pid')
             p.need(type(pid) is int and pid > 0 and pid == step['pid'] and pid not in pids
                    and step['passed'] and step['exit_code'] == 0 and not step['errors'], 'Distinct actual current process')
+            if mode == 'resume_training':
+                p.need(report.get('save_exit_observed') is True and report.get('exit_reason') == 'continue_saved',
+                       'Production save/exit required')
             if mode == 'reject_terminal':
                 refusal = report.get('observations', {}).get('terminal_refusal', {})
                 p.need(refusal.get('ok') is False and refusal.get('code') == 'LOCAL_RUN_TERMINAL', 'Original terminal refusal')

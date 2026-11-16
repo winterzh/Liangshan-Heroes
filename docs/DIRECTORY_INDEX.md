@@ -1,5 +1,8 @@
 # 项目目录索引（2026-10-30）
 
+[教场修正候选来源与首段回执](../qa/campaign_resume_current_20261116/evidence/protected_drill_candidate/)保存输入变化、冷导入、策略预检和首个保存阶段，含下阶段未启动的占用记录。
+
+
 [连环马续玩教场观察](../qa/campaign_resume_current_20261116/README.md)：observe_drill.py用原私有存档的独立副本复现，evidence/drill_observation收录路径拒绝、实际游戏采样及修正后的定向夹具报告。tools/lianhuanma_drill_test.gd临时报告写到 .godot/lianhuanma-drill-fixture。
 
 
