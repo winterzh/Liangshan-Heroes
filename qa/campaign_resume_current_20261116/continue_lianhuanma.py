@@ -1,13 +1,11 @@
-"""Continue the first unstarted stage after a verified saved prefix.
-
-The original runner, workers, assertions, private profile and slot are retained.
-This accepts only the exact pre-step engine-occupancy stop, never a failed battle.
-"""
+"""Continue after engine contention or retry the documented lure-route failure."""
 import argparse
 import importlib.util
 import json
 import os
 from pathlib import Path
+import shutil
+import subprocess
 import time
 import uuid
 
@@ -47,6 +45,42 @@ def run_stage_when_idle(engine, project, env, stage, mode, steps, bootstrap):
                 raise
 
 
+def verified_retry(old, original, tail):
+    p.identity.no_links(tail)
+    p.need(tail.parent == old.parent and tail.name.startswith('lian_tail_'), 'Expected a sibling continuation')
+    prior_receipt = tail / 'receipt.json'
+    prior = p.read(prior_receipt)
+    p.need(prior['previous_batch'] == str(old)
+           and prior['previous_receipt_sha256'] == p.sha(old / 'receipt.json')
+           and all(prior[key] == original[key] for key in ('source_identity', 'profile', 'batch_nonce'))
+           and prior['post_source_unchanged'] and prior['lock_released'] and not prior['complete'],
+           'Expected the closed failed tail of the same saved battle')
+    p.need([s['case'] for s in original['steps']] == ['save_training']
+           and [s['case'] for s in prior['steps']] == ['resume_training', 'resume_victory'],
+           'Expected one save, one re-save and one failed combat')
+    failed = prior['steps'][-1]
+    failed_row = prior['reports'][-1]
+    failed_path = tail / 'resume_victory/report.json'
+    failure = p.read(failed_path)
+    log = tail / 'resume_victory/resume_victory.log'
+    p.need(not failed['passed'] and failed['exit_code'] == 1 and not failed['errors']
+           and failed['log_sha256'] == p.sha(log) and failed_row['sha256'] == p.sha(failed_path)
+           and failure['pid'] == failed['pid'] and not failure['passed']
+           and failure['failures'] == ['ordinary non-hook infantry actually enters lure radius'],
+           'Only the documented lure-route failure is eligible')
+    pins = {**original['pins'], **prior['pins']}
+    archived_paths = {'continue_lianhuanma.py', 'workers.json', 'workers/driver.gd', 'workers/strategy.json'}
+    for name in list(pins):
+        path = Path(name)
+        if path.is_relative_to(HERE) and path.relative_to(HERE).as_posix() in archived_paths:
+            git_path = path.relative_to(p.ROOT).as_posix()
+            raw = subprocess.check_output(['git', 'show', 'e53cebb4:' + git_path], cwd=p.ROOT)
+            p.need(p.digest(raw) == pins[name], 'Unexpected historical worker input: ' + git_path)
+            del pins[name]
+    pins.update({str(prior_receipt): p.sha(prior_receipt), str(failed_path): p.sha(failed_path), str(log): p.sha(log)})
+    return original['steps'] + prior['steps'][:1], original['reports'] + prior['reports'][:1], pins, failed['pid']
+
+
 def execute(args):
     old = args.batch.absolute()
     p.identity.no_links(old)
@@ -55,7 +89,8 @@ def execute(args):
         p.identity.no_links(prior_path)
         prior = p.read(prior_path)
         if prior.get('previous_batch') == str(old):
-            p.need(not prior.get('steps'), 'A continuation process already started for this batch')
+            if not args.retry_lure_tail or prior_path.parent != args.retry_lure_tail:
+                p.need(not prior.get('steps'), 'Another continuation process already started for this batch')
     run, project, preparation = p.admission(old.parent)
     completed_modes = tuple(s['case'] for s in original['steps'])
     p.need(completed_modes in (host.MODES[:1], host.MODES[:2]),
@@ -68,12 +103,21 @@ def execute(args):
            and original['complete'] is False, 'Expected an explicit pre-launch occupancy stop')
     p.need(all(s['passed'] and s['exit_code'] == 0 and not s['errors'] for s in original['steps']),
            'Saved prefix processes must have passed')
-    for mode in remaining_modes:
-        p.need(not (old / mode / (mode + '.log')).exists()
-               and not (old / mode / 'report.json').exists(), 'Remaining stage already started: ' + mode)
-    pins = dict(original['pins'])
+    saved_steps = original['steps']
+    saved_reports = original['reports']
+    failed_pid = None
+    if args.retry_lure_tail:
+        saved_steps, saved_reports, pins, failed_pid = verified_retry(old, original, args.retry_lure_tail)
+        remaining_modes = host.MODES[len(saved_steps):]
+    else:
+        for mode in remaining_modes:
+            p.need(not (old / mode / (mode + '.log')).exists()
+                   and not (old / mode / 'report.json').exists(), 'Remaining stage already started: ' + mode)
+        pins = dict(original['pins'])
     p.check_pins(pins)
-    p.check_pins(host.worker_pins())
+    current_worker_pins = host.worker_pins()
+    p.check_pins(current_worker_pins)
+    pins.update(current_worker_pins)
     pins[str(old / 'receipt.json')] = p.sha(old / 'receipt.json')
     pins[str(Path(__file__))] = p.sha(__file__)
     generation = p.read(run / 'generation.json')
@@ -88,10 +132,11 @@ def execute(args):
     p.identity.no_links(profile)
     nonce = original['batch_nonce']
     manifest_sha = original['manifest_sha256']
-    pids = {s['pid'] for s in original['steps']}
-    for row, step in zip(original['reports'], original['steps'], strict=True):
+    pids = {s['pid'] for s in saved_steps}
+    for row, step in zip(saved_reports, saved_steps, strict=True):
         report = p.read(row['path'])
-        p.need(p.sha(row['path']) == row['sha256'] and report.get('passed') is True
+        p.need(step['passed'] and step['exit_code'] == 0 and not step['errors']
+               and p.sha(row['path']) == row['sha256'] and report.get('passed') is True
                and report.get('stage_completed') is True and report.get('failures') == []
                and all(c['passed'] for c in report['checks']) and report['pid'] == step['pid']
                and report['mode'] == step['case'] and report['profile'] == str(profile)
@@ -99,9 +144,9 @@ def execute(args):
                and report['identity']['content_version'] == identity and report['identity']['engine_sha256'] == cold['engine_sha256']
                and report['full_story_required'] is True and report['save_exit_observed'] is True
                and report['exit_reason'] == 'continue_saved', 'Original saved-stage evidence changed')
-    p.need(len(pids) == len(completed_modes) and all(type(pid) is int and pid > 0 for pid in pids),
+    p.need(len(pids) == len(saved_steps) and all(type(pid) is int and pid > 0 for pid in pids),
            'Distinct earlier PIDs required')
-    previous = Path(original['reports'][-1]['path'])
+    previous = Path(saved_reports[-1]['path'])
     output = run / ('lian_tail_' + time.strftime('%H%M%S') + '_' + uuid.uuid4().hex[:8])
     output.mkdir()
     receipt = {'schema': 'current_lianhuanma_tail_v1', 'complete': False, 'steps': [], 'reports': [],
@@ -109,6 +154,9 @@ def execute(args):
                'source_identity': identity, 'profile': str(profile), 'batch_nonce': nonce,
                'full_story_required': True, 'source_victory_chain_passed': False,
                'public_continue_qualified': False, 'native_sdk_qualified': False, 'human_acceptance': False}
+    if args.retry_lure_tail:
+        receipt.update(retry_lure_tail=str(args.retry_lure_tail), reused_saved_reports=saved_reports,
+                       retry_strategy_sha256=p.sha(HERE / 'workers/driver.gd'))
     locked = False
     try:
         wait_idle()
@@ -122,6 +170,17 @@ def execute(args):
             handle.write(str(output))
         locked = True
         workers = old / 'workers'
+        if args.retry_lure_tail:
+            workers = output / 'workers'
+            workers.mkdir()
+            for name in host.WORKERS:
+                source = HERE / 'workers' / name
+                shutil.copyfile(source, workers / name)
+                p.need(p.sha(workers / name) == pins[str(source)], 'Copied strategy input changed')
+                pins[str(workers / name)] = p.sha(workers / name)
+            binding = workers / 'bindings.json'
+            p.save(binding, {name: p.sha(workers / name) for name in host.WORKERS})
+            pins[str(binding)] = p.sha(binding)
         env = os.environ.copy()
         for key in list(env):
             if key.startswith(('LSH_', 'LT_', 'LL_', 'GT_', 'GVT_', 'GLS_', 'DF_', 'DN_', 'UST_', 'UCR_',
@@ -169,7 +228,7 @@ def execute(args):
             p.need(all(report.get(k) is False for k in ('public_continue_qualified', 'native_sdk_qualified',
                                                        'native_release_tested', 'human_acceptance')), 'No wider qualification')
             pid = report.get('pid')
-            p.need(type(pid) is int and pid > 0 and pid == step['pid'] and pid not in pids
+            p.need(type(pid) is int and pid > 0 and pid == step['pid'] and pid not in pids and pid != failed_pid
                    and step['passed'] and step['exit_code'] == 0 and not step['errors'], 'Distinct actual current process')
             if mode == 'resume_training':
                 p.need(report.get('save_exit_observed') is True and report.get('exit_reason') == 'continue_saved',
@@ -208,6 +267,9 @@ if __name__ == '__main__':
     parser.add_argument('--batch', type=Path, required=True)
     parser.add_argument('--godot', type=Path, required=True)
     parser.add_argument('--lock', type=Path, required=True)
+    parser.add_argument('--retry-lure-tail', type=Path)
     args = parser.parse_args()
+    if args.retry_lure_tail:
+        args.retry_lure_tail = args.retry_lure_tail.absolute()
     p.need(args.batch.is_absolute() and args.lock.is_absolute(), 'Absolute batch and lock required')
     execute(args)
