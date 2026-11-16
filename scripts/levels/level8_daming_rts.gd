@@ -295,6 +295,7 @@ func on_start(b) -> void:
 	b.mission.add_action("daming_fire","时迁：翠云楼举火",FIRE_CELL,["shi_qian"],2,64)
 	b.mission.add_actor_locator("daming_fire","shi_qian")
 	b.mission.add_map_locator("蔡福家 · 重整乔装",SAFEHOUSE)
+	b.mission.add_map_locator("南门外 · 接应集结",GATE_APPROACH)
 	b.lit_cells[OUTPOST]=20
 	b.lit_cells[EXIT_CELL]=20
 	b.msg("城外军队可立即出击与经营；约115秒后两处营地开始付费补军。内应举火提供90秒进攻机会，不会免费生出接应军。",9)
@@ -316,6 +317,54 @@ func _inside_prison(b,u) -> bool:
 	if not _effective(u): return false
 	var c: Vector2i=b.map.world_to_cell(u.position)
 	return c.x>15 and c.x<21 and c.y>13 and c.y<20
+func _gate_crew(b) -> Array:
+	# The briefing and the real gate action count the same effective soldiers.
+	return b.units.filter(func(u): return _effective(u) and u.faction==0 and not u.is_noncombat and u.key in FIELD_KEYS and _near(b,u,GATE_APPROACH,180))
+func coordination_state(b) -> Dictionary:
+	var crew := _gate_crew(b)
+	return {"inside": [chai,yue].filter(func(u): return _inside_prison(b,u)).size(),
+		"crew": crew.size(), "leader": crew.any(func(u): return u.key in ["lu_zhishen","wu_song"]),
+		"agents_alive": [scout,chai,yue].all(func(u): return alive(u)),
+		"safe": int(b.mission.has_event("daming_lu_safe"))+int(b.mission.has_event("daming_shi_safe"))}
+func unit_tactical_hint(b,unit) -> String:
+	if not alive(unit) or unit.faction!=0: return ""
+	if unit in [lu,shi] and rescued:
+		return Localize.text("伤员不参战 · 手动护送至城外\n南门必须打开，二人都须撤出")
+	if unit not in spies and unit.key not in ["wu_yong","lu_zhishen","wu_song"]: return ""
+	if gate_open: return Localize.text("南门已通 · 清牢救人，留兵护退路")
+	var s := coordination_state(b)
+	var heading := Localize.format_text("牢内%d/2 · 门外%d/3",[s.inside,s.crew])
+	var advice := "接应人手已齐；仍须清门前守军"
+	if not s.agents_alive and not signaled: advice="内应不齐，可护器械强攻南门"
+	elif signaled and signal_left<=0: advice="守军回防；仍可清敌夺门或强攻"
+	elif not s.leader: advice="接应需鲁智深或武松亲自到场"
+	elif s.crew<3: advice="带至少两名战友到南门外"
+	elif s.inside<2 and not signaled: advice="柴进、乐和先进入牢内院"
+	elif not signaled and scout._invis_t<=0: advice="时迁恢复乔装后才能举火"
+	return heading+"\n"+Localize.text(advice)
+func _briefing(b) -> Dictionary:
+	var s := coordination_state(b)
+	if rescued:
+		if not gate_open:
+			return {"title":"撤离 · 先打开南门", "text":"二人已解枷，南门尚未打开。外军先打开通路，伤员留在安全处；门开后护送二人到城外接应地。"}
+		return {"title":"护送 · 二人活着出城", "text":Localize.format_text("已撤出%d/2。选中尚未撤出的卢俊义、石秀，带兵护送到城外接应地；前营须守住，不必扫清全城。",s.safe)}
+	if gate_open:
+		return {"title":"入城 · 清牢前救人", "text":"南门已通。军队清开牢前与箭楼，再入牢开枷救人；留兵保护前营和出城退路。"}
+	if signaled:
+		if signal_left>0:
+			return {"title":"火号 · 夺门接应", "text":"火号正在调开守军、暂停城内补兵。鲁智深或武松带至少两名战友到南门外，清敌后右键夺门标记；也可直接攻门。"}
+		return {"title":"回防 · 重整再接应", "text":"火号调动已结束，幸存机动守军回防，未摧毁的城内兵源恢复。可重整后清敌夺门，或护器械强攻；已有经营与内应进度保留。"}
+	if not s.agents_alive:
+		return {"title":"强攻 · 内应失去接应", "text":"内应人手不齐，火号路线不可用。城外继续经营，护器械打破南门，清牢前救人；前营和两名囚犯必须保住。"}
+	if s.inside==2:
+		return {"title":"待机 · 自选举火时机", "text":"柴进、乐和已在牢内。可先让鲁智深或武松带兵靠近南门，再由仍有乔装的时迁举火争取90秒机会；也可提前举火或直接强攻。"}
+	return {"title":"两线筹备 · 经营与潜入", "text":"城外练兵备器械；柴进、乐和乔装到牢前受验后进入内院。暴露可甩开守军，退到蔡福家重整；时迁等候举火。"}
+func _update_briefing(b) -> void:
+	var next := _briefing(b)
+	if next.title!=phase_title:
+		phase_title=next.title
+		b.mission.set_title(phase_title)
+	if next.text!=b.mission.objective: b.mission.set_objective(next.text)
 func _guarded(b,cell: Vector2i,radius: float) -> bool:
 	return b.units.any(func(u): return _effective(u) and u.faction==1 and not u.is_resource and _near(b,u,cell,radius) and b.map._segment_open(u.position,b.map.cell_to_world(cell)))
 func _add_rescue(b) -> void:
@@ -363,7 +412,7 @@ func on_mission_action(b,action_id: String,actor) -> void:
 			if not gate_open: b.mission.add_action("daming_gate","鲁智深或武松：带军夺门",GATE_APPROACH,["lu_zhishen","wu_song"],2,64)
 			b.msg("火号已起！城内补兵暂停90秒，机动守军北去。清门前抵抗，鲁智深或武松带兵右键夺门标记；时迁由玩家自行撤开。",8)
 		"daming_gate":
-			var crew: int=b.units.filter(func(u): return _effective(u) and u.faction==0 and not u.is_noncombat and u.key in FIELD_KEYS and _near(b,u,GATE_APPROACH,180)).size()
+			var crew: int=_gate_crew(b).size()
 			if _guarded(b,GATE_APPROACH,150) or crew<3:
 				_retry(b,action_id,"门前仍有抵抗，或接应人手不足。清门前守军，鲁智深/武松与至少两名战友到场再夺门。")
 				return
@@ -475,10 +524,7 @@ func process(b,delta: float) -> void:
 		if b.mission.has_event("daming_lu_safe") and b.mission.has_event("daming_shi_safe"):
 			b.mission.mark("daming_victory","两名获救者生还，梁山前营守住")
 			b.win("卢俊义、石秀已一同活着出城，营救完成！城外经营、城内行动与护送战果按本局记录结算。")
-	var new_title: String="护送 · 二人活着出城" if rescued else "入城 · 清牢前救人" if gate_open else "火号 · 夺门接应" if signaled else "两线筹备 · 经营与潜入"
-	if new_title!=phase_title:
-		phase_title=new_title
-		b.mission.set_title(new_title)
+	_update_briefing(b)
 func on_unit_died(b,u) -> void:
 	if u==hall: b.lose("梁山前营失守，接应与后勤被切断。可重开并留兵保护营地。")
 	elif u==lu or u==shi: b.lose(Localize.text(u.setup_def.name)+Localize.text("在营救途中阵亡；二人必须活着抵达接应地。"))
@@ -490,5 +536,8 @@ func on_unit_died(b,u) -> void:
 		if u in [chai,yue]:
 			if not prison_open: b.mission.block_action("daming_admit","牢中内应不齐，外军可清开牢前强入。")
 			if not signaled: b.mission.block_action("daming_fire","牢中内应不齐，火号路线不可用；仍可正面攻门救人。")
-func top_status(_b) -> String:
-	return Localize.format_text("大名府 · 前营经营 / 城内行动 · 乔装%d/3 · 火号%s · 二囚%s", [spies.filter(func(u): return alive(u) and u._invis_t>0).size(),Localize.format_text("%d秒", ceili(signal_left)) if signal_left>0 else "已过" if signaled else "待起","已解枷" if rescued else "待救"])
+func top_status(b) -> String:
+	var s := coordination_state(b)
+	if rescued:
+		return Localize.format_text("大名府 · 撤出%d/2 · %s",[s.safe,Localize.text("南门已通" if gate_open else "须打开南门")])
+	return Localize.format_text("大名府 · 牢内%d/2 · 门外%d/3 · 火号%s",[s.inside,s.crew,Localize.format_text("%d秒",ceili(signal_left)) if signal_left>0 else Localize.text("已过" if signaled else "待起")])

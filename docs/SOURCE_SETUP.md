@@ -1,5 +1,8 @@
 # 源码设置与换机（2026-10-30）
 
+2026-11-16 大名府接应/撤离反馈新增`assets/localization/campaign_coordination.json`并同步catalog；关卡沿用level8 v1字段结构，状态均实时派生，不新增档案字段。本批源码改变生产身份，旧续玩候选资格不沿用。[定向验证及恢复边界](../qa/campaign_coordination_20261116/README.md)。
+
+
 2026-11-16 江州新增两路追兵的搜索游标、目击状态、目的地和决策计时，六名追兵固定引用槽，恢复profile为`campaign_level2_v2`。新翻译来源`campaign_pursuit.json`同步catalog。组件往返不授完整恢复资格，冻结候选不原地覆盖；[源码/夹具/单路实战边界](../qa/campaign_pursuit_20261116/README.md)。
 
 2026-11-16 M3首批将连环马原有破阵判定抽为`hook_conditions`，单位查看通过关卡可选接口`unit_tactical_hint`读取，不新增存档字段或改profile结构。`campaign_hooks.json`新增9条四语并同步catalog；公共HUD生产输入有变化，不沿用先前冻结候选资格。[来源与限定渲染结果](../qa/campaign_hooks_20261116/README.md)。
