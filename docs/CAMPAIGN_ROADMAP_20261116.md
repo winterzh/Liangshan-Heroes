@@ -1,5 +1,7 @@
 # 八幕战役后续开发路线图
 
+M7 Windows 发行候选。使用 `7341bd27` 封装，实际运行输入与长测的 `88e03a75` 相同。离线原生启动通过，四语、四入口及高俅重进由同一编译包验证。默认加载上限 72 FPS，既有 45 FPS 上限保留。五次正常返回。Steam 前台验证仍待完成。[最新 Windows 候选](../qa/battle_entry_timing_20261116/README.md#windows-含-72-fps-加载上限的候选)
+
 M7 Windows 72 FPS 批次。实跑 1808.448 秒，109 次进出，关键节点释放 109/109。最差一分钟 P95 14.123 ms、P99 14.371 ms。旧工具把冷启动读数计入内存趋势。修正后从预热快照起算，原数据回放显示私有内存增加 64.41 MiB，低于 128 MiB 门槛。保留实跑原判定。[72 FPS 长测结果](../qa/battle_entry_timing_20261116/README.md#windows-72-fps-模式切换三十分钟)
 
 M7 定位到加载动画的 60 FPS 限制产生大量 16.7 ms 以上帧，Windows 加载默认上限更新为 72。切场景的偶发峰值仍单独跟踪。[Windows 加载帧时分段](../qa/battle_entry_timing_20261116/README.md#windows-加载动画与场景切换帧时)

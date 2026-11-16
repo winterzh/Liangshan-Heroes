@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[Windows 72 FPS 发行候选收据](../qa/battle_entry_timing_20261116/windows_candidate_88e03a75.json)包含正式可执行文件离线启动、编译包四入口和六文件摘要。
+
 [Windows 72 FPS 30 分钟收据](../qa/battle_entry_timing_20261116/windows_campaign_menu_soak_88e03a75.json)含六路进出、完整分钟帧时、资源回收与原件摘要。[预热内存回放收据](../qa/battle_entry_timing_20261116/windows_campaign_menu_soak_warm_replay_88e03a75.json)覆盖两轮的原始样本。
 
 [Windows 加载帧时收据](../qa/battle_entry_timing_20261116/windows_loading_frame_cap_826f13c2.json)含加载、场景安装、战斗和返回的分段数据，以及生产改动后两次菜单验证。

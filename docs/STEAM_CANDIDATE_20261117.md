@@ -1,14 +1,12 @@
 # Windows Steam 更新交接与四语公告草案
 
-候选源码为 `7bd1f0e5c1aaaf25b80c30a151983a1e45cb6a12`，目标是 App `5088120` 的 Windows Depot `5088121`。本机 Steam 安装仍为 Build `26699320`，其发布回执对应 Manifest `3231099744923356430`。这组标识用于核对上线前基线及必要时回退。[上次发布回执](STEAM_UPDATE_20261116.md) · [Steam 发布指南](STEAM_RELEASE_GUIDE.md)
+候选使用 `7341bd27fb3cb1db94ea905c25d72e298695b53e` 构建，运行输入与 `88e03a754decc812901fdc8eaf51ead5fe14113d` 相同。目标是 App `5088120` 的 Windows Depot `5088121`。上一正式回执为 Build `26699320`、Manifest `3231099744923356430`。上线前对照 Steamworks 当前的 default 分支。[上次发布回执](STEAM_UPDATE_20261116.md) · [Steam 发布指南](STEAM_RELEASE_GUIDE.md)
 
 ## 交付目录与验收状态
 
-`D:/AI项目/水浒/Windows候选/2026-11-17-7bd1f0e5/SteamDepot` 含 EXE、三个原生 DLL 和两份许可证，共六个文件。文件的大小、SHA-1 和 SHA-256 已读回。原生 EXE 通过离线启动，成品包内含八章脚本以及四语进场文案。许可证字节与上次服务端清单一致。[Depot 六文件清单](../qa/battle_entry_timing_20261116/windows_steam_depot_7bd1f0e5.json) · [成品核对与启动记录](../qa/battle_entry_timing_20261116/README.md#windows-候选成品内容核对)
+`D:/AI项目/水浒/Windows候选/2026-11-17-88e03a75/SteamDepot` 含 EXE、三份 DLL 和两份许可证，逐项核对长度、SHA-1 和 SHA-256。使用 `7341bd27` 封装，实际运行输入与长测的 `88e03a75` 相同。离线原生启动通过，四语、四入口及高俅重进由同一编译包验证。默认加载上限 72 FPS，既有 45 FPS 上限保留。五次正常返回。Steam 客户端前台仍待实际验证。[六文件清单与实测](../qa/battle_entry_timing_20261116/windows_candidate_88e03a75.json)
 
-候选的四种菜单入口与高俅重进已在实际交付 EXE 的同一编译包验证。Steam 客户端实际点击仍待验。[当前 Windows 四入口验证](../qa/battle_entry_timing_20261116/README.md#windows-候选四入口与重复进场)发布时从候选清单比对 SteamPipe 预览和服务端文件，确认新 Build 对应同一 Windows Depot，再核对正式分支、四语公告和客户端下载启动。备选回退目标为 Build `26699320`，实际操作前以 Steamworks 当时的 `default` 标记为准。[发布指南](STEAM_RELEASE_GUIDE.md)
-
-高俅关 Windows 源码十分钟样本达到整段帧时门槛，六模式三十分钟样本已通过关键节点释放和内存回收检查，逐分钟 P95 仍有超限。当前候选与试玩、Android 实机及战役续玩的适用状态见路线图，公告草案只覆盖本轮玩家可见变化。[持续性能数据](../qa/campaign_sustained_performance_20261116/README.md#单位绘制优化后的十分钟复测) · [模式切换长测](../qa/battle_entry_timing_20261116/README.md#windows-主菜单模式切换三十分钟) · [八幕战役路线图](CAMPAIGN_ROADMAP_20261116.md)
+最新 Vulkan 源码长测覆盖 109 次切换，逐分钟帧时达到门槛。旧工具的私有内存项失败回执保留，按预热基线复核原数据的增长在容差内。用 SteamPipe 预览逐项比对本地六文件，再核对服务端 Build、正式分支、四语公告和客户端下载启动。[长测与预热复核](../qa/battle_entry_timing_20261116/README.md#windows-72-fps-模式切换三十分钟) · [八幕战役路线图](CAMPAIGN_ROADMAP_20261116.md)
 
 ## 简体中文
 
