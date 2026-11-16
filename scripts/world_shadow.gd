@@ -48,6 +48,8 @@ class ShadowBatch extends Node2D:
 	var retained_dying_visible := 0
 	var _written_slots := PackedByteArray()
 	var _slot_transforms: Array[Transform2D] = []
+	var _slot_positions := PackedVector2Array()
+	var _slot_height_fields := PackedInt64Array()
 	var _slot_colors := PackedColorArray()
 
 	func setup(p_battle) -> void:
@@ -141,6 +143,8 @@ void fragment() {
 		_written_slots.resize(capacity)
 		_written_slots.fill(0)
 		_slot_transforms.resize(capacity)
+		_slot_positions.resize(capacity)
+		_slot_height_fields.resize(capacity)
 		_slot_colors.resize(capacity)
 
 	func install_restored_buffer(buffer: PackedFloat32Array, visible_count: int) -> void:
@@ -192,24 +196,33 @@ void fragment() {
 		var opacity := WorldShadow._unit_opacity(unit, WorldShadow._death_fraction(unit))
 		if opacity <= 0.001:
 			return index
-		var ground: Transform2D = WorldShadow._ground_basis(unit)
 		var radius: float = unit.radius * 0.9
 		# This is the same small walk-step contraction formerly applied in
 		# Unit._draw(), now calculated once in the shared batch.
 		var lift: float = maxf(0.0, -cos(unit._anim_t * 2.0)) * float(unit._move_blend)
 		radius *= 1.0 - 0.12 * lift
 		opacity *= 1.0 - 0.10 * lift
-		var origin := WorldShadow._render_origin(unit)
 		# Unit nodes receive `ground` as a local draw transform. The batch is
 		# directly below Battle.world, so compose origin + slope exactly once.
 		# The shader then reconstructs both former local transforms, including
 		# the cast's ISO inverse, from one instance color and transform.
-		var transform := Transform2D(0.0, origin) * ground
-		var color := Color(radius / RADIUS_ENCODING_SCALE, opacity, 0.0, 1.0)
 		var written := _written_slots[index] != 0
-		if not written or _slot_transforms[index] != transform:
-			paired_multimesh.set_instance_transform_2d(index, transform)
-			_slot_transforms[index] = transform
+		var position: Vector2 = unit.position
+		var height_field_id := 0
+		if unit.map != null and unit.map.height_field != null:
+			height_field_id = unit.map.height_field.get_instance_id()
+		# Map terrain is built once per height-field instance. A stationary
+		# slot can reuse its exact slope and elevation while it stays on it.
+		if not written or _slot_positions[index] != position or _slot_height_fields[index] != height_field_id:
+			var ground := WorldShadow._ground_basis(unit)
+			var origin := WorldShadow._render_origin(unit)
+			var transform := Transform2D(0.0, origin) * ground
+			if not written or _slot_transforms[index] != transform:
+				paired_multimesh.set_instance_transform_2d(index, transform)
+				_slot_transforms[index] = transform
+			_slot_positions[index] = position
+			_slot_height_fields[index] = height_field_id
+		var color := Color(radius / RADIUS_ENCODING_SCALE, opacity, 0.0, 1.0)
 		if not written or _slot_colors[index] != color:
 			paired_multimesh.set_instance_color(index, color)
 			_slot_colors[index] = color

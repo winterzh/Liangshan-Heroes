@@ -1,5 +1,8 @@
 # 源码设置与换机（2026-10-30）
 
+阴影几何按槽位的单位位置及高度场实例判断是否重算。高度场建立和存档恢复使用各自的实例，阴影缓冲装入时由现有流程清空提交记录。[静止单位阴影坡面复测](../qa/campaign_sustained_performance_20261116/README.md#静止单位复用阴影坡面)
+
+
 WorldShadow 的提交记录按 MultiMesh 槽位持有。扩容与恢复提交使旧记录失效，继续使用原存档缓冲格式。[单位阴影复测](../qa/campaign_sustained_performance_20261116/README.md#单位阴影变换与颜色提交)
 
 

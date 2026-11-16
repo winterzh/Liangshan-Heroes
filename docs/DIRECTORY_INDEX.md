@@ -1,5 +1,8 @@
 # 项目目录索引（2026-10-30）
 
+[静止单位复用阴影坡面](../qa/campaign_sustained_performance_20261116/stationary_shadow_geometry.json)包含定点坡面计算次数、缓冲复核和标准退出证据。
+
+
 [阴影缓冲写入](../qa/campaign_sustained_performance_20261116/unchanged_shadow_slots.json)记录原始和按变更提交的槽位次数、缓冲对照及 55 秒游戏样本。
 
 
