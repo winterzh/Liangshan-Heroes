@@ -1,5 +1,9 @@
 # 开发日志
 
+## 2026-11-17 Windows 加载动画帧时
+
+分段诊断将加载限制 60 FPS 与 72 FPS 交替对照，P95 17.070 → 14.275 ms。Windows 加载上限修改后，两条正常入口验证默认上限、低上限和返回前恢复。[Windows 加载帧时分段](../qa/battle_entry_timing_20261116/README.md#windows-加载动画与场景切换帧时)
+
 ## 2026-11-17 Windows 候选四入口与重复进场
 
 使用实际交付 EXE 中的同一编译包，原菜单进入战役、高俅重进、驻守、1v1 及竞技场。四语加载及五轮关键节点释放通过。[当前 Windows 四入口验证](../qa/battle_entry_timing_20261116/README.md#windows-候选四入口与重复进场)

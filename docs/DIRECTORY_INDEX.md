@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[Windows 加载帧时收据](../qa/battle_entry_timing_20261116/windows_loading_frame_cap_826f13c2.json)含加载、场景安装、战斗和返回的分段数据，以及生产改动后两次菜单验证。
+
 [Windows 候选四种入口](../qa/battle_entry_timing_20261116/windows_candidate_7bd1f0e5.json)在候选原生启动收据中附编译包身份、五次进出和四语加载数据。
 
 [Windows Steam 候选交接](STEAM_CANDIDATE_20261117.md)记录上一正式 Build、候选材料和四语草案，另附 [Depot 文件指纹](../qa/battle_entry_timing_20261116/windows_steam_depot_7bd1f0e5.json)。

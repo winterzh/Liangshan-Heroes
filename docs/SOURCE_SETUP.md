@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+Windows 菜单加载阶段按 72 FPS 限流并应用原先更低的全局设置。场景切换通过现有退出路径恢复原值，测试收据另保留 60 与 72 的分段对照。[Windows 加载帧时分段](../qa/battle_entry_timing_20261116/README.md#windows-加载动画与场景切换帧时)
+
 候选 7bd1f0e5 的四语入口验证直接挂载 SteamDepot 中交付 EXE 的编译包，使用独立 Godot 宿主及隔离档案。[当前 Windows 四入口验证](../qa/battle_entry_timing_20261116/README.md#windows-候选四入口与重复进场)
 
 候选 7bd1f0e5 的 SteamDepot 子目录含精确六文件；机器清单和 Git 回执在载荷目录外。[Windows Steam 候选交接](STEAM_CANDIDATE_20261117.md)

@@ -64,11 +64,12 @@ func _launch_immediately() -> void:
 
 
 func _show_battle_loading(campaign_level_id: String) -> void:
-	# In VSync-off windows the loading view can otherwise compete with the scan
-	# for CPU while rendering hundreds of identical frames per second.
+	# Cap rendering so the loading view does not compete with file verification.
+	# On Windows, leave room for frame-pacing jitter around the 60 Hz budget.
+	var loading_max_fps := 72 if OS.get_name() == "Windows" else 60
 	_entry_previous_max_fps = Engine.max_fps
-	if Engine.max_fps == 0 or Engine.max_fps > 60:
-		Engine.max_fps = 60
+	if Engine.max_fps == 0 or Engine.max_fps > loading_max_fps:
+		Engine.max_fps = loading_max_fps
 	var focused := get_viewport().gui_get_focus_owner()
 	if focused != null:
 		focused.release_focus()

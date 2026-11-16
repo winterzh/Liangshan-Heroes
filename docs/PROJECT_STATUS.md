@@ -1,5 +1,7 @@
 # 当前项目总览
 
+Windows 加载动画 P95 经定向对照从 17.070 降至 14.275 ms。更新后的三十分钟场景切换验收与候选成品计时仍待测。[Windows 加载帧时分段](../qa/battle_entry_timing_20261116/README.md#windows-加载动画与场景切换帧时)
+
 本地候选 7bd1f0e5 的四种菜单入口已开战，高俅重进通过。五次返回共核对 25 项关键场景引用释放。Steam 客户端前台计时待验。[当前 Windows 四入口验证](../qa/battle_entry_timing_20261116/README.md#windows-候选四入口与重复进场)
 
 候选 7bd1f0e5 的本地 Depot 六文件与四语公告草案已备。正式发布以 Steam 平台回执为准。[Windows Steam 候选交接](STEAM_CANDIDATE_20261117.md)

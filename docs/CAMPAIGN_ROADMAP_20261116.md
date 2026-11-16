@@ -1,5 +1,7 @@
 # 八幕战役后续开发路线图
 
+M7 定位到加载动画的 60 FPS 限制产生大量 16.7 ms 以上帧，Windows 加载默认上限更新为 72。切场景的偶发峰值仍单独跟踪。[Windows 加载帧时分段](../qa/battle_entry_timing_20261116/README.md#windows-加载动画与场景切换帧时)
+
 M7 本地候选 7bd1f0e5 的编译包通过四种原菜单入口和高俅重进，四语加载及退出清理通过。Steam 客户端操作继续跟踪。[当前 Windows 四入口验证](../qa/battle_entry_timing_20261116/README.md#windows-候选四入口与重复进场)
 
 M7 已备当前 Windows 候选的六文件 Steam Depot 清单、上一正式 Build 回退凭据和四语公告草案。实际客户端前台验证待办。[Windows Steam 候选交接](STEAM_CANDIDATE_20261117.md)
