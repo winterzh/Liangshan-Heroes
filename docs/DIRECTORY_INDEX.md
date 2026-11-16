@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[祝家庄快速强攻](../qa/campaign_siege_20261116/README.md#跳过外围的快速强攻)的 `rush_first_attempt/` 和 `rush_central_road/` 分别保留首跑与中路复跑原件。
+
 [连环马原槽反攻](../qa/campaign_resume_current_20261116/evidence/protected_drill_candidate/east_flank_not_reached/)保存第二次攻营复跑的原始报告、日志和宿主回执，涵盖未触发侧翼的反攻失利。
 
 [连环马诱骑采样](../qa/campaign_resume_current_20261116/evidence/protected_drill_candidate/)新增 lure_baseline 和 lure_staged，分别保存原走位失败和并行预走位实际完成教场的日志、采样与回执。

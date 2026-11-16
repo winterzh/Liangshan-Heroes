@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+祝家庄快速强攻验证复用 `direct_runner.py --route rush`，独立写入 `.godot/zhu-rush/`。首跑和中路复跑保留原报告、日志、回执及驱动哈希。生产关卡、档案字段与玩家资源成本无变更。[复跑原件及范围](../qa/campaign_siege_20261116/README.md#跳过外围的快速强攻)。
+
 原槽侧翼复跑在韩滔未擒、官军大营仍完整时结束，侧翼策略未进入。后段中军附近金矿余量固定在2890。保留原候选、再保存档链和现有终局断言，先据实战日志排查采集与攻城预算。[本轮原始回执](../qa/campaign_resume_current_20261116/evidence/protected_drill_candidate/east_flank_not_reached/)。
 
 连环马侧翼攻营续接需同时提供原诱骑失败尾段和其后原槽攻营失败尾段（--retry-lure-tail 与 --retry-assault-tail）。两次失败的来源、报告、日志及保留的再保存链先核对，再启动两个终局验收进程。[侧翼攻营复跑](../qa/campaign_resume_current_20261116/README.md#侧翼攻营复跑)。

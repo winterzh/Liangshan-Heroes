@@ -1,5 +1,5 @@
 extends SceneTree
-## RTS_TEST_ROUTE=contracts|direct|inside. Routes use production orders, costs,
+## RTS_TEST_ROUTE=contracts|direct|inside|rush. Routes use production orders, costs,
 ## construction and live enemy combat; boundary fixtures are labelled separately.
 var failures: Array[String] = []
 var checks := 0
@@ -177,7 +177,8 @@ func _contracts(b) -> void:
 func _play(b) -> void:
 	var l = b.level
 	var entrance_towers: Array = b.units.filter(func(u): return alive(u) and u.faction == 1 and u.key == "arrow_tower")
-	var target_stage := "north"
+	var target_stage := "gate" if route == "rush" else "north"
+	var first_breach: Dictionary = {}
 	var mobilized := false
 	var rescuer = null
 	var entered_with_main_intact := false
@@ -195,7 +196,7 @@ func _play(b) -> void:
 			print("[rts-play] t=",int(clock)," stage=",target_stage," army=",army.size()," g=",b.gold," w=",b.wood," pop=",b.used_pop(),"/",b.pop_cap," buildings=",buildings_started," gate_hp=",l.gate.hp if alive(l.gate) else 0)
 		if army.size() >= 14: mobilized = true
 		if not mobilized or army.size() < 6:
-			_click(b,army,Vector2i(50,32),true)
+			_click(b,army,Vector2i(50,28) if route == "rush" else Vector2i(50,32),route != "rush")
 			continue
 		if target_stage == "north":
 			_click(b,army,l.EXPANSION,true)
@@ -213,8 +214,11 @@ func _play(b) -> void:
 					b.select_members(army,false)
 					b._issue_order(b.to_screen(l.gate.position),false)
 					orders += 1
-				else: _click(b,army,Vector2i(25,28),true)
-				if l.main_breached: target_stage = "tower"
+				else: _click(b,army,Vector2i(25,28),route != "rush")
+				if l.main_breached:
+					first_breach = {"game_seconds":l.elapsed,"expansion_secured":l.expansion_secured,
+						"supply_cut":l.supply_cut,"outpost_alive":alive(l.outpost),"raids_sent":l.raids_sent}
+					target_stage = "tower"
 		elif target_stage == "tower":
 			# Player strategy: clear the entrance's real tower before attacking the
 			# manor, rather than walking the entire army past a live fortification.
@@ -250,15 +254,25 @@ func _play(b) -> void:
 		elif target_stage == "return":
 			_click(b,army,Vector2i(23,28),true)
 			_click(b,l.prisoners.filter(func(u): return alive(u)),l.CAMP+Vector2i(-4,0))
-			if l._finish_ready(): _action(b,l.song,"zhu_rts_finish")
+			var waiting_for_group: bool = route == "rush" and l.prisoners.size() == 7 and l.prisoners.all(alive) \
+				and l.prisoners.any(func(u): return u.position.distance_to(l.hall.position) >= 190.0)
+			if l._finish_ready() and not waiting_for_group: _action(b,l.song,"zhu_rts_finish")
 	check(b.mission.has_event("zhu_victory") and b.phase == b.Phase.END,route+" route wins through live economy/combat and explicit return")
 	check(buildings_started >= 2 and units_queued >= 6,"route uses construction and normal troop production")
-	check(l.expansion_secured and l.supply_cut,"route takes expansion and cuts reinforcement source")
+	if route == "rush":
+		check(not first_breach.is_empty() and first_breach.outpost_alive and not first_breach.expansion_secured
+			and not first_breach.supply_cut and not l.expansion_secured and not l.supply_cut,
+			"rush breaches main gate and wins without taking northern gold or cutting the outpost")
+		check(l.prisoners.size() == 7 and l.prisoners.all(
+			func(u): return alive(u) and u.position.distance_to(l.hall.position) < 190.0),
+			"all seven original rescued characters return before the rush ends")
+	else:
+		check(l.expansion_secured and l.supply_cut,"route takes expansion and cuts reinforcement source")
 	var towers_destroyed: int = entrance_towers.filter(func(u): return not alive(u)).size()
 	check(towers_destroyed > 0 and units_queued_by_key.get("siege_cata",0) > 0,"route recruits siege and clears a defended entrance tower")
-	if route == "direct": check(l.main_breached and not l.inside_open,"direct route needs no inside agent")
+	if route in ["direct", "rush"]: check(l.main_breached and not l.inside_open,"direct route needs no inside agent")
 	else: check(l.inside_open and entered_with_main_intact,"inside route enters manor while main gate remains intact")
-	play_metrics = {"game_seconds":l.elapsed,"stage":target_stage,"orders":orders,"buildings_started":buildings_started,"units_queued":units_queued,"units_queued_by_key":units_queued_by_key,"towers_destroyed":towers_destroyed,"ai_trained":l.ai_trained,"raids_sent":l.raids_sent,"entered_with_main_intact":entered_with_main_intact,"events":b.mission.events.keys(),"result":b.mission.result_snapshot(b.mission.has_event("zhu_victory"))}
+	play_metrics = {"game_seconds":l.elapsed,"first_main_breach":first_breach,"stage":target_stage,"orders":orders,"buildings_started":buildings_started,"units_queued":units_queued,"units_queued_by_key":units_queued_by_key,"towers_destroyed":towers_destroyed,"ai_trained":l.ai_trained,"raids_sent":l.raids_sent,"entered_with_main_intact":entered_with_main_intact,"events":b.mission.events.keys(),"result":b.mission.result_snapshot(b.mission.has_event("zhu_victory"))}
 
 func _mode_regression() -> void:
 	for mode in ["skirmish","skirmish_ai"]:

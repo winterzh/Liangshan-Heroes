@@ -12,9 +12,10 @@ def main():
     parser.add_argument('--godot', required=True, type=Path)
     parser.add_argument('--lock', required=True, type=Path,
                         help='Shared engine lock used by this workstation')
+    parser.add_argument('--route', choices=('direct', 'rush'), default='direct')
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[2]
-    out = root / '.godot/siege-play'
+    out = root / '.godot' / ('siege-play' if args.route == 'direct' else 'zhu-rush')
     profile = out / 'profile'
     env = os.environ.copy()
     for key in list(env):
@@ -26,24 +27,26 @@ def main():
         dest = profile / key.lower()
         dest.mkdir(parents=True, exist_ok=True)
         env[key] = str(dest)
-    env.update(RTS_TEST_ROUTE='direct', RTS_TEST_OUT=str(out), STEAM_DISABLED='1', CAMPAIGN_QA='1', LSH_LANGUAGE='zh_CN',
-               LSH_SQUAD_PROFILE=str(profile), LSH_SQUAD_REPORT=str(out / 'direct.json'))
+    report_file = out / (args.route + '.json')
+    log_file = out / (args.route + '.log')
+    env.update(RTS_TEST_ROUTE=args.route, RTS_TEST_OUT=str(out), STEAM_DISABLED='1', CAMPAIGN_QA='1', LSH_LANGUAGE='zh_CN',
+               LSH_SQUAD_PROFILE=str(profile), LSH_SQUAD_REPORT=str(report_file))
     token = str(out)
     with args.lock.open('x', encoding='utf-8') as handle:
         handle.write(token)
-    receipt = {'scope': 'one existing direct route; live economy/combat, not human fun'}
+    receipt = {'scope': 'live economy and combat', 'route': args.route}
     try:
         # Remove stale output only after owning the lock.
-        (out / 'direct.json').unlink(missing_ok=True)
+        report_file.unlink(missing_ok=True)
         started = time.monotonic()
-        with (out / 'direct.log').open('wb') as log:
+        with log_file.open('wb') as log:
             child = subprocess.Popen(
                 [str(args.godot.resolve()), '--headless', '--path', str(root),
                  '--script', 'res://tools/zhujiazhuang_rts_test.gd'],
                 cwd=root, env=env, stdout=log, stderr=subprocess.STDOUT,
                 creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0)
             (out / 'process.json').write_text(json.dumps({'pid': child.pid}), encoding='utf-8')
-            print('Started direct route PID', child.pid, flush=True)
+            print('Started', args.route, 'route PID', child.pid, flush=True)
             try:
                 code = child.wait(timeout=600)
             except subprocess.TimeoutExpired:
@@ -51,9 +54,9 @@ def main():
                 child.wait()
                 receipt['timeout'] = True
                 raise
-        errors = [line for line in (out / 'direct.log').read_text(encoding='utf-8').splitlines()
+        errors = [line for line in log_file.read_text(encoding='utf-8').splitlines()
                   if line.startswith(('SCRIPT ERROR:', 'ERROR:'))]
-        report = json.loads((out / 'direct.json').read_text(encoding='utf-8'))
+        report = json.loads(report_file.read_text(encoding='utf-8')) if report_file.exists() else {}
         receipt.update(exit_code=code, errors=errors, seconds=round(time.monotonic() - started, 2),
                        passed=code == 0 and not errors and report.get('passed') is True)
         print(json.dumps(receipt, ensure_ascii=False))
