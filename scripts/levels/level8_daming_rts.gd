@@ -435,8 +435,24 @@ func on_mission_action(b,action_id: String,actor) -> void:
 			if b.map.sample_scenery!=null: b.map.sample_scenery.set_story_object_state("prison_gate","open")
 			b.mission.mark("daming_prisoners_freed","卢俊义、石秀已脱枷；两名伤员仍由玩家选中并护送，不自动走路")
 			_hide_action(b,"daming_rescue")
+			b.mission.add_level_button("daming_select_wounded","选中 · 待撤伤员","选中已获救且尚未撤出的卢俊义、石秀；镜头定位较远者，不自动下令。")
 			b.mission.add_map_locator("城外接应地 · 二人撤离",EXIT_CELL)
 			b.mission.set_objective("选中卢俊义与石秀，带兵护送到城外接应地；途中失去任何一人即失败，不必扫清全城。")
+func _wounded_group(b) -> Array:
+	# Derived from the original prisoners; selecting never moves or rescues them.
+	if not rescued: return []
+	return [lu,shi].filter(func(u): return alive(u) and b.units.has(u) and u.faction==0 and not u.is_captive and not u.garrisoned)
+func activate_mission_button(b,button_id: String) -> void:
+	if b.phase!=b.Phase.FIGHT or button_id!="daming_select_wounded" or not rescued: return
+	var members := _wounded_group(b)
+	if members.is_empty():
+		b.mission.set_status(Localize.text("当前没有可选择的待撤伤员；原选区保留，驻守者需先出营。"))
+		return
+	var exit_pos: Vector2=b.map.cell_to_world(EXIT_CELL)
+	members.sort_custom(func(a,z): return a.position.distance_squared_to(exit_pos)>z.position.distance_squared_to(exit_pos))
+	b.select_members(members,false)
+	b.center_camera_cell(b.map.world_to_cell(members[0].position))
+	b.mission.set_status(Localize.format_text("已选中%d名待撤伤员；请右键下令，派战友沿途护送。",[members.size()]))
 func _cover_tick(b,delta: float) -> void:
 	for u in spies:
 		if not alive(u): continue

@@ -1,5 +1,8 @@
 # 源码设置与换机（2026-10-30）
 
+2026-11-16 大名府daming_select_wounded进入Mission官方按钮白名单，沿用Presentation固定回调；成员由原伤员/既有状态实时派生，无新增Level字段。新增campaign_wounded_selection.json四条四语并同步catalog。生产来源变化不沿用冻结恢复候选资格。[本批实现与双路线证据](../qa/campaign_wounded_selection_20261116/README.md)。
+
+
 2026-11-16 连环马新增raid实跑入口参数；本批未改游戏代码或素材，关卡与e58f3fa3及前批防守来源同SHA。验证记录器改在Unit.died收集原十二骑ID，避免节点释放后的访问；该连接只在QA中安装。[来源与验证边界](../qa/campaign_cavalry_raid_20261116/README.md)。
 
 

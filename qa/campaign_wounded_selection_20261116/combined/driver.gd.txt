@@ -1,0 +1,94 @@
+extends "res://tools/daming_rts_test.gd"
+## Frozen selection fixtures are disposed before a separate, unmodified live route.
+var selected_live := false
+func _wounded_button(b):
+	for child in b.mission._buttons.get_children():
+		if child.has_meta(b.mission.PRESENTATION_META) and child.get_meta(b.mission.PRESENTATION_META).get("button_id","")=="daming_select_wounded": return child
+	return null
+func _economy_dm(b) -> void:
+	super._economy_dm(b)
+	if b.level.rescued and not selected_live:
+		selected_live=true
+		var before: Array=[b.level.lu._order_serial,b.level.shi._order_serial]
+		var button=_wounded_button(b)
+		check(button!=null,"actual rescue installs official wounded selection button")
+		if button!=null: button.pressed.emit()
+		check(b.selection.size()==2 and b.selection.has(b.level.lu) and b.selection.has(b.level.shi),"actual button selects both original prisoners")
+		check(before==[b.level.lu._order_serial,b.level.shi._order_serial],"live selection leaves prisoner orders unchanged")
+func _fixture() -> void:
+	var b=await _start("",7)
+	b.set_process(false);b.set_physics_process(false);b.camera.set_process(false)
+	for u in b.units: u.set_physics_process(false)
+	var l=b.level
+	b.select_members([l.strategist],false)
+	l.activate_mission_button(b,"daming_select_wounded")
+	check(_wounded_button(b)==null and b.selection==[l.strategist],"bound prisoners have no shortcut and cannot be selected by its callback")
+	# Explicit placement fixture: move guards away to invoke the real rescue handler.
+	for u in b.units:
+		if u.faction==1: u.position=Vector2(20000,20000)
+	l._open_prison(b,false)
+	l.on_mission_action(b,"daming_rescue",l.chai)
+	var button=_wounded_button(b)
+	check(button!=null and l.rescued and l.lu.is_noncombat and l.shi.is_noncombat and not l.lu.is_hero and not l.shi.is_hero,"real rescue creates shortcut while preserving wounded noncombat roles")
+	if button==null:
+		await _dispose(b)
+		return
+	l.lu.position=b.map.cell_to_world(l.PRISON_INSIDE)
+	l.shi.position=b.map.cell_to_world(l.EXIT_CELL+Vector2i(0,-5))
+	var before: Array=[l.lu._order_serial,l.shi._order_serial,l.lu.position,l.shi.position,l.lu.hp,l.shi.hp,b.gold,b.wood]
+	button.pressed.emit()
+	check(b.selection==[l.lu,l.shi],"shortcut replaces army selection with original pending wounded, farthest first")
+	var focus: Vector2=b.camera.position
+	b.center_camera_cell(b.map.world_to_cell(l.lu.position))
+	check(focus==b.camera.position,"camera uses farther prisoner rather than the one near the exit")
+	check(before==[l.lu._order_serial,l.shi._order_serial,l.lu.position,l.shi.position,l.lu.hp,l.shi.hp,b.gold,b.wood],"selection neither moves, heals, orders nor spends")
+	l.lu.resolve_story("retreated")
+	button.pressed.emit()
+	check(b.selection==[l.shi],"already withdrawn prisoner excluded; remaining original selected")
+	l.shi.garrisoned=true
+	b.select_members([l.strategist],false)
+	button.pressed.emit()
+	check(b.selection==[l.strategist],"garrisoned last prisoner preserves current army selection")
+	l.shi.garrisoned=false;l.shi.is_captive=true
+	button.pressed.emit()
+	check(b.selection==[l.strategist],"captive unit cannot enter wounded shortcut")
+	l.shi.is_captive=false
+	var phase=b.phase;b.phase=b.Phase.END;button.pressed.emit()
+	check(b.selection==[l.strategist],"official callback cannot select during end phase")
+	b.phase=phase
+	l.activate_mission_button(b,"unknown_wounded")
+	check(b.selection==[l.strategist],"unknown button id ignored")
+	for language in ["zh_CN","zh_TW","en","ja"]:
+		root.get_node("Localize").set_language(language,false)
+		check(not button.text.is_empty() and (language=="zh_CN" or button.text!="选中 · 待撤伤员"),language+" official button translated")
+	root.get_node("Localize").set_language("en",false)
+	root.size=Vector2i(960,540);root.content_scale_size=root.size
+	button.pressed.emit();l._update_briefing(b)
+	await process_frame
+	await process_frame
+	if DisplayServer.get_name()!="headless":
+		await RenderingServer.frame_post_draw
+		root.get_texture().get_image().save_png(out_dir+"/en_wounded_960.png")
+	await _dispose(b)
+func _run() -> void:
+	OS.set_environment("CAMPAIGN_QA","1")
+	AudioServer.set_bus_mute(0,true)
+	root.get_node("Settings").edge_scroll=false
+	out_dir="res://.godot/daming-wounded"
+	DirAccess.make_dir_recursive_absolute(out_dir)
+	if OS.get_environment("WOUNDED_LIVE_ONLY")!="1": await _fixture()
+	var fixture_checks := checks
+	if OS.get_environment("WOUNDED_FIXTURE_ONLY")!="1":
+		root.get_node("Localize").set_language("zh_CN",false)
+		build_cells=[Vector2i(25,54),Vector2i(37,57),Vector2i(29,63),Vector2i(39,49),Vector2i(23,50),Vector2i(21,62),Vector2i(35,51),Vector2i(44,55),Vector2i(16,55),Vector2i(45,50),Vector2i(17,62)]
+		route="signal"
+		var b=await _start("",7)
+		Engine.time_scale=4
+		await _play_dm(b)
+		check(selected_live,"actual play reaches the wounded selection interaction")
+		await _dispose(b)
+	Engine.time_scale=1
+	var report={"passed":failures.is_empty(),"checks":checks,"fixture_checks":fixture_checks,"failures":failures,"metrics":play_metrics,"scope":"explicit frozen fixtures and/or separate actual signal route; no human fun or restore qualification"}
+	FileAccess.open(out_dir+"/report.json",FileAccess.WRITE).store_string(JSON.stringify(report,"\t"))
+	print("[daming-wounded] ",JSON.stringify(report))
+	quit(0 if failures.is_empty() else 1)

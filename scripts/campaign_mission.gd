@@ -8,7 +8,7 @@ const LEVEL_BUTTON_IDS := {
 	"level1": ["hg_chao_gai", "hg_liu_tang", "hg_bai_sheng", "hg_wu_yong", "hg_empty_hands", "hg_transport_next", "hg_empty_carts", "hg_loaded_carts"],
 	"level2": ["jiang_depart"], "level3": ["zhu_select_shi_qian", "zhu_select_rescued"],
 	"level4": [], "level5": ["gao_end"], "level6": ["pine_lu", "pine_group", "pine_waiting"],
-	"level7": ["forest_wu", "forest_shi"], "level8": []}
+	"level7": ["forest_wu", "forest_shi"], "level8": ["daming_select_wounded"]}
 
 var battle
 var stage_id := ""

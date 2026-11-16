@@ -1,5 +1,8 @@
 # 项目目录索引（2026-10-30）
 
+[大名府伤员选择与双路线](../qa/campaign_wounded_selection_20261116/README.md)：tools/daming_wounded_qa.gd继承现有daming_rts_test；runner支持--fixture-only或--live-only --route signal/assault。combined保留首次夹具/举火，fixtures保留展开面板补拍，assault保留实际强攻；四语来源assets/localization/campaign_wounded_selection.json。
+
+
 [连环马断援侧翼路线](../qa/campaign_cavalry_raid_20261116/README.md)包含两次未完成反攻与最终9项实际通关原件；复用tools/lianhuanma_escort_qa.gd和前批runner.py，参数--live-only --route raid，不重复定向夹具。
 
 

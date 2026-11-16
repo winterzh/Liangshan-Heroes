@@ -1,0 +1,86 @@
+{
+	"checks": 25,
+	"failures": [],
+	"fixture_checks": 14,
+	"metrics": {
+		"ai_trained": 1,
+		"buildings_started": 5,
+		"camp_hp": 1500.0,
+		"events": [
+			"action:daming_rts:daming_admit",
+			"daming_prison_admitted",
+			"daming_post_0",
+			"action:daming_rts:daming_fire",
+			"daming_inner_ready",
+			"daming_fire_lit",
+			"action:daming_rts:daming_gate",
+			"daming_response_arrived",
+			"daming_gate_opened",
+			"action:daming_rts:daming_rescue",
+			"daming_inner_unlock",
+			"daming_prisoners_freed",
+			"daming_shi_safe",
+			"daming_pursuit",
+			"daming_lu_safe",
+			"daming_victory"
+		],
+		"game_seconds": 177.5,
+		"orders": 232,
+		"phase": "extract",
+		"prisoner_hp": [
+			360.0,
+			230.0
+		],
+		"result": {
+			"contract_version": 2,
+			"core_cleared": true,
+			"core_goal": "守住梁山前营，救出卢俊义、石秀，护送二人活着抵达城外接应地。",
+			"done_ids": [
+				"daming_infiltration",
+				"daming_signal",
+				"daming_response"
+			],
+			"goals": [
+				{
+					"id": "daming_infiltration",
+					"label": "柴进、乐和乔装入牢，时迁按分工举火",
+					"note": "",
+					"reason": "",
+					"state": "done"
+				},
+				{
+					"id": "daming_signal",
+					"label": "翠云火号发动里应外合",
+					"note": "",
+					"reason": "",
+					"state": "done"
+				},
+				{
+					"id": "daming_response",
+					"label": "鲁智深或武松夺门，牢中内应开枷",
+					"note": "",
+					"reason": "",
+					"state": "done"
+				}
+			],
+			"missed_ids": [],
+			"pending_ids": [],
+			"story_complete": true,
+			"story_done": 3,
+			"story_total": 3
+		},
+		"skill_orders": 21,
+		"spy_phase": "ready",
+		"units_queued": 21,
+		"units_queued_by_key": {
+			"liang_dao": 3,
+			"liang_gong": 6,
+			"liang_qiang": 3,
+			"lou_luo": 5,
+			"siege_cata": 2,
+			"siege_ram": 2
+		}
+	},
+	"passed": true,
+	"scope": "explicit frozen fixtures and/or separate actual signal route; no human fun or restore qualification"
+}

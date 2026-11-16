@@ -1,0 +1,34 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 621.14 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce RTX 4060 Laptop GPU
+
+WARNING: 2D MSAA is not yet supported for GLES3.
+   at: render_target_set_msaa (drivers/gles3/storage/texture_storage.cpp:2934)
+[rts] PASS bound prisoners have no shortcut and cannot be selected by its callback
+[rts] PASS real rescue creates shortcut while preserving wounded noncombat roles
+[rts] PASS shortcut replaces army selection with original pending wounded, farthest first
+[rts] PASS camera uses farther prisoner rather than the one near the exit
+[rts] PASS selection neither moves, heals, orders nor spends
+[rts] PASS already withdrawn prisoner excluded; remaining original selected
+[rts] PASS garrisoned last prisoner preserves current army selection
+[rts] PASS captive unit cannot enter wounded shortcut
+[rts] PASS official callback cannot select during end phase
+[rts] PASS unknown button id ignored
+[rts] PASS zh_CN official button translated
+[rts] PASS zh_TW official button translated
+[rts] PASS en official button translated
+[rts] PASS ja official button translated
+[daming-play] t=0 phase=outpost spies=admit army=7 cover=[true, true, true] gate=false fire=false prison=false rescued=false hall=1500.0
+[daming-play] t=60 phase=gate_tower spies=ready army=10 cover=[true, true, true] gate=false fire=false prison=true rescued=false hall=1500.0
+[daming-play] t=120 phase=prison_tower spies=ready army=12 cover=[false, true, true] gate=true fire=true prison=true rescued=false hall=1500.0
+[rts] PASS actual rescue installs official wounded selection button
+[rts] PASS actual button selects both original prisoners
+[rts] PASS live selection leaves prisoner orders unchanged
+[rts] PASS signal route wins using real economy and battle
+[rts] PASS route uses construction and paid army/siege production
+[rts] PASS camp survives without phase redeployment
+[rts] PASS same two prisoners actually reach exit alive
+[rts] PASS route cuts paid outside reinforcement source
+[rts] PASS infiltration signal allows intact gate to open
+[rts] PASS live signal route completes all three story contracts
+[rts] PASS actual play reaches the wounded selection interaction
+[daming-wounded] {"checks":25,"failures":[],"fixture_checks":14,"metrics":{"ai_trained":1,"buildings_started":5,"camp_hp":1500.0,"events":["action:daming_rts:daming_admit","daming_prison_admitted","daming_post_0","action:daming_rts:daming_fire","daming_inner_ready","daming_fire_lit","action:daming_rts:daming_gate","daming_response_arrived","daming_gate_opened","action:daming_rts:daming_rescue","daming_inner_unlock","daming_prisoners_freed","daming_shi_safe","daming_pursuit","daming_lu_safe","daming_victory"],"game_seconds":177.5,"orders":232,"phase":"extract","prisoner_hp":[360.0,230.0],"result":{"contract_version":2,"core_cleared":true,"core_goal":"守住梁山前营，救出卢俊义、石秀，护送二人活着抵达城外接应地。","done_ids":["daming_infiltration","daming_signal","daming_response"],"goals":[{"id":"daming_infiltration","label":"柴进、乐和乔装入牢，时迁按分工举火","note":"","reason":"","state":"done"},{"id":"daming_signal","label":"翠云火号发动里应外合","note":"","reason":"","state":"done"},{"id":"daming_response","label":"鲁智深或武松夺门，牢中内应开枷","note":"","reason":"","state":"done"}],"missed_ids":[],"pending_ids":[],"story_complete":true,"story_done":3,"story_total":3},"skill_orders":21,"spy_phase":"ready","units_queued":21,"units_queued_by_key":{"liang_dao":3,"liang_gong":6,"liang_qiang":3,"lou_luo":5,"siege_cata":2,"siege_ram":2}},"passed":true,"scope":"explicit frozen fixtures and/or separate actual signal route; no human fun or restore qualification"}
