@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+连环马反攻任务由原十二骑战果、韩滔生擒事件与大营状态派生。同批合入现行目录的新增三个四语键。[反攻提示原件](../qa/campaign_cavalry_escort_20261116/README.md#擒获韩滔后的反攻提示)。
+
 连环马 `--retry-support-tail` 固定前一轮关档并在同一原再保存槽续跑。策略只调整普通集结、南路推进与攻城指令。[南路续玩原件](../qa/campaign_resume_current_20261116/evidence/protected_drill_candidate/south_approach/)。
 
 野猪林与快活林定向入口分别为现有 runner 的 `--force` 和 `--wine`。两次实际运行分别使用当时目录，合入六条四语后可从相应原件重建两次受测目录。[野猪林原件](../qa/campaign_escort_arrival_20261116/README.md#提前强救与照伤提示) · [快活林原件](../qa/campaign_counter_window_20261116/README.md#饮酒与调息)。

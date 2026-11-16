@@ -87,6 +87,19 @@ func _fixture() -> void:
 		await process_frame
 	await RenderingServer.frame_post_draw
 	check(root.get_texture().get_image().save_png("res://.godot/cavalry-escort/en.png")==OK,"actual narrow-window role hint rendered")
+	l.enemy_base.hp=l.enemy_base.max_hp
+	l.lhm_killed=12
+	l._update_briefing(b)
+	check(b.mission.objective==l.COUNTER_BRIEFING.objective,"before capture the briefing offers the optional Han Tao goal")
+	check(l.unit_tactical_hint(b,l.han)==root.get_node("Localize").text("可选演义 · 集火击败韩滔即可生擒"),"visible Han Tao explains what triggers capture")
+	var han_position: Vector2=l.han.position
+	b.fog=true;l.han.position=Vector2(-4096,-4096)
+	check(l.unit_tactical_hint(b,l.han).is_empty(),"capture hint respects fog of war")
+	l.han.position=han_position;b.fog=false
+	l.han.resolve_story("captured")
+	l._update_briefing(b)
+	check(b.mission.has_event("lhm_han_captured") and b.mission.stage_title==l.CAPTURED_COUNTER_BRIEFING.title and b.mission.objective==l.CAPTURED_COUNTER_BRIEFING.objective,"capture advances the briefing to the surviving camp")
+	check(b.phase!=b.Phase.END and alive(l.enemy_base),"capture alone does not end the battle")
 	await _dispose(b)
 func _run() -> void:
 	OS.set_environment("CAMPAIGN_QA","1");AudioServer.set_bus_mute(0,true);root.get_node("Settings").edge_scroll=false

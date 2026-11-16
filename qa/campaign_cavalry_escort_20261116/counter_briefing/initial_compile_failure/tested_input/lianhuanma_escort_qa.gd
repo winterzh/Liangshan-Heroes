@@ -1,0 +1,241 @@
+extends "res://tools/lianhuanma_rts_test.gd"
+var observed: Array=[]
+var phases: Dictionary={}
+var cut_posts: Dictionary={}
+var supply_observed: Array=[]
+var post_cut_spawn := false
+var rider_ids: Array=[]
+var rider_deaths: Array=[]
+var rider_identity_changed := false
+func _record_rider_death(unit) -> void:
+	rider_deaths.append(unit.entity_id)
+func _economy_lhm(b) -> void:
+	_economy_with_counter_support(b)
+	if rider_ids.is_empty():
+		rider_ids=b.level.riders.map(func(u):return u.entity_id)
+		for rider in b.level.riders: rider.died.connect(_record_rider_death)
+	for index in range(b.level.riders.size()):
+		var rider=b.level.riders[index]
+		if is_instance_valid(rider) and (index>=rider_ids.size() or rider.entity_id!=rider_ids[index]): rider_identity_changed=true
+	for lane in range(2):
+		var existing: Array=b.level.escorts.filter(func(u):return is_instance_valid(u) and u.get_meta("source_lane",-1)==lane).map(func(u):return u.entity_id)
+		if not alive(b.level.posts[lane]) and not cut_posts.has(lane):
+			cut_posts[lane]=existing.duplicate()
+			supply_observed.append({"lane":lane,"time":b.level.elapsed,"wave_time":b.level.waves[lane].time,"wave_sent":b.level.waves[lane].sent,"rider_ids":b.level.riders.map(func(u):return u.entity_id if is_instance_valid(u) else null),"live_riders":b.level.riders.filter(func(u):return alive(u) and u.get_meta("wave_group",-1)==lane).size(),"escort_ids":existing})
+		elif cut_posts.has(lane) and existing.any(func(id):return id not in cut_posts[lane]): post_cut_spawn=true
+		var plan: Dictionary=b.level._escort_plan(b,lane)
+		if phases.get(lane,"")!=plan.phase:
+			phases[lane]=plan.phase
+			observed.append({"lane":lane,"phase":plan.phase,"time":b.level.elapsed,"escort_ids":b.level.escorts.filter(func(u):return alive(u) and u.get_meta("source_lane",-1)==lane).map(func(u):return u.entity_id)})
+func _fixture() -> void:
+	var b=await _start("",3)
+	b.set_process(false);b.set_physics_process(false);b.hud.set_process(false);b.camera.set_process(false)
+	for u in b.units:u.set_physics_process(false)
+	var l=b.level
+	var ids: Array=l.riders.map(func(u):return u.entity_id)
+	var funds: Dictionary=b.faction_res[1].duplicate()
+	l.escort_t=0;l._support_tick(b,1)
+	for u in l.escorts:u.set_physics_process(false)
+	check(l.escorts.size()==2 and b.faction_gold(1)==funds.gold-l.ai_spent_gold and b.faction_wood(1)==funds.wood-l.ai_spent_wood,"two escorts use unchanged real faction costs")
+	var u=l.escorts[0]
+	var origin: Vector2=u.position
+	var hp: float=u.hp
+	l._escort_orders(b)
+	check(u._state==u.ST_AMOVE and u._amove_dest==l._escort_plan(b,0).goal and u._queue.is_empty(),"waiting escort approaches staging point without queued attack on Liangshan")
+	var serial: int=u._order_serial
+	l._escort_orders(b)
+	check(u._order_serial==serial and u.position==origin and u.hp==hp,"repeated decision neither resets marching orders nor teleports or heals")
+	u.position=l._escort_plan(b,0).goal;l._escort_orders(b)
+	check(u._state==u.ST_IDLE and u.stance==u.STANCE_DEFEND and u._amove_dest==Vector2.ZERO and u._idle_push_t==0,"arrived muster escort guards at staging point")
+	l._send_wave(b,0)
+	for i in range(6):l.riders[i].position=b.map.cell_to_world(l.LANES[0])+Vector2(i*18,0)
+	l._escort_orders(b)
+	check(l._escort_plan(b,0).phase=="follow" and u._amove_dest==l._escort_plan(b,0).goal and l._escort_plan(b,1).phase=="muster","north launch follows its original cavalry while south still musters")
+	l.xu.position=u.position+Vector2(-40,0);u.order_attack(l.xu);serial=u._order_serial
+	l._escort_orders(b)
+	check(u._target==l.xu and u._order_serial==serial,"nearby visible engagement is not cancelled by moving formation center")
+	l.xu._invis_t=5;l._escort_orders(b)
+	check(u._target==null and u._state==u.ST_AMOVE,"invisible opponent is not tracked by escort command logic")
+	l.xu._invis_t=0
+	for i in range(6):l.riders[i].hp=0
+	u.position=b.map.cell_to_world(l.LANES[0]);l.xu.position=u.position+Vector2(-40,0) # Front-line taunt, outside home defence radius.
+	u.order_attack(l.xu);u._taunt_t=2;u._taunt_src=l.xu;serial=u._order_serial
+	l._escort_orders(b)
+	check(u._target==l.xu and u._order_serial==serial,"forced taunt takes precedence over retreat")
+	u._taunt_t=0;u._taunt_src=null
+	l._escort_orders(b)
+	check(l._escort_plan(b,0).phase=="retreat" and u._state==u.ST_MOVE and u._home==l._escort_plan(b,0).goal,"loss of own cavalry orders a physical retreat to the camp")
+	serial=u._order_serial;l._escort_orders(b)
+	check(u._order_serial==serial,"retreat keeps the existing movement command")
+	u.position=l._escort_plan(b,0).goal;l.xu.position=u.position+Vector2(40,0);u.order_attack(l.xu);serial=u._order_serial;l._escort_orders(b)
+	check(u._target==l.xu and u._order_serial==serial,"returned escorts can defend their camp")
+	l.enemy_base.hp=0
+	check(l._escort_plan(b,0).goal==b.map.cell_to_world(l.NORTH_POST),"destroyed headquarters falls back to surviving own supply post")
+	l.posts[0].hp=0
+	check(l._escort_plan(b,0).goal==b.map.cell_to_world(l.LANES[0]),"no surviving camp leaves original infantry in its lane")
+	check(ids==l.riders.map(func(r):return r.entity_id) and l.escorts.size()==2 and u.hp==hp,"orders preserve twelve rider identities and existing escorts without healing")
+	check(load("res://scripts/run_campaign_level_state.gd").new().audit_declarations("level4").ok,"derived behavior adds no unclassified save field")
+	b.fog=false;b._fog_layer.hide()
+	for language in ["zh_CN","zh_TW","en","ja"]:
+		root.get_node("Localize").set_language(language,false)
+		check(not l.unit_tactical_hint(b,u).is_empty(),language+" escort role has a translated hint")
+	root.get_node("Localize").set_language("en",false)
+	root.size=Vector2i(960,540);root.content_scale_size=root.size
+	b.select_single(u,false);b.center_camera_cell(b.map.world_to_cell(u.position));b.hud.update_selection_panel(b.selection)
+	for i in range(8):
+		b.hud._refresh_panel();b.hud._refresh_hero_bar();b.hud._layout_desktop_hero();b.hud._layout_info_panel();b.mission.tick(0)
+		await process_frame
+	await RenderingServer.frame_post_draw
+	check(root.get_texture().get_image().save_png("res://.godot/cavalry-escort/en.png")==OK,"actual narrow-window role hint rendered")
+	l.enemy_base.hp=l.enemy_base.max_hp
+	l.lhm_killed=12
+	l._update_briefing(b)
+	check(b.mission.objective==l.COUNTER_BRIEFING.objective,"before capture the briefing offers the optional Han Tao goal")
+	check(l.unit_tactical_hint(b,l.han)==Localize.text("可选演义 · 集火击败韩滔即可生擒"),"visible Han Tao explains what triggers capture")
+	var han_position: Vector2=l.han.position
+	b.fog=true;l.han.position=Vector2(-4096,-4096)
+	check(l.unit_tactical_hint(b,l.han).is_empty(),"capture hint respects fog of war")
+	l.han.position=han_position;b.fog=false
+	l.han.resolve_story("captured")
+	l._update_briefing(b)
+	check(b.mission.has_event("lhm_han_captured") and b.mission.stage_title==l.CAPTURED_COUNTER_BRIEFING.title and b.mission.objective==l.CAPTURED_COUNTER_BRIEFING.objective,"capture advances the briefing to the surviving camp")
+	check(b.phase!=b.Phase.END and alive(l.enemy_base),"capture alone does not end the battle")
+	await _dispose(b)
+func _run() -> void:
+	OS.set_environment("CAMPAIGN_QA","1");AudioServer.set_bus_mute(0,true);root.get_node("Settings").edge_scroll=false
+	DirAccess.make_dir_recursive_absolute("res://.godot/cavalry-escort")
+	if OS.get_environment("CAVALRY_LIVE_ONLY")!="1": await _fixture()
+	if OS.get_environment("CAVALRY_FIXTURE_ONLY")=="1":
+		FileAccess.open("res://.godot/cavalry-escort/report.json",FileAccess.WRITE).store_string(JSON.stringify({"passed":failures.is_empty(),"checks":checks,"failures":failures,"scope":"explicit escort command fixtures only; no live route"},"\t"))
+		quit(0 if failures.is_empty() else 1)
+		return
+	root.get_node("Localize").set_language("zh_CN",false)
+	route="raid" if OS.get_environment("CAVALRY_ROUTE")=="raid" else "defend"
+	build_cells=[Vector2i(5,28),Vector2i(5,35),Vector2i(12,36),Vector2i(17,36),Vector2i(12,23),Vector2i(16,24),Vector2i(9,43),Vector2i(20,34)]
+	var b=await _start("",3)
+	Engine.time_scale=4
+	print("[escort-live] configured time scale=",Engine.time_scale)
+	await _play_lhm(b)
+	await _dispose(b)
+	Engine.time_scale=1
+	FileAccess.open("res://.godot/cavalry-escort/report.json",FileAccess.WRITE).store_string(JSON.stringify({"passed":failures.is_empty(),"checks":checks,"failures":failures,"metrics":play_metrics,"escort_transitions":observed,"supply_observations":supply_observed,"original_rider_ids":rider_ids,"rider_deaths":rider_deaths,"route":route,"live_only":OS.get_environment("CAVALRY_LIVE_ONLY")=="1","scope":"actual "+route+" route only; not full restore, human or performance acceptance" if OS.get_environment("CAVALRY_LIVE_ONLY")=="1" else "escort fixtures plus actual "+route+" route"},"\t"))
+	quit(0 if failures.is_empty() else 1)
+
+func _economy_with_counter_support(b) -> void:
+	_mine_idle_workers(b)
+	var own: Array=b.units.filter(func(u): return alive(u) and u.faction==0 and u.is_building)
+	var reserve_gold := 0
+	if not own.any(func(u): return u.is_constructing):
+		var building_key := ""
+		if b.pop_cap-b.used_pop()-b._queued_pop()<8 and b.pop_cap<84: building_key="house"
+		elif own.filter(func(u): return u.key=="barracks").size()<2: building_key="barracks"
+		elif not own.any(func(u): return u.key=="siege_workshop"): building_key="siege_workshop"
+		if building_key!="" and not _place(b,building_key): reserve_gold=int(b._defs[building_key].cost_gold)
+	var hero_key := ""
+	if b.level.lhm_killed>=12:
+		for candidate in ["hua_rong","lin_chong"]:
+			if b.find_unit(candidate)==null:
+				hero_key=candidate;reserve_gold=maxi(reserve_gold,int(b._defs[candidate].cost_gold));break
+	var siege_key: String="siege_cata" if route=="raid" else "siege_ram"
+	var worker_count: int=b.units.filter(func(u): return alive(u) and u.faction==0 and u.is_worker).size()
+	for building in own:
+		if building.is_constructing or not building._train_queue.is_empty(): continue
+		var key := ""
+		if building.key=="barracks": key=["liang_gong","liang_gong","liang_qiang","gou_lian"][units_queued%4] if b.level.lhm_killed>=12 else ["gou_lian","liang_gong","liang_qiang","gou_lian","liang_dao"][units_queued%5]
+		elif building.key=="siege_workshop" and b.units.filter(func(u): return alive(u) and u.faction==0 and u.key==siege_key).size()<2: key=siege_key
+		elif building.key=="hall": key=hero_key if hero_key!="" else ("lou_luo" if worker_count<10 else "")
+		if key!="" and b.gold>=int(b._defs[key].cost_gold)+(0 if key==hero_key else reserve_gold) and b.queue_train(building,key,false):
+			units_queued+=1
+			units_queued_by_key[key]=int(units_queued_by_key.get(key,0))+1
+	for hero in b.units:
+		if alive(hero) and hero.faction==0 and hero.is_hero:
+			for slot in range(4):
+				if hero.can_learn(slot): hero.learn(slot)
+
+func _play_lhm(b) -> void:
+	var l=b.level
+	var time := 0.0
+	var next_log := 0.0
+	var phase := "north"
+	var assault_ready := false
+	var last_order_time := -10.0
+	var flank_stage := 0
+	var flank_ids: Array=[]
+	var starting_hall=l.hall
+	b.select_members([l.song],false)
+	b._issue_order(b.to_screen(l.hall.position),false) # Normal garrison command protects the commander.
+	while b.phase==b.Phase.FIGHT and time<900:
+		_economy_lhm(b)
+		# Keep the fragile required commander at camp; front-line heroes and
+		# replaceable troops do the fighting. No health/stat changes in live routes.
+		var army: Array=b.units.filter(func(u): return alive(u) and u.faction==0 and u!=l.song and not u.is_worker and not u.is_building and not u.is_noncombat)
+		var target_cell: Vector2i=l.LANES[0]
+		var target=null
+		var attack_move := true
+		if route=="raid":
+			if alive(l.posts[0]): target=l.posts[0]; target_cell=l.NORTH_POST
+			elif phase=="north": phase="redeploy_south"
+			if phase=="redeploy_south":
+				target_cell=Vector2i(28,41)
+				attack_move=false
+				if army.filter(func(u): return u.position.distance_to(b.map.cell_to_world(target_cell))<180).size()>=mini(8,army.size()): phase="raid_south"
+			if phase=="raid_south":
+				if alive(l.posts[1]): target=l.posts[1]; target_cell=l.SOUTH_POST
+				else: phase="hold_north"
+			if phase in ["hold_north","hold_south"]:
+				if l.riders.filter(func(u): return alive(u) and int(u.get_meta("wave_group"))==0).is_empty(): phase="hold_south"
+				target_cell=l.LANES[0] if phase=="hold_north" else l.LANES[1]
+				if l.lhm_killed>=12: phase="counter"
+		else:
+			if l.riders.filter(func(u): return alive(u) and int(u.get_meta("wave_group"))==0).is_empty(): phase="south"
+			if l.lhm_killed>=12: phase="counter"
+			if phase=="south": target_cell=l.LANES[1]
+		if phase=="counter":
+			var siege_units: Array=army.filter(func(u):return u.key in ["siege_ram","siege_cata"])
+			if route=="raid":
+				if siege_units.any(func(u):return u.entity_id not in flank_ids):
+					flank_ids=siege_units.map(func(u):return u.entity_id);flank_stage=0
+				var point: Vector2=b.map.cell_to_world(Vector2i(58,48) if flank_stage==0 else Vector2i(60,35))
+				if flank_stage<2 and siege_units.size()>=2 and siege_units.all(func(u):return u.position.distance_to(point)<=100): flank_stage+=1
+			if army.size()<12: assault_ready=false
+			if not assault_ready:
+				target_cell=Vector2i(18,32)
+				attack_move=false
+				if army.filter(func(u): return u.position.distance_to(b.map.cell_to_world(target_cell))<220).size()>=18 and (route!="raid" or flank_stage==2): assault_ready=true
+			if assault_ready:
+				target_cell=l.ENEMY_CAMP
+				target=null
+		if (army.size()>=8 or time>120) and time-last_order_time>=6:
+			var cover: Array=army
+			var engines: Array=[]
+			if phase=="counter" and (assault_ready or route=="raid"):
+				engines=army.filter(func(u):return u.key in ["siege_ram","siege_cata"])
+				cover=army.filter(func(u):return u.key not in ["siege_ram","siege_cata"])
+			if not cover.is_empty():
+				if alive(target) and target.visible:
+					b.select_members(cover,false);b._issue_order(b.to_screen(target.position),false);orders+=1
+				else: _click(b,cover,target_cell,attack_move)
+			if not engines.is_empty():
+				if route=="raid" and flank_stage<2:
+					_click(b,engines,Vector2i(58,48) if flank_stage==0 else Vector2i(60,35))
+				elif alive(l.enemy_base) and b.is_visible_world(l.enemy_base.position):
+					b.select_members(engines,false);b._issue_order(b.to_screen(l.enemy_base.position),false);orders+=1
+				else: _click(b,engines,l.ENEMY_CAMP,true)
+			last_order_time=time
+		_skills_lhm(b,army)
+		if time>=next_log:
+			print("[lhm-play] t=",int(time)," phase=",phase," army=",army.size()," riders=",l.lhm_killed," hooks=",l.broken_count," posts=",l.posts.filter(func(u): return alive(u)).size()," g=",b.gold," w=",b.wood," hall=",l.hall.hp)
+			next_log+=60
+		await _wait(1.25)
+		time+=1.25
+	check(b.phase==b.Phase.END and b.mission.has_event("lhm_victory"),route+" route wins through real economy and combat")
+	check(buildings_started>=2 and units_queued>=8,route+" route uses building and paid recruitment")
+	check(l.hall==starting_hall and alive(l.hall),route+" keeps original camp alive across phases")
+	check(l.lhm_killed==12 and l.manor_fallen,route+" clears finite riders and enemy headquarters")
+	check(l.broken_count>0,route+" army performs actual hook counterplay")
+	if route=="raid":
+		check(b.mission.has_event("lhm_supply_0") and b.mission.has_event("lhm_supply_1"),"raiding stops both escort sources")
+		check(supply_observed.size()==2 and not post_cut_spawn,"no destroyed supply post produces a later escort")
+		check(not rider_identity_changed and l.riders.size()==12 and rider_deaths.size()==12 and rider_ids.all(func(id):return rider_deaths.count(id)==1),"original twelve riders each die once; supply destruction never replaces them")
+		check(supply_observed.size()==2 and supply_observed.all(func(row):return not row.wave_sent and row.wave_time==[195.0,315.0][row.lane]),"both actual raids delay unsent cavalry by forty-five seconds")
+	play_metrics={"game_seconds":time,"strategy":route+" then regroup at rear; raid artillery moves via south then east flank before the infantry attacks from west; paid support heroes, orders at most every six seconds","flank_stage":flank_stage,"siege_choice":"siege_cata" if route=="raid" else "siege_ram","enemy_base_hp":l.enemy_base.hp if is_instance_valid(l.enemy_base) else 0,"hu_hp":l.hu.hp if is_instance_valid(l.hu) else 0,"han_hp":l.han.hp if is_instance_valid(l.han) else 0,"riders_defeated":l.lhm_killed,"hook_broken":l.broken_count,"camp_hp":l.hall.hp,"song_hp":l.song.hp,"buildings_started":buildings_started,"units_queued":units_queued,"units_queued_by_key":units_queued_by_key,"ai_trained":l.ai_trained,"orders":orders,"skill_orders":skill_orders,"result":b.mission.result_snapshot(b.mission.has_event("lhm_victory")),"events":b.mission.events.keys()}

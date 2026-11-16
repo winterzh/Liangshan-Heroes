@@ -46,6 +46,7 @@ var phase_title := ""
 const PREPARE_BRIEFING := {"title":"扎营 · 准备迎击北路","objective":"训练钩镰手，在北侧芦苇地迎骑。也可派兵先拆辎重营，断掉该路援军。徐宁的教场演练可选。"}
 const DEFEND_BRIEFING := {"title":"迎骑 · 守住中军","objective":"守住中军和宋江。把甲马引进芦苇地或沼泽，让两名钩镰手协同破阵。留兵拦住随骑而来的护军。"}
 const COUNTER_BRIEFING := {"title":"反攻 · 攻破官军大营","objective":"十二骑已击溃。集结步军保护攻城器械，攻破大营即可取胜。想生擒韩滔，先击败他再拆大营。"}
+const CAPTURED_COUNTER_BRIEFING := {"title":"反攻 · 韩滔已擒","objective":"韩滔已被生擒。护送攻城器械摧毁官军大营。正面难进时，可让步军牵制守军，投石车从侧翼攻营。"}
 const FINISH_BRIEFING := {"title":"大营已破 · 击溃余骑","objective":"官军已停止补兵。沿地图标出的踪迹击溃剩余甲马，守住中军和宋江即可取胜。"}
 
 func id() -> String: return "level4"
@@ -301,6 +302,8 @@ func hook_conditions(b, rider) -> Dictionary:
 
 func unit_tactical_hint(b, unit) -> String:
 	if not alive(unit): return ""
+	if unit == han and lhm_killed >= 12 and b.is_visible_world(unit.position):
+		return Localize.text("可选演义 · 集火击败韩滔即可生擒")
 	if unit in escorts:
 		if not b.is_visible_world(unit.position): return Localize.text("暂无视野，无法判断破阵条件")
 		var plan := _escort_plan(b,int(unit.get_meta("source_lane",-1)))
@@ -462,7 +465,7 @@ func _update_briefing(b) -> void:
 	if manor_fallen:
 		briefing = FINISH_BRIEFING
 	elif lhm_killed >= 12:
-		briefing = COUNTER_BRIEFING
+		briefing = CAPTURED_COUNTER_BRIEFING if b.mission.has_event("lhm_han_captured") else COUNTER_BRIEFING
 	elif waves[0].sent or waves[1].sent:
 		briefing = DEFEND_BRIEFING
 	if phase_title == briefing.title:
