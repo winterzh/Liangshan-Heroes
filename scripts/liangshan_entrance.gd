@@ -93,6 +93,8 @@ func setup(map: GameMap) -> void:
 		part.z_index = 1+int(map.project(part.position).y)
 		add_child(part)
 		_side_gate_parts.append(part)
+	for part in _gate_parts + _side_gate_parts:
+		map.sync_render_position(part)
 	_setup_stockade()
 	var dock_cell := Layout.dock_for(map)
 	_add_dock_replacement(_dock_straight_texture,dock_cell+Vector2i(0,-2),142.0,"dock_straight")

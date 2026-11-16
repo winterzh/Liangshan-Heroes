@@ -709,18 +709,25 @@ func _refresh_canopy_visibility() -> void:
 			tree.modulate.a = alpha
 
 
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_POST_ENTER_TREE and is_instance_valid(_map):
+		# A restored scenery tree is first built detached. Canvas entry can
+		# resend the logical transform, so apply the elevation once after mounting.
+		_sync_static_elevation()
+
+
+func _sync_static_elevation() -> void:
+	for sprite in _sprites:
+		_map.sync_render_position(sprite)
+	if is_instance_valid(_entrance):
+		for part in _entrance._gate_parts + _entrance._side_gate_parts + _entrance._wall_parts:
+			_map.sync_render_position(part)
+
+
 func _sync_elevated_nodes() -> void:
 	for unit in _battle.units:
 		if is_instance_valid(unit):
 			_map.sync_render_position(unit)
-	for sprite in _sprites:
-		_map.sync_render_position(sprite)
-	for part in _entrance._gate_parts:
-		_map.sync_render_position(part)
-	for part in _entrance._side_gate_parts:
-		_map.sync_render_position(part)
-	for part in _entrance._wall_parts:
-		_map.sync_render_position(part)
 	if is_instance_valid(_battle.fx_root):
 		for effect in _battle.fx_root.get_children():
 			if effect is Node2D:

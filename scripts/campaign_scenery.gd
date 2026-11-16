@@ -250,6 +250,7 @@ func _add_story_crowd(p: Vector2,variant: int) -> void:
 	# Resolve the same deterministic facing/texture there, without a gameplay tick.
 	if not crowd.is_node_ready(): crowd.prepare_visual()
 	_sprites.append(crowd)
+	_map.sync_render_position(crowd)
 
 func _add_story_sign(p: Vector2,size: float,label: String) -> void:
 	var sign := StorySign.new()
@@ -259,6 +260,7 @@ func _add_story_sign(p: Vector2,size: float,label: String) -> void:
 	sign.z_index=clampi(int(_map.project(p).y),1,3400)
 	add_child(sign)
 	_sprites.append(sign)
+	_map.sync_render_position(sign)
 
 func _add_wall(a: Vector2,z: Vector2,height_override := 0.0) -> void:
 	var n := int(ceil(a.distance_to(z)/(1.7 if _style=="level8" else 3.0)))
@@ -289,10 +291,15 @@ func _add_wall(a: Vector2,z: Vector2,height_override := 0.0) -> void:
 		_walls.append(wall)
 		_map.sync_render_position(wall)
 
+func _sync_static_elevation() -> void:
+	super._sync_static_elevation()
+	for wall in _walls:
+		_map.sync_render_position(wall)
+
+
 func _sync_elevated_nodes() -> void:
 	for unit in _battle.units:
 		if is_instance_valid(unit): _map.sync_render_position(unit)
-	for sprite in _sprites+_walls: _map.sync_render_position(sprite)
 	if is_instance_valid(_battle.fx_root):
 		for effect in _battle.fx_root.get_children():
 			if effect is Node2D: _map.sync_render_position(effect)
