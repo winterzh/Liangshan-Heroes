@@ -1,5 +1,8 @@
 # 项目目录索引（2026-10-30）
 
+[高俅稳定分支十分钟](../qa/campaign_sustained_performance_20261116/stable_5bf2ba1e.json)含 `5bf2ba1e` 的逐分钟帧间隔、性能门槛与同探针对照。
+
+
 [标签缓存与隐藏单位重绘](../qa/campaign_sustained_performance_20261116/cached_labels_hidden_redraw.json)记录四语像素、交替重复标签计时和修正前后的退出状态。
 
 
