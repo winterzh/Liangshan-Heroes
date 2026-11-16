@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+出征计时使用已导入的独立源码检出、Windows Godot 控制台程序和独立离线存档目录。 [出征量测记录](../qa/battle_entry_timing_20261116/README.md)
+
 连环马两路余骑由既有骑兵状态派生，四语模板放在 `campaign_cavalry_escort.json`。验证复用 `lianhuanma_escort_qa.gd` 窄窗口夹具。[余骑提示验证](../qa/campaign_cavalry_escort_20261116/README.md#两路余骑与窄窗口军情)
 
 当前来源续玩验证的实际运行版本可能同时包含后来同步的开发记录，运行身份以收据中的 `ad20ef6c` 为准。[最新候选续玩证据](../qa/campaign_resume_current_20261116/evidence/current_stable_07df0d96/README.md#2026-11-16-最新候选的连环马续玩链通过)

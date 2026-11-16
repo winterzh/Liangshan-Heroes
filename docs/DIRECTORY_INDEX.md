@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+出征卡顿的分段量测、原始 JSON 与复现脚本见[出征量测记录](../qa/battle_entry_timing_20261116/README.md)。
+
 [连环马余骑提示原件](../qa/campaign_cavalry_escort_20261116/wave_status/) 含 960 像素宽显示、运行日志及收据。
 
 [最新候选续玩证据](../qa/campaign_resume_current_20261116/evidence/current_stable_07df0d96/README.md#2026-11-16-最新候选的连环马续玩链通过)

@@ -1,6 +1,6 @@
 # 八幕战役后续开发路线图
 
-玩家报告战役出征和模式进场每次有明显停顿，已登记路径和量测方法。[出征与模式进场卡顿](DEVELOPMENT_PLAN.md#2026-11-16-出征与模式进场卡顿)
+战役出征卡顿已在源码版复现。三打祝家庄首帧首次约 45.85 秒、再次约 20.17 秒，主要停在战斗场景初始化。Steam 正式版与其他模式待分路径量测。[出征与模式进场卡顿](DEVELOPMENT_PLAN.md#2026-11-16-出征与模式进场卡顿)
 
 2026-11-16 已上线 Steam Windows Build `26699320`，覆盖已验证合入的战役玩法与任务提示。各阶段验收见下文，战役中途存档续玩的后续验证处于暂停状态。[本次发版范围](STEAM_UPDATE_20261116.md)
 
@@ -84,7 +84,7 @@ M1 原批次按其既有协议收口；不为使自动策略成功而降低玩�
 | M4 | 江州直救和白龙庙路线、大名府举火和强攻路线均有自然通关记录。[江州](../qa/campaign_pursuit_20261116/README.md) · [大名府](../qa/campaign_wounded_selection_20261116/README.md) | 同源完整恢复与真人体验。 |
 | M5 | 高俅有完整火攻演义及直接迎战核心胜利证据。三批任务提示、连船进港与座船护航经定向检查。[火攻](../qa/campaign_fire_readiness_20261116/README.md) · [直接迎战](../qa/campaign_flagship_escort_20261116/README.md) | 火攻失利后的同源自然补救、完整恢复及真人体验。 |
 | M6 | 野猪林暗护与强救、黄泥冈酒计与伤亡接力、快活林直打与酒路均有实际胜利记录。[野猪林](../qa/campaign_escort_arrival_20261116/README.md) · [黄泥冈](../qa/campaign_transport_groups_20261116/README.md) · [快活林](../qa/campaign_counter_window_20261116/README.md) | 正常速度下的真人体验和完整恢复。 |
-| M7 | Steam Windows Build `26699320` 已上线。发版后新增文案通过四语验证，已同步源码。[发布记录](STEAM_UPDATE_20261116.md) · [补译记录](../qa/battle_entry_localization_20261116/README.md) | 进场耗时、正常速度代表性性能、Android 实机、剩余美术和后续发行候选。 |
+| M7 | Steam Windows Build `26699320` 已上线。发版后新增文案通过四语验证，已同步源码。[发布记录](STEAM_UPDATE_20261116.md) · [补译记录](../qa/battle_entry_localization_20261116/README.md) | 进场初始化分段量测、Steam 实测与修复，正常速度代表性性能、Android 实机、剩余美术和后续发行候选。 |
 
 ### 2026-11-16 M4：大名府内外准备与撤离
 
