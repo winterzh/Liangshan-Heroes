@@ -13561,6 +13561,8 @@ class Overlay extends Node2D:
 	func _draw() -> void:
 		if b == null:
 			return
+		if b.level != null and b.level.has_method("draw_tactical_overlay"):
+			b.level.draw_tactical_overlay(b, self)
 		# 选中生产建筑的集结点旗帜
 		for u in b.selection:
 			if is_instance_valid(u) and u.is_building and u.has_rally and u.setup_def.has("produces"):

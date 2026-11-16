@@ -1,5 +1,8 @@
 # 源码设置与换机（2026-10-30）
 
+2026-11-16 快活林反击标记由原exposed_left等状态在Battle Overlay重绘，不新增Level/Visual字段或节点；profile结构保持，源码身份改变，旧冻结候选资格不沿用。新增campaign_counter_window.json同步catalog。[本批来源与限定验证](../qa/campaign_counter_window_20261116/README.md)。
+
+
 2026-11-16 野猪林到达反馈由现有位置/指令实时派生，不新增存档字段；pine_waiting登记到Mission官方按钮白名单，沿用固定Presentation回调。四语来源campaign_escort_arrival.json同步catalog。源码身份变化，旧冻结候选不沿用；[来源、定向检查与恢复边界](../qa/campaign_escort_arrival_20261116/README.md)。
 
 

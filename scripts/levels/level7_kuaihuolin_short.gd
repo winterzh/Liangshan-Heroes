@@ -100,13 +100,52 @@ func on_ability(b, caster, ability_id: String, lp: Vector2) -> bool:
 		var spec: Dictionary=b._scaled_ability(b._abilities[ability_id],b._hero_rb(wu),b._hero_db(wu))
 		var in_range: bool=is_instance_valid(menshen) and menshen.story_outcome=="" and wu.position.distance_to(menshen.position)<=float(spec.radius)
 		if in_range:
-			var signature: bool=ability_id=="mengzhou_kick" and exposed_left>0 and step_serial==opening_serial and wu.position.distance_to(step_origin)>=24
+			var signature: bool=ability_id=="mengzhou_kick" and _signature_footwork_ready()
 			_verify_hit.call_deferred(b,menshen,menshen.hp+menshen._shield,signature,exposed_left>0,ability_id)
 		else:
 			b.msg("拳脚落空：先靠近蒋门神再出招。",2.5)
 		return false
 	if ability_id=="mengzhou_breath": return super.on_ability(b,caster,ability_id,lp)
 	return false
+
+func _signature_footwork_ready() -> bool:
+	return exposed_left > 0 and step_serial == opening_serial and wu.position.distance_to(step_origin) >= 24
+
+## Derived from the live duel; drawing adds no nodes, timers or saved state.
+func counter_window_state(b) -> Dictionary:
+	if st != SHOWDOWN or exposed_left <= 0 or not is_instance_valid(wu) or wu.hp <= 0 or not is_instance_valid(menshen) or menshen.hp <= 0 or menshen.story_outcome != "": return {}
+	var spec: Dictionary=b._scaled_ability(b._abilities["mengzhou_kick"],b._hero_rb(wu),b._hero_db(wu))
+	return {"remaining":exposed_left,"fraction":clampf(exposed_left/(2.8 if special_kind=="rush" else 2.2),0,1),
+		"footwork":_signature_footwork_ready(),"in_range":wu.position.distance_to(menshen.position)<=float(spec.radius),
+		"kick_cooldown":wu.slot_cd(2),"position":menshen.position}
+
+func unit_tactical_hint(b, actor) -> String:
+	if actor != wu and actor != menshen: return ""
+	var state := counter_window_state(b)
+	if state.is_empty() or not b.is_visible_world(menshen.position): return ""
+	var next_step := "本次尚未踏玉环步" if step_serial != opening_serial else ("玉环步后还需实际换位" if not state.footwork else "本次换步已完成")
+	var reach := "已在出脚距离" if state.in_range else "先靠近蒋门神"
+	var cooldown := Localize.format_text("鸳鸯脚冷却 %.1f秒",state.kick_cooldown) if state.kick_cooldown>0 else Localize.text("鸳鸯脚已就绪")
+	return Localize.text(next_step)+" · "+Localize.text(reach)+" · "+cooldown
+
+func draw_tactical_overlay(b, canvas: Node2D) -> void:
+	if b.phase != b.Phase.FIGHT or not is_instance_valid(menshen) or not b.is_visible_world(menshen.position): return
+	var state := counter_window_state(b)
+	if state.is_empty(): return
+	var point: Vector2 = b.to_screen(state.position)
+	var color := Color("90efb0")
+	canvas.draw_arc(point,32,0,TAU,40,Color(0.04,0.12,0.08,0.9),5)
+	canvas.draw_arc(point,32,-PI/2,-PI/2+TAU*state.fraction,40,color,3)
+	# Inward brackets distinguish an opening from the outward attack warning.
+	for angle in [0.0,PI/2,PI,PI*1.5]:
+		var direction := Vector2.from_angle(angle)
+		var side := direction.orthogonal()
+		canvas.draw_polyline(PackedVector2Array([point+direction*43+side*5,point+direction*37,point+direction*43-side*5]),color,2)
+	var label := Localize.format_text("反击窗口 %.1f秒",state.remaining)
+	var font := ThemeDB.fallback_font
+	var width := font.get_string_size(label,HORIZONTAL_ALIGNMENT_LEFT,-1,14).x
+	canvas.draw_rect(Rect2(point+Vector2(-width/2-6,-94),Vector2(width+12,23)),Color(0.025,0.06,0.035,0.94))
+	canvas.draw_string(font,point+Vector2(-width/2,-77),label,HORIZONTAL_ALIGNMENT_LEFT,-1,14,color)
 
 func _verify_hit(b, target, before: float, signature: bool, counter: bool, ability_id: String) -> void:
 	if not is_instance_valid(b) or not b.is_inside_tree() or b.level!=self or not is_instance_valid(target): return

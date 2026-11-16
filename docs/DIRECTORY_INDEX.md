@@ -215,3 +215,6 @@ qa/campaign_progress_recovery_20261026/continue_binding_candidate/：Flow/Sessio
 
 
 `qa/campaign_escort_arrival_20261116/`保存野猪林到达计数/定位定向夹具、两张渲染图、现有北路实际通关、首次编译失败、来源哈希及runner；`tools/campaign_escort_arrival_qa.gd`为入口，`assets/localization/campaign_escort_arrival.json`为本批八条四语来源。
+
+
+`qa/campaign_counter_window_20261116/`保存快活林反击标记的原失败/夹具修正、标签调整前direct实战与最终三图定向检查，包含来源哈希和runner；入口`tools/campaign_counter_window_qa.gd`，四语来源`assets/localization/campaign_counter_window.json`。

@@ -1,0 +1,105 @@
+{
+	"checks": 38,
+	"failures": [],
+	"fixture_observations": [
+		{
+			"hint": "本次换步已完成 · 已在出脚距离 · 鸳鸯脚冷却 9.0秒",
+			"language": "zh_CN"
+		},
+		{
+			"hint": "本次換步已完成 · 已在出腳距離 · 鴛鴦腳冷卻 9.0秒",
+			"language": "zh_TW"
+		},
+		{
+			"hint": "Footwork completed for this exchange · In kick range · Mandarin Duck Kick: 9.0s cooldown",
+			"language": "en"
+		},
+		{
+			"hint": "今回の踏み替えは完了 · 蹴りの間合い内 · 鴛鴦脚：再使用まで9.0秒",
+			"language": "ja"
+		}
+	],
+	"live_cases": [
+		{
+			"casts": {
+				"0": 6,
+				"1": 4,
+				"2": 3,
+				"3": 2
+			},
+			"charge_travel": 177.332813262939,
+			"counter_hits": 3,
+			"drinks": 0,
+			"events": [
+				"kuaihuolin_early_showdown",
+				"mengzhou_step_used",
+				"dodge_heavy",
+				"counter_hit",
+				"mengzhou_signature",
+				"dodge_rush",
+				"menshen_subdued",
+				"action:return_shop:terms",
+				"terms",
+				"action:return_shop:restore_shop",
+				"restore_shop"
+			],
+			"final_hp": 258.25,
+			"game_seconds": 62.7333333333311,
+			"heavy_dodges": 2,
+			"min_hp": 269.846153846154,
+			"orders": 49,
+			"result": {
+				"contract_version": 2,
+				"core_cleared": true,
+				"core_goal": "以拳脚制服蒋门神，让施恩活着收回酒店。",
+				"done_ids": [
+					"signature_fists",
+					"spare_and_restore"
+				],
+				"goals": [
+					{
+						"id": "three_bowls",
+						"label": "依约无三不过望，沿路四处各饮三碗",
+						"note": "",
+						"reason": "没有走完无三不过望的四处酒路。",
+						"state": "missed"
+					},
+					{
+						"id": "drunken_provocation",
+						"label": "到挂着“河阳风月”酒望的店前佯醉换酒，惊动酒保，引蒋门神赶来",
+						"note": "",
+						"reason": "本局已偏离“到挂着“河阳风月”酒望的店前佯醉换酒，惊动酒保，引蒋门神赶来”的原著条件",
+						"state": "missed"
+					},
+					{
+						"id": "signature_fists",
+						"label": "趁失势以玉环步接鸳鸯脚",
+						"note": "",
+						"reason": "",
+						"state": "done"
+					},
+					{
+						"id": "spare_and_restore",
+						"label": "留蒋门神性命，说清三项条件后交还酒店",
+						"note": "",
+						"reason": "",
+						"state": "done"
+					}
+				],
+				"missed_ids": [
+					"three_bowls",
+					"drunken_provocation"
+				],
+				"pending_ids": [],
+				"story_complete": false,
+				"story_done": 2,
+				"story_total": 4
+			},
+			"route": "direct",
+			"rush_dodges": 1,
+			"victory": true
+		}
+	],
+	"passed": true,
+	"scope": "frozen counter readout/rendering plus existing direct live route; not full restore, human fun or performance/device acceptance"
+}
