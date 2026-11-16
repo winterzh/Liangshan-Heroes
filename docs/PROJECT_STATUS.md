@@ -1,5 +1,10 @@
 # 当前项目总览
 
+## 2026-11-17 Windows 原生高俅画面
+
+本地候选通过原生进关渲染。前台真实菜单在 Windows 锁屏解除后才能复测出征等待。[Windows 原生高俅画面](../qa/battle_entry_timing_20261116/README.md#windows-原生高俅关直达)
+
+
 ## 2026-11-17 Windows 本地候选四入口
 
 进场优化已进入本地 Windows 候选。原生程序完成隔离渲染启动，四个模式通过同一编译包的菜单回调进场。Steam 安装版手动进场和正式发布待办。[Windows 本地候选复测](../qa/battle_entry_timing_20261116/README.md#windows-本地候选四入口)

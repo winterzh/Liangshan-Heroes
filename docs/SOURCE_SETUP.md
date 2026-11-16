@@ -1,5 +1,8 @@
 # 源码设置与换机（2026-10-30）
 
+本地候选的原生关卡画面复核使用内置关卡与视口探针。独立用户目录及 SHA-256 见[Windows 原生高俅画面](../qa/battle_entry_timing_20261116/README.md#windows-原生高俅关直达)。
+
+
 本地 Windows 候选 `e3a752f9` 从核对的稳定分支运行输入封装，生成安装身份后再次校验输入和 DLL。原生启动与编译包四入口分开采样。[Windows 本地候选复测](../qa/battle_entry_timing_20261116/README.md#windows-本地候选四入口)
 
 

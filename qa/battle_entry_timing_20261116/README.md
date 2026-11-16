@@ -252,3 +252,11 @@ Windows 剧情和驻守入口用实际关卡的地表路由，先在加载提示
 上表是编辑器宿主使用同一编译包时的单样本。发行 EXE 已单独启动，Steam 安装版的前台操作和端到端耗时仍待验。[构建、编译包与四入口收据](windows_candidate_e3a752f9.json)
 
 本地候选目录为 `D:/AI项目/水浒/Windows候选/2026-11-17-e3a752f9`。封装原件保存在独立工作树的 `.godot/entry_win_20261117_e3a752f9/`，探针由本机 `D:/CodexTemp/lsh-entry-profile-1116/entry_pack_e3a752f9_probe.gd` 驱动。
+
+## Windows 原生高俅关直达
+
+运行交付目录中 `e3a752f9` 的 Windows EXE，复核其 SHA-256 与构建回执一致。使用独立离线档案，采用内置 `LEVEL=5` 和视口截图入口，Godot 4.6.3 Compatibility，1280×720。程序按 660 帧退出，退出码 0，未出现引擎脚本错误或游戏随机数中止。
+
+核对视口图中的「三败高太尉」标题、首段简中对白、梁山地表、两轴门楼与四名初始英雄头像。真实候选窗口可枚举，Windows 锁屏遮挡前台，菜单按键和出征耗时仍待解锁后验证。[原生 EXE 与视口摘要](windows_native_level5_e3a752f9.json)
+
+本机日志和原生视口图位于 `D:/CodexTemp/lsh-native-level5-e3a752f9-20261117/`。

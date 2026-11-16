@@ -1,5 +1,8 @@
 # 项目目录索引（2026-10-30）
 
+[Windows 原生高俅关直达](../qa/battle_entry_timing_20261116/windows_native_level5_e3a752f9.json)包含候选 EXE、原生启动日志和视口的文件摘要。
+
+
 [Windows 进场优化候选](../qa/battle_entry_timing_20261116/windows_candidate_e3a752f9.json)包含 `e3a752f9` 发行文件摘要、原生启动与四模式编译包收据。
 
 

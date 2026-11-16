@@ -1,5 +1,10 @@
 # 开发日志
 
+## 2026-11-17 Windows 原生高俅关直达
+
+原生候选 `e3a752f9` 用隔离档案直达高俅，660 帧后退出 0，已查看原生视口中的关卡画面和首段对白。Windows 锁屏时暂未完成前台出征计时。[Windows 原生高俅画面](../qa/battle_entry_timing_20261116/README.md#windows-原生高俅关直达)
+
+
 ## 2026-11-17 Windows 进场优化候选
 
 源提交 `e3a752f9` 已按 Windows Steam 预设导出并启动 180 帧。隔离渲染宿主挂载同一编译包，完成高俅、经典驻守、1v1 和竞技场四入口各一次开战。候选文件和两个收据保存在项目的 Windows候选 目录。[Windows 本地候选复测](../qa/battle_entry_timing_20261116/README.md#windows-本地候选四入口)
