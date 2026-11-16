@@ -1,0 +1,660 @@
+{
+  "source": "184c3ce8582829c7386be8a5d66012c332554c7f",
+  "probe_sha256": "4f1be39d47020ab96de80f35faec0487ed00b0f420cc981ef38eb5aea1899dce",
+  "source_hashes": {
+    "unit.gd": "6ce2a3a9311178cf7f80e43cba49dc1c1428ba82bcea45bbf91215cd8fa6e138",
+    "battle.gd": "27e1f907586ef6256ac99d3513323d033660995d8338c6e9ea9fbe29817dbd97",
+    "hud.gd": "6f0962f33dbe7626b09b0499ab91219d6a8578081ec631117229f4d66a490a06",
+    "liangshan_scenery.gd": "f3a2ff9c0cb7c02de2550ae37f3481e90f401dd1d24d747625dc28ff346dde78",
+    "liangshan_entrance.gd": "bbe1ecf8f252dc1683c633178dff9983f43b1f6692c944fd14115e38da15fccd",
+    "game_map.gd": "36c0b7fcf1401050bfc596d7bd57de545b778c80a4eb4ac1828e1d233eb719bb"
+  },
+  "renderer": "gl_compatibility",
+  "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+  "resolution": [
+    1440,
+    900
+  ],
+  "sample_seconds": 165.019605,
+  "fps": 81.2570118562579,
+  "p95_ms": 19.635,
+  "p99_ms": 24.513,
+  "checks": 13,
+  "failures": [],
+  "exit_code": 0,
+  "engine_errors": [],
+  "production": {
+    "battle_seconds": 170.016666666694,
+    "buildings_started": 5,
+    "enemy_produced": [
+      5,
+      2
+    ],
+    "memory": [
+      {
+        "mark": "before_entry",
+        "nodes": 27.0,
+        "objects": 1839.0,
+        "orphans": 0.0,
+        "static_bytes": 147183320.0,
+        "tick": 0
+      },
+      {
+        "mark": "sample_start",
+        "nodes": 450.0,
+        "objects": 3524.0,
+        "orphans": 0.0,
+        "static_bytes": 241272587.0,
+        "tick": 300
+      },
+      {
+        "mark": "periodic",
+        "nodes": 444.0,
+        "objects": 3557.0,
+        "orphans": 0.0,
+        "static_bytes": 244586531.0,
+        "tick": 1800
+      },
+      {
+        "mark": "periodic",
+        "nodes": 445.0,
+        "objects": 3572.0,
+        "orphans": 0.0,
+        "static_bytes": 250584437.0,
+        "tick": 3600
+      },
+      {
+        "mark": "periodic",
+        "nodes": 449.0,
+        "objects": 3577.0,
+        "orphans": 0.0,
+        "static_bytes": 254304321.0,
+        "tick": 5400
+      },
+      {
+        "mark": "periodic",
+        "nodes": 456.0,
+        "objects": 3608.0,
+        "orphans": 0.0,
+        "static_bytes": 258466981.0,
+        "tick": 7200
+      },
+      {
+        "mark": "periodic",
+        "nodes": 464.0,
+        "objects": 3624.0,
+        "orphans": 0.0,
+        "static_bytes": 262606993.0,
+        "tick": 9000
+      },
+      {
+        "mark": "sample_end",
+        "nodes": 473.0,
+        "objects": 3639.0,
+        "orphans": 0.0,
+        "static_bytes": 264474845.0,
+        "tick": 10201
+      },
+      {
+        "mark": "after_exit",
+        "nodes": 27.0,
+        "objects": 2392.0,
+        "orphans": 0.0,
+        "static_bytes": 273760405.0,
+        "tick": 10201
+      }
+    ],
+    "orders": 177,
+    "skill_orders": 7,
+    "units_queued_by_key": {
+      "liang_dao": 3,
+      "liang_gong": 6,
+      "liang_qiang": 4,
+      "liangshan_warship": 5,
+      "lou_luo": 3
+    },
+    "waves_sent": [
+      true,
+      false,
+      false
+    ]
+  },
+  "file_sha256": {
+    "run.json": "0d3d709ecae404e9c23f63fc0cd3e79bf033f310598af5140942a703532bcbf5",
+    "report.json": "fa29674b1de8d8a91e16d1e7c6c148eef70edd39b553dd7ecda2422bf13b834d",
+    "report_splits.json": "aa44bd236985f0c7ba3f3570b69e99dd2104ed8ab3e79755b7a72b79067b11e2",
+    "game.log": "4f03d3e248ea43c6df3f64732779aded6465c8cc1274c3f2bcbc20dd1db798b5"
+  },
+  "distributions": {
+    "whole": {
+      "frames": 13409,
+      "timing": {
+        "frame_us": {
+          "median_us": 13078,
+          "p95_us": 19635,
+          "max_us": 53440
+        },
+        "prior_postdraw_to_process_us": {
+          "median_us": 2121,
+          "p95_us": 3695,
+          "max_us": 24459
+        },
+        "process_to_predraw_us": {
+          "median_us": 6629,
+          "p95_us": 10300,
+          "max_us": 23381
+        },
+        "predraw_to_postdraw_us": {
+          "median_us": 4243,
+          "p95_us": 5943,
+          "max_us": 13110
+        },
+        "battle_physics": {
+          "median_us": 861,
+          "p95_us": 1793,
+          "max_us": 14689
+        },
+        "unit_physics": {
+          "median_us": 1027,
+          "p95_us": 1697,
+          "max_us": 9517
+        },
+        "battle_process": {
+          "median_us": 239,
+          "p95_us": 397,
+          "max_us": 2753
+        },
+        "hud_process": {
+          "median_us": 99,
+          "p95_us": 260,
+          "max_us": 1594
+        },
+        "unit_draw": {
+          "median_us": 4817,
+          "p95_us": 6909,
+          "max_us": 26965
+        },
+        "scenery_process": {
+          "median_us": 118,
+          "p95_us": 1335,
+          "max_us": 5988
+        },
+        "scenery_draw": {
+          "median_us": 0,
+          "p95_us": 0,
+          "max_us": 32
+        },
+        "entrance_process": {
+          "median_us": 2,
+          "p95_us": 400,
+          "max_us": 975
+        },
+        "entrance_draw": {
+          "median_us": 0,
+          "p95_us": 0,
+          "max_us": 0
+        },
+        "map_draw": {
+          "median_us": 0,
+          "p95_us": 0,
+          "max_us": 0
+        },
+        "tracked_script_us": {
+          "median_us": 7395,
+          "p95_us": 11338,
+          "max_us": 35063
+        }
+      }
+    },
+    "early_0_60": {
+      "frames": 5812,
+      "timing": {
+        "frame_us": {
+          "median_us": 11742.0,
+          "p95_us": 16107,
+          "max_us": 30705
+        },
+        "prior_postdraw_to_process_us": {
+          "median_us": 1873.5,
+          "p95_us": 2957,
+          "max_us": 19606
+        },
+        "process_to_predraw_us": {
+          "median_us": 5882.5,
+          "p95_us": 8154,
+          "max_us": 18889
+        },
+        "predraw_to_postdraw_us": {
+          "median_us": 4003.0,
+          "p95_us": 5350,
+          "max_us": 9262
+        },
+        "battle_physics": {
+          "median_us": 745.0,
+          "p95_us": 1467,
+          "max_us": 3537
+        },
+        "unit_physics": {
+          "median_us": 900.0,
+          "p95_us": 1338,
+          "max_us": 2496
+        },
+        "battle_process": {
+          "median_us": 216.0,
+          "p95_us": 338,
+          "max_us": 2753
+        },
+        "hud_process": {
+          "median_us": 91.0,
+          "p95_us": 157,
+          "max_us": 1231
+        },
+        "unit_draw": {
+          "median_us": 4365.0,
+          "p95_us": 5624,
+          "max_us": 22116
+        },
+        "scenery_process": {
+          "median_us": 107.0,
+          "p95_us": 1232,
+          "max_us": 5988
+        },
+        "scenery_draw": {
+          "median_us": 0.0,
+          "p95_us": 0,
+          "max_us": 32
+        },
+        "entrance_process": {
+          "median_us": 1.0,
+          "p95_us": 344,
+          "max_us": 527
+        },
+        "entrance_draw": {
+          "median_us": 0.0,
+          "p95_us": 0,
+          "max_us": 0
+        },
+        "map_draw": {
+          "median_us": 0.0,
+          "p95_us": 0,
+          "max_us": 0
+        },
+        "tracked_script_us": {
+          "median_us": 6543.5,
+          "p95_us": 8886,
+          "max_us": 24571
+        }
+      }
+    },
+    "60_120": {
+      "frames": 4745,
+      "timing": {
+        "frame_us": {
+          "median_us": 13366,
+          "p95_us": 19698,
+          "max_us": 37170
+        },
+        "prior_postdraw_to_process_us": {
+          "median_us": 2148,
+          "p95_us": 3627,
+          "max_us": 23832
+        },
+        "process_to_predraw_us": {
+          "median_us": 6859,
+          "p95_us": 10260,
+          "max_us": 23089
+        },
+        "predraw_to_postdraw_us": {
+          "median_us": 4275,
+          "p95_us": 6056,
+          "max_us": 11635
+        },
+        "battle_physics": {
+          "median_us": 885,
+          "p95_us": 1801,
+          "max_us": 14689
+        },
+        "unit_physics": {
+          "median_us": 1058,
+          "p95_us": 1681,
+          "max_us": 4397
+        },
+        "battle_process": {
+          "median_us": 242,
+          "p95_us": 404,
+          "max_us": 1125
+        },
+        "hud_process": {
+          "median_us": 100,
+          "p95_us": 267,
+          "max_us": 1288
+        },
+        "unit_draw": {
+          "median_us": 5031,
+          "p95_us": 6895,
+          "max_us": 20719
+        },
+        "scenery_process": {
+          "median_us": 119,
+          "p95_us": 1339,
+          "max_us": 2409
+        },
+        "scenery_draw": {
+          "median_us": 0,
+          "p95_us": 0,
+          "max_us": 0
+        },
+        "entrance_process": {
+          "median_us": 2,
+          "p95_us": 398,
+          "max_us": 739
+        },
+        "entrance_draw": {
+          "median_us": 0,
+          "p95_us": 0,
+          "max_us": 0
+        },
+        "map_draw": {
+          "median_us": 0,
+          "p95_us": 0,
+          "max_us": 0
+        },
+        "tracked_script_us": {
+          "median_us": 7644,
+          "p95_us": 11248,
+          "max_us": 23652
+        }
+      }
+    },
+    "contact_120_165": {
+      "frames": 2852,
+      "timing": {
+        "frame_us": {
+          "median_us": 15701.5,
+          "p95_us": 22889,
+          "max_us": 53440
+        },
+        "prior_postdraw_to_process_us": {
+          "median_us": 2622.5,
+          "p95_us": 5642,
+          "max_us": 24459
+        },
+        "process_to_predraw_us": {
+          "median_us": 8180.0,
+          "p95_us": 11765,
+          "max_us": 23381
+        },
+        "predraw_to_postdraw_us": {
+          "median_us": 4659.0,
+          "p95_us": 6500,
+          "max_us": 13110
+        },
+        "battle_physics": {
+          "median_us": 1058.0,
+          "p95_us": 2335,
+          "max_us": 8999
+        },
+        "unit_physics": {
+          "median_us": 1294.0,
+          "p95_us": 2631,
+          "max_us": 9517
+        },
+        "battle_process": {
+          "median_us": 276.0,
+          "p95_us": 466,
+          "max_us": 994
+        },
+        "hud_process": {
+          "median_us": 111.0,
+          "p95_us": 591,
+          "max_us": 1594
+        },
+        "unit_draw": {
+          "median_us": 5824.0,
+          "p95_us": 7728,
+          "max_us": 26965
+        },
+        "scenery_process": {
+          "median_us": 142.0,
+          "p95_us": 1483,
+          "max_us": 3143
+        },
+        "scenery_draw": {
+          "median_us": 0.0,
+          "p95_us": 0,
+          "max_us": 0
+        },
+        "entrance_process": {
+          "median_us": 2.0,
+          "p95_us": 472,
+          "max_us": 975
+        },
+        "entrance_draw": {
+          "median_us": 0.0,
+          "p95_us": 0,
+          "max_us": 0
+        },
+        "map_draw": {
+          "median_us": 0.0,
+          "p95_us": 0,
+          "max_us": 0
+        },
+        "tracked_script_us": {
+          "median_us": 9046.0,
+          "p95_us": 13614,
+          "max_us": 35063
+        }
+      }
+    },
+    "slowest_5_percent": {
+      "frames": 671,
+      "timing": {
+        "frame_us": {
+          "median_us": 21635,
+          "p95_us": 30087,
+          "max_us": 53440
+        },
+        "prior_postdraw_to_process_us": {
+          "median_us": 4216,
+          "p95_us": 10612,
+          "max_us": 24459
+        },
+        "process_to_predraw_us": {
+          "median_us": 11063,
+          "p95_us": 15390,
+          "max_us": 23381
+        },
+        "predraw_to_postdraw_us": {
+          "median_us": 6000,
+          "p95_us": 8246,
+          "max_us": 13110
+        },
+        "battle_physics": {
+          "median_us": 1698,
+          "p95_us": 3537,
+          "max_us": 14689
+        },
+        "unit_physics": {
+          "median_us": 1828,
+          "p95_us": 3524,
+          "max_us": 9517
+        },
+        "battle_process": {
+          "median_us": 389,
+          "p95_us": 618,
+          "max_us": 994
+        },
+        "hud_process": {
+          "median_us": 144,
+          "p95_us": 855,
+          "max_us": 1594
+        },
+        "unit_draw": {
+          "median_us": 7324,
+          "p95_us": 10393,
+          "max_us": 26965
+        },
+        "scenery_process": {
+          "median_us": 188,
+          "p95_us": 1676,
+          "max_us": 3143
+        },
+        "scenery_draw": {
+          "median_us": 0,
+          "p95_us": 0,
+          "max_us": 0
+        },
+        "entrance_process": {
+          "median_us": 3,
+          "p95_us": 548,
+          "max_us": 975
+        },
+        "entrance_draw": {
+          "median_us": 0,
+          "p95_us": 0,
+          "max_us": 0
+        },
+        "map_draw": {
+          "median_us": 0,
+          "p95_us": 0,
+          "max_us": 0
+        },
+        "tracked_script_us": {
+          "median_us": 12607,
+          "p95_us": 18480,
+          "max_us": 35063
+        }
+      }
+    }
+  },
+  "slowest_frames": [
+    {
+      "battle_physics": 5471,
+      "battle_process": 497,
+      "elapsed_us": 135077375,
+      "entrance_process": 825,
+      "frame_us": 53440,
+      "hud_process": 219,
+      "physics_tick": 8402,
+      "predraw_to_postdraw_us": 9953,
+      "prior_postdraw_to_process_us": 24459,
+      "process_to_predraw_us": 19028,
+      "scenery_process": 2797,
+      "unit_draw": 11182,
+      "unit_physics": 4438,
+      "tracked_script_us": 25429
+    },
+    {
+      "battle_physics": 8999,
+      "battle_process": 849,
+      "elapsed_us": 134760901,
+      "entrance_process": 5,
+      "frame_us": 48980,
+      "hud_process": 1594,
+      "physics_tick": 8383,
+      "predraw_to_postdraw_us": 7886,
+      "prior_postdraw_to_process_us": 19716,
+      "process_to_predraw_us": 21378,
+      "scenery_process": 385,
+      "unit_draw": 13714,
+      "unit_physics": 9517,
+      "tracked_script_us": 35063
+    },
+    {
+      "battle_physics": 8189,
+      "battle_process": 670,
+      "elapsed_us": 135125627,
+      "entrance_process": 10,
+      "frame_us": 48252,
+      "hud_process": 288,
+      "physics_tick": 8405,
+      "predraw_to_postdraw_us": 12754,
+      "prior_postdraw_to_process_us": 16105,
+      "process_to_predraw_us": 19393,
+      "scenery_process": 443,
+      "unit_draw": 13647,
+      "unit_physics": 7013,
+      "tracked_script_us": 30260
+    },
+    {
+      "battle_physics": 3492,
+      "battle_process": 864,
+      "elapsed_us": 135342248,
+      "entrance_process": 4,
+      "frame_us": 42777,
+      "hud_process": 353,
+      "physics_tick": 8419,
+      "predraw_to_postdraw_us": 11016,
+      "prior_postdraw_to_process_us": 8380,
+      "process_to_predraw_us": 23381,
+      "scenery_process": 478,
+      "unit_draw": 16600,
+      "unit_physics": 4352,
+      "tracked_script_us": 26143
+    },
+    {
+      "battle_physics": 6153,
+      "battle_process": 541,
+      "elapsed_us": 134711921,
+      "entrance_process": 975,
+      "frame_us": 42120,
+      "hud_process": 269,
+      "physics_tick": 8380,
+      "predraw_to_postdraw_us": 12529,
+      "prior_postdraw_to_process_us": 11571,
+      "process_to_predraw_us": 18020,
+      "scenery_process": 2997,
+      "unit_draw": 8681,
+      "unit_physics": 4573,
+      "tracked_script_us": 24189
+    },
+    {
+      "battle_physics": 2877,
+      "battle_process": 487,
+      "elapsed_us": 151043360,
+      "entrance_process": 549,
+      "frame_us": 39390,
+      "hud_process": 968,
+      "physics_tick": 9361,
+      "predraw_to_postdraw_us": 5803,
+      "prior_postdraw_to_process_us": 19406,
+      "process_to_predraw_us": 14181,
+      "scenery_process": 1614,
+      "unit_draw": 7696,
+      "unit_physics": 1967,
+      "tracked_script_us": 16158
+    },
+    {
+      "battle_physics": 8011,
+      "battle_process": 342,
+      "elapsed_us": 135264812,
+      "entrance_process": 479,
+      "frame_us": 38112,
+      "hud_process": 1009,
+      "physics_tick": 8415,
+      "predraw_to_postdraw_us": 7475,
+      "prior_postdraw_to_process_us": 16544,
+      "process_to_predraw_us": 14093,
+      "scenery_process": 1550,
+      "unit_draw": 7670,
+      "unit_physics": 7695,
+      "tracked_script_us": 26756
+    },
+    {
+      "battle_physics": 1843,
+      "battle_process": 327,
+      "elapsed_us": 142597295,
+      "entrance_process": 2,
+      "frame_us": 37843,
+      "hud_process": 117,
+      "physics_tick": 8855,
+      "predraw_to_postdraw_us": 5296,
+      "prior_postdraw_to_process_us": 23904,
+      "process_to_predraw_us": 8643,
+      "scenery_process": 150,
+      "unit_draw": 26965,
+      "unit_physics": 1143,
+      "tracked_script_us": 30547
+    }
+  ]
+}

@@ -1,5 +1,8 @@
 # 项目目录索引（2026-10-30）
 
+[高俅水陆接战帧分段](../qa/campaign_sustained_performance_20261116/sustained_frame_splits.json)含真实回调累计、165 秒统计与慢帧字段。
+
+
 [Windows 原生高俅关直达](../qa/battle_entry_timing_20261116/windows_native_level5_e3a752f9.json)包含候选 EXE、原生启动日志和视口的文件摘要。
 
 
