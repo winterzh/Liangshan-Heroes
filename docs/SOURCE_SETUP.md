@@ -1,5 +1,8 @@
 # 源码设置与换机（2026-10-30）
 
+高俅稳定源码复测沿用现有的正常速度 600 秒探针，汇总逐分钟帧耗时、实际出兵和付费生产。[高俅稳定分支十分钟结果](../qa/campaign_sustained_performance_20261116/README.md#普通单位美术复用后的十分钟复测)
+
+
 普通单位已解析的贴图、帧序列和方向在换局、替换美术别名或安装预取的帧时失效。源码诊断若直接改下层贴图表，要调用 Art.clear_resolved_unit_art()。[普通单位美术复用](../qa/campaign_sustained_performance_20261116/README.md#普通单位美术跨帧复用)
 
 

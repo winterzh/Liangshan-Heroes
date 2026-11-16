@@ -1,5 +1,8 @@
 # 项目目录索引（2026-10-30）
 
+[高俅稳定分支十分钟](../qa/campaign_sustained_performance_20261116/stable_560deef6.json)含 `560deef6` 的逐分钟帧间隔、性能门槛与同探针对照。
+
+
 [普通单位美术跨帧收据](../qa/campaign_sustained_performance_20261116/battle_art_lookup.json)包含对照计时、夹具更正、跨帧缓存和服装边界的验证数据。
 
 
