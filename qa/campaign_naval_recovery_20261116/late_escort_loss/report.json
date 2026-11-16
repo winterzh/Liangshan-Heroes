@@ -1,0 +1,159 @@
+{
+  "checks": 9,
+  "exposure": {
+    "first_visible_enemy_distance": 401.927032470703,
+    "lowest_hp": 203.714285714286,
+    "orders": 108
+  },
+  "failures": [],
+  "loss": {
+    "carrier_alive": false,
+    "carrier_id": 29,
+    "cleared_carrier_reference": true,
+    "fire_credit_present": true,
+    "fire_goal_state": "pending",
+    "game_seconds": 582.0,
+    "hall_block": "",
+    "hero_reservations": 0,
+    "last_exposure": {
+      "cell": [
+        40,
+        36
+      ],
+      "enemy_id": 55,
+      "hp": 203.714285714286,
+      "orders": 108
+    },
+    "level_elapsed": 586.400000000035,
+    "return_blocked": true
+  },
+  "metrics": {
+    "buildings_started": 5,
+    "camp_hp": 1500.0,
+    "enemy_paid_produced": [
+      10,
+      4
+    ],
+    "enemy_spent_gold": 607,
+    "enemy_spent_wood": 358,
+    "events": [
+      "action:gao_rts:gao_lure_side",
+      "action:gao_rts:gao_wind",
+      "gongsun_wind",
+      "fleet_in_ambush",
+      "action:gao_rts:gao_prepare",
+      "liu_tang_fire_leader",
+      "fireboat_prepared",
+      "gao_land_post_destroyed",
+      "gao_land_cleared",
+      "action:gao_rts:gao_fire_1",
+      "gao_fire_lit",
+      "action:gao_rts:gao_fire_withdraw",
+      "fire_escort_safe",
+      "liu_tang_lost",
+      "flagship_disabled",
+      "gao_sea_post_destroyed",
+      "gao_basic_victory"
+    ],
+    "game_seconds": 626.0,
+    "orders": 1022,
+    "result": {
+      "contract_version": 3,
+      "core_cleared": true,
+      "core_goal": "\u5b88\u4f4f\u5fe0\u4e49\u5802\u548c\u5b8b\u6c5f\uff0c\u51fb\u9000\u4e09\u6279\u6c34\u9646\u4e3b\u529b\uff0c\u6253\u505c\u9ad8\u4fc5\u5ea7\u8239\u3002\u53ef\u76f4\u63a5\u6536\u5175\u901a\u5173\uff1b\u751f\u64d2\u5e76\u62bc\u56de\u5802\u524d\u662f\u53ef\u9009\u6f14\u4e49\u76ee\u6807\u3002",
+      "done_ids": [
+        "gao_lure",
+        "gao_fire",
+        "gao_land"
+      ],
+      "goals": [
+        {
+          "id": "gao_lure",
+          "label": "\u962e\u5c0f\u4e03\u5f15\u6d3b\u5b98\u8239\u8fdb\u5165\u6e2f\u6c4a\u4f0f\u533a",
+          "note": "",
+          "reason": "",
+          "state": "done"
+        },
+        {
+          "id": "gao_fire",
+          "label": "\u516c\u5b59\u80dc\u796d\u98ce\u3001\u5218\u5510\u767b\u8239\u4e3e\u706b\uff0c\u62a4\u4e24\u8258\u63a5\u5e94\u8239\u64a4\u79bb",
+          "note": "",
+          "reason": "",
+          "state": "done"
+        },
+        {
+          "id": "gao_land",
+          "label": "\u51fb\u9000\u5cb8\u519b\u5e76\u62d4\u9664\u5c71\u524d\u8865\u7ed9\u8425",
+          "note": "",
+          "reason": "",
+          "state": "done"
+        },
+        {
+          "id": "gao_capture",
+          "label": "\u5c01\u6e2f\u51ff\u8239\u3001\u6c34\u4e0a\u63a5\u4fd8\u3001\u8fd4\u822a\u540e\u5b9e\u9645\u62bc\u81f3\u5fe0\u4e49\u5802",
+          "note": "",
+          "reason": "\u672c\u5c40\u672a\u5b8c\u6210",
+          "state": "missed"
+        }
+      ],
+      "missed_ids": [
+        "gao_capture"
+      ],
+      "pending_ids": [],
+      "story_complete": false,
+      "story_done": 3,
+      "story_total": 4
+    },
+    "skill_orders": 13,
+    "story_phase": "fallback",
+    "units_queued": 57,
+    "units_queued_by_key": {
+      "liang_dao": 13,
+      "liang_gong": 12,
+      "liang_qiang": 13,
+      "liangshan_warship": 15,
+      "liu_tang": 1,
+      "lou_luo": 3
+    }
+  },
+  "passed": true,
+  "recruitment": {
+    "cost": [
+      175,
+      34
+    ],
+    "game_seconds": 588.466666666704,
+    "hall_id": 1,
+    "paid": [
+      175,
+      34
+    ],
+    "second_order_block": "hero_exists",
+    "train_seconds": 40.0
+  },
+  "replacement": {
+    "duplicate_block": "hero_exists",
+    "entity_id": 144,
+    "game_seconds": 628.800000000069,
+    "movement_profile": "land",
+    "remaining_reservations": 1
+  },
+  "scope": "normal player orders, live enemy fire after withdrawal and paid recruitment",
+  "time_scale": 4.0,
+  "withdrawal": {
+    "all_fire_events": true,
+    "carrier_hp": 930.761904761903,
+    "carrier_id": 29,
+    "embarked_original_hero": true,
+    "game_seconds": 366.0,
+    "ignition_game_seconds": 354.0,
+    "level_elapsed": 368.733333333318,
+    "original_id_still_reserved": true,
+    "second_original_ship_alive": true
+  },
+  "exit_code": 0,
+  "seconds": 194.809,
+  "source_commit": "6edbec6a94164ee2fecca498d14ddabcc0ac5704",
+  "log_sha256": "e015f9f5752c3e6cb68d6450e156911a70e580f2bace02cb5001749c5b9f05a2",
+  "probe_sha256": "c9d79d5430c723ab78773a3e842a8e18771fff65787d0ed75cfaca818564003f"
+}
