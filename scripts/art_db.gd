@@ -277,6 +277,7 @@ var _terrain_img: Image
 var _avg_cache := {}
 var _anim_cache := {}
 var _generic_directional_path_cache := {}
+var _attack_prefetch_units := {}
 
 
 func _ready() -> void:
@@ -940,6 +941,46 @@ func _resolve_generic_directional_path(key: String, state: String, direction: St
 	return path
 
 
+## Ask Godot to load expensive native attack resources during the opening scene.
+## Normal animation selection remains the fallback if an asset is needed early.
+func prefetch_directional_attacks(keys: Array[String]) -> void:
+	if DisplayServer.get_name() == "headless":
+		return
+	var paths: Array[String] = []
+	for key in keys:
+		if _attack_prefetch_units.has(key):
+			continue
+		_attack_prefetch_units[key] = true
+		var family: Dictionary = ORDINARY_CHARACTER_FAMILIES.get(key, {})
+		for direction: String in CampaignArt.DIRECTIONS:
+			var path := _generic_directional_path(String(family.get("attack", key)), "attack", direction)
+			if family.has("attack") or not ResourceLoader.exists(path):
+				paths.append(path.get_basename() + ".tres")
+	if not paths.is_empty():
+		_prefetch_directional_frames.call_deferred(paths)
+
+
+func _prefetch_directional_frames(paths: Array[String]) -> void:
+	for path in paths:
+		# Do not hold up the first scene frame or start another request on exit.
+		await get_tree().process_frame
+		if AppLifecycle.quit_started():
+			return
+		var prepared_key := "validated|" + path
+		if _anim_cache.has(prepared_key) or not ResourceLoader.exists(path):
+			continue
+		if ResourceLoader.load_threaded_request(path, "SpriteFrames") != OK:
+			continue
+		var status := ResourceLoader.load_threaded_get_status(path)
+		while status == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+			await get_tree().process_frame
+			status = ResourceLoader.load_threaded_get_status(path)
+		if status == ResourceLoader.THREAD_LOAD_LOADED:
+			var frames := _decode_directional_frames(ResourceLoader.load_threaded_get(path))
+			if not frames.is_empty():
+				_anim_cache[prepared_key] = frames
+
+
 func _prepare_directional_frames(path: String) -> bool:
 	if not ResourceLoader.exists(path):
 		return false
@@ -960,7 +1001,10 @@ func _load_generic_directional_frames(path: String) -> Array:
 		var prepared: Array = _anim_cache[prepared_key]
 		_anim_cache.erase(prepared_key)
 		return prepared
-	var source: Resource = load(path)
+	return _decode_directional_frames(load(path))
+
+
+func _decode_directional_frames(source: Resource) -> Array:
 	if source is Texture2D:
 		return _slice_anim_strip(source)
 	if source is SpriteFrames and source.has_animation(&"default"):

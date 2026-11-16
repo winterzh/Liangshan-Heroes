@@ -241,6 +241,8 @@ func deploy(b) -> void:
 	flagship.visual_scale=1.8
 	flagship.defeat_outcome="subdued"
 	flagship.set_meta("campaign_flag_context","chapter80_gao_flagship")
+	Art.prefetch_directional_attacks(["wu_yong", "liu_tang"])
+
 func on_start(b) -> void:
 	b.faction_res[1]={"gold":560.0,"wood":400.0}
 	for i in range(workers.size()):

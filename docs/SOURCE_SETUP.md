@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+高俅部署后通过 Art 与 Godot 线程加载两位出场英雄的攻击资源，按路径交给原动画缓存。开战入口不等待后台队列。[高俅后台读取对照](../qa/campaign_sustained_performance_20261116/README.md#高俅开场后台读取攻击动画)
+
 四向 `.tres` 动画通过路径验证后，将已解码帧交给原动画缓存。验收对照实际读取次数、帧源及元数据。[慢帧与动画读取记录](../qa/campaign_sustained_performance_20261116/README.md#慢帧归因与动画重复读取)
 
 高俅关两轮 600 秒对照复用原探针、标准特效和固定镜头，复测绑定源码 dde14ad3。[高俅关十分钟复测](../qa/campaign_sustained_performance_20261116/README.md#局部优化后的同负载复测)
