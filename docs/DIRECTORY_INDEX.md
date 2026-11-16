@@ -1,5 +1,8 @@
 # 项目目录索引（2026-10-30）
 
+[梁山树木贴图校验](../qa/battle_entry_timing_20261116/gao_scenery_tree_calibration.json)含两次高俅进场阶段耗时、校准调用次数和同一布景摘要。
+
+
 [高俅英雄栏头像预读测点](../qa/battle_entry_timing_20261116/gao_intro_roster_prefetch.json)含首次对白前后的引擎帧、脚本绘制回调和实渲头像路径。
 
 

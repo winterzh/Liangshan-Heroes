@@ -53,6 +53,8 @@ func setup_original_decor(game_map: GameMap, visual_decor: Array) -> void:
 	# 使用局部 RNG，不能消耗战斗随机序列。
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 5088120
+	var tree_routes := ["tree_broad", "tree_young", "willow_old"]
+	var tree_art: Dictionary[String, Dictionary] = {}
 	for y in range(_map.h):
 		for x in range(_map.w):
 			var terrain := _map.t_at(x, y)
@@ -63,15 +65,21 @@ func setup_original_decor(game_map: GameMap, visual_decor: Array) -> void:
 				p += Vector2(rng.randf_range(-7, 7), rng.randf_range(-7, 7))
 				var kind: String = ["tree1", "tree", "tree1", "tree2"][rng.randi_range(0, 3)]
 				var tex := Art.object_texture(kind)
-				var tree_routes := ["tree_broad","tree_young","willow_old"]
 				var tree_route: String = tree_routes[posmod(x*17+y*29,tree_routes.size())]
-				var routed_tree := EnvironmentArt.object(level_id,tree_route)
-				var tree_metrics := EnvironmentArt.calibrated_visual_metrics("object",level_id,tree_route)
-				if routed_tree!=null and not tree_metrics.is_empty(): tex=routed_tree
+				if not tree_art.has(tree_route):
+					var routed_tree := EnvironmentArt.object(level_id, tree_route)
+					var metrics := EnvironmentArt.calibrated_visual_metrics("object", level_id, tree_route)
+					tree_art[tree_route] = {
+						"texture": routed_tree if not metrics.is_empty() else null,
+						"foot": float(metrics.get("foot", 0.91)),
+					}
+				var art := tree_art[tree_route]
+				if art.texture != null:
+					tex = art.texture
 				if tex == null:
 					continue
 				var size := rng.randf_range(90.0, 138.0) if core else rng.randf_range(48.0, 78.0)
-				var tree_foot := float(tree_metrics.get("foot",0.91))
+				var tree_foot: float = art.foot
 				var tree := _add_sprite(tex, p, size, tree_foot, true)
 				tree.set_meta("campaign_environment_route",tree_route)
 				tree.modulate = Color(rng.randf_range(0.83, 0.98), rng.randf_range(0.90, 1.0), 0.85)
