@@ -311,6 +311,11 @@ func _gameplay_identity_bound(identity: Dictionary) -> bool:
 		and typeof(identity.get("engine_binary_sha256")) == TYPE_STRING
 
 
+func prepare_new_gameplay_identity(identity: Dictionary) -> void:
+	assert(not is_inside_tree() and _gameplay_rng == null)
+	_gameplay_content_identity = identity
+
+
 func configure_new_gameplay_rng(trusted_context: Dictionary, initial_seed: int) -> Dictionary:
 	# Caller supplies installation identity from the provider, never from a save.
 	if _gameplay_rng != null or not _gameplay_rng_issue.is_empty():
@@ -439,10 +444,12 @@ func _ready() -> void:
 		_gameplay_rng_stop("RESTORE_FACTORY_REQUIRED")
 		return
 	if _gameplay_rng == null:
-		var identity: Dictionary = {"ok": false, "save_eligible": false, "code": "PROVIDER_UNAVAILABLE"}
-		if ResourceLoader.exists("res://scripts/run_content_identity.gd"):
-			var identity_provider: Script = load("res://scripts/run_content_identity.gd")
-			identity = identity_provider.new().resolve_runtime_identity()
+		var identity := _gameplay_content_identity
+		if identity.is_empty():
+			identity = {"ok": false, "save_eligible": false, "code": "PROVIDER_UNAVAILABLE"}
+			if ResourceLoader.exists("res://scripts/run_content_identity.gd"):
+				var identity_provider: Script = load("res://scripts/run_content_identity.gd")
+				identity = identity_provider.new().resolve_runtime_identity()
 		var bytes := Crypto.new().generate_random_bytes(8)
 		if bytes.size() != 8:
 			_gameplay_rng_stop("NEW_SEED_UNAVAILABLE")

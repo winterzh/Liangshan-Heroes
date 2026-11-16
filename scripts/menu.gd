@@ -5,6 +5,9 @@ extends Control
 const SPEAKERS := {}
 var _update_label: Label
 var _update_overlay: Control
+var _entry_overlay: ColorRect
+var _entry_scan: RefCounted
+var _entry_previous_max_fps := -1
 
 
 func _ready() -> void:
@@ -14,7 +17,7 @@ func _ready() -> void:
 	if OS.get_environment("SMOKE_TEST") == "1" or OS.get_environment("SCREENSHOT_DIR") != "" \
 			or OS.get_environment("LEVEL") != "" or OS.get_environment("SKIRMISH") == "1" \
 			or OS.get_environment("SKIRMISH_AI") == "1" or Campaign.scenario:
-		_launch()
+		_launch_immediately()
 		return
 	_build()
 	var presence := get_node_or_null("/root/SteamPresence")
@@ -30,9 +33,105 @@ func _notification(what: int) -> void:
 
 func _launch() -> void:
 	var flow := get_node_or_null("/root/ContinueFlow")
-	if flow != null and flow.busy(): return
-	# 延后切场景：直接在 _ready 内切换会撞上「父节点正忙于增删子节点」
+	if _entry_overlay != null or AppLifecycle.quit_started() or (flow != null and flow.busy()):
+		return
+	if DisplayServer.get_name() == "headless" or AndroidUpdater.enabled:
+		_launch_immediately()
+		return
+	_show_battle_loading()
+	# Continue on the main thread. The worker returns only verified file data.
+	_finish_battle_launch.call_deferred()
+
+
+func _launch_immediately() -> void:
 	get_tree().change_scene_to_file.call_deferred("res://scenes/main.tscn")
+
+
+func _show_battle_loading() -> void:
+	# In VSync-off windows the loading view can otherwise compete with the scan
+	# for CPU while rendering hundreds of identical frames per second.
+	_entry_previous_max_fps = Engine.max_fps
+	if Engine.max_fps == 0 or Engine.max_fps > 60:
+		Engine.max_fps = 60
+	var focused := get_viewport().gui_get_focus_owner()
+	if focused != null:
+		focused.release_focus()
+	_entry_overlay = ColorRect.new()
+	_entry_overlay.name = "BattleLoading"
+	_entry_overlay.color = Color(UITheme.INK, 0.97)
+	_entry_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	add_child(_entry_overlay)
+	var center := CenterContainer.new()
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_entry_overlay.add_child(center)
+	var column := VBoxContainer.new()
+	column.add_theme_constant_override("separation", 20)
+	center.add_child(column)
+	var label := Label.new()
+	Localize.bind_text(label, "正在读取战斗，请稍候…")
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 24)
+	column.add_child(label)
+	var progress := ProgressBar.new()
+	progress.custom_minimum_size = Vector2(360, 12)
+	progress.show_percentage = false
+	progress.indeterminate = true
+	column.add_child(progress)
+
+
+func _input(_event: InputEvent) -> void:
+	if _entry_overlay != null:
+		get_viewport().set_input_as_handled()
+
+
+func _finish_battle_launch() -> void:
+	var provider: Script = load("res://scripts/run_content_identity.gd")
+	var identity: Dictionary = {}
+	if provider != null:
+		_entry_scan = provider.new()
+		if _entry_scan.begin_runtime_identity_scan() == OK:
+			while _entry_scan.runtime_identity_scan_pending():
+				await get_tree().process_frame
+				if AppLifecycle.quit_started(): return
+			identity = _entry_scan.finish_runtime_identity_scan()
+		_entry_scan = null
+	if AppLifecycle.quit_started():
+		return
+	# process_frame runs before this frame's drawing. Let the loading view paint
+	# before the synchronous scene installation, even when the worker ends early.
+	await RenderingServer.frame_post_draw
+	if AppLifecycle.quit_started():
+		return
+	_install_battle.call_deferred(identity)
+
+
+func _install_battle(identity: Dictionary) -> void:
+	if AppLifecycle.quit_started():
+		return
+	var scene: PackedScene = load("res://scenes/main.tscn")
+	if scene != null:
+		var battle := scene.instantiate()
+		battle.prepare_new_gameplay_identity(identity)
+		if get_tree().change_scene_to_node(battle) == OK:
+			return
+		battle.free()
+	_entry_overlay.queue_free()
+	_entry_overlay = null
+	_restore_battle_loading_frame_limit()
+	push_error("Could not enter battle")
+
+
+func _restore_battle_loading_frame_limit() -> void:
+	if _entry_previous_max_fps >= 0:
+		Engine.max_fps = _entry_previous_max_fps
+		_entry_previous_max_fps = -1
+
+
+func _exit_tree() -> void:
+	_restore_battle_loading_frame_limit()
+	if _entry_scan != null:
+		_entry_scan.cancel_runtime_identity_scan()
+		_entry_scan = null
 
 
 # ======================================================================

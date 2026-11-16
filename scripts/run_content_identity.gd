@@ -12,6 +12,11 @@ var _error := ""
 var _stamps: Dictionary = {}
 var _verify_rows: Dictionary = {}
 var _verify_stamps: Dictionary = {}
+var _source_read_cancelable := false
+var _scan_thread: Thread
+var _scan_context: Dictionary
+var _scan_cancel := Mutex.new()
+var _scan_cancelled := false
 
 func _bad(code: String) -> Dictionary:
 	return {"ok": false, "code": code, "save_eligible": false, "save_code": code, "identity_scope": "installed_inputs"}
@@ -56,6 +61,9 @@ func _no_link(path: String) -> bool:
 
 func _file(base: String, relative: String) -> void:
 	if not _error.is_empty() or relative == String(_rules.derived) or _files.has(relative): return
+	if _source_read_cancelable and _scan_was_cancelled():
+		_error = "IDENTITY_CANCELLED"
+		return
 	if not _register(relative): return
 	var absolute: String = base.path_join(relative)
 	if not _no_link(absolute): return
@@ -71,7 +79,7 @@ func _file(base: String, relative: String) -> void:
 	var before_time: int = FileAccess.get_modified_time(absolute)
 	var digest: String
 	if _verify_rows.is_empty():
-		digest = FileAccess.get_sha256(absolute)
+		digest = _hash_scan_file(absolute) if _source_read_cancelable and size > 4 * 1024 * 1024 else FileAccess.get_sha256(absolute)
 	else:
 		if not _verify_rows.has(relative) or size != _verify_rows[relative].bytes or before_time != _verify_stamps.get(relative):
 			_error = "INPUT_LIST_CHANGED:" + relative
@@ -270,38 +278,123 @@ func _native_export_check(rows: Array, exe: String, source_base: String = "") ->
 	return {"ok": true}
 
 func resolve_runtime_identity() -> Dictionary:
-	_rules = JSON.parse_string(INPUT_RULES_JSON)
-	var mount: Dictionary = _mount_status()
+	var context := _prepare_runtime_identity()
+	if not context.ok: return context
+	return _complete_runtime_identity(context, _read_runtime_identity_files(context))
+
+
+func begin_runtime_identity_scan() -> Error:
+	_scan_context = _prepare_runtime_identity()
+	if not _scan_context.ok: return OK
+	_scan_thread = Thread.new()
+	var status := _scan_thread.start(_read_runtime_identity_files.bind(_scan_context, true))
+	if status != OK:
+		_scan_thread = null
+	return status
+
+
+func runtime_identity_scan_pending() -> bool:
+	return _scan_thread != null and _scan_thread.is_alive()
+
+
+func finish_runtime_identity_scan() -> Dictionary:
+	if not _scan_context.ok: return _scan_context
+	var physical: Dictionary = _scan_thread.wait_to_finish()
+	_scan_thread = null
+	var mount := _mount_status()
 	if not mount.ok: return mount
-	var exe: String = OS.get_executable_path()
-	if not exe.is_absolute_path() or not _no_link(exe): return _bad("ENGINE_BINARY_UNREADABLE")
-	var engine_sha: String = FileAccess.get_sha256(exe)
-	if not _valid_sha(engine_sha): return _bad("ENGINE_BINARY_UNREADABLE")
-	# Godot consumes --main-pack before exposing OS command-line arguments.
-	# Inspect this executed Script's backing instead; each branch still proves
-	# its physical inputs or compiled manifest without falling back to the other.
-	var executed_script: Script = get_script()
-	var source_mode: bool = executed_script.has_source_code()
-	if source_mode and not OS.has_feature("editor"): return _bad("SOURCE_BACKING_UNSUPPORTED")
-	var snapshot: Dictionary
-	var source_base := ""
+	return _complete_runtime_identity(_scan_context, physical)
+
+
+func cancel_runtime_identity_scan() -> void:
+	if _scan_thread == null: return
+	_scan_cancel.lock()
+	_scan_cancelled = true
+	_scan_cancel.unlock()
+	_scan_thread.wait_to_finish()
+	_scan_thread = null
+
+
+func _scan_was_cancelled() -> bool:
+	_scan_cancel.lock()
+	var cancelled := _scan_cancelled
+	_scan_cancel.unlock()
+	return cancelled
+
+
+func _hash_scan_file(path: String) -> String:
+	# Keep window close responsive even when the executable contains the full PCK.
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null: return ""
+	var sha := HashingContext.new()
+	if sha.start(HashingContext.HASH_SHA256) != OK: return ""
+	var modified := FileAccess.get_modified_time(path)
+	var length := file.get_length()
+	var remaining := length
+	while remaining > 0:
+		if _scan_was_cancelled(): return ""
+		var count := mini(remaining, 1024 * 1024)
+		var block := file.get_buffer(count)
+		if block.size() != count or sha.update(block) != OK: return ""
+		remaining -= count
+	if file.get_length() != length or FileAccess.get_modified_time(path) != modified:
+		return ""
+	return sha.finish().hex_encode()
+
+
+func _prepare_runtime_identity() -> Dictionary:
+	_rules = JSON.parse_string(INPUT_RULES_JSON)
+	var mount := _mount_status()
+	if not mount.ok: return mount
+	# The script backing distinguishes sources from a compiled export even when
+	# Godot has already consumed --main-pack.
+	var script: Script = get_script()
+	var source_mode := script.has_source_code()
+	var resource := script.resource_path
+	var context := {
+		"ok": true, "exe": OS.get_executable_path(), "source_mode": source_mode,
+		"source_base": "", "provider_relative": "", "provider_source": "",
+	}
 	if source_mode:
-		var script: Script = executed_script
-		var resource: String = script.resource_path
-		if not resource.begins_with("res://") or not script.has_source_code(): return _bad("SOURCE_PROVIDER_UNREADABLE")
-		var base: String = ProjectSettings.globalize_path("res://").simplify_path()
-		source_base = base
-		var provider_relative: String = resource.trim_prefix("res://")
-		var file := FileAccess.open(base.path_join(provider_relative), FileAccess.READ)
+		if not OS.has_feature("editor"): return _bad("SOURCE_BACKING_UNSUPPORTED")
+		if not resource.begins_with("res://"): return _bad("SOURCE_PROVIDER_UNREADABLE")
+		context.source_base = ProjectSettings.globalize_path("res://").simplify_path()
+		context.provider_relative = resource.trim_prefix("res://")
+		context.provider_source = script.source_code
+	elif resource != PROVIDER_PATH:
+		return _bad("BUILD_PROVIDER_PATH")
+	return context
+
+
+# Called once per provider from the menu worker. Use only filesystem IO and
+# provider-local data here. Mount, script and native binding access stay on main.
+func _read_runtime_identity_files(context: Dictionary, cancelable := false) -> Dictionary:
+	_source_read_cancelable = cancelable
+	var exe: String = context.exe
+	if not exe.is_absolute_path() or not _no_link(exe): return _bad("ENGINE_BINARY_UNREADABLE")
+	var engine_sha := _hash_scan_file(exe) if cancelable else FileAccess.get_sha256(exe)
+	if not _valid_sha(engine_sha): return _bad("ENGINE_BINARY_UNREADABLE")
+	var snapshot: Dictionary = {}
+	if context.source_mode:
+		var base: String = context.source_base
+		var relative: String = context.provider_relative
+		var file := FileAccess.open(base.path_join(relative), FileAccess.READ)
 		if file == null: return _bad("SOURCE_PROVIDER_UNREADABLE")
-		var raw: String = file.get_as_text()
+		var raw := file.get_as_text()
 		file.close()
-		if raw.trim_prefix("\ufeff").replace("\r\n", "\n") != script.source_code.trim_prefix("\ufeff").replace("\r\n", "\n"):
+		var source_code: String = context.provider_source
+		if raw.trim_prefix("\ufeff").replace("\r\n", "\n") != source_code.trim_prefix("\ufeff").replace("\r\n", "\n"):
 			return _bad("SOURCE_EXECUTING_PROVIDER_MISMATCH")
-		snapshot = _source_snapshot(base, provider_relative)
+		snapshot = _source_snapshot(base, relative)
 		if not snapshot.ok: return snapshot
-	else:
-		if get_script().resource_path != PROVIDER_PATH: return _bad("BUILD_PROVIDER_PATH")
+	return {"ok": true, "engine_sha": engine_sha, "snapshot": snapshot}
+
+
+func _complete_runtime_identity(context: Dictionary, physical: Dictionary) -> Dictionary:
+	if not physical.ok: return physical
+	var source_mode: bool = context.source_mode
+	var snapshot: Dictionary = physical.snapshot
+	if not source_mode:
 		if not ResourceLoader.exists(BUILD_PATH): return _bad("BUILD_IDENTITY_MISSING")
 		# Dynamic load after Updater, no Autoload/global symbol or preloaded base constant.
 		var build: Resource = ResourceLoader.load(BUILD_PATH, "GDScript", ResourceLoader.CACHE_MODE_IGNORE)
@@ -322,12 +415,12 @@ func resolve_runtime_identity() -> Dictionary:
 			or typeof(snapshot.total_bytes) != TYPE_INT or snapshot.total_bytes < 0 or snapshot.total_bytes > int(_rules.max_bytes) \
 			or typeof(snapshot.optional_content) != TYPE_ARRAY or typeof(snapshot.native_files) != TYPE_ARRAY:
 			return _bad("BUILD_IDENTITY_FIELDS")
-	var native: Dictionary = _native_export_check(snapshot.native_files, exe, source_base)
+	var native: Dictionary = _native_export_check(snapshot.native_files, context.exe, context.source_base)
 	if not native.ok: return native
 	var optional: Dictionary = _check_optional_content(snapshot.optional_content)
 	if not optional.ok: return optional
 	return {"ok": true, "code": "OK", "identity_schema": 1, "identity_scope": "installed_inputs",
 		"content_version": "source-v1:" + String(snapshot.source_sha256), "source_sha256": snapshot.source_sha256,
-		"engine_binary_sha256": engine_sha, "source_mode": source_mode, "save_eligible": true, "save_code": "OK",
+		"engine_binary_sha256": physical.engine_sha, "source_mode": source_mode, "save_eligible": true, "save_code": "OK",
 		"rules_sha256": snapshot.rules_sha256, "file_count": snapshot.file_count, "total_bytes": snapshot.total_bytes,
 		"provider_sha256": snapshot.provider_sha256, "optional_content": snapshot.optional_content}

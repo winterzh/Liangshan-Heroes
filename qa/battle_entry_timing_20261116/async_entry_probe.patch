@@ -1,0 +1,49 @@
+--- a/qa/battle_entry_timing_20261116/entry_timing.gd
++++ b/qa/battle_entry_timing_20261116/entry_timing.gd
+@@ -14,0 +15 @@
++var first_identity: Dictionary
+@@ -41,0 +43,9 @@
++	if first_identity.engine_binary_sha256 != FileAccess.get_sha256(OS.get_executable_path()):
++		_fail("background executable SHA differs from original FileAccess SHA")
++		return
++	var synchronous: Dictionary = load("res://scripts/run_content_identity.gd").new().resolve_runtime_identity()
++	if synchronous != first_identity:
++		_fail("background identity differs from synchronous save/restore identity")
++		return
++	print("ENTRY_ASYNC_MATCH " + JSON.stringify({"file_count": synchronous.file_count, "content_version": synchronous.content_version,
++		"engine_sha256": synchronous.engine_binary_sha256}))
+@@ -70,0 +81 @@
++	var previous_max_fps := Engine.max_fps
+@@ -71,0 +83,13 @@
++	var overlay := menu.get_node_or_null("BattleLoading")
++	if overlay == null or not overlay.find_children("*", "ProgressBar", true, false)[0].indeterminate:
++		_fail("loading status was not installed")
++		return {}
++	await RenderingServer.frame_post_draw
++	var provider: RefCounted = menu._entry_scan
++	if provider == null or not provider.runtime_identity_scan_pending() or current_scene != menu:
++		_fail("menu did not render while the physical scan was still running")
++		return {}
++	selector.pressed.emit()
++	if provider != menu._entry_scan or overlay != menu.get_node_or_null("BattleLoading"):
++		_fail("duplicate transition replaced the running scan")
++		return {}
+@@ -73,0 +98,3 @@
++	if Engine.max_fps != previous_max_fps:
++		_fail("loading frame limit leaked after scene change")
++		return {}
+@@ -78,0 +106,9 @@
++	var identity: Dictionary = battle._gameplay_content_identity
++	if rendered_before_ready < 2 or not battle._gameplay_identity_bound(identity):
++		_fail("no rendered frames during entry or battle seed is unbound: " + str(identity.get("code", "")))
++		return {}
++	if visit == 0:
++		first_identity = identity.duplicate(true)
++	elif identity != first_identity:
++		_fail("repeat entry reused a different identity for unchanged inputs")
++		return {}
+--- a/qa/battle_entry_timing_20261116/run_entry_timing.py
++++ b/qa/battle_entry_timing_20261116/run_entry_timing.py
+@@ -41 +41 @@
+-        run = subprocess.run(command, env=env, stdout=file, stderr=subprocess.STDOUT, timeout=90)
++        run = subprocess.run(command, env=env, stdout=file, stderr=subprocess.STDOUT, timeout=155)

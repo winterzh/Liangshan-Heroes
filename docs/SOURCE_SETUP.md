@@ -1,6 +1,6 @@
 # 源码设置与换机（2026-10-30）
 
-出征计时使用已导入的独立源码检出、Windows Godot 控制台程序和独立离线存档目录。记录提供分段采样补丁及同版本引擎的可执行文件哈希脚本。 [出征量测记录](../qa/battle_entry_timing_20261116/README.md)
+出征计时使用已导入的独立源码检出、Windows Godot 控制台程序和独立离线存档目录。记录提供分段采样补丁、后台校验探针和同版本引擎的可执行文件哈希脚本。 [出征量测记录](../qa/battle_entry_timing_20261116/README.md)
 
 连环马两路余骑由既有骑兵状态派生，四语模板放在 `campaign_cavalry_escort.json`。验证复用 `lianhuanma_escort_qa.gd` 窄窗口夹具。[余骑提示验证](../qa/campaign_cavalry_escort_20261116/README.md#两路余骑与窄窗口军情)
 
