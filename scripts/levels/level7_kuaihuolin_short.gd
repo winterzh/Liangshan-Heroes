@@ -1,5 +1,6 @@
 extends "res://scripts/levels/level7_kuaihuolin.gd"
 ## Current short duel: optional road preparation and a live, finite counter window.
+const ATTACK_PER_DRINK := 5
 var controls_generation:=-1
 var charge_running:=false
 var opening_serial:=-1
@@ -46,8 +47,8 @@ func on_mission_action(b, action_id: String, actor) -> void:
 		var i:=int(action_id.trim_prefix("drink_"))
 		if st!=ROAD or actor!=wu or i<0 or i>=taverns.size() or taverns[i].drunk: return
 		taverns[i].drunk=true; drunk+=1
-		wu._base_atk+=5; wu.atk+=5; wu.heal(35)
-		wu.start_drunk(maxf(0.64,1.0-0.09*drunk),1.08,999)
+		wu._base_atk+=ATTACK_PER_DRINK; wu.atk+=ATTACK_PER_DRINK; wu.heal(35)
+		if steady_left<=0: _apply_wine_speed()
 		b.mission.mark(action_id,Localize.format_text("第%d家酒望吃足三碗；现共%d家，拳力增强，酒势也更不稳。", [i+1,drunk]))
 		b.mission.set_status(Localize.format_text("已饮%d/4家：可继续沿路，或直接去快活林。", drunk))
 	elif action_id=="practice_step":
@@ -119,10 +120,22 @@ func counter_window_state(b) -> Dictionary:
 		"footwork":_signature_footwork_ready(),"in_range":wu.position.distance_to(menshen.position)<=float(spec.radius),
 		"kick_cooldown":wu.slot_cd(2),"position":menshen.position}
 
+func _apply_wine_speed() -> void:
+	if drunk>0: wu.start_drunk(maxf(0.64,1.0-0.09*drunk),1.08,999)
+
+func _wine_hint() -> String:
+	if drunk<=0 or st not in [ROAD,STEP_DRILL,SHOWDOWN]: return ""
+	var bonus := drunk*ATTACK_PER_DRINK
+	if steady_left>0:
+		return Localize.format_text("饮酒%d/4家 · 普攻+%d · 步履已稳 %.1f秒",[drunk,bonus,steady_left])
+	return Localize.format_text("饮酒%d/4家 · 普攻+%d · 酒势速度倍率%d–%d%%",
+		[drunk,bonus,roundi(wu._drunk_lo*100),roundi(wu._drunk_hi*100)])
+
 func unit_tactical_hint(b, actor) -> String:
 	if actor != wu and actor != menshen: return ""
 	var state := counter_window_state(b)
-	if state.is_empty() or not b.is_visible_world(menshen.position): return ""
+	if state.is_empty() or not b.is_visible_world(menshen.position):
+		return _wine_hint() if actor==wu else ""
 	var next_step := "本次尚未踏玉环步" if step_serial != opening_serial else ("玉环步后还需实际换位" if not state.footwork else "本次换步已完成")
 	var reach := "已在出脚距离" if state.in_range else "先靠近蒋门神"
 	var cooldown := Localize.format_text("鸳鸯脚冷却 %.1f秒",state.kick_cooldown) if state.kick_cooldown>0 else Localize.text("鸳鸯脚已就绪")
@@ -169,7 +182,7 @@ func process(b, delta: float) -> void:
 		return
 	if steady_left>0:
 		steady_left=maxf(0,steady_left-delta)
-		if steady_left<=0: wu.start_drunk(maxf(0.64,1.0-0.09*drunk),1.08,999)
+		if steady_left<=0: _apply_wine_speed()
 	if st==STEP_DRILL and wu.position.distance_to(drill_origin)>94: _complete_step_drill(b,"manual_step")
 	if st in [ROAD,STEP_DRILL]:
 		if menshen.story_outcome=="subdued": _set_menshen_subdued(b)

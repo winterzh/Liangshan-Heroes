@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+野猪林 [提前强救](../qa/campaign_escort_arrival_20261116/early_force/) 与快活林 [酒路](../qa/campaign_counter_window_20261116/wine_route/) 保存独立运行报告和输入摘要。
+
 黄泥冈 [强夺接力原件](../qa/campaign_transport_groups_20261116/force_relay/) 保存时限中止与最终实跑。
 
 [连环马英雄支援反攻](../qa/campaign_resume_current_20261116/evidence/protected_drill_candidate/counter_support_heroes/)保存实际日志、战报与宿主收据。

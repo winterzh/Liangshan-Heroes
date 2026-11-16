@@ -8,6 +8,9 @@ const WATCH := Vector2i(33, 20)
 const AMBUSH := Vector2i(45, 16)
 const EXEC_TIME := 42.0
 const RESCUE_R := 86.0
+const CARE_REACH := 100.0
+const UNTIE_TIME := 1.8
+const TEND_TIME := 2.4
 const EXIT_R := 120.0
 const REST := Vector2i(16, 20)
 const SHADOW_TOO_CLOSE_R := 112.0
@@ -295,18 +298,12 @@ func process(b, delta: float) -> void:
 			b.mission.mark("yezhulin_missed_rescue","救援窗口结束，鲁智深未能拦住水火棍。")
 			b.lose("水火棍落下，鲁智深晚了一步。重打时先选鲁智深，右键林边跟上；到树旁再右键拦棍旗标。")
 	elif st == CARE:
-		if _escorts_threatening():
-			b.mission.set_status("解差尚在抵抗；制住他们后，解缚剧情会自然继续。")
-			return
-		var patient: Unit = lin_freed if is_instance_valid(lin_freed) else lin_bound
-		if not is_instance_valid(patient) or lu.position.distance_to(patient.position)>100:
-			b.mission.set_status("解差已制住。请让鲁智深走到林冲身旁，靠近后自然解缚照伤。")
-			return
+		if _escorts_threatening() or not _lu_near_patient(): return
 		care_t += delta
-		if not is_instance_valid(lin_freed) and care_t >= 1.8:
+		if not is_instance_valid(lin_freed) and care_t >= UNTIE_TIME:
 			_finish_untie(b)
 			if not b._gameplay_rng_issue.is_empty(): return
-		elif is_instance_valid(lin_freed) and not treated and care_t >= 2.4:
+		elif is_instance_valid(lin_freed) and not treated and care_t >= TEND_TIME:
 			_finish_tending(b)
 	elif st == ESCAPE:
 		_enforce_post_rescue_escort_control(b)
@@ -406,11 +403,25 @@ func _resolve_shadow_checkpoint(b) -> void:
 	b.mission.add_map_locator("大松树 · 仍可追上",PINE)
 	b.mission.set_status("保持隐蔽或自行赶往松树；看顶部距离提示。")
 
+func _resisting_escorts() -> int:
+	return escorts.filter(func(guard): return is_instance_valid(guard) and guard.hp>0.0 \
+		and guard.story_outcome=="" and guard.faction==Unit.FACTION_GUAN).size()
+
 func _escorts_threatening() -> bool:
-	for guard in escorts:
-		if is_instance_valid(guard) and guard.hp > 0.0 and guard.story_outcome == "" and guard.faction == Unit.FACTION_GUAN:
-			return true
-	return false
+	return _resisting_escorts()>0
+
+func _lu_near_patient() -> bool:
+	var patient: Unit = lin_freed if is_instance_valid(lin_freed) else lin_bound
+	return is_instance_valid(lu) and is_instance_valid(patient) and lu.position.distance_to(patient.position)<=CARE_REACH
+
+func _care_guidance() -> String:
+	var threats := _resisting_escorts()
+	if threats>0: return Localize.format_text("还有%d名解差抵抗。先制住他们，再靠近林冲。",threats)
+	if not _lu_near_patient():
+		return Localize.text("已无抵抗。让鲁智深回到林冲身边，解缚和照伤会依次进行。")
+	var tending := is_instance_valid(lin_freed)
+	var remaining := maxf(0.0,(TEND_TIME if tending else UNTIE_TIME)-care_t)
+	return Localize.format_text("正在照伤 · %.1f秒" if tending else "正在解缚 · %.1f秒",remaining)
 
 func _all_escorts_alive() -> bool:
 	for guard in escorts:
@@ -686,6 +697,8 @@ func _update_help(b) -> void:
 			b.mission.set_guidance("右键林边地面跟随；贴近会惹人起疑，保持距离。右键解差则提前动手强救。")
 	elif st==RESCUE:
 		b.mission.set_guidance("选中鲁智深，右键松树旁金色拦棍旗标，站稳0.8秒即可救人。")
+	elif st==CARE:
+		b.mission.set_guidance(_care_guidance())
 	elif st==ESCAPE:
 		b.mission.set_guidance(_escort_arrival_guidance(b,_escort_heading_to_rest(b)))
 

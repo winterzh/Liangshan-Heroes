@@ -12,10 +12,12 @@ def main():
     parser.add_argument('--godot', required=True, type=Path)
     parser.add_argument('--lock', required=True, type=Path,
                         help='Shared engine lock used by this workstation')
-    parser.add_argument('--fixture-only', action='store_true')
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument('--fixture-only', action='store_true')
+    mode.add_argument('--wine', action='store_true', help='Run drink-state checks and the actual tavern route')
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[2]
-    out = root / '.godot/campaign-counter-window'
+    out = root / '.godot' / ('kuaihuolin-wine' if args.wine else 'campaign-counter-window')
     profile = out / 'profile'
     env = os.environ.copy()
     for key in list(env):
@@ -30,10 +32,12 @@ def main():
     env.update(STEAM_DISABLED='1', CAMPAIGN_QA='1', LSH_LANGUAGE='zh_CN',
                LSH_SQUAD_PROFILE=str(profile), LSH_SQUAD_REPORT=str(out / 'report.json'))
     env['CW_FIXTURE_ONLY'] = '1' if args.fixture_only else '0'
+    env['CW_WINE_ONLY'] = '1' if args.wine else '0'
     token = str(out)
     with args.lock.open('x', encoding='utf-8') as handle:
         handle.write(token)
-    receipt = {'scope': 'counter feedback fixtures only' if args.fixture_only else 'counter feedback fixtures and one actual direct route'}
+    scope = 'drink-state checks and actual tavern route' if args.wine else ('counter feedback fixtures only' if args.fixture_only else 'counter feedback fixtures and one actual direct route')
+    receipt = {'scope': scope}
     try:
         # Remove stale output only after owning the lock.
         (out / 'report.json').unlink(missing_ok=True)
@@ -41,7 +45,7 @@ def main():
         with (out / 'render.log').open('wb') as log:
             child = subprocess.Popen(
                 [str(args.godot.resolve()), '--rendering-method', 'gl_compatibility', '--resolution', '1280x720', '--path', str(root),
-                 '--script', 'res://tools/campaign_counter_window_qa.gd'],
+                 '--script', 'res://tools/campaign_counter_window_qa.gd'] + (['--headless'] if args.wine else []),
                 cwd=root, env=env, stdout=log, stderr=subprocess.STDOUT,
                 creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0)
             (out / 'process.json').write_text(json.dumps({'pid': child.pid}), encoding='utf-8')

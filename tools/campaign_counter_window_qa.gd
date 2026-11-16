@@ -82,16 +82,33 @@ func _window_fixture() -> void:
 	l._set_menshen_subdued(b)
 	check(l.counter_window_state(b).is_empty() and l.exposed_left==0,"subdual clears opening feedback")
 	await _dispose(b)
+func _wine_fixture() -> void:
+	var b=await _fixture()
+	var l=b.level
+	l.on_ability(b,l.wu,"mengzhou_breath",l.wu.position)
+	l.process(b,5.1)
+	check(l.drunk==0 and l.wu._drunk_hi==1.0 and l._wine_hint()=="","sober recovery expiry does not apply alcohol speed rolls")
+	l.on_mission_action(b,"drink_0",l.wu)
+	check(l.drunk==1 and "+5" in l._wine_hint() and "91–108" in l._wine_hint(),"first drink reports its actual attack and wine speed bounds")
+	l.on_ability(b,l.wu,"mengzhou_breath",l.wu.position)
+	l.on_mission_action(b,"drink_1",l.wu)
+	check(l.drunk==2 and l.wu._drunk_lo==1.0 and l.wu._drunk_hi==1.0 and "+10" in l._wine_hint() and "已稳" in l._wine_hint(),"drinking while steady adds attack without prematurely restoring speed variation")
+	l.process(b,5.1)
+	check("82–108" in l._wine_hint() and not "已稳" in l._wine_hint(),"after steady expires the current two-drink speed bounds return")
+	await _dispose(b)
 func _run() -> void:
 	OS.set_environment("CAMPAIGN_QA","1");AudioServer.set_bus_mute(0,true)
 	root.get_node("Settings").edge_scroll=false
-	folder="res://.godot/campaign-counter-window"
+	var wine_only := OS.get_environment("CW_WINE_ONLY")=="1"
+	folder="res://.godot/kuaihuolin-wine" if wine_only else "res://.godot/campaign-counter-window"
 	DirAccess.make_dir_recursive_absolute(folder)
-	await _window_fixture()
+	if wine_only: await _wine_fixture()
+	else: await _window_fixture()
 	root.get_node("Localize").set_language("zh_CN",false)
 	root.size=Vector2i(1280,720);root.content_scale_size=root.size
 	Engine.time_scale=4
-	if OS.get_environment("CW_FIXTURE_ONLY")!="1": await _live("direct")
+	if wine_only: await _live("wine")
+	elif OS.get_environment("CW_FIXTURE_ONLY")!="1": await _live("direct")
 	Engine.time_scale=1
-	FileAccess.open(folder+"/report.json",FileAccess.WRITE).store_string(JSON.stringify({"passed":failures.is_empty(),"checks":checks,"failures":failures,"fixture_observations":observations,"live_cases":cases,"scope":"frozen counter readout/rendering; executed live routes are listed in live_cases; not full restore, human fun or performance/device acceptance"},"\t"))
+	FileAccess.open(folder+"/report.json",FileAccess.WRITE).store_string(JSON.stringify({"passed":failures.is_empty(),"checks":checks,"failures":failures,"fixture_observations":observations,"live_cases":cases,"scope":"four drink-state fixtures and actual wine route" if wine_only else "frozen counter readout/rendering; executed live routes are listed in live_cases; not full restore, human fun or performance/device acceptance"},"\t"))
 	quit(0 if failures.is_empty() else 1)

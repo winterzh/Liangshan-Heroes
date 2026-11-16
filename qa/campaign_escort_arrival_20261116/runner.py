@@ -12,9 +12,10 @@ def main():
     parser.add_argument('--godot', required=True, type=Path)
     parser.add_argument('--lock', required=True, type=Path,
                         help='Shared engine lock used by this workstation')
+    parser.add_argument('--force', action='store_true', help='Run only early rescue and direct escort')
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[2]
-    out = root / '.godot/campaign-escort-arrival'
+    out = root / '.godot' / ('yezhulin-early-force' if args.force else 'campaign-escort-arrival')
     profile = out / 'profile'
     env = os.environ.copy()
     for key in list(env):
@@ -28,10 +29,12 @@ def main():
         env[key] = str(dest)
     env.update(STEAM_DISABLED='1', CAMPAIGN_QA='1', LSH_LANGUAGE='zh_CN',
                LSH_SQUAD_PROFILE=str(profile), LSH_SQUAD_REPORT=str(out / 'report.json'))
+    env['YF_FORCE_ONLY'] = '1' if args.force else '0'
     token = str(out)
     with args.lock.open('x', encoding='utf-8') as handle:
         handle.write(token)
-    receipt = {'scope': 'arrival feedback fixtures and one actual north route'}
+    receipt = {'scope': 'care transitions and actual early rescue' if args.force
+               else 'arrival feedback fixtures and one actual north route'}
     try:
         # Remove stale output only after owning the lock.
         (out / 'report.json').unlink(missing_ok=True)
@@ -39,7 +42,7 @@ def main():
         with (out / 'render.log').open('wb') as log:
             child = subprocess.Popen(
                 [str(args.godot.resolve()), '--rendering-method', 'gl_compatibility', '--resolution', '1280x720', '--path', str(root),
-                 '--script', 'res://tools/campaign_escort_arrival_qa.gd'],
+                 '--script', 'res://tools/campaign_escort_arrival_qa.gd'] + (['--headless'] if args.force else []),
                 cwd=root, env=env, stdout=log, stderr=subprocess.STDOUT,
                 creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0)
             (out / 'process.json').write_text(json.dumps({'pid': child.pid}), encoding='utf-8')

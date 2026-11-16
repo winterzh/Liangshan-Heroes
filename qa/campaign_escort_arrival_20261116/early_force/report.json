@@ -1,0 +1,93 @@
+{
+	"checks": 16,
+	"failures": [],
+	"fixture_observations": [],
+	"live_cases": [
+		{
+			"events": [
+				"yezhulin_early_force",
+				"untie",
+				"tend_feet",
+				"action:escort:leave_forest",
+				"leave_forest",
+				"yezhulin_victory"
+			],
+			"hp": [
+				[
+					"lu_zhishen",
+					540.0
+				],
+				[
+					"lin_chong",
+					320.0
+				],
+				[
+					"dong_chao",
+					150.0
+				],
+				[
+					"xue_ba",
+					150.0
+				]
+			],
+			"orders": 5,
+			"result": {
+				"contract_version": 2,
+				"core_cleared": true,
+				"core_goal": "救下林冲，由鲁智深护送他和幸存解差活着走出野猪林。",
+				"done_ids": [],
+				"goals": [
+					{
+						"id": "hidden_intercept",
+						"label": "暗中跟随，在水火棍落下前现身拦棍",
+						"note": "",
+						"reason": "本局已偏离“暗中跟随，在水火棍落下前现身拦棍”的原著条件",
+						"state": "missed"
+					},
+					{
+						"id": "spare_escorts",
+						"label": "听林冲求情，留董超、薛霸性命",
+						"note": "",
+						"reason": "本局未完成",
+						"state": "missed"
+					},
+					{
+						"id": "care_and_escort",
+						"label": "林边歇脚后，由玩家编组四人一同出林",
+						"note": "",
+						"reason": "本局未完成",
+						"state": "missed"
+					}
+				],
+				"missed_ids": [
+					"hidden_intercept",
+					"spare_escorts",
+					"care_and_escort"
+				],
+				"pending_ids": [],
+				"story_complete": false,
+				"story_done": 0,
+				"story_total": 3
+			},
+			"route": "force",
+			"seconds": 97.7499999999957,
+			"spacing": [
+				{
+					"action": "leave_forest",
+					"assembly_seconds": 0.0,
+					"initial_gap": 67.7152252197266,
+					"max_gap": 83.4172592163086,
+					"path_max_gap": 83.4172592163086,
+					"widest": [
+						79.3999999999998,
+						"lu_zhishen",
+						"(72.00005, 656.0001)",
+						"(150.0248, 685.5055)"
+					]
+				}
+			]
+		}
+	],
+	"passed": true,
+	"scope": "focused care transitions plus actual early-force route"
+}

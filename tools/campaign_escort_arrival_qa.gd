@@ -83,15 +83,33 @@ func _arrival_fixture() -> void:
 	check(l._escort_arrival_at(exit_point,l.EXIT_R).missing.is_empty() and l._survivors_near(exit_point,l.EXIT_R),"all surviving companions satisfy the unchanged arrival gate")
 	check(load("res://tools/level6_world_restore_qa.gd")!=null,"updated restore callback fixture compiles; full restore not run")
 	await _dispose(b)
+func _early_care_fixture() -> void:
+	var b=await _start("",5)
+	_freeze_arrival(b)
+	var l=b.level
+	l._begin_open_rescue(b,"care fixture")
+	check("2名" in l._care_guidance() and l._escorts_threatening(),"both active guards count as resisting")
+	l.escorts[0].resolve_story("subdued")
+	check("1名" in l._care_guidance(),"subdued guard no longer contributes to resistance")
+	l.escorts[1].resolve_story("subdued")
+	l.lu.position=l.lin_bound.position+Vector2(l.CARE_REACH+1,0)
+	check(not l._escorts_threatening() and "回到林冲身边" in l._care_guidance(),"clear fight prompts return until the real care boundary")
+	l.lu.position=l.lin_bound.position+Vector2(l.CARE_REACH,0)
+	check("正在解缚" in l._care_guidance(),"actual care range changes feedback to untying")
+	l.process(b,l.UNTIE_TIME)
+	check(is_instance_valid(l.lin_freed) and "正在照伤" in l._care_guidance(),"untying hands off to real tending feedback")
+	await _dispose(b)
 func _run() -> void:
 	OS.set_environment("CAMPAIGN_QA","1")
 	AudioServer.set_bus_mute(0,true)
 	root.get_node("Settings").edge_scroll=false
-	folder="res://.godot/campaign-escort-arrival"
+	var force_only := OS.get_environment("YF_FORCE_ONLY")=="1"
+	folder="res://.godot/yezhulin-early-force" if force_only else "res://.godot/campaign-escort-arrival"
 	DirAccess.make_dir_recursive_absolute(folder)
-	await _arrival_fixture()
+	if force_only: await _early_care_fixture()
+	else: await _arrival_fixture()
 	Engine.time_scale=4
-	await _live("north")
+	await _live("force" if force_only else "north")
 	Engine.time_scale=1
-	FileAccess.open(folder+"/report.json",FileAccess.WRITE).store_string(JSON.stringify({"passed":failures.is_empty(),"checks":checks,"failures":failures,"fixture_observations":arrival_observations,"live_cases":cases,"scope":"frozen arrival/locator boundaries plus existing north live route; not full restore, human fun or device/performance acceptance"},"\t"))
+	FileAccess.open(folder+"/report.json",FileAccess.WRITE).store_string(JSON.stringify({"passed":failures.is_empty(),"checks":checks,"failures":failures,"fixture_observations":arrival_observations,"live_cases":cases,"scope":"focused care transitions plus actual early-force route" if force_only else "frozen arrival/locator boundaries plus existing north live route; not full restore, human fun or device/performance acceptance"},"\t"))
 	quit(0 if failures.is_empty() else 1)

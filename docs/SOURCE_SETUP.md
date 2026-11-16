@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+野猪林与快活林定向入口分别为现有 runner 的 `--force` 和 `--wine`。两次实际运行分别使用当时目录，合入六条四语后可从相应原件重建两次受测目录。[野猪林原件](../qa/campaign_escort_arrival_20261116/README.md#提前强救与照伤提示) · [快活林原件](../qa/campaign_counter_window_20261116/README.md#饮酒与调息)。
+
 黄泥冈运输 runner 新增 `--relay`，复用正式关卡，初始化后启用4倍时间，使用隔离用户目录与宿主锁。[强夺路线及原件](../qa/campaign_transport_groups_20261116/README.md#强夺伤亡接力实跑)。
 
 连环马 `--retry-reserve-tail` 链入此前保车尾段并复用原首存/再保存；本批驾驶用原招募、技能和单位指令增加林冲、花荣与弓手集火。[同档实跑原件](../qa/campaign_resume_current_20261116/evidence/protected_drill_candidate/counter_support_heroes/)。
