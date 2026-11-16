@@ -15,7 +15,7 @@
 
 [江州码头撤离反馈](../qa/campaign_pursuit_20261116/README.md#码头收队与岸上好汉)含撤离名单定向检查、白龙庙实际路线及复跑脚本。
 
-[Windows 主菜单预读](../qa/battle_entry_timing_20261116/README.md#windows-主菜单预读)保存同模板诊断包进场样本、内容身份、按钮探针及源码版跨模式返回、高俅首道移动指令证据。
+[Windows 主菜单预读](../qa/battle_entry_timing_20261116/README.md#windows-主菜单预读)保存同模板诊断包进场样本、内容身份、按钮探针及源码版跨模式返回、高俅首道移动、首次选择分段及技能图标读取证据。
 
 [举火后接应船损失](../qa/campaign_naval_recovery_20261116/README.md#举火后接应船损失)含原接应船自然沉没、撤离成果保留夹具及两条复跑脚本。
 
