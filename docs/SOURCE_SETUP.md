@@ -1,5 +1,8 @@
 # 源码设置与换机（2026-10-30）
 
+2026-11-16 野猪林到达反馈由现有位置/指令实时派生，不新增存档字段；pine_waiting登记到Mission官方按钮白名单，沿用固定Presentation回调。四语来源campaign_escort_arrival.json同步catalog。源码身份变化，旧冻结候选不沿用；[来源、定向检查与恢复边界](../qa/campaign_escort_arrival_20261116/README.md)。
+
+
 2026-11-16 公共HUD与任务布局适配实际底栏，增加生产队列滚动容器；未增加保存字段，但生产身份已变化，旧冻结续玩候选资格不沿用。[定向布局证据与剩余范围](../qa/campaign_overlays_20261116/README.md)。
 
 

@@ -211,6 +211,13 @@ func _roundtrip(b: Node, label: String) -> Node:
 		var descriptor: Dictionary = candidate.get_meta("campaign_presentation_v1", {})
 		if descriptor.get("kind") != "level": continue
 		var button_id: String = descriptor.get("button_id", "")
+		if button_id == "pine_waiting":
+			var selection_before: Array = restored.selection.duplicate()
+			var members: Array = restored.level._escort_group()
+			var orders_before: Array = members.map(func(u): return u._order_serial)
+			candidate.pressed.emit()
+			check(label + " restored arrival locator does not select or command", restored.selection == selection_before and members.map(func(u): return u._order_serial) == orders_before)
+			continue
 		if check(label + " only installed selection callback", button_id in ["pine_group", "pine_lu"]):
 			candidate.pressed.emit()
 			check(label + " fixed callback selects current live identities", restored.selection == (restored.level._escort_group() if button_id == "pine_group" else [restored.level.lu]))

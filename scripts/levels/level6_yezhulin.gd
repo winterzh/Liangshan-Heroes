@@ -211,7 +211,7 @@ func on_mission_action(b, action_id: String, actor) -> void:
 			if st != ESCAPE or rest_reached:
 				return
 			if not _survivors_near(b.map.cell_to_world(REST),96):
-				_retry_escort_action(b,"rest_stop","同伴尚未到齐；让队伍走近歇脚处后，再右键旗标。")
+				_retry_escort_action(b,"rest_stop",_escort_arrival_guidance(b,true))
 				return
 			rest_reached = true
 			b.mission.mark("rest_stop","玩家带相送队到林边歇脚，照料林冲脚伤。")
@@ -319,7 +319,7 @@ func process(b, delta: float) -> void:
 			if lin_out:
 				var four_out := _full_group_near(exit_point, EXIT_R)
 				if not _survivors_near(exit_point, EXIT_R):
-					b.mission.set_status("林冲不能单独结算；等鲁智深和幸存解差一起到达林口。")
+					b.mission.set_guidance(_escort_arrival_guidance(b,false))
 					return
 				if four_out and treated and rest_reached and b.mission.has_event("warn_escorts"):
 					b.mission.mark("yezhulin_four_left", "董超、薛霸搀着林冲，跟随鲁智深踏上出林官道")
@@ -610,12 +610,43 @@ func _finish_tending(b) -> void:
 		b.mission.actions[action_id].settle_margin=16.0
 	b.mission.set_status("查看只移镜头；先选人，再右键旗标。出林需林冲、鲁智深和所有幸存同伴到齐。")
 	_add_selection_button(b,true)
+	b.mission.add_level_button("pine_waiting", "查看 · 未到齐同伴", "查看当前歇脚或出林目标外最远的幸存同伴；只移镜头，不选人、不下令。")
 	st = ESCAPE
 	rest_reached = false
 
 func _survivors_near(point: Vector2,radius: float) -> bool:
 	if not is_instance_valid(lu) or lu.hp<=0 or not is_instance_valid(lin_freed) or lin_freed.hp<=0: return false
-	return _escort_group().all(func(u): return u.position.distance_to(point)<=radius+2)
+	return _escort_arrival_at(point,radius).missing.is_empty()
+
+## Read the same physical arrival boundary used by the exit/rest gates.
+## Derived only: no extra saved counters or automatic movement.
+func _escort_arrival_at(point: Vector2, radius: float) -> Dictionary:
+	var group := _escort_group()
+	var missing: Array = []
+	var farthest = null
+	var farthest_distance := -1.0
+	for member in group:
+		var distance: float = member.position.distance_to(point)
+		if distance > radius + 2.0:
+			missing.append(member)
+			if distance > farthest_distance:
+				farthest = member
+				farthest_distance = distance
+	return {"arrived":group.size()-missing.size(), "total":group.size(), "missing":missing, "farthest":farthest}
+
+func _escort_heading_to_rest(b) -> bool:
+	if rest_reached or b.mission.has_event("leave_forest"): return false
+	return b.mission.active_action_id == "rest_stop" or (escort_player_target != Vector2.INF \
+		and escort_player_target.distance_to(b.map.cell_to_world(REST)) <= 96.0)
+
+func _escort_arrival_guidance(b, at_rest: bool) -> String:
+	var state := _escort_arrival_at(b.map.cell_to_world(REST if at_rest else EXIT_W),96.0 if at_rest else EXIT_R)
+	if state.missing.is_empty():
+		return Localize.text("同伴已到齐；让林冲右键歇脚旗标完成停留。" if at_rest else "同伴已到齐；让林冲右键出林旗标完成停留。")
+	var names := PackedStringArray()
+	for member in state.missing: names.append(Localize.text(member.display_name))
+	return Localize.format_text("%s已到 %d/%d 人；未到齐：%s。查看按钮只移镜头，选中队伍后右键旗标继续同行。", \
+		[Localize.text("歇脚处" if at_rest else "出林口"),state.arrived,state.total,", ".join(names)])
 
 func _retry_escort_action(b,key: String,text: String) -> void:
 	var action: Dictionary=b.mission.actions[key]
@@ -628,6 +659,15 @@ func _add_selection_button(b,group := false) -> void:
 	b.mission.add_level_button("pine_group" if group else "pine_lu", "选中 · 相送队伍" if group else "选中 · 鲁智深")
 
 func activate_mission_button(b, button_id: String) -> void:
+	if button_id == "pine_waiting":
+		if st != ESCAPE: return
+		var at_rest := _escort_heading_to_rest(b)
+		var cell: Vector2i = REST if at_rest else EXIT_W
+		var state := _escort_arrival_at(b.map.cell_to_world(cell),96.0 if at_rest else EXIT_R)
+		if is_instance_valid(state.farthest): cell = b.map.world_to_cell(state.farthest.position)
+		b.center_camera_cell(cell)
+		b.mission.set_status(_escort_arrival_guidance(b,at_rest))
+		return
 	if button_id not in ["pine_lu", "pine_group"]: return
 	var members: Array = _escort_group() if button_id == "pine_group" else [lu]
 	members = members.filter(func(u): return is_instance_valid(u) and u.hp>0 and u.story_outcome=="")
@@ -646,6 +686,8 @@ func _update_help(b) -> void:
 			b.mission.set_guidance("右键林边地面跟随；贴近会惹人起疑，保持距离。右键解差则提前动手强救。")
 	elif st==RESCUE:
 		b.mission.set_guidance("选中鲁智深，右键松树旁金色拦棍旗标，站稳0.8秒即可救人。")
+	elif st==ESCAPE:
+		b.mission.set_guidance(_escort_arrival_guidance(b,_escort_heading_to_rest(b)))
 
 func _story_miss(b, goal_id: String, reason: String) -> void:
 	if b.mission.has_method("miss_story_goal"):
@@ -659,6 +701,10 @@ func _shadow_distance() -> float:
 	return distance
 
 func top_status(b) -> String:
+	if st == ESCAPE:
+		var at_rest := _escort_heading_to_rest(b)
+		var state := _escort_arrival_at(b.map.cell_to_world(REST if at_rest else EXIT_W),96.0 if at_rest else EXIT_R)
+		return Localize.format_text("野猪林 | %s %d/%d 人",[Localize.text("歇脚处" if at_rest else "出林口"),state.arrived,state.total])
 	if st == RESCUE:
 		return Localize.format_text("野猪林 | 拦棍倒计时 %d 秒", ceili(maxf(0.0, exec_timer)))
 	if st == STALK:

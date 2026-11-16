@@ -216,7 +216,7 @@ func _boundaries() -> void:
 	await _dispose(b)
 	for mode in ["skirmish","skirmish_ai"]:
 		b=await _start(mode)
-		check(b._defs.lin_chong==Defs.UNITS.lin_chong,mode+" retains its normal combat Lin Chong")
+		check(b._defs.lin_chong==load("res://scripts/defs.gd").UNITS.lin_chong,mode+" retains its normal combat Lin Chong")
 		await _dispose(b)
 
 func _run() -> void:

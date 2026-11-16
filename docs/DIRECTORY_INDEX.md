@@ -212,3 +212,6 @@ qa/campaign_progress_recovery_20261026/continue_binding_candidate/：Flow/Sessio
 
 
 `qa/campaign_overlays_20261116/`保存任务/消息/底栏布局的定向渲染原件、失败与夹具修正过程、来源哈希和复跑器；对应`tools/campaign_overlay_layout_qa.gd`。final十图为冻结场景布局证据，不是整关、完整恢复或设备验收。
+
+
+`qa/campaign_escort_arrival_20261116/`保存野猪林到达计数/定位定向夹具、两张渲染图、现有北路实际通关、首次编译失败、来源哈希及runner；`tools/campaign_escort_arrival_qa.gd`为入口，`assets/localization/campaign_escort_arrival.json`为本批八条四语来源。
