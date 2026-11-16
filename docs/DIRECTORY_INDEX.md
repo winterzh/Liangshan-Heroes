@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[Windows 战役提示整合候选收据](../qa/battle_entry_timing_20261116/windows_candidate_d8085327.json)包含正式可执行文件离线启动、编译包六入口和六文件摘要。
+
 [祝家庄查看与四语定向记录](../qa/campaign_siege_20261116/scouting_hints/report.json)含实际点击、迷雾和英文窄窗。
 
 [高俅开战前预警与定位证据](../qa/campaign_flagship_escort_20261116/wave_warnings/report.json)含四语、时点和两个表现层描述符。

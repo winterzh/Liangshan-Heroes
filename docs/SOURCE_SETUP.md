@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+使用 `d8085327` 封装。原生 EXE 离线启动通过，同一编译包验证了三关战役与三种自由模式，四语加载、六次返回和运行身份一致性均通过。实测高俅首批预警和两个定位、祝家庄外营查看与迷雾约束，完整词库摘要与构建输入一致。[最新 Windows 候选](../qa/battle_entry_timing_20261116/README.md#windows-战役提示整合候选)
+
 祝家庄打法提示沿用 HUD 的 unit_tactical_hint，受当前视野与原角色状态约束。词条存于 zhujiazhuang_scouting_hints.json。[祝家庄侦察查看](../qa/campaign_siege_20261116/README.md#侦察后查看打法)
 
 高俅预警复用 waves.warned 和原有战场状态。两个定位按钮沿用通用 Mission 表现层描述符。四语载入 gao_wave_warnings.json。[高俅三批预警与定位](../qa/campaign_flagship_escort_20261116/README.md#开战前预警与两线定位)
