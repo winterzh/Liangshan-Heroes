@@ -1,5 +1,8 @@
 # 项目目录索引（2026-10-30）
 
+[标签缓存与隐藏单位重绘](../qa/campaign_sustained_performance_20261116/cached_labels_hidden_redraw.json)记录四语像素、交替重复标签计时和修正前后的退出状态。
+
+
 [高俅单位绘制对照](../qa/campaign_sustained_performance_20261116/unit_draw_work.json)包含共享防守轨迹、四语标签像素摘要及分段耗时。
 
 

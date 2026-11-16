@@ -1273,6 +1273,9 @@ func _request_redraw() -> void:
 	if not is_inside_tree() or not Engine.is_in_physics_frame():
 		queue_redraw()
 		return
+	# CanvasItem queues a fresh draw when it becomes visible again.
+	if not is_visible_in_tree():
+		return
 	# Catch-up physics ticks share the process frame counter. The one-shot
 	# connection is consumed after those ticks, before the next counter value.
 	var frame := Engine.get_process_frames()

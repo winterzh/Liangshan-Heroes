@@ -25,6 +25,7 @@ const FONT = preload("res://assets/fonts/NotoSansCJK-Regular.ttc")
 
 static var _locale_font: FontVariation
 static var _shared_theme: Theme
+static var _compact_label_layouts: Dictionary = {}
 
 
 static func shared() -> Theme:
@@ -164,6 +165,7 @@ static func locale_font() -> FontVariation:
 
 static func apply_language_font(locale: String) -> void:
 	var font := locale_font()
+	_compact_label_layouts.clear()
 	font.variation_face_index = {"zh_CN": 2, "zh_TW": 3}.get(locale, 0)
 	ThemeDB.fallback_font = font
 
@@ -173,6 +175,23 @@ static func apply_language_font(locale: String) -> void:
 static func draw_compact_label(canvas: CanvasItem, font: Font, position: Vector2, text: String,
 		width: float, font_size: int, color: Color, shadow_offset := Vector2.ZERO,
 		shadow_color := Color.TRANSPARENT) -> void:
+	var layout: Array
+	if font == _locale_font:
+		var key := [text, width, font_size]
+		layout = _compact_label_layouts.get(key, [])
+		if layout.is_empty():
+			layout = _fit_compact_label(font, text, width, font_size)
+			if _compact_label_layouts.size() >= 512:
+				_compact_label_layouts.clear()
+			_compact_label_layouts[key] = layout
+	else:
+		layout = _fit_compact_label(font, text, width, font_size)
+	if shadow_color.a > 0.0:
+		canvas.draw_string(font, position + shadow_offset, layout[0], HORIZONTAL_ALIGNMENT_CENTER, width, layout[1], shadow_color)
+	canvas.draw_string(font, position, layout[0], HORIZONTAL_ALIGNMENT_CENTER, width, layout[1], color)
+
+
+static func _fit_compact_label(font: Font, text: String, width: float, font_size: int) -> Array:
 	var actual_size := font_size
 	var text_width := font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, actual_size).x
 	while actual_size > 11 and text_width > width:
@@ -183,6 +202,4 @@ static func draw_compact_label(canvas: CanvasItem, font: Font, position: Vector2
 		while not shown.is_empty() and font.get_string_size(shown + "…", HORIZONTAL_ALIGNMENT_LEFT, -1, actual_size).x > width:
 			shown = shown.left(shown.length() - 1)
 		shown += "…"
-	if shadow_color.a > 0.0:
-		canvas.draw_string(font, position + shadow_offset, shown, HORIZONTAL_ALIGNMENT_CENTER, width, actual_size, shadow_color)
-	canvas.draw_string(font, position, shown, HORIZONTAL_ALIGNMENT_CENTER, width, actual_size, color)
+	return [shown, actual_size]
