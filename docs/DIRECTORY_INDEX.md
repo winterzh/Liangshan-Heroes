@@ -1,5 +1,8 @@
 # 项目目录索引（2026-10-30）
 
+[首批攻防与战船预读收据](../qa/campaign_sustained_performance_20261116/first_wave_paired_sections.json)记录五组同进程配对、首次出兵回调和两条预读取图验证。
+
+
 [高俅稳定分支十分钟](../qa/campaign_sustained_performance_20261116/stable_aed84d03.json)含 `aed84d03` 的逐分钟帧间隔、性能门槛与同探针对照。
 
 

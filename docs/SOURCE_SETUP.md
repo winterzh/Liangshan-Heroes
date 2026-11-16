@@ -1,5 +1,8 @@
 # 源码设置与换机（2026-10-30）
 
+Windows 高俅战斗使用已有启动预读队列准备官军战船两张转向贴图。方向路径由 CampaignArt 给出，战场从同一 Art 贴图路由取出预读结果。[首批攻防分段与战船预读](../qa/campaign_sustained_performance_20261116/README.md#首批攻防分段与战船预读)
+
+
 高俅稳定源码复测沿用现有的正常速度 600 秒探针，汇总逐分钟帧耗时、实际出兵和付费生产。[高俅稳定分支十分钟结果](../qa/campaign_sustained_performance_20261116/README.md#迷雾与地形优化后的十分钟复测)
 
 

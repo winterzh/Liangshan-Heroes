@@ -1079,6 +1079,10 @@ func prefetch_gao_opening_art() -> void:
 					continue
 				var path := stem.get_basename() + ".tres"
 				paths[path] = "ordinary_character|" + path if family.has(state) else "unit|%s|%s|%s" % [key, state, direction]
+	if OS.get_name() == "Windows":
+		# These turns first appear as the official fleet approaches the harbor.
+		for direction in ["nw", "sw"]:
+			paths[CampaignArt.object_direction_path("official_warship", "default", direction)] = ""
 	if not paths.is_empty():
 		_prefetch_opening_art.call_deferred(paths)
 
@@ -1231,9 +1235,11 @@ var _campaign_tex_cache: Dictionary = {}
 func _campaign_texture(path: String) -> Texture2D:
 	if path.is_empty(): return null
 	if _campaign_tex_cache.has(path): return _campaign_tex_cache[path]
-	# 不缓存不存在的文件：开发期新增图导入后可以立即被下一次查询发现。
-	if not ResourceLoader.exists(path): return null
-	var tex := load(path) as Texture2D
+	var tex: Texture2D = _prefetched_opening_textures.get(path)
+	if tex == null:
+		# 不缓存不存在的文件：开发期新增图导入后可以立即被下一次查询发现。
+		if not ResourceLoader.exists(path): return null
+		tex = load(path) as Texture2D
 	if tex != null: _campaign_tex_cache[path] = tex
 	return tex
 
