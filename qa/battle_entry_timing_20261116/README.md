@@ -320,3 +320,17 @@ Windows 1280×720、Vulkan Forward+、RTX 4060 Laptop。通过现行主菜单异
 - all minute P95 values meet 16.7ms
 
 表中时间从长测驱动调用源码菜单至进入战斗，记录的是自动化源码入口，Steam 安装包实际前台点击仍待做。收据含逐分钟数据、资源容差和原件指纹。原件留在本机 `D:/CodexTemp/lsh-entry-profile-1116/soak-menu-route-92f354d9/`。[完整摘要](windows_campaign_menu_soak_089a10d8.json)
+
+## Windows 源码目录校验复用
+
+Godot 4.6.3 的 Windows DirAccess.open 会切换并恢复工作目录。源码身份校验原来逐文件逐层打开父目录。现在只在 Windows 源码快照期间复用一个绝对路径访问器，每次仍查询实际父目录属性和重解析点。两遍文件树枚举、文件正文 SHA-256、大小与修改时间复核、原生库和可选内容核对沿用原合同。发布包入口和其他宿主继续使用既有路径。
+
+同一台 RTX 4060 Laptop，两个独立离线 Windows 源码进程，Compatibility，三条真实按钮路径，结果如下。两组开始前都用独立 Python 工具读取并生成一份身份快照，表中时间为真实按钮的 pressed 信号至战场首帧。战斗均从原 HUD 开打，返回后检查战场、HUD、地图、单位根、阴影批次和样本单位等七项弱引用释放。
+
+| 路径 | 原流程 | 复用目录访问器 |
+| --- | ---: | ---: |
+| 祝家庄首次 | 19.13 秒 | 15.58 秒 |
+| 竞技场 | 18.60 秒 | 14.35 秒 |
+| 祝家庄重进 | 19.00 秒 | 15.65 秒 |
+
+每版实际启动绑定的 7,114 项身份与同版 Python 全字节快照逐字段一致。同一版三次启动的身份一致。两个进程均正常退出，无脚本错误，独立档案与设置均未改动。Windows 普通目录、目录 junction 和不存在父目录三个定向判断与旧入口一致。初次外部夹具的预期结果变量缺少显式类型，修正后完成同条件对照。原始数据留在本机 `D:/CodexTemp/lsh-entry-profile-1116/source-scan-entry-compare-49293156-final/`。[详细计时与校验结果](windows_source_path_scan_49293156.json)

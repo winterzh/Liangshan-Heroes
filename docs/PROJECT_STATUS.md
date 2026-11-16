@@ -1,5 +1,7 @@
 # 当前项目总览
 
+Windows 源码祝家庄重进到战场首帧 19.00 秒 → 15.65 秒。Steam 安装包进场正在单独跟踪。[Windows 源码目录校验复用](../qa/battle_entry_timing_20261116/README.md#windows-源码目录校验复用)
+
 长时间切换工具接入正式菜单和 HUD 返回。30 分钟共 70 次进出，关键节点释放 70/70。资源与内存回收均在预热基线容差内，未检出持续单调增长。完整长测未通过。[模式切换长测结果](../qa/battle_entry_timing_20261116/README.md#windows-主菜单模式切换三十分钟)
 
 本地 Windows 候选 `7ef55d27` 已导出并原生启动，包含十分钟源码验收通过的绘制改动。[Windows 本地候选 7ef55d27](../qa/battle_entry_timing_20261116/README.md#windows-本地候选-7ef55d27)

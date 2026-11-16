@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[Windows 源码目录校验对照](../qa/battle_entry_timing_20261116/windows_source_path_scan_49293156.json)含前后两版的菜单进入计时、独立身份对比、路径判断及文件摘要。
+
 [模式切换 30 分钟收据](../qa/battle_entry_timing_20261116/windows_campaign_menu_soak_089a10d8.json)含 Vulkan 逐分钟帧时、各模式释放情况及资源趋势。
 
 [Windows 候选 7ef55d27 收据](../qa/battle_entry_timing_20261116/windows_candidate_7ef55d27.json)含构建和性能来源、独立启动与四个发行文件的摘要。

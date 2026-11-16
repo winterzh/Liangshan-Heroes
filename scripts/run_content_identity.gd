@@ -13,6 +13,7 @@ var _stamps: Dictionary = {}
 var _verify_rows: Dictionary = {}
 var _verify_stamps: Dictionary = {}
 var _source_read_cancelable := false
+var _source_dir_access: DirAccess
 var _scan_thread: Thread
 var _scan_context: Dictionary
 var _scan_cancel := Mutex.new()
@@ -51,12 +52,21 @@ func _register(path: String) -> bool:
 
 func _no_link(path: String) -> bool:
 	var current: String = path.simplify_path()
-	while current.length() > 3 and current != current.get_base_dir():
-		var parent := DirAccess.open(current.get_base_dir())
-		if parent == null or parent.is_link(current.get_file()):
+	var parent_path := current.get_base_dir()
+	while current.length() > 3 and current != parent_path:
+		var valid: bool
+		if _source_dir_access != null:
+			# Windows DirAccess.open() changes and restores the process working
+			# directory. Reuse an accessor for absolute, live attribute checks.
+			valid = _source_dir_access.dir_exists(parent_path) and not _source_dir_access.is_link(current)
+		else:
+			var parent := DirAccess.open(parent_path)
+			valid = parent != null and not parent.is_link(current.get_file())
+		if not valid:
 			_error = "INPUT_LINK_OR_PARENT"
 			return false
-		current = current.get_base_dir()
+		current = parent_path
+		parent_path = current.get_base_dir()
 	return true
 
 func _file(base: String, relative: String) -> void:
@@ -403,7 +413,10 @@ func _read_runtime_identity_files(context: Dictionary, cancelable := false) -> D
 		var source_code: String = context.provider_source
 		if raw.trim_prefix("\ufeff").replace("\r\n", "\n") != source_code.trim_prefix("\ufeff").replace("\r\n", "\n"):
 			return _bad("SOURCE_EXECUTING_PROVIDER_MISMATCH")
+		if OS.get_name() == "Windows":
+			_source_dir_access = DirAccess.open(base)
 		snapshot = _source_snapshot(base, relative)
+		_source_dir_access = null
 		if not snapshot.ok: return snapshot
 	return {"ok": true, "engine_sha": engine_sha, "snapshot": snapshot, "executable_stamp": stamp}
 

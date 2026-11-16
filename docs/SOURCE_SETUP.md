@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+Windows 源码进场校验的 DirAccess 只在源码快照期间复用。两遍枚举和逐文件哈希保留，Windows 发行包与其他宿主沿用原入口。[Windows 源码目录校验复用](../qa/battle_entry_timing_20261116/README.md#windows-源码目录校验复用)
+
 模式切换长测保留六条既有路线，取当前主菜单异步入口及战斗 HUD 返回信号。在独立用户路径断开 Steam 和内容自动更新。[30 分钟模式切换验收](CAMPAIGN_MODE_SOAK_QA.md)
 
 Windows 本地候选 `7ef55d27` 来自白名单快照。构建提交与高俅十分钟性能验收提交只相差 QA 和项目文档，核对四个发行文件后归档。[Windows 本地候选 7ef55d27](../qa/battle_entry_timing_20261116/README.md#windows-本地候选-7ef55d27)
