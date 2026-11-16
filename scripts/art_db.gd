@@ -277,7 +277,6 @@ var _terrain_img: Image
 var _avg_cache := {}
 var _anim_cache := {}
 var _generic_directional_path_cache := {}
-var _directional_prefetch_paths := {}
 
 
 func _ready() -> void:
@@ -941,16 +940,73 @@ func _resolve_generic_directional_path(key: String, state: String, direction: St
 	return path
 
 
-func prefetch_gao_opening_animations() -> void:
-	prefetch_directional_animations({"liu_tang": ["walk", "attack"], "wu_yong": ["attack"]})
+const ART_ICON_PATHS := {
+	"liu_tang_q": "res://assets/ui/liu_tang_pudao_skills_20261016/liu_tang_q.png",
+	"ruan_xiaowu_q": "res://assets/ui/ruan_xiaowu_skills_20261016/ruan_xiaowu_q.png",
+	"ruan_xiaowu_w": "res://assets/ui/ruan_xiaowu_skills_20261016/ruan_xiaowu_w.png",
+	"ruan_xiaowu_e": "res://assets/ui/ruan_xiaowu_skills_20261016/ruan_xiaowu_e.png",
+	"ruan_xiaowu_r": "res://assets/ui/ruan_xiaowu_skills_20261016/ruan_xiaowu_r.png",
+	"liu_tang_w": "res://assets/ui/liu_tang_pudao_skills_20261016/liu_tang_w.png",
+	"liu_tang_e": "res://assets/ui/liu_tang_pudao_skills_20261016/liu_tang_e.png",
+	"liu_tang_r": "res://assets/ui/liu_tang_pudao_skills_20261016/liu_tang_r.png",
+	"ruan_xiaoqi_q": "res://assets/ui/ruan_xiaoqi_spear_skills_20261016/ruan_xiaoqi_q.png",
+	"ruan_xiaoqi_w": "res://assets/ui/ruan_xiaoqi_spear_skills_20261016/ruan_xiaoqi_w.png",
+	"ruan_xiaoqi_e": "res://assets/ui/ruan_xiaoqi_spear_skills_20261016/ruan_xiaoqi_e.png",
+	"ruan_xiaoqi_r": "res://assets/ui/ruan_xiaoqi_spear_skills_20261016/ruan_xiaoqi_r.png",
+	"shi_en_q": "res://assets/ui/shi_en_staff_skills_20261015/shi_en_q.png",
+	"shi_en_w": "res://assets/ui/shi_en_staff_skills_20261015/shi_en_w.png",
+	"shi_en_e": "res://assets/ui/shi_en_staff_skills_20261015/shi_en_e.png",
+	"shi_en_r": "res://assets/ui/shi_en_staff_skills_20261015/shi_en_r.png",
+	"song_rally": "res://assets/ui/skills_v2/song_rally_v2.png",
+	"song_banner": "res://assets/ui/skills_v2/song_banner_v2.png",
+	"song_fire": "res://assets/ui/skills_v2/song_fire_v2.png",
+	"song_lead": "res://assets/ui/skills_v2/song_lead_v2.png",
+	"lin_thrust": "res://assets/ui/skills_v2/lin_thrust_v2.png",
+	"lin_sweep": "res://assets/ui/skills_v2/lin_sweep_v2.png",
+	"lin_predator": "res://assets/ui/skills_v2/lin_predator_v2.png",
+	"lin_chrono": "res://assets/ui/skills_v2/lin_chrono_v2.png",
+	"hua_blink": "res://assets/ui/skills_v2/hua_blink_v2.png",
+	"hua_rain": "res://assets/ui/skills_v2/hua_rain_v2.png",
+	"hua_pin": "res://assets/ui/skills_v2/hua_pin_v2.png",
+	"hua_blade": "res://assets/ui/skills_v2/hua_blade_v2.png",
+	"li_axes": "res://assets/ui/skills_v2/li_axes_v2.png",
+	"li_charge": "res://assets/ui/skills_v2/li_charge_v2.png",
+	"li_brawn": "res://assets/ui/skills_v2/li_brawn_v2.png",
+	"li_fury": "res://assets/ui/skills_v2/li_fury_v2.png",
+	"gong_blackrain": "res://assets/ui/skills_v2/gong_blackrain_v2.png",
+	"gong_icewall": "res://assets/ui/skills_v2/gong_icewall_v2.png",
+	"gong_slow": "res://assets/ui/skills_v2/gong_slow_v2.png",
+	"gong_dragon": "res://assets/ui/skills_v2/gong_dragon_v2.png",
+	"wu_tigers": "res://assets/ui/skills_v2/wu_tigers_v2.png",
+	"wu_wine": "res://assets/ui/skills_v2/wu_wine_v2.png",
+	"wu_blades": "res://assets/ui/skills_v2/wu_blades_v2.png",
+	"wu_drunkgod": "res://assets/ui/skills_v2/wu_drunkgod_v2.png",
+}
 
 
-## Prepare only the ordinary directional actions requested by the level.
-## Normal animation selection remains the fallback if an asset is needed early.
-func prefetch_directional_animations(actions_by_unit: Dictionary) -> void:
-	if DisplayServer.get_name() == "headless":
+var _prefetched_ability_icons: Dictionary[String, Texture2D] = {}
+var _gao_opening_art_requested := false
+
+
+func ability_icon_path(ability_id: String) -> String:
+	return String(ART_ICON_PATHS.get(ability_id, ""))
+
+
+func ability_icon_texture(path: String) -> Texture2D:
+	if _prefetched_ability_icons.has(path):
+		return _prefetched_ability_icons[path]
+	return load(path) as Texture2D
+
+
+func prefetch_gao_opening_art() -> void:
+	if _gao_opening_art_requested or DisplayServer.get_name() == "headless":
 		return
+	_gao_opening_art_requested = true
 	var paths: Dictionary[String, String] = {}
+	if OS.get_name() == "Windows":
+		for ability_id in ["liu_tang_q", "liu_tang_w", "liu_tang_e", "liu_tang_r"]:
+			paths[ability_icon_path(ability_id)] = ""
+	var actions_by_unit := {"liu_tang": ["walk", "attack"], "wu_yong": ["attack"]}
 	for key: String in actions_by_unit:
 		var family: Dictionary = ORDINARY_CHARACTER_FAMILIES.get(key, {})
 		for state: String in actions_by_unit[key]:
@@ -959,15 +1015,12 @@ func prefetch_directional_animations(actions_by_unit: Dictionary) -> void:
 				if not family.has(state) and ResourceLoader.exists(stem):
 					continue
 				var path := stem.get_basename() + ".tres"
-				if _directional_prefetch_paths.has(path):
-					continue
-				_directional_prefetch_paths[path] = true
 				paths[path] = "ordinary_character|" + path if family.has(state) else "unit|%s|%s|%s" % [key, state, direction]
 	if not paths.is_empty():
-		_prefetch_directional_frames.call_deferred(paths)
+		_prefetch_opening_art.call_deferred(paths)
 
 
-func _prefetch_directional_frames(paths: Dictionary[String, String]) -> void:
+func _prefetch_opening_art(paths: Dictionary[String, String]) -> void:
 	for path in paths:
 		# Do not hold up the first scene frame or start another request on exit.
 		await get_tree().process_frame
@@ -976,14 +1029,21 @@ func _prefetch_directional_frames(paths: Dictionary[String, String]) -> void:
 		var prepared_key := "validated|" + path
 		if _anim_cache.has(prepared_key) or _anim_cache.has(paths[path]) or not ResourceLoader.exists(path):
 			continue
-		if ResourceLoader.load_threaded_request(path, "SpriteFrames") != OK:
+		var is_icon := paths[path].is_empty()
+		var resource_type := "Texture2D" if is_icon else "SpriteFrames"
+		if ResourceLoader.load_threaded_request(path, resource_type) != OK:
 			continue
 		var status := ResourceLoader.load_threaded_get_status(path)
 		while status == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
 			await get_tree().process_frame
 			status = ResourceLoader.load_threaded_get_status(path)
 		if status == ResourceLoader.THREAD_LOAD_LOADED:
-			var frames := _decode_directional_frames(ResourceLoader.load_threaded_get(path))
+			var resource := ResourceLoader.load_threaded_get(path)
+			if is_icon:
+				if resource is Texture2D:
+					_prefetched_ability_icons[path] = resource
+				continue
+			var frames := _decode_directional_frames(resource)
 			if not frames.is_empty() and not _anim_cache.has(paths[path]):
 				_anim_cache[prepared_key] = frames
 

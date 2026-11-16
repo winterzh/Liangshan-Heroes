@@ -3752,50 +3752,6 @@ class HeroSlotButton extends Control:
 		"wu_fire": "fire", "gongsun_thunder": "thunder", "bai_drug": "drug", "zhang_drag": "wave",
 	}
 
-	# 核心英雄及施恩的手绘技能图。未覆盖的技能继续走下方矢量图标回退，
-	# 因此升级视觉不改变原有技能注册表，也不会让其他英雄出现空白按钮。
-	const ART_ICON_PATHS := {
-		"liu_tang_q": "res://assets/ui/liu_tang_pudao_skills_20261016/liu_tang_q.png",
-		"ruan_xiaowu_q": "res://assets/ui/ruan_xiaowu_skills_20261016/ruan_xiaowu_q.png",
-		"ruan_xiaowu_w": "res://assets/ui/ruan_xiaowu_skills_20261016/ruan_xiaowu_w.png",
-		"ruan_xiaowu_e": "res://assets/ui/ruan_xiaowu_skills_20261016/ruan_xiaowu_e.png",
-		"ruan_xiaowu_r": "res://assets/ui/ruan_xiaowu_skills_20261016/ruan_xiaowu_r.png",
-		"liu_tang_w": "res://assets/ui/liu_tang_pudao_skills_20261016/liu_tang_w.png",
-		"liu_tang_e": "res://assets/ui/liu_tang_pudao_skills_20261016/liu_tang_e.png",
-		"liu_tang_r": "res://assets/ui/liu_tang_pudao_skills_20261016/liu_tang_r.png",
-		"ruan_xiaoqi_q": "res://assets/ui/ruan_xiaoqi_spear_skills_20261016/ruan_xiaoqi_q.png",
-		"ruan_xiaoqi_w": "res://assets/ui/ruan_xiaoqi_spear_skills_20261016/ruan_xiaoqi_w.png",
-		"ruan_xiaoqi_e": "res://assets/ui/ruan_xiaoqi_spear_skills_20261016/ruan_xiaoqi_e.png",
-		"ruan_xiaoqi_r": "res://assets/ui/ruan_xiaoqi_spear_skills_20261016/ruan_xiaoqi_r.png",
-		"shi_en_q": "res://assets/ui/shi_en_staff_skills_20261015/shi_en_q.png",
-		"shi_en_w": "res://assets/ui/shi_en_staff_skills_20261015/shi_en_w.png",
-		"shi_en_e": "res://assets/ui/shi_en_staff_skills_20261015/shi_en_e.png",
-		"shi_en_r": "res://assets/ui/shi_en_staff_skills_20261015/shi_en_r.png",
-		"song_rally": "res://assets/ui/skills_v2/song_rally_v2.png",
-		"song_banner": "res://assets/ui/skills_v2/song_banner_v2.png",
-		"song_fire": "res://assets/ui/skills_v2/song_fire_v2.png",
-		"song_lead": "res://assets/ui/skills_v2/song_lead_v2.png",
-		"lin_thrust": "res://assets/ui/skills_v2/lin_thrust_v2.png",
-		"lin_sweep": "res://assets/ui/skills_v2/lin_sweep_v2.png",
-		"lin_predator": "res://assets/ui/skills_v2/lin_predator_v2.png",
-		"lin_chrono": "res://assets/ui/skills_v2/lin_chrono_v2.png",
-		"hua_blink": "res://assets/ui/skills_v2/hua_blink_v2.png",
-		"hua_rain": "res://assets/ui/skills_v2/hua_rain_v2.png",
-		"hua_pin": "res://assets/ui/skills_v2/hua_pin_v2.png",
-		"hua_blade": "res://assets/ui/skills_v2/hua_blade_v2.png",
-		"li_axes": "res://assets/ui/skills_v2/li_axes_v2.png",
-		"li_charge": "res://assets/ui/skills_v2/li_charge_v2.png",
-		"li_brawn": "res://assets/ui/skills_v2/li_brawn_v2.png",
-		"li_fury": "res://assets/ui/skills_v2/li_fury_v2.png",
-		"gong_blackrain": "res://assets/ui/skills_v2/gong_blackrain_v2.png",
-		"gong_icewall": "res://assets/ui/skills_v2/gong_icewall_v2.png",
-		"gong_slow": "res://assets/ui/skills_v2/gong_slow_v2.png",
-		"gong_dragon": "res://assets/ui/skills_v2/gong_dragon_v2.png",
-		"wu_tigers": "res://assets/ui/skills_v2/wu_tigers_v2.png",
-		"wu_wine": "res://assets/ui/skills_v2/wu_wine_v2.png",
-		"wu_blades": "res://assets/ui/skills_v2/wu_blades_v2.png",
-		"wu_drunkgod": "res://assets/ui/skills_v2/wu_drunkgod_v2.png",
-	}
 	var _art_icon_id := ""
 	var _art_icon_tex: Texture2D = null
 
@@ -4009,11 +3965,11 @@ class HeroSlotButton extends Control:
 			return _art_icon_tex
 		_art_icon_id = ability_id
 		_art_icon_tex = null
-		var path := String(ART_ICON_PATHS.get(ability_id, ""))
+		var path := Art.ability_icon_path(ability_id)
 		# 原生大图在41/52像素按钮内使用mipmap，避免细纹闪烁；不改其他技能采样。
 		texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS if (path.begins_with("res://assets/ui/ruan_xiaowu_skills_20261016/") or path.begins_with("res://assets/ui/liu_tang_pudao_skills_20261016/") or path.begins_with("res://assets/ui/shi_en_staff_skills_20261015/") or path.begins_with("res://assets/ui/ruan_xiaoqi_spear_skills_20261016/")) else CanvasItem.TEXTURE_FILTER_PARENT_NODE
 		if path != "":
-			_art_icon_tex = load(path) as Texture2D
+			_art_icon_tex = Art.ability_icon_texture(path)
 		return _art_icon_tex
 
 	## 在徽记方块内画矢量技能图标。token 见 ICON_TOKENS；ink=亮描线，ac=技能色描线（未学则压暗）。

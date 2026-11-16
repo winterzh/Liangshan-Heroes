@@ -51,7 +51,7 @@ func _launch(prefetch_gao := false) -> void:
 		return
 	_show_battle_loading()
 	if prefetch_gao and OS.get_name() == "Windows":
-		Art.prefetch_gao_opening_animations()
+		Art.prefetch_gao_opening_art()
 	# Continue on the main thread. The worker returns only verified file data.
 	_finish_battle_launch.call_deferred()
 
