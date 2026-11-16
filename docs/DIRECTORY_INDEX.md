@@ -1,5 +1,8 @@
 # 项目目录索引（2026-10-30）
 
+[梁山门楼与地表材质](../qa/battle_entry_timing_20261116/gao_scenery_gate_and_coast.json)保存门楼材质调用、两轴门架和地表加载分段。
+
+
 [梁山树木贴图校验](../qa/battle_entry_timing_20261116/gao_scenery_tree_calibration.json)含两次高俅进场阶段耗时、校准调用次数和同一布景摘要。
 
 

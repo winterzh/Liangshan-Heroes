@@ -58,25 +58,9 @@ func setup(map: GameMap) -> void:
 	lintel.z_index = 1 + int(map.project(lintel.position).y)
 	add_child(lintel)
 	_gate_parts.append(lintel)
-	var main_gate_texture := EnvironmentArt.object("level5","main_gate")
-	var main_gate_metrics := EnvironmentArt.calibrated_visual_metrics("object","level5","main_gate")
-	var gate_rect = EnvironmentArt.calibrated_text_rect("object","level5","main_gate",
-		"default","level5_main_gate_plaque")
-	# 旧的整张寨门位图只有一个正面朝下视角。驻守战有两条互相垂直的
-	# 墙轴，继续套用它会让门楼和墙体脱节；RTS 布局统一使用可按轴翻向
-	# 的原生门架。第五关剧情场景仍保留已验收位图，不被这次修改影响。
-	if not _rts_layout and main_gate_texture!=null and not main_gate_metrics.is_empty():
-		for part in _gate_parts: part.replacement_texture=main_gate_texture
-		lintel.replacement_owner=true
-		# The accepted gate plaque remains blank: the manifest has no approved
-		# original-text source for it. A later source-bound rect may enable text.
-		if gate_rect is Array and gate_rect.size()==4:
-			lintel.replacement_text_rect=gate_rect
-		lintel.replacement_size=320.0
-		lintel.replacement_foot=float(main_gate_metrics.get("foot",0.82))
-		lintel.position=map.cell_to_world(_gate_cell)
-		lintel.z_index=1+int(map.project(lintel.position).y)
-		lintel.set_meta("campaign_environment_route","main_gate")
+	# RTS 布局沿两条互相垂直的墙轴使用原生门架。
+	if not _rts_layout:
+		_apply_main_gate_art(lintel)
 	for cell in [_east_gate_cell+Vector2i(0,-2),_east_gate_cell+Vector2i(0,2),_east_gate_cell+Vector2i(0,2)]:
 		var part := GateVisual.new()
 		part.position = map.cell_to_world(cell)
@@ -100,6 +84,26 @@ func setup(map: GameMap) -> void:
 	_add_dock_replacement(_dock_straight_texture,dock_cell+Vector2i(0,-2),142.0,"dock_straight")
 	_add_dock_replacement(_dock_head_texture,dock_cell+Vector2i(0,1),154.0,"dock_head_t")
 	queue_redraw()
+
+
+func _apply_main_gate_art(lintel) -> void:
+	var main_gate_texture := EnvironmentArt.object("level5","main_gate")
+	var main_gate_metrics := EnvironmentArt.calibrated_visual_metrics("object","level5","main_gate")
+	if main_gate_texture == null or main_gate_metrics.is_empty():
+		return
+	var gate_rect = EnvironmentArt.calibrated_text_rect("object","level5","main_gate",
+		"default","level5_main_gate_plaque")
+	for part in _gate_parts: part.replacement_texture=main_gate_texture
+	lintel.replacement_owner=true
+	# The accepted gate plaque remains blank: the manifest has no approved
+	# original-text source for it. A later source-bound rect may enable text.
+	if gate_rect is Array and gate_rect.size()==4:
+		lintel.replacement_text_rect=gate_rect
+	lintel.replacement_size=320.0
+	lintel.replacement_foot=float(main_gate_metrics.get("foot",0.82))
+	lintel.position=_map.cell_to_world(_gate_cell)
+	lintel.z_index=1+int(_map.project(lintel.position).y)
+	lintel.set_meta("campaign_environment_route","main_gate")
 
 
 func gate_orientation_summary() -> Dictionary:
