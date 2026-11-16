@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[受损后返港实跑](../qa/campaign_naval_recovery_20261116/README.md#火攻受阻后返港收兵) 含实跑指令、事件、结算与复跑脚本。
+
 [牢院交接验收](../qa/campaign_coordination_20261116/README.md#牢院放行与开枷交接) 保存四语任务、关卡状态断言和复跑探针。
 
 [押俘收兵验收](../qa/campaign_flagship_escort_20261116/README.md#押俘进度与收兵结算) 含四语任务走向、两种收尾的定向断言与复跑探针。

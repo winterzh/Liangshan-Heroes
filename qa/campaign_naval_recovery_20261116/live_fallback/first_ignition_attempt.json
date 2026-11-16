@@ -1,0 +1,105 @@
+{
+  "checks": 14,
+  "failures": [
+    "fire opportunity lost during actual battle; abort failed story route",
+    "story wins through actual construction, production and combat",
+    "story defeats all core land/water forces and disables flagship",
+    "live story route performs fire attack and extracts both escort ships",
+    "live story route carries prisoner by water then escorts him to hall",
+    "live story route completes all four story goals",
+    "normal player orders pay for preparation and actually ignite a fire attack",
+    "original rescue ship receives ordinary return orders and actually travels toward the pier",
+    "normal dock action returns the same Liu Tang without respawning",
+    "disembark before the escort goal forfeits only the fire-attack route",
+    "the original camp survives and settles ordinary withdrawal after returning",
+    "paid ordinary fleet remains available through fallback"
+  ],
+  "fallback": {},
+  "metrics": {
+    "buildings_started": 5,
+    "camp_hp": 1500.0,
+    "enemy_paid_produced": [
+      10,
+      4
+    ],
+    "enemy_spent_gold": 607,
+    "enemy_spent_wood": 358,
+    "events": [
+      "action:gao_rts:gao_lure_side",
+      "action:gao_rts:gao_wind",
+      "gongsun_wind",
+      "fleet_in_ambush",
+      "action:gao_rts:gao_prepare",
+      "liu_tang_fire_leader",
+      "fireboat_prepared",
+      "gao_land_cleared",
+      "gao_land_post_destroyed",
+      "action:gao_rts:gao_fire_1",
+      "liu_tang_lost",
+      "gao_escaped"
+    ],
+    "game_seconds": 444.0,
+    "orders": 769,
+    "result": {
+      "contract_version": 3,
+      "core_cleared": false,
+      "core_goal": "守住忠义堂和宋江，击退三批水陆主力，打停高俅座船。可直接收兵通关；生擒并押回堂前是可选演义目标。",
+      "done_ids": [],
+      "goals": [
+        {
+          "id": "gao_lure",
+          "label": "阮小七引活官船进入港汊伏区",
+          "note": "",
+          "reason": "",
+          "state": "pending"
+        },
+        {
+          "id": "gao_fire",
+          "label": "公孙胜祭风、刘唐登船举火，护两艘接应船撤离",
+          "note": "",
+          "reason": "火船损失，可建船坞补普通战船继续进攻。",
+          "state": "missed"
+        },
+        {
+          "id": "gao_land",
+          "label": "击退岸军并拔除山前补给营",
+          "note": "",
+          "reason": "",
+          "state": "pending"
+        },
+        {
+          "id": "gao_capture",
+          "label": "封港凿船、水上接俘、返航后实际押至忠义堂",
+          "note": "",
+          "reason": "本局已偏离“封港凿船、水上接俘、返航后实际押至忠义堂”的原著条件",
+          "state": "missed"
+        }
+      ],
+      "missed_ids": [
+        "gao_fire",
+        "gao_capture"
+      ],
+      "pending_ids": [
+        "gao_lure",
+        "gao_land"
+      ],
+      "story_complete": false,
+      "story_done": 0,
+      "story_total": 4
+    },
+    "skill_orders": 19,
+    "story_phase": "fire",
+    "units_queued": 53,
+    "units_queued_by_key": {
+      "liang_dao": 12,
+      "liang_gong": 12,
+      "liang_qiang": 13,
+      "liangshan_warship": 13,
+      "lou_luo": 3
+    }
+  },
+  "passed": false,
+  "scope": "live combat and player commands with voluntary withdrawal before the fire escort objective",
+  "time_scale": 4.0,
+  "probe_sha256": "d543d7c610a98daf6b2511c0dea16f6825c6b643c44cc073ba81d8c9014b1f23"
+}
