@@ -334,9 +334,24 @@ var _content_tex := {}
 # 仅本场战斗有效；Battle 每局开场先清空，再由 scenario.apply_overrides 填入。
 var _runtime_alias := {}
 var environment_buildings: Dictionary = {}
+var _unit_lookup_frame := -1
+var _frame_unit_textures: Dictionary = {}
+var _frame_unit_animations: Dictionary = {}
+var _frame_directional_sources: Dictionary = {}
 
 func set_runtime_alias(d: Dictionary) -> void:
 	_runtime_alias = d if d != null else {}
+	_unit_lookup_frame = -1
+
+
+func _refresh_unit_lookups() -> void:
+	var frame := Engine.get_process_frames()
+	if _unit_lookup_frame == frame:
+		return
+	_unit_lookup_frame = frame
+	_frame_unit_textures.clear()
+	_frame_unit_animations.clear()
+	_frame_directional_sources.clear()
 
 func _ra(key: String) -> String:
 	return String(_runtime_alias.get(key, key))
@@ -492,6 +507,17 @@ func _canonical_character_variant(key: String, variant: String) -> String:
 
 
 func unit_texture(key: String, variant := "", direction := "") -> Texture2D:
+	_refresh_unit_lookups()
+	var lookup := [key, variant, direction]
+	var texture: Texture2D = _frame_unit_textures.get(lookup)
+	if texture == null:
+		texture = _resolve_unit_texture(key, variant, direction)
+		if texture != null:
+			_frame_unit_textures[lookup] = texture
+	return texture
+
+
+func _resolve_unit_texture(key: String, variant: String, direction: String) -> Texture2D:
 	if variant == GONGSUN_LATER_VARIANT:
 		var later := _gongsun_later_frames(key, "idle")
 		return null if later.is_empty() else later[0]
@@ -774,6 +800,17 @@ func campaign_tribute_cart_texture(direction: String) -> Texture2D:
 
 
 func unit_anim_frames(key: String, state: String, direction := "", variant := "") -> Array:
+	_refresh_unit_lookups()
+	var lookup := [key, state, direction, variant]
+	if _frame_unit_animations.has(lookup):
+		return _frame_unit_animations[lookup]
+	var frames := _resolve_unit_anim_frames(key, state, direction, variant)
+	if not frames.is_empty():
+		_frame_unit_animations[lookup] = frames
+	return frames
+
+
+func _resolve_unit_anim_frames(key: String, state: String, direction: String, variant: String) -> Array:
 	if variant == GONGSUN_LATER_VARIANT:
 		return [] if not direction.is_empty() and direction not in CampaignArt.DIRECTIONS else _gongsun_later_frames(key, state)
 	if key == "jiang_menshen" and variant.is_empty() and direction.is_empty(): direction = "se"
@@ -1115,6 +1152,17 @@ func _slice_anim_strip(tex: Texture2D) -> Array:
 ## 与 unit_anim_frames 使用同一选择顺序，只回答最终帧是否来自真实方向文件。
 ## 绘制层据此决定是否允许旧式水平镜像。
 func unit_anim_uses_directional_source(key: String, state: String, direction: String, variant := "") -> bool:
+	_refresh_unit_lookups()
+	var lookup := [key, state, direction, variant]
+	if _frame_directional_sources.has(lookup):
+		return true
+	if not _resolve_directional_source(key, state, direction, variant):
+		return false
+	_frame_directional_sources[lookup] = true
+	return true
+
+
+func _resolve_directional_source(key: String, state: String, direction: String, variant: String) -> bool:
 	if variant == GONGSUN_LATER_VARIANT: return false
 	variant = _canonical_character_variant(key, variant)
 	if direction not in CampaignArt.DIRECTIONS:

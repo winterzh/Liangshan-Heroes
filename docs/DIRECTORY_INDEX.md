@@ -1,5 +1,8 @@
 # 项目目录索引（2026-10-30）
 
+[同帧单位资源查询](../qa/campaign_sustained_performance_20261116/frame_asset_lookup.json)含 24 组配对计时、画面资源合同和短测夹具的边界。
+
+
 [高俅稳定分支十分钟](../qa/campaign_sustained_performance_20261116/stable_5bf2ba1e.json)含 `5bf2ba1e` 的逐分钟帧间隔、性能门槛与同探针对照。
 
 
