@@ -367,8 +367,11 @@ func on_mission_action(b,key: String,actor) -> void:
 			b.mission.mark(key,Localize.text(actor.display_name)+Localize.text("已活着登船。"))
 			_update_escort_objective(b)
 		"rally_dock":
+			if rally: return
 			rally=true
 			b.mission.mark("rally_dock","码头已收队。玩家带回的具名好汉会在安全登船点上船，其余人仍需亲自指挥撤回。")
+			b.mission.add_level_button("jiang_find_rearguard","查看 · 岸上好汉","移镜头到离码头最远的在世好汉。")
+			_update_dock_guidance(b)
 func _produce(b,delta: float) -> void:
 	if not alarm or not active(post) or enemy_produced>=8:
 		return
@@ -473,13 +476,42 @@ func _can_continue_rescue(b) -> bool:
 			var d: Dictionary=b._defs[key]
 			if b.can_afford(int(d.get("cost_gold",0)),int(d.get("cost_wood",0))) and b.used_pop()+int(d.get("pop",0))<=b.pop_cap: return true
 	return false
+func _dock_roster(b) -> Dictionary:
+	var dock: Vector2 = b.map.cell_to_world(DOCK)
+	var aboard := 0
+	var lost := 0
+	var ashore: Array[Unit] = []
+	var farthest: Unit
+	var farthest_distance := -1.0
+	for key in NAMED:
+		var ally = named_units.get(key)
+		if not living(ally):
+			lost += 1
+		elif ally.story_outcome=="embarked":
+			aboard += 1
+		elif active(ally):
+			ashore.append(ally)
+			var distance: float = ally.position.distance_squared_to(dock)
+			if distance > farthest_distance:
+				farthest = ally
+				farthest_distance = distance
+	return {"aboard": aboard, "lost": lost, "ashore": ashore, "farthest": farthest}
+
+func _update_dock_guidance(b) -> void:
+	var roster := _dock_roster(b)
+	var names := PackedStringArray()
+	for ally in roster.ashore:
+		names.append(Localize.text(ally.display_name))
+	if names.is_empty():
+		b.mission.set_guidance(Localize.format_text("码头收队 · 好汉已登船%d/6，阵亡%d。",[roster.aboard,roster.lost]))
+	else:
+		b.mission.set_guidance(Localize.format_text("码头收队 · 好汉已登船%d/6，阵亡%d。仍在岸上：%s。",[roster.aboard,roster.lost,", ".join(names)]))
+
 func _finish(b) -> void:
 	if victory or b.phase!=b.Phase.FIGHT: return
 	if not living(song_freed) or not living(dai_freed) or song_freed.story_outcome!="embarked" or dai_freed.story_outcome!="embarked": return
 	victory=true
-	if NAMED.all(func(key):
-		var u=named_units.get(key)
-		return living(u) and u.story_outcome=="embarked"):
+	if _dock_roster(b).aboard==NAMED.size():
 		b.mission.mark("jiangzhou_named_survive","六名具名好汉均已由玩家带回码头，活着脱险。")
 	b.mission.mark("all_embarked","宋江、戴宗均已活着登船，救援队开船离开江州。")
 	b.win("宋江、戴宗活着登船，众好汉护着二人离开江州，往梁山而去。")
@@ -527,6 +559,7 @@ func process(b,delta: float) -> void:
 			var u=named_units.get(key)
 			if _near(b,u,DOCK,120) and not _enemy_near(b,u.position,150):
 				u.resolve_story("embarked")
+		_update_dock_guidance(b)
 	_update_escort_objective(b)
 	if living(song_freed) and living(dai_freed) and song_freed.story_outcome=="embarked" and dai_freed.story_outcome=="embarked" and not is_instance_valid(depart_button):
 		b.mission.set_title("二人已脱险 · 开船或收队")
@@ -534,6 +567,14 @@ func process(b,delta: float) -> void:
 		depart_button=b.mission.add_level_button("jiang_depart","开船通关 · 宋江戴宗已登船")
 func activate_mission_button(b, button_id: String) -> void:
 	if button_id == "jiang_depart": _finish(b)
+	if button_id != "jiang_find_rearguard" or not rally: return
+	var ally: Unit = _dock_roster(b).farthest
+	if not active(ally):
+		b.center_camera_cell(DOCK)
+		b.mission.set_feedback("幸存好汉都已登船。")
+		return
+	b.center_camera_cell(b.map.world_to_cell(ally.position))
+	b.mission.set_feedback(Localize.format_text("已定位岸上的%s。可选中好汉后下令撤回码头。",Localize.text(ally.display_name)))
 func on_unit_died(b,u) -> void:
 	if u==song_bound or u==song_freed or u==dai_bound or u==dai_freed:
 		b.lose(Localize.text(u.display_name)+Localize.text("遇害，营救失败。请用军队清开退路并保护获救者。")); return

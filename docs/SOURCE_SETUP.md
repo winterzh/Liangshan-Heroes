@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+江州码头的名单由六名原好汉状态派生，定位复用关卡固定按钮协议。四语分片为 `jiangzhou_dock_roster.json`。[江州码头撤离反馈](../qa/campaign_pursuit_20261116/README.md#码头收队与岸上好汉)
+
 Windows 导出包在主菜单首帧后开始后台读取并计算程序哈希。出征时接管同一个任务，再核对文件长度、修改时间、实际装载来源、原生库和可选内容。程序文件状态有变时重新扫描。继续上次战斗时释放预读，由既有恢复流程校验。[Windows 主菜单预读](../qa/battle_entry_timing_20261116/README.md#windows-主菜单预读)
 
 举火后载船沉没复用既有撤离与失散事件。三条失船/重新集结四语词条存于 `gao_fire_approach.json`。[举火后接应船损失](../qa/campaign_naval_recovery_20261116/README.md#举火后接应船损失)
