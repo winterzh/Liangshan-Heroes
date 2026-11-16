@@ -1060,6 +1060,26 @@ func campaign_objective_position() -> Vector2:
 	return Vector2(left, 78.0 + _logical_safe_insets().y)
 
 
+func command_panel_top() -> float:
+	# Wrapped unit information can grow beyond PANEL_H. Reserve the actual
+	# container and its pending minimum, including before the next native sort.
+	var vp := get_viewport().get_visible_rect().size
+	var top := vp.y - RTSCamera.PANEL_H - _logical_safe_insets().w
+	if is_instance_valid(_bottom_panel):
+		top = minf(top, vp.y - _bottom_panel.get_combined_minimum_size().y)
+		if _bottom_panel.size.y > 0: top = minf(top, _bottom_panel.get_global_rect().position.y)
+	return maxf(0.0, top)
+
+
+func _campaign_right_width(right_edge: float, preferred: float) -> float:
+	var left := 12.0 + _logical_safe_insets().x
+	if battle != null and battle.mission != null:
+		var mission = battle.mission
+		if mission._expanded and is_instance_valid(mission._panel) and mission._panel.is_visible_in_tree():
+			left = maxf(left, mission._panel.get_global_rect().end.x + 12.0)
+	return minf(preferred, maxf(0.0, right_edge - left))
+
+
 func _format_combat_stat(value: float) -> String:
 	var safe := maxf(0.0, value)
 	if safe >= 1000000.0:
@@ -1395,7 +1415,13 @@ func _build_bottom_panel() -> void:
 	_queue_bar.add_theme_constant_override("separation", 2)
 	_queue_bar.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	_queue_bar.visible = false
-	hbox.add_child(_queue_bar)
+	var queue_scroll := ScrollContainer.new()
+	queue_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	queue_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	queue_scroll.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	queue_scroll.visible = false
+	hbox.add_child(queue_scroll)
+	queue_scroll.add_child(_queue_bar)
 
 	# 多选单位图标网格（经典RTS式）：每个图标含头像/精灵 + 血条，点击单选
 	var grid_wrap := MarginContainer.new()
@@ -1806,7 +1832,7 @@ func _update_control_help_visibility() -> void:
 		_control_help_toggle.set_pressed_no_signal(show_help)
 	if _control_help_panel != null:
 		var has_toast := msg_box != null and msg_box.visible and msg_box.get_child_count() > 0
-		_control_help_panel.visible = not touch_ui and show_help and not has_toast
+		_control_help_panel.visible = not touch_ui and show_help and not has_toast and not _info_expanded
 		_control_help_panel.modulate.a = 0.0 if has_toast else 1.0
 	# 操作提示是右下方最靠底的一层；开关变化时同步让消息/信息抽屉向上避让。
 	if _info_panel != null:
@@ -1820,7 +1846,7 @@ func _layout_control_help_panel() -> void:
 		return
 	var safe := _logical_safe_insets()
 	var right_gap := 8.0 + safe.z
-	var bottom_gap := RTSCamera.PANEL_H + (96.0 if touch_ui else 8.0) + safe.w
+	var bottom_gap := get_viewport().get_visible_rect().size.y - command_panel_top() + (96.0 if touch_ui else 8.0)
 	var width := 420.0
 	if touch_ui:
 		var float_right := _touch_float_right()
@@ -1828,6 +1854,7 @@ func _layout_control_help_panel() -> void:
 			float_right = minf(float_right, _inventory_popup.position.x - SKILL_RAIL_AVOID_GAP)
 		right_gap = get_viewport().get_visible_rect().size.x - float_right
 		width = minf(width, maxf(220.0, float_right - safe.x - 12.0))
+	width = _campaign_right_width(get_viewport().get_visible_rect().size.x-right_gap,width)
 	# 固定贴右、贴近底栏；消息和展开信息由 _layout_info_panel() 向上避让它。
 	var height := maxf(118.0, _control_help_panel.get_combined_minimum_size().y)
 	_control_help_panel.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
@@ -1844,7 +1871,7 @@ func _layout_info_panel() -> void:
 	var safe := _logical_safe_insets()
 	var right_gap := 12.0 + safe.z
 	# 展开面板向上弹出；触屏再多让出一排拇指操作键。
-	var bottom_gap := RTSCamera.PANEL_H + (96.0 if touch_ui else 8.0) + safe.w
+	var bottom_gap := get_viewport().get_visible_rect().size.y - command_panel_top() + (96.0 if touch_ui else 8.0)
 	var width := 430.0 if touch_ui else 420.0
 	var height := 276.0
 	var vp := get_viewport().get_visible_rect().size
@@ -1856,16 +1883,42 @@ func _layout_info_panel() -> void:
 			float_right = minf(float_right, _inventory_popup.position.x - SKILL_RAIL_AVOID_GAP)
 		right_gap = vp.x - float_right
 		width = minf(width, maxf(220.0, float_right - safe.x - 12.0))
+	width = _campaign_right_width(vp.x-right_gap,width)
 	if _control_help_panel != null and _control_help_panel.visible:
 		help_lift = maxf(118.0, _control_help_panel.get_combined_minimum_size().y) + 8.0
+	var top := 78.0 + safe.y
+	if is_instance_valid(top_label): top = maxf(top,top_label.get_global_rect().end.y+8.0)
+	var available := maxf(0.0,vp.y-bottom_gap-help_lift-top)
+	height = minf(height,available)
+	# The log is scrollable; fixed 390x184 minima used to force it over other UI.
+	_info_log.custom_minimum_size.x = 0
+	var log_root := _info_scroll.get_parent() as VBoxContainer
+	var chrome := _info_panel.get_theme_stylebox("panel").get_minimum_size().y + float(log_root.get_theme_constant("separation"))*2.0
+	chrome += log_root.get_child(0).get_combined_minimum_size().y + _control_help_toggle.get_combined_minimum_size().y
+	_info_scroll.custom_minimum_size = Vector2(0,maxf(0.0,height-chrome))
 	var panel_rect := Rect2(Vector2(vp.x - right_gap - width, vp.y - bottom_gap - help_lift - height),
 		Vector2(width, height))
 	# 绝对矩形比 BottomRight 锚点更能抵抗 Android 首帧之后的字体/窗口二次排版。
 	_info_panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	_info_panel.position = panel_rect.position
 	_info_panel.size = panel_rect.size
-	# 折叠态即时消息：靠右，操作提示开启时位于其上方，最多三条向上滚动。
-	var toast_height := maxf(180.0, msg_box.get_combined_minimum_size().y)
+	# Keep full strings/history intact. Fit newest previews in the remaining
+	# battlefield area; overflowing text uses an ellipsis, never a raw crop.
+	var rows := msg_box.get_children()
+	var line_height := 20.0
+	if not rows.is_empty():
+		var first_label := rows[0].get_node("Text") as Label
+		line_height = first_label.get_theme_font("font").get_height(first_label.get_theme_font_size("font_size")) + first_label.get_theme_constant("line_spacing")
+	var gap := float(msg_box.get_theme_constant("separation"))
+	var visible_count := mini(rows.size(), maxi(0,int((available+gap)/(line_height+12.0+gap))))
+	if width < 120.0: visible_count = 0
+	var lines := clampi(int(((available-gap*maxi(0,visible_count-1))/maxi(1,visible_count)-12.0)/line_height),1,3)
+	for i in range(rows.size()):
+		rows[i].visible = i >= rows.size()-visible_count
+		var label := rows[i].get_node("Text") as Label
+		label.max_lines_visible = lines
+		label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	var toast_height := minf(available,maxf(0.0,msg_box.get_combined_minimum_size().y))
 	var toast_rect := Rect2(Vector2(vp.x - right_gap - width, vp.y - bottom_gap - help_lift - toast_height),
 		Vector2(width, toast_height))
 	msg_box.set_anchors_preset(Control.PRESET_TOP_LEFT)
@@ -2009,7 +2062,7 @@ func _sync_help_dim_for_toasts() -> void:
 	if _control_help_panel == null:
 		return
 	var has_toast := msg_box != null and msg_box.visible and msg_box.get_child_count() > 0
-	_control_help_panel.visible = (not touch_ui) and _show_control_help_enabled() and not has_toast
+	_control_help_panel.visible = (not touch_ui) and _show_control_help_enabled() and not has_toast and not _info_expanded
 	_control_help_panel.modulate.a = 0.0 if has_toast else 1.0
 
 
@@ -2119,14 +2172,16 @@ func update_selection_panel(sel: Array) -> void:
 	_apply_bottom_collapse()
 
 
-## Keep a desktop hero's skills and right-hand controls inside a narrow window.
+## Keep desktop commands, production queues and right-hand controls inside a narrow window.
 ## Existing buttons, their order, learn hit areas and inventory actions remain.
 func _layout_desktop_hero() -> void:
 	if _bottom_row == null or _command_scroll == null or _selection_scroll == null:
 		return
 	var actor = battle.active_unit() if battle != null else null
-	var dense: bool = not touch_ui and not _bottom_collapsed and get_viewport().get_visible_rect().size.x < 1100.0 \
-		and actor != null and actor.is_hero
+	var narrow_limit := 1100.0 if actor != null and actor.is_hero else 1400.0
+	if _queue_bar.visible: narrow_limit = 1800.0
+	var dense: bool = not touch_ui and not _bottom_collapsed and get_viewport().get_visible_rect().size.x < narrow_limit \
+		and actor != null
 	_desktop_hero_dense = dense
 	_bottom_row.add_theme_constant_override("separation", 8 if dense else 16)
 	if not _bottom_collapsed:
@@ -2145,9 +2200,10 @@ func _layout_desktop_hero() -> void:
 	_info_name.add_theme_font_size_override("font_size", 18 if dense else 22)
 	_info_hp.add_theme_font_size_override("font_size", 13 if dense else 15)
 	_info_stats.add_theme_font_size_override("font_size", 12 if dense else 13)
-	_command_scroll.custom_minimum_size = Vector2(258, 138) if dense and actor.slot_count() > 0 else Vector2.ZERO
+	var has_commands := _skill_bar.get_children().any(func(c): return not c.is_queued_for_deletion())
+	_command_scroll.custom_minimum_size = Vector2(258 if actor != null and actor.is_hero else 212, 138) if dense and has_commands else Vector2.ZERO
 	_command_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO if dense else ScrollContainer.SCROLL_MODE_DISABLED
-	_selection_scroll.custom_minimum_size = Vector2(112, 132) if dense else Vector2.ZERO
+	_selection_scroll.custom_minimum_size = Vector2(56 if actor != null and actor.is_building else 112, 132) if dense else Vector2.ZERO
 	_selection_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO if dense else ScrollContainer.SCROLL_MODE_DISABLED
 	_sel_grid.columns = mini(2, maxi(1, _sel_grid.get_child_count())) if dense else clampi(_sel_grid.get_child_count(), 1, 12)
 	for button in _skill_bar.get_children():
@@ -2158,8 +2214,20 @@ func _layout_desktop_hero() -> void:
 			if not button.has_meta("desktop_wide_compact"):
 				button.set_meta("desktop_wide_compact", button.compact)
 			button.compact = dense or bool(button.get_meta("desktop_wide_compact"))
-	if actor != null and actor.is_hero:
-		_skill_bar.columns = 3 if dense else 99
+	if dense:
+		_skill_bar.columns = 3
+	elif actor != null and actor.is_building and (actor.setup_def.has("produces") or actor.setup_def.has("researches")):
+		var count := _skill_bar.get_children().filter(func(c): return not c.is_queued_for_deletion()).size()
+		_skill_bar.columns = maxi(1, int(ceil(count / 2.0)))
+	else:
+		_skill_bar.columns = 99
+	var queue_scroll := _queue_bar.get_parent() as ScrollContainer
+	queue_scroll.visible = _queue_bar.visible and not _bottom_collapsed
+	queue_scroll.custom_minimum_size = Vector2(144, 138) if dense and queue_scroll.visible else Vector2.ZERO
+	queue_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO if dense else ScrollContainer.SCROLL_MODE_DISABLED
+	for child in _queue_bar.get_children():
+		if child is GridContainer and not child.is_queued_for_deletion():
+			child.columns = 2 if dense else 8
 
 
 ## 无选中时把底部指挥栏收成矮条（小地图+提示），选中后恢复完整高度。

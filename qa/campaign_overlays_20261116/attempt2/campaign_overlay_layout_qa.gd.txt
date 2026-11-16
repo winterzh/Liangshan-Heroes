@@ -1,0 +1,98 @@
+extends "res://tools/zhujiazhuang_rts_test.gd"
+## Real renderer, frozen battle. Layout and complete message retention only.
+var observations: Array=[]
+const MESSAGES := [
+	"柴进、乐和已在牢内。可先让鲁智深或武松带兵靠近南门，再由仍有乔装的时迁举火争取90秒机会；也可提前举火或直接强攻。",
+	"火号调动已结束，幸存机动守军回防，未摧毁的城内兵源恢复。可重整后清敌夺门，或护器械强攻；已有经营与内应进度保留。",
+	"二人已解枷，南门尚未打开。外军先打开通路，伤员留在安全处；门开后护送二人到城外接应地。"]
+func _freeze(b) -> void:
+	b.set_process(false)
+	b.set_physics_process(false)
+	b.hud.set_process(false)
+	b.camera.set_process(false)
+	for u in b.units: u.set_physics_process(false)
+func _messages(b) -> void:
+	b.hud._set_info_expanded(false)
+	b.hud._clear_info_toasts()
+	for source in MESSAGES: b.msg(source)
+	for row in b.hud.msg_box.get_children():
+		row.get_meta("toast_tween").pause()
+		row.modulate.a=1
+func _settle(b) -> void:
+	for i in range(10):
+		if b.mission!=null: b.mission.tick(0.0)
+		b.hud._layout_top_status()
+		b.hud._layout_info_panel()
+		await process_frame
+	await RenderingServer.frame_post_draw
+func _capture_layout(b,name: String,folder: String,has_mission := true) -> void:
+	await _settle(b)
+	var h=b.hud
+	var bottom: Rect2=h._bottom_panel.get_global_rect()
+	var vp:=Rect2(Vector2.ZERO,Vector2(root.content_scale_size))
+	var mission_rect:=Rect2()
+	if has_mission:
+		mission_rect=b.mission._panel.get_global_rect()
+		check(mission_rect.end.y<=bottom.position.y-7 and vp.encloses(mission_rect),name+" objectives stay above actual command panel")
+	var message_rect: Rect2=h._info_panel.get_global_rect() if h._info_expanded else h.msg_box.get_global_rect()
+	check(message_rect.end.y<=bottom.position.y-7 and vp.encloses(message_rect),name+" messages stay inside battlefield and above commands")
+	if has_mission: check(not message_rect.intersects(mission_rect),name+" messages and objectives do not overlap")
+	if h._info_expanded:
+		check(MESSAGES.all(func(s): return root.get_node("Localize").text(s) in h._info_log.text),name+" full translated messages remain readable in scroll log")
+	else:
+		check(h.msg_box.get_child_count()==3 and h.msg_box.get_children().all(func(row): return row.get_node("Text").text==root.get_node("Localize").text(String(row.get_meta("info_text")))),name+" previews retain complete text and all three records")
+		check(h.msg_box.get_children().filter(func(row): return row.visible).all(func(row): return h.msg_box.get_global_rect().encloses(row.get_global_rect()) and row.get_node("Text").max_lines_visible<=3),name+" visible preview rows fit their bounded container")
+	observations.append({"name":name,"viewport":str(vp),"bottom":str(bottom),"mission":str(mission_rect),"messages":str(message_rect),"preview_rows":h.msg_box.get_children().map(func(row): return {"visible":row.visible,"rect":str(row.get_global_rect()),"lines":row.get_node("Text").max_lines_visible,"text":row.get_node("Text").text})})
+	check(root.get_texture().get_image().save_png(folder+"/"+name+".png")==OK,name+" captured actual renderer")
+func _run() -> void:
+	OS.set_environment("CAMPAIGN_QA","1")
+	AudioServer.set_bus_mute(0,true)
+	root.get_node("Settings").edge_scroll=false
+	var folder:="res://.godot/campaign-overlays"
+	DirAccess.make_dir_recursive_absolute(folder)
+	var b=await _start("",7)
+	_freeze(b)
+	var l=b.level
+	for row in [["zh_CN",Vector2i(1280,720)],["en",Vector2i(960,540)],["ja",Vector2i(960,540)],["zh_TW",Vector2i(1440,900)]]:
+		root.size=row[1]
+		root.content_scale_size=row[1]
+		root.get_node("Localize").set_language(row[0],false)
+		b.select_single(l.scout,false)
+		b.hud.update_selection_panel(b.selection)
+		b.hud._refresh_panel()
+		l._update_briefing(b)
+		b.mission._set_expanded(true)
+		b.hud.set_top(l.top_status(b))
+		_messages(b)
+		await _capture_layout(b,String(row[0])+"_previews",folder)
+		if row[0]=="en":
+			var log_before: Array=b.hud._message_log.duplicate(true)
+			b.hud._set_info_expanded(true)
+			await _capture_layout(b,"en_full_log",folder)
+			check(log_before==b.hud._message_log and b.hud.msg_box.get_child_count()==0,"opening full log clears transient previews without losing history")
+	# Switch from a tall selected hero to a production card and then empty selection.
+	root.size=Vector2i(960,540)
+	root.content_scale_size=root.size
+	root.get_node("Localize").set_language("en",false)
+	b.select_single(l.hall,false)
+	b.hud.update_selection_panel(b.selection)
+	b.hud._refresh_panel()
+	_messages(b)
+	await _capture_layout(b,"en_production",folder)
+	b.selection.clear()
+	b._inspect_unit=null
+	b.hud.update_selection_panel(b.selection)
+	_messages(b)
+	await _capture_layout(b,"en_empty_selection",folder)
+	await _dispose(b)
+	# A real skirmish scene exercises the same HUD without campaign objectives.
+	b=await _start("skirmish")
+	_freeze(b)
+	b.select_single(b.find_unit("hall"),false)
+	b.hud.update_selection_panel(b.selection)
+	b.hud._refresh_panel()
+	_messages(b)
+	await _capture_layout(b,"en_skirmish",folder,false)
+	await _dispose(b)
+	FileAccess.open(folder+"/report.json",FileAccess.WRITE).store_string(JSON.stringify({"passed":failures.is_empty(),"checks":checks,"failures":failures,"observations":observations,"scope":"real-renderer frozen layout and message retention; not full restore, performance or device acceptance"},"\t"))
+	quit(0 if failures.is_empty() else 1)

@@ -144,8 +144,10 @@ func _layout_details() -> void:
 	var width := 370.0 if Localize.locale == "en" else 312.0
 	_panel.custom_minimum_size.x = width if _expanded else 148.0
 	if _expanded:
-		var available: float = battle.get_viewport().get_visible_rect().size.y - RTSCamera.PANEL_H - _panel.position.y - 70.0
-		_detail_scroll.custom_minimum_size = Vector2(width - 24.0, clampf(available, 160.0, 440.0))
+		var chrome := _panel.get_theme_stylebox("panel").get_minimum_size().y + _toggle.get_combined_minimum_size().y
+		chrome += float(_toggle.get_parent().get_theme_constant("separation"))
+		var available: float = battle.hud.command_panel_top() - _panel.position.y - chrome - 8.0
+		_detail_scroll.custom_minimum_size = Vector2(width - 24.0, clampf(available, 0.0, 440.0))
 
 func _on_language_changed(_locale: String) -> void:
 	if not is_instance_valid(_panel): return

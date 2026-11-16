@@ -1,5 +1,8 @@
 # 源码设置与换机（2026-10-30）
 
+2026-11-16 公共HUD与任务布局适配实际底栏，增加生产队列滚动容器；未增加保存字段，但生产身份已变化，旧冻结续玩候选资格不沿用。[定向布局证据与剩余范围](../qa/campaign_overlays_20261116/README.md)。
+
+
 2026-11-16 高俅保存profile为`campaign_level5_v2`，新增`fire_abandoned`及载客引用一致性约束；生产身份改变，旧候选不沿用。翻译来源`campaign_naval_recovery.json`同步catalog。[本批来源与限定验证](../qa/campaign_naval_recovery_20261116/README.md)。
 
 
