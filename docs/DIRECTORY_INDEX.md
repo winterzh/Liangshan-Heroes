@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[连环马保车反攻](../qa/campaign_resume_current_20261116/evidence/protected_drill_candidate/rams_held_in_reserve/)保存实际日志、战报与宿主收据。
+
 [高俅第二批进港](../qa/campaign_flagship_escort_20261116/second_wave_front/)保存前港目的地检查、引擎日志和夹具来源哈希。
 
 [祝家庄强攻任务提示](../qa/campaign_siege_20261116/frontal_briefing/)保存任务交接检查、引擎日志、回执和源码哈希。

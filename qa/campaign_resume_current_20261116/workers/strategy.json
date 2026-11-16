@@ -4,7 +4,7 @@
   "original_commit": "f23e3b287fd66973abcbc74f4b4f537c1ec0ff5f",
   "original_sha256": "1c758b85424fa6c98e17a6b418698aa0ec2ca61b90ce5c245195f6218730c423",
   "derived_path": "driver_strategy.gd",
-  "derived_sha256": "195ebe244f6359663a385b49b9a00e654631aa51ec0400b0a5a575a0c04af4d5",
+  "derived_sha256": "06c4fcb7fba572f9e2f4b652f54828bae0bfa3563f705cda0d495807320483a1",
   "patches": [
     {
       "before": "\t\teconomy_step()\n\t\tvar army: Array = battle.units.filter",
@@ -97,6 +97,22 @@
     {
       "before": "\t\t\t\tif shop != null and alive(level.enemy_base) and shop._train_queue.is_empty() and rams.size() < 3 and battle.gold >= 70 and battle.wood >= 90:\n\t\t\t\t\tvar g0: int = battle.gold\n\t\t\t\t\tvar w0: int = battle.wood\n\t\t\t\t\tif battle.queue_train(shop, \"siege_ram\", false):\n\t\t\t\t\t\trecord_action(\"train\", [shop], {\"key\":\"siege_ram\", \"gold_spent\":g0-battle.gold, \"wood_spent\":w0-battle.wood, \"purpose\":\"v22_ram_budget\"})",
       "after": "\t\t\t\tif shop != null and alive(level.enemy_base) and shop._train_queue.is_empty() and rams.size() < 2:\n\t\t\t\t\tvar g0: int = battle.gold\n\t\t\t\t\tvar w0: int = battle.wood\n\t\t\t\t\tif battle.queue_train(shop, \"siege_ram\", false):\n\t\t\t\t\t\tvar def: Dictionary = battle._defs[\"siege_ram\"]\n\t\t\t\t\t\tcheck(g0 - battle.gold == int(def.cost_gold) and w0 - battle.wood == int(def.cost_wood), \"counterattack ram pays actual workshop costs\")\n\t\t\t\t\t\trecord_action(\"train\", [shop], {\"key\":\"siege_ram\", \"gold_spent\":g0-battle.gold, \"wood_spent\":w0-battle.wood, \"purpose\":\"counter_ram_budget\"})\n\t\t\t\t\t\tpolicy.units_queued += 1\n\t\t\t\t\t\tpolicy.units_queued_by_key[\"siege_ram\"] = int(policy.units_queued_by_key.get(\"siege_ram\", 0)) + 1"
+    },
+    {
+      "before": "func staff_counter_mines(level: Variant) -> void:\n\tvar mines:",
+      "after": "func staff_counter_mines(level: Variant) -> void:\n\t# The shared economy sends excess gold workers to timber above this stock.\n\tif battle.gold >= 250: return\n\tvar mines:"
+    },
+    {
+      "before": "\t\t\t\tvar rams_ok: bool = rams_rallied >= 1 or not base_alive or (srams.is_empty() and (strike.size() >= 18 or waited_s >= 150.0))",
+      "after": "\t\t\t\tvar rams_ok: bool = rams_rallied >= 1 or not base_alive"
+    },
+    {
+      "before": "\t\t\t\t\t# One blob: plain move (group speed cap) to the validated rally.\n\t\t\t\t\t# v26: after the first launch, rams keep pressing the manor instead of walking back west.\n\t\t\t\t\tvar press_rams: Array = []\n\t\t\t\t\tif base_alive and int(get_meta(\"v22_wave\", 0)) >= 1 and not srams.is_empty():\n\t\t\t\t\t\tpress_rams = srams\n\t\t\t\t\t\tpolicy.target(battle, press_rams, level.enemy_base, \"v26_ram_manor\")\n\t\t\t\t\tvar off: Array = strike.filter(func(u): return u.position.distance_to(rally_w) > 96.0 and u not in staged and u not in press_rams)",
+      "after": "\t\t\t\t\t# Regroup surviving siege engines with the field army after a repulse.\n\t\t\t\t\tvar off: Array = strike.filter(func(u): return u.position.distance_to(rally_w) > 96.0 and u not in staged)"
+    },
+    {
+      "before": "\t\t\t\t\tif base_alive:\n\t\t\t\t\t\t# v26: rams stay on the strike's eastward push and drive to the\n\t\t\t\t\t\t# manor immediately (do not wait for Han Tao's capture).\n\t\t\t\t\t\tpolicy.target(battle, srams, level.enemy_base, \"v26_ram_manor\")\n\t\t\t\t\telif not strike.is_empty():",
+      "after": "\t\t\t\t\tif base_alive and not han_captured:\n\t\t\t\t\t\t# Infantry contests the generals while siege engines stay at the rally.\n\t\t\t\t\t\tvar exposed: Array = srams.filter(func(u): return u.position.distance_to(rally_w) > 96.0)\n\t\t\t\t\t\tif not exposed.is_empty(): policy.move(battle, exposed, rally)\n\t\t\t\t\telif base_alive:\n\t\t\t\t\t\tpolicy.target(battle, srams, level.enemy_base, \"escorted_counter_ram\")\n\t\t\t\t\telif not strike.is_empty():"
     }
   ],
   "original_all_goal_save_clock_typed_assertions_unchanged": true,

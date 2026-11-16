@@ -99,6 +99,8 @@ func needs_counter_ram_budget() -> bool:
 		and not u.is_constructing and u._train_queue.is_empty())
 
 func staff_counter_mines(level: Variant) -> void:
+	# The shared economy sends excess gold workers to timber above this stock.
+	if battle.gold >= 250: return
 	var mines: Array = battle.units.filter(func(u): return is_instance_valid(u) and u.is_resource \
 		and u.res_kind == "gold" and u.res_left > 0.0 and not battle._resource_blocked(u) \
 		and battle.is_visible_world(u.position))
@@ -530,7 +532,7 @@ func natural_victory() -> void:
 				var stage_v: Variant = get_meta("v24_ram_stage") if has_meta("v24_ram_stage") else null
 				var staged: Array = srams.filter(func(u): return stage_v != null and u.position.distance_to(battle.map.cell_to_world(stage_v)) <= 200.0)
 				var rams_rallied: int = rallied.filter(func(u): return u.key == "siege_ram").size() + staged.size()
-				var rams_ok: bool = rams_rallied >= 1 or not base_alive or (srams.is_empty() and (strike.size() >= 18 or waited_s >= 150.0))
+				var rams_ok: bool = rams_rallied >= 1 or not base_alive
 				# v25: launch at >=18 rallied of a >=20 strike (or >=14 after 240s), never while Huyan Zhuo is near.
 				if rams_ok and not bool(get_meta("v25_hu_near", false)) and ((rallied.size() >= 18 and strike.size() >= 20) or (rallied.size() >= 14 and waited_s >= 240.0)):
 					wave += 1
@@ -541,13 +543,8 @@ func natural_victory() -> void:
 					launched = true
 					print("LIAN_COUNTER_WAVE ", wave_info.call("launch", null))
 				else:
-					# One blob: plain move (group speed cap) to the validated rally.
-					# v26: after the first launch, rams keep pressing the manor instead of walking back west.
-					var press_rams: Array = []
-					if base_alive and int(get_meta("v22_wave", 0)) >= 1 and not srams.is_empty():
-						press_rams = srams
-						policy.target(battle, press_rams, level.enemy_base, "v26_ram_manor")
-					var off: Array = strike.filter(func(u): return u.position.distance_to(rally_w) > 96.0 and u not in staged and u not in press_rams)
+					# Regroup surviving siege engines with the field army after a repulse.
+					var off: Array = strike.filter(func(u): return u.position.distance_to(rally_w) > 96.0 and u not in staged)
 					if not off.is_empty(): policy.move(battle, off, rally, false)
 			if launched:
 				var esc: Variant = null
@@ -571,10 +568,12 @@ func natural_victory() -> void:
 					cur_target = level.enemy_base
 					policy.move(battle, nonram, level.ENEMY_CAMP, true)
 				if not srams.is_empty():
-					if base_alive:
-						# v26: rams stay on the strike's eastward push and drive to the
-						# manor immediately (do not wait for Han Tao's capture).
-						policy.target(battle, srams, level.enemy_base, "v26_ram_manor")
+					if base_alive and not han_captured:
+						# Infantry contests the generals while siege engines stay at the rally.
+						var exposed: Array = srams.filter(func(u): return u.position.distance_to(rally_w) > 96.0)
+						if not exposed.is_empty(): policy.move(battle, exposed, rally)
+					elif base_alive:
+						policy.target(battle, srams, level.enemy_base, "escorted_counter_ram")
 					elif not strike.is_empty():
 						var rc: Vector2i = battle.map.world_to_cell(s_center)
 						if battle.map.is_open_cell(rc, "land") and battle._enemy_at(battle.to_screen(battle.map.cell_to_world(rc))) == null:
