@@ -261,6 +261,7 @@ func _send_wave(b,index: int) -> void:
 	if waves[index].sent: return
 	waves[index].sent=true
 	for u in water_groups[index]:
+		if index==2 and _flagship_guards().has(u): continue
 		if alive(u):
 			u.set_stance(Unit.STANCE_AGGRO)
 			u.order_amove(b.map.cell_to_world(lure_cell if index==0 and lure_started else SEA_FRONT))
@@ -268,9 +269,40 @@ func _send_wave(b,index: int) -> void:
 		if alive(u):
 			u.order_amove(b.map.cell_to_world(LAND_FRONT))
 			u.order_amove(hall.position,true)
-	if index==2 and alive(flagship): flagship.order_amove(b.map.cell_to_world(Vector2i(44,40)))
+	if index==2 and alive(flagship):
+		flagship.order_amove(b.map.cell_to_world(Vector2i(44,40)))
+		b.msg("高俅座船出发；留意护航战船的位置，可选择正面接战或侧翼攻击。",7)
 	b.mission.set_title(["第一败 · 水陆来犯","第二败 · 连船与岸军","第三败 · 海鳅船压港"][index])
 	b.msg(Localize.format_text("第%d批水陆主力出发。营地、资源和军队继续保留；两处补给源仍可主动拆除。", (index+1)),7)
+## Two original rear ships screen the flagship. Their role and orders derive
+## from existing groups/waves; no additional saved timer or replacement ship.
+func _flagship_guards() -> Array:
+	if water_groups.size()<3 or water_groups[2].size()!=6: return []
+	return [water_groups[2][4],water_groups[2][5]].filter(func(u): return alive(u))
+func _flagship_guard_plan(b,side: int) -> Dictionary:
+	if not is_instance_valid(flagship) or flagship.hp<=0:
+		return {"phase":"advance","goal":b.map.cell_to_world(SEA_FRONT)}
+	var phase := "defend" if flagship_disabled else "escort" if waves[2].sent else "muster"
+	var cell: Vector2i=b.map.world_to_cell(flagship.position)
+	for offset in [Vector2i(side*2,2),Vector2i(side,2),Vector2i(0,2),Vector2i(side,1),Vector2i.ZERO]:
+		var point: Vector2=b.map.cell_to_world(cell+offset)
+		if Naval.clear_water(b.map,cell+offset,25) and b.map._segment_open(flagship.position,point,"water"):
+			return {"phase":phase,"goal":point}
+	return {"phase":phase,"goal":flagship.position}
+func _flagship_guard_orders(b) -> void:
+	var guards := _flagship_guards()
+	for u in guards:
+		if u.garrisoned or u.is_captive or u._taunt_t>0: continue
+		var goal: Vector2=_flagship_guard_plan(b,-1 if water_groups[2][4]==u else 1).goal
+		var sight: float=float(u.setup_def.get("sight",8))*GameMap.CELL
+		if alive(u._target) and u._target.faction!=u.faction and u.position.distance_to(u._target.position)<=sight and b.target_visible_to(u,u._target): continue
+		if u.position.distance_to(goal)<=80:
+			if u._state!=Unit.ST_IDLE or u._target!=null: u.order_stop()
+			u._amove_dest=Vector2.ZERO
+			u._idle_push_t=0.0
+			if u.stance!=Unit.STANCE_DEFEND: u.set_stance(Unit.STANCE_DEFEND)
+		elif u._state!=Unit.ST_AMOVE or u._amove_dest.distance_to(goal)>96:
+			u.order_amove(goal)
 func _production(b,delta: float) -> void:
 	if core_ready:
 		return
@@ -313,7 +345,10 @@ func _fire_escorts(b,actor) -> Array:
 func _withdraw_crew(b) -> Array:
 	return [liu_carrier,b.find_unit("ruan_xiaowu_boat")].filter(func(u): return _near(b,u,FIRE_SAFE,120))
 func unit_tactical_hint(b,u) -> String:
-	if not is_instance_valid(u) or u.faction!=0: return ""
+	if not is_instance_valid(u): return ""
+	if u.faction==1 and _flagship_guards().has(u):
+		return Localize.text("座船护航 · 随座船集结与推进\n座船停航后仍守卫附近水面。")
+	if u.faction!=0: return ""
 	if u.key not in ["liu_tang","liu_tang_fireboat","ruan_xiaoer_boat","ruan_xiaowu_boat"]: return ""
 	if b.mission.has_event("gao_liu_returned") and u.key=="liu_tang":
 		return Localize.text("刘唐已返港，可继续指挥岸军。")
@@ -521,6 +556,7 @@ func process(b,delta: float) -> void:
 			b.msg(Localize.format_text("第%d批水陆主力约25秒后出发，准备水陆两线；也可截击其集结地。", (i+1)),6)
 		if elapsed>=waves[i].time:
 			_send_wave(b,i)
+	_flagship_guard_orders(b)
 	if lure_started and not b.mission.has_event("fleet_in_ambush") and water_groups[0].any(func(u): return _near(b,u,lure_cell,170)):
 		b.mission.mark("fleet_in_ambush","阮小七引得活官船深入港汊，主力可以合击。")
 	if _count(water_groups[0])==0 and not b.mission.has_event("fleet_in_ambush"):

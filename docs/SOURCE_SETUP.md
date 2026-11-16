@@ -1,5 +1,8 @@
 # 源码设置与换机（2026-10-30）
 
+2026-11-16 高俅第三批原末两船护航座船，角色由原groups/waves/flagship派生；只用普通Unit指令，未新增Level字段/计时器，旧冻结恢复资格不沿用。campaign_flagship_escort.json新增两条四语；QA记录器只监听原船死亡，不修改战斗。[本批来源与限定证据](../qa/campaign_flagship_escort_20261116/README.md)。
+
+
 2026-11-16 高俅火攻/接应/撤离条件抽出供任务与HUD共用，原边界保持；提示实时派生，无新增Level/Visual字段，生产身份变化不沿用冻结恢复资格。新增campaign_fire_readiness.json七条四语。gao_rts_play故事驾驶增加实际返港阶段，其间专船不混入普通攻击编组；只在QA中生效。[来源与限定验证](../qa/campaign_fire_readiness_20261116/README.md)。
 
 

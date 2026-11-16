@@ -1,5 +1,8 @@
 # 项目目录索引（2026-10-30）
 
+[高俅座船护航](../qa/campaign_flagship_escort_20261116/README.md)：tools/gao_flagship_escort_qa.gd继承gao_rts_play，runner分--fixture-only与--live-only；fixtures为14项/英文查看图，live为7项实际防守反攻及通知文字调整前源码。翻译来源assets/localization/campaign_flagship_escort.json。
+
+
 [高俅火攻反馈与完整演义](../qa/campaign_fire_readiness_20261116/README.md)：tools/gao_fire_readiness_qa.gd继承gao_rts_play，runner支持--fixture-only或--live-only；fixtures保留初次显示问题，live保留翻译修正前实战来源，final_fixtures为最终14项与两张图。翻译来源assets/localization/campaign_fire_readiness.json。
 
 
