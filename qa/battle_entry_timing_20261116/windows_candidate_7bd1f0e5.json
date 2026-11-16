@@ -104,7 +104,7 @@
     }
   ],
   "candidate_copy_verified": true,
-  "verification_scope": "Native offline release boot, 180 rendered frames. No native user input and no tested menu reentry in this candidate.",
+  "verification_scope": "Native offline release boot for 180 rendered frames; four menu paths and Gao repeat entry in an independent Godot editor host loading the exact packaged executable.",
   "published_to_steam": false,
   "raw_sha256": {
     "build_summary.json": "b05c1917c03a29cad6d5b63f3cabb951ea4d58829f5074899ef9de0cecbe80e9",
@@ -311,5 +311,176 @@
     },
     "native_boot_receipt_available": true,
     "verified_without_shared_engine": true
+  },
+  "pack_menu_verification": {
+    "passed": true,
+    "source_commit": "7bd1f0e5c1aaaf25b80c30a151983a1e45cb6a12",
+    "launch_type": "Godot 4.6.3 editor host loading exact compiled release pack via --main-pack",
+    "release_executable_booted_separately": true,
+    "native_release_executable_interactive_timing": false,
+    "rendering": "gl_compatibility",
+    "resolution": [
+      1280,
+      720
+    ],
+    "other_engine_active_at_launch": false,
+    "identity": {
+      "code": "OK",
+      "content_version": "source-v1:f4586731844922e1e058ead2b9edd30222d96a559842f0f8884bc41c6ff9b3c1",
+      "engine_binary_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+      "file_count": 7090,
+      "identity_schema": 1,
+      "identity_scope": "installed_inputs",
+      "ok": true,
+      "optional_content": [
+        {
+          "bytes": 0,
+          "path": "content/units.json",
+          "present": false,
+          "sha256": ""
+        },
+        {
+          "bytes": 0,
+          "path": "content/abilities.json",
+          "present": false,
+          "sha256": ""
+        }
+      ],
+      "provider_sha256": "d59ea6f38e160e18f4a09db131701ebc54a0031cb201d4eab9c0062552f04a33",
+      "rules_sha256": "6b615cda04dae2dc04ba5a994327130a67e9bec735cde015bec1e818f5536221",
+      "save_code": "OK",
+      "save_eligible": true,
+      "source_mode": false,
+      "source_sha256": "f4586731844922e1e058ead2b9edd30222d96a559842f0f8884bc41c6ff9b3c1",
+      "total_bytes": 2217927270
+    },
+    "modes": [
+      {
+        "mode": "level5",
+        "samples": [
+          {
+            "battle_attached_to_scene_ready_ms": 272.97,
+            "entry_to_battle_attached_ms": 553.68,
+            "entry_to_first_battle_render_ms": 1034.81,
+            "entry_to_first_render_ms": 44.25,
+            "frames_before_scene_ready": 31,
+            "intro_pages": 4,
+            "loading_caption": "Preparing battle · Three Defeats for Marshal Gao",
+            "locale": "en",
+            "mode_page_ms": 36.69,
+            "prefetched_ship_textures": [
+              "res://assets/campaign/objects/official_warship_default_nw.png",
+              "res://assets/campaign/objects/official_warship_default_sw.png"
+            ],
+            "released_battle_references": 5,
+            "scene_ready_to_first_battle_render_ms": 208.16,
+            "start_button_to_fight_render_ms": 22.05,
+            "surface_paths": [
+              "res://assets/campaign/environment/shared/surfaces/surface_forest_earth.png",
+              "res://assets/campaign/environment/shared/surfaces/surface_wet_bank.png",
+              "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png"
+            ],
+            "visit": 1
+          },
+          {
+            "battle_attached_to_scene_ready_ms": 108.5,
+            "entry_to_battle_attached_ms": 523.92,
+            "entry_to_first_battle_render_ms": 698.62,
+            "entry_to_first_render_ms": 18.83,
+            "frames_before_scene_ready": 32,
+            "intro_pages": 4,
+            "loading_caption": "Preparing battle · Three Defeats for Marshal Gao",
+            "locale": "en",
+            "mode_page_ms": 16.91,
+            "prefetched_ship_textures": [
+              "res://assets/campaign/objects/official_warship_default_nw.png",
+              "res://assets/campaign/objects/official_warship_default_sw.png"
+            ],
+            "released_battle_references": 5,
+            "scene_ready_to_first_battle_render_ms": 66.2,
+            "start_button_to_fight_render_ms": 12.47,
+            "surface_paths": [
+              "res://assets/campaign/environment/shared/surfaces/surface_forest_earth.png",
+              "res://assets/campaign/environment/shared/surfaces/surface_wet_bank.png",
+              "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png"
+            ],
+            "visit": 2
+          }
+        ]
+      },
+      {
+        "mode": "skirmish",
+        "samples": [
+          {
+            "battle_attached_to_scene_ready_ms": 153.37,
+            "entry_to_battle_attached_ms": 511.71,
+            "entry_to_first_battle_render_ms": 747.1,
+            "entry_to_first_render_ms": 42.89,
+            "frames_before_scene_ready": 30,
+            "intro_pages": 2,
+            "loading_caption": "戦闘を準備中 · 防衛戦",
+            "locale": "ja",
+            "mode_page_ms": 27.07,
+            "prefetched_ship_textures": [],
+            "released_battle_references": 5,
+            "scene_ready_to_first_battle_render_ms": 82.02,
+            "start_button_to_fight_render_ms": null,
+            "surface_paths": [
+              "res://assets/campaign/environment/shared/surfaces/surface_forest_earth.png",
+              "res://assets/campaign/environment/shared/surfaces/surface_wet_bank.png",
+              "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png"
+            ],
+            "visit": 1
+          }
+        ]
+      },
+      {
+        "mode": "skirmish_ai",
+        "samples": [
+          {
+            "battle_attached_to_scene_ready_ms": 68.6,
+            "entry_to_battle_attached_ms": 541.71,
+            "entry_to_first_battle_render_ms": 648.82,
+            "entry_to_first_render_ms": 39.57,
+            "frames_before_scene_ready": 32,
+            "intro_pages": 2,
+            "loading_caption": "正在準備戰鬥 · 1v1 對戰",
+            "locale": "zh_TW",
+            "mode_page_ms": 16.33,
+            "prefetched_ship_textures": [],
+            "released_battle_references": 5,
+            "scene_ready_to_first_battle_render_ms": 38.52,
+            "start_button_to_fight_render_ms": 10.68,
+            "surface_paths": [],
+            "visit": 1
+          }
+        ]
+      },
+      {
+        "mode": "arena",
+        "samples": [
+          {
+            "battle_attached_to_scene_ready_ms": 69.19,
+            "entry_to_battle_attached_ms": 520.87,
+            "entry_to_first_battle_render_ms": 617.08,
+            "entry_to_first_render_ms": 2.97,
+            "frames_before_scene_ready": 33,
+            "intro_pages": 1,
+            "loading_caption": "正在准备战斗 · 竞技场",
+            "locale": "zh_CN",
+            "mode_page_ms": null,
+            "prefetched_ship_textures": [],
+            "released_battle_references": 5,
+            "scene_ready_to_first_battle_render_ms": 27.02,
+            "start_button_to_fight_render_ms": 9.0,
+            "surface_paths": [],
+            "visit": 1
+          }
+        ]
+      }
+    ],
+    "pack_sha256": "7c6c8116d83cfe08058c3515861c1f63fceeb59e0833a5a8d8f485b6dacb5f0c",
+    "log_sha256": "ea079fdb55cfb936415ad6e7ec0eb2e9b9042958169c2bb3f1897dff5557d8c7",
+    "probe_sha256": "3d03630a5c3ee7d5e26137f0d4c6e149979b14eee56ac9559589cadcc436f357"
   }
 }

@@ -1,5 +1,9 @@
 # 开发日志
 
+## 2026-11-17 Windows 候选四入口与重复进场
+
+使用实际交付 EXE 中的同一编译包，原菜单进入战役、高俅重进、驻守、1v1 及竞技场。四语加载及五轮关键节点释放通过。[当前 Windows 四入口验证](../qa/battle_entry_timing_20261116/README.md#windows-候选四入口与重复进场)
+
 ## 2026-11-17 Windows Steam 候选发布准备
 
 补齐两份许可证，独立准备 Windows Depot 六文件并读回摘要。四语公告保持草案状态。[Windows Steam 候选交接](STEAM_CANDIDATE_20261117.md)

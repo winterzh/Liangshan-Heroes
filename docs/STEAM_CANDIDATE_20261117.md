@@ -6,7 +6,7 @@
 
 `D:/AI项目/水浒/Windows候选/2026-11-17-7bd1f0e5/SteamDepot` 含 EXE、三个原生 DLL 和两份许可证，共六个文件。文件的大小、SHA-1 和 SHA-256 已读回。原生 EXE 通过离线启动，成品包内含八章脚本以及四语进场文案。许可证字节与上次服务端清单一致。[Depot 六文件清单](../qa/battle_entry_timing_20261116/windows_steam_depot_7bd1f0e5.json) · [成品核对与启动记录](../qa/battle_entry_timing_20261116/README.md#windows-候选成品内容核对)
 
-候选的菜单入口与 Steam 客户端实际点击仍待验。发布时从候选清单比对 SteamPipe 预览和服务端文件，确认新 Build 对应同一 Windows Depot，再核对正式分支、四语公告和客户端下载启动。备选回退目标为 Build `26699320`，实际操作前以 Steamworks 当时的 `default` 标记为准。[发布指南](STEAM_RELEASE_GUIDE.md)
+候选的四种菜单入口与高俅重进已在实际交付 EXE 的同一编译包验证。Steam 客户端实际点击仍待验。[当前 Windows 四入口验证](../qa/battle_entry_timing_20261116/README.md#windows-候选四入口与重复进场)发布时从候选清单比对 SteamPipe 预览和服务端文件，确认新 Build 对应同一 Windows Depot，再核对正式分支、四语公告和客户端下载启动。备选回退目标为 Build `26699320`，实际操作前以 Steamworks 当时的 `default` 标记为准。[发布指南](STEAM_RELEASE_GUIDE.md)
 
 高俅关 Windows 源码十分钟样本达到整段帧时门槛，六模式三十分钟样本已通过关键节点释放和内存回收检查，逐分钟 P95 仍有超限。当前候选与试玩、Android 实机及战役续玩的适用状态见路线图，公告草案只覆盖本轮玩家可见变化。[持续性能数据](../qa/campaign_sustained_performance_20261116/README.md#单位绘制优化后的十分钟复测) · [模式切换长测](../qa/battle_entry_timing_20261116/README.md#windows-主菜单模式切换三十分钟) · [八幕战役路线图](CAMPAIGN_ROADMAP_20261116.md)
 
