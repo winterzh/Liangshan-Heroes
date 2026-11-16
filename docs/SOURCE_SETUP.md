@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+Windows 候选 7bd1f0e5 已用跟踪运行输入构建，在独立档案离线启动。原生文件校验及导出摘要见候选收据。[Windows 本地候选 7bd1f0e5](../qa/battle_entry_timing_20261116/README.md#windows-本地候选-7bd1f0e5)
+
 源码身份清单仍两遍完整枚举，第一遍计算逐文件哈希，第二遍读取首遍记录复核路径、大小、修改时间及规范指纹，两遍分别建表。[源码清单组装优化](../qa/battle_entry_timing_20261116/README.md#源码清单组装优化)
 
 Windows 源码进场校验的 DirAccess 只在源码快照期间复用。两遍枚举和逐文件哈希保留，Windows 发行包与其他宿主沿用原入口。[Windows 源码目录校验复用](../qa/battle_entry_timing_20261116/README.md#windows-源码目录校验复用)

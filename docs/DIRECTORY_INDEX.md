@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[Windows 候选 7bd1f0e5 收据](../qa/battle_entry_timing_20261116/windows_candidate_7bd1f0e5.json)含构建、独立原生启动及发行文件摘要。
+
 [源码身份清单组装收据](../qa/battle_entry_timing_20261116/source_manifest_assembly_4f32cd96.json)含两版三次进场、文件身份和路径复核。
 
 [Windows 源码目录校验对照](../qa/battle_entry_timing_20261116/windows_source_path_scan_49293156.json)含前后两版的菜单进入计时、独立身份对比、路径判断及文件摘要。

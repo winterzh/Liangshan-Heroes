@@ -1,5 +1,7 @@
 # 当前项目总览
 
+本地 Windows 候选 7bd1f0e5 已导出并完成离线启动。Steam 客户端进场仍待量测。[Windows 本地候选 7bd1f0e5](../qa/battle_entry_timing_20261116/README.md#windows-本地候选-7bd1f0e5)
+
 Windows 源码进场清单组装优化后，祝家庄首次与重进分别为 10.30 秒、11.31 秒。Steam 前台仍待测。[源码清单组装优化](../qa/battle_entry_timing_20261116/README.md#源码清单组装优化)
 
 Windows 源码祝家庄重进到战场首帧 19.00 秒 → 15.65 秒。Steam 安装包进场正在单独跟踪。[Windows 源码目录校验复用](../qa/battle_entry_timing_20261116/README.md#windows-源码目录校验复用)

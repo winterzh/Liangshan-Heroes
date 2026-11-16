@@ -1,5 +1,7 @@
 # 八幕战役后续开发路线图
 
+M7 Windows 候选 7bd1f0e5 已包含当前源码并通过原生离线启动。此候选的前台出征和 Steam 客户端计时仍待验。[Windows 本地候选 7bd1f0e5](../qa/battle_entry_timing_20261116/README.md#windows-本地候选-7bd1f0e5)
+
 M7 源码身份清单改为一次组装，Windows 祝家庄重进至战场首帧 14.93 秒 → 11.31 秒。仍须正式客户端前台计时及新版本长时帧时。[源码清单组装优化](../qa/battle_entry_timing_20261116/README.md#源码清单组装优化)
 
 M7 Windows 源码通过实时绝对路径检查，减少反复打开父目录的成本。祝家庄重进到首帧 19.00 秒 → 15.65 秒，仍保留完整文件身份校验。[Windows 源码目录校验复用](../qa/battle_entry_timing_20261116/README.md#windows-源码目录校验复用)
