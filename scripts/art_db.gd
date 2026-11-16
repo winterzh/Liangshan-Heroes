@@ -1258,6 +1258,18 @@ func campaign_object_texture(key: String, state := "default", direction := "") -
 	var directional := _campaign_object_directional_texture(key, state, direction)
 	if directional != null:
 		return directional
+	return _campaign_object_fallback_texture(key, state, direction)
+
+
+## Sprite drawing needs the texture and the mirror decision from the same lookup.
+func campaign_object_art(key: String, state: String, direction: String) -> Dictionary:
+	var directional := _campaign_object_directional_texture(key, state, direction)
+	if directional != null:
+		return {"texture": directional, "directional": true}
+	return {"texture": _campaign_object_fallback_texture(key, state, direction), "directional": false}
+
+
+func _campaign_object_fallback_texture(key: String, state: String, direction: String) -> Texture2D:
 	var legacy := _campaign_texture(CampaignArt.object_path(key, state))
 	if legacy != null:
 		return legacy

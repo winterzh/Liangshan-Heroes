@@ -3713,7 +3713,7 @@ func _screen_dir(d: Vector2) -> Vector2:
 
 
 ## 直立精灵绘制 + 全部程序化动画（行走步态、待机呼吸、攻击突刺·劈砍、死亡倒地）
-func _draw_sprite_animated(tex: Texture2D, tint: Color, death_f: float) -> void:
+func _draw_sprite_animated(tex: Texture2D, tint: Color, death_f: float, ship_art: Dictionary = {}) -> void:
 	if story_assistance_hidden(): return
 	var s := radius * 3.7 * visual_scale
 	var off := Vector2.ZERO
@@ -3724,11 +3724,11 @@ func _draw_sprite_animated(tex: Texture2D, tint: Color, death_f: float) -> void:
 	_frame_directional = false
 
 	if movement_profile == "water" and setup_def.has("campaign_object"):
-		var ship_key := String(setup_def.campaign_object)
-		var ship_state := String(get_meta("ship_state", "default"))
-		var ship_frame := Art.campaign_object_texture(ship_key, ship_state, animation_direction)
+		if ship_art.is_empty():
+			ship_art = Art.campaign_object_art(String(setup_def.campaign_object), String(get_meta("ship_state", "default")), animation_direction)
+		var ship_frame: Texture2D = ship_art.texture
 		if ship_frame != null: frame = ship_frame
-		_frame_directional = Art.campaign_object_uses_directional_source(ship_key, ship_state, animation_direction)
+		_frame_directional = ship_art.directional
 		off.y = sin(_idle_t * 1.4) * 1.2 if story_outcome == "" else 0.0
 	elif story_outcome != "":
 		var down: Array = _story_animation_frames()
@@ -4259,11 +4259,18 @@ func _building_shadow_texture(visible_texture: Texture2D, scoped_texture: Textur
 
 func _draw() -> void:
 	var variant := visual_art_variant()
-	var tex: Texture2D = Art.unit_texture(key, variant, animation_direction)
+	var tex: Texture2D
+	var ship_art: Dictionary
 	if setup_def.has("campaign_object"):
-		var prop := Art.campaign_object_texture(String(setup_def.campaign_object), String(get_meta("ship_state", "default")), animation_direction)
-		if prop != null:
-			tex = prop
+		var object_key := String(setup_def.campaign_object)
+		var state := String(get_meta("ship_state", "default"))
+		if movement_profile == "water" and not is_building:
+			ship_art = Art.campaign_object_art(object_key, state, animation_direction)
+			tex = ship_art.texture
+		else:
+			tex = Art.campaign_object_texture(object_key, state, animation_direction)
+	if tex == null:
+		tex = Art.unit_texture(key, variant, animation_direction)
 	var scoped_environment_tex := _campaign_environment_texture()
 	if scoped_environment_tex != null:
 		tex = scoped_environment_tex
@@ -4375,7 +4382,7 @@ func _draw() -> void:
 	if _hex_t > 0.0 and not is_building and not _dying:
 		_draw_hex_critter()   # 变形术：以小猪替身取代本体立绘
 	elif as_sprite:
-		_draw_sprite_animated(tex, tint, death_f)
+		_draw_sprite_animated(tex, tint, death_f, ship_art)
 	elif is_building:
 		_draw_building()
 	else:

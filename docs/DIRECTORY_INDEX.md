@@ -1,5 +1,8 @@
 # 项目目录索引（2026-10-30）
 
+[战船贴图与方向](../qa/campaign_sustained_performance_20261116/ship_art_lookup.json)记录 180 组资源配对、实际绘制对照和首批交战的分段结果。
+
+
 [高俅稳定分支十分钟](../qa/campaign_sustained_performance_20261116/stable_cc860253.json)含 `cc860253` 的逐分钟帧间隔、性能门槛与同探针对照。
 
 
