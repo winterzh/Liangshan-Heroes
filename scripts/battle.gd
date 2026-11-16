@@ -4389,13 +4389,7 @@ func _fog_pass(delta: float) -> void:
 	_fog_t = FOG_STEP
 	var n := _vision.size()
 	# 1) 计算本次真正在视野内的格（_sight_now）
-	_sight_now.fill(0)
-	for u in units:
-		# 资源和驻军不另供视野；驻军建筑自身提供视野。
-		if not is_instance_valid(u) or u.faction != Unit.FACTION_LIANG or u.hp <= 0.0 or u.is_resource or u.garrisoned or u.story_outcome != "":
-			continue
-		var r := int(u.setup_def.get("sight", 10 if u.is_building else 8))
-		_mark_sight_now(map.world_to_cell(u.position), r)
+	_refresh_sight_mask()
 	# 2) 逻辑和贴图同拍更新；读取实际像素以覆盖临时侦察与旧档的图、值差异。
 	var pixels := _vision_img.get_data()
 	var changed := false
@@ -4448,14 +4442,50 @@ func _reveal_fog_at(center: Vector2, radius_px: float, dur := 6.0) -> void:
 				_reveal_t[idx] = maxf(_reveal_t[idx], dur)
 
 
-func _mark_sight_now(c: Vector2i, r: int) -> void:
-	var r2 := r * r
-	for y in range(maxi(0, c.y - r), mini(map.h - 1, c.y + r) + 1):
-		var dy := y - c.y
-		var span := int(sqrt(float(r2 - dy * dy)))
+func _refresh_sight_mask() -> void:
+	_sight_now.fill(0)
+	var stride := _sight_now.size()
+	var runs := PackedInt64Array()
+	for u in units:
+		# 资源和驻军不另供视野；驻军建筑自身提供视野。
+		if not is_instance_valid(u) or u.faction != Unit.FACTION_LIANG or u.hp <= 0.0 or u.is_resource or u.garrisoned or u.story_outcome != "":
+			continue
+		var radius := int(u.setup_def.get("sight", 10 if u.is_building else 8))
+		_append_sight_runs(runs, stride, map.world_to_cell(u.position), radius)
+	_mark_sight_runs(runs, stride)
+
+
+func _append_sight_runs(runs: PackedInt64Array, stride: int, center: Vector2i, radius: int) -> void:
+	var radius_sq := radius * radius
+	for y in range(maxi(0, center.y - radius), mini(map.h - 1, center.y + radius) + 1):
+		var dy := y - center.y
+		var span := int(sqrt(float(radius_sq - dy * dy)))
 		var row := y * map.w
-		for x in range(maxi(0, c.x - span), mini(map.w - 1, c.x + span) + 1):
-			_sight_now[row + x] = 1
+		var first := row + maxi(0, center.x - span)
+		var last := row + mini(map.w - 1, center.x + span)
+		# Encode inclusive endpoints so the packed array sorts by start index.
+		runs.append(first * stride + last)
+
+
+func _mark_sight_runs(runs: PackedInt64Array, stride: int) -> void:
+	if runs.is_empty():
+		return
+	runs.sort()
+	var pending_first := 0
+	var pending_last := -1
+	for encoded in runs:
+		@warning_ignore("integer_division")
+		var first := encoded / stride
+		var last := encoded % stride
+		if first > pending_last + 1:
+			for index in range(pending_first, pending_last + 1):
+				_sight_now[index] = 1
+			pending_first = first
+			pending_last = last
+		else:
+			pending_last = maxi(pending_last, last)
+	for index in range(pending_first, pending_last + 1):
+		_sight_now[index] = 1
 
 
 func _decay_lit(delta: float) -> void:

@@ -1,5 +1,8 @@
 # 项目目录索引（2026-10-30）
 
+[视野范围合并收据](../qa/campaign_sustained_performance_20261116/fog_sight_span_union.json)记录实际开局、400 个布局、短测和基线第 5、10 分钟的引擎监视数据。
+
+
 [高俅稳定分支十分钟](../qa/campaign_sustained_performance_20261116/stable_560deef6.json)含 `560deef6` 的逐分钟帧间隔、性能门槛与同探针对照。
 
 
