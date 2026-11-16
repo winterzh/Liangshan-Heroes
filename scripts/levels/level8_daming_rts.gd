@@ -422,8 +422,11 @@ func on_mission_action(b,action_id: String,actor) -> void:
 			_update_briefing(b)
 			b.msg("火号已起！城内补兵暂停90秒，机动守军北去。清门前抵抗，鲁智深或武松带兵右键夺门标记；时迁由玩家自行撤开。",8)
 		"daming_gate":
-			var crew: int=_gate_crew(b).size()
-			if _guarded(b,GATE_APPROACH,150) or crew<3:
+			var crew := _gate_crew(b)
+			if actor not in crew:
+				_retry(b,action_id,"带队好汉暂时无法夺门。待鲁智深或武松恢复行动，再带人回到南门外办理。")
+				return
+			if _guarded(b,GATE_APPROACH,150) or crew.size()<3:
 				_retry(b,action_id,"门前仍有抵抗，或接应人手不足。清门前守军，鲁智深/武松与至少两名战友到场再夺门。")
 				return
 			_open_gate(b,false)
@@ -506,6 +509,24 @@ func _support_tick(b,delta: float) -> void:
 		ai_trained+=1
 		ai_spent_gold+=int(cost.cost_gold)
 		ai_spent_wood+=int(cost.cost_wood)
+
+func _update_pursuit(b) -> void:
+	if pursuit_sent or not pursuit.any(alive): return
+	if not pursuit_warned:
+		if [lu,shi].any(func(u): return alive(u) and b.map.world_to_cell(u.position).y>=24):
+			pursuit_warned=true
+			b.lit_cells[ENEMY_HQ]=20
+			b.msg("已有伤员离开牢区，北面留守队15秒后追向南门。可先派兵拦截。",7)
+		return
+	pursuit_t=maxf(0,pursuit_t-0.25)
+	if pursuit_t>0: return
+	pursuit_sent=true
+	for u in pursuit:
+		if alive(u):
+			u.order_amove(b.map.cell_to_world(Vector2i(30,30)))
+			u.order_amove(b.map.cell_to_world(EXIT_CELL),true)
+	b.mission.mark("daming_pursuit","现存留守队开始追击，未新增或复生敌军")
+
 func process(b,delta: float) -> void:
 	if not alive(hall):
 		return
@@ -529,19 +550,7 @@ func process(b,delta: float) -> void:
 			_open_prison(b,true)
 			b.msg("外军已控制牢前，牢院通道打开；选一名好汉进入牢内开枷，其余军队守住退路。",6)
 	if rescued:
-		if not pursuit_warned and ([lu,shi].any(func(u): return alive(u) and b.map.world_to_cell(u.position).y>=24)):
-			pursuit_warned=true
-			b.lit_cells[ENEMY_HQ]=20
-			b.msg("二人已出牢区，北面留守队正在集结，15秒后追向南门！这些兵开局就在大营，可提前截断。",7)
-		if pursuit_warned and not pursuit_sent:
-			pursuit_t-=0.25
-			if pursuit_t<=0:
-				pursuit_sent=true
-				for u in pursuit:
-					if alive(u):
-						u.order_amove(b.map.cell_to_world(Vector2i(30,30)))
-						u.order_amove(b.map.cell_to_world(EXIT_CELL),true)
-				b.mission.mark("daming_pursuit","现存留守队开始追击，未新增或复生敌军")
+		_update_pursuit(b)
 		for record in [[lu,"daming_lu_safe"],[shi,"daming_shi_safe"]]:
 			var u=record[0]
 			if alive(u) and gate_open and _near(b,u,EXIT_CELL,130) and b.map.world_to_cell(u.position).y>=45:
@@ -565,5 +574,12 @@ func on_unit_died(b,u) -> void:
 func top_status(b) -> String:
 	var s := coordination_state(b)
 	if rescued:
-		return Localize.format_text("大名府 · 撤出%d/2 · %s",[s.safe,Localize.text("南门已通" if gate_open else "须打开南门")])
+		var status := Localize.format_text("大名府 · 撤出%d/2 · %s",[s.safe,Localize.text("南门已通" if gate_open else "须打开南门")])
+		if not pursuit.any(alive):
+			return status+"\n"+Localize.text("北面留守队已击退")
+		if pursuit_sent:
+			return status+"\n"+Localize.text("留守队正追向南门")
+		if pursuit_warned:
+			return status+"\n"+Localize.format_text("留守队%d秒后追击",ceili(pursuit_t))
+		return status
 	return Localize.format_text("大名府 · 牢内%d/2 · 门外%d/3 · 火号%s",[s.inside,s.crew,Localize.format_text("%d秒",ceili(signal_left)) if signal_left>0 else Localize.text("已过" if signaled else "待起")])

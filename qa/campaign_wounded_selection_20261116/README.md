@@ -23,3 +23,11 @@ source_manifest.json记录当前生产与驱动，combined/保存当批驱动和
 `python qa/campaign_wounded_selection_20261116/runner.py --fixture-only --godot <Godot路径> --lock <共享锁>`。
 
 实际路线分别使用`--live-only --route signal`或`--live-only --route assault`。进程独占共享引擎锁，Steam禁用，用户数据位于私有.godot目录；只清本次报告，原件先归档。本批没有启动旧52/61矩阵，没有发布Steam或合并main。
+
+## 夺门与撤离追兵
+
+夺门时核对实际带队的鲁智深或武松能否行动。第一名伤员出牢区时，如原留守队尚有存活者，触发 15 秒预警。倒计时结束后由幸存者出动。军情按战况显示倒计时、追击中或已击退，玩家可以先截击留守队再带伤员撤出。复用原夺门人手、追兵状态和撤离事件，新增五条简繁中、英文和日文文案。
+
+两次进入实际关卡，冻结普通战斗，摆位及施加受控伤害。举火分支检查三名普通兵无法替失能主将办理、主将恢复后可以夺门、两名原留守队员按倒数实际收到指令，且须两名伤员到出口才结算。强攻分支检查内应实际阵亡、南门受击、外军到牢前、开枷、提前全歼留守队和最后撤出。共 17 项通过，退出 0，55.46 实际秒。四语倒数在真实关卡状态验证。完整恢复、真人体验及新版本两路自然通关待验。[报告](pursuit_status/report.json) · [运行记录](pursuit_status/route_checks.log)
+
+从已导入的隔离工程使用 Godot 4.6.3 执行 `--headless --path <工程> --script <本目录>/pursuit_status/probe.gd`。使用独立存档目录及 `STEAM_DISABLED=1`。

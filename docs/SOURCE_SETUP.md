@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+大名府夺门与追兵提示从当前队伍和既有波次字段派生。五条四语分片为 `daming_pursuit_status.json`。[大名府夺门与撤离追兵](../qa/campaign_wounded_selection_20261116/README.md#夺门与撤离追兵)
+
 连环马余骑提示使用原甲马和波次，定位登记到固定任务按钮白名单。四语分片为 `lianhuanma_remaining_riders.json`。[连环马余骑定位](../qa/campaign_cavalry_escort_20261116/README.md#提前歼骑与余骑定位)
 
 祝家庄偏门状态读取既有 `zhu_side_breached` 事件，断援与大营停产按既有状态显示。八条四语源位于 `zhujiazhuang_route_status.json`。[祝家庄断援与开门验收](../qa/campaign_siege_20261116/README.md#断援与开门后的战场提示)
