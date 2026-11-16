@@ -102,26 +102,33 @@ func _live(name: String) -> void:
 	if b.phase==b.Phase.END:
 		cases.append({"route":name,"failed_phase":true}); await _dispose(b); return
 	check(not b.mission.actions.has("cargo_group_plan") and not b.mission.actions.has("stage_0"),"cargo needs no planning or staging chores")
-	var carriers: Array=l.actors.filter(func(u): return alive(u)).slice(0,3)
-	if carriers.size()!=3:
-		check(false,"three carriers survive live route"); await _dispose(b); return
-	for i in range(3): _action(b,carriers[i],"force_take_%d_0"%i)
-	check(await until(func(): return l.cargo.size()==3 or b.phase==b.Phase.END,35) and l.cargo.size()==3,"three different player-assigned companions pick up the original loads")
-	if l.cargo.size()!=3:
+	var carriers: Array=[]
+	for key in l.Transport.OWNERS: carriers.append(b.find_unit(key))
+	if not carriers.all(func(u): return alive(u)):
+		check(false,"all seven allocated cart owners survive live route"); await _dispose(b); return
+	for i in range(7): _action(b,carriers[i],"force_take_%d_0"%i)
+	check(await until(func(): return l.empty_cargo.size()==7 or b.phase==b.Phase.END,45) and l.empty_cargo.size()==7,"seven original carts are taken through separate actual player orders")
+	if l.empty_cargo.size()!=7:
+		print("[hns-empty] ",l.empty_cargo," actions=",b.mission.actions.keys()); await _dispose(b); return
+	for i in range(7): _action(b,carriers[i],"force_load_%d_0"%i)
+	check(await until(func(): return l.cargo.size()==7 or b.phase==b.Phase.END,70) and l.cargo.size()==7,"seven carts physically travel to loading points and load all eleven bundles")
+	if l.cargo.size()!=7:
 		print("[hns-cargo] ",l.cargo," actions=",b.mission.actions.keys()); await _dispose(b); return
 	var idle_positions: Array=carriers.map(func(u): return u.position)
 	await _wait(1)
-	check(range(3).all(func(i): return carriers[i].position.distance_to(idle_positions[i])<3),"carriers wait for a separate exit order")
+	check(range(7).all(func(i): return carriers[i].position.distance_to(idle_positions[i])<3),"loaded carriers wait for separate exit orders")
 	await shot(b,name+"_cargo",l.TOP)
-	for i in range(3): _action(b,carriers[i],"force_deliver_%d_0"%i)
+	for i in range(7): _action(b,carriers[i],"force_deliver_%d_0"%i)
 	await _wait(0.5)
-	check(carriers.all(func(u): return u._state==u.ST_MOVE),"all three loaded carriers walk concurrently on player orders")
-	var reserves: Array=l.actors.filter(func(u): return alive(u) and not u.has_meta("carrying_tribute"))
+	check(carriers.all(func(u): return u._state==u.ST_MOVE),"all seven loaded carriers walk concurrently on player orders")
+	var reserves: Array=l.actors.filter(func(u): return alive(u) and not u.has_meta("carrying_tribute") and not u.has_meta("pushing_empty_tribute"))
 	if not reserves.is_empty(): _click(b,reserves,l.GATE_W+Vector2i(-1,0))
-	check(await until(func(): return l.victory or b.phase==b.Phase.END,55) and l.victory,"actual cargo and all companions reach the west exit")
+	check(await until(func(): return l.st==l.WITHDRAW or b.phase==b.Phase.END,90) and l.st==l.WITHDRAW,"seven physical deliveries unlock final assembly")
+	_click(b,l.actors.filter(func(u): return alive(u)),l.GATE_W)
+	check(await until(func(): return l.victory or b.phase==b.Phase.END,25) and l.victory,"a separate player order assembles all companions at the west exit")
 	print("[hns-exit] ",name," ",l.actors.map(func(u): return [u.key,u.hp,b.map.world_to_cell(u.position),u._state] if is_instance_valid(u) else ["fallen"])," phase=",b.phase," stage=",l.st)
 	var result: Dictionary=b.mission.result_snapshot(l.victory)
-	check(l.delivered==3 and l.bundles.all(func(u): return b.units.has(u) and u.visible),"same three loads are visible and delivered once")
+	check(l.delivered==11 and l._delivered_cart_indices(b).size()==7 and l.cargo.is_empty() and l.empty_cargo.is_empty(),"all eleven loads delivered in the original seven carts exactly once")
 	if name=="wine": check(result.story_complete,"wine route earns all four optional story goals")
 	else: check(not result.story_complete and b.mission.has_event("huangnigang_all_safe")==l.actors.all(func(u): return alive(u)),"force route credits actual survivors without inventing wine or all-safe goals")
 	await shot(b,name+"_result",l.GATE_W)

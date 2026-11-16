@@ -1,5 +1,8 @@
 # 项目目录索引（2026-10-30）
 
+[黄泥冈运输分组](../qa/campaign_transport_groups_20261116/README.md)包含定向夹具、七车十一担实际路线、失败记录和缓存修复证据。入口tools/campaign_transport_groups_qa.gd继承更新后的huangnigang_short_test实时路线；该旧工具的历史三货物boundaries未纳入本批。翻译来源assets/localization/campaign_transport_groups.json。
+
+
 [本批来源与限定验证](../qa/campaign_naval_recovery_20261116/README.md)。定向入口`tools/gao_naval_recovery_qa.gd`，实际路线复用`tools/gao_rts_play.gd`；QA含fixtures/和live/两份运行器/原件，翻译来源`assets/localization/campaign_naval_recovery.json`。
 
 

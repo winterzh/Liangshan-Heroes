@@ -389,6 +389,8 @@ func _sync_controls(b) -> void:
 		b.mission.add_level_button("hg_empty_hands", "选中 · 空手同伴",
 			Localize.text("只选中未推车的同伴；按取车、装车、出冈标记分别下令。"))
 	if st in [CARRY,FORCE]:
+		b.mission.add_level_button("hg_empty_carts", "选中 · 推空车同伴", "只选中正在推未装货车辆的七星；装车仍需右键下令。")
+		b.mission.add_level_button("hg_loaded_carts", "选中 · 已装货同伴", "只选中已装好财物的推车者；出冈仍需右键下令。")
 		b.mission.add_level_button("hg_transport_next", "下一步 · 当前所选",
 			Localize.text("选中一位七星后，定位他当前的取车、装车或出冈标记；仍需右键下令。"))
 	b.mission.add_map_locator("西冈口 · 推车退路",GATE_W)
@@ -396,6 +398,16 @@ func _sync_controls(b) -> void:
 
 func activate_mission_button(b, button_id: String) -> void:
 	if b.phase != b.Phase.FIGHT: return
+	if button_id in ["hg_empty_carts", "hg_loaded_carts"]:
+		if st not in [CARRY,FORCE]: return
+		var members := _transport_group(b,button_id=="hg_loaded_carts")
+		if members.is_empty():
+			b.mission.set_status(Localize.text("当前没有这类推车同伴；原选区保留。"))
+			return
+		b.select_members(members,false)
+		b.center_camera_cell(b.map.world_to_cell(members[0].position))
+		b.mission.set_status(Localize.format_text("已选中%d位推车同伴；右键地面可同行，装车或交付仍需各自到对应标记。",[members.size()]))
+		return
 	if button_id == "hg_transport_next":
 		if st not in [CARRY,FORCE]: return
 		var action_id := _selected_transport_action(b)
@@ -427,17 +439,48 @@ func activate_mission_button(b, button_id: String) -> void:
 	else:
 		b.mission.set_status(Localize.text("该人物当前无法行动。"))
 
+func _transport_group(b, loaded: bool) -> Array:
+	var result: Array=[]
+	var assigned: Dictionary=cargo if loaded else empty_cargo
+	var metadata := "carrying_tribute" if loaded else "pushing_empty_tribute"
+	var indices: Array=assigned.keys()
+	indices.sort()
+	for index in indices:
+		var actor=assigned[index]
+		if is_instance_valid(actor) and actor in actors and actor in b.units and actor.key in SEVEN \
+				and actor.hp>0 and actor.story_outcome=="" and actor.get_meta(metadata,-1)==index and actor not in result:
+			result.append(actor)
+	return result
+
 func _selected_transport_action(b) -> String:
-	# Navigation only: never requests an action, moves an actor or changes cargo.
 	if b.selection.size()!=1: return ""
-	var actor=b.selection[0]
-	if not is_instance_valid(actor) or actor not in actors or not b.units.has(actor) \
-		or actor.key not in SEVEN or actor.hp<=0 or actor.story_outcome!="": return ""
+	return _transport_action_for(b,b.selection[0])
+
+func _transport_action_for(b,actor) -> String:
+	# Locate one legal step only. Never request it or continue the next stage.
+	if st not in [CARRY,FORCE] or not is_instance_valid(actor) or actor not in actors or not b.units.has(actor) \
+			or actor.key not in SEVEN or actor.hp<=0 or actor.story_outcome!="": return ""
+	var prefix := "force_deliver_" if actor.has_meta("carrying_tribute") else ("force_load_" if actor.has_meta("pushing_empty_tribute") else "force_take_")
+	var nearest := ""
+	var distance := INF
 	for action_id in b.mission.actions:
 		var name:=String(action_id)
-		if not name.begins_with("force_take_") and not name.begins_with("force_load_") and not name.begins_with("force_deliver_"): continue
+		if not name.begins_with(prefix): continue
 		var action: Dictionary=b.mission.actions[action_id]
-		if not action.done and actor.key in action.actors: return name
+		if action.done or not String(action.get("blocked_reason","")).is_empty() or actor.key not in action.actors: continue
+		var candidate: float=actor.position.distance_squared_to(b.map.cell_to_world(action.cell))
+		if candidate<distance:
+			nearest=name
+			distance=candidate
+	return nearest
+
+func unit_tactical_hint(b,actor) -> String:
+	if st not in [CARRY,FORCE] or not is_instance_valid(actor) or actor not in actors: return ""
+	if actor in _transport_group(b,false):
+		return Localize.format_text("第%d车 · 尚未装货；先到装车标记，勿直接当作财物交付。",int(actor.get_meta("pushing_empty_tribute"))+1)
+	if actor in _transport_group(b,true):
+		var index: int=int(actor.get_meta("carrying_tribute"))
+		return Localize.format_text("第%d车 · 已载%d担；下令前往本车出冈标记交付。",[index+1,Transport.weight(index)])
 	return ""
 
 func top_status(b) -> String:

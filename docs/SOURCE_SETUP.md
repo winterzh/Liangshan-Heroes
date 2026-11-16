@@ -1,5 +1,8 @@
 # 源码设置与换机（2026-10-30）
 
+2026-11-16 黄泥冈运输分组实时派生，无新增Level/Visual字段；hg_empty_carts、hg_loaded_carts纳入官方按钮白名单。campaign_transport_groups.json新增八条四语并同步catalog；源码身份改变，冻结续玩资格不沿用。[来源与验证边界](../qa/campaign_transport_groups_20261116/README.md)。
+
+
 2026-11-16 快活林反击标记由原exposed_left等状态在Battle Overlay重绘，不新增Level/Visual字段或节点；profile结构保持，源码身份改变，旧冻结候选资格不沿用。新增campaign_counter_window.json同步catalog。[本批来源与限定验证](../qa/campaign_counter_window_20261116/README.md)。
 
 
