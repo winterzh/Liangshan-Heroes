@@ -156,8 +156,7 @@ func staff_counter_mines(level: Variant) -> void:
 
 func siege_finisher_active() -> bool:
 	var level: Variant = battle.level
-	return level.lhm_killed == 12 and battle.mission.has_event("lhm_han_captured") and alive(level.enemy_base) \
-		and level.enemy_base.hp <= level.enemy_base.max_hp * 0.4
+	return level.lhm_killed == 12 and battle.mission.has_event("lhm_han_captured") and alive(level.enemy_base)
 
 func siege_artillery() -> Array:
 	return battle.units.filter(func(u): return alive(u) and u.faction == 0 and u.key == "siege_cata")
@@ -343,6 +342,10 @@ func natural_victory() -> void:
 		var army: Array = battle.units.filter(func(u): return alive(u) and u.faction == 0 and u != level.song \
 			and not u.is_worker and not u.is_building and not u.is_noncombat and not u.garrisoned)
 		if siege_finisher_active():
+			if not has_meta("counter_artillery_started"):
+				set_meta("counter_artillery_started", true)
+				print("LIAN_SOUTH_COUNTER ", {"event":"han_captured", "elapsed":level.elapsed,
+					"camp_hp":level.enemy_base.hp})
 			flank_siege(army, level.enemy_base)
 			var flank_tick: int = battle._run_clock._next_tick + 180
 			await wait_live(func(): return battle._run_clock._next_tick >= flank_tick, 8.0)
@@ -501,9 +504,9 @@ func natural_victory() -> void:
 			var strike: Array = army.filter(func(u): return u not in guard)
 			var nonram: Array = strike.filter(func(u): return u.key != "siege_ram")
 			var srams: Array = strike.filter(func(u): return u.key == "siege_ram")
-			# v25: rally further west (>=18 cells from the enemy camp at (54,30)).
-			var rally: Vector2i = Vector2i(28, 30)
-			for c in [Vector2i(28, 30), Vector2i(27, 31), Vector2i(26, 29), Vector2i(25, 30), Vector2i(24, 31)]:
+			# Rally on the south road instead of feeding troops through the central approach.
+			var rally := Vector2i(28, 46)
+			for c in [rally, Vector2i(27, 46), Vector2i(26, 45), Vector2i(25, 46)]:
 				var cw: Vector2 = battle.map.cell_to_world(c)
 				if not battle.map.is_open_cell(c, "land"): continue
 				if battle.units.any(func(e): return alive(e) and e.faction == 1 and not e.is_building and e.position.distance_to(cw) <= 160.0): continue
@@ -544,7 +547,9 @@ func natural_victory() -> void:
 					"target":(str(tgt.key) + "#" + str(tgt.entity_id)) if (tgt != null and is_instance_valid(tgt)) else "",
 					"han":han_s, "manor_hp":float(level.enemy_base.hp) if is_instance_valid(level.enemy_base) else 0.0, "manor_fallen":level.manor_fallen,
 					"hu":hu_s, "guards":guard.size(), "army":army.size(), "rally":str(rally), "gold":battle.gold, "wood":battle.wood}
-			if launched and strike.size() < 10 and not finishing:
+			var approach: Array[Vector2i] = [Vector2i(39, 47), Vector2i(46, 43), Vector2i(48, 38)]
+			var waypoint: int = int(get_meta("counter_south_waypoint", 0))
+			if launched and strike.size() < 13 and not finishing:
 				print("LIAN_COUNTER_WAVE ", wave_info.call("regroup", null))
 				set_meta("v22_launched", false)
 				launched = false
@@ -557,10 +562,14 @@ func natural_victory() -> void:
 				var staged: Array = srams.filter(func(u): return stage_v != null and u.position.distance_to(battle.map.cell_to_world(stage_v)) <= 200.0)
 				var rams_rallied: int = rallied.filter(func(u): return u.key == "siege_ram").size() + staged.size()
 				var rams_ok: bool = rams_rallied >= 1 or not base_alive
-				# v25: launch at >=18 rallied of a >=20 strike (or >=14 after 240s), never while Huyan Zhuo is near.
-				var front_hero_ready: bool = han_captured or rallied.any(func(u): return u.is_hero)
-				if rams_ok and front_hero_ready and not bool(get_meta("v25_hu_near", false)) and ((rallied.size() >= 18 and strike.size() >= 20) or (rallied.size() >= 14 and waited_s >= 240.0)):
+				var front_hero_ready: bool = rallied.any(func(u): return u.is_hero)
+				var shooters_ready: int = rallied.filter(func(u): return u.is_ranged and u.key != "siege_ram").size()
+				var formed: bool = rallied.size() >= 22 and strike.size() >= 24
+				var delayed: bool = waited_s >= 160.0 and rallied.size() >= 20 and strike.size() >= 22
+				if rams_ok and front_hero_ready and shooters_ready >= 5 and not bool(get_meta("v25_hu_near", false)) and (formed or delayed):
 					wave += 1
+					waypoint = 0
+					set_meta("counter_south_waypoint", waypoint)
 					set_meta("v22_wave", wave)
 					set_meta("v22_launched", true)
 					set_meta("v22_rams_reached", false)
@@ -571,7 +580,17 @@ func natural_victory() -> void:
 					# Regroup surviving siege engines with the field army after a repulse.
 					var off: Array = strike.filter(func(u): return u.position.distance_to(rally_w) > 96.0 and u not in staged)
 					if not off.is_empty(): policy.move(battle, off, rally, false)
-			if launched:
+			if launched and waypoint < approach.size():
+				var destination: Vector2 = battle.map.cell_to_world(approach[waypoint])
+				var arrived: int = nonram.filter(func(u): return u.position.distance_to(destination) <= 145.0).size()
+				if arrived >= mini(12, nonram.size()):
+					waypoint += 1
+					set_meta("counter_south_waypoint", waypoint)
+					print("LIAN_SOUTH_COUNTER ", {"event":"waypoint", "index":waypoint,
+						"elapsed":level.elapsed, "wave":wave, "arrived":arrived})
+				if waypoint < approach.size():
+					policy.move(battle, nonram, approach[waypoint], true)
+			if launched and waypoint >= approach.size():
 				if not han_captured and alive(level.han) and level.han.fog_visible:
 					var shooters: Array = nonram.filter(func(u): return u.is_ranged \
 						and u.position.distance_to(level.han.position) <= u.atk_range + 140.0)
@@ -591,7 +610,7 @@ func natural_victory() -> void:
 				elif alive(level.han) and not han_captured:
 					cur_target = level.han
 					if level.han.fog_visible: policy.target(battle, nonram, level.han, "v22_counter_han_capture")
-					else: policy.move(battle, nonram, battle.map.world_to_cell(level.han.position), true)
+					else: policy.move(battle, nonram, Vector2i(49, 35), true)
 				elif hu_close:
 					cur_target = level.hu
 					policy.target(battle, nonram, level.hu, "v22_counter_hu_selfdefense")
@@ -1081,7 +1100,7 @@ func natural_victory() -> void:
 		if may_attack and lane == "counter":
 			var now25: int = battle._run_clock._next_tick
 			var launched25: bool = bool(get_meta("v22_launched", false))
-			var rally25: Vector2i = get_meta("v25_rally", Vector2i(28, 30))
+			var rally25: Vector2i = get_meta("v25_rally", Vector2i(28, 46))
 			var rally_w25: Vector2 = battle.map.cell_to_world(rally25)
 			var gcen25: Vector2 = Vector2.ZERO
 			for u in army: gcen25 += u.position

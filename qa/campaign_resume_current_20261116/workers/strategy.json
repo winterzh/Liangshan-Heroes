@@ -4,7 +4,7 @@
   "original_commit": "f23e3b287fd66973abcbc74f4b4f537c1ec0ff5f",
   "original_sha256": "1c758b85424fa6c98e17a6b418698aa0ec2ca61b90ce5c245195f6218730c423",
   "derived_path": "driver_strategy.gd",
-  "derived_sha256": "a3e2625029c92d737c34882a6e7eb302d101fccfea7f050c62732c9a784fecbe",
+  "derived_sha256": "ad5877f6595a2922c8c525cfc62b8914c0b7103d13a926938d4ca21833bda404",
   "patches": [
     {
       "before": "\t\teconomy_step()\n\t\tvar army: Array = battle.units.filter",
@@ -129,6 +129,38 @@
     {
       "before": "\t\t\t\tif rams_ok and not bool(get_meta(\"v25_hu_near\", false)) and ((rallied.size() >= 18 and strike.size() >= 20) or (rallied.size() >= 14 and waited_s >= 240.0)):",
       "after": "\t\t\t\tvar front_hero_ready: bool = han_captured or rallied.any(func(u): return u.is_hero)\n\t\t\t\tif rams_ok and front_hero_ready and not bool(get_meta(\"v25_hu_near\", false)) and ((rallied.size() >= 18 and strike.size() >= 20) or (rallied.size() >= 14 and waited_s >= 240.0)):"
+    },
+    {
+      "before": "\treturn level.lhm_killed == 12 and battle.mission.has_event(\"lhm_han_captured\") and alive(level.enemy_base) \\\n\t\tand level.enemy_base.hp <= level.enemy_base.max_hp * 0.4",
+      "after": "\treturn level.lhm_killed == 12 and battle.mission.has_event(\"lhm_han_captured\") and alive(level.enemy_base)"
+    },
+    {
+      "before": "\t\tif siege_finisher_active():\n\t\t\tflank_siege(army, level.enemy_base)",
+      "after": "\t\tif siege_finisher_active():\n\t\t\tif not has_meta(\"counter_artillery_started\"):\n\t\t\t\tset_meta(\"counter_artillery_started\", true)\n\t\t\t\tprint(\"LIAN_SOUTH_COUNTER \", {\"event\":\"han_captured\", \"elapsed\":level.elapsed,\n\t\t\t\t\t\"camp_hp\":level.enemy_base.hp})\n\t\t\tflank_siege(army, level.enemy_base)"
+    },
+    {
+      "before": "\t\t\t# v25: rally further west (>=18 cells from the enemy camp at (54,30)).\n\t\t\tvar rally: Vector2i = Vector2i(28, 30)\n\t\t\tfor c in [Vector2i(28, 30), Vector2i(27, 31), Vector2i(26, 29), Vector2i(25, 30), Vector2i(24, 31)]:",
+      "after": "\t\t\t# Rally on the south road instead of feeding troops through the central approach.\n\t\t\tvar rally := Vector2i(28, 46)\n\t\t\tfor c in [rally, Vector2i(27, 46), Vector2i(26, 45), Vector2i(25, 46)]:"
+    },
+    {
+      "before": "\t\t\tif launched and strike.size() < 10 and not finishing:",
+      "after": "\t\t\tvar approach: Array[Vector2i] = [Vector2i(39, 47), Vector2i(46, 43), Vector2i(48, 38)]\n\t\t\tvar waypoint: int = int(get_meta(\"counter_south_waypoint\", 0))\n\t\t\tif launched and strike.size() < 13 and not finishing:"
+    },
+    {
+      "before": "\t\t\t\t# v25: launch at >=18 rallied of a >=20 strike (or >=14 after 240s), never while Huyan Zhuo is near.\n\t\t\t\tvar front_hero_ready: bool = han_captured or rallied.any(func(u): return u.is_hero)\n\t\t\t\tif rams_ok and front_hero_ready and not bool(get_meta(\"v25_hu_near\", false)) and ((rallied.size() >= 18 and strike.size() >= 20) or (rallied.size() >= 14 and waited_s >= 240.0)):\n\t\t\t\t\twave += 1\n\t\t\t\t\tset_meta(\"v22_wave\", wave)",
+      "after": "\t\t\t\tvar front_hero_ready: bool = rallied.any(func(u): return u.is_hero)\n\t\t\t\tvar shooters_ready: int = rallied.filter(func(u): return u.is_ranged and u.key != \"siege_ram\").size()\n\t\t\t\tvar formed: bool = rallied.size() >= 22 and strike.size() >= 24\n\t\t\t\tvar delayed: bool = waited_s >= 160.0 and rallied.size() >= 20 and strike.size() >= 22\n\t\t\t\tif rams_ok and front_hero_ready and shooters_ready >= 5 and not bool(get_meta(\"v25_hu_near\", false)) and (formed or delayed):\n\t\t\t\t\twave += 1\n\t\t\t\t\twaypoint = 0\n\t\t\t\t\tset_meta(\"counter_south_waypoint\", waypoint)\n\t\t\t\t\tset_meta(\"v22_wave\", wave)"
+    },
+    {
+      "before": "\t\t\tif launched:\n\t\t\t\tif not han_captured and alive(level.han) and level.han.fog_visible:",
+      "after": "\t\t\tif launched and waypoint < approach.size():\n\t\t\t\tvar destination: Vector2 = battle.map.cell_to_world(approach[waypoint])\n\t\t\t\tvar arrived: int = nonram.filter(func(u): return u.position.distance_to(destination) <= 145.0).size()\n\t\t\t\tif arrived >= mini(12, nonram.size()):\n\t\t\t\t\twaypoint += 1\n\t\t\t\t\tset_meta(\"counter_south_waypoint\", waypoint)\n\t\t\t\t\tprint(\"LIAN_SOUTH_COUNTER \", {\"event\":\"waypoint\", \"index\":waypoint,\n\t\t\t\t\t\t\"elapsed\":level.elapsed, \"wave\":wave, \"arrived\":arrived})\n\t\t\t\tif waypoint < approach.size():\n\t\t\t\t\tpolicy.move(battle, nonram, approach[waypoint], true)\n\t\t\tif launched and waypoint >= approach.size():\n\t\t\t\tif not han_captured and alive(level.han) and level.han.fog_visible:"
+    },
+    {
+      "before": "\t\t\t\t\telse: policy.move(battle, nonram, battle.map.world_to_cell(level.han.position), true)",
+      "after": "\t\t\t\t\telse: policy.move(battle, nonram, Vector2i(49, 35), true)"
+    },
+    {
+      "before": "\t\t\tvar rally25: Vector2i = get_meta(\"v25_rally\", Vector2i(28, 30))",
+      "after": "\t\t\tvar rally25: Vector2i = get_meta(\"v25_rally\", Vector2i(28, 46))"
     }
   ],
   "original_all_goal_save_clock_typed_assertions_unchanged": true,

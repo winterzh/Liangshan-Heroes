@@ -81,8 +81,8 @@ def verified_retry(old, original, tail):
     return original['steps'] + prior['steps'][:1], original['reports'] + prior['reports'][:1], pins, failed['pid']
 
 
-ASSAULT_RECEIPT_KEYS = ('retry_assault_tail', 'retry_flank_tail', 'retry_budget_tail', 'retry_reserve_tail')
-ASSAULT_SOURCE_COMMITS = ('0daa30b3', 'ef4ec074', 'cc6efe59', 'd81ccd63')
+ASSAULT_RECEIPT_KEYS = ('retry_assault_tail', 'retry_flank_tail', 'retry_budget_tail', 'retry_reserve_tail', 'retry_support_tail')
+ASSAULT_SOURCE_COMMITS = ('0daa30b3', 'ef4ec074', 'cc6efe59', 'd81ccd63', '011d136e55445d38158abf583f15c03df45858a7')
 
 
 def verify_assault_stall(old, original, lure_tail, assault_tail, pins, failed_pids, previous=()):

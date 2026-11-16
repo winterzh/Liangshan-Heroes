@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[连环马南路续玩原件](../qa/campaign_resume_current_20261116/evidence/protected_drill_candidate/south_approach/) 保存尾段回执、战斗日志与通过或失败的报告。
+
 野猪林 [提前强救](../qa/campaign_escort_arrival_20261116/early_force/) 与快活林 [酒路](../qa/campaign_counter_window_20261116/wine_route/) 保存独立运行报告和输入摘要。
 
 黄泥冈 [强夺接力原件](../qa/campaign_transport_groups_20261116/force_relay/) 保存时限中止与最终实跑。
