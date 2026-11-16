@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+高俅载船沉没实跑复用现有经济和战斗驾驶。[载船沉没后重新集结实跑](../qa/campaign_naval_recovery_20261116/README.md#载船沉没后重新集结并收兵)
+
 高俅主动止损路线上，驾驶复用现有战斗和经济指令。[受损后返港实跑](../qa/campaign_naval_recovery_20261116/README.md#火攻受阻后返港收兵)
 
 大名府牢院交接七条文案源为 `daming_jail_handoff.json`。任务刷新复用既有关卡和动作状态。[牢院交接验收](../qa/campaign_coordination_20261116/README.md#牢院放行与开枷交接)
