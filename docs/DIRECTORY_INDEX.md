@@ -127,6 +127,8 @@
 
 [黄泥冈载重货车接力](../qa/campaign_transport_groups_20261116/README.md#载重货车掉落与接力)含载重掉落、障碍同侧、实际右键和单车交付的检查原件。
 
+[黄泥冈伤亡接力四语](../qa/campaign_transport_groups_20261116/README.md#伤亡接力报告四语)记录清空格式缓存后的四语互切，原件与探针同在 `loaded_relay/`。
+
 [大名府夺门与撤离追兵](../qa/campaign_wounded_selection_20261116/README.md#夺门与撤离追兵)含有效主将、原追兵身份、倒计时及提前拦截的定向证据。
 
 [连环马余骑定位](../qa/campaign_cavalry_escort_20261116/README.md#提前歼骑与余骑定位)含北路提前歼灭、提前破营后的余骑和正常胜利回调证据。

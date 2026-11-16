@@ -30,6 +30,9 @@ func apply_overrides(defs: Dictionary, abilities: Dictionary) -> void:
 	# only fixed display phrases; saved action labels and gameplay stay intact.
 	var phrases: Array = []
 	var report_phrases: Array = []
+	var relay_reports: Array = []
+	for key: String in SEVEN+["bai_sheng"]:
+		relay_reports.append({"source": "%s倒下；幸存七星仍可接力推车。", "args": [String(defs[key].name)]})
 	# Character selectors are whole phrases. Register their finite translations
 	# for both fresh scenes and restored labels, without relying on format history.
 	for key: String in ["chao_gai", "liu_tang", "wu_yong", "bai_sheng"]:
@@ -47,6 +50,8 @@ func apply_overrides(defs: Dictionary, abilities: Dictionary) -> void:
 			report_phrases.append({"source": "%s接过第%d辆枣车，等你下令推到财物旁。", "args": [actor_name, index + 1]})
 			report_phrases.append({"source": "%s推起第%d车，载%d担财物。", "args": args})
 			report_phrases.append({"source": "第%d车由%s推出黄泥冈，共载%d担。", "args": [index + 1, actor_name, Transport.weight(index)]})
+			relay_reports.append({"source": "%s倒下，第%d辆枣车留在原地，可由幸存七星接手。", "args": [actor_name, index + 1]})
+			relay_reports.append({"source": "%s倒下，第%d车（%d担）留在原地，可由幸存七星接力。", "args": args})
 	var registered: Dictionary = Localize.register_fixed_phrases(phrases)
 	if not registered.ok:
 		push_error("HG_TRANSPORT_TRANSLATION_" + String(registered.code))
@@ -55,6 +60,9 @@ func apply_overrides(defs: Dictionary, abilities: Dictionary) -> void:
 	var report_registered: Dictionary = Localize.register_fixed_phrases(report_phrases)
 	if not report_registered.ok:
 		push_error("HG_TRANSPORT_REPORT_TRANSLATION_" + String(report_registered.code))
+	var relay_registered: Dictionary = Localize.register_fixed_phrases(relay_reports)
+	if not relay_registered.ok:
+		push_error("HG_TRANSPORT_RELAY_TRANSLATION_" + String(relay_registered.code))
 
 func deploy(b) -> void:
 	super.deploy(b)
