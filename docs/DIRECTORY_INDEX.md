@@ -1,5 +1,8 @@
 # 项目目录索引（2026-10-30）
 
+[Windows 进场优化候选](../qa/battle_entry_timing_20261116/windows_candidate_e3a752f9.json)包含 `e3a752f9` 发行文件摘要、原生启动与四模式编译包收据。
+
+
 [进场地表贴图后台读取](../qa/battle_entry_timing_20261116/battle_entry_surface_prefetch.json)记录高俅和经典驻守各三张贴图的实际路径、缓存与绑定时点。
 
 
