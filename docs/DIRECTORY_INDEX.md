@@ -1,5 +1,8 @@
 # 项目目录索引（2026-10-30）
 
+[高俅稳定分支十分钟](../qa/campaign_sustained_performance_20261116/stable_cc860253.json)含 `cc860253` 的逐分钟帧间隔、性能门槛与同探针对照。
+
+
 [树冠遮挡筛选收据](../qa/campaign_sustained_performance_20261116/canopy_unit_partition.json)记录实际场景和生成布局的透明度对照及 55 秒样本。
 
 
