@@ -1,5 +1,8 @@
 # 源码设置与换机（2026-10-30）
 
+普通单位已解析的贴图、帧序列和方向在换局、替换美术别名或安装预取的帧时失效。源码诊断若直接改下层贴图表，要调用 Art.clear_resolved_unit_art()。[普通单位美术复用](../qa/campaign_sustained_performance_20261116/README.md#普通单位美术跨帧复用)
+
+
 战船绘制同时取得贴图和是否使用显式方向。旧版预览、普通图和高俅座船的旧贴图回退仍走 Art 路由。[战船绘制定向复测](../qa/campaign_sustained_performance_20261116/README.md#战船贴图与朝向合并查询)
 
 

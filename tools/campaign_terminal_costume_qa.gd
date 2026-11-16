@@ -36,6 +36,7 @@ func _terminal_contracts() -> void:
 	var cached_frames: Variant = art._anim_cache.get(ck)
 	art._generic_directional_path_cache[probe_key]="res://assets/anim/song_jiang_death_ne.tres"
 	art._anim_cache.erase(ck)
+	art.clear_resolved_unit_art()
 	var injected: Array = art.unit_anim_frames("lin_chong","death","ne")
 	check(not injected.is_empty(),"new generic directional death fixture resolves")
 	for variant in ["lin_chong_bound","lin_chong_prisoner","lin_chong_escort"]:
@@ -46,6 +47,7 @@ func _terminal_contracts() -> void:
 	else: art._generic_directional_path_cache[probe_key]=cached_path
 	if cached_frames==null: art._anim_cache.erase(ck)
 	else: art._anim_cache[ck]=cached_frames
+	art.clear_resolved_unit_art()
 	check(art.unit_anim_frames("lin_chong","death","invalid","lin_chong_bound").is_empty(),"invalid direction rejected")
 	check(art.unit_anim_frames("song_jiang","death","se","unknown_variant")==art.unit_anim_frames("song_jiang","death","se"),"unknown variants retain existing compatibility")
 	check(art.unit_anim_frames("qin_ming","death","se","bound_qin_ming").is_empty(),"native bound Qin terminal pose cannot borrow generic weapon body")

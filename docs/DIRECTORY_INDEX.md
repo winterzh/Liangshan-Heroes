@@ -1,5 +1,8 @@
 # 项目目录索引（2026-10-30）
 
+[普通单位美术跨帧收据](../qa/campaign_sustained_performance_20261116/battle_art_lookup.json)包含对照计时、夹具更正、跨帧缓存和服装边界的验证数据。
+
+
 [战船贴图与方向](../qa/campaign_sustained_performance_20261116/ship_art_lookup.json)记录 180 组资源配对、实际绘制对照和首批交战的分段结果。
 
 

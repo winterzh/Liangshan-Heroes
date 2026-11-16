@@ -129,6 +129,7 @@ func _clear_art_fixture_cache(art: Node) -> void:
 			erase.append(cache_key)
 	for cache_key in erase:
 		art._anim_cache.erase(cache_key)
+	art.clear_resolved_unit_art()
 
 
 func _stop_test_audio() -> void:
