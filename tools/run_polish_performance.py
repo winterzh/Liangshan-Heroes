@@ -35,7 +35,7 @@ def source_receipt():
     for directory in ("scripts", "scenes", "assets", "shaders", "resources", "data", "addons", "content", "scenarios", "fonts"):
         paths.extend(p for p in (ROOT / directory).rglob("*") if p.is_file())
     paths += [ROOT / "project.godot", ROOT / "tools/polish_performance_probe.gd",
-              ROOT / "tools/zhujiazhuang_rts_test.gd", Path(__file__).resolve()]
+              ROOT / "tools/zhujiazhuang_rts_test.gd", ROOT / "tools/gao_rts_play.gd", Path(__file__).resolve()]
     paths += [p for p in ROOT.glob("icon.*") if p.is_file()]
     text_suffixes = {".gd", ".tscn", ".tres", ".gdshader", ".gdshaderinc", ".json", ".cfg",
                      ".import", ".uid", ".svg", ".txt", ".csv", ".godot", ".py", ".md"}

@@ -21,7 +21,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DIRS = {"scripts", "scenes", "assets", "shaders", "resources", "data", "addons", "content", "scenarios", "fonts"}
 FIXED = {"project.godot", "export_presets.cfg", "icon.png", "icon.png.import", "icon.ico"}
 TOOLS = ["tools/run_polish_performance.py", "tools/polish_performance_probe.gd",
-         "tools/zhujiazhuang_rts_test.gd", "tools/analyze_polish_performance.py"]
+         "tools/zhujiazhuang_rts_test.gd", "tools/gao_rts_play.gd", "tools/analyze_polish_performance.py"]
 ERROR = re.compile(r"SCRIPT ERROR|^ERROR:|^WARNING:|Parse Error|Compile Error|\bFAIL\b|leaked|RID allocations", re.M)
 
 

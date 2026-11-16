@@ -1,9 +1,9 @@
-extends "res://tools/zhujiazhuang_rts_test.gd"
+extends "res://tools/gao_rts_play.gd"
 ## Fresh-process rendered statistical baseline. Not a deterministic combat replay.
-## POLISH_CASE=economy|defense200|zhu_contact|gao_contact, POLISH_CAMERA=fixed|auto.
+## POLISH_CASE=economy|defense200|zhu_contact|gao_contact|gao_defense, POLISH_CAMERA=fixed|auto.
 ## POLISH_EFFECTS_QUALITY=standard|reduced, default standard; never inherit saved quality.
 ## Runner owns repetitions and source/environment receipts. No production mutation.
-const CASES := ["economy", "defense200", "zhu_contact", "gao_contact"]
+const CASES := ["economy", "defense200", "zhu_contact", "gao_contact", "gao_defense"]
 const WARMUP_TICKS := 300
 var scenario := ""
 var camera_mode := "fixed"
@@ -26,6 +26,26 @@ var effects_quality_violations := 0
 var quality_settings: Node
 var fixture_rng_identity := {}
 var fixture_rng_initial := {}
+var gao_defense_memory: Array[Dictionary] = []
+
+func _gao_defend(b) -> void:
+	var level = b.level
+	_economy_gao(b)
+	var army: Array = b.units.filter(func(u):
+		return (alive(u) and u.faction == 0 and u != level.song
+			and not u.is_worker and not u.is_building and not u.is_noncombat and u.movement_profile == "land"))
+	var fleet: Array = b.units.filter(func(u):
+		return alive(u) and u.faction == 0 and u.key in level.SHIP_KEYS and u.key != "zhang_shun_boat")
+	_click(b, army, Vector2i(29,32), true)
+	_skills(b, army)
+	_click(b, fleet, Vector2i(39,45), true)
+
+func _gao_memory(label: String) -> void:
+	gao_defense_memory.append({"mark":label, "tick":physics_tick,
+		"static_bytes":Performance.get_monitor(Performance.MEMORY_STATIC),
+		"objects":Performance.get_monitor(Performance.OBJECT_COUNT),
+		"nodes":Performance.get_monitor(Performance.OBJECT_NODE_COUNT),
+		"orphans":Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT)})
 
 class TickDriver extends Node:
 	var owner_probe
@@ -65,6 +85,11 @@ func _on_tick() -> void:
 	if not is_instance_valid(battle_ref): return
 	physics_tick += 1
 	var b = battle_ref
+	if scenario == "gao_defense":
+		if physics_tick % 120 == 1: _gao_defend(b)
+		if physics_tick % 1800 == 0:
+			_gao_memory("periodic")
+			print("[gao-defense] ", JSON.stringify(_state(b)))
 	if physics_tick == 1:
 		if scenario == "economy":
 			var issued := []
@@ -130,7 +155,7 @@ func _new_battle():
 	camp.defense_waves = 30; camp.defense_hero_cap = 4; camp.defense_random = false
 	camp.enemy_mult = 1.0; camp.hero_mult = 1.0; camp.hero_mult_touched = false
 	camp.ai_difficulty = "normal"; camp.victory_mode = "conquest"
-	camp.current = 2 if scenario == "zhu_contact" else (4 if scenario == "gao_contact" else 0)
+	camp.current = 2 if scenario == "zhu_contact" else (4 if scenario in ["gao_contact","gao_defense"] else 0)
 	if scenario in ["economy","defense200"]: camp.skirmish = true
 	seed(5088120)
 	var b = load("res://scenes/main.tscn").instantiate()
@@ -170,7 +195,7 @@ func _new_battle():
 	b.camera.zoom = Vector2.ONE; b.camera.rotation = 0.0; b.camera.offset = Vector2.ZERO; b.camera._shake = 0.0
 	var cell: Vector2i = b.level.camera_start_cell()
 	if scenario == "zhu_contact": cell = b.level.MAIN_GATE
-	elif scenario == "gao_contact": cell = b.level.SEA_FRONT
+	elif scenario in ["gao_contact","gao_defense"]: cell = b.level.SEA_FRONT
 	b.center_camera_cell(cell); camera_origin = b.camera.position
 	b.camera.set_process_unhandled_input(false)
 	if camera_mode == "fixed":
@@ -209,6 +234,10 @@ func _run() -> void:
 	var audio_ready: bool = (music._thr == null or not music._thr.is_alive()) and music._tracks.calm.size()==4 and music._tracks.battle.size()==4
 	check(audio_ready,"background music synthesis finished before battle setup")
 	check(Engine.physics_ticks_per_second==60,"production 60Hz physics configuration")
+	if scenario == "gao_defense":
+		build_cells = [Vector2i(24,26),Vector2i(26,40),Vector2i(14,42),Vector2i(10,43),
+			Vector2i(21,40),Vector2i(26,23),Vector2i(9,31),Vector2i(15,24)]
+		_gao_memory("before_entry")
 	var b = await _new_battle(); battle_ref = b
 	if b == null: quit(2); return
 	var initial_units := []
@@ -227,6 +256,7 @@ func _run() -> void:
 	await RenderingServer.frame_post_draw
 	var started := Time.get_ticks_usec(); var previous := started; var start_tick := physics_tick
 	var raw := []; var process_ms := []; var physics_ms := []; var gpu_ms := []; var render_cpu_ms := []; var draws := []
+	if scenario == "gao_defense": _gao_memory("sample_start")
 	var sample_start := _state(b)
 	var quality_start: Variant = quality_settings.get("effects_quality")
 	var autocam_start := autocam_active_ticks
@@ -249,12 +279,15 @@ func _run() -> void:
 	check(camera_violations==0,"fixed camera transform has no drift")
 	check(Engine.time_scale==1.0 and Engine.physics_ticks_per_second==60,"unmodified simulation speed and frequency")
 	check(b.gameplay_rng_fault().is_empty(),"gameplay RNG remains healthy during the actual sample")
-	check(not input_log.is_empty() or scenario=="defense200","planned scenario input was issued")
+	check(not input_log.is_empty() or scenario=="defense200" or (scenario=="gao_defense" and orders>0),"planned scenario input was issued")
 	var contact_covered := true
 	if scenario in ["defense200","zhu_contact"]: contact_covered = damage_observed[0]+damage_observed[1]>damage_start[0]+damage_start[1]
-	elif scenario == "gao_contact":
+	elif scenario in ["gao_contact","gao_defense"]:
 		contact_covered = damage_observed[0]+damage_observed[1]>damage_start[0]+damage_start[1] and damage_observed[2]+damage_observed[3]>damage_start[2]+damage_start[3]
 	if seconds >= 60.0: check(contact_covered,"requested land/water combat actually occurred in sample")
+	if scenario == "gao_defense":
+		check(buildings_started>0 and units_queued_by_key.get("liangshan_warship",0)>0,"construction and paid ship recruitment occurred")
+		_gao_memory("sample_end")
 	if camera_mode == "auto":
 		check(autocam_active_ticks>autocam_start,"automatic camera actually active during sample")
 		check(manual_camera_ticks==0,"automatic camera has no manual keyboard takeover")
@@ -285,6 +318,12 @@ func _run() -> void:
 		"acceptance_eligible":complete and seconds>=60.0,"time_scale":Engine.time_scale,
 		"physics_hz":Engine.physics_ticks_per_second,"resolution":[root.size.x,root.size.y],
 		"renderer":RenderingServer.get_current_rendering_method(),"gpu":RenderingServer.get_video_adapter_name(),"godot":Engine.get_version_info().string}
+	if scenario == "gao_defense":
+		report["fixture_kind"] = "native paid production and defense against all waves on their authored timers"
+		report["defense"] = {"orders":orders,"skill_orders":skill_orders,"buildings_started":buildings_started,
+			"units_queued_by_key":units_queued_by_key,"enemy_produced":b.level.produced,
+			"waves_sent":b.level.waves.map(func(wave): return wave.sent),
+			"battle_seconds":b.level.elapsed,"memory":gao_defense_memory}
 	var output: String = OS.get_environment("POLISH_OUT")
 	if output.is_empty(): output = "res://.godot/polish_performance_report.json"
 	var shot: String = output.get_basename()+".png"
@@ -292,6 +331,7 @@ func _run() -> void:
 	tick_driver.queue_free(); battle_ref = null; fixture_units.clear()
 	var weak = weakref(b)
 	await _dispose(b)
+	if scenario == "gao_defense": _gao_memory("after_exit")
 	check(weak.get_ref()==null,"sample battle actually freed")
 	check(_prefs_hash()==prefs_before,"player campaign and settings files unchanged")
 	report["checks"] = checks; report["failures"] = failures; report["integrity_passed"] = failures.is_empty()

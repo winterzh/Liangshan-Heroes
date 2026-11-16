@@ -1,5 +1,8 @@
 # 源码设置与换机（2026-10-30）
 
+高俅正常速度负载使用 `POLISH_CASE=gao_defense`，复用原关卡付费生产、支援指令和脚本出兵时序。现有性能工具及冻结宿主的来源清单同步纳入高俅驾驶依赖。[高俅关持续帧耗时](../qa/campaign_sustained_performance_20261116/README.md)
+
+
 快活林起手预警复用原招式状态，冲撞警戒区使用实际冲撞宽度与人物半径。四语分片为 `kuaihuolin_windup.json`。[快活林起手预警](../qa/campaign_counter_window_20261116/README.md#起手倒计时与冲撞警戒区)
 
 黄泥冈重车落点沿既有地面位移限制，接力使用既有货车单元及动作 ID。四语分片为 `huangnigang_loaded_relay.json`。[黄泥冈载重货车接力](../qa/campaign_transport_groups_20261116/README.md#载重货车掉落与接力)
