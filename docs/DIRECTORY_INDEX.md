@@ -1,5 +1,8 @@
 # 项目目录索引（2026-10-30）
 
+[高俅火攻反馈与完整演义](../qa/campaign_fire_readiness_20261116/README.md)：tools/gao_fire_readiness_qa.gd继承gao_rts_play，runner支持--fixture-only或--live-only；fixtures保留初次显示问题，live保留翻译修正前实战来源，final_fixtures为最终14项与两张图。翻译来源assets/localization/campaign_fire_readiness.json。
+
+
 [大名府伤员选择与双路线](../qa/campaign_wounded_selection_20261116/README.md)：tools/daming_wounded_qa.gd继承现有daming_rts_test；runner支持--fixture-only或--live-only --route signal/assault。combined保留首次夹具/举火，fixtures保留展开面板补拍，assault保留实际强攻；四语来源assets/localization/campaign_wounded_selection.json。
 
 

@@ -111,7 +111,10 @@ func _story(b,time: float) -> void:
 			var five=b.find_unit("ruan_xiaowu_boat")
 			if alive(five): _click(b,[five],l.FIRE_SAFE)
 			_action(b,b.find_unit("ruan_xiaoer_boat"),"gao_fire_withdraw")
-			if b.mission.has_event("fire_escort_safe"): story_phase="battle"
+			if b.mission.has_event("fire_escort_safe"): story_phase="return"
+		"return":
+			_action(b,l.liu_carrier,"gao_liu_return")
+			if b.mission.has_event("gao_liu_returned"): story_phase="battle"
 		"battle":
 			if l.flagship_disabled and not alive(l.posts[0]): story_phase="seal"
 		"seal":
@@ -157,7 +160,7 @@ func _play_gao(b) -> void:
 			# Preserve the two rescue ships for their explicit task, with ordinary
 			# paid ships screening them. Moving to the fire point starts before
 			# the second wave, so task actors do not cross an engaged front late.
-			if story_phase in ["lure","wind","prepare","fire","withdraw"]:
+			if story_phase in ["lure","wind","prepare","fire","withdraw","return"]:
 				fleet=fleet.filter(func(u): return u.key not in ["ruan_xiaoer_boat","ruan_xiaowu_boat"])
 				if story_phase in ["lure","wind","prepare"]:
 					for key in ["ruan_xiaoer_boat","ruan_xiaowu_boat"]:

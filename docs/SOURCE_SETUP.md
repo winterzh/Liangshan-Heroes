@@ -1,5 +1,8 @@
 # 源码设置与换机（2026-10-30）
 
+2026-11-16 高俅火攻/接应/撤离条件抽出供任务与HUD共用，原边界保持；提示实时派生，无新增Level/Visual字段，生产身份变化不沿用冻结恢复资格。新增campaign_fire_readiness.json七条四语。gao_rts_play故事驾驶增加实际返港阶段，其间专船不混入普通攻击编组；只在QA中生效。[来源与限定验证](../qa/campaign_fire_readiness_20261116/README.md)。
+
+
 2026-11-16 大名府daming_select_wounded进入Mission官方按钮白名单，沿用Presentation固定回调；成员由原伤员/既有状态实时派生，无新增Level字段。新增campaign_wounded_selection.json四条四语并同步catalog。生产来源变化不沿用冻结恢复候选资格。[本批实现与双路线证据](../qa/campaign_wounded_selection_20261116/README.md)。
 
 

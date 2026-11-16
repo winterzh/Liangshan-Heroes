@@ -304,6 +304,31 @@ func _near(b,u,cell: Vector2i,radius: float) -> bool:
 	return alive(u) and u.position.distance_to(b.map.cell_to_world(cell))<=radius
 func _enemy_near(b,p: Vector2,radius: float) -> bool:
 	return b.units.any(func(u): return alive(u) and u.faction==1 and not u.is_resource and not u.is_building and u.position.distance_to(p)<radius)
+func _fire_targets(actor) -> Array:
+	if not alive(actor): return []
+	return water_groups[1].filter(func(u): return alive(u) and u.position.distance_to(actor.position)<200)
+func _fire_escorts(b,actor) -> Array:
+	if not alive(actor): return []
+	return [b.find_unit("ruan_xiaoer_boat"),b.find_unit("ruan_xiaowu_boat")].filter(func(u): return alive(u) and u.position.distance_to(actor.position)<=220)
+func _withdraw_crew(b) -> Array:
+	return [liu_carrier,b.find_unit("ruan_xiaowu_boat")].filter(func(u): return _near(b,u,FIRE_SAFE,120))
+func unit_tactical_hint(b,u) -> String:
+	if not is_instance_valid(u) or u.faction!=0: return ""
+	if u.key not in ["liu_tang","liu_tang_fireboat","ruan_xiaoer_boat","ruan_xiaowu_boat"]: return ""
+	if b.mission.has_event("gao_liu_returned") and u.key=="liu_tang":
+		return Localize.text("刘唐已返港，可继续指挥岸军。")
+	if fire_abandoned or b.mission.story_goals.get("gao_fire",{}).get("state","")=="missed":
+		return Localize.text("本次火攻已失去条件；继续指挥普通舰队。\n刘唐若仍在原船，可右键返港标记下船。")
+	if b.mission.has_event("fire_escort_safe"):
+		return Localize.text("接应撤离已完成，演义成果保留。\n载刘唐的原船可右键返港标记下船。")
+	if fire_lit:
+		return Localize.format_text("接应船已到安全区%d/2；压退附近官船。\n两船到齐后，右键撤出险水标记。",[_withdraw_crew(b).size()])
+	if fire_prepared:
+		var visible_targets: int=_fire_targets(fireboat).filter(func(e): return b.is_visible_world(e.position)).size()
+		return Localize.format_text("火船附近可见连船%d；接应船到位%d/2。\n护送火船到火点，待连船靠近后右键举火。",[visible_targets,_fire_escorts(b,fireboat).size()])
+	if not b.mission.has_event("gongsun_wind"):
+		return Localize.text("公孙胜先到祭风标记；刘唐随后备火。\n先造普通战船掩护两艘接应船。")
+	return Localize.format_text("刘唐到码头备火需60木，当前%d木。\n待装火具小船须留在主码头。",[int(b.wood)])
 func _fire_unavailable(b,reason: String) -> void:
 	if b.mission.has_event("fire_escort_safe"): return
 	b.mission.miss_story_goal("gao_fire",reason)
@@ -392,10 +417,9 @@ func on_mission_action(b,key: String,actor) -> void:
 		"gao_fire_0","gao_fire_1":
 			if fire_lit or actor!=fireboat:
 				return
-			var near: Array=water_groups[1].filter(func(u): return alive(u) and u.position.distance_to(actor.position)<200)
+			var near: Array=_fire_targets(actor)
 			var two=b.find_unit("ruan_xiaoer_boat")
-			var five=b.find_unit("ruan_xiaowu_boat")
-			if near.is_empty() or not alive(two) or not alive(five) or two.position.distance_to(actor.position)>220 or five.position.distance_to(actor.position)>220:
+			if near.is_empty() or _fire_escorts(b,actor).size()!=2:
 				_retry(b,key,"连船需进入火区，两艘阮氏接应船须在附近接刘唐。等敌船靠近再举火，火势只烧伤实际留在区内的官军。")
 				return
 			fire_lit=true
@@ -409,7 +433,7 @@ func on_mission_action(b,key: String,actor) -> void:
 			b.mission.mark("gao_fire_lit","火船燃起，刘唐转入阮小二接应船。火区持续8秒，只有区内官船实际受伤。")
 			b.mission.add_action("gao_fire_withdraw","阮氏接应船：撤出险水",FIRE_SAFE,["ruan_xiaoer_boat","ruan_xiaowu_boat"],1,64)
 		"gao_fire_withdraw":
-			if not _near(b,liu_carrier,FIRE_SAFE,120) or not _near(b,b.find_unit("ruan_xiaowu_boat"),FIRE_SAFE,120) or _enemy_near(b,b.map.cell_to_world(FIRE_SAFE),230):
+			if _withdraw_crew(b).size()!=2 or _enemy_near(b,b.map.cell_to_world(FIRE_SAFE),230):
 				_retry(b,key,"两艘接应船都需回到南侧安全水域，并先压退230距离内的官船。")
 				return
 			b.mission.mark("fire_escort_safe","两艘阮氏接应船和刘唐撤出险水，水寨与其余舰队保留。")
