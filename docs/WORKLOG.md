@@ -1,5 +1,9 @@
 # 开发日志
 
+## 2026-11-17 Windows 原生英文高俅关
+
+候选 bd057018 在独立离线目录直达高俅关，按 660 帧正常退出。视口核对英文关名、首段旁白及继续按钮。1280×720 的部分单位和技能栏文字省略显示。Windows 锁屏，Steam 前台点击及首次和再次进场时间待测。[Windows 原生英文高俅关](../qa/battle_entry_timing_20261116/README.md#windows-原生英文高俅关)
+
 ## 2026-11-17 Windows 本地候选 bd057018
 
 Windows Steam 预设导出，实际 EXE 离线启动 180 帧，同一编译包四入口各进场开战一次。四语加载提示和高俅两张战船预读通过。[当前 Windows 本地候选](../qa/battle_entry_timing_20261116/README.md#windows-本地候选-bd057018)

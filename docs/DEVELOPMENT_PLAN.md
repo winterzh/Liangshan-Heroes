@@ -14,7 +14,7 @@
 
 战役、驻守、1v1 和竞技场共用 `scripts/menu.gd` 的 `_launch()` 进入 `scenes/main.tscn`。正式包和其他模式分别量测首次和重复进场。记录点击到首个画面反馈、首个战场画面和首次可操作的时间。单项修复后对照数据，验证出征提示、输入、重复点击和存档身份校验。
 
-最新本地候选 bd057018 已重验四个菜单入口与四语加载。计时来自编辑器宿主挂载发行编译包，Steam 正式客户端的首次和重进问题继续跟踪。[当前 Windows 本地候选](../qa/battle_entry_timing_20261116/README.md#windows-本地候选-bd057018)
+最新本地候选 bd057018 已重验四个菜单入口与四语加载。高俅关英文开场也经本地原生 EXE 直达确认。计时来自编辑器宿主挂载发行编译包，Steam 正式客户端的首次和重进问题继续跟踪。[当前 Windows 本地候选](../qa/battle_entry_timing_20261116/README.md#windows-本地候选-bd057018) · [Windows 原生英文高俅关](../qa/battle_entry_timing_20261116/README.md#windows-原生英文高俅关)
 
 ## 2026-11-16 八章深化计划已启动
 

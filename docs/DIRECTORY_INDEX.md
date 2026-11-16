@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[原生英文高俅关收据](../qa/battle_entry_timing_20261116/windows_native_level5_bd057018.json)含 bd057018 发行 EXE、日志及视口图的摘要和英文开场核对项。
+
 [Windows 本地候选 bd057018 的收据](../qa/battle_entry_timing_20261116/windows_candidate_bd057018.json)含导出与启动步骤、发行文件指纹、四模式菜单和四语加载对照。
 
 [首批攻防与战船预读收据](../qa/campaign_sustained_performance_20261116/first_wave_paired_sections.json)记录五组同进程配对、首次出兵回调和两条预读取图验证。

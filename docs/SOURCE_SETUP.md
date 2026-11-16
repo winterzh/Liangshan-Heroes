@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+核对 bd057018 候选发行文件后，以独立离线目录和内置 LEVEL=5 入口捕获原生英文视口。收据包含发行 EXE、原生日志与视口图的 SHA-256。[Windows 原生英文高俅关](../qa/battle_entry_timing_20261116/README.md#windows-原生英文高俅关)
+
 Windows 候选由当前独立工作树的 6,550 项跟踪运行文件生成。四个发行文件已拷贝至本地候选目录，逐项核对文件长度和 SHA-256。[当前 Windows 本地候选](../qa/battle_entry_timing_20261116/README.md#windows-本地候选-bd057018)
 
 Windows 高俅战斗使用已有启动预读队列准备官军战船两张转向贴图。方向路径由 CampaignArt 给出，战场从同一 Art 贴图路由取出预读结果。[首批攻防分段与战船预读](../qa/campaign_sustained_performance_20261116/README.md#首批攻防分段与战船预读)

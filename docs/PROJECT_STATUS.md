@@ -1,5 +1,9 @@
 # 当前项目总览
 
+## 2026-11-17 Windows 原生英文开场
+
+候选 bd057018 已原生加载并绘制英文高俅关开场。Steam 客户端前台出征及模式进场仍待计时。[Windows 原生英文高俅关](../qa/battle_entry_timing_20261116/README.md#windows-原生英文高俅关)
+
 ## 2026-11-17 新 Windows 本地候选
 
 候选 bd057018 已通过原生离线启动与同一编译包四入口验证。实际 Steam 客户端的前台操作、进场耗时和完整性能验收仍待完成。[当前 Windows 本地候选](../qa/battle_entry_timing_20261116/README.md#windows-本地候选-bd057018)
