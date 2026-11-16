@@ -941,6 +941,10 @@ func _resolve_generic_directional_path(key: String, state: String, direction: St
 	return path
 
 
+func prefetch_gao_opening_animations() -> void:
+	prefetch_directional_animations({"liu_tang": ["walk", "attack"], "wu_yong": ["attack"]})
+
+
 ## Prepare only the ordinary directional actions requested by the level.
 ## Normal animation selection remains the fallback if an asset is needed early.
 func prefetch_directional_animations(actions_by_unit: Dictionary) -> void:

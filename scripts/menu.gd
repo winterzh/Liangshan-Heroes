@@ -42,7 +42,7 @@ func _notification(what: int) -> void:
 		AppLifecycle.request_quit("menu_back")
 
 
-func _launch() -> void:
+func _launch(prefetch_gao := false) -> void:
 	var flow := get_node_or_null("/root/ContinueFlow")
 	if _entry_overlay != null or AppLifecycle.quit_started() or (flow != null and flow.busy()):
 		return
@@ -50,6 +50,8 @@ func _launch() -> void:
 		_launch_immediately()
 		return
 	_show_battle_loading()
+	if prefetch_gao and OS.get_name() == "Windows":
+		Art.prefetch_gao_opening_animations()
 	# Continue on the main thread. The worker returns only verified file data.
 	_finish_battle_launch.call_deferred()
 
@@ -985,7 +987,7 @@ func _make_card(i: int) -> Control:
 			Campaign.custom_defense = false
 			Campaign.scenario = false
 			Campaign.ai_friendly = false   # AI友好模式仅限驻守战
-			_launch())
+			_launch(Campaign.LEVELS[i]["id"] == "level5"))
 	btn.add_theme_font_size_override("font_size", 18)
 	vb.add_child(btn)
 

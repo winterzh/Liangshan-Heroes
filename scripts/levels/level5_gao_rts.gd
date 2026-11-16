@@ -241,7 +241,7 @@ func deploy(b) -> void:
 	flagship.visual_scale=1.8
 	flagship.defeat_outcome="subdued"
 	flagship.set_meta("campaign_flag_context","chapter80_gao_flagship")
-	Art.prefetch_directional_animations({"liu_tang": ["walk", "attack"], "wu_yong": ["attack"]})
+	Art.prefetch_gao_opening_animations()
 
 func on_start(b) -> void:
 	b.faction_res[1]={"gold":560.0,"wood":400.0}
