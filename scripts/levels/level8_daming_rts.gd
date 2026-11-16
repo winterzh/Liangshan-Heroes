@@ -349,6 +349,8 @@ func _briefing(b) -> Dictionary:
 			return {"title":"撤离 · 先打开南门", "text":"二人已解枷，南门尚未打开。外军先打开通路，伤员留在安全处；门开后护送二人到城外接应地。"}
 		return {"title":"护送 · 二人活着出城", "text":Localize.format_text("已撤出%d/2。选中尚未撤出的卢俊义、石秀，带兵护送到城外接应地；前营须守住，不必扫清全城。",s.safe)}
 	if gate_open:
+		if prison_open:
+			return {"title":"牢内 · 开枷救人", "text":"南门和牢院已通。清开枷锁旁守军，选一名好汉右键「牢内：开枷救出二人」，留兵保护前营和退路。"}
 		return {"title":"入城 · 清牢前救人", "text":"南门已通。军队清开牢前与箭楼，再入牢开枷救人；留兵保护前营和出城退路。"}
 	if signaled:
 		if signal_left>0:
@@ -357,7 +359,13 @@ func _briefing(b) -> Dictionary:
 	if not s.agents_alive:
 		return {"title":"强攻 · 内应失去接应", "text":"内应人手不齐，火号路线不可用。城外继续经营，护器械打破南门，清牢前救人；前营和两名囚犯必须保住。"}
 	if s.inside==2:
+		if scout._invis_t<=0:
+			return {"title":"潜入 · 重整乔装", "text":"柴进、乐和已在牢内。时迁需甩开守军，到蔡福家停留3秒恢复乔装。外军也可直接攻门。"}
 		return {"title":"待机 · 自选举火时机", "text":"柴进、乐和已在牢内。可先让鲁智深或武松带兵靠近南门，再由仍有乔装的时迁举火争取90秒机会；也可提前举火或直接强攻。"}
+	if prison_open:
+		return {"title":"入院 · 就位接应", "text":"牢院已放行。带柴进、乐和进入内院，再由时迁择机举火。清开枷锁旁守军后，也可先开枷。"}
+	if chai._invis_t<=0 or yue._invis_t<=0:
+		return {"title":"潜入 · 重整乔装", "text":"柴进或乐和已暴露。甩开追兵后，到蔡福家停留3秒恢复乔装，再回牢前受验。外军也可护送器械强攻南门。"}
 	return {"title":"两线筹备 · 经营与潜入", "text":"城外练兵备器械；柴进、乐和乔装到牢前受验后进入内院。暴露可甩开守军，退到蔡福家重整；时迁等候举火。"}
 func _update_briefing(b) -> void:
 	var next := _briefing(b)
@@ -377,6 +385,7 @@ func _open_prison(b,breached: bool) -> void:
 	else: b.mission.mark("daming_prison_admitted","蔡福安排的公人身份受验通过，柴进与乐和可入牢就位")
 	_hide_action(b,"daming_admit")
 	_add_rescue(b)
+	_update_briefing(b)
 func _open_gate(b,breached: bool) -> void:
 	if gate_open: return
 	gate_open=true
@@ -387,7 +396,7 @@ func _open_gate(b,breached: bool) -> void:
 	else: b.mission.mark("daming_response_arrived","鲁智深或武松带军夺下南门，接应火号")
 	b.mission.mark("daming_gate_opened","南门已开，军队和器械由玩家调入，前营继续经营")
 	_hide_action(b,"daming_gate")
-	b.mission.set_objective("军队清开牢前与箭楼，入牢救出卢俊义、石秀；撤到城外接应地即可完成营救。")
+	_update_briefing(b)
 func on_mission_action(b,action_id: String,actor) -> void:
 	match action_id:
 		"daming_admit":
@@ -410,6 +419,7 @@ func on_mission_action(b,action_id: String,actor) -> void:
 			scout._break_invis()
 			_hide_action(b,"daming_fire")
 			if not gate_open: b.mission.add_action("daming_gate","鲁智深或武松：带军夺门",GATE_APPROACH,["lu_zhishen","wu_song"],2,64)
+			_update_briefing(b)
 			b.msg("火号已起！城内补兵暂停90秒，机动守军北去。清门前抵抗，鲁智深或武松带兵右键夺门标记；时迁由玩家自行撤开。",8)
 		"daming_gate":
 			var crew: int=_gate_crew(b).size()
@@ -437,7 +447,7 @@ func on_mission_action(b,action_id: String,actor) -> void:
 			_hide_action(b,"daming_rescue")
 			b.mission.add_level_button("daming_select_wounded","选中 · 待撤伤员","选中已获救且尚未撤出的卢俊义、石秀；镜头定位较远者，不自动下令。")
 			b.mission.add_map_locator("城外接应地 · 二人撤离",EXIT_CELL)
-			b.mission.set_objective("选中卢俊义与石秀，带兵护送到城外接应地；途中失去任何一人即失败，不必扫清全城。")
+			_update_briefing(b)
 func _wounded_group(b) -> Array:
 	# Derived from the original prisoners; selecting never moves or rescues them.
 	if not rescued: return []

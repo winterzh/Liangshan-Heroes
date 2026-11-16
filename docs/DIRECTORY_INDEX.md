@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[牢院交接验收](../qa/campaign_coordination_20261116/README.md#牢院放行与开枷交接) 保存四语任务、关卡状态断言和复跑探针。
+
 [押俘收兵验收](../qa/campaign_flagship_escort_20261116/README.md#押俘进度与收兵结算) 含四语任务走向、两种收尾的定向断言与复跑探针。
 
 出征卡顿的分段量测、原始 JSON 与复现脚本见[出征量测记录](../qa/battle_entry_timing_20261116/README.md)。

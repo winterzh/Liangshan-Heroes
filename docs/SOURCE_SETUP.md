@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+大名府牢院交接七条文案源为 `daming_jail_handoff.json`。任务刷新复用既有关卡和动作状态。[牢院交接验收](../qa/campaign_coordination_20261116/README.md#牢院放行与开枷交接)
+
 高俅收兵与押俘共用结算判定，五条词条由 `gao_capture_closeout.json` 合入词库。[押俘收兵验收](../qa/campaign_flagship_escort_20261116/README.md#押俘进度与收兵结算)
 
 出征计时使用已导入的独立源码检出、Windows Godot 控制台程序和独立离线存档目录。记录提供分段采样补丁、后台校验探针、Windows 候选编译包四模式证据、同发布模板的原生诊断 EXE 样本和可执行文件哈希脚本。 [出征量测记录](../qa/battle_entry_timing_20261116/README.md)
