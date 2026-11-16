@@ -47,7 +47,13 @@ func _fixture() -> void:
 	check(u._order_serial==serial and u.position==origin and u.hp==hp,"repeated decision neither resets marching orders nor teleports or heals")
 	u.position=l._escort_plan(b,0).goal;l._escort_orders(b)
 	check(u._state==u.ST_IDLE and u.stance==u.STANCE_DEFEND and u._amove_dest==Vector2.ZERO and u._idle_push_t==0,"arrived muster escort guards at staging point")
+	var localize := root.get_node("Localize")
+	var north: String = localize.text("北") + " "
+	var south: String = localize.text("南") + " "
+	var south_countdown: String = south + localize.format_text("%d秒", ceili(float(l.waves[1].time) - l.elapsed))
 	l._send_wave(b,0)
+	check(l.top_status(b).contains(north + localize.format_text("余%d骑", 6)) \
+		and l.top_status(b).contains(south_countdown), "north shows original live riders while south countdown remains")
 	for i in range(6):l.riders[i].position=b.map.cell_to_world(l.LANES[0])+Vector2(i*18,0)
 	l._escort_orders(b)
 	check(l._escort_plan(b,0).phase=="follow" and u._amove_dest==l._escort_plan(b,0).goal and l._escort_plan(b,1).phase=="muster","north launch follows its original cavalry while south still musters")
@@ -58,6 +64,7 @@ func _fixture() -> void:
 	check(u._target==null and u._state==u.ST_AMOVE,"invisible opponent is not tracked by escort command logic")
 	l.xu._invis_t=0
 	for i in range(6):l.riders[i].hp=0
+	check(l.top_status(b).contains(north + localize.format_text("余%d骑", 0)), "defeated riders no longer count for their lane")
 	u.position=b.map.cell_to_world(l.LANES[0]);l.xu.position=u.position+Vector2(-40,0) # Front-line taunt, outside home defence radius.
 	u.order_attack(l.xu);u._taunt_t=2;u._taunt_src=l.xu;serial=u._order_serial
 	l._escort_orders(b)
@@ -81,11 +88,22 @@ func _fixture() -> void:
 		check(not l.unit_tactical_hint(b,u).is_empty(),language+" escort role has a translated hint")
 	root.get_node("Localize").set_language("en",false)
 	root.size=Vector2i(960,540);root.content_scale_size=root.size
+	b.hud.set_top(l.top_status(b))
 	b.select_single(u,false);b.center_camera_cell(b.map.world_to_cell(u.position));b.hud.update_selection_panel(b.selection)
 	for i in range(8):
 		b.hud._refresh_panel();b.hud._refresh_hero_bar();b.hud._layout_desktop_hero();b.hud._layout_info_panel();b.mission.tick(0)
 		await process_frame
 	await RenderingServer.frame_post_draw
+	var status: Label = b.hud.top_label
+	var status_font := status.get_theme_font("font")
+	var status_font_size := status.get_theme_font_size("font_size")
+	var status_style := status.get_theme_stylebox("normal")
+	var usable_width := status.size.x - status_style.get_margin(SIDE_LEFT) - status_style.get_margin(SIDE_RIGHT)
+	var status_lines := status.text.split("\n")
+	check(status_lines.size() == 2 and status_lines[0].contains("North 0 left") and status_lines[0].contains("South"),
+		"both routes stay on the first line of the actual English HUD")
+	check(Array(status_lines).all(func(line): return status_font.get_string_size(str(line), HORIZONTAL_ALIGNMENT_LEFT, -1, status_font_size).x <= usable_width),
+		"both status lines fit the actual HUD width at 960 pixels")
 	check(root.get_texture().get_image().save_png("res://.godot/cavalry-escort/en.png")==OK,"actual narrow-window role hint rendered")
 	l.enemy_base.hp=l.enemy_base.max_hp
 	l.lhm_killed=12

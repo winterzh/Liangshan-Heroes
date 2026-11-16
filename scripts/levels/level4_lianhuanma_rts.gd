@@ -503,7 +503,16 @@ func on_unit_resolved(b,u,outcome: String) -> void:
 			action.marker.hide()
 		else: b.msg("演练骑倒得过早或搭档不齐；可重新摆骑，再试诱入、退开、两人下钩。",6)
 func top_status(_b) -> String:
-	var wave_text: Array[String]=[]
+	var remaining := [0, 0]
+	for rider in riders:
+		if not alive(rider): continue
+		var lane := int(rider.get_meta("wave_group", -1))
+		if lane >= 0 and lane < remaining.size():
+			remaining[lane] += 1
+	var wave_text: Array[String] = []
 	for lane in range(2):
-		wave_text.append((Localize.text("北") if lane==0 else Localize.text("南"))+(Localize.text("已出击") if waves[lane].sent else Localize.format_text("%d秒", maxi(0,ceili(float(waves[lane].time)-elapsed)))))
-	return Localize.format_text("连环马 · 击溃%d/12 · 钩破%d/12 · %s · 辎重营%d/2", [lhm_killed,broken_count," / ".join(wave_text),posts.filter(func(u): return alive(u)).size()])
+		var direction := Localize.text("北" if lane == 0 else "南")
+		var status := Localize.format_text("余%d骑", remaining[lane]) if waves[lane].sent \
+			else Localize.format_text("%d秒", maxi(0, ceili(float(waves[lane].time) - elapsed)))
+		wave_text.append(direction + " " + status)
+	return Localize.format_text("%s\n击溃%d · 钩破%d · 辎重%d/2", [" / ".join(wave_text), lhm_killed, broken_count, posts.filter(func(u): return alive(u)).size()])

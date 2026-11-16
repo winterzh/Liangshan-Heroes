@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[连环马余骑提示原件](../qa/campaign_cavalry_escort_20261116/wave_status/) 含 960 像素宽显示、运行日志及收据。
+
 [最新候选续玩证据](../qa/campaign_resume_current_20261116/evidence/current_stable_07df0d96/README.md#2026-11-16-最新候选的连环马续玩链通过)
 
 [最新续玩候选导入记录](../qa/campaign_resume_current_20261116/evidence/current_stable_07df0d96/README.md) 含冷导入收据、内容身份和复建所用的脚本 UID。
