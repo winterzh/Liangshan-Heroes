@@ -187,6 +187,8 @@
 
 [祝家庄前营金矿定位](../qa/campaign_siege_20261116/README.md#前营金矿定位)记录视野、采运分工、独立采矿指令和四语提示的定向验证。
 
+[祝家庄实战撤离续玩](../qa/campaign_siege_20261116/README.md#实战撤离续玩)收录两个最初的保存失败、修复后的四进程原件与复跑探针。
+
 [连环马器械预算复跑](../qa/campaign_resume_current_20261116/evidence/protected_drill_candidate/counter_budget_stall/)保存四轮反攻、补矿命令及同工人伐木命令记录。
 
 [祝家庄分兵纯强攻](../qa/campaign_siege_20261116/rush_split_force/)保存实际来源哈希、战报、引擎日志和宿主回执。

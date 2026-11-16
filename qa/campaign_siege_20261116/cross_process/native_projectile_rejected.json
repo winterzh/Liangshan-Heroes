@@ -1,0 +1,38 @@
+{
+  "passed": false,
+  "source_commit": "52377ce39cb7db1c756cc1fff85f720f3507a0c4",
+  "probe_sources_lf_sha256": {
+    "qa/campaign_siege_20261116/cross_process/probe.gd": "5d75e244e245d54e6aad337cee308105e6625118a97ab207da39256e207487f1",
+    "tools/zhujiazhuang_rts_test.gd": "435ddb8f9bc774687e1ea879ac6e9adc606380db4934ca3b72dfea294273d770"
+  },
+  "stages": [
+    {
+      "checks": 8,
+      "facts": {
+        "buildings_started": 5,
+        "identity": "source-v1:041776594b640eeeb6618d85907d0077b7c9161ec23d18cd3b208b09f209ccbf",
+        "orders": 177,
+        "save_error": {
+          "cause": {
+            "code": "TIMED_RENDER_OVERRIDE",
+            "field": "projectile",
+            "ok": false
+          },
+          "code": "TIMED_RENDER_OVERRIDE",
+          "complete_world": false,
+          "ok": false,
+          "section": "visual"
+        },
+        "units_queued": 37
+      },
+      "failures": [
+        "installed transaction saved the living battle"
+      ],
+      "pid": 39368,
+      "stage": "save",
+      "exit_code": 1,
+      "seconds": 113.563,
+      "engine_errors": []
+    }
+  ]
+}

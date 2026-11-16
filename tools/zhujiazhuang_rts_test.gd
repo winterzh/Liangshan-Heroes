@@ -263,7 +263,7 @@ func _rush_assault(b, army: Array, target, screen_cell: Vector2i) -> void:
 	else:
 		_click(b, engines, screen_cell)
 
-func _play(b) -> void:
+func _play(b, stop_after_rescue := false) -> void:
 	var l = b.level
 	if route == "rush":
 		b.qa_resource_observer = _rush_observe_income
@@ -356,7 +356,9 @@ func _play(b) -> void:
 				rescuer = rescuers[0] # Siege engines cannot perform the prisoner interaction.
 			_click(b,army.filter(func(u): return u != rescuer),Vector2i(14,31),true)
 			_action(b,rescuer,"zhu_rts_rescue")
-			if l.prisoners_freed: target_stage = "return"
+			if l.prisoners_freed:
+				if stop_after_rescue: return
+				target_stage = "return"
 		elif target_stage == "return":
 			_click(b,army,Vector2i(23,28),true)
 			_click(b,l.prisoners.filter(func(u): return alive(u)),l.CAMP+Vector2i(-4,0))

@@ -1,0 +1,152 @@
+{
+  "passed": true,
+  "source_commit": "52377ce39cb7db1c756cc1fff85f720f3507a0c4",
+  "probe_sources_lf_sha256": {
+    "qa/campaign_siege_20261116/cross_process/probe.gd": "6251a536383ccf98138cbcf36d31fe118be91e7b09e42d2b414d2e79527279e2",
+    "tools/zhujiazhuang_rts_test.gd": "435ddb8f9bc774687e1ea879ac6e9adc606380db4934ca3b72dfea294273d770",
+    "scripts/run_visual_graph.gd": "feca8481000d8edb1bab5b00ad6f7c03ffeb9802637a92c714b795eee3a64582"
+  },
+  "stages": [
+    {
+      "checks": 10,
+      "facts": {
+        "buildings_started": 6,
+        "checkpoint": {
+          "elapsed": 330.53333333332,
+          "flags": [
+            true,
+            true,
+            true,
+            true,
+            false
+          ],
+          "generation": 1,
+          "gold": 975,
+          "in_flight": 2,
+          "pid": 24956,
+          "prisoners": [
+            "58",
+            "59",
+            "60",
+            "61",
+            "62",
+            "63",
+            "64"
+          ],
+          "slot_sha256": "b002c2656a82f72b13bd7a97affe1b78bdae73fb40f5a159b3f994b17e7e3669",
+          "wood": 99
+        },
+        "identity": "source-v1:992fc1a9d09eae9570fa7f49ce48e541055d4be5207b8c6a1361f84045e07d05",
+        "orders": 176,
+        "units_queued": 36
+      },
+      "failures": [],
+      "pid": 24956,
+      "stage": "save",
+      "exit_code": 0,
+      "seconds": 116.523,
+      "engine_errors": []
+    },
+    {
+      "checks": 17,
+      "facts": {
+        "checkpoint": {
+          "elapsed": 336.533333333319,
+          "flags": [
+            true,
+            true,
+            true,
+            true,
+            false
+          ],
+          "generation": 2,
+          "gold": 985,
+          "in_flight": 2,
+          "pid": 3088,
+          "prisoners": [
+            "58",
+            "59",
+            "60",
+            "61",
+            "62",
+            "63",
+            "64"
+          ],
+          "slot_sha256": "134a71359657fd25f1a26d3e8a9759244ac4d5990197c372de639dce3bca06a0",
+          "wood": 119
+        },
+        "identity": "source-v1:992fc1a9d09eae9570fa7f49ce48e541055d4be5207b8c6a1361f84045e07d05"
+      },
+      "failures": [],
+      "pid": 3088,
+      "stage": "resume",
+      "exit_code": 0,
+      "seconds": 39.295,
+      "engine_errors": []
+    },
+    {
+      "checks": 13,
+      "facts": {
+        "game_seconds": 368.399999999984,
+        "identity": "source-v1:992fc1a9d09eae9570fa7f49ce48e541055d4be5207b8c6a1361f84045e07d05",
+        "result": {
+          "contract_version": 2,
+          "core_cleared": true,
+          "core_goal": "摧毁祝家庄大营，救出时迁并送回前营。宋江、时迁与梁山前营必须存活。",
+          "done_ids": [
+            "zhu_capture",
+            "zhu_inside",
+            "zhu_seven"
+          ],
+          "goals": [
+            {
+              "id": "zhu_capture",
+              "label": "生擒扈三娘，仍按敌将看押",
+              "note": "",
+              "reason": "",
+              "state": "done"
+            },
+            {
+              "id": "zhu_inside",
+              "label": "孙立内应，打开偏门",
+              "note": "",
+              "reason": "",
+              "state": "done"
+            },
+            {
+              "id": "zhu_seven",
+              "label": "七名被囚好汉全部撤回前营",
+              "note": "",
+              "reason": "",
+              "state": "done"
+            }
+          ],
+          "missed_ids": [],
+          "pending_ids": [],
+          "story_complete": true,
+          "story_done": 3,
+          "story_total": 3
+        }
+      },
+      "failures": [],
+      "pid": 51520,
+      "stage": "victory",
+      "exit_code": 0,
+      "seconds": 38.308,
+      "engine_errors": []
+    },
+    {
+      "checks": 5,
+      "facts": {
+        "identity": "source-v1:992fc1a9d09eae9570fa7f49ce48e541055d4be5207b8c6a1361f84045e07d05",
+        "terminal_code": "LOCAL_RUN_TERMINAL"
+      },
+      "failures": [],
+      "pid": 17128,
+      "stage": "reject",
+      "exit_code": 0,
+      "seconds": 23.757,
+      "engine_errors": []
+    }
+  ]
+}
