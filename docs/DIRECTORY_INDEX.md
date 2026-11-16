@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[Windows 黄泥冈首帧候选收据](../qa/battle_entry_timing_20261116/windows_candidate_d05b01d0.json)包含正式可执行文件离线启动、编译包四类模式和六文件摘要。
+
 [黄泥冈首帧收据](../qa/battle_entry_timing_20261116/huangnigang_opening_frames_f274ad5e.json)包含渲染边界、单位绘制回调和首帧资源回读。
 
 [Windows 进场光标收据](../qa/battle_entry_timing_20261116/windows_battle_install_cpu_cursor_782e4c95.json)包含两类入口的分段、像素校验和释放结果。
