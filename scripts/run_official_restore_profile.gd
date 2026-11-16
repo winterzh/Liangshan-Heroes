@@ -24,7 +24,7 @@ const ZHU_ID := "campaign_level3_v3"
 # The old profile is rejected by the existing slot/core gates, never migrated.
 const HG_ID := "campaign_level1_v2"
 const YEZHU_ID := "campaign_level6_v1"
-const JIANG_ID := "campaign_level2_v1"
+const JIANG_ID := "campaign_level2_v2"
 const LIAN_ID := "campaign_level4_v1"
 const LIAN_CONTEXT := {"mode": "campaign", "level_id": "level4", "waves": 0}
 const LIAN_FLAGS := {"current": 3, "skirmish": false, "skirmish_ai": false, "arena": false, "custom_defense": false, "scenario": false}

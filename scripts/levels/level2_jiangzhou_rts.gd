@@ -2,6 +2,7 @@ extends LevelBase
 ## Emergency army rescue: finite money and caches, real paid reinforcements,
 ## persistent streets and enemies, player-directed rescue and withdrawal.
 const T := GameMap.T
+const SquadOrders := preload("res://scripts/campaign_squad_orders.gd")
 const SCAFFOLD := Vector2i(30,18)
 const WEST_CAMP := Vector2i(8,26)
 const DOCK_CAMP := Vector2i(10,46)
@@ -42,6 +43,11 @@ var enemy_spent_gold := 0
 var enemy_spent_wood := 0
 var pursuit_left := -1.0
 var pursuit_sent := false
+var pursuit_steps := [0,0]
+var pursuit_contacts := [false,false]
+var pursuit_west_goal := Vector2.ZERO
+var pursuit_south_goal := Vector2.ZERO
+var pursuit_think := 0.0
 var first_rescued := false
 var meeting := false
 var rally := false
@@ -295,7 +301,7 @@ func _free(b,is_song: bool) -> void:
 	if not first_rescued:
 		first_rescued=true
 		pursuit_left=20
-		b.msg("北面六名追兵20秒后追向获救者。可留兵守法场、另队先开巷口；追兵是开局已有部队，可提前截住。",8)
+		b.msg("北面六名追兵20秒后出动，随后分搜西巷、南巷。可留兵阻击，也可换路护送；追兵看见获救者才会追赶。",8)
 	if living(song_freed) and living(dai_freed):
 		b.mission.set_title("护送 · 开路与断后")
 		b.mission.set_objective("二人已救下。西巷短而狭，南巷较宽有骑弓截兵；自由选路或改道。可先经白龙庙会水军，再分别下令登船。护卫留在岸边断后，让出登船旗标附近的通道。")
@@ -360,16 +366,84 @@ func _produce(b,delta: float) -> void:
 		b.add_resources(int(price.cost_gold),int(price.cost_wood),1)
 		return
 	u.passive=false
-	u.order_amove(_pursuit_target(b))
+	var destination: Vector2 = pursuit_west_goal if reinforcements.size() % 2 == 0 else pursuit_south_goal
+	if not pursuit_sent or destination == Vector2.ZERO: destination = _pursuit_target(b,[u])
+	u.order_amove(destination)
 	reinforcements.append(u)
 	enemy_produced+=1
 	enemy_spent_gold+=int(price.cost_gold)
 	enemy_spent_wood+=int(price.cost_wood)
 	train_left=float(price.train_time)
-func _pursuit_target(b) -> Vector2:
-	for u in [song_freed,dai_freed]:
-		if active(u): return u.position
+func _seen_escapee(b, observers: Array):
+	var found = null
+	var nearest := INF
+	for target in [song_freed,dai_freed]:
+		if not active(target) or target.garrisoned: continue
+		for observer in observers:
+			if not active(observer) or observer.garrisoned: continue
+			var distance: float = observer.position.distance_squared_to(target.position)
+			var sight := float(observer.setup_def.get("sight",8)) * GameMap.CELL
+			if distance <= sight * sight and distance < nearest and b.target_visible_to(observer,target):
+				found = target
+				nearest = distance
+	return found
+
+func _pursuit_target(b, observers: Array = []) -> Vector2:
+	var seen = _seen_escapee(b, observers)
+	if seen != null: return seen.position
 	return b.map.cell_to_world(SCAFFOLD+Vector2i(0,5))
+
+func _search_group(lane: int) -> Array:
+	var group: Array = []
+	# Keep original slots, including deaths, so a casualty never swaps lanes.
+	for pool in [pursuit,reinforcements]:
+		for i in range(pool.size()):
+			if i % 2 == lane and active(pool[i]): group.append(pool[i])
+	return group
+
+func _search_route(lane: int) -> Array:
+	return [SCAFFOLD+Vector2i(0,5)] + (WEST_ROUTE + [DOCK] if lane == 0 else SOUTH_ROUTE)
+
+func _pursuit_tick(b, delta: float) -> void:
+	if not pursuit_sent: return
+	pursuit_think -= delta
+	if pursuit_think > 0.0: return
+	pursuit_think = 2.0
+	for lane in range(2):
+		var group := _search_group(lane)
+		if group.is_empty(): continue
+		var route := _search_route(lane)
+		var goal: Vector2 = pursuit_west_goal if lane == 0 else pursuit_south_goal
+		var next_goal := goal
+		var seen = _seen_escapee(b,group)
+		if seen != null:
+			pursuit_contacts[lane] = true
+			if goal == Vector2.ZERO or goal.distance_to(seen.position) > 64.0:
+				next_goal = seen.position
+		elif goal == Vector2.ZERO:
+			next_goal = b.map.cell_to_world(route[pursuit_steps[lane]])
+		elif (pursuit_contacts[lane] or pursuit_steps[lane] < route.size()) and SquadOrders.gathered(group,goal,110.0):
+			if pursuit_contacts[lane]:
+				# Resume from the furthest of current progress and nearest route
+				# junction. Never read an unseen escapee's current position.
+				var nearest := INF
+				var index := 0
+				for i in range(route.size()):
+					var distance: float = goal.distance_squared_to(b.map.cell_to_world(route[i]))
+					if distance < nearest: nearest = distance; index = i
+				pursuit_steps[lane] = maxi(pursuit_steps[lane],index)
+				pursuit_contacts[lane] = false
+			else:
+				pursuit_steps[lane] = mini(pursuit_steps[lane]+1,route.size())
+			if pursuit_steps[lane] >= route.size():
+				SquadOrders.guard(group)
+			else:
+				next_goal = b.map.cell_to_world(route[pursuit_steps[lane]])
+		if next_goal != goal:
+			for u in group: u.passive = false
+			SquadOrders.advance(group,next_goal)
+			if lane == 0: pursuit_west_goal = next_goal
+			else: pursuit_south_goal = next_goal
 func _can_continue_rescue(b) -> bool:
 	if living(song_freed) and living(dai_freed): return true
 	if b.units.any(func(u): return active(u) and u.faction==0 and u.key in RESCUERS): return true
@@ -396,6 +470,7 @@ func process(b,delta: float) -> void:
 	if not b._gameplay_rng_issue.is_empty(): return
 	if first_rescued and not pursuit_sent:
 		pursuit_left-=delta
+	_pursuit_tick(b,delta)
 	if not execution_halted:
 		exec_left=maxf(0,exec_left-delta)
 		if executioners.all(func(u): return not active(u)):
@@ -423,11 +498,8 @@ func process(b,delta: float) -> void:
 	if first_rescued and not pursuit_sent:
 		if pursuit_left<=0:
 			pursuit_sent=true
-			for u in pursuit:
-				if active(u):
-					u.passive=false
-					u.order_amove(_pursuit_target(b))
-			b.mission.mark("jiangzhou_rear_pursuit","北面原有追兵开始行动，护住获救者，安排后队断后。")
+			b.mission.mark("jiangzhou_rear_pursuit","北面原有追兵已出动，将沿西巷和南巷搜索；可留兵牵制，掩护伤员换路。")
+			_pursuit_tick(b,0.0)
 	if not meeting and _near(b,song_freed,BAILONG,130) and _near(b,dai_freed,BAILONG,130) and _near(b,named_units.get("zhang_shun"),BAILONG,130) and _near(b,named_units.get("zhang_heng"),BAILONG,130):
 		meeting=true
 		b.mission.mark("bailong","宋江、戴宗实际抵达白龙庙，与沿江寻来的张顺、张横会合；继续带到码头登船。")
@@ -453,4 +525,13 @@ func on_unit_died(b,u) -> void:
 		if u.key in ["zhang_shun","zhang_heng"] and not meeting:
 			b.mission.miss_story_goal("bailong_meeting","接应好汉已阵亡，可直接护送宋江戴宗到码头完成核心营救。")
 func top_status(_b) -> String:
-	return Localize.text("江州劫法场 · ")+(Localize.format_text("行刑剩余%d秒", ceili(exec_left)) if not execution_halted else Localize.text("行刑已中断"))+Localize.format_text(" · 补给%d/2 · 巡防补军%d/8", [cache_taken.count(true),enemy_produced])
+	var situation := Localize.format_text("行刑剩余%d秒", ceili(exec_left))
+	if execution_halted:
+		situation = Localize.text("分别解缚，准备撤离")
+	if first_rescued:
+		situation = Localize.text("追兵分路搜索中") if pursuit_sent else Localize.format_text("追兵%d秒后出动",maxi(0,ceili(pursuit_left)))
+	var boarded := 0
+	for u in [song_freed,dai_freed]:
+		if living(u) and u.story_outcome == "embarked": boarded += 1
+	if boarded == 2: situation = Localize.text("二人已登船，可开船或接回其余好汉")
+	return Localize.format_text("江州 · %s · 补给%d/2 · 登船%d/2",[situation,cache_taken.count(true),boarded])

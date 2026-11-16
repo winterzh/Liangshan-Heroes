@@ -15,6 +15,7 @@ func _run() -> void:
 	if route=="": route="direct"
 	out_dir="res://.godot/jiangzhou_rts/"+route
 	if OS.get_environment("JZ_VISUAL")=="1": out_dir+="_rendered"
+	if not OS.get_environment("RTS_TEST_OUT").is_empty(): out_dir=OS.get_environment("RTS_TEST_OUT")
 	DirAccess.make_dir_recursive_absolute(out_dir)
 	root.size=Vector2i(1440,900)
 	if DisplayServer.get_name()!="headless": DisplayServer.window_set_size(root.size)
@@ -196,4 +197,7 @@ func _play_rescue(b) -> void:
 	check(l.camps.map(func(u): return u.get_instance_id())==camp_ids,route+" keeps its original reinforcement camps throughout the mission")
 	if route=="story": check(b.mission.result_snapshot(l.victory).story_complete,"story completes all four optional goals through real movement and combat")
 	play_metrics={"game_seconds":l.elapsed,"controller_wait_seconds":t,"paid_recruits":recruited,"max_ordinary_troops":max_troops,"orders":orders,"skills":skill_orders,"enemy_paid_recruits":l.enemy_produced,"enemy_spent_gold":l.enemy_spent_gold,"enemy_spent_wood":l.enemy_spent_wood,"cache_taken":l.cache_taken,"events":b.mission.events.keys(),"result":b.mission.result_snapshot(l.victory)}
+	play_metrics["pursuit_sent"] = l.pursuit_sent
+	play_metrics["pursuit_survivors"] = l.pursuit.filter(func(u): return alive(u)).size()
+	play_metrics["search_steps"] = l.pursuit_steps.duplicate()
 	await _shot(b,"result",l.DOCK)

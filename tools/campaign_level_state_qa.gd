@@ -89,7 +89,7 @@ func test_level(level_id: String) -> void:
 	# validation table; remaining dynamic pools deliberately exercise empty/varied
 	# sizes and the same nullable alias registry.
 	var fixed: Dictionary = {
-		"level1": {"bundles": 3}, "level2": {"caches": 2, "executioners": 2},
+		"level1": {"bundles": 3}, "level2": {"caches": 2, "executioners": 2, "pursuit": 6},
 		"level3": {"prisoners": 7}, "level4": {"posts": 2, "riders": 12},
 		"level5": {"posts": 2, "water_groups": [3, 5, 6], "land_groups": [4, 6, 8]},
 		"level6": {"escorts": 2}, "level7": {"taverns": 4}, "level8": {"posts": 2}}

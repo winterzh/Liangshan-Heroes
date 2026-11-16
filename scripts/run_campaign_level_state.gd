@@ -25,9 +25,9 @@ const FIELDS := {
 		"unit": "cart yang", "units": "convoy bundles actors", "index_unit": "cargo empty_cargo",
 		"external": "good_sign sale_sign suspicion_sign", "externals": "field_signs jujube_carts"},
 	"level2": {
-		"int": "enemy_produced enemy_spent_gold enemy_spent_wood", "bools": "cache_taken",
+		"int": "enemy_produced enemy_spent_gold enemy_spent_wood", "bools": "cache_taken pursuit_contacts", "ints": "pursuit_steps",
 		"bool": "alarm execution_halted pursuit_sent first_rescued meeting rally victory",
-		"float": "exec_left elapsed strategy_t train_left pursuit_left",
+		"float": "exec_left elapsed strategy_t train_left pursuit_left pursuit_think", "vec": "pursuit_west_goal pursuit_south_goal",
 		"unit": "post scaffold temple song_bound dai_bound song_freed dai_freed",
 		"units": "camps caches executioners city_guards pursuit blockers towers reinforcements",
 		"named_units": "named_units", "external": "depart_button"},
@@ -71,7 +71,7 @@ const MAX_REFERENCES := 4096
 # are listed. Trained troops, reserves, support and similar pools stay variable.
 const REFERENCE_SHAPES := {
 	"level1": {"bundles": Transport.LOAD_COUNT},
-	"level2": {"caches": 2, "executioners": 2},
+	"level2": {"caches": 2, "executioners": 2, "pursuit": 6},
 	"level3": {"prisoners": 7},
 	"level4": {"posts": 2, "riders": 12},
 	"level5": {"posts": 2, "water_groups": [3, 5, 6], "land_groups": [4, 6, 8]},
@@ -196,6 +196,12 @@ func _checks(level_id: String, values: Dictionary) -> bool:
 	if values.has("victory") and values.victory: return false
 	if level_id in ["level1", "level6", "level7"] and (values.st < 0 or values.st > (7 if level_id == "level1" else 3)): return false
 	if level_id == "level2" and values.cache_taken.size() != 2: return false
+	if level_id == "level2":
+		if values.pursuit_steps.size() != 2 or values.pursuit_contacts.size() != 2: return false
+		if values.pursuit_steps.any(func(step): return step < 0 or step > 6): return false
+		var goals := [values.pursuit_west_goal, values.pursuit_south_goal]
+		for lane in range(2):
+			if goals[lane] == Vector2.ZERO and (values.pursuit_steps[lane] != 0 or values.pursuit_contacts[lane]): return false
 	if level_id == "level3" and values.stage not in ["scout", "contest", "siege"]: return false
 	if level_id == "level3":
 		if values.raid_state not in ["muster", "attack", "retreat"] or values.raid_strength < 0 or values.raid_elapsed < 0.0: return false

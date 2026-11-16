@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[江州两路搜索](../qa/campaign_pursuit_20261116/README.md)包含M4首批源码与分组/保存/实际营救证据；定向入口`tools/jiangzhou_pursuit_qa.gd`及`.tscn`，实际路线复用`tools/jiangzhou_rts_play.gd`，翻译来源`assets/localization/campaign_pursuit.json`。
+
 [祝家庄内应实际路线](../qa/campaign_inside_20261116/README.md)绑定cd197b30；[连环马条件反馈](../qa/campaign_hooks_20261116/README.md)记录其后继HUD/关卡改动，入口`tools/lianhuanma_tactics_qa.gd`，翻译来源`assets/localization/campaign_hooks.json`，原始五图在该QA目录`screens/`。
 
 [祝家庄入口增援与营救交接](../qa/campaign_siege_20261116/README.md)记录第二批M2实现与限定验证；关卡仍在`level3_zhujiazhuang_rts.gd`，新增翻译来源`assets/localization/campaign_siege.json`，复用小队定向检查入口。
