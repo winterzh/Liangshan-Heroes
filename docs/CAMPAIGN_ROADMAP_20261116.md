@@ -1,5 +1,7 @@
 # 八幕战役后续开发路线图
 
+M7 Windows 更新后的本地候选 bd057018 通过离线原生启动。编译包验证了战役、驻守、1v1、竞技场进入战斗和对应四语加载画面。[当前 Windows 本地候选](../qa/battle_entry_timing_20261116/README.md#windows-本地候选-bd057018)
+
 M7 首批水陆交战五次定点交替对照，视野、布景、地形输出一致且局部处理更快。Windows 预读补入官军战船的两个实测冷路径。完整十分钟门槛仍待验。[首批攻防分段与战船预读](../qa/campaign_sustained_performance_20261116/README.md#首批攻防分段与战船预读)
 
 

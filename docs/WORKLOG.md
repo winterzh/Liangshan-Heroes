@@ -1,5 +1,9 @@
 # 开发日志
 
+## 2026-11-17 Windows 本地候选 bd057018
+
+Windows Steam 预设导出，实际 EXE 离线启动 180 帧，同一编译包四入口各进场开战一次。四语加载提示和高俅两张战船预读通过。[当前 Windows 本地候选](../qa/battle_entry_timing_20261116/README.md#windows-本地候选-bd057018)
+
 ## 2026-11-17 首批攻防分段与战船预读
 
 首批出兵前后三项优化的五次同进程对照均通过。Windows 高俅入口后台读取官军战船西北和西南向常态贴图，实测两条正式贴图路由命中。[首批攻防分段与战船预读](../qa/campaign_sustained_performance_20261116/README.md#首批攻防分段与战船预读)
