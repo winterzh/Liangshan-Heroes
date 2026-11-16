@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+Steam Windows Build `26699320` 由稳定分支提交 `9b9ca6a96f7004bd4ce8e36b5f972e4fc6ed2587` 的独立检出生成。Windows Depot `5088121` 和 Manifest `3231099744923356430` 已核对。[构建与客户端验收](../qa/steam_release_20261116/README.md)
+
 连环马反攻任务由原十二骑战果、韩滔生擒事件与大营状态派生。同批合入现行目录的新增三个四语键。[反攻提示原件](../qa/campaign_cavalry_escort_20261116/README.md#擒获韩滔后的反攻提示)。
 
 连环马 `--retry-support-tail` 固定前一轮关档并在同一原再保存槽续跑。策略只调整普通集结、南路推进与攻城指令。[南路续玩原件](../qa/campaign_resume_current_20261116/evidence/protected_drill_candidate/south_approach/)。

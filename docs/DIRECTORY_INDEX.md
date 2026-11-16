@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[Steam 2026-11-16 正式更新](STEAM_UPDATE_20261116.md) 与 [发布验收收据](../qa/steam_release_20261116/README.md) 记录 Build、服务端清单、客户端安装和四语公告。
+
 [连环马反攻提示原件](../qa/campaign_cavalry_escort_20261116/counter_briefing/) 保存首次夹具编译失败与最终定向运行。
 
 [连环马南路续玩原件](../qa/campaign_resume_current_20261116/evidence/protected_drill_candidate/south_approach/) 保存尾段回执、战斗日志与通过或失败的报告。
