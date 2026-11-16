@@ -277,7 +277,7 @@ var _terrain_img: Image
 var _avg_cache := {}
 var _anim_cache := {}
 var _generic_directional_path_cache := {}
-var _attack_prefetch_units := {}
+var _directional_prefetch_paths := {}
 
 
 func _ready() -> void:
@@ -941,33 +941,36 @@ func _resolve_generic_directional_path(key: String, state: String, direction: St
 	return path
 
 
-## Ask Godot to load expensive native attack resources during the opening scene.
+## Prepare only the ordinary directional actions requested by the level.
 ## Normal animation selection remains the fallback if an asset is needed early.
-func prefetch_directional_attacks(keys: Array[String]) -> void:
+func prefetch_directional_animations(actions_by_unit: Dictionary) -> void:
 	if DisplayServer.get_name() == "headless":
 		return
-	var paths: Array[String] = []
-	for key in keys:
-		if _attack_prefetch_units.has(key):
-			continue
-		_attack_prefetch_units[key] = true
+	var paths: Dictionary[String, String] = {}
+	for key: String in actions_by_unit:
 		var family: Dictionary = ORDINARY_CHARACTER_FAMILIES.get(key, {})
-		for direction: String in CampaignArt.DIRECTIONS:
-			var path := _generic_directional_path(String(family.get("attack", key)), "attack", direction)
-			if family.has("attack") or not ResourceLoader.exists(path):
-				paths.append(path.get_basename() + ".tres")
+		for state: String in actions_by_unit[key]:
+			for direction: String in CampaignArt.DIRECTIONS:
+				var stem := _generic_directional_path(String(family.get(state, key)), state, direction)
+				if not family.has(state) and ResourceLoader.exists(stem):
+					continue
+				var path := stem.get_basename() + ".tres"
+				if _directional_prefetch_paths.has(path):
+					continue
+				_directional_prefetch_paths[path] = true
+				paths[path] = "ordinary_character|" + path if family.has(state) else "unit|%s|%s|%s" % [key, state, direction]
 	if not paths.is_empty():
 		_prefetch_directional_frames.call_deferred(paths)
 
 
-func _prefetch_directional_frames(paths: Array[String]) -> void:
+func _prefetch_directional_frames(paths: Dictionary[String, String]) -> void:
 	for path in paths:
 		# Do not hold up the first scene frame or start another request on exit.
 		await get_tree().process_frame
 		if AppLifecycle.quit_started():
 			return
 		var prepared_key := "validated|" + path
-		if _anim_cache.has(prepared_key) or not ResourceLoader.exists(path):
+		if _anim_cache.has(prepared_key) or _anim_cache.has(paths[path]) or not ResourceLoader.exists(path):
 			continue
 		if ResourceLoader.load_threaded_request(path, "SpriteFrames") != OK:
 			continue
@@ -977,7 +980,7 @@ func _prefetch_directional_frames(paths: Array[String]) -> void:
 			status = ResourceLoader.load_threaded_get_status(path)
 		if status == ResourceLoader.THREAD_LOAD_LOADED:
 			var frames := _decode_directional_frames(ResourceLoader.load_threaded_get(path))
-			if not frames.is_empty():
+			if not frames.is_empty() and not _anim_cache.has(paths[path]):
 				_anim_cache[prepared_key] = frames
 
 
