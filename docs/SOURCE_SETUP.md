@@ -1,5 +1,8 @@
 # 源码设置与换机（2026-10-30）
 
+2026-11-16 连环马护军角色由既有waves/riders/source_lane派生，普通指令仍由Unit保存；Level字段结构保持，生产身份改变，旧候选资格不沿用。新增campaign_cavalry_escort.json三条四语。[本批来源与验证边界](../qa/campaign_cavalry_escort_20261116/README.md)。
+
+
 2026-11-16 黄泥冈运输分组实时派生，无新增Level/Visual字段；hg_empty_carts、hg_loaded_carts纳入官方按钮白名单。campaign_transport_groups.json新增八条四语并同步catalog；源码身份改变，冻结续玩资格不沿用。[来源与验证边界](../qa/campaign_transport_groups_20261116/README.md)。
 
 

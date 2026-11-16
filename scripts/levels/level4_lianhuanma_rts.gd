@@ -299,6 +299,10 @@ func hook_conditions(b, rider) -> Dictionary:
 
 func unit_tactical_hint(b, unit) -> String:
 	if not alive(unit): return ""
+	if unit in escorts:
+		if not b.is_visible_world(unit.position): return Localize.text("暂无视野，无法判断破阵条件")
+		var plan := _escort_plan(b,int(unit.get_meta("source_lane",-1)))
+		return Localize.text({"muster":"护军候骑集结 · 可先袭辎重营断援","follow":"护军伴随甲马 · 可引开快骑、截住步军","retreat":"本路甲马已失 · 护军退守，可趁机整队"}.get(plan.get("phase",""),""))
 	var rider = unit
 	if unit.key in HOOK_KEYS and unit.faction == Unit.FACTION_LIANG:
 		if unit._target in riders and alive(unit._target) and b.is_visible_world(unit._target.position):
@@ -375,12 +379,50 @@ func _support_tick(b,delta: float) -> void:
 			b.add_resources(int(cost.cost_gold),int(cost.cost_wood),1)
 			return
 		u.set_meta("source_lane",lane)
-		u.order_amove(b.map.cell_to_world(LANES[lane]))
-		u.order_amove(hall.position,true)
 		escorts.append(u)
 		ai_trained+=1
 		ai_spent_gold+=int(cost.cost_gold)
 		ai_spent_wood+=int(cost.cost_wood)
+## Derived from already saved wave state, original rider identities and each
+## escort's source_lane. Only ordinary Unit orders persist; no hidden AI timer.
+func _escort_plan(b,lane: int) -> Dictionary:
+	if lane not in [0,1]: return {}
+	var cavalry: Array=riders.filter(func(u): return alive(u) and int(u.get_meta("wave_group",-1))==lane)
+	if cavalry.is_empty():
+		var home: Vector2i=ENEMY_CAMP+Vector2i(-4,-4 if lane==0 else 4)
+		if not alive(enemy_base): home=(NORTH_POST if lane==0 else SOUTH_POST) if alive(posts[lane]) else LANES[lane]
+		return {"phase":"retreat","goal":b.map.cell_to_world(home)}
+	if not waves[lane].sent:
+		return {"phase":"muster","goal":b.map.cell_to_world(RIDER_POSTS[lane]+Vector2i(2,3 if lane==0 else -3))}
+	var center := Vector2.ZERO
+	for rider in cavalry: center+=rider.position
+	# Infantry approaches behind its own cavalry, without reading enemy positions.
+	return {"phase":"follow","goal":center/float(cavalry.size())+Vector2(96,0)}
+
+func _escort_orders(b) -> void:
+	for lane in range(2):
+		var plan := _escort_plan(b,lane)
+		var goal: Vector2=plan.goal
+		for u in escorts:
+			if not alive(u) or int(u.get_meta("source_lane",-1))!=lane or u.garrisoned or u.is_captive: continue
+			if u._taunt_t>0: continue # Forced targeting belongs to Unit, even during retreat.
+			var retreat: bool=plan.phase=="retreat"
+			# Nearby visible fighting takes precedence over following a moving center.
+			# Retreat deliberately disengages, using movement rather than teleporting.
+			var sight: float=float(u.setup_def.get("sight",8))*GameMap.CELL
+			if (not retreat or u.position.distance_to(goal)<=160) and alive(u._target) and u._target.faction!=u.faction \
+					and u.position.distance_to(u._target.position)<=sight and b.target_visible_to(u,u._target): continue
+			if u.position.distance_to(goal)<=80:
+				if u._state!=Unit.ST_IDLE or u._target!=null: u.order_stop()
+				u._amove_dest=Vector2.ZERO # Retire the old attack-move watchdog at the guard point.
+				u._idle_push_t=0.0
+				if u.stance!=Unit.STANCE_DEFEND: u.set_stance(Unit.STANCE_DEFEND)
+				continue
+			if retreat:
+				if u._state!=Unit.ST_MOVE or u._home.distance_to(goal)>96: u.order_move(goal)
+			elif u._state!=Unit.ST_AMOVE or u._amove_dest.distance_to(goal)>96:
+				u.order_amove(goal)
+
 func process(b,delta: float) -> void:
 	if not alive(hall) or not alive(song):
 		return
@@ -402,6 +444,7 @@ func process(b,delta: float) -> void:
 			b.msg((Localize.text("北路") if lane==0 else Localize.text("南路"))+Localize.text("甲马正在集结，约25秒后出发。"),6)
 		if elapsed>=float(waves[lane].time):
 			_send_wave(b,lane)
+	_escort_orders(b)
 	_update_briefing(b)
 	if manor_fallen:
 		for u in riders:

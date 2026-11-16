@@ -18,8 +18,8 @@ func _run() -> void:
 	await _dispose(b)
 	if route=="contracts":
 		b=await _start("skirmish")
-		check(b._defs.gou_lian==Defs.UNITS.gou_lian,"hook recruitment overrides do not leak to defense")
-		check(b._defs.barracks==Defs.UNITS.barracks,"chapter barracks menu does not leak to defense")
+		check(b._defs.gou_lian==load("res://scripts/defs.gd").UNITS.gou_lian,"hook recruitment overrides do not leak to defense")
+		check(b._defs.barracks==load("res://scripts/defs.gd").UNITS.barracks,"chapter barracks menu does not leak to defense")
 		await _dispose(b)
 	check(checks==({"contracts":42,"defend":5,"raid":6}.get(route,0)),"all expected route assertions executed")
 	Engine.time_scale=1
@@ -34,8 +34,8 @@ func _contracts_lhm(b) -> void:
 	check(b.economy and b.fog and b.used_pop()==20 and b.pop_cap==24,"real economy and opening population are consistent")
 	check(b._defs.barracks.produces.has("gou_lian") and b._defs.gou_lian.cost_gold==36 and b._defs.gou_lian.pop==2,"hook soldiers have explicit paid recruitment")
 	for key in ["liang_dao","liang_qiang","liang_gong","liang_ma","caltrop_tower","arrow_tower","siege_cata"]:
-		check(b._defs[key]==Defs.UNITS[key],"shared combat/economy unchanged: "+key)
-	for field in ["hp","atk","cd","range","speed","bonus_cav"]: check(b._defs.gou_lian[field]==Defs.UNITS.gou_lian[field],"hook combat definition unchanged: "+field)
+		check(b._defs[key]==load("res://scripts/defs.gd").UNITS[key],"shared combat/economy unchanged: "+key)
+	for field in ["hp","atk","cd","range","speed","bonus_cav"]: check(b._defs.gou_lian[field]==load("res://scripts/defs.gd").UNITS.gou_lian[field],"hook combat definition unchanged: "+field)
 	check(l.riders.size()==12,"all twelve finite riders exist from deployment")
 	for cell in [l.LANES[0],l.LANES[1],l.NORTH_POST,l.SOUTH_POST,l.ENEMY_CAMP,l.DRILL]:
 		check(not b.map.find_path(l.song.position,b.map.cell_to_world(cell)).is_empty(),"strategic destination reachable: "+str(cell))

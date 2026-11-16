@@ -1,0 +1,159 @@
+{
+	"checks": 5,
+	"escort_transitions": [
+		{
+			"escort_ids": [],
+			"lane": 0,
+			"phase": "muster",
+			"time": 0.0
+		},
+		{
+			"escort_ids": [],
+			"lane": 1,
+			"phase": "muster",
+			"time": 0.0
+		},
+		{
+			"escort_ids": [
+				64,
+				71,
+				77,
+				84
+			],
+			"lane": 0,
+			"phase": "follow",
+			"time": 150.53333333333
+		},
+		{
+			"escort_ids": [
+				64,
+				71,
+				77
+			],
+			"lane": 0,
+			"phase": "retreat",
+			"time": 167.199999999996
+		},
+		{
+			"escort_ids": [
+				65,
+				72,
+				78,
+				85,
+				91,
+				96,
+				101,
+				106
+			],
+			"lane": 1,
+			"phase": "follow",
+			"time": 270.333333333323
+		},
+		{
+			"escort_ids": [
+				65,
+				72,
+				78,
+				85,
+				91,
+				96,
+				101,
+				106
+			],
+			"lane": 1,
+			"phase": "retreat",
+			"time": 283.333333333322
+		}
+	],
+	"failures": [],
+	"live_only": true,
+	"metrics": {
+		"ai_trained": 19,
+		"buildings_started": 6,
+		"camp_hp": 1500.0,
+		"events": [
+			"lhm_break_1",
+			"lhm_break_2",
+			"lhm_break_3",
+			"lhm_break_4",
+			"lhm_direct_break",
+			"lhm_break_5",
+			"lhm_break_6",
+			"lhm_break_7",
+			"lhm_break_8",
+			"lhm_break_9",
+			"lhm_break_10",
+			"lhm_break_11",
+			"lhm_han_captured",
+			"lhm_manor_fallen",
+			"lhm_hu_fled",
+			"lhm_victory"
+		],
+		"game_seconds": 342.5,
+		"hook_broken": 11,
+		"orders": 59,
+		"result": {
+			"contract_version": 2,
+			"core_cleared": true,
+			"core_goal": "守住梁山中军，击溃十二骑连环马并摧毁官军大营。宋江与中军必须存活。",
+			"done_ids": [
+				"lhm_han",
+				"lhm_hu"
+			],
+			"goals": [
+				{
+					"id": "lhm_training",
+					"label": "教场诱骑撤步，徐宁与钩镰手协同下钩",
+					"note": "",
+					"reason": "本局未完成",
+					"state": "missed"
+				},
+				{
+					"id": "lhm_hooks",
+					"label": "十二骑均先由钩镰枪破阵",
+					"note": "",
+					"reason": "本局已偏离“十二骑均先由钩镰枪破阵”的原著条件",
+					"state": "missed"
+				},
+				{
+					"id": "lhm_han",
+					"label": "生擒韩滔",
+					"note": "",
+					"reason": "",
+					"state": "done"
+				},
+				{
+					"id": "lhm_hu",
+					"label": "呼延灼败走青州",
+					"note": "",
+					"reason": "",
+					"state": "done"
+				}
+			],
+			"missed_ids": [
+				"lhm_training",
+				"lhm_hooks"
+			],
+			"pending_ids": [],
+			"story_complete": false,
+			"story_done": 2,
+			"story_total": 4
+		},
+		"riders_defeated": 12,
+		"skill_orders": 13,
+		"song_hp": 280.0,
+		"strategy": "defend then regroup at rear, paid support heroes, infantry attack-move covers siege targeting HQ; orders at most every six seconds",
+		"units_queued": 37,
+		"units_queued_by_key": {
+			"gou_lian": 13,
+			"hua_rong": 1,
+			"liang_dao": 4,
+			"liang_gong": 8,
+			"liang_qiang": 5,
+			"lou_luo": 4,
+			"siege_ram": 2
+		}
+	},
+	"passed": true,
+	"scope": "actual defend-and-siege route only; not full restore, human or performance acceptance"
+}

@@ -1,0 +1,155 @@
+{
+	"checks": 5,
+	"escort_transitions": [
+		{
+			"escort_ids": [],
+			"lane": 0,
+			"phase": "muster",
+			"time": 0.0
+		},
+		{
+			"escort_ids": [],
+			"lane": 1,
+			"phase": "muster",
+			"time": 0.0
+		},
+		{
+			"escort_ids": [
+				64,
+				71,
+				76,
+				81
+			],
+			"lane": 0,
+			"phase": "follow",
+			"time": 151.066666666663
+		},
+		{
+			"escort_ids": [
+				64,
+				71,
+				76,
+				81
+			],
+			"lane": 0,
+			"phase": "retreat",
+			"time": 165.866666666662
+		},
+		{
+			"escort_ids": [
+				65,
+				72,
+				77,
+				82,
+				87,
+				93,
+				100
+			],
+			"lane": 1,
+			"phase": "follow",
+			"time": 270.19999999999
+		},
+		{
+			"escort_ids": [
+				65,
+				72,
+				77,
+				82,
+				87,
+				93,
+				100
+			],
+			"lane": 1,
+			"phase": "retreat",
+			"time": 283.533333333322
+		}
+	],
+	"failures": [
+		"defend route wins through real economy and combat",
+		"defend clears finite riders and enemy headquarters"
+	],
+	"live_only": true,
+	"metrics": {
+		"ai_trained": 21,
+		"buildings_started": 6,
+		"camp_hp": 1500.0,
+		"events": [
+			"lhm_break_1",
+			"lhm_break_2",
+			"lhm_break_3",
+			"lhm_break_4",
+			"lhm_break_5",
+			"lhm_break_6",
+			"lhm_break_7",
+			"lhm_break_8",
+			"lhm_break_9",
+			"lhm_break_10",
+			"lhm_break_11",
+			"lhm_break_12",
+			"lhm_all_hook_broken"
+		],
+		"game_seconds": 900.0,
+		"hook_broken": 12,
+		"orders": 712,
+		"result": {
+			"contract_version": 2,
+			"core_cleared": false,
+			"core_goal": "守住梁山中军，击溃十二骑连环马并摧毁官军大营。宋江与中军必须存活。",
+			"done_ids": [],
+			"goals": [
+				{
+					"id": "lhm_training",
+					"label": "教场诱骑撤步，徐宁与钩镰手协同下钩",
+					"note": "",
+					"reason": "",
+					"state": "pending"
+				},
+				{
+					"id": "lhm_hooks",
+					"label": "十二骑均先由钩镰枪破阵",
+					"note": "",
+					"reason": "",
+					"state": "pending"
+				},
+				{
+					"id": "lhm_han",
+					"label": "生擒韩滔",
+					"note": "",
+					"reason": "",
+					"state": "pending"
+				},
+				{
+					"id": "lhm_hu",
+					"label": "呼延灼败走青州",
+					"note": "",
+					"reason": "",
+					"state": "pending"
+				}
+			],
+			"missed_ids": [],
+			"pending_ids": [
+				"lhm_training",
+				"lhm_hooks",
+				"lhm_han",
+				"lhm_hu"
+			],
+			"story_complete": false,
+			"story_done": 0,
+			"story_total": 4
+		},
+		"riders_defeated": 12,
+		"skill_orders": 10,
+		"song_hp": 280.0,
+		"units_queued": 85,
+		"units_queued_by_key": {
+			"gou_lian": 30,
+			"liang_dao": 14,
+			"liang_gong": 16,
+			"liang_qiang": 12,
+			"lou_luo": 6,
+			"siege_ram": 7
+		}
+	},
+	"passed": false,
+	"scope": "explicit escort-order fixtures and one actual paid-economy defend route; not full restore, human or performance acceptance"
+}

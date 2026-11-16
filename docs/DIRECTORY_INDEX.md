@@ -1,5 +1,8 @@
 # 项目目录索引（2026-10-30）
 
+[连环马护军配合](../qa/campaign_cavalry_escort_20261116/README.md)：定向入口tools/lianhuanma_escort_qa.gd，正常防守路线复用tools/lianhuanma_rts_test.gd，三条翻译来源assets/localization/campaign_cavalry_escort.json。
+
+
 [黄泥冈运输分组](../qa/campaign_transport_groups_20261116/README.md)包含定向夹具、七车十一担实际路线、失败记录和缓存修复证据。入口tools/campaign_transport_groups_qa.gd继承更新后的huangnigang_short_test实时路线；该旧工具的历史三货物boundaries未纳入本批。翻译来源assets/localization/campaign_transport_groups.json。
 
 

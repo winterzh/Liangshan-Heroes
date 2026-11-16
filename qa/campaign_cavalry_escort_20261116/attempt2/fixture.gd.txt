@@ -1,0 +1,84 @@
+extends "res://tools/lianhuanma_rts_test.gd"
+var observed: Array=[]
+var phases: Dictionary={}
+func _economy_lhm(b) -> void:
+	super._economy_lhm(b)
+	for lane in range(2):
+		var plan: Dictionary=b.level._escort_plan(b,lane)
+		if phases.get(lane,"")!=plan.phase:
+			phases[lane]=plan.phase
+			observed.append({"lane":lane,"phase":plan.phase,"time":b.level.elapsed,"escort_ids":b.level.escorts.filter(func(u):return alive(u) and u.get_meta("source_lane",-1)==lane).map(func(u):return u.entity_id)})
+func _fixture() -> void:
+	var b=await _start("",3)
+	b.set_process(false);b.set_physics_process(false);b.hud.set_process(false);b.camera.set_process(false)
+	for u in b.units:u.set_physics_process(false)
+	var l=b.level
+	var ids: Array=l.riders.map(func(u):return u.entity_id)
+	var funds: Dictionary=b.faction_res[1].duplicate()
+	l.escort_t=0;l._support_tick(b,1)
+	for u in l.escorts:u.set_physics_process(false)
+	check(l.escorts.size()==2 and b.faction_gold(1)==funds.gold-l.ai_spent_gold and b.faction_wood(1)==funds.wood-l.ai_spent_wood,"two escorts use unchanged real faction costs")
+	var u=l.escorts[0]
+	var origin: Vector2=u.position
+	var hp: float=u.hp
+	l._escort_orders(b)
+	check(u._state==u.ST_AMOVE and u._amove_dest==l._escort_plan(b,0).goal and u._queue.is_empty(),"waiting escort approaches staging point without queued attack on Liangshan")
+	var serial: int=u._order_serial
+	l._escort_orders(b)
+	check(u._order_serial==serial and u.position==origin and u.hp==hp,"repeated decision neither resets marching orders nor teleports or heals")
+	u.position=l._escort_plan(b,0).goal;l._escort_orders(b)
+	check(u._state==u.ST_IDLE and u.stance==u.STANCE_DEFEND and u._amove_dest==Vector2.ZERO and u._idle_push_t==0,"arrived muster escort guards at staging point")
+	l._send_wave(b,0)
+	for i in range(6):l.riders[i].position=b.map.cell_to_world(l.LANES[0])+Vector2(i*18,0)
+	l._escort_orders(b)
+	check(l._escort_plan(b,0).phase=="follow" and u._amove_dest==l._escort_plan(b,0).goal and l._escort_plan(b,1).phase=="muster","north launch follows its original cavalry while south still musters")
+	l.xu.position=u.position+Vector2(-40,0);u.order_attack(l.xu);serial=u._order_serial
+	l._escort_orders(b)
+	check(u._target==l.xu and u._order_serial==serial,"nearby visible engagement is not cancelled by moving formation center")
+	l.xu._invis_t=5;l._escort_orders(b)
+	check(u._target==null and u._state==u.ST_AMOVE,"invisible opponent is not tracked by escort command logic")
+	l.xu._invis_t=0
+	for i in range(6):l.riders[i].hp=0
+	u.order_attack(l.xu);u._taunt_t=2;u._taunt_src=l.xu;serial=u._order_serial
+	l._escort_orders(b)
+	check(u._target==l.xu and u._order_serial==serial,"forced taunt takes precedence over retreat")
+	u._taunt_t=0;u._taunt_src=null
+	l._escort_orders(b)
+	check(l._escort_plan(b,0).phase=="retreat" and u._state==u.ST_MOVE and u._home==l._escort_plan(b,0).goal,"loss of own cavalry orders a physical retreat to the camp")
+	serial=u._order_serial;l._escort_orders(b)
+	check(u._order_serial==serial,"retreat keeps the existing movement command")
+	u.position=l._escort_plan(b,0).goal;l.xu.position=u.position+Vector2(40,0);u.order_attack(l.xu);serial=u._order_serial;l._escort_orders(b)
+	check(u._target==l.xu and u._order_serial==serial,"returned escorts can defend their camp")
+	l.enemy_base.hp=0
+	check(l._escort_plan(b,0).goal==b.map.cell_to_world(l.NORTH_POST),"destroyed headquarters falls back to surviving own supply post")
+	l.posts[0].hp=0
+	check(l._escort_plan(b,0).goal==b.map.cell_to_world(l.LANES[0]),"no surviving camp leaves original infantry in its lane")
+	check(ids==l.riders.map(func(r):return r.entity_id) and l.escorts.size()==2 and u.hp==hp,"orders preserve twelve rider identities and existing escorts without healing")
+	check(load("res://scripts/run_campaign_level_state.gd").new().audit_declarations("level4").ok,"derived behavior adds no unclassified save field")
+	b.fog=false;b._fog_layer.hide()
+	for language in ["zh_CN","zh_TW","en","ja"]:
+		root.get_node("Localize").set_language(language,false)
+		check(not l.unit_tactical_hint(b,u).is_empty(),language+" escort role has a translated hint")
+	root.get_node("Localize").set_language("en",false)
+	root.size=Vector2i(960,540);root.content_scale_size=root.size
+	b.select_single(u,false);b.center_camera_cell(b.map.world_to_cell(u.position));b.hud.update_selection_panel(b.selection)
+	for i in range(8):
+		b.hud._refresh_panel();b.hud._refresh_hero_bar();b.hud._layout_desktop_hero();b.hud._layout_info_panel();b.mission.tick(0)
+		await process_frame
+	await RenderingServer.frame_post_draw
+	check(root.get_texture().get_image().save_png("res://.godot/cavalry-escort/en.png")==OK,"actual narrow-window role hint rendered")
+	await _dispose(b)
+func _run() -> void:
+	OS.set_environment("CAMPAIGN_QA","1");AudioServer.set_bus_mute(0,true);root.get_node("Settings").edge_scroll=false
+	DirAccess.make_dir_recursive_absolute("res://.godot/cavalry-escort")
+	await _fixture()
+	root.get_node("Localize").set_language("zh_CN",false)
+	Engine.time_scale=4
+	route="defend"
+	build_cells=[Vector2i(5,28),Vector2i(5,35),Vector2i(12,36),Vector2i(17,36),Vector2i(12,23),Vector2i(16,24),Vector2i(9,43),Vector2i(20,34)]
+	var b=await _start("",3)
+	await _play_lhm(b)
+	await _dispose(b)
+	Engine.time_scale=1
+	FileAccess.open("res://.godot/cavalry-escort/report.json",FileAccess.WRITE).store_string(JSON.stringify({"passed":failures.is_empty(),"checks":checks,"failures":failures,"metrics":play_metrics,"escort_transitions":observed,"scope":"explicit escort-order fixtures and one actual paid-economy defend route; not full restore, human or performance acceptance"},"\t"))
+	quit(0 if failures.is_empty() else 1)
