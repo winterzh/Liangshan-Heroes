@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+候选 7bd1f0e5 的 SteamDepot 子目录含精确六文件；机器清单和 Git 回执在载荷目录外。[Windows Steam 候选交接](STEAM_CANDIDATE_20261117.md)
+
 可用 tools/verify_platform_exports.py 的 pck_inventory、check_inventory 和 inspect_windows 阅读交付 EXE。核对成品翻译原始字节时，结合目录大小与摘要定位包内载荷并比对冻结源码。[Windows 候选的成品包核对](../qa/battle_entry_timing_20261116/README.md#windows-候选成品内容核对)
 
 Windows 候选 7bd1f0e5 已用跟踪运行输入构建，在独立档案离线启动。原生文件校验及导出摘要见候选收据。[Windows 本地候选 7bd1f0e5](../qa/battle_entry_timing_20261116/README.md#windows-本地候选-7bd1f0e5)

@@ -1,5 +1,9 @@
 # 开发日志
 
+## 2026-11-17 Windows Steam 候选发布准备
+
+补齐两份许可证，独立准备 Windows Depot 六文件并读回摘要。四语公告保持草案状态。[Windows Steam 候选交接](STEAM_CANDIDATE_20261117.md)
+
 ## 2026-11-17 Windows 候选成品内容核对
 
 从 7bd1f0e5 交付 EXE 的内嵌包核对 8,369 项，八章脚本、菜单场景和内容身份均有打包条目，4,852 条本地化键来自与 Git 源文件一致的实际载荷。[Windows 候选的成品包核对](../qa/battle_entry_timing_20261116/README.md#windows-候选成品内容核对)

@@ -1,5 +1,7 @@
 # 八幕战役后续开发路线图
 
+M7 已备当前 Windows 候选的六文件 Steam Depot 清单、上一正式 Build 回退凭据和四语公告草案。实际客户端前台验证待办。[Windows Steam 候选交接](STEAM_CANDIDATE_20261117.md)
+
 M7 当前 Windows 候选的成品核对覆盖八章编译脚本、身份脚本、菜单场景及四语加载字串。源代码与包内本地化字节一致。[Windows 候选的成品包核对](../qa/battle_entry_timing_20261116/README.md#windows-候选成品内容核对)
 
 M7 Windows 候选 7bd1f0e5 已包含当前源码并通过原生离线启动。此候选的前台出征和 Steam 客户端计时仍待验。[Windows 本地候选 7bd1f0e5](../qa/battle_entry_timing_20261116/README.md#windows-本地候选-7bd1f0e5)
