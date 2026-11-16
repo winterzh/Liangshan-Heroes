@@ -154,7 +154,7 @@ func _optional(base: String, relative: String) -> Dictionary:
 	return {"path": relative, "present": false, "bytes": 0, "sha256": ""}
 
 func _source_snapshot(base: String, provider_relative: String, verify_rows: Dictionary = {}, verify_stamps: Dictionary = {}) -> Dictionary:
-	_files.clear(); _dirs.clear(); _case_paths.clear(); _stamps.clear(); _total_bytes = 0; _error = ""
+	_files = {}; _dirs = {}; _case_paths = {}; _stamps = {}; _total_bytes = 0; _error = ""
 	_verify_rows = verify_rows; _verify_stamps = verify_stamps
 	if not base.is_absolute_path() or not _no_link(base): return _bad("SOURCE_ROOT")
 	for name in _rules.root_files:
@@ -179,26 +179,29 @@ func _source_snapshot(base: String, provider_relative: String, verify_rows: Dict
 	var optional: Array[Dictionary] = []
 	for relative in _rules.optional_content: optional.append(_optional(base, String(relative)))
 	if not _error.is_empty(): return _bad(_error)
-	var canonical: String = String(_rules.header) + "\nrules\t" + _sha_text(INPUT_RULES_JSON) + "\n"
+	var rules_sha := _sha_text(INPUT_RULES_JSON)
+	var lines := PackedStringArray([String(_rules.header), "rules\t" + rules_sha])
 	var dir_names: Array = _dirs.keys()
 	dir_names.sort()
-	for name in dir_names: canonical += "D\t%s\t%d\n" % [name, 1 if _dirs[name] else 0]
+	for name in dir_names: lines.append("D\t%s\t%d" % [name, 1 if _dirs[name] else 0])
 	var names: Array = _files.keys()
 	names.sort()
 	var records: Array[Dictionary] = []
 	var native: Array[Dictionary] = []
 	for name in names:
 		var row: Dictionary = _files[name]
-		canonical += "F\t%s\t%d\t%s\n" % [name, row.bytes, row.sha256]
+		lines.append("F\t%s\t%d\t%s" % [name, row.bytes, row.sha256])
 		records.append(row)
 		if String(name).begins_with("addons/") and String(name).get_extension() in ["dll", "so", "dylib", "gdextension"]: native.append(row)
-	for row in optional: canonical += "O\t%s\t%d\n" % [row.path, 1 if row.present else 0]
-	var result: Dictionary = {"ok": true, "code": "OK", "schema": 1, "rules_sha256": _sha_text(INPUT_RULES_JSON),
-		"source_sha256": _sha_text(canonical), "file_count": records.size(), "total_bytes": _total_bytes,
+	for row in optional: lines.append("O\t%s\t%d" % [row.path, 1 if row.present else 0])
+	lines.append("") # The final newline is part of the identity format.
+	var result: Dictionary = {"ok": true, "code": "OK", "schema": 1, "rules_sha256": rules_sha,
+		"source_sha256": _sha_text("\n".join(lines)), "file_count": records.size(), "total_bytes": _total_bytes,
 		"files": records, "directories": _dirs.duplicate(), "optional_content": optional, "native_files": native,
 		"provider_path": provider_relative, "provider_sha256": String(_files[provider_relative].sha256)}
 	if verify_rows.is_empty():
-		var second: Dictionary = _source_snapshot(base, provider_relative, _files.duplicate(true), _stamps.duplicate())
+		# The second pass builds its own tables and reads these records as the reference.
+		var second: Dictionary = _source_snapshot(base, provider_relative, _files, _stamps)
 		if not second.ok or second != result: return _bad("INPUT_ENUMERATION_CHANGED")
 	return result
 
