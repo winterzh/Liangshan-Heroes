@@ -19,7 +19,7 @@ const GAO_FLAGS := {"current": 4, "skirmish": false, "skirmish_ai": false, "aren
 const DAMING_FLAGS := {"current": 7, "skirmish": false, "skirmish_ai": false, "arena": false, "custom_defense": false, "scenario": false}
 const SCHEMA := "official_restore_profile_v1"
 const CLASSIC_ID := "classic_30_v1"
-const ZHU_ID := "campaign_level3_v1"
+const ZHU_ID := "campaign_level3_v2"
 # Eleven distinct loads cannot be inferred from the old three-load profile.
 # The old profile is rejected by the existing slot/core gates, never migrated.
 const HG_ID := "campaign_level1_v2"

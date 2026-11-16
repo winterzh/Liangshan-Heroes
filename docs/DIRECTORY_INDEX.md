@@ -1,5 +1,9 @@
 # 项目目录索引（2026-10-30）
 
+[八章后续路线图](CAMPAIGN_ROADMAP_20261116.md)记录2026-11-16确认范围、阶段、逐章合同与少测试原则。公共无状态小队指令位于`scripts/campaign_squad_orders.gd`；祝家庄持有其可保存状态。定向检查入口为`tools/campaign_squad_orders_qa.gd`，翻译来源为`assets/localization/campaign_tactics.json`。
+
+[小队与侦察专项](../qa/campaign_squad_20261116/README.md)保留限定结果、来源摘要和失败记录；场景入口为`tools/campaign_squad_orders_qa.tscn`，隔离复跑包装器为`tools/run_campaign_squad_qa.py`。
+
 [战役阶段任务提示专项](../qa/campaign_briefing_20261113/README.md)记录连环马阶段和地图定位、江州解缚、四语提示的集中 Godot 检查。
 
 ## 生成副本自动清理（2026-11-02）

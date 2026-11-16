@@ -336,7 +336,7 @@ func test_level3_save_and_restore() -> void:
 	check("STORE", "slot schema is official_continue_slot_v1", doc.schema == Store.CAMPAIGN_SCHEMA)
 	check("STORE", "slot context matches Profiles.ZHU_CONTEXT", doc.context == Profiles.ZHU_CONTEXT)
 	check("STORE", "world schema is official_world_core_preparation_v1", doc.world.schema == Core.CAMPAIGN_SCHEMA)
-	check("STORE", "world profile id is campaign_level3_v1", doc.world.profile.id == Profiles.ZHU_ID)
+	check("STORE", "world profile id is campaign_level3_v2", doc.world.profile.id == Profiles.ZHU_ID)
 	check("STORE", "world sections count is 22", doc.world.sections.size() == Core.CAMPAIGN_SECTIONS.size())
 	check("STORE", "world sections has mission", doc.world.sections.has("mission"))
 	check("STORE", "world sections has presentation", doc.world.sections.has("presentation"))

@@ -1,5 +1,9 @@
 # 源码设置与换机（2026-10-30）
 
+2026-11-16 战役深化按[路线图](CAMPAIGN_ROADMAP_20261116.md)推进。祝家庄新增小队运行状态，已登记到Level组件，恢复profile更新为`campaign_level3_v2`；旧战斗候选不猜测迁移，正式战役续玩仍按独立整合验收开放。运行翻译新增`campaign_tactics.json`来源并同步catalog。首次开发使用独立工作树；冻结候选不原地覆盖。
+
+本批[小队与侦察专项](../qa/campaign_squad_20261116/README.md)11项定向夹具通过，范围为决策和Level组件；不继承为整关或完整续玩证明。复跑命令及本机引擎锁约定见该记录。
+
 连环马阶段任务文案由关卡脚本提供。翻译维护在 `assets/localization/campaign.json`，运行时加载 `assets/localization/catalog.json`。任务提示改动会改变生产来源，须用新的冻结候选验收。
 
 ## 本机生成副本自动淘汰（2026-11-02）

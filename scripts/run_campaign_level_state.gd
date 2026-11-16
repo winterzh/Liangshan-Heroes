@@ -32,11 +32,11 @@ const FIELDS := {
 		"units": "camps caches executioners city_guards pursuit blockers towers reinforcements",
 		"named_units": "named_units", "external": "depart_button"},
 	"level3": {
-		"int": "ai_trained ai_spent_gold ai_spent_wood raids_sent",
-		"bool": "expansion_secured supply_cut inside_open prisoners_freed manor_fallen sent_sun main_breached",
-		"float": "elapsed train_clock raid_clock strategic_clock", "text": "stage",
+		"int": "ai_trained ai_spent_gold ai_spent_wood raids_sent raid_strength",
+		"bool": "expansion_secured supply_cut inside_open prisoners_freed manor_fallen sent_sun main_breached raid_announced raid_warned outpost_scouted expansion_spotted",
+		"float": "elapsed train_clock raid_clock strategic_clock raid_elapsed raid_think", "text": "stage raid_state", "vec": "raid_home",
 		"unit": "hall song gate side_gate enemy_base outpost hu sun",
-		"units": "prisoners workers enemy_workers enemy_nodes reserve trained resource_guards"},
+		"units": "prisoners workers enemy_workers enemy_nodes reserve trained resource_guards raiders"},
 	"level4": {
 		"int": "ai_trained ai_spent_gold ai_spent_wood broken_count lhm_killed",
 		"bool": "manor_fallen drill_entered drill_withdrew drill_coordinated drill_complete",
@@ -197,6 +197,9 @@ func _checks(level_id: String, values: Dictionary) -> bool:
 	if level_id in ["level1", "level6", "level7"] and (values.st < 0 or values.st > (7 if level_id == "level1" else 3)): return false
 	if level_id == "level2" and values.cache_taken.size() != 2: return false
 	if level_id == "level3" and values.stage not in ["scout", "contest", "siege"]: return false
+	if level_id == "level3":
+		if values.raid_state not in ["muster", "attack", "retreat"] or values.raid_strength < 0 or values.raid_elapsed < 0.0: return false
+		if values.raid_state != "muster" and values.raid_strength < 3: return false
 	if level_id in ["level4", "level5"] and values.waves.size() != (2 if level_id == "level4" else 3): return false
 	if level_id == "level5" and (values.production_t.size() != 2 or values.produced.size() != 2): return false
 	if level_id == "level1" and (values.delivered < 0 or values.delivered > Transport.LOAD_COUNT or not Transport.valid_loaded(values.cargo_ready) or values.cargo_plan not in ["", "free"]): return false

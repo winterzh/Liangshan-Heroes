@@ -2,6 +2,7 @@ extends LevelBase
 ## 祝家庄 RTS 样板：同一张地图持续经营，外围兵源可以被切断。
 ## 不调用旧三日脚本的 clear_campaign_section，不改共享兵种数值。
 const T := GameMap.T
+const SquadOrders := preload("res://scripts/campaign_squad_orders.gd")
 const CAMP := Vector2i(55, 28)
 const MAIN_GATE := Vector2i(20, 28)
 const SIDE_GATE := Vector2i(20, 18)
@@ -43,6 +44,16 @@ var ai_trained := 0
 var ai_spent_gold := 0
 var ai_spent_wood := 0
 var raids_sent := 0
+var raiders: Array[Unit] = []
+var raid_state := "muster"
+var raid_strength := 0
+var raid_elapsed := 0.0
+var raid_think := 0.0
+var raid_home := Vector2.ZERO
+var raid_announced := false
+var raid_warned := false
+var outpost_scouted := false
+var expansion_spotted := false
 
 func id() -> String: return "level3"
 func title() -> String: return "三打祝家庄"
@@ -292,9 +303,9 @@ func on_start(b) -> void:
 	b.mission.enable_scrolling()
 	b.mission.add_action("zhu_rts_recon","探路：查看外围战场",Vector2i(42,22),FIELD_ACTORS,1.0,64.0)
 	b.mission.add_action("zhu_rts_rescue",Localize.text("救出被囚好汉"),PRISON+Vector2i(4,0),FIELD_ACTORS,3.0,64.0)
-	b.lit_cells[OUTPOST] = 12.0
-	b.lit_cells[EXPANSION] = 12.0
-	b.msg("北面可夺资源，南面拆营可断援。首支庄客约150秒后出发，注意建民居补人口。",8.0)
+	b.mission.add_map_locator("北面资源区", EXPANSION)
+	b.mission.add_map_locator("庄客外营", OUTPOST)
+	b.msg("北面可夺资源，南营可断援。派小队探路，观察外营集结；后方可同时采集、补兵。",8.0)
 
 func _introduce_sun(b) -> void:
 	if sent_sun:
@@ -310,7 +321,7 @@ func _introduce_sun(b) -> void:
 	b.mission.add_actor_locator("zhu_rts_inside","sun_li")
 	if not _alive(side_gate):
 		b.mission.block_action("zhu_rts_inside","偏门已被攻破，无需再接应；可直接入庄救人。")
-	b.msg("孙立已到前营！选中孙立或宋江，右键偏门前3号旗标，停留5秒即可接应开门；切勿强攻偏门。",9.0)
+	b.msg("孙立已到前营！可接应内应开偏门，也可继续正攻。开门前先把接应部队调到附近，庄内守军仍需迎战。",9.0)
 
 func on_mission_action(b, action_id: String, actor) -> void:
 	match action_id:
@@ -419,20 +430,95 @@ func _enemy_economy(b, delta: float) -> void:
 	ai_spent_wood += w
 
 func _raids(b, delta: float) -> void:
-	if not _alive(outpost) or not _alive(enemy_base): return
-	raid_clock -= delta
-	if raid_clock > 0.0: return
-	reserve = reserve.filter(func(u): return _alive(u))
-	if reserve.size() < 3:
-		raid_clock = 10.0
+	if raid_state == "muster": raid_clock = maxf(0.0, raid_clock - delta)
+	else: raid_elapsed += delta
+	raid_think -= delta
+	if raid_think > 0.0: return
+	raid_think = 0.5
+	reserve.assign(SquadOrders.survivors(reserve))
+	raiders.assign(SquadOrders.survivors(raiders))
+	var home_alive := _alive(outpost) and _alive(enemy_base)
+	var seeing_post: bool = _alive(outpost) and b.is_visible_world(outpost.position)
+	if seeing_post: outpost_scouted = true
+	_observe_expansion(b)
+	if raid_state == "attack":
+		if not raid_announced and _raiders_visible(b):
+			raid_announced = true
+			b.msg("发现庄客出击队！可拦截来敌，或留兵守营、另队进攻外营。",6.0)
+		if raiders.is_empty():
+			_reset_raid()
+			return
+		if SquadOrders.should_withdraw(raiders, raid_strength) or raid_elapsed >= 75.0:
+			raid_state = "retreat"
+			raid_elapsed = 0.0
+			raid_home = b.map.cell_to_world(OUTPOST + Vector2i(3,0) if home_alive else Vector2i(25,28))
+			SquadOrders.withdraw(raiders, raid_home)
+			if _raiders_visible(b):
+				b.msg("庄客正在退守！可以追击，也可趁空当补兵、争夺外围。",6.0)
 		return
-	var target := CAMP if raids_sent % 2 == 0 or not expansion_secured else EXPANSION
-	for u in reserve: u.order_amove(b.map.cell_to_world(target))
-	reserve.clear()
+	if raid_state == "retreat":
+		var next_home: Vector2 = b.map.cell_to_world(OUTPOST + Vector2i(3,0) if home_alive else Vector2i(25,28))
+		if raid_home != next_home:
+			raid_home = next_home
+			SquadOrders.withdraw(raiders, raid_home)
+		if raiders.is_empty() or SquadOrders.gathered(raiders, raid_home) or raid_elapsed >= 45.0:
+			SquadOrders.guard(raiders)
+			if home_alive:
+				# Only troops that really returned rejoin the next raid. Stragglers
+				# remain ordinary defenders; no off-map regroup or free healing.
+				for u in raiders:
+					if u.position.distance_to(raid_home) <= 150.0 and u not in reserve:
+						reserve.append(u)
+			_reset_raid()
+		return
+	if not home_alive: return
+	if raid_clock <= 20.0 and reserve.size() >= 3 and seeing_post and not raid_warned:
+		raid_warned = true
+		b.msg("侦察：南营庄客正在集结，准备出击。可提前布防，也可攻击外营打乱集结。",7.0)
+	if raid_clock > 0.0 or reserve.size() < 3: return
+	# Never order reinforcements still fighting far from the assembly point.
+	var rally: Vector2 = b.map.cell_to_world(OUTPOST + Vector2i(3,0))
+	for u in reserve:
+		if u.position.distance_to(rally) <= 180.0: raiders.append(u)
+	if raiders.size() < 3:
+		raiders.clear()
+		return
+	for u in raiders: reserve.erase(u)
+	raid_strength = raiders.size()
+	raid_state = "attack"
+	raid_elapsed = 0.0
+	raid_announced = false
+	var target := EXPANSION if expansion_spotted and raids_sent % 2 == 1 else CAMP
+	SquadOrders.advance(raiders, b.map.cell_to_world(target))
 	raids_sent += 1
-	raid_clock = 90.0
-	b.lit_cells[OUTPOST] = 15.0
-	b.msg(Localize.format_text("庄客从南面外营出击！目标：%s。拔掉外营可阻止下一次出击。", ("梁山前营" if target == CAMP else "北面资源区")),6.0)
+
+func _reset_raid() -> void:
+	raiders.clear()
+	raid_state = "muster"
+	raid_strength = 0
+	raid_elapsed = 0.0
+	raid_clock = 60.0
+	raid_announced = false
+	raid_warned = false
+
+func _raiders_visible(b) -> bool:
+	return raiders.any(func(u): return _alive(u) and b.is_visible_world(u.position))
+
+func _observe_expansion(b) -> void:
+	if expansion_spotted: return
+	var at: Vector2 = b.map.cell_to_world(EXPANSION)
+	# Target knowledge comes from an actual enemy observer, not the player's
+	# expansion_secured flag or the player's fog cache.
+	for target in b.units:
+		if not _alive(target) or target.faction != Unit.FACTION_LIANG or target.is_captive or target.garrisoned:
+			continue
+		if target.position.distance_to(at) > 180.0: continue
+		for observer in resource_guards + reserve + raiders:
+			if not _alive(observer): continue
+			var sight := float(observer.setup_def.get("sight", 8)) * GameMap.CELL
+			if observer.position.distance_to(target.position) <= sight and b.target_visible_to(observer, target):
+				expansion_spotted = true
+				return
 
 func _refresh_stage(b) -> void:
 	var next := "siege" if inside_open or main_breached or supply_cut else "contest" if expansion_secured or sent_sun else "scout"
@@ -514,6 +600,16 @@ func on_unit_died(b, u) -> void:
 func _finish_ready() -> bool:
 	return manor_fallen and prisoners_freed and _alive(hall) and not prisoners.is_empty() and _alive(prisoners[0]) and prisoners[0].position.distance_to(hall.position) < 190.0
 
-func top_status(_b) -> String:
-	var supply := "外营已断援" if supply_cut else Localize.format_text("外营出击约 %d 秒", maxi(0,ceili(raid_clock)))
+func top_status(b) -> String:
+	var supply := "南营情报需侦察"
+	if supply_cut or manor_fallen:
+		supply = "外营已断援"
+	elif raid_state == "attack" and _raiders_visible(b):
+		supply = "庄客正在出击"
+	elif raid_state == "retreat" and _raiders_visible(b):
+		supply = "庄客正在退守"
+	elif _alive(outpost) and b.is_visible_world(outpost.position):
+		supply = "南营正在集结" if reserve.size() >= 3 else "南营正在补兵"
+	elif outpost_scouted:
+		supply = "南营暂无新情报"
 	return Localize.format_text("祝家庄 · %s · %s · %s", ["攻庄救人" if stage == "siege" else "经营与侦察", "北矿可采" if expansion_secured else "北矿待争", supply])
