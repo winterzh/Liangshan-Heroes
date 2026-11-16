@@ -289,51 +289,53 @@ func is_open_world(p: Vector2, profile: String = "land") -> bool:
 
 
 func nearest_open(c: Vector2i, profile: String = "land") -> Vector2i:
-	c = Vector2i(clampi(c.x, 0, w - 1), clampi(c.y, 0, h - 1))
-	if is_open_cell(c, profile):
-		return c
-	for r in range(1, maxi(w, h)):
-		for dy in range(-r, r + 1):
-			for dx in range(-r, r + 1):
-				if maxi(absi(dx), absi(dy)) != r:
-					continue
-				var n := c + Vector2i(dx, dy)
-				if is_open_cell(n, profile):
-					return n
-	return Vector2i(-1, -1)
+	return _nearest_nav_open(c, astar_water if profile == "water" else astar)
 
 
-## 从 target 周边开放格里选“朝 origin 最近”的一格。攻击/采集建筑时各单位走自己最近的一侧，
-## 不再全部挤向扫描顺序固定的左上角。
+## 从 target 最近一圈的开放格中选择最靠近 origin 的格子。
 func nearest_open_from(target: Vector2i, origin: Vector2i, profile: String = "land") -> Vector2i:
-	target = Vector2i(clampi(target.x, 0, w - 1), clampi(target.y, 0, h - 1))
-	if is_open_cell(target, profile):
-		return target
-	for r in range(1, maxi(w, h)):
+	return _nearest_nav_open(target, astar_water if profile == "water" else astar, Vector2(origin))
+
+
+func _nearest_nav_open(target: Vector2i, nav: AStarGrid2D, origin := Vector2.INF) -> Vector2i:
+	var c := Vector2i(clampi(target.x, 0, w - 1), clampi(target.y, 0, h - 1))
+	if not nav.is_point_solid(c):
+		return c
+	for radius in range(1, maxi(w, h)):
+		var left := c.x - radius
+		var right := c.x + radius
+		var top := c.y - radius
+		var bottom := c.y + radius
 		var best := Vector2i(-1, -1)
-		var best_d := INF
-		for dy in range(-r, r + 1):
-			for dx in range(-r, r + 1):
-				if maxi(absi(dx), absi(dy)) != r:
+		var best_distance := INF
+		# Preserve row-major tie breaking while visiting only in-bounds ring edges.
+		for y in range(maxi(0, top), mini(h - 1, bottom) + 1):
+			var horizontal := y == top or y == bottom
+			var first_x := maxi(0, left) if horizontal else (left if left >= 0 else right)
+			var stride := 1 if horizontal else 2 * radius
+			for x in range(first_x, mini(w - 1, right) + 1, stride):
+				var cell := Vector2i(x, y)
+				if nav.is_point_solid(cell):
 					continue
-				var n := target + Vector2i(dx, dy)
-				if not is_open_cell(n, profile):
-					continue
-				var d := Vector2(n).distance_squared_to(Vector2(origin))
-				if d < best_d:
-					best_d = d
-					best = n
+				if origin == Vector2.INF:
+					return cell
+				var distance := Vector2(cell).distance_squared_to(origin)
+				if distance < best_distance:
+					best_distance = distance
+					best = cell
 		if best.x >= 0:
 			return best
 	return Vector2i(-1, -1)
 
 
 func find_path(from_w: Vector2, to_w: Vector2, faction := 0, profile: String = "land") -> PackedVector2Array:
-	var a := nearest_open(world_to_cell(from_w), profile)
+	var out := PackedVector2Array()
+	if not is_open_world(from_w, profile):
+		return out
+	var a := world_to_cell(from_w)
 	var target_cell := world_to_cell(to_w)
 	var b := nearest_open_from(target_cell, a, profile)
-	var out := PackedVector2Array()
-	if a.x < 0 or b.x < 0 or not is_open_world(from_w, profile):
+	if b.x < 0:
 		return out
 	if a == b:
 		out.append(to_w if target_cell == b and is_open_world(to_w, profile) else cell_to_world(b))
@@ -386,41 +388,11 @@ func _static_open(c: Vector2i, faction := 0) -> bool:
 
 
 func _nearest_static_open(c: Vector2i, faction := 0) -> Vector2i:
-	c = Vector2i(clampi(c.x, 0, w - 1), clampi(c.y, 0, h - 1))
-	if _static_open(c, faction):
-		return c
-	for r in range(1, maxi(w, h)):
-		for dy in range(-r, r + 1):
-			for dx in range(-r, r + 1):
-				if maxi(absi(dx), absi(dy)) != r:
-					continue
-				var n := c + Vector2i(dx, dy)
-				if _static_open(n, faction):
-					return n
-	return Vector2i(-1, -1)
+	return _nearest_nav_open(c, astar_static if faction == 0 else astar_static_guan)
 
 
 func _nearest_static_open_from(target: Vector2i, origin: Vector2i, faction := 0) -> Vector2i:
-	target = Vector2i(clampi(target.x, 0, w - 1), clampi(target.y, 0, h - 1))
-	if _static_open(target, faction):
-		return target
-	for r in range(1, maxi(w, h)):
-		var best := Vector2i(-1, -1)
-		var best_d := INF
-		for dy in range(-r, r + 1):
-			for dx in range(-r, r + 1):
-				if maxi(absi(dx), absi(dy)) != r:
-					continue
-				var n := target + Vector2i(dx, dy)
-				if not _static_open(n, faction):
-					continue
-				var d := Vector2(n).distance_squared_to(Vector2(origin))
-				if d < best_d:
-					best_d = d
-					best = n
-		if best.x >= 0:
-			return best
-	return Vector2i(-1, -1)
+	return _nearest_nav_open(target, astar_static if faction == 0 else astar_static_guan, Vector2(origin))
 
 
 ## 返回忽略动态建筑后的静态地形格路线。仅供堵路识别/异常恢复使用，
