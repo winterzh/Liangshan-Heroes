@@ -116,18 +116,18 @@ func _test_profiles() -> void:
 	var classic_script: Script = Classic
 	var zhu_script: Script = Zhu
 	check("installed catalog classic script", Profiles.level_script("classic_30_v1") == Classic and CampaignSource.SKIRMISH_SCRIPT == classic_script.resource_path)
-	check("installed catalog Level3 script", Profiles.level_script("campaign_level3_v2") == Zhu and CampaignSource.LEVELS[2].script == zhu_script.resource_path)
+	check("installed catalog Level3 script", Profiles.level_script("campaign_level3_v3") == Zhu and CampaignSource.LEVELS[2].script == zhu_script.resource_path)
 	check("unknown profile no script", Profiles.level_script("other") == null)
 	reject("unknown profile no flags", Profiles.install_flags("other"))
-	var zflags := Profiles.install_flags("campaign_level3_v2")
+	var zflags := Profiles.install_flags("campaign_level3_v3")
 	check("Level3 exact install flags", zflags.ok and zflags.flags == {"current": 2, "skirmish": false, "skirmish_ai": false, "arena": false, "custom_defense": false, "scenario": false})
 	var cflags := Profiles.install_flags("classic_30_v1")
 	check("classic exact install flags", cflags.ok and cflags.flags == {"skirmish": true, "skirmish_ai": false, "arena": false, "custom_defense": false, "scenario": false, "defense_waves": 30, "defense_random": false})
 	zflags.flags.current = 7; cflags.flags.defense_waves = 60
-	check("flags returned without shared aliases", Profiles.install_flags("campaign_level3_v2").flags.current == 2 and Profiles.install_flags("classic_30_v1").flags.defense_waves == 30)
+	check("flags returned without shared aliases", Profiles.install_flags("campaign_level3_v3").flags.current == 2 and Profiles.install_flags("classic_30_v1").flags.defense_waves == 30)
 	var campaign := CampaignSource.new(); owned.append(campaign)
 	var zhu := Zhu.new(); var classic := Classic.new()
-	for key: String in Profiles.install_flags("campaign_level3_v2").flags: campaign.set(key, Profiles.install_flags("campaign_level3_v2").flags[key])
+	for key: String in Profiles.install_flags("campaign_level3_v3").flags: campaign.set(key, Profiles.install_flags("campaign_level3_v3").flags[key])
 	check("actual Campaign and Level3 capture", Profiles.capture_selection(campaign, zhu, identity).ok)
 	reject("actual Campaign wrong classic script", Profiles.capture_selection(campaign, classic, identity))
 	campaign.current = 0

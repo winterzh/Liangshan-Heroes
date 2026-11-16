@@ -11,12 +11,21 @@ class OrderUnit extends Unit:
 
 class FieldFixture extends RefCounted:
 	var map := GameMap.new()
+	var mission := MissionFixture.new()
 	var units: Array = []
 	var messages: Array = []
 	var visible := false
 	func is_visible_world(_p: Vector2) -> bool: return visible
 	func target_visible_to(_observer, _target) -> bool: return true
 	func msg(value, _duration) -> void: messages.append(value)
+
+class MissionFixture extends RefCounted:
+	var stage_title := ""
+	var objective := ""
+	var active_action_id := "zhu_rts_rescue"
+	var progress := 1.5
+	func set_title(value: String) -> void: stage_title = value
+	func set_objective(value: String) -> void: objective = value
 
 func _ready() -> void:
 	_run.call_deferred()
@@ -72,6 +81,31 @@ func _run() -> void:
 	squad[0].position = level.song.position + Vector2(32,0)
 	level._observe_expansion(b)
 	check("nearby observer learns player presence", level.expansion_spotted)
+	# Existing garrison only; a second entrance cannot teleport or redirect it.
+	level.reserve.clear()
+	level.gate_defenders.assign(squad)
+	var before_positions: Array = squad.map(func(member): return member.position)
+	level._commit_gate_defense(b, level.SIDE_GATE)
+	var first_target: Vector2 = level.defense_target
+	level._commit_gate_defense(b, level.MAIN_GATE)
+	check("first opening commits existing guards without teleport or second retarget", level.defense_state == "moving" and level.defense_target == first_target and level.gate_defenders.size() == 3 and squad.map(func(member): return member.position) == before_positions and squad[0].last_order == "amove")
+	level._gate_defense_tick(b, 0.5)
+	check("unseen gate response does not announce enemy movement", not level.defense_announced)
+	b.visible = true
+	for member in squad: member.position = first_target
+	level._gate_defense_tick(b, 0.5)
+	check("visible arrived guards settle without healing", level.defense_announced and level.defense_state == "guard" and squad[0].last_order == "stop" and is_equal_approx(squad[0].hp, squad[0].max_hp * 0.4))
+	level.hall = level.song
+	level.prisoners.append(squad[0])
+	level.prisoners_freed = true
+	level._refresh_stage(b)
+	var rescued_first := b.mission.stage_title
+	level.manor_fallen = true
+	level._refresh_stage(b)
+	var returning := b.mission.stage_title
+	squad[0].position = level.hall.position
+	level._refresh_stage(b)
+	check("rescue first then fall and return update objective without cancelling action", rescued_first != returning and returning != b.mission.stage_title and b.mission.active_action_id == "zhu_rts_rescue" and b.mission.progress == 1.5)
 	# Detached component fixture: persistence of new state, without world mount.
 	var sample = load("res://scripts/levels/level3_zhujiazhuang_rts.gd").new()
 	var u = load("res://scripts/unit.gd").new()
@@ -86,11 +120,17 @@ func _run() -> void:
 	sample.raid_home = Vector2(900,700)
 	sample.outpost_scouted = true
 	sample.expansion_spotted = true
-	var captured: Dictionary = state.capture(sample, "level3", "squad:v2", {"1": u}, 2, {}, {"mission_token": "squad:fixture", "deferred_drained": true})
+	sample.gate_defenders.append(u)
+	sample.defense_state = "moving"
+	sample.defense_target = Vector2(480,576)
+	sample.defense_elapsed = 6.5
+	sample.defense_announced = true
+	var captured: Dictionary = state.capture(sample, "level3", "squad:v3", {"1": u}, 2, {}, {"mission_token": "squad:fixture", "deferred_drained": true})
 	check("new squad state captures", captured.ok)
 	if captured.ok:
-		var restored: Dictionary = state.restore(captured.record, "level3", "squad:v2", {"1": u}, 2, {}, "squad:fixture")
+		var restored: Dictionary = state.restore(captured.record, "level3", "squad:v3", {"1": u}, 2, {}, "squad:fixture")
 		check("retreat state and unit identity survive roundtrip", restored.ok and restored.level.raid_state == "retreat" and restored.level.raid_elapsed == 12.5 and restored.level.raid_home == Vector2(900,700) and restored.level.raiders[0] == u and restored.level.outpost_scouted and restored.level.expansion_spotted)
+		check("gate response state and identity survive roundtrip", restored.ok and restored.level.gate_defenders[0] == u and restored.level.defense_state == "moving" and restored.level.defense_target == Vector2(480,576) and restored.level.defense_elapsed == 6.5 and restored.level.defense_announced)
 		check("different content rejected", not state.restore(captured.record, "level3", "older:v1", {"1": u}, 2, {}, "squad:fixture").ok)
 	u.free()
 	for member in squad: member.free()

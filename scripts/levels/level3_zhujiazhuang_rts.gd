@@ -54,6 +54,11 @@ var raid_announced := false
 var raid_warned := false
 var outpost_scouted := false
 var expansion_spotted := false
+var gate_defenders: Array[Unit] = []
+var defense_state := "watch"
+var defense_target := Vector2.ZERO
+var defense_elapsed := 0.0
+var defense_announced := false
 
 func id() -> String: return "level3"
 func title() -> String: return "三打祝家庄"
@@ -249,11 +254,13 @@ func deploy(b) -> void:
 		if _created_entity_12 == null:
 			b._gameplay_rng_stop("ENTITY_REQUIRED_UNIT")
 			return
+		if c in [Vector2i(15,26),Vector2i(15,30)]: gate_defenders.append(_created_entity_12)
 	for c in [Vector2i(16,28),Vector2i(16,18),Vector2i(9,32)]:
 		var _created_entity_13: Unit = _guard(b,"zhu_gong",c)
 		if _created_entity_13 == null:
 			b._gameplay_rng_stop("ENTITY_REQUIRED_UNIT")
 			return
+		if c == Vector2i(16,28): gate_defenders.append(_created_entity_13)
 	var _created_entity_14: Unit = _guard(b,"zhu_hu",Vector2i(12,29))
 	if _created_entity_14 == null:
 		b._gameplay_rng_stop("ENTITY_REQUIRED_UNIT")
@@ -352,6 +359,7 @@ func on_mission_action(b, action_id: String, actor) -> void:
 			if b.hud != null and b.hud.has_method("_clear_info_toasts"):
 				b.hud._clear_info_toasts()
 			b.mission.mark("zhu_gate_opened","偏门已开！内应换旗成功，可沿偏门入庄救人；军队由玩家自行调入。")
+			_commit_gate_defense(b, SIDE_GATE)
 		"zhu_rts_rescue":
 			if prisoners_freed:
 				return
@@ -520,18 +528,62 @@ func _observe_expansion(b) -> void:
 				expansion_spotted = true
 				return
 
+func _commit_gate_defense(b, entrance: Vector2i) -> void:
+	# Reassign existing guards once: opening the other entrance can then flank
+	# this response. No extra spawn and no tracking of units behind player fog.
+	if defense_state != "watch": return
+	gate_defenders.assign(SquadOrders.survivors(gate_defenders))
+	if gate_defenders.is_empty():
+		defense_state = "guard"
+		return
+	defense_state = "moving"
+	defense_target = b.map.cell_to_world(entrance + Vector2i(-5,0))
+	defense_elapsed = 0.0
+	SquadOrders.advance(gate_defenders, defense_target)
+
+func _gate_defense_tick(b, delta: float) -> void:
+	if defense_state != "moving": return
+	defense_elapsed += delta
+	gate_defenders.assign(SquadOrders.survivors(gate_defenders))
+	if not defense_announced and gate_defenders.any(func(u): return b.is_visible_world(u.position)):
+		defense_announced = true
+		b.msg("发现守军向入口增援！可迎击，也可另开一路，从侧翼入庄。",7.0)
+	if gate_defenders.is_empty() or SquadOrders.gathered(gate_defenders, defense_target, 100.0) or defense_elapsed >= 45.0:
+		SquadOrders.guard(gate_defenders)
+		defense_state = "guard"
+
 func _refresh_stage(b) -> void:
-	var next := "siege" if inside_open or main_breached or supply_cut else "contest" if expansion_secured or sent_sun else "scout"
-	if next == stage: return
-	stage = next
-	b.mission.set_title("第三打 · 攻庄救人" if stage == "siege" else "第二打 · 争夺外围")
-	b.mission.set_objective("攻破大营、救时迁回营。内应和正面器械都可破局；营地与战果保留。" if stage == "siege" else "夺北面资源扩军，或拔南面外营断援；也可整备器械直接攻庄。")
+	var side_breached := is_instance_valid(side_gate) and not _alive(side_gate)
+	stage = "siege" if inside_open or main_breached or side_breached or supply_cut or manor_fallen or prisoners_freed else "contest" if expansion_secured or sent_sun else "scout"
+	var heading := "第一打 · 扎营探路"
+	var objective := "北取资源，南拔外营；兵营补兵、作坊造器械。先侦察，再决定主攻方向。"
+	if stage == "contest":
+		heading = "第二打 · 争夺外围"
+		objective = "夺北面资源扩军，或拔南面外营断援；也可整备器械直接攻庄。"
+	elif stage == "siege":
+		heading = "第三打 · 攻庄救人"
+		objective = "攻破大营、救时迁回营。内应和正面器械都可破局；营地与战果保留。"
+	if _finish_ready():
+		heading = "收军 · 时迁已归营"
+		objective = "宋江到前营收军标记即可获胜；也可先接回其余好汉，再收军。无需清空敌军。"
+	elif manor_fallen and prisoners_freed:
+		heading = "撤离 · 护送伤员"
+		objective = "大营已破，敌军不再补兵。先清理撤路，再护送时迁回前营；其余好汉全部生还是可选演义目标。"
+	elif manor_fallen:
+		heading = "营救 · 前往牢院"
+		objective = "大营已破，敌军不再补兵。派战斗部队掩护，在牢院标记救人，再护送时迁回前营。"
+	elif prisoners_freed:
+		heading = "分兵 · 护送与攻营"
+		objective = "伤员已获救，可先护送回营；另队仍须攻破祝家庄大营。宋江、时迁与前营必须存活。"
+	if b.mission.stage_title != heading: b.mission.set_title(heading)
+	if b.mission.objective != objective: b.mission.set_objective(objective)
 
 func process(b, delta: float) -> void:
 	elapsed += delta
 	_enemy_economy(b,delta)
 	if not b._gameplay_rng_issue.is_empty(): return
 	_raids(b,delta)
+	_gate_defense_tick(b,delta)
 	strategic_clock -= delta
 	if strategic_clock > 0.0:
 		return
@@ -585,9 +637,11 @@ func on_unit_died(b, u) -> void:
 	elif u == gate:
 		main_breached = true
 		b.mission.mark("zhu_gate_breached","正门已被攻破，军队可直接入庄")
+		_commit_gate_defense(b, MAIN_GATE)
 	elif u == side_gate:
 		b.mission.mark("zhu_side_breached","偏门被强攻攻破")
 		b.mission.block_action("zhu_rts_inside","偏门已被攻破，无需再接应；可直接入庄救人。")
+		_commit_gate_defense(b, SIDE_GATE)
 	elif u == sun:
 		b.mission.block_action("zhu_rts_inside","孙立已阵亡，内应路线关闭；请用器械攻破庄门救人。")
 	elif u == enemy_base:

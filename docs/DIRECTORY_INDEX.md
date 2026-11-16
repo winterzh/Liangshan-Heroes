@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[祝家庄入口增援与营救交接](../qa/campaign_siege_20261116/README.md)记录第二批M2实现与限定验证；关卡仍在`level3_zhujiazhuang_rts.gd`，新增翻译来源`assets/localization/campaign_siege.json`，复用小队定向检查入口。
+
 [八章后续路线图](CAMPAIGN_ROADMAP_20261116.md)记录2026-11-16确认范围、阶段、逐章合同与少测试原则。公共无状态小队指令位于`scripts/campaign_squad_orders.gd`；祝家庄持有其可保存状态。定向检查入口为`tools/campaign_squad_orders_qa.gd`，翻译来源为`assets/localization/campaign_tactics.json`。
 
 [小队与侦察专项](../qa/campaign_squad_20261116/README.md)保留限定结果、来源摘要和失败记录；场景入口为`tools/campaign_squad_orders_qa.tscn`，隔离复跑包装器为`tools/run_campaign_squad_qa.py`。
