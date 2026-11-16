@@ -1,0 +1,34 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+[gao-play] t=0 story=lure army=7 fleet=0 land=[4, 6, 8] sea=[3, 5, 6] flagship=2100.0 g=206 w=146 pop=36/44 hall=1500.0
+[gao-story] active= fire=false smallboat=[760.0, (22, 52)] escorts=[["ruan_xiaoer_boat", 950.0, (38, 47)], ["ruan_xiaowu_boat", 950.0, (40, 50)]]
+[gao-play] t=60 story=lure army=10 fleet=0 land=[4, 6, 8] sea=[3, 5, 6] flagship=2100.0 g=323 w=350 pop=42/44 hall=1500.0
+[gao-story] active= fire=false smallboat=[760.0, (22, 52)] escorts=[["ruan_xiaoer_boat", 950.0, (32, 50)], ["ruan_xiaowu_boat", 950.0, (33, 51)]]
+[gao-play] t=120 story=lure army=9 fleet=1 land=[0, 0, 8] sea=[3, 5, 6] flagship=2100.0 g=263 w=332 pop=44/54 hall=1500.0
+[gao-story] active= fire=false smallboat=[760.0, (22, 52)] escorts=[["ruan_xiaoer_boat", 950.0, (33, 51)], ["ruan_xiaowu_boat", 950.0, (32, 50)]]
+[gao-play] t=180 story=fire army=8 fleet=3 land=[0, 0, 8] sea=[1, 5, 6] flagship=2100.0 g=345 w=242 pop=45/64 hall=1500.0
+[gao-story] active= fire=false smallboat=[760.0, (22, 52)] escorts=[["ruan_xiaoer_boat", 950.0, (32, 49)], ["ruan_xiaowu_boat", 950.0, (32, 51)]]
+[gao-play] t=240 story=fire army=13 fleet=5 land=[0, 0, 8] sea=[0, 5, 6] flagship=2100.0 g=488 w=232 pop=56/64 hall=1500.0
+[gao-story] active= fire=false smallboat=[760.0, (22, 52)] escorts=[["ruan_xiaoer_boat", 950.0, (32, 49)], ["ruan_xiaowu_boat", 950.0, (32, 51)]]
+[gao-fire-approach] {"active":"","escorts":2,"hp":760.0,"status":"刘唐·举火小船正在前往6号旗标；到场停留1.5秒办理。","t":290.0,"targets_in_range":0,"toward_marker":243.115280151367}
+[gao-fire-approach] {"active":"","escorts":2,"hp":760.0,"status":"第二批连船尚未出发。可留火船在安全水域，等连船驶近再举火。","t":300.0,"targets_in_range":0,"toward_marker":50.8129463195801}
+[gao-play] t=300 story=fire army=14 fleet=6 land=[0, 0, 8] sea=[0, 5, 6] flagship=2100.0 g=526 w=256 pop=58/74 hall=1500.0
+[gao-story] active= fire=false smallboat=[760.0, (38, 40)] escorts=[["ruan_xiaoer_boat", 950.0, (40, 41)], ["ruan_xiaowu_boat", 950.0, (38, 41)]]
+[gao-fire-approach] {"active":"","escorts":2,"hp":760.0,"status":"第二批连船尚未出发。可留火船在安全水域，等连船驶近再举火。","t":310.0,"targets_in_range":0,"toward_marker":46.9284629821777}
+[gao-fire-approach] {"active":"","escorts":2,"hp":760.0,"status":"第二批连船尚未出发。可留火船在安全水域，等连船驶近再举火。","t":320.0,"targets_in_range":0,"toward_marker":47.1453018188477}
+[gao-fire-approach] {"active":"","escorts":2,"hp":760.0,"status":"连船还没进入火区。让接应船护住火船，等连船靠近再右键举火。","t":330.0,"targets_in_range":0,"toward_marker":47.1454582214355}
+[gao-fire-approach] {"active":"","escorts":2,"hp":760.0,"status":"连船还没进入火区。让接应船护住火船，等连船靠近再右键举火。","t":340.0,"targets_in_range":0,"toward_marker":47.1454582214355}
+[gao-fire-approach] {"active":"","escorts":2,"hp":760.0,"status":"连船还没进入火区。让接应船护住火船，等连船靠近再右键举火。","t":350.0,"targets_in_range":0,"toward_marker":47.1454582214355}
+[gao-fire-approach] ignited {"carrier_id":29,"fire_action":true,"game_seconds":352.0,"original_boat_retired":true}
+[gao-play] t=360 story=withdraw army=17 fleet=8 land=[0, 0, 0] sea=[0, 5, 6] flagship=2100.0 g=628 w=286 pop=65/74 hall=1500.0
+[gao-story] active= fire=true smallboat=[] escorts=[["ruan_xiaoer_boat", 950.0, (35, 45)], ["ruan_xiaowu_boat", 950.0, (34, 47)]]
+[gao-fire-approach] return {"abandoned":false,"fire_safe":true,"game_seconds":378.0,"hero_id":6}
+[gao-play] t=420 story=finished_fire army=20 fleet=11 land=[0, 0, 0] sea=[0, 0, 4] flagship=2100.0 g=1184 w=466 pop=70/74 hall=1500.0
+[rts] PASS assault wins through actual construction, production and combat
+[rts] PASS assault builds economy and pays for at least three replacement warships
+[rts] PASS assault preserves original camp across three expeditions
+[rts] PASS assault defeats all core land/water forces and disables flagship
+[rts] PASS new inner marker has clear navigable water and retains original arrival range
+[rts] PASS ordinary commands ignite at inner marker and transfer Liu Tang to original rescue boat
+[rts] PASS both rescue boats withdraw and the original Liu Tang disembarks
+[rts] PASS ordinary withdrawal continues through a basic victory while keeping the fire story goal
+GAO_FIRE_APPROACH_RESULT {"checks":8,"failures":[],"ignition":{"carrier_id":29,"fire_action":true,"game_seconds":352.0,"original_boat_retired":true},"metrics":{"buildings_started":5,"camp_hp":1500.0,"enemy_paid_produced":[10,4],"enemy_spent_gold":607,"enemy_spent_wood":358,"events":["action:gao_rts:gao_lure_side","action:gao_rts:gao_wind","gongsun_wind","fleet_in_ambush","action:gao_rts:gao_prepare","liu_tang_fire_leader","fireboat_prepared","gao_land_post_destroyed","action:gao_rts:gao_fire_1","gao_land_cleared","gao_fire_lit","action:gao_rts:gao_fire_withdraw","fire_escort_safe","action:gao_rts:gao_liu_return","gao_liu_returned","gao_sea_post_destroyed","flagship_disabled","gao_basic_victory"],"game_seconds":458.0,"orders":747,"result":{"contract_version":3,"core_cleared":true,"core_goal":"守住忠义堂和宋江，击退三批水陆主力，打停高俅座船。可直接收兵通关；生擒并押回堂前是可选演义目标。","done_ids":["gao_lure","gao_fire","gao_land"],"goals":[{"id":"gao_lure","label":"阮小七引活官船进入港汊伏区","note":"","reason":"","state":"done"},{"id":"gao_fire","label":"公孙胜祭风、刘唐登船举火，护两艘接应船撤离","note":"","reason":"","state":"done"},{"id":"gao_land","label":"击退岸军并拔除山前补给营","note":"","reason":"","state":"done"},{"id":"gao_capture","label":"封港凿船、水上接俘、返航后实际押至忠义堂","note":"","reason":"本局未完成","state":"missed"}],"missed_ids":["gao_capture"],"pending_ids":[],"story_complete":false,"story_done":3,"story_total":4},"skill_orders":16,"story_phase":"finished_fire","units_queued":54,"units_queued_by_key":{"liang_dao":13,"liang_gong":11,"liang_qiang":14,"liangshan_warship":13,"lou_luo":3}},"passed":true,"readiness":{"inner_cell":[40,40],"inner_navigable":true,"margin":12.0,"radius":25.0,"reach":48.0},"returned":{"abandoned":false,"fire_safe":true,"game_seconds":378.0,"hero_id":6},"scope":"actual economy, normal move and attack orders, retreat then basic victory","time_scale":4.0}

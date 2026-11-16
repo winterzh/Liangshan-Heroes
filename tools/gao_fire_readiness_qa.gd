@@ -35,7 +35,7 @@ func _fixture() -> void:
 	five.position=l.fireboat.position+Vector2(-221,0)
 	for foe in l.water_groups[1]: foe.position=Vector2(10000,10000)
 	var enemy=l.water_groups[1][0]
-	enemy.position=l.fireboat.position+Vector2(199,0)
+	enemy.position=l.fireboat.position+Vector2(l.FIRE_ZONE_RADIUS,0)
 	b._sight_now.fill(0);b._reveal_t.fill(0)
 	check(l._fire_targets(l.fireboat).size()==1 and "可见连船0" in l.unit_tactical_hint(b,l.fireboat),"hidden ship is not disclosed by tactical hint")
 	var cell: Vector2i=b.map.world_to_cell(enemy.position)
@@ -44,9 +44,9 @@ func _fixture() -> void:
 	l.on_mission_action(b,"gao_fire_1",l.fireboat)
 	check(not l.fire_lit,"one escort at 221 cannot satisfy existing fire action")
 	five.position=l.fireboat.position+Vector2(-220,0)
-	enemy.position=l.fireboat.position+Vector2(200,0)
-	check(l._fire_targets(l.fireboat).is_empty() and l._fire_escorts(b,l.fireboat).size()==2,"target radius stays exclusive 200 and escort radius inclusive 220")
-	enemy.position=l.fireboat.position+Vector2(199,0)
+	enemy.position=l.fireboat.position+Vector2(l.FIRE_ZONE_RADIUS+1.0,0)
+	check(l._fire_targets(l.fireboat).is_empty() and l._fire_escorts(b,l.fireboat).size()==2,"actual fire radius is inclusive 230 and escort radius stays inclusive 220")
+	enemy.position=l.fireboat.position+Vector2(l.FIRE_ZONE_RADIUS,0)
 	var before: Array=[two._order_serial,five._order_serial,l.fireboat._order_serial,b.gold,b.wood]
 	l.unit_tactical_hint(b,l.fireboat)
 	check(before==[two._order_serial,five._order_serial,l.fireboat._order_serial,b.gold,b.wood],"hint does not issue orders or spend resources")

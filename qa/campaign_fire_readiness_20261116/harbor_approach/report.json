@@ -1,0 +1,126 @@
+{
+  "checks": 8,
+  "failures": [],
+  "ignition": {
+    "carrier_id": 29,
+    "fire_action": true,
+    "game_seconds": 352.0,
+    "original_boat_retired": true
+  },
+  "metrics": {
+    "buildings_started": 5,
+    "camp_hp": 1500.0,
+    "enemy_paid_produced": [
+      10,
+      4
+    ],
+    "enemy_spent_gold": 607,
+    "enemy_spent_wood": 358,
+    "events": [
+      "action:gao_rts:gao_lure_side",
+      "action:gao_rts:gao_wind",
+      "gongsun_wind",
+      "fleet_in_ambush",
+      "action:gao_rts:gao_prepare",
+      "liu_tang_fire_leader",
+      "fireboat_prepared",
+      "gao_land_post_destroyed",
+      "action:gao_rts:gao_fire_1",
+      "gao_land_cleared",
+      "gao_fire_lit",
+      "action:gao_rts:gao_fire_withdraw",
+      "fire_escort_safe",
+      "action:gao_rts:gao_liu_return",
+      "gao_liu_returned",
+      "gao_sea_post_destroyed",
+      "flagship_disabled",
+      "gao_basic_victory"
+    ],
+    "game_seconds": 458.0,
+    "orders": 747,
+    "result": {
+      "contract_version": 3,
+      "core_cleared": true,
+      "core_goal": "守住忠义堂和宋江，击退三批水陆主力，打停高俅座船。可直接收兵通关；生擒并押回堂前是可选演义目标。",
+      "done_ids": [
+        "gao_lure",
+        "gao_fire",
+        "gao_land"
+      ],
+      "goals": [
+        {
+          "id": "gao_lure",
+          "label": "阮小七引活官船进入港汊伏区",
+          "note": "",
+          "reason": "",
+          "state": "done"
+        },
+        {
+          "id": "gao_fire",
+          "label": "公孙胜祭风、刘唐登船举火，护两艘接应船撤离",
+          "note": "",
+          "reason": "",
+          "state": "done"
+        },
+        {
+          "id": "gao_land",
+          "label": "击退岸军并拔除山前补给营",
+          "note": "",
+          "reason": "",
+          "state": "done"
+        },
+        {
+          "id": "gao_capture",
+          "label": "封港凿船、水上接俘、返航后实际押至忠义堂",
+          "note": "",
+          "reason": "本局未完成",
+          "state": "missed"
+        }
+      ],
+      "missed_ids": [
+        "gao_capture"
+      ],
+      "pending_ids": [],
+      "story_complete": false,
+      "story_done": 3,
+      "story_total": 4
+    },
+    "skill_orders": 16,
+    "story_phase": "finished_fire",
+    "units_queued": 54,
+    "units_queued_by_key": {
+      "liang_dao": 13,
+      "liang_gong": 11,
+      "liang_qiang": 14,
+      "liangshan_warship": 13,
+      "lou_luo": 3
+    }
+  },
+  "passed": true,
+  "readiness": {
+    "inner_cell": [
+      40,
+      40
+    ],
+    "inner_navigable": true,
+    "margin": 12.0,
+    "radius": 25.0,
+    "reach": 48.0
+  },
+  "returned": {
+    "abandoned": false,
+    "fire_safe": true,
+    "game_seconds": 378.0,
+    "hero_id": 6
+  },
+  "scope": "actual economy, normal move and attack orders, retreat then basic victory",
+  "time_scale": 4.0,
+  "exit_code": 0,
+  "seconds": 149.459,
+  "source_base": "aabfe6983b1a9c6baac0baef314a58a167f4f9a5",
+  "runtime_source_sha256": {
+    "scripts/levels/level5_gao_rts.gd": "98846295d9bc9064f4250c4cabb0f6edb1da6d2da57fbc705cb9ce5d16181bc4",
+    "assets/localization/gao_fire_approach.json": "81abdce2e725d29c2b992e712c69df969eebd39ecc1cba3f28aea981ca26d5e3",
+    "assets/localization/catalog.json": "bcd362e3a3fcc44c56a6cbdae678160a9fa8ae68d8886fae1c941f14050babf0"
+  }
+}

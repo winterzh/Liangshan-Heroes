@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+高俅内港火攻的三条四语提示存于 gao_fire_approach.json。检测和火区共用 FIRE_ZONE_RADIUS，容差由已有 Mission 动作字段保存。[内港举火实跑](../qa/campaign_fire_readiness_20261116/README.md#内港火点与举火读条)
+
 高俅载船沉没实跑复用现有经济和战斗驾驶。[载船沉没后重新集结实跑](../qa/campaign_naval_recovery_20261116/README.md#载船沉没后重新集结并收兵)
 
 高俅主动止损路线上，驾驶复用现有战斗和经济指令。[受损后返港实跑](../qa/campaign_naval_recovery_20261116/README.md#火攻受阻后返港收兵)

@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[内港举火实跑](../qa/campaign_fire_readiness_20261116/README.md#内港火点与举火读条) 含旧点采样、新点完整实跑及生产文件哈希。
+
 [载船沉没后重新集结实跑](../qa/campaign_naval_recovery_20261116/README.md#载船沉没后重新集结并收兵) 含原船损失、正常付费队列、角色身份和结算证据。
 
 [受损后返港实跑](../qa/campaign_naval_recovery_20261116/README.md#火攻受阻后返港收兵) 含实跑指令、事件、结算与复跑脚本。

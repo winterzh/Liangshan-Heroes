@@ -1,0 +1,197 @@
+{
+  "result": {
+    "checks": 12,
+    "failures": [
+      "fire opportunity lost during actual battle; abort failed story route",
+      "story wins through actual construction, production and combat",
+      "story defeats all core land/water forces and disables flagship",
+      "live story route performs fire attack and extracts both escort ships",
+      "live story route carries prisoner by water then escorts him to hall",
+      "live story route completes all four story goals",
+      "ordinary commands ignite at inner marker and transfer Liu Tang to original rescue boat",
+      "both rescue boats withdraw and the original Liu Tang disembarks",
+      "ordinary withdrawal continues through a basic victory while keeping the fire story goal"
+    ],
+    "ignition": {},
+    "metrics": {
+      "buildings_started": 5,
+      "camp_hp": 1500.0,
+      "enemy_paid_produced": [
+        10,
+        4
+      ],
+      "enemy_spent_gold": 607,
+      "enemy_spent_wood": 358,
+      "events": [
+        "action:gao_rts:gao_lure_side",
+        "action:gao_rts:gao_wind",
+        "gongsun_wind",
+        "fleet_in_ambush",
+        "action:gao_rts:gao_prepare",
+        "liu_tang_fire_leader",
+        "fireboat_prepared",
+        "gao_land_cleared",
+        "gao_land_post_destroyed",
+        "action:gao_rts:gao_fire_1",
+        "liu_tang_lost",
+        "gao_escaped"
+      ],
+      "game_seconds": 442.0,
+      "orders": 773,
+      "result": {
+        "contract_version": 3,
+        "core_cleared": false,
+        "core_goal": "守住忠义堂和宋江，击退三批水陆主力，打停高俅座船。可直接收兵通关；生擒并押回堂前是可选演义目标。",
+        "done_ids": [],
+        "goals": [
+          {
+            "id": "gao_lure",
+            "label": "阮小七引活官船进入港汊伏区",
+            "note": "",
+            "reason": "",
+            "state": "pending"
+          },
+          {
+            "id": "gao_fire",
+            "label": "公孙胜祭风、刘唐登船举火，护两艘接应船撤离",
+            "note": "",
+            "reason": "接应船损失，可继续用普通舰队作战；刘唐若仍在原船上，可返港下船。",
+            "state": "missed"
+          },
+          {
+            "id": "gao_land",
+            "label": "击退岸军并拔除山前补给营",
+            "note": "",
+            "reason": "",
+            "state": "pending"
+          },
+          {
+            "id": "gao_capture",
+            "label": "封港凿船、水上接俘、返航后实际押至忠义堂",
+            "note": "",
+            "reason": "本局已偏离“封港凿船、水上接俘、返航后实际押至忠义堂”的原著条件",
+            "state": "missed"
+          }
+        ],
+        "missed_ids": [
+          "gao_fire",
+          "gao_capture"
+        ],
+        "pending_ids": [
+          "gao_lure",
+          "gao_land"
+        ],
+        "story_complete": false,
+        "story_done": 0,
+        "story_total": 4
+      },
+      "skill_orders": 16,
+      "story_phase": "fire",
+      "units_queued": 52,
+      "units_queued_by_key": {
+        "liang_dao": 12,
+        "liang_gong": 11,
+        "liang_qiang": 12,
+        "liangshan_warship": 14,
+        "lou_luo": 3
+      }
+    },
+    "passed": false,
+    "readiness": {
+      "inner_cell": [
+        40,
+        40
+      ],
+      "inner_navigable": true,
+      "margin": 12.0,
+      "radius": 25.0,
+      "reach": 48.0
+    },
+    "returned": {},
+    "scope": "actual economy, normal move and attack orders, retreat then basic victory",
+    "time_scale": 4.0
+  },
+  "samples": [
+    {
+      "active": "",
+      "escorts": 2,
+      "hp": 760.0,
+      "status": "刘唐·举火小船正在前往6号旗标；到场停留1.5秒办理。",
+      "t": 290.0,
+      "targets_in_range": 0,
+      "toward_marker": 239.410522460938
+    },
+    {
+      "active": "gao_fire_1",
+      "escorts": 2,
+      "hp": 760.0,
+      "status": "刘唐·举火小船：刘唐：内港举火 80%",
+      "t": 300.0,
+      "targets_in_range": 0,
+      "toward_marker": 52.9695472717285
+    },
+    {
+      "active": "",
+      "escorts": 2,
+      "hp": 760.0,
+      "status": "第二批连船尚未出发。可留火船在安全水域，等连船驶近再举火。",
+      "t": 310.0,
+      "targets_in_range": 0,
+      "toward_marker": 49.8876037597656
+    },
+    {
+      "active": "",
+      "escorts": 2,
+      "hp": 760.0,
+      "status": "第二批连船尚未出发。可留火船在安全水域，等连船驶近再举火。",
+      "t": 320.0,
+      "targets_in_range": 0,
+      "toward_marker": 47.9351692199707
+    },
+    {
+      "active": "",
+      "escorts": 2,
+      "hp": 760.0,
+      "status": "连船还没进入火区。让接应船护住火船，等连船靠近再右键举火。",
+      "t": 330.0,
+      "targets_in_range": 0,
+      "toward_marker": 47.9363632202148
+    },
+    {
+      "active": "",
+      "escorts": 2,
+      "hp": 760.0,
+      "status": "连船还没进入火区。让接应船护住火船，等连船靠近再右键举火。",
+      "t": 340.0,
+      "targets_in_range": 0,
+      "toward_marker": 47.9363632202148
+    },
+    {
+      "active": "",
+      "escorts": 2,
+      "hp": 760.0,
+      "status": "连船还没进入火区。让接应船护住火船，等连船靠近再右键举火。",
+      "t": 350.0,
+      "targets_in_range": 0,
+      "toward_marker": 47.9363632202148
+    },
+    {
+      "active": "",
+      "escorts": 2,
+      "hp": 730.0,
+      "status": "连船还没进入火区。让接应船护住火船，等连船靠近再右键举火。",
+      "t": 360.0,
+      "targets_in_range": 0,
+      "toward_marker": 47.9363632202148
+    },
+    {
+      "active": "",
+      "escorts": 1,
+      "hp": 292.0,
+      "status": "接应船损失，可继续用普通舰队作战；刘唐若仍在原船上，可返港下船。",
+      "t": 370.0,
+      "targets_in_range": 0,
+      "toward_marker": 47.9363632202148
+    }
+  ]
+}

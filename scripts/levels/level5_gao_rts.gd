@@ -15,7 +15,12 @@ const LANDING := Vector2i(20,49)
 const LANDING_WATER := Vector2i(22,52)
 const LIU_RETURN := Vector2i(20,52) # Separate from the prisoner handover marker.
 const WIND := Vector2i(29,38)
-const FIRE_POINTS := [Vector2i(42,29),Vector2i(39,41)]
+# The inner approach must reach the incoming chain ships before they can
+# hold the fireboat at cannon range from the west side of the channel.
+const FIRE_POINTS := [Vector2i(42,29),Vector2i(40,40)]
+# Match the chained warship's 180 range plus both 25-pixel hull radii.
+# The same radius is used for readiness and actual fire damage.
+const FIRE_ZONE_RADIUS := 230.0
 const FIRE_SAFE := Vector2i(32,50)
 const SHIP_KEYS := ["ruan_xiaoqi_boat","ruan_xiaoer_boat","ruan_xiaowu_boat","zhang_shun_boat","liangshan_warship"]
 var hall: Unit
@@ -349,7 +354,7 @@ func _enemy_near(b,p: Vector2,radius: float) -> bool:
 	return b.units.any(func(u): return alive(u) and u.faction==1 and not u.is_resource and not u.is_building and u.position.distance_to(p)<radius)
 func _fire_targets(actor) -> Array:
 	if not alive(actor): return []
-	return water_groups[1].filter(func(u): return alive(u) and u.position.distance_to(actor.position)<200)
+	return water_groups[1].filter(func(u): return alive(u) and u.position.distance_to(actor.position)<=FIRE_ZONE_RADIUS)
 func _fire_escorts(b,actor) -> Array:
 	if not alive(actor): return []
 	return [b.find_unit("ruan_xiaoer_boat"),b.find_unit("ruan_xiaowu_boat")].filter(func(u): return alive(u) and u.position.distance_to(actor.position)<=220)
@@ -458,8 +463,12 @@ func on_mission_action(b,key: String,actor) -> void:
 			fireboat.set_meta("story_commander","liu_tang")
 			b.mission.mark("liu_tang_fire_leader","刘唐带引火物实际登上主码头小船。")
 			b.mission.mark("fireboat_prepared","小船备好火具，消耗60木；护它接近第二批连船再举火。")
-			for i in range(2):
-				b.mission.add_action("gao_fire_%d"%i,Localize.text("刘唐：")+(Localize.text("外港") if i==0 else Localize.text("内港"))+Localize.text("举火"),FIRE_POINTS[i],["liu_tang_fireboat"],1.5,48)
+			for i in range(FIRE_POINTS.size()):
+				var action_id := "gao_fire_%d" % i
+				b.mission.add_action(action_id,Localize.text("刘唐：")+(Localize.text("外港") if i==0 else Localize.text("内港"))+Localize.text("举火"),FIRE_POINTS[i],["liu_tang_fireboat"],1.5,48)
+				# Initial arrival still uses 48. Only an already started action
+				# tolerates a small nudge from the two required escort ships.
+				b.mission.actions[action_id].settle_margin = 12.0
 			b.mission.add_action("gao_liu_return","刘唐：原船返港下船",LIU_RETURN,["liu_tang_fireboat","ruan_xiaoer_boat"],1.5,48)
 			b.msg("火攻可自选放弃：把搭载刘唐的原船开回返港标记下船，已耗60木不退。若已完成两船安全撤离，下船保留该演义成果。",7)
 		"gao_fire_0","gao_fire_1":
@@ -467,13 +476,19 @@ func on_mission_action(b,key: String,actor) -> void:
 				return
 			var near: Array=_fire_targets(actor)
 			var two=b.find_unit("ruan_xiaoer_boat")
-			if near.is_empty() or _fire_escorts(b,actor).size()!=2:
-				_retry(b,key,"连船需进入火区，两艘阮氏接应船须在附近接刘唐。等敌船靠近再举火，火势只烧伤实际留在区内的官军。")
+			if near.is_empty():
+				var message := "连船还没进入火区。让接应船护住火船，等连船靠近再右键举火。"
+				if not waves[1].sent:
+					message = "第二批连船尚未出发。可留火船在安全水域，等连船驶近再举火。"
+				_retry(b,key,message)
+				return
+			if _fire_escorts(b,actor).size()!=2:
+				_retry(b,key,"连船已靠近。等阮小二、阮小五两艘接应船都到火船旁，再右键举火。")
 				return
 			fire_lit=true
 			liu_carrier=two
 			two.set_meta("carried_story_person","刘唐")
-			b._spawn_ground_fire(actor.position,220,650,8,actor,1,"gao_fireboat")
+			b._spawn_ground_fire(actor.position,FIRE_ZONE_RADIUS,650,8,actor,1,"gao_fireboat")
 			for u in near:
 				u.apply_slow(0.35,8)
 			actor.set_meta("ship_state","disabled")
