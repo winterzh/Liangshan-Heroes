@@ -4,6 +4,7 @@ extends LevelBase
 const T := GameMap.T
 const SquadOrders := preload("res://scripts/campaign_squad_orders.gd")
 const CAMP := Vector2i(55, 28)
+const CAMP_GOLD_CELLS := [Vector2i(51,18), Vector2i(57,18), Vector2i(60,24)]
 const MAIN_GATE := Vector2i(20, 28)
 const SIDE_GATE := Vector2i(20, 18)
 const OUTPOST := Vector2i(36, 39)
@@ -178,7 +179,7 @@ func deploy(b) -> void:
 			b._gameplay_rng_stop("ENTITY_REQUIRED_UNIT")
 			return
 		workers.append(_created_entity_4)
-	for c in [Vector2i(51,18),Vector2i(57,18),Vector2i(60,24)]:
+	for c in CAMP_GOLD_CELLS:
 		var _created_entity_5: Unit = _resource(b,"gold_mine",c,0,1400.0)
 		if _created_entity_5 == null:
 			b._gameplay_rng_stop("ENTITY_REQUIRED_UNIT")
@@ -312,6 +313,7 @@ func on_start(b) -> void:
 	b.mission.add_action("zhu_rts_rescue",Localize.text("救出被囚好汉"),PRISON+Vector2i(4,0),FIELD_ACTORS,3.0,64.0)
 	b.mission.add_map_locator("北面资源区", EXPANSION)
 	b.mission.add_map_locator("庄客外营", OUTPOST)
+	b.mission.add_level_button("zhu_find_camp_gold", "查看 · 前营金矿", "优先查看工人较少的可见前营金矿。选工人右键金矿可采集。")
 	b.msg("北面可夺资源，南营可断援。派小队探路，观察外营集结；后方可同时采集、补兵。",8.0)
 
 func _introduce_sun(b) -> void:
@@ -392,7 +394,11 @@ func _add_evacuation_controls(b) -> void:
 	b.mission.add_map_locator("前营", CAMP)
 
 func activate_mission_button(b, button_id: String) -> void:
-	if button_id not in ["zhu_select_shi_qian", "zhu_select_rescued"] or b.phase != b.Phase.FIGHT: return
+	if b.phase != b.Phase.FIGHT: return
+	if button_id == "zhu_find_camp_gold":
+		_view_camp_gold(b)
+		return
+	if button_id not in ["zhu_select_shi_qian", "zhu_select_rescued"]: return
 	var only_shi_qian := button_id == "zhu_select_shi_qian"
 	var members := _rescued_members(only_shi_qian)
 	if members.is_empty():
@@ -401,6 +407,31 @@ func activate_mission_button(b, button_id: String) -> void:
 	b.select_members(members, false)
 	b.center_camera_cell(b.map.world_to_cell(members[0].position))
 	b.mission.set_status("已选中时迁；请右键下令撤回前营。" if only_shi_qian else "已选中获救队伍；请右键下令撤回前营。")
+
+
+func _view_camp_gold(b) -> void:
+	var assignments := {}
+	for u in b.units:
+		if _alive(u) and u.faction == Unit.FACTION_LIANG and u.is_worker \
+				and u._state in [Unit.ST_GATHER, Unit.ST_RETURN] and is_instance_valid(u._gather_node):
+			assignments[u._gather_node] = int(assignments.get(u._gather_node, 0)) + 1
+	var best: Unit = null
+	var fewest := 0
+	for mine in b.units:
+		if not _alive(mine) or mine.key != "gold_mine" or mine.res_left <= 0.0:
+			continue
+		if b.map.world_to_cell(mine.position) not in CAMP_GOLD_CELLS \
+				or not b.is_visible_world(mine.position) or b._resource_blocked(mine):
+			continue
+		var count := int(assignments.get(mine, 0))
+		if best == null or count < fewest or (count == fewest and mine.res_left > best.res_left):
+			best = mine
+			fewest = count
+	if best == null:
+		b.mission.set_feedback("前营暂无可见的可采金矿。可争夺北矿，或在集市卖木。", 5.0)
+		return
+	b.center_camera_cell(b.map.world_to_cell(best.position))
+	b.mission.set_feedback(Localize.format_text("此矿约剩%d金，%d名工人采运。选工人右键金矿可采集。", [ceili(best.res_left), fewest]), 5.0)
 
 
 func _enemy_economy(b, delta: float) -> void:
@@ -590,7 +621,7 @@ func _refresh_stage(b) -> void:
 		elif side_open:
 			objective = "偏门已可通行。可派护卫入庄救人，也可从正门牵制守军。还需攻破大营、护送时迁回前营。"
 		elif main_breached and not supply_cut:
-			objective = "正门已破。留兵守前营，护送器械破营，救时迁回营。缺金可在集市卖木，也可转攻外营断援。"
+			objective = "正门已破。留兵守前营，护送器械破营，救时迁回营。缺金可查看前营金矿或在集市卖木，也可先断援。"
 		elif supply_cut and not main_breached:
 			objective = "南营已断援，庄内大营仍可补兵。可带器械攻正门，或接应孙立打开偏门。" if _alive(sun) else "孙立已阵亡，内应路线关闭；请用器械攻破庄门救人。"
 	if _finish_ready():
