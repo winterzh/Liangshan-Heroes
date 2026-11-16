@@ -1,0 +1,16 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+[rts] PASS the original two columns are present and the locator is gated by the manor
+[rts] PASS a destroyed northern column gets no muster warning or later charge
+[rts] PASS the next live column keeps its timer and takes over the preparation objective
+[rts] PASS the real manor death registers exactly one fixed-id locator
+[rts] PASS remaining riders replace pre-charge timers during the cleanup objective
+[rts] PASS the locator centers the nearest original rider without issuing or cancelling orders
+[rts] PASS the selected rider uses the existing battlefield hint
+[rts] PASS the locator reports the actual lane in zh_CN
+[rts] PASS the locator reports the actual lane in zh_TW
+[rts] PASS the locator reports the actual lane in en
+[rts] PASS the locator reports the actual lane in ja
+[rts] PASS the locator retargets to the next living rider after an actual death callback
+[rts] PASS a locator with no riders gives accurate feedback
+[rts] PASS the normal win callback fires after the twelve original riders and manor are defeated
+LHM_REMAINING_RESULT {"checks":14,"failures":[],"localizations":{"en":"Camera centered on a rider from the southern column. Select your troops and order them to pursue.","ja":"南路の残存騎兵にカメラを合わせた。部隊を選び、追撃を指示せよ。","zh_CN":"已定位南路余骑。请选中部队下令追击。","zh_TW":"已定位南路餘騎。請選中部隊下令追擊。"},"passed":true,"riders_defeated":12,"scope":"controlled actual chapter state with lethal damage, real mission button and victory callback","top_after_manor":"北 余0骑 / 南 余6骑\n击溃6 · 钩破0 · 辎重2/2","top_before_manor":"北 余0骑 / 南 119秒\n击溃6 · 钩破0 · 辎重2/2"}

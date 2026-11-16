@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+连环马余骑提示使用原甲马和波次，定位登记到固定任务按钮白名单。四语分片为 `lianhuanma_remaining_riders.json`。[连环马余骑定位](../qa/campaign_cavalry_escort_20261116/README.md#提前歼骑与余骑定位)
+
 祝家庄偏门状态读取既有 `zhu_side_breached` 事件，断援与大营停产按既有状态显示。八条四语源位于 `zhujiazhuang_route_status.json`。[祝家庄断援与开门验收](../qa/campaign_siege_20261116/README.md#断援与开门后的战场提示)
 
 江州码头的名单由六名原好汉状态派生，定位复用关卡固定按钮协议。四语分片为 `jiangzhou_dock_roster.json`。[江州码头撤离反馈](../qa/campaign_pursuit_20261116/README.md#码头收队与岸上好汉)

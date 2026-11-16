@@ -44,10 +44,11 @@ var drill_lure_origin := Vector2.ZERO
 var phase_title := ""
 
 const PREPARE_BRIEFING := {"title":"扎营 · 准备迎击北路","objective":"训练钩镰手，在北侧芦苇地迎骑。也可派兵先拆辎重营，断掉该路援军。徐宁的教场演练可选。"}
+const SOUTH_BRIEFING := {"title":"迎骑 · 准备南路","objective":"北路甲马已击溃。整编钩镰手迎击南路，也可先拆南路辎重营，延迟该路冲锋。"}
 const DEFEND_BRIEFING := {"title":"迎骑 · 守住中军","objective":"守住中军和宋江。把甲马引进芦苇地或沼泽，让两名钩镰手协同破阵。留兵拦住随骑而来的护军。"}
 const COUNTER_BRIEFING := {"title":"反攻 · 攻破官军大营","objective":"十二骑已击溃。集结步军保护攻城器械，攻破大营即可取胜。想生擒韩滔，先击败他再拆大营。"}
 const CAPTURED_COUNTER_BRIEFING := {"title":"反攻 · 韩滔已擒","objective":"韩滔已被生擒。护送攻城器械摧毁官军大营。正面难进时，可让步军牵制守军，投石车从侧翼攻营。"}
-const FINISH_BRIEFING := {"title":"大营已破 · 击溃余骑","objective":"官军已停止补兵。沿地图标出的踪迹击溃剩余甲马，守住中军和宋江即可取胜。"}
+const FINISH_BRIEFING := {"title":"大营已破 · 击溃余骑","objective":"官军已停止补兵。点「查看 · 余骑」可定位离中军最近的甲马。击溃余骑，守住中军和宋江即可取胜。"}
 
 func id() -> String: return "level4"
 func title() -> String: return "大破连环马"
@@ -360,6 +361,27 @@ func _send_wave(b,lane: int) -> void:
 			u.order_amove(b.map.cell_to_world(LANES[lane]))
 			u.order_amove(hall.position,true)
 	b.msg((Localize.text("北路") if lane==0 else Localize.text("南路"))+Localize.text("甲马开始冲锋！枪兵护弓，拒马减速；可出击截断辎重，也可先稳住两条路。"),7)
+
+func _lane_has_riders(lane: int) -> bool:
+	return riders.any(func(u): return alive(u) and int(u.get_meta("wave_group",-1))==lane)
+
+func activate_mission_button(b,button_id: String) -> void:
+	if button_id!="lhm_locate_remaining" or not manor_fallen or not alive(hall): return
+	var closest: Unit
+	var best_distance := INF
+	for rider in riders:
+		if not alive(rider): continue
+		var distance: float = rider.position.distance_squared_to(hall.position)
+		if distance < best_distance:
+			closest = rider
+			best_distance = distance
+	if closest == null:
+		b.mission.set_feedback("余骑已全部击溃。")
+		return
+	b.center_camera_cell(b.map.world_to_cell(closest.position))
+	b.mission.set_feedback("已定位北路余骑。请选中部队下令追击。" if int(closest.get_meta("wave_group"))==0
+		else "已定位南路余骑。请选中部队下令追击。")
+
 func _support_tick(b,delta: float) -> void:
 	if not alive(enemy_base):
 		return
@@ -441,7 +463,7 @@ func process(b,delta: float) -> void:
 	_drill_tick(b)
 	_rider_tick(b)
 	for lane in range(2):
-		if waves[lane].sent:
+		if waves[lane].sent or not _lane_has_riders(lane):
 			continue
 		if elapsed>=float(waves[lane].time)-25 and not waves[lane].warned:
 			waves[lane].warned=true
@@ -466,6 +488,8 @@ func _update_briefing(b) -> void:
 		briefing = FINISH_BRIEFING
 	elif lhm_killed >= 12:
 		briefing = CAPTURED_COUNTER_BRIEFING if b.mission.has_event("lhm_han_captured") else COUNTER_BRIEFING
+	elif not waves[1].sent and not _lane_has_riders(0):
+		briefing = SOUTH_BRIEFING
 	elif waves[0].sent or waves[1].sent:
 		briefing = DEFEND_BRIEFING
 	if phase_title == briefing.title:
@@ -483,6 +507,8 @@ func on_unit_died(b,u) -> void:
 	elif u==enemy_base:
 		manor_fallen=true
 		b.mission.mark("lhm_manor_fallen","官军大营已毁，护军停止补充；残余甲马位置已标明")
+		if riders.any(alive):
+			b.mission.add_level_button("lhm_locate_remaining","查看 · 余骑","移镜头到离中军最近的剩余甲马。")
 	elif u==xu and not drill_complete:
 		b.msg("徐宁阵亡，教场暂缺教头；可在中军重新招募后继续演练，现有钩镰兵仍可作战。",7)
 	elif u in posts:
@@ -512,7 +538,7 @@ func top_status(_b) -> String:
 	var wave_text: Array[String] = []
 	for lane in range(2):
 		var direction := Localize.text("北" if lane == 0 else "南")
-		var status := Localize.format_text("余%d骑", remaining[lane]) if waves[lane].sent \
+		var status := Localize.format_text("余%d骑", remaining[lane]) if manor_fallen or waves[lane].sent or remaining[lane]==0 \
 			else Localize.format_text("%d秒", maxi(0, ceili(float(waves[lane].time) - elapsed)))
 		wave_text.append(direction + " " + status)
 	return Localize.format_text("%s\n击溃%d · 钩破%d · 辎重%d/2", [" / ".join(wave_text), lhm_killed, broken_count, posts.filter(func(u): return alive(u)).size()])
