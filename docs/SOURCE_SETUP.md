@@ -146,3 +146,7 @@ git fetch origin
 当前Steam Windows为Build26260970，冻结生产来源47168f00；见[更新记录](STEAM_UPDATE_20261028.md)及[发布指南](STEAM_RELEASE_GUIDE.md)。公开战役续玩未开放，经典固定30波保存/继续保留。源码同步、发行程序验证、平台上线与人工验收各自记录。
 
 整理前的完整设置和历史工具状态保留于[Git提交5837d1bd](https://github.com/winterzh/Liangshan-Heroes/blob/5837d1bdc769f2847888a074f41b5c3d629c5529/docs/SOURCE_SETUP.md)，原10月20日文档归档说明见[历史全文与恢复](../qa/storage_cleanup_20261020/README.md)。专题入口见[文档导航](README.md)、[QA导航](../qa/README.md)及[GitHub约定](GITHUB_REPOSITORY.md)。
+
+### 2026-11-16 高俅三批任务提示
+
+高俅三次出击的任务正文按战局更新，并显示下一批倒计时。火攻失败后转回常规舰队提示，座船停航后提醒击退余部。22 项定向检查通过，50.75 秒，退出 0，错误 0。[高俅阶段提示验证](../qa/campaign_flagship_escort_20261116/README.md#三批阶段提示)

@@ -88,6 +88,27 @@ func _fixture() -> void:
 	var label: Label=b.hud._info_stats
 	check("Flagship escort" in label.text and b.hud._info_box.get_global_rect().encloses(label.get_global_rect()) and label.get_minimum_size().y<=label.size.y+1,"English escort role fits actual narrow inspector")
 	root.get_texture().get_image().save_png(out_dir+"/en_guard_960.png")
+	root.get_node("Localize").set_language("zh_CN",false)
+	l.waves[0].sent=false;l.waves[1].sent=false;l.waves[2].sent=false
+	l.elapsed=112.2
+	check("第1批约28秒" in l.top_status(b),"top status shows time left to the next scheduled force")
+	l._send_wave(b,0)
+	check(b.mission.objective=="守住东山关和内港。阮小七可把首批活官船引入港汊，再由舰队合击。","first launch explains the optional live-ship lure")
+	l._send_wave(b,1)
+	check(b.mission.objective=="第二批连船已动。可护送刘唐举火，也可派普通舰队接战，岸军继续守关。","second launch offers fire or a fleet engagement")
+	l.fire_lit=true;l._update_wave_objective(b)
+	check(b.mission.objective=="火船已点燃。让两艘接应船一同撤到安全水域，再右键撤出标记。","lighting the fire makes escort withdrawal the immediate instruction")
+	l._fire_unavailable(b,"fixture loss")
+	l._update_wave_objective(b)
+	check(b.mission.objective=="岸军守住东山关，普通战船接应内港。继续击退水陆主力。","fire failure shows how the regular fleet can still progress")
+	l.flagship_disabled=true
+	l._send_wave(b,2)
+	l._update_wave_objective(b)
+	check(b.mission.objective=="座船已停。击退余下的水陆主力即可收兵。","a disabled flagship leaves the remaining force as the core target")
+	l.core_ready=true
+	b.mission.set_objective("fixture end")
+	l._update_wave_objective(b)
+	check(b.mission.objective=="fixture end","wave guidance does not overwrite the core-ready objective")
 	await _dispose(b)
 func _run() -> void:
 	OS.set_environment("CAMPAIGN_QA","1")

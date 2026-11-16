@@ -258,9 +258,13 @@ func _retry(b,key: String,text: String) -> void:
 	if is_instance_valid(a.button): a.button.disabled=false
 	a.marker.show()
 	b.mission.set_status(text)
+func _wave_has_force(index: int) -> bool:
+	return water_groups[index].any(func(u): return alive(u)) or land_groups[index].any(func(u): return alive(u)) or (index==2 and alive(flagship))
+
 func _send_wave(b,index: int) -> void:
 	if waves[index].sent: return
 	waves[index].sent=true
+	if not _wave_has_force(index): return
 	var guards := _flagship_guards() if index==2 else []
 	for slot in range(water_groups[index].size()):
 		var u: Unit=water_groups[index][slot]
@@ -277,7 +281,9 @@ func _send_wave(b,index: int) -> void:
 	if index==2 and alive(flagship):
 		flagship.order_amove(b.map.cell_to_world(Vector2i(44,40)))
 		b.msg("高俅座船出发；留意护航战船的位置，可选择正面接战或侧翼攻击。",7)
-	b.mission.set_title(["第一败 · 水陆来犯","第二败 · 连船与岸军","第三败 · 海鳅船压港"][index])
+	if not core_ready:
+		b.mission.set_title(["第一败 · 水陆来犯","第二败 · 连船与岸军","第三败 · 海鳅船压港"][index])
+		_update_wave_objective(b)
 	b.msg(Localize.format_text("第%d批水陆主力出发。营地、资源和军队继续保留；两处补给源仍可主动拆除。", (index+1)),7)
 ## Two original rear ships screen the flagship. Their role and orders derive
 ## from existing groups/waves; no additional saved timer or replacement ship.
@@ -545,6 +551,24 @@ func _finish(b,captured := false) -> void:
 	if b.phase!=b.Phase.FIGHT or not _core_threats_clear() or not alive(hall) or not alive(song): return
 	if not captured: b.mission.mark("gao_basic_victory","三批主力败退，高俅座船被打停，梁山收兵。")
 	b.win(Localize.text("高俅三次进兵失利，水寨与钱粮守住。")+(Localize.text("高俅已由水军生擒、岸军押至忠义堂，宋江仍以礼相待，盼借此求得招安。") if captured else Localize.text("本局以击退座船收束；生擒押堂可在重玩时挑战。")))
+func _wave_objective(b) -> String:
+	if waves[2].sent:
+		return "座船已停。击退余下的水陆主力即可收兵。" if flagship_disabled else "第三批有座船压港。步军守关，舰队看清护船位置后合击座船。"
+	if waves[1].sent:
+		if b.mission.has_event("fire_escort_safe") or b.mission.story_goals.get("gao_fire",{}).get("state","")=="missed":
+			return "岸军守住东山关，普通战船接应内港。继续击退水陆主力。"
+		if fire_lit: return "火船已点燃。让两艘接应船一同撤到安全水域，再右键撤出标记。"
+		return "第二批连船已动。可护送刘唐举火，也可派普通舰队接战，岸军继续守关。" if _count(water_groups[1])>0 else "岸军守住东山关，普通战船接应内港。继续击退水陆主力。"
+	if waves[0].sent:
+		var can_lure: bool=_count(water_groups[0])>0 and not b.mission.has_event("fleet_in_ambush")
+		return "守住东山关和内港。阮小七可把首批活官船引入港汊，再由舰队合击。" if can_lure else "补齐岸军和舰队，守东山关与内港。可拆两处补给源来减少后续援军。"
+	return ""
+
+func _update_wave_objective(b) -> void:
+	if core_ready: return
+	var objective := _wave_objective(b)
+	if not objective.is_empty() and b.mission.objective!=objective: b.mission.set_objective(objective)
+
 func process(b,delta: float) -> void:
 	if not alive(hall) or not alive(song):
 		return
@@ -560,7 +584,8 @@ func process(b,delta: float) -> void:
 			continue
 		if elapsed>=waves[i].time-25 and not waves[i].warned:
 			waves[i].warned=true
-			b.msg(Localize.format_text("第%d批水陆主力约25秒后出发，准备水陆两线；也可截击其集结地。", (i+1)),6)
+			if _wave_has_force(i):
+				b.msg(Localize.format_text("第%d批水陆主力约25秒后出发，准备水陆两线；也可截击其集结地。", (i+1)),6)
 		if elapsed>=waves[i].time:
 			_send_wave(b,i)
 	_flagship_guard_orders(b)
@@ -572,6 +597,7 @@ func process(b,delta: float) -> void:
 			b.mission.block_action(key,"第一批官船已击退，继续经营和进攻即可。")
 	if _count(water_groups[1])==0 and not fire_lit:
 		_fire_unavailable(b,"第二批连船已击退，可继续用现存舰队进攻；已登船的刘唐可由原船返港下船。")
+	_update_wave_objective(b)
 	if land_groups.all(func(group): return _count(group)==0):
 		b.mission.mark("gao_land_cleared","三批岸上主力均已击退。")
 	if flagship_disabled and not capture_lost and not b.mission.actions.has("gao_seal"):
@@ -624,5 +650,9 @@ func on_unit_died(b,u) -> void:
 			_fire_unavailable(b,"接应船损失，可继续用普通舰队作战；刘唐若仍在原船上，可返港下船。")
 	if u==fireboat and not fire_lit: _fire_unavailable(b,"火船损失，可建船坞补普通战船继续进攻。")
 func top_status(_b) -> String:
-	var sent: int=waves.filter(func(w): return w.sent).size()
-	return Localize.format_text("三败高太尉 · 已出发%d/3批 · 水陆营地持续保留 · 官军补充 陆%d/10 船%d/4", [sent,produced[0],produced[1]])
+	if not core_ready:
+		for index in range(waves.size()):
+			if not waves[index].sent and _wave_has_force(index):
+				var remaining := maxi(0,ceili(float(waves[index].time)-elapsed))
+				return Localize.format_text("三败高太尉 · 第%d批约%d秒 · 官军补充 陆%d/10 船%d/4",[index+1,remaining,produced[0],produced[1]])
+	return Localize.format_text("三败高太尉 · 官军补充 陆%d/10 船%d/4",[produced[0],produced[1]])

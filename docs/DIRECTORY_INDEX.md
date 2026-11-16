@@ -276,3 +276,5 @@ qa/campaign_progress_recovery_20261026/continue_binding_candidate/：Flow/Sessio
 
 
 `qa/campaign_counter_window_20261116/`保存快活林反击标记的原失败/夹具修正、标签调整前direct实战与最终三图定向检查，包含来源哈希和runner；入口`tools/campaign_counter_window_qa.gd`，四语来源`assets/localization/campaign_counter_window.json`。
+
+[高俅三批阶段提示原件](../qa/campaign_flagship_escort_20261116/wave_objectives/)
