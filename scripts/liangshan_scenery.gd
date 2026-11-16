@@ -23,6 +23,8 @@ var _bank_draw_batch: StaticDrawBatch
 const EnvironmentArt := preload("res://scripts/campaign_environment_art.gd")
 var _entrance: Node2D
 var _sprites: Array[Node2D] = []
+var _fog_node_probes: Dictionary[int, FogNodeProbe] = {}
+var _fog_probe_map_size := Vector2i.ZERO
 var _reed_stems := PackedVector2Array()
 var _reed_leaves := PackedVector2Array()
 var _reed_heads := PackedVector2Array()
@@ -355,8 +357,37 @@ func _fog_anchor_revealed(anchor: Vector2, rise_px: float) -> bool:
 	return _battle.is_explored_world(top_probe)
 
 
-func _fog_node_revealed(node: Node2D) -> bool:
-	return _fog_anchor_revealed(node.position,float(node.get_meta("fog_clearance_px",64.0)))
+class FogNodeProbe:
+	var position: Vector2
+	var clearance: float
+	var foot: int
+	var top: int
+
+
+func _prepare_fog_node_probes() -> void:
+	var size := Vector2i(_map.w, _map.h)
+	if size != _fog_probe_map_size:
+		_fog_node_probes.clear()
+		_fog_probe_map_size = size
+
+
+func _fog_node_revealed(node: Node2D, vision: PackedByteArray) -> bool:
+	if vision.is_empty():
+		return true
+	var anchor := node.position
+	var clearance := float(node.get_meta("fog_clearance_px", 64.0))
+	var id := node.get_instance_id()
+	var probe: FogNodeProbe = _fog_node_probes.get(id)
+	if probe == null or probe.position != anchor or probe.clearance != clearance:
+		probe = FogNodeProbe.new()
+		probe.position = anchor
+		probe.clearance = clearance
+		var foot := _map.world_to_cell(anchor)
+		var top := _map.world_to_cell(anchor + GameMap.ISO_INV.basis_xform(Vector2(0, -clearance)))
+		probe.foot = foot.y * _map.w + foot.x
+		probe.top = top.y * _map.w + top.x
+		_fog_node_probes[id] = probe
+	return vision[probe.foot] != 0 and vision[probe.top] != 0
 
 
 func _current_reed_visibility_signature() -> int:
@@ -369,14 +400,15 @@ func _current_reed_visibility_signature() -> int:
 
 
 func _refresh_fog_visibility() -> void:
-	var fog_ready := _fog_visibility_ready()
+	_prepare_fog_node_probes()
+	var vision: PackedByteArray = _battle._vision if _fog_visibility_ready() else PackedByteArray()
 	for sprite in _sprites:
 		if is_instance_valid(sprite):
-			sprite.visible = not fog_ready or _fog_node_revealed(sprite)
+			sprite.visible = _fog_node_revealed(sprite, vision)
 	if is_instance_valid(_entrance):
 		for part in _entrance.get_children():
 			if part is Node2D:
-				part.visible = not fog_ready or _fog_node_revealed(part)
+				part.visible = _fog_node_revealed(part, vision)
 	var reed_signature := _current_reed_visibility_signature()
 	if reed_signature != _reed_visibility_signature:
 		_build_reed_mesh()
@@ -386,13 +418,15 @@ func fog_visibility_summary() -> Dictionary:
 	var unexplored := 0
 	var visible_unexplored := 0
 	if _fog_visibility_ready():
+		_prepare_fog_node_probes()
+		var vision: PackedByteArray = _battle._vision
 		var nodes: Array = _sprites.duplicate()
 		if is_instance_valid(_entrance):
 			for part in _entrance.get_children():
 				if part is Node2D:
 					nodes.append(part)
 		for node in nodes:
-			if is_instance_valid(node) and not _fog_node_revealed(node):
+			if is_instance_valid(node) and not _fog_node_revealed(node, vision):
 				unexplored += 1
 				if node.visible:
 					visible_unexplored += 1

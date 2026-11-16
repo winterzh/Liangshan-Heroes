@@ -1,5 +1,8 @@
 # 项目目录索引（2026-10-30）
 
+[布景迷雾格复用](../qa/campaign_sustained_performance_20261116/scenery_fog_probe_cells.json)记录七种视野状态、移动和净空验证、配对计时及短测。
+
+
 [视野范围合并收据](../qa/campaign_sustained_performance_20261116/fog_sight_span_union.json)记录实际开局、400 个布局、短测和基线第 5、10 分钟的引擎监视数据。
 
 
