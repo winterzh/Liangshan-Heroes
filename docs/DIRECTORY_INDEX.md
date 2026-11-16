@@ -1,5 +1,8 @@
 # 项目目录索引（2026-10-30）
 
+[高俅稳定分支十分钟](../qa/campaign_sustained_performance_20261116/stable_960c9408.json)含 `960c9408` 的逐分钟帧间隔、性能门槛与同探针对照。
+
+
 [单位绘制复用收据](../qa/campaign_sustained_performance_20261116/unit_draw_route_reuse.json)含三关画面对照、16 组配对绘制耗时及文件指纹。
 
 [高俅后半场分段收据](../qa/campaign_sustained_performance_20261116/late_battle_sections.json)含区间帧时、脚本耗时、原件和插桩还原前的源码指纹。
