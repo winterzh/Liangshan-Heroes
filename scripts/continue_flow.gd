@@ -233,6 +233,7 @@ func request_continue(menu: Node) -> Dictionary:
 	if busy(): return _bad("OPERATION_BUSY")
 	if not is_instance_valid(menu) or menu != get_tree().current_scene or menu.get_script() != Session.MenuScript: return _bad("CURRENT_MENU_REQUIRED")
 	phase = Phase.RESTORING
+	menu.cancel_battle_prewarm()
 	_source = menu
 	_before_paused = get_tree().paused
 	get_tree().paused = true

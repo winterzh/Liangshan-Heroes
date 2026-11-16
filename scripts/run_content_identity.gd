@@ -283,11 +283,13 @@ func resolve_runtime_identity() -> Dictionary:
 	return _complete_runtime_identity(context, _read_runtime_identity_files(context))
 
 
-func begin_runtime_identity_scan() -> Error:
+func begin_runtime_identity_scan(prewarm := false) -> Error:
 	_scan_context = _prepare_runtime_identity()
 	if not _scan_context.ok: return OK
+	_scan_context.prewarm = prewarm and not _scan_context.source_mode
 	_scan_thread = Thread.new()
-	var status := _scan_thread.start(_read_runtime_identity_files.bind(_scan_context, true))
+	var priority := Thread.PRIORITY_LOW if _scan_context.prewarm else Thread.PRIORITY_NORMAL
+	var status := _scan_thread.start(_read_runtime_identity_files.bind(_scan_context, true), priority)
 	if status != OK:
 		_scan_thread = null
 	return status
@@ -303,6 +305,9 @@ func finish_runtime_identity_scan() -> Dictionary:
 	_scan_thread = null
 	var mount := _mount_status()
 	if not mount.ok: return mount
+	if _scan_context.prewarm and physical.ok \
+			and physical.executable_stamp != _executable_stamp(_scan_context.exe):
+		return _bad("PREWARM_EXECUTABLE_CHANGED")
 	return _complete_runtime_identity(_scan_context, physical)
 
 
@@ -342,6 +347,13 @@ func _hash_scan_file(path: String) -> String:
 	return sha.finish().hex_encode()
 
 
+func _executable_stamp(path: String) -> Array[int]:
+	if not _no_link(path): return []
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null: return []
+	return [file.get_length(), FileAccess.get_modified_time(path)]
+
+
 func _prepare_runtime_identity() -> Dictionary:
 	_rules = JSON.parse_string(INPUT_RULES_JSON)
 	var mount := _mount_status()
@@ -372,7 +384,13 @@ func _read_runtime_identity_files(context: Dictionary, cancelable := false) -> D
 	_source_read_cancelable = cancelable
 	var exe: String = context.exe
 	if not exe.is_absolute_path() or not _no_link(exe): return _bad("ENGINE_BINARY_UNREADABLE")
+	var prewarm: bool = context.get("prewarm", false)
+	var stamp: Array[int] = []
+	if prewarm:
+		stamp = _executable_stamp(exe)
 	var engine_sha := _hash_scan_file(exe) if cancelable else FileAccess.get_sha256(exe)
+	if prewarm and (stamp.is_empty() or stamp != _executable_stamp(exe)):
+		return _bad("PREWARM_EXECUTABLE_CHANGED")
 	if not _valid_sha(engine_sha): return _bad("ENGINE_BINARY_UNREADABLE")
 	var snapshot: Dictionary = {}
 	if context.source_mode:
@@ -387,7 +405,7 @@ func _read_runtime_identity_files(context: Dictionary, cancelable := false) -> D
 			return _bad("SOURCE_EXECUTING_PROVIDER_MISMATCH")
 		snapshot = _source_snapshot(base, relative)
 		if not snapshot.ok: return snapshot
-	return {"ok": true, "engine_sha": engine_sha, "snapshot": snapshot}
+	return {"ok": true, "engine_sha": engine_sha, "snapshot": snapshot, "executable_stamp": stamp}
 
 
 func _complete_runtime_identity(context: Dictionary, physical: Dictionary) -> Dictionary:

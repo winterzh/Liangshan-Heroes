@@ -23,6 +23,17 @@ func _ready() -> void:
 	var presence := get_node_or_null("/root/SteamPresence")
 	if presence != null:
 		presence.set_presence({"mode": "menu"})
+	if OS.get_name() == "Windows" and not OS.has_feature("editor") \
+			and DisplayServer.get_name() != "headless" and not AndroidUpdater.enabled:
+		_prewarm_battle_identity.call_deferred()
+
+
+func _prewarm_battle_identity() -> void:
+	await RenderingServer.frame_post_draw
+	var flow := get_node_or_null("/root/ContinueFlow")
+	if _entry_overlay != null or _entry_scan != null or AppLifecycle.quit_started() or (flow != null and flow.busy()):
+		return
+	_begin_battle_scan(true)
 
 
 ## 主菜单按安卓「返回键」=退出游戏（quit_on_go_back 已关，需自己处理；否则按返回毫无反应）
@@ -84,17 +95,28 @@ func _input(_event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 
-func _finish_battle_launch() -> void:
+func _begin_battle_scan(prewarm := false) -> void:
 	var provider: Script = load("res://scripts/run_content_identity.gd")
-	var identity: Dictionary = {}
-	if provider != null:
-		_entry_scan = provider.new()
-		if _entry_scan.begin_runtime_identity_scan() == OK:
-			while _entry_scan.runtime_identity_scan_pending():
-				await get_tree().process_frame
-				if AppLifecycle.quit_started(): return
-			identity = _entry_scan.finish_runtime_identity_scan()
+	if provider == null:
+		return
+	_entry_scan = provider.new()
+	if _entry_scan.begin_runtime_identity_scan(prewarm) != OK:
 		_entry_scan = null
+
+
+func _finish_battle_launch() -> void:
+	if _entry_scan == null:
+		_begin_battle_scan()
+	var identity: Dictionary = {}
+	if _entry_scan != null:
+		while _entry_scan.runtime_identity_scan_pending():
+			await get_tree().process_frame
+			if AppLifecycle.quit_started(): return
+		identity = _entry_scan.finish_runtime_identity_scan()
+		_entry_scan = null
+		if identity.get("code") == "PREWARM_EXECUTABLE_CHANGED" and not AppLifecycle.quit_started():
+			_finish_battle_launch.call_deferred()
+			return
 	if AppLifecycle.quit_started():
 		return
 	# process_frame runs before this frame's drawing. Let the loading view paint
@@ -127,11 +149,20 @@ func _restore_battle_loading_frame_limit() -> void:
 		_entry_previous_max_fps = -1
 
 
-func _exit_tree() -> void:
-	_restore_battle_loading_frame_limit()
+func _cancel_battle_scan() -> void:
 	if _entry_scan != null:
 		_entry_scan.cancel_runtime_identity_scan()
 		_entry_scan = null
+
+
+func cancel_battle_prewarm() -> void:
+	if _entry_overlay == null:
+		_cancel_battle_scan()
+
+
+func _exit_tree() -> void:
+	_restore_battle_loading_frame_limit()
+	_cancel_battle_scan()
 
 
 # ======================================================================

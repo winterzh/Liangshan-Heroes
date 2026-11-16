@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[Windows 主菜单预读](../qa/battle_entry_timing_20261116/README.md#windows-主菜单预读)保存同模板诊断包五条进场样本、内容身份、按钮探针和首轮回退失败的采样。
+
 [举火后接应船损失](../qa/campaign_naval_recovery_20261116/README.md#举火后接应船损失)含原接应船自然沉没、撤离成果保留夹具及两条复跑脚本。
 
 [内港举火实跑](../qa/campaign_fire_readiness_20261116/README.md#内港火点与举火读条) 含旧点采样、新点完整实跑及生产文件哈希。
