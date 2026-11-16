@@ -1,0 +1,49 @@
+--- a/qa/battle_entry_timing_20261116/entry_timing.gd
++++ b/qa/battle_entry_timing_20261116/entry_timing.gd
+@@ -1 +1 @@
+-extends SceneTree
++extends Node
+@@ -18 +18 @@
+-func _initialize() -> void:
++func _ready() -> void:
+@@ -26 +26 @@
+-	node_added.connect(_on_node_added)
++	get_tree().node_added.connect(_on_node_added)
+@@ -28 +28 @@
+-	if change_scene_to_file(MENU) != OK:
++	if get_tree().change_scene_to_file(MENU) != OK:
+@@ -31 +31 @@
+-	await scene_changed
++	await get_tree().scene_changed
+@@ -34 +34 @@
+-	for mode in ["level3", "skirmish", "skirmish_ai", "arena"]:
++	for mode in ["level3", "arena"]:
+@@ -36 +36 @@
+-		for visit in range(2):
++		for visit in range(2 if mode == "level3" else 1):
+@@ -41,2 +41,2 @@
+-			current_scene.call("_goto_menu")
+-			await scene_changed
++			get_tree().current_scene.call("_goto_menu")
++			await get_tree().scene_changed
+@@ -51 +51 @@
+-	quit()
++	get_tree().quit()
+@@ -55 +55 @@
+-	var menu := current_scene
++	var menu := get_tree().current_scene
+@@ -87 +87 @@
+-	if provider == null or not provider.runtime_identity_scan_pending() or current_scene != menu:
++	if provider == null or not provider.runtime_identity_scan_pending() or get_tree().current_scene != menu:
+@@ -94 +94 @@
+-	await scene_changed
++	await get_tree().scene_changed
+@@ -99 +99 @@
+-	var battle = current_scene
++	var battle = get_tree().current_scene
+@@ -167 +167 @@
+-	if entry_at > 0 and node.get_parent() == root and node.scene_file_path == BATTLE:
++	if entry_at > 0 and node.get_parent() == get_tree().root and node.scene_file_path == BATTLE:
+@@ -182 +182 @@
+-	quit(1)
++	get_tree().quit(1)
