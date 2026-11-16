@@ -1,5 +1,5 @@
 extends "res://tools/zhujiazhuang_rts_test.gd"
-## HNS_CASE=wine|force|boundaries|all. Live routes use actual player orders.
+## HNS_CASE=wine|force|relay|boundaries|all. Live routes use actual player orders.
 var cases: Array=[]
 var visual:=false
 var folder:="res://.godot/huangnigang_short"
@@ -34,6 +34,9 @@ func shot(b,name: String,cell: Vector2i) -> void:
 
 func _live(name: String) -> void:
 	var b=await _start("",0)
+	if name=="relay":
+		Engine.time_scale=4.0
+		print("[hns-relay] active time scale=",Engine.time_scale)
 	var l=b.level
 	var start_orders:=orders
 	var combat: Dictionary={}
@@ -81,11 +84,21 @@ func _live(name: String) -> void:
 		combat["previous_failed_strategy"]="scattered_merchants_attack_complete_resting_convoy"
 		combat["previous_failure_log"]="qa/huangnigang_arrival_20260909/20260909_143823_8b2868e3/huangnigang.log"
 		b.center_camera_cell(l.TOP)
-		b.select_members(seven,false)
+		var opening := seven
+		if name=="relay":
+			var ranked: Array=seven.duplicate()
+			ranked.sort_custom(func(a,z): return a.hp<z.hp)
+			opening=[ranked[0]]
+			combat["strategy"]="one_vanguard_then_actual_survivor_relay"
+			combat["vanguard"]=opening[0].key
+			_click(b,ranked.slice(1),rally+Vector2i(-5,0))
+		b.select_members(opening,false)
 		b._issue_order(b.to_screen(l.yang.position),false); orders+=1
 		check(await until(func(): return l.force_started,35),"actual player attack starts the force route")
 		if not l.force_started:
 			cases.append({"route":name,"failed_stage":l.st}); await _dispose(b); return
+		if name=="relay":
+			await until(func(): return not alive(opening[0]) or b.phase==b.Phase.END,18)
 		var t:=0.0
 		while b.phase==b.Phase.FIGHT and (l.convoy.size()<15 or l.convoy.any(func(u): return alive(u))) and t<100:
 			var guards: Array=l.convoy.filter(func(u): return alive(u))
@@ -102,28 +115,56 @@ func _live(name: String) -> void:
 	if b.phase==b.Phase.END:
 		cases.append({"route":name,"failed_phase":true}); await _dispose(b); return
 	check(not b.mission.actions.has("cargo_group_plan") and not b.mission.actions.has("stage_0"),"cargo needs no planning or staging chores")
-	var carriers: Array=[]
-	for key in l.Transport.OWNERS: carriers.append(b.find_unit(key))
-	if not carriers.all(func(u): return alive(u)):
+	var carriers: Dictionary={}
+	var relay_indices: Array=[]
+	for index in range(l.Transport.CART_COUNT):
+		var owner = b.find_unit(l.Transport.owner(index))
+		if alive(owner): carriers[index]=owner
+		else: relay_indices.append(index)
+	if name=="relay":
+		combat["missing_cart_owners"]=relay_indices.map(func(index): return l.Transport.owner(index))
+		check(not relay_indices.is_empty(),"relay route loses an original cart owner through actual combat")
+	elif not relay_indices.is_empty():
 		check(false,"all seven allocated cart owners survive live route"); await _dispose(b); return
-	for i in range(7): _action(b,carriers[i],"force_take_%d_0"%i)
-	check(await until(func(): return l.empty_cargo.size()==7 or b.phase==b.Phase.END,45) and l.empty_cargo.size()==7,"seven original carts are taken through separate actual player orders")
-	if l.empty_cargo.size()!=7:
+	for index in carriers: _action(b,carriers[index],"force_take_%d_0"%index)
+	check(await until(func(): return l.empty_cargo.size()==carriers.size() or b.phase==b.Phase.END,45) and l.empty_cargo.size()==carriers.size(),"available original owners physically take their carts")
+	if l.empty_cargo.size()!=carriers.size():
 		print("[hns-empty] ",l.empty_cargo," actions=",b.mission.actions.keys()); await _dispose(b); return
-	for i in range(7): _action(b,carriers[i],"force_load_%d_0"%i)
-	check(await until(func(): return l.cargo.size()==7 or b.phase==b.Phase.END,70) and l.cargo.size()==7,"seven carts physically travel to loading points and load all eleven bundles")
-	if l.cargo.size()!=7:
+	for index in carriers: _action(b,carriers[index],"force_load_%d_0"%index)
+	check(await until(func(): return l.cargo.size()==carriers.size() or b.phase==b.Phase.END,70) and l.cargo.size()==carriers.size(),"available owners physically load their original carts")
+	if l.cargo.size()!=carriers.size():
 		print("[hns-cargo] ",l.cargo," actions=",b.mission.actions.keys()); await _dispose(b); return
-	var idle_positions: Array=carriers.map(func(u): return u.position)
+	var loaded: Array=carriers.values()
+	var idle_positions: Array=loaded.map(func(u): return u.position)
 	await _wait(1)
-	check(range(7).all(func(i): return carriers[i].position.distance_to(idle_positions[i])<3),"loaded carriers wait for separate exit orders")
+	check(range(loaded.size()).all(func(i): return loaded[i].position.distance_to(idle_positions[i])<3),"loaded carriers wait for separate exit orders")
 	await shot(b,name+"_cargo",l.TOP)
-	for i in range(7): _action(b,carriers[i],"force_deliver_%d_0"%i)
+	for index in carriers: _action(b,carriers[index],"force_deliver_%d_0"%index)
 	await _wait(0.5)
-	check(carriers.all(func(u): return u._state==u.ST_MOVE),"all seven loaded carriers walk concurrently on player orders")
+	check(loaded.all(func(u): return u._state==u.ST_MOVE),"loaded carriers walk concurrently on player orders")
 	var reserves: Array=l.actors.filter(func(u): return alive(u) and not u.has_meta("carrying_tribute") and not u.has_meta("pushing_empty_tribute"))
 	if not reserves.is_empty(): _click(b,reserves,l.GATE_W+Vector2i(-1,0))
-	check(await until(func(): return l.st==l.WITHDRAW or b.phase==b.Phase.END,90) and l.st==l.WITHDRAW,"seven physical deliveries unlock final assembly")
+	check(await until(func(): return l._delivered_cart_indices(b).size()>=carriers.size() or b.phase==b.Phase.END,90)
+		and carriers.keys().all(func(i): return i in l._delivered_cart_indices(b)),"surviving owners finish their original shipments")
+	if not relay_indices.is_empty():
+		combat["relay_deliveries"]=[]
+		for index in relay_indices:
+			var candidates: Array=l._transport_candidates(b,index)
+			if candidates.is_empty():
+				check(false,"an eligible survivor must be free to relay the abandoned cart"); await _dispose(b); return
+			var carrier = b.find_unit(candidates[0])
+			var original_owner: String=l.Transport.owner(index)
+			var attempt: int=l.force_attempts.get(index,0)
+			check(alive(carrier) and carrier.key!=original_owner,"a different survivor takes over the original empty cart")
+			if not await action(b,carrier,"force_take_%d_%d"%[index,attempt],55) or l.empty_cargo.get(index)!=carrier:
+				check(false,"a survivor must walk to and take the empty cart"); await _dispose(b); return
+			if not await action(b,carrier,"force_load_%d_%d"%[index,attempt],75) or l.cargo.get(index)!=carrier:
+				check(false,"the same survivor must load the original relay cart"); await _dispose(b); return
+			if not await action(b,carrier,"force_deliver_%d_%d"%[index,attempt],80) or index not in l._delivered_cart_indices(b):
+				check(false,"the same survivor must deliver the original relay cart"); await _dispose(b); return
+			print("[hns-relay] delivered cart ",index+1," with ",carrier.key," at ",b.mission.total_game_seconds)
+			combat.relay_deliveries.append({"cart":index,"loads":l.Transport.weight(index),"original_owner":original_owner,"carrier":carrier.key})
+	check(l.st==l.WITHDRAW,"seven physical deliveries unlock final assembly")
 	_click(b,l.actors.filter(func(u): return alive(u)),l.GATE_W)
 	check(await until(func(): return l.victory or b.phase==b.Phase.END,25) and l.victory,"a separate player order assembles all companions at the west exit")
 	print("[hns-exit] ",name," ",l.actors.map(func(u): return [u.key,u.hp,b.map.world_to_cell(u.position),u._state] if is_instance_valid(u) else ["fallen"])," phase=",b.phase," stage=",l.st)
@@ -339,18 +380,20 @@ func _run() -> void:
 	var selected:=OS.get_environment("HNS_CASE")
 	if selected=="": selected="all"
 	visual=OS.get_environment("HNS_VISUAL")=="1" and DisplayServer.get_name()!="headless"
-	folder+="/"+selected+("_rendered" if visual else "")
+	var custom_folder := OS.get_environment("HNS_OUT")
+	if custom_folder.is_empty(): folder+="/"+selected+("_rendered" if visual else "")
+	else: folder=custom_folder
 	if visual:
 		root.size=Vector2i(1280,720) if OS.get_environment("HNS_SIZE")=="1280" else Vector2i(1440,900)
 		DisplayServer.window_set_size(root.size)
 		if root.size.x==1280: folder+="_1280"
 	DirAccess.make_dir_recursive_absolute(folder)
-	for name in ["wine","force"]:
-		if selected in ["all",name]: await _live(name)
+	for name in ["wine","force","relay"]:
+		if selected==name or (selected=="all" and name!="relay"): await _live(name)
 	if selected in ["all","boundaries"]: await _boundaries()
 	var expected:=2 if selected=="all" else (0 if selected=="boundaries" else 1)
 	var boundary_ok:=boundaries_done if selected in ["all","boundaries"] else true
-	var passed:=selected in ["all","wine","force","boundaries"] and failures.is_empty() and boundary_ok and cases.size()==expected and cases.all(func(row): return row.has("result") and row.result.core_cleared)
+	var passed:=selected in ["all","wine","force","relay","boundaries"] and failures.is_empty() and boundary_ok and cases.size()==expected and cases.all(func(row): return row.has("result") and row.result.core_cleared)
 	FileAccess.open(folder+"/report.json",FileAccess.WRITE).store_string(JSON.stringify({"checks":checks,"passed":passed,"failures":failures,"cases":cases,"boundaries_done":boundaries_done},"\t"))
 	print("[hns-result] ",checks," checks, failures=",failures)
 	quit(0 if passed else 1)

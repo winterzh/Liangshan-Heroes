@@ -12,9 +12,10 @@ def main():
     parser.add_argument('--godot', required=True, type=Path)
     parser.add_argument('--lock', required=True, type=Path,
                         help='Shared engine lock used by this workstation')
+    parser.add_argument('--relay', action='store_true', help='Run only the live strong-arm relay route')
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[2]
-    out = root / '.godot/campaign-transport-groups'
+    out = root / '.godot' / ('huangnigang-relay' if args.relay else 'campaign-transport-groups')
     profile = out / 'profile'
     env = os.environ.copy()
     for key in list(env):
@@ -28,10 +29,16 @@ def main():
         env[key] = str(dest)
     env.update(STEAM_DISABLED='1', CAMPAIGN_QA='1', LSH_LANGUAGE='zh_CN',
                LSH_SQUAD_PROFILE=str(profile), LSH_SQUAD_REPORT=str(out / 'report.json'))
+    if args.relay:
+        env.update(HNS_CASE='relay', HNS_OUT=str(out))
+        script = 'res://tools/huangnigang_short_test.gd'
+    else:
+        script = 'res://tools/campaign_transport_groups_qa.gd'
     token = str(out)
     with args.lock.open('x', encoding='utf-8') as handle:
         handle.write(token)
-    receipt = {'scope': 'transport group fixtures and actual seven-cart wine route'}
+    receipt = {'scope': 'actual strong-arm route with casualty relay' if args.relay
+               else 'transport group fixtures and actual seven-cart wine route'}
     try:
         # Remove stale output only after owning the lock.
         (out / 'report.json').unlink(missing_ok=True)
@@ -39,13 +46,13 @@ def main():
         with (out / 'render.log').open('wb') as log:
             child = subprocess.Popen(
                 [str(args.godot.resolve()), '--rendering-method', 'gl_compatibility', '--resolution', '1280x720', '--path', str(root),
-                 '--script', 'res://tools/campaign_transport_groups_qa.gd'],
+                 '--script', script] + (['--headless'] if args.relay else []),
                 cwd=root, env=env, stdout=log, stderr=subprocess.STDOUT,
                 creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0)
             (out / 'process.json').write_text(json.dumps({'pid': child.pid}), encoding='utf-8')
-            print('Started direct route PID', child.pid, flush=True)
+            print('Started transport run PID', child.pid, flush=True)
             try:
-                code = child.wait(timeout=240)
+                code = child.wait(timeout=360 if args.relay else 240)
             except subprocess.TimeoutExpired:
                 child.kill()
                 child.wait()

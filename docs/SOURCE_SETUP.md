@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+黄泥冈运输 runner 新增 `--relay`，复用正式关卡，初始化后启用4倍时间，使用隔离用户目录与宿主锁。[强夺路线及原件](../qa/campaign_transport_groups_20261116/README.md#强夺伤亡接力实跑)。
+
 连环马 `--retry-reserve-tail` 链入此前保车尾段并复用原首存/再保存；本批驾驶用原招募、技能和单位指令增加林冲、花荣与弓手集火。[同档实跑原件](../qa/campaign_resume_current_20261116/evidence/protected_drill_candidate/counter_support_heroes/)。
 
 祝家庄真人样板按[试玩清单](PLAYTEST_CHECKLIST_20260906.md#2026-11-16-祝家庄样板验收)记录受测源码完整 SHA 或构建号，使用隔离用户数据和正常速度；首轮观察与不同计划重玩分别归档。

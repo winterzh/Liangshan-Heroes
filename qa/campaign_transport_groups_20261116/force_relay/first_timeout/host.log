@@ -1,0 +1,13 @@
+Started transport run PID 14672
+Traceback (most recent call last):
+  File "D:\CodexTemp\lsh-campaign-play-1116\qa\campaign_transport_groups_20261116\runner.py", line 76, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "D:\CodexTemp\lsh-campaign-play-1116\qa\campaign_transport_groups_20261116\runner.py", line 55, in main
+    code = child.wait(timeout=240)
+  File "C:\Python314\Lib\subprocess.py", line 1278, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Python314\Lib\subprocess.py", line 1607, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['C:\\Users\\rsb\\Desktop\\Godot_v4.6.3-stable_win64.exe\\Godot_v4.6.3-stable_win64.exe', '--rendering-method', 'gl_compatibility', '--resolution', '1280x720', '--path', 'D:\\CodexTemp\\lsh-campaign-play-1116', '--script', 'res://tools/huangnigang_short_test.gd', '--headless']' timed out after 240 seconds

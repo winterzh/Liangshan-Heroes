@@ -1,0 +1,395 @@
+extends "res://tools/zhujiazhuang_rts_test.gd"
+## HNS_CASE=wine|force|relay|boundaries|all. Live routes use actual player orders.
+var cases: Array=[]
+var visual:=false
+var folder:="res://.godot/huangnigang_short"
+var boundaries_done:=false
+
+func until(predicate: Callable, seconds: float) -> bool:
+	var t:=0.0
+	while not predicate.call() and t<seconds:
+		await _wait(0.1); t+=0.1
+	return bool(predicate.call())
+
+func action(b,u,key: String,seconds:=35.0) -> bool:
+	if not alive(u) or not b.mission.actions.has(key): return false
+	var event:="action:%s:%s"%[b.mission.stage_id,key]
+	# Carts now exist at entry. A fresh optional care order must really complete;
+	# the already-recorded merchant setup event is not evidence of this order.
+	if key=="place_dates": event="dates_checked" if b.mission.has_event("place_dates") else "place_dates"
+	_action(b,u,key)
+	var ok:=await until(func(): return b.mission.has_event(event) or b.phase==b.Phase.END,seconds)
+	if not b.mission.has_event(event): print("[hns-action] timeout ",key," stage=",b.mission.stage_id," actor=",u.position," exposure=",b.level.exposure," controls=",b.mission.actions.keys())
+	return ok and b.mission.has_event(event)
+
+func shot(b,name: String,cell: Vector2i) -> void:
+	if not visual: return
+	b.camera.zoom=Vector2.ONE
+	b.center_camera_cell(cell)
+	await process_frame
+	await RenderingServer.frame_post_draw
+	if b.phase==b.Phase.FIGHT:
+		check(b.mission._panel.get_global_rect().end.y<=b.hud._bottom_panel.get_global_rect().position.y-6,"short chapter task panel avoids command cards")
+	check(root.get_texture().get_image().save_png(folder+"/"+name+".png")==OK,"saved "+name)
+
+func _live(name: String) -> void:
+	var b=await _start("",0)
+	var l=b.level
+	var start_orders:=orders
+	var combat: Dictionary={}
+	check(l.st==l.MARCH and l.convoy.size()>0 and l.convoy.size()<15 and not b._smoke and not b.economy,"convoy starts entering in sequence while merchants already rest")
+	check(l.jujube_carts.size()==7 and l.actors.size()==7 and b.mission.has_event("place_dates") and b.find_unit("bai_sheng")==null,"seven merchants and original carts are present before Bai appears")
+	var chao=b.find_unit("chao_gai")
+	var before: Vector2=chao.position
+	var serial: int=chao._order_serial
+	var select_button=b.mission._buttons.get_children().filter(func(n): return n is Button and n.text=="选中 · 晁盖")
+	if not select_button.is_empty(): select_button[0].pressed.emit()
+	check(select_button.size()==1 and b.selection==[chao] and before==chao.position and serial==chao._order_serial,"selection shortcut selects without issuing movement")
+	await shot(b,name+"_start",l.TOP)
+	if name=="wine":
+		check(await action(b,chao,"place_dates"),"Chao completes the optional cart care command without creating new carts")
+		check(await until(func(): return l.st==l.INQUIRY,60) and l.convoy.size()==15 and b.mission.has_event("convoy_rested"),"all fifteen convoy members finish real arrival before inquiry")
+		check(await until(func(): return b.mission.has_event("yang_inquired"),12),"Yang actually approaches the merchants before they answer")
+		check(await action(b,b.find_unit("liu_tang"),"answer_yang"),"Liu answers Yang at the actual inquiry point")
+		var bai=b.find_unit("bai_sheng")
+		var bai_origin: Vector2=bai.position if is_instance_valid(bai) else Vector2.ZERO
+		var arrival_orders:=orders
+		check(is_instance_valid(bai) and l.bai_arrival_auto and bai._order_serial==l.bai_arrival_serial,"answer starts one automatic Bai arrival order")
+		check(await until(func(): return is_instance_valid(bai) and bai.position.distance_to(bai_origin)>120,15) and l.st==l.ARRIVAL and bai.get_meta("carrying_wine",false),"Bai really carries wine along the road without a player bring-wine order")
+		check(await until(func(): return l.st==l.WINE and b.mission.has_event("bai_unloaded"),50) and orders==arrival_orders and not l.bai_arrival_auto and l.bai_unload_t==0.0,"Bai automatically arrives and unloads without new player orders")
+		if l.st!=l.WINE:
+			cases.append({"route":name,"failed_stage":l.st}); await _dispose(b); return
+		_click(b,[b.find_unit("wu_yong")],l.WU_STATION)
+		_click(b,[b.find_unit("bai_sheng")],l.BAI_STATION)
+		check(await action(b,b.find_unit("liu_tang"),"taste_wine"),"first wine trial uses real Liu movement")
+		check(await until(func(): return l._team_ready(b),20),"Wu and Bai can preposition without false suspicion")
+		await shot(b,"wine_ready",l.SALE_WINE)
+		check(await action(b,b.find_unit("liu_tang"),"distract_yang"),"Liu initiates the actual cooperative distraction")
+		check(await until(func(): return l.drug_done or l.force_started,8) and l.drug_done,"three real participants complete one wine handoff")
+		check(b.kills==0 and l.convoy.all(func(u): return u.hp>0 and u.story_outcome=="unconscious"),"all fifteen convoy members survive unconscious")
+	else:
+		# The first 20260909_143823_8b2868e3 driver attacked from the seven
+		# scattered cart positions after all guards had gathered and lost. Keep
+		# that evidence; this is a different, explicitly coordinated live plan.
+		var rally:=Vector2i(27,17)
+		var seven: Array=l.actors.duplicate()
+		_click(b,seven,rally)
+		check(await until(func(): return seven.all(func(u): return alive(u) and u.position.distance_to(b.map.cell_to_world(rally))<=110),18) and not l.force_started,"force route gathers all seven through actual movement before opening the ambush")
+		combat["strategy"]="gather_seven_then_attack_entering_column"
+		combat["gather_seconds"]=b.mission.total_game_seconds
+		combat["guards_entered_at_attack"]=l.convoy.size()
+		combat["previous_failed_strategy"]="scattered_merchants_attack_complete_resting_convoy"
+		combat["previous_failure_log"]="qa/huangnigang_arrival_20260909/20260909_143823_8b2868e3/huangnigang.log"
+		b.center_camera_cell(l.TOP)
+		var opening := seven
+		if name=="relay":
+			var ranked: Array=seven.duplicate()
+			ranked.sort_custom(func(a,z): return a.hp<z.hp)
+			opening=[ranked[0]]
+			combat["strategy"]="one_vanguard_then_actual_survivor_relay"
+			combat["vanguard"]=opening[0].key
+			_click(b,ranked.slice(1),rally+Vector2i(-5,0))
+		b.select_members(opening,false)
+		b._issue_order(b.to_screen(l.yang.position),false); orders+=1
+		check(await until(func(): return l.force_started,35),"actual player attack starts the force route")
+		if not l.force_started:
+			cases.append({"route":name,"failed_stage":l.st}); await _dispose(b); return
+		if name=="relay":
+			await until(func(): return not alive(opening[0]) or b.phase==b.Phase.END,18)
+		var t:=0.0
+		while b.phase==b.Phase.FIGHT and (l.convoy.size()<15 or l.convoy.any(func(u): return alive(u))) and t<100:
+			var guards: Array=l.convoy.filter(func(u): return alive(u))
+			var fighters: Array=l.actors.filter(func(u): return alive(u))
+			if not guards.is_empty() and not fighters.is_empty():
+				b.select_members(fighters,false)
+				b._issue_order(b.to_screen(guards[0].position),false); orders+=1
+			await _wait(2); t+=2
+		check(l.convoy.size()==15 and l.convoy.all(func(u): return u.hp>0 and u.story_outcome=="subdued") and b.phase==b.Phase.FIGHT,"real force combat subdues all fifteen convoy members without killing Yang")
+		print("[hns-combat] phase=",b.phase," actors=",l.actors.map(func(u): return [u.key,u.hp,b.map.world_to_cell(u.position)] if is_instance_valid(u) else ["fallen"])," guards=",l.convoy.map(func(u): return [u.key,u.hp,u.story_outcome]))
+		combat["actors"]=l.actors.map(func(u): return {"key":u.key,"hp":u.hp,"max_hp":u.max_hp} if is_instance_valid(u) else {"fallen":true})
+		combat["guards"]=l.convoy.map(func(u): return {"key":u.key,"hp":u.hp,"outcome":u.story_outcome})
+		await shot(b,"force_battle",l.TOP)
+	if b.phase==b.Phase.END:
+		cases.append({"route":name,"failed_phase":true}); await _dispose(b); return
+	check(not b.mission.actions.has("cargo_group_plan") and not b.mission.actions.has("stage_0"),"cargo needs no planning or staging chores")
+	var carriers: Dictionary={}
+	var relay_indices: Array=[]
+	for index in range(l.Transport.CART_COUNT):
+		var owner = b.find_unit(l.Transport.owner(index))
+		if alive(owner): carriers[index]=owner
+		else: relay_indices.append(index)
+	if name=="relay":
+		combat["missing_cart_owners"]=relay_indices.map(func(index): return l.Transport.owner(index))
+		check(not relay_indices.is_empty(),"relay route loses an original cart owner through actual combat")
+	elif not relay_indices.is_empty():
+		check(false,"all seven allocated cart owners survive live route"); await _dispose(b); return
+	for index in carriers: _action(b,carriers[index],"force_take_%d_0"%index)
+	check(await until(func(): return l.empty_cargo.size()==carriers.size() or b.phase==b.Phase.END,45) and l.empty_cargo.size()==carriers.size(),"available original owners physically take their carts")
+	if l.empty_cargo.size()!=carriers.size():
+		print("[hns-empty] ",l.empty_cargo," actions=",b.mission.actions.keys()); await _dispose(b); return
+	for index in carriers: _action(b,carriers[index],"force_load_%d_0"%index)
+	check(await until(func(): return l.cargo.size()==carriers.size() or b.phase==b.Phase.END,70) and l.cargo.size()==carriers.size(),"available owners physically load their original carts")
+	if l.cargo.size()!=carriers.size():
+		print("[hns-cargo] ",l.cargo," actions=",b.mission.actions.keys()); await _dispose(b); return
+	var loaded: Array=carriers.values()
+	var idle_positions: Array=loaded.map(func(u): return u.position)
+	await _wait(1)
+	check(range(loaded.size()).all(func(i): return loaded[i].position.distance_to(idle_positions[i])<3),"loaded carriers wait for separate exit orders")
+	await shot(b,name+"_cargo",l.TOP)
+	for index in carriers: _action(b,carriers[index],"force_deliver_%d_0"%index)
+	await _wait(0.5)
+	check(loaded.all(func(u): return u._state==u.ST_MOVE),"loaded carriers walk concurrently on player orders")
+	var reserves: Array=l.actors.filter(func(u): return alive(u) and not u.has_meta("carrying_tribute") and not u.has_meta("pushing_empty_tribute"))
+	if not reserves.is_empty(): _click(b,reserves,l.GATE_W+Vector2i(-1,0))
+	check(await until(func(): return l._delivered_cart_indices(b).size()>=carriers.size() or b.phase==b.Phase.END,90)
+		and carriers.keys().all(func(i): return i in l._delivered_cart_indices(b)),"surviving owners finish their original shipments")
+	if not relay_indices.is_empty():
+		combat["relay_deliveries"]=[]
+		for index in relay_indices:
+			var candidates: Array=l._transport_candidates(b,index)
+			if candidates.is_empty():
+				check(false,"an eligible survivor must be free to relay the abandoned cart"); await _dispose(b); return
+			var carrier = b.find_unit(candidates[0])
+			var original_owner: String=l.Transport.owner(index)
+			var attempt: int=l.force_attempts.get(index,0)
+			check(alive(carrier) and carrier.key!=original_owner,"a different survivor takes over the original empty cart")
+			if not await action(b,carrier,"force_take_%d_%d"%[index,attempt],55) or l.empty_cargo.get(index)!=carrier:
+				check(false,"a survivor must walk to and take the empty cart"); await _dispose(b); return
+			if not await action(b,carrier,"force_load_%d_%d"%[index,attempt],75) or l.cargo.get(index)!=carrier:
+				check(false,"the same survivor must load the original relay cart"); await _dispose(b); return
+			if not await action(b,carrier,"force_deliver_%d_%d"%[index,attempt],80) or index not in l._delivered_cart_indices(b):
+				check(false,"the same survivor must deliver the original relay cart"); await _dispose(b); return
+			combat.relay_deliveries.append({"cart":index,"loads":l.Transport.weight(index),"original_owner":original_owner,"carrier":carrier.key})
+	check(l.st==l.WITHDRAW,"seven physical deliveries unlock final assembly")
+	_click(b,l.actors.filter(func(u): return alive(u)),l.GATE_W)
+	check(await until(func(): return l.victory or b.phase==b.Phase.END,25) and l.victory,"a separate player order assembles all companions at the west exit")
+	print("[hns-exit] ",name," ",l.actors.map(func(u): return [u.key,u.hp,b.map.world_to_cell(u.position),u._state] if is_instance_valid(u) else ["fallen"])," phase=",b.phase," stage=",l.st)
+	var result: Dictionary=b.mission.result_snapshot(l.victory)
+	check(l.delivered==11 and l._delivered_cart_indices(b).size()==7 and l.cargo.is_empty() and l.empty_cargo.is_empty(),"all eleven loads delivered in the original seven carts exactly once")
+	if name=="wine": check(result.story_complete,"wine route earns all four optional story goals")
+	else: check(not result.story_complete and b.mission.has_event("huangnigang_all_safe")==l.actors.all(func(u): return alive(u)),"force route credits actual survivors without inventing wine or all-safe goals")
+	await shot(b,name+"_result",l.GATE_W)
+	cases.append({"route":name,"orders":orders-start_orders,"seconds":b.mission.total_game_seconds,"result":result,"events":b.mission.events.keys(),"alive":l.actors.filter(func(u): return alive(u)).size(),"combat":combat})
+	await _dispose(b)
+
+func _complete_convoy_fixture(b) -> void:
+	# Explicit frozen boundary fixture only. This bypasses entry timing and is
+	# never used by either live completion route or the arrival observation test.
+	var l=b.level
+	while l.convoy.size()<15:
+		var before: int=l.convoy.size()
+		l._spawn_next_convoy_member(b)
+		if l.convoy.size()==before:
+			check(false,"boundary fixture can create the remaining finite convoy")
+			break
+	for u in l.convoy: u.set_physics_process(false)
+	check(l.convoy.size()==15,"boundary fixture explicitly contains all fifteen original convoy roles")
+
+func _wine_fixture():
+	var b=await _start("",0)
+	b.set_process(false); b.set_physics_process(false)
+	for u in b.units: u.set_physics_process(false)
+	var l=b.level
+	_complete_convoy_fixture(b)
+	# Explicitly inject the completed arrival layout, not the entry gate layout.
+	# Missing-partner tests use the far gate as safe absence; leaving loads there
+	# would instead exercise the unrelated suspicious-cargo-approach fallback.
+	for i in range(l.convoy.size()):
+		l.convoy[i].position=b.map.cell_to_world(l._convoy_rest_cell(i))
+		l.convoy[i].order_stop() # Explicit fixture: arrival has already ended.
+	for i in range(l.bundles.size()):
+		l.bundles[i].position=b.map.cell_to_world(l.TOP+Vector2i(i,0))
+	l._place_jujube_carts(b)
+	b.mission.mark("place_dates","explicit boundary fixture")
+	b.mission.mark("merchant_identity_confirmed","explicit boundary fixture")
+	var bai=l._ensure_bai(b,true)
+	bai.set_physics_process(false)
+	l.st=l.WINE; l.clean_trial=true
+	b.mission.mark("bring_wine","explicit boundary fixture")
+	l._begin_team_setup(b,false)
+	b.find_unit("liu_tang").position=b.map.cell_to_world(l.DISTRACT)
+	b.find_unit("wu_yong").position=b.map.cell_to_world(l.WU_STATION)
+	bai.position=b.map.cell_to_world(l.BAI_STATION)
+	l.yang.position=b.map.cell_to_world(Vector2i(28,21))
+	return b
+
+func _start_fixture_distraction(b) -> void:
+	_action(b,b.find_unit("liu_tang"),"distract_yang")
+	b.mission.tick(1.0)
+
+func _check_cargo_marker_numbers(b,label: String) -> void:
+	var rows: Array=[]
+	var seen: Dictionary={}
+	var ordered:=true
+	var unique:=true
+	var index:=0
+	for action_id in b.mission.actions:
+		index+=1
+		var item: Dictionary=b.mission.actions[action_id]
+		if not is_instance_valid(item.marker):
+			ordered=false; unique=false
+			continue
+		var number: int=item.marker.number
+		ordered=ordered and number==index
+		unique=unique and not seen.has(number)
+		seen[number]=true
+		rows.append({"action_id":action_id,"number":number,"done":item.done})
+	print("[hns-marker-fixture] ",label," ",rows)
+	check(ordered and unique and seen.size()==b.mission.actions.size(),label+": all retained action markers have unique consecutive numbers in action order")
+
+func _boundaries() -> void:
+	var b=await _start("",0)
+	var ArtDB=root.get_node("Art")
+	var replacement=ArtDB.campaign_object_texture(b.level.TRIBUTE_ART)
+	check(replacement!=null and b.level.bundles.all(func(u): return not u.has_meta("campaign_environment_route") and u.setup_def.campaign_object==b.level.TRIBUTE_ART and ArtDB.unit_texture(u.key,u.art_variant)==replacement),"ground and selected load use the versioned transparent prop")
+	check(b.level.actors.all(func(u): return u._campaign_carried_texture("tribute_load")==replacement),"all seven carriers use the same native-alpha prop")
+	b.set_process(false); b.set_physics_process(false)
+	for u in b.units: u.set_physics_process(false)
+	var l=b.level
+	_complete_convoy_fixture(b)
+	b.find_unit("chao_gai").position=b.map.cell_to_world(l.DATES)
+	for i in range(l.convoy.size()):
+		l.convoy[i].position=b.map.cell_to_world(l._convoy_rest_cell(i))
+		l.convoy[i].order_stop() # Complete the injected arrival, including its queue.
+	for i in range(3): l.bundles[i].position=b.map.cell_to_world(l.TOP+Vector2i(i,0))
+	l.process(b,0) # Explicitly injected arrival starts the short rest beat.
+	l.process(b,1.5)
+	_action(b,b.find_unit("chao_gai"),"place_dates"); b.mission.tick(0.4)
+	var generation: int=b.mission._generation
+	l.process(b,0.6)
+	b.mission.tick(0.7)
+	check(l.st==l.INQUIRY and b.mission._generation==generation and b.mission.has_event("place_dates") and l.jujube_carts.size()==7 and b.mission.actions.place_dates.done,"frozen arrival boundary preserves the in-progress optional care order and original carts")
+	await _dispose(b)
+	b=await _wine_fixture(); l=b.level
+	var liu=b.find_unit("liu_tang")
+	var wu=b.find_unit("wu_yong")
+	var bai=b.find_unit("bai_sheng")
+	check(bai._campaign_carried_texture("tribute_load")==replacement,"late-arriving Bai uses the same new carried prop")
+	_start_fixture_distraction(b)
+	check(l.wine_step=="cooperate","real distraction command starts the frozen cooperation fixture")
+	wu.position=b.map.cell_to_world(l.GATE_E)
+	l.process(b,2)
+	check(not l.drug_done and l.team_t==0 and l.attention_left<22,"missing partner prevents wine completion and time still runs")
+	b.select_single(liu,false); b._order_stop()
+	l.process(b,0)
+	check(l.wine_step=="attention" and l.clean_trial and not l.drug_done,"actual stop cancels distraction without making the player repeat good wine")
+	_start_fixture_distraction(b)
+	var before_clock: float=l.rest_t
+	l.process(b,23)
+	check(l.wine_step=="attention" and l.clean_trial and l.rest_t>=before_clock+23,"expired cooperation window does not refill the total rest clock")
+	wu.position=b.map.cell_to_world(l.WU_STATION)
+	_start_fixture_distraction(b)
+	l.process(b,1)
+	wu.position=b.map.cell_to_world(l.GATE_E)
+	l.process(b,0.1)
+	check(l.team_t==0 and not l.drug_done,"partner departure resets incomplete handoff progress")
+	wu.position=b.map.cell_to_world(l.WU_STATION)
+	l.process(b,3.1)
+	check(l.drug_done and l.convoy.size()==15 and l.convoy.all(func(u): return u.hp>0 and u.story_outcome=="unconscious"),"retry with all three present completes the same nonlethal convoy")
+	# Exact original cargo nodes, actual mission input, deliberate death injection.
+	var first=l.bundles[0]
+	var carrier=b.find_unit("chao_gai")
+	carrier.position=b.map.cell_to_world(l._bundle_claim_cell(b,0))
+	_action(b,carrier,"force_take_0_0"); b.mission.tick(0.7)
+	check(l.cargo.get(0)==carrier and not b.units.has(first) and not first.visible,"picked load leaves world queries while keeping its original scene node")
+	check(not b.mission.actions.force_take_1_0.actors.has(carrier.key),"loaded carrier cannot be assigned a second load")
+	l._force_take_cargo(b,"force_take_0_0",carrier,0)
+	check(l.cargo.size()==1 and l.delivered==0,"duplicate pickup callback cannot duplicate cargo")
+	# Explicit death fixture with three real pickups. The retired delivery is
+	# deliberately in the middle of the task list, before two still-live deliveries.
+	for i in [1,2]:
+		var u=wu if i==1 else bai
+		u.position=b.map.cell_to_world(l._bundle_claim_cell(b,i))
+		_action(b,u,"force_take_%d_0"%i); b.mission.tick(0.7)
+	check(l.cargo.size()==3 and l.cargo.get(0)==carrier and l.cargo.get(1)==wu and l.cargo.get(2)==bai and not liu.has_meta("carrying_tribute"),"three original loads are carried concurrently while Liu remains free to take over")
+	var other_deliveries: Array=[b.mission.actions.get("force_deliver_1_0",{}),b.mission.actions.get("force_deliver_2_0",{})]
+	var delivery_keys: Array=b.mission.actions.keys().filter(func(key): return String(key).begins_with("force_deliver_"))
+	check(delivery_keys==["force_deliver_0_0","force_deliver_1_0","force_deliver_2_0"] and other_deliveries.all(func(item): return not item.is_empty() and not item.done),"death will remove an earlier delivery while two later delivery markers remain pending")
+	_check_cargo_marker_numbers(b,"three pending deliveries before death")
+	var drop_at: Vector2=carrier.position
+	var expired_delivery: Dictionary=b.mission.actions.get("force_deliver_0_0",{})
+	var expired_delivery_event: String="action:%s:force_deliver_0_0"%b.mission.stage_id
+	carrier.take_damage(10000,null,false,true)
+	check(b.units.has(first) and first.visible and first.position.distance_to(drop_at)<33 and not l.force_started,"real carrier death drops the same load without erasing the completed wine route")
+	check(not expired_delivery.is_empty() and not b.mission.actions.has("force_deliver_0_0") and not expired_delivery.done and not b.mission.has_event(expired_delivery_event),"dead carrier delivery is retired without forging completion or retaining its click target")
+	_check_cargo_marker_numbers(b,"middle delivery retired and replacement pickup registered")
+	check(l.cargo.size()==2 and l.cargo.get(1)==wu and l.cargo.get(2)==bai and wu.get_meta("carrying_tribute",-1)==1 and bai.get_meta("carrying_tribute",-1)==2 and other_deliveries.all(func(item): return not item.is_empty() and not item.done and is_instance_valid(item.marker) and item.marker.visible),"retiring the dead carrier's delivery preserves both other carried loads and their pending markers")
+	liu.position=b.map.cell_to_world(l._bundle_claim_cell(b,0))
+	_action(b,liu,"force_take_0_1"); b.mission.tick(0.7)
+	_check_cargo_marker_numbers(b,"replacement carrier's delivery registered")
+	check(l.cargo.get(0)==liu and l.bundles[0]==first,"another survivor can take over the dropped original load")
+	var replacement_delivery: Dictionary=b.mission.actions.get("force_deliver_0_1",{})
+	var clicked_delivery: String=b.mission._nearest_clicked_action(b.map.cell_to_world(l.GATE_W+Vector2i(0,-1)))
+	print("[hns-cargo-retire] old_present=",b.mission.actions.has("force_deliver_0_0")," nearest=",clicked_delivery," replacement=",replacement_delivery.get("actors",[]))
+	check(not replacement_delivery.is_empty() and clicked_delivery=="force_deliver_0_1" and replacement_delivery.actors==[liu.key] and not replacement_delivery.done,"the same exit click selects the replacement carrier's new delivery attempt")
+	liu.position=b.map.cell_to_world(l.GATE_W+Vector2i(0,-1))
+	var delivery_orders:=orders
+	_action(b,liu,"force_deliver_0_1"); b.mission.tick(0.7)
+	check(orders==delivery_orders+1 and not replacement_delivery.is_empty() and replacement_delivery.done and b.mission.has_event("action:%s:force_deliver_0_1"%b.mission.stage_id) and l.delivered==1,"replacement delivery completes through the actual right-click and mission timer before any duplicate callback")
+	l._force_deliver_cargo(b,"force_deliver_0_1",liu,0)
+	check(l.delivered==1 and b.units.has(first) and first.visible and not liu.has_meta("carrying_tribute"),"delivery resolves once and restores the original ground load")
+	for i in [1,2]:
+		var u=wu if i==1 else bai
+		# These original carriers have held their loads throughout the death/relay.
+		check(l.cargo.get(i)==u and u.get_meta("carrying_tribute",-1)==i,"other original carrier still owns load %d before delivery"%i)
+		u.position=b.map.cell_to_world(l.GATE_W+Vector2i(0,i-1))
+		_action(b,u,"force_deliver_%d_0"%i); b.mission.tick(0.7)
+		check(b.mission.has_event("force_delivered_%d"%i) and not l.cargo.has(i) and not u.has_meta("carrying_tribute"),"other pending delivery still completes through its actual right-click %d"%i)
+	l._withdraw_tick(b)
+	check(l.delivered==3 and l.st==l.WITHDRAW and not l.victory,"cargo arrival does not silently abandon distant living companions")
+	_action(b,bai,"withdraw_now"); b.mission.tick(0.7)
+	l._withdraw_tick(b)
+	check(l.victory and not b.mission.has_event("huangnigang_all_safe"),"actual early-departure command clears the core without inventing all-safe credit")
+	await _dispose(b)
+	b=await _wine_fixture(); l=b.level
+	var chao=b.find_unit("chao_gai")
+	chao.position=l.bundles[0].position+Vector2(20,0)
+	check(l._find_suspicious(b).has("chao_gai") and not l._find_suspicious(b).has("wu_yong"),"wine station corridors do not authorize unrelated people approaching cargo")
+	l._suspicion_tick(b,5)
+	check(l.force_started and l.st==l.FORCE and not l.drug_done,"full suspicion produces the live force fallback")
+	await _dispose(b)
+	b=await _wine_fixture(); l=b.level
+	l.rest_t=99
+	l.process(b,2)
+	check(l.force_started and not l.drug_done,"total wine timeout still forces a consequential fallback")
+	await _dispose(b)
+	b=await _start("",0); l=b.level
+	var old_id: int=b.get_instance_id()
+	l.bundles[0].take_damage(10000,null,false,true)
+	check(b.phase==b.Phase.END and not l.victory,"destroyed objective produces an explicit loss")
+	var retry=b.hud.find_children("*","Button",true,false).filter(func(n): return n.text=="重打本关")
+	if retry.size()==1: retry[0].pressed.emit()
+	await until(func(): return is_instance_valid(current_scene) and current_scene.get_instance_id()!=old_id,10)
+	b=current_scene
+	check(retry.size()==1 and is_instance_valid(b) and b.get_instance_id()!=old_id and b.level.id()=="level1" and b.level.bundles.size()==3 and b.level.delivered==0,"actual restart reloads three fresh loads and chapter state")
+	await _dispose(b)
+	b=await _start("skirmish",4)
+	check(not b._defs.chao_gai.has("campaign_tribute_object") and not b._defs.treasure_cart.has("campaign_object"),"short chapter art overrides do not leak into defense definitions")
+	await _dispose(b)
+	boundaries_done=true
+
+func _run() -> void:
+	OS.set_environment("CAMPAIGN_QA","1")
+	AudioServer.set_bus_mute(0,true)
+	root.get_node("Settings").edge_scroll=false
+	Engine.time_scale=4
+	var selected:=OS.get_environment("HNS_CASE")
+	if selected=="": selected="all"
+	visual=OS.get_environment("HNS_VISUAL")=="1" and DisplayServer.get_name()!="headless"
+	var custom_folder := OS.get_environment("HNS_OUT")
+	if custom_folder.is_empty(): folder+="/"+selected+("_rendered" if visual else "")
+	else: folder=custom_folder
+	if visual:
+		root.size=Vector2i(1280,720) if OS.get_environment("HNS_SIZE")=="1280" else Vector2i(1440,900)
+		DisplayServer.window_set_size(root.size)
+		if root.size.x==1280: folder+="_1280"
+	DirAccess.make_dir_recursive_absolute(folder)
+	for name in ["wine","force","relay"]:
+		if selected==name or (selected=="all" and name!="relay"): await _live(name)
+	if selected in ["all","boundaries"]: await _boundaries()
+	var expected:=2 if selected=="all" else (0 if selected=="boundaries" else 1)
+	var boundary_ok:=boundaries_done if selected in ["all","boundaries"] else true
+	var passed:=selected in ["all","wine","force","relay","boundaries"] and failures.is_empty() and boundary_ok and cases.size()==expected and cases.all(func(row): return row.has("result") and row.result.core_cleared)
+	FileAccess.open(folder+"/report.json",FileAccess.WRITE).store_string(JSON.stringify({"checks":checks,"passed":passed,"failures":failures,"cases":cases,"boundaries_done":boundaries_done},"\t"))
+	print("[hns-result] ",checks," checks, failures=",failures)
+	quit(0 if passed else 1)

@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+黄泥冈 [强夺接力原件](../qa/campaign_transport_groups_20261116/force_relay/) 保存时限中止与最终实跑。
+
 [连环马英雄支援反攻](../qa/campaign_resume_current_20261116/evidence/protected_drill_candidate/counter_support_heroes/)保存实际日志、战报与宿主收据。
 
 [江州解缚与撤离交接](../qa/campaign_pursuit_20261116/rescue_handoff/)保留定向报告、白龙庙实跑与实际输入哈希。
