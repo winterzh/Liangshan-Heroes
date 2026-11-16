@@ -4,7 +4,7 @@
   "original_commit": "f23e3b287fd66973abcbc74f4b4f537c1ec0ff5f",
   "original_sha256": "1c758b85424fa6c98e17a6b418698aa0ec2ca61b90ce5c245195f6218730c423",
   "derived_path": "driver_strategy.gd",
-  "derived_sha256": "5de1ae1ec151f1c1b944ba7dbd5e9ade9e14380b74094e807a4331df615e95b8",
+  "derived_sha256": "4d351c63998de44e3c54b02d5ad8df0ac5df7825c94b7785416cfc0c223ce7e3",
   "patches": [
     {
       "before": "\t\teconomy_step()\n\t\tvar army: Array = battle.units.filter",
@@ -69,6 +69,18 @@
     {
       "before": "\tvar dummy_id: String = str(level.dummy.entity_id)\n\tpolicy.move(battle, [lure], level.DRILL_ENTRY + Vector2i(0, 2))",
       "after": "\tif not check(await wait_live(func(): return alive(lure) and lure.position.distance_to(staging_position) <= 32.0, 85.0), \"ordinary lure reaches the staging lane outside trigger range\"): return false\n\tvar dummy_id: String = str(level.dummy.entity_id)\n\tpolicy.move(battle, [lure], level.DRILL_ENTRY + Vector2i(0, 2))"
+    },
+    {
+      "before": "var combat_samples: Array = []",
+      "after": "var combat_samples: Array = []\nvar flank_siege_stage: Dictionary = {}"
+    },
+    {
+      "before": "\tpolicy._economy_lhm(battle)\n\nfunc wait_live",
+      "after": "\tif not siege_finisher_active():\n\t\tpolicy._economy_lhm(battle)\n\t\treturn\n\t# Keep workers gathering, but reserve the next gold and wood for the workshop.\n\tpolicy._mine_idle_workers(battle)\n\tvar artillery := siege_artillery()\n\tif artillery.size() >= 2: return\n\tvar definition: Dictionary = battle._defs[\"siege_cata\"]\n\tif battle.gold < int(definition.cost_gold) or battle.wood < int(definition.cost_wood): return\n\tfor workshop: Variant in battle.units:\n\t\tif not alive(workshop) or workshop.faction != 0 or workshop.key != \"siege_workshop\": continue\n\t\tif workshop.is_constructing or not workshop._train_queue.is_empty(): continue\n\t\tvar gold: int = battle.gold\n\t\tvar wood: int = battle.wood\n\t\tif battle.queue_train(workshop, \"siege_cata\", false):\n\t\t\tcheck(gold - battle.gold == int(definition.cost_gold) and wood - battle.wood == int(definition.cost_wood),\n\t\t\t\t\"flank artillery pays actual workshop costs\")\n\t\t\trecord_action(\"train_flank_artillery\", [workshop], {\"key\":\"siege_cata\", \"gold_spent\":gold-battle.gold, \"wood_spent\":wood-battle.wood})\n\t\t\tpolicy.units_queued += 1\n\t\t\tpolicy.units_queued_by_key[\"siege_cata\"] = int(policy.units_queued_by_key.get(\"siege_cata\", 0)) + 1\n\t\treturn\n\nfunc siege_finisher_active() -> bool:\n\tvar level: Variant = battle.level\n\treturn level.lhm_killed == 12 and battle.mission.has_event(\"lhm_han_captured\") and alive(level.enemy_base) \\\n\t\tand level.enemy_base.hp <= level.enemy_base.max_hp * 0.4\n\nfunc siege_artillery() -> Array:\n\treturn battle.units.filter(func(u): return alive(u) and u.faction == 0 and u.key == \"siege_cata\")\n\nfunc flank_siege(army: Array, manor: Variant) -> void:\n\tvar artillery := siege_artillery()\n\tvar screen: Array = army.filter(func(u): return u not in artillery and u.key != \"siege_ram\")\n\tvar threat: Variant = null\n\tvar screen_point: Vector2 = battle.map.cell_to_world(Vector2i(37, 30))\n\tfor enemy: Variant in battle.units:\n\t\tif alive(enemy) and enemy.faction == 1 and not enemy.is_building and enemy.fog_visible \\\n\t\t\t\tand enemy.position.distance_to(screen_point) < 170.0:\n\t\t\tthreat = enemy\n\t\t\tbreak\n\tif alive(threat):\n\t\tpolicy.target(battle, screen, threat, \"flank_west_screen\")\n\telse:\n\t\tvar off: Array = screen.filter(func(u): return u.position.distance_to(screen_point) > 95.0)\n\t\tpolicy.move(battle, off, Vector2i(37, 30))\n\tvar route: Array[Vector2i] = [Vector2i(58,48), Vector2i(60,35)]\n\tfor engine: Variant in artillery:\n\t\tvar id: int = engine.entity_id\n\t\tvar waypoint: int = int(flank_siege_stage.get(id, 0))\n\t\tif waypoint < route.size() and engine.position.distance_to(battle.map.cell_to_world(route[waypoint])) <= 70.0:\n\t\t\twaypoint += 1\n\t\t\tflank_siege_stage[id] = waypoint\n\t\t\tprint(\"LIAN_FLANK \", {\"engine\": id, \"waypoint\": waypoint, \"elapsed\": battle.level.elapsed})\n\t\tif waypoint < route.size():\n\t\t\tpolicy.move(battle, [engine], route[waypoint])\n\t\telif battle.is_visible_world(manor.position):\n\t\t\tpolicy.target(battle, [engine], manor, \"east_flank_manor\")\n\t\telse:\n\t\t\tpolicy.move(battle, [engine], Vector2i(59,35))\n\tpolicy._skills_lhm(battle, screen)\n\nfunc wait_live"
+    },
+    {
+      "before": "\t\tvar cell: Vector2i = level.LANES[0]\n",
+      "after": "\t\tif siege_finisher_active():\n\t\t\tflank_siege(army, level.enemy_base)\n\t\t\tvar flank_tick: int = battle._run_clock._next_tick + 180\n\t\t\tawait wait_live(func(): return battle._run_clock._next_tick >= flank_tick, 8.0)\n\t\t\tcontinue\n\t\tvar cell: Vector2i = level.LANES[0]\n"
     }
   ],
   "original_all_goal_save_clock_typed_assertions_unchanged": true,

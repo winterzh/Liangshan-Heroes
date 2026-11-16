@@ -3,6 +3,7 @@ const Policy := preload("policy.gd")
 var policy: RefCounted
 var next_economy_tick := 0
 var combat_samples: Array = []
+var flank_siege_stage: Dictionary = {}
 
 func run() -> void:
 	while Engine.is_in_physics_frame(): await get_tree().process_frame
@@ -65,7 +66,66 @@ func record_action(kind: String, actors: Array, detail: Dictionary = {}) -> void
 func economy_step() -> void:
 	if battle._run_clock._next_tick < next_economy_tick: return
 	next_economy_tick = battle._run_clock._next_tick + 75
-	policy._economy_lhm(battle)
+	if not siege_finisher_active():
+		policy._economy_lhm(battle)
+		return
+	# Keep workers gathering, but reserve the next gold and wood for the workshop.
+	policy._mine_idle_workers(battle)
+	var artillery := siege_artillery()
+	if artillery.size() >= 2: return
+	var definition: Dictionary = battle._defs["siege_cata"]
+	if battle.gold < int(definition.cost_gold) or battle.wood < int(definition.cost_wood): return
+	for workshop: Variant in battle.units:
+		if not alive(workshop) or workshop.faction != 0 or workshop.key != "siege_workshop": continue
+		if workshop.is_constructing or not workshop._train_queue.is_empty(): continue
+		var gold: int = battle.gold
+		var wood: int = battle.wood
+		if battle.queue_train(workshop, "siege_cata", false):
+			check(gold - battle.gold == int(definition.cost_gold) and wood - battle.wood == int(definition.cost_wood),
+				"flank artillery pays actual workshop costs")
+			record_action("train_flank_artillery", [workshop], {"key":"siege_cata", "gold_spent":gold-battle.gold, "wood_spent":wood-battle.wood})
+			policy.units_queued += 1
+			policy.units_queued_by_key["siege_cata"] = int(policy.units_queued_by_key.get("siege_cata", 0)) + 1
+		return
+
+func siege_finisher_active() -> bool:
+	var level: Variant = battle.level
+	return level.lhm_killed == 12 and battle.mission.has_event("lhm_han_captured") and alive(level.enemy_base) \
+		and level.enemy_base.hp <= level.enemy_base.max_hp * 0.4
+
+func siege_artillery() -> Array:
+	return battle.units.filter(func(u): return alive(u) and u.faction == 0 and u.key == "siege_cata")
+
+func flank_siege(army: Array, manor: Variant) -> void:
+	var artillery := siege_artillery()
+	var screen: Array = army.filter(func(u): return u not in artillery and u.key != "siege_ram")
+	var threat: Variant = null
+	var screen_point: Vector2 = battle.map.cell_to_world(Vector2i(37, 30))
+	for enemy: Variant in battle.units:
+		if alive(enemy) and enemy.faction == 1 and not enemy.is_building and enemy.fog_visible \
+				and enemy.position.distance_to(screen_point) < 170.0:
+			threat = enemy
+			break
+	if alive(threat):
+		policy.target(battle, screen, threat, "flank_west_screen")
+	else:
+		var off: Array = screen.filter(func(u): return u.position.distance_to(screen_point) > 95.0)
+		policy.move(battle, off, Vector2i(37, 30))
+	var route: Array[Vector2i] = [Vector2i(58,48), Vector2i(60,35)]
+	for engine: Variant in artillery:
+		var id: int = engine.entity_id
+		var waypoint: int = int(flank_siege_stage.get(id, 0))
+		if waypoint < route.size() and engine.position.distance_to(battle.map.cell_to_world(route[waypoint])) <= 70.0:
+			waypoint += 1
+			flank_siege_stage[id] = waypoint
+			print("LIAN_FLANK ", {"engine": id, "waypoint": waypoint, "elapsed": battle.level.elapsed})
+		if waypoint < route.size():
+			policy.move(battle, [engine], route[waypoint])
+		elif battle.is_visible_world(manor.position):
+			policy.target(battle, [engine], manor, "east_flank_manor")
+		else:
+			policy.move(battle, [engine], Vector2i(59,35))
+	policy._skills_lhm(battle, screen)
 
 func wait_live(predicate: Callable, seconds: float) -> bool:
 	var limit: int = Time.get_ticks_msec() + int(seconds * 1000.0)
@@ -216,6 +276,11 @@ func natural_victory() -> void:
 					break
 		var army: Array = battle.units.filter(func(u): return alive(u) and u.faction == 0 and u != level.song \
 			and not u.is_worker and not u.is_building and not u.is_noncombat and not u.garrisoned)
+		if siege_finisher_active():
+			flank_siege(army, level.enemy_base)
+			var flank_tick: int = battle._run_clock._next_tick + 180
+			await wait_live(func(): return battle._run_clock._next_tick >= flank_tick, 8.0)
+			continue
 		var cell: Vector2i = level.LANES[0]
 		var target: Variant = null
 		var attack_move: bool = true

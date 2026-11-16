@@ -81,6 +81,45 @@ def verified_retry(old, original, tail):
     return original['steps'] + prior['steps'][:1], original['reports'] + prior['reports'][:1], pins, failed['pid']
 
 
+def verify_assault_stall(old, original, lure_tail, assault_tail, pins, failed_pids):
+    p.identity.no_links(assault_tail)
+    p.need(assault_tail.parent == old.parent and assault_tail != lure_tail, 'Expected separate assault evidence')
+    receipt_path = assault_tail / 'receipt.json'
+    prior = p.read(receipt_path)
+    p.need(prior.get('retry_lure_tail') == str(lure_tail) and prior['previous_batch'] == str(old)
+           and all(prior[key] == original[key] for key in ('source_identity', 'profile', 'batch_nonce'))
+           and prior['previous_receipt_sha256'] == p.sha(old / 'receipt.json')
+           and not prior['complete'] and prior['post_source_unchanged'] and prior['lock_released']
+           and len(prior['steps']) == len(prior['reports']) == 1, 'Expected the closed assault stall')
+    step = prior['steps'][0]
+    report_path = assault_tail / 'resume_victory/report.json'
+    log = assault_tail / 'resume_victory/resume_victory.log'
+    report = p.read(report_path)
+    p.need(step['case'] == 'resume_victory' and not step['passed'] and step['exit_code'] == 1
+           and not step['errors'] and step['pid'] == report['pid'] and step['log_sha256'] == p.sha(log)
+           and prior['reports'][0]['sha256'] == p.sha(report_path)
+           and not report['passed'] and not report['terminal_checkpoint']
+           and report['failures'] == [
+               'normal economy and combat reach actual victory within bounded route',
+               'all twelve original riders are hook-broken before defeat and headquarters falls',
+               'Han Tao captured and Huyan Zhuo retreats through actual combat outcomes',
+           ], 'Expected the documented nonterminal siege failure')
+    p.need(prior['reused_saved_reports'] == original['reports'] + p.read(lure_tail / 'receipt.json')['reports'][:1],
+           'Prior assault must have used the exact same re-save')
+    archived_paths = {'continue_lianhuanma.py', 'workers.json', 'workers/driver.gd', 'workers/strategy.json'}
+    for name, digest in prior['pins'].items():
+        path = Path(name)
+        if path.is_relative_to(HERE) and path.relative_to(HERE).as_posix() in archived_paths:
+            git_path = path.relative_to(p.ROOT).as_posix()
+            raw = subprocess.check_output(['git', 'show', '0daa30b3:' + git_path], cwd=p.ROOT)
+            p.need(p.digest(raw) == digest, 'Unexpected historical assault input: ' + git_path)
+        else:
+            p.need(name not in pins or pins[name] == digest, 'Conflicting stable input')
+            pins[name] = digest
+    pins.update({str(receipt_path): p.sha(receipt_path), str(report_path): p.sha(report_path), str(log): p.sha(log)})
+    failed_pids.add(step['pid'])
+
+
 def execute(args):
     old = args.batch.absolute()
     p.identity.no_links(old)
@@ -89,7 +128,7 @@ def execute(args):
         p.identity.no_links(prior_path)
         prior = p.read(prior_path)
         if prior.get('previous_batch') == str(old):
-            if not args.retry_lure_tail or prior_path.parent != args.retry_lure_tail:
+            if prior_path.parent not in (args.retry_lure_tail, args.retry_assault_tail):
                 p.need(not prior.get('steps'), 'Another continuation process already started for this batch')
     run, project, preparation = p.admission(old.parent)
     completed_modes = tuple(s['case'] for s in original['steps'])
@@ -105,9 +144,12 @@ def execute(args):
            'Saved prefix processes must have passed')
     saved_steps = original['steps']
     saved_reports = original['reports']
-    failed_pid = None
+    failed_pids = set()
     if args.retry_lure_tail:
         saved_steps, saved_reports, pins, failed_pid = verified_retry(old, original, args.retry_lure_tail)
+        failed_pids.add(failed_pid)
+        if args.retry_assault_tail:
+            verify_assault_stall(old, original, args.retry_lure_tail, args.retry_assault_tail, pins, failed_pids)
         remaining_modes = host.MODES[len(saved_steps):]
     else:
         for mode in remaining_modes:
@@ -157,6 +199,8 @@ def execute(args):
     if args.retry_lure_tail:
         receipt.update(retry_lure_tail=str(args.retry_lure_tail), reused_saved_reports=saved_reports,
                        retry_strategy_sha256=p.sha(HERE / 'workers/driver.gd'))
+    if args.retry_assault_tail:
+        receipt['retry_assault_tail'] = str(args.retry_assault_tail)
     locked = False
     try:
         wait_idle()
@@ -228,7 +272,7 @@ def execute(args):
             p.need(all(report.get(k) is False for k in ('public_continue_qualified', 'native_sdk_qualified',
                                                        'native_release_tested', 'human_acceptance')), 'No wider qualification')
             pid = report.get('pid')
-            p.need(type(pid) is int and pid > 0 and pid == step['pid'] and pid not in pids and pid != failed_pid
+            p.need(type(pid) is int and pid > 0 and pid == step['pid'] and pid not in pids and pid not in failed_pids
                    and step['passed'] and step['exit_code'] == 0 and not step['errors'], 'Distinct actual current process')
             if mode == 'resume_training':
                 p.need(report.get('save_exit_observed') is True and report.get('exit_reason') == 'continue_saved',
@@ -268,8 +312,12 @@ if __name__ == '__main__':
     parser.add_argument('--godot', type=Path, required=True)
     parser.add_argument('--lock', type=Path, required=True)
     parser.add_argument('--retry-lure-tail', type=Path)
+    parser.add_argument('--retry-assault-tail', type=Path)
     args = parser.parse_args()
     if args.retry_lure_tail:
         args.retry_lure_tail = args.retry_lure_tail.absolute()
+    if args.retry_assault_tail:
+        p.need(args.retry_lure_tail is not None, 'Assault retry requires the original re-save tail')
+        args.retry_assault_tail = args.retry_assault_tail.absolute()
     p.need(args.batch.is_absolute() and args.lock.is_absolute(), 'Absolute batch and lock required')
     execute(args)

@@ -1,5 +1,8 @@
 # 源码设置与换机（2026-10-30）
 
+连环马侧翼攻营续接需同时提供原诱骑失败尾段和其后原槽攻营失败尾段（--retry-lure-tail 与 --retry-assault-tail）。两次失败的来源、报告、日志及保留的再保存链先核对，再启动两个终局验收进程。[侧翼攻营复跑](../qa/campaign_resume_current_20261116/README.md#侧翼攻营复跑)。
+
+
 连环马指定诱骑失败复跑可通过 --retry-lure-tail 接续原首存及再保存，旧输入由历史Git字节复核，新策略按现行清单核验。[已核对的续玩来源与执行记录](../qa/campaign_resume_current_20261116/README.md#同一原档续跑自然终局)。
 
 
