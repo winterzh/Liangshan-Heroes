@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[押俘收兵验收](../qa/campaign_flagship_escort_20261116/README.md#押俘进度与收兵结算) 含四语任务走向、两种收尾的定向断言与复跑探针。
+
 出征卡顿的分段量测、原始 JSON 与复现脚本见[出征量测记录](../qa/battle_entry_timing_20261116/README.md)。
 
 [连环马余骑提示原件](../qa/campaign_cavalry_escort_20261116/wave_status/) 含 960 像素宽显示、运行日志及收据。

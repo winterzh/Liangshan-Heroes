@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+高俅收兵与押俘共用结算判定，五条词条由 `gao_capture_closeout.json` 合入词库。[押俘收兵验收](../qa/campaign_flagship_escort_20261116/README.md#押俘进度与收兵结算)
+
 出征计时使用已导入的独立源码检出、Windows Godot 控制台程序和独立离线存档目录。记录提供分段采样补丁、后台校验探针、Windows 候选编译包四模式证据、同发布模板的原生诊断 EXE 样本和可执行文件哈希脚本。 [出征量测记录](../qa/battle_entry_timing_20261116/README.md)
 
 连环马两路余骑由既有骑兵状态派生，四语模板放在 `campaign_cavalry_escort.json`。验证复用 `lianhuanma_escort_qa.gd` 窄窗口夹具。[余骑提示验证](../qa/campaign_cavalry_escort_20261116/README.md#两路余骑与窄窗口军情)

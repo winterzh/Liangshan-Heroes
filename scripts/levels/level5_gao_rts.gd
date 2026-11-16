@@ -544,12 +544,37 @@ func _capture_failed(b,reason: String) -> void:
 	capture_lost=true
 	b.mission.mark("gao_escaped",reason+Localize.text("；仍可打停座船、击退三批主力取得基础通关。"))
 	for key in ["gao_seal","gao_scuttle","gao_land"]: b.mission.block_action(key,reason)
-	if core_ready: b.mission.set_objective("基础目标已达成，生擒路线已失去条件。可直接点击收兵通关，无需寻找替代专船或清扫全图。")
+	if core_ready: _update_withdrawal_briefing(b)
+
+func _capture_completed(b) -> bool:
+	return not capture_lost and alive(prisoner) and b.mission.has_event("gao_captured") and not b.mission.has_event("gao_escaped")
+
+func _update_withdrawal_briefing(b) -> void:
+	var title := "主力已退 · 收兵或押俘"
+	var objective := "基础目标已达成，可直接收兵通关；也可继续清开座船周围、封港凿船并押俘回堂。"
+	if capture_lost:
+		title = "主力已退 · 收兵通关"
+		objective = "基础目标已达成，生擒路线已失去条件。可直接点击收兵通关，无需寻找替代专船或清扫全图。"
+	elif _capture_completed(b):
+		objective = "高俅已押抵忠义堂。点击「收兵通关」即可结算。"
+	elif landed:
+		objective = "高俅已上岸。选中他和岸军，一同押到忠义堂前；也可直接收兵通关。"
+	elif recovered:
+		objective = "高俅已在张顺的小艇上。先护送小艇回主码头交接，再由岸军押堂；也可直接收兵通关。"
+	elif port_sealed:
+		objective = "港口已封。让张顺靠近停航座船，右键「凿船接俘」；也可直接收兵通关。"
+	if b.mission.stage_title != title: b.mission.set_title(title)
+	if b.mission.objective != objective: b.mission.set_objective(objective)
+
 func _core_threats_clear() -> bool:
 	return flagship_disabled and water_groups.all(func(group): return _count(group)==0) and land_groups.all(func(group): return _count(group)==0)
-func _finish(b,captured := false) -> void:
+func _finish(b) -> void:
 	if b.phase!=b.Phase.FIGHT or not _core_threats_clear() or not alive(hall) or not alive(song): return
-	if not captured: b.mission.mark("gao_basic_victory","三批主力败退，高俅座船被打停，梁山收兵。")
+	var captured := _capture_completed(b)
+	if not captured:
+		if b.mission.has_event("gao_captured"):
+			_capture_failed(b,"押俘所需小艇或俘虏损失")
+		b.mission.mark("gao_basic_victory","三批主力败退，高俅座船被打停，梁山收兵。")
 	b.win(Localize.text("高俅三次进兵失利，水寨与钱粮守住。")+(Localize.text("高俅已由水军生擒、岸军押至忠义堂，宋江仍以礼相待，盼借此求得招安。") if captured else Localize.text("本局以击退座船收束；生擒押堂可在重玩时挑战。")))
 func _wave_objective(b) -> String:
 	if waves[2].sent:
@@ -602,7 +627,7 @@ func process(b,delta: float) -> void:
 		b.mission.mark("gao_land_cleared","三批岸上主力均已击退。")
 	if flagship_disabled and not capture_lost and not b.mission.actions.has("gao_seal"):
 		b.mission.add_action("gao_seal",Localize.text("阮氏水军：封港"),b.map.world_to_cell(flagship.position)+Vector2i(0,3),["ruan_xiaoer_boat","ruan_xiaowu_boat"],2,64)
-	if landed and alive(prisoner):
+	if landed and not capture_lost and alive(prisoner):
 		var escort: bool=b.units.any(func(u): return alive(u) and u!=prisoner and u.faction==0 and not u.is_building and not u.is_worker and not u.is_noncombat and u.movement_profile=="land" and u.position.distance_to(prisoner.position)<180)
 		if not escort:
 			prisoner.order_stop()
@@ -614,15 +639,15 @@ func process(b,delta: float) -> void:
 			if _near(b,prisoner,HALL+Vector2i(0,4),100) and not _enemy_near(b,prisoner.position,180):
 				b.mission.mark("gao_captured","俘虏与护卫已实际抵忠义堂前。")
 				if _core_threats_clear():
-					_finish(b,true)
+					_finish(b)
 					return
 	if _core_threats_clear() and not core_ready:
 		core_ready=true
-		b.mission.set_title("主力已退 · 收兵或押俘")
-		b.mission.set_objective("基础目标已达成，生擒路线已失去条件。可直接点击收兵通关，无需寻找替代专船或清扫全图。" if capture_lost else "基础目标已达成，可直接收兵通关；也可继续清开座船周围、封港凿船并押俘回堂。")
 		end_button=b.mission.add_level_button("gao_end","收兵通关 · 已击退高俅")
+	if core_ready:
+		_update_withdrawal_briefing(b)
 func activate_mission_button(b, button_id: String) -> void:
-	if button_id == "gao_end": _finish(b,b.mission.has_event("gao_captured"))
+	if button_id == "gao_end": _finish(b)
 func on_unit_resolved(b,u,outcome: String) -> void:
 	if u==flagship and outcome=="subdued":
 		flagship_disabled=true
