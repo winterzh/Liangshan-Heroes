@@ -1,9 +1,28 @@
 extends "res://tools/lianhuanma_rts_test.gd"
 var observed: Array=[]
 var phases: Dictionary={}
+var cut_posts: Dictionary={}
+var supply_observed: Array=[]
+var post_cut_spawn := false
+var rider_ids: Array=[]
+var rider_deaths: Array=[]
+var rider_identity_changed := false
+func _record_rider_death(unit) -> void:
+	rider_deaths.append(unit.entity_id)
 func _economy_lhm(b) -> void:
 	_economy_with_counter_support(b)
+	if rider_ids.is_empty():
+		rider_ids=b.level.riders.map(func(u):return u.entity_id)
+		for rider in b.level.riders: rider.died.connect(_record_rider_death)
+	for index in range(b.level.riders.size()):
+		var rider=b.level.riders[index]
+		if is_instance_valid(rider) and (index>=rider_ids.size() or rider.entity_id!=rider_ids[index]): rider_identity_changed=true
 	for lane in range(2):
+		var existing: Array=b.level.escorts.filter(func(u):return is_instance_valid(u) and u.get_meta("source_lane",-1)==lane).map(func(u):return u.entity_id)
+		if not alive(b.level.posts[lane]) and not cut_posts.has(lane):
+			cut_posts[lane]=existing.duplicate()
+			supply_observed.append({"lane":lane,"time":b.level.elapsed,"wave_time":b.level.waves[lane].time,"wave_sent":b.level.waves[lane].sent,"rider_ids":b.level.riders.map(func(u):return u.entity_id if is_instance_valid(u) else null),"live_riders":b.level.riders.filter(func(u):return alive(u) and u.get_meta("wave_group",-1)==lane).size(),"escort_ids":existing})
+		elif cut_posts.has(lane) and existing.any(func(id):return id not in cut_posts[lane]): post_cut_spawn=true
 		var plan: Dictionary=b.level._escort_plan(b,lane)
 		if phases.get(lane,"")!=plan.phase:
 			phases[lane]=plan.phase
@@ -78,7 +97,7 @@ func _run() -> void:
 		quit(0 if failures.is_empty() else 1)
 		return
 	root.get_node("Localize").set_language("zh_CN",false)
-	route="defend"
+	route="raid" if OS.get_environment("CAVALRY_ROUTE")=="raid" else "defend"
 	build_cells=[Vector2i(5,28),Vector2i(5,35),Vector2i(12,36),Vector2i(17,36),Vector2i(12,23),Vector2i(16,24),Vector2i(9,43),Vector2i(20,34)]
 	var b=await _start("",3)
 	Engine.time_scale=4
@@ -86,7 +105,7 @@ func _run() -> void:
 	await _play_lhm(b)
 	await _dispose(b)
 	Engine.time_scale=1
-	FileAccess.open("res://.godot/cavalry-escort/report.json",FileAccess.WRITE).store_string(JSON.stringify({"passed":failures.is_empty(),"checks":checks,"failures":failures,"metrics":play_metrics,"escort_transitions":observed,"live_only":OS.get_environment("CAVALRY_LIVE_ONLY")=="1","scope":"actual defend-and-siege route only; not full restore, human or performance acceptance" if OS.get_environment("CAVALRY_LIVE_ONLY")=="1" else "escort fixtures plus actual defend-and-siege route"},"\t"))
+	FileAccess.open("res://.godot/cavalry-escort/report.json",FileAccess.WRITE).store_string(JSON.stringify({"passed":failures.is_empty(),"checks":checks,"failures":failures,"metrics":play_metrics,"escort_transitions":observed,"supply_observations":supply_observed,"original_rider_ids":rider_ids,"rider_deaths":rider_deaths,"route":route,"live_only":OS.get_environment("CAVALRY_LIVE_ONLY")=="1","scope":"actual "+route+" route only; not full restore, human or performance acceptance" if OS.get_environment("CAVALRY_LIVE_ONLY")=="1" else "escort fixtures plus actual "+route+" route"},"\t"))
 	quit(0 if failures.is_empty() else 1)
 
 func _economy_with_counter_support(b) -> void:
@@ -104,12 +123,13 @@ func _economy_with_counter_support(b) -> void:
 		for candidate in ["hua_rong","lin_chong"]:
 			if b.find_unit(candidate)==null:
 				hero_key=candidate;reserve_gold=maxi(reserve_gold,int(b._defs[candidate].cost_gold));break
+	var siege_key: String="siege_cata" if route=="raid" else "siege_ram"
 	var worker_count: int=b.units.filter(func(u): return alive(u) and u.faction==0 and u.is_worker).size()
 	for building in own:
 		if building.is_constructing or not building._train_queue.is_empty(): continue
 		var key := ""
 		if building.key=="barracks": key=["liang_gong","liang_gong","liang_qiang","gou_lian"][units_queued%4] if b.level.lhm_killed>=12 else ["gou_lian","liang_gong","liang_qiang","gou_lian","liang_dao"][units_queued%5]
-		elif building.key=="siege_workshop" and b.units.filter(func(u): return alive(u) and u.faction==0 and u.key=="siege_ram").size()<2: key="siege_ram"
+		elif building.key=="siege_workshop" and b.units.filter(func(u): return alive(u) and u.faction==0 and u.key==siege_key).size()<2: key=siege_key
 		elif building.key=="hall": key=hero_key if hero_key!="" else ("lou_luo" if worker_count<10 else "")
 		if key!="" and b.gold>=int(b._defs[key].cost_gold)+(0 if key==hero_key else reserve_gold) and b.queue_train(building,key,false):
 			units_queued+=1
@@ -126,6 +146,8 @@ func _play_lhm(b) -> void:
 	var phase := "north"
 	var assault_ready := false
 	var last_order_time := -10.0
+	var flank_stage := 0
+	var flank_ids: Array=[]
 	var starting_hall=l.hall
 	b.select_members([l.song],false)
 	b._issue_order(b.to_screen(l.hall.position),false) # Normal garrison command protects the commander.
@@ -156,18 +178,24 @@ func _play_lhm(b) -> void:
 			if l.lhm_killed>=12: phase="counter"
 			if phase=="south": target_cell=l.LANES[1]
 		if phase=="counter":
+			var siege_units: Array=army.filter(func(u):return u.key in ["siege_ram","siege_cata"])
+			if route=="raid":
+				if siege_units.any(func(u):return u.entity_id not in flank_ids):
+					flank_ids=siege_units.map(func(u):return u.entity_id);flank_stage=0
+				var point: Vector2=b.map.cell_to_world(Vector2i(58,48) if flank_stage==0 else Vector2i(60,35))
+				if flank_stage<2 and siege_units.size()>=2 and siege_units.all(func(u):return u.position.distance_to(point)<=100): flank_stage+=1
 			if army.size()<12: assault_ready=false
 			if not assault_ready:
 				target_cell=Vector2i(18,32)
 				attack_move=false
-				if army.filter(func(u): return u.position.distance_to(b.map.cell_to_world(target_cell))<220).size()>=18: assault_ready=true
+				if army.filter(func(u): return u.position.distance_to(b.map.cell_to_world(target_cell))<220).size()>=18 and (route!="raid" or flank_stage==2): assault_ready=true
 			if assault_ready:
 				target_cell=l.ENEMY_CAMP
 				target=null
 		if (army.size()>=8 or time>120) and time-last_order_time>=6:
 			var cover: Array=army
 			var engines: Array=[]
-			if phase=="counter" and assault_ready:
+			if phase=="counter" and (assault_ready or route=="raid"):
 				engines=army.filter(func(u):return u.key in ["siege_ram","siege_cata"])
 				cover=army.filter(func(u):return u.key not in ["siege_ram","siege_cata"])
 			if not cover.is_empty():
@@ -175,7 +203,9 @@ func _play_lhm(b) -> void:
 					b.select_members(cover,false);b._issue_order(b.to_screen(target.position),false);orders+=1
 				else: _click(b,cover,target_cell,attack_move)
 			if not engines.is_empty():
-				if alive(l.enemy_base) and b.is_visible_world(l.enemy_base.position):
+				if route=="raid" and flank_stage<2:
+					_click(b,engines,Vector2i(58,48) if flank_stage==0 else Vector2i(60,35))
+				elif alive(l.enemy_base) and b.is_visible_world(l.enemy_base.position):
 					b.select_members(engines,false);b._issue_order(b.to_screen(l.enemy_base.position),false);orders+=1
 				else: _click(b,engines,l.ENEMY_CAMP,true)
 			last_order_time=time
@@ -190,5 +220,9 @@ func _play_lhm(b) -> void:
 	check(l.hall==starting_hall and alive(l.hall),route+" keeps original camp alive across phases")
 	check(l.lhm_killed==12 and l.manor_fallen,route+" clears finite riders and enemy headquarters")
 	check(l.broken_count>0,route+" army performs actual hook counterplay")
-	if route=="raid": check(b.mission.has_event("lhm_supply_0") and b.mission.has_event("lhm_supply_1"),"raiding stops both escort sources")
-	play_metrics={"game_seconds":time,"strategy":"defend then regroup at rear, paid support heroes, infantry attack-move covers siege targeting HQ; orders at most every six seconds","riders_defeated":l.lhm_killed,"hook_broken":l.broken_count,"camp_hp":l.hall.hp,"song_hp":l.song.hp,"buildings_started":buildings_started,"units_queued":units_queued,"units_queued_by_key":units_queued_by_key,"ai_trained":l.ai_trained,"orders":orders,"skill_orders":skill_orders,"result":b.mission.result_snapshot(b.mission.has_event("lhm_victory")),"events":b.mission.events.keys()}
+	if route=="raid":
+		check(b.mission.has_event("lhm_supply_0") and b.mission.has_event("lhm_supply_1"),"raiding stops both escort sources")
+		check(supply_observed.size()==2 and not post_cut_spawn,"no destroyed supply post produces a later escort")
+		check(not rider_identity_changed and l.riders.size()==12 and rider_deaths.size()==12 and rider_ids.all(func(id):return rider_deaths.count(id)==1),"original twelve riders each die once; supply destruction never replaces them")
+		check(supply_observed.size()==2 and supply_observed.all(func(row):return not row.wave_sent and row.wave_time==[195.0,315.0][row.lane]),"both actual raids delay unsent cavalry by forty-five seconds")
+	play_metrics={"game_seconds":time,"strategy":route+" then regroup at rear; raid artillery moves via south then east flank before the infantry attacks from west; paid support heroes, orders at most every six seconds","flank_stage":flank_stage,"siege_choice":"siege_cata" if route=="raid" else "siege_ram","enemy_base_hp":l.enemy_base.hp if is_instance_valid(l.enemy_base) else 0,"hu_hp":l.hu.hp if is_instance_valid(l.hu) else 0,"han_hp":l.han.hp if is_instance_valid(l.han) else 0,"riders_defeated":l.lhm_killed,"hook_broken":l.broken_count,"camp_hp":l.hall.hp,"song_hp":l.song.hp,"buildings_started":buildings_started,"units_queued":units_queued,"units_queued_by_key":units_queued_by_key,"ai_trained":l.ai_trained,"orders":orders,"skill_orders":skill_orders,"result":b.mission.result_snapshot(b.mission.has_event("lhm_victory")),"events":b.mission.events.keys()}

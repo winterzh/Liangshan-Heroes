@@ -1,0 +1,222 @@
+{
+	"checks": 9,
+	"escort_transitions": [
+		{
+			"escort_ids": [],
+			"lane": 0,
+			"phase": "muster",
+			"time": 0.0
+		},
+		{
+			"escort_ids": [],
+			"lane": 1,
+			"phase": "muster",
+			"time": 0.0
+		},
+		{
+			"escort_ids": [],
+			"lane": 0,
+			"phase": "follow",
+			"time": 195.666666666661
+		},
+		{
+			"escort_ids": [],
+			"lane": 0,
+			"phase": "retreat",
+			"time": 210.26666666666
+		},
+		{
+			"escort_ids": [
+				64,
+				70
+			],
+			"lane": 1,
+			"phase": "follow",
+			"time": 315.733333333321
+		},
+		{
+			"escort_ids": [
+				64,
+				70
+			],
+			"lane": 1,
+			"phase": "retreat",
+			"time": 328.33333333332
+		}
+	],
+	"failures": [
+		"raid route wins through real economy and combat",
+		"raid clears finite riders and enemy headquarters"
+	],
+	"live_only": true,
+	"metrics": {
+		"ai_trained": 2,
+		"buildings_started": 6,
+		"camp_hp": 1500.0,
+		"enemy_base_hp": 765.300000000001,
+		"events": [
+			"lhm_supply_0",
+			"lhm_supply_1",
+			"lhm_break_1",
+			"lhm_break_2",
+			"lhm_break_3",
+			"lhm_break_4",
+			"lhm_break_5",
+			"lhm_break_6",
+			"lhm_break_7",
+			"lhm_break_8",
+			"lhm_break_9",
+			"lhm_break_10",
+			"lhm_break_11",
+			"lhm_break_12",
+			"lhm_all_hook_broken"
+		],
+		"game_seconds": 900.0,
+		"han_hp": 261.113565217391,
+		"hook_broken": 12,
+		"hu_hp": 1613.13188679089,
+		"orders": 164,
+		"result": {
+			"contract_version": 2,
+			"core_cleared": false,
+			"core_goal": "守住梁山中军，击溃十二骑连环马并摧毁官军大营。宋江与中军必须存活。",
+			"done_ids": [],
+			"goals": [
+				{
+					"id": "lhm_training",
+					"label": "教场诱骑撤步，徐宁与钩镰手协同下钩",
+					"note": "",
+					"reason": "",
+					"state": "pending"
+				},
+				{
+					"id": "lhm_hooks",
+					"label": "十二骑均先由钩镰枪破阵",
+					"note": "",
+					"reason": "",
+					"state": "pending"
+				},
+				{
+					"id": "lhm_han",
+					"label": "生擒韩滔",
+					"note": "",
+					"reason": "",
+					"state": "pending"
+				},
+				{
+					"id": "lhm_hu",
+					"label": "呼延灼败走青州",
+					"note": "",
+					"reason": "",
+					"state": "pending"
+				}
+			],
+			"missed_ids": [],
+			"pending_ids": [
+				"lhm_training",
+				"lhm_hooks",
+				"lhm_han",
+				"lhm_hu"
+			],
+			"story_complete": false,
+			"story_done": 0,
+			"story_total": 4
+		},
+		"riders_defeated": 12,
+		"siege_choice": "siege_cata",
+		"skill_orders": 20,
+		"song_hp": 280.0,
+		"strategy": "raid then regroup at rear, paid support heroes, infantry attack-move covers siege targeting HQ; orders at most every six seconds",
+		"units_queued": 100,
+		"units_queued_by_key": {
+			"gou_lian": 25,
+			"hua_rong": 4,
+			"liang_dao": 4,
+			"liang_gong": 36,
+			"liang_qiang": 22,
+			"lin_chong": 2,
+			"lou_luo": 5,
+			"siege_cata": 2
+		}
+	},
+	"original_rider_ids": [
+		36,
+		37,
+		38,
+		39,
+		40,
+		41,
+		42,
+		43,
+		44,
+		45,
+		46,
+		47
+	],
+	"passed": false,
+	"rider_deaths": [
+		38,
+		36,
+		37,
+		41,
+		39,
+		40,
+		43,
+		42,
+		44,
+		46,
+		45,
+		47
+	],
+	"route": "raid",
+	"scope": "actual raid route only; not full restore, human or performance acceptance",
+	"supply_observations": [
+		{
+			"escort_ids": [],
+			"lane": 0,
+			"live_riders": 6,
+			"rider_ids": [
+				36,
+				37,
+				38,
+				39,
+				40,
+				41,
+				42,
+				43,
+				44,
+				45,
+				46,
+				47
+			],
+			"time": 55.0000000000011,
+			"wave_sent": false,
+			"wave_time": 195.0
+		},
+		{
+			"escort_ids": [
+				64,
+				70
+			],
+			"lane": 1,
+			"live_riders": 6,
+			"rider_ids": [
+				36,
+				37,
+				38,
+				39,
+				40,
+				41,
+				42,
+				43,
+				44,
+				45,
+				46,
+				47
+			],
+			"time": 103.066666666666,
+			"wave_sent": false,
+			"wave_time": 315.0
+		}
+	]
+}

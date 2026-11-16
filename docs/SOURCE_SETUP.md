@@ -1,5 +1,8 @@
 # 源码设置与换机（2026-10-30）
 
+2026-11-16 连环马新增raid实跑入口参数；本批未改游戏代码或素材，关卡与e58f3fa3及前批防守来源同SHA。验证记录器改在Unit.died收集原十二骑ID，避免节点释放后的访问；该连接只在QA中安装。[来源与验证边界](../qa/campaign_cavalry_raid_20261116/README.md)。
+
+
 2026-11-16 连环马护军角色由既有waves/riders/source_lane派生，普通指令仍由Unit保存；Level字段结构保持，生产身份改变，旧候选资格不沿用。新增campaign_cavalry_escort.json三条四语。[本批来源与验证边界](../qa/campaign_cavalry_escort_20261116/README.md)。
 
 

@@ -1,5 +1,8 @@
 # 项目目录索引（2026-10-30）
 
+[连环马断援侧翼路线](../qa/campaign_cavalry_raid_20261116/README.md)包含两次未完成反攻与最终9项实际通关原件；复用tools/lianhuanma_escort_qa.gd和前批runner.py，参数--live-only --route raid，不重复定向夹具。
+
+
 [连环马护军配合](../qa/campaign_cavalry_escort_20261116/README.md)：定向入口tools/lianhuanma_escort_qa.gd，正常防守路线复用tools/lianhuanma_rts_test.gd，三条翻译来源assets/localization/campaign_cavalry_escort.json。
 
 

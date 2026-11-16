@@ -12,6 +12,7 @@ def main():
     modes = parser.add_mutually_exclusive_group()
     modes.add_argument('--live-only', action='store_true')
     modes.add_argument('--fixture-only', action='store_true')
+    parser.add_argument('--route', choices=['defend', 'raid'], default='defend')
     parser.add_argument('--godot', required=True, type=Path)
     parser.add_argument('--lock', required=True, type=Path,
                         help='Shared engine lock used by this workstation')
@@ -31,12 +32,13 @@ def main():
         env[key] = str(dest)
     env.update(STEAM_DISABLED='1', CAMPAIGN_QA='1', LSH_LANGUAGE='zh_CN',
                LSH_SQUAD_PROFILE=str(profile), LSH_SQUAD_REPORT=str(out / 'report.json'))
+    env['CAVALRY_ROUTE'] = args.route
     env['CAVALRY_LIVE_ONLY'] = '1' if args.live_only else '0'
     env['CAVALRY_FIXTURE_ONLY'] = '1' if args.fixture_only else '0'
     token = str(out)
     with args.lock.open('x', encoding='utf-8') as handle:
         handle.write(token)
-    receipt = {'scope': 'explicit escort fixtures only' if args.fixture_only else ('actual defend route only' if args.live_only else 'escort command fixtures and actual defend route')}
+    receipt = {'scope': 'explicit escort fixtures only' if args.fixture_only else ('actual ' + args.route + ' route only' if args.live_only else 'escort command fixtures and actual ' + args.route + ' route')}
     try:
         # Remove stale output only after owning the lock.
         (out / 'report.json').unlink(missing_ok=True)
