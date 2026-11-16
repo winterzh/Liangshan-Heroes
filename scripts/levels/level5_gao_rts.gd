@@ -250,6 +250,8 @@ func on_start(b) -> void:
 		if node!=null: workers[i].order_gather(node)
 	b.mission.begin("gao_rts","经营水寨 · 分守水陆","首批约140秒出发，后两批约330与540秒。岸军防东山关、舰队守内港；可出击拆两处补给，也可经营补兵接战。")
 	b.mission.enable_scrolling()
+	b.mission.add_map_locator("东山关防线",LAND_FRONT)
+	b.mission.add_map_locator("内港接战线",SEA_FRONT)
 	b.mission.add_map_locator("南岸建船坞",YARD_SITE)
 	b.mission.add_map_locator("北岸补给营",LAND_POST)
 	b.mission.add_map_locator("东岸官军船坞",SEA_POST)
@@ -614,6 +616,21 @@ func _wave_objective(b) -> String:
 		return "守住东山关和内港。阮小七可把首批活官船引入港汊，再由舰队合击。" if can_lure else "补齐岸军和舰队，守东山关与内港。可拆两处补给源来减少后续援军。"
 	return ""
 
+func _wave_warning(b, index: int) -> String:
+	match index:
+		0:
+			return "第一批约25秒后出发。岸军守东山关，留战船和岸弓互相支援。"
+		1:
+			var fire_goal: Dictionary = b.mission.story_goals.get("gao_fire", {})
+			if not fire_lit and not fire_abandoned and fire_goal.get("state", "") != "missed" and _count(water_groups[1]) > 0:
+				return "第二批约25秒后出发。可备火并集结两艘接应船，或用普通战船迎敌。"
+			return "第二批约25秒后出发。让普通战船接应内港，岸军继续守东山关。"
+		_:
+			if flagship_disabled:
+				return "第三批约25秒后出发。座船已停，守住水陆通路，准备击退余部。"
+			return "第三批约25秒后出发。步军留守东山关，舰队看清座船与护船的位置再接战。"
+
+
 func _update_wave_objective(b) -> void:
 	if core_ready: return
 	var objective := _wave_objective(b)
@@ -635,7 +652,7 @@ func process(b,delta: float) -> void:
 		if elapsed>=waves[i].time-25 and not waves[i].warned:
 			waves[i].warned=true
 			if _wave_has_force(i):
-				b.msg(Localize.format_text("第%d批水陆主力约25秒后出发，准备水陆两线；也可截击其集结地。", (i+1)),6)
+				b.msg(_wave_warning(b, i),6)
 		if elapsed>=waves[i].time:
 			_send_wave(b,i)
 	_flagship_guard_orders(b)

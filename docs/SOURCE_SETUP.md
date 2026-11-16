@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+高俅预警复用 waves.warned 和原有战场状态。两个定位按钮沿用通用 Mission 表现层描述符。四语载入 gao_wave_warnings.json。[高俅三批预警与定位](../qa/campaign_flagship_escort_20261116/README.md#开战前预警与两线定位)
+
 高俅撤离后失船复用既有实战驾驶。从隔离档案运行新增证据目录中的 probe.gd，可通过常规船队指令复现撤离、失船和付费重新集结。[高俅撤离后失船实跑](../qa/campaign_naval_recovery_20261116/README.md#两船安全撤离后失船)
 
 使用 `d05b01d0` 封装。离线原生启动通过，四语、四类模式和黄泥冈重进由同一编译包验证。黄泥冈首次启动前七套站姿进入缓存，重进复用，六次均可回菜单。游戏内光标使用 CPU 图像。[最新 Windows 候选](../qa/battle_entry_timing_20261116/README.md#windows-黄泥冈首帧优化发行候选)

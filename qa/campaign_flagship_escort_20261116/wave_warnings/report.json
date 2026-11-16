@@ -1,0 +1,99 @@
+{
+  "checks": 11,
+  "failures": [],
+  "locators": {
+    "东山关防线": {
+      "camera_error": 0.0,
+      "cell": [
+        34,
+        31
+      ],
+      "four_locales": true
+    },
+    "内港接战线": {
+      "camera_error": 0.0,
+      "cell": [
+        39,
+        44
+      ],
+      "four_locales": true
+    }
+  },
+  "passed": true,
+  "rendered_size": [
+    960,
+    540
+  ],
+  "scope": "existing scheduled warning and actual locator/translation bindings with a frozen battle fixture",
+  "warning_triggers": [
+    {
+      "enabled": true,
+      "expected": "第一批约25秒后出发。岸军守东山关，留战船和岸弓互相支援。",
+      "no_early_warning": true,
+      "scheduled_at_25_seconds": true,
+      "single_message": true,
+      "wave": 1
+    },
+    {
+      "enabled": true,
+      "expected": "第二批约25秒后出发。可备火并集结两艘接应船，或用普通战船迎敌。",
+      "no_early_warning": true,
+      "scheduled_at_25_seconds": true,
+      "single_message": true,
+      "wave": 2
+    },
+    {
+      "enabled": true,
+      "expected": "第二批约25秒后出发。让普通战船接应内港，岸军继续守东山关。",
+      "no_early_warning": true,
+      "scheduled_at_25_seconds": true,
+      "single_message": true,
+      "wave": 2
+    },
+    {
+      "enabled": true,
+      "expected": "第三批约25秒后出发。步军留守东山关，舰队看清座船与护船的位置再接战。",
+      "no_early_warning": true,
+      "scheduled_at_25_seconds": true,
+      "single_message": true,
+      "wave": 3
+    },
+    {
+      "enabled": true,
+      "expected": "第三批约25秒后出发。座船已停，守住水陆通路，准备击退余部。",
+      "no_early_warning": true,
+      "scheduled_at_25_seconds": true,
+      "single_message": true,
+      "wave": 3
+    },
+    {
+      "enabled": false,
+      "expected": "第三批约25秒后出发。座船已停，守住水陆通路，准备击退余部。",
+      "no_early_warning": true,
+      "scheduled_at_25_seconds": true,
+      "single_message": true,
+      "wave": 3
+    }
+  ],
+  "source_sha256": {
+    "assets/localization/catalog.json": "852e59452a3979420d572820f0c4013ccbbd25bc169ab24bc3bdbf4865289b33",
+    "assets/localization/gao_wave_warnings.json": "a286b34a57ac310b7bed41a6d46e66c1a106550140cc1653f879b751de00c673",
+    "scripts/levels/level5_gao_rts.gd": "d68b8cda94dfc2d151fa42eb72319b7fc97a33bc5e015c678510fd0f15ee93f1"
+  },
+  "exit_code": 0,
+  "seconds": 20.523,
+  "source_commit": "2552a1150d781700b800ef7a6acc55811b25c6af",
+  "log_sha256": "4733d6a5f78683eda0e53a65ab44cee87490c4dbdcb5f24bcf4ebedcdc1363b8",
+  "probe_sha256": "5676dc71248337a253f732e7d73c0663ccc73e3ada060437c4d142e2ea361b9e",
+  "translation_catalog": {
+    "previous_entries": 4852,
+    "entries": 4859,
+    "added": 7,
+    "unresolved_conflicts": 0
+  },
+  "git_evidence_sha256": {
+    "probe.gd": "5de57c6f69767ad8be91421a4be927d54d2f28fc639953194aabe608f8585f8c",
+    "fixture_checks.log": "d947390428a48c3d08a69629572e5bd8b6a009d23ff0cb7ed4846eb6f596ab46"
+  },
+  "first_two_fixture_attempts": "External fixture error resolving or decoding the presentation adapter; corrected in the final fixture without a game source change."
+}
