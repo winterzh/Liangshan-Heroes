@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[高俅第二批进港](../qa/campaign_flagship_escort_20261116/second_wave_front/)保存前港目的地检查、引擎日志和夹具来源哈希。
+
 [祝家庄强攻任务提示](../qa/campaign_siege_20261116/frontal_briefing/)保存任务交接检查、引擎日志、回执和源码哈希。
 
 [祝家庄纯强攻核心胜利](../qa/campaign_siege_20261116/rush_economy_observation/)收录外营保全、押送伤亡和矿量占用的原始战报与收据。

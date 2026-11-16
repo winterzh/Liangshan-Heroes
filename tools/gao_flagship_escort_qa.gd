@@ -31,6 +31,14 @@ func _fixture() -> void:
 	b.set_process(false);b.set_physics_process(false);b.camera.set_process(false)
 	for unit in b.units: unit.set_physics_process(false)
 	var l=b.level
+	var chain: Array=l.water_groups[1]
+	var chain_positions: Array=chain.map(func(u): return u.position)
+	l._send_wave(b,1)
+	var berths := {}
+	for ship in chain: berths[b.map.world_to_cell(ship._amove_dest)]=true
+	check(berths.size()==5 and l.CHAIN_FRONT.all(func(cell): return berths.has(cell))
+		and chain.all(func(u): return u._state==u.ST_AMOVE)
+		and chain_positions==chain.map(func(u): return u.position),"second wave uses five distinct navigable attack-move berths without moving the ships directly")
 	var guards: Array=l._flagship_guards()
 	var ids: Array=l.water_groups[2].map(func(u): return u.entity_id)
 	check(guards==[l.water_groups[2][4],l.water_groups[2][5]] and ids.size()==6,"only two original rear ships become guards; third fleet still has six identities")

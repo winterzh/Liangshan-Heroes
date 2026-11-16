@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+高俅第二批连船使用既有 `water_groups[1]` 顺序分配前港水面，借用水面体积检查及普通攻击移动。角色按原批次派生，新增查看文案在 `campaign_fire_readiness.json`，目录与祝家庄的新条目逐项合入。[定向检查原件](../qa/campaign_flagship_escort_20261116/second_wave_front/)。
+
 祝家庄强攻提示使用现有任务标题与目标刷新，采用 `campaign_siege.json` 同步四语运行目录，未新增档案字段。源码身份发生变化，旧冻结档案验证仍归其原来源。[任务提示检查](../qa/campaign_siege_20261116/frontal_briefing/)。
 
 祝家庄 `--route rush` 记录本营透支前后的矿量、采集分配、交易与其他收入。集市改用实际建筑热键，条件满足才成交，本局未触发。原关卡来源沿用前一批。[实跑原件](../qa/campaign_siege_20261116/rush_economy_observation/)。

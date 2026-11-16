@@ -10,6 +10,7 @@ const LAND_POST := Vector2i(26,7)
 const SEA_POST := Vector2i(55,34)
 const LAND_FRONT := Vector2i(34,31)
 const SEA_FRONT := Vector2i(39,44)
+const CHAIN_FRONT := [Vector2i(40,43),Vector2i(44,43),Vector2i(40,45),Vector2i(44,45),Vector2i(42,44)]
 const LANDING := Vector2i(20,49)
 const LANDING_WATER := Vector2i(22,52)
 const LIU_RETURN := Vector2i(20,52) # Separate from the prisoner handover marker.
@@ -260,11 +261,15 @@ func _retry(b,key: String,text: String) -> void:
 func _send_wave(b,index: int) -> void:
 	if waves[index].sent: return
 	waves[index].sent=true
-	for u in water_groups[index]:
-		if index==2 and _flagship_guards().has(u): continue
-		if alive(u):
-			u.set_stance(Unit.STANCE_AGGRO)
-			u.order_amove(b.map.cell_to_world(lure_cell if index==0 and lure_started else SEA_FRONT))
+	var guards := _flagship_guards() if index==2 else []
+	for slot in range(water_groups[index].size()):
+		var u: Unit=water_groups[index][slot]
+		if not alive(u) or u in guards: continue
+		var destination := lure_cell if index==0 and lure_started else SEA_FRONT
+		if index==1 and slot<CHAIN_FRONT.size() and Naval.clear_water(b.map,CHAIN_FRONT[slot],u.radius):
+			destination=CHAIN_FRONT[slot]
+		u.set_stance(Unit.STANCE_AGGRO)
+		u.order_amove(b.map.cell_to_world(destination))
 	for u in land_groups[index]:
 		if alive(u):
 			u.order_amove(b.map.cell_to_world(LAND_FRONT))
@@ -348,6 +353,8 @@ func unit_tactical_hint(b,u) -> String:
 	if not is_instance_valid(u): return ""
 	if u.faction==1 and _flagship_guards().has(u):
 		return Localize.text("座船护航 · 随座船集结与推进\n座船停航后仍守卫附近水面。")
+	if u.faction==1 and water_groups.size()>1 and u in water_groups[1]:
+		return Localize.text("第二批连船 · 前港列阵\n等多艘进入火区，再让刘唐举火。")
 	if u.faction!=0: return ""
 	if u.key not in ["liu_tang","liu_tang_fireboat","ruan_xiaoer_boat","ruan_xiaowu_boat"]: return ""
 	if b.mission.has_event("gao_liu_returned") and u.key=="liu_tang":
