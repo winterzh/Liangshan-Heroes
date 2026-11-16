@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[祝家庄强攻任务提示](../qa/campaign_siege_20261116/frontal_briefing/)保存任务交接检查、引擎日志、回执和源码哈希。
+
 [祝家庄纯强攻核心胜利](../qa/campaign_siege_20261116/rush_economy_observation/)收录外营保全、押送伤亡和矿量占用的原始战报与收据。
 
 [连环马器械预算复跑](../qa/campaign_resume_current_20261116/evidence/protected_drill_candidate/counter_budget_stall/)保存四轮反攻、补矿命令及同工人伐木命令记录。

@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+祝家庄强攻提示使用现有任务标题与目标刷新，采用 `campaign_siege.json` 同步四语运行目录，未新增档案字段。源码身份发生变化，旧冻结档案验证仍归其原来源。[任务提示检查](../qa/campaign_siege_20261116/frontal_briefing/)。
+
 祝家庄 `--route rush` 记录本营透支前后的矿量、采集分配、交易与其他收入。集市改用实际建筑热键，条件满足才成交，本局未触发。原关卡来源沿用前一批。[实跑原件](../qa/campaign_siege_20261116/rush_economy_observation/)。
 
 连环马此轮在前两次尾段基础上由 `--retry-flank-tail` 核对侧翼未触发的历史报告与同一再保存槽，再启终局。外部驾驶检查在生产工坊实际扣费，并在反攻阶段为可见金矿尝试安排工人。命令账证明原优先采木策略会覆盖补矿指令。[复跑原件](../qa/campaign_resume_current_20261116/evidence/protected_drill_candidate/counter_budget_stall/)。

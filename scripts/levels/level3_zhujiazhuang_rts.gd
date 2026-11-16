@@ -563,6 +563,8 @@ func _refresh_stage(b) -> void:
 	elif stage == "siege":
 		heading = "第三打 · 攻庄救人"
 		objective = "攻破大营、救时迁回营。内应和正面器械都可破局；营地与战果保留。"
+		if main_breached and not supply_cut:
+			objective = "正门已破。留兵守前营，护送器械破营，救时迁回营。缺金可在集市卖木，也可转攻外营断援。"
 	if _finish_ready():
 		heading = "收军 · 时迁已归营"
 		objective = "宋江到前营收军标记即可获胜；也可先接回其余好汉，再收军。无需清空敌军。"

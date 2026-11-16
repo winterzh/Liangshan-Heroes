@@ -95,6 +95,16 @@ func _run() -> void:
 	for member in squad: member.position = first_target
 	level._gate_defense_tick(b, 0.5)
 	check("visible arrived guards settle without healing", level.defense_announced and level.defense_state == "guard" and squad[0].last_order == "stop" and is_equal_approx(squad[0].hp, squad[0].max_hp * 0.4))
+	level.main_breached = true
+	level.outpost.hp = level.outpost.max_hp
+	level._refresh_stage(b)
+	var frontal_plan := b.mission.objective
+	level.supply_cut = true
+	level._refresh_stage(b)
+	check("frontal breach explains camp defense and market until supply is cut",
+		"守前营" in frontal_plan and "集市卖木" in frontal_plan and "断援" in frontal_plan
+		and "集市卖木" not in b.mission.objective and b.mission.active_action_id == "zhu_rts_rescue")
+	level.supply_cut = false
 	level.hall = level.song
 	level.prisoners.append(squad[0])
 	level.prisoners_freed = true
