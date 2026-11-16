@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+当前八幕战役的阶段证据与待验项从 [路线图当前进度](CAMPAIGN_ROADMAP_20261116.md#当前落地进度) 查找，逐批过程记录保留在其后。
+
 若已通过的首次导入在收尾时留下其自有引擎锁，在原续玩宿主命令追加 `--recover-cold-lock`。工具复核原收据、导入日志、生成身份及锁的归属，引擎空闲时启动实际验证。[参数与夹具](../qa/campaign_resume_current_20261116/evidence/current_stable_07df0d96/README.md#首次导入锁恢复)
 
 续玩候选 `ad20ef6c` 基于 `07df0d96`，临时补入 25 个经核对的 `.gd.uid`，复建条目见[候选与校验记录](../qa/campaign_resume_current_20261116/evidence/current_stable_07df0d96/README.md)。
