@@ -1,5 +1,8 @@
 # 项目目录索引（2026-10-30）
 
+[高俅单位绘制对照](../qa/campaign_sustained_performance_20261116/unit_draw_work.json)包含共享防守轨迹、四语标签像素摘要及分段耗时。
+
+
 [高俅水陆接战帧分段](../qa/campaign_sustained_performance_20261116/sustained_frame_splits.json)含真实回调累计、165 秒统计与慢帧字段。
 
 

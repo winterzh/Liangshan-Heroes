@@ -4135,12 +4135,13 @@ func _campaign_wine_carry_state() -> String:
 ## 逐帧动画接口：若 assets/anim/<key>_<state>.png 存在则播放帧，否则返回单张立绘。
 ## 帧数任意：attack 随挥击进度播一遍，walk 按步幅相位均匀映射整条带，idle 缓慢循环。
 func _anim_frame_for_state(fallback: Texture2D) -> Texture2D:
+	var variant := visual_art_variant()
 	_frame_directional = false
 	if story_assistance_active():
-		var assisted: Array = Art.unit_anim_frames(key,"assisted",animation_direction,visual_art_variant())
+		var assisted: Array = Art.unit_anim_frames(key,"assisted",animation_direction,variant)
 		if not assisted.is_empty():
 			_real_frames = true
-			_frame_directional = Art.unit_anim_uses_directional_source(key, "assisted", animation_direction, visual_art_variant())
+			_frame_directional = Art.unit_anim_uses_directional_source(key, "assisted", animation_direction, variant)
 			var phase := fposmod(_anim_t,TAU)/TAU if _move_blend>0.3 else 0.0
 			return assisted[int(phase*assisted.size())%assisted.size()]
 	var push_state := _campaign_tribute_push_state()
@@ -4153,22 +4154,22 @@ func _anim_frame_for_state(fallback: Texture2D) -> Texture2D:
 			return push_frames[int(push_phase * push_frames.size()) % push_frames.size()]
 	var carry_state := _campaign_wine_carry_state()
 	if not carry_state.is_empty():
-		var carried_frames: Array = Art.unit_anim_frames(key, carry_state, animation_direction, visual_art_variant())
+		var carried_frames: Array = Art.unit_anim_frames(key, carry_state, animation_direction, variant)
 		if not carried_frames.is_empty():
 			_real_frames = true
-			_frame_directional = Art.unit_anim_uses_directional_source(key, carry_state, animation_direction, visual_art_variant())
+			_frame_directional = Art.unit_anim_uses_directional_source(key, carry_state, animation_direction, variant)
 			var carry_phase := fposmod(_anim_t, TAU) / TAU if _move_blend > 0.3 else 0.0
 			return carried_frames[int(carry_phase * carried_frames.size()) % carried_frames.size()]
 	if String(get_meta("story_pose", "")) == "intercept":
-		var intercept: Array = Art.unit_anim_frames(key, "intercept", animation_direction, visual_art_variant())
+		var intercept: Array = Art.unit_anim_frames(key, "intercept", animation_direction, variant)
 		if not intercept.is_empty():
-			_frame_directional = Art.unit_anim_uses_directional_source(key, "intercept", animation_direction, visual_art_variant())
+			_frame_directional = Art.unit_anim_uses_directional_source(key, "intercept", animation_direction, variant)
 			return intercept[0]
 	if String(get_meta("story_pose", "")) in ["windup", "rush_windup"] \
 			and art_variant == "jiang_menshen_fists":
-		var windup: Array = Art.unit_anim_frames(key, "attack", animation_direction, visual_art_variant())
+		var windup: Array = Art.unit_anim_frames(key, "attack", animation_direction, variant)
 		if not windup.is_empty():
-			_frame_directional = Art.unit_anim_uses_directional_source(key, "attack", animation_direction, visual_art_variant())
+			_frame_directional = Art.unit_anim_uses_directional_source(key, "attack", animation_direction, variant)
 			return windup[0]
 	var ak := _anim_key()
 	if key in ["ruan_xiaoqi", "liu_tang", "ruan_xiaowu"] and art_variant.is_empty() and _cast_t > 0.0:
@@ -4178,44 +4179,44 @@ func _anim_frame_for_state(fallback: Texture2D) -> Texture2D:
 			_frame_directional = Art.unit_anim_uses_directional_source(ak, "attack", animation_direction, "")
 			return ready[0]
 	if _shi_en_hurt_t > 0.0 and ((key in ["shi_en", "zhang_tuanlian", "ruan_xiaoqi", "liu_tang", "ruan_xiaowu", "gongsun_sheng"] and art_variant.is_empty()) or (key in ["ruan_xiaoqi", "liu_tang", "ruan_xiaowu", "ruan_xiaoer", "chao_gai", "wu_yong", "gongsun_sheng"] and art_variant == "hn_" + key)):
-		var recoil: Array = Art.unit_anim_frames(ak, "hurt", animation_direction, visual_art_variant())
+		var recoil: Array = Art.unit_anim_frames(ak, "hurt", animation_direction, variant)
 		if not recoil.is_empty():
 			_real_frames = true
-			_frame_directional = Art.unit_anim_uses_directional_source(ak, "hurt", animation_direction, visual_art_variant())
+			_frame_directional = Art.unit_anim_uses_directional_source(ak, "hurt", animation_direction, variant)
 			var phase := clampf(1.0 - _shi_en_hurt_t / SHI_EN_HURT_DUR, 0.0, 0.999)
 			return recoil[int(phase * recoil.size())]
 	if _flinch.length_squared() > 1.0:
-		var hurt: Array = Art.unit_anim_frames(ak, "hurt", animation_direction, visual_art_variant())
+		var hurt: Array = Art.unit_anim_frames(ak, "hurt", animation_direction, variant)
 		if not hurt.is_empty():
-			_frame_directional = Art.unit_anim_uses_directional_source(ak, "hurt", animation_direction, visual_art_variant())
+			_frame_directional = Art.unit_anim_uses_directional_source(ak, "hurt", animation_direction, variant)
 			return hurt[0]
 	# 出招优先：若有 attack 帧带就同步挥击进度播放
 	if _lunge > 0.0:
 		# 采矿/采集时：优先用专属「采矿」帧带（如喽啰挥锄凿地），无则退回攻击帧
 		if _state == ST_GATHER:
-			var gf: Array = Art.unit_anim_frames(ak, "gather", animation_direction, visual_art_variant())
+			var gf: Array = Art.unit_anim_frames(ak, "gather", animation_direction, variant)
 			if not gf.is_empty():
 				_real_frames = true
-				_frame_directional = Art.unit_anim_uses_directional_source(ak, "gather", animation_direction, visual_art_variant())
+				_frame_directional = Art.unit_anim_uses_directional_source(ak, "gather", animation_direction, variant)
 				var gph := clampf(1.0 - _lunge, 0.0, 0.999)
 				return gf[int(gph * gf.size()) % gf.size()]
-		var af: Array = Art.unit_anim_frames(ak, "attack", animation_direction, visual_art_variant())
+		var af: Array = Art.unit_anim_frames(ak, "attack", animation_direction, variant)
 		if not af.is_empty():
 			_real_frames = true
-			_frame_directional = Art.unit_anim_uses_directional_source(ak, "attack", animation_direction, visual_art_variant())
+			_frame_directional = Art.unit_anim_uses_directional_source(ak, "attack", animation_direction, variant)
 			var ph := clampf(1.0 - _lunge, 0.0, 0.999)       # 0→1 一遍挥击
 			return af[int(ph * af.size()) % af.size()]
 	# 施法抬手：借用攻击帧带做「抬手蓄势」姿（不结算伤害），停在挥击中段=举起待发
 	if _cast_t > 0.0:
-		var ac: Array = Art.unit_anim_frames(ak, "attack", animation_direction, visual_art_variant())
+		var ac: Array = Art.unit_anim_frames(ak, "attack", animation_direction, variant)
 		if not ac.is_empty():
 			_real_frames = true
-			_frame_directional = Art.unit_anim_uses_directional_source(ak, "attack", animation_direction, visual_art_variant())
+			_frame_directional = Art.unit_anim_uses_directional_source(ak, "attack", animation_direction, variant)
 			var cph := clampf(1.0 - _cast_t / _cast_dur, 0.0, 1.0) * 0.55   # 只播到挥击中段
 			return ac[int(cph * ac.size()) % ac.size()]
 	var moving := _move_blend > 0.3
 	var state := "walk" if moving else "idle"
-	var frames: Array = Art.unit_anim_frames(ak, state, animation_direction, visual_art_variant())
+	var frames: Array = Art.unit_anim_frames(ak, state, animation_direction, variant)
 	if frames.is_empty() and not moving:
 		# 无专门 idle 帧时，用走循环里「双腿并拢」的过渡帧当静止姿，
 		# 确保静止与行走是同一套美术（否则会和旧静态图集立绘的大小/画风对不上 → 起停跳变）
@@ -4227,7 +4228,7 @@ func _anim_frame_for_state(fallback: Texture2D) -> Texture2D:
 		_frame_directional = false
 		return fallback
 	_real_frames = true
-	_frame_directional = Art.unit_anim_uses_directional_source(ak, state, animation_direction, visual_art_variant())
+	_frame_directional = Art.unit_anim_uses_directional_source(ak, state, animation_direction, variant)
 	var n := frames.size()
 	var t := (fposmod(_anim_t, TAU) / TAU) if moving else (fposmod(_idle_t * 1.4, TAU) / TAU)
 	return frames[int(t * n) % n]
@@ -4254,7 +4255,8 @@ func _building_shadow_texture(visible_texture: Texture2D, scoped_texture: Textur
 
 
 func _draw() -> void:
-	var tex: Texture2D = Art.unit_texture(key, visual_art_variant(), animation_direction)
+	var variant := visual_art_variant()
+	var tex: Texture2D = Art.unit_texture(key, variant, animation_direction)
 	if setup_def.has("campaign_object"):
 		var prop := Art.campaign_object_texture(String(setup_def.campaign_object), String(get_meta("ship_state", "default")), animation_direction)
 		if prop != null:
@@ -4364,8 +4366,8 @@ func _draw() -> void:
 
 	# 没有静态图集格、但放了逐帧走循环的单位（喽啰、梁山马军）也要走精灵绘制，
 	# 否则会卡在占位符——_anim_frame_for_state 在 tex 为 null 时用走循环帧当静止/行走姿。
-	var has_walk := not Art.unit_anim_frames(_anim_key(), "walk", animation_direction, visual_art_variant()).is_empty()
-	var as_sprite := not is_building and (tex != null or has_walk)
+	var as_sprite := not is_building and (tex != null \
+		or not Art.unit_anim_frames(_anim_key(), "walk", animation_direction, variant).is_empty())
 	var tint := Color(1.4, 1.2, 1.1) if _flash > 0.0 else Color.WHITE
 	if _hex_t > 0.0 and not is_building and not _dying:
 		_draw_hex_critter()   # 变形术：以小猪替身取代本体立绘
@@ -4389,9 +4391,9 @@ func _draw() -> void:
 	if (is_hero or is_building) and not _dying and not preload("res://scripts/campaign_cart_captions.gd").world_labels_owned(self):
 		var f := ThemeDB.fallback_font
 		var ty := bar_y - 6.0
-		UITheme.draw_compact_label(self, f, Vector2(-49.0, ty + 1.0), Localize.text(display_name), 100.0, 13, Color(0, 0, 0, 0.8))
 		var nc := Color("ffd866") if faction == FACTION_LIANG else Color("ff8866")
-		UITheme.draw_compact_label(self, f, Vector2(-50.0, ty), Localize.text(display_name), 100.0, 13, nc)
+		UITheme.draw_compact_label(self, f, Vector2(-50.0, ty), Localize.text(display_name), 100.0, 13, nc,
+			Vector2.ONE, Color(0, 0, 0, 0.8))
 		# 驻军占用徽标：建筑里有兵时在名字上方显示「▣ N/容量」，一眼看出驻军情况
 		if is_building and not passengers.is_empty():
 			var gt := "▣ %d/%d" % [passengers.size(), garrison_cap]

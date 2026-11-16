@@ -170,13 +170,19 @@ static func apply_language_font(locale: String) -> void:
 
 ## Custom-drawn command cards have a fixed footprint. Preserve a readable font
 ## and mark clipped names explicitly; the hover/long-press card keeps full text.
-static func draw_compact_label(canvas: CanvasItem, font: Font, position: Vector2, text: String, width: float, font_size: int, color: Color) -> void:
+static func draw_compact_label(canvas: CanvasItem, font: Font, position: Vector2, text: String,
+		width: float, font_size: int, color: Color, shadow_offset := Vector2.ZERO,
+		shadow_color := Color.TRANSPARENT) -> void:
 	var actual_size := font_size
-	while actual_size > 11 and font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, actual_size).x > width:
+	var text_width := font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, actual_size).x
+	while actual_size > 11 and text_width > width:
 		actual_size -= 1
+		text_width = font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, actual_size).x
 	var shown := text
-	if font.get_string_size(shown, HORIZONTAL_ALIGNMENT_LEFT, -1, actual_size).x > width:
+	if text_width > width:
 		while not shown.is_empty() and font.get_string_size(shown + "…", HORIZONTAL_ALIGNMENT_LEFT, -1, actual_size).x > width:
 			shown = shown.left(shown.length() - 1)
 		shown += "…"
+	if shadow_color.a > 0.0:
+		canvas.draw_string(font, position + shadow_offset, shown, HORIZONTAL_ALIGNMENT_CENTER, width, actual_size, shadow_color)
 	canvas.draw_string(font, position, shown, HORIZONTAL_ALIGNMENT_CENTER, width, actual_size, color)
