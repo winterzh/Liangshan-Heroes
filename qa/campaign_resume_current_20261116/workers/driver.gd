@@ -67,6 +67,9 @@ func economy_step() -> void:
 	if battle._run_clock._next_tick < next_economy_tick: return
 	next_economy_tick = battle._run_clock._next_tick + 75
 	if not siege_finisher_active():
+		if await_counter_support():
+			policy._mine_idle_workers(battle)
+			return
 		if needs_counter_ram_budget():
 			policy._mine_idle_workers(battle)
 		else:
@@ -90,6 +93,27 @@ func economy_step() -> void:
 			policy.units_queued += 1
 			policy.units_queued_by_key["siege_cata"] = int(policy.units_queued_by_key.get("siege_cata", 0)) + 1
 		return
+
+func await_counter_support() -> bool:
+	var level: Variant = battle.level
+	if level.lhm_killed != 12 or not alive(level.hall) or not alive(level.enemy_base): return false
+	var hall: Variant = level.hall
+	if not hall._train_queue.is_empty(): return false
+	for key: String in ["lin_chong", "hua_rong"]:
+		var reason: String = battle._train_block_reason(hall, key)
+		if reason == "resources": return true
+		if not reason.is_empty(): continue
+		var gold: int = battle.gold
+		var wood: int = battle.wood
+		if not battle.queue_train(hall, key, false): continue
+		var definition: Dictionary = battle._defs[key]
+		check(gold - battle.gold == int(definition.cost_gold) and wood - battle.wood == int(definition.cost_wood),
+			"counterattack support hero pays actual hall costs: " + key)
+		policy.units_queued += 1
+		policy.units_queued_by_key[key] = int(policy.units_queued_by_key.get(key, 0)) + 1
+		record_action("train", [hall], {"key":key, "gold_spent":gold-battle.gold, "wood_spent":wood-battle.wood, "purpose":"counter_support_hero"})
+		return false
+	return false
 
 func needs_counter_ram_budget() -> bool:
 	var level: Variant = battle.level
@@ -534,7 +558,8 @@ func natural_victory() -> void:
 				var rams_rallied: int = rallied.filter(func(u): return u.key == "siege_ram").size() + staged.size()
 				var rams_ok: bool = rams_rallied >= 1 or not base_alive
 				# v25: launch at >=18 rallied of a >=20 strike (or >=14 after 240s), never while Huyan Zhuo is near.
-				if rams_ok and not bool(get_meta("v25_hu_near", false)) and ((rallied.size() >= 18 and strike.size() >= 20) or (rallied.size() >= 14 and waited_s >= 240.0)):
+				var front_hero_ready: bool = han_captured or rallied.any(func(u): return u.is_hero)
+				if rams_ok and front_hero_ready and not bool(get_meta("v25_hu_near", false)) and ((rallied.size() >= 18 and strike.size() >= 20) or (rallied.size() >= 14 and waited_s >= 240.0)):
 					wave += 1
 					set_meta("v22_wave", wave)
 					set_meta("v22_launched", true)
@@ -547,6 +572,12 @@ func natural_victory() -> void:
 					var off: Array = strike.filter(func(u): return u.position.distance_to(rally_w) > 96.0 and u not in staged)
 					if not off.is_empty(): policy.move(battle, off, rally, false)
 			if launched:
+				if not han_captured and alive(level.han) and level.han.fog_visible:
+					var shooters: Array = nonram.filter(func(u): return u.is_ranged \
+						and u.position.distance_to(level.han.position) <= u.atk_range + 140.0)
+					if not shooters.is_empty():
+						policy.target(battle, shooters, level.han, "counter_han_volley")
+						nonram = nonram.filter(func(u): return u not in shooters)
 				var esc: Variant = null
 				for e in battle.units:
 					if not alive(e) or e.faction != 1 or e.is_building or not e.fog_visible: continue

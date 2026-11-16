@@ -81,8 +81,8 @@ def verified_retry(old, original, tail):
     return original['steps'] + prior['steps'][:1], original['reports'] + prior['reports'][:1], pins, failed['pid']
 
 
-ASSAULT_RECEIPT_KEYS = ('retry_assault_tail', 'retry_flank_tail', 'retry_budget_tail')
-ASSAULT_SOURCE_COMMITS = ('0daa30b3', 'ef4ec074', 'cc6efe59')
+ASSAULT_RECEIPT_KEYS = ('retry_assault_tail', 'retry_flank_tail', 'retry_budget_tail', 'retry_reserve_tail')
+ASSAULT_SOURCE_COMMITS = ('0daa30b3', 'ef4ec074', 'cc6efe59', 'd81ccd63')
 
 
 def verify_assault_stall(old, original, lure_tail, assault_tail, pins, failed_pids, previous=()):
@@ -318,21 +318,17 @@ if __name__ == '__main__':
     parser.add_argument('--batch', type=Path, required=True)
     parser.add_argument('--godot', type=Path, required=True)
     parser.add_argument('--lock', type=Path, required=True)
-    parser.add_argument('--retry-lure-tail', type=Path)
-    parser.add_argument('--retry-assault-tail', type=Path)
-    parser.add_argument('--retry-flank-tail', type=Path)
-    parser.add_argument('--retry-budget-tail', type=Path)
+    retry_keys = ('retry_lure_tail', *ASSAULT_RECEIPT_KEYS)
+    for key in retry_keys:
+        parser.add_argument('--' + key.replace('_', '-'), type=Path)
     args = parser.parse_args()
-    if args.retry_lure_tail:
-        args.retry_lure_tail = args.retry_lure_tail.absolute()
-    if args.retry_assault_tail:
-        p.need(args.retry_lure_tail is not None, 'Assault retry requires the original re-save tail')
-        args.retry_assault_tail = args.retry_assault_tail.absolute()
-    if args.retry_flank_tail:
-        p.need(args.retry_assault_tail is not None, 'Flank retry requires the prior assault tail')
-        args.retry_flank_tail = args.retry_flank_tail.absolute()
-    if args.retry_budget_tail:
-        p.need(args.retry_flank_tail is not None, 'Budget retry requires the prior flank tail')
-        args.retry_budget_tail = args.retry_budget_tail.absolute()
+    previous = None
+    for key in retry_keys:
+        tail = getattr(args, key)
+        if tail is not None:
+            p.need(key == 'retry_lure_tail' or previous is not None,
+                   'Retry tails require the preceding documented attempt')
+            setattr(args, key, tail.absolute())
+        previous = tail
     p.need(args.batch.is_absolute() and args.lock.is_absolute(), 'Absolute batch and lock required')
     execute(args)

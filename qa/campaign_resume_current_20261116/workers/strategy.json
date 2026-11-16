@@ -4,7 +4,7 @@
   "original_commit": "f23e3b287fd66973abcbc74f4b4f537c1ec0ff5f",
   "original_sha256": "1c758b85424fa6c98e17a6b418698aa0ec2ca61b90ce5c245195f6218730c423",
   "derived_path": "driver_strategy.gd",
-  "derived_sha256": "06c4fcb7fba572f9e2f4b652f54828bae0bfa3563f705cda0d495807320483a1",
+  "derived_sha256": "a3e2625029c92d737c34882a6e7eb302d101fccfea7f050c62732c9a784fecbe",
   "patches": [
     {
       "before": "\t\teconomy_step()\n\t\tvar army: Array = battle.units.filter",
@@ -113,6 +113,22 @@
     {
       "before": "\t\t\t\t\tif base_alive:\n\t\t\t\t\t\t# v26: rams stay on the strike's eastward push and drive to the\n\t\t\t\t\t\t# manor immediately (do not wait for Han Tao's capture).\n\t\t\t\t\t\tpolicy.target(battle, srams, level.enemy_base, \"v26_ram_manor\")\n\t\t\t\t\telif not strike.is_empty():",
       "after": "\t\t\t\t\tif base_alive and not han_captured:\n\t\t\t\t\t\t# Infantry contests the generals while siege engines stay at the rally.\n\t\t\t\t\t\tvar exposed: Array = srams.filter(func(u): return u.position.distance_to(rally_w) > 96.0)\n\t\t\t\t\t\tif not exposed.is_empty(): policy.move(battle, exposed, rally)\n\t\t\t\t\telif base_alive:\n\t\t\t\t\t\tpolicy.target(battle, srams, level.enemy_base, \"escorted_counter_ram\")\n\t\t\t\t\telif not strike.is_empty():"
+    },
+    {
+      "before": "\tif not siege_finisher_active():\n\t\tif needs_counter_ram_budget():",
+      "after": "\tif not siege_finisher_active():\n\t\tif await_counter_support():\n\t\t\tpolicy._mine_idle_workers(battle)\n\t\t\treturn\n\t\tif needs_counter_ram_budget():"
+    },
+    {
+      "before": "func needs_counter_ram_budget() -> bool:",
+      "after": "func await_counter_support() -> bool:\n\tvar level: Variant = battle.level\n\tif level.lhm_killed != 12 or not alive(level.hall) or not alive(level.enemy_base): return false\n\tvar hall: Variant = level.hall\n\tif not hall._train_queue.is_empty(): return false\n\tfor key: String in [\"lin_chong\", \"hua_rong\"]:\n\t\tvar reason: String = battle._train_block_reason(hall, key)\n\t\tif reason == \"resources\": return true\n\t\tif not reason.is_empty(): continue\n\t\tvar gold: int = battle.gold\n\t\tvar wood: int = battle.wood\n\t\tif not battle.queue_train(hall, key, false): continue\n\t\tvar definition: Dictionary = battle._defs[key]\n\t\tcheck(gold - battle.gold == int(definition.cost_gold) and wood - battle.wood == int(definition.cost_wood),\n\t\t\t\"counterattack support hero pays actual hall costs: \" + key)\n\t\tpolicy.units_queued += 1\n\t\tpolicy.units_queued_by_key[key] = int(policy.units_queued_by_key.get(key, 0)) + 1\n\t\trecord_action(\"train\", [hall], {\"key\":key, \"gold_spent\":gold-battle.gold, \"wood_spent\":wood-battle.wood, \"purpose\":\"counter_support_hero\"})\n\t\treturn false\n\treturn false\n\nfunc needs_counter_ram_budget() -> bool:"
+    },
+    {
+      "before": "\t\t\tif launched:\n\t\t\t\tvar esc: Variant = null",
+      "after": "\t\t\tif launched:\n\t\t\t\tif not han_captured and alive(level.han) and level.han.fog_visible:\n\t\t\t\t\tvar shooters: Array = nonram.filter(func(u): return u.is_ranged \\\n\t\t\t\t\t\tand u.position.distance_to(level.han.position) <= u.atk_range + 140.0)\n\t\t\t\t\tif not shooters.is_empty():\n\t\t\t\t\t\tpolicy.target(battle, shooters, level.han, \"counter_han_volley\")\n\t\t\t\t\t\tnonram = nonram.filter(func(u): return u not in shooters)\n\t\t\t\tvar esc: Variant = null"
+    },
+    {
+      "before": "\t\t\t\tif rams_ok and not bool(get_meta(\"v25_hu_near\", false)) and ((rallied.size() >= 18 and strike.size() >= 20) or (rallied.size() >= 14 and waited_s >= 240.0)):",
+      "after": "\t\t\t\tvar front_hero_ready: bool = han_captured or rallied.any(func(u): return u.is_hero)\n\t\t\t\tif rams_ok and front_hero_ready and not bool(get_meta(\"v25_hu_near\", false)) and ((rallied.size() >= 18 and strike.size() >= 20) or (rallied.size() >= 14 and waited_s >= 240.0)):"
     }
   ],
   "original_all_goal_save_clock_typed_assertions_unchanged": true,
