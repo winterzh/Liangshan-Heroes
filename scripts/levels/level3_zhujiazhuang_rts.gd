@@ -553,8 +553,8 @@ func _gate_defense_tick(b, delta: float) -> void:
 		defense_state = "guard"
 
 func _refresh_stage(b) -> void:
-	var side_breached := is_instance_valid(side_gate) and not _alive(side_gate)
-	stage = "siege" if inside_open or main_breached or side_breached or supply_cut or manor_fallen or prisoners_freed else "contest" if expansion_secured or sent_sun else "scout"
+	var side_open: bool = inside_open or b.mission.has_event("zhu_side_breached")
+	stage = "siege" if main_breached or side_open or supply_cut or manor_fallen or prisoners_freed else "contest" if expansion_secured or sent_sun else "scout"
 	var heading := "第一打 · 扎营探路"
 	var objective := "北取资源，南拔外营；兵营补兵、作坊造器械。先侦察，再决定主攻方向。"
 	if stage == "contest":
@@ -563,8 +563,14 @@ func _refresh_stage(b) -> void:
 	elif stage == "siege":
 		heading = "第三打 · 攻庄救人"
 		objective = "攻破大营、救时迁回营。内应和正面器械都可破局；营地与战果保留。"
-		if main_breached and not supply_cut:
+		if main_breached and side_open:
+			objective = "正门和偏门都已通行。可分兵牵制守军、进牢院救人。还需攻破大营、护送时迁回前营。"
+		elif side_open:
+			objective = "偏门已可通行。可派护卫入庄救人，也可从正门牵制守军。还需攻破大营、护送时迁回前营。"
+		elif main_breached and not supply_cut:
 			objective = "正门已破。留兵守前营，护送器械破营，救时迁回营。缺金可在集市卖木，也可转攻外营断援。"
+		elif supply_cut and not main_breached:
+			objective = "南营已断援，庄内大营仍可补兵。可带器械攻正门，或接应孙立打开偏门。" if _alive(sun) else "孙立已阵亡，内应路线关闭；请用器械攻破庄门救人。"
 	if _finish_ready():
 		heading = "收军 · 时迁已归营"
 		objective = "宋江到前营收军标记即可获胜；也可先接回其余好汉，再收军。无需清空敌军。"
@@ -633,7 +639,7 @@ func on_unit_died(b, u) -> void:
 	if u == outpost:
 		supply_cut = true
 		b.mission.mark("zhu_supply_cut","庄客外营已毁：停止从此处训练与出击，已出发敌军仍在场")
-		b.msg("外营已拔除，后续来袭停止！可集中整军攻庄。",7.0)
+		b.msg("南营已拔除，不再派出新的来袭队。已出发的敌军仍在，庄内大营仍可补兵。",7.0)
 		_introduce_sun(b)
 		if not b._gameplay_rng_issue.is_empty(): return
 	elif u == gate:
@@ -658,12 +664,14 @@ func _finish_ready() -> bool:
 
 func top_status(b) -> String:
 	var supply := "南营情报需侦察"
-	if supply_cut or manor_fallen:
-		supply = "外营已断援"
+	if manor_fallen:
+		supply = "大营停止补兵"
 	elif raid_state == "attack" and _raiders_visible(b):
-		supply = "庄客正在出击"
+		supply = "南营已断援 · 残部仍在出击" if supply_cut else "庄客正在出击"
 	elif raid_state == "retreat" and _raiders_visible(b):
-		supply = "庄客正在退守"
+		supply = "南营已断援 · 残部正在退守" if supply_cut else "庄客正在退守"
+	elif supply_cut:
+		supply = "南营已断援 · 庄内仍可补兵"
 	elif _alive(outpost) and b.is_visible_world(outpost.position):
 		supply = "南营正在集结" if reserve.size() >= 3 else "南营正在补兵"
 	elif outpost_scouted:

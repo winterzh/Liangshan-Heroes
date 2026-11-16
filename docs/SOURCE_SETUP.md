@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+祝家庄偏门状态读取既有 `zhu_side_breached` 事件，断援与大营停产按既有状态显示。八条四语源位于 `zhujiazhuang_route_status.json`。[祝家庄断援与开门验收](../qa/campaign_siege_20261116/README.md#断援与开门后的战场提示)
+
 江州码头的名单由六名原好汉状态派生，定位复用关卡固定按钮协议。四语分片为 `jiangzhou_dock_roster.json`。[江州码头撤离反馈](../qa/campaign_pursuit_20261116/README.md#码头收队与岸上好汉)
 
 Windows 导出包在主菜单首帧后开始后台读取并计算程序哈希。出征时接管同一个任务，再核对文件长度、修改时间、实际装载来源、原生库和可选内容。程序文件状态有变时重新扫描。继续上次战斗时释放预读，由既有恢复流程校验。[Windows 主菜单预读](../qa/battle_entry_timing_20261116/README.md#windows-主菜单预读)

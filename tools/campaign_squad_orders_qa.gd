@@ -24,8 +24,10 @@ class MissionFixture extends RefCounted:
 	var objective := ""
 	var active_action_id := "zhu_rts_rescue"
 	var progress := 1.5
+	var events := {}
 	func set_title(value: String) -> void: stage_title = value
 	func set_objective(value: String) -> void: objective = value
+	func has_event(event_id: String) -> bool: return events.has(event_id)
 
 func _ready() -> void:
 	_run.call_deferred()
