@@ -1,5 +1,7 @@
 # 当前项目总览
 
+本地 Windows 候选 `7ef55d27` 已导出并原生启动，包含十分钟源码验收通过的绘制改动。[Windows 本地候选 7ef55d27](../qa/battle_entry_timing_20261116/README.md#windows-本地候选-7ef55d27)
+
 ## 2026-11-17 高俅十分钟整帧
 
 整段 P95 16.045 ms、P99 18.634 ms，记录三批水陆交火。这一 Windows 源码样本达到两项帧时门槛。正式包操作和其他设备继续单独验收。[高俅稳定分支十分钟结果](../qa/campaign_sustained_performance_20261116/README.md#单位绘制优化后的十分钟复测)

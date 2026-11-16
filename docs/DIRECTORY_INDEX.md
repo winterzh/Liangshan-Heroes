@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[Windows 候选 7ef55d27 收据](../qa/battle_entry_timing_20261116/windows_candidate_7ef55d27.json)含构建和性能来源、独立启动与四个发行文件的摘要。
+
 [高俅稳定分支十分钟](../qa/campaign_sustained_performance_20261116/stable_960c9408.json)含 `960c9408` 的逐分钟帧间隔、性能门槛与同探针对照。
 
 

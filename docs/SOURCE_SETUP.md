@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+Windows 本地候选 `7ef55d27` 来自白名单快照。构建提交与高俅十分钟性能验收提交只相差 QA 和项目文档，核对四个发行文件后归档。[Windows 本地候选 7ef55d27](../qa/battle_entry_timing_20261116/README.md#windows-本地候选-7ef55d27)
+
 高俅稳定源码复测沿用现有的正常速度 600 秒探针，汇总逐分钟帧耗时、实际出兵和付费生产。[高俅稳定分支十分钟结果](../qa/campaign_sustained_performance_20261116/README.md#单位绘制优化后的十分钟复测)
 
 

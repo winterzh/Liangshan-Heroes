@@ -289,3 +289,11 @@ Godot 4.6.3 在隔离用户目录运行现有本地化检查，545 项通过，�
 画面中的 Three Defeats for Marshal Gao、Narrator 首段旁白和 Continue 按钮完整显示，战场和四名英雄头像均已绘制。该分辨率下，底栏部分英文单位与技能名称使用省略号。
 
 Windows 锁屏期间使用直达入口。Steam 客户端前台首次点击和同进程重进仍待计时。本机日志和视口位于 D:/CodexTemp/lsh-native-level5-bd057018-20261117/。[原生运行及画面收据](windows_native_level5_bd057018.json)
+
+## Windows 本地候选 7ef55d27
+
+从 `7ef55d27` 按 Windows Steam 预设导出，跟踪运行输入 6,550 项。构建提交相对十分钟整帧通过的 `960c9408` 只有项目记录和 QA 更新。[十分钟源码复测](../campaign_sustained_performance_20261116/README.md#单位绘制优化后的十分钟复测)
+
+Godot 4.6.3 私有导入 65.709 秒、导出 99.513 秒。实际发布 EXE 在独立离线档案渲染启动 180 帧，耗时 12.583 秒。三个阶段均退出 0，脚本和引擎错误 0。EXE 和三份 DLL 放入本地 Windows 候选目录，逐文件大小与 SHA-256 读回一致。
+
+该成品样本覆盖原生启动。前台点击出征、确认模式与再次进场耗时继续跟踪。最近一次 Steam 发布回执为 Build `26699320`。[候选来源及文件摘要](windows_candidate_7ef55d27.json)
