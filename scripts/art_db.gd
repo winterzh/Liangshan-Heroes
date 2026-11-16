@@ -318,6 +318,8 @@ func _ready() -> void:
 
 
 func _try_load(path: String) -> Texture2D:
+	if _prefetched_opening_textures.has(path):
+		return _prefetched_opening_textures[path]
 	if ResourceLoader.exists(path):
 		return load(path)
 	return null
@@ -984,7 +986,7 @@ const ART_ICON_PATHS := {
 }
 
 
-var _prefetched_ability_icons: Dictionary[String, Texture2D] = {}
+var _prefetched_opening_textures: Dictionary[String, Texture2D] = {}
 var _gao_opening_art_requested := false
 
 
@@ -993,8 +995,8 @@ func ability_icon_path(ability_id: String) -> String:
 
 
 func ability_icon_texture(path: String) -> Texture2D:
-	if _prefetched_ability_icons.has(path):
-		return _prefetched_ability_icons[path]
+	if _prefetched_opening_textures.has(path):
+		return _prefetched_opening_textures[path]
 	return load(path) as Texture2D
 
 
@@ -1004,6 +1006,10 @@ func prefetch_gao_opening_art() -> void:
 	_gao_opening_art_requested = true
 	var paths: Dictionary[String, String] = {}
 	if OS.get_name() == "Windows":
+		paths[STANDALONE_PORTRAITS["wu_yong"]] = ""
+		var wu_walk := _generic_directional_path("wu_yong", "walk", "se")
+		if not ResourceLoader.exists(wu_walk):
+			paths[wu_walk.get_basename() + ".tres"] = "unit|wu_yong|walk|se"
 		for ability_id in ["liu_tang_q", "liu_tang_w", "liu_tang_e", "liu_tang_r"]:
 			paths[ability_icon_path(ability_id)] = ""
 	var actions_by_unit := {"liu_tang": ["walk", "attack"], "wu_yong": ["attack"]}
@@ -1029,8 +1035,8 @@ func _prefetch_opening_art(paths: Dictionary[String, String]) -> void:
 		var prepared_key := "validated|" + path
 		if _anim_cache.has(prepared_key) or _anim_cache.has(paths[path]) or not ResourceLoader.exists(path):
 			continue
-		var is_icon := paths[path].is_empty()
-		var resource_type := "Texture2D" if is_icon else "SpriteFrames"
+		var is_texture := paths[path].is_empty()
+		var resource_type := "Texture2D" if is_texture else "SpriteFrames"
 		if ResourceLoader.load_threaded_request(path, resource_type) != OK:
 			continue
 		var status := ResourceLoader.load_threaded_get_status(path)
@@ -1039,9 +1045,9 @@ func _prefetch_opening_art(paths: Dictionary[String, String]) -> void:
 			status = ResourceLoader.load_threaded_get_status(path)
 		if status == ResourceLoader.THREAD_LOAD_LOADED:
 			var resource := ResourceLoader.load_threaded_get(path)
-			if is_icon:
+			if is_texture:
 				if resource is Texture2D:
-					_prefetched_ability_icons[path] = resource
+					_prefetched_opening_textures[path] = resource
 				continue
 			var frames := _decode_directional_frames(resource)
 			if not frames.is_empty() and not _anim_cache.has(paths[path]):
