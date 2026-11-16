@@ -1,5 +1,10 @@
 # 当前项目总览
 
+## 2026-11-17 高俅十分钟整帧
+
+整段 P95 17.531 ms、P99 20.561 ms，记录三批水陆交火。整帧 P95 高于 16.7 ms，性能验收继续。[高俅稳定分支十分钟结果](../qa/campaign_sustained_performance_20261116/README.md#官军战船预读后的十分钟复测)
+
+
 ## 2026-11-17 Windows 原生英文开场
 
 候选 bd057018 已原生加载并绘制英文高俅关开场。Steam 客户端前台出征及模式进场仍待计时。[Windows 原生英文高俅关](../qa/battle_entry_timing_20261116/README.md#windows-原生英文高俅关)

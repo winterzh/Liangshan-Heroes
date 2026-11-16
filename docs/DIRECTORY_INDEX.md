@@ -1,5 +1,8 @@
 # 项目目录索引（2026-10-30）
 
+[高俅稳定分支十分钟](../qa/campaign_sustained_performance_20261116/stable_9f94f0f3.json)含 `9f94f0f3` 的逐分钟帧间隔、性能门槛与同探针对照。
+
+
 [原生英文高俅关收据](../qa/battle_entry_timing_20261116/windows_native_level5_bd057018.json)含 bd057018 发行 EXE、日志及视口图的摘要和英文开场核对项。
 
 [Windows 本地候选 bd057018 的收据](../qa/battle_entry_timing_20261116/windows_candidate_bd057018.json)含导出与启动步骤、发行文件指纹、四模式菜单和四语加载对照。
