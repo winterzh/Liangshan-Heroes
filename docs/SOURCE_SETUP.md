@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+可用 tools/verify_platform_exports.py 的 pck_inventory、check_inventory 和 inspect_windows 阅读交付 EXE。核对成品翻译原始字节时，结合目录大小与摘要定位包内载荷并比对冻结源码。[Windows 候选的成品包核对](../qa/battle_entry_timing_20261116/README.md#windows-候选成品内容核对)
+
 Windows 候选 7bd1f0e5 已用跟踪运行输入构建，在独立档案离线启动。原生文件校验及导出摘要见候选收据。[Windows 本地候选 7bd1f0e5](../qa/battle_entry_timing_20261116/README.md#windows-本地候选-7bd1f0e5)
 
 源码身份清单仍两遍完整枚举，第一遍计算逐文件哈希，第二遍读取首遍记录复核路径、大小、修改时间及规范指纹，两遍分别建表。[源码清单组装优化](../qa/battle_entry_timing_20261116/README.md#源码清单组装优化)

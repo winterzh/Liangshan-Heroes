@@ -1,5 +1,7 @@
 # 当前项目总览
 
+Windows 候选 7bd1f0e5 的实际 EXE 包内含八章编译脚本及四语加载文案。候选前台进场单独待验。[Windows 候选的成品包核对](../qa/battle_entry_timing_20261116/README.md#windows-候选成品内容核对)
+
 本地 Windows 候选 7bd1f0e5 已导出并完成离线启动。Steam 客户端进场仍待量测。[Windows 本地候选 7bd1f0e5](../qa/battle_entry_timing_20261116/README.md#windows-本地候选-7bd1f0e5)
 
 Windows 源码进场清单组装优化后，祝家庄首次与重进分别为 10.30 秒、11.31 秒。Steam 前台仍待测。[源码清单组装优化](../qa/battle_entry_timing_20261116/README.md#源码清单组装优化)

@@ -1,5 +1,9 @@
 # 开发日志
 
+## 2026-11-17 Windows 候选成品内容核对
+
+从 7bd1f0e5 交付 EXE 的内嵌包核对 8,369 项，八章脚本、菜单场景和内容身份均有打包条目，4,852 条本地化键来自与 Git 源文件一致的实际载荷。[Windows 候选的成品包核对](../qa/battle_entry_timing_20261116/README.md#windows-候选成品内容核对)
+
 ## 2026-11-17 Windows 本地候选 7bd1f0e5
 
 Windows Steam 预设导出，原生离线启动 180 帧，核对四个发行文件。候选覆盖最新源码校验优化。[Windows 本地候选 7bd1f0e5](../qa/battle_entry_timing_20261116/README.md#windows-本地候选-7bd1f0e5)
