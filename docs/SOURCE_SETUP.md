@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+Windows 主菜单加载默认 72 FPS 批次完成六路 30 分钟源码验收，沿用 Vulkan 1280×720 和独立档案。实跑旧工具报私有内存趋势未通过。现行分析从预热快照起算，继续采集冷启动峰值。[72 FPS 长测结果](../qa/battle_entry_timing_20261116/README.md#windows-72-fps-模式切换三十分钟)
+
 Windows 菜单加载阶段按 72 FPS 限流并应用原先更低的全局设置。场景切换通过现有退出路径恢复原值，测试收据另保留 60 与 72 的分段对照。[Windows 加载帧时分段](../qa/battle_entry_timing_20261116/README.md#windows-加载动画与场景切换帧时)
 
 候选 7bd1f0e5 的四语入口验证直接挂载 SteamDepot 中交付 EXE 的编译包，使用独立 Godot 宿主及隔离档案。[当前 Windows 四入口验证](../qa/battle_entry_timing_20261116/README.md#windows-候选四入口与重复进场)

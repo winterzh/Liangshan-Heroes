@@ -572,11 +572,18 @@ func _analyse_stability() -> Dictionary:
 	var analysis := {}
 	var comparable_cleanup := _cleanup_samples.slice(ROUTE.size()) \
 		if _cleanup_samples.size() > ROUTE.size() else _cleanup_samples
+	# Retained growth starts at the same warmed state used for recovery. A
+	# minute sampled before the first route finishes can still inform the peak.
+	var warm_elapsed := float(_warm_baseline.elapsed_seconds)
+	var warmed_process_samples := [_warm_baseline]
+	warmed_process_samples.append_array(_minute_samples.filter(
+		func(sample): return float(sample.elapsed_seconds) > warm_elapsed))
 	for metric in RECOVERY_TOLERANCE:
-		var source: Array = _minute_samples if metric in ["working_set_bytes", "private_bytes"] else comparable_cleanup
-		var values := _series_for(metric, source)
+		var process_metric: bool = metric in ["working_set_bytes", "private_bytes"]
+		var source: Array = warmed_process_samples if process_metric else comparable_cleanup
 		var epsilon := 1.0 * MIB if metric.contains("bytes") else 1.0
-		var trend := _trend(values, epsilon)
+		var trend := _trend(_series_for(metric, source), epsilon)
+		var values := _series_for(metric, _minute_samples if process_metric else comparable_cleanup)
 		var warm := _metric_value(_warm_baseline, metric)
 		var ending := _metric_value(_end_snapshot, metric)
 		var peak := maxf(warm, ending)
