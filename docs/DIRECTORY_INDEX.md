@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[快活林起手预警](../qa/campaign_counter_window_20261116/README.md#起手倒计时与冲撞警戒区)含实渲预警、冲撞碰撞范围和完全受阻的证据。
+
 [黄泥冈载重货车接力](../qa/campaign_transport_groups_20261116/README.md#载重货车掉落与接力)含载重掉落、障碍同侧、实际右键和单车交付的检查原件。
 
 [大名府夺门与撤离追兵](../qa/campaign_wounded_selection_20261116/README.md#夺门与撤离追兵)含有效主将、原追兵身份、倒计时及提前拦截的定向证据。

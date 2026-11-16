@@ -1,6 +1,9 @@
 extends "res://scripts/levels/level7_kuaihuolin.gd"
 ## Current short duel: optional road preparation and a live, finite counter window.
 const ATTACK_PER_DRINK := 5
+const HEAVY_RADIUS := 78.0
+const RUSH_WIDTH := 92.0
+const MIN_RUSH_TRAVEL := 0.01
 var controls_generation:=-1
 var charge_running:=false
 var opening_serial:=-1
@@ -212,13 +215,18 @@ func _duel_tick(b, delta: float) -> void:
 			fist_marker.queue_redraw()
 		if fist_windup>0: return
 		if special_kind=="rush":
+			var travel: Vector2=rush_end-rush_from
+			if travel.length()<=MIN_RUSH_TRAVEL:
+				_finish_special(b,true,false)
+				menshen.order_attack(wu)
+				return
 			menshen.remove_meta("story_pose")
-			menshen._begin_charge(rush_end-rush_from,64,0,rush_from.distance_to(rush_end),92,0.65,0.9,false,"mengzhou_menshen_rush")
+			menshen._begin_charge(travel,64,0,travel.length(),RUSH_WIDTH,0.65,0.9,false,"mengzhou_menshen_rush")
 			charge_running=true
 		else:
 			var hit:=false
 			for actor in [wu,shi]:
-				if actor.position.distance_to(fist_at)<=78 and b.map._segment_open(menshen.position,actor.position,"land"):
+				if actor.position.distance_to(fist_at)<=HEAVY_RADIUS and b.map._segment_open(menshen.position,actor.position,"land"):
 					hit=true; actor.take_damage(56,menshen); actor.apply_stun(0.9)
 			_finish_special(b,not hit)
 		return
@@ -247,19 +255,23 @@ func _begin_special(b) -> void:
 	b.fx_root.add_child(fist_marker); b.map.sync_render_position(fist_marker)
 	b.msg("沉肩重拳：离开圆圈！" if special_kind=="heavy" else "俯身冲撞：横移让路！",2)
 
-func _finish_special(b, missed: bool) -> void:
+func _finish_special(b, missed: bool, record_dodge := true) -> void:
 	_clear_tell()
 	menshen.remove_meta("story_pose")
 	if missed:
-		dodged=true; opening_serial=special_index
+		opening_serial=special_index
 		exposed_left=2.8 if special_kind=="rush" else 2.2
 		menshen._damage_reduction_sources.erase(BRACE_SOURCE)
 		menshen._refresh_damage_reduction()
 		menshen.apply_stun(exposed_left)
-		if special_kind=="heavy": heavy_dodges+=1
-		else: rush_dodges+=1
-		b.mission.mark("dodge_"+special_kind,Localize.text("蒋门神本次招式落空，架势松动。"))
-		b.msg("招式落空！靠近E反击。",2)
+		if record_dodge:
+			dodged=true
+			if special_kind=="heavy": heavy_dodges+=1
+			else: rush_dodges+=1
+			b.mission.mark("dodge_"+special_kind,Localize.text("蒋门神本次招式落空，架势松动。"))
+			b.msg("招式落空！靠近E反击。",2)
+		else:
+			b.msg("冲撞被地形挡住，趁机反击。",2)
 	else:
 		step_serial=-1
 		menshen.apply_stun(0.55)
@@ -295,20 +307,42 @@ func activate_mission_button(b, button_id: String) -> void:
 func top_status(b) -> String:
 	if charge_running: return "蒋门神冲撞中 · 横移让开"
 	if exposed_left>0: return Localize.format_text("当前破绽 %.1f秒 · 反击命中%d次", [exposed_left,counter_hits])
+	if fist_windup>0:
+		if special_kind=="heavy":
+			return Localize.format_text("重拳 %.1f秒后落下 · 离开圆圈",fist_windup)
+		if rush_from.distance_to(rush_end)<=MIN_RUSH_TRAVEL:
+			return Localize.format_text("冲撞受阻 · %.1f秒后可反击",fist_windup)
+		return Localize.format_text("冲撞 %.1f秒后出招 · 横移出警戒区",fist_windup)
 	return super.top_status(b)
 
 class DuelTell extends Node2D:
 	var kind:="heavy"
 	var progress:=0.0
 	var extent:=190.0
+	func _rush_outline(radius: float) -> PackedVector2Array:
+		var outline := PackedVector2Array()
+		for step in range(17):
+			outline.append(Vector2.from_angle(PI/2+step*PI/16)*radius)
+		for step in range(17):
+			outline.append(Vector2(extent,0)+Vector2.from_angle(-PI/2+step*PI/16)*radius)
+		return outline
+
 	func _draw() -> void:
 		var color:=Color("efb94a").lerp(Color("ef492b"),clampf(progress,0,1))
 		if kind=="heavy":
-			draw_circle(Vector2.ZERO,78,Color(color,0.12+progress*0.12))
-			draw_arc(Vector2.ZERO,78,0,TAU,64,color,2.5)
-			draw_arc(Vector2.ZERO,70,-PI/2,-PI/2+maxf(0.01,progress)*TAU,64,color,4)
-		else:
-			var shape:=PackedVector2Array([Vector2(0,-46),Vector2(extent,-46),Vector2(extent,46),Vector2(0,46),Vector2(0,-46)])
+			draw_circle(Vector2.ZERO,HEAVY_RADIUS,Color(color,0.12+progress*0.12))
+			draw_arc(Vector2.ZERO,HEAVY_RADIUS,0,TAU,64,color,2.5)
+			draw_arc(Vector2.ZERO,HEAVY_RADIUS-8,-PI/2,-PI/2+maxf(0.01,progress)*TAU,64,color,4)
+		elif extent>MIN_RUSH_TRAVEL:
+			# Duel tells live under Battle/World/FX, with the same logical axes
+			# as charge movement. Use the larger player's body for the warning.
+			var battle = get_parent().get_parent().get_parent()
+			var radius := RUSH_WIDTH*0.5
+			for actor in [battle.level.wu,battle.level.shi]:
+				if is_instance_valid(actor):
+					radius=maxf(radius,RUSH_WIDTH*0.5+actor.radius)
+			var shape:=_rush_outline(radius)
 			draw_colored_polygon(shape,Color(color,0.14))
+			shape.append(shape[0])
 			draw_polyline(shape,color,2.5)
 			draw_line(Vector2(0,0),Vector2(extent*progress,0),color,5)
