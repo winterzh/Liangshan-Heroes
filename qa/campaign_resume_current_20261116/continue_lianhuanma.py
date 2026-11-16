@@ -81,12 +81,13 @@ def verified_retry(old, original, tail):
     return original['steps'] + prior['steps'][:1], original['reports'] + prior['reports'][:1], pins, failed['pid']
 
 
-def verify_assault_stall(old, original, lure_tail, assault_tail, pins, failed_pids):
+def verify_assault_stall(old, original, lure_tail, assault_tail, pins, failed_pids, earlier_assault=None):
     p.identity.no_links(assault_tail)
     p.need(assault_tail.parent == old.parent and assault_tail != lure_tail, 'Expected separate assault evidence')
     receipt_path = assault_tail / 'receipt.json'
     prior = p.read(receipt_path)
     p.need(prior.get('retry_lure_tail') == str(lure_tail) and prior['previous_batch'] == str(old)
+           and prior.get('retry_assault_tail') == (str(earlier_assault) if earlier_assault else None)
            and all(prior[key] == original[key] for key in ('source_identity', 'profile', 'batch_nonce'))
            and prior['previous_receipt_sha256'] == p.sha(old / 'receipt.json')
            and not prior['complete'] and prior['post_source_unchanged'] and prior['lock_released']
@@ -111,7 +112,8 @@ def verify_assault_stall(old, original, lure_tail, assault_tail, pins, failed_pi
         path = Path(name)
         if path.is_relative_to(HERE) and path.relative_to(HERE).as_posix() in archived_paths:
             git_path = path.relative_to(p.ROOT).as_posix()
-            raw = subprocess.check_output(['git', 'show', '0daa30b3:' + git_path], cwd=p.ROOT)
+            commit = 'ef4ec074' if earlier_assault else '0daa30b3'
+            raw = subprocess.check_output(['git', 'show', commit + ':' + git_path], cwd=p.ROOT)
             p.need(p.digest(raw) == digest, 'Unexpected historical assault input: ' + git_path)
         else:
             p.need(name not in pins or pins[name] == digest, 'Conflicting stable input')
@@ -128,7 +130,7 @@ def execute(args):
         p.identity.no_links(prior_path)
         prior = p.read(prior_path)
         if prior.get('previous_batch') == str(old):
-            if prior_path.parent not in (args.retry_lure_tail, args.retry_assault_tail):
+            if prior_path.parent not in (args.retry_lure_tail, args.retry_assault_tail, args.retry_flank_tail):
                 p.need(not prior.get('steps'), 'Another continuation process already started for this batch')
     run, project, preparation = p.admission(old.parent)
     completed_modes = tuple(s['case'] for s in original['steps'])
@@ -150,6 +152,9 @@ def execute(args):
         failed_pids.add(failed_pid)
         if args.retry_assault_tail:
             verify_assault_stall(old, original, args.retry_lure_tail, args.retry_assault_tail, pins, failed_pids)
+        if args.retry_flank_tail:
+            verify_assault_stall(old, original, args.retry_lure_tail, args.retry_flank_tail, pins, failed_pids,
+                                 earlier_assault=args.retry_assault_tail)
         remaining_modes = host.MODES[len(saved_steps):]
     else:
         for mode in remaining_modes:
@@ -201,6 +206,8 @@ def execute(args):
                        retry_strategy_sha256=p.sha(HERE / 'workers/driver.gd'))
     if args.retry_assault_tail:
         receipt['retry_assault_tail'] = str(args.retry_assault_tail)
+    if args.retry_flank_tail:
+        receipt['retry_flank_tail'] = str(args.retry_flank_tail)
     locked = False
     try:
         wait_idle()
@@ -313,11 +320,15 @@ if __name__ == '__main__':
     parser.add_argument('--lock', type=Path, required=True)
     parser.add_argument('--retry-lure-tail', type=Path)
     parser.add_argument('--retry-assault-tail', type=Path)
+    parser.add_argument('--retry-flank-tail', type=Path)
     args = parser.parse_args()
     if args.retry_lure_tail:
         args.retry_lure_tail = args.retry_lure_tail.absolute()
     if args.retry_assault_tail:
         p.need(args.retry_lure_tail is not None, 'Assault retry requires the original re-save tail')
         args.retry_assault_tail = args.retry_assault_tail.absolute()
+    if args.retry_flank_tail:
+        p.need(args.retry_assault_tail is not None, 'Flank retry requires the prior assault tail')
+        args.retry_flank_tail = args.retry_flank_tail.absolute()
     p.need(args.batch.is_absolute() and args.lock.is_absolute(), 'Absolute batch and lock required')
     execute(args)

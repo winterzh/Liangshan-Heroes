@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+连环马此轮在前两次尾段基础上由 `--retry-flank-tail` 核对侧翼未触发的历史报告与同一再保存槽，再启终局。外部驾驶检查在生产工坊实际扣费，并在反攻阶段为可见金矿尝试安排工人。命令账证明原优先采木策略会覆盖补矿指令。[复跑原件](../qa/campaign_resume_current_20261116/evidence/protected_drill_candidate/counter_budget_stall/)。
+
 祝家庄 `--route rush` 驾驶把前营留守与投石车推进分组，仍用原生产、采集、攻击和修理命令，应从独立隔离目录复跑。[分兵实跑原件](../qa/campaign_siege_20261116/rush_split_force/)。
 
 祝家庄快速强攻验证复用 `direct_runner.py --route rush`，独立写入 `.godot/zhu-rush/`。首跑和中路复跑保留原报告、日志、回执及驱动哈希。生产关卡、档案字段与玩家资源成本无变更。[复跑原件及范围](../qa/campaign_siege_20261116/README.md#跳过外围的快速强攻)。

@@ -67,7 +67,10 @@ func economy_step() -> void:
 	if battle._run_clock._next_tick < next_economy_tick: return
 	next_economy_tick = battle._run_clock._next_tick + 75
 	if not siege_finisher_active():
-		policy._economy_lhm(battle)
+		if needs_counter_ram_budget():
+			policy._mine_idle_workers(battle)
+		else:
+			policy._economy_lhm(battle)
 		return
 	# Keep workers gathering, but reserve the next gold and wood for the workshop.
 	policy._mine_idle_workers(battle)
@@ -87,6 +90,43 @@ func economy_step() -> void:
 			policy.units_queued += 1
 			policy.units_queued_by_key["siege_cata"] = int(policy.units_queued_by_key.get("siege_cata", 0)) + 1
 		return
+
+func needs_counter_ram_budget() -> bool:
+	var level: Variant = battle.level
+	if level.lhm_killed != 12 or not alive(level.enemy_base): return false
+	if battle.units.any(func(u): return alive(u) and u.faction == 0 and u.key == "siege_ram"): return false
+	return battle.units.any(func(u): return alive(u) and u.faction == 0 and u.key == "siege_workshop" \
+		and not u.is_constructing and u._train_queue.is_empty())
+
+func staff_counter_mines(level: Variant) -> void:
+	var mines: Array = battle.units.filter(func(u): return is_instance_valid(u) and u.is_resource \
+		and u.res_kind == "gold" and u.res_left > 0.0 and not battle._resource_blocked(u) \
+		and battle.is_visible_world(u.position))
+	var home: Array = mines.filter(func(m): return m.position.distance_to(level.hall.position) <= 520.0)
+	if not home.is_empty() and home.any(func(m): return m.res_left >= 200.0): mines = home
+	var workers: Array = battle.units.filter(func(u): return alive(u) and u.faction == 0 and u.is_worker)
+	for mine: Variant in mines:
+		var staffed: bool = workers.any(func(w): return w._gather_node == mine and w._state in [w.ST_GATHER, w.ST_RETURN])
+		if staffed: continue
+		var danger: bool = battle.units.any(func(e): return alive(e) and e.faction == 1 and not e.is_building \
+			and e.fog_visible and e.position.distance_to(mine.position) <= 200.0)
+		if danger: continue
+		var pick: Variant = null
+		for worker: Variant in workers:
+			var idle: bool = worker._state == worker.ST_IDLE
+			var cutting: bool = worker._state == worker.ST_GATHER and is_instance_valid(worker._gather_node) \
+				and worker._gather_node.res_kind == "wood" and worker._carry_amt == 0.0
+			if not idle and not cutting: continue
+			if pick == null or worker.position.distance_squared_to(mine.position) < pick.position.distance_squared_to(mine.position):
+				pick = worker
+		if pick != null:
+			battle.select_single(pick, false)
+			battle._issue_order(battle.to_screen(mine.position), false)
+			if pick._gather_node == mine:
+				policy.orders += 1
+				record_action("gather", [pick], {"target_entity_id":str(mine.entity_id), "purpose":"counter_gold"})
+				print("LIAN_COUNTER_GOLD ", {"mine":mine.entity_id, "worker":pick.entity_id, "remaining":mine.res_left,
+					"home":mine in home, "elapsed":level.elapsed})
 
 func siege_finisher_active() -> bool:
 	var level: Variant = battle.level
@@ -402,35 +442,21 @@ func natural_victory() -> void:
 			# safe far mines with one worker each, and keep rams funded first.
 			if battle._run_clock._next_tick >= int(get_meta("v22_econ_tick", 0)):
 				set_meta("v22_econ_tick", battle._run_clock._next_tick + 150)
-				var mines: Array = battle.units.filter(func(u): return is_instance_valid(u) and u.is_resource and u.res_kind == "gold" and u.res_left > 0.0)
-				var home_gold: Array = mines.filter(func(m): return m.position.distance_to(level.hall.position) <= 520.0)
-				var workers_all: Array = battle.units.filter(func(u): return alive(u) and u.faction == 0 and u.is_worker)
-				if home_gold.is_empty() or home_gold.all(func(m): return m.res_left < 200.0):
-					for m in mines:
-						if m in home_gold: continue
-						if battle.units.any(func(e): return alive(e) and e.faction == 1 and not e.is_building and e.position.distance_to(m.position) <= 200.0): continue
-						if workers_all.any(func(w): return is_instance_valid(w._gather_node) and w._gather_node == m): continue
-						var pick: Variant = null
-						for w in workers_all:
-							if w._state == 6: continue
-							if is_instance_valid(w._gather_node) and w._gather_node.res_kind == "gold" and w._gather_node.res_left > 0.0: continue
-							pick = w
-							break
-						if pick != null:
-							battle.select_single(pick, false)
-							battle._issue_order(battle.to_screen(m.position), false)
-							policy.orders += 1
-							record_action("gather", [pick], {"target_entity_id":str(m.entity_id), "purpose":"v22_far_gold"})
+				staff_counter_mines(level)
 				var shop: Variant = null
 				for bld in battle.units:
 					if alive(bld) and bld.faction == 0 and bld.key == "siege_workshop" and not bld.is_constructing:
 						shop = bld
 						break
-				if shop != null and alive(level.enemy_base) and shop._train_queue.is_empty() and rams.size() < 3 and battle.gold >= 70 and battle.wood >= 90:
+				if shop != null and alive(level.enemy_base) and shop._train_queue.is_empty() and rams.size() < 2:
 					var g0: int = battle.gold
 					var w0: int = battle.wood
 					if battle.queue_train(shop, "siege_ram", false):
-						record_action("train", [shop], {"key":"siege_ram", "gold_spent":g0-battle.gold, "wood_spent":w0-battle.wood, "purpose":"v22_ram_budget"})
+						var def: Dictionary = battle._defs["siege_ram"]
+						check(g0 - battle.gold == int(def.cost_gold) and w0 - battle.wood == int(def.cost_wood), "counterattack ram pays actual workshop costs")
+						record_action("train", [shop], {"key":"siege_ram", "gold_spent":g0-battle.gold, "wood_spent":w0-battle.wood, "purpose":"counter_ram_budget"})
+						policy.units_queued += 1
+						policy.units_queued_by_key["siege_ram"] = int(policy.units_queued_by_key.get("siege_ram", 0)) + 1
 			# Hall guards only while an enemy is actually near the hall.
 			var hall_threat: Variant = null
 			for e in battle.units:

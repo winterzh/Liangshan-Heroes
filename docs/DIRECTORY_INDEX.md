@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[连环马器械预算复跑](../qa/campaign_resume_current_20261116/evidence/protected_drill_candidate/counter_budget_stall/)保存四轮反攻、补矿命令及同工人伐木命令记录。
+
 [祝家庄分兵纯强攻](../qa/campaign_siege_20261116/rush_split_force/)保存实际来源哈希、战报、引擎日志和宿主回执。
 
 [祝家庄快速强攻](../qa/campaign_siege_20261116/README.md#跳过外围的快速强攻)的 `rush_first_attempt/` 和 `rush_central_road/` 分别保留首跑与中路复跑原件。
