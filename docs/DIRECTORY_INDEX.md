@@ -1,5 +1,8 @@
 # 项目目录索引（2026-10-30）
 
+[高俅英雄栏头像预读测点](../qa/battle_entry_timing_20261116/gao_intro_roster_prefetch.json)含首次对白前后的引擎帧、脚本绘制回调和实渲头像路径。
+
+
 [高俅首段对白测点](../qa/battle_entry_timing_20261116/gao_intro_first_page_prefetch.json)记录按钮回调、渲染帧及吴用立绘与行走资源的读取时点。
 
 

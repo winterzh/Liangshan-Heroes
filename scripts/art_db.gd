@@ -397,7 +397,7 @@ func ui_portrait_texture(key: String, variant := "") -> Texture2D:
 	if variant == GONGSUN_LATER_VARIANT:
 		if key != "gongsun_sheng": return null
 		if not _chapter_portrait_cache.has(variant):
-			_chapter_portrait_cache[variant] = _try_load("res://assets/characters/art_full_20260916/gongsun_sheng_portrait_20260916.png")
+			_chapter_portrait_cache[variant] = _try_load(GONGSUN_LATER_PORTRAIT)
 		return _chapter_portrait_cache[variant]
 	var owner := CampaignArt.portrait_owner(variant)
 	if not owner.is_empty():
@@ -463,6 +463,7 @@ const ORDINARY_CHARACTER_FAMILIES := {
 }
 
 const GONGSUN_LATER_VARIANT := "gongsun_sheng_later_ritual"
+const GONGSUN_LATER_PORTRAIT := "res://assets/characters/art_full_20260916/gongsun_sheng_portrait_20260916.png"
 
 func _gongsun_later_frames(key: String, state: String) -> Array:
 	# Preserve the later ritual costume until its separate source-based redraw.
@@ -1006,7 +1007,9 @@ func prefetch_gao_opening_art() -> void:
 	_gao_opening_art_requested = true
 	var paths: Dictionary[String, String] = {}
 	if OS.get_name() == "Windows":
-		paths[STANDALONE_PORTRAITS["wu_yong"]] = ""
+		for key in ["wu_yong", "song_jiang", "liu_tang"]:
+			paths[STANDALONE_PORTRAITS[key]] = ""
+		paths[GONGSUN_LATER_PORTRAIT] = ""
 		var wu_walk := _generic_directional_path("wu_yong", "walk", "se")
 		if not ResourceLoader.exists(wu_walk):
 			paths[wu_walk.get_basename() + ".tres"] = "unit|wu_yong|walk|se"
