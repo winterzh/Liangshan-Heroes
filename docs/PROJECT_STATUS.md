@@ -1,5 +1,9 @@
 # 当前项目总览
 
+## 2026-11-16 战役本地化与进场卡顿反馈
+
+本批源码补齐战役出征与相关 HUD、存档提示的四语文案。Steam Windows Build `26699320` 收到进场停顿反馈，待测耗时和瓶颈。[本地化验收](../qa/battle_entry_localization_20261116/README.md) · [问题记录](DEVELOPMENT_PLAN.md#2026-11-16-出征与模式进场卡顿)
+
 ## 2026-11-16 Steam 正式版本
 
 Windows 正式分支当前为 Build `26699320`。本批战役玩法和任务反馈更新及四语公告已上线。[发布记录](STEAM_UPDATE_20261116.md)

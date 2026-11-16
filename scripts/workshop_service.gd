@@ -167,7 +167,7 @@ func _submit() -> void:
 			_finish(Localize.text("Steam 拒绝作品信息：") + String(call_spec[0]))
 			return
 	if not bool(api.call("setItemTags", _handle, ["Map" if _pending.kind == "scenario" else "Defense"], false)):
-		_finish(Localize.text("Steam 拒绝作品信息：setItemTags"))
+		_finish(Localize.text("Steam 拒绝作品信息：") + "setItemTags")
 		return
 	api.call("submitItemUpdate", _handle, "Updated from Liangshan Heroes editor")
 	status = Localize.text("正在上传；Steam 提交后无法取消")

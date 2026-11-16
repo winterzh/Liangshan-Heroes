@@ -1,5 +1,7 @@
 # Translation sources
 
+`battle_entry_review_20261116.json` supplies reviewed battle entry, rescue, fortification and save confirmation text. `previous_runtime_translations.json` preserves 115 previously shipped entries for future catalog builds.
+
 `catalog.json` is the generated runtime catalogue. Chinese source strings are stable lookup keys; each entry contains `en`, `ja`, and `zh_TW`. Simplified Chinese is supplied by the key itself.
 
 `android_controls_20260925.json` supplies the full-automation exit notice used by the shared desktop/touch autoplay controls.
