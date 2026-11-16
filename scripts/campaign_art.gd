@@ -3,6 +3,7 @@ extends RefCounted
 const ROOT := "res://assets/campaign/"
 const ANCHOR := Vector2(0.5, 0.82)
 const DIRECTIONS := ["se", "sw", "ne", "nw"]
+const HUANGNIGANG_MERCHANTS := ["chao_gai", "wu_yong", "gongsun_sheng", "liu_tang", "ruan_xiaoer", "ruan_xiaowu", "ruan_xiaoqi"]
 ## 原著已明言的旗号文字。这里是唯一的文字白名单：渲染层只能按 id
 ## 取用，不能从关卡名、单位名或贴图文件名自由拼出旗文。
 ##

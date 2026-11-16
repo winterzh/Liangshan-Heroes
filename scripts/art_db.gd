@@ -1055,6 +1055,28 @@ func ability_icon_texture(path: String) -> Texture2D:
 	return load(path) as Texture2D
 
 
+## The seven merchants start at rest facing southeast. Prepare the same
+## variant frames that _resolve_unit_anim_frames will look up on first draw.
+func request_huangnigang_opening_frames() -> Array[String]:
+	var paths: Array[String] = []
+	for key: String in CampaignArt.HUANGNIGANG_MERCHANTS:
+		var path := CampaignArt.native_body_path("hn_" + key, "idle", "se")
+		if path.is_empty() or _anim_cache.has("native_body|" + path) or not ResourceLoader.exists(path):
+			continue
+		if ResourceLoader.load_threaded_request(path, "SpriteFrames") == OK:
+			paths.append(path)
+	return paths
+
+
+func cache_prepared_native_body(path: String, resource: SpriteFrames) -> void:
+	var cache_key := "native_body|" + path
+	if resource == null or _anim_cache.has(cache_key):
+		return
+	var frames := _decode_directional_frames(resource)
+	if not frames.is_empty():
+		_anim_cache[cache_key] = frames
+
+
 func prefetch_gao_opening_art() -> void:
 	if _gao_opening_art_requested or DisplayServer.get_name() == "headless":
 		return

@@ -1,0 +1,835 @@
+{
+  "scope": "Windows rendered source, two same-configuration instrumented cold menu samples and a separate baseline cold/warm boundary probe. Timing covers the interval after scene readiness. Scan timing is variable. No Steam client result.",
+  "measured_callback_floor_ms": 0.5,
+  "baseline_boundary_run": {
+    "final": {
+      "nodes": 74,
+      "objects": 2167.0,
+      "orphans": 0.0,
+      "static_bytes": 231136359.0
+    },
+    "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+    "initial": {
+      "nodes": 74,
+      "objects": 2020.0,
+      "orphans": 0.0,
+      "static_bytes": 196460509.0
+    },
+    "renderer": "forward_plus",
+    "resolution": "(1280.0, 720.0)",
+    "save_and_settings_unchanged": true,
+    "visits": [
+      {
+        "battle_attached_to_scene_ready_ms": 338.47,
+        "entry_to_battle_attached_ms": 10859.16,
+        "entry_to_first_battle_render_ms": 11478.72,
+        "entry_to_first_render_ms": 21.41,
+        "first_pre_draw_to_post_draw_ms": 12.08,
+        "frames_before_scene_ready": 781,
+        "initial_cap": 0,
+        "intro_pages": 3,
+        "loading_cap": 72,
+        "menu_render_ms": 44.29,
+        "menu_state": {
+          "nodes": 74,
+          "objects": 2166.0,
+          "orphans": 0.0,
+          "static_bytes": 231130339.0
+        },
+        "mode": "level1",
+        "mode_page_ms": 31.28,
+        "ready_to_first_pre_draw_ms": 269.01,
+        "released": [
+          "battle",
+          "map",
+          "hud",
+          "units_root",
+          "world",
+          "shadow_batch",
+          "unit"
+        ],
+        "scene_ready_to_first_battle_render_ms": 281.09,
+        "start_button_to_fight_render_ms": 47.26,
+        "visit": 1
+      },
+      {
+        "battle_attached_to_scene_ready_ms": 218.08,
+        "entry_to_battle_attached_ms": 9494.09,
+        "entry_to_first_battle_render_ms": 9731.72,
+        "entry_to_first_render_ms": 2.65,
+        "first_pre_draw_to_post_draw_ms": 1.04,
+        "frames_before_scene_ready": 684,
+        "initial_cap": 0,
+        "intro_pages": 3,
+        "loading_cap": 72,
+        "menu_render_ms": 41.48,
+        "menu_state": {
+          "nodes": 74,
+          "objects": 2167.0,
+          "orphans": 0.0,
+          "static_bytes": 231135631.0
+        },
+        "mode": "level1",
+        "mode_page_ms": 12.71,
+        "ready_to_first_pre_draw_ms": 18.51,
+        "released": [
+          "battle",
+          "map",
+          "hud",
+          "units_root",
+          "world",
+          "shadow_batch",
+          "unit"
+        ],
+        "scene_ready_to_first_battle_render_ms": 19.55,
+        "start_button_to_fight_render_ms": 10.92,
+        "visit": 2
+      }
+    ],
+    "source_revision": "f274ad5e7a7d7920a4785afea7073111afbbe54e",
+    "stage_start_usec": [
+      {
+        "install_start": 17822871,
+        "instantiate": 17830553,
+        "queue_change": 17834006,
+        "start": 17840163,
+        "resolve_level": 17843885,
+        "battle_definitions": 17857792,
+        "world": 17886215,
+        "map_init": 17890787,
+        "map_paint": 17895006,
+        "environment_paint": 17899873,
+        "map_bake": 17904719,
+        "level_decorate": 17908496,
+        "campaign_environment": 17910565,
+        "map_env_props": 17912910,
+        "map_height_script": 17915149,
+        "map_height_build": 17917322,
+        "map_scenery_script": 17922956,
+        "map_scenery_setup": 17925201,
+        "scenery_surface": 17927559,
+        "coast_surface_maps": 17932208,
+        "coast_material": 17947083,
+        "coast_routes": 17954393,
+        "coast_finish": 17956089,
+        "scenery_tiles": 17958003,
+        "scenery_reed_mesh": 17967103,
+        "scenery_decor": 17970029,
+        "scenery_done": 18018036,
+        "map_scenery_done": 18020227,
+        "fog": 18022981,
+        "view_layers": 18024776,
+        "hud_construct": 18028401,
+        "hud_setup": 18092086,
+        "target_cursor": 18094717,
+        "level_deploy": 18122909,
+        "deploy_actors": 18124660,
+        "deploy_tribute": 18130179,
+        "deploy_carts": 18132976,
+        "initial_view": 18171737,
+        "intro": 18173722,
+        "intro_done": 18176602
+      },
+      {
+        "install_start": 28499480,
+        "instantiate": 28501425,
+        "queue_change": 28503161,
+        "start": 28507220,
+        "resolve_level": 28509092,
+        "battle_definitions": 28511131,
+        "world": 28532830,
+        "map_init": 28534557,
+        "map_paint": 28536610,
+        "environment_paint": 28539351,
+        "map_bake": 28542969,
+        "level_decorate": 28547523,
+        "campaign_environment": 28549896,
+        "map_env_props": 28552281,
+        "map_height_script": 28554491,
+        "map_height_build": 28556704,
+        "map_scenery_script": 28561995,
+        "map_scenery_setup": 28564094,
+        "scenery_surface": 28566336,
+        "coast_surface_maps": 28568716,
+        "coast_material": 28583633,
+        "coast_routes": 28588166,
+        "coast_finish": 28589732,
+        "scenery_tiles": 28591440,
+        "scenery_reed_mesh": 28599595,
+        "scenery_decor": 28601124,
+        "scenery_done": 28638434,
+        "map_scenery_done": 28639869,
+        "fog": 28647865,
+        "view_layers": 28649319,
+        "hud_construct": 28657254,
+        "hud_setup": 28678124,
+        "target_cursor": 28679802,
+        "level_deploy": 28685076,
+        "deploy_actors": 28686845,
+        "deploy_tribute": 28692642,
+        "deploy_carts": 28694760,
+        "initial_view": 28717723,
+        "intro": 28719502,
+        "intro_done": 28723188
+      }
+    ],
+    "log_sha256": "add3bcc735755c09316b30c7809d59ef6d696978592b8167fefc508ae0daab5c"
+  },
+  "baseline_draw_run": {
+    "final": {
+      "nodes": 74,
+      "objects": 2166.0,
+      "orphans": 0.0,
+      "static_bytes": 231670132.0
+    },
+    "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+    "initial": {
+      "nodes": 74,
+      "objects": 2020.0,
+      "orphans": 0.0,
+      "static_bytes": 196992334.0
+    },
+    "renderer": "forward_plus",
+    "resolution": "(1280.0, 720.0)",
+    "save_and_settings_unchanged": true,
+    "visits": [
+      {
+        "battle_attached_to_scene_ready_ms": 299.03,
+        "entry_to_battle_attached_ms": 11710.44,
+        "entry_to_first_battle_render_ms": 12276.78,
+        "entry_to_first_render_ms": 14.94,
+        "first_pre_draw_to_post_draw_ms": 10.69,
+        "frames_before_scene_ready": 843,
+        "initial_cap": 0,
+        "intro_pages": 3,
+        "loading_cap": 72,
+        "menu_render_ms": 44.75,
+        "menu_state": {
+          "nodes": 74,
+          "objects": 2166.0,
+          "orphans": 0.0,
+          "static_bytes": 231663004.0
+        },
+        "mode": "level1",
+        "mode_page_ms": 55.62,
+        "ready_to_first_pre_draw_ms": 256.62,
+        "released": [
+          "battle",
+          "map",
+          "hud",
+          "units_root",
+          "world",
+          "shadow_batch",
+          "unit"
+        ],
+        "scene_ready_to_first_battle_render_ms": 267.31,
+        "start_button_to_fight_render_ms": 43.96,
+        "visit": 1
+      }
+    ],
+    "draw_callbacks": [
+      {
+        "end": 19384803,
+        "file": "res://scripts/game_map.gd",
+        "node": "@Node2D@131",
+        "start": 19376995
+      },
+      {
+        "end": 19394222,
+        "file": "res://scripts/campaign_scenery.gd",
+        "node": "CampaignEnvironment",
+        "start": 19386473
+      },
+      {
+        "end": 19416099,
+        "file": "",
+        "node": "@Control@172",
+        "start": 19398878
+      },
+      {
+        "end": 19447949,
+        "file": "res://scripts/unit.gd",
+        "node": "@Node2D@289",
+        "start": 19424594
+      },
+      {
+        "end": 19476423,
+        "file": "res://scripts/unit.gd",
+        "node": "@Node2D@290",
+        "start": 19449679
+      },
+      {
+        "end": 19494958,
+        "file": "res://scripts/unit.gd",
+        "node": "@Node2D@291",
+        "start": 19479194
+      },
+      {
+        "end": 19527439,
+        "file": "res://scripts/unit.gd",
+        "node": "@Node2D@292",
+        "start": 19496958
+      },
+      {
+        "end": 19550376,
+        "file": "res://scripts/unit.gd",
+        "node": "@Node2D@293",
+        "start": 19529273
+      },
+      {
+        "end": 19583623,
+        "file": "res://scripts/unit.gd",
+        "node": "@Node2D@294",
+        "start": 19552257
+      },
+      {
+        "end": 19601992,
+        "file": "res://scripts/unit.gd",
+        "node": "@Node2D@295",
+        "start": 19585460
+      },
+      {
+        "end": 19628928,
+        "file": "res://scripts/unit.gd",
+        "node": "@Node2D@296",
+        "start": 19604113
+      }
+    ],
+    "source_revision": "f274ad5e7a7d7920a4785afea7073111afbbe54e",
+    "stage_start_usec": [
+      {
+        "install_start": 19063055,
+        "instantiate": 19067017,
+        "queue_change": 19071500,
+        "start": 19077779,
+        "resolve_level": 19081792,
+        "battle_definitions": 19093307,
+        "world": 19117843,
+        "map_init": 19122109,
+        "map_paint": 19126447,
+        "environment_paint": 19130765,
+        "map_bake": 19135014,
+        "level_decorate": 19139199,
+        "campaign_environment": 19140879,
+        "map_env_props": 19143050,
+        "map_height_script": 19145204,
+        "map_height_build": 19147518,
+        "map_scenery_script": 19152719,
+        "map_scenery_setup": 19154801,
+        "scenery_surface": 19157038,
+        "coast_surface_maps": 19159306,
+        "coast_material": 19174002,
+        "coast_routes": 19180038,
+        "coast_finish": 19182222,
+        "scenery_tiles": 19186700,
+        "scenery_reed_mesh": 19196045,
+        "scenery_decor": 19198813,
+        "scenery_done": 19237624,
+        "map_scenery_done": 19238883,
+        "fog": 19241339,
+        "view_layers": 19243098,
+        "hud_construct": 19247642,
+        "hud_setup": 19301144,
+        "target_cursor": 19302891,
+        "level_deploy": 19324021,
+        "deploy_actors": 19325571,
+        "deploy_tribute": 19331859,
+        "deploy_carts": 19334171,
+        "initial_view": 19370524,
+        "intro": 19372161,
+        "intro_done": 19375133
+      }
+    ],
+    "log_sha256": "2516b216b56f37927e907eb049fa8da2846fb6ed85189bf61e893e5b437f1a4a"
+  },
+  "after": {
+    "final": {
+      "nodes": 74,
+      "objects": 2247.0,
+      "orphans": 0.0,
+      "static_bytes": 235850952.0
+    },
+    "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+    "initial": {
+      "nodes": 74,
+      "objects": 2021.0,
+      "orphans": 0.0,
+      "static_bytes": 197955582.0
+    },
+    "renderer": "forward_plus",
+    "resolution": "(1280.0, 720.0)",
+    "save_and_settings_unchanged": true,
+    "visits": [
+      {
+        "battle_attached_to_scene_ready_ms": 283.28,
+        "entry_to_battle_attached_ms": 10921.15,
+        "entry_to_first_battle_render_ms": 11273.65,
+        "entry_to_first_render_ms": 14.95,
+        "first_pre_draw_to_post_draw_ms": 9.52,
+        "frames_before_scene_ready": 785,
+        "initial_cap": 0,
+        "intro_pages": 3,
+        "loading_cap": 72,
+        "menu_render_ms": 43.58,
+        "menu_state": {
+          "nodes": 74,
+          "objects": 2168.0,
+          "orphans": 0.0,
+          "static_bytes": 232640940.0
+        },
+        "mode": "level1",
+        "mode_page_ms": 33.35,
+        "opening_art": {
+          "merchant_assets": {
+            "chao_gai": {
+              "frames": 1,
+              "path": "res://assets/anim/character_traits_v2_chao_gai_merchant_idle_se.tres"
+            },
+            "gongsun_sheng": {
+              "frames": 1,
+              "path": "res://assets/anim/character_traits_v2_gongsun_sheng_merchant_idle_se.tres"
+            },
+            "liu_tang": {
+              "frames": 1,
+              "path": "res://assets/anim/character_traits_v2_liu_tang_merchant_idle_se.tres"
+            },
+            "ruan_xiaoer": {
+              "frames": 1,
+              "path": "res://assets/anim/character_traits_v2_ruan_xiaoer_merchant_idle_se.tres"
+            },
+            "ruan_xiaoqi": {
+              "frames": 1,
+              "path": "res://assets/anim/character_traits_v2_ruan_xiaoqi_merchant_idle_se.tres"
+            },
+            "ruan_xiaowu": {
+              "frames": 1,
+              "path": "res://assets/anim/character_traits_v2_ruan_xiaowu_merchant_idle_se.tres"
+            },
+            "wu_yong": {
+              "frames": 1,
+              "path": "res://assets/anim/character_traits_v2_wu_yong_merchant_idle_se.tres"
+            }
+          },
+          "merchant_requests": [
+            "res://assets/anim/character_traits_v2_chao_gai_merchant_idle_se.tres",
+            "res://assets/anim/character_traits_v2_wu_yong_merchant_idle_se.tres",
+            "res://assets/anim/character_traits_v2_gongsun_sheng_merchant_idle_se.tres",
+            "res://assets/anim/character_traits_v2_liu_tang_merchant_idle_se.tres",
+            "res://assets/anim/character_traits_v2_ruan_xiaoer_merchant_idle_se.tres",
+            "res://assets/anim/character_traits_v2_ruan_xiaowu_merchant_idle_se.tres",
+            "res://assets/anim/character_traits_v2_ruan_xiaoqi_merchant_idle_se.tres"
+          ]
+        },
+        "ready_to_first_pre_draw_ms": 59.71,
+        "released": [
+          "battle",
+          "map",
+          "hud",
+          "units_root",
+          "world",
+          "shadow_batch",
+          "unit"
+        ],
+        "scene_ready_to_first_battle_render_ms": 69.23,
+        "start_button_to_fight_render_ms": 43.01,
+        "visit": 1
+      },
+      {
+        "battle_attached_to_scene_ready_ms": 224.37,
+        "entry_to_battle_attached_ms": 9689.7,
+        "entry_to_first_battle_render_ms": 9942.49,
+        "entry_to_first_render_ms": 2.39,
+        "first_pre_draw_to_post_draw_ms": 0.94,
+        "frames_before_scene_ready": 692,
+        "initial_cap": 0,
+        "intro_pages": 3,
+        "loading_cap": 72,
+        "menu_render_ms": 43.27,
+        "menu_state": {
+          "nodes": 74,
+          "objects": 2168.0,
+          "orphans": 0.0,
+          "static_bytes": 232664240.0
+        },
+        "mode": "level1",
+        "mode_page_ms": 11.9,
+        "opening_art": {
+          "merchant_assets": {
+            "chao_gai": {
+              "frames": 1,
+              "path": "res://assets/anim/character_traits_v2_chao_gai_merchant_idle_se.tres"
+            },
+            "gongsun_sheng": {
+              "frames": 1,
+              "path": "res://assets/anim/character_traits_v2_gongsun_sheng_merchant_idle_se.tres"
+            },
+            "liu_tang": {
+              "frames": 1,
+              "path": "res://assets/anim/character_traits_v2_liu_tang_merchant_idle_se.tres"
+            },
+            "ruan_xiaoer": {
+              "frames": 1,
+              "path": "res://assets/anim/character_traits_v2_ruan_xiaoer_merchant_idle_se.tres"
+            },
+            "ruan_xiaoqi": {
+              "frames": 1,
+              "path": "res://assets/anim/character_traits_v2_ruan_xiaoqi_merchant_idle_se.tres"
+            },
+            "ruan_xiaowu": {
+              "frames": 1,
+              "path": "res://assets/anim/character_traits_v2_ruan_xiaowu_merchant_idle_se.tres"
+            },
+            "wu_yong": {
+              "frames": 1,
+              "path": "res://assets/anim/character_traits_v2_wu_yong_merchant_idle_se.tres"
+            }
+          },
+          "merchant_requests": []
+        },
+        "ready_to_first_pre_draw_ms": 27.49,
+        "released": [
+          "battle",
+          "map",
+          "hud",
+          "units_root",
+          "world",
+          "shadow_batch",
+          "unit"
+        ],
+        "scene_ready_to_first_battle_render_ms": 28.42,
+        "start_button_to_fight_render_ms": 12.91,
+        "visit": 2
+      },
+      {
+        "battle_attached_to_scene_ready_ms": 409.74,
+        "entry_to_battle_attached_ms": 10331.02,
+        "entry_to_first_battle_render_ms": 10836.69,
+        "entry_to_first_render_ms": 28.6,
+        "first_pre_draw_to_post_draw_ms": 4.79,
+        "frames_before_scene_ready": 743,
+        "initial_cap": 0,
+        "intro_pages": 2,
+        "loading_cap": 72,
+        "menu_render_ms": 45.25,
+        "menu_state": {
+          "nodes": 74,
+          "objects": 2247.0,
+          "orphans": 0.0,
+          "static_bytes": 235854388.0
+        },
+        "mode": "skirmish",
+        "mode_page_ms": 27.05,
+        "opening_art": {
+          "merchant_requests": [],
+          "surface_paths": [
+            "res://assets/campaign/environment/shared/surfaces/surface_forest_earth.png",
+            "res://assets/campaign/environment/shared/surfaces/surface_wet_bank.png",
+            "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png"
+          ]
+        },
+        "ready_to_first_pre_draw_ms": 91.14,
+        "released": [
+          "battle",
+          "map",
+          "hud",
+          "units_root",
+          "world",
+          "shadow_batch",
+          "unit"
+        ],
+        "scene_ready_to_first_battle_render_ms": 95.93,
+        "start_button_to_fight_render_ms": null,
+        "visit": 3
+      }
+    ],
+    "candidate_normalized_sha256": {
+      "scripts/art_db.gd": "c10454f0e730c34dd4654f809e98bd95528790d903367a51f9e90251e06136c2",
+      "scripts/campaign_art.gd": "af73b160a95f8d51b2004630f3d209dd19788a60c84769f74f67c4822002e1b2",
+      "scripts/levels/level1_huangnigang.gd": "8736189632922a7fd8601db0b6b15b24dd97b45ada9800a84d8b66648588d931",
+      "scripts/menu.gd": "9e4e8effccc108de6a3a91b7da9c56aef01c44551ef06ba4ed3f03283251973c"
+    },
+    "draw_callbacks": [
+      {
+        "end": 18418132,
+        "file": "res://scripts/game_map.gd",
+        "node": "@Node2D@131",
+        "start": 18410825
+      },
+      {
+        "end": 18425973,
+        "file": "res://scripts/campaign_scenery.gd",
+        "node": "CampaignEnvironment",
+        "start": 18419592
+      },
+      {
+        "end": 18443746,
+        "file": "",
+        "node": "@Control@172",
+        "start": 18430008
+      },
+      {
+        "end": 18466867,
+        "file": "res://scripts/unit.gd",
+        "node": "@Node2D@296",
+        "start": 18452806
+      },
+      {
+        "end": 28928330,
+        "file": "res://scripts/game_map.gd",
+        "node": "@Node2D@453",
+        "start": 28920983
+      },
+      {
+        "end": 28940063,
+        "file": "res://scripts/campaign_scenery.gd",
+        "node": "CampaignEnvironment",
+        "start": 28933035
+      },
+      {
+        "end": 28944260,
+        "file": "",
+        "node": "@Control@494",
+        "start": 28942521
+      },
+      {
+        "end": 39849276,
+        "file": "res://scripts/game_map.gd",
+        "node": "@Node2D@743",
+        "start": 39837997
+      },
+      {
+        "end": 39870531,
+        "file": "res://scripts/liangshan_scenery.gd",
+        "node": "LiangshanVisualSample",
+        "start": 39851356
+      },
+      {
+        "end": 39905227,
+        "file": "",
+        "node": "@Control@934",
+        "start": 39901425
+      },
+      {
+        "end": 39912349,
+        "file": "res://scripts/unit.gd",
+        "node": "@Node2D@1042",
+        "start": 39910649
+      },
+      {
+        "end": 39918043,
+        "file": "res://scripts/unit.gd",
+        "node": "@Node2D@1062",
+        "start": 39916126
+      },
+      {
+        "end": 39926809,
+        "file": "res://scripts/unit.gd",
+        "node": "@Node2D@1067",
+        "start": 39919808
+      }
+    ],
+    "source_revision": "f274ad5e7a7d7920a4785afea7073111afbbe54e",
+    "stage_start_usec": [
+      {
+        "install_start": 18107980,
+        "instantiate": 18112638,
+        "queue_change": 18117369,
+        "start": 18127382,
+        "resolve_level": 18130539,
+        "battle_definitions": 18141419,
+        "world": 18165679,
+        "map_init": 18169093,
+        "map_paint": 18172785,
+        "environment_paint": 18177116,
+        "map_bake": 18181393,
+        "level_decorate": 18185019,
+        "campaign_environment": 18186660,
+        "map_env_props": 18188740,
+        "map_height_script": 18190732,
+        "map_height_build": 18192839,
+        "map_scenery_script": 18197991,
+        "map_scenery_setup": 18200008,
+        "scenery_surface": 18202051,
+        "coast_surface_maps": 18204197,
+        "coast_material": 18218744,
+        "coast_routes": 18223250,
+        "coast_finish": 18225335,
+        "scenery_tiles": 18227751,
+        "scenery_reed_mesh": 18236999,
+        "scenery_decor": 18239142,
+        "scenery_done": 18282632,
+        "map_scenery_done": 18284528,
+        "fog": 18293036,
+        "view_layers": 18294930,
+        "hud_construct": 18300594,
+        "hud_setup": 18356393,
+        "target_cursor": 18358169,
+        "level_deploy": 18372412,
+        "deploy_actors": 18373802,
+        "deploy_tribute": 18377777,
+        "deploy_carts": 18380299,
+        "initial_view": 18404575,
+        "intro": 18405979,
+        "intro_done": 18408824
+      },
+      {
+        "install_start": 28688426,
+        "instantiate": 28690346,
+        "queue_change": 28692063,
+        "start": 28696445,
+        "resolve_level": 28698026,
+        "battle_definitions": 28700063,
+        "world": 28722556,
+        "map_init": 28724240,
+        "map_paint": 28726164,
+        "environment_paint": 28729197,
+        "map_bake": 28732646,
+        "level_decorate": 28737117,
+        "campaign_environment": 28738296,
+        "map_env_props": 28740404,
+        "map_height_script": 28742559,
+        "map_height_build": 28744720,
+        "map_scenery_script": 28749968,
+        "map_scenery_setup": 28752034,
+        "scenery_surface": 28756395,
+        "coast_surface_maps": 28758640,
+        "coast_material": 28773674,
+        "coast_routes": 28775655,
+        "coast_finish": 28777957,
+        "scenery_tiles": 28782358,
+        "scenery_reed_mesh": 28792406,
+        "scenery_decor": 28794134,
+        "scenery_done": 28828541,
+        "map_scenery_done": 28830211,
+        "fog": 28832978,
+        "view_layers": 28835046,
+        "hud_construct": 28843155,
+        "hud_setup": 28865583,
+        "target_cursor": 28867785,
+        "level_deploy": 28873330,
+        "deploy_actors": 28875305,
+        "deploy_tribute": 28881673,
+        "deploy_carts": 28884075,
+        "initial_view": 28913419,
+        "intro": 28915446,
+        "intro_done": 28918577
+      },
+      {
+        "install_start": 39419841,
+        "instantiate": 39422589,
+        "queue_change": 39424318,
+        "start": 39428088,
+        "resolve_level": 39430073,
+        "battle_definitions": 39432208,
+        "world": 39446199,
+        "map_init": 39448781,
+        "map_paint": 39450914,
+        "environment_paint": 39464482,
+        "map_bake": 39466973,
+        "level_decorate": 39473532,
+        "coast_surface_maps": 39481818,
+        "coast_material": 39507650,
+        "coast_routes": 39510645,
+        "coast_finish": 39512849,
+        "campaign_environment": 39775175,
+        "fog": 39784710,
+        "view_layers": 39786928,
+        "hud_construct": 39796072,
+        "hud_setup": 39818787,
+        "target_cursor": 39821036,
+        "level_deploy": 39825524,
+        "initial_view": 39831586,
+        "intro": 39834008,
+        "intro_done": 39836291
+      }
+    ],
+    "log_sha256": "b3e3f8720bcb9658844395fa287ea784d677baff6ee6477579ef5c11afb7f251"
+  },
+  "baseline_draw_groups": [
+    {
+      "res://scripts/game_map.gd": {
+        "calls_over_0_5_ms": 1,
+        "total_ms": 7.808
+      },
+      "res://scripts/campaign_scenery.gd": {
+        "calls_over_0_5_ms": 1,
+        "total_ms": 7.749
+      },
+      "script_inner_class": {
+        "calls_over_0_5_ms": 1,
+        "total_ms": 17.221
+      },
+      "res://scripts/unit.gd": {
+        "calls_over_0_5_ms": 8,
+        "total_ms": 190.16
+      }
+    }
+  ],
+  "candidate_draw_groups": [
+    {
+      "res://scripts/game_map.gd": {
+        "calls_over_0_5_ms": 1,
+        "total_ms": 7.307
+      },
+      "res://scripts/campaign_scenery.gd": {
+        "calls_over_0_5_ms": 1,
+        "total_ms": 6.381
+      },
+      "script_inner_class": {
+        "calls_over_0_5_ms": 1,
+        "total_ms": 13.738
+      },
+      "res://scripts/unit.gd": {
+        "calls_over_0_5_ms": 1,
+        "total_ms": 14.061
+      }
+    },
+    {
+      "res://scripts/game_map.gd": {
+        "calls_over_0_5_ms": 1,
+        "total_ms": 7.347
+      },
+      "res://scripts/campaign_scenery.gd": {
+        "calls_over_0_5_ms": 1,
+        "total_ms": 7.028
+      },
+      "script_inner_class": {
+        "calls_over_0_5_ms": 1,
+        "total_ms": 1.739
+      }
+    },
+    {
+      "res://scripts/game_map.gd": {
+        "calls_over_0_5_ms": 1,
+        "total_ms": 11.279
+      },
+      "res://scripts/liangshan_scenery.gd": {
+        "calls_over_0_5_ms": 1,
+        "total_ms": 19.175
+      },
+      "script_inner_class": {
+        "calls_over_0_5_ms": 1,
+        "total_ms": 3.802
+      },
+      "res://scripts/unit.gd": {
+        "calls_over_0_5_ms": 3,
+        "total_ms": 10.618
+      }
+    }
+  ],
+  "original_data_subdirectories": [
+    "windows-huangnigang-first-frame-f274ad5e",
+    "windows-huangnigang-draw-callbacks-f274ad5e",
+    "windows-huangnigang-merchant-prefetch-f274ad5e"
+  ],
+  "process_exits": [
+    0,
+    0,
+    0
+  ],
+  "engine_errors": [
+    [],
+    [],
+    []
+  ]
+}

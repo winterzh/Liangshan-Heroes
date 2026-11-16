@@ -8,6 +8,7 @@ var _update_overlay: Control
 var _entry_overlay: ColorRect
 var _entry_scan: RefCounted
 var _entry_surface_requests: Array[String] = []
+var _entry_merchant_requests: Array[String] = []
 var _entry_previous_max_fps := -1
 
 
@@ -55,6 +56,8 @@ func _launch(campaign_level_id := "") -> void:
 		_request_battle_surfaces(campaign_level_id)
 		if campaign_level_id == "level5":
 			Art.prefetch_gao_opening_art()
+		elif campaign_level_id == "level1":
+			_entry_merchant_requests = Art.request_huangnigang_opening_frames()
 	# Continue on the main thread. The worker returns only verified file data.
 	_finish_battle_launch.call_deferred()
 
@@ -158,23 +161,34 @@ func _finish_battle_launch() -> void:
 		return
 	var ground_textures: Array[Texture2D] = []
 	for path in _entry_surface_requests:
-		var status := ResourceLoader.load_threaded_get_status(path)
-		while status == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
-			await get_tree().process_frame
-			if AppLifecycle.quit_started():
-				return
-			status = ResourceLoader.load_threaded_get_status(path)
-		if status == ResourceLoader.THREAD_LOAD_LOADED:
-			var texture := ResourceLoader.load_threaded_get(path) as Texture2D
-			if texture != null:
-				ground_textures.append(texture)
+		var texture := (await _wait_for_battle_resource(path)) as Texture2D
+		if AppLifecycle.quit_started():
+			return
+		if texture != null:
+			ground_textures.append(texture)
 	_entry_surface_requests.clear()
+	for path in _entry_merchant_requests:
+		var frames := (await _wait_for_battle_resource(path)) as SpriteFrames
+		if AppLifecycle.quit_started():
+			return
+		Art.cache_prepared_native_body(path, frames)
+	_entry_merchant_requests.clear()
 	# process_frame runs before this frame's drawing. Let the loading view paint
 	# before the synchronous scene installation, even when the worker ends early.
 	await RenderingServer.frame_post_draw
 	if AppLifecycle.quit_started():
 		return
 	_install_battle.call_deferred(identity, ground_textures)
+
+
+func _wait_for_battle_resource(path: String) -> Resource:
+	var status := ResourceLoader.load_threaded_get_status(path)
+	while status == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+		await get_tree().process_frame
+		if AppLifecycle.quit_started():
+			return null
+		status = ResourceLoader.load_threaded_get_status(path)
+	return ResourceLoader.load_threaded_get(path) if status == ResourceLoader.THREAD_LOAD_LOADED else null
 
 
 func _install_battle(identity: Dictionary, ground_textures: Array[Texture2D]) -> void:

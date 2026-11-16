@@ -2,6 +2,7 @@ extends LevelBase
 ## 黄泥冈：伪装、酒计、搬担。押送者麻倒，不以歼灭护卫判胜。
 const T := GameMap.T
 const EnvironmentArt := preload("res://scripts/campaign_environment_art.gd")
+const CampaignArt := preload("res://scripts/campaign_art.gd")
 const TOP := Vector2i(24, 20)
 const GATE_E := Vector2i(46, 20)
 const GATE_W := Vector2i(6, 20)
@@ -12,7 +13,7 @@ const INSPECT := Vector2i(26, 17)
 const GOOD_WINE := Vector2i(22, 23)
 const SALE_WINE := Vector2i(24, 23)
 const DISTRACT := Vector2i(26, 24)
-const SEVEN := ["chao_gai", "wu_yong", "gongsun_sheng", "liu_tang", "ruan_xiaoer", "ruan_xiaowu", "ruan_xiaoqi"]
+const SEVEN := CampaignArt.HUANGNIGANG_MERCHANTS
 const CARRIERS := ["liu_tang", "ruan_xiaowu", "ruan_xiaoqi"]
 const CARGO_STAGE_CELLS := [Vector2i(23, 19), Vector2i(25, 22), Vector2i(27, 21)]
 const CARGO_ROUTE_NAMES := ["北沿", "中道", "南沿"]
