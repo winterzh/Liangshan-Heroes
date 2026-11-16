@@ -1,5 +1,8 @@
 # 项目目录索引（2026-10-30）
 
+[连环马续玩教场观察](../qa/campaign_resume_current_20261116/README.md)：observe_drill.py用原私有存档的独立副本复现，evidence/drill_observation收录路径拒绝、实际游戏采样及修正后的定向夹具报告。tools/lianhuanma_drill_test.gd临时报告写到 .godot/lianhuanma-drill-fixture。
+
+
 [当前玩法与续玩整合候选](../qa/campaign_resume_current_20261116/README.md)：prepare.py负责新私有来源及首次冷导入；overlay.json与battle_merge.patch记录原26模块和当前Battle合并；workers/与workers.json保留原连环马四进程断言及普通指令策略，run_lianhuanma.py绑定新来源。evidence/first_import保留缺13份元数据的失败，evidence/current_cold保留修正后冷导入及完整来源清单；不含缓存、玩家档或二进制。
 
 

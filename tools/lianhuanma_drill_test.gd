@@ -33,6 +33,16 @@ func _run() -> void:
 	check(not l.drill_complete and not b.mission.has_event("lhm_drill_complete"),"premature practice defeat does not grant story goal")
 	await _reset_drill(b,l)
 	check(alive(l.dummy) and not l.drill_entered and not l.drill_withdrew,"new manual setup replaces defeated rider and resets practice state")
+	# Nearby troops starting on normal guard stance must leave the exercise alone.
+	var bystander = b.units.filter(func(u): return u.faction == 0 and u.key == "gou_lian" and u != hook)[0]
+	var old_position: Vector2 = bystander.position
+	bystander.position = l.dummy.position + Vector2(32, 0)
+	bystander.set_stance(bystander.STANCE_DEFEND)
+	await _wait(2.0)
+	check(l.dummy.hp == 120.0 and bystander._target != l.dummy, "guard does not automatically attack the live practice rider")
+	bystander.order_stop()
+	bystander.set_stance(bystander.STANCE_PASSIVE)
+	bystander.position = old_position
 	_click(b,[lure],l.DRILL_ENTRY+Vector2i(0,2))
 	for i in range(60):
 		await _wait(0.25)
@@ -97,9 +107,9 @@ func _run() -> void:
 			if alive(l.dummy): break
 	check(alive(l.dummy) and l.xu==new_xu,"revived instructor can dispatch the same optional practice action")
 	await _dispose(b)
-	check(checks==18,"all expected drill assertions executed")
+	check(checks==19,"all expected drill assertions executed")
 	Engine.time_scale=1
-	var folder="res://qa/lianhuanma_rts_20260905"
+	var folder="res://.godot/lianhuanma-drill-fixture"
 	DirAccess.make_dir_recursive_absolute(folder)
 	FileAccess.open(folder+"/drill.json",FileAccess.WRITE).store_string(JSON.stringify({"checks":checks,"passed":failures.is_empty(),"failures":failures,"scope":"isolated input/combat fixtures, not campaign balance"},"\t"))
 	print("[lhm-drill] ",checks," checks, failures ",failures)

@@ -251,6 +251,8 @@ func on_mission_action(b,action_id: String,_actor) -> void:
 		dummy.queue_free()
 		b.units.erase(dummy)
 	dummy=replacement
+	# Reserve the practice target for deliberate commands while other troops fight.
+	dummy.set_meta("campaign_no_auto_target", true)
 	dummy.passive=true
 	dummy.set_stance(Unit.STANCE_PASSIVE)
 	drill_lure=null

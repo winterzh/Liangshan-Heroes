@@ -1,5 +1,8 @@
 # 源码设置与换机（2026-10-30）
 
+2026-11-16 连环马演练骑复用Unit已有的 campaign_no_auto_target 标记。Unit通用元数据保存和恢复按原方式保留该布尔值，无新增结构字段。本次生产内容身份变化，后续续玩验证须绑定当前来源。[教场诊断与定向验证](../qa/campaign_resume_current_20261116/README.md)。
+
+
 2026-11-16 新增当前玩法续玩整合候选工具。qa/campaign_resume_current_20261116/prepare.py以Git固定blob、当前规范输入、三方合并Battle、11原UID和13明确导入元数据合成无缓存工程；native helper由--native-root指定本机来源并核对源码/构建收据/EXE，不入库二进制。当前合成身份b32972f3已通过自身首次冷导入，生产26模块尚未采用。run_lianhuanma.py绑定新来源使用原四进程完整演义断言，不能沿用旧批资格。[本批来源与记录](../qa/campaign_resume_current_20261116/README.md)。
 
 
