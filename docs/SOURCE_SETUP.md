@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+战场光标由同一套 RGBA8 图像交给 Input，回菜单恢复系统光标。Windows 真渲染验证覆盖七种图像和两类入口。[进场分段与光标回读](../qa/battle_entry_timing_20261116/README.md#windows-进场分段与光标)
+
 使用 `7341bd27` 封装，实际运行输入与长测的 `88e03a75` 相同。离线原生启动通过，四语、四入口及高俅重进由同一编译包验证。默认加载上限 72 FPS，既有 45 FPS 上限保留。五次正常返回。[最新 Windows 候选](../qa/battle_entry_timing_20261116/README.md#windows-含-72-fps-加载上限的候选)
 
 Windows 主菜单加载默认 72 FPS 批次完成六路 30 分钟源码验收，沿用 Vulkan 1280×720 和独立档案。实跑旧工具报私有内存趋势未通过。现行分析从预热快照起算，继续采集冷启动峰值。[72 FPS 长测结果](../qa/battle_entry_timing_20261116/README.md#windows-72-fps-模式切换三十分钟)

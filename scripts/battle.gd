@@ -269,13 +269,13 @@ var _panning := false      # 触屏：单指拖动地图中
 var _drag_cur := Vector2.ZERO   # 触屏：当前手指位置
 var _last_tap_ms := 0      # 触屏双击检测
 var _last_tap_pos := Vector2.ZERO
-var _target_cursor: ImageTexture   # 攻击/施法指向时的「圈中带点」鼠标
-var _cur_attack: ImageTexture
-var _cur_gather_wood: ImageTexture
-var _cur_gather_gold: ImageTexture
-var _cur_repair: ImageTexture
-var _cur_select: ImageTexture
-var _cur_garrison: ImageTexture   # 驻军：靛蓝环+拱门，提示「点这进驻」
+var _target_cursor: Image   # 攻击/施法指向时的「圈中带点」鼠标
+var _cur_attack: Image
+var _cur_gather_wood: Image
+var _cur_gather_gold: Image
+var _cur_repair: Image
+var _cur_select: Image
+var _cur_garrison: Image   # 驻军：靛蓝环+拱门，提示「点这进驻」
 var _hover_kind := "normal"
 var _cursor_resources_released := false
 
@@ -6290,7 +6290,9 @@ func _install_target_cursor() -> void:
 				img.set_pixel(x, y, Color(1, 1, 1, 0.95))        # 中心点
 			elif d <= 3.4:
 				img.set_pixel(x, y, Color(0.05, 0.05, 0.05, 0.7)) # 中心点描边
-	_target_cursor = ImageTexture.create_from_image(img)
+	# The window system reads cursor pixels on the CPU. Keep the generated
+	# image here so registering or changing a cursor needs no GPU readback.
+	_target_cursor = img
 	Input.set_custom_mouse_cursor(_target_cursor, Input.CURSOR_CROSS, c)
 	# 情境悬停光标：每种动作=不同颜色+不同图标，一眼区分。
 	# 选取用「中性白」而非绿——把绿色让给「林木采集」，避免悬停树/空地都是绿环分不清。
@@ -6302,8 +6304,7 @@ func _install_target_cursor() -> void:
 	_cur_select = _ring_cursor(Color(0.94, 0.94, 0.80), "")           # 选取：中性米白环
 
 
-## Input/DisplayServer 会跨场景缓存已注册的光标资源；若不在 Battle 离树时主动
-## 注销，运行时生成的 ImageTexture 会晚于 RenderingServer 析构并留下退出 RID 告警。
+## Input/DisplayServer 会跨场景缓存已注册的光标资源，离开战场时还原系统光标。
 func _release_custom_cursor_resources() -> void:
 	if _cursor_resources_released:
 		return
@@ -6324,7 +6325,7 @@ func _release_custom_cursor_resources() -> void:
 const CURSOR_SZ := 38   # 光标边长（热点取一半，见 _update_hover_cursor）
 
 ## 构造一枚环形光标（更大更粗 + 中心图标 dot/tree/coin/plus/box）
-func _ring_cursor(col: Color, glyph: String) -> ImageTexture:
+func _ring_cursor(col: Color, glyph: String) -> Image:
 	var sz := CURSOR_SZ
 	var img := Image.create(sz, sz, false, Image.FORMAT_RGBA8)
 	img.fill(Color(0, 0, 0, 0))
@@ -6365,7 +6366,7 @@ func _ring_cursor(col: Color, glyph: String) -> ImageTexture:
 					"plus":
 						if (absf(rx) <= 1.7 and absf(ry) <= 5.0) or (absf(ry) <= 1.7 and absf(rx) <= 5.0):
 							img.set_pixel(x, y, col)
-	return ImageTexture.create_from_image(img)
+	return img
 
 
 ## 每帧按鼠标下内容切换悬停光标（采集/攻击/修理/选取/普通）
