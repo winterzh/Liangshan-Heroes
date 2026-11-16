@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+2026-11-16 M3首批将连环马原有破阵判定抽为`hook_conditions`，单位查看通过关卡可选接口`unit_tactical_hint`读取，不新增存档字段或改profile结构。`campaign_hooks.json`新增9条四语并同步catalog；公共HUD生产输入有变化，不沿用先前冻结候选资格。[来源与限定渲染结果](../qa/campaign_hooks_20261116/README.md)。
+
 2026-11-16 战役深化按[路线图](CAMPAIGN_ROADMAP_20261116.md)推进。祝家庄小队与入口增援状态已登记到Level组件，当前恢复profile为`campaign_level3_v3`；旧战斗候选不猜测迁移，正式战役续玩仍按独立整合验收开放。运行翻译新增`campaign_tactics.json`、`campaign_siege.json`来源并同步catalog。首次开发使用独立工作树；冻结候选不原地覆盖。
 
 本批[小队与侦察专项](../qa/campaign_squad_20261116/README.md)11项定向夹具通过，范围为决策和Level组件；不继承为整关或完整续玩证明。复跑命令及本机引擎锁约定见该记录。

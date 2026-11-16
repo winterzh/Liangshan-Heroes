@@ -2495,6 +2495,13 @@ func _refresh_panel() -> void:
 	else:
 		_info_stats.text = Localize.format_text("攻 %d    防 %d    射程 %d    移速 %d    ｜ %s", [
 			int(round(prim.atk * prim.buff_atk)), _eff_def(prim), int(prim.atk_range), int(prim.base_speed), _stance_tag(prim)])
+	# Optional chapter feedback uses the same predicate as combat. Other modes
+	# retain their normal panel; inspecting an enemy never creates an order.
+	if battle != null and battle.level != null and battle.level.has_method("unit_tactical_hint"):
+		var tactical: String = battle.level.unit_tactical_hint(battle, prim)
+		if not tactical.is_empty():
+			Localize.unbind(_info_stats)
+			_info_stats.text += "\n" + tactical
 
 
 ## 有效防御值（含双戒刀削甲 _def_down）；每点防约减 5% 普攻伤害。

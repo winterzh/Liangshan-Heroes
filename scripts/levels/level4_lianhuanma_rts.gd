@@ -283,16 +283,57 @@ func _drill_tick(b) -> void:
 		drill_coordinated=attackers.has(xu) and attackers.any(func(u): return u.key=="gou_lian")
 func _hook_team(b,rider) -> Array:
 	return b.units.filter(func(u): return alive(u) and u.faction==0 and u.key in HOOK_KEYS and not u.garrisoned and not u.is_captive and u._stun_t<=0 and u._disarm_t<=0 and u.position.distance_to(rider.position)<=96 and b.map._segment_open(u.position,rider.position,u.movement_profile))
+
+## One read-only predicate for both simulation and player feedback. Does not
+## issue orders, refresh effects, reveal fog, or add state to a saved battle.
+func hook_conditions(b, rider) -> Dictionary:
+	if rider not in riders or not alive(rider): return {"valid": false}
+	var terrain: int = b.map.t_world(rider.position)
+	var impeded: bool = terrain in [T.REEDS,T.MARSH] or rider.temp_speed < 0.8
+	var hooks: Array = _hook_team(b, rider)
+	var attacking := hooks.any(func(h): return h._target == rider and h.position.distance_to(rider.position) <= h.atk_range + rider.radius + h.radius + 8)
+	var broken := bool(rider.get_meta("formation_broken", false))
+	return {"valid": true, "broken": broken, "impeded": impeded,
+		"partners": hooks.size(), "attacking": attacking,
+		"ready": not broken and impeded and hooks.size() >= 2 and attacking}
+
+func unit_tactical_hint(b, unit) -> String:
+	if not alive(unit): return ""
+	var rider = unit
+	if unit.key in HOOK_KEYS and unit.faction == Unit.FACTION_LIANG:
+		if unit._target in riders and alive(unit._target) and b.is_visible_world(unit._target.position):
+			rider = unit._target
+		else:
+			return Localize.text("钩镰配合：两人贴近受阻甲马\n右键攻击；徐宁可充当搭档")
+	elif unit not in riders:
+		return ""
+	if not b.is_visible_world(rider.position):
+		return Localize.text("暂无视野，无法判断破阵条件")
+	var state := hook_conditions(b, rider)
+	if not state.valid: return ""
+	if state.broken:
+		return Localize.text("连环阵已破 · 可集火击溃")
+	# Show the actual link effect, including its remaining duration, rather
+	# than inferring protection from an unseen neighboring rider.
+	var link: Dictionary = rider._damage_reduction_sources.get(LINK_SOURCE, {})
+	var protection := float(link.get("amount", 0.0)) if float(link.get("t", 0.0)) > 0.0 else 0.0
+	var guard := Localize.format_text("连环护阵%d%%", roundi(protection * 100.0))
+	var instruction := "下钩条件已齐"
+	if not state.impeded:
+		instruction = "先引入芦苇、沼泽，或使其显著减速"
+	elif state.partners < 2:
+		instruction = "调两名钩镰单位近身配合"
+	elif not state.attacking:
+		instruction = "搭档已到，右键攻击此骑"
+	return Localize.format_text("%s · 钩镰%d/2", [guard, mini(2, state.partners)]) + "\n" + Localize.text(instruction)
+
 func _rider_tick(b) -> void:
 	for u in riders:
 		if not alive(u) or bool(u.get_meta("formation_broken",false)): continue
 		var neighbors: int=riders.filter(func(other): return other!=u and alive(other) and not bool(other.get_meta("formation_broken",false)) and other.position.distance_to(u.position)<150).size()
 		if neighbors>0: u.apply_damage_reduction(0.5,1.25,LINK_SOURCE)
 		else: u._damage_reduction_sources.erase(LINK_SOURCE); u._refresh_damage_reduction()
-		var terrain: int=b.map.t_world(u.position)
-		var impeded: bool=terrain in [T.REEDS,T.MARSH] or u.temp_speed<0.8
-		var hooks: Array=_hook_team(b,u)
-		if impeded and hooks.size()>=2 and hooks.any(func(h): return h._target==u and h.position.distance_to(u.position)<=h.atk_range+u.radius+h.radius+8):
+		if hook_conditions(b, u).ready:
 			u.set_meta("formation_broken",true)
 			u.set_meta("wave_state","broken")
 			u._damage_reduction_sources.erase(LINK_SOURCE)
