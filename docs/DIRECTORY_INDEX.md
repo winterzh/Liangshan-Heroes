@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[祝家庄查看与四语定向记录](../qa/campaign_siege_20261116/scouting_hints/report.json)含实际点击、迷雾和英文窄窗。
+
 [高俅开战前预警与定位证据](../qa/campaign_flagship_escort_20261116/wave_warnings/report.json)含四语、时点和两个表现层描述符。
 
 [高俅撤离后失船证据](../qa/campaign_naval_recovery_20261116/late_escort_loss/report.json)含实战驾驶、原日志和结算结果。

@@ -2175,7 +2175,7 @@ func update_selection_panel(sel: Array) -> void:
 ## Keep desktop commands, production queues and right-hand controls inside a narrow window.
 ## Existing buttons, their order, learn hit areas and inventory actions remain.
 func _layout_desktop_hero() -> void:
-	if _bottom_row == null or _command_scroll == null or _selection_scroll == null:
+	if not is_inside_tree() or _bottom_row == null or _command_scroll == null or _selection_scroll == null:
 		return
 	var actor = battle.active_unit() if battle != null else null
 	var narrow_limit := 1100.0 if actor != null and actor.is_hero else 1400.0
@@ -2536,6 +2536,9 @@ func _refresh_panel() -> void:
 			var pct: int = int(prim.build_progress / maxf(prim.build_time, 0.1) * 100.0)
 			_info_hp.text = Localize.format_text("施工  %d%%   （生命 %d / %d）", [pct, int(prim.hp), int(prim.max_hp)])
 			Localize.bind_render(_info_stats, func() -> String: return Localize.text("右键工地续建 · 空选取消退资源"))
+		elif prim.setup_def.has("produces") and prim.faction == Unit.FACTION_GUAN:
+			Localize.unbind(_info_stats)
+			_info_stats.text = ""
 		elif prim.setup_def.has("produces"):
 			var q: int = prim._train_queue.size()
 			if q > 0:
@@ -2569,7 +2572,7 @@ func _refresh_panel() -> void:
 		var tactical: String = battle.level.unit_tactical_hint(battle, prim)
 		if not tactical.is_empty():
 			Localize.unbind(_info_stats)
-			_info_stats.text += "\n" + tactical
+			_info_stats.text = tactical if _info_stats.text.is_empty() else _info_stats.text + "\n" + tactical
 
 
 ## 有效防御值（含双戒刀削甲 _def_down）；每点防约减 5% 普攻伤害。

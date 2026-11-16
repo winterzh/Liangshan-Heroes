@@ -552,6 +552,28 @@ func _gate_defense_tick(b, delta: float) -> void:
 		SquadOrders.guard(gate_defenders)
 		defense_state = "guard"
 
+func unit_tactical_hint(b, u: Unit) -> String:
+	if not _alive(u) or u.garrisoned or u._invis_t > 0.0:
+		return ""
+	if u.faction == Unit.FACTION_GUAN and not b.is_visible_world(u.position):
+		return ""
+	if u == outpost:
+		return Localize.text("拆掉外营可断新援；已出击的庄客仍在场。")
+	if u in resource_guards:
+		return Localize.text("北矿守军。击退守军后派兵占住矿区，再调工人采金。")
+	if u == gate:
+		return Localize.text("正攻可先用投石车拆箭楼，再让步兵护撞车攻门。")
+	if u == side_gate:
+		if _alive(sun):
+			return Localize.text("孙立在阵。前往接应标记可开偏门，也可用器械强攻。")
+		if sent_sun:
+			return Localize.text("内应已失。可带器械攻破偏门。")
+		return Localize.text("偏门可强攻，也可侦察外围寻找内应。")
+	if u == sun and _alive(side_gate):
+		return Localize.text("选中孙立，右键接应标记打开偏门。")
+	return ""
+
+
 func _refresh_stage(b) -> void:
 	var side_open: bool = inside_open or b.mission.has_event("zhu_side_breached")
 	stage = "siege" if main_breached or side_open or supply_cut or manor_fallen or prisoners_freed else "contest" if expansion_secured or sent_sun else "scout"

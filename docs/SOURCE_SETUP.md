@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+祝家庄打法提示沿用 HUD 的 unit_tactical_hint，受当前视野与原角色状态约束。词条存于 zhujiazhuang_scouting_hints.json。[祝家庄侦察查看](../qa/campaign_siege_20261116/README.md#侦察后查看打法)
+
 高俅预警复用 waves.warned 和原有战场状态。两个定位按钮沿用通用 Mission 表现层描述符。四语载入 gao_wave_warnings.json。[高俅三批预警与定位](../qa/campaign_flagship_escort_20261116/README.md#开战前预警与两线定位)
 
 高俅撤离后失船复用既有实战驾驶。从隔离档案运行新增证据目录中的 probe.gd，可通过常规船队指令复现撤离、失船和付费重新集结。[高俅撤离后失船实跑](../qa/campaign_naval_recovery_20261116/README.md#两船安全撤离后失船)
