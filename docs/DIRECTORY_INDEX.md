@@ -1,5 +1,8 @@
 # 项目目录索引（2026-10-30）
 
+[高俅稳定分支十分钟](../qa/campaign_sustained_performance_20261116/stable_aed84d03.json)含 `aed84d03` 的逐分钟帧间隔、性能门槛与同探针对照。
+
+
 [平坦地形高度复用](../qa/campaign_sustained_performance_20261116/flat_height_grid_samples.json)记录地图内外采样、格点数据更换验证和短测。
 
 
