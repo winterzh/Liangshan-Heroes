@@ -1,0 +1,32 @@
+--- a/scripts/battle.gd
++++ b/scripts/battle.gd
+@@ -411,0 +412 @@
++	var profile_started := Time.get_ticks_usec()
+@@ -440,0 +442 @@
++	print("ENTRY_PROFILE before_identity ", Time.get_ticks_usec() - profile_started)
+@@ -453,0 +456 @@
++	print("ENTRY_PROFILE after_identity ", Time.get_ticks_usec() - profile_started)
+@@ -484,0 +488 @@
++	print("ENTRY_PROFILE before_map ", Time.get_ticks_usec() - profile_started)
+@@ -491,0 +496 @@
++	print("ENTRY_PROFILE before_environment ", Time.get_ticks_usec() - profile_started)
+@@ -502,0 +508 @@
++	print("ENTRY_PROFILE after_map ", Time.get_ticks_usec() - profile_started)
+@@ -543,0 +550 @@
++	print("ENTRY_PROFILE before_hud ", Time.get_ticks_usec() - profile_started)
+@@ -552,0 +560 @@
++	print("ENTRY_PROFILE before_deploy ", Time.get_ticks_usec() - profile_started)
+@@ -555,0 +564 @@
++	print("ENTRY_PROFILE after_deploy ", Time.get_ticks_usec() - profile_started)
+--- a/scripts/run_content_identity.gd
++++ b/scripts/run_content_identity.gd
+@@ -272,0 +273 @@
++	var profile_started := Time.get_ticks_usec()
+@@ -278,0 +280 @@
++	print("ENTRY_PROFILE after_executable_sha ", Time.get_ticks_usec() - profile_started)
+@@ -300,0 +303 @@
++		print("ENTRY_PROFILE before_source_snapshot ", Time.get_ticks_usec() - profile_started)
+@@ -301,0 +305 @@
++		print("ENTRY_PROFILE after_source_snapshot ", Time.get_ticks_usec() - profile_started)
+@@ -328,0 +333 @@
++	print("ENTRY_PROFILE identity_complete ", Time.get_ticks_usec() - profile_started)
