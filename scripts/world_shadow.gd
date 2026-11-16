@@ -46,6 +46,9 @@ class ShadowBatch extends Node2D:
 	var active_count := 0
 	var retained_dying_units: Array = []
 	var retained_dying_visible := 0
+	var _written_slots := PackedByteArray()
+	var _slot_transforms: Array[Transform2D] = []
+	var _slot_colors := PackedColorArray()
 
 	func setup(p_battle) -> void:
 		battle = p_battle
@@ -135,6 +138,15 @@ void fragment() {
 		# Colors carry radius + opacity and must be enabled before instance_count.
 		paired_multimesh.instance_count = capacity
 		paired_multimesh.visible_instance_count = 0
+		_written_slots.resize(capacity)
+		_written_slots.fill(0)
+		_slot_transforms.resize(capacity)
+		_slot_colors.resize(capacity)
+
+	func install_restored_buffer(buffer: PackedFloat32Array, visible_count: int) -> void:
+		paired_multimesh.buffer = buffer
+		paired_multimesh.visible_instance_count = visible_count
+		_written_slots.fill(0)
 
 	func _process(_delta: float) -> void:
 		if battle == null or not is_instance_valid(battle) or not WorldShadow._enabled:
@@ -171,7 +183,8 @@ void fragment() {
 			index = _write_unit_shadow(unit, index)
 		retained_dying_visible = index - living_visible
 		active_count = index
-		paired_multimesh.visible_instance_count = active_count
+		if paired_multimesh.visible_instance_count != active_count:
+			paired_multimesh.visible_instance_count = active_count
 
 	func _write_unit_shadow(unit, index: int) -> int:
 		if not WorldShadow._batch_eligible(unit, battle):
@@ -191,8 +204,16 @@ void fragment() {
 		# directly below Battle.world, so compose origin + slope exactly once.
 		# The shader then reconstructs both former local transforms, including
 		# the cast's ISO inverse, from one instance color and transform.
-		paired_multimesh.set_instance_transform_2d(index, Transform2D(0.0, origin) * ground)
-		paired_multimesh.set_instance_color(index, Color(radius / RADIUS_ENCODING_SCALE, opacity, 0.0, 1.0))
+		var transform := Transform2D(0.0, origin) * ground
+		var color := Color(radius / RADIUS_ENCODING_SCALE, opacity, 0.0, 1.0)
+		var written := _written_slots[index] != 0
+		if not written or _slot_transforms[index] != transform:
+			paired_multimesh.set_instance_transform_2d(index, transform)
+			_slot_transforms[index] = transform
+		if not written or _slot_colors[index] != color:
+			paired_multimesh.set_instance_color(index, color)
+			_slot_colors[index] = color
+		_written_slots[index] = 1
 		return index + 1
 
 	func retain_dying_unit(unit) -> void:

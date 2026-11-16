@@ -201,7 +201,7 @@ func bind(owner: Variant, record: Variant, units: Dictionary) -> Dictionary:
 			if role == "water": node.set_meta("_run_restore_prepared", true)
 			if role == "shadow":
 				node._resize(row.capacity); node.active_count = row.active; node.retained_dying_visible = row.retained_visible
-				node.paired_multimesh.buffer = row.buffer.hex_decode().to_float32_array(); node.paired_multimesh.visible_instance_count = row.active
+				node.install_restored_buffer(row.buffer.hex_decode().to_float32_array(), row.active)
 				for id: String in row.retained: node.retained_dying_units.append(units[id])
 				_assign(node.paired_instances, row.instances)
 			owner.world.add_child(node); nodes[role] = node

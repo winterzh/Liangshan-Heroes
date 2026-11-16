@@ -1,5 +1,8 @@
 # 源码设置与换机（2026-10-30）
 
+WorldShadow 的提交记录按 MultiMesh 槽位持有。扩容与恢复提交使旧记录失效，继续使用原存档缓冲格式。[单位阴影复测](../qa/campaign_sustained_performance_20261116/README.md#单位阴影变换与颜色提交)
+
+
 Art 的短期结果按引擎进程帧更新，运行时美术别名更换后下一次查找立即重建。缺失资源仍按原路径处理。[单位资源查询复测](../qa/campaign_sustained_performance_20261116/README.md#同帧复用单位资源查询)
 
 

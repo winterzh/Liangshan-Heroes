@@ -1,5 +1,8 @@
 # 项目目录索引（2026-10-30）
 
+[阴影缓冲写入](../qa/campaign_sustained_performance_20261116/unchanged_shadow_slots.json)记录原始和按变更提交的槽位次数、缓冲对照及 55 秒游戏样本。
+
+
 [同帧单位资源查询](../qa/campaign_sustained_performance_20261116/frame_asset_lookup.json)含 24 组配对计时、画面资源合同和短测夹具的边界。
 
 
