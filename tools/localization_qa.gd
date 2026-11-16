@@ -53,9 +53,31 @@ func _run() -> void:
 	var formatted := Label.new()
 	menu.add_child(formatted)
 	Localize.bind_text(formatted, Localize.format_text("生命  %d / %d", [25, 100]), &"text", "  ×2")
+	var skirmish_script := preload("res://scripts/levels/skirmish_ai.gd")
+	menu._show_1v1()
+	var difficulty := menu.find_child("DifficultyRules", true, false) as Label
+	menu._show_economy_guide()
+	var economy: Label
+	for label in menu.find_children("*", "Label", true, false):
+		if label.text == skirmish_script.economy_guide_text():
+			economy = label
+			break
+	for destination_case in [["skirmish", "驻守战"], ["skirmish_ai", "1v1 对战"], ["arena", "竞技场"],
+			["custom_defense", "自定义据守"], ["scenario", "自定义关卡"]]:
+		var previous: bool = Campaign.get(destination_case[0])
+		Campaign.set(destination_case[0], true)
+		check(menu._battle_loading_destination("") == destination_case[1], "loading destination for " + destination_case[0])
+		Campaign.set(destination_case[0], previous)
+	var level_id := "level5"
+	var level_title := String(Campaign.LEVELS[Campaign.index_for_id(level_id)]["title"])
+	menu._show_battle_loading(level_id)
+	var loading := menu.get_node("BattleLoading").find_children("*", "Label", true, false)[0] as Label
 	for language in ["en", "ja", "zh_TW", "zh_CN"]:
 		Localize.set_language(language, false)
 		await get_tree().process_frame
+		check(difficulty != null and difficulty.text == skirmish_script.difficulty_rules_text(), "open 1v1 rules: " + language)
+		check(economy != null and economy.text == skirmish_script.economy_guide_text(), "open economy guide: " + language)
+		check(loading.text == Localize.text("正在准备战斗 · %s") % Localize.text(level_title), "open campaign loading label: " + language)
 		check(get_tree().current_scene.get_instance_id() == scene_id, "language keeps scene: " + language)
 		check(Campaign.records == original_records, "language keeps progress: " + language)
 		for entry in original_achievements:

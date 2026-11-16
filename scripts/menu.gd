@@ -50,7 +50,7 @@ func _launch(campaign_level_id := "") -> void:
 	if DisplayServer.get_name() == "headless" or AndroidUpdater.enabled:
 		_launch_immediately()
 		return
-	_show_battle_loading()
+	_show_battle_loading(campaign_level_id)
 	if OS.get_name() == "Windows":
 		_request_battle_surfaces(campaign_level_id)
 		if campaign_level_id == "level5":
@@ -63,7 +63,7 @@ func _launch_immediately() -> void:
 	get_tree().change_scene_to_file.call_deferred("res://scenes/main.tscn")
 
 
-func _show_battle_loading() -> void:
+func _show_battle_loading(campaign_level_id: String) -> void:
 	# In VSync-off windows the loading view can otherwise compete with the scan
 	# for CPU while rendering hundreds of identical frames per second.
 	_entry_previous_max_fps = Engine.max_fps
@@ -84,7 +84,11 @@ func _show_battle_loading() -> void:
 	column.add_theme_constant_override("separation", 20)
 	center.add_child(column)
 	var label := Label.new()
-	Localize.bind_text(label, "正在读取战斗，请稍候…")
+	var destination := _battle_loading_destination(campaign_level_id)
+	if destination.is_empty():
+		Localize.bind_text(label, "正在读取战斗，请稍候…")
+	else:
+		Localize.bind_format(label, "正在准备战斗 · %s", destination)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.add_theme_font_size_override("font_size", 24)
 	column.add_child(label)
@@ -93,6 +97,21 @@ func _show_battle_loading() -> void:
 	progress.show_percentage = false
 	progress.indeterminate = true
 	column.add_child(progress)
+
+
+func _battle_loading_destination(campaign_level_id: String) -> String:
+	if Campaign.scenario:
+		return "自定义关卡"
+	if Campaign.custom_defense:
+		return "自定义据守"
+	if Campaign.arena:
+		return "竞技场"
+	if Campaign.skirmish_ai:
+		return "1v1 对战"
+	if Campaign.skirmish:
+		return "驻守战"
+	var index := Campaign.index_for_id(campaign_level_id)
+	return String(Campaign.LEVELS[index]["title"]) if index >= 0 else ""
 
 
 func _input(_event: InputEvent) -> void:
@@ -769,7 +788,8 @@ func _show_1v1() -> void:
 
 	var rules := Label.new()
 	rules.name = "DifficultyRules"
-	rules.text = preload("res://scripts/levels/skirmish_ai.gd").difficulty_rules_text()
+	Localize.bind_render(rules, func() -> String:
+		return preload("res://scripts/levels/skirmish_ai.gd").difficulty_rules_text())
 	rules.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	rules.custom_minimum_size.x = 520
 	rules.add_theme_font_size_override("font_size", 15)
@@ -811,7 +831,8 @@ func _show_economy_guide() -> void:
 	var ov := _mk_overlay("经济与兵种入门")
 	var box: VBoxContainer = ov[1]
 	var guide := Label.new()
-	guide.text = preload("res://scripts/levels/skirmish_ai.gd").economy_guide_text()
+	Localize.bind_render(guide, func() -> String:
+		return preload("res://scripts/levels/skirmish_ai.gd").economy_guide_text())
 	guide.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	guide.custom_minimum_size.x = 520
 	guide.add_theme_font_size_override("font_size", 18)
