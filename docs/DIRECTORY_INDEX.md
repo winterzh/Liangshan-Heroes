@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[最新候选续玩证据](../qa/campaign_resume_current_20261116/evidence/current_stable_07df0d96/README.md#2026-11-16-最新候选的连环马续玩链通过)
+
 [最新续玩候选导入记录](../qa/campaign_resume_current_20261116/evidence/current_stable_07df0d96/README.md) 含冷导入收据、内容身份和复建所用的脚本 UID。
 
 [同档胜利与旧档拒绝原件](../qa/campaign_resume_current_20261116/evidence/protected_drill_candidate/ram_escort_terminal/)含全过程胜利、独立进程拒绝及来源核对收据。

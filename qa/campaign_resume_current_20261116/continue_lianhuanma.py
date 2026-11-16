@@ -140,8 +140,8 @@ def execute(args):
                 p.need(not prior.get('steps'), 'Another continuation process already started for this batch')
     run, project, preparation = p.admission(old.parent)
     completed_modes = tuple(s['case'] for s in original['steps'])
-    p.need(completed_modes in (host.MODES[:1], host.MODES[:2]),
-           'Expected one or two completed save stages')
+    p.need(0 < len(completed_modes) < len(host.MODES) and completed_modes == host.MODES[:len(completed_modes)],
+           'Expected a completed prefix of the original verification stages')
     remaining_modes = host.MODES[len(completed_modes):]
     first_mode = remaining_modes[0]
     occupancy = RuntimeError('Godot/Liangshan engine appeared before step ' + first_mode)
@@ -172,9 +172,13 @@ def execute(args):
     pins[str(Path(__file__))] = p.sha(__file__)
     generation = p.read(run / 'generation.json')
     p.identity.verify_generated(project, generation)
-    cold = p.read(run / 'cold_import/receipt.json')
+    cold_path = run / 'cold_import/receipt.json'
+    cold = p.read(cold_path)
     engine = args.godot.absolute()
-    p.need(cold['complete'] and cold['cold_import_qualified'] and cold['lock_released']
+    recovered_import = (cold.get('lock_released') is False and len(cold['steps']) == 1
+                        and original.get('recovered_cold_lock') == {
+                            'receipt_sha256': p.sha(cold_path), 'import_pid': cold['steps'][0]['pid']})
+    p.need(cold['complete'] and cold['cold_import_qualified'] and (cold['lock_released'] or recovered_import)
            and cold['engine_sha256'] == p.sha(engine), 'Own cold import and same engine required')
     identity = 'source-v1:' + generation['identity']['source_sha256']
     p.need(original['source_identity'] == identity, 'Same current candidate required')
@@ -192,8 +196,16 @@ def execute(args):
                and report['mode'] == step['case'] and report['profile'] == str(profile)
                and report['batch_nonce'] == nonce and report['candidate_manifest_sha256'] == manifest_sha
                and report['identity']['content_version'] == identity and report['identity']['engine_sha256'] == cold['engine_sha256']
-               and report['full_story_required'] is True and report['save_exit_observed'] is True
-               and report['exit_reason'] == 'continue_saved', 'Original saved-stage evidence changed')
+               and report['full_story_required'] is True, 'Original completed-stage evidence changed')
+        if step['case'] == 'resume_victory':
+            terminal = report['terminal_checkpoint']
+            result = terminal['full_result']
+            p.need(result['core_cleared'] is True and result['story_complete'] is True
+                   and result['story_done'] == result['story_total'] == 4
+                   and terminal['lifecycle']['generation'] == 3, 'Durable original victory and all story goals required')
+        else:
+            p.need(report['save_exit_observed'] is True and report['exit_reason'] == 'continue_saved',
+                   'Original production save and exit required')
     p.need(len(pids) == len(saved_steps) and all(type(pid) is int and pid > 0 for pid in pids),
            'Distinct earlier PIDs required')
     previous = Path(saved_reports[-1]['path'])
@@ -201,11 +213,11 @@ def execute(args):
     output.mkdir()
     receipt = {'schema': 'current_lianhuanma_tail_v1', 'complete': False, 'steps': [], 'reports': [],
                'previous_batch': str(old), 'previous_receipt_sha256': p.sha(old / 'receipt.json'),
-               'source_identity': identity, 'profile': str(profile), 'batch_nonce': nonce,
+               'reused_saved_reports': saved_reports, 'source_identity': identity, 'profile': str(profile), 'batch_nonce': nonce,
                'full_story_required': True, 'source_victory_chain_passed': False,
                'public_continue_qualified': False, 'native_sdk_qualified': False, 'human_acceptance': False}
     if args.retry_lure_tail:
-        receipt.update(retry_lure_tail=str(args.retry_lure_tail), reused_saved_reports=saved_reports,
+        receipt.update(retry_lure_tail=str(args.retry_lure_tail),
                        retry_strategy_sha256=p.sha(HERE / 'workers/driver.gd'))
     receipt.update({key: str(tail) for key, tail in zip(ASSAULT_RECEIPT_KEYS, counter_tails)})
     locked = False
