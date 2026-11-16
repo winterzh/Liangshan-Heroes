@@ -360,6 +360,12 @@ func _fire_escorts(b,actor) -> Array:
 	return [b.find_unit("ruan_xiaoer_boat"),b.find_unit("ruan_xiaowu_boat")].filter(func(u): return alive(u) and u.position.distance_to(actor.position)<=220)
 func _withdraw_crew(b) -> Array:
 	return [liu_carrier,b.find_unit("ruan_xiaowu_boat")].filter(func(u): return _near(b,u,FIRE_SAFE,120))
+func _liu_loss_text(b) -> String:
+	if not fire_lit:
+		return "搭载刘唐的船只损失，刘唐失散；可在忠义堂正常付费重新集结，火攻不再能补办。"
+	if b.mission.has_event("fire_escort_safe"):
+		return "刘唐随阮小二船失散。已完成的火攻演义保留，可在忠义堂付费重新集结刘唐。"
+	return "阮小二船在撤离前沉没，刘唐失散。火攻演义未成，可在忠义堂付费重新集结刘唐。"
 func unit_tactical_hint(b,u) -> String:
 	if not is_instance_valid(u): return ""
 	if u.faction==1 and _flagship_guards().has(u):
@@ -370,6 +376,8 @@ func unit_tactical_hint(b,u) -> String:
 	if u.key not in ["liu_tang","liu_tang_fireboat","ruan_xiaoer_boat","ruan_xiaowu_boat"]: return ""
 	if b.mission.has_event("gao_liu_returned") and u.key=="liu_tang":
 		return Localize.text("刘唐已返港，可继续指挥岸军。")
+	if b.mission.has_event("liu_tang_lost"):
+		return Localize.text("刘唐已重新集结，可继续指挥岸军。" if alive(b.find_unit("liu_tang")) else _liu_loss_text(b))
 	if fire_abandoned or b.mission.story_goals.get("gao_fire",{}).get("state","")=="missed":
 		return Localize.text("本次火攻已失去条件；继续指挥普通舰队。\n刘唐若仍在原船，可右键返港标记下船。")
 	if b.mission.has_event("fire_escort_safe"):
@@ -384,7 +392,7 @@ func unit_tactical_hint(b,u) -> String:
 	return Localize.format_text("刘唐到码头备火需60木，当前%d木。\n待装火具小船须留在主码头。",[int(b.wood)])
 func _fire_unavailable(b,reason: String) -> void:
 	if b.mission.has_event("fire_escort_safe"): return
-	b.mission.miss_story_goal("gao_fire",reason)
+	if not b.mission.miss_story_goal("gao_fire",reason): return
 	for action in ["gao_wind","gao_prepare","gao_fire_0","gao_fire_1","gao_fire_withdraw"]:
 		b.mission.block_action(action,reason)
 func _liu_landing_cell(b) -> Vector2i:
@@ -672,12 +680,18 @@ func on_unit_died(b,u) -> void:
 	if u==hall or u==song: b.lose(Localize.text(u.display_name)+Localize.text("失守。岸军要守东山关，舰队护住码头；可重开并调整水陆投入。")); return
 	# The hidden embarked hero reserves population/uniqueness while aboard.
 	# A real loss of his carrier must release that reservation as well.
-	if is_instance_valid(embarked_liu) and ((u==fireboat and not fire_lit) or u==liu_carrier):
+	var lost_liu: bool=is_instance_valid(embarked_liu) and ((u==fireboat and not fire_lit) or u==liu_carrier)
+	if lost_liu:
 		b.units.erase(embarked_liu)
 		embarked_liu.queue_free()
 		embarked_liu=null
-		b.mission.mark("liu_tang_lost","搭载刘唐的船只损失，刘唐失散；可在忠义堂正常付费重新集结，火攻不再能补办。")
+		if u==liu_carrier:
+			liu_carrier=null
+			u.remove_meta("carried_story_person")
+		var reason := _liu_loss_text(b)
+		b.mission.mark("liu_tang_lost",reason)
 		b.mission.block_action("gao_liu_return","载船已损失，刘唐失散；可在忠义堂付费重新集结。")
+		_fire_unavailable(b,reason)
 	if u==posts[0]: b.mission.mark("gao_land_post_destroyed","山前补给营被拆，停止该处所有陆军补充，北侧资源可争取。")
 	if u==posts[1]: b.mission.mark("gao_sea_post_destroyed","东岸官军船坞被拆，停止该处所有战船补充。")
 	if u==flagship: flagship_disabled=true; _capture_failed(b,"座船已沉，未能生擒高俅")
@@ -686,9 +700,9 @@ func on_unit_died(b,u) -> void:
 	if u.key in ["ruan_xiaoer_boat","ruan_xiaowu_boat"]:
 		if not port_sealed and not alive(b.find_unit("ruan_xiaoer_boat")) and not alive(b.find_unit("ruan_xiaowu_boat")):
 			_capture_failed(b,"两艘封港专船均已损失")
-		if not b.mission.has_event("fire_escort_safe"):
+		if not lost_liu and not b.mission.has_event("fire_escort_safe"):
 			_fire_unavailable(b,"接应船损失，可继续用普通舰队作战；刘唐若仍在原船上，可返港下船。")
-	if u==fireboat and not fire_lit: _fire_unavailable(b,"火船损失，可建船坞补普通战船继续进攻。")
+	if not lost_liu and u==fireboat and not fire_lit: _fire_unavailable(b,"火船损失，可建船坞补普通战船继续进攻。")
 func top_status(_b) -> String:
 	if not core_ready:
 		for index in range(waves.size()):

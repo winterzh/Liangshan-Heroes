@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+举火后载船沉没复用既有撤离与失散事件。三条失船/重新集结四语词条存于 `gao_fire_approach.json`。[举火后接应船损失](../qa/campaign_naval_recovery_20261116/README.md#举火后接应船损失)
+
 高俅内港火攻的三条四语提示存于 gao_fire_approach.json。检测和火区共用 FIRE_ZONE_RADIUS，容差由已有 Mission 动作字段保存。[内港举火实跑](../qa/campaign_fire_readiness_20261116/README.md#内港火点与举火读条)
 
 高俅载船沉没实跑复用现有经济和战斗驾驶。[载船沉没后重新集结实跑](../qa/campaign_naval_recovery_20261116/README.md#载船沉没后重新集结并收兵)

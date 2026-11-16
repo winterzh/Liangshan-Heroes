@@ -1,0 +1,143 @@
+{
+  "checks": 11,
+  "failures": [],
+  "loss": {
+    "carrier_alive": false,
+    "carrier_id": 29,
+    "cleared_carrier_reference": true,
+    "fire_goal_state": "missed",
+    "fire_ignited": true,
+    "game_seconds": 368.0,
+    "hall_block": "",
+    "hero_reservations": 0,
+    "ignition_game_seconds": 354.0,
+    "initial_hero_id": 6,
+    "initial_ship_id": 32,
+    "return_blocked": true,
+    "story_reason": "阮小二船在撤离前沉没，刘唐失散。火攻演义未成，可在忠义堂付费重新集结刘唐。",
+    "withdraw_block": "阮小二船在撤离前沉没，刘唐失散。火攻演义未成，可在忠义堂付费重新集结刘唐。",
+    "withdrawn": false
+  },
+  "metrics": {
+    "buildings_started": 5,
+    "camp_hp": 1500.0,
+    "enemy_paid_produced": [
+      10,
+      4
+    ],
+    "enemy_spent_gold": 607,
+    "enemy_spent_wood": 358,
+    "events": [
+      "action:gao_rts:gao_lure_side",
+      "action:gao_rts:gao_wind",
+      "gongsun_wind",
+      "fleet_in_ambush",
+      "action:gao_rts:gao_prepare",
+      "liu_tang_fire_leader",
+      "fireboat_prepared",
+      "gao_land_cleared",
+      "gao_land_post_destroyed",
+      "action:gao_rts:gao_fire_1",
+      "gao_fire_lit",
+      "liu_tang_lost",
+      "gao_escaped",
+      "gao_sea_post_destroyed",
+      "flagship_disabled",
+      "gao_basic_victory"
+    ],
+    "game_seconds": 460.0,
+    "orders": 741,
+    "result": {
+      "contract_version": 3,
+      "core_cleared": true,
+      "core_goal": "守住忠义堂和宋江，击退三批水陆主力，打停高俅座船。可直接收兵通关；生擒并押回堂前是可选演义目标。",
+      "done_ids": [
+        "gao_lure",
+        "gao_land"
+      ],
+      "goals": [
+        {
+          "id": "gao_lure",
+          "label": "阮小七引活官船进入港汊伏区",
+          "note": "",
+          "reason": "",
+          "state": "done"
+        },
+        {
+          "id": "gao_fire",
+          "label": "公孙胜祭风、刘唐登船举火，护两艘接应船撤离",
+          "note": "",
+          "reason": "阮小二船在撤离前沉没，刘唐失散。火攻演义未成，可在忠义堂付费重新集结刘唐。",
+          "state": "missed"
+        },
+        {
+          "id": "gao_land",
+          "label": "击退岸军并拔除山前补给营",
+          "note": "",
+          "reason": "",
+          "state": "done"
+        },
+        {
+          "id": "gao_capture",
+          "label": "封港凿船、水上接俘、返航后实际押至忠义堂",
+          "note": "",
+          "reason": "本局已偏离“封港凿船、水上接俘、返航后实际押至忠义堂”的原著条件",
+          "state": "missed"
+        }
+      ],
+      "missed_ids": [
+        "gao_fire",
+        "gao_capture"
+      ],
+      "pending_ids": [],
+      "story_complete": false,
+      "story_done": 2,
+      "story_total": 4
+    },
+    "skill_orders": 14,
+    "story_phase": "fallback",
+    "units_queued": 53,
+    "units_queued_by_key": {
+      "liang_dao": 12,
+      "liang_gong": 11,
+      "liang_qiang": 13,
+      "liangshan_warship": 13,
+      "liu_tang": 1,
+      "lou_luo": 3
+    }
+  },
+  "passed": true,
+  "recruitment": {
+    "cost": [
+      175,
+      34
+    ],
+    "game_seconds": 373.599999999984,
+    "hall_id": 1,
+    "paid": [
+      175,
+      34
+    ],
+    "second_order_block": "hero_exists",
+    "train_seconds": 40.0
+  },
+  "replacement": {
+    "duplicate_block": "hero_exists",
+    "entity_id": 139,
+    "game_seconds": 413.999999999982,
+    "movement_profile": "land",
+    "remaining_reservations": 1
+  },
+  "scope": "live ignition and enemy combat, loss of Ruan Xiaoer before withdrawal, then ordinary hall recruitment",
+  "time_scale": 4.0,
+  "exit_code": 0,
+  "seconds": 154.884,
+  "source_base": "ac32053420322e566eeb810e206c53accea90b65",
+  "source_sha256": {
+    "scripts/levels/level5_gao_rts.gd": "e30008122210a555ed0ef295d63c24aa28d63b9f34eeb2658422f01859584a05",
+    "assets/localization/gao_fire_approach.json": "241a411bcf04b1bca2102a30a6c09ee811dc3c6c54271df44635951a1d022a39",
+    "assets/localization/catalog.json": "492ec14e544dcfdd90ead0a7664d14fe1bd43a652c79154ce0d13f60374dca51",
+    "tools/gao_rts_play.gd": "1ec63918a0477f0b668562e52dec1725121f71645a723812257876a3773486be",
+    "tools/zhujiazhuang_rts_test.gd": "7816ca9d5d4305ec063eff4f067f3fe1291c3fcce3faa987893a7f9c90d5dbf7"
+  }
+}

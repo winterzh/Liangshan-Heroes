@@ -1,0 +1,32 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+[gao-play] t=0 story=lure army=7 fleet=0 land=[4, 6, 8] sea=[3, 5, 6] flagship=2100.0 g=206 w=146 pop=36/44 hall=1500.0
+[gao-story] active= fire=false smallboat=[760.0, (22, 52)] escorts=[["ruan_xiaoer_boat", 950.0, (38, 47)], ["ruan_xiaowu_boat", 950.0, (40, 50)]]
+[gao-play] t=60 story=lure army=10 fleet=0 land=[4, 6, 8] sea=[3, 5, 6] flagship=2100.0 g=323 w=350 pop=42/44 hall=1500.0
+[gao-story] active= fire=false smallboat=[760.0, (22, 52)] escorts=[["ruan_xiaoer_boat", 950.0, (32, 50)], ["ruan_xiaowu_boat", 950.0, (33, 51)]]
+[gao-play] t=120 story=lure army=7 fleet=1 land=[0, 0, 8] sea=[3, 5, 6] flagship=2100.0 g=268 w=332 pop=42/54 hall=1500.0
+[gao-story] active= fire=false smallboat=[760.0, (22, 52)] escorts=[["ruan_xiaoer_boat", 950.0, (33, 51)], ["ruan_xiaowu_boat", 950.0, (32, 50)]]
+[gao-play] t=180 story=fire army=11 fleet=3 land=[0, 0, 8] sea=[1, 5, 6] flagship=2100.0 g=349 w=242 pop=48/64 hall=1500.0
+[gao-story] active= fire=false smallboat=[760.0, (22, 52)] escorts=[["ruan_xiaoer_boat", 950.0, (32, 49)], ["ruan_xiaowu_boat", 950.0, (32, 51)]]
+[gao-play] t=240 story=fire army=13 fleet=5 land=[0, 0, 8] sea=[0, 5, 6] flagship=2100.0 g=483 w=227 pop=56/64 hall=1500.0
+[gao-story] active= fire=false smallboat=[760.0, (22, 52)] escorts=[["ruan_xiaoer_boat", 950.0, (32, 49)], ["ruan_xiaowu_boat", 950.0, (32, 51)]]
+[gao-play] t=300 story=fire army=13 fleet=7 land=[0, 0, 0] sea=[0, 5, 6] flagship=2100.0 g=589 w=266 pop=60/74 hall=1500.0
+[gao-story] active= fire=false smallboat=[760.0, (38, 40)] escorts=[["ruan_xiaoer_boat", 950.0, (40, 41)], ["ruan_xiaowu_boat", 950.0, (38, 41)]]
+[gao-escort-exposure] {"enemies":12,"goal":"(41, 34)","hp":641.428571428572,"t":360.0}
+[gao-play] t=360 story=withdraw army=20 fleet=9 land=[0, 0, 0] sea=[0, 5, 6] flagship=2100.0 g=767 w=378 pop=73/74 hall=1500.0
+[gao-story] active= fire=true smallboat=[] escorts=[["ruan_xiaoer_boat", 641.428571428572, (40, 40)], ["ruan_xiaowu_boat", 950.0, (39, 41)]]
+[gao-fire-loss] {"carrier_alive":false,"carrier_id":29,"cleared_carrier_reference":true,"fire_goal_state":"missed","fire_ignited":true,"game_seconds":368.0,"hall_block":"","hero_reservations":0,"ignition_game_seconds":354.0,"initial_hero_id":6,"initial_ship_id":32,"return_blocked":true,"story_reason":"阮小二船在撤离前沉没，刘唐失散。火攻演义未成，可在忠义堂付费重新集结刘唐。","withdraw_block":"阮小二船在撤离前沉没，刘唐失散。火攻演义未成，可在忠义堂付费重新集结刘唐。","withdrawn":false}
+[gao-fire-recruit] {"cost":[175,34],"game_seconds":373.599999999984,"hall_id":1,"paid":[175,34],"second_order_block":"hero_exists","train_seconds":40.0}
+[gao-fire-replacement] {"duplicate_block":"hero_exists","entity_id":139,"game_seconds":413.999999999982,"movement_profile":"land","remaining_reservations":1}
+[gao-play] t=420 story=fallback army=21 fleet=10 land=[0, 0, 0] sea=[0, 0, 5] flagship=2100.0 g=1040 w=454 pop=70/74 hall=1500.0
+[rts] PASS assault wins through actual construction, production and combat
+[rts] PASS assault builds economy and pays for at least three replacement warships
+[rts] PASS assault preserves original camp across three expeditions
+[rts] PASS assault defeats all core land/water forces and disables flagship
+[rts] PASS normal boarding pays preparation and preserves Liu Tang's uniqueness while at sea
+[rts] PASS inner ignition transfers Liu Tang to the original rescue ship before its actual loss
+[rts] PASS enemy combat sinks the original carrier and releases the lost hero reservation
+[rts] PASS the lost carrier cannot disembark and the fire route fails
+[rts] PASS the original hall pays exactly the normal recruitment cost and rejects duplicates
+[rts] PASS one replacement Liu Tang trains normally and appears on land
+[rts] PASS ordinary forces finish by withdrawing and settle the failed fire goal correctly
+GAO_ESCORT_LOSS_RESULT {"checks":11,"failures":[],"loss":{"carrier_alive":false,"carrier_id":29,"cleared_carrier_reference":true,"fire_goal_state":"missed","fire_ignited":true,"game_seconds":368.0,"hall_block":"","hero_reservations":0,"ignition_game_seconds":354.0,"initial_hero_id":6,"initial_ship_id":32,"return_blocked":true,"story_reason":"阮小二船在撤离前沉没，刘唐失散。火攻演义未成，可在忠义堂付费重新集结刘唐。","withdraw_block":"阮小二船在撤离前沉没，刘唐失散。火攻演义未成，可在忠义堂付费重新集结刘唐。","withdrawn":false},"metrics":{"buildings_started":5,"camp_hp":1500.0,"enemy_paid_produced":[10,4],"enemy_spent_gold":607,"enemy_spent_wood":358,"events":["action:gao_rts:gao_lure_side","action:gao_rts:gao_wind","gongsun_wind","fleet_in_ambush","action:gao_rts:gao_prepare","liu_tang_fire_leader","fireboat_prepared","gao_land_cleared","gao_land_post_destroyed","action:gao_rts:gao_fire_1","gao_fire_lit","liu_tang_lost","gao_escaped","gao_sea_post_destroyed","flagship_disabled","gao_basic_victory"],"game_seconds":460.0,"orders":741,"result":{"contract_version":3,"core_cleared":true,"core_goal":"守住忠义堂和宋江，击退三批水陆主力，打停高俅座船。可直接收兵通关；生擒并押回堂前是可选演义目标。","done_ids":["gao_lure","gao_land"],"goals":[{"id":"gao_lure","label":"阮小七引活官船进入港汊伏区","note":"","reason":"","state":"done"},{"id":"gao_fire","label":"公孙胜祭风、刘唐登船举火，护两艘接应船撤离","note":"","reason":"阮小二船在撤离前沉没，刘唐失散。火攻演义未成，可在忠义堂付费重新集结刘唐。","state":"missed"},{"id":"gao_land","label":"击退岸军并拔除山前补给营","note":"","reason":"","state":"done"},{"id":"gao_capture","label":"封港凿船、水上接俘、返航后实际押至忠义堂","note":"","reason":"本局已偏离“封港凿船、水上接俘、返航后实际押至忠义堂”的原著条件","state":"missed"}],"missed_ids":["gao_fire","gao_capture"],"pending_ids":[],"story_complete":false,"story_done":2,"story_total":4},"skill_orders":14,"story_phase":"fallback","units_queued":53,"units_queued_by_key":{"liang_dao":12,"liang_gong":11,"liang_qiang":13,"liangshan_warship":13,"liu_tang":1,"lou_luo":3}},"passed":true,"recruitment":{"cost":[175,34],"game_seconds":373.599999999984,"hall_id":1,"paid":[175,34],"second_order_block":"hero_exists","train_seconds":40.0},"replacement":{"duplicate_block":"hero_exists","entity_id":139,"game_seconds":413.999999999982,"movement_profile":"land","remaining_reservations":1},"scope":"live ignition and enemy combat, loss of Ruan Xiaoer before withdrawal, then ordinary hall recruitment","time_scale":4.0}
