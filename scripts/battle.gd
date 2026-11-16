@@ -4389,30 +4389,30 @@ func _fog_pass(delta: float) -> void:
 	_fog_t = FOG_STEP
 	var n := _vision.size()
 	# 1) 计算本次真正在视野内的格（_sight_now）
-	for i in range(n):
-		_sight_now[i] = 0
+	_sight_now.fill(0)
 	for u in units:
-		# 资源点不提供视野；驻军单位藏在建筑里也不另外提供视野（视野由建筑本身给）
+		# 资源和驻军不另供视野；驻军建筑自身提供视野。
 		if not is_instance_valid(u) or u.faction != Unit.FACTION_LIANG or u.hp <= 0.0 or u.is_resource or u.garrisoned or u.story_outcome != "":
 			continue
 		var r := int(u.setup_def.get("sight", 10 if u.is_building else 8))
 		_mark_sight_now(map.world_to_cell(u.position), r)
-	# 2) 统一实时视野与地面明暗：明亮格必定能看见普通敌军；失去视野的已探索格本拍即转阴影。
-	#    禁止保留“地面仍亮、敌军却隐藏”的伪视野，否则敌人再次被发现时会像在亮地上凭空冒出。
+	# 2) 逻辑和贴图同拍更新；读取实际像素以覆盖临时侦察与旧档的图、值差异。
+	var pixels := _vision_img.get_data()
+	var changed := false
 	for i in range(n):
 		if _reveal_t[i] > 0.0:
 			_reveal_t[i] = maxf(0.0, _reveal_t[i] - step)
-		if _sight_now[i] == 1 or _reveal_t[i] > 0.0:
-			_vision[i] = 2
-		elif _vision[i] != 0:
-			_vision[i] = 1                    # 曾探索但当前无视野 → 阴影
-	# 3) 刷新迷雾纹理：2=明亮(透明) 1=阴影(半黑) 0=未探索(全黑)
-	for y in range(map.h):
-		for x in range(map.w):
-			var v: int = _vision[y * map.w + x]
-			var a := 0.0 if v == 2 else (0.5 if v == 1 else 1.0)
-			_vision_img.set_pixel(x, y, Color(0, 0, 0, a))
-	_fog_tex.update(_vision_img)
+		var state := 2 if _sight_now[i] == 1 or _reveal_t[i] > 0.0 else mini(_vision[i], 1)
+		_vision[i] = state
+		var alpha := 0 if state == 2 else (127 if state == 1 else 255)
+		var offset := i * 4 + 3
+		if pixels[offset] != alpha:
+			pixels[offset] = alpha
+			changed = true
+	# 3) 复用已有纹理句柄。画面没有变化时免上传。
+	if changed:
+		_vision_img.set_data(map.w, map.h, false, Image.FORMAT_RGBA8, pixels)
+		_fog_tex.update(_vision_img)
 	# 4) 迷雾中的敌人：普通单位仅「明亮」时显示；建筑一旦探明便留在阴影里（记忆迷雾）。
 	#    fog 层绘制在 units 之后、已探索格罩 0.5 黑 → 保留的建筑自然呈半暗阴影轮廓，
 	#    玩家始终知道开过图处官军大营/箭楼/兵营的位置。
@@ -4450,14 +4450,12 @@ func _reveal_fog_at(center: Vector2, radius_px: float, dur := 6.0) -> void:
 
 func _mark_sight_now(c: Vector2i, r: int) -> void:
 	var r2 := r * r
-	for dy in range(-r, r + 1):
-		for dx in range(-r, r + 1):
-			if dx * dx + dy * dy > r2:
-				continue
-			var x := c.x + dx
-			var y := c.y + dy
-			if x >= 0 and y >= 0 and x < map.w and y < map.h:
-				_sight_now[y * map.w + x] = 1
+	for y in range(maxi(0, c.y - r), mini(map.h - 1, c.y + r) + 1):
+		var dy := y - c.y
+		var span := int(sqrt(float(r2 - dy * dy)))
+		var row := y * map.w
+		for x in range(maxi(0, c.x - span), mini(map.w - 1, c.x + span) + 1):
+			_sight_now[row + x] = 1
 
 
 func _decay_lit(delta: float) -> void:

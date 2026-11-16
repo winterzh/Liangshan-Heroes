@@ -1,5 +1,8 @@
 # 源码设置与换机（2026-10-30）
 
+迷雾改从当前 RGBA8 图像批量更新 alpha，并复用主画面与小地图共享的纹理。临时侦察期间图、值可短暂不同，下一次正常迷雾刷新按现有规则同步。[迷雾短测](../qa/campaign_sustained_performance_20261116/README.md#迷雾短测对照)
+
+
 高俅正常速度负载使用 `POLISH_CASE=gao_defense`，复用原关卡付费生产、支援指令和脚本出兵时序。现有性能工具及冻结宿主的来源清单同步纳入高俅驾驶依赖。[高俅关持续帧耗时](../qa/campaign_sustained_performance_20261116/README.md)
 
 

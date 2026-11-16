@@ -86,7 +86,7 @@ M1 原批次按其既有协议收口；不为使自动策略成功而降低玩�
 | M4 | 江州直救和白龙庙路线、大名府举火和强攻路线均有自然通关记录。[江州](../qa/campaign_pursuit_20261116/README.md) · [大名府](../qa/campaign_wounded_selection_20261116/README.md) | 同源完整恢复与真人体验。 |
 | M5 | 高俅有完整火攻演义及直接迎战核心胜利证据。火攻受阻返港、载船沉没后付费重新集结，均有转普通舰队收兵的自然通关记录。调整后的内港火点已实跑举火与接应撤离。三批提示、护航和押俘两种收尾经定向检查。[火攻](../qa/campaign_fire_readiness_20261116/README.md) · [直接迎战](../qa/campaign_flagship_escort_20261116/README.md) | 完整恢复、真人体验及撤离完成后原船沉没的自然实跑。 |
 | M6 | 野猪林暗护与强救、黄泥冈酒计与伤亡接力、快活林直打与酒路均有实际胜利记录。[野猪林](../qa/campaign_escort_arrival_20261116/README.md) · [黄泥冈](../qa/campaign_transport_groups_20261116/README.md) · [快活林](../qa/campaign_counter_window_20261116/README.md) | 正常速度下的真人体验和完整恢复。 |
-| M7 | Steam Windows Build `26699320` 已上线。发版后新增文案通过四语验证，已同步源码。[发布记录](STEAM_UPDATE_20261116.md) · [补译记录](../qa/battle_entry_localization_20261116/README.md) | 高俅关已完成 600 秒正常速度代表性采样，P95 21.396 ms 待优化，P99 24.924 ms 达标。[持续性能记录](../qa/campaign_sustained_performance_20261116/README.md)。Windows 发行候选前台人工进场、切换清理、Android 实机、剩余美术和后续发行候选仍待验。 |
+| M7 | Steam Windows Build `26699320` 已上线。发版后新增文案通过四语验证，已同步源码。[发布记录](STEAM_UPDATE_20261116.md) · [补译记录](../qa/battle_entry_localization_20261116/README.md) | 高俅关已完成 600 秒正常速度代表性采样，P95 21.396 ms 待优化，P99 24.924 ms 达标。迷雾刷新短测耗时降低 52.1%，整帧门槛仍待达成。[持续性能记录](../qa/campaign_sustained_performance_20261116/README.md)。Windows 发行候选前台人工进场、切换清理、Android 实机、剩余美术和后续发行候选仍待验。 |
 
 ### 2026-11-16 M4：大名府内外准备与撤离
 
