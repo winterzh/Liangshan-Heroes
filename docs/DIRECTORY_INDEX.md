@@ -1,5 +1,8 @@
 # 项目目录索引（2026-10-30）
 
+[平坦地形高度复用](../qa/campaign_sustained_performance_20261116/flat_height_grid_samples.json)记录地图内外采样、格点数据更换验证和短测。
+
+
 [布景迷雾格复用](../qa/campaign_sustained_performance_20261116/scenery_fog_probe_cells.json)记录七种视野状态、移动和净空验证、配对计时及短测。
 
 

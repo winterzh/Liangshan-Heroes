@@ -119,11 +119,11 @@ func unproject(screen: Vector2) -> Vector2:
 
 func sync_render_position(node: Node2D) -> void:
 	# 仅改RenderingServer绘制变换，Node2D.position仍是原来的寻路坐标。
-	var tr := node.transform
 	var elevation := height_at(node.position)
 	var previous: float = node.get_meta("render_height", 0.0)
 	if elevation == 0.0 and previous == 0.0:
 		return
+	var tr := node.transform
 	tr.origin -= Vector2.ONE * elevation
 	RenderingServer.canvas_item_set_transform(node.get_canvas_item(), tr)
 	if elevation != previous:
