@@ -1,0 +1,55 @@
+--- current/scripts/battle.gd
++++ candidate/scripts/battle.gd
+@@ -427,9 +427,6 @@
+ 	if not initialized.ok:
+ 		_gameplay_rng_stop(initialized.code)
+ 		return
+-	_save_barrier = preload("res://scripts/run_battle_barrier.gd").new()
+-	_save_barrier.configure(self, _run_clock)
+-	add_child(_save_barrier)
+ 	_refresh_hot_patch_classes()
+ 	level = _resolve_level()
+ 	# This is the new-game entry only. The future whole-world restore factory
+@@ -454,6 +451,10 @@
+ 	if level.has_method("bind_gameplay_rng_owner"):
+ 		level.bind_gameplay_rng_owner(self)
+ 	_official_context = SteamRunPolicy.classify(Campaign, level)
++	# Bind capture to the actual launch classification, including internal campaign restores.
++	_save_barrier = preload("res://scripts/run_battle_barrier.gd").new()
++	_save_barrier.configure(self, _run_clock, _official_context)
++	add_child(_save_barrier)
+ 	_steam_run_id = SteamService.begin_run(_official_context)
+ 	_update_steam_presence()
+ 	track_hero_combat_stats = Campaign.skirmish or Campaign.custom_defense
+@@ -4474,7 +4475,7 @@
+ 	_disarm_patrol()
+ 	_disarm_ability()
+ 	_disarm_item()
+-	if _continue_receipt != null or get_node("/root/ContinueFlow").has_capture_request(self):
++	if _official_context.get("mode") == "campaign" or _continue_receipt != null or get_node("/root/ContinueFlow").has_capture_request(self):
+ 		get_node("/root/ContinueFlow").finish_local_battle(self, victory, line)
+ 		return
+ 	_complete_end(victory, line)
+@@ -4487,10 +4488,18 @@
+ 		# Freeze the same-run goal states before persistence, metrics, callbacks or
+ 		# settlement UI can observe or mutate them.
+ 		campaign_result = mission.result_snapshot(victory)
+-	if camp != null and victory and _official_context.get("mode") == "campaign":
+-		var saved_result: Dictionary = camp.on_level_won(campaign_result, _official_context)
+-		campaign_result["new_story_seal"] = bool(saved_result.get("new_story_seal", false))
+-	SteamService.settle(_steam_run_id, victory, campaign_result)
++	if _official_context.get("mode") == "campaign":
++		var claimed: Dictionary = get_node("/root/ContinueFlow").claim_campaign_completion(self, victory)
++		if not claimed.ok: return
++		# The durable intent is a six-field projection. Keep the same frozen full
++		# Mission snapshot for goal details and language-only report rebuilding.
++		for key in ["core_cleared", "story_complete", "story_done", "story_total", "done_ids", "contract_version"]:
++			if not campaign_result.has(key) or not claimed.result.has(key) or campaign_result[key] != claimed.result[key]:
++				push_error("CAMPAIGN_COMPLETION_RESULT_CHANGED")
++				return
++		campaign_result["new_story_seal"] = bool(claimed.result.get("new_story_seal", false))
++	if _official_context.get("mode") == "campaign": SteamService.refresh_campaign_targets()
++	else: SteamService.settle(_steam_run_id, victory, campaign_result)
+ 	_update_steam_presence()
+ 	# Freeze the display inputs after the one settlement. Language changes may
+ 	# rebuild text, but cannot settle, award, close metrics or alter these rows.

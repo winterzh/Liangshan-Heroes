@@ -1,5 +1,8 @@
 # 源码设置与换机（2026-10-30）
 
+2026-11-16 新增当前玩法续玩整合候选工具。qa/campaign_resume_current_20261116/prepare.py以Git固定blob、当前规范输入、三方合并Battle、11原UID和13明确导入元数据合成无缓存工程；native helper由--native-root指定本机来源并核对源码/构建收据/EXE，不入库二进制。当前合成身份b32972f3已通过自身首次冷导入，生产26模块尚未采用。run_lianhuanma.py绑定新来源使用原四进程完整演义断言，不能沿用旧批资格。[本批来源与记录](../qa/campaign_resume_current_20261116/README.md)。
+
+
 2026-11-16 高俅第三批原末两船护航座船，角色由原groups/waves/flagship派生；只用普通Unit指令，未新增Level字段/计时器，旧冻结恢复资格不沿用。campaign_flagship_escort.json新增两条四语；QA记录器只监听原船死亡，不修改战斗。[本批来源与限定证据](../qa/campaign_flagship_escort_20261116/README.md)。
 
 

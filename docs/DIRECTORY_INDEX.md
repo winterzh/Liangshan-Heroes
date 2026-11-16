@@ -1,5 +1,8 @@
 # 项目目录索引（2026-10-30）
 
+[当前玩法与续玩整合候选](../qa/campaign_resume_current_20261116/README.md)：prepare.py负责新私有来源及首次冷导入；overlay.json与battle_merge.patch记录原26模块和当前Battle合并；workers/与workers.json保留原连环马四进程断言及普通指令策略，run_lianhuanma.py绑定新来源。evidence/first_import保留缺13份元数据的失败，evidence/current_cold保留修正后冷导入及完整来源清单；不含缓存、玩家档或二进制。
+
+
 [高俅座船护航](../qa/campaign_flagship_escort_20261116/README.md)：tools/gao_flagship_escort_qa.gd继承gao_rts_play，runner分--fixture-only与--live-only；fixtures为14项/英文查看图，live为7项实际防守反攻及通知文字调整前源码。翻译来源assets/localization/campaign_flagship_escort.json。
 
 
