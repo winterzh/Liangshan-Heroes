@@ -7,6 +7,8 @@ const CART_EXIT_CELLS: Array[Vector2i]=[Vector2i(5,16),Vector2i(7,17),Vector2i(5
 const WU_STATION := Vector2i(23,23)
 const BAI_STATION := Vector2i(24,24)
 const TRIBUTE_ART := "tribute_load_alpha_20260906"
+const LOADED_RELAY_REACH := 80.0
+const TAKE_MARKER_REACH := 24.0
 var team_t := 0.0
 var distraction_serial := -1
 var controls_generation := -1
@@ -215,7 +217,7 @@ func _add_force_take(b,index: int) -> void:
 	if allowed.is_empty():allowed.append(NO_FORCE_CARRIER)
 	var loaded: bool=bool(cargo_ready.get(index,false))
 	var cell: Vector2i=_bundle_claim_cell(b,index) if loaded else _empty_cart_claim_cell(b,index)
-	b.mission.add_action("force_take_%d_%d"%[index,int(force_attempts.get(index,0))],_force_take_label(b,index),cell,allowed,0.6,48 if loaded else 24)
+	b.mission.add_action("force_take_%d_%d"%[index,int(force_attempts.get(index,0))],_force_take_label(b,index),cell,allowed,0.6,TAKE_MARKER_REACH)
 
 func _add_load_action(b,index: int,actor) -> void:
 	if st not in [CARRY,FORCE] or not Transport.is_cart(index) or not is_instance_valid(actor):return
@@ -261,7 +263,12 @@ func _force_take_cargo(b,action_id: String,actor,index: int) -> void:
 		_add_load_action(b,index,actor)
 		return
 	if index>=bundles.size() or not is_instance_valid(bundles[index]) or not b.units.has(bundles[index]):return
-	_pick_up_bundle(b,bundles[index])
+	var cart = bundles[index]
+	if actor.position.distance_to(cart.position)>LOADED_RELAY_REACH or not b.map._segment_open(actor.position,cart.position,"land"):
+		_retry_action(b,action_id,"")
+		b.mission.set_feedback("前往掉落货车旁，从同一侧接手推车。")
+		return
+	_pick_up_bundle(b,cart)
 	_assign_loaded_cart(b,index,actor)
 
 func _load_tribute_cart(b,action_id: String,actor,index: int) -> void:
@@ -528,16 +535,27 @@ func _available_force_carriers() -> Array:
 func _bundle_claim_cell(b,index: int) -> Vector2i:
 	var action_id: String=("force_load_%d_%d" if empty_cargo.has(index) else "force_take_%d_%d") % [index,int(force_attempts.get(index,0))]
 	if b.mission.actions.has(action_id):return b.mission.actions[action_id].cell
-	var origin: Vector2i=b.map.world_to_cell(bundles[index].position)
-	for offset in [Vector2i(-2,0),Vector2i(0,-2),Vector2i(2,0),Vector2i(0,2),Vector2i(-4,0),Vector2i(0,-4),Vector2i(4,0),Vector2i(0,4)]:
-		var cell: Vector2i=b.map.nearest_open(origin+offset,"land")
+	var cart=bundles[index]
+	var origin: Vector2i=b.map.world_to_cell(cart.position)
+	var relay: bool=bool(cargo_ready.get(index,false))
+	var offsets := [Vector2i(-1,0),Vector2i(0,-1),Vector2i(1,0),Vector2i(0,1)] if relay else [
+		Vector2i(-2,0),Vector2i(0,-2),Vector2i(2,0),Vector2i(0,2),Vector2i(-4,0),Vector2i(0,-4),Vector2i(4,0),Vector2i(0,4)]
+	for offset in offsets:
+		var cell: Vector2i=origin+offset if relay else b.map.nearest_open(origin+offset,"land")
 		var point: Vector2=b.map.cell_to_world(cell)
-		if b.units.any(func(u):return is_instance_valid(u) and u.position.distance_to(point)<36.0):continue
+		if relay:
+			var distance: float=point.distance_to(cart.position)
+			if distance<24.0 or distance>LOADED_RELAY_REACH-TAKE_MARKER_REACH-2.0 \
+					or not b.map._segment_open(cart.position,point,"land"):continue
+		if b.units.any(func(u):return is_instance_valid(u) and (not relay or u!=cart) and u.position.distance_to(point)<36.0):continue
 		var conflict:=false
 		for pending_id in b.mission.actions:
 			var row: Dictionary=b.mission.actions[pending_id]
 			if not row.done and point.distance_to(b.map.cell_to_world(row.cell))<48.0:conflict=true;break
 		if not conflict:return cell
+	# A narrow passage may offer no separate flag within reach. Use the actual
+	# cart's open cell instead of looking beyond the obstruction.
+	if relay:return origin
 	return super._bundle_claim_cell(b,index)
 
 func _empty_cart_claim_cell(b,index: int) -> Vector2i:

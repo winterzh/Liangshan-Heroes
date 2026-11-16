@@ -1,0 +1,13 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+[rts] PASS the real initial take action assigns the empty cart
+[rts] PASS the real loading action carries the original loaded cart
+[rts] PASS find a real open lane beside a controlled obstruction
+[rts] PASS fatal damage leaves the same loaded cart and wheel on the carrier's side
+[rts] PASS the death retires delivery and exposes one new relay task
+[rts] PASS the relay flag stands on reachable ground and its arrival circle fits the interaction distance
+[rts] PASS the opponent side lies within range but a blocked tile separates it from the cart
+[rts] PASS an old flag across a barrier cannot pick up the cart through the wall
+[rts] PASS a real right-click near the cart transfers it to the survivor with its wheel phase
+[rts] PASS the same loaded cart reaches the exit and a duplicate delivery changes no cargo count
+[rts] PASS the relay introduces no unmatched level state
+HG_LOADED_RELAY_RESULT {"blocked_cell":[11,10],"cart_id":8,"cart_index":0,"checks":11,"delivered_loads":2,"drop_position":[351.0,336.0],"failures":[],"passed":true,"scope":"controlled loaded-carrier death, obstacle and real manual relay input"}

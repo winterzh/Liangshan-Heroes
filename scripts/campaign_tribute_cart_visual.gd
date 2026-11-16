@@ -72,14 +72,10 @@ static func place_from_carrier(cart, actor) -> bool:
 	var body_size: float = actor.radius * 3.7 * actor.visual_scale
 	if not is_finite(body_size) or body_size <= 0.0: return false
 	var contact: Vector2 = actor.map.project(actor.position) + Wheel.ground_contact(actor, body_size)
-	var position: Vector2 = actor.map.unproject(contact)
-	var cell: Vector2i = actor.map.world_to_cell(position)
-	# Keep an edge-of-path death drop reachable. On open ground the exact
-	# projected wheel contact is retained, including non-flat terrain.
-	var open_cell: Vector2i = actor.map.nearest_open(cell, "land")
-	if open_cell == Vector2i(-1, -1): return false
-	if not actor.map.is_open_world(position, "land"):
-		position = actor.map.cell_to_world(open_cell)
+	# Preserve the exact wheel contact on clear ground and stop on the
+	# carrier's side if the contact crosses a wall, rock or shoreline.
+	if not actor.map.is_open_world(actor.position, "land"): return false
+	var position: Vector2 = actor.map.limit_displacement(actor.position, actor.map.unproject(contact), "land")
 	cart.position = position
 	cart.z_index = clampi(1 + int(actor.map.project(position).y), 1, 3400)
 	cart.animation_direction = actor.animation_direction

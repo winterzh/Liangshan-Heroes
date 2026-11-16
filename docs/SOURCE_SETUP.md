@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+黄泥冈重车落点沿既有地面位移限制，接力使用既有货车单元及动作 ID。四语分片为 `huangnigang_loaded_relay.json`。[黄泥冈载重货车接力](../qa/campaign_transport_groups_20261116/README.md#载重货车掉落与接力)
+
 大名府夺门与追兵提示从当前队伍和既有波次字段派生。五条四语分片为 `daming_pursuit_status.json`。[大名府夺门与撤离追兵](../qa/campaign_wounded_selection_20261116/README.md#夺门与撤离追兵)
 
 连环马余骑提示使用原甲马和波次，定位登记到固定任务按钮白名单。四语分片为 `lianhuanma_remaining_riders.json`。[连环马余骑定位](../qa/campaign_cavalry_escort_20261116/README.md#提前歼骑与余骑定位)
