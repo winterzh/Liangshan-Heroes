@@ -270,6 +270,25 @@ func _uprising(b,actor) -> void:
 	b.mission.set_title("劫场 · 先打刽子手")
 	b.mission.set_objective("两名刽子手倒下即可停刑，再分别解缚。东街巡防营32秒后开始付费补军，最多8人；拆营可断援。")
 	for key in ["west_street","south_lane","first_axes"]: b.mission.block_action(key,"已经起事，直接攻击刽子手并救人。")
+func _escort_objective() -> String:
+	if not first_rescued: return ""
+	var song_rescued := living(song_freed)
+	var dai_rescued := living(dai_freed)
+	if not song_rescued and not dai_rescued: return ""
+	if song_rescued != dai_rescued:
+		var first := song_freed if song_rescued else dai_freed
+		if first.story_outcome=="embarked": return "已有一人登船。回法场解救另一人，再护送到码头。"
+		return "宋江已解缚。可先派兵护他离开法场，另队解救戴宗。西巷较近，南巷较宽。" if song_rescued else "戴宗已解缚。可先派兵护他离开法场，另队解救宋江。西巷较近，南巷较宽。"
+	if song_freed.story_outcome=="embarked" and dai_freed.story_outcome=="embarked": return ""
+	if not meeting and active(song_freed) and active(dai_freed) and active(named_units.get("zhang_shun")) and active(named_units.get("zhang_heng")):
+		return "二人已救下。西巷短而狭，南巷较宽有骑弓截兵；自由选路或改道。可先经白龙庙会水军，再分别下令登船。护卫留在岸边断后，让出登船旗标附近的通道。"
+	return "沿西巷或南巷护送仍在岸上的获救者，先清开登船点。宋江、戴宗都登船后即可开船。"
+func _update_escort_objective(b) -> void:
+	var objective := _escort_objective()
+	if b.phase!=b.Phase.FIGHT or objective.is_empty(): return
+	var heading := "护送 · 开路与断后" if living(song_freed) and living(dai_freed) else "分兵 · 继续解缚"
+	if b.mission.stage_title!=heading: b.mission.set_title(heading)
+	if b.mission.objective!=objective: b.mission.set_objective(objective)
 func _free(b,is_song: bool) -> void:
 	var bound: Unit=song_bound if is_song else dai_bound
 	if not active(bound):
@@ -302,13 +321,12 @@ func _free(b,is_song: bool) -> void:
 		first_rescued=true
 		pursuit_left=20
 		b.msg("北面六名追兵20秒后出动，随后分搜西巷、南巷。可留兵阻击，也可换路护送；追兵看见获救者才会追赶。",8)
-	if living(song_freed) and living(dai_freed):
-		b.mission.set_title("护送 · 开路与断后")
-		b.mission.set_objective("二人已救下。西巷短而狭，南巷较宽有骑弓截兵；自由选路或改道。可先经白龙庙会水军，再分别下令登船。护卫留在岸边断后，让出登船旗标附近的通道。")
 		b.mission.add_map_locator("西巷近路",Vector2i(18,34))
 		b.mission.add_map_locator("南巷宽路",Vector2i(27,36))
-		b.mission.add_map_locator("可选 · 宋戴与张顺张横到白龙庙",BAILONG)
+		b.mission.add_map_locator("白龙庙",BAILONG)
+	if living(song_freed) and living(dai_freed):
 		b.mission.add_action("rally_dock",Localize.text("好汉 · 码头收队"),DOCK+Vector2i(0,-2),NAMED,0.7,64)
+	_update_escort_objective(b)
 func on_mission_action(b,key: String,actor) -> void:
 	if key.begins_with("cache_"):
 		var index: int=int(key.trim_prefix("cache_"))
@@ -347,6 +365,7 @@ func on_mission_action(b,key: String,actor) -> void:
 				return
 			actor.resolve_story("embarked")
 			b.mission.mark(key,Localize.text(actor.display_name)+Localize.text("已活着登船。"))
+			_update_escort_objective(b)
 		"rally_dock":
 			rally=true
 			b.mission.mark("rally_dock","码头已收队。玩家带回的具名好汉会在安全登船点上船，其余人仍需亲自指挥撤回。")
@@ -508,6 +527,7 @@ func process(b,delta: float) -> void:
 			var u=named_units.get(key)
 			if _near(b,u,DOCK,120) and not _enemy_near(b,u.position,150):
 				u.resolve_story("embarked")
+	_update_escort_objective(b)
 	if living(song_freed) and living(dai_freed) and song_freed.story_outcome=="embarked" and dai_freed.story_outcome=="embarked" and not is_instance_valid(depart_button):
 		b.mission.set_title("二人已脱险 · 开船或收队")
 		b.mission.set_objective("核心营救已达成。可立即开船；要全员脱险印，先让好汉办理码头收队，再亲自带六人撤回安全登船点。")

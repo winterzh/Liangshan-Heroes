@@ -64,6 +64,22 @@ func _run() -> void:
 	var orders: Array = members.map(func(u): return u.orders)
 	level._pursuit_tick(b,2.0)
 	check("finished search guards once without repeatedly cancelling combat", level.pursuit_steps == [6,6] and members.map(func(u): return u.orders) == orders)
+	level.first_rescued = true
+	check("first freed Song Jiang leaves Dai Zong a distinct rescue task", "另队解救戴宗" in level._escort_objective())
+	escapee.story_outcome = "embarked"
+	check("early boarding still points to the other captive", "回法场解救另一人" in level._escort_objective())
+	escapee.story_outcome = ""
+	level.song_freed = null
+	level.dai_freed = escapee
+	check("first freed Dai Zong leaves Song Jiang a distinct rescue task", "另队解救宋江" in level._escort_objective())
+	level.song_freed = members[1]
+	level.named_units = {"zhang_shun":members[3], "zhang_heng":members[5]}
+	check("both freed with both boat allies can still rendezvous", "白龙庙" in level._escort_objective())
+	members[3].hp = 0
+	check("loss of a boat ally gives boarding guidance", "登船点" in level._escort_objective() and "白龙庙" not in level._escort_objective())
+	level.song_freed.story_outcome = "embarked"
+	level.dai_freed.story_outcome = "embarked"
+	check("both aboard hands control to the departure objective", level._escort_objective().is_empty())
 	var state = load("res://scripts/run_campaign_level_state.gd").new()
 	check("all chapter declarations remain classified", state.SCRIPTS.keys().all(func(key): return state.audit_declarations(key).ok))
 	var sample = load("res://scripts/levels/level2_jiangzhou_rts.gd").new()

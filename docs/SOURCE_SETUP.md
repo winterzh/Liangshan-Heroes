@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+江州任务目标依据现有获救、登船、接应状态刷新，新增五条 `campaign_pursuit.json` 四语文字。`live/runner.py --route story` 验证分路起事和白龙庙路线，独立输出 `.godot/jiang-story/`。[两种营救及本批原件](../qa/campaign_pursuit_20261116/README.md#解缚与撤离目标交接)。
+
 连环马 `--retry-budget-tail` 可复用同一候选的两次真实保存，核对已关闭的补矿与器械预算尾段，再执行原终局断言。[同档实跑原件](../qa/campaign_resume_current_20261116/evidence/protected_drill_candidate/rams_held_in_reserve/)。
 
 高俅第二批连船使用既有 `water_groups[1]` 顺序分配前港水面，借用水面体积检查及普通攻击移动。角色按原批次派生，新增查看文案在 `campaign_fire_readiness.json`，目录与祝家庄的新条目逐项合入。[定向检查原件](../qa/campaign_flagship_escort_20261116/second_wave_front/)。
