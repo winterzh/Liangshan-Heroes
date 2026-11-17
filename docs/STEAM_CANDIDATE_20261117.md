@@ -6,6 +6,8 @@
 
 候选 fa4084ff 连环马在北路出击、南路尚未出击时保存，重启恢复后完成反攻、四语结算及旧槽拒绝。 [连环马续玩收据](../qa/campaign_cavalry_escort_20261116/player_continue/windows_candidate_fa4084ff.json)
 
+快活林保存修复包短检通过。八章和随机驻守共九次。菜单预读完成后，从出征或开战到加载提示 1.9–20.4 ms、到战场绘制确认 0.37–0.91 秒。随机配置 17 波、间隔 41 秒实际进场并保存，返回后 45 个战场关键引用均释放。 六文件的原生 EXE 另通过八章直达、驻守、清敌及主菜单。 [新版进场验证](../qa/battle_entry_timing_20261116/README.md#windows-修复候选的发版短检)
+
 ## 前一版本地候选 `fa4084ff`
 
 六文件位于 D:/AI项目/水浒/Windows候选/2026-11-17-fa4084ff/SteamDepot。原生离线启动通过，精确编译包通过八章四语战果的 66 项定向检查。精确编译包的高俅关正常速度采样 600.007 秒、67,536 帧，P95 14.707 ms、P99 17.135 ms，达到路线图 P95 ≤ 16.7 ms、P99 ≤ 33.3 ms 的门槛。 六个文件已封装成同目录的 LiangshanHeroes_Steam_candidate.zip，解压回读名称、大小和 SHA-256 全部一致。 真人与实际 Steam 客户端验证待办。 [十分钟帧时收据](../qa/campaign_sustained_performance_20261116/windows_pack_fa4084ff.json) [本地候选验证](../qa/battle_entry_localization_20261116/windows_campaign_candidate_fa4084ff.json)

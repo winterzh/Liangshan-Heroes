@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[Windows 修复候选的发版短检](../qa/battle_entry_timing_20261116/README.md#windows-修复候选的发版短检)收据及菜单探针在 qa/battle_entry_timing_20261116/。
+
 [短篇两关 Windows 续玩](../qa/campaign_short_player_continue_20261117/README.md#windows-短篇续玩和快活林修复)的收据、旧包失败记录及快活林探针差异位于 qa/campaign_short_player_continue_20261117/。
 
 [连环马 Windows 续玩收据](../qa/campaign_cavalry_escort_20261116/player_continue/windows_candidate_fa4084ff.json)及外部探针在 qa/campaign_cavalry_escort_20261116/player_continue/。
