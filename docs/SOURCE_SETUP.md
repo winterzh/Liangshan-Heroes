@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+Steam Windows Build `26719792` 从 `65ac43ac` 的独立检出导出。发行 ZIP 和 Windows Depot 各六个成员，服务端 Manifest `3426323641209633325` 的文件大小与 SHA-1 已逐项核对。[发行来源和收据](STEAM_UPDATE_20261117.md)
+
 江州存档的单位图只为开船按钮登记关卡引用。定位按钮沿用任务面板序列化以及章节白名单。复跑使用 Windows Godot 4.6.3 渲染器和独立档案，不接入 Steam 帐号。[江州会合后续玩](../qa/campaign_pursuit_20261116/README.md#白龙庙会合后续玩)
 
 江州白龙庙定位用任务固定按钮，提示和会合判定读同一四人队伍与到场距离。译文来自 `jiangzhou_bailong_meeting.json`。[江州会合进度](../qa/campaign_pursuit_20261116/README.md#白龙庙会合进度)
