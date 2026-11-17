@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+2026-11-18 Steam Windows 上传记录位于 docs/STEAM_UPDATE_20261118.md，脱敏收据位于 qa/steam_release_20261118/。 [本批记录](STEAM_UPDATE_20261118.md)
+
 [Android 触控离线验收包收据](../qa/android_controls_performance_20260925/android_touch_candidate_492e6437.json)位于 qa/android_controls_performance_20260925/，本机产物位于 D:/AI项目/水浒/Android验收/2026-11-17-492e6437/。
 
 本地试玩启动器源码为 tools/start_windows_playtest_492e6437.cmd。候选根目录附同一启动器及玩家说明。 [本地试玩短检](../qa/battle_entry_timing_20261116/windows_playtest_launcher_492e6437.json)
