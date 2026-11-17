@@ -1,0 +1,166 @@
+{
+  "source_commit": "492e64370557315e529122f9beb1d23bf5089e2e",
+  "package": "com.liangshan.heroes.qa492e6437",
+  "offline_qa": true,
+  "runs": [
+    {
+      "stage": "qa-key",
+      "seconds": 0.453,
+      "exit_code": 0,
+      "errors": [],
+      "log_sha256": "9164fd740ac84868a0160f2651c15bf021268fcd300997c34c95f96d46cb6c1b"
+    },
+    {
+      "stage": "import",
+      "seconds": 92.889,
+      "exit_code": 0,
+      "errors": [],
+      "log_sha256": "19751071a5e44d05de81d8bb5325c79f085e0c509fbc9af0334c5bd0335c1cc4"
+    },
+    {
+      "stage": "export",
+      "seconds": 117.595,
+      "exit_code": 0,
+      "errors": [],
+      "log_sha256": "c628c01685b8230879715cee7945940c2a1a8017bfabc0fd59eaecc4130f354d"
+    },
+    {
+      "stage": "apk-badging",
+      "seconds": 0.075,
+      "exit_code": 0,
+      "errors": [],
+      "log_sha256": "22922800ea7e0afc09d81e73c0df304a272d5abfe1daa5c6eb7e13a0996be208"
+    },
+    {
+      "stage": "apk-signature",
+      "seconds": 2.963,
+      "exit_code": 0,
+      "errors": [],
+      "log_sha256": "e8f964df046c5e7a9624a5963b1d0af25a8bc0e391c9c432b9ff5c341dc2d635"
+    }
+  ],
+  "toolchain": [
+    {
+      "package": "Godot 4.6.3 Android debug template",
+      "url": "https://github.com/godotengine/godot-builds/releases/download/4.6.3-stable/Godot_v4.6.3-stable_export_templates.tpz",
+      "bytes": 124546428,
+      "sha256": "5cd4cfc1a8fc23ed45be5f0a36a6cc279d15b50a40c6ef69c89276895441cd1d",
+      "crc32": 382750264
+    },
+    {
+      "package": "build-tools_r35_windows.zip",
+      "url": "https://dl.google.com/android/repository/build-tools_r35_windows.zip",
+      "bytes": 59878107,
+      "official_sha1": "af059bb67cf7786f45ee0db85e2d24985df1b4b6"
+    },
+    {
+      "package": "platform-tools_r37.0.3-win.zip",
+      "url": "https://dl.google.com/android/repository/platform-tools_r37.0.3-win.zip",
+      "bytes": 8188595,
+      "official_sha1": "b3fde5239ad89229d5a9178375b81c9887a24172"
+    },
+    {
+      "package": "platform-35_r02.zip",
+      "url": "https://dl.google.com/android/repository/platform-35_r02.zip",
+      "bytes": 64273788,
+      "official_sha1": "0bb560a90a7a2cbd0dd8348224d518b638fe7949"
+    }
+  ],
+  "complete": true,
+  "private_overlay": {
+    "export_presets.cfg": "10537f9c84e921691b34398a09f0234143718254f00e9cb95c703dc86a392c07",
+    "scripts/android_updater.gd": "10df97520f76a073f9b3362058599f0535812519e4fdad466a530d39c5ca355a"
+  },
+  "content_identity": {
+    "schema": 1,
+    "rules_sha256": "6b615cda04dae2dc04ba5a994327130a67e9bec735cde015bec1e818f5536221",
+    "source_sha256": "749a02b8c5b39a4f4ef0f10b146c35262fa9463c7a0569a8c805126b75a97936",
+    "file_count": 7101,
+    "total_bytes": 2209331852,
+    "optional_content": [
+      {
+        "path": "content/units.json",
+        "present": false,
+        "bytes": 0,
+        "sha256": ""
+      },
+      {
+        "path": "content/abilities.json",
+        "present": false,
+        "bytes": 0,
+        "sha256": ""
+      }
+    ],
+    "native_files": [],
+    "provider_path": "scripts/run_content_identity.gd",
+    "provider_sha256": "38a81eb30d488ff620eec9c15d82cc957be31d8688908604f61362699252e26b"
+  },
+  "android_sdk_min": 24,
+  "apk": {
+    "name": "LiangshanHeroes_Android_QA_492e6437.apk",
+    "bytes": 1751360711,
+    "sha256": "6e4d12f9df4ac5e7f8c840c7e4f2c5114296ff08a306d4a35bcae6702c7f2518",
+    "debug_certificate_sha256": "c4b92ec38cb429b474b577854060569c0478ef1d8c9698e1eea29260b6ef580d"
+  },
+  "on_device_verified": false,
+  "native_device_status": {
+    "phone": "pending",
+    "tablet": "pending"
+  },
+  "apk_host_preview": {
+    "catalog_sha256": "f6d6d24d01ef9e3c503b24b9efe772ef5e6fe0c2dab7905547be729f4ff63b5d",
+    "identity": {
+      "code": "OK",
+      "content_version": "source-v1:749a02b8c5b39a4f4ef0f10b146c35262fa9463c7a0569a8c805126b75a97936",
+      "engine_binary_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+      "file_count": 7101,
+      "identity_schema": 1,
+      "identity_scope": "installed_inputs",
+      "ok": true,
+      "optional_content": [
+        {
+          "bytes": 0,
+          "path": "content/units.json",
+          "present": false,
+          "sha256": ""
+        },
+        {
+          "bytes": 0,
+          "path": "content/abilities.json",
+          "present": false,
+          "sha256": ""
+        }
+      ],
+      "provider_sha256": "38a81eb30d488ff620eec9c15d82cc957be31d8688908604f61362699252e26b",
+      "rules_sha256": "6b615cda04dae2dc04ba5a994327130a67e9bec735cde015bec1e818f5536221",
+      "save_code": "OK",
+      "save_eligible": true,
+      "source_mode": false,
+      "source_sha256": "749a02b8c5b39a4f4ef0f10b146c35262fa9463c7a0569a8c805126b75a97936",
+      "total_bytes": 2209331852
+    },
+    "passed": true,
+    "samples": [
+      {
+        "click_to_battle_draw_us": 349884,
+        "click_to_loading_us": 5465,
+        "mode": "level6",
+        "random_preferences_persisted": false,
+        "released_battle_refs": 5
+      }
+    ],
+    "exit_code": 0,
+    "errors": [],
+    "apk_sha256": "6e4d12f9df4ac5e7f8c840c7e4f2c5114296ff08a306d4a35bcae6702c7f2518",
+    "log_sha256": "bcec09aa05c1d77daaf5fca9923d511992aabf47387f1414e138b80ce2e4f71b",
+    "probe_sha256": "05029a862196cc10715ae8fdbdf5826233ff9bf08ae6c10a1c38a549375b7323",
+    "scope": "Windows host mounting the APK asset tree with its Android assets/ prefix stripped and original entry CRC preserved, TOUCH_UI=1",
+    "host_resource_count": 8390
+  },
+  "platform_overlay_scope": [
+    "Private Android export preset with distinct package name and no INTERNET permission",
+    "Offline QA feature keeps AndroidUpdater from opening its cache or starting network requests",
+    "Windows-only GDExtensions omitted and installed-input identity regenerated for this APK"
+  ],
+  "published": false
+}

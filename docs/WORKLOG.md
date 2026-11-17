@@ -1,5 +1,9 @@
 # 开发日志
 
+## 2026-11-17 Android 触控验收离线包
+
+用候选 492e6437 源码导出独立包名的 ARM64 APK。已验证签名、清单和资源，Windows 宿主加载该 APK 的资源实跑野猪林进场及触屏 HUD。手机和平板待实测。 [Android 本地验收包收据](../qa/android_controls_performance_20260925/android_touch_candidate_492e6437.json)
+
 ## 2026-11-17 Windows 本地试玩交接
 
 候选 492e6437 增加独立于 Depot 的试玩启动器与玩家说明。三位玩家用不同编号建立本机档案。启动器在原生 EXE 无头短检中以隔离资料启动，真实试玩记录待收集。 [本地试玩短检](../qa/battle_entry_timing_20261116/windows_playtest_launcher_492e6437.json)

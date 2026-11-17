@@ -1,5 +1,9 @@
 # Android 开局、FPS、平板布局与托管修复 QA
 
+## Android 492e6437 触控离线验收包
+
+私有工具链用官方 Godot 4.6.3 Android 模板和 Android SDK Build Tools 35。在冻结工程另设 Android QA 包名、离线标记及重建内容身份，排除 Windows 原生绑定。APK 签名、ABI、最低版本、联网权限及小范围 APK 宿主渲染均通过。手机和平板结果仍为空。 [收据](android_touch_candidate_492e6437.json)
+
 ## 结论与交付边界
 
 源码基线 `3fe9eecf82c322ad77dfcbbfff216caec7de9a06`，目标 `winterzh/Liangshan-Heroes` 的 `codex/sync-20260905-stable`。本批修复通过下述源码/宿主图形验证，只同步 GitHub 源码；没有 APK、Release、标签、服务器或 Steam 发布。线上 2.0 不含本批修复。

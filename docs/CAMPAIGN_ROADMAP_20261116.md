@@ -1,5 +1,7 @@
 # 八幕战役后续开发路线图
 
+M7 已备与 492e6437 对应的 Android 独立离线包。Android 手机和平板触控、DPI、安全区仍需实际完成。 [Android 本地验收包收据](../qa/android_controls_performance_20260925/android_touch_candidate_492e6437.json)
+
 M2／M7 当前 Windows 候选的本地试玩入口与独立档案已准备，按首次试玩清单招募并记录。Steam 平台验收单独保留。 [本地试玩短检](../qa/battle_entry_timing_20261116/windows_playtest_launcher_492e6437.json)
 
 M7 快活林修复候选 492e6437 已验证八章与随机驻守进退及原生 EXE 11 条短检。祝家庄三名首玩、不同计划重玩、八章真人体验、Android 真机和 Steam 客户端验收仍待完成。 [新版进场验证](../qa/battle_entry_timing_20261116/README.md#windows-修复候选的发版短检)

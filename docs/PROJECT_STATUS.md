@@ -1,5 +1,7 @@
 # 当前项目总览
 
+Android 触控验收 APK 已为 492e6437 打包。Android ARM64、API 24 起；桌面仅验证 APK 资源、签名和触控布局挂载。手机和平板均待验。 [Android 本地验收包收据](../qa/android_controls_performance_20260925/android_touch_candidate_492e6437.json)
+
 492e6437 的本地试玩材料已准备。待录入三名首次体验、至少两次不同计划重玩、八章真人记录和 Android 手机、平板触控结果。 [本地试玩短检](../qa/battle_entry_timing_20261116/windows_playtest_launcher_492e6437.json)
 
 快活林修复后，八章及随机驻守在当前 Windows 候选进入战斗并返回菜单。原生 EXE 短检、候选哈希和真人待验范围已更新。 [新版进场验证](../qa/battle_entry_timing_20261116/README.md#windows-修复候选的发版短检)

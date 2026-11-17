@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+Android 触控离线验收从 Windows 候选的冻结源码导出。仅在私有导出中变更包名、更新器及平台依赖，重建 Android 内容身份，安装资料与正式包分开。 [Android 本地验收包收据](../qa/android_controls_performance_20260925/android_touch_candidate_492e6437.json)
+
 Windows 候选的本地首次试玩用 start_windows_playtest_492e6437.cmd，选择 P01、P02 或 P03，进程独立设置 APPDATA、LOCALAPPDATA 和临时目录。直接启动现有原生候选且禁用 Steam。 [本地试玩短检](../qa/battle_entry_timing_20261116/windows_playtest_launcher_492e6437.json)
 
 当前 Windows 候选使用六文件的精确 EXE 交付副本。菜单短检由 Godot 宿主加载同一编译包，原生 EXE 另以分开的离线资料验证八章、驻守、清敌及主菜单。 [新版进场验证](../qa/battle_entry_timing_20261116/README.md#windows-修复候选的发版短检)
