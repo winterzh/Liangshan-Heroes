@@ -1,5 +1,21 @@
 # Windows Steam 更新交接与四语公告草案
 
+## 正式版发版单
+
+| 项目 | 当前记录 |
+| --- | --- |
+| 上传时机 | 用户要求开发完成后再上传。上线目标仅 Steam Windows 正式分支。 |
+| 目标 | App `5088120`，Windows Depot `5088121`，Steamworks `default` |
+| 上一正式版及回退目标 | Build `26719792`，Windows Manifest `3426323641209633325`，源码 `65ac43acd98f55f2d6a37895b139bee7267863cc`。[上次正式发布记录](STEAM_UPDATE_20261117.md) |
+| 当前冻结源码 | `492e64370557315e529122f9beb1d23bf5089e2e` |
+| 上传载荷 | `D:/AI项目/水浒/Windows候选/2026-11-17-492e6437/SteamDepot`。已按收据逐项重算六文件 SHA-1，大小和名称一致。 [六文件清单及导出收据](../qa/campaign_short_player_continue_20261117/windows_kuaihuolin_fix_492e6437.json) |
+| 交付 ZIP | `SteamDepot` 同级的 `LiangshanHeroes_Steam_candidate.zip`，1,756,960,169 字节。复算 SHA-256 为 `9c6d869b6523180ee7efa733aaf83081dcbe13c9f222cd72fe487fc9f6afff12`。 |
+| 原生启动 | 同一 EXE 的八章、驻守、清敌和主菜单短检。 [原生构建收据](../qa/battle_entry_timing_20261116/windows_entry_smoke_492e6437.json) |
+| 玩家可见变化 | 以下四语草案已按上一正式源码和当前候选差异核对。战斗继续档在本机保留一个槽。 |
+| 上传前待办 | 收齐路线图要求的无攻略试玩、不同路线重玩、八章键鼠体验及 Android 真机结果。若验收触发源码修改，替换冻结包并重新核对受影响的变化。 [试玩清单](PLAYTEST_CHECKLIST_20260906.md) · [Android 验收收据](../qa/android_controls_performance_20260925/android_touch_candidate_492e6437.json) |
+
+上传时先回读当时的正式 Build，确认表中回退目标仍有效。按指南核对新 Manifest 的六文件后再切 `default`。切换后，用 Steam 客户端更新并从游戏库启动，核对下载所得 Build 与 Manifest，在 Steam 环境下检查一条代表性战役保存、重启、继续链，再记录四语公告的公开回读。需要回退时，重新设定上一正式 Build，确认下载和启动，并保留新版中途存档原件。 [Steam 发布指南](STEAM_RELEASE_GUIDE.md)
+
 ## 当前本地候选 `492e6437`
 
 六文件及 ZIP 位于 D:/AI项目/水浒/Windows候选/2026-11-17-492e6437/。修复 fa4084ff 在快活林原画摊位启用时的保存失败。新包原生离线启动、实际反击窗口存档恢复与四语结算、旧档拒绝已验证。真人和 Steam 客户端待验。 [Windows 续玩记录](../qa/campaign_short_player_continue_20261117/README.md#windows-短篇续玩和快活林修复)
@@ -36,7 +52,7 @@
 
 #### 八章战役现可中途保存
 
-- 八章战役都可在暂停菜单选择「保存并退出游戏」，重启后在主菜单选择「继续上次战斗」。读档会接回原队伍和当时的任务进度。
+- 八章战役都可在暂停菜单选择「保存并退出游戏」，重启后在主菜单选择「继续上次战斗」。本机保留一个继续槽，可回到原队伍和当时的任务进度。
 - 补齐连环马的两路军情、江州的救援旗标、大名府的乔装与撤离、高俅的举火与结算文案。战报和结算会随游戏语言更新。
 - 任务提示更清楚地说明了祝家庄的采金与接应、江州的解缚与登船、徐宁教场的协同下钩、大名府的夺门与开枷，以及高俅关的举火与接应。
 - 减少祝家庄和黄泥冈出征时的开场停顿。
@@ -48,7 +64,7 @@
 
 #### 八章戰役現可中途儲存
 
-- 八章戰役都可在暫停選單選擇「儲存並退出遊戲」，重新啟動後在主選單選擇「繼續上次戰鬥」。讀檔會接回原隊伍及當時的任務進度。
+- 八章戰役都可在暫停選單選擇「儲存並退出遊戲」，重新啟動後在主選單選擇「繼續上次戰鬥」。本機保留一個繼續欄位，可回到原隊伍及當時的任務進度。
 - 補齊連環馬的兩路軍情、江州的救援旗標、大名府的喬裝與撤離、高俅的舉火與結算文案。戰報和結算會隨遊戲語言更新。
 - 任務提示更清楚說明祝家莊的採金與接應、江州的解縛與登船、徐寧教場的協同下鉤、大名府的奪門與開枷，以及高俅關的舉火與接應。
 - 減少祝家莊和黃泥岡出征時的開場停頓。
@@ -60,7 +76,7 @@
 
 #### Save and resume all eight campaign chapters
 
-- In any of the eight campaign chapters, choose “Save and exit game” from the pause menu. Select “Continue last battle” from the main menu to return to your original units and mission progress.
+- In any of the eight campaign chapters, choose “Save and exit game” from the pause menu. Select “Continue last battle” from the main menu to return to your original units and mission progress. The game keeps one battle save on this device.
 - Updated translations for the cavalry warnings, Jiangzhou rescue markers, Daming disguises and evacuation, and Gao Qiu fireboat orders and endings. Battle logs and debriefs refresh when you switch language.
 - Mission hints now give clearer directions for mining and coordinating relief at Zhu Manor, freeing and boarding at Jiangzhou, Xu Ning’s cavalry drill, the gates and prison at Daming, and fireboat escorts in Gao Qiu’s chapter.
 - Reduced the hitches when entering Zhu Manor and the Birthday Tribute Heist.
@@ -72,7 +88,7 @@
 
 #### 全8章の戦役を途中から再開できます
 
-- 全8章でポーズメニューから「セーブしてゲームを終了」を選べます。メインメニューで「前回の戦闘を再開」を選ぶと、保存した時点の部隊と任務の進行状況に戻ります。
+- 全8章でポーズメニューから「セーブしてゲームを終了」を選べます。メインメニューで「前回の戦闘を再開」を選ぶと、保存した時点の部隊と任務の進行状況に戻ります。端末ごとに戦闘のセーブデータを1つ保存できます。
 - 連環馬の進軍警告、江州の救出マーカー、大名府の変装と撤退、高俅の火攻めと結末の翻訳を更新しました。言語を切り替えると、戦闘ログとリザルトも更新されます。
 - 祝家荘での採金と援護、江州での解縛と乗船、徐寧の騎兵対策の訓練、大名府での門の制圧と救出、高俅戦での火船と護衛のヒントを分かりやすくしました。
 - 祝家荘と黄泥岡の戦闘開始時に発生する一時的な引っかかりを軽減しました。

@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+Steam 正式版发版单绑定 Windows 冻结源码、发行载荷和回退 Build。复核六文件 SHA-1 和交付 ZIP SHA-256 后保留当前候选，实际上传之前重新确认正式分支回退目标。 [正式版发版单](STEAM_CANDIDATE_20261117.md#正式版发版单)
+
 Android 触控离线验收从 Windows 候选的冻结源码导出。仅在私有导出中变更包名、更新器及平台依赖，重建 Android 内容身份，安装资料与正式包分开。 [Android 本地验收包收据](../qa/android_controls_performance_20260925/android_touch_candidate_492e6437.json)
 
 Windows 候选的本地首次试玩用 start_windows_playtest_492e6437.cmd，选择 P01、P02 或 P03，进程独立设置 APPDATA、LOCALAPPDATA 和临时目录。直接启动现有原生候选且禁用 Steam。 [本地试玩短检](../qa/battle_entry_timing_20261116/windows_playtest_launcher_492e6437.json)

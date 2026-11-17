@@ -1,5 +1,9 @@
 # 开发日志
 
+## 2026-11-17 Steam 正式版发版单
+
+按上一正式源码和当前 Windows 候选核对四语草案，复算六文件 SHA-1 和 ZIP SHA-256，归拢回退和下载回验步骤。当前候选待玩家和设备验收。 [正式版发版单](STEAM_CANDIDATE_20261117.md#正式版发版单)
+
 ## 2026-11-17 Android 触控验收离线包
 
 用候选 492e6437 源码导出独立包名的 ARM64 APK。已验证签名、清单和资源，Windows 宿主加载该 APK 的资源实跑野猪林进场及触屏 HUD。手机和平板待实测。 [Android 本地验收包收据](../qa/android_controls_performance_20260925/android_touch_candidate_492e6437.json)
