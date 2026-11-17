@@ -559,11 +559,14 @@ func _nearest_clicked_action(target: Vector2) -> String:
 			best = distance
 	return nearest
 
-func can_tap_action(movers: Array, target: Vector2) -> bool:
+func can_tap_action(movers: Array, target: Vector2, require_flag_ring := false) -> bool:
 	var action_id := _nearest_clicked_action(target)
 	if action_id.is_empty():
 		return false
 	var action: Dictionary = actions[action_id]
+	# In a group, select a ship outside the drawn flag ring as usual.
+	if require_flag_ring and target.distance_to(battle.map.cell_to_world(action.cell)) > MissionMarker.RING_RADIUS:
+		return false
 	return String(action.get("blocked_reason","")).is_empty() \
 		and movers.any(func(unit): return _valid_action_actor(unit,action))
 
@@ -874,13 +877,14 @@ func _close_stage_metrics(reason: String) -> void:
 		"task_interruptions":_stage_interruptions,"end_reason":reason})
 
 class MissionMarker extends Node2D:
+	const RING_RADIUS := 25.0
 	var label := ""
 	var number := 1
 	var show_caption := true
 	func _ready() -> void:
 		Localize.language_changed.connect(func(_locale): queue_redraw())
 	func _draw() -> void:
-		draw_arc(Vector2.ZERO, 25, 0, TAU, 28, Color(0.98,0.79,0.34,0.86), 2.0)
+		draw_arc(Vector2.ZERO, RING_RADIUS, 0, TAU, 28, Color(0.98,0.79,0.34,0.86), 2.0)
 		draw_set_transform_matrix(GameMap.ISO_INV)
 		draw_line(Vector2(0,-8),Vector2(0,-30),Color(0.98,0.79,0.34),2.0)
 		draw_colored_polygon(PackedVector2Array([Vector2(0,-30),Vector2(16,-26),Vector2(0,-22)]),Color(0.98,0.79,0.34))

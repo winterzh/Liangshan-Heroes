@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+任务旗标绘制和组队轻点共用 `MissionMarker.RING_RADIUS`，实际到达与资格沿用任务引擎。高俅新增 11 条四语，来源 `gao_fire_controls.json`。[高俅举火与双船撤离](../qa/campaign_fire_readiness_20261116/README.md#触屏举火与双船撤离)
+
 江州登船检查与查看栏共享 150 距离。仅查看栏按玩家视野筛选敌人，实际办理沿用原判定。五条四语来自 `jiangzhou_boarding_controls.json`。[江州登船提示](../qa/campaign_pursuit_20261116/README.md#登船点危险提示与触屏指令)
 
 三个短篇补齐 18 条四语，分片 `campaign_short_controls.json`。黄泥冈「下一步」复用任务定位，快活林用实际技能名提示动作，野猪林按 HUD 模式显示拦棍和撤离指令。[三个短篇的任务提示](../qa/battle_entry_timing_20261116/README.md#三个短篇的任务提示)

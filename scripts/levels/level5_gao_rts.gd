@@ -362,6 +362,25 @@ func _fire_targets(actor) -> Array:
 func _fire_escorts(b,actor) -> Array:
 	if not alive(actor): return []
 	return [b.find_unit("ruan_xiaoer_boat"),b.find_unit("ruan_xiaowu_boat")].filter(func(u): return alive(u) and u.position.distance_to(actor.position)<=220)
+func _fire_hint(b) -> String:
+	var visible_targets: int = _fire_targets(fireboat).filter(func(u): return u._invis_t <= 0.0 and b.is_visible_world(u.position)).size()
+	var escorts := _fire_escorts(b,fireboat).size()
+	var count := Localize.format_text("火船附近可见连船%d；接应船到位%d/2。",[visible_targets,escorts])
+	if not alive(fireboat):
+		return count
+	for action_id in ["gao_fire_0","gao_fire_1"]:
+		var action: Dictionary = b.mission.actions.get(action_id,{})
+		if action.is_empty() or action.done or not String(action.get("blocked_reason","")).is_empty(): continue
+		var marker: Vector2 = b.map.cell_to_world(action.cell)
+		if fireboat.position.distance_to(marker) > float(action.reach) \
+				or not b.map._segment_open(fireboat.position,marker,fireboat.movement_profile): continue
+		if visible_targets == 0:
+			return count + "\n" + Localize.text("等第二批连船进入火区。")
+		if escorts < 2:
+			return count + "\n" + Localize.text("等两艘接应船靠近火船。")
+		return count + "\n" + Localize.text("可以举火。选中火船，轻点举火旗标。" if b.hud.touch_ui \
+			else "可以举火。选中火船，右键举火旗标。")
+	return count + "\n" + Localize.text("先护送火船到举火旗标附近。")
 func _withdraw_crew(b) -> Array:
 	return [liu_carrier,b.find_unit("ruan_xiaowu_boat")].filter(func(u): return _near(b,u,FIRE_SAFE,120))
 func _liu_loss_text(b) -> String:
@@ -387,10 +406,11 @@ func unit_tactical_hint(b,u) -> String:
 	if b.mission.has_event("fire_escort_safe"):
 		return Localize.text("接应撤离已完成，演义成果保留。\n载刘唐的原船可右键返港标记下船。")
 	if fire_lit:
-		return Localize.format_text("接应船已到安全区%d/2；压退附近官船。\n两船到齐后，右键撤出险水标记。",[_withdraw_crew(b).size()])
+		var prompt := "接应船已到安全区%d/2；压退附近官船。\n两船到齐后，轻点撤出险水旗标。" if b.hud.touch_ui \
+			else "接应船已到安全区%d/2；压退附近官船。\n两船到齐后，右键撤出险水标记。"
+		return Localize.format_text(prompt,_withdraw_crew(b).size())
 	if fire_prepared:
-		var visible_targets: int=_fire_targets(fireboat).filter(func(e): return b.is_visible_world(e.position)).size()
-		return Localize.format_text("火船附近可见连船%d；接应船到位%d/2。\n护送火船到火点，待连船靠近后右键举火。",[visible_targets,_fire_escorts(b,fireboat).size()])
+		return _fire_hint(b)
 	if not b.mission.has_event("gongsun_wind"):
 		return Localize.text("公孙胜先到祭风标记；刘唐随后备火。\n先造普通战船掩护两艘接应船。")
 	return Localize.format_text("刘唐到码头备火需60木，当前%d木。\n待装火具小船须留在主码头。",[int(b.wood)])
@@ -489,13 +509,13 @@ func on_mission_action(b,key: String,actor) -> void:
 			var near: Array=_fire_targets(actor)
 			var two=b.find_unit("ruan_xiaoer_boat")
 			if near.is_empty():
-				var message := "连船还没进入火区。让接应船护住火船，等连船靠近再右键举火。"
+				var message := "连船还没进入火区。让接应船护住火船，等连船靠近再举火。"
 				if not waves[1].sent:
 					message = "第二批连船尚未出发。可留火船在安全水域，等连船驶近再举火。"
 				_retry(b,key,message)
 				return
 			if _fire_escorts(b,actor).size()!=2:
-				_retry(b,key,"连船已靠近。等阮小二、阮小五两艘接应船都到火船旁，再右键举火。")
+				_retry(b,key,"连船已靠近。等阮小二、阮小五两艘接应船都到火船旁，再举火。")
 				return
 			fire_lit=true
 			liu_carrier=two
@@ -589,7 +609,8 @@ func _update_withdrawal_briefing(b) -> void:
 	elif recovered:
 		objective = "高俅已在张顺的小艇上。先护送小艇回主码头交接，再由岸军押堂；也可直接收兵通关。"
 	elif port_sealed:
-		objective = "港口已封。让张顺靠近停航座船，右键「凿船接俘」；也可直接收兵通关。"
+		objective = "港口已封。让张顺靠近停航座船，轻点「凿船接俘」旗标；也可直接收兵通关。" if b.hud.touch_ui \
+			else "港口已封。让张顺靠近停航座船，右键「凿船接俘」；也可直接收兵通关。"
 	if b.mission.stage_title != title: b.mission.set_title(title)
 	if b.mission.objective != objective: b.mission.set_objective(objective)
 
@@ -609,7 +630,7 @@ func _wave_objective(b) -> String:
 	if waves[1].sent:
 		if b.mission.has_event("fire_escort_safe") or b.mission.story_goals.get("gao_fire",{}).get("state","")=="missed":
 			return "岸军守住东山关，普通战船接应内港。继续击退水陆主力。"
-		if fire_lit: return "火船已点燃。让两艘接应船一同撤到安全水域，再右键撤出标记。"
+		if fire_lit: return "火船已点燃。让两艘接应船一同撤到安全水域，再下达撤出指令。"
 		return "第二批连船已动。可护送刘唐举火，也可派普通舰队接战，岸军继续守关。" if _count(water_groups[1])>0 else "岸军守住东山关，普通战船接应内港。继续击退水陆主力。"
 	if waves[0].sent:
 		var can_lure: bool=_count(water_groups[0])>0 and not b.mission.has_event("fleet_in_ambush")

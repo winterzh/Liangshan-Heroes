@@ -6693,10 +6693,11 @@ func _tap_command(p: Vector2, additive: bool) -> void:
 	if not _gameplay_rng_issue.is_empty(): return
 	var friendly := _friendly_at(p)
 	if friendly != null:
-		# A captive or the already selected actor can overlap the task flag.
+		# A captive or a selected actor can overlap the task flag.
 		# Preserve selection priority for other friendly units.
 		if not additive and mission != null and not selection.is_empty() \
-				and (friendly.is_captive or selection == [friendly]) and mission.can_tap_action(_selected_movers(),to_logic(p)):
+				and (friendly.is_captive or friendly in selection) \
+				and mission.can_tap_action(_selected_movers(),to_logic(p),selection.size() > 1 and not friendly.is_captive):
 			_issue_order(p,false)
 			return
 		_click_select(p, additive)        # 命中己方单位/建筑 → 选取（含建筑回退、Shift 追加）
