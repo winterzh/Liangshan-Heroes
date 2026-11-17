@@ -554,9 +554,12 @@ func _blend_color(t: int) -> Color:
 
 
 func natural_surface_class_at(x: int, y: int) -> int:
-	var terrain := t_at(x, y)
+	return _natural_surface_class(x, y, t_at(x, y), natural_hard_edge_cell(x, y))
+
+
+func _natural_surface_class(x: int, y: int, terrain: int, hard_edge: bool) -> int:
 	# 城墙、庄墙、台阶和码头属于人工结构；先锁定硬质地面，再处理普通地貌。
-	if natural_hard_edge_cell(x, y):
+	if hard_edge:
 		return SURFACE_HARD
 	# 建筑占地只负责阻挡；视觉地基继承周围地面，避免每座屋舍留下 3x3 方框。
 	if terrain == T.HALL:
@@ -610,10 +613,21 @@ func natural_surface_maps() -> Dictionary:
 	var land := Image.create(w, h, false, Image.FORMAT_RGBA8)
 	var class_counts := [0, 0, 0, 0, 0]
 	var protected_cells := 0
+	# A one-cell border preserves the original authored-edge checks outside the map.
+	var stride := w + 2
+	var hard_edges := PackedByteArray()
+	hard_edges.resize(stride * (h + 2))
+	for y in range(-1, h + 1):
+		var row := (y + 1) * stride + 1
+		for x in range(-1, w + 1):
+			hard_edges[row + x] = int(natural_hard_edge_cell(x, y))
 	for y in range(h):
+		var row := (y + 1) * stride + 1
 		for x in range(w):
 			var terrain := t_at(x, y)
-			var surface_class := natural_surface_class_at(x, y)
+			var cell := row + x
+			var hard_edge := hard_edges[cell] != 0
+			var surface_class := _natural_surface_class(x, y, terrain, hard_edge)
 			class_counts[surface_class] += 1
 			var packed := Color(0, 0, 0, 0)
 			match surface_class:
@@ -625,15 +639,10 @@ func natural_surface_maps() -> Dictionary:
 			weights.set_pixel(x, y, packed)
 			# 显式关闭自然地表时沿用旧岸线保护（ROAD/DOCK），便于同局回退比较；
 			# 启用后只保留人工结构白名单，普通道路和地貌边缘继续自然过渡。
-			var protected := natural_hard_edge_cell(x, y) if natural_surface_enabled \
-				else terrain in [T.ROAD, T.DOCK]
-			if natural_surface_enabled and not protected:
-				for side in [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]:
-					var neighbour_protected := natural_hard_edge_cell(x + side.x, y + side.y) \
-						if natural_surface_enabled else t_at(x + side.x, y + side.y) in [T.ROAD, T.DOCK]
-					if neighbour_protected:
-						protected = true
-						break
+			var protected := terrain == T.ROAD or terrain == T.DOCK
+			if natural_surface_enabled:
+				protected = hard_edge or hard_edges[cell - 1] != 0 or hard_edges[cell + 1] != 0 \
+					or hard_edges[cell - stride] != 0 or hard_edges[cell + stride] != 0
 			if protected:
 				protected_cells += 1
 			land.set_pixel(x, y, Color(0.0 if terrain == T.WATER else 1.0,

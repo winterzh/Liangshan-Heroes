@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+地表遮罩生成对墙基、台阶和码头的检查用一次局部网格，保留相邻保护。八章布局及自然和回退材质的对照由 Godot 4.6.3 运行。[复现与记录](../qa/battle_entry_timing_20261116/README.md#地表遮罩硬边复用)
+
 `413b95bb` 的精确编译包支持六次连续开打和返回。固定本机 1280×720，按真实菜单与 HUD 测量。该次额外记录进入后最长绘制间隔，供定位战场挂载和首轮绘制停顿。[记录](../qa/battle_entry_timing_20261116/windows_mode_switch_413b95bb.json)
 
 当前 Windows 本地候选 `413b95bb` 以 Godot 4.6.3 导出。精确编译包目录的四语词库与冻结输入逐字节一致，并含所需字体和许可。独立核对实际 Windows 原生离线启动。[收据](../qa/battle_entry_timing_20261116/windows_candidate_413b95bb.json)
