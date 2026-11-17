@@ -1,5 +1,7 @@
 # 当前项目总览
 
+当前 Windows 候选 `5acd8be2` 完成原生离线启动、黄泥冈原头像及进退场、八章续玩准入、四语及野猪林三进程续战。Steam 客户端、设备和真人体验待验。 [候选收据](../qa/battle_entry_timing_20261116/windows_candidate_5acd8be2.json)
+
 黄泥冈首屏英雄栏已提前准备七组商贩头像。源码冷进场首帧后的停顿 420 → 8 ms，原头像和对白通过验证。新 Windows 包及 Steam 客户端测量待验。 [黄泥冈首屏头像](../qa/battle_entry_timing_20261116/README.md#黄泥冈首屏头像后台读取)
 
 本地 Windows 候选 4cc25919 含祝家庄角色和布景后台读取。同一编译包三次正常开战与返回，祝家庄从就绪到渲染提交约 65 ms，完整进场约 394 ms。真人体验、设备和实际 Steam 客户端待验。 [候选收据](../qa/battle_entry_timing_20261116/windows_candidate_4cc25919.json)

@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[Windows 战役整合收据](../qa/battle_entry_timing_20261116/windows_candidate_5acd8be2.json)保存原生启动、黄泥冈冷／热进场、八章准入、四语、野猪林续玩和六文件指纹。
+
 [黄泥冈首屏头像量测](../qa/battle_entry_timing_20261116/huangnigang_opening_portrait_prefetch.json)保存原 Windows 编译包冷／热进入、源码两帧分段和英雄栏与对白的选图核对。
 
 [Windows 出征优化候选收据](../qa/battle_entry_timing_20261116/windows_candidate_4cc25919.json)保存原生启动、编译包的三路进场、布景和角色匹配与六文件指纹。

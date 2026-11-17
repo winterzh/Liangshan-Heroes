@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+Windows Steam 本地候选 `5acd8be2` 由 Godot 4.6.3 导出，原生启动与六件指纹已核对。精确编译包的续玩行为用离线平台替身走野猪林，三次独立进程沿用玩家入口和实际结算。 [候选收据](../qa/battle_entry_timing_20261116/windows_candidate_5acd8be2.json)
+
 Windows 黄泥冈正常出征时，角色站姿之外也后台读取七名商贩及对白查找的吴用常服头像。结果进入原贴图预读缓存，英雄栏与剧情继续按原人物身份选图。 [黄泥冈首屏头像](../qa/battle_entry_timing_20261116/README.md#黄泥冈首屏头像后台读取)
 
 Windows 4cc25919 采用 Godot 4.6.3 导入与 Windows Steam 预设导出。安装身份、原生离线启动、三条编译包入口和六文件指纹已核对。 [候选收据](../qa/battle_entry_timing_20261116/windows_candidate_4cc25919.json)
