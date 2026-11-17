@@ -1,5 +1,7 @@
 # 当前项目总览
 
+随机驻守开战的首帧卡顿已定位到偏好事务。新 Windows 候选 `e5bf9414` 把事务放到加载首帧后，定向实测反馈约 21 ms，进入战场约 0.52 秒。正式 Steam 客户端下载版仍待验证。[验收](../qa/battle_entry_timing_20261116/windows_candidate_e5bf9414.json)
+
 包含八章续玩的 Windows 本地候选 `72952e43` 已封装。原生启动、编译包准入、野猪林实际续玩和两条菜单进场已验证。正常速度真人体验、Steam 客户端与设备验收待完成。[收据](../qa/battle_entry_timing_20261116/windows_candidate_72952e43.json)
 
 开发源码已为八章接入玩家战役续玩。本轮野猪林、黄泥冈和快活林分别验证歇脚途中、重车落地及反击窗口的保存、重启恢复和结算。Steam 上传待开发收尾。[验证](../qa/campaign_short_player_continue_20261117/README.md)

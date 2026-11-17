@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+Windows 随机驻守首帧优化候选 `e5bf9414` 的六文件校验及编译包前后对照记录在 [`windows_candidate_e5bf9414.json`](../qa/battle_entry_timing_20261116/windows_candidate_e5bf9414.json)。
+
 Windows 八章续玩候选 `72952e43` 的导出、准入、进场和野猪林续玩记录在 [`windows_candidate_72952e43.json`](../qa/battle_entry_timing_20261116/windows_candidate_72952e43.json)。
 
 `qa/campaign_short_player_continue_20261117/` 保存野猪林、黄泥冈与快活林玩家续玩的探针、公共验证逻辑和三个收据。[验证](../qa/campaign_short_player_continue_20261117/README.md)

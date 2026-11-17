@@ -1,5 +1,9 @@
 # Windows Steam 更新交接与四语公告草案
 
+## 随机驻守反馈候选 `e5bf9414`
+
+六文件载荷位于 `D:/AI项目/水浒/Windows候选/2026-11-17-e5bf9414/SteamDepot`。新增随机驻守偏好保存时序优化，原生 EXE 离线启动和编译包定向检查通过。八章续玩编译包的代表性试验见 `72952e43`。实际 Steam 客户端验收和正式上传待开发收尾。[当前收据](../qa/battle_entry_timing_20261116/windows_candidate_e5bf9414.json)
+
 ## 当前本地候选 `72952e43`
 
 六文件 Steam Depot 已封装到 `D:/AI项目/水浒/Windows候选/2026-11-17-72952e43/SteamDepot`。Windows 原生 EXE 离线启动通过；编译包在 Godot 编辑器宿主中核对八章准入、野猪林存档续玩和结算拒绝、祝家庄出征及随机驻守进场。真实 Steam 客户端验收及正式上传待开发收尾。下文 `455f2c62` 的公告草案对应当时的补丁范围。[当前候选回执](../qa/battle_entry_timing_20261116/windows_candidate_72952e43.json)
