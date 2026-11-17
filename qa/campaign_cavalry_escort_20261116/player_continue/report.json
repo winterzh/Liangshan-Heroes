@@ -1,0 +1,280 @@
+{
+  "passed": true,
+  "source_commit": "5ba0f5d4dac723d4e782483969ca01b837a863cc",
+  "files_lf_sha256": {
+    "qa/campaign_cavalry_escort_20261116/player_continue/probe.gd": "e68aa795c72a88731b635e49480e81affd1d2c8da7aa9c2fe90230ecb20f629c",
+    "qa/campaign_siege_20261116/player_continue/platform_entry.gd": "f270ba38384e9bce258c409a6cb10444e8b834cbdc26d4266d286cceeb0f3da6",
+    "scripts/battle.gd": "df2688d0400e60d1b5e5510609f981de888380b26f7d3ebf44dcd5a2e9038827",
+    "scripts/continue_flow.gd": "381e529f8eb084212cc50fd271a2017f6973cd72965370d66a3fb47a1c650155",
+    "scripts/levels/level4_lianhuanma_rts.gd": "1c99248fd3c74b042edd77d389f36a8a3c9c39e63f23438d10a7184ce657a5e5",
+    "scripts/run_campaign_progress_coordinator.gd": "7cb414225c25d98065c4db8526de0e09f4a9f49e73b5b88488fe2b98762ad2b8",
+    "scripts/run_level4_world_factory.gd": "558f67b4578fef03a012f699393dfbe10e60e8a3d1bb3f27b581220ffd5669fd",
+    "scripts/run_official_restore_profile.gd": "a8e8f2599b101525235e57d0d5ef0d50d7629a941d0c8551026fb4a3cb120fd2",
+    "scripts/run_world_session.gd": "8b499e542ba155a3825d39caffdbe5b5acd7d0f046dd51a7122bd9efd4a1342c",
+    "tools/lianhuanma_escort_qa.gd": "47de9637bd5c2d7bcbe617f27e31c94ceb18cec6e82f2e6fc400c2873270b360",
+    "tools/lianhuanma_rts_test.gd": "4b275590cc90858e20f100454fb2c5f7916f52f81ff752f532936fdd7462e60d",
+    "tools/zhujiazhuang_rts_test.gd": "435ddb8f9bc774687e1ea879ac6e9adc606380db4934ca3b72dfea294273d770"
+  },
+  "steps": [
+    {
+      "checks": 6,
+      "facts": {
+        "checkpoint": {
+          "elapsed": 150.866666666663,
+          "north_sent": true,
+          "original_live_riders": 12,
+          "retained_escorts": 8,
+          "south_sent": false
+        },
+        "identity": "source-v1:8d16210a6d3e6718f72efb789c602c2f898ea18ab746c60e080fba620af97fb1",
+        "save_code": ""
+      },
+      "failures": [],
+      "pid": 22380,
+      "stage": "save",
+      "seconds": 86.864,
+      "exit_code": 0,
+      "errors": []
+    },
+    {
+      "checks": 12,
+      "facts": {
+        "identity": "source-v1:8d16210a6d3e6718f72efb789c602c2f898ea18ab746c60e080fba620af97fb1",
+        "play": {
+          "ai_trained": 21,
+          "buildings_started": 6,
+          "camp_hp": 1500.0,
+          "enemy_base_hp": 0,
+          "events": [
+            "lhm_break_1",
+            "lhm_break_2",
+            "lhm_direct_break",
+            "lhm_break_3",
+            "lhm_break_4",
+            "lhm_break_5",
+            "lhm_break_6",
+            "lhm_break_7",
+            "lhm_break_8",
+            "lhm_break_9",
+            "lhm_manor_fallen",
+            "lhm_hu_fled",
+            "lhm_victory"
+          ],
+          "flank_stage": 2,
+          "game_seconds": 276.25,
+          "han_hp": 639.0,
+          "hook_broken": 9,
+          "hu_hp": 1325.28730434783,
+          "orders": 69,
+          "result": {
+            "contract_version": 2,
+            "core_cleared": true,
+            "core_goal": "守住梁山中军，击溃十二骑连环马并摧毁官军大营。宋江与中军必须存活。",
+            "done_ids": [
+              "lhm_hu"
+            ],
+            "goals": [
+              {
+                "id": "lhm_training",
+                "label": "教场诱骑撤步，徐宁与钩镰手协同下钩",
+                "note": "",
+                "reason": "本局未完成",
+                "state": "missed"
+              },
+              {
+                "id": "lhm_hooks",
+                "label": "十二骑均先由钩镰枪破阵",
+                "note": "",
+                "reason": "本局已偏离“十二骑均先由钩镰枪破阵”的原著条件",
+                "state": "missed"
+              },
+              {
+                "id": "lhm_han",
+                "label": "生擒韩滔",
+                "note": "",
+                "reason": "本局未完成",
+                "state": "missed"
+              },
+              {
+                "id": "lhm_hu",
+                "label": "呼延灼败走青州",
+                "note": "",
+                "reason": "",
+                "state": "done"
+              }
+            ],
+            "missed_ids": [
+              "lhm_training",
+              "lhm_hooks",
+              "lhm_han"
+            ],
+            "pending_ids": [],
+            "story_complete": false,
+            "story_done": 1,
+            "story_total": 4
+          },
+          "riders_defeated": 12,
+          "siege_choice": "siege_cata",
+          "skill_orders": 12,
+          "song_hp": 280.0,
+          "strategy": "defend then regroup; artillery uses south to east flank",
+          "units_queued": 38,
+          "units_queued_by_key": {
+            "gou_lian": 5,
+            "hua_rong": 1,
+            "liang_dao": 2,
+            "liang_gong": 5,
+            "lin_chong": 1,
+            "lou_luo": 1,
+            "siege_cata": 3
+          }
+        },
+        "progress_sha": "616f97b4721fab78d758fc8432619d7a392a7790ae65dbda413052fa7947a9d8",
+        "resume_code": ""
+      },
+      "failures": [],
+      "pid": 48996,
+      "stage": "resume",
+      "seconds": 134.057,
+      "exit_code": 0,
+      "errors": []
+    },
+    {
+      "checks": 6,
+      "facts": {
+        "identity": "source-v1:8d16210a6d3e6718f72efb789c602c2f898ea18ab746c60e080fba620af97fb1",
+        "progress_sha": "616f97b4721fab78d758fc8432619d7a392a7790ae65dbda413052fa7947a9d8",
+        "terminal_code": "LOCAL_RUN_TERMINAL"
+      },
+      "failures": [],
+      "pid": 12472,
+      "stage": "reject",
+      "seconds": 29.907,
+      "exit_code": 0,
+      "errors": []
+    }
+  ],
+  "steam_disabled": true,
+  "automated_live_defense": true,
+  "initial_frontal_resume": {
+    "checks": 12,
+    "facts": {
+      "identity": "source-v1:8d16210a6d3e6718f72efb789c602c2f898ea18ab746c60e080fba620af97fb1",
+      "play": {
+        "ai_trained": 24,
+        "buildings_started": 6,
+        "camp_hp": 1500.0,
+        "enemy_base_hp": 324.880000000002,
+        "events": [
+          "lhm_break_1",
+          "lhm_break_2",
+          "lhm_break_3",
+          "lhm_break_4",
+          "lhm_direct_break",
+          "lhm_break_5",
+          "lhm_break_6",
+          "lhm_break_7",
+          "lhm_break_8",
+          "lhm_break_9",
+          "lhm_break_10",
+          "lhm_break_11"
+        ],
+        "flank_stage": 0,
+        "game_seconds": 900.0,
+        "han_hp": 643.2992,
+        "hook_broken": 11,
+        "hu_hp": 1809.6,
+        "orders": 173,
+        "result": {
+          "contract_version": 2,
+          "core_cleared": false,
+          "core_goal": "守住梁山中军，击溃十二骑连环马并摧毁官军大营。宋江与中军必须存活。",
+          "done_ids": [],
+          "goals": [
+            {
+              "id": "lhm_training",
+              "label": "教场诱骑撤步，徐宁与钩镰手协同下钩",
+              "note": "",
+              "reason": "",
+              "state": "pending"
+            },
+            {
+              "id": "lhm_hooks",
+              "label": "十二骑均先由钩镰枪破阵",
+              "note": "",
+              "reason": "本局已偏离“十二骑均先由钩镰枪破阵”的原著条件",
+              "state": "missed"
+            },
+            {
+              "id": "lhm_han",
+              "label": "生擒韩滔",
+              "note": "",
+              "reason": "",
+              "state": "pending"
+            },
+            {
+              "id": "lhm_hu",
+              "label": "呼延灼败走青州",
+              "note": "",
+              "reason": "",
+              "state": "pending"
+            }
+          ],
+          "missed_ids": [
+            "lhm_hooks"
+          ],
+          "pending_ids": [
+            "lhm_training",
+            "lhm_han",
+            "lhm_hu"
+          ],
+          "story_complete": false,
+          "story_done": 0,
+          "story_total": 4
+        },
+        "riders_defeated": 12,
+        "siege_choice": "siege_ram",
+        "skill_orders": 26,
+        "song_hp": 280.0,
+        "strategy": "defend then regroup at rear; raid artillery moves via south then east flank before the infantry attacks from west; paid support heroes, orders at most every six seconds",
+        "units_queued": 131,
+        "units_queued_by_key": {
+          "gou_lian": 26,
+          "hua_rong": 2,
+          "liang_dao": 3,
+          "liang_gong": 48,
+          "liang_qiang": 21,
+          "lin_chong": 3,
+          "lou_luo": 4,
+          "siege_ram": 4
+        }
+      },
+      "progress_sha": "",
+      "resume_code": ""
+    },
+    "failures": [
+      "defend route wins through real economy and combat",
+      "defend clears finite riders and enemy headquarters",
+      "natural victory is committed by the real settlement coordinator"
+    ],
+    "pid": 1748,
+    "stage": "resume",
+    "seconds": 262.115,
+    "exit_code": 1,
+    "errors": []
+  },
+  "initial_probe_files_lf_sha256": {
+    "qa/campaign_cavalry_escort_20261116/player_continue/probe.gd": "f805a6909cf28f15c3a4386dc969f7c8edc3e25bc59a51a7be82d6060f297ae1",
+    "qa/campaign_siege_20261116/player_continue/platform_entry.gd": "f270ba38384e9bce258c409a6cb10444e8b834cbdc26d4266d286cceeb0f3da6",
+    "scripts/battle.gd": "df2688d0400e60d1b5e5510609f981de888380b26f7d3ebf44dcd5a2e9038827",
+    "scripts/continue_flow.gd": "381e529f8eb084212cc50fd271a2017f6973cd72965370d66a3fb47a1c650155",
+    "scripts/levels/level4_lianhuanma_rts.gd": "1c99248fd3c74b042edd77d389f36a8a3c9c39e63f23438d10a7184ce657a5e5",
+    "scripts/run_campaign_progress_coordinator.gd": "7cb414225c25d98065c4db8526de0e09f4a9f49e73b5b88488fe2b98762ad2b8",
+    "scripts/run_level4_world_factory.gd": "558f67b4578fef03a012f699393dfbe10e60e8a3d1bb3f27b581220ffd5669fd",
+    "scripts/run_official_restore_profile.gd": "a8e8f2599b101525235e57d0d5ef0d50d7629a941d0c8551026fb4a3cb120fd2",
+    "scripts/run_world_session.gd": "8b499e542ba155a3825d39caffdbe5b5acd7d0f046dd51a7122bd9efd4a1342c",
+    "tools/lianhuanma_escort_qa.gd": "1f22381107f83332aa46593c257d3791bca31f17e56a4177fc5770b1c9391eb9",
+    "tools/lianhuanma_rts_test.gd": "4b275590cc90858e20f100454fb2c5f7916f52f81ff752f532936fdd7462e60d",
+    "tools/zhujiazhuang_rts_test.gd": "435ddb8f9bc774687e1ea879ac6e9adc606380db4934ca3b72dfea294273d770"
+  }
+}

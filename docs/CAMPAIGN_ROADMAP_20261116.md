@@ -1,5 +1,7 @@
 # 八幕战役后续开发路线图
 
+M3 连环马开放玩家暂停保存和主菜单续玩。两路出击状态读回后正常通关，旧档拒绝且结算保留，三进程共 24 项通过。Windows 发行包和 Steam 客户端待验。[连环马玩家续玩](../qa/campaign_cavalry_escort_20261116/README.md#连环马玩家续玩)
+
 M7 随机波次与设置保存复用 Windows 启动身份。编译包定向对照，加载反馈 671.39 → 153.00 ms，首帧 1.03 → 0.51 秒。[随机波次开战对照](../qa/battle_entry_timing_20261116/README.md#随机波次偏好保存与进场)
 
 M7 本地 Windows 候选 `a51c3453` 已验证首次出征复用启动身份。实际点击至祝家庄首帧约 0.69 秒，加载反馈约 22 ms，使用编辑器宿主加载相同发行编译包。[Windows 结算候选回执](../qa/campaign_siege_20261116/settlement_integration/windows_candidate_a51c3453.json)

@@ -26,7 +26,8 @@ func _check_menu_policy() -> void:
 	check(profiles.is_player_campaign_context(battle_mode),"Zhu Manor is explicitly admitted")
 	for index in range(campaign.LEVELS.size()):
 		campaign.current = index
-		var expected := battle_mode if campaign.LEVELS[index].id == "level3" else {}
+		var id: String = campaign.LEVELS[index].id
+		var expected := {"mode":"campaign","level_id":id,"waves":0} if id in ["level3","level4"] else {}
 		check(flow._player_launch_context() == expected,"normal campaign choice has expected scope " + campaign.LEVELS[index].id)
 	campaign.skirmish = true
 	check(flow._player_launch_context() == {"mode":"defense","level_id":"","waves":30},"classic 30-wave defense stays supported")

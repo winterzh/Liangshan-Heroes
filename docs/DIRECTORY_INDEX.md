@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+`qa/campaign_cavalry_escort_20261116/player_continue/` 包含连环马玩家续玩的菜单探针与三进程验证收据。[连环马验收](../qa/campaign_cavalry_escort_20261116/README.md#连环马玩家续玩)
+
 [随机波次开战对照](../qa/battle_entry_timing_20261116/README.md#随机波次偏好保存与进场)位于 `qa/battle_entry_timing_20261116/random_prefs/`，包括可复用探针、对照结果与六文件候选回执。
 
 [Windows 结算候选回执](../qa/campaign_siege_20261116/settlement_integration/windows_candidate_a51c3453.json)与原生包首次出征探针位于 `qa/campaign_siege_20261116/settlement_integration/`。

@@ -154,7 +154,7 @@ func _economy_with_counter_support(b) -> void:
 		for candidate in ["hua_rong","lin_chong"]:
 			if b.find_unit(candidate)==null:
 				hero_key=candidate;reserve_gold=maxi(reserve_gold,int(b._defs[candidate].cost_gold));break
-	var siege_key: String="siege_cata" if route=="raid" else "siege_ram"
+	var siege_key := "siege_cata" if _counter_uses_flank() else "siege_ram"
 	var worker_count: int=b.units.filter(func(u): return alive(u) and u.faction==0 and u.is_worker).size()
 	for building in own:
 		if building.is_constructing or not building._train_queue.is_empty(): continue
@@ -170,6 +170,12 @@ func _economy_with_counter_support(b) -> void:
 			for slot in range(4):
 				if hero.can_learn(slot): hero.learn(slot)
 
+func _counter_uses_flank() -> bool:
+	return route=="raid"
+
+func _stop_lhm_route(_b) -> bool:
+	return false
+
 func _play_lhm(b) -> void:
 	var l=b.level
 	var time := 0.0
@@ -177,6 +183,7 @@ func _play_lhm(b) -> void:
 	var phase := "north"
 	var assault_ready := false
 	var last_order_time := -10.0
+	var use_flank := _counter_uses_flank()
 	var flank_stage := 0
 	var flank_ids: Array=[]
 	var starting_hall=l.hall
@@ -209,8 +216,8 @@ func _play_lhm(b) -> void:
 			if l.lhm_killed>=12: phase="counter"
 			if phase=="south": target_cell=l.LANES[1]
 		if phase=="counter":
-			var siege_units: Array=army.filter(func(u):return u.key in ["siege_ram","siege_cata"])
-			if route=="raid":
+			var siege_units: Array=army.filter(func(u):return u.key=="siege_cata")
+			if use_flank:
 				if siege_units.any(func(u):return u.entity_id not in flank_ids):
 					flank_ids=siege_units.map(func(u):return u.entity_id);flank_stage=0
 				var point: Vector2=b.map.cell_to_world(Vector2i(58,48) if flank_stage==0 else Vector2i(60,35))
@@ -219,22 +226,22 @@ func _play_lhm(b) -> void:
 			if not assault_ready:
 				target_cell=Vector2i(18,32)
 				attack_move=false
-				if army.filter(func(u): return u.position.distance_to(b.map.cell_to_world(target_cell))<220).size()>=18 and (route!="raid" or flank_stage==2): assault_ready=true
+				if army.filter(func(u): return u.position.distance_to(b.map.cell_to_world(target_cell))<220).size()>=18 and (not use_flank or flank_stage==2): assault_ready=true
 			if assault_ready:
 				target_cell=l.ENEMY_CAMP
 				target=null
 		if (army.size()>=8 or time>120) and time-last_order_time>=6:
 			var cover: Array=army
 			var engines: Array=[]
-			if phase=="counter" and (assault_ready or route=="raid"):
-				engines=army.filter(func(u):return u.key in ["siege_ram","siege_cata"])
-				cover=army.filter(func(u):return u.key not in ["siege_ram","siege_cata"])
+			if phase=="counter" and (assault_ready or use_flank):
+				engines=army.filter(func(u):return u.key=="siege_cata" if use_flank else u.key in ["siege_ram","siege_cata"])
+				cover=army.filter(func(u):return u not in engines)
 			if not cover.is_empty():
 				if alive(target) and target.visible:
 					b.select_members(cover,false);b._issue_order(b.to_screen(target.position),false);orders+=1
 				else: _click(b,cover,target_cell,attack_move)
 			if not engines.is_empty():
-				if route=="raid" and flank_stage<2:
+				if use_flank and flank_stage<2:
 					_click(b,engines,Vector2i(58,48) if flank_stage==0 else Vector2i(60,35))
 				elif alive(l.enemy_base) and b.is_visible_world(l.enemy_base.position):
 					b.select_members(engines,false);b._issue_order(b.to_screen(l.enemy_base.position),false);orders+=1
@@ -242,9 +249,10 @@ func _play_lhm(b) -> void:
 			last_order_time=time
 		_skills_lhm(b,army)
 		if time>=next_log:
-			print("[lhm-play] t=",int(time)," phase=",phase," army=",army.size()," riders=",l.lhm_killed," hooks=",l.broken_count," posts=",l.posts.filter(func(u): return alive(u)).size()," g=",b.gold," w=",b.wood," hall=",l.hall.hp)
+			print("[lhm-play] t=",int(time)," phase=",phase," flank=",flank_stage," army=",army.size()," riders=",l.lhm_killed," hooks=",l.broken_count," posts=",l.posts.filter(func(u): return alive(u)).size()," g=",b.gold," w=",b.wood," hall=",l.hall.hp)
 			next_log+=60
 		await _wait(1.25)
+		if _stop_lhm_route(b): return
 		time+=1.25
 	check(b.phase==b.Phase.END and b.mission.has_event("lhm_victory"),route+" route wins through real economy and combat")
 	check(buildings_started>=2 and units_queued>=8,route+" route uses building and paid recruitment")
@@ -256,4 +264,4 @@ func _play_lhm(b) -> void:
 		check(supply_observed.size()==2 and not post_cut_spawn,"no destroyed supply post produces a later escort")
 		check(not rider_identity_changed and l.riders.size()==12 and rider_deaths.size()==12 and rider_ids.all(func(id):return rider_deaths.count(id)==1),"original twelve riders each die once; supply destruction never replaces them")
 		check(supply_observed.size()==2 and supply_observed.all(func(row):return not row.wave_sent and row.wave_time==[195.0,315.0][row.lane]),"both actual raids delay unsent cavalry by forty-five seconds")
-	play_metrics={"game_seconds":time,"strategy":route+" then regroup at rear; raid artillery moves via south then east flank before the infantry attacks from west; paid support heroes, orders at most every six seconds","flank_stage":flank_stage,"siege_choice":"siege_cata" if route=="raid" else "siege_ram","enemy_base_hp":l.enemy_base.hp if is_instance_valid(l.enemy_base) else 0,"hu_hp":l.hu.hp if is_instance_valid(l.hu) else 0,"han_hp":l.han.hp if is_instance_valid(l.han) else 0,"riders_defeated":l.lhm_killed,"hook_broken":l.broken_count,"camp_hp":l.hall.hp,"song_hp":l.song.hp,"buildings_started":buildings_started,"units_queued":units_queued,"units_queued_by_key":units_queued_by_key,"ai_trained":l.ai_trained,"orders":orders,"skill_orders":skill_orders,"result":b.mission.result_snapshot(b.mission.has_event("lhm_victory")),"events":b.mission.events.keys()}
+	play_metrics={"game_seconds":time,"strategy":route+" then regroup; artillery uses south to east flank" if use_flank else route+" then regroup for frontal counterattack","flank_stage":flank_stage,"siege_choice":"siege_cata" if use_flank else "siege_ram","enemy_base_hp":l.enemy_base.hp if is_instance_valid(l.enemy_base) else 0,"hu_hp":l.hu.hp if is_instance_valid(l.hu) else 0,"han_hp":l.han.hp if is_instance_valid(l.han) else 0,"riders_defeated":l.lhm_killed,"hook_broken":l.broken_count,"camp_hp":l.hall.hp,"song_hp":l.song.hp,"buildings_started":buildings_started,"units_queued":units_queued,"units_queued_by_key":units_queued_by_key,"ai_trained":l.ai_trained,"orders":orders,"skill_orders":skill_orders,"result":b.mission.result_snapshot(b.mission.has_event("lhm_victory")),"events":b.mission.events.keys()}

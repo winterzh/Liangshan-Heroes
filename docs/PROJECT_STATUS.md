@@ -1,5 +1,7 @@
 # 当前项目总览
 
+连环马已在开发源码开放玩家续玩。北路出击后的存档在独立进程恢复，并打完后半场；正常结算后旧档拦截通过。正式上传待开发收尾。[验证范围](../qa/campaign_cavalry_escort_20261116/README.md#连环马玩家续玩)
+
 Windows 本地候选 `6906f075` 完成随机波次的偏好写入和进场。发行编译包的单样本开战至首帧为 0.51 秒。实际 Steam 客户端待验。[随机波次开战对照](../qa/battle_entry_timing_20261116/README.md#随机波次偏好保存与进场)
 
 本地 Windows 成品候选 `a51c3453` 已封装。同一编译包在编辑器宿主中一次复用安装校验，祝家庄首帧为 0.69 秒。实际 Steam 客户端计时与奖励待验。[Windows 结算候选回执](../qa/campaign_siege_20261116/settlement_integration/windows_candidate_a51c3453.json)

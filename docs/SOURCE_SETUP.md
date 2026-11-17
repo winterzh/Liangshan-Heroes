@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+连环马与祝家庄均已加入玩家战役续玩范围。本轮在隔离用户目录以 Godot 4.6.3 验证连环马暂停保存、主菜单恢复及胜利后旧档拦截。运行源码只替换 Steam 启用判定供离线验证，仍经过玩家关卡准入。Windows 新发行包和真实 Steam 客户端待验。[验收](../qa/campaign_cavalry_escort_20261116/README.md#连环马玩家续玩)
+
 Windows Steam 版保存偏好复用启动校验的身份。每次复核可执行文件标记、挂载与原生绑定，源码环境走现有校验。[随机波次开战对照](../qa/battle_entry_timing_20261116/README.md#随机波次偏好保存与进场)
 
 战役结算 Windows 本地候选按 `a51c3453` 封装，Windows Depot 六文件已核对。[Windows 结算候选回执](../qa/campaign_siege_20261116/settlement_integration/windows_candidate_a51c3453.json)
