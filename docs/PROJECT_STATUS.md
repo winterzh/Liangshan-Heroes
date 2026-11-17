@@ -1,5 +1,7 @@
 # 当前项目总览
 
+Windows 正式版已更新到 Build 26735223，四语公告已公开并逐项回读。服务器隔离下载六文件和后台启动已通过。本机客户端启动受云同步失败阻挡，真人及 Android 真机验收继续待办。 [本批记录](STEAM_UPDATE_20261118.md)
+
 Windows 候选已上传为 Build 26735223，正式上线确认被 Escape 中断。public 回读仍为 26719792，四语公告及客户端下载验收待续。 [本批记录](STEAM_UPDATE_20261118.md)
 
 Android 触控验收 APK 已为 492e6437 打包。Android ARM64、API 24 起；桌面仅验证 APK 资源、签名和触控布局挂载。手机和平板均待验。 [Android 本地验收包收据](../qa/android_controls_performance_20260925/android_touch_candidate_492e6437.json)

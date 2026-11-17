@@ -1,12 +1,12 @@
 # Windows Steam 更新交接与四语公告草案
 
-当前候选已于 2026-11-18 上传为 Build 26735223。正式分支确认、四语公告和客户端验收待续。 [上传状态](STEAM_UPDATE_20261118.md)
+当前候选已于 2026-11-18 在正式分支上线，Build 26735223。四语公告已公开回读，客户端、真人及真机验收按发布记录接续。 [发布状态](STEAM_UPDATE_20261118.md)
 
 ## 正式版发版单
 
 | 项目 | 当前记录 |
 | --- | --- |
-| 上传时机 | 用户要求开发完成后再上传。上线目标仅 Steam Windows 正式分支。 |
+| 发布授权 | 2026-11-18 用户要求上传，随后完成 Steam 手机确认。Windows Build 26735223 已在正式分支上线。 |
 | 目标 | App `5088120`，Windows Depot `5088121`，Steamworks `default` |
 | 上一正式版及回退目标 | Build `26719792`，Windows Manifest `3426323641209633325`，源码 `65ac43acd98f55f2d6a37895b139bee7267863cc`。[上次正式发布记录](STEAM_UPDATE_20261117.md) |
 | 当前冻结源码 | `492e64370557315e529122f9beb1d23bf5089e2e` |
@@ -14,7 +14,7 @@
 | 交付 ZIP | `SteamDepot` 同级的 `LiangshanHeroes_Steam_candidate.zip`，1,756,960,169 字节。复算 SHA-256 为 `9c6d869b6523180ee7efa733aaf83081dcbe13c9f222cd72fe487fc9f6afff12`。 |
 | 原生启动 | 同一 EXE 的八章、驻守、清敌和主菜单短检。 [原生构建收据](../qa/battle_entry_timing_20261116/windows_entry_smoke_492e6437.json) |
 | 玩家可见变化 | 以下四语草案已按上一正式源码和当前候选差异核对。战斗继续档在本机保留一个槽。 |
-| 上传前待办 | 收齐路线图要求的无攻略试玩、不同路线重玩、八章键鼠体验及 Android 真机结果。若验收触发源码修改，替换冻结包并重新核对受影响的变化。 [试玩清单](PLAYTEST_CHECKLIST_20260906.md) · [Android 验收收据](../qa/android_controls_performance_20260925/android_touch_candidate_492e6437.json) |
+| 后续产品验收 | 收齐路线图要求的无攻略试玩、不同路线重玩、八章键鼠体验及 Android 真机结果。后续问题按新批次修复和验证。 [试玩清单](PLAYTEST_CHECKLIST_20260906.md) · [Android 验收收据](../qa/android_controls_performance_20260925/android_touch_candidate_492e6437.json) |
 
 上传时先回读当时的正式 Build，确认表中回退目标仍有效。按指南核对新 Manifest 的六文件后再切 `default`。切换后，用 Steam 客户端更新并从游戏库启动，核对下载所得 Build 与 Manifest，在 Steam 环境下检查一条代表性战役保存、重启、继续链，再记录四语公告的公开回读。需要回退时，重新设定上一正式 Build，确认下载和启动，并保留新版中途存档原件。 [Steam 发布指南](STEAM_RELEASE_GUIDE.md)
 

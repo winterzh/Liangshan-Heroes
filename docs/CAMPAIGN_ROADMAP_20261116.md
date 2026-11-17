@@ -1,5 +1,7 @@
 # 八幕战役后续开发路线图
 
+M7 Windows 正式版已上线 Build 26735223，八章本机续玩、战果及四语提示随本次交付。四语公告、服务器隔离下载六文件和后台启动已回读。本机客户端与真人、设备验收按实际证据接续。 [正式发布记录](STEAM_UPDATE_20261118.md)
+
 M7 已备与 492e6437 对应的 Android 独立离线包。Android 手机和平板触控、DPI、安全区仍需实际完成。 [Android 本地验收包收据](../qa/android_controls_performance_20260925/android_touch_candidate_492e6437.json)
 
 M2／M7 当前 Windows 候选的本地试玩入口与独立档案已准备，按首次试玩清单招募并记录。Steam 平台验收单独保留。 [本地试玩短检](../qa/battle_entry_timing_20261116/windows_playtest_launcher_492e6437.json)
