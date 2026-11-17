@@ -1,0 +1,673 @@
+{
+  "passed": true,
+  "source_commit": "5b03262c587c96247e9d55f3173b46a5d55e1839",
+  "probe_sources_lf_sha256": {
+    "qa/campaign_transport_groups_20261116/loaded_relay/drop_resume_probe.gd": "2d9113717e5155ec342ce32b13d490fcdb2dd04daf584580579dec1f6a55c545",
+    "qa/campaign_transport_groups_20261116/loaded_relay/natural_probe.gd": "2ce88f6f56e60fd343c676994867c55c79ac3d5ba027e6a3bbf2c3b3fad5814a",
+    "scripts/battle.gd": "9dc6a31a4ad9be48d767780a5b09b96c5a255f88d8a6839d69ef2dc2e2199f0c",
+    "scripts/continue_flow.gd": "2021ed1d64fd7dd02d9b53f26f903da725da83bdf3a1a5b6354a3cad4c8d5dcf",
+    "scripts/run_world_session.gd": "d149062a3dac05d0812978b6c476d72863bec68dc8d6cdc45af5fb676d2c0bd6",
+    "scripts/run_unit_graph.gd": "30f9f9af7e04cf37935005d1bb9dbb96b423a972ab0e2f9bf0c5c9e7b2f74bfc",
+    "scripts/run_battle_world_core.gd": "ea01ff6f8319155b7fb96346ea2f8f87f2a3ca629cace934cf5ca1a12730b2cb",
+    "scripts/levels/level1_huangnigang_short.gd": "f4e3dcdffb9f32768d584c96c7c004c415f3bbb27b4f7c4694336ace21b4f8d2",
+    "scripts/levels/level1_huangnigang.gd": "8736189632922a7fd8601db0b6b15b24dd97b45ada9800a84d8b66648588d931",
+    "scripts/run_campaign_level_state.gd": "047824c64ff01bb985827bbeea9368796735244ff27d6e77296c3e80e67fcb8b",
+    "scripts/run_unit_state.gd": "bf7d6bba1ba692542d83ee09d5c70bb014643322b7ee2e57eb9b49e013a9a0bf",
+    "scripts/campaign_mission.gd": "abbc644399c2f7ff4a26c010bf5aa0d96c9591659e04225f8b280e47fc17f08d",
+    "tools/huangnigang_short_test.gd": "c4f2d3ed344119feb1b06361f17913030ce7525cb3541664076a322454252880",
+    "tools/zhujiazhuang_rts_test.gd": "435ddb8f9bc774687e1ea879ac6e9adc606380db4934ca3b72dfea294273d770"
+  },
+  "save_probe_sha256": "84720a1f2c5b4e0fa6329d89c485f768af2cdabd4d4ef005fa0447e91385b9c0",
+  "initial_resume_observation": {
+    "checks": 7,
+    "facts": {
+      "checkpoint_mismatch": [
+        [
+          "cart_wheel",
+          0.332588805212715,
+          0.0
+        ]
+      ],
+      "result_code": ""
+    },
+    "failures": [
+      "cart, marker, wheel, original convoy, pending relay and reports survive exactly"
+    ],
+    "orders": 0,
+    "pid": 7652,
+    "stage": "resume",
+    "exit_code": 1,
+    "seconds": 24.563,
+    "engine_errors": []
+  },
+  "stages": [
+    {
+      "checks": 10,
+      "facts": {
+        "cart_id": 9,
+        "checkpoint": {
+          "actors": [
+            [
+              1,
+              "chao_gai",
+              112.461538461539,
+              "",
+              563.225219726563,
+              538.336486816406
+            ],
+            [
+              2,
+              "wu_yong",
+              0.0,
+              "",
+              953.099487304688,
+              520.210510253906
+            ],
+            [
+              3,
+              "gongsun_sheng",
+              165.0,
+              "",
+              581.134704589844,
+              593.306274414063
+            ],
+            [
+              4,
+              "liu_tang",
+              181.2,
+              "",
+              608.096008300781,
+              594.751220703125
+            ],
+            [
+              5,
+              "ruan_xiaoer",
+              130.0,
+              "",
+              519.296020507813,
+              756.608032226563
+            ],
+            [
+              6,
+              "ruan_xiaowu",
+              300.0,
+              "",
+              409.516784667969,
+              819.056274414063
+            ],
+            [
+              7,
+              "ruan_xiaoqi",
+              240.0,
+              "",
+              380.397857666016,
+              773.809265136719
+            ],
+            []
+          ],
+          "assigned": false,
+          "attempt": 1,
+          "cart": [
+            9,
+            "treasure_cart",
+            900.0,
+            "",
+            933.712585449219,
+            523.351867675781
+          ],
+          "cart_in_world": true,
+          "cart_wheel": 0.332588805212715,
+          "clock": 23.7333333333333,
+          "convoy": [
+            [
+              19,
+              "yang_zhi",
+              34.2222222222222,
+              "",
+              613.833435058594,
+              553.176330566406
+            ],
+            [
+              20,
+              "jun_han",
+              80.0,
+              "",
+              652.175415039063,
+              590.695678710938
+            ],
+            [
+              21,
+              "jun_han",
+              80.0,
+              "",
+              752.826171875,
+              541.509582519531
+            ],
+            [
+              22,
+              "jun_han",
+              80.0,
+              "",
+              891.593139648438,
+              542.531799316406
+            ],
+            [
+              23,
+              "jun_han",
+              80.0,
+              "",
+              787.851013183594,
+              536.131713867188
+            ],
+            [
+              24,
+              "jun_han",
+              80.0,
+              "",
+              899.065734863281,
+              501.797515869141
+            ],
+            [
+              25,
+              "jun_han",
+              80.0,
+              "",
+              901.423706054688,
+              523.208862304688
+            ],
+            [
+              26,
+              "jun_han",
+              80.0,
+              "",
+              915.550842285156,
+              539.640258789063
+            ],
+            [
+              27,
+              "jun_han",
+              80.0,
+              "",
+              915.591247558594,
+              561.40478515625
+            ],
+            [
+              28,
+              "jun_han",
+              80.0,
+              "",
+              937.591125488281,
+              561.473937988281
+            ],
+            [
+              29,
+              "jun_han",
+              80.0,
+              "",
+              1015.14331054688,
+              691.267944335938
+            ],
+            [
+              30,
+              "jun_han",
+              52.3636363636364,
+              "",
+              1036.19567871094,
+              698.278015136719
+            ],
+            [
+              32,
+              "yu_hou",
+              95.0,
+              "",
+              1061.0302734375,
+              707.770080566406
+            ],
+            [
+              33,
+              "yu_hou",
+              95.0,
+              "",
+              1064.58459472656,
+              685.453491210938
+            ],
+            [
+              34,
+              "lao_duguan",
+              70.0,
+              "",
+              1043.48840332031,
+              678.693969726563
+            ]
+          ],
+          "delivered": 0,
+          "eligible": [
+            "chao_gai",
+            "gongsun_sheng",
+            "liu_tang",
+            "ruan_xiaoer",
+            "ruan_xiaowu",
+            "ruan_xiaoqi"
+          ],
+          "events": [
+            "action:force_cargo:force_load_1_0",
+            "action:force_cargo:force_take_1_0",
+            "bai_entered",
+            "convoy_entered",
+            "dates_discarded_1",
+            "empty_cart_taken_1_0",
+            "force_drop_1_1",
+            "force_taken_1_0",
+            "huangnigang_actor_lost",
+            "huangnigang_convoy_hurt",
+            "huangnigang_force",
+            "place_dates"
+          ],
+          "index": 1,
+          "loaded": true,
+          "marker": [
+            30,
+            16
+          ],
+          "reports": [
+            "七星早已把七辆枣车歇在松阴，分散作乘凉商客。",
+            "七星主动向押送队动武，酒计转为强夺",
+            "演义未成 · 七星扮贩枣客，经杨志盘问不露身份：本局已偏离“七星扮贩枣客，经杨志盘问不露身份”的原著条件",
+            "演义未成 · 白胜卖酒，刘唐试酒引目，吴用与白胜配合下药：本局已偏离“白胜卖酒，刘唐试酒引目，吴用与白胜配合下药”的原著条件",
+            "七星向押送队动武，双方在冈上交战",
+            "演义未成 · 十五名押送者全部麻倒，无一伤亡：本局已偏离“十五名押送者全部麻倒，无一伤亡”的原著条件",
+            "白胜从远处东侧山路进入黄泥冈。",
+            "吴用 · 第2车（2担）取车",
+            "吴用接过第2辆枣车，等你下令推到财物旁。",
+            "杨志、十一名军汉、两个虞候和老都管已全部从东路入场。",
+            "白胜折在黄泥冈，其余好汉仍可接力夺担",
+            "演义未成 · 七星与白胜带走纲担，全身出冈：本局已偏离“七星与白胜带走纲担，全身出冈”的原著条件",
+            "吴用 · 推第2车装入2担",
+            "第2车弃枣，装入2担财物并遮盖。",
+            "吴用推起第2车，载2担财物。",
+            "吴用倒下，第2车（2担）留在原地，可由幸存七星接力。"
+          ],
+          "take_done": false
+        },
+        "drop": {
+          "actors": [
+            [
+              "chao_gai",
+              112.461538461539,
+              "(17, 16)"
+            ],
+            [
+              "gongsun_sheng",
+              165.0,
+              "(18, 18)"
+            ],
+            [
+              "liu_tang",
+              181.2,
+              "(19, 18)"
+            ],
+            [
+              "ruan_xiaoer",
+              130.0,
+              "(16, 23)"
+            ],
+            [
+              "ruan_xiaowu",
+              300.0,
+              "(12, 25)"
+            ],
+            [
+              "ruan_xiaoqi",
+              240.0,
+              "(11, 24)"
+            ]
+          ],
+          "delivered": 0,
+          "events": [
+            "place_dates",
+            "huangnigang_force",
+            "huangnigang_convoy_hurt",
+            "bai_entered",
+            "action:force_cargo:force_take_1_0",
+            "empty_cart_taken_1_0",
+            "convoy_entered",
+            "huangnigang_actor_lost",
+            "action:force_cargo:force_load_1_0",
+            "dates_discarded_1",
+            "force_taken_1_0",
+            "force_drop_1_1"
+          ],
+          "guards": [
+            [
+              "yang_zhi",
+              34.2222222222222,
+              "(19, 17)"
+            ],
+            [
+              "jun_han",
+              80.0,
+              "(20, 18)"
+            ],
+            [
+              "jun_han",
+              80.0,
+              "(23, 16)"
+            ],
+            [
+              "jun_han",
+              80.0,
+              "(27, 16)"
+            ],
+            [
+              "jun_han",
+              80.0,
+              "(24, 16)"
+            ],
+            [
+              "jun_han",
+              80.0,
+              "(28, 15)"
+            ],
+            [
+              "jun_han",
+              80.0,
+              "(28, 16)"
+            ],
+            [
+              "jun_han",
+              80.0,
+              "(28, 16)"
+            ],
+            [
+              "jun_han",
+              80.0,
+              "(28, 17)"
+            ],
+            [
+              "jun_han",
+              80.0,
+              "(29, 17)"
+            ],
+            [
+              "jun_han",
+              80.0,
+              "(31, 21)"
+            ],
+            [
+              "jun_han",
+              52.3636363636364,
+              "(32, 21)"
+            ],
+            [
+              "yu_hou",
+              95.0,
+              "(33, 22)"
+            ],
+            [
+              "yu_hou",
+              95.0,
+              "(33, 21)"
+            ],
+            [
+              "lao_duguan",
+              70.0,
+              "(32, 21)"
+            ]
+          ],
+          "phase": 2,
+          "stage": 7,
+          "time": 23.7333333333333
+        },
+        "generation": 1,
+        "loaded": {
+          "actors": [
+            [
+              "chao_gai",
+              165.538461538462,
+              "(17, 16)"
+            ],
+            [
+              "wu_yong",
+              76.5,
+              "(30, 16)"
+            ],
+            [
+              "gongsun_sheng",
+              165.0,
+              "(18, 18)"
+            ],
+            [
+              "liu_tang",
+              202.8,
+              "(19, 18)"
+            ],
+            [
+              "ruan_xiaoer",
+              130.0,
+              "(16, 23)"
+            ],
+            [
+              "ruan_xiaowu",
+              300.0,
+              "(12, 25)"
+            ],
+            [
+              "ruan_xiaoqi",
+              240.0,
+              "(11, 24)"
+            ]
+          ],
+          "delivered": 0,
+          "events": [
+            "place_dates",
+            "huangnigang_force",
+            "huangnigang_convoy_hurt",
+            "bai_entered",
+            "action:force_cargo:force_take_1_0",
+            "empty_cart_taken_1_0",
+            "convoy_entered",
+            "huangnigang_actor_lost",
+            "action:force_cargo:force_load_1_0",
+            "dates_discarded_1",
+            "force_taken_1_0"
+          ],
+          "guards": [
+            [
+              "yang_zhi",
+              143.111111111111,
+              "(19, 17)"
+            ],
+            [
+              "jun_han",
+              80.0,
+              "(20, 18)"
+            ],
+            [
+              "jun_han",
+              80.0,
+              "(25, 16)"
+            ],
+            [
+              "jun_han",
+              80.0,
+              "(28, 16)"
+            ],
+            [
+              "jun_han",
+              80.0,
+              "(26, 16)"
+            ],
+            [
+              "jun_han",
+              80.0,
+              "(28, 15)"
+            ],
+            [
+              "jun_han",
+              80.0,
+              "(28, 16)"
+            ],
+            [
+              "jun_han",
+              80.0,
+              "(29, 16)"
+            ],
+            [
+              "jun_han",
+              80.0,
+              "(29, 17)"
+            ],
+            [
+              "jun_han",
+              80.0,
+              "(29, 17)"
+            ],
+            [
+              "jun_han",
+              80.0,
+              "(35, 21)"
+            ],
+            [
+              "jun_han",
+              52.3636363636364,
+              "(36, 21)"
+            ],
+            [
+              "yu_hou",
+              95.0,
+              "(36, 22)"
+            ],
+            [
+              "yu_hou",
+              95.0,
+              "(36, 21)"
+            ],
+            [
+              "lao_duguan",
+              70.0,
+              "(36, 21)"
+            ]
+          ],
+          "phase": 2,
+          "stage": 7,
+          "time": 21.1999999999999
+        },
+        "result_code": ""
+      },
+      "failures": [],
+      "orders": 6,
+      "pid": 15036,
+      "stage": "save",
+      "exit_code": 0,
+      "seconds": 44.239,
+      "engine_errors": []
+    },
+    {
+      "checks": 16,
+      "facts": {
+        "after_combat": {
+          "actors": [
+            [
+              "chao_gai",
+              49.0769230769231,
+              "(22, 18)"
+            ],
+            [
+              "ruan_xiaowu",
+              282.4,
+              "(21, 18)"
+            ],
+            [
+              "ruan_xiaoqi",
+              154.4,
+              "(21, 19)"
+            ]
+          ],
+          "delivered": 0,
+          "events": [
+            "place_dates",
+            "huangnigang_force",
+            "huangnigang_convoy_hurt",
+            "bai_entered",
+            "action:force_cargo:force_take_1_0",
+            "empty_cart_taken_1_0",
+            "convoy_entered",
+            "huangnigang_actor_lost",
+            "action:force_cargo:force_load_1_0",
+            "dates_discarded_1",
+            "force_taken_1_0",
+            "force_drop_1_1"
+          ],
+          "guards": [],
+          "phase": 2,
+          "stage": 7,
+          "time": 46.4000000000006
+        },
+        "relay": {
+          "cart": 9,
+          "loads": 2,
+          "successor": "chao_gai",
+          "time": 68.8666666666679
+        },
+        "relay_after": {
+          "action_active": "",
+          "action_done": true,
+          "actor_pos": [
+            953.413208007813,
+            532.953979492188
+          ],
+          "actor_to_cart_open": true,
+          "actor_to_marker_open": true,
+          "distance": 23.1236915588379,
+          "path_remaining": 0,
+          "status": "晁盖：幸存七星 · 第2车（2担）接手 100%",
+          "token": 0
+        },
+        "relay_before": {
+          "cart_pos": [
+            933.712585449219,
+            523.351867675781
+          ],
+          "click_enemy": "",
+          "click_resolves": "force_take_1_1",
+          "marker": [
+            976.0,
+            528.0
+          ],
+          "marker_reach": 24.0,
+          "marker_to_cart_open": true
+        },
+        "relay_command": {
+          "marker_open": true,
+          "state": 1,
+          "token": 5
+        },
+        "result": {
+          "carts": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "core": true,
+          "loads": 11,
+          "seconds": 288.999999999989,
+          "story": 0
+        },
+        "result_code": "",
+        "wheel_after": 0.0,
+        "wheel_before": 0.332588805212715
+      },
+      "failures": [],
+      "orders": 38,
+      "pid": 42724,
+      "stage": "resume",
+      "exit_code": 0,
+      "seconds": 94.304,
+      "engine_errors": []
+    }
+  ]
+}

@@ -27,6 +27,12 @@ func _observations(b) -> Dictionary:
 func _run() -> void:
 	AudioServer.set_bus_mute(0,true)
 	root.get_node("Settings").edge_scroll = false
+	var dropped := await _reach_drop()
+	if not dropped.is_empty():
+		await _recover(dropped.battle,dropped.index,dropped.cart_id)
+	_report()
+
+func _reach_drop() -> Dictionary:
 	var b = await _start("",0)
 	Engine.time_scale = 4
 	var l = b.level
@@ -40,8 +46,7 @@ func _run() -> void:
 	check(await until(func(): return l.force_started,4),"an actual attack order breaks the disguise")
 	if not failures.is_empty():
 		facts["stop"] = _observations(b)
-		_report()
-		return
+		return {}
 	var index: int = l.Transport.OWNERS.find(carrier.key)
 	var cart = l.bundles[index]
 	var cart_id: int = cart.entity_id
@@ -52,14 +57,12 @@ func _run() -> void:
 		"the original cart is actually loaded while enemies remain")
 	facts["loaded"] = _observations(b)
 	if not failures.is_empty():
-		_report()
-		return
+		return {}
 	facts["cart_id"] = cart_id
 	var enemies: Array = l.convoy.filter(func(u): return alive(u))
 	check(not enemies.is_empty(),"real enemies still remain at loading")
 	if not failures.is_empty():
-		_report()
-		return
+		return {}
 	var enemy = enemies[0]
 	_click(b,[carrier],b.map.world_to_cell(enemy.position))
 	var dropped := await until(func(): return b.mission.has_event("force_drop_%d_1" % index) or b.phase == b.Phase.END,33)
@@ -68,10 +71,8 @@ func _run() -> void:
 		and cart.entity_id == cart_id and b.units.has(cart) and l.cargo_ready.get(index,false)
 		and l.top_status(b).contains("待接重车1辆"),"enemy combat drops the original loaded cart and shows the recovery count")
 	if not failures.is_empty():
-		_report()
-		return
-	await _recover(b,index,cart_id)
-	_report()
+		return {}
+	return {"battle":b,"index":index,"cart_id":cart_id}
 
 func _recover(b,index: int,cart_id: int) -> void:
 	var l = b.level
