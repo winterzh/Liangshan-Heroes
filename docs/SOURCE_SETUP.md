@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+江州已加入 Windows Steam 玩家战役续玩范围。隔离探针仅替换平台启用判断，经过同一玩家关卡准入，已验证会合后保存、重启恢复、登船及结算后的旧档拒绝。实际 Windows 发行包与 Steam 客户端待验。[验证](../qa/campaign_pursuit_20261116/README.md#江州玩家续玩)
+
 高俅已加入 Windows Steam 玩家战役续玩范围。Godot 4.6.3 在隔离环境仅替换 Steam 平台启用判断，沿用玩家关卡准入。验证原船载俘、主菜单续战及胜利后旧档拦截。实际 Windows 发行包和 Steam 客户端待验。[验证](../qa/campaign_fire_readiness_20261116/README.md#高俅玩家续玩)
 
 大名府已加入 Windows Steam 玩家续玩范围。Godot 4.6.3 隔离源码只替换平台启用判断，经过同一玩家关卡准入。保存、独立恢复、结算和终局拒绝通过。实际 Windows 发行包和 Steam 客户端待验。[验证](../qa/campaign_wounded_selection_20261116/README.md#大名府玩家续玩)
