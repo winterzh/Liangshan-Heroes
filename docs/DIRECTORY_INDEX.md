@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[黄泥冈掉车定位](../qa/campaign_transport_groups_20261116/README.md#重车掉落后的定位)沿用 `qa/campaign_transport_groups_20261116/loaded_relay/` 夹具，最新结果见 `guidance_report.json`。
+
 [野猪林强救解缚续玩](../qa/campaign_escort_arrival_20261116/README.md#提前强救解缚途中续玩)记录北路之外的第二条续玩路线，探针和报告在同一 `menu_resume/` 目录。
 
 [野猪林歇脚途中续玩](../qa/campaign_escort_arrival_20261116/README.md#歇脚途中保存与续玩)记录原队伍、行进中的歇脚指令和独立进程通关。探针与原件位于 `qa/campaign_escort_arrival_20261116/menu_resume/`。

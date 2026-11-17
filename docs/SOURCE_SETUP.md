@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+黄泥冈的待接重车由已装货、未交付、当前取车标记派生。两条四语文案来自 `huangnigang_loaded_relay.json`；catalog 严格构建与当前差异仅为这两条。[黄泥冈掉车定位](../qa/campaign_transport_groups_20261116/README.md#重车掉落后的定位)
+
 野猪林强救探针复用暂停保存与主菜单读取，覆盖解差由制服状态转入非战斗护送。[野猪林强救解缚续玩](../qa/campaign_escort_arrival_20261116/README.md#提前强救解缚途中续玩)
 
 野猪林续玩探针通过隔离暂停菜单保存真实北路歇脚令，独立主菜单继续同一未完成行程。[野猪林歇脚途中续玩](../qa/campaign_escort_arrival_20261116/README.md#歇脚途中保存与续玩)

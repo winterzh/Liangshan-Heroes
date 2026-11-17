@@ -407,7 +407,7 @@ func _sync_controls(b) -> void:
 		b.mission.add_level_button("hg_empty_carts", "选中 · 推空车同伴", "只选中正在推未装货车辆的七星；装车仍需右键下令。")
 		b.mission.add_level_button("hg_loaded_carts", "选中 · 已装货同伴", "只选中已装好财物的推车者；出冈仍需右键下令。")
 		b.mission.add_level_button("hg_transport_next", "下一步 · 当前所选",
-			Localize.text("选中一位七星后，定位他当前的取车、装车或出冈标记；仍需右键下令。"))
+			"定位当前所选的运输标记。空手七星优先查看可接手的重车；仍需右键下令。")
 	b.mission.add_map_locator("西冈口 · 推车退路",GATE_W)
 	if st in [MARCH,INQUIRY]: b.mission.add_map_locator("另一片松阴 · 七星与枣车",SHADE)
 
@@ -471,22 +471,38 @@ func _selected_transport_action(b) -> String:
 	if b.selection.size()!=1: return ""
 	return _transport_action_for(b,b.selection[0])
 
+func _loaded_relay_actions(b) -> Array[String]:
+	var pending: Array[String] = []
+	for index in range(Transport.CART_COUNT):
+		if not cargo_ready.get(index,false) or cargo.has(index) or _cargo_was_delivered(b,index):
+			continue
+		var action_id := "force_take_%d_%d" % [index, int(force_attempts.get(index,0))]
+		if b.mission.actions.has(action_id) and not b.mission.actions[action_id].done:
+			pending.append(action_id)
+	return pending
+
 func _transport_action_for(b,actor) -> String:
 	# Locate one legal step only. Never request it or continue the next stage.
 	if st not in [CARRY,FORCE] or not is_instance_valid(actor) or actor not in actors or not b.units.has(actor) \
 			or actor.key not in SEVEN or actor.hp<=0 or actor.story_outcome!="": return ""
 	var prefix := "force_deliver_" if actor.has_meta("carrying_tribute") else ("force_load_" if actor.has_meta("pushing_empty_tribute") else "force_take_")
+	var loaded_relays: Array[String] = []
+	if prefix == "force_take_":
+		loaded_relays = _loaded_relay_actions(b)
 	var nearest := ""
 	var distance := INF
+	var nearest_is_relay := false
 	for action_id in b.mission.actions:
 		var name:=String(action_id)
 		if not name.begins_with(prefix): continue
 		var action: Dictionary=b.mission.actions[action_id]
 		if action.done or not String(action.get("blocked_reason","")).is_empty() or actor.key not in action.actors: continue
+		var is_relay := name in loaded_relays
 		var candidate: float=actor.position.distance_squared_to(b.map.cell_to_world(action.cell))
-		if candidate<distance:
+		if (is_relay and not nearest_is_relay) or (is_relay == nearest_is_relay and candidate < distance):
 			nearest=name
 			distance=candidate
+			nearest_is_relay=is_relay
 	return nearest
 
 func unit_tactical_hint(b,actor) -> String:
@@ -501,6 +517,10 @@ func unit_tactical_hint(b,actor) -> String:
 func top_status(b) -> String:
 	var title: String={PREPARE:"商客歇脚",MARCH:"押队上冈",INQUIRY:"杨志盘问",ARRIVAL:"白胜挑酒入场",WINE:"白胜卖酒",CARRY:"装车推行",WITHDRAW:"收拢同行人",FORCE:"身份败露"}.get(st,"")
 	var text: String=Localize.format_text("智取生辰纲 | %s | 推车%d/7 · 财物%d/11担",[Localize.text(title),_delivered_cart_indices(b).size(),delivered])
+	if st in [CARRY,FORCE]:
+		var waiting := _loaded_relay_actions(b).size()
+		if waiting > 0:
+			text += " · " + Localize.format_text("待接重车%d辆",waiting)
 	if st in [INQUIRY,ARRIVAL,WINE]:text+=Localize.format_text(" | 疑心%d/100",ceili(exposure))
 	if st in [ARRIVAL,WINE]:text+=Localize.format_text(" · 歇脚剩%d秒",ceili(maxf(0.0,100.0-rest_t)))
 	if st==WINE and wine_step=="cooperate":text+=Localize.format_text(" · 引目%d秒 · 配合%d%%",[ceili(attention_left),mini(100,int(team_t/3.0*100))])
