@@ -2,7 +2,7 @@
 
 ## 2026-11-17 Windows 正式更新
 
-冻结源码 `65ac43ac` 并导出 Windows Steam 包。SteamPipe 预览与服务端一致，已上传 Build `26719792`。正式分支切换等待 Steam 手机确认。[发行记录](STEAM_UPDATE_20261117.md)
+冻结源码 `65ac43ac` 并导出 Windows Steam 包。Windows Build `26719792` 已在正式分支上线，四语公告已回读，本机 Steam 已完成下载和安装。[发行记录](STEAM_UPDATE_20261117.md)
 
 ## 2026-11-17 江州会合后续玩
 
