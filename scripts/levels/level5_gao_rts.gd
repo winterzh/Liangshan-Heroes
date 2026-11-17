@@ -743,6 +743,31 @@ func on_unit_died(b,u) -> void:
 		if not lost_liu and not b.mission.has_event("fire_escort_safe"):
 			_fire_unavailable(b,"接应船损失，可继续用普通舰队作战；刘唐若仍在原船上，可返港下船。")
 	if not lost_liu and u==fireboat and not fire_lit: _fire_unavailable(b,"火船损失，可建船坞补普通战船继续进攻。")
+func campaign_debrief(mission) -> Array[Dictionary]:
+	var fire_result := "未备火船"
+	if mission.has_event("fire_escort_safe"):
+		fire_result = "举火并完成接应撤离"
+	elif fire_abandoned:
+		fire_result = "已放弃火攻"
+	elif fire_lit:
+		fire_result = "已举火，接应撤离未完成"
+	elif fire_prepared:
+		fire_result = "已备火船，尚未举火"
+	var capture_result := "未接俘"
+	if _capture_completed(mission.battle):
+		capture_result = "已押抵忠义堂"
+	elif capture_lost:
+		capture_result = "押俘路线未成"
+	elif landed:
+		capture_result = "已上岸，尚未押堂"
+	elif recovered:
+		capture_result = "已接俘，尚未上岸"
+	return [
+		{"source": "火攻 · %s", "args": [fire_result]},
+		{"source": "座船 · %s", "args": ["已失去战力" if flagship_disabled else "尚未打停"]},
+		{"source": "押俘 · %s", "args": [capture_result]},
+	]
+
 func top_status(_b) -> String:
 	if not core_ready:
 		for index in range(waves.size()):

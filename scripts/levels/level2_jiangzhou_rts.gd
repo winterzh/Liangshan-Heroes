@@ -636,6 +636,25 @@ func unit_tactical_hint(b, actor) -> String:
 	return Localize.text("无法作战。让护卫开路，再轻点此人的登船旗标。" if b.hud.touch_ui \
 		else "无法作战。让护卫开路，再右键此人的登船旗标。")
 
+func campaign_debrief(mission) -> Array[Dictionary]:
+	var roster := _dock_roster(mission.battle)
+	return [
+		{"source": "白龙庙 · %s · 取得补给 %d/2", "args": [
+			"已会合" if meeting else "未会合", cache_taken.count(true)]},
+		{"source": "登船 · 宋江 %s · 戴宗 %s", "args": [
+			_boarding_result(song_bound, song_freed, mission.has_event("free_song")),
+			_boarding_result(dai_bound, dai_freed, mission.has_event("free_dai"))]},
+		{"source": "同行好汉 · 登船 %d/6 · 阵亡 %d", "args": [roster.aboard, roster.lost]},
+	]
+
+func _boarding_result(bound: Unit, freed: Unit, is_freed: bool) -> String:
+	var person := freed if is_freed else bound
+	if not living(person):
+		return "阵亡"
+	if not is_freed:
+		return "尚未解缚"
+	return "已登船" if person.story_outcome == "embarked" else "尚未登船"
+
 func top_status(_b) -> String:
 	var situation := Localize.format_text("行刑剩余%d秒", ceili(exec_left))
 	if execution_halted:
