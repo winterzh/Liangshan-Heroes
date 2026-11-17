@@ -301,8 +301,28 @@ func hook_conditions(b, rider) -> Dictionary:
 		"partners": hooks.size(), "attacking": attacking,
 		"ready": not broken and impeded and hooks.size() >= 2 and attacking}
 
+func _drill_hint(b) -> String:
+	if not alive(xu):
+		return Localize.text("教场缺徐宁。可在中军重新招募，再摆演练骑。")
+	if not drill_entered:
+		return Localize.text("教场第一步：派一名非钩镰战斗单位靠近演练骑。")
+	if not drill_withdrew:
+		if not alive(drill_lure):
+			return Localize.text("诱敌手已倒下。让徐宁重摆演练骑，再派人引骑。")
+		return Localize.format_text("引骑已成。让%s退到教场西侧，拉开距离。",drill_lure.display_name)
+	var team := _hook_team(b,dummy)
+	if xu not in team or not team.any(func(u): return u.key == "gou_lian"):
+		return Localize.text("诱敌手已退。让徐宁和一名钩镰手都靠近演练骑。")
+	if drill_coordinated:
+		return Localize.text("合击已成立。保持两人近身，直到演练骑被制服。")
+	return Localize.text("两名搭档已到。选中徐宁与钩镰手，轻点演练骑合击。" if b.hud.touch_ui \
+		else "两名搭档已到。选中徐宁与钩镰手，右键演练骑合击。")
+
 func unit_tactical_hint(b, unit) -> String:
 	if not alive(unit): return ""
+	if alive(dummy) and not drill_complete and (unit == dummy \
+			or (unit == drill_lure and not drill_withdrew) or (unit.key in HOOK_KEYS and unit._target == dummy)):
+		return _drill_hint(b) if b.is_visible_world(dummy.position) else Localize.text("暂无视野，无法判断破阵条件")
 	if unit == han and lhm_killed >= 12 and b.is_visible_world(unit.position):
 		return Localize.text("可选演义 · 集火击败韩滔即可生擒")
 	if unit in escorts:
@@ -314,7 +334,8 @@ func unit_tactical_hint(b, unit) -> String:
 		if unit._target in riders and alive(unit._target) and b.is_visible_world(unit._target.position):
 			rider = unit._target
 		else:
-			return Localize.text("钩镰配合：两人贴近受阻甲马\n右键攻击；徐宁可充当搭档")
+			return Localize.text("钩镰配合：两人贴近受阻甲马\n轻点攻击；徐宁可充当搭档" if b.hud.touch_ui \
+				else "钩镰配合：两人贴近受阻甲马\n右键攻击；徐宁可充当搭档")
 	elif unit not in riders:
 		return ""
 	if not b.is_visible_world(rider.position):
@@ -334,7 +355,7 @@ func unit_tactical_hint(b, unit) -> String:
 	elif state.partners < 2:
 		instruction = "调两名钩镰单位近身配合"
 	elif not state.attacking:
-		instruction = "搭档已到，右键攻击此骑"
+		instruction = "搭档已到，轻点攻击此骑" if b.hud.touch_ui else "搭档已到，右键攻击此骑"
 	return Localize.format_text("%s · 钩镰%d/2", [guard, mini(2, state.partners)]) + "\n" + Localize.text(instruction)
 
 func _rider_tick(b) -> void:
