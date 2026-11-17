@@ -7,7 +7,7 @@ var _update_label: Label
 var _update_overlay: Control
 var _entry_overlay: ColorRect
 var _entry_scan: RefCounted
-var _entry_surface_requests: Array[String] = []
+var _entry_environment_requests: Array[String] = []
 var _entry_opening_frame_requests: Dictionary[String, String] = {}
 var _entry_previous_max_fps := -1
 var _waiting_autostart := false
@@ -60,7 +60,7 @@ func _launch(campaign_level_id := "") -> void:
 		return
 	_show_battle_loading(campaign_level_id)
 	if OS.get_name() == "Windows":
-		_request_battle_surfaces(campaign_level_id)
+		_request_battle_environment(campaign_level_id)
 		if campaign_level_id == "level5":
 			Art.prefetch_gao_opening_art()
 		elif campaign_level_id == "level1" or campaign_level_id == "level3":
@@ -139,16 +139,20 @@ func _begin_battle_scan(prewarm := false) -> void:
 		_entry_scan = null
 
 
-func _request_battle_surfaces(campaign_level_id: String) -> void:
+func _request_battle_environment(campaign_level_id: String) -> void:
 	var surface_level := "level5" if Campaign.skirmish or Campaign.custom_defense else campaign_level_id
 	if surface_level.is_empty():
 		return
 	var baseline := "LIANGSHAN_VISUAL_BASELINE" if surface_level == "level5" else "CAMPAIGN_ENV_BASELINE"
 	if OS.get_environment(baseline) == "1":
 		return
-	for path in CampaignEnvironmentArt.surface_texture_paths(surface_level):
+	var paths := CampaignEnvironmentArt.surface_texture_paths(surface_level)
+	if surface_level == "level3":
+		var environment := load("res://scripts/campaign_environment.gd")
+		paths.append_array(environment.opening_scenery_texture_paths(surface_level))
+	for path in paths:
 		if ResourceLoader.load_threaded_request(path, "Texture2D") == OK:
-			_entry_surface_requests.append(path)
+			_entry_environment_requests.append(path)
 
 
 func _finish_battle_launch() -> void:
@@ -168,14 +172,14 @@ func _finish_battle_launch() -> void:
 			return
 	if AppLifecycle.quit_started():
 		return
-	var ground_textures: Array[Texture2D] = []
-	for path in _entry_surface_requests:
+	var environment_textures: Array[Texture2D] = []
+	for path in _entry_environment_requests:
 		var texture := (await _wait_for_battle_resource(path)) as Texture2D
 		if AppLifecycle.quit_started():
 			return
 		if texture != null:
-			ground_textures.append(texture)
-	_entry_surface_requests.clear()
+			environment_textures.append(texture)
+	_entry_environment_requests.clear()
 	for path in _entry_opening_frame_requests:
 		var frames := (await _wait_for_battle_resource(path)) as SpriteFrames
 		if AppLifecycle.quit_started():
@@ -187,7 +191,7 @@ func _finish_battle_launch() -> void:
 	await RenderingServer.frame_post_draw
 	if AppLifecycle.quit_started():
 		return
-	_install_battle.call_deferred(identity, ground_textures)
+	_install_battle.call_deferred(identity, environment_textures)
 
 
 func _wait_for_battle_resource(path: String) -> Resource:
@@ -200,16 +204,16 @@ func _wait_for_battle_resource(path: String) -> Resource:
 	return ResourceLoader.load_threaded_get(path) if status == ResourceLoader.THREAD_LOAD_LOADED else null
 
 
-func _install_battle(identity: Dictionary, ground_textures: Array[Texture2D]) -> void:
+func _install_battle(identity: Dictionary, environment_textures: Array[Texture2D]) -> void:
 	if AppLifecycle.quit_started():
 		return
 	var scene: PackedScene = load("res://scenes/main.tscn")
 	if scene != null:
 		var battle := scene.instantiate()
 		battle.prepare_new_gameplay_identity(identity)
-		if not ground_textures.is_empty():
+		if not environment_textures.is_empty():
 			# Keep Godot's cached textures alive through the battle's _ready.
-			battle.ready.connect(func(): ground_textures.clear(), CONNECT_ONE_SHOT)
+			battle.ready.connect(func(): environment_textures.clear(), CONNECT_ONE_SHOT)
 		if get_tree().change_scene_to_node(battle) == OK:
 			return
 		battle.free()

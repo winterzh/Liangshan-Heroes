@@ -69,6 +69,21 @@ static func overlay_layout(id: String) -> Array:
 		]
 	return []
 
+## Opening scenery that needs a separate texture for the manor and field edges.
+static func opening_scenery_texture_paths(id: String) -> Array[String]:
+	var paths: Array[String] = []
+	if id != "level3":
+		return paths
+	var hall := CampaignEnvironmentArt.route_texture_path("object", id, "zhujiazhuang_hall")
+	if not hall.is_empty():
+		paths.append(hall)
+	for overlay in overlay_layout(id):
+		var path := CampaignEnvironmentArt.route_texture_path("overlay", id, String(overlay[3]))
+		if not path.is_empty() and path not in paths:
+			paths.append(path)
+	return paths
+
+
 static func enabled(id: String) -> bool:
 	return id in LEVELS and OS.get_environment("CAMPAIGN_ENV_BASELINE")!="1"
 

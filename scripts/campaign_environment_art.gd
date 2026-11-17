@@ -973,6 +973,10 @@ static func route_path(resolver: String, active_level_id: String, route_key: Str
 	return ""
 
 
+static func route_texture_path(resolver: String, active_level_id: String, route_key: String) -> String:
+	return _texture_resource_path(route_path(resolver, active_level_id, route_key))
+
+
 static func registered_levels(resolver: String, route_key: String) -> Array:
 	var table: Dictionary = {}
 	match resolver:

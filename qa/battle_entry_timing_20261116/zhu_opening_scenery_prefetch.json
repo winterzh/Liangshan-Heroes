@@ -1,0 +1,554 @@
+{
+  "scope": "Windows source, Godot 4.6.3 Compatibility at 1280x720 RTX 4060 Laptop, isolated offline profiles. Measurements are separate cold launches with temporary instrumentation.",
+  "notes": "Four traces of ordinary Zhujiazhuang menu entry. Named decor uses an existing scoped resolver, and the after trace confirms cached textures before placement, exact resource objects in scenery and five freed battle nodes. Old and new have substantial variation in other stages.",
+  "runs": {
+    "battle_mount": {
+      "source_commit": "722c08965aacda0ca371e99cceff009b96e75e46",
+      "passed": true,
+      "source_restored": true,
+      "engine_errors": [],
+      "duration_ms": {
+        "start": 5.308,
+        "resolve_level": 13.381,
+        "definitions": 17.305,
+        "world": 3.85,
+        "map_init": 3.819,
+        "level_paint": 8.563,
+        "environment_paint": 6.088,
+        "bake": 8.495,
+        "decorate": 3.609,
+        "environment_enable": 155.982,
+        "level_backdrop": 5.386,
+        "dapple": 8.932,
+        "layers": 1.377,
+        "focus": 2.618,
+        "atmosphere": 2.096,
+        "hud": 55.082,
+        "hud_setup": 2.575,
+        "cursor": 7.878,
+        "mission": 15.619,
+        "deploy": 7.256,
+        "camera": 1.664,
+        "first_fog": 2.771,
+        "intro": 2.863
+      },
+      "samples": [
+        {
+          "battle_references_released": 5,
+          "callbacks_before_pre_draw": {},
+          "click_to_battle_ms": 13395.492,
+          "click_to_loading_ms": 8.161,
+          "diagnostic": "normal",
+          "draws": 924,
+          "layer_changed": false,
+          "level": "level3",
+          "longest_draw_gap_ms": 431.849,
+          "mode": "zhu",
+          "mount_markers_ms": {
+            "battle_attached": 12871.115,
+            "battle_ready": 13215.375,
+            "first_post_draw": 13299.579,
+            "first_pre_draw": 13287.698,
+            "game_map.gd": 12910.968,
+            "hud.gd": 13119.317,
+            "unit.gd": 13200.827
+          },
+          "picker_to_draw_ms": 45.417,
+          "scan_observed": true,
+          "worst_gap_range_ms": [
+            12867.73,
+            13299.579
+          ]
+        }
+      ],
+      "baseline_script_sha256": {
+        "scripts/battle.gd": "df2688d0400e60d1b5e5510609f981de888380b26f7d3ebf44dcd5a2e9038827"
+      },
+      "instrumented_script_sha256": {
+        "scripts/battle.gd": "a708a7ec4d49a65d4d6c59fda5ed279722a87fe6c7789cb00242af1214388d52"
+      }
+    },
+    "environment_breakdown": {
+      "source_commit": "722c08965aacda0ca371e99cceff009b96e75e46",
+      "passed": true,
+      "source_restored": true,
+      "engine_errors": [],
+      "duration_ms": {
+        "start": 3.581,
+        "resolve_level": 13.584,
+        "definitions": 15.843,
+        "world": 4.087,
+        "map_init": 4.492,
+        "level_paint": 9.418,
+        "environment_paint": 6.727,
+        "bake": 9.65,
+        "decorate": 4.66,
+        "environment_enable": 5.106,
+        "environment_begin": 4.302,
+        "config_decorate": 4.526,
+        "height": 12.594,
+        "scenery_init": 1.485,
+        "scenery_setup": 3.411,
+        "scenery_begin": 2.249,
+        "coast_material": 18.578,
+        "grove_and_banks": 16.352,
+        "reed_mesh": 1.31,
+        "decor_placement": 124.317,
+        "wall_placement": 4.534,
+        "setup_done": 2.274,
+        "scenery_done": 1.952,
+        "level_backdrop": 1.987,
+        "dapple": 2.942,
+        "layers": 1.689,
+        "focus": 2.111,
+        "atmosphere": 2.773,
+        "hud": 60.722,
+        "hud_setup": 3.859,
+        "cursor": 7.71,
+        "mission": 17.6,
+        "deploy": 9.039,
+        "camera": 1.695,
+        "first_fog": 2.681,
+        "intro": 2.876
+      },
+      "samples": [
+        {
+          "battle_references_released": 5,
+          "callbacks_before_pre_draw": {},
+          "click_to_battle_ms": 14156.911,
+          "click_to_loading_ms": 5.968,
+          "diagnostic": "normal",
+          "draws": 974,
+          "layer_changed": false,
+          "level": "level3",
+          "longest_draw_gap_ms": 485.912,
+          "mode": "zhu",
+          "mount_markers_ms": {
+            "battle_attached": 13555.66,
+            "battle_ready": 13950.297,
+            "first_post_draw": 14037.568,
+            "first_pre_draw": 14023.254,
+            "game_map.gd": 13592.768,
+            "hud.gd": 13843.973,
+            "unit.gd": 13933.782
+          },
+          "picker_to_draw_ms": 35.651,
+          "scan_observed": true,
+          "worst_gap_range_ms": [
+            13551.656,
+            14037.568
+          ]
+        }
+      ],
+      "baseline_script_sha256": {
+        "scripts/battle.gd": "df2688d0400e60d1b5e5510609f981de888380b26f7d3ebf44dcd5a2e9038827",
+        "scripts/game_map.gd": "c962236ed76a1c8d6cee90890d0f421f7d40a63007dda29a7b5a99852f0b5338",
+        "scripts/campaign_scenery.gd": "5cf8b2c3a806343e2444d0ffc4e0d8c09ad6b8b10df414b6a9567777be5f005c"
+      },
+      "instrumented_script_sha256": {
+        "scripts/battle.gd": "a708a7ec4d49a65d4d6c59fda5ed279722a87fe6c7789cb00242af1214388d52",
+        "scripts/game_map.gd": "a0c7f004268550ae4ffc218734ff728c09b6481b36a3a6493bc191da5841bbd3",
+        "scripts/campaign_scenery.gd": "6bd58e074887a89b3e3b4e9565ba901dac06d636901f88a5cd9ac31835fae5ba"
+      }
+    },
+    "decor_before": {
+      "source_commit": "722c08965aacda0ca371e99cceff009b96e75e46",
+      "passed": true,
+      "source_restored": true,
+      "engine_errors": [],
+      "duration_ms": {
+        "start": 60.598,
+        "resolve_level": 116.198,
+        "definitions": 20.548,
+        "world": 4.578,
+        "map_init": 5.227,
+        "level_paint": 8.708,
+        "environment_paint": 5.698,
+        "bake": 10.889,
+        "decorate": 3.411,
+        "environment_enable": 4.463,
+        "environment_begin": 4.477,
+        "config_decorate": 4.607,
+        "height": 41.91,
+        "scenery_init": 2.026,
+        "scenery_setup": 2.012,
+        "scenery_begin": 2.181,
+        "coast_material": 17.328,
+        "grove_and_banks": 16.854,
+        "reed_mesh": 2.347,
+        "decor_placement": 202.065,
+        "wall_placement": 5.606,
+        "setup_done": 1.614,
+        "scenery_done": 2.263,
+        "level_backdrop": 2.221,
+        "dapple": 2.831,
+        "layers": 2.808,
+        "focus": 3.089,
+        "atmosphere": 2.782,
+        "hud": 113.261,
+        "hud_setup": 1.54,
+        "cursor": 9.252,
+        "mission": 16.072,
+        "deploy": 12.221,
+        "camera": 1.527,
+        "first_fog": 3.071,
+        "intro": 2.483
+      },
+      "decor_ms": [
+        {
+          "key": "white_poplar",
+          "route": "",
+          "ms": 3.31
+        },
+        {
+          "key": "white_poplar",
+          "route": "",
+          "ms": 3.08
+        },
+        {
+          "key": "banner",
+          "route": "",
+          "ms": 3.17
+        },
+        {
+          "key": "story_sign",
+          "route": "李家庄",
+          "ms": 3.304
+        },
+        {
+          "key": "story_sign",
+          "route": "扈家庄",
+          "ms": 3.337
+        },
+        {
+          "key": "story_sign",
+          "route": "祝家庄",
+          "ms": 3.428
+        },
+        {
+          "key": "town_house",
+          "route": "",
+          "ms": 3.479
+        },
+        {
+          "key": "town_house",
+          "route": "",
+          "ms": 3.571
+        },
+        {
+          "key": "town_house",
+          "route": "",
+          "ms": 3.66
+        },
+        {
+          "key": "town_house",
+          "route": "",
+          "ms": 3.712
+        },
+        {
+          "key": "town_house",
+          "route": "",
+          "ms": 30.943
+        },
+        {
+          "key": "town_house",
+          "route": "",
+          "ms": 2.27
+        },
+        {
+          "key": "campaign_environment_object",
+          "route": "zhujiazhuang_hall",
+          "ms": 40.871
+        },
+        {
+          "key": "campaign_environment_overlay",
+          "route": "twigs_bark",
+          "ms": 42.041
+        },
+        {
+          "key": "campaign_environment_overlay",
+          "route": "roots_moss",
+          "ms": 2.935
+        },
+        {
+          "key": "campaign_environment_overlay",
+          "route": "field_edge_bank",
+          "ms": 39.688
+        },
+        {
+          "key": "campaign_environment_overlay",
+          "route": "field_edge_stubble",
+          "ms": 2.386
+        },
+        {
+          "key": "campaign_environment_overlay",
+          "route": "field_edge_ditch",
+          "ms": 2.262
+        },
+        {
+          "key": "campaign_environment_overlay",
+          "route": "field_edge_willow",
+          "ms": 2.366
+        }
+      ],
+      "samples": [
+        {
+          "battle_references_released": 5,
+          "callbacks_before_pre_draw": {},
+          "click_to_battle_ms": 22220.311,
+          "click_to_loading_ms": 7.124,
+          "diagnostic": "normal",
+          "draws": 1474,
+          "layer_changed": false,
+          "level": "level3",
+          "longest_draw_gap_ms": 1469.667,
+          "mode": "zhu",
+          "mount_markers_ms": {
+            "battle_attached": 21287.671,
+            "battle_ready": 22008.18,
+            "first_post_draw": 22092.362,
+            "first_pre_draw": 22079.61,
+            "game_map.gd": 21489.603,
+            "hud.gd": 21850.198,
+            "unit.gd": 21989.395
+          },
+          "picker_to_draw_ms": 35.026,
+          "scan_observed": true,
+          "worst_gap_range_ms": [
+            20622.695,
+            22092.362
+          ]
+        }
+      ],
+      "baseline_script_sha256": {
+        "scripts/battle.gd": "df2688d0400e60d1b5e5510609f981de888380b26f7d3ebf44dcd5a2e9038827",
+        "scripts/game_map.gd": "c962236ed76a1c8d6cee90890d0f421f7d40a63007dda29a7b5a99852f0b5338",
+        "scripts/campaign_scenery.gd": "5cf8b2c3a806343e2444d0ffc4e0d8c09ad6b8b10df414b6a9567777be5f005c"
+      },
+      "instrumented_script_sha256": {
+        "scripts/battle.gd": "a708a7ec4d49a65d4d6c59fda5ed279722a87fe6c7789cb00242af1214388d52",
+        "scripts/game_map.gd": "a0c7f004268550ae4ffc218734ff728c09b6481b36a3a6493bc191da5841bbd3",
+        "scripts/campaign_scenery.gd": "a2a86de6aa0180443c1a0429cc6630e9f835de9bf631549da798c2806407ded1"
+      }
+    },
+    "decor_after": {
+      "source_commit": "722c08965aacda0ca371e99cceff009b96e75e46",
+      "passed": true,
+      "source_restored": true,
+      "engine_errors": [],
+      "duration_ms": {
+        "start": 5.468,
+        "resolve_level": 14.578,
+        "definitions": 17.209,
+        "world": 5.131,
+        "map_init": 8.845,
+        "level_paint": 8.329,
+        "environment_paint": 5.39,
+        "bake": 10.465,
+        "decorate": 3.339,
+        "environment_enable": 4.984,
+        "environment_begin": 3.895,
+        "config_decorate": 5.077,
+        "height": 10.882,
+        "scenery_init": 1.839,
+        "scenery_setup": 3.188,
+        "scenery_begin": 3.498,
+        "coast_material": 20.197,
+        "grove_and_banks": 16.87,
+        "reed_mesh": 2.399,
+        "decor_placement": 74.359,
+        "wall_placement": 5.111,
+        "setup_done": 1.339,
+        "scenery_done": 1.786,
+        "level_backdrop": 1.805,
+        "dapple": 2.503,
+        "layers": 3.014,
+        "focus": 3.425,
+        "atmosphere": 4.058,
+        "hud": 59.681,
+        "hud_setup": 3.149,
+        "cursor": 13.455,
+        "mission": 24.282,
+        "deploy": 14.736,
+        "camera": 2.089,
+        "first_fog": 4.287,
+        "intro": 3.116
+      },
+      "decor_ms": [
+        {
+          "key": "white_poplar",
+          "route": "",
+          "ms": 2.906
+        },
+        {
+          "key": "white_poplar",
+          "route": "",
+          "ms": 1.741
+        },
+        {
+          "key": "banner",
+          "route": "",
+          "ms": 1.886
+        },
+        {
+          "key": "story_sign",
+          "route": "李家庄",
+          "ms": 1.905
+        },
+        {
+          "key": "story_sign",
+          "route": "扈家庄",
+          "ms": 2.882
+        },
+        {
+          "key": "story_sign",
+          "route": "祝家庄",
+          "ms": 2.903
+        },
+        {
+          "key": "town_house",
+          "route": "",
+          "ms": 2.034
+        },
+        {
+          "key": "town_house",
+          "route": "",
+          "ms": 2.149
+        },
+        {
+          "key": "town_house",
+          "route": "",
+          "ms": 3.097
+        },
+        {
+          "key": "town_house",
+          "route": "",
+          "ms": 3.429
+        },
+        {
+          "key": "town_house",
+          "route": "",
+          "ms": 3.296
+        },
+        {
+          "key": "town_house",
+          "route": "",
+          "ms": 2.19
+        },
+        {
+          "key": "campaign_environment_object",
+          "route": "zhujiazhuang_hall",
+          "ms": 2.331
+        },
+        {
+          "key": "campaign_environment_overlay",
+          "route": "twigs_bark",
+          "ms": 3.525
+        },
+        {
+          "key": "campaign_environment_overlay",
+          "route": "roots_moss",
+          "ms": 3.318
+        },
+        {
+          "key": "campaign_environment_overlay",
+          "route": "field_edge_bank",
+          "ms": 2.259
+        },
+        {
+          "key": "campaign_environment_overlay",
+          "route": "field_edge_stubble",
+          "ms": 2.326
+        },
+        {
+          "key": "campaign_environment_overlay",
+          "route": "field_edge_ditch",
+          "ms": 6.397
+        },
+        {
+          "key": "campaign_environment_overlay",
+          "route": "field_edge_willow",
+          "ms": 1.775
+        }
+      ],
+      "opening_texture_cache": [
+        {
+          "cached": true,
+          "path": "res://assets/campaign/environment/level3/zhujiazhuang_hall.tres"
+        },
+        {
+          "cached": true,
+          "path": "res://assets/campaign/environment/shared/overlays/twigs_bark.tres"
+        },
+        {
+          "cached": true,
+          "path": "res://assets/campaign/environment/shared/overlays/roots_moss.tres"
+        },
+        {
+          "cached": true,
+          "path": "res://assets/campaign/environment/level3/field_edge_bank.tres"
+        },
+        {
+          "cached": true,
+          "path": "res://assets/campaign/environment/level3/field_edge_stubble.tres"
+        },
+        {
+          "cached": true,
+          "path": "res://assets/campaign/environment/level3/field_edge_ditch.tres"
+        },
+        {
+          "cached": true,
+          "path": "res://assets/campaign/environment/level3/field_edge_willow.tres"
+        }
+      ],
+      "samples": [
+        {
+          "battle_references_released": 5,
+          "callbacks_before_pre_draw": {},
+          "click_to_battle_ms": 20827.924,
+          "click_to_loading_ms": 12.915,
+          "diagnostic": "normal",
+          "draws": 1455,
+          "layer_changed": false,
+          "level": "level3",
+          "longest_draw_gap_ms": 468.563,
+          "mode": "zhu",
+          "mount_markers_ms": {
+            "battle_attached": 20271.1,
+            "battle_ready": 20647.088,
+            "first_post_draw": 20734.812,
+            "first_pre_draw": 20722.48,
+            "game_map.gd": 20313.497,
+            "hud.gd": 20521.708,
+            "unit.gd": 20624.436
+          },
+          "picker_to_draw_ms": 78.044,
+          "scan_observed": true,
+          "scenery_routes": {
+            "field_edge_bank": "res://assets/campaign/environment/level3/field_edge_bank.tres",
+            "field_edge_ditch": "res://assets/campaign/environment/level3/field_edge_ditch.tres",
+            "field_edge_stubble": "res://assets/campaign/environment/level3/field_edge_stubble.tres",
+            "field_edge_willow": "res://assets/campaign/environment/level3/field_edge_willow.tres",
+            "roots_moss": "res://assets/campaign/environment/shared/overlays/roots_moss.tres",
+            "twigs_bark": "res://assets/campaign/environment/shared/overlays/twigs_bark.tres",
+            "zhujiazhuang_hall": "res://assets/campaign/environment/level3/zhujiazhuang_hall.tres"
+          },
+          "worst_gap_range_ms": [
+            20266.249,
+            20734.812
+          ]
+        }
+      ],
+      "baseline_script_sha256": {
+        "scripts/battle.gd": "df2688d0400e60d1b5e5510609f981de888380b26f7d3ebf44dcd5a2e9038827",
+        "scripts/game_map.gd": "c962236ed76a1c8d6cee90890d0f421f7d40a63007dda29a7b5a99852f0b5338",
+        "scripts/campaign_scenery.gd": "5cf8b2c3a806343e2444d0ffc4e0d8c09ad6b8b10df414b6a9567777be5f005c"
+      },
+      "instrumented_script_sha256": {
+        "scripts/battle.gd": "a708a7ec4d49a65d4d6c59fda5ed279722a87fe6c7789cb00242af1214388d52",
+        "scripts/game_map.gd": "a0c7f004268550ae4ffc218734ff728c09b6481b36a3a6493bc191da5841bbd3",
+        "scripts/campaign_scenery.gd": "efc7a0c29685660c92c7054710612d4d4c893e448880aae5753ec7fb67ce9055"
+      }
+    }
+  }
+}
