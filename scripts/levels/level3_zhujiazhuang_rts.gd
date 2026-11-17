@@ -718,6 +718,18 @@ func on_unit_died(b, u) -> void:
 	elif u in prisoners:
 		b.mission.mark("zhu_prisoner_lost","部分获救好汉未能生还")
 
+func campaign_debrief(mission) -> Array[Dictionary]:
+	var side_result := "偏门未开"
+	if inside_open:
+		side_result = "孙立已打开偏门"
+	elif mission.has_event("zhu_side_breached"):
+		side_result = "偏门由强攻打开"
+	return [
+		{"source": "北矿 · %s", "args": ["已夺下" if expansion_secured else "未夺下"]},
+		{"source": "南营 · %s · 共派出 %d 队", "args": ["已断援" if supply_cut else "外营未拆", raids_sent]},
+		{"source": "入口 · %s · %s", "args": ["正门已攻破" if main_breached else "正门未破", side_result]},
+	]
+
 func _finish_ready() -> bool:
 	return manor_fallen and prisoners_freed and _alive(hall) and not prisoners.is_empty() and _alive(prisoners[0]) and prisoners[0].position.distance_to(hall.position) < 190.0
 

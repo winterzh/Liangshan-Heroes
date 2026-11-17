@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[祝家庄路线战果](../qa/campaign_siege_20261116/README.md#祝家庄结算的路线战果)的实际结算探针和四语检查记录位于 qa/campaign_siege_20261116/route_debrief/。
+
 [原生读档布局收据](../qa/campaign_short_player_continue_20261117/native_entry_geometry.json)记录祝家庄任务栏组件与野猪林玩家存读档的布局和结果。
 
 [Windows 战役整合收据](../qa/battle_entry_timing_20261116/windows_candidate_5acd8be2.json)保存原生启动、黄泥冈冷／热进场、八章准入、四语、野猪林续玩和六文件指纹。

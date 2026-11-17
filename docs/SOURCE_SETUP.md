@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+祝家庄结算从已保存的战役状态生成三条路线战果，先冻结原句和参数，再按当前语言渲染。未增加存档字段。四语来自 campaign_siege.json，严格重建后保持既有 4,986 条译文。 [战果核对](../qa/campaign_siege_20261116/README.md#祝家庄结算的路线战果)
+
 战役续玩任务栏的拉伸控件在原生挂载前后沿用锚点及偏移，固定锚点控件仍恢复尺寸。继续捕获并校验现有布局字段。组件夹具补齐当前 HUD 所用的触屏标志和底栏边界。 [读档布局收据](../qa/campaign_short_player_continue_20261117/native_entry_geometry.json)
 
 Windows Steam 本地候选 `5acd8be2` 由 Godot 4.6.3 导出，原生启动与六件指纹已核对。精确编译包的续玩行为用离线平台替身走野猪林，三次独立进程沿用玩家入口和实际结算。 [候选收据](../qa/battle_entry_timing_20261116/windows_candidate_5acd8be2.json)

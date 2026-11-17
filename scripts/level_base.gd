@@ -44,6 +44,9 @@ func on_ability(_b, _caster, _ability_id: String, _lp: Vector2) -> bool: return 
 func campaign_core_goal() -> String: return ""
 func campaign_story_goals() -> Array[Dictionary]: return []
 func story_contract_version() -> int: return 1
+## Display-only rows derived from the final battle state. Keep source text and
+## scalar arguments so the settlement can refresh them in another language.
+func campaign_debrief(_mission) -> Array[Dictionary]: return []
 
 # 经济/经营（自由「遭遇战」模式）：默认关闭，战役关卡完全不受影响
 func economy_enabled() -> bool: return false

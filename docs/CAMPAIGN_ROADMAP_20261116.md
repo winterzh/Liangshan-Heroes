@@ -1,5 +1,7 @@
 # 八幕战役后续开发路线图
 
+M2 祝家庄结算展示围绕北矿、南营和正偏门的实际选择结果，支持比较混合打法。四语显示及结算数据冻结通过定向检查，真人首通和重玩待验。 [战果核对](../qa/campaign_siege_20261116/README.md#祝家庄结算的路线战果)
+
 M7 战役任务栏读档布局按锚点和偏移恢复。野猪林真实菜单对照未重现挂载尺寸警告，扩展任务栏、多语与独立进程布局校验通过。 [读档布局收据](../qa/campaign_short_player_continue_20261117/native_entry_geometry.json)
 
 M7 黄泥冈头像改动已进入 Windows 候选 `5acd8be2`。同一编译包冷进首帧至次帧 9.23 ms，八章准入、四语和野猪林存档到终局链通过。真实平台、设备和真人样板仍待验。 [候选收据](../qa/battle_entry_timing_20261116/windows_candidate_5acd8be2.json)

@@ -4547,15 +4547,17 @@ func _complete_end(victory: bool, line: String) -> void:
 	# rebuild text, but cannot settle, award, close metrics or alter these rows.
 	var frozen_result: Dictionary = campaign_result.duplicate(true)
 	var saved_rows: Array = []
+	var debrief_rows: Array[Dictionary] = []
 	var saved_heroes := {"track_combat": track_hero_combat_stats,
 		"kills": hero_kills.duplicate(true), "combat": hero_combat_stats.duplicate(true)}
 	var has_mission: bool = mission != null
 	if mission != null:
 		mission.finish_metrics(victory)
 		saved_rows = mission.report.duplicate()
+		debrief_rows = level.campaign_debrief(mission)
 		mission._panel.hide()
 	var render_report: Callable = func() -> String:
-		return _end_report_text(frozen_result, saved_rows, saved_heroes, has_mission)
+		return _end_report_text(frozen_result, saved_rows, saved_heroes, has_mission, debrief_rows)
 	var report: String = render_report.call()
 	hud.show_end(victory, line, kills, mission != null and camp != null and victory and camp.has_next(), report, frozen_result, render_report)
 	if _smoke:
@@ -4563,11 +4565,17 @@ func _complete_end(victory: bool, line: String) -> void:
 		print("[end] hero_kills: %s" % _hero_kill_tally())
 
 
-func _end_report_text(result: Dictionary, rows: Array, heroes: Dictionary, has_mission: bool) -> String:
+func _end_report_text(result: Dictionary, rows: Array, heroes: Dictionary, has_mission: bool,
+		debrief_rows: Array[Dictionary] = []) -> String:
 	var hero_report := _hero_end_tally(heroes)
 	if not has_mission:
 		return hero_report
 	var report_sections: Array[String] = [mission.result_report(result)]
+	if not debrief_rows.is_empty():
+		var debrief: Array[String] = [Localize.text("本局战果")]
+		for row in debrief_rows:
+			debrief.append(Localize.format_text(row.source, row.args))
+		report_sections.append("\n".join(debrief))
 	var translated_rows: Array[String] = []
 	for row: String in rows:
 		# Each authored log entry retains its existing source/provenance lookup.
