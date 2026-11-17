@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+连环马的结算读取既有两路出击、剩余骑兵、断援事件、协同破阵数和擒将事件。列出的延迟为本局排定的出击时间减去初始时刻。四语取自 campaign_cavalry_escort.json。 [两路战果](../qa/campaign_cavalry_escort_20261116/README.md#连环马的两路结算战果)
+
 Windows 候选沿用 Windows Steam 预设。候选 `04c8876b` 的实际祝家庄通关、四语结算和独立野猪林读档均使用同一编译包，Steam 接口采用隔离离线配置。 [整合候选收据](../qa/campaign_siege_20261116/windows_campaign_candidate_04c8876b.json)
 
 祝家庄结算从已保存的战役状态生成三条路线战果，先冻结原句和参数，再按当前语言渲染。未增加存档字段。四语来自 campaign_siege.json，严格重建后保持既有 4,986 条译文。 [战果核对](../qa/campaign_siege_20261116/README.md#祝家庄结算的路线战果)

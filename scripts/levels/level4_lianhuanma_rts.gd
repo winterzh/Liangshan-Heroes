@@ -12,6 +12,8 @@ const DRILL := Vector2i(16,45)
 const DRILL_ENTRY := Vector2i(21,45)
 const LINK_SOURCE := 4705
 const HOOK_KEYS := ["gou_lian","xu_ning"]
+const WAVE_TIMES := [150.0, 270.0]
+const SUPPLY_DELAY := 45.0
 const LANE_WARNING := [
 	"北路甲马正在集结，约25秒后出发。",
 	"南路甲马正在集结，约25秒后出发。",
@@ -37,7 +39,7 @@ var workers: Array[Unit]=[]
 var enemy_workers: Array[Unit]=[]
 var enemy_nodes: Array[Unit]=[]
 var escorts: Array[Unit]=[]
-var waves := [{"time":150.0,"warned":false,"sent":false},{"time":270.0,"warned":false,"sent":false}]
+var waves := [{"time":WAVE_TIMES[0],"warned":false,"sent":false},{"time":WAVE_TIMES[1],"warned":false,"sent":false}]
 var elapsed := 0.0
 var strategy_t := 0.0
 var escort_t := 55.0
@@ -546,7 +548,7 @@ func on_unit_died(b,u) -> void:
 		b.msg("徐宁阵亡，教场暂缺教头；可在中军重新招募后继续演练，现有钩镰兵仍可作战。",7)
 	elif u in posts:
 		var lane: int=posts.find(u)
-		if not waves[lane].sent: waves[lane].time+=45.0; waves[lane].warned=false
+		if not waves[lane].sent: waves[lane].time+=SUPPLY_DELAY; waves[lane].warned=false
 		b.mission.mark("lhm_supply_%d"%lane,LANE_SUPPLY_LOST[lane])
 func on_unit_resolved(b,u,outcome: String) -> void:
 	if u==han and outcome=="captured": b.mission.mark("lhm_han_captured","韩滔被生擒，仍按敌将看押")
@@ -561,13 +563,35 @@ func on_unit_resolved(b,u,outcome: String) -> void:
 			action.actor_button.disabled=true
 			action.marker.hide()
 		else: b.msg("演练骑倒得过早或搭档不齐；可重新摆骑，再试诱入、退开、两人下钩。",6)
-func top_status(_b) -> String:
-	var remaining := [0, 0]
+func _remaining_by_lane() -> Array[int]:
+	var remaining: Array[int] = [0, 0]
 	for rider in riders:
 		if not alive(rider): continue
 		var lane := int(rider.get_meta("wave_group", -1))
 		if lane >= 0 and lane < remaining.size():
 			remaining[lane] += 1
+	return remaining
+
+func campaign_debrief(mission) -> Array[Dictionary]:
+	var remaining := _remaining_by_lane()
+	var rows: Array[Dictionary] = []
+	for lane in range(waves.size()):
+		var args: Array = ["北路" if lane == 0 else "南路", remaining[lane], "已出击" if waves[lane].sent else "未出击"]
+		var source := "%s · 余 %d 骑 · %s · 辎重营仍在"
+		if mission.has_event("lhm_supply_%d" % lane):
+			var delay := roundi(float(waves[lane].time) - WAVE_TIMES[lane])
+			if delay > 0:
+				source = "%s · 余 %d 骑 · %s · 断援使冲锋推迟 %d 秒"
+				args.append(delay)
+			else:
+				source = "%s · 余 %d 骑 · %s · 出击后断援"
+		rows.append({"source": source, "args": args})
+	rows.append({"source": "协同钩破 %d/12 · %s", "args": [broken_count,
+		"韩滔已被生擒" if mission.has_event("lhm_han_captured") else "未擒获韩滔"]})
+	return rows
+
+func top_status(_b) -> String:
+	var remaining := _remaining_by_lane()
 	var wave_text: Array[String] = []
 	for lane in range(2):
 		var direction := Localize.text("北" if lane == 0 else "南")
