@@ -1,0 +1,188 @@
+{
+  "steam_disabled": true,
+  "private_qa_menu": false,
+  "passed": true,
+  "source_commit": "d9e8d315226ccae2336f5ab1c01f68109fe901ea",
+  "probe_sources_lf_sha256": {
+    "qa/campaign_wounded_selection_20261116/player_continue/probe.gd": "aeca5acfa93d8c339fd3b6f6cb0a23b8bffa8c3c18dadc54e0eaf14ffe135b9e",
+    "qa/campaign_wounded_selection_20261116/menu_resume/probe.gd": "5ac16594eeb80054da2e31a99dcd692181404af7b22f05a299187f30a73f062e",
+    "qa/campaign_siege_20261116/player_continue/platform_entry.gd": "f270ba38384e9bce258c409a6cb10444e8b834cbdc26d4266d286cceeb0f3da6",
+    "scripts/run_official_restore_profile.gd": "426e9cddf5e01464cec9ef6c53acb2d2ae2dd3389125e41e24c122d5cc774418",
+    "scripts/run_campaign_progress_coordinator.gd": "7cb414225c25d98065c4db8526de0e09f4a9f49e73b5b88488fe2b98762ad2b8",
+    "tools/zhujiazhuang_rts_test.gd": "435ddb8f9bc774687e1ea879ac6e9adc606380db4934ca3b72dfea294273d770",
+    "scripts/battle.gd": "df2688d0400e60d1b5e5510609f981de888380b26f7d3ebf44dcd5a2e9038827",
+    "scripts/continue_flow.gd": "381e529f8eb084212cc50fd271a2017f6973cd72965370d66a3fb47a1c650155",
+    "scripts/run_world_session.gd": "8b499e542ba155a3825d39caffdbe5b5acd7d0f046dd51a7122bd9efd4a1342c",
+    "scripts/run_unit_graph.gd": "30f9f9af7e04cf37935005d1bb9dbb96b423a972ab0e2f9bf0c5c9e7b2f74bfc",
+    "scripts/run_level8_world_factory.gd": "423efc9cb7f3f35a7ab48d19a01eb67dbb2fe9f62a559a54113e2adbbdc46447",
+    "scripts/run_level8_unit_contract.gd": "3a12fc58ffef74c5c8a6d9ed8d07bc455cdf05ca97f1629992678e73286945d9",
+    "scripts/run_battle_world_core.gd": "35186ee4bfcb7bd14eead8673ba9612d8365ddf00be2ef875954e02d2b932362",
+    "scripts/run_campaign_level_state.gd": "047824c64ff01bb985827bbeea9368796735244ff27d6e77296c3e80e67fcb8b",
+    "scripts/levels/level8_daming_rts.gd": "bb68cb0d24f2b903798e87874b3488a0a97b59d7e2246102c51022d36a2b054c",
+    "tools/daming_rts_test.gd": "73de9d984adc9f30554f84890a2ef9f7de24f5035d7f9b9cf0ceea8286cae7ce"
+  },
+  "stages": [
+    {
+      "checks": 9,
+      "facts": {
+        "checkpoint": {
+          "clock": 267.933333333323,
+          "enemy_recruits": 5,
+          "events": [
+            "action:daming_rts:daming_rescue",
+            "daming_early_unlock",
+            "daming_gate_breached",
+            "daming_gate_opened",
+            "daming_lu_safe",
+            "daming_post_0",
+            "daming_prison_breached",
+            "daming_prisoners_freed",
+            "daming_pursuit"
+          ],
+          "gate_open": true,
+          "gold": 15,
+          "hall": "1",
+          "outcomes": [
+            "retreated",
+            ""
+          ],
+          "prison_open": true,
+          "prisoners": [
+            "28",
+            "29"
+          ],
+          "pursuers": [
+            "56",
+            "57",
+            "58",
+            "59",
+            "60",
+            "61"
+          ],
+          "pursuit_left": 0.0,
+          "pursuit_sent": true,
+          "pursuit_warned": true,
+          "rescued": true,
+          "signaled": false,
+          "wood": 413
+        },
+        "generation": 1,
+        "identity": "source-v1:34762c5c2c997117053cdd6a509ed6bdc829c3ca2b7f8aef47281c2b93859001",
+        "result_code": "",
+        "route": "assault"
+      },
+      "failures": [],
+      "pid": 23592,
+      "stage": "save",
+      "exit_code": 0,
+      "seconds": 116.014,
+      "engine_errors": []
+    },
+    {
+      "checks": 20,
+      "facts": {
+        "game_seconds_at_result": 287.799999999989,
+        "identity": "source-v1:34762c5c2c997117053cdd6a509ed6bdc829c3ca2b7f8aef47281c2b93859001",
+        "live": {
+          "ai_trained": 5,
+          "buildings_started": 5,
+          "camp_hp": 1500.0,
+          "events": [
+            "daming_post_0",
+            "daming_gate_breached",
+            "daming_gate_opened",
+            "daming_prison_breached",
+            "action:daming_rts:daming_rescue",
+            "daming_early_unlock",
+            "daming_prisoners_freed",
+            "daming_pursuit",
+            "daming_lu_safe",
+            "daming_post_1",
+            "daming_shi_safe",
+            "daming_victory"
+          ],
+          "game_seconds": 20.0,
+          "orders": 195,
+          "phase": "extract",
+          "prisoner_hp": [
+            360.0,
+            230.0
+          ],
+          "result": {
+            "contract_version": 2,
+            "core_cleared": true,
+            "core_goal": "守住梁山前营，救出卢俊义、石秀，护送二人活着抵达城外接应地。",
+            "done_ids": [],
+            "goals": [
+              {
+                "id": "daming_infiltration",
+                "label": "柴进、乐和乔装入牢，时迁按分工举火",
+                "note": "",
+                "reason": "本局已偏离“柴进、乐和乔装入牢，时迁按分工举火”的原著条件",
+                "state": "missed"
+              },
+              {
+                "id": "daming_signal",
+                "label": "翠云火号发动里应外合",
+                "note": "",
+                "reason": "本局已偏离“翠云火号发动里应外合”的原著条件",
+                "state": "missed"
+              },
+              {
+                "id": "daming_response",
+                "label": "鲁智深或武松夺门，牢中内应开枷",
+                "note": "",
+                "reason": "本局已偏离“鲁智深或武松夺门，牢中内应开枷”的原著条件",
+                "state": "missed"
+              }
+            ],
+            "missed_ids": [
+              "daming_infiltration",
+              "daming_signal",
+              "daming_response"
+            ],
+            "pending_ids": [],
+            "story_complete": false,
+            "story_done": 0,
+            "story_total": 3
+          },
+          "skill_orders": 34,
+          "spy_phase": "admit",
+          "units_queued": 26,
+          "units_queued_by_key": {
+            "liang_dao": 2.0,
+            "liang_gong": 12,
+            "liang_qiang": 4,
+            "lou_luo": 6.0,
+            "siege_cata": 2.0
+          }
+        },
+        "progress_sha": "1c664222b2b7804380b17a9df572ab3d0a15152825672982e8014b1a024a0d32",
+        "pursuit_sent_before_result": true,
+        "result_code": "",
+        "route": "assault"
+      },
+      "failures": [],
+      "pid": 10808,
+      "stage": "resume",
+      "exit_code": 0,
+      "seconds": 71.232,
+      "engine_errors": []
+    },
+    {
+      "checks": 6,
+      "facts": {
+        "identity": "source-v1:34762c5c2c997117053cdd6a509ed6bdc829c3ca2b7f8aef47281c2b93859001",
+        "progress_sha": "1c664222b2b7804380b17a9df572ab3d0a15152825672982e8014b1a024a0d32",
+        "route": "assault",
+        "terminal_code": "LOCAL_RUN_TERMINAL"
+      },
+      "failures": [],
+      "pid": 38376,
+      "stage": "reject",
+      "exit_code": 0,
+      "seconds": 29.693,
+      "engine_errors": []
+    }
+  ]
+}
