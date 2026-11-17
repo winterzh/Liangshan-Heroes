@@ -222,7 +222,7 @@ func on_mission_action(b, action_id: String, actor) -> void:
 			if _all_escorts_alive():
 				b.mission.mark("warn_escorts","鲁智深当面喝令两个公人一路小心服侍林冲。")
 			b.mission.set_title("整队完毕 · 结伴出林")
-			b.mission.set_objective("已歇脚。选中相送队任一人，右键西侧出林旗标；整队抵达后通关。")
+			b.mission.set_objective("已歇脚。选中林冲，前往西侧出林旗标；整队抵达后通关。")
 		"leave_forest":
 			if st != ESCAPE:
 				return
@@ -612,14 +612,14 @@ func _finish_tending(b) -> void:
 	lin_freed.order_stop()
 	if is_instance_valid(lu):
 		lu.order_stop()
-	b.mission.begin("escort", "救人成功 · 选择归路", "可直接结队出林，也可到林边歇脚照伤完成演义目标。选中任意一人右键旗标，幸存队伍沿你的路线同行；没有新命令便停留原地。")
+	b.mission.begin("escort", "救人成功 · 选择归路", "可直接结队出林，也可到林边歇脚完成演义目标。选中林冲向旗标下令，幸存同伴会随他同行。")
 	b.mission.add_action("rest_stop", "可选 · 林边歇脚整队", REST, ["lin_chong"], 1.2, 48.0, 48.0)
 	b.mission.add_action("leave_forest", "结队出林", EXIT_W, ["lin_chong"], 0.8, 48.0, 48.0)
 	# Arriving companions can nudge the stopped patient a few pixels while he
 	# is treating/resting. Keep the tight arrival range without losing the order.
 	for action_id in ["rest_stop","leave_forest"]:
 		b.mission.actions[action_id].settle_margin=16.0
-	b.mission.set_status("查看只移镜头；先选人，再右键旗标。出林需林冲、鲁智深和所有幸存同伴到齐。")
+	b.mission.set_status("查看只移镜头。出林需林冲、鲁智深和所有幸存同伴到齐。")
 	_add_selection_button(b,true)
 	b.mission.add_level_button("pine_waiting", "查看 · 未到齐同伴", "查看当前歇脚或出林目标外最远的幸存同伴；只移镜头，不选人、不下令。")
 	st = ESCAPE
@@ -652,12 +652,16 @@ func _escort_heading_to_rest(b) -> bool:
 
 func _escort_arrival_guidance(b, at_rest: bool) -> String:
 	var state := _escort_arrival_at(b.map.cell_to_world(REST if at_rest else EXIT_W),96.0 if at_rest else EXIT_R)
+	var destination := Localize.text("歇脚处" if at_rest else "出林口")
 	if state.missing.is_empty():
+		if b.hud.touch_ui:
+			return Localize.format_text("同伴已到齐；选中林冲，轻点%s的旗标。",destination)
 		return Localize.text("同伴已到齐；让林冲右键歇脚旗标完成停留。" if at_rest else "同伴已到齐；让林冲右键出林旗标完成停留。")
 	var names := PackedStringArray()
 	for member in state.missing: names.append(Localize.text(member.display_name))
-	return Localize.format_text("%s已到 %d/%d 人；未到齐：%s。查看按钮只移镜头，选中队伍后右键旗标继续同行。", \
-		[Localize.text("歇脚处" if at_rest else "出林口"),state.arrived,state.total,", ".join(names)])
+	var prompt := "%s已到 %d/%d 人；未到齐：%s。选中队伍后轻点旗标继续同行。" if b.hud.touch_ui \
+		else "%s已到 %d/%d 人；未到齐：%s。查看按钮只移镜头，选中队伍后右键旗标继续同行。"
+	return Localize.format_text(prompt,[destination,state.arrived,state.total,", ".join(names)])
 
 func _retry_escort_action(b,key: String,text: String) -> void:
 	var action: Dictionary=b.mission.actions[key]
@@ -696,7 +700,9 @@ func _update_help(b) -> void:
 		else:
 			b.mission.set_guidance("右键林边地面跟随；贴近会惹人起疑，保持距离。右键解差则提前动手强救。")
 	elif st==RESCUE:
-		b.mission.set_guidance("选中鲁智深，右键松树旁金色拦棍旗标，站稳0.8秒即可救人。")
+		var prompt := "选中鲁智深，轻点松树旁金色拦棍旗标，到场站稳0.8秒即可救人。" if b.hud.touch_ui \
+			else "选中鲁智深，右键松树旁金色拦棍旗标，站稳0.8秒即可救人。"
+		b.mission.set_guidance(prompt)
 	elif st==CARE:
 		b.mission.set_guidance(_care_guidance())
 	elif st==ESCAPE:

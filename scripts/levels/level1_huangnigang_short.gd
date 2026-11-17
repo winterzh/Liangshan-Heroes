@@ -404,10 +404,10 @@ func _sync_controls(b) -> void:
 		b.mission.add_level_button("hg_empty_hands", "选中 · 空手同伴",
 			Localize.text("只选中未推车的同伴；按取车、装车、出冈标记分别下令。"))
 	if st in [CARRY,FORCE]:
-		b.mission.add_level_button("hg_empty_carts", "选中 · 推空车同伴", "只选中正在推未装货车辆的七星；装车仍需右键下令。")
-		b.mission.add_level_button("hg_loaded_carts", "选中 · 已装货同伴", "只选中已装好财物的推车者；出冈仍需右键下令。")
+		b.mission.add_level_button("hg_empty_carts", "选中 · 推空车同伴", "选中推空车的同伴，装货需另下指令。")
+		b.mission.add_level_button("hg_loaded_carts", "选中 · 已装货同伴", "选中已装货的同伴，出冈需另下指令。")
 		b.mission.add_level_button("hg_transport_next", "下一步 · 当前所选",
-			"定位当前所选的运输标记。空手七星优先查看可接手的重车；仍需右键下令。")
+			"定位运输旗标。空手人物优先查看可接手的重车。")
 	b.mission.add_map_locator("西冈口 · 推车退路",GATE_W)
 	if st in [MARCH,INQUIRY]: b.mission.add_map_locator("另一片松阴 · 七星与枣车",SHADE)
 
@@ -421,7 +421,7 @@ func activate_mission_button(b, button_id: String) -> void:
 			return
 		b.select_members(members,false)
 		b.center_camera_cell(b.map.world_to_cell(members[0].position))
-		b.mission.set_status(Localize.format_text("已选中%d位推车同伴；右键地面可同行，装车或交付仍需各自到对应标记。",[members.size()]))
+		b.mission.set_status(Localize.format_text("已选中%d位推车同伴。装车和交付需各自前往对应旗标。",members.size()))
 		return
 	if button_id == "hg_transport_next":
 		if st not in [CARRY,FORCE]: return
@@ -429,9 +429,7 @@ func activate_mission_button(b, button_id: String) -> void:
 		if action_id.is_empty():
 			b.mission.set_status(Localize.text("请单独选中一位可推车的七星；白胜负责同行。"))
 			return
-		var action: Dictionary=b.mission.actions[action_id]
-		b.center_camera_cell(action.cell)
-		b.mission.set_status(Localize.format_text("下一步：请右键“%s”标记。", [Localize.text(action.label)]))
+		b.mission.focus_action(action_id)
 		return
 	if button_id == "hg_empty_hands":
 		var members := actors.filter(func(u): return is_instance_valid(u) and u.hp>0 and u.story_outcome=="" and (st==WITHDRAW or u.key in SEVEN) and not u.has_meta("carrying_tribute") and not u.has_meta("pushing_empty_tribute"))

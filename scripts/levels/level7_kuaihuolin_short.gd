@@ -20,11 +20,11 @@ func paint_map(map: GameMap) -> void:
 
 func story_contract_version() -> int: return 2
 func deploy_hint() -> String:
-	return "沿途饮酒可选，每店三碗增加拳力，也会让步速和出手波动。右键蒋门神直接挑战，或到酒望前佯醉换酒。Q近身直拳；W玉环步后仍需右键移动；避开圆圈重拳或横移让开真实冲撞，再靠近用E鸳鸯脚反击。R可恢复气血、暂稳步履；让施恩留在安全处。"
+	return "可沿途饮酒，也可直接向蒋门神下达攻击令。玉环步加速后还需下移动令，躲开重拳或冲撞，再靠近用鸳鸯脚反击。用「稳住酒势」可回血，施恩宜留在安全处。"
 
 func apply_overrides(defs: Dictionary, abilities: Dictionary) -> void:
 	super.apply_overrides(defs,abilities)
-	abilities.mengzhou_step.desc="短时加速；按W后仍需右键下令换位。躲开本次重拳或冲撞后，趁破绽靠近接E。"
+	abilities.mengzhou_step.desc="短时加速，仍需下移动令换位。躲开重拳或冲撞后，趁破绽靠近用鸳鸯脚反击。"
 	abilities.mengzhou_punch.desc="近身直拳，造成伤害并短暂僵直；蓄力重拳和冲撞仍需看预警走位。"
 	abilities.mengzhou_kick.desc="近身连踢。当前破绽期间，玉环步实际换位后踢中，才能完成招牌拳路。"
 
@@ -38,7 +38,7 @@ func on_start(b) -> void:
 	_sync_controls(b)
 
 func _road_actions(b) -> void:
-	b.mission.begin("road_choice","沿途准备 · 饮酒或径赴快活林", "每处酒望可吃一次三碗：拳力更强，步速与出手也更不稳。可以择店饮酒，也可直接挑战；四处都饮过另计演义。第二家旁有可选练步，W只是加速，方向仍由右键决定。")
+	b.mission.begin("road_choice","沿途准备 · 饮酒或径赴快活林", "每处可饮三碗，增强拳力，但步速和出手会波动。饮满四处可得演义印。第二家旁可练玉环步：用技能加速，再下令移动。")
 	for i in range(taverns.size()):
 		if not taverns[i].drunk: b.mission.add_action("drink_%d"%i,Localize.format_text("武松 · 第%d家三碗", (i+1)),TAVERN_CELLS[i]+Vector2i(0,2),["wu_song"],0.8,48)
 	if not b.mission.has_event("road_step_practiced"):
@@ -72,7 +72,7 @@ func _start_step_drill(b) -> void:
 	drill_marker.position=drill_origin
 	drill_marker.z_index=3449
 	b.fx_root.add_child(drill_marker); b.map.sync_render_position(drill_marker)
-	b.mission.begin("road_step_drill","试一次横移 · 此处不受伤","右键圈外地面，让武松实际走出圆圈。W提供短时加速，仍需右键指定方向。离开后可继续择店饮酒或直接挑战。")
+	b.mission.begin("road_step_drill","试一次横移 · 此处不受伤","让武松走出圆圈。玉环步可加速，移动方向由你指定。练过后可继续饮酒或直接去挑战。")
 
 func _complete_step_drill(b, source: String) -> void:
 	if st!=STEP_DRILL or wu.position.distance_to(drill_origin)<=94: return
@@ -90,7 +90,7 @@ func _open_showdown(b, original_provocation:=false) -> void:
 	if not b._gameplay_rng_issue.is_empty(): return
 	charge_running=false; opening_serial=-1; step_serial=-1
 	fist_cd=3.0
-	b.mission.set_objective("圆形重拳：离开落点。直线冲撞：横移让路，蒋门神会实际冲过去。Q近身出拳；W加速后右键换位；趁招式落空的短窗口靠近按E，R可回血稳酒。保护留在后方的施恩。")
+	b.mission.set_objective("重拳蓄力时离开圆圈，冲撞起手时横移让路。用玉环步加速后下令换位，再趁破绽靠近使出鸳鸯脚。迎面直拳适合近身，「稳住酒势」可回血。让施恩留在后方。")
 	_sync_controls(b)
 
 func on_ability(b, caster, ability_id: String, lp: Vector2) -> bool:
@@ -98,7 +98,7 @@ func on_ability(b, caster, ability_id: String, lp: Vector2) -> bool:
 	if ability_id=="mengzhou_step":
 		step_serial=special_index if st==SHOWDOWN else -1
 		step_origin=wu.position
-		b.mission.mark("mengzhou_step_used","武松踏玉环步；接着右键移动换位。")
+		b.mission.mark("mengzhou_step_used","武松踏玉环步；接着下令换位。")
 		return false
 	if ability_id in ["mengzhou_punch","mengzhou_kick"]:
 		var spec: Dictionary=b._scaled_ability(b._abilities[ability_id],b._hero_rb(wu),b._hero_db(wu))
@@ -204,7 +204,7 @@ func _duel_tick(b, delta: float) -> void:
 		return
 	if exposed_left>0:
 		exposed_left=maxf(0,exposed_left-delta)
-		b.mission.set_status(Localize.format_text("破绽还剩 %.1f秒 · 靠近E反击，或R稳住酒势。", exposed_left))
+		b.mission.set_status(Localize.format_text("破绽还剩 %.1f秒 · 靠近用鸳鸯脚反击，或用「稳住酒势」恢复。", exposed_left))
 		if exposed_left<=0:
 			opening_serial=-1; step_serial=-1
 			menshen.apply_damage_reduction(0.5,999,BRACE_SOURCE)
@@ -232,7 +232,7 @@ func _duel_tick(b, delta: float) -> void:
 			_finish_special(b,not hit)
 		return
 	fist_cd-=delta
-	b.mission.set_status("Q出拳 · W后右键换位 · E近身连踢 · R稳酒。等他起手再判断方向。")
+	b.mission.set_status("玉环步加速后仍需下令换位。看清起手，避开后靠近用鸳鸯脚。")
 	if fist_cd<=0 and menshen.position.distance_to(wu.position)<145 and b.map._segment_open(menshen.position,wu.position,"land"):
 		_begin_special(b)
 
