@@ -295,6 +295,10 @@ func persistence_busy() -> bool:
 	return not _prefs_failed.is_empty() or (_cfg_writer != null and _cfg_writer.busy())
 
 func _identity() -> Dictionary:
+	var flow := get_node_or_null("/root/ContinueFlow")
+	if flow != null:
+		var installed: Dictionary = flow.revalidate_startup_identity()
+		if not installed.is_empty(): return installed
 	return ResourceLoader.load("res://scripts/run_content_identity.gd", "Script", ResourceLoader.CACHE_MODE_REUSE).new().resolve_runtime_identity()
 
 func _save() -> bool:

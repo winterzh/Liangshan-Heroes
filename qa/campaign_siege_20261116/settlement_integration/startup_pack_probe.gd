@@ -52,7 +52,7 @@ func _run() -> void:
 	var first_battle_us := Time.get_ticks_usec() - started
 	var entered: bool = is_instance_valid(b) and b.scene_file_path == "res://scenes/main.tscn" and b.level.id() == "level3"
 	var preserved: bool = entered and b._gameplay_content_identity == identity and b.gameplay_rng_fault().is_empty()
-	var used_once: bool = flow._startup_entry_provider == null and flow.take_startup_entry_identity().is_empty()
+	var used_once: bool = flow.take_startup_entry_identity().is_empty()
 	_finish({"passed":startup_draws > 1 and entered and preserved and used_once and not observed_scan,
 		"startup_us":startup_us,"startup_rendered_frames":startup_draws,"click_to_battle_draw_us":first_battle_us,
 		"loading_draw_us":loading_draw_at-started if loading_draw_at > 0 else -1,

@@ -327,13 +327,11 @@ func finish_runtime_identity_scan() -> Dictionary:
 		_prepared_pack_files = physical
 	return result
 
-func reuse_prepared_runtime_identity() -> Dictionary:
+func revalidate_prepared_runtime_identity() -> Dictionary:
 	if _prepared_pack_files.is_empty(): return {}
-	var physical := _prepared_pack_files
-	_prepared_pack_files = {}
 	var mount := _mount_status()
-	if not mount.ok or physical.executable_stamp != _executable_stamp(_scan_context.exe): return {}
-	return _complete_runtime_identity(_scan_context, physical)
+	if not mount.ok or _prepared_pack_files.executable_stamp != _executable_stamp(_scan_context.exe): return {}
+	return _complete_runtime_identity(_scan_context, _prepared_pack_files)
 
 
 func cancel_runtime_identity_scan() -> void:

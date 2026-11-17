@@ -30,6 +30,7 @@ var _campaign_completion: Dictionary = {}
 var _startup_identity: Dictionary = {}
 var _startup_scan: RefCounted
 var _startup_entry_provider: RefCounted
+var _startup_entry_used := false
 var _startup_owner := ""
 var _startup_items: Array = []
 var _startup_index := 0
@@ -580,10 +581,15 @@ func _startup_quit() -> void:
 	get_node("/root/AppLifecycle").request_quit("continue_failed")
 
 func take_startup_entry_identity() -> Dictionary:
+	if _startup_entry_used: return {}
+	_startup_entry_used = true
+	return revalidate_startup_identity()
+
+func revalidate_startup_identity() -> Dictionary:
 	if _startup_entry_provider == null: return {}
-	var provider := _startup_entry_provider
-	_startup_entry_provider = null
-	return provider.reuse_prepared_runtime_identity()
+	var identity: Dictionary = _startup_entry_provider.revalidate_prepared_runtime_identity()
+	if not identity.get("ok",false): _startup_entry_provider = null
+	return identity
 
 func _startup_recover() -> void:
 	if phase != Phase.RESTORING: return
