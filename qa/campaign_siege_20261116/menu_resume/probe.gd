@@ -83,8 +83,8 @@ func _resume() -> void:
 	var session_script: Script = load("res://scripts/run_world_session.gd")
 	var public_session = session_script.new({}, {})
 	var rejected: Dictionary = public_session.prepare_restore(menu,session_script.RestoreEntry.PLAYER_MENU)
-	check(not rejected.get("ok",false) and rejected.get("code","") == "CLASSIC_30_REQUIRED"
-		and current_scene == menu,"release menu policy refuses the campaign slot")
+	check(not rejected.get("ok",false) and rejected.get("code","") == "INSTALLED_IDENTITY_REQUIRED"
+		and current_scene == menu,"release menu admits the chapter and still requires installed identity")
 	public_session.dispose()
 	paused = false
 	flow.operation_finished.connect(_restored.bind(weakref(menu),previous),CONNECT_ONE_SHOT)

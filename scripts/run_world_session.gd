@@ -154,13 +154,15 @@ func prepare_restore(menu: Node, entry := RestoreEntry.INTERNAL) -> Dictionary:
 	var read: Dictionary = _store.read_slot(true)
 	if not read.ok: return read
 	_packet = read.document; _slot_sha = read.file_sha256
-	if entry == RestoreEntry.PLAYER_MENU and _packet.context != Store.CONTEXT: return _bad("CLASSIC_30_REQUIRED")
+	if entry == RestoreEntry.PLAYER_MENU and _packet.context != Store.CONTEXT \
+			and not Profiles.is_player_campaign_context(_packet.context):
+		return _bad("CONTINUE_CONTEXT_NOT_RELEASED")
 	var campaign := Profiles.is_official_campaign_context(_packet.context)
 	if _packet.binding.kind == "uncredited":
 		_local_receipt = LocalLifecycle.new(_packet.binding.token, _slot_root)
 		var local_plan: Dictionary = _local_receipt.prepare_resume(_packet.binding)
 		if not local_plan.ok: return local_plan
-	if entry == RestoreEntry.QA_MENU and campaign:
+	if entry in [RestoreEntry.PLAYER_MENU, RestoreEntry.QA_MENU] and campaign:
 		# The installed profile has already limited this id to the eight chapters.
 		var factory: Script = load("res://scripts/run_%s_world_factory.gd" % _packet.context.level_id)
 		var runtime: Dictionary = factory.prepare_runtime(_trusted)

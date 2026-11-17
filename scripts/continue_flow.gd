@@ -39,8 +39,16 @@ func _private_qa_enabled() -> bool:
 		if OS.get_environment(name).replace("\\", "/").trim_suffix("/") != profile.path_join(name.to_lower()): return false
 	return OS.get_user_data_dir().replace("\\", "/").begins_with(profile.path_join("appdata") + "/")
 
-func _player_context_supported() -> bool:
-	return Campaign.skirmish and not Campaign.skirmish_ai and not Campaign.arena and not Campaign.custom_defense and not Campaign.scenario and Campaign.defense_waves == 30 and Campaign.defense_hero_cap == 4 and not Campaign.defense_random
+func _player_launch_context() -> Dictionary:
+	if Campaign.skirmish_ai or Campaign.arena or Campaign.custom_defense or Campaign.scenario:
+		return {}
+	if Campaign.skirmish:
+		var classic := Campaign.defense_waves == 30 and Campaign.defense_hero_cap == 4 and not Campaign.defense_random
+		return Slot.CONTEXT if classic else {}
+	if Campaign.current < 0 or Campaign.current >= Campaign.LEVELS.size():
+		return {}
+	var context := {"mode": "campaign", "level_id": Campaign.LEVELS[Campaign.current].id, "waves": 0}
+	return context if Session.Profiles.is_player_campaign_context(context) else {}
 
 func busy() -> bool:
 	return phase != Phase.IDLE
@@ -57,7 +65,7 @@ func add_continue_entry(parent: Control, menu: Node) -> void:
 
 func add_save_entry(parent: Control, hud: Node) -> void:
 	if not is_enabled(): return
-	if not _private_qa_enabled() and not _player_context_supported(): return
+	if not _private_qa_enabled() and _player_launch_context().is_empty(): return
 	# HUD builds before setup(owner); resolve its Battle at click time, also for
 	# private restored HUDs whose owner is attached during component activation.
 	var button := _button("保存并退出游戏", func() -> void: request_save_exit(hud.battle))
@@ -146,7 +154,10 @@ func request_save_exit(battle: Node) -> Dictionary:
 	if not is_enabled(): return _bad("CONTINUE_NOT_RELEASED")
 	if busy(): return _bad("OPERATION_BUSY")
 	if not is_instance_valid(battle) or battle != get_tree().current_scene or battle.get_script() != Session.Core.B: return _bad("CURRENT_BATTLE_REQUIRED")
-	if not _private_qa_enabled() and (not _player_context_supported() or battle._official_context != Slot.CONTEXT): return _bad("CLASSIC_30_REQUIRED")
+	if not _private_qa_enabled():
+		var context := _player_launch_context()
+		if context.is_empty() or battle._official_context != context:
+			return _bad("CONTINUE_CONTEXT_NOT_RELEASED")
 	_source = battle
 	_before_paused = get_tree().paused
 	var supported: Dictionary = battle._save_barrier._scope()
@@ -354,7 +365,7 @@ func _error_message(code: String, restoring: bool) -> String:
 	if "TERMINAL" in code or "SETTLED" in code: return "这场战斗已经结束，不能再次继续或领取结算。"
 	if "CONTENT" in code or "SCHEMA" in code or "VERSION" in code or "ENGINE" in code: return "存档内容与当前安装版本不一致，暂时无法继续。"
 	if "STEAM" in code or "RECEIPT" in code: return "当前Steam进度无法安全绑定存档，请保留当前战斗。"
-	if "CLASSIC" in code or code == "UNSUPPORTED_CAPTURE_ENVIRONMENT": return "当前玩法尚不支持中途保存。"
+	if "CLASSIC" in code or code in ["CONTINUE_CONTEXT_NOT_RELEASED", "UNSUPPORTED_CAPTURE_ENVIRONMENT"]: return "当前玩法尚不支持中途保存。"
 	return "读取失败，原存档已保留。" if restoring else "保存未能确认完成，当前战斗已保留。请检查存储后重试。"
 
 func dismiss_error() -> void:

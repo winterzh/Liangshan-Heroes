@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+玩家续玩章节范围由 `scripts/run_official_restore_profile.gd` 声明，菜单与恢复事务共用该范围。首章样板为祝家庄。[祝家庄玩家续玩入口](../qa/campaign_siege_20261116/README.md#祝家庄玩家续玩入口)
+
 战役中途档的驻守英雄上限偏好由 `scripts/run_slot_store.gd` 按存档类型校验，战役接受菜单可产生的四人或六人值。[从史诗驻守返回后的战役续玩](../qa/campaign_siege_20261116/README.md#从史诗驻守返回后的战役续玩)
 
 祝家庄触屏提示来自 `scripts/levels/level3_zhujiazhuang_rts.gd`，四语源分片为 `assets/localization/zhu_touch_controls.json`。[祝家庄触屏操作](../qa/campaign_siege_20261116/README.md#前营采金接应与撤离的触屏提示)

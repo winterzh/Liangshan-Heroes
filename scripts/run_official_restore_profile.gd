@@ -36,6 +36,7 @@ const HG_CONTEXT := {"mode": "campaign", "level_id": "level1", "waves": 0}
 const YEZHU_CONTEXT := {"mode": "campaign", "level_id": "level6", "waves": 0}
 const JIANG_CONTEXT := {"mode": "campaign", "level_id": "level2", "waves": 0}
 const KUAI_CONTEXT := {"mode": "campaign", "level_id": "level7", "waves": 0}
+const PLAYER_CAMPAIGN_CONTEXTS := [ZHU_CONTEXT]
 const CLASSIC_FLAGS := {"skirmish": true, "skirmish_ai": false, "arena": false,
 	"custom_defense": false, "scenario": false, "defense_waves": 30, "defense_random": false}
 const ZHU_FLAGS := {"current": 2, "skirmish": false, "skirmish_ai": false,
@@ -190,3 +191,6 @@ static func is_official_campaign_profile(profile_id: String) -> bool:
 static func is_official_campaign_context(context: Variant) -> bool:
 	var norm := normalize_context(context)
 	return norm.ok and is_official_campaign_profile(norm.profile_id)
+
+static func is_player_campaign_context(context: Dictionary) -> bool:
+	return context in PLAYER_CAMPAIGN_CONTEXTS

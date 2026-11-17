@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[祝家庄玩家续玩入口](../qa/campaign_siege_20261116/README.md#祝家庄玩家续玩入口)的隔离双进程探针与报告位于 `qa/campaign_siege_20261116/player_continue/`。
+
 [从史诗驻守返回后的战役续玩](../qa/campaign_siege_20261116/README.md#从史诗驻守返回后的战役续玩)的菜单探针、报告和运行日志位于 `qa/campaign_siege_20261116/mode_return_resume/`。
 
 [祝家庄触屏操作](../qa/campaign_siege_20261116/README.md#前营采金接应与撤离的触屏提示)的桌面触屏探针和报告位于 `qa/campaign_siege_20261116/touch_controls/`。
