@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+Windows 4cc25919 采用 Godot 4.6.3 导入与 Windows Steam 预设导出。安装身份、原生离线启动、三条编译包入口和六文件指纹已核对。 [候选收据](../qa/battle_entry_timing_20261116/windows_candidate_4cc25919.json)
+
 祝家庄的祠堂和地饰沿用关卡原路线与 PNG／AtlasTexture 解析。Windows 正常出征期间把其纹理加入已有地表读取队列，保存到场景就绪。 [祝家庄布景](../qa/battle_entry_timing_20261116/README.md#祝家庄开场布景贴图后台读取)
 
 Windows 正常出征时，黄泥冈的七名商贩和祝家庄的林冲、六名俘虏在加载期间读取东南待机帧，通过现有动画解析缓存交给开场绘制。使用 Godot 4.6.3 与隔离档案复核缓存、原 SpriteFrames 和两关返回。 [祝家庄首帧](../qa/battle_entry_timing_20261116/README.md#祝家庄开场角色帧后台读取)

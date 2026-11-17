@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[Windows 出征优化候选收据](../qa/battle_entry_timing_20261116/windows_candidate_4cc25919.json)保存原生启动、编译包的三路进场、布景和角色匹配与六文件指纹。
+
 [祝家庄开场布景量测](../qa/battle_entry_timing_20261116/zhu_opening_scenery_prefetch.json)包含搭建、环境和逐物件分段，以及原布景贴图的匹配结果。
 
 [祝家庄开场帧收据](../qa/battle_entry_timing_20261116/zhu_opening_frame_prefetch.json)包含同发行包的绘制分段诊断、源码前后对照及黄泥冈和祝家庄原资源核对。

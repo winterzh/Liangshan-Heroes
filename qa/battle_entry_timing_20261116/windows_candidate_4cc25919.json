@@ -1,0 +1,301 @@
+{
+  "source_commit": "4cc259190d4d570332290cfdf578e3463dd9385f",
+  "scope": "Local Windows candidate. Native offline boot and exact compiled-pack three menu entries and returns. No Steam service calls.",
+  "target": {
+    "app": 5088120,
+    "depot": 5088121,
+    "branch": "default"
+  },
+  "build": {
+    "steps": [
+      {
+        "name": "import",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 84.065
+      },
+      {
+        "name": "export",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 116.807
+      },
+      {
+        "name": "release_boot",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 14.789
+      }
+    ],
+    "identity": {
+      "schema": 1,
+      "rules_sha256": "6b615cda04dae2dc04ba5a994327130a67e9bec735cde015bec1e818f5536221",
+      "source_sha256": "c1db1f219de8de0f56f3bc5d19ed4ae3d1c483674cc06bfb652e2064cbed083c",
+      "file_count": 7112,
+      "total_bytes": 2218256649,
+      "optional_content": [
+        {
+          "path": "content/units.json",
+          "present": false,
+          "bytes": 0,
+          "sha256": ""
+        },
+        {
+          "path": "content/abilities.json",
+          "present": false,
+          "bytes": 0,
+          "sha256": ""
+        }
+      ],
+      "native_files": [
+        {
+          "path": "addons/godotsteam/godotsteam.gdextension",
+          "bytes": 397,
+          "sha256": "448475b100174be41f0036794ea826fbdb85dcbe99d2adf91225f6f943e8b8aa"
+        },
+        {
+          "path": "addons/godotsteam/win64/libgodotsteam.windows.template_debug.x86_64.dll",
+          "bytes": 4304384,
+          "sha256": "da20924a9d29085c2256988b67de47003835910316712302e208e31c00f24b96"
+        },
+        {
+          "path": "addons/godotsteam/win64/libgodotsteam.windows.template_release.x86_64.dll",
+          "bytes": 3961344,
+          "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+        },
+        {
+          "path": "addons/godotsteam/win64/steam_api64.dll",
+          "bytes": 319128,
+          "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+        },
+        {
+          "path": "addons/steam_stats_reader/reader.gdextension",
+          "bytes": 176,
+          "sha256": "8593eb61751725d476f56fcac28c7d98b5065e768d44d4e317f77f774642411a"
+        },
+        {
+          "path": "addons/steam_stats_reader/steam_stats_reader.dll",
+          "bytes": 352768,
+          "sha256": "be9ea866c3e922fc0ddd40f97dede0bab7fd37a9393ad11307b91bba6e70ce6a"
+        }
+      ],
+      "provider_path": "scripts/run_content_identity.gd",
+      "provider_sha256": "38a81eb30d488ff620eec9c15d82cc957be31d8688908604f61362699252e26b"
+    },
+    "tracked_input_count": 6572
+  },
+  "compiled_pack_menu_entries": {
+    "identity": {
+      "code": "OK",
+      "content_version": "source-v1:c1db1f219de8de0f56f3bc5d19ed4ae3d1c483674cc06bfb652e2064cbed083c",
+      "engine_binary_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+      "file_count": 7112,
+      "identity_schema": 1,
+      "identity_scope": "installed_inputs",
+      "ok": true,
+      "optional_content": [
+        {
+          "bytes": 0,
+          "path": "content/units.json",
+          "present": false,
+          "sha256": ""
+        },
+        {
+          "bytes": 0,
+          "path": "content/abilities.json",
+          "present": false,
+          "sha256": ""
+        }
+      ],
+      "provider_sha256": "38a81eb30d488ff620eec9c15d82cc957be31d8688908604f61362699252e26b",
+      "rules_sha256": "6b615cda04dae2dc04ba5a994327130a67e9bec735cde015bec1e818f5536221",
+      "save_code": "OK",
+      "save_eligible": true,
+      "source_mode": false,
+      "source_sha256": "c1db1f219de8de0f56f3bc5d19ed4ae3d1c483674cc06bfb652e2064cbed083c",
+      "total_bytes": 2218256649
+    },
+    "passed": true,
+    "samples": [
+      {
+        "battle_references_released": 5,
+        "click_to_battle_ms": 469.152,
+        "click_to_loading_ms": 29.118,
+        "diagnostic": "normal",
+        "draws": 9,
+        "environment_requests": [
+          "res://assets/campaign/environment/shared/surfaces/surface_field.png",
+          "res://assets/campaign/environment/shared/surfaces/surface_forest_earth.png",
+          "res://assets/campaign/environment/level3/zhujiazhuang_hall.tres",
+          "res://assets/campaign/environment/shared/overlays/twigs_bark.tres",
+          "res://assets/campaign/environment/shared/overlays/roots_moss.tres",
+          "res://assets/campaign/environment/level3/field_edge_bank.tres",
+          "res://assets/campaign/environment/level3/field_edge_stubble.tres",
+          "res://assets/campaign/environment/level3/field_edge_ditch.tres",
+          "res://assets/campaign/environment/level3/field_edge_willow.tres"
+        ],
+        "layer_changed": false,
+        "level": "level3",
+        "longest_draw_gap_ms": 251.41,
+        "mode": "zhu",
+        "mount_markers_ms": {
+          "battle_attached": 171.47,
+          "battle_ready": 315.285,
+          "first_post_draw": 394.029,
+          "first_pre_draw": 380.373,
+          "game_map.gd": 187.688,
+          "hud.gd": 238.438,
+          "unit.gd": 307.893
+        },
+        "picker_to_draw_ms": 29.759,
+        "prepared_opening_frames": [
+          "res://assets/anim/character_traits_v5_lin_chong_gait_idle_se.tres",
+          "res://assets/anim/bound_qin_ming_idle_se.tres",
+          "res://assets/anim/bound_shi_qian_idle_se.tres",
+          "res://assets/anim/bound_yang_lin_idle_se.tres",
+          "res://assets/anim/bound_huang_xin_idle_se.tres",
+          "res://assets/anim/bound_wang_ying_idle_se.tres",
+          "res://assets/anim/bound_deng_fei_idle_se.tres"
+        ],
+        "scan_observed": false,
+        "scenery_routes": {
+          "field_edge_bank": "res://assets/campaign/environment/level3/field_edge_bank.tres",
+          "field_edge_ditch": "res://assets/campaign/environment/level3/field_edge_ditch.tres",
+          "field_edge_stubble": "res://assets/campaign/environment/level3/field_edge_stubble.tres",
+          "field_edge_willow": "res://assets/campaign/environment/level3/field_edge_willow.tres",
+          "roots_moss": "res://assets/campaign/environment/shared/overlays/roots_moss.tres",
+          "twigs_bark": "res://assets/campaign/environment/shared/overlays/twigs_bark.tres",
+          "zhujiazhuang_hall": "res://assets/campaign/environment/level3/zhujiazhuang_hall.tres"
+        },
+        "worst_gap_range_ms": [
+          142.619,
+          394.029
+        ]
+      },
+      {
+        "battle_references_released": 5,
+        "click_to_battle_ms": 1052.592,
+        "click_to_loading_ms": 6.158,
+        "diagnostic": "normal",
+        "draws": 41,
+        "environment_requests": [
+          "res://assets/campaign/environment/shared/surfaces/surface_dry_earth.png",
+          "res://assets/campaign/environment/shared/surfaces/surface_forest_earth.png"
+        ],
+        "layer_changed": false,
+        "level": "level1",
+        "longest_draw_gap_ms": 293.523,
+        "mode": "huang",
+        "mount_markers_ms": {
+          "battle_attached": 570.748,
+          "battle_ready": 712.332,
+          "first_post_draw": 759.058,
+          "first_pre_draw": 756.392,
+          "game_map.gd": 598.973,
+          "hud.gd": 664.82,
+          "unit.gd": 690.624
+        },
+        "picker_to_draw_ms": 15.271,
+        "prepared_opening_frames": [
+          "res://assets/anim/character_traits_v2_chao_gai_merchant_idle_se.tres",
+          "res://assets/anim/character_traits_v2_wu_yong_merchant_idle_se.tres",
+          "res://assets/anim/character_traits_v2_gongsun_sheng_merchant_idle_se.tres",
+          "res://assets/anim/character_traits_v2_liu_tang_merchant_idle_se.tres",
+          "res://assets/anim/character_traits_v2_ruan_xiaoer_merchant_idle_se.tres",
+          "res://assets/anim/character_traits_v2_ruan_xiaowu_merchant_idle_se.tres",
+          "res://assets/anim/character_traits_v2_ruan_xiaoqi_merchant_idle_se.tres"
+        ],
+        "scan_observed": true,
+        "scenery_routes": {},
+        "worst_gap_range_ms": [
+          759.058,
+          1052.581
+        ]
+      },
+      {
+        "battle_references_released": 5,
+        "click_to_battle_ms": 849.506,
+        "click_to_loading_ms": 2.829,
+        "diagnostic": "normal",
+        "draws": 43,
+        "environment_requests": [
+          "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png",
+          "res://assets/campaign/environment/shared/surfaces/surface_forest_earth.png",
+          "res://assets/campaign/environment/shared/surfaces/surface_wet_bank.png"
+        ],
+        "layer_changed": false,
+        "level": "skirmish",
+        "longest_draw_gap_ms": 268.921,
+        "mode": "classic",
+        "mount_markers_ms": {
+          "battle_attached": 562.92,
+          "battle_ready": 744.277,
+          "first_post_draw": 829.133,
+          "first_pre_draw": 822.184,
+          "game_map.gd": 574.433,
+          "hud.gd": 716.987,
+          "unit.gd": 740.747
+        },
+        "picker_to_draw_ms": 28.22,
+        "prepared_opening_frames": [],
+        "scan_observed": true,
+        "scenery_routes": {},
+        "worst_gap_range_ms": [
+          560.212,
+          829.133
+        ]
+      }
+    ],
+    "run_label": "opening_environment",
+    "source_commit": "4cc259190d4d570332290cfdf578e3463dd9385f",
+    "pack_sha256": "9345e3e07c888795e46df7b499426bb9234672c0e14458c8ff19c7ccddfb050b",
+    "rendering": "gl_compatibility",
+    "resolution": [
+      1280,
+      720
+    ],
+    "release_executable_smoke": true,
+    "probe_sha256": "a2a38064e2f59e3e3a0841bd0de42c662714b0c90e14de6d6e11344e97c1fa73",
+    "observation_host": "Godot editor engine with exact embedded Windows Steam pack"
+  },
+  "depot_files": [
+    {
+      "name": "GODOTSTEAM_LICENSE.txt",
+      "bytes": 1110,
+      "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2",
+      "sha1": "3891aeb1976703fc639c168329d90e27c7680a68"
+    },
+    {
+      "name": "LiangshanHeroes.exe",
+      "bytes": 1827429400,
+      "sha256": "9345e3e07c888795e46df7b499426bb9234672c0e14458c8ff19c7ccddfb050b",
+      "sha1": "010abcc6f7bea23c47bddc03dc382f6ca58c82a3"
+    },
+    {
+      "name": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+      "bytes": 1093,
+      "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf",
+      "sha1": "0b594319d5af0b833d7c0da47459b7d51e1fdbd2"
+    },
+    {
+      "name": "libgodotsteam.windows.template_release.x86_64.dll",
+      "bytes": 3961344,
+      "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26",
+      "sha1": "c056eb4e85d902bd548dc9efb22a416b9c658dda"
+    },
+    {
+      "name": "steam_api64.dll",
+      "bytes": 319128,
+      "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c",
+      "sha1": "05ea59cc2b15a10c66277659d5d0b51750460d28"
+    },
+    {
+      "name": "steam_stats_reader.dll",
+      "bytes": 352768,
+      "sha256": "be9ea866c3e922fc0ddd40f97dede0bab7fd37a9393ad11307b91bba6e70ce6a",
+      "sha1": "ac9a932af32cef47cb41a80fc766fd2a401b13ba"
+    }
+  ],
+  "steam_uploaded": false,
+  "live_steam_tested": false
+}
