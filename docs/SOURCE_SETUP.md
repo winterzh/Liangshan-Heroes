@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+离线结算候选调整 `continue_flow.gd`、`steam_service.gd` 和 `run_campaign_progress_coordinator.gd`。联机统计发布前回读原账号的本地结算凭证。[历史 Steam 结算的离线启动](../qa/campaign_siege_20261116/README.md#历史-steam-结算的离线启动)
+
 独立结算候选基于 `4ac1218a` 和旧 `20261117_081141_c3c2eb2f`，记录 24 个覆盖文件的摘要。启动安装校验在后台执行。[结算中断候选复验](../qa/campaign_siege_20261116/README.md#现行版本的结算中断候选)
 
 Windows 续玩样板使用 `2115c08f` 构建，Windows Depot 由四个构建文件与两份已核对许可证组成。[Windows 续玩候选回执](../qa/campaign_siege_20261116/player_continue/windows_candidate_2115c08f.json)
