@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[Windows 战役小修候选](../qa/battle_entry_timing_20261116/README.md#windows-战役小修候选)包含七入口计时、原生 EXE 三关短测和六文件摘要。
+
 [黄泥冈重车落地后续玩](../qa/campaign_transport_groups_20261116/README.md#实战重车落地后续玩)的探针与报告位于 `qa/campaign_transport_groups_20261116/loaded_relay/`。
 
 [黄泥冈载货伤亡实战](../qa/campaign_transport_groups_20261116/README.md#载货途中被击倒与原车接力)的实跑探针、修复前后报告位于 `qa/campaign_transport_groups_20261116/loaded_relay/`。
