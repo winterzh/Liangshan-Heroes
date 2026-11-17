@@ -1,5 +1,7 @@
 # 当前项目总览
 
+整合候选 `413b95bb` 连续模式切换和返回通过。祝家庄仍可见加载动画停顿，独立分段显示战场挂载就绪用时约 247 ms，就绪至下一次绘制约 278 ms。[连续切换与分段](../qa/battle_entry_timing_20261116/README.md#windows-整合候选连续切换)
+
 Windows 整合候选 `413b95bb` 含八章玩家续玩、随机驻守反馈优化和最近四关四语修正。实际编译包已确认对应准入、资源和定向进场。真人及设备验收、Steam 客户端实测与上线待开发收尾。[收据](../qa/battle_entry_timing_20261116/windows_candidate_413b95bb.json)
 
 大名府乔装、断援、分批撤离及失败结算的相关战报通过四语切换检查。待下一份 Windows 候选整合验证。[验证](../qa/battle_entry_localization_20261116/README.md#大名府战报四语)

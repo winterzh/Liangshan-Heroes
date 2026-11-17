@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+`windows_mode_switch_413b95bb.json` 记录 Windows 整合候选六次进入、返回和祝家庄独立挂载分段。[收据](../qa/battle_entry_timing_20261116/windows_mode_switch_413b95bb.json)
+
 八章续玩与四语 Windows 整合候选 `413b95bb` 的导出、准入、词库与进场记录在 [`windows_candidate_413b95bb.json`](../qa/battle_entry_timing_20261116/windows_candidate_413b95bb.json)。
 
 `qa/battle_entry_localization_20261116/daming_notices/` 保存大名府乔装、断援、撤离与失败结算四语验证。[记录](../qa/battle_entry_localization_20261116/README.md#大名府战报四语)
