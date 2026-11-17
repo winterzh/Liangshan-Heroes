@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[继续上次战斗后台校验](../qa/battle_entry_timing_20261116/README.md#继续上次战斗后台校验)记录空档返回、工作线程接管和独立进程续玩。
+
 [Windows 候选 d645e44f](../qa/battle_entry_timing_20261116/windows_candidate_d645e44f.json)含离线原生启动、编译包六入口和六文件摘要。
 
 [Windows 战役提示整合候选收据](../qa/battle_entry_timing_20261116/windows_candidate_d8085327.json)包含正式可执行文件离线启动、编译包六入口和六文件摘要。

@@ -11,6 +11,7 @@ enum Phase { IDLE, CONFIRM, SAVING, RESTORING, ERROR, EXITING, EXIT_CONFIRM, SET
 var phase := Phase.IDLE
 var last_result: Dictionary = {}
 var _source: Node
+var _restore_scan: RefCounted
 var _expected: Dictionary = {}
 var _session: RefCounted
 var _overlay: Control
@@ -232,8 +233,9 @@ func request_continue(menu: Node) -> Dictionary:
 	if not is_enabled(): return _bad("CONTINUE_NOT_RELEASED")
 	if busy(): return _bad("OPERATION_BUSY")
 	if not is_instance_valid(menu) or menu != get_tree().current_scene or menu.get_script() != Session.MenuScript: return _bad("CURRENT_MENU_REQUIRED")
+	if menu.get_node_or_null("BattleLoading") != null: return _bad("OPERATION_BUSY")
 	phase = Phase.RESTORING
-	menu.cancel_battle_prewarm()
+	_restore_scan = menu.take_battle_prewarm()
 	_source = menu
 	_before_paused = get_tree().paused
 	get_tree().paused = true
@@ -260,7 +262,24 @@ func _unfreeze_menu() -> void:
 
 func _restore() -> void:
 	if phase != Phase.RESTORING: return
-	var trusted := ContentIdentity.new().resolve_runtime_identity()
+	var slot_dir: String = Slot.new().directory
+	if not slot_dir.is_empty() and not DirAccess.dir_exists_absolute(slot_dir):
+		_cancel_restore_scan()
+		_fail(_bad("NO_SLOT"), true)
+		return
+	if _restore_scan == null:
+		_restore_scan = ContentIdentity.new()
+		if _restore_scan.begin_runtime_identity_scan() != OK:
+			_restore_scan = null
+			_fail(_bad("IDENTITY_SCAN_START_FAILED"), true)
+			return
+	while _restore_scan.runtime_identity_scan_pending():
+		await get_tree().process_frame
+	var trusted: Dictionary = _restore_scan.finish_runtime_identity_scan()
+	_restore_scan = null
+	if trusted.get("code") == "PREWARM_EXECUTABLE_CHANGED":
+		_restore.call_deferred()
+		return
 	if not trusted.ok: _fail(trusted, true); return
 	_session = Session.new(trusted, _runtime())
 	var entry := Session.RestoreEntry.QA_MENU if _private_qa_enabled() else Session.RestoreEntry.PLAYER_MENU
@@ -283,6 +302,14 @@ func _restore() -> void:
 	last_result = {"ok": true, "generation": installed.generation, "paused": installed.paused, "steam_credit": installed.steam_credit}
 	set_process(true)
 	operation_finished.emit(last_result)
+
+func _cancel_restore_scan() -> void:
+	if _restore_scan != null:
+		_restore_scan.cancel_runtime_identity_scan()
+		_restore_scan = null
+
+func _exit_tree() -> void:
+	_cancel_restore_scan()
 
 func _process(_delta: float) -> void:
 	if _graph_owner != null and _graph_owner.get_ref() == null:

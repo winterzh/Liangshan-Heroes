@@ -1,0 +1,56 @@
+{
+  "passed": true,
+  "source_commit": "4aa93e53439e20c525ce1a0a5bd52d6d0513d8d2",
+  "probe_sources_lf_sha256": {
+    "scripts/battle.gd": "674532760ede5c9db4deb45bcf032800e9c7b83cbba0520109ec834831fecfec",
+    "scripts/menu.gd": "5df952cf65f5c376cbf7c7b23f9a9e1942bd2fc67ab3d8651acbf0e158aee8b7",
+    "scripts/continue_flow.gd": "2021ed1d64fd7dd02d9b53f26f903da725da83bdf3a1a5b6354a3cad4c8d5dcf",
+    "scripts/run_world_session.gd": "d149062a3dac05d0812978b6c476d72863bec68dc8d6cdc45af5fb676d2c0bd6",
+    "qa/battle_entry_timing_20261116/background_continue/probe.gd": "c82850a9eb3b36e5ec44ee7c4596140be1075d28ef84abbac4419aa77eb04488"
+  },
+  "stages": [
+    {
+      "checks": 7,
+      "facts": {
+        "generation": 1,
+        "identity": "source-v1:7b6cb8a5c7f3ceb457542eb7387638f42a821395cabcbd9cfd35b9258a9fec25",
+        "no_slot_ms": 20.786,
+        "result_code": ""
+      },
+      "failures": [],
+      "pid": 34916,
+      "stage": "save",
+      "exit_code": 0,
+      "seconds": 33.833,
+      "engine_errors": []
+    },
+    {
+      "checks": 12,
+      "facts": {
+        "continue_ms": 15605.486,
+        "rendered_while_scanning": 2462,
+        "result_code": ""
+      },
+      "failures": [],
+      "pid": 30764,
+      "stage": "resume",
+      "exit_code": 0,
+      "seconds": 26.753,
+      "engine_errors": []
+    }
+  ],
+  "source_sortie_baseline": {
+    "sample": {
+      "callback_ms": 2.082,
+      "first_battle_ms": 29192.562,
+      "first_loading_ms": 9.362,
+      "initial_frame_at": 6328725,
+      "loading_at_first_frame": true,
+      "requests_at_first_frame": 7,
+      "requests_on_click": 7
+    },
+    "exit_code": 0,
+    "seconds": 36.065,
+    "base_commit": "4aa93e53439e20c525ce1a0a5bd52d6d0513d8d2"
+  }
+}

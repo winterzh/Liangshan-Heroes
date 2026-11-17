@@ -222,9 +222,12 @@ func _cancel_battle_scan() -> void:
 		_entry_scan = null
 
 
-func cancel_battle_prewarm() -> void:
-	if _entry_overlay == null:
-		_cancel_battle_scan()
+func take_battle_prewarm() -> RefCounted:
+	if _entry_overlay != null:
+		return null
+	var scan := _entry_scan
+	_entry_scan = null
+	return scan
 
 
 func _exit_tree() -> void:
