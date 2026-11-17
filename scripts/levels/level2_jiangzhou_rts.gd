@@ -9,6 +9,7 @@ const DOCK_CAMP := Vector2i(10,46)
 const DOCK := Vector2i(10,50)
 const BAILONG := Vector2i(14,43)
 const BAILONG_RADIUS := 130.0
+const BOARDING_THREAT_RADIUS := 150.0
 const CITY_POST := Vector2i(44,25)
 const CACHE_CELLS := [Vector2i(13,23),Vector2i(28,41)]
 const WEST_ROUTE := [Vector2i(22,28),Vector2i(18,34),Vector2i(14,40),BAILONG]
@@ -117,8 +118,9 @@ func decorate(map: GameMap) -> void:
 func living(u) -> bool: return is_instance_valid(u) and u.hp>0
 func active(u) -> bool: return living(u) and u.story_outcome==""
 func _near(b,u,cell: Vector2i,radius: float) -> bool: return active(u) and u.position.distance_to(b.map.cell_to_world(cell))<radius
-func _enemy_near(b,p: Vector2,radius: float) -> bool:
-	return b.units.any(func(u): return active(u) and u.faction==1 and not u.is_building and u.position.distance_to(p)<radius)
+func _enemy_near(b,p: Vector2,radius: float,visible_only := false) -> bool:
+	return b.units.any(func(u): return active(u) and u.faction==1 and not u.is_building and u.position.distance_to(p)<radius \
+		and (not visible_only or (u._invis_t <= 0.0 and b.is_visible_world(u.position))))
 func _guard(b,key: String,cell: Vector2i) -> Unit:
 	var u: Unit=b.spawn_at(key,1,cell)
 	if u == null:
@@ -390,8 +392,8 @@ func on_mission_action(b,key: String,actor) -> void:
 			var expected: Unit=song_freed if key=="board_song" else dai_freed
 			if actor!=expected or not active(actor):
 				return
-			if _enemy_near(b,actor.position,150):
-				_retry(b,key,"登船处仍有近身官军，请护卫清开150距离内的追兵。")
+			if _enemy_near(b,actor.position,BOARDING_THREAT_RADIUS):
+				_retry(b,key,"有官军挡住登船。让护卫清开登船点，再下达登船指令。")
 				return
 			actor.resolve_story("embarked")
 			b.mission.mark(key,Localize.text(actor.display_name)+Localize.text("已活着登船。"))
@@ -558,7 +560,9 @@ func process(b,delta: float) -> void:
 			execution_halted=true
 			b.mission.mark("execution_halted","两名刽子手均被打倒，行刑已中断。")
 			b.mission.set_title("救人 · 分别解缚")
-			b.mission.set_objective("行刑已停。选中好汉，分别右键宋江和戴宗身旁的解缚旗标，留兵挡住官军。")
+			var rescue_prompt := "行刑已停。选中好汉，分别轻点宋江和戴宗身旁的解缚旗标，留兵挡住官军。" if b.hud.touch_ui \
+				else "行刑已停。选中好汉，分别右键宋江和戴宗身旁的解缚旗标，留兵挡住官军。"
+			b.mission.set_objective(rescue_prompt)
 			for rec in [["free_song",-1,"宋江"],["free_dai",1,"戴宗"]]:
 				b.mission.add_action(rec[0],Localize.text("好汉 · 救下")+rec[2],SCAFFOLD+Vector2i(rec[1],1),RESCUERS,1.3,130,22)
 		elif exec_left<=0:
@@ -587,7 +591,7 @@ func process(b,delta: float) -> void:
 	if rally:
 		for key in NAMED:
 			var u=named_units.get(key)
-			if _near(b,u,DOCK,120) and not _enemy_near(b,u.position,150):
+			if _near(b,u,DOCK,120) and not _enemy_near(b,u.position,BOARDING_THREAT_RADIUS):
 				u.resolve_story("embarked")
 		_update_dock_guidance(b)
 	_update_escort_objective(b)
@@ -618,6 +622,20 @@ func on_unit_died(b,u) -> void:
 		b.mission.miss_story_goal("named_survive","已有具名好汉阵亡。")
 		if u.key in ["zhang_shun","zhang_heng"] and not meeting:
 			b.mission.miss_story_goal("bailong_meeting","接应好汉已阵亡，可直接护送宋江戴宗到码头完成核心营救。")
+
+func unit_tactical_hint(b, actor) -> String:
+	if not active(actor) or actor not in [song_freed,dai_freed] or b.mission == null:
+		return ""
+	var action: Dictionary = b.mission.actions.get("board_song" if actor == song_freed else "board_dai",{})
+	if action.is_empty() or action.done:
+		return ""
+	var destination: Vector2 = b.map.cell_to_world(action.cell)
+	if actor.position.distance_to(destination) <= float(action.reach) \
+			and _enemy_near(b,actor.position,BOARDING_THREAT_RADIUS,true):
+		return Localize.text("登船点附近有官军。先派护卫清开，再下达登船指令。")
+	return Localize.text("无法作战。让护卫开路，再轻点此人的登船旗标。" if b.hud.touch_ui \
+		else "无法作战。让护卫开路，再右键此人的登船旗标。")
+
 func top_status(_b) -> String:
 	var situation := Localize.format_text("行刑剩余%d秒", ceili(exec_left))
 	if execution_halted:

@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[江州登船提示](../qa/campaign_pursuit_20261116/README.md#登船点危险提示与触屏指令)的桌面触屏探针与报告位于 `qa/campaign_pursuit_20261116/boarding_controls/`。
+
 [三个短篇的任务提示](../qa/battle_entry_timing_20261116/README.md#三个短篇的任务提示)的桌面触屏探针与报告位于 `qa/battle_entry_timing_20261116/short_chapter_controls/`。
 
 [触屏任务旗标](../qa/battle_entry_timing_20261116/README.md#触屏任务旗标与提示)含野猪林触屏预览探针和报告，位于 `qa/battle_entry_timing_20261116/touch_mission/`。
