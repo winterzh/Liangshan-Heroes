@@ -1,0 +1,186 @@
+{
+  "passed": true,
+  "source_commit": "e52a0d7760175b11cc7975d54df9e6b666ab5cb3",
+  "probe_sources_lf_sha256": {
+    "qa/campaign_fire_readiness_20261116/menu_resume/probe.gd": "27d75ad410a725e63a4995fd824de275a4e11de7c3ec7e958dc8e29a2e826a60",
+    "scripts/battle.gd": "674532760ede5c9db4deb45bcf032800e9c7b83cbba0520109ec834831fecfec",
+    "scripts/continue_flow.gd": "2021ed1d64fd7dd02d9b53f26f903da725da83bdf3a1a5b6354a3cad4c8d5dcf",
+    "scripts/run_world_session.gd": "d149062a3dac05d0812978b6c476d72863bec68dc8d6cdc45af5fb676d2c0bd6",
+    "scripts/run_unit_graph.gd": "30f9f9af7e04cf37935005d1bb9dbb96b423a972ab0e2f9bf0c5c9e7b2f74bfc",
+    "scripts/levels/level5_gao_rts.gd": "d68b8cda94dfc2d151fa42eb72319b7fc97a33bc5e015c678510fd0f15ee93f1",
+    "tools/gao_rts_play.gd": "22532e061b01f5aacc0a037807c19ea60433c0f1e5654ee9fd99f563893932d9"
+  },
+  "stages": [
+    {
+      "checks": 7,
+      "facts": {
+        "checkpoint": {
+          "abandoned": false,
+          "carried_person": "刘唐",
+          "carrier": "29",
+          "clock": 356.666666666652,
+          "events": [
+            "action:gao_rts:gao_fire_1",
+            "action:gao_rts:gao_lure_side",
+            "action:gao_rts:gao_prepare",
+            "action:gao_rts:gao_wind",
+            "fireboat_prepared",
+            "fleet_in_ambush",
+            "gao_fire_lit",
+            "gao_land_cleared",
+            "gao_land_post_destroyed",
+            "gongsun_wind",
+            "liu_tang_fire_leader"
+          ],
+          "fireboat": "32",
+          "fireboat_outcome": "retreated",
+          "flames": [
+            {
+              "caster": "32",
+              "pos": [
+                1250.86853027344,
+                1282.33752441406
+              ],
+              "radius": 230.0,
+              "remaining": 7.46666666666667,
+              "tick": 0.466666666666667
+            }
+          ],
+          "gold": 702,
+          "ignited": true,
+          "liu": "6",
+          "liu_outcome": "embarked",
+          "waves": [
+            {
+              "sent": true,
+              "time": 140.0,
+              "warned": true
+            },
+            {
+              "sent": true,
+              "time": 330.0,
+              "warned": true
+            },
+            {
+              "sent": false,
+              "time": 540.0,
+              "warned": false
+            }
+          ],
+          "wood": 431
+        },
+        "generation": 1,
+        "result_code": ""
+      },
+      "failures": [],
+      "pid": 18060,
+      "stage": "save",
+      "exit_code": 0,
+      "seconds": 132.754,
+      "engine_errors": []
+    },
+    {
+      "checks": 14,
+      "facts": {
+        "game_seconds_at_result": 466.733333333312,
+        "live": {
+          "buildings_started": 5,
+          "camp_hp": 1500.0,
+          "enemy_paid_produced": [
+            10,
+            4
+          ],
+          "enemy_spent_gold": 607,
+          "enemy_spent_wood": 358,
+          "events": [
+            "action:gao_rts:gao_lure_side",
+            "action:gao_rts:gao_wind",
+            "gongsun_wind",
+            "fleet_in_ambush",
+            "action:gao_rts:gao_prepare",
+            "liu_tang_fire_leader",
+            "fireboat_prepared",
+            "gao_land_post_destroyed",
+            "action:gao_rts:gao_fire_1",
+            "gao_land_cleared",
+            "gao_fire_lit",
+            "action:gao_rts:gao_fire_withdraw",
+            "fire_escort_safe",
+            "action:gao_rts:gao_liu_return",
+            "gao_liu_returned",
+            "gao_sea_post_destroyed",
+            "flagship_disabled",
+            "gao_basic_victory"
+          ],
+          "game_seconds": 466.666666666652,
+          "orders": 758,
+          "result": {
+            "contract_version": 3,
+            "core_cleared": true,
+            "core_goal": "守住忠义堂和宋江，击退三批水陆主力，打停高俅座船。可直接收兵通关；生擒并押回堂前是可选演义目标。",
+            "done_ids": [
+              "gao_lure",
+              "gao_fire",
+              "gao_land"
+            ],
+            "goals": [
+              {
+                "id": "gao_lure",
+                "label": "阮小七引活官船进入港汊伏区",
+                "note": "",
+                "reason": "",
+                "state": "done"
+              },
+              {
+                "id": "gao_fire",
+                "label": "公孙胜祭风、刘唐登船举火，护两艘接应船撤离",
+                "note": "",
+                "reason": "",
+                "state": "done"
+              },
+              {
+                "id": "gao_land",
+                "label": "击退岸军并拔除山前补给营",
+                "note": "",
+                "reason": "",
+                "state": "done"
+              },
+              {
+                "id": "gao_capture",
+                "label": "封港凿船、水上接俘、返航后实际押至忠义堂",
+                "note": "",
+                "reason": "本局未完成",
+                "state": "missed"
+              }
+            ],
+            "missed_ids": [
+              "gao_capture"
+            ],
+            "pending_ids": [],
+            "story_complete": false,
+            "story_done": 3,
+            "story_total": 4
+          },
+          "skill_orders": 22,
+          "story_phase": "finished_fire",
+          "units_queued": 54,
+          "units_queued_by_key": {
+            "liang_dao": 12,
+            "liang_gong": 11,
+            "liang_qiang": 14.0,
+            "liangshan_warship": 12,
+            "lou_luo": 5.0
+          }
+        },
+        "result_code": "",
+        "returned_liu": "6"
+      },
+      "failures": [],
+      "pid": 28140,
+      "stage": "resume",
+      "exit_code": 0,
+      "seconds": 62.772,
+      "engine_errors": []
+    }
+  ]
+}

@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[高俅举火后续玩](../qa/campaign_fire_readiness_20261116/README.md#内港举火后续玩)保留实战中的火区存档、原载船恢复和撤离结果。
+
 [大名府强攻续玩](../qa/campaign_wounded_selection_20261116/README.md#强攻后分批撤离续玩)记录分批撤离的存档修复和续玩证据。
 
 [大名府举火夺门后续玩](../qa/campaign_wounded_selection_20261116/README.md#举火夺门后续玩)保留独立保存、读档和撤离实战报告。

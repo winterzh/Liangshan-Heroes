@@ -1,6 +1,7 @@
 extends "res://tools/zhujiazhuang_rts_test.gd"
 ## GAO_ROUTE=assault|story, GAO_VISUAL=1. Real player commands/costs/combat.
 ## No money, damage, unit, position or mission-result injection in this tool.
+const GAO_BUILD_CELLS := [Vector2i(24,26),Vector2i(26,40),Vector2i(14,42),Vector2i(10,43),Vector2i(21,40),Vector2i(26,23),Vector2i(9,31),Vector2i(15,24)]
 var skill_orders := 0
 var captured := {}
 var story_phase := "lure"
@@ -15,7 +16,7 @@ func _run() -> void:
 	if route=="": route="assault"
 	out_dir="res://.godot/gao_rts/"+route
 	DirAccess.make_dir_recursive_absolute(out_dir)
-	build_cells=[Vector2i(24,26),Vector2i(26,40),Vector2i(14,42),Vector2i(10,43),Vector2i(21,40),Vector2i(26,23),Vector2i(9,31),Vector2i(15,24)]
+	build_cells=GAO_BUILD_CELLS.duplicate()
 	var b=await _start("",4)
 	Engine.time_scale=4
 	await _play_gao(b)
@@ -127,15 +128,18 @@ func _story(b,time: float) -> void:
 		"land":
 			_action(b,l.carrier,"gao_land")
 			if l.landed: story_phase="escort"
-func _play_gao(b) -> void:
+func _play_gao(b, stop_at := Callable(), resume := false) -> void:
 	var l=b.level
-	var time := 0.0
-	var next_log := 0.0
+	var time: float = l.elapsed if resume else 0.0
+	var next_log := time
 	var start_hall=l.hall
-	b.select_members([l.song],false)
-	b._issue_order(b.to_screen(l.hall.position),false)
-	await _shot(b,"camp",Vector2i(23,38))
+	if not resume:
+		b.select_members([l.song],false)
+		b._issue_order(b.to_screen(l.hall.position),false)
+		await _shot(b,"camp",Vector2i(23,38))
 	while b.phase==b.Phase.FIGHT and time<1100:
+		if stop_at.is_valid() and stop_at.call():
+			return
 		_economy_gao(b)
 		if route=="story": _story(b,time)
 		var army: Array=b.units.filter(func(u): return alive(u) and u.faction==0 and u!=l.song and not u.is_worker and not u.is_building and not u.is_noncombat and u.movement_profile=="land" and b.mission._actor!=u)

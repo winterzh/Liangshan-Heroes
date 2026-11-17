@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+高俅内港举火续玩使用 Windows Godot 4.6.3 Compatibility、独立档案和隔离菜单。探针在真实点火后保存，再从主菜单读档，继续实际撤离、返港和收兵。[高俅续玩](../qa/campaign_fire_readiness_20261116/README.md#内港举火后续玩)
+
 大名府单位契约保存已撤离的原伤员。整局存档在捕获及恢复两侧检查对应事件，使用现有单位、关卡和任务字段。复跑强攻设 `DAMING_MENU_ROUTE=assault`，沿用隔离的双进程战役菜单探针。[大名府强攻续玩](../qa/campaign_wounded_selection_20261116/README.md#强攻后分批撤离续玩)
 
 大名府续玩复用举火路线自动驾驶与正式存档按钮。Windows Godot 4.6.3 使用独立档案，第一进程保存退出，第二进程由主菜单继续。探针只读取守军和伤员状态，撤离走既有玩家指令。[大名府举火夺门后续玩](../qa/campaign_wounded_selection_20261116/README.md#举火夺门后续玩)
