@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[Windows 候选 d645e44f](../qa/battle_entry_timing_20261116/windows_candidate_d645e44f.json)含离线原生启动、编译包六入口和六文件摘要。
+
 [Windows 战役提示整合候选收据](../qa/battle_entry_timing_20261116/windows_candidate_d8085327.json)包含正式可执行文件离线启动、编译包六入口和六文件摘要。
 
 [祝家庄查看与四语定向记录](../qa/campaign_siege_20261116/scouting_hints/report.json)含实际点击、迷雾和英文窄窗。

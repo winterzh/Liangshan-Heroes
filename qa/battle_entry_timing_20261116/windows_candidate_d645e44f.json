@@ -1,0 +1,416 @@
+{
+  "source_commit": "d645e44fb391546bdcdc1a872ba9d433fa049054",
+  "runtime_source_commit": "d645e44fb391546bdcdc1a872ba9d433fa049054",
+  "scope": "Local Steam Depot candidate without Steam upload. Native offline boot and menu checks on the exact compiled pack in the editor host.",
+  "target": {
+    "app": 5088120,
+    "depot": 5088121,
+    "branch": "default"
+  },
+  "previous_public_receipt": {
+    "build": 26699320,
+    "windows_manifest": "3231099744923356430"
+  },
+  "build": {
+    "source_commit": "d645e44fb391546bdcdc1a872ba9d433fa049054",
+    "runtime_source_commit": "d645e44fb391546bdcdc1a872ba9d433fa049054",
+    "preset": "Windows Steam",
+    "complete": true,
+    "steps": [
+      {
+        "name": "import",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 70.455
+      },
+      {
+        "name": "export",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 92.461
+      },
+      {
+        "name": "release_boot",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 12.736
+      }
+    ],
+    "tracked_input_count": 6550,
+    "template_sha256": "91724f15024a3a545e28ccd83134403d31ce2323a38e51c95e4dfa282f732ab6",
+    "console_engine_sha256": "63b3b2208819714c9677fbfdd8217c5b7dee8ecf5f383502e826bc9e2227ff5a",
+    "identity": {
+      "schema": 1,
+      "rules_sha256": "6b615cda04dae2dc04ba5a994327130a67e9bec735cde015bec1e818f5536221",
+      "source_sha256": "23f1b6eeef9be555c378aacbeff1b671411fcc2599cb34f8e7744df5346fa42b",
+      "file_count": 7090,
+      "total_bytes": 2217941016,
+      "optional_content": [
+        {
+          "path": "content/units.json",
+          "present": false,
+          "bytes": 0,
+          "sha256": ""
+        },
+        {
+          "path": "content/abilities.json",
+          "present": false,
+          "bytes": 0,
+          "sha256": ""
+        }
+      ],
+      "native_files": [
+        {
+          "path": "addons/godotsteam/godotsteam.gdextension",
+          "bytes": 397,
+          "sha256": "448475b100174be41f0036794ea826fbdb85dcbe99d2adf91225f6f943e8b8aa"
+        },
+        {
+          "path": "addons/godotsteam/win64/libgodotsteam.windows.template_debug.x86_64.dll",
+          "bytes": 4304384,
+          "sha256": "da20924a9d29085c2256988b67de47003835910316712302e208e31c00f24b96"
+        },
+        {
+          "path": "addons/godotsteam/win64/libgodotsteam.windows.template_release.x86_64.dll",
+          "bytes": 3961344,
+          "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+        },
+        {
+          "path": "addons/godotsteam/win64/steam_api64.dll",
+          "bytes": 319128,
+          "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+        },
+        {
+          "path": "addons/steam_stats_reader/reader.gdextension",
+          "bytes": 176,
+          "sha256": "8593eb61751725d476f56fcac28c7d98b5065e768d44d4e317f77f774642411a"
+        },
+        {
+          "path": "addons/steam_stats_reader/steam_stats_reader.dll",
+          "bytes": 352768,
+          "sha256": "be9ea866c3e922fc0ddd40f97dede0bab7fd37a9393ad11307b91bba6e70ce6a"
+        }
+      ],
+      "provider_path": "scripts/run_content_identity.gd",
+      "provider_sha256": "d59ea6f38e160e18f4a09db131701ebc54a0031cb201d4eab9c0062552f04a33"
+    },
+    "files": [
+      {
+        "name": "LiangshanHeroes.exe",
+        "bytes": 1827205280,
+        "sha256": "ae8b08734b3c2538fd4209da3589fa83b395e5717b1ecd6c467a2c2c096ee25e"
+      },
+      {
+        "name": "libgodotsteam.windows.template_release.x86_64.dll",
+        "bytes": 3961344,
+        "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+      },
+      {
+        "name": "steam_api64.dll",
+        "bytes": 319128,
+        "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+      },
+      {
+        "name": "steam_stats_reader.dll",
+        "bytes": 352768,
+        "sha256": "be9ea866c3e922fc0ddd40f97dede0bab7fd37a9393ad11307b91bba6e70ce6a"
+      }
+    ]
+  },
+  "compiled_pack_menu": {
+    "passed": true,
+    "source_commit": "d645e44fb391546bdcdc1a872ba9d433fa049054",
+    "runtime_source_commit": "d645e44fb391546bdcdc1a872ba9d433fa049054",
+    "launch_type": "Godot 4.6.3 editor host loading exact compiled release pack via --main-pack",
+    "release_executable_booted_separately": true,
+    "native_release_executable_interactive_timing": false,
+    "rendering": "gl_compatibility",
+    "resolution": [
+      1280,
+      720
+    ],
+    "other_engine_active_at_launch": false,
+    "identity": {
+      "code": "OK",
+      "content_version": "source-v1:23f1b6eeef9be555c378aacbeff1b671411fcc2599cb34f8e7744df5346fa42b",
+      "engine_binary_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+      "file_count": 7090,
+      "identity_schema": 1,
+      "identity_scope": "installed_inputs",
+      "ok": true,
+      "optional_content": [
+        {
+          "bytes": 0,
+          "path": "content/units.json",
+          "present": false,
+          "sha256": ""
+        },
+        {
+          "bytes": 0,
+          "path": "content/abilities.json",
+          "present": false,
+          "sha256": ""
+        }
+      ],
+      "provider_sha256": "d59ea6f38e160e18f4a09db131701ebc54a0031cb201d4eab9c0062552f04a33",
+      "rules_sha256": "6b615cda04dae2dc04ba5a994327130a67e9bec735cde015bec1e818f5536221",
+      "save_code": "OK",
+      "save_eligible": true,
+      "source_mode": false,
+      "source_sha256": "23f1b6eeef9be555c378aacbeff1b671411fcc2599cb34f8e7744df5346fa42b",
+      "total_bytes": 2217941016
+    },
+    "modes": [
+      {
+        "mode": "level1",
+        "samples": [
+          {
+            "battle_attached_to_scene_ready_ms": 189.99,
+            "cpu_cursor": true,
+            "entry_to_battle_attached_ms": 560.31,
+            "entry_to_first_battle_render_ms": 858.1,
+            "entry_to_first_render_ms": 205.9,
+            "frames_before_scene_ready": 27,
+            "initial_cap": 0,
+            "intro_pages": 3,
+            "loading_cap": 72,
+            "loading_caption": "Preparing battle · The Birthday Tribute Heist",
+            "locale": "en",
+            "merchant_requests": 7,
+            "mode_page_ms": 35.38,
+            "new_gameplay": {
+              "loaded_relay_report": "Chao Gai fell. Cart 1 remains here; load count: 2. A surviving Star can take over."
+            },
+            "prefetched_ship_textures": [],
+            "prewarmed_merchants": {
+              "chao_gai": "res://assets/anim/character_traits_v2_chao_gai_merchant_idle_se.tres",
+              "gongsun_sheng": "res://assets/anim/character_traits_v2_gongsun_sheng_merchant_idle_se.tres",
+              "liu_tang": "res://assets/anim/character_traits_v2_liu_tang_merchant_idle_se.tres",
+              "ruan_xiaoer": "res://assets/anim/character_traits_v2_ruan_xiaoer_merchant_idle_se.tres",
+              "ruan_xiaoqi": "res://assets/anim/character_traits_v2_ruan_xiaoqi_merchant_idle_se.tres",
+              "ruan_xiaowu": "res://assets/anim/character_traits_v2_ruan_xiaowu_merchant_idle_se.tres",
+              "wu_yong": "res://assets/anim/character_traits_v2_wu_yong_merchant_idle_se.tres"
+            },
+            "released_battle_references": 5,
+            "restored_cap": 0,
+            "scene_ready_to_first_battle_render_ms": 107.79,
+            "start_button_to_fight_render_ms": 38.17,
+            "surface_paths": [],
+            "visit": 1
+          }
+        ]
+      },
+      {
+        "mode": "level3",
+        "samples": [
+          {
+            "battle_attached_to_scene_ready_ms": 298.9,
+            "cpu_cursor": true,
+            "entry_to_battle_attached_ms": 593.02,
+            "entry_to_first_battle_render_ms": 1190.99,
+            "entry_to_first_render_ms": 57.14,
+            "frames_before_scene_ready": 40,
+            "initial_cap": 0,
+            "intro_pages": 3,
+            "loading_cap": 72,
+            "loading_caption": "正在準備戰鬥 · 三打祝家莊",
+            "locale": "zh_TW",
+            "merchant_requests": 0,
+            "mode_page_ms": 16.17,
+            "new_gameplay": {
+              "camp_gold_feedback": "此礦約剩1400金，1名工人採運。選工人右鍵金礦可採集。",
+              "outpost_hidden_hint_empty": true,
+              "outpost_visible_hint": "拆掉外營可斷新援；已出擊的莊客仍在場。"
+            },
+            "prefetched_ship_textures": [],
+            "prewarmed_merchants": {},
+            "released_battle_references": 5,
+            "restored_cap": 0,
+            "scene_ready_to_first_battle_render_ms": 299.07,
+            "start_button_to_fight_render_ms": 14.28,
+            "surface_paths": [],
+            "visit": 1
+          }
+        ]
+      },
+      {
+        "mode": "level5",
+        "samples": [
+          {
+            "battle_attached_to_scene_ready_ms": 224.84,
+            "cpu_cursor": true,
+            "entry_to_battle_attached_ms": 537.42,
+            "entry_to_first_battle_render_ms": 909.57,
+            "entry_to_first_render_ms": 17.43,
+            "frames_before_scene_ready": 38,
+            "initial_cap": 0,
+            "intro_pages": 4,
+            "loading_cap": 72,
+            "loading_caption": "Preparing battle · Three Defeats for Marshal Gao",
+            "locale": "en",
+            "merchant_requests": 0,
+            "mode_page_ms": 14.91,
+            "new_gameplay": {
+              "locators": {
+                "东山关防线": "View · East Gate Defense",
+                "内港接战线": "View · Inner Harbor Line"
+              },
+              "previous_to_launch_warning": "The first wave leaves in about 25 seconds. Hold East Gate and keep warships close enough to support your shore archers."
+            },
+            "prefetched_ship_textures": [
+              "res://assets/campaign/objects/official_warship_default_nw.png",
+              "res://assets/campaign/objects/official_warship_default_sw.png"
+            ],
+            "prewarmed_merchants": {},
+            "released_battle_references": 5,
+            "restored_cap": 0,
+            "scene_ready_to_first_battle_render_ms": 147.32,
+            "start_button_to_fight_render_ms": 29.34,
+            "surface_paths": [
+              "res://assets/campaign/environment/shared/surfaces/surface_forest_earth.png",
+              "res://assets/campaign/environment/shared/surfaces/surface_wet_bank.png",
+              "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png"
+            ],
+            "visit": 1
+          }
+        ]
+      },
+      {
+        "mode": "skirmish",
+        "samples": [
+          {
+            "battle_attached_to_scene_ready_ms": 143.3,
+            "cpu_cursor": true,
+            "entry_to_battle_attached_ms": 509.65,
+            "entry_to_first_battle_render_ms": 734.49,
+            "entry_to_first_render_ms": 46.22,
+            "frames_before_scene_ready": 35,
+            "initial_cap": 0,
+            "intro_pages": 2,
+            "loading_cap": 72,
+            "loading_caption": "戦闘を準備中 · 防衛戦",
+            "locale": "ja",
+            "merchant_requests": 0,
+            "mode_page_ms": 32.01,
+            "new_gameplay": {},
+            "prefetched_ship_textures": [],
+            "prewarmed_merchants": {},
+            "released_battle_references": 5,
+            "restored_cap": 0,
+            "scene_ready_to_first_battle_render_ms": 81.54,
+            "start_button_to_fight_render_ms": null,
+            "surface_paths": [
+              "res://assets/campaign/environment/shared/surfaces/surface_forest_earth.png",
+              "res://assets/campaign/environment/shared/surfaces/surface_wet_bank.png",
+              "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png"
+            ],
+            "visit": 1
+          }
+        ]
+      },
+      {
+        "mode": "skirmish_ai",
+        "samples": [
+          {
+            "battle_attached_to_scene_ready_ms": 52.93,
+            "cpu_cursor": true,
+            "entry_to_battle_attached_ms": 513.48,
+            "entry_to_first_battle_render_ms": 601.35,
+            "entry_to_first_render_ms": 22.13,
+            "frames_before_scene_ready": 37,
+            "initial_cap": 0,
+            "intro_pages": 2,
+            "loading_cap": 72,
+            "loading_caption": "正在準備戰鬥 · 1v1 對戰",
+            "locale": "zh_TW",
+            "merchant_requests": 0,
+            "mode_page_ms": 16.59,
+            "new_gameplay": {},
+            "prefetched_ship_textures": [],
+            "prewarmed_merchants": {},
+            "released_battle_references": 5,
+            "restored_cap": 0,
+            "scene_ready_to_first_battle_render_ms": 34.94,
+            "start_button_to_fight_render_ms": 10.0,
+            "surface_paths": [],
+            "visit": 1
+          }
+        ]
+      },
+      {
+        "mode": "arena",
+        "samples": [
+          {
+            "battle_attached_to_scene_ready_ms": 75.24,
+            "cpu_cursor": true,
+            "entry_to_battle_attached_ms": 516.41,
+            "entry_to_first_battle_render_ms": 622.16,
+            "entry_to_first_render_ms": 3.35,
+            "frames_before_scene_ready": 25,
+            "initial_cap": 45,
+            "intro_pages": 1,
+            "loading_cap": 45,
+            "loading_caption": "正在准备战斗 · 竞技场",
+            "locale": "zh_CN",
+            "merchant_requests": 0,
+            "mode_page_ms": null,
+            "new_gameplay": {},
+            "prefetched_ship_textures": [],
+            "prewarmed_merchants": {},
+            "released_battle_references": 5,
+            "restored_cap": 45,
+            "scene_ready_to_first_battle_render_ms": 30.51,
+            "start_button_to_fight_render_ms": 10.71,
+            "surface_paths": [],
+            "visit": 1
+          }
+        ]
+      }
+    ],
+    "localization_catalog_sha256": "0bf410b4336cde30bd7e1405dac51429b50d98db6e377afae8157700d2689fb5",
+    "pack_sha256": "ae8b08734b3c2538fd4209da3589fa83b395e5717b1ecd6c467a2c2c096ee25e",
+    "log_sha256": "9b48ad1cf5ac42a3aef534c08f8f85b0902e635044f0b32f7ddcaf6421cada49",
+    "probe_sha256": "3c8d9f3d3110c47e911c327e4acc359141cacd9d8a8efcacddfb10de2b0e7a1e"
+  },
+  "depot_files": [
+    {
+      "path": "GODOTSTEAM_LICENSE.txt",
+      "bytes": 1110,
+      "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2",
+      "sha1": "3891aeb1976703fc639c168329d90e27c7680a68",
+      "license_source": "vendor/godotsteam/license.md"
+    },
+    {
+      "path": "LiangshanHeroes.exe",
+      "bytes": 1827205280,
+      "sha256": "ae8b08734b3c2538fd4209da3589fa83b395e5717b1ecd6c467a2c2c096ee25e",
+      "sha1": "547e79bacd363833602373be47730687d5c26c2e"
+    },
+    {
+      "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+      "bytes": 1093,
+      "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf",
+      "sha1": "0b594319d5af0b833d7c0da47459b7d51e1fdbd2",
+      "license_source": "vendor/steam_stats_reader/GODOT_CPP_LICENSE.md"
+    },
+    {
+      "path": "libgodotsteam.windows.template_release.x86_64.dll",
+      "bytes": 3961344,
+      "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26",
+      "sha1": "c056eb4e85d902bd548dc9efb22a416b9c658dda"
+    },
+    {
+      "path": "steam_api64.dll",
+      "bytes": 319128,
+      "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c",
+      "sha1": "05ea59cc2b15a10c66277659d5d0b51750460d28"
+    },
+    {
+      "path": "steam_stats_reader.dll",
+      "bytes": 352768,
+      "sha256": "be9ea866c3e922fc0ddd40f97dede0bab7fd37a9393ad11307b91bba6e70ce6a",
+      "sha1": "ac9a932af32cef47cb41a80fc766fd2a401b13ba"
+    }
+  ],
+  "native_boot_log_sha256": "03c9761fdc7ee85a29230a55984c5b4dfd339cf6784a45726d94606c7174d958"
+}
