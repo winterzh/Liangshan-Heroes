@@ -1,5 +1,9 @@
 # Windows Steam 更新交接与四语公告草案
 
+## 当前本地候选 `72952e43`
+
+六文件 Steam Depot 已封装到 `D:/AI项目/水浒/Windows候选/2026-11-17-72952e43/SteamDepot`。Windows 原生 EXE 离线启动通过；编译包在 Godot 编辑器宿主中核对八章准入、野猪林存档续玩和结算拒绝、祝家庄出征及随机驻守进场。真实 Steam 客户端验收及正式上传待开发收尾。下文 `455f2c62` 的公告草案对应当时的补丁范围。[当前候选回执](../qa/battle_entry_timing_20261116/windows_candidate_72952e43.json)
+
 App `5088120`、Windows Depot `5088121` 本地候选来自 `455f2c623a17f582cae021a5e141676bec9e7d2b`。最近公开 Build `26719792`、Manifest `3426323641209633325`。[最近发布回执](STEAM_UPDATE_20261117.md)
 
 Windows 本地候选 `455f2c62` 已封装，原生 EXE 离线启动及黄泥冈、快活林、大名府直达短测通过。同一个编译包运行七种菜单入口，八次开战及返回，点击至战场首帧 0.57–1.02 秒。交付目录 `D:/AI项目/水浒/Windows候选/2026-11-17-455f2c62/SteamDepot`。Steam 下载版前台操作和手动计时仍待验。[六文件收据](../qa/battle_entry_timing_20261116/windows_candidate_455f2c62.json) · [Steam 发布指南](STEAM_RELEASE_GUIDE.md)

@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+Windows 本地候选 `72952e43` 使用 Godot 4.6.3 的 Windows Steam 预设，原生 EXE 离线启动通过。另以编辑器宿主加载同一编译包，核对全部八章准入、野猪林续玩以及两条进场路线。实际 Steam 安装包前台与线上统计待验。[收据](../qa/battle_entry_timing_20261116/windows_candidate_72952e43.json)
+
 Windows Steam 玩家战役准入现包含全部八章。野猪林、黄泥冈和快活林的隔离源码探针只替换平台启用判断，沿用玩家准入。Windows 发行包和 Steam 客户端待验。[三章验证](../qa/campaign_short_player_continue_20261117/README.md)
 
 江州已加入 Windows Steam 玩家战役续玩范围。隔离探针仅替换平台启用判断，经过同一玩家关卡准入，已验证会合后保存、重启恢复、登船及结算后的旧档拒绝。实际 Windows 发行包与 Steam 客户端待验。[验证](../qa/campaign_pursuit_20261116/README.md#江州玩家续玩)

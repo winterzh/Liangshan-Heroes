@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+Windows 八章续玩候选 `72952e43` 的导出、准入、进场和野猪林续玩记录在 [`windows_candidate_72952e43.json`](../qa/battle_entry_timing_20261116/windows_candidate_72952e43.json)。
+
 `qa/campaign_short_player_continue_20261117/` 保存野猪林、黄泥冈与快活林玩家续玩的探针、公共验证逻辑和三个收据。[验证](../qa/campaign_short_player_continue_20261117/README.md)
 
 `qa/campaign_pursuit_20261116/player_continue/` 保存江州玩家续玩探针和三进程收据，沿用 `menu_resume/` 的会合与登船实战驱动。[验证](../qa/campaign_pursuit_20261116/README.md#江州玩家续玩)
