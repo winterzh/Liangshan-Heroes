@@ -60,13 +60,15 @@ func _skills(b,army: Array) -> void:
 			b.select_members([u],false); b._cast_ability_slot(slot)
 			if b._ability_armed!="": b._cast_armed_at(b.to_screen(foes[0].position))
 			skill_orders+=1; break
-func _play_rescue(b) -> void:
+func _play_rescue(b, stop_at_meeting := false) -> void:
 	var l=b.level
 	var t := 0.0
 	var log_at := 0.0
 	var camp_ids: Array=l.camps.map(func(u): return u.get_instance_id())
 	await _shot(b,"start",Vector2i(18,28))
 	while b.phase==b.Phase.FIGHT and t<360:
+		if stop_at_meeting and l.meeting and l.pursuit_sent:
+			return
 		_reinforce(b)
 		var army: Array=b.units.filter(func(u): return alive(u) and u.faction==0 and not u.is_building and not u.is_worker and not u.is_noncombat)
 		max_troops=maxi(max_troops,army.filter(func(u): return u.key in ["liang_dao","liang_qiang","liang_gong","liang_ma"]).size())

@@ -364,8 +364,11 @@ func _level2_external_tokens(battle: Variant) -> Dictionary:
 		if typeof(meta) != TYPE_DICTIONARY: continue
 		if typeof(meta.get("kind")) != TYPE_STRING: return _bad("LEVEL2_BUTTON_METADATA")
 		if meta.kind != "level": continue
-		if not child is Button or child.is_queued_for_deletion() or child.get_script() != null or typeof(meta.get("button_id")) != TYPE_STRING or meta.button_id != "jiang_depart" or is_instance_valid(found):
+		if not child is Button or child.is_queued_for_deletion() or child.get_script() != null or typeof(meta.get("button_id")) != TYPE_STRING or meta.button_id not in mission.LEVEL_BUTTON_IDS.level2:
 			return _bad("LEVEL2_DEPART_BUTTON")
+		# Map locators belong to the mission, but only the departure control is a Level reference.
+		if meta.button_id != "jiang_depart": continue
+		if is_instance_valid(found): return _bad("LEVEL2_DEPART_BUTTON")
 		found = child
 	var button: Variant = battle.level.depart_button
 	if is_instance_valid(button):

@@ -1,0 +1,210 @@
+{
+  "passed": true,
+  "source_commit": "bbaa9d6ed538e9468f32d2e7f940d3e571ad6c4e",
+  "probe_sources_lf_sha256": {
+    "qa/campaign_pursuit_20261116/menu_resume/probe.gd": "1f1aa0edb71a546c70f54de29523b6e04f6fd5fb4900d8d962d98642dd4b23bf",
+    "scripts/battle.gd": "674532760ede5c9db4deb45bcf032800e9c7b83cbba0520109ec834831fecfec",
+    "scripts/continue_flow.gd": "2021ed1d64fd7dd02d9b53f26f903da725da83bdf3a1a5b6354a3cad4c8d5dcf",
+    "scripts/run_world_session.gd": "d149062a3dac05d0812978b6c476d72863bec68dc8d6cdc45af5fb676d2c0bd6",
+    "scripts/run_unit_graph.gd": "30f9f9af7e04cf37935005d1bb9dbb96b423a972ab0e2f9bf0c5c9e7b2f74bfc",
+    "scripts/levels/level2_jiangzhou_rts.gd": "0bcc743599d741dde9da5394d07eaf237050e2a21f251c00bc617b5fccfd22a0",
+    "tools/jiangzhou_rts_play.gd": "50db638b88aa063b95fdbbcf46dcac798e64a02d5ade2a50600e64564213e55d"
+  },
+  "stages": [
+    {
+      "checks": 6,
+      "facts": {
+        "checkpoint": {
+          "clock": 102.333333333333,
+          "crew": [
+            "18",
+            "19",
+            "20",
+            "21",
+            "22",
+            "23"
+          ],
+          "enemy_recruits": 2,
+          "events": [
+            "action:jiangzhou_rts:cache_0",
+            "action:jiangzhou_rts:free_dai",
+            "action:jiangzhou_rts:free_song",
+            "action:jiangzhou_rts:south_lane",
+            "action:jiangzhou_rts:west_street",
+            "bailong",
+            "cache_0",
+            "execution_halted",
+            "free_dai",
+            "free_song",
+            "jiangzhou_li_first",
+            "jiangzhou_rear_pursuit",
+            "south_lane",
+            "west_street"
+          ],
+          "gold": 95,
+          "meeting": true,
+          "pursuers": [
+            "",
+            "",
+            "45",
+            "",
+            "",
+            ""
+          ],
+          "pursuit_sent": true,
+          "rally": false,
+          "rear_contacts": [
+            false,
+            false
+          ],
+          "rescuees": [
+            "64",
+            "65"
+          ],
+          "search_steps": [
+            0,
+            0
+          ],
+          "wood": 22
+        },
+        "generation": 1,
+        "result_code": ""
+      },
+      "failures": [],
+      "pid": 50204,
+      "stage": "save",
+      "exit_code": 0,
+      "seconds": 60.883,
+      "engine_errors": []
+    },
+    {
+      "checks": 15,
+      "facts": {
+        "crew_outcomes": [
+          [
+            "chao_gai",
+            "embarked"
+          ],
+          [
+            "li_kui",
+            "embarked"
+          ],
+          [
+            "hua_rong",
+            "embarked"
+          ],
+          [
+            "yan_shun",
+            "embarked"
+          ],
+          [
+            "zhang_shun",
+            "embarked"
+          ],
+          [
+            "zhang_heng",
+            "embarked"
+          ]
+        ],
+        "live": {
+          "cache_taken": [
+            true,
+            false
+          ],
+          "controller_wait_seconds": 11.0,
+          "enemy_paid_recruits": 2,
+          "enemy_spent_gold": 50,
+          "enemy_spent_wood": 16,
+          "events": [
+            "action:jiangzhou_rts:south_lane",
+            "south_lane",
+            "action:jiangzhou_rts:west_street",
+            "west_street",
+            "jiangzhou_li_first",
+            "action:jiangzhou_rts:cache_0",
+            "cache_0",
+            "execution_halted",
+            "action:jiangzhou_rts:free_song",
+            "free_song",
+            "action:jiangzhou_rts:free_dai",
+            "free_dai",
+            "jiangzhou_rear_pursuit",
+            "bailong",
+            "action:jiangzhou_rts:rally_dock",
+            "rally_dock",
+            "action:jiangzhou_rts:board_dai",
+            "board_dai",
+            "action:jiangzhou_rts:board_song",
+            "board_song",
+            "jiangzhou_named_survive",
+            "all_embarked"
+          ],
+          "game_seconds": 114.866666666665,
+          "max_ordinary_troops": 16,
+          "orders": 286,
+          "paid_recruits": 14,
+          "pursuit_sent": true,
+          "pursuit_survivors": 0,
+          "result": {
+            "contract_version": 2,
+            "core_cleared": true,
+            "core_goal": "150秒内打倒两名刽子手，分别救出宋江、戴宗，护送二人活着登船，再下令开船。无需杀光官军。",
+            "done_ids": [
+              "li_kui_first",
+              "free_both",
+              "bailong_meeting",
+              "named_survive"
+            ],
+            "goals": [
+              {
+                "id": "li_kui_first",
+                "label": "两路就位后，由李逵排头打断行刑",
+                "note": "",
+                "reason": "",
+                "state": "done"
+              },
+              {
+                "id": "free_both",
+                "label": "在法场分别救下宋江、戴宗",
+                "note": "",
+                "reason": "",
+                "state": "done"
+              },
+              {
+                "id": "bailong_meeting",
+                "label": "护送二人到白龙庙，与水军相会",
+                "note": "",
+                "reason": "",
+                "state": "done"
+              },
+              {
+                "id": "named_survive",
+                "label": "六名具名好汉全部活着撤回码头",
+                "note": "",
+                "reason": "",
+                "state": "done"
+              }
+            ],
+            "missed_ids": [],
+            "pending_ids": [],
+            "story_complete": true,
+            "story_done": 4,
+            "story_total": 4
+          },
+          "search_steps": [
+            0,
+            2
+          ],
+          "skills": 14
+        },
+        "result_code": ""
+      },
+      "failures": [],
+      "pid": 21604,
+      "stage": "resume",
+      "exit_code": 0,
+      "seconds": 28.162,
+      "engine_errors": []
+    }
+  ]
+}

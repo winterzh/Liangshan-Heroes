@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+江州存档的单位图只为开船按钮登记关卡引用。定位按钮沿用任务面板序列化以及章节白名单。复跑使用 Windows Godot 4.6.3 渲染器和独立档案，不接入 Steam 帐号。[江州会合后续玩](../qa/campaign_pursuit_20261116/README.md#白龙庙会合后续玩)
+
 江州白龙庙定位用任务固定按钮，提示和会合判定读同一四人队伍与到场距离。译文来自 `jiangzhou_bailong_meeting.json`。[江州会合进度](../qa/campaign_pursuit_20261116/README.md#白龙庙会合进度)
 
 继续入口从主菜单接管后台校验，由 ContinueFlow 释放线程。发现预读时的 EXE 已变化会重做校验，档案仍由原 Session 校验与安装。[继续读取验证](../qa/battle_entry_timing_20261116/README.md#继续上次战斗后台校验)
