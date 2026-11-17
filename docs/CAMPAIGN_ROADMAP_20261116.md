@@ -1,5 +1,7 @@
 # 八幕战役后续开发路线图
 
+M5／M7 高俅关火攻押俘线在 Windows 候选 fa4084ff 完成三进程续玩。张顺已经接俘后保存，原船恢复后上岸，继续押至忠义堂完成四项演义。四语结算及终局旧槽拒绝通过。 [高俅关续玩收据](../qa/campaign_fire_readiness_20261116/player_continue/windows_candidate_fa4084ff.json)
+
 M4／M7 大名府强攻线用 Windows 候选 fa4084ff 保存至首名伤员撤出，独立恢复后完成第二名撤离和四语结算，终局旧槽拒绝保持存档与进度。 [大名府续玩收据](../qa/campaign_wounded_selection_20261116/player_continue/windows_candidate_fa4084ff.json)
 
 M7 本地 Windows 候选 fa4084ff 的精确编译包、固定镜头正常速度 600 秒测量达到帧时目标，600.007 秒、67,536 帧，P95 14.707 ms、P99 17.135 ms。原关卡三波交战与付费招船成立。真人和 Android 设备另验。 [十分钟帧时收据](../qa/campaign_sustained_performance_20261116/windows_pack_fa4084ff.json)

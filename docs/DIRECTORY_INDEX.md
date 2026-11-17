@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[高俅关 Windows 续玩收据](../qa/campaign_fire_readiness_20261116/player_continue/windows_candidate_fa4084ff.json)及外部探针位于 qa/campaign_fire_readiness_20261116/player_continue/。
+
 [大名府强攻续玩 Windows 编译包收据](../qa/campaign_wounded_selection_20261116/player_continue/windows_candidate_fa4084ff.json)及外部探针在 qa/campaign_wounded_selection_20261116/player_continue/。
 
 [Windows 候选高俅关 600 秒性能收据](../qa/campaign_sustained_performance_20261116/windows_pack_fa4084ff.json)包含编译包、辅助脚本和原始逐帧报告 SHA-256。真人试玩沿用[试玩清单](PLAYTEST_CHECKLIST_20260906.md)。

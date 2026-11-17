@@ -1,5 +1,7 @@
 # Windows Steam 更新交接与四语公告草案
 
+候选 fa4084ff 高俅关火攻押俘通过三进程离线续玩。原船接俘后保存，继续至押堂收兵和四项演义，四语结果一致，重启拒绝旧槽。 [高俅关续玩收据](../qa/campaign_fire_readiness_20261116/player_continue/windows_candidate_fa4084ff.json)
+
 候选 fa4084ff 的大名府强攻通过三进程离线校验。使用实际 Windows 编译包保存、继续到胜利、检查四语结算，再用新进程拒绝已结算的旧槽。 [大名府续玩收据](../qa/campaign_wounded_selection_20261116/player_continue/windows_candidate_fa4084ff.json)
 
 ## 当前本地候选 `fa4084ff`

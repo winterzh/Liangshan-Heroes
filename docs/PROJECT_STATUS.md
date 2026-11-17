@@ -1,5 +1,7 @@
 # 当前项目总览
 
+高俅关在 Windows 候选 fa4084ff 的实际水陆战中完成接俘保存、原船上岸、押抵忠义堂及四项演义结算。新进程拒绝已结算旧槽。 [高俅关续玩收据](../qa/campaign_fire_readiness_20261116/player_continue/windows_candidate_fa4084ff.json)
+
 大名府强攻线用 Windows 候选 fa4084ff 在三个独立进程闭合中途保存、原任务继续、四语通关与旧槽拒绝。真实 Steam 客户端和真人体验待验。 [大名府续玩收据](../qa/campaign_wounded_selection_20261116/player_continue/windows_candidate_fa4084ff.json)
 
 Windows 候选 fa4084ff 的高俅关标准特效正常速度实测 600.007 秒、67,536 帧，P95 14.707 ms、P99 17.135 ms，达到路线图 P95 ≤ 16.7 ms、P99 ≤ 33.3 ms 的门槛。 完整真人体验、其他设备和 Steam 客户端待验。 [十分钟帧时收据](../qa/campaign_sustained_performance_20261116/windows_pack_fa4084ff.json)

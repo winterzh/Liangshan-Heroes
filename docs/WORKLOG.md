@@ -1,5 +1,9 @@
 # 开发日志
 
+## 2026-11-17 Windows 候选高俅关火攻押俘续玩
+
+候选 fa4084ff 在 519.27 游戏秒保存张顺已接俘但尚未上岸的进度。重启后用原船上岸，从原进度押堂收兵，567.27 游戏秒取得核心胜利和四项演义。三个进程 42 项通过，含四语结算及旧槽拒绝。 [高俅关续玩收据](../qa/campaign_fire_readiness_20261116/player_continue/windows_candidate_fa4084ff.json)
+
 ## 2026-11-17 Windows 候选大名府强攻续玩
 
 候选 fa4084ff 使用实际战斗分别在 257.33 游戏秒存档、277.40 游戏秒通关。卢俊义先撤出，重启后只选择仍在城中的石秀，继续走原任务撤离。通关后旧槽被拒绝，四语结算显示强攻与两人已撤离。三个进程 43 项通过。 [大名府续玩收据](../qa/campaign_wounded_selection_20261116/player_continue/windows_candidate_fa4084ff.json)

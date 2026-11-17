@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+高俅关用已验 SHA-256 的 Windows 编译包完成火攻押俘存读档与实际结算。外部探针替换平台入口条件，原船身份、押俘任务及奖励事务来自候选包。 [高俅关续玩收据](../qa/campaign_fire_readiness_20261116/player_continue/windows_candidate_fa4084ff.json)
+
 大名府在已验 SHA-256 的 Windows 候选中验证实际保存、恢复、战斗和结算。外部离线探针只替换平台入口条件，原存读档和数据路径来自候选编译包。 [大名府续玩收据](../qa/campaign_wounded_selection_20261116/player_continue/windows_candidate_fa4084ff.json)
 
 高俅帧时复用既有测试路线，固定窗口、镜头、随机种子和特效。编辑器宿主挂载校验过 SHA-256 的候选 EXE；三份外置探针只调整两处继承路径。逐帧原件及宿主依赖校验见收据。 [十分钟帧时收据](../qa/campaign_sustained_performance_20261116/windows_pack_fa4084ff.json)
