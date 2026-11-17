@@ -1,0 +1,154 @@
+{
+  "passed": true,
+  "steam_disabled": true,
+  "private_qa_menu": false,
+  "source_commit": "f96ff6a9d4ac05c64f20d7df2891b3911b1d5ebd",
+  "probe_sources_lf_sha256": {
+    "qa/campaign_escort_arrival_20261116/menu_resume/probe.gd": "e877e8f4423390231b084e28b7c868ec528ab39202837efb69480034583e6744",
+    "qa/campaign_short_player_continue_20261117/player_session.gd": "3675b2749237ffc0bb75fded49a962c197bbca6f14928dd5340dce1c4766c5af",
+    "qa/campaign_short_player_continue_20261117/yezhulin.gd": "aee2d0ec7723e516d911ec6f89ce411580fcf953760ba0089b2442ee7e1f7b10",
+    "qa/campaign_siege_20261116/player_continue/platform_entry.gd": "f270ba38384e9bce258c409a6cb10444e8b834cbdc26d4266d286cceeb0f3da6",
+    "scripts/battle.gd": "df2688d0400e60d1b5e5510609f981de888380b26f7d3ebf44dcd5a2e9038827",
+    "scripts/continue_flow.gd": "381e529f8eb084212cc50fd271a2017f6973cd72965370d66a3fb47a1c650155",
+    "scripts/levels/level6_yezhulin.gd": "992181ea24b4d7cf3e9d946a5ed858807a8f61e6ec850f70f463f8f9923d5bb0",
+    "scripts/run_battle_world_core.gd": "35186ee4bfcb7bd14eead8673ba9612d8365ddf00be2ef875954e02d2b932362",
+    "scripts/run_campaign_level_state.gd": "047824c64ff01bb985827bbeea9368796735244ff27d6e77296c3e80e67fcb8b",
+    "scripts/run_campaign_progress_coordinator.gd": "7cb414225c25d98065c4db8526de0e09f4a9f49e73b5b88488fe2b98762ad2b8",
+    "scripts/run_official_restore_profile.gd": "931d831389d83b133084a4b4500d011af07e95954d43f50d3ee7eeedaa770ae0",
+    "scripts/run_unit_graph.gd": "30f9f9af7e04cf37935005d1bb9dbb96b423a972ab0e2f9bf0c5c9e7b2f74bfc",
+    "scripts/run_world_session.gd": "8b499e542ba155a3825d39caffdbe5b5acd7d0f046dd51a7122bd9efd4a1342c",
+    "tools/yezhulin_short_test.gd": "bfe9e650017bce04a59d27a1b8a190526647d563db2e7d3ded7b4d2f746f78f5",
+    "tools/zhujiazhuang_rts_test.gd": "435ddb8f9bc774687e1ea879ac6e9adc606380db4934ca3b72dfea294273d770"
+  },
+  "chapter": "level6",
+  "stages": [
+    {
+      "chapter": "level6",
+      "checks": 10,
+      "facts": {
+        "checkpoint": {
+          "active_action": "",
+          "clock": 18.3333333333333,
+          "events": [
+            "action:intercept:intercept",
+            "intercept",
+            "observe",
+            "shadow_caution",
+            "shadow_pine",
+            "shadow_route_chosen",
+            "tend_feet",
+            "untie"
+          ],
+          "order_token": 3,
+          "party": [
+            {
+              "hp": 540.0,
+              "id": 4,
+              "name": "lu_zhishen",
+              "serial": 17,
+              "token": 3,
+              "walking": true,
+              "x": 937.754150390625,
+              "y": 608.297119140625
+            },
+            {
+              "hp": 278.333333333333,
+              "id": 6,
+              "name": "lin_chong",
+              "serial": 3,
+              "token": 3,
+              "walking": true,
+              "x": 937.603881835938,
+              "y": 656.0
+            },
+            {
+              "hp": 150.0,
+              "id": 2,
+              "name": "dong_chao",
+              "serial": 4,
+              "token": 3,
+              "walking": true,
+              "x": 846.17041015625,
+              "y": 624.3876953125
+            },
+            {
+              "hp": 150.0,
+              "id": 3,
+              "name": "xue_ba",
+              "serial": 4,
+              "token": 3,
+              "walking": true,
+              "x": 910.1298828125,
+              "y": 624.0
+            }
+          ],
+          "rest_order": [
+            17,
+            3,
+            4,
+            4
+          ],
+          "route": "north_pines",
+          "target": [
+            528.000061035156,
+            656.000061035156
+          ]
+        },
+        "identity": "source-v1:4eb0e8eabca0b60cb25d814df680644d446b08be510c644d97523691142288f4",
+        "result_code": ""
+      },
+      "failures": [],
+      "pid": 18248,
+      "stage": "save",
+      "exit_code": 0,
+      "seconds": 45.777,
+      "engine_errors": []
+    },
+    {
+      "chapter": "level6",
+      "checks": 13,
+      "facts": {
+        "campaign_record": {
+          "best_done": 3,
+          "best_goal_ids": [
+            "hidden_intercept",
+            "spare_escorts",
+            "care_and_escort"
+          ],
+          "cleared": true,
+          "contract_version": 2,
+          "story_complete": true,
+          "story_total": 3
+        },
+        "finish_seconds": 46.1999999999984,
+        "identity": "source-v1:4eb0e8eabca0b60cb25d814df680644d446b08be510c644d97523691142288f4",
+        "progress_sha": "446f6454851a7afc837a764ba66feb5da4ff157d8d6720d11d0b01b3ddfdbabd",
+        "rest_seconds": 35.0166666666657,
+        "rest_without_new_order": true,
+        "result_code": "",
+        "story_done": 3
+      },
+      "failures": [],
+      "pid": 36288,
+      "stage": "resume",
+      "exit_code": 0,
+      "seconds": 87.355,
+      "engine_errors": []
+    },
+    {
+      "chapter": "level6",
+      "checks": 6,
+      "facts": {
+        "identity": "source-v1:4eb0e8eabca0b60cb25d814df680644d446b08be510c644d97523691142288f4",
+        "progress_sha": "446f6454851a7afc837a764ba66feb5da4ff157d8d6720d11d0b01b3ddfdbabd",
+        "terminal_code": "LOCAL_RUN_TERMINAL"
+      },
+      "failures": [],
+      "pid": 49144,
+      "stage": "reject",
+      "exit_code": 0,
+      "seconds": 28.63,
+      "engine_errors": []
+    }
+  ]
+}

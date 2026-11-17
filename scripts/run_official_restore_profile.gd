@@ -36,7 +36,7 @@ const HG_CONTEXT := {"mode": "campaign", "level_id": "level1", "waves": 0}
 const YEZHU_CONTEXT := {"mode": "campaign", "level_id": "level6", "waves": 0}
 const JIANG_CONTEXT := {"mode": "campaign", "level_id": "level2", "waves": 0}
 const KUAI_CONTEXT := {"mode": "campaign", "level_id": "level7", "waves": 0}
-const PLAYER_CAMPAIGN_CONTEXTS := [ZHU_CONTEXT, LIAN_CONTEXT, DAMING_CONTEXT, GAO_CONTEXT, JIANG_CONTEXT]
+const PLAYER_CAMPAIGN_CONTEXTS := [ZHU_CONTEXT, LIAN_CONTEXT, DAMING_CONTEXT, GAO_CONTEXT, JIANG_CONTEXT, HG_CONTEXT, YEZHU_CONTEXT, KUAI_CONTEXT]
 const CLASSIC_FLAGS := {"skirmish": true, "skirmish_ai": false, "arena": false,
 	"custom_defense": false, "scenario": false, "defense_waves": 30, "defense_random": false}
 const ZHU_FLAGS := {"current": 2, "skirmish": false, "skirmish_ai": false,

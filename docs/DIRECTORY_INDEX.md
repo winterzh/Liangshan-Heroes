@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+`qa/campaign_short_player_continue_20261117/` 保存野猪林、黄泥冈与快活林玩家续玩的探针、公共验证逻辑和三个收据。[验证](../qa/campaign_short_player_continue_20261117/README.md)
+
 `qa/campaign_pursuit_20261116/player_continue/` 保存江州玩家续玩探针和三进程收据，沿用 `menu_resume/` 的会合与登船实战驱动。[验证](../qa/campaign_pursuit_20261116/README.md#江州玩家续玩)
 
 `qa/campaign_fire_readiness_20261116/player_continue/` 保存高俅玩家续玩探针和三进程收据，复用 `menu_resume/` 的原接俘路线。[验证](../qa/campaign_fire_readiness_20261116/README.md#高俅玩家续玩)
