@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+祝家庄触屏提示来自 `scripts/levels/level3_zhujiazhuang_rts.gd`，四语源分片为 `assets/localization/zhu_touch_controls.json`。[祝家庄触屏操作](../qa/campaign_siege_20261116/README.md#前营采金接应与撤离的触屏提示)
+
 连环马教场和下钩提示来自 `scripts/levels/level4_lianhuanma_rts.gd`，四语源分片为 `assets/localization/lianhuanma_drill_controls.json`。[教场阶段与触屏下钩](../qa/campaign_cavalry_escort_20261116/README.md#教场阶段与触屏下钩)
 
 大名府查看栏与办理共用南门和牢院守军距离；仅查看栏限制玩家视野。词库分片 `daming_gate_controls.json`。[大名府夺门与开枷提示](../qa/campaign_coordination_20261116/README.md#火号后的夺门与开枷提示)

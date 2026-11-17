@@ -313,7 +313,7 @@ func on_start(b) -> void:
 	b.mission.add_action("zhu_rts_rescue",Localize.text("救出被囚好汉"),PRISON+Vector2i(4,0),FIELD_ACTORS,3.0,64.0)
 	b.mission.add_map_locator("北面资源区", EXPANSION)
 	b.mission.add_map_locator("庄客外营", OUTPOST)
-	b.mission.add_level_button("zhu_find_camp_gold", "查看 · 前营金矿", "优先查看工人较少的可见前营金矿。选工人右键金矿可采集。")
+	b.mission.add_level_button("zhu_find_camp_gold", "查看 · 前营金矿", "优先查看工人较少的可见前营金矿。")
 	b.msg("北面可夺资源，南营可断援。派小队探路，观察外营集结；后方可同时采集、补兵。",8.0)
 
 func _introduce_sun(b) -> void:
@@ -377,7 +377,8 @@ func on_mission_action(b, action_id: String, actor) -> void:
 				u.queue_redraw()
 			_add_evacuation_controls(b)
 			b.mission.mark("zhu_prisoners_freed","七名好汉脱困；伤员不参加战斗")
-			b.msg("可点“选中 · 时迁”或“选中 · 获救队伍”，再右键送回前营；“查看 · 前营”只移镜头。大营仍须攻破，伤员需要战斗部队保护。",8.0)
+			b.msg(Localize.text("用“选中 · 时迁”或“选中 · 获救队伍”，再轻点前营地面撤离。带兵保护伤员，攻破大营。" if b.hud.touch_ui \
+				else "可点“选中 · 时迁”或“选中 · 获救队伍”，再右键送回前营；“查看 · 前营”只移镜头。大营仍须攻破，伤员需要战斗部队保护。"),8.0)
 
 
 ## Rescue controls only select the live evacuees or move the camera. They never
@@ -389,8 +390,8 @@ func _rescued_members(only_shi_qian := false) -> Array:
 	return candidates.filter(func(u): return _alive(u) and u.faction == Unit.FACTION_LIANG and not u.is_captive and not u.garrisoned)
 
 func _add_evacuation_controls(b) -> void:
-	b.mission.add_level_button("zhu_select_shi_qian", "选中 · 时迁", "只选中并定位获救者；撤离需要你另下右键命令。")
-	b.mission.add_level_button("zhu_select_rescued", "选中 · 获救队伍", "只选中并定位获救者；撤离需要你另下右键命令。")
+	b.mission.add_level_button("zhu_select_shi_qian", "选中 · 时迁", "选中并定位获救者，由你下令撤回前营。")
+	b.mission.add_level_button("zhu_select_rescued", "选中 · 获救队伍", "选中并定位获救者，由你下令撤回前营。")
 	b.mission.add_map_locator("前营", CAMP)
 
 func activate_mission_button(b, button_id: String) -> void:
@@ -406,7 +407,10 @@ func activate_mission_button(b, button_id: String) -> void:
 		return
 	b.select_members(members, false)
 	b.center_camera_cell(b.map.world_to_cell(members[0].position))
-	b.mission.set_status("已选中时迁；请右键下令撤回前营。" if only_shi_qian else "已选中获救队伍；请右键下令撤回前营。")
+	if b.hud.touch_ui:
+		b.mission.set_status("已选中时迁。轻点前营地面撤离。" if only_shi_qian else "已选中获救队伍。轻点前营地面撤离。")
+	else:
+		b.mission.set_status("已选中时迁；请右键下令撤回前营。" if only_shi_qian else "已选中获救队伍；请右键下令撤回前营。")
 
 
 func _view_camp_gold(b) -> void:
@@ -431,7 +435,9 @@ func _view_camp_gold(b) -> void:
 		b.mission.set_feedback("前营暂无可见的可采金矿。可争夺北矿，或在集市卖木。", 5.0)
 		return
 	b.center_camera_cell(b.map.world_to_cell(best.position))
-	b.mission.set_feedback(Localize.format_text("此矿约剩%d金，%d名工人采运。选工人右键金矿可采集。", [ceili(best.res_left), fewest]), 5.0)
+	var prompt := "此矿约剩%d金，%d名工人采运。选工人后轻点金矿采集。" if b.hud.touch_ui \
+		else "此矿约剩%d金，%d名工人采运。选工人右键金矿可采集。"
+	b.mission.set_feedback(Localize.format_text(prompt, [ceili(best.res_left), fewest]), 5.0)
 
 
 func _enemy_economy(b, delta: float) -> void:
@@ -601,7 +607,7 @@ func unit_tactical_hint(b, u: Unit) -> String:
 			return Localize.text("内应已失。可带器械攻破偏门。")
 		return Localize.text("偏门可强攻，也可侦察外围寻找内应。")
 	if u == sun and _alive(side_gate):
-		return Localize.text("选中孙立，右键接应标记打开偏门。")
+		return Localize.text("选中孙立，轻点接应旗标打开偏门。" if b.hud.touch_ui else "选中孙立，右键接应标记打开偏门。")
 	return ""
 
 

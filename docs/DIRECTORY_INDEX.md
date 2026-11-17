@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[祝家庄触屏操作](../qa/campaign_siege_20261116/README.md#前营采金接应与撤离的触屏提示)的桌面触屏探针和报告位于 `qa/campaign_siege_20261116/touch_controls/`。
+
 [教场阶段与触屏下钩](../qa/campaign_cavalry_escort_20261116/README.md#教场阶段与触屏下钩)的桌面触屏探针和报告位于 `qa/campaign_cavalry_escort_20261116/touch_drill/`。
 
 [大名府夺门与开枷提示](../qa/campaign_coordination_20261116/README.md#火号后的夺门与开枷提示)的桌面触屏探针和报告在 `qa/campaign_coordination_20261116/touch_gate/`。
