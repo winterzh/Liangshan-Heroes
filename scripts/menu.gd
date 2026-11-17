@@ -8,7 +8,7 @@ var _update_overlay: Control
 var _entry_overlay: ColorRect
 var _entry_scan: RefCounted
 var _entry_surface_requests: Array[String] = []
-var _entry_merchant_requests: Array[String] = []
+var _entry_opening_frame_requests: Dictionary[String, String] = {}
 var _entry_previous_max_fps := -1
 var _waiting_autostart := false
 
@@ -63,8 +63,8 @@ func _launch(campaign_level_id := "") -> void:
 		_request_battle_surfaces(campaign_level_id)
 		if campaign_level_id == "level5":
 			Art.prefetch_gao_opening_art()
-		elif campaign_level_id == "level1":
-			_entry_merchant_requests = Art.request_huangnigang_opening_frames()
+		elif campaign_level_id == "level1" or campaign_level_id == "level3":
+			_entry_opening_frame_requests = Art.request_campaign_opening_frames(campaign_level_id)
 	# Continue on the main thread. The worker returns only verified file data.
 	_finish_battle_launch.call_deferred()
 
@@ -176,12 +176,12 @@ func _finish_battle_launch() -> void:
 		if texture != null:
 			ground_textures.append(texture)
 	_entry_surface_requests.clear()
-	for path in _entry_merchant_requests:
+	for path in _entry_opening_frame_requests:
 		var frames := (await _wait_for_battle_resource(path)) as SpriteFrames
 		if AppLifecycle.quit_started():
 			return
-		Art.cache_prepared_native_body(path, frames)
-	_entry_merchant_requests.clear()
+		Art.cache_prepared_opening_frames(_entry_opening_frame_requests[path], frames)
+	_entry_opening_frame_requests.clear()
 	# process_frame runs before this frame's drawing. Let the loading view paint
 	# before the synchronous scene installation, even when the worker ends early.
 	await RenderingServer.frame_post_draw

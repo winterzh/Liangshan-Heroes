@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[祝家庄开场帧收据](../qa/battle_entry_timing_20261116/zhu_opening_frame_prefetch.json)包含同发行包的绘制分段诊断、源码前后对照及黄泥冈和祝家庄原资源核对。
+
 `qa/battle_entry_timing_20261116/surface_mask_ab/` 保存硬边遮罩优化的探针、数据和旧实现指纹。[对照](../qa/battle_entry_timing_20261116/README.md#地表遮罩硬边复用)
 
 `windows_mode_switch_413b95bb.json` 记录 Windows 整合候选六次进入、返回和祝家庄独立挂载分段。[收据](../qa/battle_entry_timing_20261116/windows_mode_switch_413b95bb.json)

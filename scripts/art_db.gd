@@ -505,13 +505,17 @@ func _gongsun_later_frames(key: String, state: String) -> Array:
 func _ordinary_character_frames(key: String, state: String, direction: String, variant: String) -> Array:
 	if not variant.is_empty() or direction not in CampaignArt.DIRECTIONS:
 		return []
-	var family: Dictionary = ORDINARY_CHARACTER_FAMILIES.get(key, {})
-	if not family.has(state): return []
-	var path := "res://assets/anim/%s_%s_%s.tres" % [family[state], state, direction]
+	var path := _ordinary_character_path(key, state, direction)
+	if path.is_empty(): return []
 	var cache_key := "ordinary_character|" + path
 	if not _anim_cache.has(cache_key):
 		_anim_cache[cache_key] = _load_generic_directional_frames(path)
 	return _anim_cache[cache_key]
+
+func _ordinary_character_path(key: String, state: String, direction: String) -> String:
+	var family: Dictionary = ORDINARY_CHARACTER_FAMILIES.get(key, {})
+	return "res://assets/anim/%s_%s_%s.tres" % [family[state], state, direction] if family.has(state) else ""
+
 
 ## Jiang Zhong's reviewed white-shirt/yellow-beard family also supplies his
 ## ordinary appearance. Keep the stored variant, stats and chapter outcomes intact.
@@ -1055,21 +1059,31 @@ func ability_icon_texture(path: String) -> Texture2D:
 	return load(path) as Texture2D
 
 
-## The seven merchants start at rest facing southeast. Prepare the same
-## variant frames that _resolve_unit_anim_frames will look up on first draw.
-func request_huangnigang_opening_frames() -> Array[String]:
-	var paths: Array[String] = []
-	for key: String in CampaignArt.HUANGNIGANG_MERCHANTS:
-		var path := CampaignArt.native_body_path("hn_" + key, "idle", "se")
-		if path.is_empty() or _anim_cache.has("native_body|" + path) or not ResourceLoader.exists(path):
+## The opening cast starts facing southeast. Load the frames that the normal
+## animation lookup will use on the first draw while the loading view is active.
+func request_campaign_opening_frames(level_id: String) -> Dictionary[String, String]:
+	var variants: Array[String] = []
+	var paths: Dictionary[String, String] = {}
+	if level_id == "level1":
+		for key: String in CampaignArt.HUANGNIGANG_MERCHANTS:
+			variants.append("hn_" + key)
+	elif level_id == "level3":
+		variants.assign(CampaignArt.NATIVE_BOUND_VARIANTS.keys())
+		var path := _ordinary_character_path("lin_chong", "idle", "se")
+		paths[path] = "ordinary_character|" + path
+	for variant in variants:
+		var path := CampaignArt.native_body_path(variant, "idle", "se")
+		paths[path] = "native_body|" + path
+	var requests: Dictionary[String, String] = {}
+	for path in paths:
+		if path.is_empty() or _anim_cache.has(paths[path]) or not ResourceLoader.exists(path):
 			continue
 		if ResourceLoader.load_threaded_request(path, "SpriteFrames") == OK:
-			paths.append(path)
-	return paths
+			requests[path] = paths[path]
+	return requests
 
 
-func cache_prepared_native_body(path: String, resource: SpriteFrames) -> void:
-	var cache_key := "native_body|" + path
+func cache_prepared_opening_frames(cache_key: String, resource: SpriteFrames) -> void:
 	if resource == null or _anim_cache.has(cache_key):
 		return
 	var frames := _decode_directional_frames(resource)
