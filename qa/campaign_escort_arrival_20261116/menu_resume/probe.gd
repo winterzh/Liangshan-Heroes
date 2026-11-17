@@ -76,6 +76,9 @@ func _save() -> void:
 	if not failures.is_empty():
 		_finish()
 		return
+	_pause_and_save(b)
+
+func _pause_and_save(b) -> void:
 	Engine.time_scale = 1
 	b._open_pause()
 	flow.operation_finished.connect(_saved.bind(_checkpoint(b)),CONNECT_ONE_SHOT)
@@ -117,9 +120,8 @@ func _restored(result: Dictionary, menu: WeakRef, previous: Dictionary) -> void:
 		_finish()
 		return
 	var b = current_scene
-	var l = b.level
 	check(paused and b._official_context == CONTEXT and b.phase == b.Phase.FIGHT
-		and l.st == l.ESCAPE and not l.rest_reached,"the resumed battle is paused before rest")
+		and _expected_stage(b),"the resumed battle is paused at the intended checkpoint")
 	var actual: Dictionary = JSON.parse_string(JSON.stringify(_checkpoint(b)))
 	var expected: Dictionary = previous.state
 	var mismatches: Array = expected.keys().filter(func(k): return expected[k] != actual[k])
@@ -132,6 +134,9 @@ func _restored(result: Dictionary, menu: WeakRef, previous: Dictionary) -> void:
 		_finish()
 		return
 	_play_restored.call_deferred(b)
+
+func _expected_stage(b) -> bool:
+	return b.level.st == b.level.ESCAPE and not b.level.rest_reached
 
 func _play_restored(b) -> void:
 	var l = b.level

@@ -1,0 +1,108 @@
+{
+  "passed": true,
+  "source_commit": "5f966030673ff459581700b0ad5fb8337b0efaad",
+  "probe_sources_lf_sha256": {
+    "qa/campaign_escort_arrival_20261116/menu_resume/force_probe.gd": "119287e3e5977589836a260151321eb210ccde1e7037c551b4f03397dddd42e9",
+    "qa/campaign_escort_arrival_20261116/menu_resume/probe.gd": "e877e8f4423390231b084e28b7c868ec528ab39202837efb69480034583e6744",
+    "scripts/battle.gd": "674532760ede5c9db4deb45bcf032800e9c7b83cbba0520109ec834831fecfec",
+    "scripts/continue_flow.gd": "2021ed1d64fd7dd02d9b53f26f903da725da83bdf3a1a5b6354a3cad4c8d5dcf",
+    "scripts/run_world_session.gd": "d149062a3dac05d0812978b6c476d72863bec68dc8d6cdc45af5fb676d2c0bd6",
+    "scripts/run_unit_graph.gd": "30f9f9af7e04cf37935005d1bb9dbb96b423a972ab0e2f9bf0c5c9e7b2f74bfc",
+    "scripts/run_battle_world_core.gd": "ea01ff6f8319155b7fb96346ea2f8f87f2a3ca629cace934cf5ca1a12730b2cb",
+    "scripts/levels/level6_yezhulin.gd": "795892f035b45df50810b543cb5e289469a526f50ed878b336ff44e4c3c6c9d4",
+    "scripts/run_campaign_level_state.gd": "047824c64ff01bb985827bbeea9368796735244ff27d6e77296c3e80e67fcb8b",
+    "scripts/run_unit_state.gd": "bf7d6bba1ba692542d83ee09d5c70bb014643322b7ee2e57eb9b49e013a9a0bf",
+    "scripts/campaign_mission.gd": "abbc644399c2f7ff4a26c010bf5aa0d96c9591659e04225f8b280e47fc17f08d",
+    "scripts/run_campaign_mission_state.gd": "20448a9235e58b9c31b5bf30db485e758c923a1cfc1ac0661aa73557ab4437aa",
+    "tools/yezhulin_short_test.gd": "bfe9e650017bce04a59d27a1b8a190526647d563db2e7d3ded7b4d2f746f78f5",
+    "tools/zhujiazhuang_rts_test.gd": "435ddb8f9bc774687e1ea879ac6e9adc606380db4934ca3b72dfea294273d770"
+  },
+  "stages": [
+    {
+      "checks": 6,
+      "facts": {
+        "checkpoint": {
+          "actors": [
+            {
+              "faction": 0,
+              "hp": 380.296296296296,
+              "id": 4,
+              "name": "lu_zhishen",
+              "outcome": "",
+              "position": [
+                1420.35009765625,
+                589.12548828125
+              ],
+              "serial": 5
+            },
+            {
+              "faction": 0,
+              "hp": 156.0,
+              "id": 5,
+              "name": "lin_chong_bound",
+              "outcome": "",
+              "position": [
+                1392.0,
+                656.0
+              ],
+              "serial": 0
+            },
+            {
+              "faction": 1,
+              "hp": 1.0,
+              "id": 2,
+              "name": "dong_chao",
+              "outcome": "subdued",
+              "position": [
+                1407.13903808594,
+                590.162292480469
+              ],
+              "serial": 3
+            },
+            {
+              "faction": 1,
+              "hp": 1.0,
+              "id": 3,
+              "name": "xue_ba",
+              "outcome": "subdued",
+              "position": [
+                1428.82751464844,
+                600.439025878906
+              ],
+              "serial": 3
+            }
+          ],
+          "care_elapsed": 0.533333333333333,
+          "clock": 10.6666666666666,
+          "events": [
+            "yezhulin_early_force"
+          ],
+          "mission_stage": "open_rescue"
+        },
+        "result_code": ""
+      },
+      "failures": [],
+      "pid": 19304,
+      "stage": "save",
+      "exit_code": 0,
+      "seconds": 39.13,
+      "engine_errors": []
+    },
+    {
+      "checks": 11,
+      "facts": {
+        "care_finished_seconds": 14.4333333333335,
+        "care_without_new_order": true,
+        "finish_seconds": 97.483333333329,
+        "result_code": "",
+        "story_done": 0
+      },
+      "failures": [],
+      "pid": 6156,
+      "stage": "resume",
+      "exit_code": 0,
+      "seconds": 109.448,
+      "engine_errors": []
+    }
+  ]
+}
