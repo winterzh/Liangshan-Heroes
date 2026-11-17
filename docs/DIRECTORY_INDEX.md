@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[三章短篇结算战果](../qa/battle_entry_localization_20261116/README.md#三章短篇的结算战果)的探针和收据位于 qa/battle_entry_localization_20261116/short_route_debrief/。
+
 [江州与高俅路线结算](../qa/battle_entry_localization_20261116/README.md#江州与高俅的路线结算)的四语运行探针及收据位于 qa/battle_entry_localization_20261116/route_debrief/。
 
 [大名府结算战果](../qa/campaign_wounded_selection_20261116/README.md#大名府结算的路线战果)的定向探针与四语结果位于 qa/campaign_wounded_selection_20261116/route_debrief/。

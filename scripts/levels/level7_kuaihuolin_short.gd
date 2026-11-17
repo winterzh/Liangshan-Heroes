@@ -305,6 +305,19 @@ func activate_mission_button(b, button_id: String) -> void:
 		b.select_single(actor,false)
 		b.center_camera_cell(b.map.world_to_cell(actor.position))
 
+func campaign_debrief(mission) -> Array[Dictionary]:
+	var shop := "尚未交还施恩"
+	if mission.has_event("restore_shop"):
+		shop = "已交还施恩"
+	elif mission.has_event("menshen_subdued"):
+		shop = "蒋门神已败，酒店尚未交还"
+	return [
+		{"source": "酒望 · 饮酒 %d/4 处", "args": [drunk]},
+		{"source": "反击命中 %d 次 · %s", "args": [counter_hits,
+			"玉环步接鸳鸯脚命中" if mission.has_event("mengzhou_signature") else "未完成玉环步接鸳鸯脚"]},
+		{"source": "酒店 · %s", "args": [shop]},
+	]
+
 func top_status(b) -> String:
 	if charge_running: return "蒋门神冲撞中 · 横移让开"
 	if exposed_left>0: return Localize.format_text("当前破绽 %.1f秒 · 反击命中%d次", [exposed_left,counter_hits])

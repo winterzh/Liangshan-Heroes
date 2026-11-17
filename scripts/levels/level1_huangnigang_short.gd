@@ -338,10 +338,21 @@ func _begin_free_withdraw(b) -> void:
 	b.mission.begin("withdraw","七车十一担已到 · 收拢同行人","七辆江州车已推出冈口。让七星与白胜一起到西口，可完成全员生还目标；先行收队仍需你实际下令。")
 	b.mission.add_action("withdraw_now","先行收队 · 未到者不计全员生还",GATE_W,[],0.6,64)
 
+func _living_companions() -> Array:
+	return actors.filter(func(u): return is_instance_valid(u) and u.hp > 0 and u.story_outcome == "")
+
+func _companions_at_exit(b, living: Array) -> int:
+	var exit_point: Vector2 = b.map.cell_to_world(GATE_W)
+	var arrived := 0
+	for actor in living:
+		if actor.position.distance_to(exit_point) <= 150:
+			arrived += 1
+	return arrived
+
 func _withdraw_tick(b) -> void:
 	if victory or b.phase==b.Phase.END:return
-	var living: Array=actors.filter(func(u):return is_instance_valid(u) and u.hp>0 and u.story_outcome=="")
-	var all_out: bool=not living.is_empty() and living.all(func(u):return u.position.distance_to(b.map.cell_to_world(GATE_W))<=150)
+	var living := _living_companions()
+	var all_out := not living.is_empty() and _companions_at_exit(b, living) == living.size()
 	if delivered!=Transport.LOAD_COUNT or _delivered_cart_indices(b).size()!=Transport.CART_COUNT or living.is_empty() or not (all_out or depart_requested):return
 	if all_out and living.size()==8:b.mission.mark("huangnigang_all_safe","七星推七辆江州车带走十一担财物，与白胜一同全身出冈。")
 	else:_story_miss(b,"all_safe","已有同伴倒下。" if living.size()<8 else "先行收队，未等全员到达西冈口。")
@@ -520,6 +531,19 @@ func unit_tactical_hint(b,actor) -> String:
 		var index: int=int(actor.get_meta("carrying_tribute"))
 		return Localize.format_text("第%d车 · 已载%d担；下令前往本车出冈标记交付。",[index+1,Transport.weight(index)])
 	return ""
+
+func campaign_debrief(mission) -> Array[Dictionary]:
+	var b = mission.battle
+	var route := "酒计尚未完成"
+	if drug_done:
+		route = "酒计得手"
+	elif force_started:
+		route = "转为强夺"
+	return [
+		{"source": "夺纲 · %s", "args": [route]},
+		{"source": "运出车货 · %d/7 车 · %d/11 担", "args": [_delivered_cart_indices(b).size(), delivered]},
+		{"source": "西冈口 · %d/8 人到达", "args": [_companions_at_exit(b, _living_companions())]},
+	]
 
 func top_status(b) -> String:
 	var title: String={PREPARE:"商客歇脚",MARCH:"押队上冈",INQUIRY:"杨志盘问",ARRIVAL:"白胜挑酒入场",WINE:"白胜卖酒",CARRY:"装车推行",WITHDRAW:"收拢同行人",FORCE:"身份败露"}.get(st,"")

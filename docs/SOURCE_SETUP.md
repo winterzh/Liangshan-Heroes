@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+三章短篇结算沿用战斗结束时冻结的原始任务状态。黄泥冈到场人数与原收队条件共用出口半径，快活林的交还结果读取任务事件。文案源分属 campaign_escort_arrival.json、campaign_transport_groups.json 与 campaign_counter_window.json。 [短篇战果检查](../qa/battle_entry_localization_20261116/README.md#三章短篇的结算战果)
+
 江州与高俅关的路线结算读原队伍、任务事件和旗标，按已有冻结报告机制换语重绘。词库源为 campaign_pursuit.json 与 campaign_flagship_escort.json。 [江州与高俅战果](../qa/battle_entry_localization_20261116/README.md#江州与高俅的路线结算)
 
 大名府结算沿用既有南门、牢院、追兵与两条撤离事件，冻结单局战果供四语重新显示。没有新增存档字段，词库使用 campaign_coordination.json。 [大名府路线战果](../qa/campaign_wounded_selection_20261116/README.md#大名府结算的路线战果)

@@ -719,6 +719,24 @@ func _shadow_distance() -> float:
 			distance = minf(distance, lu.position.distance_to(target.position))
 	return distance
 
+func campaign_debrief(mission) -> Array[Dictionary]:
+	var route := "未走暗护路线"
+	if mission.has_event("yezhulin_early_force"):
+		route = "提前强救"
+	elif shadow_route == "north_pines":
+		route = "北侧松林暗护"
+	elif shadow_route == "south_reeds":
+		route = "南侧芦丛暗护"
+	elif shadow_route == "lost_trail":
+		route = "跟丢后赶往大树"
+	var b = mission.battle
+	var arrival := _escort_arrival_at(b.map.cell_to_world(EXIT_W), EXIT_R)
+	return [
+		{"source": "救援 · %s · %s", "args": [route, "已拦住水火棍" if mission.has_event("intercept") else "未完成拦棍"]},
+		{"source": "护送 · %s · %s", "args": ["已照料脚伤" if treated else "尚未照料脚伤", "已歇脚" if rest_reached else "尚未歇脚"]},
+		{"source": "出林口 · %d/4 人到达", "args": [arrival.arrived]},
+	]
+
 func top_status(b) -> String:
 	if st == ESCAPE:
 		var at_rest := _escort_heading_to_rest(b)
