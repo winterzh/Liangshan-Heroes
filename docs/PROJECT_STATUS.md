@@ -1,5 +1,7 @@
 # 当前项目总览
 
+492e6437 的本地试玩材料已准备。待录入三名首次体验、至少两次不同计划重玩、八章真人记录和 Android 手机、平板触控结果。 [本地试玩短检](../qa/battle_entry_timing_20261116/windows_playtest_launcher_492e6437.json)
+
 快活林修复后，八章及随机驻守在当前 Windows 候选进入战斗并返回菜单。原生 EXE 短检、候选哈希和真人待验范围已更新。 [新版进场验证](../qa/battle_entry_timing_20261116/README.md#windows-修复候选的发版短检)
 
 快活林发行包保存拒绝场景元数据的问题已修复并导出 Windows 492e6437，实际存读档及四语结算通过；黄泥冈原重车接力在 fa4084ff 编译包通过。 [Windows 续玩记录](../qa/campaign_short_player_continue_20261117/README.md#windows-短篇续玩和快活林修复)

@@ -1,5 +1,7 @@
 # 八幕战役后续开发路线图
 
+M2／M7 当前 Windows 候选的本地试玩入口与独立档案已准备，按首次试玩清单招募并记录。Steam 平台验收单独保留。 [本地试玩短检](../qa/battle_entry_timing_20261116/windows_playtest_launcher_492e6437.json)
+
 M7 快活林修复候选 492e6437 已验证八章与随机驻守进退及原生 EXE 11 条短检。祝家庄三名首玩、不同计划重玩、八章真人体验、Android 真机和 Steam 客户端验收仍待完成。 [新版进场验证](../qa/battle_entry_timing_20261116/README.md#windows-修复候选的发版短检)
 
 M6／M7 黄泥冈重车落地和接力在 fa4084ff 通过。发现快活林原画摊牌在该候选阻断保存，修复后的 492e6437 验证了六个摊位与同一次反击破绽的重启、四语结算和终局旧槽拒绝。 [Windows 续玩记录](../qa/campaign_short_player_continue_20261117/README.md#windows-短篇续玩和快活林修复)
