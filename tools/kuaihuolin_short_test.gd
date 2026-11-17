@@ -49,7 +49,7 @@ func _shot(b,name: String) -> void:
 	await process_frame; await RenderingServer.frame_post_draw
 	check(root.get_texture().get_image().save_png(folder+"/"+name+".png")==OK,"saved live "+name)
 
-func _live(name: String) -> void:
+func _live(name: String, on_counter_open := Callable()) -> void:
 	var b=await _start("",6)
 	var l=b.level
 	orders=0; cast_counts={}; charge_travel=0; min_hp=l.wu.hp
@@ -79,6 +79,10 @@ func _live(name: String) -> void:
 		check(await _until(func(): return l.st==l.SHOWDOWN,8),name+" actual attack opens the duel")
 	check(l.shi.position.distance_to(start)>800 and l.shi.hp==l.shi.max_hp,"Shi En actually walks to the safe waiting area")
 	check(l.drunk==(4 if name=="wine" else 0),name+" keeps chosen drink count")
+	await _duel(b,name,on_counter_open)
+
+func _duel(b, name: String, on_counter_open := Callable()) -> void:
+	var l=b.level
 	var t:=0.0
 	var seen_special:=-1
 	var attack_wait:=0.0
@@ -88,6 +92,11 @@ func _live(name: String) -> void:
 		if l.charge_running: charge_travel+=previous.distance_to(l.menshen.position)
 		previous=l.menshen.position
 		min_hp=minf(min_hp,l.wu.hp)
+		if on_counter_open.is_valid():
+			var window: Dictionary = l.counter_window_state(b)
+			if not window.is_empty() and window.footwork and window.in_range and l.wu.slot_ready(2) and l.wu._cast_t <= 0:
+				on_counter_open.call(b)
+				return
 		if name!="standing" and l.fist_windup>0 and seen_special!=l.special_index:
 			seen_special=l.special_index
 			if not screenshots.has(l.special_kind):

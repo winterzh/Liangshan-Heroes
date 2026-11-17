@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[快活林反击续玩](../qa/campaign_counter_window_20261116/README.md#酒路反击窗口续玩)记录酒势、破绽与鸳鸯脚提示的保存恢复。
+
 [黄泥冈强夺装货接力后续玩](../qa/campaign_transport_groups_20261116/README.md#强夺装货接力后续玩)保留原车载货存档、接力与交付回读。
 
 [高俅押俘续玩](../qa/campaign_fire_readiness_20261116/README.md#张顺接俘后续玩)记录接俘存档、原船恢复、主码头交接和押堂。

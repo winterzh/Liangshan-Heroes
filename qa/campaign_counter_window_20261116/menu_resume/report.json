@@ -1,0 +1,177 @@
+{
+  "passed": true,
+  "source_commit": "c21e0190949744c556661bbc1081b18d7b42061f",
+  "probe_sources_lf_sha256": {
+    "qa/campaign_counter_window_20261116/menu_resume/probe.gd": "100b7aebcd48cf7004d65a5f12a2dd1ac65f2840199e3c6ec257b2ea1c6e7257",
+    "scripts/battle.gd": "674532760ede5c9db4deb45bcf032800e9c7b83cbba0520109ec834831fecfec",
+    "scripts/continue_flow.gd": "2021ed1d64fd7dd02d9b53f26f903da725da83bdf3a1a5b6354a3cad4c8d5dcf",
+    "scripts/run_world_session.gd": "d149062a3dac05d0812978b6c476d72863bec68dc8d6cdc45af5fb676d2c0bd6",
+    "scripts/run_unit_graph.gd": "30f9f9af7e04cf37935005d1bb9dbb96b423a972ab0e2f9bf0c5c9e7b2f74bfc",
+    "scripts/run_battle_world_core.gd": "ea01ff6f8319155b7fb96346ea2f8f87f2a3ca629cace934cf5ca1a12730b2cb",
+    "scripts/levels/level7_kuaihuolin_short.gd": "90bb0fe6958dfadc468e7195788b1c8cb361adcd3de1328fdbce4a13e849e18b",
+    "scripts/run_level7_visual_state.gd": "54611db57d4a8d78bd8460d774a054086d2fd2ce1caa85bee537fe13bc7fbc60",
+    "scripts/levels/level7_kuaihuolin.gd": "37f6db9ad8cbd3f987bbd09e627444e73eae7b488d5279a99538766fe43682cb",
+    "tools/kuaihuolin_short_test.gd": "f742636822af84347b06ccf2d3690d73eee92fd59e76b13bbec3e3e4070eb914"
+  },
+  "stages": [
+    {
+      "checks": 19,
+      "facts": {
+        "checkpoint": {
+          "clock": 37.8666666666669,
+          "counter_hits": 0,
+          "drunk": 4,
+          "events": [
+            "action:road_choice:drink_0",
+            "action:road_choice:drink_1",
+            "action:road_choice:drink_2",
+            "action:road_choice:drink_3",
+            "action:road_choice:practice_step",
+            "action:road_choice:provoke",
+            "dodge_heavy",
+            "drink_0",
+            "drink_1",
+            "drink_2",
+            "drink_3",
+            "mengzhou_step_used",
+            "provoke",
+            "road_step_practiced"
+          ],
+          "hp": [
+            392.615384615385,
+            210.0,
+            733.214285714286
+          ],
+          "menshen": "7",
+          "opening_serial": 1,
+          "shi": "2",
+          "speed_band": [
+            0.64,
+            1.08
+          ],
+          "steady_left": 0.0,
+          "step_serial": 1,
+          "window": {
+            "footwork": true,
+            "fraction": 0.96969696969697,
+            "in_range": true,
+            "kick_cooldown": 0.0,
+            "remaining": 2.13333333333333
+          },
+          "wu": "1"
+        },
+        "generation": 1,
+        "result_code": ""
+      },
+      "failures": [],
+      "pid": 37288,
+      "stage": "save",
+      "exit_code": 0,
+      "seconds": 44.612,
+      "engine_errors": []
+    },
+    {
+      "checks": 19,
+      "facts": {
+        "first_resumed_hit": true,
+        "kick_cooldown_after_hit": 8.86666666666667,
+        "live": {
+          "casts": {
+            "0": 3,
+            "1": 2,
+            "2": 3,
+            "3": 1
+          },
+          "charge_travel": 186.666584014893,
+          "counter_hits": 2,
+          "drinks": 4,
+          "events": [
+            "action:road_choice:drink_0",
+            "drink_0",
+            "action:road_choice:drink_1",
+            "drink_1",
+            "action:road_choice:practice_step",
+            "mengzhou_step_used",
+            "road_step_practiced",
+            "action:road_choice:drink_2",
+            "drink_2",
+            "action:road_choice:drink_3",
+            "drink_3",
+            "action:road_choice:provoke",
+            "provoke",
+            "dodge_heavy",
+            "counter_hit",
+            "mengzhou_signature",
+            "dodge_rush",
+            "menshen_subdued",
+            "action:return_shop:terms",
+            "terms",
+            "action:return_shop:restore_shop",
+            "restore_shop"
+          ],
+          "final_hp": 342.282051282052,
+          "game_seconds": 72.6666666666677,
+          "heavy_dodges": 2,
+          "min_hp": 293.538461538462,
+          "orders": 41,
+          "result": {
+            "contract_version": 2,
+            "core_cleared": true,
+            "core_goal": "以拳脚制服蒋门神，让施恩活着收回酒店。",
+            "done_ids": [
+              "three_bowls",
+              "drunken_provocation",
+              "signature_fists",
+              "spare_and_restore"
+            ],
+            "goals": [
+              {
+                "id": "three_bowls",
+                "label": "依约无三不过望，沿路四处各饮三碗",
+                "note": "",
+                "reason": "",
+                "state": "done"
+              },
+              {
+                "id": "drunken_provocation",
+                "label": "到挂着“河阳风月”酒望的店前佯醉换酒，惊动酒保，引蒋门神赶来",
+                "note": "",
+                "reason": "",
+                "state": "done"
+              },
+              {
+                "id": "signature_fists",
+                "label": "趁失势以玉环步接鸳鸯脚",
+                "note": "",
+                "reason": "",
+                "state": "done"
+              },
+              {
+                "id": "spare_and_restore",
+                "label": "留蒋门神性命，说清三项条件后交还酒店",
+                "note": "",
+                "reason": "",
+                "state": "done"
+              }
+            ],
+            "missed_ids": [],
+            "pending_ids": [],
+            "story_complete": true,
+            "story_done": 4,
+            "story_total": 4
+          },
+          "route": "wine",
+          "rush_dodges": 1,
+          "victory": true
+        },
+        "result_code": ""
+      },
+      "failures": [],
+      "pid": 10972,
+      "stage": "resume",
+      "exit_code": 0,
+      "seconds": 32.407,
+      "engine_errors": []
+    }
+  ]
+}

@@ -119,9 +119,10 @@ func _signature_footwork_ready() -> bool:
 func counter_window_state(b) -> Dictionary:
 	if st != SHOWDOWN or exposed_left <= 0 or not is_instance_valid(wu) or wu.hp <= 0 or not is_instance_valid(menshen) or menshen.hp <= 0 or menshen.story_outcome != "": return {}
 	var spec: Dictionary=b._scaled_ability(b._abilities["mengzhou_kick"],b._hero_rb(wu),b._hero_db(wu))
+	var kick_remaining := maxf(0.0, float(wu.ability_slots[2].get("cd_t",0.0))) if wu.slot_count() > 2 else 0.0
 	return {"remaining":exposed_left,"fraction":clampf(exposed_left/(2.8 if special_kind=="rush" else 2.2),0,1),
 		"footwork":_signature_footwork_ready(),"in_range":wu.position.distance_to(menshen.position)<=float(spec.radius),
-		"kick_cooldown":wu.slot_cd(2),"position":menshen.position}
+		"kick_cooldown":kick_remaining,"position":menshen.position}
 
 func _apply_wine_speed() -> void:
 	if drunk>0: wu.start_drunk(maxf(0.64,1.0-0.09*drunk),1.08,999)
