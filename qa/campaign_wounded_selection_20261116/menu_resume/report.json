@@ -1,0 +1,162 @@
+{
+  "passed": true,
+  "source_commit": "90972fcd7c25224773ae23f9a90a2d730f0a5d2d",
+  "probe_sources_lf_sha256": {
+    "qa/campaign_wounded_selection_20261116/menu_resume/probe.gd": "af5bdf631d26a83638f7632128252c867be1b2a1d10226f17ad66b31c64e73a3",
+    "scripts/battle.gd": "674532760ede5c9db4deb45bcf032800e9c7b83cbba0520109ec834831fecfec",
+    "scripts/continue_flow.gd": "2021ed1d64fd7dd02d9b53f26f903da725da83bdf3a1a5b6354a3cad4c8d5dcf",
+    "scripts/run_world_session.gd": "d149062a3dac05d0812978b6c476d72863bec68dc8d6cdc45af5fb676d2c0bd6",
+    "scripts/run_unit_graph.gd": "30f9f9af7e04cf37935005d1bb9dbb96b423a972ab0e2f9bf0c5c9e7b2f74bfc",
+    "scripts/levels/level8_daming_rts.gd": "47185469d8785406b571344b2045e1bdabe3420f6ee23ea55c4882c88abae856",
+    "tools/daming_rts_test.gd": "b7b4e69abc7846f1dbd79c78bf0f094dafdf8161f000e95952ae4c26be990168"
+  },
+  "stages": [
+    {
+      "checks": 6,
+      "facts": {
+        "checkpoint": {
+          "clock": 219.333333333326,
+          "enemy_recruits": 2,
+          "events": [
+            "action:daming_rts:daming_admit",
+            "action:daming_rts:daming_fire",
+            "action:daming_rts:daming_gate",
+            "action:daming_rts:daming_rescue",
+            "daming_fire_lit",
+            "daming_gate_opened",
+            "daming_inner_ready",
+            "daming_inner_unlock",
+            "daming_post_0",
+            "daming_prison_admitted",
+            "daming_prisoners_freed",
+            "daming_response_arrived"
+          ],
+          "gate_open": true,
+          "gold": 257,
+          "hall": "1",
+          "prison_open": true,
+          "prisoners": [
+            "28",
+            "29"
+          ],
+          "pursuers": [
+            "56",
+            "57",
+            "58",
+            "59",
+            "60",
+            "61"
+          ],
+          "pursuit_left": 14.0,
+          "pursuit_sent": false,
+          "pursuit_warned": true,
+          "rescued": true,
+          "signaled": true,
+          "wood": 66
+        },
+        "generation": 1,
+        "result_code": ""
+      },
+      "failures": [],
+      "pid": 3652,
+      "stage": "save",
+      "exit_code": 0,
+      "seconds": 128.347,
+      "engine_errors": []
+    },
+    {
+      "checks": 16,
+      "facts": {
+        "game_seconds_at_result": 234.999999999992,
+        "live": {
+          "ai_trained": 2,
+          "buildings_started": 5,
+          "camp_hp": 1500.0,
+          "events": [
+            "action:daming_rts:daming_admit",
+            "daming_prison_admitted",
+            "daming_post_0",
+            "action:daming_rts:daming_fire",
+            "daming_inner_ready",
+            "daming_fire_lit",
+            "action:daming_rts:daming_gate",
+            "daming_response_arrived",
+            "daming_gate_opened",
+            "action:daming_rts:daming_rescue",
+            "daming_inner_unlock",
+            "daming_prisoners_freed",
+            "daming_post_1",
+            "daming_shi_safe",
+            "daming_pursuit",
+            "daming_lu_safe",
+            "daming_victory"
+          ],
+          "game_seconds": 16.25,
+          "orders": 195,
+          "phase": "extract",
+          "prisoner_hp": [
+            360.0,
+            230.0
+          ],
+          "result": {
+            "contract_version": 2,
+            "core_cleared": true,
+            "core_goal": "守住梁山前营，救出卢俊义、石秀，护送二人活着抵达城外接应地。",
+            "done_ids": [
+              "daming_infiltration",
+              "daming_signal",
+              "daming_response"
+            ],
+            "goals": [
+              {
+                "id": "daming_infiltration",
+                "label": "柴进、乐和乔装入牢，时迁按分工举火",
+                "note": "",
+                "reason": "",
+                "state": "done"
+              },
+              {
+                "id": "daming_signal",
+                "label": "翠云火号发动里应外合",
+                "note": "",
+                "reason": "",
+                "state": "done"
+              },
+              {
+                "id": "daming_response",
+                "label": "鲁智深或武松夺门，牢中内应开枷",
+                "note": "",
+                "reason": "",
+                "state": "done"
+              }
+            ],
+            "missed_ids": [],
+            "pending_ids": [],
+            "story_complete": true,
+            "story_done": 3,
+            "story_total": 3
+          },
+          "skill_orders": 18,
+          "spy_phase": "admit",
+          "units_queued": 28,
+          "units_queued_by_key": {
+            "liang_dao": 5,
+            "liang_gong": 12,
+            "liang_qiang": 2.0,
+            "lou_luo": 5.0,
+            "siege_cata": 2.0,
+            "siege_ram": 2.0
+          }
+        },
+        "pursuit_sent_before_result": true,
+        "result_code": ""
+      },
+      "failures": [],
+      "pid": 16524,
+      "stage": "resume",
+      "exit_code": 0,
+      "seconds": 32.526,
+      "engine_errors": []
+    }
+  ]
+}

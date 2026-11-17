@@ -1,6 +1,7 @@
 extends "res://tools/zhujiazhuang_rts_test.gd"
 ## DAMING_TEST=contracts|assault|signal. Live routes never inject troops, money,
 ## damage or mission results; placement/freeze fixtures are limited to contracts.
+const DAMING_BUILD_CELLS := [Vector2i(25,54),Vector2i(37,57),Vector2i(29,63),Vector2i(39,49),Vector2i(23,50),Vector2i(21,62),Vector2i(35,51),Vector2i(44,55),Vector2i(16,55),Vector2i(45,50),Vector2i(17,62)]
 var skill_orders := 0
 func _run() -> void:
 	OS.set_environment("CAMPAIGN_QA","1")
@@ -10,7 +11,7 @@ func _run() -> void:
 	route=OS.get_environment("DAMING_TEST")
 	if route=="": route="contracts"
 	out_dir="res://qa/daming_rts_20260905"
-	build_cells=[Vector2i(25,54),Vector2i(37,57),Vector2i(29,63),Vector2i(39,49),Vector2i(23,50),Vector2i(21,62),Vector2i(35,51),Vector2i(44,55),Vector2i(16,55),Vector2i(45,50),Vector2i(17,62)]
+	build_cells=DAMING_BUILD_CELLS.duplicate()
 	var b=await _start("",7)
 	Engine.time_scale=4
 	if route=="contracts": await _contracts_dm(b)
@@ -137,15 +138,17 @@ func _skills_dm(b,army: Array) -> void:
 			if b._ability_armed!="": b._cast_armed_at(b.to_screen(foes[0].position))
 			skill_orders+=1
 			break
-func _play_dm(b) -> void:
+func _play_dm(b, stop_on_pursuit_warning := false) -> void:
 	var l=b.level
 	var time := 0.0
 	var next_log := 0.0
 	var start_hall=l.hall
-	var phase := "outpost"
+	var phase := "extract" if l.rescued else "outpost"
 	var spy_phase := "admit"
 	var captured := {}
 	while b.phase==b.Phase.FIGHT and time<900:
+		if stop_on_pursuit_warning and l.pursuit_warned and not l.pursuit_sent:
+			return
 		_economy_dm(b)
 		var army: Array=b.units.filter(func(u): return alive(u) and u.faction==0 and not u.is_worker and not u.is_building and not u.is_noncombat and u.key not in l.SPY_KEYS)
 		var target=null
