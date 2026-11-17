@@ -198,7 +198,7 @@ func validate(snapshot: Variant) -> Dictionary:
 		if not _canvas_valid(record.fixed, record.runtime): return _fail("SCENERY_CANVAS_VALUE", str(i))
 		if not _fixed_values_valid(record.kind, record.fixed): return _fail("SCENERY_FIXED_VALUE", str(i))
 		for key in record.metadata:
-			if typeof(key) != TYPE_STRING or not _meta_allowed(String(key)): return _fail("SCENERY_META", str(i))
+			if typeof(key) != TYPE_STRING or not _meta_allowed(String(key), record.kind): return _fail("SCENERY_META", str(i))
 			if key in ["fog_clearance_px", "render_height"]:
 				if not _finite_number(record.metadata[key]): return _fail("SCENERY_META_NUMBER", str(i))
 			elif typeof(record.metadata[key]) != TYPE_STRING or record.metadata[key].length() > 256:
@@ -375,7 +375,7 @@ func _capture_nodes(node: Node2D, parent: int, records: Array) -> Dictionary:
 	for key in TEX_FIELDS[kind]: textures[key] = _texture_descriptor(node.get(key))
 	var metadata: Dictionary = {}
 	for key in node.get_meta_list():
-		if not _meta_allowed(String(key)): return _fail("SCENERY_META_UNSUPPORTED", String(key))
+		if not _meta_allowed(String(key), kind): return _fail("SCENERY_META_UNSUPPORTED", String(key))
 		metadata[String(key)] = node.get_meta(key)
 	var encoded: Dictionary = Codec.new().encode({"parent": parent, "kind": kind, "fixed": fixed,
 		"runtime": runtime, "textures": textures, "metadata": metadata})
@@ -748,7 +748,9 @@ func _saved_campaign_context_valid(value: Variant) -> bool:
 		and typeof(value.mode) == TYPE_STRING and value.mode == "campaign" \
 		and typeof(value.level_id) == TYPE_STRING and value.level_id == _trusted_context.get("level_id")
 
-func _meta_allowed(key: String) -> bool:
+func _meta_allowed(key: String, kind: String) -> bool:
+	if key == "campaign_environment_text_surface_id":
+		return kind == "story_stall" and _campaign_enabled() and _trusted_context.level_id == "level7"
 	return key in NODE_META or (_campaign_enabled() and key in CAMPAIGN_META)
 
 func _campaign_map(game_map: GameMap) -> Dictionary:
