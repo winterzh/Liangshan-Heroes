@@ -1,0 +1,221 @@
+{
+  "source_commit": "fa4084ff0def019efba38567145a5c3f32563348",
+  "pack_sha256": "2a59529bee3acf7dd309b0519593d715867242aadf04cfa485d268c3bf6885de",
+  "compiled_source_sha256": "67d5f4a5df50ad8b6aee2ce4ee25a23b049ba58b4ebbb14965e678d7a65d62b8",
+  "source_probe_files_lf_sha256": {
+    "tools/zhujiazhuang_rts_test.gd": "435ddb8f9bc774687e1ea879ac6e9adc606380db4934ca3b72dfea294273d770",
+    "tools/daming_rts_test.gd": "73de9d984adc9f30554f84890a2ef9f7de24f5035d7f9b9cf0ceea8286cae7ce",
+    "qa/campaign_wounded_selection_20261116/menu_resume/probe.gd": "5ac16594eeb80054da2e31a99dcd692181404af7b22f05a299187f30a73f062e",
+    "qa/campaign_siege_20261116/player_continue/platform_entry.gd": "f270ba38384e9bce258c409a6cb10444e8b834cbdc26d4266d286cceeb0f3da6",
+    "qa/campaign_wounded_selection_20261116/player_continue/probe.gd": "aeca5acfa93d8c339fd3b6f6cb0a23b8bffa8c3c18dadc54e0eaf14ffe135b9e"
+  },
+  "adapted_probe_sha256": {
+    "rts_test.gd": "0599c0679e47697b50e2cea1545d04ce45ffd0904eb7b4b20aa8ea666e29a866",
+    "daming_rts_test.gd": "f874a6d1cd789898a42d713367192b0c610f0b1cba33d36bae888dc6a3baa6bf",
+    "menu_resume.gd": "06bb56568b54da285e5263876e77e3d2791fe54ecfc37ddffb1f705cedcd8f87",
+    "platform_entry.gd": "f270ba38384e9bce258c409a6cb10444e8b834cbdc26d4266d286cceeb0f3da6",
+    "player_continue.gd": "d8c051baae141d302c73b72de03941555c1e4f34e21e62b7d0b5236072441ab4"
+  },
+  "steam_disabled": true,
+  "scope": "Compiled Windows candidate plus editor host for the test driver. Offline platform entry shim; original save, restore, combat and settlement code.",
+  "host_engine_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+  "platform_entry_stub": true,
+  "native_release_boot_passed": true,
+  "steps": [
+    {
+      "checks": 10,
+      "facts": {
+        "checkpoint": {
+          "clock": 257.333333333324,
+          "enemy_recruits": 4,
+          "events": [
+            "action:daming_rts:daming_rescue",
+            "daming_early_unlock",
+            "daming_gate_breached",
+            "daming_gate_opened",
+            "daming_lu_safe",
+            "daming_post_0",
+            "daming_prison_breached",
+            "daming_prisoners_freed"
+          ],
+          "gate_open": true,
+          "gold": 33,
+          "hall": "1",
+          "outcomes": [
+            "retreated",
+            ""
+          ],
+          "prison_open": true,
+          "prisoners": [
+            "28",
+            "29"
+          ],
+          "pursuers": [
+            "56",
+            "57",
+            "58",
+            "59",
+            "60",
+            "61"
+          ],
+          "pursuit_left": 0.5,
+          "pursuit_sent": false,
+          "pursuit_warned": true,
+          "rescued": true,
+          "signaled": false,
+          "wood": 411
+        },
+        "compiled_sha": "67d5f4a5df50ad8b6aee2ce4ee25a23b049ba58b4ebbb14965e678d7a65d62b8",
+        "generation": 1,
+        "identity": "source-v1:67d5f4a5df50ad8b6aee2ce4ee25a23b049ba58b4ebbb14965e678d7a65d62b8",
+        "result_code": "",
+        "route": "assault"
+      },
+      "failures": [],
+      "stage": "save",
+      "exit_code": 0,
+      "seconds": 83.752,
+      "engine_errors": [],
+      "log_sha256": "02901157a6b1cd5639151db511e628e6f499b1155477992d96e309d7083120c4",
+      "anchor_warnings": 0
+    },
+    {
+      "checks": 26,
+      "facts": {
+        "compiled_sha": "67d5f4a5df50ad8b6aee2ce4ee25a23b049ba58b4ebbb14965e678d7a65d62b8",
+        "debrief": {
+          "en": [
+            "South gate · Breached by force",
+            "Prison compound · Forced open by the relief force",
+            "Evacuation · Lu Junyi Retreated · Shi Xiu Retreated"
+          ],
+          "ja": [
+            "南門 · 強襲で突破",
+            "牢屋敷 · 外の部隊が強襲で開放",
+            "撤退 · 盧俊義 撤退済み · 石秀 撤退済み"
+          ],
+          "zh_CN": [
+            "南门 · 强攻破门",
+            "牢院 · 外军强开牢院",
+            "撤离 · 卢俊义 已撤离 · 石秀 已撤离"
+          ],
+          "zh_TW": [
+            "南門 · 強攻破門",
+            "牢院 · 外軍強開牢院",
+            "撤離 · 盧俊義 已撤離 · 石秀 已撤離"
+          ]
+        },
+        "game_seconds_at_result": 277.399999999989,
+        "identity": "source-v1:67d5f4a5df50ad8b6aee2ce4ee25a23b049ba58b4ebbb14965e678d7a65d62b8",
+        "live": {
+          "ai_trained": 4,
+          "buildings_started": 5,
+          "camp_hp": 1500.0,
+          "events": [
+            "daming_post_0",
+            "daming_gate_breached",
+            "daming_gate_opened",
+            "daming_prison_breached",
+            "action:daming_rts:daming_rescue",
+            "daming_early_unlock",
+            "daming_prisoners_freed",
+            "daming_lu_safe",
+            "daming_pursuit",
+            "daming_post_1",
+            "daming_shi_safe",
+            "daming_victory"
+          ],
+          "game_seconds": 20.0,
+          "orders": 226,
+          "phase": "extract",
+          "prisoner_hp": [
+            360.0,
+            230.0
+          ],
+          "result": {
+            "contract_version": 2,
+            "core_cleared": true,
+            "core_goal": "守住梁山前营，救出卢俊义、石秀，护送二人活着抵达城外接应地。",
+            "done_ids": [],
+            "goals": [
+              {
+                "id": "daming_infiltration",
+                "label": "柴进、乐和乔装入牢，时迁按分工举火",
+                "note": "",
+                "reason": "本局已偏离“柴进、乐和乔装入牢，时迁按分工举火”的原著条件",
+                "state": "missed"
+              },
+              {
+                "id": "daming_signal",
+                "label": "翠云火号发动里应外合",
+                "note": "",
+                "reason": "本局已偏离“翠云火号发动里应外合”的原著条件",
+                "state": "missed"
+              },
+              {
+                "id": "daming_response",
+                "label": "鲁智深或武松夺门，牢中内应开枷",
+                "note": "",
+                "reason": "本局已偏离“鲁智深或武松夺门，牢中内应开枷”的原著条件",
+                "state": "missed"
+              }
+            ],
+            "missed_ids": [
+              "daming_infiltration",
+              "daming_signal",
+              "daming_response"
+            ],
+            "pending_ids": [],
+            "story_complete": false,
+            "story_done": 0,
+            "story_total": 3
+          },
+          "skill_orders": 33,
+          "spy_phase": "admit",
+          "units_queued": 25,
+          "units_queued_by_key": {
+            "liang_dao": 3,
+            "liang_gong": 9.0,
+            "liang_qiang": 4,
+            "lou_luo": 6.0,
+            "siege_cata": 2.0,
+            "siege_ram": 1
+          }
+        },
+        "progress_sha": "1c664222b2b7804380b17a9df572ab3d0a15152825672982e8014b1a024a0d32",
+        "pursuit_sent_before_result": true,
+        "result_code": "",
+        "route": "assault"
+      },
+      "failures": [],
+      "stage": "resume",
+      "exit_code": 0,
+      "seconds": 24.411,
+      "engine_errors": [],
+      "log_sha256": "73ed727c6793443d8d43d46ce67f15a68a2dbb45bdec6169e684cd6757d2f399",
+      "anchor_warnings": 0
+    },
+    {
+      "checks": 7,
+      "facts": {
+        "compiled_sha": "67d5f4a5df50ad8b6aee2ce4ee25a23b049ba58b4ebbb14965e678d7a65d62b8",
+        "identity": "source-v1:67d5f4a5df50ad8b6aee2ce4ee25a23b049ba58b4ebbb14965e678d7a65d62b8",
+        "progress_sha": "1c664222b2b7804380b17a9df572ab3d0a15152825672982e8014b1a024a0d32",
+        "route": "assault",
+        "terminal_code": "LOCAL_RUN_TERMINAL"
+      },
+      "failures": [],
+      "stage": "reject",
+      "exit_code": 0,
+      "seconds": 9.912,
+      "engine_errors": [],
+      "log_sha256": "7648fe4836c2d54dca641b2b3546305827d96e6538b19dad92f556c3e9069357",
+      "anchor_warnings": 0
+    }
+  ],
+  "passed": true,
+  "checks": 43,
+  "automated_battle_speed_multiplier": 4,
+  "steps_seconds": 118.075,
+  "archived_probe_sha256": "f1706dd61956d909a3b13b5c8017911dacf1507ebfefdccfa0460e0fb97262a2"
+}

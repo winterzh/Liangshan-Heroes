@@ -1,5 +1,7 @@
 # 当前项目总览
 
+大名府强攻线用 Windows 候选 fa4084ff 在三个独立进程闭合中途保存、原任务继续、四语通关与旧槽拒绝。真实 Steam 客户端和真人体验待验。 [大名府续玩收据](../qa/campaign_wounded_selection_20261116/player_continue/windows_candidate_fa4084ff.json)
+
 Windows 候选 fa4084ff 的高俅关标准特效正常速度实测 600.007 秒、67,536 帧，P95 14.707 ms、P99 17.135 ms，达到路线图 P95 ≤ 16.7 ms、P99 ≤ 33.3 ms 的门槛。 完整真人体验、其他设备和 Steam 客户端待验。 [十分钟帧时收据](../qa/campaign_sustained_performance_20261116/windows_pack_fa4084ff.json)
 
 八章的四语本局战果已并入本地 Windows 候选 fa4084ff，实际结算界面通过 66 项编译包检查。真人验收和 Steam 正式版部署待办。 [本地候选验证](../qa/battle_entry_localization_20261116/windows_campaign_candidate_fa4084ff.json)
