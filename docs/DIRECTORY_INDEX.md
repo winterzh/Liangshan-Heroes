@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[大名府夺门与开枷提示](../qa/campaign_coordination_20261116/README.md#火号后的夺门与开枷提示)的桌面触屏探针和报告在 `qa/campaign_coordination_20261116/touch_gate/`。
+
 [高俅举火与双船撤离](../qa/campaign_fire_readiness_20261116/README.md#触屏举火与双船撤离)的桌面触屏探针与报告位于 `qa/campaign_fire_readiness_20261116/touch_withdrawal/`。
 
 [江州登船提示](../qa/campaign_pursuit_20261116/README.md#登船点危险提示与触屏指令)的桌面触屏探针与报告位于 `qa/campaign_pursuit_20261116/boarding_controls/`。
