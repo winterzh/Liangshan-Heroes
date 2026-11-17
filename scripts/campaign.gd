@@ -25,6 +25,14 @@ const CUSTOM_DEFENSE_SCRIPT := "res://scripts/levels/custom_defense.gd"
 const SCENARIO_SCRIPT := "res://scripts/levels/scenario.gd"
 const ARENA_SCRIPT := "res://scripts/levels/arena.gd"
 
+var _cfg_writer: RefCounted
+var _cfg_writer_scope: Dictionary = {}
+var _cfg_writer_original_owner := ""
+var _cfg_writer_error: Dictionary = {}
+var _prefs_requested: Dictionary = {}
+var _prefs_deferred := false
+var _prefs_failed: Dictionary = {}
+var _prefs_failed_scope: Dictionary = {}
 var current := 0
 var unlocked := 1
 var records: Dictionary = {} # stable level id -> best base clear / same-run original-story result
@@ -160,6 +168,8 @@ func has_next() -> bool:
 
 
 func on_level_won(result: Dictionary = {}, context: Dictionary = {}) -> Dictionary:
+	if SteamRunPolicy.uses_campaign_transactions() and OS.get_environment("CAMPAIGN_QA") != "1":
+		return {"accepted":false, "persisted":false, "new_story_seal":false, "code":"CAMPAIGN_COORDINATOR_REQUIRED"}
 	if context.get("mode", "custom") != "campaign":
 		return {"accepted":false,"new_story_seal":false}
 	var level_id := String(context.get("level_id", ""))
@@ -174,6 +184,8 @@ func on_level_won(result: Dictionary = {}, context: Dictionary = {}) -> Dictiona
 
 
 func record_level_result(level_id: String, result: Dictionary) -> Dictionary:
+	if SteamRunPolicy.uses_campaign_transactions() and OS.get_environment("CAMPAIGN_QA") != "1":
+		return {"accepted":false, "persisted":false, "new_story_seal":false, "code":"CAMPAIGN_COORDINATOR_REQUIRED"}
 	if index_for_id(level_id) < 0 or not bool(result.get("core_cleared", false)):
 		return {"accepted":false,"new_story_seal":false}
 	var old: Dictionary = _normalize_record(records.get(level_id, {}))
@@ -249,12 +261,48 @@ func _normalized_records(raw_value: Variant) -> Dictionary:
 
 
 func save_prefs() -> void:
-	_save()
+	if OS.get_environment("CAMPAIGN_QA") == "1": return
+	if not SteamRunPolicy.uses_campaign_transactions():
+		_save()
+		return
+	_prefs_requested.clear()
+	for key in ["ai_difficulty", "victory_mode", "scale_on", "enemy_mult", "hero_mult", "hero_mult_touched", "defense_rand_waves", "defense_interval"]:
+		_prefs_requested[key] = get(key)
+	if not _prefs_deferred:
+		_prefs_deferred = true
+		get_tree().process_frame.connect(_save_prefs_deferred, CONNECT_ONE_SHOT)
 
+func _save_prefs_deferred() -> void:
+	if Engine.is_in_physics_frame():
+		get_tree().process_frame.connect(_save_prefs_deferred, CONNECT_ONE_SHOT)
+		return
+	_prefs_deferred = false
+	if _prefs_requested.is_empty(): return
+	if not _progress_gate().background_allowed() or persistence_busy() or _shared_configuration_pending(): return
+	var frozen: Dictionary = _prefs_requested.duplicate(true)
+	_prefs_requested.clear()
+	var saved: Dictionary = _write_values("prefs", frozen, cloud_owner)
+	if not saved.ok:
+		_prefs_failed = frozen.duplicate(true)
+		var flow := get_node_or_null("/root/ContinueFlow")
+		if flow != null: flow.note_config_failure(saved)
+
+
+func _progress_gate() -> Script:
+	return ResourceLoader.load("res://scripts/run_campaign_progress_gate.gd", "Script", ResourceLoader.CACHE_MODE_REUSE)
+
+func persistence_busy() -> bool:
+	return not _prefs_failed.is_empty() or (_cfg_writer != null and _cfg_writer.busy())
+
+func _identity() -> Dictionary:
+	return ResourceLoader.load("res://scripts/run_content_identity.gd", "Script", ResourceLoader.CACHE_MODE_REUSE).new().resolve_runtime_identity()
 
 func _save() -> bool:
-	if OS.get_environment("CAMPAIGN_QA") == "1":
-		return true
+	if OS.get_environment("CAMPAIGN_QA") == "1": return true
+	if not SteamRunPolicy.uses_campaign_transactions(): return _save_basic_profile()
+	return _write_values("prefs", {}, cloud_owner).get("ok", false)
+
+func _save_basic_profile() -> bool:
 	var cfg := ConfigFile.new()
 	# Preserve unknown sections/keys from prior or newer builds instead of
 	# reconstructing campaign.cfg and silently discarding them.
@@ -279,13 +327,111 @@ func _save() -> bool:
 	return true
 
 
-## SteamCloud validates the complete profile first. Replacement is intentional:
-## merging here would carry the previous account's progress into the new one.
+func _write_values(operation: String, progress: Dictionary, owner: String) -> Dictionary:
+	if not _progress_gate().background_allowed(): return {"ok":false, "code":"CAMPAIGN_PROGRESS_PENDING"}
+	if operation == "prefs" and _shared_configuration_pending(): return {"ok":false,"code":"CLOUD_CONFIGURATION_PENDING"}
+	if _cfg_writer != null and _cfg_writer.busy(): return {"ok":false, "code":"CAMPAIGN_CFG_OWNED_PENDING"}
+	var identity: Dictionary = _identity()
+	if not identity.ok: return identity
+	_cfg_writer = ResourceLoader.load("res://scripts/run_campaign_cfg_transaction.gd", "Script", ResourceLoader.CACHE_MODE_REUSE).new()
+	_cfg_writer_original_owner = cloud_owner
+	_cfg_writer_scope = {"operation":operation, "run_token":"", "intent_sha256":"", "target_owner":owner,
+		"content_version":identity.content_version, "engine_sha256":identity.engine_binary_sha256}
+	var begun: Dictionary = _cfg_writer.begin_write(_cfg_writer_scope)
+	if not begun.ok: return _retain_writer_error(begun)
+	var cfg: ConfigFile = begun.cfg
+	if cfg.get_value("progress", "owner", "") != _cfg_writer_original_owner:
+		var aborted: Dictionary = _cfg_writer.abort_unprepared()
+		return _retain_writer_error({"ok":false,"code":"CAMPAIGN_CFG_ORIGINAL_OWNER_CHANGED","abort_confirmed":aborted.ok})
+	if operation == "cloud":
+		cfg.set_value("progress", "schema", SAVE_SCHEMA)
+		cfg.set_value("progress", "unlocked", int(progress.unlocked))
+		cfg.set_value("progress", "records", progress.records.duplicate(true))
+		cfg.set_value("progress", "owner", owner)
+	else:
+		for key in ["ai_difficulty", "victory_mode", "scale_on", "enemy_mult", "hero_mult", "hero_mult_touched", "defense_rand_waves", "defense_interval"]:
+			cfg.set_value("pref", key, progress.get(key, get(key)))
+	var saved: Dictionary = _cfg_writer.commit_prepared(cfg)
+	if not saved.ok: return _retain_writer_error(saved)
+	return _writer_complete(saved)
+
+func _retain_writer_error(error: Dictionary) -> Dictionary:
+	_cfg_writer_error = error.duplicate(true)
+	if _cfg_writer_scope.get("operation") == "cloud":
+		var flow := get_node_or_null("/root/ContinueFlow")
+		if flow != null: flow.note_config_failure(error)
+	if _cfg_writer_scope.get("operation") == "prefs": _prefs_failed_scope = _cfg_writer_scope.duplicate(true)
+	if _cfg_writer != null and not _cfg_writer.busy():
+		_cfg_writer = null
+		_cfg_writer_scope.clear()
+	return error
+
+func _writer_complete(receipt: Dictionary) -> Dictionary:
+	var operation: String = _cfg_writer_scope.operation
+	_cfg_writer = null
+	_cfg_writer_scope.clear()
+	_cfg_writer_error.clear()
+	if operation == "prefs":
+		_prefs_failed.clear()
+		_prefs_failed_scope.clear()
+	if operation == "cloud": _load()
+	var cloud := get_node_or_null("/root/SteamCloud")
+	if cloud != null: cloud.mark_dirty()
+	if not _prefs_requested.is_empty() and not _prefs_deferred:
+		_prefs_deferred = true
+		get_tree().process_frame.connect(_save_prefs_deferred, CONNECT_ONE_SHOT)
+	return receipt
+
+func retry_persistence() -> Dictionary:
+	if not _progress_gate().background_allowed(): return {"ok":false, "code":"CAMPAIGN_CFG_RETRY_NOT_ALLOWED"}
+	var identity: Dictionary = _identity()
+	if _cfg_writer == null:
+		if _prefs_failed.is_empty() or _prefs_failed_scope.is_empty() or not identity.ok \
+			or identity.content_version != _prefs_failed_scope.content_version or identity.engine_binary_sha256 != _prefs_failed_scope.engine_sha256 \
+			or cloud_owner != _prefs_failed_scope.target_owner: return {"ok":false, "code":"CAMPAIGN_PREFS_RETRY_SCOPE_CHANGED"}
+		if not cloud_owner.is_empty() and SteamService.available and SteamService.account != cloud_owner:
+			return {"ok":false, "code":"CAMPAIGN_CFG_ACCOUNT_SCOPE_CHANGED"}
+		return _write_values("prefs", _prefs_failed.duplicate(true), cloud_owner)
+	if not identity.ok or identity.content_version != _cfg_writer_scope.content_version or identity.engine_binary_sha256 != _cfg_writer_scope.engine_sha256:
+		return {"ok":false, "code":"CAMPAIGN_CFG_INSTALLED_SCOPE_CHANGED"}
+	if _cfg_writer.preparation_pending():
+		var aborted: Dictionary = _cfg_writer.abort_unprepared()
+		if not aborted.ok: return _retain_writer_error(aborted)
+		_cfg_writer = null
+		_cfg_writer_scope.clear()
+		return {"ok":false, "code":"CAMPAIGN_CFG_PREPARATION_RELEASED"}
+	if _cfg_writer_scope.operation == "cloud":
+		var cloud := get_node_or_null("/root/SteamCloud")
+		var script: Resource = ResourceLoader.load("res://scripts/steam_cloud.gd", "Script", ResourceLoader.CACHE_MODE_REUSE)
+		if cloud == null or cloud.get_script() != script or not cloud.allows_config_retry(_cfg_writer_scope, _cfg_writer_original_owner):
+			return {"ok":false, "code":"CAMPAIGN_CLOUD_RETRY_SCOPE_CHANGED"}
+	elif cloud_owner != _cfg_writer_scope.target_owner or (not cloud_owner.is_empty() and SteamService.available and SteamService.account != cloud_owner):
+		return {"ok":false, "code":"CAMPAIGN_CFG_ACCOUNT_SCOPE_CHANGED"}
+	var saved: Dictionary = _cfg_writer.retry_write()
+	return _writer_complete(saved) if saved.ok else _retain_writer_error(saved)
+
 func apply_cloud_progress(progress: Dictionary, owner: String) -> bool:
-	unlocked = maxi(1, int(progress.get("unlocked", 1)))
-	records = _normalized_records(progress.get("records", {}))
-	cloud_owner = owner
-	return _save()
+	if OS.get_environment("CAMPAIGN_QA") == "1" or not SteamRunPolicy.uses_campaign_transactions():
+		unlocked = maxi(1, int(progress.get("unlocked", 1)))
+		records = _normalized_records(progress.get("records", {}))
+		cloud_owner = owner
+		return _save()
+	var cloud := get_node_or_null("/root/SteamCloud")
+	var script: Resource = ResourceLoader.load("res://scripts/steam_cloud.gd", "Script", ResourceLoader.CACHE_MODE_REUSE)
+	if cloud == null or cloud.get_script() != script or not cloud._applying or cloud._owner != owner: return false
+	var payload: Dictionary = cloud._build_payload(owner)
+	payload.campaign = progress.duplicate(true)
+	if not cloud._validate_payload(payload, owner): return false
+	return _write_values("cloud", progress, owner).get("ok", false)
+
+func progress_committed(coordinator: RefCounted) -> void:
+	var script: Resource = ResourceLoader.load("res://scripts/run_campaign_progress_coordinator.gd", "Script", ResourceLoader.CACHE_MODE_REUSE)
+	if not is_instance_valid(coordinator) or coordinator.get_script() != script: return
+	var committed: Dictionary = coordinator.committed_owner()
+	if not committed.ok or committed.owner != cloud_owner: return
+	resume_pending_preferences()
+	var cloud := get_node_or_null("/root/SteamCloud")
+	if cloud != null: cloud.mark_dirty()
 
 
 func _load() -> void:
@@ -323,3 +469,17 @@ func story_number(index: int) -> int:
 func next_index() -> int:
 	var order := story_number(current)
 	return index_for_id(STORY_ORDER[order]) if order < STORY_ORDER.size() else -1
+
+func resume_pending_preferences() -> void:
+	if _prefs_requested.is_empty() or _prefs_deferred or persistence_busy() or _shared_configuration_pending() or not _progress_gate().background_allowed(): return
+	_prefs_deferred = true
+	get_tree().process_frame.connect(_save_prefs_deferred, CONNECT_ONE_SHOT)
+
+func cloud_configuration_pending() -> bool:
+	return _cfg_writer != null and _cfg_writer.busy() and _cfg_writer_scope.get("operation") == "cloud"
+
+
+func _shared_configuration_pending() -> bool:
+	var cloud := get_node_or_null("/root/SteamCloud")
+	var script: Resource = ResourceLoader.load("res://scripts/steam_cloud.gd", "Script", ResourceLoader.CACHE_MODE_REUSE)
+	return cloud != null and cloud.get_script() == script and cloud.shared_profile_pending()

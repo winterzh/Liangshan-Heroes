@@ -2,6 +2,9 @@ class_name SteamRunPolicy
 extends RefCounted
 ## Trust launch flags AND the exact production script, never a content-supplied id.
 
+static func uses_campaign_transactions() -> bool:
+	return OS.get_name() == "Windows" and (OS.has_feature("steam") or OS.has_feature("editor"))
+
 static func classify(campaign: Node, level: RefCounted) -> Dictionary:
 	var out := {"mode":"custom", "level_id":"", "waves":0}
 	if level == null or campaign.scenario or campaign.custom_defense or campaign.arena:

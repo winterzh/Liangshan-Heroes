@@ -10,6 +10,7 @@ var _entry_scan: RefCounted
 var _entry_surface_requests: Array[String] = []
 var _entry_merchant_requests: Array[String] = []
 var _entry_previous_max_fps := -1
+var _waiting_autostart := false
 
 
 func _ready() -> void:
@@ -19,7 +20,8 @@ func _ready() -> void:
 	if OS.get_environment("SMOKE_TEST") == "1" or OS.get_environment("SCREENSHOT_DIR") != "" \
 			or OS.get_environment("LEVEL") != "" or OS.get_environment("SKIRMISH") == "1" \
 			or OS.get_environment("SKIRMISH_AI") == "1" or Campaign.scenario:
-		_launch_immediately()
+		_waiting_autostart = true
+		_launch()
 		return
 	_build()
 	var presence := get_node_or_null("/root/SteamPresence")
@@ -45,10 +47,15 @@ func _notification(what: int) -> void:
 
 
 func _launch(campaign_level_id := "") -> void:
+	if not get_node("/root/ContinueFlow").can_launch():
+		if _waiting_autostart: get_tree().process_frame.connect(_retry_autostart, CONNECT_ONE_SHOT)
+		return
+	var direct_start := _waiting_autostart
+	_waiting_autostart = false
 	var flow := get_node_or_null("/root/ContinueFlow")
 	if _entry_overlay != null or AppLifecycle.quit_started() or (flow != null and flow.busy()):
 		return
-	if DisplayServer.get_name() == "headless" or AndroidUpdater.enabled:
+	if direct_start or DisplayServer.get_name() == "headless" or AndroidUpdater.enabled:
 		_launch_immediately()
 		return
 	_show_battle_loading(campaign_level_id)
@@ -145,9 +152,11 @@ func _request_battle_surfaces(campaign_level_id: String) -> void:
 
 
 func _finish_battle_launch() -> void:
-	if _entry_scan == null:
-		_begin_battle_scan()
 	var identity: Dictionary = {}
+	if _entry_scan == null:
+		identity = get_node("/root/ContinueFlow").take_startup_entry_identity()
+	if _entry_scan == null and identity.is_empty():
+		_begin_battle_scan()
 	if _entry_scan != null:
 		while _entry_scan.runtime_identity_scan_pending():
 			await get_tree().process_frame
@@ -1190,3 +1199,6 @@ func _open_full_update_package() -> void:
 		AndroidUpdater.call("open_full_package")
 	else:
 		AndroidUpdater.open_full_apk()
+
+func _retry_autostart() -> void:
+	if _waiting_autostart: _launch()

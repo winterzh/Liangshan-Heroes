@@ -10,6 +10,7 @@ const MenuScript = preload("res://scripts/menu.gd")
 const CampaignScript = preload("res://scripts/campaign.gd")
 const SettingsScript = preload("res://scripts/settings.gd")
 const LocalLifecycle = preload("res://scripts/run_local_lifecycle.gd")
+const CampaignLifecycle = preload("res://scripts/run_campaign_local_lifecycle.gd")
 const Profiles = preload("res://scripts/run_official_restore_profile.gd")
 const FLAGS := {"skirmish": true, "skirmish_ai": false, "arena": false, "custom_defense": false, "scenario": false, "defense_waves": 30, "defense_random": false}
 const ALL_CAMPAIGN_FLAGS := ["current", "skirmish", "skirmish_ai", "arena", "custom_defense", "scenario", "defense_waves", "defense_random"]
@@ -40,6 +41,26 @@ func _init(trusted: Dictionary, runtime: Dictionary, slot_root := "user://contin
 
 func _bad(code: String) -> Dictionary:
 	return {"ok": false, "code": code}
+
+func _new_local_receipt(run_token: String, context: Dictionary) -> RefCounted:
+	if Profiles.is_official_campaign_context(context):
+		return CampaignLifecycle.new(run_token, _slot_root, context, _trusted, _campaign().cloud_owner)
+	return LocalLifecycle.new(run_token, _slot_root)
+
+func _local_scope(receipt: Variant, context: Dictionary) -> Dictionary:
+	if typeof(receipt) != TYPE_OBJECT or not is_instance_valid(receipt) or not receipt is RefCounted:
+		return _bad("LOCAL_LIFECYCLE_SCRIPT")
+	var official_campaign: bool = Profiles.is_official_campaign_context(context)
+	var expected_script: Script = CampaignLifecycle if official_campaign else LocalLifecycle
+	if receipt.get_script() != expected_script: return _bad("LOCAL_LIFECYCLE_SCRIPT")
+	if not LocalLifecycle._hex(receipt.token, 32): return _bad("LOCAL_BINDING_TOKEN")
+	if official_campaign and not receipt.matches_scope(context, _trusted, _campaign().cloud_owner):
+		return _bad("LOCAL_CAMPAIGN_SCOPE_CHANGED")
+	if not official_campaign and context != LocalLifecycle.CONTEXT: return _bad("CLASSIC_CONTEXT_REQUIRED")
+	var expected_receipt: RefCounted = _new_local_receipt(receipt.token, context)
+	if receipt.directory.is_empty() or receipt.directory != expected_receipt.directory:
+		return _bad("LOCAL_LIFECYCLE_SCOPE")
+	return {"ok":true}
 
 func _tree() -> SceneTree:
 	return Engine.get_main_loop() as SceneTree
@@ -93,11 +114,19 @@ func save_held(source: Variant, retained_identity: Variant = null, expected_slot
 		var bound: Dictionary = _steam()._persistent_binding(source._steam_run_id, source._official_context, source._steam_valid_kills)
 		if not bound.ok: return bound
 		binding = bound.binding
+		if official_campaign:
+			if binding.owner != _campaign().cloud_owner: return _bad("CAMPAIGN_STEAM_PROFILE_OWNER_REQUIRED")
+			if source._continue_receipt == null:
+				source._continue_receipt = _new_local_receipt(binding.token, source._official_context)
+			var receipt_check: Dictionary = _local_scope(source._continue_receipt, source._official_context)
+			if not receipt_check.ok or source._continue_receipt.token != binding.token: return _bad("CAMPAIGN_CREDITED_TOKEN_CHANGED")
+			var begun: Dictionary = source._continue_receipt.binding()
+			if not begun.ok: return begun
 	else:
 		if source._continue_receipt == null:
-			source._continue_receipt = LocalLifecycle.new(Crypto.new().generate_random_bytes(16).hex_encode(), _slot_root)
-		if source._continue_receipt.get_script() != LocalLifecycle: return _bad("LOCAL_LIFECYCLE_SCRIPT")
-		if source._continue_receipt.directory != LocalLifecycle.new(source._continue_receipt.token, _slot_root).directory: return _bad("LOCAL_LIFECYCLE_SCOPE")
+			source._continue_receipt = _new_local_receipt(Crypto.new().generate_random_bytes(16).hex_encode(), source._official_context)
+		var receipt_check: Dictionary = _local_scope(source._continue_receipt, source._official_context)
+		if not receipt_check.ok: return receipt_check
 		var bound: Dictionary = source._continue_receipt.binding()
 		if not bound.ok: return bound
 		binding = bound.binding
@@ -142,6 +171,58 @@ func retry_pending_save(source: Variant) -> Dictionary:
 	_save_source = null; _save_lease.clear(); _save_clock.clear()
 	return {"ok": true, "generation": written.generation, "file_sha256": written.file_sha256, "source_retained": true, "source_held": true, "owned_retry": true}
 
+func _restore_packet_scope(packet: Dictionary, player_entry: bool, lease: Dictionary) -> Dictionary:
+	if player_entry and packet.context != Store.CONTEXT and not Profiles.is_player_campaign_context(packet.context):
+		return _bad("CONTINUE_CONTEXT_NOT_RELEASED")
+	if not Profiles.trusted_identity(_trusted) or packet.world.content_version != _trusted.content_version \
+		or packet.world.engine_sha256 != _trusted.engine_binary_sha256: return _bad("WORLD_CORE_IDENTITY")
+	if packet.binding.kind == "steam":
+		if not lease.available or packet.binding.owner != lease.account or not _steam().ensure_account(): return _bad("ACCOUNT_MISMATCH")
+		if Profiles.is_official_campaign_context(packet.context) and packet.binding.owner != _campaign().cloud_owner:
+			return _bad("CAMPAIGN_STEAM_PROFILE_OWNER_REQUIRED")
+	return {"ok":true}
+
+func _read_restore_slot(player_entry: bool, lease: Dictionary) -> Dictionary:
+	if not Profiles.trusted_identity(_trusted): return _bad("WORLD_CORE_IDENTITY")
+	var read: Dictionary = _store.read_slot()
+	if not read.ok and read.code == "RECOVERY_REQUIRED":
+		# Inspect only, then authorize the exact verified head/pending document.
+		# Neither the public scope gate nor account/install rejection may claim a
+		# foreign slot. recover(plan) still performs its own fresh owner/CAS checks.
+		var plan: Dictionary = _store.inspect_recovery()
+		if not plan.ok: return plan
+		var candidate: Dictionary = _store._verified("receipt.pending") if plan.action == "forward_pending" else _store._chain()
+		if not candidate.ok: return candidate
+		if candidate.revision == 0:
+			# A first-save owner can die before any packet exists. Preserve the
+			# original read_slot(true) cleanup contract without inventing a scope:
+			# only this exact empty head + owner-only inventory may be reclaimed.
+			if plan.action != "release_committed_lock" or plan.head_revision != 0 \
+				or plan.head_sha256 != Store.ZERO or candidate.file_sha256 != Store.ZERO \
+				or not candidate.document.is_empty() or plan.inventory.size() != 2 \
+				or not plan.inventory.has_all(["writing/", "writing/owner.json"]): return _bad("SLOT_CHANGED")
+			var empty_recovered: Dictionary = _store.recover(plan)
+			if not empty_recovered.ok: return empty_recovered
+			if empty_recovered.revision != 0 or empty_recovered.file_sha256 != Store.ZERO \
+				or not empty_recovered.document.is_empty(): return _bad("SLOT_CHANGED")
+			return _bad("NO_SLOT")
+		if plan.action == "forward_pending":
+			if candidate.revision != plan.head_revision + 1 or candidate.previous != plan.head_sha256 \
+				or candidate.file_sha256 != plan.inventory.get("receipt.pending", ""): return _bad("SLOT_CHANGED")
+		elif plan.action == "release_committed_lock":
+			if candidate.revision != plan.head_revision or candidate.file_sha256 != plan.head_sha256 \
+				or candidate.file_sha256 != plan.inventory.get("record_%010d.json" % candidate.revision, ""): return _bad("SLOT_CHANGED")
+		else: return _bad("SLOT_RECOVERY_ACTION")
+		var admitted: Dictionary = _restore_packet_scope(candidate.document,player_entry,lease)
+		if not admitted.ok: return admitted
+		read = _store.recover(plan)
+		if not read.ok: return read
+		if read.revision != candidate.revision or read.file_sha256 != candidate.file_sha256 \
+			or read.document != candidate.document: return _bad("SLOT_CHANGED")
+	if not read.ok: return read
+	var final_scope: Dictionary = _restore_packet_scope(read.document,player_entry,lease)
+	return read if final_scope.ok else final_scope
+
 func prepare_restore(menu: Node, entry := RestoreEntry.INTERNAL) -> Dictionary:
 	if _phase != "new": return _bad("SESSION_ALREADY_USED")
 	if not is_instance_valid(menu) or menu.get_script() != MenuScript or not menu.is_inside_tree() or menu != _tree().current_scene or menu.get_parent() != _tree().root or menu.is_queued_for_deletion(): return _bad("CURRENT_MENU_REQUIRED")
@@ -151,22 +232,29 @@ func prepare_restore(menu: Node, entry := RestoreEntry.INTERNAL) -> Dictionary:
 	if lease.active != 0: return _bad("ACTIVE_STEAM_RUN")
 	if _campaign().get_script() != CampaignScript: return _bad("CAMPAIGN_REQUIRED")
 	if _settings().get_script() != SettingsScript: return _bad("SETTINGS_REQUIRED")
-	var read: Dictionary = _store.read_slot(true)
+	var read: Dictionary = _read_restore_slot(entry == RestoreEntry.PLAYER_MENU,lease)
 	if not read.ok: return read
 	_packet = read.document; _slot_sha = read.file_sha256
-	if entry == RestoreEntry.PLAYER_MENU and _packet.context != Store.CONTEXT \
-			and not Profiles.is_player_campaign_context(_packet.context):
-		return _bad("CONTINUE_CONTEXT_NOT_RELEASED")
 	var campaign := Profiles.is_official_campaign_context(_packet.context)
+	# Public scope and account/install identity were checked before any recovery
+	# mutation. Mount still rechecks this complete packet and its original SHA.
+	if _packet.binding.kind == "steam" and Profiles.is_official_campaign_context(_packet.context):
+		if _packet.binding.owner != _campaign().cloud_owner: return _bad("CAMPAIGN_STEAM_PROFILE_OWNER_REQUIRED")
+		_local_receipt = _new_local_receipt(_packet.binding.token, _packet.context)
+		var marker: Dictionary = _local_receipt.prepare_credited_resume(_packet.binding.token, _packet.binding.owner)
+		if not marker.ok: return marker
 	if _packet.binding.kind == "uncredited":
-		_local_receipt = LocalLifecycle.new(_packet.binding.token, _slot_root)
+		_local_receipt = _new_local_receipt(_packet.binding.token, _packet.context)
+		var receipt_check: Dictionary = _local_scope(_local_receipt, _packet.context)
+		if not receipt_check.ok: return receipt_check
 		var local_plan: Dictionary = _local_receipt.prepare_resume(_packet.binding)
 		if not local_plan.ok: return local_plan
-	if entry in [RestoreEntry.PLAYER_MENU, RestoreEntry.QA_MENU] and campaign:
+	if campaign and (entry != RestoreEntry.INTERNAL or _packet.context in [Profiles.LIAN_CONTEXT, Profiles.GAO_CONTEXT, Profiles.DAMING_CONTEXT]):
 		# The installed profile has already limited this id to the eight chapters.
 		var factory: Script = load("res://scripts/run_%s_world_factory.gd" % _packet.context.level_id)
 		var runtime: Dictionary = factory.prepare_runtime(_trusted)
 		if not runtime.ok: return runtime
+		_core.dispose()
 		_core = Core.new(_trusted, runtime.runtime)
 	var prepared: Dictionary = _core.prepare(_packet.world)
 	if not prepared.ok: return prepared
@@ -201,7 +289,14 @@ func stage_mount() -> Dictionary:
 		if _settings().get(name) != _settings_before[name]: return _rollback(_bad("SETTINGS_CHANGED"))
 	var latest: Dictionary = _store.read_slot()
 	if not latest.ok or latest.file_sha256 != _slot_sha or latest.document != _packet: return _rollback(_bad("SLOT_CHANGED"))
-	if _local_receipt != null:
+	if _local_receipt != null and _packet.binding.kind == "steam":
+		var receipt_check: Dictionary = _local_scope(_local_receipt, _packet.context)
+		if not receipt_check.ok: return _rollback(receipt_check)
+		var marker: Dictionary = _local_receipt.prepare_credited_resume(_packet.binding.token, _packet.binding.owner)
+		if not marker.ok: return _rollback(marker)
+	if _local_receipt != null and _packet.binding.kind == "uncredited":
+		var receipt_check: Dictionary = _local_scope(_local_receipt, _packet.context)
+		if not receipt_check.ok: return _rollback(receipt_check)
 		var local_plan: Dictionary = _local_receipt.prepare_resume(_packet.binding)
 		if not local_plan.ok: return _rollback(local_plan)
 	var options: Dictionary = Codec.new().decode(_packet.options)

@@ -8,11 +8,21 @@ const ZERO := "0000000000000000000000000000000000000000000000000000000000000000"
 const MAX_BYTES := 16 * 1024 * 1024
 const MAX_RETAINED := 4
 const FIELDS := ["magic", "version", "app", "owner", "revision", "previous_sha256", "payload_bytes", "payload_sha256", "payload"]
+const LivenessManager = preload("res://scripts/run_process_liveness_manager.gd")
 var directory := ""
 var owner := ""
 var _lock_raw := ""
 var _locked := false
 var _lock_created := false
+var _liveness_scope_id := 0
+var _liveness_scope_depth := 0
+# Scope-private proof. Only the exact installed Slot validator may reuse it.
+var _readset_epoch := 0
+var _readset_collecting := false
+var _readset_inventory: Dictionary = {}
+var _readset_reads: Dictionary = {}
+var _readset_certificate: Dictionary = {}
+var _readset_script: Script = null
 
 func _init(account: String, root_path := "user://steam_receipts/v1") -> void:
 	owner = account
@@ -112,7 +122,10 @@ func _decode(raw: String) -> Dictionary:
 func _verified(name: String) -> Dictionary:
 	var read := _read(directory.path_join(name))
 	if not read.ok: return read
-	return _decode(read.raw)
+	var decoded := _decode(read.raw)
+	if not decoded.ok: return decoded
+	var noted := _readset_note(name, decoded.file_sha256)
+	return decoded if noted.ok else noted
 
 func inventory() -> Dictionary:
 	var guard := _guard()
@@ -320,9 +333,177 @@ func commit_locked(expected_revision: int, expected_sha: String, proposal: Dicti
 	return verified
 
 func inspect_recovery() -> Dictionary:
+	var entered := _enter_recovery_scope()
+	if not entered.ok: return entered
+	var result := _inspect_base_recovery()
+	if not result.ok: _readset_clear()
+	_leave_recovery_scope()
+	return result
+
+func _enter_recovery_scope() -> Dictionary:
+	if _liveness_scope_depth > 0:
+		var budget: Dictionary = LivenessManager.check_budget(_liveness_scope_id)
+		if not budget.ok: return budget
+		_liveness_scope_depth += 1
+		return {"ok": true}
+	_readset_clear()
+	var opened: Dictionary = LivenessManager.open_scope(JSON.stringify({"directory": directory, "owner": owner}))
+	if not opened.ok: return opened
+	_liveness_scope_id = opened.scope_id
+	_liveness_scope_depth = 1
+	return {"ok": true}
+
+func _leave_recovery_scope() -> void:
+	_liveness_scope_depth -= 1
+	if _liveness_scope_depth == 0:
+		_readset_clear()
+		LivenessManager.close_scope(_liveness_scope_id)
+		_liveness_scope_id = 0
+
+func _confirmed_dead(pids: Array, binding: Dictionary, phase: String) -> Dictionary:
+	if _liveness_scope_depth < 1: return bad("PROCESS_LIVENESS_SCOPE")
+	var digest := JSON.stringify({"directory": directory, "owner": owner, "snapshot": binding}).sha256_text()
+	for pid in pids:
+		var observed: Dictionary = LivenessManager.query_dead(_liveness_scope_id, int(pid), digest, phase)
+		if not observed.ok: return observed
+	return LivenessManager.check_budget(_liveness_scope_id)
+
+func _base_recovery_binding(plan: Dictionary, raw: String) -> Dictionary:
+	return {"inventory": plan.inventory, "head_revision": plan.head_revision, "head_sha256": plan.head_sha256,
+		"action": plan.action, "dead_pid": plan.dead_pid, "lock_raw": raw}
+
+# These helpers never authorize a caller-provided plan by itself. They retain
+# actual decoded raw hashes from this instance's original full virtual _chain.
+func _readset_clear() -> void:
+	_readset_epoch += 1
+	_readset_collecting = false
+	_readset_inventory.clear()
+	_readset_reads.clear()
+	_readset_certificate.clear()
+	_readset_script = null
+
+func _readset_begin(items: Dictionary) -> void:
+	if _liveness_scope_depth < 1 or _liveness_scope_id < 1: return
+	# Runtime lookup avoids a base -> subclass preload cycle. An existing exact
+	# Slot instance already has this Script loaded; subclasses never qualify.
+	var installed := ResourceLoader.load("res://scripts/run_slot_store.gd", "Script", ResourceLoader.CACHE_MODE_REUSE) as Script
+	if installed == null or get_script() != installed: return
+	_readset_script = installed
+	_readset_inventory = items.duplicate(true)
+	_readset_collecting = true
+
+func _readset_note(name: String, actual_sha: String) -> Dictionary:
+	if not _readset_collecting: return {"ok": true}
+	if actual_sha.length() != 64 or not _readset_inventory.has(name) or _readset_inventory[name] != actual_sha:
+		_readset_clear()
+		return bad("RECOVERY_READSET_CHANGED")
+	if _readset_reads.has(name) and _readset_reads[name] != actual_sha:
+		_readset_clear()
+		return bad("RECOVERY_READSET_CHANGED")
+	_readset_reads[name] = actual_sha
+	return {"ok": true}
+
+func _readset_seal(plan: Dictionary, lock_raw: String) -> Dictionary:
+	if not _readset_collecting: return {"ok": true}
+	var noted := _readset_note("writing/owner.json", lock_raw.sha256_text())
+	if not noted.ok: return noted
+	for path in _readset_inventory:
+		if path.ends_with("/"): continue
+		if not _readset_reads.has(path) or _readset_reads[path] != _readset_inventory[path]:
+			_readset_clear()
+			return bad("RECOVERY_READSET_INCOMPLETE")
+	if plan.inventory != _readset_inventory or get_script() != _readset_script:
+		_readset_clear()
+		return bad("RECOVERY_READSET_CHANGED")
+	_readset_certificate = {"plan": plan.duplicate(true), "inventory": _readset_inventory.duplicate(true),
+		"directory": directory, "owner": owner, "instance_id": get_instance_id(),
+		"scope_id": _liveness_scope_id, "epoch": _readset_epoch, "lock_raw": lock_raw}
+	_readset_collecting = false
+	_readset_reads.clear()
+	_readset_inventory.clear()
+	return {"ok": true}
+
+func _readset_native_inventory() -> Dictionary:
+	# With a sealed proof, records/pending passed full Slot validation; owner
+	# UTF8/metadata and its exact raw hash were separately bound above.
+	# A complete fresh native SHA/layout scan still binds every readback to them.
+	var guard := _guard()
+	if not guard.ok: return guard
+	var items := {}
+	var folder := DirAccess.open(directory)
+	if folder == null: return bad("READ_OPEN")
+	for name in folder.get_files():
+		var path := directory.path_join(name)
+		var file := FileAccess.open(path, FileAccess.READ)
+		if file == null: return bad("READ_OPEN")
+		var count := file.get_length()
+		file.close()
+		if count < 1 or count > _byte_limit(): return bad("READ_SIZE")
+		var digest := FileAccess.get_sha256(path)
+		if digest.length() != 64: return bad("READ_INCOMPLETE")
+		items[name] = digest
+	for name in folder.get_directories():
+		if name not in ["writing", "recovering"]: return bad("UNKNOWN_DIRECTORY")
+		var child := DirAccess.open(directory.path_join(name))
+		if child == null or not child.get_directories().is_empty(): return bad("LOCK_SHAPE")
+		items[name + "/"] = "directory"
+		for leaf in child.get_files():
+			if leaf != "owner.json" or child.is_link(leaf): return bad("LOCK_SHAPE")
+			var digest := FileAccess.get_sha256(directory.path_join(name).path_join(leaf))
+			if digest.length() != 64: return bad("READ_INCOMPLETE")
+			items[name + "/" + leaf] = digest
+	return {"ok": true, "items": items}
+
+func _readset_readback(plan: Dictionary) -> Dictionary:
+	var proof := _readset_certificate
+	if _liveness_scope_depth < 1 or _liveness_scope_id != proof.scope_id or _readset_epoch != proof.epoch \
+		or get_instance_id() != proof.instance_id or directory != proof.directory or owner != proof.owner \
+		or _readset_script == null or get_script() != _readset_script or plan != proof.plan:
+		_readset_clear()
+		return bad("RECOVERY_READSET_SCOPE")
+	var budget: Dictionary = LivenessManager.check_budget(_liveness_scope_id)
+	if not budget.ok:
+		_readset_clear()
+		return budget
+	var inv := _readset_native_inventory()
+	if not inv.ok:
+		_readset_clear()
+		return inv
+	if inv.items != proof.inventory:
+		_readset_clear()
+		return bad("RECOVERY_CAS_CHANGED")
+	var lock := _read(directory.path_join("writing/owner.json"))
+	if not lock.ok:
+		_readset_clear()
+		return lock
+	if lock.raw != proof.lock_raw or lock.raw.sha256_text() != proof.inventory.get("writing/owner.json", ""):
+		_readset_clear()
+		return bad("RECOVERY_CAS_CHANGED")
+	budget = LivenessManager.check_budget(_liveness_scope_id)
+	if not budget.ok:
+		_readset_clear()
+		return budget
+	return {"ok": true, "raw": lock.raw}
+
+func _base_recovery_readback(plan: Dictionary) -> Dictionary:
+	if not _readset_certificate.is_empty(): return _readset_readback(plan)
+	var inv := inventory()
+	if not inv.ok: return inv
+	if inv.items != plan.inventory: return bad("RECOVERY_CAS_CHANGED")
+	var head := _chain()
+	if not head.ok: return head
+	if head.revision != plan.head_revision or head.file_sha256 != plan.head_sha256: return bad("RECOVERY_CAS_CHANGED")
+	var lock := _read(directory.path_join("writing/owner.json"))
+	if not lock.ok: return lock
+	if lock.raw.sha256_text() != plan.inventory.get("writing/owner.json", ""): return bad("RECOVERY_CAS_CHANGED")
+	return {"ok": true, "raw": lock.raw}
+
+func _inspect_base_recovery() -> Dictionary:
+	_readset_clear()
 	var inv := inventory()
 	if not inv.ok: return inv
 	if inv.items.has("recovering/"): return bad("RECOVERY_WRITER_OR_RESIDUE")
+	_readset_begin(inv.items)
 	var current := _chain()
 	if not current.ok: return current
 	if not inv.items.has("writing/owner.json"): return bad("UNKNOWN_OR_MISSING_LOCK")
@@ -331,27 +512,53 @@ func inspect_recovery() -> Dictionary:
 	var metadata: Variant = JSON.parse_string(lock.raw)
 	if typeof(metadata) != TYPE_DICTIONARY or metadata.size() != 4 or not metadata.has_all(["version", "owner", "pid", "token"]): return bad("LOCK_METADATA")
 	if metadata.version != "1" or metadata.owner != owner or typeof(metadata.pid) != TYPE_STRING or not metadata.pid.is_valid_int() or str(int(metadata.pid)) != metadata.pid or int(metadata.pid) <= 0 or not _valid_token(metadata.token): return bad("LOCK_METADATA")
-	if OS.is_process_running(int(metadata.pid)): return bad("WRITER_ALIVE")
 	var action := "release_committed_lock"
 	if inv.items.has("receipt.pending"):
 		var pending := _verified("receipt.pending")
 		if not pending.ok: return pending
 		if pending.revision != current.revision + 1 or pending.previous != current.file_sha256: return bad("PENDING_CHAIN")
 		action = "forward_pending"
-	return {"ok": true, "inventory": inv.items, "action": action, "head_revision": current.revision, "head_sha256": current.file_sha256, "dead_pid": int(metadata.pid)}
+	var plan := {"ok": true, "inventory": inv.items, "action": action, "head_revision": current.revision, "head_sha256": current.file_sha256, "dead_pid": int(metadata.pid)}
+	var certified := _readset_seal(plan, lock.raw)
+	if not certified.ok: return certified
+	var observed := _confirmed_dead([int(metadata.pid)], _base_recovery_binding(plan, lock.raw), "inspect")
+	if not observed.ok: return observed
+	var readback := _base_recovery_readback(plan)
+	if not readback.ok: return readback
+	if readback.raw != lock.raw: return bad("RECOVERY_CAS_CHANGED")
+	var budget: Dictionary = LivenessManager.check_budget(_liveness_scope_id)
+	return plan if budget.ok else budget
 
 func recover(plan: Dictionary) -> Dictionary:
+	var entered := _enter_recovery_scope()
+	if not entered.ok: return entered
+	var result := _recover_base(plan)
+	_leave_recovery_scope()
+	return result
+
+func _recover_base(plan: Dictionary) -> Dictionary:
 	if _locked: return bad("REENTRANT_RECOVERY")
 	var fresh := inspect_recovery()
 	if not fresh.ok: return fresh
 	if fresh != plan: return bad("RECOVERY_PLAN_CHANGED")
+	# Close every potentially-UNKNOWN query before creating the claim directory.
+	var before := _base_recovery_readback(plan)
+	if not before.ok: return before
+	var observed := _confirmed_dead([int(plan.dead_pid)], _base_recovery_binding(plan, before.raw), "claim")
+	if not observed.ok: return observed
+	var last := _base_recovery_readback(plan)
+	if not last.ok: return last
+	if last.raw != before.raw: return bad("RECOVERY_CAS_CHANGED")
+	var budget: Dictionary = LivenessManager.check_budget(_liveness_scope_id)
+	if not budget.ok: return budget
 	# All normal commits still see the original writing directory. Another recovery
 	# must win this atomic mkdir before it may alter that directory.
 	if DirAccess.make_dir_absolute(directory.path_join("recovering")) != OK: return bad("RECOVERY_BUSY")
 	var inv := inventory()
 	if not inv.ok: return inv
 	inv.items.erase("recovering/")
-	if inv.items != plan.inventory or OS.is_process_running(plan.dead_pid): return bad("RECOVERY_CAS_CHANGED")
+	# No liveness query after mutation. The final fresh observation and CAS were closed above.
+	if inv.items != plan.inventory: return bad("RECOVERY_CAS_CHANGED")
 	if plan.action == "forward_pending":
 		var name := "record_%010d.json" % (int(plan.head_revision) + 1)
 		if FileAccess.file_exists(directory.path_join(name)) or DirAccess.rename_absolute(directory.path_join("receipt.pending"), directory.path_join(name)) != OK: return bad("RECOVERY_RENAME")

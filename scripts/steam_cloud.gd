@@ -28,6 +28,15 @@ var _language_dirty := false
 var _initial_settings := ""
 var _initial_language := ""
 var _transition_failed := false
+var _pending_shared_profile: Dictionary = {}
+var _pending_shared_kind := ""
+var _pending_binding_sha := ""
+var _pending_original_owner := ""
+var _pending_shared_identity: Dictionary = {}
+var _pending_shared_phase := ""
+var _pending_marker_owner := ""
+var _pending_shared_confirmation: Dictionary = {}
+var _pending_shared_source_profile: Dictionary = {}
 
 
 func _ready() -> void:
@@ -48,7 +57,13 @@ func _attach() -> void:
 
 
 func _process(delta: float) -> void:
+	if shared_profile_pending():
+		var flow := get_node_or_null("/root/ContinueFlow")
+		if flow != null: flow.note_config_failure({"ok":false,"code":"CLOUD_CONFIGURATION_PENDING"})
+		return
+	if not _campaign_io_ready(): return
 	if not cloud_ready:
+		if SteamService.available: _attach()
 		return
 	_tick += delta
 	_retry_after = maxf(0.0, _retry_after - delta)
@@ -65,6 +80,7 @@ func _process(delta: float) -> void:
 
 
 func _attach_account() -> void:
+	if not _campaign_io_ready(): return
 	if _busy or _transition_failed or not SteamService.available or not SteamService.ensure_account():
 		return
 	var target: String = SteamService.account
@@ -167,6 +183,11 @@ func _attach_account() -> void:
 		local = current
 	elif local.is_empty():
 		local = _default_payload(target)
+	# Validate and retain the raw source before freezing the canonical write target.
+	if not _validate_payload(local,target): _stop_local(); return
+	_pending_shared_source_profile = local.duplicate(true)
+	local = local.duplicate(true)
+	local.campaign = _merged_campaign({},local.campaign)
 	# Persist the recoverable scoped copy BEFORE changing shared files/binding.
 	if not _validate_payload(local, target) or not _store_mirror(local, true, _settings_dirty, _language_dirty):
 		_stop_local()
@@ -174,9 +195,25 @@ func _attach_account() -> void:
 	# A durable transition marker makes crashes/partial shared-file writes fail
 	# closed on the next boot. Both scoped profiles remain available to recover.
 	_transition_failed = true
-	if not _write_binding(local_owner if local_owner != "" else target, target) or not _apply_profile(local) or not _write_binding(target):
+	var installed: Dictionary = _actual_installed_identity()
+	if not installed.get("ok",false): _stop_local(); return
+	_pending_shared_identity = installed.duplicate(true)
+	_pending_shared_kind = "attach"
+	_pending_shared_phase = "marker"
+	_pending_marker_owner = local_owner if local_owner != "" else target
+	_pending_shared_profile = local.duplicate(true)
+	_pending_original_owner = campaign.cloud_owner
+	_pending_binding_sha = FileAccess.get_sha256(OWNER_PATH) if FileAccess.file_exists(OWNER_PATH) else ""
+	if not _write_binding(_pending_marker_owner, target):
 		_stop_local()
 		return
+	_pending_binding_sha = FileAccess.get_sha256(OWNER_PATH)
+	_pending_shared_phase = "apply"
+	if not _apply_profile(local): _stop_local(); return
+	if not _freeze_shared_confirmation(): _stop_local(); return
+	_pending_shared_phase = "close"
+	if not _close_shared_binding(): _stop_local(); return
+	_clear_shared_pending()
 	_transition_failed = false
 	_baseline = _build_payload()
 	cloud_ready = true
@@ -185,6 +222,7 @@ func _attach_account() -> void:
 	_pulled = false
 	_retry_after = 0.0
 	_busy = false
+	campaign.resume_pending_preferences()
 	_pull_or_seed()
 
 
@@ -196,7 +234,7 @@ func mark_dirty() -> void:
 	_pending_upload = true
 	# Before attach keep the change in runtime/normal local files. After attach
 	# keep it in the bound account's mirror even with Steam unavailable.
-	if cloud_ready and not _busy:
+	if cloud_ready and not _busy and _campaign_io_ready():
 		_remember_local()
 
 
@@ -225,6 +263,7 @@ func _capture_local() -> Dictionary:
 
 
 func _remember_local() -> bool:
+	if not _mirror_write_ready(): return false
 	var campaign := get_node_or_null("/root/Campaign")
 	if not cloud_ready or _transition_failed or campaign == null or campaign.cloud_owner != _owner:
 		return false
@@ -232,6 +271,7 @@ func _remember_local() -> bool:
 
 
 func _pull_or_seed() -> void:
+	if not _campaign_io_ready(): return
 	if _busy or not cloud_ready or not _account_matches():
 		return
 	_busy = true
@@ -269,6 +309,7 @@ func _pull_or_seed() -> void:
 
 
 func _flush() -> void:
+	if not _campaign_io_ready(): return
 	if _busy or not cloud_ready or _retry_after > 0.0:
 		return
 	if not _pulled:
@@ -344,11 +385,28 @@ func apply_payload(payload: Dictionary, from_cloud: bool) -> Dictionary:
 
 
 func _apply_profile(payload: Dictionary) -> bool:
+	if not _campaign_io_ready(): return false
 	if not _validate_payload(payload, _owner):
 		return false
 	var campaign := get_node_or_null("/root/Campaign")
 	if campaign == null:
 		return false
+	var raw_source: Dictionary = payload.duplicate(true)
+	payload = payload.duplicate(true)
+	payload.campaign = _merged_campaign({},payload.campaign)
+	if _pending_shared_profile.is_empty():
+		var installed: Dictionary = _actual_installed_identity()
+		if not installed.get("ok",false): return false
+		_pending_shared_identity = installed.duplicate(true)
+		_pending_shared_source_profile = raw_source
+		_pending_shared_profile = payload.duplicate(true)
+		_pending_shared_kind = "apply"
+		_pending_shared_phase = "apply"
+		_pending_original_owner = campaign.cloud_owner
+		_pending_binding_sha = FileAccess.get_sha256(OWNER_PATH) if FileAccess.file_exists(OWNER_PATH) else ""
+	elif _pending_shared_profile != payload:
+		return false
+	if _pending_shared_identity.is_empty() or _actual_installed_identity() != _pending_shared_identity: return false
 	_applying = true
 	var ok := Settings.apply_cloud_text(payload.settings_text) and Localize.apply_cloud_text(payload.language_text)
 	if ok:
@@ -356,6 +414,7 @@ func _apply_profile(payload: Dictionary) -> bool:
 	if ok:
 		ok = campaign.apply_cloud_progress(payload.campaign, _owner)
 	_applying = false
+	if ok and _pending_shared_kind == "apply": _clear_shared_pending()
 	return ok
 
 
@@ -490,6 +549,7 @@ func _read_mirror() -> Dictionary:
 
 
 func _store_mirror(payload: Dictionary, pending: bool, settings_changed: bool, language_changed: bool) -> bool:
+	if not _mirror_write_ready(): return false
 	var raw_owner: Variant = payload.get("owner")
 	if not raw_owner is String:
 		return false
@@ -539,6 +599,8 @@ func _has_scoped_mirror() -> bool:
 
 
 func _write_binding(owner: String, pending_owner := "") -> bool:
+	# Every binding publication preserves an unknown prior temporary artifact.
+	if FileAccess.file_exists(OWNER_PATH + ".tmp") or DirAccess.dir_exists_absolute(OWNER_PATH + ".tmp"): return false
 	var cfg := ConfigFile.new()
 	cfg.set_value("profile", "owner", owner)
 	if pending_owner != "":
@@ -608,9 +670,140 @@ func _cloud_write(native: Object, payload: Dictionary) -> bool:
 
 
 func _exit_tree() -> void:
+	if not _campaign_io_ready() or shared_profile_pending(): return
 	if not cloud_ready or _busy:
 		return
 	if dirty or _pending_upload:
 		_remember_local()
 		if _account_matches():
 			_flush()
+
+func _campaign_io_ready() -> bool:
+	var gate: Resource = ResourceLoader.load("res://scripts/run_campaign_progress_gate.gd", "Script", ResourceLoader.CACHE_MODE_REUSE)
+	var campaign := get_node_or_null("/root/Campaign")
+	return gate != null and gate.background_allowed() and campaign != null and not campaign.persistence_busy()
+
+func shared_profile_pending() -> bool:
+	return not _pending_shared_profile.is_empty()
+
+func _clear_shared_pending() -> void:
+	_pending_shared_profile.clear()
+	_pending_shared_kind = ""
+	_pending_binding_sha = ""
+	_pending_original_owner = ""
+	_pending_shared_identity.clear()
+	_pending_shared_phase = ""
+	_pending_marker_owner = ""
+	_pending_shared_confirmation.clear()
+	_pending_shared_source_profile.clear()
+
+func _shared_scope_ok() -> bool:
+	if _pending_shared_identity.is_empty() or _actual_installed_identity() != _pending_shared_identity: return false
+	var gate: Resource = ResourceLoader.load("res://scripts/run_campaign_progress_gate.gd", "Script", ResourceLoader.CACHE_MODE_REUSE)
+	var campaign := get_node_or_null("/root/Campaign")
+	if gate == null or not gate.background_allowed() or campaign == null or not shared_profile_pending() \
+		or not _validate_payload(_pending_shared_profile,_owner) or not SteamService.available \
+		or not SteamService.ensure_account() or SteamService.account != _owner:
+		return false
+	var sha: String = FileAccess.get_sha256(OWNER_PATH) if FileAccess.file_exists(OWNER_PATH) else ""
+	return sha == _pending_binding_sha and campaign.cloud_owner in [_pending_original_owner,_owner]
+
+func allows_config_retry(scope: Dictionary, original_owner: String) -> bool:
+	return _applying and _shared_scope_ok() and scope.operation == "cloud" and scope.target_owner == _owner \
+		and original_owner == _pending_original_owner
+
+func retry_shared_profile() -> Dictionary:
+	if Engine.is_in_physics_frame() or _busy or not _shared_scope_ok(): return {"ok":false,"code":"CLOUD_RETRY_SCOPE_CHANGED"}
+	var campaign := get_node("/root/Campaign")
+	_busy = true
+	if _pending_shared_phase == "marker":
+		# A closed failure before publication may be retried under the original
+		# binding SHA. Unknown/half-written temporary bytes are never overwritten.
+		if FileAccess.file_exists(OWNER_PATH + ".tmp") or not _write_binding(_pending_marker_owner,_owner):
+			_busy = false
+			return {"ok":false,"code":"CLOUD_INITIAL_BINDING_NOT_CONFIRMED"}
+		_pending_binding_sha = FileAccess.get_sha256(OWNER_PATH)
+		_pending_shared_phase = "apply"
+	var saved: Dictionary
+	if _pending_shared_phase == "close":
+		saved = {"ok":_shared_confirmation_ok(),"code":"CLOUD_SHARED_CONFIRMATION_CHANGED"}
+	elif campaign.cloud_configuration_pending():
+		_applying = true
+		saved = campaign.retry_persistence()
+		_applying = false
+	else:
+		saved = {"ok":_apply_profile(_pending_shared_profile.duplicate(true)),"code":"CLOUD_SHARED_PROFILE_RETRY"}
+	if not saved.ok:
+		_busy = false
+		return saved
+	if _pending_shared_kind == "attach":
+		if not _freeze_shared_confirmation():
+			_busy = false
+			return {"ok":false,"code":"CLOUD_SHARED_CONFIRMATION_CHANGED"}
+		_pending_shared_phase = "close"
+		if not _close_shared_binding():
+			_busy = false
+			return {"ok":false,"code":"CLOUD_BINDING_RETRY_FAILED"}
+	_clear_shared_pending()
+	_transition_failed = false
+	cloud_ready = true
+	_baseline = _build_payload()
+	dirty = true
+	_pending_upload = true
+	_pulled = false
+	_retry_after = 0.0
+	_busy = false
+	campaign.resume_pending_preferences()
+	_finish("本机云档案已确认，将稍后同步")
+	return {"ok":true,"code":"CLOUD_SHARED_PROFILE_CONFIRMED"}
+
+func _mirror_write_ready() -> bool:
+	return _campaign_io_ready() and not shared_profile_pending()
+
+func _actual_installed_identity() -> Dictionary:
+	var provider: Resource = ResourceLoader.load("res://scripts/run_content_identity.gd", "Script", ResourceLoader.CACHE_MODE_REUSE)
+	return provider.new().resolve_runtime_identity()
+
+
+func _read_shared_confirmation() -> Dictionary:
+	# Confirmation is conservative: shared bytes and runtime semantics must remain
+	# exactly those saved for this target. Drift requires inspection, never rebasing.
+	var campaign := get_node_or_null("/root/Campaign")
+	if campaign == null or campaign.persistence_busy() or campaign.cloud_owner != _owner:
+		return {"ok":false}
+	var pins: Dictionary = {}
+	for path in ["user://campaign.cfg", "user://settings.cfg", "user://language.cfg"]:
+		var file := FileAccess.open(path,FileAccess.READ)
+		if file == null or file.get_length() > 2097152: return {"ok":false}
+		var before: String = FileAccess.get_sha256(path)
+		var raw: PackedByteArray = file.get_buffer(file.get_length())
+		file.close()
+		var hash := HashingContext.new()
+		if hash.start(HashingContext.HASH_SHA256) != OK or hash.update(raw) != OK: return {"ok":false}
+		if before.is_empty() or hash.finish().hex_encode() != before or FileAccess.get_sha256(path) != before:
+			return {"ok":false}
+		var cfg := ConfigFile.new()
+		if cfg.parse(raw.get_string_from_utf8()) != OK: return {"ok":false}
+		if path == "user://campaign.cfg":
+			if cfg.get_value("progress","owner",null) != _owner or cfg.get_value("progress","schema",null) != campaign.SAVE_SCHEMA \
+				or cfg.get_value("progress","unlocked",null) != campaign.unlocked or cfg.get_value("progress","records",null) != campaign.records:
+				return {"ok":false}
+		elif raw.get_string_from_utf8() != (Settings.cloud_text() if path == "user://settings.cfg" else Localize.cloud_text()):
+			return {"ok":false}
+		pins[path] = {"bytes":raw.size(),"sha256":before}
+	var progress: Dictionary = _local_campaign()
+	if progress != _pending_shared_profile.get("campaign",{}): return {"ok":false}
+	return {"ok":true,"owner":_owner,"files":pins,"campaign":progress}
+
+func _freeze_shared_confirmation() -> bool:
+	if not _pending_shared_confirmation.is_empty(): return _shared_confirmation_ok()
+	var actual: Dictionary = _read_shared_confirmation()
+	if not actual.ok: return false
+	_pending_shared_confirmation = actual.duplicate(true)
+	return true
+
+func _shared_confirmation_ok() -> bool:
+	return not _pending_shared_confirmation.is_empty() and _read_shared_confirmation() == _pending_shared_confirmation
+
+func _close_shared_binding() -> bool:
+	return _shared_scope_ok() and _shared_confirmation_ok() and _write_binding(_owner)

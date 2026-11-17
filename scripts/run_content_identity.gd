@@ -16,6 +16,7 @@ var _source_read_cancelable := false
 var _source_dir_access: DirAccess
 var _scan_thread: Thread
 var _scan_context: Dictionary
+var _prepared_pack_files: Dictionary = {}
 var _scan_cancel := Mutex.new()
 var _scan_cancelled := false
 
@@ -321,6 +322,17 @@ func finish_runtime_identity_scan() -> Dictionary:
 	if _scan_context.prewarm and physical.ok \
 			and physical.executable_stamp != _executable_stamp(_scan_context.exe):
 		return _bad("PREWARM_EXECUTABLE_CHANGED")
+	var result := _complete_runtime_identity(_scan_context, physical)
+	if result.ok and _scan_context.prewarm:
+		_prepared_pack_files = physical
+	return result
+
+func reuse_prepared_runtime_identity() -> Dictionary:
+	if _prepared_pack_files.is_empty(): return {}
+	var physical := _prepared_pack_files
+	_prepared_pack_files = {}
+	var mount := _mount_status()
+	if not mount.ok or physical.executable_stamp != _executable_stamp(_scan_context.exe): return {}
 	return _complete_runtime_identity(_scan_context, physical)
 
 

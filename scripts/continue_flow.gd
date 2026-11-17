@@ -7,6 +7,11 @@ const PLAYER_ENTRY_ENABLED := true
 const Slot = preload("res://scripts/run_slot_store.gd")
 const Session = preload("res://scripts/run_world_session.gd")
 const ContentIdentity = preload("res://scripts/run_content_identity.gd")
+const CampaignCoordinator = preload("res://scripts/run_campaign_progress_coordinator.gd")
+const CampaignLifecycle = preload("res://scripts/run_campaign_local_lifecycle.gd")
+const CampaignStartup = preload("res://scripts/run_campaign_startup_scan.gd")
+const ConfigTransaction = preload("res://scripts/run_campaign_cfg_transaction.gd")
+const ProgressGate = preload("res://scripts/run_campaign_progress_gate.gd")
 enum Phase { IDLE, CONFIRM, SAVING, RESTORING, ERROR, EXITING, EXIT_CONFIRM, SETTLING }
 var phase := Phase.IDLE
 var last_result: Dictionary = {}
@@ -20,12 +25,30 @@ var _graph_owner: WeakRef
 var _before_paused := false
 var _menu_buttons: Array = []
 var _terminal: Dictionary = {}
+var _campaign_terminal: RefCounted
+var _campaign_completion: Dictionary = {}
+var _startup_identity: Dictionary = {}
+var _startup_scan: RefCounted
+var _startup_entry_provider: RefCounted
+var _startup_owner := ""
+var _startup_items: Array = []
+var _startup_index := 0
+var _startup_coordinator: RefCounted
+var _startup_lifecycle: RefCounted
+var _startup_scanned := false
+var _startup_cfg: RefCounted
+var _startup_cfg_scope: Dictionary = {}
+var _config_was_paused := false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	layer = 100
 	set_process(false)
 	set_process_input(false)
+	if not SteamRunPolicy.uses_campaign_transactions(): return
+	phase = Phase.RESTORING
+	_show("正在确认战役进度，请稍候…")
+	get_tree().process_frame.connect(_startup_recover, CONNECT_ONE_SHOT)
 
 func is_enabled() -> bool:
 	if PLAYER_ENTRY_ENABLED and OS.get_name() == "Windows" and OS.has_feature("steam") and not SteamRunPolicy.test_environment(): return true
@@ -115,7 +138,23 @@ func _show(message: String, confirm: String = "") -> void:
 		box.add_child(accept)
 		cancel_button.grab_focus()
 	elif phase == Phase.ERROR:
-		if last_result.get("battle_held", false):
+		if last_result.get("startup_pending", false):
+			var retry := _button("重试确认进度", retry_startup)
+			retry.name = "RetryCampaignStartup"
+			box.add_child(retry)
+			var leave := _button("退出游戏", _startup_quit)
+			leave.name = "LeaveCampaignStartup"
+			box.add_child(leave)
+			retry.grab_focus()
+		elif last_result.get("config_pending", false):
+			var retry := _button("重试保存设置", retry_config)
+			retry.name = "RetryCampaignConfig"
+			box.add_child(retry)
+			var leave := _button("退出游戏", _startup_quit)
+			leave.name = "LeaveCampaignConfig"
+			box.add_child(leave)
+			retry.grab_focus()
+		elif last_result.get("battle_held", false):
 			var pending_save: bool = last_result.get("pending_save", false)
 			var retry: Button
 			if last_result.get("terminal_pending", false):
@@ -154,10 +193,12 @@ func request_save_exit(battle: Node) -> Dictionary:
 	if not is_enabled(): return _bad("CONTINUE_NOT_RELEASED")
 	if busy(): return _bad("OPERATION_BUSY")
 	if not is_instance_valid(battle) or battle != get_tree().current_scene or battle.get_script() != Session.Core.B: return _bad("CURRENT_BATTLE_REQUIRED")
+	if not ProgressGate.status().startup_checked: return _bad("CAMPAIGN_STARTUP_RECOVERY_REQUIRED")
 	if not _private_qa_enabled():
 		var context := _player_launch_context()
 		if context.is_empty() or battle._official_context != context:
 			return _bad("CONTINUE_CONTEXT_NOT_RELEASED")
+	if not is_instance_valid(battle._save_barrier): return _bad("RUN_BARRIER_UNAVAILABLE")
 	_source = battle
 	_before_paused = get_tree().paused
 	var supported: Dictionary = battle._save_barrier._scope()
@@ -187,6 +228,7 @@ func confirm_save() -> Dictionary:
 func _begin_save() -> Dictionary:
 	phase = Phase.SAVING
 	if not is_instance_valid(_source) or _source != get_tree().current_scene: return _fail(_bad("CURRENT_BATTLE_REQUIRED"), false)
+	if not is_instance_valid(_source._save_barrier): return _fail(_bad("RUN_BARRIER_UNAVAILABLE"), false)
 	var matching: Dictionary = Slot.new().check_expected(_expected)
 	if not matching.ok: return _fail(matching, false)
 	_show("正在保存战斗，请稍候…")
@@ -203,6 +245,7 @@ func _begin_save() -> Dictionary:
 func _disconnect_capture() -> void:
 	if not is_instance_valid(_source): return
 	var barrier: Node = _source._save_barrier
+	if not is_instance_valid(barrier): return
 	if barrier.capture_ready.is_connected(_capture_ready): barrier.capture_ready.disconnect(_capture_ready)
 	if barrier.capture_rejected.is_connected(_capture_rejected): barrier.capture_rejected.disconnect(_capture_rejected)
 
@@ -278,16 +321,18 @@ func _restore() -> void:
 		_cancel_restore_scan()
 		_fail(_bad("NO_SLOT"), true)
 		return
-	if _restore_scan == null:
+	var trusted := take_startup_entry_identity() if _restore_scan == null else {}
+	if _restore_scan == null and trusted.is_empty():
 		_restore_scan = ContentIdentity.new()
 		if _restore_scan.begin_runtime_identity_scan() != OK:
 			_restore_scan = null
 			_fail(_bad("IDENTITY_SCAN_START_FAILED"), true)
 			return
-	while _restore_scan.runtime_identity_scan_pending():
-		await get_tree().process_frame
-	var trusted: Dictionary = _restore_scan.finish_runtime_identity_scan()
-	_restore_scan = null
+	if _restore_scan != null:
+		while _restore_scan.runtime_identity_scan_pending():
+			await get_tree().process_frame
+		trusted = _restore_scan.finish_runtime_identity_scan()
+		_restore_scan = null
 	if trusted.get("code") == "PREWARM_EXECUTABLE_CHANGED":
 		_restore.call_deferred()
 		return
@@ -321,6 +366,9 @@ func _cancel_restore_scan() -> void:
 
 func _exit_tree() -> void:
 	_cancel_restore_scan()
+	if _startup_scan != null:
+		_startup_scan.cancel_runtime_identity_scan()
+		_startup_scan = null
 
 func _process(_delta: float) -> void:
 	if _graph_owner != null and _graph_owner.get_ref() == null:
@@ -343,7 +391,10 @@ func _fail(result: Dictionary, restoring: bool) -> Dictionary:
 		_session.dispose(); _session = null
 	if not pending_save and not restoring and is_instance_valid(_source) and _source.get_script() == Session.Core.B:
 		var barrier: Node = _source._save_barrier
-		if barrier.state == barrier.State.HELD:
+		if not is_instance_valid(barrier):
+			# No capture could hold this boundary; restore the confirmation pause intent.
+			get_tree().paused = _before_paused
+		elif barrier.state == barrier.State.HELD:
 			var released: Dictionary = barrier.release_capture()
 			if not released.ok: result = {"ok": false, "code": released.code, "original_error": result.get("code", ""), "battle_held": true}
 		elif barrier.state == barrier.State.IDLE:
@@ -370,14 +421,14 @@ func _error_message(code: String, restoring: bool) -> String:
 
 func dismiss_error() -> void:
 	if phase != Phase.ERROR: return
-	if last_result.get("battle_held", false): return
+	if last_result.get("battle_held", false) or last_result.get("startup_pending", false) or last_result.get("config_pending", false): return
 	phase = Phase.IDLE
 	_source = null
 	_expected.clear()
 	_clear_overlay()
 
 func _held_message() -> String:
-	if last_result.get("terminal_pending", false): return "战斗已结束，但结束记录尚未保存，结算暂未发放。请检查存储后重试结算，或退出游戏。"
+	if last_result.get("terminal_pending", false): return "战斗已结束，但战役进度尚未确认保存，结算暂未发放。请检查存储后重试结算，或退出游戏。"
 	if last_result.get("pending_save", false):
 		if last_result.get("retryable", false): return "存档写入尚未完成，战斗已保持暂停。请检查存储后重试保存，或退出游戏。已有文件会保留。"
 		return "存档状态暂时无法安全确认，战斗已保持暂停。请退出游戏并检查存储，已有文件会保留。"
@@ -394,6 +445,10 @@ func retry_save() -> void:
 func retry_release() -> void:
 	if phase != Phase.ERROR or not last_result.get("battle_held", false) or not is_instance_valid(_source): return
 	if last_result.get("pending_save", false) or last_result.get("terminal_pending", false): return
+	if not is_instance_valid(_source._save_barrier):
+		last_result["release_error"] = "RUN_BARRIER_UNAVAILABLE"
+		_show(_held_message())
+		return
 	var released: Dictionary = _source._save_barrier.release_capture()
 	if not released.ok:
 		last_result["release_error"] = released.code
@@ -432,7 +487,7 @@ func finish_local_battle(battle: Node, victory: bool, line: String) -> void:
 	get_tree().process_frame.connect(_commit_terminal, CONNECT_ONE_SHOT)
 
 func has_capture_request(battle: Node) -> bool:
-	return phase == Phase.SAVING and _source == battle and battle._save_barrier != null and battle._save_barrier.input_closed()
+	return phase == Phase.SAVING and is_instance_valid(battle) and _source == battle and is_instance_valid(battle._save_barrier) and battle._save_barrier.input_closed()
 
 func _commit_terminal() -> void:
 	if phase != Phase.SETTLING or _terminal.is_empty(): return
@@ -440,14 +495,36 @@ func _commit_terminal() -> void:
 		get_tree().process_frame.connect(_commit_terminal, CONNECT_ONE_SHOT)
 		return
 	get_tree().paused = true
-	if not is_instance_valid(_source) or _source != get_tree().current_scene or (_source._continue_receipt == null and not _terminal.cancel_save):
+	if not is_instance_valid(_source) or _source != get_tree().current_scene or _source.get_script() != Session.Core.B:
+		_terminal_failed(_bad("LOCAL_TERMINAL_SOURCE_CHANGED")); return
+	var campaign_end: bool = Session.Profiles.is_official_campaign_context(_source._official_context)
+	if not campaign_end and _source._continue_receipt == null and not _terminal.cancel_save:
 		_terminal_failed(_bad("LOCAL_TERMINAL_SOURCE_CHANGED")); return
 	if _terminal.cancel_save:
+		if not is_instance_valid(_source._save_barrier):
+			_terminal_failed(_bad("RUN_BARRIER_UNAVAILABLE")); return
 		var cancelled: Dictionary = _source._save_barrier.cancel_for_terminal()
 		if not cancelled.ok: _terminal_failed(cancelled); return
-	var ended: Dictionary = {"ok": true} if _source._continue_receipt == null else _source._continue_receipt.terminal(_terminal.victory)
+		_terminal.cancel_save = false
+	var ended: Dictionary
+	if campaign_end:
+		if Campaign.persistence_busy() and _campaign_terminal == null:
+			var cloud := get_node("/root/SteamCloud")
+			var prior_write: Dictionary = cloud.retry_shared_profile() if cloud.shared_profile_pending() else Campaign.retry_persistence()
+			if not prior_write.ok and Campaign.persistence_busy(): _terminal_failed(prior_write); return
+		if _campaign_terminal == null:
+			var trusted: Dictionary = ContentIdentity.new().resolve_runtime_identity()
+			if not trusted.ok: _terminal_failed(trusted); return
+			_campaign_terminal = CampaignCoordinator.new(Campaign, trusted)
+		ended = _campaign_terminal.retry() if _campaign_terminal.started() else _campaign_terminal.begin_live(_source, _terminal.victory)
+	else:
+		ended = {"ok":true} if _source._continue_receipt == null else _source._continue_receipt.terminal(_terminal.victory)
 	if not ended.ok:
 		_terminal_failed(ended); return
+	if campaign_end:
+		var authorized: Dictionary = _campaign_terminal.consume_live_completion(_source)
+		if not authorized.ok: _terminal_failed(authorized); return
+		_campaign_completion = {"battle":weakref(_source), "victory":_terminal.victory, "result":authorized.result.duplicate(true)}
 	var completed: Node = _source
 	var outcome := _terminal.duplicate(true)
 	_terminal.clear(); _source = null
@@ -455,7 +532,8 @@ func _commit_terminal() -> void:
 	_clear_overlay()
 	get_tree().paused = _before_paused
 	completed._complete_end(outcome.victory, outcome.line)
-	last_result = {"ok": true, "terminal_completed": true, "local_terminal": completed._continue_receipt != null}
+	_campaign_terminal = null
+	last_result = {"ok":true, "terminal_completed":true, "local_terminal":completed._continue_receipt != null, "campaign_progress_committed":campaign_end}
 	operation_finished.emit(last_result)
 
 func _terminal_failed(reason: Dictionary) -> void:
@@ -471,3 +549,158 @@ func retry_terminal() -> void:
 	phase = Phase.SETTLING
 	_clear_overlay()
 	get_tree().process_frame.connect(_commit_terminal, CONNECT_ONE_SHOT)
+
+func claim_campaign_completion(battle: Node, victory: bool) -> Dictionary:
+	if _campaign_completion.is_empty() or not is_instance_valid(battle) or battle != get_tree().current_scene \
+		or battle.get_script() != Session.Core.B or _campaign_completion.battle.get_ref() != battle \
+		or _campaign_completion.victory != victory: return _bad("CAMPAIGN_COMPLETION_NOT_AUTHORIZED")
+	var result: Dictionary = _campaign_completion.result.duplicate(true)
+	_campaign_completion.clear()
+	return {"ok":true, "result":result}
+
+func can_launch() -> bool:
+	if not SteamRunPolicy.uses_campaign_transactions(): return not busy()
+	if SteamService.available and not Campaign.cloud_owner.is_empty() and SteamService.account != Campaign.cloud_owner: return false
+	return not busy() and ProgressGate.status().startup_checked and ProgressGate.background_allowed() and not Campaign.persistence_busy()
+
+func _startup_failed(reason: Dictionary) -> void:
+	phase = Phase.ERROR
+	last_result = reason.duplicate(true)
+	last_result.startup_pending = true
+	_show("战役进度暂时无法确认，已有记录已保留。请检查存储或当前账号后重试，或退出游戏。")
+	operation_finished.emit(last_result)
+
+func retry_startup() -> void:
+	if phase != Phase.ERROR or not last_result.get("startup_pending", false): return
+	phase = Phase.RESTORING
+	_show("正在确认战役进度，请稍候…")
+	get_tree().process_frame.connect(_startup_recover, CONNECT_ONE_SHOT)
+
+func _startup_quit() -> void:
+	get_node("/root/AppLifecycle").request_quit("continue_failed")
+
+func take_startup_entry_identity() -> Dictionary:
+	if _startup_entry_provider == null: return {}
+	var provider := _startup_entry_provider
+	_startup_entry_provider = null
+	return provider.reuse_prepared_runtime_identity()
+
+func _startup_recover() -> void:
+	if phase != Phase.RESTORING: return
+	if Engine.is_in_physics_frame():
+		get_tree().process_frame.connect(_startup_recover, CONNECT_ONE_SHOT)
+		return
+	if _startup_scan == null:
+		_startup_scan = ContentIdentity.new()
+		if _startup_scan.begin_runtime_identity_scan(true) != OK:
+			_startup_scan = null
+			_startup_failed(_bad("IDENTITY_SCAN_START_FAILED"))
+			return
+	while _startup_scan.runtime_identity_scan_pending():
+		await get_tree().process_frame
+	var provider := _startup_scan
+	var actual: Dictionary = provider.finish_runtime_identity_scan()
+	_startup_scan = null
+	if not actual.ok: _startup_failed(actual); return
+	if not _startup_identity.is_empty() and (actual.content_version != _startup_identity.content_version \
+		or actual.engine_binary_sha256 != _startup_identity.engine_binary_sha256):
+		_startup_failed(_bad("STARTUP_INSTALLED_IDENTITY_CHANGED")); return
+	_startup_identity = actual
+	if not _startup_scanned:
+		var cfg: RefCounted = _startup_cfg if _startup_cfg != null else ConfigTransaction.new()
+		var status: Dictionary = cfg.pending_status()
+		if not status.ok: _startup_failed(status); return
+		_startup_owner = Campaign.cloud_owner
+		if status.get("pending", false):
+			if FileAccess.file_exists(Campaign.SAVE_PATH) and Campaign.cloud_owner not in [status.document.original_owner, status.document.target_owner]:
+				_startup_failed(_bad("STARTUP_CFG_OWNER_CHANGED")); return
+			_startup_owner = status.document.target_owner
+		var catalog: Dictionary = CampaignStartup.scan(actual, _startup_owner)
+		if not catalog.ok: _startup_failed(catalog); return
+		var pending_credit: bool = catalog.pending.any(func(item): return item.intent.credit.kind == "steam")
+		var ledger_ready: Dictionary = SteamService.prepare_campaign_startup(catalog.credit_references, pending_credit)
+		if not ledger_ready.ok: _startup_failed(ledger_ready); return
+		if (status.get("pending", false) or not catalog.pending.is_empty()) and not _startup_owner.is_empty() and SteamService.available and SteamService.account != _startup_owner:
+			_startup_failed(_bad("STARTUP_ACCOUNT_MISMATCH")); return
+		if status.get("pending", false):
+			if status.document.operation == "progress":
+				var matches: Array = catalog.pending.filter(func(item): return item.token == status.document.run_token and JSON.stringify(item.intent).sha256_text() == status.document.intent_sha256)
+				if matches.size() != 1: _startup_failed(_bad("STARTUP_CFG_FROZEN_RUN_REQUIRED")); return
+			else:
+				if _startup_cfg == null:
+					_startup_cfg = cfg
+					_startup_cfg_scope = status.document.duplicate(true)
+				else:
+					for key in _startup_cfg_scope:
+						if key not in ["generation","state"] and status.document.get(key) != _startup_cfg_scope[key]:
+							_startup_failed(_bad("STARTUP_CFG_PROPOSAL_CHANGED")); return
+				var restored: Dictionary = cfg.retry_write() if cfg.busy() else cfg.recover_pending(actual, _startup_owner)
+				if not restored.ok: _startup_failed(restored); return
+				_startup_cfg = null
+				_startup_cfg_scope.clear()
+		# This is a transient bound recovery owner while the public CFG may be
+		# absent in its owned backup window. Cloud/UI writers are still blocked.
+		Campaign.cloud_owner = _startup_owner
+		_startup_items = catalog.pending.duplicate(true)
+		_startup_scanned = true
+	while _startup_index < _startup_items.size():
+		if not _startup_owner.is_empty() and SteamService.available and SteamService.account != _startup_owner:
+			_startup_failed(_bad("STARTUP_ACCOUNT_MISMATCH")); return
+		var item: Dictionary = _startup_items[_startup_index]
+		var finished: Dictionary
+		if _startup_coordinator == null:
+			_startup_coordinator = CampaignCoordinator.new(Campaign, actual)
+			_startup_lifecycle = CampaignLifecycle.new(item.token, CampaignStartup.SLOT_ROOT, item.context, actual, _startup_owner)
+		finished = _startup_coordinator.retry() if _startup_coordinator.started() else _startup_coordinator.begin_recovery(_startup_lifecycle)
+		if not finished.ok: _startup_failed(finished); return
+		_startup_coordinator = null
+		_startup_lifecycle = null
+		_startup_index += 1
+	var final_cfg: Dictionary = ConfigTransaction.new().pending_status()
+	if not final_cfg.ok or final_cfg.get("pending", false): _startup_failed(_bad("STARTUP_CFG_PENDING")); return
+	var final_catalog: Dictionary = CampaignStartup.scan(actual, _startup_owner)
+	if not final_catalog.ok or not final_catalog.pending.is_empty(): _startup_failed(_bad("STARTUP_RUNS_CHANGED")); return
+	Campaign._load()
+	if Campaign.cloud_owner != _startup_owner: _startup_failed(_bad("STARTUP_OWNER_CHANGED")); return
+	var steam_ready: Dictionary = SteamService.complete_campaign_startup(final_catalog.historical)
+	if not steam_ready.ok: _startup_failed(steam_ready); return
+	var completed: Dictionary = CampaignCoordinator.new(Campaign, actual).startup_complete()
+	if not completed.ok: _startup_failed(completed); return
+	if not actual.source_mode: _startup_entry_provider = provider
+	SteamService.refresh_campaign_targets()
+	Campaign.resume_pending_preferences()
+	phase = Phase.IDLE
+	_clear_overlay()
+	last_result = {"ok":true, "startup_checked":true, "progress_recovered":_startup_index, "settlement_authorized":false}
+	operation_finished.emit(last_result)
+
+func note_config_failure(reason: Dictionary) -> void:
+	if busy(): return
+	_config_was_paused = get_tree().paused
+	get_tree().paused = true
+	phase = Phase.ERROR
+	last_result = reason.duplicate(true)
+	last_result.config_pending = true
+	_show("设置暂时未能确认保存，已有文件已保留。请检查存储后重试，或退出游戏。")
+	operation_finished.emit(last_result)
+
+func retry_config() -> void:
+	if phase != Phase.ERROR or not last_result.get("config_pending", false): return
+	get_tree().process_frame.connect(_retry_config_write, CONNECT_ONE_SHOT)
+
+func _retry_config_write() -> void:
+	if Engine.is_in_physics_frame():
+		get_tree().process_frame.connect(_retry_config_write, CONNECT_ONE_SHOT)
+		return
+	var cloud := get_node("/root/SteamCloud")
+	var saved: Dictionary = cloud.retry_shared_profile() if cloud.shared_profile_pending() else Campaign.retry_persistence()
+	if not saved.ok:
+		last_result = saved.duplicate(true)
+		last_result.config_pending = true
+		_show("设置暂时未能确认保存，已有文件已保留。请检查存储后重试，或退出游戏。")
+		return
+	get_tree().paused = _config_was_paused
+	phase = Phase.IDLE
+	_clear_overlay()
+	last_result = saved
+	operation_finished.emit(last_result)
