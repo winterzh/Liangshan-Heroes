@@ -1,5 +1,7 @@
 # Windows Steam 更新交接与四语公告草案
 
+候选 fa4084ff 连环马在北路出击、南路尚未出击时保存，重启恢复后完成反攻、四语结算及旧槽拒绝。 [连环马续玩收据](../qa/campaign_cavalry_escort_20261116/player_continue/windows_candidate_fa4084ff.json)
+
 ## 当前本地候选 `fa4084ff`
 
 六文件位于 D:/AI项目/水浒/Windows候选/2026-11-17-fa4084ff/SteamDepot。原生离线启动通过，精确编译包通过八章四语战果的 66 项定向检查。精确编译包的高俅关正常速度采样 600.007 秒、67,536 帧，P95 14.707 ms、P99 17.135 ms，达到路线图 P95 ≤ 16.7 ms、P99 ≤ 33.3 ms 的门槛。 六个文件已封装成同目录的 LiangshanHeroes_Steam_candidate.zip，解压回读名称、大小和 SHA-256 全部一致。 真人与实际 Steam 客户端验证待办。 [十分钟帧时收据](../qa/campaign_sustained_performance_20261116/windows_pack_fa4084ff.json) [本地候选验证](../qa/battle_entry_localization_20261116/windows_campaign_candidate_fa4084ff.json)

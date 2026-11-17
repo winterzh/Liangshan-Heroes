@@ -1,0 +1,461 @@
+{
+  "source_commit": "fa4084ff0def019efba38567145a5c3f32563348",
+  "pack_sha256": "2a59529bee3acf7dd309b0519593d715867242aadf04cfa485d268c3bf6885de",
+  "compiled_source_sha256": "67d5f4a5df50ad8b6aee2ce4ee25a23b049ba58b4ebbb14965e678d7a65d62b8",
+  "source_probe_files_lf_sha256": {
+    "tools/zhujiazhuang_rts_test.gd": "435ddb8f9bc774687e1ea879ac6e9adc606380db4934ca3b72dfea294273d770",
+    "tools/lianhuanma_rts_test.gd": "4b275590cc90858e20f100454fb2c5f7916f52f81ff752f532936fdd7462e60d",
+    "tools/lianhuanma_escort_qa.gd": "47de9637bd5c2d7bcbe617f27e31c94ceb18cec6e82f2e6fc400c2873270b360",
+    "qa/campaign_siege_20261116/player_continue/platform_entry.gd": "f270ba38384e9bce258c409a6cb10444e8b834cbdc26d4266d286cceeb0f3da6",
+    "qa/campaign_cavalry_escort_20261116/player_continue/probe.gd": "e68aa795c72a88731b635e49480e81affd1d2c8da7aa9c2fe90230ecb20f629c"
+  },
+  "adapted_probe_sha256": {
+    "rts_test.gd": "0599c0679e47697b50e2cea1545d04ce45ffd0904eb7b4b20aa8ea666e29a866",
+    "lianhuanma_rts_test.gd": "3f2cd9b66de600f67e9b24a2c64996c1c700bbaef53f27ac2dcc63fb5ffa3938",
+    "lianhuanma_escort_qa.gd": "804953b805c74c2bfce40171b408782b98547252814b55f355f400d506146423",
+    "platform_entry.gd": "f270ba38384e9bce258c409a6cb10444e8b834cbdc26d4266d286cceeb0f3da6",
+    "player_continue.gd": "1eea705cf4fca3a2825739bd9d0035aa20fad81622af03cfe6e443692f55c647"
+  },
+  "steam_disabled": true,
+  "scope": "Compiled Windows candidate plus editor host for the test driver. Offline platform entry shim; original save, restore, combat and settlement code.",
+  "host_engine_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+  "platform_entry_stub": true,
+  "native_release_boot_passed": true,
+  "steps": [
+    {
+      "checks": 7,
+      "facts": {
+        "checkpoint": {
+          "elapsed": 150.799999999997,
+          "north_sent": true,
+          "original_live_riders": 12,
+          "retained_escorts": 8,
+          "south_sent": false
+        },
+        "compiled_sha": "67d5f4a5df50ad8b6aee2ce4ee25a23b049ba58b4ebbb14965e678d7a65d62b8",
+        "identity": "source-v1:67d5f4a5df50ad8b6aee2ce4ee25a23b049ba58b4ebbb14965e678d7a65d62b8",
+        "save_code": ""
+      },
+      "failures": [],
+      "stage": "save",
+      "exit_code": 0,
+      "seconds": 56.416,
+      "engine_errors": [],
+      "log_sha256": "a25a6483083d207d4994624e8aff49852d69101e18e3956925093915adc9be87",
+      "anchor_warnings": 0
+    },
+    {
+      "checks": 20,
+      "facts": {
+        "compiled_sha": "67d5f4a5df50ad8b6aee2ce4ee25a23b049ba58b4ebbb14965e678d7a65d62b8",
+        "debrief": {
+          "en": [
+            "North lane · 0 riders left · Deployed · Supply camp intact",
+            "South lane · 0 riders left · Deployed · Supply camp intact",
+            "Formations broken by coordinated hooks 11/12 · Han Tao was not captured"
+          ],
+          "ja": [
+            "北路 · 残り0騎 · 出撃済み · 輜重陣地は健在",
+            "南路 · 残り0騎 · 出撃済み · 輜重陣地は健在",
+            "協同鉤槍で破陣 11/12 · 韓滔は未捕縛"
+          ],
+          "zh_CN": [
+            "北路 · 余 0 骑 · 已出击 · 辎重营仍在",
+            "南路 · 余 0 骑 · 已出击 · 辎重营仍在",
+            "协同钩破 11/12 · 未擒获韩滔"
+          ],
+          "zh_TW": [
+            "北路 · 餘 0 騎 · 已出擊 · 輜重營仍在",
+            "南路 · 餘 0 騎 · 已出擊 · 輜重營仍在",
+            "協同鉤破 11/12 · 未擒獲韓滔"
+          ]
+        },
+        "identity": "source-v1:67d5f4a5df50ad8b6aee2ce4ee25a23b049ba58b4ebbb14965e678d7a65d62b8",
+        "play": {
+          "ai_trained": 18,
+          "buildings_started": 6,
+          "camp_hp": 1500.0,
+          "enemy_base_hp": 0,
+          "events": [
+            "lhm_break_1",
+            "lhm_break_2",
+            "lhm_break_3",
+            "lhm_direct_break",
+            "lhm_break_4",
+            "lhm_break_5",
+            "lhm_break_6",
+            "lhm_break_7",
+            "lhm_break_8",
+            "lhm_break_9",
+            "lhm_break_10",
+            "lhm_break_11",
+            "lhm_manor_fallen",
+            "lhm_hu_fled",
+            "lhm_victory"
+          ],
+          "flank_stage": 2,
+          "game_seconds": 236.25,
+          "han_hp": 720.0,
+          "hook_broken": 11,
+          "hu_hp": 1167.0,
+          "orders": 55,
+          "result": {
+            "contract_version": 2,
+            "core_cleared": true,
+            "core_goal": "守住梁山中军，击溃十二骑连环马并摧毁官军大营。宋江与中军必须存活。",
+            "done_ids": [
+              "lhm_hu"
+            ],
+            "goals": [
+              {
+                "id": "lhm_training",
+                "label": "教场诱骑撤步，徐宁与钩镰手协同下钩",
+                "note": "",
+                "reason": "本局未完成",
+                "state": "missed"
+              },
+              {
+                "id": "lhm_hooks",
+                "label": "十二骑均先由钩镰枪破阵",
+                "note": "",
+                "reason": "本局已偏离“十二骑均先由钩镰枪破阵”的原著条件",
+                "state": "missed"
+              },
+              {
+                "id": "lhm_han",
+                "label": "生擒韩滔",
+                "note": "",
+                "reason": "本局未完成",
+                "state": "missed"
+              },
+              {
+                "id": "lhm_hu",
+                "label": "呼延灼败走青州",
+                "note": "",
+                "reason": "",
+                "state": "done"
+              }
+            ],
+            "missed_ids": [
+              "lhm_training",
+              "lhm_hooks",
+              "lhm_han"
+            ],
+            "pending_ids": [],
+            "story_complete": false,
+            "story_done": 1,
+            "story_total": 4
+          },
+          "riders_defeated": 12,
+          "siege_choice": "siege_cata",
+          "skill_orders": 11,
+          "song_hp": 280.0,
+          "strategy": "defend then regroup; artillery uses south to east flank",
+          "units_queued": 38,
+          "units_queued_by_key": {
+            "gou_lian": 4,
+            "hua_rong": 1,
+            "liang_dao": 2,
+            "liang_gong": 5,
+            "liang_qiang": 2,
+            "lou_luo": 2,
+            "siege_cata": 2
+          }
+        },
+        "progress_sha": "616f97b4721fab78d758fc8432619d7a392a7790ae65dbda413052fa7947a9d8",
+        "resume_code": ""
+      },
+      "failures": [],
+      "stage": "resume",
+      "exit_code": 0,
+      "seconds": 77.63,
+      "engine_errors": [],
+      "log_sha256": "94044bc55db805358e94cdea7a6c5791847994a1b535b3b11ce6373620b527d2",
+      "anchor_warnings": 0
+    },
+    {
+      "checks": 7,
+      "facts": {
+        "compiled_sha": "67d5f4a5df50ad8b6aee2ce4ee25a23b049ba58b4ebbb14965e678d7a65d62b8",
+        "identity": "source-v1:67d5f4a5df50ad8b6aee2ce4ee25a23b049ba58b4ebbb14965e678d7a65d62b8",
+        "progress_sha": "616f97b4721fab78d758fc8432619d7a392a7790ae65dbda413052fa7947a9d8",
+        "terminal_code": "LOCAL_RUN_TERMINAL"
+      },
+      "failures": [],
+      "stage": "reject",
+      "exit_code": 0,
+      "seconds": 9.675,
+      "engine_errors": [],
+      "log_sha256": "4028290a072094e0612ef1889e1744157165a917b712befe3f97c96117f976a1",
+      "anchor_warnings": 0
+    }
+  ],
+  "passed": true,
+  "first_attempt_preserved": {
+    "checks": 14,
+    "facts": {
+      "compiled_sha": "67d5f4a5df50ad8b6aee2ce4ee25a23b049ba58b4ebbb14965e678d7a65d62b8",
+      "identity": "source-v1:67d5f4a5df50ad8b6aee2ce4ee25a23b049ba58b4ebbb14965e678d7a65d62b8",
+      "play": {
+        "ai_trained": 24,
+        "buildings_started": 6,
+        "camp_hp": 1500.0,
+        "enemy_base_hp": 318.8,
+        "events": [
+          "lhm_break_1",
+          "lhm_break_2",
+          "lhm_break_3",
+          "lhm_direct_break",
+          "lhm_break_4",
+          "lhm_break_5",
+          "lhm_supply_0",
+          "lhm_break_6",
+          "lhm_break_7",
+          "lhm_break_8",
+          "lhm_break_9",
+          "lhm_break_10",
+          "lhm_break_11"
+        ],
+        "flank_stage": 0,
+        "game_seconds": 900.0,
+        "han_hp": 612.0,
+        "hook_broken": 11,
+        "hu_hp": 1341.6,
+        "orders": 204,
+        "result": {
+          "contract_version": 2,
+          "core_cleared": false,
+          "core_goal": "守住梁山中军，击溃十二骑连环马并摧毁官军大营。宋江与中军必须存活。",
+          "done_ids": [],
+          "goals": [
+            {
+              "id": "lhm_training",
+              "label": "教场诱骑撤步，徐宁与钩镰手协同下钩",
+              "note": "",
+              "reason": "",
+              "state": "pending"
+            },
+            {
+              "id": "lhm_hooks",
+              "label": "十二骑均先由钩镰枪破阵",
+              "note": "",
+              "reason": "本局已偏离“十二骑均先由钩镰枪破阵”的原著条件",
+              "state": "missed"
+            },
+            {
+              "id": "lhm_han",
+              "label": "生擒韩滔",
+              "note": "",
+              "reason": "",
+              "state": "pending"
+            },
+            {
+              "id": "lhm_hu",
+              "label": "呼延灼败走青州",
+              "note": "",
+              "reason": "",
+              "state": "pending"
+            }
+          ],
+          "missed_ids": [
+            "lhm_hooks"
+          ],
+          "pending_ids": [
+            "lhm_training",
+            "lhm_han",
+            "lhm_hu"
+          ],
+          "story_complete": false,
+          "story_done": 0,
+          "story_total": 4
+        },
+        "riders_defeated": 12,
+        "siege_choice": "siege_cata",
+        "skill_orders": 12,
+        "song_hp": 280.0,
+        "strategy": "defend then regroup; artillery uses south to east flank",
+        "units_queued": 70,
+        "units_queued_by_key": {
+          "gou_lian": 13,
+          "hua_rong": 1,
+          "liang_dao": 2,
+          "liang_gong": 17,
+          "liang_qiang": 6,
+          "lin_chong": 1,
+          "lou_luo": 3,
+          "siege_cata": 7
+        }
+      },
+      "progress_sha": "",
+      "resume_code": ""
+    },
+    "failures": [
+      "defend route wins through real economy and combat",
+      "defend clears finite riders and enemy headquarters",
+      "natural victory is committed by the real settlement coordinator",
+      "continued victory opens the real settlement panel"
+    ],
+    "stage": "resume",
+    "exit_code": 1,
+    "seconds": 241.705,
+    "engine_errors": [],
+    "log_sha256": "6b9dd4dec6744baff7a936130d261613526296768dcc003b645fb08da07de100"
+  },
+  "first_attempt_evidence_sha256": "d75c386277941aeb7ae1d4199490e396c49fabdcda99be7c108803a92a02915a",
+  "resume_input_checkpoint_cloned_and_verified": true,
+  "checkpoint_state": {
+    "broken": 0,
+    "down": 0,
+    "drill": [
+      false,
+      false,
+      false,
+      false
+    ],
+    "elapsed": 150.799999999997,
+    "escorts": [
+      [
+        64,
+        4,
+        0
+      ],
+      [
+        65,
+        2,
+        0
+      ],
+      [
+        71,
+        4,
+        0
+      ],
+      [
+        72,
+        2,
+        0
+      ],
+      [
+        77,
+        4,
+        0
+      ],
+      [
+        78,
+        2,
+        0
+      ],
+      [
+        84,
+        3,
+        0
+      ],
+      [
+        85,
+        1,
+        2
+      ]
+    ],
+    "gold": 58,
+    "hall": 1,
+    "riders": [
+      [
+        36,
+        1625.9619140625,
+        584.794799804688,
+        300.0
+      ],
+      [
+        37,
+        1627.32421875,
+        641.953369140625,
+        300.0
+      ],
+      [
+        38,
+        1625.20690917969,
+        738.499755859375,
+        300.0
+      ],
+      [
+        39,
+        1657.9619140625,
+        584.794799804688,
+        300.0
+      ],
+      [
+        40,
+        1659.32421875,
+        641.953369140625,
+        300.0
+      ],
+      [
+        41,
+        1666.53088378906,
+        731.494079589844,
+        300.0
+      ],
+      [
+        42,
+        1694.43395996094,
+        1269.90930175781,
+        300.0
+      ],
+      [
+        43,
+        1680.0,
+        1360.0,
+        300.0
+      ],
+      [
+        44,
+        1680.0,
+        1424.0,
+        300.0
+      ],
+      [
+        45,
+        1713.54223632813,
+        1293.189453125,
+        300.0
+      ],
+      [
+        46,
+        1712.0,
+        1360.0,
+        300.0
+      ],
+      [
+        47,
+        1712.0,
+        1424.0,
+        300.0
+      ]
+    ],
+    "supply": [
+      false,
+      false
+    ],
+    "waves": [
+      [
+        true,
+        150.0
+      ],
+      [
+        false,
+        270.0
+      ]
+    ],
+    "wood": 216
+  },
+  "initial_save_probe_sha256": {
+    "rts_test.gd": "0599c0679e47697b50e2cea1545d04ce45ffd0904eb7b4b20aa8ea666e29a866",
+    "lianhuanma_rts_test.gd": "a8cceea8d1c98149d25e40e5f6aa0ba4a06a8dbee0b6ac7b637f14d76fcf639e",
+    "lianhuanma_escort_qa.gd": "e10639e97b92f2185a076f5539217e4518dc50876bb5d680c0e44944b5c4d7a9",
+    "platform_entry.gd": "f270ba38384e9bce258c409a6cb10444e8b834cbdc26d4266d286cceeb0f3da6",
+    "player_continue.gd": "7cbedfa6da22957d480becfe4e98a250e6bfdbea64c7c23405577a06532d4a89"
+  },
+  "checks": 34,
+  "automated_battle_speed_multiplier": 4,
+  "steps_seconds": 143.721,
+  "archived_probe_sha256": "398a54b8470d59bfc9fce118bfaca58954607eafe99f95333438b8612b03e7a3"
+}

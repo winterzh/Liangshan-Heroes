@@ -1,0 +1,47 @@
+--- a/tools/lianhuanma_escort_qa.gd
++++ b/tools/lianhuanma_escort_qa.gd
+@@ -221,2 +221,4 @@
+-				if siege_units.any(func(u):return u.entity_id not in flank_ids):
+-					flank_ids=siege_units.map(func(u):return u.entity_id);flank_stage=0
++				var current_ids: Array = siege_units.map(func(u):return u.entity_id)
++				if not current_ids.is_empty():
++					if not current_ids.any(func(id):return id in flank_ids): flank_stage=0
++					flank_ids=current_ids
+@@ -224 +226 @@
+-				if flank_stage<2 and siege_units.size()>=2 and siege_units.all(func(u):return u.position.distance_to(point)<=100): flank_stage+=1
++				if flank_stage<2 and siege_units.any(func(u):return u.position.distance_to(point)<=100): flank_stage+=1
+@@ -230,0 +233 @@
++				attack_move=true
+--- a/qa/campaign_cavalry_escort_20261116/player_continue/probe.gd
++++ b/qa/campaign_cavalry_escort_20261116/player_continue/probe.gd
+@@ -30,0 +31,2 @@
++	check(flow._startup_identity.get("ok",false) and not flow._startup_identity.get("source_mode",true),"runtime identity is from the release pack")
++	facts["compiled_sha"] = flow._startup_identity.get("source_sha256","")
+@@ -68,0 +71,2 @@
++		"drill":[l.drill_entered,l.drill_withdrew,l.drill_coordinated,l.drill_complete],
++		"supply":[b.mission.has_event("lhm_supply_0"),b.mission.has_event("lhm_supply_1")],
+@@ -126,0 +131 @@
++	await _check_finished_debrief(b)
+@@ -151,0 +157,22 @@
++
++func _check_finished_debrief(b) -> void:
++	check(b.hud._end_root.visible,"continued victory opens the real settlement panel")
++	if not failures.is_empty(): return
++	var rows: Array = b.level.campaign_debrief(b.mission)
++	check(rows.size()==3 and rows[0].args[0]=="北路" and rows[1].args[0]=="南路","both original lanes have outcome rows")
++	check(rows[0].args[1]==0 and rows[1].args[1]==0 and rows[2].args[0]==b.level.broken_count,
++		"the completed battle shows both lanes empty and counts actual hook breaks")
++	var localization = root.get_node("Localize")
++	var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://assets/localization/catalog.json"))
++	var snapshots := {}
++	for language in ["zh_CN","zh_TW","en","ja"]:
++		localization._formatted_sources.clear()
++		localization.set_language(language,false)
++		await process_frame
++		var lines := PackedStringArray()
++		for row in rows:
++			var args: Array = row.args if language == "zh_CN" else row.args.map(func(value): return catalog[value][language] if value is String else value)
++			lines.append((row.source if language == "zh_CN" else catalog[row.source][language]) % args)
++		check(lines.size()==3 and Array(lines).all(func(line): return line in b.hud._end_tally.text),"riders, supply and hooks in "+language)
++		snapshots[language] = lines
++	facts["debrief"] = snapshots

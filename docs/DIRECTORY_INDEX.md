@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[连环马 Windows 续玩收据](../qa/campaign_cavalry_escort_20261116/player_continue/windows_candidate_fa4084ff.json)及外部探针在 qa/campaign_cavalry_escort_20261116/player_continue/。
+
 [江州分次登船 Windows 收据](../qa/campaign_pursuit_20261116/player_continue/windows_candidate_fa4084ff.json)及探针差异在 qa/campaign_pursuit_20261116/player_continue/。
 
 [高俅关 Windows 续玩收据](../qa/campaign_fire_readiness_20261116/player_continue/windows_candidate_fa4084ff.json)及外部探针位于 qa/campaign_fire_readiness_20261116/player_continue/。

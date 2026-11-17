@@ -1,5 +1,7 @@
 # 当前项目总览
 
+连环马北路出击后在 Windows 候选 fa4084ff 保存；重启后恢复两路局势，打完原战斗并核对四语结算和旧槽拒绝。 [连环马续玩收据](../qa/campaign_cavalry_escort_20261116/player_continue/windows_candidate_fa4084ff.json)
+
 江州白龙庙路线在 Windows 候选 fa4084ff 保存一名乘员已登船的进度，恢复后另一名乘员与六名好汉登船，开船结算四项演义。 [江州续玩收据](../qa/campaign_pursuit_20261116/player_continue/windows_candidate_fa4084ff.json)
 
 高俅关在 Windows 候选 fa4084ff 的实际水陆战中完成接俘保存、原船上岸、押抵忠义堂及四项演义结算。新进程拒绝已结算旧槽。 [高俅关续玩收据](../qa/campaign_fire_readiness_20261116/player_continue/windows_candidate_fa4084ff.json)
