@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+Windows 候选沿用 Windows Steam 预设。候选 `04c8876b` 的实际祝家庄通关、四语结算和独立野猪林读档均使用同一编译包，Steam 接口采用隔离离线配置。 [整合候选收据](../qa/campaign_siege_20261116/windows_campaign_candidate_04c8876b.json)
+
 祝家庄结算从已保存的战役状态生成三条路线战果，先冻结原句和参数，再按当前语言渲染。未增加存档字段。四语来自 campaign_siege.json，严格重建后保持既有 4,986 条译文。 [战果核对](../qa/campaign_siege_20261116/README.md#祝家庄结算的路线战果)
 
 战役续玩任务栏的拉伸控件在原生挂载前后沿用锚点及偏移，固定锚点控件仍恢复尺寸。继续捕获并校验现有布局字段。组件夹具补齐当前 HUD 所用的触屏标志和底栏边界。 [读档布局收据](../qa/campaign_short_player_continue_20261117/native_entry_geometry.json)
