@@ -16,6 +16,14 @@ static func _context(identity: Dictionary) -> Dictionary:
 	if not CampaignEnvironment.enabled("level8"): return _bad("LEVEL8_CAMPAIGN_ENVIRONMENT_REQUIRED")
 	return selected
 
+static func validate_evacuation(level: Variant, events: Array) -> Dictionary:
+	for pair in [[level.lu, "daming_lu_safe"], [level.shi, "daming_shi_safe"]]:
+		var unit: Variant = pair[0]
+		var retreated: bool = is_instance_valid(unit) and unit.story_outcome == "retreated"
+		if retreated != events.has(pair[1]):
+			return _bad("LEVEL8_EVACUATION_EVENT_MISMATCH")
+	return {"ok": true}
+
 static func prepare_runtime(identity: Dictionary) -> Dictionary:
 	var selected: Dictionary = _context(identity)
 	if not selected.ok: return selected

@@ -30,11 +30,15 @@ func configure(value: Dictionary) -> Dictionary:
 
 func values(v: Dictionary) -> Dictionary:
 	var role: Dictionary=actors.get(str(v.entity_id),{});var name: String=role.get("role","")
+	var prisoner: bool = name in ["lu","shi"]
 	if v._story_pose_t!=0.0 or v._pose_previous_variant!="" or v.defeat_outcome!="":return bad("UNSUPPORTED_STORY_POSE")
-	if v.story_outcome!="" and (name!="gate" or v.story_outcome!="retreated" or not roles.values.gate_open):return bad("UNSUPPORTED_STORY_OUTCOME")
+	if v.story_outcome != "":
+		var may_retreat: bool = name == "gate" or (prisoner and roles.values.rescued and v.hp > 0.0 and not v._dying)
+		if v.story_outcome != "retreated" or not roles.values.gate_open or not may_retreat:
+			return bad("UNSUPPORTED_STORY_OUTCOME")
 	if not role.is_empty() and v.key!=role.key:return bad("ROLE_KEY")
 	if (v.hp<=0.0)!=v._dying:return bad("LIFETIME")
-	if name in ["lu","shi"]:
+	if prisoner:
 		if v.is_building or not v.is_noncombat or v.atk!=0.0 or v.ability!="" or not v.ability_slots.is_empty():return bad("PRISONER_IDENTITY")
 		if roles.values.rescued:
 			if v.is_captive or v.is_hero or v.faction!=0 or v.base_speed!=68.0 or v.art_variant!="daming_rescued_"+v.key:return bad("RESCUED_IDENTITY")
@@ -52,9 +56,12 @@ func values(v: Dictionary) -> Dictionary:
 	if pool in ["reserve","pursuit","escorts"] and (v.faction!=1 or v.is_building or v.is_worker or v.is_noncombat):return bad("GUARD_IDENTITY")
 	return {"ok":true}
 
-func parts(v: Dictionary,refs: Dictionary,meta: Dictionary,_node: Dictionary) -> Dictionary:
+func parts(v: Dictionary,refs: Dictionary,meta: Dictionary,node: Dictionary) -> Dictionary:
 	var role: String=actors.get(str(v.entity_id),{}).get("role","")
 	if refs.story_assist_owner.state!="none" or refs.story_assist_partner.state!="none" or meta.has("story_pose"):return bad("ASSISTANCE_OR_POSE")
+	if role in ["lu","shi"] and v.story_outcome == "retreated":
+		if node.visible or refs._pending_target.state != "none" or refs._target.state != "none" or not refs._queue.is_empty():
+			return bad("EVACUATED_PRISONER_ORDERS")
 	if SPY_ART.has(role):
 		if typeof(meta.get("daming_covered"))!=TYPE_BOOL:return bad("COVER_TYPE")
 		for field in ["daming_suspicion","daming_recover"]:

@@ -138,7 +138,7 @@ func _skills_dm(b,army: Array) -> void:
 			if b._ability_armed!="": b._cast_armed_at(b.to_screen(foes[0].position))
 			skill_orders+=1
 			break
-func _play_dm(b, stop_on_pursuit_warning := false) -> void:
+func _play_dm(b, stop_at := Callable(), stagger_evacuation := false) -> void:
 	var l=b.level
 	var time := 0.0
 	var next_log := 0.0
@@ -147,7 +147,7 @@ func _play_dm(b, stop_on_pursuit_warning := false) -> void:
 	var spy_phase := "admit"
 	var captured := {}
 	while b.phase==b.Phase.FIGHT and time<900:
-		if stop_on_pursuit_warning and l.pursuit_warned and not l.pursuit_sent:
+		if stop_at.is_valid() and stop_at.call():
 			return
 		_economy_dm(b)
 		var army: Array=b.units.filter(func(u): return alive(u) and u.faction==0 and not u.is_worker and not u.is_building and not u.is_noncombat and u.key not in l.SPY_KEYS)
@@ -184,7 +184,8 @@ func _play_dm(b, stop_on_pursuit_warning := false) -> void:
 			if l.rescued: phase="extract"
 		if phase=="extract":
 			cell=Vector2i(30,30)
-			for prisoner in [l.lu,l.shi]:
+			var evacuees := [l.lu] if stagger_evacuation and alive(l.lu) else [l.lu,l.shi]
+			for prisoner in evacuees:
 				if alive(prisoner): _click(b,[prisoner],l.EXIT_CELL)
 		# Spies act while the same economy and field army keep running.
 		if route=="signal" and not l.signaled:

@@ -1,5 +1,5 @@
 extends "res://tools/daming_rts_test.gd"
-## A live signal-route checkpoint through the private campaign menu.
+## Live signal and assault checkpoints through the private campaign menu.
 
 const HANDOFF := "user://daming_menu_handoff.json"
 const CONTEXT := {"mode":"campaign","level_id":"level8","waves":0}
@@ -15,7 +15,14 @@ func _run() -> void:
 		return
 	AudioServer.set_bus_mute(0,true)
 	root.get_node("Settings").edge_scroll = false
-	route = "signal"
+	route = OS.get_environment("DAMING_MENU_ROUTE")
+	if route.is_empty():
+		route = "signal"
+	if route not in ["signal","assault"]:
+		check(false,"known Daming route")
+		_finish()
+		return
+	facts["route"] = route
 	build_cells = DAMING_BUILD_CELLS.duplicate()
 	match stage:
 		"save": await _save()
@@ -51,19 +58,29 @@ func _checkpoint(b) -> Dictionary:
 	return {"gate_open":l.gate_open,"prison_open":l.prison_open,"rescued":l.rescued,"signaled":l.signaled,
 		"pursuit_warned":l.pursuit_warned,"pursuit_sent":l.pursuit_sent,"pursuit_left":l.pursuit_t,
 		"pursuers":l.pursuit.map(_entity_id),"enemy_recruits":l.ai_trained,"hall":_entity_id(l.hall),
-		"prisoners":[_entity_id(l.lu),_entity_id(l.shi)],"events":events,
+		"prisoners":[_entity_id(l.lu),_entity_id(l.shi)],"outcomes":[l.lu.story_outcome,l.shi.story_outcome],"events":events,
 		"gold":b.gold,"wood":b.wood,"clock":l.elapsed}
 
 func _save() -> void:
 	var b = await _start("",7)
 	check(b.phase == b.Phase.FIGHT and b._official_context == CONTEXT,"normal Daming battle starts")
 	Engine.time_scale = 4
-	await _play_dm(b,true)
 	var l = b.level
-	check(b.phase == b.Phase.FIGHT and l.gate_open and l.prison_open and l.rescued and l.signaled
-		and l.pursuit_warned and not l.pursuit_sent and l.pursuit_t > 0 and l.pursuit.any(alive)
-		and not b.mission.has_event("daming_victory"),
-		"actual signal, gate and rescue reach a live pursuit countdown before victory")
+	var assault := route == "assault"
+	var stop_at := func():
+		if assault:
+			return b.mission.has_event("daming_lu_safe")
+		return l.pursuit_warned and not l.pursuit_sent
+	await _play_dm(b,stop_at,assault)
+	check(b.phase == b.Phase.FIGHT and l.gate_open and l.prison_open and l.rescued,
+		"the gate, prison and rescue all progressed through live combat")
+	if assault:
+		check(not l.signaled and b.mission.has_event("daming_gate_breached") and b.mission.has_event("daming_prison_breached")
+			and l.lu.story_outcome == "retreated" and alive(l.shi) and not b.mission.has_event("daming_shi_safe"),
+			"direct assault reaches a mixed checkpoint with one evacuee safely outside")
+	else:
+		check(l.signaled and l.pursuit_warned and not l.pursuit_sent and l.pursuit_t > 0 and l.pursuit.any(alive),
+			"the signal route reaches a live pursuit countdown")
 	if not failures.is_empty():
 		_finish()
 		return
@@ -120,7 +137,15 @@ func _restored(result: Dictionary, menu: WeakRef, previous: Dictionary) -> void:
 	var mismatched: Array = expected.keys().filter(func(key): return state[key] != expected[key])
 	if not mismatched.is_empty():
 		facts["checkpoint_mismatch"] = mismatched.map(func(key): return [key,expected[key],state[key]])
-	check(mismatched.is_empty(),"gate, original units, active pursuit countdown, economy and events survive exactly")
+	check(mismatched.is_empty(),"gate, original units, evacuation outcomes, pursuit, economy and events survive exactly")
+	if route == "assault":
+		var factory = load("res://scripts/run_level8_world_factory.gd")
+		var omitted: Array = state.events.duplicate()
+		omitted.erase("daming_lu_safe")
+		var extra: Array = state.events.duplicate()
+		extra.append("daming_shi_safe")
+		check(not factory.validate_evacuation(b.level,omitted).ok and not factory.validate_evacuation(b.level,extra).ok,
+			"the world validator rejects missing and premature evacuation events")
 	var slot: Dictionary = load("res://scripts/run_slot_store.gd").new().read_slot()
 	check(slot.get("ok",false) and slot.file_sha256 == previous.sha,"reading preserves the slot bytes")
 	_play_restored.call_deferred(b,previous.driver)
@@ -139,6 +164,9 @@ func _play_restored(b, driver: Dictionary) -> void:
 			and wounded.all(func(unit): return unit in b.selection)
 			and wounded.map(func(unit): return unit._order_serial) == serials,
 			"restored locator selects the original wounded allies and issues no orders")
+		if route == "assault":
+			check(b.selection == [l.shi] and l.lu.story_outcome == "retreated",
+				"only Shi Xiu is selectable for evacuation after Lu Junyi is already safe")
 	buildings_started = driver.buildings
 	units_queued = driver.units
 	units_queued_by_key = driver.queue
@@ -146,6 +174,10 @@ func _play_restored(b, driver: Dictionary) -> void:
 	skill_orders = driver.skills
 	Engine.time_scale = 4
 	await _play_dm(b)
+	if route == "assault":
+		check(not l.signaled and b.mission.has_event("daming_gate_breached") and b.mission.has_event("daming_prison_breached")
+			and play_metrics.get("result",{}).get("story_done",-1) == 0,
+			"the continued assault wins without granting alternate-route story goals")
 	facts["game_seconds_at_result"] = l.elapsed
 	facts["pursuit_sent_before_result"] = l.pursuit_sent
 	facts["live"] = play_metrics

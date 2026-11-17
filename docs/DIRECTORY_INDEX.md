@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[大名府强攻续玩](../qa/campaign_wounded_selection_20261116/README.md#强攻后分批撤离续玩)记录分批撤离的存档修复和续玩证据。
+
 [大名府举火夺门后续玩](../qa/campaign_wounded_selection_20261116/README.md#举火夺门后续玩)保留独立保存、读档和撤离实战报告。
 
 [2026-11-17 Steam Windows 更新](STEAM_UPDATE_20261117.md)含候选来源、正式更新状态、服务端六文件收据和四语公告稿。

@@ -8,6 +8,7 @@ const CAMPAIGN_SECTIONS := ["map", "fog", "units", "level", "visual", "root", "r
 const Profiles := preload("res://scripts/run_official_restore_profile.gd")
 const CampaignLevelState := preload("res://scripts/run_campaign_level_state.gd")
 const CampaignMissionState := preload("res://scripts/run_campaign_mission_state.gd")
+const DamingFactory := preload("res://scripts/run_level8_world_factory.gd")
 const PresentationState := preload("res://scripts/run_campaign_presentation_state.gd")
 const Level3Factory := preload("res://scripts/run_level3_world_factory.gd")
 const Zhu := preload("res://scripts/levels/level3_zhujiazhuang_rts.gd")
@@ -191,6 +192,11 @@ func capture(source: Variant, retained_identity: Variant = null) -> Dictionary:
 		if not conf.ok:
 			if retained_identity == null: identity.dispose()
 			return {"ok": false, "code": conf.code, "section": "visual_partition", "cause": conf, "complete_world": false}
+		if lvl_id == "level8":
+			conf = DamingFactory.validate_evacuation(source.level, visual._mission_raw.events)
+			if not conf.ok:
+				if retained_identity == null: identity.dispose()
+				return conf
 		if lvl_id == "level7":
 			conf = visual.configure_level7(units.level_record, version, id_to_unit, source.next_entity_id, m_token)
 			if not conf.ok:
@@ -406,7 +412,7 @@ func prepare(record: Variant) -> Dictionary:
 		# waits for the new Mission-owned control; this shell is identity only.
 		_battle.level = Profiles.level_script(Profiles.GAO_ID).new()
 	elif is_daming:
-		checked = preload("res://scripts/run_level8_world_factory.gd").restore_level(s.level, _trusted, ids, _battle.next_entity_id, m_token)
+		checked = DamingFactory.restore_level(s.level, _trusted, ids, _battle.next_entity_id, m_token)
 		if not checked.ok: return _abort(checked, "level")
 		_battle.level = checked.level
 	elif is_huang:
@@ -465,6 +471,9 @@ func prepare(record: Variant) -> Dictionary:
 		}
 		checked = _visual.configure_presentation(s.presentation, s.mission, p_context, known, _battle.next_entity_id)
 		if not checked.ok: return _abort(checked, "visual_partition")
+		if is_daming:
+			checked = DamingFactory.validate_evacuation(_battle.level, _visual._mission_raw.events)
+			if not checked.ok: return _abort(checked, "level")
 
 	checked = _visual.prepare(s.visual, version, ids, _unit_plan.expired_unit)
 	if not checked.ok: return _abort(checked, "visual")
