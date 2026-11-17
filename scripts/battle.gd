@@ -10607,6 +10607,11 @@ func _issue_order(p: Vector2, queued := false) -> void:
 				msg(Localize.format_text("驻入 %s（%d 人）", [garr.display_name, sent]), 1.2)
 				return
 	var enemy := _enemy_at(p)
+	# A loaded cart's fallback relay flag can share its tile. Preserve the
+	# ordinary manual task path when the click lands on that cart's own flag.
+	if enemy != null and enemy.key == "treasure_cart" and not queued and mission != null \
+			and level.has_method("is_loaded_relay_click") and level.is_loaded_relay_click(self,enemy,to_logic(p)):
+		enemy = null
 	_click_fx_attack = enemy != null
 	if enemy != null:
 		if mission != null and mission.actions.has("zhu_rts_inside") and not mission.actions["zhu_rts_inside"].done \

@@ -481,6 +481,15 @@ func _loaded_relay_actions(b) -> Array[String]:
 			pending.append(action_id)
 	return pending
 
+func is_loaded_relay_click(b, cart, target: Vector2) -> bool:
+	if st not in [CARRY,FORCE]:
+		return false
+	var index := bundles.find(cart)
+	if not Transport.is_cart(index) or not cargo_ready.get(index,false) or cargo.has(index) or _cargo_was_delivered(b,index):
+		return false
+	var action_id := "force_take_%d_%d" % [index,int(force_attempts.get(index,0))]
+	return b.mission._nearest_clicked_action(target) == action_id
+
 func _transport_action_for(b,actor) -> String:
 	# Locate one legal step only. Never request it or continue the next stage.
 	if st not in [CARRY,FORCE] or not is_instance_valid(actor) or actor not in actors or not b.units.has(actor) \
