@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[结算中断候选复验](../qa/campaign_siege_20261116/README.md#现行版本的结算中断候选)的来源摘要、三进程结果与受控探针位于 `qa/campaign_siege_20261116/current_settlement_candidate/`。
+
 [Windows 续玩候选回执](../qa/campaign_siege_20261116/player_continue/windows_candidate_2115c08f.json)位于 `qa/campaign_siege_20261116/player_continue/`，记录本机候选的包身份和六文件摘要。
 
 [祝家庄玩家续玩入口](../qa/campaign_siege_20261116/README.md#祝家庄玩家续玩入口)的隔离双进程探针与报告位于 `qa/campaign_siege_20261116/player_continue/`。

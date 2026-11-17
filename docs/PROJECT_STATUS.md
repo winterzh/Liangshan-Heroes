@@ -1,5 +1,7 @@
 # 当前项目总览
 
+独立结算候选完成祝家庄受控中断、启动补写和再启复查。合入发布来源前仍需核对 Steam 账号可用和不可用时的启动、玩家续玩及奖励。[结算中断候选复验](../qa/campaign_siege_20261116/README.md#现行版本的结算中断候选)
+
 本地 Windows 续玩候选 `2115c08f` 已封装。原生离线启动和同一编译包的两进程祝家庄保存、读取均通过。实际 Steam 客户端资格与奖励待验。[Windows 续玩候选回执](../qa/campaign_siege_20261116/player_continue/windows_candidate_2115c08f.json)
 
 祝家庄在 Windows Steam 候选源码中接入玩家续玩。隔离测试替代平台开关，走玩家保存和继续事务。实际 Steam 客户端和统计奖励待验。[祝家庄玩家续玩入口](../qa/campaign_siege_20261116/README.md#祝家庄玩家续玩入口)

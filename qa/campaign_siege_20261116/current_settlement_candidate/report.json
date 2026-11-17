@@ -1,0 +1,117 @@
+{
+  "scope": "private Windows source candidate, Steam disabled, controlled settlement fault",
+  "composition": {
+    "base_commit": "4ac1218a7b5e56fc25a1e7f2b9752de26605e9c7",
+    "prior_candidate": "20261117_081141_c3c2eb2f",
+    "overlays_sha256": {
+      "scripts/battle.gd": "b572993d5dab7d5f05d14312457631b627d153fe7614963291eb837d1e00a51b",
+      "scripts/campaign.gd": "911e97602524fae9f7e8f9ff07b84b6d8179a574c12a233cdf2798c92625db6a",
+      "scripts/continue_flow.gd": "9464b1748b43334dd70ff7f3529ce5e2eb2e62285fe502948e92e57da5674d72",
+      "scripts/menu.gd": "5f94cceafe811cd8c3d9a69dc8aa98b7b172ace31fe860e1d233898549daaf97",
+      "scripts/process_liveness_oracle.gd": "2224516ffd215d6d0e45d3254f7071aacc0357180a0500b6ad6b889593a8b6bd",
+      "scripts/run_battle_world_core.gd": "35186ee4bfcb7bd14eead8673ba9612d8365ddf00be2ef875954e02d2b932362",
+      "scripts/run_campaign_cfg_transaction.gd": "71803fc42a6bef59479db5b8cf70a953716a3968e45ba1fb391eed5726a51d17",
+      "scripts/run_campaign_cfg_values.gd": "ebf78b673a99ea847b72aa7b897f1aede34c99f1e6cc873f66f69611929ef081",
+      "scripts/run_campaign_legacy_data.gd": "2ab0ea51afb1ede869022ec2877c75f6c395080ad34ab1a9c40aca2d5f76f93e",
+      "scripts/run_campaign_local_lifecycle.gd": "c14aee4e9fa6bf75242850a86302722ca48b0f2f6de4fcf2882acfba6ca18dda",
+      "scripts/run_campaign_progress_coordinator.gd": "4fa8c42a7c288c7384bb1254c67fe94946aa12b981315ce4753e1aeeedaab018",
+      "scripts/run_campaign_progress_gate.gd": "2303bf6b25eaf83c915bbfd88d09a58072174780f3d9397d23f9086b76d0c29f",
+      "scripts/run_campaign_progress_intent.gd": "0b04412ba4203fb93f3113d7633c753f238d5a383a62e291ca8c917f290a63ff",
+      "scripts/run_campaign_progress_projection.gd": "6c627f95c44f6876895f012b5e6a6859500b73d391f92d7bf46f41f4b0d1e68b",
+      "scripts/run_campaign_startup_scan.gd": "2f4fbebbaa4c6035e8111e70215042f91ff60d69723169da011849a187954c0d",
+      "scripts/run_process_liveness_manager.gd": "644531a889b554be5187b60d47e15b5c9331839360293ef14aa79a978a9a2976",
+      "scripts/run_snapshot_store.gd": "f222e8b3798355164ab29da4d0dc534362e2bea680ec7f7dbe7462b86df8959f",
+      "scripts/run_world_session.gd": "8b499e542ba155a3825d39caffdbe5b5acd7d0f046dd51a7122bd9efd4a1342c",
+      "scripts/steam_cloud.gd": "ee793d71e6ab757b8605fa2c3c3675493b5a52e9503dd34bb102785f93d0b986",
+      "scripts/steam_local_run_session.gd": "10198f06b28cad4a4d3c8423be426f3fbd6901654ff1dadf8d3d3ea2a40ef3f1",
+      "scripts/steam_receipt_store.gd": "10f7cd3cd77c9c5322c991c63c11bc2c85151b1fc03dbf9ceef55d698ebb90b7",
+      "scripts/steam_run_ledger.gd": "da60d5481a25f3588db2b2c6815a728f5deef45969a951d3416d3d43a53094e1",
+      "scripts/steam_run_receipt.gd": "13a277c20617ba5777d1287cc16e639441cae3cd938a550e088a2fa119a05958",
+      "scripts/steam_service.gd": "42498690141f36cb4898ea2a645b2d31a4305d8e9a239a505d4a126069a22984"
+    }
+  },
+  "import": {
+    "seconds": 95.912,
+    "exit_code": 0,
+    "errors": [],
+    "passed": true
+  },
+  "settlement": {
+    "verified": true,
+    "stages": [
+      {
+        "mode": "produce",
+        "pid": 15952,
+        "result": {
+          "checks": 10,
+          "facts": {
+            "error": "UNKNOWN_FILE",
+            "identity": "source-v1:fa1d691a6f2903314f8b8490a8f423ce09a82d2fc708bf8ea29f987c515cde19",
+            "pending": 1
+          },
+          "failures": [],
+          "mode": "produce",
+          "pid": 15952
+        },
+        "planned_termination": true,
+        "exit_code": 1,
+        "engine_errors": [],
+        "seconds": 54.765
+      },
+      {
+        "mode": "recover",
+        "pid": 40288,
+        "result": {
+          "checks": 4,
+          "facts": {
+            "goals": [
+              "zhu_capture",
+              "zhu_inside",
+              "zhu_seven"
+            ],
+            "identity": "source-v1:fa1d691a6f2903314f8b8490a8f423ce09a82d2fc708bf8ea29f987c515cde19",
+            "progress_sha256": "2590393567d1949d65f8b3d2818f01b53a049bb339216de7eba11dad7d853e90",
+            "receipt_sha256": "6838196585a58ad361e2ba8d0c77e1c379cfc68e57397709ef2ce50118192c0b",
+            "recovered": 1,
+            "unlocked": 4
+          },
+          "failures": [],
+          "mode": "recover",
+          "pid": 40288
+        },
+        "planned_termination": false,
+        "exit_code": 0,
+        "engine_errors": [],
+        "seconds": 42.158
+      },
+      {
+        "mode": "readback",
+        "pid": 52140,
+        "result": {
+          "checks": 4,
+          "facts": {
+            "goals": [
+              "zhu_capture",
+              "zhu_inside",
+              "zhu_seven"
+            ],
+            "identity": "source-v1:fa1d691a6f2903314f8b8490a8f423ce09a82d2fc708bf8ea29f987c515cde19",
+            "progress_sha256": "2590393567d1949d65f8b3d2818f01b53a049bb339216de7eba11dad7d853e90",
+            "receipt_sha256": "6838196585a58ad361e2ba8d0c77e1c379cfc68e57397709ef2ce50118192c0b",
+            "recovered": 0,
+            "unlocked": 4
+          },
+          "failures": [],
+          "mode": "readback",
+          "pid": 52140
+        },
+        "planned_termination": false,
+        "exit_code": 0,
+        "engine_errors": [],
+        "seconds": 29.729
+      }
+    ],
+    "candidate": "source-v1:fa1d691a6f2903314f8b8490a8f423ce09a82d2fc708bf8ea29f987c515cde19",
+    "probe_lf_sha256": "16e1126017e93bbb108e1ea1fe4ac0348a21205d94801edb87134a22147c10d5"
+  }
+}
