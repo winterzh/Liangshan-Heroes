@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+江州白龙庙定位用任务固定按钮，提示和会合判定读同一四人队伍与到场距离。译文来自 `jiangzhou_bailong_meeting.json`。[江州会合进度](../qa/campaign_pursuit_20261116/README.md#白龙庙会合进度)
+
 继续入口从主菜单接管后台校验，由 ContinueFlow 释放线程。发现预读时的 EXE 已变化会重做校验，档案仍由原 Session 校验与安装。[继续读取验证](../qa/battle_entry_timing_20261116/README.md#继续上次战斗后台校验)
 
 使用 `d645e44f` 封装。Windows 原生 EXE 离线启动通过。编译包实际运行六种入口、四语和六次正常返回，祝家庄可定位可采矿点，黄泥冈原存档文字可按当前语言显示接力报告。[本地 Windows 候选](../qa/battle_entry_timing_20261116/README.md#windows-含矿点与接力补译的候选)

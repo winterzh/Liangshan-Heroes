@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[江州白龙庙会合进度](../qa/campaign_pursuit_20261116/README.md#白龙庙会合进度)含会合距离、四语和实战报告。
+
 [继续上次战斗后台校验](../qa/battle_entry_timing_20261116/README.md#继续上次战斗后台校验)记录空档返回、工作线程接管和独立进程续玩。
 
 [Windows 候选 d645e44f](../qa/battle_entry_timing_20261116/windows_candidate_d645e44f.json)含离线原生启动、编译包六入口和六文件摘要。

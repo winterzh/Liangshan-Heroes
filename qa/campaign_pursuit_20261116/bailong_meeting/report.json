@@ -1,0 +1,115 @@
+{
+  "checks": 18,
+  "failures": [],
+  "fixture": {
+    "en": "At the temple: 3/4. Still on the way: Zhang Heng.",
+    "ja": "白竜廟に到着した人数：3/4。未到着：張横。",
+    "zh_CN": "白龙庙已到3/4，仍需到场：张横。",
+    "zh_TW": "白龍廟已到3/4，仍需到場：張橫。"
+  },
+  "live": {
+    "cache_taken": [
+      true,
+      false
+    ],
+    "controller_wait_seconds": 112.0,
+    "enemy_paid_recruits": 2,
+    "enemy_spent_gold": 50,
+    "enemy_spent_wood": 16,
+    "events": [
+      "action:jiangzhou_rts:south_lane",
+      "south_lane",
+      "action:jiangzhou_rts:west_street",
+      "west_street",
+      "jiangzhou_li_first",
+      "action:jiangzhou_rts:cache_0",
+      "cache_0",
+      "execution_halted",
+      "action:jiangzhou_rts:free_song",
+      "free_song",
+      "action:jiangzhou_rts:free_dai",
+      "free_dai",
+      "jiangzhou_rear_pursuit",
+      "bailong",
+      "action:jiangzhou_rts:rally_dock",
+      "rally_dock",
+      "action:jiangzhou_rts:board_dai",
+      "board_dai",
+      "action:jiangzhou_rts:board_song",
+      "board_song",
+      "jiangzhou_named_survive",
+      "all_embarked"
+    ],
+    "game_seconds": 113.399999999999,
+    "max_ordinary_troops": 17,
+    "orders": 303,
+    "paid_recruits": 14,
+    "pursuit_sent": true,
+    "pursuit_survivors": 0,
+    "result": {
+      "contract_version": 2,
+      "core_cleared": true,
+      "core_goal": "150秒内打倒两名刽子手，分别救出宋江、戴宗，护送二人活着登船，再下令开船。无需杀光官军。",
+      "done_ids": [
+        "li_kui_first",
+        "free_both",
+        "bailong_meeting",
+        "named_survive"
+      ],
+      "goals": [
+        {
+          "id": "li_kui_first",
+          "label": "两路就位后，由李逵排头打断行刑",
+          "note": "",
+          "reason": "",
+          "state": "done"
+        },
+        {
+          "id": "free_both",
+          "label": "在法场分别救下宋江、戴宗",
+          "note": "",
+          "reason": "",
+          "state": "done"
+        },
+        {
+          "id": "bailong_meeting",
+          "label": "护送二人到白龙庙，与水军相会",
+          "note": "",
+          "reason": "",
+          "state": "done"
+        },
+        {
+          "id": "named_survive",
+          "label": "六名具名好汉全部活着撤回码头",
+          "note": "",
+          "reason": "",
+          "state": "done"
+        }
+      ],
+      "missed_ids": [],
+      "pending_ids": [],
+      "story_complete": true,
+      "story_done": 4,
+      "story_total": 4
+    },
+    "search_steps": [
+      1,
+      2
+    ],
+    "skills": 10
+  },
+  "passed": true,
+  "time_scale": 4.0,
+  "exit_code": 0,
+  "seconds": 62.629,
+  "source_base": "6f34a52c25fe24b69a10e52fab0a0882d2557ea1",
+  "source_lf_sha256": {
+    "scripts/levels/level2_jiangzhou_rts.gd": "0bcc743599d741dde9da5394d07eaf237050e2a21f251c00bc617b5fccfd22a0",
+    "scripts/campaign_mission.gd": "abbc644399c2f7ff4a26c010bf5aa0d96c9591659e04225f8b280e47fc17f08d",
+    "assets/localization/catalog.json": "ebb7e2307b86ea3da0cc9446a62905caacbd5efa3eb6c2dfc4c444ccb78ac45e",
+    "assets/localization/jiangzhou_bailong_meeting.json": "d8553d3b1ac9aaa55a1dcd7588a433630e5a3f685b477869e8e8c40757159389",
+    "tools/jiangzhou_rts_play.gd": "3a1ed992d9eb693c56daa2341476f0ba4eeda9de2accf62c6fd619876a11a34d",
+    "tools/zhujiazhuang_rts_test.gd": "435ddb8f9bc774687e1ea879ac6e9adc606380db4934ca3b72dfea294273d770",
+    "qa/campaign_pursuit_20261116/bailong_meeting/probe.gd": "ca80ff81dca992dad3ba66015e203dfa920b69d3f35c746e921c03fbad7b9c01"
+  }
+}

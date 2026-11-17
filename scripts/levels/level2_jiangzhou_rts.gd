@@ -8,6 +8,7 @@ const WEST_CAMP := Vector2i(8,26)
 const DOCK_CAMP := Vector2i(10,46)
 const DOCK := Vector2i(10,50)
 const BAILONG := Vector2i(14,43)
+const BAILONG_RADIUS := 130.0
 const CITY_POST := Vector2i(44,25)
 const CACHE_CELLS := [Vector2i(13,23),Vector2i(28,41)]
 const WEST_ROUTE := [Vector2i(22,28),Vector2i(18,34),Vector2i(14,40),BAILONG]
@@ -270,6 +271,35 @@ func _uprising(b,actor) -> void:
 	b.mission.set_title("劫场 · 先打刽子手")
 	b.mission.set_objective("两名刽子手倒下即可停刑，再分别解缚。东街巡防营32秒后开始付费补军，最多8人；拆营可断援。")
 	for key in ["west_street","south_lane","first_axes"]: b.mission.block_action(key,"已经起事，直接攻击刽子手并救人。")
+
+func _bailong_party() -> Array[Unit]:
+	return [song_freed,dai_freed,named_units.get("zhang_shun"),named_units.get("zhang_heng")]
+
+func _at_bailong(b, member: Unit) -> bool:
+	return _near(b,member,BAILONG,BAILONG_RADIUS)
+
+func _view_bailong(b) -> void:
+	b.center_camera_cell(BAILONG)
+	if meeting:
+		b.mission.set_feedback("白龙庙会合已完成，继续向码头撤离。")
+		return
+	var members := _bailong_party()
+	if not active(members[2]) or not active(members[3]) \
+			or members.slice(0,2).any(func(u): return living(u) and not active(u)):
+		b.mission.set_feedback("白龙庙会合条件已失，可直接护送二人登船。")
+		return
+	if not living(song_freed) or not living(dai_freed):
+		b.mission.set_feedback("先解救宋江、戴宗，再带二人与张顺、张横到白龙庙会合。")
+		return
+	var missing := PackedStringArray()
+	for member in members:
+		if not _at_bailong(b,member):
+			missing.append(Localize.text(member.display_name))
+	if missing.is_empty():
+		b.mission.set_feedback("四人已到齐，待会合后前往码头。")
+	else:
+		b.mission.set_feedback(Localize.format_text("白龙庙已到%d/4，仍需到场：%s。",[members.size()-missing.size(),", ".join(missing)]))
+
 func _escort_objective() -> String:
 	if not first_rescued: return ""
 	var song_rescued := living(song_freed)
@@ -280,7 +310,7 @@ func _escort_objective() -> String:
 		if first.story_outcome=="embarked": return "已有一人登船。回法场解救另一人，再护送到码头。"
 		return "宋江已解缚。可先派兵护他离开法场，另队解救戴宗。西巷较近，南巷较宽。" if song_rescued else "戴宗已解缚。可先派兵护他离开法场，另队解救宋江。西巷较近，南巷较宽。"
 	if song_freed.story_outcome=="embarked" and dai_freed.story_outcome=="embarked": return ""
-	if not meeting and active(song_freed) and active(dai_freed) and active(named_units.get("zhang_shun")) and active(named_units.get("zhang_heng")):
+	if not meeting and _bailong_party().all(active):
 		return "二人已救下。西巷短而狭，南巷较宽有骑弓截兵；自由选路或改道。可先经白龙庙会水军，再分别下令登船。护卫留在岸边断后，让出登船旗标附近的通道。"
 	return "沿西巷或南巷护送仍在岸上的获救者，先清开登船点。宋江、戴宗都登船后即可开船。"
 func _update_escort_objective(b) -> void:
@@ -323,7 +353,7 @@ func _free(b,is_song: bool) -> void:
 		b.msg("北面六名追兵20秒后出动，随后分搜西巷、南巷。可留兵阻击，也可换路护送；追兵看见获救者才会追赶。",8)
 		b.mission.add_map_locator("西巷近路",Vector2i(18,34))
 		b.mission.add_map_locator("南巷宽路",Vector2i(27,36))
-		b.mission.add_map_locator("白龙庙",BAILONG)
+		b.mission.add_level_button("jiang_bailong_meeting","查看 · 白龙庙","定位白龙庙并查看会合人手。")
 	if living(song_freed) and living(dai_freed):
 		b.mission.add_action("rally_dock",Localize.text("好汉 · 码头收队"),DOCK+Vector2i(0,-2),NAMED,0.7,64)
 	_update_escort_objective(b)
@@ -551,7 +581,7 @@ func process(b,delta: float) -> void:
 			pursuit_sent=true
 			b.mission.mark("jiangzhou_rear_pursuit","北面原有追兵已出动，将沿西巷和南巷搜索；可留兵牵制，掩护伤员换路。")
 			_pursuit_tick(b,0.0)
-	if not meeting and _near(b,song_freed,BAILONG,130) and _near(b,dai_freed,BAILONG,130) and _near(b,named_units.get("zhang_shun"),BAILONG,130) and _near(b,named_units.get("zhang_heng"),BAILONG,130):
+	if not meeting and _bailong_party().all(func(u): return _at_bailong(b,u)):
 		meeting=true
 		b.mission.mark("bailong","宋江、戴宗实际抵达白龙庙，与沿江寻来的张顺、张横会合；继续带到码头登船。")
 	if rally:
@@ -567,6 +597,9 @@ func process(b,delta: float) -> void:
 		depart_button=b.mission.add_level_button("jiang_depart","开船通关 · 宋江戴宗已登船")
 func activate_mission_button(b, button_id: String) -> void:
 	if button_id == "jiang_depart": _finish(b)
+	if button_id == "jiang_bailong_meeting":
+		_view_bailong(b)
+		return
 	if button_id != "jiang_find_rearguard" or not rally: return
 	var ally: Unit = _dock_roster(b).farthest
 	if not active(ally):
