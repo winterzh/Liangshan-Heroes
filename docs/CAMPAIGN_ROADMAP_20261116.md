@@ -1,5 +1,7 @@
 # 八幕战役后续开发路线图
 
+M6／M7 黄泥冈重车落地和接力在 fa4084ff 通过。发现快活林原画摊牌在该候选阻断保存，修复后的 492e6437 验证了六个摊位与同一次反击破绽的重启、四语结算和终局旧槽拒绝。 [Windows 续玩记录](../qa/campaign_short_player_continue_20261117/README.md#windows-短篇续玩和快活林修复)
+
 M1／M3／M7 连环马在 Windows 候选 fa4084ff 闭合北路出击后保存、重启恢复、继续守反通关、四语结算和旧槽拒绝。教场、断援及两路波次由同一存档恢复。 [连环马续玩收据](../qa/campaign_cavalry_escort_20261116/player_continue/windows_candidate_fa4084ff.json)
 
 M4／M7 江州在 Windows 候选 fa4084ff 完成分次登船三进程续玩。白龙庙路线保留宋江已登船、戴宗尚在岸的状态，走原战斗开船，四语与旧槽拒绝通过。 [江州续玩收据](../qa/campaign_pursuit_20261116/player_continue/windows_candidate_fa4084ff.json)

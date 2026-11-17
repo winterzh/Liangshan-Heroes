@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+快活林的摊牌固定标识跟随原画摊位进入场景快照，仅在该关摊位接受。恢复按关卡工厂重建后比较保存字段，禁用其它节点的摊牌元数据。 [Windows 续玩记录](../qa/campaign_short_player_continue_20261117/README.md#windows-短篇续玩和快活林修复)
+
 连环马在已验 SHA-256 的 Windows 编译包中核对两路波次、原骑兵和护军及其指令、教场和断援状态。外部探针替换平台入口条件，战斗、存读档和奖励仍用候选包原代码。 [连环马续玩收据](../qa/campaign_cavalry_escort_20261116/player_continue/windows_candidate_fa4084ff.json)
 
 江州在已验 SHA-256 的 Windows 编译包中检查二人分次登船。外部驱动把保存点放在首人登船后，恢复及结算使用候选包的原代码。 [江州续玩收据](../qa/campaign_pursuit_20261116/player_continue/windows_candidate_fa4084ff.json)

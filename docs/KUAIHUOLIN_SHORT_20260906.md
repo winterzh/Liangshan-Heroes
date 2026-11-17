@@ -1,5 +1,7 @@
 # 快活林：择酒练步与真实冲撞
 
+在武松实际横移让招后保存，继续时保留本次破绽和原画摊位。已在实际 Windows 编译包完成原窗口反击及归还酒店。 [Windows 续玩记录](../qa/campaign_short_player_continue_20261117/README.md#windows-短篇续玩和快活林修复)
+
 结算显示实际饮酒地点、窗口反击命中、玉环步接鸳鸯脚及酒店交还情况。 [短篇战果检查](../qa/battle_entry_localization_20261116/README.md#三章短篇的结算战果)
 
 ## 2026-11-17 玩家续玩

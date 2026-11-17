@@ -1,0 +1,68 @@
+--- a/tools/kuaihuolin_short_test.gd
++++ b/tools/kuaihuolin_short_test.gd
+@@ -152 +152,2 @@
+-	await _dispose(b)
++	if OS.get_environment("SHORT_PLAYER_STAGE") != "resume":
++		await _dispose(b)
+--- a/qa/campaign_counter_window_20261116/menu_resume/probe.gd
++++ b/qa/campaign_counter_window_20261116/menu_resume/probe.gd
+@@ -59,0 +60 @@
++		"native_stalls":_native_stalls(b),
+@@ -68,0 +70 @@
++	_check_stall_metadata(b)
+@@ -162,0 +165,23 @@
++
++func _native_stalls(b) -> Array:
++	var records := []
++	var key := "campaign_environment_text_surface_id"
++	for node in b.map.sample_scenery.get_children():
++		if not node.has_meta(key): continue
++		records.append([String(node.get_meta(key)), String(node.get_meta("campaign_environment_route")), String(node.native_texture.resource_path),
++			node.normalized_text_rect, [node.native_draw_offset.x,node.native_draw_offset.y]])
++	return records
++
++func _check_stall_metadata(b) -> void:
++	var records := _native_stalls(b)
++	var surfaces := records.map(func(record): return record[0])
++	surfaces.sort()
++	check(surfaces == ["level7_stall_dice_sign","level7_stall_goods_sign","level7_stall_inn_a_sign","level7_stall_inn_b_sign",
++		"level7_stall_money_sign","level7_stall_wine_sign"],"all six authored stall sign IDs are active")
++	var state: Script = load("res://scripts/run_scenery_state.gd")
++	var version := String(flow._startup_identity.get("content_version",""))
++	var adapter = state.new(version,CONTEXT)
++	var plain = state.new(version,{})
++	var key := "campaign_environment_text_surface_id"
++	check(adapter._meta_allowed(key,"story_stall") and not adapter._meta_allowed(key,"sprite") 		and not plain._meta_allowed(key,"story_stall"),"only Kuaihuolin market stalls can save a sign ID")
++	check(not adapter._meta_allowed("unknown_stall_metadata","story_stall"),"unrelated stall metadata is still rejected")
+--- a/qa/campaign_short_player_continue_20261117/player_session.gd
++++ b/qa/campaign_short_player_continue_20261117/player_session.gd
+@@ -20,0 +21 @@
++	probe.facts["compiled_sha"] = probe.flow._startup_identity.get("source_sha256","")
+@@ -68,0 +70 @@
++		await _check_compiled_debrief(probe,chapter)
+@@ -77,0 +80,25 @@
++
++static func _check_compiled_debrief(probe, chapter: String) -> void:
++	var b = probe.current_scene
++	probe.check(b.hud._end_root.visible,"continued victory opens the actual debrief")
++	var localization = probe.root.get_node("Localize")
++	var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://assets/localization/catalog.json"))
++	var expected := []
++	if chapter == "level1":
++		expected = [["夺纲 · %s",["转为强夺"]],["运出车货 · %d/7 车 · %d/11 担",[7,11]],
++			["西冈口 · %d/8 人到达",[b.level._companions_at_exit(b,b.level._living_companions())]]]
++	else:
++		expected = [["酒望 · 饮酒 %d/4 处",[4]],["反击命中 %d 次 · %s",[b.level.counter_hits,"玉环步接鸳鸯脚命中"]],
++			["酒店 · %s",["已交还施恩"]]]
++	var snapshots := {}
++	for language in ["zh_CN","zh_TW","en","ja"]:
++		localization._formatted_sources.clear()
++		localization.set_language(language,false)
++		await probe.process_frame
++		var lines := PackedStringArray()
++		for row in expected:
++			var args: Array = row[1] if language == "zh_CN" else row[1].map(func(value): return catalog[value][language] if value is String else value)
++			lines.append((row[0] if language == "zh_CN" else catalog[row[0]][language]) % args)
++		probe.check(lines.size()==3 and Array(lines).all(func(line): return line in b.hud._end_tally.text),"continued battle outcomes in "+language)
++		snapshots[language] = lines
++	probe.facts["debrief"] = snapshots

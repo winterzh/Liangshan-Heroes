@@ -1,5 +1,7 @@
 # 当前项目总览
 
+快活林发行包保存拒绝场景元数据的问题已修复并导出 Windows 492e6437，实际存读档及四语结算通过；黄泥冈原重车接力在 fa4084ff 编译包通过。 [Windows 续玩记录](../qa/campaign_short_player_continue_20261117/README.md#windows-短篇续玩和快活林修复)
+
 连环马北路出击后在 Windows 候选 fa4084ff 保存；重启后恢复两路局势，打完原战斗并核对四语结算和旧槽拒绝。 [连环马续玩收据](../qa/campaign_cavalry_escort_20261116/player_continue/windows_candidate_fa4084ff.json)
 
 江州白龙庙路线在 Windows 候选 fa4084ff 保存一名乘员已登船的进度，恢复后另一名乘员与六名好汉登船，开船结算四项演义。 [江州续玩收据](../qa/campaign_pursuit_20261116/player_continue/windows_candidate_fa4084ff.json)
