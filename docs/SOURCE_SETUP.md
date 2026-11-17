@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+任务栏根据 HUD 输入模式选用触屏或键鼠文案。六条四语文案来自 `campaign_touch_instructions.json`。触屏重叠旗标沿用现有任务令牌和右键指令入口。[触屏任务旗标](../qa/battle_entry_timing_20261116/README.md#触屏任务旗标与提示)
+
 使用 `455f2c62` 构建 Windows Steam 本地候选。包含四语词库和黄泥冈接车、快活林冷却、大名府分批撤离恢复修正。[Windows 战役小修候选](../qa/battle_entry_timing_20261116/README.md#windows-战役小修候选)
 
 黄泥冈掉车续玩复用自然战斗驱动，在未接手重车时走隔离菜单保存。恢复比较原车、原人及旗标，车轮转角按 Unit 约定重建。[黄泥冈重车落地后续玩](../qa/campaign_transport_groups_20261116/README.md#实战重车落地后续玩)

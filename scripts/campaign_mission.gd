@@ -368,7 +368,8 @@ func begin(new_id: String, title: String, text: String) -> void:
 	_feedback_text = ""
 	_feedback_left = 0.0
 	set_objective(text)
-	set_status("任务按钮只定位现场；请自行选人并右键目标标记。")
+	set_status("任务按钮只定位现场；请先选人，再轻点战场上的旗标。" if battle.hud.touch_ui
+		else "任务按钮只定位现场；请自行选人并右键目标标记。")
 
 ## Change the heading while ongoing economy, actions and their progress continue.
 func set_title(text: String) -> void:
@@ -440,7 +441,8 @@ func add_action(action_id: String, label: String, cell: Vector2i, actors: Array,
 		"show_button": show_button, "done": false}
 	actions[action_id]["marker"] = marker
 	if not show_button:
-		set_status("没有自动寻路按钮；选中人物后右键场景标记即可行动。")
+		set_status("选中人物后，轻点战场上的旗标下令。" if battle.hud.touch_ui
+			else "没有自动寻路按钮；选中人物后右键场景标记即可行动。")
 
 ## Pure location button: no task registration, selection, movement or timer.
 func add_map_locator(label: String, cell: Vector2i) -> Button:
@@ -479,7 +481,9 @@ func focus_action(action_id: String) -> bool:
 	battle.center_camera_cell(action.cell)
 	set_status(String(action.get("blocked_reason", "")))
 	if _status.text.is_empty():
-		set_status(Localize.format_text("已定位：%s。选中%s后右键旗标，停留%s秒。", [action.label, _actor_labels(action.actors), str(action.duration)]))
+		var prompt := "已定位：%s。选中%s后轻点旗标，到场停留%s秒。" if battle.hud.touch_ui \
+			else "已定位：%s。选中%s后右键旗标，停留%s秒。"
+		set_status(Localize.format_text(prompt, [action.label, _actor_labels(action.actors), str(action.duration)]))
 	return true
 
 ## Locator only: select and show the required actor without issuing any order.
@@ -487,7 +491,7 @@ func add_actor_locator(action_id: String, actor_key: String) -> void:
 	var button := Button.new()
 	button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	Localize.bind_render(button, _actor_locator_text.bind(actor_key))
-	Localize.bind_text(button, "选中并定位人物；随后右键任务旗标，才会前往接应。", &"tooltip_text")
+	Localize.bind_text(button, "选中并定位人物；随后在战场的任务旗标处下令。", &"tooltip_text")
 	button.set_meta(PRESENTATION_META, {"kind": "actor", "action_id": action_id, "actor_key": actor_key})
 	button.pressed.connect(_activate_actor_locator.bind(action_id, actor_key))
 	_buttons.add_child(button)
@@ -502,7 +506,8 @@ func _activate_actor_locator(action_id: String, actor_key: String) -> void:
 		if is_instance_valid(u) and u.key == actor_key and _valid_action_actor(u, actions[action_id]):
 			battle.select_single(u, false)
 			battle.center_camera_cell(battle.map.world_to_cell(u.position))
-			set_status(Localize.format_text("已选中%s；右键%d号旗标办理%s。", [u.display_name, actions[action_id].marker.number, actions[action_id].label]))
+			var prompt := "已选中%s；轻点%d号旗标办理%s。" if battle.hud.touch_ui else "已选中%s；右键%d号旗标办理%s。"
+			set_status(Localize.format_text(prompt, [u.display_name, actions[action_id].marker.number, actions[action_id].label]))
 			return
 	set_status(Localize.format_text("所需人物无法行动：%s。", _actor_labels([actor_key])))
 
@@ -554,6 +559,14 @@ func _nearest_clicked_action(target: Vector2) -> String:
 			best = distance
 	return nearest
 
+func can_tap_action(movers: Array, target: Vector2) -> bool:
+	var action_id := _nearest_clicked_action(target)
+	if action_id.is_empty():
+		return false
+	var action: Dictionary = actions[action_id]
+	return String(action.get("blocked_reason","")).is_empty() \
+		and movers.any(func(unit): return _valid_action_actor(unit,action))
+
 func prepare_manual_move(movers: Array, target: Vector2) -> Dictionary:
 	var nearest := _nearest_clicked_action(target)
 	if nearest.is_empty(): return {}
@@ -569,7 +582,9 @@ func prepare_manual_move(movers: Array, target: Vector2) -> Dictionary:
 			candidate = u
 			best = u.position.distance_squared_to(destination)
 	if candidate == null:
-		var tip := Localize.format_text("需要%s：请选中该人物，再右键%d号旗标。", [_actor_labels(action.actors), action.marker.number])
+		var prompt := "需要%s：请选中该人物，再轻点%d号旗标。" if battle.hud.touch_ui \
+			else "需要%s：请选中该人物，再右键%d号旗标。"
+		var tip := Localize.format_text(prompt, [_actor_labels(action.actors), action.marker.number])
 		set_feedback(tip)
 		if battle != null and battle.has_method("msg"):
 			battle.msg(tip, 3.5)

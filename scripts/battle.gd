@@ -6691,7 +6691,14 @@ func _click_select(p: Vector2, additive: bool) -> void:
 ## 触屏·点选即下令（轻操作式）：点到己方单位/建筑 = 选取；点空地/敌人/资源且有选中 = 上下文指令。
 func _tap_command(p: Vector2, additive: bool) -> void:
 	if not _gameplay_rng_issue.is_empty(): return
-	if _friendly_at(p) != null:
+	var friendly := _friendly_at(p)
+	if friendly != null:
+		# A captive or the already selected actor can overlap the task flag.
+		# Preserve selection priority for other friendly units.
+		if not additive and mission != null and not selection.is_empty() \
+				and (friendly.is_captive or selection == [friendly]) and mission.can_tap_action(_selected_movers(),to_logic(p)):
+			_issue_order(p,false)
+			return
 		_click_select(p, additive)        # 命中己方单位/建筑 → 选取（含建筑回退、Shift 追加）
 	elif not selection.is_empty():
 		_issue_order(p, false)            # 点别处且有选中 → 移动/攻击/采集/进驻
