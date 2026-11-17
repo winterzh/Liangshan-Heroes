@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+战役结算 Windows 本地候选按 `a51c3453` 封装，Windows Depot 六文件已核对。[Windows 结算候选回执](../qa/campaign_siege_20261116/settlement_integration/windows_candidate_a51c3453.json)
+
 战役结算采用独立候选验证过的模块。发行事务范围由 `SteamRunPolicy.uses_campaign_transactions()` 声明。Windows Steam 的首次战斗入口可消费一次后台启动校验结果，复用时复核安装状态和文件标记。[战役结算源码整合](../qa/campaign_siege_20261116/README.md#战役结算源码整合)
 
 离线结算候选调整 `continue_flow.gd`、`steam_service.gd` 和 `run_campaign_progress_coordinator.gd`。联机统计发布前回读原账号的本地结算凭证。[历史 Steam 结算的离线启动](../qa/campaign_siege_20261116/README.md#历史-steam-结算的离线启动)

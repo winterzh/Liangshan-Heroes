@@ -1,5 +1,7 @@
 # 八幕战役后续开发路线图
 
+M7 本地 Windows 候选 `a51c3453` 已验证首次出征复用启动身份。实际点击至祝家庄首帧约 0.69 秒，加载反馈约 22 ms，使用编辑器宿主加载相同发行编译包。[Windows 结算候选回执](../qa/campaign_siege_20261116/settlement_integration/windows_candidate_a51c3453.json)
+
 M2／M7 战役结算恢复合入当前开发源码。故障页四语及退出、祝家庄绑定保存、续战结算、离线和延迟统计复测通过。正式成品入口计时和真实 Steam 奖励待验。[战役结算源码整合](../qa/campaign_siege_20261116/README.md#战役结算源码整合)
 
 M2 独立候选的 Steam 绑定存档、恢复、结算、离线加载、统计就绪后补发及旧档拒绝经三个进程通过 23 项。使用模拟 SDK，实际客户端与发行包待验。[历史 Steam 结算的离线启动](../qa/campaign_siege_20261116/README.md#历史-steam-结算的离线启动)

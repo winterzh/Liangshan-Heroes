@@ -151,3 +151,7 @@ Windows Steam 候选源码加入祝家庄的玩家保存与继续，和经典 30
 Windows Steam 的启动在后台计算安装身份。首个出征或读取可消费一次该结果，并重新核对实际文件尺寸、修改时间、挂载和原生绑定。此处加入复用代码，发行包的实际计时仍待验。
 
 故障夹具阻止启动配置校验，核对四语提示，点击实际退出按钮，正常退出并保留故障文件。第一轮编译发现两处类型推断失败，显式标注布尔类型后重新验证。最终另用三个隔离进程复测祝家庄绑定保存、续战胜利、离线加载、统计就绪后补发及旧档拒绝，23 项通过。使用模拟 SDK 和受控胜利事件。四个最终进程退出 0，无引擎或脚本错误，保留已知兼容渲染与锚点警告。Windows 成品、Android 和真实 Steam 服务待验。[报告](settlement_integration/report.json) · [故障探针](settlement_integration/startup_fault_probe.gd)
+
+### 本地 Windows 成品冷启动
+
+使用 `a51c3453` 冻结源码构建，原生 EXE 离线启动检查通过。随后让 Godot 4.6.3 编辑器宿主载入同一 EXE 的发行编译包。兼容渲染 960×540，从实际主菜单选祝家庄并点出征。启动后台校验有 109 帧绘制，首次出征消费一次已校验身份，进入战场身份一致，未观察到第二次扫描。点击至加载反馈 21.5 ms，点击至战场首帧 686.4 ms。记录为单样本编译包验证，Steam 客户端及普通安装包实机仍待验。分别回读了 Windows Depot 六文件的大小、SHA-1 和 SHA-256。[候选回执](settlement_integration/windows_candidate_a51c3453.json) · [探针](settlement_integration/startup_pack_probe.gd)

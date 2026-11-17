@@ -1,0 +1,176 @@
+{
+  "source_commit": "a51c34530a6b70d9e7136202186db907104d0c69",
+  "target": {
+    "app": 5088120,
+    "depot": 5088121,
+    "branch": "default"
+  },
+  "scope": "local packaged Windows build, native offline boot and first battle in the exact compiled pack with editor host; no Steam client or rewards",
+  "build": {
+    "steps": [
+      {
+        "name": "import",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 66.104
+      },
+      {
+        "name": "export",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 97.91
+      },
+      {
+        "name": "release_boot",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 15.1
+      }
+    ],
+    "identity": {
+      "schema": 1,
+      "rules_sha256": "6b615cda04dae2dc04ba5a994327130a67e9bec735cde015bec1e818f5536221",
+      "source_sha256": "b2efe624df42ed0ba2fbb202dbc24e1c5f4b89169b60eb2df4b89d75a04cbd86",
+      "file_count": 7112,
+      "total_bytes": 2218242399,
+      "optional_content": [
+        {
+          "path": "content/units.json",
+          "present": false,
+          "bytes": 0,
+          "sha256": ""
+        },
+        {
+          "path": "content/abilities.json",
+          "present": false,
+          "bytes": 0,
+          "sha256": ""
+        }
+      ],
+      "native_files": [
+        {
+          "path": "addons/godotsteam/godotsteam.gdextension",
+          "bytes": 397,
+          "sha256": "448475b100174be41f0036794ea826fbdb85dcbe99d2adf91225f6f943e8b8aa"
+        },
+        {
+          "path": "addons/godotsteam/win64/libgodotsteam.windows.template_debug.x86_64.dll",
+          "bytes": 4304384,
+          "sha256": "da20924a9d29085c2256988b67de47003835910316712302e208e31c00f24b96"
+        },
+        {
+          "path": "addons/godotsteam/win64/libgodotsteam.windows.template_release.x86_64.dll",
+          "bytes": 3961344,
+          "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+        },
+        {
+          "path": "addons/godotsteam/win64/steam_api64.dll",
+          "bytes": 319128,
+          "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+        },
+        {
+          "path": "addons/steam_stats_reader/reader.gdextension",
+          "bytes": 176,
+          "sha256": "8593eb61751725d476f56fcac28c7d98b5065e768d44d4e317f77f774642411a"
+        },
+        {
+          "path": "addons/steam_stats_reader/steam_stats_reader.dll",
+          "bytes": 352768,
+          "sha256": "be9ea866c3e922fc0ddd40f97dede0bab7fd37a9393ad11307b91bba6e70ce6a"
+        }
+      ],
+      "provider_path": "scripts/run_content_identity.gd",
+      "provider_sha256": "aa8d62ec7b2aed5458fa1a823aa767cb07fb86540fcb881822658758d2e9b380"
+    },
+    "tracked_input_count": 6572
+  },
+  "compiled_pack_startup": {
+    "cached_identity_consumed_once": true,
+    "click_to_battle_draw_us": 686409,
+    "first_battle_started": true,
+    "identity": {
+      "code": "OK",
+      "content_version": "source-v1:b2efe624df42ed0ba2fbb202dbc24e1c5f4b89169b60eb2df4b89d75a04cbd86",
+      "engine_binary_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+      "file_count": 7112,
+      "identity_schema": 1,
+      "identity_scope": "installed_inputs",
+      "ok": true,
+      "optional_content": [
+        {
+          "bytes": 0,
+          "path": "content/units.json",
+          "present": false,
+          "sha256": ""
+        },
+        {
+          "bytes": 0,
+          "path": "content/abilities.json",
+          "present": false,
+          "sha256": ""
+        }
+      ],
+      "provider_sha256": "aa8d62ec7b2aed5458fa1a823aa767cb07fb86540fcb881822658758d2e9b380",
+      "rules_sha256": "6b615cda04dae2dc04ba5a994327130a67e9bec735cde015bec1e818f5536221",
+      "save_code": "OK",
+      "save_eligible": true,
+      "source_mode": false,
+      "source_sha256": "b2efe624df42ed0ba2fbb202dbc24e1c5f4b89169b60eb2df4b89d75a04cbd86",
+      "total_bytes": 2218242399
+    },
+    "installed_identity_preserved": true,
+    "loading_draw_us": 21511,
+    "new_entry_scan_observed": false,
+    "passed": true,
+    "startup_rendered_frames": 109,
+    "startup_us": 559101,
+    "source_commit": "a51c34530a6b70d9e7136202186db907104d0c69",
+    "pack_sha256": "f83fb3b65413f92e74c31858cedfbaf1f053e3024cdd3fdb69908655c015c7a7",
+    "rendering": "gl_compatibility",
+    "resolution": [
+      960,
+      540
+    ],
+    "release_executable_smoke": true,
+    "probe_sha256": "e7fe1467647d31be0d64d7a571fd961912607093eb3119d08142e34122ec0b1a",
+    "observation_host": "Godot editor engine with exact embedded Windows Steam pack"
+  },
+  "depot_files": [
+    {
+      "name": "GODOTSTEAM_LICENSE.txt",
+      "bytes": 1110,
+      "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2",
+      "sha1": "3891aeb1976703fc639c168329d90e27c7680a68"
+    },
+    {
+      "name": "LiangshanHeroes.exe",
+      "bytes": 1827416568,
+      "sha256": "f83fb3b65413f92e74c31858cedfbaf1f053e3024cdd3fdb69908655c015c7a7",
+      "sha1": "ec58d31ffa88f5b7cf6dda3d909265346ac067d1"
+    },
+    {
+      "name": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+      "bytes": 1093,
+      "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf",
+      "sha1": "0b594319d5af0b833d7c0da47459b7d51e1fdbd2"
+    },
+    {
+      "name": "libgodotsteam.windows.template_release.x86_64.dll",
+      "bytes": 3961344,
+      "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26",
+      "sha1": "c056eb4e85d902bd548dc9efb22a416b9c658dda"
+    },
+    {
+      "name": "steam_api64.dll",
+      "bytes": 319128,
+      "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c",
+      "sha1": "05ea59cc2b15a10c66277659d5d0b51750460d28"
+    },
+    {
+      "name": "steam_stats_reader.dll",
+      "bytes": 352768,
+      "sha256": "be9ea866c3e922fc0ddd40f97dede0bab7fd37a9393ad11307b91bba6e70ce6a",
+      "sha1": "ac9a932af32cef47cb41a80fc766fd2a401b13ba"
+    }
+  ]
+}

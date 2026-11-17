@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[Windows 结算候选回执](../qa/campaign_siege_20261116/settlement_integration/windows_candidate_a51c3453.json)与原生包首次出征探针位于 `qa/campaign_siege_20261116/settlement_integration/`。
+
 [战役结算源码整合](../qa/campaign_siege_20261116/README.md#战役结算源码整合)的启动故障探针、来源摘要与回执位于 `qa/campaign_siege_20261116/settlement_integration/`。
 
 [历史 Steam 结算的离线启动](../qa/campaign_siege_20261116/README.md#历史-steam-结算的离线启动)的模拟 Steam 账号、离线重启与续传验证位于 `qa/campaign_siege_20261116/offline_credit_candidate/`。
