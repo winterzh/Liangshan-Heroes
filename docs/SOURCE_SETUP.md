@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+高俅续玩探针可用 `GAO_MENU_CHECKPOINT=capture` 在张顺真实接俘后保存。第二进程沿用存档并使用原任务和移动指令完成靠岸交接和押堂。[押俘续玩](../qa/campaign_fire_readiness_20261116/README.md#张顺接俘后续玩)
+
 高俅内港举火续玩使用 Windows Godot 4.6.3 Compatibility、独立档案和隔离菜单。探针在真实点火后保存，再从主菜单读档，继续实际撤离、返港和收兵。[高俅续玩](../qa/campaign_fire_readiness_20261116/README.md#内港举火后续玩)
 
 大名府单位契约保存已撤离的原伤员。整局存档在捕获及恢复两侧检查对应事件，使用现有单位、关卡和任务字段。复跑强攻设 `DAMING_MENU_ROUTE=assault`，沿用隔离的双进程战役菜单探针。[大名府强攻续玩](../qa/campaign_wounded_selection_20261116/README.md#强攻后分批撤离续玩)

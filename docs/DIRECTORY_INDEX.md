@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[高俅押俘续玩](../qa/campaign_fire_readiness_20261116/README.md#张顺接俘后续玩)记录接俘存档、原船恢复、主码头交接和押堂。
+
 [高俅举火后续玩](../qa/campaign_fire_readiness_20261116/README.md#内港举火后续玩)保留实战中的火区存档、原载船恢复和撤离结果。
 
 [大名府强攻续玩](../qa/campaign_wounded_selection_20261116/README.md#强攻后分批撤离续玩)记录分批撤离的存档修复和续玩证据。
