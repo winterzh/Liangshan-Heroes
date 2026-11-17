@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+战役续玩任务栏的拉伸控件在原生挂载前后沿用锚点及偏移，固定锚点控件仍恢复尺寸。继续捕获并校验现有布局字段。组件夹具补齐当前 HUD 所用的触屏标志和底栏边界。 [读档布局收据](../qa/campaign_short_player_continue_20261117/native_entry_geometry.json)
+
 Windows Steam 本地候选 `5acd8be2` 由 Godot 4.6.3 导出，原生启动与六件指纹已核对。精确编译包的续玩行为用离线平台替身走野猪林，三次独立进程沿用玩家入口和实际结算。 [候选收据](../qa/battle_entry_timing_20261116/windows_candidate_5acd8be2.json)
 
 Windows 黄泥冈正常出征时，角色站姿之外也后台读取七名商贩及对白查找的吴用常服头像。结果进入原贴图预读缓存，英雄栏与剧情继续按原人物身份选图。 [黄泥冈首屏头像](../qa/battle_entry_timing_20261116/README.md#黄泥冈首屏头像后台读取)

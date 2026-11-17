@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[原生读档布局收据](../qa/campaign_short_player_continue_20261117/native_entry_geometry.json)记录祝家庄任务栏组件与野猪林玩家存读档的布局和结果。
+
 [Windows 战役整合收据](../qa/battle_entry_timing_20261116/windows_candidate_5acd8be2.json)保存原生启动、黄泥冈冷／热进场、八章准入、四语、野猪林续玩和六文件指纹。
 
 [黄泥冈首屏头像量测](../qa/battle_entry_timing_20261116/huangnigang_opening_portrait_prefetch.json)保存原 Windows 编译包冷／热进入、源码两帧分段和英雄栏与对白的选图核对。

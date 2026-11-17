@@ -23,7 +23,9 @@ class ConstantHeight extends RefCounted:
 	func at(_point: Vector2) -> float: return 11.0
 
 class FixtureHUD extends Control:
+	var touch_ui := false
 	func campaign_objective_position() -> Vector2: return Vector2(84, 78)
+	func command_panel_top() -> float: return maxf(0.0, get_viewport_rect().size.y - RTSCamera.PANEL_H)
 
 class FixtureBattle extends Node2D:
 	enum Phase { FIGHT, END }

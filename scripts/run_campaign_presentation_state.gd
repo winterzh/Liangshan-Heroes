@@ -556,6 +556,18 @@ func prepare(owner: Node, presentation_record: Variant, mission_record: Variant,
 		"level_buttons": level_buttons, "activation_plan": activation_plan, "resume_eligible": restored.resume_eligible,
 		"complete_world": false, "begin_called": false, "events_replayed": 0}
 
+func _apply_native_entry_geometry(node: Control, fields: Dictionary, values: Dictionary) -> void:
+	# Stretch controls derive their rectangle from anchors and offsets. Setting
+	# their saved size as well writes offsets a second time under a different
+	# parent rectangle during detach/mount.
+	var stretched: bool = values.anchor_left != values.anchor_right or values.anchor_top != values.anchor_bottom
+	stretched = stretched or node.anchor_left != node.anchor_right or node.anchor_top != node.anchor_bottom
+	for field: String in fields:
+		if field == "visible" or (field == "size" and stretched):
+			continue
+		node.set(field, values[field])
+
+
 ## Called by the owned Core transaction immediately before native mounting.
 ## No button is fabricated: retain the exact fixed-factory objects and references.
 func prepare_native_entry() -> Dictionary:
@@ -567,8 +579,7 @@ func prepare_native_entry() -> Dictionary:
 		_pending_buttons.append(button); mission._buttons.remove_child(button)
 	for node: Control in _entry_defaults:
 		var values: Dictionary = _entry_defaults[node]
-		for field: String in values:
-			if field != "visible": node.set(field, values[field])
+		_apply_native_entry_geometry(node, values, values)
 		node.visible = values.visible
 	_entry_suspended = true
 	return {"ok": true}
@@ -584,8 +595,7 @@ func finish_native_entry() -> Dictionary:
 	for row: Dictionary in _raw.controls:
 		var node: Control = token_to_external[row.token]
 		if not _entry_defaults.has(node): continue
-		for field: String in _entry_defaults[node]:
-			if field != "visible": node.set(field, row.values[field])
+		_apply_native_entry_geometry(node, _entry_defaults[node], row.values)
 	for row: Dictionary in _raw.controls:
 		var node: Control = token_to_external[row.token]
 		if _entry_defaults.has(node): node.visible = row.values.visible

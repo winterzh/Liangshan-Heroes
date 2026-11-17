@@ -1,5 +1,7 @@
 # 当前项目总览
 
+修复了战役读档挂载时对拉伸控件重复写尺寸的问题。野猪林正常保存、继续及通关，任务栏滚动位置、按钮状态和跨语言布局通过组件校验。新 Windows 包待整合。 [读档布局收据](../qa/campaign_short_player_continue_20261117/native_entry_geometry.json)
+
 当前 Windows 候选 `5acd8be2` 完成原生离线启动、黄泥冈原头像及进退场、八章续玩准入、四语及野猪林三进程续战。Steam 客户端、设备和真人体验待验。 [候选收据](../qa/battle_entry_timing_20261116/windows_candidate_5acd8be2.json)
 
 黄泥冈首屏英雄栏已提前准备七组商贩头像。源码冷进场首帧后的停顿 420 → 8 ms，原头像和对白通过验证。新 Windows 包及 Steam 客户端测量待验。 [黄泥冈首屏头像](../qa/battle_entry_timing_20261116/README.md#黄泥冈首屏头像后台读取)

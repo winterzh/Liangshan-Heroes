@@ -1,5 +1,7 @@
 # 八幕战役后续开发路线图
 
+M7 战役任务栏读档布局按锚点和偏移恢复。野猪林真实菜单对照未重现挂载尺寸警告，扩展任务栏、多语与独立进程布局校验通过。 [读档布局收据](../qa/campaign_short_player_continue_20261117/native_entry_geometry.json)
+
 M7 黄泥冈头像改动已进入 Windows 候选 `5acd8be2`。同一编译包冷进首帧至次帧 9.23 ms，八章准入、四语和野猪林存档到终局链通过。真实平台、设备和真人样板仍待验。 [候选收据](../qa/battle_entry_timing_20261116/windows_candidate_5acd8be2.json)
 
 M7 黄泥冈首帧后的英雄栏停顿已处理。七组商贩头像和吴用对白查找的备用头像后台读取，源码两帧间隔约 420 → 8 ms。新发行包待整合。 [黄泥冈首屏头像](../qa/battle_entry_timing_20261116/README.md#黄泥冈首屏头像后台读取)
