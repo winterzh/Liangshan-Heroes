@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[随机波次开战对照](../qa/battle_entry_timing_20261116/README.md#随机波次偏好保存与进场)位于 `qa/battle_entry_timing_20261116/random_prefs/`，包括可复用探针、对照结果与六文件候选回执。
+
 [Windows 结算候选回执](../qa/campaign_siege_20261116/settlement_integration/windows_candidate_a51c3453.json)与原生包首次出征探针位于 `qa/campaign_siege_20261116/settlement_integration/`。
 
 [战役结算源码整合](../qa/campaign_siege_20261116/README.md#战役结算源码整合)的启动故障探针、来源摘要与回执位于 `qa/campaign_siege_20261116/settlement_integration/`。

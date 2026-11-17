@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+Windows Steam 版保存偏好复用启动校验的身份。每次复核可执行文件标记、挂载与原生绑定，源码环境走现有校验。[随机波次开战对照](../qa/battle_entry_timing_20261116/README.md#随机波次偏好保存与进场)
+
 战役结算 Windows 本地候选按 `a51c3453` 封装，Windows Depot 六文件已核对。[Windows 结算候选回执](../qa/campaign_siege_20261116/settlement_integration/windows_candidate_a51c3453.json)
 
 战役结算采用独立候选验证过的模块。发行事务范围由 `SteamRunPolicy.uses_campaign_transactions()` 声明。Windows Steam 的首次战斗入口可消费一次后台启动校验结果，复用时复核安装状态和文件标记。[战役结算源码整合](../qa/campaign_siege_20261116/README.md#战役结算源码整合)

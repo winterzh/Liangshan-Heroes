@@ -1,0 +1,146 @@
+{
+  "source_commit": "6906f07513d58ac63afecb58c17a276e180a362e",
+  "target": {
+    "app": 5088120,
+    "depot": 5088121,
+    "branch": "default"
+  },
+  "scope": "local packaged Windows build, native offline boot and exact compiled-pack random defense entry and preference disk readback with editor host; no Steam client or rewards",
+  "build": {
+    "steps": [
+      {
+        "name": "import",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 64.345
+      },
+      {
+        "name": "export",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 101.897
+      },
+      {
+        "name": "release_boot",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 14.516
+      }
+    ],
+    "identity": {
+      "schema": 1,
+      "rules_sha256": "6b615cda04dae2dc04ba5a994327130a67e9bec735cde015bec1e818f5536221",
+      "source_sha256": "076f20e3b035a828bc3a3d9ed83ac1ac2517e4b98dafe6765f4fbccfff3bc4fa",
+      "file_count": 7112,
+      "total_bytes": 2218242784,
+      "optional_content": [
+        {
+          "path": "content/units.json",
+          "present": false,
+          "bytes": 0,
+          "sha256": ""
+        },
+        {
+          "path": "content/abilities.json",
+          "present": false,
+          "bytes": 0,
+          "sha256": ""
+        }
+      ],
+      "native_files": [
+        {
+          "path": "addons/godotsteam/godotsteam.gdextension",
+          "bytes": 397,
+          "sha256": "448475b100174be41f0036794ea826fbdb85dcbe99d2adf91225f6f943e8b8aa"
+        },
+        {
+          "path": "addons/godotsteam/win64/libgodotsteam.windows.template_debug.x86_64.dll",
+          "bytes": 4304384,
+          "sha256": "da20924a9d29085c2256988b67de47003835910316712302e208e31c00f24b96"
+        },
+        {
+          "path": "addons/godotsteam/win64/libgodotsteam.windows.template_release.x86_64.dll",
+          "bytes": 3961344,
+          "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+        },
+        {
+          "path": "addons/godotsteam/win64/steam_api64.dll",
+          "bytes": 319128,
+          "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+        },
+        {
+          "path": "addons/steam_stats_reader/reader.gdextension",
+          "bytes": 176,
+          "sha256": "8593eb61751725d476f56fcac28c7d98b5065e768d44d4e317f77f774642411a"
+        },
+        {
+          "path": "addons/steam_stats_reader/steam_stats_reader.dll",
+          "bytes": 352768,
+          "sha256": "be9ea866c3e922fc0ddd40f97dede0bab7fd37a9393ad11307b91bba6e70ce6a"
+        }
+      ],
+      "provider_path": "scripts/run_content_identity.gd",
+      "provider_sha256": "38a81eb30d488ff620eec9c15d82cc957be31d8688908604f61362699252e26b"
+    },
+    "tracked_input_count": 6572
+  },
+  "compiled_pack_random_defense": {
+    "battle_ready": true,
+    "candidate_content_sha256": "076f20e3b035a828bc3a3d9ed83ac1ac2517e4b98dafe6765f4fbccfff3bc4fa",
+    "click_to_battle_us": 506153,
+    "click_to_loading_us": 153005,
+    "engine_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+    "loading_shown": true,
+    "passed": true,
+    "pref_file_persisted": true,
+    "random_mode_configured": true,
+    "source_commit": "6906f07513d58ac63afecb58c17a276e180a362e",
+    "pack_sha256": "f7dd7aef058f4f2e11e65d9ac0365fa27b293c0cb9090b9043ce92cfd3f0c36b",
+    "rendering": "gl_compatibility",
+    "resolution": [
+      960,
+      540
+    ],
+    "release_executable_smoke": true,
+    "probe_sha256": "915ae81b0eb02400c0b36115e173456c5af7b12623906586aa9b4f453d0d5aef",
+    "observation_host": "Godot editor engine with exact embedded Windows Steam pack"
+  },
+  "depot_files": [
+    {
+      "name": "GODOTSTEAM_LICENSE.txt",
+      "bytes": 1110,
+      "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2",
+      "sha1": "3891aeb1976703fc639c168329d90e27c7680a68"
+    },
+    {
+      "name": "LiangshanHeroes.exe",
+      "bytes": 1827417352,
+      "sha256": "f7dd7aef058f4f2e11e65d9ac0365fa27b293c0cb9090b9043ce92cfd3f0c36b",
+      "sha1": "06b23a7e8ab74b96a2f24058f8c8bde75e146cac"
+    },
+    {
+      "name": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+      "bytes": 1093,
+      "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf",
+      "sha1": "0b594319d5af0b833d7c0da47459b7d51e1fdbd2"
+    },
+    {
+      "name": "libgodotsteam.windows.template_release.x86_64.dll",
+      "bytes": 3961344,
+      "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26",
+      "sha1": "c056eb4e85d902bd548dc9efb22a416b9c658dda"
+    },
+    {
+      "name": "steam_api64.dll",
+      "bytes": 319128,
+      "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c",
+      "sha1": "05ea59cc2b15a10c66277659d5d0b51750460d28"
+    },
+    {
+      "name": "steam_stats_reader.dll",
+      "bytes": 352768,
+      "sha256": "be9ea866c3e922fc0ddd40f97dede0bab7fd37a9393ad11307b91bba6e70ce6a",
+      "sha1": "ac9a932af32cef47cb41a80fc766fd2a401b13ba"
+    }
+  ]
+}

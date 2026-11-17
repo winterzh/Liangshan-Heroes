@@ -1,5 +1,7 @@
 # 当前项目总览
 
+Windows 本地候选 `6906f075` 完成随机波次的偏好写入和进场。发行编译包的单样本开战至首帧为 0.51 秒。实际 Steam 客户端待验。[随机波次开战对照](../qa/battle_entry_timing_20261116/README.md#随机波次偏好保存与进场)
+
 本地 Windows 成品候选 `a51c3453` 已封装。同一编译包在编辑器宿主中一次复用安装校验，祝家庄首帧为 0.69 秒。实际 Steam 客户端计时与奖励待验。[Windows 结算候选回执](../qa/campaign_siege_20261116/settlement_integration/windows_candidate_a51c3453.json)
 
 战役结算恢复、离线历史加载、延迟发布及故障页退出已合入开发源码。在 Windows 源码环境通过实际菜单与模拟 SDK 定向；成品包、真机与实际 Steam 统计待验。[战役结算源码整合](../qa/campaign_siege_20261116/README.md#战役结算源码整合)
