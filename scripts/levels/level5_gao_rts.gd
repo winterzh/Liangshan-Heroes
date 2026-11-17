@@ -497,7 +497,7 @@ func on_mission_action(b,key: String,actor) -> void:
 			b.mission.mark("fireboat_prepared","小船备好火具，消耗60木；护它接近第二批连船再举火。")
 			for i in range(FIRE_POINTS.size()):
 				var action_id := "gao_fire_%d" % i
-				b.mission.add_action(action_id,Localize.text("刘唐：")+(Localize.text("外港") if i==0 else Localize.text("内港"))+Localize.text("举火"),FIRE_POINTS[i],["liu_tang_fireboat"],1.5,48)
+				b.mission.add_action(action_id,"刘唐：外港举火" if i==0 else "刘唐：内港举火",FIRE_POINTS[i],["liu_tang_fireboat"],1.5,48)
 				# Initial arrival still uses 48. Only an already started action
 				# tolerates a small nudge from the two required escort ships.
 				b.mission.actions[action_id].settle_margin = 12.0
@@ -623,7 +623,7 @@ func _finish(b) -> void:
 		if b.mission.has_event("gao_captured"):
 			_capture_failed(b,"押俘所需小艇或俘虏损失")
 		b.mission.mark("gao_basic_victory","三批主力败退，高俅座船被打停，梁山收兵。")
-	b.win(Localize.text("高俅三次进兵失利，水寨与钱粮守住。")+(Localize.text("高俅已由水军生擒、岸军押至忠义堂，宋江仍以礼相待，盼借此求得招安。") if captured else Localize.text("本局以击退座船收束；生擒押堂可在重玩时挑战。")))
+	b.win("高俅三次进兵失利，水寨与钱粮守住。高俅已由水军生擒、岸军押至忠义堂，宋江仍以礼相待，盼借此求得招安。" if captured else "高俅三次进兵失利，水寨与钱粮守住。本局以击退座船收束；生擒押堂可在重玩时挑战。")
 func _wave_objective(b) -> String:
 	if waves[2].sent:
 		return "座船已停。击退余下的水陆主力即可收兵。" if flagship_disabled else "第三批有座船压港。步军守关，舰队看清护船位置后合击座船。"

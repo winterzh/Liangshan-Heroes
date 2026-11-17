@@ -346,8 +346,8 @@ func _free(b,is_song: bool) -> void:
 	else:
 		dai_bound=null
 		dai_freed=rescued
-	b.mission.mark("free_song" if is_song else "free_dai",Localize.text(rescued.display_name)+Localize.text("已解缚，不能作战；请派兵保护并亲自下令撤离。"))
-	b.mission.add_action("board_song" if is_song else "board_dai",Localize.text(rescued.display_name)+Localize.text(" · 登船"),DOCK if is_song else DOCK+Vector2i(2,0),[key],1.5,48,22)
+	b.mission.mark("free_song" if is_song else "free_dai","宋江已解缚，不能作战；请派兵保护并亲自下令撤离。" if is_song else "戴宗已解缚，不能作战；请派兵保护并亲自下令撤离。")
+	b.mission.add_action("board_song" if is_song else "board_dai","宋江 · 登船" if is_song else "戴宗 · 登船",DOCK if is_song else DOCK+Vector2i(2,0),[key],1.5,48,22)
 	b.mission.add_actor_locator("board_song" if is_song else "board_dai",key)
 	if not first_rescued:
 		first_rescued=true
@@ -396,7 +396,7 @@ func on_mission_action(b,key: String,actor) -> void:
 				_retry(b,key,"有官军挡住登船。让护卫清开登船点，再下达登船指令。")
 				return
 			actor.resolve_story("embarked")
-			b.mission.mark(key,Localize.text(actor.display_name)+Localize.text("已活着登船。"))
+			b.mission.mark(key,"宋江已活着登船。" if key=="board_song" else "戴宗已活着登船。")
 			_update_escort_objective(b)
 		"rally_dock":
 			if rally: return
@@ -563,8 +563,8 @@ func process(b,delta: float) -> void:
 			var rescue_prompt := "行刑已停。选中好汉，分别轻点宋江和戴宗身旁的解缚旗标，留兵挡住官军。" if b.hud.touch_ui \
 				else "行刑已停。选中好汉，分别右键宋江和戴宗身旁的解缚旗标，留兵挡住官军。"
 			b.mission.set_objective(rescue_prompt)
-			for rec in [["free_song",-1,"宋江"],["free_dai",1,"戴宗"]]:
-				b.mission.add_action(rec[0],Localize.text("好汉 · 救下")+rec[2],SCAFFOLD+Vector2i(rec[1],1),RESCUERS,1.3,130,22)
+			for rec in [["free_song",-1,"好汉 · 救下宋江"],["free_dai",1,"好汉 · 救下戴宗"]]:
+				b.mission.add_action(rec[0],rec[2],SCAFFOLD+Vector2i(rec[1],1),RESCUERS,1.3,130,22)
 		elif exec_left<=0:
 			b.lose("行刑限时已到，两名刽子手未被全部打倒。下次可让补兵与进场同时进行，先集火刽子手再救人。")
 			return

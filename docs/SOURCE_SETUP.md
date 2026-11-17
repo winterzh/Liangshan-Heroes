@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+江州旗标、救援记录及高俅举火和结局的十二条源句由战役分片生成。静态词库校验完成，已有 4,962 条译文逐项一致。实际 Windows 发行包与 Steam 仍待验证。[记录](../qa/battle_entry_localization_20261116/README.md#江州与高俅界面四语)
+
 连环马两路战报由 `campaign_cavalry_escort.json` 提供六条完整源句。严格重建与全库静态核对通过，既有 4,956 条译文逐项一致。本次运行检查覆盖连环马战报和结算的四语切换。[验证](../qa/campaign_cavalry_escort_20261116/README.md#两路战报四语)
 
 Windows 随机驻守会在加载首帧后保存偏好。旧配置恢复、原有事务及其他调用方默认调度沿用原入口。本地 Windows `e5bf9414` 六文件候选已有导出和原生启动收据。[验收](../qa/battle_entry_timing_20261116/windows_candidate_e5bf9414.json)
