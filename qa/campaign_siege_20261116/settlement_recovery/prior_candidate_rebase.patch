@@ -1,0 +1,421 @@
+--- a/scripts/battle.gd
++++ b/scripts/battle.gd
+@@ -272,7 +272,7 @@
+-var _target_cursor: ImageTexture   # 攻击/施法指向时的「圈中带点」鼠标
+-var _cur_attack: ImageTexture
+-var _cur_gather_wood: ImageTexture
+-var _cur_gather_gold: ImageTexture
+-var _cur_repair: ImageTexture
+-var _cur_select: ImageTexture
+-var _cur_garrison: ImageTexture   # 驻军：靛蓝环+拱门，提示「点这进驻」
++var _target_cursor: Image   # 攻击/施法指向时的「圈中带点」鼠标
++var _cur_attack: Image
++var _cur_gather_wood: Image
++var _cur_gather_gold: Image
++var _cur_repair: Image
++var _cur_select: Image
++var _cur_garrison: Image   # 驻军：靛蓝环+拱门，提示「点这进驻」
+@@ -311,0 +312,5 @@
++
++
++func prepare_new_gameplay_identity(identity: Dictionary) -> void:
++	assert(not is_inside_tree() and _gameplay_rng == null)
++	_gameplay_content_identity = identity
+@@ -439,4 +444,6 @@
+-		var identity: Dictionary = {"ok": false, "save_eligible": false, "code": "PROVIDER_UNAVAILABLE"}
+-		if ResourceLoader.exists("res://scripts/run_content_identity.gd"):
+-			var identity_provider: Script = load("res://scripts/run_content_identity.gd")
+-			identity = identity_provider.new().resolve_runtime_identity()
++		var identity := _gameplay_content_identity
++		if identity.is_empty():
++			identity = {"ok": false, "save_eligible": false, "code": "PROVIDER_UNAVAILABLE"}
++			if ResourceLoader.exists("res://scripts/run_content_identity.gd"):
++				var identity_provider: Script = load("res://scripts/run_content_identity.gd")
++				identity = identity_provider.new().resolve_runtime_identity()
+@@ -4386,10 +4393,4 @@
+-	for i in range(n):
+-		_sight_now[i] = 0
+-	for u in units:
+-		# 资源点不提供视野；驻军单位藏在建筑里也不另外提供视野（视野由建筑本身给）
+-		if not is_instance_valid(u) or u.faction != Unit.FACTION_LIANG or u.hp <= 0.0 or u.is_resource or u.garrisoned or u.story_outcome != "":
+-			continue
+-		var r := int(u.setup_def.get("sight", 10 if u.is_building else 8))
+-		_mark_sight_now(map.world_to_cell(u.position), r)
+-	# 2) 统一实时视野与地面明暗：明亮格必定能看见普通敌军；失去视野的已探索格本拍即转阴影。
+-	#    禁止保留“地面仍亮、敌军却隐藏”的伪视野，否则敌人再次被发现时会像在亮地上凭空冒出。
++	_refresh_sight_mask()
++	# 2) 逻辑和贴图同拍更新；读取实际像素以覆盖临时侦察与旧档的图、值差异。
++	var pixels := _vision_img.get_data()
++	var changed := false
+@@ -4399,11 +4400,11 @@
+-		if _sight_now[i] == 1 or _reveal_t[i] > 0.0:
+-			_vision[i] = 2
+-		elif _vision[i] != 0:
+-			_vision[i] = 1                    # 曾探索但当前无视野 → 阴影
+-	# 3) 刷新迷雾纹理：2=明亮(透明) 1=阴影(半黑) 0=未探索(全黑)
+-	for y in range(map.h):
+-		for x in range(map.w):
+-			var v: int = _vision[y * map.w + x]
+-			var a := 0.0 if v == 2 else (0.5 if v == 1 else 1.0)
+-			_vision_img.set_pixel(x, y, Color(0, 0, 0, a))
+-	_fog_tex.update(_vision_img)
++		var state := 2 if _sight_now[i] == 1 or _reveal_t[i] > 0.0 else mini(_vision[i], 1)
++		_vision[i] = state
++		var alpha := 0 if state == 2 else (127 if state == 1 else 255)
++		var offset := i * 4 + 3
++		if pixels[offset] != alpha:
++			pixels[offset] = alpha
++			changed = true
++	# 3) 复用已有纹理句柄。画面没有变化时免上传。
++	if changed:
++		_vision_img.set_data(map.w, map.h, false, Image.FORMAT_RGBA8, pixels)
++		_fog_tex.update(_vision_img)
+@@ -4445,10 +4446,44 @@
+-func _mark_sight_now(c: Vector2i, r: int) -> void:
+-	var r2 := r * r
+-	for dy in range(-r, r + 1):
+-		for dx in range(-r, r + 1):
+-			if dx * dx + dy * dy > r2:
+-				continue
+-			var x := c.x + dx
+-			var y := c.y + dy
+-			if x >= 0 and y >= 0 and x < map.w and y < map.h:
+-				_sight_now[y * map.w + x] = 1
++func _refresh_sight_mask() -> void:
++	_sight_now.fill(0)
++	var stride := _sight_now.size()
++	var runs := PackedInt64Array()
++	for u in units:
++		# 资源和驻军不另供视野；驻军建筑自身提供视野。
++		if not is_instance_valid(u) or u.faction != Unit.FACTION_LIANG or u.hp <= 0.0 or u.is_resource or u.garrisoned or u.story_outcome != "":
++			continue
++		var radius := int(u.setup_def.get("sight", 10 if u.is_building else 8))
++		_append_sight_runs(runs, stride, map.world_to_cell(u.position), radius)
++	_mark_sight_runs(runs, stride)
++
++
++func _append_sight_runs(runs: PackedInt64Array, stride: int, center: Vector2i, radius: int) -> void:
++	var radius_sq := radius * radius
++	for y in range(maxi(0, center.y - radius), mini(map.h - 1, center.y + radius) + 1):
++		var dy := y - center.y
++		var span := int(sqrt(float(radius_sq - dy * dy)))
++		var row := y * map.w
++		var first := row + maxi(0, center.x - span)
++		var last := row + mini(map.w - 1, center.x + span)
++		# Encode inclusive endpoints so the packed array sorts by start index.
++		runs.append(first * stride + last)
++
++
++func _mark_sight_runs(runs: PackedInt64Array, stride: int) -> void:
++	if runs.is_empty():
++		return
++	runs.sort()
++	var pending_first := 0
++	var pending_last := -1
++	for encoded in runs:
++		@warning_ignore("integer_division")
++		var first := encoded / stride
++		var last := encoded % stride
++		if first > pending_last + 1:
++			for index in range(pending_first, pending_last + 1):
++				_sight_now[index] = 1
++			pending_first = first
++			pending_last = last
++		else:
++			pending_last = maxi(pending_last, last)
++	for index in range(pending_first, pending_last + 1):
++		_sight_now[index] = 1
+@@ -6267 +6302,3 @@
+-	_target_cursor = ImageTexture.create_from_image(img)
++	# The window system reads cursor pixels on the CPU. Keep the generated
++	# image here so registering or changing a cursor needs no GPU readback.
++	_target_cursor = img
+@@ -6279,2 +6316 @@
+-## Input/DisplayServer 会跨场景缓存已注册的光标资源；若不在 Battle 离树时主动
+-## 注销，运行时生成的 ImageTexture 会晚于 RenderingServer 析构并留下退出 RID 告警。
++## Input/DisplayServer 会跨场景缓存已注册的光标资源，离开战场时还原系统光标。
+@@ -6301 +6337 @@
+-func _ring_cursor(col: Color, glyph: String) -> ImageTexture:
++func _ring_cursor(col: Color, glyph: String) -> Image:
+@@ -6342 +6378 @@
+-	return ImageTexture.create_from_image(img)
++	return img
+--- a/scripts/continue_flow.gd
++++ b/scripts/continue_flow.gd
+@@ -275,0 +276 @@
++	menu.cancel_battle_prewarm()
+@@ -305,3 +306,2 @@
+-	# Enforce public scope on the Session's actual recovered packet, before Core
+-	# allocation. A separate read_slot(false) would block dead-writer recovery.
+-	var prepared: Dictionary = _session.prepare_restore(_source, not _private_qa_enabled())
++	var entry := Session.RestoreEntry.QA_MENU if _private_qa_enabled() else Session.RestoreEntry.PLAYER_MENU
++	var prepared: Dictionary = _session.prepare_restore(_source, entry)
+@@ -310 +310 @@
+-	if Session.Profiles.is_official_campaign_context(_session._packet.context):
++	if prepared.campaign:
+--- a/scripts/menu.gd
++++ b/scripts/menu.gd
+@@ -7,0 +8,5 @@
++var _entry_overlay: ColorRect
++var _entry_scan: RefCounted
++var _entry_surface_requests: Array[String] = []
++var _entry_merchant_requests: Array[String] = []
++var _entry_previous_max_fps := -1
+@@ -24,0 +30,11 @@
++	if OS.get_name() == "Windows" and not OS.has_feature("editor") \
++			and DisplayServer.get_name() != "headless" and not AndroidUpdater.enabled:
++		_prewarm_battle_identity.call_deferred()
++
++
++func _prewarm_battle_identity() -> void:
++	await RenderingServer.frame_post_draw
++	var flow := get_node_or_null("/root/ContinueFlow")
++	if _entry_overlay != null or _entry_scan != null or AppLifecycle.quit_started() or (flow != null and flow.busy()):
++		return
++	_begin_battle_scan(true)
+@@ -33 +49 @@
+-func _launch() -> void:
++func _launch(campaign_level_id := "") -> void:
+@@ -36,0 +53 @@
++	var direct_start := _waiting_autostart
+@@ -39,2 +56,17 @@
+-	if flow != null and flow.busy(): return
+-	# 延后切场景：直接在 _ready 内切换会撞上「父节点正忙于增删子节点」
++	if _entry_overlay != null or AppLifecycle.quit_started() or (flow != null and flow.busy()):
++		return
++	if direct_start or DisplayServer.get_name() == "headless" or AndroidUpdater.enabled:
++		_launch_immediately()
++		return
++	_show_battle_loading(campaign_level_id)
++	if OS.get_name() == "Windows":
++		_request_battle_surfaces(campaign_level_id)
++		if campaign_level_id == "level5":
++			Art.prefetch_gao_opening_art()
++		elif campaign_level_id == "level1":
++			_entry_merchant_requests = Art.request_huangnigang_opening_frames()
++	# Continue on the main thread. The worker returns only verified file data.
++	_finish_battle_launch.call_deferred()
++
++
++func _launch_immediately() -> void:
+@@ -41,0 +74,166 @@
++
++
++func _show_battle_loading(campaign_level_id: String) -> void:
++	# Cap rendering so the loading view does not compete with file verification.
++	# On Windows, leave room for frame-pacing jitter around the 60 Hz budget.
++	var loading_max_fps := 72 if OS.get_name() == "Windows" else 60
++	_entry_previous_max_fps = Engine.max_fps
++	if Engine.max_fps == 0 or Engine.max_fps > loading_max_fps:
++		Engine.max_fps = loading_max_fps
++	var focused := get_viewport().gui_get_focus_owner()
++	if focused != null:
++		focused.release_focus()
++	_entry_overlay = ColorRect.new()
++	_entry_overlay.name = "BattleLoading"
++	_entry_overlay.color = Color(UITheme.INK, 0.97)
++	_entry_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
++	add_child(_entry_overlay)
++	var center := CenterContainer.new()
++	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
++	_entry_overlay.add_child(center)
++	var column := VBoxContainer.new()
++	column.add_theme_constant_override("separation", 20)
++	center.add_child(column)
++	var label := Label.new()
++	var destination := _battle_loading_destination(campaign_level_id)
++	if destination.is_empty():
++		Localize.bind_text(label, "正在读取战斗，请稍候…")
++	else:
++		Localize.bind_format(label, "正在准备战斗 · %s", destination)
++	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
++	label.add_theme_font_size_override("font_size", 24)
++	column.add_child(label)
++	var progress := ProgressBar.new()
++	progress.custom_minimum_size = Vector2(360, 12)
++	progress.show_percentage = false
++	progress.indeterminate = true
++	column.add_child(progress)
++
++
++func _battle_loading_destination(campaign_level_id: String) -> String:
++	if Campaign.scenario:
++		return "自定义关卡"
++	if Campaign.custom_defense:
++		return "自定义据守"
++	if Campaign.arena:
++		return "竞技场"
++	if Campaign.skirmish_ai:
++		return "1v1 对战"
++	if Campaign.skirmish:
++		return "驻守战"
++	var index := Campaign.index_for_id(campaign_level_id)
++	return String(Campaign.LEVELS[index]["title"]) if index >= 0 else ""
++
++
++func _input(_event: InputEvent) -> void:
++	if _entry_overlay != null:
++		get_viewport().set_input_as_handled()
++
++
++func _begin_battle_scan(prewarm := false) -> void:
++	var provider: Script = load("res://scripts/run_content_identity.gd")
++	if provider == null:
++		return
++	_entry_scan = provider.new()
++	if _entry_scan.begin_runtime_identity_scan(prewarm) != OK:
++		_entry_scan = null
++
++
++func _request_battle_surfaces(campaign_level_id: String) -> void:
++	var surface_level := "level5" if Campaign.skirmish or Campaign.custom_defense else campaign_level_id
++	if surface_level.is_empty():
++		return
++	var baseline := "LIANGSHAN_VISUAL_BASELINE" if surface_level == "level5" else "CAMPAIGN_ENV_BASELINE"
++	if OS.get_environment(baseline) == "1":
++		return
++	for path in CampaignEnvironmentArt.surface_texture_paths(surface_level):
++		if ResourceLoader.load_threaded_request(path, "Texture2D") == OK:
++			_entry_surface_requests.append(path)
++
++
++func _finish_battle_launch() -> void:
++	if _entry_scan == null:
++		_begin_battle_scan()
++	var identity: Dictionary = {}
++	if _entry_scan != null:
++		while _entry_scan.runtime_identity_scan_pending():
++			await get_tree().process_frame
++			if AppLifecycle.quit_started(): return
++		identity = _entry_scan.finish_runtime_identity_scan()
++		_entry_scan = null
++		if identity.get("code") == "PREWARM_EXECUTABLE_CHANGED" and not AppLifecycle.quit_started():
++			_finish_battle_launch.call_deferred()
++			return
++	if AppLifecycle.quit_started():
++		return
++	var ground_textures: Array[Texture2D] = []
++	for path in _entry_surface_requests:
++		var texture := (await _wait_for_battle_resource(path)) as Texture2D
++		if AppLifecycle.quit_started():
++			return
++		if texture != null:
++			ground_textures.append(texture)
++	_entry_surface_requests.clear()
++	for path in _entry_merchant_requests:
++		var frames := (await _wait_for_battle_resource(path)) as SpriteFrames
++		if AppLifecycle.quit_started():
++			return
++		Art.cache_prepared_native_body(path, frames)
++	_entry_merchant_requests.clear()
++	# process_frame runs before this frame's drawing. Let the loading view paint
++	# before the synchronous scene installation, even when the worker ends early.
++	await RenderingServer.frame_post_draw
++	if AppLifecycle.quit_started():
++		return
++	_install_battle.call_deferred(identity, ground_textures)
++
++
++func _wait_for_battle_resource(path: String) -> Resource:
++	var status := ResourceLoader.load_threaded_get_status(path)
++	while status == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
++		await get_tree().process_frame
++		if AppLifecycle.quit_started():
++			return null
++		status = ResourceLoader.load_threaded_get_status(path)
++	return ResourceLoader.load_threaded_get(path) if status == ResourceLoader.THREAD_LOAD_LOADED else null
++
++
++func _install_battle(identity: Dictionary, ground_textures: Array[Texture2D]) -> void:
++	if AppLifecycle.quit_started():
++		return
++	var scene: PackedScene = load("res://scenes/main.tscn")
++	if scene != null:
++		var battle := scene.instantiate()
++		battle.prepare_new_gameplay_identity(identity)
++		if not ground_textures.is_empty():
++			# Keep Godot's cached textures alive through the battle's _ready.
++			battle.ready.connect(func(): ground_textures.clear(), CONNECT_ONE_SHOT)
++		if get_tree().change_scene_to_node(battle) == OK:
++			return
++		battle.free()
++	_entry_overlay.queue_free()
++	_entry_overlay = null
++	_restore_battle_loading_frame_limit()
++	push_error("Could not enter battle")
++
++
++func _restore_battle_loading_frame_limit() -> void:
++	if _entry_previous_max_fps >= 0:
++		Engine.max_fps = _entry_previous_max_fps
++		_entry_previous_max_fps = -1
++
++
++func _cancel_battle_scan() -> void:
++	if _entry_scan != null:
++		_entry_scan.cancel_runtime_identity_scan()
++		_entry_scan = null
++
++
++func cancel_battle_prewarm() -> void:
++	if _entry_overlay == null:
++		_cancel_battle_scan()
++
++
++func _exit_tree() -> void:
++	_restore_battle_loading_frame_limit()
++	_cancel_battle_scan()
+@@ -615 +813,2 @@
+-	rules.text = preload("res://scripts/levels/skirmish_ai.gd").difficulty_rules_text()
++	Localize.bind_render(rules, func() -> String:
++		return preload("res://scripts/levels/skirmish_ai.gd").difficulty_rules_text())
+@@ -657 +856,2 @@
+-	guide.text = preload("res://scripts/levels/skirmish_ai.gd").economy_guide_text()
++	Localize.bind_render(guide, func() -> String:
++		return preload("res://scripts/levels/skirmish_ai.gd").economy_guide_text())
+@@ -864 +1064 @@
+-			_launch())
++			_launch(Campaign.LEVELS[i]["id"]))
+--- a/scripts/run_world_session.gd
++++ b/scripts/run_world_session.gd
+@@ -15,3 +14,0 @@
+-const Level4Factory = preload("res://scripts/run_level4_world_factory.gd")
+-const Level5Factory = preload("res://scripts/run_level5_world_factory.gd")
+-const Level8Factory = preload("res://scripts/run_level8_world_factory.gd")
+@@ -19,0 +17 @@
++enum RestoreEntry { INTERNAL, PLAYER_MENU, QA_MENU }
+@@ -227 +225 @@
+-func prepare_restore(menu: Node, require_classic := false) -> Dictionary:
++func prepare_restore(menu: Node, entry := RestoreEntry.INTERNAL) -> Dictionary:
+@@ -236 +234 @@
+-	var read: Dictionary = _read_restore_slot(require_classic,lease)
++	var read: Dictionary = _read_restore_slot(entry == RestoreEntry.PLAYER_MENU,lease)
+@@ -238,0 +237 @@
++	var campaign := Profiles.is_official_campaign_context(_packet.context)
+@@ -252,5 +251,5 @@
+-	if _packet.context == Profiles.LIAN_CONTEXT:
+-		# Use the installed chapter's normal definition order, including its
+-		# recruitment population/cost overrides. Never derive runtime from a slot.
+-		var chapter_runtime: Dictionary = Level4Factory.prepare_runtime(_trusted)
+-		if not chapter_runtime.ok: return chapter_runtime
++	if campaign and (entry == RestoreEntry.QA_MENU or _packet.context in [Profiles.LIAN_CONTEXT, Profiles.GAO_CONTEXT, Profiles.DAMING_CONTEXT]):
++		# The installed profile has already limited this id to the eight chapters.
++		var factory: Script = load("res://scripts/run_%s_world_factory.gd" % _packet.context.level_id)
++		var runtime: Dictionary = factory.prepare_runtime(_trusted)
++		if not runtime.ok: return runtime
+@@ -258,11 +257 @@
+-		_core = Core.new(_trusted, chapter_runtime.runtime)
+-	elif _packet.context == Profiles.GAO_CONTEXT:
+-		var gao_runtime: Dictionary = Level5Factory.prepare_runtime(_trusted)
+-		if not gao_runtime.ok: return gao_runtime
+-		_core.dispose()
+-		_core = Core.new(_trusted, gao_runtime.runtime)
+-	elif _packet.context == Profiles.DAMING_CONTEXT:
+-		var daming_runtime: Dictionary = Level8Factory.prepare_runtime(_trusted)
+-		if not daming_runtime.ok: return daming_runtime
+-		_core.dispose()
+-		_core = Core.new(_trusted, daming_runtime.runtime)
++		_core = Core.new(_trusted, runtime.runtime)
+@@ -280 +269 @@
+-	return {"ok": true, "generation": _packet.generation, "menu_retained": true, "battle": _core._battle}
++	return {"ok": true, "generation": _packet.generation, "menu_retained": true, "battle": _core._battle, "campaign": campaign}
