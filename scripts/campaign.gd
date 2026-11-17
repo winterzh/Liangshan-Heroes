@@ -260,7 +260,7 @@ func _normalized_records(raw_value: Variant) -> Dictionary:
 	return out
 
 
-func save_prefs() -> void:
+func save_prefs(after_draw := false) -> void:
 	if OS.get_environment("CAMPAIGN_QA") == "1": return
 	if not SteamRunPolicy.uses_campaign_transactions():
 		_save()
@@ -270,7 +270,11 @@ func save_prefs() -> void:
 		_prefs_requested[key] = get(key)
 	if not _prefs_deferred:
 		_prefs_deferred = true
-		get_tree().process_frame.connect(_save_prefs_deferred, CONNECT_ONE_SHOT)
+		if after_draw:
+			# Let the loading overlay paint before the preference transaction begins.
+			RenderingServer.frame_post_draw.connect(_save_prefs_deferred, CONNECT_ONE_SHOT | CONNECT_DEFERRED)
+		else:
+			get_tree().process_frame.connect(_save_prefs_deferred, CONNECT_ONE_SHOT)
 
 func _save_prefs_deferred() -> void:
 	if Engine.is_in_physics_frame():

@@ -743,8 +743,8 @@ func _show_defense() -> void:
 		Campaign.arena = false
 		Campaign.custom_defense = false
 		Campaign.scenario = false
-		Campaign.save_prefs()
-		_launch())
+		_launch()
+		Campaign.save_prefs(_entry_overlay != null))
 	box.add_child(rbtn)
 
 	var cb := _mk_big_btn("📂  加载自定义配置", UITheme.COPPER)
