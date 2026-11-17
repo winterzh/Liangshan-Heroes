@@ -1,5 +1,7 @@
 # 当前项目总览
 
+八章的四语本局战果已并入本地 Windows 候选 fa4084ff，实际结算界面通过 66 项编译包检查。真人验收和 Steam 正式版部署待办。 [本地候选验证](../qa/battle_entry_localization_20261116/windows_campaign_candidate_fa4084ff.json)
+
 八章战役均已实现路线结算。野猪林、黄泥冈、快活林核对了部分撤出、部分交货和酒店尚未交还等实际结算显示，待并入整合 Windows 候选。 [短篇战果检查](../qa/battle_entry_localization_20261116/README.md#三章短篇的结算战果)
 
 江州和高俅关均有路线战果。江州验证了会合后开船，高俅核对火攻已完成或放弃、收兵时已上岸或已押堂的差异。待合入下一份 Windows 候选。 [江州与高俅战果](../qa/battle_entry_localization_20261116/README.md#江州与高俅的路线结算)

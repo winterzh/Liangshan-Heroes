@@ -1,5 +1,7 @@
 # 八幕战役后续开发路线图
 
+M6／M7 本地 Windows 候选 fa4084ff 原生启动通过，精确编译包验证八章四语结算面板。各章的完整真人体验和实际 Steam 客户端验证待办。 [本地候选验证](../qa/battle_entry_localization_20261116/windows_campaign_candidate_fa4084ff.json)
+
 M6 野猪林、黄泥冈、快活林补齐四语结算，八章均有「本局战果」。整合 Windows 候选和真人体验待验。 [短篇战果检查](../qa/battle_entry_localization_20261116/README.md#三章短篇的结算战果)
 
 M4／M5 江州和高俅关结算展示分别撤离与火攻押俘的实际进度。四语的会合后开船、直接收兵、押俘收兵均通过定向结算。真人与 Windows 整合候选待验。 [江州与高俅战果](../qa/battle_entry_localization_20261116/README.md#江州与高俅的路线结算)
