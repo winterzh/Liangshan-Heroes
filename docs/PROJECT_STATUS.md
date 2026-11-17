@@ -1,5 +1,7 @@
 # 当前项目总览
 
+Windows 候选 fa4084ff 的高俅关标准特效正常速度实测 600.007 秒、67,536 帧，P95 14.707 ms、P99 17.135 ms，达到路线图 P95 ≤ 16.7 ms、P99 ≤ 33.3 ms 的门槛。 完整真人体验、其他设备和 Steam 客户端待验。 [十分钟帧时收据](../qa/campaign_sustained_performance_20261116/windows_pack_fa4084ff.json)
+
 八章的四语本局战果已并入本地 Windows 候选 fa4084ff，实际结算界面通过 66 项编译包检查。真人验收和 Steam 正式版部署待办。 [本地候选验证](../qa/battle_entry_localization_20261116/windows_campaign_candidate_fa4084ff.json)
 
 八章战役均已实现路线结算。野猪林、黄泥冈、快活林核对了部分撤出、部分交货和酒店尚未交还等实际结算显示，待并入整合 Windows 候选。 [短篇战果检查](../qa/battle_entry_localization_20261116/README.md#三章短篇的结算战果)

@@ -1,5 +1,7 @@
 # 八幕战役后续开发路线图
 
+M7 本地 Windows 候选 fa4084ff 的精确编译包、固定镜头正常速度 600 秒测量达到帧时目标，600.007 秒、67,536 帧，P95 14.707 ms、P99 17.135 ms。原关卡三波交战与付费招船成立。真人和 Android 设备另验。 [十分钟帧时收据](../qa/campaign_sustained_performance_20261116/windows_pack_fa4084ff.json)
+
 M6／M7 本地 Windows 候选 fa4084ff 原生启动通过，精确编译包验证八章四语结算面板。各章的完整真人体验和实际 Steam 客户端验证待办。 [本地候选验证](../qa/battle_entry_localization_20261116/windows_campaign_candidate_fa4084ff.json)
 
 M6 野猪林、黄泥冈、快活林补齐四语结算，八章均有「本局战果」。整合 Windows 候选和真人体验待验。 [短篇战果检查](../qa/battle_entry_localization_20261116/README.md#三章短篇的结算战果)

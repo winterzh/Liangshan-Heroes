@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+高俅帧时复用既有测试路线，固定窗口、镜头、随机种子和特效。编辑器宿主挂载校验过 SHA-256 的候选 EXE；三份外置探针只调整两处继承路径。逐帧原件及宿主依赖校验见收据。 [十分钟帧时收据](../qa/campaign_sustained_performance_20261116/windows_pack_fa4084ff.json)
+
 Windows Steam 候选 fa4084ff 按追踪文件白名单重新导入并导出。在独立原生启动与精确编译包中核验，目录含原四个二进制和两个许可文件。 [本地候选验证](../qa/battle_entry_localization_20261116/windows_campaign_candidate_fa4084ff.json)
 
 三章短篇结算沿用战斗结束时冻结的原始任务状态。黄泥冈到场人数与原收队条件共用出口半径，快活林的交还结果读取任务事件。文案源分属 campaign_escort_arrival.json、campaign_transport_groups.json 与 campaign_counter_window.json。 [短篇战果检查](../qa/battle_entry_localization_20261116/README.md#三章短篇的结算战果)

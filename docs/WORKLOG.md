@@ -1,5 +1,9 @@
 # 开发日志
 
+## 2026-11-17 Windows 候选正常速度帧时
+
+使用 fa4084ff 的实际 Windows 编译包运行高俅关。三批水陆战斗均发生，普通速度 600.007 秒、67,536 帧，P95 14.707 ms、P99 17.135 ms，达到路线图 P95 ≤ 16.7 ms、P99 ≤ 33.3 ms 的门槛。 六个文件已封装成同目录的 LiangshanHeroes_Steam_candidate.zip，解压回读名称、大小和 SHA-256 全部一致。 更新了首轮真人与续玩的实测清单。 [十分钟帧时收据](../qa/campaign_sustained_performance_20261116/windows_pack_fa4084ff.json)
+
 ## 2026-11-17 八章战果 Windows 候选
 
 源码 fa4084ff 导出六文件 Windows Steam 载荷，本机离线原生启动通过。同一编译包加载八章结算，以受控战况验证四语及原战报，共 66 项。 [本地候选验证](../qa/battle_entry_localization_20261116/windows_campaign_candidate_fa4084ff.json)

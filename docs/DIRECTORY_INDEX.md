@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[Windows 候选高俅关 600 秒性能收据](../qa/campaign_sustained_performance_20261116/windows_pack_fa4084ff.json)包含编译包、辅助脚本和原始逐帧报告 SHA-256。真人试玩沿用[试玩清单](PLAYTEST_CHECKLIST_20260906.md)。
+
 [Windows 八章结算候选](../qa/battle_entry_localization_20261116/README.md#windows-八章战果候选)收据与探针在 qa/battle_entry_localization_20261116/。
 
 [三章短篇结算战果](../qa/battle_entry_localization_20261116/README.md#三章短篇的结算战果)的探针和收据位于 qa/battle_entry_localization_20261116/short_route_debrief/。
