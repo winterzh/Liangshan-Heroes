@@ -32,7 +32,7 @@ func shot(b,name: String,cell: Vector2i) -> void:
 		check(b.mission._panel.get_global_rect().end.y<=b.hud._bottom_panel.get_global_rect().position.y-6,"short chapter task panel avoids command cards")
 	check(root.get_texture().get_image().save_png(folder+"/"+name+".png")==OK,"saved "+name)
 
-func _live(name: String) -> void:
+func _live(name: String, on_relay_loaded := Callable()) -> void:
 	var b=await _start("",0)
 	if name=="relay":
 		Engine.time_scale=4.0
@@ -160,6 +160,9 @@ func _live(name: String) -> void:
 				check(false,"a survivor must walk to and take the empty cart"); await _dispose(b); return
 			if not await action(b,carrier,"force_load_%d_%d"%[index,attempt],75) or l.cargo.get(index)!=carrier:
 				check(false,"the same survivor must load the original relay cart"); await _dispose(b); return
+			if on_relay_loaded.is_valid():
+				on_relay_loaded.call(b,index,carrier)
+				return
 			if not await action(b,carrier,"force_deliver_%d_%d"%[index,attempt],80) or index not in l._delivered_cart_indices(b):
 				check(false,"the same survivor must deliver the original relay cart"); await _dispose(b); return
 			print("[hns-relay] delivered cart ",index+1," with ",carrier.key," at ",b.mission.total_game_seconds)

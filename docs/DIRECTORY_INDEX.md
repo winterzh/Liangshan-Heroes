@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[黄泥冈强夺装货接力后续玩](../qa/campaign_transport_groups_20261116/README.md#强夺装货接力后续玩)保留原车载货存档、接力与交付回读。
+
 [高俅押俘续玩](../qa/campaign_fire_readiness_20261116/README.md#张顺接俘后续玩)记录接俘存档、原船恢复、主码头交接和押堂。
 
 [高俅举火后续玩](../qa/campaign_fire_readiness_20261116/README.md#内港举火后续玩)保留实战中的火区存档、原载船恢复和撤离结果。

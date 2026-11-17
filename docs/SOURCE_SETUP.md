@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+黄泥冈续玩探针沿用强夺实战路线，在首辆接力车实际装货后用隔离暂停菜单保存，第二进程走主菜单继续。[黄泥冈强夺续玩](../qa/campaign_transport_groups_20261116/README.md#强夺装货接力后续玩)
+
 高俅续玩探针可用 `GAO_MENU_CHECKPOINT=capture` 在张顺真实接俘后保存。第二进程沿用存档并使用原任务和移动指令完成靠岸交接和押堂。[押俘续玩](../qa/campaign_fire_readiness_20261116/README.md#张顺接俘后续玩)
 
 高俅内港举火续玩使用 Windows Godot 4.6.3 Compatibility、独立档案和隔离菜单。探针在真实点火后保存，再从主菜单读档，继续实际撤离、返港和收兵。[高俅续玩](../qa/campaign_fire_readiness_20261116/README.md#内港举火后续玩)
