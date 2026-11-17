@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[野猪林歇脚途中续玩](../qa/campaign_escort_arrival_20261116/README.md#歇脚途中保存与续玩)记录原队伍、行进中的歇脚指令和独立进程通关。探针与原件位于 `qa/campaign_escort_arrival_20261116/menu_resume/`。
+
 [快活林反击续玩](../qa/campaign_counter_window_20261116/README.md#酒路反击窗口续玩)记录酒势、破绽与鸳鸯脚提示的保存恢复。
 
 [黄泥冈强夺装货接力后续玩](../qa/campaign_transport_groups_20261116/README.md#强夺装货接力后续玩)保留原车载货存档、接力与交付回读。

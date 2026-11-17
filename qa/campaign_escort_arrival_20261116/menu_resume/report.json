@@ -1,0 +1,117 @@
+{
+  "passed": true,
+  "source_commit": "20b98089a56bbe9f90028333d05e3d0ff5ecab4d",
+  "probe_sources_lf_sha256": {
+    "qa/campaign_escort_arrival_20261116/menu_resume/probe.gd": "5b2943b6fe797122f6f1cffddb90d4009c2c5324c8461ed14a6a8f033bbdac6a",
+    "scripts/battle.gd": "674532760ede5c9db4deb45bcf032800e9c7b83cbba0520109ec834831fecfec",
+    "scripts/continue_flow.gd": "2021ed1d64fd7dd02d9b53f26f903da725da83bdf3a1a5b6354a3cad4c8d5dcf",
+    "scripts/run_world_session.gd": "d149062a3dac05d0812978b6c476d72863bec68dc8d6cdc45af5fb676d2c0bd6",
+    "scripts/run_unit_graph.gd": "30f9f9af7e04cf37935005d1bb9dbb96b423a972ab0e2f9bf0c5c9e7b2f74bfc",
+    "scripts/run_battle_world_core.gd": "ea01ff6f8319155b7fb96346ea2f8f87f2a3ca629cace934cf5ca1a12730b2cb",
+    "scripts/levels/level6_yezhulin.gd": "795892f035b45df50810b543cb5e289469a526f50ed878b336ff44e4c3c6c9d4",
+    "scripts/run_campaign_level_state.gd": "047824c64ff01bb985827bbeea9368796735244ff27d6e77296c3e80e67fcb8b",
+    "scripts/run_unit_state.gd": "bf7d6bba1ba692542d83ee09d5c70bb014643322b7ee2e57eb9b49e013a9a0bf",
+    "scripts/campaign_mission.gd": "abbc644399c2f7ff4a26c010bf5aa0d96c9591659e04225f8b280e47fc17f08d",
+    "scripts/run_campaign_mission_state.gd": "20448a9235e58b9c31b5bf30db485e758c923a1cfc1ac0661aa73557ab4437aa",
+    "tools/yezhulin_short_test.gd": "bfe9e650017bce04a59d27a1b8a190526647d563db2e7d3ded7b4d2f746f78f5",
+    "tools/zhujiazhuang_rts_test.gd": "435ddb8f9bc774687e1ea879ac6e9adc606380db4934ca3b72dfea294273d770"
+  },
+  "stages": [
+    {
+      "checks": 8,
+      "facts": {
+        "checkpoint": {
+          "active_action": "",
+          "clock": 18.4,
+          "events": [
+            "action:intercept:intercept",
+            "intercept",
+            "observe",
+            "shadow_caution",
+            "shadow_pine",
+            "shadow_route_chosen",
+            "tend_feet",
+            "untie"
+          ],
+          "order_token": 3,
+          "party": [
+            {
+              "hp": 540.0,
+              "id": 4,
+              "name": "lu_zhishen",
+              "serial": 17,
+              "token": 3,
+              "walking": true,
+              "x": 934.16748046875,
+              "y": 608.677551269531
+            },
+            {
+              "hp": 278.5,
+              "id": 6,
+              "name": "lin_chong",
+              "serial": 3,
+              "token": 3,
+              "walking": true,
+              "x": 936.588623046875,
+              "y": 656.0
+            },
+            {
+              "hp": 150.0,
+              "id": 2,
+              "name": "dong_chao",
+              "serial": 4,
+              "token": 3,
+              "walking": true,
+              "x": 845.255615234375,
+              "y": 624.58154296875
+            },
+            {
+              "hp": 150.0,
+              "id": 3,
+              "name": "xue_ba",
+              "serial": 4,
+              "token": 3,
+              "walking": true,
+              "x": 909.19482421875,
+              "y": 624.0
+            }
+          ],
+          "rest_order": [
+            17,
+            3,
+            4,
+            4
+          ],
+          "route": "north_pines",
+          "target": [
+            528.000061035156,
+            656.000061035156
+          ]
+        },
+        "result_code": ""
+      },
+      "failures": [],
+      "pid": 8404,
+      "stage": "save",
+      "exit_code": 0,
+      "seconds": 48.164,
+      "engine_errors": []
+    },
+    {
+      "checks": 10,
+      "facts": {
+        "finish_seconds": 46.2499999999984,
+        "rest_seconds": 35.0666666666657,
+        "rest_without_new_order": true,
+        "result_code": "",
+        "story_done": 3
+      },
+      "failures": [],
+      "pid": 44436,
+      "stage": "resume",
+      "exit_code": 0,
+      "seconds": 55.244,
+      "engine_errors": []
+    }
+  ]
+}
