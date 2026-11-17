@@ -1091,6 +1091,25 @@ func cache_prepared_opening_frames(cache_key: String, resource: SpriteFrames) ->
 		_anim_cache[cache_key] = frames
 
 
+func request_huangnigang_opening_portraits() -> Array[String]:
+	# The first Wu Yong dialogue checks the ordinary portrait before the merchant variant.
+	var paths: Array[String] = [STANDALONE_PORTRAITS["wu_yong"]]
+	for key: String in CampaignArt.HUANGNIGANG_MERCHANTS:
+		paths.append(CHAPTER_PORTRAITS["hn_" + key])
+	var requests: Array[String] = []
+	for path in paths:
+		if _prefetched_opening_textures.has(path) or not ResourceLoader.exists(path):
+			continue
+		if ResourceLoader.load_threaded_request(path, "Texture2D") == OK:
+			requests.append(path)
+	return requests
+
+
+func cache_prepared_opening_texture(path: String, texture: Texture2D) -> void:
+	if texture != null:
+		_prefetched_opening_textures[path] = texture
+
+
 func prefetch_gao_opening_art() -> void:
 	if _gao_opening_art_requested or DisplayServer.get_name() == "headless":
 		return
@@ -1143,8 +1162,7 @@ func _prefetch_opening_art(paths: Dictionary[String, String]) -> void:
 		if status == ResourceLoader.THREAD_LOAD_LOADED:
 			var resource := ResourceLoader.load_threaded_get(path)
 			if is_texture:
-				if resource is Texture2D:
-					_prefetched_opening_textures[path] = resource
+				cache_prepared_opening_texture(path, resource as Texture2D)
 				continue
 			var frames := _decode_directional_frames(resource)
 			if not frames.is_empty() and not _anim_cache.has(paths[path]):

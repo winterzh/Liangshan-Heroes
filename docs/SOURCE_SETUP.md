@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+Windows 黄泥冈正常出征时，角色站姿之外也后台读取七名商贩及对白查找的吴用常服头像。结果进入原贴图预读缓存，英雄栏与剧情继续按原人物身份选图。 [黄泥冈首屏头像](../qa/battle_entry_timing_20261116/README.md#黄泥冈首屏头像后台读取)
+
 Windows 4cc25919 采用 Godot 4.6.3 导入与 Windows Steam 预设导出。安装身份、原生离线启动、三条编译包入口和六文件指纹已核对。 [候选收据](../qa/battle_entry_timing_20261116/windows_candidate_4cc25919.json)
 
 祝家庄的祠堂和地饰沿用关卡原路线与 PNG／AtlasTexture 解析。Windows 正常出征期间把其纹理加入已有地表读取队列，保存到场景就绪。 [祝家庄布景](../qa/battle_entry_timing_20261116/README.md#祝家庄开场布景贴图后台读取)

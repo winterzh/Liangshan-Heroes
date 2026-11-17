@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[黄泥冈首屏头像量测](../qa/battle_entry_timing_20261116/huangnigang_opening_portrait_prefetch.json)保存原 Windows 编译包冷／热进入、源码两帧分段和英雄栏与对白的选图核对。
+
 [Windows 出征优化候选收据](../qa/battle_entry_timing_20261116/windows_candidate_4cc25919.json)保存原生启动、编译包的三路进场、布景和角色匹配与六文件指纹。
 
 [祝家庄开场布景量测](../qa/battle_entry_timing_20261116/zhu_opening_scenery_prefetch.json)包含搭建、环境和逐物件分段，以及原布景贴图的匹配结果。
