@@ -1,5 +1,9 @@
 # 开发日志
 
+## 2026-11-17 Windows 候选江州分次登船续玩
+
+候选 fa4084ff 在 117.53 游戏秒保存宋江已登船、戴宗还在岸上的进度。重启恢复原人员与码头进度，124.53 游戏秒实际开船，达成四项演义。三个进程 40 项通过，含四语结算及旧槽拒绝。 [江州续玩收据](../qa/campaign_pursuit_20261116/player_continue/windows_candidate_fa4084ff.json)
+
 ## 2026-11-17 Windows 候选高俅关火攻押俘续玩
 
 候选 fa4084ff 在 519.27 游戏秒保存张顺已接俘但尚未上岸的进度。重启后用原船上岸，从原进度押堂收兵，567.27 游戏秒取得核心胜利和四项演义。三个进程 42 项通过，含四语结算及旧槽拒绝。 [高俅关续玩收据](../qa/campaign_fire_readiness_20261116/player_continue/windows_candidate_fa4084ff.json)

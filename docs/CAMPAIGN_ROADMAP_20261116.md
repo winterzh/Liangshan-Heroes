@@ -1,5 +1,7 @@
 # 八幕战役后续开发路线图
 
+M4／M7 江州在 Windows 候选 fa4084ff 完成分次登船三进程续玩。白龙庙路线保留宋江已登船、戴宗尚在岸的状态，走原战斗开船，四语与旧槽拒绝通过。 [江州续玩收据](../qa/campaign_pursuit_20261116/player_continue/windows_candidate_fa4084ff.json)
+
 M5／M7 高俅关火攻押俘线在 Windows 候选 fa4084ff 完成三进程续玩。张顺已经接俘后保存，原船恢复后上岸，继续押至忠义堂完成四项演义。四语结算及终局旧槽拒绝通过。 [高俅关续玩收据](../qa/campaign_fire_readiness_20261116/player_continue/windows_candidate_fa4084ff.json)
 
 M4／M7 大名府强攻线用 Windows 候选 fa4084ff 保存至首名伤员撤出，独立恢复后完成第二名撤离和四语结算，终局旧槽拒绝保持存档与进度。 [大名府续玩收据](../qa/campaign_wounded_selection_20261116/player_continue/windows_candidate_fa4084ff.json)

@@ -1,5 +1,7 @@
 # 当前项目总览
 
+江州白龙庙路线在 Windows 候选 fa4084ff 保存一名乘员已登船的进度，恢复后另一名乘员与六名好汉登船，开船结算四项演义。 [江州续玩收据](../qa/campaign_pursuit_20261116/player_continue/windows_candidate_fa4084ff.json)
+
 高俅关在 Windows 候选 fa4084ff 的实际水陆战中完成接俘保存、原船上岸、押抵忠义堂及四项演义结算。新进程拒绝已结算旧槽。 [高俅关续玩收据](../qa/campaign_fire_readiness_20261116/player_continue/windows_candidate_fa4084ff.json)
 
 大名府强攻线用 Windows 候选 fa4084ff 在三个独立进程闭合中途保存、原任务继续、四语通关与旧槽拒绝。真实 Steam 客户端和真人体验待验。 [大名府续玩收据](../qa/campaign_wounded_selection_20261116/player_continue/windows_candidate_fa4084ff.json)

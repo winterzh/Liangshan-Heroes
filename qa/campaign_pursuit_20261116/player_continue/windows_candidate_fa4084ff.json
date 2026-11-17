@@ -1,0 +1,292 @@
+{
+  "source_commit": "fa4084ff0def019efba38567145a5c3f32563348",
+  "pack_sha256": "2a59529bee3acf7dd309b0519593d715867242aadf04cfa485d268c3bf6885de",
+  "compiled_source_sha256": "67d5f4a5df50ad8b6aee2ce4ee25a23b049ba58b4ebbb14965e678d7a65d62b8",
+  "source_probe_files_lf_sha256": {
+    "tools/zhujiazhuang_rts_test.gd": "435ddb8f9bc774687e1ea879ac6e9adc606380db4934ca3b72dfea294273d770",
+    "tools/jiangzhou_rts_play.gd": "50db638b88aa063b95fdbbcf46dcac798e64a02d5ade2a50600e64564213e55d",
+    "qa/campaign_pursuit_20261116/menu_resume/probe.gd": "1f1aa0edb71a546c70f54de29523b6e04f6fd5fb4900d8d962d98642dd4b23bf",
+    "qa/campaign_siege_20261116/player_continue/platform_entry.gd": "f270ba38384e9bce258c409a6cb10444e8b834cbdc26d4266d286cceeb0f3da6",
+    "qa/campaign_pursuit_20261116/player_continue/probe.gd": "6ce766c464758d0e07e2784b22981a911baf606b8f03cff86720dc22f49614f0"
+  },
+  "adapted_probe_sha256": {
+    "rts_test.gd": "0599c0679e47697b50e2cea1545d04ce45ffd0904eb7b4b20aa8ea666e29a866",
+    "jiangzhou_rts_play.gd": "4fcaf2f1a30b03443990c358eef1f383f5513d2015603b7b6983a768d2b3e259",
+    "menu_resume.gd": "6bfadde4b64697d0248bd2a049f3c851f532f68cfb04a8480ba7a804131f8e7b",
+    "platform_entry.gd": "f270ba38384e9bce258c409a6cb10444e8b834cbdc26d4266d286cceeb0f3da6",
+    "player_continue.gd": "2065a8e5dfcdaf35ff9657cb98970fdf09fb729657320a9024955a07b535cbfa"
+  },
+  "steam_disabled": true,
+  "scope": "Compiled Windows candidate plus editor host for the test driver. Offline platform entry shim; original save, restore, combat and settlement code.",
+  "host_engine_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+  "platform_entry_stub": true,
+  "native_release_boot_passed": true,
+  "steps": [
+    {
+      "checks": 9,
+      "facts": {
+        "checkpoint": {
+          "clock": 117.533333333332,
+          "crew": [
+            "18",
+            "19",
+            "20",
+            "21",
+            "22",
+            "23"
+          ],
+          "enemy_recruits": 3,
+          "events": [
+            "action:jiangzhou_rts:board_song",
+            "action:jiangzhou_rts:cache_0",
+            "action:jiangzhou_rts:free_dai",
+            "action:jiangzhou_rts:free_song",
+            "action:jiangzhou_rts:rally_dock",
+            "action:jiangzhou_rts:south_lane",
+            "action:jiangzhou_rts:west_street",
+            "bailong",
+            "board_song",
+            "cache_0",
+            "execution_halted",
+            "free_dai",
+            "free_song",
+            "jiangzhou_li_first",
+            "jiangzhou_rear_pursuit",
+            "rally_dock",
+            "south_lane",
+            "west_street"
+          ],
+          "gold": 56,
+          "meeting": true,
+          "passenger_outcomes": [
+            "embarked",
+            ""
+          ],
+          "pursuers": [
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "pursuit_sent": true,
+          "rally": true,
+          "rear_contacts": [
+            false,
+            false
+          ],
+          "rescuees": [
+            "64",
+            "65"
+          ],
+          "search_steps": [
+            3,
+            3
+          ],
+          "wood": 0
+        },
+        "compiled_sha": "67d5f4a5df50ad8b6aee2ce4ee25a23b049ba58b4ebbb14965e678d7a65d62b8",
+        "generation": 1,
+        "identity": "source-v1:67d5f4a5df50ad8b6aee2ce4ee25a23b049ba58b4ebbb14965e678d7a65d62b8",
+        "result_code": ""
+      },
+      "failures": [],
+      "stage": "save",
+      "exit_code": 0,
+      "seconds": 44.586,
+      "engine_errors": [],
+      "log_sha256": "128d2c1e1db7580d7d46b3fe0bf9282081d0b676f1028be56900e77fa7291b76",
+      "anchor_warnings": 0
+    },
+    {
+      "checks": 24,
+      "facts": {
+        "campaign_record": {
+          "best_done": 4,
+          "best_goal_ids": [
+            "li_kui_first",
+            "free_both",
+            "bailong_meeting",
+            "named_survive"
+          ],
+          "cleared": true,
+          "contract_version": 2,
+          "story_complete": true,
+          "story_total": 4
+        },
+        "compiled_sha": "67d5f4a5df50ad8b6aee2ce4ee25a23b049ba58b4ebbb14965e678d7a65d62b8",
+        "crew_outcomes": [
+          [
+            "chao_gai",
+            "embarked"
+          ],
+          [
+            "li_kui",
+            "embarked"
+          ],
+          [
+            "hua_rong",
+            "embarked"
+          ],
+          [
+            "yan_shun",
+            "embarked"
+          ],
+          [
+            "zhang_shun",
+            "embarked"
+          ],
+          [
+            "zhang_heng",
+            "embarked"
+          ]
+        ],
+        "debrief": {
+          "en": [
+            "White Dragon Temple · Met up · Supply caches secured 1/2",
+            "Boarding · Song Jiang aboard · Dai Zong aboard",
+            "Companions · Boarded 6/6 · Fallen 0"
+          ],
+          "ja": [
+            "白龍廟 · 合流済み · 補給確保 1/2",
+            "乗船 · 宋江 乗船済み · 戴宗 乗船済み",
+            "同行した好漢 · 乗船 6/6 · 戦死 0"
+          ],
+          "zh_CN": [
+            "白龙庙 · 已会合 · 取得补给 1/2",
+            "登船 · 宋江 已登船 · 戴宗 已登船",
+            "同行好汉 · 登船 6/6 · 阵亡 0"
+          ],
+          "zh_TW": [
+            "白龍廟 · 已會合 · 取得補給 1/2",
+            "登船 · 宋江 已登船 · 戴宗 已登船",
+            "同行好漢 · 登船 6/6 · 陣亡 0"
+          ]
+        },
+        "identity": "source-v1:67d5f4a5df50ad8b6aee2ce4ee25a23b049ba58b4ebbb14965e678d7a65d62b8",
+        "live": {
+          "cache_taken": [
+            true,
+            false
+          ],
+          "controller_wait_seconds": 8.0,
+          "enemy_paid_recruits": 3,
+          "enemy_spent_gold": 74,
+          "enemy_spent_wood": 30,
+          "events": [
+            "action:jiangzhou_rts:south_lane",
+            "south_lane",
+            "action:jiangzhou_rts:west_street",
+            "west_street",
+            "jiangzhou_li_first",
+            "action:jiangzhou_rts:cache_0",
+            "cache_0",
+            "execution_halted",
+            "action:jiangzhou_rts:free_song",
+            "free_song",
+            "action:jiangzhou_rts:free_dai",
+            "free_dai",
+            "jiangzhou_rear_pursuit",
+            "bailong",
+            "action:jiangzhou_rts:rally_dock",
+            "rally_dock",
+            "action:jiangzhou_rts:board_song",
+            "board_song",
+            "action:jiangzhou_rts:board_dai",
+            "board_dai",
+            "jiangzhou_named_survive",
+            "all_embarked"
+          ],
+          "game_seconds": 124.533333333331,
+          "max_ordinary_troops": 19,
+          "orders": 334,
+          "paid_recruits": 15,
+          "pursuit_sent": true,
+          "pursuit_survivors": 0,
+          "result": {
+            "contract_version": 2,
+            "core_cleared": true,
+            "core_goal": "150秒内打倒两名刽子手，分别救出宋江、戴宗，护送二人活着登船，再下令开船。无需杀光官军。",
+            "done_ids": [
+              "li_kui_first",
+              "free_both",
+              "bailong_meeting",
+              "named_survive"
+            ],
+            "goals": [
+              {
+                "id": "li_kui_first",
+                "label": "两路就位后，由李逵排头打断行刑",
+                "note": "",
+                "reason": "",
+                "state": "done"
+              },
+              {
+                "id": "free_both",
+                "label": "在法场分别救下宋江、戴宗",
+                "note": "",
+                "reason": "",
+                "state": "done"
+              },
+              {
+                "id": "bailong_meeting",
+                "label": "护送二人到白龙庙，与水军相会",
+                "note": "",
+                "reason": "",
+                "state": "done"
+              },
+              {
+                "id": "named_survive",
+                "label": "六名具名好汉全部活着撤回码头",
+                "note": "",
+                "reason": "",
+                "state": "done"
+              }
+            ],
+            "missed_ids": [],
+            "pending_ids": [],
+            "story_complete": true,
+            "story_done": 4,
+            "story_total": 4
+          },
+          "search_steps": [
+            3,
+            4
+          ],
+          "skills": 13
+        },
+        "progress_sha": "c4e9143b8f7bb0a17bd9a240db117e8a39772f84522aff03e6ceff0d75c4387e",
+        "result_code": ""
+      },
+      "failures": [],
+      "stage": "resume",
+      "exit_code": 0,
+      "seconds": 15.885,
+      "engine_errors": [],
+      "log_sha256": "a867e7ab955fd0f2cb50d5fc49531351008585a871944485bddd5965ff269b8a",
+      "anchor_warnings": 0
+    },
+    {
+      "checks": 7,
+      "facts": {
+        "compiled_sha": "67d5f4a5df50ad8b6aee2ce4ee25a23b049ba58b4ebbb14965e678d7a65d62b8",
+        "identity": "source-v1:67d5f4a5df50ad8b6aee2ce4ee25a23b049ba58b4ebbb14965e678d7a65d62b8",
+        "progress_sha": "c4e9143b8f7bb0a17bd9a240db117e8a39772f84522aff03e6ceff0d75c4387e",
+        "terminal_code": "LOCAL_RUN_TERMINAL"
+      },
+      "failures": [],
+      "stage": "reject",
+      "exit_code": 0,
+      "seconds": 8.159,
+      "engine_errors": [],
+      "log_sha256": "f55209215b2c3272ae31faeb3e9cf13f0010337b0182b1c014ddc5ad4eb4f784",
+      "anchor_warnings": 0
+    }
+  ],
+  "passed": true,
+  "checks": 40,
+  "automated_battle_speed_multiplier": 4,
+  "steps_seconds": 68.63,
+  "archived_probe_sha256": "e18eb2a095e2a0f36a23eb63b497b0043ef344304fb00ca4e1e5905d3604fc73"
+}
