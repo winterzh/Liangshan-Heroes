@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+当前 Windows 本地候选 `413b95bb` 以 Godot 4.6.3 导出。精确编译包目录的四语词库与冻结输入逐字节一致，并含所需字体和许可。独立核对实际 Windows 原生离线启动。[收据](../qa/battle_entry_timing_20261116/windows_candidate_413b95bb.json)
+
 大名府完整战报文案增加十二条，来自 `campaign_coordination.json`。严格重建与全库静态校验通过，既有 4,974 条译文逐项一致。运行检查覆盖隔离源码 HUD 和结算。[验证](../qa/battle_entry_localization_20261116/README.md#大名府战报四语)
 
 江州旗标、救援记录及高俅举火和结局的十二条源句由战役分片生成。静态词库校验完成，已有 4,962 条译文逐项一致。实际 Windows 发行包与 Steam 仍待验证。[记录](../qa/battle_entry_localization_20261116/README.md#江州与高俅界面四语)

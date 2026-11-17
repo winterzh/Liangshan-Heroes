@@ -1,5 +1,7 @@
 # 当前项目总览
 
+Windows 整合候选 `413b95bb` 含八章玩家续玩、随机驻守反馈优化和最近四关四语修正。实际编译包已确认对应准入、资源和定向进场。真人及设备验收、Steam 客户端实测与上线待开发收尾。[收据](../qa/battle_entry_timing_20261116/windows_candidate_413b95bb.json)
+
 大名府乔装、断援、分批撤离及失败结算的相关战报通过四语切换检查。待下一份 Windows 候选整合验证。[验证](../qa/battle_entry_localization_20261116/README.md#大名府战报四语)
 
 江州救下与登船旗标、救援战报，高俅举火旗标和两种收兵结局已通过四语即时切换检查。[验证](../qa/battle_entry_localization_20261116/README.md#江州与高俅界面四语)

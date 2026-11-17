@@ -1,10 +1,58 @@
 # Windows Steam 更新交接与四语公告草案
 
+## 当前本地候选 `413b95bb`
+
+六文件 Steam Depot 位于 `D:/AI项目/水浒/Windows候选/2026-11-17-413b95bb/SteamDepot`。原生 EXE 离线启动通过，精确编译包核对八章续玩准入、四关 30 条新文案和两条进场路径。野猪林跨进程实战的编译包证据来自 `72952e43`。实际 Steam 账号、设备和真人验收待完成。下方是当前整合候选的对外公告草案，尚未发布。[当前候选收据](../qa/battle_entry_timing_20261116/windows_candidate_413b95bb.json)
+
+## 四语公告草案 · 八章战役续玩
+
+### 简体中文
+
+#### 八章战役现可中途保存
+
+- 八章战役都可在暂停菜单选择「保存并退出游戏」，重启后在主菜单选择「继续上次战斗」。读档会接回原队伍和当时的任务进度。
+- 补齐连环马的两路军情、江州的救援旗标、大名府的乔装与撤离、高俅的举火与结算文案。战报和结算会随游戏语言更新。
+- 任务提示更清楚地说明了祝家庄的采金与接应、江州的解缚与登船、徐宁教场的协同下钩、大名府的夺门与开枷，以及高俅关的举火与接应。
+- 随机驻守点击开战后更快显示加载画面，并保存本局波次数和每波间隔。
+- 黄泥冈会显示待接手的重车数。重车和旗标重叠时，右键可正确下达接力指令。快活林的鸳鸯脚提示会显示是否就绪和实际剩余冷却。
+
+### 繁體中文
+
+#### 八章戰役現可中途儲存
+
+- 八章戰役都可在暫停選單選擇「儲存並退出遊戲」，重新啟動後在主選單選擇「繼續上次戰鬥」。讀檔會接回原隊伍及當時的任務進度。
+- 補齊連環馬的兩路軍情、江州的救援旗標、大名府的喬裝與撤離、高俅的舉火與結算文案。戰報和結算會隨遊戲語言更新。
+- 任務提示更清楚說明祝家莊的採金與接應、江州的解縛與登船、徐寧教場的協同下鉤、大名府的奪門與開枷，以及高俅關的舉火與接應。
+- 隨機駐守點擊開戰後更快顯示載入畫面，並儲存本局波次數和每波間隔。
+- 黃泥岡會顯示待接手的重車數。重車和旗標重疊時，按右鍵可正確下達接力指令。快活林的鴛鴦腳提示會顯示是否就緒和實際剩餘冷卻。
+
+### English
+
+#### Save and resume all eight campaign chapters
+
+- In any of the eight campaign chapters, choose “Save and exit game” from the pause menu. Select “Continue last battle” from the main menu to return to your original units and mission progress.
+- Updated translations for the cavalry warnings, Jiangzhou rescue markers, Daming disguises and evacuation, and Gao Qiu fireboat orders and endings. Battle logs and debriefs refresh when you switch language.
+- Mission hints now give clearer directions for mining and coordinating relief at Zhu Manor, freeing and boarding at Jiangzhou, Xu Ning’s cavalry drill, the gates and prison at Daming, and fireboat escorts in Gao Qiu’s chapter.
+- Random Defense shows the loading screen sooner and saves your chosen wave count and interval.
+- The Birthday Tribute Heist shows how many loaded carts still need recovery. Right-clicking a recovery marker that overlaps its cart now issues a recovery order. In Drunken Duel with Jiang the Door God, Mandarin Duck Kick shows whether it is ready and how much cooldown remains.
+
+### 日本語
+
+#### 全8章の戦役を途中から再開できます
+
+- 全8章でポーズメニューから「セーブしてゲームを終了」を選べます。メインメニューで「前回の戦闘を再開」を選ぶと、保存した時点の部隊と任務の進行状況に戻ります。
+- 連環馬の進軍警告、江州の救出マーカー、大名府の変装と撤退、高俅の火攻めと結末の翻訳を更新しました。言語を切り替えると、戦闘ログとリザルトも更新されます。
+- 祝家荘での採金と援護、江州での解縛と乗船、徐寧の騎兵対策の訓練、大名府での門の制圧と救出、高俅戦での火船と護衛のヒントを分かりやすくしました。
+- ランダム防衛の開始時にロード画面が早く表示され、設定したウェーブ数と間隔が保存されます。
+- 黄泥岡では回収が必要な荷車の数を表示します。荷車と回収マーカーが重なっていても、右クリックで回収を指示できます。快活林では鴛鴦脚が使用可能かどうかと、残りのクールダウンを確認できます。
+
+## 历史候选备查
+
 ## 随机驻守反馈候选 `e5bf9414`
 
 六文件载荷位于 `D:/AI项目/水浒/Windows候选/2026-11-17-e5bf9414/SteamDepot`。新增随机驻守偏好保存时序优化，原生 EXE 离线启动和编译包定向检查通过。八章续玩编译包的代表性试验见 `72952e43`。实际 Steam 客户端验收和正式上传待开发收尾。[当前收据](../qa/battle_entry_timing_20261116/windows_candidate_e5bf9414.json)
 
-## 当前本地候选 `72952e43`
+## 之前的本地候选 `72952e43`
 
 六文件 Steam Depot 已封装到 `D:/AI项目/水浒/Windows候选/2026-11-17-72952e43/SteamDepot`。Windows 原生 EXE 离线启动通过；编译包在 Godot 编辑器宿主中核对八章准入、野猪林存档续玩和结算拒绝、祝家庄出征及随机驻守进场。真实 Steam 客户端验收及正式上传待开发收尾。下文 `455f2c62` 的公告草案对应当时的补丁范围。[当前候选回执](../qa/battle_entry_timing_20261116/windows_candidate_72952e43.json)
 
