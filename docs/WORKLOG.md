@@ -1,5 +1,9 @@
 # 开发日志
 
+## 2026-11-17 祝家庄续玩候选封装
+
+Windows 候选 `2115c08f` 原生 EXE 离线启动通过。用编辑器宿主加载同一发行编译包，两进程实际按钮保存、继续和包内身份共 33 项通过，已核对 Depot 六文件。[Windows 续玩候选回执](../qa/campaign_siege_20261116/player_continue/windows_candidate_2115c08f.json)
+
 ## 2026-11-17 祝家庄玩家续玩入口
 
 祝家庄加入 Windows Steam 候选的玩家续玩范围。隔离双进程验证实际暂停菜单保存和主菜单继续，31 项通过。[祝家庄玩家续玩入口](../qa/campaign_siege_20261116/README.md#祝家庄玩家续玩入口)

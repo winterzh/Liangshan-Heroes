@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[Windows 续玩候选回执](../qa/campaign_siege_20261116/player_continue/windows_candidate_2115c08f.json)位于 `qa/campaign_siege_20261116/player_continue/`，记录本机候选的包身份和六文件摘要。
+
 [祝家庄玩家续玩入口](../qa/campaign_siege_20261116/README.md#祝家庄玩家续玩入口)的隔离双进程探针与报告位于 `qa/campaign_siege_20261116/player_continue/`。
 
 [从史诗驻守返回后的战役续玩](../qa/campaign_siege_20261116/README.md#从史诗驻守返回后的战役续玩)的菜单探针、报告和运行日志位于 `qa/campaign_siege_20261116/mode_return_resume/`。

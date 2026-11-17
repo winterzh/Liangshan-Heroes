@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+Windows 续玩样板使用 `2115c08f` 构建，Windows Depot 由四个构建文件与两份已核对许可证组成。[Windows 续玩候选回执](../qa/campaign_siege_20261116/player_continue/windows_candidate_2115c08f.json)
+
 玩家续玩章节范围由 `scripts/run_official_restore_profile.gd` 声明，菜单与恢复事务共用该范围。首章样板为祝家庄。[祝家庄玩家续玩入口](../qa/campaign_siege_20261116/README.md#祝家庄玩家续玩入口)
 
 战役中途档的驻守英雄上限偏好由 `scripts/run_slot_store.gd` 按存档类型校验，战役接受菜单可产生的四人或六人值。[从史诗驻守返回后的战役续玩](../qa/campaign_siege_20261116/README.md#从史诗驻守返回后的战役续玩)

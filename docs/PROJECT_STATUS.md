@@ -1,5 +1,7 @@
 # 当前项目总览
 
+本地 Windows 续玩候选 `2115c08f` 已封装。原生离线启动和同一编译包的两进程祝家庄保存、读取均通过。实际 Steam 客户端资格与奖励待验。[Windows 续玩候选回执](../qa/campaign_siege_20261116/player_continue/windows_candidate_2115c08f.json)
+
 祝家庄在 Windows Steam 候选源码中接入玩家续玩。隔离测试替代平台开关，走玩家保存和继续事务。实际 Steam 客户端和统计奖励待验。[祝家庄玩家续玩入口](../qa/campaign_siege_20261116/README.md#祝家庄玩家续玩入口)
 
 祝家庄在保留史诗驻守六人偏好时已能保存退出并独立读回。此项使用隔离入口，正式战役续玩待候选验收。[从史诗驻守返回后的战役续玩](../qa/campaign_siege_20261116/README.md#从史诗驻守返回后的战役续玩)
