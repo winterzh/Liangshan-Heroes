@@ -104,4 +104,6 @@
 
 基线为 `188dad91`，已在独立目录重新冻结结算模块和现行祝家庄菜单。原私有候选的 26 个模块中，21 个直接保留，弹道模块已与当前源码一致，合并剩余四个重叠文件。合并保留战场预读、正式关卡的保存范围、隔离用战役工厂选择和等待恢复布局。
 
-第一次冷导入引擎退出 0，新增 25 个 Godot 脚本标识，原有文件零改动。第二个候选从原签收清单取这 25 份 UID，预导入核对 7,187 个文件。第二次冷导入启动前，另一项目占用共享引擎。本批暂未取得第二候选的冷导入和结算中断恢复结果。[组合收据](settlement_recovery/composition_receipt.json) · [相对原私有候选的合并差异](settlement_recovery/prior_candidate_rebase.patch)
+第一次冷导入引擎退出 0，新增 25 个 Godot 脚本标识，原有文件零改动。第二个候选从原签收清单取这 25 份 UID，共 7,187 个文件。共享引擎空闲后，第二候选用 Godot 4.6.3 完成冷导入，71.184 秒，退出 0，源文件前后相同。内容身份 `3954f0ba`。[组合收据](settlement_recovery/composition_receipt.json) · [合并差异](settlement_recovery/prior_candidate_rebase.patch) · [冷导入回执](settlement_recovery/cold_import_receipt.json)
+
+同源结算中断检查使用三个独立进程和一个全新的私有档案，关闭 Steam。探针在真实祝家庄场景设置三项胜利事件，用私有目录中的测试文件阻止进度写入，确认终局账本已经落盘且演义尚未发放，再由宿主终止本批进程。移除测试文件后，实际启动流程补写一次演义 3/3 并解锁下一章。第三个进程恢复次数为 0，进度文件和结算回执摘要均与第二个进程一致。共 18 项通过。该夹具覆盖普通进程终止后的本地结算，Steam 奖励、公开入口、发行包和真人试玩仍待验。[运行报告](settlement_recovery/interruption_report.json) · [探针](settlement_recovery/interruption_probe.gd)

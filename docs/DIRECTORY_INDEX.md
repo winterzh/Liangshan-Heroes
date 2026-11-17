@@ -191,7 +191,7 @@
 
 [祝家庄菜单续玩与本地进度回读](../qa/campaign_siege_20261116/README.md#菜单续玩与本地进度回读)收录两个独立进程的实际按钮操作，以及前次胜利后已写盘的章节记录。
 
-[祝家庄终局恢复候选](../qa/campaign_siege_20261116/README.md#终局恢复候选)记录合并来源、UID 补齐和验证状态。
+[祝家庄终局恢复候选](../qa/campaign_siege_20261116/README.md#终局恢复候选)记录合并来源、UID 补齐、冷导入和三个独立进程的结算中断证据。
 
 [连环马器械预算复跑](../qa/campaign_resume_current_20261116/evidence/protected_drill_candidate/counter_budget_stall/)保存四轮反攻、补矿命令及同工人伐木命令记录。
 
