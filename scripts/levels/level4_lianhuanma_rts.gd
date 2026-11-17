@@ -12,6 +12,18 @@ const DRILL := Vector2i(16,45)
 const DRILL_ENTRY := Vector2i(21,45)
 const LINK_SOURCE := 4705
 const HOOK_KEYS := ["gou_lian","xu_ning"]
+const LANE_WARNING := [
+	"北路甲马正在集结，约25秒后出发。",
+	"南路甲马正在集结，约25秒后出发。",
+]
+const LANE_CHARGE := [
+	"北路甲马开始冲锋！枪兵护弓，拒马减速；可出击截断辎重，也可先稳住两条路。",
+	"南路甲马开始冲锋！枪兵护弓，拒马减速；可出击截断辎重，也可先稳住两条路。",
+]
+const LANE_SUPPLY_LOST := [
+	"北路辎重营已毁：该处停止补军，未出发甲马推迟45秒；已出发部队仍在场",
+	"南路辎重营已毁：该处停止补军，未出发甲马推迟45秒；已出发部队仍在场",
+]
 var hall: Unit
 var song: Unit
 var xu: Unit
@@ -381,7 +393,7 @@ func _send_wave(b,lane: int) -> void:
 			u.set_meta("wave_state","charging")
 			u.order_amove(b.map.cell_to_world(LANES[lane]))
 			u.order_amove(hall.position,true)
-	b.msg((Localize.text("北路") if lane==0 else Localize.text("南路"))+Localize.text("甲马开始冲锋！枪兵护弓，拒马减速；可出击截断辎重，也可先稳住两条路。"),7)
+	b.msg(LANE_CHARGE[lane],7)
 
 func _lane_has_riders(lane: int) -> bool:
 	return riders.any(func(u): return alive(u) and int(u.get_meta("wave_group",-1))==lane)
@@ -489,7 +501,7 @@ func process(b,delta: float) -> void:
 		if elapsed>=float(waves[lane].time)-25 and not waves[lane].warned:
 			waves[lane].warned=true
 			b.lit_cells[RIDER_POSTS[lane]]=30.0
-			b.msg((Localize.text("北路") if lane==0 else Localize.text("南路"))+Localize.text("甲马正在集结，约25秒后出发。"),6)
+			b.msg(LANE_WARNING[lane],6)
 		if elapsed>=float(waves[lane].time):
 			_send_wave(b,lane)
 	_escort_orders(b)
@@ -535,7 +547,7 @@ func on_unit_died(b,u) -> void:
 	elif u in posts:
 		var lane: int=posts.find(u)
 		if not waves[lane].sent: waves[lane].time+=45.0; waves[lane].warned=false
-		b.mission.mark("lhm_supply_%d"%lane,(Localize.text("北路") if lane==0 else Localize.text("南路"))+Localize.text("辎重营已毁：该处停止补军，未出发甲马推迟45秒；已出发部队仍在场"))
+		b.mission.mark("lhm_supply_%d"%lane,LANE_SUPPLY_LOST[lane])
 func on_unit_resolved(b,u,outcome: String) -> void:
 	if u==han and outcome=="captured": b.mission.mark("lhm_han_captured","韩滔被生擒，仍按敌将看押")
 	elif u==hu and outcome=="retreated": b.mission.mark("lhm_hu_fled","呼延灼骑踢雪乌骓败走青州")

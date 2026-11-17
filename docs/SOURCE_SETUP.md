@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+连环马两路战报由 `campaign_cavalry_escort.json` 提供六条完整源句。严格重建与全库静态核对通过，既有 4,956 条译文逐项一致。本次运行检查覆盖连环马战报和结算的四语切换。[验证](../qa/campaign_cavalry_escort_20261116/README.md#两路战报四语)
+
 Windows 随机驻守会在加载首帧后保存偏好。旧配置恢复、原有事务及其他调用方默认调度沿用原入口。本地 Windows `e5bf9414` 六文件候选已有导出和原生启动收据。[验收](../qa/battle_entry_timing_20261116/windows_candidate_e5bf9414.json)
 
 Windows 本地候选 `72952e43` 使用 Godot 4.6.3 的 Windows Steam 预设，原生 EXE 离线启动通过。另以编辑器宿主加载同一编译包，核对全部八章准入、野猪林续玩以及两条进场路线。实际 Steam 安装包前台与线上统计待验。[收据](../qa/battle_entry_timing_20261116/windows_candidate_72952e43.json)
