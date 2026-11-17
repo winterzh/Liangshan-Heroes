@@ -48,7 +48,11 @@ func _validate_document(value: Variant) -> Dictionary:
 	var options: Dictionary = Codec.new().decode(value.options)
 	if not options.ok or typeof(options.value) != TYPE_DICTIONARY or options.value.size() != OPTIONS.size() or not options.value.has_all(OPTIONS): return bad("SLOT_OPTIONS")
 	var opts: Dictionary = options.value
-	if typeof(opts.defense_hero_cap) != TYPE_INT or opts.defense_hero_cap != 4: return bad("CLASSIC_HERO_CAP")
+	# A campaign can inherit the six-hero defense preference after returning
+	# to the menu. Only the classic defense battle requires exactly four.
+	var hero_caps := [4, 6] if is_campaign else [4]
+	if typeof(opts.defense_hero_cap) != TYPE_INT or opts.defense_hero_cap not in hero_caps:
+		return bad("SLOT_OPTION_RANGE" if is_campaign else "CLASSIC_HERO_CAP")
 	for key in ["ai_friendly", "scale_on", "hero_mult_touched"]:
 		if typeof(opts[key]) != TYPE_BOOL: return bad("SLOT_OPTION_TYPE")
 	for key in ["enemy_mult", "hero_mult"]:
