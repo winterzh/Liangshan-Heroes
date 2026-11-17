@@ -1,0 +1,243 @@
+{
+  "steam_disabled": true,
+  "private_qa_menu": false,
+  "passed": true,
+  "source_commit": "e02b68121626d522b46d0e849c5df625eed7b6bf",
+  "probe_sources_lf_sha256": {
+    "qa/campaign_fire_readiness_20261116/player_continue/probe.gd": "46fa49599c4c521b37666ac4e7351e236a150933706b650beba71918663ab467",
+    "qa/campaign_fire_readiness_20261116/menu_resume/probe.gd": "c25c374727a5abd5bdafff152757554a77b55d7eebe7b30e92824856856c3f27",
+    "qa/campaign_siege_20261116/player_continue/platform_entry.gd": "f270ba38384e9bce258c409a6cb10444e8b834cbdc26d4266d286cceeb0f3da6",
+    "scripts/run_official_restore_profile.gd": "a6fec88f9d1a159361c384a6536fca406dc999a9a58ca094c0ea4f5692ec1fb4",
+    "scripts/run_campaign_progress_coordinator.gd": "7cb414225c25d98065c4db8526de0e09f4a9f49e73b5b88488fe2b98762ad2b8",
+    "tools/zhujiazhuang_rts_test.gd": "435ddb8f9bc774687e1ea879ac6e9adc606380db4934ca3b72dfea294273d770",
+    "scripts/battle.gd": "df2688d0400e60d1b5e5510609f981de888380b26f7d3ebf44dcd5a2e9038827",
+    "scripts/continue_flow.gd": "381e529f8eb084212cc50fd271a2017f6973cd72965370d66a3fb47a1c650155",
+    "scripts/run_world_session.gd": "8b499e542ba155a3825d39caffdbe5b5acd7d0f046dd51a7122bd9efd4a1342c",
+    "scripts/run_unit_graph.gd": "30f9f9af7e04cf37935005d1bb9dbb96b423a972ab0e2f9bf0c5c9e7b2f74bfc",
+    "scripts/run_battle_world_core.gd": "35186ee4bfcb7bd14eead8673ba9612d8365ddf00be2ef875954e02d2b932362",
+    "scripts/run_level5_world_factory.gd": "c63e0f31dc5c66f3997cabd94073e3e98c47a5fe8323b146904f7807a359e882",
+    "scripts/run_level5_unit_contract.gd": "9e29f76b68d4f8b6e618eadae2dca1f9fee7bfde0313a63e8c2231dc70857b51",
+    "scripts/levels/level5_gao_rts.gd": "54abe33efb250b7e8284a21a5f1ba8c85465cd4c03982265a422e9f5b244223f",
+    "tools/gao_rts_play.gd": "22532e061b01f5aacc0a037807c19ea60433c0f1e5654ee9fd99f563893932d9"
+  },
+  "stages": [
+    {
+      "checks": 9,
+      "facts": {
+        "checkpoint": {
+          "abandoned": false,
+          "capture_lost": false,
+          "capture_person": "高俅",
+          "capture_ship": "31",
+          "carried_person": "",
+          "carrier": "",
+          "clock": 508.199999999976,
+          "core_ready": true,
+          "events": [
+            "action:gao_rts:gao_fire_1",
+            "action:gao_rts:gao_fire_withdraw",
+            "action:gao_rts:gao_liu_return",
+            "action:gao_rts:gao_lure_side",
+            "action:gao_rts:gao_prepare",
+            "action:gao_rts:gao_scuttle",
+            "action:gao_rts:gao_seal",
+            "action:gao_rts:gao_wind",
+            "fire_escort_safe",
+            "fireboat_prepared",
+            "flagship_disabled",
+            "flagship_scuttled",
+            "fleet_in_ambush",
+            "gao_fire_lit",
+            "gao_land_cleared",
+            "gao_land_post_destroyed",
+            "gao_liu_returned",
+            "gao_sea_post_destroyed",
+            "gongsun_wind",
+            "liu_tang_fire_leader",
+            "port_sealed"
+          ],
+          "fireboat": "32",
+          "fireboat_outcome": "retreated",
+          "flagship_disabled": true,
+          "flames": [],
+          "gold": 2286,
+          "ignited": true,
+          "landed": false,
+          "liu": "6",
+          "liu_outcome": "",
+          "port_sealed": true,
+          "prisoner": "",
+          "recovered": true,
+          "waves": [
+            {
+              "sent": true,
+              "time": 140.0,
+              "warned": true
+            },
+            {
+              "sent": true,
+              "time": 330.0,
+              "warned": true
+            },
+            {
+              "sent": false,
+              "time": 540.0,
+              "warned": false
+            }
+          ],
+          "wood": 461
+        },
+        "checkpoint_kind": "capture",
+        "generation": 1,
+        "identity": "source-v1:3d822dde782ac0c62eab1df80c0592d57a6e54728fb4ed6dca91cf91baedba07",
+        "result_code": ""
+      },
+      "failures": [],
+      "pid": 32904,
+      "stage": "save",
+      "exit_code": 0,
+      "seconds": 175.784,
+      "engine_errors": []
+    },
+    {
+      "checks": 19,
+      "facts": {
+        "campaign_record": {
+          "best_done": 4,
+          "best_goal_ids": [
+            "gao_lure",
+            "gao_fire",
+            "gao_land",
+            "gao_capture"
+          ],
+          "cleared": true,
+          "contract_version": 3,
+          "story_complete": true,
+          "story_total": 4
+        },
+        "capture_ship": "31",
+        "checkpoint_kind": "capture",
+        "game_seconds_at_result": 557.133333333345,
+        "identity": "source-v1:3d822dde782ac0c62eab1df80c0592d57a6e54728fb4ed6dca91cf91baedba07",
+        "landed_prisoner": "144",
+        "live": {
+          "buildings_started": 5,
+          "camp_hp": 1500.0,
+          "enemy_paid_produced": [
+            10,
+            4
+          ],
+          "enemy_spent_gold": 607,
+          "enemy_spent_wood": 358,
+          "events": [
+            "action:gao_rts:gao_lure_side",
+            "action:gao_rts:gao_wind",
+            "gongsun_wind",
+            "fleet_in_ambush",
+            "action:gao_rts:gao_prepare",
+            "liu_tang_fire_leader",
+            "fireboat_prepared",
+            "gao_land_post_destroyed",
+            "gao_land_cleared",
+            "action:gao_rts:gao_fire_1",
+            "gao_fire_lit",
+            "action:gao_rts:gao_fire_withdraw",
+            "fire_escort_safe",
+            "action:gao_rts:gao_liu_return",
+            "gao_liu_returned",
+            "gao_sea_post_destroyed",
+            "flagship_disabled",
+            "action:gao_rts:gao_seal",
+            "port_sealed",
+            "action:gao_rts:gao_scuttle",
+            "flagship_scuttled",
+            "action:gao_rts:gao_land",
+            "gao_landed",
+            "gao_captured"
+          ],
+          "game_seconds": 558.199999999976,
+          "orders": 875,
+          "result": {
+            "contract_version": 3,
+            "core_cleared": true,
+            "core_goal": "守住忠义堂和宋江，击退三批水陆主力，打停高俅座船。可直接收兵通关；生擒并押回堂前是可选演义目标。",
+            "done_ids": [
+              "gao_lure",
+              "gao_fire",
+              "gao_land",
+              "gao_capture"
+            ],
+            "goals": [
+              {
+                "id": "gao_lure",
+                "label": "阮小七引活官船进入港汊伏区",
+                "note": "",
+                "reason": "",
+                "state": "done"
+              },
+              {
+                "id": "gao_fire",
+                "label": "公孙胜祭风、刘唐登船举火，护两艘接应船撤离",
+                "note": "",
+                "reason": "",
+                "state": "done"
+              },
+              {
+                "id": "gao_land",
+                "label": "击退岸军并拔除山前补给营",
+                "note": "",
+                "reason": "",
+                "state": "done"
+              },
+              {
+                "id": "gao_capture",
+                "label": "封港凿船、水上接俘、返航后实际押至忠义堂",
+                "note": "",
+                "reason": "",
+                "state": "done"
+              }
+            ],
+            "missed_ids": [],
+            "pending_ids": [],
+            "story_complete": true,
+            "story_done": 4,
+            "story_total": 4
+          },
+          "skill_orders": 17,
+          "story_phase": "escort",
+          "units_queued": 55,
+          "units_queued_by_key": {
+            "liang_dao": 13.0,
+            "liang_gong": 12.0,
+            "liang_qiang": 13.0,
+            "liangshan_warship": 14.0,
+            "lou_luo": 3.0
+          }
+        },
+        "progress_sha": "7a4e73ac4ffc3c9d50f59691ce921057db2370f65304f55857dd348644ead2a2",
+        "result_code": ""
+      },
+      "failures": [],
+      "pid": 27940,
+      "stage": "resume",
+      "exit_code": 0,
+      "seconds": 80.469,
+      "engine_errors": []
+    },
+    {
+      "checks": 6,
+      "facts": {
+        "checkpoint_kind": "capture",
+        "identity": "source-v1:3d822dde782ac0c62eab1df80c0592d57a6e54728fb4ed6dca91cf91baedba07",
+        "progress_sha": "7a4e73ac4ffc3c9d50f59691ce921057db2370f65304f55857dd348644ead2a2",
+        "terminal_code": "LOCAL_RUN_TERMINAL"
+      },
+      "failures": [],
+      "pid": 35628,
+      "stage": "reject",
+      "exit_code": 0,
+      "seconds": 30.7,
+      "engine_errors": []
+    }
+  ]
+}

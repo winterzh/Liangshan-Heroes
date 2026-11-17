@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+`qa/campaign_fire_readiness_20261116/player_continue/` 保存高俅玩家续玩探针和三进程收据，复用 `menu_resume/` 的原接俘路线。[验证](../qa/campaign_fire_readiness_20261116/README.md#高俅玩家续玩)
+
 `qa/campaign_wounded_selection_20261116/player_continue/` 保存大名府玩家续玩的探针和三进程收据，复用 `menu_resume/` 的实战驱动。[验证](../qa/campaign_wounded_selection_20261116/README.md#大名府玩家续玩)
 
 `qa/campaign_cavalry_escort_20261116/player_continue/` 包含连环马玩家续玩的菜单探针与三进程验证收据。[连环马验收](../qa/campaign_cavalry_escort_20261116/README.md#连环马玩家续玩)

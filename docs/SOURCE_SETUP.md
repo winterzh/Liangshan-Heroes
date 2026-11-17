@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+高俅已加入 Windows Steam 玩家战役续玩范围。Godot 4.6.3 在隔离环境仅替换 Steam 平台启用判断，沿用玩家关卡准入。验证原船载俘、主菜单续战及胜利后旧档拦截。实际 Windows 发行包和 Steam 客户端待验。[验证](../qa/campaign_fire_readiness_20261116/README.md#高俅玩家续玩)
+
 大名府已加入 Windows Steam 玩家续玩范围。Godot 4.6.3 隔离源码只替换平台启用判断，经过同一玩家关卡准入。保存、独立恢复、结算和终局拒绝通过。实际 Windows 发行包和 Steam 客户端待验。[验证](../qa/campaign_wounded_selection_20261116/README.md#大名府玩家续玩)
 
 连环马与祝家庄均已加入玩家战役续玩范围。本轮在隔离用户目录以 Godot 4.6.3 验证连环马暂停保存、主菜单恢复及胜利后旧档拦截。运行源码只替换 Steam 启用判定供离线验证，仍经过玩家关卡准入。Windows 新发行包和真实 Steam 客户端待验。[验收](../qa/campaign_cavalry_escort_20261116/README.md#连环马玩家续玩)

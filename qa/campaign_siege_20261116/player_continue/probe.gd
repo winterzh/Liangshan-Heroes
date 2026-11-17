@@ -27,7 +27,7 @@ func _check_menu_policy() -> void:
 	for index in range(campaign.LEVELS.size()):
 		campaign.current = index
 		var id: String = campaign.LEVELS[index].id
-		var expected := {"mode":"campaign","level_id":id,"waves":0} if id in ["level3","level4","level8"] else {}
+		var expected := {"mode":"campaign","level_id":id,"waves":0} if id in ["level3","level4","level8","level5"] else {}
 		check(flow._player_launch_context() == expected,"normal campaign choice has expected scope " + campaign.LEVELS[index].id)
 	campaign.skirmish = true
 	check(flow._player_launch_context() == {"mode":"defense","level_id":"","waves":30},"classic 30-wave defense stays supported")
