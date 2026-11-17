@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+[大名府结算战果](../qa/campaign_wounded_selection_20261116/README.md#大名府结算的路线战果)的定向探针与四语结果位于 qa/campaign_wounded_selection_20261116/route_debrief/。
+
 [连环马两路结算战果](../qa/campaign_cavalry_escort_20261116/README.md#连环马的两路结算战果)的定向探针和四语报告位于 qa/campaign_cavalry_escort_20261116/lane_debrief/。
 
 [Windows 战果与续玩布局收据](../qa/campaign_siege_20261116/windows_campaign_candidate_04c8876b.json)保存同包的自然内应、四语实际结算、两进程续玩和六文件指纹。

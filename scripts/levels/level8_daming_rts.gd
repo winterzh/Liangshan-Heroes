@@ -611,6 +611,33 @@ func on_unit_died(b,u) -> void:
 		if u in [chai,yue]:
 			if not prison_open: b.mission.block_action("daming_admit","牢中内应不齐，外军可清开牢前强入。")
 			if not signaled: b.mission.block_action("daming_fire","牢中内应不齐，火号路线不可用；仍可正面攻门救人。")
+func campaign_debrief(mission) -> Array[Dictionary]:
+	var gate_route := "未打开"
+	if gate_open:
+		gate_route = "火号接应夺门" if mission.has_event("daming_response_arrived") else "强攻破门"
+	var prison_route := "未打开"
+	if prison_open:
+		prison_route = "乔装受验入牢" if mission.has_event("daming_prison_admitted") else "外军强开牢院"
+	var pursuit_status := "追兵已出动" if pursuit_sent else "追兵未出动"
+	if not pursuit.any(alive):
+		pursuit_status = "出动后被击退" if pursuit_sent else "出动前被击退"
+	return [
+		{"source": "南门 · %s", "args": [gate_route]},
+		{"source": "牢院 · %s", "args": [prison_route]},
+		{"source": "留守追兵 · %s", "args": [pursuit_status]},
+		{"source": "撤离 · 卢俊义 %s · 石秀 %s", "args": [
+			_evacuation_result(lu, mission.has_event("daming_lu_safe")),
+			_evacuation_result(shi, mission.has_event("daming_shi_safe")),
+		]},
+	]
+
+func _evacuation_result(wounded: Unit, safe: bool) -> String:
+	if safe:
+		return "已撤离"
+	if not is_instance_valid(wounded) or wounded.hp <= 0.0:
+		return "阵亡"
+	return "尚未撤出" if rescued else "尚未解枷"
+
 func top_status(b) -> String:
 	var s := coordination_state(b)
 	if rescued:
