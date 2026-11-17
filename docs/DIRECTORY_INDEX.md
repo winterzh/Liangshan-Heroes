@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+`qa/battle_entry_localization_20261116/daming_notices/` 保存大名府乔装、断援、撤离与失败结算四语验证。[记录](../qa/battle_entry_localization_20261116/README.md#大名府战报四语)
+
 `qa/battle_entry_localization_20261116/rescue_naval/` 保存江州救援与高俅水战四语界面探针和收据。[记录](../qa/battle_entry_localization_20261116/README.md#江州与高俅界面四语)
 
 `qa/campaign_cavalry_escort_20261116/lane_notices/` 保存连环马六条战报的四语探针与收据。[验证](../qa/campaign_cavalry_escort_20261116/README.md#两路战报四语)

@@ -20,6 +20,20 @@ const CITY_POST := Vector2i(37,27)
 const ENEMY_HQ := Vector2i(44,8)
 const EXIT_CELL := Vector2i(30,49)
 const SPY_KEYS := ["shi_qian","chai_jin","yue_he"]
+const SPY_EXPOSED_NOTICE := {
+	"shi_qian": "时迁暴露了！由玩家撤离；甩开追兵后到蔡福家停留3秒，可恢复乔装。",
+	"chai_jin": "柴进暴露了！由玩家撤离；甩开追兵后到蔡福家停留3秒，可恢复乔装。",
+	"yue_he": "乐和暴露了！由玩家撤离；甩开追兵后到蔡福家停留3秒，可恢复乔装。",
+}
+const SPY_RESTORED_NOTICE := {
+	"shi_qian": "时迁已在蔡福家恢复乔装。",
+	"chai_jin": "柴进已在蔡福家恢复乔装。",
+	"yue_he": "乐和已在蔡福家恢复乔装。",
+}
+const SUPPLY_LOST_NOTICE := [
+	"城西外营已毁，该处停止后续补军，已出场部队仍在",
+	"城内巡防营已毁，该处停止后续补军，已出场部队仍在",
+]
 const FIELD_KEYS := ["wu_yong","lu_zhishen","wu_song","hua_rong","liang_dao","liang_qiang","liang_gong","liang_ma"]
 const RESCUERS := ["chai_jin","yue_he","shi_qian","wu_yong","lu_zhishen","wu_song","hua_rong","liang_dao","liang_qiang","liang_gong","liang_ma"]
 var hall: Unit
@@ -501,10 +515,10 @@ func _cover_tick(b,delta: float) -> void:
 			if u._invis_t<=0:
 				u.set_meta("daming_covered",false)
 				u.display_name=u.setup_def.name+"·暴露"
-				b.msg(Localize.text(u.setup_def.name)+Localize.text("暴露了！由玩家撤离；甩开追兵后到蔡福家停留3秒，可恢复乔装。"),5)
+				b.msg(SPY_EXPOSED_NOTICE[u.key],5)
 		elif _near(b,u,SAFEHOUSE,88) and not _guarded(b,SAFEHOUSE,170):
 			u.set_meta("daming_recover",float(u.get_meta("daming_recover"))+delta)
-			if float(u.get_meta("daming_recover"))>=3: _cover(u); b.msg(Localize.text(u.setup_def.name)+Localize.text("已在蔡福家恢复乔装。"),4)
+			if float(u.get_meta("daming_recover"))>=3: _cover(u); b.msg(SPY_RESTORED_NOTICE[u.key],4)
 		else: u.set_meta("daming_recover",0.0)
 func _support_tick(b,delta: float) -> void:
 	if not alive(enemy_hq):
@@ -575,20 +589,22 @@ func process(b,delta: float) -> void:
 			b.msg("外军已控制牢前，牢院通道打开；选一名好汉进入牢内开枷，其余军队守住退路。",6)
 	if rescued:
 		_update_pursuit(b)
-		for record in [[lu,"daming_lu_safe"],[shi,"daming_shi_safe"]]:
+		for record in [[lu,"daming_lu_safe","卢俊义已活着抵达城外接应地"],[shi,"daming_shi_safe","石秀已活着抵达城外接应地"]]:
 			var u=record[0]
 			if alive(u) and gate_open and _near(b,u,EXIT_CELL,130) and b.map.world_to_cell(u.position).y>=45:
 				u.resolve_story("retreated")
-				b.mission.mark(record[1],Localize.text(u.setup_def.name)+Localize.text("已活着抵达城外接应地"))
+				b.mission.mark(record[1],record[2])
 		if b.mission.has_event("daming_lu_safe") and b.mission.has_event("daming_shi_safe"):
 			b.mission.mark("daming_victory","两名获救者生还，梁山前营守住")
 			b.win("卢俊义、石秀已一同活着出城，营救完成！城外经营、城内行动与护送战果按本局记录结算。")
 	_update_briefing(b)
 func on_unit_died(b,u) -> void:
 	if u==hall: b.lose("梁山前营失守，接应与后勤被切断。可重开并留兵保护营地。")
-	elif u==lu or u==shi: b.lose(Localize.text(u.setup_def.name)+Localize.text("在营救途中阵亡；二人必须活着抵达接应地。"))
+	elif u==lu or u==shi: b.lose("卢俊义在营救途中阵亡；二人必须活着抵达接应地。" if u==lu else "石秀在营救途中阵亡；二人必须活着抵达接应地。")
 	elif u==gate: _open_gate(b,true)
-	elif u in posts: b.mission.mark("daming_post_%d"%posts.find(u),Localize.text(u.display_name)+Localize.text("已毁，该处停止后续补军，已出场部队仍在"))
+	elif u in posts:
+		var index: int=posts.find(u)
+		b.mission.mark("daming_post_%d"%index,SUPPLY_LOST_NOTICE[index])
 	elif u==enemy_hq: b.mission.mark("daming_hq_fallen","留守大营已毁，两处补军停止；已经在场的留守队仍须提防")
 	elif u in spies:
 		if u==scout and not signaled: b.mission.block_action("daming_fire","时迁阵亡，火号无法办理；外军可直接击破南门继续营救。")

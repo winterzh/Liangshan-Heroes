@@ -1,5 +1,7 @@
 # 当前项目总览
 
+大名府乔装、断援、分批撤离及失败结算的相关战报通过四语切换检查。待下一份 Windows 候选整合验证。[验证](../qa/battle_entry_localization_20261116/README.md#大名府战报四语)
+
 江州救下与登船旗标、救援战报，高俅举火旗标和两种收兵结局已通过四语即时切换检查。[验证](../qa/battle_entry_localization_20261116/README.md#江州与高俅界面四语)
 
 连环马两路集结、冲锋与断援消息现支持战报四语切换，断援文案可从结算原始条目按当前语言渲染。Steam 上传待开发收尾。[验证](../qa/campaign_cavalry_escort_20261116/README.md#两路战报四语)
