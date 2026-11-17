@@ -260,16 +260,17 @@ func _unfreeze_menu() -> void:
 
 func _restore() -> void:
 	if phase != Phase.RESTORING: return
-	if not _private_qa_enabled():
-		var slot: Dictionary = Slot.new().read_slot()
-		if not slot.ok: _fail(slot, true); return
-		if slot.document.context != Slot.CONTEXT: _fail(_bad("CLASSIC_30_REQUIRED"), true); return
 	var trusted := ContentIdentity.new().resolve_runtime_identity()
 	if not trusted.ok: _fail(trusted, true); return
 	_session = Session.new(trusted, _runtime())
-	var prepared: Dictionary = _session.prepare_restore(_source)
+	var entry := Session.RestoreEntry.QA_MENU if _private_qa_enabled() else Session.RestoreEntry.PLAYER_MENU
+	var prepared: Dictionary = _session.prepare_restore(_source, entry)
 	if not prepared.ok: _fail(prepared, true); return
-	var installed: Dictionary = _session.commit_restore()
+	var installed: Dictionary
+	if prepared.campaign:
+		installed = await _session.commit_restore_async()
+	else:
+		installed = _session.commit_restore()
 	if not installed.ok: _fail(installed, true); return
 	_session.dispose(); _session = null
 	if _graph != null: _graph.dispose()

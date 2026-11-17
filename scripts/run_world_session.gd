@@ -13,6 +13,7 @@ const LocalLifecycle = preload("res://scripts/run_local_lifecycle.gd")
 const Profiles = preload("res://scripts/run_official_restore_profile.gd")
 const FLAGS := {"skirmish": true, "skirmish_ai": false, "arena": false, "custom_defense": false, "scenario": false, "defense_waves": 30, "defense_random": false}
 const ALL_CAMPAIGN_FLAGS := ["current", "skirmish", "skirmish_ai", "arena", "custom_defense", "scenario", "defense_waves", "defense_random"]
+enum RestoreEntry { INTERNAL, PLAYER_MENU, QA_MENU }
 var _core: RefCounted
 var _store: RefCounted
 var _trusted: Dictionary
@@ -141,7 +142,7 @@ func retry_pending_save(source: Variant) -> Dictionary:
 	_save_source = null; _save_lease.clear(); _save_clock.clear()
 	return {"ok": true, "generation": written.generation, "file_sha256": written.file_sha256, "source_retained": true, "source_held": true, "owned_retry": true}
 
-func prepare_restore(menu: Node) -> Dictionary:
+func prepare_restore(menu: Node, entry := RestoreEntry.INTERNAL) -> Dictionary:
 	if _phase != "new": return _bad("SESSION_ALREADY_USED")
 	if not is_instance_valid(menu) or menu.get_script() != MenuScript or not menu.is_inside_tree() or menu != _tree().current_scene or menu.get_parent() != _tree().root or menu.is_queued_for_deletion(): return _bad("CURRENT_MENU_REQUIRED")
 	if not _tree().paused or Engine.is_in_physics_frame(): return _bad("PAUSED_RESTORE_REQUIRED")
@@ -153,10 +154,18 @@ func prepare_restore(menu: Node) -> Dictionary:
 	var read: Dictionary = _store.read_slot(true)
 	if not read.ok: return read
 	_packet = read.document; _slot_sha = read.file_sha256
+	if entry == RestoreEntry.PLAYER_MENU and _packet.context != Store.CONTEXT: return _bad("CLASSIC_30_REQUIRED")
+	var campaign := Profiles.is_official_campaign_context(_packet.context)
 	if _packet.binding.kind == "uncredited":
 		_local_receipt = LocalLifecycle.new(_packet.binding.token, _slot_root)
 		var local_plan: Dictionary = _local_receipt.prepare_resume(_packet.binding)
 		if not local_plan.ok: return local_plan
+	if entry == RestoreEntry.QA_MENU and campaign:
+		# The installed profile has already limited this id to the eight chapters.
+		var factory: Script = load("res://scripts/run_%s_world_factory.gd" % _packet.context.level_id)
+		var runtime: Dictionary = factory.prepare_runtime(_trusted)
+		if not runtime.ok: return runtime
+		_core = Core.new(_trusted, runtime.runtime)
 	var prepared: Dictionary = _core.prepare(_packet.world)
 	if not prepared.ok: return prepared
 	if _packet.binding.kind == "steam":
@@ -168,7 +177,7 @@ func prepare_restore(menu: Node) -> Dictionary:
 	for name in Store.OPTIONS: _campaign_before[name] = _campaign().get(name)
 	for name in Store.SESSION_SETTINGS: _settings_before[name] = _settings().get(name)
 	_phase = "prepared"
-	return {"ok": true, "generation": _packet.generation, "menu_retained": true, "battle": _core._battle}
+	return {"ok": true, "generation": _packet.generation, "menu_retained": true, "battle": _core._battle, "campaign": campaign}
 
 func _rollback(reason: Dictionary) -> Dictionary:
 	_core.dispose(); _phase = "failed"

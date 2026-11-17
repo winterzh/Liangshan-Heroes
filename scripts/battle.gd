@@ -461,6 +461,8 @@ func _ready() -> void:
 	if level.has_method("bind_gameplay_rng_owner"):
 		level.bind_gameplay_rng_owner(self)
 	_official_context = SteamRunPolicy.classify(Campaign, level)
+	if _official_context.get("mode") == "campaign":
+		_save_barrier.configure(self, _run_clock, _official_context)
 	_steam_run_id = SteamService.begin_run(_official_context)
 	_update_steam_presence()
 	track_hero_combat_stats = Campaign.skirmish or Campaign.custom_defense

@@ -1,0 +1,82 @@
+save
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 621.14 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce RTX 4060 Laptop GPU
+
+WARNING: 2D MSAA is not yet supported for GLES3.
+   at: render_target_set_msaa (drivers/gles3/storage/texture_storage.cpp:2934)
+[rts] PASS normal Zhu Manor battle starts
+[rts] PASS visible SaveAndExit button
+[rts] PASS pause-menu action commits a saved slot
+[rts] PASS disk slot has the exact campaign context
+[rts] PASS handoff created
+ZHU_MENU_RESULT {"checks":5,"facts":{"generation":1,"identity":"source-v1:669e341a1f5a0430b52d2c463f4b3b9a8c7e181cc7378ed0d76add94cd7302e4","result_code":""},"failures":[],"pid":30984,"stage":"save"}
+
+resume
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 621.14 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce RTX 4060 Laptop GPU
+
+WARNING: 2D MSAA is not yet supported for GLES3.
+   at: render_target_set_msaa (drivers/gles3/storage/texture_storage.cpp:2934)
+[rts] PASS second process reads the exact saved bytes
+[rts] PASS release menu policy refuses the campaign slot
+[rts] PASS visible ContinueBattle button
+WARNING: Nodes with non-equal opposite anchors will have their size overridden after _ready().
+If you want to set size, change the anchors or consider using set_deferred().
+   at: _set_size (scene/gui/control.cpp:1487)
+   GDScript backtrace (most recent call first):
+       [0] prepare_native_entry (res://scripts/run_campaign_presentation_state.gd:571)
+       [1] mount_disabled (res://scripts/run_battle_world_core.gd:610)
+       [2] stage_mount (res://scripts/run_world_session.gd:221)
+       [3] commit_restore_async (res://scripts/run_world_session.gd:268)
+       [4] _restore (res://scripts/continue_flow.gd:271)
+WARNING: Nodes with non-equal opposite anchors will have their size overridden after _ready().
+If you want to set size, change the anchors or consider using set_deferred().
+   at: _set_size (scene/gui/control.cpp:1487)
+   GDScript backtrace (most recent call first):
+       [0] prepare_native_entry (res://scripts/run_campaign_presentation_state.gd:571)
+       [1] mount_disabled (res://scripts/run_battle_world_core.gd:610)
+       [2] stage_mount (res://scripts/run_world_session.gd:221)
+       [3] commit_restore_async (res://scripts/run_world_session.gd:268)
+       [4] _restore (res://scripts/continue_flow.gd:271)
+WARNING: Nodes with non-equal opposite anchors will have their size overridden after _ready().
+If you want to set size, change the anchors or consider using set_deferred().
+   at: _set_size (scene/gui/control.cpp:1487)
+   GDScript backtrace (most recent call first):
+       [0] prepare_native_entry (res://scripts/run_campaign_presentation_state.gd:571)
+       [1] mount_disabled (res://scripts/run_battle_world_core.gd:610)
+       [2] stage_mount (res://scripts/run_world_session.gd:221)
+       [3] commit_restore_async (res://scripts/run_world_session.gd:268)
+       [4] _restore (res://scripts/continue_flow.gd:271)
+WARNING: Nodes with non-equal opposite anchors will have their size overridden after _ready().
+If you want to set size, change the anchors or consider using set_deferred().
+   at: _set_size (scene/gui/control.cpp:1487)
+   GDScript backtrace (most recent call first):
+       [0] prepare_native_entry (res://scripts/run_campaign_presentation_state.gd:571)
+       [1] mount_disabled (res://scripts/run_battle_world_core.gd:610)
+       [2] stage_mount (res://scripts/run_world_session.gd:221)
+       [3] commit_restore_async (res://scripts/run_world_session.gd:268)
+       [4] _restore (res://scripts/continue_flow.gd:271)
+WARNING: Nodes with non-equal opposite anchors will have their size overridden after _ready().
+If you want to set size, change the anchors or consider using set_deferred().
+   at: _set_size (scene/gui/control.cpp:1487)
+   GDScript backtrace (most recent call first):
+       [0] finish_native_entry (res://scripts/run_campaign_presentation_state.gd:588)
+       [1] mount_disabled (res://scripts/run_battle_world_core.gd:614)
+       [2] stage_mount (res://scripts/run_world_session.gd:221)
+       [3] commit_restore_async (res://scripts/run_world_session.gd:268)
+       [4] _restore (res://scripts/continue_flow.gd:271)
+WARNING: Nodes with non-equal opposite anchors will have their size overridden after _ready().
+If you want to set size, change the anchors or consider using set_deferred().
+   at: _set_size (scene/gui/control.cpp:1487)
+   GDScript backtrace (most recent call first):
+       [0] finish_native_entry (res://scripts/run_campaign_presentation_state.gd:588)
+       [1] mount_disabled (res://scripts/run_battle_world_core.gd:614)
+       [2] stage_mount (res://scripts/run_world_session.gd:221)
+       [3] commit_restore_async (res://scripts/run_world_session.gd:268)
+       [4] _restore (res://scripts/continue_flow.gd:271)
+[rts] PASS main-menu action mounts the saved campaign
+[rts] PASS restored official campaign is fighting
+[rts] PASS economy, hall, clock and mission carry over without deploying again
+[rts] PASS pause and save-button state preserved
+[rts] PASS restoring leaves the slot bytes intact
+ZHU_MENU_RESULT {"checks":8,"facts":{"result_code":""},"failures":[],"pid":46860,"stage":"resume"}
