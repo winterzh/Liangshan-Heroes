@@ -1,0 +1,135 @@
+{
+  "candidate_source": "0f13370905b8b16937135510c8cc469998b39b99",
+  "exe_sha256": "fae95050c553dfd691e3beebca3eef7dd1d7490dfebf6e99fa50d310456b91a6",
+  "scope": "Windows offline on a separate desktop, from a byte-matching copy of the prior private checkpoint. Normal game clock and original campaign rules. Selection and camera aim were scripted to expose the three authored flags. Actual Win32 right-click messages dispatched the orders. No physical player or Steam account participated.",
+  "prior_checkpoint": "qa/battle_entry_timing_20261116/windows_yezhulin_checkpoint_0f133709.json",
+  "natural_win": {
+    "candidate": "0f133709",
+    "stage": "finish",
+    "exe_sha256": "fae95050c553dfd691e3beebca3eef7dd1d7490dfebf6e99fa50d310456b91a6",
+    "exe_unchanged": true,
+    "exit": 0,
+    "windows_button_messages": [
+      "left",
+      "escape",
+      "right",
+      "right",
+      "right"
+    ],
+    "log_sha256": "a1f523f8460d30324505ae605a6b6b43a886b651aef76974b357241b3d771056",
+    "errors": [],
+    "checks": [
+      "original Steam service initialized with its connection disabled in the isolated process",
+      "normal main menu scene mounts",
+      "native menu becomes ready",
+      "official offline player entry enabled without a private QA seam",
+      "new Windows process opens the original slot bytes",
+      "main menu enables Continue last battle with the Wild Boar Forest chapter name",
+      "actual Win32 click uses Continue last battle",
+      "official player-menu restore commits",
+      "same chapter loads at the paused checkpoint",
+      "same actor identity, hit points, paused clock, events, and order path",
+      "resume preserves the disk bytes and original offline run token",
+      "completed tutorial cue does not replay in the restored battle",
+      "native Escape resumes the restored battle",
+      "original walking path continues automatically without adding another move order",
+      "original stage advances naturally to the staff interception",
+      "saved north route naturally reaches the rescue window",
+      "one actual Windows right click intercepts the staff",
+      "normal rescue and foot care preserve four original travelers",
+      "one real rest flag order brings the party to the rest stop",
+      "one real exit flag order leads the original party out",
+      "normal victory advances the local journal and campaign progress",
+      "four travelers escape and earn all three story goals",
+      "same four original actors and visible victory screen",
+      "same run terminal revision 3 and original slot bytes",
+      "campaign records the victory and story seal once"
+    ],
+    "facts": {
+      "changed_checkpoint_keys": [],
+      "checkpoint": {
+        "clock": 5.58333333333332,
+        "events": [
+          "observe",
+          "shadow_pine",
+          "shadow_route_chosen"
+        ],
+        "hero": "lu_zhishen",
+        "hero_id": 4.0,
+        "hp": 540.0,
+        "order_serial": 2.0,
+        "position": [
+          1356.79821777344,
+          527.9951171875
+        ],
+        "remaining_path": [
+          [
+            1103.74108886719,
+            527.559265136719
+          ]
+        ],
+        "shadow_route": "north_pines",
+        "stage": "shadow_wait"
+      },
+      "clock_at_next_stage": 9.95000000000007,
+      "motion_after_restore": 64.3311538696289,
+      "next_stage": "intercept",
+      "rescued_actors": 4,
+      "slot_sha256": "5a362dfecf4fddc9cbc40aa9941087689d8d6d047d3bc8d8cdb8cd548b61ef8a",
+      "terminal": {
+        "game_seconds": 46.183333333332,
+        "journal_sha256": "fc9e6c3e82f22fb439ab41e530306cd32196fc78ab17add350905ff0691526a9",
+        "progress_sha256": "446f6454851a7afc837a764ba66feb5da4ff157d8d6720d11d0b01b3ddfdbabd",
+        "slot_sha256": "5a362dfecf4fddc9cbc40aa9941087689d8d6d047d3bc8d8cdb8cd548b61ef8a",
+        "story_done": 3,
+        "terminal_revision": 3
+      },
+      "win32_left_observed": 1,
+      "win32_right_observed": 3,
+      "window_pixels": [
+        1280,
+        720
+      ]
+    },
+    "failures": []
+  },
+  "finished_slot_reopen": {
+    "candidate": "0f133709",
+    "stage": "reject",
+    "exe_sha256": "fae95050c553dfd691e3beebca3eef7dd1d7490dfebf6e99fa50d310456b91a6",
+    "exe_unchanged": true,
+    "exit": 0,
+    "windows_button_messages": [
+      "left",
+      "left"
+    ],
+    "log_sha256": "a1f523f8460d30324505ae605a6b6b43a886b651aef76974b357241b3d771056",
+    "errors": [],
+    "checks": [
+      "original Steam service initialized with its connection disabled in the isolated process",
+      "normal main menu scene mounts",
+      "native menu becomes ready",
+      "official offline player entry enabled without a private QA seam",
+      "new process independently opens the winning profile",
+      "actual Continue interaction available for the saved slot",
+      "Win32 click tests the finished slot",
+      "terminal slot is explicitly rejected",
+      "the finished battle is never mounted again",
+      "player can dismiss the terminal-slot message",
+      "successful progress and original slot are byte-identical after rejection"
+    ],
+    "facts": {
+      "campaign_no_duplicate_credit": true,
+      "progress_sha256": "446f6454851a7afc837a764ba66feb5da4ff157d8d6720d11d0b01b3ddfdbabd",
+      "rejection": "LOCAL_RUN_TERMINAL",
+      "slot_sha256": "5a362dfecf4fddc9cbc40aa9941087689d8d6d047d3bc8d8cdb8cd548b61ef8a",
+      "win32_left_observed": 2,
+      "win32_right_observed": 0,
+      "window_pixels": [
+        1280,
+        720
+      ]
+    },
+    "failures": []
+  }
+}
