@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+0f133709 旧档矩阵使用本地 ZIP 干净解压的六个文件，经冻结清单摘要复核后在独立 Windows 档案加载。Steam 服务脚本和普通离线菜单准入来自原编译包，Steam 连接在隔离进程初始化时关闭。只复制已审核的第 1 代兼容样本和对应账本，验证再存、独立重启及原文件摘要。 [原生旧档矩阵](../qa/battle_entry_timing_20261116/windows_player_legacy_matrix_0f133709.json)
+
 原生 Windows 的野猪林终局探针从先前离线存档的字节一致副本执行原有旗标命令，用原范围、本局账本第 3 代、战役进度和存档摘要验证正常胜利及独立重启后的旧槽拒绝。 [终局收据](../qa/battle_entry_timing_20261116/windows_yezhulin_terminal_0f133709.json)
 
 Windows 野猪林中途续玩验证复用原生候选和原版 Steam 服务脚本，在隔离进程启动时禁止建立账号连接，随后测试普通离线玩家入口。采用两个独立进程，复读存档摘要和同一单位的剩余路径，并通过实际 Windows Esc 确认原指令复行。 [原生存读档收据](../qa/battle_entry_timing_20261116/windows_yezhulin_checkpoint_0f133709.json)
