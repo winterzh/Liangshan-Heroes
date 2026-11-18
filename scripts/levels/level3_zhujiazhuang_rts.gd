@@ -7,6 +7,14 @@ const CAMP := Vector2i(55, 28)
 const CAMP_GOLD_CELLS := [Vector2i(51,18), Vector2i(57,18), Vector2i(60,24)]
 const MAIN_GATE := Vector2i(20, 28)
 const SIDE_GATE := Vector2i(20, 18)
+const MAIN_TOWER := Vector2i(17, 30)
+const GATE_DEFENDER_POSTS := [Vector2i(15, 26), Vector2i(15, 30), Vector2i(16, 28)]
+const FEINT_RULE := "zhu_feint_rule"
+const FEINT_HAPPENED := "zhu_feint_happened"
+const FEINT_AT_SIDE := "zhu_feint_at_side"
+const FEINT_SHIFTS := ["zhu_feint_guard_0", "zhu_feint_guard_1", "zhu_feint_guard_2"]
+const FEINT_PRESSURE_SECONDS := 4.0
+const FEINT_RETREAT_SECONDS := 5.0
 const OUTPOST := Vector2i(36, 39)
 const EXPANSION := Vector2i(36, 16)
 const PRISON := Vector2i(11, 35)
@@ -221,7 +229,7 @@ func deploy(b) -> void:
 	# Existing shared towers cover both entrances. Catapults can outrange them;
 	# melee defenders protect the towers, making an escorted siege force useful.
 	# Offset along the inner wall so roofs do not overlap the gatehouse.
-	for c in [Vector2i(17,30),Vector2i(17,20)]:
+	for c in [MAIN_TOWER,Vector2i(17,20)]:
 		var tower: Unit = b.spawn_at("arrow_tower",1,c)
 		if tower == null:
 			b._gameplay_rng_stop("ENTITY_REQUIRED_UNIT")
@@ -308,6 +316,8 @@ func on_start(b) -> void:
 		if node != null: workers[i].order_gather(node)
 	for i in range(enemy_workers.size()): enemy_workers[i].order_gather(enemy_nodes[i])
 	b.mission.begin("zhu_rts", "第一打 · 扎营探路", "北取资源，南拔外营；兵营补兵、作坊造器械。先侦察，再决定主攻方向。")
+	if OS.get_name() == "Windows":
+		b.mission.events[FEINT_RULE] = true
 	b.mission.enable_scrolling()
 	b.mission.add_action("zhu_rts_recon","探路：查看外围战场",Vector2i(42,22),FIELD_ACTORS,1.0,64.0)
 	b.mission.add_action("zhu_rts_rescue",Localize.text("救出被囚好汉"),PRISON+Vector2i(4,0),FIELD_ACTORS,3.0,64.0)
@@ -361,6 +371,8 @@ func on_mission_action(b, action_id: String, actor) -> void:
 			if b.hud != null and b.hud.has_method("_clear_info_toasts"):
 				b.hud._clear_info_toasts()
 			b.mission.mark("zhu_gate_opened","偏门已开！内应换旗成功，可沿偏门入庄救人；军队由玩家自行调入。")
+			if defense_state == "feint":
+				b.mission.mark(FEINT_AT_SIDE, "孙立打开偏门时，正门佯攻仍在牵制守军。")
 			_commit_gate_defense(b, SIDE_GATE)
 		"zhu_rts_rescue":
 			if prisoners_freed:
@@ -568,7 +580,11 @@ func _observe_expansion(b) -> void:
 func _commit_gate_defense(b, entrance: Vector2i) -> void:
 	# Reassign existing guards once: opening the other entrance can then flank
 	# this response. No extra spawn and no tracking of units behind player fog.
-	if defense_state != "watch": return
+	if defense_state == "feint" and entrance == SIDE_GATE:
+		return
+	if defense_state not in ["watch", "feint", "returning"]: return
+	if defense_state != "watch":
+		_clear_feint_shifts(b.mission)
 	gate_defenders.assign(SquadOrders.survivors(gate_defenders))
 	if gate_defenders.is_empty():
 		defense_state = "guard"
@@ -589,6 +605,86 @@ func _gate_defense_tick(b, delta: float) -> void:
 		SquadOrders.guard(gate_defenders)
 		defense_state = "guard"
 
+func _front_tower(b) -> Unit:
+	var at: Vector2 = b.map.cell_to_world(MAIN_TOWER)
+	for u in b.units:
+		if _alive(u) and u.faction == Unit.FACTION_GUAN and u.key == "arrow_tower" and u.position.distance_to(at) < GameMap.CELL * 0.5:
+			return u
+	return null
+
+func _front_is_pressured(b, tower: Unit) -> bool:
+	if not _alive(tower) or not _alive(gate):
+		return false
+	var ahead: float = gate.position.x
+	var count := 0
+	for u in b.units:
+		if not _alive(u) or u.faction != Unit.FACTION_LIANG or u.position.x <= ahead or u.is_building \
+				or u.is_worker or u.is_noncombat or u.is_captive or u.garrisoned or u.is_summon or u.atk <= 0.0:
+			continue
+		if u.position.distance_to(tower.position) <= tower.atk_range + tower.radius + u.radius \
+				and b.target_visible_to(tower, u):
+			count += 1
+			if count >= 2:
+				return true
+	return false
+
+func _clear_feint_shifts(mission) -> void:
+	for key: String in FEINT_SHIFTS:
+		mission.events.erase(key)
+
+func _feint_tick(b, seconds: float) -> void:
+	if not b.mission.has_event(FEINT_RULE) or defense_state not in ["watch", "feint", "returning"] \
+			or gate_defenders.size() > FEINT_SHIFTS.size():
+		return
+	if defense_state == "returning":
+		var still_returning := false
+		for index in range(gate_defenders.size()):
+			var guard := gate_defenders[index]
+			if not b.mission.has_event(FEINT_SHIFTS[index]) or not _alive(guard):
+				continue
+			if guard.position.distance_to(b.map.cell_to_world(GATE_DEFENDER_POSTS[index])) > 32.0:
+				still_returning = true
+			elif guard.stance == Unit.STANCE_PASSIVE:
+				SquadOrders.guard([guard])
+		if still_returning:
+			return
+		_clear_feint_shifts(b.mission)
+		defense_state = "watch"
+		# If the side gate opened during the diversion, the guards can now react to it.
+		if inside_open or b.mission.has_event("zhu_side_breached"):
+			_commit_gate_defense(b, SIDE_GATE)
+		return
+	var pressured := _front_is_pressured(b, _front_tower(b))
+	if defense_state == "feint":
+		defense_elapsed = 0.0 if pressured else defense_elapsed + seconds
+		if defense_elapsed < FEINT_RETREAT_SECONDS:
+			return
+		defense_state = "returning"
+		defense_elapsed = 0.0
+		for index in range(gate_defenders.size()):
+			var guard := gate_defenders[index]
+			if b.mission.has_event(FEINT_SHIFTS[index]) and _alive(guard):
+				guard.order_move(b.map.cell_to_world(GATE_DEFENDER_POSTS[index]))
+				guard.set_stance(Unit.STANCE_PASSIVE)
+		b.msg("正门压力已解除，守军返回原来的岗位。", 5.0)
+		return
+	var available := SquadOrders.survivors(gate_defenders)
+	defense_elapsed = defense_elapsed + seconds if pressured and available.size() >= 2 else 0.0
+	if defense_elapsed < FEINT_PRESSURE_SECONDS:
+		return
+	defense_state = "feint"
+	defense_elapsed = 0.0
+	defense_target = b.map.cell_to_world(MAIN_GATE + Vector2i(-2, 0))
+	# The final living member keeps guarding the interior. Slots are stable
+	# across death, retreat and save/load so orders always address originals.
+	for member in available.slice(0, -1):
+		var index := gate_defenders.find(member)
+		b.mission.events[FEINT_SHIFTS[index]] = true
+		var offset := Vector2(0.0, -25.0 if index == 0 else 25.0)
+		SquadOrders.advance([member], defense_target + offset)
+	if not b.mission.mark(FEINT_HAPPENED, "正门佯攻引开部分守军。保持压力，可让孙立从偏门接应。"):
+		b.msg("正门佯攻引开部分守军。保持压力，可让孙立从偏门接应。", 5.0)
+
 func unit_tactical_hint(b, u: Unit) -> String:
 	if not _alive(u) or u.garrisoned or u._invis_t > 0.0:
 		return ""
@@ -599,6 +695,8 @@ func unit_tactical_hint(b, u: Unit) -> String:
 	if u in resource_guards:
 		return Localize.text("北矿守军。击退守军后派兵占住矿区，再调工人采金。")
 	if u == gate:
+		if b.mission.has_event(FEINT_RULE) and defense_state in ["watch", "feint"] and _alive(_front_tower(b)):
+			return Localize.text("正门佯攻 · 两名战斗单位进入箭楼射程，持续4秒可牵制守军")
 		return Localize.text("正攻可先用投石车拆箭楼，再让步兵护撞车攻门。")
 	if u == side_gate:
 		if _alive(sun):
@@ -655,6 +753,7 @@ func process(b, delta: float) -> void:
 	if strategic_clock > 0.0:
 		return
 	strategic_clock = 0.5
+	_feint_tick(b, 0.5)
 	preload("res://scripts/zhujiazhuang_recovery_hint.gd").refresh(b)
 	if not expansion_secured and resource_guards.all(func(u): return not _alive(u)):
 		for u in b.units:
@@ -724,11 +823,18 @@ func campaign_debrief(mission) -> Array[Dictionary]:
 		side_result = "孙立已打开偏门"
 	elif mission.has_event("zhu_side_breached"):
 		side_result = "偏门由强攻打开"
-	return [
+	var rows: Array[Dictionary] = [
 		{"source": "北矿 · %s", "args": ["已夺下" if expansion_secured else "未夺下"]},
 		{"source": "南营 · %s · 共派出 %d 队", "args": ["已断援" if supply_cut else "外营未拆", raids_sent]},
 		{"source": "入口 · %s · %s", "args": ["正门已攻破" if main_breached else "正门未破", side_result]},
 	]
+	if mission.has_event(FEINT_AT_SIDE):
+		rows.append({"source": "重玩建议 · 本局佯攻接应成功。下次可集中兵力，护送撞车直攻正门。"})
+	elif not supply_cut and raids_sent > 0:
+		rows.append({"source": "重玩建议 · 南营派出%d队。下次可先断援，再集中兵力攻门。", "args": [raids_sent]})
+	elif mission.has_event(FEINT_RULE) and not inside_open:
+		rows.append({"source": "重玩建议 · 可试用正门佯攻牵制守军，同时派孙立接应偏门。"})
+	return rows
 
 func _finish_ready() -> bool:
 	return manor_fallen and prisoners_freed and _alive(hall) and not prisoners.is_empty() and _alive(prisoners[0]) and prisoners[0].position.distance_to(hall.position) < 190.0

@@ -210,7 +210,7 @@ func _checks(level_id: String, values: Dictionary) -> bool:
 	if level_id == "level3":
 		if values.raid_state not in ["muster", "attack", "retreat"] or values.raid_strength < 0 or values.raid_elapsed < 0.0: return false
 		if values.raid_state != "muster" and values.raid_strength < 3: return false
-		if values.defense_state not in ["watch", "moving", "guard"] or values.defense_elapsed < 0.0: return false
+		if values.defense_state not in ["watch", "moving", "guard", "feint", "returning"] or values.defense_elapsed < 0.0: return false
 	if level_id in ["level4", "level5"] and values.waves.size() != (2 if level_id == "level4" else 3): return false
 	if level_id == "level5" and (values.production_t.size() != 2 or values.produced.size() != 2): return false
 	if level_id == "level5" and values.fire_abandoned and not values.fire_prepared: return false
