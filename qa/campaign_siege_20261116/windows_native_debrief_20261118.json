@@ -1,0 +1,310 @@
+{
+  "route_play": {
+    "exe_sha256": "9fe9d2ad829f926c5b46b728fc3a9aca79d8e9e745ffdd9f7941991e77398003",
+    "scope": "Windows native export, two isolated offline profiles, normal economy and combat commands at four times game speed.",
+    "routes": [
+      {
+        "route": "rush",
+        "process_exit": 0,
+        "checks": 13,
+        "failures": [],
+        "log_sha256": "86811027aab6f0b882e8bb677df37e55431898fd8f8fc9f158602ee85b6bdda3",
+        "local_victory": true,
+        "campaign_progress_written": true,
+        "game_seconds": 1167.35,
+        "orders": 721,
+        "reinforcement_squads": 12,
+        "story_goals_done": 1,
+        "story_goals_total": 3,
+        "gate_state_at_victory": {
+          "expansion_secured": false,
+          "inside_open": false,
+          "main_breached": true,
+          "supply_cut": false
+        },
+        "opened_during_feint": false
+      },
+      {
+        "route": "inside",
+        "process_exit": 1,
+        "checks": 13,
+        "failures": [
+          "route-specific real replay suggestion in zh_CN",
+          "route-specific real replay suggestion in zh_TW",
+          "route-specific real replay suggestion in en",
+          "route-specific real replay suggestion in ja"
+        ],
+        "log_sha256": "963c680408201be2c2a39845c63df0e33806d4bb731e027e5d02844b25832c65",
+        "local_victory": true,
+        "campaign_progress_written": true,
+        "game_seconds": 1246.02,
+        "orders": 802,
+        "reinforcement_squads": 1,
+        "story_goals_done": 2,
+        "story_goals_total": 3,
+        "gate_state_at_victory": {
+          "expansion_secured": true,
+          "inside_open": true,
+          "main_breached": false,
+          "supply_cut": true
+        },
+        "opened_during_feint": true
+      }
+    ]
+  },
+  "source_regression": {
+    "before": {
+      "checks": 12,
+      "failures": [
+        "actual frozen settlement in en",
+        "actual frozen settlement in ja",
+        "actual frozen settlement in zh_TW",
+        "actual frozen settlement in zh_CN"
+      ],
+      "log_sha256": "17b085ebf322275b1d583d867157d74eeef944682fedabc782d873154ca51ecf"
+    },
+    "after": {
+      "checks": 12,
+      "failures": [],
+      "log_sha256": "c5e0a9189f7fe0054ba302c8c963f0cc08b4fc4252afe32ebd8795a2dcec079d"
+    }
+  },
+  "native_debrief": {
+    "scope": "Opened the real menu and battle in each exact Windows export. The fixture supplied five recorded-event states, then used the normal settlement HUD and switched all four languages after clearing formatting lookup and the live event.",
+    "before": {
+      "exe_sha256": "9fe9d2ad829f926c5b46b728fc3a9aca79d8e9e745ffdd9f7941991e77398003",
+      "chapters": [
+        {
+          "level": "level3",
+          "exit": 1,
+          "checks": 8,
+          "failures": [
+            {
+              "event": "zhu_feint_at_side",
+              "language": "zh_CN",
+              "visible": true
+            },
+            {
+              "event": "zhu_feint_at_side",
+              "language": "zh_TW",
+              "visible": true
+            },
+            {
+              "event": "zhu_feint_at_side",
+              "language": "en",
+              "visible": true
+            },
+            {
+              "event": "zhu_feint_at_side",
+              "language": "ja",
+              "visible": true
+            },
+            {
+              "event": "zhu_feint_rule",
+              "language": "zh_CN",
+              "visible": true
+            },
+            {
+              "event": "zhu_feint_rule",
+              "language": "zh_TW",
+              "visible": true
+            },
+            {
+              "event": "zhu_feint_rule",
+              "language": "en",
+              "visible": true
+            },
+            {
+              "event": "zhu_feint_rule",
+              "language": "ja",
+              "visible": true
+            }
+          ],
+          "rendered": {
+            "zhu_feint_at_side": {},
+            "zhu_feint_rule": {}
+          },
+          "log_sha256": "a1f523f8460d30324505ae605a6b6b43a886b651aef76974b357241b3d771056"
+        },
+        {
+          "level": "level2",
+          "exit": 1,
+          "checks": 12,
+          "failures": [
+            {
+              "event": "jiangzhou_report_cut",
+              "language": "zh_CN",
+              "visible": true
+            },
+            {
+              "event": "jiangzhou_report_cut",
+              "language": "zh_TW",
+              "visible": true
+            },
+            {
+              "event": "jiangzhou_report_cut",
+              "language": "en",
+              "visible": true
+            },
+            {
+              "event": "jiangzhou_report_cut",
+              "language": "ja",
+              "visible": true
+            },
+            {
+              "event": "jiangzhou_report_delivered",
+              "language": "zh_CN",
+              "visible": true
+            },
+            {
+              "event": "jiangzhou_report_delivered",
+              "language": "zh_TW",
+              "visible": true
+            },
+            {
+              "event": "jiangzhou_report_delivered",
+              "language": "en",
+              "visible": true
+            },
+            {
+              "event": "jiangzhou_report_delivered",
+              "language": "ja",
+              "visible": true
+            },
+            {
+              "event": "jiangzhou_report_closed",
+              "language": "zh_CN",
+              "visible": true
+            },
+            {
+              "event": "jiangzhou_report_closed",
+              "language": "zh_TW",
+              "visible": true
+            },
+            {
+              "event": "jiangzhou_report_closed",
+              "language": "en",
+              "visible": true
+            },
+            {
+              "event": "jiangzhou_report_closed",
+              "language": "ja",
+              "visible": true
+            }
+          ],
+          "rendered": {
+            "jiangzhou_report_closed": {},
+            "jiangzhou_report_cut": {},
+            "jiangzhou_report_delivered": {}
+          },
+          "log_sha256": "a1f523f8460d30324505ae605a6b6b43a886b651aef76974b357241b3d771056"
+        }
+      ]
+    },
+    "after": {
+      "exe_sha256": "fae95050c553dfd691e3beebca3eef7dd1d7490dfebf6e99fa50d310456b91a6",
+      "chapters": [
+        {
+          "level": "level3",
+          "exit": 0,
+          "checks": 8,
+          "failures": [],
+          "rendered": {
+            "zhu_feint_at_side": {
+              "en": "Try next time · The feint worked. Try massing your troops and escorting a ram to the main gate.",
+              "ja": "次の一手 · 陽動は成功。次は兵を集め、破城槌を護衛して正門を攻めてみましょう。",
+              "zh_CN": "重玩建议 · 本局佯攻接应成功。下次可集中兵力，护送撞车直攻正门。",
+              "zh_TW": "重玩建議 · 本局佯攻接應成功。下次可集中兵力，護送撞車直攻正門。"
+            },
+            "zhu_feint_rule": {
+              "en": "Try next time · Draw guards to the main gate with a feint and send Sun Li to the side gate.",
+              "ja": "次の一手 · 正門への陽動で守備兵を引きつけ、孫立を脇門へ向かわせましょう。",
+              "zh_CN": "重玩建议 · 可试用正门佯攻牵制守军，同时派孙立接应偏门。",
+              "zh_TW": "重玩建議 · 可試用正門佯攻牽制守軍，同時派孫立接應偏門。"
+            }
+          },
+          "log_sha256": "a1f523f8460d30324505ae605a6b6b43a886b651aef76974b357241b3d771056"
+        },
+        {
+          "level": "level2",
+          "exit": 0,
+          "checks": 12,
+          "failures": [],
+          "rendered": {
+            "jiangzhou_report_closed": {
+              "en": "North watch · Interception window missed",
+              "ja": "北への伝令 · 阻止の機会を逃した",
+              "zh_CN": "北哨报信 · 拦截时机已过",
+              "zh_TW": "北哨報信 · 攔截時機已過"
+            },
+            "jiangzhou_report_cut": {
+              "en": "North watch · Runner stopped, pursuit delayed by 12 seconds",
+              "ja": "北への伝令 · 阻止し、追手を12秒遅らせた",
+              "zh_CN": "北哨报信 · 已拦截，推迟追兵12秒",
+              "zh_TW": "北哨報信 · 已攔截，推遲追兵12秒"
+            },
+            "jiangzhou_report_delivered": {
+              "en": "North watch · Runner reached his post",
+              "ja": "北への伝令 · 役人が見張りに到着",
+              "zh_CN": "北哨报信 · 官差已抵达",
+              "zh_TW": "北哨報信 · 官差已抵達"
+            }
+          },
+          "log_sha256": "a1f523f8460d30324505ae605a6b6b43a886b651aef76974b357241b3d771056"
+        }
+      ]
+    }
+  },
+  "local_package": {
+    "kind": "local_windows_release_candidate",
+    "commit": "0f13370905b8b16937135510c8cc469998b39b99",
+    "source_version": "source-v1:a6f09b78fb3654a1c7293fa943ae6afa7eea35034f55c3934bcf69f0bd2dfc7d",
+    "changed_runtime_inputs": [
+      "scripts/battle.gd"
+    ],
+    "archive_name": "LiangshanHeroes_Windows_0f133709.zip",
+    "zip_bytes": 1758336963,
+    "zip_sha256": "bef97f1cb03cbbc289877208f2c899c139d0ee8d8de0dddeadfb6d87bf5d0dc2",
+    "archive_verified_by_stream": true,
+    "uploaded": false,
+    "files": [
+      {
+        "path": "GODOTSTEAM_LICENSE.txt",
+        "bytes": 1110,
+        "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+      },
+      {
+        "path": "LiangshanHeroes.exe",
+        "bytes": 1827485240,
+        "sha256": "fae95050c553dfd691e3beebca3eef7dd1d7490dfebf6e99fa50d310456b91a6"
+      },
+      {
+        "path": "libgodotsteam.windows.template_release.x86_64.dll",
+        "bytes": 3961344,
+        "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+      },
+      {
+        "path": "steam_api64.dll",
+        "bytes": 319128,
+        "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+      },
+      {
+        "path": "steam_stats_reader.dll",
+        "bytes": 381440,
+        "sha256": "7505919cfff5907c13a02eb366690bff22ca6731c8521deefde58b114e4f796f"
+      },
+      {
+        "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+        "bytes": 1093,
+        "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+      }
+    ],
+    "clean_extraction_launch": {
+      "matching_files": 6,
+      "exit_code": 0,
+      "errors": [],
+      "log_sha256": "a9912b85473f126d3f4f63ec824170c828df3473a292f866dde86cafda5b66da",
+      "seconds": 11.053
+    }
+  }
+}
