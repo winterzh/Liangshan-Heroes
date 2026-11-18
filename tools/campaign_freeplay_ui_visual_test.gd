@@ -74,7 +74,7 @@ func _capture_story_menu(campaign) -> bool:
 	await process_frame
 	await RenderingServer.frame_post_draw
 	var entry_image: Dictionary = _save_frame("campaign_entry_1280.png")
-	var entry_texts := _find_texts(menu, ["剧情模式", "八幕全开放", "自由通关", "演义印"])
+	var entry_texts := _find_texts(menu, ["剧情模式", "开始战役", "八幕全开放", "自由通关", "演义印"])
 	results.append({
 		"id": "campaign_entry",
 		"png": output_dir.path_join("campaign_entry_1280.png"),

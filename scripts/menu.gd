@@ -328,11 +328,15 @@ func _build() -> void:
 	col.alignment = BoxContainer.ALIGNMENT_CENTER
 	col.add_theme_constant_override("separation", 8)
 	center.add_child(col)
+	var pc := OS.get_name() == "Windows"
+	var campaign_title := "📜  开始战役" if pc else "📜  剧情模式"
+	var campaign_entry := _mk_module(campaign_title, "八幕全开放 · 自由通关，依原著完成可收录演义印", UITheme.PAPER_DARK, _show_story)
+	campaign_entry.name = "CampaignMenuEntry"
+	col.add_child(campaign_entry)
 	var flow := get_node_or_null("/root/ContinueFlow")
-	if flow != null: flow.add_continue_entry(col, self)
-
-	col.add_child(_mk_module("📜  剧情模式", "八幕全开放 · 自由通关，依原著完成可收录演义印", UITheme.PAPER_DARK, _show_story))
-	col.add_child(_mk_module("🛡  驻守战", "波次防守 · 20 / 30 / 60 关，亦可加载自定义配置", UITheme.COMPLETE, _show_defense, true))
+	if flow != null:
+		flow.add_continue_entry(col, self)
+	col.add_child(_mk_module("🛡  驻守战", "波次防守 · 20 / 30 / 60 关，亦可加载自定义配置", UITheme.COMPLETE, _show_defense, not pc))
 	col.add_child(_mk_module("⚔  1v1 对战", "同规则经济 · 真实生产与升代，两种胜利条件、三档 AI", UITheme.COPPER_LIGHT, _show_1v1))
 	col.add_child(_mk_module("🏟  竞技场", "百八好汉技能试演场 · 自由点将放技能、一键刷敌", UITheme.VERMILION, func() -> void:
 		Campaign.arena = true
@@ -1028,7 +1032,12 @@ func _make_card(i: int) -> Control:
 	vb.add_child(nm)
 
 	var ds := Label.new()
-	ds.text = info["sub"]
+	var caption: String = info["sub"]
+	if OS.get_name() == "Windows":
+		match info["id"]:
+			"level6": caption = "故事入门 · 跟随押送队，找机会救林冲"
+			"level3": caption = "经典即时战略 · 扎营扩军，断援攻城"
+	Localize.bind_text(ds, caption)
 	ds.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	ds.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	ds.add_theme_font_size_override("font_size", 14)

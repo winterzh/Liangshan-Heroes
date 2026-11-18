@@ -6207,6 +6207,9 @@ func _unhandled_input(event: InputEvent) -> void:
 				else:
 					_box_select(_rect_from(_drag_from, p), event.shift_pressed)
 		elif event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
+			# Use the click's position even if the pointer has moved during a long frame.
+			if event.device != InputEvent.DEVICE_ID_EMULATION:
+				p = get_canvas_transform().affine_inverse() * event.position
 			if _build_armed != "":
 				_cancel_build()
 				return

@@ -81,11 +81,47 @@ func _bad(code: String) -> Dictionary:
 	return {"ok": false, "code": code}
 
 func add_continue_entry(parent: Control, menu: Node) -> void:
-	if not is_enabled(): return
+	if not is_enabled():
+		return
+	var slot := Slot.new()
+	if slot.directory.is_empty() or not DirAccess.dir_exists_absolute(slot.directory):
+		return
 	var button := _button("继续上次战斗", func() -> void: request_continue(menu))
 	button.name = "ContinueBattle"
 	parent.add_child(button)
-	parent.move_child(button, 0)
+	var entry: WeakRef = weakref(button)
+	# Reading the journal verifies the complete payload, which can be large.
+	# Keep the entry available for recovery while the summary loads.
+	var task := WorkerThreadPool.add_task(func() -> void:
+		var saved := slot.read_slot()
+		var context: Dictionary = saved.document.context if saved.ok else {}
+		_apply_menu_slot_summary.call_deferred(entry, context, String(saved.get("code", ""))), false, "Continue menu slot summary")
+	_retire_menu_slot_task(task)
+
+func _retire_menu_slot_task(task: int) -> void:
+	while not WorkerThreadPool.is_task_completed(task):
+		await get_tree().process_frame
+	WorkerThreadPool.wait_for_task_completion(task)
+
+func _apply_menu_slot_summary(entry: WeakRef, context: Dictionary, error_code: String) -> void:
+	var button := entry.get_ref() as Button
+	if not is_instance_valid(button) or not button.is_inside_tree():
+		return
+	if context.is_empty():
+		if error_code == "NO_SLOT":
+			button.queue_free()
+		else:
+			Localize.bind_text(button, "检查战斗存档")
+		return
+	var chapter := "驻守战"
+	if context.mode == "campaign":
+		var index := Campaign.index_for_id(context.level_id)
+		if index < 0:
+			Localize.bind_text(button, "检查战斗存档")
+			return
+		chapter = Campaign.LEVELS[index]["title"]
+	Localize.bind_format(button, "继续上次战斗 · %s", chapter)
+	button.get_parent().move_child(button, 0)
 
 func add_save_entry(parent: Control, hud: Node) -> void:
 	if not is_enabled(): return

@@ -8,7 +8,7 @@ import re
 import subprocess
 
 ENTRY_TAG = "ENTRY_TIMING "
-MODES = ("level3", "skirmish", "skirmish_ai", "arena")
+MODES = ("level6", "level3", "skirmish", "skirmish_ai", "arena")
 
 
 def engine_idle():

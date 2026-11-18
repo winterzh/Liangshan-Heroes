@@ -66,6 +66,8 @@ const FIELDS := {
 		"unit": "hall strategist scout chai yue gate lu shi enemy_hq",
 		"units": "posts towers spies workers enemy_workers reserve pursuit escorts"}}
 const MAX_REFERENCES := 4096
+# Presentation-only fields are audited but never copied into the saved world.
+const TRANSIENT_FIELDS := {"level6": ["_first_move_cue"]}
 # These pools retain their slots after a death; nullable entries are legal,
 # deleting a slot is not. Only arrays with fixed production consumers/layouts
 # are listed. Trained troops, reserves, support and similar pools stay variable.
@@ -104,6 +106,8 @@ func _names(level_id: String) -> Dictionary:
 func audit_declarations(level_id: String) -> Dictionary:
 	if not SCRIPTS.has(level_id): return _bad("OFFICIAL_LEVEL_REQUIRED")
 	var expected := _names(level_id)
+	for field: String in TRANSIENT_FIELDS.get(level_id, []):
+		expected[field] = "transient"
 	var found := {}
 	var script: Script = SCRIPTS[level_id]
 	while script != null:

@@ -6,6 +6,7 @@ const EXIT_W := Vector2i(3, 20)
 const PINE := Vector2i(27, 20)
 const WATCH := Vector2i(33, 20)
 const AMBUSH := Vector2i(45, 16)
+const FIRST_MOVE_POINT := Vector2i(42, 16)
 const EXEC_TIME := 42.0
 const RESCUE_R := 86.0
 const CARE_REACH := 100.0
@@ -26,6 +27,8 @@ var st := STALK
 var exec_timer := EXEC_TIME
 var rescued := false
 var alarm := false
+# A new battle offers the cue once. Restored battles resume without it.
+var _first_move_cue := 0.0
 var wave_t := 0.0
 var wave_n := 0
 var smoke_t := 0.0
@@ -143,6 +146,7 @@ func deploy(b) -> void:
 
 func on_start(b) -> void:
 	st = STALK
+	_first_move_cue = 6.0 if OS.get_name() == "Windows" and not b._touch_mode else 0.0
 	exec_timer = EXEC_TIME
 	rescued = false
 	tracking_done = false
@@ -169,6 +173,22 @@ func on_start(b) -> void:
 	b.mission.add_map_locator("北侧松林 · 近路", Vector2i(34,16))
 	b.mission.add_map_locator("南侧芦丛 · 隐蔽", Vector2i(34,25))
 	b.mission.set_status("点选鲁智深，再右键林边地面。查看只移镜头，押送队仍会继续前行。")
+
+func draw_tactical_overlay(b, canvas: Node2D) -> void:
+	if not _shows_first_move_cue(b):
+		return
+	var landing: Vector2 = b.map.cell_to_world(FIRST_MOVE_POINT)
+	if not b.map.is_open_world(landing) or not b.is_visible_world(landing):
+		return
+	var center: Vector2 = b.to_screen(landing)
+	var radius := 15.0 + 2.0 * sin(_first_move_cue * 6.0)
+	canvas.draw_arc(center, radius, 0, TAU, 32, Color(0.08, 0.14, 0.09, 0.9), 5.0, true)
+	canvas.draw_arc(center, radius, 0, TAU, 32, Color(0.59, 0.93, 0.66, 0.95), 2.0, true)
+	canvas.draw_circle(center, 2.5, Color(0.59, 0.93, 0.66, 0.95), true, -1.0, true)
+
+func _shows_first_move_cue(b) -> bool:
+	return _first_move_cue > 0.0 and st == STALK and b.phase == b.Phase.FIGHT \
+		and is_instance_valid(lu) and lu._order_serial == 0 and lu in b.selection
 
 func on_mission_action(b, action_id: String, actor) -> void:
 	match action_id:
@@ -230,6 +250,8 @@ func on_mission_action(b, action_id: String, actor) -> void:
 			b.mission.set_objective("等幸存同伴都走到林口。鲁智深和林冲必须生还；四人歇脚后出林另计演义目标。")
 
 func process(b, delta: float) -> void:
+	if _shows_first_move_cue(b):
+		_first_move_cue = maxf(0.0, _first_move_cue - delta)
 	if b._smoke:
 		_smoke_drive(b, delta)
 	if not is_instance_valid(lu) or lu.hp <= 0.0:
