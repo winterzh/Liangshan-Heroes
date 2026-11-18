@@ -1,5 +1,15 @@
 # 2026-11-18 Windows Steam 发布
 
+## Windows Build 26752476
+
+Steamworks 正式分支 `default` 已通过用户手机确认切至 26752476。Windows Depot 为 5088121，Manifest 为 8273375024262905155，回退构建为 26735223。服务器清单六文件的大小和 SHA-1 与上传包一致。SteamCMD 从正式分支干净下载后，六文件的大小和 SHA-256 也一致。隔离离线启动下载所得 EXE，退出 0，错误 0。 [机器收据](release_26752476.json)
+
+同一冻结版本在发布前用授权 Steam 账号验证野猪林中途保存、独立重启续玩和演义 3/3。Steam 胜场增加 1 次，解锁野猪林演义成就。独立重启拒绝已结算的旧槽，胜场和成就不再增加。新隔离档案和从 Steam 官网下载的云档均读到同一战果。下载包的启动验证用隔离离线档案执行。
+
+公开补丁说明已关联 Build 26752476，简中、繁中、英语和日语的标题、六条正文和插图均从公开页回读。四语使用同一张通用封面。 [公开公告](https://store.steampowered.com/news/app/5088120/view/680767470935474309) · [四语正文](../../docs/STEAM_UPDATE_20261118_CANDIDATE_0f133709.json)
+
+## Windows Build 26735223
+
 冻结源码 492e64370557315e529122f9beb1d23bf5089e2e，使用原候选 ZIP。传输副本经六文件大小及 SHA-1 核对，SteamPipe Preview 的根路径、名称、大小及 SHA-1 一致后上传。取得 Build 26735223、Depot 5088121、Manifest 9099660322002044845，Steamworks 服务端六文件均与原候选一致。 [机器收据](report.json)
 
 首轮浏览器恢复被物理 Escape 中断，初次只读 public 为 26719792，原状态保留在 previous_readbacks。后续仅用后台网页控制提交正式分支请求，用户完成手机确认，刷新 Steamworks 的 default 为 26735223。
