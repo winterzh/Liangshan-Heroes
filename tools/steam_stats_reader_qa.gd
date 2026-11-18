@@ -6,7 +6,23 @@ func check(label: String, passed: bool) -> void:
 	checks.append({"label": label, "passed": passed})
 func _initialize() -> void:
 	call_deferred("run")
+func check_file_sha256() -> void:
+	var native: RefCounted = ClassDB.instantiate(&"RunWindowsSha256") if ClassDB.class_exists(&"RunWindowsSha256") else null
+	check("Windows SHA-256 class registered", native != null)
+	if native == null:
+		return
+	var started: bool = native.start() == OK
+	check("empty SHA-256 uses the standard digest", started and native.finish().hex_encode() == "".sha256_text())
+	check("finished SHA-256 rejects another update", native.update("abc".to_utf8_buffer()) != OK)
+	var updated: bool = native.start() == OK and native.update("a".to_utf8_buffer()) == OK \
+		and native.update(PackedByteArray()) == OK and native.update("bc".to_utf8_buffer()) == OK
+	check("incremental SHA-256 preserves chunk order", updated and native.finish().hex_encode() == "abc".sha256_text())
+	var restarted: bool = native.start() == OK and native.update("previous".to_utf8_buffer()) == OK \
+		and native.start() == OK and native.update("current".to_utf8_buffer()) == OK
+	check("restarting SHA-256 releases the previous stream", restarted and native.finish().hex_encode() == "current".sha256_text())
+
 func run() -> void:
+	check_file_sha256()
 	check("native class registered", ClassDB.class_exists("SteamStatsReader"))
 	if not ClassDB.class_exists("SteamStatsReader"):
 		finish(); return

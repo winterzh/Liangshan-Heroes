@@ -3,6 +3,9 @@
 #include <godot_cpp/godot.hpp>
 #include "windows_api.hpp"
 #include "observer.hpp"
+#include <bcrypt.h>
+#include <godot_cpp/variant/packed_byte_array.hpp>
+#include <limits>
 
 class SteamStatsReader : public godot::RefCounted {
     GDCLASS(SteamStatsReader, godot::RefCounted)
@@ -36,10 +39,69 @@ public:
         return godot::String::utf8(answer.c_str());
     }
 };
+class RunWindowsSha256 : public godot::RefCounted {
+    GDCLASS(RunWindowsSha256, godot::RefCounted)
+    BCRYPT_ALG_HANDLE algorithm = nullptr;
+    BCRYPT_HASH_HANDLE hash = nullptr;
+
+    void close() {
+        if (hash) BCryptDestroyHash(hash);
+        if (algorithm) BCryptCloseAlgorithmProvider(algorithm, 0);
+        hash = nullptr;
+        algorithm = nullptr;
+    }
+
+protected:
+    static void _bind_methods() {
+        godot::ClassDB::bind_method(godot::D_METHOD("start"), &RunWindowsSha256::start);
+        godot::ClassDB::bind_method(godot::D_METHOD("update", "bytes"), &RunWindowsSha256::update);
+        godot::ClassDB::bind_method(godot::D_METHOD("finish"), &RunWindowsSha256::finish);
+    }
+
+public:
+    ~RunWindowsSha256() override { close(); }
+
+    godot::Error start() {
+        close();
+        if (!BCRYPT_SUCCESS(BCryptOpenAlgorithmProvider(&algorithm, BCRYPT_SHA256_ALGORITHM, nullptr, 0))
+                || !BCRYPT_SUCCESS(BCryptCreateHash(algorithm, &hash, nullptr, 0, nullptr, 0, 0))) {
+            close();
+            return godot::ERR_UNAVAILABLE;
+        }
+        return godot::OK;
+    }
+
+    godot::Error update(const godot::PackedByteArray &bytes) {
+        if (!hash) return godot::ERR_UNCONFIGURED;
+        if (bytes.size() > std::numeric_limits<ULONG>::max()) return godot::ERR_INVALID_PARAMETER;
+        if (bytes.is_empty()) return godot::OK;
+        // BCryptHashData reads the input through a non-const API parameter.
+        const auto count = static_cast<ULONG>(bytes.size());
+        if (BCRYPT_SUCCESS(BCryptHashData(hash, const_cast<PUCHAR>(bytes.ptr()), count, 0))) {
+            return godot::OK;
+        }
+        close();
+        return godot::FAILED;
+    }
+
+    godot::PackedByteArray finish() {
+        std::array<unsigned char, 32> digest{};
+        const auto size = static_cast<ULONG>(digest.size());
+        const bool success = hash && BCRYPT_SUCCESS(BCryptFinishHash(hash, digest.data(), size, 0));
+        close();
+        godot::PackedByteArray result;
+        if (success && result.resize(size) == godot::OK) {
+            std::memcpy(result.ptrw(), digest.data(), size);
+        }
+        return result;
+    }
+};
+
 void initialize_reader(godot::ModuleInitializationLevel level) {
     if (level == godot::MODULE_INITIALIZATION_LEVEL_SCENE) {
         godot::ClassDB::register_class<SteamStatsReader>();
         godot::ClassDB::register_class<SteamStatsObserver>();
+        godot::ClassDB::register_class<RunWindowsSha256>();
     }
 }
 void deinitialize_reader(godot::ModuleInitializationLevel) {}

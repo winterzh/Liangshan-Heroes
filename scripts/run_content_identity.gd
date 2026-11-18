@@ -350,12 +350,21 @@ func _scan_was_cancelled() -> bool:
 	return cancelled
 
 
-func _hash_scan_file(path: String) -> String:
+func _new_file_sha256(accelerated: bool) -> RefCounted:
+	if accelerated and ClassDB.class_exists(&"RunWindowsSha256"):
+		var native: RefCounted = ClassDB.instantiate(&"RunWindowsSha256")
+		if native != null and native.start() == OK:
+			return native
+	var sha := HashingContext.new()
+	return sha if sha.start(HashingContext.HASH_SHA256) == OK else null
+
+
+func _hash_scan_file(path: String, accelerated := false) -> String:
 	# Keep window close responsive even when the executable contains the full PCK.
 	var file := FileAccess.open(path, FileAccess.READ)
 	if file == null: return ""
-	var sha := HashingContext.new()
-	if sha.start(HashingContext.HASH_SHA256) != OK: return ""
+	var sha := _new_file_sha256(accelerated)
+	if sha == null: return ""
 	var modified := FileAccess.get_modified_time(path)
 	var length := file.get_length()
 	var remaining := length
@@ -411,7 +420,8 @@ func _read_runtime_identity_files(context: Dictionary, cancelable := false) -> D
 	var stamp: Array[int] = []
 	if prewarm:
 		stamp = _executable_stamp(exe)
-	var engine_sha := _hash_scan_file(exe) if cancelable else FileAccess.get_sha256(exe)
+	var accelerated: bool = not context.source_mode and OS.get_name() == "Windows" and OS.has_feature("steam")
+	var engine_sha := _hash_scan_file(exe, accelerated) if cancelable else FileAccess.get_sha256(exe)
 	if prewarm and (stamp.is_empty() or stamp != _executable_stamp(exe)):
 		return _bad("PREWARM_EXECUTABLE_CHANGED")
 	if not _valid_sha(engine_sha): return _bad("ENGINE_BINARY_UNREADABLE")

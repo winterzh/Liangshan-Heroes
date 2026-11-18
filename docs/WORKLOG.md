@@ -1,5 +1,9 @@
 # 开发日志
 
+## 2026-11-18 Windows 冷启动文件校验提速
+
+Windows Steam 的可取消后台身份扫描通过现有原生依赖调用 CNG。1.83 GB 同文件交替对照中，新实现耗时约 1.4 秒，原实现约 5.3–5.6 秒，完整摘要相同。取消检查、无 Steam 及模拟 Steam 读统计均通过。待冻结候选的原生菜单、存档及代表性模式整合复验。 [构建与校验证据](../qa/battle_entry_timing_20261116/windows_sha256_bridge.json)
+
 ## 2026-11-18 Windows 水战与原生续玩复测
 
 本地候选 89dfee7a 的十分钟高俅防守 P95 14.828 ms，P99 17.564 ms，三波照常进攻，13 项完整性全部通过。同一候选的原生 EXE 完成祝家庄新局保存和重启、七章第 2 代兼容样本继续以及连环马旧槽终局拒绝。冷启动测量确认完整文件 SHA-256 占约 4.8 秒，独立系统 SHA-256 得到相同摘要约耗 1.8–1.9 秒。剪贴板真实写入及 Steam 绑定仍待验证。 [水战与存档收据](../qa/campaign_sustained_performance_20261116/windows_pack_89dfee7a.json) · [冷启动诊断](../qa/battle_entry_timing_20261116/README.md#windows-候选-89dfee7a-冷启动归因)
