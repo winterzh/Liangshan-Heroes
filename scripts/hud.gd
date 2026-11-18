@@ -256,6 +256,10 @@ func _ready() -> void:
 func setup(p_battle) -> void:
 	battle = p_battle
 	minimap.battle = p_battle
+	if _pc_campaign_feedback_available() and not _pause_options.has_node("CopyBattleFeedback"):
+		_pause_options.add_theme_constant_override("separation", 10)
+		_add_feedback_button(_pause_options, false)
+		_add_feedback_button(_end_root.find_child("EndActions", true, false) as Container, true)
 	_res_bar.visible = battle != null and battle.economy
 	# 经济模式左上有资源条，军情横幅让出其真实占位；战役模式则保持居中宽幅。
 	top_label.offset_left = 322.0 if battle != null and battle.economy else 170.0
@@ -2787,6 +2791,7 @@ func _build_end() -> void:
 	_end_tally_scroll.add_child(_end_tally)
 
 	var row := HBoxContainer.new()
+	row.name = "EndActions"
 	row.add_theme_constant_override("separation", 14)
 	row.alignment = BoxContainer.ALIGNMENT_CENTER
 	vbox.add_child(row)
@@ -2808,6 +2813,47 @@ func _build_end() -> void:
 	mbtn.add_theme_font_size_override("font_size", 20)
 	mbtn.pressed.connect(func() -> void: to_menu.emit())
 	row.add_child(mbtn)
+
+
+func _pc_campaign_feedback_available() -> bool:
+	return OS.get_name() == "Windows" and battle != null and battle._official_context.get("mode") == "campaign"
+
+
+func _add_feedback_button(container: Container, debrief: bool) -> void:
+	var button := Button.new()
+	button.name = "CopyBattleFeedback"
+	button.custom_minimum_size.y = 38
+	button.add_theme_font_size_override("font_size", 18)
+	Localize.bind_text(button, "复制本局信息")
+	button.pressed.connect(func() -> void:
+		var text := _battle_feedback_text(debrief)
+		if text.is_empty():
+			return
+		DisplayServer.clipboard_set(text)
+		Localize.bind_text(button, "已复制本局信息"))
+	container.add_child(button)
+
+
+func _battle_feedback_text(debrief: bool) -> String:
+	if not _pc_campaign_feedback_available() or battle.mission == null:
+		return ""
+	var mission = battle.mission
+	var lines: Array[String] = [Localize.format_text("水浒英雄传 · Windows %s", Campaign.VERSION)]
+	# Report the installed content rather than exposing the save's run identity.
+	var flow := get_node_or_null("/root/ContinueFlow")
+	var installed: Dictionary = flow._startup_identity if flow != null else {}
+	var digest := String(installed.get("content_version", "")).get_slice(":", 1)
+	if digest.length() == 64 and digest.is_valid_hex_number(false):
+		lines.append(Localize.format_text("版本标识 · %s", digest.left(12)))
+	lines.append(Localize.format_text("章节 · %s", Localize.text(battle.level.title())))
+	var phase := Localize.text("结算" if debrief else "暂停")
+	lines.append(Localize.format_text("战役阶段 · %s · %s", [phase, Localize.current_text(mission.stage_title)]))
+	lines.append(Localize.format_text("本局时间 · %d 秒", floori(mission.elapsed)))
+	if not mission.report.is_empty():
+		lines.append(Localize.text("最近战报"))
+		for row: String in mission.report.slice(-5):
+			lines.append(Localize.current_text(row).strip_edges().left(240))
+	return "\n".join(lines)
 
 
 func show_intro(lines: Array, translate_content := true) -> void:
@@ -3144,6 +3190,9 @@ func show_pause() -> void:
 	_pause_pending_action = ""
 	_pause_confirm.hide()
 	_pause_options.show()
+	var feedback := _pause_options.get_node_or_null("CopyBattleFeedback") as Button
+	if feedback != null:
+		Localize.bind_text(feedback, "复制本局信息")
 	_pause_root.visible = true
 	_pause_root.move_to_front()  # Also block mouse/touch input to later-created HUD controls.
 	if not has_meta("_run_hud_prepared"): _pause_resume_button.grab_focus()
