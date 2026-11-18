@@ -62,7 +62,12 @@ func _launch(campaign_level_id := "") -> void:
 		_launch_immediately()
 		return
 	_show_battle_loading(campaign_level_id)
-	if OS.get_name() == "Windows":
+	if OS.get_name() == "Windows" and (not campaign_level_id.is_empty() or Campaign.skirmish or Campaign.custom_defense):
+		# Resource workers can begin decoding as soon as requests are submitted.
+		# Draw the loading overlay before the first batch competes for time.
+		await RenderingServer.frame_post_draw
+		if AppLifecycle.quit_started() or not is_inside_tree():
+			return
 		_request_battle_environment(campaign_level_id)
 		if campaign_level_id == "level5":
 			Art.prefetch_gao_opening_art()

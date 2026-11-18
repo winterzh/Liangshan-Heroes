@@ -3,6 +3,8 @@ extends SceneTree
 const MENU := "res://scenes/menu.tscn"
 const BATTLE := "res://scenes/main.tscn"
 const PICK := {
+	"level1": ["剧情模式", "出 征"],
+	"level5": ["剧情模式", "出 征"],
 	"level6": ["剧情模式", "出 征"],
 	"level3": ["剧情模式", "出 征"],
 	"skirmish": ["驻守战", "30 关"],
@@ -12,6 +14,7 @@ const PICK := {
 
 var entry_at := 0
 var battle_added_at := 0
+var loading_drawn_at := 0
 var frames_after_click: Array[int] = []
 
 
@@ -54,8 +57,10 @@ func _visit(mode: String, visit: int) -> Dictionary:
 			return {}
 		await process_frame
 	var readiness_ms := _ms(Time.get_ticks_usec() - available_from)
+	var campaign := root.get_node("Campaign")
+	var level_index: int = campaign.index_for_id(mode)
 	var selector := _find_button(menu, PICK[mode][0])
-	if selector == null and mode in ["level3", "level6"]:
+	if selector == null and level_index >= 0:
 		selector = _find_button(menu, "开始战役")
 	if selector == null:
 		_fail("mode button was not visible: " + mode)
@@ -66,8 +71,8 @@ func _visit(mode: String, visit: int) -> Dictionary:
 		selector.pressed.emit()
 		await RenderingServer.frame_post_draw
 		selection_us = Time.get_ticks_usec() - mode_at
-		if mode in ["level3", "level6"]:
-			var title := "三打祝家庄" if mode == "level3" else "大闹野猪林"
+		if level_index >= 0:
+			var title: String = campaign.LEVELS[level_index].title
 			var card := _campaign_card(menu, title)
 			selector = _find_button(card, PICK[mode][1]) if card != null else null
 		else:
@@ -77,10 +82,12 @@ func _visit(mode: String, visit: int) -> Dictionary:
 			return {}
 
 	battle_added_at = 0
+	loading_drawn_at = 0
 	frames_after_click.clear()
 	entry_at = Time.get_ticks_usec()
 	var started_at := entry_at
 	selector.pressed.emit()
+	var callback_ended_at := Time.get_ticks_usec()
 	await scene_changed
 	var ready_at := Time.get_ticks_usec()
 	var battle = current_scene
@@ -92,6 +99,9 @@ func _visit(mode: String, visit: int) -> Dictionary:
 	var initial_draw := Time.get_ticks_usec()
 	var first_feedback := frames_after_click[0] if not frames_after_click.is_empty() else initial_draw
 	entry_at = 0
+	if loading_drawn_at <= started_at or loading_drawn_at >= battle_added_at:
+		_fail("no loading overlay drawn before battlefield attachment: " + mode)
+		return {}
 
 	var intro_lines := 0
 	while battle.hud._intro_root.visible:
@@ -119,6 +129,8 @@ func _visit(mode: String, visit: int) -> Dictionary:
 		"menu_until_entry_enabled_ms":readiness_ms,
 		"mode_page_ms":_ms(selection_us) if mode != "arena" else null,
 		"entry_to_first_render_ms":_ms(first_feedback - started_at),
+		"entry_callback_ms":_ms(callback_ended_at - started_at),
+		"entry_to_loading_render_ms":_ms(loading_drawn_at - started_at),
 		"entry_to_battle_attached_ms":_ms(battle_added_at - started_at),
 		"battle_attached_to_scene_ready_ms":_ms(ready_at - battle_added_at),
 		"scene_ready_to_first_battle_render_ms":_ms(initial_draw - ready_at),
@@ -186,8 +198,14 @@ func _on_node_added(node: Node) -> void:
 
 
 func _on_frame_drawn() -> void:
-	if entry_at > 0:
-		frames_after_click.append(Time.get_ticks_usec())
+	if entry_at <= 0:
+		return
+	var now := Time.get_ticks_usec()
+	frames_after_click.append(now)
+	if loading_drawn_at == 0 and current_scene != null and current_scene.scene_file_path == MENU:
+		var overlay := current_scene.get_node_or_null("BattleLoading") as Control
+		if overlay != null and overlay.is_visible_in_tree():
+			loading_drawn_at = now
 
 
 func _ms(us: int) -> float:
