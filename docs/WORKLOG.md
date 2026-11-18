@@ -1,5 +1,9 @@
 # 开发日志
 
+## 2026-11-18 Windows 水战与原生续玩复测
+
+本地候选 89dfee7a 的十分钟高俅防守 P95 14.828 ms，P99 17.564 ms，三波照常进攻，13 项完整性全部通过。同一候选的原生 EXE 完成祝家庄新局保存和重启、七章第 2 代兼容样本继续以及连环马旧槽终局拒绝。冷启动测量确认完整文件 SHA-256 占约 4.8 秒，独立系统 SHA-256 得到相同摘要约耗 1.8–1.9 秒。剪贴板真实写入及 Steam 绑定仍待验证。 [水战与存档收据](../qa/campaign_sustained_performance_20261116/windows_pack_89dfee7a.json) · [冷启动诊断](../qa/battle_entry_timing_20261116/README.md#windows-候选-89dfee7a-冷启动归因)
+
 ## Windows 战役美术查询与金矿静态绘制
 
 Windows Steam 包复用同局美术变体、朝向和缺帧结果。高俅与黄泥冈实渲检查的画面资源对应一致，168 条组合查询中位耗时降低约 19%。金矿未震动时跳过重复绘制，树木及采集归零帧按原画面刷新。新 Windows 整合包继续验收。[对照](../qa/campaign_sustained_performance_20261116/README.md#windows-战役资源重绘与美术查找)

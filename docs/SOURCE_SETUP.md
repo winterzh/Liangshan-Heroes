@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+Windows 整合候选 89dfee7a 的六文件身份、十分钟水战及同一原生 EXE 的续玩回执见 [Windows 验收收据](../qa/campaign_sustained_performance_20261116/windows_pack_89dfee7a.json)。续玩驱动、资料目录和覆盖配置仅挂载在隔离副本。
+
 Windows Steam 包复用单位美术的本局查询结果。`Art.set_runtime_alias()` 沿用原清理入口。金矿每个物理步保留原时钟，采矿震动期间才需要持续刷新画面。[定向对照](../qa/campaign_sustained_performance_20261116/README.md#windows-战役资源重绘与美术查找)
 
 Windows 正式模板的同进程新战斗借用启动预读的身份并复核当前文件与原生依赖。空身份回落到完整后台扫描。只读续玩准入和保存边界继续使用各自验证路径。 [原生重进复验](../qa/battle_entry_timing_20261116/README.md#windows-同进程重进优化)
