@@ -14,7 +14,7 @@ func _run() -> void:
 	stage = OS.get_environment("LSH_FIXTURE_STAGE")
 	var profile := OS.get_environment("APPDATA").replace("\\", "/")
 	if not flow._private_qa_enabled() or DisplayServer.get_name() == "headless" \
-			or not profile.contains("/legacy-windows-") or stage not in ["resave", "finish", "reject"]:
+			or not profile.contains("/legacy-windows-") or stage not in ["resave", "reopen", "finish", "reject"]:
 		_fail("an isolated rendered legacy test profile is required")
 		return
 	AudioServer.set_bus_mute(0, true)
@@ -71,6 +71,9 @@ func _continued(result: Dictionary) -> void:
 		_fail("restored battle identity")
 		return
 	print("LEGACY_CONTINUED ", slot.revision)
+	if stage == "reopen":
+		root.get_node("AppLifecycle").request_quit("legacy_reopen_probe")
+		return
 	_after_continue.call_deferred(battle)
 
 
