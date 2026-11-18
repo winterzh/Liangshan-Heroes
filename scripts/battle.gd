@@ -4578,7 +4578,8 @@ func _end_report_text(result: Dictionary, rows: Array, heroes: Dictionary, has_m
 	if not debrief_rows.is_empty():
 		var debrief: Array[String] = [Localize.text("本局战果")]
 		for row in debrief_rows:
-			debrief.append(Localize.format_text(row.source, row.args))
+			var line := Localize.format_text(row.source, row.args) if row.has("args") else Localize.text(row.source)
+			debrief.append(line)
 		report_sections.append("\n".join(debrief))
 	var translated_rows: Array[String] = []
 	for row: String in rows:

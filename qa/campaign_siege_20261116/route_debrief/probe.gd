@@ -45,6 +45,7 @@ func _run() -> void:
 	# Inject the other validated route signal to exercise the separate report state.
 	b.mission.events.erase("zhu_side_breached")
 	level.inside_open = true
+	b.mission.events[level.FEINT_AT_SIDE] = true
 	var rows_before := JSON.stringify(b.mission.report)
 	var profile := FileAccess.get_sha256("user://campaign.cfg") if FileAccess.file_exists("user://campaign.cfg") else ""
 	b._official_context.clear()
@@ -55,11 +56,13 @@ func _run() -> void:
 		["北矿 · %s",["已夺下"]],
 		["南营 · %s · 共派出 %d 队",["已断援",3]],
 		["入口 · %s · %s",["正门已攻破","孙立已打开偏门"]],
+		["重玩建议 · 本局佯攻接应成功。下次可集中兵力，护送撞车直攻正门。",[]],
 	]
 	# Frozen settlement must never consult gameplay or its prior format history after a locale switch.
 	level.raids_sent = 55
 	level.inside_open = false
 	level.main_breached = false
+	b.mission.events.erase(level.FEINT_AT_SIDE)
 	for language in ["en","ja","zh_TW","zh_CN"]:
 		localize._formatted_sources.clear()
 		localize.set_language(language,false)
