@@ -1,0 +1,191 @@
+{
+  "candidate_source": "0f13370905b8b16937135510c8cc469998b39b99",
+  "exe_sha256": "fae95050c553dfd691e3beebca3eef7dd1d7490dfebf6e99fa50d310456b91a6",
+  "scope": "Exact Windows EXE in an isolated profile and desktop. Win32 messages drive the installed menu, battle, Save and Exit, Continue and Escape. The exported Steam script remains installed and original. Only its one-time network initialization was disabled in the two test processes, and the normal offline player entry and save transaction ran after startup. No signed-in Steam account or physical input device participated.",
+  "saved": {
+    "candidate": "0f133709",
+    "stage": "save",
+    "exe_sha256": "fae95050c553dfd691e3beebca3eef7dd1d7490dfebf6e99fa50d310456b91a6",
+    "exe_unchanged": true,
+    "exit": 0,
+    "windows_button_messages": [
+      "left",
+      "left",
+      "left",
+      "left",
+      "left",
+      "left",
+      "left",
+      "left",
+      "right",
+      "left",
+      "right",
+      "escape",
+      "left"
+    ],
+    "log_sha256": "a1f523f8460d30324505ae605a6b6b43a886b651aef76974b357241b3d771056",
+    "errors": [],
+    "checks": [
+      "original Steam service initialized with its connection disabled in the isolated process",
+      "normal main menu scene mounts",
+      "native menu becomes ready",
+      "official offline player entry enabled without a private QA seam",
+      "native candidate hash",
+      "new Windows offline profile and no Continue action",
+      "Win32 left click opens Start Campaign",
+      "fresh profile offers Wild Boar Forest sortie",
+      "Win32 left click confirms chapter sortie",
+      "native battle reached",
+      "Wild Boar Forest is the actual first battle",
+      "Win32 left click advances prologue page 1",
+      "Win32 left click advances prologue page 2",
+      "Win32 left click advances prologue page 3",
+      "Win32 left click starts the battle",
+      "original shadow objective begins",
+      "movement cue tile is passable and visible",
+      "first move starts with an unselected hero",
+      "Win32 left click opens the initially collapsed objectives",
+      "Win32 left click on the mission's Select Lu Zhishen button",
+      "first move cue is actually drawn at the indicated tile after selection",
+      "first Win32 right click issues one movement order",
+      "real command indicator matches the cue tile",
+      "first move cue clears once the order is accepted",
+      "Lu Zhishen walks to the cue",
+      "escort advance produces the next objective at normal speed",
+      "normal following yields the observation event without starting forced rescue",
+      "normal sim clock and healthy campaign RNG",
+      "close the expanded objectives to reach the farther map tile",
+      "the follow-up north order starts a real walking path",
+      "native Escape pauses with the player command in flight",
+      "paused checkpoint contains the movement path and next objective",
+      "actual Save and Exit commits the local checkpoint",
+      "saved slot is bound to the offline run and exact candidate"
+    ],
+    "facts": {
+      "after_selection_viewport_pixel": [
+        534,
+        307
+      ],
+      "before_selection_viewport_pixel": [
+        886,
+        342
+      ],
+      "checkpoint": {
+        "clock": 5.58333333333332,
+        "events": [
+          "observe",
+          "shadow_pine",
+          "shadow_route_chosen"
+        ],
+        "hero": "lu_zhishen",
+        "hero_id": 4,
+        "hp": 540.0,
+        "order_serial": 2,
+        "position": [
+          1356.79821777344,
+          527.9951171875
+        ],
+        "remaining_path": [
+          [
+            1103.74108886719,
+            527.559265136719
+          ]
+        ],
+        "shadow_route": "north_pines",
+        "stage": "shadow_wait"
+      },
+      "cue_draw_condition": true,
+      "cue_matching_pixels_after_selection": 267,
+      "cue_matching_pixels_before": 0,
+      "distance_walked_world_units": 74.927,
+      "frame_pixels": [
+        1280,
+        720
+      ],
+      "intro_pages": 3,
+      "next_stage": "shadow_wait",
+      "save_result_code": "",
+      "slot_revision": 1,
+      "slot_sha256": "5a362dfecf4fddc9cbc40aa9941087689d8d6d047d3bc8d8cdb8cd548b61ef8a",
+      "win32_left_observed": 10,
+      "win32_right_observed": 2,
+      "window_pixels": [
+        1280,
+        720
+      ]
+    },
+    "failures": []
+  },
+  "continued": {
+    "candidate": "0f133709",
+    "stage": "resume",
+    "exe_sha256": "fae95050c553dfd691e3beebca3eef7dd1d7490dfebf6e99fa50d310456b91a6",
+    "exe_unchanged": true,
+    "exit": 0,
+    "windows_button_messages": [
+      "left",
+      "escape"
+    ],
+    "log_sha256": "a1f523f8460d30324505ae605a6b6b43a886b651aef76974b357241b3d771056",
+    "errors": [],
+    "checks": [
+      "original Steam service initialized with its connection disabled in the isolated process",
+      "normal main menu scene mounts",
+      "native menu becomes ready",
+      "official offline player entry enabled without a private QA seam",
+      "new Windows process opens the original slot bytes",
+      "main menu enables Continue last battle with the Wild Boar Forest chapter name",
+      "actual Win32 click uses Continue last battle",
+      "official player-menu restore commits",
+      "same chapter loads at the paused checkpoint",
+      "same actor identity, hit points, paused clock, events, and order path",
+      "resume preserves the disk bytes and original offline run token",
+      "completed tutorial cue does not replay in the restored battle",
+      "native Escape resumes the restored battle",
+      "original walking path continues automatically without adding another move order",
+      "original stage advances naturally to the staff interception"
+    ],
+    "facts": {
+      "changed_checkpoint_keys": [],
+      "checkpoint": {
+        "clock": 5.58333333333332,
+        "events": [
+          "observe",
+          "shadow_pine",
+          "shadow_route_chosen"
+        ],
+        "hero": "lu_zhishen",
+        "hero_id": 4.0,
+        "hp": 540.0,
+        "order_serial": 2.0,
+        "position": [
+          1356.79821777344,
+          527.9951171875
+        ],
+        "remaining_path": [
+          [
+            1103.74108886719,
+            527.559265136719
+          ]
+        ],
+        "shadow_route": "north_pines",
+        "stage": "shadow_wait"
+      },
+      "clock_at_next_stage": 9.95000000000007,
+      "motion_after_restore": 64.3311538696289,
+      "next_stage": "intercept",
+      "slot_sha256": "5a362dfecf4fddc9cbc40aa9941087689d8d6d047d3bc8d8cdb8cd548b61ef8a",
+      "win32_left_observed": 1,
+      "win32_right_observed": 0,
+      "window_pixels": [
+        1280,
+        720
+      ]
+    },
+    "failures": []
+  },
+  "negative_fixture": {
+    "scope": "An earlier external test shim was rejected by the real script-identity check.",
+    "code": "PERSISTENT_STEAM_BINDING_REQUIRED"
+  }
+}

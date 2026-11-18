@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+Windows 野猪林中途续玩验证复用原生候选和原版 Steam 服务脚本，在隔离进程启动时禁止建立账号连接，随后测试普通离线玩家入口。采用两个独立进程，复读存档摘要和同一单位的剩余路径，并通过实际 Windows Esc 确认原指令复行。 [原生存读档收据](../qa/battle_entry_timing_20261116/windows_yezhulin_checkpoint_0f133709.json)
+
 野猪林开局验收以 Windows 原生候选、空白离线档案和独立桌面走真实按钮。任务栏默认折叠，先展开再使用选择鲁智深的章内指令。半透明落点提示用实渲画面的颜色范围校验，并读回原指令序号、单位移动和自然任务变化。 [开局收据](../qa/battle_entry_timing_20261116/windows_yezhulin_opening_0f133709.json)
 
 候选 0f133709 的十分钟高俅水战用该候选原生 EXE 在独立 Windows 桌面运行。复用固定镜头的经济、战斗指令和采样逻辑，并读取 Windows 进程内存。收据包括原生程序摘要、十分钟性能和本地 ZIP 六个成员的两种摘要。四语补丁说明与同一源码身份绑定。 [本地发版准备](../qa/campaign_sustained_performance_20261116/windows_release_perf_0f133709.json) · [四语草稿](STEAM_UPDATE_20261118_CANDIDATE_0f133709.json)
