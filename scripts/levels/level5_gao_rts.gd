@@ -85,12 +85,15 @@ func campaign_story_goals() -> Array:
 func deploy_hint() -> String:
 	return "营寨和军队全程保留。工匠采金伐木，兵营练枪弓，南侧开阔岸地可建船坞。陆军走东山关外山路，船只走港水；拆北岸营断陆援，舰队拆东岸船坞断海援。三批主力已经在地图上，可侦察、截击，不必坐等。"
 func intro_lines() -> Array:
-	return [
+	var lines := [
 		{"who":"旁白","key":"narrator","text":"童贯败归，高俅调水陆军征讨梁山。三次进兵压缩在同一战场：水寨、港汊和山前道路始终保留，官军各部已在远处集结。"},
 		{"who":"吴用","key":"wu_yong","text":"钱粮要分给岸军和水军。先造船坞留补船余地；北岸营与东岸船坞各有补充，拆掉便断一路。英雄留在岸上指挥，外港仍须战船争夺。"},
 		{"who":"刘唐","key":"liu_tang","text":"也可走火攻：公孙先生祭风，我到主码头备火登船。把两艘阮氏接应船护在旁边，等连船进入火点再举火。"},
 		{"who":"宋江","key":"song_jiang","text":"打停座船即可收兵。若要生擒，先封港，再让张顺凿船接俘，沿水道返航，岸军亲自押他到忠义堂。"},
 	]
+	if OS.get_name() == "Windows" and Campaign.has_jiangzhou_rescue_record(Campaign.level_record("level2")):
+		lines.insert(1, {"who":"宋江", "key":"song_jiang", "text":"江州那回，大伙在白龙庙会齐，一个也没落下。今日仍照那回分工，护住每艘接应船。"})
+	return lines
 func apply_overrides(defs: Dictionary,abilities: Dictionary) -> void:
 	load("res://scripts/levels/level5_liangshan.gd").new().apply_overrides(defs,abilities)
 	Naval.configure(defs)

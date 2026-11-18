@@ -188,7 +188,7 @@ func record_level_result(level_id: String, result: Dictionary) -> Dictionary:
 		return {"accepted":false, "persisted":false, "new_story_seal":false, "code":"CAMPAIGN_COORDINATOR_REQUIRED"}
 	if index_for_id(level_id) < 0 or not bool(result.get("core_cleared", false)):
 		return {"accepted":false,"new_story_seal":false}
-	var old: Dictionary = _normalize_record(records.get(level_id, {}))
+	var old: Dictionary = _normalize_record(records.get(level_id, {}), level_id)
 	var record := old.duplicate(true)
 	var was_story_complete := bool(old.story_complete)
 	var run_total := maxi(0, int(result.get("story_total", 0)))
@@ -204,7 +204,9 @@ func record_level_result(level_id: String, result: Dictionary) -> Dictionary:
 		record.best_done = run_done
 		record.story_total = run_total
 		record.best_goal_ids = run_ids
-	records[level_id] = _normalize_record(record)
+	if OS.get_name() == "Windows" and level_id == "level2" and is_jiangzhou_rescue(run_ids):
+		record["jiangzhou_rescue_memory"] = true
+	records[level_id] = _normalize_record(record, level_id)
 	_save()
 	var response: Dictionary = records[level_id].duplicate(true)
 	response.accepted = true
@@ -213,7 +215,19 @@ func record_level_result(level_id: String, result: Dictionary) -> Dictionary:
 
 
 func level_record(level_id: String) -> Dictionary:
-	return _normalize_record(records.get(level_id, {})).duplicate(true)
+	return _normalize_record(records.get(level_id, {}), level_id).duplicate(true)
+
+
+static func is_jiangzhou_rescue(goal_ids: Variant) -> bool:
+	return typeof(goal_ids) in [TYPE_ARRAY, TYPE_PACKED_STRING_ARRAY] \
+		and goal_ids.has("bailong_meeting") and goal_ids.has("named_survive")
+
+
+static func has_jiangzhou_rescue_record(record: Dictionary) -> bool:
+	var cleared: Variant = record.get("cleared", false)
+	var remembered: Variant = record.get("jiangzhou_rescue_memory", false)
+	return cleared is bool and cleared and ((remembered is bool and remembered) \
+		or is_jiangzhou_rescue(record.get("best_goal_ids", [])))
 
 
 func has_story_seal(level_id: String) -> bool:
@@ -225,7 +239,7 @@ func _empty_record() -> Dictionary:
 		"best_goal_ids":[],"contract_version":1}
 
 
-func _normalize_record(raw_value: Variant) -> Dictionary:
+func _normalize_record(raw_value: Variant, level_id := "") -> Dictionary:
 	var out := _empty_record()
 	if not raw_value is Dictionary:
 		return out
@@ -236,6 +250,8 @@ func _normalize_record(raw_value: Variant) -> Dictionary:
 	out.story_total = maxi(out.best_done, int(raw.get("story_total", raw.get("best_total", 0))))
 	out.best_goal_ids = _string_ids(raw.get("best_goal_ids", []))
 	out.contract_version = maxi(1, int(raw.get("contract_version", 1)))
+	if level_id == "level2" and has_jiangzhou_rescue_record(raw):
+		out["jiangzhou_rescue_memory"] = true
 	return out
 
 
@@ -256,7 +272,7 @@ func _normalized_records(raw_value: Variant) -> Dictionary:
 	for info in LEVELS:
 		var level_id := String(info.id)
 		if raw.has(level_id):
-			out[level_id] = _normalize_record(raw[level_id])
+			out[level_id] = _normalize_record(raw[level_id], level_id)
 	return out
 
 

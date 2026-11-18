@@ -33,6 +33,11 @@ static func _prior_record(raw: Variant, level_id: String) -> Dictionary:
 	if record.best_goal_ids.size() != record.best_done: return Intent.bad("CAMPAIGN_PRIOR_RECORD_COUNTS")
 	if record.story_complete and (not record.cleared or record.story_total == 0 or record.best_done != record.story_total):
 		return Intent.bad("CAMPAIGN_PRIOR_RECORD_OUTCOME")
+	if level_id == "level2":
+		if typeof(raw.get("jiangzhou_rescue_memory", false)) != TYPE_BOOL:
+			return Intent.bad("CAMPAIGN_PRIOR_RECORD_TYPES")
+		if Intent.Profiles.CampaignScript.has_jiangzhou_rescue_record(raw):
+			record["jiangzhou_rescue_memory"] = true
 	return {"ok":true, "record":record}
 
 static func project(raw_intent: Variant, expected_token: String, expected: Dictionary, cfg: ConfigFile) -> Dictionary:
@@ -74,6 +79,8 @@ static func project(raw_intent: Variant, expected_token: String, expected: Dicti
 		record.best_done = result.story_done
 		record.story_total = result.story_total
 		record.best_goal_ids = result.done_ids.duplicate()
+	if intent.context.level_id == "level2" and Intent.Profiles.CampaignScript.is_jiangzhou_rescue(result.done_ids):
+		record["jiangzhou_rescue_memory"] = true
 	var candidate_records: Dictionary = records.duplicate(true)
 	candidate_records[intent.context.level_id] = record
 	var required_unlock := 1

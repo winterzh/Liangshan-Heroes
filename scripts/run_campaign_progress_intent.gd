@@ -146,6 +146,8 @@ static func cfg_dominates(cfg: ConfigFile, intent: Dictionary) -> bool:
 	if typeof(record) != TYPE_DICTIONARY or typeof(record.get("cleared")) != TYPE_BOOL or not record.cleared \
 		or typeof(record.get("story_complete")) != TYPE_BOOL: return false
 	if intent.result.story_complete and not record.story_complete: return false
+	if intent.context.level_id == "level2" and Profiles.CampaignScript.is_jiangzhou_rescue(intent.result.done_ids) \
+			and not Profiles.CampaignScript.has_jiangzhou_rescue_record(record): return false
 	if not integer(record.get("best_done"), 0, 100000) or record.best_done < intent.result.story_done \
 		or not integer(record.get("story_total"), int(record.best_done), 100000) \
 		or not integer(record.get("contract_version"), int(intent.result.contract_version), 100000): return false

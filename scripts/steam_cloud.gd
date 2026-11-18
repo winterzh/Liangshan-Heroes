@@ -442,6 +442,8 @@ func _validate_payload(payload: Dictionary, owner: String) -> bool:
 		for key in ["cleared", "story_complete"]:
 			if typeof(record.get(key, false)) != TYPE_BOOL:
 				return false
+		if level_id == "level2" and typeof(record.get("jiangzhou_rescue_memory", false)) != TYPE_BOOL:
+			return false
 		for key in ["best_done", "story_total", "contract_version"]:
 			if not _whole(record.get(key, 1 if key == "contract_version" else 0), 0, 100000):
 				return false
@@ -484,7 +486,7 @@ func _merged_campaign(a: Dictionary, b: Dictionary) -> Dictionary:
 		if not source is Dictionary:
 			continue
 		for level_id in source:
-			var incoming := _normalize_record(source[level_id])
+			var incoming := _normalize_record(source[level_id], level_id)
 			records[level_id] = _better_record(records[level_id], incoming) if records.has(level_id) else incoming
 	return {"schema": 2, "unlocked": maxi(int(a.get("unlocked", 1)), int(b.get("unlocked", 1))), "records": records}
 
@@ -499,10 +501,12 @@ func _better_record(left: Dictionary, right: Dictionary) -> Dictionary:
 		out.best_done = right.best_done
 		out.story_total = right.story_total
 		out.best_goal_ids = right.best_goal_ids.duplicate()
+	if right.get("jiangzhou_rescue_memory", false):
+		out["jiangzhou_rescue_memory"] = true
 	return out
 
 
-func _normalize_record(raw_value: Variant) -> Dictionary:
+func _normalize_record(raw_value: Variant, level_id := "") -> Dictionary:
 	var out := {"cleared": false, "story_complete": false, "best_done": 0, "story_total": 0, "best_goal_ids": [], "contract_version": 1}
 	if not raw_value is Dictionary:
 		return out
@@ -517,6 +521,8 @@ func _normalize_record(raw_value: Variant) -> Dictionary:
 			if item is String and item.strip_edges() != "" and not out.best_goal_ids.has(item.strip_edges()):
 				out.best_goal_ids.append(item.strip_edges())
 	out.contract_version = maxi(1, int(raw.get("contract_version", 1)))
+	if level_id == "level2" and Campaign.has_jiangzhou_rescue_record(raw):
+		out["jiangzhou_rescue_memory"] = true
 	return out
 
 
