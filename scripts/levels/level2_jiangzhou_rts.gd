@@ -11,6 +11,15 @@ const BAILONG := Vector2i(14,43)
 const BAILONG_RADIUS := 130.0
 const BOARDING_THREAT_RADIUS := 150.0
 const CITY_POST := Vector2i(44,25)
+const NORTH_WATCH := Vector2i(30,10)
+const REPORT_GUARD_SLOT := 1
+const PURSUIT_WARNING := 20.0
+const REPORT_DELAY := 12.0
+const REPORT_RULE := "jiangzhou_report_rule"
+const REPORT_SENT := "jiangzhou_report_sent"
+const REPORT_CUT := "jiangzhou_report_cut"
+const REPORT_DELIVERED := "jiangzhou_report_delivered"
+const REPORT_CLOSED := "jiangzhou_report_closed"
 const CACHE_CELLS := [Vector2i(13,23),Vector2i(28,41)]
 const WEST_ROUTE := [Vector2i(22,28),Vector2i(18,34),Vector2i(14,40),BAILONG]
 const SOUTH_ROUTE := [Vector2i(29,29),Vector2i(28,36),Vector2i(24,43),Vector2i(18,46),DOCK]
@@ -168,7 +177,8 @@ func deploy(b) -> void:
 			b._gameplay_rng_stop("ENTITY_REQUIRED_UNIT")
 			return
 		executioners.append(_created_entity_1)
-	for off in [Vector2i(-3,1),Vector2i(3,1),Vector2i(-3,3),Vector2i(3,3),Vector2i(-2,4),Vector2i(2,4),Vector2i(0,5),Vector2i(-4,2)]:
+	var watch_offset := Vector2i(5, -2) if OS.get_name() == "Windows" else Vector2i(3, 1)
+	for off in [Vector2i(-3,1),watch_offset,Vector2i(-3,3),Vector2i(3,3),Vector2i(-2,4),Vector2i(2,4),Vector2i(0,5),Vector2i(-4,2)]:
 		var _created_entity_2: Unit = _guard(b,"guan_laozi",SCAFFOLD+off)
 		if _created_entity_2 == null:
 			b._gameplay_rng_stop("ENTITY_REQUIRED_UNIT")
@@ -240,6 +250,10 @@ func deploy(b) -> void:
 func on_start(b) -> void:
 	b.faction_res[1]={"gold":160.0,"wood":100.0}
 	b.mission.begin("jiangzhou_rts","分路备兵 · 刑期将至","150秒内打倒两名刽子手。接应营补兵与好汉接近法场可同时进行；救人后继续使用现存部队，不重置战场。")
+	# The rule travels in the existing saved mission events. Older rounds
+	# restored without it retain their original pursuit schedule.
+	if OS.get_name() == "Windows":
+		b.mission.events[REPORT_RULE] = true
 	b.mission.enable_scrolling()
 	for cell in [WEST_CAMP,DOCK_CAMP,SCAFFOLD,CITY_POST]: b.lit_cells[cell]=9999
 	b.mission.add_map_locator("西街接应营 · 刀枪弓骑",WEST_CAMP)
@@ -275,7 +289,10 @@ func _uprising(b,actor) -> void:
 	for key in ["west_street","south_lane","first_axes"]: b.mission.block_action(key,"已经起事，直接攻击刽子手并救人。")
 
 func _bailong_party() -> Array[Unit]:
-	return [song_freed,dai_freed,named_units.get("zhang_shun"),named_units.get("zhang_heng")]
+	var members: Array[Unit] = []
+	for unit in [song_freed, dai_freed, named_units.get("zhang_shun"), named_units.get("zhang_heng")]:
+		members.append(unit if is_instance_valid(unit) else null)
+	return members
 
 func _at_bailong(b, member: Unit) -> bool:
 	return _near(b,member,BAILONG,BAILONG_RADIUS)
@@ -351,14 +368,64 @@ func _free(b,is_song: bool) -> void:
 	b.mission.add_actor_locator("board_song" if is_song else "board_dai",key)
 	if not first_rescued:
 		first_rescued=true
-		pursuit_left=20
-		b.msg("北面六名追兵20秒后出动，随后分搜西巷、南巷。可留兵阻击，也可换路护送；追兵看见获救者才会追赶。",8)
+		pursuit_left=PURSUIT_WARNING
+		if not _send_pursuit_report(b):
+			b.msg("北面六名追兵20秒后出动，随后分搜西巷、南巷。可留兵阻击，也可换路护送；追兵看见获救者才会追赶。",8)
 		b.mission.add_map_locator("西巷近路",Vector2i(18,34))
 		b.mission.add_map_locator("南巷宽路",Vector2i(27,36))
 		b.mission.add_level_button("jiang_bailong_meeting","查看 · 白龙庙","定位白龙庙并查看会合人手。")
 	if living(song_freed) and living(dai_freed):
 		b.mission.add_action("rally_dock",Localize.text("好汉 · 码头收队"),DOCK+Vector2i(0,-2),NAMED,0.7,64)
 	_update_escort_objective(b)
+
+func _report_guard() -> Unit:
+	if city_guards.size() <= REPORT_GUARD_SLOT:
+		return null
+	var courier: Variant = city_guards[REPORT_GUARD_SLOT]
+	return courier if is_instance_valid(courier) else null
+
+func _report_open(mission) -> bool:
+	return pursuit_left > 0.0 and not pursuit_sent and mission.has_event(REPORT_SENT) and not _report_resolved(mission)
+
+func _report_resolved(mission) -> bool:
+	return mission.has_event(REPORT_CUT) or mission.has_event(REPORT_DELIVERED) or mission.has_event(REPORT_CLOSED)
+
+func _send_pursuit_report(b) -> bool:
+	var courier := _report_guard()
+	if not b.mission.has_event(REPORT_RULE) or not active(courier):
+		return false
+	var destination: Vector2 = b.map.cell_to_world(NORTH_WATCH)
+	courier.order_move(destination)
+	courier.set_stance(Unit.STANCE_PASSIVE)
+	return b.mission.mark(REPORT_SENT, "官差正往北哨报信。追兵约20秒后出动，拦下官差可再争取12秒。")
+
+func _update_pursuit_report(b) -> void:
+	if not b.mission.has_event(REPORT_SENT) or _report_resolved(b.mission):
+		return
+	var courier := _report_guard()
+	if active(courier) and pursuit_left > 0.0 and not _near(b, courier, NORTH_WATCH, 54.0):
+		return
+	if active(courier):
+		courier.order_stop()
+		courier.set_stance(Unit.STANCE_DEFEND)
+	if active(courier) and pursuit_left > 0.0:
+		b.mission.mark(REPORT_DELIVERED, "官差已抵达北哨。六名追兵仍按原定时间出动。")
+	else:
+		b.mission.mark(REPORT_CLOSED, "拦截时机已过。准备应对北面追兵。")
+
+func draw_tactical_overlay(b, canvas: Node2D) -> void:
+	if b.phase != b.Phase.FIGHT or b.mission == null or not _report_open(b.mission):
+		return
+	var courier := _report_guard()
+	if not active(courier) or not b.is_visible_world(courier.position):
+		return
+	var point: Vector2 = b.to_screen(courier.position)
+	var signal_color := Color(1.0, 0.73, 0.28, 0.95)
+	canvas.draw_arc(point, 14.0, 0.0, TAU, 24, Color(0.18, 0.09, 0.04, 0.9), 4.0, true)
+	canvas.draw_arc(point, 14.0, 0.0, TAU, 24, signal_color, 2.0, true)
+	canvas.draw_colored_polygon(PackedVector2Array([point + Vector2(-5,-28), point + Vector2(5,-28),
+		point + Vector2(0,-19)]), signal_color)
+
 func on_mission_action(b,key: String,actor) -> void:
 	if key.begins_with("cache_"):
 		var index: int=int(key.trim_prefix("cache_"))
@@ -553,6 +620,7 @@ func process(b,delta: float) -> void:
 	if not b._gameplay_rng_issue.is_empty(): return
 	if first_rescued and not pursuit_sent:
 		pursuit_left-=delta
+		_update_pursuit_report(b)
 	_pursuit_tick(b,delta)
 	if not execution_halted:
 		exec_left=maxf(0,exec_left-delta)
@@ -613,6 +681,9 @@ func activate_mission_button(b, button_id: String) -> void:
 	b.center_camera_cell(b.map.world_to_cell(ally.position))
 	b.mission.set_feedback(Localize.format_text("已定位岸上的%s。可选中好汉后下令撤回码头。",Localize.text(ally.display_name)))
 func on_unit_died(b,u) -> void:
+	if u == _report_guard() and _report_open(b.mission):
+		if b.mission.mark(REPORT_CUT, "报信官差已被拦下。追兵推迟12秒出动，趁现在护送。"):
+			pursuit_left += REPORT_DELAY
 	if u==song_bound or u==song_freed or u==dai_bound or u==dai_freed:
 		b.lose(Localize.text(u.display_name)+Localize.text("遇害，营救失败。请用军队清开退路并保护获救者。")); return
 	if not alarm and u.faction==1 and living(u._killer) and u._killer.faction==0: _uprising(b,u._killer)
@@ -624,6 +695,8 @@ func on_unit_died(b,u) -> void:
 			b.mission.miss_story_goal("bailong_meeting","接应好汉已阵亡，可直接护送宋江戴宗到码头完成核心营救。")
 
 func unit_tactical_hint(b, actor) -> String:
+	if b.mission != null and active(actor) and actor == _report_guard() and _report_open(b.mission):
+		return Localize.text("报信官差 · 拦下可多争取12秒")
 	if not active(actor) or actor not in [song_freed,dai_freed] or b.mission == null:
 		return ""
 	var action: Dictionary = b.mission.actions.get("board_song" if actor == song_freed else "board_dai",{})
@@ -638,7 +711,7 @@ func unit_tactical_hint(b, actor) -> String:
 
 func campaign_debrief(mission) -> Array[Dictionary]:
 	var roster := _dock_roster(mission.battle)
-	return [
+	var rows: Array[Dictionary] = [
 		{"source": "白龙庙 · %s · 取得补给 %d/2", "args": [
 			"已会合" if meeting else "未会合", cache_taken.count(true)]},
 		{"source": "登船 · 宋江 %s · 戴宗 %s", "args": [
@@ -646,6 +719,13 @@ func campaign_debrief(mission) -> Array[Dictionary]:
 			_boarding_result(dai_bound, dai_freed, mission.has_event("free_dai"))]},
 		{"source": "同行好汉 · 登船 %d/6 · 阵亡 %d", "args": [roster.aboard, roster.lost]},
 	]
+	if mission.has_event(REPORT_CUT):
+		rows.append({"source": "北哨报信 · 已拦截，推迟追兵12秒"})
+	elif mission.has_event(REPORT_DELIVERED):
+		rows.append({"source": "北哨报信 · 官差已抵达"})
+	elif mission.has_event(REPORT_CLOSED):
+		rows.append({"source": "北哨报信 · 拦截时机已过"})
+	return rows
 
 func _boarding_result(bound: Unit, freed: Unit, is_freed: bool) -> String:
 	var person := freed if is_freed else bound
@@ -661,6 +741,8 @@ func top_status(_b) -> String:
 		situation = Localize.text("分别解缚，准备撤离")
 	if first_rescued:
 		situation = Localize.text("追兵分路搜索中") if pursuit_sent else Localize.format_text("追兵%d秒后出动",maxi(0,ceili(pursuit_left)))
+		if is_instance_valid(_b) and _b.mission != null and _report_open(_b.mission):
+			situation = Localize.format_text("报信中 · 追兵%d秒", maxi(0, ceili(pursuit_left)))
 	var boarded := 0
 	for u in [song_freed,dai_freed]:
 		if living(u) and u.story_outcome == "embarked": boarded += 1
