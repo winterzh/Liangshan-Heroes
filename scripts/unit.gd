@@ -1357,9 +1357,13 @@ func _phys_body(delta: float) -> void:
 		# 建筑/资源点动画时钟：炊烟·资源被采摇晃（建筑物理在此 return，不走下面的 _idle_t）
 		if is_resource or _has_smoke():
 			_idle_t += delta
+			# Gold only moves while the harvest pulse is active. Draw its last
+			# pulse step as well, so the canvas settles at the unshifted position.
+			var animated := not is_resource or res_kind == "wood" or _harvest_pulse > 0.0
 			if _harvest_pulse > 0.0:
 				_harvest_pulse = maxf(0.0, _harvest_pulse - delta * 2.0)
-			_queue_animated_redraw()
+			if animated:
+				_queue_animated_redraw(0.08, is_resource and res_kind != "wood" and _harvest_pulse <= 0.0)
 		return
 	if _dying:
 		_death_t += delta

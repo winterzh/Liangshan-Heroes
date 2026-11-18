@@ -339,8 +339,9 @@ var _frame_unit_textures: Dictionary = {}
 var _frame_unit_animations: Dictionary = {}
 var _frame_directional_sources: Dictionary = {}
 # Ordinary lookups reference Art's persistent sprite sources. The alias setter
-# starts a fresh set on battle setup. Chapter variants keep their per-frame
-# policy because their missing exact resources can fall back to ordinary art.
+# starts a fresh set on battle setup. A mounted Windows Steam pack can also
+# reuse variant lookups and missing art for the lifetime of that battle.
+var _packed_unit_art := OS.get_name() == "Windows" and OS.has_feature("steam")
 var _battle_unit_textures: Dictionary = {}
 var _battle_unit_animations: Dictionary = {}
 var _battle_directional_sources: Dictionary = {}
@@ -524,15 +525,17 @@ func _canonical_character_variant(key: String, variant: String) -> String:
 
 
 func unit_texture(key: String, variant := "", direction := "") -> Texture2D:
-	if not variant.is_empty():
+	var persistent := _packed_unit_art or variant.is_empty()
+	if not persistent:
 		_refresh_unit_lookups()
-	var cache := _battle_unit_textures if variant.is_empty() else _frame_unit_textures
+	var cache := _battle_unit_textures if persistent else _frame_unit_textures
 	var lookup := [key, variant, direction]
 	var texture: Texture2D = cache.get(lookup)
-	if texture == null:
-		texture = _resolve_unit_texture(key, variant, direction)
-		if texture != null:
-			cache[lookup] = texture
+	if texture != null or (_packed_unit_art and cache.has(lookup)):
+		return texture
+	texture = _resolve_unit_texture(key, variant, direction)
+	if texture != null or _packed_unit_art:
+		cache[lookup] = texture
 	return texture
 
 
@@ -819,14 +822,15 @@ func campaign_tribute_cart_texture(direction: String) -> Texture2D:
 
 
 func unit_anim_frames(key: String, state: String, direction := "", variant := "") -> Array:
-	if not variant.is_empty():
+	var persistent := _packed_unit_art or variant.is_empty()
+	if not persistent:
 		_refresh_unit_lookups()
-	var cache := _battle_unit_animations if variant.is_empty() else _frame_unit_animations
+	var cache := _battle_unit_animations if persistent else _frame_unit_animations
 	var lookup := [key, state, direction, variant]
 	if cache.has(lookup):
 		return cache[lookup]
 	var frames := _resolve_unit_anim_frames(key, state, direction, variant)
-	if not frames.is_empty():
+	if not frames.is_empty() or _packed_unit_art:
 		cache[lookup] = frames
 	return frames
 
@@ -1228,14 +1232,15 @@ func _slice_anim_strip(tex: Texture2D) -> Array:
 ## 与 unit_anim_frames 使用同一选择顺序，只回答最终帧是否来自真实方向文件。
 ## 绘制层据此决定是否允许旧式水平镜像。
 func unit_anim_uses_directional_source(key: String, state: String, direction: String, variant := "") -> bool:
-	if not variant.is_empty():
+	var persistent := _packed_unit_art or variant.is_empty()
+	if not persistent:
 		_refresh_unit_lookups()
-	var cache := _battle_directional_sources if variant.is_empty() else _frame_directional_sources
+	var cache := _battle_directional_sources if persistent else _frame_directional_sources
 	var lookup := [key, state, direction, variant]
 	if cache.has(lookup):
 		return cache[lookup]
 	var directional := _resolve_directional_source(key, state, direction, variant)
-	if directional or variant.is_empty():
+	if directional or persistent:
 		cache[lookup] = directional
 	return directional
 
