@@ -64,7 +64,7 @@ def main():
         dest = project / "addons/steam_stats_reader"; dest.mkdir(parents=True)
         shutil.copyfile(reader_dll, dest / "steam_stats_reader.dll")
         (dest / "reader.gdextension").write_text('[configuration]\nentry_symbol="lsh_stats_reader_init"\ncompatibility_minimum="4.4"\n[libraries]\nwindows.x86_64="res://addons/steam_stats_reader/steam_stats_reader.dll"\n', encoding="utf-8")
-        (project / ".godot").mkdir()
+        (project / ".godot").mkdir(exist_ok=True)
         (project / ".godot/extension_list.cfg").write_text("res://addons/godotsteam/godotsteam.gdextension\nres://addons/steam_stats_reader/reader.gdextension\n", encoding="utf-8")
         profile = create_private_profile(run, work_root / "profiles")
         env = os.environ.copy()

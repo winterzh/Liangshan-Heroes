@@ -1,6 +1,6 @@
 # 源码设置与换机（2026-10-30）
 
-Windows Steam 预设由 `tools/build_steam_stats_reader.py` 重建原生依赖，使用 Visual Studio x64、原锁定的 godot-cpp 和 Windows 的 bcrypt 系统库，构建后核对 `vendor/steam_stats_reader/provenance.json`。加速路径只产生同格式完整 SHA-256，Windows 源码环境仍支持 Godot 摘要回退。 [构建证据](../qa/battle_entry_timing_20261116/windows_sha256_bridge.json)
+Windows Steam 预设使用的原生依赖由 `tools/build_steam_stats_reader.py` 重建，使用 Visual Studio x64、原锁定的 godot-cpp 和 Windows 的 bcrypt 系统库，构建后核对 `vendor/steam_stats_reader/provenance.json`。加速路径只产生同格式完整 SHA-256，Windows 源码环境仍支持 Godot 摘要回退。真实只读探针复用安装器创建的临时 `.godot` 目录。 [构建证据](../qa/battle_entry_timing_20261116/windows_sha256_bridge.json)
 
 Windows 整合候选 89dfee7a 的六文件身份、十分钟水战及同一原生 EXE 的续玩回执见 [Windows 验收收据](../qa/campaign_sustained_performance_20261116/windows_pack_89dfee7a.json)。续玩驱动、资料目录和覆盖配置仅挂载在隔离副本。
 
