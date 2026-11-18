@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+候选 0f133709 的十分钟高俅水战用该候选原生 EXE 在独立 Windows 桌面运行。复用固定镜头的经济、战斗指令和采样逻辑，并读取 Windows 进程内存。收据包括原生程序摘要、十分钟性能和本地 ZIP 六个成员的两种摘要。四语补丁说明与同一源码身份绑定。 [本地发版准备](../qa/campaign_sustained_performance_20261116/windows_release_perf_0f133709.json) · [四语草稿](STEAM_UPDATE_20261118_CANDIDATE_0f133709.json)
+
 Windows 键鼠消息验收使用独立桌面，并按进程、窗口类名定位 Godot 主窗口。Compatibility 驱动还会生成辅助窗口，不能按首个同进程窗口判定。消息坐标按原生窗口与视口变换换算，验收读取实际指令序号、落点和暂停状态。 [原生收据](../qa/battle_entry_timing_20261116/windows_input_and_feedback_0f133709.json)
 
 战役结算的 `campaign_debrief()` 行使用 `source`，有格式占位符时另传 `args`。结算以当局冻结的战果行重绘四语。祝家庄重玩建议及江州报信状态属于无参数行。针对实际结算 HUD 的回归覆盖无参数行、数字行和语言切换。 [两条路线和结算回归](../qa/campaign_siege_20261116/README.md#windows-原生两条路线及结算修复)

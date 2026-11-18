@@ -1,0 +1,110 @@
+{
+  "scope": "Exact Windows release EXE on a separate desktop. Fixed sea-front camera, standard effects, 1x game clock, paid land and water combat fixture. Offline, without physical input or an authenticated Steam run.",
+  "exe_sha256": "fae95050c553dfd691e3beebca3eef7dd1d7490dfebf6e99fa50d310456b91a6",
+  "exe_unchanged": true,
+  "native_exit": 0,
+  "process_seconds": 623.031,
+  "process_log_sha256": "0e08fb5351d207b0ecfce8a0e001bbba12f9558654bbd1d949bd12c14d27256c",
+  "raw_report_sha256": "e39e0b34176576725ee360aefc1a96f119db2574ee801c57d5b8061e2209a3aa",
+  "renderer": "gl_compatibility",
+  "actual_window_pixels": [
+    1440,
+    900
+  ],
+  "frame_timing": {
+    "seconds": 600.009021,
+    "frames": 78377,
+    "fps": 130.62636936587,
+    "p95_ms": 13.029,
+    "p99_ms": 15.136,
+    "worst_ms": 32.751,
+    "thresholds": {
+      "p95_ms": 16.7,
+      "p99_ms": 33.3
+    },
+    "passed": true,
+    "frames_over_33_3_ms": 0,
+    "frames_over_66_7_ms": 0,
+    "worst_spikes": []
+  },
+  "simulation": {
+    "complete": true,
+    "checks": 13,
+    "integrity_passed": true,
+    "failures": [],
+    "time_scale": 1.0,
+    "physics_hz": 60,
+    "land_and_water_combat": true,
+    "waves": [
+      true,
+      true,
+      true
+    ],
+    "paid_ships_queued": 18,
+    "against_ef991d10_compiled_pack": {
+      "same_initial_state": true,
+      "same_initial_units": true,
+      "compared_shared_points": 605,
+      "different_points": 0
+    }
+  },
+  "process_private_memory": {
+    "scope": "Windows process counters, after warm-up, sampled every five seconds",
+    "alignment": "trailing 590 seconds of live process samples because release log output buffered the in-process start marker",
+    "samples": 118,
+    "start_mib": 1237.719,
+    "end_mib": 1233.953,
+    "peak_mib": 1256.176,
+    "change_mib": -3.766
+  },
+  "local_steam_upload_preflight": {
+    "app_id": 5088120,
+    "windows_depot": 5088121,
+    "intended_branch": "default",
+    "previous_verified_build_id": 26735223,
+    "commit": "0f13370905b8b16937135510c8cc469998b39b99",
+    "archive_name": "LiangshanHeroes_Windows_0f133709.zip",
+    "zip_bytes": 1758336963,
+    "zip_sha256": "bef97f1cb03cbbc289877208f2c899c139d0ee8d8de0dddeadfb6d87bf5d0dc2",
+    "six_members_revalidated": [
+      {
+        "path": "GODOTSTEAM_LICENSE.txt",
+        "bytes": 1110,
+        "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2",
+        "sha1": "3891aeb1976703fc639c168329d90e27c7680a68"
+      },
+      {
+        "path": "LiangshanHeroes.exe",
+        "bytes": 1827485240,
+        "sha256": "fae95050c553dfd691e3beebca3eef7dd1d7490dfebf6e99fa50d310456b91a6",
+        "sha1": "04c0ddfa74ca3274dfa881afa0452966e2028aec"
+      },
+      {
+        "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+        "bytes": 1093,
+        "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf",
+        "sha1": "0b594319d5af0b833d7c0da47459b7d51e1fdbd2"
+      },
+      {
+        "path": "libgodotsteam.windows.template_release.x86_64.dll",
+        "bytes": 3961344,
+        "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26",
+        "sha1": "c056eb4e85d902bd548dc9efb22a416b9c658dda"
+      },
+      {
+        "path": "steam_api64.dll",
+        "bytes": 319128,
+        "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c",
+        "sha1": "05ea59cc2b15a10c66277659d5d0b51750460d28"
+      },
+      {
+        "path": "steam_stats_reader.dll",
+        "bytes": 381440,
+        "sha256": "7505919cfff5907c13a02eb366690bff22ca6731c8521deefde58b114e4f796f",
+        "sha1": "88500ca2b2eef4786d4d5c4be7a10980e17a3618"
+      }
+    ],
+    "patch_notes_draft": "docs/STEAM_UPDATE_20261118_CANDIDATE_0f133709.json",
+    "uploaded": false
+  }
+}
