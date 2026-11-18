@@ -1,0 +1,102 @@
+{
+  "candidate": "0f133709",
+  "exe_sha256": "fae95050c553dfd691e3beebca3eef7dd1d7490dfebf6e99fa50d310456b91a6",
+  "exe_unchanged": true,
+  "exit": 0,
+  "windows_button_messages": [
+    "left",
+    "left",
+    "left",
+    "left",
+    "left",
+    "left",
+    "left",
+    "left",
+    "right"
+  ],
+  "log_sha256": "a1f523f8460d30324505ae605a6b6b43a886b651aef76974b357241b3d771056",
+  "errors": [],
+  "checks": [
+    "normal main menu scene mounts",
+    "native menu becomes ready",
+    "native candidate hash",
+    "new Windows offline profile and no Continue action",
+    "Win32 left click opens Start Campaign",
+    "fresh profile offers Wild Boar Forest sortie",
+    "Win32 left click confirms chapter sortie",
+    "native battle reached",
+    "Wild Boar Forest is the actual first battle",
+    "Win32 left click advances prologue page 1",
+    "Win32 left click advances prologue page 2",
+    "Win32 left click advances prologue page 3",
+    "Win32 left click starts the battle",
+    "original shadow objective begins",
+    "movement cue tile is passable and visible",
+    "first move starts with an unselected hero",
+    "Win32 left click opens the initially collapsed objectives",
+    "Win32 left click on the mission's Select Lu Zhishen button",
+    "first move cue is actually drawn at the indicated tile after selection",
+    "first Win32 right click issues one movement order",
+    "real command indicator matches the cue tile",
+    "first move cue clears once the order is accepted",
+    "Lu Zhishen walks to the cue",
+    "escort advance produces the next objective at normal speed",
+    "normal following yields the observation event without starting forced rescue",
+    "normal sim clock and healthy campaign RNG"
+  ],
+  "facts": {
+    "after_selection_viewport_pixel": [
+      534,
+      307
+    ],
+    "before_selection_viewport_pixel": [
+      886,
+      342
+    ],
+    "cue_draw_condition": true,
+    "cue_matching_pixels_after_selection": 265,
+    "cue_matching_pixels_before": 0,
+    "distance_walked_world_units": 74.927,
+    "frame_pixels": [
+      1280,
+      720
+    ],
+    "intro_pages": 3,
+    "next_stage": "shadow_wait",
+    "win32_left_observed": 8,
+    "win32_right_observed": 1,
+    "window_pixels": [
+      1280,
+      720
+    ]
+  },
+  "failures": [],
+  "candidate_source": "0f13370905b8b16937135510c8cc469998b39b99",
+  "scope": {
+    "mode": "fresh Windows offline profile",
+    "display": "1280x720 Compatibility",
+    "input": "Win32 window messages sent only to the game window on a separate desktop",
+    "first_selection": "normal Select Lu Zhishen button after opening the objectives panel",
+    "seconds_scale": 1.0,
+    "physical_mouse_used": false,
+    "human_playtest": false
+  },
+  "frame_sha256": {
+    "after_selection": "b204665788f9ed14b7e213441e6974131129b6fffb6656bb2d9d3e45cd55362b",
+    "before_selection": "861c4c47c27fb4dcad6c5115beaab384cd223ffe56689556fe59fbcbb342203a"
+  },
+  "diagnostic_retries": [
+    {
+      "observed_failure": [
+        "Win32 left click selects Lu Zhishen"
+      ],
+      "result": "The fixture's pointerless world-click simulation did not select the unit. The final run exercised the exposed objective selection control."
+    },
+    {
+      "observed_failure": [
+        "first move cue is actually drawn at the indicated tile after selection"
+      ],
+      "result": "The initial pixel predicate assumed the full unblended script color. The final run measured the rendered translucent cue and retained separate frame hashes."
+    }
+  ]
+}
