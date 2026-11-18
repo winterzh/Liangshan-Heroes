@@ -793,6 +793,8 @@ func _on_cloud_settings_applied() -> void:
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_EXIT_TREE:
 		_release_custom_cursor_resources()
+	elif what == NOTIFICATION_WM_WINDOW_FOCUS_OUT and level != null and level.has_method("cancel_hook_line"):
+		level.cancel_hook_line()
 	elif what == NOTIFICATION_WM_GO_BACK_REQUEST:
 		if _run_capture_input_closed(): return
 		if hud != null and hud._pause_root != null and hud._pause_root.visible:
@@ -805,6 +807,8 @@ func _open_pause() -> void:
 	if _run_capture_input_closed(): return
 	if phase == Phase.END or phase == Phase.INTRO:
 		return
+	if level != null and level.has_method("cancel_hook_line"):
+		level.cancel_hook_line()
 	get_tree().paused = true
 	hud.show_pause()
 	_update_steam_presence(true)
@@ -6030,6 +6034,11 @@ func _item_slot_for_event_compat(event: InputEventKey) -> int:
 
 
 func _input(event: InputEvent) -> void:
+	if level != null and level.has_method("continue_hook_line") and phase == Phase.FIGHT \
+			and not get_tree().paused and not _run_capture_input_closed() and _gameplay_rng_issue.is_empty():
+		if level.continue_hook_line(self, event):
+			get_viewport().set_input_as_handled()
+			return
 	# GUI tooltips consume ui_cancel before _unhandled_input. Keep the battle's
 	# cancel/pause command available even while a mission tooltip is showing.
 	# Paused menus retain their own Escape handling in HUD/SettingsPanel.
@@ -6233,6 +6242,9 @@ func _unhandled_input(event: InputEvent) -> void:
 				return
 			if _garrison_armed:
 				_disarm_garrison()
+				return
+			if event.alt_pressed and event.device != InputEvent.DEVICE_ID_EMULATION \
+					and level.has_method("begin_hook_line") and level.begin_hook_line(self, p):
 				return
 			_issue_order(p, event.shift_pressed)
 	elif event is InputEventKey and event.pressed and not event.echo:

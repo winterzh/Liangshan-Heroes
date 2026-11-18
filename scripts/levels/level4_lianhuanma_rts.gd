@@ -43,6 +43,8 @@ var waves := [{"time":WAVE_TIMES[0],"warned":false,"sent":false},{"time":WAVE_TI
 var elapsed := 0.0
 var strategy_t := 0.0
 var escort_t := 55.0
+var _hook_line_start := Vector2.INF
+var _hook_line_end := Vector2.INF
 var ai_trained := 0
 var ai_spent_gold := 0
 var ai_spent_wood := 0
@@ -332,6 +334,80 @@ func _drill_hint(b) -> String:
 	return Localize.text("两名搭档已到。选中徐宁与钩镰手，轻点演练骑合击。" if b.hud.touch_ui \
 		else "两名搭档已到。选中徐宁与钩镰手，右键演练骑合击。")
 
+func _line_hooks(b) -> Array:
+	return b.selection.filter(func(u): return alive(u) and u.faction == Unit.FACTION_LIANG \
+		and u.key == "gou_lian" and not u.garrisoned and not u.is_captive)
+
+
+func begin_hook_line(b, point: Vector2) -> bool:
+	if OS.get_name() != "Windows" or _line_hooks(b).size() < 2:
+		return false
+	_hook_line_start = point
+	_hook_line_end = point
+	return true
+
+
+func cancel_hook_line() -> void:
+	_hook_line_start = Vector2.INF
+	_hook_line_end = Vector2.INF
+
+
+func continue_hook_line(b, event: InputEvent) -> bool:
+	if _hook_line_start == Vector2.INF:
+		return false
+	if event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
+		cancel_hook_line()
+		return true
+	if event is InputEventMouseMotion:
+		_hook_line_end = b.get_canvas_transform().affine_inverse() * event.position
+		return true
+	if event is not InputEventMouseButton or event.button_index != MOUSE_BUTTON_RIGHT or event.pressed:
+		return false
+	var mouse: Vector2 = event.position
+	var world: Vector2 = b.get_canvas_transform().affine_inverse() * mouse
+	var from: Vector2 = b.to_logic(_hook_line_start)
+	cancel_hook_line()
+	if mouse.y < b.get_viewport_rect().size.y - RTSCamera.PANEL_H:
+		_order_hook_line(b, from, b.to_logic(world))
+	return true
+
+
+func draw_tactical_overlay(_b, overlay: Node2D) -> void:
+	if _hook_line_start != Vector2.INF:
+		overlay.draw_line(_hook_line_start, _hook_line_end, Color(0.98, 0.78, 0.32, 0.9), 3.0, true)
+
+
+func _order_hook_line(b, from: Vector2, to: Vector2) -> void:
+	var hooks := _line_hooks(b)
+	if hooks.size() < 2 or from.distance_to(to) < 26.0:
+		return
+	var spacing := 26.0
+	for hook: Unit in hooks:
+		spacing = maxf(spacing, hook.radius * 2.0 + 4.0)
+	var samples := clampi(ceili(from.distance_to(to) / 10.0), 2, 300)
+	var valid: Array[Vector2] = []
+	for index in range(samples + 1):
+		var point := from.lerp(to, float(index) / samples)
+		if b.map.is_open_world(point, "land") and (valid.is_empty() or point.distance_to(valid.back()) >= spacing):
+			valid.append(point)
+	var count := mini(valid.size(), hooks.size())
+	if count < 2:
+		b.msg("沿可通行地面拖长一点，至少为两名钩镰手留出位置。", 3.0)
+		return
+	var axis := (to - from).normalized()
+	hooks.sort_custom(func(a, c):
+		var pa: float = a.position.dot(axis)
+		var pc: float = c.position.dot(axis)
+		return a.entity_id < c.entity_id if is_equal_approx(pa, pc) else pa < pc)
+	var assigned := hooks.slice(0, count)
+	b._stamp_manual(assigned)
+	for index in range(count):
+		var soldier: Unit = assigned[index]
+		soldier.set_stance(Unit.STANCE_DEFEND)
+		var slot := roundi(float(index) * (valid.size() - 1) / (count - 1))
+		soldier.order_move(valid[slot])
+	b.msg(Localize.format_text("钩镰布阵 · %d/%d 人前往站位", [count, hooks.size()]), 3.0)
+
 func unit_tactical_hint(b, unit) -> String:
 	if not alive(unit): return ""
 	if alive(dummy) and not drill_complete and (unit == dummy \
@@ -348,6 +424,8 @@ func unit_tactical_hint(b, unit) -> String:
 		if unit._target in riders and alive(unit._target) and b.is_visible_world(unit._target.position):
 			rider = unit._target
 		else:
+			if OS.get_name() == "Windows" and unit.key == "gou_lian" and not b.hud.touch_ui:
+				return Localize.text("选两名以上钩镰手，按 Alt 拖动右键布阵。遇受阻甲马，右键集火破阵。")
 			return Localize.text("钩镰配合：两人贴近受阻甲马\n轻点攻击；徐宁可充当搭档" if b.hud.touch_ui \
 				else "钩镰配合：两人贴近受阻甲马\n右键攻击；徐宁可充当搭档")
 	elif unit not in riders:
