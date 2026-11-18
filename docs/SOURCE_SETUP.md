@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+Windows 正式模板的同进程新战斗借用启动预读的身份并复核当前文件与原生依赖。空身份回落到完整后台扫描。只读续玩准入和保存边界继续使用各自验证路径。 [原生重进复验](../qa/battle_entry_timing_20261116/README.md#windows-同进程重进优化)
+
 PC 战役反馈由 HUD 根据当前章节及战报生成，显示安装内容指纹并省去账号、旧槽和路径数据。四语位于 `assets/localization/battle_entry_review_20261116.json`。 [反馈文本验证](../qa/battle_entry_timing_20261116/README.md#windows-战役反馈文本)
 
 高俅关跨章回顾从 `Campaign` 的江州正式胜利进度读取。同局两项达成由原战果投影记录在原有 CFG，旧最好单局可直接识别。[跨章验证](../qa/campaign_fire_readiness_20261116/README.md#pc-高俅关回忆江州)

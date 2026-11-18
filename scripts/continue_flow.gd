@@ -622,6 +622,9 @@ func take_startup_entry_identity() -> Dictionary:
 	_startup_entry_used = true
 	return revalidate_startup_identity()
 
+func has_prepared_entry_identity() -> bool:
+	return _startup_entry_provider != null
+
 func revalidate_startup_identity() -> Dictionary:
 	if _startup_entry_provider == null: return {}
 	var identity: Dictionary = _startup_entry_provider.revalidate_prepared_runtime_identity()

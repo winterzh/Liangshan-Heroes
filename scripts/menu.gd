@@ -38,6 +38,8 @@ func _prewarm_battle_identity() -> void:
 	var flow := get_node_or_null("/root/ContinueFlow")
 	if _entry_overlay != null or _entry_scan != null or AppLifecycle.quit_started() or (flow != null and flow.busy()):
 		return
+	if flow != null and flow.has_prepared_entry_identity():
+		return # A new battle can revalidate the already mounted Windows executable.
 	_begin_battle_scan(true)
 
 
@@ -161,7 +163,10 @@ func _request_battle_environment(campaign_level_id: String) -> void:
 func _finish_battle_launch() -> void:
 	var identity: Dictionary = {}
 	if _entry_scan == null:
-		identity = get_node("/root/ContinueFlow").take_startup_entry_identity()
+		var flow := get_node("/root/ContinueFlow")
+		identity = flow.take_startup_entry_identity()
+		if identity.is_empty() and OS.get_name() == "Windows":
+			identity = flow.revalidate_startup_identity()
 	if _entry_scan == null and identity.is_empty():
 		_begin_battle_scan()
 	if _entry_scan != null:
