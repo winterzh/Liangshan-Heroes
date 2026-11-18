@@ -1,0 +1,171 @@
+{
+  "source": "ef991d10c5fb6271fc4f4d7bc535cfb7a1b5651f",
+  "content_version": "source-v1:68bc2088ccb6ace05f32fdf4235fb2fd186f8940fb6f68b144a63462fe32eee0",
+  "exe_sha256": "9fe9d2ad829f926c5b46b728fc3a9aca79d8e9e745ffdd9f7941991e77398003",
+  "scope": "Exact native Windows executable on the private desktop, local profiles, normal game commands dispatched by the automated test. Game time is accelerated 4x except save boundaries.",
+  "frontline": {
+    "saved": {
+      "checks": 10,
+      "failures": [],
+      "facts": {
+        "checkpoint": {
+          "elapsed": 150.949999999997,
+          "north_sent": true,
+          "original_live_riders": 12,
+          "retained_escorts": 8,
+          "south_sent": false
+        },
+        "identity": "source-v1:68bc2088ccb6ace05f32fdf4235fb2fd186f8940fb6f68b144a63462fe32eee0",
+        "line_checkpoint": {
+          "arrivals": 3,
+          "paid_members": 1,
+          "slots": [
+            [
+              "61",
+              970.000061035156,
+              724.800048828125,
+              970.000061035156,
+              724.800048828125
+            ],
+            [
+              "11",
+              970.000061035156,
+              642.000061035156,
+              968.18017578125,
+              642.893920898438
+            ],
+            [
+              "12",
+              970.000061035156,
+              697.200073242188,
+              970.000061035156,
+              697.200073242188
+            ]
+          ]
+        },
+        "save_code": ""
+      },
+      "log_sha256": "b428a73d8540a28d194354d653bbeef2e32686b23739996a0e5b6a606c294aa5"
+    },
+    "restored_break": {
+      "checks": 9,
+      "failures": [],
+      "facts": {
+        "first_line_break": {
+          "at": 159.149999999996,
+          "attacking_members": [
+            "11"
+          ],
+          "confirmed_game_second": 159.216666666663,
+          "counter_after": 3,
+          "counter_before": 1,
+          "lane": 0,
+          "line_members": [
+            "11",
+            "12"
+          ],
+          "rider": "37",
+          "state": {
+            "attacking": true,
+            "broken": false,
+            "impeded": true,
+            "partners": 2,
+            "ready": true,
+            "valid": true
+          }
+        },
+        "identity": "source-v1:68bc2088ccb6ace05f32fdf4235fb2fd186f8940fb6f68b144a63462fe32eee0",
+        "observed_until_game_second": 159.949999999996,
+        "resume_code": "",
+        "saved_line_actors": [
+          "61",
+          "11",
+          "12"
+        ]
+      },
+      "log_sha256": "7bf0b9e7c258f3cbee9ed3f7db3753a23a35918a0559f61f81edde8287941673"
+    },
+    "stage_endpoint": "Live disruption after the original saved line is restored, before completing the rest of this attempt."
+  },
+  "earlier_counter_attempt": {
+    "saved": {
+      "checks": 10,
+      "log_sha256": "796e9fec3cb393847829bb7a4b0acb18896ef652f08d0e081f80cf57981b989c"
+    },
+    "resumed": {
+      "checks": 15,
+      "failures": [
+        "defend route wins through real economy and combat",
+        "defend clears finite riders and enemy headquarters",
+        "natural victory is committed by the real settlement coordinator",
+        "the restored hook line breaks a real charging rider"
+      ],
+      "log_sha256": "eb84d3642346250066745eba92dc8f8ff4e68dbcd9e9aa82ba57dc9307f20d08"
+    },
+    "riders_defeated": 12,
+    "breaks": 11,
+    "natural_victory": false,
+    "elapsed_game_seconds_after_resume": 900.0,
+    "enemy_base_hp": 461.3,
+    "proven_break_by_drawn_line": false
+  },
+  "same_checkpoint_through_victory": {
+    "same_slot_sha256": "5cd8c37ef8c50a61aa96909131fd4f8f1d7b31b84b48b06b3f273082e78f9047",
+    "restore_and_settlement_checks": 15,
+    "terminal_rejection_checks": 7,
+    "complete_chain_checks": 32,
+    "resume_log_sha256": "0c24466ce4253156fce695a6242792436859e888cf2bf088a98d4a2d09aa76f9",
+    "reject_log_sha256": "dd03826cd0b7f4c638afe688e5a5beb8e89243a2029cc9135749de978da4ea6e",
+    "first_line_break": {
+      "at": 159.149999999996,
+      "attacking_members": [
+        "11"
+      ],
+      "confirmed_game_second": 159.216666666663,
+      "counter_after": 3,
+      "counter_before": 1,
+      "lane": 0,
+      "line_members": [
+        "11",
+        "12"
+      ],
+      "rider": "37",
+      "state": {
+        "attacking": true,
+        "broken": false,
+        "impeded": true,
+        "partners": 2,
+        "ready": true,
+        "valid": true
+      }
+    },
+    "game_seconds": 215.0,
+    "buildings_started": 6,
+    "riders_defeated": 12,
+    "hook_broken": 12,
+    "camp_hp": 1500.0,
+    "enemy_base_hp": 0,
+    "units_queued": 43,
+    "units_queued_by_key": {
+      "gou_lian": 14,
+      "hua_rong": 1,
+      "liang_dao": 4,
+      "liang_gong": 11,
+      "liang_qiang": 4,
+      "lin_chong": 1,
+      "lou_luo": 4.0,
+      "siege_cata": 2,
+      "siege_ram": 2.0
+    },
+    "overall_victory": true,
+    "story_done": 3,
+    "story_total": 4,
+    "done_ids": [
+      "lhm_hooks",
+      "lhm_han",
+      "lhm_hu"
+    ],
+    "terminal_code": "LOCAL_RUN_TERMINAL",
+    "progress_sha256": "0d010b41661b2dd2a5553db15f30dd43be695a0ad7ba4a5a41f324ec1c5d2f08"
+  }
+}
