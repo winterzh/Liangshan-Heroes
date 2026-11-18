@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+PC 旧战役槽的兼容身份定义在 `scripts/run_campaign_save_version.gd`。保存和结算继续使用原局身份，原生载荷校验按当前安装执行。迁移测试档使用独立 Windows 资料目录；目前野猪林夹具和原正式待应用结算已验证。 [旧档验证](../qa/battle_entry_timing_20261116/README.md#build-26735223-战役续玩兼容)
+
 江州北哨报信使用 Windows 新局的既有任务事件和原守军槽。原战斗的路径、任务事件和追兵倒计时经现有连续存档读写。词库来自 `assets/localization/campaign_pursuit.json`。 [定向验证](../qa/campaign_pursuit_20261116/README.md#pc-北哨报信)
 
 Windows 存档发布检查使用发行 EXE 的独立桌面和资料目录，按保存及重启两进程执行。编辑器宿主与原生模板提供的回调名称存在差异，原生结果须单独落档。 [原生保存验证](../qa/battle_entry_timing_20261116/README.md#windows-原生保存复验)

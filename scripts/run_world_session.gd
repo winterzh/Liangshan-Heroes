@@ -12,12 +12,15 @@ const SettingsScript = preload("res://scripts/settings.gd")
 const LocalLifecycle = preload("res://scripts/run_local_lifecycle.gd")
 const CampaignLifecycle = preload("res://scripts/run_campaign_local_lifecycle.gd")
 const Profiles = preload("res://scripts/run_official_restore_profile.gd")
+const SaveVersion := preload("res://scripts/run_campaign_save_version.gd")
 const FLAGS := {"skirmish": true, "skirmish_ai": false, "arena": false, "custom_defense": false, "scenario": false, "defense_waves": 30, "defense_random": false}
 const ALL_CAMPAIGN_FLAGS := ["current", "skirmish", "skirmish_ai", "arena", "custom_defense", "scenario", "defense_waves", "defense_random"]
 enum RestoreEntry { INTERNAL, PLAYER_MENU, QA_MENU }
 var _core: RefCounted
 var _store: RefCounted
 var _trusted: Dictionary
+var _run_identity: Dictionary
+var _runtime: Dictionary
 var _packet: Dictionary = {}
 var _old_scene: Node
 var _steam_lease: Dictionary = {}
@@ -35,6 +38,8 @@ var _local_receipt: RefCounted
 
 func _init(trusted: Dictionary, runtime: Dictionary, slot_root := "user://continue/v1") -> void:
 	_trusted = trusted.duplicate(true)
+	_run_identity = _trusted
+	_runtime = runtime
 	_core = Core.new(trusted, runtime)
 	_store = Store.new(slot_root)
 	_slot_root = slot_root
@@ -44,7 +49,7 @@ func _bad(code: String) -> Dictionary:
 
 func _new_local_receipt(run_token: String, context: Dictionary) -> RefCounted:
 	if Profiles.is_official_campaign_context(context):
-		return CampaignLifecycle.new(run_token, _slot_root, context, _trusted, _campaign().cloud_owner)
+		return CampaignLifecycle.new(run_token, _slot_root, context, _run_identity, _campaign().cloud_owner)
 	return LocalLifecycle.new(run_token, _slot_root)
 
 func _local_scope(receipt: Variant, context: Dictionary) -> Dictionary:
@@ -54,7 +59,7 @@ func _local_scope(receipt: Variant, context: Dictionary) -> Dictionary:
 	var expected_script: Script = CampaignLifecycle if official_campaign else LocalLifecycle
 	if receipt.get_script() != expected_script: return _bad("LOCAL_LIFECYCLE_SCRIPT")
 	if not LocalLifecycle._hex(receipt.token, 32): return _bad("LOCAL_BINDING_TOKEN")
-	if official_campaign and not receipt.matches_scope(context, _trusted, _campaign().cloud_owner):
+	if official_campaign and not receipt.matches_scope(context, _run_identity, _campaign().cloud_owner):
 		return _bad("LOCAL_CAMPAIGN_SCOPE_CHANGED")
 	if not official_campaign and context != LocalLifecycle.CONTEXT: return _bad("CLASSIC_CONTEXT_REQUIRED")
 	var expected_receipt: RefCounted = _new_local_receipt(receipt.token, context)
@@ -96,6 +101,12 @@ func save_held(source: Variant, retained_identity: Variant = null, expected_slot
 	var lease := _lease()
 	if not lease.ok or source._steam_run_id != lease.active: return _bad("PERSISTENT_STEAM_BINDING_REQUIRED")
 	if source._steam_run_id != 0 and lease.context != source._official_context: return _bad("PERSISTENT_STEAM_BINDING_REQUIRED")
+	var run := SaveVersion.for_battle(source, _trusted)
+	if not run.ok: return run
+	_run_identity = run.identity
+	if run.legacy:
+		_core.dispose()
+		_core = Core.new(_run_identity, _runtime)
 	var captured: Dictionary = _core.capture(source, retained_identity)
 	if not captured.ok: return captured
 	var options := {}
@@ -174,13 +185,13 @@ func retry_pending_save(source: Variant) -> Dictionary:
 func _restore_packet_scope(packet: Dictionary, player_entry: bool, lease: Dictionary) -> Dictionary:
 	if player_entry and packet.context != Store.CONTEXT and not Profiles.is_player_campaign_context(packet.context):
 		return _bad("CONTINUE_CONTEXT_NOT_RELEASED")
-	if not Profiles.trusted_identity(_trusted) or packet.world.content_version != _trusted.content_version \
-		or packet.world.engine_sha256 != _trusted.engine_binary_sha256: return _bad("WORLD_CORE_IDENTITY")
+	var run := SaveVersion.resolve(packet.context, packet.world.content_version, packet.world.engine_sha256, _trusted)
+	if not run.ok: return run
 	if packet.binding.kind == "steam":
 		if not lease.available or packet.binding.owner != lease.account or not _steam().ensure_account(): return _bad("ACCOUNT_MISMATCH")
 		if Profiles.is_official_campaign_context(packet.context) and packet.binding.owner != _campaign().cloud_owner:
 			return _bad("CAMPAIGN_STEAM_PROFILE_OWNER_REQUIRED")
-	return {"ok":true}
+	return run
 
 func _read_restore_slot(player_entry: bool, lease: Dictionary) -> Dictionary:
 	if not Profiles.trusted_identity(_trusted): return _bad("WORLD_CORE_IDENTITY")
@@ -235,6 +246,9 @@ func prepare_restore(menu: Node, entry := RestoreEntry.INTERNAL) -> Dictionary:
 	var read: Dictionary = _read_restore_slot(entry == RestoreEntry.PLAYER_MENU,lease)
 	if not read.ok: return read
 	_packet = read.document; _slot_sha = read.file_sha256
+	var version := SaveVersion.resolve(_packet.context, _packet.world.content_version, _packet.world.engine_sha256, _trusted)
+	if not version.ok: return version
+	_run_identity = version.identity
 	var campaign := Profiles.is_official_campaign_context(_packet.context)
 	# Public scope and account/install identity were checked before any recovery
 	# mutation. Mount still rechecks this complete packet and its original SHA.
@@ -255,7 +269,10 @@ func prepare_restore(menu: Node, entry := RestoreEntry.INTERNAL) -> Dictionary:
 		var runtime: Dictionary = factory.prepare_runtime(_trusted)
 		if not runtime.ok: return runtime
 		_core.dispose()
-		_core = Core.new(_trusted, runtime.runtime)
+		_core = Core.new(_run_identity, runtime.runtime)
+	elif version.legacy:
+		_core.dispose()
+		_core = Core.new(_run_identity, _runtime)
 	var prepared: Dictionary = _core.prepare(_packet.world)
 	if not prepared.ok: return prepared
 	if _packet.binding.kind == "steam":

@@ -12,6 +12,7 @@ const CampaignLifecycle = preload("res://scripts/run_campaign_local_lifecycle.gd
 const CampaignStartup = preload("res://scripts/run_campaign_startup_scan.gd")
 const ConfigTransaction = preload("res://scripts/run_campaign_cfg_transaction.gd")
 const ProgressGate = preload("res://scripts/run_campaign_progress_gate.gd")
+const SaveVersion := preload("res://scripts/run_campaign_save_version.gd")
 enum Phase { IDLE, CONFIRM, SAVING, RESTORING, ERROR, EXITING, EXIT_CONFIRM, SETTLING }
 var phase := Phase.IDLE
 var last_result: Dictionary = {}
@@ -691,8 +692,10 @@ func _startup_recover() -> void:
 		var item: Dictionary = _startup_items[_startup_index]
 		var finished: Dictionary
 		if _startup_coordinator == null:
+			var run := SaveVersion.resolve(item.context, item.intent.content_version, item.intent.engine_sha256, actual)
+			if not run.ok: _startup_failed(run); return
 			_startup_coordinator = CampaignCoordinator.new(Campaign, actual)
-			_startup_lifecycle = CampaignLifecycle.new(item.token, CampaignStartup.SLOT_ROOT, item.context, actual, _startup_owner)
+			_startup_lifecycle = CampaignLifecycle.new(item.token, CampaignStartup.SLOT_ROOT, item.context, run.identity, _startup_owner)
 		finished = _startup_coordinator.retry() if _startup_coordinator.started() else _startup_coordinator.begin_recovery(_startup_lifecycle)
 		if not finished.ok: _startup_failed(finished); return
 		_startup_coordinator = null

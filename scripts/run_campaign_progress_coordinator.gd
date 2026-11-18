@@ -5,9 +5,11 @@ const Lifecycle := preload("res://scripts/run_campaign_local_lifecycle.gd")
 const ProgressProjection := preload("res://scripts/run_campaign_progress_projection.gd")
 const ConfigTransaction := preload("res://scripts/run_campaign_cfg_transaction.gd")
 const Gate := preload("res://scripts/run_campaign_progress_gate.gd")
+const SaveVersion := preload("res://scripts/run_campaign_save_version.gd")
 const SLOT_ROOT := "user://continue/v1"
 var _campaign: Node
 var _identity: Dictionary = {}
+var _run_identity: Dictionary = {}
 var _issue := ""
 var _stage := "new"
 var _battle: WeakRef
@@ -44,10 +46,13 @@ func _scope_ok() -> bool:
 		and _campaign.get_script() == Intent.Profiles.CampaignScript \
 		and _campaign.cloud_owner == _intent.get("owner") \
 		and _life != null and _life.get_script() == Lifecycle \
-		and _life.matches_scope(_intent.context, _identity, _campaign.cloud_owner)
+		and _life.matches_scope(_intent.context, _run_identity, _campaign.cloud_owner)
 
 func _install_intent(value: Dictionary) -> Dictionary:
-	_expected = Intent.scope(value.get("context"), _identity, _campaign.cloud_owner)
+	var run := SaveVersion.resolve(value.get("context"), value.get("content_version"), value.get("engine_sha256"), _identity)
+	if not run.ok: return run
+	_run_identity = run.identity
+	_expected = Intent.scope(value.get("context"), _run_identity, _campaign.cloud_owner)
 	if not _expected.ok: return _expected
 	var checked: Dictionary = Intent.validate(value, String(value.get("token", "")), _expected)
 	if not checked.ok: return checked
@@ -76,12 +81,14 @@ func begin_live(battle: Node, victory: bool) -> Dictionary:
 	var service := (Engine.get_main_loop() as SceneTree).root.get_node("SteamService")
 	var credit: Dictionary = service.capture_campaign_credit(battle,run_token)
 	if not credit.ok: return credit
-	var captured: Dictionary = Intent.capture(battle, run_token, victory, _identity, credit.credit)
+	var run := SaveVersion.for_battle(battle, _identity)
+	if not run.ok: return run
+	var captured: Dictionary = Intent.capture(battle, run_token, victory, run.identity, credit.credit)
 	if not captured.ok: return captured
 	var installed: Dictionary = _install_intent(captured.intent)
 	if not installed.ok: return installed
 	_life = battle._continue_receipt if battle._continue_receipt != null else Lifecycle.new(run_token, SLOT_ROOT,
-		_intent.context, _identity, _campaign.cloud_owner)
+		_intent.context, _run_identity, _campaign.cloud_owner)
 	if not _scope_ok(): return _bad("LOCAL_CAMPAIGN_SCOPE_CHANGED")
 	var entered: Dictionary = Gate.enter(self, _gate_scope)
 	if not entered.ok: return entered
@@ -115,7 +122,7 @@ func _live_source_ok() -> bool:
 	if not _live: return true
 	if _battle == null or not is_instance_valid(_battle.get_ref()): return false
 	var source: Node = _battle.get_ref()
-	var frozen: Dictionary = Intent.capture(source, _intent.token, _intent.victory, _identity, _intent.credit)
+	var frozen: Dictionary = Intent.capture(source, _intent.token, _intent.victory, _run_identity, _intent.credit)
 	if not frozen.ok: return false
 	if source._steam_run_id != 0:
 		var credited: Dictionary = _credited_token(source)
@@ -143,7 +150,7 @@ func _drive_cfg() -> Dictionary:
 		var request: Dictionary = _cfg_request()
 		for key in request:
 			if status.document[key] != request[key]: return _bad("CAMPAIGN_CFG_OTHER_TRANSACTION_PENDING")
-		var recovered: Dictionary = _cfg.recover_pending(_identity, _intent.owner,
+		var recovered: Dictionary = _cfg.recover_pending(_run_identity, _intent.owner,
 			{"run_token":_intent.token, "intent_sha256":_gate_scope.intent_sha256})
 		if not recovered.ok: return recovered
 		if recovered.get("persisted", false): return recovered

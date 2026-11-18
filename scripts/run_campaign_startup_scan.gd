@@ -3,6 +3,7 @@ extends RefCounted
 const Intent := preload("res://scripts/run_campaign_progress_intent.gd")
 const Lifecycle := preload("res://scripts/run_campaign_local_lifecycle.gd")
 const Legacy := preload("res://scripts/run_campaign_legacy_data.gd")
+const SaveVersion := preload("res://scripts/run_campaign_save_version.gd")
 const SLOT_ROOT := "user://continue/v1"
 const RUNS_ROOT := SLOT_ROOT + "/local_runs"
 const MAX_RUNS := 256
@@ -150,9 +151,12 @@ static func scan(identity: Dictionary, profile_owner: String) -> Dictionary:
 		if document.generation == 1:
 			active.append({"token":token, "model":observed.model})
 			continue
-		# Uncommitted pending ACKs, dead terminal locks and gen2 require current
-		# source/owner before any journal or CFG recovery. Never fabricate identity.
-		var current: Dictionary = Intent.scope(document.context, identity, profile_owner)
+		# Look up the original run identity against this installation. A pending
+		# older victory is still the same transaction and owner after an update.
+		var run := SaveVersion.resolve(document.context, document.scope.content_version,
+			document.scope.engine_sha256, identity)
+		if not run.ok: return _bad("STARTUP_PENDING_SCOPE_CHANGED")
+		var current: Dictionary = Intent.scope(document.context, run.identity, profile_owner)
 		if not current.ok or current.scope != document.scope: return _bad("STARTUP_PENDING_SCOPE_CHANGED")
 		pending.append({"token":token, "context":document.context.duplicate(true),
 			"intent":document.intent.duplicate(true), "inventory":observed.inventory,
