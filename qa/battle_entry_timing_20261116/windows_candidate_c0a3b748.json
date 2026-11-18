@@ -424,6 +424,51 @@
       "original_pursuit_size": 6,
       "save_log_sha256": "858643131065c64df1785845b54eae02cc0b3c17e6968f5207769829bc7b7899",
       "restore_log_sha256": "6dc0a3c2fe2c467601f865c9cb3960fce755e677fca78e3562400765d5fca1ab"
+    },
+    "jiangzhou_story_complete": {
+      "scope": "actual native chapters and transactions, isolated QA menu and offline local profile",
+      "stages": [
+        {
+          "stage": "save",
+          "checks": 9,
+          "failures": [],
+          "log_sha256": "0f425fb55da87eb10f64abd8dd5420f9fa72e7ca1c8b3fedefc880d987baaca4"
+        },
+        {
+          "stage": "resume",
+          "checks": 19,
+          "failures": [],
+          "log_sha256": "8151c3b2e404983840807814094a660a371dfcbc368dbb5038898e8a8ce4cd9a"
+        },
+        {
+          "stage": "reject",
+          "checks": 7,
+          "failures": [],
+          "log_sha256": "9c337a7405cdfa698fd883991cc51c5d423ee48a581fc85ab45297e3d6e2f624"
+        }
+      ],
+      "separate_processes": 3,
+      "checkpoint_at_white_dragon_temple_game_seconds": 105.683333333332,
+      "victory_game_seconds": 117.283333333332,
+      "rescued_prisoners": 2,
+      "named_allies_embarked": 6,
+      "paid_recruits": 14,
+      "story_complete": {
+        "best_done": 4,
+        "best_goal_ids": [
+          "li_kui_first",
+          "free_both",
+          "bailong_meeting",
+          "named_survive"
+        ],
+        "cleared": true,
+        "contract_version": 2,
+        "jiangzhou_rescue_memory": true,
+        "story_complete": true,
+        "story_total": 4
+      },
+      "terminal_slot_code": "LOCAL_RUN_TERMINAL",
+      "progress_sha256": "4c03311979d37adfcd5d8dbba5e5223039f0b0d47b22c27ab03776b190334758"
     }
   },
   "live_steam_read": {
@@ -472,5 +517,56 @@
       "write_calls": 0
     },
     "scope": "same reader DLL, minimal headless Godot harness with the logged-in Steam client, no production save, statistics writes or settlement"
+  },
+  "sustained_performance": {
+    "scope": "Godot 4.6.3 Windows host mounts the exact frozen pack on the isolated desktop, 1440x900, Compatibility, fixed camera, standard effects, normal battle speed",
+    "seconds": 600.000953,
+    "frames": 76439,
+    "p95_ms": 14.056,
+    "p99_ms": 16.184,
+    "worst_ms": 32.214,
+    "checks": 13,
+    "integrity_passed": true,
+    "sample_complete": true,
+    "waves_sent": [
+      true,
+      true,
+      true
+    ],
+    "paid_ships_queued": 18,
+    "frames_over_33_3_ms": 0,
+    "same_initial_setup": true,
+    "same_shared_trajectory_points": 604,
+    "pack_sha256": "37aa8e3e2fa767add5e932e5cb862fc71c7a8ef511f9d4d2d28950a327d7b04b",
+    "pack_unchanged": true,
+    "exit_code": 0,
+    "runner_seconds": 614.89,
+    "report_sha256": "cd42f9ea051c1c84da724200b20752377c42747d068f7a3329d203472332bbd3"
+  },
+  "gao_opening_recall": {
+    "scope": "native chapter menu and mounted briefing, settled Jiangzhou profile versus empty offline profile",
+    "results": [
+      {
+        "campaign_sha": "4c03311979d37adfcd5d8dbba5e5223039f0b0d47b22c27ab03776b190334758",
+        "exe_sha": "37aa8e3e2fa767add5e932e5cb862fc71c7a8ef511f9d4d2d28950a327d7b04b",
+        "languages": [
+          "zh_CN",
+          "zh_TW",
+          "en",
+          "ja"
+        ],
+        "recall_count": 1,
+        "same_profile": true,
+        "log_sha256": "2d541a0ff2c8a8200f5dd909f6fe6b8b92922b46587100d88999a8f293c50d87"
+      },
+      {
+        "campaign_sha": "",
+        "exe_sha": "37aa8e3e2fa767add5e932e5cb862fc71c7a8ef511f9d4d2d28950a327d7b04b",
+        "languages": [],
+        "recall_count": 0,
+        "same_profile": false,
+        "log_sha256": "392c1eec6a4e761cfc84fe7a19d804361345f88ec0df35715b34181c522ac773"
+      }
+    ]
   }
 }
