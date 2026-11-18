@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+ef991d10 的冻结原生程序验收复用原生存档探针和八章第 1 代旧格式样本。后续两进程验证再次保存和重启，野猪林沿用旧正式版活跃账本。整合收据另记录同一编译包的十分钟水战、原生十分钟模式切换及逐帧尾部统计。六文件 ZIP 已放在 Windows 候选目录，逐文件流式校验、干净解压及原生无窗口启动通过。 [整合收据](../qa/battle_entry_timing_20261116/windows_integrated_ef991d10.json)
+
 Windows 战役和驻守入口在加载覆盖层绘制后提交原异步美术请求。加载首帧和战场首帧单独量测，程序退出会复原加载阶段帧率限制。 [原生加载验证](../qa/battle_entry_timing_20261116/windows_loading_first_frame_ef991d10.json)
 
 Windows Steam 预设使用的原生依赖由 `tools/build_steam_stats_reader.py` 重建，使用 Visual Studio x64、原锁定的 godot-cpp 和 Windows 的 bcrypt 系统库，构建后核对 `vendor/steam_stats_reader/provenance.json`。加速路径只产生同格式完整 SHA-256，Windows 源码环境仍支持 Godot 摘要回退。真实只读探针复用安装器创建的临时 `.godot` 目录。冷启动候选 c0a3b748 的冻结六文件、原生续玩、只读 Steam 及十分钟水战可在同一 [整合验收收据](../qa/battle_entry_timing_20261116/windows_candidate_c0a3b748.json) 回读。 [构建证据](../qa/battle_entry_timing_20261116/windows_sha256_bridge.json)

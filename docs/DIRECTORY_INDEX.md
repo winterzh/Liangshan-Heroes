@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+Windows 本地候选 `ef991d10` 的六文件 ZIP 与构建收据在 `D:/AI项目/水浒/Windows候选/20261118-ef991d10/`。 [整合及干净解压记录](../qa/battle_entry_timing_20261116/windows_integrated_ef991d10.json)
+
 2026-11-18 Steam Windows 上传记录位于 docs/STEAM_UPDATE_20261118.md，脱敏收据位于 qa/steam_release_20261118/。 [本批记录](STEAM_UPDATE_20261118.md)
 
 [Android 触控离线验收包收据](../qa/android_controls_performance_20260925/android_touch_candidate_492e6437.json)位于 qa/android_controls_performance_20260925/，本机产物位于 D:/AI项目/水浒/Android验收/2026-11-17-492e6437/。
