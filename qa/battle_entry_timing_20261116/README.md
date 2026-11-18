@@ -1,5 +1,23 @@
 # 出征与模式进场卡顿量测
 
+## Windows 原生保存复验
+
+通过独立 Windows 桌面运行正式 Build 26735223 的隔离副本。用 Godot 的 `override.cfg` 指向外部测试驱动，由驱动操作原生 EXE 内的选章、出征、开战、暂停和「保存并退出游戏」。驱动保留原导出包的战斗和保存脚本，显式核对原生程序身份，用户档案和窗口留在独立环境。
+
+野猪林实际出征后保存被 `PRESENTATION_EXTRA_SIGNAL` 拒绝。原生 Godot Release 的布局回调保持原信号、原生目标和参数，但省略了调试方法名。只修任务面板的候选继续到地图校验，收到 `CAMPAIGN_EXTRA_SIGNAL`。现统一复用已有原生回调判定，覆盖任务面板、场景布景、黄泥冈和快活林视觉道具。磁盘结构及普通脚本回调的验证保持原合同。
+
+修订后的本地候选原生 EXE SHA-256 为 `8e361db36642df0eb975dab26f3e9fc264da55094aadb77569caddf24f2b45c1`，内容身份为 `source-v1:77fe59ebeea50ae37b0a8d51b6819bbc88a76911472cf580635dc889037ce87f`。Windows Compatibility、960×540、RTX 4060 Laptop、隔离离线档案。三章分别从开始战斗进入暂停保存，再用另一进程从主菜单读回同一第 1 代档。六进程退出 0，脚本及引擎错误 0，保留驱动的 GLES3 MSAA 警告。
+
+| 章节 | 原生存档 SHA-256 | 独立重启 |
+| --- | --- | --- |
+| 野猪林 | `37457eabcaeb016f666184526573bfe749e0ba897aaf71ba2e7de95a8b24de46` | 通过 |
+| 黄泥冈 | `785cbcbfe7d3afc0c55a599604c5769c540af9d412dd0c183fddfbdc79c94591` | 通过 |
+| 快活林 | `e3140f0c6c5249236191a0c159735a21db2fb8977c2d2fc88f2120d8ceac7e8d` | 通过 |
+
+上述三个是新包同版本档。Build 26735223 的跨版本半局恢复、真实 Steam 绑定与代表性中途状态验收仍待完成。
+
+回归驱动可由 `override.cfg` 设置 `[application]` 下的 `run/main_scene`，加载一个仅挂载驱动的外部场景。分别用 `LSH_FIXTURE_STAGE=save` 和 `restore` 启动独立进程，同一隔离档案下传入 `LSH_FIXTURE_LEVEL` 与 `LSH_FIXTURE_EXE_SHA`，检查 `NATIVE_STOCK_SLOT` 与 `NATIVE_STOCK_CONTINUED`。外部驱动及覆盖配置只放在验收副本。[原生探针](windows_native_save_probe.gd)
+
 ## PC 战役入口首批
 
 Windows、Godot 4.6.3、隔离资料。无头源码探针从空档案打开「开始战役」，找到野猪林和祝家庄的新版卡片，从野猪林卡片出征，按原对白和开战按钮进入战斗。选中鲁智深时落点标记满足显示条件，位置可行走且可见。普通右键处理接收事件落点，单位指令序号推进，回显落点与事件一致，提示退出。该探针进程退出 0。旧夹具槽的独立菜单探针观测到「继续上次战斗 · 大闹野猪林」提到首位。

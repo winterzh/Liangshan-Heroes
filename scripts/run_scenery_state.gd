@@ -1,4 +1,5 @@
 extends RefCounted
+const WorldDisplay := preload("res://scripts/run_world_display_state.gd")
 ## Standard Liangshan plus explicitly trusted chapter factories. The factory is the fixed production
 ## Scenery.setup, audited to write its own descendants, map.material and one
 ## map metadata value only. Its RNG instances have fixed local seeds; it never
@@ -838,8 +839,8 @@ func _campaign_node_boundary(node: Node2D, kind: String) -> Dictionary:
 		for row: Dictionary in node.get_signal_connection_list(info.name):
 			var callback: Callable = row.callable
 			if info.name != &"child_order_changed" or not node.is_inside_tree() or row.flags != CONNECT_REFERENCE_COUNTED or callback.get_object() != node.get_viewport(): return _fail("CAMPAIGN_EXTRA_SIGNAL")
-			if callback.get_method() == &"Viewport::canvas_parent_mark_dirty" and callback.get_bound_arguments() == [node]: continue
-			if callback.get_method() == &"Viewport::gui_set_root_order_dirty" and callback.get_bound_arguments().is_empty(): continue
+			if WorldDisplay.native_callback(callback, "Viewport::canvas_parent_mark_dirty") and callback.get_bound_arguments() == [node]: continue
+			if WorldDisplay.native_callback(callback, "Viewport::gui_set_root_order_dirty") and callback.get_bound_arguments().is_empty(): continue
 			return _fail("CAMPAIGN_EXTRA_SIGNAL")
 	var language_count := 0
 	for row: Dictionary in node.get_incoming_connections():

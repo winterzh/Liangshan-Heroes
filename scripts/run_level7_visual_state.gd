@@ -1,4 +1,5 @@
 extends RefCounted
+const WorldDisplay := preload("res://scripts/run_world_display_state.gd")
 ## Exact short Kuaihuolin tell nodes only; no duel replay.
 const Kuai := preload("res://scripts/levels/level7_kuaihuolin_short.gd")
 const FIELDS := {"kuai_tell": ["kind", "progress", "extent", "metadata", "token"]}
@@ -45,8 +46,8 @@ static func node_supported(node: Node2D) -> bool:
 		for row: Dictionary in node.get_signal_connection_list(info.name):
 			var callback: Callable = row.callable
 			if info.name != &"child_order_changed" or not node.is_inside_tree() or row.flags != CONNECT_REFERENCE_COUNTED or callback.get_object() != node.get_viewport(): return false
-			if callback.get_method() == &"Viewport::canvas_parent_mark_dirty" and callback.get_bound_arguments() == [node]: continue
-			if callback.get_method() == &"Viewport::gui_set_root_order_dirty" and callback.get_bound_arguments().is_empty(): continue
+			if WorldDisplay.native_callback(callback, "Viewport::canvas_parent_mark_dirty") and callback.get_bound_arguments() == [node]: continue
+			if WorldDisplay.native_callback(callback, "Viewport::gui_set_root_order_dirty") and callback.get_bound_arguments().is_empty(): continue
 			return false
 	return true
 

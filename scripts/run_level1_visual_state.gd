@@ -1,4 +1,5 @@
 extends RefCounted
+const WorldDisplay := preload("res://scripts/run_world_display_state.gd")
 ## Fixed Huangnigang props only; these carry no units, collision or gameplay.
 const Huang := preload("res://scripts/levels/level1_huangnigang.gd")
 const ArtEvent := preload("res://scripts/campaign_art_event.gd")
@@ -72,8 +73,8 @@ static func node_supported(node: Node2D) -> bool:
 		for row in node.get_signal_connection_list(info.name):
 			var callback: Callable = row.callable
 			if info.name != &"child_order_changed" or not node.is_inside_tree() or callback.get_object() != node.get_viewport() or row.flags != CONNECT_REFERENCE_COUNTED: return false
-			if callback.get_method() == &"Viewport::canvas_parent_mark_dirty" and callback.get_bound_arguments() == [node]: continue
-			if callback.get_method() == &"Viewport::gui_set_root_order_dirty" and callback.get_bound_arguments().is_empty(): continue
+			if WorldDisplay.native_callback(callback, "Viewport::canvas_parent_mark_dirty") and callback.get_bound_arguments() == [node]: continue
+			if WorldDisplay.native_callback(callback, "Viewport::gui_set_root_order_dirty") and callback.get_bound_arguments().is_empty(): continue
 			return false
 	for row in node.get_incoming_connections():
 		if kind(node) != "hg_sign" or row.signal.get_object() != Localize or row.signal.get_name() != &"language_changed" or row.callable != Callable(node, "_on_language_changed") or row.flags != 0: return false

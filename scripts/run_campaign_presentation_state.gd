@@ -4,6 +4,7 @@ extends RefCounted
 const Mission := preload("res://scripts/campaign_mission.gd")
 const State := preload("res://scripts/run_campaign_mission_state.gd")
 const Codec := preload("res://scripts/run_state_value_codec.gd")
+const WorldDisplay := preload("res://scripts/run_world_display_state.gd")
 const SCHEMA := "campaign_presentation_v1"
 const FORMAT_WIDTH_LIMIT := 64
 const FORMAT_PRECISION_LIMIT := 6
@@ -197,11 +198,17 @@ func _signals_valid(node: Node, source: Variant, prototype: Node, registry: Dict
 			# updates its direct child's anchor-derived geometry. Detached
 			# prototypes do not yet own this connection; exact graph ownership,
 			# method, flags and zero bound args are mandatory.
-			if signal_name == "item_rect_changed" and str(callback.get_method()) == "Control::_size_changed" and int(row.flags) == 0 and callback.get_bound_arguments().is_empty() and node is Control and target is Control and target.get_script() == null and target.get_parent() == node and registry.has(target): continue
+			if signal_name == "item_rect_changed" and int(row.flags) == 0 and node is Control and node.is_inside_tree() \
+					and target is Control and target.get_script() == null and target.get_parent() == node and registry.has(target) \
+					and WorldDisplay.native_callback(callback, "Control::_size_changed") and callback.get_bound_arguments().is_empty():
+				continue
 			# The mounted canvas registers this exact ref-counted viewport hook.
 			# Its target is outside the Mission registry, but must be this node's
 			# actual viewport and its sole bound argument must be the source node.
-			if signal_name == "child_order_changed" and node.is_inside_tree() and target == node.get_viewport() and int(row.flags) == CONNECT_REFERENCE_COUNTED and str(callback.get_method()) == "Viewport::canvas_parent_mark_dirty" and callback.get_bound_arguments() == [node]: continue
+			if signal_name == "child_order_changed" and node.is_inside_tree() and target == node.get_viewport() \
+					and int(row.flags) == CONNECT_REFERENCE_COUNTED and WorldDisplay.native_callback(callback, "Viewport::canvas_parent_mark_dirty") \
+					and callback.get_bound_arguments() == [node]:
+				continue
 			if target is Node and target.get_script() == null and registry.has(target) and target == node.get_parent() and int(row.flags) == 0 and callback.get_bound_arguments().is_empty() and native.has(signal_name + ":" + str(callback.get_method()) + ":" + target.get_class()): continue
 			return false
 	return true
