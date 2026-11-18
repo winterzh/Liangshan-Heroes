@@ -1,5 +1,9 @@
 # 开发日志
 
+## 2026-11-18 Windows 加载首帧与本机 Steam 安装
+
+Windows 战役和驻守先发出加载画面，再提交原资源预取。新原生包的黄泥冈首次加载提示约 9–13 ms，旧包约 235–329 ms。战场首帧仍约半秒。八种入口、加载首帧退出、黄泥冈同版本重启续玩通过。已上线的 Build 26735223 本机 Steam 安装读回，六文件与发布记录一致。 [原生量测](../qa/battle_entry_timing_20261116/windows_loading_first_frame_ef991d10.json) · [Steam 安装回读](../qa/steam_release_20261118/client_install_verified.json)
+
 ## 2026-11-18 Windows 原生江州终局及高俅回顾
 
 c0a3b748 实际招募、救援，白龙庙会合后由暂停菜单保存。重启后读回同一档案，两名囚犯和六名好汉完成撤离，演义 4/4 入账。第三进程拒绝旧槽，保留进度。利用该胜利档进高俅，四语 HUD 的回顾均正确，空档对照没有回顾。三阶段终局共 35 项通过。 [江州续玩](../qa/campaign_pursuit_20261116/README.md#windows-整合包的原生终局续玩) · [高俅开场](../qa/campaign_fire_readiness_20261116/README.md#pc-高俅关回忆江州)

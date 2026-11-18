@@ -81,6 +81,8 @@ func _visit(mode: String, visit: int) -> Dictionary:
 			_fail("deploy/configuration button was not visible: " + mode)
 			return {}
 
+	# Deliver the separate entry click on a new game tick.
+	await process_frame
 	battle_added_at = 0
 	loading_drawn_at = 0
 	frames_after_click.clear()

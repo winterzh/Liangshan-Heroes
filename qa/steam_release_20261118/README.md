@@ -6,6 +6,6 @@
 
 公告活动 708914425087657757 已关联新构建并公开。简中、繁中、英语、日语标题、各八条正文和正文图片已逐项回读。封面沿用公告图库中 event_cover_800x450.png，保存为通用英语封面供四语使用。 [公开公告](https://store.steampowered.com/news/app/5088120/view/708914425087657757) · [四语正文](patch_notes.json)
 
-本机 Steam 的静默启动请求停在 SynchronizingCloud syncfailed，游戏进程未启动。本机安装尚为 26719792。SteamCMD 从 public 下载到独立目录，Build 26735223、Manifest 9099660322002044845 和六文件大小、SHA-256 均与候选一致。下载所得 EXE 用独立资料、STEAM_DISABLED=1 和 CONTENT_UPDATE_NO_AUTO=1 启动无窗口主菜单，23.16 秒退出 0、错误 0。 [服务器下载与启动收据](server_download_verified.json)客户端正式启动及 Steam 环境的战役存读链继续待验。
+本机 Steam 的静默启动请求停在 SynchronizingCloud syncfailed，游戏进程未启动。首次核验的本机安装为 26719792。后续回读确认本机 Steam 已安装正式 Build 26735223、Manifest 9099660322002044845，六个发行文件的大小和 SHA-256 均与发布收据一致。此次只读核验未启动游戏。 [本机安装回读](client_install_verified.json)SteamCMD 从 public 下载到独立目录，Build 26735223、Manifest 9099660322002044845 和六文件大小、SHA-256 均与候选一致。下载所得 EXE 用独立资料、STEAM_DISABLED=1 和 CONTENT_UPDATE_NO_AUTO=1 启动无窗口主菜单，23.16 秒退出 0、错误 0。 [服务器下载与启动收据](server_download_verified.json)客户端正式启动及 Steam 环境的战役存读链继续待验。
 
 用户本轮要求上传。路线图中真人试玩和 Android 手机、平板验收仍待完成。

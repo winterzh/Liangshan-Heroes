@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+Windows 战役和驻守入口在加载覆盖层绘制后提交原异步美术请求。加载首帧和战场首帧单独量测，程序退出会复原加载阶段帧率限制。 [原生加载验证](../qa/battle_entry_timing_20261116/windows_loading_first_frame_ef991d10.json)
+
 Windows Steam 预设使用的原生依赖由 `tools/build_steam_stats_reader.py` 重建，使用 Visual Studio x64、原锁定的 godot-cpp 和 Windows 的 bcrypt 系统库，构建后核对 `vendor/steam_stats_reader/provenance.json`。加速路径只产生同格式完整 SHA-256，Windows 源码环境仍支持 Godot 摘要回退。真实只读探针复用安装器创建的临时 `.godot` 目录。冷启动候选 c0a3b748 的冻结六文件、原生续玩、只读 Steam 及十分钟水战可在同一 [整合验收收据](../qa/battle_entry_timing_20261116/windows_candidate_c0a3b748.json) 回读。 [构建证据](../qa/battle_entry_timing_20261116/windows_sha256_bridge.json)
 
 Windows 整合候选 89dfee7a 的六文件身份、十分钟水战及同一原生 EXE 的续玩回执见 [Windows 验收收据](../qa/campaign_sustained_performance_20261116/windows_pack_89dfee7a.json)。续玩驱动、资料目录和覆盖配置仅挂载在隔离副本。
@@ -26,7 +28,7 @@ Windows 存档发布检查使用发行 EXE 的独立桌面和资料目录，按�
 
 Windows 源码版可从「开始战役」进入八幕选章。正式版续玩入口复用原存档验证，读回成功时显示章节。野猪林首局移动提示只在新战斗启用。进场脚本现覆盖野猪林、祝家庄、驻守和 1v1，记录模式面板、场景绘制、可下令与首个右键回显。[验证入口与状态](../qa/battle_entry_timing_20261116/README.md#pc-战役入口首批)
 
-Steam Windows 正式 Build 26735223 使用冻结源码 492e6437 的原六文件候选，Manifest 9099660322002044845。手机确认后 default 回读和四语公告通过。服务器隔离下载六文件和无窗口启动已通过。本机 Steam 启动因云同步失败待验，完整范围见[本批记录](STEAM_UPDATE_20261118.md)。
+Steam Windows 正式 Build 26735223 使用冻结源码 492e6437 的原六文件候选，Manifest 9099660322002044845。手机确认后 default 回读和四语公告通过。服务器隔离下载六文件和无窗口启动已通过。后续只读校验确认本机 Steam 已安装同一 Build、Manifest 及六文件。客户端启动与带账号战役终局另验，完整范围见[本批记录](STEAM_UPDATE_20261118.md)。
 
 Steam 上传来源为冻结提交 492e6437 的原六文件候选，Build 26735223、Manifest 9099660322002044845。Preview 和服务器清单核对一致。正式分支、公告和客户端验收的续接状态见[本批记录](STEAM_UPDATE_20261118.md)。
 
