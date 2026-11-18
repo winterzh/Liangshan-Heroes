@@ -10549,6 +10549,8 @@ func _refresh_active_highlight() -> void:
 const MANUAL_ORDER_PROTECT := 5.0
 var _mission_order_token_seq := 0
 func _stamp_manual(arr: Array, queued := false) -> void:
+	if level != null and level.has_method("cancel_ram_escort"):
+		level.cancel_ram_escort(arr)
 	for u in arr:
 		if is_instance_valid(u):
 			# 任何新玩家命令都先取消同一人物正在办理的任务；随后本命令正常接管。
@@ -10614,6 +10616,9 @@ func _issue_order(p: Vector2, queued := false) -> void:
 	_click_fx_pos = p
 	_click_fx_t = 0.5
 	Sfx.play("order")
+	if not queued and level.has_method("try_ram_escort") and level.try_ram_escort(self, p, movers):
+		_click_fx_attack = false
+		return
 	_stamp_manual(movers, queued)
 	var node := _resource_at(p)
 	var rep := _damaged_building_at(p)

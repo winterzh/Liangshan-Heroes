@@ -15,6 +15,7 @@ const FEINT_AT_SIDE := "zhu_feint_at_side"
 const FEINT_SHIFTS := ["zhu_feint_guard_0", "zhu_feint_guard_1", "zhu_feint_guard_2"]
 const FEINT_PRESSURE_SECONDS := 4.0
 const FEINT_RETREAT_SECONDS := 5.0
+const ESCORT_RULE := "zhu_ram_escort_rule"
 const OUTPOST := Vector2i(36, 39)
 const EXPANSION := Vector2i(36, 16)
 const PRISON := Vector2i(11, 35)
@@ -68,6 +69,7 @@ var defense_state := "watch"
 var defense_target := Vector2.ZERO
 var defense_elapsed := 0.0
 var defense_announced := false
+var ram_escorts: Array = []
 
 func id() -> String: return "level3"
 func title() -> String: return "三打祝家庄"
@@ -318,6 +320,7 @@ func on_start(b) -> void:
 	b.mission.begin("zhu_rts", "第一打 · 扎营探路", "北取资源，南拔外营；兵营补兵、作坊造器械。先侦察，再决定主攻方向。")
 	if OS.get_name() == "Windows":
 		b.mission.events[FEINT_RULE] = true
+		b.mission.events[ESCORT_RULE] = true
 	b.mission.enable_scrolling()
 	b.mission.add_action("zhu_rts_recon","探路：查看外围战场",Vector2i(42,22),FIELD_ACTORS,1.0,64.0)
 	b.mission.add_action("zhu_rts_rescue",Localize.text("救出被囚好汉"),PRISON+Vector2i(4,0),FIELD_ACTORS,3.0,64.0)
@@ -685,11 +688,81 @@ func _feint_tick(b, seconds: float) -> void:
 	if not b.mission.mark(FEINT_HAPPENED, "正门佯攻引开部分守军。保持压力，可让孙立从偏门接应。"):
 		b.msg("正门佯攻引开部分守军。保持压力，可让孙立从偏门接应。", 5.0)
 
+static func escort_footman(u: Unit) -> bool:
+	return SquadOrders.alive(u) and u.faction == Unit.FACTION_LIANG and u.movement_profile == "land" \
+		and not (u.is_worker or u.is_hero or u.is_building or u.is_cavalry or u.is_captive or u.garrisoned or u.is_summon) \
+		and u.atk > 0.0 and not u.key.begins_with("siege_")
+
+
+static func escort_ram(u: Unit) -> bool:
+	return SquadOrders.alive(u) and u.faction == Unit.FACTION_LIANG and u.key == "siege_ram"
+
+
+func try_ram_escort(b, screen_point: Vector2, movers: Array) -> bool:
+	if not b.mission.has_event(ESCORT_RULE):
+		return false
+	var foot := movers.filter(escort_footman)
+	if foot.is_empty():
+		return false
+	var ram: Unit = b._unit_at(screen_point)
+	if not escort_ram(ram):
+		return false
+	b._stamp_manual(foot)
+	for u: Unit in foot:
+		u.order_stop()
+		u.passive = false
+		u._amove_dest = Vector2.ZERO
+		u.set_stance(Unit.STANCE_DEFEND)
+		ram_escorts.append([u, ram])
+	_escort_tick(b)
+	b.msg(Localize.format_text("%d 名步兵护卫撞车。给步兵下新命令可解除护卫。", foot.size()), 4.0)
+	return true
+
+
+func cancel_ram_escort(movers: Array) -> void:
+	if not ram_escorts.is_empty():
+		ram_escorts = ram_escorts.filter(func(pair): return not movers.has(pair[0]))
+
+
+func _escort_tick(b) -> void:
+	var slots := {}
+	for index in range(ram_escorts.size() - 1, -1, -1):
+		var pair: Array = ram_escorts[index]
+		if not is_instance_valid(pair[0]) or not escort_footman(pair[0]) or not is_instance_valid(pair[1]) or not escort_ram(pair[1]):
+			if is_instance_valid(pair[0]) and escort_footman(pair[0]):
+				pair[0].order_stop()
+			ram_escorts.remove_at(index)
+	for pair: Array in ram_escorts:
+		var foot: Unit = pair[0]
+		var ram: Unit = pair[1]
+		var slot: int = slots.get(ram, 0)
+		slots[ram] = slot + 1
+		var reach := ram.radius + foot.radius + 22.0 + float(slot / 8) * 32.0
+		var dest := ram.position + Vector2.from_angle(float(slot % 8) * TAU / 8.0) * reach
+		if not b.map.is_open_world(dest, foot.movement_profile):
+			dest = b.map.cell_to_world(b.map.nearest_open_from(b.map.world_to_cell(dest), b.map.world_to_cell(foot.position), foot.movement_profile))
+		if foot._state == Unit.ST_MOVE:
+			if foot._home.distance_to(dest) > 48.0 and foot.position.distance_to(dest) > 42.0:
+				foot._begin_move(dest)
+		else:
+			# Existing guard stance uses this anchor for short pursuit and return.
+			foot._home = dest
+			foot._has_home = true
+
+
 func unit_tactical_hint(b, u: Unit) -> String:
 	if not _alive(u) or u.garrisoned or u._invis_t > 0.0:
 		return ""
 	if u.faction == Unit.FACTION_GUAN and not b.is_visible_world(u.position):
 		return ""
+	if escort_ram(u) and b.mission.has_event(ESCORT_RULE):
+		var count := 0
+		for pair: Array in ram_escorts:
+			if is_instance_valid(pair[1]) and pair[1] == u:
+				count += 1
+		if count > 0:
+			return Localize.format_text("撞车护卫 · %d 名步兵跟随", count)
+		return Localize.text("选中步兵，右键这辆撞车即可指定护卫。")
 	if u == outpost:
 		return Localize.text("拆掉外营可断新援；已出击的庄客仍在场。")
 	if u in resource_guards:
@@ -754,6 +827,8 @@ func process(b, delta: float) -> void:
 		return
 	strategic_clock = 0.5
 	_feint_tick(b, 0.5)
+	if not ram_escorts.is_empty():
+		_escort_tick(b)
 	preload("res://scripts/zhujiazhuang_recovery_hint.gd").refresh(b)
 	if not expansion_secured and resource_guards.all(func(u): return not _alive(u)):
 		for u in b.units:
@@ -782,6 +857,14 @@ func on_unit_resolved(b, u, outcome: String) -> void:
 		b.mission.mark("zhu_hu_captured","扈三娘被生擒，仍作为敌将看押，不转为我军")
 
 func on_unit_died(b, u) -> void:
+	for index in range(ram_escorts.size() - 1, -1, -1):
+		var pair: Array = ram_escorts[index]
+		if is_instance_valid(pair[1]) and pair[1] == u:
+			if is_instance_valid(pair[0]) and escort_footman(pair[0]):
+				pair[0].order_stop()
+			ram_escorts.remove_at(index)
+		elif is_instance_valid(pair[0]) and pair[0] == u:
+			ram_escorts.remove_at(index)
 	if u == hall:
 		b.lose("前营被攻破，本次攻庄失败。\n留兵回防；选工人右键受损建筑可修理。\n出征前先处理来袭敌军，避免营地失守。")
 		return

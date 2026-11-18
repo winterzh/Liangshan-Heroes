@@ -4,6 +4,7 @@ extends RefCounted
 const Codec := preload("res://scripts/run_state_value_codec.gd")
 const U := preload("res://scripts/unit.gd")
 const Transport := preload("res://scripts/huangnigang_transport.gd")
+const SaveVersion := preload("res://scripts/run_campaign_save_version.gd")
 const SCHEMA := "campaign_level_component_v1"
 const SCRIPTS := {
 	"level1": preload("res://scripts/levels/level1_huangnigang_short.gd"),
@@ -36,6 +37,7 @@ const FIELDS := {
 		"bool": "expansion_secured supply_cut inside_open prisoners_freed manor_fallen sent_sun main_breached raid_announced raid_warned outpost_scouted expansion_spotted defense_announced",
 		"float": "elapsed train_clock raid_clock strategic_clock raid_elapsed raid_think defense_elapsed", "text": "stage raid_state defense_state", "vec": "raid_home defense_target",
 		"unit": "hall song gate side_gate enemy_base outpost hu sun",
+		"groups": "ram_escorts",
 		"units": "prisoners workers enemy_workers enemy_nodes reserve trained resource_guards raiders gate_defenders"},
 	"level4": {
 		"int": "ai_trained ai_spent_gold ai_spent_wood broken_count lhm_killed",
@@ -97,10 +99,12 @@ func _id(v: Variant) -> bool:
 func _token(v: Variant) -> bool:
 	return typeof(v) == TYPE_STRING and not v.is_empty() and v.length() <= 256
 
-func _names(level_id: String) -> Dictionary:
+func _names(level_id: String, content_version := "") -> Dictionary:
 	var result := {}
 	for kind: String in FIELDS[level_id]:
 		for field: String in String(FIELDS[level_id][kind]).split(" ", false): result[field] = kind
+	if level_id == "level3" and content_version == SaveVersion.BUILD_26735223_CONTENT:
+		result.erase("ram_escorts")
 	return result
 
 func audit_declarations(level_id: String) -> Dictionary:
@@ -220,6 +224,12 @@ func _checks(level_id: String, values: Dictionary) -> bool:
 	return true
 
 func _reference_shapes(level_id: String, references: Dictionary) -> Dictionary:
+	if level_id == "level3" and references.has("ram_escorts"):
+		var footmen := {}
+		for pair: Array in references.ram_escorts:
+			if pair.size() != 2 or pair.has(null) or pair[0] == pair[1] or footmen.has(pair[0]):
+				return _bad("RAM_ESCORT_REFERENCES", "ram_escorts")
+			footmen[pair[0]] = true
 	for field: String in REFERENCE_SHAPES[level_id]:
 		var expected: Variant = REFERENCE_SHAPES[level_id][field]
 		var rows: Variant = references.get(field)
@@ -269,7 +279,7 @@ func capture(level: Variant, level_id: String, content_version: String, id_to_un
 		if not _token(token) or seen.has(token): return _bad("EXTERNAL_TOKEN_ALIAS")
 		seen[token] = true
 	var values := {}; var refs := {}; var external := {}
-	var names := _names(level_id)
+	var names := _names(level_id, content_version)
 	for field: String in names:
 		var kind: String = names[field]
 		var v: Variant = level.get(field)
@@ -312,7 +322,7 @@ func validate(record: Variant, level_id: String, content_version: String, known_
 	var data: Dictionary = decoded.value
 	for section: String in data:
 		if typeof(data[section]) != TYPE_DICTIONARY: return _bad("SECTION_TYPE")
-	var names := _names(level_id)
+	var names := _names(level_id, content_version)
 	var count := 0
 	for field: String in names:
 		var kind: String = names[field]
@@ -348,7 +358,7 @@ func restore(record: Variant, level_id: String, content_version: String, id_to_u
 	var checked := validate(record, level_id, content_version, id_to_unit, next_entity_id, token_to_external, mission_token)
 	if not checked.ok: return checked
 	var level: Variant = SCRIPTS[level_id].new()
-	var names := _names(level_id)
+	var names := _names(level_id, content_version)
 	for field: String in names:
 		var kind: String = names[field]
 		var v: Variant
@@ -362,5 +372,10 @@ func restore(record: Variant, level_id: String, content_version: String, id_to_u
 		var current: Variant = level.get(field)
 		if typeof(current) == TYPE_ARRAY and current.is_typed(): current.assign(v); level.set(field, current)
 		else: level.set(field, v)
+	if level_id == "level3":
+		var script: Script = SCRIPTS[level_id]
+		for pair: Array in level.ram_escorts:
+			if not script.escort_footman(pair[0]) or not script.escort_ram(pair[1]):
+				return _bad("RAM_ESCORT_UNIT_TYPE", "ram_escorts")
 	return {"ok": true, "level": level, "complete_world": false, "deploy_or_start_called": false,
 		"mission_and_visuals_owned_by_caller": true, "requires_external_same_frame_install": true}

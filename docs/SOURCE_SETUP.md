@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+祝家庄新局右键撞车护卫复用现有的部队命令和守备行为。`ram_escorts` 存在关卡组件中，保存两个原实体引用。精确旧正式版 `26735223` 的战役组件保留原字段。 [护卫验证](../qa/campaign_siege_20261116/README.md#pc-撞车指定护卫)
+
 祝家庄正门牵制沿用原关卡计时、守军槽与任务事件。仅 Windows 新局登记牵制规则，旧战斗继续原守军行为。新增 `feint` 和 `returning` 属于已审计的关卡状态。四语词条在 `assets/localization/zhujiazhuang_route_status.json`。[定向与存读档](../qa/campaign_siege_20261116/README.md#pc-正门牵制和重玩建议)
 
 PC 旧战役槽的兼容身份定义在 `scripts/run_campaign_save_version.gd`。保存和结算继续使用原局身份，原生载荷校验按当前安装执行。八章早期迁移夹具及原正式待应用结算已在独立 Windows 资料目录验证。源码宿主需导入快活林六张原画摊位，避免重建时采用缺图回退。 [旧档验证](../qa/battle_entry_timing_20261116/README.md#build-26735223-战役续玩兼容)
