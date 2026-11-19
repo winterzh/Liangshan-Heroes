@@ -1,0 +1,223 @@
+{
+  "scope": "Exact new Windows build. Fresh offline player profiles and genuine Win32 window messages on private desktops. From blank opening through ordinary menu save, separate process continuation, story victory and restart rejection of old slot. Steam connection disabled.",
+  "candidate": {
+    "kind": "local_integrated_windows_candidate",
+    "commit": "c7312fe7360b164dfbbdcab57c44ffcd6602001f",
+    "source_version": "source-v1:ab5c8baa08b53161250959534d437fe0131f6f97d2e74842ff85a1d4ef5deeec",
+    "tracked_runtime_count": 6574,
+    "steps": [
+      {
+        "stage": "import",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 91.5
+      },
+      {
+        "stage": "export",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 122.4
+      }
+    ],
+    "files": [
+      {
+        "path": "GODOTSTEAM_LICENSE.txt",
+        "bytes": 1110,
+        "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+      },
+      {
+        "path": "LiangshanHeroes.exe",
+        "bytes": 1827489208,
+        "sha256": "0470b3a81131385a5300a88f1fcbf6538f867280042f1672e6e9b6c54de69a3c"
+      },
+      {
+        "path": "libgodotsteam.windows.template_release.x86_64.dll",
+        "bytes": 3961344,
+        "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+      },
+      {
+        "path": "steam_api64.dll",
+        "bytes": 319128,
+        "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+      },
+      {
+        "path": "steam_stats_reader.dll",
+        "bytes": 381440,
+        "sha256": "7505919cfff5907c13a02eb366690bff22ca6731c8521deefde58b114e4f796f"
+      },
+      {
+        "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+        "bytes": 1093,
+        "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+      }
+    ]
+  },
+  "exe_sha256": "0470b3a81131385a5300a88f1fcbf6538f867280042f1672e6e9b6c54de69a3c",
+  "all_five_exits_zero": true,
+  "total_checks": 111,
+  "stages": {
+    "opening": {
+      "checks": [
+        "normal main menu scene mounts",
+        "native menu becomes ready",
+        "native candidate hash",
+        "new Windows offline profile and no Continue action",
+        "Win32 left click opens Start Campaign",
+        "fresh profile offers Wild Boar Forest sortie",
+        "Win32 left click confirms chapter sortie",
+        "native battle reached",
+        "Wild Boar Forest is the actual first battle",
+        "Win32 left click advances prologue page 1",
+        "Win32 left click advances prologue page 2",
+        "Win32 left click advances prologue page 3",
+        "Win32 left click starts the battle",
+        "original shadow objective begins",
+        "movement cue tile is passable and visible",
+        "first move starts with an unselected hero",
+        "Win32 left click opens the initially collapsed objectives",
+        "Win32 left click on the mission's Select Lu Zhishen button",
+        "first move cue is actually drawn at the indicated tile after selection",
+        "first Win32 right click issues one movement order",
+        "real command indicator matches the cue tile",
+        "first move cue clears once the order is accepted",
+        "Lu Zhishen walks to the cue",
+        "escort advance produces the next objective at normal speed",
+        "normal following yields the observation event without starting forced rescue",
+        "normal sim clock and healthy campaign RNG"
+      ],
+      "log_sha256": "a1f523f8460d30324505ae605a6b6b43a886b651aef76974b357241b3d771056",
+      "raw_report_sha256": "0c0c4dce8d85ccdae5835a7e63c26678807533a2fb193d7221fa7706331679c5",
+      "directed_window_messages": 9
+    },
+    "save": {
+      "checks": [
+        "original Steam service initialized with its connection disabled in the isolated process",
+        "normal main menu scene mounts",
+        "native menu becomes ready",
+        "official offline player entry enabled without a private QA seam",
+        "native candidate hash",
+        "new Windows offline profile and no Continue action",
+        "Win32 left click opens Start Campaign",
+        "fresh profile offers Wild Boar Forest sortie",
+        "Win32 left click confirms chapter sortie",
+        "native battle reached",
+        "Wild Boar Forest is the actual first battle",
+        "Win32 left click advances prologue page 1",
+        "Win32 left click advances prologue page 2",
+        "Win32 left click advances prologue page 3",
+        "Win32 left click starts the battle",
+        "original shadow objective begins",
+        "movement cue tile is passable and visible",
+        "first move starts with an unselected hero",
+        "Win32 left click opens the initially collapsed objectives",
+        "Win32 left click on the mission's Select Lu Zhishen button",
+        "first move cue is actually drawn at the indicated tile after selection",
+        "first Win32 right click issues one movement order",
+        "real command indicator matches the cue tile",
+        "first move cue clears once the order is accepted",
+        "Lu Zhishen walks to the cue",
+        "escort advance produces the next objective at normal speed",
+        "normal following yields the observation event without starting forced rescue",
+        "normal sim clock and healthy campaign RNG",
+        "close the expanded objectives to reach the farther map tile",
+        "the follow-up north order starts a real walking path",
+        "native Escape pauses with the player command in flight",
+        "paused checkpoint contains the movement path and next objective",
+        "actual Save and Exit commits the local checkpoint",
+        "saved slot is bound to the offline run and exact candidate"
+      ],
+      "log_sha256": "a1f523f8460d30324505ae605a6b6b43a886b651aef76974b357241b3d771056",
+      "raw_report_sha256": "e606c5d424d9d3b7beec2871bb3034bb387761dfa7532e9bcba65e854ffb44bc",
+      "directed_window_messages": 13
+    },
+    "resume": {
+      "checks": [
+        "original Steam service initialized with its connection disabled in the isolated process",
+        "normal main menu scene mounts",
+        "native menu becomes ready",
+        "official offline player entry enabled without a private QA seam",
+        "new Windows process opens the original slot bytes",
+        "main menu enables Continue last battle with the Wild Boar Forest chapter name",
+        "actual Win32 click uses Continue last battle",
+        "official player-menu restore commits",
+        "same chapter loads at the paused checkpoint",
+        "same actor identity, hit points, paused clock, events, and order path",
+        "resume preserves the disk bytes and original offline run token",
+        "completed tutorial cue does not replay in the restored battle",
+        "native Escape resumes the restored battle",
+        "original walking path continues automatically without adding another move order",
+        "original stage advances naturally to the staff interception"
+      ],
+      "log_sha256": "a1f523f8460d30324505ae605a6b6b43a886b651aef76974b357241b3d771056",
+      "raw_report_sha256": "8e3cef1483eed3df607a35262c4911b69b6720687ce24b30f133359c23d824ef",
+      "directed_window_messages": 2
+    },
+    "finish": {
+      "checks": [
+        "original Steam service initialized with its connection disabled in the isolated process",
+        "normal main menu scene mounts",
+        "native menu becomes ready",
+        "official offline player entry enabled without a private QA seam",
+        "new Windows process opens the original slot bytes",
+        "main menu enables Continue last battle with the Wild Boar Forest chapter name",
+        "actual Win32 click uses Continue last battle",
+        "official player-menu restore commits",
+        "same chapter loads at the paused checkpoint",
+        "same actor identity, hit points, paused clock, events, and order path",
+        "resume preserves the disk bytes and original offline run token",
+        "completed tutorial cue does not replay in the restored battle",
+        "native Escape resumes the restored battle",
+        "original walking path continues automatically without adding another move order",
+        "original stage advances naturally to the staff interception",
+        "saved north route naturally reaches the rescue window",
+        "one actual Windows right click intercepts the staff",
+        "normal rescue and foot care preserve four original travelers",
+        "one real rest flag order brings the party to the rest stop",
+        "one real exit flag order leads the original party out",
+        "normal victory advances the local journal and campaign progress",
+        "four travelers escape and earn all three story goals",
+        "same four original actors and visible victory screen",
+        "same run terminal revision 3 and original slot bytes",
+        "campaign records the victory and story seal once"
+      ],
+      "log_sha256": "a1f523f8460d30324505ae605a6b6b43a886b651aef76974b357241b3d771056",
+      "raw_report_sha256": "458099801cc33d760a6c01dc33ee5c5c7c8a5d35fe787bab3fb94f2bc316d2d6",
+      "directed_window_messages": 5
+    },
+    "reject": {
+      "checks": [
+        "original Steam service initialized with its connection disabled in the isolated process",
+        "normal main menu scene mounts",
+        "native menu becomes ready",
+        "official offline player entry enabled without a private QA seam",
+        "new process independently opens the winning profile",
+        "actual Continue interaction available for the saved slot",
+        "Win32 click tests the finished slot",
+        "terminal slot is explicitly rejected",
+        "the finished battle is never mounted again",
+        "player can dismiss the terminal-slot message",
+        "successful progress and original slot are byte-identical after rejection"
+      ],
+      "log_sha256": "a1f523f8460d30324505ae605a6b6b43a886b651aef76974b357241b3d771056",
+      "raw_report_sha256": "8a00abf7e8acad3e4872173a3d6a8247e60e967089f53929f44118bde4457fcc",
+      "directed_window_messages": 2
+    }
+  },
+  "opening": {
+    "window_pixels": [
+      1280,
+      720
+    ],
+    "distance_walked_world_units": 74.927,
+    "next_stage": "shadow_wait"
+  },
+  "terminal": {
+    "chapter": "level6",
+    "rescued_actors": 4,
+    "story_done": 3,
+    "slot_unchanged_across_processes": true,
+    "terminal_revision": 3,
+    "duplicate_credit_prevented": true,
+    "old_slot_rejection": "LOCAL_RUN_TERMINAL"
+  }
+}

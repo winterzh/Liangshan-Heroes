@@ -1,0 +1,285 @@
+{
+  "scope": "Four serial exact native Windows profiles A/B/B/A. Real menu and Win32 directed input, Vulkan Forward+ 1280x720 at 60 FPS. Each fresh process runs cold and a same-process reentry. No physical input. Windows disk caches and background scheduling can differ across launches.",
+  "duration_scope": "CanvasItem inter-signal gaps can contain other main-thread work. This diagnostic compares first entry and repeat entry; sustained battle frame timing is independent.",
+  "builds": {
+    "A": {
+      "commit": "c7312fe7360b164dfbbdcab57c44ffcd6602001f",
+      "exe_sha256": "0470b3a81131385a5300a88f1fcbf6538f867280042f1672e6e9b6c54de69a3c",
+      "steps": [
+        {
+          "stage": "import",
+          "exit_code": 0,
+          "errors": [],
+          "seconds": 91.5
+        },
+        {
+          "stage": "export",
+          "exit_code": 0,
+          "errors": [],
+          "seconds": 122.4
+        }
+      ]
+    },
+    "B": {
+      "commit": "31c567ed797d0668a22c0cd08bcb71c3b7d23dbc",
+      "exe_sha256": "0ee28ce4af0e5754b58e0a99c1b6f82fe041ad12b804a48cd3860e476509a224",
+      "steps": [
+        {
+          "stage": "import",
+          "exit_code": 0,
+          "errors": [],
+          "seconds": 134.52
+        },
+        {
+          "stage": "export",
+          "exit_code": 0,
+          "errors": [],
+          "seconds": 129.43
+        }
+      ]
+    }
+  },
+  "runs": [
+    {
+      "run": "A1",
+      "variant": "A",
+      "samples": [
+        {
+          "visit": 1,
+          "entry_to_loading_render_ms": 54.1,
+          "entry_to_battle_attached_ms": 221.07,
+          "battle_attached_to_scene_ready_ms": 318.93,
+          "scene_ready_to_pre_draw_ms": 158.94,
+          "pre_draw_to_post_draw_ms": 24.14,
+          "entry_to_first_battle_render_ms": 723.08,
+          "right_click_to_order_render_ms": 42.87,
+          "prepared_idle_at_mount": [],
+          "last_loading_frame_to_first_battle_render_ms": 520.55,
+          "slowest_interval_before_battle_attach_ms": 35.28,
+          "unit_adjacent_draw_intervals_total_ms": 68.262,
+          "unit_draw_signals": 34
+        },
+        {
+          "visit": 2,
+          "entry_to_loading_render_ms": 53.66,
+          "entry_to_battle_attached_ms": 370.62,
+          "battle_attached_to_scene_ready_ms": 131.19,
+          "scene_ready_to_pre_draw_ms": 81.81,
+          "pre_draw_to_post_draw_ms": 5.74,
+          "entry_to_first_battle_render_ms": 589.36,
+          "right_click_to_order_render_ms": 40.99,
+          "prepared_idle_at_mount": [
+            "ordinary_character|res://assets/anim/character_traits_v2_liu_tang_ne_hold_idle_se.tres",
+            "gongsun_later|idle",
+            "unit|wu_yong|idle|se",
+            "unit|lou_luo|idle|se"
+          ],
+          "last_loading_frame_to_first_battle_render_ms": 223.28,
+          "slowest_interval_before_battle_attach_ms": 144.44,
+          "unit_adjacent_draw_intervals_total_ms": 2.58,
+          "unit_draw_signals": 34
+        }
+      ],
+      "log_sha256": "3c3f6301abea85065bbfdff88e03fb359583de52a19cc13f61abd2878adfccdc"
+    },
+    {
+      "run": "B1",
+      "variant": "B",
+      "samples": [
+        {
+          "visit": 1,
+          "entry_to_loading_render_ms": 71.14,
+          "entry_to_battle_attached_ms": 254.6,
+          "battle_attached_to_scene_ready_ms": 324.2,
+          "scene_ready_to_pre_draw_ms": 106.15,
+          "pre_draw_to_post_draw_ms": 27.68,
+          "entry_to_first_battle_render_ms": 712.63,
+          "right_click_to_order_render_ms": 41.99,
+          "prepared_idle_at_mount": [
+            "ordinary_character|res://assets/anim/character_traits_v2_liu_tang_ne_hold_idle_se.tres",
+            "gongsun_later|idle",
+            "validated|res://assets/anim/wu_yong_idle_se.tres",
+            "validated|res://assets/anim/lou_luo_idle_se.png"
+          ],
+          "last_loading_frame_to_first_battle_render_ms": 477.91,
+          "slowest_interval_before_battle_attach_ms": 41.34,
+          "unit_adjacent_draw_intervals_total_ms": 15.575,
+          "unit_draw_signals": 34
+        },
+        {
+          "visit": 2,
+          "entry_to_loading_render_ms": 52.27,
+          "entry_to_battle_attached_ms": 205.74,
+          "battle_attached_to_scene_ready_ms": 121.77,
+          "scene_ready_to_pre_draw_ms": 69.42,
+          "pre_draw_to_post_draw_ms": 6.02,
+          "entry_to_first_battle_render_ms": 402.95,
+          "right_click_to_order_render_ms": 57.89,
+          "prepared_idle_at_mount": [
+            "ordinary_character|res://assets/anim/character_traits_v2_liu_tang_ne_hold_idle_se.tres",
+            "gongsun_later|idle",
+            "unit|wu_yong|idle|se",
+            "unit|lou_luo|idle|se"
+          ],
+          "last_loading_frame_to_first_battle_render_ms": 216.53,
+          "slowest_interval_before_battle_attach_ms": 36.12,
+          "unit_adjacent_draw_intervals_total_ms": 2.343,
+          "unit_draw_signals": 34
+        }
+      ],
+      "log_sha256": "9d8b62970e18868111c9b0ae9097c67121e88c82940b62d553c7d5c73b042712"
+    },
+    {
+      "run": "B2",
+      "variant": "B",
+      "samples": [
+        {
+          "visit": 1,
+          "entry_to_loading_render_ms": 58.04,
+          "entry_to_battle_attached_ms": 219.59,
+          "battle_attached_to_scene_ready_ms": 248.83,
+          "scene_ready_to_pre_draw_ms": 90.98,
+          "pre_draw_to_post_draw_ms": 19.4,
+          "entry_to_first_battle_render_ms": 578.81,
+          "right_click_to_order_render_ms": 29.02,
+          "prepared_idle_at_mount": [
+            "ordinary_character|res://assets/anim/character_traits_v2_liu_tang_ne_hold_idle_se.tres",
+            "gongsun_later|idle",
+            "validated|res://assets/anim/wu_yong_idle_se.tres",
+            "validated|res://assets/anim/lou_luo_idle_se.png"
+          ],
+          "last_loading_frame_to_first_battle_render_ms": 370.7,
+          "slowest_interval_before_battle_attach_ms": 29.31,
+          "unit_adjacent_draw_intervals_total_ms": 13.208,
+          "unit_draw_signals": 34
+        },
+        {
+          "visit": 2,
+          "entry_to_loading_render_ms": 35.72,
+          "entry_to_battle_attached_ms": 168.98,
+          "battle_attached_to_scene_ready_ms": 108.05,
+          "scene_ready_to_pre_draw_ms": 68.0,
+          "pre_draw_to_post_draw_ms": 4.18,
+          "entry_to_first_battle_render_ms": 349.21,
+          "right_click_to_order_render_ms": 59.01,
+          "prepared_idle_at_mount": [
+            "ordinary_character|res://assets/anim/character_traits_v2_liu_tang_ne_hold_idle_se.tres",
+            "gongsun_later|idle",
+            "unit|wu_yong|idle|se",
+            "unit|lou_luo|idle|se"
+          ],
+          "last_loading_frame_to_first_battle_render_ms": 198.28,
+          "slowest_interval_before_battle_attach_ms": 32.12,
+          "unit_adjacent_draw_intervals_total_ms": 2.658,
+          "unit_draw_signals": 34
+        }
+      ],
+      "log_sha256": "afc2deaffabac20503888e9fbecabbf7716a7e2d13b9c949172204a611b38a91"
+    },
+    {
+      "run": "A2",
+      "variant": "A",
+      "samples": [
+        {
+          "visit": 1,
+          "entry_to_loading_render_ms": 53.31,
+          "entry_to_battle_attached_ms": 204.11,
+          "battle_attached_to_scene_ready_ms": 253.55,
+          "scene_ready_to_pre_draw_ms": 149.17,
+          "pre_draw_to_post_draw_ms": 16.56,
+          "entry_to_first_battle_render_ms": 623.4,
+          "right_click_to_order_render_ms": 29.09,
+          "prepared_idle_at_mount": [],
+          "last_loading_frame_to_first_battle_render_ms": 436.96,
+          "slowest_interval_before_battle_attach_ms": 34.24,
+          "unit_adjacent_draw_intervals_total_ms": 62.915,
+          "unit_draw_signals": 34
+        },
+        {
+          "visit": 2,
+          "entry_to_loading_render_ms": 69.93,
+          "entry_to_battle_attached_ms": 236.41,
+          "battle_attached_to_scene_ready_ms": 117.3,
+          "scene_ready_to_pre_draw_ms": 66.67,
+          "pre_draw_to_post_draw_ms": 4.9,
+          "entry_to_first_battle_render_ms": 425.27,
+          "right_click_to_order_render_ms": 41.14,
+          "prepared_idle_at_mount": [
+            "ordinary_character|res://assets/anim/character_traits_v2_liu_tang_ne_hold_idle_se.tres",
+            "gongsun_later|idle",
+            "unit|wu_yong|idle|se",
+            "unit|lou_luo|idle|se"
+          ],
+          "last_loading_frame_to_first_battle_render_ms": 207.74,
+          "slowest_interval_before_battle_attach_ms": 25.95,
+          "unit_adjacent_draw_intervals_total_ms": 2.367,
+          "unit_draw_signals": 34
+        }
+      ],
+      "log_sha256": "a8278ba4d03c50746d9190720e4d469c8622a60ac5942b884df17825de09aa49"
+    }
+  ],
+  "cold_summary_medians_ms": {
+    "A": {
+      "entry_to_loading_render_ms": 53.705,
+      "entry_to_first_battle_render_ms": 673.24,
+      "scene_ready_to_pre_draw_ms": 154.055,
+      "unit_adjacent_draw_intervals_total_ms": 65.5885,
+      "last_loading_frame_to_first_battle_render_ms": 478.755,
+      "slowest_interval_before_battle_attach_ms": 34.760000000000005
+    },
+    "B": {
+      "entry_to_loading_render_ms": 64.59,
+      "entry_to_first_battle_render_ms": 645.72,
+      "scene_ready_to_pre_draw_ms": 98.565,
+      "unit_adjacent_draw_intervals_total_ms": 14.3915,
+      "last_loading_frame_to_first_battle_render_ms": 424.305,
+      "slowest_interval_before_battle_attach_ms": 35.325
+    }
+  },
+  "cancel_after_threaded_requests": {
+    "candidate_exe_sha256": "0ee28ce4af0e5754b58e0a99c1b6f82fe041ad12b804a48cd3860e476509a224",
+    "cases": [
+      {
+        "level": "level5",
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [
+          "WARNING: 2D MSAA is not yet supported for GLES3."
+        ],
+        "requests_before_cancel": 18,
+        "gao_idle_requests_before_cancel": 4,
+        "restored_active_cap": true,
+        "log_sha256": "5b017273a377a670222f4e91b24ddb46a67a5137dd2cbf71a7568271f9021445"
+      }
+    ]
+  },
+  "candidate_six_mode_regression": {
+    "scope": "90-second native Windows smoke on the exact B binary. The fixture verifies all six frozen files first and exercises six modes serially.",
+    "seconds": 90.795358,
+    "expected_modes": {
+      "arena:arena": 3,
+      "campaign:level1": 3,
+      "campaign:level5": 2,
+      "custom_defense:custom_defense": 2,
+      "skirmish:skirmish": 2,
+      "skirmish_ai:skirmish_ai": 2
+    },
+    "checks": 131,
+    "transition_count": 14,
+    "all_modes_start_and_release": true,
+    "campaign_save_unchanged": true,
+    "long_run_acceptance_eligible": false,
+    "process": {
+      "exe_sha256": "0ee28ce4af0e5754b58e0a99c1b6f82fe041ad12b804a48cd3860e476509a224",
+      "exe_unchanged": true,
+      "exit_code": 0,
+      "seconds": 111.398,
+      "active_fps_cap": 0,
+      "errors": [],
+      "warnings": [],
+      "log_sha256": "50fea67ca56bb9f84dd1f3c313c565d4766453c5ae27bd4b6bdb0369f21021fc",
+      "report_sha256": "95d0dbf7cdf18d6ce91a94c971d40ed020224f5c72e13c7ac8702a1a3f16e103"
+    }
+  }
+}

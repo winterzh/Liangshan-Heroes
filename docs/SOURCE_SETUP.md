@@ -1,6 +1,12 @@
 # 源码设置与换机（2026-10-30）
 
-高俅在 Windows 加载画面出现后后台读取刘唐、吴用、公孙胜和喽啰的开场站姿。源码对照验证四条正常绘制路线的帧、图集、坐标和方向判定一致。实窗首帧与冷加载总耗时待复验。 [素材核对](../qa/battle_entry_timing_20261116/gao_opening_art_source_parity_20261119.json)
+Windows 本地导出 c7312fe7 从空白档完成野猪林首次指令、保存、独立重启、原队伍四人出林和演义 3/3；终局后再次进菜单按原规则拒绝旧槽，存档与战役进度摘要一致。五进程共 111 项通过。 [野猪林验收](../qa/battle_entry_timing_20261116/windows_yezhulin_route_c7312fe7.json)
+
+Windows 候选 31c567ed 完成六入口短测，14 次进出均释放战场，存档保持原状态。 [实窗对照和六模式短测](../qa/battle_entry_timing_20261116/windows_gao_idle_prefetch_abba_31c567ed.json)
+
+c7312fe7 的正常速度十分钟水战完整性通过，P95/P99 为 21.902/26.411 ms。P95 高于 16.7 ms 目标，保留新版测试和旧包全部对照。 [新版水战](../qa/campaign_sustained_performance_20261116/windows_water_600_c7312fe7.json)
+
+高俅在 Windows 加载画面出现后后台读取刘唐、吴用、公孙胜和喽啰的开场站姿。源码对照验证四条正常绘制路线的帧、图集、坐标和方向判定一致。原生四次冷进对照中，场景就绪到绘制前中位数 154.055 → 98.565 ms，点击到首帧 673.240 → 645.720 ms，加载提示 53.705 → 64.590 ms。四组资源提交后可正常退出。 [原生对照](../qa/battle_entry_timing_20261116/windows_gao_idle_prefetch_abba_31c567ed.json)
 
 f4383f2d 同包十分钟水战复测 P95 为 12.741 ms，达到 16.7 ms 目标。前一轮同包为 18.686 ms，两轮 605 个逐秒战况点一致。两轮高俅冷进也确认首帧成本集中在刘唐、吴用、公孙胜和喽啰。 [复测](../qa/campaign_sustained_performance_20261116/windows_water_600_retest_f4383f2d.json) · [角色分段](../qa/battle_entry_timing_20261116/windows_gao_opening_units_f4383f2d.json)
 
