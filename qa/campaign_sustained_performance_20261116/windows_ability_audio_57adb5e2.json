@@ -1,0 +1,77 @@
+{
+  "scope": "Released Windows executables with a Battle timing subclass. 165s Compatibility 1440x900 fixed coastal scene and normal speed each. The 7462nd physics step is the same three casts and trajectory; frame timing includes other work.",
+  "candidate_source_commit": "57adb5e2060cdebd85d0e61a7c99a11591ed4353",
+  "candidate_exe_sha256": "014582e4c8c1c077a56ca5418efbb512d48a1a5f0baba3e5580e7f3e49b400be",
+  "before_after": {
+    "31c567ed": {
+      "pending_cast_pass_us": 23633,
+      "audio_us_at_most": 17181,
+      "per_ability_audio_us": {
+        "wu_yong_w": 8719,
+        "gong_icewall": 4983,
+        "liu_tang_w": 3479
+      },
+      "preparation_status": {},
+      "enclosing_frame": {
+        "frame": 11167,
+        "sample_start_us": 119350603,
+        "interval_us": 50972,
+        "physics_tick": 7463,
+        "physical_callbacks": 2,
+        "physics_to_idle_us": 36936,
+        "idle_to_draw_us": 6480,
+        "draw_signals_us": 7262
+      },
+      "exe_sha256": "0ee28ce4af0e5754b58e0a99c1b6f82fe041ad12b804a48cd3860e476509a224",
+      "log_sha256": "b502601caac95e647c720373fe4d67035689d3bcf3e0d5bbb3a837f38798af3d",
+      "raw_report_sha256": "0bd1c257f972e2229edb0283b7d38000838c009117f10609e7127aecbc8e07a1",
+      "trace_sha256": "e6450b26f26a3431d1edf13ce18022e620ebd9a23733444063d9d4ecdc6d6d5e"
+    },
+    "57adb5e2": {
+      "pending_cast_pass_us": 4319,
+      "audio_us_at_most": 155,
+      "per_ability_audio_us": {
+        "wu_yong_w": 66,
+        "gong_icewall": 49,
+        "liu_tang_w": 40
+      },
+      "preparation_status": {
+        "wu_yong_w": "ready",
+        "gong_icewall": "ready",
+        "liu_tang_w": "ready"
+      },
+      "enclosing_frame": {
+        "frame": 14506,
+        "sample_start_us": 119353618,
+        "interval_us": 22559,
+        "physics_tick": 7462,
+        "physical_callbacks": 1,
+        "physics_to_idle_us": 10588,
+        "idle_to_draw_us": 5173,
+        "draw_signals_us": 6720
+      },
+      "exe_sha256": "014582e4c8c1c077a56ca5418efbb512d48a1a5f0baba3e5580e7f3e49b400be",
+      "log_sha256": "fe7108e03ace960ed3950e915bdca04d8311e0545eaf74073d6ab4a4befbabeb",
+      "raw_report_sha256": "75597711f8a42d1bfa78ffd9a9c04755e1d9a5b2420d7db56fd6e4fa9033e79c",
+      "trace_sha256": "b9c92ca16d9f1b19e5c1183fc92403738e9704a43db8f77b6c025fef96baaa8b"
+    }
+  },
+  "physics_step": 7462,
+  "matching_trajectory_points": 170,
+  "integrity_checks_per_run": 13,
+  "audio_timing_floor_us": 15,
+  "headless_cases": {
+    "checks": 28,
+    "errors": [],
+    "log_sha256": "e9b376d866b13c5afb9424b9edf5d510cdb1dff355fce8df3321364c594c62dd",
+    "probe_sha256": "30940f6ca9ea05398ecf52e00abfdb6093af9be1593c7f40d6d191dbfe69bdf6",
+    "published_probe_utf8_lf_sha256": "e29796a6a9404431ad9b1fc752723b6ad705075a8da83f3c21e425f9c71d4ed0"
+  },
+  "runtime_input_differences_vs_31c": [
+    "assets/localization/catalog.json",
+    "scripts/battle.gd",
+    "scripts/levels/level6_yezhulin.gd",
+    "scripts/run_hud_state.gd",
+    "scripts/sfx.gd"
+  ]
+}

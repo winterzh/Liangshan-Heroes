@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+Windows 在英雄抬手时后台合成技能音效。在结算时使用已就绪音频，临时来不及生成时同步播放。高俅第 7462 个物理步，吴用、公孙胜和刘唐三段音效主线程合计由 17.181 ms 降至为 0.155 ms，整组技能结算由 23.633 ms 降至 4.319 ms。两侧 170 个逐秒战况点一致，28 项源码检查通过。技能特效、伤害、冷却和播放时机沿用原入口。 [分段与复测](../qa/campaign_sustained_performance_20261116/windows_ability_audio_57adb5e2.json)
+
 野猪林将左键选中鲁智深和右键林边移动的提示放到顶部状态条，任务栏收起时也有当前操作。下令后显示原距离状态，过近、过远时优先显示战术警告。存档记录原距离状态，续玩时直接显示战术信息。四语源码状态共 44 项通过。真人首玩仍待记录。 [源码状态检查](../qa/battle_entry_timing_20261116/windows_yezhulin_first_order_guidance_source_20261119.json)
 
 Windows 候选 6aa9d230 的 720p 和 1080p 窗口均验证四语顶栏可见和首条右键指令。首条指令前、移动途中各完成保存和独立进程继续，读取原跟随状态并保留原路径。六进程共 189 项通过。新版试玩 ZIP 的六文件、干净解压和独立启动通过。 [实窗与续玩](../qa/battle_entry_timing_20261116/windows_yezhulin_first_order_guidance_6aa9d230.json) · [新版试玩包](../qa/battle_entry_timing_20261116/windows_playtest_package_6aa9d230.json)
