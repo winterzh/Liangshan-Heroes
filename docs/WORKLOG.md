@@ -38,6 +38,10 @@ Windows 候选 57adb5e2 用相同战况单独关闭视口 GPU 计时，完成 60
 
 Windows 候选 e5b4010a 完成高俅十分钟实际水战。P95/P99 为 23.082/26.854 ms，73 个帧间隔超过 33.3 ms。本次仍有帧时指标高于门槛。三波水陆战、18 艘付费船与 13 项检查通过。与 57adb5e2 共有 605 个逐秒点一致。 [十分钟原生水战](../qa/campaign_sustained_performance_20261116/windows_water_600_e5b4010a.json)
 
+Windows 将画面外的普通资源树摆动重绘延后，摆动时钟、采集和通行照常。镜头或视口改变时，回到绘制范围的树使用当前动画状态补绘。候选 64ec064e 在同一海岸镜头省去全部 49,505 次远处树木重绘，170 个共同战况点一致。实窗镜头跳到 1.8 倍树林，首帧无需额外物理步即按最新时钟重绘一次。继续摆动、返回海岸及采空回收均通过。镜头定向共 18 项通过。 [画面外树木验收](../qa/campaign_sustained_performance_20261116/windows_water_tree_sway_64ec064e.json)
+
+同一 Windows 64ec064e 用 Compatibility 完整运行 600.000 秒，P95/P99 为 12.847/14.931 ms，达到本次单机门槛。 0 帧超过 33.3 ms，最长 29.326 ms。三波水陆交战、18 艘付费船和 13 项检查通过，与 e5b4010a 的 605 个共同战况点一致。 Windows 64ec064e 在 1280×720 Vulkan Forward+ 的六模式短测中完成 15 次开战和返回，关键战场节点全部释放，战役进度文件字节一致。最长单帧 239.860 ms。 [十分钟水战](../qa/campaign_sustained_performance_20261116/windows_water_600_64ec064e.json) · [六模式短测](../qa/battle_entry_timing_20261116/windows_six_mode_smoke_64ec064e.json)
+
 同一 Windows e5b4010a 以 Compatibility 运行 600.019 秒逐帧分段。47,777 帧的信号顺序均有效。5,417 个超过 16.7 ms、只执行一个物理步且没有集中下令的帧中，空闲至绘制前的中位数为 7.069 ms，两个绘制信号之间为 7.168 ms。21 个超过 33.3 ms 的长帧中，15 个最长的区间是物理信号到空闲信号，集中下令只出现于 2 个长帧。 同一 EXE 按项目默认启动，日志确认 Vulkan Forward+。1440×900、标准特效、固定镜头和 1 倍速度完成 600.012 秒。P95/P99 为 14.365/17.052 ms，达到本次单机门槛。 仍有 24 帧超过 33.3 ms，最长 154.668 ms。前一轮强制 Compatibility 为 23.082/26.854 ms。两次独立运行共用战况与配置，采样时间不同。默认渲染器三波交战、18 艘付费船与 13 项检查通过，双方共有 605 个逐秒战况点一致。 [逐帧收据](../qa/campaign_sustained_performance_20261116/windows_water_all_phases_600_e5b4010a.json) · [默认渲染器十分钟](../qa/campaign_sustained_performance_20261116/windows_water_default_renderer_600_e5b4010a.json)
 
 Windows 候选 e5b4010a 的野猪林用隔离窗口发送实际点击消息，验证两种分辨率的四语首条指令和命令回显。独立进程读回首条命令前的存档，四进程共 140 项通过。六模式短测完成 14 次开战、返回与释放，战役进度字节一致。 [输入与续玩](../qa/battle_entry_timing_20261116/windows_yezhulin_onboarding_e5b4010a.json) · [六模式](../qa/battle_entry_timing_20261116/windows_six_mode_smoke_e5b4010a.json)

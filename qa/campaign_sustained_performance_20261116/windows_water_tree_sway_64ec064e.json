@@ -1,0 +1,355 @@
+{
+  "duplicate_draw_observer": {
+    "commit": "e5b4010a46911f60209a969a30bcf0553ad5e2c8",
+    "exe_sha256": "a0790df0430b9e2e475080d46575b2988f4b597b3e54c5a1251281a762528ccb",
+    "report_sha256": "7501896b6d649dfccc034050854dcbcc0400532a37228c9f693c9f54afc412df",
+    "log_sha256": "c98cc7af2d8fa118f079ce2166f908437e527f489ead61dfdef353626d8ae30d",
+    "normal_speed_seconds": 165.006033,
+    "checks_passed": 13,
+    "matched_battle_points": 170,
+    "scope": "Exported Windows executable observed via CanvasItem draw signals of each native Unit. Signal counts distinguish draw callback executions from unit redraw requests and from GPU draw calls. Timing includes observer overhead.",
+    "all_frames": {
+      "frames": 21676,
+      "total_unit_draws": 305980,
+      "excess_draws_of_same_unit_in_one_frame": 20,
+      "unit_draw_count_median": 0,
+      "unit_draw_count_p95": 41,
+      "draws_before_idle": 38,
+      "building_and_resource_draws": 91026,
+      "water_unit_draws": 41827,
+      "frame_p95_ms": 12.974,
+      "idle_to_pre_draw_median_ms": 2.196
+    },
+    "one_physics_step_no_scripted_order": {
+      "frames": 9818,
+      "total_unit_draws": 303185,
+      "excess_draws_of_same_unit_in_one_frame": 16,
+      "unit_draw_count_median": 29,
+      "unit_draw_count_p95": 43,
+      "draws_before_idle": 30,
+      "building_and_resource_draws": 90266,
+      "water_unit_draws": 41455,
+      "frame_p95_ms": 14.065,
+      "idle_to_pre_draw_median_ms": 3.179
+    },
+    "one_physics_step_no_scripted_order_slow": {
+      "frames": 72,
+      "total_unit_draws": 2723,
+      "excess_draws_of_same_unit_in_one_frame": 0,
+      "unit_draw_count_median": 42,
+      "unit_draw_count_p95": 47,
+      "draws_before_idle": 0,
+      "building_and_resource_draws": 724,
+      "water_unit_draws": 419,
+      "frame_p95_ms": 19.529,
+      "idle_to_pre_draw_median_ms": 6.495
+    },
+    "no_physics_step": {
+      "frames": 11776,
+      "total_unit_draws": 0,
+      "excess_draws_of_same_unit_in_one_frame": 0,
+      "unit_draw_count_median": 0,
+      "unit_draw_count_p95": 0,
+      "draws_before_idle": 0,
+      "building_and_resource_draws": 0,
+      "water_unit_draws": 0,
+      "frame_p95_ms": 7.857,
+      "idle_to_pre_draw_median_ms": 1.189
+    },
+    "multiple_steps": {
+      "frames": 0
+    }
+  },
+  "viewport_positions_observer": {
+    "scope": "Coordinates are the Unit canvas origins in the actual fixed viewport at draw time. 200 logical pixels is an observation margin, not proof of full sprite or shadow bounds. The debug observer adds work; this run is not an FPS acceptance test. Both original draw observers kept all game drawing and did not change animation.",
+    "instrumented_draw_positions_in_windows_candidate": "e5b4010a46911f60209a969a30bcf0553ad5e2c8",
+    "exe_sha256": "a0790df0430b9e2e475080d46575b2988f4b597b3e54c5a1251281a762528ccb",
+    "report_sha256": "fae6a8ea5f60945505440e030a9bd165d7e5f4d8d7b7ead842b3f34c1d4e1ecb",
+    "log_sha256": "fa316044ab2b4c35235a5eb63a6403cce54b8d6bfbfb92d59db0a0d114da03f7",
+    "sample_seconds": 165.006708,
+    "frames": 21725,
+    "integrity_checks": 13,
+    "matched_battle_points": 170,
+    "viewport_columns": [
+      "center_in_viewport",
+      "center_within_200_logical_px_of_viewport",
+      "center_farther_than_200_logical_px"
+    ],
+    "draws": {
+      "all_draws": {
+        "center_in_viewport": 153203,
+        "center_within_200_logical_px_of_viewport": 50429,
+        "center_farther_than_200_logical_px": 102396
+      },
+      "resources": {
+        "center_in_viewport": 0,
+        "center_within_200_logical_px_of_viewport": 0,
+        "center_farther_than_200_logical_px": 49505
+      },
+      "buildings": {
+        "center_in_viewport": 11707,
+        "center_within_200_logical_px_of_viewport": 23703,
+        "center_farther_than_200_logical_px": 6122
+      },
+      "moving_land_and_water": {
+        "center_in_viewport": 141496,
+        "center_within_200_logical_px_of_viewport": 26726,
+        "center_farther_than_200_logical_px": 46769
+      },
+      "by_kind": {
+        "building.barracks": [
+          9901,
+          6121,
+          0
+        ],
+        "building.hall": [
+          0,
+          9901,
+          0
+        ],
+        "building.house": [
+          0,
+          7681,
+          6122
+        ],
+        "building.shipyard": [
+          1806,
+          0,
+          0
+        ],
+        "land.gongsun_sheng": [
+          9150,
+          0,
+          0
+        ],
+        "land.guan_dao": [
+          1312,
+          1249,
+          0
+        ],
+        "land.guan_gong": [
+          225,
+          201,
+          0
+        ],
+        "land.liang_dao": [
+          8315,
+          548,
+          0
+        ],
+        "land.liang_gong": [
+          29911,
+          0,
+          0
+        ],
+        "land.liang_qiang": [
+          31612,
+          259,
+          0
+        ],
+        "land.liu_tang": [
+          9476,
+          18,
+          0
+        ],
+        "land.lou_luo": [
+          614,
+          24404,
+          46769
+        ],
+        "land.wu_yong": [
+          9045,
+          47,
+          0
+        ],
+        "resource.tree": [
+          0,
+          0,
+          49505
+        ],
+        "water.imperial_warship": [
+          1961,
+          0,
+          0
+        ],
+        "water.liangshan_warship": [
+          12446,
+          0,
+          0
+        ],
+        "water.ruan_xiaoer_boat": [
+          9097,
+          0,
+          0
+        ],
+        "water.ruan_xiaoqi_boat": [
+          8751,
+          0,
+          0
+        ],
+        "water.ruan_xiaowu_boat": [
+          9581,
+          0,
+          0
+        ]
+      },
+      "initial_tree_nodes": 5,
+      "potential_far_trees": 5,
+      "far_resource_or_building_positions": {
+        "22": [
+          "tree",
+          160.0,
+          -352.0,
+          13.0
+        ],
+        "23": [
+          "tree",
+          288.0,
+          -352.0,
+          13.0
+        ],
+        "24": [
+          "tree",
+          416.0,
+          -320.0,
+          13.0
+        ],
+        "25": [
+          "tree",
+          -224.0,
+          -160.0,
+          13.0
+        ],
+        "27": [
+          "tree",
+          1408.0,
+          -496.0,
+          13.0
+        ],
+        "84": [
+          "house",
+          96.0,
+          -288.0,
+          20.0
+        ],
+        "90": [
+          "house",
+          512.0,
+          -304.0,
+          20.0
+        ]
+      }
+    }
+  },
+  "native_fixed_camera_prototype": {
+    "scope": "Offline native prototype modifies only the spawned tree script in a loose diagnostic scene. Stable exact game executable, fixed camera 1440x900, Compatibility, standard visual effects, original draw position observer. This run does not validate camera motion or changing the release, and instrumentation runs one time each so timing differences are descriptive.",
+    "exe_sha256": "a0790df0430b9e2e475080d46575b2988f4b597b3e54c5a1251281a762528ccb",
+    "raw_probe_sha256": "83b8c8eec84b06a9963cb0e7c8212c9885820fa34be9e7589543c83b56a9ee52",
+    "native_log_sha256": "8a097697885013e306077d39420d27417f4efdefb43f156ff9b0fa62342fbecb",
+    "checks_passed": 13,
+    "same_battle_points": 170,
+    "land_and_water_contact": true,
+    "baseline": {
+      "total_unit_draws": 306028,
+      "tree_unit_draws": [
+        0,
+        0,
+        49505
+      ],
+      "frames": 21725,
+      "p95_ms": 12.962,
+      "p99_ms": 15.232,
+      "worst_ms": 24.892,
+      "simulated_seconds": 165.016666666667
+    },
+    "prototype": {
+      "total_unit_draws": 256480,
+      "tree_unit_draws": [
+        0,
+        0,
+        0
+      ],
+      "frames": 23641,
+      "p95_ms": 11.624,
+      "p99_ms": 13.625,
+      "worst_ms": 27.721,
+      "simulated_seconds": 165.0
+    }
+  },
+  "compiled_windows_candidate": {
+    "candidate_commit": "64ec064ef954579bb2fd0fbe1e0412cf2f2bd431",
+    "exe_sha256": "9a35cfce640da13f3aff356cb624bcaf816400c4032c1db21071c49756f7c537",
+    "scope": "Windows native candidate 1440x900, Compatibility, normal speed, isolation desktop. Fixed-camera draw observer is a 165-second paired diagnostic, not the ten-minute frame-time gate. The separate camera run drives the Windows game Viewport and checks the original art draw with the latest animation clock.",
+    "fixed_camera_samples": {
+      "prior_candidate": {
+        "tree_redraws_by_distance": [
+          0,
+          0,
+          49505
+        ],
+        "native_unit_draws": 306028,
+        "seconds": 165.006708,
+        "frames": 21725,
+        "p95_ms": 12.962,
+        "p99_ms": 15.232,
+        "worst_frame_ms": 24.892
+      },
+      "current_candidate": {
+        "tree_redraws_by_distance": [
+          0,
+          0,
+          0
+        ],
+        "native_unit_draws": 256523,
+        "seconds": 165.01089,
+        "frames": 24682,
+        "p95_ms": 11.662,
+        "p99_ms": 14.115,
+        "worst_frame_ms": 27.076
+      },
+      "matched_battle_points": 170,
+      "checks_passed": 13,
+      "raw_report_sha256": "12b1b72c8a4cc4855af78b1df9cbf2927053c4fd51dd228a722aa733a809354d",
+      "native_log_sha256": "ff53a10fc7c9e787842aa86578da21471dfdea757f150bc146aec2e6007847cb",
+      "native_exit": 0
+    },
+    "native_camera_and_resource_lifecycle": {
+      "checks_passed": 18,
+      "checks": [
+        "background music synthesis finished before battle setup",
+        "production 60Hz physics configuration",
+        "fixed gameplay RNG configured through production new-game API before attach",
+        "initial gameplay seed and zero draws observed before deployment",
+        "Windows native sway deferral enabled",
+        "native battle observes viewport size changes",
+        "exact five native forest trees deferred at the coast",
+        "outside sea view, ambient clock advances with no tree redraw",
+        "zoomed camera jump actually places the tree on screen",
+        "first forest frame had no new physics step",
+        "first forest frame immediately draws exactly once",
+        "first forest draw uses the latest clock accumulated offscreen",
+        "tree was removed from deferred set as it became visible",
+        "actual first forest frame captured",
+        "visible tree keeps animating normally",
+        "returning to coast defers ambient tree sway again",
+        "depleted tree erased from deferred redraws",
+        "depleted native tree freed normally"
+      ],
+      "facts": {
+        "clock_at_first_forest_frame": 5.08333333333332,
+        "clock_before_wait": 4.99999999999999,
+        "draws_at_first_forest_frame": 1,
+        "forest_screen_point": [
+          639.999877929688,
+          425.698120117188
+        ],
+        "same_physics_step": true,
+        "tree_id": 22
+      },
+      "first_forest_frame_sha256": "54c38fcdafc2f88c397f240e0b9315603c1b01a4ac374002ee6fd8b691449def",
+      "raw_report_sha256": "613a4fbbf6a1f46c27c6647bbfafe0c2ef7207781c56d7a62d57510d271bb4a7",
+      "native_log_sha256": "4030421cccc4d3bb0a95b95a21565fd698add37d35c8cdc10d57fa0a8e743518",
+      "native_exit": 0
+    }
+  }
+}
