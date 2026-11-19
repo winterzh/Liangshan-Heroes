@@ -1,0 +1,124 @@
+{
+  "candidate_commit": "f4383f2d2a20491c7cf05fb4d3f85a68286a82cd",
+  "exe_sha256": "c6643a03452e3643ea4e69f44e309ddfcc8a97348cbaf9c7211a96d7ee3c1be0",
+  "scope": "Exact Windows binary linked from the validated candidate. Offline, isolated desktop, 60 FPS cap. One process per route, fresh user and shader profile in each, two visits. HWND-directed click and keyboard messages, no physical input. Shader and process caches are warm on the second visit.",
+  "measurement_scope": "Time markers from SceneTree.scene_changed and paired RenderingServer.frame_pre_draw/frame_post_draw after loading. Before pre_draw includes engine scheduling and CPU-side work. Inter-signal time is wall time. The viewport CPU/GPU query returns the latest available sample, with no attribution to the exact first draw. Monitor-enabled run.",
+  "runs": [
+    {
+      "mode": "random",
+      "label": "随机驻守",
+      "renderer": "gl_compatibility",
+      "client_pixels": [
+        960,
+        540
+      ],
+      "log_sha256": "14dc750caed387a3e9888b5abbd5ed34d40c8dc3f897ed4b163b589ede7fb04d",
+      "warnings": [
+        "WARNING: 2D MSAA is not yet supported for GLES3."
+      ],
+      "samples": [
+        {
+          "battle_attached_to_scene_ready_ms": 215.17,
+          "entry_fixture_request_ms": 0.44,
+          "entry_to_battle_attached_ms": 241.72,
+          "entry_to_first_battle_render_ms": 567.97,
+          "entry_to_first_render_ms": 1.89,
+          "entry_to_loading_render_ms": 68.54,
+          "frames_before_scene_ready": 7,
+          "intro_pages": 2,
+          "latest_viewport_measurement_ms": [
+            0.707000017166138,
+            0.264999985694885
+          ],
+          "menu_until_entry_enabled_ms": 1839.76,
+          "mode_page_ms": 37.14,
+          "pre_draw_to_post_draw_ms": 21.13,
+          "right_click_to_order_render_ms": 36.14,
+          "scene_ready_to_first_battle_render_ms": 111.08,
+          "scene_ready_to_pre_draw_ms": 89.95,
+          "start_button_to_fight_render_ms": null,
+          "visit": 1
+        },
+        {
+          "battle_attached_to_scene_ready_ms": 107.44,
+          "entry_fixture_request_ms": 0.68,
+          "entry_to_battle_attached_ms": 233.16,
+          "entry_to_first_battle_render_ms": 418.05,
+          "entry_to_first_render_ms": 2.4,
+          "entry_to_loading_render_ms": 54.09,
+          "frames_before_scene_ready": 6,
+          "intro_pages": 2,
+          "latest_viewport_measurement_ms": [
+            0.73199999332428,
+            0.25
+          ],
+          "menu_until_entry_enabled_ms": 0.03,
+          "mode_page_ms": 12.29,
+          "pre_draw_to_post_draw_ms": 6.23,
+          "right_click_to_order_render_ms": 50.61,
+          "scene_ready_to_first_battle_render_ms": 77.44,
+          "scene_ready_to_pre_draw_ms": 71.22,
+          "start_button_to_fight_render_ms": null,
+          "visit": 2
+        }
+      ]
+    },
+    {
+      "mode": "level5",
+      "label": "三败高太尉",
+      "renderer": "forward_plus",
+      "client_pixels": [
+        1280,
+        720
+      ],
+      "log_sha256": "16f89da1fc8d99829fd0f4c40b37615d5f8fc8a376c2350c0bffd9a1168ddc58",
+      "warnings": [],
+      "samples": [
+        {
+          "battle_attached_to_scene_ready_ms": 292.68,
+          "entry_fixture_request_ms": 0.54,
+          "entry_to_battle_attached_ms": 218.87,
+          "entry_to_first_battle_render_ms": 691.64,
+          "entry_to_first_render_ms": 5.39,
+          "entry_to_loading_render_ms": 54.9,
+          "frames_before_scene_ready": 10,
+          "intro_pages": 4,
+          "latest_viewport_measurement_ms": [
+            0.649999976158142,
+            0.090999998152256
+          ],
+          "menu_until_entry_enabled_ms": 1942.53,
+          "mode_page_ms": 34.48,
+          "pre_draw_to_post_draw_ms": 20.62,
+          "right_click_to_order_render_ms": 38.74,
+          "scene_ready_to_first_battle_render_ms": 180.08,
+          "scene_ready_to_pre_draw_ms": 159.47,
+          "start_button_to_fight_render_ms": 28.42,
+          "visit": 1
+        },
+        {
+          "battle_attached_to_scene_ready_ms": 149.69,
+          "entry_fixture_request_ms": 0.44,
+          "entry_to_battle_attached_ms": 220.07,
+          "entry_to_first_battle_render_ms": 463.12,
+          "entry_to_first_render_ms": 1.32,
+          "entry_to_loading_render_ms": 53.21,
+          "frames_before_scene_ready": 13,
+          "intro_pages": 4,
+          "latest_viewport_measurement_ms": [
+            0.518999993801117,
+            0.130999997258186
+          ],
+          "menu_until_entry_enabled_ms": 0.03,
+          "mode_page_ms": 15.35,
+          "pre_draw_to_post_draw_ms": 6.61,
+          "right_click_to_order_render_ms": 200.33,
+          "scene_ready_to_first_battle_render_ms": 93.36,
+          "scene_ready_to_pre_draw_ms": 86.76,
+          "start_button_to_fight_render_ms": 21.25,
+          "visit": 2
+        }
+      ]
+    }
+  ]
+}

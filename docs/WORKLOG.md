@@ -1,5 +1,9 @@
 # 开发日志
 
+## 2026-11-19 Windows 水战与战场首帧复验
+
+Windows 试玩包 f4383f2d 的高俅固定镜头水战覆盖 600.002 秒，三波交战和 13 项完整性通过，P95 为 18.686 ms，超过 16.7 ms 目标。随机驻守和高俅的首帧分段显示，场景就绪后的主要等待位于绘制前信号之前，继续定位该区间。 [水战帧时](../qa/campaign_sustained_performance_20261116/windows_water_600_f4383f2d.json) · [首帧分段](../qa/battle_entry_timing_20261116/windows_first_draw_f4383f2d.json)
+
 ## 2026-11-19 Windows 输入与反馈复验
 
 f4383f2d 的五种 Windows 窗口消息路径各完成两次，包括野猪林和 1v1，首个右键可执行。暂停与结算的四语内容在 720p、1080p 实窗共通过 48 项。 [原生输入与反馈](../qa/battle_entry_timing_20261116/windows_input_and_feedback_f4383f2d.json)
