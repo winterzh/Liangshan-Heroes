@@ -85,6 +85,8 @@ static func opening_scenery_texture_paths(id: String) -> Array[String]:
 	if id == "level1":
 		for object in _huangnigang_opening_scenery():
 			_append_scenery_texture(paths, "object", id, String(object[3]))
+		# The seven ground overlays share one atlas; let the scenery load it once.
+		return paths
 	elif id == "level3":
 		_append_scenery_texture(paths, "object", id, "zhujiazhuang_hall")
 	else:
