@@ -32,6 +32,8 @@ Windows 候选 57adb5e2 用相同战况单独关闭视口 GPU 计时，完成 60
 
 Windows 候选 e5b4010a 完成高俅十分钟实际水战。P95/P99 为 23.082/26.854 ms，73 个帧间隔超过 33.3 ms。本次仍有帧时指标高于门槛。三波水陆战、18 艘付费船与 13 项检查通过。与 57adb5e2 共有 605 个逐秒点一致。 [十分钟原生水战](../qa/campaign_sustained_performance_20261116/windows_water_600_e5b4010a.json)
 
+同一 Windows e5b4010a 以 Compatibility 运行 600.019 秒逐帧分段。47,777 帧的信号顺序均有效。5,417 个超过 16.7 ms、只执行一个物理步且没有集中下令的帧中，空闲至绘制前的中位数为 7.069 ms，两个绘制信号之间为 7.168 ms。21 个超过 33.3 ms 的长帧中，15 个最长的区间是物理信号到空闲信号，集中下令只出现于 2 个长帧。 同一 EXE 按项目默认启动，日志确认 Vulkan Forward+。1440×900、标准特效、固定镜头和 1 倍速度完成 600.012 秒。P95/P99 为 14.365/17.052 ms，达到本次单机门槛。 仍有 24 帧超过 33.3 ms，最长 154.668 ms。前一轮强制 Compatibility 为 23.082/26.854 ms。两次独立运行共用战况与配置，采样时间不同。默认渲染器三波交战、18 艘付费船与 13 项检查通过，双方共有 605 个逐秒战况点一致。 [逐帧收据](../qa/campaign_sustained_performance_20261116/windows_water_all_phases_600_e5b4010a.json) · [默认渲染器十分钟](../qa/campaign_sustained_performance_20261116/windows_water_default_renderer_600_e5b4010a.json)
+
 Windows 候选 e5b4010a 的野猪林用隔离窗口发送实际点击消息，验证两种分辨率的四语首条指令和命令回显。独立进程读回首条命令前的存档，四进程共 140 项通过。六模式短测完成 14 次开战、返回与释放，战役进度字节一致。 [输入与续玩](../qa/battle_entry_timing_20261116/windows_yezhulin_onboarding_e5b4010a.json) · [六模式](../qa/battle_entry_timing_20261116/windows_six_mode_smoke_e5b4010a.json)
 
 Windows 候选 31c567ed 的离线试玩 ZIP 已回读六个文件，逐项校验后从干净解压目录隔离启动通过。祝家庄首次进入和同进程重进均能正常出征、右键下令和 Esc 暂停恢复，加载提示约 54 ms，首帧约 530、372 ms。 [试玩包与祝家庄入口](../qa/battle_entry_timing_20261116/windows_playtest_package_31c567ed.json)

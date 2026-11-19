@@ -1,0 +1,1473 @@
+{
+  "candidate_commit": "e5b4010a46911f60209a969a30bcf0553ad5e2c8",
+  "exe_sha256": "a0790df0430b9e2e475080d46575b2988f4b597b3e54c5a1251281a762528ccb",
+  "raw_report_sha256": "07e18bad4243c6df7596a737dd1cbdd96903e1b2f5ae188b24d2c0733f64fa84",
+  "native_log_sha256": "dfad60dd590ca197dfe26a9ab7ab56b3535442df742a219a52c8cf85a9316283",
+  "native_exit": 0,
+  "phase_method": "All post-draw to post-draw intervals from the same Windows Compatibility workload. The diagnostic script adds SceneTree and RenderingServer timestamps and wraps Battle and driver callbacks. Signal intervals include engine processing and scheduler delays. They cannot attribute GPU hardware time or isolate all scripts.",
+  "settings": {
+    "renderer": "gl_compatibility",
+    "resolution": [
+      1440,
+      900
+    ],
+    "camera": "fixed",
+    "effects_quality": "standard",
+    "simulated_speed": 1.0,
+    "vsync_disabled_in_fixture": true,
+    "fixture_warms_up_music_and_first_five_seconds": true,
+    "viewport_measurement_enabled": true
+  },
+  "integrity": {
+    "checks_passed": 13,
+    "waves": [
+      true,
+      true,
+      true
+    ],
+    "ships": 18,
+    "same_candidate_battle_points": 604,
+    "changed_points": 0,
+    "automated_orders": 637
+  },
+  "same_candidate_prior_uninstrumented": {
+    "duration": 600.009173,
+    "frames": 40011,
+    "p95_ms": 23.082,
+    "p99_ms": 26.854,
+    "over_33_3_ms": 73,
+    "worst_ms": 126.668
+  },
+  "instrumented_diagnostic": {
+    "duration": 600.019491,
+    "frames": 47777,
+    "p95_ms": 18.266,
+    "p99_ms": 21.587,
+    "over_33_3_ms": 21,
+    "worst_ms": 156.752
+  },
+  "valid_frames": 47777,
+  "invalid_frames_by_cause": {},
+  "all_valid": {
+    "frame_count": 47777,
+    "physics_step_counts": {
+      "1": 35246,
+      "0": 12176,
+      "2": 340,
+      "3": 6,
+      "5": 4,
+      "8": 3,
+      "6": 1,
+      "4": 1
+    },
+    "largest_interval_counts": {
+      "pre_draw_to_post_draw": 41298,
+      "idle_to_pre_draw": 6072,
+      "physics_signal_to_idle": 407
+    },
+    "over_33_3_ms": 21,
+    "frames_with_scripted_order_batch": 300,
+    "frames_with_second_trajectory_sample": 599,
+    "measurement_ms": {
+      "elapsed_us": {
+        "median": 13.616,
+        "p95": 18.266,
+        "p99": 21.587,
+        "max": 156.752
+      },
+      "previous_draw_to_first_signal": {
+        "median": 0.094,
+        "p95": 0.154,
+        "p99": 0.212,
+        "max": 3.175
+      },
+      "physics_signal_to_idle": {
+        "median": 2.668,
+        "p95": 4.008,
+        "p99": 6.955,
+        "max": 94.515
+      },
+      "idle_to_pre_draw": {
+        "median": 4.648,
+        "p95": 7.441,
+        "p99": 8.928,
+        "max": 48.338
+      },
+      "pre_draw_to_post_draw": {
+        "median": 5.953,
+        "p95": 7.57,
+        "p99": 8.359,
+        "max": 43.991
+      },
+      "battle_physics_us": {
+        "median": 1.208,
+        "p95": 2.125,
+        "p99": 2.805,
+        "max": 49.613
+      },
+      "battle_idle_us": {
+        "median": 0.302,
+        "p95": 0.457,
+        "p99": 0.587,
+        "max": 3.661
+      },
+      "fixture_tick_driver_us": {
+        "median": 0.009,
+        "p95": 0.018,
+        "p99": 0.297,
+        "max": 13.617
+      },
+      "physics_unattributed_us": {
+        "median": 1.39,
+        "p95": 2.073,
+        "p99": 3.63,
+        "max": 44.657
+      }
+    }
+  },
+  "over_33_3_ms": {
+    "frame_count": 21,
+    "physics_step_counts": {
+      "1": 5,
+      "2": 3,
+      "3": 5,
+      "5": 4,
+      "8": 3,
+      "6": 1
+    },
+    "largest_interval_counts": {
+      "pre_draw_to_post_draw": 2,
+      "idle_to_pre_draw": 4,
+      "physics_signal_to_idle": 15
+    },
+    "over_33_3_ms": 21,
+    "frames_with_scripted_order_batch": 2,
+    "frames_with_second_trajectory_sample": 1,
+    "measurement_ms": {
+      "elapsed_us": {
+        "median": 52.557,
+        "p95": 147.009,
+        "p99": 156.752,
+        "max": 156.752
+      },
+      "previous_draw_to_first_signal": {
+        "median": 0.208,
+        "p95": 0.872,
+        "p99": 1.226,
+        "max": 1.226
+      },
+      "physics_signal_to_idle": {
+        "median": 26.684,
+        "p95": 86.814,
+        "p99": 94.515,
+        "max": 94.515
+      },
+      "idle_to_pre_draw": {
+        "median": 16.121,
+        "p95": 32.996,
+        "p99": 48.338,
+        "max": 48.338
+      },
+      "pre_draw_to_post_draw": {
+        "median": 13.918,
+        "p95": 33.063,
+        "p99": 43.991,
+        "max": 43.991
+      },
+      "battle_physics_us": {
+        "median": 9.199,
+        "p95": 44.161,
+        "p99": 49.613,
+        "max": 49.613
+      },
+      "battle_idle_us": {
+        "median": 0.754,
+        "p95": 1.966,
+        "p99": 3.005,
+        "max": 3.005
+      },
+      "fixture_tick_driver_us": {
+        "median": 0.06,
+        "p95": 8.948,
+        "p99": 13.617,
+        "max": 13.617
+      },
+      "physics_unattributed_us": {
+        "median": 13.503,
+        "p95": 43.741,
+        "p99": 44.657,
+        "max": 44.657
+      }
+    }
+  },
+  "one_physics_no_scripted_batch": {
+    "frame_count": 34950,
+    "physics_step_counts": {
+      "1": 34950
+    },
+    "largest_interval_counts": {
+      "pre_draw_to_post_draw": 28936,
+      "idle_to_pre_draw": 5986,
+      "physics_signal_to_idle": 28
+    },
+    "over_33_3_ms": 4,
+    "frames_with_scripted_order_batch": 0,
+    "frames_with_second_trajectory_sample": 595,
+    "measurement_ms": {
+      "elapsed_us": {
+        "median": 14.484,
+        "p95": 18.321,
+        "p99": 20.297,
+        "max": 41.538
+      },
+      "previous_draw_to_first_signal": {
+        "median": 0.098,
+        "p95": 0.157,
+        "p99": 0.216,
+        "max": 3.096
+      },
+      "physics_signal_to_idle": {
+        "median": 2.887,
+        "p95": 4.005,
+        "p99": 4.67,
+        "max": 15.223
+      },
+      "idle_to_pre_draw": {
+        "median": 5.077,
+        "p95": 7.704,
+        "p99": 9.057,
+        "max": 17.081
+      },
+      "pre_draw_to_post_draw": {
+        "median": 6.179,
+        "p95": 7.672,
+        "p99": 8.424,
+        "max": 15.835
+      },
+      "battle_physics_us": {
+        "median": 1.317,
+        "p95": 2.184,
+        "p99": 2.66,
+        "max": 7.686
+      },
+      "battle_idle_us": {
+        "median": 0.306,
+        "p95": 0.461,
+        "p99": 0.595,
+        "max": 3.661
+      },
+      "fixture_tick_driver_us": {
+        "median": 0.01,
+        "p95": 0.018,
+        "p99": 0.252,
+        "max": 1.35
+      },
+      "physics_unattributed_us": {
+        "median": 1.513,
+        "p95": 2.071,
+        "p99": 2.434,
+        "max": 10.376
+      }
+    }
+  },
+  "one_physics_no_scripted_batch_over_16_7_ms": {
+    "frame_count": 5417,
+    "physics_step_counts": {
+      "1": 5417
+    },
+    "largest_interval_counts": {
+      "idle_to_pre_draw": 2643,
+      "pre_draw_to_post_draw": 2751,
+      "physics_signal_to_idle": 23
+    },
+    "over_33_3_ms": 4,
+    "frames_with_scripted_order_batch": 0,
+    "frames_with_second_trajectory_sample": 96,
+    "measurement_ms": {
+      "elapsed_us": {
+        "median": 17.71,
+        "p95": 20.607,
+        "p99": 23.136,
+        "max": 41.538
+      },
+      "previous_draw_to_first_signal": {
+        "median": 0.118,
+        "p95": 0.187,
+        "p99": 0.27,
+        "max": 3.096
+      },
+      "physics_signal_to_idle": {
+        "median": 3.448,
+        "p95": 4.733,
+        "p99": 5.703,
+        "max": 15.223
+      },
+      "idle_to_pre_draw": {
+        "median": 7.069,
+        "p95": 9.265,
+        "p99": 10.485,
+        "max": 17.081
+      },
+      "pre_draw_to_post_draw": {
+        "median": 7.168,
+        "p95": 8.507,
+        "p99": 9.431,
+        "max": 15.835
+      },
+      "battle_physics_us": {
+        "median": 1.566,
+        "p95": 2.661,
+        "p99": 3.151,
+        "max": 7.686
+      },
+      "battle_idle_us": {
+        "median": 0.364,
+        "p95": 0.553,
+        "p99": 0.73,
+        "max": 3.661
+      },
+      "fixture_tick_driver_us": {
+        "median": 0.012,
+        "p95": 0.022,
+        "p99": 0.298,
+        "max": 0.817
+      },
+      "physics_unattributed_us": {
+        "median": 1.776,
+        "p95": 2.437,
+        "p99": 3.372,
+        "max": 10.376
+      }
+    }
+  },
+  "no_physics": {
+    "frame_count": 12176,
+    "physics_step_counts": {
+      "0": 12176
+    },
+    "largest_interval_counts": {
+      "pre_draw_to_post_draw": 12174,
+      "idle_to_pre_draw": 2
+    },
+    "over_33_3_ms": 0,
+    "frames_with_scripted_order_batch": 0,
+    "frames_with_second_trajectory_sample": 0,
+    "measurement_ms": {
+      "elapsed_us": {
+        "median": 6.921,
+        "p95": 9.702,
+        "p99": 11.023,
+        "max": 15.666
+      },
+      "previous_draw_to_first_signal": {
+        "median": 0.077,
+        "p95": 0.14,
+        "p99": 0.189,
+        "max": 3.175
+      },
+      "physics_signal_to_idle": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+      },
+      "idle_to_pre_draw": {
+        "median": 1.602,
+        "p95": 3.625,
+        "p99": 4.526,
+        "max": 6.07
+      },
+      "pre_draw_to_post_draw": {
+        "median": 5.053,
+        "p95": 6.656,
+        "p99": 7.301,
+        "max": 11.43
+      },
+      "battle_physics_us": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+      },
+      "battle_idle_us": {
+        "median": 0.28,
+        "p95": 0.443,
+        "p99": 0.551,
+        "max": 1.2
+      },
+      "fixture_tick_driver_us": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+      },
+      "physics_unattributed_us": {
+        "median": 0.0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "max": 0.0
+      }
+    }
+  },
+  "one_physics_without_fixture_sampling_or_orders": {
+    "frame_count": 34355,
+    "physics_step_counts": {
+      "1": 34355
+    },
+    "largest_interval_counts": {
+      "pre_draw_to_post_draw": 28420,
+      "idle_to_pre_draw": 5908,
+      "physics_signal_to_idle": 27
+    },
+    "over_33_3_ms": 4,
+    "frames_with_scripted_order_batch": 0,
+    "frames_with_second_trajectory_sample": 0,
+    "measurement_ms": {
+      "elapsed_us": {
+        "median": 14.479,
+        "p95": 18.321,
+        "p99": 20.28,
+        "max": 41.538
+      },
+      "previous_draw_to_first_signal": {
+        "median": 0.098,
+        "p95": 0.157,
+        "p99": 0.216,
+        "max": 3.096
+      },
+      "physics_signal_to_idle": {
+        "median": 2.883,
+        "p95": 3.989,
+        "p99": 4.655,
+        "max": 15.223
+      },
+      "idle_to_pre_draw": {
+        "median": 5.079,
+        "p95": 7.705,
+        "p99": 9.057,
+        "max": 17.081
+      },
+      "pre_draw_to_post_draw": {
+        "median": 6.179,
+        "p95": 7.673,
+        "p99": 8.424,
+        "max": 15.835
+      },
+      "battle_physics_us": {
+        "median": 1.318,
+        "p95": 2.185,
+        "p99": 2.662,
+        "max": 7.686
+      },
+      "battle_idle_us": {
+        "median": 0.307,
+        "p95": 0.461,
+        "p99": 0.595,
+        "max": 3.661
+      },
+      "fixture_tick_driver_us": {
+        "median": 0.01,
+        "p95": 0.017,
+        "p99": 0.023,
+        "max": 0.333
+      },
+      "physics_unattributed_us": {
+        "median": 1.512,
+        "p95": 2.068,
+        "p99": 2.428,
+        "max": 10.376
+      }
+    }
+  },
+  "per_minute": [
+    {
+      "frame_count": 7297,
+      "physics_step_counts": {
+        "1": 3601,
+        "0": 3696
+      },
+      "largest_interval_counts": {
+        "pre_draw_to_post_draw": 7092,
+        "idle_to_pre_draw": 174,
+        "physics_signal_to_idle": 31
+      },
+      "over_33_3_ms": 0,
+      "frames_with_scripted_order_batch": 30,
+      "frames_with_second_trajectory_sample": 60,
+      "measurement_ms": {
+        "elapsed_us": {
+          "median": 8.011,
+          "p95": 13.102,
+          "p99": 15.212,
+          "max": 20.861
+        },
+        "previous_draw_to_first_signal": {
+          "median": 0.053,
+          "p95": 0.126,
+          "p99": 0.184,
+          "max": 3.175
+        },
+        "physics_signal_to_idle": {
+          "median": 0.0,
+          "p95": 2.877,
+          "p99": 3.702,
+          "max": 13.496
+        },
+        "idle_to_pre_draw": {
+          "median": 2.462,
+          "p95": 4.35,
+          "p99": 5.543,
+          "max": 10.646
+        },
+        "pre_draw_to_post_draw": {
+          "median": 4.489,
+          "p95": 6.264,
+          "p99": 7.067,
+          "max": 9.298
+        },
+        "battle_physics_us": {
+          "median": 0.0,
+          "p95": 1.384,
+          "p99": 1.95,
+          "max": 2.865
+        },
+        "battle_idle_us": {
+          "median": 0.228,
+          "p95": 0.355,
+          "p99": 0.462,
+          "max": 0.904
+        },
+        "fixture_tick_driver_us": {
+          "median": 0.0,
+          "p95": 0.013,
+          "p99": 0.176,
+          "max": 6.341
+        },
+        "physics_unattributed_us": {
+          "median": 0.0,
+          "p95": 1.58,
+          "p99": 2.049,
+          "max": 6.249
+        }
+      }
+    },
+    {
+      "frame_count": 6674,
+      "physics_step_counts": {
+        "0": 3086,
+        "1": 3577,
+        "2": 10,
+        "3": 1
+      },
+      "largest_interval_counts": {
+        "pre_draw_to_post_draw": 6374,
+        "idle_to_pre_draw": 262,
+        "physics_signal_to_idle": 38
+      },
+      "over_33_3_ms": 3,
+      "frames_with_scripted_order_batch": 30,
+      "frames_with_second_trajectory_sample": 60,
+      "measurement_ms": {
+        "elapsed_us": {
+          "median": 8.677,
+          "p95": 14.806,
+          "p99": 17.708,
+          "max": 39.032
+        },
+        "previous_draw_to_first_signal": {
+          "median": 0.057,
+          "p95": 0.137,
+          "p99": 0.194,
+          "max": 0.957
+        },
+        "physics_signal_to_idle": {
+          "median": 1.755,
+          "p95": 3.132,
+          "p99": 4.096,
+          "max": 18.692
+        },
+        "idle_to_pre_draw": {
+          "median": 2.823,
+          "p95": 5.334,
+          "p99": 6.938,
+          "max": 13.647
+        },
+        "pre_draw_to_post_draw": {
+          "median": 4.494,
+          "p95": 6.697,
+          "p99": 7.635,
+          "max": 14.458
+        },
+        "battle_physics_us": {
+          "median": 0.799,
+          "p95": 1.585,
+          "p99": 2.167,
+          "max": 7.442
+        },
+        "battle_idle_us": {
+          "median": 0.244,
+          "p95": 0.393,
+          "p99": 0.498,
+          "max": 1.085
+        },
+        "fixture_tick_driver_us": {
+          "median": 0.006,
+          "p95": 0.015,
+          "p99": 0.204,
+          "max": 9.989
+        },
+        "physics_unattributed_us": {
+          "median": 0.92,
+          "p95": 1.632,
+          "p99": 2.222,
+          "max": 9.923
+        }
+      }
+    },
+    {
+      "frame_count": 4614,
+      "physics_step_counts": {
+        "1": 3557,
+        "0": 1036,
+        "2": 21
+      },
+      "largest_interval_counts": {
+        "pre_draw_to_post_draw": 4038,
+        "idle_to_pre_draw": 534,
+        "physics_signal_to_idle": 42
+      },
+      "over_33_3_ms": 0,
+      "frames_with_scripted_order_batch": 30,
+      "frames_with_second_trajectory_sample": 60,
+      "measurement_ms": {
+        "elapsed_us": {
+          "median": 13.603,
+          "p95": 17.697,
+          "p99": 21.055,
+          "max": 30.783
+        },
+        "previous_draw_to_first_signal": {
+          "median": 0.098,
+          "p95": 0.158,
+          "p99": 0.219,
+          "max": 3.096
+        },
+        "physics_signal_to_idle": {
+          "median": 2.764,
+          "p95": 4.053,
+          "p99": 7.416,
+          "max": 17.375
+        },
+        "idle_to_pre_draw": {
+          "median": 4.641,
+          "p95": 7.14,
+          "p99": 8.34,
+          "max": 10.747
+        },
+        "pre_draw_to_post_draw": {
+          "median": 5.949,
+          "p95": 7.392,
+          "p99": 8.262,
+          "max": 10.16
+        },
+        "battle_physics_us": {
+          "median": 1.227,
+          "p95": 2.091,
+          "p99": 2.647,
+          "max": 5.385
+        },
+        "battle_idle_us": {
+          "median": 0.314,
+          "p95": 0.473,
+          "p99": 0.603,
+          "max": 1.012
+        },
+        "fixture_tick_driver_us": {
+          "median": 0.009,
+          "p95": 0.018,
+          "p99": 0.326,
+          "max": 8.73
+        },
+        "physics_unattributed_us": {
+          "median": 1.46,
+          "p95": 2.164,
+          "p99": 3.949,
+          "max": 10.719
+        }
+      }
+    },
+    {
+      "frame_count": 4518,
+      "physics_step_counts": {
+        "1": 3554,
+        "0": 941,
+        "2": 23
+      },
+      "largest_interval_counts": {
+        "pre_draw_to_post_draw": 3869,
+        "idle_to_pre_draw": 605,
+        "physics_signal_to_idle": 44
+      },
+      "over_33_3_ms": 0,
+      "frames_with_scripted_order_batch": 30,
+      "frames_with_second_trajectory_sample": 60,
+      "measurement_ms": {
+        "elapsed_us": {
+          "median": 13.854,
+          "p95": 17.701,
+          "p99": 21.697,
+          "max": 31.702
+        },
+        "previous_draw_to_first_signal": {
+          "median": 0.098,
+          "p95": 0.151,
+          "p99": 0.203,
+          "max": 0.543
+        },
+        "physics_signal_to_idle": {
+          "median": 2.876,
+          "p95": 4.076,
+          "p99": 8.011,
+          "max": 16.158
+        },
+        "idle_to_pre_draw": {
+          "median": 4.727,
+          "p95": 7.132,
+          "p99": 8.481,
+          "max": 11.417
+        },
+        "pre_draw_to_post_draw": {
+          "median": 5.979,
+          "p95": 7.306,
+          "p99": 8.331,
+          "max": 11.466
+        },
+        "battle_physics_us": {
+          "median": 1.294,
+          "p95": 2.188,
+          "p99": 2.781,
+          "max": 4.899
+        },
+        "battle_idle_us": {
+          "median": 0.32,
+          "p95": 0.477,
+          "p99": 0.619,
+          "max": 1.2
+        },
+        "fixture_tick_driver_us": {
+          "median": 0.009,
+          "p95": 0.018,
+          "p99": 0.327,
+          "max": 6.599
+        },
+        "physics_unattributed_us": {
+          "median": 1.509,
+          "p95": 2.17,
+          "p99": 4.117,
+          "max": 7.855
+        }
+      }
+    },
+    {
+      "frame_count": 4555,
+      "physics_step_counts": {
+        "1": 3582,
+        "0": 964,
+        "2": 9
+      },
+      "largest_interval_counts": {
+        "pre_draw_to_post_draw": 3927,
+        "idle_to_pre_draw": 594,
+        "physics_signal_to_idle": 34
+      },
+      "over_33_3_ms": 0,
+      "frames_with_scripted_order_batch": 30,
+      "frames_with_second_trajectory_sample": 60,
+      "measurement_ms": {
+        "elapsed_us": {
+          "median": 13.851,
+          "p95": 17.176,
+          "p99": 20.414,
+          "max": 29.852
+        },
+        "previous_draw_to_first_signal": {
+          "median": 0.098,
+          "p95": 0.149,
+          "p99": 0.203,
+          "max": 0.699
+        },
+        "physics_signal_to_idle": {
+          "median": 2.817,
+          "p95": 3.965,
+          "p99": 5.27,
+          "max": 14.664
+        },
+        "idle_to_pre_draw": {
+          "median": 4.748,
+          "p95": 7.113,
+          "p99": 8.274,
+          "max": 11.821
+        },
+        "pre_draw_to_post_draw": {
+          "median": 5.991,
+          "p95": 7.241,
+          "p99": 8.067,
+          "max": 10.303
+        },
+        "battle_physics_us": {
+          "median": 1.303,
+          "p95": 2.169,
+          "p99": 2.635,
+          "max": 5.427
+        },
+        "battle_idle_us": {
+          "median": 0.315,
+          "p95": 0.467,
+          "p99": 0.596,
+          "max": 2.392
+        },
+        "fixture_tick_driver_us": {
+          "median": 0.009,
+          "p95": 0.017,
+          "p99": 0.307,
+          "max": 7.058
+        },
+        "physics_unattributed_us": {
+          "median": 1.442,
+          "p95": 1.988,
+          "p99": 2.812,
+          "max": 6.775
+        }
+      }
+    },
+    {
+      "frame_count": 4192,
+      "physics_step_counts": {
+        "1": 3527,
+        "0": 628,
+        "2": 37
+      },
+      "largest_interval_counts": {
+        "idle_to_pre_draw": 689,
+        "pre_draw_to_post_draw": 3460,
+        "physics_signal_to_idle": 43
+      },
+      "over_33_3_ms": 0,
+      "frames_with_scripted_order_batch": 30,
+      "frames_with_second_trajectory_sample": 60,
+      "measurement_ms": {
+        "elapsed_us": {
+          "median": 14.73,
+          "p95": 18.636,
+          "p99": 21.908,
+          "max": 27.919
+        },
+        "previous_draw_to_first_signal": {
+          "median": 0.103,
+          "p95": 0.159,
+          "p99": 0.222,
+          "max": 0.521
+        },
+        "physics_signal_to_idle": {
+          "median": 2.997,
+          "p95": 4.257,
+          "p99": 7.815,
+          "max": 16.92
+        },
+        "idle_to_pre_draw": {
+          "median": 5.14,
+          "p95": 7.643,
+          "p99": 8.954,
+          "max": 11.623
+        },
+        "pre_draw_to_post_draw": {
+          "median": 6.281,
+          "p95": 7.634,
+          "p99": 8.371,
+          "max": 10.826
+        },
+        "battle_physics_us": {
+          "median": 1.369,
+          "p95": 2.316,
+          "p99": 2.97,
+          "max": 5.166
+        },
+        "battle_idle_us": {
+          "median": 0.323,
+          "p95": 0.478,
+          "p99": 0.596,
+          "max": 3.661
+        },
+        "fixture_tick_driver_us": {
+          "median": 0.01,
+          "p95": 0.019,
+          "p99": 0.319,
+          "max": 8.832
+        },
+        "physics_unattributed_us": {
+          "median": 1.566,
+          "p95": 2.175,
+          "p99": 3.944,
+          "max": 7.314
+        }
+      }
+    },
+    {
+      "frame_count": 4306,
+      "physics_step_counts": {
+        "1": 3568,
+        "0": 722,
+        "2": 16
+      },
+      "largest_interval_counts": {
+        "pre_draw_to_post_draw": 3545,
+        "idle_to_pre_draw": 723,
+        "physics_signal_to_idle": 38
+      },
+      "over_33_3_ms": 0,
+      "frames_with_scripted_order_batch": 30,
+      "frames_with_second_trajectory_sample": 60,
+      "measurement_ms": {
+        "elapsed_us": {
+          "median": 14.432,
+          "p95": 17.873,
+          "p99": 20.889,
+          "max": 28.081
+        },
+        "previous_draw_to_first_signal": {
+          "median": 0.101,
+          "p95": 0.157,
+          "p99": 0.217,
+          "max": 2.361
+        },
+        "physics_signal_to_idle": {
+          "median": 2.844,
+          "p95": 4.003,
+          "p99": 6.525,
+          "max": 13.123
+        },
+        "idle_to_pre_draw": {
+          "median": 5.019,
+          "p95": 7.477,
+          "p99": 8.53,
+          "max": 11.776
+        },
+        "pre_draw_to_post_draw": {
+          "median": 6.256,
+          "p95": 7.517,
+          "p99": 8.262,
+          "max": 10.308
+        },
+        "battle_physics_us": {
+          "median": 1.292,
+          "p95": 2.161,
+          "p99": 2.682,
+          "max": 5.986
+        },
+        "battle_idle_us": {
+          "median": 0.311,
+          "p95": 0.466,
+          "p99": 0.567,
+          "max": 1.093
+        },
+        "fixture_tick_driver_us": {
+          "median": 0.01,
+          "p95": 0.019,
+          "p99": 0.32,
+          "max": 5.665
+        },
+        "physics_unattributed_us": {
+          "median": 1.492,
+          "p95": 2.06,
+          "p99": 3.495,
+          "max": 9.964
+        }
+      }
+    },
+    {
+      "frame_count": 4318,
+      "physics_step_counts": {
+        "0": 728,
+        "1": 3581,
+        "2": 9
+      },
+      "largest_interval_counts": {
+        "pre_draw_to_post_draw": 3583,
+        "idle_to_pre_draw": 702,
+        "physics_signal_to_idle": 33
+      },
+      "over_33_3_ms": 0,
+      "frames_with_scripted_order_batch": 30,
+      "frames_with_second_trajectory_sample": 60,
+      "measurement_ms": {
+        "elapsed_us": {
+          "median": 14.412,
+          "p95": 17.845,
+          "p99": 20.572,
+          "max": 28.97
+        },
+        "previous_draw_to_first_signal": {
+          "median": 0.103,
+          "p95": 0.158,
+          "p99": 0.221,
+          "max": 2.858
+        },
+        "physics_signal_to_idle": {
+          "median": 2.764,
+          "p95": 3.886,
+          "p99": 5.087,
+          "max": 16.525
+        },
+        "idle_to_pre_draw": {
+          "median": 5.102,
+          "p95": 7.443,
+          "p99": 8.696,
+          "max": 11.734
+        },
+        "pre_draw_to_post_draw": {
+          "median": 6.272,
+          "p95": 7.514,
+          "p99": 8.141,
+          "max": 10.117
+        },
+        "battle_physics_us": {
+          "median": 1.286,
+          "p95": 2.178,
+          "p99": 2.679,
+          "max": 4.347
+        },
+        "battle_idle_us": {
+          "median": 0.309,
+          "p95": 0.445,
+          "p99": 0.587,
+          "max": 1.217
+        },
+        "fixture_tick_driver_us": {
+          "median": 0.01,
+          "p95": 0.019,
+          "p99": 0.312,
+          "max": 8.408
+        },
+        "physics_unattributed_us": {
+          "median": 1.413,
+          "p95": 1.919,
+          "p99": 2.44,
+          "max": 6.313
+        }
+      }
+    },
+    {
+      "frame_count": 3655,
+      "physics_step_counts": {
+        "1": 3329,
+        "0": 190,
+        "2": 136
+      },
+      "largest_interval_counts": {
+        "pre_draw_to_post_draw": 2737,
+        "idle_to_pre_draw": 871,
+        "physics_signal_to_idle": 47
+      },
+      "over_33_3_ms": 0,
+      "frames_with_scripted_order_batch": 30,
+      "frames_with_second_trajectory_sample": 60,
+      "measurement_ms": {
+        "elapsed_us": {
+          "median": 16.375,
+          "p95": 20.951,
+          "p99": 23.904,
+          "max": 32.935
+        },
+        "previous_draw_to_first_signal": {
+          "median": 0.114,
+          "p95": 0.172,
+          "p99": 0.231,
+          "max": 2.55
+        },
+        "physics_signal_to_idle": {
+          "median": 3.172,
+          "p95": 5.215,
+          "p99": 8.445,
+          "max": 20.869
+        },
+        "idle_to_pre_draw": {
+          "median": 5.951,
+          "p95": 8.715,
+          "p99": 9.824,
+          "max": 13.1
+        },
+        "pre_draw_to_post_draw": {
+          "median": 6.876,
+          "p95": 8.189,
+          "p99": 8.841,
+          "max": 11.421
+        },
+        "battle_physics_us": {
+          "median": 1.472,
+          "p95": 2.76,
+          "p99": 3.536,
+          "max": 5.695
+        },
+        "battle_idle_us": {
+          "median": 0.344,
+          "p95": 0.514,
+          "p99": 0.651,
+          "max": 2.193
+        },
+        "fixture_tick_driver_us": {
+          "median": 0.012,
+          "p95": 0.025,
+          "p99": 0.378,
+          "max": 6.419
+        },
+        "physics_unattributed_us": {
+          "median": 1.631,
+          "p95": 2.638,
+          "p99": 4.185,
+          "max": 10.78
+        }
+      }
+    },
+    {
+      "frame_count": 3648,
+      "physics_step_counts": {
+        "0": 185,
+        "1": 3370,
+        "2": 79,
+        "5": 4,
+        "8": 3,
+        "3": 5,
+        "6": 1,
+        "4": 1
+      },
+      "largest_interval_counts": {
+        "pre_draw_to_post_draw": 2673,
+        "idle_to_pre_draw": 918,
+        "physics_signal_to_idle": 57
+      },
+      "over_33_3_ms": 18,
+      "frames_with_scripted_order_batch": 30,
+      "frames_with_second_trajectory_sample": 59,
+      "measurement_ms": {
+        "elapsed_us": {
+          "median": 16.09,
+          "p95": 20.047,
+          "p99": 26.456,
+          "max": 156.752
+        },
+        "previous_draw_to_first_signal": {
+          "median": 0.109,
+          "p95": 0.166,
+          "p99": 0.234,
+          "max": 1.27
+        },
+        "physics_signal_to_idle": {
+          "median": 2.986,
+          "p95": 4.555,
+          "p99": 11.14,
+          "max": 94.515
+        },
+        "idle_to_pre_draw": {
+          "median": 5.941,
+          "p95": 8.793,
+          "p99": 10.469,
+          "max": 48.338
+        },
+        "pre_draw_to_post_draw": {
+          "median": 6.81,
+          "p95": 8.153,
+          "p99": 9.214,
+          "max": 43.991
+        },
+        "battle_physics_us": {
+          "median": 1.297,
+          "p95": 2.403,
+          "p99": 3.661,
+          "max": 49.613
+        },
+        "battle_idle_us": {
+          "median": 0.324,
+          "p95": 0.486,
+          "p99": 0.641,
+          "max": 3.005
+        },
+        "fixture_tick_driver_us": {
+          "median": 0.011,
+          "p95": 0.022,
+          "p99": 0.34,
+          "max": 13.617
+        },
+        "physics_unattributed_us": {
+          "median": 1.638,
+          "p95": 2.423,
+          "p99": 5.221,
+          "max": 44.657
+        }
+      }
+    }
+  ],
+  "ten_longest_all_valid_us": [
+    {
+      "frame": 47688,
+      "start_us": 597412158,
+      "elapsed_us": 156752,
+      "physics_tick": 36145,
+      "physics_callbacks": 5,
+      "selected_units": 7,
+      "has_scripted_order_batch": false,
+      "has_second_trajectory_sample": false,
+      "previous_draw_to_first_signal": 1226,
+      "physics_signal_to_idle": 74125,
+      "idle_to_pre_draw": 48338,
+      "pre_draw_to_post_draw": 33063,
+      "battle_physics_us": 30215,
+      "battle_idle_us": 1569,
+      "fixture_tick_driver_us": 169,
+      "physics_unattributed_us": 43741
+    },
+    {
+      "frame": 47689,
+      "start_us": 597568910,
+      "elapsed_us": 147009,
+      "physics_tick": 36153,
+      "physics_callbacks": 8,
+      "selected_units": 7,
+      "has_scripted_order_batch": false,
+      "has_second_trajectory_sample": false,
+      "previous_draw_to_first_signal": 341,
+      "physics_signal_to_idle": 86814,
+      "idle_to_pre_draw": 31126,
+      "pre_draw_to_post_draw": 28728,
+      "battle_physics_us": 44161,
+      "battle_idle_us": 1582,
+      "fixture_tick_driver_us": 187,
+      "physics_unattributed_us": 42466
+    },
+    {
+      "frame": 47690,
+      "start_us": 597715919,
+      "elapsed_us": 130853,
+      "physics_tick": 36161,
+      "physics_callbacks": 8,
+      "selected_units": 7,
+      "has_scripted_order_batch": false,
+      "has_second_trajectory_sample": false,
+      "previous_draw_to_first_signal": 358,
+      "physics_signal_to_idle": 94515,
+      "idle_to_pre_draw": 20304,
+      "pre_draw_to_post_draw": 15676,
+      "battle_physics_us": 49613,
+      "battle_idle_us": 428,
+      "fixture_tick_driver_us": 245,
+      "physics_unattributed_us": 44657
+    },
+    {
+      "frame": 47710,
+      "start_us": 598312991,
+      "elapsed_us": 101179,
+      "physics_tick": 36196,
+      "physics_callbacks": 5,
+      "selected_units": 7,
+      "has_scripted_order_batch": false,
+      "has_second_trajectory_sample": false,
+      "previous_draw_to_first_signal": 271,
+      "physics_signal_to_idle": 49124,
+      "idle_to_pre_draw": 28611,
+      "pre_draw_to_post_draw": 23173,
+      "battle_physics_us": 22116,
+      "battle_idle_us": 893,
+      "fixture_tick_driver_us": 104,
+      "physics_unattributed_us": 26904
+    },
+    {
+      "frame": 47709,
+      "start_us": 598227201,
+      "elapsed_us": 85790,
+      "physics_tick": 36191,
+      "physics_callbacks": 2,
+      "selected_units": 7,
+      "has_scripted_order_batch": false,
+      "has_second_trajectory_sample": false,
+      "previous_draw_to_first_signal": 262,
+      "physics_signal_to_idle": 28358,
+      "idle_to_pre_draw": 32996,
+      "pre_draw_to_post_draw": 24174,
+      "battle_physics_us": 13893,
+      "battle_idle_us": 3005,
+      "fixture_tick_driver_us": 60,
+      "physics_unattributed_us": 14405
+    },
+    {
+      "frame": 47687,
+      "start_us": 597331074,
+      "elapsed_us": 81084,
+      "physics_tick": 36140,
+      "physics_callbacks": 2,
+      "selected_units": 7,
+      "has_scripted_order_batch": false,
+      "has_second_trajectory_sample": false,
+      "previous_draw_to_first_signal": 355,
+      "physics_signal_to_idle": 16262,
+      "idle_to_pre_draw": 20476,
+      "pre_draw_to_post_draw": 43991,
+      "battle_physics_us": 6835,
+      "battle_idle_us": 1966,
+      "fixture_tick_driver_us": 47,
+      "physics_unattributed_us": 9380
+    },
+    {
+      "frame": 47734,
+      "start_us": 599185685,
+      "elapsed_us": 80410,
+      "physics_tick": 36249,
+      "physics_callbacks": 5,
+      "selected_units": 7,
+      "has_scripted_order_batch": false,
+      "has_second_trajectory_sample": false,
+      "previous_draw_to_first_signal": 206,
+      "physics_signal_to_idle": 46372,
+      "idle_to_pre_draw": 25272,
+      "pre_draw_to_post_draw": 8560,
+      "battle_physics_us": 22757,
+      "battle_idle_us": 1496,
+      "fixture_tick_driver_us": 97,
+      "physics_unattributed_us": 23518
+    },
+    {
+      "frame": 47733,
+      "start_us": 599118253,
+      "elapsed_us": 67432,
+      "physics_tick": 36244,
+      "physics_callbacks": 3,
+      "selected_units": 7,
+      "has_scripted_order_batch": false,
+      "has_second_trajectory_sample": false,
+      "previous_draw_to_first_signal": 276,
+      "physics_signal_to_idle": 32021,
+      "idle_to_pre_draw": 21032,
+      "pre_draw_to_post_draw": 14103,
+      "battle_physics_us": 15367,
+      "battle_idle_us": 754,
+      "fixture_tick_driver_us": 92,
+      "physics_unattributed_us": 16562
+    },
+    {
+      "frame": 47730,
+      "start_us": 598955651,
+      "elapsed_us": 61851,
+      "physics_tick": 36235,
+      "physics_callbacks": 3,
+      "selected_units": 7,
+      "has_scripted_order_batch": false,
+      "has_second_trajectory_sample": false,
+      "previous_draw_to_first_signal": 165,
+      "physics_signal_to_idle": 26684,
+      "idle_to_pre_draw": 21513,
+      "pre_draw_to_post_draw": 13489,
+      "battle_physics_us": 13031,
+      "battle_idle_us": 627,
+      "fixture_tick_driver_us": 59,
+      "physics_unattributed_us": 13594
+    },
+    {
+      "frame": 47732,
+      "start_us": 599060188,
+      "elapsed_us": 58065,
+      "physics_tick": 36241,
+      "physics_callbacks": 3,
+      "selected_units": 7,
+      "has_scripted_order_batch": true,
+      "has_second_trajectory_sample": true,
+      "previous_draw_to_first_signal": 185,
+      "physics_signal_to_idle": 30055,
+      "idle_to_pre_draw": 13069,
+      "pre_draw_to_post_draw": 14756,
+      "battle_physics_us": 7604,
+      "battle_idle_us": 584,
+      "fixture_tick_driver_us": 8948,
+      "physics_unattributed_us": 13503
+    }
+  ],
+  "same_tick_render_pairs": {
+    "scope": "Adjacent frames at the same final physics tick and same selection count. One step in the first frame, zero steps in the next. Excludes scripted order batches and periodic trajectory sampling. Timing is observational. Pairs are biased toward parts of the battle fast enough to draw multiple frames per tick. Physics interpolation and render timing can still differ.",
+    "pairs": 10743,
+    "per_minute": {
+      "1": 3007,
+      "2": 2475,
+      "3": 1012,
+      "4": 912,
+      "5": 943,
+      "6": 612,
+      "7": 709,
+      "8": 706,
+      "9": 185,
+      "10": 182
+    },
+    "one_physics_step": {
+      "elapsed": {
+        "median_ms": 12.394,
+        "p95_ms": 15.721
+      },
+      "before_first_signal": {
+        "median_ms": 0.078,
+        "p95_ms": 0.137
+      },
+      "physics_to_idle": {
+        "median_ms": 2.479,
+        "p95_ms": 3.493
+      },
+      "idle_to_pre_draw": {
+        "median_ms": 4.127,
+        "p95_ms": 6.195
+      },
+      "draw": {
+        "median_ms": 5.448,
+        "p95_ms": 6.909
+      }
+    },
+    "zero_physics_steps": {
+      "elapsed": {
+        "median_ms": 7.121,
+        "p95_ms": 9.805
+      },
+      "before_first_signal": {
+        "median_ms": 0.082,
+        "p95_ms": 0.142
+      },
+      "physics_to_idle": {
+        "median_ms": 0.0,
+        "p95_ms": 0.0
+      },
+      "idle_to_pre_draw": {
+        "median_ms": 1.655,
+        "p95_ms": 3.698
+      },
+      "draw": {
+        "median_ms": 5.191,
+        "p95_ms": 6.703
+      }
+    },
+    "paired_difference": {
+      "elapsed": {
+        "median_ms": 4.858,
+        "p95_ms": 7.761
+      },
+      "before_first_signal": {
+        "median_ms": -0.002,
+        "p95_ms": 0.041
+      },
+      "physics_to_idle": {
+        "median_ms": 2.479,
+        "p95_ms": 3.493
+      },
+      "idle_to_pre_draw": {
+        "median_ms": 2.147,
+        "p95_ms": 4.318
+      },
+      "draw": {
+        "median_ms": 0.206,
+        "p95_ms": 1.377
+      }
+    }
+  }
+}
