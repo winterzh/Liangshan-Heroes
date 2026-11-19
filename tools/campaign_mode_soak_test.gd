@@ -68,6 +68,7 @@ var _mount_trace := {}
 var _mount_samples: Array[Dictionary] = []
 var _stage_frame_samples := {}
 var _active_stage_frames := {}
+var _previous_stage_counts := {}
 var _current_battle = null
 var _current_mode := "idle"
 var _current_level_id := ""
@@ -250,14 +251,35 @@ func _record_stage_frame(frame_ms: float) -> void:
 	_active_stage_frames.worst_ms = maxf(_active_stage_frames.worst_ms, frame_ms)
 
 
+func _stage_counts_for_minute() -> Array[Dictionary]:
+	var deltas: Array[Dictionary] = []
+	for key in _stage_frame_samples:
+		var stage: Dictionary = _stage_frame_samples[key]
+		var current := Vector3i(stage.frames, stage.over_16_7_ms, stage.over_33_3_ms)
+		var previous: Vector3i = _previous_stage_counts.get(key, Vector3i.ZERO)
+		var delta := current - previous
+		if delta.x > 0:
+			deltas.append({
+				"stage": stage.stage, "mode": stage.mode, "level_id": stage.level_id,
+				"frames": delta.x, "over_16_7_ms": delta.y, "over_33_3_ms": delta.z,
+			})
+			_previous_stage_counts[key] = current
+	return deltas
+
+
 func _check_stage_frame_coverage() -> void:
 	var total := 0
+	var all_minutes_match := true
 	for sample: Dictionary in _minute_samples:
+		var minute_tagged := 0
+		for stage: Dictionary in sample.frame_stages:
+			minute_tagged += int(stage.frames)
+		all_minutes_match = all_minutes_match and minute_tagged == int(sample.rendered_frames)
 		total += int(sample.rendered_frames)
 	var tagged := 0
 	for stage: Dictionary in _stage_frame_samples.values():
 		tagged += int(stage.frames)
-	_check(tagged == total and total > 0, "each sampled render interval has exactly one diagnostic stage",
+	_check(all_minutes_match and tagged == total and total > 0, "each sampled render interval has exactly one diagnostic stage",
 		"tagged=%d sampled=%d" % [tagged, total])
 
 
@@ -362,6 +384,8 @@ func _finalize_minute(partial: bool) -> void:
 	sample["worst_frame_ms"] = _percentile(_minute_frames, 1.0)
 	sample["average_draw_calls"] = _minute_draw_sum / float(maxi(1, _minute_frame_count))
 	sample["peak_draw_calls"] = _minute_draw_max
+	if _stage_timing_enabled:
+		sample["frame_stages"] = _stage_counts_for_minute()
 	_minute_samples.append(sample)
 	print("[soak-minute] ", JSON.stringify({
 		"minute": sample.minute,
@@ -828,6 +852,13 @@ func _run() -> void:
 	if not is_instance_valid(current_scene) or current_scene.scene_file_path != MENU_SCENE:
 		_early_exit("The game did not reach the main menu.", 2)
 		return
+	var startup_flow := root.get_node("ContinueFlow")
+	var startup_deadline := Time.get_ticks_usec() + 240_000_000
+	while not startup_flow.can_launch():
+		if startup_flow.phase == startup_flow.Phase.ERROR or Time.get_ticks_usec() >= startup_deadline:
+			_early_exit("Campaign startup did not allow entry: " + str(startup_flow.last_result), 2)
+			return
+		await process_frame
 	_mount_trace_enabled = OS.get_environment("CAMPAIGN_SOAK_MOUNT_TRACE") == "1"
 	if _mount_trace_enabled:
 		node_added.connect(_trace_node_added)

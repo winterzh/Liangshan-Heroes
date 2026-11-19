@@ -1,0 +1,312 @@
+{
+  "source": "7a6a7c20ac6535e5dfd1ca49545ca972702e9411",
+  "frozen_exe_sha256": "e9457bea394b5e7d7e26165f62913db1d259dc2be0b3bc93b17731e357daddbc",
+  "frozen_source_version": "source-v1:264a58510a51a11665872baac3561a10a2bbc504778062d229bce3115ec92ed5",
+  "bundle_files": [
+    {
+      "path": "GODOTSTEAM_LICENSE.txt",
+      "bytes": 1110,
+      "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+    },
+    {
+      "path": "LiangshanHeroes.exe",
+      "bytes": 1827489320,
+      "sha256": "e9457bea394b5e7d7e26165f62913db1d259dc2be0b3bc93b17731e357daddbc"
+    },
+    {
+      "path": "libgodotsteam.windows.template_release.x86_64.dll",
+      "bytes": 3961344,
+      "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+    },
+    {
+      "path": "steam_api64.dll",
+      "bytes": 319128,
+      "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+    },
+    {
+      "path": "steam_stats_reader.dll",
+      "bytes": 381440,
+      "sha256": "7505919cfff5907c13a02eb366690bff22ca6731c8521deefde58b114e4f796f"
+    },
+    {
+      "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+      "bytes": 1093,
+      "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+    }
+  ],
+  "build_steps": [
+    {
+      "stage": "import",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 159.25
+    },
+    {
+      "stage": "export",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 148.45
+    }
+  ],
+  "renderer": {
+    "method": "forward_plus",
+    "driver": "vulkan",
+    "resolution": "1280x720",
+    "vsync": "off"
+  },
+  "test_report_sha256": "62cae34a79425184bd8c6288b1aa325dbcc866885b42a8b8b3563d16c3675374",
+  "test_log_sha256": "f78fb076d693f2db006c1c609e1f89f8ed56886afb6cc15d1fb240941b640554",
+  "exit_code": 0,
+  "accepted_at_duration_gate": false,
+  "passed": false,
+  "failures": [],
+  "actual_seconds": 90.855425,
+  "mode_visits": {
+    "arena:arena": 3,
+    "campaign:level1": 3,
+    "campaign:level5": 2,
+    "custom_defense:custom_defense": 2,
+    "skirmish:skirmish": 2,
+    "skirmish_ai:skirmish_ai": 2
+  },
+  "every_scene_released": true,
+  "campaign_save_unchanged": true,
+  "performance": {
+    "complete_minute_buckets": 1,
+    "max_minute_p95_ms": 12.834,
+    "max_minute_p99_ms": 18.526,
+    "p95_limit_ms": 16.7,
+    "p99_limit_ms": 33.3,
+    "peak_draw_calls": 1343.0,
+    "worst_frame_ms": 394.126
+  },
+  "candidate_mount": {
+    "arena": {
+      "samples": 3,
+      "feedback_median_ms": 21.456,
+      "feedback_max_ms": 26.137,
+      "first_battle_frame_median_ms": 93.091,
+      "first_battle_frame_max_ms": 154.399,
+      "mount_to_ready_median_ms": 53.62,
+      "mount_to_ready_max_ms": 97.028,
+      "worst_render_gap_median_ms": 71.635,
+      "worst_render_gap_max_ms": 128.262
+    },
+    "custom_defense": {
+      "samples": 2,
+      "feedback_median_ms": 1.896,
+      "feedback_max_ms": 2.585,
+      "first_battle_frame_median_ms": 355.649,
+      "first_battle_frame_max_ms": 402.031,
+      "mount_to_ready_median_ms": 125.268,
+      "mount_to_ready_max_ms": 155.201,
+      "worst_render_gap_median_ms": 202.007,
+      "worst_render_gap_max_ms": 236.46
+    },
+    "level1": {
+      "samples": 3,
+      "feedback_median_ms": 2.193,
+      "feedback_max_ms": 4.951,
+      "first_battle_frame_median_ms": 292.336,
+      "first_battle_frame_max_ms": 947.846,
+      "mount_to_ready_median_ms": 105.073,
+      "mount_to_ready_max_ms": 266.71,
+      "worst_render_gap_median_ms": 136.404,
+      "worst_render_gap_max_ms": 371.302
+    },
+    "level5": {
+      "samples": 2,
+      "feedback_median_ms": 1.838,
+      "feedback_max_ms": 2.665,
+      "first_battle_frame_median_ms": 371.106,
+      "first_battle_frame_max_ms": 437.998,
+      "mount_to_ready_median_ms": 123.014,
+      "mount_to_ready_max_ms": 140.804,
+      "worst_render_gap_median_ms": 227.039,
+      "worst_render_gap_max_ms": 277.979
+    },
+    "skirmish": {
+      "samples": 2,
+      "feedback_median_ms": 1.798,
+      "feedback_max_ms": 2.434,
+      "first_battle_frame_median_ms": 381.811,
+      "first_battle_frame_max_ms": 479.534,
+      "mount_to_ready_median_ms": 153.692,
+      "mount_to_ready_max_ms": 210.602,
+      "worst_render_gap_median_ms": 242.266,
+      "worst_render_gap_max_ms": 314.266
+    },
+    "skirmish_ai": {
+      "samples": 2,
+      "feedback_median_ms": 21.995,
+      "feedback_max_ms": 22.471,
+      "first_battle_frame_median_ms": 117.419,
+      "first_battle_frame_max_ms": 123.302,
+      "mount_to_ready_median_ms": 61.995,
+      "mount_to_ready_max_ms": 62.885,
+      "worst_render_gap_median_ms": 95.424,
+      "worst_render_gap_max_ms": 100.831
+    }
+  },
+  "prior_64965098_mount": {
+    "arena": {
+      "samples": 3,
+      "feedback_median_ms": 18.276,
+      "feedback_max_ms": 24.424,
+      "first_battle_frame_median_ms": 96.695,
+      "first_battle_frame_max_ms": 108.943,
+      "mount_to_ready_median_ms": 55.079,
+      "mount_to_ready_max_ms": 68.409,
+      "worst_render_gap_median_ms": 72.271,
+      "worst_render_gap_max_ms": 91.631
+    },
+    "custom_defense": {
+      "samples": 2,
+      "feedback_median_ms": 1.95,
+      "feedback_max_ms": 2.77,
+      "first_battle_frame_median_ms": 365.154,
+      "first_battle_frame_max_ms": 417.582,
+      "mount_to_ready_median_ms": 142.452,
+      "mount_to_ready_max_ms": 176.828,
+      "worst_render_gap_median_ms": 229.8,
+      "worst_render_gap_max_ms": 274.83
+    },
+    "level1": {
+      "samples": 3,
+      "feedback_median_ms": 2.055,
+      "feedback_max_ms": 3.252,
+      "first_battle_frame_median_ms": 331.052,
+      "first_battle_frame_max_ms": 429.906,
+      "mount_to_ready_median_ms": 162.25,
+      "mount_to_ready_max_ms": 205.871,
+      "worst_render_gap_median_ms": 194.643,
+      "worst_render_gap_max_ms": 279.413
+    },
+    "level5": {
+      "samples": 2,
+      "feedback_median_ms": 1.808,
+      "feedback_max_ms": 2.104,
+      "first_battle_frame_median_ms": 387.38,
+      "first_battle_frame_max_ms": 419.241,
+      "mount_to_ready_median_ms": 127.106,
+      "mount_to_ready_max_ms": 136.277,
+      "worst_render_gap_median_ms": 243.885,
+      "worst_render_gap_max_ms": 291.005
+    },
+    "skirmish": {
+      "samples": 3,
+      "feedback_median_ms": 1.318,
+      "feedback_max_ms": 1.373,
+      "first_battle_frame_median_ms": 350.355,
+      "first_battle_frame_max_ms": 441.5,
+      "mount_to_ready_median_ms": 118.374,
+      "mount_to_ready_max_ms": 188.999,
+      "worst_render_gap_median_ms": 207.941,
+      "worst_render_gap_max_ms": 265.291
+    },
+    "skirmish_ai": {
+      "samples": 2,
+      "feedback_median_ms": 19.456,
+      "feedback_max_ms": 20.073,
+      "first_battle_frame_median_ms": 109.353,
+      "first_battle_frame_max_ms": 112.846,
+      "mount_to_ready_median_ms": 58.727,
+      "mount_to_ready_max_ms": 63.788,
+      "worst_render_gap_median_ms": 89.897,
+      "worst_render_gap_max_ms": 92.773
+    }
+  },
+  "mount_trace_control_scope": "Isolated prior native candidate; short-run per-route medians, not a statistical qualification or exact-source A/B.",
+  "cancel_before_battle": [
+    {
+      "level": "level1",
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [
+        "WARNING: 2D MSAA is not yet supported for GLES3."
+      ],
+      "requests_before_cancel": 14,
+      "restored_active_cap": true,
+      "log_sha256": "b1e4b9309595c0621fd60938c8a6e3bfdd4c6c22c7e2807aad99be0925ea6e70"
+    },
+    {
+      "level": "level5",
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [
+        "WARNING: 2D MSAA is not yet supported for GLES3."
+      ],
+      "requests_before_cancel": 18,
+      "restored_active_cap": true,
+      "log_sha256": "0e601de6ab2f3182e4ea24be8bc9d813b16511c2d7dc53aec9a5187a3a1f8f12"
+    }
+  ],
+  "bundle_sample_method": "Win64 release package; six files individually verified; offline profile on isolated Windows desktop",
+  "cold_level1_repeat": {
+    "method": "ABBA with fresh player and shader profiles in each process, same path and viewport; OS cache and scheduling uncontrolled",
+    "out_of_scope": "Physical player input and 30-minute qualification",
+    "runs": [
+      {
+        "id": "A1",
+        "variant": "64965098_control",
+        "exe_sha256": "93ab33fceed8582d36ff46fdbe7d64bd0be32f3017287c8d27c29944b5eb63fc",
+        "report_sha256": "ccc812306a8ab2d89139bd05c828fe4845ef33f6ea41f870524cf86f190a8734",
+        "overlay_ms": 5.184,
+        "mount_ms": 323.092,
+        "mount_to_ready_ms": 322.938,
+        "ready_to_first_frame_ms": 93.863,
+        "first_battle_frame_ms": 739.893,
+        "longest_render_gap_ms": 432.015,
+        "requested_environment_textures": 2,
+        "last_observed_environment_pending_ms": 224.602,
+        "last_observed_opening_frames_pending_ms": 86.521
+      },
+      {
+        "id": "B1",
+        "variant": "7a6a7c20_candidate",
+        "exe_sha256": "e9457bea394b5e7d7e26165f62913db1d259dc2be0b3bc93b17731e357daddbc",
+        "report_sha256": "00eb581809a837d39b08f8bd952d134bd535fd4806d3ab1afa7001d8f866d650",
+        "overlay_ms": 5.175,
+        "mount_ms": 310.349,
+        "mount_to_ready_ms": 306.96,
+        "ready_to_first_frame_ms": 160.348,
+        "first_battle_frame_ms": 777.657,
+        "longest_render_gap_ms": 481.598,
+        "requested_environment_textures": 14,
+        "last_observed_environment_pending_ms": 198.024,
+        "last_observed_opening_frames_pending_ms": 156.284
+      },
+      {
+        "id": "B2",
+        "variant": "7a6a7c20_candidate",
+        "exe_sha256": "e9457bea394b5e7d7e26165f62913db1d259dc2be0b3bc93b17731e357daddbc",
+        "report_sha256": "df1b28ae53d0508b555a083552e19f305920327632049afc643be77038595009",
+        "overlay_ms": 20.866,
+        "mount_ms": 733.451,
+        "mount_to_ready_ms": 349.637,
+        "ready_to_first_frame_ms": 81.606,
+        "first_battle_frame_ms": 1164.694,
+        "longest_render_gap_ms": 446.738,
+        "requested_environment_textures": 14,
+        "last_observed_environment_pending_ms": 497.154,
+        "last_observed_opening_frames_pending_ms": 416.354
+      },
+      {
+        "id": "A2",
+        "variant": "64965098_control",
+        "exe_sha256": "93ab33fceed8582d36ff46fdbe7d64bd0be32f3017287c8d27c29944b5eb63fc",
+        "report_sha256": "ab1e0ed902e451b1e1478935d42fd61da551bb87e66847832897080a528eee9b",
+        "overlay_ms": 5.064,
+        "mount_ms": 227.163,
+        "mount_to_ready_ms": 238.946,
+        "ready_to_first_frame_ms": 65.065,
+        "first_battle_frame_ms": 531.174,
+        "longest_render_gap_ms": 318.399,
+        "requested_environment_textures": 2,
+        "last_observed_environment_pending_ms": 159.202,
+        "last_observed_opening_frames_pending_ms": 87.233
+      }
+    ]
+  },
+  "cold_entry_decision": "Broad prefetch did not meet the cold entry objective; held locally. Narrower candidate f4383f2d requires its own Windows timing."
+}

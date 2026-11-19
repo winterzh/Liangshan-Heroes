@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+Windows 黄泥冈、高俅和驻守的挂载诊断可用 `CAMPAIGN_SOAK_MOUNT_TRACE=1`。黄泥冈与梁山开场装饰的本地候选沿用加载页后台读取。黄泥冈广预读候选的冷进场退步，修订候选 f4383f2d 仅预读黄泥冈独立布景贴图，已通过原生六入口短测和上一正式版祝家庄续玩。 [进场预读与源数据](../qa/battle_entry_timing_20261116/README.md#2026-11-19-windows-出征布景预读)
+
 高俅 PC 火攻任务可用 Windows 渲染执行 `tools/gao_fire_readiness_qa.gd`，Steam 禁用并使用独立档案。使用 `FIRE_FIXTURE_ONLY=1` 可只跑定向检查，`FIRE_LIVE_ONLY=1` 可只跑自动押俘。结果和截图保存在工程 `.godot/gao-fire-readiness/`。 [实跑记录](../qa/campaign_fire_readiness_20261116/README.md#2026-11-19-pc-火攻的当前目标)
 
 Windows 模式切换自动化支持环境变量 `CAMPAIGN_SOAK_STAGE_TIMING=1`，用于记录进场、开战、战斗和返回的逐阶段慢帧计数。`CAMPAIGN_SOAK_MOUNT_TRACE=1` 加入挂载至首帧的时间戳。阶段归属按相邻渲染帧采样，见 [运行说明](CAMPAIGN_MODE_SOAK_QA.md)。

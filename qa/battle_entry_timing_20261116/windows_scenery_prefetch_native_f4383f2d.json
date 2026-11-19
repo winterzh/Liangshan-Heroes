@@ -1,0 +1,798 @@
+{
+  "source": "f4383f2d2a20491c7cf05fb4d3f85a68286a82cd",
+  "frozen_exe_sha256": "c6643a03452e3643ea4e69f44e309ddfcc8a97348cbaf9c7211a96d7ee3c1be0",
+  "frozen_source_version": "source-v1:af234e42513413003b131f04c26ed4fa890a0673dd2865518835544e1ce30e49",
+  "bundle_files": [
+    {
+      "path": "GODOTSTEAM_LICENSE.txt",
+      "bytes": 1110,
+      "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+    },
+    {
+      "path": "LiangshanHeroes.exe",
+      "bytes": 1827489112,
+      "sha256": "c6643a03452e3643ea4e69f44e309ddfcc8a97348cbaf9c7211a96d7ee3c1be0"
+    },
+    {
+      "path": "libgodotsteam.windows.template_release.x86_64.dll",
+      "bytes": 3961344,
+      "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+    },
+    {
+      "path": "steam_api64.dll",
+      "bytes": 319128,
+      "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+    },
+    {
+      "path": "steam_stats_reader.dll",
+      "bytes": 381440,
+      "sha256": "7505919cfff5907c13a02eb366690bff22ca6731c8521deefde58b114e4f796f"
+    },
+    {
+      "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+      "bytes": 1093,
+      "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+    }
+  ],
+  "build_steps": [
+    {
+      "stage": "import",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 89.44
+    },
+    {
+      "stage": "export",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 101.43
+    }
+  ],
+  "renderer": {
+    "method": "forward_plus",
+    "driver": "vulkan",
+    "resolution": "1280x720",
+    "vsync": "off"
+  },
+  "test_report_sha256": "6fd9cf0af4fe2891a3c7a4a54115143e468fac95a2eed1f57682898cbae119f4",
+  "test_log_sha256": "adea9b9f87f84171d5b13d2dd241f5a9138da9f9c9cab8875f410425a4abf514",
+  "exit_code": 0,
+  "accepted_at_duration_gate": false,
+  "passed": false,
+  "failures": [],
+  "actual_seconds": 95.540879,
+  "mode_visits": {
+    "arena:arena": 3,
+    "campaign:level1": 3,
+    "campaign:level5": 2,
+    "custom_defense:custom_defense": 2,
+    "skirmish:skirmish": 3,
+    "skirmish_ai:skirmish_ai": 2
+  },
+  "every_scene_released": true,
+  "campaign_save_unchanged": true,
+  "performance": {
+    "complete_minute_buckets": 1,
+    "max_minute_p95_ms": 3.555,
+    "max_minute_p99_ms": 5.125,
+    "p95_limit_ms": 16.7,
+    "p99_limit_ms": 33.3,
+    "peak_draw_calls": 1343.0,
+    "worst_frame_ms": 300.172
+  },
+  "candidate_mount": {
+    "arena": {
+      "samples": 3,
+      "feedback_median_ms": 16.468,
+      "feedback_max_ms": 17.748,
+      "first_battle_frame_median_ms": 78.441,
+      "first_battle_frame_max_ms": 112.165,
+      "mount_to_ready_median_ms": 46.678,
+      "mount_to_ready_max_ms": 73.339,
+      "worst_render_gap_median_ms": 61.982,
+      "worst_render_gap_max_ms": 94.417
+    },
+    "custom_defense": {
+      "samples": 2,
+      "feedback_median_ms": 1.04,
+      "feedback_max_ms": 1.15,
+      "first_battle_frame_median_ms": 275.229,
+      "first_battle_frame_max_ms": 287.276,
+      "mount_to_ready_median_ms": 104.666,
+      "mount_to_ready_max_ms": 117.243,
+      "worst_render_gap_median_ms": 175.38,
+      "worst_render_gap_max_ms": 187.394
+    },
+    "level1": {
+      "samples": 3,
+      "feedback_median_ms": 1.942,
+      "feedback_max_ms": 3.74,
+      "first_battle_frame_median_ms": 301.808,
+      "first_battle_frame_max_ms": 427.844,
+      "mount_to_ready_median_ms": 169.471,
+      "mount_to_ready_max_ms": 179.48,
+      "worst_render_gap_median_ms": 201.929,
+      "worst_render_gap_max_ms": 258.132
+    },
+    "level5": {
+      "samples": 2,
+      "feedback_median_ms": 1.161,
+      "feedback_max_ms": 1.394,
+      "first_battle_frame_median_ms": 338.188,
+      "first_battle_frame_max_ms": 398.734,
+      "mount_to_ready_median_ms": 100.656,
+      "mount_to_ready_max_ms": 107.379,
+      "worst_render_gap_median_ms": 190.543,
+      "worst_render_gap_max_ms": 217.064
+    },
+    "skirmish": {
+      "samples": 3,
+      "feedback_median_ms": 1.044,
+      "feedback_max_ms": 1.298,
+      "first_battle_frame_median_ms": 282.853,
+      "first_battle_frame_max_ms": 325.761,
+      "mount_to_ready_median_ms": 97.257,
+      "mount_to_ready_max_ms": 135.079,
+      "worst_render_gap_median_ms": 168.856,
+      "worst_render_gap_max_ms": 213.564
+    },
+    "skirmish_ai": {
+      "samples": 2,
+      "feedback_median_ms": 15.704,
+      "feedback_max_ms": 15.88,
+      "first_battle_frame_median_ms": 87.385,
+      "first_battle_frame_max_ms": 88.943,
+      "mount_to_ready_median_ms": 46.394,
+      "mount_to_ready_max_ms": 46.788,
+      "worst_render_gap_median_ms": 71.681,
+      "worst_render_gap_max_ms": 73.415
+    }
+  },
+  "prior_64965098_mount": {
+    "arena": {
+      "samples": 3,
+      "feedback_median_ms": 18.276,
+      "feedback_max_ms": 24.424,
+      "first_battle_frame_median_ms": 96.695,
+      "first_battle_frame_max_ms": 108.943,
+      "mount_to_ready_median_ms": 55.079,
+      "mount_to_ready_max_ms": 68.409,
+      "worst_render_gap_median_ms": 72.271,
+      "worst_render_gap_max_ms": 91.631
+    },
+    "custom_defense": {
+      "samples": 2,
+      "feedback_median_ms": 1.95,
+      "feedback_max_ms": 2.77,
+      "first_battle_frame_median_ms": 365.154,
+      "first_battle_frame_max_ms": 417.582,
+      "mount_to_ready_median_ms": 142.452,
+      "mount_to_ready_max_ms": 176.828,
+      "worst_render_gap_median_ms": 229.8,
+      "worst_render_gap_max_ms": 274.83
+    },
+    "level1": {
+      "samples": 3,
+      "feedback_median_ms": 2.055,
+      "feedback_max_ms": 3.252,
+      "first_battle_frame_median_ms": 331.052,
+      "first_battle_frame_max_ms": 429.906,
+      "mount_to_ready_median_ms": 162.25,
+      "mount_to_ready_max_ms": 205.871,
+      "worst_render_gap_median_ms": 194.643,
+      "worst_render_gap_max_ms": 279.413
+    },
+    "level5": {
+      "samples": 2,
+      "feedback_median_ms": 1.808,
+      "feedback_max_ms": 2.104,
+      "first_battle_frame_median_ms": 387.38,
+      "first_battle_frame_max_ms": 419.241,
+      "mount_to_ready_median_ms": 127.106,
+      "mount_to_ready_max_ms": 136.277,
+      "worst_render_gap_median_ms": 243.885,
+      "worst_render_gap_max_ms": 291.005
+    },
+    "skirmish": {
+      "samples": 3,
+      "feedback_median_ms": 1.318,
+      "feedback_max_ms": 1.373,
+      "first_battle_frame_median_ms": 350.355,
+      "first_battle_frame_max_ms": 441.5,
+      "mount_to_ready_median_ms": 118.374,
+      "mount_to_ready_max_ms": 188.999,
+      "worst_render_gap_median_ms": 207.941,
+      "worst_render_gap_max_ms": 265.291
+    },
+    "skirmish_ai": {
+      "samples": 2,
+      "feedback_median_ms": 19.456,
+      "feedback_max_ms": 20.073,
+      "first_battle_frame_median_ms": 109.353,
+      "first_battle_frame_max_ms": 112.846,
+      "mount_to_ready_median_ms": 58.727,
+      "mount_to_ready_max_ms": 63.788,
+      "worst_render_gap_median_ms": 89.897,
+      "worst_render_gap_max_ms": 92.773
+    }
+  },
+  "mount_trace_control_scope": "Isolated prior native candidate; short-run per-route medians, not a statistical qualification or exact-source A/B.",
+  "stage_bucket_checks": [
+    {
+      "minute": 1,
+      "partial": false,
+      "frame_count": 37247,
+      "p95_ms": 3.555,
+      "p99_ms": 5.125,
+      "stages": [
+        {
+          "frames": 1,
+          "level_id": "",
+          "mode": "",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "menu"
+        },
+        {
+          "frames": 26,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 5,
+          "over_33_3_ms": 2,
+          "stage": "mount"
+        },
+        {
+          "frames": 2,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "start"
+        },
+        {
+          "frames": 5705,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 4,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "return"
+        },
+        {
+          "frames": 4,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 3,
+          "over_33_3_ms": 2,
+          "stage": "mount"
+        },
+        {
+          "frames": 2,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 9899,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 4,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "return"
+        },
+        {
+          "frames": 21,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 3,
+          "over_33_3_ms": 2,
+          "stage": "mount"
+        },
+        {
+          "frames": 2,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 7973,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 4,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "return"
+        },
+        {
+          "frames": 4,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "mount"
+        },
+        {
+          "frames": 2,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 7690,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 2,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "return"
+        },
+        {
+          "frames": 10,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "mount"
+        },
+        {
+          "frames": 1,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 3690,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 2,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "return"
+        },
+        {
+          "frames": 11,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "mount"
+        },
+        {
+          "frames": 1,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "start"
+        },
+        {
+          "frames": 2185,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 2,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "return"
+        }
+      ]
+    },
+    {
+      "minute": 2,
+      "partial": true,
+      "frame_count": 18204,
+      "p95_ms": 4.378,
+      "p99_ms": 5.949,
+      "stages": [
+        {
+          "frames": 10,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "mount"
+        },
+        {
+          "frames": 1,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 2304,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 2,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "return"
+        },
+        {
+          "frames": 2,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "mount"
+        },
+        {
+          "frames": 1,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 3795,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 2,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "return"
+        },
+        {
+          "frames": 11,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 1,
+          "stage": "mount"
+        },
+        {
+          "frames": 1,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 2784,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 2,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "return"
+        },
+        {
+          "frames": 3130,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 2,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "return"
+        },
+        {
+          "frames": 10,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "mount"
+        },
+        {
+          "frames": 1,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 3651,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 2,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "return"
+        },
+        {
+          "frames": 11,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "mount"
+        },
+        {
+          "frames": 1,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 2471,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 2,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "return"
+        },
+        {
+          "frames": 8,
+          "level_id": "",
+          "mode": "",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "final_cleanup"
+        }
+      ]
+    }
+  ],
+  "cold_pair_comparison": {
+    "control_exe_sha256": "93ab33fceed8582d36ff46fdbe7d64bd0be32f3017287c8d27c29944b5eb63fc",
+    "candidate_exe_sha256": "c6643a03452e3643ea4e69f44e309ddfcc8a97348cbaf9c7211a96d7ee3c1be0",
+    "implementation_change_since_broad_prefetch_build": [
+      "scripts/campaign_environment.gd"
+    ],
+    "method": "ABBA per chapter, fresh player and shader profiles, isolated desktop, stock Win64 executables and identical 1280x720 Vulkan Forward+ settings, uncapped outside the normal loading overlay",
+    "scope": "Four new process-cold samples per chapter. Windows disk cache and system scheduling were uncontrolled.",
+    "chapters": [
+      {
+        "level": "level1",
+        "samples": [
+          {
+            "run": "A1",
+            "variant": "64965098",
+            "environment_requests": 2,
+            "test_report_sha256": "d91f4bf32f80a752588878d33e8972a59aced071679520b2c63cc9b5f2d71385",
+            "feedback_ms": 2.802,
+            "mount_ms": 155.502,
+            "mount_to_ready_ms": 172.637,
+            "ready_to_first_frame_ms": 49.9,
+            "first_battle_frame_ms": 378.039,
+            "longest_render_gap_ms": 237.269
+          },
+          {
+            "run": "B1",
+            "variant": "f4383f2d",
+            "environment_requests": 7,
+            "test_report_sha256": "bba7196f2f72d2b4e889ab9535052b8f12555d7ed74b0cd7acc4f19bf1983a50",
+            "feedback_ms": 4.103,
+            "mount_ms": 151.232,
+            "mount_to_ready_ms": 179.597,
+            "ready_to_first_frame_ms": 50.887,
+            "first_battle_frame_ms": 381.716,
+            "longest_render_gap_ms": 245.191
+          },
+          {
+            "run": "B2",
+            "variant": "f4383f2d",
+            "environment_requests": 7,
+            "test_report_sha256": "ef71a9ef9f14ff46962bcd6e6557edf1632a2e324f2f07214096f7f811dbe71d",
+            "feedback_ms": 3.121,
+            "mount_ms": 169.396,
+            "mount_to_ready_ms": 167.726,
+            "ready_to_first_frame_ms": 50.398,
+            "first_battle_frame_ms": 387.52,
+            "longest_render_gap_ms": 231.259
+          },
+          {
+            "run": "A2",
+            "variant": "64965098",
+            "environment_requests": 2,
+            "test_report_sha256": "f7e82b8978397411425a41ebc41c497a6dc9af0fc35e658022384c3da9583494",
+            "feedback_ms": 4.257,
+            "mount_ms": 155.664,
+            "mount_to_ready_ms": 172.255,
+            "ready_to_first_frame_ms": 49.938,
+            "first_battle_frame_ms": 377.857,
+            "longest_render_gap_ms": 236.884
+          }
+        ]
+      },
+      {
+        "level": "level5",
+        "samples": [
+          {
+            "run": "A1",
+            "variant": "64965098",
+            "environment_requests": 3,
+            "test_report_sha256": "21285ab7c99614f680244bef8ca29261e8fe53fdaafe104cd6e521d8fb3c6462",
+            "feedback_ms": 2.853,
+            "mount_ms": 127.947,
+            "mount_to_ready_ms": 251.373,
+            "ready_to_first_frame_ms": 138.95,
+            "first_battle_frame_ms": 518.27,
+            "longest_render_gap_ms": 402.993
+          },
+          {
+            "run": "B1",
+            "variant": "f4383f2d",
+            "environment_requests": 18,
+            "test_report_sha256": "a5578f53fdee79d1477ba6dada61d1499e12827cc964b11e9ef21b9063e2ab1a",
+            "feedback_ms": 3.212,
+            "mount_ms": 127.953,
+            "mount_to_ready_ms": 216.168,
+            "ready_to_first_frame_ms": 139.617,
+            "first_battle_frame_ms": 483.738,
+            "longest_render_gap_ms": 370.328
+          },
+          {
+            "run": "B2",
+            "variant": "f4383f2d",
+            "environment_requests": 18,
+            "test_report_sha256": "fc84d269977f33bc77e62ab5a6592da86acd9027fe02d905f3b81307796d9181",
+            "feedback_ms": 3.235,
+            "mount_ms": 128.005,
+            "mount_to_ready_ms": 213.033,
+            "ready_to_first_frame_ms": 139.514,
+            "first_battle_frame_ms": 480.552,
+            "longest_render_gap_ms": 367.167
+          },
+          {
+            "run": "A2",
+            "variant": "64965098",
+            "environment_requests": 3,
+            "test_report_sha256": "1a553d478ce72fb3ffd7dbfe97cb7e11647ea3da19a07a080db9113b22c6e5e4",
+            "feedback_ms": 3.19,
+            "mount_ms": 128.186,
+            "mount_to_ready_ms": 238.478,
+            "ready_to_first_frame_ms": 134.797,
+            "first_battle_frame_ms": 501.461,
+            "longest_render_gap_ms": 388.194
+          }
+        ]
+      }
+    ]
+  },
+  "qa_source_parse": {
+    "godot": "4.6.3",
+    "exit_code": 0,
+    "scope": "check only"
+  },
+  "clipboard_retest": {
+    "desired_access_masks": [
+      "0x4",
+      "0xf",
+      "0x10f",
+      "0x2010f"
+    ],
+    "create_window_station_error": 5,
+    "actual_clipboard_access": false
+  },
+  "public_build_save_migration": {
+    "predecessor_public_build_id": 26752476,
+    "chapter": "level3",
+    "native_stages": [
+      {
+        "stage": "old-save",
+        "checks": 3,
+        "failures": [],
+        "exit_code": 0,
+        "log_sha256": "9d9bc9aacb68dbd68cfe98a9646d959dbc473fd480793d23e9e05c86daeb2ee8"
+      },
+      {
+        "stage": "candidate-migrate",
+        "checks": 8,
+        "failures": [],
+        "exit_code": 0,
+        "log_sha256": "b7beefb56db0fab237a7e40b9543b2442003be4d1d9cdcfe17230909cd9cf49a"
+      },
+      {
+        "stage": "candidate-reopen",
+        "checks": 4,
+        "failures": [],
+        "exit_code": 0,
+        "log_sha256": "617d8646c7774519c436b270804e87e6fac31eaad156e9fe0938d8ab48e7d620"
+      }
+    ],
+    "old_slot_and_journal_sha256_unchanged": true,
+    "slot_generations": [
+      1,
+      2
+    ],
+    "active_journal_generations": [
+      1
+    ],
+    "resaved_slot_links_original": true,
+    "run_binding_and_origin_unchanged": true,
+    "same_defenders_and_diversion_window_read_in_separate_process": true,
+    "new_candidate_exe_sha256": "c6643a03452e3643ea4e69f44e309ddfcc8a97348cbaf9c7211a96d7ee3c1be0",
+    "initial_wrapper_exit": 1,
+    "wrapper_correction": "Original postcheck expected generation two in both stores. The new slot is generation two; the unchanged original campaign ledger stays at generation one. Integrity for each generation and identity were verified against stored records and three rendered process logs.",
+    "method": "Ordinary offline Save and Exit and Continue through three isolated rendered Windows processes. Predecessor exact server download, followed by the frozen local candidate."
+  }
+}

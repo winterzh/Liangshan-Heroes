@@ -39,8 +39,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\run_campaign_mode_so
 ```
 
 
-需要定位慢帧时，在同一 PowerShell 中先设 `$env:CAMPAIGN_SOAK_STAGE_TIMING = '1'`，然后运行上述命令。结束后用 `Remove-Item Env:CAMPAIGN_SOAK_STAGE_TIMING` 清除该开关。报告的 `frame_stages` 按路线与阶段提供采样间隔数、超过 16.7 和 33.3 ms 的数量及最大间隔。进场覆盖点击加载至战场初始化完成，开战覆盖解除剧情弹层和启动首帧，随后进入战斗，退出后的间隔归到返回。计数覆盖完整与末尾不足一分钟的采样，原有验收门槛照常执行。
+需要定位慢帧时，在同一 PowerShell 中先设 `$env:CAMPAIGN_SOAK_STAGE_TIMING = '1'`，然后运行上述命令。结束后用 `Remove-Item Env:CAMPAIGN_SOAK_STAGE_TIMING` 清除该开关。报告的 `frame_stages` 按路线与阶段提供采样间隔数、超过 16.7 和 33.3 ms 的数量及最大间隔。进场覆盖点击加载至战场初始化完成，开战覆盖解除剧情弹层和启动首帧，随后进入战斗，退出后的间隔归到返回。计数覆盖完整与末尾不足一分钟的采样。每个分钟样本也附 `frame_stages`，用累计计数的差值区分进场、战斗和退出阶段。工具逐分钟检查阶段样本数与渲染样本数相等，原有验收门槛照常执行。
 
-设置 `$env:CAMPAIGN_SOAK_MOUNT_TRACE = '1'` 可在报告加入 `mount_traces`。每条记录从菜单发起进场起计微秒，包含加载反馈、战场与地图和 HUD 挂载、首个单位、场景就绪、首帧和最大渲染间隔的起止。工具检查时间点齐全且顺序正确。采样用于进一步定位搭建和绘制的耗时。
+设置 `$env:CAMPAIGN_SOAK_MOUNT_TRACE = '1'` 可在报告加入 `mount_traces`。每条记录从菜单发起进场起计微秒，包含加载反馈、战场与地图和 HUD 挂载、首个单位、场景就绪、首帧和最大渲染间隔的起止。工具检查时间点齐全且顺序正确。 工具在正式计时前等待战役启动校验完成。采样用于进一步定位搭建和绘制的耗时。
 
 这项测试只证明真实渲染下的模式切换、资源释放和稳定性，不代替真人试玩，也不产生节奏或平衡结论。

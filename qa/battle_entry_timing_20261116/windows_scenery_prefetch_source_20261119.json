@@ -1,0 +1,505 @@
+{
+  "source_base": "8843a36e2e6baf63204fe7ac459eed3a6282795c",
+  "production_change": "7a6a7c20",
+  "renderer": "Windows source, Vulkan Forward+ 1280x720, vsync off",
+  "scope": "Single selected-source sample per route per run. Performance phases measured inside normal battle construction. Source executable and integrity scan time are outside the measured internal intervals.",
+  "phase_duration_units": "microseconds",
+  "runs": [
+    {
+      "label": "baseline-v2",
+      "exit_code": 0,
+      "log_sha256": "0b88a1ab04874739ff5f2f72fc49db1ade15685a8fafcc41ed5e202e06cd70a2",
+      "report_sha256": "d0d3e2315ade6c4e470980d4c19e48dee55c34b3640c852ce8fd6df9c10c46b4",
+      "samples": [
+        {
+          "level_id": "level1",
+          "mount_phases_us": {
+            "clock": 8343,
+            "context": 139,
+            "definitions": 27272,
+            "map_init": 53,
+            "level_paint": 752,
+            "environment_paint": 1837,
+            "nav_bake": 2671,
+            "level_decoration": 12,
+            "environment_nodes": 114016,
+            "other_world_nodes": 1941,
+            "hud_ready": 61723,
+            "hud_setup": 2606,
+            "mission_setup": 20908,
+            "deploy": 87440,
+            "after_deploy": 1152
+          },
+          "mount_render_gap_us": 511180,
+          "map_draw_callback_us": 7928
+        },
+        {
+          "level_id": "level5",
+          "mount_phases_us": {
+            "clock": 154,
+            "context": 167,
+            "definitions": 43457,
+            "map_init": 70,
+            "level_paint": 16419,
+            "environment_paint": 8,
+            "nav_bake": 4773,
+            "level_decoration": 344644,
+            "environment_nodes": 16,
+            "other_world_nodes": 15206,
+            "hud_ready": 22844,
+            "hud_setup": 1081,
+            "mission_setup": 4518,
+            "deploy": 8338,
+            "after_deploy": 1816
+          },
+          "mount_render_gap_us": 721289,
+          "map_draw_callback_us": 12512
+        },
+        {
+          "level_id": "skirmish",
+          "mount_phases_us": {
+            "clock": 166,
+            "context": 94,
+            "definitions": 13183,
+            "map_init": 69,
+            "level_paint": 11839,
+            "environment_paint": 10,
+            "nav_bake": 4994,
+            "level_decoration": 52322,
+            "environment_nodes": 10,
+            "other_world_nodes": 15543,
+            "hud_ready": 22179,
+            "hud_setup": 140,
+            "mission_setup": 3242,
+            "deploy": 4689,
+            "after_deploy": 1216
+          },
+          "mount_render_gap_us": 229406,
+          "map_draw_callback_us": 12929
+        }
+      ],
+      "scenery_calibration_calls_over_2_ms": [],
+      "nodes_released": true,
+      "campaign_save_unchanged": true
+    },
+    {
+      "label": "environment-baseline",
+      "exit_code": 0,
+      "log_sha256": "d75e26d3e6de3c32c1fcc236446e651dc094f949bcdb53cdecd091a3c1c2513b",
+      "report_sha256": "c4066108aaa822cba45dbd2a4a7eea221fd1cccaba0e426570946d7725e32690",
+      "samples": [
+        {
+          "level_id": "level1",
+          "mount_phases_us": {
+            "clock": 10460,
+            "context": 165,
+            "definitions": 31934,
+            "map_init": 48,
+            "level_paint": 780,
+            "environment_paint": 1851,
+            "nav_bake": 2728,
+            "level_decoration": 6,
+            "environment_nodes": 97439,
+            "other_world_nodes": 2515,
+            "hud_ready": 57619,
+            "hud_setup": 2219,
+            "mission_setup": 15902,
+            "deploy": 79470,
+            "after_deploy": 1316
+          },
+          "mount_render_gap_us": 405254,
+          "map_draw_callback_us": 8194,
+          "scenery_setup_phases_us": {
+            "coast": 8568,
+            "terrain_nodes": 8080,
+            "reed_mesh": 6775,
+            "scoped_decor": 70044
+          }
+        },
+        {
+          "level_id": "level5",
+          "mount_phases_us": {
+            "clock": 125,
+            "context": 86,
+            "definitions": 37831,
+            "map_init": 64,
+            "level_paint": 13384,
+            "environment_paint": 8,
+            "nav_bake": 4639,
+            "level_decoration": 230664,
+            "environment_nodes": 10,
+            "other_world_nodes": 14235,
+            "hud_ready": 22895,
+            "hud_setup": 952,
+            "mission_setup": 3976,
+            "deploy": 7479,
+            "after_deploy": 1282
+          },
+          "mount_render_gap_us": 462871,
+          "map_draw_callback_us": 12010,
+          "scenery_setup_phases_us": {
+            "coast": 9059,
+            "terrain_nodes": 108031,
+            "reed_mesh": 1811,
+            "scoped_decor": 39909,
+            "hall": 11839,
+            "posts": 49405,
+            "ground_shadows": 3883
+          }
+        },
+        {
+          "level_id": "skirmish",
+          "mount_phases_us": {
+            "clock": 128,
+            "context": 80,
+            "definitions": 12655,
+            "map_init": 63,
+            "level_paint": 11323,
+            "environment_paint": 6,
+            "nav_bake": 4543,
+            "level_decoration": 48553,
+            "environment_nodes": 11,
+            "other_world_nodes": 15263,
+            "hud_ready": 20979,
+            "hud_setup": 156,
+            "mission_setup": 3221,
+            "deploy": 4213,
+            "after_deploy": 1019
+          },
+          "mount_render_gap_us": 212242,
+          "map_draw_callback_us": 12288,
+          "scenery_setup_phases_us": {
+            "coast": 8935,
+            "terrain_nodes": 22526,
+            "reed_mesh": 2731,
+            "scoped_decor": 1636,
+            "hall": 491,
+            "posts": 1831,
+            "ground_shadows": 3864
+          }
+        }
+      ],
+      "scenery_calibration_calls_over_2_ms": [
+        {
+          "accepted": true,
+          "elapsed_us": 7884,
+          "file": "tree_broad.png"
+        },
+        {
+          "accepted": true,
+          "elapsed_us": 5866,
+          "file": "tree_young.png"
+        },
+        {
+          "accepted": true,
+          "elapsed_us": 5491,
+          "file": "willow_old.png"
+        },
+        {
+          "accepted": true,
+          "elapsed_us": 5674,
+          "file": "reeds_short.png"
+        },
+        {
+          "accepted": true,
+          "elapsed_us": 5707,
+          "file": "reeds_tall.png"
+        },
+        {
+          "accepted": true,
+          "elapsed_us": 5018,
+          "file": "reeds_bent.png"
+        },
+        {
+          "accepted": true,
+          "elapsed_us": 5866,
+          "file": "reeds_seeded.png"
+        },
+        {
+          "accepted": true,
+          "elapsed_us": 5716,
+          "file": "zhongyi_hall_standard_east_blank.png"
+        },
+        {
+          "accepted": true,
+          "elapsed_us": 8733,
+          "file": "zhongyi_hall_standard_west_blank.png"
+        },
+        {
+          "accepted": true,
+          "elapsed_us": 5371,
+          "file": "liangshan_hilltop_standard_blank.png"
+        },
+        {
+          "accepted": true,
+          "elapsed_us": 5144,
+          "file": "zhongyi_hall.png"
+        },
+        {
+          "accepted": true,
+          "elapsed_us": 5135,
+          "file": "watchtower.png"
+        },
+        {
+          "accepted": true,
+          "elapsed_us": 5426,
+          "file": "stockade_segment.png"
+        },
+        {
+          "accepted": true,
+          "elapsed_us": 5843,
+          "file": "dock_straight.png"
+        },
+        {
+          "accepted": true,
+          "elapsed_us": 4907,
+          "file": "dock_head_t.png"
+        }
+      ],
+      "nodes_released": true,
+      "campaign_save_unchanged": true
+    },
+    {
+      "label": "scenery-prefetch",
+      "exit_code": 0,
+      "log_sha256": "989fabc629d496cd631f8d002105a4d97739371bd290d560b950ad9f42992e01",
+      "report_sha256": "746de8b83e2d625115069a42a6d8f83da33e288fe293510f0c85129143edde54",
+      "samples": [
+        {
+          "level_id": "level1",
+          "mount_phases_us": {
+            "clock": 7946,
+            "context": 112,
+            "definitions": 25127,
+            "map_init": 42,
+            "level_paint": 722,
+            "environment_paint": 1726,
+            "nav_bake": 2486,
+            "level_decoration": 3,
+            "environment_nodes": 24312,
+            "other_world_nodes": 1663,
+            "hud_ready": 48905,
+            "hud_setup": 2114,
+            "mission_setup": 11564,
+            "deploy": 29980,
+            "after_deploy": 1039
+          },
+          "mount_render_gap_us": 226578,
+          "map_draw_callback_us": 8090,
+          "scenery_setup_phases_us": {
+            "coast": 7879,
+            "terrain_nodes": 7340,
+            "reed_mesh": 4676,
+            "scoped_decor": 760
+          },
+          "textures_ready_before_mount": [
+            "surface_dry_earth.png",
+            "surface_forest_earth.png",
+            "huangnigang_pine_old.png",
+            "huangnigang_pine_double.png",
+            "huangnigang_pine_young_lean.png",
+            "huangnigang_seven_pudao.png",
+            "huangnigang_dry_verge.png",
+            "shallow_cart_ruts.tres",
+            "scattered_footprints.tres",
+            "pole_wheel_marks.tres",
+            "rounded_stones.tres",
+            "gravel_clods.tres",
+            "pine_needles_leaves.tres",
+            "dry_grass_leaves.tres"
+          ]
+        },
+        {
+          "level_id": "level5",
+          "mount_phases_us": {
+            "clock": 147,
+            "context": 100,
+            "definitions": 39993,
+            "map_init": 67,
+            "level_paint": 13496,
+            "environment_paint": 9,
+            "nav_bake": 4757,
+            "level_decoration": 131399,
+            "environment_nodes": 17,
+            "other_world_nodes": 18080,
+            "hud_ready": 21677,
+            "hud_setup": 1084,
+            "mission_setup": 3873,
+            "deploy": 8033,
+            "after_deploy": 1425
+          },
+          "mount_render_gap_us": 336359,
+          "map_draw_callback_us": 12389,
+          "scenery_setup_phases_us": {
+            "coast": 9329,
+            "terrain_nodes": 62431,
+            "reed_mesh": 1834,
+            "scoped_decor": 19751,
+            "hall": 5288,
+            "posts": 22018,
+            "ground_shadows": 4039
+          },
+          "textures_ready_before_mount": [
+            "surface_compacted_stone.png",
+            "surface_forest_earth.png",
+            "surface_wet_bank.png",
+            "reeds_short.png",
+            "reeds_tall.png",
+            "reeds_bent.png",
+            "reeds_seeded.png",
+            "willow_old.png",
+            "tree_broad.png",
+            "tree_young.png",
+            "dock_straight.png",
+            "dock_head_t.png",
+            "watchtower.png",
+            "stockade_segment.png",
+            "zhongyi_hall.png",
+            "zhongyi_hall_standard_west_blank.png",
+            "zhongyi_hall_standard_east_blank.png",
+            "liangshan_hilltop_standard_blank.png"
+          ]
+        },
+        {
+          "level_id": "skirmish",
+          "mount_phases_us": {
+            "clock": 158,
+            "context": 114,
+            "definitions": 13179,
+            "map_init": 72,
+            "level_paint": 11927,
+            "environment_paint": 12,
+            "nav_bake": 5051,
+            "level_decoration": 51927,
+            "environment_nodes": 14,
+            "other_world_nodes": 14563,
+            "hud_ready": 20069,
+            "hud_setup": 131,
+            "mission_setup": 3088,
+            "deploy": 4551,
+            "after_deploy": 1141
+          },
+          "mount_render_gap_us": 207226,
+          "map_draw_callback_us": 12009,
+          "scenery_setup_phases_us": {
+            "coast": 9551,
+            "terrain_nodes": 23829,
+            "reed_mesh": 2996,
+            "scoped_decor": 1817,
+            "hall": 488,
+            "posts": 1842,
+            "ground_shadows": 4307
+          },
+          "textures_ready_before_mount": [
+            "surface_compacted_stone.png",
+            "surface_forest_earth.png",
+            "surface_wet_bank.png",
+            "reeds_short.png",
+            "reeds_tall.png",
+            "reeds_bent.png",
+            "reeds_seeded.png",
+            "willow_old.png",
+            "tree_broad.png",
+            "tree_young.png",
+            "dock_straight.png",
+            "dock_head_t.png",
+            "watchtower.png",
+            "stockade_segment.png",
+            "zhongyi_hall.png",
+            "zhongyi_hall_standard_west_blank.png",
+            "zhongyi_hall_standard_east_blank.png",
+            "liangshan_hilltop_standard_blank.png"
+          ]
+        }
+      ],
+      "scenery_calibration_calls_over_2_ms": [
+        {
+          "accepted": true,
+          "elapsed_us": 6390,
+          "file": "tree_broad.png"
+        },
+        {
+          "accepted": true,
+          "elapsed_us": 7404,
+          "file": "tree_young.png"
+        },
+        {
+          "accepted": true,
+          "elapsed_us": 5343,
+          "file": "willow_old.png"
+        },
+        {
+          "accepted": true,
+          "elapsed_us": 5559,
+          "file": "reeds_short.png"
+        },
+        {
+          "accepted": true,
+          "elapsed_us": 5704,
+          "file": "reeds_tall.png"
+        },
+        {
+          "accepted": true,
+          "elapsed_us": 5461,
+          "file": "reeds_bent.png"
+        },
+        {
+          "accepted": true,
+          "elapsed_us": 8117,
+          "file": "reeds_seeded.png"
+        },
+        {
+          "accepted": true,
+          "elapsed_us": 5279,
+          "file": "zhongyi_hall_standard_east_blank.png"
+        },
+        {
+          "accepted": true,
+          "elapsed_us": 7689,
+          "file": "zhongyi_hall_standard_west_blank.png"
+        },
+        {
+          "accepted": true,
+          "elapsed_us": 4604,
+          "file": "liangshan_hilltop_standard_blank.png"
+        },
+        {
+          "accepted": true,
+          "elapsed_us": 5114,
+          "file": "zhongyi_hall.png"
+        },
+        {
+          "accepted": true,
+          "elapsed_us": 5136,
+          "file": "watchtower.png"
+        },
+        {
+          "accepted": true,
+          "elapsed_us": 4759,
+          "file": "stockade_segment.png"
+        },
+        {
+          "accepted": true,
+          "elapsed_us": 5271,
+          "file": "dock_straight.png"
+        },
+        {
+          "accepted": true,
+          "elapsed_us": 5242,
+          "file": "dock_head_t.png"
+        }
+      ],
+      "nodes_released": true,
+      "campaign_save_unchanged": true
+    }
+  ],
+  "historical_environment_static_checker": {
+    "status": "open",
+    "unchanged_in_control_and_candidate": [
+      "scripts/unit.gd",
+      "tools/campaign_environment_art_static_contract.py"
+    ],
+    "existing_failure": "The checker expects the old direct level resolver and rejects later level7 route and plaque entries.",
+    "runtime_scoped_asset_binding": "The three rendered source routes loaded all logged textures and completed entry and release."
+  }
+}
