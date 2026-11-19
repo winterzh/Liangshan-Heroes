@@ -37,10 +37,21 @@ func _fixture() -> void:
 	var enemy=l.water_groups[1][0]
 	enemy.position=l.fireboat.position+Vector2(l.FIRE_ZONE_RADIUS,0)
 	b._sight_now.fill(0);b._reveal_t.fill(0)
+	check("尚未出发" in l._wave_objective(b) and "安全水域" in l.unit_tactical_hint(b,l.fireboat),
+		"early preparation shows the safe-water waiting option before the wave")
+	l.waves[1].sent=true
+	check("进入火区" in l._wave_objective(b),
+		"the prepared fire route tells players to await visible targets once the wave is moving")
+	var marker_position: Vector2=l.fireboat.position
+	l.fireboat.position=b.map.cell_to_world(l.FIRE_SAFE)
+	check("到举火旗标" in l._wave_objective(b),
+		"the objective directs the fireboat back to an actual ignition marker")
+	l.fireboat.position=marker_position
 	check(l._fire_targets(l.fireboat).size()==1 and "可见连船0" in l.unit_tactical_hint(b,l.fireboat),"hidden ship is not disclosed by tactical hint")
 	var cell: Vector2i=b.map.world_to_cell(enemy.position)
 	b._sight_now[cell.y*b.map.w+cell.x]=1
 	check("可见连船1" in l.unit_tactical_hint(b,l.fireboat) and "到位1/2" in l.unit_tactical_hint(b,l.fireboat),"visible target and actual escort range are reported separately")
+	check("两艘接应船" in l._wave_objective(b),"a visible target with a missing escort identifies the actual requirement")
 	l.on_mission_action(b,"gao_fire_1",l.fireboat)
 	check(not l.fire_lit,"one escort at 221 cannot satisfy existing fire action")
 	five.position=l.fireboat.position+Vector2(-220,0)
@@ -50,12 +61,27 @@ func _fixture() -> void:
 	var before: Array=[two._order_serial,five._order_serial,l.fireboat._order_serial,b.gold,b.wood]
 	l.unit_tactical_hint(b,l.fireboat)
 	check(before==[two._order_serial,five._order_serial,l.fireboat._order_serial,b.gold,b.wood],"hint does not issue orders or spend resources")
+	b.hud.set_touch_ui(false)
+	var action_source := "可以举火。选中火船，右键举火旗标。"
+	var loc := root.get_node("Localize")
+	var catalog: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://assets/localization/catalog.json"))
+	for language in ["zh_CN","zh_TW","en","ja"]:
+		loc.set_language(language,false)
+		l._update_wave_objective(b)
+		var expected: String=action_source if language=="zh_CN" else String(catalog[action_source][language])
+		check(b.mission._objective.text==expected and expected in l.unit_tactical_hint(b,l.fireboat),
+			language+" task and unit panel agree on the original ignition action")
+	loc.set_language("zh_CN",false)
+	l.waves[2].sent=true
+	check("第三批" in l._wave_objective(b),"third-wave core defense guidance retains precedence over optional fire")
+	l.waves[2].sent=false
 	root.get_node("Localize").set_language("en",false)
 	root.size=Vector2i(960,540);root.content_scale_size=root.size
 	await _capture_hint(b,l.fireboat,"en_ready_960")
 	root.get_node("Localize").set_language("zh_CN",false)
 	l.on_mission_action(b,"gao_fire_1",l.fireboat)
 	check(l.fire_lit and l.liu_carrier==two,"shared readiness preserves actual fire transfer")
+	check("撤到安全水域" in l._wave_objective(b),"an actual ignition hands off to the two-ship withdrawal")
 	two.position=b.map.cell_to_world(l.FIRE_SAFE)
 	five.position=two.position+Vector2(121,0)
 	check("安全区1/2" in l.unit_tactical_hint(b,two),"withdrawal counts only ships in the safe radius")
@@ -66,6 +92,7 @@ func _fixture() -> void:
 	five.position=two.position+Vector2(120,0)
 	l.on_mission_action(b,"gao_fire_withdraw",two)
 	check(b.mission.has_event("fire_escort_safe") and "成果保留" in l.unit_tactical_hint(b,two),"two safe ships unlock original completion and return advice")
+	check("普通战船" in l._wave_objective(b),"completed fire route hands the main objective back to the fleet")
 	root.get_node("Localize").set_language("ja",false)
 	check("演義目標" in l.unit_tactical_hint(b,two) and not "演义成果" in l.unit_tactical_hint(b,two),"completed return advice is actually localized in Japanese")
 	await _capture_hint(b,two,"ja_safe_960")
@@ -76,6 +103,14 @@ func _run() -> void:
 	root.get_node("Settings").edge_scroll=false
 	out_dir="res://.godot/gao-fire-readiness"
 	DirAccess.make_dir_recursive_absolute(out_dir)
+	var flow := root.get_node("ContinueFlow")
+	var deadline := Time.get_ticks_msec()+180000
+	while not flow.can_launch():
+		if flow.phase==flow.Phase.ERROR or Time.get_ticks_msec()>=deadline:
+			push_error("Campaign startup phase %s: %s" % [flow.phase, flow.last_result])
+			quit(2)
+			return
+		await process_frame
 	if OS.get_environment("FIRE_LIVE_ONLY")!="1": await _fixture()
 	var fixture_checks := checks
 	if OS.get_environment("FIRE_FIXTURE_ONLY")!="1":

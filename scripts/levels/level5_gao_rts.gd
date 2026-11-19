@@ -365,25 +365,32 @@ func _fire_targets(actor) -> Array:
 func _fire_escorts(b,actor) -> Array:
 	if not alive(actor): return []
 	return [b.find_unit("ruan_xiaoer_boat"),b.find_unit("ruan_xiaowu_boat")].filter(func(u): return alive(u) and u.position.distance_to(actor.position)<=220)
-func _fire_hint(b) -> String:
-	var visible_targets: int = _fire_targets(fireboat).filter(func(u): return u._invis_t <= 0.0 and b.is_visible_world(u.position)).size()
-	var escorts := _fire_escorts(b,fireboat).size()
-	var count := Localize.format_text("火船附近可见连船%d；接应船到位%d/2。",[visible_targets,escorts])
-	if not alive(fireboat):
-		return count
+func _visible_fire_target_count(b) -> int:
+	return _fire_targets(fireboat).filter(func(u): return u._invis_t <= 0.0 and b.is_visible_world(u.position)).size()
+func _fire_next_step(b, visible_targets: int, escorts: int) -> String:
+	if visible_targets == 0 and not waves[1].sent:
+		return "第二批连船尚未出发。可留火船在安全水域，等连船驶近再举火。"
 	for action_id in ["gao_fire_0","gao_fire_1"]:
 		var action: Dictionary = b.mission.actions.get(action_id,{})
 		if action.is_empty() or action.done or not String(action.get("blocked_reason","")).is_empty(): continue
 		var marker: Vector2 = b.map.cell_to_world(action.cell)
-		if fireboat.position.distance_to(marker) > float(action.reach) \
-				or not b.map._segment_open(fireboat.position,marker,fireboat.movement_profile): continue
+		if fireboat.position.distance_to(marker) > float(action.reach) or not b.map._segment_open(fireboat.position,marker,fireboat.movement_profile):
+			continue
 		if visible_targets == 0:
-			return count + "\n" + Localize.text("等第二批连船进入火区。")
+			return "等第二批连船进入火区。"
 		if escorts < 2:
-			return count + "\n" + Localize.text("等两艘接应船靠近火船。")
-		return count + "\n" + Localize.text("可以举火。选中火船，轻点举火旗标。" if b.hud.touch_ui \
-			else "可以举火。选中火船，右键举火旗标。")
-	return count + "\n" + Localize.text("先护送火船到举火旗标附近。")
+			return "等两艘接应船靠近火船。"
+		if b.hud.touch_ui:
+			return "可以举火。选中火船，轻点举火旗标。"
+		return "可以举火。选中火船，右键举火旗标。"
+	return "先护送火船到举火旗标附近。"
+func _fire_hint(b) -> String:
+	var visible_targets := _visible_fire_target_count(b)
+	var escorts := _fire_escorts(b,fireboat).size()
+	var count := Localize.format_text("火船附近可见连船%d；接应船到位%d/2。",[visible_targets,escorts])
+	if not alive(fireboat):
+		return count
+	return count + "\n" + Localize.text(_fire_next_step(b, visible_targets, escorts))
 func _withdraw_crew(b) -> Array:
 	return [liu_carrier,b.find_unit("ruan_xiaowu_boat")].filter(func(u): return _near(b,u,FIRE_SAFE,120))
 func _liu_loss_text(b) -> String:
@@ -630,11 +637,17 @@ func _finish(b) -> void:
 func _wave_objective(b) -> String:
 	if waves[2].sent:
 		return "座船已停。击退余下的水陆主力即可收兵。" if flagship_disabled else "第三批有座船压港。步军守关，舰队看清护船位置后合击座船。"
+	var fire_available: bool = not fire_abandoned and not b.mission.has_event("fire_escort_safe") \
+		and b.mission.story_goals.get("gao_fire",{}).get("state","")!="missed"
+	if fire_available:
+		if fire_lit:
+			return "火船已点燃。让两艘接应船一同撤到安全水域，再下达撤出指令。"
+		if fire_prepared and alive(fireboat):
+			return _fire_next_step(b, _visible_fire_target_count(b), _fire_escorts(b,fireboat).size())
 	if waves[1].sent:
-		if b.mission.has_event("fire_escort_safe") or b.mission.story_goals.get("gao_fire",{}).get("state","")=="missed":
-			return "岸军守住东山关，普通战船接应内港。继续击退水陆主力。"
-		if fire_lit: return "火船已点燃。让两艘接应船一同撤到安全水域，再下达撤出指令。"
-		return "第二批连船已动。可护送刘唐举火，也可派普通舰队接战，岸军继续守关。" if _count(water_groups[1])>0 else "岸军守住东山关，普通战船接应内港。继续击退水陆主力。"
+		if fire_available and _count(water_groups[1])>0:
+			return "第二批连船已动。可护送刘唐举火，也可派普通舰队接战，岸军继续守关。"
+		return "岸军守住东山关，普通战船接应内港。继续击退水陆主力。"
 	if waves[0].sent:
 		var can_lure: bool=_count(water_groups[0])>0 and not b.mission.has_event("fleet_in_ambush")
 		return "守住东山关和内港。阮小七可把首批活官船引入港汊，再由舰队合击。" if can_lure else "补齐岸军和舰队，守东山关与内港。可拆两处补给源来减少后续援军。"

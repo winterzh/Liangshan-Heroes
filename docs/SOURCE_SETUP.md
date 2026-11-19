@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+高俅 PC 火攻任务可用 Windows 渲染执行 `tools/gao_fire_readiness_qa.gd`，Steam 禁用并使用独立档案。使用 `FIRE_FIXTURE_ONLY=1` 可只跑定向检查，`FIRE_LIVE_ONLY=1` 可只跑自动押俘。结果和截图保存在工程 `.godot/gao-fire-readiness/`。 [实跑记录](../qa/campaign_fire_readiness_20261116/README.md#2026-11-19-pc-火攻的当前目标)
+
 Windows 模式切换自动化支持环境变量 `CAMPAIGN_SOAK_STAGE_TIMING=1`，用于记录进场、开战、战斗和返回的逐阶段慢帧计数。阶段归属按相邻渲染帧采样，见 [运行说明](CAMPAIGN_MODE_SOAK_QA.md)。
 
 大名府 PC 火号的渲染验证用 `tools/daming_coordination_qa.gd`。在 Windows Godot Compatibility 渲染器以独立档案运行，先等启动身份就绪，再进入真实战场构造缺指挥者、可见守军、迷雾和火号到期状态。截图及报告落在工程的 `.godot/daming-coordination/`。 [实跑与验收记录](../qa/campaign_coordination_20261116/README.md#2026-11-19-pc-火号与南门接应)
