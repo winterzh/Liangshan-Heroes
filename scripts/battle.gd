@@ -7561,6 +7561,9 @@ func _begin_cast(caster: Unit, slot: int, lp: Vector2, tgt: Unit = null, preserv
 	var windup := float(ad.get("cast_windup", CAST_WINDUP))
 	caster.begin_cast_windup(windup, col, preserve_queue)
 	_pending_casts.append({"caster": caster, "slot": slot, "lp": lp, "tgt": tgt, "serial": caster._cast_serial})
+	if not ABILITY_SFX_ID.has(aid):
+		var effect: Dictionary = ad.get("effect", {})
+		Sfx.prepare_ability(aid, String(visual.get("theme", "")), String(effect.get("active_kind", effect.get("kind", ""))))
 	if aid == "hua_blade" and tgt != null and is_instance_valid(tgt):
 		var aim := HuaSnipeAimFx.new()   # R 的 1 秒蓄力全程可见：收束准星 + 单体瞄准线
 		aim.caster = caster

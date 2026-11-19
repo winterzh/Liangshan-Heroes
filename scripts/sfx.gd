@@ -8,6 +8,7 @@ const GUARD := 64   # 重采样越界读护卫帧（见 music.gd 同名说明）
 const SHUTDOWN_DRAIN_MSEC := 120
 
 var _bank := {}                 # name -> AudioStreamWAV
+var _ability_preparations := {} # name -> {task, theme, kind, pcm}
 var _players: Array = []
 var _next := 0
 var _last := {}                 # name -> 上次播放 ticks（节流）
@@ -40,6 +41,9 @@ func shutdown() -> void:
 			player.stream = null
 			player.free()
 	_players.clear()
+	for preparation in _ability_preparations.values():
+		WorkerThreadPool.wait_for_task_completion(preparation.task)
+	_ability_preparations.clear()
 	_bank.clear()
 	_last.clear()
 	_next = 0
@@ -76,12 +80,37 @@ func _ability_sfx_selftest() -> void:
 
 ## 技能专属音：按技能 id 播种合成（同主题不同技能音高/层次/节奏皆异），懒生成缓存。
 ## theme 取 AbilityVisuals 写入的视觉主题（fire/ice/...），缺省按 kind 推断；kind 叠加施法类型动机（弹道/光环/位移…）。
+func prepare_ability(aid: String, theme: String, kind: String) -> void:
+	if _shutting_down or not enabled or not OS.has_feature("windows"):
+		return
+	var key := "ab_" + aid
+	if _bank.has(key) or _ability_preparations.has(key):
+		return
+	# The worker owns the buffer until its task completes. Stream creation and
+	# playback stay on the main thread.
+	var pcm: Array[PackedByteArray] = []
+	var task := WorkerThreadPool.add_task(func() -> void:
+		pcm.append(_ability_pcm(aid, theme, kind))
+	)
+	_ability_preparations[key] = {"task": task, "theme": theme, "kind": kind, "pcm": pcm}
+
+
 func play_ability(aid: String, theme: String, kind: String, vol_db := 0.0) -> void:
 	if _shutting_down or not enabled:
 		return
 	var key := "ab_" + aid
+	var preparation: Dictionary = _ability_preparations.get(key, {})
+	if not preparation.is_empty() and WorkerThreadPool.is_task_completed(preparation.task):
+		WorkerThreadPool.wait_for_task_completion(preparation.task)
+		_ability_preparations.erase(key)
+		if not _bank.has(key) and preparation.theme == theme and preparation.kind == kind and not preparation.pcm.is_empty():
+			_bank[key] = _wav_from_pcm(preparation.pcm[0])
 	if not _bank.has(key):
-		_bank[key] = _wav(_build_ability(aid, theme, kind))
+		# An immediate cast or a busy worker still plays at the original time.
+		if OS.has_feature("windows"):
+			_bank[key] = _wav_from_pcm(_ability_pcm(aid, theme, kind))
+		else:
+			_bank[key] = _wav(_build_ability(aid, theme, kind))
 	play(key, vol_db, 0.03, 70)
 
 
@@ -148,11 +177,19 @@ func _build_bank() -> void:
 
 
 func _wav(samples: PackedFloat32Array) -> AudioStreamWAV:
+	return _wav_from_pcm(_pcm_bytes(samples))
+
+
+func _pcm_bytes(samples: PackedFloat32Array) -> PackedByteArray:
 	var n := samples.size()
 	var data := PackedByteArray()
 	data.resize((n + GUARD) * 2)   # 末尾 GUARD 帧留 0（静音垫）：重采样越界读不再命中未映射页
 	for i in range(n):
 		data.encode_s16(i * 2, int(clampf(samples[i], -1.0, 1.0) * 32767.0))
+	return data
+
+
+func _wav_from_pcm(data: PackedByteArray) -> AudioStreamWAV:
 	var w := AudioStreamWAV.new()
 	w.format = AudioStreamWAV.FORMAT_16_BITS
 	w.mix_rate = RATE
@@ -179,13 +216,14 @@ func _tone(freq: float, dur: float, vol: float, decay := 6.0, wave := "sine") ->
 	return out
 
 
-func _noise(dur: float, vol: float, decay := 10.0) -> PackedFloat32Array:
+func _noise(dur: float, vol: float, decay := 10.0, rng: RandomNumberGenerator = null) -> PackedFloat32Array:
 	var n := int(dur * RATE)
 	var out := PackedFloat32Array()
 	out.resize(n)
 	for i in range(n):
 		var t := float(i) / RATE
-		out[i] = randf_range(-1.0, 1.0) * exp(-decay * t) * vol
+		var sample := rng.randf_range(-1.0, 1.0) if rng != null else randf_range(-1.0, 1.0)
+		out[i] = sample * exp(-decay * t) * vol
 	return out
 
 
@@ -288,7 +326,15 @@ const _KIND_THEME := {
 	"hex": "shadow", "silence": "shadow", "invis": "shadow", "debuff": "shadow",
 }
 
-func _build_ability(aid: String, theme: String, kind: String) -> PackedFloat32Array:
+func _ability_pcm(aid: String, theme: String, kind: String) -> PackedByteArray:
+	# Isolate the noise from the global RNG, so both preparation and the
+	# synchronous Windows route yield the same sound without sharing RNG state.
+	var noise_rng := RandomNumberGenerator.new()
+	noise_rng.seed = hash(aid + "/noise")
+	return _pcm_bytes(_build_ability(aid, theme, kind, noise_rng))
+
+
+func _build_ability(aid: String, theme: String, kind: String, noise_rng: RandomNumberGenerator = null) -> PackedFloat32Array:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = hash(aid)
 	var pv := rng.randf_range(0.82, 1.22)   # 个体音高体质：同主题技能彼此拉开
@@ -297,46 +343,46 @@ func _build_ability(aid: String, theme: String, kind: String) -> PackedFloat32Ar
 	var body: PackedFloat32Array
 	match theme:
 		"fire":
-			body = _mix(_noise(rng.randf_range(0.18, 0.3), 0.16, rng.randf_range(5.0, 8.5)),
+			body = _mix(_noise(rng.randf_range(0.18, 0.3), 0.16, rng.randf_range(5.0, 8.5), noise_rng),
 				_glide(190.0 * pv, 85.0 * pv, 0.24, 0.15, 6.0, "saw"))
 			body = _mix(body, _pops(rng, rng.randi_range(3, 7), 0.3, 0.14))   # 火星噼啪
 		"ice":
 			body = _mix(_glide(760.0 * pv, 1500.0 * pv, rng.randf_range(0.12, 0.2), 0.11, 8.0, "sine"),
 				_pops(rng, rng.randi_range(3, 6), 0.26, 0.10, 1900.0 * pv, 40.0))   # 冰晶叮铃
 		"thunder":
-			body = _mix(_noise(0.05, 0.30, 42.0), _glide(320.0 * pv, 62.0 * pv, rng.randf_range(0.28, 0.4), 0.22, 4.5, "saw"))
+			body = _mix(_noise(0.05, 0.30, 42.0, noise_rng), _glide(320.0 * pv, 62.0 * pv, rng.randf_range(0.28, 0.4), 0.22, 4.5, "saw"))
 			body = _mix(body, _pops(rng, 2, 0.12, 0.16))   # 炸裂枝杈
 		"water":
 			body = _mix(_glide(520.0 * pv, 260.0 * pv, rng.randf_range(0.2, 0.3), 0.13, 5.0, "sine"),
-				_noise(0.22, 0.11, 7.0))
+				_noise(0.22, 0.11, 7.0, noise_rng))
 			body = _mix(body, _pops(rng, rng.randi_range(2, 5), 0.28, 0.09, 620.0 * pv, 30.0))   # 水珠
 		"poison":
 			body = _mix(_pops(rng, rng.randi_range(5, 9), rng.randf_range(0.24, 0.34), 0.13, 260.0 * pv, 22.0),
-				_noise(0.26, 0.09, 6.0))   # 咕嘟冒泡 + 毒雾嘶嘶
+				_noise(0.26, 0.09, 6.0, noise_rng))   # 咕嘟冒泡 + 毒雾嘶嘶
 		"shadow":
 			body = _mix(_glide(240.0 * pv, 108.0 * pv, rng.randf_range(0.3, 0.42), 0.15, 3.6, "saw"),
 				_glide(247.0 * pv, 111.0 * pv, 0.34, 0.10, 3.6, "saw"))   # 双saw微失谐·阴冷
 		"holy":
 			body = _chord([523.0 * pv, 659.0 * pv, 784.0 * pv], rng.randf_range(0.3, 0.42), 0.12, rng.randf_range(4.0, 6.0))
-			body = _mix(body, _noise(0.12, 0.05, 12.0))   # 圣钟 + 微光气息
+			body = _mix(body, _noise(0.12, 0.05, 12.0, noise_rng))   # 圣钟 + 微光气息
 		"stone", "hammer":
-			body = _mix(_tone(88.0 * pv, 0.18, 0.30, 9.0), _noise(0.09, 0.24, 16.0))
+			body = _mix(_tone(88.0 * pv, 0.18, 0.30, 9.0), _noise(0.09, 0.24, 16.0, noise_rng))
 			body = _mix(body, _pops(rng, rng.randi_range(2, 5), 0.22, 0.10))   # 落石碎屑
 		"axe", "blade":
-			body = _mix(_tone(rng.randf_range(700.0, 950.0) * pv, 0.05, 0.17, 32.0, "tri"), _noise(0.05, 0.15, 34.0))
+			body = _mix(_tone(rng.randf_range(700.0, 950.0) * pv, 0.05, 0.17, 32.0, "tri"), _noise(0.05, 0.15, 34.0, noise_rng))
 			body = _mix(body, _tone(1300.0 * pv, 0.09, 0.07, 22.0, "sine"))   # 刃鸣余韵
 		"spear":
-			body = _mix(_noise(rng.randf_range(0.06, 0.1), 0.16, 22.0), _glide(420.0 * pv, 210.0 * pv, 0.1, 0.12, 18.0, "tri"))
+			body = _mix(_noise(rng.randf_range(0.06, 0.1), 0.16, 22.0, noise_rng), _glide(420.0 * pv, 210.0 * pv, 0.1, 0.12, 18.0, "tri"))
 		"arrow":
-			body = _seq([_tone(rng.randf_range(480.0, 620.0) * pv, 0.025, 0.16, 22.0, "tri"), _noise(0.08, 0.12, 14.0)])   # 崩弦+破空
+			body = _seq([_tone(rng.randf_range(480.0, 620.0) * pv, 0.025, 0.16, 22.0, "tri"), _noise(0.08, 0.12, 14.0, noise_rng)])   # 崩弦+破空
 		"beast":
-			body = _mix(_glide(170.0 * pv, 84.0 * pv, rng.randf_range(0.24, 0.36), 0.20, 4.0, "saw"), _noise(0.16, 0.10, 8.0))   # 低吼+鼻息
+			body = _mix(_glide(170.0 * pv, 84.0 * pv, rng.randf_range(0.24, 0.36), 0.20, 4.0, "saw"), _noise(0.16, 0.10, 8.0, noise_rng))   # 低吼+鼻息
 		"chain":
-			body = _mix(_pops(rng, rng.randi_range(4, 7), rng.randf_range(0.18, 0.28), 0.15, 1050.0 * pv, 32.0), _noise(0.1, 0.08, 18.0))   # 铁环铮铮
+			body = _mix(_pops(rng, rng.randi_range(4, 7), rng.randf_range(0.18, 0.28), 0.15, 1050.0 * pv, 32.0), _noise(0.1, 0.08, 18.0, noise_rng))   # 铁环铮铮
 		"command":
 			body = _mix(_glide(233.0 * pv, 349.0 * pv, rng.randf_range(0.24, 0.34), 0.15, 3.2, "tri"), _tone(98.0, 0.16, 0.18, 8.0))   # 号角+鼓
 		_:
-			body = _mix(_noise(0.16, 0.16, 9.0), _glide(500.0 * pv, 300.0 * pv, 0.16, 0.12, 8.0, "tri"))   # 通用施法
+			body = _mix(_noise(0.16, 0.16, 9.0, noise_rng), _glide(500.0 * pv, 300.0 * pv, 0.16, 0.12, 8.0, "tri"))   # 通用施法
 	# —— kind 动机叠加：给「动作感」——
 	match kind:
 		"bolt", "line_nuke", "chain_nuke", "global_nuke", "blink_shot":
