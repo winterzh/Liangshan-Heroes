@@ -1,0 +1,372 @@
+{
+  "scope": "Exact Windows EXE, 265s with timings around the harness economy, selection, move/attack and casting entry points. Optional GL viewport timestamps off. Command sections include costs within the original player-call pathways and harness overhead. This is a diagnostic.",
+  "exe_sha256": "014582e4c8c1c077a56ca5418efbb512d48a1a5f0baba3e5580e7f3e49b400be",
+  "scope_checks": 13,
+  "same_trajectory_points": 270,
+  "scripted_order_batches": 136,
+  "batch_timing": {
+    "economy": {
+      "median_ms": 0.326,
+      "p95_ms": 1.755,
+      "max_ms": 10.281
+    },
+    "collect_army_fleet": {
+      "median_ms": 0.082,
+      "p95_ms": 0.127,
+      "max_ms": 0.315
+    },
+    "army": {
+      "median_ms": 2.042,
+      "p95_ms": 3.239,
+      "max_ms": 4.772
+    },
+    "skill": {
+      "median_ms": 0.177,
+      "p95_ms": 1.013,
+      "max_ms": 5.624
+    },
+    "fleet": {
+      "median_ms": 1.129,
+      "p95_ms": 1.87,
+      "max_ms": 8.042
+    },
+    "whole_batch": {
+      "median_ms": 4.039,
+      "p95_ms": 8.236,
+      "max_ms": 22.626
+    }
+  },
+  "individual_orders": {
+    "29,32": {
+      "count": 136,
+      "unit_count_median": 15.0,
+      "selection": {
+        "median_ms": 1.576,
+        "p95_ms": 2.467,
+        "max_ms": 3.976
+      },
+      "minimap_command": {
+        "median_ms": 0.419,
+        "p95_ms": 0.668,
+        "max_ms": 1.218
+      }
+    },
+    "39,45": {
+      "count": 136,
+      "unit_count_median": 4.0,
+      "selection": {
+        "median_ms": 0.938,
+        "p95_ms": 1.627,
+        "max_ms": 7.688
+      },
+      "minimap_command": {
+        "median_ms": 0.185,
+        "p95_ms": 0.31,
+        "max_ms": 0.476
+      }
+    },
+    "35,50": {
+      "count": 8,
+      "unit_count_median": 1.0,
+      "selection": {
+        "median_ms": 0.933,
+        "p95_ms": 1.692,
+        "max_ms": 1.692
+      },
+      "minimap_command": {
+        "median_ms": 0.09,
+        "p95_ms": 0.141,
+        "max_ms": 0.141
+      }
+    }
+  },
+  "largest_batches": [
+    {
+      "tick": 1,
+      "total_us": 22626,
+      "section_us": {
+        "economy": 10281,
+        "collect_army_fleet": 92,
+        "army": 3915,
+        "skill": 296,
+        "fleet": 8042
+      }
+    },
+    {
+      "tick": 4081,
+      "total_us": 13312,
+      "section_us": {
+        "economy": 5608,
+        "collect_army_fleet": 315,
+        "army": 4772,
+        "skill": 401,
+        "fleet": 2216
+      }
+    },
+    {
+      "tick": 6481,
+      "total_us": 9866,
+      "section_us": {
+        "economy": 266,
+        "collect_army_fleet": 69,
+        "army": 2037,
+        "skill": 5624,
+        "fleet": 1870
+      }
+    },
+    {
+      "tick": 7441,
+      "total_us": 9582,
+      "section_us": {
+        "economy": 583,
+        "collect_army_fleet": 96,
+        "army": 2194,
+        "skill": 5310,
+        "fleet": 1399
+      }
+    },
+    {
+      "tick": 9361,
+      "total_us": 8450,
+      "section_us": {
+        "economy": 487,
+        "collect_army_fleet": 95,
+        "army": 2218,
+        "skill": 4600,
+        "fleet": 1050
+      }
+    },
+    {
+      "tick": 961,
+      "total_us": 8249,
+      "section_us": {
+        "economy": 732,
+        "collect_army_fleet": 230,
+        "army": 3980,
+        "skill": 549,
+        "fleet": 2758
+      }
+    },
+    {
+      "tick": 2161,
+      "total_us": 8236,
+      "section_us": {
+        "economy": 985,
+        "collect_army_fleet": 303,
+        "army": 3890,
+        "skill": 485,
+        "fleet": 2573
+      }
+    },
+    {
+      "tick": 2521,
+      "total_us": 7517,
+      "section_us": {
+        "economy": 4672,
+        "collect_army_fleet": 82,
+        "army": 1463,
+        "skill": 178,
+        "fleet": 1122
+      }
+    },
+    {
+      "tick": 8401,
+      "total_us": 6284,
+      "section_us": {
+        "economy": 707,
+        "collect_army_fleet": 84,
+        "army": 3668,
+        "skill": 314,
+        "fleet": 1511
+      }
+    },
+    {
+      "tick": 8041,
+      "total_us": 6231,
+      "section_us": {
+        "economy": 2674,
+        "collect_army_fleet": 92,
+        "army": 2372,
+        "skill": 165,
+        "fleet": 928
+      }
+    },
+    {
+      "tick": 15481,
+      "total_us": 5911,
+      "section_us": {
+        "economy": 420,
+        "collect_army_fleet": 94,
+        "army": 2786,
+        "skill": 197,
+        "fleet": 2414
+      }
+    },
+    {
+      "tick": 11401,
+      "total_us": 5904,
+      "section_us": {
+        "economy": 415,
+        "collect_army_fleet": 112,
+        "army": 3596,
+        "skill": 266,
+        "fleet": 1515
+      }
+    }
+  ],
+  "slow_frames": 44,
+  "slow_frames_with_command_batch": 4,
+  "largest_slow_frames": [
+    {
+      "sample_started_us": 62100091,
+      "duration_us": 125293,
+      "physics_tick_count": 5,
+      "physics_phase_us": 70674,
+      "between_draw_signals_us": 20286,
+      "command_tick": null,
+      "command_stage_us": {}
+    },
+    {
+      "sample_started_us": 62225384,
+      "duration_us": 98749,
+      "physics_tick_count": 8,
+      "physics_phase_us": 66326,
+      "between_draw_signals_us": 15824,
+      "command_tick": null,
+      "command_stage_us": {}
+    },
+    {
+      "sample_started_us": 30246521,
+      "duration_us": 95790,
+      "physics_tick_count": 3,
+      "physics_phase_us": 37727,
+      "between_draw_signals_us": 28231,
+      "command_tick": null,
+      "command_stage_us": {}
+    },
+    {
+      "sample_started_us": 62011888,
+      "duration_us": 88203,
+      "physics_tick_count": 5,
+      "physics_phase_us": 61552,
+      "between_draw_signals_us": 14570,
+      "command_tick": null,
+      "command_stage_us": {}
+    },
+    {
+      "sample_started_us": 30342311,
+      "duration_us": 74813,
+      "physics_tick_count": 6,
+      "physics_phase_us": 56898,
+      "between_draw_signals_us": 7067,
+      "command_tick": null,
+      "command_stage_us": {}
+    },
+    {
+      "sample_started_us": 61938230,
+      "duration_us": 73658,
+      "physics_tick_count": 3,
+      "physics_phase_us": 26828,
+      "between_draw_signals_us": 23133,
+      "command_tick": null,
+      "command_stage_us": {}
+    },
+    {
+      "sample_started_us": 11046614,
+      "duration_us": 70741,
+      "physics_tick_count": 4,
+      "physics_phase_us": 48641,
+      "between_draw_signals_us": 10990,
+      "command_tick": 961,
+      "command_stage_us": {
+        "economy": 732,
+        "collect_army_fleet": 230,
+        "army": 3980,
+        "skill": 549,
+        "fleet": 2758
+      }
+    },
+    {
+      "sample_started_us": 10977147,
+      "duration_us": 69467,
+      "physics_tick_count": 3,
+      "physics_phase_us": 31085,
+      "between_draw_signals_us": 13359,
+      "command_tick": null,
+      "command_stage_us": {}
+    },
+    {
+      "sample_started_us": 134686454,
+      "duration_us": 62154,
+      "physics_tick_count": 2,
+      "physics_phase_us": 17963,
+      "between_draw_signals_us": 14791,
+      "command_tick": null,
+      "command_stage_us": {}
+    },
+    {
+      "sample_started_us": 61879211,
+      "duration_us": 59019,
+      "physics_tick_count": 3,
+      "physics_phase_us": 26289,
+      "between_draw_signals_us": 18822,
+      "command_tick": null,
+      "command_stage_us": {}
+    },
+    {
+      "sample_started_us": 63039395,
+      "duration_us": 52935,
+      "physics_tick_count": 2,
+      "physics_phase_us": 33172,
+      "between_draw_signals_us": 9459,
+      "command_tick": 4081,
+      "command_stage_us": {
+        "economy": 5608,
+        "collect_army_fleet": 315,
+        "army": 4772,
+        "skill": 401,
+        "fleet": 2216
+      }
+    },
+    {
+      "sample_started_us": 61826352,
+      "duration_us": 52859,
+      "physics_tick_count": 2,
+      "physics_phase_us": 14724,
+      "between_draw_signals_us": 21453,
+      "command_tick": null,
+      "command_stage_us": {}
+    }
+  ],
+  "raw_report_sha256": "4051403f29698f2e61b21c40d4eb0be433700221a60193d0477ceea215de7360",
+  "log_sha256": "627b5428381f066e6d6e7e9f231866261079d1214b594abd4b0e0bc6d441fa5e",
+  "longest_frame_stage_tallies": [
+    {
+      "stage": "between_render_signals",
+      "contains_scripted_batch": false,
+      "frames": 14
+    },
+    {
+      "stage": "idle_to_before_draw",
+      "contains_scripted_batch": false,
+      "frames": 7
+    },
+    {
+      "stage": "physics_batch_to_idle",
+      "contains_scripted_batch": false,
+      "frames": 19
+    },
+    {
+      "stage": "physics_batch_to_idle",
+      "contains_scripted_batch": true,
+      "frames": 4
+    }
+  ],
+  "overall_frame_timing": {
+    "seconds": 265.017585,
+    "frames": 25238,
+    "p95_ms": 16.128,
+    "p99_ms": 19.957,
+    "worst_ms": 125.293
+  }
+}

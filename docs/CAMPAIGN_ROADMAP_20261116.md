@@ -24,6 +24,10 @@ Windows 候选 57adb5e2 用相同战况单独关闭视口 GPU 计时，完成 60
 
 梁山岸线准备复用四方向常量，每格只判断一次是否允许台地边，确认要绘制岸线后才计算边的位置。高俅、原梁山和黄泥冈的岸线端点、顺序、前后层、类型与色调全部一致。高俅源码单项中位耗时 16.537 → 11.544 ms。 [岸线源码对照](../qa/battle_entry_timing_20261116/windows_source_bank_preparation_20261119.json)
 
+高俅另做了 265 秒的集中下令分段。陆军与船队选中耗时中位数为 1.576、0.938 ms，对应移动命令为 0.419、0.185 ms。本轮 44 个超过 33.3 ms 的帧中有 4 个包含该命令批次。其他长帧分布在物理更新、绘制准备和绘制信号之间。270 个共同战况点一致。 [下令分段](../qa/campaign_sustained_performance_20261116/windows_water_order_sections_265_57adb5e2.json)
+
+岸线优化已纳入 Windows 候选 d776a4e1。1280×720 Vulkan Forward+ 下六模式 14 次开战与返回通过，每次释放关键战场节点，存档字节一致。本轮高俅出征到首帧中位数 378.602 ms，最大 386.931 ms。 [原生六模式回归](../qa/battle_entry_timing_20261116/windows_six_mode_smoke_d776a4e1.json)
+
 Windows 候选 31c567ed 的离线试玩 ZIP 已回读六个文件，逐项校验后从干净解压目录隔离启动通过。祝家庄首次进入和同进程重进均能正常出征、右键下令和 Esc 暂停恢复，加载提示约 54 ms，首帧约 530、372 ms。 [试玩包与祝家庄入口](../qa/battle_entry_timing_20261116/windows_playtest_package_31c567ed.json)
 
 31c567ed 的祝家庄正攻与断援走偏门两条路线均从实际菜单打到胜利，各通过 13 项，含四语重玩建议。本次正攻遇南营三队，演义 1/3；偏门接应遇一队，演义 3/3。暂停与结算反馈在 720p、1080p 实窗各通过 24 项。 [路线结果](../qa/campaign_siege_20261116/windows_native_routes_31c567ed.json) · [四语反馈](../qa/battle_entry_timing_20261116/windows_feedback_rendered_31c567ed.json)
