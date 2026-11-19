@@ -539,6 +539,16 @@ func _mk_big_btn(text: String, col: Color, format_args: Variant = null) -> Butto
 # ======================================================================
 # 模块一：剧情模式（八幕战役卡片）
 # ======================================================================
+func _prefetch_picker_surfaces(overlay: Control, level_ids: Array) -> void:
+	if OS.get_name() != "Windows" or DisplayServer.get_name() == "headless":
+		return
+	await RenderingServer.frame_post_draw
+	if not is_inside_tree() or not is_instance_valid(overlay) or overlay.is_queued_for_deletion():
+		return
+	if overlay.is_visible_in_tree() and _entry_overlay == null and not AppLifecycle.quit_started():
+		Art.prefetch_menu_surfaces(level_ids)
+
+
 func _show_story() -> void:
 	var ov := _mk_overlay("剧情模式 · 八幕战役", null, 1080.0)
 	var overlay: ColorRect = ov[0]
@@ -587,6 +597,7 @@ func _show_story() -> void:
 			i += 1
 
 	_add_back(box, overlay)
+	_prefetch_picker_surfaces(overlay, Campaign.STORY_ORDER)
 
 
 # ======================================================================
@@ -596,6 +607,7 @@ func _show_defense() -> void:
 	var ov := _mk_overlay("驻守战 · 据守梁山大寨")
 	var overlay: ColorRect = ov[0]
 	var box: VBoxContainer = ov[1]
+	_prefetch_picker_surfaces(overlay, ["level5"])
 
 	var tip := Label.new()
 	tip.text = "守住忠义堂，击退一波波官军围剿"

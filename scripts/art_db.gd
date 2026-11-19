@@ -1051,6 +1051,7 @@ const ART_ICON_PATHS := {
 
 var _prefetched_opening_textures: Dictionary[String, Texture2D] = {}
 var _gao_opening_art_requested := false
+var _menu_surface_requests: Dictionary[String, bool] = {}
 
 
 func ability_icon_path(ability_id: String) -> String:
@@ -1124,6 +1125,31 @@ func request_huangnigang_opening_portraits() -> Array[String]:
 func cache_prepared_opening_texture(path: String, texture: Texture2D) -> void:
 	if texture != null:
 		_prefetched_opening_textures[path] = texture
+
+
+## Five shared terrain textures can be reused by later battles in this process.
+func prefetch_menu_surfaces(level_ids: Array) -> void:
+	if OS.get_name() != "Windows" or DisplayServer.get_name() == "headless" or AppLifecycle.quit_started():
+		return
+	for level_id: String in level_ids:
+		for path in CampaignEnvironmentArt.surface_texture_paths(level_id):
+			if _prefetched_opening_textures.has(path) or _menu_surface_requests.has(path):
+				continue
+			if ResourceLoader.load_threaded_request(path, "Texture2D") == OK:
+				_menu_surface_requests[path] = true
+				_collect_menu_surface.call_deferred(path)
+
+
+func _collect_menu_surface(path: String) -> void:
+	var status := ResourceLoader.load_threaded_get_status(path)
+	while status == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+		await get_tree().process_frame
+		status = ResourceLoader.load_threaded_get_status(path)
+	# A successful request owns one reference even if a launch requests it too.
+	if status != ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+		var texture := ResourceLoader.load_threaded_get(path) as Texture2D
+		cache_prepared_opening_texture(path, texture)
+	_menu_surface_requests.erase(path)
 
 
 func prefetch_gao_opening_art() -> void:
