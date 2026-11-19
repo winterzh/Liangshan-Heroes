@@ -62,6 +62,9 @@ var _minute_frames: Array[float] = []
 var _minute_draw_sum := 0.0
 var _minute_draw_max := 0.0
 var _minute_frame_count := 0
+var _stage_timing_enabled := false
+var _stage_frame_samples := {}
+var _active_stage_frames := {}
 var _current_battle = null
 var _current_mode := "idle"
 var _current_level_id := ""
@@ -223,6 +226,38 @@ func _snapshot(include_process_memory: bool) -> Dictionary:
 	return snapshot
 
 
+func _tag_frame_stage(stage: String, mode := "", level_id := "") -> void:
+	if not _stage_timing_enabled:
+		return
+	var key := "%s/%s/%s" % [stage, mode, level_id]
+	if not _stage_frame_samples.has(key):
+		_stage_frame_samples[key] = {
+			"stage": stage, "mode": mode, "level_id": level_id,
+			"frames": 0, "over_16_7_ms": 0, "over_33_3_ms": 0, "worst_ms": 0.0,
+		}
+	_active_stage_frames = _stage_frame_samples[key]
+
+
+func _record_stage_frame(frame_ms: float) -> void:
+	_active_stage_frames.frames += 1
+	if frame_ms > FRAME_P95_LIMIT_MS:
+		_active_stage_frames.over_16_7_ms += 1
+	if frame_ms > FRAME_P99_LIMIT_MS:
+		_active_stage_frames.over_33_3_ms += 1
+	_active_stage_frames.worst_ms = maxf(_active_stage_frames.worst_ms, frame_ms)
+
+
+func _check_stage_frame_coverage() -> void:
+	var total := 0
+	for sample: Dictionary in _minute_samples:
+		total += int(sample.rendered_frames)
+	var tagged := 0
+	for stage: Dictionary in _stage_frame_samples.values():
+		tagged += int(stage.frames)
+	_check(tagged == total and total > 0, "each sampled render interval has exactly one diagnostic stage",
+		"tagged=%d sampled=%d" % [tagged, total])
+
+
 func _record_render_frame() -> void:
 	var now := Time.get_ticks_usec()
 	if _last_frame_usec > 0:
@@ -232,6 +267,8 @@ func _record_render_frame() -> void:
 		if frame_ms > 0.0:
 			_minute_frames.append(frame_ms)
 			_minute_frame_count += 1
+			if _stage_timing_enabled:
+				_record_stage_frame(frame_ms)
 			var draw_calls := Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME)
 			_minute_draw_sum += draw_calls
 			_minute_draw_max = maxf(_minute_draw_max, draw_calls)
@@ -414,6 +451,7 @@ func _dispose_battle(battle, transition: Dictionary) -> bool:
 	var unit_ref: WeakRef = weakref(battle.units[0]) if not battle.units.is_empty() else null
 	_current_battle = null
 	_current_mode = "cleanup"
+	_tag_frame_stage("return", transition.mode, transition.level_id)
 	battle.hud.to_menu.emit()
 	battle = null
 	var menu_ready := await _await_scene(MENU_SCENE)
@@ -450,6 +488,7 @@ func _run_fixture(fixture: Dictionary) -> bool:
 	var mode := String(fixture.mode)
 	_current_mode = "building:" + mode
 	_current_level_id = String(fixture.level_id)
+	_tag_frame_stage("mount", mode, _current_level_id)
 	var began := Time.get_ticks_usec()
 	seed(5_088_120 + _transitions.size())
 	current_scene.call("_launch", _current_level_id if mode == "campaign" else "")
@@ -463,6 +502,7 @@ func _run_fixture(fixture: Dictionary) -> bool:
 	if not battle_initialized:
 		return false
 	_current_battle = battle
+	_tag_frame_stage("start", mode, _current_level_id)
 	if battle.hud._intro_root != null:
 		battle.hud._intro_root.hide()
 	battle._on_intro_done()
@@ -471,6 +511,7 @@ func _run_fixture(fixture: Dictionary) -> bool:
 	await _render_tick()
 	_current_mode = mode
 	_current_level_id = String(battle.level.id())
+	_tag_frame_stage("play", mode, _current_level_id)
 	var expected_id := String(fixture.level_id)
 	var nodes_ok := battle.map != null and battle.hud != null and battle.world != null \
 		and battle.camera != null and battle.units_root != null
@@ -725,6 +766,8 @@ func _run() -> void:
 	_bucket_start_usec = _start_usec
 	_next_minute_usec = _start_usec + MINUTE_USEC
 	_last_frame_usec = _start_usec
+	_stage_timing_enabled = OS.get_environment("CAMPAIGN_SOAK_STAGE_TIMING") == "1"
+	_tag_frame_stage("menu")
 	_baseline = _snapshot(true)
 	await _render_tick()
 	while Time.get_ticks_usec() < _end_usec:
@@ -738,12 +781,14 @@ func _run() -> void:
 		if _cycle == 1 and _warm_baseline.is_empty():
 			_current_mode = "warm_cleanup"
 			_current_level_id = ""
+			_tag_frame_stage("warm_cleanup")
 			_warm_baseline = _snapshot(true)
 			_last_frame_usec = Time.get_ticks_usec()
 	# Allow deferred frees and renderer-side resource releases to settle before
 	# the comparable end snapshot.
 	_current_mode = "final_cleanup"
 	_current_level_id = ""
+	_tag_frame_stage("final_cleanup")
 	for i in range(8):
 		await _render_tick()
 	if not _minute_frames.is_empty():
@@ -767,6 +812,8 @@ func _run() -> void:
 	for fixture in ROUTE:
 		var route_key := String(fixture.mode) + ":" + String(fixture.level_id)
 		_check(int(_route_visit_counts.get(route_key, 0)) > 0, route_key + " was built and normally started", str(_route_visit_counts.get(route_key, 0)))
+	if _stage_timing_enabled:
+		_check_stage_frame_coverage()
 	var performance := _performance_summary()
 	var actual_seconds := float(Time.get_ticks_usec() - _start_usec) / 1_000_000.0
 	if _acceptance_eligible:
@@ -820,6 +867,8 @@ func _run() -> void:
 		"exit_warning_status": "pending wrapper post-process",
 		"scope": "Real renderer lifecycle, frame, resource and release evidence. No human playtest, pacing or balance conclusion.",
 	}
+	if _stage_timing_enabled:
+		_report["frame_stages"] = _stage_frame_samples.values()
 	_write_report()
 	print("CAMPAIGN_MODE_SOAK_RESULT ", JSON.stringify({
 		"passed": acceptance_passed,

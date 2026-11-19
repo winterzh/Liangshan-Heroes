@@ -38,4 +38,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\run_campaign_mode_so
 powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\run_campaign_mode_soak.ps1 -DurationSeconds 90 -AllowShort
 ```
 
+
+需要定位慢帧时，在同一 PowerShell 中先设 `$env:CAMPAIGN_SOAK_STAGE_TIMING = '1'`，然后运行上述命令。结束后用 `Remove-Item Env:CAMPAIGN_SOAK_STAGE_TIMING` 清除该开关。报告的 `frame_stages` 按路线与阶段提供采样间隔数、超过 16.7 和 33.3 ms 的数量及最大间隔。进场覆盖点击加载至战场初始化完成，开战覆盖解除剧情弹层和启动首帧，随后进入战斗，退出后的间隔归到返回。计数覆盖完整与末尾不足一分钟的采样，原有验收门槛照常执行。
+
 这项测试只证明真实渲染下的模式切换、资源释放和稳定性，不代替真人试玩，也不产生节奏或平衡结论。
