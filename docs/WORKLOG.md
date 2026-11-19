@@ -1,5 +1,10 @@
 # 开发日志
 
+## 2026-11-19 Windows 八章旧档复验
+
+f4383f2d 已完成 Build 26735223 八章第 1 代兼容样本在原生 Windows 试玩 ZIP 中的继续、再次保存和独立重启。野猪林终局及旧槽拒绝通过，18 个隔离进程退出 0。 [八章续玩验收](../qa/battle_entry_timing_20261116/windows_player_legacy_matrix_f4383f2d.json)
+
+
 ## 2026-11-19 Windows 离线试玩和江州双分支
 
 f4383f2d 离线试玩 ZIP 的六文件干净解压与隔离启动通过。从同一江州中途档分别放行、右键攻击，原六名追兵在 20.183 和 32.183 游戏秒出动，原槽与账本摘要保留。 [试玩包](../qa/battle_entry_timing_20261116/windows_playtest_package_f4383f2d.json) · [江州双分支](../qa/campaign_pursuit_20261116/windows_courier_branches_f4383f2d.json)

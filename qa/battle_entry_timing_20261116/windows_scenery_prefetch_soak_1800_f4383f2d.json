@@ -6206,5 +6206,79 @@
     "log_sha256": "07bbcd311dd0397b60ff5f1f22c4774297590bc484fef3b41a466fb3bde39242",
     "checks_passed": true,
     "method": "Same frozen Windows executable; move the timing start after the initial synchronous process-memory reading. A separate short exercise verifies the QA-only change."
+  },
+  "completed_run_entry_breakdown": {
+    "arena": {
+      "samples": 48,
+      "median_battle_attach_to_scene_ready_ms": 46.889,
+      "median_scene_ready_to_first_draw_ms": 14.501,
+      "longest_mount_gap_ms": 87.035,
+      "longest_gap_split_ms": {
+        "before_battle_attach": 1.354,
+        "battle_attach_to_hud": 39.762,
+        "hud_to_scene_ready": 25.59,
+        "scene_ready_to_first_draw": 20.329
+      }
+    },
+    "custom_defense": {
+      "samples": 48,
+      "median_battle_attach_to_scene_ready_ms": 96.173,
+      "median_scene_ready_to_first_draw_ms": 61.141,
+      "longest_mount_gap_ms": 194.387,
+      "longest_gap_split_ms": {
+        "before_battle_attach": 13.999,
+        "battle_attach_to_hud": 97.353,
+        "hud_to_scene_ready": 24.599,
+        "scene_ready_to_first_draw": 58.436
+      }
+    },
+    "level1": {
+      "samples": 48,
+      "median_battle_attach_to_scene_ready_ms": 117.241,
+      "median_scene_ready_to_first_draw_ms": 17.186,
+      "longest_mount_gap_ms": 219.507,
+      "longest_gap_split_ms": {
+        "before_battle_attach": 14.571,
+        "battle_attach_to_hud": 68.169,
+        "hud_to_scene_ready": 88.346,
+        "scene_ready_to_first_draw": 48.421
+      }
+    },
+    "level5": {
+      "samples": 47,
+      "median_battle_attach_to_scene_ready_ms": 97.041,
+      "median_scene_ready_to_first_draw_ms": 57.64,
+      "longest_mount_gap_ms": 229.977,
+      "longest_gap_split_ms": {
+        "before_battle_attach": 12.855,
+        "battle_attach_to_hud": 78.079,
+        "hud_to_scene_ready": 28.173,
+        "scene_ready_to_first_draw": 110.87
+      }
+    },
+    "skirmish": {
+      "samples": 48,
+      "median_battle_attach_to_scene_ready_ms": 95.861,
+      "median_scene_ready_to_first_draw_ms": 60.205,
+      "longest_mount_gap_ms": 221.016,
+      "longest_gap_split_ms": {
+        "before_battle_attach": 13.313,
+        "battle_attach_to_hud": 113.799,
+        "hud_to_scene_ready": 25.204,
+        "scene_ready_to_first_draw": 68.7
+      }
+    },
+    "skirmish_ai": {
+      "samples": 48,
+      "median_battle_attach_to_scene_ready_ms": 50.578,
+      "median_scene_ready_to_first_draw_ms": 23.855,
+      "longest_mount_gap_ms": 95.031,
+      "longest_gap_split_ms": {
+        "before_battle_attach": 3.033,
+        "battle_attach_to_hud": 29.327,
+        "hud_to_scene_ready": 35.032,
+        "scene_ready_to_first_draw": 27.639
+      }
+    }
   }
 }
