@@ -1576,6 +1576,11 @@ func _inventory_display_hero() -> Unit:
 
 
 func refresh_inventory() -> void:
+	_update_inventory_slots()
+	_layout_inventory()
+
+
+func _update_inventory_slots() -> void:
 	_inventory_hero = _inventory_display_hero()
 	for grid in [_inventory_grid, _inventory_popup_grid]:
 		if grid == null:
@@ -1584,7 +1589,6 @@ func refresh_inventory() -> void:
 			if child is InventorySlotButton:
 				child.hero = _inventory_hero
 				child.queue_redraw()
-	_layout_inventory()
 
 
 func _layout_inventory() -> void:
@@ -2172,7 +2176,11 @@ func update_selection_panel(sel: Array) -> void:
 	_rebuild_grid()
 	_rebuild_command_card()
 	_refresh_panel()
-	refresh_inventory()
+	if not touch_ui and _bottom_panel != null and minimap != null:
+		# The bottom bar lays out the inventory once at its new height.
+		_update_inventory_slots()
+	else:
+		refresh_inventory()
 	_apply_bottom_collapse()
 
 
