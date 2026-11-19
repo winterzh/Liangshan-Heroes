@@ -8,7 +8,19 @@ func _run() -> void:
 	root.get_node("Settings").edge_scroll=false
 	var folder := "res://.godot/daming-coordination"
 	DirAccess.make_dir_recursive_absolute(folder)
+	var flow := root.get_node("ContinueFlow")
+	var deadline := Time.get_ticks_msec()+60000
+	while not flow.can_launch():
+		if flow.phase==flow.Phase.ERROR or Time.get_ticks_msec()>=deadline:
+			push_error(str(flow.last_result))
+			quit(2)
+			return
+		await process_frame
 	var b=await _start("",7)
+	if b.phase!=b.Phase.FIGHT or not b.mission.actions.has("daming_fire"):
+		push_error("Daming did not enter an active campaign battle")
+		quit(3)
+		return
 	b.set_process(false)
 	b.set_physics_process(false)
 	b.camera.set_process(false)
@@ -34,6 +46,8 @@ func _run() -> void:
 	l.chai.position=b.map.cell_to_world(l.PRISON_INSIDE)
 	l.yue.position=l.chai.position+Vector2(10,0)
 	check(l.coordination_state(b).inside==2 and l._briefing(b).title=="待机 · 自选举火时机","inside position enables timing advice before fire")
+	check("翠云楼举火" in l.unit_tactical_hint(b,l.scout) and "翠云楼举火" in l._briefing(b).text,
+		"ready teams see the ignition action before the diversion begins")
 	l.scout._invis_t=0
 	check("恢复乔装" in l.unit_tactical_hint(b,l.scout),"exposed signal agent is called out after team is ready")
 	l.scout._invis_t=99999
@@ -49,17 +63,68 @@ func _run() -> void:
 	l._update_briefing(b)
 	check(serials==b.units.map(func(u): return u._order_serial) and money==[b.gold,b.wood] and action_before==[action.done,action.get("progress",0)],"briefing reads state without orders, costs or action resets")
 	var texts: Array=[]
+	var loc := root.get_node("Localize")
 	for language in ["zh_CN","zh_TW","en","ja"]:
-		root.get_node("Localize").set_language(language,false)
+		loc.set_language(language,false)
 		l._update_briefing(b)
 		await _capture(b,l.scout,language+"_ready",folder,texts)
 		check(b.mission._objective.get_minimum_size().y<=b.mission._objective.size.y+1,language+" objective has enough height")
+		var expected: String=loc.text("时迁")+loc.text("·乔装")
+		check(b.hud._info_name.text.begins_with(expected),language+" rendered spy name includes localized disguise")
+		var names_match := true
+		for agent in [l.scout,l.chai,l.yue]:
+			var name: String=agent.setup_def.name
+			for suffix in ["·乔装","·暴露"]:
+				if loc.text(name+suffix)!=loc.text(name)+loc.text(suffix):
+					names_match=false
+		check(names_match,language+" exact unit title lookup covers all three spies and both cover states")
 	root.get_node("Localize").set_language("zh_CN",false)
 	# Existing signal action remains available even if no outside army is ready.
 	for u in b.units:
 		if u.faction==0 and u.key in l.FIELD_KEYS: u.position=b.map.cell_to_world(l.CAMP)
 	l.on_mission_action(b,"daming_fire",l.scout)
 	check(l.signaled and l.signal_left==90 and b.mission.actions.has("daming_gate") and l.coordination_state(b).crew==0,"early fire remains a player choice rather than a new readiness lock")
+	check("鲁智深或武松" in b.mission.objective and "90秒" in l.top_status(b),
+		"the active signal shows its countdown and calls for a commander")
+	var gate_marker: Vector2 = b.map.cell_to_world(l.GATE_APPROACH)
+	leader.position=gate_marker
+	l._update_briefing(b)
+	check("两名战友" in b.mission.objective and "两名战友" in l.unit_tactical_hint(b,leader),
+		"the objective and inspected unit both ask for missing companions")
+	var far: Vector2 = b.map.cell_to_world(Vector2i(5,5))
+	for u in b.units:
+		if u.faction==1 and u!=l.gate: u.position=far
+	for i in range(2): soldiers[i].position=gate_marker+Vector2(30+i*25,30)
+	var guard = l.reserve[0]
+	guard.position=gate_marker+Vector2(0,96)
+	b._grid_build()
+	l._update_briefing(b)
+	check("可见守军" in b.mission.objective and "可见守军" in l.unit_tactical_hint(b,leader),
+		"with the crew assembled, visible resistance becomes the next step")
+	b.fog=true
+	b._sight_now.fill(0)
+	b._reveal_t.fill(0)
+	b.hud.set_touch_ui(false)
+	l._update_briefing(b)
+	check("右键夺门" in b.mission.objective and not "可见守军" in l.unit_tactical_hint(b,leader)
+		and l._guarded(b,l.GATE_APPROACH,l.GATE_GUARD_RADIUS),
+		"unit and task text reveal no hidden guards, while the gate still enforces resistance")
+	b.fog=false
+	guard.position=far
+	b._grid_build()
+	l._update_briefing(b)
+	check("右键夺门" in l.unit_tactical_hint(b,leader) and "右键夺门" in b.mission.objective,
+		"cleared gate directs the ready group to the actual desktop action")
+	var catalog: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://assets/localization/catalog.json"))
+	var title_source := "火号生效 · 城内暂停补兵"
+	var action_source := "接应人手已齐。选鲁智深或武松，右键夺门旗标。"
+	for language in ["zh_CN","zh_TW","en","ja"]:
+		root.get_node("Localize").set_language(language,false)
+		var title: String=title_source if language=="zh_CN" else String(catalog[title_source][language])
+		var hint: String=action_source if language=="zh_CN" else String(catalog[action_source][language])
+		check(b.mission._title.text==title and b.mission._objective.text==hint and hint in l.unit_tactical_hint(b,leader),
+			language+" translated signal title and contextual desktop prompt")
+	root.get_node("Localize").set_language("zh_CN",false)
 	l.signal_left=0
 	l.strategy_t=0
 	l.process(b,0.25)

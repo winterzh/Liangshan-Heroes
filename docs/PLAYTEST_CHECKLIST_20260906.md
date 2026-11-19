@@ -101,7 +101,7 @@
 | 剧情 → 江州劫法场 | 有限补给、分兵救援、替补与撤离压力 | `tools/jiangzhou_rts_play.gd` 实际两路线；test/visual 的受控边界另列；[当前说明](JIANGZHOU_RTS_20260906.md) | 真人待测 |
 | 剧情 → 三打祝家庄 | 上述两路线、墙门观感、经营/反制、孙立接应 | `tools/zhujiazhuang_rts_test.gd` direct/inside 与 contracts 分开；群选接应专项；[当前说明](ZHUJIAZHUANG_RTS_20260905.md)、[接应 QA](../qa/zhujiazhuang_gate_contact_20260905/README.md) | 真人待测 |
 | 剧情 → 大破连环马 | 反骑提示、编成选择、守反与断粮节奏 | `tools/lianhuanma_rts_test.gd` 与 drill 专项；[当前说明](LIANHUANMA_RTS_20260905.md) | 真人待测 |
-| 剧情 → 智取大名府 | 城内外双线、夺门/器械两办法、伤员撤离 | `tools/daming_rts_test.gd` 与 infiltration 专项；[当前说明](DAMING_RTS_20260905.md) | 真人待测 |
+| 剧情 → 智取大名府 | 自主判断举火时机、南门当前缺谁、到期后能否继续，以及夺门和强攻、伤员撤离 | `tools/daming_rts_test.gd` 与 infiltration 专项；[当前说明](DAMING_RTS_20260905.md) | 真人待测 |
 | 剧情 → 三败高太尉 | 水陆配合、长列表、收兵与火攻接俘选择 | `tools/gao_rts_play.gd` 实际路线与 test 边界分开；[当前说明](GAO_RTS_20260906.md)；不用旧 fleet/lure 工具代替新版 | 真人待测 |
 | 驻守战 → 30 关 · 经典（推荐） | AI友好与改变倍率均关闭；真实经营/补兵打完 30 波，记录早中晚期压力、败后补救与末波结算 | 波次/经济/末波专项只能证明所覆盖规则；完整当轮 30 波运行和真人体验单列 | 完整验收待测 |
 | 标准/精简特效 | 同场景切换，观察敌我、选中、命中及技能预警能否识别 | 规则和伤害一致性回归，按路线图记录正常速度性能 | 真人待测 |

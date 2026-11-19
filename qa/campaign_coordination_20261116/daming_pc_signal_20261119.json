@@ -1,0 +1,60 @@
+{
+  "chapter": "level8",
+  "scope": "Windows source QA. Isolated Godot 4.6.3 rendered fixtures and automated live economy/combat at 4x. Human experience and exported-candidate QA are pending.",
+  "runtime_sources": {
+    "scripts/levels/level8_daming_rts.gd": "9d6f911c5c9cd16d86fa8d6876595d5f364125a1e10de4e984e7c3acf2133c27",
+    "assets/localization/catalog.json": "d6c60858eccbbb4c021a3bc4df3d5943b34c10814fe9b09b0a4c6c35b9622acb"
+  },
+  "rendered": {
+    "window_design_sizes": [
+      [
+        1280,
+        720
+      ],
+      [
+        960,
+        540
+      ]
+    ],
+    "checks": 46,
+    "failures": [],
+    "checks_cover": [
+      "before-fire action guidance",
+      "active countdown and crew progression",
+      "fog-safe resistance",
+      "four locales and six spy-status names",
+      "expiry and save field declaration audit"
+    ],
+    "ready_objectives": [
+      "里外已就位，派时迁到翠云楼举火。",
+      "裡外已就位，派時遷到翠雲樓舉火。",
+      "Both teams are in position. Send Shi Qian to Cuiyun Tower to light the signal.",
+      "内外の部隊が配置についた。時遷を翠雲楼へ送り、火の合図を上げよ。"
+    ],
+    "screenshots": {
+      "en_narrow_escort.png": "ceda435cbd6ceccc92442018d8ccd506433185d502301556d50ac54b5c9ab959",
+      "en_ready.png": "6e0e08b974dc641c12c9ce137cc367b1398d33a2183e7f7e6c17b3185a184483",
+      "ja_ready.png": "7d341a043d85e972ca8d61b5fbbb11d7f7a334fad084c24a612a493059ade90c",
+      "zh_CN_expired.png": "4c0dd5afadea4973219f6c8f345b8ed6946b6c639b32b67cce25cd4eef6c161c",
+      "zh_CN_ready.png": "a7387e9beeb771d3813127f722e0f8c8dd4808e7280ddc04ee0064ffc207ac52",
+      "zh_TW_ready.png": "4e682fa9a08af0c3c4e31c8d814f707360ff1773f461ad4abb4e16f4c6e7217f"
+    },
+    "log_sha256": "ac18789ce8ed63887983831088cdc8c78e48aca611a67361275bc7766d32bec4"
+  },
+  "shared_gate_control_regression": {
+    "checks": 15,
+    "passed": true
+  },
+  "live_signal_route": {
+    "checks": 8,
+    "passed": true,
+    "game_seconds": 180.0,
+    "commands": 238,
+    "paid_units": 19,
+    "outside_camp_cut": true,
+    "gate_opened_by_signal": true,
+    "both_prisoners_escaped": true,
+    "story": 3,
+    "story_total": 3
+  }
+}

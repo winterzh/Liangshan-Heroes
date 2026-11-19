@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+大名府 PC 火号的渲染验证用 `tools/daming_coordination_qa.gd`。在 Windows Godot Compatibility 渲染器以独立档案运行，先等启动身份就绪，再进入真实战场构造缺指挥者、可见守军、迷雾和火号到期状态。截图及报告落在工程的 `.godot/daming-coordination/`。 [实跑与验收记录](../qa/campaign_coordination_20261116/README.md#2026-11-19-pc-火号与南门接应)
+
 Windows 本地试玩包 64965098 从六文件 ZIP 解压启动通过，试玩启动器的 P01、P02、P03 档案分开保存。Windows 战役旧档兼容表成对登记上一正式版本的内容标识与 EXE SHA-256，保存沿用原战斗身份。 [Windows 打包与续玩记录](../qa/battle_entry_timing_20261116/README.md#windows-候选-64965098)
 
 当前 Steam Windows 正式构建 26752476 由冻结源码 `0f13370905b8b16937135510c8cc469998b39b99` 生成，Depot 5088121 的 Manifest 为 8273375024262905155。使用六文件发布清单核对线上下载，构建 26735223 为旧档兼容和回退基线。账号续玩、奖励和云档收据只保留验收结果。 [Windows 发布收据](../qa/steam_release_20261118/release_26752476.json)

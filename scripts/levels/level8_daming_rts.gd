@@ -342,6 +342,17 @@ func coordination_state(b) -> Dictionary:
 		"crew": crew.size(), "leader": crew.any(func(u): return u.key in ["lu_zhishen","wu_song"]),
 		"agents_alive": [scout,chai,yue].all(func(u): return alive(u)),
 		"safe": int(b.mission.has_event("daming_lu_safe"))+int(b.mission.has_event("daming_shi_safe"))}
+func _gate_response_advice(b, state: Dictionary) -> String:
+	if not state.leader:
+		return "接应需鲁智深或武松亲自到场"
+	if state.crew < 3:
+		return "带至少两名战友到南门外"
+	if _guarded(b,GATE_APPROACH,GATE_GUARD_RADIUS,true):
+		return "接应人手已齐。南门仍有可见守军，清开后再夺门。"
+	if b.hud.touch_ui:
+		return "接应人手已齐。选鲁智深或武松，轻点夺门旗标。"
+	return "接应人手已齐。选鲁智深或武松，右键夺门旗标。"
+
 func unit_tactical_hint(b,unit) -> String:
 	if not alive(unit) or unit.faction!=0: return ""
 	if unit in [lu,shi] and rescued:
@@ -356,18 +367,14 @@ func unit_tactical_hint(b,unit) -> String:
 		return Localize.text("南门已通 · 清牢救人，留兵护退路")
 	var s := coordination_state(b)
 	var heading := Localize.format_text("牢内%d/2 · 门外%d/3",[s.inside,s.crew])
-	var advice := "接应人手已齐；仍须清门前守军"
-	if not s.agents_alive and not signaled: advice="内应不齐，可护器械强攻南门"
+	if signaled:
+		return heading+"\n"+Localize.text(_gate_response_advice(b, s))
+	var advice := "里外已就位，派时迁到翠云楼举火。"
+	if not s.agents_alive: advice="内应不齐，可护器械强攻南门"
 	elif not s.leader: advice="接应需鲁智深或武松亲自到场"
 	elif s.crew<3: advice="带至少两名战友到南门外"
-	elif s.inside<2 and not signaled: advice="柴进、乐和先进入牢内院"
-	elif not signaled and scout._invis_t<=0: advice="时迁恢复乔装后才能举火"
-	elif signaled:
-		if _guarded(b,GATE_APPROACH,GATE_GUARD_RADIUS,true):
-			advice="接应人手已齐。南门仍有可见守军，清开后再夺门。"
-		else:
-			advice="接应人手已齐。选鲁智深或武松，轻点夺门旗标。" if b.hud.touch_ui \
-				else "接应人手已齐。选鲁智深或武松，右键夺门旗标。"
+	elif s.inside<2: advice="柴进、乐和先进入牢内院"
+	elif scout._invis_t<=0: advice="时迁恢复乔装后才能举火"
 	return heading+"\n"+Localize.text(advice)
 func _briefing(b) -> Dictionary:
 	var s := coordination_state(b)
@@ -383,15 +390,15 @@ func _briefing(b) -> Dictionary:
 		return {"title":"入城 · 清牢前救人", "text":"南门已通。军队清开牢前与箭楼，再入牢开枷救人；留兵保护前营和出城退路。"}
 	if signaled:
 		if signal_left>0:
-			var order := "火号正在调开守军、暂停城内补兵。鲁智深或武松带至少两名战友到南门外，清敌后轻点夺门旗标；也可直接攻门。" if b.hud.touch_ui \
-				else "火号正在调开守军、暂停城内补兵。鲁智深或武松带至少两名战友到南门外，清敌后右键夺门标记；也可直接攻门。"
-			return {"title":"火号 · 夺门接应", "text":order}
+			return {"title":"火号生效 · 城内暂停补兵", "text":_gate_response_advice(b, s)}
 		return {"title":"回防 · 重整再接应", "text":"火号调动已结束，幸存机动守军回防，未摧毁的城内兵源恢复。可重整后清敌夺门，或护器械强攻；已有经营与内应进度保留。"}
 	if not s.agents_alive:
 		return {"title":"强攻 · 内应失去接应", "text":"内应人手不齐，火号路线不可用。城外继续经营，护器械打破南门，清牢前救人；前营和两名囚犯必须保住。"}
 	if s.inside==2:
 		if scout._invis_t<=0:
 			return {"title":"潜入 · 重整乔装", "text":"柴进、乐和已在牢内。时迁需甩开守军，到蔡福家停留3秒恢复乔装。外军也可直接攻门。"}
+		if s.leader and s.crew >= 3:
+			return {"title":"待机 · 自选举火时机", "text":"里外已就位，派时迁到翠云楼举火。"}
 		return {"title":"待机 · 自选举火时机", "text":"柴进、乐和已在牢内。可先让鲁智深或武松带兵靠近南门，再由仍有乔装的时迁举火争取90秒机会；也可提前举火或直接强攻。"}
 	if prison_open:
 		return {"title":"入院 · 就位接应", "text":"牢院已放行。带柴进、乐和进入内院，再由时迁择机举火。清开枷锁旁守军后，也可先开枷。"}

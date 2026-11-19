@@ -7,7 +7,19 @@ func _run() -> void:
 	AudioServer.set_bus_mute(0,true)
 	root.get_node("Settings").edge_scroll = false
 	var facts := {}
+	var flow := root.get_node("ContinueFlow")
+	var deadline := Time.get_ticks_msec()+60000
+	while not flow.can_launch():
+		if flow.phase==flow.Phase.ERROR or Time.get_ticks_msec()>=deadline:
+			push_error(str(flow.last_result))
+			quit(2)
+			return
+		await process_frame
 	var b = await _start("",7)
+	if b.phase!=b.Phase.FIGHT or not b.mission.actions.has("daming_fire"):
+		push_error("Daming did not enter an active campaign battle")
+		quit(3)
+		return
 	b.set_process(false)
 	b.set_physics_process(false)
 	var l = b.level
@@ -23,8 +35,8 @@ func _run() -> void:
 	l.chai.position = b.map.cell_to_world(l.PRISON_INSIDE)
 	l.yue.position = l.chai.position + Vector2(10,0)
 	l.on_mission_action(b,"daming_fire",l.scout)
-	check(l.signaled and b.mission.actions.has("daming_gate") and "轻点夺门" in b.mission.objective,
-		"the real fire callback creates a touch-ready gate objective")
+	check(l.signaled and b.mission.actions.has("daming_gate") and "鲁智深或武松" in b.mission.objective,
+		"the real fire callback opens the gate action and directs a commander to assemble")
 	var leader = b.find_unit("lu_zhishen")
 	var troops: Array = b.units.filter(func(u): return u.faction == 0 and u.key == "liang_qiang")
 	var gate_marker: Vector2 = b.map.cell_to_world(l.GATE_APPROACH)
