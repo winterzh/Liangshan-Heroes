@@ -1,5 +1,9 @@
 # 开发日志
 
+## 2026-11-19 高俅开场站姿后台读取
+
+高俅在 Windows 加载画面出现后后台读取刘唐、吴用、公孙胜和喽啰的开场站姿。源码对照验证四条正常绘制路线的帧、图集、坐标和方向判定一致。实窗首帧与冷加载总耗时待复验。 [素材核对](../qa/battle_entry_timing_20261116/gao_opening_art_source_parity_20261119.json)
+
 ## 2026-11-19 高俅水战复测与首帧角色归因
 
 f4383f2d 同包十分钟水战复测 P95 为 12.741 ms，达到 16.7 ms 目标。前一轮同包为 18.686 ms，两轮 605 个逐秒战况点一致。两轮高俅冷进也确认首帧成本集中在刘唐、吴用、公孙胜和喽啰。 [复测](../qa/campaign_sustained_performance_20261116/windows_water_600_retest_f4383f2d.json) · [角色分段](../qa/battle_entry_timing_20261116/windows_gao_opening_units_f4383f2d.json)

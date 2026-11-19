@@ -1075,6 +1075,18 @@ func request_campaign_opening_frames(level_id: String) -> Dictionary[String, Str
 		variants.assign(CampaignArt.NATIVE_BOUND_VARIANTS.keys())
 		var path := _ordinary_character_path("lin_chong", "idle", "se")
 		paths[path] = "ordinary_character|" + path
+	elif level_id == "level5":
+		var liu_idle := _ordinary_character_path("liu_tang", "idle", "se")
+		paths[liu_idle] = "ordinary_character|" + liu_idle
+		paths["res://assets/anim/gongsun_sheng_idle.png"] = "gongsun_later|idle"
+		for key in ["wu_yong", "lou_luo"]:
+			if _anim_cache.has("unit|%s|idle|se" % key):
+				continue
+			var path := _generic_directional_path(key, "idle", "se")
+			if not ResourceLoader.exists(path):
+				path = path.get_basename() + ".tres"
+			# Let normal lookup apply its direction checks and frame alignment.
+			paths[path] = "validated|" + path
 	for variant in variants:
 		var path := CampaignArt.native_body_path(variant, "idle", "se")
 		paths[path] = "native_body|" + path
@@ -1082,12 +1094,12 @@ func request_campaign_opening_frames(level_id: String) -> Dictionary[String, Str
 	for path in paths:
 		if path.is_empty() or _anim_cache.has(paths[path]) or not ResourceLoader.exists(path):
 			continue
-		if ResourceLoader.load_threaded_request(path, "SpriteFrames") == OK:
+		if ResourceLoader.load_threaded_request(path) == OK:
 			requests[path] = paths[path]
 	return requests
 
 
-func cache_prepared_opening_frames(cache_key: String, resource: SpriteFrames) -> void:
+func cache_prepared_opening_frames(cache_key: String, resource: Resource) -> void:
 	if resource == null or _anim_cache.has(cache_key):
 		return
 	var frames := _decode_directional_frames(resource)

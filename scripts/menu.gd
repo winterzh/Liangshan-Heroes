@@ -69,12 +69,12 @@ func _launch(campaign_level_id := "") -> void:
 		if AppLifecycle.quit_started() or not is_inside_tree():
 			return
 		_request_battle_environment(campaign_level_id)
-		if campaign_level_id == "level5":
-			Art.prefetch_gao_opening_art()
-		elif campaign_level_id == "level1" or campaign_level_id == "level3":
+		if campaign_level_id in ["level1", "level3", "level5"]:
 			_entry_opening_frame_requests = Art.request_campaign_opening_frames(campaign_level_id)
 			if campaign_level_id == "level1":
 				_entry_opening_portrait_requests = Art.request_huangnigang_opening_portraits()
+			elif campaign_level_id == "level5":
+				Art.prefetch_gao_opening_art()
 	# Continue on the main thread. The worker returns only verified file data.
 	_finish_battle_launch.call_deferred()
 
@@ -194,7 +194,7 @@ func _finish_battle_launch() -> void:
 			environment_textures.append(texture)
 	_entry_environment_requests.clear()
 	for path in _entry_opening_frame_requests:
-		var frames := (await _wait_for_battle_resource(path)) as SpriteFrames
+		var frames := await _wait_for_battle_resource(path)
 		if AppLifecycle.quit_started():
 			return
 		Art.cache_prepared_opening_frames(_entry_opening_frame_requests[path], frames)
