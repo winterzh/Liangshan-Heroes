@@ -157,7 +157,7 @@ func _request_battle_environment(campaign_level_id: String) -> void:
 	if OS.get_environment(baseline) == "1":
 		return
 	var paths := CampaignEnvironmentArt.surface_texture_paths(surface_level)
-	if surface_level == "level3":
+	if surface_level in ["level1", "level3", "level5"]:
 		var environment := load("res://scripts/campaign_environment.gd")
 		paths.append_array(environment.opening_scenery_texture_paths(surface_level))
 	for path in paths:

@@ -267,13 +267,21 @@ func _trace_node_added(node: Node) -> void:
 	var elapsed := Time.get_ticks_usec() - int(_mount_trace.origin_us)
 	if node.scene_file_path == BATTLE_SCENE and node.get_parent() == root:
 		_mount_trace.battle_attached_us = elapsed
-	elif _mount_trace.battle_attached_us >= 0:
-		if _mount_trace.map_attached_us < 0 and node is GameMap:
-			_mount_trace.map_attached_us = elapsed
-		elif _mount_trace.hud_attached_us < 0 and node is HUD:
-			_mount_trace.hud_attached_us = elapsed
-		elif _mount_trace.first_unit_us < 0 and node is Unit:
-			_mount_trace.first_unit_us = elapsed
+	elif _mount_trace.battle_attached_us >= 0 and _mount_trace.first_unit_us < 0:
+		# A --script SceneTree compiles before project autoloads are registered.
+		# Inspect the attached script rather than importing its dependencies here.
+		var script := node.get_script() as Script
+		if script == null:
+			return
+		match script.get_global_name():
+			&"GameMap":
+				if _mount_trace.map_attached_us < 0:
+					_mount_trace.map_attached_us = elapsed
+			&"HUD":
+				if _mount_trace.hud_attached_us < 0:
+					_mount_trace.hud_attached_us = elapsed
+			&"Unit":
+				_mount_trace.first_unit_us = elapsed
 
 
 func _trace_scene_changed() -> void:

@@ -69,19 +69,47 @@ static func overlay_layout(id: String) -> Array:
 		]
 	return []
 
-## Opening scenery that needs a separate texture for the manor and field edges.
+## Texture routes used by the opening scenery, before the scene is mounted.
 static func opening_scenery_texture_paths(id: String) -> Array[String]:
 	var paths: Array[String] = []
-	if id != "level3":
+	if id == "level5":
+		# The RTS court shares the calibrated trees, reeds, flags, hall and dock.
+		# The legacy bitmap main gate belongs to the traditional court only.
+		for resolver in ["object", "static_flag"]:
+			var calibrations: Dictionary = CampaignEnvironmentArt.VISUAL_CALIBRATIONS[resolver]
+			for key in calibrations:
+				if key == "main_gate" or calibrations[key].level_id != id:
+					continue
+				_append_scenery_texture(paths, resolver, id, key)
 		return paths
-	var hall := CampaignEnvironmentArt.route_texture_path("object", id, "zhujiazhuang_hall")
-	if not hall.is_empty():
-		paths.append(hall)
+	if id == "level1":
+		for object in _huangnigang_opening_scenery():
+			_append_scenery_texture(paths, "object", id, String(object[3]))
+	elif id == "level3":
+		_append_scenery_texture(paths, "object", id, "zhujiazhuang_hall")
+	else:
+		return paths
 	for overlay in overlay_layout(id):
-		var path := CampaignEnvironmentArt.route_texture_path("overlay", id, String(overlay[3]))
-		if not path.is_empty() and path not in paths:
-			paths.append(path)
+		_append_scenery_texture(paths, "overlay", id, String(overlay[3]))
 	return paths
+
+
+static func _append_scenery_texture(paths: Array[String], resolver: String, id: String, key: String) -> void:
+	var path := CampaignEnvironmentArt.route_texture_path(resolver, id, key)
+	if not path.is_empty() and path not in paths:
+		paths.append(path)
+
+
+static func _huangnigang_opening_scenery() -> Array:
+	# 松阴和兵器组共用手工摆放的阴凉点，均不参与伏兵或生辰纲判定。
+	# 兵器组缺少专用素材时不放占位物件。
+	return [
+		scoped_object(Vector2i(20,17),112.0,"huangnigang_pine_old","tree",0.82,true,true),
+		scoped_object(Vector2i(25,18),112.0,"huangnigang_pine_double","tree",0.82,true,true),
+		scoped_object(Vector2i(30,19),112.0,"huangnigang_pine_young_lean","tree",0.82,true,true),
+		scoped_object(Vector2i(20,17),94.0,"huangnigang_seven_pudao","",0.82,false,true),
+		scoped_object(Vector2i(34,22),86.0,"huangnigang_dry_verge","",0.82,false,false),
+	]
 
 
 static func enabled(id: String) -> bool:
@@ -222,14 +250,7 @@ static func decorate(map: GameMap,id: String) -> void:
 			result.append(["market_stall",cell,64.0,"lantern"])
 			result.append(["crowd",cell+Vector2i(1,1),0.0,cell.y])
 	if id=="level1":
-		# 冈顶松阴和白胜卖酒的位置只做视觉提示，伏兵和生辰纲逻辑仍在关卡脚本。
-		result.append(scoped_object(Vector2i(20,17),112.0,"huangnigang_pine_old","tree",0.82,true,true))
-		result.append(scoped_object(Vector2i(25,18),112.0,"huangnigang_pine_double","tree",0.82,true,true))
-		result.append(scoped_object(Vector2i(30,19),112.0,"huangnigang_pine_young_lean","tree",0.82,true,true))
-		# The weapon group shares the SHADE anchor with the old pine by design.
-		# Missing art draws nothing; it is never replaced by a generic weapon icon.
-		result.append(scoped_object(Vector2i(20,17),94.0,"huangnigang_seven_pudao","",0.82,false,true))
-		result.append(scoped_object(Vector2i(34,22),86.0,"huangnigang_dry_verge","",0.82,false,false))
+		result.append_array(_huangnigang_opening_scenery())
 	if id=="level2": result.append(["zhu_gate",Vector2i(30,4),128.0])
 	if id=="level7":
 		# 东门外的市井有酒肆、客店、赌坊和兑坊；名称由摊面招牌承担，不改酒望交互。
