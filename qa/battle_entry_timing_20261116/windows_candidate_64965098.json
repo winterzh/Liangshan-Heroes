@@ -1,0 +1,149 @@
+{
+  "platform": "windows",
+  "kind": "local_playtest_candidate",
+  "source_commit": "64965098a734bf6027027a624d9645469b243bf1",
+  "source_version": "source-v1:3bdd7bfadea3cf7837d0d704523e6800b5a2bfe7a54bbd6a4a015c255171bbd0",
+  "archive": {
+    "name": "LiangshanHeroes_Windows_64965098.zip",
+    "size": 1758338249,
+    "sha256": "bb415688c0f93c8f6a42ff3eea01b35b085e10a081860b9e5e36afb1382139a1"
+  },
+  "files": [
+    {
+      "name": "GODOTSTEAM_LICENSE.txt",
+      "bytes": 1110,
+      "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+    },
+    {
+      "name": "LiangshanHeroes.exe",
+      "bytes": 1827487096,
+      "sha256": "93ab33fceed8582d36ff46fdbe7d64bd0be32f3017287c8d27c29944b5eb63fc"
+    },
+    {
+      "name": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+      "bytes": 1093,
+      "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+    },
+    {
+      "name": "libgodotsteam.windows.template_release.x86_64.dll",
+      "bytes": 3961344,
+      "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+    },
+    {
+      "name": "steam_api64.dll",
+      "bytes": 319128,
+      "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+    },
+    {
+      "name": "steam_stats_reader.dll",
+      "bytes": 381440,
+      "sha256": "7505919cfff5907c13a02eb366690bff22ca6731c8521deefde58b114e4f796f"
+    }
+  ],
+  "stock_exe_boot": {
+    "isolated_offline": true,
+    "exit": 0,
+    "errors": []
+  },
+  "launcher": {
+    "sha256": "46d8386eebb54ee91153b8ee8c52643361f59c66785527c32ab76092aa7952d4",
+    "isolated_profiles": [
+      "P01",
+      "P02",
+      "P03"
+    ]
+  },
+  "legacy_campaign_compatibility": {
+    "predecessor_public_build_id": 26752476,
+    "chapter": "level3",
+    "original_slot_identity": {
+      "content_version": "source-v1:a6f09b78fb3654a1c7293fa943ae6afa7eea35034f55c3934bcf69f0bd2dfc7d",
+      "engine_sha256": "fae95050c553dfd691e3beebca3eef7dd1d7490dfebf6e99fa50d310456b91a6"
+    },
+    "initial_candidate_rejection": "WORLD_CORE_IDENTITY",
+    "origin_rule_checks": 22,
+    "native_stages": [
+      {
+        "checks": 3,
+        "failures": [],
+        "stage": "old-save"
+      },
+      {
+        "checks": 8,
+        "failures": [],
+        "stage": "candidate-migrate"
+      },
+      {
+        "checks": 4,
+        "failures": [],
+        "stage": "candidate-reopen"
+      }
+    ],
+    "old_slot_and_journal_sha256_unchanged": true,
+    "resaved_slot_generation": 2,
+    "resaved_slot_links_original": true,
+    "run_binding_and_origin_unchanged": true,
+    "original_journal_state": "active",
+    "method": "ordinary offline player Save and Exit and Continue across three isolated rendered Windows processes"
+  },
+  "zhu_manor_route_samples": {
+    "automation_time_scale": 4,
+    "prior_export_changed_runtime_file_only": "scripts/run_campaign_save_version.gd",
+    "frontal_assault_prior_export": {
+      "route": "rush",
+      "exe_sha256": "e03e18a25aed44cced7ff0ffb232ebb35bac1b20a74f9f51a96134b28ea63b38",
+      "exit": 0,
+      "passed": true,
+      "checks": 13,
+      "game_seconds": 1243.67,
+      "outpost_raids": 5,
+      "story_objectives": 1,
+      "gates": {
+        "expansion_secured": false,
+        "inside_open": false,
+        "main_breached": true,
+        "supply_cut": false
+      },
+      "debrief_languages": [
+        "zh_CN",
+        "zh_TW",
+        "en",
+        "ja"
+      ]
+    },
+    "first_side_gate_attempt_prior_export": {
+      "route": "inside",
+      "exe_sha256": "e03e18a25aed44cced7ff0ffb232ebb35bac1b20a74f9f51a96134b28ea63b38",
+      "exit": 1,
+      "passed": false,
+      "checks": 7,
+      "game_seconds": 1601.17,
+      "outpost_raids": 1,
+      "story_objectives": 0,
+      "gates": null,
+      "debrief_languages": []
+    },
+    "side_gate_follow_through_current_export": {
+      "route": "inside",
+      "exe_sha256": "93ab33fceed8582d36ff46fdbe7d64bd0be32f3017287c8d27c29944b5eb63fc",
+      "exit": 0,
+      "passed": true,
+      "checks": 13,
+      "game_seconds": 359.55,
+      "outpost_raids": 1,
+      "story_objectives": 3,
+      "gates": {
+        "expansion_secured": true,
+        "inside_open": true,
+        "main_breached": false,
+        "supply_cut": true
+      },
+      "debrief_languages": [
+        "zh_CN",
+        "zh_TW",
+        "en",
+        "ja"
+      ]
+    }
+  }
+}
