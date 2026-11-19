@@ -5,6 +5,12 @@ extends RefCounted
 const Profiles := preload("res://scripts/run_official_restore_profile.gd")
 const BUILD_26735223_CONTENT := "source-v1:0d56b78b9a3132ef8ecec36c88c075ca080ce93f11f0b88c942f5ca0e72ff7e7"
 const BUILD_26735223_EXE := "9b8ea12e40f81a9ba1be6ca1fecfcb48c9578cc92e6ddef314359f234dcac1ab"
+const BUILD_26752476_CONTENT := "source-v1:a6f09b78fb3654a1c7293fa943ae6afa7eea35034f55c3934bcf69f0bd2dfc7d"
+const BUILD_26752476_EXE := "fae95050c553dfd691e3beebca3eef7dd1d7490dfebf6e99fa50d310456b91a6"
+const APPROVED_WINDOWS_ORIGINS := {
+	BUILD_26735223_CONTENT: BUILD_26735223_EXE,
+	BUILD_26752476_CONTENT: BUILD_26752476_EXE,
+}
 
 
 static func resolve(context: Variant, content_version: Variant, engine_sha: Variant, installed: Dictionary) -> Dictionary:
@@ -13,10 +19,10 @@ static func resolve(context: Variant, content_version: Variant, engine_sha: Vari
 	if content_version == installed.content_version and engine_sha == installed.engine_binary_sha256:
 		return {"ok": true, "identity": installed, "legacy": false}
 	if OS.get_name() != "Windows" or not Profiles.is_official_campaign_context(context) \
-			or content_version != BUILD_26735223_CONTENT or engine_sha != BUILD_26735223_EXE:
+			or APPROVED_WINDOWS_ORIGINS.get(content_version) != engine_sha:
 		return {"ok": false, "code": "WORLD_CORE_IDENTITY"}
 	return {"ok": true, "legacy": true, "identity": {"ok": true, "save_eligible": true,
-		"content_version": BUILD_26735223_CONTENT, "engine_binary_sha256": BUILD_26735223_EXE}}
+		"content_version": content_version, "engine_binary_sha256": engine_sha}}
 
 
 static func for_battle(battle: Node, installed: Dictionary) -> Dictionary:
