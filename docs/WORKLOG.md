@@ -1,5 +1,9 @@
 # 开发日志
 
+## 2026-11-19 高俅水战复测与首帧角色归因
+
+f4383f2d 同包十分钟水战复测 P95 为 12.741 ms，达到 16.7 ms 目标。前一轮同包为 18.686 ms，两轮 605 个逐秒战况点一致。两轮高俅冷进也确认首帧成本集中在刘唐、吴用、公孙胜和喽啰。 [复测](../qa/campaign_sustained_performance_20261116/windows_water_600_retest_f4383f2d.json) · [角色分段](../qa/battle_entry_timing_20261116/windows_gao_opening_units_f4383f2d.json)
+
 ## 2026-11-19 梁山台地绘制与水战对照
 
 梁山台地首轮绘制共享岩壁图集、纹理坐标和碎石贴图。两套 Windows 渲染配置均通过原始绘制命令与网格逐项对照。高俅短测的四次对照显示帧时波动，十分钟性能仍待达标。 [绘制对照](../qa/battle_entry_timing_20261116/windows_terrace_texture_reuse_20261119.json) · [水战短测](../qa/campaign_sustained_performance_20261116/windows_water_165_abba_20261119.json)
