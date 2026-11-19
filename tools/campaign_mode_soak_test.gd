@@ -63,6 +63,9 @@ var _minute_draw_sum := 0.0
 var _minute_draw_max := 0.0
 var _minute_frame_count := 0
 var _stage_timing_enabled := false
+var _mount_trace_enabled := false
+var _mount_trace := {}
+var _mount_samples: Array[Dictionary] = []
 var _stage_frame_samples := {}
 var _active_stage_frames := {}
 var _current_battle = null
@@ -256,6 +259,56 @@ func _check_stage_frame_coverage() -> void:
 		tagged += int(stage.frames)
 	_check(tagged == total and total > 0, "each sampled render interval has exactly one diagnostic stage",
 		"tagged=%d sampled=%d" % [tagged, total])
+
+
+func _trace_node_added(node: Node) -> void:
+	if _mount_trace.is_empty() or _mount_trace.scene_ready_us >= 0:
+		return
+	var elapsed := Time.get_ticks_usec() - int(_mount_trace.origin_us)
+	if node.scene_file_path == BATTLE_SCENE and node.get_parent() == root:
+		_mount_trace.battle_attached_us = elapsed
+	elif _mount_trace.battle_attached_us >= 0:
+		if _mount_trace.map_attached_us < 0 and node is GameMap:
+			_mount_trace.map_attached_us = elapsed
+		elif _mount_trace.hud_attached_us < 0 and node is HUD:
+			_mount_trace.hud_attached_us = elapsed
+		elif _mount_trace.first_unit_us < 0 and node is Unit:
+			_mount_trace.first_unit_us = elapsed
+
+
+func _trace_scene_changed() -> void:
+	if not _mount_trace.is_empty() and _mount_trace.battle_attached_us >= 0:
+		_mount_trace.scene_ready_us = Time.get_ticks_usec() - int(_mount_trace.origin_us)
+
+
+func _trace_drawing() -> void:
+	if _mount_trace.is_empty() or _mount_trace.first_battle_frame_us >= 0:
+		return
+	var elapsed := Time.get_ticks_usec() - int(_mount_trace.origin_us)
+	if _mount_trace.first_overlay_us < 0:
+		_mount_trace.first_overlay_us = elapsed
+	if elapsed - int(_mount_trace.last_draw_us) > int(_mount_trace.gap_end_us) - int(_mount_trace.gap_start_us):
+		_mount_trace.gap_start_us = _mount_trace.last_draw_us
+		_mount_trace.gap_end_us = elapsed
+	_mount_trace.last_draw_us = elapsed
+	if _mount_trace.scene_ready_us >= 0:
+		_mount_trace.first_battle_frame_us = elapsed
+
+
+func _report_mount_trace() -> void:
+	var ordered := ["first_overlay_us", "battle_attached_us", "map_attached_us", "hud_attached_us",
+		"first_unit_us", "scene_ready_us", "first_battle_frame_us"]
+	var last := 0
+	for stamp in ordered:
+		var current := int(_mount_trace[stamp])
+		if current < last or current <= 0:
+			_check(false, "native mount trace has ordered milestones", JSON.stringify(_mount_trace))
+			break
+		last = current
+	_mount_trace.erase("origin_us")
+	_mount_trace.erase("last_draw_us")
+	_mount_samples.append(_mount_trace)
+	_mount_trace = {}
 
 
 func _record_render_frame() -> void:
@@ -490,6 +543,11 @@ func _run_fixture(fixture: Dictionary) -> bool:
 	_current_level_id = String(fixture.level_id)
 	_tag_frame_stage("mount", mode, _current_level_id)
 	var began := Time.get_ticks_usec()
+	if _mount_trace_enabled:
+		_mount_trace = {"level_id": _current_level_id, "mode": mode, "origin_us": began,
+			"first_overlay_us": -1, "battle_attached_us": -1, "map_attached_us": -1,
+			"hud_attached_us": -1, "first_unit_us": -1, "scene_ready_us": -1,
+			"first_battle_frame_us": -1, "last_draw_us": 0, "gap_start_us": 0, "gap_end_us": 0}
 	seed(5_088_120 + _transitions.size())
 	current_scene.call("_launch", _current_level_id if mode == "campaign" else "")
 	var battle_ready := await _await_scene(BATTLE_SCENE)
@@ -511,6 +569,8 @@ func _run_fixture(fixture: Dictionary) -> bool:
 	await _render_tick()
 	_current_mode = mode
 	_current_level_id = String(battle.level.id())
+	if _mount_trace_enabled:
+		_report_mount_trace()
 	_tag_frame_stage("play", mode, _current_level_id)
 	var expected_id := String(fixture.level_id)
 	var nodes_ok := battle.map != null and battle.hud != null and battle.world != null \
@@ -760,6 +820,11 @@ func _run() -> void:
 	if not is_instance_valid(current_scene) or current_scene.scene_file_path != MENU_SCENE:
 		_early_exit("The game did not reach the main menu.", 2)
 		return
+	_mount_trace_enabled = OS.get_environment("CAMPAIGN_SOAK_MOUNT_TRACE") == "1"
+	if _mount_trace_enabled:
+		node_added.connect(_trace_node_added)
+		scene_changed.connect(_trace_scene_changed)
+		RenderingServer.frame_post_draw.connect(_trace_drawing)
 	_started_at = Time.get_datetime_string_from_system(false, true)
 	_start_usec = Time.get_ticks_usec()
 	_end_usec = _start_usec + int(_duration_seconds * 1_000_000.0)
@@ -869,6 +934,8 @@ func _run() -> void:
 	}
 	if _stage_timing_enabled:
 		_report["frame_stages"] = _stage_frame_samples.values()
+	if _mount_trace_enabled:
+		_report["mount_traces"] = _mount_samples
 	_write_report()
 	print("CAMPAIGN_MODE_SOAK_RESULT ", JSON.stringify({
 		"passed": acceptance_passed,
