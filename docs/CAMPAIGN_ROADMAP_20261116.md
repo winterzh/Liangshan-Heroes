@@ -4,6 +4,12 @@
 
 ## 2026-11-18 PC 后续开发
 
+Windows 候选 31c567ed 的离线试玩 ZIP 已回读六个文件，逐项校验后从干净解压目录隔离启动通过。祝家庄首次进入和同进程重进均能正常出征、右键下令和 Esc 暂停恢复，加载提示约 54 ms，首帧约 530、372 ms。 [试玩包与祝家庄入口](../qa/battle_entry_timing_20261116/windows_playtest_package_31c567ed.json)
+
+31c567ed 从干净解压目录接入 Build 26735223 的八章旧档样本，每章继续、再存、独立重启通过。野猪林另外验证终局和旧槽拒绝。18 个隔离进程通过，旧槽与本局账本保留。 [八章旧档](../qa/battle_entry_timing_20261116/windows_player_legacy_matrix_31c567ed.json)
+
+31c567ed 完成高俅十分钟样本，三波水陆战和 13 项完整性检查通过。P95/P99 为 21.930/28.943 ms，P95 高于 16.7 ms 目标。 [原生水战](../qa/campaign_sustained_performance_20261116/windows_water_600_31c567ed.json)
+
 Windows 本地导出 c7312fe7 从空白档完成野猪林首次指令、保存、独立重启、原队伍四人出林和演义 3/3；终局后再次进菜单按原规则拒绝旧槽，存档与战役进度摘要一致。五进程共 111 项通过。 [野猪林验收](../qa/battle_entry_timing_20261116/windows_yezhulin_route_c7312fe7.json)
 
 Windows 候选 31c567ed 完成六入口短测，14 次进出均释放战场，存档保持原状态。 [实窗对照和六模式短测](../qa/battle_entry_timing_20261116/windows_gao_idle_prefetch_abba_31c567ed.json)

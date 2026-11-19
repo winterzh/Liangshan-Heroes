@@ -1,0 +1,98 @@
+{
+  "platform": "windows",
+  "kind": "local_playtest_candidate",
+  "source_commit": "31c567ed797d0668a22c0cd08bcb71c3b7d23dbc",
+  "source_version": "source-v1:835e039cf77da20133a8e067ee574f25875cad3dc226a33e6ea10229e1717e2c",
+  "archive": {
+    "name": "LiangshanHeroes_Windows_31c567ed.zip",
+    "size": 1758339518,
+    "sha256": "401d201750cbead1756a4756282107881876fff311d8a2aa0c5f5ab025a4b0f4"
+  },
+  "files": [
+    {
+      "name": "GODOTSTEAM_LICENSE.txt",
+      "bytes": 1110,
+      "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+    },
+    {
+      "name": "LiangshanHeroes.exe",
+      "bytes": 1827489336,
+      "sha256": "0ee28ce4af0e5754b58e0a99c1b6f82fe041ad12b804a48cd3860e476509a224"
+    },
+    {
+      "name": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+      "bytes": 1093,
+      "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+    },
+    {
+      "name": "libgodotsteam.windows.template_release.x86_64.dll",
+      "bytes": 3961344,
+      "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+    },
+    {
+      "name": "steam_api64.dll",
+      "bytes": 319128,
+      "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+    },
+    {
+      "name": "steam_stats_reader.dll",
+      "bytes": 381440,
+      "sha256": "7505919cfff5907c13a02eb366690bff22ca6731c8521deefde58b114e4f796f"
+    }
+  ],
+  "six_mode_short_check_report_sha256": "95d0dbf7cdf18d6ce91a94c971d40ed020224f5c72e13c7ac8702a1a3f16e103",
+  "stock_exe_boot": {
+    "isolated_offline": true,
+    "exit": 0,
+    "errors": []
+  },
+  "launcher": {
+    "sha256": "f8026397a7eca03b21de154e9cab4377cbd4074010d3dc23efa4cd567cafcb8d",
+    "isolated_profiles": [
+      "P01",
+      "P02",
+      "P03"
+    ]
+  },
+  "manor_window_entry_check": {
+    "mode": "level3",
+    "samples": [
+      {
+        "battle_attached_to_scene_ready_ms": 200.24,
+        "entry_fixture_request_ms": 0.65,
+        "entry_to_battle_attached_ms": 233.84,
+        "entry_to_first_battle_render_ms": 530.33,
+        "entry_to_first_render_ms": 3.0,
+        "entry_to_loading_render_ms": 54.22,
+        "frames_before_scene_ready": 6,
+        "intro_pages": 3,
+        "menu_until_entry_enabled_ms": 2032.9,
+        "mode_page_ms": 28.05,
+        "right_click_to_order_render_ms": 32.54,
+        "scene_ready_to_first_battle_render_ms": 96.25,
+        "start_button_to_fight_render_ms": 20.85,
+        "visit": 1
+      },
+      {
+        "battle_attached_to_scene_ready_ms": 111.04,
+        "entry_fixture_request_ms": 0.45,
+        "entry_to_battle_attached_ms": 215.68,
+        "entry_to_first_battle_render_ms": 371.54,
+        "entry_to_first_render_ms": 2.12,
+        "entry_to_loading_render_ms": 53.97,
+        "frames_before_scene_ready": 11,
+        "intro_pages": 3,
+        "menu_until_entry_enabled_ms": 0.03,
+        "mode_page_ms": 17.59,
+        "right_click_to_order_render_ms": 42.23,
+        "scene_ready_to_first_battle_render_ms": 44.82,
+        "start_button_to_fight_render_ms": 9.84,
+        "visit": 2
+      }
+    ],
+    "source": "native Windows executable, isolated desktop",
+    "log_sha256": "d1e506841021c6122e129b04d8e18d0cdf8e680911894988b90c7562280919a7",
+    "exe_sha256": "0ee28ce4af0e5754b58e0a99c1b6f82fe041ad12b804a48cd3860e476509a224",
+    "scope": "Real Windows Compatibility 960x540, offline isolated desktop, two visits from the ordinary menu. Directed Win32 mouse and keyboard messages. Timing includes the test tool's message handoff."
+  }
+}
