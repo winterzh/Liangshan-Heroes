@@ -3179,6 +3179,9 @@ func _ensure_pause_controls() -> void:
 	_pause_confirm_button.pressed.connect(_confirm_pause_action)
 	_pause_confirm.add_child(_pause_confirm_button)
 	_refresh_pc_feedback_entries()
+	# A paused restore may construct these controls after the initial HUD gate.
+	if has_meta("_run_hud_prepared"):
+		_gate_run_prepared_ui()
 
 
 func _request_pause_action(action: String) -> void:
