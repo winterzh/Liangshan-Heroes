@@ -36,6 +36,10 @@ Windows 候选 57adb5e2 用相同战况单独关闭视口 GPU 计时，完成 60
 
 桌面切换选区时先更新英雄及物品槽引用，再统一布置背包和信息区。Windows 高俅的 187 次选区更新中，两侧实际更新中位耗时 1.241 → 1.128 ms。1280×720 窄窗口背包弹窗与 1920×1080 宽布局内嵌背包均通过，双方各 20 个界面状态的选区与背包一致。宽布局清空选区时，右侧信息抽屉与已收起底栏之间的间距从 66 px 恢复到 8 px。 [选区实窗与耗时对照](../qa/battle_entry_timing_20261116/windows_pc_inventory_selection_e5b4010a.json)
 
+Windows 候选 e5b4010a 完成高俅十分钟实际水战。P95/P99 为 23.082/26.854 ms，73 个帧间隔超过 33.3 ms。本次仍有帧时指标高于门槛。三波水陆战、18 艘付费船与 13 项检查通过。与 57adb5e2 共有 605 个逐秒点一致。 [十分钟原生水战](../qa/campaign_sustained_performance_20261116/windows_water_600_e5b4010a.json)
+
+Windows 候选 e5b4010a 的野猪林用隔离窗口发送实际点击消息，验证两种分辨率的四语首条指令和命令回显。独立进程读回首条命令前的存档，四进程共 140 项通过。六模式短测完成 14 次开战、返回与释放，战役进度字节一致。 [输入与续玩](../qa/battle_entry_timing_20261116/windows_yezhulin_onboarding_e5b4010a.json) · [六模式](../qa/battle_entry_timing_20261116/windows_six_mode_smoke_e5b4010a.json)
+
 Windows 候选 31c567ed 的离线试玩 ZIP 已回读六个文件，逐项校验后从干净解压目录隔离启动通过。祝家庄首次进入和同进程重进均能正常出征、右键下令和 Esc 暂停恢复，加载提示约 54 ms，首帧约 530、372 ms。 [试玩包与祝家庄入口](../qa/battle_entry_timing_20261116/windows_playtest_package_31c567ed.json)
 
 31c567ed 从干净解压目录接入 Build 26735223 的八章旧档样本，每章继续、再存、独立重启通过。野猪林另外验证终局和旧槽拒绝。18 个隔离进程通过，旧槽与本局账本保留。 [八章旧档](../qa/battle_entry_timing_20261116/windows_player_legacy_matrix_31c567ed.json)
