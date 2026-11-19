@@ -186,9 +186,13 @@ func draw_tactical_overlay(b, canvas: Node2D) -> void:
 	canvas.draw_arc(center, radius, 0, TAU, 32, Color(0.59, 0.93, 0.66, 0.95), 2.0, true)
 	canvas.draw_circle(center, 2.5, Color(0.59, 0.93, 0.66, 0.95), true, -1.0, true)
 
-func _shows_first_move_cue(b) -> bool:
+func _first_move_pending(b) -> bool:
 	return _first_move_cue > 0.0 and st == STALK and b.phase == b.Phase.FIGHT \
-		and is_instance_valid(lu) and lu._order_serial == 0 and lu in b.selection
+		and not b._touch_mode and is_instance_valid(lu) and lu._order_serial == 0
+
+
+func _shows_first_move_cue(b) -> bool:
+	return _first_move_pending(b) and lu in b.selection
 
 func on_mission_action(b, action_id: String, actor) -> void:
 	match action_id:
@@ -768,6 +772,9 @@ func top_status(b) -> String:
 		return Localize.format_text("野猪林 | 拦棍倒计时 %d 秒", ceili(maxf(0.0, exec_timer)))
 	if st == STALK:
 		var distance := _shadow_distance()
+		if distance >= SHADOW_TOO_CLOSE_R and distance <= SHADOW_TOO_FAR_R and _first_move_pending(b):
+			var instruction := "右键林边地面移动" if lu in b.selection else "左键选中鲁智深"
+			return Localize.text("野猪林 | 暗中跟随 | ") + Localize.text(instruction)
 		var distance_text := "过近·立即退回林边" if distance < SHADOW_TOO_CLOSE_R else ("过远·向官道边跟上" if distance > SHADOW_TOO_FAR_R else "未露面·距离合适")
 		return Localize.text("野猪林 | 暗中跟随 | ") + Localize.text(distance_text)
 	return Localize.text("野猪林 | ") + [Localize.text("暗中跟随"), Localize.text("拦棍救人"), Localize.text("求情解缚·照料脚伤"), Localize.text("相送沧州道")][st]

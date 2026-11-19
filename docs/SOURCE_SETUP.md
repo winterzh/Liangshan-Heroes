@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+野猪林将左键选中鲁智深和右键林边移动的提示放到顶部状态条，任务栏收起时也有当前操作。下令后显示原距离状态，过近、过远时优先显示战术警告。四语源码状态共 35 项通过。Windows 实窗和真人首玩后续复验。 [源码状态检查](../qa/battle_entry_timing_20261116/windows_yezhulin_first_order_guidance_source_20261119.json)
+
 Windows 候选 31c567ed 的离线试玩 ZIP 已回读六个文件，逐项校验后从干净解压目录隔离启动通过。祝家庄首次进入和同进程重进均能正常出征、右键下令和 Esc 暂停恢复，加载提示约 54 ms，首帧约 530、372 ms。 [试玩包与祝家庄入口](../qa/battle_entry_timing_20261116/windows_playtest_package_31c567ed.json)
 
 31c567ed 的祝家庄正攻与断援走偏门两条路线均从实际菜单打到胜利，各通过 13 项，含四语重玩建议。本次正攻遇南营三队，演义 1/3；偏门接应遇一队，演义 3/3。暂停与结算反馈在 720p、1080p 实窗各通过 24 项。 [路线结果](../qa/campaign_siege_20261116/windows_native_routes_31c567ed.json) · [四语反馈](../qa/battle_entry_timing_20261116/windows_feedback_rendered_31c567ed.json)
