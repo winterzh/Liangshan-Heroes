@@ -2272,13 +2272,17 @@ func _apply_bottom_collapse() -> void:
 		_queue_bar.visible = false
 	if _sel_grid != null and _sel_grid.get_parent() != null:
 		_sel_grid.get_parent().visible = not collapsed
-	if _inventory_dock != null:
+	# On a ready desktop HUD, the inventory owns its visibility and updates
+	# the info panel after the final controls are in place.
+	var inventory_updates_info := not touch_ui and _inventory_dock != null and _inventory_popup != null
+	if _inventory_dock != null and not inventory_updates_info:
 		_inventory_dock.visible = not collapsed
 	if _bottom_hint != null:
 		_bottom_hint.visible = collapsed
 	if _bottom_margin != null:
 		_bottom_margin.add_theme_constant_override("margin_top", 6 if collapsed else 8)
-	_layout_info_panel()
+	if not inventory_updates_info:
+		_layout_info_panel()
 	_layout_info_dock()
 	_layout_inventory()
 	_layout_desktop_hero()
