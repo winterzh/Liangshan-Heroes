@@ -1,0 +1,350 @@
+{
+  "scope": "Exact Windows EXE, normal-speed graphical fixture for 340 seconds with additional phase timestamps and optional GL viewport measuring disabled, isolated Compatibility 1440x900. It is a diagnostic rather than the performance acceptance run.",
+  "scope_note": "Windows have every recorded frame. Outside the windows only frames over 33.3 ms enter the phase trace. The phases use signal wall times and can include deferred callbacks, engine waits and OS scheduling.",
+  "exe_sha256": "014582e4c8c1c077a56ca5418efbb512d48a1a5f0baba3e5580e7f3e49b400be",
+  "native_exit": 0,
+  "asset_identity_preserved": true,
+  "checks": 13,
+  "waves_sent": [
+    true,
+    true,
+    false
+  ],
+  "same_setup_as_600": true,
+  "common_trace_ticks": 345,
+  "different_trace_ticks": 0,
+  "phase_records": 5167,
+  "invalid_phase_records": {},
+  "windows": [
+    {
+      "from_s": 195,
+      "to_s": 265,
+      "valid_frames": 3823,
+      "p95_ms": 22.702,
+      "p99_ms": 26.933,
+      "phases": [
+        {
+          "phase": "before_physics_or_idle",
+          "p50_ms": 0.122,
+          "p95_ms": 0.225
+        },
+        {
+          "phase": "physics_batch_to_idle",
+          "p50_ms": 3.659,
+          "p95_ms": 7.246
+        },
+        {
+          "phase": "idle_to_before_draw",
+          "p50_ms": 6.297,
+          "p95_ms": 9.055
+        },
+        {
+          "phase": "between_render_signals",
+          "p50_ms": 7.493,
+          "p95_ms": 8.864
+        }
+      ],
+      "slow_frames": {
+        "valid_frames": 3,
+        "p95_ms": 34.048,
+        "p99_ms": 34.048,
+        "phases": [
+          {
+            "phase": "before_physics_or_idle",
+            "p50_ms": 0.135,
+            "p95_ms": 0.175
+          },
+          {
+            "phase": "physics_batch_to_idle",
+            "p50_ms": 17.344,
+            "p95_ms": 18.214
+          },
+          {
+            "phase": "idle_to_before_draw",
+            "p50_ms": 7.79,
+            "p95_ms": 10.974
+          },
+          {
+            "phase": "between_render_signals",
+            "p50_ms": 8.692,
+            "p95_ms": 8.894
+          }
+        ]
+      }
+    },
+    {
+      "from_s": 300,
+      "to_s": 325,
+      "valid_frames": 1328,
+      "p95_ms": 24.438,
+      "p99_ms": 27.418,
+      "phases": [
+        {
+          "phase": "before_physics_or_idle",
+          "p50_ms": 0.124,
+          "p95_ms": 0.227
+        },
+        {
+          "phase": "physics_batch_to_idle",
+          "p50_ms": 3.657,
+          "p95_ms": 7.844
+        },
+        {
+          "phase": "idle_to_before_draw",
+          "p50_ms": 6.525,
+          "p95_ms": 9.547
+        },
+        {
+          "phase": "between_render_signals",
+          "p50_ms": 7.601,
+          "p95_ms": 9.108
+        }
+      ],
+      "slow_frames": {
+        "valid_frames": 2,
+        "p95_ms": 37.013,
+        "p99_ms": 37.013,
+        "phases": [
+          {
+            "phase": "before_physics_or_idle",
+            "p50_ms": 0.103,
+            "p95_ms": 0.368
+          },
+          {
+            "phase": "physics_batch_to_idle",
+            "p50_ms": 18.702,
+            "p95_ms": 20.777
+          },
+          {
+            "phase": "idle_to_before_draw",
+            "p50_ms": 6.52,
+            "p95_ms": 7.778
+          },
+          {
+            "phase": "between_render_signals",
+            "p50_ms": 8.394,
+            "p95_ms": 10.165
+          }
+        ]
+      }
+    }
+  ],
+  "frame_timing_overall": {
+    "frames": 19549,
+    "seconds": 340.007329,
+    "p95_ms": 22.564,
+    "p99_ms": 26.391,
+    "worst_ms": 39.264
+  },
+  "slow_frame_count_in_raw": 21,
+  "slow_frames_with_all_signal_bounds": 21,
+  "slow_frames_by_longest_phase": {
+    "physics_batch_to_idle": 21
+  },
+  "most_delayed_frames": [
+    {
+      "frame": 8526,
+      "start_ms": 135000.136,
+      "duration_ms": 39.264,
+      "physics_tick": 8401,
+      "physics_callbacks": 1,
+      "phases_ms": {
+        "before_physics_or_idle": 0.054,
+        "physics_batch_to_idle": 22.176,
+        "idle_to_before_draw": 9.204,
+        "between_render_signals": 7.83
+      }
+    },
+    {
+      "frame": 19291,
+      "start_ms": 335005.872,
+      "duration_ms": 39.148,
+      "physics_tick": 20401,
+      "physics_callbacks": 1,
+      "phases_ms": {
+        "before_physics_or_idle": 0.095,
+        "physics_batch_to_idle": 23.299,
+        "idle_to_before_draw": 8.049,
+        "between_render_signals": 7.705
+      }
+    },
+    {
+      "frame": 7643,
+      "start_ms": 119006.141,
+      "duration_ms": 37.709,
+      "physics_tick": 7441,
+      "physics_callbacks": 1,
+      "phases_ms": {
+        "before_physics_or_idle": 0.169,
+        "physics_batch_to_idle": 22.397,
+        "idle_to_before_draw": 7.239,
+        "between_render_signals": 7.904
+      }
+    },
+    {
+      "frame": 17477,
+      "start_ms": 301003.412,
+      "duration_ms": 37.013,
+      "physics_tick": 18361,
+      "physics_callbacks": 2,
+      "phases_ms": {
+        "before_physics_or_idle": 0.368,
+        "physics_batch_to_idle": 18.702,
+        "idle_to_before_draw": 7.778,
+        "between_render_signals": 10.165
+      }
+    },
+    {
+      "frame": 17784,
+      "start_ms": 307001.95,
+      "duration_ms": 35.794,
+      "physics_tick": 18721,
+      "physics_callbacks": 2,
+      "phases_ms": {
+        "before_physics_or_idle": 0.103,
+        "physics_batch_to_idle": 20.777,
+        "idle_to_before_draw": 6.52,
+        "between_render_signals": 8.394
+      }
+    },
+    {
+      "frame": 8733,
+      "start_ms": 138998.578,
+      "duration_ms": 35.515,
+      "physics_tick": 8641,
+      "physics_callbacks": 2,
+      "phases_ms": {
+        "before_physics_or_idle": 0.152,
+        "physics_batch_to_idle": 19.144,
+        "idle_to_before_draw": 7.504,
+        "between_render_signals": 8.715
+      }
+    },
+    {
+      "frame": 7867,
+      "start_ms": 123027.83,
+      "duration_ms": 35.481,
+      "physics_tick": 7682,
+      "physics_callbacks": 2,
+      "phases_ms": {
+        "before_physics_or_idle": 0.145,
+        "physics_batch_to_idle": 19.338,
+        "idle_to_before_draw": 7.214,
+        "between_render_signals": 8.784
+      }
+    },
+    {
+      "frame": 9394,
+      "start_ms": 151014.735,
+      "duration_ms": 35.413,
+      "physics_tick": 9361,
+      "physics_callbacks": 1,
+      "phases_ms": {
+        "before_physics_or_idle": 0.171,
+        "physics_batch_to_idle": 19.856,
+        "idle_to_before_draw": 6.26,
+        "between_render_signals": 9.126
+      }
+    },
+    {
+      "frame": 6206,
+      "start_ms": 95030.53,
+      "duration_ms": 34.849,
+      "physics_tick": 6002,
+      "physics_callbacks": 2,
+      "phases_ms": {
+        "before_physics_or_idle": 0.17,
+        "physics_batch_to_idle": 18.937,
+        "idle_to_before_draw": 5.609,
+        "between_render_signals": 10.133
+      }
+    },
+    {
+      "frame": 6673,
+      "start_ms": 103026.162,
+      "duration_ms": 34.64,
+      "physics_tick": 6481,
+      "physics_callbacks": 1,
+      "phases_ms": {
+        "before_physics_or_idle": 0.113,
+        "physics_batch_to_idle": 21.236,
+        "idle_to_before_draw": 4.822,
+        "between_render_signals": 8.469
+      }
+    },
+    {
+      "frame": 11088,
+      "start_ms": 183021.603,
+      "duration_ms": 34.474,
+      "physics_tick": 11281,
+      "physics_callbacks": 1,
+      "phases_ms": {
+        "before_physics_or_idle": 0.134,
+        "physics_batch_to_idle": 18.574,
+        "idle_to_before_draw": 7.9,
+        "between_render_signals": 7.866
+      }
+    },
+    {
+      "frame": 11284,
+      "start_ms": 187012.134,
+      "duration_ms": 34.053,
+      "physics_tick": 11521,
+      "physics_callbacks": 2,
+      "phases_ms": {
+        "before_physics_or_idle": 0.12,
+        "physics_batch_to_idle": 19.904,
+        "idle_to_before_draw": 6.842,
+        "between_render_signals": 7.187
+      }
+    }
+  ],
+  "log_sha256": "2e03f6ab6293e6574fa32b94adf85efbfe87b4a51e8f1bfd8cfd300fdc4103e6",
+  "report_sha256": "9ba6a18cfcfed2ef3c6f0c40ae85ee9e58ea9dbfe7d63a76e30848a336238d6e",
+  "scripted_batch_overlap": {
+    "definition": "The harness invokes economy, land orders, skills and fleet orders on physics_tick % 120 == 1. The frame contains a command step if its observed physics callbacks span any such tick.",
+    "probe_sha256": "63106447df00ffce076972512ff34f55b3dd56e8108edfc2bfd413b5c87dac6d",
+    "slow_frames_with_command_batch": 21,
+    "slow_frames_with_other_physics_steps_only": 0,
+    "slow_frames_with_one_step": 12,
+    "slow_frames_with_two_steps": 9,
+    "complete_windows": [
+      {
+        "start_seconds": 195,
+        "end_seconds": 265,
+        "with_scripted_batch": {
+          "frames": 35,
+          "over_33_3_ms": 3,
+          "p50_ms": 28.404,
+          "p95_ms": 33.961,
+          "p99_ms": 34.048
+        },
+        "without_scripted_batch": {
+          "frames": 3788,
+          "over_33_3_ms": 0,
+          "p50_ms": 17.757,
+          "p95_ms": 22.39,
+          "p99_ms": 25.066
+        }
+      },
+      {
+        "start_seconds": 300,
+        "end_seconds": 325,
+        "with_scripted_batch": {
+          "frames": 12,
+          "over_33_3_ms": 2,
+          "p50_ms": 28.097,
+          "p95_ms": 37.013,
+          "p99_ms": 37.013
+        },
+        "without_scripted_batch": {
+          "frames": 1316,
+          "over_33_3_ms": 0,
+          "p50_ms": 18.108,
+          "p95_ms": 24.178,
+          "p99_ms": 26.418
+        }
+      }
+    ]
+  }
+}

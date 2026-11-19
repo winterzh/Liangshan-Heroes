@@ -22,6 +22,10 @@ Windows 候选 57adb5e2 用相同战况单独关闭视口 GPU 计时，完成 60
 
 Godot 4.6.3 的视口时间戳在绘制前后插入 GPU 查询。Compatibility 的查询结果稍后由渲染器读取。对照用于了解观察开销与同包波动。 [视口实现](https://github.com/godotengine/godot/blob/7d41c59c4/servers/rendering/renderer_viewport.cpp#L325-L330) · [查询实现](https://github.com/godotengine/godot/blob/7d41c59c4/drivers/gles3/storage/utilities.cpp#L324-L348)
 
+## Windows 高俅分段中的集中下令
+
+高俅同一 Windows 候选关闭视口额外计时后，再记录 340 秒的逐帧阶段。该次的 21 个超过 33.3 ms 的帧，耗时占比最高的区间均在物理更新与空闲信号之间，均包含自动化集中下令的物理步。两个完整采样时段，在没有集中下令的帧里 P95 仍为 22.390、24.178 ms。继续细分下令批次中选人、生产、技能和移动指令，按完整样本复测整段帧时。 两段连续记录分别覆盖第 195–265 秒和第 300–325 秒，其余时段记录全部超过 33.3 ms 的帧。345 个共同战况点与同包十分钟对照一致，两个绘制信号之间的长帧继续单独留证。 [分段收据](./windows_water_draw_phase_340_57adb5e2.json)
+
 ## Windows 候选 31c567ed 原生十分钟水战
 
 600.010 秒、36,859 帧，P95/P99 为 21.930/28.943 ms；目标为 16.7/33.3 ms。223 帧超过 33.3 ms，60 帧超过 66.7 ms，最慢 147.422 ms。第 3、6 分钟分别有 78、60 帧超过 33.3 ms。相同 1440×900 Compatibility、标准特效、固定镜头、正常速度。三波交战、18 艘付费船和 13 项完整性通过。与前一候选共同的 604 个逐秒战况点一致。 [完整水战收据](windows_water_600_31c567ed.json)

@@ -37,6 +37,7 @@ var _reed_visibility_signature := -1
 var _routed_reed_count := 0
 const STATIC_CONTACT_SEGMENTS := 12
 const HALL_CELL := Vector2i(16,30)
+const BANK_SIDES := [Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT, Vector2i.UP]
 
 
 func setup(game_map: GameMap) -> void:
@@ -613,16 +614,16 @@ func _add_flag_overlay(marker: String, p: Vector2, size: float, foot: float, dec
 
 
 func _cache_banks(x: int, y: int, terrain: int) -> void:
-	if terrain in [GameMap.T.WATER, GameMap.T.ROAD, GameMap.T.DOCK]:
+	if terrain == GameMap.T.WATER or terrain == GameMap.T.ROAD or terrain == GameMap.T.DOCK:
 		return
-	var origin := Vector2(x, y) * GameMap.CELL
-	for side in [Vector2i(1, 0), Vector2i(0, 1), Vector2i(-1, 0), Vector2i(0, -1)]:
+	var terrace_land := terrain == GameMap.T.GRASS or terrain == GameMap.T.FOREST
+	for side in BANK_SIDES:
 		var neighbour := _map.t_at(x + side.x, y + side.y)
 		var coast := neighbour == GameMap.T.WATER
-		var terrace := terrain in [GameMap.T.GRASS, GameMap.T.FOREST] \
-			and neighbour in [GameMap.T.MARSH, GameMap.T.REEDS]
+		var terrace := terrace_land and (neighbour == GameMap.T.MARSH or neighbour == GameMap.T.REEDS)
 		if not coast and not terrace:
 			continue
+		var origin := Vector2(x, y) * GameMap.CELL
 		var a := origin
 		var b := origin
 		if side == Vector2i(1, 0):
