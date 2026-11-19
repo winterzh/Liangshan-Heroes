@@ -549,6 +549,19 @@ func _prefetch_picker_surfaces(overlay: Control, level_ids: Array) -> void:
 		Art.prefetch_menu_surfaces(level_ids)
 
 
+func _prefetch_huangnigang_card(button: Button) -> void:
+	await RenderingServer.frame_post_draw
+	if _entry_overlay != null or AppLifecycle.quit_started() or not is_instance_valid(button):
+		return
+	if not button.is_visible_in_tree() or not (button.is_hovered() or button.has_focus()):
+		return
+	if button.has_meta(&"opening_preview"):
+		return
+	var preview: Array[Resource] = []
+	button.set_meta(&"opening_preview", preview)
+	Art.prefetch_huangnigang_preview(preview)
+
+
 func _show_story() -> void:
 	var ov := _mk_overlay("剧情模式 · 八幕战役", null, 1080.0)
 	var overlay: ColorRect = ov[0]
@@ -1102,6 +1115,10 @@ func _make_card(i: int) -> Control:
 		btn.disabled = true
 	else:
 		btn.text = "出 征"
+		if info["id"] == "level1" and OS.get_name() == "Windows" and DisplayServer.get_name() != "headless":
+			var prefetch := _prefetch_huangnigang_card.bind(btn)
+			btn.mouse_entered.connect(prefetch)
+			btn.focus_entered.connect(prefetch)
 		btn.pressed.connect(func() -> void:
 			Campaign.current = i
 			Campaign.arena = false

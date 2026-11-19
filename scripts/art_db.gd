@@ -1127,6 +1127,22 @@ func cache_prepared_opening_texture(path: String, texture: Texture2D) -> void:
 		_prefetched_opening_textures[path] = texture
 
 
+## Keep the requested art alive through the picker button. An actual launch
+## still collects its own request and passes the art through the usual caches.
+func prefetch_huangnigang_preview(preview: Array[Resource]) -> void:
+	var frames := request_campaign_opening_frames("level1")
+	var paths := request_huangnigang_opening_portraits()
+	paths.append_array(frames.keys())
+	for path in paths:
+		_retain_opening_preview.call_deferred(path, preview)
+
+
+func _retain_opening_preview(path: String, preview: Array[Resource]) -> void:
+	var resource := await _collect_menu_request(path)
+	if resource != null:
+		preview.append(resource)
+
+
 ## Five shared terrain textures can be reused by later battles in this process.
 func prefetch_menu_surfaces(level_ids: Array) -> void:
 	if OS.get_name() != "Windows" or DisplayServer.get_name() == "headless" or AppLifecycle.quit_started():
@@ -1141,15 +1157,18 @@ func prefetch_menu_surfaces(level_ids: Array) -> void:
 
 
 func _collect_menu_surface(path: String) -> void:
+	var texture := (await _collect_menu_request(path)) as Texture2D
+	cache_prepared_opening_texture(path, texture)
+	_menu_surface_requests.erase(path)
+
+
+func _collect_menu_request(path: String) -> Resource:
 	var status := ResourceLoader.load_threaded_get_status(path)
 	while status == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
 		await get_tree().process_frame
 		status = ResourceLoader.load_threaded_get_status(path)
 	# A successful request owns one reference even if a launch requests it too.
-	if status != ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
-		var texture := ResourceLoader.load_threaded_get(path) as Texture2D
-		cache_prepared_opening_texture(path, texture)
-	_menu_surface_requests.erase(path)
+	return ResourceLoader.load_threaded_get(path) if status != ResourceLoader.THREAD_LOAD_INVALID_RESOURCE else null
 
 
 func prefetch_gao_opening_art() -> void:
