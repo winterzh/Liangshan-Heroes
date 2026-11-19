@@ -1,0 +1,1849 @@
+{
+  "source_commit": "e5b4010a46911f60209a969a30bcf0553ad5e2c8",
+  "base_commit": "d776a4e15f56a6eaf1ae32187ca95fcd9ba32263",
+  "layout_case_states_per_exe": 20,
+  "scope": "Two exact Windows EXEs in separate profiles and isolated desktops. Real selection and inventory toggle APIs used at 1280x720 Chinese and 1920x1080 English; the latter uses an explicitly resized logical viewport. Timing samples use a 165s battle and identical command and HUD sequencing.",
+  "single_pass_prototype": {
+    "removed_inventory_pass_only": true,
+    "trajectory_points_matching_older_candidate": 169,
+    "median_total_us": 1256,
+    "median_inventory_and_bottom_us": 842,
+    "raw_report_sha256": "363ecc36bbbfbfcd1f9cfddf18ef7fb2a08c7d5773c7f2b21060c3b4513b778f"
+  },
+  "runtime_input_diff": [
+    "scripts/hud.gd"
+  ],
+  "selection_inventory_and_controls_equal": true,
+  "approved_geometry_alignment": [
+    {
+      "window": [
+        1920,
+        1080
+      ],
+      "case": "clear_selection",
+      "right_drawer_bottom_gap_before_px": 66.0,
+      "right_drawer_bottom_gap_after_px": 8,
+      "y_shift_px": 58.0,
+      "controls": [
+        "help_rect",
+        "info_visible_rect",
+        "toast_rect"
+      ]
+    }
+  ],
+  "common_trajectory_sample_floor": 170,
+  "rendered_matrices": [
+    {
+      "inventory_toggle_present": true,
+      "language": "zh_CN",
+      "states": [
+        {
+          "active": "",
+          "bottom": [
+            0.0,
+            628.0,
+            1280.0,
+            92.0
+          ],
+          "bottom_collapsed": true,
+          "case": "empty",
+          "command_columns": 99,
+          "help_rect": [
+            852.0,
+            490.0,
+            420.0,
+            130.0
+          ],
+          "help_visible": false,
+          "info_visible_rect": [
+            848.0,
+            344.0,
+            420.0,
+            276.0
+          ],
+          "inventory_bindings": [
+            [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          ],
+          "inventory_dock_visible": false,
+          "inventory_hero": "",
+          "inventory_inline_visible": false,
+          "inventory_popup_open": false,
+          "inventory_popup_visible": false,
+          "inventory_toggle": "▦ 物品",
+          "inventory_visible_rect": [],
+          "members": [],
+          "minimap": [
+            10.0,
+            636.0,
+            72.0,
+            76.0
+          ],
+          "selection_title": "",
+          "toast_count": 0,
+          "toast_rect": [
+            848.0,
+            620.0,
+            420.0,
+            0.0
+          ],
+          "visible_commands": 0
+        },
+        {
+          "active": "wu_yong",
+          "bottom": [
+            0.0,
+            562.0,
+            1280.0,
+            158.0
+          ],
+          "bottom_collapsed": false,
+          "case": "hero_group",
+          "command_columns": 99,
+          "help_rect": [
+            852.0,
+            424.0,
+            420.0,
+            130.0
+          ],
+          "help_visible": false,
+          "info_visible_rect": [
+            848.0,
+            278.0,
+            420.0,
+            276.0
+          ],
+          "inventory_bindings": [
+            [
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong"
+            ],
+            [
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong"
+            ]
+          ],
+          "inventory_dock_visible": true,
+          "inventory_hero": "wu_yong",
+          "inventory_inline_visible": false,
+          "inventory_popup_open": false,
+          "inventory_popup_visible": false,
+          "inventory_toggle": "▦ 物品",
+          "inventory_visible_rect": [
+            1158.0,
+            606.0,
+            92.0,
+            70.0
+          ],
+          "members": [
+            [
+              "wu_yong",
+              1
+            ],
+            [
+              "lou_luo",
+              1
+            ]
+          ],
+          "minimap": [
+            10.0,
+            572.0,
+            132.0,
+            140.0
+          ],
+          "selection_title": "▸ 吴用  Lv1  (当前 ｜ 共 2 ｜ Tab 切换)",
+          "toast_count": 0,
+          "toast_rect": [
+            848.0,
+            554.0,
+            420.0,
+            0.0
+          ],
+          "visible_commands": 5
+        },
+        {
+          "active": "wu_yong",
+          "bottom": [
+            0.0,
+            562.0,
+            1280.0,
+            158.0
+          ],
+          "bottom_collapsed": false,
+          "case": "inventory_open_attempt",
+          "command_columns": 99,
+          "help_rect": [
+            852.0,
+            424.0,
+            420.0,
+            130.0
+          ],
+          "help_visible": false,
+          "info_visible_rect": [
+            848.0,
+            278.0,
+            420.0,
+            276.0
+          ],
+          "inventory_bindings": [
+            [
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong"
+            ],
+            [
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong"
+            ]
+          ],
+          "inventory_dock_visible": true,
+          "inventory_hero": "wu_yong",
+          "inventory_inline_visible": false,
+          "inventory_popup_open": true,
+          "inventory_popup_visible": true,
+          "inventory_toggle": "▾ 收起",
+          "inventory_visible_rect": [
+            1084.0,
+            471.0,
+            188.0,
+            127.0
+          ],
+          "members": [
+            [
+              "wu_yong",
+              1
+            ],
+            [
+              "lou_luo",
+              1
+            ]
+          ],
+          "minimap": [
+            10.0,
+            572.0,
+            132.0,
+            140.0
+          ],
+          "selection_title": "▸ 吴用  Lv1  (当前 ｜ 共 2 ｜ Tab 切换)",
+          "toast_count": 0,
+          "toast_rect": [
+            848.0,
+            554.0,
+            420.0,
+            0.0
+          ],
+          "visible_commands": 5
+        },
+        {
+          "active": "gongsun_sheng",
+          "bottom": [
+            0.0,
+            562.0,
+            1280.0,
+            158.0
+          ],
+          "bottom_collapsed": false,
+          "case": "swap_hero",
+          "command_columns": 99,
+          "help_rect": [
+            852.0,
+            424.0,
+            420.0,
+            130.0
+          ],
+          "help_visible": false,
+          "info_visible_rect": [
+            848.0,
+            278.0,
+            420.0,
+            276.0
+          ],
+          "inventory_bindings": [
+            [
+              "gongsun_sheng",
+              "gongsun_sheng",
+              "gongsun_sheng",
+              "gongsun_sheng",
+              "gongsun_sheng",
+              "gongsun_sheng"
+            ],
+            [
+              "gongsun_sheng",
+              "gongsun_sheng",
+              "gongsun_sheng",
+              "gongsun_sheng",
+              "gongsun_sheng",
+              "gongsun_sheng"
+            ]
+          ],
+          "inventory_dock_visible": true,
+          "inventory_hero": "gongsun_sheng",
+          "inventory_inline_visible": false,
+          "inventory_popup_open": true,
+          "inventory_popup_visible": true,
+          "inventory_toggle": "▾ 收起",
+          "inventory_visible_rect": [
+            1084.0,
+            471.0,
+            188.0,
+            127.0
+          ],
+          "members": [
+            [
+              "gongsun_sheng",
+              1
+            ]
+          ],
+          "minimap": [
+            10.0,
+            572.0,
+            132.0,
+            140.0
+          ],
+          "selection_title": "公孙胜  Lv1",
+          "toast_count": 0,
+          "toast_rect": [
+            848.0,
+            554.0,
+            420.0,
+            0.0
+          ],
+          "visible_commands": 5
+        },
+        {
+          "active": "lou_luo",
+          "bottom": [
+            0.0,
+            562.0,
+            1280.0,
+            158.0
+          ],
+          "bottom_collapsed": false,
+          "case": "worker_closes_inventory",
+          "command_columns": 3,
+          "help_rect": [
+            852.0,
+            424.0,
+            420.0,
+            130.0
+          ],
+          "help_visible": false,
+          "info_visible_rect": [
+            848.0,
+            278.0,
+            420.0,
+            276.0
+          ],
+          "inventory_bindings": [
+            [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          ],
+          "inventory_dock_visible": false,
+          "inventory_hero": "",
+          "inventory_inline_visible": false,
+          "inventory_popup_open": false,
+          "inventory_popup_visible": false,
+          "inventory_toggle": "▦ 物品",
+          "inventory_visible_rect": [],
+          "members": [
+            [
+              "lou_luo",
+              1
+            ]
+          ],
+          "minimap": [
+            10.0,
+            594.0,
+            96.0,
+            96.0
+          ],
+          "selection_title": "喽啰",
+          "toast_count": 0,
+          "toast_rect": [
+            848.0,
+            554.0,
+            420.0,
+            0.0
+          ],
+          "visible_commands": 4
+        },
+        {
+          "active": "",
+          "bottom": [
+            0.0,
+            562.0,
+            1280.0,
+            158.0
+          ],
+          "bottom_collapsed": false,
+          "case": "enemy_inspect",
+          "command_columns": 99,
+          "help_rect": [
+            852.0,
+            424.0,
+            420.0,
+            130.0
+          ],
+          "help_visible": false,
+          "info_visible_rect": [
+            848.0,
+            278.0,
+            420.0,
+            276.0
+          ],
+          "inventory_bindings": [
+            [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          ],
+          "inventory_dock_visible": false,
+          "inventory_hero": "",
+          "inventory_inline_visible": false,
+          "inventory_popup_open": false,
+          "inventory_popup_visible": false,
+          "inventory_toggle": "▦ 物品",
+          "inventory_visible_rect": [],
+          "members": [
+            [
+              "barracks",
+              1
+            ]
+          ],
+          "minimap": [
+            10.0,
+            572.0,
+            132.0,
+            140.0
+          ],
+          "selection_title": "山前补给营",
+          "toast_count": 0,
+          "toast_rect": [
+            848.0,
+            554.0,
+            420.0,
+            0.0
+          ],
+          "visible_commands": 0
+        },
+        {
+          "active": "",
+          "bottom": [
+            0.0,
+            628.0,
+            1280.0,
+            92.0
+          ],
+          "bottom_collapsed": true,
+          "case": "clear_selection",
+          "command_columns": 99,
+          "help_rect": [
+            852.0,
+            432.0,
+            420.0,
+            130.0
+          ],
+          "help_visible": false,
+          "info_visible_rect": [
+            848.0,
+            286.0,
+            420.0,
+            276.0
+          ],
+          "inventory_bindings": [
+            [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          ],
+          "inventory_dock_visible": false,
+          "inventory_hero": "",
+          "inventory_inline_visible": false,
+          "inventory_popup_open": false,
+          "inventory_popup_visible": false,
+          "inventory_toggle": "▦ 物品",
+          "inventory_visible_rect": [],
+          "members": [],
+          "minimap": [
+            10.0,
+            636.0,
+            72.0,
+            76.0
+          ],
+          "selection_title": "",
+          "toast_count": 0,
+          "toast_rect": [
+            848.0,
+            562.0,
+            420.0,
+            0.0
+          ],
+          "visible_commands": 0
+        },
+        {
+          "active": "wu_yong",
+          "bottom": [
+            0.0,
+            562.0,
+            1280.0,
+            158.0
+          ],
+          "bottom_collapsed": false,
+          "case": "help_only_group",
+          "command_columns": 99,
+          "help_rect": [
+            852.0,
+            417.0,
+            420.0,
+            137.0
+          ],
+          "help_visible": true,
+          "info_visible_rect": [
+            848.0,
+            133.0,
+            420.0,
+            276.0
+          ],
+          "inventory_bindings": [
+            [
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong"
+            ],
+            [
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong"
+            ]
+          ],
+          "inventory_dock_visible": true,
+          "inventory_hero": "wu_yong",
+          "inventory_inline_visible": false,
+          "inventory_popup_open": false,
+          "inventory_popup_visible": false,
+          "inventory_toggle": "▦ 物品",
+          "inventory_visible_rect": [
+            1158.0,
+            606.0,
+            92.0,
+            70.0
+          ],
+          "members": [
+            [
+              "wu_yong",
+              1
+            ],
+            [
+              "lou_luo",
+              1
+            ]
+          ],
+          "minimap": [
+            10.0,
+            572.0,
+            132.0,
+            140.0
+          ],
+          "selection_title": "▸ 吴用  Lv1  (当前 ｜ 共 2 ｜ Tab 切换)",
+          "toast_count": 0,
+          "toast_rect": [
+            848.0,
+            409.0,
+            420.0,
+            0.0
+          ],
+          "visible_commands": 5
+        },
+        {
+          "active": "wu_yong",
+          "bottom": [
+            0.0,
+            562.0,
+            1280.0,
+            158.0
+          ],
+          "bottom_collapsed": false,
+          "case": "help_and_toast_group",
+          "command_columns": 99,
+          "help_rect": [
+            852.0,
+            417.0,
+            420.0,
+            137.0
+          ],
+          "help_visible": false,
+          "info_visible_rect": [
+            848.0,
+            278.0,
+            420.0,
+            276.0
+          ],
+          "inventory_bindings": [
+            [
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong"
+            ],
+            [
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong"
+            ]
+          ],
+          "inventory_dock_visible": true,
+          "inventory_hero": "wu_yong",
+          "inventory_inline_visible": false,
+          "inventory_popup_open": false,
+          "inventory_popup_visible": false,
+          "inventory_toggle": "▦ 物品",
+          "inventory_visible_rect": [
+            1158.0,
+            606.0,
+            92.0,
+            70.0
+          ],
+          "members": [
+            [
+              "wu_yong",
+              1
+            ],
+            [
+              "lou_luo",
+              1
+            ]
+          ],
+          "minimap": [
+            10.0,
+            572.0,
+            132.0,
+            140.0
+          ],
+          "selection_title": "▸ 吴用  Lv1  (当前 ｜ 共 2 ｜ Tab 切换)",
+          "toast_count": 1,
+          "toast_rect": [
+            848.0,
+            470.0,
+            420.0,
+            84.0
+          ],
+          "visible_commands": 5
+        },
+        {
+          "active": "lou_luo",
+          "bottom": [
+            0.0,
+            562.0,
+            1280.0,
+            158.0
+          ],
+          "bottom_collapsed": false,
+          "case": "help_and_toast_worker",
+          "command_columns": 3,
+          "help_rect": [
+            852.0,
+            417.0,
+            420.0,
+            137.0
+          ],
+          "help_visible": false,
+          "info_visible_rect": [
+            848.0,
+            278.0,
+            420.0,
+            276.0
+          ],
+          "inventory_bindings": [
+            [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          ],
+          "inventory_dock_visible": false,
+          "inventory_hero": "",
+          "inventory_inline_visible": false,
+          "inventory_popup_open": false,
+          "inventory_popup_visible": false,
+          "inventory_toggle": "▦ 物品",
+          "inventory_visible_rect": [],
+          "members": [
+            [
+              "lou_luo",
+              1
+            ]
+          ],
+          "minimap": [
+            10.0,
+            594.0,
+            96.0,
+            96.0
+          ],
+          "selection_title": "喽啰",
+          "toast_count": 1,
+          "toast_rect": [
+            848.0,
+            520.0,
+            420.0,
+            34.0
+          ],
+          "visible_commands": 4
+        }
+      ],
+      "viewport": [
+        1280.0,
+        720.0
+      ],
+      "window": [
+        1280,
+        720
+      ]
+    },
+    {
+      "inventory_toggle_present": false,
+      "language": "en",
+      "states": [
+        {
+          "active": "",
+          "bottom": [
+            0.0,
+            988.0,
+            1920.0,
+            92.0
+          ],
+          "bottom_collapsed": true,
+          "case": "empty",
+          "command_columns": 99,
+          "help_rect": [
+            1492.0,
+            785.0,
+            420.0,
+            137.0
+          ],
+          "help_visible": false,
+          "info_visible_rect": [
+            1488.0,
+            646.0,
+            420.0,
+            276.0
+          ],
+          "inventory_bindings": [
+            [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          ],
+          "inventory_dock_visible": false,
+          "inventory_hero": "",
+          "inventory_inline_visible": false,
+          "inventory_popup_open": false,
+          "inventory_popup_visible": false,
+          "inventory_toggle": "▦ Items",
+          "inventory_visible_rect": [],
+          "members": [],
+          "minimap": [
+            10.0,
+            996.0,
+            72.0,
+            76.0
+          ],
+          "selection_title": "",
+          "toast_count": 0,
+          "toast_rect": [
+            1488.0,
+            922.0,
+            420.0,
+            0.0
+          ],
+          "visible_commands": 0
+        },
+        {
+          "active": "wu_yong",
+          "bottom": [
+            0.0,
+            922.0,
+            1920.0,
+            158.0
+          ],
+          "bottom_collapsed": false,
+          "case": "hero_group",
+          "command_columns": 99,
+          "help_rect": [
+            1492.0,
+            777.0,
+            420.0,
+            137.0
+          ],
+          "help_visible": false,
+          "info_visible_rect": [
+            1488.0,
+            638.0,
+            420.0,
+            276.0
+          ],
+          "inventory_bindings": [
+            [
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong"
+            ],
+            [
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong"
+            ]
+          ],
+          "inventory_dock_visible": true,
+          "inventory_hero": "wu_yong",
+          "inventory_inline_visible": true,
+          "inventory_popup_open": false,
+          "inventory_popup_visible": false,
+          "inventory_toggle": "▦ Items",
+          "inventory_visible_rect": [
+            1606.0,
+            966.0,
+            304.0,
+            75.0
+          ],
+          "members": [
+            [
+              "wu_yong",
+              1
+            ],
+            [
+              "lou_luo",
+              1
+            ]
+          ],
+          "minimap": [
+            10.0,
+            932.0,
+            132.0,
+            140.0
+          ],
+          "selection_title": "▸ Wu Yong  Lv1  (Current · 2 total · Tab to cycle)",
+          "toast_count": 0,
+          "toast_rect": [
+            1488.0,
+            914.0,
+            420.0,
+            0.0
+          ],
+          "visible_commands": 5
+        },
+        {
+          "active": "wu_yong",
+          "bottom": [
+            0.0,
+            922.0,
+            1920.0,
+            158.0
+          ],
+          "bottom_collapsed": false,
+          "case": "inventory_open_attempt",
+          "command_columns": 99,
+          "help_rect": [
+            1492.0,
+            777.0,
+            420.0,
+            137.0
+          ],
+          "help_visible": false,
+          "info_visible_rect": [
+            1488.0,
+            638.0,
+            420.0,
+            276.0
+          ],
+          "inventory_bindings": [
+            [
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong"
+            ],
+            [
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong"
+            ]
+          ],
+          "inventory_dock_visible": true,
+          "inventory_hero": "wu_yong",
+          "inventory_inline_visible": true,
+          "inventory_popup_open": false,
+          "inventory_popup_visible": false,
+          "inventory_toggle": "▦ Items",
+          "inventory_visible_rect": [
+            1606.0,
+            966.0,
+            304.0,
+            75.0
+          ],
+          "members": [
+            [
+              "wu_yong",
+              1
+            ],
+            [
+              "lou_luo",
+              1
+            ]
+          ],
+          "minimap": [
+            10.0,
+            932.0,
+            132.0,
+            140.0
+          ],
+          "selection_title": "▸ Wu Yong  Lv1  (Current · 2 total · Tab to cycle)",
+          "toast_count": 0,
+          "toast_rect": [
+            1488.0,
+            914.0,
+            420.0,
+            0.0
+          ],
+          "visible_commands": 5
+        },
+        {
+          "active": "gongsun_sheng",
+          "bottom": [
+            0.0,
+            922.0,
+            1920.0,
+            158.0
+          ],
+          "bottom_collapsed": false,
+          "case": "swap_hero",
+          "command_columns": 99,
+          "help_rect": [
+            1492.0,
+            777.0,
+            420.0,
+            137.0
+          ],
+          "help_visible": false,
+          "info_visible_rect": [
+            1488.0,
+            638.0,
+            420.0,
+            276.0
+          ],
+          "inventory_bindings": [
+            [
+              "gongsun_sheng",
+              "gongsun_sheng",
+              "gongsun_sheng",
+              "gongsun_sheng",
+              "gongsun_sheng",
+              "gongsun_sheng"
+            ],
+            [
+              "gongsun_sheng",
+              "gongsun_sheng",
+              "gongsun_sheng",
+              "gongsun_sheng",
+              "gongsun_sheng",
+              "gongsun_sheng"
+            ]
+          ],
+          "inventory_dock_visible": true,
+          "inventory_hero": "gongsun_sheng",
+          "inventory_inline_visible": true,
+          "inventory_popup_open": false,
+          "inventory_popup_visible": false,
+          "inventory_toggle": "▦ Items",
+          "inventory_visible_rect": [
+            1606.0,
+            966.0,
+            304.0,
+            75.0
+          ],
+          "members": [
+            [
+              "gongsun_sheng",
+              1
+            ]
+          ],
+          "minimap": [
+            10.0,
+            932.0,
+            132.0,
+            140.0
+          ],
+          "selection_title": "Gongsun Sheng  Lv1",
+          "toast_count": 0,
+          "toast_rect": [
+            1488.0,
+            914.0,
+            420.0,
+            0.0
+          ],
+          "visible_commands": 5
+        },
+        {
+          "active": "lou_luo",
+          "bottom": [
+            0.0,
+            922.0,
+            1920.0,
+            158.0
+          ],
+          "bottom_collapsed": false,
+          "case": "worker_closes_inventory",
+          "command_columns": 99,
+          "help_rect": [
+            1492.0,
+            777.0,
+            420.0,
+            137.0
+          ],
+          "help_visible": false,
+          "info_visible_rect": [
+            1488.0,
+            638.0,
+            420.0,
+            276.0
+          ],
+          "inventory_bindings": [
+            [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          ],
+          "inventory_dock_visible": false,
+          "inventory_hero": "",
+          "inventory_inline_visible": false,
+          "inventory_popup_open": false,
+          "inventory_popup_visible": false,
+          "inventory_toggle": "▦ Items",
+          "inventory_visible_rect": [],
+          "members": [
+            [
+              "lou_luo",
+              1
+            ]
+          ],
+          "minimap": [
+            10.0,
+            932.0,
+            132.0,
+            140.0
+          ],
+          "selection_title": "Camp Follower",
+          "toast_count": 0,
+          "toast_rect": [
+            1488.0,
+            914.0,
+            420.0,
+            0.0
+          ],
+          "visible_commands": 4
+        },
+        {
+          "active": "",
+          "bottom": [
+            0.0,
+            922.0,
+            1920.0,
+            158.0
+          ],
+          "bottom_collapsed": false,
+          "case": "enemy_inspect",
+          "command_columns": 99,
+          "help_rect": [
+            1492.0,
+            777.0,
+            420.0,
+            137.0
+          ],
+          "help_visible": false,
+          "info_visible_rect": [
+            1488.0,
+            638.0,
+            420.0,
+            276.0
+          ],
+          "inventory_bindings": [
+            [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          ],
+          "inventory_dock_visible": false,
+          "inventory_hero": "",
+          "inventory_inline_visible": false,
+          "inventory_popup_open": false,
+          "inventory_popup_visible": false,
+          "inventory_toggle": "▦ Items",
+          "inventory_visible_rect": [],
+          "members": [
+            [
+              "barracks",
+              1
+            ]
+          ],
+          "minimap": [
+            10.0,
+            932.0,
+            132.0,
+            140.0
+          ],
+          "selection_title": "Mountain-Front Supply Camp",
+          "toast_count": 0,
+          "toast_rect": [
+            1488.0,
+            914.0,
+            420.0,
+            0.0
+          ],
+          "visible_commands": 0
+        },
+        {
+          "active": "",
+          "bottom": [
+            0.0,
+            988.0,
+            1920.0,
+            92.0
+          ],
+          "bottom_collapsed": true,
+          "case": "clear_selection",
+          "command_columns": 99,
+          "help_rect": [
+            1492.0,
+            843.0,
+            420.0,
+            137.0
+          ],
+          "help_visible": false,
+          "info_visible_rect": [
+            1488.0,
+            704.0,
+            420.0,
+            276.0
+          ],
+          "inventory_bindings": [
+            [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          ],
+          "inventory_dock_visible": false,
+          "inventory_hero": "",
+          "inventory_inline_visible": false,
+          "inventory_popup_open": false,
+          "inventory_popup_visible": false,
+          "inventory_toggle": "▦ Items",
+          "inventory_visible_rect": [],
+          "members": [],
+          "minimap": [
+            10.0,
+            996.0,
+            72.0,
+            76.0
+          ],
+          "selection_title": "",
+          "toast_count": 0,
+          "toast_rect": [
+            1488.0,
+            980.0,
+            420.0,
+            0.0
+          ],
+          "visible_commands": 0
+        },
+        {
+          "active": "wu_yong",
+          "bottom": [
+            0.0,
+            922.0,
+            1920.0,
+            158.0
+          ],
+          "bottom_collapsed": false,
+          "case": "help_only_group",
+          "command_columns": 99,
+          "help_rect": [
+            1492.0,
+            777.0,
+            420.0,
+            137.0
+          ],
+          "help_visible": true,
+          "info_visible_rect": [
+            1488.0,
+            493.0,
+            420.0,
+            276.0
+          ],
+          "inventory_bindings": [
+            [
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong"
+            ],
+            [
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong"
+            ]
+          ],
+          "inventory_dock_visible": true,
+          "inventory_hero": "wu_yong",
+          "inventory_inline_visible": true,
+          "inventory_popup_open": false,
+          "inventory_popup_visible": false,
+          "inventory_toggle": "▦ Items",
+          "inventory_visible_rect": [
+            1606.0,
+            966.0,
+            304.0,
+            75.0
+          ],
+          "members": [
+            [
+              "wu_yong",
+              1
+            ],
+            [
+              "lou_luo",
+              1
+            ]
+          ],
+          "minimap": [
+            10.0,
+            932.0,
+            132.0,
+            140.0
+          ],
+          "selection_title": "▸ Wu Yong  Lv1  (Current · 2 total · Tab to cycle)",
+          "toast_count": 0,
+          "toast_rect": [
+            1488.0,
+            769.0,
+            420.0,
+            0.0
+          ],
+          "visible_commands": 5
+        },
+        {
+          "active": "wu_yong",
+          "bottom": [
+            0.0,
+            922.0,
+            1920.0,
+            158.0
+          ],
+          "bottom_collapsed": false,
+          "case": "help_and_toast_group",
+          "command_columns": 99,
+          "help_rect": [
+            1492.0,
+            777.0,
+            420.0,
+            137.0
+          ],
+          "help_visible": false,
+          "info_visible_rect": [
+            1488.0,
+            638.0,
+            420.0,
+            276.0
+          ],
+          "inventory_bindings": [
+            [
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong"
+            ],
+            [
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong",
+              "wu_yong"
+            ]
+          ],
+          "inventory_dock_visible": true,
+          "inventory_hero": "wu_yong",
+          "inventory_inline_visible": true,
+          "inventory_popup_open": false,
+          "inventory_popup_visible": false,
+          "inventory_toggle": "▦ Items",
+          "inventory_visible_rect": [
+            1606.0,
+            966.0,
+            304.0,
+            75.0
+          ],
+          "members": [
+            [
+              "wu_yong",
+              1
+            ],
+            [
+              "lou_luo",
+              1
+            ]
+          ],
+          "minimap": [
+            10.0,
+            932.0,
+            132.0,
+            140.0
+          ],
+          "selection_title": "▸ Wu Yong  Lv1  (Current · 2 total · Tab to cycle)",
+          "toast_count": 1,
+          "toast_rect": [
+            1488.0,
+            830.0,
+            420.0,
+            84.0
+          ],
+          "visible_commands": 5
+        },
+        {
+          "active": "lou_luo",
+          "bottom": [
+            0.0,
+            922.0,
+            1920.0,
+            158.0
+          ],
+          "bottom_collapsed": false,
+          "case": "help_and_toast_worker",
+          "command_columns": 99,
+          "help_rect": [
+            1492.0,
+            777.0,
+            420.0,
+            137.0
+          ],
+          "help_visible": false,
+          "info_visible_rect": [
+            1488.0,
+            638.0,
+            420.0,
+            276.0
+          ],
+          "inventory_bindings": [
+            [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            [
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          ],
+          "inventory_dock_visible": false,
+          "inventory_hero": "",
+          "inventory_inline_visible": false,
+          "inventory_popup_open": false,
+          "inventory_popup_visible": false,
+          "inventory_toggle": "▦ Items",
+          "inventory_visible_rect": [],
+          "members": [
+            [
+              "lou_luo",
+              1
+            ]
+          ],
+          "minimap": [
+            10.0,
+            932.0,
+            132.0,
+            140.0
+          ],
+          "selection_title": "Camp Follower",
+          "toast_count": 1,
+          "toast_rect": [
+            1488.0,
+            880.0,
+            420.0,
+            34.0
+          ],
+          "visible_commands": 4
+        }
+      ],
+      "viewport": [
+        1920.0,
+        1080.0
+      ],
+      "window": [
+        1920,
+        1080
+      ]
+    }
+  ],
+  "layout_witness": {
+    "d776a4e1": {
+      "raw_layout_sha256": "71463cfb168e3971860eb6980d33d27a5ebd4bb9bd919ae34607f42ffb3c1c60",
+      "log_sha256": "5cb8dec1b05bd3d92c18850f0e3326468ad9d5cbe30417e2759ac081deef0351"
+    },
+    "e5b4010a": {
+      "raw_layout_sha256": "1e0e347b612cba2df865ced818affceacab3f2cf81ebb767ee0bbb034640bc42",
+      "log_sha256": "2f8b105f62303e936b63c178b7929899bccdd9748ff62148a35f7f0f96923c74"
+    }
+  },
+  "selection_timing": {
+    "d776a4e1": {
+      "scope": "165-second normal-speed frozen Windows candidate with a diagnostics-only Battle subclass, 1440x900 Compatibility. The subclass reproduces the shipped HUD selection update order while timing its production methods. Automatic batches use real selection and order entry points. No foreground control.",
+      "candidate_commit": "d776a4e15f56a6eaf1ae32187ca95fcd9ba32263",
+      "exe_sha256": "ad8a05c9d7606cd4e0e450d7730792d5dbf3bdd8033147208955109e25f6818e",
+      "probe_checks": 13,
+      "same_trajectory_points": 170,
+      "measured_batches": 85,
+      "selection_subsections": {
+        "full": {
+          "rows": 187,
+          "median_selection_count": 6,
+          "total": {
+            "median_us": 1241,
+            "p95_us": 2119,
+            "max_us": 5963
+          },
+          "highlighting": {
+            "median_us": 6,
+            "p95_us": 10,
+            "max_us": 20
+          },
+          "reference": {
+            "median_us": 1,
+            "p95_us": 3,
+            "max_us": 14
+          },
+          "icons": {
+            "median_us": 144,
+            "p95_us": 334,
+            "max_us": 442
+          },
+          "commands": {
+            "median_us": 105,
+            "p95_us": 187,
+            "max_us": 269
+          },
+          "stats": {
+            "median_us": 128,
+            "p95_us": 201,
+            "max_us": 4221
+          },
+          "inventory": {
+            "median_us": 641,
+            "p95_us": 1114,
+            "max_us": 2308
+          },
+          "bottom": {
+            "median_us": 211,
+            "p95_us": 331,
+            "max_us": 1337
+          }
+        },
+        "small_1_to_6": {
+          "rows": 101,
+          "median_selection_count": 3,
+          "total": {
+            "median_us": 963,
+            "p95_us": 1797,
+            "max_us": 5963
+          },
+          "highlighting": {
+            "median_us": 4,
+            "p95_us": 8,
+            "max_us": 13
+          },
+          "reference": {
+            "median_us": 1,
+            "p95_us": 3,
+            "max_us": 5
+          },
+          "icons": {
+            "median_us": 99,
+            "p95_us": 162,
+            "max_us": 424
+          },
+          "commands": {
+            "median_us": 17,
+            "p95_us": 151,
+            "max_us": 207
+          },
+          "stats": {
+            "median_us": 117,
+            "p95_us": 190,
+            "max_us": 4221
+          },
+          "inventory": {
+            "median_us": 499,
+            "p95_us": 1070,
+            "max_us": 1970
+          },
+          "bottom": {
+            "median_us": 191,
+            "p95_us": 281,
+            "max_us": 1337
+          }
+        },
+        "large_7_plus": {
+          "rows": 86,
+          "median_selection_count": 11.5,
+          "total": {
+            "median_us": 1644.5,
+            "p95_us": 2127,
+            "max_us": 2890
+          },
+          "highlighting": {
+            "median_us": 7.0,
+            "p95_us": 13,
+            "max_us": 20
+          },
+          "reference": {
+            "median_us": 2.0,
+            "p95_us": 4,
+            "max_us": 14
+          },
+          "icons": {
+            "median_us": 233.0,
+            "p95_us": 358,
+            "max_us": 442
+          },
+          "commands": {
+            "median_us": 136.0,
+            "p95_us": 212,
+            "max_us": 269
+          },
+          "stats": {
+            "median_us": 142.5,
+            "p95_us": 207,
+            "max_us": 307
+          },
+          "inventory": {
+            "median_us": 822.5,
+            "p95_us": 1114,
+            "max_us": 2308
+          },
+          "bottom": {
+            "median_us": 232.0,
+            "p95_us": 340,
+            "max_us": 568
+          }
+        }
+      },
+      "log_sha256": "1227b5b7d9d4bf7d27aec98f60048ae8bea7789be559714e5c53ae121a28748a",
+      "raw_report_sha256": "ad0e077de8dedc5b5774521322a35c31d46427f3d636c395905e79a9806fe263",
+      "timing_subclass_sha256": "c1e9deae0dd801a28576316cb24fe286739d223fd24ca15fa649a084dc77123f"
+    },
+    "e5b4010a": {
+      "scope": "165-second normal-speed frozen Windows candidate with a diagnostics-only Battle subclass, 1440x900 Compatibility. The subclass reproduces the shipped HUD selection update order while timing its production methods. Automatic batches use real selection and order entry points. No foreground control.",
+      "candidate_commit": "e5b4010a46911f60209a969a30bcf0553ad5e2c8",
+      "exe_sha256": "a0790df0430b9e2e475080d46575b2988f4b597b3e54c5a1251281a762528ccb",
+      "probe_checks": 13,
+      "same_trajectory_points": 170,
+      "measured_batches": 85,
+      "selection_subsections": {
+        "full": {
+          "rows": 187,
+          "median_selection_count": 6,
+          "total": {
+            "median_us": 1128,
+            "p95_us": 2028,
+            "max_us": 3990
+          },
+          "highlighting": {
+            "median_us": 5,
+            "p95_us": 11,
+            "max_us": 18
+          },
+          "reference": {
+            "median_us": 1,
+            "p95_us": 3,
+            "max_us": 4
+          },
+          "icons": {
+            "median_us": 132,
+            "p95_us": 339,
+            "max_us": 588
+          },
+          "commands": {
+            "median_us": 92,
+            "p95_us": 193,
+            "max_us": 481
+          },
+          "stats": {
+            "median_us": 113,
+            "p95_us": 209,
+            "max_us": 2627
+          },
+          "inventory": {
+            "median_us": 18,
+            "p95_us": 35,
+            "max_us": 45
+          },
+          "bottom": {
+            "median_us": 749,
+            "p95_us": 1299,
+            "max_us": 2271
+          }
+        },
+        "small_1_to_6": {
+          "rows": 101,
+          "median_selection_count": 3,
+          "total": {
+            "median_us": 745,
+            "p95_us": 1622,
+            "max_us": 3990
+          },
+          "highlighting": {
+            "median_us": 4,
+            "p95_us": 7,
+            "max_us": 9
+          },
+          "reference": {
+            "median_us": 1,
+            "p95_us": 2,
+            "max_us": 4
+          },
+          "icons": {
+            "median_us": 88,
+            "p95_us": 161,
+            "max_us": 218
+          },
+          "commands": {
+            "median_us": 15,
+            "p95_us": 128,
+            "max_us": 481
+          },
+          "stats": {
+            "median_us": 97,
+            "p95_us": 198,
+            "max_us": 2627
+          },
+          "inventory": {
+            "median_us": 13,
+            "p95_us": 28,
+            "max_us": 45
+          },
+          "bottom": {
+            "median_us": 522,
+            "p95_us": 1199,
+            "max_us": 2271
+          }
+        },
+        "large_7_plus": {
+          "rows": 86,
+          "median_selection_count": 11.5,
+          "total": {
+            "median_us": 1356.5,
+            "p95_us": 2204,
+            "max_us": 2778
+          },
+          "highlighting": {
+            "median_us": 6.0,
+            "p95_us": 12,
+            "max_us": 18
+          },
+          "reference": {
+            "median_us": 2.0,
+            "p95_us": 3,
+            "max_us": 4
+          },
+          "icons": {
+            "median_us": 210.0,
+            "p95_us": 353,
+            "max_us": 588
+          },
+          "commands": {
+            "median_us": 119.5,
+            "p95_us": 218,
+            "max_us": 264
+          },
+          "stats": {
+            "median_us": 125.5,
+            "p95_us": 209,
+            "max_us": 286
+          },
+          "inventory": {
+            "median_us": 20.0,
+            "p95_us": 36,
+            "max_us": 43
+          },
+          "bottom": {
+            "median_us": 850.5,
+            "p95_us": 1316,
+            "max_us": 1936
+          }
+        }
+      },
+      "log_sha256": "f8ef62fd3d99e2d03b312b690c00b511a82f2781ff5a46f26578ff7e83514a0d",
+      "raw_report_sha256": "36c016692a03f67d343e21433b2368b00d55658d1df7c6b9b40a062ab74c2b58",
+      "timing_subclass_sha256": "e508f08b8d8c0ba21d73687ee3931310d8ebf51231725f4d65312a1d4c1d9968"
+    }
+  }
+}

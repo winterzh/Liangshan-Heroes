@@ -34,6 +34,8 @@ Windows 候选 57adb5e2 用相同战况单独关闭视口 GPU 计时，完成 60
 
 岸线优化已纳入 Windows 候选 d776a4e1。1280×720 Vulkan Forward+ 下六模式 14 次开战与返回通过，每次释放关键战场节点，存档字节一致。本轮高俅出征到首帧中位数 378.602 ms，最大 386.931 ms。 [原生六模式回归](../qa/battle_entry_timing_20261116/windows_six_mode_smoke_d776a4e1.json)
 
+桌面切换选区时先更新英雄及物品槽引用，再统一布置背包和信息区。Windows 高俅的 187 次选区更新中，两侧实际更新中位耗时 1.241 → 1.128 ms。1280×720 窄窗口背包弹窗与 1920×1080 宽布局内嵌背包均通过，双方各 20 个界面状态的选区与背包一致。宽布局清空选区时，右侧信息抽屉与已收起底栏之间的间距从 66 px 恢复到 8 px。 [选区实窗与耗时对照](../qa/battle_entry_timing_20261116/windows_pc_inventory_selection_e5b4010a.json)
+
 Windows 候选 31c567ed 的离线试玩 ZIP 已回读六个文件，逐项校验后从干净解压目录隔离启动通过。祝家庄首次进入和同进程重进均能正常出征、右键下令和 Esc 暂停恢复，加载提示约 54 ms，首帧约 530、372 ms。 [试玩包与祝家庄入口](../qa/battle_entry_timing_20261116/windows_playtest_package_31c567ed.json)
 
 31c567ed 从干净解压目录接入 Build 26735223 的八章旧档样本，每章继续、再存、独立重启通过。野猪林另外验证终局和旧槽拒绝。18 个隔离进程通过，旧槽与本局账本保留。 [八章旧档](../qa/battle_entry_timing_20261116/windows_player_legacy_matrix_31c567ed.json)
