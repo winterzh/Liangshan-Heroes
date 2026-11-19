@@ -16,6 +16,10 @@ Windows 候选 6aa9d230 的 720p 和 1080p 窗口均验证四语顶栏可见和�
 
 Windows 候选 57adb5e2 水战完整运行 600.002 秒，P95/P99 为 17.261/22.438 ms，超过 33.3 ms 的帧有 130 个。本轮仍未达到整段帧时门槛。三波水陆交战、18 艘付费船和 13 项完整性检查通过，旧版与新版共有的 605 个逐秒战况点一致。 [十分钟水战](../qa/campaign_sustained_performance_20261116/windows_water_600_57adb5e2.json)
 
+Windows 候选 57adb5e2 用相同战况单独关闭视口 GPU 计时，完成 600.018 秒对照。开启与关闭时的 P95/P99 分别为 17.261/22.438 和 18.939/22.752 ms，超过 33.3 ms 的帧为 130 和 19。605 个共同战况点一致。两个样本为先后各一次，保留各自的整段结果。 [视口计时对照](../qa/campaign_sustained_performance_20261116/windows_water_draw_timestamps_control_57adb5e2.json)
+
+57adb5e2 在 Windows 1280×720 Vulkan Forward+ 完成六模式 91.781 秒短测。14 次开战和返回均通过，关键战场节点释放 14/14，战役进度字节一致。 [六模式回归](../qa/battle_entry_timing_20261116/windows_six_mode_smoke_57adb5e2.json)
+
 Windows 候选 31c567ed 的离线试玩 ZIP 已回读六个文件，逐项校验后从干净解压目录隔离启动通过。祝家庄首次进入和同进程重进均能正常出征、右键下令和 Esc 暂停恢复，加载提示约 54 ms，首帧约 530、372 ms。 [试玩包与祝家庄入口](../qa/battle_entry_timing_20261116/windows_playtest_package_31c567ed.json)
 
 31c567ed 的祝家庄正攻与断援走偏门两条路线均从实际菜单打到胜利，各通过 13 项，含四语重玩建议。本次正攻遇南营三队，演义 1/3；偏门接应遇一队，演义 3/3。暂停与结算反馈在 720p、1080p 实窗各通过 24 项。 [路线结果](../qa/campaign_siege_20261116/windows_native_routes_31c567ed.json) · [四语反馈](../qa/battle_entry_timing_20261116/windows_feedback_rendered_31c567ed.json)

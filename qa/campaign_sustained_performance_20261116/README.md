@@ -16,6 +16,12 @@ Windows 源码的 28 项检查覆盖同一 PCM、掉队回退、从原抬手结�
 
 Windows 候选 57adb5e2 水战完整运行 600.002 秒，P95/P99 为 17.261/22.438 ms，超过 33.3 ms 的帧有 130 个。本轮仍未达到整段帧时门槛。三波水陆交战、18 艘付费船和 13 项完整性检查通过，旧版与新版共有的 605 个逐秒战况点一致。 固定海岸镜头、1440×900 Compatibility、标准特效、1 倍速度。十分钟实包测试使用普通采样脚本，技能分段在上方另记。 [完整收据](./windows_water_600_57adb5e2.json)
 
+## Windows 57adb5e2 视口计时对照
+
+Windows 候选 57adb5e2 用相同战况单独关闭视口 GPU 计时，完成 600.018 秒对照。开启与关闭时的 P95/P99 分别为 17.261/22.438 和 18.939/22.752 ms，超过 33.3 ms 的帧为 130 和 19。605 个共同战况点一致。两个样本为先后各一次，保留各自的整段结果。 关闭后视口 CPU 和 GPU 计时读数均未出现，有效帧仍由相邻绘制完成信号计时。渲染方案、分辨率、1 倍速度、特效质量与原样本一致。 [对照收据](./windows_water_draw_timestamps_control_57adb5e2.json)
+
+Godot 4.6.3 的视口时间戳在绘制前后插入 GPU 查询。Compatibility 的查询结果稍后由渲染器读取。对照用于了解观察开销与同包波动。 [视口实现](https://github.com/godotengine/godot/blob/7d41c59c4/servers/rendering/renderer_viewport.cpp#L325-L330) · [查询实现](https://github.com/godotengine/godot/blob/7d41c59c4/drivers/gles3/storage/utilities.cpp#L324-L348)
+
 ## Windows 候选 31c567ed 原生十分钟水战
 
 600.010 秒、36,859 帧，P95/P99 为 21.930/28.943 ms；目标为 16.7/33.3 ms。223 帧超过 33.3 ms，60 帧超过 66.7 ms，最慢 147.422 ms。第 3、6 分钟分别有 78、60 帧超过 33.3 ms。相同 1440×900 Compatibility、标准特效、固定镜头、正常速度。三波交战、18 艘付费船和 13 项完整性通过。与前一候选共同的 604 个逐秒战况点一致。 [完整水战收据](windows_water_600_31c567ed.json)
