@@ -4,6 +4,8 @@
 
 ## 2026-11-18 PC 后续开发
 
+梁山台地首轮绘制共享岩壁图集、纹理坐标和碎石贴图。两套 Windows 渲染配置均通过原始绘制命令与网格逐项对照。高俅短测的四次对照显示帧时波动，十分钟性能仍待达标。 [绘制对照](../qa/battle_entry_timing_20261116/windows_terrace_texture_reuse_20261119.json) · [水战短测](../qa/campaign_sustained_performance_20261116/windows_water_165_abba_20261119.json)
+
 Windows 试玩包 f4383f2d 的高俅固定镜头水战覆盖 600.002 秒，三波交战和 13 项完整性通过，P95 为 18.686 ms，超过 16.7 ms 目标。随机驻守和高俅的首帧分段显示，场景就绪后的主要等待位于绘制前信号之前，继续定位该区间。 [水战帧时](../qa/campaign_sustained_performance_20261116/windows_water_600_f4383f2d.json) · [首帧分段](../qa/battle_entry_timing_20261116/windows_first_draw_f4383f2d.json)
 
 2026-11-19 Windows 候选 64965098 的 30 分钟模式切换结束。274 次回菜单的资源释放通过，内存与存档通过。逐分钟帧时未达标。两轮短测的最长帧都出现在进场阶段，细测确认高俅和黄泥冈的停顿跨越场景搭建和第一帧绘制。已分段测量地图、HUD、单位和绘制。装饰预读的源码搭建耗时下降，黄泥冈原生冷启动复跑退步。已收窄预读首批素材，修订包 f4383f2d 完成八次独立冷进场与六入口 15 次进出。黄泥冈首帧约 382–388 ms，高俅约 481–484 ms。正式版祝家庄档继续、再存和重启通过。f4383f2d 的 30 分钟原生验收通过，287 次进出，完整分钟最大 P95/P99 为 6.147/8.402 ms。 [长测补录](../qa/battle_entry_timing_20261116/windows_scenery_prefetch_soak_1800_f4383f2d.json) 旧包的 72 FPS 对照中首分钟 P95 仍超标。 [完整长测](../qa/battle_entry_timing_20261116/README.md#windows-64965098-模式切换三十分钟)

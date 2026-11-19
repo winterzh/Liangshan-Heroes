@@ -213,7 +213,9 @@ func static_terrace_batch_summary() -> Dictionary:
 ## Preserve every cap, rock overlay, crack and AA fringe in original order.
 func _draw_terrace(canvas) -> void:
 	var rock := Art.terrain_texture("cliff") as AtlasTexture
+	var rock_atlas := rock.atlas
 	var uv := _rock_uv(rock)
+	var gravel := Art.terrain_texture("rocks")
 	for ridge in _bank_ridges:
 		var points := PackedVector2Array()
 		for i in range(ridge.size() - 1):
@@ -234,12 +236,12 @@ func _draw_terrace(canvas) -> void:
 		for i in range(points.size() - 1):
 			var n := normals[i]
 			if n.x + n.y > 0.05:
-				_face(canvas, outer[i], outer[i + 1], _ridge_depth(points[i]), _ridge_depth(points[i + 1]), i)
+				_face(canvas, outer[i], outer[i + 1], _ridge_depth(points[i]), _ridge_depth(points[i + 1]), i, rock_atlas, uv)
 			else:
 				canvas.draw_line(outer[i], outer[i + 1], Color(0.08, 0.14, 0.07, 0.40), 5.0, true)
 			var cap := PackedVector2Array([inner[i],inner[i+1],outer[i+1],outer[i]])
 			canvas.draw_colored_polygon(cap,Color("797460").darkened(float(i%5)*0.025))
-			canvas.draw_polygon(cap,PackedColorArray([Color(0.85,0.81,0.71,0.18)]),uv,rock.atlas)
+			canvas.draw_polygon(cap,PackedColorArray([Color(0.85,0.81,0.71,0.18)]),uv,rock_atlas)
 			var crack := inner[i].lerp(outer[i],0.65)
 			canvas.draw_polyline(PackedVector2Array([inner[i],crack+Vector2(2,-1),outer[i]]),Color(0.25,0.26,0.20,0.55),0.85,true)
 			if i % 3 != 0:
@@ -247,7 +249,7 @@ func _draw_terrace(canvas) -> void:
 			if i % 4 == 2:
 				var p := _screen(points[i])
 				var size := 26.0 + float(i % 3) * 7.0
-				canvas.draw_texture_rect(Art.terrain_texture("rocks"), Rect2(p - Vector2(size * 0.5, size * 0.78), Vector2.ONE * size), false, Color(0.73, 0.81, 0.66))
+				canvas.draw_texture_rect(gravel, Rect2(p - Vector2(size * 0.5, size * 0.78), Vector2.ONE * size), false, Color(0.73, 0.81, 0.66))
 
 func _ridge_depth(p: Vector2) -> float:
 	# 低石脚承托木墙，不再用高岩圈暗示院内土丘。
@@ -255,17 +257,18 @@ func _ridge_depth(p: Vector2) -> float:
 
 func _rock_uv(rock: AtlasTexture) -> PackedVector2Array:
 	var uv := PackedVector2Array()
+	var atlas_size := rock.atlas.get_size()
 	for corner in [Vector2(0, 0), Vector2(1, 0), Vector2(1, 1), Vector2(0, 1)]:
-		uv.append((rock.region.position + corner * rock.region.size) / rock.atlas.get_size())
+		uv.append((rock.region.position + corner * rock.region.size) / atlas_size)
 	return uv
 
-func _face(canvas, a: Vector2, b: Vector2, depth_a: float, depth_b: float, salt: int) -> void:
+func _face(canvas, a: Vector2, b: Vector2, depth_a: float, depth_b: float, salt: int,
+		rock_atlas: Texture2D, rock_uv: PackedVector2Array) -> void:
 	var drop_a := Vector2(0, depth_a)
 	var drop_b := Vector2(0, depth_b)
-	var rock := Art.terrain_texture("cliff") as AtlasTexture
 	var face := PackedVector2Array([a,b,b+drop_b,a+drop_a])
 	canvas.draw_polygon(face,PackedColorArray([Color("7c7766"),Color("726e5d"),Color("494b3c"),Color("575545")]))
-	canvas.draw_polygon(face,PackedColorArray([Color(0.82,0.79,0.69,0.16)]),_rock_uv(rock),rock.atlas)
+	canvas.draw_polygon(face,PackedColorArray([Color(0.82,0.79,0.69,0.16)]),rock_uv,rock_atlas)
 	canvas.draw_line(a.lerp(b,0.55),a.lerp(b,0.42)+drop_a*0.7,Color(0.21,0.23,0.18,0.6),1.0,true)
 	canvas.draw_line(a, b, Color(0.48, 0.53, 0.35, 0.45), 1.1, true)
 	canvas.draw_line(a + drop_a, b + drop_b, Color(0.10, 0.14, 0.09, 0.35), 3.0, true)

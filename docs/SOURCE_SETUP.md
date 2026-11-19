@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+梁山台地首轮绘制共享岩壁图集、纹理坐标和碎石贴图。两套 Windows 渲染配置均通过原始绘制命令与网格逐项对照。高俅短测的四次对照显示帧时波动，十分钟性能仍待达标。 [绘制对照](../qa/battle_entry_timing_20261116/windows_terrace_texture_reuse_20261119.json) · [水战短测](../qa/campaign_sustained_performance_20261116/windows_water_165_abba_20261119.json)
+
 Windows 试玩包 f4383f2d 的高俅固定镜头水战覆盖 600.002 秒，三波交战和 13 项完整性通过，P95 为 18.686 ms，超过 16.7 ms 目标。随机驻守和高俅的首帧分段显示，场景就绪后的主要等待位于绘制前信号之前，继续定位该区间。 [水战帧时](../qa/campaign_sustained_performance_20261116/windows_water_600_f4383f2d.json) · [首帧分段](../qa/battle_entry_timing_20261116/windows_first_draw_f4383f2d.json)
 
 Windows 黄泥冈、高俅和驻守的挂载诊断可用 `CAMPAIGN_SOAK_MOUNT_TRACE=1`。黄泥冈与梁山开场装饰的本地候选沿用加载页后台读取。黄泥冈广预读候选的冷进场退步，修订候选 f4383f2d 仅预读黄泥冈独立布景贴图，已完成原生六入口短测、上一正式版祝家庄续玩和 30 分钟模式切换验证，完整结果见 [原生长测](../qa/battle_entry_timing_20261116/windows_scenery_prefetch_soak_1800_f4383f2d.json)。 同一冻结版可从本地 Windows 候选目录走三编号试玩入口，包内六文件均已回读并通过独立启动。 [离线试玩包](../qa/battle_entry_timing_20261116/windows_playtest_package_f4383f2d.json) · [八章原生旧档](../qa/battle_entry_timing_20261116/windows_player_legacy_matrix_f4383f2d.json) · [窗口输入与反馈](../qa/battle_entry_timing_20261116/windows_input_and_feedback_f4383f2d.json) [进场预读与源数据](../qa/battle_entry_timing_20261116/README.md#2026-11-19-windows-出征布景预读)

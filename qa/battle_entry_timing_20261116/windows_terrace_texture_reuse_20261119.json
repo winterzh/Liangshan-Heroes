@@ -1,0 +1,195 @@
+{
+  "scope": "Windows graphical source tests. For each renderer and Liangshan layout, nine alternating runs reconstruct identical static batch inputs. Encoded mesh arrays, ordered draw submissions, texture identity, and direct primitive commands match.",
+  "baseline_source_sha256": "0c16c3948572ff04eed795b1f9e1f312f43408409dcd9c8843a8cc2c2a806d0c",
+  "modified_source_sha256": "54ce4b4b6cfd5c87af8d639be40f12a79969e8659014ab642e5e3514e7b296e2",
+  "benchmarks": [
+    {
+      "renderer": "gl_compatibility",
+      "requested_window_pixels": [
+        960,
+        540
+      ],
+      "log_sha256": "072ee715e98aa92ebc75f6a73a54aeded2cffd7ddd690fa0973ee3b0fddc4c1c",
+      "raw_report_sha256": "8aaaa7a5ec112a57dead96d55915299b31a7bf3207e81b7e8b3eb87ce9b3228d",
+      "comparison": {
+        "rts": {
+          "aa_lines": 814,
+          "aa_polylines": 140,
+          "draw_commands_identical": true,
+          "draw_submissions": 495,
+          "native_texture_rects": 34,
+          "new_usec": [
+            24704,
+            23601,
+            24174,
+            22885,
+            23479,
+            24367,
+            23470,
+            23714,
+            23726
+          ],
+          "old_usec": [
+            26866,
+            25899,
+            24822,
+            22844,
+            24770,
+            23955,
+            24000,
+            24482,
+            24147
+          ],
+          "ordered": true,
+          "source_commands": 1414,
+          "triangles": 19144,
+          "valid": true,
+          "vertices": 35488,
+          "median_old_usec": 24482,
+          "median_new_usec": 23714
+        },
+        "traditional": {
+          "aa_lines": 337,
+          "aa_polylines": 68,
+          "draw_commands_identical": true,
+          "draw_submissions": 225,
+          "native_texture_rects": 16,
+          "new_usec": [
+            9459,
+            9615,
+            9430,
+            9745,
+            9804,
+            9481,
+            9604,
+            9483,
+            10979
+          ],
+          "old_usec": [
+            9802,
+            10218,
+            9699,
+            9789,
+            9634,
+            9784,
+            9694,
+            10108,
+            11627
+          ],
+          "ordered": true,
+          "source_commands": 613,
+          "triangles": 8218,
+          "valid": true,
+          "vertices": 15076,
+          "median_old_usec": 9789,
+          "median_new_usec": 9604
+        }
+      }
+    },
+    {
+      "renderer": "forward_plus",
+      "requested_window_pixels": [
+        1280,
+        720
+      ],
+      "log_sha256": "1f125af490dae2657e0b76040a54fe993b8ffca0ea7fc7aa82821e1be3c1af45",
+      "raw_report_sha256": "8af1151663066608d7d2ffcf51508e501ffaa23685bdb55d6b90c75680afe3be",
+      "comparison": {
+        "rts": {
+          "aa_lines": 814,
+          "aa_polylines": 140,
+          "draw_commands_identical": true,
+          "draw_submissions": 495,
+          "native_texture_rects": 34,
+          "new_usec": [
+            22969,
+            22592,
+            23194,
+            22628,
+            22405,
+            22865,
+            22228,
+            23205,
+            23091
+          ],
+          "old_usec": [
+            24155,
+            23322,
+            23929,
+            22819,
+            24025,
+            22794,
+            24940,
+            22619,
+            24955
+          ],
+          "ordered": true,
+          "source_commands": 1414,
+          "triangles": 19144,
+          "valid": true,
+          "vertices": 35488,
+          "median_old_usec": 23929,
+          "median_new_usec": 22865
+        },
+        "traditional": {
+          "aa_lines": 337,
+          "aa_polylines": 68,
+          "draw_commands_identical": true,
+          "draw_submissions": 225,
+          "native_texture_rects": 16,
+          "new_usec": [
+            10171,
+            9976,
+            10103,
+            11126,
+            9919,
+            10096,
+            9469,
+            10296,
+            10335
+          ],
+          "old_usec": [
+            10762,
+            10320,
+            11482,
+            10291,
+            10796,
+            11279,
+            10466,
+            10953,
+            11636
+          ],
+          "ordered": true,
+          "source_commands": 613,
+          "triangles": 8218,
+          "valid": true,
+          "vertices": 15076,
+          "median_old_usec": 10796,
+          "median_new_usec": 10103
+        }
+      }
+    }
+  ],
+  "source_mode_regression": {
+    "renderer": "forward_plus",
+    "window_pixels": [
+      1280,
+      720
+    ],
+    "runtime_seconds": 43.57487,
+    "native_exit": 0,
+    "runtime_passed": true,
+    "long_run_acceptance_eligible": false,
+    "checks": 50,
+    "failures": [],
+    "route_visits": {
+      "campaign:level1": 1,
+      "campaign:level5": 1,
+      "skirmish:skirmish": 1
+    },
+    "all_scenes_released": true,
+    "campaign_save_unchanged": true,
+    "log_sha256": "6755bbc0a11e0708ab20b339af63e5aa7c6267242cee14b88f68cf551e90baa8",
+    "raw_report_sha256": "d6e02fc3c58ade4adb30afc088b09f39faaadfb2adc86b4b25de18303ba337bc"
+  }
+}

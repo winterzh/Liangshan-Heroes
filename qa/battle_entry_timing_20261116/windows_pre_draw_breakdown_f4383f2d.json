@@ -1,0 +1,486 @@
+{
+  "candidate": "f4383f2d",
+  "exe_sha256": "c6643a03452e3643ea4e69f44e309ddfcc8a97348cbaf9c7211a96d7ee3c1be0",
+  "scope": "Independent monitor-enabled native Windows starts, isolate desktop and user profile, with two visits per mode. Random defense at Compatibility 960x540 and Gao at Forward+ 1280x720, 60 FPS cap. Timer observations can include the hook's own scheduling cost.",
+  "measurement_caveat": "Node priority probes bracket regular process and physics callbacks. Adjacent CanvasItem.draw events only estimate activity around the preceding item. Other callbacks may interleave. Very early and late work may not have an event for a registered descendant.",
+  "source_reference": [
+    "https://github.com/godotengine/godot/blob/4.6.3-stable/main/main.cpp#L4963-L4982",
+    "https://github.com/godotengine/godot/blob/4.6.3-stable/scene/main/canvas_item.cpp#L133-L153"
+  ],
+  "routes": [
+    {
+      "mode": "random",
+      "priority_log_sha256": "744b83ad75b793771f5b650bccb84ba16236bc60537a583c1665f37ffffd7740",
+      "canvas_log_sha256": "1fd70da7a236f9cedd3270541b9739388cb75685fcf52e1c5bd98d15203a7d7c",
+      "priority_samples": [
+        {
+          "visit": 1,
+          "scene_ready_to_pre_draw_ms": 97.96,
+          "pre_draw_to_post_draw_ms": 24.93,
+          "priority_timeline": [
+            [
+              "frame_before_draw",
+              97.96
+            ]
+          ]
+        },
+        {
+          "visit": 2,
+          "scene_ready_to_pre_draw_ms": 81.65,
+          "pre_draw_to_post_draw_ms": 8.56,
+          "priority_timeline": [
+            [
+              "frame_before_draw",
+              81.66
+            ]
+          ]
+        }
+      ],
+      "canvas_samples": [
+        {
+          "visit": 1,
+          "scene_ready_to_pre_draw_ms": 91.2,
+          "pre_draw_to_post_draw_ms": 21.7,
+          "registered_canvas_items": 344,
+          "draw_signal_count": 237,
+          "registration_ms": 1.32,
+          "scene_ready_to_first_observed_canvas_draw_ms": 1.586,
+          "first_to_last_observed_canvas_draw_ms": 89.338,
+          "last_observed_canvas_draw_to_pre_draw_signal_ms": 0.276,
+          "largest_script_or_class_groups": [
+            {
+              "script_or_class": "res://scripts/liangshan_entrance.gd",
+              "sum_gap_ms": 23.719
+            },
+            {
+              "script_or_class": "res://scripts/liangshan_scenery.gd",
+              "sum_gap_ms": 21.668
+            },
+            {
+              "script_or_class": "res://scripts/game_map.gd",
+              "sum_gap_ms": 12.281
+            },
+            {
+              "script_or_class": "",
+              "sum_gap_ms": 9.349
+            },
+            {
+              "script_or_class": "res://scripts/liangshan_gate.gd",
+              "sum_gap_ms": 8.524
+            },
+            {
+              "script_or_class": "res://scripts/unit.gd",
+              "sum_gap_ms": 5.467
+            },
+            {
+              "script_or_class": "res://scripts/campaign_flag_overlay.gd",
+              "sum_gap_ms": 2.995
+            },
+            {
+              "script_or_class": "Label",
+              "sum_gap_ms": 2.218
+            }
+          ],
+          "largest_adjacent_gaps": [
+            {
+              "gap_ms": 23.719,
+              "prior_script_or_class": "res://scripts/liangshan_entrance.gd",
+              "prior_node": "@Node2D@237",
+              "next_script_or_class": "res://scripts/liangshan_gate.gd",
+              "next_node": "@Node2D@238"
+            },
+            {
+              "gap_ms": 21.668,
+              "prior_script_or_class": "res://scripts/liangshan_scenery.gd",
+              "prior_node": "LiangshanVisualSample",
+              "next_script_or_class": "",
+              "next_node": "@Node2D@102"
+            },
+            {
+              "gap_ms": 12.281,
+              "prior_script_or_class": "res://scripts/game_map.gd",
+              "prior_node": "@Node2D@100",
+              "next_script_or_class": "res://scripts/liangshan_scenery.gd",
+              "next_node": "LiangshanVisualSample"
+            },
+            {
+              "gap_ms": 5.237,
+              "prior_script_or_class": "",
+              "prior_node": "@Control@291",
+              "next_script_or_class": "Label",
+              "next_node": "@Label@292"
+            },
+            {
+              "gap_ms": 3.612,
+              "prior_script_or_class": "res://scripts/liangshan_gate.gd",
+              "prior_node": "@Node2D@240",
+              "next_script_or_class": "res://scripts/liangshan_gate.gd",
+              "next_node": "@Node2D@241"
+            },
+            {
+              "gap_ms": 3.424,
+              "prior_script_or_class": "",
+              "prior_node": "@Node2D@275",
+              "next_script_or_class": "Label",
+              "next_node": "@Label@277"
+            },
+            {
+              "gap_ms": 2.809,
+              "prior_script_or_class": "res://scripts/liangshan_gate.gd",
+              "prior_node": "@Node2D@243",
+              "next_script_or_class": "res://scripts/liangshan_stockade.gd",
+              "next_node": "@Node2D@244"
+            },
+            {
+              "gap_ms": 1.532,
+              "prior_script_or_class": "Label",
+              "prior_node": "@Label@359",
+              "next_script_or_class": "Label",
+              "next_node": "@Label@360"
+            }
+          ]
+        },
+        {
+          "visit": 2,
+          "scene_ready_to_pre_draw_ms": 80.85,
+          "pre_draw_to_post_draw_ms": 9.27,
+          "registered_canvas_items": 344,
+          "draw_signal_count": 237,
+          "registration_ms": 1.09,
+          "scene_ready_to_first_observed_canvas_draw_ms": 1.352,
+          "first_to_last_observed_canvas_draw_ms": 79.2,
+          "last_observed_canvas_draw_to_pre_draw_signal_ms": 0.298,
+          "largest_script_or_class_groups": [
+            {
+              "script_or_class": "res://scripts/liangshan_entrance.gd",
+              "sum_gap_ms": 24.838
+            },
+            {
+              "script_or_class": "res://scripts/liangshan_scenery.gd",
+              "sum_gap_ms": 24.302
+            },
+            {
+              "script_or_class": "res://scripts/game_map.gd",
+              "sum_gap_ms": 14.079
+            },
+            {
+              "script_or_class": "res://scripts/liangshan_gate.gd",
+              "sum_gap_ms": 7.715
+            },
+            {
+              "script_or_class": "",
+              "sum_gap_ms": 4.521
+            },
+            {
+              "script_or_class": "res://scripts/unit.gd",
+              "sum_gap_ms": 2.358
+            },
+            {
+              "script_or_class": "VBoxContainer",
+              "sum_gap_ms": 0.317
+            },
+            {
+              "script_or_class": "Label",
+              "sum_gap_ms": 0.269
+            }
+          ],
+          "largest_adjacent_gaps": [
+            {
+              "gap_ms": 24.838,
+              "prior_script_or_class": "res://scripts/liangshan_entrance.gd",
+              "prior_node": "@Node2D@651",
+              "next_script_or_class": "res://scripts/liangshan_gate.gd",
+              "next_node": "@Node2D@652"
+            },
+            {
+              "gap_ms": 24.302,
+              "prior_script_or_class": "res://scripts/liangshan_scenery.gd",
+              "prior_node": "LiangshanVisualSample",
+              "next_script_or_class": "",
+              "next_node": "@Node2D@516"
+            },
+            {
+              "gap_ms": 14.079,
+              "prior_script_or_class": "res://scripts/game_map.gd",
+              "prior_node": "@Node2D@514",
+              "next_script_or_class": "res://scripts/liangshan_scenery.gd",
+              "next_node": "LiangshanVisualSample"
+            },
+            {
+              "gap_ms": 3.499,
+              "prior_script_or_class": "",
+              "prior_node": "@Control@705",
+              "next_script_or_class": "Label",
+              "next_node": "@Label@706"
+            },
+            {
+              "gap_ms": 3.333,
+              "prior_script_or_class": "res://scripts/liangshan_gate.gd",
+              "prior_node": "@Node2D@654",
+              "next_script_or_class": "res://scripts/liangshan_gate.gd",
+              "next_node": "@Node2D@655"
+            },
+            {
+              "gap_ms": 2.66,
+              "prior_script_or_class": "res://scripts/liangshan_gate.gd",
+              "prior_node": "@Node2D@657",
+              "next_script_or_class": "res://scripts/liangshan_stockade.gd",
+              "next_node": "@Node2D@658"
+            },
+            {
+              "gap_ms": 0.55,
+              "prior_script_or_class": "res://scripts/liangshan_gate.gd",
+              "prior_node": "@Node2D@652",
+              "next_script_or_class": "res://scripts/liangshan_gate.gd",
+              "next_node": "@Node2D@653"
+            },
+            {
+              "gap_ms": 0.473,
+              "prior_script_or_class": "",
+              "prior_node": "@Node2D@689",
+              "next_script_or_class": "Label",
+              "next_node": "@Label@691"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "level5",
+      "priority_log_sha256": "8f12d1a030bb715ad13c9ba531eedae1e893c137757a6cb3cae4d53ae5cccbb6",
+      "canvas_log_sha256": "5f848808cf49325b52f43d3564e03a34271dbe04ce0656f5ea1a63fe3d00c94b",
+      "priority_samples": [
+        {
+          "visit": 1,
+          "scene_ready_to_pre_draw_ms": 136.39,
+          "pre_draw_to_post_draw_ms": 15.86,
+          "priority_timeline": [
+            [
+              "frame_before_draw",
+              136.39
+            ]
+          ]
+        },
+        {
+          "visit": 2,
+          "scene_ready_to_pre_draw_ms": 65.25,
+          "pre_draw_to_post_draw_ms": 3.36,
+          "priority_timeline": [
+            [
+              "frame_before_draw",
+              65.25
+            ]
+          ]
+        }
+      ],
+      "canvas_samples": [
+        {
+          "visit": 1,
+          "scene_ready_to_pre_draw_ms": 155.3,
+          "pre_draw_to_post_draw_ms": 20.93,
+          "registered_canvas_items": 394,
+          "draw_signal_count": 234,
+          "registration_ms": 1.21,
+          "scene_ready_to_first_observed_canvas_draw_ms": 1.483,
+          "first_to_last_observed_canvas_draw_ms": 153.482,
+          "last_observed_canvas_draw_to_pre_draw_signal_ms": 0.335,
+          "largest_script_or_class_groups": [
+            {
+              "script_or_class": "res://scripts/unit.gd",
+              "sum_gap_ms": 68.857
+            },
+            {
+              "script_or_class": "res://scripts/liangshan_entrance.gd",
+              "sum_gap_ms": 22.736
+            },
+            {
+              "script_or_class": "",
+              "sum_gap_ms": 18.77
+            },
+            {
+              "script_or_class": "res://scripts/liangshan_scenery.gd",
+              "sum_gap_ms": 16.666
+            },
+            {
+              "script_or_class": "res://scripts/game_map.gd",
+              "sum_gap_ms": 12.319
+            },
+            {
+              "script_or_class": "res://scripts/liangshan_gate.gd",
+              "sum_gap_ms": 6.84
+            },
+            {
+              "script_or_class": "Label",
+              "sum_gap_ms": 2.621
+            },
+            {
+              "script_or_class": "res://scripts/campaign_flag_overlay.gd",
+              "sum_gap_ms": 1.677
+            }
+          ],
+          "largest_adjacent_gaps": [
+            {
+              "gap_ms": 25.721,
+              "prior_script_or_class": "res://scripts/unit.gd",
+              "prior_node": "@Node2D@434",
+              "next_script_or_class": "res://scripts/unit.gd",
+              "next_node": "@Node2D@435"
+            },
+            {
+              "gap_ms": 22.736,
+              "prior_script_or_class": "res://scripts/liangshan_entrance.gd",
+              "prior_node": "@Node2D@259",
+              "next_script_or_class": "res://scripts/liangshan_gate.gd",
+              "next_node": "@Node2D@260"
+            },
+            {
+              "gap_ms": 20.793,
+              "prior_script_or_class": "res://scripts/unit.gd",
+              "prior_node": "@Node2D@432",
+              "next_script_or_class": "res://scripts/unit.gd",
+              "next_node": "@Node2D@433"
+            },
+            {
+              "gap_ms": 16.666,
+              "prior_script_or_class": "res://scripts/liangshan_scenery.gd",
+              "prior_node": "LiangshanVisualSample",
+              "next_script_or_class": "",
+              "next_node": "@Node2D@134"
+            },
+            {
+              "gap_ms": 14.754,
+              "prior_script_or_class": "",
+              "prior_node": "@Control@313",
+              "next_script_or_class": "Label",
+              "next_node": "@Label@314"
+            },
+            {
+              "gap_ms": 12.319,
+              "prior_script_or_class": "res://scripts/game_map.gd",
+              "prior_node": "@Node2D@132",
+              "next_script_or_class": "res://scripts/liangshan_scenery.gd",
+              "next_node": "LiangshanVisualSample"
+            },
+            {
+              "gap_ms": 5.504,
+              "prior_script_or_class": "res://scripts/unit.gd",
+              "prior_node": "@Node2D@433",
+              "next_script_or_class": "res://scripts/unit.gd",
+              "next_node": "@Node2D@434"
+            },
+            {
+              "gap_ms": 3.575,
+              "prior_script_or_class": "res://scripts/unit.gd",
+              "prior_node": "@Node2D@431",
+              "next_script_or_class": "",
+              "next_node": "WorldShadowBatch"
+            }
+          ]
+        },
+        {
+          "visit": 2,
+          "scene_ready_to_pre_draw_ms": 74.74,
+          "pre_draw_to_post_draw_ms": 5.74,
+          "registered_canvas_items": 394,
+          "draw_signal_count": 234,
+          "registration_ms": 1.17,
+          "scene_ready_to_first_observed_canvas_draw_ms": 1.428,
+          "first_to_last_observed_canvas_draw_ms": 72.947,
+          "last_observed_canvas_draw_to_pre_draw_signal_ms": 0.365,
+          "largest_script_or_class_groups": [
+            {
+              "script_or_class": "res://scripts/liangshan_entrance.gd",
+              "sum_gap_ms": 24.843
+            },
+            {
+              "script_or_class": "res://scripts/liangshan_scenery.gd",
+              "sum_gap_ms": 18.637
+            },
+            {
+              "script_or_class": "res://scripts/game_map.gd",
+              "sum_gap_ms": 12.71
+            },
+            {
+              "script_or_class": "res://scripts/liangshan_gate.gd",
+              "sum_gap_ms": 7.769
+            },
+            {
+              "script_or_class": "",
+              "sum_gap_ms": 4.904
+            },
+            {
+              "script_or_class": "res://scripts/unit.gd",
+              "sum_gap_ms": 2.705
+            },
+            {
+              "script_or_class": "Label",
+              "sum_gap_ms": 0.324
+            },
+            {
+              "script_or_class": "VBoxContainer",
+              "sum_gap_ms": 0.177
+            }
+          ],
+          "largest_adjacent_gaps": [
+            {
+              "gap_ms": 24.843,
+              "prior_script_or_class": "res://scripts/liangshan_entrance.gd",
+              "prior_node": "@Node2D@763",
+              "next_script_or_class": "res://scripts/liangshan_gate.gd",
+              "next_node": "@Node2D@764"
+            },
+            {
+              "gap_ms": 18.637,
+              "prior_script_or_class": "res://scripts/liangshan_scenery.gd",
+              "prior_node": "LiangshanVisualSample",
+              "next_script_or_class": "",
+              "next_node": "@Node2D@638"
+            },
+            {
+              "gap_ms": 12.71,
+              "prior_script_or_class": "res://scripts/game_map.gd",
+              "prior_node": "@Node2D@636",
+              "next_script_or_class": "res://scripts/liangshan_scenery.gd",
+              "next_node": "LiangshanVisualSample"
+            },
+            {
+              "gap_ms": 3.619,
+              "prior_script_or_class": "",
+              "prior_node": "@Control@817",
+              "next_script_or_class": "Label",
+              "next_node": "@Label@818"
+            },
+            {
+              "gap_ms": 3.014,
+              "prior_script_or_class": "res://scripts/liangshan_gate.gd",
+              "prior_node": "@Node2D@766",
+              "next_script_or_class": "res://scripts/liangshan_gate.gd",
+              "next_node": "@Node2D@767"
+            },
+            {
+              "gap_ms": 2.616,
+              "prior_script_or_class": "res://scripts/liangshan_gate.gd",
+              "prior_node": "@Node2D@769",
+              "next_script_or_class": "res://scripts/liangshan_stockade.gd",
+              "next_node": "@Node2D@770"
+            },
+            {
+              "gap_ms": 0.649,
+              "prior_script_or_class": "",
+              "prior_node": "@Node2D@801",
+              "next_script_or_class": "Label",
+              "next_node": "@Label@803"
+            },
+            {
+              "gap_ms": 0.608,
+              "prior_script_or_class": "res://scripts/liangshan_gate.gd",
+              "prior_node": "@Node2D@764",
+              "next_script_or_class": "res://scripts/liangshan_gate.gd",
+              "next_node": "@Node2D@765"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
