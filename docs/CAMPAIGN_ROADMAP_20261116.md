@@ -4,7 +4,7 @@
 
 ## 2026-11-18 PC 后续开发
 
-野猪林将左键选中鲁智深和右键林边移动的提示放到顶部状态条，任务栏收起时也有当前操作。下令后显示原距离状态，过近、过远时优先显示战术警告。四语源码状态共 35 项通过。Windows 实窗和真人首玩后续复验。 [源码状态检查](../qa/battle_entry_timing_20261116/windows_yezhulin_first_order_guidance_source_20261119.json)
+野猪林将左键选中鲁智深和右键林边移动的提示放到顶部状态条，任务栏收起时也有当前操作。下令后显示原距离状态，过近、过远时优先显示战术警告。存档记录原距离状态，续玩时直接显示战术信息。四语源码状态共 44 项通过。Windows 实窗、首条指令前存档和真人首玩后续复验。 [源码状态检查](../qa/battle_entry_timing_20261116/windows_yezhulin_first_order_guidance_source_20261119.json)
 
 Windows 候选 31c567ed 的离线试玩 ZIP 已回读六个文件，逐项校验后从干净解压目录隔离启动通过。祝家庄首次进入和同进程重进均能正常出征、右键下令和 Esc 暂停恢复，加载提示约 54 ms，首帧约 530、372 ms。 [试玩包与祝家庄入口](../qa/battle_entry_timing_20261116/windows_playtest_package_31c567ed.json)
 

@@ -775,9 +775,17 @@ func top_status(b) -> String:
 		if distance >= SHADOW_TOO_CLOSE_R and distance <= SHADOW_TOO_FAR_R and _first_move_pending(b):
 			var instruction := "右键林边地面移动" if lu in b.selection else "左键选中鲁智深"
 			return Localize.text("野猪林 | 暗中跟随 | ") + Localize.text(instruction)
-		var distance_text := "过近·立即退回林边" if distance < SHADOW_TOO_CLOSE_R else ("过远·向官道边跟上" if distance > SHADOW_TOO_FAR_R else "未露面·距离合适")
-		return Localize.text("野猪林 | 暗中跟随 | ") + Localize.text(distance_text)
+		return _shadow_distance_status(distance)
 	return Localize.text("野猪林 | ") + [Localize.text("暗中跟随"), Localize.text("拦棍救人"), Localize.text("求情解缚·照料脚伤"), Localize.text("相送沧州道")][st]
+
+func top_status_for_save(b, visible_status: String) -> String:
+	return _shadow_distance_status(_shadow_distance()) if _first_move_pending(b) else visible_status
+
+
+func _shadow_distance_status(distance: float) -> String:
+	var distance_text := "过近·立即退回林边" if distance < SHADOW_TOO_CLOSE_R else ("过远·向官道边跟上" if distance > SHADOW_TOO_FAR_R else "未露面·距离合适")
+	return Localize.text("野猪林 | 暗中跟随 | ") + Localize.text(distance_text)
+
 
 func _smoke_drive(b, delta: float) -> void:
 	if st == STALK and is_instance_valid(lu) and is_instance_valid(lin_freed) \

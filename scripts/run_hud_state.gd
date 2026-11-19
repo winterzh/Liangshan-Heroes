@@ -131,7 +131,11 @@ func capture(owner: Variant, object_to_id: Dictionary) -> Dictionary:
 		if not object_to_id.has(chip.hero): return _bad("HUD_HERO_ID")
 		heroes.append({"id": object_to_id[chip.hero], "clock": chip._redraw_accum})
 	var t: Transform2D = hud.transform
-	var raw := {"schema": SCHEMA, "values": values, "selected": selected, "top": hud.top_label.text, "pause": {"visible": hud._pause_root.visible, "pending": hud._pause_pending_action}, "canvas": {"layer": hud.layer, "visible": hud.visible, "x": t.x, "y": t.y, "origin": t.origin, "follow": hud.follow_viewport_enabled, "follow_scale": hud.follow_viewport_scale}, "activation": a, "minimap": {"clock": hud.minimap._accum, "pixels": pixels}, "inventory_clocks": clocks, "hero_clocks": heroes, "autocam_visible": hud._autocam_btn.visible, "autocam_alpha": float(hud._autocam_btn.modulate.a)}
+	var top: String = hud.top_label.text
+	# Persist tactical status when a first-order hint is on screen.
+	if is_instance_valid(owner.level) and owner.level.has_method("top_status_for_save"):
+		top = owner.level.top_status_for_save(owner, top)
+	var raw := {"schema": SCHEMA, "values": values, "selected": selected, "top": top, "pause": {"visible": hud._pause_root.visible, "pending": hud._pause_pending_action}, "canvas": {"layer": hud.layer, "visible": hud.visible, "x": t.x, "y": t.y, "origin": t.origin, "follow": hud.follow_viewport_enabled, "follow_scale": hud.follow_viewport_scale}, "activation": a, "minimap": {"clock": hud.minimap._accum, "pixels": pixels}, "inventory_clocks": clocks, "hero_clocks": heroes, "autocam_visible": hud._autocam_btn.visible, "autocam_alpha": float(hud._autocam_btn.modulate.a)}
 	raw["hero_roster"] = Array(owner._hero_roster_keys)
 	raw["compact_stats"] = hud._compact_combat_stats
 	var known: Dictionary = {}
