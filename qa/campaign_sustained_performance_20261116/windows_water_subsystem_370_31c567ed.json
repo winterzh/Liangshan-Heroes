@@ -1,0 +1,662 @@
+{
+  "sample_frame_timing": {
+    "seconds": 370.019245,
+    "frames": 27883,
+    "p95_ms": 19.676,
+    "p99_ms": 22.733,
+    "frames_over_33_3_ms": 8
+  },
+  "largest_render_interval": {
+    "frame": 11115,
+    "start_us": 114662591,
+    "duration_us": 142157,
+    "physics_tick": 7181,
+    "physics_tick_count": 1,
+    "previous_draw_to_physics_us": 94,
+    "physics_to_idle_us": 2400,
+    "idle_to_pre_draw_us": 3948,
+    "between_render_signals_us": 135715
+  },
+  "largest_zone_group_interval": {
+    "current_frame": {
+      "frame": 11527,
+      "start_us": 119351987,
+      "duration_us": 37911,
+      "physics_tick": 7462,
+      "physics_callbacks": 1,
+      "physics_to_idle_us": 23419,
+      "other_work_us": 5318,
+      "idle_to_before_draw_us": 7263,
+      "draw_signal_interval_us": 7116,
+      "units_us": 1416,
+      "battle_subsystem_us": {
+        "aura": 226,
+        "automicro": 12,
+        "fog": 5,
+        "grid": 422,
+        "level_hud": 129,
+        "separation": 284,
+        "stealth_ecast": 34,
+        "summon_eco": 23,
+        "zones": 15550
+      }
+    },
+    "previous_phase_run_frame_us": 35128,
+    "previous_phase_run_physics_to_idle_us": 22112
+  },
+  "source_ref": "31c567ed",
+  "exe_sha256": "0ee28ce4af0e5754b58e0a99c1b6f82fe041ad12b804a48cd3860e476509a224",
+  "source_exe_unchanged": true,
+  "report_sha256": "8649822492b050e6f457699576afd9d732df4c7059924f7ab67f45fdfdbf36ec",
+  "log_sha256": "bc3514a012efe7bd4d855bdd23ac8d1b5fa41c52f1ce910ae9766f42ebdef71c",
+  "checks_passed": 13,
+  "common_trace_ticks": 375,
+  "changed_trace_ticks": 0,
+  "scope": "Isolated Windows Compatibility 1440x900, standard FX, fixed camera, 1x and two natural attack waves. The built-in battle profiler records script work during the two windows. It adds timing overhead and does not time every engine or OS stage.",
+  "fixture_order_cadence": "The defensive route issues production, land orders, spell attempts and ship orders once every 120 simulation ticks (tick % 120 == 1). That helper and any production functions it invokes are outside the existing Battle and Unit profiler.",
+  "windows": [
+    {
+      "start_s": 118,
+      "end_s": 158,
+      "one_tick": {
+        "frame_count": 2394,
+        "median_ms": {
+          "duration_us": 13.671,
+          "physics_to_idle_us": 2.849,
+          "other_work_us": 0.249,
+          "units_us": 1.274,
+          "idle_to_before_draw_us": 4.667,
+          "draw_signal_interval_us": 5.924,
+          "aura": 0.199,
+          "automicro": 0.013,
+          "fog": 0.005,
+          "grid": 0.402,
+          "level_hud": 0.148,
+          "separation": 0.366,
+          "stealth_ecast": 0.001,
+          "summon_eco": 0.023,
+          "zones": 0.033
+        }
+      },
+      "one_tick_with_fixture_orders": {
+        "frame_count": 20,
+        "median_ms": {
+          "duration_us": 21.133,
+          "physics_to_idle_us": 10.24,
+          "other_work_us": 7.294,
+          "units_us": 1.626,
+          "idle_to_before_draw_us": 4.549,
+          "draw_signal_interval_us": 6.175,
+          "aura": 0.186,
+          "automicro": 0.012,
+          "fog": 0.005,
+          "grid": 0.349,
+          "level_hud": 0.165,
+          "separation": 0.361,
+          "stealth_ecast": 0.001,
+          "summon_eco": 0.024,
+          "zones": 0.031
+        }
+      },
+      "one_tick_without_fixture_orders": {
+        "frame_count": 2374,
+        "median_ms": {
+          "duration_us": 13.662,
+          "physics_to_idle_us": 2.845,
+          "other_work_us": 0.249,
+          "units_us": 1.272,
+          "idle_to_before_draw_us": 4.668,
+          "draw_signal_interval_us": 5.924,
+          "aura": 0.199,
+          "automicro": 0.013,
+          "fog": 0.005,
+          "grid": 0.402,
+          "level_hud": 0.148,
+          "separation": 0.367,
+          "stealth_ecast": 0.001,
+          "summon_eco": 0.023,
+          "zones": 0.033
+        }
+      },
+      "slow_one_tick": {
+        "frame_count": 1,
+        "median_ms": {
+          "duration_us": 37.911,
+          "physics_to_idle_us": 23.419,
+          "other_work_us": 5.318,
+          "units_us": 1.416,
+          "idle_to_before_draw_us": 7.263,
+          "draw_signal_interval_us": 7.116,
+          "aura": 0.226,
+          "automicro": 0.012,
+          "fog": 0.005,
+          "grid": 0.422,
+          "level_hud": 0.129,
+          "separation": 0.284,
+          "stealth_ecast": 0.034,
+          "summon_eco": 0.023,
+          "zones": 15.55
+        }
+      },
+      "slow_one_tick_with_fixture_orders": {
+        "frame_count": 0
+      },
+      "multiple_ticks": {
+        "frame_count": 3,
+        "median_ms": {
+          "duration_us": 18.446,
+          "physics_to_idle_us": 5.909,
+          "other_work_us": 0.52,
+          "units_us": 2.638,
+          "idle_to_before_draw_us": 5.455,
+          "draw_signal_interval_us": 6.841,
+          "aura": 0.451,
+          "automicro": 0.033,
+          "fog": 0.011,
+          "grid": 0.897,
+          "level_hud": 0.385,
+          "separation": 0.8,
+          "stealth_ecast": 0.007,
+          "summon_eco": 0.046,
+          "zones": 0.061
+        }
+      },
+      "largest_physics_to_idle": [
+        {
+          "frame": 11527,
+          "start_us": 119351987,
+          "duration_us": 37911,
+          "physics_tick": 7462,
+          "physics_callbacks": 1,
+          "physics_to_idle_us": 23419,
+          "other_work_us": 5318,
+          "idle_to_before_draw_us": 7263,
+          "draw_signal_interval_us": 7116,
+          "units_us": 1416,
+          "battle_subsystem_us": {
+            "aura": 226,
+            "automicro": 12,
+            "fog": 5,
+            "grid": 422,
+            "level_hud": 129,
+            "separation": 284,
+            "stealth_ecast": 34,
+            "summon_eco": 23,
+            "zones": 15550
+          }
+        },
+        {
+          "frame": 11504,
+          "start_us": 118994602,
+          "duration_us": 30247,
+          "physics_tick": 7441,
+          "physics_callbacks": 1,
+          "physics_to_idle_us": 17901,
+          "other_work_us": 15176,
+          "idle_to_before_draw_us": 5075,
+          "draw_signal_interval_us": 7166,
+          "units_us": 1613,
+          "battle_subsystem_us": {
+            "aura": 177,
+            "automicro": 11,
+            "fog": 4,
+            "grid": 342,
+            "level_hud": 177,
+            "separation": 315,
+            "stealth_ecast": 33,
+            "summon_eco": 21,
+            "zones": 32
+          }
+        },
+        {
+          "frame": 12863,
+          "start_us": 134998851,
+          "duration_us": 30459,
+          "physics_tick": 8401,
+          "physics_callbacks": 1,
+          "physics_to_idle_us": 17725,
+          "other_work_us": 12611,
+          "idle_to_before_draw_us": 5335,
+          "draw_signal_interval_us": 7306,
+          "units_us": 2054,
+          "battle_subsystem_us": {
+            "aura": 227,
+            "automicro": 17,
+            "fog": 4,
+            "grid": 406,
+            "level_hud": 1977,
+            "separation": 365,
+            "stealth_ecast": 2,
+            "summon_eco": 31,
+            "zones": 31
+          }
+        },
+        {
+          "frame": 14187,
+          "start_us": 151007489,
+          "duration_us": 25785,
+          "physics_tick": 9361,
+          "physics_callbacks": 1,
+          "physics_to_idle_us": 15536,
+          "other_work_us": 11725,
+          "idle_to_before_draw_us": 4631,
+          "draw_signal_interval_us": 5488,
+          "units_us": 1758,
+          "battle_subsystem_us": {
+            "aura": 174,
+            "automicro": 12,
+            "fog": 893,
+            "grid": 351,
+            "level_hud": 195,
+            "separation": 363,
+            "stealth_ecast": 1,
+            "summon_eco": 24,
+            "zones": 40
+          }
+        },
+        {
+          "frame": 12362,
+          "start_us": 128994739,
+          "duration_us": 23821,
+          "physics_tick": 8041,
+          "physics_callbacks": 1,
+          "physics_to_idle_us": 13777,
+          "other_work_us": 10676,
+          "idle_to_before_draw_us": 4616,
+          "draw_signal_interval_us": 5356,
+          "units_us": 1351,
+          "battle_subsystem_us": {
+            "aura": 147,
+            "automicro": 11,
+            "fog": 839,
+            "grid": 318,
+            "level_hud": 86,
+            "separation": 303,
+            "stealth_ecast": 1,
+            "summon_eco": 21,
+            "zones": 24
+          }
+        },
+        {
+          "frame": 12535,
+          "start_us": 131008329,
+          "duration_us": 24586,
+          "physics_tick": 8161,
+          "physics_callbacks": 1,
+          "physics_to_idle_us": 12315,
+          "other_work_us": 8970,
+          "idle_to_before_draw_us": 4358,
+          "draw_signal_interval_us": 7719,
+          "units_us": 1849,
+          "battle_subsystem_us": {
+            "aura": 233,
+            "automicro": 14,
+            "fog": 5,
+            "grid": 486,
+            "level_hud": 276,
+            "separation": 416,
+            "stealth_ecast": 2,
+            "summon_eco": 28,
+            "zones": 36
+          }
+        },
+        {
+          "frame": 14331,
+          "start_us": 153001038,
+          "duration_us": 25149,
+          "physics_tick": 9481,
+          "physics_callbacks": 1,
+          "physics_to_idle_us": 12240,
+          "other_work_us": 8609,
+          "idle_to_before_draw_us": 5728,
+          "draw_signal_interval_us": 7016,
+          "units_us": 2083,
+          "battle_subsystem_us": {
+            "aura": 234,
+            "automicro": 18,
+            "fog": 9,
+            "grid": 495,
+            "level_hud": 163,
+            "separation": 530,
+            "stealth_ecast": 3,
+            "summon_eco": 28,
+            "zones": 68
+          }
+        },
+        {
+          "frame": 14457,
+          "start_us": 154986853,
+          "duration_us": 22769,
+          "physics_tick": 9601,
+          "physics_callbacks": 1,
+          "physics_to_idle_us": 11430,
+          "other_work_us": 7779,
+          "idle_to_before_draw_us": 5351,
+          "draw_signal_interval_us": 5863,
+          "units_us": 2106,
+          "battle_subsystem_us": {
+            "aura": 275,
+            "automicro": 17,
+            "fog": 5,
+            "grid": 509,
+            "level_hud": 216,
+            "separation": 438,
+            "stealth_ecast": 2,
+            "summon_eco": 29,
+            "zones": 54
+          }
+        }
+      ]
+    },
+    {
+      "start_s": 325,
+      "end_s": 365,
+      "one_tick": {
+        "frame_count": 2019,
+        "median_ms": {
+          "duration_us": 17.488,
+          "physics_to_idle_us": 3.59,
+          "other_work_us": 0.31,
+          "units_us": 1.599,
+          "idle_to_before_draw_us": 6.169,
+          "draw_signal_interval_us": 7.277,
+          "aura": 0.251,
+          "automicro": 0.015,
+          "fog": 0.005,
+          "grid": 0.485,
+          "level_hud": 0.175,
+          "separation": 0.497,
+          "stealth_ecast": 0.002,
+          "summon_eco": 0.026,
+          "zones": 0.038
+        }
+      },
+      "one_tick_with_fixture_orders": {
+        "frame_count": 17,
+        "median_ms": {
+          "duration_us": 27.809,
+          "physics_to_idle_us": 12.197,
+          "other_work_us": 8.981,
+          "units_us": 1.95,
+          "idle_to_before_draw_us": 7.232,
+          "draw_signal_interval_us": 7.222,
+          "aura": 0.224,
+          "automicro": 0.014,
+          "fog": 0.005,
+          "grid": 0.457,
+          "level_hud": 0.209,
+          "separation": 0.477,
+          "stealth_ecast": 0.002,
+          "summon_eco": 0.025,
+          "zones": 0.04
+        }
+      },
+      "one_tick_without_fixture_orders": {
+        "frame_count": 2002,
+        "median_ms": {
+          "duration_us": 17.468,
+          "physics_to_idle_us": 3.584,
+          "other_work_us": 0.31,
+          "units_us": 1.595,
+          "idle_to_before_draw_us": 6.167,
+          "draw_signal_interval_us": 7.277,
+          "aura": 0.251,
+          "automicro": 0.015,
+          "fog": 0.005,
+          "grid": 0.486,
+          "level_hud": 0.175,
+          "separation": 0.498,
+          "stealth_ecast": 0.002,
+          "summon_eco": 0.026,
+          "zones": 0.038
+        }
+      },
+      "slow_one_tick": {
+        "frame_count": 2,
+        "median_ms": {
+          "duration_us": 34.092,
+          "physics_to_idle_us": 17.68,
+          "other_work_us": 13.469,
+          "units_us": 2.074,
+          "idle_to_before_draw_us": 8.708,
+          "draw_signal_interval_us": 7.574,
+          "aura": 0.234,
+          "automicro": 0.015,
+          "fog": 0.554,
+          "grid": 0.474,
+          "level_hud": 0.238,
+          "separation": 0.558,
+          "stealth_ecast": 0.002,
+          "summon_eco": 0.028,
+          "zones": 0.035
+        }
+      },
+      "slow_one_tick_with_fixture_orders": {
+        "frame_count": 2,
+        "median_ms": {
+          "duration_us": 34.092,
+          "physics_to_idle_us": 17.68,
+          "other_work_us": 13.469,
+          "units_us": 2.074,
+          "idle_to_before_draw_us": 8.708,
+          "draw_signal_interval_us": 7.574,
+          "aura": 0.234,
+          "automicro": 0.015,
+          "fog": 0.554,
+          "grid": 0.474,
+          "level_hud": 0.238,
+          "separation": 0.558,
+          "stealth_ecast": 0.002,
+          "summon_eco": 0.028,
+          "zones": 0.035
+        }
+      },
+      "multiple_ticks": {
+        "frame_count": 190,
+        "median_ms": {
+          "duration_us": 21.148,
+          "physics_to_idle_us": 6.888,
+          "other_work_us": 0.578,
+          "units_us": 3.001,
+          "idle_to_before_draw_us": 6.317,
+          "draw_signal_interval_us": 7.586,
+          "aura": 0.472,
+          "automicro": 0.031,
+          "fog": 0.011,
+          "grid": 0.9,
+          "level_hud": 0.337,
+          "separation": 1.004,
+          "stealth_ecast": 0.006,
+          "summon_eco": 0.05,
+          "zones": 0.075
+        }
+      },
+      "largest_physics_to_idle": [
+        {
+          "frame": 25926,
+          "start_us": 335004975,
+          "duration_us": 34314,
+          "physics_tick": 20401,
+          "physics_callbacks": 1,
+          "physics_to_idle_us": 20504,
+          "other_work_us": 17113,
+          "idle_to_before_draw_us": 7112,
+          "draw_signal_interval_us": 6590,
+          "units_us": 2129,
+          "battle_subsystem_us": {
+            "aura": 181,
+            "automicro": 11,
+            "fog": 5,
+            "grid": 368,
+            "level_hud": 226,
+            "separation": 414,
+            "stealth_ecast": 1,
+            "summon_eco": 22,
+            "zones": 34
+          }
+        },
+        {
+          "frame": 26257,
+          "start_us": 340995480,
+          "duration_us": 33354,
+          "physics_tick": 20761,
+          "physics_callbacks": 2,
+          "physics_to_idle_us": 16322,
+          "other_work_us": 10361,
+          "idle_to_before_draw_us": 8535,
+          "draw_signal_interval_us": 8372,
+          "units_us": 3203,
+          "battle_subsystem_us": {
+            "aura": 509,
+            "automicro": 29,
+            "fog": 12,
+            "grid": 815,
+            "level_hud": 444,
+            "separation": 801,
+            "stealth_ecast": 2,
+            "summon_eco": 50,
+            "zones": 96
+          }
+        },
+        {
+          "frame": 26598,
+          "start_us": 347019629,
+          "duration_us": 30187,
+          "physics_tick": 21122,
+          "physics_callbacks": 2,
+          "physics_to_idle_us": 16263,
+          "other_work_us": 9689,
+          "idle_to_before_draw_us": 6533,
+          "draw_signal_interval_us": 7229,
+          "units_us": 3089,
+          "battle_subsystem_us": {
+            "aura": 537,
+            "automicro": 40,
+            "fog": 12,
+            "grid": 1056,
+            "level_hud": 454,
+            "separation": 1215,
+            "stealth_ecast": 4,
+            "summon_eco": 62,
+            "zones": 105
+          }
+        },
+        {
+          "frame": 25499,
+          "start_us": 326993803,
+          "duration_us": 33870,
+          "physics_tick": 19921,
+          "physics_callbacks": 1,
+          "physics_to_idle_us": 14856,
+          "other_work_us": 9825,
+          "idle_to_before_draw_us": 10304,
+          "draw_signal_interval_us": 8558,
+          "units_us": 2018,
+          "battle_subsystem_us": {
+            "aura": 286,
+            "automicro": 18,
+            "fog": 1104,
+            "grid": 580,
+            "level_hud": 251,
+            "separation": 702,
+            "stealth_ecast": 3,
+            "summon_eco": 34,
+            "zones": 35
+          }
+        },
+        {
+          "frame": 27275,
+          "start_us": 359010683,
+          "duration_us": 32262,
+          "physics_tick": 21841,
+          "physics_callbacks": 1,
+          "physics_to_idle_us": 14805,
+          "other_work_us": 10241,
+          "idle_to_before_draw_us": 9330,
+          "draw_signal_interval_us": 7982,
+          "units_us": 2716,
+          "battle_subsystem_us": {
+            "aura": 218,
+            "automicro": 14,
+            "fog": 8,
+            "grid": 460,
+            "level_hud": 433,
+            "separation": 636,
+            "stealth_ecast": 2,
+            "summon_eco": 29,
+            "zones": 48
+          }
+        },
+        {
+          "frame": 25942,
+          "start_us": 335336784,
+          "duration_us": 29180,
+          "physics_tick": 20422,
+          "physics_callbacks": 2,
+          "physics_to_idle_us": 14631,
+          "other_work_us": 5057,
+          "idle_to_before_draw_us": 6742,
+          "draw_signal_interval_us": 7599,
+          "units_us": 2821,
+          "battle_subsystem_us": {
+            "aura": 434,
+            "automicro": 30,
+            "fog": 9,
+            "grid": 1031,
+            "level_hud": 254,
+            "separation": 919,
+            "stealth_ecast": 155,
+            "summon_eco": 47,
+            "zones": 3874
+          }
+        },
+        {
+          "frame": 25816,
+          "start_us": 332997889,
+          "duration_us": 28376,
+          "physics_tick": 20281,
+          "physics_callbacks": 1,
+          "physics_to_idle_us": 14280,
+          "other_work_us": 10166,
+          "idle_to_before_draw_us": 6616,
+          "draw_signal_interval_us": 7344,
+          "units_us": 2309,
+          "battle_subsystem_us": {
+            "aura": 391,
+            "automicro": 19,
+            "fog": 9,
+            "grid": 635,
+            "level_hud": 137,
+            "separation": 528,
+            "stealth_ecast": 2,
+            "summon_eco": 32,
+            "zones": 52
+          }
+        },
+        {
+          "frame": 27383,
+          "start_us": 361008266,
+          "duration_us": 26212,
+          "physics_tick": 21961,
+          "physics_callbacks": 1,
+          "physics_to_idle_us": 13515,
+          "other_work_us": 9722,
+          "idle_to_before_draw_us": 5065,
+          "draw_signal_interval_us": 7462,
+          "units_us": 2222,
+          "battle_subsystem_us": {
+            "aura": 260,
+            "automicro": 14,
+            "fog": 5,
+            "grid": 476,
+            "level_hud": 214,
+            "separation": 533,
+            "stealth_ecast": 2,
+            "summon_eco": 28,
+            "zones": 39
+          }
+        }
+      ]
+    }
+  ]
+}

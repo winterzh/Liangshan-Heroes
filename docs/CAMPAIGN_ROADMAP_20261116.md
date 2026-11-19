@@ -10,6 +10,8 @@ Windows 候选 6aa9d230 的 720p 和 1080p 窗口均验证四语顶栏可见和�
 
 31c567ed 六模式 30 分钟通过，283 次进出均释放关键节点，存档字节一致。最差一分钟 P95/P99 为 13.647/23.519 ms。高俅挂载仍有 601.002 ms 的长间隔。370 秒水战分段的三帧超过 33.3 ms，物理信号到空闲信号占 21.051–22.690 ms。十分钟水战验收仍未达标。 [模式长测](../qa/battle_entry_timing_20261116/windows_scenery_prefetch_soak_1800_31c567ed.json) · [水战分段](../qa/campaign_sustained_performance_20261116/windows_water_phase_370_31c567ed.json)
 
+高俅第二轮分段把自动化集中下令的帧单独统计。两个窗口内，单物理步的常规帧到空闲信号中位数为 2.845、3.584 ms，集中下令帧为 10.240、12.197 ms。另有一处第 7462 步的慢帧复现，技能与区域效果计时组占 15.550 ms。整轮最长 142.157 ms，两个绘制信号之间占 135.715 ms。后两项保留各自的复现条件。 [逐帧子系统复测](../qa/campaign_sustained_performance_20261116/windows_water_subsystem_370_31c567ed.json)
+
 Windows 候选 31c567ed 的离线试玩 ZIP 已回读六个文件，逐项校验后从干净解压目录隔离启动通过。祝家庄首次进入和同进程重进均能正常出征、右键下令和 Esc 暂停恢复，加载提示约 54 ms，首帧约 530、372 ms。 [试玩包与祝家庄入口](../qa/battle_entry_timing_20261116/windows_playtest_package_31c567ed.json)
 
 31c567ed 的祝家庄正攻与断援走偏门两条路线均从实际菜单打到胜利，各通过 13 项，含四语重玩建议。本次正攻遇南营三队，演义 1/3；偏门接应遇一队，演义 3/3。暂停与结算反馈在 720p、1080p 实窗各通过 24 项。 [路线结果](../qa/campaign_siege_20261116/windows_native_routes_31c567ed.json) · [四语反馈](../qa/battle_entry_timing_20261116/windows_feedback_rendered_31c567ed.json)
