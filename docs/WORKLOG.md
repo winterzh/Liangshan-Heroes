@@ -1,5 +1,10 @@
 # 开发日志
 
+## 2026-11-19 Windows 输入与反馈复验
+
+f4383f2d 的五种 Windows 窗口消息路径各完成两次，包括野猪林和 1v1，首个右键可执行。暂停与结算的四语内容在 720p、1080p 实窗共通过 48 项。 [原生输入与反馈](../qa/battle_entry_timing_20261116/windows_input_and_feedback_f4383f2d.json)
+
+
 ## 2026-11-19 Windows 八章旧档复验
 
 f4383f2d 已完成 Build 26735223 八章第 1 代兼容样本在原生 Windows 试玩 ZIP 中的继续、再次保存和独立重启。野猪林终局及旧槽拒绝通过，18 个隔离进程退出 0。 [八章续玩验收](../qa/battle_entry_timing_20261116/windows_player_legacy_matrix_f4383f2d.json)
