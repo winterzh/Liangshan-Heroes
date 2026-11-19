@@ -1,6 +1,6 @@
 # 源码设置与换机（2026-10-30）
 
-Windows 黄泥冈、高俅和驻守的挂载诊断可用 `CAMPAIGN_SOAK_MOUNT_TRACE=1`。黄泥冈与梁山开场装饰的本地候选沿用加载页后台读取。黄泥冈广预读候选的冷进场退步，修订候选 f4383f2d 仅预读黄泥冈独立布景贴图，已完成原生六入口短测、上一正式版祝家庄续玩和 30 分钟模式切换验证，完整结果见 [原生长测](../qa/battle_entry_timing_20261116/windows_scenery_prefetch_soak_1800_f4383f2d.json)。 [进场预读与源数据](../qa/battle_entry_timing_20261116/README.md#2026-11-19-windows-出征布景预读)
+Windows 黄泥冈、高俅和驻守的挂载诊断可用 `CAMPAIGN_SOAK_MOUNT_TRACE=1`。黄泥冈与梁山开场装饰的本地候选沿用加载页后台读取。黄泥冈广预读候选的冷进场退步，修订候选 f4383f2d 仅预读黄泥冈独立布景贴图，已完成原生六入口短测、上一正式版祝家庄续玩和 30 分钟模式切换验证，完整结果见 [原生长测](../qa/battle_entry_timing_20261116/windows_scenery_prefetch_soak_1800_f4383f2d.json)。 同一冻结版可从本地 Windows 候选目录走三编号试玩入口，包内六文件均已回读并通过独立启动。 [离线试玩包](../qa/battle_entry_timing_20261116/windows_playtest_package_f4383f2d.json) [进场预读与源数据](../qa/battle_entry_timing_20261116/README.md#2026-11-19-windows-出征布景预读)
 
 高俅 PC 火攻任务可用 Windows 渲染执行 `tools/gao_fire_readiness_qa.gd`，Steam 禁用并使用独立档案。使用 `FIRE_FIXTURE_ONLY=1` 可只跑定向检查，`FIRE_LIVE_ONLY=1` 可只跑自动押俘。结果和截图保存在工程 `.godot/gao-fire-readiness/`。 [实跑记录](../qa/campaign_fire_readiness_20261116/README.md#2026-11-19-pc-火攻的当前目标)
 

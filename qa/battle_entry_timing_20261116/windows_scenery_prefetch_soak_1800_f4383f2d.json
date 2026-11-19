@@ -6188,5 +6188,23 @@
     "orphan_nodes": 0.0,
     "working_set_from_warm_mib": 49.27
   },
-  "longest_interval_scope": "First instrumented menu interval includes the synchronous initial Windows process-memory reading. Worst mount interval is recorded separately."
+  "longest_interval_scope": "First instrumented menu interval includes the synchronous initial Windows process-memory reading. Worst mount interval is recorded separately.",
+  "initial_memory_probe_exclusion_recheck": {
+    "sample_seconds": 51.342716,
+    "transitions": 8,
+    "mode_visits": {
+      "arena:arena": 2,
+      "campaign:level1": 2,
+      "campaign:level5": 1,
+      "custom_defense:custom_defense": 1,
+      "skirmish:skirmish": 1,
+      "skirmish_ai:skirmish_ai": 1
+    },
+    "first_menu_interval_ms": 0.756,
+    "exit_code": 0,
+    "report_sha256": "84b776cec12c691d5cf8906c485b96fe44a18a3e304ebb9bc5ead9c222867dba",
+    "log_sha256": "07bbcd311dd0397b60ff5f1f22c4774297590bc484fef3b41a466fb3bde39242",
+    "checks_passed": true,
+    "method": "Same frozen Windows executable; move the timing start after the initial synchronous process-memory reading. A separate short exercise verifies the QA-only change."
+  }
 }

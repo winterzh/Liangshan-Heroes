@@ -869,10 +869,11 @@ func _run() -> void:
 	_end_usec = _start_usec + int(_duration_seconds * 1_000_000.0)
 	_bucket_start_usec = _start_usec
 	_next_minute_usec = _start_usec + MINUTE_USEC
-	_last_frame_usec = _start_usec
 	_stage_timing_enabled = OS.get_environment("CAMPAIGN_SOAK_STAGE_TIMING") == "1"
 	_tag_frame_stage("menu")
 	_baseline = _snapshot(true)
+	# Start measuring after the synchronous process-memory probe.
+	_last_frame_usec = Time.get_ticks_usec()
 	await _render_tick()
 	while Time.get_ticks_usec() < _end_usec:
 		_cycle += 1

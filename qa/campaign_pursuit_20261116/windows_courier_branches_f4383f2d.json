@@ -1,0 +1,64 @@
+{
+  "exe_sha256": "c6643a03452e3643ea4e69f44e309ddfcc8a97348cbaf9c7211a96d7ee3c1be0",
+  "source": "f4383f2d2a20491c7cf05fb4d3f85a68286a82cd",
+  "method": "Windows Compatibility, same rendered checkpoint persisted via the normal player save, two byte-identical isolated slot and ledger copies, normal player attack order and normal pursuit timing after restore",
+  "clock_cadence": "Read physical simulation steps. The authored strategy polls dispatch every 0.25 game seconds. The deadline delta is checked independently to within 0.001 seconds.",
+  "scope": "Controlled checkpoint setup at first rescue using the authored guard and actual range and combat. Does not cover the first rescue as a full playthrough.",
+  "checkpoint": {
+    "outcome": {
+      "entity": "11",
+      "first_rescued": true,
+      "in_flight": true,
+      "timer": 20.0,
+      "x": 1136.0,
+      "y": 528.0
+    },
+    "log_sha256": "b7875a258eb160596243030896f626aaeb196df8a2c2cce7016006f63db2b1e8",
+    "exit_code": 0
+  },
+  "branches": [
+    {
+      "outcome": {
+        "choice": "let_pass",
+        "courier_entity_id": "11",
+        "deadline_change_seconds": 1.98951966012828e-13,
+        "debrief_source": "北哨报信 · 官差已抵达",
+        "departure_delta_seconds": 0.183333333333447,
+        "elapsed_after_restore": 20.1833333333334,
+        "initial_remaining_seconds": 20.0,
+        "intercepted": false,
+        "player_attack_order": false,
+        "reported": true,
+        "reserve_count": 6,
+        "reserve_same": true
+      },
+      "log_sha256": "ab8a437176a7b8d9111b5d2acfcd8c691ffb81b28a4fd3c99fcc9b4be35e9eae",
+      "exit_code": 0
+    },
+    {
+      "outcome": {
+        "choice": "intercept",
+        "courier_entity_id": "11",
+        "deadline_change_seconds": 12.0000000000001,
+        "debrief_source": "北哨报信 · 已拦截，推迟追兵12秒",
+        "departure_delta_seconds": 12.1833333333328,
+        "elapsed_after_restore": 32.1833333333328,
+        "initial_remaining_seconds": 20.0,
+        "intercepted": true,
+        "player_attack_order": true,
+        "reported": false,
+        "reserve_count": 6,
+        "reserve_same": true
+      },
+      "log_sha256": "08fc567cb56136ac1006fe9f38788fc22efb2812be118f9548f1d9353d94edbe",
+      "exit_code": 0
+    }
+  ],
+  "original_records_unchanged": true,
+  "branch_launch_delta_seconds": 12.0,
+  "initial_harness_corrections": [
+    "The first generated driver used a duplicate variable name and was recompiled before retrying.",
+    "The branch copy now includes only the checkpoint and the exact two generation-one records. Copying an entire shader cache had exceeded Windows path limits.",
+    "The timing check uses the original strategy cadence of a quarter second and samples physics steps. The deadline itself is verified independently."
+  ]
+}
