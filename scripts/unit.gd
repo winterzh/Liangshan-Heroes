@@ -1362,7 +1362,8 @@ func _phys_body(delta: float) -> void:
 			var animated := not is_resource or res_kind == "wood" or _harvest_pulse > 0.0
 			if _harvest_pulse > 0.0:
 				_harvest_pulse = maxf(0.0, _harvest_pulse - delta * 2.0)
-			if animated:
+			if animated and (not is_resource or res_kind != "wood" or key != "tree" \
+					or battle == null or not battle.defer_far_tree_sway(self)):
 				_queue_animated_redraw(0.08, is_resource and res_kind != "wood" and _harvest_pulse <= 0.0)
 		return
 	if _dying:

@@ -104,6 +104,11 @@ var _impact_fx_frame := 0
 var _damage_fx_frame := 0
 var _ground_fire_visuals := 0
 var _unit_draw_rect := Rect2()
+const TREE_SWAY_VIEW_MARGIN := 200.0
+var _defer_tree_sway := OS.get_name() == "Windows" and DisplayServer.get_name() != "headless"
+var _deferred_tree_sway: Dictionary[int, Unit] = {}
+var _tree_sway_canvas := Transform2D()
+var _tree_sway_view := Rect2()
 const LITE_IMPACT_BUDGET := 16
 const LITE_DAMAGE_BUDGET := 12
 const LITE_GROUND_FIRE_CAP := 8
@@ -414,6 +419,8 @@ func _refresh_run_capture_presentation() -> void:
 		shadow._update_visible_units()
 
 func _ready() -> void:
+	if _defer_tree_sway:
+		get_viewport().size_changed.connect(_refresh_deferred_tree_sway, CONNECT_DEFERRED)
 	if not Settings.cloud_settings_applied.is_connected(_on_cloud_settings_applied):
 		Settings.cloud_settings_applied.connect(_on_cloud_settings_applied)
 	# Only the trusted core preparation transaction sets this transient marker.
@@ -1448,6 +1455,7 @@ func deplete_resource(node: Unit) -> void:
 	units.erase(node)
 	selection.erase(node)
 	if is_instance_valid(node):
+		_deferred_tree_sway.erase(node.entity_id)
 		node.queue_free()
 
 
@@ -2877,6 +2885,9 @@ func _process(_delta: float) -> void:
 			Music.set_mood(want)
 	if ai_friendly:   # 自动镜头仅在 AI友好模式下生效（含其下的全托管档）
 		_autocam_tick(_delta)
+	if not _deferred_tree_sway.is_empty():
+		# Camera2D can move later in the idle pass, including frames without a physics step.
+		_refresh_deferred_tree_sway.call_deferred()
 
 
 ## ───────────────── AI友好模式·自动镜头：全员托管后自动巡视战况最激烈处 ─────────────────
@@ -5873,6 +5884,41 @@ func _grid_build() -> void:
 	_lite_fx = mob > lite_threshold
 	_impact_fx_frame = 0
 	_damage_fx_frame = 0
+
+
+func defer_far_tree_sway(tree: Unit) -> bool:
+	if not _defer_tree_sway or camera == null or tree.radius > 40.0 or tree.get_viewport() != get_viewport():
+		return false
+	if _tree_sway_bounds(get_viewport().get_visible_rect()).has_point(tree.get_global_transform_with_canvas().origin):
+		_deferred_tree_sway.erase(tree.entity_id)
+		return false
+	_deferred_tree_sway[tree.entity_id] = tree
+	return true
+
+
+func _tree_sway_bounds(view: Rect2) -> Rect2:
+	# The projected crown and ground shadow extend beyond the tree's origin.
+	return view.grow(TREE_SWAY_VIEW_MARGIN * maxf(1.0, maxf(camera.zoom.x, camera.zoom.y)))
+
+
+func _refresh_deferred_tree_sway() -> void:
+	if _deferred_tree_sway.is_empty() or not is_inside_tree() or not is_instance_valid(camera):
+		return
+	var viewport := get_viewport()
+	var view := viewport.get_visible_rect()
+	var canvas := viewport.get_canvas_transform()
+	if view == _tree_sway_view and canvas == _tree_sway_canvas:
+		return
+	_tree_sway_view = view
+	_tree_sway_canvas = canvas
+	var bounds := _tree_sway_bounds(view)
+	for id in _deferred_tree_sway.keys():
+		var tree: Unit = _deferred_tree_sway[id]
+		if not is_instance_valid(tree) or tree.get_viewport() != viewport:
+			_deferred_tree_sway.erase(id)
+		elif bounds.has_point(tree.get_global_transform_with_canvas().origin):
+			_deferred_tree_sway.erase(id)
+			tree.queue_redraw()
 
 
 func unit_visual_active(world_pos: Vector2) -> bool:
