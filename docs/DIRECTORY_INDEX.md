@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+Build 26752476 的 Windows 离线试玩入口位于本机 `D:/AI项目/水浒/Windows候选/20261118-0f133709/PC试玩/`。目录含启动器、试玩说明及六个发行文件。[发布后安装和试玩收据](../qa/battle_entry_timing_20261116/windows_post_release_26752476.json)
+
 Windows 本地候选 `ef991d10` 的六文件 ZIP 与构建收据在 `D:/AI项目/水浒/Windows候选/20261118-ef991d10/`。 [整合及干净解压记录](../qa/battle_entry_timing_20261116/windows_integrated_ef991d10.json)
 
 2026-11-18 Steam Windows 上传记录位于 docs/STEAM_UPDATE_20261118.md，脱敏收据位于 qa/steam_release_20261118/。 [本批记录](STEAM_UPDATE_20261118.md)

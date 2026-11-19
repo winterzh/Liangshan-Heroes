@@ -54,7 +54,7 @@ Steam 正式版发版单绑定 Windows 冻结源码、发行载荷和回退 Buil
 
 Android 触控离线验收从 Windows 候选的冻结源码导出。仅在私有导出中变更包名、更新器及平台依赖，重建 Android 内容身份，安装资料与正式包分开。 [Android 本地验收包收据](../qa/android_controls_performance_20260925/android_touch_candidate_492e6437.json)
 
-Windows 候选的本地首次试玩用 start_windows_playtest_492e6437.cmd，选择 P01、P02 或 P03，进程独立设置 APPDATA、LOCALAPPDATA 和临时目录。直接启动现有原生候选且禁用 Steam。 [本地试玩短检](../qa/battle_entry_timing_20261116/windows_playtest_launcher_492e6437.json)
+正式 Build 26752476 的离线试玩在 Windows 候选目录的「PC试玩」，由先前的版本固定启动器生成。复制给试玩者时将启动器放在六文件解压位置旁。P01、P02、P03 各有独立 APPDATA、LOCALAPPDATA 和临时目录，启动时禁用 Steam。带 `--check` 可用 QA 档案做无窗口短检。 [当前试玩和安装验收](../qa/battle_entry_timing_20261116/windows_post_release_26752476.json)
 
 当前 Windows 候选使用六文件的精确 EXE 交付副本。菜单短检由 Godot 宿主加载同一编译包，原生 EXE 另以分开的离线资料验证八章、驻守、清敌及主菜单。 [新版进场验证](../qa/battle_entry_timing_20261116/README.md#windows-修复候选的发版短检)
 

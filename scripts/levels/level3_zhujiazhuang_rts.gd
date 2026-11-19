@@ -374,7 +374,7 @@ func on_mission_action(b, action_id: String, actor) -> void:
 			if b.hud != null and b.hud.has_method("_clear_info_toasts"):
 				b.hud._clear_info_toasts()
 			b.mission.mark("zhu_gate_opened","偏门已开！内应换旗成功，可沿偏门入庄救人；军队由玩家自行调入。")
-			if defense_state == "feint":
+			if defense_state == "feint" and _has_feint_guards(b.mission):
 				b.mission.mark(FEINT_AT_SIDE, "孙立打开偏门时，正门佯攻仍在牵制守军。")
 			_commit_gate_defense(b, SIDE_GATE)
 		"zhu_rts_rescue":
@@ -631,6 +631,13 @@ func _front_is_pressured(b, tower: Unit) -> bool:
 				return true
 	return false
 
+func _has_feint_guards(mission) -> bool:
+	for index in range(mini(gate_defenders.size(), FEINT_SHIFTS.size())):
+		if mission.has_event(FEINT_SHIFTS[index]) and _alive(gate_defenders[index]):
+			return true
+	return false
+
+
 func _clear_feint_shifts(mission) -> void:
 	for key: String in FEINT_SHIFTS:
 		mission.events.erase(key)
@@ -768,8 +775,13 @@ func unit_tactical_hint(b, u: Unit) -> String:
 	if u in resource_guards:
 		return Localize.text("北矿守军。击退守军后派兵占住矿区，再调工人采金。")
 	if u == gate:
-		if b.mission.has_event(FEINT_RULE) and defense_state in ["watch", "feint"] and _alive(_front_tower(b)):
-			return Localize.text("正门佯攻 · 两名战斗单位进入箭楼射程，持续4秒可牵制守军")
+		if b.mission.has_event(FEINT_RULE):
+			if defense_state == "feint" and _has_feint_guards(b.mission):
+				return Localize.text("正门佯攻生效 · 部分守军已被引向正门")
+			if defense_state == "returning" and _has_feint_guards(b.mission):
+				return Localize.text("佯攻已解除 · 守军正返回原岗位")
+			if defense_state == "watch" and _alive(_front_tower(b)) and SquadOrders.survivors(gate_defenders).size() >= 2:
+				return Localize.text("正门佯攻 · 两名战斗单位进入箭楼射程，持续4秒可牵制守军")
 		return Localize.text("正攻可先用投石车拆箭楼，再让步兵护撞车攻门。")
 	if u == side_gate:
 		if _alive(sun):
@@ -801,6 +813,8 @@ func _refresh_stage(b) -> void:
 			objective = "正门已破。留兵守前营，护送器械破营，救时迁回营。缺金可查看前营金矿或在集市卖木，也可先断援。"
 		elif supply_cut and not main_breached:
 			objective = "南营已断援，庄内大营仍可补兵。可带器械攻正门，或接应孙立打开偏门。" if _alive(sun) else "孙立已阵亡，内应路线关闭；请用器械攻破庄门救人。"
+	if not main_breached and not side_open and _alive(sun) and defense_state == "feint" and _has_feint_guards(b.mission):
+		objective = "部分守军已被引向正门。保持正门压力，让孙立到偏门接应；还需破营、救出时迁。"
 	if _finish_ready():
 		heading = "收军 · 时迁已归营"
 		objective = "宋江到前营收军标记即可获胜；也可先接回其余好汉，再收军。无需清空敌军。"
