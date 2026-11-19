@@ -1,5 +1,7 @@
 # 当前项目总览
 
+Windows 本地试玩包 6aa9d230 覆盖野猪林首条操作顶栏、四语实窗和首次指令前后续玩。六个文件干净解压与隔离启动通过。 [新版试玩包](../qa/battle_entry_timing_20261116/windows_playtest_package_6aa9d230.json)
+
 Windows 本地试玩包 64965098 已校验并启动，包含祝家庄佯攻提示与当前正式版旧档兼容修复。用 Build 26752476 的同一祝家庄中途档完成继续、再保存和独立重启，原战斗身份保留。 [本地候选收据](../qa/battle_entry_timing_20261116/windows_candidate_64965098.json)
 
 Steam Windows 正式版为 Build 26752476。本机客户端安装的六个文件已按大小和 SHA-256 与正式下载比对。此构建的 P01、P02、P03 离线试玩入口已准备，独立 QA 档案的启动短检通过。实体键鼠、系统剪贴板以及三位首次玩家与两次不同路线的重玩还待记录。 [Windows 正式版后验收](../qa/battle_entry_timing_20261116/windows_post_release_26752476.json)

@@ -1,0 +1,292 @@
+{
+  "scope": "Exact Windows EXE, normal-speed graphical fixture for 370 seconds with additional phase timestamps, isolated Compatibility 1440x900. It is a diagnostic rather than the performance acceptance run.",
+  "scope_note": "Windows have every recorded frame. Outside the windows only frames over 38 ms enter the phase trace. The phases use signal wall times and can include deferred callbacks, engine waits and OS scheduling.",
+  "exe_sha256": "0ee28ce4af0e5754b58e0a99c1b6f82fe041ad12b804a48cd3860e476509a224",
+  "native_exit": 0,
+  "asset_identity_preserved": true,
+  "checks": 13,
+  "waves_sent": [
+    true,
+    true,
+    false
+  ],
+  "same_setup_as_600": true,
+  "common_trace_ticks": 375,
+  "different_trace_ticks": 0,
+  "phase_records": 6059,
+  "invalid_phase_records": {},
+  "windows": [
+    {
+      "from_s": 118,
+      "to_s": 158,
+      "valid_frames": 3219,
+      "p95_ms": 17.281,
+      "p99_ms": 19.656,
+      "phases": [
+        {
+          "phase": "before_physics_or_idle",
+          "p50_ms": 0.1,
+          "p95_ms": 0.161
+        },
+        {
+          "phase": "physics_batch_to_idle",
+          "p50_ms": 2.593,
+          "p95_ms": 3.864
+        },
+        {
+          "phase": "idle_to_before_draw",
+          "p50_ms": 4.507,
+          "p95_ms": 6.972
+        },
+        {
+          "phase": "between_render_signals",
+          "p50_ms": 5.834,
+          "p95_ms": 7.444
+        }
+      ],
+      "slow_frames": {
+        "valid_frames": 2,
+        "p95_ms": 36.389,
+        "p99_ms": 36.389,
+        "phases": [
+          {
+            "phase": "before_physics_or_idle",
+            "p50_ms": 0.083,
+            "p95_ms": 0.111
+          },
+          {
+            "phase": "physics_batch_to_idle",
+            "p50_ms": 22.112,
+            "p95_ms": 22.69
+          },
+          {
+            "phase": "idle_to_before_draw",
+            "p50_ms": 6.734,
+            "p95_ms": 7.287
+          },
+          {
+            "phase": "between_render_signals",
+            "p50_ms": 5.646,
+            "p95_ms": 6.854
+          }
+        ]
+      }
+    },
+    {
+      "from_s": 325,
+      "to_s": 365,
+      "valid_frames": 2840,
+      "p95_ms": 18.814,
+      "p99_ms": 22.056,
+      "phases": [
+        {
+          "phase": "before_physics_or_idle",
+          "p50_ms": 0.106,
+          "p95_ms": 0.17
+        },
+        {
+          "phase": "physics_batch_to_idle",
+          "p50_ms": 2.938,
+          "p95_ms": 4.248
+        },
+        {
+          "phase": "idle_to_before_draw",
+          "p50_ms": 5.089,
+          "p95_ms": 7.695
+        },
+        {
+          "phase": "between_render_signals",
+          "p50_ms": 6.239,
+          "p95_ms": 7.852
+        }
+      ],
+      "slow_frames": {
+        "valid_frames": 1,
+        "p95_ms": 34.996,
+        "p99_ms": 34.996,
+        "phases": [
+          {
+            "phase": "before_physics_or_idle",
+            "p50_ms": 0.103,
+            "p95_ms": 0.103
+          },
+          {
+            "phase": "physics_batch_to_idle",
+            "p50_ms": 21.051,
+            "p95_ms": 21.051
+          },
+          {
+            "phase": "idle_to_before_draw",
+            "p50_ms": 7.595,
+            "p95_ms": 7.595
+          },
+          {
+            "phase": "between_render_signals",
+            "p50_ms": 6.247,
+            "p95_ms": 6.247
+          }
+        ]
+      }
+    }
+  ],
+  "most_delayed_frames": [
+    {
+      "frame": 10898,
+      "start_ms": 118993.397,
+      "duration_ms": 36.389,
+      "physics_tick": 7441,
+      "physics_callbacks": 1,
+      "phases_ms": {
+        "before_physics_or_idle": 0.111,
+        "physics_batch_to_idle": 22.69,
+        "idle_to_before_draw": 6.734,
+        "between_render_signals": 6.854
+      }
+    },
+    {
+      "frame": 10918,
+      "start_ms": 119358.782,
+      "duration_ms": 35.128,
+      "physics_tick": 7462,
+      "physics_callbacks": 1,
+      "phases_ms": {
+        "before_physics_or_idle": 0.083,
+        "physics_batch_to_idle": 22.112,
+        "idle_to_before_draw": 7.287,
+        "between_render_signals": 5.646
+      }
+    },
+    {
+      "frame": 27452,
+      "start_ms": 335010.261,
+      "duration_ms": 34.996,
+      "physics_tick": 20401,
+      "physics_callbacks": 1,
+      "phases_ms": {
+        "before_physics_or_idle": 0.103,
+        "physics_batch_to_idle": 21.051,
+        "idle_to_before_draw": 7.595,
+        "between_render_signals": 6.247
+      }
+    },
+    {
+      "frame": 27470,
+      "start_ms": 335355.922,
+      "duration_ms": 29.686,
+      "physics_tick": 20422,
+      "physics_callbacks": 1,
+      "phases_ms": {
+        "before_physics_or_idle": 0.274,
+        "physics_batch_to_idle": 12.64,
+        "idle_to_before_draw": 9.39,
+        "between_render_signals": 7.382
+      }
+    },
+    {
+      "frame": 13566,
+      "start_ms": 151009.769,
+      "duration_ms": 28.979,
+      "physics_tick": 9361,
+      "physics_callbacks": 1,
+      "phases_ms": {
+        "before_physics_or_idle": 0.127,
+        "physics_batch_to_idle": 16.418,
+        "idle_to_before_draw": 6.043,
+        "between_render_signals": 6.391
+      }
+    },
+    {
+      "frame": 12303,
+      "start_ms": 135001.154,
+      "duration_ms": 27.889,
+      "physics_tick": 8401,
+      "physics_callbacks": 1,
+      "phases_ms": {
+        "before_physics_or_idle": 0.092,
+        "physics_batch_to_idle": 17.179,
+        "idle_to_before_draw": 4.115,
+        "between_render_signals": 6.503
+      }
+    },
+    {
+      "frame": 27698,
+      "start_ms": 339006.763,
+      "duration_ms": 27.199,
+      "physics_tick": 20641,
+      "physics_callbacks": 1,
+      "phases_ms": {
+        "before_physics_or_idle": 0.1,
+        "physics_batch_to_idle": 13.731,
+        "idle_to_before_draw": 5.39,
+        "between_render_signals": 7.978
+      }
+    },
+    {
+      "frame": 27441,
+      "start_ms": 334807.009,
+      "duration_ms": 27.117,
+      "physics_tick": 20389,
+      "physics_callbacks": 2,
+      "phases_ms": {
+        "before_physics_or_idle": 0.228,
+        "physics_batch_to_idle": 9.469,
+        "idle_to_before_draw": 10.043,
+        "between_render_signals": 7.377
+      }
+    },
+    {
+      "frame": 26911,
+      "start_ms": 326998.636,
+      "duration_ms": 26.927,
+      "physics_tick": 19921,
+      "physics_callbacks": 1,
+      "phases_ms": {
+        "before_physics_or_idle": 0.203,
+        "physics_batch_to_idle": 13.759,
+        "idle_to_before_draw": 5.95,
+        "between_render_signals": 7.015
+      }
+    },
+    {
+      "frame": 12629,
+      "start_ms": 139009.437,
+      "duration_ms": 26.502,
+      "physics_tick": 8641,
+      "physics_callbacks": 1,
+      "phases_ms": {
+        "before_physics_or_idle": 0.123,
+        "physics_batch_to_idle": 13.292,
+        "idle_to_before_draw": 6.585,
+        "between_render_signals": 6.502
+      }
+    },
+    {
+      "frame": 27957,
+      "start_ms": 342990.235,
+      "duration_ms": 25.727,
+      "physics_tick": 20881,
+      "physics_callbacks": 1,
+      "phases_ms": {
+        "before_physics_or_idle": 0.127,
+        "physics_batch_to_idle": 12.672,
+        "idle_to_before_draw": 4.854,
+        "between_render_signals": 8.074
+      }
+    },
+    {
+      "frame": 28558,
+      "start_ms": 351003.848,
+      "duration_ms": 25.723,
+      "physics_tick": 21361,
+      "physics_callbacks": 1,
+      "phases_ms": {
+        "before_physics_or_idle": 0.263,
+        "physics_batch_to_idle": 11.139,
+        "idle_to_before_draw": 6.706,
+        "between_render_signals": 7.615
+      }
+    }
+  ],
+  "log_sha256": "f78982f4e0993aa57d0abbf56bb4b42604165b13be674433f4750d8aac23627f",
+  "report_sha256": "86e556435794c8654d55f92ae455b931761dcf80cc60a614e4d6a50224abdd1a"
+}

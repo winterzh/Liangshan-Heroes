@@ -2,13 +2,17 @@
 
 ## 2026-11-19 野猪林首条操作提示
 
-野猪林将左键选中鲁智深和右键林边移动的提示放到顶部状态条，任务栏收起时也有当前操作。下令后显示原距离状态，过近、过远时优先显示战术警告。存档记录原距离状态，续玩时直接显示战术信息。四语源码状态共 44 项通过。Windows 实窗、首条指令前存档和真人首玩后续复验。 [源码状态检查](../qa/battle_entry_timing_20261116/windows_yezhulin_first_order_guidance_source_20261119.json)
+野猪林将左键选中鲁智深和右键林边移动的提示放到顶部状态条，任务栏收起时也有当前操作。下令后显示原距离状态，过近、过远时优先显示战术警告。存档记录原距离状态，续玩时直接显示战术信息。四语源码状态共 44 项通过。真人首玩仍待记录。 [源码状态检查](../qa/battle_entry_timing_20261116/windows_yezhulin_first_order_guidance_source_20261119.json)
 
 ## 2026-11-19 祝家庄双路线与四语反馈
 
 31c567ed 的祝家庄正攻与断援走偏门两条路线均从实际菜单打到胜利，各通过 13 项，含四语重玩建议。本次正攻遇南营三队，演义 1/3；偏门接应遇一队，演义 3/3。暂停与结算反馈在 720p、1080p 实窗各通过 24 项。 [路线结果](../qa/campaign_siege_20261116/windows_native_routes_31c567ed.json) · [四语反馈](../qa/battle_entry_timing_20261116/windows_feedback_rendered_31c567ed.json)
 
 ## 2026-11-19 站姿预读版试玩包与水战
+
+Windows 候选 6aa9d230 的 720p 和 1080p 窗口均验证四语顶栏可见和首条右键指令。首条指令前、移动途中各完成保存和独立进程继续，读取原跟随状态并保留原路径。六进程共 189 项通过。新版试玩 ZIP 的六文件、干净解压和独立启动通过。 [实窗与续玩](../qa/battle_entry_timing_20261116/windows_yezhulin_first_order_guidance_6aa9d230.json) · [新版试玩包](../qa/battle_entry_timing_20261116/windows_playtest_package_6aa9d230.json)
+
+31c567ed 六模式 30 分钟通过，283 次进出均释放关键节点，存档字节一致。最差一分钟 P95/P99 为 13.647/23.519 ms。高俅挂载仍有 601.002 ms 的长间隔。370 秒水战分段的三帧超过 33.3 ms，物理信号到空闲信号占 21.051–22.690 ms。十分钟水战验收仍未达标。 [模式长测](../qa/battle_entry_timing_20261116/windows_scenery_prefetch_soak_1800_31c567ed.json) · [水战分段](../qa/campaign_sustained_performance_20261116/windows_water_phase_370_31c567ed.json)
 
 Windows 候选 31c567ed 的离线试玩 ZIP 已回读六个文件，逐项校验后从干净解压目录隔离启动通过。祝家庄首次进入和同进程重进均能正常出征、右键下令和 Esc 暂停恢复，加载提示约 54 ms，首帧约 530、372 ms。 [试玩包与祝家庄入口](../qa/battle_entry_timing_20261116/windows_playtest_package_31c567ed.json)
 

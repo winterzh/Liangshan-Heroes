@@ -1,0 +1,375 @@
+{
+  "kind": "local_windows_start_guidance_and_checkpoint",
+  "source_commit": "6aa9d2302deda04dde1355d54d25e343b360bfce",
+  "exe_sha256": "00fa3e07f24889630b2ac0be699a76737c215b8fbf391f9493fc5d1a185f3a7b",
+  "source_version": "source-v1:d1cd373ed3804b187fd263f4286a83d363f5b996766d9167bbd265cefc1f86a0",
+  "native_processes": 6,
+  "scope": "Offline Windows graphical runs on isolated desktops with targeted Win32 messages. Opens the regular player menu and uses real left/right input handlers. The two checkpoint runs restart in independent processes. No physical player input or Steam account.",
+  "openings": [
+    {
+      "window_pixels": [
+        1280,
+        720
+      ],
+      "checks": [
+        "normal main menu scene mounts",
+        "native menu becomes ready",
+        "native candidate hash",
+        "new Windows offline profile and no Continue action",
+        "Win32 left click opens Start Campaign",
+        "fresh profile offers Wild Boar Forest sortie",
+        "Win32 left click confirms chapter sortie",
+        "native battle reached",
+        "Wild Boar Forest is the actual first battle",
+        "Win32 left click advances prologue page 1",
+        "Win32 left click advances prologue page 2",
+        "Win32 left click advances prologue page 3",
+        "Win32 left click starts the battle",
+        "original shadow objective begins",
+        "movement cue tile is passable and visible",
+        "first move starts with an unselected hero",
+        "objectives start collapsed",
+        "zh_CN rendered hint with the objectives closed at stage 1",
+        "zh_CN top label fits at stage 1",
+        "zh_TW rendered hint with the objectives closed at stage 1",
+        "zh_TW top label fits at stage 1",
+        "en rendered hint with the objectives closed at stage 1",
+        "en top label fits at stage 1",
+        "ja rendered hint with the objectives closed at stage 1",
+        "ja top label fits at stage 1",
+        "Lu Zhishen portrait is visible",
+        "Win32 portrait click selects Lu Zhishen while objectives stay collapsed",
+        "zh_CN rendered hint with the objectives closed at stage 2",
+        "zh_CN top label fits at stage 2",
+        "zh_TW rendered hint with the objectives closed at stage 2",
+        "zh_TW top label fits at stage 2",
+        "en rendered hint with the objectives closed at stage 2",
+        "en top label fits at stage 2",
+        "ja rendered hint with the objectives closed at stage 2",
+        "ja top label fits at stage 2",
+        "first move cue is actually drawn at the indicated tile after selection",
+        "first Win32 right click issues one movement order",
+        "real command indicator matches the cue tile",
+        "first move cue clears once the order is accepted",
+        "zh_CN rendered hint with the objectives closed at stage 3",
+        "zh_CN top label fits at stage 3",
+        "zh_TW rendered hint with the objectives closed at stage 3",
+        "zh_TW top label fits at stage 3",
+        "en rendered hint with the objectives closed at stage 3",
+        "en top label fits at stage 3",
+        "ja rendered hint with the objectives closed at stage 3",
+        "ja top label fits at stage 3",
+        "Lu Zhishen walks to the cue",
+        "escort advance produces the next objective at normal speed",
+        "normal following yields the observation event without starting forced rescue",
+        "normal sim clock and healthy campaign RNG"
+      ],
+      "windows_button_messages": [
+        "left",
+        "left",
+        "left",
+        "left",
+        "left",
+        "left",
+        "left",
+        "right"
+      ],
+      "log_sha256": "a1f523f8460d30324505ae605a6b6b43a886b651aef76974b357241b3d771056",
+      "facts": {
+        "after_selection_viewport_pixel": [
+          534,
+          307
+        ],
+        "before_selection_viewport_pixel": [
+          886,
+          342
+        ],
+        "cue_draw_condition": true,
+        "cue_matching_pixels_after_selection": 271,
+        "cue_matching_pixels_before": 0,
+        "distance_walked_world_units": 74.927,
+        "frame_pixels": [
+          1280,
+          720
+        ],
+        "intro_pages": 3,
+        "next_stage": "shadow_wait",
+        "top_status_1": {
+          "en": "Wild Boar Forest | Shadowing | Left-click to select Lu Zhishen",
+          "ja": "野猪林 | 隠密追跡 | 左クリックで魯智深を選択",
+          "zh_CN": "野猪林 | 暗中跟随 | 左键选中鲁智深",
+          "zh_TW": "野豬林 | 暗中跟隨 | 左鍵選中魯智深"
+        },
+        "top_status_2": {
+          "en": "Wild Boar Forest | Shadowing | Right-click the forest edge to move",
+          "ja": "野猪林 | 隠密追跡 | 林の端の地面を右クリックして移動",
+          "zh_CN": "野猪林 | 暗中跟随 | 右键林边地面移动",
+          "zh_TW": "野豬林 | 暗中跟隨 | 右鍵林邊地面移動"
+        },
+        "top_status_3": {
+          "en": "Wild Boar Forest | Shadowing | Unseen · Good distance",
+          "ja": "野猪林 | 隠密追跡 | 未発見・適切な距離",
+          "zh_CN": "野猪林 | 暗中跟随 | 未露面·距离合适",
+          "zh_TW": "野豬林 | 暗中跟隨 | 未露面·距離合適"
+        },
+        "win32_left_observed": 7,
+        "win32_right_observed": 1,
+        "window_pixels": [
+          1280,
+          720
+        ]
+      },
+      "png_sha256": {
+        "before_selection.png": "5a396dcf985f80c8f19cd4d4fcf55f89502fcfcbe4b97a9ae5231da5b5b5d451",
+        "after_selection.png": "bfdae9e471823c601138fba8d8f32f49bd3aaf2e16de82dd70d249576364dde7"
+      }
+    },
+    {
+      "window_pixels": [
+        1920,
+        1080
+      ],
+      "checks": [
+        "normal main menu scene mounts",
+        "native menu becomes ready",
+        "native candidate hash",
+        "new Windows offline profile and no Continue action",
+        "Win32 left click opens Start Campaign",
+        "fresh profile offers Wild Boar Forest sortie",
+        "Win32 left click confirms chapter sortie",
+        "native battle reached",
+        "Wild Boar Forest is the actual first battle",
+        "Win32 left click advances prologue page 1",
+        "Win32 left click advances prologue page 2",
+        "Win32 left click advances prologue page 3",
+        "Win32 left click starts the battle",
+        "original shadow objective begins",
+        "movement cue tile is passable and visible",
+        "first move starts with an unselected hero",
+        "objectives start collapsed",
+        "zh_CN rendered hint with the objectives closed at stage 1",
+        "zh_CN top label fits at stage 1",
+        "zh_TW rendered hint with the objectives closed at stage 1",
+        "zh_TW top label fits at stage 1",
+        "en rendered hint with the objectives closed at stage 1",
+        "en top label fits at stage 1",
+        "ja rendered hint with the objectives closed at stage 1",
+        "ja top label fits at stage 1",
+        "Lu Zhishen portrait is visible",
+        "Win32 portrait click selects Lu Zhishen while objectives stay collapsed",
+        "zh_CN rendered hint with the objectives closed at stage 2",
+        "zh_CN top label fits at stage 2",
+        "zh_TW rendered hint with the objectives closed at stage 2",
+        "zh_TW top label fits at stage 2",
+        "en rendered hint with the objectives closed at stage 2",
+        "en top label fits at stage 2",
+        "ja rendered hint with the objectives closed at stage 2",
+        "ja top label fits at stage 2",
+        "first move cue is actually drawn at the indicated tile after selection",
+        "first Win32 right click issues one movement order",
+        "real command indicator matches the cue tile",
+        "first move cue clears once the order is accepted",
+        "zh_CN rendered hint with the objectives closed at stage 3",
+        "zh_CN top label fits at stage 3",
+        "zh_TW rendered hint with the objectives closed at stage 3",
+        "zh_TW top label fits at stage 3",
+        "en rendered hint with the objectives closed at stage 3",
+        "en top label fits at stage 3",
+        "ja rendered hint with the objectives closed at stage 3",
+        "ja top label fits at stage 3",
+        "Lu Zhishen walks to the cue",
+        "escort advance produces the next objective at normal speed",
+        "normal following yields the observation event without starting forced rescue",
+        "normal sim clock and healthy campaign RNG"
+      ],
+      "windows_button_messages": [
+        "left",
+        "left",
+        "left",
+        "left",
+        "left",
+        "left",
+        "left",
+        "right"
+      ],
+      "log_sha256": "a1f523f8460d30324505ae605a6b6b43a886b651aef76974b357241b3d771056",
+      "facts": {
+        "after_selection_viewport_pixel": [
+          802,
+          461
+        ],
+        "before_selection_viewport_pixel": [
+          1330,
+          513
+        ],
+        "cue_draw_condition": true,
+        "cue_matching_pixels_after_selection": 620,
+        "cue_matching_pixels_before": 0,
+        "distance_walked_world_units": 74.927,
+        "frame_pixels": [
+          1920,
+          1080
+        ],
+        "intro_pages": 3,
+        "next_stage": "shadow_wait",
+        "top_status_1": {
+          "en": "Wild Boar Forest | Shadowing | Left-click to select Lu Zhishen",
+          "ja": "野猪林 | 隠密追跡 | 左クリックで魯智深を選択",
+          "zh_CN": "野猪林 | 暗中跟随 | 左键选中鲁智深",
+          "zh_TW": "野豬林 | 暗中跟隨 | 左鍵選中魯智深"
+        },
+        "top_status_2": {
+          "en": "Wild Boar Forest | Shadowing | Right-click the forest edge to move",
+          "ja": "野猪林 | 隠密追跡 | 林の端の地面を右クリックして移動",
+          "zh_CN": "野猪林 | 暗中跟随 | 右键林边地面移动",
+          "zh_TW": "野豬林 | 暗中跟隨 | 右鍵林邊地面移動"
+        },
+        "top_status_3": {
+          "en": "Wild Boar Forest | Shadowing | Unseen · Good distance",
+          "ja": "野猪林 | 隠密追跡 | 未発見・適切な距離",
+          "zh_CN": "野猪林 | 暗中跟随 | 未露面·距离合适",
+          "zh_TW": "野豬林 | 暗中跟隨 | 未露面·距離合適"
+        },
+        "win32_left_observed": 7,
+        "win32_right_observed": 1,
+        "window_pixels": [
+          1920,
+          1080
+        ]
+      },
+      "png_sha256": {
+        "before_selection.png": "485b1117702746a5404ebea855afad861cca67d9c064be4f6b8a7ca98da587e3",
+        "after_selection.png": "4c4389c578593cd17aa0f10ec27ea6e565e377a2defb3f7e867fe609d0100dd1"
+      }
+    }
+  ],
+  "checkpoints": [
+    {
+      "save": {
+        "checks": [
+          "original Steam service initialized with its connection disabled in the isolated process",
+          "normal main menu scene mounts",
+          "native menu becomes ready",
+          "official offline player entry enabled without a private QA seam",
+          "native candidate hash",
+          "new Windows offline profile and no Continue action",
+          "Win32 left click opens Start Campaign",
+          "fresh profile offers Wild Boar Forest sortie",
+          "Win32 left click confirms chapter sortie",
+          "native battle reached",
+          "Wild Boar Forest is the actual first battle",
+          "Win32 left click advances prologue page 1",
+          "Win32 left click advances prologue page 2",
+          "Win32 left click advances prologue page 3",
+          "Win32 left click starts the battle",
+          "original shadow objective begins",
+          "live first-order hint is present before selection with the task panel closed",
+          "native Escape pauses before the first command",
+          "first-order checkpoint still has no orders",
+          "actual Save and Exit commits the local checkpoint",
+          "saved slot is bound to the offline run and exact candidate"
+        ],
+        "log_sha256": "a1f523f8460d30324505ae605a6b6b43a886b651aef76974b357241b3d771056"
+      },
+      "resume": {
+        "checks": [
+          "original Steam service initialized with its connection disabled in the isolated process",
+          "normal main menu scene mounts",
+          "native menu becomes ready",
+          "official offline player entry enabled without a private QA seam",
+          "new Windows process opens the original slot bytes",
+          "main menu enables Continue last battle with the Wild Boar Forest chapter name",
+          "actual Win32 click uses Continue last battle",
+          "official player-menu restore commits",
+          "same chapter loads at the paused checkpoint",
+          "same actor identity, hit points, paused clock, events, and order path",
+          "resume preserves the disk bytes and original offline run token",
+          "the restored hero has no command and the teaching state is inactive",
+          "paused restore shows regular tactical status before any simulation frame",
+          "map cue does not replay on restore",
+          "native Escape resumes the restored battle",
+          "restored hero portrait is available",
+          "selecting the restored hero leaves the tutorial inactive"
+        ],
+        "log_sha256": "a1f523f8460d30324505ae605a6b6b43a886b651aef76974b357241b3d771056"
+      },
+      "case": "before-first-order",
+      "saved_phase": "shadow",
+      "saved_order_serial": 0,
+      "saved_path_points": 0,
+      "resume_details": {
+        "restored_top": "野猪林 | 暗中跟随 | 未露面·距离合适"
+      }
+    },
+    {
+      "save": {
+        "checks": [
+          "original Steam service initialized with its connection disabled in the isolated process",
+          "normal main menu scene mounts",
+          "native menu becomes ready",
+          "official offline player entry enabled without a private QA seam",
+          "native candidate hash",
+          "new Windows offline profile and no Continue action",
+          "Win32 left click opens Start Campaign",
+          "fresh profile offers Wild Boar Forest sortie",
+          "Win32 left click confirms chapter sortie",
+          "native battle reached",
+          "Wild Boar Forest is the actual first battle",
+          "Win32 left click advances prologue page 1",
+          "Win32 left click advances prologue page 2",
+          "Win32 left click advances prologue page 3",
+          "Win32 left click starts the battle",
+          "original shadow objective begins",
+          "movement cue tile is passable and visible",
+          "first move starts with an unselected hero",
+          "Win32 left click opens the initially collapsed objectives",
+          "Win32 left click on the mission's Select Lu Zhishen button",
+          "first move cue is actually drawn at the indicated tile after selection",
+          "first Win32 right click issues one movement order",
+          "real command indicator matches the cue tile",
+          "first move cue clears once the order is accepted",
+          "Lu Zhishen walks to the cue",
+          "escort advance produces the next objective at normal speed",
+          "normal following yields the observation event without starting forced rescue",
+          "normal sim clock and healthy campaign RNG",
+          "close the expanded objectives to reach the farther map tile",
+          "the follow-up north order starts a real walking path",
+          "native Escape pauses with the player command in flight",
+          "paused checkpoint contains the movement path and next objective",
+          "actual Save and Exit commits the local checkpoint",
+          "saved slot is bound to the offline run and exact candidate"
+        ],
+        "log_sha256": "a1f523f8460d30324505ae605a6b6b43a886b651aef76974b357241b3d771056"
+      },
+      "resume": {
+        "checks": [
+          "original Steam service initialized with its connection disabled in the isolated process",
+          "normal main menu scene mounts",
+          "native menu becomes ready",
+          "official offline player entry enabled without a private QA seam",
+          "new Windows process opens the original slot bytes",
+          "main menu enables Continue last battle with the Wild Boar Forest chapter name",
+          "actual Win32 click uses Continue last battle",
+          "official player-menu restore commits",
+          "same chapter loads at the paused checkpoint",
+          "same actor identity, hit points, paused clock, events, and order path",
+          "resume preserves the disk bytes and original offline run token",
+          "completed tutorial cue does not replay in the restored battle",
+          "native Escape resumes the restored battle",
+          "original walking path continues automatically without adding another move order",
+          "original stage advances naturally to the staff interception"
+        ],
+        "log_sha256": "a1f523f8460d30324505ae605a6b6b43a886b651aef76974b357241b3d771056"
+      },
+      "case": "shipped-adapter",
+      "saved_phase": "shadow_wait",
+      "saved_order_serial": 2,
+      "saved_path_points": 1,
+      "resume_details": {
+        "motion_after_restore": 64.3311538696289,
+        "next_stage": "intercept"
+      }
+    }
+  ],
+  "checks": 189
+}
