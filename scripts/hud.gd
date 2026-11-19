@@ -240,6 +240,9 @@ func _ready() -> void:
 	_build_intro()
 	_build_end()
 	_build_pause()
+	if OS.get_name() != "Windows":
+		_ensure_end_controls()
+		_ensure_pause_controls()
 	_build_skill_tip()
 	_build_autocam_badge()
 	_build_arena_buttons()
@@ -256,10 +259,7 @@ func _ready() -> void:
 func setup(p_battle) -> void:
 	battle = p_battle
 	minimap.battle = p_battle
-	if _pc_campaign_feedback_available() and not _pause_options.has_node("CopyBattleFeedback"):
-		_pause_options.add_theme_constant_override("separation", 10)
-		_add_feedback_button(_pause_options, false)
-		_add_feedback_button(_end_root.find_child("EndActions", true, false) as Container, true)
+	_refresh_pc_feedback_entries()
 	_res_bar.visible = battle != null and battle.economy
 	# 经济模式左上有资源条，军情横幅让出其真实占位；战役模式则保持居中宽幅。
 	top_label.offset_left = 322.0 if battle != null and battle.economy else 170.0
@@ -2763,6 +2763,10 @@ func _build_end() -> void:
 	_end_root.visible = false
 	add_child(_end_root)
 
+
+func _ensure_end_controls() -> void:
+	if _end_title != null:
+		return
 	var cc := MarginContainer.new()
 	cc.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	cc.offset_left = 60; cc.offset_right = -60
@@ -2825,6 +2829,19 @@ func _build_end() -> void:
 	mbtn.add_theme_font_size_override("font_size", 20)
 	mbtn.pressed.connect(func() -> void: to_menu.emit())
 	row.add_child(mbtn)
+	_refresh_pc_feedback_entries()
+
+
+func _refresh_pc_feedback_entries() -> void:
+	if not _pc_campaign_feedback_available():
+		return
+	if _pause_options != null and not _pause_options.has_node("CopyBattleFeedback"):
+		_pause_options.add_theme_constant_override("separation", 10)
+		_add_feedback_button(_pause_options, false)
+	if _end_title != null:
+		var actions := _end_root.find_child("EndActions", true, false) as Container
+		if not actions.has_node("CopyBattleFeedback"):
+			_add_feedback_button(actions, true)
 
 
 func _pc_campaign_feedback_available() -> bool:
@@ -3050,6 +3067,7 @@ func _end_campaign_text(victory: bool, campaign_result: Dictionary) -> String:
 
 
 func show_end(victory: bool, line: String, kills: int, has_next := false, hero_tally := "", campaign_result: Dictionary = {}, report_renderer: Callable = Callable()) -> void:
+	_ensure_end_controls()
 	var saved_result: Dictionary = campaign_result.duplicate(true)
 	Localize.bind_render(_end_title, func() -> String: return Localize.text("旗开得胜！") if victory else Localize.text("功败垂成……"))
 	_end_title.add_theme_color_override("font_color", UITheme.PAPER_DARK if victory else UITheme.DANGER)
@@ -3075,6 +3093,10 @@ func _build_pause() -> void:
 	_pause_root.visible = false
 	add_child(_pause_root)
 
+
+func _ensure_pause_controls() -> void:
+	if _pause_options != null:
+		return
 	var cc := CenterContainer.new()
 	cc.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_pause_root.add_child(cc)
@@ -3156,6 +3178,7 @@ func _build_pause() -> void:
 	_pause_confirm_button.add_theme_font_size_override("font_size", 22)
 	_pause_confirm_button.pressed.connect(_confirm_pause_action)
 	_pause_confirm.add_child(_pause_confirm_button)
+	_refresh_pc_feedback_entries()
 
 
 func _request_pause_action(action: String) -> void:
@@ -3192,13 +3215,14 @@ func _confirm_pause_action() -> void:
 
 
 func pause_back() -> void:
-	if _pause_confirm.visible:
+	if _pause_confirm != null and _pause_confirm.visible:
 		show_pause()
 	else:
 		resume_game.emit()
 
 
 func show_pause() -> void:
+	_ensure_pause_controls()
 	_pause_pending_action = ""
 	_pause_confirm.hide()
 	_pause_options.show()
@@ -3212,7 +3236,8 @@ func show_pause() -> void:
 
 func hide_pause() -> void:
 	_pause_pending_action = ""
-	_pause_confirm.hide()
+	if _pause_confirm != null:
+		_pause_confirm.hide()
 	_pause_root.visible = false
 
 
