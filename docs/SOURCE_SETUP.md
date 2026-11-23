@@ -1,6 +1,8 @@
 # 源码设置与换机（2026-10-30）
 
-Windows 离线试玩候选 `42604585` 已通过 ZIP 全量回读、干净解包启动和缺失 PCK 提示。完整解压，将 EXE 与 PCK 放在同一目录，再运行 `Start Local Playtest.cmd`。 [Windows 空车装货验收](../qa/campaign_transport_groups_20261116/windows_empty_cart_dispatch_42604585.json)
+当前 Windows 离线试玩候选为 `ee9f29f5`。完整解压，保留同目录的 EXE 与 PCK，再运行 `Start Local Playtest.cmd`。ZIP 全量回读和干净解包启动通过。 [开场读取与进场数据](../qa/battle_entry_timing_20261116/windows_opening_portrait_entry_ee9f29f5.json)
+
+上一 Windows 离线试玩候选 `42604585` 已通过 ZIP 全量回读、干净解包启动和缺失 PCK 提示。完整解压，将 EXE 与 PCK 放在同一目录，再运行 `Start Local Playtest.cmd`。 [Windows 空车装货验收](../qa/campaign_transport_groups_20261116/windows_empty_cart_dispatch_42604585.json)
 
 104ae848 的本地拆包版可用于六入口进退复查。隔离实窗、95 次活动与节点释放通过，第三分钟帧时超标已记入报告。 [六入口原生长测](../qa/battle_entry_timing_20261116/windows_mode_soak_600_104ae848.json)
 

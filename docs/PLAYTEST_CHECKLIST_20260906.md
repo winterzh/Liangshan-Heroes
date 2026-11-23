@@ -2,7 +2,7 @@
 
 ## 当前 Windows 离线试玩准备
 
-验收新版战役使用 Windows 本地候选 `42604585`。把试玩 ZIP 完整解压，让 EXE 与 PCK 留在同一目录，再双击 `Start Local Playtest.cmd`，按分配的 1、2 或 3。每个编号都有独立离线档案。暂停菜单可保存并退出，同一编号重启后可从主菜单继续。 [本地包目录](DIRECTORY_INDEX.md) · [Windows 空车装货验收](../qa/campaign_transport_groups_20261116/windows_empty_cart_dispatch_42604585.json)
+验收新版战役使用 Windows 本地候选 `ee9f29f5`。把试玩 ZIP 完整解压，让 EXE 与 PCK 留在同一目录，再双击 `Start Local Playtest.cmd`，按分配的 1、2 或 3。每个编号都有独立离线档案。暂停菜单可保存并退出，同一编号重启后可从主菜单继续。 [本地包目录](DIRECTORY_INDEX.md) · [Windows 空车装货验收](../qa/campaign_transport_groups_20261116/windows_empty_cart_dispatch_42604585.json)
 
 交给试玩者时只需提供这一个 ZIP，内含发行文件、启动器和本地试玩说明。首次体验使用空白编号，重玩由原编号开新战役。
 

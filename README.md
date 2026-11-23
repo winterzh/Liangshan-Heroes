@@ -12,7 +12,7 @@ Liangshan Heroes · 基于 Godot 4.6.3 的水浒题材即时战略项目。
 | [main](https://github.com/winterzh/Liangshan-Heroes/tree/main) / [stable](https://github.com/winterzh/Liangshan-Heroes/tree/codex/sync-20260905-stable) | 开发候选同步到 stable。 |
 | [GitHub Releases](https://github.com/winterzh/Liangshan-Heroes/releases) | 历史安装包；最新Release为 **Android v2.0**，与Steam Windows版本分别记录 |
 
-Windows 离线试玩候选 `42604585`。完整解压，把 EXE 与 PCK 留在同一目录，再双击 `Start Local Playtest.cmd`。[试玩步骤](docs/PLAYTEST_CHECKLIST_20260906.md)
+Windows 离线试玩候选 `ee9f29f5`。完整解压，把 EXE 与 PCK 留在同一目录，再双击 `Start Local Playtest.cmd`。[试玩步骤](docs/PLAYTEST_CHECKLIST_20260906.md)
 
 ## 从这里开始
 
