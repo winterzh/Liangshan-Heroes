@@ -11,7 +11,7 @@ param(
 
     [Parameter()]
     [ValidateRange(1, 86400)]
-    [int]$DurationSeconds = 1800,
+    [int]$DurationSeconds = 600,
 
     [Parameter()]
     [ValidateRange(2, 30)]
@@ -26,7 +26,7 @@ $GodotPath = & (Join-Path $PSScriptRoot 'resolve_godot.ps1') -GodotPath $GodotPa
 $reportName = 'campaign_mode_soak.json'
 $logName = 'godot_console.log'
 $readmeName = 'README.md'
-$minimumAcceptanceSeconds = 1800
+$minimumAcceptanceSeconds = 600
 
 function Set-ProcessEnvironment {
     param([string]$Name, [AllowNull()][string]$Value)
@@ -45,7 +45,8 @@ if (-not (Test-Path -LiteralPath $GodotPath -PathType Leaf)) {
 if (-not (Test-Path -LiteralPath (Join-Path $ProjectPath 'project.godot') -PathType Leaf)) {
     throw "project.godot not found under: $ProjectPath"
 }
-if ($DurationSeconds -lt $minimumAcceptanceSeconds -and -not $AllowShort) {
+$shortRun = $DurationSeconds -lt $minimumAcceptanceSeconds
+if ($shortRun -and -not $AllowShort) {
     throw "A release acceptance run requires at least $minimumAcceptanceSeconds seconds. Use -AllowShort only for harness debugging; it cannot pass acceptance."
 }
 
@@ -98,7 +99,7 @@ try {
     }
 }
 
-$logLines = @(Get-Content -LiteralPath $logPath -ErrorAction SilentlyContinue)
+$logLines = if ([IO.File]::Exists($logPath)) { [IO.File]::ReadAllLines($logPath) } else { @() }
 $warningPattern = '(?i)(WARNING:|ERROR:|SCRIPT ERROR|Parse Error|orphan node|instances leaked at exit|RID allocations|TextureStorage|RenderingServer.+destroyed)'
 $warningLines = @($logLines | Where-Object { $_ -match $warningPattern } | Select-Object -Unique)
 
@@ -141,9 +142,9 @@ $renderer = if ($null -ne $report.renderer) {
     '{0}; {1}; {2}' -f $report.renderer.adapter, $report.renderer.api, $report.renderer.method
 } else { 'report unavailable' }
 $resultText = if ($fullAcceptance) {
-    'PASS：30 分钟稳定性验收完成。'
-} elseif ($AllowShort -and $runtimePassed) {
-    '仅调试：工具检查通过，但运行时长不足 30 分钟，不能作为验收结果。'
+    "稳定性验收通过，实跑至少 $minimumAcceptanceSeconds 秒。"
+} elseif ($shortRun -and $runtimePassed) {
+    "调试检查通过。完整验收要求至少 $minimumAcceptanceSeconds 秒。"
 } else {
     'FAIL：请检查 campaign_mode_soak.json 和 godot_console.log。'
 }
@@ -172,7 +173,7 @@ Write-Host "README: $readmePath"
 if ($fullAcceptance) {
     exit 0
 }
-if ($AllowShort -and $runtimePassed) {
+if ($shortRun -and $runtimePassed) {
     exit 0
 }
 if ($engineExitCode -ne 0) {

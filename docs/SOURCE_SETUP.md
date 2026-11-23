@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+Windows 源码和私有长测入口默认 600 秒，至少 10 个完整分钟才计完整验收。PowerShell 输出保留原生告警，短测可作为工具调试。已用七个 PowerShell 包装层用例核对默认、指定时长、调试和错误结果。原生成品包和逐分钟门槛以独立实跑为准。 [十分钟成品收据](../qa/battle_entry_timing_20261116/windows_mode_soak_600_7ea5b5d3.json)
+
 Windows 候选 `7ea5b5d3` 已用 Godot 4.6.3 导入与导出，两个步骤退出 0、错误 0。纯脚本改动，运行包共六文件。预校验使用原 SHA 路径和缓存，最多涉及 15 张 512×512 PNG，按 RGBA8 基级估算 15 MiB。样本来自隔离 Windows 离线窗口。Steam 前台、物理键鼠与长时内存回落另验。 [Windows 对照收据](../qa/battle_entry_timing_20261116/windows_gao_scenery_calibration_preview_7ea5b5d3.json)
 
 Windows 本地候选 `58cbcdb5` 用 Godot 4.6.3 重新导入和导出，两个步骤退出 0、错误 0。相比 `83f62108` 冻结输入只改动 `scripts/ability_visuals.gd`。六文件指纹在原生进场与旧档复验前后均一致。 [Windows 验收收据](../qa/battle_entry_timing_20261116/windows_skill_visual_initialization_58cbcdb5.json)

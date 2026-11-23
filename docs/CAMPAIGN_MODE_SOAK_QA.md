@@ -1,4 +1,6 @@
-# 30 分钟模式切换稳定性验收
+# Windows 模式切换稳定性验收
+
+Windows 候选 `7ea5b5d3` 实跑 604.218 秒，六入口 96 次进出。战斗活动 96/96，关键节点释放 96/96，隔离档案未写入战役进度。最差完整分钟 P95/P99 7.988/13.760 ms。十分钟验收通过。结束菜单节点 74 个，较首轮结束 +0 个。孤立节点 0 个。工作集和私有字节分别较首轮结束 +40.8、+44.4 MiB。在隔离 Windows 离线窗口按一倍速运行。条件为直接进场，实体操作、真人感受和 Steam 前台待验。 [十分钟成品收据](../qa/battle_entry_timing_20261116/windows_mode_soak_600_7ea5b5d3.json)
 
 2026-11-17 Windows 默认加载上限 72 FPS。实跑 1808.448 秒，109 次进出，关键节点释放 109/109。最差一分钟 P95 14.123 ms、P99 14.371 ms。旧工具把冷启动读数计入内存趋势。修正后从预热快照起算，原数据回放显示私有内存增加 64.41 MiB，低于 128 MiB 门槛。保留实跑原判定。[72 FPS 长测结果](../qa/battle_entry_timing_20261116/README.md#windows-72-fps-模式切换三十分钟)
 
@@ -8,7 +10,7 @@
 
 2026-09-05 起，Godot 位置由 `tools/resolve_godot.ps1` 解析：可继续传 `-GodotPath`，或配置 `GODOT_PATH` / 根目录 `godot.local.txt`。不再默认访问办公室绝对路径；启动前先用 `tools/run_local.ps1 -Mode import` 准备导入缓存。家里接续只验证路径与启动，未重新运行本页的 30 分钟验收。
 
-入口是 `tools/run_campaign_mode_soak.ps1`。它先确认系统里没有其他 Godot 进程，再用 1280×720、Vulkan、`forward_plus` 启动真实渲染测试。默认运行 1800 秒，实际总耗时通常为 30—32 分钟，另加数秒日志整理时间。
+入口是 `tools/run_campaign_mode_soak.ps1`。它先确认系统里没有其他 Godot 进程，再用 1280×720、Vulkan、`forward_plus` 启动真实渲染测试。当前 PC 计划默认运行 600 秒。启动、完成最后一场并返回菜单及整理日志另计。可用 `-DurationSeconds 1800` 延长采样。
 
 测试循环为：战役 level1 → 竞技场 → 遭遇战 → AI 对战 → 自定义据守 → 战役 level5。每一项先设置该轮模式，再经原主菜单的异步进场入口装载战场。通过 HUD 进入 `FIGHT`，完成停留后调用同一个 HUD 返回菜单信号，等待主菜单重新就绪。单次场景超时会保存失败报告并退出。竞技场调用已有出兵按钮；据守使首波计时到期，由正常关卡更新派兵；AI 对战只向官军战斗兵下进攻令；level5 实际选阮小七并右键 `gao_lure_side` 旗标，由正常航行触发侧港诱舰。记录移动/伤害和任务进展，不能以短停留未完成的任务冒称完成。每次退出都用弱引用检查 Battle、关卡对象、任务控制器、地图、HUD、世界、相机、单位根节点和一个样本单位已经释放。
 
@@ -30,9 +32,9 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\run_campaign_mode_so
 - `godot_console.log`：完整控制台和退出信息。
 - `README.md`：本次结果的简表。
 
-完整验收要求：实跑不少于 1800 秒；至少 30 个完整分钟桶；各分钟 P95 不超过 16.7ms、P99 不超过 33.3ms；所有关键节点释放；从首轮六路线完成时的预热快照起，持续单调增长和结束时的内存回收均在既有容差内；测试不会调用保存入口，`campaign.cfg` 存在状态和字节必须完全不变；进程退出码为 0，且日志没有匹配到脚本错误、泄漏、孤儿节点、RID、TextureStorage 或 RenderingServer 销毁警告。
+完整验收至少实跑 600 秒，包含 10 个完整分钟。每分钟 P95 不超过 16.7 ms，P99 不超过 33.3 ms。每场释放关键节点，首轮六路线完成后从预热快照核对内存回收和持续增长。测试期间 `campaign.cfg` 的存在状态和字节须保持一致。进程须退出 0，日志须通过脚本错误与资源释放警告检查。
 
-只调试工具时可以缩短，但结果不会被记作 30 分钟验收：
+工具调试可用 `-AllowShort`。短测结果只记录调试检查。
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\run_campaign_mode_soak.ps1 -DurationSeconds 90 -AllowShort

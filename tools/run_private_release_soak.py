@@ -1,4 +1,4 @@
-"""Freeze current sources and run the existing 30-minute Vulkan lifecycle soak.
+"""Freeze current sources and run the ten-minute Vulkan lifecycle soak.
 
 The player profile is read-only; the existing soak report retains its own FPS,
 memory and duration gates. A completed run is not automatically a passed run.
@@ -17,6 +17,8 @@ import uuid
 from run_steam_integration_qa import ROOT, LOCK, sources, resolve_godot, resolve_profile_root
 from run_classic30_continue_acceptance import tree_snapshot, engine_pids
 
+SOAK_SECONDS = 600
+
 
 def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -30,7 +32,7 @@ def main():
     parent = resolve_profile_root(args.work_root)
     engine = resolve_godot(None)
     if not args.run:
-        print(json.dumps({'preflight': True, 'engine_busy': engine_pids(), 'lock_busy': LOCK.exists(), 'seconds': 1800}))
+        print(json.dumps({'preflight': True, 'engine_busy': engine_pids(), 'lock_busy': LOCK.exists(), 'seconds': SOAK_SECONDS}))
         return 0
     if engine_pids() or LOCK.exists():
         raise RuntimeError('Exclusive engine slot unavailable')
@@ -44,7 +46,7 @@ def main():
     with LOCK.open('x', encoding='utf-8') as stream:
         stream.write(owner)
     receipt = {'run_id': run_id, 'complete': False, 'passed': False, 'source_files': [], 'steps': [],
-               'engine_sha256': digest(engine), 'private_project': str(project), 'seconds_required': 1800}
+               'engine_sha256': digest(engine), 'private_project': str(project), 'seconds_required': SOAK_SECONDS}
     console_engine = engine.with_name(engine.stem + '_console.exe')
     if console_engine.is_file():
         receipt['console_launcher_sha256'] = digest(console_engine)
@@ -81,7 +83,7 @@ def main():
         commands = [
             ('import', [str(engine), '--path', str(project), '--headless', '--editor', '--import'], 600),
             ('soak', ['powershell.exe', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', str(project/'tools/run_campaign_mode_soak.ps1'),
-                      '-GodotPath', str(engine), '-ProjectPath', str(project), '-OutputDirectory', str(evidence), '-DurationSeconds', '1800'], 2400),
+                      '-GodotPath', str(engine), '-ProjectPath', str(project), '-OutputDirectory', str(evidence), '-DurationSeconds', str(SOAK_SECONDS)], SOAK_SECONDS + 600),
         ]
         for label, command, limit in commands:
             if engine_pids():

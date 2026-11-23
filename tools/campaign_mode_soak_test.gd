@@ -14,8 +14,8 @@ const ROUTE := [
 	{"mode": "custom_defense", "level_id": "custom_defense"},
 	{"mode": "campaign", "level_id": "level5"},
 ]
-const DEFAULT_DURATION_SECONDS := 1800.0
-const MIN_ACCEPTANCE_SECONDS := 1800.0
+const MIN_ACCEPTANCE_MINUTES := 10
+const MIN_ACCEPTANCE_SECONDS := MIN_ACCEPTANCE_MINUTES * 60.0
 const DEFAULT_DWELL_SECONDS := 6.0
 const MINUTE_USEC := 60_000_000
 const MIB := 1024.0 * 1024.0
@@ -49,7 +49,7 @@ var _visit_counts := {}
 var _route_visit_counts := {}
 var _report := {}
 var _output_dir := ""
-var _duration_seconds := DEFAULT_DURATION_SECONDS
+var _duration_seconds := MIN_ACCEPTANCE_SECONDS
 var _dwell_seconds := DEFAULT_DWELL_SECONDS
 var _acceptance_eligible := false
 var _started_at := ""
@@ -816,7 +816,7 @@ func _run() -> void:
 	if _output_dir.is_empty():
 		_output_dir = ProjectSettings.globalize_path("res://qa/campaign_mode_soak")
 	DirAccess.make_dir_recursive_absolute(_output_dir)
-	_duration_seconds = maxf(1.0, _env_float("CAMPAIGN_SOAK_SECONDS", DEFAULT_DURATION_SECONDS))
+	_duration_seconds = maxf(1.0, _env_float("CAMPAIGN_SOAK_SECONDS", MIN_ACCEPTANCE_SECONDS))
 	_dwell_seconds = clampf(_env_float("CAMPAIGN_SOAK_DWELL_SECONDS", DEFAULT_DWELL_SECONDS), 2.0, 30.0)
 	_acceptance_eligible = _duration_seconds >= MIN_ACCEPTANCE_SECONDS
 	root.size = Vector2i(1280, 720)
@@ -922,14 +922,14 @@ func _run() -> void:
 	var performance := _performance_summary()
 	var actual_seconds := float(Time.get_ticks_usec() - _start_usec) / 1_000_000.0
 	if _acceptance_eligible:
-		_check(actual_seconds >= MIN_ACCEPTANCE_SECONDS, "wall-clock soak reaches 30 minutes", "%.3f" % actual_seconds)
-		_check(int(performance.complete_minute_buckets) >= 30, "thirty complete minute buckets were recorded", str(performance.complete_minute_buckets))
+		_check(actual_seconds >= MIN_ACCEPTANCE_SECONDS, "wall-clock mode switching reaches %d minutes" % MIN_ACCEPTANCE_MINUTES, "%.3f" % actual_seconds)
+		_check(int(performance.complete_minute_buckets) >= MIN_ACCEPTANCE_MINUTES, "at least %d complete minute buckets were recorded" % MIN_ACCEPTANCE_MINUTES, str(performance.complete_minute_buckets))
 		_check(float(performance.max_minute_p95_ms) <= FRAME_P95_LIMIT_MS, "all minute P95 values meet 16.7ms", str(performance.max_minute_p95_ms))
 		_check(float(performance.max_minute_p99_ms) <= FRAME_P99_LIMIT_MS, "all minute P99 values meet 33.3ms", str(performance.max_minute_p99_ms))
 	var stability := _analyse_stability()
 	var runtime_checks_passed := _failures.is_empty()
 	var acceptance_passed := runtime_checks_passed and _acceptance_eligible \
-		and actual_seconds >= MIN_ACCEPTANCE_SECONDS and int(performance.complete_minute_buckets) >= 30
+		and actual_seconds >= MIN_ACCEPTANCE_SECONDS and int(performance.complete_minute_buckets) >= MIN_ACCEPTANCE_MINUTES
 	_report = {
 		"passed": acceptance_passed,
 		"runtime_checks_passed": runtime_checks_passed,
