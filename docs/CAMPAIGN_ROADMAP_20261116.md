@@ -60,6 +60,8 @@ Windows 进场保留暂停及结算的外层，首次打开时创建控件。读
 
 ## 2026-11-18 PC 后续开发
 
+M5 高俅岸上押俘补齐护卫脱节时的等待、恢复行军与保存。正式版备火档接到登岸后保存，独立重启以原指令押堂至演义 4/4。 [Windows 验收收据](../qa/campaign_fire_readiness_20261116/windows_gao_shore_escort_bbe6fc01.json)
+
 M3 连环马加入营破后的待命骑兵迎击。正式版提前破营的战斗档已在 Windows 候选实跑出击、再存、重启、守营与自然终局。 [Windows 验收收据](../qa/campaign_cavalry_escort_20261116/windows_lianhuanma_camp_fall_dbff5ccd.json)
 
 M2 祝家庄收军阶段显示伤员人数与七人全返状态，提供选择未归营伤员。正式版分批撤离旧档已从 Windows 候选通过续玩、再存、重启及收军结算。三名无攻略首玩和两次不同计划的真人重玩待验。 [Windows 验收收据](../qa/campaign_siege_20261116/windows_evacuate_camp_025ef7ad.json)
