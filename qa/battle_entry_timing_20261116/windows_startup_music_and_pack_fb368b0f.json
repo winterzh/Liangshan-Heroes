@@ -1,0 +1,871 @@
+{
+  "scope": "Isolated Windows native processes using fresh local profiles and native Vulkan Forward+ rendering, 1280x720 and 60 FPS cap. The original menu mounts with an additional temporary observer. Boots share Windows file caches. UI commands operate inside the process viewport. These are offline file and startup checks.",
+  "success": {
+    "wav_streams_match": 8,
+    "isolated_audio_routes": [
+      "menu",
+      "battle",
+      "menu",
+      "early_exit"
+    ],
+    "archive_verified": true
+  },
+  "sample_timings_ms_median": {
+    "process_to_progress_draw_ms": {
+      "baseline": 11151.359,
+      "music": 9672.899
+    },
+    "process_to_ready_menu_ms": {
+      "baseline": 12683.359,
+      "music": 11063.399
+    },
+    "process_to_sortie_button_ms": {
+      "baseline": 12715.359,
+      "music": 11094.399
+    },
+    "sortie_to_loading_ms": {
+      "baseline": 14.119,
+      "music": 14.44
+    },
+    "sortie_to_battle_ms": {
+      "baseline": 470.831,
+      "music": 445.783
+    },
+    "sortie_to_first_move_ms": {
+      "baseline": 604.61,
+      "music": 558.325
+    },
+    "right_click_to_order_draw_ms": {
+      "baseline": 26.887,
+      "music": 40.682
+    },
+    "longest_entry_gap_ms": {
+      "baseline": 232.401,
+      "music": 225.519
+    }
+  },
+  "stock_external_stages": [
+    {
+      "verified_identity": "34fbdb9fec2cad6a50a03a85d15530a352e0775f0aa67138f58cb9b7d1369b74",
+      "create_process_return_ms": 4550.432,
+      "process_creation_ms": 0.761,
+      "rendering_method": "forward_plus",
+      "game_log_sha256": "73c0153a8ceef1d28560f227ab30626b33be750cc5f83d0bd53f460bebf9055e",
+      "milestones": {
+        "process_to_progress_draw_ms": 10314.918,
+        "process_to_ready_menu_ms": 11617.918,
+        "process_to_sortie_button_ms": 11643.918,
+        "sortie_to_loading_ms": 14.165,
+        "sortie_to_battle_ms": 415.817,
+        "sortie_to_first_move_ms": 525.886,
+        "right_click_to_order_draw_ms": 41.892,
+        "longest_entry_gap_ms": 203.07
+      }
+    },
+    {
+      "verified_identity": "34fbdb9fec2cad6a50a03a85d15530a352e0775f0aa67138f58cb9b7d1369b74",
+      "create_process_return_ms": 4068.604,
+      "process_creation_ms": 0.645,
+      "rendering_method": "gl_compatibility",
+      "game_log_sha256": "bd3380e7c343b851f7cc511ccfa45251b68be112db82fb0d0a9f71602b437e96",
+      "milestones": {
+        "process_to_progress_draw_ms": 8207.98,
+        "process_to_ready_menu_ms": 9510.98,
+        "process_to_sortie_button_ms": 9539.98,
+        "sortie_to_loading_ms": 5.024,
+        "sortie_to_battle_ms": 458.654,
+        "sortie_to_first_move_ms": 591.691,
+        "right_click_to_order_draw_ms": 8.788,
+        "longest_entry_gap_ms": 217.561
+      }
+    }
+  ],
+  "instrumented_source_ms": {
+    "localization": 80.799,
+    "art_db": 1162.579,
+    "campaign": 0.192,
+    "settings": 0.173,
+    "sfx": 51.467,
+    "music": 566.424,
+    "steam_service": 0.146,
+    "steam_cloud": 0.213,
+    "workshop_service": 0.348,
+    "continue_flow": 20.486,
+    "menu": 79.669
+  },
+  "instrumented_source_log_sha256": "02661a54b4e042a75aa1600574e2c2425f4d70800208189c93b0bcd10f89fc53",
+  "paired_native": [
+    {
+      "verified_identity": "34fbdb9fec2cad6a50a03a85d15530a352e0775f0aa67138f58cb9b7d1369b74",
+      "viewport": [
+        1280,
+        720
+      ],
+      "window_pixels": [
+        1280,
+        720
+      ],
+      "engine": "4.6.3-stable (official)",
+      "fps_cap": 60,
+      "rendering_method": "forward_plus",
+      "rendering_driver": "vulkan",
+      "course_selection": false,
+      "tracks_on_first_menu_frame": {
+        "calm": 1,
+        "battle": 1
+      },
+      "calm_playback_after_first_menu_ms": 0.0,
+      "tracks": {
+        "calm": [
+          16.0029024943311,
+          18.0029024943311,
+          20.0029024943311,
+          14.0029024943311
+        ],
+        "battle": [
+          12.0029024943311,
+          11.0029024943311,
+          14.0029024943311,
+          12.0029024943311
+        ]
+      },
+      "intro_pages": 3,
+      "max_entry_gap_us": 226819,
+      "progress_unchanged": true,
+      "variant": "baseline",
+      "source_commit": "bf99bd12bf88a641579d1a7e00f3beaeeea26824",
+      "payload_verified": 6,
+      "create_process_return_ms": 5013.943,
+      "milestones": {
+        "process_to_progress_draw_ms": 11786.634,
+        "process_to_ready_menu_ms": 13346.634,
+        "process_to_sortie_button_ms": 13380.634,
+        "sortie_to_loading_ms": 14.522,
+        "sortie_to_battle_ms": 485.542,
+        "sortie_to_first_move_ms": 617.515,
+        "right_click_to_order_draw_ms": 44.517,
+        "longest_entry_gap_ms": 226.819
+      },
+      "process_start_offsets_ms": {
+        "first_menu_draw": 11786.634,
+        "initial_progress_draw": 11786.634,
+        "ready_menu_draw": 13346.634,
+        "sortie_button_draw": 13380.634,
+        "sortie_click": 13380.634,
+        "first_loading_draw": 13394.634,
+        "first_battle_draw": 13864.634,
+        "fight_draw": 13943.634,
+        "first_move_click": 13952.634,
+        "first_move_draw": 13997.634
+      },
+      "raw": {
+        "first_menu_draw": 6753572,
+        "initial_progress_draw": 6753611,
+        "ready_menu_draw": 8313454,
+        "sortie_button_draw": 8346306,
+        "sortie_click": 8346308,
+        "first_loading_draw": 8360830,
+        "first_battle_draw": 8831850,
+        "fight_draw": 8910038,
+        "first_move_click": 8919306,
+        "first_move_draw": 8963823
+      },
+      "game_log_sha256": "addb9d894c386a3c8236b832afc62336ecbf8035c07c2f304a3f131a06ee407e",
+      "trace_sha256": "0a02ceee8e9cbe2bbf396023f27dbb41b5c5704d265c922357a487bb9353d51e",
+      "exit_code": 0,
+      "runtime_errors": []
+    },
+    {
+      "verified_identity": "ad472c51e733890ba190b088f3b66d405a9e80186ea9d60359b321b8771aa80c",
+      "viewport": [
+        1280,
+        720
+      ],
+      "window_pixels": [
+        1280,
+        720
+      ],
+      "engine": "4.6.3-stable (official)",
+      "fps_cap": 60,
+      "rendering_method": "forward_plus",
+      "rendering_driver": "vulkan",
+      "course_selection": false,
+      "tracks_on_first_menu_frame": {
+        "calm": 0,
+        "battle": 0
+      },
+      "calm_playback_after_first_menu_ms": 301.66,
+      "tracks": {
+        "calm": [
+          16.0029024943311,
+          18.0029024943311,
+          20.0029024943311,
+          14.0029024943311
+        ],
+        "battle": [
+          12.0029024943311,
+          11.0029024943311,
+          14.0029024943311,
+          12.0029024943311
+        ]
+      },
+      "intro_pages": 3,
+      "max_entry_gap_us": 234186,
+      "progress_unchanged": true,
+      "variant": "music",
+      "source_commit": "fb368b0f3535d8908b704bb17025c087a8e370a9",
+      "payload_verified": 6,
+      "create_process_return_ms": 5101.605,
+      "milestones": {
+        "process_to_progress_draw_ms": 10003.484,
+        "process_to_ready_menu_ms": 11428.484,
+        "process_to_sortie_button_ms": 11462.484,
+        "sortie_to_loading_ms": 14.382,
+        "sortie_to_battle_ms": 449.988,
+        "sortie_to_first_move_ms": 562.799,
+        "right_click_to_order_draw_ms": 40.315,
+        "longest_entry_gap_ms": 234.186
+      },
+      "process_start_offsets_ms": {
+        "first_menu_draw": 10003.484,
+        "initial_progress_draw": 10003.484,
+        "ready_menu_draw": 11428.484,
+        "sortie_button_draw": 11462.484,
+        "sortie_click": 11462.484,
+        "first_loading_draw": 11477.484,
+        "first_battle_draw": 11913.484,
+        "fight_draw": 11976.484,
+        "first_move_click": 11985.484,
+        "first_move_draw": 12025.484
+      },
+      "raw": {
+        "first_menu_draw": 4884869,
+        "initial_progress_draw": 4884885,
+        "ready_menu_draw": 6310244,
+        "sortie_button_draw": 6344417,
+        "sortie_click": 6344419,
+        "first_loading_draw": 6358801,
+        "first_battle_draw": 6794407,
+        "fight_draw": 6858188,
+        "first_move_click": 6866903,
+        "first_move_draw": 6907218
+      },
+      "game_log_sha256": "f325dcd0e51a381bffeb33f1327c32628adee253b692d6f7abd25435c0674785",
+      "trace_sha256": "89717ea27cc509278b1d70b0d41e32242b623d39e8fab450232ba297cc41c339",
+      "exit_code": 0,
+      "runtime_errors": []
+    },
+    {
+      "verified_identity": "ad472c51e733890ba190b088f3b66d405a9e80186ea9d60359b321b8771aa80c",
+      "viewport": [
+        1280,
+        720
+      ],
+      "window_pixels": [
+        1280,
+        720
+      ],
+      "engine": "4.6.3-stable (official)",
+      "fps_cap": 60,
+      "rendering_method": "forward_plus",
+      "rendering_driver": "vulkan",
+      "course_selection": false,
+      "tracks_on_first_menu_frame": {
+        "calm": 0,
+        "battle": 0
+      },
+      "calm_playback_after_first_menu_ms": 304.387,
+      "tracks": {
+        "calm": [
+          16.0029024943311,
+          18.0029024943311,
+          20.0029024943311,
+          14.0029024943311
+        ],
+        "battle": [
+          12.0029024943311,
+          11.0029024943311,
+          14.0029024943311,
+          12.0029024943311
+        ]
+      },
+      "intro_pages": 3,
+      "max_entry_gap_us": 216853,
+      "progress_unchanged": true,
+      "variant": "music",
+      "source_commit": "fb368b0f3535d8908b704bb17025c087a8e370a9",
+      "payload_verified": 6,
+      "create_process_return_ms": 4566.506,
+      "milestones": {
+        "process_to_progress_draw_ms": 9342.315,
+        "process_to_ready_menu_ms": 10698.315,
+        "process_to_sortie_button_ms": 10726.315,
+        "sortie_to_loading_ms": 14.498,
+        "sortie_to_battle_ms": 441.578,
+        "sortie_to_first_move_ms": 553.852,
+        "right_click_to_order_draw_ms": 41.05,
+        "longest_entry_gap_ms": 216.853
+      },
+      "process_start_offsets_ms": {
+        "first_menu_draw": 9342.315,
+        "initial_progress_draw": 9342.315,
+        "ready_menu_draw": 10698.315,
+        "sortie_button_draw": 10726.315,
+        "sortie_click": 10726.315,
+        "first_loading_draw": 10740.315,
+        "first_battle_draw": 11168.315,
+        "fight_draw": 11228.315,
+        "first_move_click": 11239.315,
+        "first_move_draw": 11280.315
+      },
+      "raw": {
+        "first_menu_draw": 4757742,
+        "initial_progress_draw": 4757756,
+        "ready_menu_draw": 6114118,
+        "sortie_button_draw": 6142302,
+        "sortie_click": 6142304,
+        "first_loading_draw": 6156802,
+        "first_battle_draw": 6583882,
+        "fight_draw": 6644062,
+        "first_move_click": 6655106,
+        "first_move_draw": 6696156
+      },
+      "game_log_sha256": "f325dcd0e51a381bffeb33f1327c32628adee253b692d6f7abd25435c0674785",
+      "trace_sha256": "799c8216076170671a844729cb238d0f43488bcb3e780a7e6d60d705e2ca606c",
+      "exit_code": 0,
+      "runtime_errors": []
+    },
+    {
+      "verified_identity": "34fbdb9fec2cad6a50a03a85d15530a352e0775f0aa67138f58cb9b7d1369b74",
+      "viewport": [
+        1280,
+        720
+      ],
+      "window_pixels": [
+        1280,
+        720
+      ],
+      "engine": "4.6.3-stable (official)",
+      "fps_cap": 60,
+      "rendering_method": "forward_plus",
+      "rendering_driver": "vulkan",
+      "course_selection": false,
+      "tracks_on_first_menu_frame": {
+        "calm": 1,
+        "battle": 1
+      },
+      "calm_playback_after_first_menu_ms": 0.0,
+      "tracks": {
+        "calm": [
+          16.0029024943311,
+          18.0029024943311,
+          20.0029024943311,
+          14.0029024943311
+        ],
+        "battle": [
+          12.0029024943311,
+          11.0029024943311,
+          14.0029024943311,
+          12.0029024943311
+        ]
+      },
+      "intro_pages": 3,
+      "max_entry_gap_us": 237983,
+      "progress_unchanged": true,
+      "variant": "baseline",
+      "source_commit": "bf99bd12bf88a641579d1a7e00f3beaeeea26824",
+      "payload_verified": 6,
+      "create_process_return_ms": 5002.382,
+      "milestones": {
+        "process_to_progress_draw_ms": 10516.084,
+        "process_to_ready_menu_ms": 12020.084,
+        "process_to_sortie_button_ms": 12050.084,
+        "sortie_to_loading_ms": 13.716,
+        "sortie_to_battle_ms": 456.12,
+        "sortie_to_first_move_ms": 591.705,
+        "right_click_to_order_draw_ms": 9.256,
+        "longest_entry_gap_ms": 237.983
+      },
+      "process_start_offsets_ms": {
+        "first_menu_draw": 10516.084,
+        "initial_progress_draw": 10516.084,
+        "ready_menu_draw": 12020.084,
+        "sortie_button_draw": 12050.084,
+        "sortie_click": 12050.084,
+        "first_loading_draw": 12064.084,
+        "first_battle_draw": 12507.084,
+        "fight_draw": 12580.084,
+        "first_move_click": 12634.084,
+        "first_move_draw": 12643.084
+      },
+      "raw": {
+        "first_menu_draw": 5493912,
+        "initial_progress_draw": 5493924,
+        "ready_menu_draw": 6997968,
+        "sortie_button_draw": 7029223,
+        "sortie_click": 7029228,
+        "first_loading_draw": 7042944,
+        "first_battle_draw": 7485348,
+        "fight_draw": 7559638,
+        "first_move_click": 7611677,
+        "first_move_draw": 7620933
+      },
+      "game_log_sha256": "addb9d894c386a3c8236b832afc62336ecbf8035c07c2f304a3f131a06ee407e",
+      "trace_sha256": "972666e691867e58eb4303908aba3e302a67258f18d7dedbbbd79d0600eff904",
+      "exit_code": 0,
+      "runtime_errors": []
+    },
+    {
+      "verified_identity": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "viewport": [
+        1280,
+        720
+      ],
+      "window_pixels": [
+        1280,
+        720
+      ],
+      "engine": "4.6.3-stable (official)",
+      "fps_cap": 60,
+      "rendering_method": "forward_plus",
+      "rendering_driver": "vulkan",
+      "course_selection": false,
+      "tracks_on_first_menu_frame": {
+        "calm": 1,
+        "battle": 1
+      },
+      "calm_playback_after_first_menu_ms": 0.0,
+      "tracks": {
+        "calm": [
+          16.0029024943311,
+          18.0029024943311,
+          20.0029024943311,
+          14.0029024943311
+        ],
+        "battle": [
+          12.0029024943311,
+          11.0029024943311,
+          14.0029024943311,
+          12.0029024943311
+        ]
+      },
+      "intro_pages": 3,
+      "max_entry_gap_us": 234714,
+      "progress_unchanged": true,
+      "variant": "split",
+      "source_commit": "bf99bd12bf88a641579d1a7e00f3beaeeea26824",
+      "payload_verified": 7,
+      "create_process_return_ms": 326.107,
+      "milestones": {
+        "process_to_progress_draw_ms": 5804.068,
+        "process_to_ready_menu_ms": 5861.068,
+        "process_to_sortie_button_ms": 5889.068,
+        "sortie_to_loading_ms": 13.777,
+        "sortie_to_battle_ms": 527.826,
+        "sortie_to_first_move_ms": 780.138,
+        "right_click_to_order_draw_ms": 112.907,
+        "longest_entry_gap_ms": 234.714
+      },
+      "process_start_offsets_ms": {
+        "first_menu_draw": 5804.068,
+        "initial_progress_draw": 5804.068,
+        "ready_menu_draw": 5861.068,
+        "sortie_button_draw": 5889.068,
+        "sortie_click": 5889.068,
+        "first_loading_draw": 5903.068,
+        "first_battle_draw": 6418.068,
+        "fight_draw": 6504.068,
+        "first_move_click": 6556.068,
+        "first_move_draw": 6669.068
+      },
+      "raw": {
+        "first_menu_draw": 5459294,
+        "initial_progress_draw": 5459306,
+        "ready_menu_draw": 5515822,
+        "sortie_button_draw": 5544720,
+        "sortie_click": 5544722,
+        "first_loading_draw": 5558499,
+        "first_battle_draw": 6072548,
+        "fight_draw": 6159803,
+        "first_move_click": 6211953,
+        "first_move_draw": 6324860
+      },
+      "game_log_sha256": "0dde5dff55f2445a3bec29854559b1a6452bd1a0f1d1786d82320a442183d09f",
+      "trace_sha256": "e1833428659e63caa4a832fb96017c44ec040c38e31cbc00a0dc332934142c7f",
+      "exit_code": 0,
+      "runtime_errors": []
+    },
+    {
+      "early_quit": true,
+      "player_streams_released": true,
+      "quit_request_ms": 319.17,
+      "variant": "early",
+      "source_commit": "fb368b0f3535d8908b704bb17025c087a8e370a9",
+      "payload_verified": 6,
+      "game_log_sha256": "734d4262eaae5b065223a6a96620f5a4d54ee95dfa81ce6947b30a56d96a3da3",
+      "runtime_errors": [],
+      "exit_code": 0
+    }
+  ],
+  "split_private_runs": [
+    {
+      "verified_identity": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "viewport": [
+        1280,
+        720
+      ],
+      "window_pixels": [
+        1280,
+        720
+      ],
+      "engine": "4.6.3-stable (official)",
+      "fps_cap": 60,
+      "rendering_method": "forward_plus",
+      "rendering_driver": "vulkan",
+      "course_selection": false,
+      "tracks_on_first_menu_frame": {
+        "calm": 1,
+        "battle": 1
+      },
+      "calm_playback_after_first_menu_ms": 0.0,
+      "tracks": {
+        "calm": [
+          16.0029024943311,
+          18.0029024943311,
+          20.0029024943311,
+          14.0029024943311
+        ],
+        "battle": [
+          12.0029024943311,
+          11.0029024943311,
+          14.0029024943311,
+          12.0029024943311
+        ]
+      },
+      "intro_pages": 3,
+      "max_entry_gap_us": 281485,
+      "progress_unchanged": true,
+      "variant": "split",
+      "source_commit": "bf99bd12bf88a641579d1a7e00f3beaeeea26824",
+      "payload_verified": 7,
+      "create_process_return_ms": 371.842,
+      "milestones": {
+        "process_to_progress_draw_ms": 5511.816,
+        "process_to_ready_menu_ms": 5551.816,
+        "process_to_sortie_button_ms": 5607.816,
+        "sortie_to_loading_ms": 13.567,
+        "sortie_to_battle_ms": 517.293,
+        "sortie_to_first_move_ms": 767.049,
+        "right_click_to_order_draw_ms": 111.597,
+        "longest_entry_gap_ms": 281.485
+      },
+      "process_start_offsets_ms": {
+        "first_menu_draw": 5511.816,
+        "initial_progress_draw": 5511.816,
+        "ready_menu_draw": 5551.816,
+        "sortie_button_draw": 5607.816,
+        "sortie_click": 5607.816,
+        "first_loading_draw": 5621.816,
+        "first_battle_draw": 6124.816,
+        "fight_draw": 6197.816,
+        "first_move_click": 6262.816,
+        "first_move_draw": 6374.816
+      },
+      "raw": {
+        "first_menu_draw": 5122752,
+        "initial_progress_draw": 5122764,
+        "ready_menu_draw": 5164137,
+        "sortie_button_draw": 5219113,
+        "sortie_click": 5219119,
+        "first_loading_draw": 5232686,
+        "first_battle_draw": 5736412,
+        "fight_draw": 5809300,
+        "first_move_click": 5874571,
+        "first_move_draw": 5986168
+      },
+      "game_log_sha256": "0dde5dff55f2445a3bec29854559b1a6452bd1a0f1d1786d82320a442183d09f",
+      "trace_sha256": "d4c7677642538698c938a981b403bf54c437c94660097e1cc7b0230299b2061c",
+      "exit_code": 0,
+      "runtime_errors": []
+    },
+    {
+      "verified_identity": "34fbdb9fec2cad6a50a03a85d15530a352e0775f0aa67138f58cb9b7d1369b74",
+      "viewport": [
+        1280,
+        720
+      ],
+      "window_pixels": [
+        1280,
+        720
+      ],
+      "engine": "4.6.3-stable (official)",
+      "fps_cap": 60,
+      "rendering_method": "forward_plus",
+      "rendering_driver": "vulkan",
+      "course_selection": false,
+      "tracks_on_first_menu_frame": {
+        "calm": 1,
+        "battle": 1
+      },
+      "calm_playback_after_first_menu_ms": 0.0,
+      "tracks": {
+        "calm": [
+          16.0029024943311,
+          18.0029024943311,
+          20.0029024943311,
+          14.0029024943311
+        ],
+        "battle": [
+          12.0029024943311,
+          11.0029024943311,
+          14.0029024943311,
+          12.0029024943311
+        ]
+      },
+      "intro_pages": 3,
+      "max_entry_gap_us": 205513,
+      "progress_unchanged": true,
+      "variant": "baseline",
+      "source_commit": "bf99bd12bf88a641579d1a7e00f3beaeeea26824",
+      "payload_verified": 6,
+      "create_process_return_ms": 5234.891,
+      "milestones": {
+        "process_to_progress_draw_ms": 10428.621,
+        "process_to_ready_menu_ms": 11802.621,
+        "process_to_sortie_button_ms": 11831.621,
+        "sortie_to_loading_ms": 14.365,
+        "sortie_to_battle_ms": 427.928,
+        "sortie_to_first_move_ms": 554.972,
+        "right_click_to_order_draw_ms": 6.119,
+        "longest_entry_gap_ms": 205.513
+      },
+      "process_start_offsets_ms": {
+        "first_menu_draw": 10428.621,
+        "initial_progress_draw": 10428.621,
+        "ready_menu_draw": 11802.621,
+        "sortie_button_draw": 11831.621,
+        "sortie_click": 11831.621,
+        "first_loading_draw": 11845.621,
+        "first_battle_draw": 12259.621,
+        "fight_draw": 12334.621,
+        "first_move_click": 12380.621,
+        "first_move_draw": 12386.621
+      },
+      "raw": {
+        "first_menu_draw": 5178559,
+        "initial_progress_draw": 5178576,
+        "ready_menu_draw": 6552767,
+        "sortie_button_draw": 6580894,
+        "sortie_click": 6580896,
+        "first_loading_draw": 6595261,
+        "first_battle_draw": 7008824,
+        "fight_draw": 7083868,
+        "first_move_click": 7129749,
+        "first_move_draw": 7135868
+      },
+      "game_log_sha256": "addb9d894c386a3c8236b832afc62336ecbf8035c07c2f304a3f131a06ee407e",
+      "trace_sha256": "f4b5a819c02619269e9ca61257de9e42cbcd952bc7e2d124fe17ffe9f4890688",
+      "exit_code": 0,
+      "runtime_errors": []
+    },
+    {
+      "verified_identity": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "viewport": [
+        1280,
+        720
+      ],
+      "window_pixels": [
+        1280,
+        720
+      ],
+      "engine": "4.6.3-stable (official)",
+      "fps_cap": 60,
+      "rendering_method": "forward_plus",
+      "rendering_driver": "vulkan",
+      "course_selection": false,
+      "tracks_on_first_menu_frame": {
+        "calm": 1,
+        "battle": 1
+      },
+      "calm_playback_after_first_menu_ms": 0.0,
+      "tracks": {
+        "calm": [
+          16.0029024943311,
+          18.0029024943311,
+          20.0029024943311,
+          14.0029024943311
+        ],
+        "battle": [
+          12.0029024943311,
+          11.0029024943311,
+          14.0029024943311,
+          12.0029024943311
+        ]
+      },
+      "intro_pages": 3,
+      "max_entry_gap_us": 299994,
+      "progress_unchanged": true,
+      "variant": "split",
+      "source_commit": "bf99bd12bf88a641579d1a7e00f3beaeeea26824",
+      "payload_verified": 7,
+      "create_process_return_ms": 295.332,
+      "milestones": {
+        "process_to_progress_draw_ms": 6507.029,
+        "process_to_ready_menu_ms": 6566.029,
+        "process_to_sortie_button_ms": 6603.029,
+        "sortie_to_loading_ms": 13.346,
+        "sortie_to_battle_ms": 582.784,
+        "sortie_to_first_move_ms": 898.12,
+        "right_click_to_order_draw_ms": 140.078,
+        "longest_entry_gap_ms": 299.994
+      },
+      "process_start_offsets_ms": {
+        "first_menu_draw": 6507.029,
+        "initial_progress_draw": 6507.029,
+        "ready_menu_draw": 6566.029,
+        "sortie_button_draw": 6603.029,
+        "sortie_click": 6603.029,
+        "first_loading_draw": 6616.029,
+        "first_battle_draw": 7186.029,
+        "fight_draw": 7286.029,
+        "first_move_click": 7362.029,
+        "first_move_draw": 7501.029
+      },
+      "raw": {
+        "first_menu_draw": 6193193,
+        "initial_progress_draw": 6193215,
+        "ready_menu_draw": 6252346,
+        "sortie_button_draw": 6289644,
+        "sortie_click": 6289648,
+        "first_loading_draw": 6302994,
+        "first_battle_draw": 6872432,
+        "fight_draw": 6972497,
+        "first_move_click": 7047690,
+        "first_move_draw": 7187768
+      },
+      "game_log_sha256": "0dde5dff55f2445a3bec29854559b1a6452bd1a0f1d1786d82320a442183d09f",
+      "trace_sha256": "5c2735763e70cf5925d202362d3b4ea4edc73b9910892414d5bd16465aa56278",
+      "exit_code": 0,
+      "runtime_errors": []
+    }
+  ],
+  "split_pack_scope": "Experiment with the same previous project contents and external .pck. The current runtime hashes the executable only. Production use requires binding the separate content file to validated startup and save identities, then testing distribution and restoration.",
+  "split_create_process_ms_median": {
+    "embedded": 5013.943,
+    "separate": 326.107
+  },
+  "split_files": {
+    "exe": {
+      "path": "LiangshanHeroes.exe",
+      "bytes": 104886784,
+      "sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4"
+    },
+    "pck": {
+      "path": "LiangshanHeroes.pck",
+      "bytes": 1722687116,
+      "sha256": "b073ac4ed71fc6fb6d93e5bde5d82fcc54b649df37a8a4e40e16f1e6375dda8b"
+    }
+  },
+  "fixed_seed_pcm": {
+    "battle": {
+      "0": {
+        "bytes": 529328,
+        "channels": 1,
+        "format": 1,
+        "mix_rate": 22050,
+        "sha256": "6a6dc90c8ac0d19ce18598d909cea59a99b0c6c0f5effa87c4b9fa6fd8da88f6"
+      },
+      "1": {
+        "bytes": 485228,
+        "channels": 1,
+        "format": 1,
+        "mix_rate": 22050,
+        "sha256": "26f1835f6e7d4c79a399f8b760f07bd41d0aa51e824b893ccd8d3186d994da9c"
+      },
+      "2": {
+        "bytes": 617528,
+        "channels": 1,
+        "format": 1,
+        "mix_rate": 22050,
+        "sha256": "3c43cac619a5b38a86aa53de032cae5cd4171d40cf679529363db3041913d600"
+      },
+      "3": {
+        "bytes": 529328,
+        "channels": 1,
+        "format": 1,
+        "mix_rate": 22050,
+        "sha256": "e76aa8d33831384f80008ed31d0980197a166141ffac565a4d461d369225da77"
+      }
+    },
+    "calm": {
+      "0": {
+        "bytes": 705728,
+        "channels": 1,
+        "format": 1,
+        "mix_rate": 22050,
+        "sha256": "e368b6f3ac8621758948b110f1187c9ddc1cb2a3b35ac003815e5977d3e5cdd4"
+      },
+      "1": {
+        "bytes": 793928,
+        "channels": 1,
+        "format": 1,
+        "mix_rate": 22050,
+        "sha256": "eb42d457b83cda5bc89966229d1e3d64a1033d27bc1ec0fdb3ee0f015457784f"
+      },
+      "2": {
+        "bytes": 882128,
+        "channels": 1,
+        "format": 1,
+        "mix_rate": 22050,
+        "sha256": "ad9ff36bdbdc89c945408b8b9ee7557ab6b29d6ad315b7f81d1ad10a8f786c5b"
+      },
+      "3": {
+        "bytes": 617528,
+        "channels": 1,
+        "format": 1,
+        "mix_rate": 22050,
+        "sha256": "f50cfd882228792d07a3bb88bfdd0b2294e70a29d37eadc1590a7c631adec895"
+      }
+    }
+  },
+  "native_launcher_archive": {
+    "name": "LiangshanHeroes_PC_Playtest_fb368b0f.zip",
+    "bytes": 1758396245,
+    "sha256": "c5d68185b611d92b3fb14c73c84fee88df60074b73d35391d5e72598f6647348",
+    "members_verified": 8
+  },
+  "launcher_verification": {
+    "name": "Start Local Playtest.cmd",
+    "sha256": "5d22b650a04ef61b94d83c06c8a21d88e0582335c868a7aa034ab47e7a1d09ff",
+    "argument": "--offline-playtest",
+    "profiles": [
+      "P01",
+      "P02",
+      "P03"
+    ],
+    "clean_archive_boot": {
+      "mode": "headless",
+      "exit": 0,
+      "errors": [],
+      "log_sha256": "a9912b85473f126d3f4f63ec824170c828df3473a292f866dde86cafda5b66da"
+    }
+  },
+  "binary_candidate": {
+    "commit": "fb368b0f3535d8908b704bb17025c087a8e370a9",
+    "steps": [
+      {
+        "stage": "import",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 73.0
+      },
+      {
+        "stage": "export",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 113.59
+      }
+    ],
+    "source_version": "source-v1:3a094a0df97573e69319cf7945362af3262913f86c2d8f9680777c45edf1b87f"
+  }
+}
