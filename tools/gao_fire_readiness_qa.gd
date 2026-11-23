@@ -30,6 +30,9 @@ func _fixture() -> void:
 	l.on_mission_action(b,"gao_wind",b.find_unit("gongsun_sheng"))
 	check("60木" in l.unit_tactical_hint(b,liu),"wind completion explains real wood cost")
 	l.on_mission_action(b,"gao_prepare",liu)
+	var return_marker: Vector2 = b.map.cell_to_world(l.LIU_RETURN)
+	check(b.mission.can_tap_action([l.fireboat],return_marker) and not b.mission.can_tap_action([two],return_marker),
+		"only the original fireboat is eligible to return Liu Tang before ignition")
 	l.fireboat.position=b.map.cell_to_world(l.FIRE_POINTS[1])
 	two.position=l.fireboat.position+Vector2(220,0)
 	five.position=l.fireboat.position+Vector2(-221,0)
@@ -81,6 +84,8 @@ func _fixture() -> void:
 	root.get_node("Localize").set_language("zh_CN",false)
 	l.on_mission_action(b,"gao_fire_1",l.fireboat)
 	check(l.fire_lit and l.liu_carrier==two,"shared readiness preserves actual fire transfer")
+	check(b.mission.actions.gao_liu_return.actors==["ruan_xiaoer_boat"] and b.mission.can_tap_action([two],return_marker)
+		and not b.mission.can_tap_action([five],return_marker),"return marker switches to the actual passenger carrier")
 	check("撤到安全水域" in l._wave_objective(b),"an actual ignition hands off to the two-ship withdrawal")
 	two.position=b.map.cell_to_world(l.FIRE_SAFE)
 	five.position=two.position+Vector2(121,0)
@@ -91,11 +96,25 @@ func _fixture() -> void:
 	check(not b.mission.has_event("fire_escort_safe"),"one ship outside safe radius cannot complete withdrawal")
 	five.position=two.position+Vector2(120,0)
 	l.on_mission_action(b,"gao_fire_withdraw",two)
-	check(b.mission.has_event("fire_escort_safe") and "成果保留" in l.unit_tactical_hint(b,two),"two safe ships unlock original completion and return advice")
-	check("普通战船" in l._wave_objective(b),"completed fire route hands the main objective back to the fleet")
-	root.get_node("Localize").set_language("ja",false)
-	check("演義目標" in l.unit_tactical_hint(b,two) and not "演义成果" in l.unit_tactical_hint(b,two),"completed return advice is actually localized in Japanese")
+	check(b.mission.has_event("fire_escort_safe"),"two safe ships complete the original withdrawal")
+	var return_source := "双船已撤离，火攻演义保留。可让阮小二送刘唐返港下船。"
+	var safe_source := "双船已撤离，火攻演义保留。"
+	for language in ["zh_CN","zh_TW","en","ja"]:
+		loc.set_language(language,false)
+		l._update_wave_objective(b)
+		var current: String = return_source if language=="zh_CN" else String(catalog[return_source][language])
+		var safe: String = safe_source if language=="zh_CN" else String(catalog[safe_source][language])
+		check(b.mission._objective.text==current and l.unit_tactical_hint(b,two)==current and l.unit_tactical_hint(b,five)==safe,
+			language+" live objective names the carrier and only its panel offers return")
 	await _capture_hint(b,two,"ja_safe_960")
+	loc.set_language("zh_CN",false)
+	two.position=return_marker
+	l.on_mission_action(b,"gao_liu_return",two)
+	l._update_wave_objective(b)
+	check(b.mission.has_event("gao_liu_returned") and b.mission.has_event("fire_escort_safe") and liu.story_outcome=="",
+		"original Liu Tang returns ashore and keeps the fire objective")
+	check(l.unit_tactical_hint(b,two)==safe_source and l.unit_tactical_hint(b,five)==safe_source
+		and "普通战船" in b.mission._objective.text,"after unloading, both panels stop offering a return and the task returns to fleet defense")
 	await _dispose(b)
 func _run() -> void:
 	OS.set_environment("CAMPAIGN_QA","1")

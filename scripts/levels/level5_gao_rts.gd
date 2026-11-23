@@ -23,6 +23,7 @@ const FIRE_POINTS := [Vector2i(42,29),Vector2i(40,40)]
 const FIRE_ZONE_RADIUS := 230.0
 const FIRE_SAFE := Vector2i(32,50)
 const SHIP_KEYS := ["ruan_xiaoqi_boat","ruan_xiaoer_boat","ruan_xiaowu_boat","zhang_shun_boat","liangshan_warship"]
+const OPENING_OBJECTIVE := "首批约140秒出发，后两批约330与540秒。岸军防东山关、舰队守内港；可出击拆两处补给，也可经营补兵接战。"
 var hall: Unit
 var song: Unit
 var flagship: Unit
@@ -251,7 +252,7 @@ func on_start(b) -> void:
 	for i in range(workers.size()):
 		var node=b.nearest_free_gold(workers[i].position,null,workers[i]) if i<3 else b.nearest_resource(workers[i].position,"wood")
 		if node!=null: workers[i].order_gather(node)
-	b.mission.begin("gao_rts","经营水寨 · 分守水陆","首批约140秒出发，后两批约330与540秒。岸军防东山关、舰队守内港；可出击拆两处补给，也可经营补兵接战。")
+	b.mission.begin("gao_rts","经营水寨 · 分守水陆",OPENING_OBJECTIVE)
 	b.mission.enable_scrolling()
 	b.mission.add_map_locator("东山关防线",LAND_FRONT)
 	b.mission.add_map_locator("内港接战线",SEA_FRONT)
@@ -393,6 +394,16 @@ func _fire_hint(b) -> String:
 	return count + "\n" + Localize.text(_fire_next_step(b, visible_targets, escorts))
 func _withdraw_crew(b) -> Array:
 	return [liu_carrier,b.find_unit("ruan_xiaowu_boat")].filter(func(u): return _near(b,u,FIRE_SAFE,120))
+func _liu_return_ship() -> Unit:
+	if not is_instance_valid(embarked_liu): return null
+	var ship = liu_carrier if fire_lit else fireboat
+	return ship if alive(ship) else null
+
+func _fire_aftermath(withdrew: bool, can_return: bool) -> String:
+	if withdrew:
+		return "双船已撤离，火攻演义保留。可让阮小二送刘唐返港下船。" if can_return else "双船已撤离，火攻演义保留。"
+	return "火攻未成。普通战船可继续迎敌，载刘唐的船可返港下船。" if can_return else "火攻未成，继续用普通战船迎敌。"
+
 func _liu_loss_text(b) -> String:
 	if not fire_lit:
 		return "搭载刘唐的船只损失，刘唐失散；可在忠义堂正常付费重新集结，火攻不再能补办。"
@@ -411,10 +422,9 @@ func unit_tactical_hint(b,u) -> String:
 		return Localize.text("刘唐已返港，可继续指挥岸军。")
 	if b.mission.has_event("liu_tang_lost"):
 		return Localize.text("刘唐已重新集结，可继续指挥岸军。" if alive(b.find_unit("liu_tang")) else _liu_loss_text(b))
-	if fire_abandoned or b.mission.story_goals.get("gao_fire",{}).get("state","")=="missed":
-		return Localize.text("本次火攻已失去条件；继续指挥普通舰队。\n刘唐若仍在原船，可右键返港标记下船。")
-	if b.mission.has_event("fire_escort_safe"):
-		return Localize.text("接应撤离已完成，演义成果保留。\n载刘唐的原船可右键返港标记下船。")
+	var withdrew: bool = b.mission.has_event("fire_escort_safe")
+	if withdrew or fire_abandoned or b.mission.story_goals.get("gao_fire",{}).get("state","")=="missed":
+		return Localize.text(_fire_aftermath(withdrew, u == _liu_return_ship()))
 	if fire_lit:
 		var prompt := "接应船已到安全区%d/2；压退附近官船。\n两船到齐后，轻点撤出险水旗标。" if b.hud.touch_ui \
 			else "接应船已到安全区%d/2；压退附近官船。\n两船到齐后，右键撤出险水标记。"
@@ -444,9 +454,8 @@ func _liu_landing_cell(b) -> Vector2i:
 				return cell
 	return Naval.INVALID
 func _disembark_liu(b,actor) -> void:
-	var current_ship=liu_carrier if fire_lit else fireboat
 	if not is_instance_valid(embarked_liu) or embarked_liu.story_outcome!="embarked": return
-	if actor!=current_ship or not _near(b,actor,LIU_RETURN,64) or _enemy_near(b,b.map.cell_to_world(LANDING),180):
+	if actor!=_liu_return_ship() or not _near(b,actor,LIU_RETURN,64) or _enemy_near(b,b.map.cell_to_world(LANDING),180):
 		_retry(b,"gao_liu_return","请把搭载刘唐的原船驶到返港标记，先清开码头附近官军。")
 		return
 	var cell := _liu_landing_cell(b)
@@ -511,7 +520,7 @@ func on_mission_action(b,key: String,actor) -> void:
 				# Initial arrival still uses 48. Only an already started action
 				# tolerates a small nudge from the two required escort ships.
 				b.mission.actions[action_id].settle_margin = 12.0
-			b.mission.add_action("gao_liu_return","刘唐：原船返港下船",LIU_RETURN,["liu_tang_fireboat","ruan_xiaoer_boat"],1.5,48)
+			b.mission.add_action("gao_liu_return","刘唐：原船返港下船",LIU_RETURN,["liu_tang_fireboat"],1.5,48)
 			b.msg("火攻可自选放弃：把搭载刘唐的原船开回返港标记下船，已耗60木不退。若已完成两船安全撤离，下船保留该演义成果。",7)
 		"gao_fire_0","gao_fire_1":
 			if fire_lit or actor!=fireboat:
@@ -530,6 +539,7 @@ func on_mission_action(b,key: String,actor) -> void:
 			fire_lit=true
 			liu_carrier=two
 			two.set_meta("carried_story_person","刘唐")
+			b.mission.update_action_actors("gao_liu_return",["ruan_xiaoer_boat"])
 			b._spawn_ground_fire(actor.position,FIRE_ZONE_RADIUS,650,8,actor,1,"gao_fireboat")
 			for u in near:
 				u.apply_slow(0.35,8)
@@ -637,8 +647,11 @@ func _finish(b) -> void:
 func _wave_objective(b) -> String:
 	if waves[2].sent:
 		return "座船已停。击退余下的水陆主力即可收兵。" if flagship_disabled else "第三批有座船压港。步军守关，舰队看清护船位置后合击座船。"
-	var fire_available: bool = not fire_abandoned and not b.mission.has_event("fire_escort_safe") \
+	var withdrew: bool = b.mission.has_event("fire_escort_safe")
+	var fire_available: bool = not fire_abandoned and not withdrew \
 		and b.mission.story_goals.get("gao_fire",{}).get("state","")!="missed"
+	if not fire_available and _liu_return_ship() != null:
+		return _fire_aftermath(withdrew, true)
 	if fire_available:
 		if fire_lit:
 			return "火船已点燃。让两艘接应船一同撤到安全水域，再下达撤出指令。"
@@ -651,7 +664,7 @@ func _wave_objective(b) -> String:
 	if waves[0].sent:
 		var can_lure: bool=_count(water_groups[0])>0 and not b.mission.has_event("fleet_in_ambush")
 		return "守住东山关和内港。阮小七可把首批活官船引入港汊，再由舰队合击。" if can_lure else "补齐岸军和舰队，守东山关与内港。可拆两处补给源来减少后续援军。"
-	return ""
+	return OPENING_OBJECTIVE
 
 func _wave_warning(b, index: int) -> String:
 	match index:
@@ -671,7 +684,7 @@ func _wave_warning(b, index: int) -> String:
 func _update_wave_objective(b) -> void:
 	if core_ready: return
 	var objective := _wave_objective(b)
-	if not objective.is_empty() and b.mission.objective!=objective: b.mission.set_objective(objective)
+	if b.mission.objective!=objective: b.mission.set_objective(objective)
 
 func process(b,delta: float) -> void:
 	if not alive(hall) or not alive(song):

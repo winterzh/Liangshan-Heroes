@@ -16,6 +16,14 @@ func _run() -> void:
 	AudioServer.set_bus_mute(0,true)
 	var folder:=OS.get_environment("RTS_TEST_OUT")
 	DirAccess.make_dir_recursive_absolute(folder)
+	var flow := root.get_node("ContinueFlow")
+	var deadline := Time.get_ticks_msec() + 180000
+	while not flow.can_launch():
+		if flow.phase == flow.Phase.ERROR or Time.get_ticks_msec() >= deadline:
+			push_error("Campaign startup phase %s: %s" % [flow.phase, flow.last_result])
+			quit(2)
+			return
+		await process_frame
 	var b=await _start("",4)
 	_freeze(b)
 	var l=b.level
@@ -47,6 +55,10 @@ func _run() -> void:
 	for cell in blocked: b.map.astar.set_point_solid(cell,blocked[cell])
 	b.find_unit("ruan_xiaowu_boat").take_damage(10000,null,false,true)
 	check(not b.mission.actions.gao_fire_0.get("blocked_reason","").is_empty() and b.mission.actions.gao_liu_return.get("blocked_reason","").is_empty(),"lost escort blocks impossible fire but keeps original carrier return")
+	l._update_wave_objective(b)
+	check("返港下船" in b.mission._objective.text and "返港下船" in l.unit_tactical_hint(b,l.fireboat)
+		and not "返港下船" in l.unit_tactical_hint(b,b.find_unit("ruan_xiaoer_boat")),
+		"fire fallback offers the original carrier a return without assigning it to an empty escort")
 	l.fireboat.position=b.map.cell_to_world(l.LANDING_WATER+Vector2i(4,1))
 	var origin: Vector2=l.fireboat.position
 	l.fireboat.set_physics_process(true)
@@ -59,6 +71,9 @@ func _run() -> void:
 	check(hero==b.find_unit("liu_tang") and before==[hero.entity_id,hero.hp,hero.hero_level,hero.hero_xp,hero.inventory.snapshot()] and b.used_pop()==population-3,"same injured hero returns with growth and equipment; only lost escort frees population")
 	check(hero.story_outcome=="" and not hero.passive and hero.stance==hero.STANCE_DEFEND and b.map.is_open_world(hero.position),"returned hero is a normal controllable defender on land")
 	check(l.fire_abandoned and l.embarked_liu==null and l.liu_carrier==null and l.fireboat.story_outcome=="retreated" and not l.fireboat.has_meta("story_commander"),"abandonment clears passenger bindings and retires unused fireboat")
+	l._update_wave_objective(b)
+	check(b.mission._objective.text==l.OPENING_OBJECTIVE and "已返港" in l.unit_tactical_hint(b,hero),
+		"before wave one, abandoning the fire route restores the opening objective after Liu Tang is ashore")
 	var unit_count: int=b.units.size()
 	l.on_mission_action(b,"gao_liu_return",l.fireboat)
 	l.on_mission_action(b,"gao_prepare",hero)
