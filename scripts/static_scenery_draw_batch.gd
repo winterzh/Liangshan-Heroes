@@ -27,6 +27,9 @@ extends RefCounted
 ## THE SOFTWARE.
 
 const FEATHER_SIZE := 1.25
+const QUAD_UVS := PackedVector2Array([Vector2.ZERO, Vector2.ZERO, Vector2.ZERO, Vector2.ZERO])
+const EMPTY_UVS := PackedVector2Array()
+const EMPTY_TRIANGLES := PackedInt32Array()
 static var _enabled := OS.get_environment("LSH_STATIC_SCENERY_BATCH") != "0"
 var valid := true
 var _batches: Array[Dictionary] = []
@@ -204,29 +207,57 @@ func _join_offset(direction: Vector2, previous: Vector2) -> Vector2:
 
 
 func _quad(a: Vector2, b: Vector2, c: Vector2, d: Vector2, colors: PackedColorArray) -> void:
-	_append(PackedVector2Array([a, b, c, d]), colors,
-		PackedInt32Array([0, 1, 2, 0, 2, 3]), PackedVector2Array(), null)
+	if _texture != null:
+		_flush()
+		_texture = null
+	var first := _vertices.size()
+	_vertices.append(Vector3(a.x, a.y, 0.0))
+	_vertices.append(Vector3(b.x, b.y, 0.0))
+	_vertices.append(Vector3(c.x, c.y, 0.0))
+	_vertices.append(Vector3(d.x, d.y, 0.0))
+	if colors.size() == 1:
+		var color := colors[0]
+		_colors.append(color)
+		_colors.append(color)
+		_colors.append(color)
+		_colors.append(color)
+	else:
+		_colors.append_array(colors)
+	_uvs.append_array(QUAD_UVS)
+	_indices.append(first)
+	_indices.append(first + 1)
+	_indices.append(first + 2)
+	_indices.append(first)
+	_indices.append(first + 2)
+	_indices.append(first + 3)
 
 
 func _strip(points: PackedVector2Array, colors: PackedColorArray) -> void:
-	var triangles := PackedInt32Array()
+	var first := _append(points, colors, EMPTY_TRIANGLES, EMPTY_UVS, null)
 	for i in range(points.size() - 2):
-		triangles.append_array(PackedInt32Array([i, i + 1, i + 2] if i % 2 == 0 else [i + 1, i, i + 2]))
-	_append(points, colors, triangles, PackedVector2Array(), null)
+		# Match triangle-strip winding while writing directly into the batch.
+		var offset := i % 2
+		_indices.append(first + i + offset)
+		_indices.append(first + i + 1 - offset)
+		_indices.append(first + i + 2)
 
 
 func _append(points: PackedVector2Array, colors: PackedColorArray,
-		triangles: PackedInt32Array, uvs: PackedVector2Array, texture: Texture2D) -> void:
+		triangles: PackedInt32Array, uvs: PackedVector2Array, texture: Texture2D) -> int:
 	if texture != _texture:
 		_flush()
 		_texture = texture
 	var first := _vertices.size()
+	var solid := colors.size() == 1
+	var textured := not uvs.is_empty()
 	for i in range(points.size()):
-		_vertices.append(Vector3(points[i].x, points[i].y, 0.0))
-		_colors.append(colors[0] if colors.size() == 1 else colors[i])
-		_uvs.append(Vector2.ZERO if uvs.is_empty() else uvs[i])
+		var point := points[i]
+		_vertices.append(Vector3(point.x, point.y, 0.0))
+		_colors.append(colors[0] if solid else colors[i])
+		_uvs.append(uvs[i] if textured else Vector2.ZERO)
 	for index in triangles:
 		_indices.append(first + index)
+	return first
 
 
 func _flush() -> void:
