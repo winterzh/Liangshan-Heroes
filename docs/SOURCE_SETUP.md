@@ -1,5 +1,10 @@
 # 源码设置与换机（2026-10-30）
 
+## 祝家庄偏门定位随既有任务恢复
+
+任务状态从原孙立指令、当前接应任务及偏门开放事件计算。新定位使用任务栏已有的稳定按钮标识和恢复机制。关卡存档字段沿用原格式。 [Windows 任务验收](../qa/campaign_siege_20261116/windows_zhu_side_handoff_2f60fd63.json)
+
+
 ## Windows 直接重载战场使用启动校验结果
 
 当战场没有收到主菜单提交的入口身份时，导出的 Windows 版先从 ContinueFlow 重新核对启动身份。该结果有效时用于初始化新的战斗和随机状态。无有效结果时继续完整文件身份检查。 [重开与下一关验收](../qa/battle_entry_timing_20261116/windows_campaign_reentry_a1bd61b0.json)
