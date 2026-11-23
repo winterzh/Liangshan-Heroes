@@ -1,5 +1,10 @@
 # 源码设置与换机（2026-10-30）
 
+## 战场桌面鼠标事件坐标
+
+战场在处理桌面鼠标按钮时，把视口事件位置换算成战场坐标，供左右键共用。设备标识为触屏模拟时沿用原指针路径。移动落点、选人规则和编队字段沿用原逻辑。 [Windows 点选回归](../qa/battle_entry_timing_20261116/windows_pc_left_click_event_position_48a6082d.json)
+
+
 ## Windows 编队镜头采用当前选中成员
 
 编队双按复用战场现有选择过滤结果定位镜头。编队记录和存档字段沿用原格式。验收使用正常菜单、桌面视口数字键和出驻军的生产接口。 [原生编队复测](../qa/battle_entry_timing_20261116/windows_pc_control_group_camera_7e775856.json)

@@ -1,0 +1,238 @@
+{
+  "scope": "Normal offline Windows campaign, actual viewport button events and the ordinary Fight menu. The opening click targets an authored actor. To make modifier, double-click and rectangle behavior reproducible, a controlled fixture then places two authored actors at distinct viewport points. The physical pointer is unused. Touch emulation and physical keyboard/mouse operation are outside the acceptance scope.",
+  "frozen_inputs_compared": 6574,
+  "runtime_input_changes": [
+    "scripts/battle.gd"
+  ],
+  "reproduction_logic": "The old program read CanvasItem.get_global_mouse_position() for a desktop left click. The isolation fixture dispatches a valid button event at a different point. The new left path uses the same event coordinate projection as the existing right path.",
+  "candidate_freeze": {
+    "kind": "local_integrated_windows_candidate",
+    "layout": "split_pck",
+    "commit": "48a6082d3e321f06960839e9f9b7f6aa41986a0a",
+    "source_version": "source-v1:bd7764c194642244a9692e3ef3fbe15a995dc26530b4bc0622de22b35378a4d8",
+    "tracked_runtime_count": 6574,
+    "steps": [
+      {
+        "stage": "import",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 58.25
+      },
+      {
+        "stage": "export",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 85.19
+      }
+    ],
+    "files": [
+      {
+        "path": "GODOTSTEAM_LICENSE.txt",
+        "bytes": 1110,
+        "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+      },
+      {
+        "path": "LiangshanHeroes.exe",
+        "bytes": 104886784,
+        "sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4"
+      },
+      {
+        "path": "LiangshanHeroes.pck",
+        "bytes": 1722698060,
+        "sha256": "e810dcf9e3e66017374dcccac07eaee84b458a7a4a089b0fbc5d14fb157bf6ef"
+      },
+      {
+        "path": "libgodotsteam.windows.template_release.x86_64.dll",
+        "bytes": 3961344,
+        "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+      },
+      {
+        "path": "steam_api64.dll",
+        "bytes": 319128,
+        "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+      },
+      {
+        "path": "steam_stats_reader.dll",
+        "bytes": 393728,
+        "sha256": "5a79a77b5b6e2cff21b285c785118352805a09d91876f89276af119ee1702517"
+      },
+      {
+        "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+        "bytes": 1093,
+        "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+      }
+    ]
+  },
+  "conditions": [
+    {
+      "condition": "old",
+      "source_commit": "7e7758561fe8b1001f7400c22bcaa1c170280331",
+      "window": [
+        1280,
+        720
+      ],
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "837458fb835553fdab5f56fbd30a7262f0513ba369ddf2364a05b91b6c01f072",
+      "driver_script_sha256": "5d1b3f1b81e014cacb24bf1b5ae83fb56a3271a12bf63ca3d944eb8c288a659f",
+      "log_sha256": "8b361169d9e3695f24ea231d108445f7bf933d9e224002d2f3a091a98176b95a",
+      "trace_sha256": "61f1668018ef826c064c6420e84657d53c988a62a1a844a547d6804afb3fc176",
+      "renderer": "Vulkan Forward+",
+      "all_native_payload_files_verified": true,
+      "progress_unchanged": true,
+      "exit_code": 0,
+      "pointer_selection": {
+        "expected_unit": "chao_gai",
+        "selected_by_left_click": [],
+        "viewport_event": [
+          561.776062011719,
+          263.534790039063
+        ],
+        "event_world": [
+          64.0,
+          499.417053222656
+        ],
+        "global_pointer_before_press": [
+          -1216835712.0,
+          207.112701416016
+        ],
+        "battle_press_world": [
+          -1216835712.0,
+          207.112701416016
+        ],
+        "press_dispatched_to_battle": true,
+        "uses_event_world_at_press": false,
+        "picked_expected_unit": false
+      },
+      "desktop_selection_variants": {},
+      "verified_right_click_move": true,
+      "movement_probe_programmatic_selection_fallback": true
+    },
+    {
+      "condition": "fixed",
+      "source_commit": "48a6082d3e321f06960839e9f9b7f6aa41986a0a",
+      "window": [
+        1280,
+        720
+      ],
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "e810dcf9e3e66017374dcccac07eaee84b458a7a4a089b0fbc5d14fb157bf6ef",
+      "driver_script_sha256": "dd99de384a915bb0cfc15d13d2f8ee68c887b598f45bd1ba8c425ba93e4d9c38",
+      "log_sha256": "da17bd886b6aae0e9c366d99d78464cda07009149120cccc249901340e4ebe25",
+      "trace_sha256": "6bd75d7af18cdd274782f570df4a26d91db5fbeac088cca627c5e47812383abf",
+      "renderer": "Vulkan Forward+",
+      "all_native_payload_files_verified": true,
+      "progress_unchanged": true,
+      "exit_code": 0,
+      "pointer_selection": {
+        "expected_unit": "chao_gai",
+        "selected_by_left_click": [
+          "chao_gai"
+        ],
+        "viewport_event": [
+          370.804046630859,
+          258.954650878906
+        ],
+        "event_world": [
+          64.0,
+          499.417053222656
+        ],
+        "global_pointer_before_press": [
+          870449984.0,
+          274.912811279297
+        ],
+        "battle_press_world": [
+          64.0,
+          499.417053222656
+        ],
+        "press_dispatched_to_battle": true,
+        "uses_event_world_at_press": true,
+        "picked_expected_unit": true
+      },
+      "desktop_selection_variants": {
+        "left_select": true,
+        "shift_add": true,
+        "shift_remove": true,
+        "double_click": true,
+        "box_select": true,
+        "keyboard_arms_attack_move": true,
+        "attack_move_uses_click_position": true
+      },
+      "verified_right_click_move": true,
+      "movement_probe_programmatic_selection_fallback": false
+    },
+    {
+      "condition": "compact",
+      "source_commit": "48a6082d3e321f06960839e9f9b7f6aa41986a0a",
+      "window": [
+        960,
+        540
+      ],
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "e810dcf9e3e66017374dcccac07eaee84b458a7a4a089b0fbc5d14fb157bf6ef",
+      "driver_script_sha256": "dd99de384a915bb0cfc15d13d2f8ee68c887b598f45bd1ba8c425ba93e4d9c38",
+      "log_sha256": "da17bd886b6aae0e9c366d99d78464cda07009149120cccc249901340e4ebe25",
+      "trace_sha256": "ee370d69ad228f28bbda4a05409f03fe24c991c5fb5cfc917c23727eba77a4c9",
+      "renderer": "Vulkan Forward+",
+      "all_native_payload_files_verified": true,
+      "progress_unchanged": true,
+      "exit_code": 0,
+      "pointer_selection": {
+        "expected_unit": "chao_gai",
+        "selected_by_left_click": [
+          "chao_gai"
+        ],
+        "viewport_event": [
+          371.964904785156,
+          257.793823242188
+        ],
+        "event_world": [
+          64.0,
+          499.417053222656
+        ],
+        "global_pointer_before_press": [
+          1494381056.0,
+          152.331756591797
+        ],
+        "battle_press_world": [
+          64.0,
+          499.417053222656
+        ],
+        "press_dispatched_to_battle": true,
+        "uses_event_world_at_press": true,
+        "picked_expected_unit": true
+      },
+      "desktop_selection_variants": {
+        "left_select": true,
+        "shift_add": true,
+        "shift_remove": true,
+        "double_click": true,
+        "box_select": true,
+        "keyboard_arms_attack_move": true,
+        "attack_move_uses_click_position": true
+      },
+      "verified_right_click_move": true,
+      "movement_probe_programmatic_selection_fallback": false
+    }
+  ],
+  "six_entry_runtime": {
+    "duration_seconds": 75.932,
+    "transitions": 12,
+    "all_activity_and_node_release_checks_passed": true,
+    "campaign_progress_unchanged": true,
+    "eligible_for_ten_minute_acceptance": false,
+    "launcher": {
+      "candidate": "48a6082d3e321f06960839e9f9b7f6aa41986a0a",
+      "payload_files_unchanged": true,
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "e810dcf9e3e66017374dcccac07eaee84b458a7a4a089b0fbc5d14fb157bf6ef",
+      "split_identity": "891e9f4389bd17f320bfdbeb545d1b83879675bd160831bb563eb4f71404ddfa",
+      "exe_unchanged": true,
+      "exit_code": 0,
+      "seconds": 84.331,
+      "errors": [],
+      "warnings": [],
+      "log_sha256": "c841b3466cd06bc8de7cab661c5018d24ab9ff9cd3162da0ec71abd36d959435",
+      "report_sha256": "645e7392280650ce674b157ba58deb7b4e9cf57602f9caee51951c5074a4f0c5"
+    }
+  }
+}
