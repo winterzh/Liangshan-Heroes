@@ -1,0 +1,567 @@
+{
+  "scope": "Windows Vulkan Forward+ 960x540 with isolated offline profiles. An original rescue checkpoint from a completed prior run is copied by hash. Controlled unit placement, sight and damage exercise danger states. Normal GUI input, Save and Exit and independent Continue exercise camera, orders and save lineage. A separate automated four-times-speed battle uses normal scouting, paid production, player orders, side-gate feint, rescue, withdrawal and settlement.",
+  "candidate": {
+    "kind": "local_integrated_windows_candidate",
+    "layout": "split_pck",
+    "commit": "93b2e9bd860999c2372373bb4d70dab8c746601a",
+    "source_version": "source-v1:5acb31d4181c515d7b4abfc8ff4d7906e735d73783ffe25b1575fefed4be5b81",
+    "tracked_runtime_count": 6574,
+    "steps": [
+      {
+        "stage": "import",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 59.73
+      },
+      {
+        "stage": "export",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 86.95
+      }
+    ],
+    "files": [
+      {
+        "path": "GODOTSTEAM_LICENSE.txt",
+        "bytes": 1110,
+        "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+      },
+      {
+        "path": "LiangshanHeroes.exe",
+        "bytes": 104886784,
+        "sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4"
+      },
+      {
+        "path": "LiangshanHeroes.pck",
+        "bytes": 1722704764,
+        "sha256": "1d6830f2d063b9cb41bd5667193b13f534e1337a8600ebb100139073f7ed2215"
+      },
+      {
+        "path": "libgodotsteam.windows.template_release.x86_64.dll",
+        "bytes": 3961344,
+        "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+      },
+      {
+        "path": "steam_api64.dll",
+        "bytes": 319128,
+        "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+      },
+      {
+        "path": "steam_stats_reader.dll",
+        "bytes": 393728,
+        "sha256": "5a79a77b5b6e2cff21b285c785118352805a09d91876f89276af119ee1702517"
+      },
+      {
+        "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+        "bytes": 1093,
+        "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+      }
+    ]
+  },
+  "tracked_runtime_inputs": 6574,
+  "changed_runtime_inputs": [
+    "assets/localization/catalog.json",
+    "scripts/campaign_mission.gd",
+    "scripts/levels/level3_zhujiazhuang_rts.gd",
+    "scripts/run_campaign_level_state.gd"
+  ],
+  "localization_entries": 5256,
+  "localization_strict_exit": 0,
+  "controlled_checkpoint_processes": {
+    "danger-save": {
+      "checks": 36,
+      "facts": {
+        "camera_cell": [
+          32,
+          20
+        ],
+        "elapsed": 462.549999999977,
+        "generation": 4,
+        "languages": {
+          "en": {
+            "button": "Locate Wounded",
+            "compact_warning": "Zhu Manor · Wounded in danger · See Objectives",
+            "locator_rect": [
+              104.0,
+              507.0,
+              346.0,
+              37.0
+            ],
+            "locator_visible": true,
+            "objective": "Shi Qian is in danger. Use \"Locate Wounded\" and send troops to cover him. His return unlocks the finish.",
+            "task_clip": [
+              104.0,
+              129.0,
+              346.0,
+              415.0
+            ],
+            "tooltip": "Center the camera on a wounded ally in danger. Shi Qian takes priority."
+          },
+          "ja": {
+            "button": "負傷者の位置を確認",
+            "compact_warning": "祝家荘 · 負傷者に危険 · 目標を確認",
+            "locator_rect": [
+              104.0,
+              507.0,
+              288.0,
+              37.0
+            ],
+            "locator_visible": true,
+            "objective": "時遷に危険が迫っています。「負傷者の位置を確認」で位置を確認し、部隊を援護に。時遷が帰還すれば撤収できます。",
+            "task_clip": [
+              104.0,
+              129.0,
+              288.0,
+              415.0
+            ],
+            "tooltip": "危険が迫る負傷者にカメラを移動します。時遷を優先します。"
+          },
+          "zh_CN": {
+            "button": "查看 · 撤离险情",
+            "compact_warning": "祝家庄 · 伤员遇险 · 查看任务目标",
+            "locator_rect": [
+              104.0,
+              141.0,
+              288.0,
+              37.0
+            ],
+            "locator_visible": true,
+            "objective": "时迁有危险。点「查看 · 撤离险情」并派兵掩护。时迁归营即可收军。",
+            "task_clip": [
+              104.0,
+              129.0,
+              288.0,
+              415.0
+            ],
+            "tooltip": "把镜头移到遇险伤员。优先定位时迁。"
+          },
+          "zh_TW": {
+            "button": "查看 · 撤離險情",
+            "compact_warning": "祝家莊 · 傷員遇險 · 查看任務目標",
+            "locator_rect": [
+              104.0,
+              488.0,
+              288.0,
+              37.0
+            ],
+            "locator_visible": true,
+            "objective": "時遷有危險。點「查看 · 撤離險情」並派兵掩護。時遷歸營即可收軍。",
+            "task_clip": [
+              104.0,
+              129.0,
+              288.0,
+              415.0
+            ],
+            "tooltip": "把鏡頭移到遇險傷員。優先定位時遷。"
+          }
+        },
+        "locator_clicked": true,
+        "resolution": [
+          960,
+          540
+        ],
+        "slot_sha256": "63b6106373d6643c865d16afa2249d81827218a35b9ad4b68edde2498b33130b"
+      },
+      "failures": [],
+      "stage": "danger-save",
+      "source_commit": "93b2e9bd860999c2372373bb4d70dab8c746601a",
+      "executable_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "slots": {
+        "record_0000000003.json": "0577e4667340d3744ca1a17f3e70f12a945b87d3c648e0a27d708f4d0023c44e",
+        "record_0000000004.json": "63b6106373d6643c865d16afa2249d81827218a35b9ad4b68edde2498b33130b"
+      },
+      "runtime_errors": [],
+      "log_sha256": "39b282c8b7b37e20d62ad5fa10dca767ca200c8b3c6c31e779500c2b74816498",
+      "pack_files_verified": 7,
+      "pck_sha256": "1d6830f2d063b9cb41bd5667193b13f534e1337a8600ebb100139073f7ed2215",
+      "split_startup_identity": "425c6512c0a8ee6e95ce8cf11f18b2f4faebd0c97041cdbafa1ddfcdf0f5d42b"
+    },
+    "danger-reopen": {
+      "checks": 31,
+      "facts": {
+        "achievement": {
+          "best_done": 3,
+          "best_goal_ids": [
+            "zhu_capture",
+            "zhu_inside",
+            "zhu_seven"
+          ],
+          "cleared": true,
+          "contract_version": 2,
+          "story_complete": true,
+          "story_total": 3
+        },
+        "actual_return_seconds": 19.1333333333322,
+        "camera_cell": [
+          32,
+          20
+        ],
+        "languages": {
+          "en": {
+            "button": "Locate Wounded",
+            "compact_warning": "Zhu Manor · Wounded in danger · See Objectives",
+            "locator_rect": [
+              104.0,
+              507.0,
+              346.0,
+              37.0
+            ],
+            "locator_visible": true,
+            "objective": "Shi Qian is in danger. Use \"Locate Wounded\" and send troops to cover him. His return unlocks the finish.",
+            "task_clip": [
+              104.0,
+              129.0,
+              346.0,
+              415.0
+            ],
+            "tooltip": "Center the camera on a wounded ally in danger. Shi Qian takes priority."
+          },
+          "ja": {
+            "button": "負傷者の位置を確認",
+            "compact_warning": "祝家荘 · 負傷者に危険 · 目標を確認",
+            "locator_rect": [
+              104.0,
+              507.0,
+              288.0,
+              37.0
+            ],
+            "locator_visible": true,
+            "objective": "時遷に危険が迫っています。「負傷者の位置を確認」で位置を確認し、部隊を援護に。時遷が帰還すれば撤収できます。",
+            "task_clip": [
+              104.0,
+              129.0,
+              288.0,
+              415.0
+            ],
+            "tooltip": "危険が迫る負傷者にカメラを移動します。時遷を優先します。"
+          },
+          "zh_CN": {
+            "button": "查看 · 撤离险情",
+            "compact_warning": "祝家庄 · 伤员遇险 · 查看任务目标",
+            "locator_rect": [
+              104.0,
+              482.0,
+              288.0,
+              37.0
+            ],
+            "locator_visible": true,
+            "objective": "时迁有危险。点「查看 · 撤离险情」并派兵掩护。时迁归营即可收军。",
+            "task_clip": [
+              104.0,
+              129.0,
+              288.0,
+              415.0
+            ],
+            "tooltip": "把镜头移到遇险伤员。优先定位时迁。"
+          },
+          "zh_TW": {
+            "button": "查看 · 撤離險情",
+            "compact_warning": "祝家莊 · 傷員遇險 · 查看任務目標",
+            "locator_rect": [
+              104.0,
+              488.0,
+              288.0,
+              37.0
+            ],
+            "locator_visible": true,
+            "objective": "時遷有危險。點「查看 · 撤離險情」並派兵掩護。時遷歸營即可收軍。",
+            "task_clip": [
+              104.0,
+              129.0,
+              288.0,
+              415.0
+            ],
+            "tooltip": "把鏡頭移到遇險傷員。優先定位時遷。"
+          }
+        },
+        "locator_clicked": true,
+        "resolution": [
+          960,
+          540
+        ]
+      },
+      "failures": [],
+      "stage": "danger-reopen",
+      "source_commit": "93b2e9bd860999c2372373bb4d70dab8c746601a",
+      "executable_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "slots": {
+        "record_0000000003.json": "0577e4667340d3744ca1a17f3e70f12a945b87d3c648e0a27d708f4d0023c44e",
+        "record_0000000004.json": "63b6106373d6643c865d16afa2249d81827218a35b9ad4b68edde2498b33130b"
+      },
+      "runtime_errors": [],
+      "log_sha256": "65af965c71b4e5b711aaa54a265516c7c29d5ec7909ce49d60f51c7b9b082046",
+      "pack_files_verified": 7,
+      "pck_sha256": "1d6830f2d063b9cb41bd5667193b13f534e1337a8600ebb100139073f7ed2215",
+      "split_startup_identity": "425c6512c0a8ee6e95ce8cf11f18b2f4faebd0c97041cdbafa1ddfcdf0f5d42b"
+    }
+  },
+  "live_route_before_waiting_for_crew": {
+    "source_commit": "65e53fc21d49b3f38930f173fac9c96e1de019b4",
+    "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+    "pck_sha256": "29842dc3e8ecf0c0b881703859ecb8c6d7446dfa57c2ef6312e3a49cf67d9f9c",
+    "split_identity_sha256": "b306f552cbaf3f4635909e75cb0522716db0e3c31a1ad535db4d29e51409b45d",
+    "runs": [
+      {
+        "route": "inside",
+        "exit": 0,
+        "engine_error": false,
+        "log_sha256": "93246487dfcb2ec3de9c5a3a19ffc233a9d225f7556ef948588d20e79cbe6a53",
+        "fixture_sha256": "51953c2b6635537b74f672ccaed9424f75148ca67468459b270c00d2abe8e9d1",
+        "report": {
+          "checks": 16,
+          "failures": [],
+          "metrics": {
+            "ai_trained": 10,
+            "buildings_started": 5,
+            "button_dispatches": 1,
+            "campaign_progress": true,
+            "debrief_languages": [
+              "zh_CN",
+              "zh_TW",
+              "en",
+              "ja"
+            ],
+            "entered_with_main_intact": true,
+            "evacuation_warnings": [],
+            "events": [
+              "zhu_feint_rule",
+              "zhu_ram_escort_rule",
+              "zhu_resource_secured",
+              "zhu_supply_cut",
+              "zhu_hu_captured",
+              "zhu_feint_happened",
+              "action:zhu_rts:zhu_rts_inside",
+              "zhu_gate_opened",
+              "zhu_feint_at_side",
+              "zhu_manor_fallen",
+              "zhu_gate_breached",
+              "action:zhu_rts:zhu_rts_rescue",
+              "zhu_prisoners_freed",
+              "action:zhu_rts:zhu_rts_finish",
+              "zhu_victory"
+            ],
+            "finish_gate": {
+              "expansion_secured": true,
+              "inside_open": true,
+              "main_breached": true,
+              "supply_cut": true
+            },
+            "first_main_breach": {},
+            "game_seconds": 461.083333333312,
+            "guards_shifted": false,
+            "handoff": {
+              "contact_under_pressure": true,
+              "locator_available_when_open": true,
+              "marching_under_pressure": false
+            },
+            "orders": 286,
+            "raids_sent": 1,
+            "replay_suggestion": {
+              "en": "Try next time · The feint worked. Try massing your troops and escorting a ram to the main gate.",
+              "ja": "次の一手 · 陽動は成功。次は兵を集め、破城槌を護衛して正門を攻めてみましょう。",
+              "zh_CN": "重玩建议 · 本局佯攻接应成功。下次可集中兵力，护送撞车直攻正门。",
+              "zh_TW": "重玩建議 · 本局佯攻接應成功。下次可集中兵力，護送撞車直攻正門。"
+            },
+            "result": {
+              "contract_version": 2,
+              "core_cleared": true,
+              "core_goal": "摧毁祝家庄大营，救出时迁并送回前营。宋江、时迁与梁山前营必须存活。",
+              "done_ids": [
+                "zhu_capture",
+                "zhu_inside"
+              ],
+              "goals": [
+                {
+                  "id": "zhu_capture",
+                  "label": "生擒扈三娘，仍按敌将看押",
+                  "note": "",
+                  "reason": "",
+                  "state": "done"
+                },
+                {
+                  "id": "zhu_inside",
+                  "label": "孙立内应，打开偏门",
+                  "note": "",
+                  "reason": "",
+                  "state": "done"
+                },
+                {
+                  "id": "zhu_seven",
+                  "label": "七名被囚好汉全部撤回前营",
+                  "note": "",
+                  "reason": "本局未完成",
+                  "state": "missed"
+                }
+              ],
+              "missed_ids": [
+                "zhu_seven"
+              ],
+              "pending_ids": [],
+              "story_complete": false,
+              "story_done": 2,
+              "story_total": 3
+            },
+            "stage": "return",
+            "towers_destroyed": 2,
+            "units_queued": 52,
+            "units_queued_by_key": {
+              "hua_rong": 1,
+              "liang_dao": 13,
+              "liang_gong": 21,
+              "liang_qiang": 11,
+              "siege_cata": 3,
+              "siege_ram": 3
+            }
+          },
+          "passed": true,
+          "route": "inside",
+          "scope": "automated live gameplay; not human fun acceptance"
+        }
+      }
+    ]
+  },
+  "full_live_route": {
+    "source_commit": "65e53fc21d49b3f38930f173fac9c96e1de019b4",
+    "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+    "pck_sha256": "29842dc3e8ecf0c0b881703859ecb8c6d7446dfa57c2ef6312e3a49cf67d9f9c",
+    "split_identity_sha256": "b306f552cbaf3f4635909e75cb0522716db0e3c31a1ad535db4d29e51409b45d",
+    "runs": [
+      {
+        "route": "inside",
+        "exit": 0,
+        "engine_error": false,
+        "log_sha256": "5b2da3c3c881e49c7e6b124e1d4e8237252ee3118b0e09f380a311434ca4ae3a",
+        "fixture_sha256": "131c53f49f2413f01938d9ac30c2be437a3a4078af7e0b18f3f018a48a4f920c",
+        "report": {
+          "checks": 16,
+          "failures": [],
+          "metrics": {
+            "ai_trained": 13,
+            "buildings_started": 5,
+            "button_dispatches": 1,
+            "campaign_progress": true,
+            "debrief_languages": [
+              "zh_CN",
+              "zh_TW",
+              "en",
+              "ja"
+            ],
+            "entered_with_main_intact": true,
+            "evacuation_warnings": [],
+            "events": [
+              "zhu_feint_rule",
+              "zhu_ram_escort_rule",
+              "zhu_resource_secured",
+              "zhu_supply_cut",
+              "zhu_hu_captured",
+              "zhu_feint_happened",
+              "action:zhu_rts:zhu_rts_inside",
+              "zhu_gate_opened",
+              "zhu_feint_at_side",
+              "zhu_manor_fallen",
+              "zhu_gate_breached",
+              "action:zhu_rts:zhu_rts_rescue",
+              "zhu_prisoners_freed",
+              "zhu_seven_safe",
+              "action:zhu_rts:zhu_rts_finish",
+              "zhu_victory"
+            ],
+            "finish_gate": {
+              "expansion_secured": true,
+              "inside_open": true,
+              "main_breached": true,
+              "supply_cut": true
+            },
+            "first_main_breach": {},
+            "game_seconds": 459.683333333312,
+            "guards_shifted": false,
+            "handoff": {
+              "contact_under_pressure": true,
+              "locator_available_when_open": true,
+              "marching_under_pressure": false
+            },
+            "orders": 274,
+            "raids_sent": 1,
+            "replay_suggestion": {
+              "en": "Try next time · The feint worked. Try massing your troops and escorting a ram to the main gate.",
+              "ja": "次の一手 · 陽動は成功。次は兵を集め、破城槌を護衛して正門を攻めてみましょう。",
+              "zh_CN": "重玩建议 · 本局佯攻接应成功。下次可集中兵力，护送撞车直攻正门。",
+              "zh_TW": "重玩建議 · 本局佯攻接應成功。下次可集中兵力，護送撞車直攻正門。"
+            },
+            "result": {
+              "contract_version": 2,
+              "core_cleared": true,
+              "core_goal": "摧毁祝家庄大营，救出时迁并送回前营。宋江、时迁与梁山前营必须存活。",
+              "done_ids": [
+                "zhu_capture",
+                "zhu_inside",
+                "zhu_seven"
+              ],
+              "goals": [
+                {
+                  "id": "zhu_capture",
+                  "label": "生擒扈三娘，仍按敌将看押",
+                  "note": "",
+                  "reason": "",
+                  "state": "done"
+                },
+                {
+                  "id": "zhu_inside",
+                  "label": "孙立内应，打开偏门",
+                  "note": "",
+                  "reason": "",
+                  "state": "done"
+                },
+                {
+                  "id": "zhu_seven",
+                  "label": "七名被囚好汉全部撤回前营",
+                  "note": "",
+                  "reason": "",
+                  "state": "done"
+                }
+              ],
+              "missed_ids": [],
+              "pending_ids": [],
+              "story_complete": true,
+              "story_done": 3,
+              "story_total": 3
+            },
+            "stage": "return",
+            "towers_destroyed": 2,
+            "units_queued": 53,
+            "units_queued_by_key": {
+              "hua_rong": 3,
+              "liang_dao": 13,
+              "liang_gong": 21,
+              "liang_qiang": 10,
+              "siege_cata": 3,
+              "siege_ram": 3
+            }
+          },
+          "passed": true,
+          "route": "inside",
+          "scope": "automated live gameplay; not human fun acceptance"
+        }
+      }
+    ]
+  },
+  "fixed_layout": {
+    "candidate_before_fix": "c9a9d6989f3e01aba7c540739f01bdc8d5b0a409",
+    "viewport": [
+      960,
+      540
+    ],
+    "clipped_languages": [
+      "en",
+      "ja"
+    ],
+    "log_sha256": "25910eca4a8d040529fc2e669ed646353e98d7eb792db3a06a9ade8e41b20e6a",
+    "resolution": "The evacuation locator is the primary action while wounded allies are in danger."
+  },
+  "fixed_continue_rejection": {
+    "candidate_before_fix": "96d2695b75799d0f0c002ca8a98d833a93e3ada5",
+    "code": "UNCLASSIFIED_DECLARATION",
+    "log_sha256": "959eb1cde98c8ce1777bdea0b1b70164b71cc0c6dd749fe2bdd4b5eebc5a2eed",
+    "resolution": "The derived HUD flag is declared transient; stored level fields remain compatible."
+  }
+}
