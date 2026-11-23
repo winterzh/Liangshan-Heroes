@@ -1,5 +1,5 @@
 {
-  "release_state": "uploaded_pending_default",
+  "release_state": "published_verified",
   "candidate": {
     "source_commit": "ee9f29f5f8124166ce1492b30094fea39fbf6c8e",
     "layout": "split_pck",
@@ -233,5 +233,64 @@
     "remote_valid": true,
     "stats_ready": true
   },
-  "scope": "Windows. The startup probe used the stock cloud adapter and the existing Steam login with an isolated local profile. It verified an actual Steam stats read and settled cloud synchronization. No gameplay or new achievement claim in that probe."
+  "scope": "Windows. The startup probe used the stock cloud adapter and the existing Steam login with an isolated local profile. It verified an actual Steam stats read and settled cloud synchronization. No gameplay or new achievement claim in that probe.",
+  "public_branch": {
+    "app": 5088120,
+    "branch": "default",
+    "build_id": 26873421,
+    "manifest_id": "1495091939036589520",
+    "activated_by": "user reported manual publication",
+    "server_files_verified": 7,
+    "other_branches_readback": {
+      "macos": 0,
+      "steam-integration": 25476210
+    },
+    "observed_at_local": "2026-11-24T01:33:16.437628+08:00",
+    "method": "Steamworks default branch, build-row tag and server manifest readback"
+  },
+  "public_download": {
+    "complete": true,
+    "app": 5088120,
+    "build_id": 26873421,
+    "manifest_id": "1495091939036589520",
+    "matching_files": 7,
+    "exit_code": 0,
+    "seconds": 19.155,
+    "errors": [],
+    "method": "fresh SteamCMD download from public, then stock bundled EXE in an isolated offline profile"
+  },
+  "announcement": {
+    "public": true,
+    "event_id": "680767470935475624",
+    "linked_build_id": 26873421,
+    "url": "https://store.steampowered.com/news/app/5088120/view/680767470935475624",
+    "artwork": "Steam default game cover; existing game artwork in announcement body",
+    "locales": {
+      "schinese": {
+        "title_matches": true,
+        "body_entries_verified": 5,
+        "image_loaded": true
+      },
+      "tchinese": {
+        "title_matches": true,
+        "body_entries_verified": 5,
+        "image_loaded": true
+      },
+      "english": {
+        "title_matches": true,
+        "body_entries_verified": 5,
+        "image_loaded": true
+      },
+      "japanese": {
+        "title_matches": true,
+        "body_entries_verified": 5,
+        "image_loaded": true
+      }
+    }
+  },
+  "desktop_client_readback": {
+    "observed_installed_build": 26752476,
+    "observed_target_build": 26752476,
+    "launch_performed": false
+  }
 }

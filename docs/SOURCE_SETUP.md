@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+Steam Windows 正式 Build 26873421 已核验。发行来源 `ee9f29f5`，七文件完整干净下载，原生隔离启动通过。四语补丁说明已公开。 [发布与验收](STEAM_UPDATE_20261124.md)
+
 当前 Windows 离线试玩候选为 `ee9f29f5`。完整解压，保留同目录的 EXE 与 PCK，再运行 `Start Local Playtest.cmd`。ZIP 全量回读和干净解包启动通过。 [开场读取与进场数据](../qa/battle_entry_timing_20261116/windows_opening_portrait_entry_ee9f29f5.json)
 
 上一 Windows 离线试玩候选 `42604585` 已通过 ZIP 全量回读、干净解包启动和缺失 PCK 提示。完整解压，将 EXE 与 PCK 放在同一目录，再运行 `Start Local Playtest.cmd`。 [Windows 空车装货验收](../qa/campaign_transport_groups_20261116/windows_empty_cart_dispatch_42604585.json)

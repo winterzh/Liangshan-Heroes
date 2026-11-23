@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+最新版 Steam 发布记录、机器验收和公告入口见 [2026-11-24 发布目录](../qa/steam_release_20261124/README.md)。
+
 当前 Windows 离线试玩包位于 D:/AI项目/水浒/Windows候选/20261124-ee9f29f5/。ZIP 含配套 EXE、PCK、运行库、许可、启动器和说明。 [开场读取与进场数据](../qa/battle_entry_timing_20261116/windows_opening_portrait_entry_ee9f29f5.json)
 
 快活林操作验收包位于 D:/AI项目/水浒/Windows候选/20261123-94629f93/。ZIP 含发行文件、启动器和说明。 [Windows 验收收据](../qa/campaign_counter_window_20261116/windows_shop_handover_94629f93.json)

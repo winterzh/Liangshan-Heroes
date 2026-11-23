@@ -8,9 +8,9 @@ Liangshan Heroes · 基于 Godot 4.6.3 的水浒题材即时战略项目。
 
 | 入口 | 版本与用途 |
 | --- | --- |
-| [Steam Windows](https://store.steampowered.com/app/5088120/) | Windows 正式版 Build **26752476**。[发布记录](docs/STEAM_UPDATE_20261118_CANDIDATE_0f133709.json) · [四语公告](https://store.steampowered.com/news/app/5088120/view/680767470935474309) |
-| [main](https://github.com/winterzh/Liangshan-Heroes/tree/main) / [stable](https://github.com/winterzh/Liangshan-Heroes/tree/codex/sync-20260905-stable) | 开发候选同步到 stable。 |
-| [GitHub Releases](https://github.com/winterzh/Liangshan-Heroes/releases) | 历史安装包；最新Release为 **Android v2.0**，与Steam Windows版本分别记录 |
+| [Steam Windows](https://store.steampowered.com/app/5088120/) | 正式 Build **26873421**。[更新详情](docs/STEAM_UPDATE_20261124.md) · [四语公告](https://store.steampowered.com/news/app/5088120/view/680767470935475624) |
+| [main](https://github.com/winterzh/Liangshan-Heroes/tree/main) · [开发分支](https://github.com/winterzh/Liangshan-Heroes/tree/codex/sync-20260905-stable) | 正式版生产源码为 `ee9f29f5`，版本说明和验收记录与源码一并维护。 |
+| [GitHub Releases](https://github.com/winterzh/Liangshan-Heroes/releases) | GitHub 历史安装包，平台和版本见[更新记录](CHANGELOG.md)。 |
 
 Windows 离线试玩候选 `ee9f29f5`。完整解压，把 EXE 与 PCK 留在同一目录，再双击 `Start Local Playtest.cmd`。[试玩步骤](docs/PLAYTEST_CHECKLIST_20260906.md)
 
