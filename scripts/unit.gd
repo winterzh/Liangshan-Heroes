@@ -578,6 +578,19 @@ func is_holding_ground() -> bool:
 		or (_state == ST_CHASE and _chase_intent == CHASE_AUTO))
 
 
+static func shares_shore_escort_lane(a: Unit, b: Unit) -> bool:
+	# A scripted march can pass friendly dock formations without displacing them.
+	# Enemy blocking and map navigation still use the normal movement rules.
+	return a.faction == b.faction and (a._marching_shore_prisoner() or b._marching_shore_prisoner())
+
+
+func _marching_shore_prisoner() -> bool:
+	if not is_noncombat or key != "gao_qiu" or _state != ST_MOVE:
+		return false
+	var link: Variant = get_meta(SHORE_ESCORT_ORDER, [])
+	return link is Array and link.size() == 3 and link[0] == entity_id and link[1] == _order_serial
+
+
 static func separation_yield_position(mover: Unit, mover_pos: Vector2, holder: Unit, holder_pos: Vector2,
 		radial_pos: Vector2, overlap: float, nav_map: GameMap) -> Vector2:
 	# A radial weight alone makes a head-on friend push the holder at 2.5% speed

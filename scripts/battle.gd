@@ -6039,6 +6039,8 @@ func _separation_pass(_delta: float) -> void:
 					var min_d := a_radius + b.radius + 2.0
 					if d2 >= min_d * min_d or d2 <= 0.0001:
 						continue
+					if (a.is_noncombat or b.is_noncombat) and Unit.shares_shore_escort_lane(a, b):
+						continue
 					var d := sqrt(d2)
 					var b_mv := b._state == Unit.ST_MOVE or b._state == Unit.ST_AMOVE or b._state == Unit.ST_CHASE
 					var aw := 0.5

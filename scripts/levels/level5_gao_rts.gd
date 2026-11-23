@@ -701,7 +701,9 @@ func _order_prisoner_escort(b) -> void:
 	b._stamp_manual(group)
 	guard.order_move(targets[0], false, pace)
 	prisoner.order_move(targets[1], false, pace)
-	guard.set_meta(Unit.SHORE_ESCORT_ORDER, [prisoner.entity_id, prisoner._order_serial, guard._order_serial])
+	var link := [prisoner.entity_id, prisoner._order_serial, guard._order_serial]
+	guard.set_meta(Unit.SHORE_ESCORT_ORDER, link)
+	prisoner.set_meta(Unit.SHORE_ESCORT_ORDER, link)
 	b.select_members(group, false)
 	Sfx.play("order")
 	b.mission.set_feedback("岸军已出发，正押送高俅回堂。")

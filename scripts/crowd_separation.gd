@@ -104,6 +104,7 @@ static func solve(units: Array, buckets: Dictionary, map: GameMap, cell_size: fl
 					var d2 := diff.length_squared()
 					var min_d := radius+radii[bi]+2.0
 					if d2 >= min_d*min_d or d2 <= 0.0001: continue
+					if (sources[ai].is_noncombat or sources[bi].is_noncombat) and Unit.shares_shore_escort_lane(sources[ai],sources[bi]): continue
 					var distance := sqrt(d2)
 					var b_moving := (flags[bi] & MOVING) != 0
 					var b_holding := (flags[bi] & HOLDING) != 0
