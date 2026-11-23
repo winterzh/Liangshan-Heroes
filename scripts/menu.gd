@@ -38,7 +38,11 @@ func _ready() -> void:
 func _prewarm_battle_identity() -> void:
 	await RenderingServer.frame_post_draw
 	var flow := get_node_or_null("/root/ContinueFlow")
-	if _entry_overlay != null or _entry_scan != null or AppLifecycle.quit_started() or (flow != null and flow.busy()):
+	if _entry_overlay != null or _entry_scan != null or AppLifecycle.quit_started():
+		return
+	# Overlap the two shared Huangnigang surfaces with the startup identity scan.
+	Art.prefetch_menu_surfaces(["level1"])
+	if flow != null and flow.busy():
 		return
 	if flow != null and flow.has_prepared_entry_identity():
 		return # A new battle can revalidate the already mounted Windows executable.
