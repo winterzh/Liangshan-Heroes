@@ -6151,7 +6151,9 @@ func _unhandled_input(event: InputEvent) -> void:
 			camera.clamp_to_limits()
 		return
 	if event is InputEventMouseButton:
-		var p := get_global_mouse_position()
+		# Use the reported desktop click even if the pointer moved before dispatch.
+		var p := get_global_mouse_position() if event.device == InputEvent.DEVICE_ID_EMULATION \
+				else get_canvas_transform().affine_inverse() * event.position
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if event.pressed:
 				if _build_armed != "":
@@ -6265,9 +6267,6 @@ func _unhandled_input(event: InputEvent) -> void:
 				else:
 					_box_select(_rect_from(_drag_from, p), event.shift_pressed)
 		elif event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
-			# Use the click's position even if the pointer has moved during a long frame.
-			if event.device != InputEvent.DEVICE_ID_EMULATION:
-				p = get_canvas_transform().affine_inverse() * event.position
 			if _build_armed != "":
 				_cancel_build()
 				return
