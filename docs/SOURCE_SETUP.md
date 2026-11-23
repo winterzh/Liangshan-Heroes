@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+地图寻路烘焙改为按行合并相同地形。使用 Godot 4.6.3 和隔离档案，把 STOCKADE_QA_OUTPUT 设为可写 JSON 路径，运行 --headless --script res://tools/stockade_navigation_qa.gd，可复验驻守门墙、水陆格与同尺寸地图重烘焙。 [寻路对照与入口短测](../qa/battle_entry_timing_20261116/windows_map_bake_row_spans_20261124.json)
+
 Steam Windows 正式 Build 26873421 已核验。发行来源 `ee9f29f5`，七文件完整干净下载，原生隔离启动通过。四语补丁说明已公开。 [发布与验收](STEAM_UPDATE_20261124.md)
 
 当前 Windows 离线试玩候选为 `ee9f29f5`。完整解压，保留同目录的 EXE 与 PCK，再运行 `Start Local Playtest.cmd`。ZIP 全量回读和干净解包启动通过。 [开场读取与进场数据](../qa/battle_entry_timing_20261116/windows_opening_portrait_entry_ee9f29f5.json)

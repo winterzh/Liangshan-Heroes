@@ -237,8 +237,10 @@ func scatter(of_type: int, into: int, density: int, seed_mix: int = 0) -> void:
 ## ---------- 寻路烘焙 ----------
 
 func bake() -> void:
+	var region := Rect2i(0, 0, w, h)
+	var land_grids := [astar, astar_guan, astar_static, astar_static_guan]
 	for nav in [astar, astar_guan, astar_water, astar_static, astar_static_guan]:
-		nav.region = Rect2i(0, 0, w, h)
+		nav.region = region
 		nav.cell_size = Vector2(CELL, CELL)
 		nav.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_ONLY_IF_NO_OBSTACLES
 		nav.update()
@@ -247,25 +249,32 @@ func bake() -> void:
 	_base_solid.fill(0)
 	_block_count.fill(0)
 	for y in range(h):
-		for x in range(w):
-			var id := Vector2i(x, y)
-			var info: Dictionary = INFO[t_at(x, y)]
-			astar_water.set_point_solid(id, t_at(x, y) != T.WATER)
-			# AStarGrid2D.update() is a no-op when dimensions are unchanged.
-			# Explicitly restore both open and blocked cells when a map is rebaked.
-			astar.set_point_solid(id, bool(info["solid"]))
-			astar_guan.set_point_solid(id, bool(info["solid"]))
-			astar_static.set_point_solid(id, bool(info["solid"]))
-			astar_static_guan.set_point_solid(id, bool(info["solid"]))
-			if info["solid"]:
-				_base_solid[idx(x, y)] = 1
+		var row_start := y * w
+		var x := 0
+		# Equal terrain stays in one row span, so each grid receives one bulk update.
+		while x < w:
+			var tile := int(grid[row_start + x])
+			var end := x + 1
+			while end < w and grid[row_start + end] == tile:
+				end += 1
+			var span := Rect2i(x, y, end - x, 1)
+			var info: Dictionary = INFO[tile]
+			var solid := bool(info["solid"])
+			astar_water.fill_solid_region(span, tile != T.WATER)
+			# Keep writing both open and blocked spans when rebaking unchanged dimensions.
+			for nav in land_grids:
+				nav.fill_solid_region(span, solid)
+			if solid:
+				for column in range(x, end):
+					_base_solid[row_start + column] = 1
 			else:
-				var sl: float = info["sl"]
-				var sg: float = info["sg"]
-				astar.set_point_weight_scale(id, clampf(1.4 / maxf(sl, 0.2), 1.0, 4.0))
-				astar_guan.set_point_weight_scale(id, clampf(1.4 / maxf(sg, 0.2), 1.0, 4.0))
-				astar_static.set_point_weight_scale(id, clampf(1.4 / maxf(sl, 0.2), 1.0, 4.0))
-				astar_static_guan.set_point_weight_scale(id, clampf(1.4 / maxf(sg, 0.2), 1.0, 4.0))
+				var liang_weight := clampf(1.4 / maxf(float(info["sl"]), 0.2), 1.0, 4.0)
+				var guan_weight := clampf(1.4 / maxf(float(info["sg"]), 0.2), 1.0, 4.0)
+				astar.fill_weight_scale_region(span, liang_weight)
+				astar_guan.fill_weight_scale_region(span, guan_weight)
+				astar_static.fill_weight_scale_region(span, liang_weight)
+				astar_static_guan.fill_weight_scale_region(span, guan_weight)
+			x = end
 	_navigation_revision += 1
 	queue_redraw()
 

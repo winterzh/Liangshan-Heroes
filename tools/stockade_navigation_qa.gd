@@ -17,8 +17,35 @@ func legal(map, origin: Vector2, path: PackedVector2Array) -> bool:
 		origin = point
 	return true
 
+func _check_terrain_rebake(map_script: Script) -> void:
+	var map = map_script.new()
+	map.init_map(8, 3, "sand", map_script.T.GRASS)
+	map.fill_rect(1, 1, 3, 1, map_script.T.WATER)
+	map.bake()
+	var middle := Vector2i(2, 1)
+	var dry_cell := Vector2i(4, 1)
+	var temporary_block := Vector2i(5, 1)
+	check(map.is_open_cell(middle, "water") and not map.is_open_cell(middle), "initial water span has the correct movement profiles")
+	map.block_footprint(temporary_block, 0, true)
+	check(map.is_dynamic_blocked(temporary_block), "rebake fixture installs a dynamic obstruction")
+	map.set_cell_t(middle.x, middle.y, map_script.T.MARSH)
+	map.set_cell_t(dry_cell.x, dry_cell.y, map_script.T.WATER)
+	map.bake()
+	check(map.is_open_cell(middle) and not map.is_open_cell(middle, "water"), "same-size rebake can split a water span")
+	check(map.is_open_cell(dry_cell, "water") and not map.is_open_cell(dry_cell), "same-size rebake can extend a water span")
+	check(map.is_open_cell(Vector2i(1, 1), "water") and map.is_open_cell(Vector2i(3, 1), "water"), "rebake preserves unchanged neighboring water")
+	check(not map.is_dynamic_blocked(temporary_block) and map.is_open_cell(temporary_block), "rebake clears the previous dynamic obstruction")
+	check(is_equal_approx(map.astar.get_point_weight_scale(middle), 1.4 / 0.85)
+			and is_equal_approx(map.astar_static.get_point_weight_scale(middle), 1.4 / 0.85)
+			and is_equal_approx(map.astar_guan.get_point_weight_scale(middle), 1.4 / 0.5)
+			and is_equal_approx(map.astar_static_guan.get_point_weight_scale(middle), 1.4 / 0.5),
+			"rebake applies the correct marsh weights to both factions and both land grids")
+	map.free()
+
+
 func _run() -> void:
 	var Map = load("res://scripts/game_map.gd")
+	_check_terrain_rebake(Map)
 	var Layout = load("res://scripts/liangshan_layout.gd")
 	for script in ["skirmish", "custom_defense"]:
 		var level = load("res://scripts/levels/" + script + ".gd").new()
@@ -67,7 +94,7 @@ func _run() -> void:
 		check(legal(map, south, map.find_path(south, inside)), script + " south gate remains usable")
 		map.free()
 	var report := {"passed": failures.is_empty(), "checks": checks, "failures": failures,
-		"scope": "Authored skirmish/custom defense maps; 90 wall cells, diagonal segments, both factions, gate opening/reclosing and north approach connectivity. Not visual or performance acceptance."}
+		"scope": "Authored skirmish/custom defense maps; 90 wall cells, diagonal segments, both factions, gate opening/reclosing, north approach connectivity and same-size terrain rebake. Not visual or performance acceptance."}
 	FileAccess.open(OS.get_environment("STOCKADE_QA_OUTPUT"), FileAccess.WRITE).store_string(JSON.stringify(report, "\t"))
 	print("STOCKADE_QA ", checks.size(), " checks; failures=", failures.size())
 	for failure in failures: print("FAIL ", failure)
