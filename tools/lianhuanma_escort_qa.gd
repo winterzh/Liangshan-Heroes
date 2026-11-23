@@ -119,8 +119,127 @@ func _fixture() -> void:
 	check(b.mission.has_event("lhm_han_captured") and b.mission.stage_title==l.CAPTURED_COUNTER_BRIEFING.title and b.mission.objective==l.CAPTURED_COUNTER_BRIEFING.objective,"capture advances the briefing to the surviving camp")
 	check(b.phase!=b.Phase.END and alive(l.enemy_base),"capture alone does not end the battle")
 	await _dispose(b)
+
+func _supply_scene():
+	var b=await _start("",3)
+	b.set_process(false)
+	b.set_physics_process(false)
+	b.camera.set_process(false)
+	for unit in b.units: unit.set_physics_process(false)
+	b.fog=false
+	b._fog_layer.hide()
+	return b
+
+func _supply_feedback_fixture() -> void:
+	var flow:=root.get_node("ContinueFlow")
+	var deadline:=Time.get_ticks_msec()+120000
+	while not flow.can_launch():
+		if flow.phase==flow.Phase.ERROR or Time.get_ticks_msec()>=deadline:
+			quit(2)
+			return
+		await process_frame
+	var output:=OS.get_environment("CAVALRY_SUPPLY_OUT")
+	DirAccess.make_dir_recursive_absolute(output)
+	var loc:=root.get_node("Localize")
+	var catalog: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://assets/localization/catalog.json"))
+	var b=await _supply_scene()
+	var l=b.level
+	var preview: String=l.unit_tactical_hint(b,l.posts[0])
+	check("推迟45秒" in preview,"visible supply post predicts a delay for the living waiting lane")
+	b.fog=true
+	b._sight_now.fill(0)
+	b._reveal_t.fill(0)
+	check(l.unit_tactical_hint(b,l.posts[0]).is_empty(),"unseen supply post reveals no live tactical state")
+	b.fog=false
+	l.escort_t=0.0
+	l._support_tick(b,0.0)
+	var escorts: Array=l.escorts.duplicate()
+	var original_riders: Array=l.riders.duplicate()
+	var title: String=b.mission.stage_title
+	l.posts[0].take_damage(100000,l.song,true,true)
+	l._update_briefing(b)
+	check(escorts.size()==2 and escorts.all(alive) and l.riders==original_riders,
+		"cutting supply retains already paid escorts and the original riders")
+	check(not l.waves[0].sent and l.waves[0].time==195.0 and b.mission.has_event("lhm_supply_0"),
+		"destroying the waiting north supply post delays the live riders by forty-five")
+	check(b.mission.stage_title==title and b.mission.objective==l.NORTH_AFTER_CUT,
+		"the briefing changes within the same north preparation phase")
+	var rows: Array=l.campaign_debrief(b.mission)
+	check(rows[0].args[-1]==45 and "推迟" in rows[0].source,"a live waiting lane shows the actual delay in the debrief")
+	var words: Array=[]
+	for language in ["zh_CN","zh_TW","en","ja"]:
+		loc.set_language(language,false)
+		var source: String=l.NORTH_AFTER_CUT
+		var expected: String=source if language=="zh_CN" else catalog[source][language]
+		check(b.mission._objective.text==expected,language+" rendered objective shows the real north delay")
+		words.append({"language":language,"north":expected})
+	loc.set_language("en",false)
+	root.size=Vector2i(960,540)
+	root.content_scale_size=root.size
+	b.mission._set_expanded(true)
+	b.mission.tick(0)
+	await process_frame
+	b.mission._detail_scroll.ensure_control_visible(b.mission._objective)
+	await process_frame
+	await RenderingServer.frame_post_draw
+	var visible_objective: bool=b.mission._detail_scroll.get_global_rect().encloses(b.mission._objective.get_global_rect())
+	check(visible_objective and root.get_texture().get_image().save_png(output+"/north_960_en.png")==OK,
+		"the 960-pixel Windows window draws the revised north objective")
+	loc.set_language("zh_CN",false)
+	l._send_wave(b,1)
+	check("继续" in l.unit_tactical_hint(b,l.posts[1]) or "仍会作战" in l.unit_tactical_hint(b,l.posts[1]),
+		"a launched lane's visible supply post promises only to stop reinforcements")
+	l.posts[1].take_damage(100000,l.song,true,true)
+	check(l.waves[1].sent and l.waves[1].time==270.0 and l.riders==original_riders,
+		"the launched south rush and its original riders stay on the schedule")
+	check(l.LANE_SUPPLY_LOST[1] in b.mission.report and "出击后断援" in l.campaign_debrief(b.mission)[1].source,
+		"battle report and debrief describe the late supply cut")
+	var trained: int=l.ai_trained
+	l.escort_t=0.0
+	l._support_tick(b,0)
+	check(l.ai_trained==trained,"two destroyed posts cannot queue another escort")
+	await _dispose(b)
+	b=await _supply_scene()
+	l=b.level
+	for rider in l.riders:
+		if int(rider.get_meta("wave_group",-1))==0:
+			rider.take_damage(100000,l.song,true,true)
+	l._update_briefing(b)
+	title=b.mission.stage_title
+	check(b.mission.objective==l.SOUTH_BRIEFING.objective,
+		"the live south lane first offers its uncut reinforcement source")
+	l.posts[1].take_damage(100000,l.song,true,true)
+	l._update_briefing(b)
+	check(b.mission.stage_title==title and b.mission.objective==l.SOUTH_AFTER_CUT and l.waves[1].time==315.0,
+		"the south transition no longer advises attacking its already destroyed camp")
+	l.posts[0].take_damage(100000,l.song,true,true)
+	rows=l.campaign_debrief(b.mission)
+	check(l.lhm_killed==6 and not l.waves[0].sent and l.waves[0].time==150.0 and l._remaining_by_lane()==[0,6],
+		"destroying a camp after eliminating the waiting lane cannot retime an empty charge")
+	check(l.LANE_SUPPLY_CLEARED[0] in b.mission.report and rows[0].args==["北路"] and "未出击即被歼灭" in rows[0].source,
+		"the battle and end reports attribute the eliminated north lane correctly")
+	l.waves[0].time=195.0 # Legacy save made under the old empty-lane timing behavior.
+	for language in ["zh_CN","zh_TW","en","ja"]:
+		loc.set_language(language,false)
+		rows=l.campaign_debrief(b.mission)
+		var source: String=rows[0].source
+		var formatted: String=loc.format_text(source,rows[0].args)
+		var template: String=source if language=="zh_CN" else catalog[source][language]
+		var direction: String="北路" if language=="zh_CN" else catalog["北路"][language]
+		check(formatted==template%direction and not formatted.contains("45"),
+			language+" old empty-lane timer no longer presents a delayed charge")
+		words.append({"language":language,"cleared":formatted})
+	await _dispose(b)
+	FileAccess.open(output+"/report.json",FileAccess.WRITE).store_string(JSON.stringify(
+		{"checks":checks,"passed":failures.is_empty(),"failures":failures,"texts":words,
+		"scope":"Two controlled Windows battles exercising real damage and war reports; separate from autonomous live route."},"	"))
+	quit(0 if failures.is_empty() else 1)
+
 func _run() -> void:
 	OS.set_environment("CAMPAIGN_QA","1");AudioServer.set_bus_mute(0,true);root.get_node("Settings").edge_scroll=false
+	if OS.get_environment("CAVALRY_SUPPLY_OUT")!="":
+		await _supply_feedback_fixture()
+		return
 	DirAccess.make_dir_recursive_absolute("res://.godot/cavalry-escort")
 	if OS.get_environment("CAVALRY_LIVE_ONLY")!="1": await _fixture()
 	if OS.get_environment("CAVALRY_FIXTURE_ONLY")=="1":

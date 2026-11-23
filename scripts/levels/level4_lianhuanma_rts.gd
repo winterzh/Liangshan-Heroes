@@ -22,9 +22,17 @@ const LANE_CHARGE := [
 	"北路甲马开始冲锋！枪兵护弓，拒马减速；可出击截断辎重，也可先稳住两条路。",
 	"南路甲马开始冲锋！枪兵护弓，拒马减速；可出击截断辎重，也可先稳住两条路。",
 ]
-const LANE_SUPPLY_LOST := [
+const LANE_SUPPLY_DELAYED := [
 	"北路辎重营已毁：该处停止补军，未出发甲马推迟45秒；已出发部队仍在场",
 	"南路辎重营已毁：该处停止补军，未出发甲马推迟45秒；已出发部队仍在场",
+]
+const LANE_SUPPLY_LOST := [
+	"北路辎重营已毁：停止补军，已出击的甲马和在场部队继续作战。",
+	"南路辎重营已毁：停止补军，已出击的甲马和在场部队继续作战。",
+]
+const LANE_SUPPLY_CLEARED := [
+	"北路原骑已全歼，辎重营也已毁；本路不再补军。",
+	"南路原骑已全歼，辎重营也已毁；本路不再补军。",
 ]
 var hall: Unit
 var song: Unit
@@ -61,6 +69,8 @@ var phase_title := ""
 
 const PREPARE_BRIEFING := {"title":"扎营 · 准备迎击北路","objective":"训练钩镰手，在北侧芦苇地迎骑。也可派兵先拆辎重营，断掉该路援军。徐宁的教场演练可选。"}
 const SOUTH_BRIEFING := {"title":"迎骑 · 准备南路","objective":"北路甲马已击溃。整编钩镰手迎击南路，也可先拆南路辎重营，延迟该路冲锋。"}
+const NORTH_AFTER_CUT := "北路辎重已断，尚未出发的骑队推迟45秒。趁这段时间补充钩镰手，在北侧芦苇地布阵。教场演练仍可选。"
+const SOUTH_AFTER_CUT := "北路甲马已击溃，南路辎重也已断。南路原骑推迟45秒，趁此把钩镰手调到南侧迎击。"
 const DEFEND_BRIEFING := {"title":"迎骑 · 守住中军","objective":"守住中军和宋江。把甲马引进芦苇地或沼泽，让两名钩镰手协同破阵。留兵拦住随骑而来的护军。"}
 const COUNTER_BRIEFING := {"title":"反攻 · 攻破官军大营","objective":"十二骑已击溃。集结步军保护攻城器械，攻破大营即可取胜。想生擒韩滔，先击败他再拆大营。"}
 const CAPTURED_COUNTER_BRIEFING := {"title":"反攻 · 韩滔已擒","objective":"韩滔已被生擒。护送攻城器械摧毁官军大营。正面难进时，可让步军牵制守军，投石车从侧翼攻营。"}
@@ -415,6 +425,12 @@ func unit_tactical_hint(b, unit) -> String:
 		return _drill_hint(b) if b.is_visible_world(dummy.position) else Localize.text("暂无视野，无法判断破阵条件")
 	if unit == han and lhm_killed >= 12 and b.is_visible_world(unit.position):
 		return Localize.text("可选演义 · 集火击败韩滔即可生擒")
+	var lane := posts.find(unit)
+	if lane >= 0:
+		if not b.is_visible_world(unit.position): return ""
+		if not waves[lane].sent and _lane_has_riders(lane):
+			return Localize.text("摧毁辎重营会停止本路补军，让尚未出击的甲马推迟45秒。")
+		return Localize.text("摧毁辎重营会停止本路补军；已在场的部队仍会作战。")
 	if unit in escorts:
 		if not b.is_visible_world(unit.position): return Localize.text("暂无视野，无法判断破阵条件")
 		var plan := _escort_plan(b,int(unit.get_meta("source_lane",-1)))
@@ -605,11 +621,16 @@ func _update_briefing(b) -> void:
 		briefing = SOUTH_BRIEFING
 	elif waves[0].sent or waves[1].sent:
 		briefing = DEFEND_BRIEFING
-	if phase_title == briefing.title:
-		return
-	phase_title = briefing.title
-	b.mission.set_title(phase_title)
-	b.mission.set_objective(briefing.objective)
+	var objective: String = briefing.objective
+	if briefing == PREPARE_BRIEFING and b.mission.has_event("lhm_supply_0"):
+		objective = NORTH_AFTER_CUT
+	elif briefing == SOUTH_BRIEFING and b.mission.has_event("lhm_supply_1"):
+		objective = SOUTH_AFTER_CUT
+	if phase_title != briefing.title:
+		phase_title = briefing.title
+		b.mission.set_title(phase_title)
+	if b.mission.objective != objective:
+		b.mission.set_objective(objective)
 
 func on_unit_died(b,u) -> void:
 	if u==hall or u==song:
@@ -626,8 +647,15 @@ func on_unit_died(b,u) -> void:
 		b.msg("徐宁阵亡，教场暂缺教头；可在中军重新招募后继续演练，现有钩镰兵仍可作战。",7)
 	elif u in posts:
 		var lane: int=posts.find(u)
-		if not waves[lane].sent: waves[lane].time+=SUPPLY_DELAY; waves[lane].warned=false
-		b.mission.mark("lhm_supply_%d"%lane,LANE_SUPPLY_LOST[lane])
+		var notice: String = LANE_SUPPLY_CLEARED[lane]
+		if _lane_has_riders(lane):
+			if waves[lane].sent:
+				notice = LANE_SUPPLY_LOST[lane]
+			else:
+				waves[lane].time += SUPPLY_DELAY
+				waves[lane].warned = false
+				notice = LANE_SUPPLY_DELAYED[lane]
+		b.mission.mark("lhm_supply_%d" % lane, notice)
 func on_unit_resolved(b,u,outcome: String) -> void:
 	if u==han and outcome=="captured": b.mission.mark("lhm_han_captured","韩滔被生擒，仍按敌将看押")
 	elif u==hu and outcome=="retreated": b.mission.mark("lhm_hu_fled","呼延灼骑踢雪乌骓败走青州")
@@ -658,7 +686,10 @@ func campaign_debrief(mission) -> Array[Dictionary]:
 		var source := "%s · 余 %d 骑 · %s · 辎重营仍在"
 		if mission.has_event("lhm_supply_%d" % lane):
 			var delay := roundi(float(waves[lane].time) - WAVE_TIMES[lane])
-			if delay > 0:
+			if not waves[lane].sent and remaining[lane] == 0:
+				source = "%s · 原骑未出击即被歼灭 · 辎重营已毁"
+				args.resize(1)
+			elif delay > 0:
 				source = "%s · 余 %d 骑 · %s · 断援使冲锋推迟 %d 秒"
 				args.append(delay)
 			else:
