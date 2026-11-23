@@ -69,7 +69,7 @@ const FIELDS := {
 		"units": "posts towers spies workers enemy_workers reserve pursuit escorts"}}
 const MAX_REFERENCES := 4096
 # Presentation-only fields are audited but never copied into the saved world.
-const TRANSIENT_FIELDS := {"level4": ["_hook_line_start", "_hook_line_end"], "level6": ["_first_move_cue"]}
+const TRANSIENT_FIELDS := {"level2": ["_shore_select_button"], "level4": ["_hook_line_start", "_hook_line_end"], "level6": ["_first_move_cue"]}
 # These pools retain their slots after a death; nullable entries are legal,
 # deleting a slot is not. Only arrays with fixed production consumers/layouts
 # are listed. Trained troops, reserves, support and similar pools stay variable.

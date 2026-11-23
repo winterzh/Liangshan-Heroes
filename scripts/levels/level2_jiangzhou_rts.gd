@@ -63,6 +63,7 @@ var first_rescued := false
 var meeting := false
 var rally := false
 var depart_button: Button
+var _shore_select_button: Button
 var victory := false
 
 func id() -> String: return "level2"
@@ -596,8 +597,18 @@ func _dock_roster(b) -> Dictionary:
 				farthest_distance = distance
 	return {"aboard": aboard, "lost": lost, "ashore": ashore, "farthest": farthest}
 
+func _selectable_shore_party(ashore: Array) -> Array:
+	return ashore.filter(func(ally): return ally.faction == Unit.FACTION_LIANG and not ally.garrisoned)
+
 func _update_dock_guidance(b) -> void:
 	var roster := _dock_roster(b)
+	if not is_instance_valid(_shore_select_button):
+		# A resumed battle may already have the control in its presentation state.
+		_shore_select_button = b.mission.find_level_button("jiang_select_rearguard")
+		if _shore_select_button == null:
+			_shore_select_button = b.mission.add_level_button("jiang_select_rearguard", "选中 · 岸上好汉",
+				"选中仍可行动的岸上好汉，随后由你下令撤回码头。")
+	_shore_select_button.disabled = _selectable_shore_party(roster.ashore).is_empty()
 	var names := PackedStringArray()
 	for ally in roster.ashore:
 		names.append(Localize.text(ally.display_name))
@@ -672,7 +683,16 @@ func activate_mission_button(b, button_id: String) -> void:
 	if button_id == "jiang_bailong_meeting":
 		_view_bailong(b)
 		return
-	if button_id != "jiang_find_rearguard" or not rally: return
+	if not rally: return
+	if button_id == "jiang_select_rearguard":
+		var members := _selectable_shore_party(_dock_roster(b).ashore)
+		if members.is_empty():
+			b.mission.set_feedback("当前没有可选的岸上好汉。")
+			return
+		b.select_members(members, false)
+		b.mission.set_feedback(Localize.format_text("已选中%d名岸上好汉。请下令撤回码头。", [members.size()]))
+		return
+	if button_id != "jiang_find_rearguard": return
 	var ally: Unit = _dock_roster(b).farthest
 	if not active(ally):
 		b.center_camera_cell(DOCK)

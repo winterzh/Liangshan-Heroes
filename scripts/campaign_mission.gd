@@ -6,7 +6,7 @@ const STORY_MISSED := "missed"
 const PRESENTATION_META := &"campaign_presentation_v1"
 const LEVEL_BUTTON_IDS := {
 	"level1": ["hg_chao_gai", "hg_liu_tang", "hg_bai_sheng", "hg_wu_yong", "hg_empty_hands", "hg_transport_next", "hg_empty_carts", "hg_loaded_carts", "hg_waiting"],
-	"level2": ["jiang_depart", "jiang_find_rearguard", "jiang_bailong_meeting"], "level3": ["zhu_select_shi_qian", "zhu_select_rescued", "zhu_find_camp_gold"],
+	"level2": ["jiang_depart", "jiang_find_rearguard", "jiang_bailong_meeting", "jiang_select_rearguard"], "level3": ["zhu_select_shi_qian", "zhu_select_rescued", "zhu_find_camp_gold"],
 	"level4": ["lhm_locate_remaining"], "level5": ["gao_end"], "level6": ["pine_lu", "pine_group", "pine_waiting"],
 	"level7": ["forest_wu", "forest_shi"], "level8": ["daming_select_wounded"]}
 
@@ -524,6 +524,15 @@ func add_level_button(button_id: String, label: String, tooltip := "") -> Button
 	button.pressed.connect(_activate_level_button.bind(button_id))
 	_buttons.add_child(button)
 	return button
+
+func find_level_button(button_id: String) -> Button:
+	for child in _buttons.get_children():
+		if child is Button and not child.is_queued_for_deletion():
+			var descriptor: Dictionary = child.get_meta(PRESENTATION_META, {})
+			if descriptor.get("button_id") == button_id:
+				return child
+	return null
+
 
 func _activate_level_button(button_id: String) -> void:
 	if battle.phase != battle.Phase.FIGHT or not LEVEL_BUTTON_IDS.get(battle.level.id(), []).has(button_id): return
