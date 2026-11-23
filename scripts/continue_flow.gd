@@ -247,7 +247,7 @@ func request_save_exit(battle: Node) -> Dictionary:
 	_expected = {"revision": read.revision, "file_sha256": read.file_sha256}
 	# Only the installed battle can advance the exact checkpoint it loaded
 	# without prompting. The write still uses the same revision and SHA check.
-	var same_checkpoint := _graph_owner != null and _graph_owner.get_ref() == battle \
+	var same_checkpoint: bool = _graph_owner != null and _graph_owner.get_ref() == battle \
 		and _restored_slot_sha == read.file_sha256
 	if read.exists and not same_checkpoint:
 		phase = Phase.CONFIRM
