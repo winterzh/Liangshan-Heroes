@@ -10,6 +10,11 @@ const LANES := [Vector2i(29,21),Vector2i(30,41)]
 const RIDER_POSTS := [Vector2i(52,20),Vector2i(52,42)]
 const DRILL := Vector2i(16,45)
 const DRILL_ENTRY := Vector2i(21,45)
+const SOUTH_SIEGE_BUTTON := "lhm_flank_artillery"
+const SOUTH_SIEGE_CELLS := [
+	Vector2i(22,43), Vector2i(30,57), Vector2i(43,58), Vector2i(55,58),
+	Vector2i(60,46), Vector2i(61,40),
+]
 const LINK_SOURCE := 4705
 const HOOK_KEYS := ["gou_lian","xu_ning"]
 const WAVE_TIMES := [150.0, 270.0]
@@ -507,6 +512,10 @@ func _lane_has_riders(lane: int) -> bool:
 	return riders.any(func(u): return alive(u) and int(u.get_meta("wave_group",-1))==lane)
 
 func activate_mission_button(b,button_id: String) -> void:
+	if button_id == SOUTH_SIEGE_BUTTON:
+		if _south_siege_available():
+			_order_south_siege(b)
+		return
 	if button_id!="lhm_locate_remaining" or not manor_fallen or not alive(hall): return
 	var closest: Unit
 	var best_distance := INF
@@ -522,6 +531,103 @@ func activate_mission_button(b,button_id: String) -> void:
 	b.center_camera_cell(b.map.world_to_cell(closest.position))
 	b.mission.set_feedback("已定位北路余骑。请选中部队下令追击。" if int(closest.get_meta("wave_group"))==0
 		else "已定位南路余骑。请选中部队下令追击。")
+
+func _south_siege_available() -> bool:
+	return OS.has_feature("pc") and lhm_killed >= 12 and not manor_fallen and alive(enemy_base)
+
+
+func _update_south_siege_button(b, available: bool) -> void:
+	var button: Button = b.mission.find_level_button(SOUTH_SIEGE_BUTTON)
+	if available and button == null:
+		button = b.mission.add_level_button(SOUTH_SIEGE_BUTTON, "投石车绕南侧",
+			"派选中的投石车从南侧绕到敌营东边，未选投石车时派空闲的。到位后自行下令攻营。")
+		button.get_parent().move_child(button, 0)
+		b.mission.reveal_primary_level_button()
+	elif not available and button != null:
+		button.get_parent().remove_child(button)
+		button.queue_free()
+
+
+func _south_siege_actor(unit) -> bool:
+	return alive(unit) and unit.faction == 0 and unit.key == "siege_cata" and not unit.garrisoned and not unit.is_captive
+
+
+func _south_siege_route(map: GameMap, unit: Unit) -> Array[Vector2]:
+	# Spread nearby catapults within each shared navigation cell.
+	var offset := Vector2.ONE * float(unit.entity_id % 3 - 1) * 9.0
+	var route: Array[Vector2] = []
+	for cell: Vector2i in SOUTH_SIEGE_CELLS:
+		route.append(map.cell_to_world(cell) + offset)
+	return route
+
+
+func _south_siege_entry(cell: Vector2i) -> int:
+	# A catapult already along the south or east edge can rejoin farther ahead.
+	if cell.y >= 55:
+		if cell.x >= 53: return 4
+		if cell.x >= 40: return 3
+		if cell.x >= 28: return 2
+	if cell.x >= 58:
+		return 5
+	return 0
+
+
+func _following_south_siege(unit: Unit, route: Array[Vector2], entry: int) -> bool:
+	if unit._state != Unit.ST_MOVE: return false
+	var current := route.size() - 1 - unit._queue.size()
+	if current < 0 or not route[current].is_equal_approx(unit._home): return false
+	# A direct move to the destination from the west is not the flank.
+	if unit._queue.is_empty(): return entry == route.size() - 1
+	for i in range(unit._queue.size()):
+		var order: Dictionary = unit._queue[i]
+		if order.get("kind") != "move" or order.get("pos") != route[current + i + 1]:
+			return false
+	return true
+
+
+func _south_siege_path_open(map: GameMap, unit: Unit, route: Array[Vector2], entry: int) -> bool:
+	var from := unit.position
+	for i in range(entry, route.size()):
+		var path := map.find_path(from, route[i], unit.faction, unit.movement_profile)
+		if path.is_empty() or not path[-1].is_equal_approx(route[i]): return false
+		from = route[i]
+	return true
+
+
+func _order_south_siege(b) -> void:
+	var actors: Array = b.selection.filter(_south_siege_actor)
+	var selected := not actors.is_empty()
+	if not selected:
+		actors = b.units.filter(_south_siege_actor)
+	var dispatched := 0
+	var already := 0
+	var blocked := 0
+	for unit: Unit in actors:
+		var route := _south_siege_route(b.map, unit)
+		var entry := _south_siege_entry(b.map.world_to_cell(unit.position))
+		if _following_south_siege(unit, route, entry) or unit.position.distance_to(route[-1]) <= 24.0:
+			already += 1
+			continue
+		if not selected and (unit._state != Unit.ST_IDLE or unit._target != null or not unit._queue.is_empty()):
+			continue
+		if not _south_siege_path_open(b.map, unit, route, entry):
+			blocked += 1
+			continue
+		b._stamp_manual([unit])
+		unit.order_move(route[entry])
+		for i in range(entry + 1, route.size()):
+			unit.order_move(route[i], true)
+		dispatched += 1
+	if blocked > 0:
+		b.mission.set_feedback("部分投石车暂时无法绕行，请清开道路或手动改道。" if dispatched + already > 0
+			else "投石车暂时无法绕行，请清开道路或手动改道。")
+	elif dispatched > 0:
+		b.mission.set_feedback("投石车已从南侧出发。到位后请下令攻营。")
+	elif already > 0:
+		b.mission.set_feedback("投石车已在绕行或抵达敌营东侧。")
+	else:
+		b.mission.set_feedback("请选中投石车，或等投石车空闲后再下令。")
+
 
 func _support_tick(b,delta: float) -> void:
 	if not alive(enemy_base):
@@ -639,7 +745,12 @@ func _update_briefing(b) -> void:
 	elif waves[0].sent or waves[1].sent:
 		briefing = DEFEND_BRIEFING
 	var objective: String = briefing.objective
-	if briefing == FINISH_BRIEFING and CAMP_FALL_WAVE_EVENTS.any(b.mission.has_event):
+	var south_siege_available := _south_siege_available()
+	_update_south_siege_button(b, south_siege_available)
+	if south_siege_available:
+		objective = "韩滔已被生擒。可让投石车绕南侧，步军在正面牵制。投石车到位后，请下令攻营。" if briefing == CAPTURED_COUNTER_BRIEFING \
+			else "十二骑已击溃。可让投石车绕南侧，到位后下令攻营。想生擒韩滔，先击败他再拆大营。"
+	elif briefing == FINISH_BRIEFING and CAMP_FALL_WAVE_EVENTS.any(b.mission.has_event):
 		objective = "待命甲马因大营被毁已向中军出击。守住中军和宋江，击溃余骑。点「查看 · 余骑」可定位最近的一骑。"
 	elif briefing == PREPARE_BRIEFING and b.mission.has_event("lhm_supply_0"):
 		objective = NORTH_AFTER_CUT
