@@ -9,6 +9,7 @@ const BAI_STATION := Vector2i(24,24)
 const TRIBUTE_ART := "tribute_load_alpha_20260906"
 const LOADED_RELAY_REACH := 80.0
 const TAKE_MARKER_REACH := 24.0
+const SEND_LOADED_CARTS := "hg_send_loaded_carts"
 const EARLY_WITHDRAW := GATE_W + Vector2i(-3,0)
 const WITHDRAW_RADIUS := 150.0
 const WITHDRAW_OBJECTIVE := "七车十一担已经运出。让幸存同伴右键西冈口集合，八人到齐可获全员生还。若要先行收队，请单独右键西冈口西侧的收队旗标。"
@@ -427,6 +428,8 @@ func process(b, delta: float) -> void:
 	_sync_controls(b)
 
 func _sync_controls(b) -> void:
+	if st in [CARRY,FORCE] and b.phase == b.Phase.FIGHT and not b.hud.touch_ui:
+		_update_loaded_cart_button(b)
 	if controls_generation==b.mission._generation: return
 	controls_generation=b.mission._generation
 	var keys: Array=[]
@@ -455,6 +458,9 @@ func _sync_controls(b) -> void:
 
 func activate_mission_button(b, button_id: String) -> void:
 	if b.phase != b.Phase.FIGHT: return
+	if button_id == SEND_LOADED_CARTS:
+		_send_loaded_carts(b)
+		return
 	if button_id in ["hg_empty_carts", "hg_loaded_carts"]:
 		if st not in [CARRY,FORCE]: return
 		var members := _transport_group(b,button_id=="hg_loaded_carts")
@@ -515,6 +521,62 @@ func _transport_group(b, loaded: bool) -> Array:
 				and actor.hp>0 and actor.story_outcome=="" and actor.get_meta(metadata,-1)==index and actor not in result:
 			result.append(actor)
 	return result
+
+func _update_loaded_cart_button(b) -> void:
+	var available := not cargo.is_empty()
+	var button: Button = b.mission.find_level_button(SEND_LOADED_CARTS)
+	if button == null and available:
+		button = b.mission.add_level_button(SEND_LOADED_CARTS, "送已装货的车出冈",
+			"让已装货的车各自前往交付旗标。途中可随时停下或改道。")
+		button.get_parent().move_child(button, 0)
+		b.mission.reveal_primary_level_button()
+	if button != null:
+		button.disabled = not available
+
+func _send_loaded_carts(b) -> void:
+	if st not in [CARRY,FORCE] or b.hud.touch_ui or not b._gameplay_rng_issue.is_empty():
+		return
+	var carriers := _transport_group(b, true)
+	if carriers.is_empty():
+		b.mission.set_feedback("当前没有可出冈的已装货车辆。")
+		return
+	var issued := 0
+	var blocked := 0
+	for actor: Unit in carriers:
+		var index: int = actor.get_meta("carrying_tribute")
+		var action_id := "force_deliver_%d_%d" % [index, int(force_attempts.get(index,0))]
+		var action: Dictionary = b.mission.actions.get(action_id, {})
+		if action.is_empty() or action.done or not b.mission._valid_action_actor(actor, action) \
+				or not String(action.get("blocked_reason","")).is_empty():
+			blocked += 1
+			continue
+		var destination: Vector2 = b.map.cell_to_world(action.cell)
+		if b.mission.active_action_id == action_id \
+				or (actor.mission_order_target == destination and (actor.mission_order_active or actor.mission_order_arrival_t > 0.0)):
+			continue
+		var path: PackedVector2Array = b.map.find_path(actor.position, destination, actor.faction, actor.movement_profile)
+		if path.is_empty() or b.mission._nearest_clicked_action(destination) != action_id \
+				or path[-1].distance_to(destination) > float(action.reach) \
+				or not b.map._segment_open(path[-1], destination, actor.movement_profile):
+			blocked += 1
+			continue
+		# Each cart carries its own normal right-click receipt for its delivery.
+		# Sharing a token would consume all the other carts' orders on first arrival.
+		var group := [actor]
+		b._stamp_manual(group)
+		actor.order_move(destination)
+		b._stamp_mission_move(group, destination)
+		issued += 1
+	if issued > 0:
+		Sfx.play("order")
+	if issued > 0 and blocked > 0:
+		b.mission.set_feedback(Localize.format_text("已派%d辆车出冈。其余车辆暂无法交付，请检查退路或手动下令。", issued))
+	elif issued > 0:
+		b.mission.set_feedback(Localize.format_text("已派%d辆车前往各自的交付点。", issued))
+	elif blocked > 0:
+		b.mission.set_feedback("当前无法下达新的交付命令。请清开退路或手动下令。")
+	else:
+		b.mission.set_feedback("已装货的车正在出冈或交付。")
 
 func _selected_transport_action(b) -> String:
 	if b.selection.size()!=1: return ""
