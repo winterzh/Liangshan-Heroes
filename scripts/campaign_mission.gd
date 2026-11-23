@@ -167,9 +167,14 @@ func _apply_restored_detail_scroll() -> void:
 		return
 	# The native range clamps a saved offset if the current viewport has less
 	# scrollable space. A collapsed panel keeps the pending position until opened.
-	_detail_scroll.scroll_horizontal = _restored_detail_scroll.x
-	_detail_scroll.scroll_vertical = _restored_detail_scroll.y
+	var offset := _restored_detail_scroll
+	_detail_scroll.scroll_horizontal = offset.x
+	_detail_scroll.scroll_vertical = offset.y
 	_restored_detail_scroll = Vector2i(-1, -1)
+	# Opening an unscrolled older panel after continuing should reveal its new
+	# primary action, just as opening a fresh panel does.
+	if offset == Vector2i.ZERO and not _detail_scroll.get_tree().paused:
+		reveal_primary_level_button()
 
 func _layout_details() -> void:
 	var width := 370.0 if Localize.locale == "en" else 312.0
