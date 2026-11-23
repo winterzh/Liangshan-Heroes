@@ -12,6 +12,8 @@ const GATE_DEFENDER_POSTS := [Vector2i(15, 26), Vector2i(15, 30), Vector2i(16, 2
 const INSIDE_ACTION := "zhu_rts_inside"
 const SEND_SUN_BUTTON := "zhu_send_sun_li"
 const VIEW_SIDE_BUTTON := "zhu_view_side_gate"
+const VIEW_DANGER_BUTTON := "zhu_view_evacuation_danger"
+const EVACUATION_DANGER_NEAR := 3.0 * GameMap.CELL
 const FEINT_RULE := "zhu_feint_rule"
 const FEINT_HAPPENED := "zhu_feint_happened"
 const FEINT_AT_SIDE := "zhu_feint_at_side"
@@ -439,6 +441,38 @@ func _update_camp_evacuation_control(b) -> void:
 	if return_button != null:
 		return_button.disabled = outside.is_empty()
 
+func _evacuation_danger(b) -> Unit:
+	if b.hud.touch_ui or not prisoners_freed or not _alive(hall):
+		return null
+	# Rescue order puts Shi Qian first. Only recent hits and enemies the player can see provide a warning.
+	for wounded: Unit in _rescued_outside_camp():
+		if wounded._hit_recent_t > 0.0:
+			return wounded
+		for enemy: Unit in b.units:
+			if not _alive(enemy) or enemy.faction != Unit.FACTION_GUAN or enemy.atk <= 0.0 \
+					or enemy.is_captive or enemy.garrisoned or enemy._invis_t > 0.0:
+				continue
+			var reach := maxf(EVACUATION_DANGER_NEAR, enemy.atk_range + enemy.radius + wounded.radius)
+			if wounded.position.distance_squared_to(enemy.position) <= reach * reach and b.is_visible_world(enemy.position):
+				return wounded
+	return null
+
+
+func _update_evacuation_danger_control(b, wounded: Unit) -> void:
+	var button: Button = b.mission.find_level_button(VIEW_DANGER_BUTTON)
+	if wounded == null:
+		if button != null:
+			button.get_parent().remove_child(button)
+			button.queue_free()
+		return
+	if button != null:
+		return
+	button = b.mission.add_level_button(VIEW_DANGER_BUTTON, "查看 · 撤离险情",
+		"把镜头移到遇险伤员。优先定位时迁。")
+	var return_button: Button = b.mission.find_level_button("zhu_return_wounded")
+	button.get_parent().move_child(button, return_button.get_index() + 1 if return_button != null else 0)
+
+
 func _order_wounded_return(b) -> void:
 	if not manor_fallen or not prisoners_freed or not _alive(hall) or b.hud.touch_ui or not b._gameplay_rng_issue.is_empty():
 		return
@@ -538,6 +572,11 @@ func activate_mission_button(b, button_id: String) -> void:
 	if button_id == VIEW_SIDE_BUTTON:
 		if not b.hud.touch_ui and _side_gate_is_open(b):
 			b.mission._activate_map_locator("祝家庄偏门", SIDE_GATE)
+		return
+	if button_id == VIEW_DANGER_BUTTON:
+		var wounded := _evacuation_danger(b)
+		if wounded != null:
+			b.mission._activate_map_locator(wounded.display_name, b.map.world_to_cell(wounded.position))
 		return
 	if button_id == "zhu_return_wounded":
 		_order_wounded_return(b)
@@ -961,6 +1000,10 @@ func _refresh_stage(b) -> void:
 				else "孙立正赶往偏门。部队可在门外掩护，开门后再入庄。"
 		elif feint:
 			objective = "部分守军已被引向正门。保持正门压力，让孙立到偏门接应；还需破营、救出时迁。"
+	var danger: Unit
+	if prisoners_freed:
+		danger = _evacuation_danger(b)
+		_update_evacuation_danger_control(b, danger)
 	if _finish_ready():
 		heading = "收军 · 时迁已归营"
 		if b.mission.has_event("zhu_prisoner_lost"):
@@ -970,16 +1013,23 @@ func _refresh_stage(b) -> void:
 		else:
 			objective = "宋江可立即收军。想取得七人全返演义，先选中尚未归营的伤员，把他们送回前营。" if b.hud.touch_ui \
 				else "宋江可立即收军。想取得七人全返演义，可先点「送伤员回前营」。"
+		if danger != null and not b.mission.has_event("zhu_prisoner_lost"):
+			objective = "宋江可立即收军。想取得七人全返演义，可先点「查看 · 撤离险情」，派兵掩护余下伤员。"
 	elif manor_fallen and prisoners_freed:
 		heading = "撤离 · 护送伤员"
 		objective = "大营已破，敌军不再补兵。先清理撤路，再护送时迁回前营；其余好汉全部生还是可选演义目标。" if b.hud.touch_ui \
 			else "先清开撤路，再点「送伤员回前营」。时迁归营即可收军，七人全返另记演义印。"
+		if danger != null:
+			objective = "时迁有危险。点「查看 · 撤离险情」并派兵掩护。时迁归营即可收军。" if danger == prisoners[0] \
+				else "有伤员遇险。点「查看 · 撤离险情」并派兵掩护。时迁归营即可收军。"
 	elif manor_fallen:
 		heading = "营救 · 前往牢院"
 		objective = "大营已破，敌军不再补兵。派战斗部队掩护，在牢院标记救人，再护送时迁回前营。"
 	elif prisoners_freed:
 		heading = "分兵 · 护送与攻营"
 		objective = "伤员已获救，可先护送回营；另队仍须攻破祝家庄大营。宋江、时迁与前营必须存活。"
+		if danger != null:
+			objective = "有伤员遇险。点「查看 · 撤离险情」并派兵掩护，另队仍须攻破祝家庄大营。"
 	if b.mission.stage_title != heading: b.mission.set_title(heading)
 	if b.mission.objective != objective: b.mission.set_objective(objective)
 
