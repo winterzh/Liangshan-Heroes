@@ -5,11 +5,11 @@ const STORY_DONE := "done"
 const STORY_MISSED := "missed"
 const PRESENTATION_META := &"campaign_presentation_v1"
 const LEVEL_BUTTON_IDS := {
-	"level1": ["hg_chao_gai", "hg_liu_tang", "hg_bai_sheng", "hg_wu_yong", "hg_empty_hands", "hg_transport_next", "hg_empty_carts", "hg_loaded_carts", "hg_send_loaded_carts", "hg_waiting"],
+	"level1": ["hg_chao_gai", "hg_liu_tang", "hg_bai_sheng", "hg_wu_yong", "hg_empty_hands", "hg_transport_next", "hg_empty_carts", "hg_loaded_carts", "hg_send_empty_carts", "hg_send_loaded_carts", "hg_waiting"],
 	"level2": ["jiang_depart", "jiang_find_rearguard", "jiang_bailong_meeting", "jiang_select_rearguard", "jiang_return_rearguard", "jiang_board_rescued"], "level3": ["zhu_select_shi_qian", "zhu_select_rescued", "zhu_find_camp_gold", "zhu_select_outside_camp", "zhu_return_wounded"],
 	"level4": ["lhm_locate_remaining", "lhm_flank_artillery"], "level5": ["gao_end", "gao_escort"], "level6": ["pine_lu", "pine_group", "pine_waiting", "pine_order_rest", "pine_order_exit"],
 	"level7": ["forest_wu", "forest_shi", "forest_order_terms", "forest_order_shop"], "level8": ["daming_select_wounded", "daming_evac_wounded"]}
-const PRIMARY_LEVEL_BUTTON_IDS := ["gao_escort", "zhu_return_wounded", "jiang_return_rearguard", "jiang_board_rescued", "daming_evac_wounded", "hg_send_loaded_carts", "pine_order_exit", "forest_order_shop", "lhm_flank_artillery"]
+const PRIMARY_LEVEL_BUTTON_IDS := ["gao_escort", "zhu_return_wounded", "jiang_return_rearguard", "jiang_board_rescued", "daming_evac_wounded", "hg_send_loaded_carts", "hg_send_empty_carts", "pine_order_exit", "forest_order_shop", "lhm_flank_artillery"]
 
 var battle
 var stage_id := ""
@@ -576,7 +576,7 @@ func reveal_primary_level_button() -> void:
 	var button: Button
 	for id: String in PRIMARY_LEVEL_BUTTON_IDS:
 		button = find_level_button(id)
-		if button != null:
+		if button != null and not button.disabled:
 			break
 	if button == null or button.disabled:
 		return
