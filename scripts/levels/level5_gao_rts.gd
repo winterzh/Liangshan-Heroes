@@ -21,6 +21,8 @@ const FIRE_POINTS := [Vector2i(42,29),Vector2i(40,40)]
 # Match the chained warship's 180 range plus both 25-pixel hull radii.
 # The same radius is used for readiness and actual fire damage.
 const FIRE_ZONE_RADIUS := 230.0
+const PRISONER_ESCORT_RADIUS := 180.0
+const PRISONER_WAITING := "高俅正在等待岸军护卫。已下达的行军命令会保留。"
 const FIRE_SAFE := Vector2i(32,50)
 const SHIP_KEYS := ["ruan_xiaoqi_boat","ruan_xiaoer_boat","ruan_xiaowu_boat","zhang_shun_boat","liangshan_warship"]
 const OPENING_OBJECTIVE := "首批约140秒出发，后两批约330与540秒。岸军防东山关、舰队守内港；可出击拆两处补给，也可经营补兵接战。"
@@ -427,6 +429,9 @@ func unit_tactical_hint(b,u) -> String:
 	if u.faction==1 and water_groups.size()>1 and u in water_groups[1]:
 		return Localize.text("第二批连船 · 前港列阵\n等多艘进入火区，再让刘唐举火。")
 	if u.faction!=0: return ""
+	if u == prisoner and alive(prisoner) and not capture_lost:
+		return Localize.text(PRISONER_WAITING if prisoner_waiting_for_escort(b, prisoner)
+			else "已有岸军护卫。可下令将高俅押回忠义堂前。")
 	if u.key not in ["liu_tang","liu_tang_fireboat","ruan_xiaoer_boat","ruan_xiaowu_boat"]: return ""
 	if b.mission.has_event("gao_liu_returned") and u.key=="liu_tang":
 		return Localize.text("刘唐已返港，可继续指挥岸军。")
@@ -623,6 +628,16 @@ func _capture_failed(b,reason: String) -> void:
 	for key in ["gao_seal","gao_scuttle","gao_land"]: b.mission.block_action(key,reason)
 	if core_ready: _update_withdrawal_briefing(b)
 
+# The movement controller and task briefing use the same live shore guards.
+func prisoner_waiting_for_escort(b, unit: Unit) -> bool:
+	if unit != prisoner or not landed or capture_lost:
+		return false
+	return not b.units_near(unit.position, PRISONER_ESCORT_RADIUS).any(func(guard):
+		return guard != unit and alive(guard) and guard.faction == Unit.FACTION_LIANG \
+			and not guard.is_building and not guard.is_worker and not guard.is_noncombat \
+			and not guard.garrisoned and not guard.is_captive and guard.movement_profile == "land" \
+			and guard.position.distance_to(unit.position) < PRISONER_ESCORT_RADIUS)
+
 func _capture_completed(b) -> bool:
 	return not capture_lost and alive(prisoner) and b.mission.has_event("gao_captured") and not b.mission.has_event("gao_escaped")
 
@@ -635,7 +650,8 @@ func _update_withdrawal_briefing(b) -> void:
 	elif _capture_completed(b):
 		objective = "高俅已押抵忠义堂。点击「收兵通关」即可结算。"
 	elif landed:
-		objective = "高俅已上岸。选中他和岸军，一同押到忠义堂前；也可直接收兵通关。"
+		objective = "高俅正在等待岸军。让护卫靠近后可继续押堂，也可直接收兵通关。" if prisoner_waiting_for_escort(b, prisoner) \
+			else "高俅已上岸。选中他和岸军，一同押到忠义堂前；也可直接收兵通关。"
 	elif recovered:
 		objective = "高俅已在张顺的小艇上。先护送小艇回主码头交接，再由岸军押堂；也可直接收兵通关。"
 	elif port_sealed:
@@ -730,11 +746,9 @@ func process(b,delta: float) -> void:
 	if flagship_disabled and not capture_lost and not b.mission.actions.has("gao_seal"):
 		b.mission.add_action("gao_seal",Localize.text("阮氏水军：封港"),b.map.world_to_cell(flagship.position)+Vector2i(0,3),["ruan_xiaoer_boat","ruan_xiaowu_boat"],2,64)
 	if landed and not capture_lost and alive(prisoner):
-		var escort: bool=b.units.any(func(u): return alive(u) and u!=prisoner and u.faction==0 and not u.is_building and not u.is_worker and not u.is_noncombat and u.movement_profile=="land" and u.position.distance_to(prisoner.position)<180)
-		if not escort:
-			prisoner.order_stop()
+		if prisoner_waiting_for_escort(b, prisoner):
 			if not escort_warning:
-				b.msg("高俅落单，停下等待岸军。选中俘虏与护卫，一同押回忠义堂前。",5)
+				b.msg(PRISONER_WAITING,5)
 			escort_warning=true
 		else:
 			escort_warning=false

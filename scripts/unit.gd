@@ -2603,6 +2603,13 @@ func _follow_path(delta: float) -> bool:
 	if _root_t > 0.0:
 		_stepped = false
 		return false   # 缠绕：原地定身（不吃掉路点、不算到达），可照常攻击/施法
+	if is_noncombat and key == "gao_qiu" and battle != null and battle.level != null \
+			and battle.level.has_method("prisoner_waiting_for_escort") and battle.level.prisoner_waiting_for_escort(battle, self):
+		_stepped = false
+		# Waiting for a guard is intentional; keep the path and do not repath.
+		_stuck_t = 0.0
+		_last_pos = position
+		return false
 	if _path_i >= _path.size():
 		return true
 	var wp := _path[_path_i]
