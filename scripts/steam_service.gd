@@ -45,7 +45,8 @@ var _context := {}
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	if not OS.has_feature("steam") or SteamRunPolicy.test_environment():
+	# A local playtest uses the ordinary Windows save flow without a Steam session.
+	if not OS.has_feature("steam") or SteamRunPolicy.test_environment() or "--offline-playtest" in OS.get_cmdline_user_args():
 		return
 	if not Engine.has_singleton("Steam"):
 		status = "Steam 组件未加载，请检查 Steam 版安装文件"
