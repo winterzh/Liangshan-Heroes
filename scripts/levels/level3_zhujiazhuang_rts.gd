@@ -54,6 +54,7 @@ var expansion_secured := false
 var supply_cut := false
 var inside_open := false
 var prisoners_freed := false
+var _evacuation_in_danger := false
 var manor_fallen := false
 var sent_sun := false
 var main_breached := false
@@ -459,6 +460,7 @@ func _evacuation_danger(b) -> Unit:
 
 
 func _update_evacuation_danger_control(b, wounded: Unit) -> void:
+	_evacuation_in_danger = wounded != null
 	var button: Button = b.mission.find_level_button(VIEW_DANGER_BUTTON)
 	if wounded == null:
 		if button != null:
@@ -1010,11 +1012,11 @@ func _refresh_stage(b) -> void:
 			objective = "本局有伤员阵亡，七人全返演义已失败。宋江可到前营收军，完成主目标。"
 		elif b.mission.has_event("zhu_seven_safe"):
 			objective = "七人全返演义已达成。让宋江到前营收军标记即可结算。"
+		elif danger != null:
+			objective = "宋江可立即收军。想取得七人全返演义，可先点「查看 · 撤离险情」，派兵掩护余下伤员。"
 		else:
 			objective = "宋江可立即收军。想取得七人全返演义，先选中尚未归营的伤员，把他们送回前营。" if b.hud.touch_ui \
 				else "宋江可立即收军。想取得七人全返演义，可先点「送伤员回前营」。"
-		if danger != null and not b.mission.has_event("zhu_prisoner_lost"):
-			objective = "宋江可立即收军。想取得七人全返演义，可先点「查看 · 撤离险情」，派兵掩护余下伤员。"
 	elif manor_fallen and prisoners_freed:
 		heading = "撤离 · 护送伤员"
 		objective = "大营已破，敌军不再补兵。先清理撤路，再护送时迁回前营；其余好汉全部生还是可选演义目标。" if b.hud.touch_ui \
@@ -1139,6 +1141,8 @@ func _finish_ready() -> bool:
 	return manor_fallen and prisoners_freed and _alive(hall) and not prisoners.is_empty() and _at_forward_camp(prisoners[0])
 
 func top_status(b) -> String:
+	if _evacuation_in_danger and not b.mission._expanded:
+		return Localize.text("祝家庄 · 伤员遇险 · 查看任务目标")
 	if manor_fallen and prisoners_freed and _alive(hall):
 		var arrived := prisoners.filter(_at_forward_camp).size()
 		var lost := PRISONERS.size() - prisoners.filter(_alive).size()
