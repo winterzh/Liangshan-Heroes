@@ -4,6 +4,7 @@ extends Control
 
 const SPEAKERS := {}
 const OPENING_PREVIEW_DELAY_US := 120_000
+const SCENERY_CALIBRATION_SLICE_US := 24_000
 var _update_label: Label
 var _update_overlay: Control
 var _entry_overlay: ColorRect
@@ -77,7 +78,7 @@ func _launch(campaign_level_id := "") -> void:
 			elif campaign_level_id == "level5":
 				Art.prefetch_gao_opening_art()
 	# Continue on the main thread. The worker returns only verified file data.
-	_finish_battle_launch.call_deferred()
+	_finish_battle_launch.call_deferred(campaign_level_id)
 
 
 func _launch_immediately() -> void:
@@ -166,7 +167,7 @@ func _request_battle_environment(campaign_level_id: String) -> void:
 			_entry_environment_requests.append(path)
 
 
-func _finish_battle_launch() -> void:
+func _finish_battle_launch(campaign_level_id: String) -> void:
 	var identity: Dictionary = {}
 	if _entry_scan == null:
 		var flow := get_node("/root/ContinueFlow")
@@ -182,17 +183,37 @@ func _finish_battle_launch() -> void:
 		identity = _entry_scan.finish_runtime_identity_scan()
 		_entry_scan = null
 		if identity.get("code") == "PREWARM_EXECUTABLE_CHANGED" and not AppLifecycle.quit_started():
-			_finish_battle_launch.call_deferred()
+			_finish_battle_launch.call_deferred(campaign_level_id)
 			return
 	if AppLifecycle.quit_started():
 		return
 	var environment_textures: Array[Texture2D] = []
+	var calibrate_liangshan := campaign_level_id == "level5" or Campaign.skirmish or Campaign.custom_defense
+	var calibration_frame := Engine.get_process_frames()
+	var calibration_us := 0
 	for path in _entry_environment_requests:
 		var texture := (await _wait_for_battle_resource(path)) as Texture2D
 		if AppLifecycle.quit_started():
 			return
-		if texture != null:
-			environment_textures.append(texture)
+		if texture == null:
+			continue
+		environment_textures.append(texture)
+		if not calibrate_liangshan:
+			continue
+		if Engine.get_process_frames() != calibration_frame:
+			calibration_frame = Engine.get_process_frames()
+			calibration_us = 0
+		# A quick sortie can miss the picker's preview. Keep using the verified
+		# pixel cache and draw the loading view between batches of cold textures.
+		var started := Time.get_ticks_usec()
+		if CampaignEnvironmentArt.prepare_png_calibration(texture):
+			calibration_us += Time.get_ticks_usec() - started
+			if calibration_us >= SCENERY_CALIBRATION_SLICE_US:
+				await RenderingServer.frame_post_draw
+				if AppLifecycle.quit_started():
+					return
+				calibration_frame = Engine.get_process_frames()
+				calibration_us = 0
 	_entry_environment_requests.clear()
 	for path in _entry_opening_frame_requests:
 		var frames := await _wait_for_battle_resource(path)
