@@ -246,7 +246,8 @@ func on_mission_action(b, action_id: String, actor) -> void:
 			if _all_escorts_alive():
 				b.mission.mark("warn_escorts","鲁智深当面喝令两个公人一路小心服侍林冲。")
 			b.mission.set_title("整队完毕 · 结伴出林")
-			b.mission.set_objective("已歇脚。选中林冲，前往西侧出林旗标；整队抵达后通关。")
+			b.mission.set_objective("已歇脚。选中林冲，前往西侧出林旗标；整队抵达后通关。" if b.hud.touch_ui \
+				else "已歇脚。点「带队出林」，整队抵达西侧林口后通关。")
 		"leave_forest":
 			if st != ESCAPE:
 				return
@@ -650,6 +651,7 @@ func _finish_tending(b) -> void:
 	b.mission.add_level_button("pine_waiting", "查看 · 未到齐同伴", "查看当前歇脚或出林目标外最远的幸存同伴；只移镜头，不选人、不下令。")
 	st = ESCAPE
 	rest_reached = false
+	_update_escort_commands(b)
 
 func _survivors_near(point: Vector2,radius: float) -> bool:
 	if not is_instance_valid(lu) or lu.hp<=0 or not is_instance_valid(lin_freed) or lin_freed.hp<=0: return false
@@ -699,7 +701,45 @@ func _retry_escort_action(b,key: String,text: String) -> void:
 func _add_selection_button(b,group := false) -> void:
 	b.mission.add_level_button("pine_group" if group else "pine_lu", "选中 · 相送队伍" if group else "选中 · 鲁智深")
 
+func _update_escort_commands(b) -> void:
+	if b.hud.touch_ui or not b.mission.actions.has("leave_forest"):
+		return
+	var rest_button: Button = b.mission.find_level_button("pine_order_rest")
+	if rest_button == null:
+		var tooltip := "给相送队下令并选中林冲。可随时停止或手动改道。"
+		rest_button = b.mission.add_level_button("pine_order_rest", "带队去歇脚", tooltip)
+		var exit_button: Button = b.mission.add_level_button("pine_order_exit", "带队出林", tooltip)
+		rest_button.get_parent().move_child(rest_button, 0)
+		exit_button.get_parent().move_child(exit_button, 1)
+		b.mission.reveal_primary_level_button()
+		if not b.mission.has_event("leave_forest"):
+			b.mission.set_objective("已歇脚。点「带队出林」，整队抵达西侧林口后通关。" if rest_reached \
+				else "点「带队去歇脚」可完成演义目标，也可直接点「带队出林」。")
+	rest_button.disabled = rest_reached
+
+func _order_escort_group(b, action_id: String) -> void:
+	if st != ESCAPE or b.hud.touch_ui or not b._gameplay_rng_issue.is_empty():
+		return
+	var action: Dictionary = b.mission.actions.get(action_id, {})
+	var group := _escort_group()
+	if action.is_empty() or not b.mission._valid_action_actor(lin_freed, action) or lu not in group \
+			or (action_id == "rest_stop" and rest_reached) or b.mission.active_action_id == action_id:
+		return
+	var target: Vector2 = b.map.cell_to_world(action.cell)
+	if escort_player_target.distance_to(target) <= float(action.click_reach) \
+			and group.any(func(unit: Unit) -> bool: return unit._path_i < unit._path.size() \
+				and unit._order_serial == int(escort_orders.get(unit.entity_id, -1))):
+		return
+	b.select_single(lin_freed, false)
+	b._stamp_manual([lin_freed])
+	b._stamp_mission_move([lin_freed], target)
+	_adopt_latest_player_escort_order(b)
+	Sfx.play("order")
+
 func activate_mission_button(b, button_id: String) -> void:
+	if button_id in ["pine_order_rest", "pine_order_exit"]:
+		_order_escort_group(b, "rest_stop" if button_id == "pine_order_rest" else "leave_forest")
+		return
 	if button_id == "pine_waiting":
 		if st != ESCAPE: return
 		var at_rest := _escort_heading_to_rest(b)
@@ -717,6 +757,8 @@ func activate_mission_button(b, button_id: String) -> void:
 	b.center_camera_cell(b.map.world_to_cell(members[0].position))
 
 func _update_help(b) -> void:
+	if st == ESCAPE:
+		_update_escort_commands(b)
 	if b.mission.active_action_id!="": return
 	if st==STALK:
 		if lu not in b.selection:
