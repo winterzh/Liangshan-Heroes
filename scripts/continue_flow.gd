@@ -612,8 +612,15 @@ func _startup_failed(reason: Dictionary) -> void:
 	phase = Phase.ERROR
 	last_result = reason.duplicate(true)
 	last_result.startup_pending = true
-	_show("战役进度暂时无法确认，已有记录已保留。请检查存储或当前账号后重试，或退出游戏。")
+	if String(reason.get("code", "")).begins_with("SPLIT_PACK_"):
+		_show("无法确认 Windows 游戏文件。请检查 EXE 和 PCK 是否来自同一版本，然后退出并重新启动游戏。")
+	else:
+		_show("战役进度暂时无法确认，已有记录已保留。请检查存储或当前账号后重试，或退出游戏。")
 	operation_finished.emit(last_result)
+
+func report_installation_failure(reason: Dictionary) -> void:
+	if not busy() and String(reason.get("code", "")).begins_with("SPLIT_PACK_"):
+		_startup_failed(reason)
 
 func retry_startup() -> void:
 	if phase != Phase.ERROR or not last_result.get("startup_pending", false): return

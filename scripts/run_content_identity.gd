@@ -3,6 +3,8 @@ extends RefCounted
 const INPUT_RULES_JSON := """{"schema":1,"header":"liangshan-installed-inputs-v1","roots":["scripts","scenes","assets","content","scenarios","fonts","shaders","addons"],"required_roots":["scripts","scenes"],"root_files":["project.godot","export_presets.cfg","icon.png","icon.png.import","icon.ico"],"required_files":["project.godot"],"optional_content":["content/units.json","content/abilities.json"],"skip_directories":[".godot",".git","__pycache__"],"import_ignore_is_exclusion":false,"derived":"scripts/run_build_identity.gd","max_files":60000,"max_bytes":34359738368,"max_depth":40}"""
 const BUILD_PATH := "res://scripts/run_build_identity.gd"
 const PROVIDER_PATH := "res://scripts/run_content_identity.gd"
+const SPLIT_PACK_FEATURE := "lsh_windows_split_pack"
+const SPLIT_IDENTITY_DOMAIN := "liangshan-windows-split-v1"
 var _rules: Dictionary = {}
 var _files: Dictionary = {}
 var _dirs: Dictionary = {}
@@ -320,8 +322,8 @@ func finish_runtime_identity_scan() -> Dictionary:
 	var mount := _mount_status()
 	if not mount.ok: return mount
 	if _scan_context.prewarm and physical.ok \
-			and physical.executable_stamp != _executable_stamp(_scan_context.exe):
-		return _bad("PREWARM_EXECUTABLE_CHANGED")
+			and physical.executable_stamp != _installed_payload_stamp(_scan_context):
+		return _bad("SPLIT_PACK_CHANGED_RESTART" if _scan_context.split_pack != "" else "PREWARM_EXECUTABLE_CHANGED")
 	var result := _complete_runtime_identity(_scan_context, physical)
 	if result.ok and _scan_context.prewarm:
 		_prepared_pack_files = physical
@@ -330,7 +332,7 @@ func finish_runtime_identity_scan() -> Dictionary:
 func revalidate_prepared_runtime_identity() -> Dictionary:
 	if _prepared_pack_files.is_empty(): return {}
 	var mount := _mount_status()
-	if not mount.ok or _prepared_pack_files.executable_stamp != _executable_stamp(_scan_context.exe): return {}
+	if not mount.ok or _prepared_pack_files.executable_stamp != _installed_payload_stamp(_scan_context): return {}
 	return _complete_runtime_identity(_scan_context, _prepared_pack_files)
 
 
@@ -386,6 +388,41 @@ func _executable_stamp(path: String) -> Array[int]:
 	return [file.get_length(), FileAccess.get_modified_time(path)]
 
 
+func _installed_payload_stamp(context: Dictionary) -> Array:
+	if context.split_pack.is_empty():
+		return _executable_stamp(context.exe)
+	var bridge: RefCounted = ClassDB.instantiate(&"RunWindowsSha256")
+	var stamp: PackedByteArray = bridge.payload_stamp(false)
+	return [] if stamp.is_empty() else [stamp]
+
+
+func _prepare_windows_pack(context: Dictionary) -> Dictionary:
+	if OS.get_name() != "Windows" or OS.has_feature("editor"):
+		return context
+	var pack: String = context.exe.get_basename() + ".pck"
+	if not OS.has_feature(SPLIT_PACK_FEATURE):
+		return _bad("SPLIT_PACK_UNEXPECTED") if FileAccess.file_exists(pack) else context
+	if not FileAccess.file_exists(pack):
+		return _bad("SPLIT_PACK_MISSING")
+	if not _no_link(pack):
+		return _bad("SPLIT_PACK_UNREADABLE")
+	if not ClassDB.class_exists(&"RunWindowsSha256"):
+		return _bad("SPLIT_PACK_BRIDGE_MISSING")
+	var bridge: RefCounted = ClassDB.instantiate(&"RunWindowsSha256")
+	if bridge == null or not bridge.has_method("payload_stamp") or not bridge.has_method("uses_default_project"):
+		return _bad("SPLIT_PACK_BRIDGE_MISSING")
+	if not bridge.uses_default_project():
+		return _bad("SPLIT_PACK_LAUNCH_UNSUPPORTED")
+	var startup_stamp: PackedByteArray = bridge.payload_stamp(true)
+	if startup_stamp.is_empty():
+		return _bad("SPLIT_PACK_UNREADABLE")
+	context.split_pack = pack
+	context.launch_stamp = [startup_stamp]
+	if _installed_payload_stamp(context) != context.launch_stamp:
+		return _bad("SPLIT_PACK_CHANGED_RESTART")
+	return context
+
+
 func _prepare_runtime_identity() -> Dictionary:
 	_rules = JSON.parse_string(INPUT_RULES_JSON)
 	var mount := _mount_status()
@@ -397,7 +434,7 @@ func _prepare_runtime_identity() -> Dictionary:
 	var resource := script.resource_path
 	var context := {
 		"ok": true, "exe": OS.get_executable_path(), "source_mode": source_mode,
-		"source_base": "", "provider_relative": "", "provider_source": "",
+		"source_base": "", "provider_relative": "", "provider_source": "", "split_pack": "", "launch_stamp": [],
 	}
 	if source_mode:
 		if not OS.has_feature("editor"): return _bad("SOURCE_BACKING_UNSUPPORTED")
@@ -407,6 +444,8 @@ func _prepare_runtime_identity() -> Dictionary:
 		context.provider_source = script.source_code
 	elif resource != PROVIDER_PATH:
 		return _bad("BUILD_PROVIDER_PATH")
+	else:
+		return _prepare_windows_pack(context)
 	return context
 
 
@@ -417,14 +456,21 @@ func _read_runtime_identity_files(context: Dictionary, cancelable := false) -> D
 	var exe: String = context.exe
 	if not exe.is_absolute_path() or not _no_link(exe): return _bad("ENGINE_BINARY_UNREADABLE")
 	var prewarm: bool = context.get("prewarm", false)
-	var stamp: Array[int] = []
-	if prewarm:
-		stamp = _executable_stamp(exe)
+	var split_pack: String = context.split_pack
+	var stamp: Array = _installed_payload_stamp(context) if prewarm or not split_pack.is_empty() else []
+	if not split_pack.is_empty() and stamp != context.launch_stamp:
+		return _bad("SPLIT_PACK_CHANGED_RESTART")
 	var accelerated: bool = not context.source_mode and OS.get_name() == "Windows" and OS.has_feature("steam")
 	var engine_sha := _hash_scan_file(exe, accelerated) if cancelable else FileAccess.get_sha256(exe)
-	if prewarm and (stamp.is_empty() or stamp != _executable_stamp(exe)):
-		return _bad("PREWARM_EXECUTABLE_CHANGED")
 	if not _valid_sha(engine_sha): return _bad("ENGINE_BINARY_UNREADABLE")
+	if not split_pack.is_empty():
+		var pack_sha := _hash_scan_file(split_pack, accelerated) if cancelable else FileAccess.get_sha256(split_pack)
+		if stamp != _installed_payload_stamp(context): return _bad("SPLIT_PACK_CHANGED_RESTART")
+		if not _valid_sha(pack_sha): return _bad("SPLIT_PACK_UNREADABLE")
+		# Same slot field and schema as the embedded layout, with both physical files bound.
+		engine_sha = _sha_text("%s\n%s\n%s" % [SPLIT_IDENTITY_DOMAIN, engine_sha, pack_sha])
+	elif prewarm and (stamp.is_empty() or stamp != _installed_payload_stamp(context)):
+		return _bad("PREWARM_EXECUTABLE_CHANGED")
 	var snapshot: Dictionary = {}
 	if context.source_mode:
 		var base: String = context.source_base

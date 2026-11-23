@@ -1,0 +1,68 @@
+{
+  "scope": "Windows native reader build and synthetic Steam ABI tests",
+  "bridge_source_commit": "85dabdee2afd0ca7c661413dea25deb4f4f25c7f",
+  "dll_bytes": 393728,
+  "dll_sha256": "5a79a77b5b6e2cff21b285c785118352805a09d91876f89276af119ee1702517",
+  "godot_sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00",
+  "compiler_sha256": "a560c2e6d5c3c30bf563ba5285576e9423f18d44165e1398539d912866a4daab",
+  "godot_cpp": {
+    "url": "https://github.com/godotengine/godot-cpp/archive/refs/tags/godot-4.4-stable.zip",
+    "sha256": "0d64106ce1e09547f6054743b6fb9db903f23f27d1e669c7556a0a02669bd9ba"
+  },
+  "build_steps": [
+    {
+      "name": "compile_tests",
+      "exit_code": 0,
+      "log_sha256": "b29beca581e5f408aa919d635b517d53ccfe62a693897f00507010ed46a13732"
+    },
+    {
+      "name": "unit_tests",
+      "exit_code": 0,
+      "log_sha256": "b206a518124f38667896be76eb50c1ef8ffd8ad30e053e99cb2a55d72257a999"
+    },
+    {
+      "name": "configure_extension",
+      "exit_code": 0,
+      "log_sha256": "29c4d72d927c49b239038748fa9f7a16a5dd8a0f8f19113a3683e144d221b7f5"
+    },
+    {
+      "name": "compile_extension",
+      "exit_code": 0,
+      "log_sha256": "7c1dd1c0f9225ffa7d78b6bceeae32df5509083084f8a7e568ea073c8fa344f0"
+    },
+    {
+      "name": "compile_mock",
+      "exit_code": 0,
+      "log_sha256": "22bf6391e7736ae3143c22266950df397049e4a494493f527a21307c10c8f6cd"
+    },
+    {
+      "name": "absent_import",
+      "exit_code": 0,
+      "log_sha256": "5152971a898a40509281d3884176a8009a0aa0fd9834c8fbdcb1949053435dbd"
+    },
+    {
+      "name": "absent_test",
+      "exit_code": 0,
+      "log_sha256": "c8f7e609cc23db42b6f2670fa3a6edbaefe37c4bd62abea413f5c8886ec52a01"
+    },
+    {
+      "name": "mock_import",
+      "exit_code": 0,
+      "log_sha256": "5152971a898a40509281d3884176a8009a0aa0fd9834c8fbdcb1949053435dbd"
+    },
+    {
+      "name": "mock_test",
+      "exit_code": 0,
+      "log_sha256": "58953f48fd2b3db59d2136ac7f5da09f1de609d364d6eb1a102fd9b8f5e6e7be"
+    }
+  ],
+  "reader_unit_tests": {
+    "passed": true,
+    "checks": 61
+  },
+  "isolated_reader_smoke": {
+    "absent": true,
+    "mock": true
+  },
+  "real_steam_tested": false
+}

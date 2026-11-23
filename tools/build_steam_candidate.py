@@ -67,8 +67,10 @@ def main():
     parser.add_argument("--qa-run", type=Path, required=True)
     parser.add_argument("--godot")
     parser.add_argument("--profile-root", type=Path, help="Absolute short parent for a new, exclusive private profile")
+    parser.add_argument("--split-pck", action="store_true", help="Export Windows EXE and PCK side by side")
     parser.add_argument("--run", action="store_true")
     args = parser.parse_args()
+    preset = "Windows Steam Split" if args.split_pck else "Windows Steam"
     profile_root = resolve_profile_root(args.profile_root)
     qa = args.qa_run.resolve()
     qa.relative_to((ROOT / ".godot/steam_integration_qa").resolve())
@@ -137,9 +139,10 @@ def main():
         exe = windows / "LiangshanHeroes.exe"
         receipt["identity_seed"] = seed(project)
         identity_generation = None
+        receipt["export_preset"] = preset
         commands = [
             ("import", [engine,"--headless","--path",str(project),"--editor","--import"]),
-            ("export", [engine,"--headless","--path",str(project),"--export-release","Windows Steam",str(exe)]),
+            ("export", [engine,"--headless","--path",str(project),"--export-release",preset,str(exe)]),
         ]
         for name, command in commands:
             print("RUN " + name + " " + str(run), flush=True)
@@ -160,6 +163,9 @@ def main():
                 receipt["content_identity"] = identity_generation
             else:
                 verify_generated(project, identity_generation)
+        pack = exe.with_suffix(".pck")
+        if pack.is_file() != args.split_pck:
+            raise RuntimeError("Exported payload layout does not match the selected preset")
         verification = verify(run, windows, Path(engine), env, records)
         receipt["steps"].extend(verification["steps"])
         receipt["verification"] = verification
@@ -179,7 +185,7 @@ def main():
             for row in records:
                 if sha(ROOT / row["path"]) != row["sha256"]: raise RuntimeError("Production source changed before identity probe")
             verify_generated(project, identity_generation)
-        for probe_stage, probe_pack in [("source_identity_probe", None), ("content_identity_probe", exe)]:
+        for probe_stage, probe_pack in [("source_identity_probe", None), ("content_identity_probe", pack if args.split_pck else exe)]:
             receipt["identity_probe_exit_unconfirmed"] = True
             try:
                 receipt[probe_stage] = probe_content_identity(project, probe_pack, Path(engine), run / probe_stage, env, identity_generation["identity"], identity_guard)

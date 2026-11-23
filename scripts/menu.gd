@@ -248,20 +248,25 @@ func _wait_for_battle_resource(path: String) -> Resource:
 func _install_battle(identity: Dictionary, environment_textures: Array[Texture2D]) -> void:
 	if AppLifecycle.quit_started():
 		return
-	var scene: PackedScene = load("res://scenes/main.tscn")
-	if scene != null:
-		var battle := scene.instantiate()
-		battle.prepare_new_gameplay_identity(identity)
-		if not environment_textures.is_empty():
-			# Keep Godot's cached textures alive through the battle's _ready.
-			battle.ready.connect(func(): environment_textures.clear(), CONNECT_ONE_SHOT)
-		if get_tree().change_scene_to_node(battle) == OK:
-			return
-		battle.free()
+	var changed_installation := String(identity.get("code", "")).begins_with("SPLIT_PACK_")
+	if not changed_installation:
+		var scene: PackedScene = load("res://scenes/main.tscn")
+		if scene != null:
+			var battle := scene.instantiate()
+			battle.prepare_new_gameplay_identity(identity)
+			if not environment_textures.is_empty():
+				# Keep Godot's cached textures alive through the battle's _ready.
+				battle.ready.connect(func(): environment_textures.clear(), CONNECT_ONE_SHOT)
+			if get_tree().change_scene_to_node(battle) == OK:
+				return
+			battle.free()
 	_entry_overlay.queue_free()
 	_entry_overlay = null
 	_restore_battle_loading_frame_limit()
-	push_error("Could not enter battle")
+	if changed_installation:
+		get_node("/root/ContinueFlow").report_installation_failure(identity)
+	else:
+		push_error("Could not enter battle")
 
 
 func _restore_battle_loading_frame_limit() -> void:

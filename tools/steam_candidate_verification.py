@@ -44,8 +44,10 @@ def verify(run, windows, engine, env, source_records):
         env["LSH_QA_SCRIPTS_FILE"] = str(script_manifest)
         env["LSH_QA_SCRIPTS_SHA"] = report["script_inputs_sha256"]
         exe = windows / "LiangshanHeroes.exe"
+        pack = exe.with_suffix(".pck")
+        package = pack if pack.is_file() else exe
         for name, command in [
-            ("package",[str(probe_engine),"--headless","--main-pack",str(exe),"--script",str(ROOT / "tools/steam_package_probe.gd")]),
+            ("package",[str(probe_engine),"--headless","--main-pack",str(package),"--script",str(ROOT / "tools/steam_package_probe.gd")]),
             ("exe_smoke",[str(exe),"--headless","--max-fps","60","--quit-after","600"]),
         ]:
             print("RUN " + name,flush=True)

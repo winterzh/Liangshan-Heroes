@@ -1,7 +1,7 @@
 {
-  "status": "WINDOWS_SHA256_BRIDGE_STEAM_READ_ONLY_VALIDATED",
-  "source_head": "1082bfe04024f631167cb4f597865e6d59a10962",
-  "build_receipt": "qa/battle_entry_timing_20261116/windows_sha256_bridge.json",
+  "status": "WINDOWS_SPLIT_PAYLOAD_BRIDGE_SYNTHETIC_VALIDATED",
+  "source_head": "85dabdee2afd0ca7c661413dea25deb4f4f25c7f",
+  "build_receipt": "qa/battle_entry_timing_20261116/windows_split_payload_reader_5a79a77b.json",
   "godot_cpp": {
     "url": "https://github.com/godotengine/godot-cpp/archive/refs/tags/godot-4.4-stable.zip",
     "sha256": "0d64106ce1e09547f6054743b6fb9db903f23f27d1e669c7556a0a02669bd9ba"
@@ -12,8 +12,8 @@
   "files": [
     {
       "path": "win64/steam_stats_reader.dll",
-      "bytes": 381440,
-      "sha256": "7505919cfff5907c13a02eb366690bff22ca6731c8521deefde58b114e4f796f"
+      "bytes": 393728,
+      "sha256": "5a79a77b5b6e2cff21b285c785118352805a09d91876f89276af119ee1702517"
     },
     {
       "path": "GODOT_CPP_LICENSE.md",
@@ -23,8 +23,8 @@
   ],
   "source_inputs": {
     "native/steam_stats_reader/build_profile.json": "3d38d062afbf6d75f648dec342a7e5d965bec84ebfa7b6ea63c0ac13a0dabcb8",
-    "native/steam_stats_reader/CMakeLists.txt": "68b0f85f91410e9a17058716f72c609e8481b72429cba1dfc4e0671e5de3e939",
-    "native/steam_stats_reader/extension.cpp": "3e1cf32df388a87399fe0dbf7e9d526b642f2e778bd02518f7ba385974c383da",
+    "native/steam_stats_reader/CMakeLists.txt": "4b0741ce46755eab4407b3e8d8ea336445e33f4f2afbe99a639494fa4b1a4c3a",
+    "native/steam_stats_reader/extension.cpp": "c46752d3a7827f5020829aa7de1e9c6bba8bf8a3b7cb1e20c293dd22a4ce6103",
     "native/steam_stats_reader/mock_steam.cpp": "334ff05c842a7b46c1fc2accd2e8c2617cc53d01823efcfced3544a431e85b5c",
     "native/steam_stats_reader/observer.hpp": "14439fbb78372514c91c9c24a9809e341f94249f09b2d1541ca39b6578827cfb",
     "native/steam_stats_reader/OBSERVER.md": "bb3d9f94fc9142d3eeb3306777dbf601efd2c73fc97d74b77dffd80eccb35a6c",
@@ -46,5 +46,10 @@
     "build_receipt": "qa/steam_stats_live_read_20260908/build/receipt.json",
     "live_read_receipt": "qa/steam_stats_live_read_20260908/live_read.json"
   },
-  "live_read_receipt": "qa/battle_entry_timing_20261116/windows_candidate_c0a3b748.json"
+  "previous_sha256_bridge": {
+    "sha256": "7505919cfff5907c13a02eb366690bff22ca6731c8521deefde58b114e4f796f",
+    "source_head": "1082bfe04024f631167cb4f597865e6d59a10962",
+    "build_receipt": "qa/battle_entry_timing_20261116/windows_sha256_bridge.json",
+    "live_read_receipt": "qa/battle_entry_timing_20261116/windows_candidate_c0a3b748.json"
+  }
 }
