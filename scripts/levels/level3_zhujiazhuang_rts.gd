@@ -21,6 +21,7 @@ const EXPANSION := Vector2i(36, 16)
 const PRISON := Vector2i(11, 35)
 const INNER_CONTACT := Vector2i(25, 18)
 const EVACUATION_RADIUS := 190.0
+const EVACUATION_RALLY := CAMP + Vector2i(-3,0)
 const PRISONERS := ["shi_qian", "shi_xiu", "qin_ming", "yang_lin", "huang_xin", "wang_ying", "deng_fei"]
 const FIELD_ACTORS := ["song_jiang", "lin_chong", "hua_rong", "sun_li", "liang_dao", "liang_qiang", "liang_gong", "liang_ma"]
 const TROOPS := [{"key":"zhu_keke", "cost":"liang_dao"}, {"key":"zhu_gong", "cost":"liang_gong"}, {"key":"zhu_qi", "cost":"liang_ma"}]
@@ -417,14 +418,58 @@ func _rescued_outside_camp() -> Array:
 	return _rescued_members().filter(func(u): return not _at_forward_camp(u))
 
 func _update_camp_evacuation_control(b) -> void:
+	var outside := _rescued_outside_camp()
 	var button: Button = b.mission.find_level_button("zhu_select_outside_camp")
 	if button == null:
 		button = b.mission.add_level_button("zhu_select_outside_camp", "选中 · 尚未归营伤员",
 			"只选中尚未抵达前营的可指挥伤员。请选择路线并下令归营。")
-	button.disabled = _rescued_outside_camp().is_empty()
+	button.disabled = outside.is_empty()
+	if not manor_fallen or b.hud.touch_ui:
+		return
+	var return_button: Button = b.mission.find_level_button("zhu_return_wounded")
+	if return_button == null and not outside.is_empty():
+		return_button = b.mission.add_level_button("zhu_return_wounded", "送伤员回前营",
+			"给尚未归营的伤员下达行军命令。请先派战斗部队清开撤路。")
+		return_button.get_parent().move_child(return_button, 0)
+		b.mission.reveal_primary_level_button()
+	if return_button != null:
+		return_button.disabled = outside.is_empty()
+
+func _order_wounded_return(b) -> void:
+	if not manor_fallen or not prisoners_freed or not _alive(hall) or b.hud.touch_ui or not b._gameplay_rng_issue.is_empty():
+		return
+	var outside := _rescued_outside_camp()
+	if outside.is_empty():
+		return
+	var pending := outside.filter(func(u: Unit) -> bool:
+		return u._state != Unit.ST_MOVE or u._home.distance_to(hall.position) >= EVACUATION_RADIUS \
+			or u._path_i >= u._path.size())
+	if pending.is_empty():
+		b.mission.set_feedback("伤员正在归营途中。")
+		return
+	var origin: Vector2i = b.map.world_to_cell(pending[0].position)
+	var rally_cell: Vector2i = b.map.nearest_open_from(EVACUATION_RALLY, origin)
+	var rally: Vector2 = b.map.cell_to_world(rally_cell)
+	if rally_cell.x < 0 or rally.distance_to(hall.position) >= EVACUATION_RADIUS:
+		b.mission.set_feedback("前营附近没有落脚点。请清开道路后再下令归营。")
+		return
+	var targets: Array = b._formation_targets(pending, rally)
+	var pace: float = b._group_speed_cap(pending)
+	b._stamp_manual(pending)
+	for i in range(pending.size()):
+		var target: Vector2 = targets[i]
+		if target.distance_to(hall.position) >= EVACUATION_RADIUS:
+			target = rally
+		pending[i].order_move(target, false, pace)
+	b.select_members(outside, false)
+	Sfx.play("order")
+	b.mission.set_feedback(Localize.format_text("已派%d名伤员返回前营。", [pending.size()]))
 
 func activate_mission_button(b, button_id: String) -> void:
 	if b.phase != b.Phase.FIGHT: return
+	if button_id == "zhu_return_wounded":
+		_order_wounded_return(b)
+		return
 	if button_id == "zhu_find_camp_gold":
 		_view_camp_gold(b)
 		return
@@ -843,10 +888,12 @@ func _refresh_stage(b) -> void:
 		elif b.mission.has_event("zhu_seven_safe"):
 			objective = "七人全返演义已达成。让宋江到前营收军标记即可结算。"
 		else:
-			objective = "宋江可立即收军。想取得七人全返演义，先选中尚未归营的伤员，把他们送回前营。"
+			objective = "宋江可立即收军。想取得七人全返演义，先选中尚未归营的伤员，把他们送回前营。" if b.hud.touch_ui \
+				else "宋江可立即收军。想取得七人全返演义，可先点「送伤员回前营」。"
 	elif manor_fallen and prisoners_freed:
 		heading = "撤离 · 护送伤员"
-		objective = "大营已破，敌军不再补兵。先清理撤路，再护送时迁回前营；其余好汉全部生还是可选演义目标。"
+		objective = "大营已破，敌军不再补兵。先清理撤路，再护送时迁回前营；其余好汉全部生还是可选演义目标。" if b.hud.touch_ui \
+			else "先清开撤路，再点「送伤员回前营」。时迁归营即可收军，七人全返另记演义印。"
 	elif manor_fallen:
 		heading = "营救 · 前往牢院"
 		objective = "大营已破，敌军不再补兵。派战斗部队掩护，在牢院标记救人，再护送时迁回前营。"
