@@ -399,6 +399,16 @@ func _liu_return_ship() -> Unit:
 	var ship = liu_carrier if fire_lit else fireboat
 	return ship if alive(ship) else null
 
+func refresh_restored_liu_return(b) -> void:
+	var ship := _liu_return_ship()
+	if ship == null: return
+	var action: Dictionary = b.mission.actions.get("gao_liu_return", {})
+	if action.is_empty() or action.done or action.has("blocked_reason") or action.actors == [ship.key]: return
+	# Older Windows saves list both ships. Keep the saved action and its progress,
+	# and refresh who can take the next order from the restored passenger binding.
+	b.mission.update_action_actors("gao_liu_return", [ship.key])
+	_update_wave_objective(b)
+
 func _fire_aftermath(withdrew: bool, can_return: bool) -> String:
 	if withdrew:
 		return "双船已撤离，火攻演义保留。可让阮小二送刘唐返港下船。" if can_return else "双船已撤离，火攻演义保留。"
