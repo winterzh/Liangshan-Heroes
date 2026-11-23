@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+Windows 候选 `7ea5b5d3` 已用 Godot 4.6.3 导入与导出，两个步骤退出 0、错误 0。纯脚本改动，运行包共六文件。预校验使用原 SHA 路径和缓存，最多涉及 15 张 512×512 PNG，按 RGBA8 基级估算 15 MiB。样本来自隔离 Windows 离线窗口。Steam 前台、物理键鼠与长时内存回落另验。 [Windows 对照收据](../qa/battle_entry_timing_20261116/windows_gao_scenery_calibration_preview_7ea5b5d3.json)
+
 Windows 本地候选 `58cbcdb5` 用 Godot 4.6.3 重新导入和导出，两个步骤退出 0、错误 0。相比 `83f62108` 冻结输入只改动 `scripts/ability_visuals.gd`。六文件指纹在原生进场与旧档复验前后均一致。 [Windows 验收收据](../qa/battle_entry_timing_20261116/windows_skill_visual_initialization_58cbcdb5.json)
 
 Windows 本地候选 `83f62108` 用 Godot 4.6.3 导入与正式模板导出，两个步骤退出 0、错误 0。冻结包输入相对 `d08f639b` 只有 `scripts/workshop_content.gd` 一项改动，六文件指纹在原生 ABBA 运行前后均一致。测试在隔离 Windows 窗口离线进行。候选包未提交 Steam，正式客户端前台实测仍待补。 [原生进场收据](../qa/battle_entry_timing_20261116/windows_custom_config_decode_83f62108.json)
