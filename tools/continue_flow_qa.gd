@@ -407,7 +407,7 @@ func _run() -> void:
 	if mode == "held_error":
 		received = false
 		clicked(battle.hud, "SaveAndExit")
-		clicked(flow, "ConfirmSave")
+		check("unchanged restored slot enters saving without confirmation", flow.phase == flow.Phase.SAVING)
 		battle._run_clock.abort_step("QA_INJECTED_CLOCK_FAULT")
 		await wait_operation()
 		check("release failure retains held world", result.get("battle_held", false) and get_tree().paused and battle._save_barrier.state == battle._save_barrier.State.HELD)
@@ -440,16 +440,20 @@ func _run() -> void:
 	for _i in range(20): await get_tree().physics_frame
 	await get_tree().process_frame
 	check("production continues after restore", battle.level.hall._train_t != train_before)
+	var current: Dictionary = Slot.new().read_slot()
+	var replacement: Dictionary = Slot.new().write_slot(current.document)
+	check("checkpoint changed on disk since restore", replacement.ok)
+	before = Slot.new().inspect_slot()
 	battle._open_pause()
 	clicked(battle.hud, "SaveAndExit")
-	check("existing slot asks confirmation", flow.phase == flow.Phase.CONFIRM)
+	check("changed slot asks confirmation", flow.phase == flow.Phase.CONFIRM)
 	check("confirmation focuses cancel", flow.get_viewport().gui_get_focus_owner().name == "CancelSave")
 	check("opening confirmation does not write", Slot.new().inspect_slot() == before)
 	await capture_ui("overwrite_confirm")
 	clicked(flow, "CancelSave")
 	check("cancel preserves world and slot", not flow.busy() and get_tree().current_scene == battle and Slot.new().inspect_slot() == before)
 	clicked(battle.hud, "SaveAndExit")
-	var current: Dictionary = Slot.new().read_slot()
+	current = Slot.new().read_slot()
 	var competing: Dictionary = Slot.new().write_slot(current.document)
 	check("competing legitimate save committed", competing.ok)
 	var newer: Dictionary = Slot.new().inspect_slot()

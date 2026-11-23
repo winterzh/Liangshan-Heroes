@@ -377,7 +377,8 @@ func commit_restore() -> Dictionary:
 	Engine.time_scale = _tree().root.get_node("Settings").game_speed
 	_phase = "installed"
 	_tree().paused = _packet.resume_paused
-	return {"ok": true, "battle": battle, "identity": owned.identity, "generation": _packet.generation, "steam_credit": not binding_plan.is_empty(), "steam_published": false, "paused": _tree().paused}
+	return {"ok": true, "battle": battle, "identity": owned.identity, "generation": _packet.generation,
+		"slot_file_sha256": _slot_sha, "steam_credit": not binding_plan.is_empty(), "steam_published": false, "paused": _tree().paused}
 
 func commit_restore_async(max_layout_frames := 12) -> Dictionary:
 	if _phase == "new": return _bad("RESTORE_NOT_PREPARED")

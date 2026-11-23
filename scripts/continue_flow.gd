@@ -23,6 +23,7 @@ var _session: RefCounted
 var _overlay: Control
 var _graph: RefCounted
 var _graph_owner: WeakRef
+var _restored_slot_sha := ""
 var _before_paused := false
 var _menu_buttons: Array = []
 var _terminal: Dictionary = {}
@@ -244,7 +245,11 @@ func request_save_exit(battle: Node) -> Dictionary:
 	var read: Dictionary = Slot.new().inspect_slot()
 	if not read.ok: return _fail(read, false)
 	_expected = {"revision": read.revision, "file_sha256": read.file_sha256}
-	if read.exists:
+	# Only the installed battle can advance the exact checkpoint it loaded
+	# without prompting. The write still uses the same revision and SHA check.
+	var same_checkpoint := _graph_owner != null and _graph_owner.get_ref() == battle \
+		and _restored_slot_sha == read.file_sha256
+	if read.exists and not same_checkpoint:
 		phase = Phase.CONFIRM
 		get_tree().paused = true
 		_show("覆盖上次的战斗存档？\n\n本机只保留一个继续槽。成功保存后会替换上次存档，取消将留在当前战斗。", "确认覆盖并保存")
@@ -389,6 +394,7 @@ func _restore() -> void:
 	if _graph != null: _graph.dispose()
 	_graph = installed.identity
 	_graph_owner = weakref(installed.battle)
+	_restored_slot_sha = installed.slot_file_sha256
 	_menu_buttons.clear()
 	_source = null
 	phase = Phase.IDLE
@@ -411,6 +417,7 @@ func _exit_tree() -> void:
 func _process(_delta: float) -> void:
 	if _graph_owner != null and _graph_owner.get_ref() == null:
 		_graph.dispose(); _graph = null; _graph_owner = null
+		_restored_slot_sha = ""
 		set_process(false)
 
 func _fail(result: Dictionary, restoring: bool) -> Dictionary:
