@@ -131,6 +131,14 @@ func _wine_fixture() -> void:
 func _run() -> void:
 	OS.set_environment("CAMPAIGN_QA","1");AudioServer.set_bus_mute(0,true)
 	root.get_node("Settings").edge_scroll=false
+	var flow := root.get_node("ContinueFlow")
+	var deadline := Time.get_ticks_msec()+120000
+	while not flow.can_launch():
+		if flow.phase==flow.Phase.ERROR or Time.get_ticks_msec()>=deadline:
+			push_error(str(flow.last_result))
+			quit(2)
+			return
+		await process_frame
 	var wine_only := OS.get_environment("CW_WINE_ONLY")=="1"
 	folder="res://.godot/kuaihuolin-wine" if wine_only else "res://.godot/campaign-counter-window"
 	DirAccess.make_dir_recursive_absolute(folder)

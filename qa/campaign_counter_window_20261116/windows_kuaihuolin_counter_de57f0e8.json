@@ -1,0 +1,261 @@
+{
+  "scope": "Source-rendered fixtures plus three independent private Windows processes using the normal offline campaign menu and actual commands at 4x simulation. Keyboard shortcuts are verified in rendered UI. No human-input or Steam acceptance.",
+  "old_task_instruction": {
+    "kick_cooldown": 9.0,
+    "kick_ready": false,
+    "opening": 1.1,
+    "punch_ready": true,
+    "status": "Opening: 1.1 s. Close in and counter with Mandarin Duck Kick, or use Steady Yourself to recover.",
+    "source_commit": "83087bd5508298443433eaf8c7267ece907f4458",
+    "log_sha256": "93eecf352c91d1892a77481cc8d861713e15733f6758ac5f1802998d1a5958ec"
+  },
+  "fixture": {
+    "checks": 36,
+    "punch_text": [
+      {
+        "language": "zh_CN",
+        "punch_status": "破绽 1.1秒 · Q 迎面直拳反击"
+      },
+      {
+        "language": "zh_TW",
+        "punch_status": "破綻 1.1秒 · Q 迎面直拳反擊"
+      },
+      {
+        "language": "en",
+        "punch_status": "Opening 1.1s · Counter with Q Straight Punch"
+      },
+      {
+        "language": "ja",
+        "punch_status": "隙 1.1秒 · Q 正面突きで反撃"
+      }
+    ],
+    "narrow_window": "960 x 540, English, remapped punch U",
+    "log_sha256": "40a45a0c71657278fda0ee716299088d961255664f8812472e4a4525b76e85cb"
+  },
+  "localization": {
+    "display_sources": 4874,
+    "missing": 0,
+    "errors": 0
+  },
+  "windows_direct_route": {
+    "revision": "de57f0e8fe19e720f1b7edce04077ba3586e0b0c",
+    "exe_sha256": "78f893ae9bb345c014fd97883fc970a894dfdaba881be5718a4a8a7654669567",
+    "checks": 48,
+    "stages": [
+      {
+        "checks": 20,
+        "facts": {
+          "checkpoint": {
+            "clock": 26.5499999999999,
+            "counter_hits": 1,
+            "drunk": 0,
+            "events": [
+              "counter_hit",
+              "dodge_heavy",
+              "kuaihuolin_early_showdown",
+              "mengzhou_signature",
+              "mengzhou_step_used"
+            ],
+            "hp": [
+              406.153846153846,
+              210.0,
+              646.585714285715
+            ],
+            "menshen": "7",
+            "opening_serial": 1,
+            "shi": "2",
+            "speed_band": [
+              1.0,
+              1.0
+            ],
+            "status": "破绽 0.8秒 · Q 迎面直拳反击",
+            "steady_left": 0.0,
+            "step_serial": -1,
+            "window": {
+              "footwork": false,
+              "fraction": 0.363636363636364,
+              "in_range": true,
+              "kick_cooldown": 8.06666666666667,
+              "remaining": 0.8
+            },
+            "wu": "1"
+          },
+          "generation": 1,
+          "result_code": ""
+        },
+        "failures": [],
+        "stage": "save",
+        "log_sha256": "bc19f2bc9eca222355b08404b3b6dada322c9243f6526a32ee554b8768099637",
+        "exit_code": 0,
+        "errors": [],
+        "checks_passed": [
+          "real offline Windows player admission",
+          "Steam and cloud remain disconnected",
+          "verified exact executable",
+          "Start Campaign exists in the real menu",
+          "real Kuaihuolin sortie button is available",
+          "direct starts current player-controlled short chapter",
+          "direct retains authored duel stats and vulnerable noncombat companion",
+          "all preparation choices are available at the start",
+          "direct walks to the shop",
+          "proximity alone does not steal the player's preparation choice",
+          "direct actual attack opens the duel",
+          "Shi En actually walks to the safe waiting area",
+          "direct keeps chosen drink count",
+          "a missed attack creates a live counter opening with no drinks",
+          "kick cooldown outlasts the live opening but the punch is available",
+          "live HUD and mission both show the usable punch",
+          "visible SaveAndExit button",
+          "pause-menu action commits a saved slot",
+          "disk slot stores the exact chapter context",
+          "handoff created"
+        ]
+      },
+      {
+        "checks": 21,
+        "facts": {
+          "live": {
+            "casts": {
+              "0": 1
+            },
+            "charge_travel": 373.333492279053,
+            "counter_hits": 4,
+            "drinks": 0,
+            "events": [
+              "kuaihuolin_early_showdown",
+              "mengzhou_step_used",
+              "dodge_heavy",
+              "counter_hit",
+              "mengzhou_signature",
+              "dodge_rush",
+              "menshen_subdued",
+              "action:return_shop:terms",
+              "terms",
+              "action:return_shop:restore_shop",
+              "restore_shop"
+            ],
+            "final_hp": 125.089743589744,
+            "game_seconds": 68.6833333333346,
+            "heavy_dodges": 2,
+            "min_hp": 116.923076923077,
+            "orders": 36,
+            "result": {
+              "contract_version": 2,
+              "core_cleared": true,
+              "core_goal": "以拳脚制服蒋门神，让施恩活着收回酒店。",
+              "done_ids": [
+                "signature_fists",
+                "spare_and_restore"
+              ],
+              "goals": [
+                {
+                  "id": "three_bowls",
+                  "label": "依约无三不过望，沿路四处各饮三碗",
+                  "note": "",
+                  "reason": "没有走完无三不过望的四处酒路。",
+                  "state": "missed"
+                },
+                {
+                  "id": "drunken_provocation",
+                  "label": "到挂着“河阳风月”酒望的店前佯醉换酒，惊动酒保，引蒋门神赶来",
+                  "note": "",
+                  "reason": "本局已偏离“到挂着“河阳风月”酒望的店前佯醉换酒，惊动酒保，引蒋门神赶来”的原著条件",
+                  "state": "missed"
+                },
+                {
+                  "id": "signature_fists",
+                  "label": "趁失势以玉环步接鸳鸯脚",
+                  "note": "",
+                  "reason": "",
+                  "state": "done"
+                },
+                {
+                  "id": "spare_and_restore",
+                  "label": "留蒋门神性命，说清三项条件后交还酒店",
+                  "note": "",
+                  "reason": "",
+                  "state": "done"
+                }
+              ],
+              "missed_ids": [
+                "three_bowls",
+                "drunken_provocation"
+              ],
+              "pending_ids": [],
+              "story_complete": false,
+              "story_done": 2,
+              "story_total": 4
+            },
+            "route": "direct",
+            "rush_dodges": 1,
+            "victory": true
+          },
+          "opening_serial": 1,
+          "progress_sha": "b16ed1f51914c75c4627880378501fcde9a0362b345941423f38498ec64cdc0f",
+          "result_code": "",
+          "resumed_punch_hit": true
+        },
+        "failures": [],
+        "stage": "resume",
+        "log_sha256": "5bde1cb9217bd054251ad979128fbc556abed987123c15d99449220a97cc7a18",
+        "exit_code": 0,
+        "errors": [],
+        "checks_passed": [
+          "real offline Windows player admission",
+          "Steam and cloud remain disconnected",
+          "verified exact executable",
+          "second process reads the exact checkpoint from disk",
+          "visible ContinueBattle button",
+          "main-menu action mounts the saved campaign",
+          "restored chapter retains the get_tree().paused battle",
+          "battle clock restored on the same checkpoint",
+          "sober state, footwork, opening timer, participants, events and prompt survive exactly",
+          "reading preserves the slot bytes",
+          "restart restores the actual HUD and task punch prompt",
+          "the normal punch hits and counts in the exact restored opening",
+          "direct reaches the required real combat outcome (unprepared standing control loses)",
+          "direct actually avoids both distinct specials",
+          "direct boss visibly travels through an actual charge",
+          "direct actual moving W and current-window E earns signature",
+          "direct player chooses and speaks the three terms",
+          "direct Shi En actually returns and takes over the shop",
+          "direct explicitly ends without a timeout or fabricated result",
+          "direct route does not invent optional wine/provocation credit",
+          "natural victory is committed by the campaign settlement coordinator"
+        ]
+      },
+      {
+        "checks": 7,
+        "facts": {
+          "progress_sha": "b16ed1f51914c75c4627880378501fcde9a0362b345941423f38498ec64cdc0f",
+          "terminal_code": "LOCAL_RUN_TERMINAL"
+        },
+        "failures": [],
+        "stage": "reject",
+        "log_sha256": "4813cd722e2de2986121326109c36d8a53d3c753956aad5bf3ac1318c093f008",
+        "exit_code": 0,
+        "errors": [],
+        "checks_passed": [
+          "real offline Windows player admission",
+          "Steam and cloud remain disconnected",
+          "verified exact executable",
+          "visible ContinueBattle button",
+          "player menu rejects the settled slot",
+          "settled campaign progress and original slot bytes are preserved",
+          "visible CloseError button"
+        ]
+      }
+    ],
+    "disk_verification": {
+      "slot_generations": [
+        1
+      ],
+      "settlement_generations": [
+        1,
+        2,
+        3
+      ],
+      "single_local_settlement": true
+    }
+  }
+}
