@@ -4,15 +4,15 @@ Liangshan Heroes · 基于 Godot 4.6.3 的水浒题材即时战略项目。
 
 人物、兵器、服饰与剧情调整先核对《水浒传》百二十回本，具体动作编排、配色与招式数值属于游戏表现。**游戏已有发布版本，完整开发计划仍在进行。**
 
-## 当前版本（2026-10-28）
+## 当前版本（2026-11-24）
 
 | 入口 | 版本与用途 |
 | --- | --- |
-| [Steam Windows](https://store.steampowered.com/app/5088120/) | 正式 default Build **26260970**；[本次更新](docs/STEAM_UPDATE_20261028.md) · [四语公告](https://store.steampowered.com/news/app/5088120/view/680765564125184330) |
-| [main](https://github.com/winterzh/Liangshan-Heroes/tree/main) / [stable](https://github.com/winterzh/Liangshan-Heroes/tree/codex/sync-20260905-stable) | main为上次主线；本次发行冻结来自stable `47168f00`，本轮未合并main |
+| [Steam Windows](https://store.steampowered.com/app/5088120/) | Windows 正式版 Build **26752476**。[发布记录](docs/STEAM_UPDATE_20261118_CANDIDATE_0f133709.json) · [四语公告](https://store.steampowered.com/news/app/5088120/view/680767470935474309) |
+| [main](https://github.com/winterzh/Liangshan-Heroes/tree/main) / [stable](https://github.com/winterzh/Liangshan-Heroes/tree/codex/sync-20260905-stable) | 开发候选同步到 stable。 |
 | [GitHub Releases](https://github.com/winterzh/Liangshan-Heroes/releases) | 历史安装包；最新Release为 **Android v2.0**，与Steam Windows版本分别记录 |
 
-本次Steam更新完善黄泥冈七车十一担的取车、推空车、装载、交付与倒地接力，改善任务选择、HUD、Esc暂停及四语提示。完整战役续玩尚未开放；中途保存/继续仍仅支持经典固定30波据守。
+Windows 离线试玩候选 `104ae848`。完整解压，把 EXE 与 PCK 留在同一目录，再双击 `Start Local Playtest.cmd`。[试玩步骤](docs/PLAYTEST_CHECKLIST_20260906.md)
 
 ## 从这里开始
 

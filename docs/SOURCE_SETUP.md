@@ -1,12 +1,14 @@
 # 源码设置与换机（2026-10-30）
 
+当前 Windows 离线试玩候选为 `104ae848`。完整解压后运行 `Start Local Playtest.cmd`，EXE 与 PCK 留在同一目录。私有成品构建器可用 `--split-pck` 选择 `Windows Steam Split` 预设。 [Windows 拆包验收](../qa/battle_entry_timing_20261116/windows_split_payload_and_resume_104ae848.json)
+
 Windows 首次出征使用原主菜单和隔离档验收，通过左键选关、正常开战与右键下令。 [启动与出征收据](../qa/battle_entry_timing_20261116/windows_fresh_process_startup_bf99bd12.json)
 
 从最新版离线试玩 ZIP 的干净解包复验六入口进退、回收与十分钟帧时。六文件运行前后摘要一致，原生窗口不切换系统桌面。 [十分钟成品收据](../qa/battle_entry_timing_20261116/windows_mode_soak_600_bf99bd12.json)
 
 连环马完整演义在现有 Windows 1ccb8af6 包通过。使用普通玩家保存与继续接口，维持原关卡状态和运行身份。 [Windows 验收收据](../qa/campaign_cavalry_escort_20261116/windows_lianhuanma_all_four_seals_1ccb8af6.json)
 
-当前 Windows 离线试玩候选为 `fb368b0f`。解压后运行 `Start Local Playtest.cmd`。新版原生启动、背景音乐和干净解压启动已通过。 [Windows 启动与音频验收](../qa/battle_entry_timing_20261116/windows_startup_music_and_pack_fb368b0f.json) · [上一版连环马续玩验收](../qa/campaign_cavalry_escort_20261116/windows_lianhuanma_southern_siege_bf99bd12.json)
+上一 Windows 内嵌试玩候选为 `fb368b0f`。解压后运行 `Start Local Playtest.cmd`。新版原生启动、背景音乐和干净解压启动已通过。 [Windows 启动与音频验收](../qa/battle_entry_timing_20261116/windows_startup_music_and_pack_fb368b0f.json) · [上一版连环马续玩验收](../qa/campaign_cavalry_escort_20261116/windows_lianhuanma_southern_siege_bf99bd12.json)
 
 前一 Windows 离线试玩候选为 `94629f93`。解压后双击 `Start Local Playtest.cmd`，用同一编号继续。快活林复用任务按钮白名单、普通移动命令与原到场办理。 [Windows 验收收据](../qa/campaign_counter_window_20261116/windows_shop_handover_94629f93.json)
 

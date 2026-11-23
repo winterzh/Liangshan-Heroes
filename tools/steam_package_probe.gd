@@ -77,11 +77,13 @@ func _check_reader() -> void:
 	fixture.invalid_counter = true
 	check("packed invalid counter rejects whole snapshot", reader.current_snapshot().get("code") == "BAD_STAT")
 
-func _check_unreleased_entries() -> void:
+func _check_offline_entries() -> void:
 	var flow: Node = root.get_node_or_null("ContinueFlow")
 	check("packed continue coordinator autoload", flow != null)
 	if flow != null:
-		check("packed public continue remains disabled and idle", not flow.is_enabled() and not flow.busy())
+		# This editor probe runs with Steam disabled while identity recovery can still be active.
+		var startup_phase: int = flow.phase
+		check("packed editor probe cannot enable player continue", not flow.is_enabled())
 		var parent := VBoxContainer.new()
 		flow.add_continue_entry(parent, null)
 		flow.add_save_entry(parent, null)
@@ -91,14 +93,14 @@ func _check_unreleased_entries() -> void:
 		var saved: Dictionary = flow.request_save_exit(null)
 		check("packed direct continue request remains refused", continued.get("ok") == false and continued.get("code") == "CONTINUE_NOT_RELEASED")
 		check("packed direct save request remains refused", saved.get("ok") == false and saved.get("code") == "CONTINUE_NOT_RELEASED")
-		check("packed refused requests leave coordinator idle", not flow.busy())
+		check("packed refused requests leave the startup phase intact", flow.phase == startup_phase)
 	var observer_script: GDScript = load("res://scripts/steam_stats_observer.gd")
 	check("packed optional observer facade", observer_script != null)
-	check("unreleased native observer is not shipped", not ClassDB.class_exists("SteamStatsObserver"))
+	check("packed native observer bridge is present", ClassDB.class_exists("SteamStatsObserver"))
 	if observer_script != null:
 		var observer: RefCounted = observer_script.new()
 		var attached: Dictionary = observer.attach("76561198000000001", "76561198000000002")
-		check("packed optional observer fails closed with released dependency", attached.get("ok") == false and attached.get("code") == "OBSERVER_UNSUPPORTED")
+		check("packed observer rejects binding with Steam disabled", attached.get("ok") == false and attached.get("code") == "STEAM_NOT_INITIALIZED")
 		check("packed unsupported observer cannot request account data", observer.request().get("code") == "OBSERVER_CLOSED")
 
 func _check_localization() -> void:
@@ -188,7 +190,7 @@ func _run() -> void:
 	check("Steam QA initialization disabled", not service.available and service.native == null)
 	_check_reader()
 	_check_scripts()
-	_check_unreleased_entries()
+	_check_offline_entries()
 	_list("res://")
 	var forbidden := false
 	for path in files:
