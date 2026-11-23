@@ -1,5 +1,9 @@
 # 源码设置与换机（2026-10-30）
 
+## Windows 黄泥冈地面图集读取
+
+主菜单的 Windows 战役加载读取黄泥冈布景时，同时请求七个地面小景共用的图集。各个小景沿用原有路线和裁切信息，重新进场时沿用已读取的资源。Windows 开发候选 f6d0dbf5 采用这项调整。 [Windows 验收收据](../qa/battle_entry_timing_20261116/windows_ground_atlas_attach_f6d0dbf5.json)
+
 ## Windows 共用地表读取时机
 
 两版的 6,574 个运行输入仅主菜单脚本有差异。对照版在 Windows 成品的主菜单首次绘制后复用共用地表预读，导出仍采用原有拆包布局。候选 e66d5047 采用这两张贴图的提前读取。进场的最长绘制间隔仍需单独处理。 [Windows 验收收据](../qa/battle_entry_timing_20261116/windows_startup_surface_prefetch_e66d5047.json)

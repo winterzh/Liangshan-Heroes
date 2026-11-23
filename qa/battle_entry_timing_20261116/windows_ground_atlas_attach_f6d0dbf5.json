@@ -1,0 +1,2148 @@
+{
+  "decision": "adopted",
+  "method": [
+    "Fresh private Windows processes, isolated offline profiles, Vulkan Forward+ 1280x720 and 60 FPS for paired launches.",
+    "The stage probes subclass the frozen scripts, copy the exact ready callback and add timestamps. Their first load compiles diagnostic scripts and adds pre-attachment time. Use the stage probes to compare work after attachment.",
+    "Renderer signals delimit render submission and completion notifications. They are not GPU hardware-timer results.",
+    "The compiled pairs retain the shipping scene and add an autoload observer. The matching viewport driver opens Story, sorties, advances the three dialogue pages, moves a unit and returns to the menu.",
+    "The six-route run is a short compatibility check."
+  ],
+  "baseline": {
+    "kind": "local_integrated_windows_candidate",
+    "layout": "split_pck",
+    "commit": "e66d50473e2f9da66e382c81054bb0f77302956c",
+    "source_version": "source-v1:fc611531d9ed80c479ddd719fd662b692372dd60e29f39e6f02bcc896e4795ba",
+    "tracked_runtime_count": 6574,
+    "steps": [
+      {
+        "stage": "import",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 63.43
+      },
+      {
+        "stage": "export",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 85.5
+      }
+    ],
+    "files": [
+      {
+        "path": "GODOTSTEAM_LICENSE.txt",
+        "bytes": 1110,
+        "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+      },
+      {
+        "path": "LiangshanHeroes.exe",
+        "bytes": 104886784,
+        "sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4"
+      },
+      {
+        "path": "LiangshanHeroes.pck",
+        "bytes": 1722697964,
+        "sha256": "54b8dbe22e6dd42860cb41bad8eb7dd983a99a446fef21a6652fbb8b85572bba"
+      },
+      {
+        "path": "libgodotsteam.windows.template_release.x86_64.dll",
+        "bytes": 3961344,
+        "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+      },
+      {
+        "path": "steam_api64.dll",
+        "bytes": 319128,
+        "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+      },
+      {
+        "path": "steam_stats_reader.dll",
+        "bytes": 393728,
+        "sha256": "5a79a77b5b6e2cff21b285c785118352805a09d91876f89276af119ee1702517"
+      },
+      {
+        "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+        "bytes": 1093,
+        "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+      }
+    ]
+  },
+  "candidate": {
+    "kind": "local_integrated_windows_candidate",
+    "layout": "split_pck",
+    "commit": "f6d0dbf563067eb9b43075f61632e622ca56d7a7",
+    "source_version": "source-v1:3b04a2a961ee811aee8c8646552941536e58fe27eb36ae2c158853fb00bfefe3",
+    "tracked_runtime_count": 6574,
+    "steps": [
+      {
+        "stage": "import",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 58.8
+      },
+      {
+        "stage": "export",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 90.02
+      }
+    ],
+    "files": [
+      {
+        "path": "GODOTSTEAM_LICENSE.txt",
+        "bytes": 1110,
+        "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+      },
+      {
+        "path": "LiangshanHeroes.exe",
+        "bytes": 104886784,
+        "sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4"
+      },
+      {
+        "path": "LiangshanHeroes.pck",
+        "bytes": 1722698156,
+        "sha256": "f1c19aeb15d146a2a05bd9cc8c541086679ba4821e9ef72b715600665b92229b"
+      },
+      {
+        "path": "libgodotsteam.windows.template_release.x86_64.dll",
+        "bytes": 3961344,
+        "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+      },
+      {
+        "path": "steam_api64.dll",
+        "bytes": 319128,
+        "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+      },
+      {
+        "path": "steam_stats_reader.dll",
+        "bytes": 393728,
+        "sha256": "5a79a77b5b6e2cff21b285c785118352805a09d91876f89276af119ee1702517"
+      },
+      {
+        "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+        "bytes": 1093,
+        "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+      }
+    ]
+  },
+  "only_frozen_input_changed": "scripts/campaign_environment.gd",
+  "timing": {
+    "mount_stages": {
+      "sample_count": 8,
+      "runs": [
+        {
+          "variant": "plain",
+          "source_commit": "e66d50473e2f9da66e382c81054bb0f77302956c",
+          "ms": {
+            "loading_to_attach_ms": 175.132,
+            "sortie_to_battle_ms": 414.659,
+            "sortie_to_first_move_ms": 670.687,
+            "process_to_ready_menu_ms": 6925.957,
+            "map_to_hud_ms": 49.157,
+            "hud_to_ready_ms": 87.667,
+            "longest_entry_gap_ms": 242.215,
+            "attach_to_ready_ms": 163.359,
+            "startup_progress_to_ready_ms": 1606.0,
+            "ready_to_first_pre_draw_ms": 49.015,
+            "first_pre_to_post_draw_ms": 12.944
+          },
+          "log_sha256": "ede964607327eb1b2e4e7ac105b457bbe05c457f1181ac21b65a3b5878fa02bd",
+          "entry_trace_sha256": "a2168ebe1bf83151655a8b6cf0213b9b4c0a30627e6e4ef0cf17026c6988fc40",
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "ready_stamps_since_click_us": {}
+        },
+        {
+          "variant": "trace",
+          "source_commit": "e66d50473e2f9da66e382c81054bb0f77302956c",
+          "ms": {
+            "loading_to_attach_ms": 453.529,
+            "sortie_to_battle_ms": 689.491,
+            "sortie_to_first_move_ms": 835.925,
+            "process_to_ready_menu_ms": 7134.743,
+            "map_to_hud_ms": 52.282,
+            "hud_to_ready_ms": 82.621,
+            "longest_entry_gap_ms": 530.506,
+            "attach_to_ready_ms": 163.667,
+            "startup_progress_to_ready_ms": 1442.0,
+            "ready_to_first_pre_draw_ms": 52.807,
+            "first_pre_to_post_draw_ms": 12.514,
+            "map_environment_ms": 42.558,
+            "hud_attach_ms": 41.72,
+            "unit_deployment_ms": 26.791
+          },
+          "log_sha256": "ede964607327eb1b2e4e7ac105b457bbe05c457f1181ac21b65a3b5878fa02bd",
+          "entry_trace_sha256": "267757c8cea3ef3b200f495a699635aa9465231ea41a25d76b9cf11ae2c8f1fa",
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "ready_stamps_since_click_us": {
+            "ready_begin": 460512,
+            "run_clock_and_level": 460523,
+            "steam_run_and_barrier": 466160,
+            "unit_and_ability_definitions": 466285,
+            "ability_visual_resolution": 483876,
+            "level_economy_and_fog": 489185,
+            "world_and_map_nodes": 489191,
+            "map_allocation": 489270,
+            "level_terrain_layout": 489303,
+            "terrain_art_layout": 489831,
+            "map_bake": 491189,
+            "map_decoration": 491812,
+            "map_environment": 491819,
+            "dapple_texture": 534377,
+            "unit_layers_fog_camera": 540446,
+            "atmosphere_and_motes": 540548,
+            "hud_attach": 541506,
+            "hud_setup": 583226,
+            "cursor_init": 583321,
+            "mission_init": 586628,
+            "unit_deployment": 596099,
+            "camera_and_first_fog": 622890,
+            "first_dialogue": 622996,
+            "ready_tail": 624077,
+            "ready_end": 624090
+          }
+        },
+        {
+          "variant": "trace",
+          "source_commit": "e66d50473e2f9da66e382c81054bb0f77302956c",
+          "ms": {
+            "loading_to_attach_ms": 379.428,
+            "sortie_to_battle_ms": 581.901,
+            "sortie_to_first_move_ms": 690.464,
+            "process_to_ready_menu_ms": 5816.393,
+            "map_to_hud_ms": 41.792,
+            "hud_to_ready_ms": 72.739,
+            "longest_entry_gap_ms": 422.704,
+            "attach_to_ready_ms": 137.992,
+            "startup_progress_to_ready_ms": 1320.0,
+            "ready_to_first_pre_draw_ms": 38.537,
+            "first_pre_to_post_draw_ms": 11.271,
+            "map_environment_ms": 37.821,
+            "hud_attach_ms": 39.235,
+            "unit_deployment_ms": 21.452
+          },
+          "log_sha256": "ede964607327eb1b2e4e7ac105b457bbe05c457f1181ac21b65a3b5878fa02bd",
+          "entry_trace_sha256": "59c342ce5777064d98588e490c2fc58d2ce010bc56338b7ae6abb6076a25f952",
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "ready_stamps_since_click_us": {
+            "ready_begin": 394108,
+            "run_clock_and_level": 394117,
+            "steam_run_and_barrier": 398378,
+            "unit_and_ability_definitions": 398471,
+            "ability_visual_resolution": 413695,
+            "level_economy_and_fog": 417496,
+            "world_and_map_nodes": 417499,
+            "map_allocation": 417564,
+            "level_terrain_layout": 417595,
+            "terrain_art_layout": 418097,
+            "map_bake": 419369,
+            "map_decoration": 419931,
+            "map_environment": 419934,
+            "dapple_texture": 457755,
+            "unit_layers_fog_camera": 458218,
+            "atmosphere_and_motes": 458303,
+            "hud_attach": 459203,
+            "hud_setup": 498438,
+            "cursor_init": 498542,
+            "mission_init": 502191,
+            "unit_deployment": 509685,
+            "camera_and_first_fog": 531137,
+            "first_dialogue": 531234,
+            "ready_tail": 532040,
+            "ready_end": 532047
+          }
+        },
+        {
+          "variant": "plain",
+          "source_commit": "e66d50473e2f9da66e382c81054bb0f77302956c",
+          "ms": {
+            "loading_to_attach_ms": 170.091,
+            "sortie_to_battle_ms": 388.467,
+            "sortie_to_first_move_ms": 525.59,
+            "process_to_ready_menu_ms": 6083.996,
+            "map_to_hud_ms": 42.805,
+            "hud_to_ready_ms": 75.045,
+            "longest_entry_gap_ms": 216.731,
+            "attach_to_ready_ms": 146.84,
+            "startup_progress_to_ready_ms": 1387.0,
+            "ready_to_first_pre_draw_ms": 45.513,
+            "first_pre_to_post_draw_ms": 11.23
+          },
+          "log_sha256": "ede964607327eb1b2e4e7ac105b457bbe05c457f1181ac21b65a3b5878fa02bd",
+          "entry_trace_sha256": "8fab7f75eb93523261093cb38457356205207a12e1358d7adbdc2b1f59be2af1",
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "ready_stamps_since_click_us": {}
+        },
+        {
+          "variant": "trace",
+          "source_commit": "e66d50473e2f9da66e382c81054bb0f77302956c",
+          "ms": {
+            "loading_to_attach_ms": 392.684,
+            "sortie_to_battle_ms": 605.465,
+            "sortie_to_first_move_ms": 708.341,
+            "process_to_ready_menu_ms": 5823.003,
+            "map_to_hud_ms": 46.186,
+            "hud_to_ready_ms": 68.215,
+            "longest_entry_gap_ms": 445.622,
+            "attach_to_ready_ms": 139.383,
+            "startup_progress_to_ready_ms": 1321.0,
+            "ready_to_first_pre_draw_ms": 37.805,
+            "first_pre_to_post_draw_ms": 10.753,
+            "map_environment_ms": 41.276,
+            "hud_attach_ms": 35.925,
+            "unit_deployment_ms": 20.843
+          },
+          "log_sha256": "ede964607327eb1b2e4e7ac105b457bbe05c457f1181ac21b65a3b5878fa02bd",
+          "entry_trace_sha256": "c29896e54862e0d50d6f958aea78beff6596a4bc68c43e60a7f516567aa523a8",
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "ready_stamps_since_click_us": {
+            "ready_begin": 417532,
+            "run_clock_and_level": 417542,
+            "steam_run_and_barrier": 422033,
+            "unit_and_ability_definitions": 422153,
+            "ability_visual_resolution": 438306,
+            "level_economy_and_fog": 442423,
+            "world_and_map_nodes": 442427,
+            "map_allocation": 442508,
+            "level_terrain_layout": 442620,
+            "terrain_art_layout": 443120,
+            "map_bake": 444408,
+            "map_decoration": 445005,
+            "map_environment": 445019,
+            "dapple_texture": 486295,
+            "unit_layers_fog_camera": 487677,
+            "atmosphere_and_motes": 487768,
+            "hud_attach": 488661,
+            "hud_setup": 524586,
+            "cursor_init": 524676,
+            "mission_init": 528060,
+            "unit_deployment": 534966,
+            "camera_and_first_fog": 555809,
+            "first_dialogue": 555888,
+            "ready_tail": 556844,
+            "ready_end": 556854
+          }
+        },
+        {
+          "variant": "plain",
+          "source_commit": "e66d50473e2f9da66e382c81054bb0f77302956c",
+          "ms": {
+            "loading_to_attach_ms": 174.29,
+            "sortie_to_battle_ms": 393.075,
+            "sortie_to_first_move_ms": 507.055,
+            "process_to_ready_menu_ms": 5959.627,
+            "map_to_hud_ms": 45.022,
+            "hud_to_ready_ms": 72.926,
+            "longest_entry_gap_ms": 212.874,
+            "attach_to_ready_ms": 141.471,
+            "startup_progress_to_ready_ms": 1472.0,
+            "ready_to_first_pre_draw_ms": 40.399,
+            "first_pre_to_post_draw_ms": 12.609
+          },
+          "log_sha256": "ede964607327eb1b2e4e7ac105b457bbe05c457f1181ac21b65a3b5878fa02bd",
+          "entry_trace_sha256": "85eee464cbdfe4c097f42dac33f1a3de9786acfeef538bcaebd63b620dd47068",
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "ready_stamps_since_click_us": {}
+        },
+        {
+          "variant": "plain",
+          "source_commit": "e66d50473e2f9da66e382c81054bb0f77302956c",
+          "ms": {
+            "loading_to_attach_ms": 180.814,
+            "sortie_to_battle_ms": 382.77,
+            "sortie_to_first_move_ms": 507.994,
+            "process_to_ready_menu_ms": 5973.134,
+            "map_to_hud_ms": 41.977,
+            "hud_to_ready_ms": 74.192,
+            "longest_entry_gap_ms": 214.061,
+            "attach_to_ready_ms": 142.813,
+            "startup_progress_to_ready_ms": 1341.0,
+            "ready_to_first_pre_draw_ms": 41.3,
+            "first_pre_to_post_draw_ms": 10.464
+          },
+          "log_sha256": "ede964607327eb1b2e4e7ac105b457bbe05c457f1181ac21b65a3b5878fa02bd",
+          "entry_trace_sha256": "fc7dc45a4abe6c8b58982e0e54d9c3cf7b36eb07eca11ee14dafac9da5e5e5b5",
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "ready_stamps_since_click_us": {}
+        },
+        {
+          "variant": "trace",
+          "source_commit": "e66d50473e2f9da66e382c81054bb0f77302956c",
+          "ms": {
+            "loading_to_attach_ms": 362.643,
+            "sortie_to_battle_ms": 563.502,
+            "sortie_to_first_move_ms": 672.477,
+            "process_to_ready_menu_ms": 6276.872,
+            "map_to_hud_ms": 43.681,
+            "hud_to_ready_ms": 74.527,
+            "longest_entry_gap_ms": 428.311,
+            "attach_to_ready_ms": 142.175,
+            "startup_progress_to_ready_ms": 1343.0,
+            "ready_to_first_pre_draw_ms": 41.096,
+            "first_pre_to_post_draw_ms": 10.478,
+            "map_environment_ms": 39.467,
+            "hud_attach_ms": 36.696,
+            "unit_deployment_ms": 24.737
+          },
+          "log_sha256": "ede964607327eb1b2e4e7ac105b457bbe05c457f1181ac21b65a3b5878fa02bd",
+          "entry_trace_sha256": "dc26a649485edb2a6880610d7770998d9db51ddc3154584065ad2dbe2c62be85",
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "ready_stamps_since_click_us": {
+            "ready_begin": 369763,
+            "run_clock_and_level": 369776,
+            "steam_run_and_barrier": 374179,
+            "unit_and_ability_definitions": 374276,
+            "ability_visual_resolution": 389800,
+            "level_economy_and_fog": 393653,
+            "world_and_map_nodes": 393657,
+            "map_allocation": 393722,
+            "level_terrain_layout": 393756,
+            "terrain_art_layout": 394295,
+            "map_bake": 395774,
+            "map_decoration": 396195,
+            "map_environment": 396199,
+            "dapple_texture": 435666,
+            "unit_layers_fog_camera": 436222,
+            "atmosphere_and_motes": 436357,
+            "hud_attach": 437349,
+            "hud_setup": 474045,
+            "cursor_init": 474147,
+            "mission_init": 477678,
+            "unit_deployment": 486157,
+            "camera_and_first_fog": 510894,
+            "first_dialogue": 510985,
+            "ready_tail": 511869,
+            "ready_end": 511876
+          }
+        }
+      ],
+      "median_ms": {
+        "plain": {
+          "loading_to_attach_ms": 174.711,
+          "sortie_to_battle_ms": 390.771,
+          "sortie_to_first_move_ms": 516.792,
+          "process_to_ready_menu_ms": 6028.565,
+          "map_to_hud_ms": 43.913,
+          "hud_to_ready_ms": 74.618,
+          "longest_entry_gap_ms": 215.396,
+          "attach_to_ready_ms": 144.827,
+          "startup_progress_to_ready_ms": 1429.5,
+          "ready_to_first_pre_draw_ms": 43.406,
+          "first_pre_to_post_draw_ms": 11.919
+        },
+        "trace": {
+          "loading_to_attach_ms": 386.056,
+          "sortie_to_battle_ms": 593.683,
+          "sortie_to_first_move_ms": 699.403,
+          "process_to_ready_menu_ms": 6049.938,
+          "map_to_hud_ms": 44.933,
+          "hud_to_ready_ms": 73.633,
+          "longest_entry_gap_ms": 436.966,
+          "attach_to_ready_ms": 140.779,
+          "startup_progress_to_ready_ms": 1332.0,
+          "ready_to_first_pre_draw_ms": 39.816,
+          "first_pre_to_post_draw_ms": 11.012,
+          "map_environment_ms": 40.371,
+          "hud_attach_ms": 37.965,
+          "unit_deployment_ms": 23.095
+        }
+      },
+      "raw_sha256": "9f79db124f3b6523fc50cf1c82b599e26c40693e48b0ee18bb3ce80b4274e332"
+    },
+    "ready_component_stages": {
+      "sample_count": 5,
+      "runs": [
+        {
+          "variant": "plain",
+          "source_commit": "e66d50473e2f9da66e382c81054bb0f77302956c",
+          "ms": {
+            "loading_to_attach_ms": 160.809,
+            "sortie_to_battle_ms": 381.083,
+            "sortie_to_first_move_ms": 500.052,
+            "process_to_ready_menu_ms": 6409.832,
+            "map_to_hud_ms": 41.933,
+            "hud_to_ready_ms": 76.14,
+            "longest_entry_gap_ms": 208.326,
+            "attach_to_ready_ms": 143.83,
+            "startup_progress_to_ready_ms": 1370.0,
+            "ready_to_first_pre_draw_ms": 41.64,
+            "first_pre_to_post_draw_ms": 10.258
+          },
+          "log_sha256": "ede964607327eb1b2e4e7ac105b457bbe05c457f1181ac21b65a3b5878fa02bd",
+          "entry_trace_sha256": "bfc63e8a4417c04cd3f8c0f1ca7b23b012dabd7274bd257b57b11ec88d975ef9",
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "ready_stamps_since_click_us": {}
+        },
+        {
+          "variant": "trace",
+          "source_commit": "e66d50473e2f9da66e382c81054bb0f77302956c",
+          "ms": {
+            "loading_to_attach_ms": 564.213,
+            "sortie_to_battle_ms": 792.64,
+            "sortie_to_first_move_ms": 918.806,
+            "process_to_ready_menu_ms": 5876.82,
+            "map_to_hud_ms": 47.126,
+            "hud_to_ready_ms": 76.966,
+            "longest_entry_gap_ms": 613.912,
+            "attach_to_ready_ms": 151.8,
+            "startup_progress_to_ready_ms": 1420.0,
+            "ready_to_first_pre_draw_ms": 51.265,
+            "first_pre_to_post_draw_ms": 13.163,
+            "map_environment_ms": 43.102,
+            "terrain_weight_images_ms": 3.843,
+            "scenery_props_ms": 28.298,
+            "hud_attach_ms": 38.145,
+            "hud_bottom_panel_ms": 20.116,
+            "hud_theme_assignment_ms": 2.495,
+            "unit_deployment_ms": 26.224
+          },
+          "log_sha256": "ede964607327eb1b2e4e7ac105b457bbe05c457f1181ac21b65a3b5878fa02bd",
+          "entry_trace_sha256": "847c94b5113c8ec4ed680378e12592b915f3d4d974add1e49a798ba3fe0fac4f",
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "ready_stamps_since_click_us": {
+            "ready_begin": 576425,
+            "run_clock_and_level": 576439,
+            "steam_run_and_barrier": 582169,
+            "unit_and_ability_definitions": 582302,
+            "ability_visual_resolution": 599309,
+            "level_economy_and_fog": 604034,
+            "world_and_map_nodes": 604039,
+            "map_allocation": 604122,
+            "level_terrain_layout": 604157,
+            "terrain_art_layout": 604711,
+            "map_bake": 605965,
+            "map_decoration": 606546,
+            "map_environment": 606550,
+            "environment_config_load": 606554,
+            "environment_config_decorate": 606572,
+            "environment_height": 606597,
+            "environment_scenery_node": 609400,
+            "environment_scenery_setup": 609471,
+            "scenery_parent_link": 609475,
+            "scenery_material": 609486,
+            "terrain_weights": 609488,
+            "terrain_shader_init": 613331,
+            "terrain_atlas_lookup": 616753,
+            "terrain_surface_routes": 616822,
+            "terrain_atlas_parameters": 616938,
+            "scenery_cell_walk": 617020,
+            "scenery_reeds_mesh": 620973,
+            "scenery_props": 621347,
+            "scenery_special_walls": 649645,
+            "dapple_texture": 649652,
+            "unit_layers_fog_camera": 650153,
+            "atmosphere_and_motes": 650256,
+            "hud_attach": 651211,
+            "hud_initialize": 651252,
+            "hud_resource_bar": 654387,
+            "hud_hero_bar": 656027,
+            "hud_bottom_panel": 656060,
+            "hud_inventory_popup": 676176,
+            "hud_info_panel": 676331,
+            "hud_dialogue": 679378,
+            "hud_end_panel": 682559,
+            "hud_pause_panel": 682585,
+            "hud_auxiliary_containers": 682598,
+            "hud_apply_theme": 685739,
+            "hud_refresh_layout": 688234,
+            "hud_setup": 689356,
+            "cursor_init": 689451,
+            "mission_init": 693375,
+            "unit_deployment": 700870,
+            "camera_and_first_fog": 727094,
+            "first_dialogue": 727203,
+            "ready_tail": 728150,
+            "ready_end": 728159
+          }
+        },
+        {
+          "variant": "trace",
+          "source_commit": "e66d50473e2f9da66e382c81054bb0f77302956c",
+          "ms": {
+            "loading_to_attach_ms": 443.574,
+            "sortie_to_battle_ms": 662.244,
+            "sortie_to_first_move_ms": 774.95,
+            "process_to_ready_menu_ms": 6055.668,
+            "map_to_hud_ms": 47.196,
+            "hud_to_ready_ms": 72.136,
+            "longest_entry_gap_ms": 505.869,
+            "attach_to_ready_ms": 142.798,
+            "startup_progress_to_ready_ms": 1455.0,
+            "ready_to_first_pre_draw_ms": 41.533,
+            "first_pre_to_post_draw_ms": 9.726,
+            "map_environment_ms": 40.096,
+            "terrain_weight_images_ms": 3.476,
+            "scenery_props_ms": 26.623,
+            "hud_attach_ms": 36.855,
+            "hud_bottom_panel_ms": 19.778,
+            "hud_theme_assignment_ms": 2.358,
+            "unit_deployment_ms": 23.378
+          },
+          "log_sha256": "ede964607327eb1b2e4e7ac105b457bbe05c457f1181ac21b65a3b5878fa02bd",
+          "entry_trace_sha256": "78d601bd6767b5af32e571c5d60cb29c2021d016848e480cda6fc066c814abc4",
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "ready_stamps_since_click_us": {
+            "ready_begin": 468197,
+            "run_clock_and_level": 468207,
+            "steam_run_and_barrier": 472794,
+            "unit_and_ability_definitions": 472889,
+            "ability_visual_resolution": 487882,
+            "level_economy_and_fog": 491602,
+            "world_and_map_nodes": 491605,
+            "map_allocation": 491655,
+            "level_terrain_layout": 491684,
+            "terrain_art_layout": 492181,
+            "map_bake": 493407,
+            "map_decoration": 493956,
+            "map_environment": 493960,
+            "environment_config_load": 493963,
+            "environment_config_decorate": 493973,
+            "environment_height": 493995,
+            "environment_scenery_node": 496660,
+            "environment_scenery_setup": 496704,
+            "scenery_parent_link": 496708,
+            "scenery_material": 496716,
+            "terrain_weights": 496718,
+            "terrain_shader_init": 500194,
+            "terrain_atlas_lookup": 503126,
+            "terrain_surface_routes": 503172,
+            "terrain_atlas_parameters": 503259,
+            "scenery_cell_walk": 503318,
+            "scenery_reeds_mesh": 507058,
+            "scenery_props": 507423,
+            "scenery_special_walls": 534046,
+            "dapple_texture": 534056,
+            "unit_layers_fog_camera": 537666,
+            "atmosphere_and_motes": 537796,
+            "hud_attach": 538805,
+            "hud_initialize": 538856,
+            "hud_resource_bar": 541965,
+            "hud_hero_bar": 543441,
+            "hud_bottom_panel": 543481,
+            "hud_inventory_popup": 563259,
+            "hud_info_panel": 563400,
+            "hud_dialogue": 566385,
+            "hud_end_panel": 569337,
+            "hud_pause_panel": 569363,
+            "hud_auxiliary_containers": 569385,
+            "hud_apply_theme": 572400,
+            "hud_refresh_layout": 574758,
+            "hud_setup": 575660,
+            "cursor_init": 575742,
+            "mission_init": 579337,
+            "unit_deployment": 586594,
+            "camera_and_first_fog": 609972,
+            "first_dialogue": 610066,
+            "ready_tail": 610930,
+            "ready_end": 610937
+          }
+        },
+        {
+          "variant": "trace",
+          "source_commit": "e66d50473e2f9da66e382c81054bb0f77302956c",
+          "ms": {
+            "loading_to_attach_ms": 452.356,
+            "sortie_to_battle_ms": 665.192,
+            "sortie_to_first_move_ms": 743.665,
+            "process_to_ready_menu_ms": 6150.057,
+            "map_to_hud_ms": 44.163,
+            "hud_to_ready_ms": 76.646,
+            "longest_entry_gap_ms": 500.51,
+            "attach_to_ready_ms": 147.464,
+            "startup_progress_to_ready_ms": 1487.0,
+            "ready_to_first_pre_draw_ms": 38.841,
+            "first_pre_to_post_draw_ms": 11.686,
+            "map_environment_ms": 39.075,
+            "terrain_weight_images_ms": 3.393,
+            "scenery_props_ms": 25.92,
+            "hud_attach_ms": 41.884,
+            "hud_bottom_panel_ms": 21.251,
+            "hud_theme_assignment_ms": 2.747,
+            "unit_deployment_ms": 20.653
+          },
+          "log_sha256": "ede964607327eb1b2e4e7ac105b457bbe05c457f1181ac21b65a3b5878fa02bd",
+          "entry_trace_sha256": "f50f872e916f888939f7dba6f08cd51e502936fbae604e65a2ff4c955f42923d",
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "ready_stamps_since_click_us": {
+            "ready_begin": 467212,
+            "run_clock_and_level": 467225,
+            "steam_run_and_barrier": 472571,
+            "unit_and_ability_definitions": 472712,
+            "ability_visual_resolution": 489471,
+            "level_economy_and_fog": 493761,
+            "world_and_map_nodes": 493767,
+            "map_allocation": 493858,
+            "level_terrain_layout": 493893,
+            "terrain_art_layout": 494396,
+            "map_bake": 495649,
+            "map_decoration": 496188,
+            "map_environment": 496192,
+            "environment_config_load": 496196,
+            "environment_config_decorate": 496216,
+            "environment_height": 496239,
+            "environment_scenery_node": 498970,
+            "environment_scenery_setup": 499041,
+            "scenery_parent_link": 499046,
+            "scenery_material": 499058,
+            "terrain_weights": 499061,
+            "terrain_shader_init": 502454,
+            "terrain_atlas_lookup": 505162,
+            "terrain_surface_routes": 505204,
+            "terrain_atlas_parameters": 505262,
+            "scenery_cell_walk": 505304,
+            "scenery_reeds_mesh": 509007,
+            "scenery_props": 509341,
+            "scenery_special_walls": 535261,
+            "dapple_texture": 535267,
+            "unit_layers_fog_camera": 536650,
+            "atmosphere_and_motes": 536800,
+            "hud_attach": 537965,
+            "hud_initialize": 538030,
+            "hud_resource_bar": 542051,
+            "hud_hero_bar": 544222,
+            "hud_bottom_panel": 544273,
+            "hud_inventory_popup": 565524,
+            "hud_info_panel": 565704,
+            "hud_dialogue": 569251,
+            "hud_end_panel": 572698,
+            "hud_pause_panel": 572730,
+            "hud_auxiliary_containers": 572745,
+            "hud_apply_theme": 576049,
+            "hud_refresh_layout": 578796,
+            "hud_setup": 579849,
+            "cursor_init": 579953,
+            "mission_init": 583984,
+            "unit_deployment": 592889,
+            "camera_and_first_fog": 613542,
+            "first_dialogue": 613667,
+            "ready_tail": 614608,
+            "ready_end": 614615
+          }
+        },
+        {
+          "variant": "plain",
+          "source_commit": "e66d50473e2f9da66e382c81054bb0f77302956c",
+          "ms": {
+            "loading_to_attach_ms": 156.696,
+            "sortie_to_battle_ms": 359.026,
+            "sortie_to_first_move_ms": 477.119,
+            "process_to_ready_menu_ms": 6106.147,
+            "map_to_hud_ms": 39.608,
+            "hud_to_ready_ms": 70.191,
+            "longest_entry_gap_ms": 206.259,
+            "attach_to_ready_ms": 136.415,
+            "startup_progress_to_ready_ms": 1439.0,
+            "ready_to_first_pre_draw_ms": 41.461,
+            "first_pre_to_post_draw_ms": 10.321
+          },
+          "log_sha256": "ede964607327eb1b2e4e7ac105b457bbe05c457f1181ac21b65a3b5878fa02bd",
+          "entry_trace_sha256": "01965d1579aa09a868cdebda85ad5c4a653290ad7a44baca381dfc987879c8f3",
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "ready_stamps_since_click_us": {}
+        }
+      ],
+      "median_ms": {
+        "plain": {
+          "loading_to_attach_ms": 158.752,
+          "sortie_to_battle_ms": 370.055,
+          "sortie_to_first_move_ms": 488.586,
+          "process_to_ready_menu_ms": 6257.989,
+          "map_to_hud_ms": 40.77,
+          "hud_to_ready_ms": 73.166,
+          "longest_entry_gap_ms": 207.292,
+          "attach_to_ready_ms": 140.123,
+          "startup_progress_to_ready_ms": 1404.5,
+          "ready_to_first_pre_draw_ms": 41.55,
+          "first_pre_to_post_draw_ms": 10.29
+        },
+        "trace": {
+          "loading_to_attach_ms": 452.356,
+          "sortie_to_battle_ms": 665.192,
+          "sortie_to_first_move_ms": 774.95,
+          "process_to_ready_menu_ms": 6055.668,
+          "map_to_hud_ms": 47.126,
+          "hud_to_ready_ms": 76.646,
+          "longest_entry_gap_ms": 505.869,
+          "attach_to_ready_ms": 147.464,
+          "startup_progress_to_ready_ms": 1455.0,
+          "ready_to_first_pre_draw_ms": 41.533,
+          "first_pre_to_post_draw_ms": 11.686,
+          "map_environment_ms": 40.096,
+          "terrain_weight_images_ms": 3.476,
+          "scenery_props_ms": 26.623,
+          "hud_attach_ms": 38.145,
+          "hud_bottom_panel_ms": 20.116,
+          "hud_theme_assignment_ms": 2.495,
+          "unit_deployment_ms": 23.378
+        }
+      },
+      "raw_sha256": "62c09b02e8e2da26f413e23198f9a20328dcd805707081785b778a18a8376de4"
+    },
+    "single_atlas_request_comparison": {
+      "sample_count": 6,
+      "runs": [
+        {
+          "variant": "trace",
+          "source_commit": "e66d50473e2f9da66e382c81054bb0f77302956c",
+          "ms": {
+            "loading_to_attach_ms": 431.377,
+            "sortie_to_battle_ms": 638.123,
+            "sortie_to_first_move_ms": 771.413,
+            "process_to_ready_menu_ms": 6043.486,
+            "map_to_hud_ms": 40.254,
+            "hud_to_ready_ms": 81.554,
+            "longest_entry_gap_ms": 485.609,
+            "attach_to_ready_ms": 144.356,
+            "startup_progress_to_ready_ms": 1303.0,
+            "ready_to_first_pre_draw_ms": 44.284,
+            "first_pre_to_post_draw_ms": 10.619,
+            "map_environment_ms": 36.785,
+            "terrain_weight_images_ms": 3.264,
+            "scenery_props_ms": 23.649,
+            "hud_attach_ms": 37.518,
+            "hud_bottom_panel_ms": 19.174,
+            "hud_theme_assignment_ms": 2.681,
+            "unit_deployment_ms": 30.782,
+            "first_overlay_ms": 21.882
+          },
+          "log_sha256": "ede964607327eb1b2e4e7ac105b457bbe05c457f1181ac21b65a3b5878fa02bd",
+          "entry_trace_sha256": "6730db3374ca654baaa1b202ace5d25c556cf3dc981ecd60440da5673d5ea24f",
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "ready_stamps_since_click_us": {
+            "ready_begin": 438872,
+            "run_clock_and_level": 438882,
+            "steam_run_and_barrier": 443004,
+            "unit_and_ability_definitions": 443094,
+            "ability_visual_resolution": 457513,
+            "level_economy_and_fog": 461357,
+            "world_and_map_nodes": 461361,
+            "map_allocation": 461415,
+            "level_terrain_layout": 461446,
+            "terrain_art_layout": 461959,
+            "map_bake": 463164,
+            "map_decoration": 463544,
+            "map_environment": 463547,
+            "environment_config_load": 463550,
+            "environment_config_decorate": 463561,
+            "environment_height": 463579,
+            "environment_scenery_node": 466299,
+            "environment_scenery_setup": 466342,
+            "scenery_parent_link": 466346,
+            "scenery_material": 466356,
+            "terrain_weights": 466358,
+            "terrain_shader_init": 469622,
+            "terrain_atlas_lookup": 472422,
+            "terrain_surface_routes": 472472,
+            "terrain_atlas_parameters": 472532,
+            "scenery_cell_walk": 472573,
+            "scenery_reeds_mesh": 476233,
+            "scenery_props": 476678,
+            "scenery_special_walls": 500327,
+            "dapple_texture": 500332,
+            "unit_layers_fog_camera": 500764,
+            "atmosphere_and_motes": 500844,
+            "hud_attach": 501626,
+            "hud_initialize": 501672,
+            "hud_resource_bar": 504092,
+            "hud_hero_bar": 505309,
+            "hud_bottom_panel": 505339,
+            "hud_inventory_popup": 524513,
+            "hud_info_panel": 524677,
+            "hud_dialogue": 528603,
+            "hud_end_panel": 532030,
+            "hud_pause_panel": 532068,
+            "hud_auxiliary_containers": 532083,
+            "hud_apply_theme": 535492,
+            "hud_refresh_layout": 538173,
+            "hud_setup": 539144,
+            "cursor_init": 539237,
+            "mission_init": 543044,
+            "unit_deployment": 551285,
+            "camera_and_first_fog": 582067,
+            "first_dialogue": 582173,
+            "ready_tail": 583167,
+            "ready_end": 583174
+          },
+          "scoped_art_calls": [
+            {
+              "kind": "object",
+              "route": "huangnigang_pine_old",
+              "elapsed_us": 40
+            },
+            {
+              "kind": "object",
+              "route": "huangnigang_pine_double",
+              "elapsed_us": 24
+            },
+            {
+              "kind": "object",
+              "route": "huangnigang_pine_young_lean",
+              "elapsed_us": 20
+            },
+            {
+              "kind": "object",
+              "route": "huangnigang_seven_pudao",
+              "elapsed_us": 18
+            },
+            {
+              "kind": "object",
+              "route": "huangnigang_dry_verge",
+              "elapsed_us": 17
+            },
+            {
+              "kind": "overlay",
+              "route": "shallow_cart_ruts",
+              "elapsed_us": 21882,
+              "cached_atlas_before": false
+            },
+            {
+              "kind": "overlay",
+              "route": "scattered_footprints",
+              "elapsed_us": 402,
+              "cached_atlas_before": true
+            },
+            {
+              "kind": "overlay",
+              "route": "pole_wheel_marks",
+              "elapsed_us": 234,
+              "cached_atlas_before": true
+            },
+            {
+              "kind": "overlay",
+              "route": "rounded_stones",
+              "elapsed_us": 217,
+              "cached_atlas_before": true
+            },
+            {
+              "kind": "overlay",
+              "route": "gravel_clods",
+              "elapsed_us": 220,
+              "cached_atlas_before": true
+            },
+            {
+              "kind": "overlay",
+              "route": "pine_needles_leaves",
+              "elapsed_us": 218,
+              "cached_atlas_before": true
+            },
+            {
+              "kind": "overlay",
+              "route": "dry_grass_leaves",
+              "elapsed_us": 201,
+              "cached_atlas_before": true
+            }
+          ]
+        },
+        {
+          "variant": "prepared",
+          "source_commit": "e66d50473e2f9da66e382c81054bb0f77302956c",
+          "ms": {
+            "loading_to_attach_ms": 470.725,
+            "sortie_to_battle_ms": 650.704,
+            "sortie_to_first_move_ms": 760.577,
+            "process_to_ready_menu_ms": 5851.816,
+            "map_to_hud_ms": 18.803,
+            "hud_to_ready_ms": 65.961,
+            "longest_entry_gap_ms": 481.041,
+            "attach_to_ready_ms": 108.452,
+            "startup_progress_to_ready_ms": 1440.0,
+            "ready_to_first_pre_draw_ms": 42.247,
+            "first_pre_to_post_draw_ms": 17.154,
+            "map_environment_ms": 15.282,
+            "terrain_weight_images_ms": 3.298,
+            "scenery_props_ms": 2.25,
+            "hud_attach_ms": 35.891,
+            "hud_bottom_panel_ms": 18.311,
+            "hud_theme_assignment_ms": 2.267,
+            "unit_deployment_ms": 18.457,
+            "first_overlay_ms": 0.525
+          },
+          "log_sha256": "ede964607327eb1b2e4e7ac105b457bbe05c457f1181ac21b65a3b5878fa02bd",
+          "entry_trace_sha256": "155b9bfd70c12017d2348823000ee00a197476d74ee1617de65457e3e2554a78",
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "ready_stamps_since_click_us": {
+            "ready_begin": 482862,
+            "run_clock_and_level": 482872,
+            "steam_run_and_barrier": 487279,
+            "unit_and_ability_definitions": 487371,
+            "ability_visual_resolution": 502619,
+            "level_economy_and_fog": 506466,
+            "world_and_map_nodes": 506470,
+            "map_allocation": 506542,
+            "level_terrain_layout": 506572,
+            "terrain_art_layout": 507060,
+            "map_bake": 508273,
+            "map_decoration": 508772,
+            "map_environment": 508776,
+            "environment_config_load": 508780,
+            "environment_config_decorate": 508795,
+            "environment_height": 508820,
+            "environment_scenery_node": 511463,
+            "environment_scenery_setup": 511510,
+            "scenery_parent_link": 511514,
+            "scenery_material": 511522,
+            "terrain_weights": 511523,
+            "terrain_shader_init": 514821,
+            "terrain_atlas_lookup": 517606,
+            "terrain_surface_routes": 517657,
+            "terrain_atlas_parameters": 517734,
+            "scenery_cell_walk": 517787,
+            "scenery_reeds_mesh": 521476,
+            "scenery_props": 521803,
+            "scenery_special_walls": 524053,
+            "dapple_texture": 524058,
+            "unit_layers_fog_camera": 524507,
+            "atmosphere_and_motes": 524590,
+            "hud_attach": 525302,
+            "hud_initialize": 525349,
+            "hud_resource_bar": 529019,
+            "hud_hero_bar": 530843,
+            "hud_bottom_panel": 530886,
+            "hud_inventory_popup": 549197,
+            "hud_info_panel": 549322,
+            "hud_dialogue": 552177,
+            "hud_end_panel": 555042,
+            "hud_pause_panel": 555065,
+            "hud_auxiliary_containers": 555077,
+            "hud_apply_theme": 558096,
+            "hud_refresh_layout": 560363,
+            "hud_setup": 561193,
+            "cursor_init": 561268,
+            "mission_init": 564543,
+            "unit_deployment": 571904,
+            "camera_and_first_fog": 590361,
+            "first_dialogue": 590431,
+            "ready_tail": 591247,
+            "ready_end": 591254
+          },
+          "scoped_art_calls": [
+            {
+              "kind": "object",
+              "route": "huangnigang_pine_old",
+              "elapsed_us": 50
+            },
+            {
+              "kind": "object",
+              "route": "huangnigang_pine_double",
+              "elapsed_us": 33
+            },
+            {
+              "kind": "object",
+              "route": "huangnigang_pine_young_lean",
+              "elapsed_us": 24
+            },
+            {
+              "kind": "object",
+              "route": "huangnigang_seven_pudao",
+              "elapsed_us": 22
+            },
+            {
+              "kind": "object",
+              "route": "huangnigang_dry_verge",
+              "elapsed_us": 22
+            },
+            {
+              "kind": "overlay",
+              "route": "shallow_cart_ruts",
+              "elapsed_us": 525,
+              "cached_atlas_before": true
+            },
+            {
+              "kind": "overlay",
+              "route": "scattered_footprints",
+              "elapsed_us": 277,
+              "cached_atlas_before": true
+            },
+            {
+              "kind": "overlay",
+              "route": "pole_wheel_marks",
+              "elapsed_us": 258,
+              "cached_atlas_before": true
+            },
+            {
+              "kind": "overlay",
+              "route": "rounded_stones",
+              "elapsed_us": 242,
+              "cached_atlas_before": true
+            },
+            {
+              "kind": "overlay",
+              "route": "gravel_clods",
+              "elapsed_us": 232,
+              "cached_atlas_before": true
+            },
+            {
+              "kind": "overlay",
+              "route": "pine_needles_leaves",
+              "elapsed_us": 233,
+              "cached_atlas_before": true
+            },
+            {
+              "kind": "overlay",
+              "route": "dry_grass_leaves",
+              "elapsed_us": 234,
+              "cached_atlas_before": true
+            }
+          ]
+        },
+        {
+          "variant": "prepared",
+          "source_commit": "e66d50473e2f9da66e382c81054bb0f77302956c",
+          "ms": {
+            "loading_to_attach_ms": 433.582,
+            "sortie_to_battle_ms": 606.823,
+            "sortie_to_first_move_ms": 717.656,
+            "process_to_ready_menu_ms": 6262.439,
+            "map_to_hud_ms": 19.296,
+            "hud_to_ready_ms": 68.227,
+            "longest_entry_gap_ms": 454.632,
+            "attach_to_ready_ms": 109.015,
+            "startup_progress_to_ready_ms": 1423.0,
+            "ready_to_first_pre_draw_ms": 40.153,
+            "first_pre_to_post_draw_ms": 9.452,
+            "map_environment_ms": 15.226,
+            "terrain_weight_images_ms": 3.317,
+            "scenery_props_ms": 2.481,
+            "hud_attach_ms": 35.056,
+            "hud_bottom_panel_ms": 17.99,
+            "hud_theme_assignment_ms": 2.013,
+            "unit_deployment_ms": 21.997,
+            "first_overlay_ms": 0.582
+          },
+          "log_sha256": "ede964607327eb1b2e4e7ac105b457bbe05c457f1181ac21b65a3b5878fa02bd",
+          "entry_trace_sha256": "bd70486d9584633b930e5772233831cddb4d99192d8d816d7afd1462223477ee",
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "ready_stamps_since_click_us": {
+            "ready_begin": 448212,
+            "run_clock_and_level": 448222,
+            "steam_run_and_barrier": 452130,
+            "unit_and_ability_definitions": 452211,
+            "ability_visual_resolution": 466080,
+            "level_economy_and_fog": 469647,
+            "world_and_map_nodes": 469651,
+            "map_allocation": 469696,
+            "level_terrain_layout": 469731,
+            "terrain_art_layout": 470286,
+            "map_bake": 471474,
+            "map_decoration": 472021,
+            "map_environment": 472025,
+            "environment_config_load": 472028,
+            "environment_config_decorate": 472038,
+            "environment_height": 472060,
+            "environment_scenery_node": 474634,
+            "environment_scenery_setup": 474669,
+            "scenery_parent_link": 474672,
+            "scenery_material": 474680,
+            "terrain_weights": 474682,
+            "terrain_shader_init": 477999,
+            "terrain_atlas_lookup": 480606,
+            "terrain_surface_routes": 480652,
+            "terrain_atlas_parameters": 480709,
+            "scenery_cell_walk": 480808,
+            "scenery_reeds_mesh": 484430,
+            "scenery_props": 484764,
+            "scenery_special_walls": 487245,
+            "dapple_texture": 487251,
+            "unit_layers_fog_camera": 487792,
+            "atmosphere_and_motes": 487924,
+            "hud_attach": 488951,
+            "hud_initialize": 488997,
+            "hud_resource_bar": 492911,
+            "hud_hero_bar": 494784,
+            "hud_bottom_panel": 494823,
+            "hud_inventory_popup": 512813,
+            "hud_info_panel": 512919,
+            "hud_dialogue": 515554,
+            "hud_end_panel": 518340,
+            "hud_pause_panel": 518370,
+            "hud_auxiliary_containers": 518381,
+            "hud_apply_theme": 521263,
+            "hud_refresh_layout": 523276,
+            "hud_setup": 524007,
+            "cursor_init": 524076,
+            "mission_init": 527367,
+            "unit_deployment": 534301,
+            "camera_and_first_fog": 556298,
+            "first_dialogue": 556372,
+            "ready_tail": 557167,
+            "ready_end": 557174
+          },
+          "scoped_art_calls": [
+            {
+              "kind": "object",
+              "route": "huangnigang_pine_old",
+              "elapsed_us": 64
+            },
+            {
+              "kind": "object",
+              "route": "huangnigang_pine_double",
+              "elapsed_us": 29
+            },
+            {
+              "kind": "object",
+              "route": "huangnigang_pine_young_lean",
+              "elapsed_us": 27
+            },
+            {
+              "kind": "object",
+              "route": "huangnigang_seven_pudao",
+              "elapsed_us": 21
+            },
+            {
+              "kind": "object",
+              "route": "huangnigang_dry_verge",
+              "elapsed_us": 22
+            },
+            {
+              "kind": "overlay",
+              "route": "shallow_cart_ruts",
+              "elapsed_us": 582,
+              "cached_atlas_before": true
+            },
+            {
+              "kind": "overlay",
+              "route": "scattered_footprints",
+              "elapsed_us": 364,
+              "cached_atlas_before": true
+            },
+            {
+              "kind": "overlay",
+              "route": "pole_wheel_marks",
+              "elapsed_us": 256,
+              "cached_atlas_before": true
+            },
+            {
+              "kind": "overlay",
+              "route": "rounded_stones",
+              "elapsed_us": 227,
+              "cached_atlas_before": true
+            },
+            {
+              "kind": "overlay",
+              "route": "gravel_clods",
+              "elapsed_us": 239,
+              "cached_atlas_before": true
+            },
+            {
+              "kind": "overlay",
+              "route": "pine_needles_leaves",
+              "elapsed_us": 241,
+              "cached_atlas_before": true
+            },
+            {
+              "kind": "overlay",
+              "route": "dry_grass_leaves",
+              "elapsed_us": 240,
+              "cached_atlas_before": true
+            }
+          ]
+        },
+        {
+          "variant": "trace",
+          "source_commit": "e66d50473e2f9da66e382c81054bb0f77302956c",
+          "ms": {
+            "loading_to_attach_ms": 435.178,
+            "sortie_to_battle_ms": 640.596,
+            "sortie_to_first_move_ms": 764.419,
+            "process_to_ready_menu_ms": 5908.665,
+            "map_to_hud_ms": 40.373,
+            "hud_to_ready_ms": 77.055,
+            "longest_entry_gap_ms": 487.85,
+            "attach_to_ready_ms": 141.767,
+            "startup_progress_to_ready_ms": 1307.0,
+            "ready_to_first_pre_draw_ms": 41.935,
+            "first_pre_to_post_draw_ms": 9.447,
+            "map_environment_ms": 36.708,
+            "terrain_weight_images_ms": 3.428,
+            "scenery_props_ms": 23.36,
+            "hud_attach_ms": 34.731,
+            "hud_bottom_panel_ms": 17.988,
+            "hud_theme_assignment_ms": 2.615,
+            "unit_deployment_ms": 28.879,
+            "first_overlay_ms": 21.611
+          },
+          "log_sha256": "ede964607327eb1b2e4e7ac105b457bbe05c457f1181ac21b65a3b5878fa02bd",
+          "entry_trace_sha256": "37f0b5d96ea6e0896a0016fe963540b0c492a87088c5dcb3ee637763b0025ebd",
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "ready_stamps_since_click_us": {
+            "ready_begin": 447458,
+            "run_clock_and_level": 447470,
+            "steam_run_and_barrier": 451961,
+            "unit_and_ability_definitions": 452077,
+            "ability_visual_resolution": 467645,
+            "level_economy_and_fog": 471681,
+            "world_and_map_nodes": 471687,
+            "map_allocation": 471788,
+            "level_terrain_layout": 471822,
+            "terrain_art_layout": 472351,
+            "map_bake": 473574,
+            "map_decoration": 474115,
+            "map_environment": 474118,
+            "environment_config_load": 474121,
+            "environment_config_decorate": 474137,
+            "environment_height": 474160,
+            "environment_scenery_node": 476792,
+            "environment_scenery_setup": 476841,
+            "scenery_parent_link": 476846,
+            "scenery_material": 476855,
+            "terrain_weights": 476858,
+            "terrain_shader_init": 480286,
+            "terrain_atlas_lookup": 483201,
+            "terrain_surface_routes": 483253,
+            "terrain_atlas_parameters": 483349,
+            "scenery_cell_walk": 483402,
+            "scenery_reeds_mesh": 487153,
+            "scenery_props": 487461,
+            "scenery_special_walls": 510821,
+            "dapple_texture": 510826,
+            "unit_layers_fog_camera": 511264,
+            "atmosphere_and_motes": 511344,
+            "hud_attach": 512107,
+            "hud_initialize": 512166,
+            "hud_resource_bar": 514599,
+            "hud_hero_bar": 515816,
+            "hud_bottom_panel": 515849,
+            "hud_inventory_popup": 533837,
+            "hud_info_panel": 533986,
+            "hud_dialogue": 536789,
+            "hud_end_panel": 539848,
+            "hud_pause_panel": 539874,
+            "hud_auxiliary_containers": 539886,
+            "hud_apply_theme": 543280,
+            "hud_refresh_layout": 545895,
+            "hud_setup": 546838,
+            "cursor_init": 546914,
+            "mission_init": 550238,
+            "unit_deployment": 558860,
+            "camera_and_first_fog": 587739,
+            "first_dialogue": 587856,
+            "ready_tail": 589136,
+            "ready_end": 589145
+          },
+          "scoped_art_calls": [
+            {
+              "kind": "object",
+              "route": "huangnigang_pine_old",
+              "elapsed_us": 35
+            },
+            {
+              "kind": "object",
+              "route": "huangnigang_pine_double",
+              "elapsed_us": 24
+            },
+            {
+              "kind": "object",
+              "route": "huangnigang_pine_young_lean",
+              "elapsed_us": 20
+            },
+            {
+              "kind": "object",
+              "route": "huangnigang_seven_pudao",
+              "elapsed_us": 18
+            },
+            {
+              "kind": "object",
+              "route": "huangnigang_dry_verge",
+              "elapsed_us": 18
+            },
+            {
+              "kind": "overlay",
+              "route": "shallow_cart_ruts",
+              "elapsed_us": 21611,
+              "cached_atlas_before": false
+            },
+            {
+              "kind": "overlay",
+              "route": "scattered_footprints",
+              "elapsed_us": 375,
+              "cached_atlas_before": true
+            },
+            {
+              "kind": "overlay",
+              "route": "pole_wheel_marks",
+              "elapsed_us": 238,
+              "cached_atlas_before": true
+            },
+            {
+              "kind": "overlay",
+              "route": "rounded_stones",
+              "elapsed_us": 233,
+              "cached_atlas_before": true
+            },
+            {
+              "kind": "overlay",
+              "route": "gravel_clods",
+              "elapsed_us": 243,
+              "cached_atlas_before": true
+            },
+            {
+              "kind": "overlay",
+              "route": "pine_needles_leaves",
+              "elapsed_us": 236,
+              "cached_atlas_before": true
+            },
+            {
+              "kind": "overlay",
+              "route": "dry_grass_leaves",
+              "elapsed_us": 219,
+              "cached_atlas_before": true
+            }
+          ]
+        },
+        {
+          "variant": "trace",
+          "source_commit": "e66d50473e2f9da66e382c81054bb0f77302956c",
+          "ms": {
+            "loading_to_attach_ms": 444.367,
+            "sortie_to_battle_ms": 650.982,
+            "sortie_to_first_move_ms": 781.802,
+            "process_to_ready_menu_ms": 5649.521,
+            "map_to_hud_ms": 45.854,
+            "hud_to_ready_ms": 67.984,
+            "longest_entry_gap_ms": 498.294,
+            "attach_to_ready_ms": 137.681,
+            "startup_progress_to_ready_ms": 1285.0,
+            "ready_to_first_pre_draw_ms": 45.069,
+            "first_pre_to_post_draw_ms": 11.559,
+            "map_environment_ms": 39.077,
+            "terrain_weight_images_ms": 3.442,
+            "scenery_props_ms": 25.609,
+            "hud_attach_ms": 33.665,
+            "hud_bottom_panel_ms": 17.897,
+            "hud_theme_assignment_ms": 2.155,
+            "unit_deployment_ms": 22.32,
+            "first_overlay_ms": 23.739
+          },
+          "log_sha256": "ede964607327eb1b2e4e7ac105b457bbe05c457f1181ac21b65a3b5878fa02bd",
+          "entry_trace_sha256": "fcc6b95c18472a35ed2b98f17c7683f0f57548968c16b77eaa07fc612c698f7b",
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "ready_stamps_since_click_us": {
+            "ready_begin": 456681,
+            "run_clock_and_level": 456692,
+            "steam_run_and_barrier": 461252,
+            "unit_and_ability_definitions": 461358,
+            "ability_visual_resolution": 476539,
+            "level_economy_and_fog": 480455,
+            "world_and_map_nodes": 480461,
+            "map_allocation": 480518,
+            "level_terrain_layout": 480548,
+            "terrain_art_layout": 481041,
+            "map_bake": 482295,
+            "map_decoration": 482867,
+            "map_environment": 482871,
+            "environment_config_load": 482874,
+            "environment_config_decorate": 482896,
+            "environment_height": 482925,
+            "environment_scenery_node": 485655,
+            "environment_scenery_setup": 485692,
+            "scenery_parent_link": 485696,
+            "scenery_material": 485704,
+            "terrain_weights": 485706,
+            "terrain_shader_init": 489148,
+            "terrain_atlas_lookup": 491932,
+            "terrain_surface_routes": 491979,
+            "terrain_atlas_parameters": 492034,
+            "scenery_cell_walk": 492082,
+            "scenery_reeds_mesh": 496048,
+            "scenery_props": 496331,
+            "scenery_special_walls": 521940,
+            "dapple_texture": 521948,
+            "unit_layers_fog_camera": 525407,
+            "atmosphere_and_motes": 525513,
+            "hud_attach": 526333,
+            "hud_initialize": 526377,
+            "hud_resource_bar": 528910,
+            "hud_hero_bar": 530245,
+            "hud_bottom_panel": 530272,
+            "hud_inventory_popup": 548169,
+            "hud_info_panel": 548274,
+            "hud_dialogue": 551150,
+            "hud_end_panel": 554082,
+            "hud_pause_panel": 554104,
+            "hud_auxiliary_containers": 554115,
+            "hud_apply_theme": 557082,
+            "hud_refresh_layout": 559237,
+            "hud_setup": 559998,
+            "cursor_init": 560071,
+            "mission_init": 563330,
+            "unit_deployment": 570991,
+            "camera_and_first_fog": 593311,
+            "first_dialogue": 593394,
+            "ready_tail": 594296,
+            "ready_end": 594304
+          },
+          "scoped_art_calls": [
+            {
+              "kind": "object",
+              "route": "huangnigang_pine_old",
+              "elapsed_us": 41
+            },
+            {
+              "kind": "object",
+              "route": "huangnigang_pine_double",
+              "elapsed_us": 23
+            },
+            {
+              "kind": "object",
+              "route": "huangnigang_pine_young_lean",
+              "elapsed_us": 20
+            },
+            {
+              "kind": "object",
+              "route": "huangnigang_seven_pudao",
+              "elapsed_us": 17
+            },
+            {
+              "kind": "object",
+              "route": "huangnigang_dry_verge",
+              "elapsed_us": 20
+            },
+            {
+              "kind": "overlay",
+              "route": "shallow_cart_ruts",
+              "elapsed_us": 23739,
+              "cached_atlas_before": false
+            },
+            {
+              "kind": "overlay",
+              "route": "scattered_footprints",
+              "elapsed_us": 457,
+              "cached_atlas_before": true
+            },
+            {
+              "kind": "overlay",
+              "route": "pole_wheel_marks",
+              "elapsed_us": 254,
+              "cached_atlas_before": true
+            },
+            {
+              "kind": "overlay",
+              "route": "rounded_stones",
+              "elapsed_us": 232,
+              "cached_atlas_before": true
+            },
+            {
+              "kind": "overlay",
+              "route": "gravel_clods",
+              "elapsed_us": 232,
+              "cached_atlas_before": true
+            },
+            {
+              "kind": "overlay",
+              "route": "pine_needles_leaves",
+              "elapsed_us": 252,
+              "cached_atlas_before": true
+            },
+            {
+              "kind": "overlay",
+              "route": "dry_grass_leaves",
+              "elapsed_us": 221,
+              "cached_atlas_before": true
+            }
+          ]
+        },
+        {
+          "variant": "prepared",
+          "source_commit": "e66d50473e2f9da66e382c81054bb0f77302956c",
+          "ms": {
+            "loading_to_attach_ms": 468.479,
+            "sortie_to_battle_ms": 667.983,
+            "sortie_to_first_move_ms": 778.346,
+            "process_to_ready_menu_ms": 6136.66,
+            "map_to_hud_ms": 25.421,
+            "hud_to_ready_ms": 71.214,
+            "longest_entry_gap_ms": 484.258,
+            "attach_to_ready_ms": 118.979,
+            "startup_progress_to_ready_ms": 1425.0,
+            "ready_to_first_pre_draw_ms": 41.739,
+            "first_pre_to_post_draw_ms": 13.757,
+            "map_environment_ms": 19.057,
+            "terrain_weight_images_ms": 3.412,
+            "scenery_props_ms": 3.296,
+            "hud_attach_ms": 38.553,
+            "hud_bottom_panel_ms": 19.622,
+            "hud_theme_assignment_ms": 2.428,
+            "unit_deployment_ms": 20.211,
+            "first_overlay_ms": 0.69
+          },
+          "log_sha256": "ede964607327eb1b2e4e7ac105b457bbe05c457f1181ac21b65a3b5878fa02bd",
+          "entry_trace_sha256": "a20a4d40e0a5472276019d36be0ca9925c4f8f9d8b2b37ae54328846fd6f238a",
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "ready_stamps_since_click_us": {
+            "ready_begin": 493518,
+            "run_clock_and_level": 493528,
+            "steam_run_and_barrier": 497749,
+            "unit_and_ability_definitions": 497837,
+            "ability_visual_resolution": 511544,
+            "level_economy_and_fog": 515739,
+            "world_and_map_nodes": 515744,
+            "map_allocation": 515856,
+            "level_terrain_layout": 515892,
+            "terrain_art_layout": 516395,
+            "map_bake": 517610,
+            "map_decoration": 518146,
+            "map_environment": 518150,
+            "environment_config_load": 518153,
+            "environment_config_decorate": 518168,
+            "environment_height": 518188,
+            "environment_scenery_node": 520917,
+            "environment_scenery_setup": 521003,
+            "scenery_parent_link": 521010,
+            "scenery_material": 521025,
+            "terrain_weights": 521027,
+            "terrain_shader_init": 524439,
+            "terrain_atlas_lookup": 527345,
+            "terrain_surface_routes": 527405,
+            "terrain_atlas_parameters": 527502,
+            "scenery_cell_walk": 527584,
+            "scenery_reeds_mesh": 533487,
+            "scenery_props": 533905,
+            "scenery_special_walls": 537201,
+            "dapple_texture": 537207,
+            "unit_layers_fog_camera": 539823,
+            "atmosphere_and_motes": 539994,
+            "hud_attach": 541230,
+            "hud_initialize": 541282,
+            "hud_resource_bar": 545422,
+            "hud_hero_bar": 547340,
+            "hud_bottom_panel": 547391,
+            "hud_inventory_popup": 567013,
+            "hud_info_panel": 567142,
+            "hud_dialogue": 570142,
+            "hud_end_panel": 573196,
+            "hud_pause_panel": 573226,
+            "hud_auxiliary_containers": 573245,
+            "hud_apply_theme": 576492,
+            "hud_refresh_layout": 578920,
+            "hud_setup": 579783,
+            "cursor_init": 579859,
+            "mission_init": 583314,
+            "unit_deployment": 591190,
+            "camera_and_first_fog": 611401,
+            "first_dialogue": 611502,
+            "ready_tail": 612419,
+            "ready_end": 612426
+          },
+          "scoped_art_calls": [
+            {
+              "kind": "object",
+              "route": "huangnigang_pine_old",
+              "elapsed_us": 56
+            },
+            {
+              "kind": "object",
+              "route": "huangnigang_pine_double",
+              "elapsed_us": 38
+            },
+            {
+              "kind": "object",
+              "route": "huangnigang_pine_young_lean",
+              "elapsed_us": 31
+            },
+            {
+              "kind": "object",
+              "route": "huangnigang_seven_pudao",
+              "elapsed_us": 36
+            },
+            {
+              "kind": "object",
+              "route": "huangnigang_dry_verge",
+              "elapsed_us": 33
+            },
+            {
+              "kind": "overlay",
+              "route": "shallow_cart_ruts",
+              "elapsed_us": 690,
+              "cached_atlas_before": true
+            },
+            {
+              "kind": "overlay",
+              "route": "scattered_footprints",
+              "elapsed_us": 398,
+              "cached_atlas_before": true
+            },
+            {
+              "kind": "overlay",
+              "route": "pole_wheel_marks",
+              "elapsed_us": 368,
+              "cached_atlas_before": true
+            },
+            {
+              "kind": "overlay",
+              "route": "rounded_stones",
+              "elapsed_us": 332,
+              "cached_atlas_before": true
+            },
+            {
+              "kind": "overlay",
+              "route": "gravel_clods",
+              "elapsed_us": 383,
+              "cached_atlas_before": true
+            },
+            {
+              "kind": "overlay",
+              "route": "pine_needles_leaves",
+              "elapsed_us": 454,
+              "cached_atlas_before": true
+            },
+            {
+              "kind": "overlay",
+              "route": "dry_grass_leaves",
+              "elapsed_us": 357,
+              "cached_atlas_before": true
+            }
+          ]
+        }
+      ],
+      "median_ms": {
+        "prepared": {
+          "loading_to_attach_ms": 468.479,
+          "sortie_to_battle_ms": 650.704,
+          "sortie_to_first_move_ms": 760.577,
+          "process_to_ready_menu_ms": 6136.66,
+          "map_to_hud_ms": 19.296,
+          "hud_to_ready_ms": 68.227,
+          "longest_entry_gap_ms": 481.041,
+          "attach_to_ready_ms": 109.015,
+          "startup_progress_to_ready_ms": 1425.0,
+          "ready_to_first_pre_draw_ms": 41.739,
+          "first_pre_to_post_draw_ms": 13.757,
+          "map_environment_ms": 15.282,
+          "terrain_weight_images_ms": 3.317,
+          "scenery_props_ms": 2.481,
+          "hud_attach_ms": 35.891,
+          "hud_bottom_panel_ms": 18.311,
+          "hud_theme_assignment_ms": 2.267,
+          "unit_deployment_ms": 20.211,
+          "first_overlay_ms": 0.582
+        },
+        "trace": {
+          "loading_to_attach_ms": 435.178,
+          "sortie_to_battle_ms": 640.596,
+          "sortie_to_first_move_ms": 771.413,
+          "process_to_ready_menu_ms": 5908.665,
+          "map_to_hud_ms": 40.373,
+          "hud_to_ready_ms": 77.055,
+          "longest_entry_gap_ms": 487.85,
+          "attach_to_ready_ms": 141.767,
+          "startup_progress_to_ready_ms": 1303.0,
+          "ready_to_first_pre_draw_ms": 44.284,
+          "first_pre_to_post_draw_ms": 10.619,
+          "map_environment_ms": 36.785,
+          "terrain_weight_images_ms": 3.428,
+          "scenery_props_ms": 23.649,
+          "hud_attach_ms": 34.731,
+          "hud_bottom_panel_ms": 17.988,
+          "hud_theme_assignment_ms": 2.615,
+          "unit_deployment_ms": 28.879,
+          "first_overlay_ms": 21.882
+        }
+      },
+      "raw_sha256": "000e63fe16b1905f98a1b51e540d034f7357d978528e3cddd1be3638124ad9c6"
+    },
+    "compiled_immediate": {
+      "sample_count": 8,
+      "runs": [
+        {
+          "variant": "prior",
+          "source_commit": "e66d50473e2f9da66e382c81054bb0f77302956c",
+          "ms": {
+            "loading_to_attach_ms": 173.417,
+            "sortie_to_battle_ms": 399.313,
+            "sortie_to_first_move_ms": 525.775,
+            "process_to_ready_menu_ms": 6340.237,
+            "map_to_hud_ms": 43.009,
+            "hud_to_ready_ms": 83.052,
+            "longest_entry_gap_ms": 219.589,
+            "attach_to_ready_ms": 147.915,
+            "startup_progress_to_ready_ms": 1324.0
+          },
+          "log_sha256": "ede964607327eb1b2e4e7ac105b457bbe05c457f1181ac21b65a3b5878fa02bd",
+          "entry_trace_sha256": "e82b5d7d158bf6b95c3f79c0d93e19c4627f8b7e2670d0e1ec7967680f60fbd4",
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "atlas_cached_at_attach": false
+        },
+        {
+          "variant": "surface",
+          "source_commit": "f6d0dbf563067eb9b43075f61632e622ca56d7a7",
+          "ms": {
+            "loading_to_attach_ms": 155.299,
+            "sortie_to_battle_ms": 350.853,
+            "sortie_to_first_move_ms": 470.74,
+            "process_to_ready_menu_ms": 6108.397,
+            "map_to_hud_ms": 18.885,
+            "hud_to_ready_ms": 69.575,
+            "longest_entry_gap_ms": 183.239,
+            "attach_to_ready_ms": 110.872,
+            "startup_progress_to_ready_ms": 1472.0
+          },
+          "log_sha256": "b544729e4289354bf348066c7367dbbff52292ec09417111f771d5eaf9b312af",
+          "entry_trace_sha256": "e25b8f4ec7fc50a02c340e1965167f5082fad661dabcb4097c7bcb890b3a2ea3",
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "atlas_cached_at_attach": true
+        },
+        {
+          "variant": "surface",
+          "source_commit": "f6d0dbf563067eb9b43075f61632e622ca56d7a7",
+          "ms": {
+            "loading_to_attach_ms": 174.22,
+            "sortie_to_battle_ms": 358.067,
+            "sortie_to_first_move_ms": 433.121,
+            "process_to_ready_menu_ms": 5799.715,
+            "map_to_hud_ms": 18.867,
+            "hud_to_ready_ms": 75.25,
+            "longest_entry_gap_ms": 187.284,
+            "attach_to_ready_ms": 116.968,
+            "startup_progress_to_ready_ms": 1370.0
+          },
+          "log_sha256": "b544729e4289354bf348066c7367dbbff52292ec09417111f771d5eaf9b312af",
+          "entry_trace_sha256": "e139fd17f8cfcb0df281a9c2fe083c3823546fbc103d4bc06d20e239b7a58c31",
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "atlas_cached_at_attach": true
+        },
+        {
+          "variant": "prior",
+          "source_commit": "e66d50473e2f9da66e382c81054bb0f77302956c",
+          "ms": {
+            "loading_to_attach_ms": 174.94,
+            "sortie_to_battle_ms": 395.976,
+            "sortie_to_first_move_ms": 514.015,
+            "process_to_ready_menu_ms": 6228.184,
+            "map_to_hud_ms": 46.437,
+            "hud_to_ready_ms": 74.362,
+            "longest_entry_gap_ms": 208.703,
+            "attach_to_ready_ms": 142.866,
+            "startup_progress_to_ready_ms": 1490.0
+          },
+          "log_sha256": "ede964607327eb1b2e4e7ac105b457bbe05c457f1181ac21b65a3b5878fa02bd",
+          "entry_trace_sha256": "80dbddab5476568ac08627bf4974d857aa30cd2a7695aa0e1379f09521a63961",
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "atlas_cached_at_attach": false
+        },
+        {
+          "variant": "prior",
+          "source_commit": "e66d50473e2f9da66e382c81054bb0f77302956c",
+          "ms": {
+            "loading_to_attach_ms": 163.731,
+            "sortie_to_battle_ms": 363.511,
+            "sortie_to_first_move_ms": 489.966,
+            "process_to_ready_menu_ms": 6253.498,
+            "map_to_hud_ms": 50.486,
+            "hud_to_ready_ms": 68.075,
+            "longest_entry_gap_ms": 208.253,
+            "attach_to_ready_ms": 140.323,
+            "startup_progress_to_ready_ms": 1475.0
+          },
+          "log_sha256": "ede964607327eb1b2e4e7ac105b457bbe05c457f1181ac21b65a3b5878fa02bd",
+          "entry_trace_sha256": "ad2e60e522024b25deeb245e46e7e302a76b286ddd57e2ef23e5f7f68e494bcb",
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "atlas_cached_at_attach": false
+        },
+        {
+          "variant": "surface",
+          "source_commit": "f6d0dbf563067eb9b43075f61632e622ca56d7a7",
+          "ms": {
+            "loading_to_attach_ms": 181.038,
+            "sortie_to_battle_ms": 354.92,
+            "sortie_to_first_move_ms": 470.511,
+            "process_to_ready_menu_ms": 6258.765,
+            "map_to_hud_ms": 18.277,
+            "hud_to_ready_ms": 72.821,
+            "longest_entry_gap_ms": 185.15,
+            "attach_to_ready_ms": 113.912,
+            "startup_progress_to_ready_ms": 1491.0
+          },
+          "log_sha256": "b544729e4289354bf348066c7367dbbff52292ec09417111f771d5eaf9b312af",
+          "entry_trace_sha256": "c5e06ebaa59def9ce25939acb33008641b5cd957ce20f5bb02828ab35398df98",
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "atlas_cached_at_attach": true
+        },
+        {
+          "variant": "surface",
+          "source_commit": "f6d0dbf563067eb9b43075f61632e622ca56d7a7",
+          "ms": {
+            "loading_to_attach_ms": 179.502,
+            "sortie_to_battle_ms": 363.708,
+            "sortie_to_first_move_ms": 440.636,
+            "process_to_ready_menu_ms": 6085.641,
+            "map_to_hud_ms": 20.512,
+            "hud_to_ready_ms": 72.301,
+            "longest_entry_gap_ms": 189.628,
+            "attach_to_ready_ms": 118.46,
+            "startup_progress_to_ready_ms": 1423.0
+          },
+          "log_sha256": "b544729e4289354bf348066c7367dbbff52292ec09417111f771d5eaf9b312af",
+          "entry_trace_sha256": "b66f3391e98ff38009ff0784a20c6d84b21011d80861e2e4dea8d5959b378e5b",
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "atlas_cached_at_attach": true
+        },
+        {
+          "variant": "prior",
+          "source_commit": "e66d50473e2f9da66e382c81054bb0f77302956c",
+          "ms": {
+            "loading_to_attach_ms": 182.621,
+            "sortie_to_battle_ms": 407.198,
+            "sortie_to_first_move_ms": 644.735,
+            "process_to_ready_menu_ms": 5936.049,
+            "map_to_hud_ms": 53.707,
+            "hud_to_ready_ms": 75.875,
+            "longest_entry_gap_ms": 228.025,
+            "attach_to_ready_ms": 155.479,
+            "startup_progress_to_ready_ms": 1370.0
+          },
+          "log_sha256": "ede964607327eb1b2e4e7ac105b457bbe05c457f1181ac21b65a3b5878fa02bd",
+          "entry_trace_sha256": "2a893fffe4ae38c6c46a9c66debea5edbd65b2a69af01b61800b2718a3e0293b",
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "atlas_cached_at_attach": false
+        }
+      ],
+      "median_ms": {
+        "prior": {
+          "loading_to_attach_ms": 174.178,
+          "sortie_to_battle_ms": 397.644,
+          "sortie_to_first_move_ms": 519.895,
+          "process_to_ready_menu_ms": 6240.841,
+          "map_to_hud_ms": 48.462,
+          "hud_to_ready_ms": 75.118,
+          "longest_entry_gap_ms": 214.146,
+          "attach_to_ready_ms": 145.391,
+          "startup_progress_to_ready_ms": 1422.5
+        },
+        "surface": {
+          "loading_to_attach_ms": 176.861,
+          "sortie_to_battle_ms": 356.494,
+          "sortie_to_first_move_ms": 455.574,
+          "process_to_ready_menu_ms": 6097.019,
+          "map_to_hud_ms": 18.876,
+          "hud_to_ready_ms": 72.561,
+          "longest_entry_gap_ms": 186.217,
+          "attach_to_ready_ms": 115.44,
+          "startup_progress_to_ready_ms": 1447.5
+        }
+      },
+      "raw_sha256": "28811e5eff339c0ff2915422e3e973c4999528a0f2a5423b0671ddd3ac639bff"
+    },
+    "compiled_music_ready": {
+      "sample_count": 4,
+      "runs": [
+        {
+          "variant": "prior",
+          "source_commit": "e66d50473e2f9da66e382c81054bb0f77302956c",
+          "ms": {
+            "loading_to_attach_ms": 155.1,
+            "sortie_to_battle_ms": 371.365,
+            "sortie_to_first_move_ms": 497.713,
+            "process_to_ready_menu_ms": 6091.696,
+            "map_to_hud_ms": 40.265,
+            "hud_to_ready_ms": 75.093,
+            "longest_entry_gap_ms": 210.343,
+            "attach_to_ready_ms": 138.473,
+            "startup_progress_to_ready_ms": 1469.0
+          },
+          "log_sha256": "ede964607327eb1b2e4e7ac105b457bbe05c457f1181ac21b65a3b5878fa02bd",
+          "entry_trace_sha256": "0b5c530c3598b21ba0350cfbe52713a857a017e1eec365da0c27a1ec6f9c243d",
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "atlas_cached_at_attach": false
+        },
+        {
+          "variant": "surface",
+          "source_commit": "f6d0dbf563067eb9b43075f61632e622ca56d7a7",
+          "ms": {
+            "loading_to_attach_ms": 158.125,
+            "sortie_to_battle_ms": 371.585,
+            "sortie_to_first_move_ms": 501.564,
+            "process_to_ready_menu_ms": 6012.188,
+            "map_to_hud_ms": 22.669,
+            "hud_to_ready_ms": 79.655,
+            "longest_entry_gap_ms": 206.539,
+            "attach_to_ready_ms": 127.104,
+            "startup_progress_to_ready_ms": 1472.0
+          },
+          "log_sha256": "b544729e4289354bf348066c7367dbbff52292ec09417111f771d5eaf9b312af",
+          "entry_trace_sha256": "13648593d98a5041bcac7ad92e8904c4da1f11abd0b51dde4d69fcb791a2fc2a",
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "atlas_cached_at_attach": true
+        },
+        {
+          "variant": "surface",
+          "source_commit": "f6d0dbf563067eb9b43075f61632e622ca56d7a7",
+          "ms": {
+            "loading_to_attach_ms": 157.813,
+            "sortie_to_battle_ms": 334.959,
+            "sortie_to_first_move_ms": 443.68,
+            "process_to_ready_menu_ms": 6279.312,
+            "map_to_hud_ms": 21.188,
+            "hud_to_ready_ms": 61.733,
+            "longest_entry_gap_ms": 154.55,
+            "attach_to_ready_ms": 104.754,
+            "startup_progress_to_ready_ms": 1458.0
+          },
+          "log_sha256": "b544729e4289354bf348066c7367dbbff52292ec09417111f771d5eaf9b312af",
+          "entry_trace_sha256": "7557edc979c902845206256c9c2cefea4c477f149ff9534207e5ca78affd744f",
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "atlas_cached_at_attach": true
+        },
+        {
+          "variant": "prior",
+          "source_commit": "e66d50473e2f9da66e382c81054bb0f77302956c",
+          "ms": {
+            "loading_to_attach_ms": 155.36,
+            "sortie_to_battle_ms": 372.105,
+            "sortie_to_first_move_ms": 512.675,
+            "process_to_ready_menu_ms": 6220.672,
+            "map_to_hud_ms": 51.763,
+            "hud_to_ready_ms": 71.041,
+            "longest_entry_gap_ms": 213.21,
+            "attach_to_ready_ms": 145.466,
+            "startup_progress_to_ready_ms": 1439.0
+          },
+          "log_sha256": "ede964607327eb1b2e4e7ac105b457bbe05c457f1181ac21b65a3b5878fa02bd",
+          "entry_trace_sha256": "8a01259d931bebb83f88b9c63aae354ea86a2c0846be36565792aae09e4a8911",
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "atlas_cached_at_attach": false
+        }
+      ],
+      "median_ms": {
+        "prior": {
+          "loading_to_attach_ms": 155.23,
+          "sortie_to_battle_ms": 371.735,
+          "sortie_to_first_move_ms": 505.194,
+          "process_to_ready_menu_ms": 6156.184,
+          "map_to_hud_ms": 46.014,
+          "hud_to_ready_ms": 73.067,
+          "longest_entry_gap_ms": 211.776,
+          "attach_to_ready_ms": 141.97,
+          "startup_progress_to_ready_ms": 1454.0
+        },
+        "surface": {
+          "loading_to_attach_ms": 157.969,
+          "sortie_to_battle_ms": 353.272,
+          "sortie_to_first_move_ms": 472.622,
+          "process_to_ready_menu_ms": 6145.75,
+          "map_to_hud_ms": 21.928,
+          "hud_to_ready_ms": 70.694,
+          "longest_entry_gap_ms": 180.544,
+          "attach_to_ready_ms": 115.929,
+          "startup_progress_to_ready_ms": 1465.0
+        }
+      },
+      "raw_sha256": "78263ec766af09ac4fac2481ae61f4a72b557f346afb90c0f2adf17cc5fdbbe6"
+    }
+  },
+  "ground_overlays_identical": [
+    {
+      "route": "shallow_cart_ruts",
+      "position": "(1104.0, 656.0)",
+      "region": "[P: (0.0, 0.0), S: (358.0, 365.0)]",
+      "size": 88.0
+    },
+    {
+      "route": "scattered_footprints",
+      "position": "(880.0, 688.0)",
+      "region": "[P: (358.0, 0.0), S: (302.0, 365.0)]",
+      "size": 68.0
+    },
+    {
+      "route": "pole_wheel_marks",
+      "position": "(400.0, 656.0)",
+      "region": "[P: (986.0, 0.0), S: (319.0, 365.0)]",
+      "size": 54.0
+    },
+    {
+      "route": "rounded_stones",
+      "position": "(1232.0, 592.0)",
+      "region": "[P: (0.0, 365.0), S: (358.0, 263.0)]",
+      "size": 48.0
+    },
+    {
+      "route": "gravel_clods",
+      "position": "(1008.0, 560.0)",
+      "region": "[P: (358.0, 365.0), S: (302.0, 263.0)]",
+      "size": 52.0
+    },
+    {
+      "route": "pine_needles_leaves",
+      "position": "(784.0, 528.0)",
+      "region": "[P: (0.0, 628.0), S: (358.0, 288.0)]",
+      "size": 66.0
+    },
+    {
+      "route": "dry_grass_leaves",
+      "position": "(528.0, 720.0)",
+      "region": "[P: (986.0, 628.0), S: (319.0, 288.0)]",
+      "size": 58.0
+    }
+  ],
+  "quit_during_loading": {
+    "atlas_status_at_quit": 1,
+    "battle_never_attached": true,
+    "early_quit": true,
+    "player_streams_released": true,
+    "progress_unchanged": true,
+    "variant": "early",
+    "source_commit": "f6d0dbf563067eb9b43075f61632e622ca56d7a7",
+    "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+    "pck_sha256": "f1c19aeb15d146a2a05bd9cc8c541086679ba4821e9ef72b715600665b92229b",
+    "payload_verified": 7,
+    "game_log_sha256": "e6ef969590f1bf2b17628b948311fc16580d0a5c8644fd84baabb8671a44a7a8",
+    "runtime_errors": [],
+    "exit_code": 0
+  },
+  "short_six_mode_smoke": {
+    "native": {
+      "candidate": "f6d0dbf563067eb9b43075f61632e622ca56d7a7",
+      "payload_files_unchanged": true,
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "f1c19aeb15d146a2a05bd9cc8c541086679ba4821e9ef72b715600665b92229b",
+      "split_identity": "487d3c8a2c6ed9cb1cd9a5158b4326a466ca067dc05abe2fbddfb5dd0c363add",
+      "exe_unchanged": true,
+      "exit_code": 0,
+      "seconds": 103.046,
+      "errors": [],
+      "warnings": [],
+      "log_sha256": "b8a9b46cad2b12dc168a3fb145678eb91801956296308faaa40ef0bc68e774a1",
+      "report_sha256": "cf369d3b20c384b9775fa2749562d19775838e35f01c7d26a8e83c0a5975f501"
+    },
+    "seconds": 94.756538,
+    "visits": 15,
+    "routes": {
+      "arena:arena": 3,
+      "campaign:level1": 3,
+      "campaign:level5": 2,
+      "custom_defense:custom_defense": 2,
+      "skirmish:skirmish": 3,
+      "skirmish_ai:skirmish_ai": 2
+    },
+    "progress_unchanged": true,
+    "runtime_checks_passed": true,
+    "acceptance_eligible": false
+  }
+}
