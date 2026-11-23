@@ -1,6 +1,8 @@
 # 源码设置与换机（2026-10-30）
 
-当前 Windows 离线试玩候选为 `201c2c5f`。完整解压后双击 `Start Local Playtest.cmd`，使用同一编号继续本包存档。江州的任务按钮通过关卡白名单保存，二人的移动令沿用普通右键的单位路径和任务凭证字段。 [Windows 验收收据](../qa/campaign_pursuit_20261116/windows_jiang_boarding_201c2c5f.json)
+当前 Windows 离线试玩候选为 `94629f93`。解压后双击 `Start Local Playtest.cmd`，用同一编号继续。快活林复用任务按钮白名单、普通移动命令与原到场办理。 [Windows 验收收据](../qa/campaign_counter_window_20261116/windows_shop_handover_94629f93.json)
+
+前一 Windows 离线候选为 `201c2c5f`。完整解压后双击 `Start Local Playtest.cmd`，使用同一编号继续本包存档。江州的任务按钮通过关卡白名单保存，二人的移动令沿用普通右键的单位路径和任务凭证字段。 [Windows 验收收据](../qa/campaign_pursuit_20261116/windows_jiang_boarding_201c2c5f.json)
 
 前一 Windows 离线候选为 `cf173596`。完整解压后双击 `Start Local Playtest.cmd`，使用同一编号继续本包存档。继续流程在内存记录所读存档的 SHA-256，与当前存档一致时直接进入既有保存事务。 [本地包目录](DIRECTORY_INDEX.md) · [Windows 验收收据](../qa/battle_entry_timing_20261116/windows_same_checkpoint_resave_cf173596.json)
 

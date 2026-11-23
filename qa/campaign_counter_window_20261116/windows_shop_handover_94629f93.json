@@ -1,0 +1,378 @@
+{
+  "platform": "Windows native, Compatibility renderer, isolated offline profiles",
+  "input": "Mouse-button events on actual task panel buttons in the isolated viewport, ordinary pause save and menu continue. Real duel and movement; no Steam client, physical input, or human test.",
+  "build_26752476": {
+    "source_commit": "0f13370905b8b16937135510c8cc469998b39b99",
+    "post_duel_game_seconds": 59.6000000000013,
+    "ordinary_orders": 30,
+    "terms_unsettled": true
+  },
+  "candidate": {
+    "kind": "local_integrated_windows_candidate",
+    "commit": "94629f93de028aa96baf32450a18fcc883804376",
+    "source_version": "source-v1:49c10c35770581d15cb6239f2c69f7d073c9b2f93282ab66947822a29aafc5bf",
+    "tracked_runtime_count": 6574,
+    "steps": [
+      {
+        "stage": "import",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 76.2
+      },
+      {
+        "stage": "export",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 102.4
+      }
+    ],
+    "files": [
+      {
+        "path": "GODOTSTEAM_LICENSE.txt",
+        "bytes": 1110,
+        "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+      },
+      {
+        "path": "LiangshanHeroes.exe",
+        "bytes": 1827566456,
+        "sha256": "4b70ae94de3074d4609ceb5b9d59ab07121bcae061b19aefadd4e89a5d55c7d6"
+      },
+      {
+        "path": "libgodotsteam.windows.template_release.x86_64.dll",
+        "bytes": 3961344,
+        "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+      },
+      {
+        "path": "steam_api64.dll",
+        "bytes": 319128,
+        "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+      },
+      {
+        "path": "steam_stats_reader.dll",
+        "bytes": 381440,
+        "sha256": "7505919cfff5907c13a02eb366690bff22ca6731c8521deefde58b114e4f796f"
+      },
+      {
+        "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+        "bytes": 1093,
+        "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+      }
+    ]
+  },
+  "earlier_build_attempts": [
+    {
+      "stage": "import",
+      "exit_code": 3221226356,
+      "source_commit": "2a14b3c8d250bcef86eeae1f7bad203876ae096e",
+      "log_sha256": "de0556108a5fbeff5b06592b800275f607c3278b655bc1fe5ec72fc9c4fda994",
+      "resolution": "Fresh isolated build of the same source commit before any package verification."
+    },
+    {
+      "stage": "960x540 viewport",
+      "source_commit": "2a14b3c8d250bcef86eeae1f7bad203876ae096e",
+      "log_sha256": "ef0fca2e233e3472906b64674965dd583a714137406f964d0f206c918d982ed9",
+      "resolution": "Reveal the lower handover action so both related choices fit in the short viewport."
+    }
+  ],
+  "offline_archive": {
+    "platform": "windows",
+    "kind": "local_playtest_candidate",
+    "source_commit": "94629f93de028aa96baf32450a18fcc883804376",
+    "source_version": "source-v1:49c10c35770581d15cb6239f2c69f7d073c9b2f93282ab66947822a29aafc5bf",
+    "archive": {
+      "name": "LiangshanHeroes_PC_Playtest_94629f93.zip",
+      "bytes": 1758390027,
+      "sha256": "a5be846aa252fe635b2aeba00f05678164612a9ef2d1b3d32330bf7bdc590101",
+      "members_verified": 8
+    },
+    "runtime_files": [
+      {
+        "path": "GODOTSTEAM_LICENSE.txt",
+        "bytes": 1110,
+        "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+      },
+      {
+        "path": "LiangshanHeroes.exe",
+        "bytes": 1827566456,
+        "sha256": "4b70ae94de3074d4609ceb5b9d59ab07121bcae061b19aefadd4e89a5d55c7d6"
+      },
+      {
+        "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+        "bytes": 1093,
+        "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+      },
+      {
+        "path": "libgodotsteam.windows.template_release.x86_64.dll",
+        "bytes": 3961344,
+        "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+      },
+      {
+        "path": "steam_api64.dll",
+        "bytes": 319128,
+        "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+      },
+      {
+        "path": "steam_stats_reader.dll",
+        "bytes": 381440,
+        "sha256": "7505919cfff5907c13a02eb366690bff22ca6731c8521deefde58b114e4f796f"
+      }
+    ],
+    "launcher": {
+      "name": "Start Local Playtest.cmd",
+      "sha256": "b0e52f075353e9bb69ab9a3538d9ee900a0785029171944ba09729bf8a091e98",
+      "argument": "--offline-playtest",
+      "profiles": [
+        "P01",
+        "P02",
+        "P03"
+      ],
+      "clean_archive_boot": {
+        "mode": "headless",
+        "exit": 0,
+        "errors": [],
+        "log_sha256": "a9912b85473f126d3f4f63ec824170c828df3473a292f866dde86cafda5b66da"
+      }
+    }
+  },
+  "passes": 97,
+  "stages": [
+    {
+      "name": "old-save",
+      "checks": [
+        "isolated profile and inactive Steam adapter",
+        "normal player flow is enabled in isolation",
+        "exact release executable passed startup identity verification",
+        "Start Campaign exists in the real menu",
+        "real Kuaihuolin sortie button is available",
+        "direct starts current player-controlled short chapter",
+        "direct retains authored duel stats and vulnerable noncombat companion",
+        "all preparation choices are available at the start",
+        "direct walks to the shop",
+        "proximity alone does not steal the player's preparation choice",
+        "direct actual attack opens the duel",
+        "Shi En actually walks to the safe waiting area",
+        "direct keeps chosen drink count",
+        "direct reaches the required real combat outcome (unprepared standing control loses)",
+        "direct actually avoids both distinct specials",
+        "direct boss visibly travels through an actual charge",
+        "direct actual moving W and current-window E earns signature",
+        "public build reached handover through real menu and duel",
+        "public build saves after the duel with both handover choices untouched",
+        "normal pause save commits phase-appropriate slot revision",
+        "isolated handoff persisted"
+      ],
+      "exit_code": 0,
+      "runtime_errors": [],
+      "source_commit": "0f13370905b8b16937135510c8cc469998b39b99",
+      "exe_sha256": "fae95050c553dfd691e3beebca3eef7dd1d7490dfebf6e99fa50d310456b91a6",
+      "log_sha256": "8e825e481ed0a06d29238877ecd9eec0acffd16ae9dd66532856aed3d6ef9d47",
+      "slot_records_sha256": {
+        "record_0000000001.json": "2cbaf9a557b6bcd4f211d20f0f1a952c1b9ed3a444362577d6b6a3d22e66104e"
+      }
+    },
+    {
+      "name": "migrate",
+      "checks": [
+        "isolated profile and inactive Steam adapter",
+        "normal player flow is enabled in isolation",
+        "exact release executable passed startup identity verification",
+        "input slot has the exact last committed bytes",
+        "continue leaves the original slot bytes intact",
+        "ordinary continue mounts the saved world: ",
+        "restore returns the same paused campaign",
+        "Wu Song, Shi En, original duel outcome and the handover path restore exactly",
+        "legacy presentation starts without the new control and revised save restores exactly one",
+        "original pre-handover checkpoint has no shortcut yet",
+        "normal resume puts both one-click choices at the top of the task panel",
+        "zh_CN shows the whole button forest_order_terms",
+        "zh_CN localizes the tooltip forest_order_terms",
+        "zh_CN shows the whole button forest_order_shop",
+        "zh_CN localizes the tooltip forest_order_shop",
+        "zh_CN renders both one-click labels",
+        "zh_TW shows the whole button forest_order_terms",
+        "zh_TW localizes the tooltip forest_order_terms",
+        "zh_TW shows the whole button forest_order_shop",
+        "zh_TW localizes the tooltip forest_order_shop",
+        "zh_TW renders both one-click labels",
+        "en shows the whole button forest_order_terms",
+        "en localizes the tooltip forest_order_terms",
+        "en shows the whole button forest_order_shop",
+        "en localizes the tooltip forest_order_shop",
+        "en renders both one-click labels",
+        "ja shows the whole button forest_order_terms",
+        "ja localizes the tooltip forest_order_terms",
+        "ja shows the whole button forest_order_shop",
+        "ja localizes the tooltip forest_order_shop",
+        "ja renders both one-click labels",
+        "terms shortcut issues a real move before the original dwell can settle anything",
+        "repeated terms click preserves Wu Song's current order",
+        "handover is held while terms are in motion and selection and camera stay in place",
+        "Wu Song actually reaches the flag and says the three conditions",
+        "the finished terms choice disappears and the separate handover becomes primary",
+        "second shortcut issues only the real handover move",
+        "repeated handover click keeps the original path",
+        "Shi En is still on the way at the second save",
+        "normal pause save commits phase-appropriate slot revision",
+        "save preserves legacy run lineage",
+        "isolated handoff persisted"
+      ],
+      "exit_code": 0,
+      "runtime_errors": [],
+      "source_commit": "94629f93de028aa96baf32450a18fcc883804376",
+      "exe_sha256": "4b70ae94de3074d4609ceb5b9d59ab07121bcae061b19aefadd4e89a5d55c7d6",
+      "log_sha256": "edec46a75d5fda7e5b46d73e49358a1ffb1dbd295ce009d4bf63cab7bfd80112",
+      "slot_records_sha256": {
+        "record_0000000001.json": "2cbaf9a557b6bcd4f211d20f0f1a952c1b9ed3a444362577d6b6a3d22e66104e",
+        "record_0000000002.json": "103edefd52b0a32e9fa910056cd643d8933f3c3f74df52ee0d4d4e3a3337841e"
+      }
+    },
+    {
+      "name": "reopen",
+      "checks": [
+        "isolated profile and inactive Steam adapter",
+        "normal player flow is enabled in isolation",
+        "exact release executable passed startup identity verification",
+        "input slot has the exact last committed bytes",
+        "continue leaves the original slot bytes intact",
+        "ordinary continue mounts the saved world: ",
+        "restore returns the same paused campaign",
+        "Wu Song, Shi En, original duel outcome and the handover path restore exactly",
+        "legacy presentation starts without the new control and revised save restores exactly one",
+        "new process resumes the route without a duplicate or an obsolete terms button",
+        "Shi En reaches the original handover flag and claims the inn",
+        "the ending matches the chosen route and settles the correct optional seals once"
+      ],
+      "exit_code": 0,
+      "runtime_errors": [],
+      "source_commit": "94629f93de028aa96baf32450a18fcc883804376",
+      "exe_sha256": "4b70ae94de3074d4609ceb5b9d59ab07121bcae061b19aefadd4e89a5d55c7d6",
+      "log_sha256": "3dff56d63ab440e1150185b8cdc43f946bb6f6594363d82fa10358202ab163bc",
+      "slot_records_sha256": {
+        "record_0000000001.json": "2cbaf9a557b6bcd4f211d20f0f1a952c1b9ed3a444362577d6b6a3d22e66104e",
+        "record_0000000002.json": "103edefd52b0a32e9fa910056cd643d8933f3c3f74df52ee0d4d4e3a3337841e"
+      }
+    },
+    {
+      "name": "reject",
+      "checks": [
+        "isolated profile and inactive Steam adapter",
+        "normal player flow is enabled in isolation",
+        "exact release executable passed startup identity verification",
+        "input slot has the exact last committed bytes",
+        "continue leaves the original slot bytes intact",
+        "completed local battle cannot be opened again"
+      ],
+      "exit_code": 0,
+      "runtime_errors": [],
+      "source_commit": "94629f93de028aa96baf32450a18fcc883804376",
+      "exe_sha256": "4b70ae94de3074d4609ceb5b9d59ab07121bcae061b19aefadd4e89a5d55c7d6",
+      "log_sha256": "3ac3f6d57ae7c59421393cdc0d58db1879b089b788cb597da4b92fa882e7bfdc",
+      "slot_records_sha256": {
+        "record_0000000001.json": "2cbaf9a557b6bcd4f211d20f0f1a952c1b9ed3a444362577d6b6a3d22e66104e",
+        "record_0000000002.json": "103edefd52b0a32e9fa910056cd643d8933f3c3f74df52ee0d4d4e3a3337841e"
+      }
+    },
+    {
+      "name": "direct",
+      "checks": [
+        "isolated profile and inactive Steam adapter",
+        "normal player flow is enabled in isolation",
+        "exact release executable passed startup identity verification",
+        "input slot has the exact last committed bytes",
+        "continue leaves the original slot bytes intact",
+        "ordinary continue mounts the saved world: ",
+        "restore returns the same paused campaign",
+        "Wu Song, Shi En, original duel outcome and the handover path restore exactly",
+        "legacy presentation starts without the new control and revised save restores exactly one",
+        "original pre-handover checkpoint has no shortcut yet",
+        "normal resume puts both one-click choices at the top of the task panel",
+        "choosing direct handover only orders Shi En",
+        "normal Stop cancels the handover before arrival",
+        "clicking the handover after Stop issues a new normal move",
+        "Shi En reaches the original handover flag and claims the inn",
+        "the ending matches the chosen route and settles the correct optional seals once"
+      ],
+      "exit_code": 0,
+      "runtime_errors": [],
+      "source_commit": "94629f93de028aa96baf32450a18fcc883804376",
+      "exe_sha256": "4b70ae94de3074d4609ceb5b9d59ab07121bcae061b19aefadd4e89a5d55c7d6",
+      "log_sha256": "73c5116dd9385b618d18d50f902f9ccb6e18b0eb7ade9d2d37553681ebdf6820",
+      "slot_records_sha256": {
+        "record_0000000001.json": "2cbaf9a557b6bcd4f211d20f0f1a952c1b9ed3a444362577d6b6a3d22e66104e"
+      }
+    }
+  ],
+  "button_languages": [
+    {
+      "labels": [
+        "让武松说清条件",
+        "让施恩接店"
+      ],
+      "language": "zh_CN"
+    },
+    {
+      "labels": [
+        "讓武松說清條件",
+        "讓施恩接店"
+      ],
+      "language": "zh_TW"
+    },
+    {
+      "labels": [
+        "Send Wu Song to Set Terms",
+        "Send Shi En to Reclaim the Inn"
+      ],
+      "language": "en"
+    },
+    {
+      "labels": [
+        "武松に条件を伝えさせる",
+        "施恩に店を取り戻させる"
+      ],
+      "language": "ja"
+    }
+  ],
+  "viewport": [
+    960,
+    540
+  ],
+  "notified_and_handed_over": {
+    "progress": {
+      "best_done": 2,
+      "best_goal_ids": [
+        "signature_fists",
+        "spare_and_restore"
+      ],
+      "cleared": true,
+      "contract_version": 2,
+      "story_complete": false,
+      "story_total": 4
+    },
+    "seconds_after_continue": 6.13333333333319
+  },
+  "direct_handover": {
+    "progress": {
+      "best_done": 1,
+      "best_goal_ids": [
+        "signature_fists"
+      ],
+      "cleared": true,
+      "contract_version": 2,
+      "story_complete": false,
+      "story_total": 4
+    },
+    "seconds_after_click": 6.53333333333341
+  },
+  "terminal": {
+    "old_slot": "LOCAL_RUN_TERMINAL",
+    "progress_sha256": "b16ed1f51914c75c4627880378501fcde9a0362b345941423f38498ec64cdc0f"
+  },
+  "localization": {
+    "new_entries": 10,
+    "strict_catalog_rebuild": true
+  },
+  "pending": [
+    "Human first play and operation perception",
+    "Steam foreground and real cloud acceptance for this candidate"
+  ]
+}
