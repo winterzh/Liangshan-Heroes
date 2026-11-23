@@ -1,0 +1,386 @@
+{
+  "source_commit": "97eab51a6f8bbdb825fb7c6bd47292c4d37dbd74",
+  "exe_sha256": "a808d75808cb7a4206d977b74a019acc29efad4a3acc469dc4ba01dd199ff9d5",
+  "scope": "Exact local Windows candidate, compatibility renderer, independent offline player admission, two real Save and Exit and Continue checkpoints in separate processes. Normal production commands at 4x simulation speed, without changing actor health or resources. Steam startup was disabled before the game initialized, then the real player admission gate was exercised with the native Steam adapter still offline.",
+  "renderer": "gl_compatibility",
+  "viewport": [
+    1440,
+    900
+  ],
+  "time_scale": 4,
+  "witnesses": [
+    {
+      "checks": 10,
+      "facts": {
+        "checkpoint": {
+          "abandoned": false,
+          "capture_lost": false,
+          "capture_person": "",
+          "capture_ship": "",
+          "carried_person": "刘唐",
+          "carrier": "29",
+          "clock": 356.883333333318,
+          "core_ready": false,
+          "events": [
+            "action:gao_rts:gao_fire_1",
+            "action:gao_rts:gao_lure_side",
+            "action:gao_rts:gao_prepare",
+            "action:gao_rts:gao_wind",
+            "fireboat_prepared",
+            "fleet_in_ambush",
+            "gao_fire_lit",
+            "gao_land_cleared",
+            "gao_land_post_destroyed",
+            "gongsun_wind",
+            "liu_tang_fire_leader"
+          ],
+          "fireboat": "32",
+          "fireboat_outcome": "retreated",
+          "flagship_disabled": false,
+          "flames": [
+            {
+              "caster": "32",
+              "pos": [
+                1252.16784667969,
+                1278.58862304688
+              ],
+              "radius": 230.0,
+              "remaining": 7.46666666666667,
+              "tick": 0.466666666666667
+            }
+          ],
+          "gold": 1167,
+          "ignited": true,
+          "landed": false,
+          "liu": "6",
+          "liu_outcome": "embarked",
+          "port_sealed": false,
+          "prisoner": "",
+          "recovered": false,
+          "waves": [
+            {
+              "sent": true,
+              "time": 140.0,
+              "warned": true
+            },
+            {
+              "sent": true,
+              "time": 330.0,
+              "warned": true
+            },
+            {
+              "sent": false,
+              "time": 540.0,
+              "warned": false
+            }
+          ],
+          "wood": 383
+        },
+        "checkpoint_kind": "fire",
+        "generation": 1,
+        "identity": "source-v1:957422aa0226cfdbbb3a06b30ba887585fa174fcf803a3fa9078ed56a8806808",
+        "result_code": ""
+      },
+      "failures": [],
+      "stage": "save_fire",
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [
+        "WARNING: 2D MSAA is not yet supported for GLES3."
+      ],
+      "log_sha256": "60e34286a2fc5d2a7589730c04c2c20d5f37c41a70e1cdc85e919c99472c55b0"
+    },
+    {
+      "checks": 18,
+      "facts": {
+        "checkpoint": {
+          "abandoned": false,
+          "capture_lost": false,
+          "capture_person": "高俅",
+          "capture_ship": "31",
+          "carried_person": "",
+          "carrier": "",
+          "clock": 504.949999999976,
+          "core_ready": true,
+          "events": [
+            "action:gao_rts:gao_fire_1",
+            "action:gao_rts:gao_fire_withdraw",
+            "action:gao_rts:gao_liu_return",
+            "action:gao_rts:gao_lure_side",
+            "action:gao_rts:gao_prepare",
+            "action:gao_rts:gao_scuttle",
+            "action:gao_rts:gao_seal",
+            "action:gao_rts:gao_wind",
+            "fire_escort_safe",
+            "fireboat_prepared",
+            "flagship_disabled",
+            "flagship_scuttled",
+            "fleet_in_ambush",
+            "gao_fire_lit",
+            "gao_land_cleared",
+            "gao_land_post_destroyed",
+            "gao_liu_returned",
+            "gao_sea_post_destroyed",
+            "gongsun_wind",
+            "liu_tang_fire_leader",
+            "port_sealed"
+          ],
+          "fireboat": "32",
+          "fireboat_outcome": "retreated",
+          "flagship_disabled": true,
+          "flames": [],
+          "gold": 2259,
+          "ignited": true,
+          "landed": false,
+          "liu": "6",
+          "liu_outcome": "",
+          "port_sealed": true,
+          "prisoner": "",
+          "recovered": true,
+          "waves": [
+            {
+              "sent": true,
+              "time": 140.0,
+              "warned": true
+            },
+            {
+              "sent": true,
+              "time": 330.0,
+              "warned": true
+            },
+            {
+              "sent": false,
+              "time": 540.0,
+              "warned": false
+            }
+          ],
+          "wood": 552
+        },
+        "checkpoint_kind": "capture",
+        "generation": 2,
+        "identity": "source-v1:957422aa0226cfdbbb3a06b30ba887585fa174fcf803a3fa9078ed56a8806808",
+        "result_code": "",
+        "returned_liu": "6"
+      },
+      "failures": [],
+      "stage": "advance",
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [
+        "WARNING: 2D MSAA is not yet supported for GLES3."
+      ],
+      "log_sha256": "554bcf6249dbbf838a3c7646227c2d462f41a0f48395bcce788f00e96835e31a"
+    },
+    {
+      "checks": 28,
+      "facts": {
+        "campaign_record": {
+          "best_done": 4,
+          "best_goal_ids": [
+            "gao_lure",
+            "gao_fire",
+            "gao_land",
+            "gao_capture"
+          ],
+          "cleared": true,
+          "contract_version": 3,
+          "story_complete": true,
+          "story_total": 4
+        },
+        "capture_ship": "31",
+        "checkpoint_kind": "capture",
+        "debrief": [
+          {
+            "language": "zh_CN",
+            "outcomes": [
+              "火攻 · 举火并完成接应撤离",
+              "座船 · 已失去战力",
+              "押俘 · 已押抵忠义堂"
+            ],
+            "title": "旗开得胜！"
+          },
+          {
+            "language": "zh_TW",
+            "outcomes": [
+              "火攻 · 舉火並完成接應撤離",
+              "座船 · 已失去戰力",
+              "押俘 · 已押抵忠義堂"
+            ],
+            "title": "旗開得勝！"
+          },
+          {
+            "language": "en",
+            "outcomes": [
+              "Fire attack · Fire lit and escort evacuation completed",
+              "Flagship · Disabled",
+              "Prisoner escort · Escorted to Loyalty Hall"
+            ],
+            "title": "Victory!"
+          },
+          {
+            "language": "ja",
+            "outcomes": [
+              "火攻め · 点火し援護船の撤退も完了",
+              "旗艦 · 戦闘不能",
+              "捕虜の護送 · 忠義堂まで護送済み"
+            ],
+            "title": "勝利！"
+          }
+        ],
+        "game_seconds_at_result": 554.683333333343,
+        "identity": "source-v1:957422aa0226cfdbbb3a06b30ba887585fa174fcf803a3fa9078ed56a8806808",
+        "landed_prisoner": "145",
+        "live": {
+          "buildings_started": 5,
+          "camp_hp": 1500.0,
+          "enemy_paid_produced": [
+            10,
+            4
+          ],
+          "enemy_spent_gold": 607,
+          "enemy_spent_wood": 358,
+          "events": [
+            "action:gao_rts:gao_lure_side",
+            "action:gao_rts:gao_wind",
+            "gongsun_wind",
+            "fleet_in_ambush",
+            "action:gao_rts:gao_prepare",
+            "liu_tang_fire_leader",
+            "fireboat_prepared",
+            "gao_land_post_destroyed",
+            "action:gao_rts:gao_fire_1",
+            "gao_land_cleared",
+            "gao_fire_lit",
+            "action:gao_rts:gao_fire_withdraw",
+            "fire_escort_safe",
+            "action:gao_rts:gao_liu_return",
+            "gao_liu_returned",
+            "gao_sea_post_destroyed",
+            "flagship_disabled",
+            "action:gao_rts:gao_seal",
+            "port_sealed",
+            "action:gao_rts:gao_scuttle",
+            "flagship_scuttled",
+            "action:gao_rts:gao_land",
+            "gao_landed",
+            "gao_captured"
+          ],
+          "game_seconds": 554.949999999976,
+          "orders": 854,
+          "result": {
+            "contract_version": 3,
+            "core_cleared": true,
+            "core_goal": "守住忠义堂和宋江，击退三批水陆主力，打停高俅座船。可直接收兵通关；生擒并押回堂前是可选演义目标。",
+            "done_ids": [
+              "gao_lure",
+              "gao_fire",
+              "gao_land",
+              "gao_capture"
+            ],
+            "goals": [
+              {
+                "id": "gao_lure",
+                "label": "阮小七引活官船进入港汊伏区",
+                "note": "",
+                "reason": "",
+                "state": "done"
+              },
+              {
+                "id": "gao_fire",
+                "label": "公孙胜祭风、刘唐登船举火，护两艘接应船撤离",
+                "note": "",
+                "reason": "",
+                "state": "done"
+              },
+              {
+                "id": "gao_land",
+                "label": "击退岸军并拔除山前补给营",
+                "note": "",
+                "reason": "",
+                "state": "done"
+              },
+              {
+                "id": "gao_capture",
+                "label": "封港凿船、水上接俘、返航后实际押至忠义堂",
+                "note": "",
+                "reason": "",
+                "state": "done"
+              }
+            ],
+            "missed_ids": [],
+            "pending_ids": [],
+            "story_complete": true,
+            "story_done": 4,
+            "story_total": 4
+          },
+          "skill_orders": 17,
+          "story_phase": "escort",
+          "units_queued": 56,
+          "units_queued_by_key": {
+            "liang_dao": 12.0,
+            "liang_gong": 13.0,
+            "liang_qiang": 15.0,
+            "liangshan_warship": 13.0,
+            "lou_luo": 3.0
+          }
+        },
+        "progress_sha": "7a4e73ac4ffc3c9d50f59691ce921057db2370f65304f55857dd348644ead2a2",
+        "result_code": ""
+      },
+      "failures": [],
+      "stage": "resume",
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [
+        "WARNING: 2D MSAA is not yet supported for GLES3."
+      ],
+      "log_sha256": "f0509b02fc077408f9f0ec68ebba0b4b0471e2edc09ce1db96e9ba4c08f3e894"
+    },
+    {
+      "checks": 7,
+      "facts": {
+        "checkpoint_kind": "fire",
+        "identity": "source-v1:957422aa0226cfdbbb3a06b30ba887585fa174fcf803a3fa9078ed56a8806808",
+        "progress_sha": "7a4e73ac4ffc3c9d50f59691ce921057db2370f65304f55857dd348644ead2a2",
+        "terminal_code": "LOCAL_RUN_TERMINAL"
+      },
+      "failures": [],
+      "stage": "reject",
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [
+        "WARNING: 2D MSAA is not yet supported for GLES3."
+      ],
+      "log_sha256": "100a57313b93f661f42e210e522529f65bf8210ecb696091673c42d60853c637"
+    }
+  ],
+  "four_locales_with_real_debrief": [
+    "zh_CN",
+    "zh_TW",
+    "en",
+    "ja"
+  ],
+  "disk_verification": {
+    "slot_generations": [
+      1,
+      2
+    ],
+    "local_lifecycle_generations": [
+      1,
+      2,
+      3
+    ],
+    "old_slot_and_original_lifecycle_unchanged": true,
+    "same_run_binding": true,
+    "one_applied_local_victory": true,
+    "progress_unchanged_after_reject": true,
+    "original_fire_slot_sha256": "2ea872a77a85f1e89c4d37048024175679bab75858b2c2d5974dd1f99d91ceb6",
+    "prisoner_slot_sha256": "6f6225e513a6067500cf8b350955a1dfb3ba46b42ad888bd52e9bec08d70b71a",
+    "confirmed_progress_sha256": "7a4e73ac4ffc3c9d50f59691ce921057db2370f65304f55857dd348644ead2a2"
+  },
+  "test_setup": {
+    "resumed_byte_identical_fire_slot_copy": true,
+    "second_save_confirmed_in_the_actual_overwrite_dialog": true
+  },
+  "independent_processes": 4
+}
