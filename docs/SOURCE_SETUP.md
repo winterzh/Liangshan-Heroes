@@ -2,7 +2,7 @@
 
 连环马完整演义在现有 Windows 1ccb8af6 包通过。使用普通玩家保存与继续接口，维持原关卡状态和运行身份。 [Windows 验收收据](../qa/campaign_cavalry_escort_20261116/windows_lianhuanma_all_four_seals_1ccb8af6.json)
 
-当前 Windows 离线试玩候选为 `1ccb8af6`。解压后运行 `Start Local Playtest.cmd`。梁山布景沿用原像素验证及缓存，加载时按完成批次交还绘制。 [Windows 进场验收](../qa/battle_entry_timing_20261116/windows_liangshan_loading_calibration_1ccb8af6.json)
+当前 Windows 离线试玩候选为 `bf99bd12`。解压后运行 `Start Local Playtest.cmd`。连环马南侧绕行沿用原有移动队列及存档格式，候选从正式版生成的本地旧档已完成在途保存和独立重开。 [Windows 验收收据](../qa/campaign_cavalry_escort_20261116/windows_lianhuanma_southern_siege_bf99bd12.json)
 
 前一 Windows 离线试玩候选为 `94629f93`。解压后双击 `Start Local Playtest.cmd`，用同一编号继续。快活林复用任务按钮白名单、普通移动命令与原到场办理。 [Windows 验收收据](../qa/campaign_counter_window_20261116/windows_shop_handover_94629f93.json)
 

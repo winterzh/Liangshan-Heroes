@@ -2,7 +2,7 @@
 
 ## 当前 Windows 离线试玩准备
 
-验收新版战役使用 Windows 本地候选 `1ccb8af6`。把试玩 ZIP 完整解压，双击 `Start Local Playtest.cmd`，按分配的 1、2 或 3。每个编号都有独立离线档案。暂停菜单可保存并退出，同一编号重启后可从主菜单继续。 [本地包目录](DIRECTORY_INDEX.md) · [Windows 进场验收](../qa/battle_entry_timing_20261116/windows_liangshan_loading_calibration_1ccb8af6.json)
+验收新版战役使用 Windows 本地候选 `bf99bd12`。把试玩 ZIP 完整解压，双击 `Start Local Playtest.cmd`，按分配的 1、2 或 3。每个编号都有独立离线档案。暂停菜单可保存并退出，同一编号重启后可从主菜单继续。 [本地包目录](DIRECTORY_INDEX.md) · [Windows 连环马验收](../qa/campaign_cavalry_escort_20261116/windows_lianhuanma_southern_siege_bf99bd12.json)
 
 交给试玩者时只需提供这一个 ZIP，内含发行文件、启动器和本地试玩说明。首次体验使用空白编号，重玩由原编号开新战役。
 

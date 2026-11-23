@@ -1,0 +1,432 @@
+{
+  "scenario": "大破连环马 · PC 投石车南侧绕行",
+  "scope": {
+    "platform": "Windows 4.6.3 native game binaries",
+    "old_build": 26752476,
+    "test_environment": "Isolated Windows desktop and local offline profile. Normal menu, pause, save and continue. Automated in-game commands and viewport mouse/key events. The command trial ran at normal speed, the campaign playthrough was accelerated.",
+    "real_mouse_used": false,
+    "human_playtest_verified": false,
+    "steam_cloud_verified": false
+  },
+  "checks": 104,
+  "stages": {
+    "old-save": {
+      "checks": 20,
+      "facts": {
+        "game_seconds": 291.683333333322,
+        "hook_orders": 12,
+        "paid_orders": 34,
+        "ready_catapults": 2,
+        "riders": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            "46",
+            0.0,
+            1149.83703613281,
+            1364.08422851563,
+            "broken",
+            true
+          ],
+          [
+            "47",
+            0.0,
+            1149.43811035156,
+            1409.75305175781,
+            "broken",
+            true
+          ]
+        ],
+        "slot_sha256": "588bf8263181bc04d046b1544085ffa0179b3667b7220e320cc4e422075ea33b"
+      },
+      "failures": [],
+      "stage": "old-save",
+      "source_commit": "0f13370905b8b16937135510c8cc469998b39b99",
+      "executable_sha256": "fae95050c553dfd691e3beebca3eef7dd1d7490dfebf6e99fa50d310456b91a6",
+      "slots": {
+        "record_0000000001.json": "588bf8263181bc04d046b1544085ffa0179b3667b7220e320cc4e422075ea33b"
+      },
+      "pack_files_verified": 6,
+      "runtime_errors": [],
+      "log_sha256": "5089e19821f649d04f75d3c4f2c08bdf5bd7ede50bd95840d2d34d87693bb5e6",
+      "passed": [
+        "isolated profile using the normal offline player option",
+        "ordinary campaign admission, private QA disabled",
+        "exact native executable verified",
+        "Start Campaign exists in the real menu",
+        "real Lianhuanma sortie button is available",
+        "actual menu starts the ordinary level-four battle",
+        "Xu Ning walks to the flag and sets the real drill rider",
+        "the ordinary spearman approaches and draws the practice rider in",
+        "the lure moves around the occupied lane before retreating west",
+        "the spearman walks back far enough to count as a real retreat",
+        "Xu Ning and one hook soldier reach the real melee area",
+        "two actual attacking partners subdue the drill rider after lure and withdrawal",
+        "all twelve original riders remain in their proper pre-wave battle",
+        "ordinary production paid for at least one hook soldier during the drill",
+        "published build broke all riders, with camp and Han still active",
+        "ordinary training produced two idle catapults",
+        "old binary has no new control",
+        "ordinary visible SaveAndExit control",
+        "ordinary player pause writes generation one",
+        "isolated handoff proof is writable"
+      ]
+    },
+    "migrate": {
+      "checks": 31,
+      "facts": {
+        "generation": 2,
+        "labels": {
+          "en": "Flank South with Catapults",
+          "ja": "投石車を南から迂回",
+          "zh_CN": "投石车绕南侧",
+          "zh_TW": "投石車繞南側"
+        },
+        "normal_right_click_redirect": true,
+        "queued_cells": [
+          [
+            22,
+            43
+          ],
+          [
+            30,
+            57
+          ],
+          [
+            43,
+            58
+          ],
+          [
+            55,
+            58
+          ],
+          [
+            60,
+            46
+          ],
+          [
+            61,
+            40
+          ]
+        ],
+        "riders": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "slot_sha256": "dd9dcc2e141eea176504fecdff75f3b86489bc7a90c646af29c9f0160253c8fd",
+        "viewport": [
+          1280.0,
+          720.0
+        ],
+        "window_pixels": [
+          960,
+          540
+        ]
+      },
+      "failures": [],
+      "stage": "migrate",
+      "source_commit": "bf99bd12bf88a641579d1a7e00f3beaeeea26824",
+      "executable_sha256": "34fbdb9fec2cad6a50a03a85d15530a352e0775f0aa67138f58cb9b7d1369b74",
+      "slots": {
+        "record_0000000001.json": "588bf8263181bc04d046b1544085ffa0179b3667b7220e320cc4e422075ea33b",
+        "record_0000000002.json": "dd9dcc2e141eea176504fecdff75f3b86489bc7a90c646af29c9f0160253c8fd"
+      },
+      "pack_files_verified": 6,
+      "runtime_errors": [],
+      "log_sha256": "8ed6cf6f39366d64fb63674672981f702bf748fc5373812234eaa2125c70a2c1",
+      "passed": [
+        "isolated profile using the normal offline player option",
+        "normal offline startup option",
+        "ordinary campaign admission, private QA disabled",
+        "exact native executable verified",
+        "ready slot has the exact saved bytes",
+        "ordinary visible ContinueBattle control",
+        "Continue preserves the exact committed slot bytes",
+        "original battle restores: ",
+        "economy, player army, cavalry outcomes, events and wave timers restore",
+        "official battle still has twelve broken riders and an active camp",
+        "published checkpoint originally has no new control",
+        "the old save gains the new button and retains Han's optional goal",
+        "visible at 960x540 with localized label and tooltip in zh_CN",
+        "visible at 960x540 with localized label and tooltip in zh_TW",
+        "visible at 960x540 with localized label and tooltip in en",
+        "visible at 960x540 with localized label and tooltip in ja",
+        "the published save restored both real catapults",
+        "ordinary terrain order puts the other catapult to work",
+        "one viewport click queues the full south route for the idle catapult",
+        "idle fallback leaves the busy catapult, other troops, selection and camera alone",
+        "repeating the click keeps active paths and order serials",
+        "an explicitly selected catapult can replace its own order independently",
+        "ordinary S cancels exactly the selected catapult's route",
+        "the stopped catapult can rejoin with one click",
+        "ordinary right-click redirects only the selected catapult during the march",
+        "both catapults can still take the south route after a manual detour",
+        "both real catapults continue moving with saved legs before exiting",
+        "ordinary visible SaveAndExit control",
+        "ordinary player pause writes expected slot generation",
+        "previous committed bytes, run identity and original world provenance remain bound",
+        "isolated handoff proof is writable"
+      ]
+    },
+    "reopen": {
+      "checks": 16,
+      "facts": {
+        "attack_orders": 194,
+        "camp_hp_before_attack": 1500.0,
+        "march_game_seconds": 132.666666666659,
+        "progress": {
+          "best_done": 4,
+          "best_goal_ids": [
+            "lhm_training",
+            "lhm_hooks",
+            "lhm_han",
+            "lhm_hu"
+          ],
+          "cleared": true,
+          "contract_version": 2,
+          "story_complete": true,
+          "story_total": 4
+        },
+        "progress_sha256": "84506f7782ac715b3d620eb0c0e94d413f73ff09b8ee487767c99b8e825a114b",
+        "routes": [
+          {
+            "arrived": true,
+            "east": true,
+            "endpoint_distance": 19.5826683044434,
+            "hp": 221.166666666662,
+            "south": true,
+            "through_center": false
+          },
+          {
+            "arrived": true,
+            "east": true,
+            "endpoint_distance": 1.97690546512604,
+            "hp": 224.999999999999,
+            "south": true,
+            "through_center": false
+          }
+        ],
+        "terminal_camp_alive": true,
+        "victory_clock": 493.633333333308
+      },
+      "failures": [],
+      "stage": "reopen",
+      "source_commit": "bf99bd12bf88a641579d1a7e00f3beaeeea26824",
+      "executable_sha256": "34fbdb9fec2cad6a50a03a85d15530a352e0775f0aa67138f58cb9b7d1369b74",
+      "slots": {
+        "record_0000000001.json": "588bf8263181bc04d046b1544085ffa0179b3667b7220e320cc4e422075ea33b",
+        "record_0000000002.json": "dd9dcc2e141eea176504fecdff75f3b86489bc7a90c646af29c9f0160253c8fd"
+      },
+      "pack_files_verified": 6,
+      "runtime_errors": [],
+      "log_sha256": "7682bf897570dc2fabc9f658ecc3ab55f9b4640dfe5ca363f5c19d54111a68a4",
+      "passed": [
+        "isolated profile using the normal offline player option",
+        "normal offline startup option",
+        "ordinary campaign admission, private QA disabled",
+        "exact native executable verified",
+        "ready slot has the exact saved bytes",
+        "ordinary visible ContinueBattle control",
+        "Continue preserves the exact committed slot bytes",
+        "original battle restores: ",
+        "economy, player army, cavalry outcomes, events and wave timers restore",
+        "official battle still has twelve broken riders and an active camp",
+        "the saved presentation restored the installed mission control",
+        "both active targets, queues, paths, cursors and positions restore exactly",
+        "both restored catapults travel the south edge and reach the eastern staging point without crossing the enemy front",
+        "the movement order holds outside camp engagement and leaves Han's optional goal available",
+        "real infantry captures Han, then explicit siege orders break the camp and Huyan Zhuo retreats",
+        "normal local terminal transaction grants all four story seals"
+      ]
+    },
+    "reject": {
+      "checks": 8,
+      "facts": {
+        "progress_sha256": "84506f7782ac715b3d620eb0c0e94d413f73ff09b8ee487767c99b8e825a114b",
+        "window_pixels": [
+          960,
+          540
+        ],
+        "unchanged_progress_bytes": true
+      },
+      "failures": [],
+      "stage": "reject",
+      "source_commit": "bf99bd12bf88a641579d1a7e00f3beaeeea26824",
+      "executable_sha256": "34fbdb9fec2cad6a50a03a85d15530a352e0775f0aa67138f58cb9b7d1369b74",
+      "slots": {
+        "record_0000000001.json": "588bf8263181bc04d046b1544085ffa0179b3667b7220e320cc4e422075ea33b",
+        "record_0000000002.json": "dd9dcc2e141eea176504fecdff75f3b86489bc7a90c646af29c9f0160253c8fd"
+      },
+      "pack_files_verified": 6,
+      "runtime_errors": [],
+      "log_sha256": "6bc07aaa911632e34c09c15e4d470812976806778fbe0862708e82e46a1f6ba8",
+      "passed": [
+        "isolated profile using the normal offline player option",
+        "normal offline startup option",
+        "ordinary campaign admission, private QA disabled",
+        "exact native executable verified",
+        "ready slot has the exact saved bytes",
+        "ordinary visible ContinueBattle control",
+        "Continue preserves the exact committed slot bytes",
+        "settled battle cannot be reopened"
+      ]
+    },
+    "initial-compatibility": {
+      "checks": 29,
+      "facts": {
+        "generation": 2,
+        "labels": {
+          "en": "Flank South with Catapults",
+          "ja": "投石車を南から迂回",
+          "zh_CN": "投石车绕南侧",
+          "zh_TW": "投石車繞南側"
+        },
+        "queued_cells": [
+          [
+            22,
+            43
+          ],
+          [
+            30,
+            57
+          ],
+          [
+            43,
+            58
+          ],
+          [
+            55,
+            58
+          ],
+          [
+            60,
+            46
+          ],
+          [
+            61,
+            40
+          ]
+        ],
+        "riders": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "slot_sha256": "577b96b9104fccc81fc24842eddb651aee96cad5a710ac6dd95c948fc363ca82",
+        "viewport": [
+          1280.0,
+          720.0
+        ]
+      },
+      "failures": [],
+      "stage": "migrate",
+      "source_commit": "bf99bd12bf88a641579d1a7e00f3beaeeea26824",
+      "executable_sha256": "34fbdb9fec2cad6a50a03a85d15530a352e0775f0aa67138f58cb9b7d1369b74",
+      "slots": {
+        "record_0000000001.json": "588bf8263181bc04d046b1544085ffa0179b3667b7220e320cc4e422075ea33b",
+        "record_0000000002.json": "577b96b9104fccc81fc24842eddb651aee96cad5a710ac6dd95c948fc363ca82"
+      },
+      "pack_files_verified": 6,
+      "runtime_errors": [],
+      "log_sha256": "ddfd53cac47f8fe27784d25037bdf06b218d3d6fd46440090d468654087549e8",
+      "passed": [
+        "isolated profile using the normal offline player option",
+        "normal offline startup option",
+        "ordinary campaign admission, private QA disabled",
+        "exact native executable verified",
+        "ready slot has the exact saved bytes",
+        "ordinary visible ContinueBattle control",
+        "Continue preserves the exact committed slot bytes",
+        "original battle restores: ",
+        "economy, player army, cavalry outcomes, events and wave timers restore",
+        "official battle still has twelve broken riders and an active camp",
+        "published checkpoint originally has no new control",
+        "the old save gains the new button and retains Han's optional goal",
+        "visible at 960x540 with localized label and tooltip in zh_CN",
+        "visible at 960x540 with localized label and tooltip in zh_TW",
+        "visible at 960x540 with localized label and tooltip in en",
+        "visible at 960x540 with localized label and tooltip in ja",
+        "the published save restored both real catapults",
+        "ordinary terrain order puts the other catapult to work",
+        "one viewport click queues the full south route for the idle catapult",
+        "idle fallback leaves the busy catapult, other troops, selection and camera alone",
+        "repeating the click keeps active paths and order serials",
+        "an explicitly selected catapult can replace its own order independently",
+        "ordinary S cancels exactly the selected catapult's route",
+        "the stopped catapult can rejoin with one click",
+        "both real catapults continue moving with saved legs before exiting",
+        "ordinary visible SaveAndExit control",
+        "ordinary player pause writes expected slot generation",
+        "previous committed bytes, run identity and original world provenance remain bound",
+        "isolated handoff proof is writable"
+      ]
+    }
+  },
+  "candidate": {
+    "source_commit": "bf99bd12bf88a641579d1a7e00f3beaeeea26824",
+    "source_version": "source-v1:2c90b4fec4e80b0c2e398b7342a18b89d56947ae5ad212c6c4d040b4faca6883",
+    "import_and_export": [
+      {
+        "stage": "import",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 71.9
+      },
+      {
+        "stage": "export",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 98.6
+      }
+    ]
+  },
+  "archive": {
+    "name": "LiangshanHeroes_PC_Playtest_bf99bd12.zip",
+    "bytes": 1758395566,
+    "sha256": "6bba9d4d5b9e33f771ef6fb35bd0a7ba072701fab99d9e9d89ff8a84a8c62b0d",
+    "members_verified": 8
+  },
+  "launcher": {
+    "name": "Start Local Playtest.cmd",
+    "sha256": "91fc3b8fa84ec333c9c7bfa06c71496f50e2d9022cd6261cbfdb471e5102403a",
+    "argument": "--offline-playtest",
+    "profiles": [
+      "P01",
+      "P02",
+      "P03"
+    ],
+    "clean_archive_boot": {
+      "mode": "headless",
+      "exit": 0,
+      "errors": [],
+      "log_sha256": "a9912b85473f126d3f4f63ec824170c828df3473a292f866dde86cafda5b66da"
+    }
+  }
+}
