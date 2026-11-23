@@ -23,6 +23,8 @@ const FIRE_POINTS := [Vector2i(42,29),Vector2i(40,40)]
 const FIRE_ZONE_RADIUS := 230.0
 const PRISONER_ESCORT_RADIUS := 180.0
 const PRISONER_WAITING := "高俅正在等待岸军护卫。已下达的行军命令会保留。"
+const PRISONER_HANDOVER := HALL + Vector2i(0,4)
+const ESCORT_PROMPT := "高俅已上岸。点击「押送高俅回堂」调附近的一名空闲岸军同行，也可自行指挥。"
 const FIRE_SAFE := Vector2i(32,50)
 const SHIP_KEYS := ["ruan_xiaoqi_boat","ruan_xiaoer_boat","ruan_xiaowu_boat","zhang_shun_boat","liangshan_warship"]
 const OPENING_OBJECTIVE := "首批约140秒出发，后两批约330与540秒。岸军防东山关、舰队守内港；可出击拆两处补给，也可经营补兵接战。"
@@ -619,24 +621,71 @@ func on_mission_action(b,key: String,actor) -> void:
 			prisoner.setup_def=prisoner.setup_def.duplicate(true)
 			prisoner.setup_def["pop"]=0
 			prisoner.set_stance(Unit.STANCE_PASSIVE)
-			b.mission.mark("gao_landed","高俅已实际上岸。选中他和岸军一起返回忠义堂；落单会停下等待护卫。")
-			b.mission.add_map_locator(Localize.text("押俘终点 · 忠义堂前"),HALL+Vector2i(0,4))
+			var briefing := "高俅已实际上岸。选中他和岸军一起返回忠义堂；落单会停下等待护卫。" if b.hud.touch_ui else ESCORT_PROMPT
+			b.mission.mark("gao_landed",briefing)
+			b.mission.add_map_locator(Localize.text("押俘终点 · 忠义堂前"),PRISONER_HANDOVER)
+			_sync_prisoner_escort_button(b)
 func _capture_failed(b,reason: String) -> void:
 	if capture_lost: return
 	capture_lost=true
 	b.mission.mark("gao_escaped",reason+Localize.text("；仍可打停座船、击退三批主力取得基础通关。"))
 	for key in ["gao_seal","gao_scuttle","gao_land"]: b.mission.block_action(key,reason)
+	_sync_prisoner_escort_button(b)
 	if core_ready: _update_withdrawal_briefing(b)
+
+func _is_shore_guard(guard: Unit) -> bool:
+	return alive(guard) and guard.faction == Unit.FACTION_LIANG and guard.story_outcome == "" \
+		and not guard.is_building and not guard.is_worker and not guard.is_noncombat \
+		and not guard.garrisoned and not guard.is_captive and guard.movement_profile == "land"
 
 # The movement controller and task briefing use the same live shore guards.
 func prisoner_waiting_for_escort(b, unit: Unit) -> bool:
 	if unit != prisoner or not landed or capture_lost:
 		return false
 	return not b.units_near(unit.position, PRISONER_ESCORT_RADIUS).any(func(guard):
-		return guard != unit and alive(guard) and guard.faction == Unit.FACTION_LIANG \
-			and not guard.is_building and not guard.is_worker and not guard.is_noncombat \
-			and not guard.garrisoned and not guard.is_captive and guard.movement_profile == "land" \
-			and guard.position.distance_to(unit.position) < PRISONER_ESCORT_RADIUS)
+		return _is_shore_guard(guard) and guard.position.distance_to(unit.position) < PRISONER_ESCORT_RADIUS)
+
+func _sync_prisoner_escort_button(b) -> void:
+	var button: Button = b.mission.find_level_button("gao_escort")
+	if not landed or capture_lost or not alive(prisoner) or b.mission.has_event("gao_captured"):
+		if button != null: button.queue_free()
+	elif button == null and not b.hud.touch_ui:
+		button = b.mission.add_level_button("gao_escort", "押送高俅回堂", "派附近一名空闲岸军与高俅按编队速度走向忠义堂。")
+		button.get_parent().move_child(button, 0)
+		b.mission.set_guidance(ESCORT_PROMPT)
+
+func _order_prisoner_escort(b) -> void:
+	if not landed or capture_lost or not alive(prisoner) or b.mission.has_event("gao_captured") or not b._gameplay_rng_issue.is_empty():
+		return
+	var destination: Vector2 = b.map.cell_to_world(PRISONER_HANDOVER)
+	if prisoner._state == Unit.ST_MOVE and prisoner._home.distance_to(destination) < 100.0 \
+			and not prisoner_waiting_for_escort(b, prisoner):
+		b.mission.set_feedback("高俅正在押送途中。")
+		return
+	var guard: Unit
+	var closest := PRISONER_ESCORT_RADIUS
+	for candidate: Unit in b.units_near(prisoner.position, PRISONER_ESCORT_RADIUS):
+		if not _is_shore_guard(candidate) or candidate._state != Unit.ST_IDLE or candidate._target != null \
+				or not candidate._queue.is_empty() or candidate.stance == Unit.STANCE_HOLD or candidate._patrolling \
+				or candidate._action_queue_busy() or candidate.waiting_manual_mission_arrival():
+			continue
+		var distance := candidate.position.distance_to(prisoner.position)
+		if distance < closest:
+			guard = candidate
+			closest = distance
+	if guard == null:
+		b.center_camera_cell(b.map.world_to_cell(prisoner.position))
+		b.mission.set_feedback("附近没有空闲岸军。让一名岸军到高俅身边待命，再点押送。", 4.0)
+		return
+	var group := [guard, prisoner]
+	var targets: Array = b._formation_targets(group, destination)
+	var pace: float = b._group_speed_cap(group)
+	b._stamp_manual(group)
+	guard.order_move(targets[0], false, pace)
+	prisoner.order_move(targets[1], false, pace)
+	b.select_members(group, false)
+	Sfx.play("order")
+	b.mission.set_feedback("岸军已出发，正押送高俅回堂。")
 
 func _capture_completed(b) -> bool:
 	return not capture_lost and alive(prisoner) and b.mission.has_event("gao_captured") and not b.mission.has_event("gao_escaped")
@@ -650,8 +699,11 @@ func _update_withdrawal_briefing(b) -> void:
 	elif _capture_completed(b):
 		objective = "高俅已押抵忠义堂。点击「收兵通关」即可结算。"
 	elif landed:
-		objective = "高俅正在等待岸军。让护卫靠近后可继续押堂，也可直接收兵通关。" if prisoner_waiting_for_escort(b, prisoner) \
-			else "高俅已上岸。选中他和岸军，一同押到忠义堂前；也可直接收兵通关。"
+		if prisoner_waiting_for_escort(b, prisoner):
+			objective = "高俅正在等待岸军。让护卫靠近后可继续押堂，也可直接收兵通关。"
+		else:
+			objective = "高俅已上岸。选中他和岸军，一同押到忠义堂前；也可直接收兵通关。" if b.hud.touch_ui \
+				else "可点「押送高俅回堂」，也可直接收兵通关。"
 	elif recovered:
 		objective = "高俅已在张顺的小艇上。先护送小艇回主码头交接，再由岸军押堂；也可直接收兵通关。"
 	elif port_sealed:
@@ -752,11 +804,13 @@ func process(b,delta: float) -> void:
 			escort_warning=true
 		else:
 			escort_warning=false
-			if _near(b,prisoner,HALL+Vector2i(0,4),100) and not _enemy_near(b,prisoner.position,180):
+			if _near(b,prisoner,PRISONER_HANDOVER,100) and not _enemy_near(b,prisoner.position,180):
 				b.mission.mark("gao_captured","俘虏与护卫已实际抵忠义堂前。")
+				_sync_prisoner_escort_button(b)
 				if _core_threats_clear():
 					_finish(b)
 					return
+		_sync_prisoner_escort_button(b)
 	if _core_threats_clear() and not core_ready:
 		core_ready=true
 		end_button=b.mission.add_level_button("gao_end","收兵通关 · 已击退高俅")
@@ -764,6 +818,7 @@ func process(b,delta: float) -> void:
 		_update_withdrawal_briefing(b)
 func activate_mission_button(b, button_id: String) -> void:
 	if button_id == "gao_end": _finish(b)
+	elif button_id == "gao_escort": _order_prisoner_escort(b)
 func on_unit_resolved(b,u,outcome: String) -> void:
 	if u==flagship and outcome=="subdued":
 		flagship_disabled=true
