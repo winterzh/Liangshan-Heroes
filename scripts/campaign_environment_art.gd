@@ -6,6 +6,12 @@ extends RefCounted
 ## the active campaign level, and a missing or out-of-scope resource returns null.
 
 const FROZEN_MANIFEST_SHA256 := "162e74544989ce4b89e32db6d1562e10962a1d58fc1c3d39e30c83abdb9430cf"
+const GROUND_OVERLAY_ATLAS_PATH := "res://assets/campaign/environment/art_full_20260915/overlays.png"
+
+# Retain one shared texture after the first Windows sortie that draws it.
+# Godot otherwise drops the atlas when the last scenery node is freed.
+static var _ground_overlay_atlas: Texture2D
+
 const OBJECT_ROUTES: Dictionary = {
 	"kuaihuolin_stall_inn_a": {"levels":["level7"],"paths":{"default":"res://assets/campaign/environment/level7/stall_inn_a.png"}},
 	"kuaihuolin_stall_wine": {"levels":["level7"],"paths":{"default":"res://assets/campaign/environment/level7/stall_wine.png"}},
@@ -934,7 +940,12 @@ static func object(active_level_id: String, route_key: String,
 
 
 static func overlay(active_level_id: String, route_key: String) -> Texture2D:
-	return _load_texture(_route_path(OVERLAY_ROUTES, active_level_id, route_key))
+	var texture := _load_texture(_route_path(OVERLAY_ROUTES, active_level_id, route_key))
+	if _ground_overlay_atlas == null and OS.get_name() == "Windows" and texture is AtlasTexture:
+		var atlas: Texture2D = texture.atlas
+		if atlas != null and atlas.resource_path == GROUND_OVERLAY_ATLAS_PATH:
+			_ground_overlay_atlas = atlas
+	return texture
 
 
 static func static_flag(active_level_id: String, route_key: String) -> Texture2D:
