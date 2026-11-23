@@ -2,7 +2,7 @@
 
 ## 当前 Windows 离线试玩准备
 
-验收新版战役使用 Windows 本地候选 5256f8d3。把试玩 ZIP 完整解压，双击 `Start Local Playtest.cmd`，按分配的 1、2 或 3。每个编号都有独立离线档案。暂停菜单可保存并退出，同一编号重启后可从主菜单继续。 [Windows 大名府验收](../qa/campaign_wounded_selection_20261116/windows_daming_evacuation_5256f8d3.json)
+验收新版战役使用 Windows 本地候选 913ee3ec。把试玩 ZIP 完整解压，双击 `Start Local Playtest.cmd`，按分配的 1、2 或 3。每个编号都有独立离线档案。暂停菜单可保存并退出，同一编号重启后可从主菜单继续。 [Windows 黄泥冈验收](../qa/campaign_transport_groups_20261116/windows_loaded_cart_dispatch_913ee3ec.json)
 
 交给试玩者时只需提供这一个 ZIP，内含发行文件、启动器和本地试玩说明。首次体验使用空白编号，重玩由原编号开新战役。
 
