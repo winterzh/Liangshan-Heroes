@@ -10494,7 +10494,7 @@ func _recall_group(n: int) -> void:
 	_update_sel_label()
 	var now := Time.get_ticks_msec()
 	if _last_group_key == n and now - _last_group_time < 350:
-		_center_on(members)
+		_center_on(selection)
 	_last_group_key = n
 	_last_group_time = now
 
