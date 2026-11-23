@@ -1,0 +1,156 @@
+{
+  "scope": "Exact Windows payloads. Ordinary chapter and Fight buttons were clicked. The right-click movement check used in-game programmatic selection when the opening pointer test did not select its intended unit. Then the same observer arranges a mixed control group and a group with no selectable units. The fixture triggers actual Ctrl+number and number-key input through the isolated game viewport. Garrison and leave-garrison use the existing routines. Escaped status is a controlled boundary case. The new six-mode short run checks entry, simulation, cleanup and progress. It does not qualify long-run memory, the Steam client or physical input.",
+  "production_source_changes": [
+    "scripts/battle.gd"
+  ],
+  "group_camera_fixture_sha256": "d8f4a007c1b71bf307ab79aa07b2dceef18ec93ae496b66278e361ba76bd3573",
+  "cases": [
+    {
+      "source_commit": "9c2b299de9265a9a117a7be464152db4d75cedbb",
+      "condition": "old",
+      "native_payload_files_verified": 7,
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "c01259f89bd87d7cdecfc7ba0e88fde381ce89f22f577347268d85f720a5569c",
+      "log_sha256": "235c7e7e2e79d35c4e188df985ddc7f998ab397f07248532c643314e44f34884",
+      "trace_sha256": "391f7a883c1158c69a66c0f1936491e82c351529747fd074c78b144e79b10255",
+      "renderer": "vulkan",
+      "viewport": [
+        1280,
+        720
+      ],
+      "progress_unchanged": true,
+      "first_unit_selected_by_pointer": false,
+      "right_click_movement_issued": true,
+      "control_group": {
+        "first_press_only_selects": true,
+        "mixed_centers_onscreen_units": false,
+        "mixed_camera_actual": [
+          -42.6666870117188,
+          985.771606445313
+        ],
+        "mixed_camera_expected": [
+          -192.0,
+          596.0
+        ],
+        "empty_selection_keeps_camera": false,
+        "membership_preserved": true,
+        "unloaded_member_available_from_same_group": true,
+        "unloaded_group_center_correct": false
+      },
+      "launch_exit_code": 0
+    },
+    {
+      "source_commit": "7e7758561fe8b1001f7400c22bcaa1c170280331",
+      "condition": "fixed",
+      "native_payload_files_verified": 7,
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "837458fb835553fdab5f56fbd30a7262f0513ba369ddf2364a05b91b6c01f072",
+      "log_sha256": "8b361169d9e3695f24ea231d108445f7bf933d9e224002d2f3a091a98176b95a",
+      "trace_sha256": "a713ce92af98c42e4136b728d21eb1d41672ae5e8adc4e7794b813bcf6f402ae",
+      "renderer": "vulkan",
+      "viewport": [
+        1280,
+        720
+      ],
+      "progress_unchanged": true,
+      "first_unit_selected_by_pointer": false,
+      "right_click_movement_issued": true,
+      "control_group": {
+        "first_press_only_selects": true,
+        "mixed_centers_onscreen_units": true,
+        "mixed_camera_actual": [
+          -192.0,
+          596.0
+        ],
+        "mixed_camera_expected": [
+          -192.0,
+          596.0
+        ],
+        "empty_selection_keeps_camera": true,
+        "membership_preserved": true,
+        "unloaded_member_available_from_same_group": true,
+        "unloaded_group_center_correct": true
+      },
+      "launch_exit_code": 0
+    }
+  ],
+  "candidate_freeze": {
+    "kind": "local_integrated_windows_candidate",
+    "layout": "split_pck",
+    "commit": "7e7758561fe8b1001f7400c22bcaa1c170280331",
+    "source_version": "source-v1:05bcf76d3137509710c565d5c49c0f704ad18d45d77a768eb1af057eb3d53534",
+    "tracked_runtime_count": 6574,
+    "steps": [
+      {
+        "stage": "import",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 61.15
+      },
+      {
+        "stage": "export",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 86.4
+      }
+    ],
+    "files": [
+      {
+        "path": "GODOTSTEAM_LICENSE.txt",
+        "bytes": 1110,
+        "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+      },
+      {
+        "path": "LiangshanHeroes.exe",
+        "bytes": 104886784,
+        "sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4"
+      },
+      {
+        "path": "LiangshanHeroes.pck",
+        "bytes": 1722698156,
+        "sha256": "837458fb835553fdab5f56fbd30a7262f0513ba369ddf2364a05b91b6c01f072"
+      },
+      {
+        "path": "libgodotsteam.windows.template_release.x86_64.dll",
+        "bytes": 3961344,
+        "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+      },
+      {
+        "path": "steam_api64.dll",
+        "bytes": 319128,
+        "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+      },
+      {
+        "path": "steam_stats_reader.dll",
+        "bytes": 393728,
+        "sha256": "5a79a77b5b6e2cff21b285c785118352805a09d91876f89276af119ee1702517"
+      },
+      {
+        "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+        "bytes": 1093,
+        "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+      }
+    ]
+  },
+  "candidate_six_entry_smoke": {
+    "native_launcher": {
+      "candidate": "7e7758561fe8b1001f7400c22bcaa1c170280331",
+      "payload_files_unchanged": true,
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "837458fb835553fdab5f56fbd30a7262f0513ba369ddf2364a05b91b6c01f072",
+      "split_identity": "ed7443045f8665daf8d698115082dc57bc3c40e5d5e2768c252293890de43706",
+      "exe_unchanged": true,
+      "exit_code": 0,
+      "seconds": 84.115,
+      "errors": [],
+      "warnings": [],
+      "log_sha256": "529df7c0b68e6f78d47a05ccbdf8db01a008eee87f47b057ec0b443eb22264d2",
+      "report_sha256": "7887cb1c6043606506fb1f1f54dbd52585115e118780191a139c6f4316a61f03"
+    },
+    "actual_seconds": 76.047,
+    "transitions": 12,
+    "campaign_save_unchanged": true,
+    "activity_and_node_release_checks_passed": true,
+    "eligible_for_ten_minute_acceptance": false
+  }
+}
