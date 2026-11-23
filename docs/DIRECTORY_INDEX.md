@@ -1,6 +1,8 @@
 # 项目目录索引（2026-10-30）
 
-当前 Windows 离线试玩 ZIP 和构建收据位于 D:/AI项目/水浒/Windows候选/20261123-91ab70df/。同目录的「PC试玩」可直接启动。 [本地试玩与八章兼容收据](../qa/battle_entry_timing_20261116/windows_playtest_and_legacy_26752476_91ab70df.json)
+当前 Windows 离线试玩包位于 D:/AI项目/水浒/Windows候选/20261123-5256f8d3/。单个 ZIP 含发行文件、启动器和试玩说明，同目录的「PC试玩」可直接启动。 [Windows 大名府验收](../qa/campaign_wounded_selection_20261116/windows_daming_evacuation_5256f8d3.json)
+
+八章旧档整体验收的 Windows 离线试玩 ZIP 和构建收据位于 D:/AI项目/水浒/Windows候选/20261123-91ab70df/。同目录的「PC试玩」可直接启动。 [本地试玩与八章兼容收据](../qa/battle_entry_timing_20261116/windows_playtest_and_legacy_26752476_91ab70df.json)
 
 早期 Windows 离线试玩包 94d1e9a6 位于 `D:/AI项目/水浒/Windows候选/20261123-94d1e9a6/PC试玩/`。同一候选根目录含六文件 ZIP 和构建收据。[离线试玩包记录](../qa/battle_entry_timing_20261116/windows_playtest_package_94d1e9a6.json)
 

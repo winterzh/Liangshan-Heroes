@@ -1,0 +1,496 @@
+{
+  "source_commit": "5256f8d33451e49307458173a28aeaf889837c4c",
+  "previous_development_candidate_with_eight_chapter_windows_matrix": "91ab70df",
+  "published_baseline_build": 26752476,
+  "scope": "Windows PC only. Production EXEs on separate rendering desktops. A real direct assault in the published EXE is automated at four times speed to create the first slot. The candidate uses its ordinary offline UI with targeted viewport mouse inputs. The in-flight save resumes at the original checkpoint, and walking after it is automated at four times speed. A separate frozen on-map fixture exercises the blocked and partially reachable cases. No physical input, Steam account or cloud use.",
+  "localization": {
+    "changed": {
+      "送伤员出城": {
+        "zh_TW": "送傷員出城",
+        "en": "Evacuate the Wounded",
+        "ja": "負傷者を城外へ"
+      },
+      "已撤出%d/2。派战友清开退路，再点「送伤员出城」。前营须守住，不必扫清全城。": {
+        "zh_TW": "已撤出%d/2。派戰友清開退路，再點「送傷員出城」。前營須守住，不必掃清全城。",
+        "en": "%d/2 evacuated. Clear the escape route with your troops, then click Evacuate the Wounded. Keep the camp standing; you can leave the rest of the city alone.",
+        "ja": "%d/2人が脱出。味方に退路を確保させてから「負傷者を城外へ」を押します。前営を守れば、城内の敵を全滅させる必要はありません。"
+      },
+      "让仍待撤的伤员走向城外接应地。先派战友清开退路；可随时手动改令。": {
+        "zh_TW": "讓仍待撤的傷員走向城外接應地。先派戰友清開退路；可隨時手動改令。",
+        "en": "Send the remaining wounded toward the rendezvous outside the city. Clear the route first. You can change their orders at any time.",
+        "ja": "残っている負傷者を城外の合流地点へ向かわせます。先に味方で退路を確保しましょう。指示はいつでも変更できます。"
+      },
+      "伤员正在前往城外接应地。": {
+        "zh_TW": "傷員正在前往城外接應地。",
+        "en": "The wounded are already heading to the rendezvous.",
+        "ja": "負傷者は城外の合流地点へ移動中です。"
+      },
+      "退路还有可见守军。派战友清开，再下令撤离。": {
+        "zh_TW": "退路還有可見守軍。派戰友清開，再下令撤離。",
+        "en": "Guards are visible on the escape route. Clear them with your troops before ordering the evacuation.",
+        "ja": "退路に守備兵が見えます。味方で排除してから撤離を指示してください。"
+      },
+      "已派%d名伤员前往城外接应地。": {
+        "zh_TW": "已派%d名傷員前往城外接應地。",
+        "en": "Ordered %d wounded to head to the rendezvous.",
+        "ja": "負傷者%d人に城外の合流地点へ向かうよう指示しました。"
+      },
+      "已派出可撤伤员。另有伤员无法到达，请清开退路或手动改道。": {
+        "zh_TW": "已派出可撤傷員。另有傷員無法到達，請清開退路或手動改道。",
+        "en": "The wounded with a clear path are on their way. Clear the route or guide the others around the obstruction.",
+        "ja": "通行できる負傷者は移動を始めました。残りの負傷者の退路を確保するか、別の道を指示してください。"
+      },
+      "伤员暂时无法到达接应地。请清开退路或手动改道。": {
+        "zh_TW": "傷員暫時無法到達接應地。請清開退路或手動改道。",
+        "en": "The wounded cannot reach the rendezvous yet. Clear the route or guide them around the obstruction.",
+        "ja": "負傷者が合流地点にたどり着けません。退路を確保するか、別の道を指示してください。"
+      }
+    },
+    "languages": [
+      "zh_CN",
+      "zh_TW",
+      "en",
+      "ja"
+    ],
+    "strict_merge_entries": 5195
+  },
+  "candidate_build": {
+    "kind": "local_integrated_windows_candidate",
+    "commit": "5256f8d33451e49307458173a28aeaf889837c4c",
+    "source_version": "source-v1:3168f3b329a8e5d6702bfa0a14c945391f4f484118bc0e21994f49f26d2a1ad1",
+    "tracked_runtime_count": 6574,
+    "steps": [
+      {
+        "stage": "import",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 69.31
+      },
+      {
+        "stage": "export",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 124.16
+      }
+    ],
+    "files": [
+      {
+        "path": "GODOTSTEAM_LICENSE.txt",
+        "bytes": 1110,
+        "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+      },
+      {
+        "path": "LiangshanHeroes.exe",
+        "bytes": 1827547128,
+        "sha256": "d2ae6dc48b37d7835a93a252390d212be3549af673aec6927a78a43e7cc92844"
+      },
+      {
+        "path": "libgodotsteam.windows.template_release.x86_64.dll",
+        "bytes": 3961344,
+        "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+      },
+      {
+        "path": "steam_api64.dll",
+        "bytes": 319128,
+        "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+      },
+      {
+        "path": "steam_stats_reader.dll",
+        "bytes": 381440,
+        "sha256": "7505919cfff5907c13a02eb366690bff22ca6731c8521deefde58b114e4f796f"
+      },
+      {
+        "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+        "bytes": 1093,
+        "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+      }
+    ]
+  },
+  "live_campaign_checks": 56,
+  "terminal_probe_recheck": {
+    "first_log_sha256": "ad0730fdf932214e6744c51186529d1542c4e681aebbc88531062241604a881c",
+    "reason": "Initial test expected an unchanged order serial after the game's normal arrival calls order_stop. The replay checks that the original serial holds while moving and increments once at actual story retreat."
+  },
+  "stages": {
+    "old-save": {
+      "checks": 12,
+      "facts": {
+        "checkpoint": {
+          "clock": 256.883333333324,
+          "events": [
+            "action:daming_rts:daming_rescue",
+            "daming_early_unlock",
+            "daming_gate_breached",
+            "daming_gate_opened",
+            "daming_lu_safe",
+            "daming_post_0",
+            "daming_prison_breached",
+            "daming_prisoners_freed",
+            "daming_pursuit"
+          ],
+          "gate_open": true,
+          "gold": 194,
+          "hall": "1",
+          "lu": {
+            "home": [
+              961.992553710938,
+              1459.81323242188
+            ],
+            "hp": 360.0,
+            "id": "28",
+            "order": 19,
+            "outcome": "retreated",
+            "path": [],
+            "path_i": 0,
+            "position": [
+              961.992553710938,
+              1459.81323242188
+            ],
+            "state": 0
+          },
+          "prison_open": true,
+          "pursuers": [
+            "56",
+            "57",
+            "58",
+            "59",
+            "60",
+            "61"
+          ],
+          "pursuit_left": 0.0,
+          "pursuit_sent": true,
+          "rescued": true,
+          "shi": {
+            "home": [
+              624.0,
+              528.0
+            ],
+            "hp": 230.0,
+            "id": "29",
+            "order": 0,
+            "outcome": "",
+            "path": [],
+            "path_i": 0,
+            "position": [
+              624.0,
+              528.0
+            ],
+            "state": 0
+          },
+          "signaled": false,
+          "wood": 93
+        },
+        "generation": 1,
+        "slot_sha256": "400a4753f4074a164a419a4dd1d74d3487d42eb650c395b9bd67eb8bb822bab5"
+      },
+      "failures": [],
+      "stage": "old-save",
+      "exit_code": 0,
+      "errors": [],
+      "exe_sha256": "fae95050c553dfd691e3beebca3eef7dd1d7490dfebf6e99fa50d310456b91a6",
+      "log_sha256": "c349eb6f90d1ed6893282b562c12b26b824f7b2316a30d9633dd3522d861f2af",
+      "slots": {
+        "record_0000000001.json": "400a4753f4074a164a419a4dd1d74d3487d42eb650c395b9bd67eb8bb822bab5"
+      },
+      "checks_passed": [
+        "original Steam adapter is offline",
+        "previous release starts offline",
+        "ordinary Windows player save flow",
+        "running exact verified EXE",
+        "Start Campaign exists in the real menu",
+        "real Daming sortie button is available",
+        "ordinary sortie started Daming",
+        "paid troops actually take both doors and free both original prisoners",
+        "old published checkpoint has Lu safe and Shi waiting",
+        "normal pause menu save button",
+        "committed ordinary player save",
+        "save keeps the published run identity"
+      ]
+    },
+    "move-save": {
+      "checks": 23,
+      "facts": {
+        "checkpoint": {
+          "clock": 257.89999999999,
+          "events": [
+            "action:daming_rts:daming_rescue",
+            "daming_early_unlock",
+            "daming_gate_breached",
+            "daming_gate_opened",
+            "daming_lu_safe",
+            "daming_post_0",
+            "daming_post_1",
+            "daming_prison_breached",
+            "daming_prisoners_freed",
+            "daming_pursuit"
+          ],
+          "gate_open": true,
+          "gold": 194,
+          "hall": "1",
+          "lu": {
+            "home": [
+              961.992553710938,
+              1459.81323242188
+            ],
+            "hp": 360.0,
+            "id": "28",
+            "order": 19,
+            "outcome": "retreated",
+            "path": [],
+            "path_i": 0,
+            "position": [
+              961.992553710938,
+              1459.81323242188
+            ],
+            "state": 0
+          },
+          "prison_open": true,
+          "pursuers": [
+            "56",
+            "57",
+            "58",
+            "59",
+            "60",
+            "61"
+          ],
+          "pursuit_left": 0.0,
+          "pursuit_sent": true,
+          "rescued": true,
+          "shi": {
+            "home": [
+              976.0,
+              1584.0
+            ],
+            "hp": 230.0,
+            "id": "29",
+            "order": 1,
+            "outcome": "",
+            "path": [
+              [
+                624.0,
+                688.0
+              ],
+              [
+                944.0,
+                1168.0
+              ],
+              [
+                976.0,
+                1584.0
+              ]
+            ],
+            "path_i": 0,
+            "position": [
+              624.0,
+              552.684448242188
+            ],
+            "state": 1
+          },
+          "signaled": false,
+          "wood": 93
+        },
+        "checkpoint_differences": [],
+        "click_feedback": "已派1名伤员前往城外接应地。",
+        "generation": 2,
+        "slot_sha256": "d20cb10468033a958a8388ac745a3aed9e3c074d2cb4d545fa7e087e4cdb379d"
+      },
+      "failures": [],
+      "stage": "move-save",
+      "exit_code": 0,
+      "errors": [],
+      "exe_sha256": "d2ae6dc48b37d7835a93a252390d212be3549af673aec6927a78a43e7cc92844",
+      "log_sha256": "8833f5f15027470e17448d55b9b9ac51b1c2a9ab17b36b7c6bc0c5503cc86ab4",
+      "slots": {
+        "record_0000000001.json": "400a4753f4074a164a419a4dd1d74d3487d42eb650c395b9bd67eb8bb822bab5",
+        "record_0000000002.json": "d20cb10468033a958a8388ac745a3aed9e3c074d2cb4d545fa7e087e4cdb379d"
+      },
+      "checks_passed": [
+        "original Steam adapter is offline",
+        "ordinary offline launcher argument",
+        "ordinary Windows player save flow",
+        "running exact verified EXE",
+        "independent process opens the original run and slot",
+        "main menu has the real Continue Last Battle button",
+        "reading keeps slot bytes",
+        "real continue completes",
+        "paused battle restores original army identity, orders, economy and pursuit",
+        "published checkpoint has no new button in its saved UI",
+        "current shortcut appears first on continuing",
+        "shortcut is clickable in the 960 by 540 mission HUD",
+        "zh_CN label and tooltip",
+        "zh_TW label and tooltip",
+        "en label and tooltip",
+        "ja label and tooltip",
+        "one click gives only Shi Xiu a real path to the rendezvous",
+        "the already safe prisoner and escort orders, selection and camera remain",
+        "sending the order does not award evacuation",
+        "repeated click leaves the existing route intact",
+        "normal pause menu save button",
+        "committed ordinary player save",
+        "save keeps the published run identity"
+      ]
+    },
+    "finish": {
+      "checks": 13,
+      "facts": {
+        "checkpoint_differences": [],
+        "progress_sha256": "1c664222b2b7804380b17a9df572ab3d0a15152825672982e8014b1a024a0d32",
+        "record": {
+          "best_done": 0,
+          "best_goal_ids": [],
+          "cleared": true,
+          "contract_version": 2,
+          "story_complete": false,
+          "story_total": 3
+        },
+        "serial_after_story_stop": 2,
+        "serial_before_arrival": 1,
+        "travel_after_restore": 20.2666666666655
+      },
+      "failures": [],
+      "stage": "finish",
+      "exit_code": 0,
+      "errors": [],
+      "exe_sha256": "d2ae6dc48b37d7835a93a252390d212be3549af673aec6927a78a43e7cc92844",
+      "log_sha256": "0f8fd3b9dd3a47fcebfe4c61dba9a13bd7a858f8787482f7212afa8a73138979",
+      "slots": {
+        "record_0000000001.json": "400a4753f4074a164a419a4dd1d74d3487d42eb650c395b9bd67eb8bb822bab5",
+        "record_0000000002.json": "d20cb10468033a958a8388ac745a3aed9e3c074d2cb4d545fa7e087e4cdb379d"
+      },
+      "checks_passed": [
+        "original Steam adapter is offline",
+        "ordinary offline launcher argument",
+        "ordinary Windows player save flow",
+        "running exact verified EXE",
+        "independent process opens the original run and slot",
+        "main menu has the real Continue Last Battle button",
+        "reading keeps slot bytes",
+        "real continue completes",
+        "paused battle restores original army identity, orders, economy and pursuit",
+        "in-flight order and button survive restart",
+        "Shi Xiu walks on the saved order until the normal evacuation stop",
+        "natural assault victory with both original prisoners and no fire signal",
+        "original local run settles once with assault score 0/3"
+      ]
+    },
+    "reject": {
+      "checks": 8,
+      "facts": {
+        "code": "LOCAL_RUN_TERMINAL",
+        "progress_sha256": "1c664222b2b7804380b17a9df572ab3d0a15152825672982e8014b1a024a0d32"
+      },
+      "failures": [],
+      "stage": "reject",
+      "exit_code": 0,
+      "errors": [],
+      "exe_sha256": "d2ae6dc48b37d7835a93a252390d212be3549af673aec6927a78a43e7cc92844",
+      "log_sha256": "ea67577d4339b2fab8921d9716c8fe3899ad4868adf73747497f0f40ec6c11b6",
+      "slots": {
+        "record_0000000001.json": "400a4753f4074a164a419a4dd1d74d3487d42eb650c395b9bd67eb8bb822bab5",
+        "record_0000000002.json": "d20cb10468033a958a8388ac745a3aed9e3c074d2cb4d545fa7e087e4cdb379d"
+      },
+      "checks_passed": [
+        "original Steam adapter is offline",
+        "ordinary offline launcher argument",
+        "ordinary Windows player save flow",
+        "running exact verified EXE",
+        "independent process opens the original run and slot",
+        "main menu has the real Continue Last Battle button",
+        "reading keeps slot bytes",
+        "victory blocks re-entry from the stale slot"
+      ]
+    },
+    "controls": {
+      "checks": 19,
+      "facts": {},
+      "failures": [],
+      "stage": "controls",
+      "exit_code": 0,
+      "errors": [],
+      "exe_sha256": "d2ae6dc48b37d7835a93a252390d212be3549af673aec6927a78a43e7cc92844",
+      "log_sha256": "449bc0f790206e7ec23ec028556f91fa4d4047c9a93e1741eef3651d76eda952",
+      "slots": {},
+      "checks_passed": [
+        "original Steam adapter is offline",
+        "ordinary offline launcher argument",
+        "ordinary Windows player save flow",
+        "running exact verified EXE",
+        "Start Campaign exists in the real menu",
+        "real Daming sortie button is available",
+        "normal battle mounted for controlled tests",
+        "No shortcut before rescue",
+        "Freed prisoners wait while south gate is closed",
+        "Closed gate ignores a dispatch",
+        "Opening the south gate exposes the first PC task action",
+        "Visible guards at rendezvous keep both orders intact",
+        "Reachable prisoner receives a normal move path",
+        "Unreachable prisoner keeps the original order and receives an explanation",
+        "Another click sends only the prisoner who can now move",
+        "Issuing commands never awards arrival",
+        "Normal stop cancels the issued move",
+        "Touch UI keeps manual-only dispatch",
+        "PC player can dispatch again after manually stopping"
+      ]
+    }
+  },
+  "offline_bundle": {
+    "platform": "windows",
+    "kind": "local_playtest_candidate",
+    "source_commit": "5256f8d33451e49307458173a28aeaf889837c4c",
+    "source_version": "source-v1:3168f3b329a8e5d6702bfa0a14c945391f4f484118bc0e21994f49f26d2a1ad1",
+    "archive": {
+      "name": "LiangshanHeroes_PC_Playtest_5256f8d3.zip",
+      "bytes": 1758378615,
+      "sha256": "e5863f527d3fb8246a3e3fc66e5c8c26d0c28dbdff26db80740e1cba226169f9",
+      "members_verified": 8
+    },
+    "runtime_files": [
+      {
+        "path": "GODOTSTEAM_LICENSE.txt",
+        "bytes": 1110,
+        "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+      },
+      {
+        "path": "LiangshanHeroes.exe",
+        "bytes": 1827547128,
+        "sha256": "d2ae6dc48b37d7835a93a252390d212be3549af673aec6927a78a43e7cc92844"
+      },
+      {
+        "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+        "bytes": 1093,
+        "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+      },
+      {
+        "path": "libgodotsteam.windows.template_release.x86_64.dll",
+        "bytes": 3961344,
+        "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+      },
+      {
+        "path": "steam_api64.dll",
+        "bytes": 319128,
+        "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+      },
+      {
+        "path": "steam_stats_reader.dll",
+        "bytes": 381440,
+        "sha256": "7505919cfff5907c13a02eb366690bff22ca6731c8521deefde58b114e4f796f"
+      }
+    ],
+    "launcher": {
+      "name": "Start Local Playtest.cmd",
+      "sha256": "b263dde2a4432cf7cedbbdef7473bf2b13dbf04af2e7cf11ccbec99c77fb24f4",
+      "argument": "--offline-playtest",
+      "profiles": [
+        "P01",
+        "P02",
+        "P03"
+      ],
+      "clean_archive_boot": {
+        "mode": "headless",
+        "exit": 0,
+        "errors": [],
+        "log_sha256": "a9912b85473f126d3f4f63ec824170c828df3473a292f866dde86cafda5b66da"
+      }
+    }
+  }
+}

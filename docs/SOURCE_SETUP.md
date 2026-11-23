@@ -1,6 +1,8 @@
 # 源码设置与换机（2026-10-30）
 
-当前 Windows 本地试玩包为 91ab70df。解压后双击 `Start Local Playtest.cmd`，选择 1、2 或 3。各编号使用独立本地档案。暂停菜单可保存退出，同一编号重新启动后在主菜单继续。 [本地试玩与八章兼容收据](../qa/battle_entry_timing_20261116/windows_playtest_and_legacy_26752476_91ab70df.json)
+当前 Windows 本地试玩包为 5256f8d3。解压后双击 Start Local Playtest.cmd，选择分配的独立档案编号。大名府撤离快捷指令和原正式强攻旧档已在该包验收。 [Windows 大名府验收](../qa/campaign_wounded_selection_20261116/windows_daming_evacuation_5256f8d3.json)
+
+前一版 Windows 本地试玩包为 91ab70df。解压后双击 `Start Local Playtest.cmd`，选择 1、2 或 3。各编号使用独立本地档案。暂停菜单可保存退出，同一编号重新启动后在主菜单继续。 [本地试玩与八章兼容收据](../qa/battle_entry_timing_20261116/windows_playtest_and_legacy_26752476_91ab70df.json)
 
 Windows 候选 91ab70df 使用 Godot 4.6.3 导入和导出，退出 0、错误 0。江州快捷撤回沿用任务按钮白名单和单位移动字段，六文件运行前后摘要相同，新增八条四语词条通过严格构建。 [Windows 成品验收](../qa/campaign_pursuit_20261116/windows_jiang_return_party_91ab70df.json)
 
