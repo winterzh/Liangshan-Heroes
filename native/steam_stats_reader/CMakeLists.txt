@@ -5,6 +5,6 @@ set(GODOTCPP_BUILD_PROFILE "${CMAKE_CURRENT_SOURCE_DIR}/build_profile.json" CACH
 set(GODOTCPP_USE_STATIC_CPP ON CACHE BOOL "" FORCE)
 add_subdirectory("${GODOT_CPP_SOURCE}" godot-cpp)
 add_library(steam_stats_reader SHARED extension.cpp)
-target_link_libraries(steam_stats_reader PRIVATE godot-cpp::template_release bcrypt)
+target_link_libraries(steam_stats_reader PRIVATE godot-cpp::template_release bcrypt shell32)
 target_compile_options(steam_stats_reader PRIVATE /W4 /WX /Brepro /guard:cf)
 target_link_options(steam_stats_reader PRIVATE /Brepro /DYNAMICBASE /NXCOMPAT)

@@ -4,6 +4,9 @@
 #include "windows_api.hpp"
 #include "observer.hpp"
 #include <bcrypt.h>
+#include <shellapi.h>
+#include <string>
+#include <string_view>
 #include <godot_cpp/variant/packed_byte_array.hpp>
 #include <limits>
 
@@ -23,6 +26,43 @@ public:
 };
 namespace {
 lsh::ObserverRegistry observer_registry;
+
+using FileStamp = std::array<uint64_t, 6>;
+using PayloadStamp = std::array<FileStamp, 2>;
+PayloadStamp startup_payload{};
+bool startup_payload_available = false;
+
+bool query_file_stamp(const std::wstring &path, FileStamp &stamp) {
+    HANDLE file = CreateFileW(path.c_str(), FILE_READ_ATTRIBUTES,
+            FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, nullptr,
+            OPEN_EXISTING, FILE_FLAG_OPEN_REPARSE_POINT, nullptr);
+    if (file == INVALID_HANDLE_VALUE) return false;
+    BY_HANDLE_FILE_INFORMATION info{};
+    FILE_BASIC_INFO basic{};
+    const bool ok = GetFileInformationByHandle(file, &info)
+            && GetFileInformationByHandleEx(file, FileBasicInfo, &basic, static_cast<DWORD>(sizeof(basic)))
+            && !(info.dwFileAttributes & (FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_REPARSE_POINT));
+    CloseHandle(file);
+    if (!ok) return false;
+    stamp = {info.dwVolumeSerialNumber,
+            (uint64_t(info.nFileIndexHigh) << 32) | info.nFileIndexLow,
+            (uint64_t(info.nFileSizeHigh) << 32) | info.nFileSizeLow,
+            static_cast<uint64_t>(basic.CreationTime.QuadPart),
+            static_cast<uint64_t>(basic.LastWriteTime.QuadPart),
+            static_cast<uint64_t>(basic.ChangeTime.QuadPart)};
+    return true;
+}
+
+bool query_payload_stamp(PayloadStamp &stamp) {
+    std::wstring executable(32768, L'\0');
+    const DWORD count = GetModuleFileNameW(nullptr, executable.data(), static_cast<DWORD>(executable.size()));
+    if (!count || count >= executable.size()) return false;
+    executable.resize(count);
+    const auto extension = executable.find_last_of(L'.');
+    if (extension == std::wstring::npos || extension <= executable.find_last_of(L"/\\")) return false;
+    const std::wstring pack = executable.substr(0, extension) + L".pck";
+    return query_file_stamp(executable, stamp[0]) && query_file_stamp(pack, stamp[1]);
+}
 }
 class SteamStatsObserver : public godot::RefCounted {
     GDCLASS(SteamStatsObserver, godot::RefCounted)
@@ -56,10 +96,50 @@ protected:
         godot::ClassDB::bind_method(godot::D_METHOD("start"), &RunWindowsSha256::start);
         godot::ClassDB::bind_method(godot::D_METHOD("update", "bytes"), &RunWindowsSha256::update);
         godot::ClassDB::bind_method(godot::D_METHOD("finish"), &RunWindowsSha256::finish);
+        godot::ClassDB::bind_method(godot::D_METHOD("payload_stamp", "at_launch"), &RunWindowsSha256::payload_stamp);
+        godot::ClassDB::bind_method(godot::D_METHOD("uses_default_project"), &RunWindowsSha256::uses_default_project);
     }
 
 public:
     ~RunWindowsSha256() override { close(); }
+
+    godot::PackedByteArray payload_stamp(bool at_launch) const {
+        PayloadStamp current{};
+        if (at_launch) {
+            if (!startup_payload_available) return {};
+            current = startup_payload;
+        } else if (!query_payload_stamp(current)) {
+            return {};
+        }
+        godot::PackedByteArray bytes;
+        if (bytes.resize(sizeof(current)) == godot::OK) {
+            std::memcpy(bytes.ptrw(), current.data(), sizeof(current));
+        }
+        return bytes;
+    }
+
+    bool uses_default_project() const {
+        // Godot consumes setup flags before exposing script-visible arguments.
+        int count = 0;
+        wchar_t **argv = CommandLineToArgvW(GetCommandLineW(), &count);
+        if (argv == nullptr) return false;
+        bool canonical = true;
+        for (int i = 1; i < count; ++i) {
+            std::wstring_view arg = argv[i];
+            if (arg == L"--") break;
+            const auto flag = arg.substr(0, arg.find(L'='));
+            if (flag == L"--main-pack" || flag == L"--path" || flag == L"--upwards"
+                    || flag == L"--script" || flag == L"-s" || flag == L"--editor"
+                    || flag == L"-e" || flag == L"--project-manager" || flag == L"-p"
+                    || arg == L"project.godot" || (arg.size() >= 14 && arg.substr(arg.size() - 14) == L"/project.godot")
+                    || (arg.size() >= 14 && arg.substr(arg.size() - 14) == L"\\project.godot")) {
+                canonical = false;
+                break;
+            }
+        }
+        LocalFree(argv);
+        return canonical;
+    }
 
     godot::Error start() {
         close();
@@ -99,6 +179,7 @@ public:
 
 void initialize_reader(godot::ModuleInitializationLevel level) {
     if (level == godot::MODULE_INITIALIZATION_LEVEL_SCENE) {
+        startup_payload_available = query_payload_stamp(startup_payload);
         godot::ClassDB::register_class<SteamStatsReader>();
         godot::ClassDB::register_class<SteamStatsObserver>();
         godot::ClassDB::register_class<RunWindowsSha256>();
