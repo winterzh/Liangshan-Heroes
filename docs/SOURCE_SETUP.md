@@ -1,5 +1,9 @@
 # 源码设置与换机（2026-10-30）
 
+## Windows 共用地表读取时机
+
+两版的 6,574 个运行输入仅主菜单脚本有差异。对照版在 Windows 成品的主菜单首次绘制后复用共用地表预读，导出仍采用原有拆包布局。候选 e66d5047 采用这两张贴图的提前读取。进场的最长绘制间隔仍需单独处理。 [Windows 验收收据](../qa/battle_entry_timing_20261116/windows_startup_surface_prefetch_e66d5047.json)
+
 现行 Windows 候选采用逐像素生成的地形贴图。批量生成 RF 高度图和 RGBA8 地表图的本机实验附有逐字节对照、原生进场复测和旧档兼容记录。 [地形与成品对照](../qa/battle_entry_timing_20261116/windows_terrain_images_8ede7f8d.json)
 
 祝家庄 PC 的偏门快捷命令使用原任务和移动凭证，关卡存档字段沿用现有格式。Godot 4.6.3 在 Windows 隔离档案运行 `--script res://qa/campaign_siege_20261116/side_dispatch_probe.gd` 可复验四语布局、重复点击、堵路、停止和真实抵达。成品另验证偏门命令的途中保存及独立继续。 [祝家庄验收收据](../qa/campaign_siege_20261116/windows_zhu_side_dispatch_5b4b89ea.json)

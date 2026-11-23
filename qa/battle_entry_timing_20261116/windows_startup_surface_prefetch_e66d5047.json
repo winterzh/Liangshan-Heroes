@@ -1,0 +1,1455 @@
+{
+  "decision": "adopted",
+  "changes": [
+    "Run the existing shared ground texture prefetch after the first exported Windows menu draw.",
+    "Level 1 has two shared ground textures and the existing process-wide caches deduplicate requests."
+  ],
+  "method": [
+    "Separate real Windows game processes on an isolated desktop and profiles, offline, Forward+ Vulkan, 1280x720 at 60 fps.",
+    "First two comparisons use one compiled candidate and a diagnostic menu subclass. Existing card focus has a 330 ms deliberate dwell before the click.",
+    "Request waits are wall-clock observations in production collection order. They overlap concurrent work and are not independent asset decode times.",
+    "The two compiled comparisons retain the original main scene, with an observer attached from an autoload.",
+    "Compiled direct starts issuing viewport events immediately after menu readiness. The music-ready comparison waits for all tracks.",
+    "Results describe this test PC and fixture. The 90-second route smoke does not qualify as the ten-minute acceptance run."
+  ],
+  "baseline": {
+    "kind": "local_integrated_windows_candidate",
+    "layout": "split_pck",
+    "commit": "5b4b89ea90d86af41e9fd40c766e6b38afa508fa",
+    "source_version": "source-v1:e8c9f08736f33efa4239e0e4e7a0b8074b51314695848e63dbd77dac3b04881b",
+    "tracked_runtime_count": 6574,
+    "steps": [
+      {
+        "stage": "import",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 66.04
+      },
+      {
+        "stage": "export",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 86.11
+      }
+    ],
+    "files": [
+      {
+        "path": "GODOTSTEAM_LICENSE.txt",
+        "bytes": 1110,
+        "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+      },
+      {
+        "path": "LiangshanHeroes.exe",
+        "bytes": 104886784,
+        "sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4"
+      },
+      {
+        "path": "LiangshanHeroes.pck",
+        "bytes": 1722697964,
+        "sha256": "bbcada41f22704660a274ab3989ea8f8f1e8636f2b9d0bc201be5e2d3e1727ad"
+      },
+      {
+        "path": "libgodotsteam.windows.template_release.x86_64.dll",
+        "bytes": 3961344,
+        "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+      },
+      {
+        "path": "steam_api64.dll",
+        "bytes": 319128,
+        "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+      },
+      {
+        "path": "steam_stats_reader.dll",
+        "bytes": 393728,
+        "sha256": "5a79a77b5b6e2cff21b285c785118352805a09d91876f89276af119ee1702517"
+      },
+      {
+        "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+        "bytes": 1093,
+        "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+      }
+    ]
+  },
+  "candidate": {
+    "kind": "local_integrated_windows_candidate",
+    "layout": "split_pck",
+    "commit": "e66d50473e2f9da66e382c81054bb0f77302956c",
+    "source_version": "source-v1:fc611531d9ed80c479ddd719fd662b692372dd60e29f39e6f02bcc896e4795ba",
+    "tracked_runtime_count": 6574,
+    "steps": [
+      {
+        "stage": "import",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 63.43
+      },
+      {
+        "stage": "export",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 85.5
+      }
+    ],
+    "files": [
+      {
+        "path": "GODOTSTEAM_LICENSE.txt",
+        "bytes": 1110,
+        "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+      },
+      {
+        "path": "LiangshanHeroes.exe",
+        "bytes": 104886784,
+        "sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4"
+      },
+      {
+        "path": "LiangshanHeroes.pck",
+        "bytes": 1722697964,
+        "sha256": "54b8dbe22e6dd42860cb41bad8eb7dd983a99a446fef21a6652fbb8b85572bba"
+      },
+      {
+        "path": "libgodotsteam.windows.template_release.x86_64.dll",
+        "bytes": 3961344,
+        "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+      },
+      {
+        "path": "steam_api64.dll",
+        "bytes": 319128,
+        "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+      },
+      {
+        "path": "steam_stats_reader.dll",
+        "bytes": 393728,
+        "sha256": "5a79a77b5b6e2cff21b285c785118352805a09d91876f89276af119ee1702517"
+      },
+      {
+        "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+        "bytes": 1093,
+        "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+      }
+    ]
+  },
+  "entry": {
+    "initial_stage_diagnostic": {
+      "count": 4,
+      "input_sha256": "621a9c37e3bcefb904ec30dd48ba74f03e33c7e023b539278fbbbcf009e7a7d9",
+      "runs": [
+        {
+          "variant": "observe",
+          "condition": "observe-fast",
+          "source_commit": "5b4b89ea90d86af41e9fd40c766e6b38afa508fa",
+          "durations_ms": {
+            "process_to_progress_draw_ms": 4993.184,
+            "process_to_ready_menu_ms": 6311.184,
+            "process_to_sortie_button_ms": 6338.184,
+            "sortie_to_loading_ms": 14.428,
+            "loading_to_attach_ms": 258.184,
+            "map_to_hud_ms": 47.084,
+            "hud_to_ready_ms": 73.381,
+            "sortie_to_battle_ms": 466.374,
+            "sortie_to_first_move_ms": 584.192,
+            "longest_entry_gap_ms": 196.832,
+            "first_progress_to_ready_ms": 1318.0,
+            "process_to_first_move_ms": 6922.376,
+            "first_progress_to_first_move_ms": 1929.192,
+            "environment_wait_ms": 189.053,
+            "opening_frames_wait_ms": 0.035,
+            "opening_portraits_wait_ms": 35.335
+          },
+          "game_log_sha256": "adadfc831339077a99089972a95ebac2e0da98adc3f8613a246d1a8e49d2184e",
+          "draw_trace_sha256": "8ce1bf60ac53bc86b9c88cfc1d94c27f3c5d695faaa06f1ff3b7615d8bd330f3",
+          "exit_code": 0,
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "requests": [
+            {
+              "group": "environment",
+              "resource": "res://assets/campaign/environment/shared/surfaces/surface_dry_earth.png",
+              "initial_thread_status": 1,
+              "wait_ms": 189.018
+            },
+            {
+              "group": "portraits",
+              "resource": "res://assets/characters/chao_gai_merchant_20261017/portrait.png",
+              "initial_thread_status": 1,
+              "wait_ms": 35.3
+            }
+          ]
+        },
+        {
+          "variant": "focused",
+          "condition": "focused-fast",
+          "source_commit": "5b4b89ea90d86af41e9fd40c766e6b38afa508fa",
+          "durations_ms": {
+            "process_to_progress_draw_ms": 4673.779,
+            "process_to_ready_menu_ms": 6011.779,
+            "process_to_sortie_button_ms": 6038.779,
+            "sortie_to_loading_ms": 17.713,
+            "loading_to_attach_ms": 35.637,
+            "map_to_hud_ms": 42.351,
+            "hud_to_ready_ms": 79.471,
+            "sortie_to_battle_ms": 258.256,
+            "sortie_to_first_move_ms": 406.708,
+            "longest_entry_gap_ms": 207.751,
+            "first_progress_to_ready_ms": 1338.0,
+            "process_to_first_move_ms": 6445.487,
+            "first_progress_to_first_move_ms": 1771.708,
+            "environment_wait_ms": 0.066,
+            "opening_frames_wait_ms": 0.034,
+            "opening_portraits_wait_ms": 0.033
+          },
+          "game_log_sha256": "adadfc831339077a99089972a95ebac2e0da98adc3f8613a246d1a8e49d2184e",
+          "draw_trace_sha256": "6c523cbc89f45bb9aac74387a19577ed3aad48604492739c658a1482b0950a79",
+          "exit_code": 0,
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "requests": []
+        },
+        {
+          "variant": "focused",
+          "condition": "focused-fast",
+          "source_commit": "5b4b89ea90d86af41e9fd40c766e6b38afa508fa",
+          "durations_ms": {
+            "process_to_progress_draw_ms": 4774.911,
+            "process_to_ready_menu_ms": 6143.911,
+            "process_to_sortie_button_ms": 6170.911,
+            "sortie_to_loading_ms": 23.263,
+            "loading_to_attach_ms": 59.42,
+            "map_to_hud_ms": 41.555,
+            "hud_to_ready_ms": 70.736,
+            "sortie_to_battle_ms": 271.427,
+            "sortie_to_first_move_ms": 395.679,
+            "longest_entry_gap_ms": 191.49,
+            "first_progress_to_ready_ms": 1369.0,
+            "process_to_first_move_ms": 6566.59,
+            "first_progress_to_first_move_ms": 1791.679,
+            "environment_wait_ms": 31.128,
+            "opening_frames_wait_ms": 0.051,
+            "opening_portraits_wait_ms": 0.053
+          },
+          "game_log_sha256": "adadfc831339077a99089972a95ebac2e0da98adc3f8613a246d1a8e49d2184e",
+          "draw_trace_sha256": "1d481bedfa9813bb743c94a6783f93bb66638c6e5c52218f3d8537e08ff5bb11",
+          "exit_code": 0,
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "requests": [
+            {
+              "group": "environment",
+              "resource": "res://assets/campaign/environment/level1/huangnigang_pine_old.png",
+              "initial_thread_status": 1,
+              "wait_ms": 31.053
+            }
+          ]
+        },
+        {
+          "variant": "observe",
+          "condition": "observe-fast",
+          "source_commit": "5b4b89ea90d86af41e9fd40c766e6b38afa508fa",
+          "durations_ms": {
+            "process_to_progress_draw_ms": 4586.617,
+            "process_to_ready_menu_ms": 5988.617,
+            "process_to_sortie_button_ms": 6015.617,
+            "sortie_to_loading_ms": 14.384,
+            "loading_to_attach_ms": 256.9,
+            "map_to_hud_ms": 42.615,
+            "hud_to_ready_ms": 78.757,
+            "sortie_to_battle_ms": 476.176,
+            "sortie_to_first_move_ms": 603.563,
+            "longest_entry_gap_ms": 208.363,
+            "first_progress_to_ready_ms": 1402.0,
+            "process_to_first_move_ms": 6619.18,
+            "first_progress_to_first_move_ms": 2032.563,
+            "environment_wait_ms": 185.164,
+            "opening_frames_wait_ms": 0.069,
+            "opening_portraits_wait_ms": 32.155
+          },
+          "game_log_sha256": "adadfc831339077a99089972a95ebac2e0da98adc3f8613a246d1a8e49d2184e",
+          "draw_trace_sha256": "a173f78a7f396b6efa14a0a3c09adcf0e5337da3338ee8bfed93b5938d061db1",
+          "exit_code": 0,
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "requests": [
+            {
+              "group": "environment",
+              "resource": "res://assets/campaign/environment/shared/surfaces/surface_dry_earth.png",
+              "initial_thread_status": 1,
+              "wait_ms": 99.342
+            },
+            {
+              "group": "environment",
+              "resource": "res://assets/campaign/environment/shared/surfaces/surface_forest_earth.png",
+              "initial_thread_status": 1,
+              "wait_ms": 85.776
+            },
+            {
+              "group": "portraits",
+              "resource": "res://assets/characters/chao_gai_merchant_20261017/portrait.png",
+              "initial_thread_status": 1,
+              "wait_ms": 32.108
+            }
+          ]
+        }
+      ],
+      "median_ms": {
+        "observe": {
+          "process_to_progress_draw_ms": 4789.9,
+          "process_to_ready_menu_ms": 6149.9,
+          "process_to_sortie_button_ms": 6176.9,
+          "sortie_to_loading_ms": 14.406,
+          "loading_to_attach_ms": 257.542,
+          "map_to_hud_ms": 44.85,
+          "hud_to_ready_ms": 76.069,
+          "sortie_to_battle_ms": 471.275,
+          "sortie_to_first_move_ms": 593.878,
+          "longest_entry_gap_ms": 202.597,
+          "first_progress_to_ready_ms": 1360.0,
+          "process_to_first_move_ms": 6770.778,
+          "first_progress_to_first_move_ms": 1980.878,
+          "environment_wait_ms": 187.108,
+          "opening_frames_wait_ms": 0.052,
+          "opening_portraits_wait_ms": 33.745
+        },
+        "focused": {
+          "process_to_progress_draw_ms": 4724.345,
+          "process_to_ready_menu_ms": 6077.845,
+          "process_to_sortie_button_ms": 6104.845,
+          "sortie_to_loading_ms": 20.488,
+          "loading_to_attach_ms": 47.529,
+          "map_to_hud_ms": 41.953,
+          "hud_to_ready_ms": 75.103,
+          "sortie_to_battle_ms": 264.841,
+          "sortie_to_first_move_ms": 401.193,
+          "longest_entry_gap_ms": 199.62,
+          "first_progress_to_ready_ms": 1353.5,
+          "process_to_first_move_ms": 6506.039,
+          "first_progress_to_first_move_ms": 1781.694,
+          "environment_wait_ms": 15.597,
+          "opening_frames_wait_ms": 0.042,
+          "opening_portraits_wait_ms": 0.043
+        }
+      }
+    },
+    "cold_menu_preload_diagnostic": {
+      "count": 8,
+      "input_sha256": "b5f6dde604ea1ec10b49018725214d4ab01cfb737d326aa52bd48a1976fca009",
+      "runs": [
+        {
+          "variant": "observe",
+          "condition": "observe-fast",
+          "source_commit": "5b4b89ea90d86af41e9fd40c766e6b38afa508fa",
+          "durations_ms": {
+            "process_to_progress_draw_ms": 5026.16,
+            "process_to_ready_menu_ms": 6348.16,
+            "process_to_sortie_button_ms": 6378.16,
+            "sortie_to_loading_ms": 5.974,
+            "loading_to_attach_ms": 198.427,
+            "map_to_hud_ms": 40.952,
+            "hud_to_ready_ms": 77.655,
+            "sortie_to_battle_ms": 399.176,
+            "sortie_to_first_move_ms": 519.335,
+            "longest_entry_gap_ms": 213.218,
+            "first_progress_to_ready_ms": 1322.0,
+            "process_to_first_move_ms": 6897.495,
+            "first_progress_to_first_move_ms": 1871.335,
+            "environment_wait_ms": 113.255,
+            "opening_frames_wait_ms": 0.092,
+            "opening_portraits_wait_ms": 49.563
+          },
+          "game_log_sha256": "adadfc831339077a99089972a95ebac2e0da98adc3f8613a246d1a8e49d2184e",
+          "draw_trace_sha256": "16a0fb5df23b4f2b46ed18db2460c97e01c64c926c8d73a46e4e8e157c298e68",
+          "exit_code": 0,
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "requests": [
+            {
+              "group": "environment",
+              "resource": "res://assets/campaign/environment/shared/surfaces/surface_dry_earth.png",
+              "initial_thread_status": 1,
+              "wait_ms": 96.71
+            },
+            {
+              "group": "environment",
+              "resource": "res://assets/campaign/environment/shared/surfaces/surface_forest_earth.png",
+              "initial_thread_status": 1,
+              "wait_ms": 16.5
+            },
+            {
+              "group": "portraits",
+              "resource": "res://assets/characters/chao_gai_merchant_20261017/portrait.png",
+              "initial_thread_status": 1,
+              "wait_ms": 16.396
+            },
+            {
+              "group": "portraits",
+              "resource": "res://assets/characters/liu_tang_merchant_20261016/portrait.png",
+              "initial_thread_status": 1,
+              "wait_ms": 16.582
+            },
+            {
+              "group": "portraits",
+              "resource": "res://assets/characters/ruan_xiaowu_merchant_20261016/portrait.png",
+              "initial_thread_status": 1,
+              "wait_ms": 16.527
+            }
+          ],
+          "shared_surfaces_cached_on_click": 0
+        },
+        {
+          "variant": "prewarmed",
+          "condition": "prewarmed-fast",
+          "source_commit": "5b4b89ea90d86af41e9fd40c766e6b38afa508fa",
+          "durations_ms": {
+            "process_to_progress_draw_ms": 4630.633,
+            "process_to_ready_menu_ms": 6053.633,
+            "process_to_sortie_button_ms": 6096.633,
+            "sortie_to_loading_ms": 14.541,
+            "loading_to_attach_ms": 172.899,
+            "map_to_hud_ms": 48.687,
+            "hud_to_ready_ms": 73.58,
+            "sortie_to_battle_ms": 382.244,
+            "sortie_to_first_move_ms": 505.639,
+            "longest_entry_gap_ms": 207.638,
+            "first_progress_to_ready_ms": 1423.0,
+            "process_to_first_move_ms": 6602.272,
+            "first_progress_to_first_move_ms": 1971.639,
+            "environment_wait_ms": 0.072,
+            "opening_frames_wait_ms": 51.339,
+            "opening_portraits_wait_ms": 83.145
+          },
+          "game_log_sha256": "adadfc831339077a99089972a95ebac2e0da98adc3f8613a246d1a8e49d2184e",
+          "draw_trace_sha256": "df5d940db72e874aadbcfd31945dd1e2dcb096dd9f7b3225d2f0d6ae1778fca1",
+          "exit_code": 0,
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "requests": [
+            {
+              "group": "frames",
+              "resource": "res://assets/anim/character_traits_v2_chao_gai_merchant_idle_se.tres",
+              "initial_thread_status": 1,
+              "wait_ms": 34.842
+            },
+            {
+              "group": "frames",
+              "resource": "res://assets/anim/character_traits_v2_ruan_xiaoer_merchant_idle_se.tres",
+              "initial_thread_status": 1,
+              "wait_ms": 16.431
+            },
+            {
+              "group": "portraits",
+              "resource": "res://assets/characters/chao_gai_merchant_20261017/portrait.png",
+              "initial_thread_status": 1,
+              "wait_ms": 33.287
+            },
+            {
+              "group": "portraits",
+              "resource": "res://assets/characters/gongsun_sheng_merchant_20261017/portrait.png",
+              "initial_thread_status": 1,
+              "wait_ms": 33.298
+            },
+            {
+              "group": "portraits",
+              "resource": "res://assets/characters/ruan_xiaowu_merchant_20261016/portrait.png",
+              "initial_thread_status": 1,
+              "wait_ms": 16.506
+            }
+          ],
+          "shared_surfaces_cached_on_click": 2
+        },
+        {
+          "variant": "prewarmed",
+          "condition": "prewarmed-fast",
+          "source_commit": "5b4b89ea90d86af41e9fd40c766e6b38afa508fa",
+          "durations_ms": {
+            "process_to_progress_draw_ms": 4623.142,
+            "process_to_ready_menu_ms": 5930.142,
+            "process_to_sortie_button_ms": 5964.142,
+            "sortie_to_loading_ms": 12.415,
+            "loading_to_attach_ms": 176.004,
+            "map_to_hud_ms": 44.833,
+            "hud_to_ready_ms": 75.78,
+            "sortie_to_battle_ms": 391.296,
+            "sortie_to_first_move_ms": 508.954,
+            "longest_entry_gap_ms": 217.86,
+            "first_progress_to_ready_ms": 1307.0,
+            "process_to_first_move_ms": 6473.096,
+            "first_progress_to_first_move_ms": 1849.954,
+            "environment_wait_ms": 0.089,
+            "opening_frames_wait_ms": 53.716,
+            "opening_portraits_wait_ms": 83.152
+          },
+          "game_log_sha256": "adadfc831339077a99089972a95ebac2e0da98adc3f8613a246d1a8e49d2184e",
+          "draw_trace_sha256": "a5deb3e8b6538091b27e832cee8ca3f76ed9b11283d5493a40a8f6ab737e8291",
+          "exit_code": 0,
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "requests": [
+            {
+              "group": "frames",
+              "resource": "res://assets/anim/character_traits_v2_chao_gai_merchant_idle_se.tres",
+              "initial_thread_status": 1,
+              "wait_ms": 37.105
+            },
+            {
+              "group": "frames",
+              "resource": "res://assets/anim/character_traits_v2_ruan_xiaowu_merchant_idle_se.tres",
+              "initial_thread_status": 1,
+              "wait_ms": 16.544
+            },
+            {
+              "group": "portraits",
+              "resource": "res://assets/characters/chao_gai_merchant_20261017/portrait.png",
+              "initial_thread_status": 1,
+              "wait_ms": 16.772
+            },
+            {
+              "group": "portraits",
+              "resource": "res://assets/characters/wu_yong_merchant_20261017/portrait.png",
+              "initial_thread_status": 1,
+              "wait_ms": 16.527
+            },
+            {
+              "group": "portraits",
+              "resource": "res://assets/characters/gongsun_sheng_merchant_20261017/portrait.png",
+              "initial_thread_status": 1,
+              "wait_ms": 16.527
+            },
+            {
+              "group": "portraits",
+              "resource": "res://assets/characters/ruan_xiaowu_merchant_20261016/portrait.png",
+              "initial_thread_status": 1,
+              "wait_ms": 33.292
+            }
+          ],
+          "shared_surfaces_cached_on_click": 2
+        },
+        {
+          "variant": "observe",
+          "condition": "observe-fast",
+          "source_commit": "5b4b89ea90d86af41e9fd40c766e6b38afa508fa",
+          "durations_ms": {
+            "process_to_progress_draw_ms": 4513.5,
+            "process_to_ready_menu_ms": 5899.5,
+            "process_to_sortie_button_ms": 5926.5,
+            "sortie_to_loading_ms": 14.11,
+            "loading_to_attach_ms": 281.818,
+            "map_to_hud_ms": 41.348,
+            "hud_to_ready_ms": 68.907,
+            "sortie_to_battle_ms": 482.431,
+            "sortie_to_first_move_ms": 595.42,
+            "longest_entry_gap_ms": 188.8,
+            "first_progress_to_ready_ms": 1386.0,
+            "process_to_first_move_ms": 6521.92,
+            "first_progress_to_first_move_ms": 2008.42,
+            "environment_wait_ms": 223.967,
+            "opening_frames_wait_ms": 0.038,
+            "opening_portraits_wait_ms": 32.206
+          },
+          "game_log_sha256": "adadfc831339077a99089972a95ebac2e0da98adc3f8613a246d1a8e49d2184e",
+          "draw_trace_sha256": "ec653b3ea308e4565da7e1581a2be532e55ee3f4fc99fb2a52eda943e13ed2cd",
+          "exit_code": 0,
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "requests": [
+            {
+              "group": "environment",
+              "resource": "res://assets/campaign/environment/shared/surfaces/surface_dry_earth.png",
+              "initial_thread_status": 1,
+              "wait_ms": 223.926
+            },
+            {
+              "group": "portraits",
+              "resource": "res://assets/characters/chao_gai_merchant_20261017/portrait.png",
+              "initial_thread_status": 1,
+              "wait_ms": 32.141
+            }
+          ],
+          "shared_surfaces_cached_on_click": 0
+        },
+        {
+          "variant": "prewarmed",
+          "condition": "prewarmed-fast",
+          "source_commit": "5b4b89ea90d86af41e9fd40c766e6b38afa508fa",
+          "durations_ms": {
+            "process_to_progress_draw_ms": 4736.472,
+            "process_to_ready_menu_ms": 6175.472,
+            "process_to_sortie_button_ms": 6207.472,
+            "sortie_to_loading_ms": 12.261,
+            "loading_to_attach_ms": 160.438,
+            "map_to_hud_ms": 42.441,
+            "hud_to_ready_ms": 75.872,
+            "sortie_to_battle_ms": 369.186,
+            "sortie_to_first_move_ms": 477.411,
+            "longest_entry_gap_ms": 210.412,
+            "first_progress_to_ready_ms": 1439.0,
+            "process_to_first_move_ms": 6684.883,
+            "first_progress_to_first_move_ms": 1948.411,
+            "environment_wait_ms": 0.114,
+            "opening_frames_wait_ms": 35.831,
+            "opening_portraits_wait_ms": 83.149
+          },
+          "game_log_sha256": "adadfc831339077a99089972a95ebac2e0da98adc3f8613a246d1a8e49d2184e",
+          "draw_trace_sha256": "9916df038a48e21b57ec99e49fbe3196a1057484c7882bb16e25966a8b63a5d6",
+          "exit_code": 0,
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "requests": [
+            {
+              "group": "frames",
+              "resource": "res://assets/anim/character_traits_v2_chao_gai_merchant_idle_se.tres",
+              "initial_thread_status": 1,
+              "wait_ms": 19.344
+            },
+            {
+              "group": "frames",
+              "resource": "res://assets/anim/character_traits_v2_ruan_xiaoer_merchant_idle_se.tres",
+              "initial_thread_status": 1,
+              "wait_ms": 16.417
+            },
+            {
+              "group": "portraits",
+              "resource": "res://assets/characters/chao_gai_merchant_20261017/portrait.png",
+              "initial_thread_status": 1,
+              "wait_ms": 33.238
+            },
+            {
+              "group": "portraits",
+              "resource": "res://assets/characters/gongsun_sheng_merchant_20261017/portrait.png",
+              "initial_thread_status": 1,
+              "wait_ms": 16.95
+            },
+            {
+              "group": "portraits",
+              "resource": "res://assets/characters/liu_tang_merchant_20261016/portrait.png",
+              "initial_thread_status": 1,
+              "wait_ms": 16.221
+            },
+            {
+              "group": "portraits",
+              "resource": "res://assets/characters/ruan_xiaowu_merchant_20261016/portrait.png",
+              "initial_thread_status": 1,
+              "wait_ms": 16.692
+            }
+          ],
+          "shared_surfaces_cached_on_click": 2
+        },
+        {
+          "variant": "observe",
+          "condition": "observe-fast",
+          "source_commit": "5b4b89ea90d86af41e9fd40c766e6b38afa508fa",
+          "durations_ms": {
+            "process_to_progress_draw_ms": 4706.847,
+            "process_to_ready_menu_ms": 6145.847,
+            "process_to_sortie_button_ms": 6173.847,
+            "sortie_to_loading_ms": 14.505,
+            "loading_to_attach_ms": 209.096,
+            "map_to_hud_ms": 48.748,
+            "hud_to_ready_ms": 77.275,
+            "sortie_to_battle_ms": 426.509,
+            "sortie_to_first_move_ms": 552.105,
+            "longest_entry_gap_ms": 215.957,
+            "first_progress_to_ready_ms": 1439.0,
+            "process_to_first_move_ms": 6725.952,
+            "first_progress_to_first_move_ms": 2019.105,
+            "environment_wait_ms": 94.502,
+            "opening_frames_wait_ms": 25.408,
+            "opening_portraits_wait_ms": 49.917
+          },
+          "game_log_sha256": "adadfc831339077a99089972a95ebac2e0da98adc3f8613a246d1a8e49d2184e",
+          "draw_trace_sha256": "26dc0942b56c226f4e8beea8b4e61ba0461063c837eecc455d64168ec0387b81",
+          "exit_code": 0,
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "requests": [
+            {
+              "group": "environment",
+              "resource": "res://assets/campaign/environment/shared/surfaces/surface_dry_earth.png",
+              "initial_thread_status": 1,
+              "wait_ms": 94.453
+            },
+            {
+              "group": "frames",
+              "resource": "res://assets/anim/character_traits_v2_ruan_xiaowu_merchant_idle_se.tres",
+              "initial_thread_status": 1,
+              "wait_ms": 25.354
+            },
+            {
+              "group": "portraits",
+              "resource": "res://assets/characters/chao_gai_merchant_20261017/portrait.png",
+              "initial_thread_status": 1,
+              "wait_ms": 8.532
+            },
+            {
+              "group": "portraits",
+              "resource": "res://assets/characters/wu_yong_merchant_20261017/portrait.png",
+              "initial_thread_status": 1,
+              "wait_ms": 24.685
+            },
+            {
+              "group": "portraits",
+              "resource": "res://assets/characters/ruan_xiaowu_merchant_20261016/portrait.png",
+              "initial_thread_status": 1,
+              "wait_ms": 16.659
+            }
+          ],
+          "shared_surfaces_cached_on_click": 0
+        },
+        {
+          "variant": "observe",
+          "condition": "observe-fast",
+          "source_commit": "5b4b89ea90d86af41e9fd40c766e6b38afa508fa",
+          "durations_ms": {
+            "process_to_progress_draw_ms": 4826.845,
+            "process_to_ready_menu_ms": 6183.845,
+            "process_to_sortie_button_ms": 6208.845,
+            "sortie_to_loading_ms": 14.391,
+            "loading_to_attach_ms": 214.099,
+            "map_to_hud_ms": 41.024,
+            "hud_to_ready_ms": 75.478,
+            "sortie_to_battle_ms": 418.847,
+            "sortie_to_first_move_ms": 532.991,
+            "longest_entry_gap_ms": 200.938,
+            "first_progress_to_ready_ms": 1357.0,
+            "process_to_first_move_ms": 6741.836,
+            "first_progress_to_first_move_ms": 1914.991,
+            "environment_wait_ms": 102.941,
+            "opening_frames_wait_ms": 21.882,
+            "opening_portraits_wait_ms": 52.036
+          },
+          "game_log_sha256": "adadfc831339077a99089972a95ebac2e0da98adc3f8613a246d1a8e49d2184e",
+          "draw_trace_sha256": "0df7f4871da951559c1c4c861e3ebf0c537dd8bb7f16de5038a9e0e73c9be1ae",
+          "exit_code": 0,
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "requests": [
+            {
+              "group": "environment",
+              "resource": "res://assets/campaign/environment/shared/surfaces/surface_dry_earth.png",
+              "initial_thread_status": 1,
+              "wait_ms": 102.87
+            },
+            {
+              "group": "frames",
+              "resource": "res://assets/anim/character_traits_v2_ruan_xiaowu_merchant_idle_se.tres",
+              "initial_thread_status": 1,
+              "wait_ms": 21.813
+            },
+            {
+              "group": "portraits",
+              "resource": "res://assets/characters/chao_gai_merchant_20261017/portrait.png",
+              "initial_thread_status": 1,
+              "wait_ms": 15.69
+            },
+            {
+              "group": "portraits",
+              "resource": "res://assets/characters/ruan_xiaowu_merchant_20261016/portrait.png",
+              "initial_thread_status": 1,
+              "wait_ms": 36.303
+            }
+          ],
+          "shared_surfaces_cached_on_click": 0
+        },
+        {
+          "variant": "prewarmed",
+          "condition": "prewarmed-fast",
+          "source_commit": "5b4b89ea90d86af41e9fd40c766e6b38afa508fa",
+          "durations_ms": {
+            "process_to_progress_draw_ms": 4540.416,
+            "process_to_ready_menu_ms": 5926.416,
+            "process_to_sortie_button_ms": 5963.416,
+            "sortie_to_loading_ms": 24.829,
+            "loading_to_attach_ms": 172.172,
+            "map_to_hud_ms": 45.744,
+            "hud_to_ready_ms": 71.828,
+            "sortie_to_battle_ms": 390.638,
+            "sortie_to_first_move_ms": 508.94,
+            "longest_entry_gap_ms": 212.07,
+            "first_progress_to_ready_ms": 1386.0,
+            "process_to_first_move_ms": 6472.356,
+            "first_progress_to_first_move_ms": 1931.94,
+            "environment_wait_ms": 0.065,
+            "opening_frames_wait_ms": 51.633,
+            "opening_portraits_wait_ms": 83.012
+          },
+          "game_log_sha256": "adadfc831339077a99089972a95ebac2e0da98adc3f8613a246d1a8e49d2184e",
+          "draw_trace_sha256": "2a748fa03afa89bb7b5d6b5417f73347c57cf460f99637329036be4d561612de",
+          "exit_code": 0,
+          "payload_verified": 7,
+          "progress_unchanged": true,
+          "requests": [
+            {
+              "group": "frames",
+              "resource": "res://assets/anim/character_traits_v2_chao_gai_merchant_idle_se.tres",
+              "initial_thread_status": 1,
+              "wait_ms": 18.815
+            },
+            {
+              "group": "frames",
+              "resource": "res://assets/anim/character_traits_v2_wu_yong_merchant_idle_se.tres",
+              "initial_thread_status": 1,
+              "wait_ms": 16.385
+            },
+            {
+              "group": "frames",
+              "resource": "res://assets/anim/character_traits_v2_ruan_xiaoer_merchant_idle_se.tres",
+              "initial_thread_status": 1,
+              "wait_ms": 16.374
+            },
+            {
+              "group": "portraits",
+              "resource": "res://assets/characters/chao_gai_merchant_20261017/portrait.png",
+              "initial_thread_status": 1,
+              "wait_ms": 33.167
+            },
+            {
+              "group": "portraits",
+              "resource": "res://assets/characters/gongsun_sheng_merchant_20261017/portrait.png",
+              "initial_thread_status": 1,
+              "wait_ms": 33.225
+            },
+            {
+              "group": "portraits",
+              "resource": "res://assets/characters/ruan_xiaowu_merchant_20261016/portrait.png",
+              "initial_thread_status": 1,
+              "wait_ms": 16.58
+            }
+          ],
+          "shared_surfaces_cached_on_click": 2
+        }
+      ],
+      "median_ms": {
+        "observe": {
+          "process_to_progress_draw_ms": 4766.846,
+          "process_to_ready_menu_ms": 6164.846,
+          "process_to_sortie_button_ms": 6191.346,
+          "sortie_to_loading_ms": 14.25,
+          "loading_to_attach_ms": 211.597,
+          "map_to_hud_ms": 41.186,
+          "hud_to_ready_ms": 76.376,
+          "sortie_to_battle_ms": 422.678,
+          "sortie_to_first_move_ms": 542.548,
+          "longest_entry_gap_ms": 207.078,
+          "first_progress_to_ready_ms": 1371.5,
+          "process_to_first_move_ms": 6733.894,
+          "first_progress_to_first_move_ms": 1961.706,
+          "environment_wait_ms": 108.098,
+          "opening_frames_wait_ms": 10.987,
+          "opening_portraits_wait_ms": 49.74
+        },
+        "prewarmed": {
+          "process_to_progress_draw_ms": 4626.887,
+          "process_to_ready_menu_ms": 5991.887,
+          "process_to_sortie_button_ms": 6030.387,
+          "sortie_to_loading_ms": 13.478,
+          "loading_to_attach_ms": 172.536,
+          "map_to_hud_ms": 45.288,
+          "hud_to_ready_ms": 74.68,
+          "sortie_to_battle_ms": 386.441,
+          "sortie_to_first_move_ms": 507.289,
+          "longest_entry_gap_ms": 211.241,
+          "first_progress_to_ready_ms": 1404.5,
+          "process_to_first_move_ms": 6537.684,
+          "first_progress_to_first_move_ms": 1940.176,
+          "environment_wait_ms": 0.08,
+          "opening_frames_wait_ms": 51.486,
+          "opening_portraits_wait_ms": 83.147
+        }
+      }
+    },
+    "compiled_direct": {
+      "count": 8,
+      "input_sha256": "066c4907a9a3f0553c49647dc9388f77209dc8d2180d93cba1d7ab6fd098bae7",
+      "runs": [
+        {
+          "variant": "prior",
+          "condition": "prior-fast",
+          "source_commit": "5b4b89ea90d86af41e9fd40c766e6b38afa508fa",
+          "durations_ms": {
+            "process_to_progress_draw_ms": 5108.874,
+            "process_to_ready_menu_ms": 6494.874,
+            "process_to_sortie_button_ms": 6523.874,
+            "sortie_to_loading_ms": 14.512,
+            "loading_to_attach_ms": 198.04,
+            "map_to_hud_ms": 41.012,
+            "hud_to_ready_ms": 69.36,
+            "sortie_to_battle_ms": 391.815,
+            "sortie_to_first_move_ms": 498.769,
+            "longest_entry_gap_ms": 181.471,
+            "first_progress_to_ready_ms": 1386.0,
+            "process_to_first_move_ms": 7022.643,
+            "first_progress_to_first_move_ms": 1913.769
+          },
+          "game_log_sha256": "adadfc831339077a99089972a95ebac2e0da98adc3f8613a246d1a8e49d2184e",
+          "draw_trace_sha256": "32fd9093681a2943c0102c6c13727019db02a4ccbfdf5472b7083b45c1e1d12b",
+          "exit_code": 0,
+          "payload_verified": 7,
+          "progress_unchanged": true
+        },
+        {
+          "variant": "surface",
+          "condition": "surface-fast",
+          "source_commit": "e66d50473e2f9da66e382c81054bb0f77302956c",
+          "durations_ms": {
+            "process_to_progress_draw_ms": 4540.739,
+            "process_to_ready_menu_ms": 5910.739,
+            "process_to_sortie_button_ms": 5946.739,
+            "sortie_to_loading_ms": 14.603,
+            "loading_to_attach_ms": 189.093,
+            "map_to_hud_ms": 43.504,
+            "hud_to_ready_ms": 73.206,
+            "sortie_to_battle_ms": 396.147,
+            "sortie_to_first_move_ms": 509.406,
+            "longest_entry_gap_ms": 210.765,
+            "first_progress_to_ready_ms": 1370.0,
+            "process_to_first_move_ms": 6456.145,
+            "first_progress_to_first_move_ms": 1915.406
+          },
+          "game_log_sha256": "ede964607327eb1b2e4e7ac105b457bbe05c457f1181ac21b65a3b5878fa02bd",
+          "draw_trace_sha256": "ee294117bbf2722fc64d222b9a9d2a2f510097e6f9fd3d4ab890ed759c49c88f",
+          "exit_code": 0,
+          "payload_verified": 7,
+          "progress_unchanged": true
+        },
+        {
+          "variant": "surface",
+          "condition": "surface-fast",
+          "source_commit": "e66d50473e2f9da66e382c81054bb0f77302956c",
+          "durations_ms": {
+            "process_to_progress_draw_ms": 4393.2,
+            "process_to_ready_menu_ms": 5746.2,
+            "process_to_sortie_button_ms": 5785.2,
+            "sortie_to_loading_ms": 24.127,
+            "loading_to_attach_ms": 158.671,
+            "map_to_hud_ms": 44.714,
+            "hud_to_ready_ms": 72.124,
+            "sortie_to_battle_ms": 373.858,
+            "sortie_to_first_move_ms": 490.807,
+            "longest_entry_gap_ms": 203.915,
+            "first_progress_to_ready_ms": 1353.0,
+            "process_to_first_move_ms": 6276.007,
+            "first_progress_to_first_move_ms": 1882.807
+          },
+          "game_log_sha256": "ede964607327eb1b2e4e7ac105b457bbe05c457f1181ac21b65a3b5878fa02bd",
+          "draw_trace_sha256": "7e35dd7baaad72d4929b1b06d835235d299a820b851996c663b79e4169d24ea4",
+          "exit_code": 0,
+          "payload_verified": 7,
+          "progress_unchanged": true
+        },
+        {
+          "variant": "prior",
+          "condition": "prior-fast",
+          "source_commit": "5b4b89ea90d86af41e9fd40c766e6b38afa508fa",
+          "durations_ms": {
+            "process_to_progress_draw_ms": 4400.4,
+            "process_to_ready_menu_ms": 5771.4,
+            "process_to_sortie_button_ms": 5797.4,
+            "sortie_to_loading_ms": 6.878,
+            "loading_to_attach_ms": 199.303,
+            "map_to_hud_ms": 40.71,
+            "hud_to_ready_ms": 71.361,
+            "sortie_to_battle_ms": 392.618,
+            "sortie_to_first_move_ms": 506.921,
+            "longest_entry_gap_ms": 200.103,
+            "first_progress_to_ready_ms": 1371.0,
+            "process_to_first_move_ms": 6304.321,
+            "first_progress_to_first_move_ms": 1903.921
+          },
+          "game_log_sha256": "adadfc831339077a99089972a95ebac2e0da98adc3f8613a246d1a8e49d2184e",
+          "draw_trace_sha256": "24b1179a985e36e00e342713c1c042c9d809f9fbda880bca48d649936469196c",
+          "exit_code": 0,
+          "payload_verified": 7,
+          "progress_unchanged": true
+        },
+        {
+          "variant": "prior",
+          "condition": "prior-fast",
+          "source_commit": "5b4b89ea90d86af41e9fd40c766e6b38afa508fa",
+          "durations_ms": {
+            "process_to_progress_draw_ms": 4892.675,
+            "process_to_ready_menu_ms": 6216.675,
+            "process_to_sortie_button_ms": 6249.675,
+            "sortie_to_loading_ms": 14.088,
+            "loading_to_attach_ms": 182.972,
+            "map_to_hud_ms": 49.605,
+            "hud_to_ready_ms": 69.108,
+            "sortie_to_battle_ms": 397.787,
+            "sortie_to_first_move_ms": 525.025,
+            "longest_entry_gap_ms": 205.771,
+            "first_progress_to_ready_ms": 1324.0,
+            "process_to_first_move_ms": 6774.7,
+            "first_progress_to_first_move_ms": 1882.025
+          },
+          "game_log_sha256": "adadfc831339077a99089972a95ebac2e0da98adc3f8613a246d1a8e49d2184e",
+          "draw_trace_sha256": "cf174d6e049e0dd3c8e7688a1a3d30b5bd383abc03bc50ab030ebeba0be79c9a",
+          "exit_code": 0,
+          "payload_verified": 7,
+          "progress_unchanged": true
+        },
+        {
+          "variant": "surface",
+          "condition": "surface-fast",
+          "source_commit": "e66d50473e2f9da66e382c81054bb0f77302956c",
+          "durations_ms": {
+            "process_to_progress_draw_ms": 4387.6,
+            "process_to_ready_menu_ms": 5723.6,
+            "process_to_sortie_button_ms": 5761.6,
+            "sortie_to_loading_ms": 14.645,
+            "loading_to_attach_ms": 155.782,
+            "map_to_hud_ms": 39.281,
+            "hud_to_ready_ms": 70.911,
+            "sortie_to_battle_ms": 355.033,
+            "sortie_to_first_move_ms": 463.302,
+            "longest_entry_gap_ms": 202.691,
+            "first_progress_to_ready_ms": 1336.0,
+            "process_to_first_move_ms": 6224.902,
+            "first_progress_to_first_move_ms": 1837.302
+          },
+          "game_log_sha256": "ede964607327eb1b2e4e7ac105b457bbe05c457f1181ac21b65a3b5878fa02bd",
+          "draw_trace_sha256": "12f3188263606c574016c0da247409849a09324fa9bb3ebb7fabf31494b0b205",
+          "exit_code": 0,
+          "payload_verified": 7,
+          "progress_unchanged": true
+        },
+        {
+          "variant": "surface",
+          "condition": "surface-fast",
+          "source_commit": "e66d50473e2f9da66e382c81054bb0f77302956c",
+          "durations_ms": {
+            "process_to_progress_draw_ms": 4654.833,
+            "process_to_ready_menu_ms": 6124.833,
+            "process_to_sortie_button_ms": 6163.833,
+            "sortie_to_loading_ms": 24.622,
+            "loading_to_attach_ms": 157.466,
+            "map_to_hud_ms": 43.2,
+            "hud_to_ready_ms": 78.164,
+            "sortie_to_battle_ms": 387.33,
+            "sortie_to_first_move_ms": 505.421,
+            "longest_entry_gap_ms": 209.982,
+            "first_progress_to_ready_ms": 1470.0,
+            "process_to_first_move_ms": 6669.254,
+            "first_progress_to_first_move_ms": 2014.421
+          },
+          "game_log_sha256": "ede964607327eb1b2e4e7ac105b457bbe05c457f1181ac21b65a3b5878fa02bd",
+          "draw_trace_sha256": "f04945b0cedab57ebf713299e320b3f973a3f23826ef034d4ed96eb69fb49967",
+          "exit_code": 0,
+          "payload_verified": 7,
+          "progress_unchanged": true
+        },
+        {
+          "variant": "prior",
+          "condition": "prior-fast",
+          "source_commit": "5b4b89ea90d86af41e9fd40c766e6b38afa508fa",
+          "durations_ms": {
+            "process_to_progress_draw_ms": 4681.683,
+            "process_to_ready_menu_ms": 6016.683,
+            "process_to_sortie_button_ms": 6045.683,
+            "sortie_to_loading_ms": 14.541,
+            "loading_to_attach_ms": 213.519,
+            "map_to_hud_ms": 42.505,
+            "hud_to_ready_ms": 69.603,
+            "sortie_to_battle_ms": 410.723,
+            "sortie_to_first_move_ms": 520.976,
+            "longest_entry_gap_ms": 191.502,
+            "first_progress_to_ready_ms": 1335.0,
+            "process_to_first_move_ms": 6566.659,
+            "first_progress_to_first_move_ms": 1884.976
+          },
+          "game_log_sha256": "adadfc831339077a99089972a95ebac2e0da98adc3f8613a246d1a8e49d2184e",
+          "draw_trace_sha256": "249fa67dbcc043277b6e0a4e16995290712fd766b03576d9eada99c05e8581a8",
+          "exit_code": 0,
+          "payload_verified": 7,
+          "progress_unchanged": true
+        }
+      ],
+      "median_ms": {
+        "prior": {
+          "process_to_progress_draw_ms": 4787.179,
+          "process_to_ready_menu_ms": 6116.679,
+          "process_to_sortie_button_ms": 6147.679,
+          "sortie_to_loading_ms": 14.3,
+          "loading_to_attach_ms": 198.671,
+          "map_to_hud_ms": 41.758,
+          "hud_to_ready_ms": 69.481,
+          "sortie_to_battle_ms": 395.202,
+          "sortie_to_first_move_ms": 513.948,
+          "longest_entry_gap_ms": 195.803,
+          "first_progress_to_ready_ms": 1353.0,
+          "process_to_first_move_ms": 6670.68,
+          "first_progress_to_first_move_ms": 1894.448
+        },
+        "surface": {
+          "process_to_progress_draw_ms": 4466.969,
+          "process_to_ready_menu_ms": 5828.469,
+          "process_to_sortie_button_ms": 5865.969,
+          "sortie_to_loading_ms": 19.386,
+          "loading_to_attach_ms": 158.069,
+          "map_to_hud_ms": 43.352,
+          "hud_to_ready_ms": 72.665,
+          "sortie_to_battle_ms": 380.594,
+          "sortie_to_first_move_ms": 498.114,
+          "longest_entry_gap_ms": 206.948,
+          "first_progress_to_ready_ms": 1361.5,
+          "process_to_first_move_ms": 6366.076,
+          "first_progress_to_first_move_ms": 1899.106
+        }
+      }
+    },
+    "compiled_music_ready": {
+      "count": 4,
+      "input_sha256": "e528bb096cb9e819d82b63e9971bcc942191487542ea3ac1222c5eb2bd2d48c1",
+      "runs": [
+        {
+          "variant": "prior",
+          "condition": "prior-steady",
+          "source_commit": "5b4b89ea90d86af41e9fd40c766e6b38afa508fa",
+          "durations_ms": {
+            "process_to_progress_draw_ms": 4488.463,
+            "process_to_ready_menu_ms": 5925.463,
+            "process_to_sortie_button_ms": 6699.463,
+            "sortie_to_loading_ms": 14.48,
+            "loading_to_attach_ms": 206.168,
+            "map_to_hud_ms": 40.485,
+            "hud_to_ready_ms": 73.974,
+            "sortie_to_battle_ms": 406.285,
+            "sortie_to_first_move_ms": 516.206,
+            "longest_entry_gap_ms": 195.706,
+            "first_progress_to_ready_ms": 1437.0,
+            "process_to_first_move_ms": 7215.669,
+            "first_progress_to_first_move_ms": 2727.206
+          },
+          "game_log_sha256": "adadfc831339077a99089972a95ebac2e0da98adc3f8613a246d1a8e49d2184e",
+          "draw_trace_sha256": "8c13840d1f928e1762e3720c49172b5ea69f32e33853c1b85291c14c794156bd",
+          "exit_code": 0,
+          "payload_verified": 7,
+          "progress_unchanged": true
+        },
+        {
+          "variant": "surface",
+          "condition": "surface-steady",
+          "source_commit": "e66d50473e2f9da66e382c81054bb0f77302956c",
+          "durations_ms": {
+            "process_to_progress_draw_ms": 4541.586,
+            "process_to_ready_menu_ms": 5927.586,
+            "process_to_sortie_button_ms": 6829.586,
+            "sortie_to_loading_ms": 24.759,
+            "loading_to_attach_ms": 156.529,
+            "map_to_hud_ms": 44.11,
+            "hud_to_ready_ms": 68.716,
+            "sortie_to_battle_ms": 365.499,
+            "sortie_to_first_move_ms": 481.835,
+            "longest_entry_gap_ms": 202.415,
+            "first_progress_to_ready_ms": 1386.0,
+            "process_to_first_move_ms": 7311.421,
+            "first_progress_to_first_move_ms": 2769.835
+          },
+          "game_log_sha256": "ede964607327eb1b2e4e7ac105b457bbe05c457f1181ac21b65a3b5878fa02bd",
+          "draw_trace_sha256": "9cb9a71f07f01d60ce134b7035e4dff6e99826d09f77b88fd4546134c4d60629",
+          "exit_code": 0,
+          "payload_verified": 7,
+          "progress_unchanged": true
+        },
+        {
+          "variant": "surface",
+          "condition": "surface-steady",
+          "source_commit": "e66d50473e2f9da66e382c81054bb0f77302956c",
+          "durations_ms": {
+            "process_to_progress_draw_ms": 4862.235,
+            "process_to_ready_menu_ms": 6352.235,
+            "process_to_sortie_button_ms": 7223.235,
+            "sortie_to_loading_ms": 14.527,
+            "loading_to_attach_ms": 174.394,
+            "map_to_hud_ms": 49.488,
+            "hud_to_ready_ms": 75.811,
+            "sortie_to_battle_ms": 394.242,
+            "sortie_to_first_move_ms": 655.625,
+            "longest_entry_gap_ms": 218.454,
+            "first_progress_to_ready_ms": 1490.0,
+            "process_to_first_move_ms": 7878.86,
+            "first_progress_to_first_move_ms": 3016.625
+          },
+          "game_log_sha256": "ede964607327eb1b2e4e7ac105b457bbe05c457f1181ac21b65a3b5878fa02bd",
+          "draw_trace_sha256": "054103c634ed4a7c4a1881bc9bec9d06c227b433d1d1dbaabdf675c9751830e1",
+          "exit_code": 0,
+          "payload_verified": 7,
+          "progress_unchanged": true
+        },
+        {
+          "variant": "prior",
+          "condition": "prior-steady",
+          "source_commit": "5b4b89ea90d86af41e9fd40c766e6b38afa508fa",
+          "durations_ms": {
+            "process_to_progress_draw_ms": 4585.347,
+            "process_to_ready_menu_ms": 5989.347,
+            "process_to_sortie_button_ms": 6931.347,
+            "sortie_to_loading_ms": 14.288,
+            "loading_to_attach_ms": 212.299,
+            "map_to_hud_ms": 45.549,
+            "hud_to_ready_ms": 76.114,
+            "sortie_to_battle_ms": 427.516,
+            "sortie_to_first_move_ms": 548.223,
+            "longest_entry_gap_ms": 203.4,
+            "first_progress_to_ready_ms": 1404.0,
+            "process_to_first_move_ms": 7479.57,
+            "first_progress_to_first_move_ms": 2894.223
+          },
+          "game_log_sha256": "adadfc831339077a99089972a95ebac2e0da98adc3f8613a246d1a8e49d2184e",
+          "draw_trace_sha256": "4395cbc5e827e68bcfe1ef3465a4514ebd039b748e2d0263d5ced278af3f77b9",
+          "exit_code": 0,
+          "payload_verified": 7,
+          "progress_unchanged": true
+        }
+      ],
+      "median_ms": {
+        "prior": {
+          "process_to_progress_draw_ms": 4536.905,
+          "process_to_ready_menu_ms": 5957.405,
+          "process_to_sortie_button_ms": 6815.405,
+          "sortie_to_loading_ms": 14.384,
+          "loading_to_attach_ms": 209.233,
+          "map_to_hud_ms": 43.017,
+          "hud_to_ready_ms": 75.044,
+          "sortie_to_battle_ms": 416.901,
+          "sortie_to_first_move_ms": 532.215,
+          "longest_entry_gap_ms": 199.553,
+          "first_progress_to_ready_ms": 1420.5,
+          "process_to_first_move_ms": 7347.619,
+          "first_progress_to_first_move_ms": 2810.715
+        },
+        "surface": {
+          "process_to_progress_draw_ms": 4701.91,
+          "process_to_ready_menu_ms": 6139.91,
+          "process_to_sortie_button_ms": 7026.41,
+          "sortie_to_loading_ms": 19.643,
+          "loading_to_attach_ms": 165.462,
+          "map_to_hud_ms": 46.799,
+          "hud_to_ready_ms": 72.263,
+          "sortie_to_battle_ms": 379.87,
+          "sortie_to_first_move_ms": 568.73,
+          "longest_entry_gap_ms": 210.435,
+          "first_progress_to_ready_ms": 1438.0,
+          "process_to_first_move_ms": 7595.14,
+          "first_progress_to_first_move_ms": 2893.23
+        }
+      }
+    },
+    "compiled_music_ready_repeat": {
+      "count": 4,
+      "input_sha256": "3e82e265040d89741cab2d32d2a429f22face75262318ac236e43274919cedb9",
+      "runs": [
+        {
+          "variant": "surface",
+          "condition": "surface-steady",
+          "source_commit": "e66d50473e2f9da66e382c81054bb0f77302956c",
+          "durations_ms": {
+            "process_to_progress_draw_ms": 4581.123,
+            "process_to_ready_menu_ms": 5923.123,
+            "process_to_sortie_button_ms": 6923.123,
+            "sortie_to_loading_ms": 25.553,
+            "loading_to_attach_ms": 171.931,
+            "map_to_hud_ms": 45.684,
+            "hud_to_ready_ms": 72.874,
+            "sortie_to_battle_ms": 393.017,
+            "sortie_to_first_move_ms": 472.526,
+            "longest_entry_gap_ms": 214.285,
+            "first_progress_to_ready_ms": 1342.0,
+            "process_to_first_move_ms": 7395.649,
+            "first_progress_to_first_move_ms": 2814.526
+          },
+          "game_log_sha256": "ede964607327eb1b2e4e7ac105b457bbe05c457f1181ac21b65a3b5878fa02bd",
+          "draw_trace_sha256": "342211ca1b09dcd14c61bb65ff24c2258191d925601e535294db1fbe603fc3f9",
+          "exit_code": 0,
+          "payload_verified": 7,
+          "progress_unchanged": true
+        },
+        {
+          "variant": "prior",
+          "condition": "prior-steady",
+          "source_commit": "5b4b89ea90d86af41e9fd40c766e6b38afa508fa",
+          "durations_ms": {
+            "process_to_progress_draw_ms": 4919.825,
+            "process_to_ready_menu_ms": 6261.825,
+            "process_to_sortie_button_ms": 7287.825,
+            "sortie_to_loading_ms": 14.39,
+            "loading_to_attach_ms": 191.681,
+            "map_to_hud_ms": 45.068,
+            "hud_to_ready_ms": 76.256,
+            "sortie_to_battle_ms": 417.879,
+            "sortie_to_first_move_ms": 530.569,
+            "longest_entry_gap_ms": 230.336,
+            "first_progress_to_ready_ms": 1342.0,
+            "process_to_first_move_ms": 7818.394,
+            "first_progress_to_first_move_ms": 2898.569
+          },
+          "game_log_sha256": "adadfc831339077a99089972a95ebac2e0da98adc3f8613a246d1a8e49d2184e",
+          "draw_trace_sha256": "b66ab104b98d85eb7aaf6e4dbdbf203f500bf9983247a76821509c5366fe8938",
+          "exit_code": 0,
+          "payload_verified": 7,
+          "progress_unchanged": true
+        },
+        {
+          "variant": "prior",
+          "condition": "prior-steady",
+          "source_commit": "5b4b89ea90d86af41e9fd40c766e6b38afa508fa",
+          "durations_ms": {
+            "process_to_progress_draw_ms": 4736.062,
+            "process_to_ready_menu_ms": 6207.062,
+            "process_to_sortie_button_ms": 7103.062,
+            "sortie_to_loading_ms": 14.91,
+            "loading_to_attach_ms": 196.722,
+            "map_to_hud_ms": 44.124,
+            "hud_to_ready_ms": 78.213,
+            "sortie_to_battle_ms": 424.103,
+            "sortie_to_first_move_ms": 553.656,
+            "longest_entry_gap_ms": 216.724,
+            "first_progress_to_ready_ms": 1471.0,
+            "process_to_first_move_ms": 7656.718,
+            "first_progress_to_first_move_ms": 2920.656
+          },
+          "game_log_sha256": "adadfc831339077a99089972a95ebac2e0da98adc3f8613a246d1a8e49d2184e",
+          "draw_trace_sha256": "a8a25a9f65278d583ca93bf52c7718064895c66383b252e9b3a68b84fbac779d",
+          "exit_code": 0,
+          "payload_verified": 7,
+          "progress_unchanged": true
+        },
+        {
+          "variant": "surface",
+          "condition": "surface-steady",
+          "source_commit": "e66d50473e2f9da66e382c81054bb0f77302956c",
+          "durations_ms": {
+            "process_to_progress_draw_ms": 4568.229,
+            "process_to_ready_menu_ms": 6075.229,
+            "process_to_sortie_button_ms": 6856.229,
+            "sortie_to_loading_ms": 24.845,
+            "loading_to_attach_ms": 189.239,
+            "map_to_hud_ms": 44.486,
+            "hud_to_ready_ms": 73.975,
+            "sortie_to_battle_ms": 409.852,
+            "sortie_to_first_move_ms": 527.295,
+            "longest_entry_gap_ms": 213.503,
+            "first_progress_to_ready_ms": 1507.0,
+            "process_to_first_move_ms": 7383.524,
+            "first_progress_to_first_move_ms": 2815.295
+          },
+          "game_log_sha256": "ede964607327eb1b2e4e7ac105b457bbe05c457f1181ac21b65a3b5878fa02bd",
+          "draw_trace_sha256": "4fa17949ba3f5bcfe7c18b76c64c0c118dd0846a3b466e0f73e24487eaf08776",
+          "exit_code": 0,
+          "payload_verified": 7,
+          "progress_unchanged": true
+        }
+      ],
+      "median_ms": {
+        "prior": {
+          "process_to_progress_draw_ms": 4827.943,
+          "process_to_ready_menu_ms": 6234.443,
+          "process_to_sortie_button_ms": 7195.443,
+          "sortie_to_loading_ms": 14.65,
+          "loading_to_attach_ms": 194.202,
+          "map_to_hud_ms": 44.596,
+          "hud_to_ready_ms": 77.234,
+          "sortie_to_battle_ms": 420.991,
+          "sortie_to_first_move_ms": 542.112,
+          "longest_entry_gap_ms": 223.53,
+          "first_progress_to_ready_ms": 1406.5,
+          "process_to_first_move_ms": 7737.556,
+          "first_progress_to_first_move_ms": 2909.613
+        },
+        "surface": {
+          "process_to_progress_draw_ms": 4574.676,
+          "process_to_ready_menu_ms": 5999.176,
+          "process_to_sortie_button_ms": 6889.676,
+          "sortie_to_loading_ms": 25.199,
+          "loading_to_attach_ms": 180.585,
+          "map_to_hud_ms": 45.085,
+          "hud_to_ready_ms": 73.424,
+          "sortie_to_battle_ms": 401.434,
+          "sortie_to_first_move_ms": 499.91,
+          "longest_entry_gap_ms": 213.894,
+          "first_progress_to_ready_ms": 1424.5,
+          "process_to_first_move_ms": 7389.587,
+          "first_progress_to_first_move_ms": 2814.91
+        }
+      }
+    },
+    "compiled_music_ready_pooled": {
+      "count": 8,
+      "median_ms": {
+        "prior": {
+          "process_to_progress_draw_ms": 4660.704,
+          "process_to_ready_menu_ms": 6098.204,
+          "process_to_sortie_button_ms": 7017.204,
+          "sortie_to_loading_ms": 14.435,
+          "loading_to_attach_ms": 201.445,
+          "map_to_hud_ms": 44.596,
+          "hud_to_ready_ms": 76.185,
+          "sortie_to_battle_ms": 420.991,
+          "sortie_to_first_move_ms": 539.396,
+          "longest_entry_gap_ms": 210.062,
+          "first_progress_to_ready_ms": 1420.5,
+          "process_to_first_move_ms": 7568.144,
+          "first_progress_to_first_move_ms": 2896.396
+        },
+        "surface": {
+          "process_to_progress_draw_ms": 4574.676,
+          "process_to_ready_menu_ms": 6001.408,
+          "process_to_sortie_button_ms": 6889.676,
+          "sortie_to_loading_ms": 24.802,
+          "loading_to_attach_ms": 173.163,
+          "map_to_hud_ms": 45.085,
+          "hud_to_ready_ms": 73.424,
+          "sortie_to_battle_ms": 393.63,
+          "sortie_to_first_move_ms": 504.565,
+          "longest_entry_gap_ms": 213.894,
+          "first_progress_to_ready_ms": 1438.0,
+          "process_to_first_move_ms": 7389.587,
+          "first_progress_to_first_move_ms": 2814.91
+        }
+      }
+    }
+  },
+  "early_startup_quit": {
+    "early_quit": true,
+    "player_streams_released": true,
+    "progress_unchanged": true,
+    "quit_reason": "continue_failed",
+    "quit_request_ms": 289.974,
+    "textures_in_flight": [
+      "res://assets/campaign/environment/shared/surfaces/surface_dry_earth.png",
+      "res://assets/campaign/environment/shared/surfaces/surface_forest_earth.png"
+    ],
+    "variant": "early",
+    "source_commit": "e66d50473e2f9da66e382c81054bb0f77302956c",
+    "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+    "pck_sha256": "54b8dbe22e6dd42860cb41bad8eb7dd983a99a446fef21a6652fbb8b85572bba",
+    "payload_verified": 7,
+    "game_log_sha256": "3ac7ef6d1de45cbdcdbe1c4198ddf5007cbfa0d3072b91c80591794a9ffb687f",
+    "runtime_errors": [],
+    "exit_code": 0
+  },
+  "short_six_mode_smoke": {
+    "native": {
+      "candidate": "e66d50473e2f9da66e382c81054bb0f77302956c",
+      "payload_files_unchanged": true,
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "54b8dbe22e6dd42860cb41bad8eb7dd983a99a446fef21a6652fbb8b85572bba",
+      "split_identity": "d38aa5753fa35ce2a126d947bfcf221dd629ab1a39d466d1217a3fcad40cb11e",
+      "exe_unchanged": true,
+      "exit_code": 0,
+      "seconds": 103.133,
+      "errors": [],
+      "warnings": [],
+      "log_sha256": "133b2267e5738e7174fbf16806c0fe61e0bbd1aef2023ff8a3993cb7af83d98c",
+      "report_sha256": "37bb153175c3d6d86d770d99ea70cb8f7cd4093d5c0f7dd1ef1b3e98ba51534d"
+    },
+    "actual_seconds": 94.739759,
+    "acceptance_eligible": false,
+    "visits": 15,
+    "routes": {
+      "arena:arena": 3,
+      "campaign:level1": 3,
+      "campaign:level5": 2,
+      "custom_defense:custom_defense": 2,
+      "skirmish:skirmish": 3,
+      "skirmish_ai:skirmish_ai": 2
+    },
+    "runtime_checks_passed": true,
+    "progress_unchanged": true
+  }
+}
