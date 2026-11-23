@@ -25,6 +25,8 @@ var _entrance: Node2D
 var _sprites: Array[Node2D] = []
 var _fog_node_probes: Dictionary[int, FogNodeProbe] = {}
 var _fog_probe_map_size := Vector2i.ZERO
+const REED_STALKS := 8
+var _reed_rng := RandomNumberGenerator.new()
 var _reed_stems := PackedVector2Array()
 var _reed_leaves := PackedVector2Array()
 var _reed_heads := PackedVector2Array()
@@ -275,8 +277,7 @@ func _near_forest(x: int, y: int) -> bool:
 
 func _cache_reeds(x: int, y: int) -> void:
 	# 短苇丛批量画在地面层，水道与士兵上半身始终可读；不用几百个逐帧节点。
-	var rng := RandomNumberGenerator.new()
-	rng.seed = 5088120+x*131+y*317
+	_reed_rng.seed = 5088120+x*131+y*317
 	var world_p := _map.cell_to_world(Vector2i(x,y))
 	var p := _map.project(world_p)
 	_reed_cells.append(world_p)
@@ -293,17 +294,26 @@ func _cache_reeds(x: int, y: int) -> void:
 			reed.set_meta("campaign_environment_route",route_key)
 			_ground_shadows.append({"p":world_p,"tex":routed,"s":70.0,"foot":reed_foot,"alpha":0.12})
 		_routed_reed_count+=1
-	for i in range(8):
-		var foot := p+Vector2(rng.randf_range(-18,18),rng.randf_range(-7,7))
-		var top := foot+Vector2(rng.randf_range(-5,5),-rng.randf_range(12,26))
-		_reed_stems.append_array(PackedVector2Array([foot,top]))
-		_reed_stem_anchors.append_array(PackedVector2Array([world_p,world_p]))
+	for i in range(REED_STALKS):
+		var foot := p+Vector2(_reed_rng.randf_range(-18,18),_reed_rng.randf_range(-7,7))
+		var top := foot+Vector2(_reed_rng.randf_range(-5,5),-_reed_rng.randf_range(12,26))
+		_reed_stems.append(foot)
+		_reed_stems.append(top)
 		var leaf := foot.lerp(top,0.52)
-		_reed_leaves.append_array(PackedVector2Array([leaf,leaf+Vector2(-6,-5),leaf,leaf+Vector2(6,-6)]))
-		_reed_leaf_anchors.append_array(PackedVector2Array([world_p,world_p,world_p,world_p]))
+		_reed_leaves.append(leaf)
+		_reed_leaves.append(leaf+Vector2(-6,-5))
+		_reed_leaves.append(leaf)
+		_reed_leaves.append(leaf+Vector2(6,-6))
 		if i%2==0:
-			_reed_heads.append_array(PackedVector2Array([top,top+Vector2(1,-4)]))
-			_reed_head_anchors.append_array(PackedVector2Array([world_p,world_p]))
+			_reed_heads.append(top)
+			_reed_heads.append(top+Vector2(1,-4))
+	# Every vertex in this clump shares one anchor for fog visibility.
+	var anchors := PackedVector2Array()
+	anchors.resize(REED_STALKS * 4)
+	anchors.fill(world_p)
+	_reed_stem_anchors.append_array(anchors.slice(0, REED_STALKS * 2))
+	_reed_leaf_anchors.append_array(anchors)
+	_reed_head_anchors.append_array(anchors.slice(0, REED_STALKS))
 
 
 func _build_reed_mesh() -> void:
