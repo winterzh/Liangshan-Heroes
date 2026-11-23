@@ -1,6 +1,10 @@
 # 源码设置与换机（2026-10-30）
 
-当前 Windows 离线试玩候选为 `104ae848`。完整解压后运行 `Start Local Playtest.cmd`，EXE 与 PCK 留在同一目录。私有成品构建器可用 `--split-pck` 选择 `Windows Steam Split` 预设。 [Windows 拆包验收](../qa/battle_entry_timing_20261116/windows_split_payload_and_resume_104ae848.json)
+Windows 离线试玩候选 `42604585` 已通过 ZIP 全量回读、干净解包启动和缺失 PCK 提示。完整解压，将 EXE 与 PCK 放在同一目录，再运行 `Start Local Playtest.cmd`。 [Windows 空车装货验收](../qa/campaign_transport_groups_20261116/windows_empty_cart_dispatch_42604585.json)
+
+104ae848 的本地拆包版可用于六入口进退复查。隔离实窗、95 次活动与节点释放通过，第三分钟帧时超标已记入报告。 [六入口原生长测](../qa/battle_entry_timing_20261116/windows_mode_soak_600_104ae848.json)
+
+上一 Windows 拆包试玩候选为 `104ae848`。完整解压后运行 `Start Local Playtest.cmd`，EXE 与 PCK 留在同一目录。私有成品构建器可用 `--split-pck` 选择 `Windows Steam Split` 预设。 [Windows 拆包验收](../qa/battle_entry_timing_20261116/windows_split_payload_and_resume_104ae848.json)
 
 Windows 首次出征使用原主菜单和隔离档验收，通过左键选关、正常开战与右键下令。 [启动与出征收据](../qa/battle_entry_timing_20261116/windows_fresh_process_startup_bf99bd12.json)
 

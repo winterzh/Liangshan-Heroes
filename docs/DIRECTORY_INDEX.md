@@ -1,6 +1,6 @@
 # 项目目录索引（2026-10-30）
 
-当前 Windows 离线试玩包位于 D:/AI项目/水浒/Windows候选/20261124-104ae848/。ZIP 含配套 EXE、PCK、运行库、许可、启动器和说明。 [Windows 拆包验收](../qa/battle_entry_timing_20261116/windows_split_payload_and_resume_104ae848.json)
+当前 Windows 离线试玩包位于 D:/AI项目/水浒/Windows候选/20261124-42604585/。ZIP 含配套 EXE、PCK、运行库、许可、启动器和说明。 [Windows 空车装货验收](../qa/campaign_transport_groups_20261116/windows_empty_cart_dispatch_42604585.json)
 
 快活林操作验收包位于 D:/AI项目/水浒/Windows候选/20261123-94629f93/。ZIP 含发行文件、启动器和说明。 [Windows 验收收据](../qa/campaign_counter_window_20261116/windows_shop_handover_94629f93.json)
 

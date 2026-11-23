@@ -1,0 +1,2425 @@
+{
+  "scope": "Eight packaged Windows Vulkan Forward+ 1280x720 offline processes at 60 fps. The observer uses the normal campaign picker and a right-click move. Results describe callback intervals, not exclusive CPU or GPU time.",
+  "conditions": {
+    "fast": "Click the sortie as soon as the ordinary menu gate and card are visible.",
+    "steady": "Wait until the eight synthesized tracks are ready and another 0.5 seconds before opening the picker.",
+    "cache": "Same host and shared filesystem cache in sequential processes. Payload read for digest verification before and after each measurement."
+  },
+  "variants": {
+    "baseline": "Windows embedded candidate fb368b0f",
+    "split": "Windows split candidate 104ae848"
+  },
+  "conditions_medians_ms": {
+    "split-fast": {
+      "process_to_ready_menu_ms": 7398.032,
+      "sortie_to_loading_ms": 13.937,
+      "sortie_to_battle_ms": 563.853,
+      "longest_entry_gap_ms": 262.63,
+      "loading_to_attach_ms": 300.666,
+      "attach_to_map_ms": 43.642,
+      "map_to_hud_ms": 61.287,
+      "hud_to_ready_ms": 84.742,
+      "ready_to_draw_ms": 59.58
+    },
+    "baseline-fast": {
+      "process_to_ready_menu_ms": 11162.731,
+      "sortie_to_loading_ms": 14.021,
+      "sortie_to_battle_ms": 467.238,
+      "longest_entry_gap_ms": 248.076,
+      "loading_to_attach_ms": 223.161,
+      "attach_to_map_ms": 25.619,
+      "map_to_hud_ms": 51.79,
+      "hud_to_ready_ms": 89.508,
+      "ready_to_draw_ms": 63.139
+    },
+    "baseline-steady": {
+      "process_to_ready_menu_ms": 11082.961,
+      "sortie_to_loading_ms": 14.719,
+      "sortie_to_battle_ms": 431.868,
+      "longest_entry_gap_ms": 217.039,
+      "loading_to_attach_ms": 218.61,
+      "attach_to_map_ms": 23.868,
+      "map_to_hud_ms": 47.669,
+      "hud_to_ready_ms": 71.529,
+      "ready_to_draw_ms": 55.472
+    },
+    "split-steady": {
+      "process_to_ready_menu_ms": 6758.936,
+      "sortie_to_loading_ms": 14.736,
+      "sortie_to_battle_ms": 476.606,
+      "longest_entry_gap_ms": 209.085,
+      "loading_to_attach_ms": 255.929,
+      "attach_to_map_ms": 28.981,
+      "map_to_hud_ms": 47.017,
+      "hud_to_ready_ms": 75.166,
+      "ready_to_draw_ms": 54.777
+    }
+  },
+  "normal_menu_entry_observer_sha256": "67b8ff62300678abe15beacff85ab21c6f67fea7385410080cdfd0bca615eb26",
+  "runs": [
+    {
+      "verified_identity": "d4944f9a7cb6e4f0ec5e1b6e83af4706564da24c3c7af17c62e2895830e4894b",
+      "viewport": [
+        1280,
+        720
+      ],
+      "window_pixels": [
+        1280,
+        720
+      ],
+      "engine": "4.6.3-stable (official)",
+      "fps_cap": 60,
+      "rendering_method": "forward_plus",
+      "rendering_driver": "vulkan",
+      "course_selection": false,
+      "tracks_on_first_menu_frame": {
+        "calm": 0,
+        "battle": 0
+      },
+      "calm_playback_after_first_menu_ms": 388.259,
+      "tracks": {
+        "calm": [
+          16.0029024943311,
+          18.0029024943311,
+          20.0029024943311,
+          14.0029024943311
+        ],
+        "battle": [
+          12.0029024943311,
+          11.0029024943311,
+          14.0029024943311,
+          12.0029024943311
+        ]
+      },
+      "intro_pages": 3,
+      "max_entry_gap_us": 292272,
+      "progress_unchanged": true,
+      "entry_probe": {
+        "phase_us": {
+          "clicked_after_menu_us": 55233,
+          "music_at_click": [
+            3,
+            3
+          ],
+          "music_building_at_click": true,
+          "prepared_identity": true,
+          "attached": 402028,
+          "GameMap": 459797,
+          "HUD": 530955,
+          "Unit": 590619,
+          "ready": 621752
+        },
+        "frames": [
+          {
+            "since_click_us": 13343,
+            "tracks": [
+              3,
+              3
+            ],
+            "music_building": true,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 0,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 47340,
+            "tracks": [
+              3,
+              3
+            ],
+            "music_building": true,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 51900,
+            "tracks": [
+              3,
+              3
+            ],
+            "music_building": true,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 55055,
+            "tracks": [
+              3,
+              3
+            ],
+            "music_building": true,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 66717,
+            "tracks": [
+              3,
+              3
+            ],
+            "music_building": true,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 113498,
+            "tracks": [
+              4,
+              3
+            ],
+            "music_building": true,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 118644,
+            "tracks": [
+              4,
+              3
+            ],
+            "music_building": true,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 134647,
+            "tracks": [
+              4,
+              3
+            ],
+            "music_building": true,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 141718,
+            "tracks": [
+              4,
+              3
+            ],
+            "music_building": true,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 149737,
+            "tracks": [
+              4,
+              3
+            ],
+            "music_building": true,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 167601,
+            "tracks": [
+              4,
+              3
+            ],
+            "music_building": true,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 191189,
+            "tracks": [
+              4,
+              3
+            ],
+            "music_building": true,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 215788,
+            "tracks": [
+              4,
+              3
+            ],
+            "music_building": true,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 238486,
+            "tracks": [
+              4,
+              3
+            ],
+            "music_building": true,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 242950,
+            "tracks": [
+              4,
+              3
+            ],
+            "music_building": true,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 250124,
+            "tracks": [
+              4,
+              3
+            ],
+            "music_building": true,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 266715,
+            "tracks": [
+              4,
+              3
+            ],
+            "music_building": true,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 284138,
+            "tracks": [
+              4,
+              3
+            ],
+            "music_building": true,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 300314,
+            "tracks": [
+              4,
+              3
+            ],
+            "music_building": true,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 328321,
+            "tracks": [
+              4,
+              3
+            ],
+            "music_building": true,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 333859,
+            "tracks": [
+              4,
+              3
+            ],
+            "music_building": true,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 350942,
+            "tracks": [
+              4,
+              3
+            ],
+            "music_building": true,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 366229,
+            "tracks": [
+              4,
+              3
+            ],
+            "music_building": true,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 393500,
+            "tracks": [
+              4,
+              3
+            ],
+            "music_building": true,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 0,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 685772,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false
+          }
+        ],
+        "settled": false
+      },
+      "variant": "split",
+      "condition": "split-fast",
+      "source_commit": "104ae8487b1f3033fe9ce1a4a31a819e01a0ea16",
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "payload_verified": 7,
+      "create_process_return_ms": 319.171,
+      "milestones": {
+        "loading_to_attach_ms": 388.661,
+        "attach_to_map_ms": 57.769,
+        "map_to_hud_ms": 71.158,
+        "hud_to_ready_ms": 90.797,
+        "ready_to_draw_ms": 64.067,
+        "process_to_progress_draw_ms": 5663.177,
+        "process_to_ready_menu_ms": 8104.177,
+        "process_to_sortie_button_ms": 8159.177,
+        "sortie_to_loading_ms": 13.367,
+        "sortie_to_battle_ms": 685.819,
+        "sortie_to_first_move_ms": 931.035,
+        "right_click_to_order_draw_ms": 105.707,
+        "longest_entry_gap_ms": 292.272
+      },
+      "process_start_offsets_ms": {
+        "first_menu_draw": 5663.177,
+        "initial_progress_draw": 5663.177,
+        "ready_menu_draw": 8104.177,
+        "sortie_button_draw": 8159.177,
+        "sortie_click": 8159.177,
+        "first_loading_draw": 8172.177,
+        "first_battle_draw": 8845.177,
+        "fight_draw": 8923.177,
+        "first_move_click": 8984.177,
+        "first_move_draw": 9090.177
+      },
+      "raw": {
+        "first_menu_draw": 5329452,
+        "initial_progress_draw": 5329474,
+        "ready_menu_draw": 7770176,
+        "sortie_button_draw": 7825355,
+        "sortie_click": 7825360,
+        "first_loading_draw": 7838727,
+        "first_battle_draw": 8511179,
+        "fight_draw": 8588890,
+        "first_move_click": 8650688,
+        "first_move_draw": 8756395
+      },
+      "game_log_sha256": "741c2ef3957d13229ad5bf615a273bea7aec8f5b720008bb9360af13e250af60",
+      "trace_sha256": "a193c25181e415b37379b3210bb8597422cdf895b3f2a8c01d89b79a3cb51ea9",
+      "exit_code": 0,
+      "runtime_errors": []
+    },
+    {
+      "verified_identity": "ad472c51e733890ba190b088f3b66d405a9e80186ea9d60359b321b8771aa80c",
+      "viewport": [
+        1280,
+        720
+      ],
+      "window_pixels": [
+        1280,
+        720
+      ],
+      "engine": "4.6.3-stable (official)",
+      "fps_cap": 60,
+      "rendering_method": "forward_plus",
+      "rendering_driver": "vulkan",
+      "course_selection": false,
+      "tracks_on_first_menu_frame": {
+        "calm": 0,
+        "battle": 0
+      },
+      "calm_playback_after_first_menu_ms": 318.692,
+      "tracks": {
+        "calm": [
+          16.0029024943311,
+          18.0029024943311,
+          20.0029024943311,
+          14.0029024943311
+        ],
+        "battle": [
+          12.0029024943311,
+          11.0029024943311,
+          14.0029024943311,
+          12.0029024943311
+        ]
+      },
+      "intro_pages": 3,
+      "max_entry_gap_us": 235711,
+      "progress_unchanged": true,
+      "entry_probe": {
+        "phase_us": {
+          "clicked_after_menu_us": 29565,
+          "music_at_click": [
+            3,
+            3
+          ],
+          "music_building_at_click": true,
+          "prepared_identity": true,
+          "attached": 227153,
+          "GameMap": 253404,
+          "HUD": 304496,
+          "Unit": 358778,
+          "ready": 385179
+        },
+        "frames": [
+          {
+            "since_click_us": 14235,
+            "tracks": [
+              3,
+              3
+            ],
+            "music_building": true,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 0,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 36882,
+            "tracks": [
+              3,
+              3
+            ],
+            "music_building": true,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 39494,
+            "tracks": [
+              3,
+              3
+            ],
+            "music_building": true,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 44418,
+            "tracks": [
+              3,
+              3
+            ],
+            "music_building": true,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 88327,
+            "tracks": [
+              3,
+              3
+            ],
+            "music_building": true,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 99532,
+            "tracks": [
+              3,
+              3
+            ],
+            "music_building": true,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 114473,
+            "tracks": [
+              3,
+              3
+            ],
+            "music_building": true,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 140535,
+            "tracks": [
+              3,
+              3
+            ],
+            "music_building": true,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 157784,
+            "tracks": [
+              3,
+              3
+            ],
+            "music_building": true,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 162700,
+            "tracks": [
+              3,
+              3
+            ],
+            "music_building": true,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 166390,
+            "tracks": [
+              3,
+              3
+            ],
+            "music_building": true,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 175979,
+            "tracks": [
+              3,
+              3
+            ],
+            "music_building": true,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 198865,
+            "tracks": [
+              4,
+              3
+            ],
+            "music_building": true,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 209472,
+            "tracks": [
+              4,
+              3
+            ],
+            "music_building": true,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 0,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 445183,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false
+          }
+        ],
+        "settled": false
+      },
+      "variant": "baseline",
+      "condition": "baseline-fast",
+      "source_commit": "fb368b0f3535d8908b704bb17025c087a8e370a9",
+      "exe_sha256": "ad472c51e733890ba190b088f3b66d405a9e80186ea9d60359b321b8771aa80c",
+      "payload_verified": 6,
+      "create_process_return_ms": 5422.522,
+      "milestones": {
+        "loading_to_attach_ms": 212.893,
+        "attach_to_map_ms": 26.251,
+        "map_to_hud_ms": 51.092,
+        "hud_to_ready_ms": 80.683,
+        "ready_to_draw_ms": 60.031,
+        "process_to_progress_draw_ms": 10285.763,
+        "process_to_ready_menu_ms": 11689.763,
+        "process_to_sortie_button_ms": 11719.763,
+        "sortie_to_loading_ms": 14.26,
+        "sortie_to_battle_ms": 445.21,
+        "sortie_to_first_move_ms": 556.828,
+        "right_click_to_order_draw_ms": 42.103,
+        "longest_entry_gap_ms": 235.711
+      },
+      "process_start_offsets_ms": {
+        "first_menu_draw": 10285.763,
+        "initial_progress_draw": 10285.763,
+        "ready_menu_draw": 11689.763,
+        "sortie_button_draw": 11719.763,
+        "sortie_click": 11719.763,
+        "first_loading_draw": 11733.763,
+        "first_battle_draw": 12165.763,
+        "fight_draw": 12225.763,
+        "first_move_click": 12234.763,
+        "first_move_draw": 12276.763
+      },
+      "raw": {
+        "first_menu_draw": 4841780,
+        "initial_progress_draw": 4841793,
+        "ready_menu_draw": 6246626,
+        "sortie_button_draw": 6276165,
+        "sortie_click": 6276167,
+        "first_loading_draw": 6290427,
+        "first_battle_draw": 6721377,
+        "fight_draw": 6782725,
+        "first_move_click": 6790892,
+        "first_move_draw": 6832995
+      },
+      "game_log_sha256": "f325dcd0e51a381bffeb33f1327c32628adee253b692d6f7abd25435c0674785",
+      "trace_sha256": "077a59623bebd41fefc36af58211ff6761c1345825f5552922e1be0c83599c47",
+      "exit_code": 0,
+      "runtime_errors": []
+    },
+    {
+      "verified_identity": "ad472c51e733890ba190b088f3b66d405a9e80186ea9d60359b321b8771aa80c",
+      "viewport": [
+        1280,
+        720
+      ],
+      "window_pixels": [
+        1280,
+        720
+      ],
+      "engine": "4.6.3-stable (official)",
+      "fps_cap": 60,
+      "rendering_method": "forward_plus",
+      "rendering_driver": "vulkan",
+      "course_selection": false,
+      "tracks_on_first_menu_frame": {
+        "calm": 0,
+        "battle": 0
+      },
+      "calm_playback_after_first_menu_ms": 338.181,
+      "tracks": {
+        "calm": [
+          16.0029024943311,
+          18.0029024943311,
+          20.0029024943311,
+          14.0029024943311
+        ],
+        "battle": [
+          12.0029024943311,
+          11.0029024943311,
+          14.0029024943311,
+          12.0029024943311
+        ]
+      },
+      "intro_pages": 3,
+      "max_entry_gap_us": 260441,
+      "progress_unchanged": true,
+      "entry_probe": {
+        "phase_us": {
+          "clicked_after_menu_us": 35496,
+          "music_at_click": [
+            3,
+            3
+          ],
+          "music_building_at_click": true,
+          "prepared_identity": true,
+          "attached": 247210,
+          "GameMap": 272196,
+          "HUD": 324684,
+          "Unit": 390272,
+          "ready": 423018
+        },
+        "frames": [
+          {
+            "since_click_us": 13749,
+            "tracks": [
+              3,
+              3
+            ],
+            "music_building": true,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 0,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 43792,
+            "tracks": [
+              3,
+              3
+            ],
+            "music_building": true,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 48466,
+            "tracks": [
+              3,
+              3
+            ],
+            "music_building": true,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 53184,
+            "tracks": [
+              3,
+              3
+            ],
+            "music_building": true,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 91868,
+            "tracks": [
+              3,
+              3
+            ],
+            "music_building": true,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 109576,
+            "tracks": [
+              3,
+              3
+            ],
+            "music_building": true,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 114492,
+            "tracks": [
+              3,
+              3
+            ],
+            "music_building": true,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 127182,
+            "tracks": [
+              3,
+              3
+            ],
+            "music_building": true,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 152092,
+            "tracks": [
+              3,
+              3
+            ],
+            "music_building": true,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 174981,
+            "tracks": [
+              3,
+              3
+            ],
+            "music_building": true,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 182103,
+            "tracks": [
+              3,
+              3
+            ],
+            "music_building": true,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 188302,
+            "tracks": [
+              3,
+              3
+            ],
+            "music_building": true,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 196394,
+            "tracks": [
+              3,
+              3
+            ],
+            "music_building": true,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 213742,
+            "tracks": [
+              4,
+              3
+            ],
+            "music_building": true,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 228804,
+            "tracks": [
+              4,
+              3
+            ],
+            "music_building": true,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 0,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 489245,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false
+          }
+        ],
+        "settled": false
+      },
+      "variant": "baseline",
+      "condition": "baseline-fast",
+      "source_commit": "fb368b0f3535d8908b704bb17025c087a8e370a9",
+      "exe_sha256": "ad472c51e733890ba190b088f3b66d405a9e80186ea9d60359b321b8771aa80c",
+      "payload_verified": 6,
+      "create_process_return_ms": 4445.56,
+      "milestones": {
+        "loading_to_attach_ms": 233.428,
+        "attach_to_map_ms": 24.986,
+        "map_to_hud_ms": 52.488,
+        "hud_to_ready_ms": 98.334,
+        "ready_to_draw_ms": 66.248,
+        "process_to_progress_draw_ms": 9176.699,
+        "process_to_ready_menu_ms": 10635.699,
+        "process_to_sortie_button_ms": 10670.699,
+        "sortie_to_loading_ms": 13.782,
+        "sortie_to_battle_ms": 489.266,
+        "sortie_to_first_move_ms": 717.261,
+        "right_click_to_order_draw_ms": 95.976,
+        "longest_entry_gap_ms": 260.441
+      },
+      "process_start_offsets_ms": {
+        "first_menu_draw": 9176.699,
+        "initial_progress_draw": 9176.699,
+        "ready_menu_draw": 10635.699,
+        "sortie_button_draw": 10670.699,
+        "sortie_click": 10670.699,
+        "first_loading_draw": 10684.699,
+        "first_battle_draw": 11160.699,
+        "fight_draw": 11238.699,
+        "first_move_click": 11291.699,
+        "first_move_draw": 11387.699
+      },
+      "raw": {
+        "first_menu_draw": 4714864,
+        "initial_progress_draw": 4714874,
+        "ready_menu_draw": 6173579,
+        "sortie_button_draw": 6209040,
+        "sortie_click": 6209043,
+        "first_loading_draw": 6222825,
+        "first_battle_draw": 6698309,
+        "fight_draw": 6776867,
+        "first_move_click": 6830328,
+        "first_move_draw": 6926304
+      },
+      "game_log_sha256": "f325dcd0e51a381bffeb33f1327c32628adee253b692d6f7abd25435c0674785",
+      "trace_sha256": "9e166204b804945313bf8ebc122ab382965195e83c9c05d795d46eb23c838052",
+      "exit_code": 0,
+      "runtime_errors": []
+    },
+    {
+      "verified_identity": "d4944f9a7cb6e4f0ec5e1b6e83af4706564da24c3c7af17c62e2895830e4894b",
+      "viewport": [
+        1280,
+        720
+      ],
+      "window_pixels": [
+        1280,
+        720
+      ],
+      "engine": "4.6.3-stable (official)",
+      "fps_cap": 60,
+      "rendering_method": "forward_plus",
+      "rendering_driver": "vulkan",
+      "course_selection": false,
+      "tracks_on_first_menu_frame": {
+        "calm": 0,
+        "battle": 0
+      },
+      "calm_playback_after_first_menu_ms": 321.478,
+      "tracks": {
+        "calm": [
+          16.0029024943311,
+          18.0029024943311,
+          20.0029024943311,
+          14.0029024943311
+        ],
+        "battle": [
+          12.0029024943311,
+          11.0029024943311,
+          14.0029024943311,
+          12.0029024943311
+        ]
+      },
+      "intro_pages": 3,
+      "max_entry_gap_us": 232988,
+      "progress_unchanged": true,
+      "entry_probe": {
+        "phase_us": {
+          "clicked_after_menu_us": 32540,
+          "music_at_click": [
+            3,
+            3
+          ],
+          "music_building_at_click": true,
+          "prepared_identity": true,
+          "attached": 227178,
+          "GameMap": 256694,
+          "HUD": 308109,
+          "Unit": 361929,
+          "ready": 386795
+        },
+        "frames": [
+          {
+            "since_click_us": 14482,
+            "tracks": [
+              3,
+              3
+            ],
+            "music_building": true,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 0,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 35261,
+            "tracks": [
+              3,
+              3
+            ],
+            "music_building": true,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 42476,
+            "tracks": [
+              3,
+              3
+            ],
+            "music_building": true,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 46212,
+            "tracks": [
+              3,
+              3
+            ],
+            "music_building": true,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 90539,
+            "tracks": [
+              4,
+              3
+            ],
+            "music_building": true,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 101724,
+            "tracks": [
+              4,
+              3
+            ],
+            "music_building": true,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 115971,
+            "tracks": [
+              4,
+              3
+            ],
+            "music_building": true,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 125062,
+            "tracks": [
+              4,
+              3
+            ],
+            "music_building": true,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 148579,
+            "tracks": [
+              4,
+              3
+            ],
+            "music_building": true,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 160674,
+            "tracks": [
+              4,
+              3
+            ],
+            "music_building": true,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 163739,
+            "tracks": [
+              4,
+              3
+            ],
+            "music_building": true,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 181268,
+            "tracks": [
+              4,
+              3
+            ],
+            "music_building": true,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 197164,
+            "tracks": [
+              4,
+              3
+            ],
+            "music_building": true,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 208874,
+            "tracks": [
+              4,
+              3
+            ],
+            "music_building": true,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 0,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 441862,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false
+          }
+        ],
+        "settled": false
+      },
+      "variant": "split",
+      "condition": "split-fast",
+      "source_commit": "104ae8487b1f3033fe9ce1a4a31a819e01a0ea16",
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "payload_verified": 7,
+      "create_process_return_ms": 284.944,
+      "milestones": {
+        "loading_to_attach_ms": 212.671,
+        "attach_to_map_ms": 29.516,
+        "map_to_hud_ms": 51.415,
+        "hud_to_ready_ms": 78.686,
+        "ready_to_draw_ms": 55.093,
+        "process_to_progress_draw_ms": 5251.888,
+        "process_to_ready_menu_ms": 6691.888,
+        "process_to_sortie_button_ms": 6724.888,
+        "sortie_to_loading_ms": 14.507,
+        "sortie_to_battle_ms": 441.888,
+        "sortie_to_first_move_ms": 522.351,
+        "right_click_to_order_draw_ms": 5.962,
+        "longest_entry_gap_ms": 232.988
+      },
+      "process_start_offsets_ms": {
+        "first_menu_draw": 5251.888,
+        "initial_progress_draw": 5251.888,
+        "ready_menu_draw": 6691.888,
+        "sortie_button_draw": 6724.888,
+        "sortie_click": 6724.888,
+        "first_loading_draw": 6738.888,
+        "first_battle_draw": 7165.888,
+        "fight_draw": 7228.888,
+        "first_move_click": 7240.888,
+        "first_move_draw": 7246.888
+      },
+      "raw": {
+        "first_menu_draw": 4951367,
+        "initial_progress_draw": 4951380,
+        "ready_menu_draw": 6391591,
+        "sortie_button_draw": 6424099,
+        "sortie_click": 6424102,
+        "first_loading_draw": 6438609,
+        "first_battle_draw": 6865990,
+        "fight_draw": 6929601,
+        "first_move_click": 6940491,
+        "first_move_draw": 6946453
+      },
+      "game_log_sha256": "741c2ef3957d13229ad5bf615a273bea7aec8f5b720008bb9360af13e250af60",
+      "trace_sha256": "15a903e5e813422b6343cf5cff24fb804b3febcfbd3c8035e3307bf40e77cc6d",
+      "exit_code": 0,
+      "runtime_errors": []
+    },
+    {
+      "verified_identity": "ad472c51e733890ba190b088f3b66d405a9e80186ea9d60359b321b8771aa80c",
+      "viewport": [
+        1280,
+        720
+      ],
+      "window_pixels": [
+        1280,
+        720
+      ],
+      "engine": "4.6.3-stable (official)",
+      "fps_cap": 60,
+      "rendering_method": "forward_plus",
+      "rendering_driver": "vulkan",
+      "course_selection": false,
+      "tracks_on_first_menu_frame": {
+        "calm": 0,
+        "battle": 0
+      },
+      "calm_playback_after_first_menu_ms": 305.214,
+      "tracks": {
+        "calm": [
+          16.0029024943311,
+          18.0029024943311,
+          20.0029024943311,
+          14.0029024943311
+        ],
+        "battle": [
+          12.0029024943311,
+          11.0029024943311,
+          14.0029024943311,
+          12.0029024943311
+        ]
+      },
+      "intro_pages": 3,
+      "max_entry_gap_us": 219228,
+      "progress_unchanged": true,
+      "entry_probe": {
+        "phase_us": {
+          "clicked_after_menu_us": 856847,
+          "music_at_click": [
+            4,
+            4
+          ],
+          "music_building_at_click": false,
+          "prepared_identity": true,
+          "attached": 222597,
+          "GameMap": 246504,
+          "HUD": 295178,
+          "Unit": 345280,
+          "ready": 367631
+        },
+        "frames": [
+          {
+            "since_click_us": 14974,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 0,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 37439,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 42590,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 77788,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 95444,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 101152,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 114433,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 125240,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 164772,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 186715,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 189906,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 190551,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 204662,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 0,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 423890,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false
+          }
+        ],
+        "settled": true
+      },
+      "variant": "baseline",
+      "condition": "baseline-steady",
+      "source_commit": "fb368b0f3535d8908b704bb17025c087a8e370a9",
+      "exe_sha256": "ad472c51e733890ba190b088f3b66d405a9e80186ea9d60359b321b8771aa80c",
+      "payload_verified": 6,
+      "create_process_return_ms": 4648.585,
+      "milestones": {
+        "loading_to_attach_ms": 207.591,
+        "attach_to_map_ms": 23.907,
+        "map_to_hud_ms": 48.674,
+        "hud_to_ready_ms": 72.453,
+        "ready_to_draw_ms": 56.292,
+        "process_to_progress_draw_ms": 9624.505,
+        "process_to_ready_menu_ms": 11115.505,
+        "process_to_sortie_button_ms": 11972.505,
+        "sortie_to_loading_ms": 15.006,
+        "sortie_to_battle_ms": 423.923,
+        "sortie_to_first_move_ms": 532.89,
+        "right_click_to_order_draw_ms": 37.666,
+        "longest_entry_gap_ms": 219.228
+      },
+      "process_start_offsets_ms": {
+        "first_menu_draw": 9624.505,
+        "initial_progress_draw": 9624.505,
+        "ready_menu_draw": 11115.505,
+        "sortie_button_draw": 11972.505,
+        "sortie_click": 11972.505,
+        "first_loading_draw": 11986.505,
+        "first_battle_draw": 12396.505,
+        "fight_draw": 12458.505,
+        "first_move_click": 12467.505,
+        "first_move_draw": 12505.505
+      },
+      "raw": {
+        "first_menu_draw": 4959916,
+        "initial_progress_draw": 4959929,
+        "ready_menu_draw": 6451258,
+        "sortie_button_draw": 7308074,
+        "sortie_click": 7308076,
+        "first_loading_draw": 7323082,
+        "first_battle_draw": 7731999,
+        "fight_draw": 7793764,
+        "first_move_click": 7803300,
+        "first_move_draw": 7840966
+      },
+      "game_log_sha256": "f325dcd0e51a381bffeb33f1327c32628adee253b692d6f7abd25435c0674785",
+      "trace_sha256": "a9343e94a4f2da2eeab77e131ab0bc95a5ff98cb237d0f8941d788b125bbccb0",
+      "exit_code": 0,
+      "runtime_errors": []
+    },
+    {
+      "verified_identity": "d4944f9a7cb6e4f0ec5e1b6e83af4706564da24c3c7af17c62e2895830e4894b",
+      "viewport": [
+        1280,
+        720
+      ],
+      "window_pixels": [
+        1280,
+        720
+      ],
+      "engine": "4.6.3-stable (official)",
+      "fps_cap": 60,
+      "rendering_method": "forward_plus",
+      "rendering_driver": "vulkan",
+      "course_selection": false,
+      "tracks_on_first_menu_frame": {
+        "calm": 0,
+        "battle": 0
+      },
+      "calm_playback_after_first_menu_ms": 335.313,
+      "tracks": {
+        "calm": [
+          16.0029024943311,
+          18.0029024943311,
+          20.0029024943311,
+          14.0029024943311
+        ],
+        "battle": [
+          12.0029024943311,
+          11.0029024943311,
+          14.0029024943311,
+          12.0029024943311
+        ]
+      },
+      "intro_pages": 3,
+      "max_entry_gap_us": 205963,
+      "progress_unchanged": true,
+      "entry_probe": {
+        "phase_us": {
+          "clicked_after_menu_us": 973003,
+          "music_at_click": [
+            4,
+            4
+          ],
+          "music_building_at_click": false,
+          "prepared_identity": true,
+          "attached": 228981,
+          "GameMap": 256122,
+          "HUD": 303448,
+          "Unit": 354109,
+          "ready": 378547
+        },
+        "frames": [
+          {
+            "since_click_us": 14820,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 0,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 38425,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 40339,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 52155,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 85279,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 98411,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 104864,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 112727,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 145632,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 175915,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 205308,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 221100,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 225854,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 0,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 431817,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false
+          }
+        ],
+        "settled": true
+      },
+      "variant": "split",
+      "condition": "split-steady",
+      "source_commit": "104ae8487b1f3033fe9ce1a4a31a819e01a0ea16",
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "payload_verified": 7,
+      "create_process_return_ms": 298.109,
+      "milestones": {
+        "loading_to_attach_ms": 214.133,
+        "attach_to_map_ms": 27.141,
+        "map_to_hud_ms": 47.326,
+        "hud_to_ready_ms": 75.099,
+        "ready_to_draw_ms": 53.293,
+        "process_to_progress_draw_ms": 5151.25,
+        "process_to_ready_menu_ms": 6641.25,
+        "process_to_sortie_button_ms": 7614.25,
+        "sortie_to_loading_ms": 14.848,
+        "sortie_to_battle_ms": 431.84,
+        "sortie_to_first_move_ms": 548.879,
+        "right_click_to_order_draw_ms": 42.797,
+        "longest_entry_gap_ms": 205.963
+      },
+      "process_start_offsets_ms": {
+        "first_menu_draw": 5151.25,
+        "initial_progress_draw": 5151.25,
+        "ready_menu_draw": 6641.25,
+        "sortie_button_draw": 7614.25,
+        "sortie_click": 7614.25,
+        "first_loading_draw": 7630.25,
+        "first_battle_draw": 8047.25,
+        "fight_draw": 8111.25,
+        "first_move_click": 8121.25,
+        "first_move_draw": 8164.25
+      },
+      "raw": {
+        "first_menu_draw": 4836779,
+        "initial_progress_draw": 4836800,
+        "ready_menu_draw": 6326705,
+        "sortie_button_draw": 7299670,
+        "sortie_click": 7299673,
+        "first_loading_draw": 7314521,
+        "first_battle_draw": 7731513,
+        "fight_draw": 7797037,
+        "first_move_click": 7805755,
+        "first_move_draw": 7848552
+      },
+      "game_log_sha256": "741c2ef3957d13229ad5bf615a273bea7aec8f5b720008bb9360af13e250af60",
+      "trace_sha256": "6798052cdc9155878e5df80e178f34fc35759809fabe181236c0627df957a301",
+      "exit_code": 0,
+      "runtime_errors": []
+    },
+    {
+      "verified_identity": "d4944f9a7cb6e4f0ec5e1b6e83af4706564da24c3c7af17c62e2895830e4894b",
+      "viewport": [
+        1280,
+        720
+      ],
+      "window_pixels": [
+        1280,
+        720
+      ],
+      "engine": "4.6.3-stable (official)",
+      "fps_cap": 60,
+      "rendering_method": "forward_plus",
+      "rendering_driver": "vulkan",
+      "course_selection": false,
+      "tracks_on_first_menu_frame": {
+        "calm": 0,
+        "battle": 0
+      },
+      "calm_playback_after_first_menu_ms": 305.337,
+      "tracks": {
+        "calm": [
+          16.0029024943311,
+          18.0029024943311,
+          20.0029024943311,
+          14.0029024943311
+        ],
+        "battle": [
+          12.0029024943311,
+          11.0029024943311,
+          14.0029024943311,
+          12.0029024943311
+        ]
+      },
+      "intro_pages": 3,
+      "max_entry_gap_us": 212208,
+      "progress_unchanged": true,
+      "entry_probe": {
+        "phase_us": {
+          "clicked_after_menu_us": 691700,
+          "music_at_click": [
+            4,
+            4
+          ],
+          "music_building_at_click": false,
+          "prepared_identity": true,
+          "attached": 312349,
+          "GameMap": 343170,
+          "HUD": 389878,
+          "Unit": 438290,
+          "ready": 465112
+        },
+        "frames": [
+          {
+            "since_click_us": 14598,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 0,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 38701,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 41616,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 45523,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 59091,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 95727,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 108498,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 115837,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 130395,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 165841,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 266563,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 292203,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 309138,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 0,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 521346,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false
+          }
+        ],
+        "settled": true
+      },
+      "variant": "split",
+      "condition": "split-steady",
+      "source_commit": "104ae8487b1f3033fe9ce1a4a31a819e01a0ea16",
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "payload_verified": 7,
+      "create_process_return_ms": 280.141,
+      "milestones": {
+        "loading_to_attach_ms": 297.725,
+        "attach_to_map_ms": 30.821,
+        "map_to_hud_ms": 46.708,
+        "hud_to_ready_ms": 75.234,
+        "ready_to_draw_ms": 56.261,
+        "process_to_progress_draw_ms": 5185.622,
+        "process_to_ready_menu_ms": 6876.622,
+        "process_to_sortie_button_ms": 7567.622,
+        "sortie_to_loading_ms": 14.624,
+        "sortie_to_battle_ms": 521.373,
+        "sortie_to_first_move_ms": 650.71,
+        "right_click_to_order_draw_ms": 7.307,
+        "longest_entry_gap_ms": 212.208
+      },
+      "process_start_offsets_ms": {
+        "first_menu_draw": 5185.622,
+        "initial_progress_draw": 5185.622,
+        "ready_menu_draw": 6876.622,
+        "sortie_button_draw": 7567.622,
+        "sortie_click": 7568.622,
+        "first_loading_draw": 7582.622,
+        "first_battle_draw": 8089.622,
+        "fight_draw": 8162.622,
+        "first_move_click": 8211.622,
+        "first_move_draw": 8218.622
+      },
+      "raw": {
+        "first_menu_draw": 4884406,
+        "initial_progress_draw": 4884420,
+        "ready_menu_draw": 6575496,
+        "sortie_button_draw": 7267136,
+        "sortie_click": 7267139,
+        "first_loading_draw": 7281763,
+        "first_battle_draw": 7788512,
+        "fight_draw": 7860832,
+        "first_move_click": 7910542,
+        "first_move_draw": 7917849
+      },
+      "game_log_sha256": "741c2ef3957d13229ad5bf615a273bea7aec8f5b720008bb9360af13e250af60",
+      "trace_sha256": "6571cca4c8e0e93dc4a0ad9544094aef41e66b5d4094a80179b137b7a7a243a1",
+      "exit_code": 0,
+      "runtime_errors": []
+    },
+    {
+      "verified_identity": "ad472c51e733890ba190b088f3b66d405a9e80186ea9d60359b321b8771aa80c",
+      "viewport": [
+        1280,
+        720
+      ],
+      "window_pixels": [
+        1280,
+        720
+      ],
+      "engine": "4.6.3-stable (official)",
+      "fps_cap": 60,
+      "rendering_method": "forward_plus",
+      "rendering_driver": "vulkan",
+      "course_selection": false,
+      "tracks_on_first_menu_frame": {
+        "calm": 0,
+        "battle": 0
+      },
+      "calm_playback_after_first_menu_ms": 321.873,
+      "tracks": {
+        "calm": [
+          16.0029024943311,
+          18.0029024943311,
+          20.0029024943311,
+          14.0029024943311
+        ],
+        "battle": [
+          12.0029024943311,
+          11.0029024943311,
+          14.0029024943311,
+          12.0029024943311
+        ]
+      },
+      "intro_pages": 3,
+      "max_entry_gap_us": 214850,
+      "progress_unchanged": true,
+      "entry_probe": {
+        "phase_us": {
+          "clicked_after_menu_us": 940089,
+          "music_at_click": [
+            4,
+            4
+          ],
+          "music_building_at_click": false,
+          "prepared_identity": true,
+          "attached": 244061,
+          "GameMap": 267891,
+          "HUD": 314556,
+          "Unit": 360453,
+          "ready": 385161
+        },
+        "frames": [
+          {
+            "since_click_us": 14417,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 0,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 36773,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 41748,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 45876,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 90534,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 103101,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 116185,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 125138,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 146946,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 7,
+            "frames": 7,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 173230,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 188878,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 200726,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 205342,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 220048,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 8,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 224936,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false,
+            "textures": 0,
+            "frames": 0,
+            "portraits": 0,
+            "identity_worker": false
+          },
+          {
+            "since_click_us": 439786,
+            "tracks": [
+              4,
+              4
+            ],
+            "music_building": false
+          }
+        ],
+        "settled": true
+      },
+      "variant": "baseline",
+      "condition": "baseline-steady",
+      "source_commit": "fb368b0f3535d8908b704bb17025c087a8e370a9",
+      "exe_sha256": "ad472c51e733890ba190b088f3b66d405a9e80186ea9d60359b321b8771aa80c",
+      "payload_verified": 6,
+      "create_process_return_ms": 4506.034,
+      "milestones": {
+        "loading_to_attach_ms": 229.629,
+        "attach_to_map_ms": 23.83,
+        "map_to_hud_ms": 46.665,
+        "hud_to_ready_ms": 70.605,
+        "ready_to_draw_ms": 54.651,
+        "process_to_progress_draw_ms": 9537.418,
+        "process_to_ready_menu_ms": 11050.418,
+        "process_to_sortie_button_ms": 11990.418,
+        "sortie_to_loading_ms": 14.432,
+        "sortie_to_battle_ms": 439.812,
+        "sortie_to_first_move_ms": 559.304,
+        "right_click_to_order_draw_ms": 43.831,
+        "longest_entry_gap_ms": 214.85
+      },
+      "process_start_offsets_ms": {
+        "first_menu_draw": 9537.418,
+        "initial_progress_draw": 9537.418,
+        "ready_menu_draw": 11050.418,
+        "sortie_button_draw": 11990.418,
+        "sortie_click": 11990.418,
+        "first_loading_draw": 12004.418,
+        "first_battle_draw": 12430.418,
+        "fight_draw": 12494.418,
+        "first_move_click": 12506.418,
+        "first_move_draw": 12549.418
+      },
+      "raw": {
+        "first_menu_draw": 5015891,
+        "initial_progress_draw": 5015909,
+        "ready_menu_draw": 6528871,
+        "sortie_button_draw": 7468907,
+        "sortie_click": 7468910,
+        "first_loading_draw": 7483342,
+        "first_battle_draw": 7908722,
+        "fight_draw": 7973099,
+        "first_move_click": 7984383,
+        "first_move_draw": 8028214
+      },
+      "game_log_sha256": "f325dcd0e51a381bffeb33f1327c32628adee253b692d6f7abd25435c0674785",
+      "trace_sha256": "2e549dae49c8b31f7fa5148835ac7e18e578e2c7244e35a0f81356379536feb5",
+      "exit_code": 0,
+      "runtime_errors": []
+    }
+  ]
+}
