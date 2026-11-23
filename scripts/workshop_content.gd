@@ -24,23 +24,33 @@ static func encode_payload(value: Variant) -> Variant:
 static func runtime_payload(data: Dictionary) -> Dictionary:
 	var result := data.duplicate(true)
 	for group in ["units", "abilities"]:
-		if not result.get(group, {}) is Dictionary: continue
-		var reference: Dictionary = Defs.UNITS if group == "units" else Defs.ABILITIES
-		var examples := {}
+		var overrides: Variant = result.get(group)
+		if not overrides is Dictionary or overrides.is_empty():
+			continue
+		var is_ability_group: bool = group == "abilities"
+		var reference: Dictionary = Defs.ABILITIES if is_ability_group else Defs.UNITS
+		var color_fields := {}
+		var effect_color_fields := {}
 		for entry in reference.values():
 			for field in entry:
-				if entry[field] is Color: examples[field] = true
-		for key in result.get(group, {}):
-			if not result[group][key] is Dictionary: continue
-			for field in examples:
-				if result[group][key].has(field): result[group][key][field] = _restore_color(result[group][key][field])
-			if group == "abilities" and result[group][key].get("effect") is Dictionary:
-				var colors := {}
-				for entry in reference.values():
-					for field in entry.get("effect", {}):
-						if entry.effect[field] is Color: colors[field] = true
-				for field in colors:
-					if result[group][key].effect.has(field): result[group][key].effect[field] = _restore_color(result[group][key].effect[field])
+				if entry[field] is Color:
+					color_fields[field] = true
+			if is_ability_group:
+				var effect: Dictionary = entry.get("effect", {})
+				for field in effect:
+					if effect[field] is Color:
+						effect_color_fields[field] = true
+		for override in overrides.values():
+			if not override is Dictionary:
+				continue
+			for field in color_fields:
+				if override.has(field):
+					override[field] = _restore_color(override[field])
+			var effect: Variant = override.get("effect") if is_ability_group else null
+			if effect is Dictionary:
+				for field in effect_color_fields:
+					if effect.has(field):
+						effect[field] = _restore_color(effect[field])
 	return result
 
 static func _restore_color(value: Variant) -> Variant:
