@@ -1769,7 +1769,7 @@ func _set_info_expanded(v: bool) -> void:
 		_clear_info_toasts()
 		_scroll_info_to_bottom()
 	_update_info_toggle()
-	_layout_info_panel()
+	_update_control_help_visibility()
 
 
 func _update_info_toggle() -> void:
