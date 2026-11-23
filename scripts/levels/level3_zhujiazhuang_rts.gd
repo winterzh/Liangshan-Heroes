@@ -20,6 +20,7 @@ const OUTPOST := Vector2i(36, 39)
 const EXPANSION := Vector2i(36, 16)
 const PRISON := Vector2i(11, 35)
 const INNER_CONTACT := Vector2i(25, 18)
+const EVACUATION_RADIUS := 190.0
 const PRISONERS := ["shi_qian", "shi_xiu", "qin_ming", "yang_lin", "huang_xin", "wang_ying", "deng_fei"]
 const FIELD_ACTORS := ["song_jiang", "lin_chong", "hua_rong", "sun_li", "liang_dao", "liang_qiang", "liang_gong", "liang_ma"]
 const TROOPS := [{"key":"zhu_keke", "cost":"liang_dao"}, {"key":"zhu_gong", "cost":"liang_gong"}, {"key":"zhu_qi", "cost":"liang_ma"}]
@@ -354,7 +355,7 @@ func on_mission_action(b, action_id: String, actor) -> void:
 				b.mission.actions[action_id]["marker"].show()
 				b.mission.set_status("请先将时迁护送至前营附近，再由宋江收军。")
 				return
-			if prisoners.all(func(u): return _alive(u) and u.position.distance_to(hall.position) < 190.0):
+			if prisoners.all(_at_forward_camp):
 				b.mission.mark("zhu_seven_safe","七名被囚好汉全部撤回前营")
 			b.mission.mark("zhu_victory","祝家庄大营已破，时迁安全回营")
 			b.win("祝家庄已破，时迁归营！营地经营、战场争夺与攻庄救人完成。")
@@ -409,10 +410,30 @@ func _add_evacuation_controls(b) -> void:
 	b.mission.add_level_button("zhu_select_rescued", "选中 · 获救队伍", "选中并定位获救者，由你下令撤回前营。")
 	b.mission.add_map_locator("前营", CAMP)
 
+func _at_forward_camp(u) -> bool:
+	return _alive(u) and u.position.distance_to(hall.position) < EVACUATION_RADIUS
+
+func _rescued_outside_camp() -> Array:
+	return _rescued_members().filter(func(u): return not _at_forward_camp(u))
+
+func _update_camp_evacuation_control(b) -> void:
+	var button: Button = b.mission.find_level_button("zhu_select_outside_camp")
+	if button == null:
+		button = b.mission.add_level_button("zhu_select_outside_camp", "选中 · 尚未归营伤员",
+			"只选中尚未抵达前营的可指挥伤员。请选择路线并下令归营。")
+	button.disabled = _rescued_outside_camp().is_empty()
+
 func activate_mission_button(b, button_id: String) -> void:
 	if b.phase != b.Phase.FIGHT: return
 	if button_id == "zhu_find_camp_gold":
 		_view_camp_gold(b)
+		return
+	if button_id == "zhu_select_outside_camp":
+		if prisoners_freed and _alive(hall):
+			var outside := _rescued_outside_camp()
+			if not outside.is_empty():
+				b.select_members(outside, false)
+				b.mission.set_feedback(Localize.format_text("已选中尚未归营的伤员：%d 人。请下令归营。", outside.size()))
 		return
 	if button_id not in ["zhu_select_shi_qian", "zhu_select_rescued"]: return
 	var only_shi_qian := button_id == "zhu_select_shi_qian"
@@ -817,7 +838,12 @@ func _refresh_stage(b) -> void:
 		objective = "部分守军已被引向正门。保持正门压力，让孙立到偏门接应；还需破营、救出时迁。"
 	if _finish_ready():
 		heading = "收军 · 时迁已归营"
-		objective = "宋江到前营收军标记即可获胜；也可先接回其余好汉，再收军。无需清空敌军。"
+		if b.mission.has_event("zhu_prisoner_lost"):
+			objective = "本局有伤员阵亡，七人全返演义已失败。宋江可到前营收军，完成主目标。"
+		elif b.mission.has_event("zhu_seven_safe"):
+			objective = "七人全返演义已达成。让宋江到前营收军标记即可结算。"
+		else:
+			objective = "宋江可立即收军。想取得七人全返演义，先选中尚未归营的伤员，把他们送回前营。"
 	elif manor_fallen and prisoners_freed:
 		heading = "撤离 · 护送伤员"
 		objective = "大营已破，敌军不再补兵。先清理撤路，再护送时迁回前营；其余好汉全部生还是可选演义目标。"
@@ -853,18 +879,16 @@ func process(b, delta: float) -> void:
 				_introduce_sun(b)
 				if not b._gameplay_rng_issue.is_empty(): return
 				break
-	_refresh_stage(b)
-	if prisoners_freed and manor_fallen:
-		var safe := 0
-		for u in prisoners:
-			if _alive(u) and u.position.distance_to(hall.position) < 190.0:
-				safe += 1
-		if safe == 7:
+	if prisoners_freed and _alive(hall):
+		_update_camp_evacuation_control(b)
+	if prisoners_freed and manor_fallen and _alive(hall):
+		if prisoners.size() == PRISONERS.size() and prisoners.all(_at_forward_camp):
 			b.mission.mark("zhu_seven_safe","七名被囚好汉全部撤回前营")
-		if _alive(prisoners[0]) and prisoners[0].position.distance_to(hall.position) < 190.0:
+		if _finish_ready():
 			if not b.mission.actions.has("zhu_rts_finish"):
 				b.mission.add_action("zhu_rts_finish",Localize.text("宋江：收军结算（可先救齐七人）"),CAMP+Vector2i(-4,0),["song_jiang"],1.0,96.0)
-				b.msg("核心目标已完成。宋江到前营标记收军即可获胜；也可继续接回其余好汉。",7.0)
+				b.msg("时迁已到前营。可由宋江在收军标记完成主目标。",7.0)
+	_refresh_stage(b)
 
 func on_unit_resolved(b, u, outcome: String) -> void:
 	if u == hu and outcome == "captured":
@@ -934,9 +958,13 @@ func campaign_debrief(mission) -> Array[Dictionary]:
 	return rows
 
 func _finish_ready() -> bool:
-	return manor_fallen and prisoners_freed and _alive(hall) and not prisoners.is_empty() and _alive(prisoners[0]) and prisoners[0].position.distance_to(hall.position) < 190.0
+	return manor_fallen and prisoners_freed and _alive(hall) and not prisoners.is_empty() and _at_forward_camp(prisoners[0])
 
 func top_status(b) -> String:
+	if manor_fallen and prisoners_freed and _alive(hall):
+		var arrived := prisoners.filter(_at_forward_camp).size()
+		var lost := PRISONERS.size() - prisoners.filter(_alive).size()
+		return Localize.format_text("祝家庄 · 伤员归营 %d/%d · 阵亡 %d", [arrived, PRISONERS.size(), lost])
 	var supply := "南营情报需侦察"
 	if manor_fallen:
 		supply = "大营停止补兵"
