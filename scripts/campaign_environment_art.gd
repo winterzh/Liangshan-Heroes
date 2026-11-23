@@ -1033,9 +1033,11 @@ static func _verified_png_source_sha(path: String) -> String:
 	return String(record.source_sha256)
 
 ## Prime the existing pixel cache with the exact routed texture from preview.
-static func prepare_png_calibration(texture: Texture2D) -> void:
-	if PNG_TEXTURE_CALIBRATIONS.has(texture.resource_path) and not _png_pixel_hashes.has(texture.get_instance_id()):
-		_verified_png_source_sha(texture.resource_path)
+static func prepare_png_calibration(texture: Texture2D) -> bool:
+	if not PNG_TEXTURE_CALIBRATIONS.has(texture.resource_path) or _png_pixel_hashes.has(texture.get_instance_id()):
+		return false
+	_verified_png_source_sha(texture.resource_path)
+	return true
 
 
 static func _atlas_calibration_matches(path: String, texture: Texture2D, record: Dictionary) -> bool:

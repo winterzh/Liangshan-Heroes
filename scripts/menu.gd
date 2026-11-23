@@ -3,6 +3,7 @@ extends Control
 ## headless 测试或设了 LEVEL/SKIRMISH 等环境变量时直接进入战斗。
 
 const SPEAKERS := {}
+const OPENING_PREVIEW_DELAY_US := 120_000
 var _update_label: Label
 var _update_overlay: Control
 var _entry_overlay: ColorRect
@@ -539,20 +540,46 @@ func _mk_big_btn(text: String, col: Color, format_args: Variant = null) -> Butto
 # ======================================================================
 # 模块一：剧情模式（八幕战役卡片）
 # ======================================================================
-func _prefetch_picker_surfaces(overlay: Control, level_ids: Array) -> void:
+func _prefetch_picker_surfaces(overlay: Control, level_ids: Array, calibrate_liangshan := false) -> void:
 	if OS.get_name() != "Windows" or DisplayServer.get_name() == "headless":
 		return
 	await RenderingServer.frame_post_draw
 	if not is_inside_tree() or not is_instance_valid(overlay) or overlay.is_queued_for_deletion():
 		return
-	if overlay.is_visible_in_tree() and _entry_overlay == null and not AppLifecycle.quit_started():
-		Art.prefetch_menu_surfaces(level_ids)
+	if not overlay.is_visible_in_tree() or _entry_overlay != null or AppLifecycle.quit_started():
+		return
+	Art.prefetch_menu_surfaces(level_ids)
+	if not calibrate_liangshan or OS.get_environment("LIANGSHAN_VISUAL_BASELINE") == "1":
+		return
+	var active := _liangshan_preview_active(overlay)
+	var preview_after := Time.get_ticks_usec() + OPENING_PREVIEW_DELAY_US
+	while Time.get_ticks_usec() < preview_after:
+		await RenderingServer.frame_post_draw
+		if AppLifecycle.quit_started() or not active.call():
+			return
+	Art.prefetch_liangshan_scenery_preview(active)
+
+
+func _liangshan_preview_active(control: Control, require_attention := false) -> Callable:
+	var menu_ref: WeakRef = weakref(self)
+	var control_ref: WeakRef = weakref(control)
+	return func() -> bool:
+		var menu: Control = menu_ref.get_ref()
+		var target: Control = control_ref.get_ref()
+		if menu == null or not menu.is_inside_tree() or menu.get("_entry_overlay") != null:
+			return false
+		if target == null or target.is_queued_for_deletion() or not target.is_visible_in_tree():
+			return false
+		if require_attention:
+			var button := target as Button
+			return button != null and (button.is_hovered() or button.has_focus())
+		return true
 
 
 func _prefetch_campaign_card(button: Button, level_id: String) -> void:
 	# A quick click can use the normal loading sequence without competing
 	# with speculative animation and portrait requests.
-	var preview_after := Time.get_ticks_usec() + 120_000
+	var preview_after := Time.get_ticks_usec() + OPENING_PREVIEW_DELAY_US
 	while true:
 		await RenderingServer.frame_post_draw
 		if _entry_overlay != null or AppLifecycle.quit_started() or not is_instance_valid(button):
@@ -571,14 +598,8 @@ func _prefetch_campaign_card(button: Button, level_id: String) -> void:
 	if OS.get_environment("LIANGSHAN_VISUAL_BASELINE") == "1":
 		return
 	button.set_meta(&"opening_preview", true)
-	var menu_ref: WeakRef = weakref(self)
-	var button_ref: WeakRef = weakref(button)
-	var active := func() -> bool:
-		var menu: Control = menu_ref.get_ref()
-		var target: Button = button_ref.get_ref()
-		return menu != null and menu.is_inside_tree() and menu.get("_entry_overlay") == null \
-			and target != null and target.is_visible_in_tree() and (target.is_hovered() or target.has_focus())
-	var completed := await Art.prefetch_gao_scenery_preview(active)
+	var active := _liangshan_preview_active(button, true)
+	var completed := await Art.prefetch_liangshan_scenery_preview(active)
 	if not completed and is_instance_valid(button):
 		button.remove_meta(&"opening_preview")
 
@@ -641,7 +662,7 @@ func _show_defense() -> void:
 	var ov := _mk_overlay("驻守战 · 据守梁山大寨")
 	var overlay: ColorRect = ov[0]
 	var box: VBoxContainer = ov[1]
-	_prefetch_picker_surfaces(overlay, ["level5"])
+	_prefetch_picker_surfaces(overlay, ["level5"], true)
 
 	var tip := Label.new()
 	tip.text = "守住忠义堂，击退一波波官军围剿"
@@ -1024,6 +1045,8 @@ func _show_custom_picker() -> void:
 	var ov := _mk_overlay("选择自定义据守配置" if not saved.is_empty() else "还没有保存的配置——先去「更多 → 据守数值编辑器」做一个并保存")
 	var overlay: ColorRect = ov[0]
 	var box: VBoxContainer = ov[1]
+	if not saved.is_empty():
+		_prefetch_picker_surfaces(overlay, ["level5"], true)
 	for name in saved:
 		var b := Button.new()
 		b.text = "▶  " + String(name)

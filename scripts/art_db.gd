@@ -1145,19 +1145,20 @@ func _retain_opening_preview(path: String, preview: Array[Resource]) -> void:
 
 ## Keep one outstanding request and drain it even if the picker closes.
 ## Check at most one imported texture per rendered frame.
-func prefetch_gao_scenery_preview(active: Callable) -> bool:
+func prefetch_liangshan_scenery_preview(active: Callable) -> bool:
 	var environment := load("res://scripts/campaign_environment.gd")
 	for path: String in environment.opening_scenery_texture_paths("level5"):
 		if AppLifecycle.quit_started() or not active.call():
 			return false
-		if ResourceLoader.load_threaded_request(path, "Texture2D") != OK:
-			continue
-		var texture := (await _collect_menu_request(path)) as Texture2D
-		if AppLifecycle.quit_started() or not active.call():
-			return false
-		if texture != null:
-			CampaignEnvironmentArt.prepare_png_calibration(texture)
-		await RenderingServer.frame_post_draw
+		var texture := ResourceLoader.get_cached_ref(path) as Texture2D
+		if texture == null:
+			if ResourceLoader.load_threaded_request(path, "Texture2D") != OK:
+				continue
+			texture = (await _collect_menu_request(path)) as Texture2D
+			if AppLifecycle.quit_started() or not active.call():
+				return false
+		if texture != null and CampaignEnvironmentArt.prepare_png_calibration(texture):
+			await RenderingServer.frame_post_draw
 	return true
 
 
