@@ -141,6 +141,7 @@ func _set_expanded(expanded: bool) -> void:
 	_layout_details()
 	_panel.reset_size()
 	queue_restored_detail_scroll()
+	reveal_primary_level_button()
 
 func detail_scroll_offset() -> Vector2i:
 	if _restored_detail_scroll.x >= 0:
@@ -561,6 +562,17 @@ func find_level_button(button_id: String) -> Button:
 			if descriptor.get("button_id") == button_id:
 				return child
 	return null
+
+
+func reveal_primary_level_button() -> void:
+	if not _expanded or _restored_detail_scroll.x >= 0:
+		return
+	var button := find_level_button("gao_escort")
+	if button == null:
+		return
+	await _panel.get_tree().process_frame
+	if is_instance_valid(button) and button.is_visible_in_tree() and _restored_detail_scroll.x < 0:
+		_detail_scroll.ensure_control_visible(button)
 
 
 func _activate_level_button(button_id: String) -> void:

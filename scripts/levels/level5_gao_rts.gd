@@ -653,6 +653,7 @@ func _sync_prisoner_escort_button(b) -> void:
 		button = b.mission.add_level_button("gao_escort", "押送高俅回堂", "派附近一名空闲岸军与高俅按编队速度走向忠义堂。")
 		button.get_parent().move_child(button, 0)
 		b.mission.set_guidance(ESCORT_PROMPT)
+		b.mission.reveal_primary_level_button()
 
 func _order_prisoner_escort(b) -> void:
 	if not landed or capture_lost or not alive(prisoner) or b.mission.has_event("gao_captured") or not b._gameplay_rng_issue.is_empty():
