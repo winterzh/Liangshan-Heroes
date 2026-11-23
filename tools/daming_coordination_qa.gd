@@ -9,7 +9,7 @@ func _run() -> void:
 	var folder := "res://.godot/daming-coordination"
 	DirAccess.make_dir_recursive_absolute(folder)
 	var flow := root.get_node("ContinueFlow")
-	var deadline := Time.get_ticks_msec()+60000
+	var deadline := Time.get_ticks_msec()+120000
 	while not flow.can_launch():
 		if flow.phase==flow.Phase.ERROR or Time.get_ticks_msec()>=deadline:
 			push_error(str(flow.last_result))
@@ -129,11 +129,36 @@ func _run() -> void:
 	l.strategy_t=0
 	l.process(b,0.25)
 	check(l.reserve_returned and l.phase_title=="回防 · 重整再接应" and not b.mission.actions.daming_gate.done,"expiry keeps gate action available and updates recovery objective")
+	var recovery_source := "火号已过，幸存守军回防，未拆的城内营恢复补兵。\n%s\n也可护送器械强攻南门。"
+	for language in ["zh_CN","zh_TW","en","ja"]:
+		loc.set_language(language,false)
+		l._update_briefing(b)
+		var template: String = recovery_source if language=="zh_CN" else String(catalog[recovery_source][language])
+		var hint: String = action_source if language=="zh_CN" else String(catalog[action_source][language])
+		check(b.mission._objective.text==template%hint and hint in l.unit_tactical_hint(b,leader),
+			language+" expired fire signal still shows the applicable gate order and assault option")
+	loc.set_language("zh_CN",false)
+	leader.position=b.map.cell_to_world(l.CAMP)
+	l._update_briefing(b)
+	check("接应需鲁智深或武松" in b.mission._objective.text,"when the signal expires, the objective still identifies a missing leader")
+	leader.position=gate_marker
+	soldiers[0].position=b.map.cell_to_world(l.CAMP)
+	l._update_briefing(b)
+	check("两名战友" in b.mission._objective.text,"after expiry, reaching the gate as its leader still calls for a full party")
+	soldiers[0].position=gate_marker+Vector2(30,30)
+	guard.position=gate_marker+Vector2(0,96)
+	l._update_briefing(b)
+	check("可见守军" in b.mission._objective.text,"after expiry, visible guards still replace the generic order with a clearing step")
+	guard.position=far
+	b._grid_build()
+	l._update_briefing(b)
 	await _capture(b,l.scout,"zh_CN_expired",folder,texts)
 	l.rescued=true
 	l._update_briefing(b)
 	check(l.phase_title=="撤离 · 先打开南门","rescue before gate opening explains the blocked escape")
-	l.gate_open=true
+	l.on_mission_action(b,"daming_gate",leader)
+	check(l.gate_open and b.mission.has_event("daming_response_arrived") and not b.mission.has_event("daming_gate_breached"),
+		"the original gate action still opens the intact gate after the 90-second diversion")
 	b.mission.mark("daming_lu_safe","fixture: one prisoner safely outside")
 	l._update_briefing(b)
 	check("1/2" in b.mission.objective and "1/2" in l.top_status(b),"one escaped prisoner is reflected in objective and top bar")

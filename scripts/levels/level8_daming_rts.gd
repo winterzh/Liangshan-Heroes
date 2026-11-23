@@ -391,7 +391,8 @@ func _briefing(b) -> Dictionary:
 	if signaled:
 		if signal_left>0:
 			return {"title":"火号生效 · 城内暂停补兵", "text":_gate_response_advice(b, s)}
-		return {"title":"回防 · 重整再接应", "text":"火号调动已结束，幸存机动守军回防，未摧毁的城内兵源恢复。可重整后清敌夺门，或护器械强攻；已有经营与内应进度保留。"}
+		var recovery := "火号已过，幸存守军回防，未拆的城内营恢复补兵。\n%s\n也可护送器械强攻南门。"
+		return {"title":"回防 · 重整再接应", "text":Localize.format_text(recovery, _gate_response_advice(b, s))}
 	if not s.agents_alive:
 		return {"title":"强攻 · 内应失去接应", "text":"内应人手不齐，火号路线不可用。城外继续经营，护器械打破南门，清牢前救人；前营和两名囚犯必须保住。"}
 	if s.inside==2:
