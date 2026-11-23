@@ -552,16 +552,17 @@ func _prefetch_picker_surfaces(overlay: Control, level_ids: Array) -> void:
 func _prefetch_huangnigang_card(button: Button) -> void:
 	# A quick click can use the normal loading sequence without competing
 	# with speculative animation and portrait requests.
-	await get_tree().create_timer(0.12, true, false, true).timeout
-	if _entry_overlay != null or AppLifecycle.quit_started() or not is_instance_valid(button):
-		return
-	await RenderingServer.frame_post_draw
-	if _entry_overlay != null or AppLifecycle.quit_started() or not is_instance_valid(button):
-		return
-	if not button.is_visible_in_tree() or not (button.is_hovered() or button.has_focus()):
-		return
-	if button.has_meta(&"opening_preview"):
-		return
+	var preview_after := Time.get_ticks_usec() + 120_000
+	while true:
+		await RenderingServer.frame_post_draw
+		if _entry_overlay != null or AppLifecycle.quit_started() or not is_instance_valid(button):
+			return
+		if not button.is_visible_in_tree() or not (button.is_hovered() or button.has_focus()):
+			return
+		if button.has_meta(&"opening_preview"):
+			return
+		if Time.get_ticks_usec() >= preview_after:
+			break
 	var preview: Array[Resource] = []
 	button.set_meta(&"opening_preview", preview)
 	Art.prefetch_huangnigang_preview(preview)
