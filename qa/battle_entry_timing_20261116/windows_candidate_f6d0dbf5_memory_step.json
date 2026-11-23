@@ -1,0 +1,68 @@
+{
+  "candidate": "f6d0dbf563067eb9b43075f61632e622ca56d7a7",
+  "pck_sha256": "f1c19aeb15d146a2a05bd9cc8c541086679ba4821e9ef72b715600665b92229b",
+  "scope": "External Windows metadata sampler on the isolated offline process. No memory contents were read. Samples group committed regions by allocation base; absolute addresses are excluded from this receipt.",
+  "short_diagnostic": {
+    "native": {
+      "candidate": "f6d0dbf563067eb9b43075f61632e622ca56d7a7",
+      "payload_files_unchanged": true,
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "f1c19aeb15d146a2a05bd9cc8c541086679ba4821e9ef72b715600665b92229b",
+      "split_identity": "487d3c8a2c6ed9cb1cd9a5158b4326a466ca067dc05abe2fbddfb5dd0c363add",
+      "exe_unchanged": true,
+      "exit_code": 0,
+      "seconds": 115.243,
+      "errors": [],
+      "warnings": [],
+      "log_sha256": "4a92814d7e124270bdb6964c6ac14b33c1c7eebaf549419d453b81036604d520",
+      "report_sha256": "24ba9ee3cec113a56915c7b1e0c4b0dee851904791c0401c6020277ab763e294"
+    },
+    "window": [
+      1280,
+      720
+    ],
+    "measure_seconds": 107.089893,
+    "warm_private_bytes": 2108526592,
+    "end_private_bytes": 2121957376,
+    "warm_working_set_bytes": 1107656704,
+    "end_working_set_bytes": 1120456704,
+    "transitions": 17,
+    "route_visits": {
+      "arena:arena": 3,
+      "campaign:level1": 3,
+      "campaign:level5": 2,
+      "custom_defense:custom_defense": 3,
+      "skirmish:skirmish": 3,
+      "skirmish_ai:skirmish_ai": 3
+    },
+    "progress_unchanged": true,
+    "raw_sampler_sha256": "9ffc5974b1482cea527f166a3910d4b63382df1a33bc203d49af253938369bb4",
+    "sample_count": 119,
+    "median_sample_ms": 39.225
+  },
+  "earlier_ten_minute_measurement": {
+    "receipt": "windows_candidate_f6d0dbf5_mode_soak_600.json",
+    "acceptance_passed": false,
+    "warm_private_bytes": 1967132672,
+    "end_private_bytes": 2137608192,
+    "increase_in_first_complete_minute_bytes": 137056256
+  },
+  "largest_increase_after_twenty_seconds": {
+    "classification": "MEM_COMMIT and MEM_PRIVATE",
+    "from_process_launch_seconds": 36.9611,
+    "to_process_launch_seconds": 37.9136,
+    "private_usage_delta_bytes": 270024704,
+    "committed_by_type_delta_bytes": {
+      "private": 269496320,
+      "mapped": 0,
+      "image": 0
+    },
+    "mode_during_observation": "first level5 campaign mount",
+    "last_measurement_ms_from_sortie": 181.295,
+    "first_battle_frame_ms": 255.839,
+    "new_allocation_groups": 8,
+    "committed_per_group_bytes": 33554432,
+    "groups_still_committed_at_last_sample": 8
+  },
+  "limits": "The coincidence with the first level5 mount does not establish ownership or a leak. This short diagnostic does not satisfy the ten-minute acceptance gate."
+}

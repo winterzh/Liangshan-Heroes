@@ -1,5 +1,9 @@
 # 源码设置与换机（2026-10-30）
 
+## Windows 操作提示随抽屉刷新
+
+HUD 的抽屉切换函数复用现有的操作提示刷新。既有触屏、战报浮窗和开关状态参与同一可见性判定。战斗中在信息抽屉勾选「在主界面显示操作提示」，收起抽屉后会立即显示键鼠提示。再次打开抽屉会隐藏提示，关闭开关后收起仍保持隐藏。 [验收收据](../qa/battle_entry_timing_20261116/windows_keyboard_help_after_drawer_9c2b299d.json)
+
 ## Windows 黄泥冈地面图集读取
 
 主菜单的 Windows 战役加载读取黄泥冈布景时，同时请求七个地面小景共用的图集。各个小景沿用原有路线和裁切信息，重新进场时沿用已读取的资源。Windows 开发候选 f6d0dbf5 采用这项调整。 [Windows 验收收据](../qa/battle_entry_timing_20261116/windows_ground_atlas_attach_f6d0dbf5.json)

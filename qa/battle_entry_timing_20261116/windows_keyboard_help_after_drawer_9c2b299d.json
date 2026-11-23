@@ -1,0 +1,799 @@
+{
+  "prior": {
+    "kind": "local_integrated_windows_candidate",
+    "layout": "split_pck",
+    "commit": "f6d0dbf563067eb9b43075f61632e622ca56d7a7",
+    "source_version": "source-v1:3b04a2a961ee811aee8c8646552941536e58fe27eb36ae2c158853fb00bfefe3",
+    "tracked_runtime_count": 6574,
+    "steps": [
+      {
+        "stage": "import",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 58.8
+      },
+      {
+        "stage": "export",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 90.02
+      }
+    ],
+    "files": [
+      {
+        "path": "GODOTSTEAM_LICENSE.txt",
+        "bytes": 1110,
+        "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+      },
+      {
+        "path": "LiangshanHeroes.exe",
+        "bytes": 104886784,
+        "sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4"
+      },
+      {
+        "path": "LiangshanHeroes.pck",
+        "bytes": 1722698156,
+        "sha256": "f1c19aeb15d146a2a05bd9cc8c541086679ba4821e9ef72b715600665b92229b"
+      },
+      {
+        "path": "libgodotsteam.windows.template_release.x86_64.dll",
+        "bytes": 3961344,
+        "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+      },
+      {
+        "path": "steam_api64.dll",
+        "bytes": 319128,
+        "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+      },
+      {
+        "path": "steam_stats_reader.dll",
+        "bytes": 393728,
+        "sha256": "5a79a77b5b6e2cff21b285c785118352805a09d91876f89276af119ee1702517"
+      },
+      {
+        "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+        "bytes": 1093,
+        "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+      }
+    ]
+  },
+  "candidate": {
+    "kind": "local_integrated_windows_candidate",
+    "layout": "split_pck",
+    "commit": "9c2b299de9265a9a117a7be464152db4d75cedbb",
+    "source_version": "source-v1:e7366a067c81a7d49e1d4ac50beb10fe62e668b323f733f50a01c18c1f87e309",
+    "tracked_runtime_count": 6574,
+    "steps": [
+      {
+        "stage": "import",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 63.98
+      },
+      {
+        "stage": "export",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 88.41
+      }
+    ],
+    "files": [
+      {
+        "path": "GODOTSTEAM_LICENSE.txt",
+        "bytes": 1110,
+        "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+      },
+      {
+        "path": "LiangshanHeroes.exe",
+        "bytes": 104886784,
+        "sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4"
+      },
+      {
+        "path": "LiangshanHeroes.pck",
+        "bytes": 1722698156,
+        "sha256": "c01259f89bd87d7cdecfc7ba0e88fde381ce89f22f577347268d85f720a5569c"
+      },
+      {
+        "path": "libgodotsteam.windows.template_release.x86_64.dll",
+        "bytes": 3961344,
+        "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+      },
+      {
+        "path": "steam_api64.dll",
+        "bytes": 319128,
+        "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+      },
+      {
+        "path": "steam_stats_reader.dll",
+        "bytes": 393728,
+        "sha256": "5a79a77b5b6e2cff21b285c785118352805a09d91876f89276af119ee1702517"
+      },
+      {
+        "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+        "bytes": 1093,
+        "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+      }
+    ]
+  },
+  "only_runtime_input_change": "scripts/hud.gd",
+  "decision": "Use the existing help visibility and layout update at both drawer state changes. Keep the default bottom-panel construction; the theme-only test ranged around a small gain and the wider theme change moved the help panel's geometry.",
+  "scope": "Native Windows Vulkan Forward+ offline exported copies through the normal main scene. The automated profile switched through all four languages within each run and clicked the existing controls through the game viewport. No system clipboard or physical mouse/keyboard input was used.",
+  "discovery_probe_four_bottom_builds": {
+    "medians_ms": {
+      "observe": 21.233,
+      "themed": 10.021,
+      "detached": 27.791,
+      "combined": 14.221
+    },
+    "runs": [
+      {
+        "variant": "observe",
+        "bottom_build_ms": 23.479,
+        "layout_changes": [],
+        "log_sha256": "b544729e4289354bf348066c7367dbbff52292ec09417111f771d5eaf9b312af",
+        "inventory_opened": true
+      },
+      {
+        "variant": "themed",
+        "bottom_build_ms": 10.055,
+        "layout_changes": [
+          {
+            "phase": "collapsed",
+            "control": "help",
+            "before": {
+              "visible": false,
+              "theme_shared": true,
+              "rect": [
+                852.0,
+                432.0,
+                420.0,
+                130.0
+              ]
+            },
+            "after": {
+              "visible": false,
+              "theme_shared": true,
+              "rect": [
+                852.0,
+                425.0,
+                420.0,
+                137.0
+              ]
+            }
+          },
+          {
+            "phase": "expanded",
+            "control": "help",
+            "before": {
+              "visible": false,
+              "theme_shared": true,
+              "rect": [
+                852.0,
+                424.0,
+                420.0,
+                130.0
+              ]
+            },
+            "after": {
+              "visible": false,
+              "theme_shared": true,
+              "rect": [
+                852.0,
+                417.0,
+                420.0,
+                137.0
+              ]
+            }
+          },
+          {
+            "phase": "inventory_open",
+            "control": "help",
+            "before": {
+              "visible": false,
+              "theme_shared": true,
+              "rect": [
+                852.0,
+                424.0,
+                420.0,
+                130.0
+              ]
+            },
+            "after": {
+              "visible": false,
+              "theme_shared": true,
+              "rect": [
+                852.0,
+                417.0,
+                420.0,
+                137.0
+              ]
+            }
+          }
+        ],
+        "log_sha256": "b544729e4289354bf348066c7367dbbff52292ec09417111f771d5eaf9b312af",
+        "inventory_opened": true
+      },
+      {
+        "variant": "detached",
+        "bottom_build_ms": 27.157,
+        "layout_changes": [],
+        "log_sha256": "b544729e4289354bf348066c7367dbbff52292ec09417111f771d5eaf9b312af",
+        "inventory_opened": true
+      },
+      {
+        "variant": "combined",
+        "bottom_build_ms": 15.04,
+        "layout_changes": [
+          {
+            "phase": "collapsed",
+            "control": "help",
+            "before": {
+              "visible": false,
+              "theme_shared": true,
+              "rect": [
+                852.0,
+                432.0,
+                420.0,
+                130.0
+              ]
+            },
+            "after": {
+              "visible": false,
+              "theme_shared": true,
+              "rect": [
+                852.0,
+                425.0,
+                420.0,
+                137.0
+              ]
+            }
+          },
+          {
+            "phase": "expanded",
+            "control": "help",
+            "before": {
+              "visible": false,
+              "theme_shared": true,
+              "rect": [
+                852.0,
+                424.0,
+                420.0,
+                130.0
+              ]
+            },
+            "after": {
+              "visible": false,
+              "theme_shared": true,
+              "rect": [
+                852.0,
+                417.0,
+                420.0,
+                137.0
+              ]
+            }
+          },
+          {
+            "phase": "inventory_open",
+            "control": "help",
+            "before": {
+              "visible": false,
+              "theme_shared": true,
+              "rect": [
+                852.0,
+                424.0,
+                420.0,
+                130.0
+              ]
+            },
+            "after": {
+              "visible": false,
+              "theme_shared": true,
+              "rect": [
+                852.0,
+                417.0,
+                420.0,
+                137.0
+              ]
+            }
+          }
+        ],
+        "log_sha256": "b544729e4289354bf348066c7367dbbff52292ec09417111f771d5eaf9b312af",
+        "inventory_opened": true
+      },
+      {
+        "variant": "combined",
+        "bottom_build_ms": 13.403,
+        "layout_changes": [
+          {
+            "phase": "collapsed",
+            "control": "help",
+            "before": {
+              "visible": false,
+              "theme_shared": true,
+              "rect": [
+                852.0,
+                432.0,
+                420.0,
+                130.0
+              ]
+            },
+            "after": {
+              "visible": false,
+              "theme_shared": true,
+              "rect": [
+                852.0,
+                425.0,
+                420.0,
+                137.0
+              ]
+            }
+          },
+          {
+            "phase": "expanded",
+            "control": "help",
+            "before": {
+              "visible": false,
+              "theme_shared": true,
+              "rect": [
+                852.0,
+                424.0,
+                420.0,
+                130.0
+              ]
+            },
+            "after": {
+              "visible": false,
+              "theme_shared": true,
+              "rect": [
+                852.0,
+                417.0,
+                420.0,
+                137.0
+              ]
+            }
+          },
+          {
+            "phase": "inventory_open",
+            "control": "help",
+            "before": {
+              "visible": false,
+              "theme_shared": true,
+              "rect": [
+                852.0,
+                424.0,
+                420.0,
+                130.0
+              ]
+            },
+            "after": {
+              "visible": false,
+              "theme_shared": true,
+              "rect": [
+                852.0,
+                417.0,
+                420.0,
+                137.0
+              ]
+            }
+          }
+        ],
+        "log_sha256": "b544729e4289354bf348066c7367dbbff52292ec09417111f771d5eaf9b312af",
+        "inventory_opened": true
+      },
+      {
+        "variant": "detached",
+        "bottom_build_ms": 28.426,
+        "layout_changes": [],
+        "log_sha256": "b544729e4289354bf348066c7367dbbff52292ec09417111f771d5eaf9b312af",
+        "inventory_opened": true
+      },
+      {
+        "variant": "themed",
+        "bottom_build_ms": 9.987,
+        "layout_changes": [
+          {
+            "phase": "collapsed",
+            "control": "help",
+            "before": {
+              "visible": false,
+              "theme_shared": true,
+              "rect": [
+                852.0,
+                432.0,
+                420.0,
+                130.0
+              ]
+            },
+            "after": {
+              "visible": false,
+              "theme_shared": true,
+              "rect": [
+                852.0,
+                425.0,
+                420.0,
+                137.0
+              ]
+            }
+          },
+          {
+            "phase": "expanded",
+            "control": "help",
+            "before": {
+              "visible": false,
+              "theme_shared": true,
+              "rect": [
+                852.0,
+                424.0,
+                420.0,
+                130.0
+              ]
+            },
+            "after": {
+              "visible": false,
+              "theme_shared": true,
+              "rect": [
+                852.0,
+                417.0,
+                420.0,
+                137.0
+              ]
+            }
+          },
+          {
+            "phase": "inventory_open",
+            "control": "help",
+            "before": {
+              "visible": false,
+              "theme_shared": true,
+              "rect": [
+                852.0,
+                424.0,
+                420.0,
+                130.0
+              ]
+            },
+            "after": {
+              "visible": false,
+              "theme_shared": true,
+              "rect": [
+                852.0,
+                417.0,
+                420.0,
+                137.0
+              ]
+            }
+          }
+        ],
+        "log_sha256": "b544729e4289354bf348066c7367dbbff52292ec09417111f771d5eaf9b312af",
+        "inventory_opened": true
+      },
+      {
+        "variant": "observe",
+        "bottom_build_ms": 18.986,
+        "layout_changes": [],
+        "log_sha256": "b544729e4289354bf348066c7367dbbff52292ec09417111f771d5eaf9b312af",
+        "inventory_opened": true
+      }
+    ],
+    "raw_sha256": "5b73d478e51d4091751d4dbe8155461488c09339f52feab257431386c08e2f6a"
+  },
+  "split_theme_probe_and_drawer": {
+    "medians_ms": {
+      "observe": 18.7,
+      "themed": 16.499
+    },
+    "runs": [
+      {
+        "variant": "observe",
+        "bottom_build_ms": 19.794,
+        "layout_changes": [],
+        "log_sha256": "b544729e4289354bf348066c7367dbbff52292ec09417111f771d5eaf9b312af",
+        "inventory_opened": true,
+        "help_visible_after_drawer_close": false
+      },
+      {
+        "variant": "themed",
+        "bottom_build_ms": 15.232,
+        "layout_changes": [],
+        "log_sha256": "b544729e4289354bf348066c7367dbbff52292ec09417111f771d5eaf9b312af",
+        "inventory_opened": true,
+        "help_visible_after_drawer_close": true
+      },
+      {
+        "variant": "themed",
+        "bottom_build_ms": 17.766,
+        "layout_changes": [],
+        "log_sha256": "b544729e4289354bf348066c7367dbbff52292ec09417111f771d5eaf9b312af",
+        "inventory_opened": true,
+        "help_visible_after_drawer_close": true
+      },
+      {
+        "variant": "observe",
+        "bottom_build_ms": 17.605,
+        "layout_changes": [],
+        "log_sha256": "b544729e4289354bf348066c7367dbbff52292ec09417111f771d5eaf9b312af",
+        "inventory_opened": true,
+        "help_visible_after_drawer_close": false
+      }
+    ],
+    "raw_sha256": "8ec78ad842547ae7b4abbd9ff792d7b01931cab1d0ae83d198d00ea9da9529e0"
+  },
+  "compiled_control_help": [
+    {
+      "source": "f6d0dbf563067eb9b43075f61632e622ca56d7a7",
+      "variant": "prior",
+      "window_pixels": [
+        1280,
+        720
+      ],
+      "viewport": [
+        1280,
+        720
+      ],
+      "languages": [
+        {
+          "language": "zh_CN",
+          "hide_while_drawer_open": true,
+          "visible_after_close": false,
+          "within_viewport": true,
+          "text_matches_locale_and_keybinds": true,
+          "panel_rect": "[P: (852.0, 424.0), S: (420.0, 130.0)]",
+          "hides_again_on_reopen": true,
+          "settings_restored": true,
+          "hide_after_disable": true
+        },
+        {
+          "language": "zh_TW",
+          "hide_while_drawer_open": true,
+          "visible_after_close": false,
+          "within_viewport": true,
+          "text_matches_locale_and_keybinds": true,
+          "panel_rect": "[P: (852.0, 417.0), S: (420.0, 137.0)]",
+          "hides_again_on_reopen": true,
+          "settings_restored": true,
+          "hide_after_disable": true
+        },
+        {
+          "language": "en",
+          "hide_while_drawer_open": true,
+          "visible_after_close": false,
+          "within_viewport": true,
+          "text_matches_locale_and_keybinds": true,
+          "panel_rect": "[P: (852.0, 417.0), S: (420.0, 137.0)]",
+          "hides_again_on_reopen": true,
+          "settings_restored": true,
+          "hide_after_disable": true
+        },
+        {
+          "language": "ja",
+          "hide_while_drawer_open": true,
+          "visible_after_close": false,
+          "within_viewport": true,
+          "text_matches_locale_and_keybinds": true,
+          "panel_rect": "[P: (852.0, 417.0), S: (420.0, 137.0)]",
+          "hides_again_on_reopen": true,
+          "settings_restored": true,
+          "hide_after_disable": true
+        }
+      ],
+      "payloads_verified": 7,
+      "log_sha256": "b544729e4289354bf348066c7367dbbff52292ec09417111f771d5eaf9b312af",
+      "progress_unchanged": true,
+      "exit_code": 0
+    },
+    {
+      "source": "9c2b299de9265a9a117a7be464152db4d75cedbb",
+      "variant": "large",
+      "window_pixels": [
+        1280,
+        720
+      ],
+      "viewport": [
+        1280,
+        720
+      ],
+      "languages": [
+        {
+          "language": "zh_CN",
+          "hide_while_drawer_open": true,
+          "visible_after_close": true,
+          "within_viewport": true,
+          "text_matches_locale_and_keybinds": true,
+          "panel_rect": "[P: (852.0, 417.0), S: (420.0, 137.0)]",
+          "hides_again_on_reopen": true,
+          "settings_restored": true,
+          "hide_after_disable": true
+        },
+        {
+          "language": "zh_TW",
+          "hide_while_drawer_open": true,
+          "visible_after_close": true,
+          "within_viewport": true,
+          "text_matches_locale_and_keybinds": true,
+          "panel_rect": "[P: (852.0, 417.0), S: (420.0, 137.0)]",
+          "hides_again_on_reopen": true,
+          "settings_restored": true,
+          "hide_after_disable": true
+        },
+        {
+          "language": "en",
+          "hide_while_drawer_open": true,
+          "visible_after_close": true,
+          "within_viewport": true,
+          "text_matches_locale_and_keybinds": true,
+          "panel_rect": "[P: (852.0, 417.0), S: (420.0, 137.0)]",
+          "hides_again_on_reopen": true,
+          "settings_restored": true,
+          "hide_after_disable": true
+        },
+        {
+          "language": "ja",
+          "hide_while_drawer_open": true,
+          "visible_after_close": true,
+          "within_viewport": true,
+          "text_matches_locale_and_keybinds": true,
+          "panel_rect": "[P: (852.0, 417.0), S: (420.0, 137.0)]",
+          "hides_again_on_reopen": true,
+          "settings_restored": true,
+          "hide_after_disable": true
+        }
+      ],
+      "payloads_verified": 7,
+      "log_sha256": "235c7e7e2e79d35c4e188df985ddc7f998ab397f07248532c643314e44f34884",
+      "progress_unchanged": true,
+      "exit_code": 0
+    },
+    {
+      "source": "9c2b299de9265a9a117a7be464152db4d75cedbb",
+      "variant": "small",
+      "window_pixels": [
+        960,
+        540
+      ],
+      "viewport": [
+        960,
+        540
+      ],
+      "languages": [
+        {
+          "language": "zh_CN",
+          "hide_while_drawer_open": true,
+          "visible_after_close": true,
+          "within_viewport": true,
+          "text_matches_locale_and_keybinds": true,
+          "panel_rect": "[P: (852.0, 417.0), S: (420.0, 137.0)]",
+          "hides_again_on_reopen": true,
+          "settings_restored": true,
+          "hide_after_disable": true
+        },
+        {
+          "language": "zh_TW",
+          "hide_while_drawer_open": true,
+          "visible_after_close": true,
+          "within_viewport": true,
+          "text_matches_locale_and_keybinds": true,
+          "panel_rect": "[P: (852.0, 417.0), S: (420.0, 137.0)]",
+          "hides_again_on_reopen": true,
+          "settings_restored": true,
+          "hide_after_disable": true
+        },
+        {
+          "language": "en",
+          "hide_while_drawer_open": true,
+          "visible_after_close": true,
+          "within_viewport": true,
+          "text_matches_locale_and_keybinds": true,
+          "panel_rect": "[P: (852.0, 417.0), S: (420.0, 137.0)]",
+          "hides_again_on_reopen": true,
+          "settings_restored": true,
+          "hide_after_disable": true
+        },
+        {
+          "language": "ja",
+          "hide_while_drawer_open": true,
+          "visible_after_close": true,
+          "within_viewport": true,
+          "text_matches_locale_and_keybinds": true,
+          "panel_rect": "[P: (852.0, 417.0), S: (420.0, 137.0)]",
+          "hides_again_on_reopen": true,
+          "settings_restored": true,
+          "hide_after_disable": true
+        }
+      ],
+      "payloads_verified": 7,
+      "log_sha256": "235c7e7e2e79d35c4e188df985ddc7f998ab397f07248532c643314e44f34884",
+      "progress_unchanged": true,
+      "exit_code": 0
+    },
+    {
+      "source": "9c2b299de9265a9a117a7be464152db4d75cedbb",
+      "variant": "wide",
+      "window_pixels": [
+        1920,
+        1080
+      ],
+      "viewport": [
+        1920,
+        1080
+      ],
+      "languages": [
+        {
+          "language": "zh_CN",
+          "hide_while_drawer_open": true,
+          "visible_after_close": true,
+          "within_viewport": true,
+          "text_matches_locale_and_keybinds": true,
+          "panel_rect": "[P: (852.0, 417.0), S: (420.0, 137.0)]",
+          "hides_again_on_reopen": true,
+          "settings_restored": true,
+          "hide_after_disable": true
+        },
+        {
+          "language": "zh_TW",
+          "hide_while_drawer_open": true,
+          "visible_after_close": true,
+          "within_viewport": true,
+          "text_matches_locale_and_keybinds": true,
+          "panel_rect": "[P: (852.0, 417.0), S: (420.0, 137.0)]",
+          "hides_again_on_reopen": true,
+          "settings_restored": true,
+          "hide_after_disable": true
+        },
+        {
+          "language": "en",
+          "hide_while_drawer_open": true,
+          "visible_after_close": true,
+          "within_viewport": true,
+          "text_matches_locale_and_keybinds": true,
+          "panel_rect": "[P: (852.0, 417.0), S: (420.0, 137.0)]",
+          "hides_again_on_reopen": true,
+          "settings_restored": true,
+          "hide_after_disable": true
+        },
+        {
+          "language": "ja",
+          "hide_while_drawer_open": true,
+          "visible_after_close": true,
+          "within_viewport": true,
+          "text_matches_locale_and_keybinds": true,
+          "panel_rect": "[P: (852.0, 417.0), S: (420.0, 137.0)]",
+          "hides_again_on_reopen": true,
+          "settings_restored": true,
+          "hide_after_disable": true
+        }
+      ],
+      "payloads_verified": 7,
+      "log_sha256": "235c7e7e2e79d35c4e188df985ddc7f998ab397f07248532c643314e44f34884",
+      "progress_unchanged": true,
+      "exit_code": 0
+    }
+  ],
+  "compiled_raw_sha256": "a5470d73ca71e41a147d88adcd45136f9e2bb107ce1f143b291965de2d8ba575",
+  "short_six_entry_smoke": {
+    "native": {
+      "candidate": "9c2b299de9265a9a117a7be464152db4d75cedbb",
+      "payload_files_unchanged": true,
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "c01259f89bd87d7cdecfc7ba0e88fde381ce89f22f577347268d85f720a5569c",
+      "split_identity": "5a8a47a8765469b3708b122d34b103f55e2e04803cc29d831b9bb1c6c7623d8f",
+      "exe_unchanged": true,
+      "exit_code": 0,
+      "seconds": 103.687,
+      "errors": [],
+      "warnings": [],
+      "log_sha256": "bb1f285cd9cfd405d36de96a436e1cf03efa3cf86b72266fc97a071ce7a15954",
+      "report_sha256": "90e9e76e027f843d3fb543f27aac27813981b75e2cf165ab0fd2b4d977119337"
+    },
+    "visits": 15,
+    "routes": {
+      "arena:arena": 3,
+      "campaign:level1": 3,
+      "campaign:level5": 2,
+      "custom_defense:custom_defense": 2,
+      "skirmish:skirmish": 3,
+      "skirmish_ai:skirmish_ai": 2
+    },
+    "seconds": 94.788217,
+    "progress_unchanged": true
+  }
+}
