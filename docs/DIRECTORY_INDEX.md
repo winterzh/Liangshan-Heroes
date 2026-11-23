@@ -1,6 +1,8 @@
 # 项目目录索引（2026-10-30）
 
-新版 Windows 离线试玩位于 `D:/AI项目/水浒/Windows候选/20261123-94d1e9a6/PC试玩/`。同一候选根目录含六文件 ZIP 和构建收据。[离线试玩包记录](../qa/battle_entry_timing_20261116/windows_playtest_package_94d1e9a6.json)
+当前 Windows 离线试玩 ZIP 和构建收据位于 D:/AI项目/水浒/Windows候选/20261123-91ab70df/。同目录的「PC试玩」可直接启动。 [本地试玩与八章兼容收据](../qa/battle_entry_timing_20261116/windows_playtest_and_legacy_26752476_91ab70df.json)
+
+早期 Windows 离线试玩包 94d1e9a6 位于 `D:/AI项目/水浒/Windows候选/20261123-94d1e9a6/PC试玩/`。同一候选根目录含六文件 ZIP 和构建收据。[离线试玩包记录](../qa/battle_entry_timing_20261116/windows_playtest_package_94d1e9a6.json)
 
 祝家庄提示与战役旧档兼容的 Windows 本地试玩包位于 `D:/AI项目/水浒/Windows候选/20261119-64965098/`。六文件 ZIP 与构建收据在根目录，独立离线入口在「PC试玩」。
 
@@ -12,7 +14,7 @@ Windows 本地候选 `ef991d10` 的六文件 ZIP 与构建收据在 `D:/AI项目
 
 [Android 触控离线验收包收据](../qa/android_controls_performance_20260925/android_touch_candidate_492e6437.json)位于 qa/android_controls_performance_20260925/，本机产物位于 D:/AI项目/水浒/Android验收/2026-11-17-492e6437/。
 
-本地试玩启动器源码为 tools/start_windows_playtest_492e6437.cmd。候选根目录附同一启动器及玩家说明。 [本地试玩短检](../qa/battle_entry_timing_20261116/windows_playtest_launcher_492e6437.json)
+早期试玩启动器见 `tools/start_windows_playtest_492e6437.cmd`。91ab70df 的 ZIP 内置支持正常本地存读档的离线启动器。 [本地试玩短检](../qa/battle_entry_timing_20261116/windows_playtest_launcher_492e6437.json)
 
 [Windows 修复候选的发版短检](../qa/battle_entry_timing_20261116/README.md#windows-修复候选的发版短检)收据及菜单探针在 qa/battle_entry_timing_20261116/。
 

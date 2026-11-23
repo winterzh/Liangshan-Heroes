@@ -1,0 +1,572 @@
+{
+  "playtest_bundle": {
+    "platform": "windows",
+    "kind": "local_playtest_candidate",
+    "source_commit": "91ab70dfa8530177701ae21490622298dbcdc445",
+    "source_version": "source-v1:9fdc0e2fa6c8b139418670f1de33d57357df7434af78117db86967b9f007e6ce",
+    "archive": {
+      "name": "LiangshanHeroes_PC_Playtest_91ab70df.zip",
+      "bytes": 1758375871,
+      "sha256": "4518a47c39e504cd831ec8ef1a237ea353f55572cdde4cad7b324dd0fbfaa106",
+      "members_verified": 8
+    },
+    "runtime_files": [
+      {
+        "path": "GODOTSTEAM_LICENSE.txt",
+        "bytes": 1110,
+        "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+      },
+      {
+        "path": "LiangshanHeroes.exe",
+        "bytes": 1827541784,
+        "sha256": "ea7a2701895c4a7047236f8add568e19f9b9a0abaa3693d92187449ce2bfad08"
+      },
+      {
+        "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+        "bytes": 1093,
+        "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+      },
+      {
+        "path": "libgodotsteam.windows.template_release.x86_64.dll",
+        "bytes": 3961344,
+        "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+      },
+      {
+        "path": "steam_api64.dll",
+        "bytes": 319128,
+        "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+      },
+      {
+        "path": "steam_stats_reader.dll",
+        "bytes": 381440,
+        "sha256": "7505919cfff5907c13a02eb366690bff22ca6731c8521deefde58b114e4f796f"
+      }
+    ],
+    "launcher": {
+      "name": "Start Local Playtest.cmd",
+      "sha256": "65aaa90253481e44b911c48a3d59d4eb710512e153c61f71c46c6c7d8ce2a0c2",
+      "argument": "--offline-playtest",
+      "profiles": [
+        "P01",
+        "P02",
+        "P03"
+      ],
+      "clean_archive_boot": {
+        "mode": "headless",
+        "exit": 0,
+        "errors": [],
+        "log_sha256": "a9912b85473f126d3f4f63ec824170c828df3473a292f866dde86cafda5b66da"
+      }
+    }
+  },
+  "published_save_compatibility": {
+    "candidate_commit": "91ab70dfa8530177701ae21490622298dbcdc445",
+    "candidate_exe_sha256": "ea7a2701895c4a7047236f8add568e19f9b9a0abaa3693d92187449ce2bfad08",
+    "baseline_build": 26752476,
+    "baseline_exe_sha256": "fae95050c553dfd691e3beebca3eef7dd1d7490dfebf6e99fa50d310456b91a6",
+    "scope": "Both unmodified native Windows executable binaries rendered in isolated desktops with separate player profiles. External scene invokes normal menu, campaign and pause buttons. Steam adapter initialized offline; no private QA continuation. Real Build 26752476 generates each first-generation save after two seconds in battle. Level6 terminal is an intentionally controlled loss. No Steam account or cloud assertion.",
+    "chapters": [
+      {
+        "chapter": "level6",
+        "old_slot_sha256": "938df8d6685af0a79a6daf1504d822585c30d7d3948e02a7fabde1f35abcdcfc",
+        "old_journal_sha256": "55483644132d438f9bb718eb4783be963e9628b88f0c91413f201686861a5423",
+        "resaved_slot_sha256": "88d535ae8611b6736386af1de97e7cd2fe07833a5925f30fbd01d10573a80d27",
+        "original_records_unchanged": true,
+        "stages": [
+          {
+            "phase": "old-save",
+            "exit": 0,
+            "errors": [],
+            "markers": [
+              "PC_FEINT_NATIVE_RESULT {\"checks\":0,\"failures\":[],\"stage\":\"old-save\"}"
+            ],
+            "log_sha256": "cf73f874083b0e1892fd734577fc75b0e4ae12cff7bbf59c44d1d9c901aee900"
+          },
+          {
+            "phase": "resave",
+            "exit": 0,
+            "errors": [],
+            "markers": [
+              "LEGACY_CONTINUED 1",
+              "LEGACY_RESAVED 2"
+            ],
+            "log_sha256": "d880194799ae7eb0e1f919dbb40f694928a644131f6b2eeeef4ef9f6191e7828"
+          },
+          {
+            "phase": "reopen",
+            "exit": 0,
+            "errors": [],
+            "markers": [
+              "LEGACY_CONTINUED 2"
+            ],
+            "log_sha256": "4eedcbf1435f796f20263840f3e56be1234f508ea5a222cb7b192625bf4e0dda"
+          },
+          {
+            "phase": "finish",
+            "exit": 0,
+            "errors": [],
+            "markers": [
+              "LEGACY_CONTINUED 2",
+              "LEGACY_TERMINAL_COMMITTED"
+            ],
+            "log_sha256": "425adc6c5818be36e994ad9769b9e00f9f8c05a645ccbd5bedf7b9ebe5d205a8"
+          },
+          {
+            "phase": "reject",
+            "exit": 0,
+            "errors": [],
+            "markers": [
+              "LEGACY_TERMINAL_REJECTED 2"
+            ],
+            "log_sha256": "ca8931195d63d1a33b863b1f8568934c801538550c720e9d1f555f847f783e5d"
+          }
+        ]
+      },
+      {
+        "chapter": "level1",
+        "old_slot_sha256": "fa62db7ed6d71e77393306783e4d9437a4ec2001b7a350ed3e30ca225431d6ea",
+        "old_journal_sha256": "66424b58def9cf44e9f340d81a38a530763cb3382a3fc4c892a4583f11fa0918",
+        "resaved_slot_sha256": "51f52e6c41dd77cbfd66966980b5eeacc19e0b06e27c952726b19afd822dc5fb",
+        "original_records_unchanged": true,
+        "stages": [
+          {
+            "phase": "old-save",
+            "exit": 0,
+            "errors": [],
+            "markers": [
+              "PC_FEINT_NATIVE_RESULT {\"checks\":0,\"failures\":[],\"stage\":\"old-save\"}"
+            ],
+            "log_sha256": "cf73f874083b0e1892fd734577fc75b0e4ae12cff7bbf59c44d1d9c901aee900"
+          },
+          {
+            "phase": "resave",
+            "exit": 0,
+            "errors": [],
+            "markers": [
+              "LEGACY_CONTINUED 1",
+              "LEGACY_RESAVED 2"
+            ],
+            "log_sha256": "d880194799ae7eb0e1f919dbb40f694928a644131f6b2eeeef4ef9f6191e7828"
+          },
+          {
+            "phase": "reopen",
+            "exit": 0,
+            "errors": [],
+            "markers": [
+              "LEGACY_CONTINUED 2"
+            ],
+            "log_sha256": "4eedcbf1435f796f20263840f3e56be1234f508ea5a222cb7b192625bf4e0dda"
+          }
+        ]
+      },
+      {
+        "chapter": "level2",
+        "old_slot_sha256": "912963fb82166efe5bac3f36964497132ca7f66210e0d5368f22fbf8c5f5da51",
+        "old_journal_sha256": "ca42a75151f03ee51289f24fe92c29ee45aa1d3852072f705e257a8f059f82c9",
+        "resaved_slot_sha256": "008778112900a4184372ace194ed270308811ffe4704f7ff6da70624e65a22c1",
+        "original_records_unchanged": true,
+        "stages": [
+          {
+            "phase": "old-save",
+            "exit": 0,
+            "errors": [],
+            "markers": [
+              "PC_FEINT_NATIVE_RESULT {\"checks\":0,\"failures\":[],\"stage\":\"old-save\"}"
+            ],
+            "log_sha256": "cf73f874083b0e1892fd734577fc75b0e4ae12cff7bbf59c44d1d9c901aee900"
+          },
+          {
+            "phase": "resave",
+            "exit": 0,
+            "errors": [],
+            "markers": [
+              "LEGACY_CONTINUED 1",
+              "LEGACY_RESAVED 2"
+            ],
+            "log_sha256": "d880194799ae7eb0e1f919dbb40f694928a644131f6b2eeeef4ef9f6191e7828"
+          },
+          {
+            "phase": "reopen",
+            "exit": 0,
+            "errors": [],
+            "markers": [
+              "LEGACY_CONTINUED 2"
+            ],
+            "log_sha256": "4eedcbf1435f796f20263840f3e56be1234f508ea5a222cb7b192625bf4e0dda"
+          }
+        ]
+      },
+      {
+        "chapter": "level3",
+        "old_slot_sha256": "bfeb8af9cd31d666b879100e0e64ebb3a3f2297796a46902cf459bcd24cb3a96",
+        "old_journal_sha256": "c7d1da89b70684842430532f848e9c69223caa97c93e74eb687135426ad676af",
+        "resaved_slot_sha256": "47267972acf3d4e88ad0702f516375b32c77d69acc708adca133f5fa26de4f9f",
+        "original_records_unchanged": true,
+        "stages": [
+          {
+            "phase": "old-save",
+            "exit": 0,
+            "errors": [],
+            "markers": [
+              "PC_FEINT_NATIVE_RESULT {\"checks\":0,\"failures\":[],\"stage\":\"old-save\"}"
+            ],
+            "log_sha256": "cf73f874083b0e1892fd734577fc75b0e4ae12cff7bbf59c44d1d9c901aee900"
+          },
+          {
+            "phase": "resave",
+            "exit": 0,
+            "errors": [],
+            "markers": [
+              "LEGACY_CONTINUED 1",
+              "LEGACY_RESAVED 2"
+            ],
+            "log_sha256": "d880194799ae7eb0e1f919dbb40f694928a644131f6b2eeeef4ef9f6191e7828"
+          },
+          {
+            "phase": "reopen",
+            "exit": 0,
+            "errors": [],
+            "markers": [
+              "LEGACY_CONTINUED 2"
+            ],
+            "log_sha256": "4eedcbf1435f796f20263840f3e56be1234f508ea5a222cb7b192625bf4e0dda"
+          }
+        ]
+      },
+      {
+        "chapter": "level4",
+        "old_slot_sha256": "f2fe1623b0f051756c4b9173959fb2b8b2a3c74dceccc06c7c5d1f2e4f949403",
+        "old_journal_sha256": "b831204689ccc3745896cc38f7bbf3016c23a14bc5786460ba6af017fd2a4020",
+        "resaved_slot_sha256": "76faca4722a3f6de41eaae6d05e83a9cd43f03670ce09adffaa65dd997c66644",
+        "original_records_unchanged": true,
+        "stages": [
+          {
+            "phase": "old-save",
+            "exit": 0,
+            "errors": [],
+            "markers": [
+              "PC_FEINT_NATIVE_RESULT {\"checks\":0,\"failures\":[],\"stage\":\"old-save\"}"
+            ],
+            "log_sha256": "cf73f874083b0e1892fd734577fc75b0e4ae12cff7bbf59c44d1d9c901aee900"
+          },
+          {
+            "phase": "resave",
+            "exit": 0,
+            "errors": [],
+            "markers": [
+              "LEGACY_CONTINUED 1",
+              "LEGACY_RESAVED 2"
+            ],
+            "log_sha256": "d880194799ae7eb0e1f919dbb40f694928a644131f6b2eeeef4ef9f6191e7828"
+          },
+          {
+            "phase": "reopen",
+            "exit": 0,
+            "errors": [],
+            "markers": [
+              "LEGACY_CONTINUED 2"
+            ],
+            "log_sha256": "4eedcbf1435f796f20263840f3e56be1234f508ea5a222cb7b192625bf4e0dda"
+          }
+        ]
+      },
+      {
+        "chapter": "level5",
+        "old_slot_sha256": "8bc3ca2cbd9f94ee996e5db8cf695516f0aa07b5bd8d187983e5e9a0ec2ee28c",
+        "old_journal_sha256": "336b922029f1fd96332219f0b057ef3046d83731727c0585312adce0324577e3",
+        "resaved_slot_sha256": "a00cf4117b2ba1cbc9e43a084064c6eac100729ae3b9752b86b45880f2a34606",
+        "original_records_unchanged": true,
+        "stages": [
+          {
+            "phase": "old-save",
+            "exit": 0,
+            "errors": [],
+            "markers": [
+              "PC_FEINT_NATIVE_RESULT {\"checks\":0,\"failures\":[],\"stage\":\"old-save\"}"
+            ],
+            "log_sha256": "cf73f874083b0e1892fd734577fc75b0e4ae12cff7bbf59c44d1d9c901aee900"
+          },
+          {
+            "phase": "resave",
+            "exit": 0,
+            "errors": [],
+            "markers": [
+              "LEGACY_CONTINUED 1",
+              "LEGACY_RESAVED 2"
+            ],
+            "log_sha256": "d880194799ae7eb0e1f919dbb40f694928a644131f6b2eeeef4ef9f6191e7828"
+          },
+          {
+            "phase": "reopen",
+            "exit": 0,
+            "errors": [],
+            "markers": [
+              "LEGACY_CONTINUED 2"
+            ],
+            "log_sha256": "4eedcbf1435f796f20263840f3e56be1234f508ea5a222cb7b192625bf4e0dda"
+          }
+        ]
+      },
+      {
+        "chapter": "level7",
+        "old_slot_sha256": "2099900b7bf0ed46f4c0e50314804efd98e7c9c5c3940e5c252ffb169ed2c3f7",
+        "old_journal_sha256": "24af0e2601f814702893f199470079fd7ea1aa2fb6782f0eb17a7f7225eec66d",
+        "resaved_slot_sha256": "b3bf98dc9f3750f479f5a90180b850e6a263f6c0fab90833062205cb2a04b4d7",
+        "original_records_unchanged": true,
+        "stages": [
+          {
+            "phase": "old-save",
+            "exit": 0,
+            "errors": [],
+            "markers": [
+              "PC_FEINT_NATIVE_RESULT {\"checks\":0,\"failures\":[],\"stage\":\"old-save\"}"
+            ],
+            "log_sha256": "cf73f874083b0e1892fd734577fc75b0e4ae12cff7bbf59c44d1d9c901aee900"
+          },
+          {
+            "phase": "resave",
+            "exit": 0,
+            "errors": [],
+            "markers": [
+              "LEGACY_CONTINUED 1",
+              "LEGACY_RESAVED 2"
+            ],
+            "log_sha256": "d880194799ae7eb0e1f919dbb40f694928a644131f6b2eeeef4ef9f6191e7828"
+          },
+          {
+            "phase": "reopen",
+            "exit": 0,
+            "errors": [],
+            "markers": [
+              "LEGACY_CONTINUED 2"
+            ],
+            "log_sha256": "4eedcbf1435f796f20263840f3e56be1234f508ea5a222cb7b192625bf4e0dda"
+          }
+        ]
+      },
+      {
+        "chapter": "level8",
+        "old_slot_sha256": "417774f36cd9ecd13cd1df39defafd81b8273260953914da098d8d3ebea48318",
+        "old_journal_sha256": "52050515eae855e30afa4d509b9a5f5b21b18d4dedf81d927ddb75e8b28a7fa3",
+        "resaved_slot_sha256": "de0e411fb97f87af6d507e9f58abb9f129e64e245e85100948bc27308126f40a",
+        "original_records_unchanged": true,
+        "stages": [
+          {
+            "phase": "old-save",
+            "exit": 0,
+            "errors": [],
+            "markers": [
+              "PC_FEINT_NATIVE_RESULT {\"checks\":0,\"failures\":[],\"stage\":\"old-save\"}"
+            ],
+            "log_sha256": "cf73f874083b0e1892fd734577fc75b0e4ae12cff7bbf59c44d1d9c901aee900"
+          },
+          {
+            "phase": "resave",
+            "exit": 0,
+            "errors": [],
+            "markers": [
+              "LEGACY_CONTINUED 1",
+              "LEGACY_RESAVED 2"
+            ],
+            "log_sha256": "d880194799ae7eb0e1f919dbb40f694928a644131f6b2eeeef4ef9f6191e7828"
+          },
+          {
+            "phase": "reopen",
+            "exit": 0,
+            "errors": [],
+            "markers": [
+              "LEGACY_CONTINUED 2"
+            ],
+            "log_sha256": "4eedcbf1435f796f20263840f3e56be1234f508ea5a222cb7b192625bf4e0dda"
+          }
+        ]
+      }
+    ]
+  },
+  "offline_launcher_play_route": {
+    "save": {
+      "candidate": "91ab70df",
+      "stage": "save",
+      "exe_sha256": "ea7a2701895c4a7047236f8add568e19f9b9a0abaa3693d92187449ce2bfad08",
+      "exe_unchanged": true,
+      "exit": 0,
+      "windows_button_messages": [
+        "left",
+        "left",
+        "left",
+        "left",
+        "left",
+        "left",
+        "left",
+        "left",
+        "right",
+        "left",
+        "right",
+        "escape",
+        "left"
+      ],
+      "log_sha256": "a1f523f8460d30324505ae605a6b6b43a886b651aef76974b357241b3d771056",
+      "errors": [],
+      "checks": [
+        "the packaged launcher argument is present without a Steam test environment",
+        "original Steam adapter stays disconnected and the isolated profile has no cloud operation",
+        "normal main menu scene mounts",
+        "native menu becomes ready",
+        "official offline player entry enabled without a private QA seam",
+        "native candidate hash",
+        "new Windows offline profile and no Continue action",
+        "Win32 left click opens Start Campaign",
+        "fresh profile offers Wild Boar Forest sortie",
+        "Win32 left click confirms chapter sortie",
+        "native battle reached",
+        "Wild Boar Forest is the actual first battle",
+        "Win32 left click advances prologue page 1",
+        "Win32 left click advances prologue page 2",
+        "Win32 left click advances prologue page 3",
+        "Win32 left click starts the battle",
+        "original shadow objective begins",
+        "movement cue tile is passable and visible",
+        "first move starts with an unselected hero",
+        "Win32 left click opens the initially collapsed objectives",
+        "Win32 left click on the mission's Select Lu Zhishen button",
+        "first move cue is actually drawn at the indicated tile after selection",
+        "first Win32 right click issues one movement order",
+        "real command indicator matches the cue tile",
+        "first move cue clears once the order is accepted",
+        "Lu Zhishen walks to the cue",
+        "escort advance produces the next objective at normal speed",
+        "normal following yields the observation event without starting forced rescue",
+        "normal sim clock and healthy campaign RNG",
+        "close the expanded objectives to reach the farther map tile",
+        "the follow-up north order starts a real walking path",
+        "native Escape pauses with the player command in flight",
+        "paused checkpoint contains the movement path and next objective",
+        "actual Save and Exit commits the local checkpoint",
+        "saved slot is bound to the offline run and exact candidate"
+      ],
+      "facts": {
+        "after_selection_viewport_pixel": [
+          534,
+          307
+        ],
+        "before_selection_viewport_pixel": [
+          886,
+          342
+        ],
+        "checkpoint": {
+          "clock": 5.59999999999999,
+          "events": [
+            "observe",
+            "shadow_pine",
+            "shadow_route_chosen"
+          ],
+          "hero": "lu_zhishen",
+          "hero_id": 4,
+          "hp": 540.0,
+          "order_serial": 2,
+          "position": [
+            1357.74426269531,
+            527.996765136719
+          ],
+          "remaining_path": [
+            [
+              1103.74108886719,
+              527.559265136719
+            ]
+          ],
+          "shadow_route": "north_pines",
+          "stage": "shadow_wait"
+        },
+        "cue_draw_condition": true,
+        "cue_matching_pixels_after_selection": 267,
+        "cue_matching_pixels_before": 0,
+        "distance_walked_world_units": 74.927,
+        "frame_pixels": [
+          1280,
+          720
+        ],
+        "intro_pages": 3,
+        "next_stage": "shadow_wait",
+        "save_result_code": "",
+        "slot_revision": 1,
+        "slot_sha256": "46c0a8efabc7264755f0a25ef489f8a2a5a3002e41a3064fcaf5b8b5e5f2fb0e",
+        "win32_left_observed": 10,
+        "win32_right_observed": 2,
+        "window_pixels": [
+          1280,
+          720
+        ]
+      },
+      "failures": []
+    },
+    "resume": {
+      "candidate": "91ab70df",
+      "stage": "resume",
+      "exe_sha256": "ea7a2701895c4a7047236f8add568e19f9b9a0abaa3693d92187449ce2bfad08",
+      "exe_unchanged": true,
+      "exit": 0,
+      "windows_button_messages": [
+        "left",
+        "escape"
+      ],
+      "log_sha256": "a1f523f8460d30324505ae605a6b6b43a886b651aef76974b357241b3d771056",
+      "errors": [],
+      "checks": [
+        "the packaged launcher argument is present without a Steam test environment",
+        "original Steam adapter stays disconnected and the isolated profile has no cloud operation",
+        "normal main menu scene mounts",
+        "native menu becomes ready",
+        "official offline player entry enabled without a private QA seam",
+        "new Windows process opens the original slot bytes",
+        "main menu enables Continue last battle with the Wild Boar Forest chapter name",
+        "actual Win32 click uses Continue last battle",
+        "official player-menu restore commits",
+        "same chapter loads at the paused checkpoint",
+        "same actor identity, hit points, paused clock, events, and order path",
+        "resume preserves the disk bytes and original offline run token",
+        "completed tutorial cue does not replay in the restored battle",
+        "native Escape resumes the restored battle",
+        "original walking path continues automatically without adding another move order",
+        "original stage advances naturally to the staff interception"
+      ],
+      "facts": {
+        "changed_checkpoint_keys": [],
+        "checkpoint": {
+          "clock": 5.59999999999999,
+          "events": [
+            "observe",
+            "shadow_pine",
+            "shadow_route_chosen"
+          ],
+          "hero": "lu_zhishen",
+          "hero_id": 4.0,
+          "hp": 540.0,
+          "order_serial": 2.0,
+          "position": [
+            1357.74426269531,
+            527.996765136719
+          ],
+          "remaining_path": [
+            [
+              1103.74108886719,
+              527.559265136719
+            ]
+          ],
+          "shadow_route": "north_pines",
+          "stage": "shadow_wait"
+        },
+        "clock_at_next_stage": 9.95000000000007,
+        "motion_after_restore": 64.3311538696289,
+        "next_stage": "intercept",
+        "slot_sha256": "46c0a8efabc7264755f0a25ef489f8a2a5a3002e41a3064fcaf5b8b5e5f2fb0e",
+        "win32_left_observed": 1,
+        "win32_right_observed": 0,
+        "window_pixels": [
+          1280,
+          720
+        ]
+      },
+      "failures": []
+    }
+  }
+}
