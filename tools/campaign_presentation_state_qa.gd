@@ -511,6 +511,41 @@ func exercise_cross_locale(bundle: Dictionary) -> void:
 	get_tree().paused = false
 	Localize.set_language("zh_CN", false)
 
+func exercise_hidden_hud_scroll(bundle: Dictionary) -> void:
+	var target := make_owner()
+	target.owner.hud.hide()
+	var adapter := Presentation.new()
+	var prepared := adapter.prepare(target.owner, bundle.presentation, bundle.mission, CONTEXT, target.ids, target.next_id, RESTORE_MS)
+	check("a saved nonzero scroll prepares under a hidden HUD", prepared.ok)
+	if not prepared.ok: return
+	adapters.append(adapter)
+	var mission: Variant = prepared.mission
+	var mounted := await finish_mounted(adapter, target.owner)
+	check("hidden HUD completes gated layout without a native scrollbar range", mounted.ok)
+	if mounted.ok:
+		var active := adapter.activate()
+		check("hidden HUD can activate with a pending scroll preference", active.ok)
+		if active.ok:
+			mission._toggle.button_pressed = false
+			target.owner.hud.show()
+			await get_tree().process_frame
+			check("collapsed panel retains saved offset", mission.detail_scroll_offset() == Vector2i(0, 170))
+			var saved := presentation.capture(mission, CONTEXT)
+			var captured := state.capture(mission, CONTEXT, target.ids, target.next_id, saved.get("external_to_token", {}), CAPTURE_MS,
+				{"deferred_drained": true, "presentation_captured": true})
+			var ui_state: Dictionary = codec.decode(saved.record.payload) if saved.ok else {}
+			var mission_state: Dictionary = codec.decode(captured.record.payload) if captured.ok else {}
+			check("both snapshot components preserve the deferred offset",
+				ui_state.get("ok", false) and mission_state.get("ok", false)
+				and ui_state.value.scroll == {"horizontal": 0, "vertical": 170}
+				and mission_state.value.scroll == ui_state.value.scroll)
+			mission._toggle.button_pressed = true
+			for frame in range(3): await get_tree().process_frame
+			check("opening applies the native scroll and moves the content",
+				mission._detail_scroll.scroll_vertical == 170 and mission._details.position.y < -100.0)
+	adapter.dispose(); adapters.erase(adapter)
+	get_tree().paused = false
+
 func full_suite() -> void:
 	Localize.set_language("zh_CN", false)
 	check_format_contract()
@@ -528,6 +563,7 @@ func full_suite() -> void:
 	check_failed_prepare(bundle, source)
 	await exercise_restore(bundle, "same process", source)
 	await exercise_cross_locale(bundle)
+	await exercise_hidden_hud_scroll(bundle)
 
 func cleanup() -> void:
 	get_tree().paused = false
