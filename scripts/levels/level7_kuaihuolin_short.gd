@@ -65,6 +65,7 @@ func on_mission_action(b, action_id: String, actor) -> void:
 		if not b._gameplay_rng_issue.is_empty(): return
 		if action_id=="restore_shop" and b.mission.has_event("restore_shop"): victory=true
 	_sync_controls(b)
+	_sync_shop_controls(b)
 
 func _start_step_drill(b) -> void:
 	st=STEP_DRILL
@@ -209,6 +210,7 @@ func process(b, delta: float) -> void:
 	elif st==SHOWDOWN and menshen.story_outcome=="":
 		_duel_tick(b,delta)
 	_sync_controls(b)
+	_sync_shop_controls(b)
 
 func _duel_tick(b, delta: float) -> void:
 	if charge_running:
@@ -308,6 +310,7 @@ func _set_menshen_subdued(b) -> void:
 	_clear_tell()
 	super._set_menshen_subdued(b)
 	_sync_controls(b)
+	_sync_shop_controls(b)
 
 func _sync_controls(b) -> void:
 	if controls_generation==b.mission._generation: return
@@ -317,7 +320,71 @@ func _sync_controls(b) -> void:
 	b.mission.add_map_locator("快活林酒肉店",SIGN)
 	b.mission.add_map_locator("施恩安全候场处",Vector2i(44,25))
 
+func _sync_shop_controls(b) -> void:
+	if st != RETURN_SHOP or b.phase != b.Phase.FIGHT or b.hud.touch_ui:
+		return
+	var terms_done: bool = b.mission.has_event("terms")
+	var changed := false
+	var shop_button: Button = b.mission.find_level_button("forest_order_shop")
+	if shop_button == null:
+		shop_button = b.mission.add_level_button("forest_order_shop", "让施恩接店",
+			"派施恩到酒店旗标接管。可直接接店，也可等武松先说清条件。")
+		shop_button.get_parent().move_child(shop_button, 0)
+		changed = true
+	var terms_button: Button = b.mission.find_level_button("forest_order_terms")
+	if not terms_done and terms_button == null:
+		terms_button = b.mission.add_level_button("forest_order_terms", "让武松说清条件",
+			"派武松到退店旗标，与蒋门神说清三项条件。谈完后再让施恩接店。")
+		terms_button.get_parent().move_child(terms_button, 0)
+		changed = true
+	elif terms_done and terms_button != null:
+		terms_button.get_parent().remove_child(terms_button)
+		terms_button.queue_free()
+		changed = true
+	var prompt := "退店条件已谈妥。点「让施恩接店」，待施恩到场交割。" if terms_done \
+		else "可点「让施恩接店」结束本关。若要完成原著演义，先点「让武松说清条件」，谈完再接店。"
+	if b.mission.objective != prompt:
+		b.mission.set_objective(prompt)
+	if changed:
+		b.mission.reveal_primary_level_button()
+
+func _has_shop_order(b, actor: Unit, action_id: String) -> bool:
+	return is_instance_valid(actor) and (b.mission.active_action_id == action_id or (
+		(actor.mission_order_active or actor.mission_order_arrival_t > 0.0)
+		and b.mission._nearest_clicked_action(actor.mission_order_target) == action_id))
+
+func _order_shop_task(b, actor: Unit, action_id: String) -> void:
+	if st != RETURN_SHOP or b.hud.touch_ui or not b._gameplay_rng_issue.is_empty():
+		return
+	var action: Dictionary = b.mission.actions.get(action_id, {})
+	if action.is_empty() or action.done or not b.mission._valid_action_actor(actor, action):
+		return
+	if _has_shop_order(b, actor, action_id):
+		return
+	if action_id == "restore_shop" and not b.mission.has_event("terms") and _has_shop_order(b, wu, "terms"):
+		b.mission.set_feedback("武松正在去谈退店条件。谈完后再让施恩接店。")
+		return
+	var target: Vector2 = b.map.cell_to_world(action.cell)
+	var path: PackedVector2Array = b.map.find_path(actor.position, target, actor.faction, actor.movement_profile)
+	if not String(action.get("blocked_reason", "")).is_empty() or path.is_empty() \
+			or b.mission._nearest_clicked_action(target) != action_id or path[-1].distance_to(target) > float(action.reach) \
+			or not b.map._segment_open(path[-1], target, actor.movement_profile):
+		b.mission.set_feedback("暂时走不到旗标。请清开道路或手动改道。")
+		return
+	var group := [actor]
+	b._stamp_manual(group)
+	actor.order_move(target)
+	b._stamp_mission_move(group, target)
+	Sfx.play("order")
+	b.mission.set_feedback("武松已前往退店旗标。" if action_id == "terms" else "施恩已前往酒店旗标。")
+
 func activate_mission_button(b, button_id: String) -> void:
+	if button_id == "forest_order_terms":
+		_order_shop_task(b, wu, "terms")
+		return
+	if button_id == "forest_order_shop":
+		_order_shop_task(b, shi, "restore_shop")
+		return
 	var actor = wu if button_id == "forest_wu" else (shi if button_id == "forest_shi" else null)
 	if is_instance_valid(actor) and actor.hp>0:
 		b.select_single(actor,false)
