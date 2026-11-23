@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+Windows 候选 dbff5ccd 用 Godot 4.6.3 导入、导出，两步退出 0、错误 0。大营破后出击沿用原任务事件和波次，保持章内存档结构。六条本地化通过严格目录生成校验。 [Windows 验收收据](../qa/campaign_cavalry_escort_20261116/windows_lianhuanma_camp_fall_dbff5ccd.json)
+
 Windows 候选 025ef7ad 用 Godot 4.6.3 导入、导出，退出 0、错误 0，验收前后六个发布文件逐项核对。新增八条本地化，经严格目录重建核对。沿用原归营判定和任务按钮保存格式。任务面板滚动位置沿用现有存档字段，HUD 隐藏时先保留偏移，等布局可用再应用。共享任务面板源码回归 224 项。 [Windows 验收收据](../qa/campaign_siege_20261116/windows_evacuate_camp_025ef7ad.json)
 
 Windows 候选 f47fb1e0 用 Godot 4.6.3 导入并导出，两步退出 0、错误 0。冻结运行输入只更新江州脚本、存档字段分类、任务按钮白名单和四语目录，六文件指纹在运行前后通过核对。新增按钮引用登记为临时界面字段，八章存档字段检查通过。旧档沿用已有战斗格式，恢复战斗后由关卡补齐缺少的按钮。四条四语词条经严格目录生成校验。 [Windows 验收收据](../qa/campaign_pursuit_20261116/windows_jiangzhou_shore_selection_f47fb1e0.json)
