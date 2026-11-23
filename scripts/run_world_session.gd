@@ -369,8 +369,9 @@ func commit_restore() -> Dictionary:
 	_steam()._context = _packet.context.duplicate(true)
 	_tree().current_scene = battle
 	_old_scene.free(); _old_scene = null
-	if _packet.context.get("level_id", "") == "level5":
-		battle.level.refresh_restored_liu_return(battle)
+	match _packet.context.get("level_id", ""):
+		"level1": battle.level.refresh_restored_withdrawal(battle)
+		"level5": battle.level.refresh_restored_liu_return(battle)
 	if not node.value.name.is_empty(): battle.name = node.value.name
 	battle._install_target_cursor()
 	Engine.time_scale = _tree().root.get_node("Settings").game_speed

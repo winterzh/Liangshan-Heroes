@@ -9,6 +9,9 @@ const BAI_STATION := Vector2i(24,24)
 const TRIBUTE_ART := "tribute_load_alpha_20260906"
 const LOADED_RELAY_REACH := 80.0
 const TAKE_MARKER_REACH := 24.0
+const EARLY_WITHDRAW := GATE_W + Vector2i(-3,0)
+const WITHDRAW_RADIUS := 150.0
+const WITHDRAW_OBJECTIVE := "七车十一担已经运出。让幸存同伴右键西冈口集合，八人到齐可获全员生还。若要先行收队，请单独右键西冈口西侧的收队旗标。"
 var team_t := 0.0
 var distraction_serial := -1
 var controls_generation := -1
@@ -130,7 +133,7 @@ func on_mission_action(b, action_id: String, actor) -> void:
 			b.mission.mark("distract_yang","刘唐佯讨半瓢酒，引住押队目光；吴用与白胜在乙桶交接。")
 		"withdraw_now":
 			if st==WITHDRAW and delivered==Transport.LOAD_COUNT and _delivered_cart_indices(b).size()==Transport.CART_COUNT \
-					and _mission_action_done(b,action_id) and _at(b,actor,GATE_W,66):
+					and _mission_action_done(b,action_id) and _at(b,actor,b.mission.actions[action_id].cell,66):
 				depart_requested=true
 		_:
 			super.on_mission_action(b,action_id,actor)
@@ -335,8 +338,31 @@ func _force_deliver_cargo(b,action_id: String,actor,index: int) -> void:
 func _begin_free_withdraw(b) -> void:
 	if st==WITHDRAW:return
 	st=WITHDRAW
-	b.mission.begin("withdraw","七车十一担已到 · 收拢同行人","七辆江州车已推出冈口。让七星与白胜一起到西口，可完成全员生还目标；先行收队仍需你实际下令。")
-	b.mission.add_action("withdraw_now","先行收队 · 未到者不计全员生还",GATE_W,[],0.6,64)
+	b.mission.begin("withdraw","七车十一担已到 · 收拢同行人",WITHDRAW_OBJECTIVE)
+	b.mission.add_action("withdraw_now","先行收队 · 未到者不计全员生还",EARLY_WITHDRAW,[],0.6,64)
+
+func refresh_restored_withdrawal(b) -> void:
+	if st != WITHDRAW or not b.mission.actions.has("withdraw_now"): return
+	var action: Dictionary = b.mission.actions.withdraw_now
+	if action.cell != GATE_W or action.done or b.mission.active_action_id == "withdraw_now": return
+	# Legacy saves used the assembly point for the optional action. Keep an old
+	# order already en route; move the idle flag before accepting new commands.
+	for actor in _living_companions():
+		if actor.mission_order_token > 0 and (actor.mission_order_active or actor.mission_order_arrival_t > 0.0) \
+				and b.mission._nearest_clicked_action(actor.mission_order_target) == "withdraw_now":
+			return
+	action.cell = EARLY_WITHDRAW
+	action.marker.position = b.map.cell_to_world(EARLY_WITHDRAW)
+	b.map.sync_render_position(action.marker)
+	b.mission.set_objective(WITHDRAW_OBJECTIVE)
+	if controls_generation == b.mission._generation:
+		_add_waiting_button(b)
+	else:
+		_sync_controls(b)
+
+func _add_waiting_button(b) -> void:
+	b.mission.add_level_button("hg_waiting", "选中 · 未到西冈口",
+		"选中尚未到西冈口的幸存同伴。右键西冈口集合。")
 
 func _living_companions() -> Array:
 	return actors.filter(func(u): return is_instance_valid(u) and u.hp > 0 and u.story_outcome == "")
@@ -345,12 +371,16 @@ func _companions_at_exit(b, living: Array) -> int:
 	var exit_point: Vector2 = b.map.cell_to_world(GATE_W)
 	var arrived := 0
 	for actor in living:
-		if actor.position.distance_to(exit_point) <= 150:
+		if _at_withdrawal(actor, exit_point):
 			arrived += 1
 	return arrived
 
+func _at_withdrawal(actor, exit_point: Vector2) -> bool:
+	return actor.position.distance_to(exit_point) <= WITHDRAW_RADIUS
+
 func _withdraw_tick(b) -> void:
 	if victory or b.phase==b.Phase.END:return
+	refresh_restored_withdrawal(b)
 	var living := _living_companions()
 	var all_out := not living.is_empty() and _companions_at_exit(b, living) == living.size()
 	if delivered!=Transport.LOAD_COUNT or _delivered_cart_indices(b).size()!=Transport.CART_COUNT or living.is_empty() or not (all_out or depart_requested):return
@@ -419,6 +449,7 @@ func _sync_controls(b) -> void:
 		b.mission.add_level_button("hg_loaded_carts", "选中 · 已装货同伴", "选中已装货的同伴，出冈需另下指令。")
 		b.mission.add_level_button("hg_transport_next", "下一步 · 当前所选",
 			"定位运输旗标。空手人物优先查看可接手的重车。")
+	if st == WITHDRAW: _add_waiting_button(b)
 	b.mission.add_map_locator("西冈口 · 推车退路",GATE_W)
 	if st in [MARCH,INQUIRY]: b.mission.add_map_locator("另一片松阴 · 七星与枣车",SHADE)
 
@@ -441,6 +472,15 @@ func activate_mission_button(b, button_id: String) -> void:
 			b.mission.set_status(Localize.text("请单独选中一位可推车的七星；白胜负责同行。"))
 			return
 		b.mission.focus_action(action_id)
+		return
+	if button_id == "hg_waiting":
+		if st != WITHDRAW: return
+		var exit_point: Vector2 = b.map.cell_to_world(GATE_W)
+		var waiting := _living_companions().filter(func(u): return not _at_withdrawal(u, exit_point))
+		if waiting.is_empty(): return
+		b.select_members(waiting, false)
+		b.center_camera_cell(b.map.world_to_cell(waiting[0].position))
+		b.mission.set_status("已选中未到同伴；请右键西冈口集合。")
 		return
 	if button_id == "hg_empty_hands":
 		var members := actors.filter(func(u): return is_instance_valid(u) and u.hp>0 and u.story_outcome=="" and (st==WITHDRAW or u.key in SEVEN) and not u.has_meta("carrying_tribute") and not u.has_meta("pushing_empty_tribute"))
@@ -546,7 +586,10 @@ func campaign_debrief(mission) -> Array[Dictionary]:
 	]
 
 func top_status(b) -> String:
-	var title: String={PREPARE:"商客歇脚",MARCH:"押队上冈",INQUIRY:"杨志盘问",ARRIVAL:"白胜挑酒入场",WINE:"白胜卖酒",CARRY:"装车推行",WITHDRAW:"收拢同行人",FORCE:"身份败露"}.get(st,"")
+	if st == WITHDRAW:
+		var living := _living_companions()
+		return Localize.format_text("西冈口集合 · %d/%d 名幸存同伴已到", [_companions_at_exit(b,living), living.size()])
+	var title: String={PREPARE:"商客歇脚",MARCH:"押队上冈",INQUIRY:"杨志盘问",ARRIVAL:"白胜挑酒入场",WINE:"白胜卖酒",CARRY:"装车推行",FORCE:"身份败露"}.get(st,"")
 	var text: String=Localize.format_text("智取生辰纲 | %s | 推车%d/7 · 财物%d/11担",[Localize.text(title),_delivered_cart_indices(b).size(),delivered])
 	if st in [CARRY,FORCE]:
 		var waiting := _loaded_relay_actions(b).size()

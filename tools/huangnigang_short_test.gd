@@ -34,9 +34,8 @@ func shot(b,name: String,cell: Vector2i) -> void:
 
 func _live(name: String, on_relay_loaded := Callable()) -> void:
 	var b=await _start("",0)
-	if name=="relay":
-		Engine.time_scale=4.0
-		print("[hns-relay] active time scale=",Engine.time_scale)
+	Engine.time_scale=4.0
+	if name=="relay": print("[hns-relay] active time scale=",Engine.time_scale)
 	var l=b.level
 	var start_orders:=orders
 	var combat: Dictionary={}
@@ -143,7 +142,7 @@ func _live(name: String, on_relay_loaded := Callable()) -> void:
 	await _wait(0.5)
 	check(loaded.all(func(u): return u._state==u.ST_MOVE),"loaded carriers walk concurrently on player orders")
 	var reserves: Array=l.actors.filter(func(u): return alive(u) and not u.has_meta("carrying_tribute") and not u.has_meta("pushing_empty_tribute"))
-	if not reserves.is_empty(): _click(b,reserves,l.GATE_W+Vector2i(-1,0))
+	if name!="wine" and not reserves.is_empty(): _click(b,reserves,l.GATE_W+Vector2i(-1,0))
 	check(await until(func(): return l._delivered_cart_indices(b).size()>=carriers.size() or b.phase==b.Phase.END,90)
 		and carriers.keys().all(func(i): return i in l._delivered_cart_indices(b)),"surviving owners finish their original shipments")
 	if not relay_indices.is_empty():
@@ -168,7 +167,10 @@ func _live(name: String, on_relay_loaded := Callable()) -> void:
 			print("[hns-relay] delivered cart ",index+1," with ",carrier.key," at ",b.mission.total_game_seconds)
 			combat.relay_deliveries.append({"cart":index,"loads":l.Transport.weight(index),"original_owner":original_owner,"carrier":carrier.key})
 	check(l.st==l.WITHDRAW,"seven physical deliveries unlock final assembly")
-	_click(b,l.actors.filter(func(u): return alive(u)),l.GATE_W)
+	if name=="wine":
+		await _rally_after_wine(b)
+	else:
+		_click(b,l.actors.filter(func(u): return alive(u)),l.GATE_W)
 	check(await until(func(): return l.victory or b.phase==b.Phase.END,25) and l.victory,"a separate player order assembles all companions at the west exit")
 	print("[hns-exit] ",name," ",l.actors.map(func(u): return [u.key,u.hp,b.map.world_to_cell(u.position),u._state] if is_instance_valid(u) else ["fallen"])," phase=",b.phase," stage=",l.st)
 	var result: Dictionary=b.mission.result_snapshot(l.victory)
@@ -178,6 +180,34 @@ func _live(name: String, on_relay_loaded := Callable()) -> void:
 	await shot(b,name+"_result",l.GATE_W)
 	cases.append({"route":name,"orders":orders-start_orders,"seconds":b.mission.total_game_seconds,"result":result,"events":b.mission.events.keys(),"alive":l.actors.filter(func(u): return alive(u)).size(),"combat":combat})
 	await _dispose(b)
+
+func _rally_after_wine(b) -> void:
+	var l=b.level
+	var bai=b.find_unit("bai_sheng")
+	var exit_point: Vector2=b.map.cell_to_world(l.GATE_W)
+	var waiting: Array=l._living_companions().filter(func(u): return not l._at_withdrawal(u,exit_point))
+	var ready: Array=l._living_companions().filter(func(u): return l._at_withdrawal(u,exit_point))
+	check(waiting.has(bai) and not ready.is_empty(),"the original Bai is still behind while the carts and some companions reach the exit")
+	if waiting.is_empty() or ready.is_empty(): return
+	_click(b,ready,l.GATE_W)
+	await _wait(1.6)
+	check(b.phase==b.Phase.FIGHT and not l.depart_requested and not l.victory,
+		"ordinary right-click at the exit never orders early departure")
+	var waiting_button: Button
+	for button in b.mission._buttons.get_children():
+		if button.get_meta(b.mission.PRESENTATION_META,{}).get("button_id","")=="hg_waiting":
+			waiting_button=button
+			break
+	check(waiting_button!=null,"the mission offers a selector for companions who have yet to arrive")
+	if waiting_button==null: return
+	waiting=l._living_companions().filter(func(u): return not l._at_withdrawal(u,exit_point))
+	var serials: Array=waiting.map(func(u): return u._order_serial)
+	waiting_button.pressed.emit()
+	check(b.selection.size()==waiting.size() and waiting.all(func(u): return u in b.selection)
+		and waiting.map(func(u): return u._order_serial)==serials,
+		"selecting the missing companions leaves all orders alone")
+	b.minimap_order(exit_point,false)
+	orders+=1
 
 func _complete_convoy_fixture(b) -> void:
 	# Explicit frozen boundary fixture only. This bypasses entry timing and is
@@ -379,6 +409,13 @@ func _run() -> void:
 	OS.set_environment("CAMPAIGN_QA","1")
 	AudioServer.set_bus_mute(0,true)
 	root.get_node("Settings").edge_scroll=false
+	var flow := root.get_node("ContinueFlow")
+	var deadline := Time.get_ticks_msec()+120000
+	while not flow.can_launch():
+		if flow.phase==flow.Phase.ERROR or Time.get_ticks_msec()>=deadline:
+			quit(2)
+			return
+		await process_frame
 	Engine.time_scale=4
 	var selected:=OS.get_environment("HNS_CASE")
 	if selected=="": selected="all"
