@@ -1143,6 +1143,24 @@ func _retain_opening_preview(path: String, preview: Array[Resource]) -> void:
 		preview.append(resource)
 
 
+## Keep one outstanding request and drain it even if the picker closes.
+## Check at most one imported texture per rendered frame.
+func prefetch_gao_scenery_preview(active: Callable) -> bool:
+	var environment := load("res://scripts/campaign_environment.gd")
+	for path: String in environment.opening_scenery_texture_paths("level5"):
+		if AppLifecycle.quit_started() or not active.call():
+			return false
+		if ResourceLoader.load_threaded_request(path, "Texture2D") != OK:
+			continue
+		var texture := (await _collect_menu_request(path)) as Texture2D
+		if AppLifecycle.quit_started() or not active.call():
+			return false
+		if texture != null:
+			CampaignEnvironmentArt.prepare_png_calibration(texture)
+		await RenderingServer.frame_post_draw
+	return true
+
+
 ## Five shared terrain textures can be reused by later battles in this process.
 func prefetch_menu_surfaces(level_ids: Array) -> void:
 	if OS.get_name() != "Windows" or DisplayServer.get_name() == "headless" or AppLifecycle.quit_started():

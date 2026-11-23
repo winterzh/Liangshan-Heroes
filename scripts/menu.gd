@@ -549,7 +549,7 @@ func _prefetch_picker_surfaces(overlay: Control, level_ids: Array) -> void:
 		Art.prefetch_menu_surfaces(level_ids)
 
 
-func _prefetch_huangnigang_card(button: Button) -> void:
+func _prefetch_campaign_card(button: Button, level_id: String) -> void:
 	# A quick click can use the normal loading sequence without competing
 	# with speculative animation and portrait requests.
 	var preview_after := Time.get_ticks_usec() + 120_000
@@ -563,9 +563,24 @@ func _prefetch_huangnigang_card(button: Button) -> void:
 			return
 		if Time.get_ticks_usec() >= preview_after:
 			break
-	var preview: Array[Resource] = []
-	button.set_meta(&"opening_preview", preview)
-	Art.prefetch_huangnigang_preview(preview)
+	if level_id == "level1":
+		var preview: Array[Resource] = []
+		button.set_meta(&"opening_preview", preview)
+		Art.prefetch_huangnigang_preview(preview)
+		return
+	if OS.get_environment("LIANGSHAN_VISUAL_BASELINE") == "1":
+		return
+	button.set_meta(&"opening_preview", true)
+	var menu_ref: WeakRef = weakref(self)
+	var button_ref: WeakRef = weakref(button)
+	var active := func() -> bool:
+		var menu: Control = menu_ref.get_ref()
+		var target: Button = button_ref.get_ref()
+		return menu != null and menu.is_inside_tree() and menu.get("_entry_overlay") == null \
+			and target != null and target.is_visible_in_tree() and (target.is_hovered() or target.has_focus())
+	await Art.prefetch_gao_scenery_preview(active)
+	if is_instance_valid(button):
+		button.remove_meta(&"opening_preview")
 
 
 func _show_story() -> void:
@@ -1121,8 +1136,8 @@ func _make_card(i: int) -> Control:
 		btn.disabled = true
 	else:
 		btn.text = "出 征"
-		if info["id"] == "level1" and OS.get_name() == "Windows" and DisplayServer.get_name() != "headless":
-			var prefetch := _prefetch_huangnigang_card.bind(btn)
+		if info["id"] in ["level1", "level5"] and OS.get_name() == "Windows" and DisplayServer.get_name() != "headless":
+			var prefetch := _prefetch_campaign_card.bind(btn, String(info["id"]))
 			btn.mouse_entered.connect(prefetch)
 			btn.focus_entered.connect(prefetch)
 		btn.pressed.connect(func() -> void:
