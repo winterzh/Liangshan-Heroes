@@ -29,6 +29,45 @@ const IMPACT_BY_THEME := {
 }
 
 
+# Earlier matches take priority. Hero keywords use lowercase Latin or Chinese.
+const HERO_THEME_KEYWORDS := {
+	"axe": ["斧", "axe", "berserker"],
+	"hammer": ["锤", "hammer"],
+	"stone": ["石", "山", "地", "earth"],
+	"spear": ["枪", "矛", "spear", "lancer"],
+	"arrow": ["箭", "弓", "arrow", "wind"],
+	"blade": ["刀", "剑", "blade"],
+	"fire": ["火", "焰", "炮", "fire"],
+	"thunder": ["雷", "电", "storm", "thunder"],
+	"water": ["冰", "寒", "霜", "水", "浪", "潮", "river", "winter"],
+	"poison": ["毒", "瘴", "venom", "poison"],
+	"shadow": ["魂", "黑", "暗", "影", "梦", "shadow", "night"],
+	"holy": ["医", "安道全", "heal", "holy"],
+	"beast": ["虎", "龙", "狼", "兽", "dragon", "beast"],
+	"chain": ["索", "钩", "链", "网", "chain"],
+	"command": ["宋", "军", "令", "banner", "commander"],
+}
+
+const ABILITY_THEME_KEYWORDS := {
+	"hammer": ["锤", "重锤", "砸", "震"],
+	"axe": ["斧"],
+	"stone": ["飞石", "石", "山", "地", "裂"],
+	"spear": ["枪", "矛", "刺", "突"],
+	"arrow": ["箭", "弓", "射"],
+	"blade": ["刀", "剑", "斩", "割"],
+	"fire": ["火", "焰", "炎", "炮", "爆"],
+	"thunder": ["雷", "电", "霹雳"],
+	"ice": ["冰", "寒", "霜"],
+	"water": ["水", "浪", "潮", "江", "海"],
+	"poison": ["毒", "瘴"],
+	"shadow": ["魂", "幽", "黑", "暗", "影", "梦", "咒"],
+	"holy": ["疗", "医", "救", "护", "盾", "金光"],
+	"beast": ["虎", "龙", "狼", "兽", "变身"],
+	"chain": ["钩", "索", "链", "网", "缚"],
+	"command": ["令", "阵", "旗", "号令", "战吼", "暴喝"],
+}
+
+
 static func apply(defs: Dictionary, abilities: Dictionary) -> Dictionary:
 	var excluded_abilities := {}
 	for hk in EXCLUDED_HEROES.keys():
@@ -46,7 +85,8 @@ static func apply(defs: Dictionary, abilities: Dictionary) -> Dictionary:
 		if not bool(d.get("hero_trainable", false)) or EXCLUDED_HEROES.has(String(key)):
 			continue
 		hero_count += 1
-		var base_theme := _hero_theme(String(key), d)
+		var hero_label := "%s %s" % [String(key), String(d.get("name", ""))]
+		var base_theme := _hero_theme(String(key), hero_label)
 		var art_abilities: Array = d.get("abilities", []).duplicate()
 		if String(key) == "liu_tang" and not art_abilities.has("liu_cleave"):
 			art_abilities.append("liu_cleave")
@@ -66,7 +106,7 @@ static func apply(defs: Dictionary, abilities: Dictionary) -> Dictionary:
 				abilities[aid] = ad
 				visual_count += 1
 				continue
-			var theme := _ability_theme(String(key), d, ad, eff, base_theme)
+			var theme := _ability_theme(hero_label, ad, eff, base_theme)
 			var visual := _visual_for(kind, theme, ad, eff)
 			if visual.is_empty():
 				continue
@@ -132,45 +172,19 @@ static func _visual_for(kind: String, theme: String, ad: Dictionary, eff: Dictio
 	}
 
 
-static func _hero_theme(key: String, d: Dictionary) -> String:
-	# 只依据本作英雄名、单位 key 和技能语义选择视觉主题，不保留外部作品角色对照表。
-	var txt := "%s %s" % [key, String(d.get("name", ""))]
-	if _has(txt, ["斧", "axe", "berserker"]): return "axe"
-	if _has(txt, ["锤", "hammer"]): return "hammer"
-	if _has(txt, ["石", "山", "地", "earth"]): return "stone"
-	if _has(txt, ["枪", "矛", "spear", "lancer"]): return "spear"
-	if _has(txt, ["箭", "弓", "arrow", "wind"]): return "arrow"
-	if _has(txt, ["刀", "剑", "blade"]): return "blade"
-	if _has(txt, ["火", "焰", "炮", "fire"]): return "fire"
-	if _has(txt, ["雷", "电", "storm", "thunder"]): return "thunder"
-	if _has(txt, ["冰", "寒", "霜", "水", "浪", "潮", "river", "winter"]): return "water"
-	if _has(txt, ["毒", "瘴", "venom", "poison"]): return "poison"
-	if _has(txt, ["魂", "黑", "暗", "影", "梦", "shadow", "night"]): return "shadow"
-	if _has(txt, ["医", "安道全", "heal", "holy"]): return "holy"
-	if _has(txt, ["虎", "龙", "狼", "兽", "dragon", "beast"]): return "beast"
-	if _has(txt, ["索", "钩", "链", "网", "chain"]): return "chain"
-	if _has(txt, ["宋", "军", "令", "banner", "commander"]): return "command"
+static func _hero_theme(key: String, label: String) -> String:
+	var text := label.to_lower()
+	for theme: String in HERO_THEME_KEYWORDS:
+		if _has_keyword(text, HERO_THEME_KEYWORDS[theme]):
+			return theme
 	return ["stone", "blade", "fire", "water", "shadow", "thunder"][abs(hash(key)) % 6]
 
 
-static func _ability_theme(key: String, d: Dictionary, ad: Dictionary, eff: Dictionary, fallback: String) -> String:
-	var txt := "%s %s %s %s" % [key, String(d.get("name", "")), String(ad.get("name", "")), String(ad.get("desc", ""))]
-	if _has(txt, ["锤", "重锤", "砸", "震"]): return "hammer"
-	if _has(txt, ["斧"]): return "axe"
-	if _has(txt, ["飞石", "石", "山", "地", "裂"]): return "stone"
-	if _has(txt, ["枪", "矛", "刺", "突"]): return "spear"
-	if _has(txt, ["箭", "弓", "射"]): return "arrow"
-	if _has(txt, ["刀", "剑", "斩", "割"]): return "blade"
-	if _has(txt, ["火", "焰", "炎", "炮", "爆"]): return "fire"
-	if _has(txt, ["雷", "电", "霹雳"]): return "thunder"
-	if _has(txt, ["冰", "寒", "霜"]): return "ice"
-	if _has(txt, ["水", "浪", "潮", "江", "海"]): return "water"
-	if _has(txt, ["毒", "瘴"]): return "poison"
-	if _has(txt, ["魂", "幽", "黑", "暗", "影", "梦", "咒"]): return "shadow"
-	if _has(txt, ["疗", "医", "救", "护", "盾", "金光"]): return "holy"
-	if _has(txt, ["虎", "龙", "狼", "兽", "变身"]): return "beast"
-	if _has(txt, ["钩", "索", "链", "网", "缚"]): return "chain"
-	if _has(txt, ["令", "阵", "旗", "号令", "战吼", "暴喝"]): return "command"
+static func _ability_theme(hero_label: String, ad: Dictionary, eff: Dictionary, fallback: String) -> String:
+	var text := "%s %s %s" % [hero_label, String(ad.get("name", "")), String(ad.get("desc", ""))]
+	for theme: String in ABILITY_THEME_KEYWORDS:
+		if _has_keyword(text, ABILITY_THEME_KEYWORDS[theme]):
+			return theme
 	if String(eff.get("dispel", "")) != "" or String(eff.get("kind", "")) == "shield":
 		return "holy"
 	if float(eff.get("silence", 0.0)) > 0.0 or float(eff.get("amp", 0.0)) > 0.0:
@@ -178,9 +192,8 @@ static func _ability_theme(key: String, d: Dictionary, ad: Dictionary, eff: Dict
 	return fallback
 
 
-static func _has(txt: String, needles: Array) -> bool:
-	var low := txt.to_lower()
-	for n in needles:
-		if low.find(String(n).to_lower()) >= 0:
+static func _has_keyword(text: String, keywords: Array) -> bool:
+	for keyword: String in keywords:
+		if text.contains(keyword):
 			return true
 	return false
