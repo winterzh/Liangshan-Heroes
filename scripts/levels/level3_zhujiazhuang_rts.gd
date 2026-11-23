@@ -437,7 +437,8 @@ func _update_camp_evacuation_control(b) -> void:
 	if return_button == null and not outside.is_empty():
 		return_button = b.mission.add_level_button("zhu_return_wounded", "送伤员回前营",
 			"给尚未归营的伤员下达行军命令。请先派战斗部队清开撤路。")
-		return_button.get_parent().move_child(return_button, 0)
+		var danger_button: Button = b.mission.find_level_button(VIEW_DANGER_BUTTON)
+		return_button.get_parent().move_child(return_button, 1 if danger_button != null else 0)
 		b.mission.reveal_primary_level_button()
 	if return_button != null:
 		return_button.disabled = outside.is_empty()
@@ -471,8 +472,7 @@ func _update_evacuation_danger_control(b, wounded: Unit) -> void:
 		return
 	button = b.mission.add_level_button(VIEW_DANGER_BUTTON, "查看 · 撤离险情",
 		"把镜头移到遇险伤员。优先定位时迁。")
-	var return_button: Button = b.mission.find_level_button("zhu_return_wounded")
-	button.get_parent().move_child(button, return_button.get_index() + 1 if return_button != null else 0)
+	button.get_parent().move_child(button, 0)
 
 
 func _order_wounded_return(b) -> void:

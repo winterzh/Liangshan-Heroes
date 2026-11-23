@@ -9,7 +9,7 @@ const LEVEL_BUTTON_IDS := {
 	"level2": ["jiang_depart", "jiang_find_rearguard", "jiang_bailong_meeting", "jiang_select_rearguard", "jiang_return_rearguard", "jiang_board_rescued"], "level3": ["zhu_select_shi_qian", "zhu_select_rescued", "zhu_find_camp_gold", "zhu_select_outside_camp", "zhu_return_wounded", "zhu_send_sun_li", "zhu_view_side_gate", "zhu_view_evacuation_danger"],
 	"level4": ["lhm_locate_remaining", "lhm_flank_artillery"], "level5": ["gao_end", "gao_escort"], "level6": ["pine_lu", "pine_group", "pine_waiting", "pine_order_rest", "pine_order_exit"],
 	"level7": ["forest_wu", "forest_shi", "forest_order_terms", "forest_order_shop"], "level8": ["daming_select_wounded", "daming_evac_wounded"]}
-const PRIMARY_LEVEL_BUTTON_IDS := ["gao_escort", "zhu_return_wounded", "zhu_view_evacuation_danger", "zhu_send_sun_li", "zhu_view_side_gate", "jiang_return_rearguard", "jiang_board_rescued", "daming_evac_wounded", "hg_send_loaded_carts", "hg_send_empty_carts", "pine_order_exit", "forest_order_shop", "lhm_flank_artillery"]
+const PRIMARY_LEVEL_BUTTON_IDS := ["gao_escort", "zhu_view_evacuation_danger", "zhu_return_wounded", "zhu_send_sun_li", "zhu_view_side_gate", "jiang_return_rearguard", "jiang_board_rescued", "daming_evac_wounded", "hg_send_loaded_carts", "hg_send_empty_carts", "pine_order_exit", "forest_order_shop", "lhm_flank_artillery"]
 
 var battle
 var stage_id := ""
