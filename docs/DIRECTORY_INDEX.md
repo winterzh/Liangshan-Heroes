@@ -1,6 +1,8 @@
 # 项目目录索引（2026-10-30）
 
-当前 Windows 离线试玩包位于 D:/AI项目/水浒/Windows候选/20261123-94629f93/。ZIP 含发行文件、启动器和说明。 [Windows 验收收据](../qa/campaign_counter_window_20261116/windows_shop_handover_94629f93.json)
+当前 Windows 离线试玩包位于 D:/AI项目/水浒/Windows候选/20261123-1ccb8af6/。ZIP 含发行文件、启动器和说明。 [Windows 进场验收](../qa/battle_entry_timing_20261116/windows_liangshan_loading_calibration_1ccb8af6.json)
+
+快活林操作验收包位于 D:/AI项目/水浒/Windows候选/20261123-94629f93/。ZIP 含发行文件、启动器和说明。 [Windows 验收收据](../qa/campaign_counter_window_20261116/windows_shop_handover_94629f93.json)
 
 江州操作验收所用 Windows 候选包位于 D:/AI项目/水浒/Windows候选/20261123-201c2c5f/。单个 ZIP 含发行文件、启动器和说明，同目录的「PC试玩」可直接启动。 [Windows 验收收据](../qa/campaign_pursuit_20261116/windows_jiang_boarding_201c2c5f.json)
 
