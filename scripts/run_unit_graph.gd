@@ -389,8 +389,11 @@ func _level5_external_tokens(battle: Variant) -> Dictionary:
 		if typeof(meta) != TYPE_DICTIONARY: continue
 		if typeof(meta.get("kind")) != TYPE_STRING: return _bad("LEVEL5_BUTTON_METADATA")
 		if meta.kind != "level": continue
-		if not child is Button or child.is_queued_for_deletion() or child.get_script() != null or typeof(meta.get("button_id")) != TYPE_STRING or meta.button_id != "gao_end" or is_instance_valid(found):
+		if not child is Button or child.is_queued_for_deletion() or child.get_script() != null or typeof(meta.get("button_id")) != TYPE_STRING or meta.button_id not in mission.LEVEL_BUTTON_IDS.level5:
 			return _bad("LEVEL5_END_BUTTON")
+		# Only the end button is referenced by the Level. Escort is owned by Mission.
+		if meta.button_id != "gao_end": continue
+		if is_instance_valid(found): return _bad("LEVEL5_END_BUTTON")
 		found = child
 	var button: Variant = battle.level.end_button
 	if is_instance_valid(button):
