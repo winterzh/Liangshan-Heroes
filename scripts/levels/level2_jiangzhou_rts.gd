@@ -7,6 +7,7 @@ const SCAFFOLD := Vector2i(30,18)
 const WEST_CAMP := Vector2i(8,26)
 const DOCK_CAMP := Vector2i(10,46)
 const DOCK := Vector2i(10,50)
+const DOCK_BOARDING_RADIUS := 120.0
 const BAILONG := Vector2i(14,43)
 const BAILONG_RADIUS := 130.0
 const BOARDING_THREAT_RADIUS := 150.0
@@ -600,6 +601,9 @@ func _dock_roster(b) -> Dictionary:
 func _selectable_shore_party(ashore: Array) -> Array:
 	return ashore.filter(func(ally): return ally.faction == Unit.FACTION_LIANG and not ally.garrisoned)
 
+func _rescued_pair_aboard() -> bool:
+	return living(song_freed) and living(dai_freed) and song_freed.story_outcome == "embarked" and dai_freed.story_outcome == "embarked"
+
 func _update_dock_guidance(b) -> void:
 	var roster := _dock_roster(b)
 	if not is_instance_valid(_shore_select_button):
@@ -608,7 +612,21 @@ func _update_dock_guidance(b) -> void:
 		if _shore_select_button == null:
 			_shore_select_button = b.mission.add_level_button("jiang_select_rearguard", "选中 · 岸上好汉",
 				"选中仍可行动的岸上好汉，随后由你下令撤回码头。")
-	_shore_select_button.disabled = _selectable_shore_party(roster.ashore).is_empty()
+	var members := _selectable_shore_party(roster.ashore)
+	_shore_select_button.disabled = members.is_empty()
+	if _rescued_pair_aboard() and not b.hud.touch_ui:
+		var button: Button = b.mission.find_level_button("jiang_return_rearguard")
+		if button == null and not members.is_empty():
+			button = b.mission.add_level_button("jiang_return_rearguard","撤回岸上好汉",
+				"派仍在岸上的好汉走回码头。可随时改道或让其断后。")
+			button.get_parent().move_child(button, 0)
+			b.mission.reveal_primary_level_button()
+		if button != null:
+			button.disabled = members.is_empty()
+		var objective := "宋江、戴宗已登船。可点击「开船通关」。" if members.is_empty() \
+			else "宋江、戴宗已登船。可先点「撤回岸上好汉」，也可直接开船。"
+		if b.mission.objective != objective:
+			b.mission.set_objective(objective)
 	var names := PackedStringArray()
 	for ally in roster.ashore:
 		names.append(Localize.text(ally.display_name))
@@ -617,9 +635,40 @@ func _update_dock_guidance(b) -> void:
 	else:
 		b.mission.set_guidance(Localize.format_text("码头收队 · 好汉已登船%d/6，阵亡%d。仍在岸上：%s。",[roster.aboard,roster.lost,", ".join(names)]))
 
+func _order_shore_return(b) -> void:
+	if not _rescued_pair_aboard() or b.hud.touch_ui or not b._gameplay_rng_issue.is_empty():
+		return
+	var dock: Vector2 = b.map.cell_to_world(DOCK)
+	var pending := _selectable_shore_party(_dock_roster(b).ashore).filter(func(u: Unit) -> bool:
+		return u._state != Unit.ST_MOVE or u._home.distance_to(dock) >= DOCK_BOARDING_RADIUS or u._path_i >= u._path.size())
+	if pending.is_empty():
+		b.mission.set_feedback("好汉正在向码头撤回。")
+		return
+	if _enemy_near(b,dock,BOARDING_THREAT_RADIUS,true):
+		b.center_camera_cell(DOCK)
+		b.mission.set_feedback("码头还有官军。先清开登船点，再撤回好汉。")
+		return
+	var origin: Vector2i = b.map.world_to_cell(pending[0].position)
+	var rally_cell: Vector2i = b.map.nearest_open_from(DOCK, origin)
+	var destination: Vector2 = b.map.cell_to_world(rally_cell)
+	if rally_cell.x < 0 or destination.distance_to(dock) >= DOCK_BOARDING_RADIUS:
+		b.mission.set_feedback("码头附近没有落脚点。清开道路后再下令撤回。")
+		return
+	var targets: Array = b._formation_targets(pending, destination, 30.0)
+	var pace: float = b._group_speed_cap(pending)
+	b._stamp_manual(pending)
+	for i in range(pending.size()):
+		var target: Vector2 = targets[i]
+		if target.distance_to(dock) >= DOCK_BOARDING_RADIUS:
+			target = destination
+		pending[i].order_move(target, false, pace)
+	b.select_members(pending, false)
+	Sfx.play("order")
+	b.mission.set_feedback(Localize.format_text("已下令让%d名好汉撤回码头。", [pending.size()]))
+
 func _finish(b) -> void:
 	if victory or b.phase!=b.Phase.FIGHT: return
-	if not living(song_freed) or not living(dai_freed) or song_freed.story_outcome!="embarked" or dai_freed.story_outcome!="embarked": return
+	if not _rescued_pair_aboard(): return
 	victory=true
 	if _dock_roster(b).aboard==NAMED.size():
 		b.mission.mark("jiangzhou_named_survive","六名具名好汉均已由玩家带回码头，活着脱险。")
@@ -670,13 +719,14 @@ func process(b,delta: float) -> void:
 	if rally:
 		for key in NAMED:
 			var u=named_units.get(key)
-			if _near(b,u,DOCK,120) and not _enemy_near(b,u.position,BOARDING_THREAT_RADIUS):
+			if _near(b,u,DOCK,DOCK_BOARDING_RADIUS) and not _enemy_near(b,u.position,BOARDING_THREAT_RADIUS):
 				u.resolve_story("embarked")
 		_update_dock_guidance(b)
 	_update_escort_objective(b)
-	if living(song_freed) and living(dai_freed) and song_freed.story_outcome=="embarked" and dai_freed.story_outcome=="embarked" and not is_instance_valid(depart_button):
+	if _rescued_pair_aboard() and not is_instance_valid(depart_button):
 		b.mission.set_title("二人已脱险 · 开船或收队")
-		b.mission.set_objective("核心营救已达成。可立即开船；要全员脱险印，先让好汉办理码头收队，再亲自带六人撤回安全登船点。")
+		if not rally or b.hud.touch_ui:
+			b.mission.set_objective("核心营救已达成。可立即开船；要全员脱险印，先让好汉办理码头收队，再亲自带六人撤回安全登船点。")
 		depart_button=b.mission.add_level_button("jiang_depart","开船通关 · 宋江戴宗已登船")
 func activate_mission_button(b, button_id: String) -> void:
 	if button_id == "jiang_depart": _finish(b)
@@ -684,6 +734,9 @@ func activate_mission_button(b, button_id: String) -> void:
 		_view_bailong(b)
 		return
 	if not rally: return
+	if button_id == "jiang_return_rearguard":
+		_order_shore_return(b)
+		return
 	if button_id == "jiang_select_rearguard":
 		var members := _selectable_shore_party(_dock_roster(b).ashore)
 		if members.is_empty():
