@@ -1,5 +1,10 @@
 # 源码设置与换机（2026-10-30）
 
+## Windows 直接重载战场使用启动校验结果
+
+当战场没有收到主菜单提交的入口身份时，导出的 Windows 版先从 ContinueFlow 重新核对启动身份。该结果有效时用于初始化新的战斗和随机状态。无有效结果时继续完整文件身份检查。 [重开与下一关验收](../qa/battle_entry_timing_20261116/windows_campaign_reentry_a1bd61b0.json)
+
+
 ## 战场桌面鼠标事件坐标
 
 战场在处理桌面鼠标按钮时，把视口事件位置换算成战场坐标，供左右键共用。设备标识为触屏模拟时沿用原指针路径。移动落点、选人规则和编队字段沿用原逻辑。 [Windows 点选回归](../qa/battle_entry_timing_20261116/windows_pc_left_click_event_position_48a6082d.json)

@@ -1,0 +1,160 @@
+{
+  "scope": "Windows 1280×720 Vulkan Forward+ in isolated single processes. Clicked actual pause restart, debrief retry and Next buttons. Debrief states used controlled loss and victory in a local scratch campaign. All launches used a fresh battle with the verified installation identity. An explicit missing-provider test exercised the original fallback. Timings are one sample per action per package.",
+  "changed_runtime_inputs": [
+    "scripts/battle.gd"
+  ],
+  "runtime_input_count": 6574,
+  "observer_script_sha256": "c0124b44aa8be547f8ee233bec29442042e45fbf21044e42fc64ca5a95f84821",
+  "windows_candidate": {
+    "kind": "local_integrated_windows_candidate",
+    "layout": "split_pck",
+    "commit": "a1bd61b04dff6e7928b53a5c8081ed127b516be0",
+    "source_version": "source-v1:7772b51765efd603d27dffc3fc4604818f5cc88a379a3c15698f969ae3e69737",
+    "tracked_runtime_count": 6574,
+    "steps": [
+      {
+        "stage": "import",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 61.09
+      },
+      {
+        "stage": "export",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 85.64
+      }
+    ],
+    "files": [
+      {
+        "path": "GODOTSTEAM_LICENSE.txt",
+        "bytes": 1110,
+        "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+      },
+      {
+        "path": "LiangshanHeroes.exe",
+        "bytes": 104886784,
+        "sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4"
+      },
+      {
+        "path": "LiangshanHeroes.pck",
+        "bytes": 1722697452,
+        "sha256": "5d37250b44314bbc3927f79b6e29b6a883a952abc5cff0804c4c8033ee11058f"
+      },
+      {
+        "path": "libgodotsteam.windows.template_release.x86_64.dll",
+        "bytes": 3961344,
+        "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+      },
+      {
+        "path": "steam_api64.dll",
+        "bytes": 319128,
+        "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+      },
+      {
+        "path": "steam_stats_reader.dll",
+        "bytes": 393728,
+        "sha256": "5a79a77b5b6e2cff21b285c785118352805a09d91876f89276af119ee1702517"
+      },
+      {
+        "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+        "bytes": 1093,
+        "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+      }
+    ]
+  },
+  "cases": [
+    {
+      "condition": "prior",
+      "commit": "48a6082d3e321f06960839e9f9b7f6aa41986a0a",
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "e810dcf9e3e66017374dcccac07eaee84b458a7a4a089b0fbc5d14fb157bf6ef",
+      "runtime_exit_code": 0,
+      "native_payload_files_verified": 7,
+      "game_log_sha256": "134bc1711b9ae4442dcae2162f126a1ce8006847de9a03b0feedd8ec08bf076c",
+      "raw_observation_sha256": "ab35d3320f15421c8aaa5f173f215cba787dcefdaad8f0a62c33cfb3e9d082e5",
+      "actions": {
+        "pause_restart": {
+          "chapter": "level1",
+          "click_to_first_draw_ms": 5155.846,
+          "fresh_bound_run": true,
+          "original_installation_identity": true,
+          "intro_and_live_tree_ready": true
+        },
+        "debrief_retry": {
+          "chapter": "level1",
+          "click_to_first_draw_ms": 5075.731,
+          "fresh_bound_run": true,
+          "original_installation_identity": true,
+          "intro_and_live_tree_ready": true
+        },
+        "next_chapter": {
+          "chapter": "level7",
+          "click_to_first_draw_ms": 5133.328,
+          "fresh_bound_run": true,
+          "original_installation_identity": true,
+          "intro_and_live_tree_ready": true
+        },
+        "restart_without_prepared_provider": {
+          "chapter": "level7",
+          "click_to_first_draw_ms": 4879.97,
+          "fresh_bound_run": true,
+          "original_installation_identity": true,
+          "intro_and_live_tree_ready": true
+        },
+        "cancel_kept_existing_battle": true,
+        "restart_and_retry_kept_progress": true,
+        "next_chapter_kept_the_single_controlled_win": true
+      }
+    },
+    {
+      "condition": "candidate",
+      "commit": "a1bd61b04dff6e7928b53a5c8081ed127b516be0",
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "5d37250b44314bbc3927f79b6e29b6a883a952abc5cff0804c4c8033ee11058f",
+      "runtime_exit_code": 0,
+      "native_payload_files_verified": 7,
+      "game_log_sha256": "3bb9aa2994394c2c8e1e57f411186be6f44145b8ae35aa1f2791880650bd6bef",
+      "raw_observation_sha256": "1a35c4b4574c1a7e0784417289604bc08a827f74ae1f0e3cc3b9a0198637de44",
+      "actions": {
+        "pause_restart": {
+          "chapter": "level1",
+          "click_to_first_draw_ms": 156.895,
+          "fresh_bound_run": true,
+          "original_installation_identity": true,
+          "intro_and_live_tree_ready": true
+        },
+        "debrief_retry": {
+          "chapter": "level1",
+          "click_to_first_draw_ms": 137.678,
+          "fresh_bound_run": true,
+          "original_installation_identity": true,
+          "intro_and_live_tree_ready": true
+        },
+        "next_chapter": {
+          "chapter": "level7",
+          "click_to_first_draw_ms": 343.106,
+          "fresh_bound_run": true,
+          "original_installation_identity": true,
+          "intro_and_live_tree_ready": true
+        },
+        "restart_without_prepared_provider": {
+          "chapter": "level7",
+          "click_to_first_draw_ms": 4878.059,
+          "fresh_bound_run": true,
+          "original_installation_identity": true,
+          "intro_and_live_tree_ready": true
+        },
+        "cancel_kept_existing_battle": true,
+        "restart_and_retry_kept_progress": true,
+        "next_chapter_kept_the_single_controlled_win": true
+      }
+    }
+  ],
+  "delta_ms_candidate_minus_prior": {
+    "pause_restart": -4998.951,
+    "debrief_retry": -4938.053,
+    "next_chapter": -4790.222,
+    "restart_without_prepared_provider": -1.911
+  }
+}
