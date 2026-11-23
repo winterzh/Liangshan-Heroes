@@ -1,0 +1,801 @@
+{
+  "candidate": "f6d0dbf563067eb9b43075f61632e622ca56d7a7",
+  "payload": {
+    "GODOTSTEAM_LICENSE.txt": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2",
+    "LiangshanHeroes.exe": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+    "LiangshanHeroes.pck": "f1c19aeb15d146a2a05bd9cc8c541086679ba4821e9ef72b715600665b92229b",
+    "libgodotsteam.windows.template_release.x86_64.dll": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26",
+    "steam_api64.dll": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c",
+    "steam_stats_reader.dll": "5a79a77b5b6e2cff21b285c785118352805a09d91876f89276af119ee1702517",
+    "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+  },
+  "method": [
+    "Separate native Windows processes with isolated offline profiles and the same seven shipped payload files.",
+    "For alternate renderers the diagnostic copy checks the requested driver and method. The repository's production ten-minute gate is unaffected.",
+    "The external VirtualQueryEx sampler reads allocation metadata, not memory contents. Published counts omit raw addresses.",
+    "Each run reports two windows. Both start at the last sample before first Gao sortie, then end either at the first sample after the first drawn frame or at the last sample before the next sortie. A sample can straddle multiple events.",
+    "A repeated address may have been reused. Timing and backend comparison do not identify the allocation owner."
+  ],
+  "runs": [
+    {
+      "case": "r1-normal-forward",
+      "order": [
+        "level1",
+        "arena",
+        "skirmish",
+        "skirmish_ai",
+        "custom_defense",
+        "level5"
+      ],
+      "renderer": {
+        "adapter": "NVIDIA GeForce RTX 4060 Laptop GPU",
+        "api": "1.4.357",
+        "display": "Windows",
+        "driver": "vulkan",
+        "godot": {
+          "build": "official",
+          "hash": "7d41c59c457bd5a245092b4e7eb2d833e3b3f8c3",
+          "hex": 263683,
+          "major": 4,
+          "minor": 6,
+          "patch": 3,
+          "status": "stable",
+          "string": "4.6.3-stable (official)",
+          "timestamp": 0
+        },
+        "method": "forward_plus",
+        "vendor": "NVIDIA",
+        "vsync": 0
+      },
+      "diagnostic_override": {},
+      "launcher": {
+        "candidate": "f6d0dbf563067eb9b43075f61632e622ca56d7a7",
+        "payload_files_unchanged": true,
+        "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+        "pck_sha256": "f1c19aeb15d146a2a05bd9cc8c541086679ba4821e9ef72b715600665b92229b",
+        "split_identity": "487d3c8a2c6ed9cb1cd9a5158b4326a466ca067dc05abe2fbddfb5dd0c363add",
+        "exe_unchanged": true,
+        "exit_code": 0,
+        "seconds": 84.602,
+        "errors": [],
+        "warnings": [],
+        "log_sha256": "28b8ee7b437cb9cbb6819fa3e4fa6b345ac5677c64722053faf1bdaac07c53a0",
+        "report_sha256": "6fecb8f595c2505e90fc34d45aa02bf121af2f0ce9a65d80158166902ed84b1f"
+      },
+      "duration_seconds": 76.09,
+      "visits": 12,
+      "route_visits": {
+        "arena:arena": 2,
+        "campaign:level1": 2,
+        "campaign:level5": 2,
+        "custom_defense:custom_defense": 2,
+        "skirmish:skirmish": 2,
+        "skirmish_ai:skirmish_ai": 2
+      },
+      "game_progress_unchanged": true,
+      "runtime_checks_passed": true,
+      "runtime_failures": [],
+      "warm_private_bytes": 2104102912,
+      "end_private_bytes": 2113253376,
+      "warm_working_set_bytes": 1102016512,
+      "end_working_set_bytes": 1111867392,
+      "allocation_metadata": {
+        "samples": 86,
+        "median_capture_ms": 47.029,
+        "raw_metadata_sha256": "4b1bc372c0bb7051f3c8ac3a4fce3401fea3cea6866ac20b0dacd0723d599b08",
+        "first_gao_sortie_to_first_draw_ms": 295.103,
+        "first_gao_attach_ms": 127.967,
+        "window_before_sortie_through_first_sample_after_draw": [
+          {
+            "from_ms_relative_to_click": -783.901,
+            "to_ms_relative_to_click": 177.757,
+            "private_size_delta_bytes": 404504576,
+            "private_committed_delta_bytes": 410247168,
+            "new_32_mib_allocation_groups": 8
+          },
+          {
+            "from_ms_relative_to_click": 177.757,
+            "to_ms_relative_to_click": 1135.596,
+            "private_size_delta_bytes": 6606848,
+            "private_committed_delta_bytes": 69632,
+            "new_32_mib_allocation_groups": 0
+          }
+        ],
+        "new_32_mib_allocation_addresses_around_first_draw": 8,
+        "window_before_sortie_through_last_sample_before_next_sortie_32_mib_groups": 8,
+        "first_visit_allocation_events": [
+          {
+            "from_ms_relative_to_click": -783.901,
+            "to_ms_relative_to_click": 177.757,
+            "new_32_mib_allocation_groups": 8
+          }
+        ],
+        "same_sized_commit_at_the_same_addresses_during_last_battle": 8
+      }
+    },
+    {
+      "case": "r1-gao-first-forward",
+      "order": [
+        "level5",
+        "level1",
+        "arena",
+        "skirmish",
+        "skirmish_ai",
+        "custom_defense"
+      ],
+      "renderer": {
+        "adapter": "NVIDIA GeForce RTX 4060 Laptop GPU",
+        "api": "1.4.357",
+        "display": "Windows",
+        "driver": "vulkan",
+        "godot": {
+          "build": "official",
+          "hash": "7d41c59c457bd5a245092b4e7eb2d833e3b3f8c3",
+          "hex": 263683,
+          "major": 4,
+          "minor": 6,
+          "patch": 3,
+          "status": "stable",
+          "string": "4.6.3-stable (official)",
+          "timestamp": 0
+        },
+        "method": "forward_plus",
+        "vendor": "NVIDIA",
+        "vsync": 0
+      },
+      "diagnostic_override": {},
+      "launcher": {
+        "candidate": "f6d0dbf563067eb9b43075f61632e622ca56d7a7",
+        "payload_files_unchanged": true,
+        "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+        "pck_sha256": "f1c19aeb15d146a2a05bd9cc8c541086679ba4821e9ef72b715600665b92229b",
+        "split_identity": "487d3c8a2c6ed9cb1cd9a5158b4326a466ca067dc05abe2fbddfb5dd0c363add",
+        "exe_unchanged": true,
+        "exit_code": 0,
+        "seconds": 85.595,
+        "errors": [],
+        "warnings": [],
+        "log_sha256": "2458d939bd2d2001d7ca2d4f25fac75688081b1dc52ef60644928a8777398b6a",
+        "report_sha256": "096994f14d7cdbe022dc8c672158aee0b12c26d30814409c9dbecc83ea8818a4"
+      },
+      "duration_seconds": 76.452,
+      "visits": 12,
+      "route_visits": {
+        "arena:arena": 2,
+        "campaign:level1": 2,
+        "campaign:level5": 2,
+        "custom_defense:custom_defense": 2,
+        "skirmish:skirmish": 2,
+        "skirmish_ai:skirmish_ai": 2
+      },
+      "game_progress_unchanged": true,
+      "runtime_checks_passed": true,
+      "runtime_failures": [],
+      "warm_private_bytes": 2104791040,
+      "end_private_bytes": 2112724992,
+      "warm_working_set_bytes": 1105944576,
+      "end_working_set_bytes": 1114128384,
+      "allocation_metadata": {
+        "samples": 88,
+        "median_capture_ms": 44.076,
+        "raw_metadata_sha256": "b3b21af2f5c213d5417521ed44d88a2bd0227ff0dd7ab09190919c3842b98b72",
+        "first_gao_sortie_to_first_draw_ms": 413.035,
+        "first_gao_attach_ms": 195.785,
+        "window_before_sortie_through_first_sample_after_draw": [
+          {
+            "from_ms_relative_to_click": -574.511,
+            "to_ms_relative_to_click": 376.487,
+            "private_size_delta_bytes": 58019840,
+            "private_committed_delta_bytes": 48533504,
+            "new_32_mib_allocation_groups": 0
+          },
+          {
+            "from_ms_relative_to_click": 376.487,
+            "to_ms_relative_to_click": 1315.375,
+            "private_size_delta_bytes": 287449088,
+            "private_committed_delta_bytes": 295268352,
+            "new_32_mib_allocation_groups": 8
+          }
+        ],
+        "new_32_mib_allocation_addresses_around_first_draw": 8,
+        "window_before_sortie_through_last_sample_before_next_sortie_32_mib_groups": 8,
+        "first_visit_allocation_events": [
+          {
+            "from_ms_relative_to_click": 376.487,
+            "to_ms_relative_to_click": 1315.375,
+            "new_32_mib_allocation_groups": 8
+          }
+        ],
+        "same_sized_commit_at_the_same_addresses_during_last_battle": 8
+      }
+    },
+    {
+      "case": "r2-gao-first-compat",
+      "order": [
+        "level5",
+        "level1",
+        "arena",
+        "skirmish",
+        "skirmish_ai",
+        "custom_defense"
+      ],
+      "renderer": {
+        "adapter": "NVIDIA GeForce RTX 4060 Laptop GPU",
+        "api": "3.3.0 NVIDIA 621.24",
+        "display": "Windows",
+        "driver": "opengl3",
+        "godot": {
+          "build": "official",
+          "hash": "7d41c59c457bd5a245092b4e7eb2d833e3b3f8c3",
+          "hex": 263683,
+          "major": 4,
+          "minor": 6,
+          "patch": 3,
+          "status": "stable",
+          "string": "4.6.3-stable (official)",
+          "timestamp": 0
+        },
+        "method": "gl_compatibility",
+        "vendor": "NVIDIA",
+        "vsync": 0
+      },
+      "diagnostic_override": {},
+      "launcher": {
+        "candidate": "f6d0dbf563067eb9b43075f61632e622ca56d7a7",
+        "payload_files_unchanged": true,
+        "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+        "pck_sha256": "f1c19aeb15d146a2a05bd9cc8c541086679ba4821e9ef72b715600665b92229b",
+        "split_identity": "487d3c8a2c6ed9cb1cd9a5158b4326a466ca067dc05abe2fbddfb5dd0c363add",
+        "exe_unchanged": true,
+        "exit_code": 0,
+        "seconds": 83.093,
+        "errors": [],
+        "warnings": [
+          "WARNING: 2D MSAA is not yet supported for GLES3."
+        ],
+        "log_sha256": "2ea33d3891de583e93986d653e203f9887dc3a023f7512f8019a7d79e9093ba1",
+        "report_sha256": "a804c1144d94b4b89cac7f7b21a38727c00f99b15027c52e05a86916b9c47c7d"
+      },
+      "duration_seconds": 75.904,
+      "visits": 12,
+      "route_visits": {
+        "arena:arena": 2,
+        "campaign:level1": 2,
+        "campaign:level5": 2,
+        "custom_defense:custom_defense": 2,
+        "skirmish:skirmish": 2,
+        "skirmish_ai:skirmish_ai": 2
+      },
+      "game_progress_unchanged": true,
+      "runtime_checks_passed": true,
+      "runtime_failures": [],
+      "warm_private_bytes": 1349013504,
+      "end_private_bytes": 1351188480,
+      "warm_working_set_bytes": 617111552,
+      "end_working_set_bytes": 620064768,
+      "allocation_metadata": {
+        "samples": 87,
+        "median_capture_ms": 27.357,
+        "raw_metadata_sha256": "dfc6e9e39d8ce60d8b18a25619d7f494ca39f1fef2073eef3218f1658f762062",
+        "first_gao_sortie_to_first_draw_ms": 370.818,
+        "first_gao_attach_ms": 164.788,
+        "window_before_sortie_through_first_sample_after_draw": [
+          {
+            "from_ms_relative_to_click": -627.868,
+            "to_ms_relative_to_click": 303.412,
+            "private_size_delta_bytes": 142925824,
+            "private_committed_delta_bytes": 139407360,
+            "new_32_mib_allocation_groups": 0
+          },
+          {
+            "from_ms_relative_to_click": 303.412,
+            "to_ms_relative_to_click": 1240.097,
+            "private_size_delta_bytes": 278032384,
+            "private_committed_delta_bytes": 280731648,
+            "new_32_mib_allocation_groups": 0
+          }
+        ],
+        "new_32_mib_allocation_addresses_around_first_draw": 0,
+        "window_before_sortie_through_last_sample_before_next_sortie_32_mib_groups": 0,
+        "first_visit_allocation_events": [],
+        "same_sized_commit_at_the_same_addresses_during_last_battle": 0
+      }
+    },
+    {
+      "case": "r2-normal-compat",
+      "order": [
+        "level1",
+        "arena",
+        "skirmish",
+        "skirmish_ai",
+        "custom_defense",
+        "level5"
+      ],
+      "renderer": {
+        "adapter": "NVIDIA GeForce RTX 4060 Laptop GPU",
+        "api": "3.3.0 NVIDIA 621.24",
+        "display": "Windows",
+        "driver": "opengl3",
+        "godot": {
+          "build": "official",
+          "hash": "7d41c59c457bd5a245092b4e7eb2d833e3b3f8c3",
+          "hex": 263683,
+          "major": 4,
+          "minor": 6,
+          "patch": 3,
+          "status": "stable",
+          "string": "4.6.3-stable (official)",
+          "timestamp": 0
+        },
+        "method": "gl_compatibility",
+        "vendor": "NVIDIA",
+        "vsync": 0
+      },
+      "diagnostic_override": {},
+      "launcher": {
+        "candidate": "f6d0dbf563067eb9b43075f61632e622ca56d7a7",
+        "payload_files_unchanged": true,
+        "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+        "pck_sha256": "f1c19aeb15d146a2a05bd9cc8c541086679ba4821e9ef72b715600665b92229b",
+        "split_identity": "487d3c8a2c6ed9cb1cd9a5158b4326a466ca067dc05abe2fbddfb5dd0c363add",
+        "exe_unchanged": true,
+        "exit_code": 0,
+        "seconds": 83.205,
+        "errors": [],
+        "warnings": [
+          "WARNING: 2D MSAA is not yet supported for GLES3."
+        ],
+        "log_sha256": "65af19955257a5eda1eecc519eedf817f6b75ece727126b7186c9dc008c58935",
+        "report_sha256": "aa1bb0e8cea976e0ad8ed10b6ff7d1c2e0719be5ca2bef2f8015f7d669ecd845"
+      },
+      "duration_seconds": 75.808,
+      "visits": 12,
+      "route_visits": {
+        "arena:arena": 2,
+        "campaign:level1": 2,
+        "campaign:level5": 2,
+        "custom_defense:custom_defense": 2,
+        "skirmish:skirmish": 2,
+        "skirmish_ai:skirmish_ai": 2
+      },
+      "game_progress_unchanged": true,
+      "runtime_checks_passed": true,
+      "runtime_failures": [],
+      "warm_private_bytes": 1366548480,
+      "end_private_bytes": 1358868480,
+      "warm_working_set_bytes": 608784384,
+      "end_working_set_bytes": 620879872,
+      "allocation_metadata": {
+        "samples": 87,
+        "median_capture_ms": 25.714,
+        "raw_metadata_sha256": "4614c232575cbc382e405f9725c9548ca1a095c384a986904b8c7a3963017599",
+        "first_gao_sortie_to_first_draw_ms": 264.433,
+        "first_gao_attach_ms": 119.282,
+        "window_before_sortie_through_first_sample_after_draw": [
+          {
+            "from_ms_relative_to_click": -604.662,
+            "to_ms_relative_to_click": 331.065,
+            "private_size_delta_bytes": 65937408,
+            "private_committed_delta_bytes": 65138688,
+            "new_32_mib_allocation_groups": 0
+          }
+        ],
+        "new_32_mib_allocation_addresses_around_first_draw": 0,
+        "window_before_sortie_through_last_sample_before_next_sortie_32_mib_groups": 0,
+        "first_visit_allocation_events": [],
+        "same_sized_commit_at_the_same_addresses_during_last_battle": 0
+      }
+    },
+    {
+      "case": "r2-gao-first-d3d12",
+      "order": [
+        "level5",
+        "level1",
+        "arena",
+        "skirmish",
+        "skirmish_ai",
+        "custom_defense"
+      ],
+      "renderer": {
+        "adapter": "NVIDIA GeForce RTX 4060 Laptop GPU",
+        "api": "12_0",
+        "display": "Windows",
+        "driver": "d3d12",
+        "godot": {
+          "build": "official",
+          "hash": "7d41c59c457bd5a245092b4e7eb2d833e3b3f8c3",
+          "hex": 263683,
+          "major": 4,
+          "minor": 6,
+          "patch": 3,
+          "status": "stable",
+          "string": "4.6.3-stable (official)",
+          "timestamp": 0
+        },
+        "method": "forward_plus",
+        "vendor": "NVIDIA",
+        "vsync": 0
+      },
+      "diagnostic_override": {},
+      "launcher": {
+        "candidate": "f6d0dbf563067eb9b43075f61632e622ca56d7a7",
+        "payload_files_unchanged": true,
+        "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+        "pck_sha256": "f1c19aeb15d146a2a05bd9cc8c541086679ba4821e9ef72b715600665b92229b",
+        "split_identity": "487d3c8a2c6ed9cb1cd9a5158b4326a466ca067dc05abe2fbddfb5dd0c363add",
+        "exe_unchanged": true,
+        "exit_code": 0,
+        "seconds": 85.48,
+        "errors": [],
+        "warnings": [],
+        "log_sha256": "7b207e3d682c2bc8e52aef8ec0bc16aeb64fac55ce44d419afe4d57804abafb1",
+        "report_sha256": "5df9b91d3adaba2a6f12f3f3e57b1716e44bdfb762cf8cfd9933aa11485ea25a"
+      },
+      "duration_seconds": 76.232,
+      "visits": 12,
+      "route_visits": {
+        "arena:arena": 2,
+        "campaign:level1": 2,
+        "campaign:level5": 2,
+        "custom_defense:custom_defense": 2,
+        "skirmish:skirmish": 2,
+        "skirmish_ai:skirmish_ai": 2
+      },
+      "game_progress_unchanged": true,
+      "runtime_checks_passed": true,
+      "runtime_failures": [],
+      "warm_private_bytes": 1998884864,
+      "end_private_bytes": 2004754432,
+      "warm_working_set_bytes": 1041113088,
+      "end_working_set_bytes": 1047199744,
+      "allocation_metadata": {
+        "samples": 88,
+        "median_capture_ms": 44.617,
+        "raw_metadata_sha256": "ba99221280aeecf5fc33e3a370ed95afeced0bcf09a4dde4e76af4347be6eb96",
+        "first_gao_sortie_to_first_draw_ms": 471.957,
+        "first_gao_attach_ms": 154.182,
+        "window_before_sortie_through_first_sample_after_draw": [
+          {
+            "from_ms_relative_to_click": -643.139,
+            "to_ms_relative_to_click": 296.883,
+            "private_size_delta_bytes": 178274304,
+            "private_committed_delta_bytes": 164044800,
+            "new_32_mib_allocation_groups": 0
+          },
+          {
+            "from_ms_relative_to_click": 296.883,
+            "to_ms_relative_to_click": 1255.463,
+            "private_size_delta_bytes": 464478208,
+            "private_committed_delta_bytes": 476442624,
+            "new_32_mib_allocation_groups": 0
+          }
+        ],
+        "new_32_mib_allocation_addresses_around_first_draw": 0,
+        "window_before_sortie_through_last_sample_before_next_sortie_32_mib_groups": 0,
+        "first_visit_allocation_events": [],
+        "same_sized_commit_at_the_same_addresses_during_last_battle": 0
+      }
+    },
+    {
+      "case": "r3-gao-first-forward-msaa-off",
+      "order": [
+        "level5",
+        "level1",
+        "arena",
+        "skirmish",
+        "skirmish_ai",
+        "custom_defense"
+      ],
+      "renderer": {
+        "adapter": "NVIDIA GeForce RTX 4060 Laptop GPU",
+        "api": "1.4.357",
+        "display": "Windows",
+        "driver": "vulkan",
+        "godot": {
+          "build": "official",
+          "hash": "7d41c59c457bd5a245092b4e7eb2d833e3b3f8c3",
+          "hex": 263683,
+          "major": 4,
+          "minor": 6,
+          "patch": 3,
+          "status": "stable",
+          "string": "4.6.3-stable (official)",
+          "timestamp": 0
+        },
+        "method": "forward_plus",
+        "vendor": "NVIDIA",
+        "vsync": 0
+      },
+      "diagnostic_override": {
+        "setting": "msaa_2d",
+        "value": 0,
+        "actual_viewport_msaa_2d": 0
+      },
+      "launcher": {
+        "candidate": "f6d0dbf563067eb9b43075f61632e622ca56d7a7",
+        "payload_files_unchanged": true,
+        "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+        "pck_sha256": "f1c19aeb15d146a2a05bd9cc8c541086679ba4821e9ef72b715600665b92229b",
+        "split_identity": "487d3c8a2c6ed9cb1cd9a5158b4326a466ca067dc05abe2fbddfb5dd0c363add",
+        "exe_unchanged": true,
+        "exit_code": 0,
+        "seconds": 84.574,
+        "errors": [],
+        "warnings": [],
+        "log_sha256": "a2ccd52cde8851052c3acbc61e8318472694c456b12d118c107bcdfc20369173",
+        "report_sha256": "49ccf2f02589af806fac727082a119aef47c9096ddf9f8bbd6c56c6cffdc7918"
+      },
+      "duration_seconds": 76.031,
+      "visits": 12,
+      "route_visits": {
+        "arena:arena": 2,
+        "campaign:level1": 2,
+        "campaign:level5": 2,
+        "custom_defense:custom_defense": 2,
+        "skirmish:skirmish": 2,
+        "skirmish_ai:skirmish_ai": 2
+      },
+      "game_progress_unchanged": true,
+      "runtime_checks_passed": true,
+      "runtime_failures": [],
+      "warm_private_bytes": 2098569216,
+      "end_private_bytes": 2102321152,
+      "warm_working_set_bytes": 1102712832,
+      "end_working_set_bytes": 1107165184,
+      "allocation_metadata": {
+        "samples": 87,
+        "median_capture_ms": 39.694,
+        "raw_metadata_sha256": "184f24d527666ab0ff6e98f11c515c543b0df81b5899705beb4558a85e4f0f9d",
+        "first_gao_sortie_to_first_draw_ms": 362.329,
+        "first_gao_attach_ms": 153.57,
+        "window_before_sortie_through_first_sample_after_draw": [
+          {
+            "from_ms_relative_to_click": -15.455,
+            "to_ms_relative_to_click": 925.778,
+            "private_size_delta_bytes": 88952832,
+            "private_committed_delta_bytes": 82456576,
+            "new_32_mib_allocation_groups": 0
+          }
+        ],
+        "new_32_mib_allocation_addresses_around_first_draw": 0,
+        "window_before_sortie_through_last_sample_before_next_sortie_32_mib_groups": 8,
+        "first_visit_allocation_events": [
+          {
+            "from_ms_relative_to_click": 925.778,
+            "to_ms_relative_to_click": 1871.021,
+            "new_32_mib_allocation_groups": 8
+          }
+        ],
+        "same_sized_commit_at_the_same_addresses_during_last_battle": 8
+      }
+    },
+    {
+      "case": "r3-gao-first-forward-staging-32",
+      "order": [
+        "level5",
+        "level1",
+        "arena",
+        "skirmish",
+        "skirmish_ai",
+        "custom_defense"
+      ],
+      "renderer": {
+        "adapter": "NVIDIA GeForce RTX 4060 Laptop GPU",
+        "api": "1.4.357",
+        "display": "Windows",
+        "driver": "vulkan",
+        "godot": {
+          "build": "official",
+          "hash": "7d41c59c457bd5a245092b4e7eb2d833e3b3f8c3",
+          "hex": 263683,
+          "major": 4,
+          "minor": 6,
+          "patch": 3,
+          "status": "stable",
+          "string": "4.6.3-stable (official)",
+          "timestamp": 0
+        },
+        "method": "forward_plus",
+        "vendor": "NVIDIA",
+        "vsync": 0
+      },
+      "diagnostic_override": {
+        "setting": "staging_max_mb",
+        "value": 32,
+        "actual_viewport_msaa_2d": 2
+      },
+      "launcher": {
+        "candidate": "f6d0dbf563067eb9b43075f61632e622ca56d7a7",
+        "payload_files_unchanged": true,
+        "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+        "pck_sha256": "f1c19aeb15d146a2a05bd9cc8c541086679ba4821e9ef72b715600665b92229b",
+        "split_identity": "487d3c8a2c6ed9cb1cd9a5158b4326a466ca067dc05abe2fbddfb5dd0c363add",
+        "exe_unchanged": true,
+        "exit_code": 0,
+        "seconds": 86.294,
+        "errors": [],
+        "warnings": [],
+        "log_sha256": "7887a1a1505a4596f72a0008c74bc170e6a961d095b267b5913873531d854074",
+        "report_sha256": "d774c65af7dbf44b68e8a46fb5625f9861fcff07a21e67506d8da39128304fd8"
+      },
+      "duration_seconds": 76.216,
+      "visits": 12,
+      "route_visits": {
+        "arena:arena": 2,
+        "campaign:level1": 2,
+        "campaign:level5": 2,
+        "custom_defense:custom_defense": 2,
+        "skirmish:skirmish": 2,
+        "skirmish_ai:skirmish_ai": 2
+      },
+      "game_progress_unchanged": true,
+      "runtime_checks_passed": true,
+      "runtime_failures": [],
+      "warm_private_bytes": 2103312384,
+      "end_private_bytes": 2106290176,
+      "warm_working_set_bytes": 1108418560,
+      "end_working_set_bytes": 1112002560,
+      "allocation_metadata": {
+        "samples": 89,
+        "median_capture_ms": 39.658,
+        "raw_metadata_sha256": "de48a89449ad4ba69ed14aadf85905a4bcff14173a70df5dd0cddc0abdaef5fe",
+        "first_gao_sortie_to_first_draw_ms": 407.531,
+        "first_gao_attach_ms": 179.137,
+        "window_before_sortie_through_first_sample_after_draw": [
+          {
+            "from_ms_relative_to_click": -488.374,
+            "to_ms_relative_to_click": 449.005,
+            "private_size_delta_bytes": 67940352,
+            "private_committed_delta_bytes": 66478080,
+            "new_32_mib_allocation_groups": 0
+          }
+        ],
+        "new_32_mib_allocation_addresses_around_first_draw": 0,
+        "window_before_sortie_through_last_sample_before_next_sortie_32_mib_groups": 8,
+        "first_visit_allocation_events": [
+          {
+            "from_ms_relative_to_click": 449.005,
+            "to_ms_relative_to_click": 1390.326,
+            "new_32_mib_allocation_groups": 8
+          }
+        ],
+        "same_sized_commit_at_the_same_addresses_during_last_battle": 8
+      }
+    },
+    {
+      "case": "r3-normal-d3d12",
+      "order": [
+        "level1",
+        "arena",
+        "skirmish",
+        "skirmish_ai",
+        "custom_defense",
+        "level5"
+      ],
+      "renderer": {
+        "adapter": "NVIDIA GeForce RTX 4060 Laptop GPU",
+        "api": "12_0",
+        "display": "Windows",
+        "driver": "d3d12",
+        "godot": {
+          "build": "official",
+          "hash": "7d41c59c457bd5a245092b4e7eb2d833e3b3f8c3",
+          "hex": 263683,
+          "major": 4,
+          "minor": 6,
+          "patch": 3,
+          "status": "stable",
+          "string": "4.6.3-stable (official)",
+          "timestamp": 0
+        },
+        "method": "forward_plus",
+        "vendor": "NVIDIA",
+        "vsync": 0
+      },
+      "diagnostic_override": {},
+      "launcher": {
+        "candidate": "f6d0dbf563067eb9b43075f61632e622ca56d7a7",
+        "payload_files_unchanged": true,
+        "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+        "pck_sha256": "f1c19aeb15d146a2a05bd9cc8c541086679ba4821e9ef72b715600665b92229b",
+        "split_identity": "487d3c8a2c6ed9cb1cd9a5158b4326a466ca067dc05abe2fbddfb5dd0c363add",
+        "exe_unchanged": true,
+        "exit_code": 0,
+        "seconds": 88.112,
+        "errors": [],
+        "warnings": [],
+        "log_sha256": "90e5006324a6367d33d43108408162ae6cdef2cef07a25f70bc6a56922c71c08",
+        "report_sha256": "f04e26eaf1c189fbcca9133216094ca80ae06540eb908b35d995c6de3a02d034"
+      },
+      "duration_seconds": 76.546,
+      "visits": 12,
+      "route_visits": {
+        "arena:arena": 2,
+        "campaign:level1": 2,
+        "campaign:level5": 2,
+        "custom_defense:custom_defense": 2,
+        "skirmish:skirmish": 2,
+        "skirmish_ai:skirmish_ai": 2
+      },
+      "game_progress_unchanged": true,
+      "runtime_checks_passed": true,
+      "runtime_failures": [],
+      "warm_private_bytes": 1990254592,
+      "end_private_bytes": 1998209024,
+      "warm_working_set_bytes": 1029726208,
+      "end_working_set_bytes": 1038893056,
+      "allocation_metadata": {
+        "samples": 90,
+        "median_capture_ms": 50.107,
+        "raw_metadata_sha256": "89669a8829970acfdcc439fe6afa1ff42d095840b824628752b72f908af58e0e",
+        "first_gao_sortie_to_first_draw_ms": 286.895,
+        "first_gao_attach_ms": 127.99,
+        "window_before_sortie_through_first_sample_after_draw": [
+          {
+            "from_ms_relative_to_click": -118.804,
+            "to_ms_relative_to_click": 850.154,
+            "private_size_delta_bytes": 215441408,
+            "private_committed_delta_bytes": 219312128,
+            "new_32_mib_allocation_groups": 0
+          }
+        ],
+        "new_32_mib_allocation_addresses_around_first_draw": 0,
+        "window_before_sortie_through_last_sample_before_next_sortie_32_mib_groups": 0,
+        "first_visit_allocation_events": [],
+        "same_sized_commit_at_the_same_addresses_during_last_battle": 0
+      }
+    }
+  ],
+  "initial_compatibility_trial_stopped_at_fixed_renderer_guard": {
+    "candidate": "f6d0dbf563067eb9b43075f61632e622ca56d7a7",
+    "payload_files_unchanged": true,
+    "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+    "pck_sha256": "f1c19aeb15d146a2a05bd9cc8c541086679ba4821e9ef72b715600665b92229b",
+    "split_identity": "487d3c8a2c6ed9cb1cd9a5158b4326a466ca067dc05abe2fbddfb5dd0c363add",
+    "exe_unchanged": true,
+    "exit_code": 2,
+    "seconds": 5.961,
+    "errors": [],
+    "warnings": [
+      "WARNING: 2D MSAA is not yet supported for GLES3."
+    ],
+    "log_sha256": "6ae788f7404f04a630b799ef7adc7ae4a9e458e6bbb7b687666d679358028913",
+    "report_sha256": "e0667491ac35d2f9303534b3ca017f02b57e5ecf936285c27aea5ca32fccf6cd"
+  },
+  "upstream_references": {
+    "project_settings": "https://github.com/godotengine/godot/blob/4.6.3-stable/doc/classes/ProjectSettings.xml#L3340-L3355",
+    "texture_initialization_transfer_workers": "https://github.com/godotengine/godot/blob/4.6.3-stable/servers/rendering/rendering_device.cpp#L1474-L1509",
+    "transfer_worker_buffer_growth": "https://github.com/godotengine/godot/blob/4.6.3-stable/servers/rendering/rendering_device.cpp#L5930-L5955",
+    "vma_large_heap_heuristic": "https://github.com/godotengine/godot/blob/4.6.3-stable/thirdparty/vulkan/vk_mem_alloc.h#L13202-L13208"
+  },
+  "device_heap_properties": {
+    "queried_after_soak": true,
+    "selected_gpu": {
+      "device": "NVIDIA GeForce RTX 4060 Laptop GPU",
+      "vendor_id": 4318,
+      "heaps": [
+        {
+          "heap_size_bytes": 8342470656,
+          "heap_flags": 1,
+          "types": [
+            1,
+            7
+          ],
+          "any_host_visible": true
+        },
+        {
+          "heap_size_bytes": 16737384448,
+          "heap_flags": 0,
+          "types": [
+            0,
+            6,
+            14
+          ],
+          "any_host_visible": true
+        }
+      ]
+    },
+    "raw_query_sha256": "59c5a0f5b8ecc25a943c9aee1d2624e8b0138957f13cb15b46bdea4593ccca0b",
+    "api_query": "vkGetPhysicalDeviceMemoryProperties"
+  }
+}
