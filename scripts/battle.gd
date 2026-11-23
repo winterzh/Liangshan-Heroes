@@ -6152,7 +6152,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if event is InputEventMouseButton:
 		# Use the reported desktop click even if the pointer moved before dispatch.
-		var p := get_global_mouse_position() if event.device == InputEvent.DEVICE_ID_EMULATION \
+		var p: Vector2 = get_global_mouse_position() if event.device == InputEvent.DEVICE_ID_EMULATION \
 				else get_canvas_transform().affine_inverse() * event.position
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if event.pressed:
