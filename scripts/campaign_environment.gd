@@ -85,7 +85,10 @@ static func opening_scenery_texture_paths(id: String) -> Array[String]:
 	if id == "level1":
 		for object in _huangnigang_opening_scenery():
 			_append_scenery_texture(paths, "object", id, String(object[3]))
-		# The seven ground overlays share one atlas; let the scenery load it once.
+		# Load the shared texture once; the seven overlay routes still choose their own regions.
+		var atlas := CampaignEnvironmentArt.GROUND_OVERLAY_ATLAS_PATH
+		if not ResourceLoader.has_cached(atlas) and ResourceLoader.exists(atlas):
+			paths.append(atlas)
 		return paths
 	elif id == "level3":
 		_append_scenery_texture(paths, "object", id, "zhujiazhuang_hall")
