@@ -2,6 +2,27 @@
 
 Steam Build、Git源码提交、版本标签及GitHub Release各自记账。源码里有新提交或新候选，不代表玩家已收到更新。
 
+## 2026-11-18 · Steam Windows Build 26752476
+
+- 更快显示出征和模式加载反馈。主菜单继续入口显示章名，野猪林补充首次右键移动提示。
+- 改善兼容旧档续玩与再次保存。祝家庄增加撞车护卫和正门牵制，连环马增加钩镰手布阵，江州为救援与撤离增加前后章呼应。
+- 正式分支、四语公告、服务器干净下载及真实 Steam 账号的续玩、结算与云档回读均已记录。
+
+[发布收据](qa/steam_release_20261118/release_26752476.json) · [四语公告](https://store.steampowered.com/news/app/5088120/view/680767470935474309)
+
+## 2026-11-18 · Steam Windows Build 26735223
+
+- 八章加入兼容的战役中途保存与继续，调整部分任务提示、战场读取及结算。
+- 正式分支、Windows Depot 和干净安装已核对。
+
+[版本详情](docs/STEAM_UPDATE_20261118.md) · [Steam 下载收据](qa/steam_release_20261118/server_download_verified.json)
+
+## 2026-11-17 · Steam Windows Build 26719792
+
+- 增加 Windows 进场加载反馈与后台资源准备，更新八章中的任务定位、目标提示和战场反馈。
+
+[版本详情](docs/STEAM_UPDATE_20261117.md) · [四语公告](https://store.steampowered.com/news/app/5088120/view/708914425087657030)
+
 ## 2026-10-28 · Steam Windows Build26260970
 
 - 完善黄泥冈七辆原车、十一担财物的取车→推空车→装载→交付，以及倒地后幸存者接力和重复交付保护。

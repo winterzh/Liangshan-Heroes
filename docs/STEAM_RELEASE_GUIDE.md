@@ -16,7 +16,7 @@
 | 源码分支 | `codex/sync-20260905-stable` |
 | Godot | `4.6.3 stable` |
 
-Windows 候选固定为以下六个文件，不能把源码、PDB、登录缓存、`steam_appid.txt`、玩家存档或 QA 临时目录混入 Depot：
+Windows 候选使用明确的根文件白名单。内嵌版包含以下六个文件，拆包版另包含同目录的 LiangshanHeroes.pck。源码、PDB、登录缓存、`steam_appid.txt`、玩家存档和 QA 临时目录须在 Depot 之外。
 
 1. `LiangshanHeroes.exe`
 2. `libgodotsteam.windows.template_release.x86_64.dll`
@@ -31,8 +31,8 @@ Windows 候选固定为以下六个文件，不能把源码、PDB、登录缓存
 
 | 阶段 | 合格证据 | 不能替代的事情 |
 | --- | --- | --- |
-| 本地候选完成 | QA 收据、ZIP 哈希、六成员清单、实际 EXE 短测 | 不代表已上传 |
-| Depot 上传完成 | 新 BuildID、ManifestID、服务器六文件清单 | 不代表玩家正式分支已切换 |
+| 本地候选完成 | QA 收据、ZIP 哈希、白名单文件清单、实际 EXE 短测 | 不代表已上传 |
+| Depot 上传完成 | 新 BuildID、ManifestID、服务器文件清单 | 不代表玩家正式分支已切换 |
 | `default` 上线 | Steamworks 构建页回读新 Build 带 `default` 标签，或权威 app info 显示新 BuildID | 不代表客户端已经下载 |
 | 补丁说明公开 | 四种语言公开页面的标题、正文和图片回读正确 | 不代表构建上线 |
 | 客户端验收 | Steam 客户端完成更新，库内 manifest/文件与目标一致并从“开始游戏”启动 | 不代表真人完整通关 |
@@ -55,7 +55,7 @@ Windows 候选固定为以下六个文件，不能把源码、PDB、登录缓存
 唯一候选目录：
 唯一 ZIP 路径、字节数、SHA-256：
 EXE 字节数、SHA-256：
-六成员清单及 SHA-1：
+白名单文件清单及 SHA-1：
 实际 EXE 短测收据：
 四语补丁说明文件：
 回滚 BuildID：
@@ -125,7 +125,7 @@ py -3 -X utf8 -B tools/build_steam_candidate.py `
 - `source_head` 与发布单一致；
 - 来源身份和包内身份探针都通过；
 - ZIP 可重新读取，成员名、字节数和 SHA-256 与收据一致；
-- 六个正式成员恰好齐全，没有第七个文件。
+- 内嵌版恰好六个正式成员，拆包版恰好七个，EXE 与 PCK 共同纳入运行身份核对。
 
 候选一旦进入实际 EXE 短测，就把它视为只读。后续上传必须使用这一个 ZIP，不能在上传目录重新导出、替换 DLL、改名后重压或从当前工作区临时拼包。
 
@@ -171,7 +171,7 @@ Steam 构建发布时同步准备并发布以下语言：
 1. 打开 App `5088120` 的 SteamPipe / 构建上传页面。
 2. 选择发布单中冻结的唯一 `LiangshanHeroes_Steam_candidate.zip`。
 3. 等待 Depot 构建完成，记录页面返回的 BuildID 和 ManifestID。
-4. 打开服务器文件清单，逐项核对六个文件的名称、字节数和 SHA-1。
+4. 打开服务器文件清单，逐项核对全部白名单文件的名称、字节数和 SHA-1。
 5. 服务器清单与本地不一致时立即停止，不切换 `default`。
 
 网页显示 `Build commit successful` 只表示构建创建成功；在 `default` 标签出现之前，玩家正式分支仍可能是旧版本。
@@ -188,11 +188,11 @@ Steam 构建发布时同步准备并发布以下语言：
 D:\CodexTemp\lsh_steam_upload_<批次>\content
 ```
 
-解压后重新核对六成员名称、字节数、SHA-256 和 SHA-1。解压只是传输准备，不能修改候选内容。
+解压后重新核对全部白名单成员名称、字节数、SHA-256 和 SHA-1。解压只是传输准备，不能修改候选内容。
 
 ### 8.2 显式白名单 VDF
 
-Depot VDF 必须逐文件映射六个成员，不使用宽泛的 `*`：
+Depot VDF 必须逐文件映射本次候选的白名单成员，不使用宽泛的 `*`：
 
 ```vdf
 "DepotBuild"
@@ -206,6 +206,8 @@ Depot VDF 必须逐文件映射六个成员，不使用宽泛的 `*`：
     "FileMapping" { "LocalPath" "steam_stats_reader.dll" "DepotPath" "." "Recursive" "0" }
 }
 ```
+
+拆包版在上述 VDF 加入 LiangshanHeroes.pck 的根目录映射。成品的离线试玩启动器及说明只放在本地试玩 ZIP 中。
 
 先准备 `Preview "1"` 的 App VDF：
 
@@ -224,7 +226,7 @@ Depot VDF 必须逐文件映射六个成员，不使用宽泛的 `*`：
 }
 ```
 
-预览确认只有 Windows Depot `5088121` 和六个白名单文件后，复制为正式 VDF，仅将 `Preview` 改为 `0`，并使用新的 `output_upload` 目录。
+预览确认只有 Windows Depot `5088121` 和本次候选的白名单文件后，复制为正式 VDF，仅将 `Preview` 改为 `0`，并使用新的 `output_upload` 目录。
 
 ### 8.3 先预览，再正式上传
 
@@ -240,7 +242,7 @@ steamcmd.exe +login "<Steamworks账号>" `
   +quit
 ```
 
-必须满足：Preview退出码为0，并逐一解析预览manifest，确认六个根文件名称、大小与SHA1都匹配候选，随后正式上传退出码为0并取得新BuildID／ManifestID。`DepotPath`表示目标目录；逐文件映射到根目录使用`.`，不能填文件名，否则可能产生`filename/filename`嵌套路径。仅凭Preview退出0不得上传。上传日志只保留脱敏副本；原始凭据和Steam缓存不进Git。
+必须满足：Preview退出码为0，并逐一解析预览manifest，确认全部白名单根文件名称、大小与SHA1都匹配候选，随后正式上传退出码为0并取得新BuildID／ManifestID。`DepotPath`表示目标目录；逐文件映射到根目录使用`.`，不能填文件名，否则可能产生`filename/filename`嵌套路径。仅凭Preview退出0不得上传。上传日志只保留脱敏副本；原始凭据和Steam缓存不进Git。
 
 ## 9. 将新 Build 切换到 `default`
 

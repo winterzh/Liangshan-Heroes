@@ -1,31 +1,10 @@
-# GitHub仓库约定（2026-10-20）
+# GitHub 仓库约定
 
-## 分支与入口
+默认分支 main 提供项目首页和正式版源码入口。开发与验收提交同步至 codex/sync-20260905-stable。需同步 main 时，依项目约定先确认用户指示、核对两分支的祖先关系，再用快进同步已验收的提交。源码提交、Steam 构建号和 GitHub Release 各自记录。 [项目首页](../README.md) · [分支列表](https://github.com/winterzh/Liangshan-Heroes/branches)
 
-仓库：[winterzh/Liangshan-Heroes](https://github.com/winterzh/Liangshan-Heroes)。默认分支`main`，开发同步分支`codex/sync-20260905-stable`；本次收尾二者内容一致，实际SHA以分支回读为准。本机当前工作区为main，后续分支选择、合并和发布遵循AGENTS.md及用户当次授权。
+- 玩家可从首页进入 Steam Windows 正式版，在更新记录查看构建和公告。GitHub Releases 提供历史安装包，版本和平台列在更新记录。
+- 开发者从源码设置进入，按文档和 QA 索引查找设计、验证和发布证据。开发候选的验收范围以对应收据为准。 [源码设置](SOURCE_SETUP.md) · [文档索引](README.md) · [QA 索引](../qa/README.md)
+- 代码和生产素材按白名单同步。Steam 的构建包、安装文件、账号缓存和玩家存档留在本地。 [Steam 发布指南](STEAM_RELEASE_GUIDE.md)
+- GitHub 的仓库资料、权限和默认分支设置由仓库管理员管理。协作者负责已授权的代码推送和项目资料整理。
 
-保留这两个有明确用途的分支。2026-10-20回读无开放PR或Issue；旧合并记录保留，不以另建空PR或删除历史制造整理结果。
-
-## 版本、标签与Release
-
-- Steam Windows当前交付记录为Build26048429，完整内容与收据从[更新记录](../CHANGELOG.md)进入。
-- GitHub有15个历史Release、38个源码标签；现有Latest是Android v2.0，v2.0.1为源码标签，无对应GitHub Release。本次只建索引，不创建新发布或移动标签。
-- `qa/`中的候选、保存成功的源码、局部检查和已发布产品分开记录；完整战役续玩仍未开放。
-
-首页负责玩家/开发入口，CHANGELOG负责版本索引，docs/README负责文档导航，qa/README负责证据导航。文件结构保持现有Godot路径，专题和来源不批量迁移。
-
-## 仓库About与管理权限
-
-当前协作者具有push/triage权限，没有admin/maintain。默认分支已是main；About简介、官网和topics目前为空，需要仓库管理员设置，本次未写入。准备的管理字段如下：
-
-| 字段 | 建议内容（尚未应用） |
-| --- | --- |
-| Description | 基于Godot 4.6.3的水浒题材即时战略游戏，人物与剧情依据《水浒传》百二十回本。 |
-| Website | `https://store.steampowered.com/app/5088120/` |
-| Topics | `godot`、`gdscript`、`real-time-strategy`、`water-margin` |
-
-当前分支无保护规则。分支保护、协作者和可见性属于管理员设置，本次没有改变这些权限或规则。
-
-## 本次整理与历史
-
-本次更新首页、版本记录、协作说明、文档/QA导航和问题模板，补充当前Build示例、运行来源和原著依据；当前源码与Steam构建保持。[本批仓库快照](../qa/github_organization_20261020/README.md)。旧文档与缓存整理分别见其原收据，历史Release附件与Git历史保留。
+[更新记录](../CHANGELOG.md) · [历史仓库快照](../qa/github_organization_20261020/README.md)
