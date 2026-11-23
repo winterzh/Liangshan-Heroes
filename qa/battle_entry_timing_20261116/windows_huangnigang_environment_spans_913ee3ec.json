@@ -1,0 +1,717 @@
+{
+  "windows_candidate_source": "913ee3ec11f3fcb9531d8d02e23fb8df18e1dcc6",
+  "executable_sha256": "81de74bc65173516e393b7322b08070e35d969c87c129b1ef75cfd91ed87a5a7",
+  "method": "Launch the unchanged offline Windows EXE on a separate desktop. Load temporary inherited scripts into a fresh profile to time Battle._ready, GameMap.enable_campaign_environment and CampaignScenery.setup. Stamp times are microseconds relative to each entry. The first entry of each process includes probe setup overhead.",
+  "route": "campaign/level1: enter through menu, simulate the authored Huangnigang convoy at normal game speed, return to the original menu",
+  "scope": "Diagnostic instrumented runs only. These runs do not accept the candidate or identify the root cause of the mixed-mode outlier.",
+  "runs": [
+    {
+      "requested_seconds": 36.0,
+      "actual_seconds": 38.615821,
+      "renderer": {
+        "adapter": "NVIDIA GeForce RTX 4060 Laptop GPU",
+        "api": "1.4.357",
+        "display": "Windows",
+        "driver": "vulkan",
+        "godot": {
+          "build": "official",
+          "hash": "7d41c59c457bd5a245092b4e7eb2d833e3b3f8c3",
+          "hex": 263683,
+          "major": 4,
+          "minor": 6,
+          "patch": 3,
+          "status": "stable",
+          "string": "4.6.3-stable (official)",
+          "timestamp": 0
+        },
+        "method": "forward_plus",
+        "vendor": "NVIDIA",
+        "vsync": 0
+      },
+      "viewport": [
+        1280,
+        720
+      ],
+      "transition_count": 11,
+      "campaign_save": {
+        "after": {
+          "exists": false,
+          "sha256": "absent",
+          "size_bytes": 0
+        },
+        "before": {
+          "exists": false,
+          "sha256": "absent",
+          "size_bytes": 0
+        },
+        "unchanged": true
+      },
+      "acceptance_eligible": false,
+      "passed": false,
+      "probe": "ready-spans",
+      "wrapper_receipt": {
+        "exe_sha256": "81de74bc65173516e393b7322b08070e35d969c87c129b1ef75cfd91ed87a5a7",
+        "exe_unchanged": true,
+        "exit_code": 1,
+        "seconds": 52.73,
+        "active_fps_cap": 0,
+        "errors": [],
+        "warnings": [],
+        "log_sha256": "1802b6043c496ee86ca5a1fa5f7b910f62fafdc4ae844bf14e3d18b40c22e30c",
+        "report_sha256": "5ccc51e210f8b7f8d4f852a19baf651c894a9d41a51e4c7c24c8e15a45c0674c"
+      },
+      "failed_checks": [
+        {
+          "name": "working_set_bytes returns within warm-baseline tolerance",
+          "end_delta_from_warm_bytes": 143241216.0,
+          "tolerance_bytes": 134217728.0
+        },
+        {
+          "name": "private_bytes returns within warm-baseline tolerance",
+          "end_delta_from_warm_bytes": 141840384.0,
+          "tolerance_bytes": 134217728.0
+        }
+      ],
+      "passed_check_count": 103,
+      "mount_traces": [
+        {
+          "battle_attached_us": 405359,
+          "first_battle_frame_us": 604218,
+          "first_overlay_us": 3202,
+          "hud_attached_us": 472901,
+          "level_id": "level1",
+          "map_attached_us": 428847,
+          "ready_stages_us": {
+            "atmosphere": 472864,
+            "backdrop": 471551,
+            "camera": 471683,
+            "campaign_environment": 470320,
+            "cursors": 517109,
+            "decorate": 432730,
+            "definitions": 428767,
+            "deploy": 551696,
+            "fog_init": 471597,
+            "hud_setup": 511337,
+            "identity_and_level": 405413,
+            "map_init": 428885,
+            "navigation": 432727,
+            "opening_fog": 551779,
+            "paint": 430745,
+            "ready_end": 552873,
+            "ready_start": 405369
+          },
+          "scene_ready_us": 552941
+        },
+        {
+          "battle_attached_us": 156258,
+          "first_battle_frame_us": 317678,
+          "first_overlay_us": 3135,
+          "hud_attached_us": 244137,
+          "level_id": "level1",
+          "map_attached_us": 184134,
+          "ready_stages_us": {
+            "atmosphere": 244087,
+            "backdrop": 235921,
+            "camera": 236017,
+            "campaign_environment": 234523,
+            "cursors": 268979,
+            "decorate": 189396,
+            "definitions": 184016,
+            "deploy": 297479,
+            "fog_init": 235940,
+            "hud_setup": 265877,
+            "identity_and_level": 156358,
+            "map_init": 184205,
+            "navigation": 189384,
+            "opening_fog": 297637,
+            "paint": 187122,
+            "ready_end": 298753,
+            "ready_start": 156281
+          },
+          "scene_ready_us": 298889
+        },
+        {
+          "battle_attached_us": 142950,
+          "first_battle_frame_us": 292541,
+          "first_overlay_us": 2238,
+          "hud_attached_us": 223971,
+          "level_id": "level1",
+          "map_attached_us": 167188,
+          "ready_stages_us": {
+            "atmosphere": 223934,
+            "backdrop": 214784,
+            "camera": 214930,
+            "campaign_environment": 214229,
+            "cursors": 243729,
+            "decorate": 171490,
+            "definitions": 167057,
+            "deploy": 272776,
+            "fog_init": 214803,
+            "hud_setup": 240874,
+            "identity_and_level": 143044,
+            "map_init": 167232,
+            "navigation": 171481,
+            "opening_fog": 272964,
+            "paint": 169164,
+            "ready_end": 274240,
+            "ready_start": 142973
+          },
+          "scene_ready_us": 274335
+        },
+        {
+          "battle_attached_us": 156115,
+          "first_battle_frame_us": 308208,
+          "first_overlay_us": 1547,
+          "hud_attached_us": 244489,
+          "level_id": "level1",
+          "map_attached_us": 182527,
+          "ready_stages_us": {
+            "atmosphere": 244420,
+            "backdrop": 236590,
+            "camera": 236738,
+            "campaign_environment": 235021,
+            "cursors": 265198,
+            "decorate": 187395,
+            "definitions": 182428,
+            "deploy": 290211,
+            "fog_init": 236627,
+            "hud_setup": 262148,
+            "identity_and_level": 156189,
+            "map_init": 182571,
+            "navigation": 187385,
+            "opening_fog": 290325,
+            "paint": 184542,
+            "ready_end": 291018,
+            "ready_start": 156136
+          },
+          "scene_ready_us": 291057
+        },
+        {
+          "battle_attached_us": 141645,
+          "first_battle_frame_us": 310817,
+          "first_overlay_us": 1566,
+          "hud_attached_us": 231878,
+          "level_id": "level1",
+          "map_attached_us": 170930,
+          "ready_stages_us": {
+            "atmosphere": 231840,
+            "backdrop": 224120,
+            "camera": 224233,
+            "campaign_environment": 222743,
+            "cursors": 254844,
+            "decorate": 179113,
+            "definitions": 170671,
+            "deploy": 289202,
+            "fog_init": 224141,
+            "hud_setup": 250894,
+            "identity_and_level": 141716,
+            "map_init": 170997,
+            "navigation": 179097,
+            "opening_fog": 289344,
+            "paint": 174350,
+            "ready_end": 290237,
+            "ready_start": 141663
+          },
+          "scene_ready_us": 290297
+        },
+        {
+          "battle_attached_us": 156493,
+          "first_battle_frame_us": 303875,
+          "first_overlay_us": 1409,
+          "hud_attached_us": 235346,
+          "level_id": "level1",
+          "map_attached_us": 181224,
+          "ready_stages_us": {
+            "atmosphere": 235298,
+            "backdrop": 227032,
+            "camera": 227155,
+            "campaign_environment": 226491,
+            "cursors": 256194,
+            "decorate": 185436,
+            "definitions": 181096,
+            "deploy": 284399,
+            "fog_init": 227058,
+            "hud_setup": 253548,
+            "identity_and_level": 156581,
+            "map_init": 181267,
+            "navigation": 185423,
+            "opening_fog": 284588,
+            "paint": 183216,
+            "ready_end": 285705,
+            "ready_start": 156515
+          },
+          "scene_ready_us": 285771
+        },
+        {
+          "battle_attached_us": 127583,
+          "first_battle_frame_us": 266348,
+          "first_overlay_us": 1242,
+          "hud_attached_us": 201519,
+          "level_id": "level1",
+          "map_attached_us": 151255,
+          "ready_stages_us": {
+            "atmosphere": 201479,
+            "backdrop": 193854,
+            "camera": 193947,
+            "campaign_environment": 193280,
+            "cursors": 221268,
+            "decorate": 155211,
+            "definitions": 151113,
+            "deploy": 247637,
+            "fog_init": 193870,
+            "hud_setup": 218742,
+            "identity_and_level": 127670,
+            "map_init": 151294,
+            "navigation": 155206,
+            "opening_fog": 247780,
+            "paint": 153220,
+            "ready_end": 248599,
+            "ready_start": 127599
+          },
+          "scene_ready_us": 248655
+        },
+        {
+          "battle_attached_us": 141297,
+          "first_battle_frame_us": 294290,
+          "first_overlay_us": 1244,
+          "hud_attached_us": 220648,
+          "level_id": "level1",
+          "map_attached_us": 166980,
+          "ready_stages_us": {
+            "atmosphere": 220596,
+            "backdrop": 212644,
+            "camera": 212732,
+            "campaign_environment": 212065,
+            "cursors": 243195,
+            "decorate": 172179,
+            "definitions": 166864,
+            "deploy": 272196,
+            "fog_init": 212661,
+            "hud_setup": 239777,
+            "identity_and_level": 141376,
+            "map_init": 167034,
+            "navigation": 172169,
+            "opening_fog": 272320,
+            "paint": 169620,
+            "ready_end": 273245,
+            "ready_start": 141317
+          },
+          "scene_ready_us": 273305
+        },
+        {
+          "battle_attached_us": 141900,
+          "first_battle_frame_us": 280763,
+          "first_overlay_us": 1635,
+          "hud_attached_us": 218770,
+          "level_id": "level1",
+          "map_attached_us": 167408,
+          "ready_stages_us": {
+            "atmosphere": 218742,
+            "backdrop": 212037,
+            "camera": 212130,
+            "campaign_environment": 211520,
+            "cursors": 239257,
+            "decorate": 171756,
+            "definitions": 167320,
+            "deploy": 264392,
+            "fog_init": 212051,
+            "hud_setup": 236282,
+            "identity_and_level": 141975,
+            "map_init": 167447,
+            "navigation": 171750,
+            "opening_fog": 264477,
+            "paint": 169483,
+            "ready_end": 265032,
+            "ready_start": 141919
+          },
+          "scene_ready_us": 265070
+        },
+        {
+          "battle_attached_us": 141395,
+          "first_battle_frame_us": 279989,
+          "first_overlay_us": 1820,
+          "hud_attached_us": 215870,
+          "level_id": "level1",
+          "map_attached_us": 164688,
+          "ready_stages_us": {
+            "atmosphere": 215832,
+            "backdrop": 208967,
+            "camera": 209046,
+            "campaign_environment": 208490,
+            "cursors": 235047,
+            "decorate": 169036,
+            "definitions": 164551,
+            "deploy": 260859,
+            "fog_init": 208981,
+            "hud_setup": 232244,
+            "identity_and_level": 141456,
+            "map_init": 164753,
+            "navigation": 169030,
+            "opening_fog": 261019,
+            "paint": 166841,
+            "ready_end": 262028,
+            "ready_start": 141410
+          },
+          "scene_ready_us": 262107
+        },
+        {
+          "battle_attached_us": 141676,
+          "first_battle_frame_us": 274562,
+          "first_overlay_us": 1193,
+          "hud_attached_us": 215694,
+          "level_id": "level1",
+          "map_attached_us": 165367,
+          "ready_stages_us": {
+            "atmosphere": 215646,
+            "backdrop": 208059,
+            "camera": 208163,
+            "campaign_environment": 207502,
+            "cursors": 233244,
+            "decorate": 169300,
+            "definitions": 165261,
+            "deploy": 256706,
+            "fog_init": 208075,
+            "hud_setup": 230745,
+            "identity_and_level": 141782,
+            "map_init": 165417,
+            "navigation": 169295,
+            "opening_fog": 256821,
+            "paint": 167358,
+            "ready_end": 257631,
+            "ready_start": 141701
+          },
+          "scene_ready_us": 257681
+        }
+      ]
+    },
+    {
+      "requested_seconds": 18.0,
+      "actual_seconds": 21.303893,
+      "renderer": {
+        "adapter": "NVIDIA GeForce RTX 4060 Laptop GPU",
+        "api": "1.4.357",
+        "display": "Windows",
+        "driver": "vulkan",
+        "godot": {
+          "build": "official",
+          "hash": "7d41c59c457bd5a245092b4e7eb2d833e3b3f8c3",
+          "hex": 263683,
+          "major": 4,
+          "minor": 6,
+          "patch": 3,
+          "status": "stable",
+          "string": "4.6.3-stable (official)",
+          "timestamp": 0
+        },
+        "method": "forward_plus",
+        "vendor": "NVIDIA",
+        "vsync": 0
+      },
+      "viewport": [
+        1280,
+        720
+      ],
+      "transition_count": 6,
+      "campaign_save": {
+        "after": {
+          "exists": false,
+          "sha256": "absent",
+          "size_bytes": 0
+        },
+        "before": {
+          "exists": false,
+          "sha256": "absent",
+          "size_bytes": 0
+        },
+        "unchanged": true
+      },
+      "acceptance_eligible": false,
+      "passed": false,
+      "probe": "env-substeps",
+      "wrapper_receipt": {
+        "exe_sha256": "81de74bc65173516e393b7322b08070e35d969c87c129b1ef75cfd91ed87a5a7",
+        "exe_unchanged": true,
+        "exit_code": 1,
+        "seconds": 34.728,
+        "active_fps_cap": 0,
+        "errors": [],
+        "warnings": [],
+        "log_sha256": "2e536a05d4deb505101ba4e49f6f5015e06797a8e0b0737589cd5947e0c34ecc",
+        "report_sha256": "070d959aa9795d01d2f1a964cd0a6fa5c35360c51339fc1e65a0c9134fb8330b"
+      },
+      "failed_checks": [
+        {
+          "name": "working_set_bytes returns within warm-baseline tolerance",
+          "end_delta_from_warm_bytes": 141320192.0,
+          "tolerance_bytes": 134217728.0
+        },
+        {
+          "name": "private_bytes returns within warm-baseline tolerance",
+          "end_delta_from_warm_bytes": 139776000.0,
+          "tolerance_bytes": 134217728.0
+        }
+      ],
+      "passed_check_count": 68,
+      "mount_traces": [
+        {
+          "battle_attached_us": 401387,
+          "environment_stages_us": {
+            "config_decor": 433060,
+            "enable_start": 432968,
+            "height": 435828,
+            "scenery_node": 454781,
+            "scenery_setup": 489367,
+            "surface_mask_duration": 3411
+          },
+          "first_battle_frame_us": 618995,
+          "first_overlay_us": 4106,
+          "hud_attached_us": 491760,
+          "level_id": "level1",
+          "map_attached_us": 428987,
+          "ready_stages_us": {
+            "atmosphere": 491723,
+            "backdrop": 490686,
+            "camera": 490801,
+            "campaign_environment": 489370,
+            "cursors": 533901,
+            "decorate": 432964,
+            "definitions": 428885,
+            "deploy": 568743,
+            "fog_init": 490714,
+            "hud_setup": 529715,
+            "identity_and_level": 401438,
+            "map_init": 429032,
+            "navigation": 432951,
+            "opening_fog": 568824,
+            "paint": 430798,
+            "ready_end": 569718,
+            "ready_start": 401398
+          },
+          "scene_ready_us": 569766,
+          "scenery_stages_us": {
+            "coast_material": 461086,
+            "decor_objects": 489362,
+            "setup_end": 489364,
+            "setup_start": 454784,
+            "tile_vegetation": 465136
+          }
+        },
+        {
+          "battle_attached_us": 189033,
+          "environment_stages_us": {
+            "config_decor": 213479,
+            "enable_start": 213434,
+            "height": 216406,
+            "scenery_node": 216455,
+            "scenery_setup": 252235,
+            "surface_mask_duration": 3608
+          },
+          "first_battle_frame_us": 321513,
+          "first_overlay_us": 2269,
+          "hud_attached_us": 259540,
+          "level_id": "level1",
+          "map_attached_us": 209423,
+          "ready_stages_us": {
+            "atmosphere": 259512,
+            "backdrop": 252708,
+            "camera": 252798,
+            "campaign_environment": 252238,
+            "cursors": 277303,
+            "decorate": 213431,
+            "definitions": 209360,
+            "deploy": 304148,
+            "fog_init": 252727,
+            "hud_setup": 274522,
+            "identity_and_level": 189089,
+            "map_init": 209457,
+            "navigation": 213425,
+            "opening_fog": 304264,
+            "paint": 211391,
+            "ready_end": 304921,
+            "ready_start": 189046
+          },
+          "scene_ready_us": 304973,
+          "scenery_stages_us": {
+            "coast_material": 220288,
+            "decor_objects": 252230,
+            "setup_end": 252232,
+            "setup_start": 216457,
+            "tile_vegetation": 224380
+          }
+        },
+        {
+          "battle_attached_us": 141834,
+          "environment_stages_us": {
+            "config_decor": 168600,
+            "enable_start": 168527,
+            "height": 171839,
+            "scenery_node": 171953,
+            "scenery_setup": 208960,
+            "surface_mask_duration": 3903
+          },
+          "first_battle_frame_us": 278087,
+          "first_overlay_us": 1670,
+          "hud_attached_us": 217602,
+          "level_id": "level1",
+          "map_attached_us": 164433,
+          "ready_stages_us": {
+            "atmosphere": 217544,
+            "backdrop": 209452,
+            "camera": 209535,
+            "campaign_environment": 208965,
+            "cursors": 236146,
+            "decorate": 168522,
+            "definitions": 164354,
+            "deploy": 260081,
+            "fog_init": 209465,
+            "hud_setup": 233394,
+            "identity_and_level": 141910,
+            "map_init": 164469,
+            "navigation": 168510,
+            "opening_fog": 260196,
+            "paint": 166300,
+            "ready_end": 260889,
+            "ready_start": 141853
+          },
+          "scene_ready_us": 260935,
+          "scenery_stages_us": {
+            "coast_material": 176160,
+            "decor_objects": 208953,
+            "setup_end": 208957,
+            "setup_start": 171960,
+            "tile_vegetation": 181263
+          }
+        },
+        {
+          "battle_attached_us": 126786,
+          "environment_stages_us": {
+            "config_decor": 150956,
+            "enable_start": 150909,
+            "height": 153659,
+            "scenery_node": 153710,
+            "scenery_setup": 188485,
+            "surface_mask_duration": 3445
+          },
+          "first_battle_frame_us": 251705,
+          "first_overlay_us": 880,
+          "hud_attached_us": 195590,
+          "level_id": "level1",
+          "map_attached_us": 147228,
+          "ready_stages_us": {
+            "atmosphere": 195562,
+            "backdrop": 188956,
+            "camera": 189024,
+            "campaign_environment": 188488,
+            "cursors": 211961,
+            "decorate": 150906,
+            "definitions": 147148,
+            "deploy": 235358,
+            "fog_init": 188968,
+            "hud_setup": 209385,
+            "identity_and_level": 126838,
+            "map_init": 147264,
+            "navigation": 150903,
+            "opening_fog": 235466,
+            "paint": 149033,
+            "ready_end": 236172,
+            "ready_start": 126799
+          },
+          "scene_ready_us": 236285,
+          "scenery_stages_us": {
+            "coast_material": 157378,
+            "decor_objects": 188480,
+            "setup_end": 188482,
+            "setup_start": 153713,
+            "tile_vegetation": 161908
+          }
+        },
+        {
+          "battle_attached_us": 113102,
+          "environment_stages_us": {
+            "config_decor": 136425,
+            "enable_start": 136386,
+            "height": 139230,
+            "scenery_node": 139277,
+            "scenery_setup": 174618,
+            "surface_mask_duration": 3510
+          },
+          "first_battle_frame_us": 238979,
+          "first_overlay_us": 911,
+          "hud_attached_us": 182219,
+          "level_id": "level1",
+          "map_attached_us": 132579,
+          "ready_stages_us": {
+            "atmosphere": 182192,
+            "backdrop": 175881,
+            "camera": 175952,
+            "campaign_environment": 174622,
+            "cursors": 200309,
+            "decorate": 136382,
+            "definitions": 132508,
+            "deploy": 223445,
+            "fog_init": 175895,
+            "hud_setup": 197629,
+            "identity_and_level": 113164,
+            "map_init": 132616,
+            "navigation": 136377,
+            "opening_fog": 223522,
+            "paint": 134454,
+            "ready_end": 224050,
+            "ready_start": 113118
+          },
+          "scene_ready_us": 224092,
+          "scenery_stages_us": {
+            "coast_material": 142999,
+            "decor_objects": 174614,
+            "setup_end": 174616,
+            "setup_start": 139280,
+            "tile_vegetation": 146908
+          }
+        },
+        {
+          "battle_attached_us": 127619,
+          "environment_stages_us": {
+            "config_decor": 153075,
+            "enable_start": 153023,
+            "height": 155972,
+            "scenery_node": 156026,
+            "scenery_setup": 192276,
+            "surface_mask_duration": 3473
+          },
+          "first_battle_frame_us": 259280,
+          "first_overlay_us": 1654,
+          "hud_attached_us": 199962,
+          "level_id": "level1",
+          "map_attached_us": 148690,
+          "ready_stages_us": {
+            "atmosphere": 199933,
+            "backdrop": 193591,
+            "camera": 193662,
+            "campaign_environment": 192281,
+            "cursors": 219585,
+            "decorate": 153020,
+            "definitions": 148620,
+            "deploy": 242702,
+            "fog_init": 193605,
+            "hud_setup": 217065,
+            "identity_and_level": 127669,
+            "map_init": 148725,
+            "navigation": 153013,
+            "opening_fog": 242795,
+            "paint": 150633,
+            "ready_end": 243353,
+            "ready_start": 127631
+          },
+          "scene_ready_us": 243396,
+          "scenery_stages_us": {
+            "coast_material": 159749,
+            "decor_objects": 192268,
+            "setup_end": 192273,
+            "setup_start": 156028,
+            "tile_vegetation": 163679
+          }
+        }
+      ]
+    }
+  ]
+}
