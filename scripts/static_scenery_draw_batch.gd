@@ -27,10 +27,10 @@ extends RefCounted
 ## THE SOFTWARE.
 
 const FEATHER_SIZE := 1.25
-const QUAD_UVS := PackedVector2Array([Vector2.ZERO, Vector2.ZERO, Vector2.ZERO, Vector2.ZERO])
-const EMPTY_UVS := PackedVector2Array()
-const EMPTY_TRIANGLES := PackedInt32Array()
 static var _enabled := OS.get_environment("LSH_STATIC_SCENERY_BATCH") != "0"
+static var _quad_uvs := PackedVector2Array([Vector2.ZERO, Vector2.ZERO, Vector2.ZERO, Vector2.ZERO])
+static var _empty_uvs := PackedVector2Array()
+static var _empty_triangles := PackedInt32Array()
 var valid := true
 var _batches: Array[Dictionary] = []
 var _texture: Texture2D
@@ -223,7 +223,7 @@ func _quad(a: Vector2, b: Vector2, c: Vector2, d: Vector2, colors: PackedColorAr
 		_colors.append(color)
 	else:
 		_colors.append_array(colors)
-	_uvs.append_array(QUAD_UVS)
+	_uvs.append_array(_quad_uvs)
 	_indices.append(first)
 	_indices.append(first + 1)
 	_indices.append(first + 2)
@@ -233,7 +233,7 @@ func _quad(a: Vector2, b: Vector2, c: Vector2, d: Vector2, colors: PackedColorAr
 
 
 func _strip(points: PackedVector2Array, colors: PackedColorArray) -> void:
-	var first := _append(points, colors, EMPTY_TRIANGLES, EMPTY_UVS, null)
+	var first := _append(points, colors, _empty_triangles, _empty_uvs, null)
 	for i in range(points.size() - 2):
 		# Match triangle-strip winding while writing directly into the batch.
 		var offset := i % 2
