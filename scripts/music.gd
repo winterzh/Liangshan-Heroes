@@ -2,7 +2,7 @@ extends Node
 ## 程序合成背景音乐（Autoload: Music）。无需任何音频素材：
 ## 每种情绪（calm 经营 / battle 战斗）各合成 4 首风格迥异的曲子，随机轮播（不连续重复同一首）；
 ## 旋律按随机游走生成——每次启动听到的都是新曲。两个常驻播放器按情绪交叉淡入淡出（set_mood）。
-## 五声音阶（宫商角徵羽），合中式古风。除首曲外其余曲目在后台线程合成，不拖慢启动。
+## 五声音阶（宫商角徵羽），合中式古风。Windows 窗口首帧绘制后再启动合成线程，主线程只接收成品音频。
 
 const RATE := 22050
 const BASE_DB := -15.0       # 音乐整体增益（压低，绝不盖过音效）
@@ -29,11 +29,15 @@ var _tracks := {"calm": [], "battle": []}   # 情绪 -> Array[AudioStreamWAV]（
 var _last_idx := {"calm": -1, "battle": -1} # 上一首索引（避免连续重复）
 var _gap := {"calm": 0.0, "battle": 0.0}    # 曲间停顿计时
 var _thr: Thread = null
+var _synthesis_mutex := Mutex.new()
 var _shutting_down := false
 
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS   # 暂停时音乐继续
+	_p_calm = _mk_player()
+	_p_battle = _mk_player()
+	set_mood("calm", true)
 	if OS.get_environment("MUSIC_TEST") == "1":
 		# 测试：全部同步合成并打印统计（长度/峰值/削波）
 		for s in range(STYLES):
@@ -43,23 +47,36 @@ func _ready() -> void:
 			_dump("battle%d" % s, bb)
 			_add_track("calm", cb)
 			_add_track("battle", bb)
+	elif OS.get_name() == "Windows" and DisplayServer.get_name() != "headless":
+		_start_after_first_frame()
+		return
 	else:
-		# 首曲同步合成（进菜单即有乐），其余 6 首后台线程慢慢补
 		_add_track("calm", _build_calm_style(0, _mk_rng()))
 		_add_track("battle", _build_battle_style(0, _mk_rng()))
-		_thr = Thread.new()
-		_thr.start(_bg_build)
-	_p_calm = _mk_player()
-	_p_battle = _mk_player()
+		_start_builder(1)
 	_play_next("calm")
 	_play_next("battle")
-	set_mood("calm", true)
+
+
+func _start_after_first_frame() -> void:
+	await RenderingServer.frame_post_draw
+	if not _shutting_down:
+		_start_builder(0)
+
+
+func _start_builder(first_style: int) -> void:
+	_thr = Thread.new()
+	if _thr.start(_bg_build.bind(first_style)) != OK:
+		_thr = null
+		_bg_build(first_style)
 
 
 func shutdown() -> void:
 	if _shutting_down:
 		return
+	_synthesis_mutex.lock()
 	_shutting_down = true
+	_synthesis_mutex.unlock()
 	enabled = false
 	set_process(false)
 	# 先断开正在播放的两路，给音频后端尽早释放 playback；再等待仅负责
@@ -88,26 +105,35 @@ func _exit_tree() -> void:
 	shutdown()
 
 
-## 后台合成其余曲目：每首用独立 RNG，结果经 call_deferred 回主线程入库（PackedFloat32Array 跨线程按值拷贝，安全）
-func _bg_build() -> void:
-	for s in range(1, STYLES):
-		var cb := _build_calm_style(s, _mk_rng())
-		call_deferred("_add_track_buf", "calm", cb)
-		var bb := _build_battle_style(s, _mk_rng())
-		call_deferred("_add_track_buf", "battle", bb)
+## 合成和 PCM 编码在工作线程进行，播放器及 AudioStreamWAV 留在主线程。
+func _bg_build(first_style: int) -> void:
+	for style in range(first_style, STYLES):
+		if _synthesis_stopped(): return
+		var calm := _build_calm_style(style, _mk_rng())
+		call_deferred("_add_encoded_track", "calm", _encode_track(calm))
+		if _synthesis_stopped(): return
+		var battle := _build_battle_style(style, _mk_rng())
+		call_deferred("_add_encoded_track", "battle", _encode_track(battle))
 
 
-func _add_track_buf(mood_key: String, buf: PackedFloat32Array) -> void:
+func _synthesis_stopped() -> bool:
+	_synthesis_mutex.lock()
+	var stopped := _shutting_down
+	_synthesis_mutex.unlock()
+	return stopped
+
+
+func _add_encoded_track(mood_key: String, data: PackedByteArray) -> void:
 	if _shutting_down:
 		return
-	_add_track(mood_key, buf)
+	var first: bool = _tracks[mood_key].is_empty()
+	_tracks[mood_key].append(_wav(data))
+	if first:
+		_play_next(mood_key)
 
 
 func _add_track(mood_key: String, buf: PackedFloat32Array) -> void:
-	if _shutting_down:
-		return
-	_seam_fade(buf)
-	_tracks[mood_key].append(_wav(buf))
+	_tracks[mood_key].append(_wav(_encode_track(buf)))
 
 
 func _mk_rng() -> RandomNumberGenerator:
@@ -233,12 +259,17 @@ func _seam_fade(buf: PackedFloat32Array) -> void:
 ## 护卫帧 GUARD：重采样器在流末尾会多读 1~N 帧。尾部补零作安全垫，避免越界读命中未映射页硬崩（安卓）。
 const GUARD := 64
 
-func _wav(buf: PackedFloat32Array) -> AudioStreamWAV:
+func _encode_track(buf: PackedFloat32Array) -> PackedByteArray:
+	_seam_fade(buf)
 	var n := buf.size()
 	var data := PackedByteArray()
 	data.resize((n + GUARD) * 2)
 	for i in range(n):
 		data.encode_s16(i * 2, int(clampf(buf[i], -1.0, 1.0) * 32767.0))
+	return data
+
+
+func _wav(data: PackedByteArray) -> AudioStreamWAV:
 	var w := AudioStreamWAV.new()
 	w.format = AudioStreamWAV.FORMAT_16_BITS
 	w.mix_rate = RATE
