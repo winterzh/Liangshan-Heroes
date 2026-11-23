@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+Windows 候选 f47fb1e0 用 Godot 4.6.3 导入并导出，两步退出 0、错误 0。冻结运行输入只更新江州脚本、存档字段分类、任务按钮白名单和四语目录，六文件指纹在运行前后通过核对。新增按钮引用登记为临时界面字段，八章存档字段检查通过。旧档沿用已有战斗格式，恢复战斗后由关卡补齐缺少的按钮。四条四语词条经严格目录生成校验。 [Windows 验收收据](../qa/campaign_pursuit_20261116/windows_jiangzhou_shore_selection_f47fb1e0.json)
+
 Windows 候选 `cbf5fd2c` 已用 Godot 4.6.3 重新导入并导出，两个步骤退出 0、错误 0。已复核成品的六个文件。梁山 PNG 校验共享原缓存，每次最多收取一条待处理请求。 [Windows 预校验收据](../qa/battle_entry_timing_20261116/windows_defense_scenery_preview_cbf5fd2c.json)
 
 Windows 源码和私有长测入口默认 600 秒，至少 10 个完整分钟才计完整验收。PowerShell 输出保留原生告警，短测可作为工具调试。已用七个 PowerShell 包装层用例核对默认、指定时长、调试和错误结果。原生成品包和逐分钟门槛以独立实跑为准。 [十分钟成品收据](../qa/battle_entry_timing_20261116/windows_mode_soak_600_7ea5b5d3.json)
