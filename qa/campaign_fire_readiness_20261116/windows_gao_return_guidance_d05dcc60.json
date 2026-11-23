@@ -1,0 +1,252 @@
+{
+  "source_commit": "d05dcc60983ff2d34fe4de04e9a997ea9fa98182",
+  "game": "Gao Qiu campaign, Liu Tang return",
+  "translation": {
+    "languages": [
+      "zh_CN",
+      "zh_TW",
+      "en",
+      "ja"
+    ],
+    "display_sources": 4872,
+    "missing": 0,
+    "validation_errors": 0
+  },
+  "source_runs": {
+    "readiness_and_live": {
+      "checks": 40,
+      "fixtures": 31,
+      "game_seconds": 544.0,
+      "story_goals_completed": 4,
+      "log_sha256": "669b30174a4ffc025ebb40408e04f3c56f75fa2ea310f0a2515e8b361402086b",
+      "scope": "Preceded the last production edit that restores the opening objective before wave one. The other return changes were already loaded."
+    },
+    "early_fallback": {
+      "checks": 22,
+      "log_sha256": "afe54397f6bc2fac21b7d3371f704669e4e48f20409559cf12f9d47b657f8611",
+      "scope": "Isolated rendered source, controlled escort casualty and ordinary return order. Before wave one, the displayed task returns to the opening objective after unloading."
+    }
+  },
+  "windows_candidate": {
+    "exe_sha256": "e7214139db1d95368dccca7f07283c35f63e4cca239323ac7dc516911036ee4c",
+    "six_payload_files": 6,
+    "build_steps": [
+      {
+        "stage": "import",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 183.9
+      },
+      {
+        "stage": "export",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 99.81
+      }
+    ],
+    "independent_processes": 4,
+    "checks": 66,
+    "renderer": "gl_compatibility",
+    "viewport": [
+      1440,
+      900
+    ],
+    "simulation_speed": 4,
+    "checkpoint_seconds": [
+      356.349999999985,
+      506.549999999976
+    ],
+    "checkpoint_fire_remaining_seconds": 7.46666666666667,
+    "actual_carrier_only_after_readback": true,
+    "displayed_return_before_unloading": true,
+    "return_instruction_clears_after_unloading": true,
+    "victory_seconds": 556.016666666678,
+    "story_goals_completed": 4,
+    "one_persisted_offline_victory": true,
+    "terminal_continue_result": "LOCAL_RUN_TERMINAL",
+    "debrief_languages": [
+      "zh_CN",
+      "zh_TW",
+      "en",
+      "ja"
+    ],
+    "phases": [
+      {
+        "stage": "save_fire",
+        "checks": 10,
+        "checks_verified": [
+          "current startup completes",
+          "ordinary offline player admission without private QA",
+          "the exact packaged Windows executable passes startup verification",
+          "normal Gao Qiu battle starts",
+          "live checkpoint remains in a fighting battle",
+          "the fire is still burning and the original Liu Tang is aboard the original rescue boat",
+          "visible SaveAndExit button",
+          "pause-menu action commits a saved slot",
+          "disk slot stores the exact chapter context",
+          "handoff created"
+        ],
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [
+          "WARNING: 2D MSAA is not yet supported for GLES3."
+        ],
+        "log_sha256": "e5bd8c37d65a5bc2cbcf59a075f64a0f8f9a32149ac4451cb6678609c82f0c7e"
+      },
+      {
+        "stage": "advance",
+        "checks": 21,
+        "checks_verified": [
+          "current startup completes",
+          "ordinary offline player admission without private QA",
+          "the exact packaged Windows executable passes startup verification",
+          "second process reads the exact checkpoint from disk",
+          "visible ContinueBattle button",
+          "main-menu action mounts the saved campaign",
+          "restored chapter retains the get_tree().paused battle",
+          "battle clock restored on the same checkpoint",
+          "the checkpoint's original units, expedition state, economy and events survive exactly",
+          "reading preserves the slot bytes",
+          "live fire checkpoint retains both real withdrawal and return actions",
+          "the saved return marker keeps only the original occupied escort after an independent restart",
+          "withdrawal in the resumed battle shows return only on Liu Tang's actual carrier",
+          "both escort boats withdraw and the same original Liu Tang lands before capture",
+          "the native battle showed the return step and cleared it again once Liu Tang was ashore",
+          "same original Zhang Shun ship carries Gao Qiu at the second checkpoint",
+          "visible SaveAndExit button",
+          "visible ConfirmSave button",
+          "pause-menu action commits a saved slot",
+          "disk slot stores the exact chapter context",
+          "handoff created"
+        ],
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [
+          "WARNING: 2D MSAA is not yet supported for GLES3."
+        ],
+        "log_sha256": "06674889acc5d50432e3df6c5b1ccd04a00cdcd4c45843569a8274a3b3361396"
+      },
+      {
+        "stage": "resume",
+        "checks": 28,
+        "checks_verified": [
+          "current startup completes",
+          "ordinary offline player admission without private QA",
+          "the exact packaged Windows executable passes startup verification",
+          "second process reads the exact checkpoint from disk",
+          "visible ContinueBattle button",
+          "main-menu action mounts the saved campaign",
+          "restored chapter retains the get_tree().paused battle",
+          "battle clock restored on the same checkpoint",
+          "the checkpoint's original units, expedition state, economy and events survive exactly",
+          "reading preserves the slot bytes",
+          "the actual landing objective remains pending",
+          "story wins through actual construction, production and combat",
+          "story builds economy and pays for at least three replacement warships",
+          "story preserves original camp across three expeditions",
+          "story defeats all core land/water forces and disables flagship",
+          "live story route performs fire attack and extracts both escort ships",
+          "live story route carries prisoner by water then escorts him to hall",
+          "live story route completes all four story goals",
+          "the same boat lands the prisoner and the original landed prisoner reaches the hall",
+          "natural victory and all four story goals are committed by the settlement coordinator",
+          "zh_CN shows victory and 4/4 on the actual debrief",
+          "zh_CN shows fire withdrawal, flagship and prisoner outcomes on the actual debrief",
+          "zh_TW shows victory and 4/4 on the actual debrief",
+          "zh_TW shows fire withdrawal, flagship and prisoner outcomes on the actual debrief",
+          "en shows victory and 4/4 on the actual debrief",
+          "en shows fire withdrawal, flagship and prisoner outcomes on the actual debrief",
+          "ja shows victory and 4/4 on the actual debrief",
+          "ja shows fire withdrawal, flagship and prisoner outcomes on the actual debrief"
+        ],
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [
+          "WARNING: 2D MSAA is not yet supported for GLES3."
+        ],
+        "log_sha256": "db5f6ab63c84129a69fab61758d3b8fa946d091d36f46211ff718f300ab8ea93"
+      },
+      {
+        "stage": "reject",
+        "checks": 7,
+        "checks_verified": [
+          "current startup completes",
+          "ordinary offline player admission without private QA",
+          "the exact packaged Windows executable passes startup verification",
+          "visible ContinueBattle button",
+          "player menu rejects the settled slot",
+          "settled campaign progress and original slot bytes are preserved",
+          "visible CloseError button"
+        ],
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [
+          "WARNING: 2D MSAA is not yet supported for GLES3."
+        ],
+        "log_sha256": "cdf9f9f730917b4917fc4fde4495e2d3c224890211b5e4b97c518f3897fc24ba"
+      }
+    ]
+  },
+  "published_build_legacy_save": {
+    "published_build": 26752476,
+    "published_exe_sha256": "fae95050c553dfd691e3beebca3eef7dd1d7490dfebf6e99fa50d310456b91a6",
+    "original_saved_candidates": [
+      "liu_tang_fireboat",
+      "ruan_xiaoer_boat"
+    ],
+    "eligible_actor_after_readback": "liu_tang_fireboat",
+    "source_slot_bytes_unchanged": true,
+    "restored_original_passenger_after_normal_return_order": true,
+    "checks": 23,
+    "phases": [
+      {
+        "stage": "save_fire",
+        "checks": 10,
+        "checks_verified": [
+          "current startup completes",
+          "ordinary offline player admission without private QA",
+          "the exact packaged Windows executable passes startup verification",
+          "normal Gao Qiu battle starts",
+          "live checkpoint remains in a fighting battle",
+          "published build stores both original return candidates before ignition",
+          "visible SaveAndExit button",
+          "pause-menu action commits a saved slot",
+          "disk slot stores the exact chapter context",
+          "handoff created"
+        ],
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [
+          "WARNING: 2D MSAA is not yet supported for GLES3."
+        ],
+        "log_sha256": "62aeaa74c13342ee51b02684b22fe92c3b8bc15f74569c4f421af9cb3533542f"
+      },
+      {
+        "stage": "advance",
+        "checks": 13,
+        "checks_verified": [
+          "current startup completes",
+          "ordinary offline player admission without private QA",
+          "the exact packaged Windows executable passes startup verification",
+          "second process reads the exact checkpoint from disk",
+          "visible ContinueBattle button",
+          "main-menu action mounts the saved campaign",
+          "restored chapter retains the get_tree().paused battle",
+          "battle clock restored on the same checkpoint",
+          "the checkpoint's original units, expedition state, economy and events survive exactly",
+          "reading preserves the slot bytes",
+          "the loaded battle keeps its exact published build provenance",
+          "the old return action recognizes only the true passenger carrier before play resumes",
+          "the actual return order from the old save unloads the original person and allows normal battle to continue"
+        ],
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [
+          "WARNING: 2D MSAA is not yet supported for GLES3."
+        ],
+        "log_sha256": "9074dc0e785ffc841cf2ceddf2959e2b3b546e61ec027b0b995735af0db8c314"
+      }
+    ]
+  },
+  "scope": "Source fixtures and a frozen Windows executable on an isolated desktop using offline profiles. Automated player orders and the actual menu; no physical input or Steam client services."
+}
