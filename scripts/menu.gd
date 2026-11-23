@@ -578,8 +578,8 @@ func _prefetch_campaign_card(button: Button, level_id: String) -> void:
 		var target: Button = button_ref.get_ref()
 		return menu != null and menu.is_inside_tree() and menu.get("_entry_overlay") == null \
 			and target != null and target.is_visible_in_tree() and (target.is_hovered() or target.has_focus())
-	await Art.prefetch_gao_scenery_preview(active)
-	if is_instance_valid(button):
+	var completed := await Art.prefetch_gao_scenery_preview(active)
+	if not completed and is_instance_valid(button):
 		button.remove_meta(&"opening_preview")
 
 
