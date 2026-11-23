@@ -1,8 +1,10 @@
 # 源码设置与换机（2026-10-30）
 
-当前 Windows 离线试玩候选为 `cf173596`。完整解压后双击 `Start Local Playtest.cmd`，使用同一编号继续本包存档。继续流程在内存记录所读存档的 SHA-256，与当前存档一致时直接进入既有保存事务。 [本地包目录](DIRECTORY_INDEX.md) · [Windows 验收收据](../qa/battle_entry_timing_20261116/windows_same_checkpoint_resave_cf173596.json)
+当前 Windows 离线试玩候选为 `201c2c5f`。完整解压后双击 `Start Local Playtest.cmd`，使用同一编号继续本包存档。江州的任务按钮通过关卡白名单保存，二人的移动令沿用普通右键的单位路径和任务凭证字段。 [Windows 验收收据](../qa/campaign_pursuit_20261116/windows_jiang_boarding_201c2c5f.json)
 
-同一版本从正常 Windows 离线玩家入口补验经典驻守全 30 波。自动驱动沿用正常建造、训练及技能指令。三次实战续玩与胜利后两次旧档拦截通过。 [Windows 经典驻守收据](../qa/classic30_continue_20260909/windows_full_cf173596.json)
+前一 Windows 离线候选为 `cf173596`。完整解压后双击 `Start Local Playtest.cmd`，使用同一编号继续本包存档。继续流程在内存记录所读存档的 SHA-256，与当前存档一致时直接进入既有保存事务。 [本地包目录](DIRECTORY_INDEX.md) · [Windows 验收收据](../qa/battle_entry_timing_20261116/windows_same_checkpoint_resave_cf173596.json)
+
+前一版本从正常 Windows 离线玩家入口补验经典驻守全 30 波。自动驱动沿用正常建造、训练及技能指令。三次实战续玩与胜利后两次旧档拦截通过。 [Windows 经典驻守收据](../qa/classic30_continue_20260909/windows_full_cf173596.json)
 
 野猪林护送按钮注册在关卡呈现白名单，依原移动凭证和路径办理任务。 [Windows 野猪林验收](../qa/campaign_escort_arrival_20261116/windows_escort_shortcuts_42f13534.json)
 

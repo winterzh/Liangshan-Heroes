@@ -1,5 +1,7 @@
 # 八幕战役后续开发路线图
 
+江州救下宋江、戴宗后，PC 任务栏可点「送获救者登船」。二人各走向自己的旗标，护卫继续原有指令。撤离途中仍可停止、改道或先走白龙庙。两人上船后由玩家决定何时开船。 已验证正式旧档的继续、两条行军令的保存和恢复、分别登船及出航。真人首玩继续记录玩家是否知道先清码头再走。 [Windows 验收收据](../qa/campaign_pursuit_20261116/windows_jiang_boarding_201c2c5f.json)
+
 PC 战役续玩后更新同一份存档可直接保存退出。新开战斗或本机存档已发生变化时继续显示覆盖确认。 [Windows 验收收据](../qa/battle_entry_timing_20261116/windows_same_checkpoint_resave_cf173596.json)
 
 野猪林 PC 任务栏把歇脚和出林各缩为一次明确下令，点击后选中林冲，途中可随时停止或改道。在 Windows 候选 `42f13534`，正式版救人后的旧档可使用新入口，途中再存重启保留原路径。 [Windows 验收收据](../qa/campaign_escort_arrival_20261116/windows_escort_shortcuts_42f13534.json)

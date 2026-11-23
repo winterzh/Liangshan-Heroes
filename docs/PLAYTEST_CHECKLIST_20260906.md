@@ -2,7 +2,7 @@
 
 ## 当前 Windows 离线试玩准备
 
-验收新版战役使用 Windows 本地候选 `cf173596`。把试玩 ZIP 完整解压，双击 `Start Local Playtest.cmd`，按分配的 1、2 或 3。每个编号都有独立离线档案。暂停菜单可保存并退出，同一编号重启后可从主菜单继续。 [本地包目录](DIRECTORY_INDEX.md) · [Windows 验收收据](../qa/battle_entry_timing_20261116/windows_same_checkpoint_resave_cf173596.json)
+验收新版战役使用 Windows 本地候选 `201c2c5f`。把试玩 ZIP 完整解压，双击 `Start Local Playtest.cmd`，按分配的 1、2 或 3。每个编号都有独立离线档案。暂停菜单可保存并退出，同一编号重启后可从主菜单继续。 [本地包目录](DIRECTORY_INDEX.md) · [Windows 验收收据](../qa/campaign_pursuit_20261116/windows_jiang_boarding_201c2c5f.json)
 
 交给试玩者时只需提供这一个 ZIP，内含发行文件、启动器和本地试玩说明。首次体验使用空白编号，重玩由原编号开新战役。
 
@@ -98,7 +98,7 @@
 | 剧情 → 大闹野猪林 | 上述首次/复验，跟丢后仍知道可做什么 | 当前四条实际路线与单列边界：`tools/yezhulin_short_test.gd`；[短篇说明](YEZHULIN_SHORT_20260906.md)、[历史 QA](../qa/yezhulin_short_20260906/README.md) | 真人待测 |
 | 剧情 → 智取生辰纲 | 酒计与强夺选择、分队搬运和死亡接力是否易懂 | `tools/huangnigang_short_test.gd` 的实际路线/边界分开；[当前说明](HUANGNIGANG_SHORT_20260906.md) | 真人待测 |
 | 剧情 → 醉打蒋门神 | 择酒/直挑、躲招反击、技能提示及失败学习 | `tools/kuaihuolin_short_test.gd` 与独立 boundaries；[当前说明](KUAIHUOLIN_SHORT_20260906.md) | 真人待测 |
-| 剧情 → 江州劫法场 | 有限补给、分兵救援、替补与撤离压力 | `tools/jiangzhou_rts_play.gd` 实际两路线；test/visual 的受控边界另列；[当前说明](JIANGZHOU_RTS_20260906.md) | 真人待测 |
+| 剧情 → 江州劫法场 | 有限补给、分兵救援、替补、找任务栏登船命令与主动改道 | `tools/jiangzhou_rts_play.gd` 实际两路线；test/visual 的受控边界另列；[当前说明](JIANGZHOU_RTS_20260906.md) | 真人待测 |
 | 剧情 → 三打祝家庄 | 上述两路线、墙门观感、经营/反制、孙立接应 | `tools/zhujiazhuang_rts_test.gd` direct/inside 与 contracts 分开；群选接应专项；[当前说明](ZHUJIAZHUANG_RTS_20260905.md)、[接应 QA](../qa/zhujiazhuang_gate_contact_20260905/README.md) | 真人待测 |
 | 剧情 → 大破连环马 | 反骑提示、编成选择、守反与断粮节奏 | `tools/lianhuanma_rts_test.gd` 与 drill 专项；[当前说明](LIANHUANMA_RTS_20260905.md) | 真人待测 |
 | 剧情 → 智取大名府 | 自主判断举火时机、南门当前缺谁、到期后能否继续，以及夺门和强攻、伤员撤离 | `tools/daming_rts_test.gd` 与 infiltration 专项；[当前说明](DAMING_RTS_20260905.md) | 真人待测 |

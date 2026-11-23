@@ -1,0 +1,307 @@
+{
+  "platform": "Windows native release executables, Compatibility renderer, isolated offline profiles",
+  "input": "Game viewport mouse-button events on the actual mission button at 960x540. Normal pause save and main menu continue. Separate Windows desktop with ordinary gameplay automation.",
+  "baseline": {
+    "steam_default_at_download": 26752476,
+    "cached_public_depot_files_verified": 6,
+    "checkpoint_game_seconds": 120.283333333332,
+    "prisoners_ashore": 2,
+    "named_heroes_aboard": 5,
+    "paid_recruits": 14
+  },
+  "candidate": {
+    "kind": "local_integrated_windows_candidate",
+    "commit": "201c2c5fa9498a6b25f362267f27f501c690a5f5",
+    "source_version": "source-v1:ccc63d4327cff58ee7755c557c6a2375a8b367004389cd23c186c8fd26c1190d",
+    "tracked_runtime_count": 6574,
+    "steps": [
+      {
+        "stage": "import",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 106.09
+      },
+      {
+        "stage": "export",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 108.51
+      }
+    ],
+    "files": [
+      {
+        "path": "GODOTSTEAM_LICENSE.txt",
+        "bytes": 1110,
+        "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+      },
+      {
+        "path": "LiangshanHeroes.exe",
+        "bytes": 1827560248,
+        "sha256": "438ddd5650511618568481643b74946f53e15d27ce122c9e156ce86fb1034cae"
+      },
+      {
+        "path": "libgodotsteam.windows.template_release.x86_64.dll",
+        "bytes": 3961344,
+        "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+      },
+      {
+        "path": "steam_api64.dll",
+        "bytes": 319128,
+        "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+      },
+      {
+        "path": "steam_stats_reader.dll",
+        "bytes": 381440,
+        "sha256": "7505919cfff5907c13a02eb366690bff22ca6731c8521deefde58b114e4f796f"
+      },
+      {
+        "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+        "bytes": 1093,
+        "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+      }
+    ]
+  },
+  "offline_playtest": {
+    "platform": "windows",
+    "kind": "local_playtest_candidate",
+    "source_commit": "201c2c5fa9498a6b25f362267f27f501c690a5f5",
+    "source_version": "source-v1:ccc63d4327cff58ee7755c557c6a2375a8b367004389cd23c186c8fd26c1190d",
+    "archive": {
+      "name": "LiangshanHeroes_PC_Playtest_201c2c5f.zip",
+      "bytes": 1758385217,
+      "sha256": "3f5eac145b1def8eb8a3ee78ca7e0bc51e749ff105150e0e57f57d31be2d81d7",
+      "members_verified": 8
+    },
+    "runtime_files": [
+      {
+        "path": "GODOTSTEAM_LICENSE.txt",
+        "bytes": 1110,
+        "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+      },
+      {
+        "path": "LiangshanHeroes.exe",
+        "bytes": 1827560248,
+        "sha256": "438ddd5650511618568481643b74946f53e15d27ce122c9e156ce86fb1034cae"
+      },
+      {
+        "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+        "bytes": 1093,
+        "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+      },
+      {
+        "path": "libgodotsteam.windows.template_release.x86_64.dll",
+        "bytes": 3961344,
+        "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+      },
+      {
+        "path": "steam_api64.dll",
+        "bytes": 319128,
+        "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+      },
+      {
+        "path": "steam_stats_reader.dll",
+        "bytes": 381440,
+        "sha256": "7505919cfff5907c13a02eb366690bff22ca6731c8521deefde58b114e4f796f"
+      }
+    ],
+    "launcher": {
+      "name": "Start Local Playtest.cmd",
+      "sha256": "28d35fbe62f7be538afbd6b5896157ba46c3f5e7098dee10256c5c4231140983",
+      "argument": "--offline-playtest",
+      "profiles": [
+        "P01",
+        "P02",
+        "P03"
+      ],
+      "clean_archive_boot": {
+        "mode": "headless",
+        "exit": 0,
+        "errors": [],
+        "log_sha256": "a9912b85473f126d3f4f63ec824170c828df3473a292f866dde86cafda5b66da"
+      }
+    }
+  },
+  "passes": 73,
+  "stages": [
+    {
+      "stage": "old-save",
+      "checks": [
+        "isolated profile and inactive Steam adapter",
+        "normal player flow is enabled in isolation",
+        "exact packaged executable passed startup identity verification",
+        "actual menu enters the ordinary Jiangzhou battle",
+        "actual route rallies the crew while the original Yan Shun stays ashore",
+        "public build saves with both rescued prisoners still ashore",
+        "published build has the normal rally locator and no boarding shortcut",
+        "live route used paid units and skills",
+        "normal pause save commits phase-appropriate slot revision",
+        "isolated handoff persisted"
+      ],
+      "exit_code": 0,
+      "runtime_errors": [],
+      "source_commit": "0f13370905b8b16937135510c8cc469998b39b99",
+      "executable_sha256": "fae95050c553dfd691e3beebca3eef7dd1d7490dfebf6e99fa50d310456b91a6",
+      "log_sha256": "995f8807f72247730ca57de285b9567538a8f14a0319c71c683b1bbc90a70d01",
+      "slot_record_sha256": {
+        "record_0000000001.json": "897e358eedd485364a28890622a5950b3f4171af14d112787e61a6d6e3d22ef8"
+      }
+    },
+    {
+      "stage": "migrate",
+      "checks": [
+        "isolated profile and inactive Steam adapter",
+        "normal player flow is enabled in isolation",
+        "exact packaged executable passed startup identity verification",
+        "input slot has the exact last committed bytes",
+        "continue leaves the original slot bytes intact",
+        "ordinary continue mounts the saved world: ",
+        "restore returns the same paused campaign",
+        "both prisoners, crew outcomes and positions, mission events, timer and resources restored exactly",
+        "legacy presentation starts without the new control and revised save restores exactly one",
+        "original route restored before either prisoner boards",
+        "legacy resume creates one primary boarding shortcut",
+        "960x540 mission panel shows the entire shortcut",
+        "zh_CN renders the complete label and tooltip with the button visible",
+        "zh_TW renders the complete label and tooltip with the button visible",
+        "en renders the complete label and tooltip with the button visible",
+        "ja renders the complete label and tooltip with the button visible",
+        "first click goes through the actual GUI input path",
+        "one click sends independent normal move orders to the exact flags",
+        "camera, shore guard command and selection stay in the player's hands",
+        "repeat clicks keep both orders and their paths",
+        "the dispatch neither boards the prisoners nor unlocks the departure",
+        "both moves are still in flight when saving",
+        "normal pause save commits phase-appropriate slot revision",
+        "save preserves legacy run lineage",
+        "isolated handoff persisted"
+      ],
+      "exit_code": 0,
+      "runtime_errors": [],
+      "source_commit": "201c2c5fa9498a6b25f362267f27f501c690a5f5",
+      "executable_sha256": "438ddd5650511618568481643b74946f53e15d27ce122c9e156ce86fb1034cae",
+      "log_sha256": "86541a8be997a4ed2dcab2ee0c02b4055f6b3eeef98860a302cdb1299c0860db",
+      "slot_record_sha256": {
+        "record_0000000001.json": "897e358eedd485364a28890622a5950b3f4171af14d112787e61a6d6e3d22ef8",
+        "record_0000000002.json": "c481586281d7e3e2a035decdf418868a6e807dd623457e51baa5d1d21963ee5f"
+      }
+    },
+    {
+      "stage": "reopen",
+      "checks": [
+        "isolated profile and inactive Steam adapter",
+        "normal player flow is enabled in isolation",
+        "exact packaged executable passed startup identity verification",
+        "input slot has the exact last committed bytes",
+        "continue leaves the original slot bytes intact",
+        "ordinary continue mounts the saved world: ",
+        "restore returns the same paused campaign",
+        "both prisoners, crew outcomes and positions, mission events, timer and resources restored exactly",
+        "legacy presentation starts without the new control and revised save restores exactly one",
+        "fresh process restores both orders and one button",
+        "both saved paths independently reach and complete their real boarding flags",
+        "completed boarding removes the shortcut and awaits explicit departure",
+        "separate shore recall is still usable after boarding",
+        "separate shore command safely brings the last named guard aboard",
+        "explicit normal departure records all four Jiangzhou seals"
+      ],
+      "exit_code": 0,
+      "runtime_errors": [],
+      "source_commit": "201c2c5fa9498a6b25f362267f27f501c690a5f5",
+      "executable_sha256": "438ddd5650511618568481643b74946f53e15d27ce122c9e156ce86fb1034cae",
+      "log_sha256": "52f7d857ccfeabf946fc9dd905fe5f60dac820b7f0392bbec0390222d3338dcd",
+      "slot_record_sha256": {
+        "record_0000000001.json": "897e358eedd485364a28890622a5950b3f4171af14d112787e61a6d6e3d22ef8",
+        "record_0000000002.json": "c481586281d7e3e2a035decdf418868a6e807dd623457e51baa5d1d21963ee5f"
+      }
+    },
+    {
+      "stage": "reject",
+      "checks": [
+        "isolated profile and inactive Steam adapter",
+        "normal player flow is enabled in isolation",
+        "exact packaged executable passed startup identity verification",
+        "input slot has the exact last committed bytes",
+        "continue leaves the original slot bytes intact",
+        "completed local battle cannot be opened again"
+      ],
+      "exit_code": 0,
+      "runtime_errors": [],
+      "source_commit": "201c2c5fa9498a6b25f362267f27f501c690a5f5",
+      "executable_sha256": "438ddd5650511618568481643b74946f53e15d27ce122c9e156ce86fb1034cae",
+      "log_sha256": "bc06b7999a69c78990f2737c8cd1f3191ed16dc40937258c07a6ef1c894c5d15",
+      "slot_record_sha256": {
+        "record_0000000001.json": "897e358eedd485364a28890622a5950b3f4171af14d112787e61a6d6e3d22ef8",
+        "record_0000000002.json": "c481586281d7e3e2a035decdf418868a6e807dd623457e51baa5d1d21963ee5f"
+      }
+    },
+    {
+      "stage": "bounds",
+      "checks": [
+        "isolated profile and inactive Steam adapter",
+        "normal player flow is enabled in isolation",
+        "exact packaged executable passed startup identity verification",
+        "input slot has the exact last committed bytes",
+        "continue leaves the original slot bytes intact",
+        "ordinary continue mounts the saved world: ",
+        "restore returns the same paused campaign",
+        "both prisoners, crew outcomes and positions, mission events, timer and resources restored exactly",
+        "legacy presentation starts without the new control and revised save restores exactly one",
+        "original route restored before either prisoner boards",
+        "legacy resume creates one primary boarding shortcut",
+        "960x540 mission panel shows the entire shortcut",
+        "an obstructed flag leaves its actor untouched while the reachable actor receives an order",
+        "the clear flag completes separately while the other person is still ashore",
+        "after a solo boarding, only the passenger still ashore receives the next command",
+        "ordinary player Stop fully cancels the shortcut's move",
+        "the shortcut can issue the cancelled order again"
+      ],
+      "exit_code": 0,
+      "runtime_errors": [],
+      "source_commit": "201c2c5fa9498a6b25f362267f27f501c690a5f5",
+      "executable_sha256": "438ddd5650511618568481643b74946f53e15d27ce122c9e156ce86fb1034cae",
+      "log_sha256": "864513719a9f311a742b8c095672fea677d86ffee30c72e07064df30d2d6cbfc",
+      "slot_record_sha256": {
+        "record_0000000001.json": "897e358eedd485364a28890622a5950b3f4171af14d112787e61a6d6e3d22ef8"
+      }
+    }
+  ],
+  "button_languages": [
+    {
+      "label": "送获救者登船",
+      "language": "zh_CN"
+    },
+    {
+      "label": "送獲救者登船",
+      "language": "zh_TW"
+    },
+    {
+      "label": "Send Rescued Pair to the Boat",
+      "language": "en"
+    },
+    {
+      "label": "救出した二人を船へ",
+      "language": "ja"
+    }
+  ],
+  "resumed_seconds_to_boarding": 8.06666666666622,
+  "terminal": {
+    "story_seals": 4,
+    "reject_code": "LOCAL_RUN_TERMINAL",
+    "progress_sha256": "4c03311979d37adfcd5d8dbba5e5223039f0b0d47b22c27ab03776b190334758"
+  },
+  "controlled_case": "A separate copy of the exact old-save profile was used to set one flag's blocked_reason and exercise separate dispatch, solo boarding, Stop and reissuing.",
+  "localization": {
+    "new_strings": 8,
+    "strict_catalog_rebuild": true,
+    "languages": [
+      "zh_CN",
+      "zh_TW",
+      "en",
+      "ja"
+    ]
+  },
+  "pending": [
+    "human first play and route readability",
+    "Steam foreground and real cloud acceptance for this candidate"
+  ]
+}
