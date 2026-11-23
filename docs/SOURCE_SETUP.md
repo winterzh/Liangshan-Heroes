@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+Windows 本地候选 `58cbcdb5` 用 Godot 4.6.3 重新导入和导出，两个步骤退出 0、错误 0。相比 `83f62108` 冻结输入只改动 `scripts/ability_visuals.gd`。六文件指纹在原生进场与旧档复验前后均一致。 [Windows 验收收据](../qa/battle_entry_timing_20261116/windows_skill_visual_initialization_58cbcdb5.json)
+
 Windows 本地候选 `83f62108` 用 Godot 4.6.3 导入与正式模板导出，两个步骤退出 0、错误 0。冻结包输入相对 `d08f639b` 只有 `scripts/workshop_content.gd` 一项改动，六文件指纹在原生 ABBA 运行前后均一致。测试在隔离 Windows 窗口离线进行。候选包未提交 Steam，正式客户端前台实测仍待补。 [原生进场收据](../qa/battle_entry_timing_20261116/windows_custom_config_decode_83f62108.json)
 
 连环马查看可见辎重营时会说明断援的实际效果。原骑尚未出击且仍在场，毁营会停止补军并推迟冲锋 45 秒。已经出击的骑队照常作战。原骑提前全歼时，后拆营只停止补军，战报记录原骑未出击即被歼灭。北路或南路已断援时，任务改为提示布阵。四语、窄窗和三种断援情形的源码定向共 23 项。
