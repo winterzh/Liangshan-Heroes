@@ -1,5 +1,7 @@
 # 当前项目总览
 
+Windows 候选 `42f13534` 新增野猪林护送的两项任务命令。实包验证正式版救人后的旧档、960×540 显示、四语按钮、停止、再保存及原路径恢复。Steam 前台和真人首玩待验。 [Windows 验收收据](../qa/campaign_escort_arrival_20261116/windows_escort_shortcuts_42f13534.json)
+
 Windows 候选 `a8ba93b8` 复用地面图集。黄泥冈新旧包对照的重进首帧中位数由 250.98 ms 降至 230.45 ms。新包六入口混跑 603.7 秒，共 96 次进出，内存回收与帧时达标。Steam 前台计时和真人体验待验。 [Windows 验收收据](../qa/battle_entry_timing_20261116/windows_ground_overlay_atlas_a8ba93b8.json)
 
 Windows 候选 913ee3ec 使用六入口原顺序混跑 604.6 秒，共 96 次进出。战斗活动、关键节点释放和战役进度字节检查通过。最差完整分钟 P95/P99 为 6.7/11.9 ms。按现有十分钟验收阈值通过。1v1 共 16 次，最长进场绘制间隔 88.5 ms。历史峰值仍待复现定位。

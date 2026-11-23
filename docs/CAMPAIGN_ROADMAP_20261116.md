@@ -1,5 +1,7 @@
 # 八幕战役后续开发路线图
 
+野猪林 PC 任务栏把歇脚和出林各缩为一次明确下令，点击后选中林冲，途中可随时停止或改道。在 Windows 候选 `42f13534`，正式版救人后的旧档可使用新入口，途中再存重启保留原路径。 [Windows 验收收据](../qa/campaign_escort_arrival_20261116/windows_escort_shortcuts_42f13534.json)
+
 Windows 候选 `a8ba93b8` 复用黄泥冈小景的共用地面图集。五次重进的点击到首帧中位数由 250.98 ms 降至 230.45 ms。新包完成 603.7 秒六入口混跑及 96 次进出，内存回收与帧时达标。首次出征和 Steam 前台仍按各自验收条件跟踪。 [Windows 验收收据](../qa/battle_entry_timing_20261116/windows_ground_overlay_atlas_a8ba93b8.json)
 
 Windows 候选 913ee3ec 补验黄泥冈强夺。吴用在实战中倒下，原第 2 车带两担落地。暂停保存并独立重启后，晁盖接回同一辆重车，公孙胜为第 3 车装货。任务栏点一次后两车各到原交付点，随后完成七车十一担并收拢幸存者，基础胜利、演义 0/4，终局旧档拦截通过。三个隔离 Windows 进程共 47 项。使用已有离线试玩包，真人体验和本候选 Steam 云档待验。 [Windows 强夺接力验收](../qa/campaign_transport_groups_20261116/windows_force_relay_dispatch_913ee3ec.json)

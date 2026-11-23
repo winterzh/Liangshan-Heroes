@@ -1,5 +1,9 @@
 # 当前开发计划（2026-10-30）
 
+野猪林 PC 护送可从任务栏直接下令。正式版救人后存档的继续、行军中再保存与重启已按 Windows 原生入口验证。真人首玩仍分别观察歇脚选择、停止及完成条件是否看得懂。 [Windows 验收收据](../qa/campaign_escort_arrival_20261116/windows_escort_shortcuts_42f13534.json)
+
+同局续玩后再次保存会显示覆盖确认。后续核对同局更新与覆盖另一局的区别，并复验当前存档变化时的保护。 [Windows 验收收据](../qa/campaign_escort_arrival_20261116/windows_escort_shortcuts_42f13534.json)
+
 黄泥冈复用 Windows 地面图集后，重进道具及小景初始化中位数由 26.97 ms 降至 2.44 ms。首次出征仍按需读取纹理。六入口十分钟验收通过，偶发长帧继续跨模式跟踪。 [Windows 验收收据](../qa/battle_entry_timing_20261116/windows_ground_overlay_atlas_a8ba93b8.json)
 
 Windows 候选 913ee3ec 使用六入口原顺序混跑 604.6 秒，共 96 次进出。战斗活动、关键节点释放和战役进度字节检查通过。最差完整分钟 P95/P99 为 6.7/11.9 ms。按现有十分钟验收阈值通过。1v1 共 16 次，最长进场绘制间隔 88.5 ms。历史峰值仍待复现定位。

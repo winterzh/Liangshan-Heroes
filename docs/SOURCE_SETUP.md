@@ -1,6 +1,8 @@
 # 源码设置与换机（2026-10-30）
 
-当前 Windows 离线试玩包为 `a8ba93b8`。完整解压后双击 `Start Local Playtest.cmd`，使用同一编号继续本包存档。Windows 战役用到共享地面小景后，环境素材解析器保留一张图集的引用，小景素材仍从原关卡清单解析。 [本地包目录](DIRECTORY_INDEX.md) · [Windows 验收收据](../qa/battle_entry_timing_20261116/windows_ground_overlay_atlas_a8ba93b8.json)
+当前 Windows 离线试玩候选为 `42f13534`。完整解压后双击 `Start Local Playtest.cmd`，使用同一编号继续本包存档。野猪林护送按钮注册在关卡呈现白名单，依原移动凭证和路径办理任务。 [本地包目录](DIRECTORY_INDEX.md) · [Windows 验收收据](../qa/campaign_escort_arrival_20261116/windows_escort_shortcuts_42f13534.json)
+
+Windows 战役用到共享地面小景后，环境素材解析器保留一张图集的引用，小景素材仍从原关卡清单解析。 [Windows 黄泥冈验收](../qa/battle_entry_timing_20261116/windows_ground_overlay_atlas_a8ba93b8.json)
 
 黄泥冈布景分段使用临时继承探针，保留候选 `913ee3ec` 的 Windows EXE 字节。收据按每次进场保留战斗、地图环境和布景时间戳。 [分段诊断收据](../qa/battle_entry_timing_20261116/windows_huangnigang_environment_spans_913ee3ec.json)
 
