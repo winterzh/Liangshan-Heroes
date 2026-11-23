@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+Windows 候选 f6eab724 用 Godot 4.6.3 导入并导出，退出 0、错误 0。验证前后核对六个包文件。押送复用既有单位移动和元数据存档结构，任务面板按白名单存读按钮。新增七条四语词条通过严格目录重建。 [Windows 验收收据](../qa/campaign_fire_readiness_20261116/windows_gao_one_click_escort_f6eab724.json)
+
 Windows 候选 bbe6fc01 用 Godot 4.6.3 导入、导出，退出 0、错误 0。运行前后核对六个包文件。等待押俘沿用既有单位路径和移动指令字段，新增三条四语词条经过严格目录校验。 [Windows 验收收据](../qa/campaign_fire_readiness_20261116/windows_gao_shore_escort_bbe6fc01.json)
 
 Windows 候选 dbff5ccd 用 Godot 4.6.3 导入、导出，两步退出 0、错误 0。大营破后出击沿用原任务事件和波次，保持章内存档结构。六条本地化通过严格目录生成校验。 [Windows 验收收据](../qa/campaign_cavalry_escort_20261116/windows_lianhuanma_camp_fall_dbff5ccd.json)
