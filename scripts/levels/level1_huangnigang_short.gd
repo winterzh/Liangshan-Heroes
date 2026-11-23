@@ -551,10 +551,9 @@ func _send_loaded_carts(b) -> void:
 			blocked += 1
 			continue
 		var destination: Vector2 = b.map.cell_to_world(action.cell)
-		var has_delivery_order := (actor.mission_order_active or actor.mission_order_arrival_t > 0.0) \
+		var has_delivery_order: bool = (actor.mission_order_active or actor.mission_order_arrival_t > 0.0) \
 			and b.mission._nearest_clicked_action(actor.mission_order_target) == action_id
-		if b.mission.active_action_id == action_id \
-				or has_delivery_order:
+		if b.mission.active_action_id == action_id or has_delivery_order:
 			continue
 		var path: PackedVector2Array = b.map.find_path(actor.position, destination, actor.faction, actor.movement_profile)
 		if path.is_empty() or b.mission._nearest_clicked_action(destination) != action_id \
