@@ -8,6 +8,8 @@ const GATE_APPROACH := Vector2i(30,43)
 const GATE_GUARD_RADIUS := 150.0
 const WICKET := Vector2i(33,39)
 const SAFEHOUSE := Vector2i(24,28)
+const SAFEHOUSE_RADIUS := 88.0
+const COVER_RECOVERY := 3.0
 const PRISON_DOOR := Vector2i(19,20)
 const PRISON_CHECK := Vector2i(19,24)
 const PRISON_INSIDE := Vector2i(18,18)
@@ -355,11 +357,27 @@ func _gate_response_advice(b, state: Dictionary) -> String:
 		return "接应人手已齐。选鲁智深或武松，轻点夺门旗标。"
 	return "接应人手已齐。选鲁智深或武松，右键夺门旗标。"
 
+func _spy_cover_hint(b, spy: Unit) -> String:
+	if spy._invis_t > 0:
+		if float(spy.get_meta("daming_suspicion", 0.0)) >= 1.0:
+			return Localize.text("乔装快被识破 · 退开巡守")
+		return ""
+	var recovering := float(spy.get_meta("daming_recover", 0.0))
+	if recovering > 0.0:
+		return Localize.format_text("重整乔装 · 还需 %d 秒", ceili(COVER_RECOVERY - recovering))
+	if _near(b, spy, SAFEHOUSE, SAFEHOUSE_RADIUS):
+		return Localize.text("已到蔡福家 · 等附近安全后再重整")
+	return Localize.text("已暴露 · 甩开巡守，返回蔡福家")
+
 func unit_tactical_hint(b,unit) -> String:
 	if not alive(unit) or unit.faction!=0: return ""
 	if unit in [lu,shi] and rescued:
 		return Localize.text("伤员不参战 · 手动护送至城外\n南门必须打开，二人都须撤出")
 	if unit not in spies and unit.key not in ["wu_yong","lu_zhishen","wu_song"]: return ""
+	if not b.hud.touch_ui and not signaled and not gate_open and not rescued and unit in spies:
+		var cover := _spy_cover_hint(b, unit)
+		if not cover.is_empty():
+			return cover
 	if gate_open:
 		if prison_open and not rescued:
 			if _guarded(b,JAIL_ACTION,JAIL_GUARD_RADIUS,true):
@@ -590,9 +608,9 @@ func _cover_tick(b,delta: float) -> void:
 				u.set_meta("daming_covered",false)
 				u.display_name=u.setup_def.name+"·暴露"
 				b.msg(SPY_EXPOSED_NOTICE[u.key],5)
-		elif _near(b,u,SAFEHOUSE,88) and not _guarded(b,SAFEHOUSE,170):
+		elif _near(b,u,SAFEHOUSE,SAFEHOUSE_RADIUS) and not _guarded(b,SAFEHOUSE,170):
 			u.set_meta("daming_recover",float(u.get_meta("daming_recover"))+delta)
-			if float(u.get_meta("daming_recover"))>=3: _cover(u); b.msg(SPY_RESTORED_NOTICE[u.key],4)
+			if float(u.get_meta("daming_recover"))>=COVER_RECOVERY: _cover(u); b.msg(SPY_RESTORED_NOTICE[u.key],4)
 		else: u.set_meta("daming_recover",0.0)
 func _support_tick(b,delta: float) -> void:
 	if not alive(enemy_hq):
