@@ -1,0 +1,397 @@
+{
+  "windows": true,
+  "old_build": 26752476,
+  "candidate": "bf99bd12bf88a641579d1a7e00f3beaeeea26824",
+  "boot_scene": "unchanged shipped res://scenes/menu.tscn, plus temporary measurement observer",
+  "scope": "Fresh Windows processes on an isolated desktop with fresh offline profiles and native Vulkan Forward+ rendering. Shared operating-system file cache. Actual in-viewport left-clicks for menu, sortie and briefing. The fixture selected a visible unit through the normal selection API and then submitted an in-viewport right-click. No physical input, Steam client foreground, archive extraction, launcher profile selection or human reading time.",
+  "clock": "Windows wall-clock anchor immediately before CreateProcessW, cross-checked against QueryPerformanceCounter for the entire process. Inter-stage intervals use monotonic engine ticks. Visible milestones end at frame_post_draw.",
+  "fixture_sha256": "e69a8c72adadfca75928b6bcbda273a5488fa3e05ab17e68d214f71eca716b29",
+  "local_steam_install_readback": {
+    "steam_app_id": 5088120,
+    "expected_build": 26752476,
+    "expected_depot_manifest": "8273375024262905155",
+    "mode": "read-only local manifest and runtime hashes, without launching the Steam client",
+    "installs": [
+      {
+        "game_build": 26752476,
+        "state_flags": 4,
+        "expected_depot_manifest_found": true,
+        "matching_runtime_files": 6,
+        "runtime_file_mismatches": []
+      }
+    ]
+  },
+  "matched_steam_installations": 1,
+  "ordered_runs": [
+    {
+      "verified_identity": "fae95050c553dfd691e3beebca3eef7dd1d7490dfebf6e99fa50d310456b91a6",
+      "viewport": [
+        1280,
+        720
+      ],
+      "window_pixels": [
+        1280,
+        720
+      ],
+      "engine": "4.6.3-stable (official)",
+      "fps_cap": 60,
+      "rendering_method": "forward_plus",
+      "rendering_driver": "vulkan",
+      "course_selection": false,
+      "intro_pages": 3,
+      "max_entry_gap_us": 228282,
+      "progress_unchanged": true,
+      "variant": "official",
+      "source_commit": "0f13370905b8b16937135510c8cc469998b39b99",
+      "payload_verified": 6,
+      "milestones": {
+        "process_to_progress_draw_ms": 9902.442,
+        "process_to_ready_menu_ms": 11223.442,
+        "process_to_sortie_button_ms": 11253.442,
+        "sortie_to_loading_ms": 15.3,
+        "sortie_to_battle_ms": 409.805,
+        "sortie_to_first_move_ms": 526.955,
+        "right_click_to_order_draw_ms": 39.696,
+        "longest_entry_gap_ms": 228.282
+      },
+      "process_start_offsets_ms": {
+        "first_menu_draw": 9902.442,
+        "initial_progress_draw": 9902.442,
+        "ready_menu_draw": 11223.442,
+        "sortie_button_draw": 11253.442,
+        "sortie_click": 11253.442,
+        "first_loading_draw": 11269.442,
+        "first_battle_draw": 11663.442,
+        "fight_draw": 11729.442,
+        "first_move_click": 11740.442,
+        "first_move_draw": 11780.442
+      },
+      "raw": {
+        "first_menu_draw": 5194289,
+        "initial_progress_draw": 5194302,
+        "ready_menu_draw": 6515886,
+        "sortie_button_draw": 6545831,
+        "sortie_click": 6545835,
+        "first_loading_draw": 6561135,
+        "first_battle_draw": 6955640,
+        "fight_draw": 7022249,
+        "first_move_click": 7033094,
+        "first_move_draw": 7072790
+      },
+      "game_log_sha256": "a07f0244fce663414d368130a1bd01ab4d8a98a44a56f1ded43443b6d32547b5",
+      "trace_sha256": "07834c5238d5f1883dd3576396ddf96cda0fd361d8c78a0f33a6c7dd51881335",
+      "exit_code": 0,
+      "runtime_errors": []
+    },
+    {
+      "verified_identity": "34fbdb9fec2cad6a50a03a85d15530a352e0775f0aa67138f58cb9b7d1369b74",
+      "viewport": [
+        1280,
+        720
+      ],
+      "window_pixels": [
+        1280,
+        720
+      ],
+      "engine": "4.6.3-stable (official)",
+      "fps_cap": 60,
+      "rendering_method": "forward_plus",
+      "rendering_driver": "vulkan",
+      "course_selection": false,
+      "intro_pages": 3,
+      "max_entry_gap_us": 182576,
+      "progress_unchanged": true,
+      "variant": "candidate",
+      "source_commit": "bf99bd12bf88a641579d1a7e00f3beaeeea26824",
+      "payload_verified": 6,
+      "milestones": {
+        "process_to_progress_draw_ms": 9507.115,
+        "process_to_ready_menu_ms": 10813.115,
+        "process_to_sortie_button_ms": 10840.115,
+        "sortie_to_loading_ms": 14.228,
+        "sortie_to_battle_ms": 398.161,
+        "sortie_to_first_move_ms": 507.132,
+        "right_click_to_order_draw_ms": 36.492,
+        "longest_entry_gap_ms": 182.576
+      },
+      "process_start_offsets_ms": {
+        "first_menu_draw": 9507.115,
+        "initial_progress_draw": 9507.115,
+        "ready_menu_draw": 10813.115,
+        "sortie_button_draw": 10840.115,
+        "sortie_click": 10841.115,
+        "first_loading_draw": 10855.115,
+        "first_battle_draw": 11239.115,
+        "fight_draw": 11302.115,
+        "first_move_click": 11311.115,
+        "first_move_draw": 11347.115
+      },
+      "raw": {
+        "first_menu_draw": 4755935,
+        "initial_progress_draw": 4755948,
+        "ready_menu_draw": 6062248,
+        "sortie_button_draw": 6090126,
+        "sortie_click": 6090133,
+        "first_loading_draw": 6104361,
+        "first_battle_draw": 6488294,
+        "fight_draw": 6552139,
+        "first_move_click": 6560773,
+        "first_move_draw": 6597265
+      },
+      "game_log_sha256": "addb9d894c386a3c8236b832afc62336ecbf8035c07c2f304a3f131a06ee407e",
+      "trace_sha256": "89a727e20883636fe7bfb9461fc764e2b8db8816224d51f165121a1f02f6529b",
+      "exit_code": 0,
+      "runtime_errors": []
+    },
+    {
+      "verified_identity": "34fbdb9fec2cad6a50a03a85d15530a352e0775f0aa67138f58cb9b7d1369b74",
+      "viewport": [
+        1280,
+        720
+      ],
+      "window_pixels": [
+        1280,
+        720
+      ],
+      "engine": "4.6.3-stable (official)",
+      "fps_cap": 60,
+      "rendering_method": "forward_plus",
+      "rendering_driver": "vulkan",
+      "course_selection": false,
+      "intro_pages": 3,
+      "max_entry_gap_us": 176198,
+      "progress_unchanged": true,
+      "variant": "candidate",
+      "source_commit": "bf99bd12bf88a641579d1a7e00f3beaeeea26824",
+      "payload_verified": 6,
+      "milestones": {
+        "process_to_progress_draw_ms": 8908.771,
+        "process_to_ready_menu_ms": 10178.771,
+        "process_to_sortie_button_ms": 10204.771,
+        "sortie_to_loading_ms": 14.464,
+        "sortie_to_battle_ms": 385.815,
+        "sortie_to_first_move_ms": 488.813,
+        "right_click_to_order_draw_ms": 35.413,
+        "longest_entry_gap_ms": 176.198
+      },
+      "process_start_offsets_ms": {
+        "first_menu_draw": 8908.771,
+        "initial_progress_draw": 8908.771,
+        "ready_menu_draw": 10178.771,
+        "sortie_button_draw": 10204.771,
+        "sortie_click": 10204.771,
+        "first_loading_draw": 10219.771,
+        "first_battle_draw": 10590.771,
+        "fight_draw": 10649.771,
+        "first_move_click": 10657.771,
+        "first_move_draw": 10692.771
+      },
+      "raw": {
+        "first_menu_draw": 4610792,
+        "initial_progress_draw": 4610809,
+        "ready_menu_draw": 5880579,
+        "sortie_button_draw": 5905740,
+        "sortie_click": 5905742,
+        "first_loading_draw": 5920206,
+        "first_battle_draw": 6291557,
+        "fight_draw": 6351444,
+        "first_move_click": 6359142,
+        "first_move_draw": 6394555
+      },
+      "game_log_sha256": "addb9d894c386a3c8236b832afc62336ecbf8035c07c2f304a3f131a06ee407e",
+      "trace_sha256": "b4502acae1e37f052e09b113b2ba65eb4fe2490c11bf5268e4e5159544e36c9e",
+      "exit_code": 0,
+      "runtime_errors": []
+    },
+    {
+      "verified_identity": "fae95050c553dfd691e3beebca3eef7dd1d7490dfebf6e99fa50d310456b91a6",
+      "viewport": [
+        1280,
+        720
+      ],
+      "window_pixels": [
+        1280,
+        720
+      ],
+      "engine": "4.6.3-stable (official)",
+      "fps_cap": 60,
+      "rendering_method": "forward_plus",
+      "rendering_driver": "vulkan",
+      "course_selection": false,
+      "intro_pages": 3,
+      "max_entry_gap_us": 234806,
+      "progress_unchanged": true,
+      "variant": "official",
+      "source_commit": "0f13370905b8b16937135510c8cc469998b39b99",
+      "payload_verified": 6,
+      "milestones": {
+        "process_to_progress_draw_ms": 9163.675,
+        "process_to_ready_menu_ms": 10452.675,
+        "process_to_sortie_button_ms": 10479.675,
+        "sortie_to_loading_ms": 15.328,
+        "sortie_to_battle_ms": 405.005,
+        "sortie_to_first_move_ms": 516.64,
+        "right_click_to_order_draw_ms": 40.093,
+        "longest_entry_gap_ms": 234.806
+      },
+      "process_start_offsets_ms": {
+        "first_menu_draw": 9163.675,
+        "initial_progress_draw": 9163.675,
+        "ready_menu_draw": 10452.675,
+        "sortie_button_draw": 10479.675,
+        "sortie_click": 10479.675,
+        "first_loading_draw": 10495.675,
+        "first_battle_draw": 10884.675,
+        "fight_draw": 10949.675,
+        "first_move_click": 10956.675,
+        "first_move_draw": 10996.675
+      },
+      "raw": {
+        "first_menu_draw": 4971310,
+        "initial_progress_draw": 4971325,
+        "ready_menu_draw": 6260791,
+        "sortie_button_draw": 6287419,
+        "sortie_click": 6287423,
+        "first_loading_draw": 6302751,
+        "first_battle_draw": 6692428,
+        "fight_draw": 6756561,
+        "first_move_click": 6763970,
+        "first_move_draw": 6804063
+      },
+      "game_log_sha256": "a07f0244fce663414d368130a1bd01ab4d8a98a44a56f1ded43443b6d32547b5",
+      "trace_sha256": "3ea0e4ec8566bea9e6c6ed538c78ba4945fbde8c0cf21e8d27b3f45ecb9a3de2",
+      "exit_code": 0,
+      "runtime_errors": []
+    }
+  ],
+  "summary": {
+    "process_to_progress_draw_ms": {
+      "official": {
+        "samples": [
+          9902.442,
+          9163.675
+        ],
+        "median": 9533.058
+      },
+      "candidate": {
+        "samples": [
+          9507.115,
+          8908.771
+        ],
+        "median": 9207.943
+      }
+    },
+    "process_to_ready_menu_ms": {
+      "official": {
+        "samples": [
+          11223.442,
+          10452.675
+        ],
+        "median": 10838.058
+      },
+      "candidate": {
+        "samples": [
+          10813.115,
+          10178.771
+        ],
+        "median": 10495.943
+      }
+    },
+    "process_to_sortie_button_ms": {
+      "official": {
+        "samples": [
+          11253.442,
+          10479.675
+        ],
+        "median": 10866.558
+      },
+      "candidate": {
+        "samples": [
+          10840.115,
+          10204.771
+        ],
+        "median": 10522.443
+      }
+    },
+    "sortie_to_loading_ms": {
+      "official": {
+        "samples": [
+          15.3,
+          15.328
+        ],
+        "median": 15.314
+      },
+      "candidate": {
+        "samples": [
+          14.228,
+          14.464
+        ],
+        "median": 14.346
+      }
+    },
+    "sortie_to_battle_ms": {
+      "official": {
+        "samples": [
+          409.805,
+          405.005
+        ],
+        "median": 407.405
+      },
+      "candidate": {
+        "samples": [
+          398.161,
+          385.815
+        ],
+        "median": 391.988
+      }
+    },
+    "sortie_to_first_move_ms": {
+      "official": {
+        "samples": [
+          526.955,
+          516.64
+        ],
+        "median": 521.798
+      },
+      "candidate": {
+        "samples": [
+          507.132,
+          488.813
+        ],
+        "median": 497.972
+      }
+    },
+    "right_click_to_order_draw_ms": {
+      "official": {
+        "samples": [
+          39.696,
+          40.093
+        ],
+        "median": 39.895
+      },
+      "candidate": {
+        "samples": [
+          36.492,
+          35.413
+        ],
+        "median": 35.953
+      }
+    },
+    "longest_entry_gap_ms": {
+      "official": {
+        "samples": [
+          228.282,
+          234.806
+        ],
+        "median": 231.544
+      },
+      "candidate": {
+        "samples": [
+          182.576,
+          176.198
+        ],
+        "median": 179.387
+      }
+    }
+  }
+}
