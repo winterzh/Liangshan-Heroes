@@ -1,0 +1,861 @@
+{
+  "baseline_source_commit": "d0ae32b0e7b800e7eef63f4ca526ad8f426528b6",
+  "baseline_windows_source_commit": "5b4b89ea90d86af41e9fd40c766e6b38afa508fa",
+  "experimental_candidate": {
+    "kind": "local_integrated_windows_candidate",
+    "layout": "split_pck",
+    "commit": "8ede7f8db1b2ccba0eaf6a1e3dbae96368dba0cc",
+    "source_version": "source-v1:9cebbbef7e5546245ece615b4c74f86d4817abe3279605a9a8b8ac56d77fc016",
+    "tracked_runtime_count": 6574,
+    "steps": [
+      {
+        "stage": "import",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 63.01
+      },
+      {
+        "stage": "export",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 84.99
+      }
+    ],
+    "files": [
+      {
+        "path": "GODOTSTEAM_LICENSE.txt",
+        "bytes": 1110,
+        "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+      },
+      {
+        "path": "LiangshanHeroes.exe",
+        "bytes": 104886784,
+        "sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4"
+      },
+      {
+        "path": "LiangshanHeroes.pck",
+        "bytes": 1722698364,
+        "sha256": "468358e7b7f5090890ca4f6f07bf461c74f75ca6e711b59aa06dbbbd83fec0f7"
+      },
+      {
+        "path": "libgodotsteam.windows.template_release.x86_64.dll",
+        "bytes": 3961344,
+        "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+      },
+      {
+        "path": "steam_api64.dll",
+        "bytes": 319128,
+        "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+      },
+      {
+        "path": "steam_stats_reader.dll",
+        "bytes": 393728,
+        "sha256": "5a79a77b5b6e2cff21b285c785118352805a09d91876f89276af119ee1702517"
+      },
+      {
+        "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+        "bytes": 1093,
+        "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+      }
+    ]
+  },
+  "decision": "Keep the previous Windows candidate on the development branch. Both end-to-end median timing groups favored the previous candidate. Retain the terrain implementation as a local experiment.",
+  "authored_height_and_surface": {
+    "height_passed": true,
+    "heights": {
+      "level1": {
+        "after_ms": 1.486,
+        "before_ms": 3.2405,
+        "cases": 8,
+        "cpu_float_bytes_sha256": "b8561495c8c84a68352daa3327aa5206af8810acf1e06ec4f5da1aef4cb8cdc5",
+        "height": 40,
+        "rf_pixels_sha256": "b709c601df800265ba582b0993863277bc4b59671998a5683590245e9704512c",
+        "same_cpu_gpu": true,
+        "save_bytes_match": true,
+        "width": 48
+      },
+      "level2": {
+        "after_ms": 2.518,
+        "before_ms": 6.088,
+        "cases": 8,
+        "cpu_float_bytes_sha256": "2ab41e648d726e176c3be0b271118edd2ef0748462c81eed7515d67dc7fa2815",
+        "height": 58,
+        "rf_pixels_sha256": "2ab41e648d726e176c3be0b271118edd2ef0748462c81eed7515d67dc7fa2815",
+        "same_cpu_gpu": true,
+        "save_bytes_match": true,
+        "width": 60
+      },
+      "level3": {
+        "after_ms": 2.906,
+        "before_ms": 5.9805,
+        "cases": 8,
+        "cpu_float_bytes_sha256": "121ee8f7c957b8b83588d21db07fe27b3eaf1372c1bf473f4c86845af3ecf957",
+        "height": 56,
+        "rf_pixels_sha256": "fe763fd3ac50a583be05a245934d0d47f3a64e5f852c5cfe3e4aa8685fac21ed",
+        "same_cpu_gpu": true,
+        "save_bytes_match": true,
+        "width": 64
+      },
+      "level4": {
+        "after_ms": 3.532,
+        "before_ms": 6.854,
+        "cases": 8,
+        "cpu_float_bytes_sha256": "f7c2e058ddbaef18ae5ff97dcd9b323e231f8f92968606cc1244af75d5823652",
+        "height": 60,
+        "rf_pixels_sha256": "79dec347fa49a298c6bc354cc2b8af50c76ba6c1b1ed2283800bec28862a4365",
+        "same_cpu_gpu": true,
+        "save_bytes_match": true,
+        "width": 64
+      },
+      "level5": {
+        "after_ms": 2.1995,
+        "before_ms": 6.2655,
+        "cases": 8,
+        "cpu_float_bytes_sha256": "3cda6d80c974e0d0ddc2ac115d5b02a5d86e41c884d3fef8a41963d4eb8a6a67",
+        "height": 60,
+        "rf_pixels_sha256": "e37139f3809ac9056ea36c2918a35ad4359022ad5e9fccea5823e8276bbd876a",
+        "same_cpu_gpu": true,
+        "save_bytes_match": true,
+        "width": 60
+      },
+      "level6": {
+        "after_ms": 1.577,
+        "before_ms": 3.36,
+        "cases": 8,
+        "cpu_float_bytes_sha256": "db53295d07eb430d292cbb8af5ee2e474c1d4f177dde5ddfb0a4b539d3597d47",
+        "height": 40,
+        "rf_pixels_sha256": "28f50f9ce33364e0c81e0ac354d3e3f22b32ff17713acdbffcb155927fec2914",
+        "same_cpu_gpu": true,
+        "save_bytes_match": true,
+        "width": 52
+      },
+      "level7": {
+        "after_ms": 1.863,
+        "before_ms": 3.8205,
+        "cases": 8,
+        "cpu_float_bytes_sha256": "c7e0b274ea9f38bda3e881268ef753af180cab82636f36aead29cf76a2ffb324",
+        "height": 38,
+        "rf_pixels_sha256": "c7e0b274ea9f38bda3e881268ef753af180cab82636f36aead29cf76a2ffb324",
+        "same_cpu_gpu": true,
+        "save_bytes_match": true,
+        "width": 60
+      },
+      "level8": {
+        "after_ms": 3.1625,
+        "before_ms": 6.621,
+        "cases": 8,
+        "cpu_float_bytes_sha256": "35c9838c4cd4b1918305c9cfb1dd76ee5b3cb40a2a92086aae43c7aa6ca8526b",
+        "height": 66,
+        "rf_pixels_sha256": "35c9838c4cd4b1918305c9cfb1dd76ee5b3cb40a2a92086aae43c7aa6ca8526b",
+        "same_cpu_gpu": true,
+        "save_bytes_match": true,
+        "width": 60
+      },
+      "mixed_water_boundary": {
+        "after_ms": 0.7095,
+        "before_ms": 5.9655,
+        "cases": 4,
+        "cpu_float_bytes_sha256": "b67a737f5c3fdebf2e80c4ab846e1a4f52b4bdacc0036e5d5520ad04877f320a",
+        "height": 60,
+        "rf_pixels_sha256": "b67a737f5c3fdebf2e80c4ab846e1a4f52b4bdacc0036e5d5520ad04877f320a",
+        "same_cpu_gpu": true,
+        "save_bytes_match": true,
+        "width": 60
+      },
+      "single_field": {
+        "after_ms": 0.0205,
+        "before_ms": 0.0275,
+        "cases": 2,
+        "cpu_float_bytes_sha256": "84e0c0eafaa95a34c293f278ac52e45ce537bab5e752a00e6959a13ae103b65a",
+        "height": 1,
+        "rf_pixels_sha256": "84e0c0eafaa95a34c293f278ac52e45ce537bab5e752a00e6959a13ae103b65a",
+        "same_cpu_gpu": true,
+        "save_bytes_match": true,
+        "width": 1
+      },
+      "single_water": {
+        "after_ms": 0.021,
+        "before_ms": 0.0845,
+        "cases": 2,
+        "cpu_float_bytes_sha256": "84e0c0eafaa95a34c293f278ac52e45ce537bab5e752a00e6959a13ae103b65a",
+        "height": 1,
+        "rf_pixels_sha256": "84e0c0eafaa95a34c293f278ac52e45ce537bab5e752a00e6959a13ae103b65a",
+        "same_cpu_gpu": true,
+        "save_bytes_match": true,
+        "width": 1
+      }
+    },
+    "mask_passed": true,
+    "masks": {
+      "level1_fallback": {
+        "after_ms": 3.7285,
+        "before_ms": 4.31,
+        "cases": 8,
+        "enabled": false,
+        "hashes": {
+          "land": "a5d7434ea9a646b2bc32fb06b9b0e3b51341b911fcc5f5ff657580c068680fc4",
+          "weights": "2f83b8a89c9c54e2b2cad53ace5b385c2553d6106456862be921d24b5e24356d"
+        },
+        "same_cpu_gpu": true
+      },
+      "level1_natural": {
+        "after_ms": 3.876,
+        "before_ms": 4.475,
+        "cases": 8,
+        "enabled": true,
+        "hashes": {
+          "land": "d63ff904a60d1ab6ad4abed48c80972ff95b94259db98dfe57a8e74be46b98fb",
+          "weights": "2f83b8a89c9c54e2b2cad53ace5b385c2553d6106456862be921d24b5e24356d"
+        },
+        "same_cpu_gpu": true
+      },
+      "level2_fallback": {
+        "after_ms": 8.5705,
+        "before_ms": 9.588,
+        "cases": 8,
+        "enabled": false,
+        "hashes": {
+          "land": "4d7dae31dc535bcdf7607f6636d3ec3d0afa8095c1a9523bd2066c5e8f8551c2",
+          "weights": "f042f37c0339916fb0da2954055d5fe6d56d97a0ed5374cae0a78dd0812d82d7"
+        },
+        "same_cpu_gpu": true
+      },
+      "level2_natural": {
+        "after_ms": 8.855,
+        "before_ms": 9.958,
+        "cases": 8,
+        "enabled": true,
+        "hashes": {
+          "land": "bf7dc33c565a24af178ae21a2f88571e8e51a9e85a8ef35776f5df6e8dca3cdb",
+          "weights": "f042f37c0339916fb0da2954055d5fe6d56d97a0ed5374cae0a78dd0812d82d7"
+        },
+        "same_cpu_gpu": true
+      },
+      "level3_fallback": {
+        "after_ms": 10.144,
+        "before_ms": 11.379,
+        "cases": 8,
+        "enabled": false,
+        "hashes": {
+          "land": "b68c5881682c84a54f0614f4abe73fc078780a5344ee7ec81ab1c8b5742a47a5",
+          "weights": "8b7e2a798bc65934208bde07d7adfb930fbf4c7aaeecb7f8812eaaf3d1ea3b05"
+        },
+        "same_cpu_gpu": true
+      },
+      "level3_natural": {
+        "after_ms": 10.21,
+        "before_ms": 11.4,
+        "cases": 8,
+        "enabled": true,
+        "hashes": {
+          "land": "6f86587380a78f7b287e908f12227ababa35ead6ffc9283144838c48ef6fd3ae",
+          "weights": "8b7e2a798bc65934208bde07d7adfb930fbf4c7aaeecb7f8812eaaf3d1ea3b05"
+        },
+        "same_cpu_gpu": true
+      },
+      "level4_fallback": {
+        "after_ms": 9.0925,
+        "before_ms": 10.3555,
+        "cases": 8,
+        "enabled": false,
+        "hashes": {
+          "land": "616832c85442ef9b07e07fed2504bf16d3c0250f3c11dcea62063787fca6c2c4",
+          "weights": "038ad33c8387dc2a5b8c813be6adac0f5217ebca5a01ef824bd6abea96bbeee3"
+        },
+        "same_cpu_gpu": true
+      },
+      "level4_natural": {
+        "after_ms": 9.6895,
+        "before_ms": 10.93,
+        "cases": 8,
+        "enabled": true,
+        "hashes": {
+          "land": "b99954d18fffe90c004288ffcd99cdaaa506068489e9c74c6cd6b0901a527721",
+          "weights": "038ad33c8387dc2a5b8c813be6adac0f5217ebca5a01ef824bd6abea96bbeee3"
+        },
+        "same_cpu_gpu": true
+      },
+      "level5_fallback": {
+        "after_ms": 7.2335,
+        "before_ms": 8.3015,
+        "cases": 8,
+        "enabled": false,
+        "hashes": {
+          "land": "94b57e7dc146177ce8b07deaad5eb6013e95f5316efb55eb4f33720a23981c68",
+          "weights": "a76e212ac7f423723381340e2f4b3c659f3a8ff2472748644b5d68102efab6a4"
+        },
+        "same_cpu_gpu": true
+      },
+      "level5_natural": {
+        "after_ms": 7.553,
+        "before_ms": 8.615,
+        "cases": 8,
+        "enabled": true,
+        "hashes": {
+          "land": "8a85cfd78eb348a00e33b94be7a247f5ca84f15e7b98833feeac2923a16b4d07",
+          "weights": "a76e212ac7f423723381340e2f4b3c659f3a8ff2472748644b5d68102efab6a4"
+        },
+        "same_cpu_gpu": true
+      },
+      "level6_fallback": {
+        "after_ms": 4.7645,
+        "before_ms": 5.4225,
+        "cases": 8,
+        "enabled": false,
+        "hashes": {
+          "land": "4d5050be65b92677d5e8fd6b96416f12228639604c943e65832df63d3d22400c",
+          "weights": "83c13b4cb455c4810ae77eb4d16c2ea21f7bcab3a046c22ee22d0d29c6bf5c07"
+        },
+        "same_cpu_gpu": true
+      },
+      "level6_natural": {
+        "after_ms": 4.8755,
+        "before_ms": 5.4945,
+        "cases": 8,
+        "enabled": true,
+        "hashes": {
+          "land": "7e8a3ba4c66d6f6910267b7fba42568cb1a1a3d9643381881db50d731543cf7f",
+          "weights": "83c13b4cb455c4810ae77eb4d16c2ea21f7bcab3a046c22ee22d0d29c6bf5c07"
+        },
+        "same_cpu_gpu": true
+      },
+      "level7_fallback": {
+        "after_ms": 5.1895,
+        "before_ms": 5.8615,
+        "cases": 8,
+        "enabled": false,
+        "hashes": {
+          "land": "2f92e5bc5f32e520bec469f8a808f4582957d6dcd671894042ef28086c8a1bb5",
+          "weights": "45e719cf0c7decbc6338aa6459c0f427863a3f43672f4540eca69d6e187f9645"
+        },
+        "same_cpu_gpu": true
+      },
+      "level7_natural": {
+        "after_ms": 5.3455,
+        "before_ms": 6.029,
+        "cases": 8,
+        "enabled": true,
+        "hashes": {
+          "land": "2e2c0641547ed8b2ae5051cc18225fd043affcbae0dd2636053b803af109adf5",
+          "weights": "45e719cf0c7decbc6338aa6459c0f427863a3f43672f4540eca69d6e187f9645"
+        },
+        "same_cpu_gpu": true
+      },
+      "level8_fallback": {
+        "after_ms": 12.165,
+        "before_ms": 13.3815,
+        "cases": 8,
+        "enabled": false,
+        "hashes": {
+          "land": "f3ee6523cebb7c0fb6830c0f6e55cd742a2153f4c49c6ab5b04ec5dc8dac5524",
+          "weights": "15dad289a9877d94577c26e441086b96e6cd06d2a7bdfae2421df6a80d453d1c"
+        },
+        "same_cpu_gpu": true
+      },
+      "level8_natural": {
+        "after_ms": 12.4155,
+        "before_ms": 13.6735,
+        "cases": 8,
+        "enabled": true,
+        "hashes": {
+          "land": "347c49a45b84bcf94ec744cf40dd0c4090a545ed0163d3ab3b62dff3576e2882",
+          "weights": "15dad289a9877d94577c26e441086b96e6cd06d2a7bdfae2421df6a80d453d1c"
+        },
+        "same_cpu_gpu": true
+      },
+      "mixed_water_boundary": {
+        "after_ms": 7.792,
+        "before_ms": 8.865,
+        "cases": 4,
+        "enabled": true,
+        "hashes": {
+          "land": "12a6de94035ebbd64934e73546d27aa03e590c3bfd64663d2abb234eaf449842",
+          "weights": "bb3b6960ffbe3678eae545510af85a1be0959736aec1ce616e8dcaa2019a6cce"
+        },
+        "same_cpu_gpu": true
+      },
+      "single_field": {
+        "after_ms": 0.0135,
+        "before_ms": 0.016,
+        "cases": 2,
+        "enabled": true,
+        "hashes": {
+          "land": "eaeca3b2c5d442d259ec8c2efbe7180579e031507e961205939fbc6aaecc66af",
+          "weights": "7e071fd9b023ed8f18458a73613a0834f6220bd5cc50357ba3493c6040a9ea8c"
+        },
+        "same_cpu_gpu": true
+      },
+      "single_water": {
+        "after_ms": 0.013,
+        "before_ms": 0.016,
+        "cases": 2,
+        "enabled": true,
+        "hashes": {
+          "land": "719770c167f5cd545246762878825dd051a775e3f27fee5b386585e80adc0f9f",
+          "weights": "d03e82f01e5b5333a6e2d8cccf2a8311f45ca32ccd25f60491f80552e15d21df"
+        },
+        "same_cpu_gpu": true
+      }
+    },
+    "production": true,
+    "renderer": "forward_plus",
+    "log_sha256": "f3a6b1c504371f00bf9e98b9a13616cb35933c650f6f6bc6fc2bac169c3d6a76",
+    "scope": "Windows real Vulkan ImageTexture. Alternating production and reference builds with identical authored inputs.",
+    "height_cases": 72,
+    "mask_cases": 136,
+    "old_height_probe_sha256": "75e45c15a8bf54dc67ce014c4cb39a9c16771c2ea6faf71f31b0f0d841e9ef6e",
+    "old_surface_probe_sha256": "1fae48edec082934924768547777fd9cc33edbb2ee3ae76affa4fc191788408b",
+    "probe_sha256": "a5f9b62375f634e3505b562d2c65755b00003000d5fb5317ae9c846490e52906",
+    "hash_encoding": "Hashes for sample and image values are SHA-256 of the lowercase hex serialization. The fixture compares actual bytes directly."
+  },
+  "windows_sortie": {
+    "scope": "Identical isolated Windows configuration with both package identities verified. Four new processes per build with A/B/B/A twice. Separate A/B/B/A run once all background tracks are ready. Same machine file cache, Vulkan Forward+ 1280x720 and 60 FPS cap. Original menu, first valid move, and return to menu.",
+    "medians_ms": {
+      "prior": {
+        "sortie_to_loading_ms": 14.244,
+        "loading_to_attach_ms": 214.98,
+        "sortie_to_battle_ms": 421.02,
+        "sortie_to_first_move_ms": 543.706,
+        "map_to_hud_ms": 42.156,
+        "longest_entry_gap_ms": 194.727
+      },
+      "terrain": {
+        "sortie_to_loading_ms": 13.465,
+        "loading_to_attach_ms": 237.012,
+        "sortie_to_battle_ms": 447.602,
+        "sortie_to_first_move_ms": 577.197,
+        "map_to_hud_ms": 43.626,
+        "longest_entry_gap_ms": 207.454
+      }
+    },
+    "raw_sha256": "f513e281173528327c56ca100ddded981ba39144f42703dfe46944d52430e178",
+    "runs": [
+      {
+        "variant": "prior",
+        "source_commit": "5b4b89ea90d86af41e9fd40c766e6b38afa508fa",
+        "pck_sha256": "bbcada41f22704660a274ab3989ea8f8f1e8636f2b9d0bc201be5e2d3e1727ad",
+        "milestones": {
+          "loading_to_attach_ms": 268.032,
+          "attach_to_map_ms": 26.171,
+          "map_to_hud_ms": 42.755,
+          "hud_to_ready_ms": 80.491,
+          "ready_to_draw_ms": 56.797,
+          "process_to_progress_draw_ms": 5322.326,
+          "process_to_ready_menu_ms": 6725.326,
+          "process_to_sortie_button_ms": 6753.326,
+          "sortie_to_loading_ms": 14.36,
+          "sortie_to_battle_ms": 488.606,
+          "sortie_to_first_move_ms": 609.054,
+          "right_click_to_order_draw_ms": 42.55,
+          "longest_entry_gap_ms": 208.962
+        },
+        "trace_sha256": "c5f3533c4743da6b682b050743f2daf5c664d46bf3f7b2ae4ff2afee25846f55",
+        "game_log_sha256": "adadfc831339077a99089972a95ebac2e0da98adc3f8613a246d1a8e49d2184e",
+        "payload_verified": 7,
+        "exit_code": 0
+      },
+      {
+        "variant": "terrain",
+        "source_commit": "8ede7f8db1b2ccba0eaf6a1e3dbae96368dba0cc",
+        "pck_sha256": "468358e7b7f5090890ca4f6f07bf461c74f75ca6e711b59aa06dbbbd83fec0f7",
+        "milestones": {
+          "loading_to_attach_ms": 226.931,
+          "attach_to_map_ms": 23.201,
+          "map_to_hud_ms": 43.592,
+          "hud_to_ready_ms": 72.407,
+          "ready_to_draw_ms": 51.712,
+          "process_to_progress_draw_ms": 4850.553,
+          "process_to_ready_menu_ms": 6292.553,
+          "process_to_sortie_button_ms": 6322.553,
+          "sortie_to_loading_ms": 14.262,
+          "sortie_to_battle_ms": 432.105,
+          "sortie_to_first_move_ms": 558.727,
+          "right_click_to_order_draw_ms": 50.418,
+          "longest_entry_gap_ms": 208.562
+        },
+        "trace_sha256": "f0cd971cf0380dc6d5686e73f9e9db4894d2a057eb399bb9a888181f4a1ff520",
+        "game_log_sha256": "6e62d6f9dbcbb85aff06f8cdfa06f925540162e40518faa930cc37ad1f284d6b",
+        "payload_verified": 7,
+        "exit_code": 0
+      },
+      {
+        "variant": "terrain",
+        "source_commit": "8ede7f8db1b2ccba0eaf6a1e3dbae96368dba0cc",
+        "pck_sha256": "468358e7b7f5090890ca4f6f07bf461c74f75ca6e711b59aa06dbbbd83fec0f7",
+        "milestones": {
+          "loading_to_attach_ms": 264.861,
+          "attach_to_map_ms": 23.485,
+          "map_to_hud_ms": 43.66,
+          "hud_to_ready_ms": 77.326,
+          "ready_to_draw_ms": 56.923,
+          "process_to_progress_draw_ms": 4552.56,
+          "process_to_ready_menu_ms": 6059.56,
+          "process_to_sortie_button_ms": 6094.56,
+          "sortie_to_loading_ms": 13.554,
+          "sortie_to_battle_ms": 479.809,
+          "sortie_to_first_move_ms": 613.462,
+          "right_click_to_order_draw_ms": 52.603,
+          "longest_entry_gap_ms": 205.979
+        },
+        "trace_sha256": "365379af7229ba386f0825ac543b734c32877a3887a47487b5303f76476b1d05",
+        "game_log_sha256": "6e62d6f9dbcbb85aff06f8cdfa06f925540162e40518faa930cc37ad1f284d6b",
+        "payload_verified": 7,
+        "exit_code": 0
+      },
+      {
+        "variant": "prior",
+        "source_commit": "5b4b89ea90d86af41e9fd40c766e6b38afa508fa",
+        "pck_sha256": "bbcada41f22704660a274ab3989ea8f8f1e8636f2b9d0bc201be5e2d3e1727ad",
+        "milestones": {
+          "loading_to_attach_ms": 240.366,
+          "attach_to_map_ms": 22.429,
+          "map_to_hud_ms": 45.334,
+          "hud_to_ready_ms": 69.44,
+          "ready_to_draw_ms": 55.928,
+          "process_to_progress_draw_ms": 4725.636,
+          "process_to_ready_menu_ms": 6201.636,
+          "process_to_sortie_button_ms": 6231.636,
+          "sortie_to_loading_ms": 14.392,
+          "sortie_to_battle_ms": 447.889,
+          "sortie_to_first_move_ms": 583.498,
+          "right_click_to_order_draw_ms": 7.418,
+          "longest_entry_gap_ms": 195.647
+        },
+        "trace_sha256": "38c290c59cccf0e5298bcdc3ed6ec58e3e63505f8e379462068ff7e60a2dcbe8",
+        "game_log_sha256": "adadfc831339077a99089972a95ebac2e0da98adc3f8613a246d1a8e49d2184e",
+        "payload_verified": 7,
+        "exit_code": 0
+      },
+      {
+        "variant": "prior",
+        "source_commit": "5b4b89ea90d86af41e9fd40c766e6b38afa508fa",
+        "pck_sha256": "bbcada41f22704660a274ab3989ea8f8f1e8636f2b9d0bc201be5e2d3e1727ad",
+        "milestones": {
+          "loading_to_attach_ms": 189.396,
+          "attach_to_map_ms": 26.811,
+          "map_to_hud_ms": 41.557,
+          "hud_to_ready_ms": 72.291,
+          "ready_to_draw_ms": 49.968,
+          "process_to_progress_draw_ms": 4676.313,
+          "process_to_ready_menu_ms": 6231.313,
+          "process_to_sortie_button_ms": 6262.313,
+          "sortie_to_loading_ms": 14.129,
+          "sortie_to_battle_ms": 394.152,
+          "sortie_to_first_move_ms": 503.914,
+          "right_click_to_order_draw_ms": 38.712,
+          "longest_entry_gap_ms": 193.808
+        },
+        "trace_sha256": "9dd6d462ca1e1b841219b22c26bc95adb0280f16a329ce1197d1e8e5a9fb0fe9",
+        "game_log_sha256": "adadfc831339077a99089972a95ebac2e0da98adc3f8613a246d1a8e49d2184e",
+        "payload_verified": 7,
+        "exit_code": 0
+      },
+      {
+        "variant": "terrain",
+        "source_commit": "8ede7f8db1b2ccba0eaf6a1e3dbae96368dba0cc",
+        "pck_sha256": "468358e7b7f5090890ca4f6f07bf461c74f75ca6e711b59aa06dbbbd83fec0f7",
+        "milestones": {
+          "loading_to_attach_ms": 247.092,
+          "attach_to_map_ms": 27.627,
+          "map_to_hud_ms": 46.569,
+          "hud_to_ready_ms": 75.757,
+          "ready_to_draw_ms": 52.678,
+          "process_to_progress_draw_ms": 4638.84,
+          "process_to_ready_menu_ms": 6091.84,
+          "process_to_sortie_button_ms": 6120.84,
+          "sortie_to_loading_ms": 13.376,
+          "sortie_to_battle_ms": 463.099,
+          "sortie_to_first_move_ms": 595.667,
+          "right_click_to_order_draw_ms": 7.498,
+          "longest_entry_gap_ms": 206.347
+        },
+        "trace_sha256": "3854ea55a7188e67e5b53c8af21018eb2e985f5395e6aa61f549d5001ab5106c",
+        "game_log_sha256": "6e62d6f9dbcbb85aff06f8cdfa06f925540162e40518faa930cc37ad1f284d6b",
+        "payload_verified": 7,
+        "exit_code": 0
+      },
+      {
+        "variant": "terrain",
+        "source_commit": "8ede7f8db1b2ccba0eaf6a1e3dbae96368dba0cc",
+        "pck_sha256": "468358e7b7f5090890ca4f6f07bf461c74f75ca6e711b59aa06dbbbd83fec0f7",
+        "milestones": {
+          "loading_to_attach_ms": 183.824,
+          "attach_to_map_ms": 24.428,
+          "map_to_hud_ms": 40.029,
+          "hud_to_ready_ms": 80.902,
+          "ready_to_draw_ms": 57.383,
+          "process_to_progress_draw_ms": 4513.053,
+          "process_to_ready_menu_ms": 5800.053,
+          "process_to_sortie_button_ms": 5825.053,
+          "sortie_to_loading_ms": 6.71,
+          "sortie_to_battle_ms": 393.276,
+          "sortie_to_first_move_ms": 506.221,
+          "right_click_to_order_draw_ms": 40.773,
+          "longest_entry_gap_ms": 220.311
+        },
+        "trace_sha256": "4015ebf44955f20b697fdd18a0aba8412c8de3e00f6ee932cc7c7664148bbff7",
+        "game_log_sha256": "6e62d6f9dbcbb85aff06f8cdfa06f925540162e40518faa930cc37ad1f284d6b",
+        "payload_verified": 7,
+        "exit_code": 0
+      },
+      {
+        "variant": "prior",
+        "source_commit": "5b4b89ea90d86af41e9fd40c766e6b38afa508fa",
+        "pck_sha256": "bbcada41f22704660a274ab3989ea8f8f1e8636f2b9d0bc201be5e2d3e1727ad",
+        "milestones": {
+          "loading_to_attach_ms": 189.593,
+          "attach_to_map_ms": 24.55,
+          "map_to_hud_ms": 40.694,
+          "hud_to_ready_ms": 68.831,
+          "ready_to_draw_ms": 47.135,
+          "process_to_progress_draw_ms": 4185.011,
+          "process_to_ready_menu_ms": 5438.011,
+          "process_to_sortie_button_ms": 5463.011,
+          "sortie_to_loading_ms": 14.117,
+          "sortie_to_battle_ms": 384.92,
+          "sortie_to_first_move_ms": 490.616,
+          "right_click_to_order_draw_ms": 37.044,
+          "longest_entry_gap_ms": 183.473
+        },
+        "trace_sha256": "30d6b6b9e9484d466c6beafe055261407917b7c206a3b913083faa0f58980139",
+        "game_log_sha256": "adadfc831339077a99089972a95ebac2e0da98adc3f8613a246d1a8e49d2184e",
+        "payload_verified": 7,
+        "exit_code": 0
+      }
+    ],
+    "request_lists_observed_on_draw_frames": {
+      "prior": {
+        "attach_ms": 229.234,
+        "textures_disappeared_at_draw_ms": 196.964,
+        "frames_disappeared_at_draw_ms": 196.964,
+        "portraits_disappeared_at_draw_ms": 226.82
+      },
+      "terrain": {
+        "attach_ms": 250.831,
+        "textures_disappeared_at_draw_ms": 205.255,
+        "frames_disappeared_at_draw_ms": 205.255,
+        "portraits_disappeared_at_draw_ms": 240.122
+      }
+    },
+    "music_ready": {
+      "medians_ms": {
+        "prior": {
+          "sortie_to_loading_ms": 14.369,
+          "loading_to_attach_ms": 251.791,
+          "sortie_to_battle_ms": 475.353,
+          "sortie_to_first_move_ms": 597.04,
+          "map_to_hud_ms": 45.809,
+          "longest_entry_gap_ms": 219.848
+        },
+        "terrain": {
+          "sortie_to_loading_ms": 14.297,
+          "loading_to_attach_ms": 294.466,
+          "sortie_to_battle_ms": 527.75,
+          "sortie_to_first_move_ms": 736.354,
+          "map_to_hud_ms": 49.537,
+          "longest_entry_gap_ms": 221.726
+        }
+      },
+      "raw_sha256": "a6c71b8790ada86f3cf4b38d90f7e7e0f2b1512e3e8c514bd16ca97ff1bd99fb",
+      "runs": [
+        {
+          "variant": "prior",
+          "source_commit": "5b4b89ea90d86af41e9fd40c766e6b38afa508fa",
+          "pck_sha256": "bbcada41f22704660a274ab3989ea8f8f1e8636f2b9d0bc201be5e2d3e1727ad",
+          "milestones": {
+            "loading_to_attach_ms": 215.522,
+            "attach_to_map_ms": 29.401,
+            "map_to_hud_ms": 48.498,
+            "hud_to_ready_ms": 86.006,
+            "ready_to_draw_ms": 59.164,
+            "process_to_progress_draw_ms": 4920.683,
+            "process_to_ready_menu_ms": 6540.683,
+            "process_to_sortie_button_ms": 7416.683,
+            "sortie_to_loading_ms": 14.221,
+            "sortie_to_battle_ms": 452.812,
+            "sortie_to_first_move_ms": 571.952,
+            "right_click_to_order_draw_ms": 42.355,
+            "longest_entry_gap_ms": 241.758
+          },
+          "trace_sha256": "52e59166c9b75397caca8034fddc2371ea41c36cb2dd475675b8d790c9f5f650",
+          "game_log_sha256": "adadfc831339077a99089972a95ebac2e0da98adc3f8613a246d1a8e49d2184e",
+          "payload_verified": 7,
+          "exit_code": 0
+        },
+        {
+          "variant": "terrain",
+          "source_commit": "8ede7f8db1b2ccba0eaf6a1e3dbae96368dba0cc",
+          "pck_sha256": "468358e7b7f5090890ca4f6f07bf461c74f75ca6e711b59aa06dbbbd83fec0f7",
+          "milestones": {
+            "loading_to_attach_ms": 285.961,
+            "attach_to_map_ms": 26.432,
+            "map_to_hud_ms": 45.613,
+            "hud_to_ready_ms": 84.139,
+            "ready_to_draw_ms": 64.237,
+            "process_to_progress_draw_ms": 4796.175,
+            "process_to_ready_menu_ms": 6349.175,
+            "process_to_sortie_button_ms": 7193.175,
+            "sortie_to_loading_ms": 14.573,
+            "sortie_to_battle_ms": 520.955,
+            "sortie_to_first_move_ms": 812.564,
+            "right_click_to_order_draw_ms": 140.295,
+            "longest_entry_gap_ms": 223.097
+          },
+          "trace_sha256": "5ab127f4b43740aa62835cd33af0f855cc143aaa7ce343694841d73a6a2b9c09",
+          "game_log_sha256": "6e62d6f9dbcbb85aff06f8cdfa06f925540162e40518faa930cc37ad1f284d6b",
+          "payload_verified": 7,
+          "exit_code": 0
+        },
+        {
+          "variant": "terrain",
+          "source_commit": "8ede7f8db1b2ccba0eaf6a1e3dbae96368dba0cc",
+          "pck_sha256": "468358e7b7f5090890ca4f6f07bf461c74f75ca6e711b59aa06dbbbd83fec0f7",
+          "milestones": {
+            "loading_to_attach_ms": 302.971,
+            "attach_to_map_ms": 26.076,
+            "map_to_hud_ms": 53.461,
+            "hud_to_ready_ms": 81.912,
+            "ready_to_draw_ms": 56.104,
+            "process_to_progress_draw_ms": 4781.968,
+            "process_to_ready_menu_ms": 6218.968,
+            "process_to_sortie_button_ms": 7178.968,
+            "sortie_to_loading_ms": 14.021,
+            "sortie_to_battle_ms": 534.545,
+            "sortie_to_first_move_ms": 660.145,
+            "right_click_to_order_draw_ms": 7.231,
+            "longest_entry_gap_ms": 220.356
+          },
+          "trace_sha256": "ff2f777c80f2df70f7a88547adace8ee9d324d2c3a208bf96ea47523e345796f",
+          "game_log_sha256": "6e62d6f9dbcbb85aff06f8cdfa06f925540162e40518faa930cc37ad1f284d6b",
+          "payload_verified": 7,
+          "exit_code": 0
+        },
+        {
+          "variant": "prior",
+          "source_commit": "5b4b89ea90d86af41e9fd40c766e6b38afa508fa",
+          "pck_sha256": "bbcada41f22704660a274ab3989ea8f8f1e8636f2b9d0bc201be5e2d3e1727ad",
+          "milestones": {
+            "loading_to_attach_ms": 288.061,
+            "attach_to_map_ms": 23.917,
+            "map_to_hud_ms": 43.12,
+            "hud_to_ready_ms": 74.941,
+            "ready_to_draw_ms": 53.34,
+            "process_to_progress_draw_ms": 4819.907,
+            "process_to_ready_menu_ms": 6256.907,
+            "process_to_sortie_button_ms": 7146.907,
+            "sortie_to_loading_ms": 14.516,
+            "sortie_to_battle_ms": 497.895,
+            "sortie_to_first_move_ms": 622.128,
+            "right_click_to_order_draw_ms": 45.231,
+            "longest_entry_gap_ms": 197.938
+          },
+          "trace_sha256": "a52601b5d1ee6d928442d470f22e5d36048379a4e684fcfdf7f0163ad254c330",
+          "game_log_sha256": "adadfc831339077a99089972a95ebac2e0da98adc3f8613a246d1a8e49d2184e",
+          "payload_verified": 7,
+          "exit_code": 0
+        }
+      ],
+      "request_lists_observed_on_draw_frames": {
+        "prior": {
+          "attach_ms": 266.16,
+          "textures_disappeared_at_draw_ms": 203.404,
+          "frames_disappeared_at_draw_ms": 203.404,
+          "portraits_disappeared_at_draw_ms": 255.485
+        },
+        "terrain": {
+          "attach_ms": 308.763,
+          "textures_disappeared_at_draw_ms": 286.812,
+          "frames_disappeared_at_draw_ms": 286.812,
+          "portraits_disappeared_at_draw_ms": 305.997
+        }
+      }
+    }
+  },
+  "windows_old_save": {
+    "candidate_commit": "8ede7f8db1b2ccba0eaf6a1e3dbae96368dba0cc",
+    "candidate_exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+    "candidate_pck_sha256": "468358e7b7f5090890ca4f6f07bf461c74f75ca6e711b59aa06dbbbd83fec0f7",
+    "split_startup_identity": "34f727a00676e3277eb64ef6b944a9660816e2a30481f10555ca7e08fc680a35",
+    "baseline_build": 26752476,
+    "baseline_exe_sha256": "fae95050c553dfd691e3beebca3eef7dd1d7490dfebf6e99fa50d310456b91a6",
+    "driver_sha256": "fc4c0db6a9963e5d6ea825fba977baa3b91c7692a506628ea967b86f0f9a9d9f",
+    "scope": "Two generation-one slots and journals created by Build 26752476, one for Huangnigang and one for Gao. They represent both terrain height profiles. Their SHA-256 digests match the original published-build matrix. Independent rendered Windows processes use ordinary offline Continue and Save and Exit. Automation uses an isolated desktop and leaves the installed Steam profile alone.",
+    "chapters": [
+      {
+        "chapter": "level1",
+        "old_slot_sha256": "fa62db7ed6d71e77393306783e4d9437a4ec2001b7a350ed3e30ca225431d6ea",
+        "old_journal_sha256": "66424b58def9cf44e9f340d81a38a530763cb3382a3fc4c892a4583f11fa0918",
+        "resaved_slot_sha256": "aa6fcefcf35b973e3312263f03ed8c2f63818ffb5f867af489fe819c9b78b433",
+        "original_records_unchanged": true,
+        "stages": [
+          {
+            "phase": "resave",
+            "exit": 0,
+            "markers": [
+              "LEGACY_CONTINUED 1",
+              "LEGACY_RESAVED 2"
+            ],
+            "errors": [],
+            "log_sha256": "d880194799ae7eb0e1f919dbb40f694928a644131f6b2eeeef4ef9f6191e7828"
+          },
+          {
+            "phase": "reopen",
+            "exit": 0,
+            "markers": [
+              "LEGACY_CONTINUED 2"
+            ],
+            "errors": [],
+            "log_sha256": "4eedcbf1435f796f20263840f3e56be1234f508ea5a222cb7b192625bf4e0dda"
+          }
+        ]
+      },
+      {
+        "chapter": "level5",
+        "old_slot_sha256": "8bc3ca2cbd9f94ee996e5db8cf695516f0aa07b5bd8d187983e5e9a0ec2ee28c",
+        "old_journal_sha256": "336b922029f1fd96332219f0b057ef3046d83731727c0585312adce0324577e3",
+        "resaved_slot_sha256": "0d49856e5339c05e9eff97011ba09b8c111886ec0c8e111ca7f46db38c9d3b9d",
+        "original_records_unchanged": true,
+        "stages": [
+          {
+            "phase": "resave",
+            "exit": 0,
+            "markers": [
+              "LEGACY_CONTINUED 1",
+              "LEGACY_RESAVED 2"
+            ],
+            "errors": [],
+            "log_sha256": "d880194799ae7eb0e1f919dbb40f694928a644131f6b2eeeef4ef9f6191e7828"
+          },
+          {
+            "phase": "reopen",
+            "exit": 0,
+            "markers": [
+              "LEGACY_CONTINUED 2"
+            ],
+            "errors": [],
+            "log_sha256": "4eedcbf1435f796f20263840f3e56be1234f508ea5a222cb7b192625bf4e0dda"
+          }
+        ]
+      }
+    ],
+    "completed": true,
+    "processes": 4
+  },
+  "candidate_six_entry_smoke": {
+    "elapsed_seconds": 94.725208,
+    "entries": 15,
+    "route_visits": {
+      "arena:arena": 3,
+      "campaign:level1": 3,
+      "campaign:level5": 2,
+      "custom_defense:custom_defense": 2,
+      "skirmish:skirmish": 3,
+      "skirmish_ai:skirmish_ai": 2
+    },
+    "all_routes_started_active_and_released": true,
+    "progress_unchanged": true,
+    "report_sha256": "27383779fa135dd1edc770813a0774a01f1493c91b8f60c924dc70b556496213",
+    "log_sha256": "2e0bcb29933550db9f4cb1aaf56e54eb49b5ddefe57e7f9f97a3d27edd315c64"
+  },
+  "baseline_six_entry_soak": "windows_candidate_5b4b89ea_mode_soak_600.json"
+}

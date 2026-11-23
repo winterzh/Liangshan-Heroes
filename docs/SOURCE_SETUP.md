@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+现行 Windows 候选采用逐像素生成的地形贴图。批量生成 RF 高度图和 RGBA8 地表图的本机实验附有逐字节对照、原生进场复测和旧档兼容记录。 [地形与成品对照](../qa/battle_entry_timing_20261116/windows_terrain_images_8ede7f8d.json)
+
 祝家庄 PC 的偏门快捷命令使用原任务和移动凭证，关卡存档字段沿用现有格式。Godot 4.6.3 在 Windows 隔离档案运行 `--script res://qa/campaign_siege_20261116/side_dispatch_probe.gd` 可复验四语布局、重复点击、堵路、停止和真实抵达。成品另验证偏门命令的途中保存及独立继续。 [祝家庄验收收据](../qa/campaign_siege_20261116/windows_zhu_side_dispatch_5b4b89ea.json)
 
 地图寻路烘焙改为按行合并相同地形。使用 Godot 4.6.3 和隔离档案，把 STOCKADE_QA_OUTPUT 设为可写 JSON 路径，运行 --headless --script res://tools/stockade_navigation_qa.gd，可复验驻守门墙、水陆格与同尺寸地图重烘焙。 [寻路对照与入口短测](../qa/battle_entry_timing_20261116/windows_map_bake_row_spans_20261124.json)
