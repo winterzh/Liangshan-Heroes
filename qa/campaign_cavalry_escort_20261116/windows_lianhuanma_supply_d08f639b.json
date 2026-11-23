@@ -1,0 +1,553 @@
+{
+  "scope": "Two controlled source scenes and three private Windows process stages with real ordinary campaign menu/orders at four times the normal simulation speed. Offline automated evidence.",
+  "baseline": {
+    "source_commit": "05edcac75af64d0af706b0169a242745ad70fe06",
+    "log_sha256": "fa2285fb8f654b4ce018999c1d18ebf3bc9957235ee7e77dad541e08be3d08bb",
+    "facts": {
+      "north_alive": false,
+      "north_args": [
+        "北路",
+        0,
+        "未出击",
+        45
+      ],
+      "north_sent": false,
+      "north_text": "%s · 余 %d 骑 · %s · 断援使冲锋推迟 %d 秒",
+      "north_wave": 195.0,
+      "south_objective": "北路甲马已击溃。整编钩镰手迎击南路，也可先拆南路辎重营，延迟该路冲锋。",
+      "south_wave": 315.0
+    }
+  },
+  "source_fixture": {
+    "checks": 23,
+    "current_facts": [
+      {
+        "language": "zh_CN",
+        "north": "北路辎重已断，尚未出发的骑队推迟45秒。趁这段时间补充钩镰手，在北侧芦苇地布阵。教场演练仍可选。"
+      },
+      {
+        "language": "zh_TW",
+        "north": "北路輜重已斷，尚未出發的騎隊推遲45秒。趁這段時間補充鉤鐮手，在北側蘆葦地布陣。教場演練仍可選。"
+      },
+      {
+        "language": "en",
+        "north": "Northern supplies are cut. The unlaunched cavalry is delayed by 45 seconds. Train hook spearmen and form up in the north reeds. The drill is optional."
+      },
+      {
+        "language": "ja",
+        "north": "北路の補給が途絶え、未出撃の騎隊は45秒遅れます。この間に鉤鎌兵を補充し、北の葦原で布陣してください。教練は任意です。"
+      },
+      {
+        "cleared": "北路 · 原骑未出击即被歼灭 · 辎重营已毁",
+        "language": "zh_CN"
+      },
+      {
+        "cleared": "北路 · 原騎未出擊即被殲滅 · 輜重營已毀",
+        "language": "zh_TW"
+      },
+      {
+        "cleared": "North lane · Cavalry eliminated before launch · Supply camp destroyed",
+        "language": "en"
+      },
+      {
+        "cleared": "北路 · 甲騎は出撃前に全滅 · 輜重営を破壊",
+        "language": "ja"
+      }
+    ],
+    "log_sha256": "f60698f24a6d674fccbef8978264e53c0360d4281c541f78d27325c3c278dcf3"
+  },
+  "localization": {
+    "display_sources": 4886,
+    "missing": 0,
+    "errors": 0
+  },
+  "windows_live_raid": {
+    "revision": "d08f639b3a8ede5114021d0efc94cf8bfda83e12",
+    "exe_sha256": "7321545106b826535b33ca62782b15b37a7829b678031d702b31044320f04139",
+    "stages": [
+      {
+        "checks": 12,
+        "facts": {
+          "checkpoint": {
+            "battle_clock": 104.149999999999,
+            "enemy_paid_escorts": 2,
+            "escorts": [
+              [
+                "64",
+                "guan_dao",
+                85000,
+                1689372,
+                1318865,
+                2
+              ],
+              [
+                "70",
+                "guan_dao",
+                85000,
+                1673942,
+                1300482,
+                2
+              ]
+            ],
+            "gold": 67,
+            "hall": [
+              "1",
+              "hall",
+              1500000,
+              336000,
+              976000,
+              0
+            ],
+            "north_cut": true,
+            "objective": "北路辎重已断，尚未出发的骑队推迟45秒。趁这段时间补充钩镰手，在北侧芦苇地布阵。教场演练仍可选。",
+            "riders": [
+              [
+                "36",
+                "lian_huan_ma",
+                300000,
+                1680000,
+                592000,
+                0
+              ],
+              [
+                "37",
+                "lian_huan_ma",
+                300000,
+                1680000,
+                656000,
+                0
+              ],
+              [
+                "38",
+                "lian_huan_ma",
+                300000,
+                1680000,
+                720000,
+                0
+              ],
+              [
+                "39",
+                "lian_huan_ma",
+                300000,
+                1712000,
+                592000,
+                0
+              ],
+              [
+                "40",
+                "lian_huan_ma",
+                300000,
+                1712000,
+                656000,
+                0
+              ],
+              [
+                "41",
+                "lian_huan_ma",
+                300000,
+                1712000,
+                720000,
+                0
+              ],
+              [
+                "42",
+                "lian_huan_ma",
+                300000,
+                1690687,
+                1280592,
+                0
+              ],
+              [
+                "43",
+                "lian_huan_ma",
+                300000,
+                1680000,
+                1360000,
+                0
+              ],
+              [
+                "44",
+                "lian_huan_ma",
+                300000,
+                1680000,
+                1424000,
+                0
+              ],
+              [
+                "45",
+                "lian_huan_ma",
+                300000,
+                1713618,
+                1296660,
+                0
+              ],
+              [
+                "46",
+                "lian_huan_ma",
+                300000,
+                1712000,
+                1360000,
+                0
+              ],
+              [
+                "47",
+                "lian_huan_ma",
+                300000,
+                1712000,
+                1424000,
+                0
+              ]
+            ],
+            "south_cut": true,
+            "title": "扎营 · 准备迎击北路",
+            "wave0": {
+              "sent": false,
+              "time": 195.0,
+              "warned": false
+            },
+            "wave1": {
+              "sent": false,
+              "time": 315.0,
+              "warned": false
+            },
+            "wood": 311
+          },
+          "result_code": "",
+          "supply_observed": [
+            {
+              "escort_ids": [],
+              "lane": 0,
+              "live_riders": 6,
+              "rider_ids": [
+                36,
+                37,
+                38,
+                39,
+                40,
+                41,
+                42,
+                43,
+                44,
+                45,
+                46,
+                47
+              ],
+              "time": 54.6833333333344,
+              "wave_sent": false,
+              "wave_time": 195.0
+            },
+            {
+              "escort_ids": [
+                64,
+                70
+              ],
+              "lane": 1,
+              "live_riders": 6,
+              "rider_ids": [
+                36,
+                37,
+                38,
+                39,
+                40,
+                41,
+                42,
+                43,
+                44,
+                45,
+                46,
+                47
+              ],
+              "time": 102.883333333333,
+              "wave_sent": false,
+              "wave_time": 315.0
+            }
+          ]
+        },
+        "failures": [],
+        "stage": "save",
+        "log_sha256": "fed8cbd49cf344b077cbea27df4d877dcb3de6007284a75f72b8ac966a8f0a1a",
+        "exit_code": 0,
+        "errors": [],
+        "checks_passed": [
+          "normal offline Windows entry stays disconnected from Steam",
+          "normal saved battle admission",
+          "verified exact Windows executable",
+          "Start Campaign exists in the real menu",
+          "real Lianhuanma sortie button is available",
+          "normal early raids dismantle both active camps and delay both original living waves",
+          "the actual briefing takes over after the normal north supply attack",
+          "each observed cut preserves that lane’s six original riders",
+          "visible SaveAndExit button",
+          "normal pause menu commits the saved battle",
+          "the slot contains the exact campaign context",
+          "independent restart handoff written"
+        ]
+      },
+      {
+        "checks": 25,
+        "facts": {
+          "actual_game_seconds": 442.683333333313,
+          "debrief": {
+            "en": [
+              "North lane · 0 riders left · Deployed · Cutting supplies delayed the charge by 45 s",
+              "South lane · 0 riders left · Deployed · Cutting supplies delayed the charge by 45 s"
+            ],
+            "ja": [
+              "北路 · 残り0騎 · 出撃済み · 補給遮断で突撃が45秒遅延",
+              "南路 · 残り0騎 · 出撃済み · 補給遮断で突撃が45秒遅延"
+            ],
+            "zh_CN": [
+              "北路 · 余 0 骑 · 已出击 · 断援使冲锋推迟 45 秒",
+              "南路 · 余 0 骑 · 已出击 · 断援使冲锋推迟 45 秒"
+            ],
+            "zh_TW": [
+              "北路 · 餘 0 騎 · 已出擊 · 斷援使衝鋒推遲 45 秒",
+              "南路 · 餘 0 騎 · 已出擊 · 斷援使衝鋒推遲 45 秒"
+            ]
+          },
+          "live": {
+            "ai_trained": 2,
+            "buildings_started": 6,
+            "camp_hp": 1500.0,
+            "enemy_base_hp": 0,
+            "events": [
+              "lhm_supply_0",
+              "lhm_supply_1",
+              "lhm_break_1",
+              "lhm_break_2",
+              "lhm_break_3",
+              "lhm_break_4",
+              "lhm_break_5",
+              "lhm_break_6",
+              "lhm_break_7",
+              "lhm_break_8",
+              "lhm_break_9",
+              "lhm_break_10",
+              "lhm_break_11",
+              "lhm_break_12",
+              "lhm_all_hook_broken",
+              "lhm_manor_fallen",
+              "lhm_hu_fled",
+              "lhm_victory"
+            ],
+            "flank_stage": 2,
+            "game_seconds": 332.5,
+            "han_hp": 720.0,
+            "hook_broken": 12,
+            "hu_hp": 1200.0624,
+            "orders": 86,
+            "result": {
+              "contract_version": 2,
+              "core_cleared": true,
+              "core_goal": "守住梁山中军，击溃十二骑连环马并摧毁官军大营。宋江与中军必须存活。",
+              "done_ids": [
+                "lhm_hooks",
+                "lhm_hu"
+              ],
+              "goals": [
+                {
+                  "id": "lhm_training",
+                  "label": "教场诱骑撤步，徐宁与钩镰手协同下钩",
+                  "note": "",
+                  "reason": "本局未完成",
+                  "state": "missed"
+                },
+                {
+                  "id": "lhm_hooks",
+                  "label": "十二骑均先由钩镰枪破阵",
+                  "note": "",
+                  "reason": "",
+                  "state": "done"
+                },
+                {
+                  "id": "lhm_han",
+                  "label": "生擒韩滔",
+                  "note": "",
+                  "reason": "本局未完成",
+                  "state": "missed"
+                },
+                {
+                  "id": "lhm_hu",
+                  "label": "呼延灼败走青州",
+                  "note": "",
+                  "reason": "",
+                  "state": "done"
+                }
+              ],
+              "missed_ids": [
+                "lhm_training",
+                "lhm_han"
+              ],
+              "pending_ids": [],
+              "story_complete": false,
+              "story_done": 2,
+              "story_total": 4
+            },
+            "riders_defeated": 12,
+            "siege_choice": "siege_cata",
+            "skill_orders": 14,
+            "song_hp": 280.0,
+            "strategy": "raid then regroup; artillery uses south to east flank",
+            "units_queued": 38,
+            "units_queued_by_key": {
+              "gou_lian": 11,
+              "hua_rong": 1,
+              "liang_dao": 3,
+              "liang_gong": 7,
+              "liang_qiang": 5,
+              "lin_chong": 1,
+              "lou_luo": 8,
+              "siege_cata": 2
+            }
+          },
+          "original_riders": [
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47
+          ],
+          "progress_sha": "eca9d3f5b26129a43fae55b2a01a5eaeeaa0fedea8e63b428408fb8fbcc9dc66",
+          "result_code": "",
+          "retreat_and_follow": [
+            {
+              "escort_ids": [],
+              "lane": 0,
+              "phase": "muster",
+              "time": 104.149999999999
+            },
+            {
+              "escort_ids": [
+                64,
+                70
+              ],
+              "lane": 1,
+              "phase": "muster",
+              "time": 104.149999999999
+            },
+            {
+              "escort_ids": [],
+              "lane": 0,
+              "phase": "follow",
+              "time": 195.616666666661
+            },
+            {
+              "escort_ids": [],
+              "lane": 0,
+              "phase": "retreat",
+              "time": 209.083333333327
+            },
+            {
+              "escort_ids": [
+                64,
+                70
+              ],
+              "lane": 1,
+              "phase": "follow",
+              "time": 315.549999999987
+            },
+            {
+              "escort_ids": [
+                64,
+                70
+              ],
+              "lane": 1,
+              "phase": "retreat",
+              "time": 328.28333333332
+            }
+          ],
+          "rider_deaths": [
+            38,
+            36,
+            37,
+            39,
+            41,
+            40,
+            43,
+            42,
+            46,
+            44,
+            45,
+            47
+          ]
+        },
+        "failures": [],
+        "stage": "resume",
+        "log_sha256": "e362ecdcb12e051a3f8a07e38fe070c92d79f44687ac645274a94b3de73b8116",
+        "exit_code": 0,
+        "errors": [],
+        "checks_passed": [
+          "normal offline Windows entry stays disconnected from Steam",
+          "normal saved battle admission",
+          "verified exact Windows executable",
+          "restart sees the exact saved slot bytes",
+          "visible ContinueBattle button",
+          "normal Continue mounts the saved cavalry battle",
+          "restored battle stays paused",
+          "original battle clock survives",
+          "original formations, post losses, timers, economy and objective survive",
+          "visible objective is restored without asking to cut the same supply twice",
+          "reading preserves the original slot bytes",
+          "raid route wins through real economy and combat",
+          "raid route uses building and paid recruitment",
+          "raid keeps original camp alive across phases",
+          "raid clears finite riders and enemy headquarters",
+          "raid army performs actual hook counterplay",
+          "raiding stops both escort sources",
+          "no destroyed supply post produces a later escort",
+          "original twelve riders each die once; supply destruction never replaces them",
+          "both actual raids delay unsent cavalry by forty-five seconds",
+          "zh_CN rendered victory report shows both actual launched delayed waves",
+          "zh_TW rendered victory report shows both actual launched delayed waves",
+          "en rendered victory report shows both actual launched delayed waves",
+          "ja rendered victory report shows both actual launched delayed waves",
+          "natural victory settles into local campaign progress"
+        ]
+      },
+      {
+        "checks": 7,
+        "facts": {
+          "progress_sha": "eca9d3f5b26129a43fae55b2a01a5eaeeaa0fedea8e63b428408fb8fbcc9dc66",
+          "terminal_code": "LOCAL_RUN_TERMINAL"
+        },
+        "failures": [],
+        "stage": "reject",
+        "log_sha256": "655b98ca86d89968d8b9c31679d4fae2a089b4fd6cb16de7e4b7e99f671207d2",
+        "exit_code": 0,
+        "errors": [],
+        "checks_passed": [
+          "normal offline Windows entry stays disconnected from Steam",
+          "normal saved battle admission",
+          "verified exact Windows executable",
+          "visible ContinueBattle button",
+          "player menu rejects the settled slot",
+          "original slot bytes are unchanged",
+          "visible CloseError button"
+        ]
+      }
+    ],
+    "checks": 44,
+    "disk_verification": {
+      "slot_generations": [
+        1
+      ],
+      "settlement_generations": [
+        1,
+        2,
+        3
+      ],
+      "single_persisted_local_settlement": true
+    }
+  },
+  "automation_corrections": [
+    "The detector stores living riders per lane (six); the saved battle separately verifies all twelve.",
+    "Replay copied the original saved-slot and active journal generation byte for byte. The harness normalizes deserialized escort IDs to integers before comparing live IDs."
+  ]
+}
