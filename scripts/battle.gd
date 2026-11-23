@@ -449,6 +449,13 @@ func _ready() -> void:
 		return
 	if _gameplay_rng == null:
 		var identity := _gameplay_content_identity
+		# A restart or chapter advance enters without the menu's prepared identity.
+		if identity.is_empty() and OS.get_name() == "Windows" and not OS.has_feature("editor"):
+			var flow := get_node_or_null("/root/ContinueFlow")
+			if flow != null:
+				var prepared: Dictionary = flow.revalidate_startup_identity()
+				if prepared.get("ok", false):
+					identity = prepared
 		if identity.is_empty():
 			identity = {"ok": false, "save_eligible": false, "code": "PROVIDER_UNAVAILABLE"}
 			if ResourceLoader.exists("res://scripts/run_content_identity.gd"):
