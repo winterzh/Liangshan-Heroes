@@ -346,6 +346,7 @@ func _sync_shop_controls(b) -> void:
 	if b.mission.objective != prompt:
 		b.mission.set_objective(prompt)
 	if changed:
+		# Reveal the lower of the two nearby controls so both are visible in a short window.
 		b.mission.reveal_primary_level_button()
 
 func _has_shop_order(b, actor: Unit, action_id: String) -> bool:
