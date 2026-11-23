@@ -1,0 +1,621 @@
+{
+  "scope": "Isolated real Windows Compatibility rendering at 960x540, using the offline player menu and native input messages. Stale-slot cases deliberately append valid test generations; classic defense uses normal wave zero, with a paid worker queue.",
+  "build": {
+    "kind": "local_integrated_windows_candidate",
+    "commit": "cf1735965c77bc5ef8429886b26a51b3f931883a",
+    "source_version": "source-v1:e20d2a4e152cdf7eb15db17d8c575bb993a96354628764c388a4b86e9b70a159",
+    "tracked_runtime_count": 6574,
+    "steps": [
+      {
+        "stage": "import",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 72.41
+      },
+      {
+        "stage": "export",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 99.25
+      }
+    ],
+    "files": [
+      {
+        "path": "GODOTSTEAM_LICENSE.txt",
+        "bytes": 1110,
+        "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+      },
+      {
+        "path": "LiangshanHeroes.exe",
+        "bytes": 1827555160,
+        "sha256": "90c7ae3ab5a823b861a146f24ddf13ed961170f350d1db0d24cebb17bb92193a"
+      },
+      {
+        "path": "libgodotsteam.windows.template_release.x86_64.dll",
+        "bytes": 3961344,
+        "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+      },
+      {
+        "path": "steam_api64.dll",
+        "bytes": 319128,
+        "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+      },
+      {
+        "path": "steam_stats_reader.dll",
+        "bytes": 381440,
+        "sha256": "7505919cfff5907c13a02eb366690bff22ca6731c8521deefde58b114e4f796f"
+      },
+      {
+        "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+        "bytes": 1093,
+        "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+      }
+    ]
+  },
+  "published_origin": {
+    "steam_build": 26752476,
+    "exe_sha256": "fae95050c553dfd691e3beebca3eef7dd1d7490dfebf6e99fa50d310456b91a6",
+    "slot_sha256": "521690ebc8f9a198fe447cd66d012c30368d35a761f7530a37e6c4aba46acf6a"
+  },
+  "previous_confirmed_save": {
+    "source_commit_prefix": "42f13534",
+    "exe_sha256": "8c0ea2f72275652804fd15a05b8de80983335059c68e8c9d656c723f9ea02879",
+    "original_input_messages": [
+      "left",
+      "escape",
+      "left",
+      "left",
+      "left",
+      "stop",
+      "left",
+      "escape",
+      "left",
+      "left"
+    ],
+    "confirmation_check": "native click confirms replacing the active checkpoint"
+  },
+  "candidate": {
+    "orders": {
+      "candidate": "cf173596",
+      "stage": "orders",
+      "exe_sha256": "90c7ae3ab5a823b861a146f24ddf13ed961170f350d1db0d24cebb17bb92193a",
+      "exe_unchanged": true,
+      "exit": 0,
+      "windows_button_messages": [
+        "left",
+        "escape",
+        "left",
+        "left",
+        "left",
+        "stop",
+        "left",
+        "escape",
+        "left"
+      ],
+      "log_sha256": "a1f523f8460d30324505ae605a6b6b43a886b651aef76974b357241b3d771056",
+      "errors": [],
+      "checks": [
+        "original Steam service initialized with its connection disabled in the isolated process",
+        "normal main menu scene mounts",
+        "native menu becomes ready",
+        "official offline player entry enabled without a private QA seam",
+        "independent process reads the same disk checkpoint",
+        "the normal Continue action enables",
+        "native click continues the saved escort",
+        "official offline player restore succeeds",
+        "restores same people, position, health and in-flight orders",
+        "reading does not rewrite the saved bytes or replace the run",
+        "the previous save has the expected presentation version",
+        "native Escape resumes the original escort",
+        "shortcuts appear in the resumed normal fight",
+        "native click opens task details",
+        "both buttons are fully visible in the default 960x540 task layout",
+        "live shortcut localization zh_CN",
+        "live shortcut localization zh_TW",
+        "live shortcut localization en",
+        "live shortcut localization ja",
+        "the whole party waits for a decision and Lin Chong need not be selected",
+        "one native click gives the rest order and selects Lin Chong",
+        "original four start walking together, with no extra selection or flag click or immediate rest credit",
+        "pressing the same action during travel does not replace the order",
+        "native stop cancels travel for all four",
+        "another explicit click restarts the cancelled order",
+        "native Escape pauses the escort",
+        "same verified checkpoint saves directly from a single native click",
+        "native click on Save and Exit",
+        "pause menu commits the escort checkpoint",
+        "saved checkpoint retains original published-build identity"
+      ],
+      "facts": {
+        "checkpoint": {
+          "active_action": "",
+          "party": [
+            {
+              "hp": 540.0,
+              "id": 4,
+              "key": "lu_zhishen",
+              "path": [
+                [
+                  488.0,
+                  656.0
+                ]
+              ],
+              "position": [
+                940.336303710938,
+                607.382568359375
+              ],
+              "serial": 55,
+              "token": 5
+            },
+            {
+              "hp": 280.708333333333,
+              "id": 6,
+              "key": "lin_chong",
+              "path": [
+                [
+                  528.0,
+                  656.0
+                ]
+              ],
+              "position": [
+                937.5927734375,
+                656.0
+              ],
+              "serial": 5,
+              "token": 5
+            },
+            {
+              "hp": 150.0,
+              "id": 2,
+              "key": "dong_chao",
+              "path": [
+                [
+                  546.0,
+                  688.0
+                ]
+              ],
+              "position": [
+                846.17041015625,
+                624.3876953125
+              ],
+              "serial": 6,
+              "token": 5
+            },
+            {
+              "hp": 150.0,
+              "id": 3,
+              "key": "xue_ba",
+              "path": [
+                [
+                  546.0,
+                  624.0
+                ]
+              ],
+              "position": [
+                910.1298828125,
+                624.0
+              ],
+              "serial": 6,
+              "token": 5
+            }
+          ],
+          "rest": false,
+          "route": "north_pines",
+          "seconds": 19.2333333333335,
+          "stage": "escort",
+          "target": "(528.0, 656.0)",
+          "token": 5
+        },
+        "party_before_save": [
+          4,
+          6,
+          2,
+          3
+        ],
+        "revision": 2,
+        "save_code": "",
+        "slot_sha256": "7a714913c17ed9e8053f6a337475357a56c1d5ad80a8578f39430c1d6d242977",
+        "win32_left_observed": 6,
+        "win32_right_observed": 0,
+        "window_pixels": [
+          960,
+          540
+        ]
+      },
+      "failures": []
+    },
+    "finish": {
+      "candidate": "cf173596",
+      "stage": "finish",
+      "exe_sha256": "90c7ae3ab5a823b861a146f24ddf13ed961170f350d1db0d24cebb17bb92193a",
+      "exe_unchanged": true,
+      "exit": 0,
+      "windows_button_messages": [
+        "left",
+        "escape",
+        "left"
+      ],
+      "log_sha256": "a1f523f8460d30324505ae605a6b6b43a886b651aef76974b357241b3d771056",
+      "errors": [],
+      "checks": [
+        "original Steam service initialized with its connection disabled in the isolated process",
+        "normal main menu scene mounts",
+        "native menu becomes ready",
+        "official offline player entry enabled without a private QA seam",
+        "independent process reads the same disk checkpoint",
+        "the normal Continue action enables",
+        "native click continues the saved escort",
+        "official offline player restore succeeds",
+        "restores same people, position, health and in-flight orders",
+        "reading does not rewrite the saved bytes or replace the run",
+        "the previous save has the expected presentation version",
+        "native Escape resumes the original escort",
+        "shortcuts appear in the resumed normal fight",
+        "both buttons are fully visible in the default 960x540 task layout",
+        "resumed rest order brings the four original travelers to the rest stop without a repeated order",
+        "completed rest command is disabled",
+        "one native exit click issues travel without clearing the chapter immediately",
+        "actual exit and local campaign journal complete",
+        "same living travelers actually exit, with the expected optional rest story goal",
+        "victory closes the same local run and preserves source slot bytes"
+      ],
+      "facts": {
+        "game_seconds": 47.3333333333319,
+        "native_exit_clicks": 1,
+        "rest_visited": true,
+        "story_done": 3,
+        "win32_left_observed": 2,
+        "win32_right_observed": 0,
+        "window_pixels": [
+          960,
+          540
+        ]
+      },
+      "failures": []
+    },
+    "reject": {
+      "candidate": "cf173596",
+      "stage": "reject",
+      "exe_sha256": "90c7ae3ab5a823b861a146f24ddf13ed961170f350d1db0d24cebb17bb92193a",
+      "exe_unchanged": true,
+      "exit": 0,
+      "windows_button_messages": [
+        "left",
+        "left"
+      ],
+      "log_sha256": "a1f523f8460d30324505ae605a6b6b43a886b651aef76974b357241b3d771056",
+      "errors": [],
+      "checks": [
+        "original Steam service initialized with its connection disabled in the isolated process",
+        "normal main menu scene mounts",
+        "native menu becomes ready",
+        "official offline player entry enabled without a private QA seam",
+        "new process independently opens the winning profile",
+        "actual Continue interaction available for the saved slot",
+        "Win32 click tests the finished slot",
+        "terminal slot is explicitly rejected",
+        "the finished battle is never mounted again",
+        "player can dismiss the terminal-slot message",
+        "successful progress and original slot are byte-identical after rejection"
+      ],
+      "facts": {
+        "campaign_no_duplicate_credit": true,
+        "progress_sha256": "446f6454851a7afc837a764ba66feb5da4ff157d8d6720d11d0b01b3ddfdbabd",
+        "rejection": "LOCAL_RUN_TERMINAL",
+        "slot_sha256": "7a714913c17ed9e8053f6a337475357a56c1d5ad80a8578f39430c1d6d242977",
+        "win32_left_observed": 2,
+        "win32_right_observed": 0,
+        "window_pixels": [
+          960,
+          540
+        ]
+      },
+      "failures": []
+    },
+    "fresh": {
+      "candidate": "cf173596",
+      "stage": "fresh",
+      "exe_sha256": "90c7ae3ab5a823b861a146f24ddf13ed961170f350d1db0d24cebb17bb92193a",
+      "exe_unchanged": true,
+      "exit": 0,
+      "windows_button_messages": [
+        "left",
+        "left",
+        "left",
+        "left",
+        "escape",
+        "left",
+        "left"
+      ],
+      "log_sha256": "a1f523f8460d30324505ae605a6b6b43a886b651aef76974b357241b3d771056",
+      "errors": [],
+      "checks": [
+        "original Steam service initialized with its connection disabled in the isolated process",
+        "normal main menu scene mounts",
+        "native menu becomes ready",
+        "official offline player entry enabled without a private QA seam",
+        "existing Wild Boar Forest checkpoint is present",
+        "new session starts the same chapter through the ordinary menu",
+        "native click advances an original prologue page",
+        "native click advances an original prologue page",
+        "native click advances an original prologue page",
+        "native click starts the new battle",
+        "same chapter is a fresh run",
+        "new battle pauses by Escape",
+        "new run requires confirmation before replacing any saved bytes",
+        "cancel is focused",
+        "cancel preserves current battle, pause and original slot"
+      ],
+      "facts": {
+        "slot_sha256": "521690ebc8f9a198fe447cd66d012c30368d35a761f7530a37e6c4aba46acf6a",
+        "win32_left_observed": 6,
+        "win32_right_observed": 0,
+        "window_pixels": [
+          960,
+          540
+        ]
+      },
+      "failures": []
+    },
+    "stale": {
+      "candidate": "cf173596",
+      "stage": "stale",
+      "exe_sha256": "90c7ae3ab5a823b861a146f24ddf13ed961170f350d1db0d24cebb17bb92193a",
+      "exe_unchanged": true,
+      "exit": 0,
+      "windows_button_messages": [
+        "left",
+        "left",
+        "left",
+        "left"
+      ],
+      "log_sha256": "a1f523f8460d30324505ae605a6b6b43a886b651aef76974b357241b3d771056",
+      "errors": [],
+      "checks": [
+        "original Steam service initialized with its connection disabled in the isolated process",
+        "normal main menu scene mounts",
+        "native menu becomes ready",
+        "official offline player entry enabled without a private QA seam",
+        "independent process reads the same disk checkpoint",
+        "the normal Continue action enables",
+        "native click continues the saved escort",
+        "official offline player restore succeeds",
+        "restores same people, position, health and in-flight orders",
+        "reading does not rewrite the saved bytes or replace the run",
+        "valid fixture advances the disk checkpoint before opening save",
+        "same battle with a changed checkpoint still asks for confirmation",
+        "native click uses the normal save command",
+        "save reaches the normal guarded storage result",
+        "the newer valid on-disk checkpoint remains byte-identical",
+        "save refuses stale authorization and keeps the original battle paused",
+        "capture releases cleanly and the game stays open",
+        "the player can close the error and return to pause"
+      ],
+      "facts": {
+        "preserved_generation": 3,
+        "preserved_head_sha256": "f513d5648fe612bee26a8c2eeded25c1aa78671e48ff8c977b9ced50ac6cbcfd",
+        "result_code": "SLOT_CHANGED",
+        "win32_left_observed": 4,
+        "win32_right_observed": 0,
+        "window_pixels": [
+          960,
+          540
+        ]
+      },
+      "failures": []
+    },
+    "race": {
+      "candidate": "cf173596",
+      "stage": "race",
+      "exe_sha256": "90c7ae3ab5a823b861a146f24ddf13ed961170f350d1db0d24cebb17bb92193a",
+      "exe_unchanged": true,
+      "exit": 0,
+      "windows_button_messages": [
+        "left",
+        "left",
+        "left"
+      ],
+      "log_sha256": "a1f523f8460d30324505ae605a6b6b43a886b651aef76974b357241b3d771056",
+      "errors": [],
+      "checks": [
+        "original Steam service initialized with its connection disabled in the isolated process",
+        "normal main menu scene mounts",
+        "native menu becomes ready",
+        "official offline player entry enabled without a private QA seam",
+        "independent process reads the same disk checkpoint",
+        "the normal Continue action enables",
+        "native click continues the saved escort",
+        "official offline player restore succeeds",
+        "restores same people, position, health and in-flight orders",
+        "reading does not rewrite the saved bytes or replace the run",
+        "unchanged resumed checkpoint skips the confirm dialog",
+        "second journal writer runs after save request and before capture completes",
+        "native click uses the normal save command",
+        "save reaches the normal guarded storage result",
+        "the newer valid on-disk checkpoint remains byte-identical",
+        "save refuses stale authorization and keeps the original battle paused",
+        "capture releases cleanly and the game stays open",
+        "the player can close the error and return to pause"
+      ],
+      "facts": {
+        "preserved_generation": 2,
+        "preserved_head_sha256": "f7c9f4587b0a756e9d8834b08a1784fe5c7dc72999d4d67a3dddf013005a1c7e",
+        "result_code": "SLOT_CHANGED",
+        "win32_left_observed": 3,
+        "win32_right_observed": 0,
+        "window_pixels": [
+          960,
+          540
+        ]
+      },
+      "failures": []
+    },
+    "classic_save": {
+      "candidate": "cf173596",
+      "stage": "classic_save",
+      "exe_sha256": "90c7ae3ab5a823b861a146f24ddf13ed961170f350d1db0d24cebb17bb92193a",
+      "exe_unchanged": true,
+      "exit": 0,
+      "windows_button_messages": [
+        "left",
+        "left",
+        "left",
+        "left",
+        "escape",
+        "left"
+      ],
+      "log_sha256": "a1f523f8460d30324505ae605a6b6b43a886b651aef76974b357241b3d771056",
+      "errors": [],
+      "checks": [
+        "original Steam service initialized with its connection disabled in the isolated process",
+        "normal main menu scene mounts",
+        "native menu becomes ready",
+        "official offline player entry enabled without a private QA seam",
+        "empty profile opens the actual defense menu",
+        "native click chooses standard 30-wave defense",
+        "normal defense battle mounts",
+        "native click advances an original defense prologue page",
+        "native click advances an original defense prologue page",
+        "ordinary starting economy at normal classic difficulty",
+        "normal production queues a paid worker order",
+        "ordinary pause controls show",
+        "classic checkpoint enters saving without a second click",
+        "native click uses Save and Exit",
+        "classic save commits",
+        "slot stores the exact installed classic mode and expected generation"
+      ],
+      "facts": {
+        "classic": {
+          "gold": 230,
+          "next_id": 28,
+          "queue": [
+            "lou_luo"
+          ],
+          "timer": 119.966666666667,
+          "wave": 0,
+          "wood": 150
+        },
+        "revision": 1,
+        "slot_sha256": "a66fedb2d4e6d4b64a2bbb4d919d2a94ae954bd2413b41d79895e545b0ff9937",
+        "win32_left_observed": 5,
+        "win32_right_observed": 0,
+        "window_pixels": [
+          960,
+          540
+        ]
+      },
+      "failures": []
+    },
+    "classic_resave": {
+      "candidate": "cf173596",
+      "stage": "classic_resave",
+      "exe_sha256": "90c7ae3ab5a823b861a146f24ddf13ed961170f350d1db0d24cebb17bb92193a",
+      "exe_unchanged": true,
+      "exit": 0,
+      "windows_button_messages": [
+        "left",
+        "left"
+      ],
+      "log_sha256": "a1f523f8460d30324505ae605a6b6b43a886b651aef76974b357241b3d771056",
+      "errors": [],
+      "checks": [
+        "original Steam service initialized with its connection disabled in the isolated process",
+        "normal main menu scene mounts",
+        "native menu becomes ready",
+        "official offline player entry enabled without a private QA seam",
+        "independent process opens the original classic defense slot",
+        "native click resumes classic defense",
+        "official classic defense resume returns success",
+        "restores the same wave, countdown, resources and paid queue",
+        "classic resume leaves original slot bytes intact",
+        "classic checkpoint enters saving without a second click",
+        "native click uses Save and Exit",
+        "classic save commits",
+        "slot stores the exact installed classic mode and expected generation",
+        "new classic generation advances the original run"
+      ],
+      "facts": {
+        "classic": {
+          "gold": 230,
+          "next_id": 28,
+          "queue": [
+            "lou_luo"
+          ],
+          "timer": 119.966666666667,
+          "wave": 0,
+          "wood": 150
+        },
+        "revision": 2,
+        "slot_sha256": "5c067742e832a202459f95644d486b6993bbdfc8612b649ef5bdf5bafee645f4",
+        "win32_left_observed": 2,
+        "win32_right_observed": 0,
+        "window_pixels": [
+          960,
+          540
+        ]
+      },
+      "failures": []
+    }
+  },
+  "checks_passed": 142,
+  "local_playtest_package": {
+    "platform": "windows",
+    "kind": "local_playtest_candidate",
+    "source_commit": "cf1735965c77bc5ef8429886b26a51b3f931883a",
+    "source_version": "source-v1:e20d2a4e152cdf7eb15db17d8c575bb993a96354628764c388a4b86e9b70a159",
+    "archive": {
+      "name": "LiangshanHeroes_PC_Playtest_cf173596.zip",
+      "bytes": 1758382479,
+      "sha256": "fa3662c25ab990fd2cd0a2f1d8603e054e5f568287b02bd9dbb113c2204e3007",
+      "members_verified": 8
+    },
+    "runtime_files": [
+      {
+        "path": "GODOTSTEAM_LICENSE.txt",
+        "bytes": 1110,
+        "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+      },
+      {
+        "path": "LiangshanHeroes.exe",
+        "bytes": 1827555160,
+        "sha256": "90c7ae3ab5a823b861a146f24ddf13ed961170f350d1db0d24cebb17bb92193a"
+      },
+      {
+        "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+        "bytes": 1093,
+        "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+      },
+      {
+        "path": "libgodotsteam.windows.template_release.x86_64.dll",
+        "bytes": 3961344,
+        "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+      },
+      {
+        "path": "steam_api64.dll",
+        "bytes": 319128,
+        "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+      },
+      {
+        "path": "steam_stats_reader.dll",
+        "bytes": 381440,
+        "sha256": "7505919cfff5907c13a02eb366690bff22ca6731c8521deefde58b114e4f796f"
+      }
+    ],
+    "launcher": {
+      "name": "Start Local Playtest.cmd",
+      "sha256": "be3d44a78fd55fc2e19cb6a83b59821195054e370ceaa62149f0a859b35dd8aa",
+      "argument": "--offline-playtest",
+      "profiles": [
+        "P01",
+        "P02",
+        "P03"
+      ],
+      "clean_archive_boot": {
+        "mode": "headless",
+        "exit": 0,
+        "errors": [],
+        "log_sha256": "a9912b85473f126d3f4f63ec824170c828df3473a292f866dde86cafda5b66da"
+      }
+    }
+  }
+}

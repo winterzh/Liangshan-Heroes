@@ -2,7 +2,7 @@
 
 野猪林 PC 护送可从任务栏直接下令。正式版救人后存档的继续、行军中再保存与重启已按 Windows 原生入口验证。真人首玩仍分别观察歇脚选择、停止及完成条件是否看得懂。 [Windows 验收收据](../qa/campaign_escort_arrival_20261116/windows_escort_shortcuts_42f13534.json)
 
-同局续玩后再次保存会显示覆盖确认。后续核对同局更新与覆盖另一局的区别，并复验当前存档变化时的保护。 [Windows 验收收据](../qa/campaign_escort_arrival_20261116/windows_escort_shortcuts_42f13534.json)
+续玩当前存档后，若本机读入的同一份存档仍原样存在，点一次「保存并退出游戏」即可。新开一局或本机存档已被更新时，继续使用覆盖确认。 [Windows 验收收据](../qa/battle_entry_timing_20261116/windows_same_checkpoint_resave_cf173596.json)
 
 黄泥冈复用 Windows 地面图集后，重进道具及小景初始化中位数由 26.97 ms 降至 2.44 ms。首次出征仍按需读取纹理。六入口十分钟验收通过，偶发长帧继续跨模式跟踪。 [Windows 验收收据](../qa/battle_entry_timing_20261116/windows_ground_overlay_atlas_a8ba93b8.json)
 

@@ -1,5 +1,7 @@
 # 八幕战役后续开发路线图
 
+PC 战役续玩后更新同一份存档可直接保存退出。新开战斗或本机存档已发生变化时继续显示覆盖确认。 [Windows 验收收据](../qa/battle_entry_timing_20261116/windows_same_checkpoint_resave_cf173596.json)
+
 野猪林 PC 任务栏把歇脚和出林各缩为一次明确下令，点击后选中林冲，途中可随时停止或改道。在 Windows 候选 `42f13534`，正式版救人后的旧档可使用新入口，途中再存重启保留原路径。 [Windows 验收收据](../qa/campaign_escort_arrival_20261116/windows_escort_shortcuts_42f13534.json)
 
 Windows 候选 `a8ba93b8` 复用黄泥冈小景的共用地面图集。五次重进的点击到首帧中位数由 250.98 ms 降至 230.45 ms。新包完成 603.7 秒六入口混跑及 96 次进出，内存回收与帧时达标。首次出征和 Steam 前台仍按各自验收条件跟踪。 [Windows 验收收据](../qa/battle_entry_timing_20261116/windows_ground_overlay_atlas_a8ba93b8.json)

@@ -1,6 +1,6 @@
 # 项目目录索引（2026-10-30）
 
-当前 Windows 离线试玩包位于 D:/AI项目/水浒/Windows候选/20261123-42f13534/。单个 ZIP 含发行文件、启动器和说明，同目录的「PC试玩」可直接启动。 [Windows 验收收据](../qa/campaign_escort_arrival_20261116/windows_escort_shortcuts_42f13534.json)
+当前 Windows 离线试玩包位于 D:/AI项目/水浒/Windows候选/20261123-cf173596/。单个 ZIP 含发行文件、启动器和说明，同目录的「PC试玩」可直接启动。 [Windows 验收收据](../qa/battle_entry_timing_20261116/windows_same_checkpoint_resave_cf173596.json)
 
 大名府操作专项的 Windows 离线试玩包位于 D:/AI项目/水浒/Windows候选/20261123-5256f8d3/。单个 ZIP 含发行文件、启动器和试玩说明，同目录的「PC试玩」可直接启动。 [Windows 大名府验收](../qa/campaign_wounded_selection_20261116/windows_daming_evacuation_5256f8d3.json)
 
