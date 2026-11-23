@@ -11,6 +11,7 @@ const MAIN_TOWER := Vector2i(17, 30)
 const GATE_DEFENDER_POSTS := [Vector2i(15, 26), Vector2i(15, 30), Vector2i(16, 28)]
 const INSIDE_ACTION := "zhu_rts_inside"
 const SEND_SUN_BUTTON := "zhu_send_sun_li"
+const VIEW_SIDE_BUTTON := "zhu_view_side_gate"
 const FEINT_RULE := "zhu_feint_rule"
 const FEINT_HAPPENED := "zhu_feint_happened"
 const FEINT_AT_SIDE := "zhu_feint_at_side"
@@ -473,20 +474,34 @@ func _inside_action_available(b, action: Dictionary) -> bool:
 		and _alive(side_gate) and b.mission._valid_action_actor(sun, action)
 
 
+func _side_gate_is_open(b) -> bool:
+	return inside_open or b.mission.has_event("zhu_side_breached")
+
+
+func _sun_ordered_to_side_gate(b) -> bool:
+	return (sun.mission_order_active or sun.mission_order_arrival_t > 0.0) \
+		and b.mission._nearest_clicked_action(sun.mission_order_target) == INSIDE_ACTION
+
+
 func _update_inside_shortcut(b) -> void:
-	if not sent_sun or b.hud.touch_ui:
+	var opened := _side_gate_is_open(b)
+	if b.hud.touch_ui or (not sent_sun and not opened):
 		return
 	var action: Dictionary = b.mission.actions.get(INSIDE_ACTION, {})
 	var button: Button = b.mission.find_level_button(SEND_SUN_BUTTON)
-	if not _inside_action_available(b, action):
+	if opened or not _inside_action_available(b, action):
 		if button != null:
 			button.get_parent().remove_child(button)
 			button.queue_free()
-		return
-	if button == null:
+	elif button == null:
 		button = b.mission.add_level_button(SEND_SUN_BUTTON, "派孙立去偏门",
 			"派孙立前往偏门旗标接应。等他到场并完成接应后，军队才能从偏门进入。")
 		button.get_parent().move_child(button, 0)
+		b.mission.reveal_primary_level_button()
+	if opened and b.mission.find_level_button(VIEW_SIDE_BUTTON) == null:
+		var locator: Button = b.mission.add_level_button(VIEW_SIDE_BUTTON, "查看 · 偏门",
+			"只定位地图；选人和移动仍由玩家指挥。")
+		locator.get_parent().move_child(locator, 0)
 		b.mission.reveal_primary_level_button()
 
 
@@ -496,8 +511,7 @@ func _order_sun_to_side_gate(b) -> void:
 	var action: Dictionary = b.mission.actions.get(INSIDE_ACTION, {})
 	if not _inside_action_available(b, action) or b.mission.active_action_id == INSIDE_ACTION:
 		return
-	if (sun.mission_order_active or sun.mission_order_arrival_t > 0.0) \
-			and b.mission._nearest_clicked_action(sun.mission_order_target) == INSIDE_ACTION:
+	if _sun_ordered_to_side_gate(b):
 		return
 	var target: Vector2 = b.map.cell_to_world(action.cell)
 	var path: PackedVector2Array = b.map.find_path(sun.position, target, sun.faction, sun.movement_profile)
@@ -520,6 +534,10 @@ func activate_mission_button(b, button_id: String) -> void:
 	if b.phase != b.Phase.FIGHT: return
 	if button_id == SEND_SUN_BUTTON:
 		_order_sun_to_side_gate(b)
+		return
+	if button_id == VIEW_SIDE_BUTTON:
+		if not b.hud.touch_ui and _side_gate_is_open(b):
+			b.mission._activate_map_locator("祝家庄偏门", SIDE_GATE)
 		return
 	if button_id == "zhu_return_wounded":
 		_order_wounded_return(b)
@@ -915,7 +933,7 @@ func unit_tactical_hint(b, u: Unit) -> String:
 
 
 func _refresh_stage(b) -> void:
-	var side_open: bool = inside_open or b.mission.has_event("zhu_side_breached")
+	var side_open := _side_gate_is_open(b)
 	stage = "siege" if main_breached or side_open or supply_cut or manor_fallen or prisoners_freed else "contest" if expansion_secured or sent_sun else "scout"
 	var heading := "第一打 · 扎营探路"
 	var objective := "北取资源，南拔外营；兵营补兵、作坊造器械。先侦察，再决定主攻方向。"
@@ -933,8 +951,16 @@ func _refresh_stage(b) -> void:
 			objective = "正门已破。留兵守前营，护送器械破营，救时迁回营。缺金可查看前营金矿或在集市卖木，也可先断援。"
 		elif supply_cut and not main_breached:
 			objective = "南营已断援，庄内大营仍可补兵。可带器械攻正门，或接应孙立打开偏门。" if _alive(sun) else "孙立已阵亡，内应路线关闭；请用器械攻破庄门救人。"
-	if not main_breached and not side_open and _alive(sun) and defense_state == "feint" and _has_feint_guards(b.mission):
-		objective = "部分守军已被引向正门。保持正门压力，让孙立到偏门接应；还需破营、救出时迁。"
+	if not main_breached and not side_open and _alive(sun):
+		var feint := defense_state == "feint" and _has_feint_guards(b.mission)
+		if not b.hud.touch_ui and b.mission.active_action_id == INSIDE_ACTION:
+			objective = "偏门接应中。保持正门压力，让接应者留在旗标旁。" if feint \
+				else "偏门接应中。让接应者留在旗标旁，部队在门外掩护。"
+		elif not b.hud.touch_ui and _sun_ordered_to_side_gate(b):
+			objective = "孙立正赶往偏门。保持正门压力，派部队在偏门外掩护。" if feint \
+				else "孙立正赶往偏门。部队可在门外掩护，开门后再入庄。"
+		elif feint:
+			objective = "部分守军已被引向正门。保持正门压力，让孙立到偏门接应；还需破营、救出时迁。"
 	if _finish_ready():
 		heading = "收军 · 时迁已归营"
 		if b.mission.has_event("zhu_prisoner_lost"):
