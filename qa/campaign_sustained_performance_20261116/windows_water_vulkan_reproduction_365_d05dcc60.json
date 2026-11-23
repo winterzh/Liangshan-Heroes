@@ -1,0 +1,351 @@
+{
+  "source_commit": "d05dcc60983ff2d34fe4de04e9a997ea9fa98182",
+  "exe_sha256": "e7214139db1d95368dccca7f07283c35f63e4cca239323ac7dc516911036ee4c",
+  "scope": "Two independent repeats of the same frozen Windows executable on a private desktop with fixed camera and the normal-speed scripted workload. A uses in-game phase probes. B uses a raw frame sampler with start/end clock markers and records only its own Windows process and primary thread CPU counters externally. Both use the project default Vulkan Forward+ and standard effects, with the existing fixture disabling VSync and enabling viewport timing. Both are diagnostic, not a ten-minute release gate.",
+  "prior_365_second_prefix": {
+    "frames": 44920,
+    "p95_ms": 19.04,
+    "p99_ms": 33.651,
+    "over_33_3_ms": 461,
+    "over_66_7_ms": 119,
+    "worst_ms": 253.255
+  },
+  "prior_fourth_and_fifth_minutes": {
+    "frames": 11277,
+    "p95_ms": 24.943,
+    "p99_ms": 47.003,
+    "over_33_3_ms": 241,
+    "over_66_7_ms": 62,
+    "worst_ms": 253.255
+  },
+  "instrumented_repeat": {
+    "source_commit": "d05dcc60983ff2d34fe4de04e9a997ea9fa98182",
+    "exe_sha256": "e7214139db1d95368dccca7f07283c35f63e4cca239323ac7dc516911036ee4c",
+    "six_payload_files_verified": true,
+    "renderer_log": "Vulkan 1.4.357 - Forward+ - Using Device #0: NVIDIA - NVIDIA GeForce RTX 4060 Laptop GPU",
+    "settings": {
+      "renderer": "forward_plus",
+      "window_pixels": [
+        1440,
+        900
+      ],
+      "camera": "fixed",
+      "standard_effects": true,
+      "time_scale": 1,
+      "tracked_viewport_times": true,
+      "vsync_disabled_by_fixture": true
+    },
+    "scope": "Diagnostic only. Offline private Windows desktop, unchanged frozen executable, same automated paid-defense workload. The performance probe records SceneTree and RenderingServer wall-clock signals, and wraps Battle and driver callbacks. Ranges include scheduling and native engine activity. Godot GPU and process monitors may refer to prior frames.",
+    "rendered_seconds": 365.005,
+    "simulated_seconds": 364.983,
+    "integrity": {
+      "checks_passed": 13,
+      "land_and_water_combat": true,
+      "waves_sent": [
+        true,
+        true,
+        false
+      ],
+      "ships_paid": 11,
+      "matching_tick_points": 369
+    },
+    "diagnostic_frames": {
+      "frames": 82161,
+      "p95_ms": 10.299,
+      "p99_ms": 12.487,
+      "over_33_3_ms": 0,
+      "over_66_7_ms": 0,
+      "worst_ms": 30.205
+    },
+    "same_executable_earlier_first_365_seconds": {
+      "frames": 44920,
+      "p95_ms": 19.04,
+      "p99_ms": 33.651,
+      "over_33_3_ms": 461,
+      "over_66_7_ms": 119,
+      "worst_ms": 253.255
+    },
+    "minute_four_and_five": {
+      "old_without_phase_probe": {
+        "frames": 11277,
+        "p95_ms": 24.943,
+        "p99_ms": 47.003,
+        "over_33_3_ms": 241,
+        "over_66_7_ms": 62,
+        "worst_ms": 253.255
+      },
+      "current_valid_frames": {
+        "frames": 25583,
+        "p95_ms": 9.982,
+        "p99_ms": 11.97,
+        "over_33_3_ms": 0,
+        "over_66_7_ms": 0,
+        "worst_ms": 21.861
+      }
+    },
+    "valid_frames": 82161,
+    "unusable_frames_by_cause": {},
+    "usable_slow_frames": {
+      "frames": 0,
+      "physics_steps_per_frame": {},
+      "with_scripted_order": 0,
+      "longest_signal_interval": {},
+      "milliseconds": {
+        "elapsed": {
+          "median": null,
+          "p95": null,
+          "max": null
+        },
+        "post_to_first": {
+          "median": null,
+          "p95": null,
+          "max": null
+        },
+        "physics_to_idle": {
+          "median": null,
+          "p95": null,
+          "max": null
+        },
+        "idle_to_pre_draw": {
+          "median": null,
+          "p95": null,
+          "max": null
+        },
+        "pre_to_post_draw": {
+          "median": null,
+          "p95": null,
+          "max": null
+        },
+        "battle_physics": {
+          "median": null,
+          "p95": null,
+          "max": null
+        },
+        "battle_idle": {
+          "median": null,
+          "p95": null,
+          "max": null
+        },
+        "driver_physics": {
+          "median": null,
+          "p95": null,
+          "max": null
+        },
+        "other_physics": {
+          "median": null,
+          "p95": null,
+          "max": null
+        },
+        "other_idle": {
+          "median": null,
+          "p95": null,
+          "max": null
+        }
+      }
+    },
+    "usable_slow_frames_single_physics_without_driver_order": {
+      "frames": 0,
+      "physics_steps_per_frame": {},
+      "with_scripted_order": 0,
+      "longest_signal_interval": {},
+      "milliseconds": {
+        "elapsed": {
+          "median": null,
+          "p95": null,
+          "max": null
+        },
+        "post_to_first": {
+          "median": null,
+          "p95": null,
+          "max": null
+        },
+        "physics_to_idle": {
+          "median": null,
+          "p95": null,
+          "max": null
+        },
+        "idle_to_pre_draw": {
+          "median": null,
+          "p95": null,
+          "max": null
+        },
+        "pre_to_post_draw": {
+          "median": null,
+          "p95": null,
+          "max": null
+        },
+        "battle_physics": {
+          "median": null,
+          "p95": null,
+          "max": null
+        },
+        "battle_idle": {
+          "median": null,
+          "p95": null,
+          "max": null
+        },
+        "driver_physics": {
+          "median": null,
+          "p95": null,
+          "max": null
+        },
+        "other_physics": {
+          "median": null,
+          "p95": null,
+          "max": null
+        },
+        "other_idle": {
+          "median": null,
+          "p95": null,
+          "max": null
+        }
+      }
+    },
+    "usable_frames_in_slow_window": {
+      "frames": 25583,
+      "physics_steps_per_frame": {
+        "0": 18383,
+        "1": 7200
+      },
+      "with_scripted_order": 60,
+      "longest_signal_interval": {
+        "idle_to_pre_draw": 22757,
+        "pre_to_post_draw": 2698,
+        "physics_to_idle": 127,
+        "post_to_first": 1
+      },
+      "milliseconds": {
+        "elapsed": {
+          "median": 3.122,
+          "p95": 9.982,
+          "max": 21.861
+        },
+        "post_to_first": {
+          "median": 0.071,
+          "p95": 0.147,
+          "max": 2.959
+        },
+        "physics_to_idle": {
+          "median": 0.0,
+          "p95": 3.29,
+          "max": 12.059
+        },
+        "idle_to_pre_draw": {
+          "median": 1.57,
+          "p95": 4.792,
+          "max": 12.261
+        },
+        "pre_to_post_draw": {
+          "median": 1.357,
+          "p95": 2.029,
+          "max": 5.225
+        },
+        "battle_physics": {
+          "median": 0.0,
+          "p95": 1.489,
+          "max": 3.796
+        },
+        "battle_idle": {
+          "median": 0.283,
+          "p95": 0.371,
+          "max": 3.277
+        },
+        "driver_physics": {
+          "median": 0.0,
+          "p95": 0.01,
+          "max": 4.858
+        },
+        "other_physics": {
+          "median": 0.0,
+          "p95": 1.724,
+          "max": 5.895
+        },
+        "other_idle": {
+          "median": 1.264,
+          "p95": 4.45,
+          "max": 11.12
+        }
+      }
+    },
+    "ten_longest_usable_slow_frames_in_microseconds": [],
+    "raw_report_sha256": "8f7a0ecdf5a75c341759b27f0b3b36e23253d3735d87e46d639209e8751c55dd",
+    "log_sha256": "4e61aaec3b0c5804e63c25438b5b55a1bfd35469bd976f5f092ed781e0d806e3",
+    "exit_code": 0,
+    "engine_errors": 0
+  },
+  "repeat_without_game_phase_probe": {
+    "exit_code": 0,
+    "engine_errors": 0,
+    "all_six_payload_files_verified": true,
+    "window_pixels": [
+      1440,
+      900
+    ],
+    "rendered_seconds": 365.012,
+    "simulated_seconds": 365.017,
+    "frames": {
+      "frames": 73835,
+      "p95_ms": 10.502,
+      "p99_ms": 12.459,
+      "over_33_3_ms": 0,
+      "over_66_7_ms": 0,
+      "worst_ms": 26.817
+    },
+    "fourth_and_fifth_minutes": {
+      "frames": 22940,
+      "p95_ms": 10.806,
+      "p99_ms": 12.77,
+      "over_33_3_ms": 0,
+      "over_66_7_ms": 0,
+      "worst_ms": 24.794
+    },
+    "battle": {
+      "checks": 13,
+      "waves": [
+        true,
+        true,
+        false
+      ],
+      "ships_paid": 11,
+      "matching_prior_tick_samples": 370,
+      "different_prior_tick_samples": 0
+    },
+    "windows_cpu": {
+      "scope": "GetThreadTimes for the launched primary thread and GetProcessTimes for the same process. Includes only the interior of a long frame if the synchronized samples leave usable coverage. CPU totals cannot identify an off-CPU wait reason. Windows CPU counters are coarse relative to one frame.",
+      "clock_safe_for_matching": true,
+      "clock_offset_drift_us": -773,
+      "clock_bracket_us": [
+        3,
+        3
+      ],
+      "samples_during_frame_window": 11811,
+      "median_sample_spacing_ms": 30.901,
+      "largest_sample_gap_ms": 33.827,
+      "average_primary_thread_cpu_percent": 99.45,
+      "average_process_cpu_equivalent_cores": 1.111,
+      "spikes_with_interior_samples": 0,
+      "longest_matched_intervals": []
+    },
+    "raw_report_sha256": "127ede57606d7e855c1f41a5cb683830374ec1647506bc9557779e8c6c6d372e",
+    "parent_runner_receipt_sha256": "436ab30edee1104ef857d54b58b5d492eb50be783ec3633b1f730af106026b9e",
+    "log_sha256": "71e8edafa01b6187313d3a02bc1de1d9e3940c545993e2446261beed1bf1a9e6"
+  },
+  "workload_sources": {
+    "source_commit": "fa4084ff0def019efba38567145a5c3f32563348",
+    "files": [
+      {
+        "source": "tools/polish_performance_probe.gd",
+        "reused_fixture_sha256": "c23175f4fe886f8d8db2bacc2f5dbf55e32e0f32f649053871054913536cd620"
+      },
+      {
+        "source": "tools/gao_rts_play.gd",
+        "reused_fixture_sha256": "13ae60c144eba1374ac75c802764fde74a737a401d9ae9f53a9067b9cbb902b5"
+      },
+      {
+        "source": "tools/zhujiazhuang_rts_test.gd",
+        "reused_fixture_sha256": "0599c0679e47697b50e2cea1545d04ce45ffd0904eb7b4b20aa8ea666e29a866"
+      }
+    ],
+    "scope": "Verified exact script bodies after the two local extends-path relocations. Desktop launchers adapt SceneTree calls and add diagnostics outside the production executable."
+  }
+}
