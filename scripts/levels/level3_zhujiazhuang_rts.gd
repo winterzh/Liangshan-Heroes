@@ -9,6 +9,8 @@ const MAIN_GATE := Vector2i(20, 28)
 const SIDE_GATE := Vector2i(20, 18)
 const MAIN_TOWER := Vector2i(17, 30)
 const GATE_DEFENDER_POSTS := [Vector2i(15, 26), Vector2i(15, 30), Vector2i(16, 28)]
+const INSIDE_ACTION := "zhu_rts_inside"
+const SEND_SUN_BUTTON := "zhu_send_sun_li"
 const FEINT_RULE := "zhu_feint_rule"
 const FEINT_HAPPENED := "zhu_feint_happened"
 const FEINT_AT_SIDE := "zhu_feint_at_side"
@@ -345,6 +347,7 @@ func _introduce_sun(b) -> void:
 	b.mission.add_actor_locator("zhu_rts_inside","sun_li")
 	if not _alive(side_gate):
 		b.mission.block_action("zhu_rts_inside","偏门已被攻破，无需再接应；可直接入庄救人。")
+	_update_inside_shortcut(b)
 	b.msg("孙立已到前营！可接应内应开偏门，也可继续正攻。开门前先把接应部队调到附近，庄内守军仍需迎战。",9.0)
 
 func on_mission_action(b, action_id: String, actor) -> void:
@@ -465,8 +468,59 @@ func _order_wounded_return(b) -> void:
 	Sfx.play("order")
 	b.mission.set_feedback(Localize.format_text("已派%d名伤员返回前营。", [pending.size()]))
 
+func _inside_action_available(b, action: Dictionary) -> bool:
+	return not action.is_empty() and not action.done and String(action.get("blocked_reason", "")).is_empty() \
+		and _alive(side_gate) and b.mission._valid_action_actor(sun, action)
+
+
+func _update_inside_shortcut(b) -> void:
+	if not sent_sun or b.hud.touch_ui:
+		return
+	var action: Dictionary = b.mission.actions.get(INSIDE_ACTION, {})
+	var button: Button = b.mission.find_level_button(SEND_SUN_BUTTON)
+	if not _inside_action_available(b, action):
+		if button != null:
+			button.get_parent().remove_child(button)
+			button.queue_free()
+		return
+	if button == null:
+		button = b.mission.add_level_button(SEND_SUN_BUTTON, "派孙立去偏门",
+			"派孙立前往偏门旗标接应。等他到场并完成接应后，军队才能从偏门进入。")
+		button.get_parent().move_child(button, 0)
+		b.mission.reveal_primary_level_button()
+
+
+func _order_sun_to_side_gate(b) -> void:
+	if b.hud.touch_ui or not b._gameplay_rng_issue.is_empty():
+		return
+	var action: Dictionary = b.mission.actions.get(INSIDE_ACTION, {})
+	if not _inside_action_available(b, action) or b.mission.active_action_id == INSIDE_ACTION:
+		return
+	if (sun.mission_order_active or sun.mission_order_arrival_t > 0.0) \
+			and b.mission._nearest_clicked_action(sun.mission_order_target) == INSIDE_ACTION:
+		return
+	var target: Vector2 = b.map.cell_to_world(action.cell)
+	var path: PackedVector2Array = b.map.find_path(sun.position, target, sun.faction, sun.movement_profile)
+	if path.is_empty() or path[-1].distance_to(target) > float(action.reach) \
+			or not b.map._segment_open(path[-1], target, sun.movement_profile):
+		b.mission.set_feedback("暂时走不到旗标。请清开道路或手动改道。")
+		return
+	var group := [sun]
+	var move: Dictionary = b.mission.prepare_manual_move(group, target)
+	if move.is_empty() or move.actor != sun:
+		return
+	b._stamp_manual(group)
+	sun.order_move(move.target)
+	b._stamp_mission_move(group, target)
+	Sfx.play("order")
+	b.mission.set_feedback("孙立已前往偏门接应。")
+
+
 func activate_mission_button(b, button_id: String) -> void:
 	if b.phase != b.Phase.FIGHT: return
+	if button_id == SEND_SUN_BUTTON:
+		_order_sun_to_side_gate(b)
+		return
 	if button_id == "zhu_return_wounded":
 		_order_wounded_return(b)
 		return
@@ -914,6 +968,7 @@ func process(b, delta: float) -> void:
 		return
 	strategic_clock = 0.5
 	_feint_tick(b, 0.5)
+	_update_inside_shortcut(b)
 	if not ram_escorts.is_empty():
 		_escort_tick(b)
 	preload("res://scripts/zhujiazhuang_recovery_hint.gd").refresh(b)
