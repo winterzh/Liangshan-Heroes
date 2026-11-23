@@ -19,6 +19,8 @@ const OUTPOST := Vector2i(13,46)
 const CITY_POST := Vector2i(37,27)
 const ENEMY_HQ := Vector2i(44,8)
 const EXIT_CELL := Vector2i(30,49)
+const EXIT_RADIUS := 130.0
+const EXIT_MIN_ROW := 45
 const SPY_KEYS := ["shi_qian","chai_jin","yue_he"]
 const SPY_EXPOSED_NOTICE := {
 	"shi_qian": "时迁暴露了！由玩家撤离；甩开追兵后到蔡福家停留3秒，可恢复乔装。",
@@ -381,7 +383,10 @@ func _briefing(b) -> Dictionary:
 	if rescued:
 		if not gate_open:
 			return {"title":"撤离 · 先打开南门", "text":"二人已解枷，南门尚未打开。外军先打开通路，伤员留在安全处；门开后护送二人到城外接应地。"}
-		return {"title":"护送 · 二人活着出城", "text":Localize.format_text("已撤出%d/2。选中尚未撤出的卢俊义、石秀，带兵护送到城外接应地；前营须守住，不必扫清全城。",s.safe)}
+		var objective := "已撤出%d/2。派战友清开退路，再点「送伤员出城」。前营须守住，不必扫清全城。"
+		if b.hud.touch_ui:
+			objective = "已撤出%d/2。选中尚未撤出的卢俊义、石秀，带兵护送到城外接应地；前营须守住，不必扫清全城。"
+		return {"title":"护送 · 二人活着出城", "text":Localize.format_text(objective,s.safe)}
 	if gate_open:
 		if prison_open:
 			var order := "南门和牢院已通。清开枷锁旁守军，选一名好汉轻点开枷旗标，留兵保护前营和退路。" if b.hud.touch_ui \
@@ -407,6 +412,8 @@ func _briefing(b) -> Dictionary:
 		return {"title":"潜入 · 重整乔装", "text":"柴进或乐和已暴露。甩开追兵后，到蔡福家停留3秒恢复乔装，再回牢前受验。外军也可护送器械强攻南门。"}
 	return {"title":"两线筹备 · 经营与潜入", "text":"城外练兵备器械；柴进、乐和乔装到牢前受验后进入内院。暴露可甩开守军，退到蔡福家重整；时迁等候举火。"}
 func _update_briefing(b) -> void:
+	if rescued and gate_open and not b.hud.touch_ui:
+		_update_evacuation_button(b)
 	var next := _briefing(b)
 	if next.title!=phase_title:
 		phase_title=next.title
@@ -499,8 +506,67 @@ func _wounded_group(b) -> Array:
 	# Derived from the original prisoners; selecting never moves or rescues them.
 	if not rescued: return []
 	return [lu,shi].filter(func(u): return alive(u) and b.units.has(u) and u.faction==0 and not u.is_captive and not u.garrisoned)
+
+func _update_evacuation_button(b) -> void:
+	var available := not _wounded_group(b).is_empty()
+	var button: Button = b.mission.find_level_button("daming_evac_wounded")
+	if button == null and available:
+		button = b.mission.add_level_button("daming_evac_wounded", "送伤员出城",
+			"让仍待撤的伤员走向城外接应地。先派战友清开退路；可随时手动改令。")
+		button.get_parent().move_child(button, 0)
+		b.mission.reveal_primary_level_button()
+	if button != null:
+		button.disabled = not available
+
+func _in_exit_zone(b, point: Vector2) -> bool:
+	return point.distance_to(b.map.cell_to_world(EXIT_CELL)) <= EXIT_RADIUS \
+		and b.map.world_to_cell(point).y >= EXIT_MIN_ROW
+
+func _order_wounded_evacuation(b) -> void:
+	if not rescued or not gate_open or not alive(hall) or b.hud.touch_ui or not b._gameplay_rng_issue.is_empty():
+		return
+	var wounded := _wounded_group(b)
+	if wounded.is_empty():
+		return
+	var pending := wounded.filter(func(u: Unit) -> bool:
+		return u._state != Unit.ST_MOVE or u._path_i >= u._path.size() or not _in_exit_zone(b, u._path[-1]))
+	if pending.is_empty():
+		b.mission.set_feedback("伤员正在前往城外接应地。")
+		return
+	if _guarded(b,SOUTH_GATE,GATE_GUARD_RADIUS,true) or _guarded(b,EXIT_CELL,EXIT_RADIUS,true):
+		b.mission.set_feedback("退路还有可见守军。派战友清开，再下令撤离。")
+		return
+	var exit_pos: Vector2 = b.map.cell_to_world(EXIT_CELL)
+	var targets: Array = b._formation_targets(pending, exit_pos)
+	var ordered := 0
+	for i in range(pending.size()):
+		var u: Unit = pending[i]
+		var target: Vector2 = targets[i]
+		if not _in_exit_zone(b, target):
+			target = exit_pos
+		var path: PackedVector2Array = b.map.find_path(u.position, target, u.faction, u.movement_profile)
+		if target != exit_pos and (path.is_empty() or not _in_exit_zone(b, path[-1])):
+			path = b.map.find_path(u.position, exit_pos, u.faction, u.movement_profile)
+		if path.is_empty() or not _in_exit_zone(b, path[-1]):
+			continue
+		b._stamp_manual([u])
+		u.order_move(path[-1])
+		ordered += 1
+	if ordered > 0:
+		Sfx.play("order")
+	if ordered == pending.size():
+		b.mission.set_feedback(Localize.format_text("已派%d名伤员前往城外接应地。",ordered))
+	elif ordered > 0:
+		b.mission.set_feedback("已派出可撤伤员。另有伤员无法到达，请清开退路或手动改道。")
+	else:
+		b.mission.set_feedback("伤员暂时无法到达接应地。请清开退路或手动改道。")
+
 func activate_mission_button(b,button_id: String) -> void:
-	if b.phase!=b.Phase.FIGHT or button_id!="daming_select_wounded" or not rescued: return
+	if b.phase!=b.Phase.FIGHT or not rescued: return
+	if button_id=="daming_evac_wounded":
+		_order_wounded_evacuation(b)
+		return
+	if button_id!="daming_select_wounded": return
 	var members := _wounded_group(b)
 	if members.is_empty():
 		b.mission.set_status(Localize.text("当前没有可选择的待撤伤员；原选区保留，驻守者需先出营。"))
@@ -599,7 +665,7 @@ func process(b,delta: float) -> void:
 		_update_pursuit(b)
 		for record in [[lu,"daming_lu_safe","卢俊义已活着抵达城外接应地"],[shi,"daming_shi_safe","石秀已活着抵达城外接应地"]]:
 			var u=record[0]
-			if alive(u) and gate_open and _near(b,u,EXIT_CELL,130) and b.map.world_to_cell(u.position).y>=45:
+			if alive(u) and gate_open and _in_exit_zone(b,u.position):
 				u.resolve_story("retreated")
 				b.mission.mark(record[1],record[2])
 		if b.mission.has_event("daming_lu_safe") and b.mission.has_event("daming_shi_safe"):
