@@ -100,7 +100,7 @@
 | 剧情 → 醉打蒋门神 | 择酒/直挑、躲招反击、技能提示、失败学习与接店选择 | `tools/kuaihuolin_short_test.gd` 与独立 boundaries；[当前说明](KUAIHUOLIN_SHORT_20260906.md) | 真人待测 |
 | 剧情 → 江州劫法场 | 有限补给、分兵救援、替补、找任务栏登船命令与主动改道 | `tools/jiangzhou_rts_play.gd` 实际两路线；test/visual 的受控边界另列；[当前说明](JIANGZHOU_RTS_20260906.md) | 真人待测 |
 | 剧情 → 三打祝家庄 | 上述两路线、墙门观感、经营/反制、孙立接应 | `tools/zhujiazhuang_rts_test.gd` direct/inside 与 contracts 分开；群选接应专项；[当前说明](ZHUJIAZHUANG_RTS_20260905.md)、[接应 QA](../qa/zhujiazhuang_gate_contact_20260905/README.md) | 真人待测 |
-| 剧情 → 大破连环马 | 反骑提示、编成选择、守反与断粮节奏 | `tools/lianhuanma_rts_test.gd` 与 drill 专项；[当前说明](LIANHUANMA_RTS_20260905.md) | 真人待测 |
+| 剧情 → 大破连环马 | 反骑提示、教场引骑撤步、编成选择、守反与断粮节奏 | `tools/lianhuanma_rts_test.gd` 与 drill 专项；[当前说明](LIANHUANMA_RTS_20260905.md) | 真人待测 |
 | 剧情 → 智取大名府 | 自主判断举火时机、南门当前缺谁、到期后能否继续，以及夺门和强攻、伤员撤离 | `tools/daming_rts_test.gd` 与 infiltration 专项；[当前说明](DAMING_RTS_20260905.md) | 真人待测 |
 | 剧情 → 三败高太尉 | 水陆配合、长列表、收兵与火攻接俘选择 | `tools/gao_rts_play.gd` 实际路线与 test 边界分开；[当前说明](GAO_RTS_20260906.md)；不用旧 fleet/lure 工具代替新版 | 真人待测 |
 | 驻守战 → 30 关 · 经典（推荐） | 关闭 AI 友好与倍率调整，实际经营与补兵，记录早中晚期压力、败后补救与末波结算 | `cf173596` Windows 离线实包自动完整 30 波，以及经营、交战、换波继续和终局拒绝已通过。[验收收据](../qa/classic30_continue_20260909/windows_full_cf173596.json) | 真人待测 |
