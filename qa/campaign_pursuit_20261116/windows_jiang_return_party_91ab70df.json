@@ -1,0 +1,134 @@
+{
+  "source_commit": "91ab70dfa8530177701ae21490622298dbcdc445",
+  "baseline": {
+    "slots": {
+      "record_0000000001.json": "2cb44f787e962c08c1d849d742fd4f3b2563f8ee4fdce1e3e307e3f889d4cd04",
+      "record_0000000002.json": "a80a046a342c6f1720a1cda3f0708f069fa2db9de0abbf4dee3a8d0f619432a3"
+    },
+    "source": "f47fb1e076775744edc38c8da8fe521fa13503f3",
+    "official_baseline": 26752476,
+    "log_sha256": "f347c2c37f4283ddc0f6e44772372fbced9746985df2819807c39e0323e7a6ff",
+    "checkpoint_seconds": 125.933333333331
+  },
+  "environment": {
+    "platform": "Windows",
+    "viewport": [
+      960,
+      540
+    ],
+    "isolated_desktop": true,
+    "offline_playtest": true,
+    "human_playtest": false
+  },
+  "observations": {
+    "original_named_unit_id": "21",
+    "saved_order_serial": 95,
+    "order_serial_after_boarding": 96,
+    "saved_generation": 3,
+    "main_pair_aboard_before_recall": true,
+    "original_recall_order_preserved": true,
+    "actual_boarding_seconds_after_reload": 3.733,
+    "story_progress": {
+      "best_done": 4,
+      "best_goal_ids": [
+        "li_kui_first",
+        "free_both",
+        "bailong_meeting",
+        "named_survive"
+      ],
+      "cleared": true,
+      "contract_version": 2,
+      "jiangzhou_rescue_memory": true,
+      "story_complete": true,
+      "story_total": 4
+    },
+    "progress_sha256": "4c03311979d37adfcd5d8dbba5e5223039f0b0d47b22c27ab03776b190334758",
+    "old_slot_refused": true
+  },
+  "source_probe": {
+    "checks": 17,
+    "localized_button": {
+      "en": "Recall Shore Party",
+      "ja": "陸の仲間を呼び戻す",
+      "zh_CN": "撤回岸上好汉",
+      "zh_TW": "撤回岸上好漢"
+    },
+    "log_sha256": "962edae4fe503dd5880df204c73764327a3347ac13bb66995cec6599dc93e808",
+    "new_localization_keys": 8,
+    "catalog_entries": 5187
+  },
+  "export": {
+    "steps": [
+      {
+        "stage": "import",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 70.38
+      },
+      {
+        "stage": "export",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 112.27
+      }
+    ],
+    "files": [
+      {
+        "path": "GODOTSTEAM_LICENSE.txt",
+        "bytes": 1110,
+        "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+      },
+      {
+        "path": "LiangshanHeroes.exe",
+        "bytes": 1827541784,
+        "sha256": "ea7a2701895c4a7047236f8add568e19f9b9a0abaa3693d92187449ce2bfad08"
+      },
+      {
+        "path": "libgodotsteam.windows.template_release.x86_64.dll",
+        "bytes": 3961344,
+        "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+      },
+      {
+        "path": "steam_api64.dll",
+        "bytes": 319128,
+        "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+      },
+      {
+        "path": "steam_stats_reader.dll",
+        "bytes": 381440,
+        "sha256": "7505919cfff5907c13a02eb366690bff22ca6731c8521deefde58b114e4f796f"
+      },
+      {
+        "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+        "bytes": 1093,
+        "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+      }
+    ]
+  },
+  "native_processes": {
+    "recall-save": {
+      "checks": 18,
+      "log_sha256": "1d4a92b5170d4fc66bab7ab66cb4ddfad538859339ef971712a7878406dfd848",
+      "slot_record_sha256": {
+        "record_0000000002.json": "a80a046a342c6f1720a1cda3f0708f069fa2db9de0abbf4dee3a8d0f619432a3",
+        "record_0000000003.json": "bc8f1fcc4f399494597c73d25079019589db95ce1bf1297186acce743092789e"
+      }
+    },
+    "recall-reopen": {
+      "checks": 13,
+      "log_sha256": "cd12d656d1d75f05c9582134cd67ee6efa872e9fba6b45f69f437a2c4a2cb501",
+      "slot_record_sha256": {
+        "record_0000000002.json": "a80a046a342c6f1720a1cda3f0708f069fa2db9de0abbf4dee3a8d0f619432a3",
+        "record_0000000003.json": "bc8f1fcc4f399494597c73d25079019589db95ce1bf1297186acce743092789e"
+      }
+    },
+    "reject": {
+      "checks": 6,
+      "log_sha256": "bc06b7999a69c78990f2737c8cd1f3191ed16dc40937258c07a6ef1c894c5d15",
+      "slot_record_sha256": {
+        "record_0000000002.json": "a80a046a342c6f1720a1cda3f0708f069fa2db9de0abbf4dee3a8d0f619432a3",
+        "record_0000000003.json": "bc8f1fcc4f399494597c73d25079019589db95ce1bf1297186acce743092789e"
+      }
+    }
+  }
+}
