@@ -312,8 +312,8 @@ func on_start(b) -> void:
 	b.mission.add_actor_locator("daming_fire","shi_qian")
 	b.mission.add_map_locator("蔡福家 · 重整乔装",SAFEHOUSE)
 	b.mission.add_map_locator("南门外 · 接应集结",GATE_APPROACH)
-	b.lit_cells[OUTPOST]=20
-	b.lit_cells[EXIT_CELL]=20
+	b.lit_cells[OUTPOST]=20.0
+	b.lit_cells[EXIT_CELL]=20.0
 	b.msg("城外军队可立即出击与经营；约115秒后两处营地开始付费补军。内应举火提供90秒进攻机会，不会免费生出接应军。",9)
 func _retry(b,action_id: String,text: String) -> void:
 	var a: Dictionary=b.mission.actions[action_id]
@@ -561,7 +561,7 @@ func _update_pursuit(b) -> void:
 	if not pursuit_warned:
 		if [lu,shi].any(func(u): return alive(u) and b.map.world_to_cell(u.position).y>=24):
 			pursuit_warned=true
-			b.lit_cells[ENEMY_HQ]=20
+			b.lit_cells[ENEMY_HQ]=20.0
 			b.msg("已有伤员离开牢区，北面留守队15秒后追向南门。可先派兵拦截。",7)
 		return
 	pursuit_t=maxf(0,pursuit_t-0.25)

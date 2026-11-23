@@ -263,7 +263,7 @@ func on_start(b) -> void:
 	b.mission.add_action("gao_lure_side","阮小七：侧汊诱舰",Vector2i(37,39),["ruan_xiaoqi_boat"],1,64)
 	b.mission.add_action("gao_wind","公孙胜：祭风",WIND,["gongsun_sheng"],2,64)
 	b.mission.add_actor_locator("gao_wind","gongsun_sheng")
-	for cell in [YARD_SITE,LAND_POST,SEA_POST,LAND_FRONT,SEA_FRONT]: b.lit_cells[cell]=25
+	for cell in [YARD_SITE,LAND_POST,SEA_POST,LAND_FRONT,SEA_FRONT]: b.lit_cells[cell]=25.0
 	b.msg("工匠已分采金木。南岸船坞100金100木，每艘战船90金65木、3人口；请留出下水口。先保住忠义堂与宋江。",10)
 func _retry(b,key: String,text: String) -> void:
 	var a: Dictionary=b.mission.actions[key]

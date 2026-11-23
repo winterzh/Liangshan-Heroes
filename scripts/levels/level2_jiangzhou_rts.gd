@@ -255,7 +255,7 @@ func on_start(b) -> void:
 	if OS.get_name() == "Windows":
 		b.mission.events[REPORT_RULE] = true
 	b.mission.enable_scrolling()
-	for cell in [WEST_CAMP,DOCK_CAMP,SCAFFOLD,CITY_POST]: b.lit_cells[cell]=9999
+	for cell in [WEST_CAMP,DOCK_CAMP,SCAFFOLD,CITY_POST]: b.lit_cells[cell]=9999.0
 	b.mission.add_map_locator("西街接应营 · 刀枪弓骑",WEST_CAMP)
 	b.mission.add_map_locator("江边接应营 · 共用金木",DOCK_CAMP)
 	b.mission.add_map_locator("东街巡防营 · 拆除断援",CITY_POST)

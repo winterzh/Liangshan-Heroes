@@ -28,6 +28,8 @@ func _run() -> void:
 	b.fog=false
 	b._fog_layer.hide()
 	var l=b.level
+	check(typeof(b.lit_cells.get(l.OUTPOST))==TYPE_FLOAT and typeof(b.lit_cells.get(l.EXIT_CELL))==TYPE_FLOAT,
+		"initial scripted reveals use saveable float timers")
 	for u in b.units:
 		if u.faction==0 and u.key in l.FIELD_KEYS: u.position=b.map.cell_to_world(l.CAMP)
 	var soldiers: Array=b.units.filter(func(u): return u.faction==0 and u.key in ["liang_qiang","liang_gong"])
@@ -168,6 +170,11 @@ func _run() -> void:
 	root.content_scale_size=root.size
 	l._update_briefing(b)
 	await _capture(b,l.shi,"en_narrow_escort",folder,texts)
+	l.shi.position=b.map.cell_to_world(Vector2i(22,24))
+	l._update_pursuit(b)
+	var reveal: Variant=b.lit_cells.get(l.ENEMY_HQ)
+	check(l.pursuit_warned and typeof(reveal)==TYPE_FLOAT and reveal==20.0,
+		"the first pursuit warning immediately writes a saveable reveal timer")
 	var state=load("res://scripts/run_campaign_level_state.gd").new()
 	check(state.audit_declarations("level8").ok,"derived coordination adds no unclassified save fields")
 	await _dispose(b)
