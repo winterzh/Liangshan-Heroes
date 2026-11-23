@@ -1,5 +1,7 @@
 # 项目目录索引（2026-10-30）
 
+新版 Windows 离线试玩位于 `D:/AI项目/水浒/Windows候选/20261123-94d1e9a6/PC试玩/`。同一候选根目录含六文件 ZIP 和构建收据。[离线试玩包记录](../qa/battle_entry_timing_20261116/windows_playtest_package_94d1e9a6.json)
+
 祝家庄提示与战役旧档兼容的 Windows 本地试玩包位于 `D:/AI项目/水浒/Windows候选/20261119-64965098/`。六文件 ZIP 与构建收据在根目录，独立离线入口在「PC试玩」。
 
 Build 26752476 的 Windows 离线试玩入口位于本机 `D:/AI项目/水浒/Windows候选/20261118-0f133709/PC试玩/`。目录含启动器、试玩说明及六个发行文件。[发布后安装和试玩收据](../qa/battle_entry_timing_20261116/windows_post_release_26752476.json)

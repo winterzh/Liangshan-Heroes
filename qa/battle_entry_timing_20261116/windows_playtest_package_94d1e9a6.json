@@ -1,0 +1,126 @@
+{
+  "platform": "windows",
+  "kind": "local_playtest_candidate",
+  "source_commit": "94d1e9a694c32d60e323afb35052dad640eff203",
+  "source_version": "source-v1:ee9aa7e6a10bae33e7a139baebc13e9584521536ede2c18daab31741ad45a0b5",
+  "archive": {
+    "name": "LiangshanHeroes_Windows_94d1e9a6.zip",
+    "size": 1758345080,
+    "sha256": "e50641f15a63cfde061bd00a7344bf2f8eb619675f24814f57fc80f08b1c0212"
+  },
+  "files": [
+    {
+      "name": "GODOTSTEAM_LICENSE.txt",
+      "bytes": 1110,
+      "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+    },
+    {
+      "name": "LiangshanHeroes.exe",
+      "bytes": 1827498488,
+      "sha256": "eacb207f806a9a2b5316d8649eaa7fd29826e260365a39a6c54b3e136f20e577"
+    },
+    {
+      "name": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+      "bytes": 1093,
+      "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+    },
+    {
+      "name": "libgodotsteam.windows.template_release.x86_64.dll",
+      "bytes": 3961344,
+      "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+    },
+    {
+      "name": "steam_api64.dll",
+      "bytes": 319128,
+      "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+    },
+    {
+      "name": "steam_stats_reader.dll",
+      "bytes": 381440,
+      "sha256": "7505919cfff5907c13a02eb366690bff22ca6731c8521deefde58b114e4f796f"
+    }
+  ],
+  "launcher_argument": "--offline-playtest",
+  "native_save_resume_checks": {
+    "save": 35,
+    "resume": 16
+  },
+  "native_save_resume_log_sha256": {
+    "save": "a1f523f8460d30324505ae605a6b6b43a886b651aef76974b357241b3d771056",
+    "resume": "a1f523f8460d30324505ae605a6b6b43a886b651aef76974b357241b3d771056"
+  },
+  "stock_exe_boot": {
+    "isolated_offline": true,
+    "exit": 0,
+    "errors": []
+  },
+  "launcher": {
+    "sha256": "60189e37e22bd5eed6334cd91974ac9e20a19b6e40ff7684a3ac411b269890bb",
+    "isolated_profiles": [
+      "P01",
+      "P02",
+      "P03"
+    ]
+  },
+  "runtime_change_from_d05dcc60": [
+    "scripts/steam_service.gd"
+  ],
+  "tested_checks": {
+    "save": [
+      "the packaged launcher argument is present without a Steam test environment",
+      "original Steam adapter stays disconnected and the isolated profile has no cloud operation",
+      "normal main menu scene mounts",
+      "native menu becomes ready",
+      "official offline player entry enabled without a private QA seam",
+      "native candidate hash",
+      "new Windows offline profile and no Continue action",
+      "Win32 left click opens Start Campaign",
+      "fresh profile offers Wild Boar Forest sortie",
+      "Win32 left click confirms chapter sortie",
+      "native battle reached",
+      "Wild Boar Forest is the actual first battle",
+      "Win32 left click advances prologue page 1",
+      "Win32 left click advances prologue page 2",
+      "Win32 left click advances prologue page 3",
+      "Win32 left click starts the battle",
+      "original shadow objective begins",
+      "movement cue tile is passable and visible",
+      "first move starts with an unselected hero",
+      "Win32 left click opens the initially collapsed objectives",
+      "Win32 left click on the mission's Select Lu Zhishen button",
+      "first move cue is actually drawn at the indicated tile after selection",
+      "first Win32 right click issues one movement order",
+      "real command indicator matches the cue tile",
+      "first move cue clears once the order is accepted",
+      "Lu Zhishen walks to the cue",
+      "escort advance produces the next objective at normal speed",
+      "normal following yields the observation event without starting forced rescue",
+      "normal sim clock and healthy campaign RNG",
+      "close the expanded objectives to reach the farther map tile",
+      "the follow-up north order starts a real walking path",
+      "native Escape pauses with the player command in flight",
+      "paused checkpoint contains the movement path and next objective",
+      "actual Save and Exit commits the local checkpoint",
+      "saved slot is bound to the offline run and exact candidate"
+    ],
+    "resume": [
+      "the packaged launcher argument is present without a Steam test environment",
+      "original Steam adapter stays disconnected and the isolated profile has no cloud operation",
+      "normal main menu scene mounts",
+      "native menu becomes ready",
+      "official offline player entry enabled without a private QA seam",
+      "new Windows process opens the original slot bytes",
+      "main menu enables Continue last battle with the Wild Boar Forest chapter name",
+      "actual Win32 click uses Continue last battle",
+      "official player-menu restore commits",
+      "same chapter loads at the paused checkpoint",
+      "same actor identity, hit points, paused clock, events, and order path",
+      "resume preserves the disk bytes and original offline run token",
+      "completed tutorial cue does not replay in the restored battle",
+      "native Escape resumes the restored battle",
+      "original walking path continues automatically without adding another move order",
+      "original stage advances naturally to the staff interception"
+    ]
+  },
+  "scope": "Windows packaged executable with the launcher argument. Two independent private desktop processes drive the real campaign and persistence buttons using messages addressed only to their own windows. The clean extracted stock package also passes headless boot with the actual launcher. The tests use an isolated local profile, no Steam adapter or cloud connection and no physical mouse or keyboard."
+}
