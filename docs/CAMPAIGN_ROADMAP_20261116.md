@@ -1,5 +1,10 @@
 # 八幕战役后续开发路线图
 
+## M7 寻路烘焙成品对照
+
+黄泥冈完成 Windows 成品对照。八次正常出征均可点选、下令并返回，逐格与按行烘焙的导航结果相同。 [Windows 成品对照](../qa/battle_entry_timing_20261116/windows_compiled_nav_bake_93b2e9bd.json)
+
+
 ## M2 祝家庄撤离险情
 
 救人后，队伍遇险可优先查看时迁并派兵掩护。时迁回营即可收军，七人全返仍可继续争取。这两条结算路径已在 Windows 自动实跑覆盖。真人首玩与不同打法的重玩仍待验证。 [Windows 成品验收](../qa/campaign_siege_20261116/windows_zhu_evacuation_danger_93b2e9bd.json)

@@ -1,5 +1,10 @@
 # 开发日志
 
+## 2026-11-24 黄泥冈寻路烘焙成品对照
+
+补验当前 Windows 出征流程。每版四次的单独烘焙为 1.72 → 0.31 ms，五套寻路网格摘要一致。 [Windows 成品对照](../qa/battle_entry_timing_20261116/windows_compiled_nav_bake_93b2e9bd.json)
+
+
 ## 2026-11-24 祝家庄伤员撤离
 
 接入伤员险情提示、时迁优先定位和收起任务时的顶部提示。修正旧档读取与 960×540 英语、日语按钮遮挡。Windows 成品 93b2e9bd 两个隔离进程合计通过 67 项。 [Windows 成品验收](../qa/campaign_siege_20261116/windows_zhu_evacuation_danger_93b2e9bd.json)

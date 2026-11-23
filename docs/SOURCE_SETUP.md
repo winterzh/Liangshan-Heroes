@@ -1,5 +1,10 @@
 # 源码设置与换机（2026-10-30）
 
+## Windows 寻路烘焙成品复验
+
+逐格对照包只切换 GameMap 源码。按行版复用当前 Windows 候选。镜头和按键观测收集完毕后，用同一地形在新建地图节点上单独测编译后的烘焙函数。 [Windows 成品对照](../qa/battle_entry_timing_20261116/windows_compiled_nav_bake_93b2e9bd.json)
+
+
 ## 祝家庄撤离险情随战场状态刷新
 
 桌面任务每半秒按存活且尚未归营的伤员、实际受击计时与当前视野计算提示。定位按钮复用任务栏的稳定标识和摄像机入口，收起时用同一结果显示顶部军情。顶部提示缓存登记为临时界面字段。存档沿用既有任务描述，继续战斗后随战场状态刷新。 [Windows 存读验证](../qa/campaign_siege_20261116/windows_zhu_evacuation_danger_93b2e9bd.json)

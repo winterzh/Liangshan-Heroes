@@ -1,5 +1,10 @@
 # 当前项目总览
 
+## M7 黄泥冈寻路烘焙成品验收
+
+黄泥冈实际菜单出征对照中，首帧中位数 368.62 → 358.61 ms，首条有效移动 480.62 → 481.64 ms。单独烘焙复测 1.72 → 0.31 ms。 [Windows 成品对照](../qa/battle_entry_timing_20261116/windows_compiled_nav_bake_93b2e9bd.json)
+
+
 ## Windows 祝家庄撤离险情
 
 Windows 候选 93b2e9bd 已完成祝家庄撤离提示与续玩验收。用实战旧档布置险情，核对四语紧凑界面和按键定位。险情解除后实际送七人归营并结算。真人首玩与重玩待验。 [Windows 成品验收](../qa/campaign_siege_20261116/windows_zhu_evacuation_danger_93b2e9bd.json)

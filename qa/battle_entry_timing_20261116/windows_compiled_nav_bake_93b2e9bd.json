@@ -1,0 +1,565 @@
+{
+  "scope": "Four independent 1280x720 Vulkan Forward+ offline Windows processes per variant, alternated cell/row/row/cell twice on one PC. Menu, sortie, opening dialogue, unit selection and first movement use viewport inputs. An autoload observes rendered frames and node attachment without substituting the shipping battle or navigation code. After first movement, each process rebuilds the original 48x40 terrain on 13 fresh GameMap nodes; the first verifies five navigation grids, base solids and dynamic blockers by hash and the other 12 contribute to the per-process median. Files, not system caches or other applications, are isolated.",
+  "candidate": {
+    "kind": "local_integrated_windows_candidate",
+    "layout": "split_pck",
+    "commit": "93b2e9bd860999c2372373bb4d70dab8c746601a",
+    "source_version": "source-v1:5acb31d4181c515d7b4abfc8ff4d7906e735d73783ffe25b1575fefed4be5b81",
+    "tracked_runtime_count": 6574,
+    "steps": [
+      {
+        "stage": "import",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 59.73
+      },
+      {
+        "stage": "export",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 86.95
+      }
+    ],
+    "files": [
+      {
+        "path": "GODOTSTEAM_LICENSE.txt",
+        "bytes": 1110,
+        "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+      },
+      {
+        "path": "LiangshanHeroes.exe",
+        "bytes": 104886784,
+        "sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4"
+      },
+      {
+        "path": "LiangshanHeroes.pck",
+        "bytes": 1722704764,
+        "sha256": "1d6830f2d063b9cb41bd5667193b13f534e1337a8600ebb100139073f7ed2215"
+      },
+      {
+        "path": "libgodotsteam.windows.template_release.x86_64.dll",
+        "bytes": 3961344,
+        "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+      },
+      {
+        "path": "steam_api64.dll",
+        "bytes": 319128,
+        "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+      },
+      {
+        "path": "steam_stats_reader.dll",
+        "bytes": 393728,
+        "sha256": "5a79a77b5b6e2cff21b285c785118352805a09d91876f89276af119ee1702517"
+      },
+      {
+        "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+        "bytes": 1093,
+        "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+      }
+    ]
+  },
+  "local_comparison": {
+    "kind": "local_integrated_windows_candidate",
+    "layout": "split_pck",
+    "commit": "ad1eb8fb7c3032b407bb184826e16e3aa3d4f4ca",
+    "source_version": "source-v1:b2a87752d4e0ba5cf7890605ac32229f417897c088f587b8f1ba05fb5feb2a1c",
+    "tracked_runtime_count": 6574,
+    "steps": [
+      {
+        "stage": "import",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 62.02
+      },
+      {
+        "stage": "export",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 90.17
+      }
+    ],
+    "files": [
+      {
+        "path": "GODOTSTEAM_LICENSE.txt",
+        "bytes": 1110,
+        "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+      },
+      {
+        "path": "LiangshanHeroes.exe",
+        "bytes": 104886784,
+        "sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4"
+      },
+      {
+        "path": "LiangshanHeroes.pck",
+        "bytes": 1722704348,
+        "sha256": "5433363d71a99fb3213057414ac41bc00097be94ecb7aa3e402255f882e8102a"
+      },
+      {
+        "path": "libgodotsteam.windows.template_release.x86_64.dll",
+        "bytes": 3961344,
+        "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+      },
+      {
+        "path": "steam_api64.dll",
+        "bytes": 319128,
+        "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+      },
+      {
+        "path": "steam_stats_reader.dll",
+        "bytes": 393728,
+        "sha256": "5a79a77b5b6e2cff21b285c785118352805a09d91876f89276af119ee1702517"
+      },
+      {
+        "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+        "bytes": 1093,
+        "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+      }
+    ]
+  },
+  "only_runtime_input_changed": "scripts/game_map.gd",
+  "checked_runtime_input_count": 6574,
+  "navigation_equal": true,
+  "runner_probe_sha256": "ac001d7acff8404f89d96970ed55aac7cb85df82551d69fad4bf8982752a322b",
+  "metrics_ms": {
+    "cells": {
+      "sortie_to_battle_ms": {
+        "median": 368.617,
+        "min": 357.84,
+        "max": 379.99
+      },
+      "sortie_to_first_move_ms": {
+        "median": 480.625,
+        "min": 474.15,
+        "max": 514.819
+      },
+      "longest_entry_gap_ms": {
+        "median": 191.033,
+        "min": 185.948,
+        "max": 202.127
+      },
+      "attach_to_map_ms": {
+        "median": 27.578,
+        "min": 24.758,
+        "max": 27.94
+      },
+      "compiled_nav_bake_ms": {
+        "median": 1.719,
+        "min": 1.698,
+        "max": 1.738
+      }
+    },
+    "rows": {
+      "sortie_to_battle_ms": {
+        "median": 358.606,
+        "min": 341.788,
+        "max": 374.824
+      },
+      "sortie_to_first_move_ms": {
+        "median": 481.642,
+        "min": 462.603,
+        "max": 488.246
+      },
+      "longest_entry_gap_ms": {
+        "median": 185.016,
+        "min": 175.111,
+        "max": 196.418
+      },
+      "attach_to_map_ms": {
+        "median": 24.03,
+        "min": 22.854,
+        "max": 25.089
+      },
+      "compiled_nav_bake_ms": {
+        "median": 0.314,
+        "min": 0.279,
+        "max": 0.346
+      }
+    }
+  },
+  "alternating_trials": [
+    {
+      "variant": "cells",
+      "source_commit": "ad1eb8fb7c3032b407bb184826e16e3aa3d4f4ca",
+      "game_log_sha256": "9784170d6b4fa2e751901685c49d88e13f178bcfdddb77aab6bff1695c31d35e",
+      "trace_sha256": "8378788c8b7e30510497821271b2728f195056aa714ced4297ec8517873b9c7c",
+      "milestones": {
+        "loading_to_attach_ms": 177.122,
+        "attach_to_map_ms": 27.94,
+        "map_to_hud_ms": 20.583,
+        "hud_to_ready_ms": 75.714,
+        "ready_to_draw_ms": 54.114,
+        "process_to_progress_draw_ms": 5047.531,
+        "process_to_ready_menu_ms": 6486.531,
+        "process_to_sortie_button_ms": 6523.531,
+        "sortie_to_loading_ms": 11.857,
+        "sortie_to_battle_ms": 367.33,
+        "sortie_to_first_move_ms": 481.475,
+        "right_click_to_order_draw_ms": 41.536,
+        "longest_entry_gap_ms": 194.021
+      },
+      "navigation": {
+        "dimensions": [
+          48,
+          40
+        ],
+        "bake_us": [
+          1848,
+          1741,
+          1723,
+          1817,
+          1806,
+          1790,
+          1734,
+          1744,
+          1722,
+          1709,
+          1721,
+          1717
+        ],
+        "digest": "3e7d7a03e5c0347cdc55411538e4983a9a9624fca188273733a07112f8d04362"
+      },
+      "course_selection": true,
+      "progress_unchanged": true,
+      "payload_verified": 7,
+      "pck_sha256": "5433363d71a99fb3213057414ac41bc00097be94ecb7aa3e402255f882e8102a",
+      "runtime_errors": [],
+      "navigation_median_ms": 1.7375
+    },
+    {
+      "variant": "rows",
+      "source_commit": "93b2e9bd860999c2372373bb4d70dab8c746601a",
+      "game_log_sha256": "e761ee2a9350caba5afbab08dae2d37d94d67b00d02907c4389e2f915d3b5a6d",
+      "trace_sha256": "1548679130504c45fba27c789a1db9ba1983234812ea3425122bd2c5441849c0",
+      "milestones": {
+        "loading_to_attach_ms": 165.32,
+        "attach_to_map_ms": 24.149,
+        "map_to_hud_ms": 19.788,
+        "hud_to_ready_ms": 76.442,
+        "ready_to_draw_ms": 52.091,
+        "process_to_progress_draw_ms": 4879.541,
+        "process_to_ready_menu_ms": 6366.541,
+        "process_to_sortie_button_ms": 6406.541,
+        "sortie_to_loading_ms": 24.819,
+        "sortie_to_battle_ms": 362.609,
+        "sortie_to_first_move_ms": 488.246,
+        "right_click_to_order_draw_ms": 50.775,
+        "longest_entry_gap_ms": 175.111
+      },
+      "navigation": {
+        "dimensions": [
+          48,
+          40
+        ],
+        "bake_us": [
+          397,
+          348,
+          337,
+          349,
+          346,
+          351,
+          356,
+          346,
+          340,
+          320,
+          322,
+          331
+        ],
+        "digest": "3e7d7a03e5c0347cdc55411538e4983a9a9624fca188273733a07112f8d04362"
+      },
+      "course_selection": true,
+      "progress_unchanged": true,
+      "payload_verified": 7,
+      "pck_sha256": "1d6830f2d063b9cb41bd5667193b13f534e1337a8600ebb100139073f7ed2215",
+      "runtime_errors": [],
+      "navigation_median_ms": 0.346
+    },
+    {
+      "variant": "rows",
+      "source_commit": "93b2e9bd860999c2372373bb4d70dab8c746601a",
+      "game_log_sha256": "e761ee2a9350caba5afbab08dae2d37d94d67b00d02907c4389e2f915d3b5a6d",
+      "trace_sha256": "c1ed27be7aaa02712445ad24baab2bc155ed339638b67ec374812f6b7838ff1b",
+      "milestones": {
+        "loading_to_attach_ms": 179.43,
+        "attach_to_map_ms": 22.854,
+        "map_to_hud_ms": 19.207,
+        "hud_to_ready_ms": 69.996,
+        "ready_to_draw_ms": 55.832,
+        "process_to_progress_draw_ms": 5045.978,
+        "process_to_ready_menu_ms": 6420.978,
+        "process_to_sortie_button_ms": 6453.978,
+        "sortie_to_loading_ms": 7.283,
+        "sortie_to_battle_ms": 354.602,
+        "sortie_to_first_move_ms": 475.851,
+        "right_click_to_order_draw_ms": 43.735,
+        "longest_entry_gap_ms": 186.296
+      },
+      "navigation": {
+        "dimensions": [
+          48,
+          40
+        ],
+        "bake_us": [
+          322,
+          279,
+          276,
+          279,
+          277,
+          275,
+          403,
+          326,
+          285,
+          289,
+          278,
+          279
+        ],
+        "digest": "3e7d7a03e5c0347cdc55411538e4983a9a9624fca188273733a07112f8d04362"
+      },
+      "course_selection": true,
+      "progress_unchanged": true,
+      "payload_verified": 7,
+      "pck_sha256": "1d6830f2d063b9cb41bd5667193b13f534e1337a8600ebb100139073f7ed2215",
+      "runtime_errors": [],
+      "navigation_median_ms": 0.279
+    },
+    {
+      "variant": "cells",
+      "source_commit": "ad1eb8fb7c3032b407bb184826e16e3aa3d4f4ca",
+      "game_log_sha256": "9784170d6b4fa2e751901685c49d88e13f178bcfdddb77aab6bff1695c31d35e",
+      "trace_sha256": "c45eb82b87ced23351cc8a61b9656e28beead876927eb31cc47f968b3bb114d8",
+      "milestones": {
+        "loading_to_attach_ms": 179.613,
+        "attach_to_map_ms": 27.408,
+        "map_to_hud_ms": 22.813,
+        "hud_to_ready_ms": 78.098,
+        "ready_to_draw_ms": 48.738,
+        "process_to_progress_draw_ms": 5257.866,
+        "process_to_ready_menu_ms": 6779.866,
+        "process_to_sortie_button_ms": 6825.866,
+        "sortie_to_loading_ms": 13.234,
+        "sortie_to_battle_ms": 369.904,
+        "sortie_to_first_move_ms": 474.15,
+        "right_click_to_order_draw_ms": 35.79,
+        "longest_entry_gap_ms": 188.045
+      },
+      "navigation": {
+        "dimensions": [
+          48,
+          40
+        ],
+        "bake_us": [
+          1823,
+          1983,
+          1732,
+          1824,
+          1727,
+          1700,
+          1655,
+          1650,
+          1695,
+          1643,
+          1643,
+          1641
+        ],
+        "digest": "3e7d7a03e5c0347cdc55411538e4983a9a9624fca188273733a07112f8d04362"
+      },
+      "course_selection": true,
+      "progress_unchanged": true,
+      "payload_verified": 7,
+      "pck_sha256": "5433363d71a99fb3213057414ac41bc00097be94ecb7aa3e402255f882e8102a",
+      "runtime_errors": [],
+      "navigation_median_ms": 1.6975
+    },
+    {
+      "variant": "cells",
+      "source_commit": "ad1eb8fb7c3032b407bb184826e16e3aa3d4f4ca",
+      "game_log_sha256": "9784170d6b4fa2e751901685c49d88e13f178bcfdddb77aab6bff1695c31d35e",
+      "trace_sha256": "15088c889b441a5ac19cce8105ee383be099e0a319c845c5b285d6bd055ee89f",
+      "milestones": {
+        "loading_to_attach_ms": 159.562,
+        "attach_to_map_ms": 27.747,
+        "map_to_hud_ms": 23.166,
+        "hud_to_ready_ms": 74.947,
+        "ready_to_draw_ms": 60.174,
+        "process_to_progress_draw_ms": 4620.659,
+        "process_to_ready_menu_ms": 5976.659,
+        "process_to_sortie_button_ms": 6011.659,
+        "sortie_to_loading_ms": 12.244,
+        "sortie_to_battle_ms": 357.84,
+        "sortie_to_first_move_ms": 479.774,
+        "right_click_to_order_draw_ms": 44.034,
+        "longest_entry_gap_ms": 202.127
+      },
+      "navigation": {
+        "dimensions": [
+          48,
+          40
+        ],
+        "bake_us": [
+          1741,
+          1718,
+          1679,
+          1695,
+          1700,
+          1722,
+          1695,
+          1696,
+          1784,
+          1707,
+          1721,
+          1660
+        ],
+        "digest": "3e7d7a03e5c0347cdc55411538e4983a9a9624fca188273733a07112f8d04362"
+      },
+      "course_selection": true,
+      "progress_unchanged": true,
+      "payload_verified": 7,
+      "pck_sha256": "5433363d71a99fb3213057414ac41bc00097be94ecb7aa3e402255f882e8102a",
+      "runtime_errors": [],
+      "navigation_median_ms": 1.7035
+    },
+    {
+      "variant": "rows",
+      "source_commit": "93b2e9bd860999c2372373bb4d70dab8c746601a",
+      "game_log_sha256": "e761ee2a9350caba5afbab08dae2d37d94d67b00d02907c4389e2f915d3b5a6d",
+      "trace_sha256": "672f8d3f667529d02b1364420aac2d2bedaab5b5e23e176f8e017358def7d667",
+      "milestones": {
+        "loading_to_attach_ms": 163.691,
+        "attach_to_map_ms": 23.912,
+        "map_to_hud_ms": 19.085,
+        "hud_to_ready_ms": 74.7,
+        "ready_to_draw_ms": 53.196,
+        "process_to_progress_draw_ms": 4962.201,
+        "process_to_ready_menu_ms": 6282.201,
+        "process_to_sortie_button_ms": 6317.201,
+        "sortie_to_loading_ms": 7.204,
+        "sortie_to_battle_ms": 341.788,
+        "sortie_to_first_move_ms": 462.603,
+        "right_click_to_order_draw_ms": 43.55,
+        "longest_entry_gap_ms": 183.735
+      },
+      "navigation": {
+        "dimensions": [
+          48,
+          40
+        ],
+        "bake_us": [
+          317,
+          307,
+          410,
+          302,
+          312,
+          412,
+          452,
+          398,
+          388,
+          361,
+          301,
+          291
+        ],
+        "digest": "3e7d7a03e5c0347cdc55411538e4983a9a9624fca188273733a07112f8d04362"
+      },
+      "course_selection": true,
+      "progress_unchanged": true,
+      "payload_verified": 7,
+      "pck_sha256": "1d6830f2d063b9cb41bd5667193b13f534e1337a8600ebb100139073f7ed2215",
+      "runtime_errors": [],
+      "navigation_median_ms": 0.339
+    },
+    {
+      "variant": "rows",
+      "source_commit": "93b2e9bd860999c2372373bb4d70dab8c746601a",
+      "game_log_sha256": "e761ee2a9350caba5afbab08dae2d37d94d67b00d02907c4389e2f915d3b5a6d",
+      "trace_sha256": "20cd1b901f47741b4fde442222a116bc9f34ee6d43bc5560a9a4e24f5d3b7cdf",
+      "milestones": {
+        "loading_to_attach_ms": 171.611,
+        "attach_to_map_ms": 25.089,
+        "map_to_hud_ms": 24.683,
+        "hud_to_ready_ms": 69.284,
+        "ready_to_draw_ms": 59.53,
+        "process_to_progress_draw_ms": 4717.975,
+        "process_to_ready_menu_ms": 6071.975,
+        "process_to_sortie_button_ms": 6107.975,
+        "sortie_to_loading_ms": 24.627,
+        "sortie_to_battle_ms": 374.824,
+        "sortie_to_first_move_ms": 487.433,
+        "right_click_to_order_draw_ms": 42.083,
+        "longest_entry_gap_ms": 196.418
+      },
+      "navigation": {
+        "dimensions": [
+          48,
+          40
+        ],
+        "bake_us": [
+          335,
+          317,
+          311,
+          286,
+          283,
+          282,
+          283,
+          280,
+          284,
+          292,
+          296,
+          294
+        ],
+        "digest": "3e7d7a03e5c0347cdc55411538e4983a9a9624fca188273733a07112f8d04362"
+      },
+      "course_selection": true,
+      "progress_unchanged": true,
+      "payload_verified": 7,
+      "pck_sha256": "1d6830f2d063b9cb41bd5667193b13f534e1337a8600ebb100139073f7ed2215",
+      "runtime_errors": [],
+      "navigation_median_ms": 0.289
+    },
+    {
+      "variant": "cells",
+      "source_commit": "ad1eb8fb7c3032b407bb184826e16e3aa3d4f4ca",
+      "game_log_sha256": "9784170d6b4fa2e751901685c49d88e13f178bcfdddb77aab6bff1695c31d35e",
+      "trace_sha256": "3dd62bf4a8b1c4fcc516b5138c888dc7469d1395b1f38660253b2d37257750dc",
+      "milestones": {
+        "loading_to_attach_ms": 191.808,
+        "attach_to_map_ms": 24.758,
+        "map_to_hud_ms": 20.381,
+        "hud_to_ready_ms": 74.237,
+        "ready_to_draw_ms": 54.33,
+        "process_to_progress_draw_ms": 4754.376,
+        "process_to_ready_menu_ms": 6141.376,
+        "process_to_sortie_button_ms": 6182.376,
+        "sortie_to_loading_ms": 14.476,
+        "sortie_to_battle_ms": 379.99,
+        "sortie_to_first_move_ms": 514.819,
+        "right_click_to_order_draw_ms": 8.126,
+        "longest_entry_gap_ms": 185.948
+      },
+      "navigation": {
+        "dimensions": [
+          48,
+          40
+        ],
+        "bake_us": [
+          1771,
+          1763,
+          1723,
+          1715,
+          1722,
+          1792,
+          1745,
+          1759,
+          1753,
+          1719,
+          1706,
+          1699
+        ],
+        "digest": "3e7d7a03e5c0347cdc55411538e4983a9a9624fca188273733a07112f8d04362"
+      },
+      "course_selection": true,
+      "progress_unchanged": true,
+      "payload_verified": 7,
+      "pck_sha256": "5433363d71a99fb3213057414ac41bc00097be94ecb7aa3e402255f882e8102a",
+      "runtime_errors": [],
+      "navigation_median_ms": 1.734
+    }
+  ]
+}
