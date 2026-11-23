@@ -1,6 +1,6 @@
 # 八幕战役后续开发路线图
 
-Windows 候选 913ee3ec 使用六入口原顺序混跑 604.6 秒，共 96 次进出。战斗活动、关键节点释放和战役进度字节检查通过。最差完整分钟 P95/P99 为 6.7/11.9 ms。按现有十分钟验收阈值通过。1v1 共 16 次，最长进场绘制间隔 88.5 ms。历史峰值仍待复现定位。 [Windows 混合入口分段收据](../qa/battle_entry_timing_20261116/windows_mixed_entry_phases_913ee3ec.json)
+Windows 候选 `a8ba93b8` 复用黄泥冈小景的共用地面图集。五次重进的点击到首帧中位数由 250.98 ms 降至 230.45 ms。新包完成 603.7 秒六入口混跑及 96 次进出，内存回收与帧时达标。首次出征和 Steam 前台仍按各自验收条件跟踪。 [Windows 验收收据](../qa/battle_entry_timing_20261116/windows_ground_overlay_atlas_a8ba93b8.json)
 
 Windows 候选 913ee3ec 补验黄泥冈强夺。吴用在实战中倒下，原第 2 车带两担落地。暂停保存并独立重启后，晁盖接回同一辆重车，公孙胜为第 3 车装货。任务栏点一次后两车各到原交付点，随后完成七车十一担并收拢幸存者，基础胜利、演义 0/4，终局旧档拦截通过。三个隔离 Windows 进程共 47 项。使用已有离线试玩包，真人体验和本候选 Steam 云档待验。 [Windows 强夺接力验收](../qa/campaign_transport_groups_20261116/windows_force_relay_dispatch_913ee3ec.json)
 

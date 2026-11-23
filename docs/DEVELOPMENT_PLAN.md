@@ -1,6 +1,6 @@
 # 当前开发计划（2026-10-30）
 
-黄泥冈重进时布景道具及地面小景循环占 26.6–28.6 ms。下次分开量纹理读取和节点创建，再用同一 Windows 入口比较改动前后耗时和内存。 [分段诊断收据](../qa/battle_entry_timing_20261116/windows_huangnigang_environment_spans_913ee3ec.json)
+黄泥冈复用 Windows 地面图集后，重进道具及小景初始化中位数由 26.97 ms 降至 2.44 ms。首次出征仍按需读取纹理。六入口十分钟验收通过，偶发长帧继续跨模式跟踪。 [Windows 验收收据](../qa/battle_entry_timing_20261116/windows_ground_overlay_atlas_a8ba93b8.json)
 
 Windows 候选 913ee3ec 使用六入口原顺序混跑 604.6 秒，共 96 次进出。战斗活动、关键节点释放和战役进度字节检查通过。最差完整分钟 P95/P99 为 6.7/11.9 ms。按现有十分钟验收阈值通过。1v1 共 16 次，最长进场绘制间隔 88.5 ms。历史峰值仍待复现定位。
 

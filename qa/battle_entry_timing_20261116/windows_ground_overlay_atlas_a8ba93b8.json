@@ -1,0 +1,927 @@
+{
+  "scope": "Windows Forward+ at 1280x720 on isolated desktop with offline player entry. Timed A/B includes inherited probes on both candidates. Mixed routes use original scenes and shaders. Save acceptance covers Huangnigang from formal Build 26752476. Test is automated.",
+  "shared_atlas": {
+    "path": "res://assets/campaign/environment/art_full_20260915/overlays.png",
+    "size": [
+      1305,
+      1205
+    ]
+  },
+  "build": {
+    "kind": "local_integrated_windows_candidate",
+    "commit": "a8ba93b836ad92534f23f53b3d4976af226ff633",
+    "source_version": "source-v1:bb4cb5789b7dc01330cb6ebd561cc244ccca833483a79a3565eaed737b71eca9",
+    "tracked_runtime_count": 6574,
+    "steps": [
+      {
+        "stage": "import",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 84.59
+      },
+      {
+        "stage": "export",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 121.78
+      }
+    ],
+    "files": [
+      {
+        "path": "GODOTSTEAM_LICENSE.txt",
+        "bytes": 1110,
+        "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+      },
+      {
+        "path": "LiangshanHeroes.exe",
+        "bytes": 1827551896,
+        "sha256": "ac239f58dba1c6b15fc6130bbd9d0145b6dc4520f833a8238b66a7946e22cf3b"
+      },
+      {
+        "path": "libgodotsteam.windows.template_release.x86_64.dll",
+        "bytes": 3961344,
+        "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+      },
+      {
+        "path": "steam_api64.dll",
+        "bytes": 319128,
+        "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+      },
+      {
+        "path": "steam_stats_reader.dll",
+        "bytes": 381440,
+        "sha256": "7505919cfff5907c13a02eb366690bff22ca6731c8521deefde58b114e4f796f"
+      },
+      {
+        "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+        "bytes": 1093,
+        "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+      }
+    ]
+  },
+  "instrumented_six_visits_per_build": {
+    "913ee3ec": {
+      "actual_seconds": 21.375897,
+      "dwell_seconds": 3.0,
+      "renderer": {
+        "adapter": "NVIDIA GeForce RTX 4060 Laptop GPU",
+        "api": "1.4.357",
+        "display": "Windows",
+        "driver": "vulkan",
+        "godot": {
+          "build": "official",
+          "hash": "7d41c59c457bd5a245092b4e7eb2d833e3b3f8c3",
+          "hex": 263683,
+          "major": 4,
+          "minor": 6,
+          "patch": 3,
+          "status": "stable",
+          "string": "4.6.3-stable (official)",
+          "timestamp": 0
+        },
+        "method": "forward_plus",
+        "vendor": "NVIDIA",
+        "vsync": 0
+      },
+      "viewport": [
+        1280,
+        720
+      ],
+      "campaign_save": {
+        "after": {
+          "exists": false,
+          "sha256": "absent",
+          "size_bytes": 0
+        },
+        "before": {
+          "exists": false,
+          "sha256": "absent",
+          "size_bytes": 0
+        },
+        "unchanged": true
+      },
+      "passed": false,
+      "acceptance_eligible": false,
+      "failures": [
+        "working_set_bytes returns within warm-baseline tolerance",
+        "private_bytes returns within warm-baseline tolerance"
+      ],
+      "failed_checks": [
+        {
+          "name": "working_set_bytes returns within warm-baseline tolerance",
+          "end": 1136730112.0,
+          "end_delta_from_warm": 139497472.0,
+          "monotonic_growth_detected": false,
+          "peak": 1205714944.0,
+          "recovered_from_peak": 68984832.0,
+          "recovery_passed": false,
+          "tolerance": 134217728.0,
+          "trend": {
+            "decreases": 0,
+            "first": 997232640.0,
+            "flat": 0,
+            "increases": 1,
+            "last": 1136717824.0,
+            "near_monotonic": false,
+            "net": 139485184.0,
+            "samples": 2
+          },
+          "warm_baseline": 997232640.0
+        },
+        {
+          "name": "private_bytes returns within warm-baseline tolerance",
+          "end": 1864855552.0,
+          "end_delta_from_warm": 138358784.0,
+          "monotonic_growth_detected": false,
+          "peak": 1864855552.0,
+          "recovered_from_peak": 0.0,
+          "recovery_passed": false,
+          "tolerance": 134217728.0,
+          "trend": {
+            "decreases": 0,
+            "first": 1726496768.0,
+            "flat": 0,
+            "increases": 1,
+            "last": 1864855552.0,
+            "near_monotonic": false,
+            "net": 138358784.0,
+            "samples": 2
+          },
+          "warm_baseline": 1726496768.0
+        }
+      ],
+      "warm_medians_us": {
+        "first_decal_lookup_us": 24951,
+        "all_decal_lookups_us": 26508,
+        "props_us": 26974,
+        "environment_us": 37349,
+        "first_battle_frame_us": 250975,
+        "longest_entry_gap_us": 138369
+      },
+      "runner": {
+        "exe_sha256": "81de74bc65173516e393b7322b08070e35d969c87c129b1ef75cfd91ed87a5a7",
+        "exe_unchanged": true,
+        "exit_code": 1,
+        "seconds": 34.886,
+        "active_fps_cap": 0,
+        "errors": [],
+        "warnings": [],
+        "log_sha256": "d3f66e72383c1072e74842ce2d3e81eb69a8430bd6acea520b66850ac268956a",
+        "report_sha256": "a5e56543be031f1e8784e01958685aa81a89ab0b7efcd7a68305cee213cc9223"
+      },
+      "samples": [
+        {
+          "shared_atlas_id": -9223371710890244256,
+          "first_decal_lookup_us": 23228,
+          "all_decal_lookups_us": 24803,
+          "props_us": 25308,
+          "environment_us": 62552,
+          "first_battle_frame_us": 673339,
+          "longest_entry_gap_us": 509511
+        },
+        {
+          "shared_atlas_id": -9223371630292498119,
+          "first_decal_lookup_us": 25004,
+          "all_decal_lookups_us": 27079,
+          "props_us": 27680,
+          "environment_us": 40645,
+          "first_battle_frame_us": 273698,
+          "longest_entry_gap_us": 152987
+        },
+        {
+          "shared_atlas_id": -9223371571119257368,
+          "first_decal_lookup_us": 25840,
+          "all_decal_lookups_us": 28168,
+          "props_us": 28897,
+          "environment_us": 39818,
+          "first_battle_frame_us": 277251,
+          "longest_entry_gap_us": 149227
+        },
+        {
+          "shared_atlas_id": -9223371493323306862,
+          "first_decal_lookup_us": 21874,
+          "all_decal_lookups_us": 23469,
+          "props_us": 23950,
+          "environment_us": 34637,
+          "first_battle_frame_us": 250975,
+          "longest_entry_gap_us": 135819
+        },
+        {
+          "shared_atlas_id": -9223371408095049735,
+          "first_decal_lookup_us": 24951,
+          "all_decal_lookups_us": 26508,
+          "props_us": 26974,
+          "environment_us": 37349,
+          "first_battle_frame_us": 238533,
+          "longest_entry_gap_us": 138369
+        },
+        {
+          "shared_atlas_id": -9223371323336554604,
+          "first_decal_lookup_us": 24115,
+          "all_decal_lookups_us": 25532,
+          "props_us": 25928,
+          "environment_us": 36158,
+          "first_battle_frame_us": 245456,
+          "longest_entry_gap_us": 133287
+        }
+      ]
+    },
+    "a8ba93b8": {
+      "actual_seconds": 21.173124,
+      "dwell_seconds": 3.0,
+      "renderer": {
+        "adapter": "NVIDIA GeForce RTX 4060 Laptop GPU",
+        "api": "1.4.357",
+        "display": "Windows",
+        "driver": "vulkan",
+        "godot": {
+          "build": "official",
+          "hash": "7d41c59c457bd5a245092b4e7eb2d833e3b3f8c3",
+          "hex": 263683,
+          "major": 4,
+          "minor": 6,
+          "patch": 3,
+          "status": "stable",
+          "string": "4.6.3-stable (official)",
+          "timestamp": 0
+        },
+        "method": "forward_plus",
+        "vendor": "NVIDIA",
+        "vsync": 0
+      },
+      "viewport": [
+        1280,
+        720
+      ],
+      "campaign_save": {
+        "after": {
+          "exists": false,
+          "sha256": "absent",
+          "size_bytes": 0
+        },
+        "before": {
+          "exists": false,
+          "sha256": "absent",
+          "size_bytes": 0
+        },
+        "unchanged": true
+      },
+      "passed": false,
+      "acceptance_eligible": false,
+      "failures": [
+        "working_set_bytes returns within warm-baseline tolerance",
+        "private_bytes returns within warm-baseline tolerance"
+      ],
+      "failed_checks": [
+        {
+          "name": "working_set_bytes returns within warm-baseline tolerance",
+          "end": 1159241728.0,
+          "end_delta_from_warm": 140378112.0,
+          "monotonic_growth_detected": false,
+          "peak": 1227902976.0,
+          "recovered_from_peak": 68661248.0,
+          "recovery_passed": false,
+          "tolerance": 134217728.0,
+          "trend": {
+            "decreases": 0,
+            "first": 1018863616.0,
+            "flat": 0,
+            "increases": 1,
+            "last": 1159233536.0,
+            "near_monotonic": false,
+            "net": 140369920.0,
+            "samples": 2
+          },
+          "warm_baseline": 1018863616.0
+        },
+        {
+          "name": "private_bytes returns within warm-baseline tolerance",
+          "end": 1887465472.0,
+          "end_delta_from_warm": 139038720.0,
+          "monotonic_growth_detected": false,
+          "peak": 1887465472.0,
+          "recovered_from_peak": 0.0,
+          "recovery_passed": false,
+          "tolerance": 134217728.0,
+          "trend": {
+            "decreases": 0,
+            "first": 1748426752.0,
+            "flat": 0,
+            "increases": 1,
+            "last": 1887465472.0,
+            "near_monotonic": false,
+            "net": 139038720.0,
+            "samples": 2
+          },
+          "warm_baseline": 1748426752.0
+        }
+      ],
+      "warm_medians_us": {
+        "first_decal_lookup_us": 410,
+        "all_decal_lookups_us": 2085,
+        "props_us": 2443,
+        "environment_us": 13439,
+        "first_battle_frame_us": 230451,
+        "longest_entry_gap_us": 116489
+      },
+      "runner": {
+        "exe_sha256": "ac239f58dba1c6b15fc6130bbd9d0145b6dc4520f833a8238b66a7946e22cf3b",
+        "exe_unchanged": true,
+        "exit_code": 1,
+        "seconds": 35.225,
+        "active_fps_cap": 0,
+        "errors": [],
+        "warnings": [],
+        "log_sha256": "e3d3127bd4670bbd5075609a81ddab643e41b4d2adc615e0b26ad2c11f202ebe",
+        "report_sha256": "d2314767e418a79b05e7f6c2cb638f0a863e49ed30cca5014b7f927e9bf6058e"
+      },
+      "samples": [
+        {
+          "shared_atlas_id": -9223371688358443168,
+          "first_decal_lookup_us": 26208,
+          "all_decal_lookups_us": 27838,
+          "props_us": 28349,
+          "environment_us": 66475,
+          "first_battle_frame_us": 667224,
+          "longest_entry_gap_us": 510125
+        },
+        {
+          "shared_atlas_id": -9223371688358443168,
+          "first_decal_lookup_us": 410,
+          "all_decal_lookups_us": 2085,
+          "props_us": 2443,
+          "environment_us": 15066,
+          "first_battle_frame_us": 242102,
+          "longest_entry_gap_us": 102861
+        },
+        {
+          "shared_atlas_id": -9223371688358443168,
+          "first_decal_lookup_us": 494,
+          "all_decal_lookups_us": 2245,
+          "props_us": 2731,
+          "environment_us": 13439,
+          "first_battle_frame_us": 235429,
+          "longest_entry_gap_us": 121439
+        },
+        {
+          "shared_atlas_id": -9223371688358443168,
+          "first_decal_lookup_us": 408,
+          "all_decal_lookups_us": 1745,
+          "props_us": 2189,
+          "environment_us": 13187,
+          "first_battle_frame_us": 230451,
+          "longest_entry_gap_us": 116489
+        },
+        {
+          "shared_atlas_id": -9223371688358443168,
+          "first_decal_lookup_us": 486,
+          "all_decal_lookups_us": 2120,
+          "props_us": 2581,
+          "environment_us": 14254,
+          "first_battle_frame_us": 217824,
+          "longest_entry_gap_us": 117537
+        },
+        {
+          "shared_atlas_id": -9223371688358443168,
+          "first_decal_lookup_us": 398,
+          "all_decal_lookups_us": 1794,
+          "props_us": 2154,
+          "environment_us": 13186,
+          "first_battle_frame_us": 226818,
+          "longest_entry_gap_us": 114169
+        }
+      ]
+    }
+  },
+  "mixed_modes": {
+    "actual_seconds": 603.742359,
+    "viewport": [
+      1280,
+      720
+    ],
+    "renderer": {
+      "adapter": "NVIDIA GeForce RTX 4060 Laptop GPU",
+      "api": "1.4.357",
+      "display": "Windows",
+      "driver": "vulkan",
+      "godot": {
+        "build": "official",
+        "hash": "7d41c59c457bd5a245092b4e7eb2d833e3b3f8c3",
+        "hex": 263683,
+        "major": 4,
+        "minor": 6,
+        "patch": 3,
+        "status": "stable",
+        "string": "4.6.3-stable (official)",
+        "timestamp": 0
+      },
+      "method": "forward_plus",
+      "vendor": "NVIDIA",
+      "vsync": 0
+    },
+    "transition_count": 96,
+    "dwell_seconds": 6.0,
+    "performance": {
+      "complete_minute_buckets": 10,
+      "max_minute_p95_ms": 6.715,
+      "max_minute_p99_ms": 14.487,
+      "p95_limit_ms": 16.7,
+      "p99_limit_ms": 33.3,
+      "peak_draw_calls": 1344.0,
+      "worst_frame_ms": 215.203
+    },
+    "route_visits": {
+      "arena:arena": 16,
+      "campaign:level1": 16,
+      "campaign:level5": 16,
+      "custom_defense:custom_defense": 16,
+      "skirmish:skirmish": 16,
+      "skirmish_ai:skirmish_ai": 16
+    },
+    "stability": {
+      "godot_static_bytes": {
+        "end": 0.0,
+        "end_delta_from_warm": 0.0,
+        "monotonic_growth_detected": false,
+        "peak": 0.0,
+        "recovered_from_peak": 0.0,
+        "recovery_passed": true,
+        "tolerance": 67108864.0,
+        "trend": {
+          "decreases": 0,
+          "first": 0.0,
+          "flat": 89,
+          "increases": 0,
+          "last": 0.0,
+          "near_monotonic": false,
+          "net": 0.0,
+          "samples": 90
+        },
+        "warm_baseline": 0.0
+      },
+      "node_count": {
+        "end": 74.0,
+        "end_delta_from_warm": 0.0,
+        "monotonic_growth_detected": false,
+        "peak": 74.0,
+        "recovered_from_peak": 0.0,
+        "recovery_passed": true,
+        "tolerance": 32.0,
+        "trend": {
+          "decreases": 0,
+          "first": 74.0,
+          "flat": 89,
+          "increases": 0,
+          "last": 74.0,
+          "near_monotonic": false,
+          "net": 0.0,
+          "samples": 90
+        },
+        "warm_baseline": 74.0
+      },
+      "object_count": {
+        "end": 2348.0,
+        "end_delta_from_warm": -12.0,
+        "monotonic_growth_detected": false,
+        "peak": 2361.0,
+        "recovered_from_peak": 13.0,
+        "recovery_passed": true,
+        "tolerance": 512.0,
+        "trend": {
+          "decreases": 4,
+          "first": 2361.0,
+          "flat": 81,
+          "increases": 4,
+          "last": 2361.0,
+          "near_monotonic": false,
+          "net": 0.0,
+          "samples": 90
+        },
+        "warm_baseline": 2360.0
+      },
+      "orphan_node_count": {
+        "end": 0.0,
+        "end_delta_from_warm": 0.0,
+        "monotonic_growth_detected": false,
+        "peak": 0.0,
+        "recovered_from_peak": 0.0,
+        "recovery_passed": true,
+        "tolerance": 2.0,
+        "trend": {
+          "decreases": 0,
+          "first": 0.0,
+          "flat": 89,
+          "increases": 0,
+          "last": 0.0,
+          "near_monotonic": false,
+          "net": 0.0,
+          "samples": 90
+        },
+        "warm_baseline": 0.0
+      },
+      "private_bytes": {
+        "end": 2142437376.0,
+        "end_delta_from_warm": 36614144.0,
+        "monotonic_growth_detected": false,
+        "peak": 2142437376.0,
+        "recovered_from_peak": 0.0,
+        "recovery_passed": true,
+        "tolerance": 134217728.0,
+        "trend": {
+          "decreases": 1,
+          "first": 2105823232.0,
+          "flat": 3,
+          "increases": 7,
+          "last": 2142437376.0,
+          "near_monotonic": false,
+          "net": 36614144.0,
+          "samples": 12
+        },
+        "warm_baseline": 2105823232.0
+      },
+      "render_buffer_bytes": {
+        "end": 6107876.0,
+        "end_delta_from_warm": -3525980.0,
+        "monotonic_growth_detected": false,
+        "peak": 10054176.0,
+        "recovered_from_peak": 3946300.0,
+        "recovery_passed": true,
+        "tolerance": 67108864.0,
+        "trend": {
+          "decreases": 29,
+          "first": 7051480.0,
+          "flat": 30,
+          "increases": 30,
+          "last": 9624448.0,
+          "near_monotonic": false,
+          "net": 2572968.0,
+          "samples": 90
+        },
+        "warm_baseline": 9633856.0
+      },
+      "render_texture_bytes": {
+        "end": 652652032.0,
+        "end_delta_from_warm": -51120640.0,
+        "monotonic_growth_detected": false,
+        "peak": 703772672.0,
+        "recovered_from_peak": 51120640.0,
+        "recovery_passed": true,
+        "tolerance": 33554432.0,
+        "trend": {
+          "decreases": 44,
+          "first": 699907584.0,
+          "flat": 15,
+          "increases": 30,
+          "last": 703772672.0,
+          "near_monotonic": false,
+          "net": 3865088.0,
+          "samples": 90
+        },
+        "warm_baseline": 703772672.0
+      },
+      "render_video_bytes": {
+        "end": 784589344.0,
+        "end_delta_from_warm": -37873456.0,
+        "monotonic_growth_detected": false,
+        "peak": 839660240.0,
+        "recovered_from_peak": 55070896.0,
+        "recovery_passed": true,
+        "tolerance": 67108864.0,
+        "trend": {
+          "decreases": 44,
+          "first": 817060128.0,
+          "flat": 15,
+          "increases": 30,
+          "last": 839230608.0,
+          "near_monotonic": false,
+          "net": 22170480.0,
+          "samples": 90
+        },
+        "warm_baseline": 822462800.0
+      },
+      "resource_count": {
+        "end": 359.0,
+        "end_delta_from_warm": 0.0,
+        "monotonic_growth_detected": false,
+        "peak": 359.0,
+        "recovered_from_peak": 0.0,
+        "recovery_passed": true,
+        "tolerance": 128.0,
+        "trend": {
+          "decreases": 0,
+          "first": 359.0,
+          "flat": 89,
+          "increases": 0,
+          "last": 359.0,
+          "near_monotonic": false,
+          "net": 0.0,
+          "samples": 90
+        },
+        "warm_baseline": 359.0
+      },
+      "working_set_bytes": {
+        "end": 1146028032.0,
+        "end_delta_from_warm": 37040128.0,
+        "monotonic_growth_detected": false,
+        "peak": 1248804864.0,
+        "recovered_from_peak": 102776832.0,
+        "recovery_passed": true,
+        "tolerance": 134217728.0,
+        "trend": {
+          "decreases": 0,
+          "first": 1108987904.0,
+          "flat": 4,
+          "increases": 7,
+          "last": 1146028032.0,
+          "near_monotonic": false,
+          "net": 37040128.0,
+          "samples": 12
+        },
+        "warm_baseline": 1108987904.0
+      }
+    },
+    "campaign_save": {
+      "after": {
+        "exists": false,
+        "sha256": "absent",
+        "size_bytes": 0
+      },
+      "before": {
+        "exists": false,
+        "sha256": "absent",
+        "size_bytes": 0
+      },
+      "unchanged": true
+    },
+    "passed": true,
+    "failures": [],
+    "per_route": {
+      "campaign:level1": {
+        "visits": 16,
+        "first_battle_frame_warm_median_us": 228471,
+        "max_entry_gap_us": 213298,
+        "max_entry_gap_trace": {
+          "first_overlay_us": 3507,
+          "battle_attached_us": 162604,
+          "map_attached_us": 187174,
+          "hud_attached_us": 234772,
+          "first_unit_us": 287168,
+          "scene_ready_us": 310937,
+          "first_battle_frame_us": 362090,
+          "gap_start_us": 148792,
+          "gap_end_us": 362090
+        }
+      },
+      "arena:arena": {
+        "visits": 16,
+        "first_battle_frame_warm_median_us": 71768,
+        "max_entry_gap_us": 85445,
+        "max_entry_gap_trace": {
+          "first_overlay_us": 16785,
+          "battle_attached_us": 18076,
+          "map_attached_us": 49791,
+          "hud_attached_us": 60262,
+          "first_unit_us": 76602,
+          "scene_ready_us": 80000,
+          "first_battle_frame_us": 102230,
+          "gap_start_us": 16785,
+          "gap_end_us": 102230
+        }
+      },
+      "skirmish:skirmish": {
+        "visits": 16,
+        "first_battle_frame_warm_median_us": 258092,
+        "max_entry_gap_us": 206305,
+        "max_entry_gap_trace": {
+          "first_overlay_us": 1489,
+          "battle_attached_us": 251580,
+          "map_attached_us": 262348,
+          "hud_attached_us": 343304,
+          "first_unit_us": 370111,
+          "scene_ready_us": 376494,
+          "first_battle_frame_us": 444780,
+          "gap_start_us": 238475,
+          "gap_end_us": 444780
+        }
+      },
+      "skirmish_ai:skirmish_ai": {
+        "visits": 16,
+        "first_battle_frame_warm_median_us": 89279,
+        "max_entry_gap_us": 91197,
+        "max_entry_gap_trace": {
+          "first_overlay_us": 25561,
+          "battle_attached_us": 27160,
+          "map_attached_us": 35349,
+          "hud_attached_us": 54510,
+          "first_unit_us": 74121,
+          "scene_ready_us": 79593,
+          "first_battle_frame_us": 116758,
+          "gap_start_us": 25561,
+          "gap_end_us": 116758
+        }
+      },
+      "custom_defense:custom_defense": {
+        "visits": 16,
+        "first_battle_frame_warm_median_us": 260080,
+        "max_entry_gap_us": 185033,
+        "max_entry_gap_trace": {
+          "first_overlay_us": 1173,
+          "battle_attached_us": 126938,
+          "map_attached_us": 166748,
+          "hud_attached_us": 222413,
+          "first_unit_us": 241757,
+          "scene_ready_us": 246508,
+          "first_battle_frame_us": 299056,
+          "gap_start_us": 114023,
+          "gap_end_us": 299056
+        }
+      },
+      "campaign:level5": {
+        "visits": 16,
+        "first_battle_frame_warm_median_us": 262144,
+        "max_entry_gap_us": 198361,
+        "max_entry_gap_trace": {
+          "first_overlay_us": 1542,
+          "battle_attached_us": 141456,
+          "map_attached_us": 150746,
+          "hud_attached_us": 227524,
+          "first_unit_us": 254990,
+          "scene_ready_us": 265380,
+          "first_battle_frame_us": 326665,
+          "gap_start_us": 128304,
+          "gap_end_us": 326665
+        }
+      }
+    },
+    "runner": {
+      "exe_sha256": "ac239f58dba1c6b15fc6130bbd9d0145b6dc4520f833a8238b66a7946e22cf3b",
+      "exe_unchanged": true,
+      "exit_code": 0,
+      "seconds": 617.478,
+      "active_fps_cap": 0,
+      "errors": [],
+      "warnings": [],
+      "log_sha256": "92a813a7e57262738e30195bbe5a41568703ea9ccb1c2a7201abdd16fb6370e0",
+      "report_sha256": "400e98417bba417d4f2470269345a9c74de878f7b7ccca6269069afa0cbcdd99"
+    }
+  },
+  "published_build_legacy_huangnigang": {
+    "candidate_commit": "a8ba93b836ad92534f23f53b3d4976af226ff633",
+    "candidate_exe_sha256": "ac239f58dba1c6b15fc6130bbd9d0145b6dc4520f833a8238b66a7946e22cf3b",
+    "baseline_build": 26752476,
+    "baseline_exe_sha256": "fae95050c553dfd691e3beebca3eef7dd1d7490dfebf6e99fa50d310456b91a6",
+    "scope": "Both unmodified native Windows executable binaries rendered in isolated desktops with separate player profiles. External scene invokes normal menu, campaign and pause buttons. Steam adapter initialized offline; no private QA continuation. Real Build 26752476 generates each first-generation save after two seconds in battle. Level6 terminal is an intentionally controlled loss. No Steam account or cloud assertion.",
+    "chapters": [
+      {
+        "chapter": "level1",
+        "old_slot_sha256": "a540c8fa1ddc55ae1154e6ba28cc1dee2f85b169b9466c9c93383dd6e15541c2",
+        "old_journal_sha256": "949cb0b5ca13caa59d4b5aac688a7932a756816765498fa2df9df03a0cffeb4e",
+        "resaved_slot_sha256": "59fbeae0e568bf1b80d02b0080e3e6079d756c8a549afb209d6a3d550a980402",
+        "original_records_unchanged": true,
+        "ground_overlays": {
+          "dry_grass_leaves": [
+            "(528.0, 720.0)",
+            58.0,
+            "[P: (986.0, 628.0), S: (319.0, 288.0)]",
+            "[P: (0.0, 15.5), S: (0.0, 31.0)]",
+            true,
+            "(1305.0, 1205.0)"
+          ],
+          "gravel_clods": [
+            "(1008.0, 560.0)",
+            52.0,
+            "[P: (358.0, 365.0), S: (302.0, 263.0)]",
+            "[P: (0.0, 19.5), S: (0.0, 39.0)]",
+            true,
+            "(1305.0, 1205.0)"
+          ],
+          "pine_needles_leaves": [
+            "(784.0, 528.0)",
+            66.0,
+            "[P: (0.0, 628.0), S: (358.0, 288.0)]",
+            "[P: (0.0, 35.0), S: (0.0, 70.0)]",
+            true,
+            "(1305.0, 1205.0)"
+          ],
+          "pole_wheel_marks": [
+            "(400.0, 656.0)",
+            54.0,
+            "[P: (986.0, 0.0), S: (319.0, 365.0)]",
+            "[P: (23.0, 0.0), S: (46.0, 0.0)]",
+            true,
+            "(1305.0, 1205.0)"
+          ],
+          "rounded_stones": [
+            "(1232.0, 592.0)",
+            48.0,
+            "[P: (0.0, 365.0), S: (358.0, 263.0)]",
+            "[P: (0.0, 47.5), S: (0.0, 95.0)]",
+            true,
+            "(1305.0, 1205.0)"
+          ],
+          "scattered_footprints": [
+            "(880.0, 688.0)",
+            68.0,
+            "[P: (358.0, 0.0), S: (302.0, 365.0)]",
+            "[P: (31.5, 0.0), S: (63.0, 0.0)]",
+            true,
+            "(1305.0, 1205.0)"
+          ],
+          "shallow_cart_ruts": [
+            "(1104.0, 656.0)",
+            88.0,
+            "[P: (0.0, 0.0), S: (358.0, 365.0)]",
+            "[P: (3.5, 0.0), S: (7.0, 0.0)]",
+            true,
+            "(1305.0, 1205.0)"
+          ]
+        },
+        "stages": [
+          {
+            "phase": "old-save",
+            "log_sha256": "cf73f874083b0e1892fd734577fc75b0e4ae12cff7bbf59c44d1d9c901aee900",
+            "exit": 0,
+            "markers": []
+          },
+          {
+            "phase": "resave",
+            "log_sha256": "2c07e5bb78debcd73ccfd3352e583ffc6b460f84eb1d6aeebb04b646b1aaeb1b",
+            "exit": 0,
+            "markers": [
+              "LEGACY_CONTINUED 1",
+              "LEGACY_RESAVED 2"
+            ]
+          },
+          {
+            "phase": "reopen",
+            "log_sha256": "0a535b9fa4f4b4af11521517a2789fdb9c92ca12467ca446656df4b95d55fd1c",
+            "exit": 0,
+            "markers": [
+              "LEGACY_CONTINUED 2"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "local_offline_playtest": {
+    "platform": "windows",
+    "kind": "local_playtest_candidate",
+    "source_commit": "a8ba93b836ad92534f23f53b3d4976af226ff633",
+    "source_version": "source-v1:bb4cb5789b7dc01330cb6ebd561cc244ccca833483a79a3565eaed737b71eca9",
+    "archive": {
+      "name": "LiangshanHeroes_PC_Playtest_a8ba93b8.zip",
+      "bytes": 1758380588,
+      "sha256": "a0c85faa00f4da931c2d4b3afb5dc07dd08eeb5af417ff6330c39120ec9c1f60",
+      "members_verified": 8
+    },
+    "runtime_files": [
+      {
+        "path": "GODOTSTEAM_LICENSE.txt",
+        "bytes": 1110,
+        "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+      },
+      {
+        "path": "LiangshanHeroes.exe",
+        "bytes": 1827551896,
+        "sha256": "ac239f58dba1c6b15fc6130bbd9d0145b6dc4520f833a8238b66a7946e22cf3b"
+      },
+      {
+        "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+        "bytes": 1093,
+        "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+      },
+      {
+        "path": "libgodotsteam.windows.template_release.x86_64.dll",
+        "bytes": 3961344,
+        "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+      },
+      {
+        "path": "steam_api64.dll",
+        "bytes": 319128,
+        "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+      },
+      {
+        "path": "steam_stats_reader.dll",
+        "bytes": 381440,
+        "sha256": "7505919cfff5907c13a02eb366690bff22ca6731c8521deefde58b114e4f796f"
+      }
+    ],
+    "launcher": {
+      "name": "Start Local Playtest.cmd",
+      "sha256": "3852c641f62645f7f5e4ad10c31d4209eaa1eb29ee29f3acbd09fb8eb91bbf77",
+      "argument": "--offline-playtest",
+      "profiles": [
+        "P01",
+        "P02",
+        "P03"
+      ],
+      "clean_archive_boot": {
+        "mode": "headless",
+        "exit": 0,
+        "errors": [],
+        "log_sha256": "a9912b85473f126d3f4f63ec824170c828df3473a292f866dde86cafda5b66da"
+      }
+    }
+  }
+}

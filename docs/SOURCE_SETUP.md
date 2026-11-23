@@ -1,12 +1,14 @@
 # 源码设置与换机（2026-10-30）
 
+当前 Windows 离线试玩包为 `a8ba93b8`。完整解压后双击 `Start Local Playtest.cmd`，使用同一编号继续本包存档。Windows 战役用到共享地面小景后，环境素材解析器保留一张图集的引用，小景素材仍从原关卡清单解析。 [本地包目录](DIRECTORY_INDEX.md) · [Windows 验收收据](../qa/battle_entry_timing_20261116/windows_ground_overlay_atlas_a8ba93b8.json)
+
 黄泥冈布景分段使用临时继承探针，保留候选 `913ee3ec` 的 Windows EXE 字节。收据按每次进场保留战斗、地图环境和布景时间戳。 [分段诊断收据](../qa/battle_entry_timing_20261116/windows_huangnigang_environment_spans_913ee3ec.json)
 
 现有性能工具可使用 CAMPAIGN_SOAK_ENTRY_SIGNALS=1 记录进场过程、物理帧及绘制前后回调，并为每次进场附加可与 Windows 计数对齐的时间戳。短检验证了可选开关及数据输出。 [Windows 混合入口分段收据](../qa/battle_entry_timing_20261116/windows_mixed_entry_phases_913ee3ec.json)
 
 Windows 候选 913ee3ec 补验黄泥冈强夺。吴用在实战中倒下，原第 2 车带两担落地。暂停保存并独立重启后，晁盖接回同一辆重车，公孙胜为第 3 车装货。任务栏点一次后两车各到原交付点，随后完成七车十一担并收拢幸存者，基础胜利、演义 0/4，终局旧档拦截通过。三个隔离 Windows 进程共 47 项。使用已有离线试玩包，真人体验和本候选 Steam 云档待验。 [Windows 强夺接力验收](../qa/campaign_transport_groups_20261116/windows_force_relay_dispatch_913ee3ec.json)
 
-当前 Windows 本地试玩包为 913ee3ec。解压后双击 Start Local Playtest.cmd，选择分配的独立档案编号。黄泥冈批量交付与正式版酒计旧档已在该包验收。 [Windows 黄泥冈验收](../qa/campaign_transport_groups_20261116/windows_loaded_cart_dispatch_913ee3ec.json)
+黄泥冈批量交付与正式版酒计旧档在前一候选 913ee3ec 验收。 [Windows 黄泥冈验收](../qa/campaign_transport_groups_20261116/windows_loaded_cart_dispatch_913ee3ec.json)
 
 大名府操作专项的 Windows 本地试玩包为 5256f8d3。解压后双击 Start Local Playtest.cmd，选择分配的独立档案编号。大名府撤离快捷指令和原正式强攻旧档已在该包验收。 [Windows 大名府验收](../qa/campaign_wounded_selection_20261116/windows_daming_evacuation_5256f8d3.json)
 
