@@ -321,7 +321,7 @@ func _view_bailong(b) -> void:
 	else:
 		b.mission.set_feedback(Localize.format_text("白龙庙已到%d/4，仍需到场：%s。",[members.size()-missing.size(),", ".join(missing)]))
 
-func _escort_objective() -> String:
+func _escort_objective(touch_ui: bool) -> String:
 	if not first_rescued: return ""
 	var song_rescued := living(song_freed)
 	var dai_rescued := living(dai_freed)
@@ -331,12 +331,18 @@ func _escort_objective() -> String:
 		if first.story_outcome=="embarked": return "已有一人登船。回法场解救另一人，再护送到码头。"
 		return "宋江已解缚。可先派兵护他离开法场，另队解救戴宗。西巷较近，南巷较宽。" if song_rescued else "戴宗已解缚。可先派兵护他离开法场，另队解救宋江。西巷较近，南巷较宽。"
 	if song_freed.story_outcome=="embarked" and dai_freed.story_outcome=="embarked": return ""
+	if not touch_ui:
+		if not meeting and _bailong_party().all(active):
+			return "可先去白龙庙会合，也可清开码头后点「送获救者登船」。护卫可留在岸边断后。"
+		return "清开码头后点「送获救者登船」，也可手动选路。二人上船后由你下令开船。"
 	if not meeting and _bailong_party().all(active):
 		return "二人已救下。西巷短而狭，南巷较宽有骑弓截兵；自由选路或改道。可先经白龙庙会水军，再分别下令登船。护卫留在岸边断后，让出登船旗标附近的通道。"
 	return "沿西巷或南巷护送仍在岸上的获救者，先清开登船点。宋江、戴宗都登船后即可开船。"
 func _update_escort_objective(b) -> void:
-	var objective := _escort_objective()
-	if b.phase!=b.Phase.FIGHT or objective.is_empty(): return
+	if b.phase!=b.Phase.FIGHT: return
+	_update_boarding_button(b)
+	var objective := _escort_objective(b.hud.touch_ui)
+	if objective.is_empty(): return
 	var heading := "护送 · 开路与断后" if living(song_freed) and living(dai_freed) else "分兵 · 继续解缚"
 	if b.mission.stage_title!=heading: b.mission.set_title(heading)
 	if b.mission.objective!=objective: b.mission.set_objective(objective)
@@ -604,6 +610,66 @@ func _selectable_shore_party(ashore: Array) -> Array:
 func _rescued_pair_aboard() -> bool:
 	return living(song_freed) and living(dai_freed) and song_freed.story_outcome == "embarked" and dai_freed.story_outcome == "embarked"
 
+func _can_order_boarding(b) -> bool:
+	return not b.hud.touch_ui and living(song_freed) and living(dai_freed) and (active(song_freed) or active(dai_freed))
+
+func _update_boarding_button(b) -> void:
+	var button: Button = b.mission.find_level_button("jiang_board_rescued")
+	if not _can_order_boarding(b):
+		if button != null:
+			button.queue_free()
+		return
+	if button == null:
+		button = b.mission.add_level_button("jiang_board_rescued", "送获救者登船",
+			"派仍在岸上的宋江、戴宗各走到自己的登船旗标。可随时停止或改道。")
+		button.get_parent().move_child(button, 0)
+		b.mission.reveal_primary_level_button()
+
+func _order_rescued_boarding(b) -> void:
+	if not _can_order_boarding(b) or not b._gameplay_rng_issue.is_empty():
+		return
+	var issued := 0
+	var blocked := 0
+	for actor: Unit in [song_freed, dai_freed]:
+		if not active(actor):
+			continue
+		var action_id := "board_song" if actor == song_freed else "board_dai"
+		var action: Dictionary = b.mission.actions.get(action_id, {})
+		if action.is_empty() or action.done or not b.mission._valid_action_actor(actor, action) \
+				or not String(action.get("blocked_reason", "")).is_empty():
+			blocked += 1
+			continue
+		var has_boarding_order: bool = (actor.mission_order_active or actor.mission_order_arrival_t > 0.0) \
+			and b.mission._nearest_clicked_action(actor.mission_order_target) == action_id
+		if has_boarding_order or b.mission.active_action_id == action_id:
+			continue
+		var destination: Vector2 = b.map.cell_to_world(action.cell)
+		if _enemy_near(b, destination, BOARDING_THREAT_RADIUS, true):
+			blocked += 1
+			continue
+		var path: PackedVector2Array = b.map.find_path(actor.position, destination, actor.faction, actor.movement_profile)
+		if path.is_empty() or b.mission._nearest_clicked_action(destination) != action_id \
+				or path[-1].distance_to(destination) > float(action.reach) \
+				or not b.map._segment_open(path[-1], destination, actor.movement_profile):
+			blocked += 1
+			continue
+		# Each boarding flag consumes only the arriving actor's order.
+		var group := [actor]
+		b._stamp_manual(group)
+		actor.order_move(destination)
+		b._stamp_mission_move(group, destination)
+		issued += 1
+	if issued > 0:
+		Sfx.play("order")
+	if issued > 0 and blocked > 0:
+		b.mission.set_feedback("已派一人登船。另一处登船点暂不可达，可清开退路或手动改道。")
+	elif issued > 0:
+		b.mission.set_feedback(Localize.format_text("已派%d名获救者前往登船。", issued))
+	elif blocked > 0:
+		b.mission.set_feedback("登船点暂不可达。请清开退路或手动改道。")
+	else:
+		b.mission.set_feedback("获救者正在前往旗标或登船。")
+
 func _update_dock_guidance(b) -> void:
 	var roster := _dock_roster(b)
 	if not is_instance_valid(_shore_select_button):
@@ -732,6 +798,9 @@ func activate_mission_button(b, button_id: String) -> void:
 	if button_id == "jiang_depart": _finish(b)
 	if button_id == "jiang_bailong_meeting":
 		_view_bailong(b)
+		return
+	if button_id == "jiang_board_rescued":
+		_order_rescued_boarding(b)
 		return
 	if not rally: return
 	if button_id == "jiang_return_rearguard":
