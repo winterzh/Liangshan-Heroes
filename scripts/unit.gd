@@ -16,6 +16,7 @@ var _campaign_environment_render_texture: Texture2D
 
 enum { FACTION_LIANG = 0, FACTION_GUAN = 1 }
 enum { ST_IDLE, ST_MOVE, ST_AMOVE, ST_CHASE, ST_GATHER, ST_RETURN, ST_BUILD, ST_REPAIR, ST_GARRISON }
+const SHORE_ESCORT_ORDER := &"gao_shore_escort_order"
 enum { STANCE_AGGRO, STANCE_DEFEND, STANCE_HOLD, STANCE_PASSIVE }   # 进攻=追击/守备=守阵/据守=原地/避战=不索敌不还手
 enum { CHASE_AUTO, CHASE_AMOVE, CHASE_EXPLICIT, CHASE_FORCED }
 enum WK { SWORD, SPEAR, AXE, BOW, FIST, IRON_STAFF }   # FIST is a per-campaign unarmed style; IRON_STAFF is Lu Zhishen's iron Buddhist staff.
@@ -2603,8 +2604,9 @@ func _follow_path(delta: float) -> bool:
 	if _root_t > 0.0:
 		_stepped = false
 		return false   # 缠绕：原地定身（不吃掉路点、不算到达），可照常攻击/施法
-	if is_noncombat and key == "gao_qiu" and battle != null and battle.level != null \
-			and battle.level.has_method("prisoner_waiting_for_escort") and battle.level.prisoner_waiting_for_escort(battle, self):
+	var shore_escort := (is_noncombat and key == "gao_qiu") or (_group_cap > 0.0 and has_meta(SHORE_ESCORT_ORDER))
+	if shore_escort and battle != null and battle.level != null \
+			and battle.level.has_method("wait_for_shore_escort") and battle.level.wait_for_shore_escort(battle, self):
 		_stepped = false
 		# Waiting for a guard is intentional; keep the path and do not repath.
 		_stuck_t = 0.0

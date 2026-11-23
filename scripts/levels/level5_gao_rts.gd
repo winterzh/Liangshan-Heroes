@@ -22,6 +22,7 @@ const FIRE_POINTS := [Vector2i(42,29),Vector2i(40,40)]
 # The same radius is used for readiness and actual fire damage.
 const FIRE_ZONE_RADIUS := 230.0
 const PRISONER_ESCORT_RADIUS := 180.0
+const SHORE_ESCORT_SPACING := 104.0
 const PRISONER_WAITING := "高俅正在等待岸军护卫。已下达的行军命令会保留。"
 const PRISONER_HANDOVER := HALL + Vector2i(0,4)
 const ESCORT_PROMPT := "高俅已上岸。点击「押送高俅回堂」调附近的一名空闲岸军同行，也可自行指挥。"
@@ -645,6 +646,22 @@ func prisoner_waiting_for_escort(b, unit: Unit) -> bool:
 	return not b.units_near(unit.position, PRISONER_ESCORT_RADIUS).any(func(guard):
 		return _is_shore_guard(guard) and guard.position.distance_to(unit.position) < PRISONER_ESCORT_RADIUS)
 
+func wait_for_shore_escort(b, mover: Unit) -> bool:
+	if mover == prisoner:
+		return prisoner_waiting_for_escort(b, mover)
+	# Bind the two ordinary move orders, including across a save. A new player
+	# order on either unit ends this assignment without changing its route.
+	var link: Variant = mover.get_meta(Unit.SHORE_ESCORT_ORDER, [])
+	if not alive(prisoner) or capture_lost or not _is_shore_guard(mover) \
+			or not link is Array or link != [prisoner.entity_id, prisoner._order_serial, mover._order_serial]:
+		mover.remove_meta(Unit.SHORE_ESCORT_ORDER)
+		return false
+	if prisoner._state != Unit.ST_MOVE or mover._path_i >= mover._path.size():
+		return false
+	var gap: Vector2 = mover.position - prisoner.position
+	var step: Vector2 = mover._path[mover._path_i] - mover.position
+	return gap.length_squared() >= SHORE_ESCORT_SPACING * SHORE_ESCORT_SPACING and gap.dot(step) > 0.0
+
 func _sync_prisoner_escort_button(b) -> void:
 	var button: Button = b.mission.find_level_button("gao_escort")
 	if not landed or capture_lost or not alive(prisoner) or b.mission.has_event("gao_captured"):
@@ -684,6 +701,7 @@ func _order_prisoner_escort(b) -> void:
 	b._stamp_manual(group)
 	guard.order_move(targets[0], false, pace)
 	prisoner.order_move(targets[1], false, pace)
+	guard.set_meta(Unit.SHORE_ESCORT_ORDER, [prisoner.entity_id, prisoner._order_serial, guard._order_serial])
 	b.select_members(group, false)
 	Sfx.play("order")
 	b.mission.set_feedback("岸军已出发，正押送高俅回堂。")
