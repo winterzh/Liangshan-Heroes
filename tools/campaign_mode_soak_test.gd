@@ -64,6 +64,7 @@ var _minute_draw_max := 0.0
 var _minute_frame_count := 0
 var _stage_timing_enabled := false
 var _mount_trace_enabled := false
+var _entry_signals_enabled := false
 var _mount_trace := {}
 var _mount_samples: Array[Dictionary] = []
 var _stage_frame_samples := {}
@@ -311,9 +312,20 @@ func _trace_scene_changed() -> void:
 		_mount_trace.scene_ready_us = Time.get_ticks_usec() - int(_mount_trace.origin_us)
 
 
+func _trace_entry_signal(name: String) -> void:
+	if _mount_trace.is_empty() or _mount_trace.first_battle_frame_us >= 0:
+		return
+	# These are times observed by Godot's signal callbacks, not exclusive CPU or GPU timings.
+	var stamps: Dictionary = _mount_trace.get_or_add("entry_signal_us", {})
+	var values: Array = stamps.get_or_add(name, [])
+	values.append(Time.get_ticks_usec() - int(_mount_trace.origin_us))
+
+
 func _trace_drawing() -> void:
 	if _mount_trace.is_empty() or _mount_trace.first_battle_frame_us >= 0:
 		return
+	if _entry_signals_enabled:
+		_trace_entry_signal("post_draw")
 	var elapsed := Time.get_ticks_usec() - int(_mount_trace.origin_us)
 	if _mount_trace.first_overlay_us < 0:
 		_mount_trace.first_overlay_us = elapsed
@@ -580,6 +592,8 @@ func _run_fixture(fixture: Dictionary) -> bool:
 			"first_overlay_us": -1, "battle_attached_us": -1, "map_attached_us": -1,
 			"hud_attached_us": -1, "first_unit_us": -1, "scene_ready_us": -1,
 			"first_battle_frame_us": -1, "last_draw_us": 0, "gap_start_us": 0, "gap_end_us": 0}
+		if _entry_signals_enabled:
+			_mount_trace["unix_origin_us"] = roundi(Time.get_unix_time_from_system() * 1_000_000.0)
 	seed(5_088_120 + _transitions.size())
 	current_scene.call("_launch", _current_level_id if mode == "campaign" else "")
 	var battle_ready := await _await_scene(BATTLE_SCENE)
@@ -859,11 +873,16 @@ func _run() -> void:
 			_early_exit("Campaign startup did not allow entry: " + str(startup_flow.last_result), 2)
 			return
 		await process_frame
-	_mount_trace_enabled = OS.get_environment("CAMPAIGN_SOAK_MOUNT_TRACE") == "1"
+	_entry_signals_enabled = OS.get_environment("CAMPAIGN_SOAK_ENTRY_SIGNALS") == "1"
+	_mount_trace_enabled = _entry_signals_enabled or OS.get_environment("CAMPAIGN_SOAK_MOUNT_TRACE") == "1"
 	if _mount_trace_enabled:
 		node_added.connect(_trace_node_added)
 		scene_changed.connect(_trace_scene_changed)
 		RenderingServer.frame_post_draw.connect(_trace_drawing)
+	if _entry_signals_enabled:
+		process_frame.connect(_trace_entry_signal.bind("process"))
+		physics_frame.connect(_trace_entry_signal.bind("physics"))
+		RenderingServer.frame_pre_draw.connect(_trace_entry_signal.bind("pre_draw"))
 	_started_at = Time.get_datetime_string_from_system(false, true)
 	_start_usec = Time.get_ticks_usec()
 	_end_usec = _start_usec + int(_duration_seconds * 1_000_000.0)
