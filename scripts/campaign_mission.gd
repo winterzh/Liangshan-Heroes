@@ -32,6 +32,7 @@ var _toggle: Button
 var _details: VBoxContainer
 var _detail_scroll: ScrollContainer
 var _expanded := false
+var _restored_detail_scroll := Vector2i(-1, -1)
 var _title: Label
 var _core: Label
 var _story: Label
@@ -139,6 +140,34 @@ func _set_expanded(expanded: bool) -> void:
 	_toggle.tooltip_text = Localize.text("收起任务详情，留出战场视野" if expanded else "展开本关目标与任务定位按钮")
 	_layout_details()
 	_panel.reset_size()
+	queue_restored_detail_scroll()
+
+func detail_scroll_offset() -> Vector2i:
+	if _restored_detail_scroll.x >= 0:
+		return _restored_detail_scroll
+	return Vector2i(_detail_scroll.scroll_horizontal, _detail_scroll.scroll_vertical)
+
+# The HUD can be hidden while a battle mounts. Keep its scroll preference
+# until the native container is visible and has laid out its content.
+func defer_detail_scroll(offset: Vector2i) -> void:
+	_restored_detail_scroll = offset
+
+func queue_restored_detail_scroll() -> void:
+	if _restored_detail_scroll.x < 0 or not _detail_scroll.is_visible_in_tree():
+		return
+	var frame := _detail_scroll.get_tree().process_frame
+	if not frame.is_connected(_apply_restored_detail_scroll):
+		_detail_scroll.queue_sort()
+		frame.connect(_apply_restored_detail_scroll, CONNECT_ONE_SHOT)
+
+func _apply_restored_detail_scroll() -> void:
+	if not is_instance_valid(_detail_scroll) or not _detail_scroll.is_visible_in_tree():
+		return
+	# The native range clamps a saved offset if the current viewport has less
+	# scrollable space. A collapsed panel keeps the pending position until opened.
+	_detail_scroll.scroll_horizontal = _restored_detail_scroll.x
+	_detail_scroll.scroll_vertical = _restored_detail_scroll.y
+	_restored_detail_scroll = Vector2i(-1, -1)
 
 func _layout_details() -> void:
 	var width := 370.0 if Localize.locale == "en" else 312.0
@@ -790,6 +819,7 @@ func tick(delta: float) -> void:
 	_panel.position = battle.hud.campaign_objective_position()
 	if _expanded:
 		_layout_details()
+		queue_restored_detail_scroll()
 	_panel.reset_size()
 	elapsed += delta
 	total_game_seconds += delta

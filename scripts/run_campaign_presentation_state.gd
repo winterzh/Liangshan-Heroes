@@ -369,8 +369,9 @@ func capture(source: Variant, context: Dictionary, held_ui: Array = []) -> Dicti
 	for row: Variant in held_ui:
 		if not _fields(row, ["node", "mode", "blocked"]) or not is_instance_valid(row.node) or held.has(row.node): return _bad("PRESENTATION_HELD_FLAGS")
 		held[row.node] = row
+	var scroll: Vector2i = source.detail_scroll_offset()
 	var raw := {"locale": Localize.locale, "controls": [], "buttons": [], "markers": [], "bindings": [],
-		"scroll": {"horizontal": source._detail_scroll.scroll_horizontal, "vertical": source._detail_scroll.scroll_vertical}}
+		"scroll": {"horizontal": scroll.x, "vertical": scroll.y}}
 	for row: Dictionary in registry.rows:
 		if not row.node is Control or row.node.is_queued_for_deletion() or row.node.get_script() != null: return _bad("PRESENTATION_CONTROL")
 		var node: Control = row.node
@@ -624,10 +625,14 @@ func finish_layout() -> Dictionary:
 		_restore_mounted_label_text()
 		return _bad("PRESENTATION_LAYOUT_PENDING")
 	var scroll: ScrollContainer = mission._detail_scroll
-	var horizontal: HScrollBar = scroll.get_h_scroll_bar(); var vertical: VScrollBar = scroll.get_v_scroll_bar()
-	if float(_raw.scroll.horizontal) > maxf(horizontal.min_value, horizontal.max_value - horizontal.page) or float(_raw.scroll.vertical) > maxf(vertical.min_value, vertical.max_value - vertical.page): return _bad("PRESENTATION_LAYOUT_PENDING")
-	scroll.scroll_horizontal = _raw.scroll.horizontal; scroll.scroll_vertical = _raw.scroll.vertical
-	if scroll.scroll_horizontal != _raw.scroll.horizontal or scroll.scroll_vertical != _raw.scroll.vertical: return _bad("PRESENTATION_LAYOUT_PENDING")
+	if scroll.is_visible_in_tree():
+		var horizontal: HScrollBar = scroll.get_h_scroll_bar()
+		var vertical: VScrollBar = scroll.get_v_scroll_bar()
+		if float(_raw.scroll.horizontal) > maxf(horizontal.min_value, horizontal.max_value - horizontal.page) or float(_raw.scroll.vertical) > maxf(vertical.min_value, vertical.max_value - vertical.page): return _bad("PRESENTATION_LAYOUT_PENDING")
+		scroll.scroll_horizontal = _raw.scroll.horizontal; scroll.scroll_vertical = _raw.scroll.vertical
+		if scroll.scroll_horizontal != _raw.scroll.horizontal or scroll.scroll_vertical != _raw.scroll.vertical: return _bad("PRESENTATION_LAYOUT_PENDING")
+	else:
+		mission.defer_detail_scroll(Vector2i(_raw.scroll.horizontal, _raw.scroll.vertical))
 	# The gated ScrollBars do not emit value_changed. Explicitly position the
 	# content at the saved offset and wait for that layout before restoring
 	# transforms which Container.fit_child_in_rect normally resets.
@@ -669,6 +674,7 @@ func activate() -> Dictionary:
 		node.set_process(flags.process); node.set_physics_process(flags.physics); node.set_process_input(flags.input)
 		node.set_process_shortcut_input(flags.shortcut); node.set_process_unhandled_input(flags.unhandled); node.set_process_unhandled_key_input(flags.unhandled_key)
 		node.process_mode = flags.mode; node.set_block_signals(flags.blocked)
+	mission.queue_restored_detail_scroll()
 	_active = true
 	return {"ok": true, "complete_world": false, "gameplay_activated": false}
 

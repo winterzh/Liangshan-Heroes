@@ -22,7 +22,7 @@ const VALUE_FIELDS := {
 const NODE_FIELDS := ["_panel", "_toggle", "_details", "_detail_scroll", "_title", "_core",
 	"_story", "_objective", "_buttons", "_status", "_scroll", "_scroll_content"]
 const OTHER_FIELDS := ["battle", "story_goals", "events", "report", "actions", "_actor",
-	"_markers", "stage_metrics", "_stage_started_ms", "_result_cache"]
+	"_markers", "stage_metrics", "_stage_started_ms", "_result_cache", "_restored_detail_scroll"]
 const ACTION_FIELDS := ["label", "cell", "actors", "duration", "reach", "click_reach", "button", "show_button", "done", "marker"]
 const OPTIONAL_ACTION_FIELDS := ["actor_button", "blocked_reason", "settle_margin", "quiet_complete"]
 var _codec := Codec.new()
@@ -153,8 +153,9 @@ func capture(mission: Variant, context: Dictionary, id_to_unit: Dictionary, next
 		var encoded := _encode_node(mission.get(field), field, external_to_token, field in ["_scroll", "_scroll_content"])
 		if not encoded.ok: return encoded
 		data.nodes[field] = encoded.value
-	data.scroll.horizontal = mission._detail_scroll.scroll_horizontal
-	data.scroll.vertical = mission._detail_scroll.scroll_vertical
+	var scroll: Vector2i = mission.detail_scroll_offset()
+	data.scroll.horizontal = scroll.x
+	data.scroll.vertical = scroll.y
 	for node: Node in mission._buttons.get_children():
 		var encoded := _encode_node(node, "button_order", external_to_token)
 		if not encoded.ok: return encoded
