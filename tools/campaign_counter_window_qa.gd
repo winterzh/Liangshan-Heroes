@@ -46,7 +46,10 @@ func _window_fixture() -> void:
 	b.fog=false
 	b.select_single(l.wu,false)
 	root.get_node("Localize").set_language("zh_CN",false)
+	check("靠近后用E 鸳鸯脚" in b.mission._status.text,
+		"the task gives the ready kick's approach instruction as soon as the opening begins")
 	await _render_window(b,"heavy_open")
+	check(b.hud.top_label.text==b.mission._status.text,"top HUD and mission show the same opening instruction")
 	var serial: int=l.special_index
 	var hp: float=l.menshen.hp
 	l._duel_tick(b,1.1)
@@ -69,8 +72,37 @@ func _window_fixture() -> void:
 	await _dispatch(b,2)
 	check(l.menshen.hp<hp and b.mission.has_event("mengzhou_signature"),"real E damage still earns original current-step signature")
 	check(l.counter_window_state(b).kick_cooldown>0,"readiness reports actual E cooldown")
+	var counter_sources := {
+		"zh_CN":"Q 迎面直拳反击",
+		"zh_TW":"Q 迎面直拳反擊",
+		"en":"Counter with Q Straight Punch",
+		"ja":"Q 正面突きで反撃",
+	}
+	check(l.wu.slot_ready(0) and not l.wu.slot_ready(2),"actual kick leaves a usable punch and a cooling kick in the same opening")
+	for locale in counter_sources:
+		root.get_node("Localize").set_language(locale,false)
+		l._duel_tick(b,0.0)
+		b.hud.set_top(l.top_status(b))
+		check(counter_sources[locale] in b.mission._status.text and b.mission._status.text==b.hud.top_label.text,
+			locale+" actual mission and HUD show the available punch")
+		observations.append({"language":locale,"punch_status":b.mission._status.text})
+	root.get_node("Localize").set_language("en",false)
+	var settings := root.get_node("Settings")
+	check(settings.rebind_key("command_0",KEY_U),"a normal desktop key remap is accepted")
+	l._duel_tick(b,0.0)
+	await _render_window(b,"punch_narrow_en")
+	check("U Straight Punch" in b.hud.top_label.text and "U Straight Punch" in b.mission._status.text,
+		"narrow desktop HUD and mission use the configured punch key")
+	check(settings.rebind_key("command_0",KEY_Q),"default punch key is restored in the test profile")
+	var previous_hits: int=l.counter_hits
+	hp=l.menshen.hp
+	await _dispatch(b,0)
+	check(l.menshen.hp<hp and l.counter_hits==previous_hits+1,"the recommended real punch deals damage and counts as a counter")
+	l._duel_tick(b,0.0)
+	check("Skills unavailable" in b.mission._status.text,"both cooling skills are no longer advertised as usable")
 	l._duel_tick(b,2.3)
 	check(l.counter_window_state(b).is_empty() and l.unit_tactical_hint(b,l.wu)=="" and l.menshen._damage_reduction_sources.has(l.BRACE_SOURCE),"expiry removes feedback and restores original brace")
+	check("Opening" not in b.mission._status.text,"the task drops the opening instruction at expiry")
 	await _render_window(b,"expired_en")
 	l.special_kind="rush";l.special_index+=1
 	l._finish_special(b,true)

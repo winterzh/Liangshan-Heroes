@@ -4,6 +4,7 @@ const ATTACK_PER_DRINK := 5
 const HEAVY_RADIUS := 78.0
 const RUSH_WIDTH := 92.0
 const MIN_RUSH_TRAVEL := 0.01
+const DUEL_FOOTWORK_STATUS := "玉环步加速后仍需下令换位。看清起手，避开后靠近用鸳鸯脚。"
 var controls_generation:=-1
 var charge_running:=false
 var opening_serial:=-1
@@ -124,6 +125,20 @@ func counter_window_state(b) -> Dictionary:
 		"footwork":_signature_footwork_ready(),"in_range":wu.position.distance_to(menshen.position)<=float(spec.radius),
 		"kick_cooldown":kick_remaining,"position":menshen.position}
 
+func _counter_status(b) -> String:
+	if not is_instance_valid(wu) or not is_instance_valid(menshen) or not b.is_visible_world(menshen.position):
+		return Localize.format_text("当前破绽 %.1f秒 · 反击命中%d次", [exposed_left, counter_hits])
+	var slot := 2
+	if not wu.slot_ready(slot):
+		slot = 0
+		if not wu.slot_ready(slot):
+			return Localize.format_text("破绽 %.1f秒 · 拳脚暂不可用", exposed_left)
+	var ability_id: String = wu.ability_slots[slot].id
+	var spec: Dictionary = b._scaled_ability(b._abilities[ability_id], b._hero_rb(wu), b._hero_db(wu))
+	var key := "" if b.hud.touch_ui else Settings.key_label("command_%d" % slot) + " "
+	var source := "破绽 %.1f秒 · %s%s反击" if wu.position.distance_to(menshen.position) <= float(spec.radius) else "破绽 %.1f秒 · 靠近后用%s%s"
+	return Localize.format_text(source, [exposed_left, key, String(spec.name)])
+
 func _apply_wine_speed() -> void:
 	if drunk>0: wu.start_drunk(maxf(0.64,1.0-0.09*drunk),1.08,999)
 
@@ -204,10 +219,12 @@ func _duel_tick(b, delta: float) -> void:
 		return
 	if exposed_left>0:
 		exposed_left=maxf(0,exposed_left-delta)
-		b.mission.set_status(Localize.format_text("破绽还剩 %.1f秒 · 靠近用鸳鸯脚反击，或用「稳住酒势」恢复。", exposed_left))
 		if exposed_left<=0:
 			opening_serial=-1; step_serial=-1
 			menshen.apply_damage_reduction(0.5,999,BRACE_SOURCE)
+			b.mission.set_status(DUEL_FOOTWORK_STATUS)
+		else:
+			b.mission.set_status(_counter_status(b))
 		return
 	if fist_windup>0:
 		fist_windup=maxf(0,fist_windup-delta)
@@ -232,7 +249,7 @@ func _duel_tick(b, delta: float) -> void:
 			_finish_special(b,not hit)
 		return
 	fist_cd-=delta
-	b.mission.set_status("玉环步加速后仍需下令换位。看清起手，避开后靠近用鸳鸯脚。")
+	b.mission.set_status(DUEL_FOOTWORK_STATUS)
 	if fist_cd<=0 and menshen.position.distance_to(wu.position)<145 and b.map._segment_open(menshen.position,wu.position,"land"):
 		_begin_special(b)
 
@@ -265,12 +282,13 @@ func _finish_special(b, missed: bool, record_dodge := true) -> void:
 		menshen._damage_reduction_sources.erase(BRACE_SOURCE)
 		menshen._refresh_damage_reduction()
 		menshen.apply_stun(exposed_left)
+		b.mission.set_status(_counter_status(b))
 		if record_dodge:
 			dodged=true
 			if special_kind=="heavy": heavy_dodges+=1
 			else: rush_dodges+=1
 			b.mission.mark("dodge_"+special_kind,Localize.text("蒋门神本次招式落空，架势松动。"))
-			b.msg("招式落空！靠近E反击。",2)
+			b.msg("招式落空！",2)
 		else:
 			b.msg("冲撞被地形挡住，趁机反击。",2)
 	else:
@@ -320,7 +338,7 @@ func campaign_debrief(mission) -> Array[Dictionary]:
 
 func top_status(b) -> String:
 	if charge_running: return "蒋门神冲撞中 · 横移让开"
-	if exposed_left>0: return Localize.format_text("当前破绽 %.1f秒 · 反击命中%d次", [exposed_left,counter_hits])
+	if exposed_left>0: return _counter_status(b)
 	if fist_windup>0:
 		if special_kind=="heavy":
 			return Localize.format_text("重拳 %.1f秒后落下 · 离开圆圈",fist_windup)
