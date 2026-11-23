@@ -1,5 +1,7 @@
 # 当前开发计划（2026-10-30）
 
+Windows `cf173596` 已完成经典驻守全 30 波、三次续玩与终局旧档拦截。兼容渲染观察中，第 12、24 波所在采样分钟的 P95 为 17.746 和 17.720 ms，先保留为定向性能复查区间。Steam 前台与真人体验继续跟踪。 [Windows 验收收据](../qa/classic30_continue_20260909/windows_full_cf173596.json)
+
 野猪林 PC 护送可从任务栏直接下令。正式版救人后存档的继续、行军中再保存与重启已按 Windows 原生入口验证。真人首玩仍分别观察歇脚选择、停止及完成条件是否看得懂。 [Windows 验收收据](../qa/campaign_escort_arrival_20261116/windows_escort_shortcuts_42f13534.json)
 
 续玩当前存档后，若本机读入的同一份存档仍原样存在，点一次「保存并退出游戏」即可。新开一局或本机存档已被更新时，继续使用覆盖确认。 [Windows 验收收据](../qa/battle_entry_timing_20261116/windows_same_checkpoint_resave_cf173596.json)

@@ -1,5 +1,7 @@
 # 当前项目总览
 
+Windows 候选 `cf173596` 的经典驻守已自动完整运行 30 波，标准 1 倍速，三次真实保存和独立恢复以及末波胜利、两次终局旧档拒绝通过。Steam 在线与真人体验待验。 [Windows 验收收据](../qa/classic30_continue_20260909/windows_full_cf173596.json)
+
 Windows 候选 `cf173596` 简化同局再保存。野猪林正式版旧档续玩后在歇脚途中用一次点击保存，仍保留原人物、行进状态和本局存档身份。 [Windows 验收收据](../qa/battle_entry_timing_20261116/windows_same_checkpoint_resave_cf173596.json)
 
 Windows 候选 `42f13534` 新增野猪林护送的两项任务命令。实包验证正式版救人后的旧档、960×540 显示、四语按钮、停止、再保存及原路径恢复。Steam 前台和真人首玩待验。 [Windows 验收收据](../qa/campaign_escort_arrival_20261116/windows_escort_shortcuts_42f13534.json)

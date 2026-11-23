@@ -1,0 +1,2087 @@
+{
+  "scope": "Frozen Windows offline candidate cf173596, OpenGL Compatibility 1280×720 on isolated Windows desktops. Ordinary player menu and combat/economy commands were automatically driven. Normal 1× simulation, 60 Hz rules, unmodified enemy schedule, with no ally AI or scaling. Frame samples are observational.",
+  "build": {
+    "commit": "cf1735965c77bc5ef8429886b26a51b3f931883a",
+    "source_version": "source-v1:e20d2a4e152cdf7eb15db17d8c575bb993a96354628764c388a4b86e9b70a159",
+    "exe_sha256": "90c7ae3ab5a823b861a146f24ddf13ed961170f350d1db0d24cebb17bb92193a"
+  },
+  "observer": {
+    "runner_sha256": "fa86bc50f6cd74944df0438f7bd0fcdcb27d303db0a3b07a345a04a67034fa96",
+    "production_observer_input_sha256": {
+      "classic30_continue_acceptance.gd": "34f3bd375824b8cffac920016e8141a50f7b81c3487ecafe4fca8fb8c0530379",
+      "classic30_player_commands.gd": "51bc7583e8c3ecf4a36d6cfd5339a6fab0bdee9515bf568a4b2b1c52a1588297",
+      "classic30_inflight_observer.gd": "0549d6f2eca39aa9ed1aaf4b24eb07ae635c67cd307effbd178ceefe6a8c177c"
+    },
+    "isolated_observer_sha256": {
+      "tools/classic30_continue_acceptance.gd": "c4c4f1ade096304071f63b372f0f6d46f3fa168199b5273bfa4f81d79f2957ec",
+      "tools/classic30_player_commands.gd": "b8aad92ad6a50ce91625cb72fe913dc4f83e7bbf18c23d1533ed9f6db0c5d7e1",
+      "tools/classic30_inflight_observer.gd": "5f9685e8a9fb99de9a9d6666adbda4e0d908a67eb64b5d887da66f6aa549305e"
+    },
+    "scenes": {
+      "override": "feb63e19b479ad4d8cb480a8da0b44db9368339fb43ab5880219c3ec6fb81ac2",
+      "observer": "4ab01ab6d6d18fd973eed22d0d3492573b3039598f6bc41896485874a6510fdf"
+    }
+  },
+  "initial_terminal_observer_exit": {
+    "outcome": "terminal_refused",
+    "exit_hex": "0xC0000005",
+    "passed_before_exit": 16,
+    "report_sha256": "d6a5c56df9d0c936f0f1952ff46494f980d33e911b2f59536f1227c178c141d2",
+    "log_sha256": "a1f523f8460d30324505ae605a6b6b43a886b651aef76974b357241b3d771056",
+    "scope": "The observer requested immediate SceneTree quit after recording rejection. Both subsequent processes used the production window-close coordinator."
+  },
+  "terminal_normal_exit": {
+    "observer_sha256": {
+      "tools/classic30_continue_acceptance.gd": "4f8635ab6672c15bb54cce58051fda45faaa54c6cb8930ba27bea6f1efdbaff4",
+      "tools/classic30_player_commands.gd": "b8aad92ad6a50ce91625cb72fe913dc4f83e7bbf18c23d1533ed9f6db0c5d7e1",
+      "tools/classic30_inflight_observer.gd": "5f9685e8a9fb99de9a9d6666adbda4e0d908a67eb64b5d887da66f6aa549305e"
+    },
+    "journal_files_byte_identical_each_time": true,
+    "unchanged_journal_file_count": 4
+  },
+  "phases": {
+    "new_economy": {
+      "checks": 31,
+      "process_seconds": 44.662,
+      "summary": {
+        "action_counts": {
+          "build": 1,
+          "order": 2,
+          "train": 1
+        },
+        "case": "new_economy",
+        "clock_fault": "",
+        "constructing": 1,
+        "enemies": 0,
+        "gameplay_fault": "",
+        "gold": 94,
+        "hall_hp": 1500.0,
+        "heroes": [],
+        "in_flight": 0,
+        "kills": 0,
+        "phase": 2,
+        "physics_hz": 60,
+        "pid": 46860,
+        "resource_extracted": 40.0,
+        "sim_seconds": 8.0,
+        "time_scale": 1.0,
+        "training": 1,
+        "units": 28,
+        "valid_kills": 0,
+        "wave": 0,
+        "wave_timer": 112.00000000000045,
+        "wood": 73
+      },
+      "outcome": "saved_and_exiting",
+      "report_sha256": "a2a57d1967c3b2a950e1e684ca6116fef6d7d4bf2cf863ffee50442df127c744",
+      "state_sha256": "404e3cad9984335c4f8815387fdef9a95800d41469d5e90b1e6a455f191afebb",
+      "events_sha256": "34d514a1b3b1050bdb7486e112718870ebeb06eaf55b7362b12b92c37ae23c09",
+      "log_sha256": "36603d438cd7626fa54379383f2868691a6c880bd1c8add4c97808242beda1c7",
+      "performance": {
+        "hardware_independent_fps_guarantee": false,
+        "human_test": false,
+        "renderer": "gl_compatibility",
+        "scope": "rendered normal 30-wave gameplay with command observer; pauses/loading excluded",
+        "windows": [
+          {
+            "end_wave": 0,
+            "fps": 171.98181339433043,
+            "frames": 1369,
+            "p95_ms": 9.803,
+            "p99_ms": 12.611,
+            "peak_static_bytes": 0.0,
+            "peak_units": 28,
+            "seconds": 7.960144000000006,
+            "worst_ms": 16.054
+          }
+        ]
+      }
+    },
+    "resume_combat": {
+      "checks": 40,
+      "process_seconds": 188.948,
+      "summary": {
+        "action_counts": {
+          "build": 5,
+          "build_unavailable": 8,
+          "cast": 2,
+          "learn": 3,
+          "order": 7,
+          "train": 5
+        },
+        "case": "resume_combat",
+        "clock_fault": "",
+        "constructing": 0,
+        "enemies": 10,
+        "gameplay_fault": "",
+        "gold": 119,
+        "hall_hp": 1500.0,
+        "heroes": [
+          {
+            "hp": 320.0,
+            "key": "lin_chong",
+            "level": 1,
+            "max_hp": 320.0
+          },
+          {
+            "hp": 180.0,
+            "key": "hua_rong",
+            "level": 1,
+            "max_hp": 180.0
+          },
+          {
+            "hp": 280.0,
+            "key": "song_jiang",
+            "level": 1,
+            "max_hp": 280.0
+          }
+        ],
+        "in_flight": 2,
+        "kills": 0,
+        "phase": 2,
+        "physics_hz": 60,
+        "pid": 16312,
+        "resource_extracted": 1380.0,
+        "sim_seconds": 143.58333333333334,
+        "time_scale": 1.0,
+        "training": 1,
+        "units": 46,
+        "valid_kills": 0,
+        "wave": 1,
+        "wave_timer": 8.433333333333866,
+        "wood": 78
+      },
+      "outcome": "saved_and_exiting",
+      "report_sha256": "2d691bd2047979c0fe58236521895afd6d02ac45becba7d2879ec7848569d037",
+      "state_sha256": "54b7a28b1923e481f93a7114f93a4685f8f76ec842dfeb5a17e0027784ae5a2b",
+      "events_sha256": "72b77d26a6c9fc4e0abf3221669c7201d17c73b8b0d240fd00835daf2447c057",
+      "log_sha256": "b8a428fbd243210e2bbd3106568cc7b8a59768b700cb8acb29e245ec7fcc6d2a",
+      "performance": {
+        "hardware_independent_fps_guarantee": false,
+        "human_test": false,
+        "renderer": "gl_compatibility",
+        "scope": "rendered normal 30-wave gameplay with command observer; pauses/loading excluded",
+        "windows": [
+          {
+            "end_wave": 0,
+            "fps": 231.09824365334816,
+            "frames": 13866,
+            "p95_ms": 6.508,
+            "p99_ms": 9.344,
+            "peak_static_bytes": 0.0,
+            "peak_units": 31,
+            "seconds": 60.00045600000002,
+            "worst_ms": 59.856
+          },
+          {
+            "end_wave": 1,
+            "fps": 236.1959649855981,
+            "frames": 14172,
+            "p95_ms": 6.636,
+            "p99_ms": 8.196,
+            "peak_static_bytes": 0.0,
+            "peak_units": 46,
+            "seconds": 60.00102500000002,
+            "worst_ms": 52.334
+          },
+          {
+            "end_wave": 1,
+            "fps": 223.30653547030116,
+            "frames": 3450,
+            "p95_ms": 7.763,
+            "p99_ms": 9.196,
+            "peak_static_bytes": 0.0,
+            "peak_units": 46,
+            "seconds": 15.449615000000014,
+            "worst_ms": 87.951
+          }
+        ]
+      }
+    },
+    "resume_transition": {
+      "checks": 31,
+      "process_seconds": 80.899,
+      "summary": {
+        "action_counts": {
+          "build": 5.0,
+          "build_unavailable": 8.0,
+          "cast": 3,
+          "learn": 4,
+          "order": 13,
+          "train": 5.0
+        },
+        "case": "resume_transition",
+        "clock_fault": "",
+        "constructing": 0,
+        "enemies": 21,
+        "gameplay_fault": "",
+        "gold": 191,
+        "hall_hp": 1500.0,
+        "heroes": [
+          {
+            "hp": 320.0,
+            "key": "lin_chong",
+            "level": 1,
+            "max_hp": 320.0
+          },
+          {
+            "hp": 201.60000000000002,
+            "key": "hua_rong",
+            "level": 2,
+            "max_hp": 201.60000000000002
+          },
+          {
+            "hp": 280.0,
+            "key": "song_jiang",
+            "level": 1,
+            "max_hp": 280.0
+          }
+        ],
+        "in_flight": 0,
+        "kills": 3,
+        "phase": 2,
+        "physics_hz": 60,
+        "pid": 46600,
+        "resource_extracted": 1530.0,
+        "sim_seconds": 152.03333333333333,
+        "time_scale": 1.0,
+        "training": 1,
+        "units": 57,
+        "valid_kills": 3,
+        "wave": 2,
+        "wave_timer": 30.0,
+        "wood": 123
+      },
+      "outcome": "saved_and_exiting",
+      "report_sha256": "c181aafcf7ef474b8ec2fd459478c46ec9eede4741e3305b41db2e884558d453",
+      "state_sha256": "f75868214193da25d9dfd1e3472a4f60e8222b5a8e9ea2e5f18f90c70bb7da31",
+      "events_sha256": "fff109371650c1eef17199263a0265a7bef1ee2b1331287308085601b04ca493",
+      "log_sha256": "f4991a9c2fc1931b2ebd4707ad0d44147b36e02c3b219137e2739b1f4d0ea8d2",
+      "performance": {
+        "hardware_independent_fps_guarantee": false,
+        "human_test": false,
+        "renderer": "gl_compatibility",
+        "scope": "rendered normal 30-wave gameplay with command observer; pauses/loading excluded",
+        "windows": [
+          {
+            "end_wave": 2,
+            "fps": 125.9533045583415,
+            "frames": 1046,
+            "p95_ms": 13.691,
+            "p99_ms": 17.807,
+            "peak_static_bytes": 0.0,
+            "peak_units": 46,
+            "seconds": 8.304665000000007,
+            "worst_ms": 77.531
+          }
+        ]
+      }
+    },
+    "resume_victory": {
+      "checks": 232,
+      "process_seconds": 919.999,
+      "summary": {
+        "action_counts": {
+          "build": 33,
+          "build_unavailable": 8.0,
+          "cast": 683,
+          "learn": 48,
+          "order": 2733,
+          "repair": 18,
+          "research": 5,
+          "trade": 2,
+          "train": 97
+        },
+        "case": "resume_victory",
+        "clock_fault": "",
+        "constructing": 1,
+        "enemies": 0,
+        "gameplay_fault": "",
+        "gold": 12539,
+        "hall_hp": 1500.0,
+        "heroes": [
+          {
+            "hp": 459.36,
+            "key": "hua_rong",
+            "level": 12,
+            "max_hp": 459.36
+          },
+          {
+            "hp": 879.56,
+            "key": "song_jiang",
+            "level": 12,
+            "max_hp": 879.56
+          },
+          {
+            "hp": 421.08,
+            "key": "gongsun_sheng",
+            "level": 12,
+            "max_hp": 421.08
+          }
+        ],
+        "in_flight": 0,
+        "kills": 778,
+        "phase": 3,
+        "physics_hz": 60,
+        "pid": 34348,
+        "resource_extracted": 1640.0,
+        "sim_seconds": 1040.0,
+        "time_scale": 1.0,
+        "training": 3,
+        "units": 68,
+        "valid_kills": 778,
+        "wave": 30,
+        "wave_timer": -0.016666666665904283,
+        "wood": 6813
+      },
+      "outcome": "natural_victory",
+      "report_sha256": "d2b0cc671400e2e5aa236d7ee9544c580a4b8be9e3a6718921cae0a74f535cd4",
+      "state_sha256": "9a2c598afb29b0980e9c1d58175f1689223dd84392095c47f2f0eabe208adfee",
+      "events_sha256": "366d6658605e1d2aad777e0f99989c0b58e71b04231c817637b20484e2116e42",
+      "log_sha256": "338a6ea1ca6e1de903e6cedd7562829b2d7a93ef81c36adce0829b78394900ed",
+      "performance": {
+        "hardware_independent_fps_guarantee": false,
+        "human_test": false,
+        "renderer": "gl_compatibility",
+        "scope": "rendered normal 30-wave gameplay with command observer; pauses/loading excluded",
+        "windows": [
+          {
+            "end_wave": 3,
+            "fps": 181.81163048450165,
+            "frames": 10909,
+            "p95_ms": 10.369,
+            "p99_ms": 13.794,
+            "peak_static_bytes": 0.0,
+            "peak_units": 71,
+            "seconds": 60.001662000000195,
+            "worst_ms": 268.698
+          },
+          {
+            "end_wave": 5,
+            "fps": 170.4608482697124,
+            "frames": 10228,
+            "p95_ms": 12.111,
+            "p99_ms": 15.519,
+            "peak_static_bytes": 0.0,
+            "peak_units": 106,
+            "seconds": 60.002048,
+            "worst_ms": 95.174
+          },
+          {
+            "end_wave": 7,
+            "fps": 139.02863184843287,
+            "frames": 8342,
+            "p95_ms": 14.247,
+            "p99_ms": 17.467,
+            "peak_static_bytes": 0.0,
+            "peak_units": 123,
+            "seconds": 60.00202900000005,
+            "worst_ms": 73.054
+          },
+          {
+            "end_wave": 9,
+            "fps": 141.7348816126279,
+            "frames": 8505,
+            "p95_ms": 13.983,
+            "p99_ms": 17.099,
+            "peak_static_bytes": 0.0,
+            "peak_units": 146,
+            "seconds": 60.006400000000035,
+            "worst_ms": 48.634
+          },
+          {
+            "end_wave": 12,
+            "fps": 106.90260006620791,
+            "frames": 6415,
+            "p95_ms": 17.746,
+            "p99_ms": 25.791,
+            "peak_static_bytes": 0.0,
+            "peak_units": 156,
+            "seconds": 60.007895000000026,
+            "worst_ms": 210.688
+          },
+          {
+            "end_wave": 14,
+            "fps": 149.24974378794,
+            "frames": 8955,
+            "p95_ms": 13.266,
+            "p99_ms": 17.164,
+            "peak_static_bytes": 0.0,
+            "peak_units": 78,
+            "seconds": 60.00010299999993,
+            "worst_ms": 111.502
+          },
+          {
+            "end_wave": 16,
+            "fps": 138.69816918416674,
+            "frames": 8322,
+            "p95_ms": 14.136,
+            "p99_ms": 18.235,
+            "peak_static_bytes": 0.0,
+            "peak_units": 86,
+            "seconds": 60.00079200000001,
+            "worst_ms": 38.953
+          },
+          {
+            "end_wave": 18,
+            "fps": 154.64214815407647,
+            "frames": 9280,
+            "p95_ms": 13.668,
+            "p99_ms": 18.26,
+            "peak_static_bytes": 0.0,
+            "peak_units": 89,
+            "seconds": 60.00951300000015,
+            "worst_ms": 34.755
+          },
+          {
+            "end_wave": 20,
+            "fps": 127.84607938689905,
+            "frames": 7671,
+            "p95_ms": 15.122,
+            "p99_ms": 20.08,
+            "peak_static_bytes": 0.0,
+            "peak_units": 103,
+            "seconds": 60.00183999999988,
+            "worst_ms": 54.615
+          },
+          {
+            "end_wave": 22,
+            "fps": 119.87329794040782,
+            "frames": 7193,
+            "p95_ms": 16.333,
+            "p99_ms": 21.019,
+            "peak_static_bytes": 0.0,
+            "peak_units": 104,
+            "seconds": 60.0050229999998,
+            "worst_ms": 38.932
+          },
+          {
+            "end_wave": 24,
+            "fps": 110.47108393131032,
+            "frames": 6629,
+            "p95_ms": 17.72,
+            "p99_ms": 23.803,
+            "peak_static_bytes": 0.0,
+            "peak_units": 107,
+            "seconds": 60.00665299999987,
+            "worst_ms": 49.659
+          },
+          {
+            "end_wave": 26,
+            "fps": 134.2129396771492,
+            "frames": 8054,
+            "p95_ms": 15.693,
+            "p99_ms": 19.672,
+            "peak_static_bytes": 0.0,
+            "peak_units": 103,
+            "seconds": 60.00911700000008,
+            "worst_ms": 39.626
+          },
+          {
+            "end_wave": 28,
+            "fps": 127.51583603536541,
+            "frames": 7652,
+            "p95_ms": 15.619,
+            "p99_ms": 19.749,
+            "peak_static_bytes": 0.0,
+            "peak_units": 108,
+            "seconds": 60.00823299999997,
+            "worst_ms": 47.862
+          },
+          {
+            "end_wave": 30,
+            "fps": 120.73368485472014,
+            "frames": 7245,
+            "p95_ms": 16.626,
+            "p99_ms": 21.28,
+            "peak_static_bytes": 0.0,
+            "peak_units": 105,
+            "seconds": 60.008107999999915,
+            "worst_ms": 58.04
+          },
+          {
+            "end_wave": 30,
+            "fps": 101.679551259256,
+            "frames": 4872,
+            "p95_ms": 17.636,
+            "p99_ms": 22.14,
+            "peak_static_bytes": 0.0,
+            "peak_units": 92,
+            "seconds": 47.91523899999998,
+            "worst_ms": 42.317
+          }
+        ]
+      }
+    },
+    "terminal_reject_1": {
+      "checks": 17,
+      "process_seconds": 26.662,
+      "summary": {
+        "case": "terminal_reject_1",
+        "pid": 17488,
+        "sim_seconds": 0.0
+      },
+      "outcome": "terminal_refused",
+      "report_sha256": "9e5069691b3a6f6a283196c44941e215a258fd022f37b2cd475b5323274e682c",
+      "state_sha256": "b852929a7da875c2d29b5bf27bdebee571684aaa75ed8a53f14776e7d2d85aac",
+      "events_sha256": "7b1cc7b50dc36fe75d7435377be5afb347576730916ac803e12207c5abdaa131",
+      "log_sha256": "c837aff240f78ce3eb183dd14d9d7afe68e08de18029d1bfdb816238f120be54",
+      "performance": {
+        "hardware_independent_fps_guarantee": false,
+        "human_test": false,
+        "renderer": "gl_compatibility",
+        "scope": "rendered normal 30-wave gameplay with command observer; pauses/loading excluded",
+        "windows": []
+      }
+    },
+    "terminal_reject_2": {
+      "checks": 17,
+      "process_seconds": 21.93,
+      "summary": {
+        "case": "terminal_reject_2",
+        "pid": 42244,
+        "sim_seconds": 0.0
+      },
+      "outcome": "terminal_refused",
+      "report_sha256": "7a4fdafe2cdf87645eb6051447134e55d99ed9992da2381da1d53e687287a19f",
+      "state_sha256": "592c80cc335c9b63d4b4077994c9f76a15a52d6ffa6539dc9cd00ae798f6b9cf",
+      "events_sha256": "050f3afd68aca421cadb8d21a358d7c1ca5c68481bb16e48821c295515c14fff",
+      "log_sha256": "d74741ef32511313acbf700fd893b9798d56615b0efbb7e2e66e81aa423a0100",
+      "performance": {
+        "hardware_independent_fps_guarantee": false,
+        "human_test": false,
+        "renderer": "gl_compatibility",
+        "scope": "rendered normal 30-wave gameplay with command observer; pauses/loading excluded",
+        "windows": []
+      }
+    }
+  },
+  "summary": {
+    "checks_passed": 368,
+    "victory": true,
+    "terminal_simulation_seconds": 1040.0,
+    "terminal_hall_hp": 1500.0,
+    "minimum_sample_hall_hp": 1500.0,
+    "enemy_roster_total": 778,
+    "enemy_kills": 778,
+    "commands": {
+      "build": 33,
+      "train": 97,
+      "learn": 48,
+      "cast": 683
+    },
+    "strategy": "Normal paid construction and recruitment, harvesting, unit movement, hero leveling, original abilities."
+  },
+  "waves": [
+    {
+      "number": 1.0,
+      "sim_seconds": 120.01666666666668,
+      "enemies": 10,
+      "hall_hp": 1500.0
+    },
+    {
+      "number": 2.0,
+      "sim_seconds": 152.03333333333333,
+      "enemies": 14,
+      "hall_hp": 1500.0
+    },
+    {
+      "number": 3,
+      "sim_seconds": 182.05,
+      "enemies": 17,
+      "hall_hp": 1500.0
+    },
+    {
+      "number": 4,
+      "sim_seconds": 212.06666666666666,
+      "enemies": 20,
+      "hall_hp": 1500.0
+    },
+    {
+      "number": 5,
+      "sim_seconds": 244.08333333333334,
+      "enemies": 19,
+      "hall_hp": 1500.0
+    },
+    {
+      "number": 6,
+      "sim_seconds": 274.1,
+      "enemies": 25,
+      "hall_hp": 1500.0
+    },
+    {
+      "number": 7,
+      "sim_seconds": 302.1166666666667,
+      "enemies": 23,
+      "hall_hp": 1500.0
+    },
+    {
+      "number": 8,
+      "sim_seconds": 332.1333333333333,
+      "enemies": 16,
+      "hall_hp": 1500.0
+    },
+    {
+      "number": 9,
+      "sim_seconds": 360.15,
+      "enemies": 25,
+      "hall_hp": 1500.0
+    },
+    {
+      "number": 10,
+      "sim_seconds": 392.1666666666667,
+      "enemies": 19,
+      "hall_hp": 1500.0
+    },
+    {
+      "number": 11,
+      "sim_seconds": 420.18333333333334,
+      "enemies": 22,
+      "hall_hp": 1500.0
+    },
+    {
+      "number": 12,
+      "sim_seconds": 448.2,
+      "enemies": 32,
+      "hall_hp": 1500.0
+    },
+    {
+      "number": 13,
+      "sim_seconds": 478.21666666666664,
+      "enemies": 24,
+      "hall_hp": 1500.0
+    },
+    {
+      "number": 14,
+      "sim_seconds": 506.23333333333335,
+      "enemies": 23,
+      "hall_hp": 1500.0
+    },
+    {
+      "number": 15,
+      "sim_seconds": 538.25,
+      "enemies": 31,
+      "hall_hp": 1500.0
+    },
+    {
+      "number": 16,
+      "sim_seconds": 566.2666666666667,
+      "enemies": 23,
+      "hall_hp": 1500.0
+    },
+    {
+      "number": 17,
+      "sim_seconds": 594.2833333333333,
+      "enemies": 22,
+      "hall_hp": 1500.0
+    },
+    {
+      "number": 18,
+      "sim_seconds": 624.3,
+      "enemies": 26,
+      "hall_hp": 1500.0
+    },
+    {
+      "number": 19,
+      "sim_seconds": 652.3166666666667,
+      "enemies": 27,
+      "hall_hp": 1500.0
+    },
+    {
+      "number": 20,
+      "sim_seconds": 686.3333333333334,
+      "enemies": 33,
+      "hall_hp": 1500.0
+    },
+    {
+      "number": 21,
+      "sim_seconds": 714.35,
+      "enemies": 26,
+      "hall_hp": 1500.0
+    },
+    {
+      "number": 22,
+      "sim_seconds": 742.3666666666667,
+      "enemies": 30,
+      "hall_hp": 1500.0
+    },
+    {
+      "number": 23,
+      "sim_seconds": 772.3833333333333,
+      "enemies": 30,
+      "hall_hp": 1500.0
+    },
+    {
+      "number": 24,
+      "sim_seconds": 800.4,
+      "enemies": 40,
+      "hall_hp": 1500.0
+    },
+    {
+      "number": 25,
+      "sim_seconds": 834.4166666666666,
+      "enemies": 30,
+      "hall_hp": 1500.0
+    },
+    {
+      "number": 26,
+      "sim_seconds": 862.4333333333333,
+      "enemies": 33,
+      "hall_hp": 1500.0
+    },
+    {
+      "number": 27,
+      "sim_seconds": 892.45,
+      "enemies": 31,
+      "hall_hp": 1500.0
+    },
+    {
+      "number": 28,
+      "sim_seconds": 920.4666666666667,
+      "enemies": 42,
+      "hall_hp": 1500.0
+    },
+    {
+      "number": 29,
+      "sim_seconds": 950.4833333333333,
+      "enemies": 28,
+      "hall_hp": 1500.0
+    },
+    {
+      "number": 30,
+      "sim_seconds": 986.5,
+      "enemies": 37,
+      "hall_hp": 1500.0
+    }
+  ],
+  "checkpoints": [
+    {
+      "held_witness": {
+        "clock_next": "491",
+        "enemies": 0.0,
+        "in_flight": 0.0,
+        "live_channels": 0.0,
+        "live_item_windups": 0.0,
+        "live_projectiles": 0.0,
+        "live_spell_windups": 0.0,
+        "projectiles": 0.0,
+        "queue_counts": {
+          "_channels": 0.0,
+          "_pending_casts": 0.0,
+          "_pending_item_casts": 0.0,
+          "_walk_casts": 0.0,
+          "_walk_item_casts": 0.0
+        }
+      },
+      "kind": "economy",
+      "pid": 46860.0,
+      "witness": {
+        "action_counts": {
+          "build": 1.0,
+          "order": 2.0,
+          "train": 1.0
+        },
+        "case": "new_economy",
+        "clock_fault": "",
+        "constructing": 1.0,
+        "enemies": 0.0,
+        "gameplay_fault": "",
+        "gold": 94.0,
+        "hall_hp": 1500.0,
+        "heroes": [],
+        "in_flight": 0.0,
+        "kills": 0.0,
+        "phase": 2.0,
+        "physics_hz": 60.0,
+        "pid": 46860.0,
+        "resource_extracted": 40.0,
+        "sim_seconds": 8.0,
+        "time_scale": 1.0,
+        "training": 1.0,
+        "units": 28.0,
+        "valid_kills": 0.0,
+        "wave": 0.0,
+        "wave_timer": 112.00000000000044,
+        "wood": 73.0
+      }
+    },
+    {
+      "held_witness": {
+        "clock_next": "8626",
+        "enemies": 10.0,
+        "in_flight": 2.0,
+        "live_channels": 0.0,
+        "live_item_windups": 0.0,
+        "live_projectiles": 0.0,
+        "live_spell_windups": 2.0,
+        "projectiles": 0.0,
+        "queue_counts": {
+          "_channels": 0.0,
+          "_pending_casts": 2.0,
+          "_pending_item_casts": 0.0,
+          "_walk_casts": 0.0,
+          "_walk_item_casts": 0.0
+        }
+      },
+      "kind": "combat",
+      "pid": 16312.0,
+      "witness": {
+        "action_counts": {
+          "build": 5.0,
+          "build_unavailable": 8.0,
+          "cast": 2.0,
+          "learn": 3.0,
+          "order": 7.0,
+          "train": 5.0
+        },
+        "case": "resume_combat",
+        "clock_fault": "",
+        "constructing": 0.0,
+        "enemies": 10.0,
+        "gameplay_fault": "",
+        "gold": 119.0,
+        "hall_hp": 1500.0,
+        "heroes": [
+          {
+            "hp": 320.0,
+            "key": "lin_chong",
+            "level": 1.0,
+            "max_hp": 320.0
+          },
+          {
+            "hp": 180.0,
+            "key": "hua_rong",
+            "level": 1.0,
+            "max_hp": 180.0
+          },
+          {
+            "hp": 280.0,
+            "key": "song_jiang",
+            "level": 1.0,
+            "max_hp": 280.0
+          }
+        ],
+        "in_flight": 2.0,
+        "kills": 0.0,
+        "phase": 2.0,
+        "physics_hz": 60.0,
+        "pid": 16312.0,
+        "resource_extracted": 1380.0,
+        "sim_seconds": 143.58333333333334,
+        "time_scale": 1.0,
+        "training": 1.0,
+        "units": 46.0,
+        "valid_kills": 0.0,
+        "wave": 1.0,
+        "wave_timer": 8.433333333333866,
+        "wood": 78.0
+      }
+    },
+    {
+      "held_witness": {
+        "clock_next": "9133",
+        "enemies": 21.0,
+        "in_flight": 0.0,
+        "live_channels": 0.0,
+        "live_item_windups": 0.0,
+        "live_projectiles": 0.0,
+        "live_spell_windups": 0.0,
+        "projectiles": 0.0,
+        "queue_counts": {
+          "_channels": 0.0,
+          "_pending_casts": 0.0,
+          "_pending_item_casts": 0.0,
+          "_walk_casts": 0.0,
+          "_walk_item_casts": 0.0
+        }
+      },
+      "kind": "wave_transition",
+      "pid": 46600.0,
+      "witness": {
+        "action_counts": {
+          "build": 5.0,
+          "build_unavailable": 8.0,
+          "cast": 3.0,
+          "learn": 4.0,
+          "order": 13.0,
+          "train": 5.0
+        },
+        "case": "resume_transition",
+        "clock_fault": "",
+        "constructing": 0.0,
+        "enemies": 21.0,
+        "gameplay_fault": "",
+        "gold": 191.0,
+        "hall_hp": 1500.0,
+        "heroes": [
+          {
+            "hp": 320.0,
+            "key": "lin_chong",
+            "level": 1.0,
+            "max_hp": 320.0
+          },
+          {
+            "hp": 201.6,
+            "key": "hua_rong",
+            "level": 2.0,
+            "max_hp": 201.6
+          },
+          {
+            "hp": 280.0,
+            "key": "song_jiang",
+            "level": 1.0,
+            "max_hp": 280.0
+          }
+        ],
+        "in_flight": 0.0,
+        "kills": 3.0,
+        "phase": 2.0,
+        "physics_hz": 60.0,
+        "pid": 46600.0,
+        "resource_extracted": 1530.0,
+        "sim_seconds": 152.03333333333333,
+        "time_scale": 1.0,
+        "training": 1.0,
+        "units": 57.0,
+        "valid_kills": 3.0,
+        "wave": 2.0,
+        "wave_timer": 30.0,
+        "wood": 123.0
+      }
+    }
+  ],
+  "resumes": [
+    {
+      "differences": [],
+      "from_pid": 46860.0,
+      "pid": 16312.0,
+      "slot_sha256": "1df26839f91587280f1f1445908cd2def935bd7de3824761c7406d388231b99e",
+      "wave": 0.0
+    },
+    {
+      "differences": [],
+      "from_pid": 16312.0,
+      "pid": 46600.0,
+      "slot_sha256": "c31bf27f22d8c8a44fd8faeb86abb789cd43994dea125ee2ac4016aeb0edd667",
+      "wave": 1.0
+    },
+    {
+      "differences": [],
+      "from_pid": 46600,
+      "pid": 34348,
+      "slot_sha256": "edbe2781a606a82ef8f5454fba8d9da9db13779bf944623a250400b3ecaa7e27",
+      "wave": 2
+    }
+  ],
+  "old_slot_rejections": [
+    {
+      "case": "terminal_reject_1",
+      "code": "LOCAL_RUN_TERMINAL",
+      "pid": 17488.0
+    },
+    {
+      "case": "terminal_reject_2",
+      "code": "LOCAL_RUN_TERMINAL",
+      "pid": 42244
+    }
+  ],
+  "original_slot_sha256_matched_during_each_restore": true,
+  "progress_samples": [
+    {
+      "sim_seconds": 0.0,
+      "wave": 0,
+      "enemies": 0,
+      "kills": 0,
+      "hall_hp": 1500.0,
+      "gold": 94,
+      "wood": 58,
+      "units": 28
+    },
+    {
+      "sim_seconds": 8.0,
+      "wave": 0,
+      "enemies": 0,
+      "kills": 0,
+      "hall_hp": 1500.0,
+      "gold": 94,
+      "wood": 73,
+      "units": 28
+    },
+    {
+      "sim_seconds": 8.0,
+      "wave": 0,
+      "enemies": 0,
+      "kills": 0,
+      "hall_hp": 1500.0,
+      "gold": 94,
+      "wood": 73,
+      "units": 28
+    },
+    {
+      "sim_seconds": 18.133333333333333,
+      "wave": 0,
+      "enemies": 0,
+      "kills": 0,
+      "hall_hp": 1500.0,
+      "gold": 104,
+      "wood": 103,
+      "units": 28
+    },
+    {
+      "sim_seconds": 28.133333333333333,
+      "wave": 0,
+      "enemies": 0,
+      "kills": 0,
+      "hall_hp": 1500.0,
+      "gold": 114,
+      "wood": 128,
+      "units": 28
+    },
+    {
+      "sim_seconds": 38.15,
+      "wave": 0,
+      "enemies": 0,
+      "kills": 0,
+      "hall_hp": 1500.0,
+      "gold": 12,
+      "wood": 59,
+      "units": 30
+    },
+    {
+      "sim_seconds": 48.15,
+      "wave": 0,
+      "enemies": 0,
+      "kills": 0,
+      "hall_hp": 1500.0,
+      "gold": 62,
+      "wood": 84,
+      "units": 30
+    },
+    {
+      "sim_seconds": 58.15,
+      "wave": 0,
+      "enemies": 0,
+      "kills": 0,
+      "hall_hp": 1500.0,
+      "gold": 112,
+      "wood": 119,
+      "units": 30
+    },
+    {
+      "sim_seconds": 68.13333333333334,
+      "wave": 0,
+      "enemies": 0,
+      "kills": 0,
+      "hall_hp": 1500.0,
+      "gold": 152,
+      "wood": 54,
+      "units": 31
+    },
+    {
+      "sim_seconds": 78.15,
+      "wave": 0,
+      "enemies": 0,
+      "kills": 0,
+      "hall_hp": 1500.0,
+      "gold": 42,
+      "wood": 29,
+      "units": 32
+    },
+    {
+      "sim_seconds": 88.15,
+      "wave": 0,
+      "enemies": 0,
+      "kills": 0,
+      "hall_hp": 1500.0,
+      "gold": 92,
+      "wood": 9,
+      "units": 33
+    },
+    {
+      "sim_seconds": 98.16666666666667,
+      "wave": 0,
+      "enemies": 0,
+      "kills": 0,
+      "hall_hp": 1500.0,
+      "gold": 142,
+      "wood": 29,
+      "units": 33
+    },
+    {
+      "sim_seconds": 108.16666666666667,
+      "wave": 0,
+      "enemies": 0,
+      "kills": 0,
+      "hall_hp": 1500.0,
+      "gold": 127,
+      "wood": 24,
+      "units": 34
+    },
+    {
+      "sim_seconds": 118.15,
+      "wave": 0,
+      "enemies": 0,
+      "kills": 0,
+      "hall_hp": 1500.0,
+      "gold": 157,
+      "wood": 49,
+      "units": 35
+    },
+    {
+      "sim_seconds": 128.16666666666666,
+      "wave": 1,
+      "enemies": 10,
+      "kills": 0,
+      "hall_hp": 1500.0,
+      "gold": 29,
+      "wood": 18,
+      "units": 46
+    },
+    {
+      "sim_seconds": 138.16666666666666,
+      "wave": 1,
+      "enemies": 10,
+      "kills": 0,
+      "hall_hp": 1500.0,
+      "gold": 89,
+      "wood": 53,
+      "units": 46
+    },
+    {
+      "sim_seconds": 143.58333333333334,
+      "wave": 1,
+      "enemies": 10,
+      "kills": 0,
+      "hall_hp": 1500.0,
+      "gold": 119,
+      "wood": 78,
+      "units": 46
+    },
+    {
+      "sim_seconds": 143.58333333333334,
+      "wave": 1,
+      "enemies": 10,
+      "kills": 0,
+      "hall_hp": 1500.0,
+      "gold": 119,
+      "wood": 78,
+      "units": 46
+    },
+    {
+      "sim_seconds": 152.03333333333333,
+      "wave": 2,
+      "enemies": 21,
+      "kills": 3,
+      "hall_hp": 1500.0,
+      "gold": 191,
+      "wood": 123,
+      "units": 57
+    },
+    {
+      "sim_seconds": 152.03333333333333,
+      "wave": 2,
+      "enemies": 21,
+      "kills": 3,
+      "hall_hp": 1500.0,
+      "gold": 191,
+      "wood": 123,
+      "units": 57
+    },
+    {
+      "sim_seconds": 152.03333333333333,
+      "wave": 2,
+      "enemies": 21,
+      "kills": 3,
+      "hall_hp": 1500.0,
+      "gold": 191,
+      "wood": 123,
+      "units": 57
+    },
+    {
+      "sim_seconds": 161.91666666666666,
+      "wave": 2,
+      "enemies": 18,
+      "kills": 6,
+      "hall_hp": 1500.0,
+      "gold": 195,
+      "wood": 123,
+      "units": 55
+    },
+    {
+      "sim_seconds": 171.91666666666666,
+      "wave": 2,
+      "enemies": 17,
+      "kills": 7,
+      "hall_hp": 1500.0,
+      "gold": 151,
+      "wood": 103,
+      "units": 56
+    },
+    {
+      "sim_seconds": 181.91666666666666,
+      "wave": 2,
+      "enemies": 13,
+      "kills": 11,
+      "hall_hp": 1500.0,
+      "gold": 174,
+      "wood": 93,
+      "units": 53
+    },
+    {
+      "sim_seconds": 191.91666666666666,
+      "wave": 3,
+      "enemies": 26,
+      "kills": 15,
+      "hall_hp": 1500.0,
+      "gold": 135,
+      "wood": 68,
+      "units": 68
+    },
+    {
+      "sim_seconds": 201.93333333333334,
+      "wave": 3,
+      "enemies": 25,
+      "kills": 16,
+      "hall_hp": 1500.0,
+      "gold": 121,
+      "wood": 63,
+      "units": 69
+    },
+    {
+      "sim_seconds": 211.91666666666666,
+      "wave": 3,
+      "enemies": 25,
+      "kills": 16,
+      "hall_hp": 1500.0,
+      "gold": 181,
+      "wood": 118,
+      "units": 69
+    },
+    {
+      "sim_seconds": 221.93333333333334,
+      "wave": 4,
+      "enemies": 40,
+      "kills": 21,
+      "hall_hp": 1500.0,
+      "gold": 196,
+      "wood": 153,
+      "units": 85
+    },
+    {
+      "sim_seconds": 231.93333333333334,
+      "wave": 4,
+      "enemies": 40,
+      "kills": 21,
+      "hall_hp": 1500.0,
+      "gold": 161,
+      "wood": 168,
+      "units": 86
+    },
+    {
+      "sim_seconds": 241.93333333333334,
+      "wave": 4,
+      "enemies": 40,
+      "kills": 21,
+      "hall_hp": 1500.0,
+      "gold": 231,
+      "wood": 238,
+      "units": 86
+    },
+    {
+      "sim_seconds": 251.95,
+      "wave": 5,
+      "enemies": 54,
+      "kills": 26,
+      "hall_hp": 1500.0,
+      "gold": 139,
+      "wood": 198,
+      "units": 102
+    },
+    {
+      "sim_seconds": 261.95,
+      "wave": 5,
+      "enemies": 50,
+      "kills": 30,
+      "hall_hp": 1500.0,
+      "gold": 227,
+      "wood": 278,
+      "units": 98
+    },
+    {
+      "sim_seconds": 271.95,
+      "wave": 5,
+      "enemies": 49,
+      "kills": 31,
+      "hall_hp": 1500.0,
+      "gold": 291,
+      "wood": 368,
+      "units": 97
+    },
+    {
+      "sim_seconds": 281.95,
+      "wave": 6,
+      "enemies": 66,
+      "kills": 39,
+      "hall_hp": 1500.0,
+      "gold": 280,
+      "wood": 238,
+      "units": 115
+    },
+    {
+      "sim_seconds": 291.95,
+      "wave": 6,
+      "enemies": 53,
+      "kills": 52,
+      "hall_hp": 1500.0,
+      "gold": 385,
+      "wood": 305,
+      "units": 100
+    },
+    {
+      "sim_seconds": 301.96666666666664,
+      "wave": 6,
+      "enemies": 53,
+      "kills": 52,
+      "hall_hp": 1500.0,
+      "gold": 420,
+      "wood": 382,
+      "units": 100
+    },
+    {
+      "sim_seconds": 311.96666666666664,
+      "wave": 7,
+      "enemies": 60,
+      "kills": 68,
+      "hall_hp": 1500.0,
+      "gold": 530,
+      "wood": 433,
+      "units": 110
+    },
+    {
+      "sim_seconds": 321.96666666666664,
+      "wave": 7,
+      "enemies": 60,
+      "kills": 68,
+      "hall_hp": 1500.0,
+      "gold": 216,
+      "wood": 304,
+      "units": 111
+    },
+    {
+      "sim_seconds": 331.98333333333335,
+      "wave": 7,
+      "enemies": 60,
+      "kills": 68,
+      "hall_hp": 1500.0,
+      "gold": 331,
+      "wood": 306,
+      "units": 111
+    },
+    {
+      "sim_seconds": 341.98333333333335,
+      "wave": 8,
+      "enemies": 69,
+      "kills": 75,
+      "hall_hp": 1500.0,
+      "gold": 383,
+      "wood": 388,
+      "units": 122
+    },
+    {
+      "sim_seconds": 352.0,
+      "wave": 8,
+      "enemies": 68,
+      "kills": 76,
+      "hall_hp": 1500.0,
+      "gold": 489,
+      "wood": 490,
+      "units": 121
+    },
+    {
+      "sim_seconds": 362.0,
+      "wave": 9,
+      "enemies": 88,
+      "kills": 81,
+      "hall_hp": 1500.0,
+      "gold": 557,
+      "wood": 591,
+      "units": 143
+    },
+    {
+      "sim_seconds": 372.01666666666665,
+      "wave": 9,
+      "enemies": 82,
+      "kills": 87,
+      "hall_hp": 1500.0,
+      "gold": 637,
+      "wood": 697,
+      "units": 139
+    },
+    {
+      "sim_seconds": 382.03333333333336,
+      "wave": 9,
+      "enemies": 80,
+      "kills": 89,
+      "hall_hp": 1500.0,
+      "gold": 612,
+      "wood": 724,
+      "units": 136
+    },
+    {
+      "sim_seconds": 392.01666666666665,
+      "wave": 9,
+      "enemies": 79,
+      "kills": 90,
+      "hall_hp": 1500.0,
+      "gold": 629,
+      "wood": 811,
+      "units": 137
+    },
+    {
+      "sim_seconds": 402.05,
+      "wave": 10,
+      "enemies": 86,
+      "kills": 102,
+      "hall_hp": 1500.0,
+      "gold": 764,
+      "wood": 917,
+      "units": 144
+    },
+    {
+      "sim_seconds": 412.03333333333336,
+      "wave": 10,
+      "enemies": 78,
+      "kills": 110,
+      "hall_hp": 1500.0,
+      "gold": 806,
+      "wood": 965,
+      "units": 137
+    },
+    {
+      "sim_seconds": 421.96666666666664,
+      "wave": 11,
+      "enemies": 54,
+      "kills": 156,
+      "hall_hp": 1500.0,
+      "gold": 1250,
+      "wood": 1091,
+      "units": 112
+    },
+    {
+      "sim_seconds": 432.0,
+      "wave": 11,
+      "enemies": 16,
+      "kills": 194,
+      "hall_hp": 1500.0,
+      "gold": 2152,
+      "wood": 1230,
+      "units": 64
+    },
+    {
+      "sim_seconds": 442.0,
+      "wave": 11,
+      "enemies": 4,
+      "kills": 206,
+      "hall_hp": 1500.0,
+      "gold": 2280,
+      "wood": 1370,
+      "units": 52
+    },
+    {
+      "sim_seconds": 452.0,
+      "wave": 12,
+      "enemies": 21,
+      "kills": 221,
+      "hall_hp": 1500.0,
+      "gold": 2804,
+      "wood": 1523,
+      "units": 71
+    },
+    {
+      "sim_seconds": 462.01666666666665,
+      "wave": 12,
+      "enemies": 11,
+      "kills": 231,
+      "hall_hp": 1500.0,
+      "gold": 2925,
+      "wood": 1677,
+      "units": 61
+    },
+    {
+      "sim_seconds": 472.0,
+      "wave": 12,
+      "enemies": 1,
+      "kills": 241,
+      "hall_hp": 1500.0,
+      "gold": 2932,
+      "wood": 1748,
+      "units": 52
+    },
+    {
+      "sim_seconds": 482.01666666666665,
+      "wave": 13,
+      "enemies": 9,
+      "kills": 257,
+      "hall_hp": 1500.0,
+      "gold": 3190,
+      "wood": 1895,
+      "units": 61
+    },
+    {
+      "sim_seconds": 492.01666666666665,
+      "wave": 13,
+      "enemies": 6,
+      "kills": 260,
+      "hall_hp": 1500.0,
+      "gold": 3282,
+      "wood": 2034,
+      "units": 59
+    },
+    {
+      "sim_seconds": 502.0,
+      "wave": 13,
+      "enemies": 2,
+      "kills": 264,
+      "hall_hp": 1500.0,
+      "gold": 3391,
+      "wood": 2146,
+      "units": 55
+    },
+    {
+      "sim_seconds": 512.0166666666667,
+      "wave": 14,
+      "enemies": 12,
+      "kills": 277,
+      "hall_hp": 1500.0,
+      "gold": 3566,
+      "wood": 2300,
+      "units": 65
+    },
+    {
+      "sim_seconds": 522.0166666666667,
+      "wave": 14,
+      "enemies": 3,
+      "kills": 286,
+      "hall_hp": 1500.0,
+      "gold": 3622,
+      "wood": 2401,
+      "units": 57
+    },
+    {
+      "sim_seconds": 532.0166666666667,
+      "wave": 14,
+      "enemies": 0,
+      "kills": 289,
+      "hall_hp": 1500.0,
+      "gold": 3920,
+      "wood": 2541,
+      "units": 53
+    },
+    {
+      "sim_seconds": 542.0333333333333,
+      "wave": 15,
+      "enemies": 22,
+      "kills": 298,
+      "hall_hp": 1500.0,
+      "gold": 3891,
+      "wood": 2621,
+      "units": 78
+    },
+    {
+      "sim_seconds": 552.0166666666667,
+      "wave": 15,
+      "enemies": 10,
+      "kills": 310,
+      "hall_hp": 1500.0,
+      "gold": 3992,
+      "wood": 2684,
+      "units": 67
+    },
+    {
+      "sim_seconds": 562.0333333333333,
+      "wave": 15,
+      "enemies": 1,
+      "kills": 319,
+      "hall_hp": 1500.0,
+      "gold": 4147,
+      "wood": 2761,
+      "units": 57
+    },
+    {
+      "sim_seconds": 572.05,
+      "wave": 16,
+      "enemies": 12,
+      "kills": 331,
+      "hall_hp": 1500.0,
+      "gold": 4614,
+      "wood": 2823,
+      "units": 71
+    },
+    {
+      "sim_seconds": 582.05,
+      "wave": 16,
+      "enemies": 6,
+      "kills": 337,
+      "hall_hp": 1500.0,
+      "gold": 4742,
+      "wood": 2914,
+      "units": 64
+    },
+    {
+      "sim_seconds": 592.05,
+      "wave": 16,
+      "enemies": 1,
+      "kills": 342,
+      "hall_hp": 1500.0,
+      "gold": 4807,
+      "wood": 2990,
+      "units": 60
+    },
+    {
+      "sim_seconds": 602.0666666666667,
+      "wave": 17,
+      "enemies": 10,
+      "kills": 355,
+      "hall_hp": 1500.0,
+      "gold": 4925,
+      "wood": 3074,
+      "units": 72
+    },
+    {
+      "sim_seconds": 612.0666666666667,
+      "wave": 17,
+      "enemies": 0,
+      "kills": 365,
+      "hall_hp": 1500.0,
+      "gold": 5358,
+      "wood": 3186,
+      "units": 61
+    },
+    {
+      "sim_seconds": 622.0666666666667,
+      "wave": 17,
+      "enemies": 0,
+      "kills": 365,
+      "hall_hp": 1500.0,
+      "gold": 5387,
+      "wood": 3269,
+      "units": 63
+    },
+    {
+      "sim_seconds": 632.0666666666667,
+      "wave": 18,
+      "enemies": 11,
+      "kills": 380,
+      "hall_hp": 1500.0,
+      "gold": 5596,
+      "wood": 3346,
+      "units": 73
+    },
+    {
+      "sim_seconds": 642.0833333333334,
+      "wave": 18,
+      "enemies": 3,
+      "kills": 388,
+      "hall_hp": 1500.0,
+      "gold": 5709,
+      "wood": 3352,
+      "units": 67
+    },
+    {
+      "sim_seconds": 652.0666666666667,
+      "wave": 18,
+      "enemies": 1,
+      "kills": 390,
+      "hall_hp": 1500.0,
+      "gold": 5641,
+      "wood": 3125,
+      "units": 67
+    },
+    {
+      "sim_seconds": 662.0833333333334,
+      "wave": 19,
+      "enemies": 12,
+      "kills": 406,
+      "hall_hp": 1500.0,
+      "gold": 5840,
+      "wood": 3167,
+      "units": 80
+    },
+    {
+      "sim_seconds": 672.0666666666667,
+      "wave": 19,
+      "enemies": 5,
+      "kills": 413,
+      "hall_hp": 1500.0,
+      "gold": 6175,
+      "wood": 3272,
+      "units": 71
+    },
+    {
+      "sim_seconds": 682.0833333333334,
+      "wave": 19,
+      "enemies": 2,
+      "kills": 416,
+      "hall_hp": 1500.0,
+      "gold": 6442,
+      "wood": 3377,
+      "units": 68
+    },
+    {
+      "sim_seconds": 692.0833333333334,
+      "wave": 20,
+      "enemies": 12,
+      "kills": 439,
+      "hall_hp": 1500.0,
+      "gold": 6704,
+      "wood": 3407,
+      "units": 80
+    },
+    {
+      "sim_seconds": 702.1,
+      "wave": 20,
+      "enemies": 5,
+      "kills": 446,
+      "hall_hp": 1500.0,
+      "gold": 6748,
+      "wood": 3424,
+      "units": 74
+    },
+    {
+      "sim_seconds": 712.1166666666667,
+      "wave": 20,
+      "enemies": 0,
+      "kills": 451,
+      "hall_hp": 1500.0,
+      "gold": 6945,
+      "wood": 3536,
+      "units": 69
+    },
+    {
+      "sim_seconds": 722.1166666666667,
+      "wave": 21,
+      "enemies": 11,
+      "kills": 466,
+      "hall_hp": 1500.0,
+      "gold": 7039,
+      "wood": 3633,
+      "units": 82
+    },
+    {
+      "sim_seconds": 732.1333333333333,
+      "wave": 21,
+      "enemies": 3,
+      "kills": 474,
+      "hall_hp": 1500.0,
+      "gold": 7157,
+      "wood": 3717,
+      "units": 75
+    },
+    {
+      "sim_seconds": 742.1333333333333,
+      "wave": 21,
+      "enemies": 2,
+      "kills": 475,
+      "hall_hp": 1500.0,
+      "gold": 7312,
+      "wood": 3784,
+      "units": 74
+    },
+    {
+      "sim_seconds": 752.1333333333333,
+      "wave": 22,
+      "enemies": 17,
+      "kills": 490,
+      "hall_hp": 1500.0,
+      "gold": 7321,
+      "wood": 3829,
+      "units": 92
+    },
+    {
+      "sim_seconds": 762.1333333333333,
+      "wave": 22,
+      "enemies": 4,
+      "kills": 503,
+      "hall_hp": 1500.0,
+      "gold": 7715,
+      "wood": 3941,
+      "units": 78
+    },
+    {
+      "sim_seconds": 772.15,
+      "wave": 22,
+      "enemies": 1,
+      "kills": 506,
+      "hall_hp": 1500.0,
+      "gold": 7782,
+      "wood": 4038,
+      "units": 77
+    },
+    {
+      "sim_seconds": 782.15,
+      "wave": 23,
+      "enemies": 10,
+      "kills": 527,
+      "hall_hp": 1500.0,
+      "gold": 8125,
+      "wood": 4164,
+      "units": 76
+    },
+    {
+      "sim_seconds": 792.15,
+      "wave": 23,
+      "enemies": 1,
+      "kills": 536,
+      "hall_hp": 1500.0,
+      "gold": 8317,
+      "wood": 4318,
+      "units": 63
+    },
+    {
+      "sim_seconds": 802.15,
+      "wave": 24,
+      "enemies": 30,
+      "kills": 547,
+      "hall_hp": 1500.0,
+      "gold": 8545,
+      "wood": 4443,
+      "units": 92
+    },
+    {
+      "sim_seconds": 812.1666666666666,
+      "wave": 24,
+      "enemies": 4,
+      "kills": 573,
+      "hall_hp": 1500.0,
+      "gold": 8883,
+      "wood": 4583,
+      "units": 66
+    },
+    {
+      "sim_seconds": 822.1666666666666,
+      "wave": 24,
+      "enemies": 1,
+      "kills": 576,
+      "hall_hp": 1500.0,
+      "gold": 8945,
+      "wood": 4673,
+      "units": 64
+    },
+    {
+      "sim_seconds": 832.1666666666666,
+      "wave": 24,
+      "enemies": 1,
+      "kills": 576,
+      "hall_hp": 1500.0,
+      "gold": 8893,
+      "wood": 4712,
+      "units": 66
+    },
+    {
+      "sim_seconds": 842.1666666666666,
+      "wave": 25,
+      "enemies": 17,
+      "kills": 590,
+      "hall_hp": 1500.0,
+      "gold": 9151,
+      "wood": 4824,
+      "units": 80
+    },
+    {
+      "sim_seconds": 852.1833333333333,
+      "wave": 25,
+      "enemies": 11,
+      "kills": 596,
+      "hall_hp": 1500.0,
+      "gold": 9246,
+      "wood": 4921,
+      "units": 75
+    },
+    {
+      "sim_seconds": 862.1833333333333,
+      "wave": 25,
+      "enemies": 6,
+      "kills": 601,
+      "hall_hp": 1500.0,
+      "gold": 9266,
+      "wood": 4995,
+      "units": 70
+    },
+    {
+      "sim_seconds": 872.1833333333333,
+      "wave": 26,
+      "enemies": 14,
+      "kills": 626,
+      "hall_hp": 1500.0,
+      "gold": 9723,
+      "wood": 5106,
+      "units": 76
+    },
+    {
+      "sim_seconds": 882.1833333333333,
+      "wave": 26,
+      "enemies": 2,
+      "kills": 638,
+      "hall_hp": 1500.0,
+      "gold": 9931,
+      "wood": 5232,
+      "units": 63
+    },
+    {
+      "sim_seconds": 892.1833333333333,
+      "wave": 26,
+      "enemies": 0,
+      "kills": 640,
+      "hall_hp": 1500.0,
+      "gold": 10041,
+      "wood": 5379,
+      "units": 61
+    },
+    {
+      "sim_seconds": 902.1833333333333,
+      "wave": 27,
+      "enemies": 13,
+      "kills": 658,
+      "hall_hp": 1500.0,
+      "gold": 10196,
+      "wood": 5511,
+      "units": 76
+    },
+    {
+      "sim_seconds": 912.1833333333333,
+      "wave": 27,
+      "enemies": 5,
+      "kills": 666,
+      "hall_hp": 1500.0,
+      "gold": 10259,
+      "wood": 5540,
+      "units": 67
+    },
+    {
+      "sim_seconds": 922.1833333333333,
+      "wave": 28,
+      "enemies": 40,
+      "kills": 673,
+      "hall_hp": 1500.0,
+      "gold": 10187,
+      "wood": 5598,
+      "units": 104
+    },
+    {
+      "sim_seconds": 932.2166666666667,
+      "wave": 28,
+      "enemies": 23,
+      "kills": 690,
+      "hall_hp": 1500.0,
+      "gold": 10526,
+      "wood": 5689,
+      "units": 89
+    },
+    {
+      "sim_seconds": 942.2166666666667,
+      "wave": 28,
+      "enemies": 7,
+      "kills": 706,
+      "hall_hp": 1500.0,
+      "gold": 10756,
+      "wood": 5815,
+      "units": 72
+    },
+    {
+      "sim_seconds": 952.2333333333333,
+      "wave": 29,
+      "enemies": 24,
+      "kills": 717,
+      "hall_hp": 1500.0,
+      "gold": 10832,
+      "wood": 5912,
+      "units": 92
+    },
+    {
+      "sim_seconds": 962.2333333333333,
+      "wave": 29,
+      "enemies": 15,
+      "kills": 726,
+      "hall_hp": 1500.0,
+      "gold": 10992,
+      "wood": 6028,
+      "units": 80
+    },
+    {
+      "sim_seconds": 972.25,
+      "wave": 29,
+      "enemies": 2,
+      "kills": 739,
+      "hall_hp": 1500.0,
+      "gold": 11407,
+      "wood": 6153,
+      "units": 68
+    },
+    {
+      "sim_seconds": 982.25,
+      "wave": 29,
+      "enemies": 0,
+      "kills": 741,
+      "hall_hp": 1500.0,
+      "gold": 11493,
+      "wood": 6251,
+      "units": 67
+    },
+    {
+      "sim_seconds": 992.25,
+      "wave": 30,
+      "enemies": 24,
+      "kills": 754,
+      "hall_hp": 1500.0,
+      "gold": 11599,
+      "wood": 6377,
+      "units": 91
+    },
+    {
+      "sim_seconds": 1002.25,
+      "wave": 30,
+      "enemies": 11,
+      "kills": 767,
+      "hall_hp": 1500.0,
+      "gold": 11957,
+      "wood": 6450,
+      "units": 80
+    },
+    {
+      "sim_seconds": 1012.25,
+      "wave": 30,
+      "enemies": 9,
+      "kills": 769,
+      "hall_hp": 1500.0,
+      "gold": 12119,
+      "wood": 6544,
+      "units": 75
+    },
+    {
+      "sim_seconds": 1022.25,
+      "wave": 30,
+      "enemies": 6,
+      "kills": 772,
+      "hall_hp": 1500.0,
+      "gold": 12224,
+      "wood": 6610,
+      "units": 74
+    },
+    {
+      "sim_seconds": 1032.2666666666667,
+      "wave": 30,
+      "enemies": 2,
+      "kills": 776,
+      "hall_hp": 1500.0,
+      "gold": 12531,
+      "wood": 6708,
+      "units": 70
+    }
+  ],
+  "screenshot_sha256": {
+    "new_economy_economy_before_save.png": "06aa9756759d11dfae1a3908fe083618f18471adf87bfb3179109f95d0528472",
+    "resume_combat_combat_before_save.png": "f431b45afe59157a6671338e44466712eaeef797df4cfa1f958807553287b086",
+    "resume_transition_wave_transition_before_save.png": "faaa35177516502d3748cc63bcd0c286907bad516c056865a6d60ff998ceb3ac",
+    "resume_victory_victory.png": "388475a402fd2b2d41c4fc51f378e32ae24f8863854425d89c3bbb0ab3747e13"
+  }
+}

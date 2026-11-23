@@ -2,6 +2,8 @@
 
 当前 Windows 离线试玩包位于 D:/AI项目/水浒/Windows候选/20261123-cf173596/。单个 ZIP 含发行文件、启动器和说明，同目录的「PC试玩」可直接启动。 [Windows 验收收据](../qa/battle_entry_timing_20261116/windows_same_checkpoint_resave_cf173596.json)
 
+同包经典驻守完整 30 波收据位于 `qa/classic30_continue_20260909/`。 [Windows 经典驻守收据](../qa/classic30_continue_20260909/windows_full_cf173596.json)
+
 大名府操作专项的 Windows 离线试玩包位于 D:/AI项目/水浒/Windows候选/20261123-5256f8d3/。单个 ZIP 含发行文件、启动器和试玩说明，同目录的「PC试玩」可直接启动。 [Windows 大名府验收](../qa/campaign_wounded_selection_20261116/windows_daming_evacuation_5256f8d3.json)
 
 八章旧档整体验收的 Windows 离线试玩 ZIP 和构建收据位于 D:/AI项目/水浒/Windows候选/20261123-91ab70df/。同目录的「PC试玩」可直接启动。 [本地试玩与八章兼容收据](../qa/battle_entry_timing_20261116/windows_playtest_and_legacy_26752476_91ab70df.json)
