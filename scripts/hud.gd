@@ -2912,11 +2912,13 @@ func _show_intro_line() -> void:
 		_intro_name.text = "【%s】" % who
 		_intro_text.text = String(line.get("text", ""))
 	_intro_name.add_theme_color_override("font_color", color)
-	var tex: Texture2D = Art.portrait_texture(String(line.get("key", "narrator")))
-	if battle != null:
-		var actor = battle.find_unit(String(line.get("key", "narrator")))
-		if is_instance_valid(actor) and actor.visual_art_variant() != "":
-			tex = actor.ui_portrait_texture()
+	var portrait_key := String(line.get("key", "narrator"))
+	var actor = battle.find_unit(portrait_key) if battle != null else null
+	var tex: Texture2D
+	if is_instance_valid(actor) and actor.visual_art_variant() != "":
+		tex = actor.ui_portrait_texture()
+	else:
+		tex = Art.portrait_texture(portrait_key)
 	if tex != null:
 		_intro_port_tex.texture = tex
 		_intro_port_tex.visible = true

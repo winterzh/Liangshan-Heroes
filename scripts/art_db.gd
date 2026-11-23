@@ -1109,12 +1109,9 @@ func cache_prepared_opening_frames(cache_key: String, resource: Resource) -> voi
 
 
 func request_huangnigang_opening_portraits() -> Array[String]:
-	# The first Wu Yong dialogue checks the ordinary portrait before the merchant variant.
-	var paths: Array[String] = [STANDALONE_PORTRAITS["wu_yong"]]
-	for key: String in CampaignArt.HUANGNIGANG_MERCHANTS:
-		paths.append(CHAPTER_PORTRAITS["hn_" + key])
 	var requests: Array[String] = []
-	for path in paths:
+	for key: String in CampaignArt.HUANGNIGANG_MERCHANTS:
+		var path: String = CHAPTER_PORTRAITS["hn_" + key]
 		if _prefetched_opening_textures.has(path) or not ResourceLoader.exists(path):
 			continue
 		if ResourceLoader.load_threaded_request(path, "Texture2D") == OK:
