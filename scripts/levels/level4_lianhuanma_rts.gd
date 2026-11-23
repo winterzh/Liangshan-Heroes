@@ -14,6 +14,11 @@ const LINK_SOURCE := 4705
 const HOOK_KEYS := ["gou_lian","xu_ning"]
 const WAVE_TIMES := [150.0, 270.0]
 const SUPPLY_DELAY := 45.0
+const CAMP_FALL_WAVE_EVENTS := ["lhm_north_after_camp_fall", "lhm_south_after_camp_fall"]
+const CAMP_FALL_CHARGE := [
+	"官军大营已破 · 北路待命甲马正冲向中军！",
+	"官军大营已破 · 南路待命甲马正冲向中军！",
+]
 const LANE_WARNING := [
 	"北路甲马正在集结，约25秒后出发。",
 	"南路甲马正在集结，约25秒后出发。",
@@ -425,6 +430,10 @@ func unit_tactical_hint(b, unit) -> String:
 		return _drill_hint(b) if b.is_visible_world(dummy.position) else Localize.text("暂无视野，无法判断破阵条件")
 	if unit == han and lhm_killed >= 12 and b.is_visible_world(unit.position):
 		return Localize.text("可选演义 · 集火击败韩滔即可生擒")
+	if unit == enemy_base and b.is_visible_world(unit.position):
+		for lane in range(waves.size()):
+			if not waves[lane].sent and _lane_has_riders(lane):
+				return Localize.text("若先攻破大营，待命甲马会立刻冲向中军。记得留兵守营。")
 	var lane := posts.find(unit)
 	if lane >= 0:
 		if not b.is_visible_world(unit.position): return ""
@@ -482,14 +491,17 @@ func _rider_tick(b) -> void:
 			b.show_story_art("broken_cavalry",u.position,72,1.5)
 			b.mission.mark("lhm_break_%d"%broken_count,Localize.format_text("钩镰协同破开第%d骑连环阵", broken_count))
 	if broken_count==12: b.mission.mark("lhm_all_hook_broken","十二骑均被钩镰枪协同破阵")
-func _send_wave(b,lane: int) -> void:
+func _send_wave(b, lane: int, camp_fell := false) -> void:
 	waves[lane].sent=true
 	for u in riders:
 		if alive(u) and int(u.get_meta("wave_group"))==lane:
 			u.set_meta("wave_state","charging")
 			u.order_amove(b.map.cell_to_world(LANES[lane]))
 			u.order_amove(hall.position,true)
-	b.msg(LANE_CHARGE[lane],7)
+	if camp_fell:
+		b.mission.mark(CAMP_FALL_WAVE_EVENTS[lane], CAMP_FALL_CHARGE[lane])
+	else:
+		b.msg(LANE_CHARGE[lane],7)
 
 func _lane_has_riders(lane: int) -> bool:
 	return riders.any(func(u): return alive(u) and int(u.get_meta("wave_group",-1))==lane)
@@ -594,6 +606,11 @@ func process(b,delta: float) -> void:
 	for lane in range(2):
 		if waves[lane].sent or not _lane_has_riders(lane):
 			continue
+		if manor_fallen:
+			# Only the surviving riders that have not already charged react to
+			# the fall of headquarters. Their original route and units remain.
+			_send_wave(b, lane, true)
+			continue
 		if elapsed>=float(waves[lane].time)-25 and not waves[lane].warned:
 			waves[lane].warned=true
 			b.lit_cells[RIDER_POSTS[lane]]=30.0
@@ -622,7 +639,9 @@ func _update_briefing(b) -> void:
 	elif waves[0].sent or waves[1].sent:
 		briefing = DEFEND_BRIEFING
 	var objective: String = briefing.objective
-	if briefing == PREPARE_BRIEFING and b.mission.has_event("lhm_supply_0"):
+	if briefing == FINISH_BRIEFING and CAMP_FALL_WAVE_EVENTS.any(b.mission.has_event):
+		objective = "待命甲马因大营被毁已向中军出击。守住中军和宋江，击溃余骑。点「查看 · 余骑」可定位最近的一骑。"
+	elif briefing == PREPARE_BRIEFING and b.mission.has_event("lhm_supply_0"):
 		objective = NORTH_AFTER_CUT
 	elif briefing == SOUTH_BRIEFING and b.mission.has_event("lhm_supply_1"):
 		objective = SOUTH_AFTER_CUT
@@ -684,7 +703,12 @@ func campaign_debrief(mission) -> Array[Dictionary]:
 	for lane in range(waves.size()):
 		var args: Array = ["北路" if lane == 0 else "南路", remaining[lane], "已出击" if waves[lane].sent else "未出击"]
 		var source := "%s · 余 %d 骑 · %s · 辎重营仍在"
-		if mission.has_event("lhm_supply_%d" % lane):
+		var supply_cut: bool = mission.has_event("lhm_supply_%d" % lane)
+		if mission.has_event(CAMP_FALL_WAVE_EVENTS[lane]):
+			source = "%s · 余 %d 骑 · 大营被毁后出击 · 辎重营已毁" if supply_cut \
+				else "%s · 余 %d 骑 · 大营被毁后出击 · 辎重营仍在"
+			args.resize(2)
+		elif supply_cut:
 			var delay := roundi(float(waves[lane].time) - WAVE_TIMES[lane])
 			if not waves[lane].sent and remaining[lane] == 0:
 				source = "%s · 原骑未出击即被歼灭 · 辎重营已毁"
