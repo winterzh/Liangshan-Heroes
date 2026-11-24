@@ -15,6 +15,8 @@ const RALLY_WAITING := "hg_rally_waiting"
 const EARLY_WITHDRAW := GATE_W + Vector2i(-3,0)
 const WITHDRAW_RADIUS := 150.0
 const WITHDRAW_OBJECTIVE := "七车十一担已经运出。让幸存同伴右键西冈口集合，八人到齐可获全员生还。若要先行收队，请单独右键西冈口西侧的收队旗标。"
+static var _transport_phrase_names: Array[String] = []
+static var _transport_phrase_catalog := 0
 var team_t := 0.0
 var distraction_serial := -1
 var controls_generation := -1
@@ -30,14 +32,23 @@ func campaign_story_goals() -> Array:
 func apply_overrides(defs: Dictionary, abilities: Dictionary) -> void:
 	super.apply_overrides(defs,abilities)
 	defs["treasure_cart"]["campaign_object"] = TRIBUTE_ART
-	for key in SEVEN+["bai_sheng"]:
+	var merchants := SEVEN + ["bai_sheng"]
+	for key in merchants:
 		defs[key]["campaign_tribute_object"] = TRIBUTE_ART
-	# Both normal Battle setup and cold prepare_runtime call this path. Rebuild
-	# only fixed display phrases; saved action labels and gameplay stay intact.
+	# Localize registers these aliases in all four tables for its lifetime.
+	# Overrides still apply to this battle even when its names already match.
+	var reuse_phrases := OS.get_name() == "Windows"
+	var catalog := Localize.get_instance_id()
+	var names: Array[String] = []
+	if reuse_phrases:
+		for key in merchants:
+			names.append(String(defs[key].name))
+		if catalog == _transport_phrase_catalog and names == _transport_phrase_names:
+			return
 	var phrases: Array = []
 	var report_phrases: Array = []
 	var relay_reports: Array = []
-	for key: String in SEVEN+["bai_sheng"]:
+	for key: String in merchants:
 		relay_reports.append({"source": "%s倒下；幸存七星仍可接力推车。", "args": [String(defs[key].name)]})
 	# Character selectors are whole phrases. Register their finite translations
 	# for both fresh scenes and restored labels, without relying on format history.
@@ -69,6 +80,9 @@ func apply_overrides(defs: Dictionary, abilities: Dictionary) -> void:
 	var relay_registered: Dictionary = Localize.register_fixed_phrases(relay_reports)
 	if not relay_registered.ok:
 		push_error("HG_TRANSPORT_RELAY_TRANSLATION_" + String(relay_registered.code))
+	if reuse_phrases and registered.ok and report_registered.ok and relay_registered.ok:
+		_transport_phrase_catalog = catalog
+		_transport_phrase_names = names
 
 func deploy(b) -> void:
 	super.deploy(b)
