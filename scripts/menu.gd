@@ -711,6 +711,12 @@ func _show_story() -> void:
 			i += 1
 
 	_add_back(box, overlay)
+	if OS.get_name() == "Windows":
+		var scroll := overlay.get_node("OverlayScroll") as ScrollContainer
+		scroll.follow_focus = true
+		var first_action := box.find_next_valid_focus()
+		if first_action != null and box.is_ancestor_of(first_action):
+			first_action.grab_focus()
 	_prefetch_picker_surfaces(overlay, Campaign.STORY_ORDER)
 
 
