@@ -19,6 +19,7 @@ const Layout := preload("res://scripts/liangshan_layout.gd")
 const CampaignFlagOverlay := preload("res://scripts/campaign_flag_overlay.gd")
 const WorldShadow := preload("res://scripts/world_shadow.gd")
 const StaticDrawBatch := preload("res://scripts/static_scenery_draw_batch.gd")
+static var _recent_banks: Array[Dictionary] = []
 var _bank_draw_batch: StaticDrawBatch
 const EnvironmentArt := preload("res://scripts/campaign_environment_art.gd")
 var _entrance: Node2D
@@ -658,9 +659,7 @@ func _draw() -> void:
 		draw_mesh(_reed_mesh,null)
 	if StaticDrawBatch.enabled():
 		if _bank_draw_batch == null:
-			_bank_draw_batch = StaticDrawBatch.new()
-			_draw_banks(_bank_draw_batch)
-			_bank_draw_batch.finish()
+			_bank_draw_batch = _build_bank_batch()
 		if _bank_draw_batch.valid:
 			_bank_draw_batch.draw(self)
 		else:
@@ -681,6 +680,20 @@ func _draw() -> void:
 	else:
 		_draw_legacy_ground_shadows()
 	draw_set_transform_matrix(Transform2D.IDENTITY)
+
+
+func _build_bank_batch() -> StaticDrawBatch:
+	# Each row contains projected endpoints and all flags used by _draw_banks.
+	# A batch retains only these inputs and meshes, never its scene or map.
+	var key := _banks if OS.has_feature("windows") else []
+	var reused := StaticDrawBatch.find_cached(_recent_banks, key) as StaticDrawBatch
+	if reused != null:
+		return reused
+	var batch := StaticDrawBatch.new()
+	_draw_banks(batch)
+	batch.finish()
+	StaticDrawBatch.remember(_recent_banks, key, batch)
+	return batch
 
 
 func static_bank_batch_summary() -> Dictionary:

@@ -27,6 +27,7 @@ extends RefCounted
 ## THE SOFTWARE.
 
 const FEATHER_SIZE := 1.25
+const CACHE_LIMIT := 3
 static var _enabled := OS.get_environment("LSH_STATIC_SCENERY_BATCH") != "0"
 static var _quad_uvs := PackedVector2Array([Vector2.ZERO, Vector2.ZERO, Vector2.ZERO, Vector2.ZERO])
 static var _empty_uvs := PackedVector2Array()
@@ -48,6 +49,25 @@ var _native_texture_rects := 0
 
 static func enabled() -> bool:
 	return _enabled
+
+
+## Each owner supplies a typed geometry key and keeps its own bounded cache.
+static func find_cached(cache: Array[Dictionary], key: Array) -> RefCounted:
+	if not key.is_empty():
+		for i in range(cache.size()):
+			if cache[i].key == key:
+				var hit: Dictionary = cache.pop_at(i)
+				cache.append(hit)
+				return hit.batch
+	return null
+
+
+static func remember(cache: Array[Dictionary], key: Array, batch: RefCounted) -> void:
+	if key.is_empty() or not batch.valid:
+		return
+	if cache.size() == CACHE_LIMIT:
+		cache.pop_front()
+	cache.append({"key": key.duplicate(true), "batch": batch})
 
 
 func finish() -> void:

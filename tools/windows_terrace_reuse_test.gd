@@ -1,6 +1,7 @@
 extends SceneTree
 ## Graphical Windows fixture for terrace cache reuse, key changes, and eviction.
 var _entrance_script: GDScript
+var _scenery_script: GDScript
 var _map_script: GDScript
 var _layout_script: GDScript
 var _height_script: GDScript
@@ -8,6 +9,7 @@ var _batch_script: GDScript
 
 var _results := {}
 var _world: Node2D
+var _empty_frame_sha256: String
 
 
 func _initialize() -> void:
@@ -122,13 +124,87 @@ func _cache_boundaries() -> void:
 	map.free()
 
 
+func _bank_scenery(map: Node2D) -> Node2D:
+	var scenery: Node2D = _scenery_script.new()
+	scenery._map = map
+	scenery.process_mode = Node.PROCESS_MODE_DISABLED
+	for y in range(map.h):
+		for x in range(map.w):
+			scenery._cache_banks(x, y, map.grid[y * map.w + x])
+	return scenery
+
+
+func _banks_rendered_pair(rts: bool) -> void:
+	_scenery_script._recent_banks.clear()
+	var map := _map(rts)
+	var fresh := _bank_scenery(map)
+	var reference: RefCounted = _batch_script.new()
+	fresh._draw_banks(reference)
+	reference.finish()
+	fresh._bank_draw_batch = reference
+	var expected := await _capture(fresh)
+	fresh.free()
+	var old_map: WeakRef = weakref(map)
+	map.free()
+	map = _map(rts)
+	var first := _bank_scenery(map)
+	var first_pixels := await _capture(first)
+	var saved: RefCounted = first._bank_draw_batch
+	first.free()
+	map.free()
+	map = _map(rts)
+	var second := _bank_scenery(map)
+	var second_pixels := await _capture(second)
+	_results["banks_rts" if rts else "banks_traditional"] = {
+		"same_pixels": first_pixels == expected and second_pixels == expected,
+		"same_batch": (saved != null and is_same(saved, second._bank_draw_batch)) if _batch_script.enabled()
+			else saved == null and second._bank_draw_batch == null,
+		"fresh_map_released": old_map.get_ref() == null,
+		"substantial_reference": reference.valid and reference.summary().vertices > 1000 and expected != _empty_frame_sha256,
+		"rgba_sha256": expected,
+	}
+	second.free()
+	map.free()
+
+
+func _bank_cache_boundaries() -> void:
+	_scenery_script._recent_banks.clear()
+	var map := _map(true)
+	var owner := _bank_scenery(map)
+	var before := await _capture(owner)
+	var original: RefCounted = owner._bank_draw_batch
+	var changed := _bank_scenery(map)
+	var saved_anchor: Vector2 = changed._banks[0].a
+	changed._banks[0].a = saved_anchor + Vector2(8.0, 0.0)
+	var different := changed._build_bank_batch() as RefCounted
+	changed._banks[0].a = saved_anchor
+	var restored := changed._build_bank_batch() as RefCounted
+	for n in [1.0, 2.0, 3.0]:
+		changed._banks[0].a = saved_anchor + Vector2(0.0, n)
+		changed._build_bank_batch()
+	changed._banks[0].a = saved_anchor
+	var rebuilt := changed._build_bank_batch() as RefCounted
+	var after := await _capture(owner)
+	_results["bank_lifetime"] = {
+		"changing_one_anchor_rebuilds": not is_same(different, original),
+		"restored_anchor_reuses_original": is_same(restored, original),
+		"cache_is_bounded": _scenery_script._recent_banks.size() == 3,
+		"evicted_batch_rebuilt": not is_same(rebuilt, original),
+		"live_owner_still_draws": before == after and is_same(owner._bank_draw_batch, original),
+	}
+	changed.free()
+	owner.free()
+	map.free()
+
+
 func _run() -> void:
 	_entrance_script = load("res://scripts/liangshan_entrance.gd")
+	_scenery_script = load("res://scripts/liangshan_scenery.gd")
 	_map_script = load("res://scripts/game_map.gd")
 	_layout_script = load("res://scripts/liangshan_layout.gd")
 	_height_script = load("res://scripts/liangshan_height.gd")
 	_batch_script = load("res://scripts/static_scenery_draw_batch.gd")
-	for script in [_entrance_script, _map_script, _layout_script, _height_script, _batch_script]:
+	for script in [_entrance_script, _scenery_script, _map_script, _layout_script, _height_script, _batch_script]:
 		if script == null or not script.can_instantiate():
 			push_error("Terrace fixture requires imported project scripts")
 			quit(2)
@@ -140,10 +216,15 @@ func _run() -> void:
 	iso.origin = Vector2(960, -650)
 	_world.transform = iso
 	root.add_child(_world)
+	await RenderingServer.frame_post_draw
+	_empty_frame_sha256 = root.get_texture().get_image().get_data().hex_encode().sha256_text()
 	await _rendered_pair(true)
 	await _rendered_pair(false)
+	await _banks_rendered_pair(true)
+	await _banks_rendered_pair(false)
 	if _batch_script.enabled():
 		await _cache_boundaries()
+		await _bank_cache_boundaries()
 	var passed := true
 	for row: Dictionary in _results.values():
 		for value in row.values():

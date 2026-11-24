@@ -8,7 +8,6 @@ const CampaignArtEvent := preload("res://scripts/campaign_art_event.gd")
 const StaticDrawBatch := preload("res://scripts/static_scenery_draw_batch.gd")
 const LiangshanHeight := preload("res://scripts/liangshan_height.gd")
 const CampaignHeight := preload("res://scripts/campaign_height.gd")
-const TERRACE_CACHE_LIMIT := 3
 static var _recent_terraces: Array[Dictionary] = []
 
 var _terrace_draw_batch: StaticDrawBatch
@@ -208,19 +207,13 @@ func _draw() -> void:
 
 func _build_terrace_batch() -> StaticDrawBatch:
 	var key := _terrace_cache_key() if OS.has_feature("windows") else []
-	if not key.is_empty():
-		for i in range(_recent_terraces.size()):
-			if _recent_terraces[i].key == key:
-				var hit: Dictionary = _recent_terraces.pop_at(i)
-				_recent_terraces.append(hit)
-				return hit.batch
+	var reused := StaticDrawBatch.find_cached(_recent_terraces, key) as StaticDrawBatch
+	if reused != null:
+		return reused
 	var batch := StaticDrawBatch.new()
 	_draw_terrace(batch)
 	batch.finish()
-	if batch.valid and not key.is_empty():
-		if _recent_terraces.size() == TERRACE_CACHE_LIMIT:
-			_recent_terraces.pop_front()
-		_recent_terraces.append({"key": key, "batch": batch})
+	StaticDrawBatch.remember(_recent_terraces, key, batch)
 	return batch
 
 
