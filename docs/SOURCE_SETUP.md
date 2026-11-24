@@ -1,5 +1,10 @@
 # 源码设置与换机（2026-10-30）
 
+
+## 2026-11-24 Windows 黄泥冈开场图集对照
+
+当前稳定源码继续通过各自原贴图使用这八个黄泥冈道具。试验候选 9da97d6b 将原 Vulkan 运行时解码的 RGBA 排成 2064×1032 的无损图集，行列为 2×4。每片有效尺寸为 512×512，四边各外扩 2 像素。Vulkan 和 OpenGL Compatibility 的采样区域与原成品逐像素一致。候选保存在本地分支 codex/windows-huangnigang-texture-evidence-20261124。 [Windows 对照收据](../qa/battle_entry_timing_20261116/windows_huangnigang_opening_atlas_experiment_9da97d6b.json)
+
 ## 2026-11-24 Windows 连环马投石车绕行与到位
 
 当前 Windows 候选 6e134685 使用七文件拆包，连环马的南侧绕行和东侧选中已在 960×540 隔离窗口验收。新按钮沿用任务栏控件和存档结构。
