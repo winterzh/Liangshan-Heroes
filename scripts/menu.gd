@@ -8,6 +8,7 @@ const SCENERY_CALIBRATION_SLICE_US := 24_000
 var _update_label: Label
 var _update_overlay: Control
 var _entry_overlay: ColorRect
+var _entry_prepared_battle: Node
 var _entry_scan: RefCounted
 var _entry_environment_requests: Array[String] = []
 var _entry_opening_frame_requests: Dictionary[String, String] = {}
@@ -261,6 +262,17 @@ func _install_battle(identity: Dictionary, environment_textures: Array[Texture2D
 			if not environment_textures.is_empty():
 				# Keep Godot's cached textures alive through the battle's _ready.
 				battle.ready.connect(func(): environment_textures.clear(), CONNECT_ONE_SHOT)
+			if OS.get_name() == "Windows" and battle.prepare_classic_entry_map():
+				# Finish a loading frame after preparing the authored map. The
+				# next frame mounts it and initializes the live battle.
+				_entry_prepared_battle = battle
+				await RenderingServer.frame_post_draw
+				if not is_instance_valid(battle):
+					return
+				_entry_prepared_battle = null
+				if AppLifecycle.quit_started():
+					battle.free()
+					return
 			if get_tree().change_scene_to_node(battle) == OK:
 				return
 			battle.free()
@@ -294,6 +306,9 @@ func take_battle_prewarm() -> RefCounted:
 
 
 func _exit_tree() -> void:
+	if is_instance_valid(_entry_prepared_battle):
+		_entry_prepared_battle.free()
+		_entry_prepared_battle = null
 	_restore_battle_loading_frame_limit()
 	_cancel_battle_scan()
 

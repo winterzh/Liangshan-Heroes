@@ -32,6 +32,7 @@ var _save_barrier: Node
 
 var world: Node2D
 var map: GameMap
+var _classic_entry_map_prepared := false
 var hud: HUD
 var camera: RTSCamera
 var units_root: Node2D
@@ -440,7 +441,8 @@ func _ready() -> void:
 		_gameplay_rng_stop(initialized.code)
 		return
 	_refresh_hot_patch_classes()
-	level = _resolve_level()
+	if not _classic_entry_map_prepared:
+		level = _resolve_level()
 	# This is the new-game entry only. The future whole-world restore factory
 	# must attach an already prepared world without running deploy/on_start.
 	if not _gameplay_rng_issue.is_empty(): return
@@ -476,6 +478,8 @@ func _ready() -> void:
 	_save_barrier = preload("res://scripts/run_battle_barrier.gd").new()
 	_save_barrier.configure(self, _run_clock, _official_context)
 	add_child(_save_barrier)
+	if _classic_entry_map_prepared:
+		move_child(world, _save_barrier.get_index())
 	_steam_run_id = SteamService.begin_run(_official_context)
 	_update_steam_presence()
 	track_hero_combat_stats = Campaign.skirmish or Campaign.custom_defense
@@ -500,18 +504,8 @@ func _ready() -> void:
 		current_age = level.start_age() if level.has_method("start_age") else 3
 	fog = level.fog_enabled()
 
-	world = Node2D.new()
-	world.transform = GameMap.ISO
-	add_child(world)
-
-	map = GameMap.new()
-	world.add_child(map)
-	map.init_map(level.map_w(), level.map_h(), level.map_theme(), level.map_base())
-	level.paint_map(map)
-	environment.paint(map,level.id())
-	map.bake()
-	level.decorate(map)
-	map.enable_campaign_environment(level.id())
+	if not _classic_entry_map_prepared:
+		_build_entry_map(environment)
 	# 驻守战的逻辑地图仍是60×60，但等距菱形外侧不能直接露出引擎黑底。
 	# 在地图下方延伸同色水泊，只负责画面铺底，不增加可走格、资源或寻路范围。
 	if bool(map.get_meta("liangshan_rts_court", false)):
@@ -740,6 +734,33 @@ func _build_test() -> void:
 		if tower != null and not tower.is_constructing and t > 25:
 			break
 	AppLifecycle.request_quit("build_test")
+
+
+func prepare_classic_entry_map() -> bool:
+	if is_inside_tree() or world != null or not Campaign.skirmish:
+		return false
+	var selected: LevelBase = Campaign.make_level()
+	if selected.id() != "skirmish":
+		return false
+	level = selected
+	_build_entry_map(load("res://scripts/campaign_environment.gd"))
+	_classic_entry_map_prepared = true
+	return true
+
+
+func _build_entry_map(environment: Script) -> void:
+	world = Node2D.new()
+	world.transform = GameMap.ISO
+	add_child(world)
+
+	map = GameMap.new()
+	world.add_child(map)
+	map.init_map(level.map_w(), level.map_h(), level.map_theme(), level.map_base())
+	level.paint_map(map)
+	environment.paint(map,level.id())
+	map.bake()
+	level.decorate(map)
+	map.enable_campaign_environment(level.id())
 
 
 func _resolve_level() -> LevelBase:
