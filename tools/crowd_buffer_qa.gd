@@ -1,7 +1,7 @@
 extends "res://tools/crowd_separation_qa.gd"
 
 func _reference_spec() -> Dictionary:
-	return {"path":"res://tools/contracts/separation/before_4589c85.txt","sha256":"a1953e526f83bbede3cbd65621c1b892314c1d36f21ebb8e45edbba3065734f6"}
+	return {"path":"res://tools/contracts/separation/dispatch_before_9017cb7e.txt","sha256":"431639e2beca6aa46139e2c714c338701b75ec0e8588982123fa01efc8a91cc1"}
 
 func _output_path() -> String:
 	return "res://.godot/crowd_buffer_qa"
@@ -10,7 +10,7 @@ func _extra_cases(b, old) -> void:
 	var layouts := 0
 	var extra_positions := 0
 	var extra_steps := 0
-	for target_count in [6,30,63,64,128,320,321,326,506]:
+	for target_count in [6,30,47,48,50,53,63,64,128,320,321,326,506]:
 		b._perf_bench_setup(target_count-6);b._prof_on=false
 		await process_frame # Flush the previous setup's queued Unit nodes.
 		var units: Array=b.units.filter(func(u):return not u.is_building and not u.is_resource)
@@ -47,7 +47,7 @@ func _extra_cases(b, old) -> void:
 		_benchmark(b,old,units,baseline,"dense_%s"%target_count)
 		var spread:=baseline.map(func(p):return baseline[0]+(p-baseline[0])*2.4)
 		_benchmark(b,old,units,spread,"spread_%s"%target_count)
-	check(layouts==36 and extra_steps==108 and extra_positions==21168,"all population and stale-grid fixtures completed")
-	check(report.samples.size()==20,"all twenty density/population timing workloads completed")
+	check(layouts==52 and extra_steps==156 and extra_positions==23544,"all population and stale-grid fixtures completed")
+	check(report.samples.size()==28,"all 28 density/population timing workloads completed")
 	position_comparisons+=extra_positions;sequential_steps+=extra_steps
-	report["buffer_fixtures"]={"layouts":layouts,"steps":extra_steps,"position_comparisons":extra_positions,"scope":"Actual populations 6/30/63/64/128/320/321/326/506; three consecutive steps; duplicate order and bucket entries, bucket-only neighbors and coordinates changed after grid build."}
+	report["buffer_fixtures"]={"layouts":layouts,"steps":extra_steps,"position_comparisons":extra_positions,"scope":"Actual populations 6/30/47/48/50/53/63/64/128/320/321/326/506; three consecutive steps; duplicate order and bucket entries, bucket-only neighbors and coordinates changed after grid build."}
