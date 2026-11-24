@@ -1,0 +1,72 @@
+{
+  "candidate": "990254a9a7b499b3fa6e97e317fb91ac6a4423e2",
+  "scope": "Windows isolated desktop with local offline profile. Six entries through the menu launch path, 1280 by 720, Vulkan Forward+, normal speed, six-second minimum dwell.",
+  "initial_run": {
+    "exit_code": 2,
+    "elapsed_process_seconds": 273.728,
+    "soak_seconds": null,
+    "eligible": false,
+    "passed": false,
+    "failures": [
+      "campaign enters the battle scene through the menu"
+    ],
+    "reason": "Mode transition failed: campaign/level5.",
+    "engine_errors": [],
+    "engine_warnings": [],
+    "game_log_sha256": "94b4c3bbb67249f8cc3078c1d62c1d0d91caaffd9d02919b05eeceaff9549644",
+    "report_sha256": "23be88f04ebed3010b95004e7729fa4dc11f155e5643ee877b18c95b56b87e04",
+    "fixture_sha256": "c6efde8584bf60c1032aaada5d6f6ac0e031b4db8302d10fa7a8d4ee6959832a",
+    "target_results": {
+      "level1": 4,
+      "arena": 4,
+      "skirmish": 4,
+      "skirmish_ai": 4,
+      "custom_defense": 4,
+      "level5": 3
+    },
+    "finished_entries": 23,
+    "released_entries": 23,
+    "progress_unchanged": null,
+    "performance": null,
+    "late_launch_samples": []
+  },
+  "diagnostic_run": {
+    "exit_code": 1,
+    "elapsed_process_seconds": 616.06,
+    "soak_seconds": 604.043485,
+    "eligible": true,
+    "passed": false,
+    "failures": [
+      "all minute P95 values meet 16.7ms",
+      "all minute P99 values meet 33.3ms"
+    ],
+    "reason": null,
+    "engine_errors": [],
+    "engine_warnings": [],
+    "game_log_sha256": "f984eb1bd1c14f3c0d2963b8eea1a9ca2e69f1244dd8dbbe93a44eb40894f815",
+    "report_sha256": "95b26a0db5ac266d6273aa9b5f60992b01a9468044c4a32e3f2e5a74de57f7b3",
+    "fixture_sha256": "68d417e290772ad3bfaee4baa3b452176fec5a419c51c1b9183992e99c25869a",
+    "target_results": {
+      "level1": 16,
+      "arena": 16,
+      "skirmish": 16,
+      "skirmish_ai": 16,
+      "custom_defense": 15,
+      "level5": 15
+    },
+    "finished_entries": 94,
+    "released_entries": 94,
+    "progress_unchanged": true,
+    "performance": {
+      "complete_minute_buckets": 10,
+      "max_minute_p95_ms": 26.466,
+      "max_minute_p99_ms": 52.967,
+      "p95_limit_ms": 16.7,
+      "p99_limit_ms": 33.3,
+      "peak_draw_calls": 1382.0,
+      "worst_frame_ms": 456.187
+    },
+    "late_launch_samples": []
+  },
+  "diagnostic_scope": "Samples in the observer were added after launch if a menu did not switch within 1.2 seconds. The diagnostic retry overlapped an export and separate isolated campaign acceptance."
+}
