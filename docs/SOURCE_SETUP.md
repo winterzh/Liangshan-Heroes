@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+本机以 Steam Build 26873421 与 Windows 冻结候选 dfe197b3 的七个成品文件哈希为基准。四个独立离线进程按正式版、候选、候选、正式版运行，1280×720、Vulkan Forward+、60 FPS 上限。计时通过生产菜单信号和战场右键处理器完成，原始报告与日志的 SHA-256 随收据保留。 [成品进场收据](../qa/battle_entry_timing_20261116/windows_entry_compare_26873421_dfe197b3.json)
+
 ## 快活林接店与终局核对
 
 饮酒、到店和退店动作均使用原旗标及实时战斗规则。接店的第 2 代存档保留施恩的命令和原游戏身份，独立进程继续后按原账本完成结算。 [Windows 通关验收](../qa/campaign_counter_window_20261116/windows_kuaihuolin_pc_duel_terminal_dfe197b3.json)
