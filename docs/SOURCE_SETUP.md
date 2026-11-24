@@ -1,5 +1,9 @@
 # 源码设置与换机（2026-10-30）
 
+## 2026-11-24 Windows 密集小队单位分离
+
+Windows 战况中，48 至 63 个机动单位平均每个已占用的空间格超过 2.5 个单位时，使用既有批量分离算法。占位和通行边界用本次开发基线逐步对照。 冻结候选 9017cb7e 的运行输入仅变更 `scripts/battle.gd`。分离对照基线取本次修改前的稳定分支。 [位置与成品对照](../qa/battle_entry_timing_20261116/windows_compact_separation_9017cb7e.json) [六入口长测](../qa/battle_entry_timing_20261116/windows_candidate_9017cb7e_mode_soak_600.json) [首次长测](../qa/battle_entry_timing_20261116/windows_compact_separation_first_soak_9017cb7e_600.json)
+
 ## 2026-11-24 Windows 交战慢帧分段
 
 `CAMPAIGN_SOAK_PLAY_FRAME_TRACE=1` 记录交战期间超过 33.3 毫秒的绘制间隔与物理、空闲和绘制信号。默认验收仍可直接运行。独立 60.0 秒复验核对了原生验收脚本修正后的逐局物理步数。以前的移植脚本改写了快照键，导致活动收据打印进程累计值。修正后 10 局每局 355–365 步，均有实际交战并释放关键节点。 [Windows 分段收据](../qa/battle_entry_timing_20261116/windows_play_frame_phases_f76e44fd_d09f8f4f.json)
