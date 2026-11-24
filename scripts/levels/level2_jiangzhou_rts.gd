@@ -659,8 +659,7 @@ func _order_rescue(b, action_id: String) -> void:
 				b.mission.set_feedback("已有友军前往这个解缚旗标。")
 				return
 			continue
-		if actor == b.mission._actor or actor._state != Unit.ST_IDLE or actor._hold_order_active \
-				or actor._patrolling or actor._target != null or not actor._queue.is_empty() or actor._action_queue_busy():
+		if not _awaiting_player_order(b, actor):
 			continue
 		waiting.append(actor)
 	waiting.sort_custom(func(a: Unit, other: Unit) -> bool:
@@ -774,14 +773,20 @@ func _update_dock_guidance(b) -> void:
 	else:
 		b.mission.set_guidance(Localize.format_text("码头收队 · 好汉已登船%d/6，阵亡%d。仍在岸上：%s。",[roster.aboard,roster.lost,", ".join(names)]))
 
+func _awaiting_player_order(b, actor: Unit) -> bool:
+	return actor != b.mission._actor and actor._state == Unit.ST_IDLE and not actor._hold_order_active \
+		and not actor._patrolling and actor._target == null and actor._queue.is_empty() and not actor._action_queue_busy() \
+		and not actor.mission_order_active and actor.mission_order_arrival_t <= 0.0
+
+
 func _order_shore_return(b) -> void:
 	if not _rescued_pair_aboard() or b.hud.touch_ui or not b._gameplay_rng_issue.is_empty():
 		return
 	var dock: Vector2 = b.map.cell_to_world(DOCK)
-	var pending := _selectable_shore_party(_dock_roster(b).ashore).filter(func(u: Unit) -> bool:
-		return u._state != Unit.ST_MOVE or u._home.distance_to(dock) >= DOCK_BOARDING_RADIUS or u._path_i >= u._path.size())
+	var pending := _selectable_shore_party(_dock_roster(b).ashore).filter(
+		func(actor: Unit) -> bool: return _awaiting_player_order(b, actor))
 	if pending.is_empty():
-		b.mission.set_feedback("好汉正在向码头撤回。")
+		b.mission.set_feedback(Localize.format_text("当前没有待令的岸上好汉。改派可先选人按 %s 停止。", Settings.key_label("stop")))
 		return
 	if _enemy_near(b,dock,BOARDING_THREAT_RADIUS,true):
 		b.center_camera_cell(DOCK)
