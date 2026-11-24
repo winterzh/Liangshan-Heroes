@@ -337,7 +337,7 @@ func _escort_objective(touch_ui: bool) -> String:
 	if song_freed.story_outcome=="embarked" and dai_freed.story_outcome=="embarked": return ""
 	if not touch_ui:
 		if not meeting and _bailong_party().all(active):
-			return "可先去白龙庙会合，也可清开码头后点「送获救者登船」。护卫可留在岸边断后。"
+			return "可点「送获救者去白龙庙」，再带张顺、张横会合。也可清开码头后直接登船。"
 		return "清开码头后点「送获救者登船」，也可手动选路。二人上船后由你下令开船。"
 	if not meeting and _bailong_party().all(active):
 		return "二人已救下。西巷短而狭，南巷较宽有骑弓截兵；自由选路或改道。可先经白龙庙会水军，再分别下令登船。护卫留在岸边断后，让出登船旗标附近的通道。"
@@ -345,6 +345,7 @@ func _escort_objective(touch_ui: bool) -> String:
 func _update_escort_objective(b) -> void:
 	if b.phase!=b.Phase.FIGHT: return
 	_update_boarding_button(b)
+	_update_bailong_order(b)
 	_update_rescue_controls(b)
 	var objective := _escort_objective(b.hud.touch_ui)
 	if objective.is_empty(): return
@@ -682,6 +683,55 @@ func _order_rescue(b, action_id: String) -> void:
 		else "暂时走不到解缚旗标。请清开道路或手动改道。")
 
 
+func _can_order_bailong(b) -> bool:
+	return not b.hud.touch_ui and not meeting and _bailong_party().all(active)
+
+
+func _update_bailong_order(b) -> void:
+	var button: Button = b.mission.find_level_button("jiang_send_bailong")
+	if not _can_order_bailong(b):
+		if button != null:
+			button.get_parent().remove_child(button)
+			button.queue_free()
+		return
+	if button == null:
+		button = b.mission.add_level_button("jiang_send_bailong", "送获救者去白龙庙",
+			"只派待令的宋江、戴宗。张顺、张横仍由你指挥，到齐四人才算会合。")
+		button.get_parent().move_child(button, 0)
+		b.mission.reveal_primary_level_button()
+
+
+func _order_bailong(b) -> void:
+	if not _can_order_bailong(b) or not b._gameplay_rng_issue.is_empty():
+		return
+	var center: Vector2 = b.map.cell_to_world(BAILONG)
+	var pending: Array[Unit] = []
+	for actor: Unit in [song_freed, dai_freed]:
+		if actor.faction == Unit.FACTION_LIANG and not actor.garrisoned and not _at_bailong(b, actor) and _awaiting_player_order(b, actor):
+			pending.append(actor)
+	if pending.is_empty():
+		b.mission.set_feedback(Localize.format_text("当前没有待令且未到白龙庙的获救者。改派可先选人按 %s 停止。", Settings.key_label("stop")))
+		return
+	if _enemy_near(b, center, BAILONG_RADIUS, true):
+		b.mission.set_feedback("白龙庙附近有官军。请先清开会合处，或手动改道。")
+		return
+	var issued := 0
+	for actor in pending:
+		var cell := BAILONG + (Vector2i(-1, 0) if actor == song_freed else Vector2i(0, 1))
+		var destination: Vector2 = b.map.cell_to_world(cell)
+		var path: PackedVector2Array = b.map.find_path(actor.position, destination, actor.faction, actor.movement_profile)
+		if path.is_empty() or path[-1].distance_to(center) >= BAILONG_RADIUS:
+			continue
+		b._stamp_manual([actor])
+		actor.order_move(destination)
+		issued += 1
+	if issued == 0:
+		b.mission.set_feedback("暂时走不到白龙庙。请清开道路或手动改道。")
+		return
+	Sfx.play("order")
+	b.mission.set_feedback(Localize.format_text("已派%d名获救者去白龙庙。张顺、张横仍由你指挥。", issued))
+
+
 func _can_order_boarding(b) -> bool:
 	return not b.hud.touch_ui and living(song_freed) and living(dai_freed) and (active(song_freed) or active(dai_freed))
 
@@ -880,6 +930,9 @@ func activate_mission_button(b, button_id: String) -> void:
 	if button_id == "jiang_depart": _finish(b)
 	if button_id == "jiang_bailong_meeting":
 		_view_bailong(b)
+		return
+	if button_id == "jiang_send_bailong":
+		_order_bailong(b)
 		return
 	if button_id == "jiang_board_rescued":
 		_order_rescued_boarding(b)
