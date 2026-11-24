@@ -1,5 +1,7 @@
 # 源码设置与换机（2026-10-30）
 
+试验 c6f3c895 的 Windows 拆包导入和导出通过。稳定分支沿用当前候选的短句登记实现。短句格式校验按当前登记批次复用，保留四语表、冲突检查和原子写入。隔离成品和源码对照摘要随验收记录保留。 [十分钟验收](../qa/battle_entry_timing_20261116/windows_candidate_49a27a43_mode_soak_600.json) [黄泥冈四进程对照](../qa/battle_entry_timing_20261116/windows_huangnigang_phrase_format_c6f3c895.json)
+
 Windows 候选 49a27a43 通过 Godot 4.6.3 冻结导入和拆包导出，七个成品文件通过哈希复核。新增按钮沿用原开枷任务、三秒读条及战役保存字段。四语分片的运行条目一致，八章存档声明检查通过。 [Windows 大名府开枷验收](../qa/campaign_coordination_20261116/windows_daming_pc_unlock_49a27a43.json)
 
 Windows 候选 5935f70f 的冻结导入与拆包导出通过。新增任务按钮沿用章节按钮白名单和原手动任务令，继续使用同一战役保存字段。术语分片九条与运行目录新增条目逐项一致，八章声明检查通过。 [Windows 江州解缚验收](../qa/campaign_pursuit_20261116/windows_jiangzhou_pc_rescue_5935f70f.json)
