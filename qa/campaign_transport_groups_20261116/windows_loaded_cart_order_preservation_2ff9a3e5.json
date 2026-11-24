@@ -1,0 +1,188 @@
+{
+  "candidate_commit": "2ff9a3e56c7076a06981e9b52771b504651b1815",
+  "source_build": 26873421,
+  "scope": "Four isolated Windows offline native runs. The public install was verified and copied for the source run. Game UI events went to the isolated viewport, with normal menu Continue and pause Save and Exit. The completion leg advanced at 4x.",
+  "renderer": "OpenGL Compatibility",
+  "candidate_viewport": [
+    960,
+    540
+  ],
+  "candidate_build_steps": [
+    {
+      "stage": "import",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 60.75
+    },
+    {
+      "stage": "export",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 108.36
+    }
+  ],
+  "candidate_payload": [
+    {
+      "path": "GODOTSTEAM_LICENSE.txt",
+      "bytes": 1110,
+      "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+    },
+    {
+      "path": "LiangshanHeroes.exe",
+      "bytes": 104886784,
+      "sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4"
+    },
+    {
+      "path": "LiangshanHeroes.pck",
+      "bytes": 1722728188,
+      "sha256": "4cfd3c79c388b0a1fd88809b526b4111c13380de0e983af4e7212a0a67e67d8b"
+    },
+    {
+      "path": "libgodotsteam.windows.template_release.x86_64.dll",
+      "bytes": 3961344,
+      "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+    },
+    {
+      "path": "steam_api64.dll",
+      "bytes": 319128,
+      "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+    },
+    {
+      "path": "steam_stats_reader.dll",
+      "bytes": 393728,
+      "sha256": "5a79a77b5b6e2cff21b285c785118352805a09d91876f89276af119ee1702517"
+    },
+    {
+      "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+      "bytes": 1093,
+      "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+    }
+  ],
+  "total_checks_passed": 91,
+  "stages": {
+    "old-save": {
+      "checks_passed": 32,
+      "code": 0,
+      "errors": [],
+      "warnings": [
+        "WARNING: 2D MSAA is not yet supported for GLES3."
+      ],
+      "log_sha256": "bb622f331abdf9acc64ffc0bb864a6c84c09b3ccf2a23c9ce0aed5dfb7b53d77",
+      "fixture_sha256": "0e111ffaad291126c91a39529c0402300bbad30117bb6964aec55e875d903f89",
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "a49365f77c2b069c9e4f79d49f6feddacd81d824cd0c554e790eff35a170363c",
+      "installed_identity": "7c97301d45dbfc705cbb6c36cfee174d9f2dce71afa0518883ff67f33f466107",
+      "isolated_slot_sha256": {
+        "record_0000000001.json": "4b547def7477bc530f917ea82e08bcc77b8e1fb92d5e8287eb05289ac92aef09"
+      }
+    },
+    "move-save": {
+      "checks_passed": 35,
+      "code": 0,
+      "errors": [],
+      "warnings": [
+        "WARNING: 2D MSAA is not yet supported for GLES3."
+      ],
+      "log_sha256": "4e8fdee28782615e32a063a3b426d46fe0b494034f7e71b719a11c76fe23bba8",
+      "fixture_sha256": "073d18bafbe279bfd7c147614ab20e168c4fef8f66fa82597e8354624e7b3340",
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "4cfd3c79c388b0a1fd88809b526b4111c13380de0e983af4e7212a0a67e67d8b",
+      "installed_identity": "1583c092930bf421c2c2303f5a88462408a272541bb74e1b1d6417268d10b475",
+      "isolated_slot_sha256": {
+        "record_0000000001.json": "4b547def7477bc530f917ea82e08bcc77b8e1fb92d5e8287eb05289ac92aef09",
+        "record_0000000002.json": "85371c7ba67ebe836df2d3c5e975d1c54983cb0b45de24a25e76d8def204b37d"
+      }
+    },
+    "finish": {
+      "checks_passed": 16,
+      "code": 0,
+      "errors": [],
+      "warnings": [
+        "WARNING: 2D MSAA is not yet supported for GLES3."
+      ],
+      "log_sha256": "adead6011c6a7f1657474f192334582aad8b619e87a7601698713242075b6d0a",
+      "fixture_sha256": "073d18bafbe279bfd7c147614ab20e168c4fef8f66fa82597e8354624e7b3340",
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "4cfd3c79c388b0a1fd88809b526b4111c13380de0e983af4e7212a0a67e67d8b",
+      "installed_identity": "1583c092930bf421c2c2303f5a88462408a272541bb74e1b1d6417268d10b475",
+      "isolated_slot_sha256": {
+        "record_0000000001.json": "4b547def7477bc530f917ea82e08bcc77b8e1fb92d5e8287eb05289ac92aef09",
+        "record_0000000002.json": "85371c7ba67ebe836df2d3c5e975d1c54983cb0b45de24a25e76d8def204b37d"
+      }
+    },
+    "reject": {
+      "checks_passed": 8,
+      "code": 0,
+      "errors": [],
+      "warnings": [
+        "WARNING: 2D MSAA is not yet supported for GLES3."
+      ],
+      "log_sha256": "8540ea021cfe054141bb180ac2d99bd3cf5309541e7c1c1084d728de3b6a3ecd",
+      "fixture_sha256": "073d18bafbe279bfd7c147614ab20e168c4fef8f66fa82597e8354624e7b3340",
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "4cfd3c79c388b0a1fd88809b526b4111c13380de0e983af4e7212a0a67e67d8b",
+      "installed_identity": "1583c092930bf421c2c2303f5a88462408a272541bb74e1b1d6417268d10b475",
+      "isolated_slot_sha256": {
+        "record_0000000001.json": "4b547def7477bc530f917ea82e08bcc77b8e1fb92d5e8287eb05289ac92aef09",
+        "record_0000000002.json": "85371c7ba67ebe836df2d3c5e975d1c54983cb0b45de24a25e76d8def204b37d"
+      }
+    }
+  },
+  "cart_commands": {
+    "initial_manual_delivery_preserved": true,
+    "initial_defensive_hold_preserved": true,
+    "initial_manual_detour_preserved": true,
+    "new_initial_deliveries": 4,
+    "repeat_click_preserved_all_orders": true,
+    "batch_kept_selection_camera_and_bystander": true,
+    "hold_and_detour_survived_restart": true,
+    "stop_key": "J",
+    "localized_no_idle_carts_feedback": {
+      "en": "No loaded carts are awaiting orders. To redirect one, select it and press J to stop.",
+      "ja": "指示待ちの荷車はありません。行き先を変えるには、荷車を選んで J キーで停止してください。",
+      "zh_CN": "当前没有待令货车。要改派，请先选车按 J 停止。",
+      "zh_TW": "目前沒有待令貨車。要改派，請先選車按 J 停止。"
+    },
+    "released_carts_dispatched_in_second_click": 2
+  },
+  "layout": {
+    "button": "[P: (96.0, 494.0), S: (288.0, 37.0)]",
+    "command_top": 549.0,
+    "grows": "[P: (96.0, 494.0), S: (288.0, 37.0)]",
+    "restored_scroll": "(-1, -1)",
+    "scroll": "[P: (96.0, 129.0), S: (288.0, 402.0)]",
+    "scroll_offset": 7
+  },
+  "completion": {
+    "cart_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "checkpoint_differences": [],
+    "delivered_loads": 11,
+    "delivery_seconds_after_restore": 17.399999999999,
+    "progress_sha256": "932209bee55feb6afde2aaafc00751b7ecac07210108447a1766900a582bf88e",
+    "record": {
+      "best_done": 4,
+      "best_goal_ids": [
+        "merchant_cover",
+        "wine_scheme",
+        "no_bloodshed",
+        "all_safe"
+      ],
+      "cleared": true,
+      "contract_version": 3,
+      "story_complete": true,
+      "story_total": 4
+    }
+  },
+  "terminal_reopen": {
+    "code": "LOCAL_RUN_TERMINAL",
+    "progress_sha256": "932209bee55feb6afde2aaafc00751b7ecac07210108447a1766900a582bf88e"
+  }
+}

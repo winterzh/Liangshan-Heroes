@@ -1,5 +1,11 @@
 # 八幕战役后续开发路线图
 
+## 2026-11-24 黄泥冈批量出冈保留原指令
+
+PC 任务栏「送已装货的车出冈」只派待令车辆。已在交付、手动改道和据守的货车继续原令。全车有令时，提示显示当前绑定的停止键。停止指定车辆后可重新派遣。
+
+从 Steam Build 26873421 的本机成品跑出七车满载档，使用 Windows 候选 2ff9a3e5 继续。一次点击只派四辆，原交付、改道和据守未变。960×540 的按钮布局及改绑 J 后的四语提示通过。再保存并用独立进程恢复，按 J 释放两辆后再次派出，七车十一担实际交付，八人集合，演义 4/4。已结算旧槽被拦截，原槽摘要一致。4 个隔离离线 Windows 进程共通过 91 项，结算段使用四倍速。 [Windows 验收收据](../qa/campaign_transport_groups_20261116/windows_loaded_cart_order_preservation_2ff9a3e5.json)
+
 ## 2026-11-24 自定义驻守 Windows 地图分段加载
 
 Windows 从已保存预设开始自定义驻守时，在加载画面内准备地形、寻路和布景。预设数值仍在正局部署时应用。重进最长间隔的中位数从 133.5 到 95.3 毫秒。已核对两份不同预设。 [实际预设对照](../qa/battle_entry_timing_20261116/windows_custom_defense_prepared_map_f76e44fd.json) [六入口长测](../qa/battle_entry_timing_20261116/windows_candidate_f76e44fd_mode_soak_600.json)

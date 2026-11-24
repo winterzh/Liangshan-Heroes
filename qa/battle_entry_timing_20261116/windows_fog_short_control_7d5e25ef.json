@@ -1,0 +1,126 @@
+{
+  "requested_seconds": 130,
+  "dwell_seconds": 6,
+  "viewport": [
+    1280,
+    720
+  ],
+  "renderer": "Vulkan Forward+",
+  "scope": "Sequential Windows offline native tests using the same fixture at normal game speed. Two full minutes per build.",
+  "fixture_sha256": "f425c47e7ab6fff7df93baa8413b7e0004f46d9245b6db560d15671a27ac5132",
+  "test_order": [
+    "baseline",
+    "candidate"
+  ],
+  "p95_limit_ms": 16.7,
+  "p99_limit_ms": 33.3,
+  "results": {
+    "baseline": {
+      "runtime": {
+        "candidate": "9017cb7e4b6f6109f5a0cf061b824935d4972d35",
+        "payload_files_unchanged": true,
+        "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+        "pck_sha256": "72f94ccd6b0bcafc26e53681c5bca2bd0afaa851817a4269f38e912b45088de7",
+        "split_identity": "18889a68c90b8e02854748c6c6d0de7f0a7f03a982a5c4282ff96dd7098d3793",
+        "exe_unchanged": true,
+        "exit_code": 0,
+        "seconds": 147.102,
+        "errors": [],
+        "warnings": [],
+        "log_sha256": "01028d1b5c5ddccfb2cb52e1f1c6dddf17913ea01ab3c710a16f55ef5c882c9f",
+        "report_sha256": "de31bd6e8db012d9a42f57975c2200ca55329622349b2665ea865fb0060c5f56"
+      },
+      "actual_seconds": 134.060632,
+      "route_visits": {
+        "arena:arena": 4,
+        "campaign:level1": 4,
+        "campaign:level5": 3,
+        "custom_defense:custom_defense": 3,
+        "skirmish:skirmish": 3,
+        "skirmish_ai:skirmish_ai": 3
+      },
+      "activity_and_release_passed": 20,
+      "campaign_save": {
+        "after": {
+          "exists": false,
+          "sha256": "absent",
+          "size_bytes": 0
+        },
+        "before": {
+          "exists": false,
+          "sha256": "absent",
+          "size_bytes": 0
+        },
+        "unchanged": true
+      },
+      "complete_minutes": [
+        {
+          "minute": 1,
+          "p95_ms": 12.242,
+          "p99_ms": 33.281
+        },
+        {
+          "minute": 2,
+          "p95_ms": 23.788,
+          "p99_ms": 45.348
+        }
+      ],
+      "complete_minute_frame_budgets_passed": false,
+      "durable_acceptance_eligible": false
+    },
+    "candidate": {
+      "runtime": {
+        "candidate": "7d5e25ef9cb24a6b2b06eef975c5056375c98385",
+        "payload_files_unchanged": true,
+        "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+        "pck_sha256": "83b327b8c54e16bfa36ba619cf35cef4cee117d3f0c43dfc6aa74ae870c9f77f",
+        "split_identity": "ff30f100937fc7057a88b1490f80344eac96f726e1ac397d5d6336de5fe24263",
+        "exe_unchanged": true,
+        "exit_code": 0,
+        "seconds": 144.464,
+        "errors": [],
+        "warnings": [],
+        "log_sha256": "16aa11bcde3767b23aa63547932459eb93c2ff566565f62f10720375142f3e33",
+        "report_sha256": "a9b12e05ddc3254d2b76f7dab8b1deea55fc60155da07f27d46408ed756709c5"
+      },
+      "actual_seconds": 132.145034,
+      "route_visits": {
+        "arena:arena": 4,
+        "campaign:level1": 4,
+        "campaign:level5": 3,
+        "custom_defense:custom_defense": 3,
+        "skirmish:skirmish": 3,
+        "skirmish_ai:skirmish_ai": 3
+      },
+      "activity_and_release_passed": 20,
+      "campaign_save": {
+        "after": {
+          "exists": false,
+          "sha256": "absent",
+          "size_bytes": 0
+        },
+        "before": {
+          "exists": false,
+          "sha256": "absent",
+          "size_bytes": 0
+        },
+        "unchanged": true
+      },
+      "complete_minutes": [
+        {
+          "minute": 1,
+          "p95_ms": 10.373,
+          "p99_ms": 23.051
+        },
+        {
+          "minute": 2,
+          "p95_ms": 13.971,
+          "p99_ms": 26.557
+        }
+      ],
+      "complete_minute_frame_budgets_passed": true,
+      "durable_acceptance_eligible": false
+    }
+  },
+  "decision": "Short results only. Retain the validated runtime and the prior failed ten-minute candidate receipt. The baseline exceeded the pair criteria, so a complete candidate retest was not started."
+}
