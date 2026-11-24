@@ -235,7 +235,9 @@ func _finish_battle_launch(campaign_level_id: String) -> void:
 	# These maps are ready to prepare while the last loading frame is still visible.
 	var prepared_level_id := ""
 	if OS.get_name() == "Windows":
-		if Campaign.skirmish and not Campaign.custom_defense:
+		if Campaign.custom_defense:
+			prepared_level_id = "custom_defense"
+		elif Campaign.skirmish:
 			prepared_level_id = "skirmish"
 		elif campaign_level_id in ["level1", "level5"]:
 			prepared_level_id = campaign_level_id
