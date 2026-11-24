@@ -1,5 +1,11 @@
 # 源码设置与换机（2026-10-30）
 
+## 2026-11-24 Windows 战争迷雾刷新复用
+
+Windows 迷雾同步试验保留定向对照和完整帧时记录。 Windows 候选 7d5e25ef 的运行输入变更位于 `scripts/battle.gd`。 [原生视野对照](../qa/battle_entry_timing_20261116/windows_fog_refresh_7d5e25ef.json) [六入口长测](../qa/battle_entry_timing_20261116/windows_candidate_7d5e25ef_mode_soak_600.json)
+
+实现和原生对照夹具保存在本地试验分支 `codex/windows-fog-refresh-20261124`。
+
 ## 2026-11-24 Windows 密集小队单位分离
 
 Windows 战况中，48 至 63 个机动单位平均每个已占用的空间格超过 2.5 个单位时，使用既有批量分离算法。占位和通行边界用本次开发基线逐步对照。 冻结候选 9017cb7e 的运行输入仅变更 `scripts/battle.gd`。分离对照基线取本次修改前的稳定分支。 [位置与成品对照](../qa/battle_entry_timing_20261116/windows_compact_separation_9017cb7e.json) [六入口长测](../qa/battle_entry_timing_20261116/windows_candidate_9017cb7e_mode_soak_600.json) [首次长测](../qa/battle_entry_timing_20261116/windows_compact_separation_first_soak_9017cb7e_600.json)
