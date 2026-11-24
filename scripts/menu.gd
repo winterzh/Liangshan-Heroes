@@ -105,6 +105,8 @@ func _show_battle_loading(campaign_level_id: String) -> void:
 	_entry_overlay.color = Color(UITheme.INK, 0.97)
 	_entry_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(_entry_overlay)
+	if OS.get_name() == "Windows":
+		_watch_picker_focus(_entry_overlay, focused)
 	var center := CenterContainer.new()
 	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_entry_overlay.add_child(center)
@@ -568,7 +570,47 @@ func _mk_overlay(title_text: String, format_args: Variant = null, content_width 
 	return [overlay, box]
 
 
-func _add_back(box: VBoxContainer, overlay: ColorRect) -> void:
+func _focus_mode_picker(overlay: ColorRect, initial: Control) -> void:
+	if OS.get_name() != "Windows":
+		return
+	var scroll := overlay.get_node("OverlayScroll") as ScrollContainer
+	scroll.follow_focus = true
+	_watch_picker_focus(overlay, get_viewport().gui_get_focus_owner())
+	if initial != null and overlay.is_ancestor_of(initial):
+		initial.grab_focus()
+
+
+func _watch_picker_focus(overlay: ColorRect, previous: Control) -> void:
+	overlay.set_meta(&"picker_focus_scope", true)
+	overlay.tree_exited.connect(_restore_picker_focus.bind(weakref(previous) if previous != null else null))
+	_update_picker_focus_scope()
+
+
+func _update_picker_focus_scope() -> void:
+	var active: Control
+	for child in get_children():
+		if not child.is_queued_for_deletion() and child.is_inside_tree() and child.has_meta(&"picker_focus_scope"):
+			active = child as Control
+	# Mouse input already stops at the overlay. Keep Tab and arrow focus there too.
+	for child in get_children():
+		if child is Control and not child.is_queued_for_deletion():
+			child.focus_behavior_recursive = Control.FOCUS_BEHAVIOR_DISABLED if active != null and child != active \
+				else Control.FOCUS_BEHAVIOR_INHERITED
+
+
+func _restore_picker_focus(previous: WeakRef) -> void:
+	if not is_inside_tree() or is_queued_for_deletion() or AppLifecycle.quit_started():
+		return
+	_update_picker_focus_scope()
+	if previous == null or get_viewport().gui_get_focus_owner() != null:
+		return
+	var control := previous.get_ref() as Control
+	if control != null and control.is_inside_tree() and control.is_visible_in_tree() \
+			and control.get_focus_mode_with_override() != Control.FOCUS_NONE:
+		control.grab_focus()
+
+
+func _add_back(box: VBoxContainer, overlay: ColorRect) -> Button:
 	var sp := Control.new()
 	sp.custom_minimum_size = Vector2(0, 8)
 	box.add_child(sp)
@@ -578,6 +620,7 @@ func _add_back(box: VBoxContainer, overlay: ColorRect) -> void:
 	back.add_theme_font_size_override("font_size", 19)
 	back.pressed.connect(overlay.queue_free)
 	box.add_child(back)
+	return back
 
 
 ## 大号入口按钮（弹层内的选项）。
@@ -711,12 +754,7 @@ func _show_story() -> void:
 			i += 1
 
 	_add_back(box, overlay)
-	if OS.get_name() == "Windows":
-		var scroll := overlay.get_node("OverlayScroll") as ScrollContainer
-		scroll.follow_focus = true
-		var first_action := box.find_next_valid_focus()
-		if first_action != null and box.is_ancestor_of(first_action):
-			first_action.grab_focus()
+	_focus_mode_picker(overlay, box.find_next_valid_focus())
 	_prefetch_picker_surfaces(overlay, Campaign.STORY_ORDER)
 
 
@@ -830,6 +868,7 @@ func _show_defense() -> void:
 		[30, 4, "🛡  30 关 · 经典（推荐）", Color("a9e34b")],
 		[60, 6, "🔥  60 关 · 史诗（可用 6 员英雄）", Color("ff9a6a")],
 	]
+	var classic: Button
 	for o in opts:
 		var waves: int = o[0]
 		var hcap: int = o[1]
@@ -845,6 +884,8 @@ func _show_defense() -> void:
 			Campaign.scenario = false
 			_launch())
 		box.add_child(b)
+		if waves == 30:
+			classic = b
 
 	# 自定义随机波次：任意波数 + 每波固定间隔(秒)，每波随机敌军(数量随波次增长)、受敌方倍率影响
 	var rndlbl := Label.new()
@@ -913,6 +954,7 @@ func _show_defense() -> void:
 	box.add_child(cb)
 
 	_add_back(box, overlay)
+	_focus_mode_picker(overlay, classic)
 
 
 # ======================================================================
@@ -992,6 +1034,7 @@ func _show_1v1() -> void:
 	drow.alignment = BoxContainer.ALIGNMENT_CENTER
 	drow.add_theme_constant_override("separation", 16)
 	box.add_child(drow)
+	var normal: Button
 	for diff in [["简单", "easy", Color("a9e34b")], ["普通", "normal", Color("ffe9a8")], ["困难", "hard", Color("ff8a6a")]]:
 		var ab := Button.new()
 		ab.text = diff[0]
@@ -1009,8 +1052,11 @@ func _show_1v1() -> void:
 			Campaign.ai_difficulty = key
 			_launch())
 		drow.add_child(ab)
+		if key == "normal":
+			normal = ab
 
 	_add_back(box, overlay)
+	_focus_mode_picker(overlay, normal)
 
 
 func _show_economy_guide() -> void:
@@ -1023,7 +1069,8 @@ func _show_economy_guide() -> void:
 	guide.custom_minimum_size.x = 520
 	guide.add_theme_font_size_override("font_size", 18)
 	box.add_child(guide)
-	_add_back(box, ov[0])
+	var back := _add_back(box, ov[0])
+	_focus_mode_picker(ov[0], back)
 
 
 # ======================================================================
@@ -1134,6 +1181,7 @@ func _show_custom_picker() -> void:
 				_launch())
 		box.add_child(b)
 	_add_back(box, overlay)
+	_focus_mode_picker(overlay, box.find_next_valid_focus())
 
 
 # ======================================================================
