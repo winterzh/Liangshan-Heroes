@@ -1,5 +1,9 @@
 # 八幕战役后续开发路线图
 
+## 2026-11-24 黄泥冈 Windows 地图分段加载
+
+Windows 从菜单开始黄泥冈时，加载画面先画出，随后在最后一帧加载画面前准备地形、寻路和场景物件。开场对白、部队和任务在场景挂载后按原入口初始化。首进到战场首帧中位数 457.5 → 378.0 毫秒。 [黄泥冈出征对照](../qa/battle_entry_timing_20261116/windows_huangnigang_prepared_map_fb1da805.json) [六入口十分钟收据](../qa/battle_entry_timing_20261116/windows_candidate_fb1da805_mode_soak_600.json)
+
 ## 2026-11-24 PC 本局信息复制与剪贴板占用反馈
 
 暂停和结算的「复制本局信息」在 Windows 确认能读回时显示已复制。剪贴板被占用时显示「复制失败，点此重试」。原候选在占用时会误报成功。候选 acc67e63 通过独立不可见窗口站复测，受控占用时外部读回为空，按钮正确提示重试。解除占用后，暂停和结算四语共 8 次实际点击，Windows UTF-16 文本经换行归一后与对应本局信息逐份一致。两轮的交互桌面剪贴板序号和格式数量均一致。测试使用 1280×720 隔离原生窗口和受控战报，结算面板由验收场景打开。 [Windows 剪贴板验收收据](../qa/battle_entry_timing_20261116/windows_feedback_clipboard_retry_acc67e63.json)
