@@ -30,32 +30,46 @@ WINDOWS_SURFACE_IMPORTS = (
     "assets/campaign/environment/shared/surfaces/surface_forest_earth.png.import",
     "assets/campaign/environment/shared/surfaces/surface_wet_bank.png.import",
 )
+WINDOWS_OPENING_PORTRAITS = (
+    "assets/characters/chao_gai_merchant_20261017/portrait.png.import",
+    "assets/characters/gongsun_sheng_merchant_20261017/portrait.png.import",
+    "assets/characters/liu_tang_merchant_20261016/portrait.png.import",
+    "assets/characters/ruan_xiaoer_merchant_20261016/portrait.png.import",
+    "assets/characters/ruan_xiaoqi_merchant_20261016/portrait.png.import",
+    "assets/characters/ruan_xiaowu_merchant_20261016/portrait.png.import",
+    "assets/characters/wu_yong_merchant_20261017/portrait.png.import",
+)
+# The chapter HUD uses small portraits. Keep the source's first half-size mip
+# dimensions and regenerate the mip chain in the Windows export copy.
+WINDOWS_OPENING_PORTRAIT_SIDE = 627
+
 
 def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def _surface_cache(project, descriptor):
+def _texture_cache(project, descriptor):
     remap = re.search(rb'(?m)^path="res://(\.godot/imported/[\w.-]+\.ctex)"\r?$', descriptor)
     if remap is None:
-        raise RuntimeError("A Windows ground texture is missing its standard import path")
+        raise RuntimeError("A Windows texture is missing its standard import path")
     cache = project / remap[1].decode("ascii")
     if cache.resolve().parent != (project / ".godot/imported").absolute():
-        raise RuntimeError("A Windows ground texture points outside the private import cache")
+        raise RuntimeError("A Windows texture points outside the private import cache")
     return cache
 
 
-def prepare_windows_surface_imports(project):
-    """Apply the Windows format in the private export copy of the project."""
+def _prepare_windows_texture_imports(project, descriptors, setting, before, after, mipmaps):
     prepared = []
-    for relative in WINDOWS_SURFACE_IMPORTS:
+    pattern = rb"(?m)^" + re.escape(setting) + b"=" + before + rb"(?=\r?$)"
+    for relative in descriptors:
         descriptor = project / relative
         original = descriptor.read_bytes()
-        changed, count = re.subn(rb"(?m)^compress/mode=0(?=\r?$)", b"compress/mode=3", original)
-        if count != 1 or not re.search(rb"(?m)^mipmaps/generate=false\r?$", original):
+        changed, count = re.subn(pattern, setting + b"=" + after, original)
+        if (count != 1 or not re.search(rb"(?m)^compress/mode=0\r?$", original)
+                or not re.search(rb"(?m)^mipmaps/generate=" + mipmaps + rb"\r?$", original)):
             raise RuntimeError("Unexpected import options for " + relative)
-        cache = _surface_cache(project, original)
-        # The QA cache was copied from the WebP import. Rebuild those three entries.
+        cache = _texture_cache(project, original)
+        # Rebuild the texture with the private Windows descriptor.
         cache.unlink(missing_ok=True)
         cache.with_suffix(".md5").unlink(missing_ok=True)
         descriptor.write_bytes(changed)
@@ -63,20 +77,42 @@ def prepare_windows_surface_imports(project):
     return prepared
 
 
-def windows_surface_import_receipt(project, prepared):
+def _windows_texture_import_receipt(project, prepared, encoding, side=None):
     assets = []
     for entry in prepared:
         descriptor = project / entry["descriptor"]
         contents = descriptor.read_bytes()
-        cache = _surface_cache(project, contents)
+        cache = _texture_cache(project, contents)
         with cache.open("rb") as stream:
             header = stream.read(52)
-        # GST2's image format code 0 stores pixels directly.
-        if len(header) != 52 or header[:4] != b"GST2" or struct.unpack_from("<I", header, 36) != (0,):
-            raise RuntimeError("Windows ground texture did not import uncompressed: " + entry["descriptor"])
+        if len(header) != 52 or header[:4] != b"GST2":
+            raise RuntimeError("Invalid Windows texture import: " + entry["descriptor"])
+        format_code, width, height = struct.unpack_from("<IHH", header, 36)
+        if format_code != encoding or (side is not None and (width, height) != (side, side)):
+            raise RuntimeError("Unexpected Windows texture format or dimensions: " + entry["descriptor"])
         assets.append({**entry, "import_descriptor_sha256": hashlib.sha256(contents).hexdigest(),
                        "bytes": cache.stat().st_size, "sha256": sha(cache)})
     return assets
+
+
+def prepare_windows_surface_imports(project):
+    return _prepare_windows_texture_imports(
+        project, WINDOWS_SURFACE_IMPORTS, b"compress/mode", b"0", b"3", b"false")
+
+
+def windows_surface_import_receipt(project, prepared):
+    return _windows_texture_import_receipt(project, prepared, 0)
+
+
+def prepare_windows_opening_portraits(project):
+    return _prepare_windows_texture_imports(
+        project, WINDOWS_OPENING_PORTRAITS, b"process/size_limit", b"0",
+        str(WINDOWS_OPENING_PORTRAIT_SIDE).encode("ascii"), b"true")
+
+
+def windows_opening_portrait_receipt(project, prepared):
+    return _windows_texture_import_receipt(project, prepared, 2, WINDOWS_OPENING_PORTRAIT_SIDE)
+
 
 def allowed(name):
     path = PurePosixPath(name)
@@ -161,6 +197,7 @@ def main():
             if sha(dest) != row["sha256"]: raise RuntimeError("Source changed during copy")
         shutil.copytree(qa / "project/.godot/imported", project / ".godot/imported")
         prepared_surfaces = prepare_windows_surface_imports(project)
+        prepared_portraits = prepare_windows_opening_portraits(project)
         receipt["native_dependencies"] = install_native(project)
         if receipt["native_dependencies"] != proof["native_dependencies"]:
             raise RuntimeError("Native dependencies changed after QA")
@@ -210,6 +247,7 @@ def main():
             if code or errors: raise RuntimeError(name + " failed: " + "\n".join(errors))
             if name == "import":
                 receipt["windows_surface_imports"] = windows_surface_import_receipt(project, prepared_surfaces)
+                receipt["windows_opening_portraits"] = windows_opening_portrait_receipt(project, prepared_portraits)
                 identity_generation = generate(project)
                 with (run / "content_identity_generation.json").open("x", encoding="utf-8") as output:
                     output.write(json.dumps(identity_generation, indent=2) + "\n")
@@ -218,6 +256,8 @@ def main():
                 verify_generated(project, identity_generation)
                 if receipt["windows_surface_imports"] != windows_surface_import_receipt(project, prepared_surfaces):
                     raise RuntimeError("Windows ground texture imports changed during export")
+                if receipt["windows_opening_portraits"] != windows_opening_portrait_receipt(project, prepared_portraits):
+                    raise RuntimeError("Windows opening portrait imports changed during export")
         pack = exe.with_suffix(".pck")
         if pack.is_file() != args.split_pck:
             raise RuntimeError("Exported payload layout does not match the selected preset")
