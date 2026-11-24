@@ -1,5 +1,9 @@
 # 当前项目总览
 
+## 经典驻守 30 波跨版本续玩
+
+正式 Build 26873421 的第 1 波档可在 Windows 候选 6164ba82 继续。第 2 波三骑按原计时出阵，再存及独立重开通过。另复验八章开局档。Steam 云档、成就与真人体验另验。 [Windows 续玩验收](../qa/battle_entry_timing_20261116/windows_classic30_public_26873421_migration_6164ba82.json)
+
 ## Steam 正式版八章旧档
 
 正式 Build 26873421 的八章开局档均可在 Windows 候选 11118952 继续、移动原部队、再存并独立重开。大名府另有中途乔装档恢复到火号终局的独立验收。 [八章 Windows 验收](../qa/battle_entry_timing_20261116/windows_current_public_26873421_campaign_migration_11118952.json)

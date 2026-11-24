@@ -1,5 +1,9 @@
 # 源码设置与换机（2026-10-30）
 
+## Windows 经典驻守旧档身份
+
+经典 30 波只接受已核对的 Build 26873421 内容与拆包身份。恢复及再存沿用原身份和账本。其他历史经典档身份仍按原规则拒绝，原有战役兼容规则继续生效。 [Windows 续玩验收](../qa/battle_entry_timing_20261116/windows_classic30_public_26873421_migration_6164ba82.json)
+
 ## Windows 正式版存档兼容
 
 候选 11118952 使用验收过的正式版内容与拆包身份恢复战役原档。八章验证覆盖阵容、血量、路径、资源、地形和任务事件，第二代存档沿用原版本身份。 [八章 Windows 验收](../qa/battle_entry_timing_20261116/windows_current_public_26873421_campaign_migration_11118952.json)
