@@ -134,10 +134,19 @@ func _bank_scenery(map: Node2D) -> Node2D:
 	return scenery
 
 
+func _center_bank_fixture(scenery: Node2D) -> void:
+	for bank: Dictionary in scenery._banks:
+		if bank.front:
+			var center: Vector2 = (bank.a + bank.b) * 0.5
+			_world.position = Vector2(root.size) * 0.5 - center
+			return
+
+
 func _banks_rendered_pair(rts: bool) -> void:
 	_scenery_script._recent_banks.clear()
 	var map := _map(rts)
 	var fresh := _bank_scenery(map)
+	_center_bank_fixture(fresh)
 	var reference: RefCounted = _batch_script.new()
 	fresh._draw_banks(reference)
 	reference.finish()
@@ -160,7 +169,8 @@ func _banks_rendered_pair(rts: bool) -> void:
 		"same_batch": (saved != null and is_same(saved, second._bank_draw_batch)) if _batch_script.enabled()
 			else saved == null and second._bank_draw_batch == null,
 		"fresh_map_released": old_map.get_ref() == null,
-		"substantial_reference": reference.valid and reference.summary().vertices > 1000 and expected != _empty_frame_sha256,
+		"substantial_reference": reference.valid and reference.summary().vertices > 1000,
+		"visible_reference": expected != _empty_frame_sha256,
 		"rgba_sha256": expected,
 	}
 	second.free()
@@ -171,6 +181,7 @@ func _bank_cache_boundaries() -> void:
 	_scenery_script._recent_banks.clear()
 	var map := _map(true)
 	var owner := _bank_scenery(map)
+	_center_bank_fixture(owner)
 	var before := await _capture(owner)
 	var original: RefCounted = owner._bank_draw_batch
 	var changed := _bank_scenery(map)
@@ -220,10 +231,11 @@ func _run() -> void:
 	_empty_frame_sha256 = root.get_texture().get_image().get_data().hex_encode().sha256_text()
 	await _rendered_pair(true)
 	await _rendered_pair(false)
+	if _batch_script.enabled():
+		await _cache_boundaries()
 	await _banks_rendered_pair(true)
 	await _banks_rendered_pair(false)
 	if _batch_script.enabled():
-		await _cache_boundaries()
 		await _bank_cache_boundaries()
 	var passed := true
 	for row: Dictionary in _results.values():
