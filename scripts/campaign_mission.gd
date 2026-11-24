@@ -6,10 +6,10 @@ const STORY_MISSED := "missed"
 const PRESENTATION_META := &"campaign_presentation_v1"
 const LEVEL_BUTTON_IDS := {
 	"level1": ["hg_chao_gai", "hg_liu_tang", "hg_bai_sheng", "hg_wu_yong", "hg_empty_hands", "hg_transport_next", "hg_empty_carts", "hg_loaded_carts", "hg_send_empty_carts", "hg_send_loaded_carts", "hg_waiting"],
-	"level2": ["jiang_depart", "jiang_find_rearguard", "jiang_bailong_meeting", "jiang_select_rearguard", "jiang_return_rearguard", "jiang_board_rescued"], "level3": ["zhu_select_shi_qian", "zhu_select_rescued", "zhu_find_camp_gold", "zhu_select_outside_camp", "zhu_return_wounded", "zhu_send_sun_li", "zhu_view_side_gate", "zhu_view_evacuation_danger"],
+	"level2": ["jiang_depart", "jiang_find_rearguard", "jiang_bailong_meeting", "jiang_select_rearguard", "jiang_return_rearguard", "jiang_board_rescued", "jiang_rescue_song", "jiang_rescue_dai"], "level3": ["zhu_select_shi_qian", "zhu_select_rescued", "zhu_find_camp_gold", "zhu_select_outside_camp", "zhu_return_wounded", "zhu_send_sun_li", "zhu_view_side_gate", "zhu_view_evacuation_danger"],
 	"level4": ["lhm_locate_remaining", "lhm_flank_artillery"], "level5": ["gao_end", "gao_escort", "gao_withdraw_escort_ships", "gao_return_liu_tang"], "level6": ["pine_lu", "pine_group", "pine_waiting", "pine_order_rest", "pine_order_exit"],
 	"level7": ["forest_wu", "forest_shi", "forest_order_terms", "forest_order_shop", "forest_road_drink", "forest_road_provoke"], "level8": ["daming_select_wounded", "daming_evac_wounded", "daming_send_scout_fire"]}
-const PRIMARY_LEVEL_BUTTON_IDS := ["gao_escort", "gao_withdraw_escort_ships", "gao_return_liu_tang", "zhu_view_evacuation_danger", "zhu_return_wounded", "zhu_send_sun_li", "zhu_view_side_gate", "jiang_return_rearguard", "jiang_board_rescued", "daming_evac_wounded", "daming_send_scout_fire", "hg_send_loaded_carts", "hg_send_empty_carts", "pine_order_exit", "forest_order_shop", "forest_road_provoke", "forest_road_drink", "lhm_flank_artillery"]
+const PRIMARY_LEVEL_BUTTON_IDS := ["gao_escort", "gao_withdraw_escort_ships", "gao_return_liu_tang", "zhu_view_evacuation_danger", "zhu_return_wounded", "zhu_send_sun_li", "zhu_view_side_gate", "jiang_return_rearguard", "jiang_board_rescued", "jiang_rescue_dai", "jiang_rescue_song", "daming_evac_wounded", "daming_send_scout_fire", "hg_send_loaded_carts", "hg_send_empty_carts", "pine_order_exit", "forest_order_shop", "forest_road_provoke", "forest_road_drink", "lhm_flank_artillery"]
 
 var battle
 var stage_id := ""

@@ -26,6 +26,10 @@ const WEST_ROUTE := [Vector2i(22,28),Vector2i(18,34),Vector2i(14,40),BAILONG]
 const SOUTH_ROUTE := [Vector2i(29,29),Vector2i(28,36),Vector2i(24,43),Vector2i(18,46),DOCK]
 const NAMED := ["chao_gai","li_kui","hua_rong","yan_shun","zhang_shun","zhang_heng"]
 const RESCUERS := ["chao_gai","li_kui","hua_rong","yan_shun","zhang_shun","zhang_heng","liang_dao","liang_qiang","liang_gong","liang_ma"]
+const RESCUE_ORDERS := {
+	"jiang_rescue_song": ["free_song", "派人救宋江"],
+	"jiang_rescue_dai": ["free_dai", "派人救戴宗"],
+}
 const DEADLINE := 150.0
 var camps: Array[Unit]=[]
 var named_units: Dictionary={}
@@ -341,6 +345,7 @@ func _escort_objective(touch_ui: bool) -> String:
 func _update_escort_objective(b) -> void:
 	if b.phase!=b.Phase.FIGHT: return
 	_update_boarding_button(b)
+	_update_rescue_controls(b)
 	var objective := _escort_objective(b.hud.touch_ui)
 	if objective.is_empty(): return
 	var heading := "护送 · 开路与断后" if living(song_freed) and living(dai_freed) else "分兵 · 继续解缚"
@@ -610,6 +615,74 @@ func _selectable_shore_party(ashore: Array) -> Array:
 func _rescued_pair_aboard() -> bool:
 	return living(song_freed) and living(dai_freed) and song_freed.story_outcome == "embarked" and dai_freed.story_outcome == "embarked"
 
+func _update_rescue_controls(b) -> void:
+	var added := false
+	var index := 0
+	for button_id: String in RESCUE_ORDERS:
+		var entry: Array = RESCUE_ORDERS[button_id]
+		var action: Dictionary = b.mission.actions.get(entry[0], {})
+		var available: bool = execution_halted and not b.hud.touch_ui and not action.is_empty() and not action.done
+		var button: Button = b.mission.find_level_button(button_id)
+		if not available:
+			if button != null:
+				button.get_parent().remove_child(button)
+				button.queue_free()
+			continue
+		if button == null:
+			button = b.mission.add_level_button(button_id, entry[1],
+				"派就近待令的友军前往解缚旗标。到场后才会解缚，可随时停止或改道。")
+			button.get_parent().move_child(button, index)
+			added = true
+		index += 1
+	if added:
+		b.mission.reveal_primary_level_button()
+
+
+func _order_rescue(b, action_id: String) -> void:
+	if b.phase != b.Phase.FIGHT or not execution_halted or b.hud.touch_ui or not b._gameplay_rng_issue.is_empty():
+		return
+	var action: Dictionary = b.mission.actions.get(action_id, {})
+	if action.is_empty() or action.done or not String(action.get("blocked_reason", "")).is_empty():
+		return
+	if b.mission.active_action_id == action_id:
+		b.mission.set_feedback("已有友军正在解缚。")
+		return
+	var destination: Vector2 = b.map.cell_to_world(action.cell)
+	if b.mission._nearest_clicked_action(destination) != action_id:
+		return
+	var waiting: Array[Unit] = []
+	for actor: Unit in b.units:
+		if not b.mission._valid_action_actor(actor, action):
+			continue
+		if actor.mission_order_active or actor.mission_order_arrival_t > 0.0:
+			if b.mission._nearest_clicked_action(actor.mission_order_target) == action_id:
+				b.mission.set_feedback("已有友军前往这个解缚旗标。")
+				return
+			continue
+		if actor == b.mission._actor or actor._state != Unit.ST_IDLE or actor._hold_order_active \
+				or actor._patrolling or actor._target != null or not actor._queue.is_empty() or actor._action_queue_busy():
+			continue
+		waiting.append(actor)
+	waiting.sort_custom(func(a: Unit, other: Unit) -> bool:
+		var left := a.position.distance_squared_to(destination)
+		var right := other.position.distance_squared_to(destination)
+		return a.entity_id < other.entity_id if left == right else left < right)
+	for actor in waiting:
+		var path: PackedVector2Array = b.map.find_path(actor.position, destination, actor.faction, actor.movement_profile)
+		if path.is_empty() or path[-1].distance_to(destination) > float(action.reach) \
+				or not b.map._segment_open(path[-1], destination, actor.movement_profile):
+			continue
+		var group := [actor]
+		b._stamp_manual(group)
+		actor.order_move(destination)
+		b._stamp_mission_move(group, destination)
+		Sfx.play("order")
+		b.mission.set_feedback(Localize.format_text("已派%s前往解缚旗标。", Localize.text(actor.display_name)))
+		return
+	b.mission.set_feedback("当前没有待令友军。可停止一名友军，再下令解缚。" if waiting.is_empty() \
+		else "暂时走不到解缚旗标。请清开道路或手动改道。")
+
+
 func _can_order_boarding(b) -> bool:
 	return not b.hud.touch_ui and living(song_freed) and living(dai_freed) and (active(song_freed) or active(dai_freed))
 
@@ -755,10 +828,11 @@ func process(b,delta: float) -> void:
 			b.mission.mark("execution_halted","两名刽子手均被打倒，行刑已中断。")
 			b.mission.set_title("救人 · 分别解缚")
 			var rescue_prompt := "行刑已停。选中好汉，分别轻点宋江和戴宗身旁的解缚旗标，留兵挡住官军。" if b.hud.touch_ui \
-				else "行刑已停。选中好汉，分别右键宋江和戴宗身旁的解缚旗标，留兵挡住官军。"
+				else "行刑已停。可从任务栏分别派人救宋江、戴宗，或右键旗标。留兵挡住官军。"
 			b.mission.set_objective(rescue_prompt)
 			for rec in [["free_song",-1,"好汉 · 救下宋江"],["free_dai",1,"好汉 · 救下戴宗"]]:
 				b.mission.add_action(rec[0],rec[2],SCAFFOLD+Vector2i(rec[1],1),RESCUERS,1.3,130,22)
+			_update_rescue_controls(b)
 		elif exec_left<=0:
 			b.lose("行刑限时已到，两名刽子手未被全部打倒。下次可让补兵与进场同时进行，先集火刽子手再救人。")
 			return
@@ -795,6 +869,9 @@ func process(b,delta: float) -> void:
 			b.mission.set_objective("核心营救已达成。可立即开船；要全员脱险印，先让好汉办理码头收队，再亲自带六人撤回安全登船点。")
 		depart_button=b.mission.add_level_button("jiang_depart","开船通关 · 宋江戴宗已登船")
 func activate_mission_button(b, button_id: String) -> void:
+	if RESCUE_ORDERS.has(button_id):
+		_order_rescue(b, RESCUE_ORDERS[button_id][0])
+		return
 	if button_id == "jiang_depart": _finish(b)
 	if button_id == "jiang_bailong_meeting":
 		_view_bailong(b)
