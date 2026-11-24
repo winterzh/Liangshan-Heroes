@@ -656,7 +656,7 @@ func _update_evacuation_button(b) -> void:
 	var button: Button = b.mission.find_level_button("daming_evac_wounded")
 	if button == null and available:
 		button = b.mission.add_level_button("daming_evac_wounded", "送伤员出城",
-			"让仍待撤的伤员走向城外接应地。先派战友清开退路；可随时手动改令。")
+			"派待令伤员前往城外接应地。先派战友清开退路。")
 		button.get_parent().move_child(button, 0)
 		b.mission.reveal_primary_level_button()
 	if button != null:
@@ -669,13 +669,19 @@ func _in_exit_zone(b, point: Vector2) -> bool:
 func _order_wounded_evacuation(b) -> void:
 	if not rescued or not gate_open or not alive(hall) or b.hud.touch_ui or not b._gameplay_rng_issue.is_empty():
 		return
-	var wounded := _wounded_group(b)
+	var wounded := _wounded_group(b).filter(func(u: Unit) -> bool: return not _in_exit_zone(b, u.position))
 	if wounded.is_empty():
 		return
 	var pending := wounded.filter(func(u: Unit) -> bool:
-		return u._state != Unit.ST_MOVE or u._path_i >= u._path.size() or not _in_exit_zone(b, u._path[-1]))
+		return u._state == Unit.ST_IDLE and not u._hold_order_active and not u._patrolling \
+			and u._target == null and u._queue.is_empty() and not u._action_queue_busy() \
+			and not u.mission_order_active and u.mission_order_arrival_t <= 0.0)
 	if pending.is_empty():
-		b.mission.set_feedback("伤员正在前往城外接应地。")
+		if wounded.all(func(u: Unit) -> bool:
+			return u._state == Unit.ST_MOVE and u._path_i < u._path.size() and _in_exit_zone(b, u._path[-1])):
+			b.mission.set_feedback("伤员正在前往城外接应地。")
+		else:
+			b.mission.set_feedback(Localize.format_text("当前没有待令伤员。改派可先选人按 %s 停止。", Settings.key_label("stop")))
 		return
 	if _guarded(b,SOUTH_GATE,GATE_GUARD_RADIUS,true) or _guarded(b,EXIT_CELL,EXIT_RADIUS,true):
 		b.mission.set_feedback("退路还有可见守军。派战友清开，再下令撤离。")
