@@ -578,6 +578,9 @@ func _focus_mode_picker(overlay: ColorRect, initial: Control) -> void:
 	_watch_picker_focus(overlay, get_viewport().gui_get_focus_owner())
 	if initial != null and overlay.is_ancestor_of(initial):
 		initial.grab_focus()
+		await get_tree().process_frame
+		if is_instance_valid(initial) and initial.has_focus() and is_instance_valid(scroll):
+			scroll.ensure_control_visible(initial)
 
 
 func _watch_picker_focus(overlay: ColorRect, previous: Control) -> void:
