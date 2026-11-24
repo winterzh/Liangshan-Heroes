@@ -1,0 +1,136 @@
+{
+  "scope": "A private copy of the known partial-disguise-recovery checkpoint from a controlled patrol placement. From Continue Battle onward the normal game ticks, paid production, combat, movement and actions are automated at four times game speed. No units or resources are injected after the checkpoint. A second independent process retries Continue after settlement.",
+  "candidate": "55c580d5a881a60dfe4ba15a9e1280dea24a011b",
+  "checkpoint_source": "windows_daming_disguise_55c580d5.json",
+  "packages_sha256": {
+    "GODOTSTEAM_LICENSE.txt": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2",
+    "LiangshanHeroes.exe": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+    "LiangshanHeroes.pck": "3210991fc7ff7e4809be2652eb0471f1d8727bb492e2c000d2488fd2d285f4e4",
+    "libgodotsteam.windows.template_release.x86_64.dll": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26",
+    "steam_api64.dll": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c",
+    "steam_stats_reader.dll": "5a79a77b5b6e2cff21b285c785118352805a09d91876f89276af119ee1702517",
+    "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+  },
+  "played": {
+    "checks": 17,
+    "facts": {
+      "elapsed_to_cover": 1.86666666666666,
+      "live": {
+        "ai_trained": 1,
+        "buildings_started": 5,
+        "camp_hp": 1500.0,
+        "events": [
+          "action:daming_rts:daming_admit",
+          "daming_prison_admitted",
+          "daming_post_0",
+          "action:daming_rts:daming_fire",
+          "daming_inner_ready",
+          "daming_fire_lit",
+          "action:daming_rts:daming_gate",
+          "daming_response_arrived",
+          "daming_gate_opened",
+          "action:daming_rts:daming_rescue",
+          "daming_inner_unlock",
+          "daming_prisoners_freed",
+          "daming_post_1",
+          "daming_shi_safe",
+          "daming_pursuit",
+          "daming_lu_safe",
+          "daming_victory"
+        ],
+        "game_seconds": 180.0,
+        "orders": 235,
+        "phase": "extract",
+        "prisoner_hp": [
+          360.0,
+          230.0
+        ],
+        "result": {
+          "contract_version": 2,
+          "core_cleared": true,
+          "core_goal": "守住梁山前营，救出卢俊义、石秀，护送二人活着抵达城外接应地。",
+          "done_ids": [
+            "daming_infiltration",
+            "daming_signal",
+            "daming_response"
+          ],
+          "goals": [
+            {
+              "id": "daming_infiltration",
+              "label": "柴进、乐和乔装入牢，时迁按分工举火",
+              "note": "",
+              "reason": "",
+              "state": "done"
+            },
+            {
+              "id": "daming_signal",
+              "label": "翠云火号发动里应外合",
+              "note": "",
+              "reason": "",
+              "state": "done"
+            },
+            {
+              "id": "daming_response",
+              "label": "鲁智深或武松夺门，牢中内应开枷",
+              "note": "",
+              "reason": "",
+              "state": "done"
+            }
+          ],
+          "missed_ids": [],
+          "pending_ids": [],
+          "story_complete": true,
+          "story_done": 3,
+          "story_total": 3
+        },
+        "skill_orders": 19,
+        "spy_phase": "ready",
+        "units_queued": 20,
+        "units_queued_by_key": {
+          "liang_dao": 3,
+          "liang_gong": 7,
+          "liang_qiang": 2,
+          "lou_luo": 4,
+          "siege_cata": 2,
+          "siege_ram": 2
+        }
+      },
+      "progress": {
+        "best_done": 3,
+        "best_goal_ids": [
+          "daming_infiltration",
+          "daming_signal",
+          "daming_response"
+        ],
+        "cleared": true,
+        "contract_version": 2,
+        "story_complete": true,
+        "story_total": 3
+      },
+      "progress_sha256": "d67ec141599da77e0794e6afe37c7b06620287057d2a0d905ccf98b554aabde3",
+      "resolution": [
+        960,
+        540
+      ],
+      "slot_sha256": "78979379f45a2ec5462cf7526fb650978ecfc4e5fcae39c958531d4155bfae11"
+    },
+    "failures": [],
+    "stage": "cover-reopen",
+    "log_sha256": "124bcc947abaa909d26be5cffab18ddc24e519aee496745a84128e874e193cc4",
+    "rendering": "Vulkan Forward+",
+    "payload_verified": 7
+  },
+  "terminal_retry": {
+    "checks": 6,
+    "facts": {
+      "progress_sha256": "d67ec141599da77e0794e6afe37c7b06620287057d2a0d905ccf98b554aabde3",
+      "slot_sha256": "78979379f45a2ec5462cf7526fb650978ecfc4e5fcae39c958531d4155bfae11",
+      "terminal_code": "LOCAL_RUN_TERMINAL"
+    },
+    "failures": [],
+    "stage": "cover-reject",
+    "log_sha256": "cf8b1cd158e03214236340161758bfe18be96f0fb8e772a6330303492f991c85",
+    "rendering": "Vulkan Forward+",
+    "payload_verified": 7
+  }
+}

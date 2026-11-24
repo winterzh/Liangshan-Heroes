@@ -1,5 +1,10 @@
 # 八幕战役后续开发路线图
 
+## 大名府恢复乔装后接回火号路线
+
+M4 暴露补救已经从受控恢复档接回正常受验与火号路线，真实付费作战并撤出卢俊义、石秀。 [Windows 成品验收](../qa/campaign_coordination_20261116/windows_daming_cover_to_victory_55c580d5.json)
+
+
 ## M4 大名府潜入补救
 
 选中潜入角色可看到乔装告急与恢复进度，给退开巡守或返回蔡福家的决定提供反馈。真人两线取舍待验。 [Windows 成品验收](../qa/campaign_coordination_20261116/windows_daming_disguise_55c580d5.json)

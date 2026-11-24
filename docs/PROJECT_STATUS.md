@@ -1,5 +1,10 @@
 # 当前项目总览
 
+## 大名府恢复乔装后接回火号路线
+
+Windows 候选 55c580d5 已从乔装恢复档打通火号路线，结算演义 3/3。真人潜入与整章体验待验。 [Windows 成品验收](../qa/campaign_coordination_20261116/windows_daming_cover_to_victory_55c580d5.json)
+
+
 ## Windows 大名府乔装反馈
 
 Windows 候选 55c580d5 核对靠近巡守、暴露后回蔡福家、受阻等候与中途存档，恢复剩余计时后可继续潜入。 [Windows 成品验收](../qa/campaign_coordination_20261116/windows_daming_disguise_55c580d5.json)

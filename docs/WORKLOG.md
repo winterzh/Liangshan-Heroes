@@ -1,5 +1,10 @@
 # 开发日志
 
+## 大名府恢复乔装后接回火号路线
+
+补验乔装恢复后到火号夺门、撤出二人和单次结算。独立重开确认旧槽拦截。 [Windows 成品验收](../qa/campaign_coordination_20261116/windows_daming_cover_to_victory_55c580d5.json)
+
+
 ## 2026-11-24 大名府潜入反馈
 
 PC 角色面板显示即将识破、暴露返回、安全等候和实际恢复倒计时。已在成品验证保存和独立续玩。 [Windows 成品验收](../qa/campaign_coordination_20261116/windows_daming_disguise_55c580d5.json)

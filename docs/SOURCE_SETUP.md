@@ -1,5 +1,10 @@
 # 源码设置与换机（2026-10-30）
 
+## 大名府恢复乔装后接回火号路线
+
+补验复用原乔装恢复档及运行账本的隔离副本，后续按普通玩家入口继续与结算。 [Windows 成品验收](../qa/campaign_coordination_20261116/windows_daming_cover_to_victory_55c580d5.json)
+
+
 ## 大名府乔装进度使用现有计时
 
 PC 角色面板读取原有盘查和恢复字段。实际进度和提示采用同一个安全屋范围与恢复时长。存档继续沿用原角色字段。 [Windows 成品验收](../qa/campaign_coordination_20261116/windows_daming_disguise_55c580d5.json)
