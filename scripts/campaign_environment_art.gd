@@ -958,6 +958,18 @@ static func surface(active_level_id: String, surface_key: String) -> Texture2D:
 	return _load_texture(surface_path(active_level_id,surface_key))
 
 
+static func huangnigang_opening_object_texture_paths() -> Array[String]:
+	var route_keys: Array[String] = ["jujube_load"]
+	for cart_index in range(1, 8):
+		route_keys.append("jujube_cart_%02d" % cart_index)
+	var paths: Array[String] = []
+	for route_key in route_keys:
+		var path := route_texture_path("object", "level1", route_key)
+		if not path.is_empty():
+			paths.append(path)
+	return paths
+
+
 static func surface_texture_paths(active_level_id: String) -> Array[String]:
 	var paths: Array[String] = []
 	for surface_key: String in SURFACE_ROUTES:
