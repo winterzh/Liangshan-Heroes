@@ -1,5 +1,10 @@
 # 八幕战役后续开发路线图
 
+## M4 大名府火号启动
+
+玩家可在牢内就位后自己决定何时点火。任务栏省去找时迁与旗标的操作，接应仍按正常战斗办理。 [Windows 成品验收](../qa/campaign_coordination_20261116/windows_daming_send_fire_11118952.json)
+
+
 ## 大名府恢复乔装后接回火号路线
 
 M4 暴露补救已经从受控恢复档接回正常受验与火号路线，真实付费作战并撤出卢俊义、石秀。 [Windows 成品验收](../qa/campaign_coordination_20261116/windows_daming_cover_to_victory_55c580d5.json)

@@ -1,5 +1,10 @@
 # 源码设置与换机（2026-10-30）
 
+## 大名府火号复用任务行军
+
+新按钮使用已有任务行军与到场读条，保存按钮标识和原行军状态。Windows 继续入口补入正式 Build 26873421 的内容与拆包身份，使用原章运行账本。兼容已在大名府真实读档与再存中验证。 [Windows 成品验收](../qa/campaign_coordination_20261116/windows_daming_send_fire_11118952.json)
+
+
 ## 大名府恢复乔装后接回火号路线
 
 补验复用原乔装恢复档及运行账本的隔离副本，后续按普通玩家入口继续与结算。 [Windows 成品验收](../qa/campaign_coordination_20261116/windows_daming_cover_to_victory_55c580d5.json)

@@ -1,5 +1,10 @@
 # 当前项目总览
 
+## Windows 大名府火号指令
+
+候选 11118952 从正式 Build 26873421 存档继续，通过一键派时迁、按原路续玩、火号夺门和二人撤离。四语窄窗及终局旧槽拦截完成。 [Windows 成品验收](../qa/campaign_coordination_20261116/windows_daming_send_fire_11118952.json)
+
+
 ## 大名府恢复乔装后接回火号路线
 
 Windows 候选 55c580d5 已从乔装恢复档打通火号路线，结算演义 3/3。真人潜入与整章体验待验。 [Windows 成品验收](../qa/campaign_coordination_20261116/windows_daming_cover_to_victory_55c580d5.json)

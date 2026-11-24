@@ -1,5 +1,10 @@
 # 开发日志
 
+## 2026-11-24 大名府火号指令
+
+牢内接应到位后，PC 任务栏可直接派时迁前往翠云楼。按原行军在途保存，独立重开后实际举火。 [Windows 成品验收](../qa/campaign_coordination_20261116/windows_daming_send_fire_11118952.json)
+
+
 ## 大名府恢复乔装后接回火号路线
 
 补验乔装恢复后到火号夺门、撤出二人和单次结算。独立重开确认旧槽拦截。 [Windows 成品验收](../qa/campaign_coordination_20261116/windows_daming_cover_to_victory_55c580d5.json)
