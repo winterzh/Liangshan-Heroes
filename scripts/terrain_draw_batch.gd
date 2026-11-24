@@ -8,6 +8,7 @@ var tints: Array = []
 # resources alive in the batch object, which GameMap stores until its next
 # terrain redraw.
 var _meshes: Array[ArrayMesh] = []
+var _mesh_textures: Array[Texture2D] = []
 
 
 func add_region(texture: Texture2D, destination: Rect2, source: Rect2, color: Color) -> void:
@@ -34,12 +35,18 @@ func flush(canvas: Node2D) -> void:
 			# `canvas` is GameMap itself, retaining its existing local transform and
 			# ShaderMaterial. Atlas is supplied only as the draw source texture.
 			_meshes.append(mesh)
-			canvas.draw_mesh(mesh, texture)
+			_mesh_textures.append(texture)
 	# 色罩只覆盖自己的同一格；地形顶点连续，延后到整层贴图之后不改变合成。
 	var tint_mesh := _tint_mesh(tints)
 	if tint_mesh != null:
 		_meshes.append(tint_mesh)
-		canvas.draw_mesh(tint_mesh, null)
+		_mesh_textures.append(null)
+	draw_prepared_meshes(canvas)
+
+
+func draw_prepared_meshes(canvas: Node2D) -> void:
+	for i in _meshes.size():
+		canvas.draw_mesh(_meshes[i], _mesh_textures[i])
 
 
 func _flush_legacy(canvas: Node2D) -> void:

@@ -70,6 +70,8 @@ var natural_surface_enabled := false
 # script-owned RefCounted reference, so a local-only batch can be freed before
 # the renderer consumes it.
 var _terrain_draw_cache: RefCounted = null
+const TERRAIN_MESH_CACHE_LIMIT := 3
+static var _recent_terrain_meshes: Array[Dictionary] = []
 
 # 自然地表只改变最终着色，不改变逻辑格、碰撞、寻路权重或高度场。
 # 贴图权重在格心之间连续插值，shader 将可见过渡收窄到 12—24 逻辑像素，
@@ -670,10 +672,58 @@ func _near_lower_water(x: int, y: int) -> bool:
 		or t_at(x, y - 1) == T.WATER or t_at(x, y + 1) == T.WATER
 
 
+func _terrain_atlas_identity(texture: Texture2D) -> Array:
+	var atlas := texture as AtlasTexture
+	if atlas == null or atlas.atlas == null:
+		return []
+	return [atlas.atlas.get_rid(), atlas.atlas.get_size(), atlas.region]
+
+
+func _reuse_prepared_terrain_meshes() -> RefCounted:
+	for entry in _recent_terrain_meshes:
+		if entry.size != Vector2i(w, h) or entry.style != environment_style or entry.tiles != grid:
+			continue
+		var matches := true
+		for key in entry.atlases:
+			if _terrain_atlas_identity(Art.terrain_texture(key)) != entry.atlases[key]:
+				matches = false
+				break
+		if matches:
+			return entry.batch
+	return null
+
+
+func _remember_prepared_terrain_meshes(batch: RefCounted, textures: Dictionary[String, Texture2D]) -> void:
+	var atlases := {}
+	for key in textures:
+		var identity := _terrain_atlas_identity(textures[key])
+		if identity.is_empty():
+			return
+		atlases[key] = identity
+	if atlases.is_empty():
+		return
+	# Keep the tile snapshot separate from maps that can be edited after drawing.
+	_recent_terrain_meshes.push_front({
+		"size": Vector2i(w, h), "style": environment_style, "tiles": grid.duplicate(),
+		"atlases": atlases, "batch": batch,
+	})
+	if _recent_terrain_meshes.size() > TERRAIN_MESH_CACHE_LIMIT:
+		_recent_terrain_meshes.pop_back()
+
+
 func _draw() -> void:
 	# 战役原来每格交替提交贴图与纯色色罩，导致数千次材质/纹理批次切换。
 	# 对照采样可设CAMPAIGN_TERRAIN_BATCH=0；自由模式始终保留原提交顺序。
-	var terrain_batch: RefCounted = TerrainDrawBatch.new() if sample_scenery != null and OS.get_environment("CAMPAIGN_TERRAIN_BATCH") != "0" else null
+	var batch_enabled := sample_scenery != null and OS.get_environment("CAMPAIGN_TERRAIN_BATCH") != "0"
+	var can_reuse := batch_enabled and natural_surface_enabled and OS.get_name() == "Windows" \
+		and OS.get_environment("CAMPAIGN_TERRAIN_MESH_BATCH") != "0"
+	if can_reuse:
+		var prepared := _reuse_prepared_terrain_meshes()
+		if prepared != null:
+			_terrain_draw_cache = prepared
+			prepared.draw_prepared_meshes(self)
+			return
+	var terrain_batch: RefCounted = TerrainDrawBatch.new() if batch_enabled else null
 	# The texture and its atlas cells stay constant for one map draw.
 	var textures: Dictionary[String, Texture2D] = {}
 	var source_cells: Dictionary[String, Array] = {}
@@ -778,6 +828,8 @@ func _draw() -> void:
 	if terrain_batch != null:
 		terrain_batch.flush(self)
 		_terrain_draw_cache = terrain_batch
+		if can_reuse:
+			_remember_prepared_terrain_meshes(terrain_batch, textures)
 	else:
 		_terrain_draw_cache = null
 	if not natural_surface_enabled:
