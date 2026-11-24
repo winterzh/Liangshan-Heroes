@@ -4,6 +4,8 @@ const ATTACK_PER_DRINK := 5
 const HEAVY_RADIUS := 78.0
 const RUSH_WIDTH := 92.0
 const MIN_RUSH_TRAVEL := 0.01
+const ROAD_DRINK_BUTTON := "forest_road_drink"
+const ROAD_PROVOKE_BUTTON := "forest_road_provoke"
 const DUEL_FOOTWORK_STATUS := "玉环步加速后仍需下令换位。看清起手，避开后靠近用鸳鸯脚。"
 var controls_generation:=-1
 var charge_running:=false
@@ -45,6 +47,7 @@ func _road_actions(b) -> void:
 	if not b.mission.has_event("road_step_practiced"):
 		b.mission.add_action("practice_step","可选 · 官道旁试一次换步",Vector2i(25,19),["wu_song"],0.5,40)
 	b.mission.add_action("provoke",Localize.text("武松 · 店前佯醉换酒"),KUAIHUO+Vector2i(-2,1),["wu_song"],0.8,48)
+	refresh_road_controls(b)
 
 func on_mission_action(b, action_id: String, actor) -> void:
 	if action_id.begins_with("drink_"):
@@ -55,6 +58,7 @@ func on_mission_action(b, action_id: String, actor) -> void:
 		if steady_left<=0: _apply_wine_speed()
 		b.mission.mark(action_id,Localize.format_text("第%d家酒望吃足三碗；现共%d家，拳力增强，酒势也更不稳。", [i+1,drunk]))
 		b.mission.set_status(Localize.format_text("已饮%d/4家：可继续沿路，或直接去快活林。", drunk))
+		refresh_road_controls(b)
 	elif action_id=="practice_step":
 		if st!=ROAD or actor!=wu: return
 		_start_step_drill(b)
@@ -349,7 +353,38 @@ func _sync_shop_controls(b) -> void:
 		# Reveal the lower of the two nearby controls so both are visible in a short window.
 		b.mission.reveal_primary_level_button()
 
-func _has_shop_order(b, actor: Unit, action_id: String) -> bool:
+func _next_road_drink() -> String:
+	for index in range(taverns.size()):
+		if not taverns[index].drunk:
+			return "drink_%d" % index
+	return ""
+
+
+func refresh_road_controls(b) -> void:
+	if st != ROAD or b.phase != b.Phase.FIGHT or b.hud.touch_ui:
+		return
+	var changed := false
+	var challenge: Button = b.mission.find_level_button(ROAD_PROVOKE_BUTTON)
+	if challenge == null:
+		challenge = b.mission.add_level_button(ROAD_PROVOKE_BUTTON, "到店挑衅",
+			"派武松到快活林店前佯醉换酒。走到旗标后才会引蒋门神出店。")
+		challenge.get_parent().move_child(challenge, 0)
+		changed = true
+	var drink: Button = b.mission.find_level_button(ROAD_DRINK_BUTTON)
+	if _next_road_drink().is_empty():
+		if drink != null:
+			drink.get_parent().remove_child(drink)
+			drink.queue_free()
+	elif drink == null:
+		drink = b.mission.add_level_button(ROAD_DRINK_BUTTON, "去下一家饮酒",
+			"派武松走到下一处未饮过的酒望。每次只派一家，也可随时去酒店。")
+		drink.get_parent().move_child(drink, 0)
+		changed = true
+	if changed:
+		b.mission.reveal_primary_level_button()
+
+
+func _has_task_order(b, actor: Unit, action_id: String) -> bool:
 	return is_instance_valid(actor) and (b.mission.active_action_id == action_id or (
 		(actor.mission_order_active or actor.mission_order_arrival_t > 0.0)
 		and b.mission._nearest_clicked_action(actor.mission_order_target) == action_id))
@@ -357,12 +392,14 @@ func _has_shop_order(b, actor: Unit, action_id: String) -> bool:
 func _order_shop_task(b, actor: Unit, action_id: String) -> void:
 	if st != RETURN_SHOP or b.hud.touch_ui or not b._gameplay_rng_issue.is_empty():
 		return
+	_order_task(b, actor, action_id, "武松已前往退店旗标。" if action_id == "terms" else "施恩已前往酒店旗标。")
+
+
+func _order_task(b, actor: Unit, action_id: String, feedback: String) -> void:
 	var action: Dictionary = b.mission.actions.get(action_id, {})
-	if action.is_empty() or action.done or not b.mission._valid_action_actor(actor, action):
+	if action.is_empty() or action.done or not b.mission._valid_action_actor(actor, action) or _has_task_order(b, actor, action_id):
 		return
-	if _has_shop_order(b, actor, action_id):
-		return
-	if action_id == "restore_shop" and not b.mission.has_event("terms") and _has_shop_order(b, wu, "terms"):
+	if action_id == "restore_shop" and not b.mission.has_event("terms") and _has_task_order(b, wu, "terms"):
 		b.mission.set_feedback("武松正在去谈退店条件。谈完后再让施恩接店。")
 		return
 	var target: Vector2 = b.map.cell_to_world(action.cell)
@@ -377,9 +414,16 @@ func _order_shop_task(b, actor: Unit, action_id: String) -> void:
 	actor.order_move(target)
 	b._stamp_mission_move(group, target)
 	Sfx.play("order")
-	b.mission.set_feedback("武松已前往退店旗标。" if action_id == "terms" else "施恩已前往酒店旗标。")
+	b.mission.set_feedback(feedback)
 
 func activate_mission_button(b, button_id: String) -> void:
+	if button_id in [ROAD_DRINK_BUTTON, ROAD_PROVOKE_BUTTON]:
+		if st == ROAD and not b.hud.touch_ui and b._gameplay_rng_issue.is_empty():
+			if button_id == ROAD_DRINK_BUTTON:
+				_order_task(b, wu, _next_road_drink(), "武松正前往下一处酒望。")
+			else:
+				_order_task(b, wu, "provoke", "武松正前往快活林店前。")
+		return
 	if button_id == "forest_order_terms":
 		_order_shop_task(b, wu, "terms")
 		return

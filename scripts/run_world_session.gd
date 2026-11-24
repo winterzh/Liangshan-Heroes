@@ -372,6 +372,7 @@ func commit_restore() -> Dictionary:
 	match _packet.context.get("level_id", ""):
 		"level1": battle.level.refresh_restored_withdrawal(battle)
 		"level5": battle.level.refresh_restored_liu_return(battle)
+		"level7": battle.level.refresh_road_controls(battle)
 	if not node.value.name.is_empty(): battle.name = node.value.name
 	battle._install_target_cursor()
 	Engine.time_scale = _tree().root.get_node("Settings").game_speed
