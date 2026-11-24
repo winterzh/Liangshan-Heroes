@@ -1,5 +1,10 @@
 # 当前开发计划（2026-10-30）
 
+## 2026-11-24 自定义驻守首帧绘制与主线程取样
+
+两轮隔离 Windows 六入口长测覆盖第 65 次自定义驻守。首次所测就绪至绘制前约 123.5 毫秒，第二轮新增画布回调和内存采样边界。 [Windows 绘制追踪](../qa/battle_entry_timing_20261116/windows_cycle11_draw_cpu_f76e44fd.json)
+
+
 ## 2026-11-24 自定义驻守 Windows 地图分段加载
 
 Windows 从已保存预设开始自定义驻守时，在加载画面内准备地形、寻路和布景。预设数值仍在正局部署时应用。重进最长间隔的中位数从 133.5 到 95.3 毫秒。已核对两份不同预设。 [实际预设对照](../qa/battle_entry_timing_20261116/windows_custom_defense_prepared_map_f76e44fd.json) [六入口长测](../qa/battle_entry_timing_20261116/windows_candidate_f76e44fd_mode_soak_600.json)

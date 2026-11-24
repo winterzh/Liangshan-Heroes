@@ -1,0 +1,7263 @@
+{
+  "date": "2026-11-24",
+  "frozen_runtime_commit": "f76e44fdd940da7dd66c4df4a855714948adcd27",
+  "scope": "Two separate native Windows runs at 1280x720 Vulkan Forward+, six-route order and six-second live dwell. The second run adds observation of CanvasItem.draw signals for custom defense and times the synchronous memory probes. Stock gate verdicts are retained separately from the diagnosis.",
+  "cpu_semantics": "Windows primary-thread CPU accumulators are quantized. Timing windows are estimated by inward and outward samples, using QueryThreadCycleTime and neighbouring GetThreadTimes counters. Draw signal boundaries are ordered observations, not exclusive time inside a specific node.",
+  "stock_with_cpu_observer": {
+    "run": {
+      "candidate": "f76e44fdd940da7dd66c4df4a855714948adcd27",
+      "payload_files_unchanged": true,
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "2b56c924785544902d9e1a6ea727cba5629bc9f9acbdce3c10d7c641b10f154f",
+      "split_identity": "86caa8a1da4dc0db77e8b47685db43f0b43ec86a64bbedf8284b7d69c3c4b33c",
+      "exe_unchanged": true,
+      "exit_code": 0,
+      "seconds": 611.354,
+      "errors": [],
+      "warnings": [],
+      "log_sha256": "ae6f9ed23e628c93b61d4d9cb79f6d5e6fa555a254ab4874650d298d6ca0ab5e",
+      "thread_id": 14036,
+      "thread_samples_sha256": "5e9dce9460fd905ea29539f70854cb3b39591082bc00cbda3de65c9f3be68384",
+      "report_sha256": "1e3ef85d3c756b3a84649d9de8b53b89022a0b06eb3fcd8f1e6043ee1c59f787"
+    },
+    "fixture_sha256": "3827a96d5cb4cfaa34f478339920636a366642c806c0b4b5d3d626106cd4bc85",
+    "actual_seconds": 601.802394,
+    "transitions": 95,
+    "lifecycle_checks": [],
+    "gate_passed": true,
+    "frame_performance": {
+      "complete_minute_buckets": 10,
+      "max_minute_p95_ms": 13.635,
+      "max_minute_p99_ms": 24.175,
+      "p95_limit_ms": 16.7,
+      "p99_limit_ms": 33.3,
+      "peak_draw_calls": 1382.0,
+      "worst_frame_ms": 577.156
+    },
+    "memory_probe_spans": [],
+    "cpu_sample_rows": 39482,
+    "ordinal_65": {
+      "index": 65,
+      "cycle": 11,
+      "level": "custom_defense",
+      "gap_ms": 199.496,
+      "attach_to_ready_ms": 63.929,
+      "ready_to_pre_draw_ms": 123.548,
+      "pre_draw_to_present_ms": 10.505,
+      "gap_cpu": {
+        "wall_ms": 199.496,
+        "main_cpu_inward_and_outward_ms": [
+          171.875,
+          203.125
+        ],
+        "process_cpu_inward_and_outward_ms": [
+          171.875,
+          203.125
+        ],
+        "main_cycle_inward_and_outward_M": [
+          502.326,
+          593.93
+        ],
+        "boundary_ms": 14.938,
+        "clock_drift_ms": 0.0
+      },
+      "attach_to_ready_cpu": {
+        "wall_ms": 63.929,
+        "main_cpu_inward_and_outward_ms": [
+          46.875,
+          78.125
+        ],
+        "process_cpu_inward_and_outward_ms": [
+          46.875,
+          78.125
+        ],
+        "main_cycle_inward_and_outward_M": [
+          132.454,
+          226.542
+        ],
+        "boundary_ms": 11.459,
+        "clock_drift_ms": 0.002
+      },
+      "ready_to_predraw_cpu": {
+        "wall_ms": 123.548,
+        "main_cpu_inward_and_outward_ms": [
+          109.375,
+          140.625
+        ],
+        "process_cpu_inward_and_outward_ms": [
+          109.375,
+          140.625
+        ],
+        "main_cycle_inward_and_outward_M": [
+          320.786,
+          416.473
+        ],
+        "boundary_ms": 11.251,
+        "clock_drift_ms": 0.003
+      },
+      "memory_probe_overlap": [],
+      "canvas_signal_count": 0,
+      "entry_signals": {
+        "physics": [
+          923,
+          1069,
+          28906,
+          42833,
+          70621,
+          84498,
+          112271,
+          126156,
+          140051,
+          153933,
+          219480,
+          219499,
+          219501,
+          219504
+        ],
+        "post_draw": [
+          1624,
+          28734,
+          29567,
+          30244,
+          43939,
+          57758,
+          71879,
+          85611,
+          99242,
+          113243,
+          127315,
+          141276,
+          218912,
+          418403
+        ],
+        "pre_draw": [
+          1221,
+          28027,
+          29165,
+          29820,
+          43218,
+          57145,
+          71133,
+          84943,
+          98737,
+          112679,
+          126757,
+          140543,
+          218193,
+          407905
+        ],
+        "process": [
+          1076,
+          2275,
+          28940,
+          29651,
+          42864,
+          56707,
+          70666,
+          84531,
+          98368,
+          112312,
+          126204,
+          140095,
+          153972,
+          219510
+        ]
+      }
+    },
+    "custom_defense_gaps": [
+      {
+        "index": 5,
+        "cycle": 1,
+        "level": "custom_defense",
+        "gap_ms": 94.134,
+        "attach_to_ready_ms": 42.395,
+        "ready_to_pre_draw_ms": 45.74,
+        "pre_draw_to_present_ms": 4.814,
+        "gap_cpu": {
+          "wall_ms": 94.134,
+          "main_cpu_inward_and_outward_ms": [
+            78.125,
+            109.375
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            78.125,
+            109.375
+          ],
+          "main_cycle_inward_and_outward_M": [
+            230.808,
+            321.528
+          ],
+          "boundary_ms": 10.604,
+          "clock_drift_ms": 0.006
+        },
+        "attach_to_ready_cpu": null,
+        "ready_to_predraw_cpu": null,
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 0,
+        "entry_signals": {
+          "physics": [
+            736,
+            19002,
+            28539,
+            42409,
+            70189,
+            84101,
+            98095,
+            111855,
+            181004,
+            181021,
+            181023
+          ],
+          "post_draw": [
+            1454,
+            18880,
+            19443,
+            28983,
+            42928,
+            57048,
+            70814,
+            84956,
+            99829,
+            180601,
+            274733
+          ],
+          "pre_draw": [
+            1186,
+            18487,
+            19154,
+            28724,
+            42596,
+            56624,
+            70397,
+            84451,
+            98666,
+            180065,
+            269922
+          ],
+          "process": [
+            1089,
+            1899,
+            19014,
+            28560,
+            42426,
+            56327,
+            70207,
+            84133,
+            98144,
+            111874,
+            181030
+          ]
+        }
+      },
+      {
+        "index": 11,
+        "cycle": 2,
+        "level": "custom_defense",
+        "gap_ms": 79.173,
+        "attach_to_ready_ms": 35.814,
+        "ready_to_pre_draw_ms": 39.478,
+        "pre_draw_to_present_ms": 2.998,
+        "gap_cpu": {
+          "wall_ms": 79.173,
+          "main_cpu_inward_and_outward_ms": [
+            62.5,
+            93.75
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            62.5,
+            93.75
+          ],
+          "main_cycle_inward_and_outward_M": [
+            179.481,
+            271.629
+          ],
+          "boundary_ms": 11.344,
+          "clock_drift_ms": 0.0
+        },
+        "attach_to_ready_cpu": null,
+        "ready_to_predraw_cpu": null,
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 0,
+        "entry_signals": {
+          "physics": [
+            539,
+            18438,
+            42218,
+            56111,
+            83889,
+            97794,
+            150984,
+            150996,
+            150998
+          ],
+          "post_draw": [
+            903,
+            18344,
+            19006,
+            28773,
+            42767,
+            56689,
+            70535,
+            84491,
+            99944,
+            150631,
+            229804
+          ],
+          "pre_draw": [
+            697,
+            17969,
+            18616,
+            28499,
+            42413,
+            56350,
+            70196,
+            84123,
+            99593,
+            150164,
+            226807
+          ],
+          "process": [
+            624,
+            1292,
+            18455,
+            28338,
+            42237,
+            56131,
+            69998,
+            83910,
+            97818,
+            111653,
+            151003
+          ]
+        }
+      },
+      {
+        "index": 17,
+        "cycle": 3,
+        "level": "custom_defense",
+        "gap_ms": 104.043,
+        "attach_to_ready_ms": 49.192,
+        "ready_to_pre_draw_ms": 49.139,
+        "pre_draw_to_present_ms": 4.582,
+        "gap_cpu": {
+          "wall_ms": 104.043,
+          "main_cpu_inward_and_outward_ms": [
+            93.75,
+            125.0
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            93.75,
+            125.0
+          ],
+          "main_cycle_inward_and_outward_M": [
+            273.604,
+            368.033
+          ],
+          "boundary_ms": 13.559,
+          "clock_drift_ms": 0.001
+        },
+        "attach_to_ready_cpu": null,
+        "ready_to_predraw_cpu": null,
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 0,
+        "entry_signals": {
+          "physics": [
+            691,
+            22953,
+            28483,
+            56282,
+            70150,
+            84049,
+            111918,
+            125709,
+            174128,
+            174140
+          ],
+          "post_draw": [
+            1272,
+            22693,
+            24031,
+            29120,
+            43276,
+            57268,
+            70863,
+            84848,
+            99099,
+            114019,
+            173710,
+            277751
+          ],
+          "pre_draw": [
+            925,
+            21845,
+            23403,
+            28757,
+            42706,
+            56671,
+            70431,
+            84360,
+            98377,
+            112932,
+            173095,
+            273172
+          ],
+          "process": [
+            812,
+            1947,
+            22983,
+            28507,
+            42385,
+            56317,
+            70173,
+            84074,
+            97945,
+            112031,
+            125735,
+            174147
+          ]
+        }
+      },
+      {
+        "index": 23,
+        "cycle": 4,
+        "level": "custom_defense",
+        "gap_ms": 94.826,
+        "attach_to_ready_ms": 41.704,
+        "ready_to_pre_draw_ms": 47.316,
+        "pre_draw_to_present_ms": 4.452,
+        "gap_cpu": {
+          "wall_ms": 94.826,
+          "main_cpu_inward_and_outward_ms": [
+            78.125,
+            109.375
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            78.125,
+            109.375
+          ],
+          "main_cycle_inward_and_outward_M": [
+            229.738,
+            320.801
+          ],
+          "boundary_ms": 11.502,
+          "clock_drift_ms": 0.001
+        },
+        "attach_to_ready_cpu": null,
+        "ready_to_predraw_cpu": null,
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 0,
+        "entry_signals": {
+          "physics": [
+            713,
+            23483,
+            42392,
+            56345,
+            84048,
+            97958,
+            159983,
+            159997,
+            159999,
+            160001
+          ],
+          "post_draw": [
+            1286,
+            23213,
+            24423,
+            29469,
+            43047,
+            57403,
+            70884,
+            84639,
+            98909,
+            159466,
+            254290
+          ],
+          "pre_draw": [
+            965,
+            22525,
+            23809,
+            28980,
+            42631,
+            56779,
+            70435,
+            84278,
+            98325,
+            158811,
+            249841
+          ],
+          "process": [
+            843,
+            1874,
+            23510,
+            28531,
+            42413,
+            56386,
+            70172,
+            84069,
+            97988,
+            111845,
+            160007
+          ]
+        }
+      },
+      {
+        "index": 29,
+        "cycle": 5,
+        "level": "custom_defense",
+        "gap_ms": 92.713,
+        "attach_to_ready_ms": 42.825,
+        "ready_to_pre_draw_ms": 44.195,
+        "pre_draw_to_present_ms": 4.39,
+        "gap_cpu": {
+          "wall_ms": 92.713,
+          "main_cpu_inward_and_outward_ms": [
+            78.125,
+            109.375
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            78.125,
+            109.375
+          ],
+          "main_cycle_inward_and_outward_M": [
+            223.79,
+            317.925
+          ],
+          "boundary_ms": 14.11,
+          "clock_drift_ms": 0.001
+        },
+        "attach_to_ready_cpu": null,
+        "ready_to_predraw_cpu": null,
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 0,
+        "entry_signals": {
+          "physics": [
+            879,
+            20877,
+            28656,
+            42571,
+            70354,
+            84249,
+            98170,
+            111988,
+            158172,
+            158193
+          ],
+          "post_draw": [
+            1508,
+            20775,
+            21210,
+            29048,
+            43316,
+            57359,
+            71220,
+            85073,
+            100985,
+            157638,
+            250354
+          ],
+          "pre_draw": [
+            1159,
+            20352,
+            20998,
+            28810,
+            42867,
+            56827,
+            70692,
+            84617,
+            100276,
+            156736,
+            245965
+          ],
+          "process": [
+            1034,
+            2303,
+            20894,
+            28670,
+            42596,
+            56480,
+            70384,
+            84285,
+            98216,
+            112006,
+            158200
+          ]
+        }
+      },
+      {
+        "index": 35,
+        "cycle": 6,
+        "level": "custom_defense",
+        "gap_ms": 82.116,
+        "attach_to_ready_ms": 36.528,
+        "ready_to_pre_draw_ms": 40.629,
+        "pre_draw_to_present_ms": 3.899,
+        "gap_cpu": {
+          "wall_ms": 82.116,
+          "main_cpu_inward_and_outward_ms": [
+            62.5,
+            93.75
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            62.5,
+            109.375
+          ],
+          "main_cycle_inward_and_outward_M": [
+            181.758,
+            273.08
+          ],
+          "boundary_ms": 13.328,
+          "clock_drift_ms": 0.005
+        },
+        "attach_to_ready_cpu": null,
+        "ready_to_predraw_cpu": null,
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 0,
+        "entry_signals": {
+          "physics": [
+            580,
+            18503,
+            28368,
+            56148,
+            70025,
+            84006,
+            139624,
+            139638
+          ],
+          "post_draw": [
+            993,
+            18393,
+            19129,
+            28894,
+            42915,
+            56819,
+            70592,
+            85978,
+            139228,
+            221343
+          ],
+          "pre_draw": [
+            762,
+            17947,
+            18704,
+            28584,
+            42509,
+            56389,
+            70247,
+            84652,
+            138783,
+            217447
+          ],
+          "process": [
+            671,
+            1375,
+            18523,
+            28386,
+            42266,
+            56171,
+            70043,
+            84065,
+            97802,
+            139643
+          ]
+        }
+      },
+      {
+        "index": 41,
+        "cycle": 7,
+        "level": "custom_defense",
+        "gap_ms": 130.961,
+        "attach_to_ready_ms": 65.327,
+        "ready_to_pre_draw_ms": 58.69,
+        "pre_draw_to_present_ms": 5.563,
+        "gap_cpu": {
+          "wall_ms": 130.961,
+          "main_cpu_inward_and_outward_ms": [
+            93.75,
+            125.0
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            93.75,
+            125.0
+          ],
+          "main_cycle_inward_and_outward_M": [
+            307.765,
+            399.569
+          ],
+          "boundary_ms": 13.096,
+          "clock_drift_ms": 0.002
+        },
+        "attach_to_ready_cpu": {
+          "wall_ms": 65.327,
+          "main_cpu_inward_and_outward_ms": [
+            31.25,
+            62.5
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            31.25,
+            62.5
+          ],
+          "main_cycle_inward_and_outward_M": [
+            127.622,
+            218.889
+          ],
+          "boundary_ms": 11.715,
+          "clock_drift_ms": 0.001
+        },
+        "ready_to_predraw_cpu": {
+          "wall_ms": 58.69,
+          "main_cpu_inward_and_outward_ms": [
+            46.875,
+            78.125
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            46.875,
+            78.125
+          ],
+          "main_cycle_inward_and_outward_M": [
+            135.688,
+            225.135
+          ],
+          "boundary_ms": 8.632,
+          "clock_drift_ms": 0.003
+        },
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 0,
+        "entry_signals": {
+          "physics": [
+            1578,
+            37497,
+            38236,
+            51437,
+            65310,
+            79215,
+            93094,
+            120848,
+            134760,
+            148649,
+            162602,
+            176430,
+            266713,
+            266733,
+            266736,
+            266738
+          ],
+          "post_draw": [
+            2962,
+            37371,
+            38144,
+            38794,
+            52903,
+            66788,
+            80984,
+            94326,
+            108300,
+            122006,
+            135896,
+            150000,
+            164539,
+            178529,
+            266137,
+            397096
+          ],
+          "pre_draw": [
+            2169,
+            36800,
+            37718,
+            38422,
+            51918,
+            65799,
+            79794,
+            93614,
+            107468,
+            121231,
+            135225,
+            149185,
+            163366,
+            177391,
+            265376,
+            391537
+          ],
+          "process": [
+            1839,
+            3915,
+            37519,
+            38249,
+            51480,
+            65367,
+            79288,
+            93128,
+            107018,
+            120878,
+            134798,
+            148688,
+            162667,
+            176482,
+            190302,
+            266744
+          ]
+        }
+      },
+      {
+        "index": 47,
+        "cycle": 8,
+        "level": "custom_defense",
+        "gap_ms": 143.171,
+        "attach_to_ready_ms": 69.036,
+        "ready_to_pre_draw_ms": 66.767,
+        "pre_draw_to_present_ms": 5.543,
+        "gap_cpu": {
+          "wall_ms": 143.171,
+          "main_cpu_inward_and_outward_ms": [
+            109.375,
+            140.625
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            109.375,
+            156.25
+          ],
+          "main_cycle_inward_and_outward_M": [
+            347.249,
+            437.201
+          ],
+          "boundary_ms": 10.951,
+          "clock_drift_ms": 0.0
+        },
+        "attach_to_ready_cpu": {
+          "wall_ms": 69.036,
+          "main_cpu_inward_and_outward_ms": [
+            46.875,
+            78.125
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            46.875,
+            93.75
+          ],
+          "main_cycle_inward_and_outward_M": [
+            166.091,
+            257.519
+          ],
+          "boundary_ms": 15.407,
+          "clock_drift_ms": 0.002
+        },
+        "ready_to_predraw_cpu": {
+          "wall_ms": 66.767,
+          "main_cpu_inward_and_outward_ms": [
+            46.875,
+            78.125
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            46.875,
+            78.125
+          ],
+          "main_cycle_inward_and_outward_M": [
+            134.727,
+            226.113
+          ],
+          "boundary_ms": 15.407,
+          "clock_drift_ms": 0.003
+        },
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 0,
+        "entry_signals": {
+          "physics": [
+            1936,
+            46238,
+            46270,
+            47736,
+            74024,
+            87911,
+            101809,
+            115697,
+            129611,
+            157366,
+            171249,
+            185141,
+            199018,
+            212921,
+            299742,
+            299764,
+            299767,
+            299770
+          ],
+          "post_draw": [
+            3370,
+            45910,
+            47552,
+            48715,
+            61510,
+            75457,
+            89035,
+            103208,
+            116916,
+            131736,
+            144645,
+            158875,
+            172723,
+            186777,
+            206296,
+            298945,
+            442116
+          ],
+          "pre_draw": [
+            2582,
+            44566,
+            46738,
+            48159,
+            60669,
+            74649,
+            88361,
+            102307,
+            116192,
+            130365,
+            143859,
+            157956,
+            171900,
+            185710,
+            205044,
+            297547,
+            436575
+          ],
+          "process": [
+            2317,
+            4426,
+            46288,
+            47763,
+            60143,
+            74061,
+            87952,
+            101845,
+            115736,
+            129662,
+            143461,
+            157422,
+            171286,
+            185184,
+            199069,
+            212967,
+            299777
+          ]
+        }
+      },
+      {
+        "index": 53,
+        "cycle": 9,
+        "level": "custom_defense",
+        "gap_ms": 146.569,
+        "attach_to_ready_ms": 75.002,
+        "ready_to_pre_draw_ms": 64.229,
+        "pre_draw_to_present_ms": 5.935,
+        "gap_cpu": {
+          "wall_ms": 146.569,
+          "main_cpu_inward_and_outward_ms": [
+            140.625,
+            171.875
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            140.625,
+            171.875
+          ],
+          "main_cycle_inward_and_outward_M": [
+            407.711,
+            498.002
+          ],
+          "boundary_ms": 14.964,
+          "clock_drift_ms": 0.0
+        },
+        "attach_to_ready_cpu": {
+          "wall_ms": 75.002,
+          "main_cpu_inward_and_outward_ms": [
+            62.5,
+            93.75
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            62.5,
+            93.75
+          ],
+          "main_cycle_inward_and_outward_M": [
+            178.447,
+            268.665
+          ],
+          "boundary_ms": 9.236,
+          "clock_drift_ms": 0.001
+        },
+        "ready_to_predraw_cpu": {
+          "wall_ms": 64.229,
+          "main_cpu_inward_and_outward_ms": [
+            46.875,
+            78.125
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            46.875,
+            78.125
+          ],
+          "main_cycle_inward_and_outward_M": [
+            137.958,
+            229.264
+          ],
+          "boundary_ms": 10.054,
+          "clock_drift_ms": 0.02
+        },
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 0,
+        "entry_signals": {
+          "physics": [
+            1043,
+            1189,
+            29945,
+            43860,
+            57752,
+            85539,
+            99443,
+            127256,
+            141106,
+            154966,
+            225335,
+            225353,
+            225356,
+            225359
+          ],
+          "post_draw": [
+            1901,
+            29788,
+            30694,
+            31487,
+            44968,
+            58935,
+            72729,
+            86578,
+            100518,
+            114576,
+            130080,
+            143063,
+            224817,
+            371384
+          ],
+          "pre_draw": [
+            1352,
+            29045,
+            30195,
+            31078,
+            44355,
+            58266,
+            72096,
+            85978,
+            99849,
+            113829,
+            128484,
+            141799,
+            224111,
+            365454
+          ],
+          "process": [
+            1198,
+            2719,
+            29965,
+            30815,
+            43895,
+            57784,
+            71665,
+            85580,
+            99475,
+            113321,
+            127317,
+            141159,
+            155000,
+            225365
+          ]
+        }
+      },
+      {
+        "index": 59,
+        "cycle": 10,
+        "level": "custom_defense",
+        "gap_ms": 109.863,
+        "attach_to_ready_ms": 52.925,
+        "ready_to_pre_draw_ms": 50.71,
+        "pre_draw_to_present_ms": 4.701,
+        "gap_cpu": {
+          "wall_ms": 109.863,
+          "main_cpu_inward_and_outward_ms": [
+            93.75,
+            125.0
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            93.75,
+            125.0
+          ],
+          "main_cycle_inward_and_outward_M": [
+            268.962,
+            361.072
+          ],
+          "boundary_ms": 9.381,
+          "clock_drift_ms": 0.003
+        },
+        "attach_to_ready_cpu": {
+          "wall_ms": 52.925,
+          "main_cpu_inward_and_outward_ms": [
+            31.25,
+            62.5
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            31.25,
+            62.5
+          ],
+          "main_cycle_inward_and_outward_M": [
+            87.904,
+            179.326
+          ],
+          "boundary_ms": 14.775,
+          "clock_drift_ms": 0.001
+        },
+        "ready_to_predraw_cpu": {
+          "wall_ms": 50.71,
+          "main_cpu_inward_and_outward_ms": [
+            46.875,
+            78.125
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            46.875,
+            78.125
+          ],
+          "main_cycle_inward_and_outward_M": [
+            135.626,
+            227.179
+          ],
+          "boundary_ms": 14.775,
+          "clock_drift_ms": 0.001
+        },
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 0,
+        "entry_signals": {
+          "physics": [
+            920,
+            27416,
+            42613,
+            56501,
+            84274,
+            98156,
+            126061,
+            179080,
+            179101,
+            179103
+          ],
+          "post_draw": [
+            1622,
+            27254,
+            28111,
+            29270,
+            43536,
+            57317,
+            71214,
+            85032,
+            98906,
+            113508,
+            178513,
+            288375
+          ],
+          "pre_draw": [
+            1183,
+            26632,
+            27696,
+            28867,
+            42960,
+            56843,
+            70797,
+            84559,
+            98447,
+            112706,
+            177737,
+            283677
+          ],
+          "process": [
+            1060,
+            2417,
+            27442,
+            28689,
+            42640,
+            56527,
+            70393,
+            84299,
+            98180,
+            112141,
+            126088,
+            179109
+          ]
+        }
+      },
+      {
+        "index": 65,
+        "cycle": 11,
+        "level": "custom_defense",
+        "gap_ms": 199.496,
+        "attach_to_ready_ms": 63.929,
+        "ready_to_pre_draw_ms": 123.548,
+        "pre_draw_to_present_ms": 10.505,
+        "gap_cpu": {
+          "wall_ms": 199.496,
+          "main_cpu_inward_and_outward_ms": [
+            171.875,
+            203.125
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            171.875,
+            203.125
+          ],
+          "main_cycle_inward_and_outward_M": [
+            502.326,
+            593.93
+          ],
+          "boundary_ms": 14.938,
+          "clock_drift_ms": 0.0
+        },
+        "attach_to_ready_cpu": {
+          "wall_ms": 63.929,
+          "main_cpu_inward_and_outward_ms": [
+            46.875,
+            78.125
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            46.875,
+            78.125
+          ],
+          "main_cycle_inward_and_outward_M": [
+            132.454,
+            226.542
+          ],
+          "boundary_ms": 11.459,
+          "clock_drift_ms": 0.002
+        },
+        "ready_to_predraw_cpu": {
+          "wall_ms": 123.548,
+          "main_cpu_inward_and_outward_ms": [
+            109.375,
+            140.625
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            109.375,
+            140.625
+          ],
+          "main_cycle_inward_and_outward_M": [
+            320.786,
+            416.473
+          ],
+          "boundary_ms": 11.251,
+          "clock_drift_ms": 0.003
+        },
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 0,
+        "entry_signals": {
+          "physics": [
+            923,
+            1069,
+            28906,
+            42833,
+            70621,
+            84498,
+            112271,
+            126156,
+            140051,
+            153933,
+            219480,
+            219499,
+            219501,
+            219504
+          ],
+          "post_draw": [
+            1624,
+            28734,
+            29567,
+            30244,
+            43939,
+            57758,
+            71879,
+            85611,
+            99242,
+            113243,
+            127315,
+            141276,
+            218912,
+            418403
+          ],
+          "pre_draw": [
+            1221,
+            28027,
+            29165,
+            29820,
+            43218,
+            57145,
+            71133,
+            84943,
+            98737,
+            112679,
+            126757,
+            140543,
+            218193,
+            407905
+          ],
+          "process": [
+            1076,
+            2275,
+            28940,
+            29651,
+            42864,
+            56707,
+            70666,
+            84531,
+            98368,
+            112312,
+            126204,
+            140095,
+            153972,
+            219510
+          ]
+        }
+      },
+      {
+        "index": 71,
+        "cycle": 12,
+        "level": "custom_defense",
+        "gap_ms": 95.398,
+        "attach_to_ready_ms": 45.499,
+        "ready_to_pre_draw_ms": 44.5,
+        "pre_draw_to_present_ms": 3.865,
+        "gap_cpu": {
+          "wall_ms": 95.398,
+          "main_cpu_inward_and_outward_ms": [
+            78.125,
+            109.375
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            78.125,
+            125.0
+          ],
+          "main_cycle_inward_and_outward_M": [
+            222.98,
+            315.456
+          ],
+          "boundary_ms": 14.157,
+          "clock_drift_ms": 0.001
+        },
+        "attach_to_ready_cpu": null,
+        "ready_to_predraw_cpu": null,
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 0,
+        "entry_signals": {
+          "physics": [
+            1075,
+            19392,
+            28898,
+            42783,
+            70558,
+            84439,
+            98349,
+            112224,
+            155114
+          ],
+          "post_draw": [
+            1823,
+            19241,
+            19834,
+            29921,
+            43879,
+            57583,
+            71582,
+            85693,
+            101007,
+            154401,
+            249799
+          ],
+          "pre_draw": [
+            1441,
+            18698,
+            19554,
+            29364,
+            43226,
+            57020,
+            71003,
+            85032,
+            100372,
+            153737,
+            245936
+          ],
+          "process": [
+            1222,
+            2438,
+            19410,
+            28932,
+            42816,
+            56670,
+            70594,
+            84478,
+            98402,
+            112256,
+            155140
+          ]
+        }
+      },
+      {
+        "index": 77,
+        "cycle": 13,
+        "level": "custom_defense",
+        "gap_ms": 170.159,
+        "attach_to_ready_ms": 67.289,
+        "ready_to_pre_draw_ms": 93.903,
+        "pre_draw_to_present_ms": 7.29,
+        "gap_cpu": {
+          "wall_ms": 170.159,
+          "main_cpu_inward_and_outward_ms": [
+            156.25,
+            187.5
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            156.25,
+            187.5
+          ],
+          "main_cycle_inward_and_outward_M": [
+            453.619,
+            543.749
+          ],
+          "boundary_ms": 10.816,
+          "clock_drift_ms": 0.005
+        },
+        "attach_to_ready_cpu": {
+          "wall_ms": 67.289,
+          "main_cpu_inward_and_outward_ms": [
+            46.875,
+            78.125
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            46.875,
+            78.125
+          ],
+          "main_cycle_inward_and_outward_M": [
+            131.28,
+            222.626
+          ],
+          "boundary_ms": 13.172,
+          "clock_drift_ms": 0.0
+        },
+        "ready_to_predraw_cpu": {
+          "wall_ms": 93.903,
+          "main_cpu_inward_and_outward_ms": [
+            78.125,
+            109.375
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            78.125,
+            109.375
+          ],
+          "main_cycle_inward_and_outward_M": [
+            229.726,
+            322.339
+          ],
+          "boundary_ms": 13.915,
+          "clock_drift_ms": 0.002
+        },
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 0,
+        "entry_signals": {
+          "physics": [
+            1152,
+            1337,
+            75476,
+            75499,
+            75505,
+            76608,
+            89373,
+            103283,
+            131056,
+            144936,
+            158840,
+            172727,
+            186611,
+            214384,
+            287637,
+            287659,
+            287661,
+            287664
+          ],
+          "post_draw": [
+            1996,
+            75288,
+            76472,
+            77449,
+            90470,
+            104467,
+            118185,
+            132121,
+            146001,
+            160066,
+            173671,
+            187694,
+            202402,
+            287024,
+            457182
+          ],
+          "pre_draw": [
+            1510,
+            74445,
+            75804,
+            76875,
+            89709,
+            103720,
+            117572,
+            131428,
+            145354,
+            159320,
+            173106,
+            187110,
+            201386,
+            286307,
+            449895
+          ],
+          "process": [
+            1346,
+            3291,
+            75516,
+            76629,
+            89405,
+            103319,
+            117169,
+            131088,
+            144966,
+            158879,
+            172792,
+            186648,
+            200537,
+            214417,
+            287670
+          ]
+        }
+      },
+      {
+        "index": 83,
+        "cycle": 14,
+        "level": "custom_defense",
+        "gap_ms": 82.656,
+        "attach_to_ready_ms": 37.936,
+        "ready_to_pre_draw_ms": 40.749,
+        "pre_draw_to_present_ms": 3.02,
+        "gap_cpu": {
+          "wall_ms": 82.656,
+          "main_cpu_inward_and_outward_ms": [
+            78.125,
+            109.375
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            78.125,
+            109.375
+          ],
+          "main_cycle_inward_and_outward_M": [
+            230.054,
+            320.107
+          ],
+          "boundary_ms": 15.048,
+          "clock_drift_ms": 0.0
+        },
+        "attach_to_ready_cpu": null,
+        "ready_to_predraw_cpu": null,
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 0,
+        "entry_signals": {
+          "physics": [
+            859,
+            20542,
+            42553,
+            56451,
+            84204,
+            98179,
+            155922,
+            155934,
+            155936
+          ],
+          "post_draw": [
+            1344,
+            20444,
+            21007,
+            29293,
+            43339,
+            57176,
+            71017,
+            84814,
+            101452,
+            155559,
+            238216
+          ],
+          "pre_draw": [
+            1049,
+            20033,
+            20719,
+            28893,
+            42855,
+            56750,
+            70598,
+            84445,
+            98863,
+            155069,
+            235197
+          ],
+          "process": [
+            957,
+            2129,
+            20556,
+            28651,
+            42587,
+            56477,
+            70325,
+            84226,
+            98241,
+            111965,
+            155940
+          ]
+        }
+      },
+      {
+        "index": 89,
+        "cycle": 15,
+        "level": "custom_defense",
+        "gap_ms": 94.496,
+        "attach_to_ready_ms": 44.558,
+        "ready_to_pre_draw_ms": 44.273,
+        "pre_draw_to_present_ms": 4.383,
+        "gap_cpu": {
+          "wall_ms": 94.496,
+          "main_cpu_inward_and_outward_ms": [
+            78.125,
+            109.375
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            78.125,
+            109.375
+          ],
+          "main_cycle_inward_and_outward_M": [
+            228.751,
+            320.08
+          ],
+          "boundary_ms": 11.199,
+          "clock_drift_ms": 0.001
+        },
+        "attach_to_ready_cpu": null,
+        "ready_to_predraw_cpu": null,
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 0,
+        "entry_signals": {
+          "physics": [
+            742,
+            22482,
+            28548,
+            56316,
+            70216,
+            84088,
+            111901,
+            125761,
+            173230,
+            173253
+          ],
+          "post_draw": [
+            1274,
+            22376,
+            22995,
+            29549,
+            43424,
+            57028,
+            71224,
+            84871,
+            99078,
+            113126,
+            172733,
+            267228
+          ],
+          "pre_draw": [
+            967,
+            21922,
+            22650,
+            29005,
+            42815,
+            56607,
+            70599,
+            84397,
+            98381,
+            112441,
+            172018,
+            262847
+          ],
+          "process": [
+            858,
+            1847,
+            22497,
+            28583,
+            42448,
+            56341,
+            70246,
+            84113,
+            98009,
+            111960,
+            125787,
+            173260
+          ]
+        }
+      },
+      {
+        "index": 95,
+        "cycle": 16,
+        "level": "custom_defense",
+        "gap_ms": 88.695,
+        "attach_to_ready_ms": 41.628,
+        "ready_to_pre_draw_ms": 41.928,
+        "pre_draw_to_present_ms": 3.71,
+        "gap_cpu": {
+          "wall_ms": 88.695,
+          "main_cpu_inward_and_outward_ms": [
+            78.125,
+            109.375
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            78.125,
+            125.0
+          ],
+          "main_cycle_inward_and_outward_M": [
+            232.086,
+            321.836
+          ],
+          "boundary_ms": 14.125,
+          "clock_drift_ms": 0.003
+        },
+        "attach_to_ready_cpu": null,
+        "ready_to_predraw_cpu": null,
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 0,
+        "entry_signals": {
+          "physics": [
+            656,
+            19561,
+            28433,
+            42322,
+            56238,
+            84017,
+            97946,
+            111798,
+            155752
+          ],
+          "post_draw": [
+            1143,
+            19491,
+            19938,
+            28849,
+            42800,
+            56951,
+            70833,
+            85208,
+            99181,
+            155166,
+            243861
+          ],
+          "pre_draw": [
+            876,
+            19166,
+            19689,
+            28595,
+            42484,
+            56523,
+            70392,
+            84538,
+            98441,
+            154359,
+            240153
+          ],
+          "process": [
+            765,
+            1748,
+            19572,
+            28444,
+            42334,
+            56262,
+            70124,
+            84044,
+            97976,
+            111826,
+            155808
+          ]
+        }
+      }
+    ],
+    "largest_entry_gaps": [
+      {
+        "index": 55,
+        "cycle": 10,
+        "level": "level1",
+        "gap_ms": 577.157,
+        "attach_to_ready_ms": 452.883,
+        "ready_to_pre_draw_ms": 110.988,
+        "pre_draw_to_present_ms": 4.839,
+        "gap_cpu": {
+          "wall_ms": 577.157,
+          "main_cpu_inward_and_outward_ms": [
+            546.875,
+            578.125
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            546.875,
+            578.125
+          ],
+          "main_cycle_inward_and_outward_M": [
+            1646.455,
+            1728.492
+          ],
+          "boundary_ms": 9.297,
+          "clock_drift_ms": 0.0
+        },
+        "attach_to_ready_cpu": {
+          "wall_ms": 452.883,
+          "main_cpu_inward_and_outward_ms": [
+            421.875,
+            453.125
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            421.875,
+            453.125
+          ],
+          "main_cycle_inward_and_outward_M": [
+            1283.127,
+            1376.444
+          ],
+          "boundary_ms": 14.53,
+          "clock_drift_ms": 0.0
+        },
+        "ready_to_predraw_cpu": {
+          "wall_ms": 110.988,
+          "main_cpu_inward_and_outward_ms": [
+            93.75,
+            125.0
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            93.75,
+            125.0
+          ],
+          "main_cycle_inward_and_outward_M": [
+            270.011,
+            359.918
+          ],
+          "boundary_ms": 13.684,
+          "clock_drift_ms": 0.003
+        },
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 0,
+        "entry_signals": {
+          "physics": [
+            6193,
+            7351,
+            361873,
+            361972,
+            361999,
+            362020,
+            362043,
+            362064,
+            362084,
+            362104
+          ],
+          "post_draw": [
+            11610,
+            358552,
+            935706
+          ],
+          "pre_draw": [
+            8449,
+            354502,
+            930880
+          ],
+          "process": [
+            7404,
+            16829,
+            362132
+          ]
+        }
+      },
+      {
+        "index": 39,
+        "cycle": 7,
+        "level": "skirmish",
+        "gap_ms": 217.774,
+        "attach_to_ready_ms": 91.696,
+        "ready_to_pre_draw_ms": 118.145,
+        "pre_draw_to_present_ms": 5.385,
+        "gap_cpu": {
+          "wall_ms": 217.774,
+          "main_cpu_inward_and_outward_ms": [
+            203.125,
+            234.375
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            203.125,
+            234.375
+          ],
+          "main_cycle_inward_and_outward_M": [
+            631.913,
+            720.156
+          ],
+          "boundary_ms": 13.967,
+          "clock_drift_ms": 0.003
+        },
+        "attach_to_ready_cpu": {
+          "wall_ms": 91.696,
+          "main_cpu_inward_and_outward_ms": [
+            62.5,
+            93.75
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            62.5,
+            93.75
+          ],
+          "main_cycle_inward_and_outward_M": [
+            219.594,
+            311.722
+          ],
+          "boundary_ms": 15.41,
+          "clock_drift_ms": 0.001
+        },
+        "ready_to_predraw_cpu": {
+          "wall_ms": 118.145,
+          "main_cpu_inward_and_outward_ms": [
+            93.75,
+            125.0
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            93.75,
+            125.0
+          ],
+          "main_cycle_inward_and_outward_M": [
+            273.526,
+            367.985
+          ],
+          "boundary_ms": 15.41,
+          "clock_drift_ms": 0.002
+        },
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 0,
+        "entry_signals": {
+          "physics": [
+            1267,
+            46322,
+            47202,
+            60214,
+            74102,
+            87995,
+            101899,
+            115781,
+            143570,
+            157457,
+            171341,
+            185252,
+            199141,
+            302520,
+            302565,
+            302569,
+            302572,
+            302574
+          ],
+          "post_draw": [
+            2214,
+            46125,
+            47110,
+            48020,
+            61153,
+            75131,
+            89076,
+            103033,
+            116983,
+            130732,
+            144701,
+            158639,
+            172525,
+            186850,
+            201957,
+            301530,
+            519303
+          ],
+          "pre_draw": [
+            1682,
+            45223,
+            46583,
+            47418,
+            60542,
+            74470,
+            88406,
+            102326,
+            116262,
+            130044,
+            143995,
+            157981,
+            171784,
+            185931,
+            201274,
+            300703,
+            513921
+          ],
+          "process": [
+            1453,
+            3103,
+            46352,
+            47214,
+            60241,
+            74134,
+            88028,
+            101933,
+            115820,
+            129667,
+            143608,
+            157495,
+            171376,
+            185310,
+            199198,
+            212981,
+            302582
+          ]
+        }
+      },
+      {
+        "index": 65,
+        "cycle": 11,
+        "level": "custom_defense",
+        "gap_ms": 199.496,
+        "attach_to_ready_ms": 63.929,
+        "ready_to_pre_draw_ms": 123.548,
+        "pre_draw_to_present_ms": 10.505,
+        "gap_cpu": {
+          "wall_ms": 199.496,
+          "main_cpu_inward_and_outward_ms": [
+            171.875,
+            203.125
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            171.875,
+            203.125
+          ],
+          "main_cycle_inward_and_outward_M": [
+            502.326,
+            593.93
+          ],
+          "boundary_ms": 14.938,
+          "clock_drift_ms": 0.0
+        },
+        "attach_to_ready_cpu": {
+          "wall_ms": 63.929,
+          "main_cpu_inward_and_outward_ms": [
+            46.875,
+            78.125
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            46.875,
+            78.125
+          ],
+          "main_cycle_inward_and_outward_M": [
+            132.454,
+            226.542
+          ],
+          "boundary_ms": 11.459,
+          "clock_drift_ms": 0.002
+        },
+        "ready_to_predraw_cpu": {
+          "wall_ms": 123.548,
+          "main_cpu_inward_and_outward_ms": [
+            109.375,
+            140.625
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            109.375,
+            140.625
+          ],
+          "main_cycle_inward_and_outward_M": [
+            320.786,
+            416.473
+          ],
+          "boundary_ms": 11.251,
+          "clock_drift_ms": 0.003
+        },
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 0,
+        "entry_signals": {
+          "physics": [
+            923,
+            1069,
+            28906,
+            42833,
+            70621,
+            84498,
+            112271,
+            126156,
+            140051,
+            153933,
+            219480,
+            219499,
+            219501,
+            219504
+          ],
+          "post_draw": [
+            1624,
+            28734,
+            29567,
+            30244,
+            43939,
+            57758,
+            71879,
+            85611,
+            99242,
+            113243,
+            127315,
+            141276,
+            218912,
+            418403
+          ],
+          "pre_draw": [
+            1221,
+            28027,
+            29165,
+            29820,
+            43218,
+            57145,
+            71133,
+            84943,
+            98737,
+            112679,
+            126757,
+            140543,
+            218193,
+            407905
+          ],
+          "process": [
+            1076,
+            2275,
+            28940,
+            29651,
+            42864,
+            56707,
+            70666,
+            84531,
+            98368,
+            112312,
+            126204,
+            140095,
+            153972,
+            219510
+          ]
+        }
+      },
+      {
+        "index": 78,
+        "cycle": 13,
+        "level": "level5",
+        "gap_ms": 193.44,
+        "attach_to_ready_ms": 101.308,
+        "ready_to_pre_draw_ms": 83.065,
+        "pre_draw_to_present_ms": 7.259,
+        "gap_cpu": {
+          "wall_ms": 193.44,
+          "main_cpu_inward_and_outward_ms": [
+            187.5,
+            218.75
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            187.5,
+            218.75
+          ],
+          "main_cycle_inward_and_outward_M": [
+            542.104,
+            635.305
+          ],
+          "boundary_ms": 12.141,
+          "clock_drift_ms": 0.005
+        },
+        "attach_to_ready_cpu": {
+          "wall_ms": 101.308,
+          "main_cpu_inward_and_outward_ms": [
+            93.75,
+            125.0
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            93.75,
+            125.0
+          ],
+          "main_cycle_inward_and_outward_M": [
+            266.656,
+            360.389
+          ],
+          "boundary_ms": 13.949,
+          "clock_drift_ms": 0.003
+        },
+        "ready_to_predraw_cpu": {
+          "wall_ms": 83.065,
+          "main_cpu_inward_and_outward_ms": [
+            62.5,
+            93.75
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            62.5,
+            93.75
+          ],
+          "main_cycle_inward_and_outward_M": [
+            183.291,
+            275.447
+          ],
+          "boundary_ms": 12.205,
+          "clock_drift_ms": 0.001
+        },
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 0,
+        "entry_signals": {
+          "physics": [
+            1427,
+            1624,
+            53258,
+            53292,
+            55503,
+            67126,
+            94907,
+            108784,
+            122684,
+            136581,
+            150685,
+            178254,
+            192110,
+            206032,
+            220031,
+            233789,
+            372611,
+            372635,
+            372639,
+            372644,
+            372648,
+            372651,
+            372655
+          ],
+          "post_draw": [
+            2428,
+            52182,
+            55047,
+            56803,
+            69167,
+            82781,
+            96507,
+            109920,
+            124221,
+            138167,
+            152681,
+            166095,
+            180309,
+            194015,
+            208304,
+            222546,
+            242081,
+            371888,
+            565326
+          ],
+          "pre_draw": [
+            1816,
+            50898,
+            54148,
+            56084,
+            67839,
+            81774,
+            95524,
+            109265,
+            123182,
+            137312,
+            151336,
+            165052,
+            179003,
+            192724,
+            206715,
+            221323,
+            240381,
+            370548,
+            558072
+          ],
+          "process": [
+            1634,
+            3279,
+            53307,
+            55531,
+            67163,
+            81045,
+            94951,
+            108828,
+            122727,
+            136627,
+            150733,
+            164355,
+            178312,
+            192153,
+            206082,
+            220088,
+            233839,
+            247671,
+            372663
+          ]
+        }
+      },
+      {
+        "index": 69,
+        "cycle": 12,
+        "level": "skirmish",
+        "gap_ms": 183.675,
+        "attach_to_ready_ms": 76.98,
+        "ready_to_pre_draw_ms": 96.643,
+        "pre_draw_to_present_ms": 7.368,
+        "gap_cpu": {
+          "wall_ms": 183.675,
+          "main_cpu_inward_and_outward_ms": [
+            171.875,
+            187.5
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            171.875,
+            187.5
+          ],
+          "main_cycle_inward_and_outward_M": [
+            484.928,
+            559.078
+          ],
+          "boundary_ms": 10.892,
+          "clock_drift_ms": 0.001
+        },
+        "attach_to_ready_cpu": {
+          "wall_ms": 76.98,
+          "main_cpu_inward_and_outward_ms": [
+            62.5,
+            93.75
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            62.5,
+            93.75
+          ],
+          "main_cycle_inward_and_outward_M": [
+            168.494,
+            252.108
+          ],
+          "boundary_ms": 8.038,
+          "clock_drift_ms": 0.001
+        },
+        "ready_to_predraw_cpu": {
+          "wall_ms": 96.643,
+          "main_cpu_inward_and_outward_ms": [
+            78.125,
+            109.375
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            78.125,
+            109.375
+          ],
+          "main_cycle_inward_and_outward_M": [
+            222.322,
+            316.434
+          ],
+          "boundary_ms": 12.634,
+          "clock_drift_ms": 0.002
+        },
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 0,
+        "entry_signals": {
+          "physics": [
+            1176,
+            1321,
+            29886,
+            43778,
+            57668,
+            85464,
+            99355,
+            127152,
+            141149,
+            154886,
+            168787,
+            249670,
+            249695,
+            249701,
+            249705,
+            249709
+          ],
+          "post_draw": [
+            1898,
+            29518,
+            31215,
+            32215,
+            44998,
+            58851,
+            72549,
+            86528,
+            100705,
+            114387,
+            128978,
+            143193,
+            156088,
+            248700,
+            432374
+          ],
+          "pre_draw": [
+            1515,
+            28561,
+            30399,
+            31675,
+            44201,
+            58031,
+            71958,
+            85928,
+            99858,
+            113697,
+            127729,
+            142000,
+            155381,
+            247328,
+            425010
+          ],
+          "process": [
+            1361,
+            2505,
+            29919,
+            31427,
+            43815,
+            57700,
+            71551,
+            85503,
+            99392,
+            113232,
+            127196,
+            141196,
+            154919,
+            168819,
+            249717
+          ]
+        }
+      },
+      {
+        "index": 60,
+        "cycle": 10,
+        "level": "level5",
+        "gap_ms": 179.826,
+        "attach_to_ready_ms": 93.116,
+        "ready_to_pre_draw_ms": 78.436,
+        "pre_draw_to_present_ms": 5.653,
+        "gap_cpu": {
+          "wall_ms": 179.826,
+          "main_cpu_inward_and_outward_ms": [
+            171.875,
+            203.125
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            171.875,
+            203.125
+          ],
+          "main_cycle_inward_and_outward_M": [
+            492.915,
+            587.414
+          ],
+          "boundary_ms": 14.123,
+          "clock_drift_ms": 0.002
+        },
+        "attach_to_ready_cpu": {
+          "wall_ms": 93.116,
+          "main_cpu_inward_and_outward_ms": [
+            78.125,
+            109.375
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            78.125,
+            109.375
+          ],
+          "main_cycle_inward_and_outward_M": [
+            219.489,
+            307.873
+          ],
+          "boundary_ms": 14.501,
+          "clock_drift_ms": 0.001
+        },
+        "ready_to_predraw_cpu": {
+          "wall_ms": 78.436,
+          "main_cpu_inward_and_outward_ms": [
+            62.5,
+            93.75
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            62.5,
+            93.75
+          ],
+          "main_cycle_inward_and_outward_M": [
+            185.042,
+            280.741
+          ],
+          "boundary_ms": 12.866,
+          "clock_drift_ms": 0.003
+        },
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 0,
+        "entry_signals": {
+          "physics": [
+            986,
+            1143,
+            24863,
+            42667,
+            56572,
+            84337,
+            98240,
+            126017,
+            139876,
+            202806,
+            202843,
+            202849,
+            202853
+          ],
+          "post_draw": [
+            2209,
+            24694,
+            25657,
+            29404,
+            43745,
+            57804,
+            71567,
+            85342,
+            99461,
+            113347,
+            129171,
+            201554,
+            381380
+          ],
+          "pre_draw": [
+            1452,
+            24089,
+            25115,
+            28994,
+            43070,
+            57149,
+            70885,
+            84704,
+            98895,
+            112689,
+            128374,
+            200538,
+            375730
+          ],
+          "process": [
+            1149,
+            2855,
+            24889,
+            28757,
+            42696,
+            56601,
+            70464,
+            84373,
+            98277,
+            112126,
+            126056,
+            139904,
+            202865
+          ]
+        }
+      },
+      {
+        "index": 77,
+        "cycle": 13,
+        "level": "custom_defense",
+        "gap_ms": 170.159,
+        "attach_to_ready_ms": 67.289,
+        "ready_to_pre_draw_ms": 93.903,
+        "pre_draw_to_present_ms": 7.29,
+        "gap_cpu": {
+          "wall_ms": 170.159,
+          "main_cpu_inward_and_outward_ms": [
+            156.25,
+            187.5
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            156.25,
+            187.5
+          ],
+          "main_cycle_inward_and_outward_M": [
+            453.619,
+            543.749
+          ],
+          "boundary_ms": 10.816,
+          "clock_drift_ms": 0.005
+        },
+        "attach_to_ready_cpu": {
+          "wall_ms": 67.289,
+          "main_cpu_inward_and_outward_ms": [
+            46.875,
+            78.125
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            46.875,
+            78.125
+          ],
+          "main_cycle_inward_and_outward_M": [
+            131.28,
+            222.626
+          ],
+          "boundary_ms": 13.172,
+          "clock_drift_ms": 0.0
+        },
+        "ready_to_predraw_cpu": {
+          "wall_ms": 93.903,
+          "main_cpu_inward_and_outward_ms": [
+            78.125,
+            109.375
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            78.125,
+            109.375
+          ],
+          "main_cycle_inward_and_outward_M": [
+            229.726,
+            322.339
+          ],
+          "boundary_ms": 13.915,
+          "clock_drift_ms": 0.002
+        },
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 0,
+        "entry_signals": {
+          "physics": [
+            1152,
+            1337,
+            75476,
+            75499,
+            75505,
+            76608,
+            89373,
+            103283,
+            131056,
+            144936,
+            158840,
+            172727,
+            186611,
+            214384,
+            287637,
+            287659,
+            287661,
+            287664
+          ],
+          "post_draw": [
+            1996,
+            75288,
+            76472,
+            77449,
+            90470,
+            104467,
+            118185,
+            132121,
+            146001,
+            160066,
+            173671,
+            187694,
+            202402,
+            287024,
+            457182
+          ],
+          "pre_draw": [
+            1510,
+            74445,
+            75804,
+            76875,
+            89709,
+            103720,
+            117572,
+            131428,
+            145354,
+            159320,
+            173106,
+            187110,
+            201386,
+            286307,
+            449895
+          ],
+          "process": [
+            1346,
+            3291,
+            75516,
+            76629,
+            89405,
+            103319,
+            117169,
+            131088,
+            144966,
+            158879,
+            172792,
+            186648,
+            200537,
+            214417,
+            287670
+          ]
+        }
+      },
+      {
+        "index": 1,
+        "cycle": 1,
+        "level": "level1",
+        "gap_ms": 169.311,
+        "attach_to_ready_ms": 107.46,
+        "ready_to_pre_draw_ms": 48.236,
+        "pre_draw_to_present_ms": 12.095,
+        "gap_cpu": {
+          "wall_ms": 169.311,
+          "main_cpu_inward_and_outward_ms": [
+            109.375,
+            140.625
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            343.75,
+            421.875
+          ],
+          "main_cycle_inward_and_outward_M": [
+            426.826,
+            470.491
+          ],
+          "boundary_ms": 12.706,
+          "clock_drift_ms": 0.001
+        },
+        "attach_to_ready_cpu": {
+          "wall_ms": 107.46,
+          "main_cpu_inward_and_outward_ms": [
+            78.125,
+            93.75
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            250.0,
+            312.5
+          ],
+          "main_cycle_inward_and_outward_M": [
+            252.846,
+            321.975
+          ],
+          "boundary_ms": 13.704,
+          "clock_drift_ms": 0.002
+        },
+        "ready_to_predraw_cpu": null,
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 0,
+        "entry_signals": {
+          "physics": [
+            1792,
+            4652,
+            4658,
+            4660,
+            4662,
+            4664,
+            4665,
+            4666,
+            7865,
+            26055,
+            29427,
+            43304,
+            71108,
+            85006,
+            98881,
+            112728,
+            141458
+          ],
+          "post_draw": [
+            5209,
+            25869,
+            27200,
+            30611,
+            44306,
+            58770,
+            73995,
+            86310,
+            100193,
+            140853,
+            310163
+          ],
+          "pre_draw": [
+            4787,
+            24927,
+            26624,
+            29944,
+            43700,
+            57744,
+            73453,
+            85626,
+            99382,
+            132608,
+            298071
+          ],
+          "process": [
+            4671,
+            24589,
+            26086,
+            29465,
+            43343,
+            57188,
+            71569,
+            85057,
+            98923,
+            112750,
+            141482
+          ]
+        }
+      }
+    ]
+  },
+  "with_additional_draw_signals": {
+    "run": {
+      "candidate": "f76e44fdd940da7dd66c4df4a855714948adcd27",
+      "payload_files_unchanged": true,
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "2b56c924785544902d9e1a6ea727cba5629bc9f9acbdce3c10d7c641b10f154f",
+      "split_identity": "86caa8a1da4dc0db77e8b47685db43f0b43ec86a64bbedf8284b7d69c3c4b33c",
+      "exe_unchanged": true,
+      "exit_code": 0,
+      "seconds": 619.177,
+      "errors": [],
+      "warnings": [],
+      "log_sha256": "06d66fde863d0fe3f81f0f9c72a26081fba41621862dae27638cb53fc48c12b5",
+      "thread_id": 28704,
+      "thread_samples_sha256": "0a5880a93d97a6dad11621083ab7dd2b9921d2eb9d076868a93fb252793c83e8",
+      "report_sha256": "f6b364f955b6cca57556c56b6ce362000955458cb996df6d4fdad5d13c5cf290"
+    },
+    "fixture_sha256": "45694822883b67a23a5ca8c1684880ed9fc8c262d388c51038942dd0d4102eee",
+    "actual_seconds": 606.135622,
+    "transitions": 96,
+    "lifecycle_checks": [],
+    "gate_passed": true,
+    "frame_performance": {
+      "complete_minute_buckets": 10,
+      "max_minute_p95_ms": 10.846,
+      "max_minute_p99_ms": 30.68,
+      "p95_limit_ms": 16.7,
+      "p99_limit_ms": 33.3,
+      "peak_draw_calls": 1382.0,
+      "worst_frame_ms": 378.862
+    },
+    "memory_probe_spans": [
+      {
+        "cycle": 0,
+        "elapsed_us": 396632,
+        "mode": "idle",
+        "query_ok": true,
+        "unix_started_us": 1795504623323000
+      },
+      {
+        "cycle": 1,
+        "elapsed_us": 210296,
+        "mode": "warm_cleanup",
+        "query_ok": true,
+        "unix_started_us": 1795504661796000
+      },
+      {
+        "cycle": 2,
+        "elapsed_us": 204717,
+        "mode": "skirmish_ai",
+        "query_ok": true,
+        "unix_started_us": 1795504683322000
+      },
+      {
+        "cycle": 4,
+        "elapsed_us": 225901,
+        "mode": "arena",
+        "query_ok": true,
+        "unix_started_us": 1795504743324000
+      },
+      {
+        "cycle": 5,
+        "elapsed_us": 219106,
+        "mode": "custom_defense",
+        "query_ok": true,
+        "unix_started_us": 1795504803324000
+      },
+      {
+        "cycle": 7,
+        "elapsed_us": 230026,
+        "mode": "skirmish",
+        "query_ok": true,
+        "unix_started_us": 1795504863324000
+      },
+      {
+        "cycle": 8,
+        "elapsed_us": 228239,
+        "mode": "campaign",
+        "query_ok": true,
+        "unix_started_us": 1795504923326000
+      },
+      {
+        "cycle": 10,
+        "elapsed_us": 334252,
+        "mode": "skirmish_ai",
+        "query_ok": true,
+        "unix_started_us": 1795504983324000
+      },
+      {
+        "cycle": 12,
+        "elapsed_us": 267035,
+        "mode": "campaign",
+        "query_ok": true,
+        "unix_started_us": 1795505043326000
+      },
+      {
+        "cycle": 13,
+        "elapsed_us": 224515,
+        "mode": "custom_defense",
+        "query_ok": true,
+        "unix_started_us": 1795505103324000
+      },
+      {
+        "cycle": 15,
+        "elapsed_us": 360006,
+        "mode": "arena",
+        "query_ok": true,
+        "unix_started_us": 1795505163330000
+      },
+      {
+        "cycle": 16,
+        "elapsed_us": 325210,
+        "mode": "campaign",
+        "query_ok": true,
+        "unix_started_us": 1795505223326000
+      },
+      {
+        "cycle": 16,
+        "elapsed_us": 303334,
+        "mode": "final_cleanup",
+        "query_ok": true,
+        "unix_started_us": 1795505228793000
+      },
+      {
+        "cycle": 16,
+        "elapsed_us": 358601,
+        "mode": "final_cleanup",
+        "query_ok": true,
+        "unix_started_us": 1795505229098000
+      }
+    ],
+    "cpu_sample_rows": 39909,
+    "ordinal_65": {
+      "index": 65,
+      "cycle": 11,
+      "level": "custom_defense",
+      "gap_ms": 116.694,
+      "attach_to_ready_ms": 54.435,
+      "ready_to_pre_draw_ms": 55.892,
+      "pre_draw_to_present_ms": 4.774,
+      "gap_cpu": {
+        "wall_ms": 116.694,
+        "main_cpu_inward_and_outward_ms": [
+          109.375,
+          140.625
+        ],
+        "process_cpu_inward_and_outward_ms": [
+          109.375,
+          140.625
+        ],
+        "main_cycle_inward_and_outward_M": [
+          324.709,
+          414.381
+        ],
+        "boundary_ms": 13.197,
+        "clock_drift_ms": 0.002
+      },
+      "attach_to_ready_cpu": {
+        "wall_ms": 54.435,
+        "main_cpu_inward_and_outward_ms": [
+          46.875,
+          78.125
+        ],
+        "process_cpu_inward_and_outward_ms": [
+          46.875,
+          78.125
+        ],
+        "main_cycle_inward_and_outward_M": [
+          139.195,
+          230.889
+        ],
+        "boundary_ms": 12.299,
+        "clock_drift_ms": 0.001
+      },
+      "ready_to_predraw_cpu": {
+        "wall_ms": 55.892,
+        "main_cpu_inward_and_outward_ms": [
+          31.25,
+          62.5
+        ],
+        "process_cpu_inward_and_outward_ms": [
+          31.25,
+          62.5
+        ],
+        "main_cycle_inward_and_outward_M": [
+          92.087,
+          185.515
+        ],
+        "boundary_ms": 12.791,
+        "clock_drift_ms": 0.001
+      },
+      "memory_probe_overlap": [],
+      "canvas_signal_count": 237,
+      "entry_signals": {
+        "physics": [
+          727,
+          25855,
+          28504,
+          42463,
+          56328,
+          70201,
+          97990,
+          111872,
+          125754,
+          175097,
+          175117
+        ],
+        "post_draw": [
+          1282,
+          25699,
+          26469,
+          29107,
+          43622,
+          57416,
+          71137,
+          85020,
+          98932,
+          112933,
+          174536,
+          291231
+        ],
+        "pre_draw": [
+          980,
+          25202,
+          26051,
+          28708,
+          42903,
+          56775,
+          70686,
+          84472,
+          98353,
+          112282,
+          173836,
+          286458
+        ],
+        "process": [
+          871,
+          1779,
+          25873,
+          28520,
+          42498,
+          56362,
+          70229,
+          84088,
+          98020,
+          111905,
+          125789,
+          175124
+        ]
+      },
+      "canvas_before_predraw": 237,
+      "canvas_first_ms_after_ready": 0.247,
+      "canvas_last_ms_before_predraw": 0.216,
+      "longest_canvas_boundaries": [
+        {
+          "after": [
+            "LiangshanVisualSample",
+            "Node2D",
+            "res://scripts/liangshan_scenery.gd"
+          ],
+          "before": [
+            "@Node2D@18484",
+            "Node2D",
+            ""
+          ],
+          "ms": 15.06,
+          "cpu": null
+        },
+        {
+          "after": [
+            "@Node2D@18619",
+            "Node2D",
+            "res://scripts/liangshan_entrance.gd"
+          ],
+          "before": [
+            "@Node2D@18620",
+            "Node2D",
+            "res://scripts/liangshan_gate.gd"
+          ],
+          "ms": 14.794,
+          "cpu": null
+        },
+        {
+          "after": [
+            "@Node2D@18482",
+            "Node2D",
+            "res://scripts/game_map.gd"
+          ],
+          "before": [
+            "LiangshanVisualSample",
+            "Node2D",
+            "res://scripts/liangshan_scenery.gd"
+          ],
+          "ms": 11.613,
+          "cpu": null
+        },
+        {
+          "after": [
+            "@Control@18676",
+            "Control",
+            ""
+          ],
+          "before": [
+            "@Label@18677",
+            "Label",
+            ""
+          ],
+          "ms": 3.422,
+          "cpu": null
+        },
+        {
+          "after": [
+            "@Node2D@18622",
+            "Node2D",
+            "res://scripts/liangshan_gate.gd"
+          ],
+          "before": [
+            "@Node2D@18623",
+            "Node2D",
+            "res://scripts/liangshan_gate.gd"
+          ],
+          "ms": 2.365,
+          "cpu": null
+        }
+      ]
+    },
+    "custom_defense_gaps": [
+      {
+        "index": 5,
+        "cycle": 1,
+        "level": "custom_defense",
+        "gap_ms": 79.327,
+        "attach_to_ready_ms": 34.79,
+        "ready_to_pre_draw_ms": 40.069,
+        "pre_draw_to_present_ms": 3.543,
+        "gap_cpu": {
+          "wall_ms": 79.327,
+          "main_cpu_inward_and_outward_ms": [
+            62.5,
+            93.75
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            62.5,
+            93.75
+          ],
+          "main_cycle_inward_and_outward_M": [
+            187.38,
+            275.52
+          ],
+          "boundary_ms": 14.031,
+          "clock_drift_ms": 0.003
+        },
+        "attach_to_ready_cpu": null,
+        "ready_to_predraw_cpu": null,
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 237,
+        "entry_signals": {
+          "physics": [
+            632,
+            17818,
+            28419,
+            56217,
+            70087,
+            84008,
+            165290,
+            165302,
+            165303,
+            165305
+          ],
+          "post_draw": [
+            1241,
+            17761,
+            18114,
+            28783,
+            43202,
+            56859,
+            70742,
+            86355,
+            164923,
+            244251
+          ],
+          "pre_draw": [
+            1012,
+            17499,
+            17910,
+            28554,
+            42699,
+            56498,
+            70294,
+            85893,
+            164445,
+            240709
+          ],
+          "process": [
+            930,
+            1612,
+            17825,
+            28430,
+            42347,
+            56242,
+            70102,
+            84037,
+            97875,
+            165310
+          ]
+        },
+        "canvas_before_predraw": 237,
+        "canvas_first_ms_after_ready": 0.126,
+        "canvas_last_ms_before_predraw": 0.152,
+        "longest_canvas_boundaries": [
+          {
+            "after": [
+              "@Node2D@1179",
+              "Node2D",
+              "res://scripts/liangshan_entrance.gd"
+            ],
+            "before": [
+              "@Node2D@1180",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "ms": 10.844,
+            "cpu": null
+          },
+          {
+            "after": [
+              "LiangshanVisualSample",
+              "Node2D",
+              "res://scripts/liangshan_scenery.gd"
+            ],
+            "before": [
+              "@Node2D@1044",
+              "Node2D",
+              ""
+            ],
+            "ms": 10.265,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Node2D@1042",
+              "Node2D",
+              "res://scripts/game_map.gd"
+            ],
+            "before": [
+              "LiangshanVisualSample",
+              "Node2D",
+              "res://scripts/liangshan_scenery.gd"
+            ],
+            "ms": 7.156,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Control@1236",
+              "Control",
+              ""
+            ],
+            "before": [
+              "@Label@1237",
+              "Label",
+              ""
+            ],
+            "ms": 2.694,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Node2D@1182",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "before": [
+              "@Node2D@1183",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "ms": 1.845,
+            "cpu": null
+          }
+        ]
+      },
+      {
+        "index": 11,
+        "cycle": 2,
+        "level": "custom_defense",
+        "gap_ms": 85.959,
+        "attach_to_ready_ms": 40.438,
+        "ready_to_pre_draw_ms": 41.342,
+        "pre_draw_to_present_ms": 3.152,
+        "gap_cpu": {
+          "wall_ms": 85.959,
+          "main_cpu_inward_and_outward_ms": [
+            78.125,
+            109.375
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            78.125,
+            109.375
+          ],
+          "main_cycle_inward_and_outward_M": [
+            226.149,
+            315.113
+          ],
+          "boundary_ms": 11.375,
+          "clock_drift_ms": 0.003
+        },
+        "attach_to_ready_cpu": null,
+        "ready_to_predraw_cpu": null,
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 237,
+        "entry_signals": {
+          "physics": [
+            645,
+            18227,
+            28439,
+            56261,
+            70139,
+            84039,
+            111796,
+            154106,
+            154120
+          ],
+          "post_draw": [
+            1047,
+            18149,
+            18539,
+            28955,
+            43027,
+            57360,
+            70999,
+            85059,
+            99621,
+            153703,
+            239663
+          ],
+          "pre_draw": [
+            814,
+            17765,
+            18329,
+            28631,
+            42574,
+            56717,
+            70507,
+            84480,
+            98790,
+            153194,
+            236512
+          ],
+          "process": [
+            737,
+            1438,
+            18238,
+            28455,
+            42330,
+            56305,
+            70168,
+            84078,
+            97914,
+            111825,
+            154125
+          ]
+        },
+        "canvas_before_predraw": 237,
+        "canvas_first_ms_after_ready": 0.148,
+        "canvas_last_ms_before_predraw": 0.183,
+        "longest_canvas_boundaries": [
+          {
+            "after": [
+              "@Node2D@2923",
+              "Node2D",
+              "res://scripts/liangshan_entrance.gd"
+            ],
+            "before": [
+              "@Node2D@2924",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "ms": 12.205,
+            "cpu": null
+          },
+          {
+            "after": [
+              "LiangshanVisualSample",
+              "Node2D",
+              "res://scripts/liangshan_scenery.gd"
+            ],
+            "before": [
+              "@Node2D@2788",
+              "Node2D",
+              ""
+            ],
+            "ms": 10.266,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Node2D@2786",
+              "Node2D",
+              "res://scripts/game_map.gd"
+            ],
+            "before": [
+              "LiangshanVisualSample",
+              "Node2D",
+              "res://scripts/liangshan_scenery.gd"
+            ],
+            "ms": 7.117,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Control@2980",
+              "Control",
+              ""
+            ],
+            "before": [
+              "@Label@2981",
+              "Label",
+              ""
+            ],
+            "ms": 2.919,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Node2D@2926",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "before": [
+              "@Node2D@2927",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "ms": 1.918,
+            "cpu": null
+          }
+        ]
+      },
+      {
+        "index": 17,
+        "cycle": 3,
+        "level": "custom_defense",
+        "gap_ms": 88.405,
+        "attach_to_ready_ms": 40.97,
+        "ready_to_pre_draw_ms": 42.778,
+        "pre_draw_to_present_ms": 3.619,
+        "gap_cpu": {
+          "wall_ms": 88.405,
+          "main_cpu_inward_and_outward_ms": [
+            78.125,
+            109.375
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            78.125,
+            109.375
+          ],
+          "main_cycle_inward_and_outward_M": [
+            229.691,
+            319.721
+          ],
+          "boundary_ms": 12.66,
+          "clock_drift_ms": 0.002
+        },
+        "attach_to_ready_cpu": null,
+        "ready_to_predraw_cpu": null,
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 237,
+        "entry_signals": {
+          "physics": [
+            668,
+            17488,
+            28446,
+            56229,
+            70111,
+            84027,
+            139874,
+            139886
+          ],
+          "post_draw": [
+            1067,
+            17409,
+            17807,
+            28806,
+            42935,
+            56720,
+            70565,
+            84993,
+            139489,
+            227894
+          ],
+          "pre_draw": [
+            870,
+            17054,
+            17591,
+            28587,
+            42553,
+            56411,
+            70282,
+            84403,
+            139009,
+            224277
+          ],
+          "process": [
+            767,
+            1456,
+            17500,
+            28457,
+            42348,
+            56246,
+            70125,
+            84056,
+            97911,
+            139891
+          ]
+        },
+        "canvas_before_predraw": 237,
+        "canvas_first_ms_after_ready": 0.197,
+        "canvas_last_ms_before_predraw": 0.237,
+        "longest_canvas_boundaries": [
+          {
+            "after": [
+              "@Node2D@4667",
+              "Node2D",
+              "res://scripts/liangshan_entrance.gd"
+            ],
+            "before": [
+              "@Node2D@4668",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "ms": 11.943,
+            "cpu": null
+          },
+          {
+            "after": [
+              "LiangshanVisualSample",
+              "Node2D",
+              "res://scripts/liangshan_scenery.gd"
+            ],
+            "before": [
+              "@Node2D@4532",
+              "Node2D",
+              ""
+            ],
+            "ms": 10.477,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Node2D@4530",
+              "Node2D",
+              "res://scripts/game_map.gd"
+            ],
+            "before": [
+              "LiangshanVisualSample",
+              "Node2D",
+              "res://scripts/liangshan_scenery.gd"
+            ],
+            "ms": 7.86,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Control@4724",
+              "Control",
+              ""
+            ],
+            "before": [
+              "@Label@4725",
+              "Label",
+              ""
+            ],
+            "ms": 2.896,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Node2D@4670",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "before": [
+              "@Node2D@4671",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "ms": 1.969,
+            "cpu": null
+          }
+        ]
+      },
+      {
+        "index": 23,
+        "cycle": 4,
+        "level": "custom_defense",
+        "gap_ms": 90.937,
+        "attach_to_ready_ms": 42.743,
+        "ready_to_pre_draw_ms": 42.48,
+        "pre_draw_to_present_ms": 3.208,
+        "gap_cpu": {
+          "wall_ms": 90.937,
+          "main_cpu_inward_and_outward_ms": [
+            78.125,
+            109.375
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            78.125,
+            125.0
+          ],
+          "main_cycle_inward_and_outward_M": [
+            230.611,
+            320.575
+          ],
+          "boundary_ms": 12.066,
+          "clock_drift_ms": 0.0
+        },
+        "attach_to_ready_cpu": null,
+        "ready_to_predraw_cpu": null,
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 237,
+        "entry_signals": {
+          "physics": [
+            619,
+            17990,
+            28406,
+            42314,
+            70093,
+            83974,
+            97869,
+            145198,
+            145236
+          ],
+          "post_draw": [
+            999,
+            17893,
+            18415,
+            28897,
+            43094,
+            56894,
+            70920,
+            84888,
+            143914,
+            234851
+          ],
+          "pre_draw": [
+            779,
+            17502,
+            18145,
+            28593,
+            42626,
+            56516,
+            70438,
+            84330,
+            142948,
+            231645
+          ],
+          "process": [
+            704,
+            1421,
+            18005,
+            28421,
+            42340,
+            56199,
+            70123,
+            83999,
+            97901,
+            145247
+          ]
+        },
+        "canvas_before_predraw": 237,
+        "canvas_first_ms_after_ready": 0.182,
+        "canvas_last_ms_before_predraw": 0.151,
+        "longest_canvas_boundaries": [
+          {
+            "after": [
+              "@Node2D@6411",
+              "Node2D",
+              "res://scripts/liangshan_entrance.gd"
+            ],
+            "before": [
+              "@Node2D@6412",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "ms": 11.732,
+            "cpu": null
+          },
+          {
+            "after": [
+              "LiangshanVisualSample",
+              "Node2D",
+              "res://scripts/liangshan_scenery.gd"
+            ],
+            "before": [
+              "@Node2D@6276",
+              "Node2D",
+              ""
+            ],
+            "ms": 10.914,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Node2D@6274",
+              "Node2D",
+              "res://scripts/game_map.gd"
+            ],
+            "before": [
+              "LiangshanVisualSample",
+              "Node2D",
+              "res://scripts/liangshan_scenery.gd"
+            ],
+            "ms": 7.996,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Control@6468",
+              "Control",
+              ""
+            ],
+            "before": [
+              "@Label@6469",
+              "Label",
+              ""
+            ],
+            "ms": 2.763,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Node2D@6414",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "before": [
+              "@Node2D@6415",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "ms": 1.899,
+            "cpu": null
+          }
+        ]
+      },
+      {
+        "index": 29,
+        "cycle": 5,
+        "level": "custom_defense",
+        "gap_ms": 117.836,
+        "attach_to_ready_ms": 50.362,
+        "ready_to_pre_draw_ms": 61.429,
+        "pre_draw_to_present_ms": 4.701,
+        "gap_cpu": {
+          "wall_ms": 117.836,
+          "main_cpu_inward_and_outward_ms": [
+            93.75,
+            125.0
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            93.75,
+            125.0
+          ],
+          "main_cycle_inward_and_outward_M": [
+            277.104,
+            368.65
+          ],
+          "boundary_ms": 14.254,
+          "clock_drift_ms": 0.003
+        },
+        "attach_to_ready_cpu": {
+          "wall_ms": 50.362,
+          "main_cpu_inward_and_outward_ms": [
+            31.25,
+            62.5
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            31.25,
+            62.5
+          ],
+          "main_cycle_inward_and_outward_M": [
+            91.333,
+            182.08
+          ],
+          "boundary_ms": 12.91,
+          "clock_drift_ms": 0.003
+        },
+        "ready_to_predraw_cpu": {
+          "wall_ms": 61.429,
+          "main_cpu_inward_and_outward_ms": [
+            46.875,
+            78.125
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            46.875,
+            78.125
+          ],
+          "main_cycle_inward_and_outward_M": [
+            138.354,
+            233.987
+          ],
+          "boundary_ms": 10.27,
+          "clock_drift_ms": 0.003
+        },
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 237,
+        "entry_signals": {
+          "physics": [
+            849,
+            20617,
+            28618,
+            56395,
+            70272,
+            84164,
+            111994,
+            125905,
+            183647,
+            183661,
+            183663
+          ],
+          "post_draw": [
+            1449,
+            20485,
+            21368,
+            29209,
+            43121,
+            57565,
+            70939,
+            84945,
+            98615,
+            113507,
+            183008,
+            300844
+          ],
+          "pre_draw": [
+            1110,
+            19972,
+            20883,
+            28868,
+            42710,
+            56789,
+            70501,
+            84437,
+            98256,
+            112598,
+            182227,
+            296145
+          ],
+          "process": [
+            989,
+            2046,
+            20637,
+            28664,
+            42501,
+            56429,
+            70288,
+            84182,
+            98048,
+            112040,
+            125932,
+            183668
+          ]
+        },
+        "canvas_before_predraw": 237,
+        "canvas_first_ms_after_ready": 0.184,
+        "canvas_last_ms_before_predraw": 0.208,
+        "longest_canvas_boundaries": [
+          {
+            "after": [
+              "@Node2D@8155",
+              "Node2D",
+              "res://scripts/liangshan_entrance.gd"
+            ],
+            "before": [
+              "@Node2D@8156",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "ms": 17.062,
+            "cpu": null
+          },
+          {
+            "after": [
+              "LiangshanVisualSample",
+              "Node2D",
+              "res://scripts/liangshan_scenery.gd"
+            ],
+            "before": [
+              "@Node2D@8020",
+              "Node2D",
+              ""
+            ],
+            "ms": 16.009,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Node2D@8018",
+              "Node2D",
+              "res://scripts/game_map.gd"
+            ],
+            "before": [
+              "LiangshanVisualSample",
+              "Node2D",
+              "res://scripts/liangshan_scenery.gd"
+            ],
+            "ms": 12.162,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Control@8212",
+              "Control",
+              ""
+            ],
+            "before": [
+              "@Label@8213",
+              "Label",
+              ""
+            ],
+            "ms": 4.224,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Node2D@8158",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "before": [
+              "@Node2D@8159",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "ms": 2.594,
+            "cpu": null
+          }
+        ]
+      },
+      {
+        "index": 35,
+        "cycle": 6,
+        "level": "custom_defense",
+        "gap_ms": 147.157,
+        "attach_to_ready_ms": 65.536,
+        "ready_to_pre_draw_ms": 49.077,
+        "pre_draw_to_present_ms": 5.774,
+        "gap_cpu": {
+          "wall_ms": 147.157,
+          "main_cpu_inward_and_outward_ms": [
+            93.75,
+            125.0
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            93.75,
+            140.625
+          ],
+          "main_cycle_inward_and_outward_M": [
+            353.319,
+            410.565
+          ],
+          "boundary_ms": 13.214,
+          "clock_drift_ms": 0.002
+        },
+        "attach_to_ready_cpu": {
+          "wall_ms": 65.536,
+          "main_cpu_inward_and_outward_ms": [
+            46.875,
+            93.75
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            46.875,
+            93.75
+          ],
+          "main_cycle_inward_and_outward_M": [
+            131.168,
+            226.323
+          ],
+          "boundary_ms": 14.645,
+          "clock_drift_ms": 0.002
+        },
+        "ready_to_predraw_cpu": null,
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 237,
+        "entry_signals": {
+          "physics": [
+            1184,
+            1360,
+            44517,
+            45795,
+            58449,
+            86235,
+            100124,
+            114020,
+            127899,
+            155696,
+            169570,
+            183452,
+            197343,
+            225123,
+            238975,
+            252907,
+            266774,
+            294563,
+            308435,
+            322328,
+            336209,
+            350084,
+            485911,
+            485934,
+            485939,
+            485942,
+            485946,
+            485949,
+            485954,
+            485958
+          ],
+          "post_draw": [
+            2089,
+            44297,
+            45644,
+            46552,
+            60546,
+            73954,
+            88107,
+            102307,
+            115796,
+            129774,
+            143602,
+            157605,
+            171534,
+            186264,
+            200639,
+            213946,
+            228674,
+            240724,
+            254749,
+            268726,
+            282601,
+            296412,
+            310343,
+            330776,
+            338010,
+            485168,
+            607461
+          ],
+          "pre_draw": [
+            1557,
+            43118,
+            44870,
+            46047,
+            59479,
+            72887,
+            86789,
+            101007,
+            114819,
+            128610,
+            142416,
+            156450,
+            170284,
+            184767,
+            198656,
+            212104,
+            226096,
+            239701,
+            253608,
+            267407,
+            281289,
+            295298,
+            308994,
+            329132,
+            336865,
+            483984,
+            601689
+          ],
+          "process": [
+            1369,
+            3054,
+            44547,
+            45814,
+            58491,
+            72340,
+            86285,
+            100174,
+            114107,
+            127961,
+            141756,
+            155750,
+            169624,
+            183504,
+            197405,
+            211210,
+            225190,
+            239015,
+            252966,
+            266824,
+            280660,
+            294611,
+            308480,
+            322380,
+            336252,
+            350135,
+            485967
+          ]
+        },
+        "canvas_before_predraw": 237,
+        "canvas_first_ms_after_ready": 0.172,
+        "canvas_last_ms_before_predraw": 0.263,
+        "longest_canvas_boundaries": [
+          {
+            "after": [
+              "@Node2D@9899",
+              "Node2D",
+              "res://scripts/liangshan_entrance.gd"
+            ],
+            "before": [
+              "@Node2D@9900",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "ms": 13.039,
+            "cpu": null
+          },
+          {
+            "after": [
+              "LiangshanVisualSample",
+              "Node2D",
+              "res://scripts/liangshan_scenery.gd"
+            ],
+            "before": [
+              "@Node2D@9764",
+              "Node2D",
+              ""
+            ],
+            "ms": 12.657,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Node2D@9762",
+              "Node2D",
+              "res://scripts/game_map.gd"
+            ],
+            "before": [
+              "LiangshanVisualSample",
+              "Node2D",
+              "res://scripts/liangshan_scenery.gd"
+            ],
+            "ms": 10.043,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Control@9956",
+              "Control",
+              ""
+            ],
+            "before": [
+              "@Label@9957",
+              "Label",
+              ""
+            ],
+            "ms": 3.054,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Node2D@9902",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "before": [
+              "@Node2D@9903",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "ms": 2.165,
+            "cpu": null
+          }
+        ]
+      },
+      {
+        "index": 41,
+        "cycle": 7,
+        "level": "custom_defense",
+        "gap_ms": 92.206,
+        "attach_to_ready_ms": 41.271,
+        "ready_to_pre_draw_ms": 45.475,
+        "pre_draw_to_present_ms": 4.23,
+        "gap_cpu": {
+          "wall_ms": 92.206,
+          "main_cpu_inward_and_outward_ms": [
+            78.125,
+            109.375
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            78.125,
+            109.375
+          ],
+          "main_cycle_inward_and_outward_M": [
+            224.425,
+            311.265
+          ],
+          "boundary_ms": 10.602,
+          "clock_drift_ms": 0.002
+        },
+        "attach_to_ready_cpu": null,
+        "ready_to_predraw_cpu": null,
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 237,
+        "entry_signals": {
+          "physics": [
+            806,
+            25214,
+            28588,
+            56362,
+            70268,
+            84148,
+            111926,
+            158025,
+            158041
+          ],
+          "post_draw": [
+            1537,
+            25001,
+            25780,
+            29246,
+            43122,
+            56921,
+            70980,
+            84741,
+            99393,
+            157534,
+            249740
+          ],
+          "pre_draw": [
+            1136,
+            24365,
+            25424,
+            28819,
+            42694,
+            56581,
+            70566,
+            84412,
+            98521,
+            156732,
+            245512
+          ],
+          "process": [
+            966,
+            2353,
+            25233,
+            28607,
+            42474,
+            56384,
+            70292,
+            84174,
+            98050,
+            111945,
+            158048
+          ]
+        },
+        "canvas_before_predraw": 237,
+        "canvas_first_ms_after_ready": 0.158,
+        "canvas_last_ms_before_predraw": 0.254,
+        "longest_canvas_boundaries": [
+          {
+            "after": [
+              "@Node2D@11643",
+              "Node2D",
+              "res://scripts/liangshan_entrance.gd"
+            ],
+            "before": [
+              "@Node2D@11644",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "ms": 12.597,
+            "cpu": null
+          },
+          {
+            "after": [
+              "LiangshanVisualSample",
+              "Node2D",
+              "res://scripts/liangshan_scenery.gd"
+            ],
+            "before": [
+              "@Node2D@11508",
+              "Node2D",
+              ""
+            ],
+            "ms": 11.271,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Node2D@11506",
+              "Node2D",
+              "res://scripts/game_map.gd"
+            ],
+            "before": [
+              "LiangshanVisualSample",
+              "Node2D",
+              "res://scripts/liangshan_scenery.gd"
+            ],
+            "ms": 8.443,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Control@11700",
+              "Control",
+              ""
+            ],
+            "before": [
+              "@Label@11701",
+              "Label",
+              ""
+            ],
+            "ms": 2.98,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Node2D@11646",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "before": [
+              "@Node2D@11647",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "ms": 2.107,
+            "cpu": null
+          }
+        ]
+      },
+      {
+        "index": 47,
+        "cycle": 8,
+        "level": "custom_defense",
+        "gap_ms": 124.913,
+        "attach_to_ready_ms": 57.447,
+        "ready_to_pre_draw_ms": 58.18,
+        "pre_draw_to_present_ms": 6.954,
+        "gap_cpu": {
+          "wall_ms": 124.913,
+          "main_cpu_inward_and_outward_ms": [
+            109.375,
+            140.625
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            109.375,
+            140.625
+          ],
+          "main_cycle_inward_and_outward_M": [
+            317.566,
+            408.52
+          ],
+          "boundary_ms": 11.035,
+          "clock_drift_ms": 0.001
+        },
+        "attach_to_ready_cpu": {
+          "wall_ms": 57.447,
+          "main_cpu_inward_and_outward_ms": [
+            46.875,
+            78.125
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            46.875,
+            78.125
+          ],
+          "main_cycle_inward_and_outward_M": [
+            136.962,
+            230.141
+          ],
+          "boundary_ms": 11.748,
+          "clock_drift_ms": 0.002
+        },
+        "ready_to_predraw_cpu": {
+          "wall_ms": 58.18,
+          "main_cpu_inward_and_outward_ms": [
+            46.875,
+            78.125
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            46.875,
+            78.125
+          ],
+          "main_cycle_inward_and_outward_M": [
+            133.812,
+            225.172
+          ],
+          "boundary_ms": 10.973,
+          "clock_drift_ms": 0.001
+        },
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 237,
+        "entry_signals": {
+          "physics": [
+            1321,
+            21461,
+            29129,
+            43007,
+            56932,
+            84950,
+            98580,
+            112445,
+            158999,
+            159018
+          ],
+          "post_draw": [
+            2031,
+            21334,
+            22144,
+            29913,
+            43710,
+            57848,
+            71354,
+            86035,
+            99484,
+            158273,
+            283184
+          ],
+          "pre_draw": [
+            1626,
+            20914,
+            21673,
+            29434,
+            43273,
+            57360,
+            70976,
+            85426,
+            98983,
+            157439,
+            276233
+          ],
+          "process": [
+            1481,
+            2827,
+            21483,
+            29155,
+            43029,
+            57000,
+            70766,
+            84986,
+            98618,
+            112466,
+            159025
+          ]
+        },
+        "canvas_before_predraw": 237,
+        "canvas_first_ms_after_ready": 0.247,
+        "canvas_last_ms_before_predraw": 0.437,
+        "longest_canvas_boundaries": [
+          {
+            "after": [
+              "@Node2D@13387",
+              "Node2D",
+              "res://scripts/liangshan_entrance.gd"
+            ],
+            "before": [
+              "@Node2D@13388",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "ms": 16.288,
+            "cpu": null
+          },
+          {
+            "after": [
+              "LiangshanVisualSample",
+              "Node2D",
+              "res://scripts/liangshan_scenery.gd"
+            ],
+            "before": [
+              "@Node2D@13252",
+              "Node2D",
+              ""
+            ],
+            "ms": 13.252,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Node2D@13250",
+              "Node2D",
+              "res://scripts/game_map.gd"
+            ],
+            "before": [
+              "LiangshanVisualSample",
+              "Node2D",
+              "res://scripts/liangshan_scenery.gd"
+            ],
+            "ms": 10.718,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Control@13444",
+              "Control",
+              ""
+            ],
+            "before": [
+              "@Label@13445",
+              "Label",
+              ""
+            ],
+            "ms": 4.111,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Node2D@13390",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "before": [
+              "@Node2D@13391",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "ms": 2.791,
+            "cpu": null
+          }
+        ]
+      },
+      {
+        "index": 53,
+        "cycle": 9,
+        "level": "custom_defense",
+        "gap_ms": 113.52,
+        "attach_to_ready_ms": 51.202,
+        "ready_to_pre_draw_ms": 55.363,
+        "pre_draw_to_present_ms": 5.435,
+        "gap_cpu": {
+          "wall_ms": 113.52,
+          "main_cpu_inward_and_outward_ms": [
+            93.75,
+            125.0
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            93.75,
+            125.0
+          ],
+          "main_cycle_inward_and_outward_M": [
+            276.53,
+            368.382
+          ],
+          "boundary_ms": 11.511,
+          "clock_drift_ms": 0.004
+        },
+        "attach_to_ready_cpu": {
+          "wall_ms": 51.202,
+          "main_cpu_inward_and_outward_ms": [
+            31.25,
+            62.5
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            31.25,
+            62.5
+          ],
+          "main_cycle_inward_and_outward_M": [
+            90.527,
+            181.463
+          ],
+          "boundary_ms": 12.966,
+          "clock_drift_ms": 0.001
+        },
+        "ready_to_predraw_cpu": {
+          "wall_ms": 55.363,
+          "main_cpu_inward_and_outward_ms": [
+            46.875,
+            78.125
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            46.875,
+            78.125
+          ],
+          "main_cycle_inward_and_outward_M": [
+            141.087,
+            231.835
+          ],
+          "boundary_ms": 12.966,
+          "clock_drift_ms": 0.006
+        },
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 237,
+        "entry_signals": {
+          "physics": [
+            823,
+            26844,
+            28589,
+            42487,
+            56402,
+            84165,
+            98042,
+            111924,
+            126057,
+            139714,
+            206596,
+            206620,
+            206623
+          ],
+          "post_draw": [
+            1442,
+            26705,
+            27544,
+            29456,
+            43159,
+            57134,
+            71079,
+            84987,
+            98691,
+            112522,
+            126818,
+            141939,
+            206056,
+            319577
+          ],
+          "pre_draw": [
+            1099,
+            26096,
+            27052,
+            28838,
+            42725,
+            56734,
+            70591,
+            84471,
+            98289,
+            112152,
+            126347,
+            141502,
+            205225,
+            314145
+          ],
+          "process": [
+            974,
+            2075,
+            26861,
+            28605,
+            42505,
+            56430,
+            70281,
+            84191,
+            98061,
+            111941,
+            126082,
+            139738,
+            153592,
+            206630
+          ]
+        },
+        "canvas_before_predraw": 237,
+        "canvas_first_ms_after_ready": 0.173,
+        "canvas_last_ms_before_predraw": 0.298,
+        "longest_canvas_boundaries": [
+          {
+            "after": [
+              "@Node2D@15131",
+              "Node2D",
+              "res://scripts/liangshan_entrance.gd"
+            ],
+            "before": [
+              "@Node2D@15132",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "ms": 15.21,
+            "cpu": null
+          },
+          {
+            "after": [
+              "LiangshanVisualSample",
+              "Node2D",
+              "res://scripts/liangshan_scenery.gd"
+            ],
+            "before": [
+              "@Node2D@14996",
+              "Node2D",
+              ""
+            ],
+            "ms": 14.119,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Node2D@14994",
+              "Node2D",
+              "res://scripts/game_map.gd"
+            ],
+            "before": [
+              "LiangshanVisualSample",
+              "Node2D",
+              "res://scripts/liangshan_scenery.gd"
+            ],
+            "ms": 10.519,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Control@15188",
+              "Control",
+              ""
+            ],
+            "before": [
+              "@Label@15189",
+              "Label",
+              ""
+            ],
+            "ms": 3.634,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Node2D@15134",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "before": [
+              "@Node2D@15135",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "ms": 2.559,
+            "cpu": null
+          }
+        ]
+      },
+      {
+        "index": 59,
+        "cycle": 10,
+        "level": "custom_defense",
+        "gap_ms": 81.703,
+        "attach_to_ready_ms": 37.512,
+        "ready_to_pre_draw_ms": 40.23,
+        "pre_draw_to_present_ms": 2.937,
+        "gap_cpu": {
+          "wall_ms": 81.703,
+          "main_cpu_inward_and_outward_ms": [
+            62.5,
+            93.75
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            62.5,
+            109.375
+          ],
+          "main_cycle_inward_and_outward_M": [
+            183.438,
+            271.403
+          ],
+          "boundary_ms": 15.642,
+          "clock_drift_ms": 0.002
+        },
+        "attach_to_ready_cpu": null,
+        "ready_to_predraw_cpu": null,
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 237,
+        "entry_signals": {
+          "physics": [
+            773,
+            19807,
+            28558,
+            42451,
+            70232,
+            84176,
+            98003,
+            140506
+          ],
+          "post_draw": [
+            1298,
+            19619,
+            20380,
+            29081,
+            43054,
+            56859,
+            70893,
+            85393,
+            140120,
+            221824
+          ],
+          "pre_draw": [
+            1014,
+            19084,
+            20034,
+            28762,
+            42672,
+            56535,
+            70487,
+            84719,
+            139497,
+            218888
+          ],
+          "process": [
+            897,
+            1790,
+            19826,
+            28575,
+            42471,
+            56336,
+            70254,
+            84226,
+            98023,
+            140523
+          ]
+        },
+        "canvas_before_predraw": 237,
+        "canvas_first_ms_after_ready": 0.135,
+        "canvas_last_ms_before_predraw": 0.157,
+        "longest_canvas_boundaries": [
+          {
+            "after": [
+              "@Node2D@16875",
+              "Node2D",
+              "res://scripts/liangshan_entrance.gd"
+            ],
+            "before": [
+              "@Node2D@16876",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "ms": 10.952,
+            "cpu": null
+          },
+          {
+            "after": [
+              "LiangshanVisualSample",
+              "Node2D",
+              "res://scripts/liangshan_scenery.gd"
+            ],
+            "before": [
+              "@Node2D@16740",
+              "Node2D",
+              ""
+            ],
+            "ms": 10.255,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Node2D@16738",
+              "Node2D",
+              "res://scripts/game_map.gd"
+            ],
+            "before": [
+              "LiangshanVisualSample",
+              "Node2D",
+              "res://scripts/liangshan_scenery.gd"
+            ],
+            "ms": 7.864,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Control@16932",
+              "Control",
+              ""
+            ],
+            "before": [
+              "@Label@16933",
+              "Label",
+              ""
+            ],
+            "ms": 2.708,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Node2D@16878",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "before": [
+              "@Node2D@16879",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "ms": 1.983,
+            "cpu": null
+          }
+        ]
+      },
+      {
+        "index": 65,
+        "cycle": 11,
+        "level": "custom_defense",
+        "gap_ms": 116.694,
+        "attach_to_ready_ms": 54.435,
+        "ready_to_pre_draw_ms": 55.892,
+        "pre_draw_to_present_ms": 4.774,
+        "gap_cpu": {
+          "wall_ms": 116.694,
+          "main_cpu_inward_and_outward_ms": [
+            109.375,
+            140.625
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            109.375,
+            140.625
+          ],
+          "main_cycle_inward_and_outward_M": [
+            324.709,
+            414.381
+          ],
+          "boundary_ms": 13.197,
+          "clock_drift_ms": 0.002
+        },
+        "attach_to_ready_cpu": {
+          "wall_ms": 54.435,
+          "main_cpu_inward_and_outward_ms": [
+            46.875,
+            78.125
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            46.875,
+            78.125
+          ],
+          "main_cycle_inward_and_outward_M": [
+            139.195,
+            230.889
+          ],
+          "boundary_ms": 12.299,
+          "clock_drift_ms": 0.001
+        },
+        "ready_to_predraw_cpu": {
+          "wall_ms": 55.892,
+          "main_cpu_inward_and_outward_ms": [
+            31.25,
+            62.5
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            31.25,
+            62.5
+          ],
+          "main_cycle_inward_and_outward_M": [
+            92.087,
+            185.515
+          ],
+          "boundary_ms": 12.791,
+          "clock_drift_ms": 0.001
+        },
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 237,
+        "entry_signals": {
+          "physics": [
+            727,
+            25855,
+            28504,
+            42463,
+            56328,
+            70201,
+            97990,
+            111872,
+            125754,
+            175097,
+            175117
+          ],
+          "post_draw": [
+            1282,
+            25699,
+            26469,
+            29107,
+            43622,
+            57416,
+            71137,
+            85020,
+            98932,
+            112933,
+            174536,
+            291231
+          ],
+          "pre_draw": [
+            980,
+            25202,
+            26051,
+            28708,
+            42903,
+            56775,
+            70686,
+            84472,
+            98353,
+            112282,
+            173836,
+            286458
+          ],
+          "process": [
+            871,
+            1779,
+            25873,
+            28520,
+            42498,
+            56362,
+            70229,
+            84088,
+            98020,
+            111905,
+            125789,
+            175124
+          ]
+        },
+        "canvas_before_predraw": 237,
+        "canvas_first_ms_after_ready": 0.247,
+        "canvas_last_ms_before_predraw": 0.216,
+        "longest_canvas_boundaries": [
+          {
+            "after": [
+              "LiangshanVisualSample",
+              "Node2D",
+              "res://scripts/liangshan_scenery.gd"
+            ],
+            "before": [
+              "@Node2D@18484",
+              "Node2D",
+              ""
+            ],
+            "ms": 15.06,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Node2D@18619",
+              "Node2D",
+              "res://scripts/liangshan_entrance.gd"
+            ],
+            "before": [
+              "@Node2D@18620",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "ms": 14.794,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Node2D@18482",
+              "Node2D",
+              "res://scripts/game_map.gd"
+            ],
+            "before": [
+              "LiangshanVisualSample",
+              "Node2D",
+              "res://scripts/liangshan_scenery.gd"
+            ],
+            "ms": 11.613,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Control@18676",
+              "Control",
+              ""
+            ],
+            "before": [
+              "@Label@18677",
+              "Label",
+              ""
+            ],
+            "ms": 3.422,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Node2D@18622",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "before": [
+              "@Node2D@18623",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "ms": 2.365,
+            "cpu": null
+          }
+        ]
+      },
+      {
+        "index": 71,
+        "cycle": 12,
+        "level": "custom_defense",
+        "gap_ms": 92.927,
+        "attach_to_ready_ms": 43.728,
+        "ready_to_pre_draw_ms": 44.33,
+        "pre_draw_to_present_ms": 3.761,
+        "gap_cpu": {
+          "wall_ms": 92.927,
+          "main_cpu_inward_and_outward_ms": [
+            78.125,
+            109.375
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            78.125,
+            109.375
+          ],
+          "main_cycle_inward_and_outward_M": [
+            224.082,
+            318.105
+          ],
+          "boundary_ms": 10.004,
+          "clock_drift_ms": 0.003
+        },
+        "attach_to_ready_cpu": null,
+        "ready_to_predraw_cpu": null,
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 237,
+        "entry_signals": {
+          "physics": [
+            642,
+            18962,
+            28442,
+            42318,
+            70114,
+            83990,
+            97961,
+            111762,
+            156793,
+            156809
+          ],
+          "post_draw": [
+            1047,
+            18879,
+            19288,
+            28883,
+            42849,
+            57179,
+            70848,
+            84714,
+            99492,
+            156363,
+            249290
+          ],
+          "pre_draw": [
+            819,
+            18496,
+            19071,
+            28634,
+            42503,
+            56593,
+            70447,
+            84268,
+            98571,
+            155765,
+            245531
+          ],
+          "process": [
+            733,
+            1450,
+            18973,
+            28463,
+            42334,
+            56241,
+            70139,
+            84013,
+            98012,
+            111781,
+            156814
+          ]
+        },
+        "canvas_before_predraw": 237,
+        "canvas_first_ms_after_ready": 0.251,
+        "canvas_last_ms_before_predraw": 0.181,
+        "longest_canvas_boundaries": [
+          {
+            "after": [
+              "@Node2D@20363",
+              "Node2D",
+              "res://scripts/liangshan_entrance.gd"
+            ],
+            "before": [
+              "@Node2D@20364",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "ms": 12.02,
+            "cpu": null
+          },
+          {
+            "after": [
+              "LiangshanVisualSample",
+              "Node2D",
+              "res://scripts/liangshan_scenery.gd"
+            ],
+            "before": [
+              "@Node2D@20228",
+              "Node2D",
+              ""
+            ],
+            "ms": 11.046,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Node2D@20226",
+              "Node2D",
+              "res://scripts/game_map.gd"
+            ],
+            "before": [
+              "LiangshanVisualSample",
+              "Node2D",
+              "res://scripts/liangshan_scenery.gd"
+            ],
+            "ms": 8.637,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Control@20420",
+              "Control",
+              ""
+            ],
+            "before": [
+              "@Label@20421",
+              "Label",
+              ""
+            ],
+            "ms": 2.898,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Node2D@20366",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "before": [
+              "@Node2D@20367",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "ms": 2.04,
+            "cpu": null
+          }
+        ]
+      },
+      {
+        "index": 77,
+        "cycle": 13,
+        "level": "custom_defense",
+        "gap_ms": 88.876,
+        "attach_to_ready_ms": 39.572,
+        "ready_to_pre_draw_ms": 44.285,
+        "pre_draw_to_present_ms": 3.656,
+        "gap_cpu": {
+          "wall_ms": 88.876,
+          "main_cpu_inward_and_outward_ms": [
+            78.125,
+            93.75
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            78.125,
+            93.75
+          ],
+          "main_cycle_inward_and_outward_M": [
+            230.344,
+            322.333
+          ],
+          "boundary_ms": 12.166,
+          "clock_drift_ms": 0.001
+        },
+        "attach_to_ready_cpu": null,
+        "ready_to_predraw_cpu": null,
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 237,
+        "entry_signals": {
+          "physics": [
+            522,
+            18450,
+            28315,
+            42205,
+            69980,
+            83988,
+            97756,
+            140591,
+            140606
+          ],
+          "post_draw": [
+            898,
+            18351,
+            18760,
+            28783,
+            42811,
+            56736,
+            70560,
+            85607,
+            140113,
+            228989
+          ],
+          "pre_draw": [
+            679,
+            17912,
+            18563,
+            28507,
+            42440,
+            56374,
+            70218,
+            84680,
+            139589,
+            225335
+          ],
+          "process": [
+            604,
+            1273,
+            18462,
+            28331,
+            42221,
+            56109,
+            69999,
+            84052,
+            97772,
+            140611
+          ]
+        },
+        "canvas_before_predraw": 237,
+        "canvas_first_ms_after_ready": 0.158,
+        "canvas_last_ms_before_predraw": 0.182,
+        "longest_canvas_boundaries": [
+          {
+            "after": [
+              "@Node2D@22107",
+              "Node2D",
+              "res://scripts/liangshan_entrance.gd"
+            ],
+            "before": [
+              "@Node2D@22108",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "ms": 13.157,
+            "cpu": null
+          },
+          {
+            "after": [
+              "LiangshanVisualSample",
+              "Node2D",
+              "res://scripts/liangshan_scenery.gd"
+            ],
+            "before": [
+              "@Node2D@21972",
+              "Node2D",
+              ""
+            ],
+            "ms": 10.794,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Node2D@21970",
+              "Node2D",
+              "res://scripts/game_map.gd"
+            ],
+            "before": [
+              "LiangshanVisualSample",
+              "Node2D",
+              "res://scripts/liangshan_scenery.gd"
+            ],
+            "ms": 7.887,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Control@22164",
+              "Control",
+              ""
+            ],
+            "before": [
+              "@Label@22165",
+              "Label",
+              ""
+            ],
+            "ms": 2.909,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Node2D@22110",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "before": [
+              "@Node2D@22111",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "ms": 2.07,
+            "cpu": null
+          }
+        ]
+      },
+      {
+        "index": 83,
+        "cycle": 14,
+        "level": "custom_defense",
+        "gap_ms": 86.536,
+        "attach_to_ready_ms": 39.377,
+        "ready_to_pre_draw_ms": 42.269,
+        "pre_draw_to_present_ms": 3.702,
+        "gap_cpu": {
+          "wall_ms": 86.536,
+          "main_cpu_inward_and_outward_ms": [
+            62.5,
+            93.75
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            62.5,
+            93.75
+          ],
+          "main_cycle_inward_and_outward_M": [
+            182.44,
+            275.752
+          ],
+          "boundary_ms": 13.21,
+          "clock_drift_ms": 0.0
+        },
+        "attach_to_ready_cpu": null,
+        "ready_to_predraw_cpu": null,
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 237,
+        "entry_signals": {
+          "physics": [
+            670,
+            21177,
+            28459,
+            56257,
+            70161,
+            84042,
+            141844,
+            141858
+          ],
+          "post_draw": [
+            1105,
+            20957,
+            21882,
+            28960,
+            43277,
+            56986,
+            71101,
+            85358,
+            141386,
+            227922
+          ],
+          "pre_draw": [
+            856,
+            20385,
+            21532,
+            28671,
+            42733,
+            56563,
+            70554,
+            84565,
+            140740,
+            224221
+          ],
+          "process": [
+            761,
+            1542,
+            21203,
+            28478,
+            42381,
+            56282,
+            70190,
+            84083,
+            97902,
+            141863
+          ]
+        },
+        "canvas_before_predraw": 237,
+        "canvas_first_ms_after_ready": 0.163,
+        "canvas_last_ms_before_predraw": 0.181,
+        "longest_canvas_boundaries": [
+          {
+            "after": [
+              "@Node2D@23851",
+              "Node2D",
+              "res://scripts/liangshan_entrance.gd"
+            ],
+            "before": [
+              "@Node2D@23852",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "ms": 11.423,
+            "cpu": null
+          },
+          {
+            "after": [
+              "LiangshanVisualSample",
+              "Node2D",
+              "res://scripts/liangshan_scenery.gd"
+            ],
+            "before": [
+              "@Node2D@23716",
+              "Node2D",
+              ""
+            ],
+            "ms": 10.65,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Node2D@23714",
+              "Node2D",
+              "res://scripts/game_map.gd"
+            ],
+            "before": [
+              "LiangshanVisualSample",
+              "Node2D",
+              "res://scripts/liangshan_scenery.gd"
+            ],
+            "ms": 8.142,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Control@23908",
+              "Control",
+              ""
+            ],
+            "before": [
+              "@Label@23909",
+              "Label",
+              ""
+            ],
+            "ms": 2.813,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Node2D@23854",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "before": [
+              "@Node2D@23855",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "ms": 2.083,
+            "cpu": null
+          }
+        ]
+      },
+      {
+        "index": 89,
+        "cycle": 15,
+        "level": "custom_defense",
+        "gap_ms": 85.05,
+        "attach_to_ready_ms": 38.464,
+        "ready_to_pre_draw_ms": 41.846,
+        "pre_draw_to_present_ms": 3.601,
+        "gap_cpu": {
+          "wall_ms": 85.05,
+          "main_cpu_inward_and_outward_ms": [
+            62.5,
+            93.75
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            62.5,
+            93.75
+          ],
+          "main_cycle_inward_and_outward_M": [
+            227.652,
+            316.852
+          ],
+          "boundary_ms": 12.0,
+          "clock_drift_ms": 0.0
+        },
+        "attach_to_ready_cpu": null,
+        "ready_to_predraw_cpu": null,
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 237,
+        "entry_signals": {
+          "physics": [
+            635,
+            19832,
+            42306,
+            56199,
+            83972,
+            97882,
+            140742,
+            140756
+          ],
+          "post_draw": [
+            1095,
+            19764,
+            20247,
+            28904,
+            42777,
+            56667,
+            70582,
+            84453,
+            140337,
+            225387
+          ],
+          "pre_draw": [
+            809,
+            19318,
+            19939,
+            28556,
+            42460,
+            56370,
+            70266,
+            84149,
+            139874,
+            221787
+          ],
+          "process": [
+            726,
+            1628,
+            19841,
+            28415,
+            42319,
+            56213,
+            70084,
+            83986,
+            97908,
+            140761
+          ]
+        },
+        "canvas_before_predraw": 237,
+        "canvas_first_ms_after_ready": 0.147,
+        "canvas_last_ms_before_predraw": 0.207,
+        "longest_canvas_boundaries": [
+          {
+            "after": [
+              "@Node2D@25595",
+              "Node2D",
+              "res://scripts/liangshan_entrance.gd"
+            ],
+            "before": [
+              "@Node2D@25596",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "ms": 11.191,
+            "cpu": null
+          },
+          {
+            "after": [
+              "LiangshanVisualSample",
+              "Node2D",
+              "res://scripts/liangshan_scenery.gd"
+            ],
+            "before": [
+              "@Node2D@25460",
+              "Node2D",
+              ""
+            ],
+            "ms": 10.752,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Node2D@25458",
+              "Node2D",
+              "res://scripts/game_map.gd"
+            ],
+            "before": [
+              "LiangshanVisualSample",
+              "Node2D",
+              "res://scripts/liangshan_scenery.gd"
+            ],
+            "ms": 7.674,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Control@25652",
+              "Control",
+              ""
+            ],
+            "before": [
+              "@Label@25653",
+              "Label",
+              ""
+            ],
+            "ms": 2.762,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Node2D@25598",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "before": [
+              "@Node2D@25599",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "ms": 1.887,
+            "cpu": null
+          }
+        ]
+      },
+      {
+        "index": 95,
+        "cycle": 16,
+        "level": "custom_defense",
+        "gap_ms": 235.84,
+        "attach_to_ready_ms": 146.444,
+        "ready_to_pre_draw_ms": 77.231,
+        "pre_draw_to_present_ms": 5.871,
+        "gap_cpu": {
+          "wall_ms": 235.84,
+          "main_cpu_inward_and_outward_ms": [
+            218.75,
+            234.375
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            218.75,
+            234.375
+          ],
+          "main_cycle_inward_and_outward_M": [
+            679.88,
+            768.99
+          ],
+          "boundary_ms": 12.665,
+          "clock_drift_ms": 0.008
+        },
+        "attach_to_ready_cpu": {
+          "wall_ms": 146.444,
+          "main_cpu_inward_and_outward_ms": [
+            109.375,
+            140.625
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            109.375,
+            140.625
+          ],
+          "main_cycle_inward_and_outward_M": [
+            360.482,
+            450.686
+          ],
+          "boundary_ms": 12.126,
+          "clock_drift_ms": 0.004
+        },
+        "ready_to_predraw_cpu": {
+          "wall_ms": 77.231,
+          "main_cpu_inward_and_outward_ms": [
+            62.5,
+            93.75
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            62.5,
+            93.75
+          ],
+          "main_cycle_inward_and_outward_M": [
+            182.697,
+            274.528
+          ],
+          "boundary_ms": 12.191,
+          "clock_drift_ms": 0.001
+        },
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 237,
+        "entry_signals": {
+          "physics": [
+            1005,
+            33758,
+            34437,
+            47657,
+            61538,
+            89335,
+            103242,
+            117129,
+            131024,
+            144969,
+            310102,
+            310190,
+            310206,
+            310223,
+            310234,
+            310244,
+            310261,
+            310281
+          ],
+          "post_draw": [
+            1968,
+            33638,
+            34353,
+            34962,
+            48445,
+            62304,
+            76168,
+            90159,
+            104248,
+            118283,
+            132190,
+            146962,
+            307160,
+            543011
+          ],
+          "pre_draw": [
+            1376,
+            33109,
+            33954,
+            34601,
+            47935,
+            61792,
+            75715,
+            89662,
+            103651,
+            117634,
+            131522,
+            145716,
+            304520,
+            537143
+          ],
+          "process": [
+            1170,
+            2845,
+            33775,
+            34449,
+            47678,
+            61556,
+            75434,
+            89367,
+            103275,
+            117221,
+            131064,
+            145024,
+            158788,
+            310307
+          ]
+        },
+        "canvas_before_predraw": 237,
+        "canvas_first_ms_after_ready": 0.248,
+        "canvas_last_ms_before_predraw": 0.326,
+        "longest_canvas_boundaries": [
+          {
+            "after": [
+              "@Node2D@27339",
+              "Node2D",
+              "res://scripts/liangshan_entrance.gd"
+            ],
+            "before": [
+              "@Node2D@27340",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "ms": 19.995,
+            "cpu": null
+          },
+          {
+            "after": [
+              "LiangshanVisualSample",
+              "Node2D",
+              "res://scripts/liangshan_scenery.gd"
+            ],
+            "before": [
+              "@Node2D@27204",
+              "Node2D",
+              ""
+            ],
+            "ms": 19.926,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Node2D@27202",
+              "Node2D",
+              "res://scripts/game_map.gd"
+            ],
+            "before": [
+              "LiangshanVisualSample",
+              "Node2D",
+              "res://scripts/liangshan_scenery.gd"
+            ],
+            "ms": 16.59,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Control@27396",
+              "Control",
+              ""
+            ],
+            "before": [
+              "@Label@27397",
+              "Label",
+              ""
+            ],
+            "ms": 5.108,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Node2D@27345",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "before": [
+              "@Node2D@27346",
+              "Node2D",
+              "res://scripts/liangshan_stockade.gd"
+            ],
+            "ms": 3.569,
+            "cpu": null
+          }
+        ]
+      }
+    ],
+    "largest_entry_gaps": [
+      {
+        "index": 67,
+        "cycle": 12,
+        "level": "level1",
+        "gap_ms": 378.883,
+        "attach_to_ready_ms": 351.631,
+        "ready_to_pre_draw_ms": 20.286,
+        "pre_draw_to_present_ms": 2.07,
+        "gap_cpu": {
+          "wall_ms": 378.883,
+          "main_cpu_inward_and_outward_ms": [
+            359.375,
+            390.625
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            375.0,
+            406.25
+          ],
+          "main_cycle_inward_and_outward_M": [
+            1085.867,
+            1177.227
+          ],
+          "boundary_ms": 14.894,
+          "clock_drift_ms": 0.001
+        },
+        "attach_to_ready_cpu": {
+          "wall_ms": 351.631,
+          "main_cpu_inward_and_outward_ms": [
+            328.125,
+            359.375
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            343.75,
+            375.0
+          ],
+          "main_cycle_inward_and_outward_M": [
+            995.725,
+            1085.279
+          ],
+          "boundary_ms": 13.38,
+          "clock_drift_ms": 0.002
+        },
+        "ready_to_predraw_cpu": null,
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 0,
+        "entry_signals": {
+          "physics": [
+            6122,
+            6839,
+            14787,
+            331911,
+            331996,
+            332029,
+            332064,
+            332085,
+            332116,
+            332147,
+            332176
+          ],
+          "post_draw": [
+            10455,
+            330273,
+            709159
+          ],
+          "pre_draw": [
+            7808,
+            326880,
+            707093
+          ],
+          "process": [
+            6905,
+            325262,
+            332199
+          ]
+        }
+      },
+      {
+        "index": 1,
+        "cycle": 1,
+        "level": "level1",
+        "gap_ms": 270.172,
+        "attach_to_ready_ms": 206.169,
+        "ready_to_pre_draw_ms": 50.887,
+        "pre_draw_to_present_ms": 10.972,
+        "gap_cpu": {
+          "wall_ms": 270.172,
+          "main_cpu_inward_and_outward_ms": [
+            234.375,
+            250.0
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            656.25,
+            687.5
+          ],
+          "main_cycle_inward_and_outward_M": [
+            729.214,
+            790.447
+          ],
+          "boundary_ms": 12.844,
+          "clock_drift_ms": 0.003
+        },
+        "attach_to_ready_cpu": {
+          "wall_ms": 206.169,
+          "main_cpu_inward_and_outward_ms": [
+            187.5,
+            218.75
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            515.625,
+            578.125
+          ],
+          "main_cycle_inward_and_outward_M": [
+            572.065,
+            636.742
+          ],
+          "boundary_ms": 13.688,
+          "clock_drift_ms": 0.001
+        },
+        "ready_to_predraw_cpu": {
+          "wall_ms": 50.887,
+          "main_cpu_inward_and_outward_ms": [
+            31.25,
+            46.875
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            62.5,
+            140.625
+          ],
+          "main_cycle_inward_and_outward_M": [
+            87.243,
+            157.149
+          ],
+          "boundary_ms": 13.688,
+          "clock_drift_ms": 0.002
+        },
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 0,
+        "entry_signals": {
+          "physics": [
+            2268,
+            5392,
+            5400,
+            5403,
+            5406,
+            5408,
+            5410,
+            5412,
+            9148,
+            40601,
+            42909,
+            42930,
+            70676,
+            98470,
+            112353,
+            126303,
+            140129,
+            206927,
+            206959,
+            206965,
+            206969
+          ],
+          "post_draw": [
+            6085,
+            42549,
+            44419,
+            45545,
+            60145,
+            72146,
+            85755,
+            100151,
+            113648,
+            128996,
+            143375,
+            206075,
+            476245
+          ],
+          "pre_draw": [
+            5544,
+            41216,
+            43710,
+            44869,
+            59164,
+            71435,
+            85027,
+            99461,
+            112906,
+            127099,
+            142261,
+            193580,
+            465279
+          ],
+          "process": [
+            5418,
+            40626,
+            42940,
+            44586,
+            56815,
+            70708,
+            84572,
+            98503,
+            112387,
+            126369,
+            140163,
+            154002,
+            206976
+          ]
+        }
+      },
+      {
+        "index": 88,
+        "cycle": 15,
+        "level": "skirmish_ai",
+        "gap_ms": 262.854,
+        "attach_to_ready_ms": 209.124,
+        "ready_to_pre_draw_ms": 48.318,
+        "pre_draw_to_present_ms": 1.758,
+        "gap_cpu": {
+          "wall_ms": 262.854,
+          "main_cpu_inward_and_outward_ms": [
+            234.375,
+            265.625
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            250.0,
+            281.25
+          ],
+          "main_cycle_inward_and_outward_M": [
+            727.415,
+            818.1
+          ],
+          "boundary_ms": 15.089,
+          "clock_drift_ms": 0.001
+        },
+        "attach_to_ready_cpu": {
+          "wall_ms": 209.124,
+          "main_cpu_inward_and_outward_ms": [
+            171.875,
+            203.125
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            187.5,
+            218.75
+          ],
+          "main_cycle_inward_and_outward_M": [
+            545.63,
+            637.666
+          ],
+          "boundary_ms": 12.074,
+          "clock_drift_ms": 0.007
+        },
+        "ready_to_predraw_cpu": null,
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 0,
+        "entry_signals": {
+          "physics": [
+            3138,
+            129406,
+            131572,
+            133455,
+            133473,
+            133480,
+            133487,
+            133494
+          ],
+          "post_draw": [
+            131165,
+            394021
+          ],
+          "pre_draw": [
+            129936,
+            392266
+          ],
+          "process": [
+            129436,
+            133504
+          ]
+        }
+      },
+      {
+        "index": 91,
+        "cycle": 16,
+        "level": "level1",
+        "gap_ms": 261.466,
+        "attach_to_ready_ms": 147.595,
+        "ready_to_pre_draw_ms": 19.323,
+        "pre_draw_to_present_ms": 0.817,
+        "gap_cpu": {
+          "wall_ms": 261.466,
+          "main_cpu_inward_and_outward_ms": [
+            250.0,
+            281.25
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            359.375,
+            390.625
+          ],
+          "main_cycle_inward_and_outward_M": [
+            711.534,
+            802.121
+          ],
+          "boundary_ms": 13.601,
+          "clock_drift_ms": 0.0
+        },
+        "attach_to_ready_cpu": {
+          "wall_ms": 147.595,
+          "main_cpu_inward_and_outward_ms": [
+            140.625,
+            171.875
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            140.625,
+            171.875
+          ],
+          "main_cycle_inward_and_outward_M": [
+            412.356,
+            503.576
+          ],
+          "boundary_ms": 12.868,
+          "clock_drift_ms": 0.003
+        },
+        "ready_to_predraw_cpu": null,
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 0,
+        "entry_signals": {
+          "physics": [
+            3811,
+            4519,
+            269385,
+            269423,
+            269431,
+            269437,
+            269443,
+            269449,
+            269454,
+            269460
+          ],
+          "post_draw": [
+            7049,
+            268519,
+            438455
+          ],
+          "pre_draw": [
+            5202,
+            267234,
+            437639
+          ],
+          "process": [
+            4564,
+            10537,
+            269470
+          ]
+        }
+      },
+      {
+        "index": 45,
+        "cycle": 8,
+        "level": "skirmish",
+        "gap_ms": 246.501,
+        "attach_to_ready_ms": 127.306,
+        "ready_to_pre_draw_ms": 110.296,
+        "pre_draw_to_present_ms": 6.382,
+        "gap_cpu": {
+          "wall_ms": 246.501,
+          "main_cpu_inward_and_outward_ms": [
+            218.75,
+            250.0
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            218.75,
+            250.0
+          ],
+          "main_cycle_inward_and_outward_M": [
+            673.744,
+            763.584
+          ],
+          "boundary_ms": 9.461,
+          "clock_drift_ms": 0.001
+        },
+        "attach_to_ready_cpu": {
+          "wall_ms": 127.306,
+          "main_cpu_inward_and_outward_ms": [
+            93.75,
+            125.0
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            93.75,
+            125.0
+          ],
+          "main_cycle_inward_and_outward_M": [
+            304.909,
+            394.674
+          ],
+          "boundary_ms": 13.866,
+          "clock_drift_ms": 0.001
+        },
+        "ready_to_predraw_cpu": {
+          "wall_ms": 110.296,
+          "main_cpu_inward_and_outward_ms": [
+            93.75,
+            125.0
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            93.75,
+            125.0
+          ],
+          "main_cycle_inward_and_outward_M": [
+            276.635,
+            368.835
+          ],
+          "boundary_ms": 15.244,
+          "clock_drift_ms": 0.001
+        },
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 0,
+        "entry_signals": {
+          "physics": [
+            1322,
+            47550,
+            47567,
+            48807,
+            61463,
+            75365,
+            103163,
+            117042,
+            130899,
+            144794,
+            158671,
+            186475,
+            200352,
+            214223,
+            228113,
+            242090,
+            269778,
+            283709,
+            297553,
+            439020,
+            439070,
+            439077,
+            439087,
+            439093,
+            439098,
+            439104
+          ],
+          "post_draw": [
+            2179,
+            47375,
+            48492,
+            50174,
+            62731,
+            76815,
+            91416,
+            105404,
+            118962,
+            132670,
+            146602,
+            160161,
+            174257,
+            188670,
+            202019,
+            216070,
+            230172,
+            243634,
+            257314,
+            271072,
+            287127,
+            438051,
+            684552
+          ],
+          "pre_draw": [
+            1675,
+            46661,
+            47906,
+            49422,
+            61933,
+            75828,
+            90210,
+            104144,
+            118020,
+            131760,
+            145751,
+            159312,
+            173363,
+            187277,
+            200967,
+            215034,
+            229021,
+            242708,
+            256393,
+            270274,
+            286259,
+            436560,
+            678175
+          ],
+          "process": [
+            1509,
+            3408,
+            47578,
+            48854,
+            61500,
+            75402,
+            89251,
+            103220,
+            117087,
+            130940,
+            144839,
+            158709,
+            172583,
+            186524,
+            200402,
+            214258,
+            228152,
+            242135,
+            255894,
+            269817,
+            283758,
+            297591,
+            439116
+          ]
+        }
+      },
+      {
+        "index": 95,
+        "cycle": 16,
+        "level": "custom_defense",
+        "gap_ms": 235.84,
+        "attach_to_ready_ms": 146.444,
+        "ready_to_pre_draw_ms": 77.231,
+        "pre_draw_to_present_ms": 5.871,
+        "gap_cpu": {
+          "wall_ms": 235.84,
+          "main_cpu_inward_and_outward_ms": [
+            218.75,
+            234.375
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            218.75,
+            234.375
+          ],
+          "main_cycle_inward_and_outward_M": [
+            679.88,
+            768.99
+          ],
+          "boundary_ms": 12.665,
+          "clock_drift_ms": 0.008
+        },
+        "attach_to_ready_cpu": {
+          "wall_ms": 146.444,
+          "main_cpu_inward_and_outward_ms": [
+            109.375,
+            140.625
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            109.375,
+            140.625
+          ],
+          "main_cycle_inward_and_outward_M": [
+            360.482,
+            450.686
+          ],
+          "boundary_ms": 12.126,
+          "clock_drift_ms": 0.004
+        },
+        "ready_to_predraw_cpu": {
+          "wall_ms": 77.231,
+          "main_cpu_inward_and_outward_ms": [
+            62.5,
+            93.75
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            62.5,
+            93.75
+          ],
+          "main_cycle_inward_and_outward_M": [
+            182.697,
+            274.528
+          ],
+          "boundary_ms": 12.191,
+          "clock_drift_ms": 0.001
+        },
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 237,
+        "entry_signals": {
+          "physics": [
+            1005,
+            33758,
+            34437,
+            47657,
+            61538,
+            89335,
+            103242,
+            117129,
+            131024,
+            144969,
+            310102,
+            310190,
+            310206,
+            310223,
+            310234,
+            310244,
+            310261,
+            310281
+          ],
+          "post_draw": [
+            1968,
+            33638,
+            34353,
+            34962,
+            48445,
+            62304,
+            76168,
+            90159,
+            104248,
+            118283,
+            132190,
+            146962,
+            307160,
+            543011
+          ],
+          "pre_draw": [
+            1376,
+            33109,
+            33954,
+            34601,
+            47935,
+            61792,
+            75715,
+            89662,
+            103651,
+            117634,
+            131522,
+            145716,
+            304520,
+            537143
+          ],
+          "process": [
+            1170,
+            2845,
+            33775,
+            34449,
+            47678,
+            61556,
+            75434,
+            89367,
+            103275,
+            117221,
+            131064,
+            145024,
+            158788,
+            310307
+          ]
+        },
+        "canvas_before_predraw": 237,
+        "canvas_first_ms_after_ready": 0.248,
+        "canvas_last_ms_before_predraw": 0.326,
+        "longest_canvas_boundaries": [
+          {
+            "after": [
+              "@Node2D@27339",
+              "Node2D",
+              "res://scripts/liangshan_entrance.gd"
+            ],
+            "before": [
+              "@Node2D@27340",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "ms": 19.995,
+            "cpu": null
+          },
+          {
+            "after": [
+              "LiangshanVisualSample",
+              "Node2D",
+              "res://scripts/liangshan_scenery.gd"
+            ],
+            "before": [
+              "@Node2D@27204",
+              "Node2D",
+              ""
+            ],
+            "ms": 19.926,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Node2D@27202",
+              "Node2D",
+              "res://scripts/game_map.gd"
+            ],
+            "before": [
+              "LiangshanVisualSample",
+              "Node2D",
+              "res://scripts/liangshan_scenery.gd"
+            ],
+            "ms": 16.59,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Control@27396",
+              "Control",
+              ""
+            ],
+            "before": [
+              "@Label@27397",
+              "Label",
+              ""
+            ],
+            "ms": 5.108,
+            "cpu": null
+          },
+          {
+            "after": [
+              "@Node2D@27345",
+              "Node2D",
+              "res://scripts/liangshan_gate.gd"
+            ],
+            "before": [
+              "@Node2D@27346",
+              "Node2D",
+              "res://scripts/liangshan_stockade.gd"
+            ],
+            "ms": 3.569,
+            "cpu": null
+          }
+        ]
+      },
+      {
+        "index": 96,
+        "cycle": 16,
+        "level": "level5",
+        "gap_ms": 176.001,
+        "attach_to_ready_ms": 73.707,
+        "ready_to_pre_draw_ms": 90.862,
+        "pre_draw_to_present_ms": 8.969,
+        "gap_cpu": {
+          "wall_ms": 176.001,
+          "main_cpu_inward_and_outward_ms": [
+            140.625,
+            171.875
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            140.625,
+            171.875
+          ],
+          "main_cycle_inward_and_outward_M": [
+            455.492,
+            540.514
+          ],
+          "boundary_ms": 13.077,
+          "clock_drift_ms": 0.004
+        },
+        "attach_to_ready_cpu": {
+          "wall_ms": 73.707,
+          "main_cpu_inward_and_outward_ms": [
+            62.5,
+            93.75
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            62.5,
+            93.75
+          ],
+          "main_cycle_inward_and_outward_M": [
+            179.152,
+            265.368
+          ],
+          "boundary_ms": 14.715,
+          "clock_drift_ms": 0.003
+        },
+        "ready_to_predraw_cpu": {
+          "wall_ms": 90.862,
+          "main_cpu_inward_and_outward_ms": [
+            46.875,
+            78.125
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            46.875,
+            78.125
+          ],
+          "main_cycle_inward_and_outward_M": [
+            182.656,
+            276.34
+          ],
+          "boundary_ms": 14.941,
+          "clock_drift_ms": 0.001
+        },
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 0,
+        "entry_signals": {
+          "physics": [
+            1283,
+            35440,
+            36199,
+            49361,
+            63277,
+            77127,
+            91029,
+            118793,
+            132681,
+            146551,
+            160500,
+            174348,
+            247360,
+            247397,
+            247401
+          ],
+          "post_draw": [
+            2021,
+            35293,
+            36117,
+            36881,
+            50513,
+            64747,
+            78362,
+            92154,
+            105950,
+            119940,
+            133677,
+            147700,
+            164676,
+            246325,
+            422324
+          ],
+          "pre_draw": [
+            1602,
+            34667,
+            35646,
+            36380,
+            49841,
+            63936,
+            77539,
+            91455,
+            105273,
+            119167,
+            133098,
+            147020,
+            164059,
+            245199,
+            413360
+          ],
+          "process": [
+            1455,
+            2816,
+            35458,
+            36210,
+            49397,
+            63322,
+            77160,
+            91064,
+            104902,
+            118823,
+            132716,
+            146585,
+            160550,
+            174375,
+            247415
+          ]
+        }
+      },
+      {
+        "index": 36,
+        "cycle": 6,
+        "level": "level5",
+        "gap_ms": 152.433,
+        "attach_to_ready_ms": 86.871,
+        "ready_to_pre_draw_ms": 58.787,
+        "pre_draw_to_present_ms": 4.847,
+        "gap_cpu": {
+          "wall_ms": 152.433,
+          "main_cpu_inward_and_outward_ms": [
+            140.625,
+            171.875
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            140.625,
+            171.875
+          ],
+          "main_cycle_inward_and_outward_M": [
+            408.92,
+            500.674
+          ],
+          "boundary_ms": 13.52,
+          "clock_drift_ms": 0.001
+        },
+        "attach_to_ready_cpu": {
+          "wall_ms": 86.871,
+          "main_cpu_inward_and_outward_ms": [
+            62.5,
+            93.75
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            62.5,
+            93.75
+          ],
+          "main_cycle_inward_and_outward_M": [
+            179.851,
+            273.307
+          ],
+          "boundary_ms": 16.097,
+          "clock_drift_ms": 0.003
+        },
+        "ready_to_predraw_cpu": {
+          "wall_ms": 58.787,
+          "main_cpu_inward_and_outward_ms": [
+            46.875,
+            78.125
+          ],
+          "process_cpu_inward_and_outward_ms": [
+            46.875,
+            78.125
+          ],
+          "main_cycle_inward_and_outward_M": [
+            135.613,
+            227.396
+          ],
+          "boundary_ms": 9.407,
+          "clock_drift_ms": 0.007
+        },
+        "memory_probe_overlap": [],
+        "canvas_signal_count": 0,
+        "entry_signals": {
+          "physics": [
+            1291,
+            37586,
+            38548,
+            51513,
+            65397,
+            79305,
+            107114,
+            120967,
+            134847,
+            148756,
+            162622,
+            190444,
+            204279,
+            275093,
+            275119,
+            275122
+          ],
+          "post_draw": [
+            2223,
+            37425,
+            38438,
+            39344,
+            52767,
+            66645,
+            81035,
+            94714,
+            108682,
+            122296,
+            136142,
+            151069,
+            164066,
+            177907,
+            192140,
+            274418,
+            426852
+          ],
+          "pre_draw": [
+            1689,
+            36662,
+            37854,
+            38792,
+            52028,
+            65838,
+            80008,
+            93843,
+            107905,
+            121494,
+            135479,
+            149690,
+            163160,
+            177134,
+            191216,
+            273526,
+            422007
+          ],
+          "process": [
+            1516,
+            3064,
+            37609,
+            38562,
+            51558,
+            65432,
+            79356,
+            93190,
+            107156,
+            121011,
+            134889,
+            148801,
+            162669,
+            176519,
+            190511,
+            204312,
+            275132
+          ]
+        }
+      }
+    ]
+  },
+  "prior_custom_defense_peak_boundaries": {
+    "cycle": 11,
+    "index": 65,
+    "ready_to_pre_draw_ms": 399.084,
+    "pre_draw_to_first_frame_ms": 21.939,
+    "trace": {
+      "battle_attached_us": 921607,
+      "entry_signal_us": {
+        "physics": [
+          1621,
+          1824,
+          40591,
+          41723,
+          68437,
+          82326,
+          96183,
+          123967,
+          137871,
+          151776,
+          165667,
+          193432,
+          207457,
+          221195,
+          235103,
+          249020,
+          276789,
+          290647,
+          304543,
+          318404,
+          332323,
+          360080,
+          374007,
+          387943,
+          401821,
+          415652,
+          443557,
+          457582,
+          471171,
+          485318,
+          917604,
+          917678,
+          917696,
+          917713,
+          917739,
+          917754,
+          917768,
+          917784
+        ],
+        "post_draw": [
+          2667,
+          39760,
+          41607,
+          42864,
+          56466,
+          70015,
+          84291,
+          98157,
+          112447,
+          125622,
+          140447,
+          154965,
+          169279,
+          183929,
+          199168,
+          213132,
+          224135,
+          237978,
+          252564,
+          265649,
+          280419,
+          294089,
+          307326,
+          321208,
+          336859,
+          349899,
+          363642,
+          378715,
+          392393,
+          406317,
+          419786,
+          434241,
+          448394,
+          463073,
+          473823,
+          914893,
+          1566735
+        ],
+        "pre_draw": [
+          1997,
+          38568,
+          41031,
+          41929,
+          55300,
+          69052,
+          83010,
+          96794,
+          110739,
+          124586,
+          138737,
+          152717,
+          166850,
+          181290,
+          195916,
+          209732,
+          222244,
+          236011,
+          250445,
+          263807,
+          277849,
+          291820,
+          305535,
+          319290,
+          334224,
+          347325,
+          361099,
+          375853,
+          389461,
+          403149,
+          416873,
+          430987,
+          445391,
+          459743,
+          471988,
+          911110,
+          1544807
+        ],
+        "process": [
+          1833,
+          3358,
+          40620,
+          41738,
+          54539,
+          68485,
+          82379,
+          96225,
+          110072,
+          124023,
+          137945,
+          151847,
+          165747,
+          179565,
+          193513,
+          207580,
+          221262,
+          235173,
+          249113,
+          262873,
+          276868,
+          290716,
+          304624,
+          318464,
+          332473,
+          346255,
+          360147,
+          374096,
+          388050,
+          401906,
+          415734,
+          429540,
+          443640,
+          457700,
+          471228,
+          485405,
+          917809
+        ]
+      },
+      "first_battle_frame_us": 1566746,
+      "first_overlay_us": 2669,
+      "first_unit_us": 1123621,
+      "gap_end_us": 1566746,
+      "gap_start_us": 914901,
+      "hud_attached_us": 1037649,
+      "level_id": "custom_defense",
+      "map_attached_us": 921703,
+      "mode": "custom_defense",
+      "scene_ready_us": 1145723,
+      "unix_origin_us": 1795503671415000
+    }
+  },
+  "prior_peak_gaps": [
+    {
+      "index": 65,
+      "cycle": 11,
+      "level": "custom_defense",
+      "mode": "custom_defense",
+      "first_visit_in_process": false,
+      "actual_mode_correct": true,
+      "active": true,
+      "released": true,
+      "post_menu_node_count": 74.0,
+      "post_menu_orphan_count": 0.0,
+      "start_to_fight_ms": 869.17,
+      "live_seconds": 6.002328,
+      "largest_gap_ms": 521.402,
+      "first_overlay_ms": 2.612,
+      "attach_to_ready_ms": 305.289,
+      "ready_to_first_frame_ms": 201.748,
+      "start_to_first_battle_frame_ms": 813.541,
+      "timing_milestones_ordered": true,
+      "gap_overlap_ms": {
+        "点击至加载提示": 0.0,
+        "加载提示至战场挂载": 14.365,
+        "战场至地图节点": 24.372,
+        "地图节点至 HUD": 178.236,
+        "HUD 至首个单位": 81.72,
+        "首个单位至场景就绪": 20.961,
+        "场景就绪至战场首帧": 201.748
+      }
+    },
+    {
+      "index": 65,
+      "cycle": 11,
+      "level": "custom_defense",
+      "mode": "custom_defense",
+      "first_visit_in_process": false,
+      "actual_mode_correct": true,
+      "active": true,
+      "released": true,
+      "post_menu_node_count": 74.0,
+      "post_menu_orphan_count": 0.0,
+      "start_to_fight_ms": 1708.134,
+      "live_seconds": 6.007244,
+      "largest_gap_ms": 651.845,
+      "first_overlay_ms": 2.669,
+      "attach_to_ready_ms": 224.116,
+      "ready_to_first_frame_ms": 421.023,
+      "start_to_first_battle_frame_ms": 1566.746,
+      "timing_milestones_ordered": true,
+      "gap_overlap_ms": {
+        "点击至加载提示": 0.0,
+        "加载提示至战场挂载": 6.706,
+        "战场至地图节点": 0.096,
+        "地图节点至 HUD": 115.946,
+        "HUD 至首个单位": 85.972,
+        "首个单位至场景就绪": 22.102,
+        "场景就绪至战场首帧": 421.023
+      }
+    }
+  ],
+  "entrance_first_draw_probe": {
+    "run": {
+      "candidate": "f76e44fdd940da7dd66c4df4a855714948adcd27",
+      "pck_sha256": "2b56c924785544902d9e1a6ea727cba5629bc9f9acbdce3c10d7c641b10f154f",
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "exe_unchanged": true,
+      "exit_code": 0,
+      "seconds": 46.182,
+      "active_fps_cap": 60,
+      "errors": [],
+      "warnings": [],
+      "log_sha256": "383fa344d4b848f4750e499b84d580a06faed8797facf3a0df7bd1ab0e88fb83",
+      "report_sha256": "841e5064abd4fe08524592c0a575082201e1b8612037640c7325a353eaad9a00"
+    },
+    "repeat_medians_ms": {
+      "entrance_draw_us": 11.745,
+      "terrace_geometry_us": 11.418,
+      "first_map_draw_us": 7.646,
+      "first_scenery_draw_us": 11.119
+    },
+    "direct_timings_us": [
+      {
+        "entrance_draw_us": 12694,
+        "terrace_geometry_us": 12361,
+        "first_map_draw_us": 8878,
+        "first_scenery_draw_us": 12676
+      },
+      {
+        "entrance_draw_us": 11605,
+        "terrace_geometry_us": 11397,
+        "first_map_draw_us": 7627,
+        "first_scenery_draw_us": 11503
+      },
+      {
+        "entrance_draw_us": 12381,
+        "terrace_geometry_us": 11752,
+        "first_map_draw_us": 7646,
+        "first_scenery_draw_us": 12021
+      },
+      {
+        "entrance_draw_us": 11822,
+        "terrace_geometry_us": 11552,
+        "first_map_draw_us": 7307,
+        "first_scenery_draw_us": 11052
+      },
+      {
+        "entrance_draw_us": 11755,
+        "terrace_geometry_us": 11418,
+        "first_map_draw_us": 7933,
+        "first_scenery_draw_us": 11194
+      },
+      {
+        "entrance_draw_us": 11554,
+        "terrace_geometry_us": 11219,
+        "first_map_draw_us": 7363,
+        "first_scenery_draw_us": 10576
+      },
+      {
+        "entrance_draw_us": 11449,
+        "terrace_geometry_us": 11179,
+        "first_map_draw_us": 7834,
+        "first_scenery_draw_us": 11235
+      },
+      {
+        "entrance_draw_us": 11745,
+        "terrace_geometry_us": 11474,
+        "first_map_draw_us": 8395,
+        "first_scenery_draw_us": 12011
+      },
+      {
+        "entrance_draw_us": 11563,
+        "terrace_geometry_us": 11238,
+        "first_map_draw_us": 7277,
+        "first_scenery_draw_us": 10554
+      },
+      {
+        "entrance_draw_us": 11419,
+        "terrace_geometry_us": 11105,
+        "first_map_draw_us": 7273,
+        "first_scenery_draw_us": 10829
+      },
+      {
+        "entrance_draw_us": 11490,
+        "terrace_geometry_us": 11205,
+        "first_map_draw_us": 8703,
+        "first_scenery_draw_us": 11649
+      },
+      {
+        "entrance_draw_us": 12235,
+        "terrace_geometry_us": 11859,
+        "first_map_draw_us": 7336,
+        "first_scenery_draw_us": 11119
+      },
+      {
+        "entrance_draw_us": 12394,
+        "terrace_geometry_us": 11939,
+        "first_map_draw_us": 7776,
+        "first_scenery_draw_us": 11319
+      },
+      {
+        "entrance_draw_us": 12948,
+        "terrace_geometry_us": 12671,
+        "first_map_draw_us": 7849,
+        "first_scenery_draw_us": 10876
+      },
+      {
+        "entrance_draw_us": 11610,
+        "terrace_geometry_us": 11184,
+        "first_map_draw_us": 8293,
+        "first_scenery_draw_us": 10825
+      },
+      {
+        "entrance_draw_us": 12794,
+        "terrace_geometry_us": 12388,
+        "first_map_draw_us": 7644,
+        "first_scenery_draw_us": 10909
+      }
+    ],
+    "same_longest_boundary_count": 15,
+    "canvas_visits": 16,
+    "callback_source_sha256": "3f22e47524590bdb238602d6af2260301dc2a37d5c743296cac77fd74693fda4",
+    "scope": "Separate instrumented native run through the saved preset picker, 16 starts. The nested terrace geometry interval excludes finishing the batch and submitting it."
+  }
+}

@@ -1,5 +1,10 @@
 # 源码设置与换机（2026-10-30）
 
+## 2026-11-24 自定义驻守首帧绘制与主线程取样
+
+新增可选环境变量 CAMPAIGN_SOAK_ENTRY_DRAW_LEVEL，按关卡 ID 记录首帧画布回调顺序。进场信号模式同时标注了同步采样的起止。绘制信号表示观察边界，各回调的独占耗时需要另测。 [Windows 绘制追踪](../qa/battle_entry_timing_20261116/windows_cycle11_draw_cpu_f76e44fd.json)
+
+
 ## 2026-11-24 自定义驻守 Windows 地图分段加载
 
 Windows 从已保存预设开始自定义驻守时，在加载画面内准备地形、寻路和布景。预设数值仍在正局部署时应用。冻结 f76e44fd 已核对 6,574 个运行时输入，变动在 scripts/menu.gd。 [实际预设对照](../qa/battle_entry_timing_20261116/windows_custom_defense_prepared_map_f76e44fd.json) [六入口长测](../qa/battle_entry_timing_20261116/windows_candidate_f76e44fd_mode_soak_600.json)

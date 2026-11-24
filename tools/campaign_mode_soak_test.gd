@@ -65,6 +65,8 @@ var _minute_frame_count := 0
 var _stage_timing_enabled := false
 var _mount_trace_enabled := false
 var _entry_signals_enabled := false
+var _entry_draw_trace_level := ""
+var _memory_probe_spans: Array[Dictionary] = []
 var _mount_trace := {}
 var _mount_samples: Array[Dictionary] = []
 var _stage_frame_samples := {}
@@ -227,7 +229,13 @@ func _snapshot(include_process_memory: bool) -> Dictionary:
 		"resources": _resource_metrics(),
 	}
 	if include_process_memory:
+		var started := Time.get_ticks_usec()
+		var unix_started := roundi(Time.get_unix_time_from_system() * 1_000_000.0) if _entry_signals_enabled else 0
 		snapshot["process_memory"] = _process_memory()
+		if _entry_signals_enabled:
+			_memory_probe_spans.append({"unix_started_us": unix_started,
+				"elapsed_us": Time.get_ticks_usec() - started, "mode": _current_mode,
+				"cycle": _cycle, "query_ok": snapshot.process_memory.query_ok})
 	return snapshot
 
 
@@ -288,6 +296,12 @@ func _trace_node_added(node: Node) -> void:
 	if _mount_trace.is_empty() or _mount_trace.scene_ready_us >= 0:
 		return
 	var elapsed := Time.get_ticks_usec() - int(_mount_trace.origin_us)
+	if not _entry_draw_trace_level.is_empty() and _mount_trace.level_id == _entry_draw_trace_level \
+			and _mount_trace.battle_attached_us >= 0 and node is CanvasItem:
+		var canvas := node as CanvasItem
+		var draw_script := canvas.get_script() as Script
+		var script_path := draw_script.resource_path if draw_script != null else ""
+		canvas.draw.connect(_trace_canvas_draw.bind(String(canvas.name), canvas.get_class(), script_path), CONNECT_ONE_SHOT)
 	if node.scene_file_path == BATTLE_SCENE and node.get_parent() == root:
 		_mount_trace.battle_attached_us = elapsed
 	elif _mount_trace.battle_attached_us >= 0 and _mount_trace.first_unit_us < 0:
@@ -305,6 +319,14 @@ func _trace_node_added(node: Node) -> void:
 					_mount_trace.hud_attached_us = elapsed
 			&"Unit":
 				_mount_trace.first_unit_us = elapsed
+
+
+func _trace_canvas_draw(node_name: String, node_class: String, script_path: String) -> void:
+	if _mount_trace.is_empty() or _mount_trace.first_battle_frame_us >= 0:
+		return
+	# CanvasItem.draw marks an engine callback boundary, including native controls.
+	var signals: Array = _mount_trace.get_or_add("canvas_draw_signals", [])
+	signals.append([Time.get_ticks_usec() - int(_mount_trace.origin_us), node_name, node_class, script_path])
 
 
 func _trace_scene_changed() -> void:
@@ -873,7 +895,8 @@ func _run() -> void:
 			_early_exit("Campaign startup did not allow entry: " + str(startup_flow.last_result), 2)
 			return
 		await process_frame
-	_entry_signals_enabled = OS.get_environment("CAMPAIGN_SOAK_ENTRY_SIGNALS") == "1"
+	_entry_draw_trace_level = OS.get_environment("CAMPAIGN_SOAK_ENTRY_DRAW_LEVEL")
+	_entry_signals_enabled = OS.get_environment("CAMPAIGN_SOAK_ENTRY_SIGNALS") == "1" or not _entry_draw_trace_level.is_empty()
 	_mount_trace_enabled = _entry_signals_enabled or OS.get_environment("CAMPAIGN_SOAK_MOUNT_TRACE") == "1"
 	if _mount_trace_enabled:
 		node_added.connect(_trace_node_added)
@@ -995,6 +1018,9 @@ func _run() -> void:
 		_report["frame_stages"] = _stage_frame_samples.values()
 	if _mount_trace_enabled:
 		_report["mount_traces"] = _mount_samples
+	if _entry_signals_enabled:
+		_report["memory_probe_spans"] = _memory_probe_spans
+		_report["entry_draw_trace_level"] = _entry_draw_trace_level
 	_write_report()
 	print("CAMPAIGN_MODE_SOAK_RESULT ", JSON.stringify({
 		"passed": acceptance_passed,
