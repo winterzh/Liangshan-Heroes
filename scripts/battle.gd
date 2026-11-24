@@ -32,7 +32,7 @@ var _save_barrier: Node
 
 var world: Node2D
 var map: GameMap
-var _classic_entry_map_prepared := false
+var _entry_map_prepared := false
 var hud: HUD
 var camera: RTSCamera
 var units_root: Node2D
@@ -441,7 +441,7 @@ func _ready() -> void:
 		_gameplay_rng_stop(initialized.code)
 		return
 	_refresh_hot_patch_classes()
-	if not _classic_entry_map_prepared:
+	if not _entry_map_prepared:
 		level = _resolve_level()
 	# This is the new-game entry only. The future whole-world restore factory
 	# must attach an already prepared world without running deploy/on_start.
@@ -478,7 +478,7 @@ func _ready() -> void:
 	_save_barrier = preload("res://scripts/run_battle_barrier.gd").new()
 	_save_barrier.configure(self, _run_clock, _official_context)
 	add_child(_save_barrier)
-	if _classic_entry_map_prepared:
+	if _entry_map_prepared:
 		move_child(world, _save_barrier.get_index())
 	_steam_run_id = SteamService.begin_run(_official_context)
 	_update_steam_presence()
@@ -504,7 +504,7 @@ func _ready() -> void:
 		current_age = level.start_age() if level.has_method("start_age") else 3
 	fog = level.fog_enabled()
 
-	if not _classic_entry_map_prepared:
+	if not _entry_map_prepared:
 		_build_entry_map(environment)
 	# 驻守战的逻辑地图仍是60×60，但等距菱形外侧不能直接露出引擎黑底。
 	# 在地图下方延伸同色水泊，只负责画面铺底，不增加可走格、资源或寻路范围。
@@ -736,15 +736,15 @@ func _build_test() -> void:
 	AppLifecycle.request_quit("build_test")
 
 
-func prepare_classic_entry_map() -> void:
-	if is_inside_tree() or world != null or not Campaign.skirmish:
+func prepare_entry_map(expected_level_id: String) -> void:
+	if is_inside_tree() or world != null:
 		return
 	var selected: LevelBase = Campaign.make_level()
-	if selected.id() != "skirmish":
+	if selected.id() != expected_level_id:
 		return
 	level = selected
 	_build_entry_map(load("res://scripts/campaign_environment.gd"))
-	_classic_entry_map_prepared = true
+	_entry_map_prepared = true
 
 
 func _build_entry_map(environment: Script) -> void:

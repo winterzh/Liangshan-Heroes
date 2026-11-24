@@ -232,14 +232,18 @@ func _finish_battle_launch(campaign_level_id: String) -> void:
 			return
 		Art.cache_prepared_opening_texture(path, texture)
 	_entry_opening_portrait_requests.clear()
-	# The classic map gets its final loading draw after map preparation. All
-	# other entries paint the loading view before their synchronous installation.
-	var stage_classic_map := OS.get_name() == "Windows" and Campaign.skirmish and not Campaign.custom_defense
-	if not stage_classic_map:
+	# These maps are ready to prepare while the last loading frame is still visible.
+	var prepared_level_id := ""
+	if OS.get_name() == "Windows":
+		if Campaign.skirmish and not Campaign.custom_defense:
+			prepared_level_id = "skirmish"
+		elif campaign_level_id == "level1":
+			prepared_level_id = campaign_level_id
+	if prepared_level_id.is_empty():
 		await RenderingServer.frame_post_draw
 	if AppLifecycle.quit_started():
 		return
-	_install_battle.call_deferred(identity, environment_textures, stage_classic_map)
+	_install_battle.call_deferred(identity, environment_textures, prepared_level_id)
 
 
 func _wait_for_battle_resource(path: String) -> Resource:
@@ -253,7 +257,7 @@ func _wait_for_battle_resource(path: String) -> Resource:
 
 
 func _install_battle(identity: Dictionary, environment_textures: Array[Texture2D],
-		stage_classic_map := false) -> void:
+		prepared_level_id := "") -> void:
 	if AppLifecycle.quit_started():
 		return
 	var changed_installation := String(identity.get("code", "")).begins_with("SPLIT_PACK_")
@@ -265,9 +269,9 @@ func _install_battle(identity: Dictionary, environment_textures: Array[Texture2D
 			if not environment_textures.is_empty():
 				# Keep Godot's cached textures alive through the battle's _ready.
 				battle.ready.connect(func(): environment_textures.clear(), CONNECT_ONE_SHOT)
-			if stage_classic_map:
+			if not prepared_level_id.is_empty():
 				# Finish the loading frame with the prepared world still detached.
-				battle.prepare_classic_entry_map()
+				battle.prepare_entry_map(prepared_level_id)
 				_entry_prepared_battle = battle
 				await RenderingServer.frame_post_draw
 				if not is_instance_valid(battle):
