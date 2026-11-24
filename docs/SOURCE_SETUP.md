@@ -1,5 +1,9 @@
 # 源码设置与换机（2026-10-30）
 
+## Windows 正式版存档兼容
+
+候选 11118952 使用验收过的正式版内容与拆包身份恢复战役原档。八章验证覆盖阵容、血量、路径、资源、地形和任务事件，第二代存档沿用原版本身份。 [八章 Windows 验收](../qa/battle_entry_timing_20261116/windows_current_public_26873421_campaign_migration_11118952.json)
+
 ## 大名府火号复用任务行军
 
 新按钮使用已有任务行军与到场读条，保存按钮标识和原行军状态。Windows 继续入口补入正式 Build 26873421 的内容与拆包身份，使用原章运行账本。兼容已在大名府真实读档与再存中验证。 [Windows 成品验收](../qa/campaign_coordination_20261116/windows_daming_send_fire_11118952.json)

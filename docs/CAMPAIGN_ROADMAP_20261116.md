@@ -1,5 +1,9 @@
 # 八幕战役后续开发路线图
 
+## 八章开局存档续玩验收
+
+Steam 正式 Build 26873421 的八章开局档已在候选 11118952 验证。每章都能直接继续、移动原单位、再存及独立重开。中途剧情路线另以大名府验收记录为准。 [八章 Windows 验收](../qa/battle_entry_timing_20261116/windows_current_public_26873421_campaign_migration_11118952.json)
+
 ## M4 大名府火号启动
 
 玩家可在牢内就位后自己决定何时点火。任务栏省去找时迁与旗标的操作，接应仍按正常战斗办理。 [Windows 成品验收](../qa/campaign_coordination_20261116/windows_daming_send_fire_11118952.json)

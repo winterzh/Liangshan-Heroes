@@ -1,5 +1,9 @@
 # 当前项目总览
 
+## Steam 正式版八章旧档
+
+正式 Build 26873421 的八章开局档均可在 Windows 候选 11118952 继续、移动原部队、再存并独立重开。大名府另有中途乔装档恢复到火号终局的独立验收。 [八章 Windows 验收](../qa/battle_entry_timing_20261116/windows_current_public_26873421_campaign_migration_11118952.json)
+
 ## Windows 大名府火号指令
 
 候选 11118952 从正式 Build 26873421 存档继续，通过一键派时迁、按原路续玩、火号夺门和二人撤离。四语窄窗及终局旧槽拦截完成。 [Windows 成品验收](../qa/campaign_coordination_20261116/windows_daming_send_fire_11118952.json)

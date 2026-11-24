@@ -1,5 +1,9 @@
 # 开发日志
 
+## 2026-11-24 从 Steam 正式版续玩八章
+
+正式 Build 26873421 逐章用普通菜单开战保存。候选 11118952 逐章继续、下达小地图移动、等原单位实际移动后再存，最后由独立进程续玩第 2 代存档。24 个原生进程通过，八份第 1 代原档及八份账本的原始字节一致。 [八章 Windows 验收](../qa/battle_entry_timing_20261116/windows_current_public_26873421_campaign_migration_11118952.json)
+
 ## 2026-11-24 大名府火号指令
 
 牢内接应到位后，PC 任务栏可直接派时迁前往翠云楼。按原行军在途保存，独立重开后实际举火。 [Windows 成品验收](../qa/campaign_coordination_20261116/windows_daming_send_fire_11118952.json)
