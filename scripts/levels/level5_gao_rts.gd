@@ -27,6 +27,13 @@ const PRISONER_WAITING := "高俅正在等待岸军护卫。已下达的行军�
 const PRISONER_HANDOVER := HALL + Vector2i(0,4)
 const ESCORT_PROMPT := "高俅已上岸。点击「押送高俅回堂」调附近的一名空闲岸军同行，也可自行指挥。"
 const FIRE_SAFE := Vector2i(32,50)
+const FIRE_WITHDRAW_SLOTS := [Vector2i(-1, -1), Vector2i(0, 1)]
+const WITHDRAW_ESCORT_SHIPS := "gao_withdraw_escort_ships"
+const RETURN_LIU_TANG := "gao_return_liu_tang"
+const WITHDRAW_ACTION := "gao_fire_withdraw"
+const RETURN_ACTION := "gao_liu_return"
+const WITHDRAW_PROMPT := "火船已点燃。点「撤出接应船」让两船驶向安全水域；附近有官船时，先压退追兵。"
+const RETURN_PROMPT := "双船已撤离。可点「送刘唐返港」，让载他的原船回主码头。"
 const SHIP_KEYS := ["ruan_xiaoqi_boat","ruan_xiaoer_boat","ruan_xiaowu_boat","zhang_shun_boat","liangshan_warship"]
 const OPENING_OBJECTIVE := "首批约140秒出发，后两批约330与540秒。岸军防东山关、舰队守内港；可出击拆两处补给，也可经营补兵接战。"
 var hall: Unit
@@ -397,8 +404,87 @@ func _fire_hint(b) -> String:
 	if not alive(fireboat):
 		return count
 	return count + "\n" + Localize.text(_fire_next_step(b, visible_targets, escorts))
+func _escort_ships(b) -> Array:
+	return [liu_carrier, b.find_unit("ruan_xiaowu_boat")]
+
+
 func _withdraw_crew(b) -> Array:
-	return [liu_carrier,b.find_unit("ruan_xiaowu_boat")].filter(func(u): return _near(b,u,FIRE_SAFE,120))
+	return _escort_ships(b).filter(func(ship): return _near(b, ship, FIRE_SAFE, 120))
+
+
+# Both ships must enter the safe water before the first one starts the usual
+# withdrawal action. The story's original enemy and arrival checks still run.
+func can_start_manual_mission_action(b, action_id: String) -> bool:
+	return action_id != WITHDRAW_ACTION or b.hud.touch_ui or _withdraw_crew(b).size() == 2
+
+
+func _fire_route_ships(b, button_id: String) -> Array:
+	if b.hud.touch_ui:
+		return []
+	var withdrew: bool = b.mission.has_event("fire_escort_safe")
+	var missed: bool = b.mission.story_goals.get("gao_fire", {}).get("state", "") == "missed"
+	var withdrawing := button_id == WITHDRAW_ESCORT_SHIPS
+	if withdrawing and (not fire_lit or withdrew or missed or fire_abandoned):
+		return []
+	if not withdrawing and not withdrew and not missed:
+		return []
+	var action_id := WITHDRAW_ACTION if withdrawing else RETURN_ACTION
+	var action: Dictionary = b.mission.actions.get(action_id, {})
+	if action.is_empty() or action.done or not String(action.get("blocked_reason", "")).is_empty():
+		return []
+	var ships: Array = _escort_ships(b) if withdrawing else [_liu_return_ship()]
+	return ships if ships.all(func(ship): return b.mission._valid_action_actor(ship, action)) else []
+
+
+func _sync_fire_route_button(b, button_id: String, label: String, tooltip: String) -> void:
+	var button: Button = b.mission.find_level_button(button_id)
+	if _fire_route_ships(b, button_id).is_empty():
+		if button != null:
+			button.get_parent().remove_child(button)
+			button.queue_free()
+	elif button == null:
+		button = b.mission.add_level_button(button_id, label, tooltip)
+		button.get_parent().move_child(button, 0)
+		b.mission.reveal_primary_level_button()
+
+
+func _order_fire_route(b, button_id: String) -> void:
+	if not b._gameplay_rng_issue.is_empty():
+		return
+	var withdrawing := button_id == WITHDRAW_ESCORT_SHIPS
+	var action_id := WITHDRAW_ACTION if withdrawing else RETURN_ACTION
+	var ships := _fire_route_ships(b, button_id)
+	if ships.is_empty() or b.mission.active_action_id == action_id:
+		return
+	var action: Dictionary = b.mission.actions[action_id]
+	var marker: Vector2 = b.map.cell_to_world(action.cell)
+	var movers: Array = []
+	var targets: Array[Vector2] = []
+	for index in range(ships.size()):
+		var ship: Unit = ships[index]
+		if (ship.mission_order_active or ship.mission_order_arrival_t > 0.0) \
+				and ship.mission_order_target == marker:
+			continue
+		# Keep a full tile between each hull and the marker, within action reach.
+		var cell: Vector2i = action.cell
+		if withdrawing:
+			cell += FIRE_WITHDRAW_SLOTS[index]
+		var target: Vector2 = b.map.cell_to_world(cell)
+		var path: PackedVector2Array = b.map.find_path(ship.position, target, ship.faction, ship.movement_profile)
+		if path.is_empty() or path[-1].distance_to(marker) > float(action.reach) \
+				or not b.map._segment_open(path[-1], marker, ship.movement_profile):
+			b.mission.set_feedback("暂时走不到旗标。请清开道路或手动改道。")
+			return
+		movers.append(ship)
+		targets.append(target)
+	if movers.is_empty() or not b.mission.can_tap_action(movers, marker):
+		return
+	b._stamp_manual(movers)
+	for index in range(movers.size()):
+		movers[index].order_move(targets[index])
+	b._stamp_mission_move(movers, marker)
+	b.mission.set_feedback("两艘接应船正驶往安全水域。" if withdrawing else "载刘唐的船已启程返港。")
+	Sfx.play("order")
 func _liu_return_ship() -> Unit:
 	if not is_instance_valid(embarked_liu): return null
 	var ship = liu_carrier if fire_lit else fireboat
@@ -406,12 +492,11 @@ func _liu_return_ship() -> Unit:
 
 func refresh_restored_liu_return(b) -> void:
 	var ship := _liu_return_ship()
-	if ship == null: return
-	var action: Dictionary = b.mission.actions.get("gao_liu_return", {})
-	if action.is_empty() or action.done or action.has("blocked_reason") or action.actors == [ship.key]: return
-	# Older Windows saves list both ships. Keep the saved action and its progress,
-	# and refresh who can take the next order from the restored passenger binding.
-	b.mission.update_action_actors("gao_liu_return", [ship.key])
+	var action: Dictionary = b.mission.actions.get(RETURN_ACTION, {})
+	if ship != null and not action.is_empty() and not action.done and not action.has("blocked_reason") and action.actors != [ship.key]:
+		# Older saves can list both boats. Preserve their action and progress;
+		# only the ship carrying the restored passenger can take the next order.
+		b.mission.update_action_actors(RETURN_ACTION, [ship.key])
 	_update_wave_objective(b)
 
 func _fire_aftermath(withdrew: bool, can_return: bool) -> String:
@@ -750,10 +835,12 @@ func _wave_objective(b) -> String:
 	var fire_available: bool = not fire_abandoned and not withdrew \
 		and b.mission.story_goals.get("gao_fire",{}).get("state","")!="missed"
 	if not fire_available and _liu_return_ship() != null:
+		if withdrew and not b.hud.touch_ui:
+			return RETURN_PROMPT
 		return _fire_aftermath(withdrew, true)
 	if fire_available:
 		if fire_lit:
-			return "火船已点燃。让两艘接应船一同撤到安全水域，再下达撤出指令。"
+			return "火船已点燃。让两艘接应船一同撤到安全水域，再下达撤出指令。" if b.hud.touch_ui else WITHDRAW_PROMPT
 		if fire_prepared and alive(fireboat):
 			return _fire_next_step(b, _visible_fire_target_count(b), _fire_escorts(b,fireboat).size())
 	if waves[1].sent:
@@ -781,6 +868,8 @@ func _wave_warning(b, index: int) -> String:
 
 
 func _update_wave_objective(b) -> void:
+	_sync_fire_route_button(b, WITHDRAW_ESCORT_SHIPS, "撤出接应船", "派阮小二和阮小五驶向安全水域。两船到齐并压退附近官船后才算撤离。")
+	_sync_fire_route_button(b, RETURN_LIU_TANG, "送刘唐返港", "派载刘唐的原船返回主码头。靠岸并清开登陆点后，刘唐才能下船。")
 	if core_ready: return
 	var objective := _wave_objective(b)
 	if b.mission.objective!=objective: b.mission.set_objective(objective)
@@ -840,6 +929,8 @@ func process(b,delta: float) -> void:
 func activate_mission_button(b, button_id: String) -> void:
 	if button_id == "gao_end": _finish(b)
 	elif button_id == "gao_escort": _order_prisoner_escort(b)
+	elif button_id == WITHDRAW_ESCORT_SHIPS or button_id == RETURN_LIU_TANG:
+		_order_fire_route(b, button_id)
 func on_unit_resolved(b,u,outcome: String) -> void:
 	if u==flagship and outcome=="subdued":
 		flagship_disabled=true
