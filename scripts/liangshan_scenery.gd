@@ -20,6 +20,7 @@ const CampaignFlagOverlay := preload("res://scripts/campaign_flag_overlay.gd")
 const WorldShadow := preload("res://scripts/world_shadow.gd")
 const StaticDrawBatch := preload("res://scripts/static_scenery_draw_batch.gd")
 static var _recent_banks: Array[Dictionary] = []
+static var _recent_coast_surfaces: Array[Dictionary] = []
 var _bank_draw_batch: StaticDrawBatch
 const EnvironmentArt := preload("res://scripts/campaign_environment_art.gd")
 var _entrance: Node2D
@@ -166,12 +167,38 @@ func setup_original_decor(game_map: GameMap, visual_decor: Array) -> void:
 	queue_redraw()
 
 
+func _coast_shader_inputs() -> Dictionary:
+	# Mask generation uses only grid cells, dimensions, the authored edge rules
+	# selected by environment_style and the natural surface switch.
+	var reuse := OS.get_name() == "Windows"
+	var key := [_map.w, _map.h, _map.environment_style, _map.natural_surface_enabled, _map.grid]
+	if reuse:
+		for i in range(_recent_coast_surfaces.size()):
+			if _recent_coast_surfaces[i].key == key:
+				var hit: Dictionary = _recent_coast_surfaces.pop_at(i)
+				_recent_coast_surfaces.append(hit)
+				return hit.inputs
+	var inputs := _map.natural_surface_maps()
+	inputs["land_texture"] = ImageTexture.create_from_image(inputs.land)
+	inputs["weights_texture"] = ImageTexture.create_from_image(inputs.weights)
+	inputs.erase("land")
+	inputs.erase("weights")
+	if reuse:
+		# Retain only immutable shader inputs. Map nodes and per-map materials keep
+		# their usual lifetime, and editing a grid cannot mutate the saved key.
+		key[4] = _map.grid.duplicate()
+		if _recent_coast_surfaces.size() == 3:
+			_recent_coast_surfaces.pop_front()
+		_recent_coast_surfaces.append({"key": key, "inputs": inputs})
+	return inputs
+
+
 func _setup_coast_material() -> void:
-	var surface_data: Dictionary = _map.natural_surface_maps()
+	var surface_data := _coast_shader_inputs()
 	var mat := ShaderMaterial.new()
 	mat.shader = load("res://scripts/liangshan_coast.gdshader")
-	mat.set_shader_parameter("land_mask", ImageTexture.create_from_image(surface_data.land))
-	mat.set_shader_parameter("surface_weights", ImageTexture.create_from_image(surface_data.weights))
+	mat.set_shader_parameter("land_mask", surface_data.land_texture)
+	mat.set_shader_parameter("surface_weights", surface_data.weights_texture)
 	mat.set_shader_parameter("map_size", Vector2(_map.w, _map.h))
 	mat.set_shader_parameter("natural_surface_enabled", _map.natural_surface_enabled)
 	mat.set_shader_parameter("natural_blend_min_px", float(surface_data.blend_min_px))
@@ -180,7 +207,7 @@ func _setup_coast_material() -> void:
 	mat.set_shader_parameter("natural_seed", float(int(surface_data.seed) % 4096))
 	_map.set_meta("natural_surface_contract", {
 		"enabled": _map.natural_surface_enabled,
-		"class_counts": surface_data.class_counts,
+		"class_counts": surface_data.class_counts.duplicate(),
 		"protected_cells": surface_data.protected_cells,
 		"weight_sha256": surface_data.weight_sha256,
 		"land_sha256": surface_data.land_sha256,

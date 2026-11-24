@@ -208,6 +208,61 @@ func _bank_cache_boundaries() -> void:
 	map.free()
 
 
+func _read_coast_material(map: Node2D, scenery: Node2D) -> Dictionary:
+	scenery._map = map
+	scenery._setup_coast_material()
+	var direct: Dictionary = map.natural_surface_maps()
+	var material := map.material as ShaderMaterial
+	var land := material.get_shader_parameter("land_mask") as Texture2D
+	var weights := material.get_shader_parameter("surface_weights") as Texture2D
+	var land_pixels := land.get_image().get_data()
+	return {"material": material, "land": land, "weights": weights, "pixels": land_pixels,
+		"matches": land_pixels == direct.land.get_data()
+			and weights.get_image().get_data() == direct.weights.get_data()
+			and map.get_meta("natural_surface_contract").class_counts == direct.class_counts}
+
+
+func _coast_cache_boundaries() -> void:
+	_scenery_script._recent_coast_surfaces.clear()
+	var first_map := _map(true)
+	var later_map := _map(true)
+	var scenery := _scenery_script.new() as Node2D
+	first_map.natural_surface_enabled = true
+	later_map.natural_surface_enabled = true
+	var original := _read_coast_material(first_map, scenery)
+	var repeated := _read_coast_material(later_map, scenery)
+	var kept_cell: int = later_map.t_at(0, 0)
+	later_map.set_cell_t(0, 0, _map_script.T.DOCK)
+	var changed := _read_coast_material(later_map, scenery)
+	later_map.set_cell_t(0, 0, kept_cell)
+	var restored := _read_coast_material(later_map, scenery)
+	later_map.natural_surface_enabled = false
+	var legacy := _read_coast_material(later_map, scenery)
+	later_map.natural_surface_enabled = true
+	later_map.environment_style = "level2"
+	var steps := _read_coast_material(later_map, scenery)
+	later_map.environment_style = "level8"
+	var walls := _read_coast_material(later_map, scenery)
+	later_map.environment_style = ""
+	var rebuilt := _read_coast_material(later_map, scenery)
+	_results["coast_textures"] = {
+		"texture_bytes_match_mask_builder": [original, repeated, changed, restored, legacy, steps, walls, rebuilt]
+			.all(func(row: Dictionary) -> bool: return row.matches),
+		"repeated_maps_share_textures": is_same(repeated.land, original.land) and is_same(repeated.weights, original.weights),
+		"maps_keep_independent_materials": not is_same(repeated.material, original.material),
+		"grid_change_rebuilds": not is_same(changed.land, original.land) and changed.pixels != original.pixels,
+		"restoring_grid_reuses": is_same(restored.land, original.land),
+		"visual_switch_and_authored_edges_change_key": not is_same(legacy.land, original.land)
+			and not is_same(steps.land, original.land) and not is_same(walls.land, steps.land),
+		"oldest_entry_evicted_at_limit": _scenery_script._recent_coast_surfaces.size() == 3
+			and not is_same(rebuilt.land, original.land),
+		"live_material_keeps_texture_after_eviction": original.land.get_image().get_data() == original.pixels,
+	}
+	scenery.free()
+	first_map.free()
+	later_map.free()
+
+
 func _run() -> void:
 	_entrance_script = load("res://scripts/liangshan_entrance.gd")
 	_scenery_script = load("res://scripts/liangshan_scenery.gd")
@@ -237,6 +292,7 @@ func _run() -> void:
 	await _banks_rendered_pair(false)
 	if _batch_script.enabled():
 		await _bank_cache_boundaries()
+	_coast_cache_boundaries()
 	var passed := true
 	for row: Dictionary in _results.values():
 		for value in row.values():
