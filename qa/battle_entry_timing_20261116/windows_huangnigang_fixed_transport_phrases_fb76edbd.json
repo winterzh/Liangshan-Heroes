@@ -1,0 +1,1242 @@
+{
+  "candidate": "fb76edbd6e53c2751409ad8fa44e74aecede3daf",
+  "base_runtime": "9697a6740c54889c5cf56e282d8d943e400f7cfc",
+  "freeze": {
+    "kind": "local_integrated_windows_candidate",
+    "layout": "split_pck",
+    "commit": "fb76edbd6e53c2751409ad8fa44e74aecede3daf",
+    "source_version": "source-v1:eccf5a362137ac99e8ce1dea79b9e937feaf9bc8a03983925f3c1d81c9353b92",
+    "tracked_runtime_count": 6574,
+    "steps": [
+      {
+        "stage": "import",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 75.47
+      },
+      {
+        "stage": "export",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 98.49
+      }
+    ],
+    "files": [
+      {
+        "path": "GODOTSTEAM_LICENSE.txt",
+        "bytes": 1110,
+        "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+      },
+      {
+        "path": "LiangshanHeroes.exe",
+        "bytes": 104886784,
+        "sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4"
+      },
+      {
+        "path": "LiangshanHeroes.pck",
+        "bytes": 1722744844,
+        "sha256": "f1533345463912045e19c367754d140b0d526c029038b17eff0cbee51d5dd464"
+      },
+      {
+        "path": "libgodotsteam.windows.template_release.x86_64.dll",
+        "bytes": 3961344,
+        "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+      },
+      {
+        "path": "steam_api64.dll",
+        "bytes": 319128,
+        "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+      },
+      {
+        "path": "steam_stats_reader.dll",
+        "bytes": 393728,
+        "sha256": "5a79a77b5b6e2cff21b285c785118352805a09d91876f89276af119ee1702517"
+      },
+      {
+        "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+        "bytes": 1093,
+        "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+      }
+    ]
+  },
+  "scope": "隔离原生 Windows 成品，Vulkan Forward+ 1280×720，关闭垂直同步，无帧率上限。各局使用普通加载与战斗入口。分段在对应成品的原 Battle 和 HUD 方法插入时间标记。",
+  "initial_profile": {
+    "native": {
+      "candidate": "9697a6740c54889c5cf56e282d8d943e400f7cfc",
+      "fixture_sha256": "6bd1dabe8abae210dd86ea13b4d69f25beb8d8d96a7e23ca82b1abc8776f6d64",
+      "all_candidate_payloads_unchanged": true,
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "fe01eb4216d5769269c626e2a4511fb5ac0ef1b533463531d219338ed31d9abd",
+      "exe_unchanged": true,
+      "exit_code": 0,
+      "seconds": 102.053,
+      "active_fps_cap": 0,
+      "errors": [],
+      "warnings": [],
+      "log_sha256": "9da034f8865b5a0758a175a99834fd79e72324e311539897532b725bf110aa29",
+      "report_sha256": "a2fe7ab75c005f5f09fe835de8cf5642c855e927f93d2d440be4344ed0d081d5"
+    },
+    "first_in_process": {
+      "request_to_first_frame_ms": 926.073,
+      "peak_entry_frame_gap_ms": 547.118,
+      "map_build_ms": 34.715,
+      "ready_to_hud_ms": 43.162,
+      "hud_create_and_setup_ms": 56.966,
+      "ready_to_first_draw_ms": 85.592
+    },
+    "repeat_median": {
+      "request_to_first_frame_ms": 114.24,
+      "peak_entry_frame_gap_ms": 75.727,
+      "map_build_ms": 12.147,
+      "ready_to_hud_ms": 36.494,
+      "hud_create_and_setup_ms": 14.017,
+      "ready_to_first_draw_ms": 13.394
+    },
+    "largest_repeat_frame_gap_ms": 184.477,
+    "all_entries": [
+      {
+        "request_to_first_frame_ms": 926.073,
+        "peak_entry_frame_gap_ms": 547.118,
+        "map_build_ms": 34.715,
+        "ready_to_hud_ms": 43.162,
+        "hud_create_and_setup_ms": 56.966,
+        "ready_to_first_draw_ms": 85.592
+      },
+      {
+        "request_to_first_frame_ms": 110.766,
+        "peak_entry_frame_gap_ms": 76.232,
+        "map_build_ms": 11.048,
+        "ready_to_hud_ms": 34.673,
+        "hud_create_and_setup_ms": 14.463,
+        "ready_to_first_draw_ms": 15.575
+      },
+      {
+        "request_to_first_frame_ms": 89.237,
+        "peak_entry_frame_gap_ms": 58.051,
+        "map_build_ms": 9.523,
+        "ready_to_hud_ms": 27.621,
+        "hud_create_and_setup_ms": 9.957,
+        "ready_to_first_draw_ms": 10.432
+      },
+      {
+        "request_to_first_frame_ms": 101.079,
+        "peak_entry_frame_gap_ms": 66.035,
+        "map_build_ms": 9.796,
+        "ready_to_hud_ms": 33.362,
+        "hud_create_and_setup_ms": 10.917,
+        "ready_to_first_draw_ms": 12.044
+      },
+      {
+        "request_to_first_frame_ms": 103.981,
+        "peak_entry_frame_gap_ms": 69.124,
+        "map_build_ms": 11.446,
+        "ready_to_hud_ms": 31.614,
+        "hud_create_and_setup_ms": 13.938,
+        "ready_to_first_draw_ms": 12.118
+      },
+      {
+        "request_to_first_frame_ms": 102.654,
+        "peak_entry_frame_gap_ms": 68.183,
+        "map_build_ms": 10.792,
+        "ready_to_hud_ms": 31.028,
+        "hud_create_and_setup_ms": 12.561,
+        "ready_to_first_draw_ms": 13.152
+      },
+      {
+        "request_to_first_frame_ms": 93.589,
+        "peak_entry_frame_gap_ms": 60.203,
+        "map_build_ms": 10.039,
+        "ready_to_hud_ms": 30.088,
+        "hud_create_and_setup_ms": 10.151,
+        "ready_to_first_draw_ms": 10.215
+      },
+      {
+        "request_to_first_frame_ms": 119.266,
+        "peak_entry_frame_gap_ms": 75.433,
+        "map_build_ms": 14.376,
+        "ready_to_hud_ms": 32.262,
+        "hud_create_and_setup_ms": 15.732,
+        "ready_to_first_draw_ms": 14.438
+      },
+      {
+        "request_to_first_frame_ms": 94.324,
+        "peak_entry_frame_gap_ms": 60.884,
+        "map_build_ms": 9.988,
+        "ready_to_hud_ms": 28.344,
+        "hud_create_and_setup_ms": 11.725,
+        "ready_to_first_draw_ms": 11.008
+      },
+      {
+        "request_to_first_frame_ms": 122.074,
+        "peak_entry_frame_gap_ms": 75.135,
+        "map_build_ms": 12.015,
+        "ready_to_hud_ms": 35.651,
+        "hud_create_and_setup_ms": 14.544,
+        "ready_to_first_draw_ms": 12.523
+      },
+      {
+        "request_to_first_frame_ms": 108.758,
+        "peak_entry_frame_gap_ms": 72.06,
+        "map_build_ms": 12.89,
+        "ready_to_hud_ms": 35.465,
+        "hud_create_and_setup_ms": 14.605,
+        "ready_to_first_draw_ms": 11.279
+      },
+      {
+        "request_to_first_frame_ms": 126.978,
+        "peak_entry_frame_gap_ms": 81.618,
+        "map_build_ms": 11.471,
+        "ready_to_hud_ms": 39.622,
+        "hud_create_and_setup_ms": 13.918,
+        "ready_to_first_draw_ms": 14.569
+      },
+      {
+        "request_to_first_frame_ms": 122.669,
+        "peak_entry_frame_gap_ms": 80.536,
+        "map_build_ms": 12.706,
+        "ready_to_hud_ms": 40.496,
+        "hud_create_and_setup_ms": 15.185,
+        "ready_to_first_draw_ms": 12.746
+      },
+      {
+        "request_to_first_frame_ms": 127.57,
+        "peak_entry_frame_gap_ms": 84.396,
+        "map_build_ms": 13.913,
+        "ready_to_hud_ms": 39.24,
+        "hud_create_and_setup_ms": 16.808,
+        "ready_to_first_draw_ms": 13.394
+      },
+      {
+        "request_to_first_frame_ms": 107.29,
+        "peak_entry_frame_gap_ms": 69.478,
+        "map_build_ms": 12.383,
+        "ready_to_hud_ms": 31.725,
+        "hud_create_and_setup_ms": 12.202,
+        "ready_to_first_draw_ms": 12.843
+      },
+      {
+        "request_to_first_frame_ms": 106.324,
+        "peak_entry_frame_gap_ms": 71.167,
+        "map_build_ms": 12.147,
+        "ready_to_hud_ms": 31.013,
+        "hud_create_and_setup_ms": 13.173,
+        "ready_to_first_draw_ms": 14.384
+      },
+      {
+        "request_to_first_frame_ms": 137.141,
+        "peak_entry_frame_gap_ms": 92.08,
+        "map_build_ms": 13.279,
+        "ready_to_hud_ms": 41.145,
+        "hud_create_and_setup_ms": 18.623,
+        "ready_to_first_draw_ms": 15.777
+      },
+      {
+        "request_to_first_frame_ms": 121.154,
+        "peak_entry_frame_gap_ms": 81.212,
+        "map_build_ms": 13.462,
+        "ready_to_hud_ms": 39.082,
+        "hud_create_and_setup_ms": 14.458,
+        "ready_to_first_draw_ms": 15.033
+      },
+      {
+        "request_to_first_frame_ms": 112.65,
+        "peak_entry_frame_gap_ms": 77.97,
+        "map_build_ms": 10.823,
+        "ready_to_hud_ms": 36.494,
+        "hud_create_and_setup_ms": 14.581,
+        "ready_to_first_draw_ms": 13.783
+      },
+      {
+        "request_to_first_frame_ms": 125.305,
+        "peak_entry_frame_gap_ms": 84.013,
+        "map_build_ms": 13.353,
+        "ready_to_hud_ms": 42.608,
+        "hud_create_and_setup_ms": 12.365,
+        "ready_to_first_draw_ms": 14.909
+      },
+      {
+        "request_to_first_frame_ms": 139.628,
+        "peak_entry_frame_gap_ms": 92.562,
+        "map_build_ms": 15.002,
+        "ready_to_hud_ms": 43.843,
+        "hud_create_and_setup_ms": 19.142,
+        "ready_to_first_draw_ms": 17.698
+      },
+      {
+        "request_to_first_frame_ms": 114.326,
+        "peak_entry_frame_gap_ms": 77.729,
+        "map_build_ms": 11.076,
+        "ready_to_hud_ms": 36.567,
+        "hud_create_and_setup_ms": 13.661,
+        "ready_to_first_draw_ms": 14.241
+      },
+      {
+        "request_to_first_frame_ms": 122.04,
+        "peak_entry_frame_gap_ms": 81.336,
+        "map_build_ms": 16.442,
+        "ready_to_hud_ms": 38.514,
+        "hud_create_and_setup_ms": 14.978,
+        "ready_to_first_draw_ms": 14.539
+      },
+      {
+        "request_to_first_frame_ms": 98.686,
+        "peak_entry_frame_gap_ms": 61.946,
+        "map_build_ms": 10.392,
+        "ready_to_hud_ms": 27.92,
+        "hud_create_and_setup_ms": 11.274,
+        "ready_to_first_draw_ms": 11.587
+      },
+      {
+        "request_to_first_frame_ms": 167.504,
+        "peak_entry_frame_gap_ms": 106.324,
+        "map_build_ms": 17.946,
+        "ready_to_hud_ms": 49.962,
+        "hud_create_and_setup_ms": 19.507,
+        "ready_to_first_draw_ms": 16.435
+      },
+      {
+        "request_to_first_frame_ms": 107.983,
+        "peak_entry_frame_gap_ms": 68.129,
+        "map_build_ms": 11.43,
+        "ready_to_hud_ms": 32.38,
+        "hud_create_and_setup_ms": 12.092,
+        "ready_to_first_draw_ms": 12.443
+      },
+      {
+        "request_to_first_frame_ms": 114.24,
+        "peak_entry_frame_gap_ms": 75.727,
+        "map_build_ms": 11.728,
+        "ready_to_hud_ms": 36.901,
+        "hud_create_and_setup_ms": 12.256,
+        "ready_to_first_draw_ms": 13.238
+      },
+      {
+        "request_to_first_frame_ms": 109.543,
+        "peak_entry_frame_gap_ms": 73.667,
+        "map_build_ms": 11.109,
+        "ready_to_hud_ms": 36.233,
+        "hud_create_and_setup_ms": 12.179,
+        "ready_to_first_draw_ms": 13.156
+      },
+      {
+        "request_to_first_frame_ms": 175.727,
+        "peak_entry_frame_gap_ms": 109.919,
+        "map_build_ms": 21.567,
+        "ready_to_hud_ms": 56.337,
+        "hud_create_and_setup_ms": 18.055,
+        "ready_to_first_draw_ms": 18.271
+      },
+      {
+        "request_to_first_frame_ms": 154.926,
+        "peak_entry_frame_gap_ms": 102.7,
+        "map_build_ms": 16.651,
+        "ready_to_hud_ms": 48.517,
+        "hud_create_and_setup_ms": 18.548,
+        "ready_to_first_draw_ms": 17.912
+      },
+      {
+        "request_to_first_frame_ms": 109.339,
+        "peak_entry_frame_gap_ms": 67.826,
+        "map_build_ms": 12.127,
+        "ready_to_hud_ms": 32.088,
+        "hud_create_and_setup_ms": 11.728,
+        "ready_to_first_draw_ms": 13.213
+      },
+      {
+        "request_to_first_frame_ms": 104.212,
+        "peak_entry_frame_gap_ms": 69.123,
+        "map_build_ms": 10.709,
+        "ready_to_hud_ms": 31.217,
+        "hud_create_and_setup_ms": 14.017,
+        "ready_to_first_draw_ms": 12.257
+      },
+      {
+        "request_to_first_frame_ms": 133.138,
+        "peak_entry_frame_gap_ms": 84.217,
+        "map_build_ms": 16.015,
+        "ready_to_hud_ms": 41.232,
+        "hud_create_and_setup_ms": 14.206,
+        "ready_to_first_draw_ms": 14.697
+      },
+      {
+        "request_to_first_frame_ms": 95.966,
+        "peak_entry_frame_gap_ms": 60.811,
+        "map_build_ms": 11.012,
+        "ready_to_hud_ms": 28.092,
+        "hud_create_and_setup_ms": 10.523,
+        "ready_to_first_draw_ms": 11.81
+      },
+      {
+        "request_to_first_frame_ms": 212.895,
+        "peak_entry_frame_gap_ms": 142.222,
+        "map_build_ms": 20.929,
+        "ready_to_hud_ms": 63.738,
+        "hud_create_and_setup_ms": 29.513,
+        "ready_to_first_draw_ms": 26.691
+      },
+      {
+        "request_to_first_frame_ms": 106.846,
+        "peak_entry_frame_gap_ms": 69.584,
+        "map_build_ms": 13.22,
+        "ready_to_hud_ms": 34.159,
+        "hud_create_and_setup_ms": 12.099,
+        "ready_to_first_draw_ms": 12.926
+      },
+      {
+        "request_to_first_frame_ms": 108.21,
+        "peak_entry_frame_gap_ms": 74.149,
+        "map_build_ms": 11.195,
+        "ready_to_hud_ms": 37.529,
+        "hud_create_and_setup_ms": 12.844,
+        "ready_to_first_draw_ms": 13.015
+      },
+      {
+        "request_to_first_frame_ms": 142.291,
+        "peak_entry_frame_gap_ms": 86.35,
+        "map_build_ms": 19.529,
+        "ready_to_hud_ms": 46.356,
+        "hud_create_and_setup_ms": 14.751,
+        "ready_to_first_draw_ms": 13.456
+      },
+      {
+        "request_to_first_frame_ms": 319.896,
+        "peak_entry_frame_gap_ms": 184.477,
+        "map_build_ms": 40.093,
+        "ready_to_hud_ms": 100.443,
+        "hud_create_and_setup_ms": 36.721,
+        "ready_to_first_draw_ms": 27.394
+      },
+      {
+        "request_to_first_frame_ms": 208.906,
+        "peak_entry_frame_gap_ms": 145.809,
+        "map_build_ms": 23.004,
+        "ready_to_hud_ms": 64.336,
+        "hud_create_and_setup_ms": 30.552,
+        "ready_to_first_draw_ms": 26.475
+      }
+    ],
+    "overrides_including_ability_visual_median_ms": 22.894,
+    "additional_fine_trace_hashes": {
+      "fixture": "1e36830ff18ac65a5422806633b4caf7745a57adb526d8acef7b6ede1a0fce15",
+      "report": "c27573d9aa5b40342dbd05dbf4d99a09b044dc016526bac22991b12c89886eb2"
+    }
+  },
+  "ordered_comparison": [
+    {
+      "commit": "9697a6740c54889c5cf56e282d8d943e400f7cfc",
+      "native": {
+        "candidate": "9697a6740c54889c5cf56e282d8d943e400f7cfc",
+        "fixture_sha256": "b956b5652dfd219e1752b65f00b921a37f30826f85c1ff483f367e36ad64e073",
+        "all_candidate_payloads_unchanged": true,
+        "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+        "pck_sha256": "fe01eb4216d5769269c626e2a4511fb5ac0ef1b533463531d219338ed31d9abd",
+        "exe_unchanged": true,
+        "exit_code": 0,
+        "seconds": 42.544,
+        "active_fps_cap": 0,
+        "errors": [],
+        "warnings": [],
+        "log_sha256": "04546d68a318fa809924398fd9e3984c164372c8fd921c6cd31543645c43fcd1",
+        "report_sha256": "e3e16c27b30233db551e7531680800f5a581fc56983316fec61bc28036d841e1"
+      },
+      "first_in_process": {
+        "request_to_first_frame_ms": 671.357,
+        "peak_entry_frame_gap_ms": 341.869,
+        "map_build_ms": 16.77,
+        "ready_to_hud_ms": 32.29,
+        "hud_create_and_setup_ms": 42.033,
+        "ready_to_first_draw_ms": 57.615,
+        "chapter_overrides_ms": 17.74,
+        "ability_visual_ms": 5.004
+      },
+      "repeat_median": {
+        "request_to_first_frame_ms": 99.598,
+        "peak_entry_frame_gap_ms": 66.935,
+        "map_build_ms": 10.386,
+        "ready_to_hud_ms": 32.108,
+        "hud_create_and_setup_ms": 11.398,
+        "ready_to_first_draw_ms": 11.691,
+        "chapter_overrides_ms": 15.95,
+        "ability_visual_ms": 4.587
+      },
+      "entries": [
+        {
+          "request_to_first_frame_ms": 671.357,
+          "peak_entry_frame_gap_ms": 341.869,
+          "map_build_ms": 16.77,
+          "ready_to_hud_ms": 32.29,
+          "hud_create_and_setup_ms": 42.033,
+          "ready_to_first_draw_ms": 57.615,
+          "chapter_overrides_ms": 17.74,
+          "ability_visual_ms": 5.004
+        },
+        {
+          "request_to_first_frame_ms": 115.811,
+          "peak_entry_frame_gap_ms": 80.021,
+          "map_build_ms": 12.166,
+          "ready_to_hud_ms": 36.493,
+          "hud_create_and_setup_ms": 15.456,
+          "ready_to_first_draw_ms": 13.92,
+          "chapter_overrides_ms": 16.832,
+          "ability_visual_ms": 5.19
+        },
+        {
+          "request_to_first_frame_ms": 105.708,
+          "peak_entry_frame_gap_ms": 70.054,
+          "map_build_ms": 10.054,
+          "ready_to_hud_ms": 34.701,
+          "hud_create_and_setup_ms": 13.477,
+          "ready_to_first_draw_ms": 11.132,
+          "chapter_overrides_ms": 18.199,
+          "ability_visual_ms": 5.768
+        },
+        {
+          "request_to_first_frame_ms": 93.45,
+          "peak_entry_frame_gap_ms": 62.187,
+          "map_build_ms": 9.729,
+          "ready_to_hud_ms": 30.556,
+          "hud_create_and_setup_ms": 11.292,
+          "ready_to_first_draw_ms": 10.809,
+          "chapter_overrides_ms": 14.775,
+          "ability_visual_ms": 4.12
+        },
+        {
+          "request_to_first_frame_ms": 99.598,
+          "peak_entry_frame_gap_ms": 66.935,
+          "map_build_ms": 10.645,
+          "ready_to_hud_ms": 32.108,
+          "hud_create_and_setup_ms": 11.398,
+          "ready_to_first_draw_ms": 12.697,
+          "chapter_overrides_ms": 15.636,
+          "ability_visual_ms": 4.321
+        },
+        {
+          "request_to_first_frame_ms": 106.288,
+          "peak_entry_frame_gap_ms": 72.067,
+          "map_build_ms": 10.829,
+          "ready_to_hud_ms": 32.968,
+          "hud_create_and_setup_ms": 13.787,
+          "ready_to_first_draw_ms": 12.146,
+          "chapter_overrides_ms": 15.248,
+          "ability_visual_ms": 5.06
+        },
+        {
+          "request_to_first_frame_ms": 101.726,
+          "peak_entry_frame_gap_ms": 68.65,
+          "map_build_ms": 11.046,
+          "ready_to_hud_ms": 35.752,
+          "hud_create_and_setup_ms": 10.957,
+          "ready_to_first_draw_ms": 11.186,
+          "chapter_overrides_ms": 19.496,
+          "ability_visual_ms": 4.603
+        },
+        {
+          "request_to_first_frame_ms": 100.496,
+          "peak_entry_frame_gap_ms": 67.483,
+          "map_build_ms": 10.304,
+          "ready_to_hud_ms": 32.558,
+          "hud_create_and_setup_ms": 11.719,
+          "ready_to_first_draw_ms": 11.592,
+          "chapter_overrides_ms": 15.972,
+          "ability_visual_ms": 4.674
+        },
+        {
+          "request_to_first_frame_ms": 99.549,
+          "peak_entry_frame_gap_ms": 65.963,
+          "map_build_ms": 10.766,
+          "ready_to_hud_ms": 32.08,
+          "hud_create_and_setup_ms": 11.083,
+          "ready_to_first_draw_ms": 12.42,
+          "chapter_overrides_ms": 15.95,
+          "ability_visual_ms": 4.587
+        },
+        {
+          "request_to_first_frame_ms": 97.345,
+          "peak_entry_frame_gap_ms": 65.361,
+          "map_build_ms": 10.386,
+          "ready_to_hud_ms": 31.226,
+          "hud_create_and_setup_ms": 10.922,
+          "ready_to_first_draw_ms": 11.691,
+          "chapter_overrides_ms": 15.5,
+          "ability_visual_ms": 4.425
+        },
+        {
+          "request_to_first_frame_ms": 94.22,
+          "peak_entry_frame_gap_ms": 62.7,
+          "map_build_ms": 10.29,
+          "ready_to_hud_ms": 27.937,
+          "hud_create_and_setup_ms": 11.507,
+          "ready_to_first_draw_ms": 12.807,
+          "chapter_overrides_ms": 13.744,
+          "ability_visual_ms": 4.056
+        },
+        {
+          "request_to_first_frame_ms": 85.013,
+          "peak_entry_frame_gap_ms": 54.726,
+          "map_build_ms": 9.628,
+          "ready_to_hud_ms": 26.282,
+          "hud_create_and_setup_ms": 9.63,
+          "ready_to_first_draw_ms": 9.679,
+          "chapter_overrides_ms": 12.867,
+          "ability_visual_ms": 4.099
+        },
+        {
+          "request_to_first_frame_ms": 93.965,
+          "peak_entry_frame_gap_ms": 62.39,
+          "map_build_ms": 9.833,
+          "ready_to_hud_ms": 31.081,
+          "hud_create_and_setup_ms": 10.578,
+          "ready_to_first_draw_ms": 10.635,
+          "chapter_overrides_ms": 16.338,
+          "ability_visual_ms": 4.394
+        },
+        {
+          "request_to_first_frame_ms": 117.983,
+          "peak_entry_frame_gap_ms": 80.145,
+          "map_build_ms": 12.46,
+          "ready_to_hud_ms": 41.835,
+          "hud_create_and_setup_ms": 12.768,
+          "ready_to_first_draw_ms": 12.738,
+          "chapter_overrides_ms": 19.791,
+          "ability_visual_ms": 7.293
+        }
+      ],
+      "alias_checks": 32
+    },
+    {
+      "commit": "fb76edbd6e53c2751409ad8fa44e74aecede3daf",
+      "native": {
+        "candidate": "fb76edbd6e53c2751409ad8fa44e74aecede3daf",
+        "fixture_sha256": "b956b5652dfd219e1752b65f00b921a37f30826f85c1ff483f367e36ad64e073",
+        "all_candidate_payloads_unchanged": true,
+        "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+        "pck_sha256": "f1533345463912045e19c367754d140b0d526c029038b17eff0cbee51d5dd464",
+        "exe_unchanged": true,
+        "exit_code": 0,
+        "seconds": 41.208,
+        "active_fps_cap": 0,
+        "errors": [],
+        "warnings": [],
+        "log_sha256": "3beda6e847d92e82249a90817bb4ea8890190303988b38f471101b1c5ed418eb",
+        "report_sha256": "0086220e0b2e1d18b1e51b6689502223687e233dcdd6398feb0aba5ce6627265"
+      },
+      "first_in_process": {
+        "request_to_first_frame_ms": 678.111,
+        "peak_entry_frame_gap_ms": 384.216,
+        "map_build_ms": 17.59,
+        "ready_to_hud_ms": 30.951,
+        "hud_create_and_setup_ms": 41.422,
+        "ready_to_first_draw_ms": 59.313,
+        "chapter_overrides_ms": 16.487,
+        "ability_visual_ms": 4.353
+      },
+      "repeat_median": {
+        "request_to_first_frame_ms": 86.552,
+        "peak_entry_frame_gap_ms": 53.736,
+        "map_build_ms": 10.613,
+        "ready_to_hud_ms": 16.078,
+        "hud_create_and_setup_ms": 12.604,
+        "ready_to_first_draw_ms": 12.663,
+        "chapter_overrides_ms": 0.052,
+        "ability_visual_ms": 4.622
+      },
+      "entries": [
+        {
+          "request_to_first_frame_ms": 678.111,
+          "peak_entry_frame_gap_ms": 384.216,
+          "map_build_ms": 17.59,
+          "ready_to_hud_ms": 30.951,
+          "hud_create_and_setup_ms": 41.422,
+          "ready_to_first_draw_ms": 59.313,
+          "chapter_overrides_ms": 16.487,
+          "ability_visual_ms": 4.353
+        },
+        {
+          "request_to_first_frame_ms": 90.613,
+          "peak_entry_frame_gap_ms": 55.04,
+          "map_build_ms": 11.508,
+          "ready_to_hud_ms": 16.908,
+          "hud_create_and_setup_ms": 12.77,
+          "ready_to_first_draw_ms": 13.609,
+          "chapter_overrides_ms": 0.051,
+          "ability_visual_ms": 4.304
+        },
+        {
+          "request_to_first_frame_ms": 71.93,
+          "peak_entry_frame_gap_ms": 41.414,
+          "map_build_ms": 9.538,
+          "ready_to_hud_ms": 12.874,
+          "hud_create_and_setup_ms": 9.634,
+          "ready_to_first_draw_ms": 9.79,
+          "chapter_overrides_ms": 0.037,
+          "ability_visual_ms": 3.651
+        },
+        {
+          "request_to_first_frame_ms": 81.124,
+          "peak_entry_frame_gap_ms": 49.868,
+          "map_build_ms": 10.303,
+          "ready_to_hud_ms": 15.342,
+          "hud_create_and_setup_ms": 11.511,
+          "ready_to_first_draw_ms": 12.178,
+          "chapter_overrides_ms": 0.08,
+          "ability_visual_ms": 4.508
+        },
+        {
+          "request_to_first_frame_ms": 82.728,
+          "peak_entry_frame_gap_ms": 51.226,
+          "map_build_ms": 9.927,
+          "ready_to_hud_ms": 16.455,
+          "hud_create_and_setup_ms": 12.453,
+          "ready_to_first_draw_ms": 11.204,
+          "chapter_overrides_ms": 0.054,
+          "ability_visual_ms": 4.558
+        },
+        {
+          "request_to_first_frame_ms": 87.142,
+          "peak_entry_frame_gap_ms": 53.736,
+          "map_build_ms": 10.525,
+          "ready_to_hud_ms": 15.385,
+          "hud_create_and_setup_ms": 12.604,
+          "ready_to_first_draw_ms": 13.113,
+          "chapter_overrides_ms": 0.066,
+          "ability_visual_ms": 5.009
+        },
+        {
+          "request_to_first_frame_ms": 86.552,
+          "peak_entry_frame_gap_ms": 55.315,
+          "map_build_ms": 10.613,
+          "ready_to_hud_ms": 14.115,
+          "hud_create_and_setup_ms": 16.643,
+          "ready_to_first_draw_ms": 13.133,
+          "chapter_overrides_ms": 0.04,
+          "ability_visual_ms": 4.172
+        },
+        {
+          "request_to_first_frame_ms": 84.637,
+          "peak_entry_frame_gap_ms": 50.704,
+          "map_build_ms": 10.566,
+          "ready_to_hud_ms": 16.078,
+          "hud_create_and_setup_ms": 11.072,
+          "ready_to_first_draw_ms": 11.703,
+          "chapter_overrides_ms": 0.048,
+          "ability_visual_ms": 4.654
+        },
+        {
+          "request_to_first_frame_ms": 78.031,
+          "peak_entry_frame_gap_ms": 46.994,
+          "map_build_ms": 9.913,
+          "ready_to_hud_ms": 14.878,
+          "hud_create_and_setup_ms": 11.131,
+          "ready_to_first_draw_ms": 11.14,
+          "chapter_overrides_ms": 0.044,
+          "ability_visual_ms": 4.594
+        },
+        {
+          "request_to_first_frame_ms": 98.84,
+          "peak_entry_frame_gap_ms": 59.727,
+          "map_build_ms": 14.568,
+          "ready_to_hud_ms": 17.006,
+          "hud_create_and_setup_ms": 15.072,
+          "ready_to_first_draw_ms": 14.237,
+          "chapter_overrides_ms": 0.069,
+          "ability_visual_ms": 4.693
+        },
+        {
+          "request_to_first_frame_ms": 80.226,
+          "peak_entry_frame_gap_ms": 47.872,
+          "map_build_ms": 10.898,
+          "ready_to_hud_ms": 15.757,
+          "hud_create_and_setup_ms": 10.57,
+          "ready_to_first_draw_ms": 11.741,
+          "chapter_overrides_ms": 0.067,
+          "ability_visual_ms": 4.622
+        },
+        {
+          "request_to_first_frame_ms": 94.607,
+          "peak_entry_frame_gap_ms": 57.154,
+          "map_build_ms": 11.458,
+          "ready_to_hud_ms": 17.786,
+          "hud_create_and_setup_ms": 15.051,
+          "ready_to_first_draw_ms": 12.663,
+          "chapter_overrides_ms": 0.053,
+          "ability_visual_ms": 4.908
+        },
+        {
+          "request_to_first_frame_ms": 108.962,
+          "peak_entry_frame_gap_ms": 65.83,
+          "map_build_ms": 11.69,
+          "ready_to_hud_ms": 18.072,
+          "hud_create_and_setup_ms": 14.172,
+          "ready_to_first_draw_ms": 18.928,
+          "chapter_overrides_ms": 0.047,
+          "ability_visual_ms": 5.289
+        },
+        {
+          "request_to_first_frame_ms": 97.452,
+          "peak_entry_frame_gap_ms": 56.941,
+          "map_build_ms": 14.653,
+          "ready_to_hud_ms": 19.459,
+          "hud_create_and_setup_ms": 13.342,
+          "ready_to_first_draw_ms": 12.866,
+          "chapter_overrides_ms": 0.052,
+          "ability_visual_ms": 5.156
+        }
+      ],
+      "alias_checks": 32
+    },
+    {
+      "commit": "fb76edbd6e53c2751409ad8fa44e74aecede3daf",
+      "native": {
+        "candidate": "fb76edbd6e53c2751409ad8fa44e74aecede3daf",
+        "fixture_sha256": "b956b5652dfd219e1752b65f00b921a37f30826f85c1ff483f367e36ad64e073",
+        "all_candidate_payloads_unchanged": true,
+        "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+        "pck_sha256": "f1533345463912045e19c367754d140b0d526c029038b17eff0cbee51d5dd464",
+        "exe_unchanged": true,
+        "exit_code": 0,
+        "seconds": 41.558,
+        "active_fps_cap": 0,
+        "errors": [],
+        "warnings": [],
+        "log_sha256": "fa9b844d3c84e05ecc44bce22fbe675514e81d104b2ad9556f2a7948a07f9e31",
+        "report_sha256": "29a439c034038163e8d9b8749506a2aa4fdc67b10582b9e56c75485f02b87352"
+      },
+      "first_in_process": {
+        "request_to_first_frame_ms": 634.884,
+        "peak_entry_frame_gap_ms": 361.925,
+        "map_build_ms": 19.337,
+        "ready_to_hud_ms": 32.136,
+        "hud_create_and_setup_ms": 37.011,
+        "ready_to_first_draw_ms": 61.68,
+        "chapter_overrides_ms": 15.233,
+        "ability_visual_ms": 4.494
+      },
+      "repeat_median": {
+        "request_to_first_frame_ms": 83.808,
+        "peak_entry_frame_gap_ms": 50.728,
+        "map_build_ms": 10.899,
+        "ready_to_hud_ms": 15.787,
+        "hud_create_and_setup_ms": 11.881,
+        "ready_to_first_draw_ms": 11.769,
+        "chapter_overrides_ms": 0.055,
+        "ability_visual_ms": 4.715
+      },
+      "entries": [
+        {
+          "request_to_first_frame_ms": 634.884,
+          "peak_entry_frame_gap_ms": 361.925,
+          "map_build_ms": 19.337,
+          "ready_to_hud_ms": 32.136,
+          "hud_create_and_setup_ms": 37.011,
+          "ready_to_first_draw_ms": 61.68,
+          "chapter_overrides_ms": 15.233,
+          "ability_visual_ms": 4.494
+        },
+        {
+          "request_to_first_frame_ms": 89.414,
+          "peak_entry_frame_gap_ms": 56.94,
+          "map_build_ms": 11.099,
+          "ready_to_hud_ms": 17.2,
+          "hud_create_and_setup_ms": 13.805,
+          "ready_to_first_draw_ms": 13.25,
+          "chapter_overrides_ms": 0.046,
+          "ability_visual_ms": 4.639
+        },
+        {
+          "request_to_first_frame_ms": 84.9,
+          "peak_entry_frame_gap_ms": 54.013,
+          "map_build_ms": 10.272,
+          "ready_to_hud_ms": 15.787,
+          "hud_create_and_setup_ms": 12.827,
+          "ready_to_first_draw_ms": 14.373,
+          "chapter_overrides_ms": 0.048,
+          "ability_visual_ms": 4.844
+        },
+        {
+          "request_to_first_frame_ms": 83.808,
+          "peak_entry_frame_gap_ms": 50.758,
+          "map_build_ms": 10.44,
+          "ready_to_hud_ms": 17.209,
+          "hud_create_and_setup_ms": 10.718,
+          "ready_to_first_draw_ms": 12.162,
+          "chapter_overrides_ms": 0.063,
+          "ability_visual_ms": 4.986
+        },
+        {
+          "request_to_first_frame_ms": 83.781,
+          "peak_entry_frame_gap_ms": 49.373,
+          "map_build_ms": 11.283,
+          "ready_to_hud_ms": 15.529,
+          "hud_create_and_setup_ms": 10.723,
+          "ready_to_first_draw_ms": 11.769,
+          "chapter_overrides_ms": 0.044,
+          "ability_visual_ms": 4.263
+        },
+        {
+          "request_to_first_frame_ms": 84.93,
+          "peak_entry_frame_gap_ms": 51.891,
+          "map_build_ms": 10.147,
+          "ready_to_hud_ms": 18.877,
+          "hud_create_and_setup_ms": 11.459,
+          "ready_to_first_draw_ms": 11.033,
+          "chapter_overrides_ms": 0.091,
+          "ability_visual_ms": 5.904
+        },
+        {
+          "request_to_first_frame_ms": 82.433,
+          "peak_entry_frame_gap_ms": 49.371,
+          "map_build_ms": 10.025,
+          "ready_to_hud_ms": 15.518,
+          "hud_create_and_setup_ms": 11.709,
+          "ready_to_first_draw_ms": 11.876,
+          "chapter_overrides_ms": 0.071,
+          "ability_visual_ms": 4.263
+        },
+        {
+          "request_to_first_frame_ms": 76.959,
+          "peak_entry_frame_gap_ms": 46.526,
+          "map_build_ms": 9.521,
+          "ready_to_hud_ms": 15.084,
+          "hud_create_and_setup_ms": 11.666,
+          "ready_to_first_draw_ms": 10.359,
+          "chapter_overrides_ms": 0.045,
+          "ability_visual_ms": 4.537
+        },
+        {
+          "request_to_first_frame_ms": 76.018,
+          "peak_entry_frame_gap_ms": 46.13,
+          "map_build_ms": 9.97,
+          "ready_to_hud_ms": 13.501,
+          "hud_create_and_setup_ms": 10.77,
+          "ready_to_first_draw_ms": 11.889,
+          "chapter_overrides_ms": 0.045,
+          "ability_visual_ms": 4.095
+        },
+        {
+          "request_to_first_frame_ms": 85.889,
+          "peak_entry_frame_gap_ms": 52.324,
+          "map_build_ms": 12.223,
+          "ready_to_hud_ms": 17.354,
+          "hud_create_and_setup_ms": 12.223,
+          "ready_to_first_draw_ms": 11.638,
+          "chapter_overrides_ms": 0.073,
+          "ability_visual_ms": 4.282
+        },
+        {
+          "request_to_first_frame_ms": 82.662,
+          "peak_entry_frame_gap_ms": 49.566,
+          "map_build_ms": 11.178,
+          "ready_to_hud_ms": 15.539,
+          "hud_create_and_setup_ms": 12.181,
+          "ready_to_first_draw_ms": 10.625,
+          "chapter_overrides_ms": 0.044,
+          "ability_visual_ms": 4.867
+        },
+        {
+          "request_to_first_frame_ms": 84.668,
+          "peak_entry_frame_gap_ms": 50.728,
+          "map_build_ms": 11.427,
+          "ready_to_hud_ms": 16.702,
+          "hud_create_and_setup_ms": 12.761,
+          "ready_to_first_draw_ms": 10.964,
+          "chapter_overrides_ms": 0.064,
+          "ability_visual_ms": 5.255
+        },
+        {
+          "request_to_first_frame_ms": 81.351,
+          "peak_entry_frame_gap_ms": 48.833,
+          "map_build_ms": 10.899,
+          "ready_to_hud_ms": 15.397,
+          "hud_create_and_setup_ms": 11.881,
+          "ready_to_first_draw_ms": 11.756,
+          "chapter_overrides_ms": 0.055,
+          "ability_visual_ms": 4.715
+        },
+        {
+          "request_to_first_frame_ms": 120.822,
+          "peak_entry_frame_gap_ms": 71.0,
+          "map_build_ms": 16.042,
+          "ready_to_hud_ms": 25.537,
+          "hud_create_and_setup_ms": 15.766,
+          "ready_to_first_draw_ms": 15.846,
+          "chapter_overrides_ms": 0.073,
+          "ability_visual_ms": 7.859
+        }
+      ],
+      "alias_checks": 32
+    },
+    {
+      "commit": "9697a6740c54889c5cf56e282d8d943e400f7cfc",
+      "native": {
+        "candidate": "9697a6740c54889c5cf56e282d8d943e400f7cfc",
+        "fixture_sha256": "b956b5652dfd219e1752b65f00b921a37f30826f85c1ff483f367e36ad64e073",
+        "all_candidate_payloads_unchanged": true,
+        "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+        "pck_sha256": "fe01eb4216d5769269c626e2a4511fb5ac0ef1b533463531d219338ed31d9abd",
+        "exe_unchanged": true,
+        "exit_code": 0,
+        "seconds": 46.053,
+        "active_fps_cap": 0,
+        "errors": [],
+        "warnings": [],
+        "log_sha256": "766c08eabe0d296bc118640ff412a3e7c14961be0bc7ce0c9ea6afe78f69b192",
+        "report_sha256": "d8cc5f1fa1852a88dcdfbced12795f4c7e5f3fb854a4d2be5ccd351b242b93f3"
+      },
+      "first_in_process": {
+        "request_to_first_frame_ms": 1223.261,
+        "peak_entry_frame_gap_ms": 644.887,
+        "map_build_ms": 27.371,
+        "ready_to_hud_ms": 53.503,
+        "hud_create_and_setup_ms": 62.95,
+        "ready_to_first_draw_ms": 99.763,
+        "chapter_overrides_ms": 26.898,
+        "ability_visual_ms": 7.624
+      },
+      "repeat_median": {
+        "request_to_first_frame_ms": 132.025,
+        "peak_entry_frame_gap_ms": 80.507,
+        "map_build_ms": 15.439,
+        "ready_to_hud_ms": 39.913,
+        "hud_create_and_setup_ms": 14.004,
+        "ready_to_first_draw_ms": 13.71,
+        "chapter_overrides_ms": 20.337,
+        "ability_visual_ms": 5.863
+      },
+      "entries": [
+        {
+          "request_to_first_frame_ms": 1223.261,
+          "peak_entry_frame_gap_ms": 644.887,
+          "map_build_ms": 27.371,
+          "ready_to_hud_ms": 53.503,
+          "hud_create_and_setup_ms": 62.95,
+          "ready_to_first_draw_ms": 99.763,
+          "chapter_overrides_ms": 26.898,
+          "ability_visual_ms": 7.624
+        },
+        {
+          "request_to_first_frame_ms": 96.382,
+          "peak_entry_frame_gap_ms": 65.073,
+          "map_build_ms": 10.617,
+          "ready_to_hud_ms": 31.4,
+          "hud_create_and_setup_ms": 11.234,
+          "ready_to_first_draw_ms": 11.732,
+          "chapter_overrides_ms": 16.36,
+          "ability_visual_ms": 4.721
+        },
+        {
+          "request_to_first_frame_ms": 131.147,
+          "peak_entry_frame_gap_ms": 81.814,
+          "map_build_ms": 15.536,
+          "ready_to_hud_ms": 37.368,
+          "hud_create_and_setup_ms": 14.073,
+          "ready_to_first_draw_ms": 16.506,
+          "chapter_overrides_ms": 19.442,
+          "ability_visual_ms": 5.704
+        },
+        {
+          "request_to_first_frame_ms": 202.558,
+          "peak_entry_frame_gap_ms": 118.298,
+          "map_build_ms": 24.924,
+          "ready_to_hud_ms": 53.933,
+          "hud_create_and_setup_ms": 21.887,
+          "ready_to_first_draw_ms": 20.777,
+          "chapter_overrides_ms": 28.597,
+          "ability_visual_ms": 8.289
+        },
+        {
+          "request_to_first_frame_ms": 116.821,
+          "peak_entry_frame_gap_ms": 71.6,
+          "map_build_ms": 13.867,
+          "ready_to_hud_ms": 35.823,
+          "hud_create_and_setup_ms": 12.506,
+          "ready_to_first_draw_ms": 12.064,
+          "chapter_overrides_ms": 19.067,
+          "ability_visual_ms": 5.253
+        },
+        {
+          "request_to_first_frame_ms": 116.247,
+          "peak_entry_frame_gap_ms": 75.162,
+          "map_build_ms": 13.674,
+          "ready_to_hud_ms": 36.545,
+          "hud_create_and_setup_ms": 13.704,
+          "ready_to_first_draw_ms": 13.54,
+          "chapter_overrides_ms": 19.7,
+          "ability_visual_ms": 5.127
+        },
+        {
+          "request_to_first_frame_ms": 139.773,
+          "peak_entry_frame_gap_ms": 89.153,
+          "map_build_ms": 16.116,
+          "ready_to_hud_ms": 46.584,
+          "hud_create_and_setup_ms": 15.067,
+          "ready_to_first_draw_ms": 15.098,
+          "chapter_overrides_ms": 23.747,
+          "ability_visual_ms": 6.497
+        },
+        {
+          "request_to_first_frame_ms": 135.315,
+          "peak_entry_frame_gap_ms": 84.479,
+          "map_build_ms": 15.404,
+          "ready_to_hud_ms": 42.867,
+          "hud_create_and_setup_ms": 14.102,
+          "ready_to_first_draw_ms": 13.6,
+          "chapter_overrides_ms": 20.973,
+          "ability_visual_ms": 6.584
+        },
+        {
+          "request_to_first_frame_ms": 126.436,
+          "peak_entry_frame_gap_ms": 77.444,
+          "map_build_ms": 15.053,
+          "ready_to_hud_ms": 36.931,
+          "hud_create_and_setup_ms": 13.935,
+          "ready_to_first_draw_ms": 13.821,
+          "chapter_overrides_ms": 18.169,
+          "ability_visual_ms": 5.98
+        },
+        {
+          "request_to_first_frame_ms": 132.903,
+          "peak_entry_frame_gap_ms": 79.2,
+          "map_build_ms": 15.475,
+          "ready_to_hud_ms": 42.458,
+          "hud_create_and_setup_ms": 13.163,
+          "ready_to_first_draw_ms": 12.854,
+          "chapter_overrides_ms": 21.42,
+          "ability_visual_ms": 5.746
+        },
+        {
+          "request_to_first_frame_ms": 202.416,
+          "peak_entry_frame_gap_ms": 134.487,
+          "map_build_ms": 20.608,
+          "ready_to_hud_ms": 69.747,
+          "hud_create_and_setup_ms": 25.539,
+          "ready_to_first_draw_ms": 20.012,
+          "chapter_overrides_ms": 30.512,
+          "ability_visual_ms": 12.817
+        },
+        {
+          "request_to_first_frame_ms": 121.758,
+          "peak_entry_frame_gap_ms": 72.546,
+          "map_build_ms": 14.703,
+          "ready_to_hud_ms": 36.537,
+          "hud_create_and_setup_ms": 13.086,
+          "ready_to_first_draw_ms": 11.663,
+          "chapter_overrides_ms": 19.286,
+          "ability_visual_ms": 5.432
+        },
+        {
+          "request_to_first_frame_ms": 168.675,
+          "peak_entry_frame_gap_ms": 108.932,
+          "map_build_ms": 19.16,
+          "ready_to_hud_ms": 52.782,
+          "hud_create_and_setup_ms": 19.565,
+          "ready_to_first_draw_ms": 19.282,
+          "chapter_overrides_ms": 27.665,
+          "ability_visual_ms": 7.734
+        }
+      ],
+      "alias_checks": 32
+    }
+  ],
+  "repeat_medians": {
+    "before": {
+      "request_to_first_frame_ms": 115.811,
+      "peak_entry_frame_gap_ms": 72.067,
+      "map_build_ms": 12.166,
+      "ready_to_hud_ms": 35.823,
+      "hud_create_and_setup_ms": 13.086,
+      "ready_to_first_draw_ms": 12.697,
+      "chapter_overrides_ms": 18.199,
+      "ability_visual_ms": 5.19
+    },
+    "after": {
+      "request_to_first_frame_ms": 84.653,
+      "peak_entry_frame_gap_ms": 50.992,
+      "map_build_ms": 10.755,
+      "ready_to_hud_ms": 15.933,
+      "hud_create_and_setup_ms": 12.202,
+      "ready_to_first_draw_ms": 11.883,
+      "chapter_overrides_ms": 0.052,
+      "ability_visual_ms": 4.646
+    }
+  },
+  "unchanged_opening_content": {
+    "alias_samples": {
+      "en": [
+        "Select · Bai Sheng",
+        "Chao Gai · Cart 1 (loads: 2): Take cart",
+        "Chao Gai · Push cart 1 to load 2 bundles",
+        "Chao Gai has taken date cart 1. Order them to push it to the treasure.",
+        "Chao Gai fell. Cart 1 remains here; load count: 2. A surviving Star can take over."
+      ],
+      "ja": [
+        "選択 · 白勝",
+        "晁蓋 · 第1車（2担）車を受け取る",
+        "晁蓋 · 第1車を運び、2担を積む",
+        "晁蓋が第1のナツメ車を受け持った。財宝のそばまで押すよう命令しよう。",
+        "晁蓋が倒れた。第1車（2担）はその場に残り、生き残った七星が引き継げる。"
+      ],
+      "zh_CN": [
+        "选中 · 白胜",
+        "晁盖 · 第1车（2担）取车",
+        "晁盖 · 推第1车装入2担",
+        "晁盖接过第1辆枣车，等你下令推到财物旁。",
+        "晁盖倒下，第1车（2担）留在原地，可由幸存七星接力。"
+      ],
+      "zh_TW": [
+        "選中 · 白勝",
+        "晁蓋 · 第1車（2擔）取車",
+        "晁蓋 · 推第1車裝入2擔",
+        "晁蓋接過第1輛棗車，等你下令推到財物旁。",
+        "晁蓋倒下，第1車（2擔）留在原地，可由倖存七星接力。"
+      ]
+    },
+    "scenery_by_visit": [
+      {
+        "palette_sha256": "7fa4866128deab22f32824addc390fa2d90f3de6afe1505e763f2cab6da37d48",
+        "shadow_count": 8,
+        "shadows_sha256": "5ea9522dd65d005f3e9d24072103a8cc8e827d9e8b82832f3c61266ba9d2ffd1",
+        "static_sprites": 16,
+        "surface_sha256": "2f83b8a89c9c54e2b2cad53ace5b385c2553d6106456862be921d24b5e24356d"
+      },
+      {
+        "palette_sha256": "bb79c22c7de1320b52da02c2b06bf7cd5a5195faa6f4c080ae1a0cbe562da8ba",
+        "shadow_count": 8,
+        "shadows_sha256": "5ea9522dd65d005f3e9d24072103a8cc8e827d9e8b82832f3c61266ba9d2ffd1",
+        "static_sprites": 16,
+        "surface_sha256": "2f83b8a89c9c54e2b2cad53ace5b385c2553d6106456862be921d24b5e24356d"
+      }
+    ],
+    "terrain": "06e1324fd8353be410a5006b73fe0ab91c5550902e424afff55539258be9ef35",
+    "dapple": {
+      "sha256": "aaee43e77645e3134e0021bbf072b45e442e2a2d8f5ddbfaca17bec0dd8141b9",
+      "size": [
+        64,
+        64
+      ]
+    }
+  },
+  "legacy_resume": {
+    "official_seed_build": 26873421,
+    "original_slot_and_journal_sha256": {
+      "slot": "5a46e75bcbeb1b6ee738eca40518400ae8b0fb0a71b3c1ea7742bd5926a7ea25",
+      "journal": "a753d45126f135f8586fed4d9c969b9c3549207f678bffb5eeed8dffe932fd40"
+    },
+    "origin_receipt_sha256": "2d965216f470575f6f28d6bf7ad5e7fc82d66aee578dc3517e0e2246bce5b2bf",
+    "source_seed_preserved": true,
+    "stages": [
+      {
+        "stage": "resave",
+        "checks": 31,
+        "log_sha256": "b806613d4d903dd969863891c6087f4b44716b9dff879ed6d80a1e62ffd2818c",
+        "slot_sha256": "bf37907dc3ec0545c4f73bab44ab28876408a12d4d73f1fc5e10ea308224ea5e"
+      },
+      {
+        "stage": "reopen",
+        "checks": 26,
+        "log_sha256": "d32ccbab79405bb96db903ac49ed7cad7b57886b9f3efdbdd1bc39f918f618d2",
+        "slot_sha256": "bf37907dc3ec0545c4f73bab44ab28876408a12d4d73f1fc5e10ea308224ea5e"
+      }
+    ],
+    "compiled_probe_sha256": "16824ecabd6fa90b3cfe7b2d83426057264ee3ea576598a667233d083a57c6b4"
+  }
+}
