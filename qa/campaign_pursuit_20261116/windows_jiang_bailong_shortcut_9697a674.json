@@ -1,0 +1,273 @@
+{
+  "steam_seed_build": 26873421,
+  "mode": "isolated native Windows offline playtest",
+  "candidate": {
+    "kind": "local_integrated_windows_candidate",
+    "layout": "split_pck",
+    "commit": "9697a6740c54889c5cf56e282d8d943e400f7cfc",
+    "source_version": "source-v1:3cb2300554d474620d41d3f4e594c3a0742d7b43412a914ae72bee53be7d0e13",
+    "tracked_runtime_count": 6574,
+    "steps": [
+      {
+        "stage": "import",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 65.82
+      },
+      {
+        "stage": "export",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 98.29
+      }
+    ],
+    "files": [
+      {
+        "path": "GODOTSTEAM_LICENSE.txt",
+        "bytes": 1110,
+        "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+      },
+      {
+        "path": "LiangshanHeroes.exe",
+        "bytes": 104886784,
+        "sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4"
+      },
+      {
+        "path": "LiangshanHeroes.pck",
+        "bytes": 1722748604,
+        "sha256": "fe01eb4216d5769269c626e2a4511fb5ac0ef1b533463531d219338ed31d9abd"
+      },
+      {
+        "path": "libgodotsteam.windows.template_release.x86_64.dll",
+        "bytes": 3961344,
+        "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+      },
+      {
+        "path": "steam_api64.dll",
+        "bytes": 319128,
+        "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+      },
+      {
+        "path": "steam_stats_reader.dll",
+        "bytes": 393728,
+        "sha256": "5a79a77b5b6e2cff21b285c785118352805a09d91876f89276af119ee1702517"
+      },
+      {
+        "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+        "bytes": 1093,
+        "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+      }
+    ]
+  },
+  "resolution": [
+    960,
+    540
+  ],
+  "load_and_save_checks": {
+    "prior_rescue_dispatch": {
+      "checks": [
+        "normal isolated Windows profile",
+        "normal admission checks the exact Windows payload",
+        "exact slot resumes with original Steam identity",
+        "continued in an independent game process",
+        "main menu offers Continue Battle",
+        "normal Continue restores battle ",
+        "the original two prisoners still need rescue",
+        "the older post-execution slot gains both PC orders on resume",
+        "both controls fit the 960x540 objective drawer in zh_CN",
+        "both controls fit the 960x540 objective drawer in zh_TW",
+        "both controls fit the 960x540 objective drawer in en",
+        "both controls fit the 960x540 objective drawer in ja",
+        "original living units provide a holding hero, a moving hero and two spare rescuers",
+        "one viewport click dispatches a waiting unit without changing selection or camera",
+        "repeated rescue click leaves every order serial unchanged",
+        "the two orders use distinct actors and both still require travel",
+        "other friendly orders including hold and the original move are preserved",
+        "S cancels only the selected rescue order",
+        "the cancelled rescue can be issued again independently",
+        "pause save is available with both orders on the way",
+        "real pause save writes revision three with original binding and hash chain"
+      ],
+      "log_sha256": "e0a2175805ad066d038e2c6b16236b61edde5452d59ce3460b4e2bd6b8c44ba0",
+      "probe_sha256": "e1bcc74067789c2683e2284322978ff11756f06030285f762f6b119e1e0e53f1"
+    },
+    "shortcut_and_save": {
+      "checks": [
+        "normal isolated Windows profile",
+        "normal admission checks the exact Windows payload",
+        "exact slot resumes with original Steam identity",
+        "continued in an independent game process",
+        "main menu offers Continue Battle",
+        "normal Continue restores battle ",
+        "the original two prisoners still need rescue",
+        "both saved positions, targets, paths, order serials and tokens restore",
+        "both original flags are completed by arrival and waiting after reload",
+        "completed rescue orders give way to the boarding control",
+        "normal rescue and western approach leave all four participants alive",
+        "the two route options coexist before arrival",
+        "the temple control fits the actual 960x540 drawer in zh_CN",
+        "the temple control fits the actual 960x540 drawer in zh_TW",
+        "the temple control fits the actual 960x540 drawer in en",
+        "the temple control fits the actual 960x540 drawer in ja",
+        "visible temple shortcut receives a player click",
+        "only the idle Song receives the order while Dai remains on hold",
+        "escort selection and camera remain, and dispatch grants no meeting credit",
+        "repeat click never replaces the route or interrupts hold",
+        "the ordinary Stop key releases Dai for reassignment",
+        "the next click sends Dai without replacing the moving Song",
+        "travelling alone does not award the optional goal",
+        "pause menu can save both in-flight routes",
+        "normal pause save preserves prior official identity and links the new checkpoint"
+      ],
+      "log_sha256": "d07d32ddffd82d2d00370acadac6e27d833d0ca9c1c4ce4e636ffb8ec626ea99",
+      "probe_sha256": "01981af754083e7e580005ac0496c7e62d50482ce4d89558c1aba9eff0cd8142"
+    },
+    "independent_reopen_and_finish": {
+      "checks": [
+        "normal isolated Windows profile",
+        "normal admission checks the exact Windows payload",
+        "exact slot resumes with original Steam identity",
+        "continued in an independent game process",
+        "main menu offers Continue Battle",
+        "normal Continue restores battle ",
+        "independent restart restores original actors, orders, route points, clocks and progress",
+        "restored mission still offers the control and original slot bytes",
+        "the original four actually arrive and earn the Bailong meeting",
+        "both prisoners follow the restored routes without a repeated order",
+        "completed meeting removes the shortcut and preserves the normal boarding choice",
+        "story rescues both prisoners and wins using actual player commands",
+        "story pays for real ordinary reinforcements and fields them",
+        "story stops execution and separately unbinds both prisoners",
+        "story keeps its original reinforcement camps throughout the mission",
+        "story completes all four optional goals through real movement and combat",
+        "the ordinary departure still credits both rescued prisoners"
+      ],
+      "log_sha256": "d3fd94fbe11df6b120eaf1276d286a6b611cb3f78ff1fc859d65467676605893",
+      "probe_sha256": "01981af754083e7e580005ac0496c7e62d50482ce4d89558c1aba9eff0cd8142"
+    }
+  },
+  "diagnostic": {
+    "prior_probe_failure": "freed object captured in the automated skill-target filter",
+    "prior_log_sha256": "e887aaedc837e2a8a970d07a9ecab426193fe3cbeca8e47f16f66049b1daee51",
+    "prior_stack": [
+      "GDScript backtrace (most recent call first):\n[0] _skills (res://jiang_play.gd:56)\n[1] _qa_resume_temple (res://rescue.gd:477)\n[2] _wait (res://zhu_driver.gd:51)"
+    ],
+    "verified_controller_source_sha256": "72c8fcb276d91740458dfd453bde83e948546501fe3f10ddafa9249832cdbe2a",
+    "native_controller_sha256": "bc8527405ae5053e2f5702073632118394ce20b3e46aa10faf8ec19d12f9c894"
+  },
+  "slot_sha256": {
+    "original_verified_dispatch": "0cdbfc62ddfe720df90b38579651ce975fa2fa80827f085d3336d0c971451790",
+    "shortcut_checkpoint": "78dc5e9c64e0d599407cfe7c45595404d8be196af7189f3308f0dffda38a46ba"
+  },
+  "labels": {
+    "en": "Escort Prisoners to Bailong Temple",
+    "ja": "救出者を白龍廟へ送る",
+    "zh_CN": "送获救者去白龙庙",
+    "zh_TW": "送獲救者去白龍廟"
+  },
+  "checkpoint": {
+    "elapsed": "111.966666666665",
+    "events": [
+      "action:jiangzhou_rts:cache_0",
+      "action:jiangzhou_rts:free_dai",
+      "action:jiangzhou_rts:free_song",
+      "action:jiangzhou_rts:south_lane",
+      "action:jiangzhou_rts:west_street",
+      "cache_0",
+      "execution_halted",
+      "free_dai",
+      "free_song",
+      "jiangzhou_li_first",
+      "jiangzhou_rear_pursuit",
+      "jiangzhou_report_rule",
+      "south_lane",
+      "west_street"
+    ],
+    "meeting": false,
+    "members": {
+      "dai_zong": {
+        "held": false,
+        "hp": "150.0",
+        "id": "68",
+        "order": "22",
+        "path": [
+          "(464.0, 1424.0)"
+        ],
+        "path_i": "0",
+        "point": "(640.9315, 1049.878)",
+        "state": "1"
+      },
+      "song_jiang": {
+        "held": false,
+        "hp": "200.0",
+        "id": "64",
+        "order": "20",
+        "path": [
+          "(432.0, 1392.0)"
+        ],
+        "path_i": "0",
+        "point": "(630.4695, 1024.828)",
+        "state": "1"
+      },
+      "zhang_heng": {
+        "held": false,
+        "hp": "288.325000000004",
+        "id": "23",
+        "order": "97",
+        "path": [
+          "(469.3053, 1383.855)"
+        ],
+        "path_i": "1",
+        "point": "(471.3684, 1380.688)",
+        "state": "0"
+      },
+      "zhang_shun": {
+        "held": false,
+        "hp": "210.0",
+        "id": "22",
+        "order": "19",
+        "path": [
+          "(458.6949, 1400.145)"
+        ],
+        "path_i": "1",
+        "point": "(456.6317, 1403.312)",
+        "state": "0"
+      }
+    }
+  },
+  "meeting_game_seconds": 139.13333333334,
+  "settlement": {
+    "game_seconds": 158.450000000022,
+    "paid_recruits": 15,
+    "max_ordinary_troops": 16,
+    "orders": 309,
+    "events": [
+      "jiangzhou_report_rule",
+      "action:jiangzhou_rts:south_lane",
+      "south_lane",
+      "action:jiangzhou_rts:west_street",
+      "west_street",
+      "jiangzhou_li_first",
+      "action:jiangzhou_rts:cache_0",
+      "cache_0",
+      "execution_halted",
+      "action:jiangzhou_rts:free_song",
+      "free_song",
+      "action:jiangzhou_rts:free_dai",
+      "free_dai",
+      "jiangzhou_rear_pursuit",
+      "bailong",
+      "action:jiangzhou_rts:rally_dock",
+      "rally_dock",
+      "action:jiangzhou_rts:board_song",
+      "board_song",
+      "action:jiangzhou_rts:board_dai",
+      "board_dai",
+      "jiangzhou_named_survive",
+      "all_embarked"
+    ],
+    "story_done": 4,
+    "story_total": 4,
+    "core_cleared": true
+  }
+}

@@ -52,13 +52,17 @@ func _attack(b,army: Array,foe,cell: Vector2i) -> void:
 	else: _click(b,army,cell,true)
 func _skills(b,army: Array) -> void:
 	for u in army:
-		if not u.is_hero or u._cast_t>0: continue
-		var foes: Array=b.units.filter(func(v): return alive(v) and v.faction==1 and not v.is_building and b.is_visible_world(v.position) and u.position.distance_to(v.position)<200)
-		if foes.is_empty(): continue
+		if not alive(u) or not u.is_hero or u._cast_t>0: continue
+		var target: Unit = null
+		for enemy in b.units:
+			if alive(enemy) and enemy.faction==1 and not enemy.is_building and b.is_visible_world(enemy.position) and u.position.distance_to(enemy.position)<200:
+				target=enemy
+				break
+		if target==null: continue
 		for slot in [0,1,3]:
 			if slot>=u.slot_count() or not u.slot_ready(slot): continue
 			b.select_members([u],false); b._cast_ability_slot(slot)
-			if b._ability_armed!="": b._cast_armed_at(b.to_screen(foes[0].position))
+			if b._ability_armed!="": b._cast_armed_at(b.to_screen(target.position))
 			skill_orders+=1; break
 func _play_rescue(b, stop_at_meeting := false) -> void:
 	var l=b.level
