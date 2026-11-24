@@ -22,23 +22,34 @@ var _flat_cells := PackedByteArray()
 func build(w: int, h: int, terrain: PackedInt32Array) -> void:
 	width = w + 1
 	height = h + 1
+	var water_vertices := PackedByteArray()
+	water_vertices.resize(width * height)
+	# The four corners of each water cell stay at water level.
+	for y in range(h):
+		var terrain_row := y * w
+		var vertex_row := y * width
+		for x in range(w):
+			if terrain[terrain_row + x] == 0:
+				var corner := vertex_row + x
+				water_vertices[corner] = 1
+				water_vertices[corner + 1] = 1
+				water_vertices[corner + width] = 1
+				water_vertices[corner + width + 1] = 1
 	var height_samples := PackedFloat32Array()
-	height_samples.resize(width * height)
-	var img := Image.create(width, height, false, Image.FORMAT_RF)
+	var pixels := PackedFloat32Array()
+	height_samples.resize(water_vertices.size())
+	pixels.resize(water_vertices.size())
 	for y in range(height):
+		var row := y * width
 		for x in range(width):
-			var value := _profile(Vector2(x, y))
-			# 水格的四角必须同在零水位，禁止山脚插值把港面抬成斜坡。
-			for dy in [-1,0]:
-				for dx in [-1,0]:
-					var cx: int = x+dx
-					var cy: int = y+dy
-					if cx>=0 and cx<w and cy>=0 and cy<h and terrain[cy*w+cx]==0:
-						value = 0.0
-			height_samples[y * width + x] = value
-			img.set_pixel(x, y, Color(value / MAX_HEIGHT, 0, 0, 1))
+			var index := row + x
+			if water_vertices[index] == 0:
+				var value := _profile(Vector2(x, y))
+				height_samples[index] = value
+				pixels[index] = value / MAX_HEIGHT
 	samples = height_samples
-	texture = ImageTexture.create_from_image(img)
+	var image := Image.create_from_data(width, height, false, Image.FORMAT_RF, pixels.to_byte_array())
+	texture = ImageTexture.create_from_image(image)
 
 
 func _rebuild_flat_cells() -> void:
