@@ -1,0 +1,260 @@
+{
+  "scope": "Using the same frozen Windows candidate as the PC naval-shortcut acceptance, copy its exact third-generation return checkpoint. Finish Liu Tang's return without a new order, then use ordinary construction, training and assault commands to disable the flagship and land the prisoner. Click the native PC escort task, save in transit, independently restore the exact escort and finish the battle. Another process attempts the settled slot.",
+  "coverage_limits": "Offline isolated Windows Vulkan Forward+ at 960x540, with automatic commands and accelerated battle clock. The test covers the captured-prisoner story route and local progression. The Steam cloud, live account rewards and human play are outside this run.",
+  "earlier_naval_receipt": "windows_gao_pc_naval_retreat_9289bd84.json",
+  "earlier_naval_receipt_sha256": "503e7b4e543431c506b5ead8ed9e386f037a395c550f0ca9c2e5060471f7b002",
+  "checks": 43,
+  "steam_build": 26873421,
+  "candidate": {
+    "kind": "local_integrated_windows_candidate",
+    "layout": "split_pck",
+    "commit": "9289bd84608f2afb7336027df4b9750fbabcb6ca",
+    "source_version": "source-v1:3876457104bddfa133a0987064603359c7094615ca4be027f9ec8887938f443b",
+    "tracked_runtime_count": 6574,
+    "steps": [
+      {
+        "stage": "import",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 71.01
+      },
+      {
+        "stage": "export",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 88.77
+      }
+    ],
+    "files": [
+      {
+        "path": "GODOTSTEAM_LICENSE.txt",
+        "bytes": 1110,
+        "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+      },
+      {
+        "path": "LiangshanHeroes.exe",
+        "bytes": 104886784,
+        "sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4"
+      },
+      {
+        "path": "LiangshanHeroes.pck",
+        "bytes": 1722715116,
+        "sha256": "e5f1a978a8c31989378b12db992504b71c87e4b5d3877d0983fdb982d064d07a"
+      },
+      {
+        "path": "libgodotsteam.windows.template_release.x86_64.dll",
+        "bytes": 3961344,
+        "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+      },
+      {
+        "path": "steam_api64.dll",
+        "bytes": 319128,
+        "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+      },
+      {
+        "path": "steam_stats_reader.dll",
+        "bytes": 393728,
+        "sha256": "5a79a77b5b6e2cff21b285c785118352805a09d91876f89276af119ee1702517"
+      },
+      {
+        "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+        "bytes": 1093,
+        "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+      }
+    ]
+  },
+  "input_generation_3_sha256": "1c1887df9b1be99968d63c4f4cbe15791b9ad773e18401146d7d27f29435591d",
+  "source_naval_receipt_sha256": "a7b4541ab67f93e80e21406197915e174bc684283526f23f7b55d5239c629dc9",
+  "observers": {
+    "gao_play.gd": "2adead3f0d747e34418aef2382606871623a1bcb7c55c493f7e970f42489e197",
+    "zhu_driver.gd": "a36348d8a71deffac08195e337caa64be3d9dfd7d56d9c1725924897681f6796",
+    "terminal.gd": "f77723ea15d32845806228527deadfe63dc2812a1e04e5d3f86aa7b7c5f89fce"
+  },
+  "stages": {
+    "capture": {
+      "checks": 19,
+      "facts": {
+        "capture_ship": "31",
+        "clock_at_landing": 548.083333333337,
+        "events_at_landing": [
+          "action:gao_rts:gao_lure_side",
+          "action:gao_rts:gao_wind",
+          "gongsun_wind",
+          "fleet_in_ambush",
+          "action:gao_rts:gao_prepare",
+          "liu_tang_fire_leader",
+          "fireboat_prepared",
+          "gao_land_post_destroyed",
+          "gao_land_cleared",
+          "action:gao_rts:gao_fire_1",
+          "gao_fire_lit",
+          "action:gao_rts:gao_fire_withdraw",
+          "fire_escort_safe",
+          "action:gao_rts:gao_liu_return",
+          "gao_liu_returned",
+          "gao_sea_post_destroyed",
+          "flagship_disabled",
+          "action:gao_rts:gao_seal",
+          "port_sealed",
+          "action:gao_rts:gao_scuttle",
+          "flagship_scuttled",
+          "action:gao_rts:gao_land",
+          "gao_landed"
+        ],
+        "liu": "6",
+        "march": {
+          "guard": [
+            "137",
+            "(650.83, 1589.42)",
+            "(601.4245, 1100.424)",
+            "115.0",
+            "85",
+            "0",
+            [
+              "(624.0, 1584.0)",
+              "(601.4245, 1100.424)"
+            ],
+            "0",
+            false,
+            "(inf, inf)"
+          ],
+          "link": "[144, 1, 85]",
+          "prisoner": [
+            "144",
+            "(641.2512, 1578.055)",
+            "(582.5756, 1107.576)",
+            "180.0",
+            "1",
+            "0",
+            [
+              "(592.0, 1264.0)",
+              "(582.5756, 1107.576)"
+            ],
+            "0",
+            false,
+            "(inf, inf)"
+          ],
+          "time": "548.866666666669"
+        },
+        "paid_ships": 13,
+        "slot_sha256": "e24eea3b7ba69e334d7d3016872652485dceb55f6637b81f088cf787bac9f38c"
+      },
+      "failures": [],
+      "pid": 20484,
+      "stage": "capture",
+      "exit_code": 0,
+      "errors": [],
+      "log_sha256": "36bb93b548fb9378ad6c857fa712902ce3f5f10805aeeedcd90ab026d559faea",
+      "status": true
+    },
+    "settle": {
+      "checks": 14,
+      "facts": {
+        "campaign_record": {
+          "best_done": 4,
+          "best_goal_ids": [
+            "gao_lure",
+            "gao_fire",
+            "gao_land",
+            "gao_capture"
+          ],
+          "cleared": true,
+          "contract_version": 3,
+          "story_complete": true,
+          "story_total": 4
+        },
+        "end_clock": 581.466666666695,
+        "hall_hp": 1500.0,
+        "prisoner": "144",
+        "progress_sha256": "7a4e73ac4ffc3c9d50f59691ce921057db2370f65304f55857dd348644ead2a2",
+        "result": {
+          "contract_version": 3,
+          "core_cleared": true,
+          "core_goal": "守住忠义堂和宋江，击退三批水陆主力，打停高俅座船。可直接收兵通关；生擒并押回堂前是可选演义目标。",
+          "done_ids": [
+            "gao_lure",
+            "gao_fire",
+            "gao_land",
+            "gao_capture"
+          ],
+          "goals": [
+            {
+              "id": "gao_lure",
+              "label": "阮小七引活官船进入港汊伏区",
+              "note": "",
+              "reason": "",
+              "state": "done"
+            },
+            {
+              "id": "gao_fire",
+              "label": "公孙胜祭风、刘唐登船举火，护两艘接应船撤离",
+              "note": "",
+              "reason": "",
+              "state": "done"
+            },
+            {
+              "id": "gao_land",
+              "label": "击退岸军并拔除山前补给营",
+              "note": "",
+              "reason": "",
+              "state": "done"
+            },
+            {
+              "id": "gao_capture",
+              "label": "封港凿船、水上接俘、返航后实际押至忠义堂",
+              "note": "",
+              "reason": "",
+              "state": "done"
+            }
+          ],
+          "missed_ids": [],
+          "pending_ids": [],
+          "story_complete": true,
+          "story_done": 4,
+          "story_total": 4
+        },
+        "slot_sha256": "e24eea3b7ba69e334d7d3016872652485dceb55f6637b81f088cf787bac9f38c"
+      },
+      "failures": [],
+      "pid": 46132,
+      "stage": "settle",
+      "exit_code": 0,
+      "errors": [],
+      "log_sha256": "ef943d570cf7d9e4a15c6813bd037e048e1f29b9100b0babe6bed419055baee6",
+      "status": true
+    },
+    "reject": {
+      "checks": 10,
+      "facts": {
+        "progress_sha256": "7a4e73ac4ffc3c9d50f59691ce921057db2370f65304f55857dd348644ead2a2",
+        "slot_sha256": "e24eea3b7ba69e334d7d3016872652485dceb55f6637b81f088cf787bac9f38c",
+        "terminal_code": "LOCAL_RUN_TERMINAL"
+      },
+      "failures": [],
+      "pid": 37120,
+      "stage": "reject",
+      "exit_code": 0,
+      "errors": [],
+      "log_sha256": "c334b8b9a56720fae270e0719b60c60dca3e2490dc8d29281052ff941f3e7d40",
+      "status": true
+    }
+  },
+  "complete": true,
+  "capture_observer_sha256": "eeb41d25d4d239c3c48a995a7e502944c1b9152c6edd1a4c20fc4fd398c7abc8",
+  "settle_observer_sha256": "3e09e11b1c21655a04a5f2edee170bd57f3c0728453d60e27287b93bae3be23e",
+  "initial_settlement_observer": {
+    "log_sha256": "61fb769160cd136255f81bf261b879d70a1a7fd1f9591066f567a4b84bdc8f94",
+    "reason": "The battle phase changes before the asynchronous campaign commit and end panel. The observer now awaits both actual settlement completion and the visible result."
+  },
+  "earlier_reject_observer": {
+    "log_sha256": "7b2953f5ba0a0f89c2ac7a05237ae38e875e7b1e4218395b6e32c4da24763364",
+    "reason": "The old slot was rejected and bytes matched. The observer must dismiss the ordinary error dialog before requesting a clean exit."
+  },
+  "terminal_ledger_sha256": {
+    "record_0000000001.json": "6ad42f6a4c72b7a9ab1fce71642817b864e07d066157077ab0eb0b67163830e8",
+    "record_0000000002.json": "844a8c809e7aec5b41ea2a00c6a9ec3fceb7bf6b3cc8ae847d24ffc252a1bf11",
+    "record_0000000003.json": "d78b65c854adc33c7d239538808d1023804f09e3573cca720ae3a535c8547ab7"
+  },
+  "source_slots_preserved": true,
+  "terminal_files_preserved_after_rejection": true
+}

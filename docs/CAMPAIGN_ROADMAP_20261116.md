@@ -1,5 +1,9 @@
 # 八幕战役后续开发路线图
 
+## M5 高俅火攻路线到自然结算
+
+同一 Windows 成品从撤船和返港操作接到三批核心兵力清除、打停座船和张顺接俘。新进程接回在途押堂，原俘虏按原令到忠义堂，演义 4/4。 [Windows 结算验收](../qa/campaign_fire_readiness_20261116/windows_gao_pc_terminal_9289bd84.json)
+
 ## M5 高俅火攻后的撤船与返港
 
 举火后点击「撤出接应船」，阮小二、阮小五各驶向安全水域。两船到齐、压退附近官船后，才完成撤离。可再点「送刘唐返港」，让载他的原船靠回主码头；到场且登陆点安全才下船。 [Windows 验收收据](../qa/campaign_fire_readiness_20261116/windows_gao_pc_naval_retreat_9289bd84.json)
