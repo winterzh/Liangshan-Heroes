@@ -1,5 +1,9 @@
 # 源码设置与换机（2026-10-30）
 
+## 高俅火攻后的撤船与返港
+
+两个 PC 任务按钮沿用已登记的任务旗标、实走路径和现有的移动意图保存。撤离等两船到位再开始办理，靠岸检查仍由原关卡执行。旧档的原船、原乘员和原账本继续恢复。 [Windows 验收收据](../qa/campaign_fire_readiness_20261116/windows_gao_pc_naval_retreat_9289bd84.json)
+
 ## Windows 经典驻守旧档身份
 
 经典 30 波只接受已核对的 Build 26873421 内容与拆包身份。恢复及再存沿用原身份和账本。其他历史经典档身份仍按原规则拒绝，原有战役兼容规则继续生效。 [Windows 续玩验收](../qa/battle_entry_timing_20261116/windows_classic30_public_26873421_migration_6164ba82.json)

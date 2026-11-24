@@ -1,5 +1,9 @@
 # 八幕战役后续开发路线图
 
+## M5 高俅火攻后的撤船与返港
+
+举火后点击「撤出接应船」，阮小二、阮小五各驶向安全水域。两船到齐、压退附近官船后，才完成撤离。可再点「送刘唐返港」，让载他的原船靠回主码头；到场且登陆点安全才下船。 [Windows 验收收据](../qa/campaign_fire_readiness_20261116/windows_gao_pc_naval_retreat_9289bd84.json)
+
 ## 八章开局存档续玩验收
 
 Steam 正式 Build 26873421 的八章开局档已在候选 11118952 验证。每章都能直接继续、移动原单位、再存及独立重开。中途剧情路线另以大名府验收记录为准。 [八章 Windows 验收](../qa/battle_entry_timing_20261116/windows_current_public_26873421_campaign_migration_11118952.json)

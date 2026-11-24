@@ -1,5 +1,9 @@
 # 当前项目总览
 
+## Windows 高俅火攻后的撤船与返港
+
+候选 9289bd84 从正式 Build 26873421 的举火原档继续，验过两次从任务栏下令、两段在途保存、独立续玩、实际撤离和原刘唐下船。960×540 两个按钮四语可点。四个离线进程共 70 项通过。真人体验与 Steam 云档另验。 [Windows 验收收据](../qa/campaign_fire_readiness_20261116/windows_gao_pc_naval_retreat_9289bd84.json)
+
 ## 经典驻守 30 波跨版本续玩
 
 正式 Build 26873421 的第 1 波档可在 Windows 候选 6164ba82 继续。第 2 波三骑按原计时出阵，再存及独立重开通过。另复验八章开局档。Steam 云档、成就与真人体验另验。 [Windows 续玩验收](../qa/battle_entry_timing_20261116/windows_classic30_public_26873421_migration_6164ba82.json)
