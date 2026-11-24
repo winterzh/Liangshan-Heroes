@@ -11,6 +11,7 @@ const LOADED_RELAY_REACH := 80.0
 const TAKE_MARKER_REACH := 24.0
 const SEND_EMPTY_CARTS := "hg_send_empty_carts"
 const SEND_LOADED_CARTS := "hg_send_loaded_carts"
+const RALLY_WAITING := "hg_rally_waiting"
 const EARLY_WITHDRAW := GATE_W + Vector2i(-3,0)
 const WITHDRAW_RADIUS := 150.0
 const WITHDRAW_OBJECTIVE := "七车十一担已经运出。让幸存同伴右键西冈口集合，八人到齐可获全员生还。若要先行收队，请单独右键西冈口西侧的收队旗标。"
@@ -377,6 +378,9 @@ func _companions_at_exit(b, living: Array) -> int:
 			arrived += 1
 	return arrived
 
+func _waiting_companions(exit_point: Vector2) -> Array:
+	return _living_companions().filter(func(actor): return not _at_withdrawal(actor, exit_point))
+
 func _at_withdrawal(actor, exit_point: Vector2) -> bool:
 	return actor.position.distance_to(exit_point) <= WITHDRAW_RADIUS
 
@@ -430,10 +434,13 @@ func process(b, delta: float) -> void:
 
 func _sync_controls(b) -> void:
 	if st in [CARRY,FORCE] and b.phase == b.Phase.FIGHT and not b.hud.touch_ui:
-		_update_cart_dispatch_button(b, SEND_EMPTY_CARTS, not empty_cargo.is_empty(), "送待令空车去装货",
+		_update_transport_button(b, SEND_EMPTY_CARTS, not empty_cargo.is_empty(), "送待令空车去装货",
 			"让待令空车各自前往装车点。已经下令的车继续照原指令行动。")
-		_update_cart_dispatch_button(b, SEND_LOADED_CARTS, not cargo.is_empty(), "送已装货的车出冈",
+		_update_transport_button(b, SEND_LOADED_CARTS, not cargo.is_empty(), "送已装货的车出冈",
 			"让已装货的车各自前往交付旗标。途中可随时停下或改道。")
+	if st == WITHDRAW and b.phase == b.Phase.FIGHT and not b.hud.touch_ui:
+		_update_transport_button(b, RALLY_WAITING, true, "送待令同伴去西冈口",
+			"让尚未到达的待令同伴去西冈口集合。已下令的同伴继续行动。")
 	if controls_generation==b.mission._generation: return
 	controls_generation=b.mission._generation
 	var keys: Array=[]
@@ -468,6 +475,9 @@ func activate_mission_button(b, button_id: String) -> void:
 	if button_id == SEND_LOADED_CARTS:
 		_send_loaded_carts(b)
 		return
+	if button_id == RALLY_WAITING:
+		_rally_waiting(b)
+		return
 	if button_id in ["hg_empty_carts", "hg_loaded_carts"]:
 		if st not in [CARRY,FORCE]: return
 		var members := _transport_group(b,button_id=="hg_loaded_carts")
@@ -489,7 +499,7 @@ func activate_mission_button(b, button_id: String) -> void:
 	if button_id == "hg_waiting":
 		if st != WITHDRAW: return
 		var exit_point: Vector2 = b.map.cell_to_world(GATE_W)
-		var waiting := _living_companions().filter(func(u): return not _at_withdrawal(u, exit_point))
+		var waiting := _waiting_companions(exit_point)
 		if waiting.is_empty(): return
 		b.select_members(waiting, false)
 		b.center_camera_cell(b.map.world_to_cell(waiting[0].position))
@@ -516,6 +526,35 @@ func activate_mission_button(b, button_id: String) -> void:
 	else:
 		b.mission.set_status(Localize.text("该人物当前无法行动。"))
 
+func _rally_waiting(b) -> void:
+	if st != WITHDRAW or b.hud.touch_ui or not b._gameplay_rng_issue.is_empty():
+		return
+	var center: Vector2 = b.map.cell_to_world(GATE_W)
+	var waiting := _waiting_companions(center).filter(_awaiting_transport_order)
+	if waiting.is_empty():
+		b.mission.set_feedback("当前没有待令的未到同伴。")
+		return
+	var targets: Array = b._formation_targets(waiting, center)
+	var move_cap: float = b._group_speed_cap(waiting)
+	var sent := 0
+	for i in range(waiting.size()):
+		var actor: Unit = waiting[i]
+		var target: Vector2 = targets[i]
+		var path: PackedVector2Array = b.map.find_path(actor.position, target, actor.faction, actor.movement_profile)
+		if path.is_empty() or path[-1].distance_to(center) > WITHDRAW_RADIUS:
+			continue
+		# Ordinary movement only: the early departure flag is a separate order.
+		b._stamp_manual([actor])
+		actor.order_move(target, false, move_cap)
+		sent += 1
+	if sent > 0:
+		Sfx.play("order")
+		var message := "已派%d位同伴去西冈口集合。" if sent == waiting.size() \
+			else "已派%d位同伴去西冈口集合。其余待令同伴暂时找不到通路。"
+		b.mission.set_feedback(Localize.format_text(message, sent))
+	else:
+		b.mission.set_feedback("待令同伴暂时找不到通往西冈口的路。")
+
 func _transport_group(b, loaded: bool) -> Array:
 	var result: Array=[]
 	var assigned: Dictionary=cargo if loaded else empty_cargo
@@ -529,7 +568,7 @@ func _transport_group(b, loaded: bool) -> Array:
 			result.append(actor)
 	return result
 
-func _update_cart_dispatch_button(b, id: String, available: bool, label: String, tooltip: String) -> void:
+func _update_transport_button(b, id: String, available: bool, label: String, tooltip: String) -> void:
 	var button: Button = b.mission.find_level_button(id)
 	if button == null and available:
 		button = b.mission.add_level_button(id, label, tooltip)
@@ -546,7 +585,7 @@ func _send_empty_carts(b) -> void:
 	var issued := 0
 	var blocked := 0
 	for actor: Unit in _transport_group(b, false):
-		if not _cart_dispatch_idle(actor):
+		if not _awaiting_transport_order(actor):
 			continue
 		var index: int = actor.get_meta("pushing_empty_tribute")
 		var action_id := "force_load_%d_%d" % [index, int(force_attempts.get(index, 0))]
@@ -576,7 +615,7 @@ func _send_loaded_carts(b) -> void:
 	var issued := 0
 	var blocked := 0
 	for actor: Unit in carriers:
-		if not _cart_dispatch_idle(actor):
+		if not _awaiting_transport_order(actor):
 			continue
 		var index: int = actor.get_meta("carrying_tribute")
 		var action_id := "force_deliver_%d_%d" % [index, int(force_attempts.get(index,0))]
@@ -602,7 +641,7 @@ func _send_loaded_carts(b) -> void:
 		b.mission.set_feedback(Localize.format_text("当前没有待令货车。要改派，请先选车按 %s 停止。", Settings.key_label("stop")))
 
 
-func _cart_dispatch_idle(actor: Unit) -> bool:
+func _awaiting_transport_order(actor: Unit) -> bool:
 	return actor._state == Unit.ST_IDLE and not actor._hold_order_active and not actor._patrolling \
 		and actor._target == null and actor._queue.is_empty() and not actor._action_queue_busy() \
 		and not actor.mission_order_active and actor.mission_order_arrival_t <= 0.0
