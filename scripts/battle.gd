@@ -736,16 +736,15 @@ func _build_test() -> void:
 	AppLifecycle.request_quit("build_test")
 
 
-func prepare_classic_entry_map() -> bool:
+func prepare_classic_entry_map() -> void:
 	if is_inside_tree() or world != null or not Campaign.skirmish:
-		return false
+		return
 	var selected: LevelBase = Campaign.make_level()
 	if selected.id() != "skirmish":
-		return false
+		return
 	level = selected
 	_build_entry_map(load("res://scripts/campaign_environment.gd"))
 	_classic_entry_map_prepared = true
-	return true
 
 
 func _build_entry_map(environment: Script) -> void:

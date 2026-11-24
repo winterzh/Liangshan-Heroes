@@ -232,12 +232,14 @@ func _finish_battle_launch(campaign_level_id: String) -> void:
 			return
 		Art.cache_prepared_opening_texture(path, texture)
 	_entry_opening_portrait_requests.clear()
-	# process_frame runs before this frame's drawing. Let the loading view paint
-	# before the synchronous scene installation, even when the worker ends early.
-	await RenderingServer.frame_post_draw
+	# The classic map gets its final loading draw after map preparation. All
+	# other entries paint the loading view before their synchronous installation.
+	var stage_classic_map := OS.get_name() == "Windows" and Campaign.skirmish and not Campaign.custom_defense
+	if not stage_classic_map:
+		await RenderingServer.frame_post_draw
 	if AppLifecycle.quit_started():
 		return
-	_install_battle.call_deferred(identity, environment_textures)
+	_install_battle.call_deferred(identity, environment_textures, stage_classic_map)
 
 
 func _wait_for_battle_resource(path: String) -> Resource:
@@ -250,7 +252,8 @@ func _wait_for_battle_resource(path: String) -> Resource:
 	return ResourceLoader.load_threaded_get(path) if status == ResourceLoader.THREAD_LOAD_LOADED else null
 
 
-func _install_battle(identity: Dictionary, environment_textures: Array[Texture2D]) -> void:
+func _install_battle(identity: Dictionary, environment_textures: Array[Texture2D],
+		stage_classic_map := false) -> void:
 	if AppLifecycle.quit_started():
 		return
 	var changed_installation := String(identity.get("code", "")).begins_with("SPLIT_PACK_")
@@ -262,9 +265,9 @@ func _install_battle(identity: Dictionary, environment_textures: Array[Texture2D
 			if not environment_textures.is_empty():
 				# Keep Godot's cached textures alive through the battle's _ready.
 				battle.ready.connect(func(): environment_textures.clear(), CONNECT_ONE_SHOT)
-			if OS.get_name() == "Windows" and battle.prepare_classic_entry_map():
-				# Finish a loading frame after preparing the authored map. The
-				# next frame mounts it and initializes the live battle.
+			if stage_classic_map:
+				# Finish the loading frame with the prepared world still detached.
+				battle.prepare_classic_entry_map()
 				_entry_prepared_battle = battle
 				await RenderingServer.frame_post_draw
 				if not is_instance_valid(battle):
