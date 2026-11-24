@@ -1509,6 +1509,11 @@ func _build_bottom_panel() -> void:
 	help_sb.content_margin_bottom = 0
 	_control_help_panel.add_theme_stylebox_override("panel", help_sb)
 	add_child(_control_help_panel)
+	if OS.get_name() != "Windows":
+		_build_control_help_label()
+
+
+func _build_control_help_label() -> void:
 	_control_help = Label.new()
 	_control_help.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_control_help.text = _key_help_text()
@@ -1838,10 +1843,7 @@ func _update_control_help_visibility() -> void:
 	if _control_help_toggle != null:
 		_control_help_toggle.visible = not touch_ui
 		_control_help_toggle.set_pressed_no_signal(show_help)
-	if _control_help_panel != null:
-		var has_toast := msg_box != null and msg_box.visible and msg_box.get_child_count() > 0
-		_control_help_panel.visible = not touch_ui and show_help and not has_toast and not _info_expanded
-		_control_help_panel.modulate.a = 0.0 if has_toast else 1.0
+	_apply_control_help_visibility(show_help)
 	# 操作提示是右下方最靠底的一层；开关变化时同步让消息/信息抽屉向上避让。
 	if _info_panel != null:
 		_layout_info_panel()
@@ -2067,10 +2069,19 @@ func _clear_info_toasts() -> void:
 ## Toast fade-out is translucent; fully hide keybind help while any toast is on
 ## screen so the two right-side layers do not read as overlapping ghost text.
 func _sync_help_dim_for_toasts() -> void:
+	_apply_control_help_visibility(_show_control_help_enabled())
+
+
+func _apply_control_help_visibility(show_help: bool) -> void:
 	if _control_help_panel == null:
 		return
 	var has_toast := msg_box != null and msg_box.visible and msg_box.get_child_count() > 0
-	_control_help_panel.visible = (not touch_ui) and _show_control_help_enabled() and not has_toast and not _info_expanded
+	var visible_help := not touch_ui and show_help and not has_toast and not _info_expanded
+	if visible_help and _control_help == null:
+		_build_control_help_label()
+		if has_meta("_run_hud_prepared"):
+			_gate_run_prepared_ui()
+	_control_help_panel.visible = visible_help
 	_control_help_panel.modulate.a = 0.0 if has_toast else 1.0
 
 
