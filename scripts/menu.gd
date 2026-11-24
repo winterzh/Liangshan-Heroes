@@ -167,6 +167,8 @@ func _request_battle_environment(campaign_level_id: String) -> void:
 	if surface_level in ["level1", "level3", "level5"]:
 		var environment := load("res://scripts/campaign_environment.gd")
 		paths.append_array(environment.opening_scenery_texture_paths(surface_level))
+	if surface_level == "level1":
+		paths.append_array(CampaignEnvironmentArt.huangnigang_opening_object_texture_paths())
 	for path in paths:
 		if ResourceLoader.load_threaded_request(path, "Texture2D") == OK:
 			_entry_environment_requests.append(path)
