@@ -1,0 +1,911 @@
+{
+  "source_commit": "053a6611a7482bc16c07a676b5da4923f21ecf75",
+  "results": {
+    "lsh-hg51-grid-pair": {
+      "variant": "lookup",
+      "grid_results": {
+        "arena": {
+          "exact": true,
+          "index_per_unit_windows_us": 822,
+          "iterations": 160,
+          "lite_effects_at_capture": false,
+          "paired_build_us": [
+            [
+              2057,
+              1936
+            ],
+            [
+              2073,
+              1979
+            ],
+            [
+              2046,
+              2024
+            ],
+            [
+              1957,
+              1888
+            ],
+            [
+              2070,
+              1968
+            ],
+            [
+              2073,
+              2091
+            ]
+          ],
+          "queries": 21,
+          "timed_grid_us": 2321,
+          "units": 8,
+          "uses_height_field": false,
+          "visual_per_unit_windows_us": 1234
+        },
+        "custom_defense": {
+          "exact": true,
+          "index_per_unit_windows_us": 2366,
+          "iterations": 160,
+          "lite_effects_at_capture": false,
+          "paired_build_us": [
+            [
+              10021,
+              9202
+            ],
+            [
+              8552,
+              8354
+            ],
+            [
+              8405,
+              8986
+            ],
+            [
+              8413,
+              8364
+            ],
+            [
+              8391,
+              7780
+            ],
+            [
+              8191,
+              7889
+            ]
+          ],
+          "queries": 49,
+          "timed_grid_us": 8755,
+          "units": 27,
+          "uses_height_field": true,
+          "visual_per_unit_windows_us": 5759
+        },
+        "level1": {
+          "exact": true,
+          "index_per_unit_windows_us": 2671,
+          "iterations": 160,
+          "lite_effects_at_capture": false,
+          "paired_build_us": [
+            [
+              7012,
+              7057
+            ],
+            [
+              7189,
+              6422
+            ],
+            [
+              6737,
+              6643
+            ],
+            [
+              7010,
+              6452
+            ],
+            [
+              6787,
+              6894
+            ],
+            [
+              6929,
+              7479
+            ]
+          ],
+          "queries": 56,
+          "timed_grid_us": 7197,
+          "units": 19,
+          "uses_height_field": true,
+          "visual_per_unit_windows_us": 4018
+        },
+        "level5": {
+          "exact": true,
+          "index_per_unit_windows_us": 10876,
+          "iterations": 160,
+          "lite_effects_at_capture": false,
+          "paired_build_us": [
+            [
+              24445,
+              24076
+            ],
+            [
+              24544,
+              24293
+            ],
+            [
+              25200,
+              25121
+            ],
+            [
+              24399,
+              25072
+            ],
+            [
+              24536,
+              24591
+            ],
+            [
+              24065,
+              24175
+            ]
+          ],
+          "queries": 70,
+          "timed_grid_us": 25728,
+          "units": 69,
+          "uses_height_field": true,
+          "visual_per_unit_windows_us": 13247
+        },
+        "skirmish": {
+          "exact": true,
+          "index_per_unit_windows_us": 2216,
+          "iterations": 160,
+          "lite_effects_at_capture": false,
+          "paired_build_us": [
+            [
+              7567,
+              7654
+            ],
+            [
+              7664,
+              7651
+            ],
+            [
+              8209,
+              8008
+            ],
+            [
+              8129,
+              7489
+            ],
+            [
+              7735,
+              7490
+            ],
+            [
+              7670,
+              7579
+            ]
+          ],
+          "queries": 49,
+          "timed_grid_us": 8282,
+          "units": 27,
+          "uses_height_field": true,
+          "visual_per_unit_windows_us": 5490
+        },
+        "skirmish_ai": {
+          "exact": true,
+          "index_per_unit_windows_us": 3496,
+          "iterations": 160,
+          "lite_effects_at_capture": false,
+          "paired_build_us": [
+            [
+              8683,
+              8446
+            ],
+            [
+              8860,
+              8499
+            ],
+            [
+              8588,
+              8734
+            ],
+            [
+              8597,
+              8794
+            ],
+            [
+              8549,
+              8584
+            ],
+            [
+              8822,
+              8640
+            ]
+          ],
+          "queries": 70,
+          "timed_grid_us": 9730,
+          "units": 40,
+          "uses_height_field": false,
+          "visual_per_unit_windows_us": 5454
+        }
+      },
+      "summary": {
+        "arena": {
+          "units": 8,
+          "queries": 21,
+          "uses_height_field": false,
+          "visual_share_in_timed_unit_windows_pct": 60.02,
+          "baseline_us_per_build": 12.897,
+          "alternative_us_per_build": 12.334,
+          "paired_median_change_pct": -4.03,
+          "faster_pairs": 5
+        },
+        "custom_defense": {
+          "units": 27,
+          "queries": 49,
+          "uses_height_field": true,
+          "visual_share_in_timed_unit_windows_pct": 70.88,
+          "baseline_us_per_build": 52.556,
+          "alternative_us_per_build": 52.244,
+          "paired_median_change_pct": -3.0,
+          "faster_pairs": 5
+        },
+        "level1": {
+          "units": 19,
+          "queries": 56,
+          "uses_height_field": true,
+          "visual_share_in_timed_unit_windows_pct": 60.07,
+          "baseline_us_per_build": 43.559,
+          "alternative_us_per_build": 42.303,
+          "paired_median_change_pct": -0.38,
+          "faster_pairs": 3
+        },
+        "level5": {
+          "units": 69,
+          "queries": 70,
+          "uses_height_field": true,
+          "visual_share_in_timed_unit_windows_pct": 54.91,
+          "baseline_us_per_build": 153.066,
+          "alternative_us_per_build": 152.762,
+          "paired_median_change_pct": -0.04,
+          "faster_pairs": 3
+        },
+        "skirmish": {
+          "units": 27,
+          "queries": 49,
+          "uses_height_field": true,
+          "visual_share_in_timed_unit_windows_pct": 71.24,
+          "baseline_us_per_build": 48.141,
+          "alternative_us_per_build": 47.594,
+          "paired_median_change_pct": -1.82,
+          "faster_pairs": 5
+        },
+        "skirmish_ai": {
+          "units": 40,
+          "queries": 70,
+          "uses_height_field": false,
+          "visual_share_in_timed_unit_windows_pct": 60.94,
+          "baseline_us_per_build": 54.0,
+          "alternative_us_per_build": 53.825,
+          "paired_median_change_pct": -0.83,
+          "faster_pairs": 3
+        }
+      },
+      "executable_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "8541e1252cfdff88f0d774c4146cce3f005d2c2e46a76f7ddd47b5799a3260cb",
+      "report_sha256": "afbe1a5a410164aa00ce685147f1f16d2c8b8bd26872474f02e5665b446308b3",
+      "log_sha256": "9cc2edfe93c12c8215140b5e63d844ca3097b4fac70815373af1e8628fed6b1e",
+      "fixture_sha256": "7b5c56d9cfc9224f28182e6bb4853abbd165f31c989e39b9f9995b52f7617eb7",
+      "lifecycle_passes": 12,
+      "progress_unchanged": true
+    },
+    "lsh-hg51-grid-typed": {
+      "variant": "typed",
+      "grid_results": {
+        "arena": {
+          "exact": true,
+          "index_per_unit_windows_us": 9117,
+          "iterations": 160,
+          "lite_effects_at_capture": false,
+          "paired_build_us": [
+            [
+              17765,
+              17579
+            ],
+            [
+              17375,
+              17461
+            ],
+            [
+              17595,
+              17216
+            ],
+            [
+              17548,
+              17931
+            ],
+            [
+              18474,
+              17607
+            ],
+            [
+              17358,
+              17383
+            ]
+          ],
+          "queries": 70,
+          "timed_grid_us": 18820,
+          "units": 58,
+          "uses_height_field": false,
+          "visual_per_unit_windows_us": 8535
+        },
+        "custom_defense": {
+          "exact": true,
+          "index_per_unit_windows_us": 4252,
+          "iterations": 160,
+          "lite_effects_at_capture": false,
+          "paired_build_us": [
+            [
+              11564,
+              11345
+            ],
+            [
+              12039,
+              11327
+            ],
+            [
+              12765,
+              11785
+            ],
+            [
+              12536,
+              11853
+            ],
+            [
+              12379,
+              11823
+            ],
+            [
+              11736,
+              11447
+            ]
+          ],
+          "queries": 70,
+          "timed_grid_us": 12920,
+          "units": 37,
+          "uses_height_field": true,
+          "visual_per_unit_windows_us": 7860
+        },
+        "level1": {
+          "exact": true,
+          "index_per_unit_windows_us": 2604,
+          "iterations": 160,
+          "lite_effects_at_capture": false,
+          "paired_build_us": [
+            [
+              6588,
+              6458
+            ],
+            [
+              6677,
+              6527
+            ],
+            [
+              6989,
+              6524
+            ],
+            [
+              6761,
+              6632
+            ],
+            [
+              6886,
+              6785
+            ],
+            [
+              6616,
+              6824
+            ]
+          ],
+          "queries": 56,
+          "timed_grid_us": 7125,
+          "units": 19,
+          "uses_height_field": true,
+          "visual_per_unit_windows_us": 3976
+        },
+        "level5": {
+          "exact": true,
+          "index_per_unit_windows_us": 10994,
+          "iterations": 160,
+          "lite_effects_at_capture": false,
+          "paired_build_us": [
+            [
+              24265,
+              25160
+            ],
+            [
+              25055,
+              25371
+            ],
+            [
+              24761,
+              25362
+            ],
+            [
+              24313,
+              24782
+            ],
+            [
+              24459,
+              24764
+            ],
+            [
+              25101,
+              24822
+            ]
+          ],
+          "queries": 70,
+          "timed_grid_us": 26317,
+          "units": 69,
+          "uses_height_field": true,
+          "visual_per_unit_windows_us": 13655
+        },
+        "skirmish": {
+          "exact": true,
+          "index_per_unit_windows_us": 4101,
+          "iterations": 160,
+          "lite_effects_at_capture": false,
+          "paired_build_us": [
+            [
+              10942,
+              11716
+            ],
+            [
+              10991,
+              10921
+            ],
+            [
+              11135,
+              11118
+            ],
+            [
+              11109,
+              11370
+            ],
+            [
+              11485,
+              11151
+            ],
+            [
+              11614,
+              11318
+            ]
+          ],
+          "queries": 70,
+          "timed_grid_us": 12880,
+          "units": 37,
+          "uses_height_field": true,
+          "visual_per_unit_windows_us": 7950
+        },
+        "skirmish_ai": {
+          "exact": true,
+          "index_per_unit_windows_us": 3581,
+          "iterations": 160,
+          "lite_effects_at_capture": false,
+          "paired_build_us": [
+            [
+              8581,
+              8760
+            ],
+            [
+              8725,
+              8646
+            ],
+            [
+              8467,
+              8674
+            ],
+            [
+              8574,
+              8491
+            ],
+            [
+              8754,
+              8459
+            ],
+            [
+              8783,
+              8659
+            ]
+          ],
+          "queries": 70,
+          "timed_grid_us": 9756,
+          "units": 40,
+          "uses_height_field": false,
+          "visual_per_unit_windows_us": 5416
+        }
+      },
+      "summary": {
+        "arena": {
+          "units": 58,
+          "queries": 70,
+          "uses_height_field": false,
+          "visual_share_in_timed_unit_windows_pct": 48.35,
+          "baseline_us_per_build": 109.822,
+          "alternative_us_per_build": 109.5,
+          "paired_median_change_pct": -0.45,
+          "faster_pairs": 3
+        },
+        "custom_defense": {
+          "units": 37,
+          "queries": 70,
+          "uses_height_field": true,
+          "visual_share_in_timed_unit_windows_pct": 64.89,
+          "baseline_us_per_build": 76.306,
+          "alternative_us_per_build": 72.6,
+          "paired_median_change_pct": -4.97,
+          "faster_pairs": 6
+        },
+        "level1": {
+          "units": 19,
+          "queries": 56,
+          "uses_height_field": true,
+          "visual_share_in_timed_unit_windows_pct": 60.43,
+          "baseline_us_per_build": 41.994,
+          "alternative_us_per_build": 41.122,
+          "paired_median_change_pct": -1.94,
+          "faster_pairs": 5
+        },
+        "level5": {
+          "units": 69,
+          "queries": 70,
+          "uses_height_field": true,
+          "visual_share_in_timed_unit_windows_pct": 55.4,
+          "baseline_us_per_build": 153.812,
+          "alternative_us_per_build": 156.194,
+          "paired_median_change_pct": 1.6,
+          "faster_pairs": 1
+        },
+        "skirmish": {
+          "units": 37,
+          "queries": 70,
+          "uses_height_field": true,
+          "visual_share_in_timed_unit_windows_pct": 65.97,
+          "baseline_us_per_build": 69.513,
+          "alternative_us_per_build": 70.216,
+          "paired_median_change_pct": -0.39,
+          "faster_pairs": 4
+        },
+        "skirmish_ai": {
+          "units": 40,
+          "queries": 70,
+          "uses_height_field": false,
+          "visual_share_in_timed_unit_windows_pct": 60.2,
+          "baseline_us_per_build": 54.081,
+          "alternative_us_per_build": 54.078,
+          "paired_median_change_pct": -0.94,
+          "faster_pairs": 4
+        }
+      },
+      "executable_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "8541e1252cfdff88f0d774c4146cce3f005d2c2e46a76f7ddd47b5799a3260cb",
+      "report_sha256": "598093c37dc9077ac7b03e0b930bf08f8ddbcf263b3118a2097be541a39ff593",
+      "log_sha256": "76495e0ecf3a83f86a24e3af3ff3ba7c52092eae2d897ca141a2059df40b7fb5",
+      "fixture_sha256": "6e8fd9aaa89ca237c1b29dfd7e1cdcdcc1fd298e4aae3a6a81c56ba4542eee98",
+      "lifecycle_passes": 12,
+      "progress_unchanged": true
+    },
+    "lsh-hg51-grid-depth": {
+      "variant": "depth",
+      "grid_results": {
+        "arena": {
+          "exact": true,
+          "index_per_unit_windows_us": 9382,
+          "iterations": 160,
+          "lite_effects_at_capture": false,
+          "paired_build_us": [
+            [
+              18735,
+              18334
+            ],
+            [
+              19484,
+              18800
+            ],
+            [
+              19289,
+              18731
+            ],
+            [
+              21843,
+              18327
+            ],
+            [
+              22783,
+              20590
+            ],
+            [
+              18249,
+              17866
+            ]
+          ],
+          "queries": 70,
+          "snapshot_unchanged_depth": 8,
+          "steady_unchanged_depth": 9280,
+          "timed_grid_us": 20094,
+          "units": 58,
+          "uses_height_field": false,
+          "visual_per_unit_windows_us": 9624
+        },
+        "custom_defense": {
+          "exact": true,
+          "index_per_unit_windows_us": 4210,
+          "iterations": 160,
+          "lite_effects_at_capture": false,
+          "paired_build_us": [
+            [
+              11134,
+              11556
+            ],
+            [
+              11455,
+              11254
+            ],
+            [
+              12166,
+              12683
+            ],
+            [
+              12762,
+              12072
+            ],
+            [
+              11728,
+              12106
+            ],
+            [
+              11627,
+              12201
+            ]
+          ],
+          "queries": 70,
+          "snapshot_unchanged_depth": 23,
+          "steady_unchanged_depth": 5920,
+          "timed_grid_us": 13202,
+          "units": 37,
+          "uses_height_field": true,
+          "visual_per_unit_windows_us": 8188
+        },
+        "level1": {
+          "exact": true,
+          "index_per_unit_windows_us": 2739,
+          "iterations": 160,
+          "lite_effects_at_capture": false,
+          "paired_build_us": [
+            [
+              6686,
+              6602
+            ],
+            [
+              6481,
+              6618
+            ],
+            [
+              6498,
+              6552
+            ],
+            [
+              6798,
+              6759
+            ],
+            [
+              6708,
+              6935
+            ],
+            [
+              6896,
+              6631
+            ]
+          ],
+          "queries": 56,
+          "snapshot_unchanged_depth": 18,
+          "steady_unchanged_depth": 3040,
+          "timed_grid_us": 7738,
+          "units": 19,
+          "uses_height_field": true,
+          "visual_per_unit_windows_us": 4454
+        },
+        "level5": {
+          "exact": true,
+          "index_per_unit_windows_us": 13617,
+          "iterations": 160,
+          "lite_effects_at_capture": false,
+          "paired_build_us": [
+            [
+              25191,
+              25351
+            ],
+            [
+              25137,
+              25390
+            ],
+            [
+              27772,
+              27687
+            ],
+            [
+              28129,
+              26496
+            ],
+            [
+              24925,
+              27568
+            ],
+            [
+              28451,
+              26883
+            ]
+          ],
+          "queries": 70,
+          "snapshot_unchanged_depth": 64,
+          "steady_unchanged_depth": 11040,
+          "timed_grid_us": 33288,
+          "units": 69,
+          "uses_height_field": true,
+          "visual_per_unit_windows_us": 17473
+        },
+        "skirmish": {
+          "exact": true,
+          "index_per_unit_windows_us": 3942,
+          "iterations": 160,
+          "lite_effects_at_capture": false,
+          "paired_build_us": [
+            [
+              11853,
+              12224
+            ],
+            [
+              11646,
+              11428
+            ],
+            [
+              11448,
+              11844
+            ],
+            [
+              11447,
+              11362
+            ],
+            [
+              11476,
+              11373
+            ],
+            [
+              12179,
+              11957
+            ]
+          ],
+          "queries": 70,
+          "snapshot_unchanged_depth": 26,
+          "steady_unchanged_depth": 5920,
+          "timed_grid_us": 12837,
+          "units": 37,
+          "uses_height_field": true,
+          "visual_per_unit_windows_us": 8092
+        },
+        "skirmish_ai": {
+          "exact": true,
+          "index_per_unit_windows_us": 4426,
+          "iterations": 160,
+          "lite_effects_at_capture": false,
+          "paired_build_us": [
+            [
+              9047,
+              8766
+            ],
+            [
+              8960,
+              8996
+            ],
+            [
+              9583,
+              9182
+            ],
+            [
+              9344,
+              9970
+            ],
+            [
+              9322,
+              9560
+            ],
+            [
+              9376,
+              9661
+            ]
+          ],
+          "queries": 70,
+          "snapshot_unchanged_depth": 38,
+          "steady_unchanged_depth": 6400,
+          "timed_grid_us": 12815,
+          "units": 40,
+          "uses_height_field": false,
+          "visual_per_unit_windows_us": 7432
+        }
+      },
+      "summary": {
+        "arena": {
+          "units": 58,
+          "queries": 70,
+          "uses_height_field": false,
+          "visual_share_in_timed_unit_windows_pct": 50.64,
+          "baseline_us_per_build": 121.166,
+          "alternative_us_per_build": 115.828,
+          "paired_median_change_pct": -3.2,
+          "faster_pairs": 6,
+          "snapshot_unchanged_depth": 8
+        },
+        "custom_defense": {
+          "units": 37,
+          "queries": 70,
+          "uses_height_field": true,
+          "visual_share_in_timed_unit_windows_pct": 66.04,
+          "baseline_us_per_build": 72.984,
+          "alternative_us_per_build": 75.556,
+          "paired_median_change_pct": 3.51,
+          "faster_pairs": 2,
+          "snapshot_unchanged_depth": 23
+        },
+        "level1": {
+          "units": 19,
+          "queries": 56,
+          "uses_height_field": true,
+          "visual_share_in_timed_unit_windows_pct": 61.92,
+          "baseline_us_per_build": 41.856,
+          "alternative_us_per_build": 41.403,
+          "paired_median_change_pct": 0.13,
+          "faster_pairs": 3,
+          "snapshot_unchanged_depth": 18
+        },
+        "level5": {
+          "units": 69,
+          "queries": 70,
+          "uses_height_field": true,
+          "visual_share_in_timed_unit_windows_pct": 56.2,
+          "baseline_us_per_build": 165.509,
+          "alternative_us_per_build": 166.809,
+          "paired_median_change_pct": 0.16,
+          "faster_pairs": 3,
+          "snapshot_unchanged_depth": 64
+        },
+        "skirmish": {
+          "units": 37,
+          "queries": 70,
+          "uses_height_field": true,
+          "visual_share_in_timed_unit_windows_pct": 67.24,
+          "baseline_us_per_build": 72.256,
+          "alternative_us_per_build": 72.725,
+          "paired_median_change_pct": -0.82,
+          "faster_pairs": 4,
+          "snapshot_unchanged_depth": 26
+        },
+        "skirmish_ai": {
+          "units": 40,
+          "queries": 70,
+          "uses_height_field": false,
+          "visual_share_in_timed_unit_windows_pct": 62.67,
+          "baseline_us_per_build": 58.331,
+          "alternative_us_per_build": 58.569,
+          "paired_median_change_pct": 1.48,
+          "faster_pairs": 2,
+          "snapshot_unchanged_depth": 38
+        }
+      },
+      "executable_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "8541e1252cfdff88f0d774c4146cce3f005d2c2e46a76f7ddd47b5799a3260cb",
+      "report_sha256": "be2273e03da1459724ff1ca96f7a4f3f5b74f715617f88a7330997a9936d18cf",
+      "log_sha256": "6b44e83855610689d8edacb3d7b9bb1610fdf947ca56b91684e1d5df3df2ff3f",
+      "fixture_sha256": "6bed3d20e609e8305e2ead793ce08244bb89e8a3eac07b8f06ee4e91c84ae02e",
+      "lifecycle_passes": 12,
+      "progress_unchanged": true
+    }
+  }
+}
