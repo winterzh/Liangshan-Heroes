@@ -1,5 +1,9 @@
 # 八幕战役后续开发路线图
 
+## M6 快活林可选酒路与收尾
+
+跳过全部酒望仍能到店、实战制服蒋门神并接店，完成演义 3/4。四次明确下令饮酒后再到店，演义 4/4。零饮酒接店在途恢复与终局旧槽拦截已通过。 [Windows 通关验收](../qa/campaign_counter_window_20261116/windows_kuaihuolin_pc_duel_terminal_dfe197b3.json)
+
 ## M6 快活林开打前的路线选择
 
 快活林开打前，PC 任务栏可点「去下一家饮酒」或「到店挑衅」。前者每次只派武松走一处酒望，后者可跳过剩余酒望，武松到店办理后才引出蒋门神。停止和改道沿用原指令。 [Windows 验收收据](../qa/campaign_counter_window_20261116/windows_kuaihuolin_pc_road_dfe197b3.json)

@@ -1,5 +1,9 @@
 # 源码设置与换机（2026-10-30）
 
+## 快活林接店与终局核对
+
+饮酒、到店和退店动作均使用原旗标及实时战斗规则。接店的第 2 代存档保留施恩的命令和原游戏身份，独立进程继续后按原账本完成结算。 [Windows 通关验收](../qa/campaign_counter_window_20261116/windows_kuaihuolin_pc_duel_terminal_dfe197b3.json)
+
 ## 快活林开场任务按钮
 
 开场行军沿用原旗标的移动意图与存档。路线按钮从旧档的现存动作和酒望状态恢复。饮酒仍按原到场判定增攻，决斗阶段清除开场按钮。 [Windows 验收收据](../qa/campaign_counter_window_20261116/windows_kuaihuolin_pc_road_dfe197b3.json)

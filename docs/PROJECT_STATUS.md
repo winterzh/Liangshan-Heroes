@@ -1,5 +1,9 @@
 # 当前项目总览
 
+## Windows 快活林两条路线的自然结算
+
+候选 dfe197b3 通过零饮酒 3/4 和四处饮酒 4/4。零饮酒在途重开后由原施恩接店，另一次重启拒绝已结算旧槽。四个隔离进程共 75 项。真人体验、在线奖励和 Steam 云档另验。 [Windows 通关验收](../qa/campaign_counter_window_20261116/windows_kuaihuolin_pc_duel_terminal_dfe197b3.json)
+
 ## Windows 快活林开场路线
 
 候选 dfe197b3 从正式 Build 26873421 的开场原档验证了饮一处、改去酒店和跳过全部酒望两路。两次在途保存及独立重开，四语窄窗和停止重下均通过。四个离线进程共 63 项。 [Windows 验收收据](../qa/campaign_counter_window_20261116/windows_kuaihuolin_pc_road_dfe197b3.json)

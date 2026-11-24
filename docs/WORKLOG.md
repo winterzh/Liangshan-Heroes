@@ -1,5 +1,9 @@
 # 开发日志
 
+## 2026-11-24 快活林两条路线通关
+
+从同一份正式版开场档验证零饮酒到店和四处饮酒到店。两路均通过实战反击、说清退店条件、施恩接店。零饮酒路线在接店途中保存，独立继续结算 3/4，四处饮酒路线结算 4/4。 [Windows 通关验收](../qa/campaign_counter_window_20261116/windows_kuaihuolin_pc_duel_terminal_dfe197b3.json)
+
 ## 2026-11-24 快活林饮酒与到店指令
 
 快活林开打前，PC 任务栏可点「去下一家饮酒」或「到店挑衅」。前者每次只派武松走一处酒望，后者可跳过剩余酒望，武松到店办理后才引出蒋门神。停止和改道沿用原指令。 [Windows 验收收据](../qa/campaign_counter_window_20261116/windows_kuaihuolin_pc_road_dfe197b3.json)
