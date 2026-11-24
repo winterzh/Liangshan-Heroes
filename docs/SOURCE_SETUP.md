@@ -1,6 +1,11 @@
 # 源码设置与换机（2026-10-30）
 
 
+## 2026-11-24 Windows 黄泥冈出征贴图预读
+
+候选 c882e734 采用 Windows 七文件拆包。开场贴图按原有战役资源路径请求。菜单携带已读取的纹理到战场就绪，随后清空菜单持有列表。继续使用原保存字段和原资源身份。正式 Build 26873421 来源的黄泥冈档通过续玩、再保存和独立重读共 25 项。用实际出征按钮验证了八张贴图全部提交后台读取。完成读取后、挂载战场前关闭游戏，退出码为 0，进度字节一致。此实现随已验的 Windows 开发源码整合。 [Windows 对照收据](../qa/battle_entry_timing_20261116/windows_huangnigang_opening_preload_c882e734.json)
+
+
 ## 2026-11-24 Windows 黄泥冈开场图集对照
 
 当前稳定源码继续通过各自原贴图使用这八个黄泥冈道具。试验候选 9da97d6b 将原 Vulkan 运行时解码的 RGBA 排成 2064×1032 的无损图集，行列为 2×4。每片有效尺寸为 512×512，四边各外扩 2 像素。Vulkan 和 OpenGL Compatibility 的采样区域与原成品逐像素一致。候选保存在本地分支 codex/windows-huangnigang-texture-evidence-20261124。 [Windows 对照收据](../qa/battle_entry_timing_20261116/windows_huangnigang_opening_atlas_experiment_9da97d6b.json)
