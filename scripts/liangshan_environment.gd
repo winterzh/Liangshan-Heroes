@@ -24,9 +24,19 @@ const REED_BANKS := [
 static func paint(map: GameMap) -> void:
 	var original := map.grid.duplicate()
 	var mainland := PackedVector2Array(MAINLAND)
+	var reed_banks: Array[PackedVector2Array] = []
+	for bank in REED_BANKS:
+		reed_banks.append(PackedVector2Array(bank))
 	for y in range(map.h):
+		var row := y * map.w
 		for x in range(map.w):
-			var cell := Vector2i(x,y)
+			var cell := Vector2i(x, y)
+			if COMBAT_GROUND.has_point(cell) or original[row + x] == T.ROAD:
+				continue
+			# The east channel stays open unless an existing road crosses it.
+			if x >= 39 and x <= 42:
+				map.set_cell_t(x, y, T.WATER)
+				continue
 			var p := Vector2(cell) + Vector2(0.5,0.5)
 			var terrain := T.WATER
 			if Geometry2D.is_point_in_polygon(p,mainland):
@@ -38,16 +48,10 @@ static func paint(map: GameMap) -> void:
 				elif edge<3.5 and x>27:
 					terrain = T.REEDS
 			else:
-				for bank in REED_BANKS:
-					var outline := PackedVector2Array(bank)
+				for outline in reed_banks:
 					if Geometry2D.is_point_in_polygon(p,outline):
 						terrain = T.MARSH if _edge_distance(p,outline)<0.8 else T.REEDS
 						break
-			# 东侧大港保持隔水，仅让原两条堤道跨过；苇滩不能暗中铺出第三条陆路。
-			if x>=39 and x<=42:
-				terrain = T.WATER
-			if COMBAT_GROUND.has_point(cell) or original[y*map.w+x]==T.ROAD:
-				terrain = original[y*map.w+x]
 			map.set_cell_t(x,y,terrain)
 	# 山麓小路沿后山下至寨侧，留在可通行的林中，不穿厅墙。
 	map.paint_path([Vector2(18,6),Vector2(21,11),Vector2(19,17),Vector2(23,22),Vector2(23,23)],0,T.ROAD)
