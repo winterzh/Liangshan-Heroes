@@ -1,0 +1,2840 @@
+{
+  "candidate": "465328a22aca7880f42800b7de6972f21176bd41",
+  "baseline": "fb76edbd6e53c2751409ad8fa44e74aecede3daf",
+  "profiled_short_runs_acceptance_eligible": false,
+  "scope": "Independent native Windows visits on the same route with attached timing probes and an isolated phase render.",
+  "prior_formal_visit_15": [
+    {
+      "candidate": "9697a6740c54889c5cf56e282d8d943e400f7cfc",
+      "visit": 15,
+      "request_to_first_frame_ms": 980.973,
+      "overlay_to_mount_ms": 660.813
+    },
+    {
+      "candidate": "fb76edbd6e53c2751409ad8fa44e74aecede3daf",
+      "visit": 15,
+      "request_to_first_frame_ms": 1014.706,
+      "overlay_to_mount_ms": 713.364
+    }
+  ],
+  "before": {
+    "launcher": {
+      "candidate": "fb76edbd6e53c2751409ad8fa44e74aecede3daf",
+      "probe_sha256": "834af501bafbdf624bda405911b8a7da10192b2cd2cca3b745572d2bc7347d68",
+      "menu_probe_sha256": "b9cc12c6bae88b01258af599891cc970ab97f3b77f48d7d429d5fb4505e9b04f",
+      "battle_probe_sha256": "646e41238e51acfa6fb1de421df6e8849f1dfe3189dc2c0b3399a6c13a26fecb",
+      "payload_files_unchanged": true,
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "f1533345463912045e19c367754d140b0d526c029038b17eff0cbee51d5dd464",
+      "split_identity": "04151f43b304fca3052103d2633b2c3c0883e10f8adedcabcc29548c72e951fb",
+      "exe_unchanged": true,
+      "exit_code": 0,
+      "seconds": 126.547,
+      "errors": [],
+      "warnings": [],
+      "log_sha256": "07674ecac19e8ba359fb079f1059ed685a610190134ba0ca9fc643d4687dabfd",
+      "report_sha256": "42ef5fc5142a7ebb52fd613ce7fcdc57d09c74f976a4c2eaf8189d200f8f4fb5"
+    },
+    "renderer": {
+      "adapter": "NVIDIA GeForce RTX 4060 Laptop GPU",
+      "api": "1.4.357",
+      "display": "Windows",
+      "driver": "vulkan",
+      "godot": {
+        "build": "official",
+        "hash": "7d41c59c457bd5a245092b4e7eb2d833e3b3f8c3",
+        "hex": 263683,
+        "major": 4,
+        "minor": 6,
+        "patch": 3,
+        "status": "stable",
+        "string": "4.6.3-stable (official)",
+        "timestamp": 0
+      },
+      "method": "forward_plus",
+      "vendor": "NVIDIA",
+      "vsync": 0
+    },
+    "viewport": [
+      1280,
+      720
+    ],
+    "seconds": 116.293083,
+    "complete_minutes": 1,
+    "activity_and_release": 18,
+    "campaign_progress_unchanged": true,
+    "short_run_failures": [],
+    "memory_stability": {
+      "working_set_bytes": {
+        "end": 1198673920.0,
+        "end_delta_from_warm": 11599872.0,
+        "monotonic_growth_detected": false,
+        "peak": 1267372032.0,
+        "recovered_from_peak": 68698112.0,
+        "recovery_passed": true,
+        "tolerance": 134217728.0,
+        "trend": {
+          "decreases": 0,
+          "first": 1187074048.0,
+          "flat": 0,
+          "increases": 2,
+          "last": 1198673920.0,
+          "near_monotonic": false,
+          "net": 11599872.0,
+          "samples": 3
+        },
+        "warm_baseline": 1187074048.0
+      },
+      "private_bytes": {
+        "end": 2192752640.0,
+        "end_delta_from_warm": 11603968.0,
+        "monotonic_growth_detected": false,
+        "peak": 2192752640.0,
+        "recovered_from_peak": 0.0,
+        "recovery_passed": true,
+        "tolerance": 134217728.0,
+        "trend": {
+          "decreases": 0,
+          "first": 2181148672.0,
+          "flat": 0,
+          "increases": 2,
+          "last": 2192752640.0,
+          "near_monotonic": false,
+          "net": 11603968.0,
+          "samples": 3
+        },
+        "warm_baseline": 2181148672.0
+      }
+    },
+    "distinct_shader_ids": 18,
+    "distinct_material_ids": 18,
+    "render_control": {
+      "material_and_shader_source_match": true,
+      "phase_isolated": true,
+      "reference_pixels": [
+        {
+          "color_samples": [
+            "(0.2431, 0.4667, 0.6941, 1.0)",
+            "(0.7765, 0.502, 0.3176, 1.0)",
+            "(0.5373, 0.6118, 0.3373, 1.0)"
+          ],
+          "sha256": "3d4b9652335f4a898b0cfe4a622cbb4bd9f15b90fe9aad283559c25c4fb48574",
+          "size": [
+            192,
+            108
+          ]
+        },
+        {
+          "color_samples": [
+            "(0.2118, 0.4314, 0.6549, 1.0)",
+            "(0.7765, 0.502, 0.3176, 1.0)",
+            "(0.5373, 0.6118, 0.3373, 1.0)"
+          ],
+          "sha256": "a73b3ff0947d7ce577b83293a02a30e74e204a840f38605d5f40a70ab10b7255",
+          "size": [
+            192,
+            108
+          ]
+        }
+      ],
+      "shader_reused": false,
+      "shader_source_sha256": {
+        "stock": [
+          "b12643da4a8abfa7f6f624e76fe8a0be3de3c014e7e43e10e96bfce6ed808c68",
+          "b12643da4a8abfa7f6f624e76fe8a0be3de3c014e7e43e10e96bfce6ed808c68"
+        ],
+        "trial": [
+          "b12643da4a8abfa7f6f624e76fe8a0be3de3c014e7e43e10e96bfce6ed808c68",
+          "b12643da4a8abfa7f6f624e76fe8a0be3de3c014e7e43e10e96bfce6ed808c68"
+        ]
+      },
+      "trial_pixels": [
+        {
+          "color_samples": [
+            "(0.2431, 0.4667, 0.6941, 1.0)",
+            "(0.7765, 0.502, 0.3176, 1.0)",
+            "(0.5373, 0.6118, 0.3373, 1.0)"
+          ],
+          "sha256": "3d4b9652335f4a898b0cfe4a622cbb4bd9f15b90fe9aad283559c25c4fb48574",
+          "size": [
+            192,
+            108
+          ]
+        },
+        {
+          "color_samples": [
+            "(0.2118, 0.4314, 0.6549, 1.0)",
+            "(0.7765, 0.502, 0.3176, 1.0)",
+            "(0.5373, 0.6118, 0.3373, 1.0)"
+          ],
+          "sha256": "a73b3ff0947d7ce577b83293a02a30e74e204a840f38605d5f40a70ab10b7255",
+          "size": [
+            192,
+            108
+          ]
+        }
+      ]
+    },
+    "repeat_median_ms": {
+      "request_to_first_frame": 180.132,
+      "overlay_to_mount": 113.109,
+      "atmosphere_build": 9.215
+    },
+    "visits": [
+      {
+        "index": 1,
+        "level": "level1",
+        "times_ms": {
+          "request_to_first_frame": 588.269,
+          "overlay_to_mount": 440.089,
+          "mount_to_first_frame": 143.319,
+          "identity": 22.894,
+          "texture_requests_until_environment_ready": 42.296,
+          "environment_wait_after_identity": 16.372,
+          "texture_wait_total": 16.307,
+          "calibration_total": 0.0,
+          "environment_ready_to_install": 97.049,
+          "scene_load": 0.428,
+          "scene_instantiate_and_probe_attach": 272.154,
+          "handoff_to_mount": 1.335,
+          "atmosphere_build": 0.962,
+          "detached_map_prepare": 19.334,
+          "detached_map_to_post_draw": 6.744
+        },
+        "environment_requests": 16,
+        "longest_texture_wait": {
+          "path": "res://assets/campaign/environment/art_full_20260915/overlays.png",
+          "ms": 16.074
+        },
+        "milestones_us": {
+          "battle_instantiated": 417519,
+          "battle_scene_loaded": 145365,
+          "detached_frame_drawn": 443610,
+          "environment_complete": 47888,
+          "environment_requests": 5592,
+          "finish_deferred": 8293,
+          "finish_entered": 8622,
+          "frame_requests": 7717,
+          "frame_resources_complete": 75640,
+          "handoff": 443615,
+          "identity_applied": 417523,
+          "identity_ready": 31516,
+          "install_deferred": 144928,
+          "install_entered": 144937,
+          "map_prepare_started": 417532,
+          "map_prepared": 436866,
+          "overlay_added": 1540,
+          "overlay_draw_done": 4867,
+          "portraits_complete": 144916
+        },
+        "map_milestones_us": {
+          "atmosphere_attach_done": 472207,
+          "atmosphere_attach_start": 471245,
+          "environment_enabled": 436861,
+          "environment_paint": 419448,
+          "level_decorate": 420067,
+          "level_paint": 418156,
+          "map_bake": 420061,
+          "map_node": 417611,
+          "map_size": 417646
+        }
+      },
+      {
+        "index": 2,
+        "level": "arena",
+        "times_ms": {
+          "request_to_first_frame": 76.341,
+          "overlay_to_mount": 1.854,
+          "mount_to_first_frame": 56.219,
+          "identity": 16.359,
+          "texture_requests_until_environment_ready": 0.008,
+          "environment_wait_after_identity": 0.008,
+          "texture_wait_total": 0.0,
+          "calibration_total": 0.0,
+          "environment_ready_to_install": 1.051,
+          "scene_load": 0.403,
+          "scene_instantiate_and_probe_attach": 0.096,
+          "handoff_to_mount": 1.16,
+          "atmosphere_build": 7.813
+        },
+        "environment_requests": 0,
+        "longest_texture_wait": null,
+        "milestones_us": {
+          "battle_instantiated": 18956,
+          "battle_scene_loaded": 18860,
+          "environment_complete": 17406,
+          "finish_deferred": 613,
+          "finish_entered": 1039,
+          "frame_resources_complete": 17407,
+          "handoff": 18962,
+          "identity_applied": 18960,
+          "identity_ready": 17398,
+          "install_deferred": 18318,
+          "install_entered": 18457,
+          "overlay_added": 608,
+          "portraits_complete": 17407
+        },
+        "map_milestones_us": {
+          "atmosphere_attach_done": 38830,
+          "atmosphere_attach_start": 31017,
+          "environment_enabled": 30287,
+          "environment_paint": 29761,
+          "level_decorate": 30276,
+          "level_paint": 29756,
+          "map_bake": 30274,
+          "map_node": 29708,
+          "map_size": 29750
+        }
+      },
+      {
+        "index": 3,
+        "level": "skirmish",
+        "times_ms": {
+          "request_to_first_frame": 306.822,
+          "overlay_to_mount": 212.281,
+          "mount_to_first_frame": 93.26,
+          "identity": 18.379,
+          "texture_requests_until_environment_ready": 175.988,
+          "environment_wait_after_identity": 157.47,
+          "texture_wait_total": 105.468,
+          "calibration_total": 49.588,
+          "environment_ready_to_install": 0.112,
+          "scene_load": 0.273,
+          "scene_instantiate_and_probe_attach": 0.062,
+          "handoff_to_mount": 1.191,
+          "atmosphere_build": 6.621,
+          "detached_map_prepare": 33.099,
+          "detached_map_to_post_draw": 0.78
+        },
+        "environment_requests": 18,
+        "longest_texture_wait": {
+          "path": "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png",
+          "ms": 105.2
+        },
+        "milestones_us": {
+          "battle_instantiated": 178478,
+          "battle_scene_loaded": 178416,
+          "detached_frame_drawn": 212368,
+          "environment_complete": 178031,
+          "environment_requests": 2043,
+          "finish_deferred": 2046,
+          "finish_entered": 2182,
+          "frame_resources_complete": 178033,
+          "handoff": 212371,
+          "identity_applied": 178480,
+          "identity_ready": 20561,
+          "install_deferred": 178042,
+          "install_entered": 178143,
+          "map_prepare_started": 178489,
+          "map_prepared": 211588,
+          "overlay_added": 580,
+          "overlay_draw_done": 1285,
+          "portraits_complete": 178034
+        },
+        "map_milestones_us": {
+          "atmosphere_attach_done": 231617,
+          "atmosphere_attach_start": 224996,
+          "environment_enabled": 211584,
+          "environment_paint": 185512,
+          "level_decorate": 211576,
+          "level_paint": 185500,
+          "map_bake": 186651,
+          "map_node": 178527,
+          "map_size": 178573
+        }
+      },
+      {
+        "index": 4,
+        "level": "skirmish_ai",
+        "times_ms": {
+          "request_to_first_frame": 99.126,
+          "overlay_to_mount": 1.823,
+          "mount_to_first_frame": 76.201,
+          "identity": 19.158,
+          "texture_requests_until_environment_ready": 0.011,
+          "environment_wait_after_identity": 0.011,
+          "texture_wait_total": 0.0,
+          "calibration_total": 0.0,
+          "environment_ready_to_install": 1.065,
+          "scene_load": 0.285,
+          "scene_instantiate_and_probe_attach": 0.105,
+          "handoff_to_mount": 1.277,
+          "atmosphere_build": 7.981
+        },
+        "environment_requests": 0,
+        "longest_texture_wait": null,
+        "milestones_us": {
+          "battle_instantiated": 21642,
+          "battle_scene_loaded": 21537,
+          "environment_complete": 20187,
+          "finish_deferred": 674,
+          "finish_entered": 1018,
+          "frame_resources_complete": 20189,
+          "handoff": 21648,
+          "identity_applied": 21646,
+          "identity_ready": 20176,
+          "install_deferred": 21144,
+          "install_entered": 21252,
+          "overlay_added": 670,
+          "portraits_complete": 20190
+        },
+        "map_milestones_us": {
+          "atmosphere_attach_done": 42176,
+          "atmosphere_attach_start": 34195,
+          "environment_enabled": 33423,
+          "environment_paint": 32506,
+          "level_decorate": 33410,
+          "level_paint": 32498,
+          "map_bake": 33405,
+          "map_node": 31138,
+          "map_size": 31201
+        }
+      },
+      {
+        "index": 5,
+        "level": "custom_defense",
+        "times_ms": {
+          "request_to_first_frame": 317.831,
+          "overlay_to_mount": 248.334,
+          "mount_to_first_frame": 67.615,
+          "identity": 16.542,
+          "texture_requests_until_environment_ready": 201.762,
+          "environment_wait_after_identity": 185.007,
+          "texture_wait_total": 184.929,
+          "calibration_total": 0.0,
+          "environment_ready_to_install": 0.018,
+          "scene_load": 0.39,
+          "scene_instantiate_and_probe_attach": 0.106,
+          "handoff_to_mount": 2.076,
+          "atmosphere_build": 7.296,
+          "detached_map_prepare": 42.368,
+          "detached_map_to_post_draw": 1.134
+        },
+        "environment_requests": 18,
+        "longest_texture_wait": {
+          "path": "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png",
+          "ms": 184.803
+        },
+        "milestones_us": {
+          "battle_instantiated": 204619,
+          "battle_scene_loaded": 204513,
+          "detached_frame_drawn": 248133,
+          "environment_complete": 204105,
+          "environment_requests": 2343,
+          "finish_deferred": 2348,
+          "finish_entered": 2556,
+          "frame_resources_complete": 204108,
+          "handoff": 248140,
+          "identity_applied": 204622,
+          "identity_ready": 19098,
+          "install_deferred": 204117,
+          "install_entered": 204123,
+          "map_prepare_started": 204631,
+          "map_prepared": 246999,
+          "overlay_added": 873,
+          "overlay_draw_done": 1887,
+          "portraits_complete": 204110
+        },
+        "map_milestones_us": {
+          "atmosphere_attach_done": 272443,
+          "atmosphere_attach_start": 265147,
+          "environment_enabled": 246994,
+          "environment_paint": 221517,
+          "level_decorate": 246979,
+          "level_paint": 221510,
+          "map_bake": 222699,
+          "map_node": 212959,
+          "map_size": 213019
+        }
+      },
+      {
+        "index": 6,
+        "level": "level5",
+        "times_ms": {
+          "request_to_first_frame": 293.266,
+          "overlay_to_mount": 176.128,
+          "mount_to_first_frame": 115.124,
+          "identity": 17.509,
+          "texture_requests_until_environment_ready": 138.045,
+          "environment_wait_after_identity": 119.631,
+          "texture_wait_total": 119.586,
+          "calibration_total": 0.0,
+          "environment_ready_to_install": 0.08,
+          "scene_load": 0.258,
+          "scene_instantiate_and_probe_attach": 0.071,
+          "handoff_to_mount": 1.348,
+          "atmosphere_build": 6.65,
+          "detached_map_prepare": 35.144,
+          "detached_map_to_post_draw": 0.779
+        },
+        "environment_requests": 18,
+        "longest_texture_wait": {
+          "path": "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png",
+          "ms": 119.509
+        },
+        "milestones_us": {
+          "battle_instantiated": 140857,
+          "battle_scene_loaded": 140786,
+          "detached_frame_drawn": 176791,
+          "environment_complete": 140448,
+          "environment_requests": 2403,
+          "finish_deferred": 3216,
+          "finish_entered": 3308,
+          "frame_requests": 2897,
+          "frame_resources_complete": 140512,
+          "gao_art_requests": 3214,
+          "handoff": 176794,
+          "identity_applied": 140860,
+          "identity_ready": 20817,
+          "install_deferred": 140522,
+          "install_entered": 140528,
+          "map_prepare_started": 140868,
+          "map_prepared": 176012,
+          "overlay_added": 1118,
+          "overlay_draw_done": 2017,
+          "portraits_complete": 140513
+        },
+        "map_milestones_us": {
+          "atmosphere_attach_done": 216268,
+          "atmosphere_attach_start": 209618,
+          "environment_enabled": 176008,
+          "environment_paint": 150268,
+          "level_decorate": 175999,
+          "level_paint": 150258,
+          "map_bake": 151222,
+          "map_node": 140921,
+          "map_size": 140970
+        }
+      },
+      {
+        "index": 7,
+        "level": "level1",
+        "times_ms": {
+          "request_to_first_frame": 79.76,
+          "overlay_to_mount": 28.909,
+          "mount_to_first_frame": 48.593,
+          "identity": 16.214,
+          "texture_requests_until_environment_ready": 16.529,
+          "environment_wait_after_identity": 0.093,
+          "texture_wait_total": 0.078,
+          "calibration_total": 0.0,
+          "environment_ready_to_install": 0.008,
+          "scene_load": 0.194,
+          "scene_instantiate_and_probe_attach": 0.063,
+          "handoff_to_mount": 1.122,
+          "atmosphere_build": 7.471,
+          "detached_map_prepare": 9.568,
+          "detached_map_to_post_draw": 0.776
+        },
+        "environment_requests": 15,
+        "longest_texture_wait": {
+          "path": "res://assets/campaign/environment/shared/surfaces/surface_dry_earth.png",
+          "ms": 0.014
+        },
+        "milestones_us": {
+          "battle_instantiated": 19685,
+          "battle_scene_loaded": 19622,
+          "detached_frame_drawn": 30042,
+          "environment_complete": 19420,
+          "environment_requests": 2891,
+          "finish_deferred": 2942,
+          "finish_entered": 3113,
+          "frame_requests": 2929,
+          "frame_resources_complete": 19421,
+          "handoff": 30045,
+          "identity_applied": 19686,
+          "identity_ready": 19327,
+          "install_deferred": 19426,
+          "install_entered": 19428,
+          "map_prepare_started": 19698,
+          "map_prepared": 29266,
+          "overlay_added": 997,
+          "overlay_draw_done": 2264,
+          "portraits_complete": 19421
+        },
+        "map_milestones_us": {
+          "atmosphere_attach_done": 46522,
+          "atmosphere_attach_start": 39051,
+          "environment_enabled": 29263,
+          "environment_paint": 21601,
+          "level_decorate": 22015,
+          "level_paint": 20313,
+          "map_bake": 22010,
+          "map_node": 19746,
+          "map_size": 19774
+        }
+      },
+      {
+        "index": 8,
+        "level": "arena",
+        "times_ms": {
+          "request_to_first_frame": 69.841,
+          "overlay_to_mount": 2.762,
+          "mount_to_first_frame": 48.652,
+          "identity": 16.379,
+          "texture_requests_until_environment_ready": 0.013,
+          "environment_wait_after_identity": 0.013,
+          "texture_wait_total": 0.0,
+          "calibration_total": 0.0,
+          "environment_ready_to_install": 1.25,
+          "scene_load": 0.376,
+          "scene_instantiate_and_probe_attach": 0.114,
+          "handoff_to_mount": 1.865,
+          "atmosphere_build": 7.027
+        },
+        "environment_requests": 0,
+        "longest_texture_wait": null,
+        "milestones_us": {
+          "battle_instantiated": 19316,
+          "battle_scene_loaded": 19202,
+          "environment_complete": 17576,
+          "finish_deferred": 858,
+          "finish_entered": 1184,
+          "frame_resources_complete": 17577,
+          "handoff": 19324,
+          "identity_applied": 19321,
+          "identity_ready": 17563,
+          "install_deferred": 18493,
+          "install_entered": 18826,
+          "overlay_added": 852,
+          "portraits_complete": 17578
+        },
+        "map_milestones_us": {
+          "atmosphere_attach_done": 38926,
+          "atmosphere_attach_start": 31899,
+          "environment_enabled": 31179,
+          "environment_paint": 30444,
+          "level_decorate": 31171,
+          "level_paint": 30436,
+          "map_bake": 31168,
+          "map_node": 30384,
+          "map_size": 30426
+        }
+      },
+      {
+        "index": 9,
+        "level": "skirmish",
+        "times_ms": {
+          "request_to_first_frame": 239.473,
+          "overlay_to_mount": 172.173,
+          "mount_to_first_frame": 65.109,
+          "identity": 18.466,
+          "texture_requests_until_environment_ready": 137.997,
+          "environment_wait_after_identity": 119.192,
+          "texture_wait_total": 119.068,
+          "calibration_total": 0.0,
+          "environment_ready_to_install": 0.032,
+          "scene_load": 0.517,
+          "scene_instantiate_and_probe_attach": 0.11,
+          "handoff_to_mount": 1.439,
+          "atmosphere_build": 6.529,
+          "detached_map_prepare": 30.663,
+          "detached_map_to_post_draw": 0.855
+        },
+        "environment_requests": 18,
+        "longest_texture_wait": {
+          "path": "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png",
+          "ms": 105.106
+        },
+        "milestones_us": {
+          "battle_instantiated": 141383,
+          "battle_scene_loaded": 141273,
+          "detached_frame_drawn": 172919,
+          "environment_complete": 140724,
+          "environment_requests": 2727,
+          "finish_deferred": 2740,
+          "finish_entered": 3066,
+          "frame_resources_complete": 140728,
+          "handoff": 172925,
+          "identity_applied": 141386,
+          "identity_ready": 21532,
+          "install_deferred": 140745,
+          "install_entered": 140756,
+          "map_prepare_started": 141401,
+          "map_prepared": 172064,
+          "overlay_added": 1225,
+          "overlay_draw_done": 2198,
+          "portraits_complete": 140730
+        },
+        "map_milestones_us": {
+          "atmosphere_attach_done": 193435,
+          "atmosphere_attach_start": 186906,
+          "environment_enabled": 172059,
+          "environment_paint": 148796,
+          "level_decorate": 172045,
+          "level_paint": 148778,
+          "map_bake": 150226,
+          "map_node": 141471,
+          "map_size": 141526
+        }
+      },
+      {
+        "index": 10,
+        "level": "skirmish_ai",
+        "times_ms": {
+          "request_to_first_frame": 89.188,
+          "overlay_to_mount": 1.965,
+          "mount_to_first_frame": 66.756,
+          "identity": 18.196,
+          "texture_requests_until_environment_ready": 0.01,
+          "environment_wait_after_identity": 0.01,
+          "texture_wait_total": 0.0,
+          "calibration_total": 0.0,
+          "environment_ready_to_install": 1.236,
+          "scene_load": 0.362,
+          "scene_instantiate_and_probe_attach": 0.113,
+          "handoff_to_mount": 1.205,
+          "atmosphere_build": 7.456
+        },
+        "environment_requests": 0,
+        "longest_texture_wait": null,
+        "milestones_us": {
+          "battle_instantiated": 21223,
+          "battle_scene_loaded": 21110,
+          "environment_complete": 19512,
+          "finish_deferred": 942,
+          "finish_entered": 1306,
+          "frame_resources_complete": 19513,
+          "handoff": 21227,
+          "identity_applied": 21225,
+          "identity_ready": 19502,
+          "install_deferred": 20524,
+          "install_entered": 20748,
+          "overlay_added": 934,
+          "portraits_complete": 19514
+        },
+        "map_milestones_us": {
+          "atmosphere_attach_done": 42957,
+          "atmosphere_attach_start": 35501,
+          "environment_enabled": 34767,
+          "environment_paint": 33780,
+          "level_decorate": 34748,
+          "level_paint": 33771,
+          "map_bake": 34739,
+          "map_node": 32461,
+          "map_size": 32533
+        }
+      },
+      {
+        "index": 11,
+        "level": "custom_defense",
+        "times_ms": {
+          "request_to_first_frame": 290.861,
+          "overlay_to_mount": 208.498,
+          "mount_to_first_frame": 80.258,
+          "identity": 29.84,
+          "texture_requests_until_environment_ready": 156.996,
+          "environment_wait_after_identity": 126.714,
+          "texture_wait_total": 126.638,
+          "calibration_total": 0.0,
+          "environment_ready_to_install": 0.02,
+          "scene_load": 0.502,
+          "scene_instantiate_and_probe_attach": 0.14,
+          "handoff_to_mount": 1.499,
+          "atmosphere_build": 9.557,
+          "detached_map_prepare": 47.619,
+          "detached_map_to_post_draw": 1.12
+        },
+        "environment_requests": 18,
+        "longest_texture_wait": {
+          "path": "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png",
+          "ms": 126.515
+        },
+        "milestones_us": {
+          "battle_instantiated": 160343,
+          "battle_scene_loaded": 160203,
+          "detached_frame_drawn": 209099,
+          "environment_complete": 159681,
+          "environment_requests": 2685,
+          "finish_deferred": 2690,
+          "finish_entered": 3127,
+          "frame_resources_complete": 159684,
+          "handoff": 209104,
+          "identity_applied": 160346,
+          "identity_ready": 32967,
+          "install_deferred": 159692,
+          "install_entered": 159701,
+          "map_prepare_started": 160360,
+          "map_prepared": 207979,
+          "overlay_added": 926,
+          "overlay_draw_done": 2113,
+          "portraits_complete": 159685
+        },
+        "map_milestones_us": {
+          "atmosphere_attach_done": 235009,
+          "atmosphere_attach_start": 225452,
+          "environment_enabled": 207974,
+          "environment_paint": 173629,
+          "level_decorate": 207959,
+          "level_paint": 173620,
+          "map_bake": 175187,
+          "map_node": 160445,
+          "map_size": 160534
+        }
+      },
+      {
+        "index": 12,
+        "level": "level5",
+        "times_ms": {
+          "request_to_first_frame": 746.16,
+          "overlay_to_mount": 590.808,
+          "mount_to_first_frame": 152.538,
+          "identity": 77.82,
+          "texture_requests_until_environment_ready": 484.034,
+          "environment_wait_after_identity": 405.859,
+          "texture_wait_total": 405.729,
+          "calibration_total": 0.0,
+          "environment_ready_to_install": 0.041,
+          "scene_load": 0.857,
+          "scene_instantiate_and_probe_attach": 0.168,
+          "handoff_to_mount": 2.657,
+          "atmosphere_build": 29.616,
+          "detached_map_prepare": 100.354,
+          "detached_map_to_post_draw": 1.852
+        },
+        "environment_requests": 18,
+        "longest_texture_wait": {
+          "path": "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png",
+          "ms": 405.477
+        },
+        "milestones_us": {
+          "battle_instantiated": 488701,
+          "battle_scene_loaded": 488533,
+          "detached_frame_drawn": 590959,
+          "environment_complete": 487635,
+          "environment_requests": 3601,
+          "finish_deferred": 3662,
+          "finish_entered": 3956,
+          "frame_requests": 3651,
+          "frame_resources_complete": 487640,
+          "gao_art_requests": 3656,
+          "handoff": 590965,
+          "identity_applied": 488706,
+          "identity_ready": 81776,
+          "install_deferred": 487659,
+          "install_entered": 487676,
+          "map_prepare_started": 488753,
+          "map_prepared": 589107,
+          "overlay_added": 1297,
+          "overlay_draw_done": 2825,
+          "portraits_complete": 487643
+        },
+        "map_milestones_us": {
+          "atmosphere_attach_done": 666918,
+          "atmosphere_attach_start": 637302,
+          "environment_enabled": 589101,
+          "environment_paint": 542087,
+          "level_decorate": 589078,
+          "level_paint": 542063,
+          "map_bake": 545528,
+          "map_node": 488918,
+          "map_size": 489104
+        }
+      },
+      {
+        "index": 13,
+        "level": "level1",
+        "times_ms": {
+          "request_to_first_frame": 120.79,
+          "overlay_to_mount": 54.046,
+          "mount_to_first_frame": 64.738,
+          "identity": 31.831,
+          "texture_requests_until_environment_ready": 32.369,
+          "environment_wait_after_identity": 0.163,
+          "texture_wait_total": 0.132,
+          "calibration_total": 0.0,
+          "environment_ready_to_install": 0.016,
+          "scene_load": 0.376,
+          "scene_instantiate_and_probe_attach": 0.096,
+          "handoff_to_mount": 1.399,
+          "atmosphere_build": 9.805,
+          "detached_map_prepare": 17.186,
+          "detached_map_to_post_draw": 1.502
+        },
+        "environment_requests": 15,
+        "longest_texture_wait": {
+          "path": "res://assets/campaign/environment/shared/surfaces/surface_dry_earth.png",
+          "ms": 0.029
+        },
+        "milestones_us": {
+          "battle_instantiated": 35945,
+          "battle_scene_loaded": 35849,
+          "detached_frame_drawn": 54649,
+          "environment_complete": 35457,
+          "environment_requests": 3088,
+          "finish_deferred": 3190,
+          "finish_entered": 3463,
+          "frame_requests": 3170,
+          "frame_resources_complete": 35459,
+          "handoff": 54653,
+          "identity_applied": 35948,
+          "identity_ready": 35294,
+          "install_deferred": 35469,
+          "install_entered": 35473,
+          "map_prepare_started": 35961,
+          "map_prepared": 53147,
+          "overlay_added": 923,
+          "overlay_draw_done": 2015,
+          "portraits_complete": 35460
+        },
+        "map_milestones_us": {
+          "atmosphere_attach_done": 77004,
+          "atmosphere_attach_start": 67199,
+          "environment_enabled": 53141,
+          "environment_paint": 39485,
+          "level_decorate": 40171,
+          "level_paint": 37060,
+          "map_bake": 40165,
+          "map_node": 36039,
+          "map_size": 36091
+        }
+      },
+      {
+        "index": 14,
+        "level": "arena",
+        "times_ms": {
+          "request_to_first_frame": 100.852,
+          "overlay_to_mount": 2.311,
+          "mount_to_first_frame": 69.051,
+          "identity": 27.061,
+          "texture_requests_until_environment_ready": 0.01,
+          "environment_wait_after_identity": 0.01,
+          "texture_wait_total": 0.0,
+          "calibration_total": 0.0,
+          "environment_ready_to_install": 1.351,
+          "scene_load": 0.466,
+          "scene_instantiate_and_probe_attach": 0.081,
+          "handoff_to_mount": 1.426,
+          "atmosphere_build": 11.401
+        },
+        "environment_requests": 0,
+        "longest_texture_wait": null,
+        "milestones_us": {
+          "battle_instantiated": 30371,
+          "battle_scene_loaded": 30290,
+          "environment_complete": 28473,
+          "finish_deferred": 922,
+          "finish_entered": 1402,
+          "frame_resources_complete": 28474,
+          "handoff": 30375,
+          "identity_applied": 30373,
+          "identity_ready": 28463,
+          "install_deferred": 29562,
+          "install_entered": 29824,
+          "overlay_added": 914,
+          "portraits_complete": 28475
+        },
+        "map_milestones_us": {
+          "atmosphere_attach_done": 55258,
+          "atmosphere_attach_start": 43857,
+          "environment_enabled": 42860,
+          "environment_paint": 42035,
+          "level_decorate": 42829,
+          "level_paint": 42024,
+          "map_bake": 42825,
+          "map_node": 41956,
+          "map_size": 42015
+        }
+      },
+      {
+        "index": 15,
+        "level": "skirmish",
+        "times_ms": {
+          "request_to_first_frame": 286.582,
+          "overlay_to_mount": 206.934,
+          "mount_to_first_frame": 78.158,
+          "identity": 22.268,
+          "texture_requests_until_environment_ready": 151.99,
+          "environment_wait_after_identity": 129.565,
+          "texture_wait_total": 129.484,
+          "calibration_total": 0.0,
+          "environment_ready_to_install": 0.028,
+          "scene_load": 0.49,
+          "scene_instantiate_and_probe_attach": 0.089,
+          "handoff_to_mount": 1.65,
+          "atmosphere_build": 8.872,
+          "detached_map_prepare": 51.021,
+          "detached_map_to_post_draw": 1.207
+        },
+        "environment_requests": 18,
+        "longest_texture_wait": {
+          "path": "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png",
+          "ms": 129.351
+        },
+        "milestones_us": {
+          "battle_instantiated": 154525,
+          "battle_scene_loaded": 154436,
+          "detached_frame_drawn": 206769,
+          "environment_complete": 153918,
+          "environment_requests": 1928,
+          "finish_deferred": 1933,
+          "finish_entered": 2085,
+          "frame_resources_complete": 153921,
+          "handoff": 206774,
+          "identity_applied": 154528,
+          "identity_ready": 24353,
+          "install_deferred": 153935,
+          "install_entered": 153946,
+          "map_prepare_started": 154541,
+          "map_prepared": 205562,
+          "overlay_added": 616,
+          "overlay_draw_done": 1495,
+          "portraits_complete": 153922
+        },
+        "map_milestones_us": {
+          "atmosphere_attach_done": 234834,
+          "atmosphere_attach_start": 225962,
+          "environment_enabled": 205559,
+          "environment_paint": 167622,
+          "level_decorate": 205549,
+          "level_paint": 167611,
+          "map_bake": 169386,
+          "map_node": 154607,
+          "map_size": 154683
+        }
+      },
+      {
+        "index": 16,
+        "level": "skirmish_ai",
+        "times_ms": {
+          "request_to_first_frame": 87.111,
+          "overlay_to_mount": 1.721,
+          "mount_to_first_frame": 65.486,
+          "identity": 18.275,
+          "texture_requests_until_environment_ready": 0.009,
+          "environment_wait_after_identity": 0.009,
+          "texture_wait_total": 0.0,
+          "calibration_total": 0.0,
+          "environment_ready_to_install": 1.125,
+          "scene_load": 0.43,
+          "scene_instantiate_and_probe_attach": 0.097,
+          "handoff_to_mount": 0.935,
+          "atmosphere_build": 7.818
+        },
+        "environment_requests": 0,
+        "longest_texture_wait": null,
+        "milestones_us": {
+          "battle_instantiated": 20685,
+          "battle_scene_loaded": 20588,
+          "environment_complete": 19033,
+          "finish_deferred": 553,
+          "finish_entered": 749,
+          "frame_resources_complete": 19034,
+          "handoff": 20690,
+          "identity_applied": 20689,
+          "identity_ready": 19024,
+          "install_deferred": 19949,
+          "install_entered": 20158,
+          "overlay_added": 548,
+          "portraits_complete": 19034
+        },
+        "map_milestones_us": {
+          "atmosphere_attach_done": 39892,
+          "atmosphere_attach_start": 32074,
+          "environment_enabled": 31296,
+          "environment_paint": 30415,
+          "level_decorate": 31284,
+          "level_paint": 30408,
+          "map_bake": 31279,
+          "map_node": 29016,
+          "map_size": 29080
+        }
+      },
+      {
+        "index": 17,
+        "level": "custom_defense",
+        "times_ms": {
+          "request_to_first_frame": 688.97,
+          "overlay_to_mount": 583.342,
+          "mount_to_first_frame": 101.245,
+          "identity": 86.785,
+          "texture_requests_until_environment_ready": 451.923,
+          "environment_wait_after_identity": 364.725,
+          "texture_wait_total": 364.543,
+          "calibration_total": 0.0,
+          "environment_ready_to_install": 0.046,
+          "scene_load": 1.148,
+          "scene_instantiate_and_probe_attach": 0.227,
+          "handoff_to_mount": 1.601,
+          "atmosphere_build": 11.824,
+          "detached_map_prepare": 125.34,
+          "detached_map_to_post_draw": 1.543
+        },
+        "environment_requests": 18,
+        "longest_texture_wait": {
+          "path": "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png",
+          "ms": 364.168
+        },
+        "milestones_us": {
+          "battle_instantiated": 459206,
+          "battle_scene_loaded": 458979,
+          "detached_frame_drawn": 586119,
+          "environment_complete": 457785,
+          "environment_requests": 5862,
+          "finish_deferred": 5875,
+          "finish_entered": 6275,
+          "frame_resources_complete": 457791,
+          "handoff": 586124,
+          "identity_applied": 459212,
+          "identity_ready": 93060,
+          "install_deferred": 457812,
+          "install_entered": 457831,
+          "map_prepare_started": 459236,
+          "map_prepared": 584576,
+          "overlay_added": 1896,
+          "overlay_draw_done": 4397,
+          "portraits_complete": 457795
+        },
+        "map_milestones_us": {
+          "atmosphere_attach_done": 623306,
+          "atmosphere_attach_start": 611482,
+          "environment_enabled": 584571,
+          "environment_paint": 496360,
+          "level_decorate": 584550,
+          "level_paint": 496335,
+          "map_bake": 501780,
+          "map_node": 459371,
+          "map_size": 459678
+        }
+      },
+      {
+        "index": 18,
+        "level": "level5",
+        "times_ms": {
+          "request_to_first_frame": 437.117,
+          "overlay_to_mount": 289.839,
+          "mount_to_first_frame": 145.064,
+          "identity": 30.459,
+          "texture_requests_until_environment_ready": 199.332,
+          "environment_wait_after_identity": 168.566,
+          "texture_wait_total": 168.457,
+          "calibration_total": 0.0,
+          "environment_ready_to_install": 0.038,
+          "scene_load": 0.735,
+          "scene_instantiate_and_probe_attach": 0.136,
+          "handoff_to_mount": 1.931,
+          "atmosphere_build": 18.204,
+          "detached_map_prepare": 85.376,
+          "detached_map_to_post_draw": 1.682
+        },
+        "environment_requests": 18,
+        "longest_texture_wait": {
+          "path": "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png",
+          "ms": 168.23
+        },
+        "milestones_us": {
+          "battle_instantiated": 203038,
+          "battle_scene_loaded": 202902,
+          "detached_frame_drawn": 290117,
+          "environment_complete": 202129,
+          "environment_requests": 2797,
+          "finish_deferred": 2835,
+          "finish_entered": 3104,
+          "frame_requests": 2827,
+          "frame_resources_complete": 202133,
+          "gao_art_requests": 2830,
+          "handoff": 290122,
+          "identity_applied": 203042,
+          "identity_ready": 33563,
+          "install_deferred": 202152,
+          "install_entered": 202167,
+          "map_prepare_started": 203059,
+          "map_prepared": 288435,
+          "overlay_added": 1086,
+          "overlay_draw_done": 2225,
+          "portraits_complete": 202135
+        },
+        "map_milestones_us": {
+          "atmosphere_attach_done": 337848,
+          "atmosphere_attach_start": 319644,
+          "environment_enabled": 288429,
+          "environment_paint": 232548,
+          "level_decorate": 288399,
+          "level_paint": 232534,
+          "map_bake": 235234,
+          "map_node": 203168,
+          "map_size": 203312
+        }
+      }
+    ]
+  },
+  "after": {
+    "launcher": {
+      "candidate": "465328a22aca7880f42800b7de6972f21176bd41",
+      "probe_sha256": "df4487a937e9afae66c96a557edf3b76fdcce9e90f388824ae027ef3b379c62a",
+      "menu_probe_sha256": "b9cc12c6bae88b01258af599891cc970ab97f3b77f48d7d429d5fb4505e9b04f",
+      "battle_probe_sha256": "646e41238e51acfa6fb1de421df6e8849f1dfe3189dc2c0b3399a6c13a26fecb",
+      "payload_files_unchanged": true,
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "ed21928aefdecf0436d8eec9da8f64fcdbd00507ae6799abc7e554b576c81c0a",
+      "split_identity": "0dcf3874b0e905a95cbfa7624b3bbd98860b2334b62932953b7f5030568d1cd2",
+      "exe_unchanged": true,
+      "exit_code": 1,
+      "seconds": 124.009,
+      "errors": [],
+      "warnings": [],
+      "log_sha256": "6aae51184d62c334b869455091e39c2995b20d967476cd62abc325e94547c378",
+      "report_sha256": "df72761dc9c31c9182d8e264ff2687bc104554b3795530561dbc0442d691e49f"
+    },
+    "renderer": {
+      "adapter": "NVIDIA GeForce RTX 4060 Laptop GPU",
+      "api": "1.4.357",
+      "display": "Windows",
+      "driver": "vulkan",
+      "godot": {
+        "build": "official",
+        "hash": "7d41c59c457bd5a245092b4e7eb2d833e3b3f8c3",
+        "hex": 263683,
+        "major": 4,
+        "minor": 6,
+        "patch": 3,
+        "status": "stable",
+        "string": "4.6.3-stable (official)",
+        "timestamp": 0
+      },
+      "method": "forward_plus",
+      "vendor": "NVIDIA",
+      "vsync": 0
+    },
+    "viewport": [
+      1280,
+      720
+    ],
+    "seconds": 114.634688,
+    "complete_minutes": 1,
+    "activity_and_release": 18,
+    "campaign_progress_unchanged": true,
+    "short_run_failures": [
+      "working_set_bytes returns within warm-baseline tolerance",
+      "private_bytes returns within warm-baseline tolerance"
+    ],
+    "memory_stability": {
+      "working_set_bytes": {
+        "end": 1189572608.0,
+        "end_delta_from_warm": 144625664.0,
+        "monotonic_growth_detected": false,
+        "peak": 1258323968.0,
+        "recovered_from_peak": 68751360.0,
+        "recovery_passed": false,
+        "tolerance": 134217728.0,
+        "trend": {
+          "decreases": 0,
+          "first": 1044946944.0,
+          "flat": 0,
+          "increases": 2,
+          "last": 1189572608.0,
+          "near_monotonic": false,
+          "net": 144625664.0,
+          "samples": 3
+        },
+        "warm_baseline": 1044946944.0
+      },
+      "private_bytes": {
+        "end": 2179620864.0,
+        "end_delta_from_warm": 144396288.0,
+        "monotonic_growth_detected": false,
+        "peak": 2179620864.0,
+        "recovered_from_peak": 0.0,
+        "recovery_passed": false,
+        "tolerance": 134217728.0,
+        "trend": {
+          "decreases": 0,
+          "first": 2035224576.0,
+          "flat": 0,
+          "increases": 2,
+          "last": 2179620864.0,
+          "near_monotonic": false,
+          "net": 144396288.0,
+          "samples": 3
+        },
+        "warm_baseline": 2035224576.0
+      }
+    },
+    "distinct_shader_ids": 1,
+    "distinct_material_ids": 18,
+    "render_control": {
+      "guard_cache_recovers": true,
+      "guard_detected_mutation": true,
+      "guard_valid_before": true,
+      "material_and_shader_source_match": true,
+      "phase_isolated": true,
+      "reference_pixels": [
+        {
+          "color_samples": [
+            "(0.2431, 0.4667, 0.6941, 1.0)",
+            "(0.7765, 0.502, 0.3176, 1.0)",
+            "(0.5373, 0.6118, 0.3373, 1.0)"
+          ],
+          "sha256": "3d4b9652335f4a898b0cfe4a622cbb4bd9f15b90fe9aad283559c25c4fb48574",
+          "size": [
+            192,
+            108
+          ]
+        },
+        {
+          "color_samples": [
+            "(0.2118, 0.4314, 0.6549, 1.0)",
+            "(0.7765, 0.502, 0.3176, 1.0)",
+            "(0.5373, 0.6118, 0.3373, 1.0)"
+          ],
+          "sha256": "a73b3ff0947d7ce577b83293a02a30e74e204a840f38605d5f40a70ab10b7255",
+          "size": [
+            192,
+            108
+          ]
+        }
+      ],
+      "shader_reused": true,
+      "shader_source_sha256": {
+        "stock": [
+          "b12643da4a8abfa7f6f624e76fe8a0be3de3c014e7e43e10e96bfce6ed808c68",
+          "b12643da4a8abfa7f6f624e76fe8a0be3de3c014e7e43e10e96bfce6ed808c68"
+        ],
+        "trial": [
+          "b12643da4a8abfa7f6f624e76fe8a0be3de3c014e7e43e10e96bfce6ed808c68",
+          "b12643da4a8abfa7f6f624e76fe8a0be3de3c014e7e43e10e96bfce6ed808c68"
+        ]
+      },
+      "trial_pixels": [
+        {
+          "color_samples": [
+            "(0.2431, 0.4667, 0.6941, 1.0)",
+            "(0.7765, 0.502, 0.3176, 1.0)",
+            "(0.5373, 0.6118, 0.3373, 1.0)"
+          ],
+          "sha256": "3d4b9652335f4a898b0cfe4a622cbb4bd9f15b90fe9aad283559c25c4fb48574",
+          "size": [
+            192,
+            108
+          ]
+        },
+        {
+          "color_samples": [
+            "(0.2118, 0.4314, 0.6549, 1.0)",
+            "(0.7765, 0.502, 0.3176, 1.0)",
+            "(0.5373, 0.6118, 0.3373, 1.0)"
+          ],
+          "sha256": "a73b3ff0947d7ce577b83293a02a30e74e204a840f38605d5f40a70ab10b7255",
+          "size": [
+            192,
+            108
+          ]
+        }
+      ]
+    },
+    "repeat_median_ms": {
+      "request_to_first_frame": 165.901,
+      "overlay_to_mount": 88.331,
+      "atmosphere_build": 0.11
+    },
+    "visits": [
+      {
+        "index": 1,
+        "level": "level1",
+        "times_ms": {
+          "request_to_first_frame": 606.087,
+          "overlay_to_mount": 455.44,
+          "mount_to_first_frame": 144.903,
+          "identity": 20.677,
+          "texture_requests_until_environment_ready": 39.407,
+          "environment_wait_after_identity": 16.371,
+          "texture_wait_total": 16.33,
+          "calibration_total": 0.0,
+          "environment_ready_to_install": 97.372,
+          "scene_load": 0.722,
+          "scene_instantiate_and_probe_attach": 283.074,
+          "handoff_to_mount": 1.931,
+          "atmosphere_build": 1.166,
+          "detached_map_prepare": 21.04,
+          "detached_map_to_post_draw": 10.742
+        },
+        "environment_requests": 16,
+        "longest_texture_wait": {
+          "path": "res://assets/campaign/environment/art_full_20260915/overlays.png",
+          "ms": 16.183
+        },
+        "milestones_us": {
+          "battle_instantiated": 427453,
+          "battle_scene_loaded": 144379,
+          "detached_frame_drawn": 459246,
+          "environment_complete": 46285,
+          "environment_requests": 6878,
+          "finish_deferred": 9069,
+          "finish_entered": 9237,
+          "frame_requests": 8637,
+          "frame_resources_complete": 74214,
+          "handoff": 459253,
+          "identity_applied": 427456,
+          "identity_ready": 29914,
+          "install_deferred": 143645,
+          "install_entered": 143657,
+          "map_prepare_started": 427464,
+          "map_prepared": 448504,
+          "overlay_added": 1623,
+          "overlay_draw_done": 5752,
+          "portraits_complete": 143627
+        },
+        "map_milestones_us": {
+          "atmosphere_attach_done": 494777,
+          "atmosphere_attach_start": 493611,
+          "environment_enabled": 448495,
+          "environment_paint": 429372,
+          "level_decorate": 430040,
+          "level_paint": 428055,
+          "map_bake": 430030,
+          "map_node": 427537,
+          "map_size": 427569
+        }
+      },
+      {
+        "index": 2,
+        "level": "arena",
+        "times_ms": {
+          "request_to_first_frame": 76.102,
+          "overlay_to_mount": 1.895,
+          "mount_to_first_frame": 56.565,
+          "identity": 15.644,
+          "texture_requests_until_environment_ready": 0.009,
+          "environment_wait_after_identity": 0.009,
+          "texture_wait_total": 0.0,
+          "calibration_total": 0.0,
+          "environment_ready_to_install": 0.815,
+          "scene_load": 0.274,
+          "scene_instantiate_and_probe_attach": 0.095,
+          "handoff_to_mount": 1.402,
+          "atmosphere_build": 0.091
+        },
+        "environment_requests": 0,
+        "longest_texture_wait": null,
+        "milestones_us": {
+          "battle_instantiated": 18131,
+          "battle_scene_loaded": 18036,
+          "environment_complete": 16947,
+          "finish_deferred": 708,
+          "finish_entered": 1294,
+          "frame_resources_complete": 16948,
+          "handoff": 18135,
+          "identity_applied": 18134,
+          "identity_ready": 16938,
+          "install_deferred": 17690,
+          "install_entered": 17762,
+          "overlay_added": 698,
+          "portraits_complete": 16949
+        },
+        "map_milestones_us": {
+          "atmosphere_attach_done": 31019,
+          "atmosphere_attach_start": 30928,
+          "environment_enabled": 30259,
+          "environment_paint": 29590,
+          "level_decorate": 30245,
+          "level_paint": 29582,
+          "map_bake": 30242,
+          "map_node": 29536,
+          "map_size": 29573
+        }
+      },
+      {
+        "index": 3,
+        "level": "skirmish",
+        "times_ms": {
+          "request_to_first_frame": 331.1,
+          "overlay_to_mount": 228.311,
+          "mount_to_first_frame": 101.27,
+          "identity": 22.096,
+          "texture_requests_until_environment_ready": 188.529,
+          "environment_wait_after_identity": 166.326,
+          "texture_wait_total": 115.368,
+          "calibration_total": 50.076,
+          "environment_ready_to_install": 0.132,
+          "scene_load": 0.336,
+          "scene_instantiate_and_probe_attach": 0.063,
+          "handoff_to_mount": 1.883,
+          "atmosphere_build": 0.143,
+          "detached_map_prepare": 34.902,
+          "detached_map_to_post_draw": 1.395
+        },
+        "environment_requests": 18,
+        "longest_texture_wait": {
+          "path": "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png",
+          "ms": 115.037
+        },
+        "milestones_us": {
+          "battle_instantiated": 191635,
+          "battle_scene_loaded": 191572,
+          "detached_frame_drawn": 227942,
+          "environment_complete": 191104,
+          "environment_requests": 2575,
+          "finish_deferred": 2583,
+          "finish_entered": 2682,
+          "frame_resources_complete": 191105,
+          "handoff": 227947,
+          "identity_applied": 191636,
+          "identity_ready": 24778,
+          "install_deferred": 191116,
+          "install_entered": 191236,
+          "map_prepare_started": 191645,
+          "map_prepared": 226547,
+          "overlay_added": 638,
+          "overlay_draw_done": 1524,
+          "portraits_complete": 191107
+        },
+        "map_milestones_us": {
+          "atmosphere_attach_done": 248129,
+          "atmosphere_attach_start": 247986,
+          "environment_enabled": 226542,
+          "environment_paint": 198913,
+          "level_decorate": 226530,
+          "level_paint": 198902,
+          "map_bake": 200133,
+          "map_node": 191693,
+          "map_size": 191740
+        }
+      },
+      {
+        "index": 4,
+        "level": "skirmish_ai",
+        "times_ms": {
+          "request_to_first_frame": 75.592,
+          "overlay_to_mount": 1.848,
+          "mount_to_first_frame": 56.478,
+          "identity": 15.53,
+          "texture_requests_until_environment_ready": 0.009,
+          "environment_wait_after_identity": 0.009,
+          "texture_wait_total": 0.0,
+          "calibration_total": 0.0,
+          "environment_ready_to_install": 0.98,
+          "scene_load": 0.28,
+          "scene_instantiate_and_probe_attach": 0.123,
+          "handoff_to_mount": 1.257,
+          "atmosphere_build": 0.085
+        },
+        "environment_requests": 0,
+        "longest_texture_wait": null,
+        "milestones_us": {
+          "battle_instantiated": 17852,
+          "battle_scene_loaded": 17729,
+          "environment_complete": 16469,
+          "finish_deferred": 577,
+          "finish_entered": 930,
+          "frame_resources_complete": 16469,
+          "handoff": 17857,
+          "identity_applied": 17856,
+          "identity_ready": 16460,
+          "install_deferred": 17323,
+          "install_entered": 17449,
+          "overlay_added": 573,
+          "portraits_complete": 16470
+        },
+        "map_milestones_us": {
+          "atmosphere_attach_done": 29538,
+          "atmosphere_attach_start": 29453,
+          "environment_enabled": 28700,
+          "environment_paint": 27766,
+          "level_decorate": 28681,
+          "level_paint": 27758,
+          "map_bake": 28672,
+          "map_node": 26609,
+          "map_size": 26660
+        }
+      },
+      {
+        "index": 5,
+        "level": "custom_defense",
+        "times_ms": {
+          "request_to_first_frame": 251.452,
+          "overlay_to_mount": 186.201,
+          "mount_to_first_frame": 63.386,
+          "identity": 18.362,
+          "texture_requests_until_environment_ready": 137.622,
+          "environment_wait_after_identity": 118.945,
+          "texture_wait_total": 118.858,
+          "calibration_total": 0.0,
+          "environment_ready_to_install": 0.026,
+          "scene_load": 0.602,
+          "scene_instantiate_and_probe_attach": 0.089,
+          "handoff_to_mount": 1.739,
+          "atmosphere_build": 0.119,
+          "detached_map_prepare": 43.935,
+          "detached_map_to_post_draw": 1.494
+        },
+        "environment_requests": 18,
+        "longest_texture_wait": {
+          "path": "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png",
+          "ms": 118.7
+        },
+        "milestones_us": {
+          "battle_instantiated": 140873,
+          "battle_scene_loaded": 140784,
+          "detached_frame_drawn": 186322,
+          "environment_complete": 140156,
+          "environment_requests": 2534,
+          "finish_deferred": 2546,
+          "finish_entered": 2849,
+          "frame_resources_complete": 140159,
+          "handoff": 186327,
+          "identity_applied": 140877,
+          "identity_ready": 21211,
+          "install_deferred": 140172,
+          "install_entered": 140182,
+          "map_prepare_started": 140893,
+          "map_prepared": 184828,
+          "overlay_added": 731,
+          "overlay_draw_done": 1875,
+          "portraits_complete": 140160
+        },
+        "map_milestones_us": {
+          "atmosphere_attach_done": 202121,
+          "atmosphere_attach_start": 202002,
+          "environment_enabled": 184819,
+          "environment_paint": 162214,
+          "level_decorate": 184794,
+          "level_paint": 162204,
+          "map_bake": 163571,
+          "map_node": 154409,
+          "map_size": 154482
+        }
+      },
+      {
+        "index": 6,
+        "level": "level5",
+        "times_ms": {
+          "request_to_first_frame": 282.275,
+          "overlay_to_mount": 163.895,
+          "mount_to_first_frame": 116.187,
+          "identity": 21.662,
+          "texture_requests_until_environment_ready": 123.843,
+          "environment_wait_after_identity": 101.046,
+          "texture_wait_total": 100.98,
+          "calibration_total": 0.0,
+          "environment_ready_to_install": 0.133,
+          "scene_load": 0.334,
+          "scene_instantiate_and_probe_attach": 0.062,
+          "handoff_to_mount": 2.725,
+          "atmosphere_build": 0.091,
+          "detached_map_prepare": 34.808,
+          "detached_map_to_post_draw": 1.482
+        },
+        "environment_requests": 18,
+        "longest_texture_wait": {
+          "path": "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png",
+          "ms": 100.872
+        },
+        "milestones_us": {
+          "battle_instantiated": 127058,
+          "battle_scene_loaded": 126996,
+          "detached_frame_drawn": 163358,
+          "environment_complete": 126529,
+          "environment_requests": 2686,
+          "finish_deferred": 3652,
+          "finish_entered": 3821,
+          "frame_requests": 3274,
+          "frame_resources_complete": 126642,
+          "gao_art_requests": 3650,
+          "handoff": 163363,
+          "identity_applied": 127059,
+          "identity_ready": 25483,
+          "install_deferred": 126653,
+          "install_entered": 126662,
+          "map_prepare_started": 127068,
+          "map_prepared": 161876,
+          "overlay_added": 951,
+          "overlay_draw_done": 2197,
+          "portraits_complete": 126644
+        },
+        "map_milestones_us": {
+          "atmosphere_attach_done": 200468,
+          "atmosphere_attach_start": 200377,
+          "environment_enabled": 161872,
+          "environment_paint": 136711,
+          "level_decorate": 161853,
+          "level_paint": 136703,
+          "map_bake": 137792,
+          "map_node": 127125,
+          "map_size": 127177
+        }
+      },
+      {
+        "index": 7,
+        "level": "level1",
+        "times_ms": {
+          "request_to_first_frame": 73.569,
+          "overlay_to_mount": 32.989,
+          "mount_to_first_frame": 38.045,
+          "identity": 17.433,
+          "texture_requests_until_environment_ready": 18.253,
+          "environment_wait_after_identity": 0.11,
+          "texture_wait_total": 0.086,
+          "calibration_total": 0.0,
+          "environment_ready_to_install": 0.013,
+          "scene_load": 0.216,
+          "scene_instantiate_and_probe_attach": 0.066,
+          "handoff_to_mount": 2.355,
+          "atmosphere_build": 0.079,
+          "detached_map_prepare": 9.942,
+          "detached_map_to_post_draw": 1.24
+        },
+        "environment_requests": 15,
+        "longest_texture_wait": {
+          "path": "res://assets/campaign/environment/shared/surfaces/surface_dry_earth.png",
+          "ms": 0.021
+        },
+        "milestones_us": {
+          "battle_instantiated": 21971,
+          "battle_scene_loaded": 21905,
+          "detached_frame_drawn": 33164,
+          "environment_complete": 21676,
+          "environment_requests": 3423,
+          "finish_deferred": 3595,
+          "finish_entered": 4133,
+          "frame_requests": 3512,
+          "frame_resources_complete": 21677,
+          "handoff": 33169,
+          "identity_applied": 21973,
+          "identity_ready": 21566,
+          "install_deferred": 21685,
+          "install_entered": 21689,
+          "map_prepare_started": 21982,
+          "map_prepared": 31924,
+          "overlay_added": 1164,
+          "overlay_draw_done": 2540,
+          "portraits_complete": 21678
+        },
+        "map_milestones_us": {
+          "atmosphere_attach_done": 43781,
+          "atmosphere_attach_start": 43702,
+          "environment_enabled": 31921,
+          "environment_paint": 23861,
+          "level_decorate": 24400,
+          "level_paint": 22602,
+          "map_bake": 24394,
+          "map_node": 22050,
+          "map_size": 22089
+        }
+      },
+      {
+        "index": 8,
+        "level": "arena",
+        "times_ms": {
+          "request_to_first_frame": 59.663,
+          "overlay_to_mount": 1.507,
+          "mount_to_first_frame": 40.293,
+          "identity": 15.985,
+          "texture_requests_until_environment_ready": 0.008,
+          "environment_wait_after_identity": 0.008,
+          "texture_wait_total": 0.0,
+          "calibration_total": 0.0,
+          "environment_ready_to_install": 0.836,
+          "scene_load": 0.23,
+          "scene_instantiate_and_probe_attach": 0.061,
+          "handoff_to_mount": 1.006,
+          "atmosphere_build": 0.093
+        },
+        "environment_requests": 0,
+        "longest_texture_wait": null,
+        "milestones_us": {
+          "battle_instantiated": 18361,
+          "battle_scene_loaded": 18300,
+          "environment_complete": 17234,
+          "finish_deferred": 659,
+          "finish_entered": 1241,
+          "frame_resources_complete": 17235,
+          "handoff": 18364,
+          "identity_applied": 18363,
+          "identity_ready": 17226,
+          "install_deferred": 17906,
+          "install_entered": 18070,
+          "overlay_added": 651,
+          "portraits_complete": 17236
+        },
+        "map_milestones_us": {
+          "atmosphere_attach_done": 29577,
+          "atmosphere_attach_start": 29484,
+          "environment_enabled": 28789,
+          "environment_paint": 28074,
+          "level_decorate": 28776,
+          "level_paint": 28064,
+          "map_bake": 28773,
+          "map_node": 28012,
+          "map_size": 28053
+        }
+      },
+      {
+        "index": 9,
+        "level": "skirmish",
+        "times_ms": {
+          "request_to_first_frame": 212.447,
+          "overlay_to_mount": 156.273,
+          "mount_to_first_frame": 53.763,
+          "identity": 17.967,
+          "texture_requests_until_environment_ready": 123.835,
+          "environment_wait_after_identity": 105.407,
+          "texture_wait_total": 105.345,
+          "calibration_total": 0.0,
+          "environment_ready_to_install": 0.016,
+          "scene_load": 0.277,
+          "scene_instantiate_and_probe_attach": 0.062,
+          "handoff_to_mount": 1.095,
+          "atmosphere_build": 0.112,
+          "detached_map_prepare": 29.752,
+          "detached_map_to_post_draw": 0.646
+        },
+        "environment_requests": 18,
+        "longest_texture_wait": {
+          "path": "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png",
+          "ms": 105.236
+        },
+        "milestones_us": {
+          "battle_instantiated": 127181,
+          "battle_scene_loaded": 127119,
+          "detached_frame_drawn": 157587,
+          "environment_complete": 126826,
+          "environment_requests": 2991,
+          "finish_deferred": 2997,
+          "finish_entered": 3452,
+          "frame_resources_complete": 126829,
+          "handoff": 157589,
+          "identity_applied": 127182,
+          "identity_ready": 21419,
+          "install_deferred": 126837,
+          "install_entered": 126842,
+          "map_prepare_started": 127189,
+          "map_prepared": 156941,
+          "overlay_added": 1084,
+          "overlay_draw_done": 2426,
+          "portraits_complete": 126830
+        },
+        "map_milestones_us": {
+          "atmosphere_attach_done": 170434,
+          "atmosphere_attach_start": 170322,
+          "environment_enabled": 156938,
+          "environment_paint": 134726,
+          "level_decorate": 156929,
+          "level_paint": 134718,
+          "map_bake": 135738,
+          "map_node": 127234,
+          "map_size": 127281
+        }
+      },
+      {
+        "index": 10,
+        "level": "skirmish_ai",
+        "times_ms": {
+          "request_to_first_frame": 128.109,
+          "overlay_to_mount": 2.336,
+          "mount_to_first_frame": 93.957,
+          "identity": 28.677,
+          "texture_requests_until_environment_ready": 0.013,
+          "environment_wait_after_identity": 0.013,
+          "texture_wait_total": 0.0,
+          "calibration_total": 0.0,
+          "environment_ready_to_install": 1.611,
+          "scene_load": 0.449,
+          "scene_instantiate_and_probe_attach": 0.134,
+          "handoff_to_mount": 1.455,
+          "atmosphere_build": 0.18
+        },
+        "environment_requests": 0,
+        "longest_texture_wait": null,
+        "milestones_us": {
+          "battle_instantiated": 32691,
+          "battle_scene_loaded": 32557,
+          "environment_complete": 30497,
+          "finish_deferred": 1177,
+          "finish_entered": 1807,
+          "frame_resources_complete": 30499,
+          "handoff": 32697,
+          "identity_applied": 32695,
+          "identity_ready": 30484,
+          "install_deferred": 31884,
+          "install_entered": 32108,
+          "overlay_added": 1160,
+          "portraits_complete": 30500
+        },
+        "map_milestones_us": {
+          "atmosphere_attach_done": 50575,
+          "atmosphere_attach_start": 50395,
+          "environment_enabled": 49111,
+          "environment_paint": 47742,
+          "level_decorate": 49092,
+          "level_paint": 47725,
+          "map_bake": 49085,
+          "map_node": 45642,
+          "map_size": 45744
+        }
+      },
+      {
+        "index": 11,
+        "level": "custom_defense",
+        "times_ms": {
+          "request_to_first_frame": 203.692,
+          "overlay_to_mount": 143.673,
+          "mount_to_first_frame": 57.975,
+          "identity": 17.828,
+          "texture_requests_until_environment_ready": 110.175,
+          "environment_wait_after_identity": 92.088,
+          "texture_wait_total": 92.026,
+          "calibration_total": 0.0,
+          "environment_ready_to_install": 0.021,
+          "scene_load": 0.438,
+          "scene_instantiate_and_probe_attach": 0.091,
+          "handoff_to_mount": 1.317,
+          "atmosphere_build": 0.079,
+          "detached_map_prepare": 30.509,
+          "detached_map_to_post_draw": 0.711
+        },
+        "environment_requests": 18,
+        "longest_texture_wait": {
+          "path": "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png",
+          "ms": 91.935
+        },
+        "milestones_us": {
+          "battle_instantiated": 113163,
+          "battle_scene_loaded": 113072,
+          "detached_frame_drawn": 144396,
+          "environment_complete": 112613,
+          "environment_requests": 2438,
+          "finish_deferred": 2442,
+          "finish_entered": 2697,
+          "frame_resources_complete": 112616,
+          "handoff": 144400,
+          "identity_applied": 113165,
+          "identity_ready": 20525,
+          "install_deferred": 112627,
+          "install_entered": 112634,
+          "map_prepare_started": 113176,
+          "map_prepared": 143685,
+          "overlay_added": 843,
+          "overlay_draw_done": 2052,
+          "portraits_complete": 112618
+        },
+        "map_milestones_us": {
+          "atmosphere_attach_done": 157945,
+          "atmosphere_attach_start": 157866,
+          "environment_enabled": 143681,
+          "environment_paint": 120704,
+          "level_decorate": 143674,
+          "level_paint": 120693,
+          "map_bake": 121915,
+          "map_node": 113240,
+          "map_size": 113289
+        }
+      },
+      {
+        "index": 12,
+        "level": "level5",
+        "times_ms": {
+          "request_to_first_frame": 213.603,
+          "overlay_to_mount": 153.861,
+          "mount_to_first_frame": 57.626,
+          "identity": 15.614,
+          "texture_requests_until_environment_ready": 124.034,
+          "environment_wait_after_identity": 108.051,
+          "texture_wait_total": 108.0,
+          "calibration_total": 0.0,
+          "environment_ready_to_install": 0.017,
+          "scene_load": 0.348,
+          "scene_instantiate_and_probe_attach": 0.091,
+          "handoff_to_mount": 1.138,
+          "atmosphere_build": 0.154,
+          "detached_map_prepare": 27.076,
+          "detached_map_to_post_draw": 0.671
+        },
+        "environment_requests": 18,
+        "longest_texture_wait": {
+          "path": "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png",
+          "ms": 107.912
+        },
+        "milestones_us": {
+          "battle_instantiated": 127075,
+          "battle_scene_loaded": 126984,
+          "detached_frame_drawn": 154835,
+          "environment_complete": 126619,
+          "environment_requests": 2585,
+          "finish_deferred": 2626,
+          "finish_entered": 2954,
+          "frame_requests": 2620,
+          "frame_resources_complete": 126621,
+          "gao_art_requests": 2623,
+          "handoff": 154839,
+          "identity_applied": 127077,
+          "identity_ready": 18568,
+          "install_deferred": 126630,
+          "install_entered": 126636,
+          "map_prepare_started": 127088,
+          "map_prepared": 154164,
+          "overlay_added": 897,
+          "overlay_draw_done": 2124,
+          "portraits_complete": 126622
+        },
+        "map_milestones_us": {
+          "atmosphere_attach_done": 168556,
+          "atmosphere_attach_start": 168402,
+          "environment_enabled": 154162,
+          "environment_paint": 136090,
+          "level_decorate": 154154,
+          "level_paint": 136082,
+          "map_bake": 136993,
+          "map_node": 127165,
+          "map_size": 127219
+        }
+      },
+      {
+        "index": 13,
+        "level": "level1",
+        "times_ms": {
+          "request_to_first_frame": 70.483,
+          "overlay_to_mount": 31.464,
+          "mount_to_first_frame": 37.928,
+          "identity": 18.193,
+          "texture_requests_until_environment_ready": 18.627,
+          "environment_wait_after_identity": 0.091,
+          "texture_wait_total": 0.075,
+          "calibration_total": 0.0,
+          "environment_ready_to_install": 0.01,
+          "scene_load": 0.211,
+          "scene_instantiate_and_probe_attach": 0.063,
+          "handoff_to_mount": 1.597,
+          "atmosphere_build": 0.131,
+          "detached_map_prepare": 9.49,
+          "detached_map_to_post_draw": 0.76
+        },
+        "environment_requests": 15,
+        "longest_texture_wait": {
+          "path": "res://assets/campaign/environment/shared/surfaces/surface_dry_earth.png",
+          "ms": 0.016
+        },
+        "milestones_us": {
+          "battle_instantiated": 20694,
+          "battle_scene_loaded": 20631,
+          "detached_frame_drawn": 30954,
+          "environment_complete": 20410,
+          "environment_requests": 1783,
+          "finish_deferred": 1902,
+          "finish_entered": 2126,
+          "frame_requests": 1884,
+          "frame_resources_complete": 20411,
+          "handoff": 30958,
+          "identity_applied": 20695,
+          "identity_ready": 20319,
+          "install_deferred": 20417,
+          "install_entered": 20420,
+          "map_prepare_started": 20704,
+          "map_prepared": 30194,
+          "overlay_added": 479,
+          "overlay_draw_done": 1096,
+          "portraits_complete": 20412
+        },
+        "map_milestones_us": {
+          "atmosphere_attach_done": 39822,
+          "atmosphere_attach_start": 39691,
+          "environment_enabled": 30191,
+          "environment_paint": 22615,
+          "level_decorate": 23032,
+          "level_paint": 21311,
+          "map_bake": 23027,
+          "map_node": 20764,
+          "map_size": 20795
+        }
+      },
+      {
+        "index": 14,
+        "level": "arena",
+        "times_ms": {
+          "request_to_first_frame": 89.836,
+          "overlay_to_mount": 2.038,
+          "mount_to_first_frame": 62.407,
+          "identity": 23.215,
+          "texture_requests_until_environment_ready": 0.01,
+          "environment_wait_after_identity": 0.01,
+          "texture_wait_total": 0.0,
+          "calibration_total": 0.0,
+          "environment_ready_to_install": 1.32,
+          "scene_load": 0.386,
+          "scene_instantiate_and_probe_attach": 0.111,
+          "handoff_to_mount": 1.169,
+          "atmosphere_build": 0.108
+        },
+        "environment_requests": 0,
+        "longest_texture_wait": null,
+        "milestones_us": {
+          "battle_instantiated": 26255,
+          "battle_scene_loaded": 26144,
+          "environment_complete": 24438,
+          "finish_deferred": 813,
+          "finish_entered": 1213,
+          "frame_resources_complete": 24439,
+          "handoff": 26260,
+          "identity_applied": 26258,
+          "identity_ready": 24428,
+          "install_deferred": 25451,
+          "install_entered": 25758,
+          "overlay_added": 806,
+          "portraits_complete": 24440
+        },
+        "map_milestones_us": {
+          "atmosphere_attach_done": 39598,
+          "atmosphere_attach_start": 39490,
+          "environment_enabled": 38577,
+          "environment_paint": 37794,
+          "level_decorate": 38557,
+          "level_paint": 37784,
+          "map_bake": 38555,
+          "map_node": 37686,
+          "map_size": 37772
+        }
+      },
+      {
+        "index": 15,
+        "level": "skirmish",
+        "times_ms": {
+          "request_to_first_frame": 326.85,
+          "overlay_to_mount": 265.472,
+          "mount_to_first_frame": 59.417,
+          "identity": 20.448,
+          "texture_requests_until_environment_ready": 233.022,
+          "environment_wait_after_identity": 212.033,
+          "texture_wait_total": 211.972,
+          "calibration_total": 0.0,
+          "environment_ready_to_install": 0.018,
+          "scene_load": 0.299,
+          "scene_instantiate_and_probe_attach": 0.091,
+          "handoff_to_mount": 1.174,
+          "atmosphere_build": 0.204,
+          "detached_map_prepare": 29.595,
+          "detached_map_to_post_draw": 0.81
+        },
+        "environment_requests": 18,
+        "longest_texture_wait": {
+          "path": "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png",
+          "ms": 211.88
+        },
+        "milestones_us": {
+          "battle_instantiated": 235839,
+          "battle_scene_loaded": 235748,
+          "detached_frame_drawn": 266257,
+          "environment_complete": 235431,
+          "environment_requests": 2409,
+          "finish_deferred": 2415,
+          "finish_entered": 2950,
+          "frame_resources_complete": 235433,
+          "handoff": 266259,
+          "identity_applied": 235842,
+          "identity_ready": 23398,
+          "install_deferred": 235443,
+          "install_entered": 235449,
+          "map_prepare_started": 235852,
+          "map_prepared": 265447,
+          "overlay_added": 919,
+          "overlay_draw_done": 1970,
+          "portraits_complete": 235435
+        },
+        "map_milestones_us": {
+          "atmosphere_attach_done": 283327,
+          "atmosphere_attach_start": 283123,
+          "environment_enabled": 265444,
+          "environment_paint": 243767,
+          "level_decorate": 265436,
+          "level_paint": 243754,
+          "map_bake": 244754,
+          "map_node": 235914,
+          "map_size": 235966
+        }
+      },
+      {
+        "index": 16,
+        "level": "skirmish_ai",
+        "times_ms": {
+          "request_to_first_frame": 75.679,
+          "overlay_to_mount": 2.016,
+          "mount_to_first_frame": 55.646,
+          "identity": 16.26,
+          "texture_requests_until_environment_ready": 0.009,
+          "environment_wait_after_identity": 0.009,
+          "texture_wait_total": 0.0,
+          "calibration_total": 0.0,
+          "environment_ready_to_install": 1.295,
+          "scene_load": 0.539,
+          "scene_instantiate_and_probe_attach": 0.064,
+          "handoff_to_mount": 0.956,
+          "atmosphere_build": 0.078
+        },
+        "environment_requests": 0,
+        "longest_texture_wait": null,
+        "milestones_us": {
+          "battle_instantiated": 19074,
+          "battle_scene_loaded": 19010,
+          "environment_complete": 17176,
+          "finish_deferred": 531,
+          "finish_entered": 907,
+          "frame_resources_complete": 17176,
+          "handoff": 19077,
+          "identity_applied": 19075,
+          "identity_ready": 17167,
+          "install_deferred": 18079,
+          "install_entered": 18471,
+          "overlay_added": 527,
+          "portraits_complete": 17177
+        },
+        "map_milestones_us": {
+          "atmosphere_attach_done": 31038,
+          "atmosphere_attach_start": 30960,
+          "environment_enabled": 30221,
+          "environment_paint": 29213,
+          "level_decorate": 30205,
+          "level_paint": 29206,
+          "map_bake": 30195,
+          "map_node": 27719,
+          "map_size": 27782
+        }
+      },
+      {
+        "index": 17,
+        "level": "custom_defense",
+        "times_ms": {
+          "request_to_first_frame": 574.434,
+          "overlay_to_mount": 478.777,
+          "mount_to_first_frame": 93.371,
+          "identity": 48.582,
+          "texture_requests_until_environment_ready": 371.329,
+          "environment_wait_after_identity": 322.417,
+          "texture_wait_total": 322.258,
+          "calibration_total": 0.0,
+          "environment_ready_to_install": 0.035,
+          "scene_load": 0.848,
+          "scene_instantiate_and_probe_attach": 0.168,
+          "handoff_to_mount": 1.876,
+          "atmosphere_build": 0.124,
+          "detached_map_prepare": 102.381,
+          "detached_map_to_post_draw": 1.312
+        },
+        "environment_requests": 18,
+        "longest_texture_wait": {
+          "path": "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png",
+          "ms": 322.016
+        },
+        "milestones_us": {
+          "battle_instantiated": 375467,
+          "battle_scene_loaded": 375299,
+          "detached_frame_drawn": 479183,
+          "environment_complete": 374416,
+          "environment_requests": 3087,
+          "finish_deferred": 3095,
+          "finish_entered": 3417,
+          "frame_resources_complete": 374420,
+          "handoff": 479187,
+          "identity_applied": 375471,
+          "identity_ready": 51999,
+          "install_deferred": 374435,
+          "install_entered": 374451,
+          "map_prepare_started": 375490,
+          "map_prepared": 477871,
+          "overlay_added": 1102,
+          "overlay_draw_done": 2302,
+          "portraits_complete": 374422
+        },
+        "map_milestones_us": {
+          "atmosphere_attach_done": 500848,
+          "atmosphere_attach_start": 500724,
+          "environment_enabled": 477866,
+          "environment_paint": 410672,
+          "level_decorate": 477837,
+          "level_paint": 410644,
+          "map_bake": 415878,
+          "map_node": 375596,
+          "map_size": 375770
+        }
+      },
+      {
+        "index": 18,
+        "level": "level5",
+        "times_ms": {
+          "request_to_first_frame": 259.917,
+          "overlay_to_mount": 196.072,
+          "mount_to_first_frame": 62.497,
+          "identity": 25.953,
+          "texture_requests_until_environment_ready": 152.411,
+          "environment_wait_after_identity": 126.313,
+          "texture_wait_total": 126.244,
+          "calibration_total": 0.0,
+          "environment_ready_to_install": 0.023,
+          "scene_load": 0.414,
+          "scene_instantiate_and_probe_attach": 0.086,
+          "handoff_to_mount": 1.169,
+          "atmosphere_build": 0.094,
+          "detached_map_prepare": 40.744,
+          "detached_map_to_post_draw": 0.78
+        },
+        "environment_requests": 18,
+        "longest_texture_wait": {
+          "path": "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png",
+          "ms": 126.119
+        },
+        "milestones_us": {
+          "battle_instantiated": 154713,
+          "battle_scene_loaded": 154627,
+          "detached_frame_drawn": 196249,
+          "environment_complete": 154190,
+          "environment_requests": 1779,
+          "finish_deferred": 1807,
+          "finish_entered": 1924,
+          "frame_requests": 1802,
+          "frame_resources_complete": 154193,
+          "gao_art_requests": 1805,
+          "handoff": 196251,
+          "identity_applied": 154715,
+          "identity_ready": 27877,
+          "install_deferred": 154205,
+          "install_entered": 154213,
+          "map_prepare_started": 154725,
+          "map_prepared": 195469,
+          "overlay_added": 641,
+          "overlay_draw_done": 1353,
+          "portraits_complete": 154194
+        },
+        "map_milestones_us": {
+          "atmosphere_attach_done": 210176,
+          "atmosphere_attach_start": 210082,
+          "environment_enabled": 195465,
+          "environment_paint": 170003,
+          "level_decorate": 195457,
+          "level_paint": 169996,
+          "map_bake": 171340,
+          "map_node": 154791,
+          "map_size": 154872
+        }
+      }
+    ]
+  },
+  "official_build_save_replay": {
+    "steam_build": 26873421,
+    "level": "level1",
+    "processes": 2,
+    "source_seed_preserved": true,
+    "original_phase": 1.99443062501351,
+    "saved_phase": 2.01109729168018,
+    "reopened_phase": 2.01109729168018,
+    "source_slot_sha256": "5a46e75bcbeb1b6ee738eca40518400ae8b0fb0a71b3c1ea7742bd5926a7ea25",
+    "resaved_slot_sha256": "4fec7d02ff450e3ffeeae15bd7728660ae8f3f54a7df87a1a8c66c71df2ea3b6",
+    "checks": {
+      "resave": 18,
+      "reopen": 12
+    },
+    "log_sha256": {
+      "resave": "d9d95f9926b2a0069cfcc36864b5af08b1b9f7a335cc46accf4867625bc2a29a",
+      "reopen": "3211c6d56ebdb1cc1e26eccbf02a2e4896747a0231833b85ce4cce7abf47072d"
+    },
+    "receipt_sha256": "8e0776f75b205eed321b2e892c5f72a8fc9f52924f620d225d2ffedb24cda0c4",
+    "probe_sha256": "096921b03f1d6d01861bb1113b720ebb170d8d27935b9c793c3e0603bf73db0a"
+  },
+  "ten_minute_validation": {
+    "launcher": {
+      "candidate": "465328a22aca7880f42800b7de6972f21176bd41",
+      "payload_files_unchanged": true,
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "ed21928aefdecf0436d8eec9da8f64fcdbd00507ae6799abc7e554b576c81c0a",
+      "split_identity": "0dcf3874b0e905a95cbfa7624b3bbd98860b2334b62932953b7f5030568d1cd2",
+      "exe_unchanged": true,
+      "exit_code": 1,
+      "seconds": 612.405,
+      "errors": [],
+      "warnings": [],
+      "log_sha256": "2d450b27ec12b004ee0ba34d9f6ba85b573277ebbba3d034a2459413d6ae95c3",
+      "report_sha256": "8e3abc76e0a1377b23561266c78ae55ad3e9b4bd0790d66d08d8010d4fa3bb21"
+    },
+    "acceptance_passed": false,
+    "actual_seconds": 601.92508,
+    "activity_and_release": 95,
+    "campaign_progress_unchanged": true,
+    "performance": {
+      "complete_minute_buckets": 10,
+      "max_minute_p95_ms": 27.914,
+      "max_minute_p99_ms": 53.214,
+      "p95_limit_ms": 16.7,
+      "p99_limit_ms": 33.3,
+      "peak_draw_calls": 1416.0,
+      "worst_frame_ms": 306.345
+    },
+    "failures": [
+      "all minute P95 values meet 16.7ms",
+      "all minute P99 values meet 33.3ms",
+      "working_set_bytes returns within warm-baseline tolerance",
+      "working_set_bytes has no sustained monotonic growth above tolerance",
+      "private_bytes returns within warm-baseline tolerance",
+      "private_bytes has no sustained monotonic growth above tolerance"
+    ],
+    "stability": {
+      "godot_static_bytes": {
+        "end": 0.0,
+        "end_delta_from_warm": 0.0,
+        "monotonic_growth_detected": false,
+        "peak": 0.0,
+        "recovered_from_peak": 0.0,
+        "recovery_passed": true,
+        "tolerance": 67108864.0,
+        "trend": {
+          "decreases": 0,
+          "first": 0.0,
+          "flat": 88,
+          "increases": 0,
+          "last": 0.0,
+          "near_monotonic": false,
+          "net": 0.0,
+          "samples": 89
+        },
+        "warm_baseline": 0.0
+      },
+      "node_count": {
+        "end": 74.0,
+        "end_delta_from_warm": 0.0,
+        "monotonic_growth_detected": false,
+        "peak": 74.0,
+        "recovered_from_peak": 0.0,
+        "recovery_passed": true,
+        "tolerance": 32.0,
+        "trend": {
+          "decreases": 0,
+          "first": 74.0,
+          "flat": 88,
+          "increases": 0,
+          "last": 74.0,
+          "near_monotonic": false,
+          "net": 0.0,
+          "samples": 89
+        },
+        "warm_baseline": 74.0
+      },
+      "object_count": {
+        "end": 3289.0,
+        "end_delta_from_warm": -11.0,
+        "monotonic_growth_detected": false,
+        "peak": 3302.0,
+        "recovered_from_peak": 13.0,
+        "recovery_passed": true,
+        "tolerance": 512.0,
+        "trend": {
+          "decreases": 2,
+          "first": 3300.0,
+          "flat": 83,
+          "increases": 3,
+          "last": 3301.0,
+          "near_monotonic": false,
+          "net": 1.0,
+          "samples": 89
+        },
+        "warm_baseline": 3300.0
+      },
+      "orphan_node_count": {
+        "end": 0.0,
+        "end_delta_from_warm": 0.0,
+        "monotonic_growth_detected": false,
+        "peak": 0.0,
+        "recovered_from_peak": 0.0,
+        "recovery_passed": true,
+        "tolerance": 2.0,
+        "trend": {
+          "decreases": 0,
+          "first": 0.0,
+          "flat": 88,
+          "increases": 0,
+          "last": 0.0,
+          "near_monotonic": false,
+          "net": 0.0,
+          "samples": 89
+        },
+        "warm_baseline": 0.0
+      },
+      "private_bytes": {
+        "end": 2131800064.0,
+        "end_delta_from_warm": 161751040.0,
+        "monotonic_growth_detected": true,
+        "peak": 2131800064.0,
+        "recovered_from_peak": 0.0,
+        "recovery_passed": false,
+        "tolerance": 134217728.0,
+        "trend": {
+          "decreases": 0,
+          "first": 1970049024.0,
+          "flat": 3,
+          "increases": 8,
+          "last": 2131800064.0,
+          "near_monotonic": true,
+          "net": 161751040.0,
+          "samples": 12
+        },
+        "warm_baseline": 1970049024.0
+      },
+      "render_buffer_bytes": {
+        "end": 10176500.0,
+        "end_delta_from_warm": -1750304.0,
+        "monotonic_growth_detected": false,
+        "peak": 12149844.0,
+        "recovered_from_peak": 1973344.0,
+        "recovery_passed": true,
+        "tolerance": 67108864.0,
+        "trend": {
+          "decreases": 29,
+          "first": 10804816.0,
+          "flat": 29,
+          "increases": 30,
+          "last": 12149844.0,
+          "near_monotonic": false,
+          "net": 1345028.0,
+          "samples": 89
+        },
+        "warm_baseline": 11926804.0
+      },
+      "render_texture_bytes": {
+        "end": 686296576.0,
+        "end_delta_from_warm": -34310656.0,
+        "monotonic_growth_detected": false,
+        "peak": 720607232.0,
+        "recovered_from_peak": 34310656.0,
+        "recovery_passed": true,
+        "tolerance": 33554432.0,
+        "trend": {
+          "decreases": 44,
+          "first": 699973120.0,
+          "flat": 14,
+          "increases": 30,
+          "last": 720607232.0,
+          "near_monotonic": false,
+          "net": 20634112.0,
+          "samples": 89
+        },
+        "warm_baseline": 720607232.0
+      },
+      "render_video_bytes": {
+        "end": 805530656.0,
+        "end_delta_from_warm": -27673744.0,
+        "monotonic_growth_detected": false,
+        "peak": 841815936.0,
+        "recovered_from_peak": 36285280.0,
+        "recovery_passed": true,
+        "tolerance": 67108864.0,
+        "trend": {
+          "decreases": 44,
+          "first": 811447152.0,
+          "flat": 14,
+          "increases": 30,
+          "last": 841815936.0,
+          "near_monotonic": false,
+          "net": 30368784.0,
+          "samples": 89
+        },
+        "warm_baseline": 833204400.0
+      },
+      "resource_count": {
+        "end": 363.0,
+        "end_delta_from_warm": 2.0,
+        "monotonic_growth_detected": false,
+        "peak": 363.0,
+        "recovered_from_peak": 0.0,
+        "recovery_passed": true,
+        "tolerance": 128.0,
+        "trend": {
+          "decreases": 0,
+          "first": 361.0,
+          "flat": 87,
+          "increases": 1,
+          "last": 363.0,
+          "near_monotonic": false,
+          "net": 2.0,
+          "samples": 89
+        },
+        "warm_baseline": 361.0
+      },
+      "working_set_bytes": {
+        "end": 1140801536.0,
+        "end_delta_from_warm": 162660352.0,
+        "monotonic_growth_detected": true,
+        "peak": 1209204736.0,
+        "recovered_from_peak": 68403200.0,
+        "recovery_passed": false,
+        "tolerance": 134217728.0,
+        "trend": {
+          "decreases": 0,
+          "first": 978141184.0,
+          "flat": 3,
+          "increases": 8,
+          "last": 1140801536.0,
+          "near_monotonic": true,
+          "net": 162660352.0,
+          "samples": 12
+        },
+        "warm_baseline": 978141184.0
+      }
+    },
+    "complete_minutes": [
+      {
+        "minute": 1,
+        "p95_frame_ms": 9.964,
+        "p99_frame_ms": 15.393
+      },
+      {
+        "minute": 2,
+        "p95_frame_ms": 27.914,
+        "p99_frame_ms": 53.214
+      },
+      {
+        "minute": 3,
+        "p95_frame_ms": 13.738,
+        "p99_frame_ms": 26.884
+      },
+      {
+        "minute": 4,
+        "p95_frame_ms": 16.312,
+        "p99_frame_ms": 30.363
+      },
+      {
+        "minute": 5,
+        "p95_frame_ms": 13.844,
+        "p99_frame_ms": 29.5
+      },
+      {
+        "minute": 6,
+        "p95_frame_ms": 10.132,
+        "p99_frame_ms": 17.145
+      },
+      {
+        "minute": 7,
+        "p95_frame_ms": 18.252,
+        "p99_frame_ms": 34.778
+      },
+      {
+        "minute": 8,
+        "p95_frame_ms": 10.729,
+        "p99_frame_ms": 14.281
+      },
+      {
+        "minute": 9,
+        "p95_frame_ms": 12.39,
+        "p99_frame_ms": 27.361
+      },
+      {
+        "minute": 10,
+        "p95_frame_ms": 11.372,
+        "p99_frame_ms": 15.973
+      }
+    ],
+    "visit_15_ms": 561.865,
+    "peak_entry": {
+      "level": "level5",
+      "index": 30,
+      "request_to_first_frame_ms": 789.155,
+      "overlay_to_mount_ms": 482.544
+    }
+  },
+  "isolated_serial_surface_decode": {
+    "launcher": {
+      "candidate": "465328a22aca7880f42800b7de6972f21176bd41",
+      "probe_sha256": "6953efb1a0e1b3ac4a8ad09cb18fc2bae62d7e9410dbb3eaeb5c9a287a181a67",
+      "payload_files_unchanged": true,
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "ed21928aefdecf0436d8eec9da8f64fcdbd00507ae6799abc7e554b576c81c0a",
+      "split_identity": "0dcf3874b0e905a95cbfa7624b3bbd98860b2334b62932953b7f5030568d1cd2",
+      "exe_unchanged": true,
+      "exit_code": 0,
+      "seconds": 15.292,
+      "errors": [],
+      "warnings": [],
+      "log_sha256": "f79bcd1676b02aa6635cb6cd9a0506c95307b04c05c183f41b1cc01970360348",
+      "report_sha256": "3ace4c625c9eae2a199a09998ccc22dfb7cd592868461a10ab235a06c7e07bd8"
+    },
+    "probe_scope": "packed surface decode and serial native load",
+    "results": {
+      "surface_compacted_stone.png": {
+        "rounds": [
+          {
+            "bytes": 5185890,
+            "native_load_us": 97659,
+            "packed_read_us": 2998,
+            "pixels_sha256": "475dbfdc6f7c58f42919217b81a85b3f8a4c5bf6770df7708bf4c90cf30b8682",
+            "size": [
+              2048,
+              2048
+            ],
+            "webp_decode_us": 107320
+          },
+          {
+            "bytes": 5185890,
+            "native_load_us": 88359,
+            "packed_read_us": 2091,
+            "pixels_sha256": "475dbfdc6f7c58f42919217b81a85b3f8a4c5bf6770df7708bf4c90cf30b8682",
+            "size": [
+              2048,
+              2048
+            ],
+            "webp_decode_us": 74873
+          },
+          {
+            "bytes": 5185890,
+            "native_load_us": 99625,
+            "packed_read_us": 1825,
+            "pixels_sha256": "475dbfdc6f7c58f42919217b81a85b3f8a4c5bf6770df7708bf4c90cf30b8682",
+            "size": [
+              2048,
+              2048
+            ],
+            "webp_decode_us": 90246
+          },
+          {
+            "bytes": 5185890,
+            "native_load_us": 99909,
+            "packed_read_us": 2210,
+            "pixels_sha256": "475dbfdc6f7c58f42919217b81a85b3f8a4c5bf6770df7708bf4c90cf30b8682",
+            "size": [
+              2048,
+              2048
+            ],
+            "webp_decode_us": 94005
+          },
+          {
+            "bytes": 5185890,
+            "native_load_us": 86117,
+            "packed_read_us": 1742,
+            "pixels_sha256": "475dbfdc6f7c58f42919217b81a85b3f8a4c5bf6770df7708bf4c90cf30b8682",
+            "size": [
+              2048,
+              2048
+            ],
+            "webp_decode_us": 76282
+          }
+        ],
+        "median_ms": {
+          "packed_read_us": 2.091,
+          "webp_decode_us": 90.246,
+          "native_load_us": 97.659
+        }
+      },
+      "surface_forest_earth.png": {
+        "rounds": [
+          {
+            "bytes": 5421084,
+            "native_load_us": 86979,
+            "packed_read_us": 2228,
+            "pixels_sha256": "f1d179584965b17dd57ec10b38ec94509b0af8930d5d0e70333701fb3a8f3ec9",
+            "size": [
+              2048,
+              2048
+            ],
+            "webp_decode_us": 82790
+          },
+          {
+            "bytes": 5421084,
+            "native_load_us": 87826,
+            "packed_read_us": 1709,
+            "pixels_sha256": "f1d179584965b17dd57ec10b38ec94509b0af8930d5d0e70333701fb3a8f3ec9",
+            "size": [
+              2048,
+              2048
+            ],
+            "webp_decode_us": 73972
+          },
+          {
+            "bytes": 5421084,
+            "native_load_us": 108273,
+            "packed_read_us": 2479,
+            "pixels_sha256": "f1d179584965b17dd57ec10b38ec94509b0af8930d5d0e70333701fb3a8f3ec9",
+            "size": [
+              2048,
+              2048
+            ],
+            "webp_decode_us": 83114
+          },
+          {
+            "bytes": 5421084,
+            "native_load_us": 94506,
+            "packed_read_us": 2651,
+            "pixels_sha256": "f1d179584965b17dd57ec10b38ec94509b0af8930d5d0e70333701fb3a8f3ec9",
+            "size": [
+              2048,
+              2048
+            ],
+            "webp_decode_us": 81753
+          },
+          {
+            "bytes": 5421084,
+            "native_load_us": 89776,
+            "packed_read_us": 1695,
+            "pixels_sha256": "f1d179584965b17dd57ec10b38ec94509b0af8930d5d0e70333701fb3a8f3ec9",
+            "size": [
+              2048,
+              2048
+            ],
+            "webp_decode_us": 75445
+          }
+        ],
+        "median_ms": {
+          "packed_read_us": 2.228,
+          "webp_decode_us": 81.753,
+          "native_load_us": 89.776
+        }
+      },
+      "surface_wet_bank.png": {
+        "rounds": [
+          {
+            "bytes": 4879846,
+            "native_load_us": 86175,
+            "packed_read_us": 1896,
+            "pixels_sha256": "ca7a60ffc2ee1bc64469a86976bbb3f1d587e8e7a93bdec97b349f89e35f6335",
+            "size": [
+              2048,
+              2048
+            ],
+            "webp_decode_us": 73351
+          },
+          {
+            "bytes": 4879846,
+            "native_load_us": 81935,
+            "packed_read_us": 2340,
+            "pixels_sha256": "ca7a60ffc2ee1bc64469a86976bbb3f1d587e8e7a93bdec97b349f89e35f6335",
+            "size": [
+              2048,
+              2048
+            ],
+            "webp_decode_us": 73397
+          },
+          {
+            "bytes": 4879846,
+            "native_load_us": 174816,
+            "packed_read_us": 4955,
+            "pixels_sha256": "ca7a60ffc2ee1bc64469a86976bbb3f1d587e8e7a93bdec97b349f89e35f6335",
+            "size": [
+              2048,
+              2048
+            ],
+            "webp_decode_us": 285945
+          },
+          {
+            "bytes": 4879846,
+            "native_load_us": 83704,
+            "packed_read_us": 2230,
+            "pixels_sha256": "ca7a60ffc2ee1bc64469a86976bbb3f1d587e8e7a93bdec97b349f89e35f6335",
+            "size": [
+              2048,
+              2048
+            ],
+            "webp_decode_us": 72468
+          },
+          {
+            "bytes": 4879846,
+            "native_load_us": 83640,
+            "packed_read_us": 1400,
+            "pixels_sha256": "ca7a60ffc2ee1bc64469a86976bbb3f1d587e8e7a93bdec97b349f89e35f6335",
+            "size": [
+              2048,
+              2048
+            ],
+            "webp_decode_us": 72263
+          }
+        ],
+        "median_ms": {
+          "packed_read_us": 2.23,
+          "webp_decode_us": 73.351,
+          "native_load_us": 83.704
+        }
+      }
+    }
+  },
+  "source_disposition": "Local development candidate after complete Windows performance gate failure."
+}
