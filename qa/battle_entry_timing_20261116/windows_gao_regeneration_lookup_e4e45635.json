@@ -1,0 +1,357 @@
+{
+  "scope": "Two isolated Windows Vulkan sessions, same fixed camera/inputs/effects, normal one-times rate. Paired lookup measurement is outside the frame sample; no sustained FPS claim.",
+  "original": {
+    "source": "30c666bc6e7e399a35e798b3e3a46fe4e7572ded",
+    "log_sha256": "f239c707dbc0bf9fb945c4cff99031c78088b6cf95c5eddd69b57f454739d28a",
+    "report_sha256": "f4e43ef96bb8c3a6433cbefb60849dbfa15c6e9dcf06a912224118780eb0426a",
+    "fixture_sha256": "b194b6740732ed334289743269c841f5ba312046a13753e99265a3f33e1d43e1",
+    "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+    "pck_sha256": "94088b328e0133a85419c93f318c76899ea2f7a6b46c0e0af4aea12cbdace49d",
+    "scope": {
+      "camera_mode": "fixed",
+      "renderer": "forward_plus",
+      "resolution": [
+        1440,
+        900
+      ],
+      "effects_quality": "standard",
+      "physics_hz": 60,
+      "time_scale": 1.0,
+      "seconds": 165.010041,
+      "checks": 13
+    },
+    "frame_statistics": {
+      "p95_ms": 12.933,
+      "p99_ms": 17.308,
+      "worst_ms": 96.495,
+      "frames": 28296
+    },
+    "frames_over_33_3_ms": 19,
+    "paired_regeneration_lookups": [
+      {
+        "full_health": 4,
+        "iterations": 240,
+        "living_heroes": 4,
+        "paired_us": [
+          [
+            4935,
+            57
+          ],
+          [
+            4396,
+            57
+          ],
+          [
+            4412,
+            57
+          ],
+          [
+            4407,
+            57
+          ],
+          [
+            4431,
+            58
+          ],
+          [
+            4409,
+            58
+          ]
+        ]
+      },
+      {
+        "full_health": 4,
+        "iterations": 240,
+        "living_heroes": 4,
+        "paired_us": [
+          [
+            6344,
+            100
+          ],
+          [
+            5743,
+            104
+          ],
+          [
+            5710,
+            74
+          ],
+          [
+            6430,
+            79
+          ],
+          [
+            6238,
+            88
+          ],
+          [
+            8110,
+            79
+          ]
+        ]
+      }
+    ],
+    "actual_paid_boats": 5,
+    "diagnostic_window": {
+      "profile_rows": 2369,
+      "unit_physics_median_per_tick_us": 1508.0,
+      "max_physics_steps_per_recorded_frame": 4,
+      "long_frames_classified": {
+        "draw": 10,
+        "physics_to_idle": 3,
+        "unavailable": 1
+      },
+      "longest_observed_frames": [
+        {
+          "frame": 17495,
+          "sample_elapsed_us": 84839269,
+          "frame_us": 96495,
+          "physics_tick": 5390,
+          "physics_steps": 1,
+          "largest_observed_phase": "draw",
+          "parts_us": {
+            "before_physics": 530,
+            "physics_to_idle": 3848,
+            "idle_to_pre_draw": 6851,
+            "draw": 85266
+          }
+        },
+        {
+          "frame": 16572,
+          "sample_elapsed_us": 78074996,
+          "frame_us": 85999,
+          "physics_tick": 4984,
+          "physics_steps": 1,
+          "largest_observed_phase": "draw",
+          "parts_us": {
+            "before_physics": 286,
+            "physics_to_idle": 3647,
+            "idle_to_pre_draw": 4615,
+            "draw": 77451
+          }
+        },
+        {
+          "frame": 14297,
+          "sample_elapsed_us": 62624276,
+          "frame_us": 77912,
+          "physics_tick": 4058,
+          "physics_steps": 1,
+          "largest_observed_phase": "draw",
+          "parts_us": {
+            "before_physics": 129,
+            "physics_to_idle": 2733,
+            "idle_to_pre_draw": 3834,
+            "draw": 71216
+          }
+        },
+        {
+          "frame": 23827,
+          "sample_elapsed_us": 125631659,
+          "frame_us": 65965,
+          "physics_tick": 7837,
+          "physics_steps": 0,
+          "largest_observed_phase": "unavailable",
+          "parts_us": null
+        },
+        {
+          "frame": 17503,
+          "sample_elapsed_us": 85133201,
+          "frame_us": 54746,
+          "physics_tick": 5408,
+          "physics_steps": 2,
+          "largest_observed_phase": "draw",
+          "parts_us": {
+            "before_physics": 434,
+            "physics_to_idle": 4950,
+            "idle_to_pre_draw": 5294,
+            "draw": 44068
+          }
+        }
+      ]
+    }
+  },
+  "optimized": {
+    "source": "e4e45635ac3812119aff9d551dd459e215cd7583",
+    "log_sha256": "2bfe7c7270d744ce6a41b8d1eabceef2aa08383fe67c4d54be6e2dc3b410746d",
+    "report_sha256": "fa9b184dd477b4f394607db398fc54824607249bdf0eafdea4b8cdc231314770",
+    "fixture_sha256": "3ad97ceff8c92365d2847a5ac55d210d9d340dc16d234a1477512db5ae607a92",
+    "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+    "pck_sha256": "e039920055e100d6d727ca84787aa81b0afc845050177c33e0c5c20ccebbeea3",
+    "scope": {
+      "camera_mode": "fixed",
+      "renderer": "forward_plus",
+      "resolution": [
+        1440,
+        900
+      ],
+      "effects_quality": "standard",
+      "physics_hz": 60,
+      "time_scale": 1.0,
+      "seconds": 165.000306,
+      "checks": 13
+    },
+    "frame_statistics": {
+      "p95_ms": 12.617,
+      "p99_ms": 15.892,
+      "worst_ms": 104.784,
+      "frames": 24947
+    },
+    "frames_over_33_3_ms": 26,
+    "paired_regeneration_lookups": [
+      {
+        "full_health": 4,
+        "iterations": 240,
+        "living_heroes": 4,
+        "paired_us": [
+          [
+            6190,
+            58
+          ],
+          [
+            4655,
+            59
+          ],
+          [
+            4802,
+            61
+          ],
+          [
+            4813,
+            57
+          ],
+          [
+            4747,
+            71
+          ],
+          [
+            4580,
+            57
+          ]
+        ]
+      },
+      {
+        "full_health": 4,
+        "iterations": 240,
+        "living_heroes": 4,
+        "paired_us": [
+          [
+            5505,
+            112
+          ],
+          [
+            6003,
+            75
+          ],
+          [
+            4938,
+            64
+          ],
+          [
+            5018,
+            63
+          ],
+          [
+            5009,
+            72
+          ],
+          [
+            5416,
+            76
+          ]
+        ]
+      }
+    ],
+    "actual_paid_boats": 5,
+    "diagnostic_window": {
+      "profile_rows": 2399,
+      "unit_physics_median_per_tick_us": 1315.0,
+      "max_physics_steps_per_recorded_frame": 3,
+      "long_frames_classified": {
+        "before_physics": 1,
+        "draw": 13,
+        "unavailable": 5
+      },
+      "longest_observed_frames": [
+        {
+          "frame": 4481,
+          "sample_elapsed_us": 26914925,
+          "frame_us": 104784,
+          "physics_tick": 1916,
+          "physics_steps": 0,
+          "largest_observed_phase": "unavailable",
+          "parts_us": null
+        },
+        {
+          "frame": 10646,
+          "sample_elapsed_us": 68632309,
+          "frame_us": 92535,
+          "physics_tick": 4418,
+          "physics_steps": 0,
+          "largest_observed_phase": "unavailable",
+          "parts_us": null
+        },
+        {
+          "frame": 7523,
+          "sample_elapsed_us": 45885110,
+          "frame_us": 89601,
+          "physics_tick": 3055,
+          "physics_steps": 1,
+          "largest_observed_phase": "draw",
+          "parts_us": {
+            "before_physics": 171,
+            "physics_to_idle": 2432,
+            "idle_to_pre_draw": 4637,
+            "draw": 82361
+          }
+        },
+        {
+          "frame": 8323,
+          "sample_elapsed_us": 52115608,
+          "frame_us": 84715,
+          "physics_tick": 3427,
+          "physics_steps": 0,
+          "largest_observed_phase": "unavailable",
+          "parts_us": null
+        },
+        {
+          "frame": 3304,
+          "sample_elapsed_us": 20636305,
+          "frame_us": 56029,
+          "physics_tick": 1539,
+          "physics_steps": 1,
+          "largest_observed_phase": "draw",
+          "parts_us": {
+            "before_physics": 161,
+            "physics_to_idle": 2785,
+            "idle_to_pre_draw": 3274,
+            "draw": 49809
+          }
+        }
+      ]
+    }
+  },
+  "same_one_second_states": 170,
+  "win_regeneration_contract": {
+    "capped_heal_credit": true,
+    "cooldowns_tick": true,
+    "full_health": true,
+    "hurt_in_combat": true,
+    "out_of_combat_supply": true,
+    "passive_with_equipment": true
+  },
+  "lookup_us_per_four_heroes": [
+    [
+      18.37708333333333,
+      0.2375
+    ],
+    [
+      26.2125,
+      0.34791666666666665
+    ]
+  ],
+  "frame_timing_differences": {
+    "p95_ms": -0.31599999999999895,
+    "p99_ms": -1.4160000000000004,
+    "worst_ms": 8.289000000000001
+  }
+}
