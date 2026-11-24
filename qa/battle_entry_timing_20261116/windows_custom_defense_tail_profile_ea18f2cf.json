@@ -1,0 +1,1378 @@
+{
+  "candidate": "ea18f2cfaa3ef3160b3ff341c81daa52c33ae917",
+  "historical_candidate": "2ff9a3e56c7076a06981e9b52771b504651b1815",
+  "historical_718_ms": {
+    "wall_metrics": {
+      "pre": 1657479,
+      "first": 1684159,
+      "ready": 1290145,
+      "gap_start": 965944,
+      "gap_end": 1684159,
+      "loading_hint_ms": 7.965,
+      "gap_ms": 718.215,
+      "click_to_first_frame_ms": 1684.159,
+      "ready_to_paint_ms": 367.334,
+      "paint_signals_ms": 26.68
+    },
+    "original_receipt": "windows_candidate_2ff9a3e5_mode_soak_600.json",
+    "original_report_sha256": "05e8c7250c8171fd318ff246aaeb6cba35d6e8a05849dd7dc2693f3dba9cd8b8"
+  },
+  "scope": "Real menu and fight transitions in two isolated Windows Vulkan Forward+ runs at normal speed, 1280x720, vsync off. Match game signal timestamps with Windows main thread and process CPU counters. These windows are elapsed times, not exclusive rendering/GPU timings.",
+  "trace_safety": {
+    "counter_poll_wait_ms": 5,
+    "edge_error_max_ms": 20,
+    "clock_drift_max_ms": 2,
+    "shortest_paired_segment_ms": 50,
+    "endpoint_method": "Counter query start and finish bracket snapshots. Inner snapshot queries finish inside the target interval. Outer query endpoints bracket the full interval."
+  },
+  "runs": {
+    "custom": {
+      "execution": {
+        "candidate": "ea18f2cfaa3ef3160b3ff341c81daa52c33ae917",
+        "payload_files_unchanged": true,
+        "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+        "pck_sha256": "e417ec0fbd2d0a8c2ef0ef00db8332364d69e89eabd5ae5d8894e80c6c92b5c3",
+        "split_identity": "0e8823da1939be5751e49411abcd03208b55a6d315f44b497a8b5ae0aa8d45bd",
+        "exe_unchanged": true,
+        "exit_code": 1,
+        "seconds": 194.18,
+        "errors": [],
+        "warnings": [],
+        "log_sha256": "9262b88bef04a6a6a0a76096b3470c1ad616125a0691aa6454ca833771ad29cf",
+        "thread_id": 43384,
+        "thread_samples_sha256": "28b94e9de0578588613f47c991f1fd55abe534ff4e4938870eda4e3abee8bbd3",
+        "report_sha256": "b5b889a315d1beb5c145a67724d03b43baa11dfcae3af94934f26e0691cfa48a"
+      },
+      "requested_seconds": 180.0,
+      "actual_seconds": 184.369,
+      "route": [
+        {
+          "level_id": "custom_defense",
+          "mode": "custom_defense"
+        }
+      ],
+      "viewport": [
+        1280,
+        720
+      ],
+      "renderer": {
+        "adapter": "NVIDIA GeForce RTX 4060 Laptop GPU",
+        "api": "1.4.357",
+        "display": "Windows",
+        "driver": "vulkan",
+        "godot": {
+          "build": "official",
+          "hash": "7d41c59c457bd5a245092b4e7eb2d833e3b3f8c3",
+          "hex": 263683,
+          "major": 4,
+          "minor": 6,
+          "patch": 3,
+          "status": "stable",
+          "string": "4.6.3-stable (official)",
+          "timestamp": 0
+        },
+        "method": "forward_plus",
+        "vendor": "NVIDIA",
+        "vsync": 0
+      },
+      "valid_transitions": 29,
+      "thread_samples": 12446,
+      "campaign_save": {
+        "after": {
+          "exists": false,
+          "sha256": "absent",
+          "size_bytes": 0
+        },
+        "before": {
+          "exists": false,
+          "sha256": "absent",
+          "size_bytes": 0
+        },
+        "unchanged": true
+      },
+      "gating_failures": [
+        "working_set_bytes returns within warm-baseline tolerance",
+        "private_bytes returns within warm-baseline tolerance"
+      ],
+      "resource_recovery": {
+        "node_count": {
+          "end": 74.0,
+          "end_delta_from_warm": 0.0,
+          "monotonic_growth_detected": false,
+          "peak": 74.0,
+          "recovered_from_peak": 0.0,
+          "recovery_passed": true,
+          "tolerance": 32.0,
+          "trend": {
+            "decreases": 0,
+            "first": 74.0,
+            "flat": 27,
+            "increases": 0,
+            "last": 74.0,
+            "near_monotonic": false,
+            "net": 0.0,
+            "samples": 28
+          },
+          "warm_baseline": 74.0
+        },
+        "orphan_node_count": {
+          "end": 0.0,
+          "end_delta_from_warm": 0.0,
+          "monotonic_growth_detected": false,
+          "peak": 0.0,
+          "recovered_from_peak": 0.0,
+          "recovery_passed": true,
+          "tolerance": 2.0,
+          "trend": {
+            "decreases": 0,
+            "first": 0.0,
+            "flat": 27,
+            "increases": 0,
+            "last": 0.0,
+            "near_monotonic": false,
+            "net": 0.0,
+            "samples": 28
+          },
+          "warm_baseline": 0.0
+        },
+        "object_count": {
+          "end": 2090.0,
+          "end_delta_from_warm": -13.0,
+          "monotonic_growth_detected": false,
+          "peak": 2103.0,
+          "recovered_from_peak": 13.0,
+          "recovery_passed": true,
+          "tolerance": 512.0,
+          "trend": {
+            "decreases": 0,
+            "first": 2103.0,
+            "flat": 27,
+            "increases": 0,
+            "last": 2102.0,
+            "near_monotonic": false,
+            "net": -1.0,
+            "samples": 28
+          },
+          "warm_baseline": 2103.0
+        },
+        "resource_count": {
+          "end": 223.0,
+          "end_delta_from_warm": 0.0,
+          "monotonic_growth_detected": false,
+          "peak": 223.0,
+          "recovered_from_peak": 0.0,
+          "recovery_passed": true,
+          "tolerance": 128.0,
+          "trend": {
+            "decreases": 0,
+            "first": 223.0,
+            "flat": 27,
+            "increases": 0,
+            "last": 223.0,
+            "near_monotonic": false,
+            "net": 0.0,
+            "samples": 28
+          },
+          "warm_baseline": 223.0
+        },
+        "render_texture_bytes": {
+          "end": 280468480.0,
+          "end_delta_from_warm": -34343424.0,
+          "monotonic_growth_detected": false,
+          "peak": 314811904.0,
+          "recovered_from_peak": 34343424.0,
+          "recovery_passed": true,
+          "tolerance": 33554432.0,
+          "trend": {
+            "decreases": 0,
+            "first": 314811904.0,
+            "flat": 27,
+            "increases": 0,
+            "last": 314811904.0,
+            "near_monotonic": false,
+            "net": 0.0,
+            "samples": 28
+          },
+          "warm_baseline": 314811904.0
+        },
+        "render_video_bytes": {
+          "end": 388812832.0,
+          "end_delta_from_warm": -6836400.0,
+          "monotonic_growth_detected": false,
+          "peak": 427108864.0,
+          "recovered_from_peak": 38296032.0,
+          "recovery_passed": true,
+          "tolerance": 67108864.0,
+          "trend": {
+            "decreases": 0,
+            "first": 411370816.0,
+            "flat": 26,
+            "increases": 1,
+            "last": 427106512.0,
+            "near_monotonic": false,
+            "net": 15735696.0,
+            "samples": 28
+          },
+          "warm_baseline": 395649232.0
+        },
+        "render_buffer_bytes": {
+          "end": 6107876.0,
+          "end_delta_from_warm": -3946300.0,
+          "monotonic_growth_detected": false,
+          "peak": 10056528.0,
+          "recovered_from_peak": 3948652.0,
+          "recovery_passed": true,
+          "tolerance": 67108864.0,
+          "trend": {
+            "decreases": 0,
+            "first": 10047120.0,
+            "flat": 27,
+            "increases": 0,
+            "last": 10054176.0,
+            "near_monotonic": false,
+            "net": 7056.0,
+            "samples": 28
+          },
+          "warm_baseline": 10054176.0
+        },
+        "working_set_bytes": {
+          "end": 1091956736.0,
+          "end_delta_from_warm": 157790208.0,
+          "monotonic_growth_detected": false,
+          "peak": 1160175616.0,
+          "recovered_from_peak": 68218880.0,
+          "recovery_passed": false,
+          "tolerance": 134217728.0,
+          "trend": {
+            "decreases": 0,
+            "first": 934166528.0,
+            "flat": 1,
+            "increases": 3,
+            "last": 1091956736.0,
+            "near_monotonic": false,
+            "net": 157790208.0,
+            "samples": 5
+          },
+          "warm_baseline": 934166528.0
+        },
+        "private_bytes": {
+          "end": 1824481280.0,
+          "end_delta_from_warm": 161128448.0,
+          "monotonic_growth_detected": false,
+          "peak": 1824481280.0,
+          "recovered_from_peak": 0.0,
+          "recovery_passed": false,
+          "tolerance": 134217728.0,
+          "trend": {
+            "decreases": 0,
+            "first": 1663352832.0,
+            "flat": 1,
+            "increases": 3,
+            "last": 1824481280.0,
+            "near_monotonic": false,
+            "net": 161128448.0,
+            "samples": 5
+          },
+          "warm_baseline": 1663352832.0
+        }
+      },
+      "entry_visits": [
+        {
+          "transition": 1,
+          "cycle": 1,
+          "loading_hint_ms": 5.58,
+          "gap_ms": 148.368,
+          "click_to_first_frame_ms": 399.393,
+          "ready_to_paint_ms": 58.742,
+          "paint_signals_ms": 15.827,
+          "gap_cpu": {
+            "main_cpu_ms": [
+              125.0,
+              140.625
+            ],
+            "process_cpu_ms": [
+              218.75,
+              250.0
+            ],
+            "edge_error_ms": 13.999,
+            "clock_drift_ms": 0.0
+          },
+          "ready_to_paint_cpu": {
+            "main_cpu_ms": [
+              31.25,
+              62.5
+            ],
+            "process_cpu_ms": [
+              31.25,
+              62.5
+            ],
+            "edge_error_ms": 14.748,
+            "clock_drift_ms": 0.002
+          }
+        },
+        {
+          "transition": 2,
+          "cycle": 2,
+          "loading_hint_ms": 1.397,
+          "gap_ms": 89.243,
+          "click_to_first_frame_ms": 228.277,
+          "ready_to_paint_ms": 41.896,
+          "paint_signals_ms": 2.93,
+          "gap_cpu": {
+            "main_cpu_ms": [
+              78.125,
+              109.375
+            ],
+            "process_cpu_ms": [
+              78.125,
+              109.375
+            ],
+            "edge_error_ms": 10.164,
+            "clock_drift_ms": 0.001
+          },
+          "ready_to_paint_cpu": null
+        },
+        {
+          "transition": 3,
+          "cycle": 3,
+          "loading_hint_ms": 0.925,
+          "gap_ms": 92.608,
+          "click_to_first_frame_ms": 302.187,
+          "ready_to_paint_ms": 39.5,
+          "paint_signals_ms": 2.984,
+          "gap_cpu": {
+            "main_cpu_ms": [
+              0.0,
+              0.0
+            ],
+            "process_cpu_ms": [
+              15.625,
+              46.875
+            ],
+            "edge_error_ms": 9.576,
+            "clock_drift_ms": 0.001
+          },
+          "ready_to_paint_cpu": null
+        },
+        {
+          "transition": 4,
+          "cycle": 4,
+          "loading_hint_ms": 1.647,
+          "gap_ms": 92.216,
+          "click_to_first_frame_ms": 246.266,
+          "ready_to_paint_ms": 43.63,
+          "paint_signals_ms": 3.83,
+          "gap_cpu": {
+            "main_cpu_ms": [
+              62.5,
+              93.75
+            ],
+            "process_cpu_ms": [
+              62.5,
+              93.75
+            ],
+            "edge_error_ms": 14.023,
+            "clock_drift_ms": 0.002
+          },
+          "ready_to_paint_cpu": null
+        },
+        {
+          "transition": 5,
+          "cycle": 5,
+          "loading_hint_ms": 1.006,
+          "gap_ms": 93.812,
+          "click_to_first_frame_ms": 247.48,
+          "ready_to_paint_ms": 40.871,
+          "paint_signals_ms": 4.172,
+          "gap_cpu": {
+            "main_cpu_ms": [
+              93.75,
+              125.0
+            ],
+            "process_cpu_ms": [
+              109.375,
+              171.875
+            ],
+            "edge_error_ms": 15.259,
+            "clock_drift_ms": 0.004
+          },
+          "ready_to_paint_cpu": null
+        },
+        {
+          "transition": 6,
+          "cycle": 6,
+          "loading_hint_ms": 0.814,
+          "gap_ms": 82.526,
+          "click_to_first_frame_ms": 220.029,
+          "ready_to_paint_ms": 40.682,
+          "paint_signals_ms": 3.574,
+          "gap_cpu": {
+            "main_cpu_ms": [
+              62.5,
+              93.75
+            ],
+            "process_cpu_ms": [
+              62.5,
+              93.75
+            ],
+            "edge_error_ms": 15.303,
+            "clock_drift_ms": 0.005
+          },
+          "ready_to_paint_cpu": null
+        },
+        {
+          "transition": 7,
+          "cycle": 7,
+          "loading_hint_ms": 0.877,
+          "gap_ms": 86.931,
+          "click_to_first_frame_ms": 226.65,
+          "ready_to_paint_ms": 43.122,
+          "paint_signals_ms": 3.849,
+          "gap_cpu": {
+            "main_cpu_ms": [
+              78.125,
+              109.375
+            ],
+            "process_cpu_ms": [
+              78.125,
+              109.375
+            ],
+            "edge_error_ms": 12.793,
+            "clock_drift_ms": 0.0
+          },
+          "ready_to_paint_cpu": null
+        },
+        {
+          "transition": 8,
+          "cycle": 8,
+          "loading_hint_ms": 0.861,
+          "gap_ms": 82.058,
+          "click_to_first_frame_ms": 221.581,
+          "ready_to_paint_ms": 41.142,
+          "paint_signals_ms": 3.595,
+          "gap_cpu": {
+            "main_cpu_ms": [
+              62.5,
+              93.75
+            ],
+            "process_cpu_ms": [
+              62.5,
+              93.75
+            ],
+            "edge_error_ms": 10.236,
+            "clock_drift_ms": 0.003
+          },
+          "ready_to_paint_cpu": null
+        },
+        {
+          "transition": 9,
+          "cycle": 9,
+          "loading_hint_ms": 0.925,
+          "gap_ms": 84.03,
+          "click_to_first_frame_ms": 225.766,
+          "ready_to_paint_ms": 41.119,
+          "paint_signals_ms": 2.814,
+          "gap_cpu": {
+            "main_cpu_ms": [
+              46.875,
+              78.125
+            ],
+            "process_cpu_ms": [
+              46.875,
+              78.125
+            ],
+            "edge_error_ms": 15.668,
+            "clock_drift_ms": 0.001
+          },
+          "ready_to_paint_cpu": null
+        },
+        {
+          "transition": 10,
+          "cycle": 10,
+          "loading_hint_ms": 0.864,
+          "gap_ms": 89.093,
+          "click_to_first_frame_ms": 228.759,
+          "ready_to_paint_ms": 43.369,
+          "paint_signals_ms": 3.861,
+          "gap_cpu": {
+            "main_cpu_ms": [
+              78.125,
+              109.375
+            ],
+            "process_cpu_ms": [
+              78.125,
+              109.375
+            ],
+            "edge_error_ms": 12.201,
+            "clock_drift_ms": 0.0
+          },
+          "ready_to_paint_cpu": null
+        },
+        {
+          "transition": 11,
+          "cycle": 11,
+          "loading_hint_ms": 0.907,
+          "gap_ms": 90.601,
+          "click_to_first_frame_ms": 232.412,
+          "ready_to_paint_ms": 42.623,
+          "paint_signals_ms": 4.098,
+          "gap_cpu": {
+            "main_cpu_ms": [
+              62.5,
+              93.75
+            ],
+            "process_cpu_ms": [
+              62.5,
+              109.375
+            ],
+            "edge_error_ms": 16.09,
+            "clock_drift_ms": 0.0
+          },
+          "ready_to_paint_cpu": null
+        },
+        {
+          "transition": 12,
+          "cycle": 12,
+          "loading_hint_ms": 1.198,
+          "gap_ms": 92.099,
+          "click_to_first_frame_ms": 249.689,
+          "ready_to_paint_ms": 43.484,
+          "paint_signals_ms": 3.753,
+          "gap_cpu": {
+            "main_cpu_ms": [
+              78.125,
+              109.375
+            ],
+            "process_cpu_ms": [
+              78.125,
+              109.375
+            ],
+            "edge_error_ms": 12.601,
+            "clock_drift_ms": 0.001
+          },
+          "ready_to_paint_cpu": null
+        },
+        {
+          "transition": 13,
+          "cycle": 13,
+          "loading_hint_ms": 1.29,
+          "gap_ms": 87.947,
+          "click_to_first_frame_ms": 244.346,
+          "ready_to_paint_ms": 44.249,
+          "paint_signals_ms": 3.291,
+          "gap_cpu": {
+            "main_cpu_ms": [
+              62.5,
+              93.75
+            ],
+            "process_cpu_ms": [
+              62.5,
+              93.75
+            ],
+            "edge_error_ms": 14.688,
+            "clock_drift_ms": 0.002
+          },
+          "ready_to_paint_cpu": null
+        },
+        {
+          "transition": 14,
+          "cycle": 14,
+          "loading_hint_ms": 1.018,
+          "gap_ms": 97.665,
+          "click_to_first_frame_ms": 257.383,
+          "ready_to_paint_ms": 44.876,
+          "paint_signals_ms": 4.996,
+          "gap_cpu": {
+            "main_cpu_ms": [
+              93.75,
+              125.0
+            ],
+            "process_cpu_ms": [
+              109.375,
+              125.0
+            ],
+            "edge_error_ms": 14.46,
+            "clock_drift_ms": 0.001
+          },
+          "ready_to_paint_cpu": null
+        },
+        {
+          "transition": 15,
+          "cycle": 15,
+          "loading_hint_ms": 1.174,
+          "gap_ms": 90.539,
+          "click_to_first_frame_ms": 248.619,
+          "ready_to_paint_ms": 43.583,
+          "paint_signals_ms": 4.01,
+          "gap_cpu": {
+            "main_cpu_ms": [
+              62.5,
+              93.75
+            ],
+            "process_cpu_ms": [
+              62.5,
+              93.75
+            ],
+            "edge_error_ms": 14.873,
+            "clock_drift_ms": 0.002
+          },
+          "ready_to_paint_cpu": null
+        },
+        {
+          "transition": 16,
+          "cycle": 16,
+          "loading_hint_ms": 1.088,
+          "gap_ms": 101.147,
+          "click_to_first_frame_ms": 271.204,
+          "ready_to_paint_ms": 45.128,
+          "paint_signals_ms": 4.143,
+          "gap_cpu": {
+            "main_cpu_ms": [
+              78.125,
+              109.375
+            ],
+            "process_cpu_ms": [
+              78.125,
+              109.375
+            ],
+            "edge_error_ms": 12.957,
+            "clock_drift_ms": 0.004
+          },
+          "ready_to_paint_cpu": null
+        },
+        {
+          "transition": 17,
+          "cycle": 17,
+          "loading_hint_ms": 1.367,
+          "gap_ms": 81.851,
+          "click_to_first_frame_ms": 222.188,
+          "ready_to_paint_ms": 40.044,
+          "paint_signals_ms": 3.402,
+          "gap_cpu": {
+            "main_cpu_ms": [
+              62.5,
+              93.75
+            ],
+            "process_cpu_ms": [
+              62.5,
+              93.75
+            ],
+            "edge_error_ms": 12.952,
+            "clock_drift_ms": 0.0
+          },
+          "ready_to_paint_cpu": null
+        },
+        {
+          "transition": 18,
+          "cycle": 18,
+          "loading_hint_ms": 1.094,
+          "gap_ms": 92.214,
+          "click_to_first_frame_ms": 251.042,
+          "ready_to_paint_ms": 43.531,
+          "paint_signals_ms": 3.633,
+          "gap_cpu": {
+            "main_cpu_ms": [
+              78.125,
+              109.375
+            ],
+            "process_cpu_ms": [
+              78.125,
+              109.375
+            ],
+            "edge_error_ms": 10.748,
+            "clock_drift_ms": 0.005
+          },
+          "ready_to_paint_cpu": null
+        },
+        {
+          "transition": 19,
+          "cycle": 19,
+          "loading_hint_ms": 1.307,
+          "gap_ms": 90.301,
+          "click_to_first_frame_ms": 246.886,
+          "ready_to_paint_ms": 42.511,
+          "paint_signals_ms": 3.706,
+          "gap_cpu": {
+            "main_cpu_ms": [
+              78.125,
+              109.375
+            ],
+            "process_cpu_ms": [
+              78.125,
+              109.375
+            ],
+            "edge_error_ms": 13.555,
+            "clock_drift_ms": 0.002
+          },
+          "ready_to_paint_cpu": null
+        },
+        {
+          "transition": 20,
+          "cycle": 20,
+          "loading_hint_ms": 1.355,
+          "gap_ms": 114.723,
+          "click_to_first_frame_ms": 288.605,
+          "ready_to_paint_ms": 52.55,
+          "paint_signals_ms": 5.351,
+          "gap_cpu": {
+            "main_cpu_ms": [
+              109.375,
+              140.625
+            ],
+            "process_cpu_ms": [
+              109.375,
+              156.25
+            ],
+            "edge_error_ms": 13.548,
+            "clock_drift_ms": 0.001
+          },
+          "ready_to_paint_cpu": {
+            "main_cpu_ms": [
+              31.25,
+              62.5
+            ],
+            "process_cpu_ms": [
+              31.25,
+              62.5
+            ],
+            "edge_error_ms": 14.909,
+            "clock_drift_ms": 0.004
+          }
+        },
+        {
+          "transition": 21,
+          "cycle": 21,
+          "loading_hint_ms": 1.058,
+          "gap_ms": 93.119,
+          "click_to_first_frame_ms": 250.552,
+          "ready_to_paint_ms": 46.334,
+          "paint_signals_ms": 4.704,
+          "gap_cpu": {
+            "main_cpu_ms": [
+              78.125,
+              109.375
+            ],
+            "process_cpu_ms": [
+              78.125,
+              109.375
+            ],
+            "edge_error_ms": 8.805,
+            "clock_drift_ms": 0.002
+          },
+          "ready_to_paint_cpu": null
+        },
+        {
+          "transition": 22,
+          "cycle": 22,
+          "loading_hint_ms": 0.886,
+          "gap_ms": 90.94,
+          "click_to_first_frame_ms": 249.004,
+          "ready_to_paint_ms": 45.308,
+          "paint_signals_ms": 4.507,
+          "gap_cpu": {
+            "main_cpu_ms": [
+              78.125,
+              109.375
+            ],
+            "process_cpu_ms": [
+              78.125,
+              109.375
+            ],
+            "edge_error_ms": 11.765,
+            "clock_drift_ms": 0.003
+          },
+          "ready_to_paint_cpu": null
+        },
+        {
+          "transition": 23,
+          "cycle": 23,
+          "loading_hint_ms": 0.915,
+          "gap_ms": 86.074,
+          "click_to_first_frame_ms": 225.261,
+          "ready_to_paint_ms": 40.357,
+          "paint_signals_ms": 4.177,
+          "gap_cpu": {
+            "main_cpu_ms": [
+              62.5,
+              93.75
+            ],
+            "process_cpu_ms": [
+              62.5,
+              109.375
+            ],
+            "edge_error_ms": 14.032,
+            "clock_drift_ms": 0.0
+          },
+          "ready_to_paint_cpu": null
+        },
+        {
+          "transition": 24,
+          "cycle": 24,
+          "loading_hint_ms": 1.155,
+          "gap_ms": 100.281,
+          "click_to_first_frame_ms": 271.943,
+          "ready_to_paint_ms": 49.24,
+          "paint_signals_ms": 3.984,
+          "gap_cpu": {
+            "main_cpu_ms": [
+              78.125,
+              109.375
+            ],
+            "process_cpu_ms": [
+              78.125,
+              109.375
+            ],
+            "edge_error_ms": 14.905,
+            "clock_drift_ms": 0.003
+          },
+          "ready_to_paint_cpu": null
+        },
+        {
+          "transition": 25,
+          "cycle": 25,
+          "loading_hint_ms": 0.895,
+          "gap_ms": 82.638,
+          "click_to_first_frame_ms": 222.676,
+          "ready_to_paint_ms": 40.141,
+          "paint_signals_ms": 3.63,
+          "gap_cpu": {
+            "main_cpu_ms": [
+              62.5,
+              93.75
+            ],
+            "process_cpu_ms": [
+              62.5,
+              109.375
+            ],
+            "edge_error_ms": 14.763,
+            "clock_drift_ms": 0.002
+          },
+          "ready_to_paint_cpu": null
+        },
+        {
+          "transition": 26,
+          "cycle": 26,
+          "loading_hint_ms": 1.586,
+          "gap_ms": 108.701,
+          "click_to_first_frame_ms": 301.729,
+          "ready_to_paint_ms": 52.653,
+          "paint_signals_ms": 4.22,
+          "gap_cpu": {
+            "main_cpu_ms": [
+              93.75,
+              125.0
+            ],
+            "process_cpu_ms": [
+              93.75,
+              125.0
+            ],
+            "edge_error_ms": 13.474,
+            "clock_drift_ms": 0.0
+          },
+          "ready_to_paint_cpu": {
+            "main_cpu_ms": [
+              31.25,
+              62.5
+            ],
+            "process_cpu_ms": [
+              31.25,
+              62.5
+            ],
+            "edge_error_ms": 13.607,
+            "clock_drift_ms": 0.002
+          }
+        },
+        {
+          "transition": 27,
+          "cycle": 27,
+          "loading_hint_ms": 1.037,
+          "gap_ms": 98.456,
+          "click_to_first_frame_ms": 257.971,
+          "ready_to_paint_ms": 45.612,
+          "paint_signals_ms": 4.487,
+          "gap_cpu": {
+            "main_cpu_ms": [
+              93.75,
+              125.0
+            ],
+            "process_cpu_ms": [
+              93.75,
+              125.0
+            ],
+            "edge_error_ms": 13.379,
+            "clock_drift_ms": 0.002
+          },
+          "ready_to_paint_cpu": null
+        },
+        {
+          "transition": 28,
+          "cycle": 28,
+          "loading_hint_ms": 0.989,
+          "gap_ms": 85.02,
+          "click_to_first_frame_ms": 238.254,
+          "ready_to_paint_ms": 41.842,
+          "paint_signals_ms": 3.901,
+          "gap_cpu": {
+            "main_cpu_ms": [
+              62.5,
+              93.75
+            ],
+            "process_cpu_ms": [
+              62.5,
+              93.75
+            ],
+            "edge_error_ms": 13.256,
+            "clock_drift_ms": 0.001
+          },
+          "ready_to_paint_cpu": null
+        },
+        {
+          "transition": 29,
+          "cycle": 29,
+          "loading_hint_ms": 1.385,
+          "gap_ms": 84.456,
+          "click_to_first_frame_ms": 254.948,
+          "ready_to_paint_ms": 40.289,
+          "paint_signals_ms": 4.843,
+          "gap_cpu": {
+            "main_cpu_ms": [
+              78.125,
+              109.375
+            ],
+            "process_cpu_ms": [
+              78.125,
+              109.375
+            ],
+            "edge_error_ms": 14.974,
+            "clock_drift_ms": 0.004
+          },
+          "ready_to_paint_cpu": null
+        }
+      ]
+    },
+    "mixed": {
+      "execution": {
+        "candidate": "ea18f2cfaa3ef3160b3ff341c81daa52c33ae917",
+        "payload_files_unchanged": true,
+        "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+        "pck_sha256": "e417ec0fbd2d0a8c2ef0ef00db8332364d69e89eabd5ae5d8894e80c6c92b5c3",
+        "split_identity": "0e8823da1939be5751e49411abcd03208b55a6d315f44b497a8b5ae0aa8d45bd",
+        "exe_unchanged": true,
+        "exit_code": 0,
+        "seconds": 231.159,
+        "errors": [],
+        "warnings": [],
+        "log_sha256": "268658e6503477b4fcda751a4e1e909e7ad564fe97f8a58808be080f1f8beabd",
+        "thread_id": 35776,
+        "thread_samples_sha256": "c0fc019a15c6e10bfc77650ab2bc879caef0d30b10193b276ed131cfeb4d1114",
+        "report_sha256": "949116a68e4ba5938c10ae015a2cbf9494ed9991a71f6b5df0cbd0a87e6371ee"
+      },
+      "requested_seconds": 215.0,
+      "actual_seconds": 221.044,
+      "route": [
+        {
+          "level_id": "level1",
+          "mode": "campaign"
+        },
+        {
+          "level_id": "arena",
+          "mode": "arena"
+        },
+        {
+          "level_id": "skirmish",
+          "mode": "skirmish"
+        },
+        {
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai"
+        },
+        {
+          "level_id": "custom_defense",
+          "mode": "custom_defense"
+        },
+        {
+          "level_id": "level5",
+          "mode": "campaign"
+        }
+      ],
+      "viewport": [
+        1280,
+        720
+      ],
+      "renderer": {
+        "adapter": "NVIDIA GeForce RTX 4060 Laptop GPU",
+        "api": "1.4.357",
+        "display": "Windows",
+        "driver": "vulkan",
+        "godot": {
+          "build": "official",
+          "hash": "7d41c59c457bd5a245092b4e7eb2d833e3b3f8c3",
+          "hex": 263683,
+          "major": 4,
+          "minor": 6,
+          "patch": 3,
+          "status": "stable",
+          "string": "4.6.3-stable (official)",
+          "timestamp": 0
+        },
+        "method": "forward_plus",
+        "vendor": "NVIDIA",
+        "vsync": 0
+      },
+      "valid_transitions": 35,
+      "thread_samples": 14838,
+      "campaign_save": {
+        "after": {
+          "exists": false,
+          "sha256": "absent",
+          "size_bytes": 0
+        },
+        "before": {
+          "exists": false,
+          "sha256": "absent",
+          "size_bytes": 0
+        },
+        "unchanged": true
+      },
+      "gating_failures": [],
+      "resource_recovery": {
+        "node_count": {
+          "end": 74.0,
+          "end_delta_from_warm": 0.0,
+          "monotonic_growth_detected": false,
+          "peak": 74.0,
+          "recovered_from_peak": 0.0,
+          "recovery_passed": true,
+          "tolerance": 32.0,
+          "trend": {
+            "decreases": 0,
+            "first": 74.0,
+            "flat": 28,
+            "increases": 0,
+            "last": 74.0,
+            "near_monotonic": false,
+            "net": 0.0,
+            "samples": 29
+          },
+          "warm_baseline": 74.0
+        },
+        "orphan_node_count": {
+          "end": 0.0,
+          "end_delta_from_warm": 0.0,
+          "monotonic_growth_detected": false,
+          "peak": 0.0,
+          "recovered_from_peak": 0.0,
+          "recovery_passed": true,
+          "tolerance": 2.0,
+          "trend": {
+            "decreases": 0,
+            "first": 0.0,
+            "flat": 28,
+            "increases": 0,
+            "last": 0.0,
+            "near_monotonic": false,
+            "net": 0.0,
+            "samples": 29
+          },
+          "warm_baseline": 0.0
+        },
+        "object_count": {
+          "end": 2351.0,
+          "end_delta_from_warm": -13.0,
+          "monotonic_growth_detected": false,
+          "peak": 2364.0,
+          "recovered_from_peak": 13.0,
+          "recovery_passed": true,
+          "tolerance": 512.0,
+          "trend": {
+            "decreases": 1,
+            "first": 2364.0,
+            "flat": 25,
+            "increases": 2,
+            "last": 2363.0,
+            "near_monotonic": false,
+            "net": -1.0,
+            "samples": 29
+          },
+          "warm_baseline": 2364.0
+        },
+        "resource_count": {
+          "end": 361.0,
+          "end_delta_from_warm": 0.0,
+          "monotonic_growth_detected": false,
+          "peak": 361.0,
+          "recovered_from_peak": 0.0,
+          "recovery_passed": true,
+          "tolerance": 128.0,
+          "trend": {
+            "decreases": 0,
+            "first": 361.0,
+            "flat": 28,
+            "increases": 0,
+            "last": 361.0,
+            "near_monotonic": false,
+            "net": 0.0,
+            "samples": 29
+          },
+          "warm_baseline": 361.0
+        },
+        "render_texture_bytes": {
+          "end": 686206464.0,
+          "end_delta_from_warm": -34343424.0,
+          "monotonic_growth_detected": false,
+          "peak": 720549888.0,
+          "recovered_from_peak": 34343424.0,
+          "recovery_passed": true,
+          "tolerance": 33554432.0,
+          "trend": {
+            "decreases": 14,
+            "first": 699907584.0,
+            "flat": 4,
+            "increases": 10,
+            "last": 720549888.0,
+            "near_monotonic": false,
+            "net": 20642304.0,
+            "samples": 29
+          },
+          "warm_baseline": 720549888.0
+        },
+        "render_video_bytes": {
+          "end": 818143776.0,
+          "end_delta_from_warm": -29484848.0,
+          "monotonic_growth_detected": false,
+          "peak": 856437456.0,
+          "recovered_from_peak": 38293680.0,
+          "recovery_passed": true,
+          "tolerance": 67108864.0,
+          "trend": {
+            "decreases": 14,
+            "first": 824400160.0,
+            "flat": 4,
+            "increases": 10,
+            "last": 856430400.0,
+            "near_monotonic": false,
+            "net": 32030240.0,
+            "samples": 29
+          },
+          "warm_baseline": 847628624.0
+        },
+        "render_buffer_bytes": {
+          "end": 6107876.0,
+          "end_delta_from_warm": -3525980.0,
+          "monotonic_growth_detected": false,
+          "peak": 10054176.0,
+          "recovered_from_peak": 3946300.0,
+          "recovery_passed": true,
+          "tolerance": 67108864.0,
+          "trend": {
+            "decreases": 9,
+            "first": 7051480.0,
+            "flat": 9,
+            "increases": 10,
+            "last": 10047120.0,
+            "near_monotonic": false,
+            "net": 2995640.0,
+            "samples": 29
+          },
+          "warm_baseline": 9633856.0
+        },
+        "working_set_bytes": {
+          "end": 1131716608.0,
+          "end_delta_from_warm": 22810624.0,
+          "monotonic_growth_detected": false,
+          "peak": 1200521216.0,
+          "recovered_from_peak": 68804608.0,
+          "recovery_passed": true,
+          "tolerance": 134217728.0,
+          "trend": {
+            "decreases": 0,
+            "first": 1108905984.0,
+            "flat": 0,
+            "increases": 4,
+            "last": 1131716608.0,
+            "near_monotonic": false,
+            "net": 22810624.0,
+            "samples": 5
+          },
+          "warm_baseline": 1108905984.0
+        },
+        "private_bytes": {
+          "end": 2124525568.0,
+          "end_delta_from_warm": 23416832.0,
+          "monotonic_growth_detected": false,
+          "peak": 2124525568.0,
+          "recovered_from_peak": 0.0,
+          "recovery_passed": true,
+          "tolerance": 134217728.0,
+          "trend": {
+            "decreases": 0,
+            "first": 2101108736.0,
+            "flat": 0,
+            "increases": 4,
+            "last": 2124525568.0,
+            "near_monotonic": false,
+            "net": 23416832.0,
+            "samples": 5
+          },
+          "warm_baseline": 2101108736.0
+        }
+      },
+      "entry_visits": [
+        {
+          "transition": 5,
+          "cycle": 1,
+          "loading_hint_ms": 1.558,
+          "gap_ms": 89.274,
+          "click_to_first_frame_ms": 279.248,
+          "ready_to_paint_ms": 43.611,
+          "paint_signals_ms": 3.827,
+          "gap_cpu": {
+            "main_cpu_ms": [
+              62.5,
+              78.125
+            ],
+            "process_cpu_ms": [
+              62.5,
+              93.75
+            ],
+            "edge_error_ms": 12.523,
+            "clock_drift_ms": 0.003
+          },
+          "ready_to_paint_cpu": null
+        },
+        {
+          "transition": 11,
+          "cycle": 2,
+          "loading_hint_ms": 1.748,
+          "gap_ms": 109.247,
+          "click_to_first_frame_ms": 287.466,
+          "ready_to_paint_ms": 56.782,
+          "paint_signals_ms": 4.636,
+          "gap_cpu": {
+            "main_cpu_ms": [
+              93.75,
+              125.0
+            ],
+            "process_cpu_ms": [
+              93.75,
+              125.0
+            ],
+            "edge_error_ms": 8.716,
+            "clock_drift_ms": 0.027
+          },
+          "ready_to_paint_cpu": {
+            "main_cpu_ms": [
+              46.875,
+              78.125
+            ],
+            "process_cpu_ms": [
+              46.875,
+              78.125
+            ],
+            "edge_error_ms": 11.524,
+            "clock_drift_ms": 0.003
+          }
+        },
+        {
+          "transition": 17,
+          "cycle": 3,
+          "loading_hint_ms": 1.995,
+          "gap_ms": 378.872,
+          "click_to_first_frame_ms": 849.276,
+          "ready_to_paint_ms": 226.515,
+          "paint_signals_ms": 9.778,
+          "gap_cpu": {
+            "main_cpu_ms": [
+              312.5,
+              328.125
+            ],
+            "process_cpu_ms": [
+              312.5,
+              328.125
+            ],
+            "edge_error_ms": 14.423,
+            "clock_drift_ms": 0.002
+          },
+          "ready_to_paint_cpu": {
+            "main_cpu_ms": [
+              171.875,
+              187.5
+            ],
+            "process_cpu_ms": [
+              171.875,
+              187.5
+            ],
+            "edge_error_ms": 13.887,
+            "clock_drift_ms": 0.001
+          }
+        },
+        {
+          "transition": 23,
+          "cycle": 4,
+          "loading_hint_ms": 1.353,
+          "gap_ms": 107.51,
+          "click_to_first_frame_ms": 281.932,
+          "ready_to_paint_ms": 49.197,
+          "paint_signals_ms": 4.684,
+          "gap_cpu": {
+            "main_cpu_ms": [
+              93.75,
+              125.0
+            ],
+            "process_cpu_ms": [
+              93.75,
+              125.0
+            ],
+            "edge_error_ms": 14.747,
+            "clock_drift_ms": 0.0
+          },
+          "ready_to_paint_cpu": null
+        },
+        {
+          "transition": 29,
+          "cycle": 5,
+          "loading_hint_ms": 1.236,
+          "gap_ms": 93.03,
+          "click_to_first_frame_ms": 246.824,
+          "ready_to_paint_ms": 43.452,
+          "paint_signals_ms": 3.838,
+          "gap_cpu": {
+            "main_cpu_ms": [
+              78.125,
+              109.375
+            ],
+            "process_cpu_ms": [
+              78.125,
+              109.375
+            ],
+            "edge_error_ms": 15.731,
+            "clock_drift_ms": 0.002
+          },
+          "ready_to_paint_cpu": null
+        },
+        {
+          "transition": 35,
+          "cycle": 6,
+          "loading_hint_ms": 1.19,
+          "gap_ms": 90.637,
+          "click_to_first_frame_ms": 246.153,
+          "ready_to_paint_ms": 44.257,
+          "paint_signals_ms": 4.126,
+          "gap_cpu": {
+            "main_cpu_ms": [
+              78.125,
+              109.375
+            ],
+            "process_cpu_ms": [
+              78.125,
+              109.375
+            ],
+            "edge_error_ms": 13.927,
+            "clock_drift_ms": 0.001
+          },
+          "ready_to_paint_cpu": null
+        }
+      ]
+    }
+  }
+}
