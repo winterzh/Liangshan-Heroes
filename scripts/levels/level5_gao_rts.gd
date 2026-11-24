@@ -30,6 +30,7 @@ const FIRE_SAFE := Vector2i(32,50)
 const FIRE_WITHDRAW_SLOTS := [Vector2i(-1, -1), Vector2i(0, 1)]
 const WITHDRAW_ESCORT_SHIPS := "gao_withdraw_escort_ships"
 const RETURN_LIU_TANG := "gao_return_liu_tang"
+const RECRUIT_LIU_TANG := "gao_recruit_liu_tang"
 const WITHDRAW_ACTION := "gao_fire_withdraw"
 const RETURN_ACTION := "gao_liu_return"
 const WITHDRAW_PROMPT := "火船已点燃。点「撤出接应船」让两船驶向安全水域；附近有官船时，先压退追兵。"
@@ -446,6 +447,31 @@ func _sync_fire_route_button(b, button_id: String, label: String, tooltip: Strin
 		button = b.mission.add_level_button(button_id, label, tooltip)
 		button.get_parent().move_child(button, 0)
 		b.mission.reveal_primary_level_button()
+
+
+func _offers_liu_tang_recruitment(b) -> bool:
+	return b.phase == b.Phase.FIGHT and not b.hud.touch_ui and alive(hall) \
+		and b.mission.has_event("liu_tang_lost") and not hall._train_queue.has("liu_tang") \
+		and b.count_alive(Unit.FACTION_LIANG, "liu_tang") == 0
+
+
+func _sync_recruit_liu_tang_button(b) -> void:
+	var button: Button = b.mission.find_level_button(RECRUIT_LIU_TANG)
+	if not _offers_liu_tang_recruitment(b):
+		if button != null:
+			button.get_parent().remove_child(button)
+			button.queue_free()
+	elif button == null:
+		button = b.mission.add_level_button(RECRUIT_LIU_TANG, "付费重募刘唐",
+			"在忠义堂按正常价格排队重募刘唐。完成后，他将在岸上出阵。")
+		button.get_parent().move_child(button, 0)
+		b.mission.reveal_primary_level_button()
+
+
+func _recruit_liu_tang(b) -> void:
+	if _offers_liu_tang_recruitment(b) and b.queue_train(hall, "liu_tang"):
+		_sync_recruit_liu_tang_button(b)
+		b.mission.set_feedback("刘唐已加入忠义堂的训练队列。")
 
 
 func _order_fire_route(b, button_id: String) -> void:
@@ -868,6 +894,7 @@ func _wave_warning(b, index: int) -> String:
 
 
 func _update_wave_objective(b) -> void:
+	_sync_recruit_liu_tang_button(b)
 	_sync_fire_route_button(b, WITHDRAW_ESCORT_SHIPS, "撤出接应船", "派阮小二和阮小五驶向安全水域。两船到齐并压退附近官船后才算撤离。")
 	_sync_fire_route_button(b, RETURN_LIU_TANG, "送刘唐返港", "派载刘唐的原船返回主码头。靠岸并清开登陆点后，刘唐才能下船。")
 	if core_ready: return
@@ -929,6 +956,7 @@ func process(b,delta: float) -> void:
 func activate_mission_button(b, button_id: String) -> void:
 	if button_id == "gao_end": _finish(b)
 	elif button_id == "gao_escort": _order_prisoner_escort(b)
+	elif button_id == RECRUIT_LIU_TANG: _recruit_liu_tang(b)
 	elif button_id == WITHDRAW_ESCORT_SHIPS or button_id == RETURN_LIU_TANG:
 		_order_fire_route(b, button_id)
 func on_unit_resolved(b,u,outcome: String) -> void:
@@ -952,6 +980,7 @@ func on_unit_died(b,u) -> void:
 		b.mission.mark("liu_tang_lost",reason)
 		b.mission.block_action("gao_liu_return","载船已损失，刘唐失散；可在忠义堂付费重新集结。")
 		_fire_unavailable(b,reason)
+		_sync_recruit_liu_tang_button(b)
 	if u==posts[0]: b.mission.mark("gao_land_post_destroyed","山前补给营被拆，停止该处所有陆军补充，北侧资源可争取。")
 	if u==posts[1]: b.mission.mark("gao_sea_post_destroyed","东岸官军船坞被拆，停止该处所有战船补充。")
 	if u==flagship: flagship_disabled=true; _capture_failed(b,"座船已沉，未能生擒高俅")
