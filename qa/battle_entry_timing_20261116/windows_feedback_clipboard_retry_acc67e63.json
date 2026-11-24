@@ -1,0 +1,489 @@
+{
+  "source_scope": "Windows native pause and debrief controls on an invisible independent window station with an initially empty clipboard, using private profiles",
+  "clipboard_observer": "Test fixture injects the mouse event only into the rendered game window. A second process reads CF_UNICODETEXT on the separate station and compares exact UTF-8 SHA-256 after CRLF normalization. The interactive window station is only checked for format count and sequence number.",
+  "test_scope": "Four locales on both pause and debrief with fixed report rows. The debrief is shown as a scene fixture. One controlled locked clipboard attempt before the first ordinary click.",
+  "baseline": {
+    "candidate": {
+      "kind": "local_integrated_windows_candidate",
+      "layout": "split_pck",
+      "commit": "bdafa9ee166d8fee1d63284695c73b5f00281ac8",
+      "source_version": "source-v1:a8bf3531b4974c24fc52cb04499b4e12132710b328a4fd4ed032bf957ac78e87",
+      "tracked_runtime_count": 6574,
+      "steps": [
+        {
+          "stage": "import",
+          "exit_code": 0,
+          "errors": [],
+          "seconds": 71.33
+        },
+        {
+          "stage": "export",
+          "exit_code": 0,
+          "errors": [],
+          "seconds": 94.16
+        }
+      ],
+      "files": [
+        {
+          "path": "GODOTSTEAM_LICENSE.txt",
+          "bytes": 1110,
+          "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+        },
+        {
+          "path": "LiangshanHeroes.exe",
+          "bytes": 104886784,
+          "sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4"
+        },
+        {
+          "path": "LiangshanHeroes.pck",
+          "bytes": 1722727884,
+          "sha256": "bad27527aa1b68c36328f54574a5d3349283b7378c20d27179873689b87cfbf0"
+        },
+        {
+          "path": "libgodotsteam.windows.template_release.x86_64.dll",
+          "bytes": 3961344,
+          "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+        },
+        {
+          "path": "steam_api64.dll",
+          "bytes": 319128,
+          "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+        },
+        {
+          "path": "steam_stats_reader.dll",
+          "bytes": 393728,
+          "sha256": "5a79a77b5b6e2cff21b285c785118352805a09d91876f89276af119ee1702517"
+        },
+        {
+          "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+          "bytes": 1093,
+          "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+        }
+      ]
+    },
+    "split_identity": "8546058bfe8c5c20f78ca2e0e1e7299b0850874d1052e71a639b4b79274a7bc1",
+    "expected_retry_label": false,
+    "initial_interactive_station": [
+      6,
+      844
+    ],
+    "fixture_sha256": "bd5072f46d09b816c5d803265c291b9b5184f25d04ebbf2417cf2d0d16931e84",
+    "attempts": {
+      "busy": {
+        "external_clipboard_sha256": null,
+        "expected_sha256": null,
+        "observer_locked_private_clipboard": true,
+        "readback_matches": true,
+        "button_reported_success": true,
+        "button_reported_retry": false,
+        "button_label": "已复制本局信息"
+      },
+      "pause-zh_CN": {
+        "external_clipboard_sha256": "11e6082f924e0910819bbea13a67d405964c818068698ed71d2254d20d1fb6c5",
+        "expected_sha256": "11e6082f924e0910819bbea13a67d405964c818068698ed71d2254d20d1fb6c5",
+        "observer_locked_private_clipboard": false,
+        "readback_matches": true,
+        "button_reported_success": true,
+        "button_reported_retry": false,
+        "button_label": "已复制本局信息"
+      },
+      "pause-zh_TW": {
+        "external_clipboard_sha256": "088d364397b7d734fd3598712985c7eff90bf956f4db7e739f3277519be2ceeb",
+        "expected_sha256": "088d364397b7d734fd3598712985c7eff90bf956f4db7e739f3277519be2ceeb",
+        "observer_locked_private_clipboard": false,
+        "readback_matches": true,
+        "button_reported_success": true,
+        "button_reported_retry": false,
+        "button_label": "已複製本局資訊"
+      },
+      "pause-en": {
+        "external_clipboard_sha256": "afd75dc0c0f196b4c98d890e668a82eb33a2a5f1e5b87ce518925e384d5394b1",
+        "expected_sha256": "afd75dc0c0f196b4c98d890e668a82eb33a2a5f1e5b87ce518925e384d5394b1",
+        "observer_locked_private_clipboard": false,
+        "readback_matches": true,
+        "button_reported_success": true,
+        "button_reported_retry": false,
+        "button_label": "Battle details copied"
+      },
+      "pause-ja": {
+        "external_clipboard_sha256": "324b1cbebe3a2c1519c806d043cd49bb98a318bca63235eb313d14612af9f2a8",
+        "expected_sha256": "324b1cbebe3a2c1519c806d043cd49bb98a318bca63235eb313d14612af9f2a8",
+        "observer_locked_private_clipboard": false,
+        "readback_matches": true,
+        "button_reported_success": true,
+        "button_reported_retry": false,
+        "button_label": "戦闘情報をコピーしました"
+      },
+      "debrief-zh_CN": {
+        "external_clipboard_sha256": "af00904b0c4283bf306fa141d7fe6a683ee026db6bd6fdcc4e9b6b93e69d5e77",
+        "expected_sha256": "af00904b0c4283bf306fa141d7fe6a683ee026db6bd6fdcc4e9b6b93e69d5e77",
+        "observer_locked_private_clipboard": false,
+        "readback_matches": true,
+        "button_reported_success": true,
+        "button_reported_retry": false,
+        "button_label": "已复制本局信息"
+      },
+      "debrief-zh_TW": {
+        "external_clipboard_sha256": "a86f992487ee2d87dc5efb22939c166a45043fee3524280b674d0fa9f3cc36d3",
+        "expected_sha256": "a86f992487ee2d87dc5efb22939c166a45043fee3524280b674d0fa9f3cc36d3",
+        "observer_locked_private_clipboard": false,
+        "readback_matches": true,
+        "button_reported_success": true,
+        "button_reported_retry": false,
+        "button_label": "已複製本局資訊"
+      },
+      "debrief-en": {
+        "external_clipboard_sha256": "0874daf30abc0243d00c066da5472723d820fa982d81a22dfbf30aaffb4468ff",
+        "expected_sha256": "0874daf30abc0243d00c066da5472723d820fa982d81a22dfbf30aaffb4468ff",
+        "observer_locked_private_clipboard": false,
+        "readback_matches": true,
+        "button_reported_success": true,
+        "button_reported_retry": false,
+        "button_label": "Battle details copied"
+      },
+      "debrief-ja": {
+        "external_clipboard_sha256": "e327d8ffb97dee705f3e79b60ef7fb5f99ae8222f32f92cd445d71246d479796",
+        "expected_sha256": "e327d8ffb97dee705f3e79b60ef7fb5f99ae8222f32f92cd445d71246d479796",
+        "observer_locked_private_clipboard": false,
+        "readback_matches": true,
+        "button_reported_success": true,
+        "button_reported_retry": false,
+        "button_label": "戦闘情報をコピーしました"
+      }
+    },
+    "complete": false,
+    "private_station_initially_empty": true,
+    "child_private_desktop_verified": true,
+    "exit_code": 0,
+    "engine_errors": [
+      "ERROR: Unable to open clipboard."
+    ],
+    "renderer_log": "OpenGL API 3.3.0 NVIDIA 621.24 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce RTX 4060 Laptop GPU",
+    "log_sha256": "f5469f7c8b762a5a504a8f66a51b9e4a6f80896579a8724bfa9ff3863bd213f7",
+    "game": {
+      "busy": {
+        "id": "busy",
+        "label": "已复制本局信息",
+        "reported_retry": false,
+        "reported_success": true,
+        "sha256": "11e6082f924e0910819bbea13a67d405964c818068698ed71d2254d20d1fb6c5"
+      },
+      "checks": 33,
+      "copies": [
+        {
+          "id": "pause-zh_CN",
+          "label": "已复制本局信息",
+          "reported_retry": false,
+          "reported_success": true,
+          "sha256": "11e6082f924e0910819bbea13a67d405964c818068698ed71d2254d20d1fb6c5"
+        },
+        {
+          "id": "pause-zh_TW",
+          "label": "已複製本局資訊",
+          "reported_retry": false,
+          "reported_success": true,
+          "sha256": "088d364397b7d734fd3598712985c7eff90bf956f4db7e739f3277519be2ceeb"
+        },
+        {
+          "id": "pause-en",
+          "label": "Battle details copied",
+          "reported_retry": false,
+          "reported_success": true,
+          "sha256": "afd75dc0c0f196b4c98d890e668a82eb33a2a5f1e5b87ce518925e384d5394b1"
+        },
+        {
+          "id": "pause-ja",
+          "label": "戦闘情報をコピーしました",
+          "reported_retry": false,
+          "reported_success": true,
+          "sha256": "324b1cbebe3a2c1519c806d043cd49bb98a318bca63235eb313d14612af9f2a8"
+        },
+        {
+          "id": "debrief-zh_CN",
+          "label": "已复制本局信息",
+          "reported_retry": false,
+          "reported_success": true,
+          "sha256": "af00904b0c4283bf306fa141d7fe6a683ee026db6bd6fdcc4e9b6b93e69d5e77"
+        },
+        {
+          "id": "debrief-zh_TW",
+          "label": "已複製本局資訊",
+          "reported_retry": false,
+          "reported_success": true,
+          "sha256": "a86f992487ee2d87dc5efb22939c166a45043fee3524280b674d0fa9f3cc36d3"
+        },
+        {
+          "id": "debrief-en",
+          "label": "Battle details copied",
+          "reported_retry": false,
+          "reported_success": true,
+          "sha256": "0874daf30abc0243d00c066da5472723d820fa982d81a22dfbf30aaffb4468ff"
+        },
+        {
+          "id": "debrief-ja",
+          "label": "戦闘情報をコピーしました",
+          "reported_retry": false,
+          "reported_success": true,
+          "sha256": "e327d8ffb97dee705f3e79b60ef7fb5f99ae8222f32f92cd445d71246d479796"
+        }
+      ],
+      "failures": [],
+      "viewport": [
+        1280,
+        720
+      ]
+    },
+    "payload_unchanged": true,
+    "final_interactive_station": [
+      6,
+      844
+    ],
+    "interactive_metadata_equal": true
+  },
+  "fixed": {
+    "candidate": {
+      "kind": "local_integrated_windows_candidate",
+      "layout": "split_pck",
+      "commit": "acc67e6328c576e690efd7365e2c1933ebf6f709",
+      "source_version": "source-v1:e0c5342372cfe4ee2a756f154229965a73373f0314dd29c39662cbe880c0050f",
+      "tracked_runtime_count": 6574,
+      "steps": [
+        {
+          "stage": "import",
+          "exit_code": 0,
+          "errors": [],
+          "seconds": 65.2
+        },
+        {
+          "stage": "export",
+          "exit_code": 0,
+          "errors": [],
+          "seconds": 83.61
+        }
+      ],
+      "files": [
+        {
+          "path": "GODOTSTEAM_LICENSE.txt",
+          "bytes": 1110,
+          "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+        },
+        {
+          "path": "LiangshanHeroes.exe",
+          "bytes": 104886784,
+          "sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4"
+        },
+        {
+          "path": "LiangshanHeroes.pck",
+          "bytes": 1722728060,
+          "sha256": "44c0d36b61b08ee8ff0a49468d15f28ee16d56d0e91ff6f9e63c8e8f2e04dd59"
+        },
+        {
+          "path": "libgodotsteam.windows.template_release.x86_64.dll",
+          "bytes": 3961344,
+          "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+        },
+        {
+          "path": "steam_api64.dll",
+          "bytes": 319128,
+          "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+        },
+        {
+          "path": "steam_stats_reader.dll",
+          "bytes": 393728,
+          "sha256": "5a79a77b5b6e2cff21b285c785118352805a09d91876f89276af119ee1702517"
+        },
+        {
+          "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+          "bytes": 1093,
+          "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+        }
+      ]
+    },
+    "split_identity": "03c7ace6b355c2a4c5a31d7dc7192d34b73f7df8fd85596c38984813c5555622",
+    "expected_retry_label": true,
+    "initial_interactive_station": [
+      6,
+      844
+    ],
+    "fixture_sha256": "bd5072f46d09b816c5d803265c291b9b5184f25d04ebbf2417cf2d0d16931e84",
+    "attempts": {
+      "busy": {
+        "external_clipboard_sha256": null,
+        "expected_sha256": null,
+        "observer_locked_private_clipboard": true,
+        "readback_matches": true,
+        "button_reported_success": false,
+        "button_reported_retry": true,
+        "button_label": "复制失败，点此重试"
+      },
+      "pause-zh_CN": {
+        "external_clipboard_sha256": "12933dee85f13b3b0455a66798f3adad7e108615fbd0aeda4a2b82b5b36f86a0",
+        "expected_sha256": "12933dee85f13b3b0455a66798f3adad7e108615fbd0aeda4a2b82b5b36f86a0",
+        "observer_locked_private_clipboard": false,
+        "readback_matches": true,
+        "button_reported_success": true,
+        "button_reported_retry": false,
+        "button_label": "已复制本局信息"
+      },
+      "pause-zh_TW": {
+        "external_clipboard_sha256": "14dc94b3f5817c9d6aea6c6f626047ba3eeeb79fdbbe535d5e64fa088085919c",
+        "expected_sha256": "14dc94b3f5817c9d6aea6c6f626047ba3eeeb79fdbbe535d5e64fa088085919c",
+        "observer_locked_private_clipboard": false,
+        "readback_matches": true,
+        "button_reported_success": true,
+        "button_reported_retry": false,
+        "button_label": "已複製本局資訊"
+      },
+      "pause-en": {
+        "external_clipboard_sha256": "0eb7429e3028b54c7bfeebebce5c581c1ce638f37af12c5eeee777febcc70242",
+        "expected_sha256": "0eb7429e3028b54c7bfeebebce5c581c1ce638f37af12c5eeee777febcc70242",
+        "observer_locked_private_clipboard": false,
+        "readback_matches": true,
+        "button_reported_success": true,
+        "button_reported_retry": false,
+        "button_label": "Battle details copied"
+      },
+      "pause-ja": {
+        "external_clipboard_sha256": "410108fd0e41714051e5113d53ee9771318b5d8fc002ddda4f17c16a44dac0c9",
+        "expected_sha256": "410108fd0e41714051e5113d53ee9771318b5d8fc002ddda4f17c16a44dac0c9",
+        "observer_locked_private_clipboard": false,
+        "readback_matches": true,
+        "button_reported_success": true,
+        "button_reported_retry": false,
+        "button_label": "戦闘情報をコピーしました"
+      },
+      "debrief-zh_CN": {
+        "external_clipboard_sha256": "5bc6ba27bb68764df59a7de6c26c02fa3e98b2c0a07b17b945ab729770132b16",
+        "expected_sha256": "5bc6ba27bb68764df59a7de6c26c02fa3e98b2c0a07b17b945ab729770132b16",
+        "observer_locked_private_clipboard": false,
+        "readback_matches": true,
+        "button_reported_success": true,
+        "button_reported_retry": false,
+        "button_label": "已复制本局信息"
+      },
+      "debrief-zh_TW": {
+        "external_clipboard_sha256": "efd69c9bf552494e6b2e506a406356a52ccad48b9172b9eba25187fa8d9f34b2",
+        "expected_sha256": "efd69c9bf552494e6b2e506a406356a52ccad48b9172b9eba25187fa8d9f34b2",
+        "observer_locked_private_clipboard": false,
+        "readback_matches": true,
+        "button_reported_success": true,
+        "button_reported_retry": false,
+        "button_label": "已複製本局資訊"
+      },
+      "debrief-en": {
+        "external_clipboard_sha256": "02496348e705a991eb97928b70782f31887b2c1e4ef56d4624860c62359560bf",
+        "expected_sha256": "02496348e705a991eb97928b70782f31887b2c1e4ef56d4624860c62359560bf",
+        "observer_locked_private_clipboard": false,
+        "readback_matches": true,
+        "button_reported_success": true,
+        "button_reported_retry": false,
+        "button_label": "Battle details copied"
+      },
+      "debrief-ja": {
+        "external_clipboard_sha256": "de51e9f7b4c46554b5919c9dacb96bc73d8f550ba569b4b96082406fa7981e2c",
+        "expected_sha256": "de51e9f7b4c46554b5919c9dacb96bc73d8f550ba569b4b96082406fa7981e2c",
+        "observer_locked_private_clipboard": false,
+        "readback_matches": true,
+        "button_reported_success": true,
+        "button_reported_retry": false,
+        "button_label": "戦闘情報をコピーしました"
+      }
+    },
+    "complete": true,
+    "cleared_prior_test_text": true,
+    "private_station_initially_empty": true,
+    "child_private_desktop_verified": true,
+    "exit_code": 0,
+    "engine_errors": [
+      "ERROR: Unable to open clipboard.",
+      "ERROR: Unable to open clipboard."
+    ],
+    "expected_busy_api_errors": [
+      "ERROR: Unable to open clipboard. at: clipboard_set (platform/windows/display_server_windows.cpp:1008)",
+      "ERROR: Unable to open clipboard. at: clipboard_get (platform/windows/display_server_windows.cpp:1046)"
+    ],
+    "unexpected_engine_errors": [],
+    "renderer_log": "OpenGL API 3.3.0 NVIDIA 621.24 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce RTX 4060 Laptop GPU",
+    "log_sha256": "11428cf57fddade896d36028119141b3444a3a2daf1e06a87e4e2a3288c48503",
+    "game": {
+      "busy": {
+        "id": "busy",
+        "label": "复制失败，点此重试",
+        "reported_retry": true,
+        "reported_success": false,
+        "sha256": "12933dee85f13b3b0455a66798f3adad7e108615fbd0aeda4a2b82b5b36f86a0"
+      },
+      "checks": 33,
+      "copies": [
+        {
+          "id": "pause-zh_CN",
+          "label": "已复制本局信息",
+          "reported_retry": false,
+          "reported_success": true,
+          "sha256": "12933dee85f13b3b0455a66798f3adad7e108615fbd0aeda4a2b82b5b36f86a0"
+        },
+        {
+          "id": "pause-zh_TW",
+          "label": "已複製本局資訊",
+          "reported_retry": false,
+          "reported_success": true,
+          "sha256": "14dc94b3f5817c9d6aea6c6f626047ba3eeeb79fdbbe535d5e64fa088085919c"
+        },
+        {
+          "id": "pause-en",
+          "label": "Battle details copied",
+          "reported_retry": false,
+          "reported_success": true,
+          "sha256": "0eb7429e3028b54c7bfeebebce5c581c1ce638f37af12c5eeee777febcc70242"
+        },
+        {
+          "id": "pause-ja",
+          "label": "戦闘情報をコピーしました",
+          "reported_retry": false,
+          "reported_success": true,
+          "sha256": "410108fd0e41714051e5113d53ee9771318b5d8fc002ddda4f17c16a44dac0c9"
+        },
+        {
+          "id": "debrief-zh_CN",
+          "label": "已复制本局信息",
+          "reported_retry": false,
+          "reported_success": true,
+          "sha256": "5bc6ba27bb68764df59a7de6c26c02fa3e98b2c0a07b17b945ab729770132b16"
+        },
+        {
+          "id": "debrief-zh_TW",
+          "label": "已複製本局資訊",
+          "reported_retry": false,
+          "reported_success": true,
+          "sha256": "efd69c9bf552494e6b2e506a406356a52ccad48b9172b9eba25187fa8d9f34b2"
+        },
+        {
+          "id": "debrief-en",
+          "label": "Battle details copied",
+          "reported_retry": false,
+          "reported_success": true,
+          "sha256": "02496348e705a991eb97928b70782f31887b2c1e4ef56d4624860c62359560bf"
+        },
+        {
+          "id": "debrief-ja",
+          "label": "戦闘情報をコピーしました",
+          "reported_retry": false,
+          "reported_success": true,
+          "sha256": "de51e9f7b4c46554b5919c9dacb96bc73d8f550ba569b4b96082406fa7981e2c"
+        }
+      ],
+      "failures": [],
+      "viewport": [
+        1280,
+        720
+      ]
+    },
+    "payload_unchanged": true,
+    "test_clipboard_cleared": true,
+    "final_interactive_station": [
+      6,
+      844
+    ],
+    "interactive_metadata_equal": true
+  }
+}
