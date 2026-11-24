@@ -1,5 +1,9 @@
 # 当前开发计划（2026-10-30）
 
+## 2026-11-24 高俅关 Windows 地图分段加载
+
+Windows 选关开始高俅关时，在加载画面内准备梁山地形、寻路和布景。开场对白、部队和任务在场景挂载后初始化。32 次同机对照中，重进最长间隔中位数从 134.5 到 95.1 毫秒。高俅关正式版旧档续玩检查通过。 [出征对照与分段](../qa/battle_entry_timing_20261116/windows_gao_prepared_map_27e27e9f.json) [六入口十分钟收据](../qa/battle_entry_timing_20261116/windows_candidate_27e27e9f_mode_soak_600.json)
+
 ## 2026-11-24 黄泥冈 Windows 地图分段加载
 
 Windows 从菜单开始黄泥冈时，加载画面先画出，随后在最后一帧加载画面前准备地形、寻路和场景物件。开场对白、部队和任务在场景挂载后按原入口初始化。首进到战场首帧中位数 457.5 → 378.0 毫秒。 [黄泥冈出征对照](../qa/battle_entry_timing_20261116/windows_huangnigang_prepared_map_fb1da805.json) [六入口十分钟收据](../qa/battle_entry_timing_20261116/windows_candidate_fb1da805_mode_soak_600.json)
