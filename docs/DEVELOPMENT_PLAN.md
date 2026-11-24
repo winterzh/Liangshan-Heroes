@@ -1,5 +1,9 @@
 # 当前开发计划（2026-10-30）
 
+## 2026-11-24 自定义驻守 Windows 地图分段加载
+
+Windows 从已保存预设开始自定义驻守时，在加载画面内准备地形、寻路和布景。预设数值仍在正局部署时应用。重进最长间隔的中位数从 133.5 到 95.3 毫秒。已核对两份不同预设。 [实际预设对照](../qa/battle_entry_timing_20261116/windows_custom_defense_prepared_map_f76e44fd.json) [六入口长测](../qa/battle_entry_timing_20261116/windows_candidate_f76e44fd_mode_soak_600.json)
+
 ## 2026-11-24 高俅关 Windows 地图分段加载
 
 Windows 选关开始高俅关时，在加载画面内准备梁山地形、寻路和布景。开场对白、部队和任务在场景挂载后初始化。32 次同机对照中，重进最长间隔中位数从 134.5 到 95.1 毫秒。高俅关正式版旧档续玩检查通过。 [出征对照与分段](../qa/battle_entry_timing_20261116/windows_gao_prepared_map_27e27e9f.json) [六入口十分钟收据](../qa/battle_entry_timing_20261116/windows_candidate_27e27e9f_mode_soak_600.json)
