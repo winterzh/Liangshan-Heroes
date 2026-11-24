@@ -1403,19 +1403,21 @@ func _phys_body(delta: float) -> void:
 	# 梁山兵熟悉水泊、补给充足，脱战 6 秒后缓慢回血；官军远征无此待遇
 	_combat_cool = maxf(0.0, _combat_cool - delta)
 	_hit_recent_t = maxf(0.0, _hit_recent_t - delta)
-	var regen := 0.0
-	if faction == FACTION_LIANG and _combat_cool <= 0.0:
-		regen += 2.5
-	var passive_regen := _passive_regen()
-	regen += passive_regen    # 被动回血（如宋江·仁义）：战斗中也生效
-	if regen > 0.0 and hp < max_hp:
-		var hp_before_regen := hp
-		hp = minf(max_hp, hp + regen * delta)
-		# 只把英雄被动产生的份额计入治疗；通用脱战补给不算英雄战绩。
-		if _track_combat_stats and passive_regen > 0.0 and battle != null:
-			var effective_regen := hp - hp_before_regen
-			battle.record_hero_combat_healing(self, self, effective_regen * passive_regen / regen)
-		_request_redraw()
+	# 只有受伤时才汇总英雄被动与装备回血。
+	if hp < max_hp:
+		var regen := 0.0
+		if faction == FACTION_LIANG and _combat_cool <= 0.0:
+			regen += 2.5
+		var passive_regen := _passive_regen()
+		regen += passive_regen
+		if regen > 0.0:
+			var hp_before_regen := hp
+			hp = minf(max_hp, hp + regen * delta)
+			# 只把英雄被动产生的份额计入治疗；通用脱战补给不算英雄战绩。
+			if _track_combat_stats and passive_regen > 0.0 and battle != null:
+				var effective_regen := hp - hp_before_regen
+				battle.record_hero_combat_healing(self, self, effective_regen * passive_regen / regen)
+			_request_redraw()
 
 	# 技能冷却/充能（各槽）与临时增益计时
 	_tick_ability_slots(delta)
