@@ -1,5 +1,9 @@
 # 八幕战役后续开发路线图
 
+## M6 快活林开打前的路线选择
+
+快活林开打前，PC 任务栏可点「去下一家饮酒」或「到店挑衅」。前者每次只派武松走一处酒望，后者可跳过剩余酒望，武松到店办理后才引出蒋门神。停止和改道沿用原指令。 [Windows 验收收据](../qa/campaign_counter_window_20261116/windows_kuaihuolin_pc_road_dfe197b3.json)
+
 ## M5 高俅火攻路线到自然结算
 
 同一 Windows 成品从撤船和返港操作接到三批核心兵力清除、打停座船和张顺接俘。新进程接回在途押堂，原俘虏按原令到忠义堂，演义 4/4。 [Windows 结算验收](../qa/campaign_fire_readiness_20261116/windows_gao_pc_terminal_9289bd84.json)

@@ -1,5 +1,9 @@
 # 当前项目总览
 
+## Windows 快活林开场路线
+
+候选 dfe197b3 从正式 Build 26873421 的开场原档验证了饮一处、改去酒店和跳过全部酒望两路。两次在途保存及独立重开，四语窄窗和停止重下均通过。四个离线进程共 63 项。 [Windows 验收收据](../qa/campaign_counter_window_20261116/windows_kuaihuolin_pc_road_dfe197b3.json)
+
 ## Windows 高俅火攻后的整关结算
 
 候选 9289bd84 用同一正式版衍生路线，从返港在途档继续到押堂，在第 581.47 游戏秒结算演义 4/4。三个隔离进程通过 43 项。独立重启拒绝已结算旧槽，本地战果及存档摘要一致。Steam 在线奖励、云存档与真人体验另验。 [Windows 结算验收](../qa/campaign_fire_readiness_20261116/windows_gao_pc_terminal_9289bd84.json)

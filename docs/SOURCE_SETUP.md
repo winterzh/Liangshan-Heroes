@@ -1,5 +1,9 @@
 # 源码设置与换机（2026-10-30）
 
+## 快活林开场任务按钮
+
+开场行军沿用原旗标的移动意图与存档。路线按钮从旧档的现存动作和酒望状态恢复。饮酒仍按原到场判定增攻，决斗阶段清除开场按钮。 [Windows 验收收据](../qa/campaign_counter_window_20261116/windows_kuaihuolin_pc_road_dfe197b3.json)
+
 ## 高俅撤船与押堂存档衔接
 
 复用已验收的第 3 代档和原出征身份。第 4 代保存普通岸军和俘虏移动路径及命令关联，独立启动以原路径完成。同局自然终局后，继续入口按原账本拒绝旧槽。 [Windows 结算验收](../qa/campaign_fire_readiness_20261116/windows_gao_pc_terminal_9289bd84.json)
