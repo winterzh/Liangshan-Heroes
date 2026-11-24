@@ -615,6 +615,13 @@ func _following_south_siege(unit: Unit, route: Array[Vector2], entry: int) -> bo
 	return true
 
 
+func _marching_south_siege(unit: Unit, map: GameMap) -> bool:
+	if not _south_siege_actor(unit) or unit._state != Unit.ST_MOVE:
+		return false
+	var entry := _south_siege_entry(map.world_to_cell(unit.position))
+	return _following_south_siege(unit, _south_siege_route(map, unit), entry)
+
+
 func _south_siege_path_open(map: GameMap, unit: Unit, route: Array[Vector2], entry: int) -> bool:
 	var from := unit.position
 	for i in range(entry, route.size()):
@@ -785,6 +792,9 @@ func _update_briefing(b) -> void:
 	if arrived:
 		objective = "投石车已到敌营东侧。选中东侧投石车，右键可见的官军大营攻城。" if briefing == CAPTURED_COUNTER_BRIEFING \
 			else "投石车已到敌营东侧。想生擒韩滔，先击败他，再选中投石车攻营。"
+	elif south_siege_available and b.units.any(_marching_south_siege.bind(b.map)):
+		objective = "投石车正在绕南侧。用步军牵制守军，投石车到东侧后再下令攻营。" if briefing == CAPTURED_COUNTER_BRIEFING \
+			else "投石车正在绕南侧。想生擒韩滔，先击败他，再下令攻营。"
 	elif south_siege_available:
 		objective = "韩滔已被生擒。可让投石车绕南侧，步军在正面牵制。投石车到位后，请下令攻营。" if briefing == CAPTURED_COUNTER_BRIEFING \
 			else "十二骑已击溃。可让投石车绕南侧，到位后下令攻营。想生擒韩滔，先击败他再拆大营。"
