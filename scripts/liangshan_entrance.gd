@@ -6,6 +6,11 @@ const Stockade := preload("res://scripts/liangshan_stockade.gd")
 const EnvironmentArt := preload("res://scripts/campaign_environment_art.gd")
 const CampaignArtEvent := preload("res://scripts/campaign_art_event.gd")
 const StaticDrawBatch := preload("res://scripts/static_scenery_draw_batch.gd")
+const LiangshanHeight := preload("res://scripts/liangshan_height.gd")
+const CampaignHeight := preload("res://scripts/campaign_height.gd")
+const TERRACE_CACHE_LIMIT := 3
+static var _recent_terraces: Array[Dictionary] = []
+
 var _terrace_draw_batch: StaticDrawBatch
 var _map: GameMap
 var _gate_parts: Array[Node2D] = []
@@ -172,9 +177,7 @@ func _draw() -> void:
 	draw_set_transform_matrix(GameMap.ISO_INV)
 	if StaticDrawBatch.enabled():
 		if _terrace_draw_batch == null:
-			_terrace_draw_batch = StaticDrawBatch.new()
-			_draw_terrace(_terrace_draw_batch)
-			_terrace_draw_batch.finish()
+			_terrace_draw_batch = _build_terrace_batch()
 		if _terrace_draw_batch.valid:
 			_terrace_draw_batch.draw(self)
 		else:
@@ -202,6 +205,40 @@ func _draw() -> void:
 			draw_line(p + Vector2(0, 9), p - Vector2(0, 7), Color("493522"), 4.5, true)
 			draw_circle(p - Vector2(0, 7), 2.8, Color("b39361"), true, -1.0, true)
 	draw_set_transform_matrix(Transform2D.IDENTITY)
+
+func _build_terrace_batch() -> StaticDrawBatch:
+	var key := _terrace_cache_key() if OS.has_feature("windows") else []
+	if not key.is_empty():
+		for i in range(_recent_terraces.size()):
+			if _recent_terraces[i].key == key:
+				var hit: Dictionary = _recent_terraces.pop_at(i)
+				_recent_terraces.append(hit)
+				return hit.batch
+	var batch := StaticDrawBatch.new()
+	_draw_terrace(batch)
+	batch.finish()
+	if batch.valid and not key.is_empty():
+		if _recent_terraces.size() == TERRACE_CACHE_LIMIT:
+			_recent_terraces.pop_front()
+		_recent_terraces.append({"key": key, "batch": batch})
+	return batch
+
+
+func _terrace_cache_key() -> Array:
+	var field := _map.height_field
+	var height_inputs: Array = []
+	if field != null:
+		if field.get_script() != LiangshanHeight and field.get_script() != CampaignHeight:
+			return []
+		# Both fields project through the same bilinear sampler. Capture the CPU
+		# samples, including restored terrain, without retaining the map or field.
+		height_inputs = [field.width, field.height, field.samples]
+	var rock := Art.terrain_texture("cliff") as AtlasTexture
+	if rock == null or rock.atlas == null:
+		return []
+	return [_bank_ridges, height_inputs, rock.atlas, rock.region, rock.atlas.get_size(),
+		Art.terrain_texture("rocks")]
+
 
 func _screen(cell: Vector2) -> Vector2:
 	return _map.project(cell * GameMap.CELL)
