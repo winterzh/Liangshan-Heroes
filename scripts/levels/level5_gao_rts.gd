@@ -980,7 +980,7 @@ func on_unit_died(b,u) -> void:
 		b.mission.mark("liu_tang_lost",reason)
 		b.mission.block_action("gao_liu_return","载船已损失，刘唐失散；可在忠义堂付费重新集结。")
 		_fire_unavailable(b,reason)
-		_sync_recruit_liu_tang_button(b)
+		_update_wave_objective(b)
 	if u==posts[0]: b.mission.mark("gao_land_post_destroyed","山前补给营被拆，停止该处所有陆军补充，北侧资源可争取。")
 	if u==posts[1]: b.mission.mark("gao_sea_post_destroyed","东岸官军船坞被拆，停止该处所有战船补充。")
 	if u==flagship: flagship_disabled=true; _capture_failed(b,"座船已沉，未能生擒高俅")
