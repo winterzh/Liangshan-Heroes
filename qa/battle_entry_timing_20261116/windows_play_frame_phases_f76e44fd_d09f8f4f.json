@@ -1,0 +1,5816 @@
+{
+  "scope": "Two sequential instrumented 240-second Windows Vulkan Forward+ runs, 1280x720, normal speed, same six routes with six seconds of battle per visit. These are phase diagnostics below the 600-second acceptance duration.",
+  "timing": "Previous frame post signal to first physics or idle signal, physics to idle signal, idle to pre-draw signal, and pre-draw to post-draw signal. All are wall-time boundaries. The Windows process and primary thread counters are independently sampled at nominal 5 ms and quantized. Measured bracket values can include CPU before or after a boundary. Godot draw signals give no exclusive GPU or subsystem time.",
+  "fixture_source_sha256": "6706894d500580a832b2a354c74ba052a1b54448b7f8ab63bf7a44d79f25e587",
+  "runs": {
+    "stable": {
+      "run": {
+        "candidate": "f76e44fdd940da7dd66c4df4a855714948adcd27",
+        "payload_files_unchanged": true,
+        "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+        "pck_sha256": "2b56c924785544902d9e1a6ea727cba5629bc9f9acbdce3c10d7c641b10f154f",
+        "split_identity": "86caa8a1da4dc0db77e8b47685db43f0b43ec86a64bbedf8284b7d69c3c4b33c",
+        "exe_unchanged": true,
+        "exit_code": 0,
+        "seconds": 251.013,
+        "errors": [],
+        "warnings": [],
+        "log_sha256": "e612ca3cf994b90c9922d8dfbd379e27e6296d2200c233d49680c42dd52f5fa2",
+        "thread_id": 34292,
+        "thread_samples_sha256": "ca434583431bb478636dc75d643143d9aa3b0674d6255b3908d05d9961e5ef62",
+        "report_sha256": "2f16be9c0cc23a0660477c9e3d12e08a587588fb448dc34222a89f022f80b722"
+      },
+      "seconds": 242.036593,
+      "lifecycle_passes": 38,
+      "sample_count": 16117,
+      "sampler_observed_median_interval_ms": 15.459,
+      "instrumented_scene_sha256": "a1aeebc02072cac6c19008b2e8ad0ed50600f25068575f35c2428bdecbbdb9de",
+      "all_tagged_play_long_frames": 32,
+      "fully_in_play": 31,
+      "memory_probe_overlaps": 0,
+      "minute_samples": [
+        {
+          "average_draw_calls": 550.095399660712,
+          "average_frame_ms": 2.97041522802116,
+          "bucket_seconds": 60.001764,
+          "cycle": 2,
+          "elapsed_seconds": 60.001768,
+          "frame_stages": [
+            {
+              "frames": 1,
+              "level_id": "",
+              "mode": "",
+              "over_16_7_ms": 0,
+              "over_33_3_ms": 0,
+              "stage": "menu"
+            },
+            {
+              "frames": 14,
+              "level_id": "level1",
+              "mode": "campaign",
+              "over_16_7_ms": 5,
+              "over_33_3_ms": 3,
+              "stage": "mount"
+            },
+            {
+              "frames": 2,
+              "level_id": "level1",
+              "mode": "campaign",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 1,
+              "stage": "start"
+            },
+            {
+              "frames": 4269,
+              "level_id": "level1",
+              "mode": "campaign",
+              "over_16_7_ms": 0,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 4,
+              "level_id": "level1",
+              "mode": "campaign",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 2,
+              "stage": "return"
+            },
+            {
+              "frames": 4,
+              "level_id": "arena",
+              "mode": "arena",
+              "over_16_7_ms": 4,
+              "over_33_3_ms": 2,
+              "stage": "mount"
+            },
+            {
+              "frames": 2,
+              "level_id": "arena",
+              "mode": "arena",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 0,
+              "stage": "start"
+            },
+            {
+              "frames": 4781,
+              "level_id": "arena",
+              "mode": "arena",
+              "over_16_7_ms": 23,
+              "over_33_3_ms": 10,
+              "stage": "play"
+            },
+            {
+              "frames": 4,
+              "level_id": "arena",
+              "mode": "arena",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 2,
+              "stage": "return"
+            },
+            {
+              "frames": 34,
+              "level_id": "skirmish",
+              "mode": "skirmish",
+              "over_16_7_ms": 8,
+              "over_33_3_ms": 5,
+              "stage": "mount"
+            },
+            {
+              "frames": 2,
+              "level_id": "skirmish",
+              "mode": "skirmish",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 2,
+              "stage": "start"
+            },
+            {
+              "frames": 3659,
+              "level_id": "skirmish",
+              "mode": "skirmish",
+              "over_16_7_ms": 35,
+              "over_33_3_ms": 16,
+              "stage": "play"
+            },
+            {
+              "frames": 4,
+              "level_id": "skirmish",
+              "mode": "skirmish",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 2,
+              "stage": "return"
+            },
+            {
+              "frames": 4,
+              "level_id": "skirmish_ai",
+              "mode": "skirmish_ai",
+              "over_16_7_ms": 3,
+              "over_33_3_ms": 2,
+              "stage": "mount"
+            },
+            {
+              "frames": 2,
+              "level_id": "skirmish_ai",
+              "mode": "skirmish_ai",
+              "over_16_7_ms": 0,
+              "over_33_3_ms": 0,
+              "stage": "start"
+            },
+            {
+              "frames": 4605,
+              "level_id": "skirmish_ai",
+              "mode": "skirmish_ai",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 2,
+              "level_id": "skirmish_ai",
+              "mode": "skirmish_ai",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 1,
+              "stage": "return"
+            },
+            {
+              "frames": 15,
+              "level_id": "custom_defense",
+              "mode": "custom_defense",
+              "over_16_7_ms": 4,
+              "over_33_3_ms": 3,
+              "stage": "mount"
+            },
+            {
+              "frames": 1,
+              "level_id": "custom_defense",
+              "mode": "custom_defense",
+              "over_16_7_ms": 0,
+              "over_33_3_ms": 0,
+              "stage": "start"
+            },
+            {
+              "frames": 1944,
+              "level_id": "custom_defense",
+              "mode": "custom_defense",
+              "over_16_7_ms": 9,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 2,
+              "level_id": "custom_defense",
+              "mode": "custom_defense",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 1,
+              "stage": "return"
+            },
+            {
+              "frames": 13,
+              "level_id": "level5",
+              "mode": "campaign",
+              "over_16_7_ms": 3,
+              "over_33_3_ms": 2,
+              "stage": "mount"
+            },
+            {
+              "frames": 1,
+              "level_id": "level5",
+              "mode": "campaign",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 1,
+              "stage": "start"
+            },
+            {
+              "frames": 671,
+              "level_id": "level5",
+              "mode": "campaign",
+              "over_16_7_ms": 36,
+              "over_33_3_ms": 4,
+              "stage": "play"
+            },
+            {
+              "frames": 2,
+              "level_id": "level5",
+              "mode": "campaign",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 1,
+              "stage": "return"
+            }
+          ],
+          "level_id": "skirmish_ai",
+          "minute": 1,
+          "mode": "skirmish_ai",
+          "p95_frame_ms": 7.617,
+          "p99_frame_ms": 14.801,
+          "partial": false,
+          "peak_draw_calls": 1343.0,
+          "phase": 2,
+          "process_memory": {
+            "peak_working_set_bytes": 1183105024.0,
+            "private_bytes": 2112401408.0,
+            "query_ok": true,
+            "source": "powershell Get-Process for this Godot PID",
+            "virtual_bytes": 11554078720.0,
+            "working_set_bytes": 1120260096.0
+          },
+          "rendered_frames": 20042,
+          "resources": {
+            "draw_calls": 489.0,
+            "godot_static_bytes": 0.0,
+            "godot_static_peak_bytes": 0.0,
+            "node_count": 199.0,
+            "object_count": 2599.0,
+            "orphan_node_count": 0.0,
+            "render_buffer_bytes": 6496764.0,
+            "render_objects": 5107.0,
+            "render_primitives": 15376.0,
+            "render_texture_bytes": 679373824.0,
+            "render_video_bytes": 811701600.0,
+            "resource_count": 360.0
+          },
+          "root_child_count": 16,
+          "scene_count": 1,
+          "units": {
+            "alive_units": 40,
+            "buildings": 26,
+            "guan": 8,
+            "liang": 32,
+            "mobile_units": 14,
+            "resources": 0,
+            "scene_units": 40,
+            "visible": 32
+          },
+          "worst_frame_ms": 184.415
+        },
+        {
+          "average_draw_calls": 657.220121130552,
+          "average_frame_ms": 4.02069973082098,
+          "bucket_seconds": 59.998531,
+          "cycle": 4,
+          "elapsed_seconds": 120.000298,
+          "frame_stages": [
+            {
+              "frames": 6,
+              "level_id": "level1",
+              "mode": "campaign",
+              "over_16_7_ms": 4,
+              "over_33_3_ms": 4,
+              "stage": "mount"
+            },
+            {
+              "frames": 2,
+              "level_id": "level1",
+              "mode": "campaign",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 0,
+              "stage": "start"
+            },
+            {
+              "frames": 2461,
+              "level_id": "level1",
+              "mode": "campaign",
+              "over_16_7_ms": 0,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 2,
+              "level_id": "level1",
+              "mode": "campaign",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 1,
+              "stage": "return"
+            },
+            {
+              "frames": 2,
+              "level_id": "arena",
+              "mode": "arena",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 1,
+              "stage": "mount"
+            },
+            {
+              "frames": 1,
+              "level_id": "arena",
+              "mode": "arena",
+              "over_16_7_ms": 0,
+              "over_33_3_ms": 0,
+              "stage": "start"
+            },
+            {
+              "frames": 2059,
+              "level_id": "arena",
+              "mode": "arena",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 2,
+              "level_id": "arena",
+              "mode": "arena",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 1,
+              "stage": "return"
+            },
+            {
+              "frames": 13,
+              "level_id": "skirmish",
+              "mode": "skirmish",
+              "over_16_7_ms": 3,
+              "over_33_3_ms": 2,
+              "stage": "mount"
+            },
+            {
+              "frames": 1,
+              "level_id": "skirmish",
+              "mode": "skirmish",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 0,
+              "stage": "start"
+            },
+            {
+              "frames": 1432,
+              "level_id": "skirmish",
+              "mode": "skirmish",
+              "over_16_7_ms": 0,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 2,
+              "level_id": "skirmish",
+              "mode": "skirmish",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 1,
+              "stage": "return"
+            },
+            {
+              "frames": 2,
+              "level_id": "skirmish_ai",
+              "mode": "skirmish_ai",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 1,
+              "stage": "mount"
+            },
+            {
+              "frames": 1,
+              "level_id": "skirmish_ai",
+              "mode": "skirmish_ai",
+              "over_16_7_ms": 0,
+              "over_33_3_ms": 0,
+              "stage": "start"
+            },
+            {
+              "frames": 3685,
+              "level_id": "skirmish_ai",
+              "mode": "skirmish_ai",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 4,
+              "level_id": "skirmish_ai",
+              "mode": "skirmish_ai",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 2,
+              "stage": "return"
+            },
+            {
+              "frames": 29,
+              "level_id": "custom_defense",
+              "mode": "custom_defense",
+              "over_16_7_ms": 6,
+              "over_33_3_ms": 4,
+              "stage": "mount"
+            },
+            {
+              "frames": 2,
+              "level_id": "custom_defense",
+              "mode": "custom_defense",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 0,
+              "stage": "start"
+            },
+            {
+              "frames": 3172,
+              "level_id": "custom_defense",
+              "mode": "custom_defense",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 4,
+              "level_id": "custom_defense",
+              "mode": "custom_defense",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 2,
+              "stage": "return"
+            },
+            {
+              "frames": 28,
+              "level_id": "level5",
+              "mode": "campaign",
+              "over_16_7_ms": 6,
+              "over_33_3_ms": 4,
+              "stage": "mount"
+            },
+            {
+              "frames": 2,
+              "level_id": "level5",
+              "mode": "campaign",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 2,
+              "stage": "start"
+            },
+            {
+              "frames": 1944,
+              "level_id": "level5",
+              "mode": "campaign",
+              "over_16_7_ms": 5,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 4,
+              "level_id": "level5",
+              "mode": "campaign",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 2,
+              "stage": "return"
+            }
+          ],
+          "level_id": "level1",
+          "minute": 2,
+          "mode": "campaign",
+          "p95_frame_ms": 8.41,
+          "p99_frame_ms": 11.407,
+          "partial": false,
+          "peak_draw_calls": 1343.0,
+          "phase": 2,
+          "process_memory": {
+            "peak_working_set_bytes": 1194209280.0,
+            "private_bytes": 2119610368.0,
+            "query_ok": true,
+            "source": "powershell Get-Process for this Godot PID",
+            "virtual_bytes": 11554078720.0,
+            "working_set_bytes": 1126203392.0
+          },
+          "rendered_frames": 14860,
+          "resources": {
+            "draw_calls": 217.0,
+            "godot_static_bytes": 0.0,
+            "godot_static_peak_bytes": 0.0,
+            "node_count": 236.0,
+            "object_count": 2707.0,
+            "orphan_node_count": 0.0,
+            "render_buffer_bytes": 7112512.0,
+            "render_objects": 625.0,
+            "render_primitives": 21081.0,
+            "render_texture_bytes": 693025792.0,
+            "render_video_bytes": 825968000.0,
+            "resource_count": 380.0
+          },
+          "root_child_count": 16,
+          "scene_count": 1,
+          "units": {
+            "alive_units": 25,
+            "buildings": 11,
+            "guan": 18,
+            "liang": 7,
+            "mobile_units": 14,
+            "resources": 0,
+            "scene_units": 25,
+            "visible": 25
+          },
+          "worst_frame_ms": 145.707
+        },
+        {
+          "average_draw_calls": 617.799343375821,
+          "average_frame_ms": 3.84236281704647,
+          "bucket_seconds": 59.999918,
+          "cycle": 5,
+          "elapsed_seconds": 180.000216,
+          "frame_stages": [
+            {
+              "frames": 3,
+              "level_id": "level1",
+              "mode": "campaign",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 2,
+              "stage": "mount"
+            },
+            {
+              "frames": 1,
+              "level_id": "level1",
+              "mode": "campaign",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 0,
+              "stage": "start"
+            },
+            {
+              "frames": 1455,
+              "level_id": "level1",
+              "mode": "campaign",
+              "over_16_7_ms": 0,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 4,
+              "level_id": "level1",
+              "mode": "campaign",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 2,
+              "stage": "return"
+            },
+            {
+              "frames": 4,
+              "level_id": "arena",
+              "mode": "arena",
+              "over_16_7_ms": 4,
+              "over_33_3_ms": 3,
+              "stage": "mount"
+            },
+            {
+              "frames": 2,
+              "level_id": "arena",
+              "mode": "arena",
+              "over_16_7_ms": 0,
+              "over_33_3_ms": 0,
+              "stage": "start"
+            },
+            {
+              "frames": 3400,
+              "level_id": "arena",
+              "mode": "arena",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 4,
+              "level_id": "arena",
+              "mode": "arena",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 2,
+              "stage": "return"
+            },
+            {
+              "frames": 28,
+              "level_id": "skirmish",
+              "mode": "skirmish",
+              "over_16_7_ms": 6,
+              "over_33_3_ms": 4,
+              "stage": "mount"
+            },
+            {
+              "frames": 2,
+              "level_id": "skirmish",
+              "mode": "skirmish",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 0,
+              "stage": "start"
+            },
+            {
+              "frames": 3165,
+              "level_id": "skirmish",
+              "mode": "skirmish",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 4,
+              "level_id": "skirmish",
+              "mode": "skirmish",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 2,
+              "stage": "return"
+            },
+            {
+              "frames": 4,
+              "level_id": "skirmish_ai",
+              "mode": "skirmish_ai",
+              "over_16_7_ms": 4,
+              "over_33_3_ms": 2,
+              "stage": "mount"
+            },
+            {
+              "frames": 2,
+              "level_id": "skirmish_ai",
+              "mode": "skirmish_ai",
+              "over_16_7_ms": 0,
+              "over_33_3_ms": 0,
+              "stage": "start"
+            },
+            {
+              "frames": 4496,
+              "level_id": "skirmish_ai",
+              "mode": "skirmish_ai",
+              "over_16_7_ms": 0,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 4,
+              "level_id": "skirmish_ai",
+              "mode": "skirmish_ai",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 2,
+              "stage": "return"
+            },
+            {
+              "frames": 29,
+              "level_id": "custom_defense",
+              "mode": "custom_defense",
+              "over_16_7_ms": 6,
+              "over_33_3_ms": 4,
+              "stage": "mount"
+            },
+            {
+              "frames": 2,
+              "level_id": "custom_defense",
+              "mode": "custom_defense",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 0,
+              "stage": "start"
+            },
+            {
+              "frames": 1851,
+              "level_id": "custom_defense",
+              "mode": "custom_defense",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 2,
+              "level_id": "custom_defense",
+              "mode": "custom_defense",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 1,
+              "stage": "return"
+            },
+            {
+              "frames": 13,
+              "level_id": "level5",
+              "mode": "campaign",
+              "over_16_7_ms": 3,
+              "over_33_3_ms": 2,
+              "stage": "mount"
+            },
+            {
+              "frames": 1,
+              "level_id": "level5",
+              "mode": "campaign",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 1,
+              "stage": "start"
+            },
+            {
+              "frames": 1056,
+              "level_id": "level5",
+              "mode": "campaign",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 2,
+              "level_id": "level5",
+              "mode": "campaign",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 1,
+              "stage": "return"
+            }
+          ],
+          "level_id": "custom_defense",
+          "minute": 3,
+          "mode": "custom_defense",
+          "p95_frame_ms": 8.289,
+          "p99_frame_ms": 11.178,
+          "partial": false,
+          "peak_draw_calls": 1343.0,
+          "phase": 2,
+          "process_memory": {
+            "peak_working_set_bytes": 1201557504.0,
+            "private_bytes": 2128678912.0,
+            "query_ok": true,
+            "source": "powershell Get-Process for this Godot PID",
+            "virtual_bytes": 11512135680.0,
+            "working_set_bytes": 1134067712.0
+          },
+          "rendered_frames": 15534,
+          "resources": {
+            "draw_calls": 1067.0,
+            "godot_static_bytes": 0.0,
+            "godot_static_peak_bytes": 0.0,
+            "node_count": 364.0,
+            "object_count": 3436.0,
+            "orphan_node_count": 0.0,
+            "render_buffer_bytes": 10192224.0,
+            "render_objects": 2440.0,
+            "render_primitives": 93609.0,
+            "render_texture_bytes": 713668096.0,
+            "render_video_bytes": 849693664.0,
+            "resource_count": 362.0
+          },
+          "root_child_count": 16,
+          "scene_count": 1,
+          "units": {
+            "alive_units": 37,
+            "buildings": 20,
+            "guan": 10,
+            "liang": 27,
+            "mobile_units": 17,
+            "resources": 0,
+            "scene_units": 37,
+            "visible": 27
+          },
+          "worst_frame_ms": 151.848
+        },
+        {
+          "average_draw_calls": 657.472585054678,
+          "average_frame_ms": 4.53120185297692,
+          "bucket_seconds": 60.003074,
+          "cycle": 7,
+          "elapsed_seconds": 240.003291,
+          "frame_stages": [
+            {
+              "frames": 6,
+              "level_id": "level1",
+              "mode": "campaign",
+              "over_16_7_ms": 4,
+              "over_33_3_ms": 4,
+              "stage": "mount"
+            },
+            {
+              "frames": 2,
+              "level_id": "level1",
+              "mode": "campaign",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 0,
+              "stage": "start"
+            },
+            {
+              "frames": 2162,
+              "level_id": "level1",
+              "mode": "campaign",
+              "over_16_7_ms": 24,
+              "over_33_3_ms": 1,
+              "stage": "play"
+            },
+            {
+              "frames": 4,
+              "level_id": "level1",
+              "mode": "campaign",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 2,
+              "stage": "return"
+            },
+            {
+              "frames": 4,
+              "level_id": "arena",
+              "mode": "arena",
+              "over_16_7_ms": 4,
+              "over_33_3_ms": 3,
+              "stage": "mount"
+            },
+            {
+              "frames": 2,
+              "level_id": "arena",
+              "mode": "arena",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 0,
+              "stage": "start"
+            },
+            {
+              "frames": 2760,
+              "level_id": "arena",
+              "mode": "arena",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 1,
+              "stage": "play"
+            },
+            {
+              "frames": 2,
+              "level_id": "arena",
+              "mode": "arena",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 1,
+              "stage": "return"
+            },
+            {
+              "frames": 14,
+              "level_id": "skirmish",
+              "mode": "skirmish",
+              "over_16_7_ms": 3,
+              "over_33_3_ms": 2,
+              "stage": "mount"
+            },
+            {
+              "frames": 1,
+              "level_id": "skirmish",
+              "mode": "skirmish",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 0,
+              "stage": "start"
+            },
+            {
+              "frames": 1464,
+              "level_id": "skirmish",
+              "mode": "skirmish",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 2,
+              "level_id": "skirmish",
+              "mode": "skirmish",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 1,
+              "stage": "return"
+            },
+            {
+              "frames": 2,
+              "level_id": "skirmish_ai",
+              "mode": "skirmish_ai",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 1,
+              "stage": "mount"
+            },
+            {
+              "frames": 1,
+              "level_id": "skirmish_ai",
+              "mode": "skirmish_ai",
+              "over_16_7_ms": 0,
+              "over_33_3_ms": 0,
+              "stage": "start"
+            },
+            {
+              "frames": 2216,
+              "level_id": "skirmish_ai",
+              "mode": "skirmish_ai",
+              "over_16_7_ms": 0,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 2,
+              "level_id": "skirmish_ai",
+              "mode": "skirmish_ai",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 1,
+              "stage": "return"
+            },
+            {
+              "frames": 13,
+              "level_id": "custom_defense",
+              "mode": "custom_defense",
+              "over_16_7_ms": 3,
+              "over_33_3_ms": 2,
+              "stage": "mount"
+            },
+            {
+              "frames": 1,
+              "level_id": "custom_defense",
+              "mode": "custom_defense",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 0,
+              "stage": "start"
+            },
+            {
+              "frames": 2519,
+              "level_id": "custom_defense",
+              "mode": "custom_defense",
+              "over_16_7_ms": 0,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 4,
+              "level_id": "custom_defense",
+              "mode": "custom_defense",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 2,
+              "stage": "return"
+            },
+            {
+              "frames": 29,
+              "level_id": "level5",
+              "mode": "campaign",
+              "over_16_7_ms": 6,
+              "over_33_3_ms": 4,
+              "stage": "mount"
+            },
+            {
+              "frames": 2,
+              "level_id": "level5",
+              "mode": "campaign",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 2,
+              "stage": "start"
+            },
+            {
+              "frames": 1952,
+              "level_id": "level5",
+              "mode": "campaign",
+              "over_16_7_ms": 3,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 4,
+              "level_id": "level5",
+              "mode": "campaign",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 2,
+              "stage": "return"
+            }
+          ],
+          "level_id": "arena",
+          "minute": 4,
+          "mode": "arena",
+          "p95_frame_ms": 9.629,
+          "p99_frame_ms": 13.808,
+          "partial": false,
+          "peak_draw_calls": 1343.0,
+          "phase": 2,
+          "process_memory": {
+            "peak_working_set_bytes": 1204875264.0,
+            "private_bytes": 2130001920.0,
+            "query_ok": true,
+            "source": "powershell Get-Process for this Godot PID",
+            "virtual_bytes": 11512135680.0,
+            "working_set_bytes": 1136148480.0
+          },
+          "rendered_frames": 13168,
+          "resources": {
+            "draw_calls": 229.0,
+            "godot_static_bytes": 0.0,
+            "godot_static_peak_bytes": 0.0,
+            "node_count": 212.0,
+            "object_count": 2593.0,
+            "orphan_node_count": 0.0,
+            "render_buffer_bytes": 6407004.0,
+            "render_objects": 3557.0,
+            "render_primitives": 12098.0,
+            "render_texture_bytes": 679357440.0,
+            "render_video_bytes": 811593920.0,
+            "resource_count": 360.0
+          },
+          "root_child_count": 16,
+          "scene_count": 1,
+          "units": {
+            "alive_units": 58,
+            "buildings": 5,
+            "guan": 50,
+            "liang": 8,
+            "mobile_units": 53,
+            "resources": 0,
+            "scene_units": 58,
+            "visible": 58
+          },
+          "worst_frame_ms": 138.652
+        },
+        {
+          "average_draw_calls": 213.661157024793,
+          "average_frame_ms": 4.41821487603306,
+          "bucket_seconds": 1.511268,
+          "cycle": 7,
+          "elapsed_seconds": 241.514558,
+          "frame_stages": [
+            {
+              "frames": 232,
+              "level_id": "arena",
+              "mode": "arena",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 2,
+              "level_id": "arena",
+              "mode": "arena",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 1,
+              "stage": "return"
+            },
+            {
+              "frames": 8,
+              "level_id": "",
+              "mode": "",
+              "over_16_7_ms": 0,
+              "over_33_3_ms": 0,
+              "stage": "final_cleanup"
+            }
+          ],
+          "level_id": "",
+          "minute": 5,
+          "mode": "final_cleanup",
+          "p95_frame_ms": 10.43,
+          "p99_frame_ms": 17.476,
+          "partial": true,
+          "peak_draw_calls": 232.0,
+          "phase": -1,
+          "process_memory": {
+            "peak_working_set_bytes": 1204875264.0,
+            "private_bytes": 2130001920.0,
+            "query_ok": true,
+            "source": "powershell Get-Process for this Godot PID",
+            "virtual_bytes": 11512135680.0,
+            "working_set_bytes": 1136148480.0
+          },
+          "rendered_frames": 242,
+          "resources": {
+            "draw_calls": 45.0,
+            "godot_static_bytes": 0.0,
+            "godot_static_peak_bytes": 0.0,
+            "node_count": 74.0,
+            "object_count": 2352.0,
+            "orphan_node_count": 0.0,
+            "render_buffer_bytes": 6107876.0,
+            "render_objects": 490.0,
+            "render_primitives": 3860.0,
+            "render_texture_bytes": 686206464.0,
+            "render_video_bytes": 818143776.0,
+            "resource_count": 361.0
+          },
+          "root_child_count": 16,
+          "scene_count": 0,
+          "units": {
+            "alive_units": 0,
+            "buildings": 0,
+            "guan": 0,
+            "liang": 0,
+            "mobile_units": 0,
+            "resources": 0,
+            "scene_units": 0,
+            "visible": 0
+          },
+          "worst_frame_ms": 72.294
+        }
+      ],
+      "derived_phase_stats": {
+        "all": {
+          "eligible": 31,
+          "frame_cpu_brackets": 18,
+          "largest_segment_cpu_brackets": 4,
+          "largest_segment_counts": {
+            "process_to_pre_draw": 16,
+            "physics_to_process": 14,
+            "pre_draw_to_post_draw": 1
+          },
+          "largest_segment_over_half": 19,
+          "with_two_or_more_physics_steps": 27,
+          "with_no_physics_steps": 1,
+          "main_cpu_inward_at_least_half": 15,
+          "main_cpu_outward_at_most_one_third": 0,
+          "median_interval_ms": 41.96
+        },
+        "level1": {
+          "eligible": 1,
+          "frame_cpu_brackets": 0,
+          "largest_segment_cpu_brackets": 0,
+          "largest_segment_counts": {
+            "pre_draw_to_post_draw": 1
+          },
+          "largest_segment_over_half": 1,
+          "with_two_or_more_physics_steps": 0,
+          "with_no_physics_steps": 1,
+          "main_cpu_inward_at_least_half": 0,
+          "main_cpu_outward_at_most_one_third": 0,
+          "median_interval_ms": 37.971
+        },
+        "arena": {
+          "eligible": 10,
+          "frame_cpu_brackets": 7,
+          "largest_segment_cpu_brackets": 3,
+          "largest_segment_counts": {
+            "process_to_pre_draw": 2,
+            "physics_to_process": 8
+          },
+          "largest_segment_over_half": 9,
+          "with_two_or_more_physics_steps": 9,
+          "with_no_physics_steps": 0,
+          "main_cpu_inward_at_least_half": 7,
+          "main_cpu_outward_at_most_one_third": 0,
+          "median_interval_ms": 48.809
+        },
+        "skirmish": {
+          "eligible": 16,
+          "frame_cpu_brackets": 8,
+          "largest_segment_cpu_brackets": 0,
+          "largest_segment_counts": {
+            "process_to_pre_draw": 12,
+            "physics_to_process": 4
+          },
+          "largest_segment_over_half": 5,
+          "with_two_or_more_physics_steps": 16,
+          "with_no_physics_steps": 0,
+          "main_cpu_inward_at_least_half": 6,
+          "main_cpu_outward_at_most_one_third": 0,
+          "median_interval_ms": 39.422
+        },
+        "skirmish_ai": {
+          "eligible": 0,
+          "frame_cpu_brackets": 0,
+          "largest_segment_cpu_brackets": 0,
+          "largest_segment_counts": {},
+          "largest_segment_over_half": 0,
+          "with_two_or_more_physics_steps": 0,
+          "with_no_physics_steps": 0,
+          "main_cpu_inward_at_least_half": 0,
+          "main_cpu_outward_at_most_one_third": 0,
+          "median_interval_ms": null
+        },
+        "custom_defense": {
+          "eligible": 0,
+          "frame_cpu_brackets": 0,
+          "largest_segment_cpu_brackets": 0,
+          "largest_segment_counts": {},
+          "largest_segment_over_half": 0,
+          "with_two_or_more_physics_steps": 0,
+          "with_no_physics_steps": 0,
+          "main_cpu_inward_at_least_half": 0,
+          "main_cpu_outward_at_most_one_third": 0,
+          "median_interval_ms": null
+        },
+        "level5": {
+          "eligible": 4,
+          "frame_cpu_brackets": 3,
+          "largest_segment_cpu_brackets": 1,
+          "largest_segment_counts": {
+            "process_to_pre_draw": 2,
+            "physics_to_process": 2
+          },
+          "largest_segment_over_half": 4,
+          "with_two_or_more_physics_steps": 2,
+          "with_no_physics_steps": 0,
+          "main_cpu_inward_at_least_half": 2,
+          "main_cpu_outward_at_most_one_third": 0,
+          "median_interval_ms": 49.082
+        }
+      },
+      "frames": [
+        {
+          "elapsed_us": 34341888,
+          "entry": 6,
+          "fully_in_play": true,
+          "interval_us": 38219,
+          "level_id": "level5",
+          "minute": 1,
+          "mode": "campaign",
+          "physics_steps": 1,
+          "post_to_physics_us": 599,
+          "post_to_pre_draw_us": 31317,
+          "post_to_process_us": 9493,
+          "unix_end_us": 1795508360280000,
+          "memory_counter_probe_overlap": false,
+          "segments_ms": {
+            "between_frames": 0.599,
+            "physics_to_process": 8.894,
+            "process_to_pre_draw": 21.824,
+            "pre_draw_to_post_draw": 6.902
+          },
+          "largest_segment": "process_to_pre_draw",
+          "largest_segment_share": 0.571,
+          "frame_cpu": null,
+          "largest_segment_cpu": null
+        },
+        {
+          "elapsed_us": 34388880,
+          "entry": 6,
+          "fully_in_play": true,
+          "interval_us": 46992,
+          "level_id": "level5",
+          "minute": 1,
+          "mode": "campaign",
+          "physics_steps": 3,
+          "post_to_physics_us": 495,
+          "post_to_pre_draw_us": 41413,
+          "post_to_process_us": 31040,
+          "unix_end_us": 1795508360327000,
+          "memory_counter_probe_overlap": false,
+          "segments_ms": {
+            "between_frames": 0.495,
+            "physics_to_process": 30.545,
+            "process_to_pre_draw": 10.373,
+            "pre_draw_to_post_draw": 5.579
+          },
+          "largest_segment": "physics_to_process",
+          "largest_segment_share": 0.65,
+          "frame_cpu": {
+            "main_cpu_in_and_out_ms": [
+              31.25,
+              62.5
+            ],
+            "process_cpu_in_and_out_ms": [
+              31.25,
+              78.125
+            ],
+            "main_cycles_in_and_out_million": [
+              94.304,
+              187.307
+            ],
+            "bracket_slack_ms": 14.737,
+            "unix_qpc_drift_ms": 0.0
+          },
+          "largest_segment_cpu": null
+        },
+        {
+          "elapsed_us": 34440052,
+          "entry": 6,
+          "fully_in_play": true,
+          "interval_us": 51172,
+          "level_id": "level5",
+          "minute": 1,
+          "mode": "campaign",
+          "physics_steps": 3,
+          "post_to_physics_us": 434,
+          "post_to_pre_draw_us": 43322,
+          "post_to_process_us": 33237,
+          "unix_end_us": 1795508360379000,
+          "memory_counter_probe_overlap": false,
+          "segments_ms": {
+            "between_frames": 0.434,
+            "physics_to_process": 32.803,
+            "process_to_pre_draw": 10.085,
+            "pre_draw_to_post_draw": 7.85
+          },
+          "largest_segment": "physics_to_process",
+          "largest_segment_share": 0.641,
+          "frame_cpu": {
+            "main_cpu_in_and_out_ms": [
+              31.25,
+              62.5
+            ],
+            "process_cpu_in_and_out_ms": [
+              31.25,
+              62.5
+            ],
+            "main_cycles_in_and_out_million": [
+              87.617,
+              176.047
+            ],
+            "bracket_slack_ms": 13.864,
+            "unix_qpc_drift_ms": 0.001
+          },
+          "largest_segment_cpu": null
+        },
+        {
+          "elapsed_us": 35261554,
+          "entry": 6,
+          "fully_in_play": true,
+          "interval_us": 81436,
+          "level_id": "level5",
+          "minute": 1,
+          "mode": "campaign",
+          "physics_steps": 1,
+          "post_to_physics_us": 1087,
+          "post_to_pre_draw_us": 77728,
+          "post_to_process_us": 5442,
+          "unix_end_us": 1795508361200000,
+          "memory_counter_probe_overlap": false,
+          "segments_ms": {
+            "between_frames": 1.087,
+            "physics_to_process": 4.355,
+            "process_to_pre_draw": 72.286,
+            "pre_draw_to_post_draw": 3.708
+          },
+          "largest_segment": "process_to_pre_draw",
+          "largest_segment_share": 0.888,
+          "frame_cpu": {
+            "main_cpu_in_and_out_ms": [
+              0.0,
+              31.25
+            ],
+            "process_cpu_in_and_out_ms": [
+              0.0,
+              31.25
+            ],
+            "main_cycles_in_and_out_million": [
+              30.643,
+              111.532
+            ],
+            "bracket_slack_ms": 13.593,
+            "unix_qpc_drift_ms": 0.04
+          },
+          "largest_segment_cpu": {
+            "main_cpu_in_and_out_ms": [
+              0.0,
+              0.0
+            ],
+            "process_cpu_in_and_out_ms": [
+              0.0,
+              0.0
+            ],
+            "main_cycles_in_and_out_million": [
+              13.995,
+              30.643
+            ],
+            "bracket_slack_ms": 13.781,
+            "unix_qpc_drift_ms": 0.002
+          }
+        },
+        {
+          "elapsed_us": 50201793,
+          "entry": 8,
+          "fully_in_play": true,
+          "interval_us": 35322,
+          "level_id": "arena",
+          "minute": 1,
+          "mode": "arena",
+          "physics_steps": 1,
+          "post_to_physics_us": 481,
+          "post_to_pre_draw_us": 29591,
+          "post_to_process_us": 9793,
+          "unix_end_us": 1795508376141000,
+          "memory_counter_probe_overlap": false,
+          "segments_ms": {
+            "between_frames": 0.481,
+            "physics_to_process": 9.312,
+            "process_to_pre_draw": 19.798,
+            "pre_draw_to_post_draw": 5.731
+          },
+          "largest_segment": "process_to_pre_draw",
+          "largest_segment_share": 0.561,
+          "frame_cpu": null,
+          "largest_segment_cpu": null
+        },
+        {
+          "elapsed_us": 50264484,
+          "entry": 8,
+          "fully_in_play": true,
+          "interval_us": 62691,
+          "level_id": "arena",
+          "minute": 1,
+          "mode": "arena",
+          "physics_steps": 2,
+          "post_to_physics_us": 814,
+          "post_to_pre_draw_us": 57292,
+          "post_to_process_us": 35422,
+          "unix_end_us": 1795508376203000,
+          "memory_counter_probe_overlap": false,
+          "segments_ms": {
+            "between_frames": 0.814,
+            "physics_to_process": 34.608,
+            "process_to_pre_draw": 21.87,
+            "pre_draw_to_post_draw": 5.399
+          },
+          "largest_segment": "physics_to_process",
+          "largest_segment_share": 0.552,
+          "frame_cpu": {
+            "main_cpu_in_and_out_ms": [
+              46.875,
+              78.125
+            ],
+            "process_cpu_in_and_out_ms": [
+              46.875,
+              78.125
+            ],
+            "main_cycles_in_and_out_million": [
+              135.491,
+              221.916
+            ],
+            "bracket_slack_ms": 14.609,
+            "unix_qpc_drift_ms": 0.001
+          },
+          "largest_segment_cpu": null
+        },
+        {
+          "elapsed_us": 50357724,
+          "entry": 8,
+          "fully_in_play": true,
+          "interval_us": 93240,
+          "level_id": "arena",
+          "minute": 1,
+          "mode": "arena",
+          "physics_steps": 4,
+          "post_to_physics_us": 992,
+          "post_to_pre_draw_us": 87764,
+          "post_to_process_us": 64658,
+          "unix_end_us": 1795508376297000,
+          "memory_counter_probe_overlap": false,
+          "segments_ms": {
+            "between_frames": 0.992,
+            "physics_to_process": 63.666,
+            "process_to_pre_draw": 23.106,
+            "pre_draw_to_post_draw": 5.476
+          },
+          "largest_segment": "physics_to_process",
+          "largest_segment_share": 0.683,
+          "frame_cpu": {
+            "main_cpu_in_and_out_ms": [
+              78.125,
+              109.375
+            ],
+            "process_cpu_in_and_out_ms": [
+              78.125,
+              109.375
+            ],
+            "main_cycles_in_and_out_million": [
+              227.397,
+              317.582
+            ],
+            "bracket_slack_ms": 13.564,
+            "unix_qpc_drift_ms": 0.003
+          },
+          "largest_segment_cpu": {
+            "main_cpu_in_and_out_ms": [
+              46.875,
+              78.125
+            ],
+            "process_cpu_in_and_out_ms": [
+              46.875,
+              78.125
+            ],
+            "main_cycles_in_and_out_million": [
+              134.651,
+              228.062
+            ],
+            "bracket_slack_ms": 12.145,
+            "unix_qpc_drift_ms": 0.001
+          }
+        },
+        {
+          "elapsed_us": 50464569,
+          "entry": 8,
+          "fully_in_play": true,
+          "interval_us": 106845,
+          "level_id": "arena",
+          "minute": 1,
+          "mode": "arena",
+          "physics_steps": 6,
+          "post_to_physics_us": 534,
+          "post_to_pre_draw_us": 103734,
+          "post_to_process_us": 73081,
+          "unix_end_us": 1795508376403000,
+          "memory_counter_probe_overlap": false,
+          "segments_ms": {
+            "between_frames": 0.534,
+            "physics_to_process": 72.547,
+            "process_to_pre_draw": 30.653,
+            "pre_draw_to_post_draw": 3.111
+          },
+          "largest_segment": "physics_to_process",
+          "largest_segment_share": 0.679,
+          "frame_cpu": {
+            "main_cpu_in_and_out_ms": [
+              78.125,
+              93.75
+            ],
+            "process_cpu_in_and_out_ms": [
+              78.125,
+              93.75
+            ],
+            "main_cycles_in_and_out_million": [
+              217.797,
+              287.751
+            ],
+            "bracket_slack_ms": 14.409,
+            "unix_qpc_drift_ms": 0.0
+          },
+          "largest_segment_cpu": {
+            "main_cpu_in_and_out_ms": [
+              46.875,
+              78.125
+            ],
+            "process_cpu_in_and_out_ms": [
+              46.875,
+              78.125
+            ],
+            "main_cycles_in_and_out_million": [
+              137.655,
+              227.719
+            ],
+            "bracket_slack_ms": 13.875,
+            "unix_qpc_drift_ms": 0.001
+          }
+        },
+        {
+          "elapsed_us": 50542512,
+          "entry": 8,
+          "fully_in_play": true,
+          "interval_us": 77943,
+          "level_id": "arena",
+          "minute": 1,
+          "mode": "arena",
+          "physics_steps": 6,
+          "post_to_physics_us": 2573,
+          "post_to_pre_draw_us": 76221,
+          "post_to_process_us": 43448,
+          "unix_end_us": 1795508376482000,
+          "memory_counter_probe_overlap": false,
+          "segments_ms": {
+            "between_frames": 2.573,
+            "physics_to_process": 40.875,
+            "process_to_pre_draw": 32.773,
+            "pre_draw_to_post_draw": 1.722
+          },
+          "largest_segment": "physics_to_process",
+          "largest_segment_share": 0.524,
+          "frame_cpu": {
+            "main_cpu_in_and_out_ms": [
+              46.875,
+              78.125
+            ],
+            "process_cpu_in_and_out_ms": [
+              46.875,
+              93.75
+            ],
+            "main_cycles_in_and_out_million": [
+              101.512,
+              191.651
+            ],
+            "bracket_slack_ms": 15.436,
+            "unix_qpc_drift_ms": 0.001
+          },
+          "largest_segment_cpu": {
+            "main_cpu_in_and_out_ms": [
+              15.625,
+              46.875
+            ],
+            "process_cpu_in_and_out_ms": [
+              15.625,
+              62.5
+            ],
+            "main_cycles_in_and_out_million": [
+              44.631,
+              130.613
+            ],
+            "bracket_slack_ms": 12.863,
+            "unix_qpc_drift_ms": 0.001
+          }
+        },
+        {
+          "elapsed_us": 50676521,
+          "entry": 8,
+          "fully_in_play": true,
+          "interval_us": 43873,
+          "level_id": "arena",
+          "minute": 1,
+          "mode": "arena",
+          "physics_steps": 2,
+          "post_to_physics_us": 303,
+          "post_to_pre_draw_us": 41580,
+          "post_to_process_us": 23966,
+          "unix_end_us": 1795508376616000,
+          "memory_counter_probe_overlap": false,
+          "segments_ms": {
+            "between_frames": 0.303,
+            "physics_to_process": 23.663,
+            "process_to_pre_draw": 17.614,
+            "pre_draw_to_post_draw": 2.293
+          },
+          "largest_segment": "physics_to_process",
+          "largest_segment_share": 0.539,
+          "frame_cpu": {
+            "main_cpu_in_and_out_ms": [
+              31.25,
+              62.5
+            ],
+            "process_cpu_in_and_out_ms": [
+              31.25,
+              78.125
+            ],
+            "main_cycles_in_and_out_million": [
+              84.616,
+              171.516
+            ],
+            "bracket_slack_ms": 12.563,
+            "unix_qpc_drift_ms": 0.004
+          },
+          "largest_segment_cpu": null
+        },
+        {
+          "elapsed_us": 50784466,
+          "entry": 8,
+          "fully_in_play": true,
+          "interval_us": 50617,
+          "level_id": "arena",
+          "minute": 1,
+          "mode": "arena",
+          "physics_steps": 2,
+          "post_to_physics_us": 1742,
+          "post_to_pre_draw_us": 47226,
+          "post_to_process_us": 25353,
+          "unix_end_us": 1795508376723000,
+          "memory_counter_probe_overlap": false,
+          "segments_ms": {
+            "between_frames": 1.742,
+            "physics_to_process": 23.611,
+            "process_to_pre_draw": 21.873,
+            "pre_draw_to_post_draw": 3.391
+          },
+          "largest_segment": "physics_to_process",
+          "largest_segment_share": 0.466,
+          "frame_cpu": {
+            "main_cpu_in_and_out_ms": [
+              31.25,
+              62.5
+            ],
+            "process_cpu_in_and_out_ms": [
+              31.25,
+              62.5
+            ],
+            "main_cycles_in_and_out_million": [
+              88.953,
+              158.661
+            ],
+            "bracket_slack_ms": 10.027,
+            "unix_qpc_drift_ms": 0.0
+          },
+          "largest_segment_cpu": null
+        },
+        {
+          "elapsed_us": 50819174,
+          "entry": 8,
+          "fully_in_play": true,
+          "interval_us": 34708,
+          "level_id": "arena",
+          "minute": 1,
+          "mode": "arena",
+          "physics_steps": 3,
+          "post_to_physics_us": 641,
+          "post_to_pre_draw_us": 32286,
+          "post_to_process_us": 19075,
+          "unix_end_us": 1795508376757000,
+          "memory_counter_probe_overlap": false,
+          "segments_ms": {
+            "between_frames": 0.641,
+            "physics_to_process": 18.434,
+            "process_to_pre_draw": 13.211,
+            "pre_draw_to_post_draw": 2.422
+          },
+          "largest_segment": "physics_to_process",
+          "largest_segment_share": 0.531,
+          "frame_cpu": null,
+          "largest_segment_cpu": null
+        },
+        {
+          "elapsed_us": 50858693,
+          "entry": 8,
+          "fully_in_play": true,
+          "interval_us": 39519,
+          "level_id": "arena",
+          "minute": 1,
+          "mode": "arena",
+          "physics_steps": 2,
+          "post_to_physics_us": 1013,
+          "post_to_pre_draw_us": 35772,
+          "post_to_process_us": 15360,
+          "unix_end_us": 1795508376798000,
+          "memory_counter_probe_overlap": false,
+          "segments_ms": {
+            "between_frames": 1.013,
+            "physics_to_process": 14.347,
+            "process_to_pre_draw": 20.412,
+            "pre_draw_to_post_draw": 3.747
+          },
+          "largest_segment": "process_to_pre_draw",
+          "largest_segment_share": 0.517,
+          "frame_cpu": null,
+          "largest_segment_cpu": null
+        },
+        {
+          "elapsed_us": 50905695,
+          "entry": 8,
+          "fully_in_play": true,
+          "interval_us": 47002,
+          "level_id": "arena",
+          "minute": 1,
+          "mode": "arena",
+          "physics_steps": 3,
+          "post_to_physics_us": 2026,
+          "post_to_pre_draw_us": 44282,
+          "post_to_process_us": 26045,
+          "unix_end_us": 1795508376844000,
+          "memory_counter_probe_overlap": false,
+          "segments_ms": {
+            "between_frames": 2.026,
+            "physics_to_process": 24.019,
+            "process_to_pre_draw": 18.237,
+            "pre_draw_to_post_draw": 2.72
+          },
+          "largest_segment": "physics_to_process",
+          "largest_segment_share": 0.511,
+          "frame_cpu": {
+            "main_cpu_in_and_out_ms": [
+              31.25,
+              62.5
+            ],
+            "process_cpu_in_and_out_ms": [
+              31.25,
+              62.5
+            ],
+            "main_cycles_in_and_out_million": [
+              84.69,
+              163.839
+            ],
+            "bracket_slack_ms": 10.262,
+            "unix_qpc_drift_ms": 0.003
+          },
+          "largest_segment_cpu": null
+        },
+        {
+          "elapsed_us": 55281315,
+          "entry": 9,
+          "fully_in_play": true,
+          "interval_us": 37077,
+          "level_id": "skirmish",
+          "minute": 1,
+          "mode": "skirmish",
+          "physics_steps": 2,
+          "post_to_physics_us": 617,
+          "post_to_pre_draw_us": 28836,
+          "post_to_process_us": 11536,
+          "unix_end_us": 1795508381220000,
+          "memory_counter_probe_overlap": false,
+          "segments_ms": {
+            "between_frames": 0.617,
+            "physics_to_process": 10.919,
+            "process_to_pre_draw": 17.3,
+            "pre_draw_to_post_draw": 8.241
+          },
+          "largest_segment": "process_to_pre_draw",
+          "largest_segment_share": 0.467,
+          "frame_cpu": null,
+          "largest_segment_cpu": null
+        },
+        {
+          "elapsed_us": 55330410,
+          "entry": 9,
+          "fully_in_play": true,
+          "interval_us": 49095,
+          "level_id": "skirmish",
+          "minute": 1,
+          "mode": "skirmish",
+          "physics_steps": 2,
+          "post_to_physics_us": 574,
+          "post_to_pre_draw_us": 39729,
+          "post_to_process_us": 9815,
+          "unix_end_us": 1795508381269000,
+          "memory_counter_probe_overlap": false,
+          "segments_ms": {
+            "between_frames": 0.574,
+            "physics_to_process": 9.241,
+            "process_to_pre_draw": 29.914,
+            "pre_draw_to_post_draw": 9.366
+          },
+          "largest_segment": "process_to_pre_draw",
+          "largest_segment_share": 0.609,
+          "frame_cpu": {
+            "main_cpu_in_and_out_ms": [
+              31.25,
+              62.5
+            ],
+            "process_cpu_in_and_out_ms": [
+              31.25,
+              78.125
+            ],
+            "main_cycles_in_and_out_million": [
+              90.723,
+              183.035
+            ],
+            "bracket_slack_ms": 11.79,
+            "unix_qpc_drift_ms": 0.002
+          },
+          "largest_segment_cpu": null
+        },
+        {
+          "elapsed_us": 55379669,
+          "entry": 9,
+          "fully_in_play": true,
+          "interval_us": 49259,
+          "level_id": "skirmish",
+          "minute": 1,
+          "mode": "skirmish",
+          "physics_steps": 3,
+          "post_to_physics_us": 605,
+          "post_to_pre_draw_us": 41830,
+          "post_to_process_us": 22524,
+          "unix_end_us": 1795508381319000,
+          "memory_counter_probe_overlap": false,
+          "segments_ms": {
+            "between_frames": 0.605,
+            "physics_to_process": 21.919,
+            "process_to_pre_draw": 19.306,
+            "pre_draw_to_post_draw": 7.429
+          },
+          "largest_segment": "physics_to_process",
+          "largest_segment_share": 0.445,
+          "frame_cpu": {
+            "main_cpu_in_and_out_ms": [
+              31.25,
+              62.5
+            ],
+            "process_cpu_in_and_out_ms": [
+              31.25,
+              109.375
+            ],
+            "main_cycles_in_and_out_million": [
+              88.336,
+              181.059
+            ],
+            "bracket_slack_ms": 10.756,
+            "unix_qpc_drift_ms": 0.001
+          },
+          "largest_segment_cpu": null
+        },
+        {
+          "elapsed_us": 55416400,
+          "entry": 9,
+          "fully_in_play": true,
+          "interval_us": 36731,
+          "level_id": "skirmish",
+          "minute": 1,
+          "mode": "skirmish",
+          "physics_steps": 3,
+          "post_to_physics_us": 540,
+          "post_to_pre_draw_us": 29877,
+          "post_to_process_us": 16375,
+          "unix_end_us": 1795508381354000,
+          "memory_counter_probe_overlap": false,
+          "segments_ms": {
+            "between_frames": 0.54,
+            "physics_to_process": 15.835,
+            "process_to_pre_draw": 13.502,
+            "pre_draw_to_post_draw": 6.854
+          },
+          "largest_segment": "physics_to_process",
+          "largest_segment_share": 0.431,
+          "frame_cpu": null,
+          "largest_segment_cpu": null
+        },
+        {
+          "elapsed_us": 55457402,
+          "entry": 9,
+          "fully_in_play": true,
+          "interval_us": 41002,
+          "level_id": "skirmish",
+          "minute": 1,
+          "mode": "skirmish",
+          "physics_steps": 2,
+          "post_to_physics_us": 790,
+          "post_to_pre_draw_us": 34535,
+          "post_to_process_us": 10412,
+          "unix_end_us": 1795508381396000,
+          "memory_counter_probe_overlap": false,
+          "segments_ms": {
+            "between_frames": 0.79,
+            "physics_to_process": 9.622,
+            "process_to_pre_draw": 24.123,
+            "pre_draw_to_post_draw": 6.467
+          },
+          "largest_segment": "process_to_pre_draw",
+          "largest_segment_share": 0.588,
+          "frame_cpu": null,
+          "largest_segment_cpu": null
+        },
+        {
+          "elapsed_us": 55495911,
+          "entry": 9,
+          "fully_in_play": true,
+          "interval_us": 38509,
+          "level_id": "skirmish",
+          "minute": 1,
+          "mode": "skirmish",
+          "physics_steps": 3,
+          "post_to_physics_us": 469,
+          "post_to_pre_draw_us": 29541,
+          "post_to_process_us": 15844,
+          "unix_end_us": 1795508381435000,
+          "memory_counter_probe_overlap": false,
+          "segments_ms": {
+            "between_frames": 0.469,
+            "physics_to_process": 15.375,
+            "process_to_pre_draw": 13.697,
+            "pre_draw_to_post_draw": 8.968
+          },
+          "largest_segment": "physics_to_process",
+          "largest_segment_share": 0.399,
+          "frame_cpu": {
+            "main_cpu_in_and_out_ms": [
+              31.25,
+              62.5
+            ],
+            "process_cpu_in_and_out_ms": [
+              31.25,
+              93.75
+            ],
+            "main_cycles_in_and_out_million": [
+              91.012,
+              177.755
+            ],
+            "bracket_slack_ms": 12.331,
+            "unix_qpc_drift_ms": 0.004
+          },
+          "largest_segment_cpu": null
+        },
+        {
+          "elapsed_us": 55532358,
+          "entry": 9,
+          "fully_in_play": true,
+          "interval_us": 36447,
+          "level_id": "skirmish",
+          "minute": 1,
+          "mode": "skirmish",
+          "physics_steps": 2,
+          "post_to_physics_us": 520,
+          "post_to_pre_draw_us": 31091,
+          "post_to_process_us": 14947,
+          "unix_end_us": 1795508381471000,
+          "memory_counter_probe_overlap": false,
+          "segments_ms": {
+            "between_frames": 0.52,
+            "physics_to_process": 14.427,
+            "process_to_pre_draw": 16.144,
+            "pre_draw_to_post_draw": 5.356
+          },
+          "largest_segment": "process_to_pre_draw",
+          "largest_segment_share": 0.443,
+          "frame_cpu": null,
+          "largest_segment_cpu": null
+        },
+        {
+          "elapsed_us": 55574318,
+          "entry": 9,
+          "fully_in_play": true,
+          "interval_us": 41960,
+          "level_id": "skirmish",
+          "minute": 1,
+          "mode": "skirmish",
+          "physics_steps": 3,
+          "post_to_physics_us": 492,
+          "post_to_pre_draw_us": 33710,
+          "post_to_process_us": 11597,
+          "unix_end_us": 1795508381513000,
+          "memory_counter_probe_overlap": false,
+          "segments_ms": {
+            "between_frames": 0.492,
+            "physics_to_process": 11.105,
+            "process_to_pre_draw": 22.113,
+            "pre_draw_to_post_draw": 8.25
+          },
+          "largest_segment": "process_to_pre_draw",
+          "largest_segment_share": 0.527,
+          "frame_cpu": {
+            "main_cpu_in_and_out_ms": [
+              31.25,
+              62.5
+            ],
+            "process_cpu_in_and_out_ms": [
+              31.25,
+              62.5
+            ],
+            "main_cycles_in_and_out_million": [
+              87.947,
+              179.404
+            ],
+            "bracket_slack_ms": 12.228,
+            "unix_qpc_drift_ms": 0.002
+          },
+          "largest_segment_cpu": null
+        },
+        {
+          "elapsed_us": 55616325,
+          "entry": 9,
+          "fully_in_play": true,
+          "interval_us": 42007,
+          "level_id": "skirmish",
+          "minute": 1,
+          "mode": "skirmish",
+          "physics_steps": 2,
+          "post_to_physics_us": 1153,
+          "post_to_pre_draw_us": 31803,
+          "post_to_process_us": 11932,
+          "unix_end_us": 1795508381555000,
+          "memory_counter_probe_overlap": false,
+          "segments_ms": {
+            "between_frames": 1.153,
+            "physics_to_process": 10.779,
+            "process_to_pre_draw": 19.871,
+            "pre_draw_to_post_draw": 10.204
+          },
+          "largest_segment": "process_to_pre_draw",
+          "largest_segment_share": 0.473,
+          "frame_cpu": null,
+          "largest_segment_cpu": null
+        },
+        {
+          "elapsed_us": 55654526,
+          "entry": 9,
+          "fully_in_play": true,
+          "interval_us": 38201,
+          "level_id": "skirmish",
+          "minute": 1,
+          "mode": "skirmish",
+          "physics_steps": 3,
+          "post_to_physics_us": 1110,
+          "post_to_pre_draw_us": 30614,
+          "post_to_process_us": 17874,
+          "unix_end_us": 1795508381593000,
+          "memory_counter_probe_overlap": false,
+          "segments_ms": {
+            "between_frames": 1.11,
+            "physics_to_process": 16.764,
+            "process_to_pre_draw": 12.74,
+            "pre_draw_to_post_draw": 7.587
+          },
+          "largest_segment": "physics_to_process",
+          "largest_segment_share": 0.439,
+          "frame_cpu": null,
+          "largest_segment_cpu": null
+        },
+        {
+          "elapsed_us": 55701242,
+          "entry": 9,
+          "fully_in_play": true,
+          "interval_us": 46716,
+          "level_id": "skirmish",
+          "minute": 1,
+          "mode": "skirmish",
+          "physics_steps": 2,
+          "post_to_physics_us": 960,
+          "post_to_pre_draw_us": 39695,
+          "post_to_process_us": 17471,
+          "unix_end_us": 1795508381640000,
+          "memory_counter_probe_overlap": false,
+          "segments_ms": {
+            "between_frames": 0.96,
+            "physics_to_process": 16.511,
+            "process_to_pre_draw": 22.224,
+            "pre_draw_to_post_draw": 7.021
+          },
+          "largest_segment": "process_to_pre_draw",
+          "largest_segment_share": 0.476,
+          "frame_cpu": {
+            "main_cpu_in_and_out_ms": [
+              31.25,
+              62.5
+            ],
+            "process_cpu_in_and_out_ms": [
+              31.25,
+              62.5
+            ],
+            "main_cycles_in_and_out_million": [
+              91.142,
+              181.822
+            ],
+            "bracket_slack_ms": 10.79,
+            "unix_qpc_drift_ms": 0.001
+          },
+          "largest_segment_cpu": null
+        },
+        {
+          "elapsed_us": 55735235,
+          "entry": 9,
+          "fully_in_play": true,
+          "interval_us": 33993,
+          "level_id": "skirmish",
+          "minute": 1,
+          "mode": "skirmish",
+          "physics_steps": 3,
+          "post_to_physics_us": 657,
+          "post_to_pre_draw_us": 28126,
+          "post_to_process_us": 12113,
+          "unix_end_us": 1795508381674000,
+          "memory_counter_probe_overlap": false,
+          "segments_ms": {
+            "between_frames": 0.657,
+            "physics_to_process": 11.456,
+            "process_to_pre_draw": 16.013,
+            "pre_draw_to_post_draw": 5.867
+          },
+          "largest_segment": "process_to_pre_draw",
+          "largest_segment_share": 0.471,
+          "frame_cpu": {
+            "main_cpu_in_and_out_ms": [
+              15.625,
+              46.875
+            ],
+            "process_cpu_in_and_out_ms": [
+              15.625,
+              46.875
+            ],
+            "main_cycles_in_and_out_million": [
+              44.035,
+              137.531
+            ],
+            "bracket_slack_ms": 10.783,
+            "unix_qpc_drift_ms": 0.002
+          },
+          "largest_segment_cpu": null
+        },
+        {
+          "elapsed_us": 55801425,
+          "entry": 9,
+          "fully_in_play": true,
+          "interval_us": 40334,
+          "level_id": "skirmish",
+          "minute": 1,
+          "mode": "skirmish",
+          "physics_steps": 2,
+          "post_to_physics_us": 574,
+          "post_to_pre_draw_us": 34134,
+          "post_to_process_us": 10261,
+          "unix_end_us": 1795508381740000,
+          "memory_counter_probe_overlap": false,
+          "segments_ms": {
+            "between_frames": 0.574,
+            "physics_to_process": 9.687,
+            "process_to_pre_draw": 23.873,
+            "pre_draw_to_post_draw": 6.2
+          },
+          "largest_segment": "process_to_pre_draw",
+          "largest_segment_share": 0.592,
+          "frame_cpu": {
+            "main_cpu_in_and_out_ms": [
+              15.625,
+              46.875
+            ],
+            "process_cpu_in_and_out_ms": [
+              15.625,
+              62.5
+            ],
+            "main_cycles_in_and_out_million": [
+              46.414,
+              134.427
+            ],
+            "bracket_slack_ms": 12.794,
+            "unix_qpc_drift_ms": 0.002
+          },
+          "largest_segment_cpu": null
+        },
+        {
+          "elapsed_us": 55836659,
+          "entry": 9,
+          "fully_in_play": true,
+          "interval_us": 35234,
+          "level_id": "skirmish",
+          "minute": 1,
+          "mode": "skirmish",
+          "physics_steps": 2,
+          "post_to_physics_us": 700,
+          "post_to_pre_draw_us": 29318,
+          "post_to_process_us": 14623,
+          "unix_end_us": 1795508381775000,
+          "memory_counter_probe_overlap": false,
+          "segments_ms": {
+            "between_frames": 0.7,
+            "physics_to_process": 13.923,
+            "process_to_pre_draw": 14.695,
+            "pre_draw_to_post_draw": 5.916
+          },
+          "largest_segment": "process_to_pre_draw",
+          "largest_segment_share": 0.417,
+          "frame_cpu": null,
+          "largest_segment_cpu": null
+        },
+        {
+          "elapsed_us": 55900497,
+          "entry": 9,
+          "fully_in_play": true,
+          "interval_us": 36705,
+          "level_id": "skirmish",
+          "minute": 1,
+          "mode": "skirmish",
+          "physics_steps": 2,
+          "post_to_physics_us": 465,
+          "post_to_pre_draw_us": 30764,
+          "post_to_process_us": 10735,
+          "unix_end_us": 1795508381839000,
+          "memory_counter_probe_overlap": false,
+          "segments_ms": {
+            "between_frames": 0.465,
+            "physics_to_process": 10.27,
+            "process_to_pre_draw": 20.029,
+            "pre_draw_to_post_draw": 5.941
+          },
+          "largest_segment": "process_to_pre_draw",
+          "largest_segment_share": 0.546,
+          "frame_cpu": null,
+          "largest_segment_cpu": null
+        },
+        {
+          "elapsed_us": 56803047,
+          "entry": 9,
+          "fully_in_play": true,
+          "interval_us": 43642,
+          "level_id": "skirmish",
+          "minute": 1,
+          "mode": "skirmish",
+          "physics_steps": 2,
+          "post_to_physics_us": 439,
+          "post_to_pre_draw_us": 35219,
+          "post_to_process_us": 15556,
+          "unix_end_us": 1795508382742000,
+          "memory_counter_probe_overlap": false,
+          "segments_ms": {
+            "between_frames": 0.439,
+            "physics_to_process": 15.117,
+            "process_to_pre_draw": 19.663,
+            "pre_draw_to_post_draw": 8.423
+          },
+          "largest_segment": "process_to_pre_draw",
+          "largest_segment_share": 0.451,
+          "frame_cpu": {
+            "main_cpu_in_and_out_ms": [
+              31.25,
+              62.5
+            ],
+            "process_cpu_in_and_out_ms": [
+              31.25,
+              62.5
+            ],
+            "main_cycles_in_and_out_million": [
+              88.541,
+              173.77
+            ],
+            "bracket_slack_ms": 14.123,
+            "unix_qpc_drift_ms": 0.0
+          },
+          "largest_segment_cpu": null
+        },
+        {
+          "elapsed_us": 229267608,
+          "entry": 37,
+          "fully_in_play": true,
+          "interval_us": 37971,
+          "level_id": "level1",
+          "minute": 4,
+          "mode": "campaign",
+          "physics_steps": 0,
+          "post_to_physics_us": -1,
+          "post_to_pre_draw_us": 3055,
+          "post_to_process_us": 107,
+          "unix_end_us": 1795508555206000,
+          "memory_counter_probe_overlap": false,
+          "segments_ms": {
+            "between_frames": 0.107,
+            "physics_to_process": 0.0,
+            "process_to_pre_draw": 2.948,
+            "pre_draw_to_post_draw": 34.916
+          },
+          "largest_segment": "pre_draw_to_post_draw",
+          "largest_segment_share": 0.92,
+          "frame_cpu": null,
+          "largest_segment_cpu": null
+        },
+        {
+          "elapsed_us": 235452116,
+          "entry": 38,
+          "fully_in_play": false,
+          "interval_us": 42547,
+          "level_id": "arena",
+          "minute": 4,
+          "mode": "arena",
+          "physics_steps": 3,
+          "post_to_physics_us": 16552,
+          "post_to_pre_draw_us": 41218,
+          "post_to_process_us": 34312,
+          "unix_end_us": 1795508561391000,
+          "memory_counter_probe_overlap": false
+        }
+      ]
+    },
+    "terrace": {
+      "run": {
+        "candidate": "d09f8f4f354639cc68f2cab0b4767bc7e169233e",
+        "payload_files_unchanged": true,
+        "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+        "pck_sha256": "70bb31040b1998806202df9363fd9e219c2a3ce2811baae6bfa3436c5ab13393",
+        "split_identity": "9971350051bc07701a20073953328617ea2227d08796a83f87e0dfa3b77e264f",
+        "exe_unchanged": true,
+        "exit_code": 0,
+        "seconds": 252.493,
+        "errors": [],
+        "warnings": [],
+        "log_sha256": "ffe611494a36eee6805066d0b7e5470598719916691ed8024365cc6fa599dd9b",
+        "thread_id": 4072,
+        "thread_samples_sha256": "4e7472954f235732754b61c69b8f402b4720cedd44c5acaaab100f2604e7ea9a",
+        "report_sha256": "2fcc6f85c2bde915454e904aa22b0fba5853b8cfb6c4b36c93222d38153652eb"
+      },
+      "seconds": 241.578414,
+      "lifecycle_passes": 38,
+      "sample_count": 16168,
+      "sampler_observed_median_interval_ms": 15.46,
+      "instrumented_scene_sha256": "a1aeebc02072cac6c19008b2e8ad0ed50600f25068575f35c2428bdecbbdb9de",
+      "all_tagged_play_long_frames": 5,
+      "fully_in_play": 4,
+      "memory_probe_overlaps": 0,
+      "minute_samples": [
+        {
+          "average_draw_calls": 559.609349593496,
+          "average_frame_ms": 3.43780963995353,
+          "bucket_seconds": 60.000341,
+          "cycle": 2,
+          "elapsed_seconds": 60.000344,
+          "frame_stages": [
+            {
+              "frames": 1,
+              "level_id": "",
+              "mode": "",
+              "over_16_7_ms": 0,
+              "over_33_3_ms": 0,
+              "stage": "menu"
+            },
+            {
+              "frames": 19,
+              "level_id": "level1",
+              "mode": "campaign",
+              "over_16_7_ms": 5,
+              "over_33_3_ms": 5,
+              "stage": "mount"
+            },
+            {
+              "frames": 2,
+              "level_id": "level1",
+              "mode": "campaign",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 1,
+              "stage": "start"
+            },
+            {
+              "frames": 3723,
+              "level_id": "level1",
+              "mode": "campaign",
+              "over_16_7_ms": 0,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 4,
+              "level_id": "level1",
+              "mode": "campaign",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 2,
+              "stage": "return"
+            },
+            {
+              "frames": 4,
+              "level_id": "arena",
+              "mode": "arena",
+              "over_16_7_ms": 4,
+              "over_33_3_ms": 2,
+              "stage": "mount"
+            },
+            {
+              "frames": 2,
+              "level_id": "arena",
+              "mode": "arena",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 0,
+              "stage": "start"
+            },
+            {
+              "frames": 4489,
+              "level_id": "arena",
+              "mode": "arena",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 4,
+              "level_id": "arena",
+              "mode": "arena",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 2,
+              "stage": "return"
+            },
+            {
+              "frames": 26,
+              "level_id": "skirmish",
+              "mode": "skirmish",
+              "over_16_7_ms": 8,
+              "over_33_3_ms": 5,
+              "stage": "mount"
+            },
+            {
+              "frames": 2,
+              "level_id": "skirmish",
+              "mode": "skirmish",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 1,
+              "stage": "start"
+            },
+            {
+              "frames": 3605,
+              "level_id": "skirmish",
+              "mode": "skirmish",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 4,
+              "level_id": "skirmish",
+              "mode": "skirmish",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 2,
+              "stage": "return"
+            },
+            {
+              "frames": 4,
+              "level_id": "skirmish_ai",
+              "mode": "skirmish_ai",
+              "over_16_7_ms": 4,
+              "over_33_3_ms": 2,
+              "stage": "mount"
+            },
+            {
+              "frames": 2,
+              "level_id": "skirmish_ai",
+              "mode": "skirmish_ai",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 0,
+              "stage": "start"
+            },
+            {
+              "frames": 3100,
+              "level_id": "skirmish_ai",
+              "mode": "skirmish_ai",
+              "over_16_7_ms": 0,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 2,
+              "level_id": "skirmish_ai",
+              "mode": "skirmish_ai",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 1,
+              "stage": "return"
+            },
+            {
+              "frames": 14,
+              "level_id": "custom_defense",
+              "mode": "custom_defense",
+              "over_16_7_ms": 4,
+              "over_33_3_ms": 3,
+              "stage": "mount"
+            },
+            {
+              "frames": 1,
+              "level_id": "custom_defense",
+              "mode": "custom_defense",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 0,
+              "stage": "start"
+            },
+            {
+              "frames": 1266,
+              "level_id": "custom_defense",
+              "mode": "custom_defense",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 2,
+              "level_id": "custom_defense",
+              "mode": "custom_defense",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 1,
+              "stage": "return"
+            },
+            {
+              "frames": 14,
+              "level_id": "level5",
+              "mode": "campaign",
+              "over_16_7_ms": 3,
+              "over_33_3_ms": 3,
+              "stage": "mount"
+            },
+            {
+              "frames": 1,
+              "level_id": "level5",
+              "mode": "campaign",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 1,
+              "stage": "start"
+            },
+            {
+              "frames": 927,
+              "level_id": "level5",
+              "mode": "campaign",
+              "over_16_7_ms": 3,
+              "over_33_3_ms": 1,
+              "stage": "play"
+            },
+            {
+              "frames": 2,
+              "level_id": "level5",
+              "mode": "campaign",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 1,
+              "stage": "return"
+            }
+          ],
+          "level_id": "skirmish_ai",
+          "minute": 1,
+          "mode": "skirmish_ai",
+          "p95_frame_ms": 7.877,
+          "p99_frame_ms": 11.164,
+          "partial": false,
+          "peak_draw_calls": 1343.0,
+          "phase": 2,
+          "process_memory": {
+            "peak_working_set_bytes": 1181630464.0,
+            "private_bytes": 2109054976.0,
+            "query_ok": true,
+            "source": "powershell Get-Process for this Godot PID",
+            "virtual_bytes": 11555254272.0,
+            "working_set_bytes": 1115209728.0
+          },
+          "rendered_frames": 17220,
+          "resources": {
+            "draw_calls": 488.0,
+            "godot_static_bytes": 0.0,
+            "godot_static_peak_bytes": 0.0,
+            "node_count": 199.0,
+            "object_count": 3523.0,
+            "orphan_node_count": 0.0,
+            "render_buffer_bytes": 8429052.0,
+            "render_objects": 5106.0,
+            "render_primitives": 15342.0,
+            "render_texture_bytes": 679373824.0,
+            "render_video_bytes": 813639200.0,
+            "resource_count": 360.0
+          },
+          "root_child_count": 16,
+          "scene_count": 1,
+          "units": {
+            "alive_units": 40,
+            "buildings": 26,
+            "guan": 8,
+            "liang": 32,
+            "mobile_units": 14,
+            "resources": 0,
+            "scene_units": 40,
+            "visible": 32
+          },
+          "worst_frame_ms": 255.919
+        },
+        {
+          "average_draw_calls": 689.25687955146,
+          "average_frame_ms": 3.84414764451889,
+          "bucket_seconds": 60.001179,
+          "cycle": 4,
+          "elapsed_seconds": 120.001523,
+          "frame_stages": [
+            {
+              "frames": 6,
+              "level_id": "level1",
+              "mode": "campaign",
+              "over_16_7_ms": 4,
+              "over_33_3_ms": 4,
+              "stage": "mount"
+            },
+            {
+              "frames": 2,
+              "level_id": "level1",
+              "mode": "campaign",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 0,
+              "stage": "start"
+            },
+            {
+              "frames": 2704,
+              "level_id": "level1",
+              "mode": "campaign",
+              "over_16_7_ms": 0,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 2,
+              "level_id": "level1",
+              "mode": "campaign",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 1,
+              "stage": "return"
+            },
+            {
+              "frames": 2,
+              "level_id": "arena",
+              "mode": "arena",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 1,
+              "stage": "mount"
+            },
+            {
+              "frames": 1,
+              "level_id": "arena",
+              "mode": "arena",
+              "over_16_7_ms": 0,
+              "over_33_3_ms": 0,
+              "stage": "start"
+            },
+            {
+              "frames": 1690,
+              "level_id": "arena",
+              "mode": "arena",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 2,
+              "level_id": "arena",
+              "mode": "arena",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 1,
+              "stage": "return"
+            },
+            {
+              "frames": 15,
+              "level_id": "skirmish",
+              "mode": "skirmish",
+              "over_16_7_ms": 3,
+              "over_33_3_ms": 2,
+              "stage": "mount"
+            },
+            {
+              "frames": 1,
+              "level_id": "skirmish",
+              "mode": "skirmish",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 0,
+              "stage": "start"
+            },
+            {
+              "frames": 1486,
+              "level_id": "skirmish",
+              "mode": "skirmish",
+              "over_16_7_ms": 0,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 2,
+              "level_id": "skirmish",
+              "mode": "skirmish",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 1,
+              "stage": "return"
+            },
+            {
+              "frames": 2,
+              "level_id": "skirmish_ai",
+              "mode": "skirmish_ai",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 1,
+              "stage": "mount"
+            },
+            {
+              "frames": 1,
+              "level_id": "skirmish_ai",
+              "mode": "skirmish_ai",
+              "over_16_7_ms": 0,
+              "over_33_3_ms": 0,
+              "stage": "start"
+            },
+            {
+              "frames": 3638,
+              "level_id": "skirmish_ai",
+              "mode": "skirmish_ai",
+              "over_16_7_ms": 0,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 4,
+              "level_id": "skirmish_ai",
+              "mode": "skirmish_ai",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 2,
+              "stage": "return"
+            },
+            {
+              "frames": 28,
+              "level_id": "custom_defense",
+              "mode": "custom_defense",
+              "over_16_7_ms": 6,
+              "over_33_3_ms": 4,
+              "stage": "mount"
+            },
+            {
+              "frames": 2,
+              "level_id": "custom_defense",
+              "mode": "custom_defense",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 0,
+              "stage": "start"
+            },
+            {
+              "frames": 3302,
+              "level_id": "custom_defense",
+              "mode": "custom_defense",
+              "over_16_7_ms": 0,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 4,
+              "level_id": "custom_defense",
+              "mode": "custom_defense",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 2,
+              "stage": "return"
+            },
+            {
+              "frames": 25,
+              "level_id": "level5",
+              "mode": "campaign",
+              "over_16_7_ms": 6,
+              "over_33_3_ms": 4,
+              "stage": "mount"
+            },
+            {
+              "frames": 2,
+              "level_id": "level5",
+              "mode": "campaign",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 1,
+              "stage": "start"
+            },
+            {
+              "frames": 2592,
+              "level_id": "level5",
+              "mode": "campaign",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 4,
+              "level_id": "level5",
+              "mode": "campaign",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 2,
+              "stage": "return"
+            }
+          ],
+          "level_id": "level1",
+          "minute": 2,
+          "mode": "campaign",
+          "p95_frame_ms": 8.013,
+          "p99_frame_ms": 10.702,
+          "partial": false,
+          "peak_draw_calls": 1382.0,
+          "phase": 2,
+          "process_memory": {
+            "peak_working_set_bytes": 1188597760.0,
+            "private_bytes": 2117447680.0,
+            "query_ok": true,
+            "source": "powershell Get-Process for this Godot PID",
+            "virtual_bytes": 11555254272.0,
+            "working_set_bytes": 1119744000.0
+          },
+          "rendered_frames": 15517,
+          "resources": {
+            "draw_calls": 214.0,
+            "godot_static_bytes": 0.0,
+            "godot_static_peak_bytes": 0.0,
+            "node_count": 235.0,
+            "object_count": 3630.0,
+            "orphan_node_count": 0.0,
+            "render_buffer_bytes": 9059776.0,
+            "render_objects": 617.0,
+            "render_primitives": 20999.0,
+            "render_texture_bytes": 693025792.0,
+            "render_video_bytes": 827920576.0,
+            "resource_count": 380.0
+          },
+          "root_child_count": 16,
+          "scene_count": 1,
+          "units": {
+            "alive_units": 24,
+            "buildings": 11,
+            "guan": 17,
+            "liang": 7,
+            "mobile_units": 13,
+            "resources": 0,
+            "scene_units": 24,
+            "visible": 24
+          },
+          "worst_frame_ms": 116.697
+        },
+        {
+          "average_draw_calls": 625.418176670442,
+          "average_frame_ms": 3.3804942808607,
+          "bucket_seconds": 60.000102,
+          "cycle": 5,
+          "elapsed_seconds": 180.001625,
+          "frame_stages": [
+            {
+              "frames": 3,
+              "level_id": "level1",
+              "mode": "campaign",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 2,
+              "stage": "mount"
+            },
+            {
+              "frames": 1,
+              "level_id": "level1",
+              "mode": "campaign",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 0,
+              "stage": "start"
+            },
+            {
+              "frames": 1836,
+              "level_id": "level1",
+              "mode": "campaign",
+              "over_16_7_ms": 0,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 4,
+              "level_id": "level1",
+              "mode": "campaign",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 2,
+              "stage": "return"
+            },
+            {
+              "frames": 4,
+              "level_id": "arena",
+              "mode": "arena",
+              "over_16_7_ms": 4,
+              "over_33_3_ms": 2,
+              "stage": "mount"
+            },
+            {
+              "frames": 2,
+              "level_id": "arena",
+              "mode": "arena",
+              "over_16_7_ms": 0,
+              "over_33_3_ms": 0,
+              "stage": "start"
+            },
+            {
+              "frames": 4072,
+              "level_id": "arena",
+              "mode": "arena",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 4,
+              "level_id": "arena",
+              "mode": "arena",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 2,
+              "stage": "return"
+            },
+            {
+              "frames": 25,
+              "level_id": "skirmish",
+              "mode": "skirmish",
+              "over_16_7_ms": 6,
+              "over_33_3_ms": 4,
+              "stage": "mount"
+            },
+            {
+              "frames": 2,
+              "level_id": "skirmish",
+              "mode": "skirmish",
+              "over_16_7_ms": 0,
+              "over_33_3_ms": 0,
+              "stage": "start"
+            },
+            {
+              "frames": 3757,
+              "level_id": "skirmish",
+              "mode": "skirmish",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 4,
+              "level_id": "skirmish",
+              "mode": "skirmish",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 2,
+              "stage": "return"
+            },
+            {
+              "frames": 4,
+              "level_id": "skirmish_ai",
+              "mode": "skirmish_ai",
+              "over_16_7_ms": 4,
+              "over_33_3_ms": 2,
+              "stage": "mount"
+            },
+            {
+              "frames": 2,
+              "level_id": "skirmish_ai",
+              "mode": "skirmish_ai",
+              "over_16_7_ms": 0,
+              "over_33_3_ms": 0,
+              "stage": "start"
+            },
+            {
+              "frames": 4408,
+              "level_id": "skirmish_ai",
+              "mode": "skirmish_ai",
+              "over_16_7_ms": 0,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 4,
+              "level_id": "skirmish_ai",
+              "mode": "skirmish_ai",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 2,
+              "stage": "return"
+            },
+            {
+              "frames": 27,
+              "level_id": "custom_defense",
+              "mode": "custom_defense",
+              "over_16_7_ms": 6,
+              "over_33_3_ms": 4,
+              "stage": "mount"
+            },
+            {
+              "frames": 2,
+              "level_id": "custom_defense",
+              "mode": "custom_defense",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 0,
+              "stage": "start"
+            },
+            {
+              "frames": 2386,
+              "level_id": "custom_defense",
+              "mode": "custom_defense",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 2,
+              "level_id": "custom_defense",
+              "mode": "custom_defense",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 1,
+              "stage": "return"
+            },
+            {
+              "frames": 13,
+              "level_id": "level5",
+              "mode": "campaign",
+              "over_16_7_ms": 3,
+              "over_33_3_ms": 2,
+              "stage": "mount"
+            },
+            {
+              "frames": 1,
+              "level_id": "level5",
+              "mode": "campaign",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 1,
+              "stage": "start"
+            },
+            {
+              "frames": 1095,
+              "level_id": "level5",
+              "mode": "campaign",
+              "over_16_7_ms": 0,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 2,
+              "level_id": "level5",
+              "mode": "campaign",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 1,
+              "stage": "return"
+            }
+          ],
+          "level_id": "custom_defense",
+          "minute": 3,
+          "mode": "custom_defense",
+          "p95_frame_ms": 7.31,
+          "p99_frame_ms": 9.917,
+          "partial": false,
+          "peak_draw_calls": 1343.0,
+          "phase": 2,
+          "process_memory": {
+            "peak_working_set_bytes": 1192251392.0,
+            "private_bytes": 2125852672.0,
+            "query_ok": true,
+            "source": "powershell Get-Process for this Godot PID",
+            "virtual_bytes": 11513311232.0,
+            "working_set_bytes": 1126731776.0
+          },
+          "rendered_frames": 17660,
+          "resources": {
+            "draw_calls": 1071.0,
+            "godot_static_bytes": 0.0,
+            "godot_static_peak_bytes": 0.0,
+            "node_count": 364.0,
+            "object_count": 3898.0,
+            "orphan_node_count": 0.0,
+            "render_buffer_bytes": 11008272.0,
+            "render_objects": 2444.0,
+            "render_primitives": 93865.0,
+            "render_texture_bytes": 713668096.0,
+            "render_video_bytes": 850512368.0,
+            "resource_count": 362.0
+          },
+          "root_child_count": 16,
+          "scene_count": 1,
+          "units": {
+            "alive_units": 37,
+            "buildings": 20,
+            "guan": 10,
+            "liang": 27,
+            "mobile_units": 17,
+            "resources": 0,
+            "scene_units": 37,
+            "visible": 27
+          },
+          "worst_frame_ms": 113.608
+        },
+        {
+          "average_draw_calls": 669.872914961919,
+          "average_frame_ms": 3.75769446717442,
+          "bucket_seconds": 60.000385,
+          "cycle": 7,
+          "elapsed_seconds": 240.00201,
+          "frame_stages": [
+            {
+              "frames": 6,
+              "level_id": "level1",
+              "mode": "campaign",
+              "over_16_7_ms": 4,
+              "over_33_3_ms": 4,
+              "stage": "mount"
+            },
+            {
+              "frames": 2,
+              "level_id": "level1",
+              "mode": "campaign",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 0,
+              "stage": "start"
+            },
+            {
+              "frames": 3083,
+              "level_id": "level1",
+              "mode": "campaign",
+              "over_16_7_ms": 0,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 4,
+              "level_id": "level1",
+              "mode": "campaign",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 2,
+              "stage": "return"
+            },
+            {
+              "frames": 4,
+              "level_id": "arena",
+              "mode": "arena",
+              "over_16_7_ms": 4,
+              "over_33_3_ms": 2,
+              "stage": "mount"
+            },
+            {
+              "frames": 2,
+              "level_id": "arena",
+              "mode": "arena",
+              "over_16_7_ms": 0,
+              "over_33_3_ms": 0,
+              "stage": "start"
+            },
+            {
+              "frames": 3068,
+              "level_id": "arena",
+              "mode": "arena",
+              "over_16_7_ms": 25,
+              "over_33_3_ms": 4,
+              "stage": "play"
+            },
+            {
+              "frames": 2,
+              "level_id": "arena",
+              "mode": "arena",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 1,
+              "stage": "return"
+            },
+            {
+              "frames": 14,
+              "level_id": "skirmish",
+              "mode": "skirmish",
+              "over_16_7_ms": 3,
+              "over_33_3_ms": 2,
+              "stage": "mount"
+            },
+            {
+              "frames": 1,
+              "level_id": "skirmish",
+              "mode": "skirmish",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 0,
+              "stage": "start"
+            },
+            {
+              "frames": 1625,
+              "level_id": "skirmish",
+              "mode": "skirmish",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 2,
+              "level_id": "skirmish",
+              "mode": "skirmish",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 1,
+              "stage": "return"
+            },
+            {
+              "frames": 2,
+              "level_id": "skirmish_ai",
+              "mode": "skirmish_ai",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 1,
+              "stage": "mount"
+            },
+            {
+              "frames": 1,
+              "level_id": "skirmish_ai",
+              "mode": "skirmish_ai",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 0,
+              "stage": "start"
+            },
+            {
+              "frames": 2205,
+              "level_id": "skirmish_ai",
+              "mode": "skirmish_ai",
+              "over_16_7_ms": 0,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 2,
+              "level_id": "skirmish_ai",
+              "mode": "skirmish_ai",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 1,
+              "stage": "return"
+            },
+            {
+              "frames": 12,
+              "level_id": "custom_defense",
+              "mode": "custom_defense",
+              "over_16_7_ms": 3,
+              "over_33_3_ms": 2,
+              "stage": "mount"
+            },
+            {
+              "frames": 1,
+              "level_id": "custom_defense",
+              "mode": "custom_defense",
+              "over_16_7_ms": 0,
+              "over_33_3_ms": 0,
+              "stage": "start"
+            },
+            {
+              "frames": 3099,
+              "level_id": "custom_defense",
+              "mode": "custom_defense",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 4,
+              "level_id": "custom_defense",
+              "mode": "custom_defense",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 2,
+              "stage": "return"
+            },
+            {
+              "frames": 25,
+              "level_id": "level5",
+              "mode": "campaign",
+              "over_16_7_ms": 8,
+              "over_33_3_ms": 4,
+              "stage": "mount"
+            },
+            {
+              "frames": 2,
+              "level_id": "level5",
+              "mode": "campaign",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 1,
+              "stage": "start"
+            },
+            {
+              "frames": 2717,
+              "level_id": "level5",
+              "mode": "campaign",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 4,
+              "level_id": "level5",
+              "mode": "campaign",
+              "over_16_7_ms": 2,
+              "over_33_3_ms": 2,
+              "stage": "return"
+            }
+          ],
+          "level_id": "arena",
+          "minute": 4,
+          "mode": "arena",
+          "p95_frame_ms": 7.693,
+          "p99_frame_ms": 11.942,
+          "partial": false,
+          "peak_draw_calls": 1382.0,
+          "phase": 2,
+          "process_memory": {
+            "peak_working_set_bytes": 1197752320.0,
+            "private_bytes": 2128265216.0,
+            "query_ok": true,
+            "source": "powershell Get-Process for this Godot PID",
+            "virtual_bytes": 11513311232.0,
+            "working_set_bytes": 1129107456.0
+          },
+          "rendered_frames": 15887,
+          "resources": {
+            "draw_calls": 226.0,
+            "godot_static_bytes": 0.0,
+            "godot_static_peak_bytes": 0.0,
+            "node_count": 212.0,
+            "object_count": 3517.0,
+            "orphan_node_count": 0.0,
+            "render_buffer_bytes": 8340156.0,
+            "render_objects": 3549.0,
+            "render_primitives": 12020.0,
+            "render_texture_bytes": 679357440.0,
+            "render_video_bytes": 813532384.0,
+            "resource_count": 360.0
+          },
+          "root_child_count": 16,
+          "scene_count": 1,
+          "units": {
+            "alive_units": 58,
+            "buildings": 5,
+            "guan": 50,
+            "liang": 8,
+            "mobile_units": 53,
+            "resources": 0,
+            "scene_units": 58,
+            "visible": 58
+          },
+          "worst_frame_ms": 115.858
+        },
+        {
+          "average_draw_calls": 200.8984375,
+          "average_frame_ms": 4.58534375,
+          "bucket_seconds": 0.914187,
+          "cycle": 7,
+          "elapsed_seconds": 240.916196,
+          "frame_stages": [
+            {
+              "frames": 118,
+              "level_id": "arena",
+              "mode": "arena",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 0,
+              "stage": "play"
+            },
+            {
+              "frames": 2,
+              "level_id": "arena",
+              "mode": "arena",
+              "over_16_7_ms": 1,
+              "over_33_3_ms": 1,
+              "stage": "return"
+            },
+            {
+              "frames": 8,
+              "level_id": "",
+              "mode": "",
+              "over_16_7_ms": 0,
+              "over_33_3_ms": 0,
+              "stage": "final_cleanup"
+            }
+          ],
+          "level_id": "",
+          "minute": 5,
+          "mode": "final_cleanup",
+          "p95_frame_ms": 10.606,
+          "p99_frame_ms": 17.572,
+          "partial": true,
+          "peak_draw_calls": 229.0,
+          "phase": -1,
+          "process_memory": {
+            "peak_working_set_bytes": 1197752320.0,
+            "private_bytes": 2128265216.0,
+            "query_ok": true,
+            "source": "powershell Get-Process for this Godot PID",
+            "virtual_bytes": 11513311232.0,
+            "working_set_bytes": 1129107456.0
+          },
+          "rendered_frames": 128,
+          "resources": {
+            "draw_calls": 45.0,
+            "godot_static_bytes": 0.0,
+            "godot_static_peak_bytes": 0.0,
+            "node_count": 74.0,
+            "object_count": 3276.0,
+            "orphan_node_count": 0.0,
+            "render_buffer_bytes": 8041028.0,
+            "render_objects": 490.0,
+            "render_primitives": 3860.0,
+            "render_texture_bytes": 686206464.0,
+            "render_video_bytes": 820082240.0,
+            "resource_count": 361.0
+          },
+          "root_child_count": 16,
+          "scene_count": 0,
+          "units": {
+            "alive_units": 0,
+            "buildings": 0,
+            "guan": 0,
+            "liang": 0,
+            "mobile_units": 0,
+            "resources": 0,
+            "scene_units": 0,
+            "visible": 0
+          },
+          "worst_frame_ms": 84.285
+        }
+      ],
+      "derived_phase_stats": {
+        "all": {
+          "eligible": 4,
+          "frame_cpu_brackets": 1,
+          "largest_segment_cpu_brackets": 1,
+          "largest_segment_counts": {
+            "physics_to_process": 4
+          },
+          "largest_segment_over_half": 2,
+          "with_two_or_more_physics_steps": 4,
+          "with_no_physics_steps": 0,
+          "main_cpu_inward_at_least_half": 1,
+          "main_cpu_outward_at_most_one_third": 0,
+          "median_interval_ms": 40.181
+        },
+        "level1": {
+          "eligible": 0,
+          "frame_cpu_brackets": 0,
+          "largest_segment_cpu_brackets": 0,
+          "largest_segment_counts": {},
+          "largest_segment_over_half": 0,
+          "with_two_or_more_physics_steps": 0,
+          "with_no_physics_steps": 0,
+          "main_cpu_inward_at_least_half": 0,
+          "main_cpu_outward_at_most_one_third": 0,
+          "median_interval_ms": null
+        },
+        "arena": {
+          "eligible": 4,
+          "frame_cpu_brackets": 1,
+          "largest_segment_cpu_brackets": 1,
+          "largest_segment_counts": {
+            "physics_to_process": 4
+          },
+          "largest_segment_over_half": 2,
+          "with_two_or_more_physics_steps": 4,
+          "with_no_physics_steps": 0,
+          "main_cpu_inward_at_least_half": 1,
+          "main_cpu_outward_at_most_one_third": 0,
+          "median_interval_ms": 40.181
+        },
+        "skirmish": {
+          "eligible": 0,
+          "frame_cpu_brackets": 0,
+          "largest_segment_cpu_brackets": 0,
+          "largest_segment_counts": {},
+          "largest_segment_over_half": 0,
+          "with_two_or_more_physics_steps": 0,
+          "with_no_physics_steps": 0,
+          "main_cpu_inward_at_least_half": 0,
+          "main_cpu_outward_at_most_one_third": 0,
+          "median_interval_ms": null
+        },
+        "skirmish_ai": {
+          "eligible": 0,
+          "frame_cpu_brackets": 0,
+          "largest_segment_cpu_brackets": 0,
+          "largest_segment_counts": {},
+          "largest_segment_over_half": 0,
+          "with_two_or_more_physics_steps": 0,
+          "with_no_physics_steps": 0,
+          "main_cpu_inward_at_least_half": 0,
+          "main_cpu_outward_at_most_one_third": 0,
+          "median_interval_ms": null
+        },
+        "custom_defense": {
+          "eligible": 0,
+          "frame_cpu_brackets": 0,
+          "largest_segment_cpu_brackets": 0,
+          "largest_segment_counts": {},
+          "largest_segment_over_half": 0,
+          "with_two_or_more_physics_steps": 0,
+          "with_no_physics_steps": 0,
+          "main_cpu_inward_at_least_half": 0,
+          "main_cpu_outward_at_most_one_third": 0,
+          "median_interval_ms": null
+        },
+        "level5": {
+          "eligible": 0,
+          "frame_cpu_brackets": 0,
+          "largest_segment_cpu_brackets": 0,
+          "largest_segment_counts": {},
+          "largest_segment_over_half": 0,
+          "with_two_or_more_physics_steps": 0,
+          "with_no_physics_steps": 0,
+          "main_cpu_inward_at_least_half": 0,
+          "main_cpu_outward_at_most_one_third": 0,
+          "median_interval_ms": null
+        }
+      },
+      "frames": [
+        {
+          "elapsed_us": 33039641,
+          "entry": 6,
+          "fully_in_play": false,
+          "interval_us": 51132,
+          "level_id": "level5",
+          "minute": 1,
+          "mode": "campaign",
+          "physics_steps": 8,
+          "post_to_physics_us": 10341,
+          "post_to_pre_draw_us": 47818,
+          "post_to_process_us": 34794,
+          "unix_end_us": 1795508612890000,
+          "memory_counter_probe_overlap": false
+        },
+        {
+          "elapsed_us": 239037590,
+          "entry": 38,
+          "fully_in_play": true,
+          "interval_us": 35580,
+          "level_id": "arena",
+          "minute": 4,
+          "mode": "arena",
+          "physics_steps": 2,
+          "post_to_physics_us": 633,
+          "post_to_pre_draw_us": 31964,
+          "post_to_process_us": 17448,
+          "unix_end_us": 1795508818888000,
+          "memory_counter_probe_overlap": false,
+          "segments_ms": {
+            "between_frames": 0.633,
+            "physics_to_process": 16.815,
+            "process_to_pre_draw": 14.516,
+            "pre_draw_to_post_draw": 3.616
+          },
+          "largest_segment": "physics_to_process",
+          "largest_segment_share": 0.473,
+          "frame_cpu": null,
+          "largest_segment_cpu": null
+        },
+        {
+          "elapsed_us": 239081641,
+          "entry": 38,
+          "fully_in_play": true,
+          "interval_us": 44051,
+          "level_id": "arena",
+          "minute": 4,
+          "mode": "arena",
+          "physics_steps": 2,
+          "post_to_physics_us": 743,
+          "post_to_pre_draw_us": 38254,
+          "post_to_process_us": 20374,
+          "unix_end_us": 1795508818932000,
+          "memory_counter_probe_overlap": false,
+          "segments_ms": {
+            "between_frames": 0.743,
+            "physics_to_process": 19.631,
+            "process_to_pre_draw": 17.88,
+            "pre_draw_to_post_draw": 5.797
+          },
+          "largest_segment": "physics_to_process",
+          "largest_segment_share": 0.446,
+          "frame_cpu": null,
+          "largest_segment_cpu": null
+        },
+        {
+          "elapsed_us": 239142957,
+          "entry": 38,
+          "fully_in_play": true,
+          "interval_us": 61316,
+          "level_id": "arena",
+          "minute": 4,
+          "mode": "arena",
+          "physics_steps": 2,
+          "post_to_physics_us": 809,
+          "post_to_pre_draw_us": 57683,
+          "post_to_process_us": 39067,
+          "unix_end_us": 1795508818994000,
+          "memory_counter_probe_overlap": false,
+          "segments_ms": {
+            "between_frames": 0.809,
+            "physics_to_process": 38.258,
+            "process_to_pre_draw": 18.616,
+            "pre_draw_to_post_draw": 3.633
+          },
+          "largest_segment": "physics_to_process",
+          "largest_segment_share": 0.624,
+          "frame_cpu": {
+            "main_cpu_in_and_out_ms": [
+              62.5,
+              78.125
+            ],
+            "process_cpu_in_and_out_ms": [
+              62.5,
+              78.125
+            ],
+            "main_cycles_in_and_out_million": [
+              148.962,
+              243.139
+            ],
+            "bracket_slack_ms": 18.309,
+            "unix_qpc_drift_ms": 0.005
+          },
+          "largest_segment_cpu": {
+            "main_cpu_in_and_out_ms": [
+              15.625,
+              46.875
+            ],
+            "process_cpu_in_and_out_ms": [
+              15.625,
+              46.875
+            ],
+            "main_cycles_in_and_out_million": [
+              37.788,
+              108.996
+            ],
+            "bracket_slack_ms": 12.404,
+            "unix_qpc_drift_ms": 0.006
+          }
+        },
+        {
+          "elapsed_us": 239179268,
+          "entry": 38,
+          "fully_in_play": true,
+          "interval_us": 36311,
+          "level_id": "arena",
+          "minute": 4,
+          "mode": "arena",
+          "physics_steps": 4,
+          "post_to_physics_us": 550,
+          "post_to_pre_draw_us": 33723,
+          "post_to_process_us": 22824,
+          "unix_end_us": 1795508819029000,
+          "memory_counter_probe_overlap": false,
+          "segments_ms": {
+            "between_frames": 0.55,
+            "physics_to_process": 22.274,
+            "process_to_pre_draw": 10.899,
+            "pre_draw_to_post_draw": 2.588
+          },
+          "largest_segment": "physics_to_process",
+          "largest_segment_share": 0.613,
+          "frame_cpu": null,
+          "largest_segment_cpu": null
+        }
+      ]
+    }
+  },
+  "battle_section_followup": {
+    "scope": "Separate instrumented native baseline run with existing Battle and Unit profiler counters enabled only in live visits. Counter wall time is directly measured inside selected callbacks. The synthetic battle benchmark is inactive.",
+    "wall_seconds": 135.630174,
+    "lifecycle_passes": 21,
+    "all_traced_frames": 75,
+    "fully_in_play": 73,
+    "level_counts": {
+      "arena": 42,
+      "skirmish": 10,
+      "custom_defense": 2,
+      "level5": 12,
+      "level1": 7
+    },
+    "fixture_sha256": "caf1c885e1a0325bfd0e40b14bf99d3c873dee39c11ed719aaf0a2d6a01dec61",
+    "run": {
+      "candidate": "f76e44fdd940da7dd66c4df4a855714948adcd27",
+      "payload_files_unchanged": true,
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "2b56c924785544902d9e1a6ea727cba5629bc9f9acbdce3c10d7c641b10f154f",
+      "split_identity": "86caa8a1da4dc0db77e8b47685db43f0b43ec86a64bbedf8284b7d69c3c4b33c",
+      "exe_unchanged": true,
+      "exit_code": 0,
+      "seconds": 145.515,
+      "errors": [],
+      "warnings": [],
+      "log_sha256": "8c0f17fdbe863ad46fecee83f6ea19c7f511bc8836ae1b603c280bb5f0f77d97",
+      "thread_id": 25776,
+      "thread_samples_sha256": "2e6c3dbe4c7f51e7a662a4cca8bdb6c5fd2f4bfe668073d1a17b579c286244a4",
+      "report_sha256": "a201ccd4f0c9697f6429e55f1c7203b99c3cb250a10dc5842340c6d2a94a9c35"
+    },
+    "representative_arena_frame": {
+      "battle_physics_sections_us": {
+        "aura": 759,
+        "automicro": 182,
+        "fog": 44,
+        "grid": 5183,
+        "level_hud": 1290,
+        "separation": 13194,
+        "stealth_ecast": 235,
+        "summon_eco": 297,
+        "zones": 274
+      },
+      "elapsed_us": 49791292,
+      "entry": 8,
+      "fully_in_play": true,
+      "interval_us": 70775,
+      "level_id": "arena",
+      "minute": 1,
+      "mode": "arena",
+      "physics_steps": 3,
+      "post_to_physics_us": 654,
+      "post_to_pre_draw_us": 68142,
+      "post_to_process_us": 43220,
+      "profiled_battle_physics_steps": 3,
+      "unit_physics_us": 17665,
+      "unix_end_us": 1795508899002000
+    },
+    "representative_classic_frame": {
+      "battle_physics_sections_us": {
+        "aura": 1401,
+        "automicro": 217,
+        "fog": 6464,
+        "grid": 6608,
+        "level_hud": 3229,
+        "separation": 3587,
+        "stealth_ecast": 258,
+        "summon_eco": 271,
+        "zones": 406
+      },
+      "elapsed_us": 52905198,
+      "entry": 9,
+      "fully_in_play": true,
+      "interval_us": 91775,
+      "level_id": "skirmish",
+      "minute": 1,
+      "mode": "skirmish",
+      "physics_steps": 4,
+      "post_to_physics_us": 939,
+      "post_to_pre_draw_us": 81308,
+      "post_to_process_us": 42457,
+      "profiled_battle_physics_steps": 4,
+      "unit_physics_us": 15118,
+      "unix_end_us": 1795508902116000
+    },
+    "rows": [
+      {
+        "battle_physics_sections_us": {
+          "aura": 334,
+          "automicro": 63,
+          "fog": 15,
+          "grid": 1905,
+          "level_hud": 349,
+          "separation": 3528,
+          "stealth_ecast": 9,
+          "summon_eco": 89,
+          "zones": 106
+        },
+        "elapsed_us": 49665645,
+        "entry": 8,
+        "fully_in_play": true,
+        "interval_us": 34290,
+        "level_id": "arena",
+        "minute": 1,
+        "mode": "arena",
+        "physics_steps": 1,
+        "post_to_physics_us": 412,
+        "post_to_pre_draw_us": 29715,
+        "post_to_process_us": 14361,
+        "profiled_battle_physics_steps": 1,
+        "unit_physics_us": 6406,
+        "unix_end_us": 1795508898876000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 532,
+          "automicro": 118,
+          "fog": 29,
+          "grid": 3247,
+          "level_hud": 744,
+          "separation": 7610,
+          "stealth_ecast": 13,
+          "summon_eco": 165,
+          "zones": 194
+        },
+        "elapsed_us": 49720517,
+        "entry": 8,
+        "fully_in_play": true,
+        "interval_us": 54872,
+        "level_id": "arena",
+        "minute": 1,
+        "mode": "arena",
+        "physics_steps": 2,
+        "post_to_physics_us": 588,
+        "post_to_pre_draw_us": 49600,
+        "post_to_process_us": 29580,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 14440,
+        "unix_end_us": 1795508898931000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 759,
+          "automicro": 182,
+          "fog": 44,
+          "grid": 5183,
+          "level_hud": 1290,
+          "separation": 13194,
+          "stealth_ecast": 235,
+          "summon_eco": 297,
+          "zones": 274
+        },
+        "elapsed_us": 49791292,
+        "entry": 8,
+        "fully_in_play": true,
+        "interval_us": 70775,
+        "level_id": "arena",
+        "minute": 1,
+        "mode": "arena",
+        "physics_steps": 3,
+        "post_to_physics_us": 654,
+        "post_to_pre_draw_us": 68142,
+        "post_to_process_us": 43220,
+        "profiled_battle_physics_steps": 3,
+        "unit_physics_us": 17665,
+        "unix_end_us": 1795508899002000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 503,
+          "automicro": 113,
+          "fog": 28,
+          "grid": 3268,
+          "level_hud": 938,
+          "separation": 8674,
+          "stealth_ecast": 210,
+          "summon_eco": 174,
+          "zones": 268
+        },
+        "elapsed_us": 49830528,
+        "entry": 8,
+        "fully_in_play": true,
+        "interval_us": 39236,
+        "level_id": "arena",
+        "minute": 1,
+        "mode": "arena",
+        "physics_steps": 4,
+        "post_to_physics_us": 353,
+        "post_to_pre_draw_us": 37353,
+        "post_to_process_us": 29588,
+        "profiled_battle_physics_steps": 4,
+        "unit_physics_us": 12376,
+        "unix_end_us": 1795508899041000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 155,
+          "automicro": 41,
+          "fog": 13,
+          "grid": 1012,
+          "level_hud": 415,
+          "separation": 529,
+          "stealth_ecast": 6,
+          "summon_eco": 59,
+          "zones": 60
+        },
+        "elapsed_us": 52750436,
+        "entry": 9,
+        "fully_in_play": true,
+        "interval_us": 45622,
+        "level_id": "skirmish",
+        "minute": 1,
+        "mode": "skirmish",
+        "physics_steps": 1,
+        "post_to_physics_us": 1127,
+        "post_to_pre_draw_us": 32330,
+        "post_to_process_us": 5879,
+        "profiled_battle_physics_steps": 1,
+        "unit_physics_us": 1888,
+        "unix_end_us": 1795508901961000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 480,
+          "automicro": 124,
+          "fog": 45,
+          "grid": 2856,
+          "level_hud": 1410,
+          "separation": 2134,
+          "stealth_ecast": 101,
+          "summon_eco": 159,
+          "zones": 239
+        },
+        "elapsed_us": 52813423,
+        "entry": 9,
+        "fully_in_play": true,
+        "interval_us": 62987,
+        "level_id": "skirmish",
+        "minute": 1,
+        "mode": "skirmish",
+        "physics_steps": 3,
+        "post_to_physics_us": 1187,
+        "post_to_pre_draw_us": 50509,
+        "post_to_process_us": 24763,
+        "profiled_battle_physics_steps": 3,
+        "unit_physics_us": 14095,
+        "unix_end_us": 1795508902024000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 1401,
+          "automicro": 217,
+          "fog": 6464,
+          "grid": 6608,
+          "level_hud": 3229,
+          "separation": 3587,
+          "stealth_ecast": 258,
+          "summon_eco": 271,
+          "zones": 406
+        },
+        "elapsed_us": 52905198,
+        "entry": 9,
+        "fully_in_play": true,
+        "interval_us": 91775,
+        "level_id": "skirmish",
+        "minute": 1,
+        "mode": "skirmish",
+        "physics_steps": 4,
+        "post_to_physics_us": 939,
+        "post_to_pre_draw_us": 81308,
+        "post_to_process_us": 42457,
+        "profiled_battle_physics_steps": 4,
+        "unit_physics_us": 15118,
+        "unix_end_us": 1795508902116000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 813,
+          "automicro": 216,
+          "fog": 72,
+          "grid": 4703,
+          "level_hud": 2665,
+          "separation": 3464,
+          "stealth_ecast": 121,
+          "summon_eco": 278,
+          "zones": 400
+        },
+        "elapsed_us": 52970497,
+        "entry": 9,
+        "fully_in_play": true,
+        "interval_us": 65299,
+        "level_id": "skirmish",
+        "minute": 1,
+        "mode": "skirmish",
+        "physics_steps": 5,
+        "post_to_physics_us": 800,
+        "post_to_pre_draw_us": 56303,
+        "post_to_process_us": 30791,
+        "profiled_battle_physics_steps": 5,
+        "unit_physics_us": 13485,
+        "unix_end_us": 1795508902181000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 736,
+          "automicro": 215,
+          "fog": 5683,
+          "grid": 5623,
+          "level_hud": 2825,
+          "separation": 2951,
+          "stealth_ecast": 335,
+          "summon_eco": 215,
+          "zones": 327
+        },
+        "elapsed_us": 53057061,
+        "entry": 9,
+        "fully_in_play": true,
+        "interval_us": 86564,
+        "level_id": "skirmish",
+        "minute": 1,
+        "mode": "skirmish",
+        "physics_steps": 4,
+        "post_to_physics_us": 802,
+        "post_to_pre_draw_us": 74239,
+        "post_to_process_us": 37084,
+        "profiled_battle_physics_steps": 4,
+        "unit_physics_us": 14010,
+        "unix_end_us": 1795508902268000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 814,
+          "automicro": 244,
+          "fog": 88,
+          "grid": 5340,
+          "level_hud": 2875,
+          "separation": 3412,
+          "stealth_ecast": 39,
+          "summon_eco": 264,
+          "zones": 452
+        },
+        "elapsed_us": 53125382,
+        "entry": 9,
+        "fully_in_play": true,
+        "interval_us": 68321,
+        "level_id": "skirmish",
+        "minute": 1,
+        "mode": "skirmish",
+        "physics_steps": 5,
+        "post_to_physics_us": 1746,
+        "post_to_pre_draw_us": 60152,
+        "post_to_process_us": 36725,
+        "profiled_battle_physics_steps": 5,
+        "unit_physics_us": 17160,
+        "unix_end_us": 1795508902337000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 971,
+          "automicro": 354,
+          "fog": 82,
+          "grid": 6229,
+          "level_hud": 3428,
+          "separation": 3784,
+          "stealth_ecast": 328,
+          "summon_eco": 291,
+          "zones": 534
+        },
+        "elapsed_us": 53203715,
+        "entry": 9,
+        "fully_in_play": true,
+        "interval_us": 78333,
+        "level_id": "skirmish",
+        "minute": 1,
+        "mode": "skirmish",
+        "physics_steps": 5,
+        "post_to_physics_us": 2222,
+        "post_to_pre_draw_us": 69069,
+        "post_to_process_us": 37166,
+        "profiled_battle_physics_steps": 5,
+        "unit_physics_us": 14906,
+        "unix_end_us": 1795508902415000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 780,
+          "automicro": 120,
+          "fog": 4283,
+          "grid": 2748,
+          "level_hud": 1158,
+          "separation": 1855,
+          "stealth_ecast": 80,
+          "summon_eco": 148,
+          "zones": 185
+        },
+        "elapsed_us": 53243635,
+        "entry": 9,
+        "fully_in_play": true,
+        "interval_us": 39920,
+        "level_id": "skirmish",
+        "minute": 1,
+        "mode": "skirmish",
+        "physics_steps": 4,
+        "post_to_physics_us": 1479,
+        "post_to_pre_draw_us": 35172,
+        "post_to_process_us": 22947,
+        "profiled_battle_physics_steps": 4,
+        "unit_physics_us": 8518,
+        "unix_end_us": 1795508902455000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 212,
+          "automicro": 53,
+          "fog": 3201,
+          "grid": 1371,
+          "level_hud": 647,
+          "separation": 808,
+          "stealth_ecast": 9,
+          "summon_eco": 76,
+          "zones": 113
+        },
+        "elapsed_us": 55377923,
+        "entry": 9,
+        "fully_in_play": true,
+        "interval_us": 35575,
+        "level_id": "skirmish",
+        "minute": 1,
+        "mode": "skirmish",
+        "physics_steps": 2,
+        "post_to_physics_us": 556,
+        "post_to_pre_draw_us": 30904,
+        "post_to_process_us": 14483,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 6481,
+        "unix_end_us": 1795508904589000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 334,
+          "automicro": 64,
+          "fog": 4227,
+          "grid": 2355,
+          "level_hud": 1212,
+          "separation": 1025,
+          "stealth_ecast": 133,
+          "summon_eco": 189,
+          "zones": 157
+        },
+        "elapsed_us": 70011535,
+        "entry": 11,
+        "fully_in_play": true,
+        "interval_us": 52433,
+        "level_id": "custom_defense",
+        "minute": 2,
+        "mode": "custom_defense",
+        "physics_steps": 2,
+        "post_to_physics_us": 1413,
+        "post_to_pre_draw_us": 44317,
+        "post_to_process_us": 20619,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 8116,
+        "unix_end_us": 1795508919223000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 332,
+          "automicro": 81,
+          "fog": 31,
+          "grid": 2170,
+          "level_hud": 1002,
+          "separation": 1255,
+          "stealth_ecast": 10,
+          "summon_eco": 106,
+          "zones": 175
+        },
+        "elapsed_us": 70051762,
+        "entry": 11,
+        "fully_in_play": true,
+        "interval_us": 40227,
+        "level_id": "custom_defense",
+        "minute": 2,
+        "mode": "custom_defense",
+        "physics_steps": 3,
+        "post_to_physics_us": 639,
+        "post_to_pre_draw_us": 34809,
+        "post_to_process_us": 12014,
+        "profiled_battle_physics_steps": 3,
+        "unit_physics_us": 4850,
+        "unix_end_us": 1795508919263000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 351,
+          "automicro": 25,
+          "fog": 24,
+          "grid": 993,
+          "level_hud": 390,
+          "separation": 929,
+          "stealth_ecast": 4,
+          "summon_eco": 47,
+          "zones": 57
+        },
+        "elapsed_us": 71376430,
+        "entry": 12,
+        "fully_in_play": true,
+        "interval_us": 37105,
+        "level_id": "level5",
+        "minute": 2,
+        "mode": "campaign",
+        "physics_steps": 1,
+        "post_to_physics_us": 359,
+        "post_to_pre_draw_us": 28069,
+        "post_to_process_us": 7228,
+        "profiled_battle_physics_steps": 1,
+        "unit_physics_us": 2741,
+        "unix_end_us": 1795508920587000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 1779,
+          "automicro": 190,
+          "fog": 92,
+          "grid": 4554,
+          "level_hud": 2077,
+          "separation": 3338,
+          "stealth_ecast": 114,
+          "summon_eco": 164,
+          "zones": 175
+        },
+        "elapsed_us": 71426308,
+        "entry": 12,
+        "fully_in_play": true,
+        "interval_us": 49878,
+        "level_id": "level5",
+        "minute": 2,
+        "mode": "campaign",
+        "physics_steps": 3,
+        "post_to_physics_us": 752,
+        "post_to_pre_draw_us": 43117,
+        "post_to_process_us": 31135,
+        "profiled_battle_physics_steps": 3,
+        "unit_physics_us": 12821,
+        "unix_end_us": 1795508920638000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 301,
+          "automicro": 27,
+          "fog": 21,
+          "grid": 834,
+          "level_hud": 369,
+          "separation": 951,
+          "stealth_ecast": 3,
+          "summon_eco": 39,
+          "zones": 49
+        },
+        "elapsed_us": 71720942,
+        "entry": 12,
+        "fully_in_play": true,
+        "interval_us": 46451,
+        "level_id": "level5",
+        "minute": 2,
+        "mode": "campaign",
+        "physics_steps": 1,
+        "post_to_physics_us": 362,
+        "post_to_pre_draw_us": 39544,
+        "post_to_process_us": 5898,
+        "profiled_battle_physics_steps": 1,
+        "unit_physics_us": 1977,
+        "unix_end_us": 1795508920932000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 864,
+          "automicro": 77,
+          "fog": 2784,
+          "grid": 2404,
+          "level_hud": 860,
+          "separation": 1948,
+          "stealth_ecast": 82,
+          "summon_eco": 113,
+          "zones": 111
+        },
+        "elapsed_us": 71892859,
+        "entry": 12,
+        "fully_in_play": true,
+        "interval_us": 37891,
+        "level_id": "level5",
+        "minute": 2,
+        "mode": "campaign",
+        "physics_steps": 2,
+        "post_to_physics_us": 356,
+        "post_to_pre_draw_us": 32128,
+        "post_to_process_us": 19092,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 6498,
+        "unix_end_us": 1795508921104000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 385,
+          "automicro": 34,
+          "fog": 24,
+          "grid": 982,
+          "level_hud": 691,
+          "separation": 709,
+          "stealth_ecast": 4,
+          "summon_eco": 49,
+          "zones": 63
+        },
+        "elapsed_us": 73021764,
+        "entry": 12,
+        "fully_in_play": true,
+        "interval_us": 33870,
+        "level_id": "level5",
+        "minute": 2,
+        "mode": "campaign",
+        "physics_steps": 1,
+        "post_to_physics_us": 630,
+        "post_to_pre_draw_us": 26672,
+        "post_to_process_us": 10015,
+        "profiled_battle_physics_steps": 1,
+        "unit_physics_us": 5044,
+        "unix_end_us": 1795508922233000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 703,
+          "automicro": 63,
+          "fog": 35,
+          "grid": 1886,
+          "level_hud": 832,
+          "separation": 1456,
+          "stealth_ecast": 7,
+          "summon_eco": 90,
+          "zones": 129
+        },
+        "elapsed_us": 75581409,
+        "entry": 12,
+        "fully_in_play": true,
+        "interval_us": 35862,
+        "level_id": "level5",
+        "minute": 2,
+        "mode": "campaign",
+        "physics_steps": 2,
+        "post_to_physics_us": 394,
+        "post_to_pre_draw_us": 29726,
+        "post_to_process_us": 12348,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 4569,
+        "unix_end_us": 1795508924792000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 790,
+          "automicro": 75,
+          "fog": 41,
+          "grid": 1819,
+          "level_hud": 1267,
+          "separation": 1679,
+          "stealth_ecast": 282,
+          "summon_eco": 93,
+          "zones": 99
+        },
+        "elapsed_us": 75698535,
+        "entry": 12,
+        "fully_in_play": true,
+        "interval_us": 41597,
+        "level_id": "level5",
+        "minute": 2,
+        "mode": "campaign",
+        "physics_steps": 2,
+        "post_to_physics_us": 356,
+        "post_to_pre_draw_us": 35874,
+        "post_to_process_us": 16232,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 7158,
+        "unix_end_us": 1795508924910000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 785,
+          "automicro": 65,
+          "fog": 43,
+          "grid": 1977,
+          "level_hud": 1031,
+          "separation": 1508,
+          "stealth_ecast": 191,
+          "summon_eco": 93,
+          "zones": 100
+        },
+        "elapsed_us": 76147042,
+        "entry": 12,
+        "fully_in_play": true,
+        "interval_us": 35388,
+        "level_id": "level5",
+        "minute": 2,
+        "mode": "campaign",
+        "physics_steps": 2,
+        "post_to_physics_us": 863,
+        "post_to_pre_draw_us": 28618,
+        "post_to_process_us": 13339,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 4371,
+        "unix_end_us": 1795508925358000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 339,
+          "automicro": 63,
+          "fog": 19,
+          "grid": 1566,
+          "level_hud": 1365,
+          "separation": 700,
+          "stealth_ecast": 14,
+          "summon_eco": 64,
+          "zones": 135
+        },
+        "elapsed_us": 81350308,
+        "entry": 13,
+        "fully_in_play": true,
+        "interval_us": 34581,
+        "level_id": "level1",
+        "minute": 2,
+        "mode": "campaign",
+        "physics_steps": 2,
+        "post_to_physics_us": 430,
+        "post_to_pre_draw_us": 30909,
+        "post_to_process_us": 10733,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 4802,
+        "unix_end_us": 1795508930561000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 293,
+          "automicro": 52,
+          "fog": 16,
+          "grid": 1210,
+          "level_hud": 1406,
+          "separation": 598,
+          "stealth_ecast": 12,
+          "summon_eco": 55,
+          "zones": 120
+        },
+        "elapsed_us": 81442833,
+        "entry": 13,
+        "fully_in_play": true,
+        "interval_us": 33393,
+        "level_id": "level1",
+        "minute": 2,
+        "mode": "campaign",
+        "physics_steps": 2,
+        "post_to_physics_us": 725,
+        "post_to_pre_draw_us": 29581,
+        "post_to_process_us": 8689,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 3095,
+        "unix_end_us": 1795508930654000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 341,
+          "automicro": 63,
+          "fog": 19,
+          "grid": 1373,
+          "level_hud": 1327,
+          "separation": 688,
+          "stealth_ecast": 181,
+          "summon_eco": 66,
+          "zones": 139
+        },
+        "elapsed_us": 81478272,
+        "entry": 13,
+        "fully_in_play": true,
+        "interval_us": 35439,
+        "level_id": "level1",
+        "minute": 2,
+        "mode": "campaign",
+        "physics_steps": 2,
+        "post_to_physics_us": 640,
+        "post_to_pre_draw_us": 29784,
+        "post_to_process_us": 10034,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 4238,
+        "unix_end_us": 1795508930690000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 388,
+          "automicro": 61,
+          "fog": 16,
+          "grid": 1348,
+          "level_hud": 1359,
+          "separation": 681,
+          "stealth_ecast": 57,
+          "summon_eco": 61,
+          "zones": 171
+        },
+        "elapsed_us": 81512560,
+        "entry": 13,
+        "fully_in_play": true,
+        "interval_us": 34288,
+        "level_id": "level1",
+        "minute": 2,
+        "mode": "campaign",
+        "physics_steps": 2,
+        "post_to_physics_us": 532,
+        "post_to_pre_draw_us": 29979,
+        "post_to_process_us": 9455,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 3865,
+        "unix_end_us": 1795508930724000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 343,
+          "automicro": 63,
+          "fog": 18,
+          "grid": 1918,
+          "level_hud": 1463,
+          "separation": 670,
+          "stealth_ecast": 61,
+          "summon_eco": 63,
+          "zones": 141
+        },
+        "elapsed_us": 81880901,
+        "entry": 13,
+        "fully_in_play": true,
+        "interval_us": 34089,
+        "level_id": "level1",
+        "minute": 2,
+        "mode": "campaign",
+        "physics_steps": 2,
+        "post_to_physics_us": 402,
+        "post_to_pre_draw_us": 29561,
+        "post_to_process_us": 10885,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 4754,
+        "unix_end_us": 1795508931092000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 343,
+          "automicro": 57,
+          "fog": 15,
+          "grid": 1399,
+          "level_hud": 1213,
+          "separation": 651,
+          "stealth_ecast": 121,
+          "summon_eco": 60,
+          "zones": 120
+        },
+        "elapsed_us": 81915914,
+        "entry": 13,
+        "fully_in_play": true,
+        "interval_us": 35013,
+        "level_id": "level1",
+        "minute": 2,
+        "mode": "campaign",
+        "physics_steps": 2,
+        "post_to_physics_us": 929,
+        "post_to_pre_draw_us": 30047,
+        "post_to_process_us": 9247,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 3405,
+        "unix_end_us": 1795508931127000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 454,
+          "automicro": 63,
+          "fog": 16,
+          "grid": 1382,
+          "level_hud": 1415,
+          "separation": 619,
+          "stealth_ecast": 12,
+          "summon_eco": 109,
+          "zones": 333
+        },
+        "elapsed_us": 81950017,
+        "entry": 13,
+        "fully_in_play": true,
+        "interval_us": 34103,
+        "level_id": "level1",
+        "minute": 2,
+        "mode": "campaign",
+        "physics_steps": 2,
+        "post_to_physics_us": 893,
+        "post_to_pre_draw_us": 30606,
+        "post_to_process_us": 11244,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 5051,
+        "unix_end_us": 1795508931161000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 351,
+          "automicro": 68,
+          "fog": 17,
+          "grid": 1440,
+          "level_hud": 420,
+          "separation": 4736,
+          "stealth_ecast": 286,
+          "summon_eco": 81,
+          "zones": 110
+        },
+        "elapsed_us": 84052130,
+        "entry": 14,
+        "fully_in_play": true,
+        "interval_us": 35004,
+        "level_id": "arena",
+        "minute": 2,
+        "mode": "arena",
+        "physics_steps": 2,
+        "post_to_physics_us": 319,
+        "post_to_pre_draw_us": 31202,
+        "post_to_process_us": 15238,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 6021,
+        "unix_end_us": 1795508933263000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 338,
+          "automicro": 73,
+          "fog": 21,
+          "grid": 2431,
+          "level_hud": 733,
+          "separation": 5723,
+          "stealth_ecast": 212,
+          "summon_eco": 104,
+          "zones": 127
+        },
+        "elapsed_us": 84120526,
+        "entry": 14,
+        "fully_in_play": true,
+        "interval_us": 41494,
+        "level_id": "arena",
+        "minute": 2,
+        "mode": "arena",
+        "physics_steps": 2,
+        "post_to_physics_us": 395,
+        "post_to_pre_draw_us": 37418,
+        "post_to_process_us": 20690,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 8949,
+        "unix_end_us": 1795508933332000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 414,
+          "automicro": 86,
+          "fog": 28,
+          "grid": 2184,
+          "level_hud": 550,
+          "separation": 5865,
+          "stealth_ecast": 19,
+          "summon_eco": 104,
+          "zones": 132
+        },
+        "elapsed_us": 84162510,
+        "entry": 14,
+        "fully_in_play": true,
+        "interval_us": 41984,
+        "level_id": "arena",
+        "minute": 2,
+        "mode": "arena",
+        "physics_steps": 2,
+        "post_to_physics_us": 381,
+        "post_to_pre_draw_us": 38238,
+        "post_to_process_us": 18585,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 7363,
+        "unix_end_us": 1795508933374000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 416,
+          "automicro": 92,
+          "fog": 23,
+          "grid": 2797,
+          "level_hud": 628,
+          "separation": 6845,
+          "stealth_ecast": 118,
+          "summon_eco": 134,
+          "zones": 156
+        },
+        "elapsed_us": 84203395,
+        "entry": 14,
+        "fully_in_play": true,
+        "interval_us": 40885,
+        "level_id": "arena",
+        "minute": 2,
+        "mode": "arena",
+        "physics_steps": 3,
+        "post_to_physics_us": 463,
+        "post_to_pre_draw_us": 37720,
+        "post_to_process_us": 25906,
+        "profiled_battle_physics_steps": 3,
+        "unit_physics_us": 12423,
+        "unix_end_us": 1795508933415000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 374,
+          "automicro": 66,
+          "fog": 21,
+          "grid": 2020,
+          "level_hud": 582,
+          "separation": 6193,
+          "stealth_ecast": 8,
+          "summon_eco": 91,
+          "zones": 391
+        },
+        "elapsed_us": 84238341,
+        "entry": 14,
+        "fully_in_play": true,
+        "interval_us": 34946,
+        "level_id": "arena",
+        "minute": 2,
+        "mode": "arena",
+        "physics_steps": 2,
+        "post_to_physics_us": 316,
+        "post_to_pre_draw_us": 31687,
+        "post_to_process_us": 18137,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 6783,
+        "unix_end_us": 1795508933449000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 336,
+          "automicro": 74,
+          "fog": 23,
+          "grid": 1958,
+          "level_hud": 547,
+          "separation": 6228,
+          "stealth_ecast": 192,
+          "summon_eco": 96,
+          "zones": 129
+        },
+        "elapsed_us": 84278875,
+        "entry": 14,
+        "fully_in_play": true,
+        "interval_us": 40534,
+        "level_id": "arena",
+        "minute": 2,
+        "mode": "arena",
+        "physics_steps": 2,
+        "post_to_physics_us": 328,
+        "post_to_pre_draw_us": 37070,
+        "post_to_process_us": 20363,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 8551,
+        "unix_end_us": 1795508933489000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 487,
+          "automicro": 98,
+          "fog": 29,
+          "grid": 2949,
+          "level_hud": 693,
+          "separation": 7484,
+          "stealth_ecast": 101,
+          "summon_eco": 141,
+          "zones": 148
+        },
+        "elapsed_us": 84324287,
+        "entry": 14,
+        "fully_in_play": true,
+        "interval_us": 45412,
+        "level_id": "arena",
+        "minute": 2,
+        "mode": "arena",
+        "physics_steps": 3,
+        "post_to_physics_us": 388,
+        "post_to_pre_draw_us": 41830,
+        "post_to_process_us": 28752,
+        "profiled_battle_physics_steps": 3,
+        "unit_physics_us": 14264,
+        "unix_end_us": 1795508933535000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 285,
+          "automicro": 67,
+          "fog": 18,
+          "grid": 1979,
+          "level_hud": 773,
+          "separation": 5055,
+          "stealth_ecast": 417,
+          "summon_eco": 90,
+          "zones": 117
+        },
+        "elapsed_us": 84409795,
+        "entry": 14,
+        "fully_in_play": true,
+        "interval_us": 33585,
+        "level_id": "arena",
+        "minute": 2,
+        "mode": "arena",
+        "physics_steps": 2,
+        "post_to_physics_us": 477,
+        "post_to_pre_draw_us": 30368,
+        "post_to_process_us": 17438,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 6900,
+        "unix_end_us": 1795508933621000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 420,
+          "automicro": 101,
+          "fog": 21,
+          "grid": 2647,
+          "level_hud": 694,
+          "separation": 6381,
+          "stealth_ecast": 12,
+          "summon_eco": 131,
+          "zones": 154
+        },
+        "elapsed_us": 84448878,
+        "entry": 14,
+        "fully_in_play": true,
+        "interval_us": 39083,
+        "level_id": "arena",
+        "minute": 2,
+        "mode": "arena",
+        "physics_steps": 3,
+        "post_to_physics_us": 423,
+        "post_to_pre_draw_us": 36369,
+        "post_to_process_us": 24287,
+        "profiled_battle_physics_steps": 3,
+        "unit_physics_us": 11560,
+        "unix_end_us": 1795508933660000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 279,
+          "automicro": 67,
+          "fog": 19,
+          "grid": 2005,
+          "level_hud": 464,
+          "separation": 4525,
+          "stealth_ecast": 7,
+          "summon_eco": 94,
+          "zones": 100
+        },
+        "elapsed_us": 84771122,
+        "entry": 14,
+        "fully_in_play": true,
+        "interval_us": 37791,
+        "level_id": "arena",
+        "minute": 2,
+        "mode": "arena",
+        "physics_steps": 2,
+        "post_to_physics_us": 679,
+        "post_to_pre_draw_us": 33810,
+        "post_to_process_us": 18939,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 9324,
+        "unix_end_us": 1795508933983000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 165,
+          "automicro": 31,
+          "fog": 10,
+          "grid": 1042,
+          "level_hud": 339,
+          "separation": 3599,
+          "stealth_ecast": 4,
+          "summon_eco": 49,
+          "zones": 60
+        },
+        "elapsed_us": 84804984,
+        "entry": 14,
+        "fully_in_play": true,
+        "interval_us": 33862,
+        "level_id": "arena",
+        "minute": 2,
+        "mode": "arena",
+        "physics_steps": 1,
+        "post_to_physics_us": 719,
+        "post_to_pre_draw_us": 30055,
+        "post_to_process_us": 12117,
+        "profiled_battle_physics_steps": 1,
+        "unit_physics_us": 5285,
+        "unix_end_us": 1795508934016000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 397,
+          "automicro": 61,
+          "fog": 20,
+          "grid": 1920,
+          "level_hud": 487,
+          "separation": 5638,
+          "stealth_ecast": 10,
+          "summon_eco": 104,
+          "zones": 113
+        },
+        "elapsed_us": 84842068,
+        "entry": 14,
+        "fully_in_play": true,
+        "interval_us": 37084,
+        "level_id": "arena",
+        "minute": 2,
+        "mode": "arena",
+        "physics_steps": 2,
+        "post_to_physics_us": 1435,
+        "post_to_pre_draw_us": 33028,
+        "post_to_process_us": 22168,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 10446,
+        "unix_end_us": 1795508934053000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 294,
+          "automicro": 68,
+          "fog": 17,
+          "grid": 1871,
+          "level_hud": 525,
+          "separation": 4777,
+          "stealth_ecast": 124,
+          "summon_eco": 91,
+          "zones": 114
+        },
+        "elapsed_us": 85081002,
+        "entry": 14,
+        "fully_in_play": true,
+        "interval_us": 35724,
+        "level_id": "arena",
+        "minute": 2,
+        "mode": "arena",
+        "physics_steps": 2,
+        "post_to_physics_us": 272,
+        "post_to_pre_draw_us": 32384,
+        "post_to_process_us": 19558,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 10081,
+        "unix_end_us": 1795508934292000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 131,
+          "automicro": 30,
+          "fog": 24,
+          "grid": 893,
+          "level_hud": 430,
+          "separation": 666,
+          "stealth_ecast": 5,
+          "summon_eco": 42,
+          "zones": 68
+        },
+        "elapsed_us": 90927094,
+        "entry": 15,
+        "fully_in_play": true,
+        "interval_us": 36758,
+        "level_id": "skirmish",
+        "minute": 2,
+        "mode": "skirmish",
+        "physics_steps": 1,
+        "post_to_physics_us": 556,
+        "post_to_pre_draw_us": 30081,
+        "post_to_process_us": 5163,
+        "profiled_battle_physics_steps": 1,
+        "unit_physics_us": 1723,
+        "unix_end_us": 1795508940138000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 833,
+          "automicro": 73,
+          "fog": 43,
+          "grid": 2140,
+          "level_hud": 921,
+          "separation": 1807,
+          "stealth_ecast": 9,
+          "summon_eco": 96,
+          "zones": 96
+        },
+        "elapsed_us": 111851444,
+        "entry": 18,
+        "fully_in_play": true,
+        "interval_us": 37139,
+        "level_id": "level5",
+        "minute": 2,
+        "mode": "campaign",
+        "physics_steps": 2,
+        "post_to_physics_us": 753,
+        "post_to_pre_draw_us": 29335,
+        "post_to_process_us": 17810,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 8223,
+        "unix_end_us": 1795508961063000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 916,
+          "automicro": 73,
+          "fog": 52,
+          "grid": 2998,
+          "level_hud": 878,
+          "separation": 2179,
+          "stealth_ecast": 9,
+          "summon_eco": 113,
+          "zones": 109
+        },
+        "elapsed_us": 111952540,
+        "entry": 18,
+        "fully_in_play": true,
+        "interval_us": 40745,
+        "level_id": "level5",
+        "minute": 2,
+        "mode": "campaign",
+        "physics_steps": 2,
+        "post_to_physics_us": 749,
+        "post_to_pre_draw_us": 33490,
+        "post_to_process_us": 17399,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 6097,
+        "unix_end_us": 1795508961164000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 927,
+          "automicro": 71,
+          "fog": 3118,
+          "grid": 2438,
+          "level_hud": 888,
+          "separation": 1717,
+          "stealth_ecast": 268,
+          "summon_eco": 100,
+          "zones": 123
+        },
+        "elapsed_us": 111989386,
+        "entry": 18,
+        "fully_in_play": true,
+        "interval_us": 36846,
+        "level_id": "level5",
+        "minute": 2,
+        "mode": "campaign",
+        "physics_steps": 2,
+        "post_to_physics_us": 490,
+        "post_to_pre_draw_us": 29350,
+        "post_to_process_us": 18983,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 5886,
+        "unix_end_us": 1795508961201000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 726,
+          "automicro": 67,
+          "fog": 56,
+          "grid": 1751,
+          "level_hud": 659,
+          "separation": 1372,
+          "stealth_ecast": 88,
+          "summon_eco": 94,
+          "zones": 92
+        },
+        "elapsed_us": 112049176,
+        "entry": 18,
+        "fully_in_play": true,
+        "interval_us": 33785,
+        "level_id": "level5",
+        "minute": 2,
+        "mode": "campaign",
+        "physics_steps": 2,
+        "post_to_physics_us": 428,
+        "post_to_pre_draw_us": 26929,
+        "post_to_process_us": 12070,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 4351,
+        "unix_end_us": 1795508961260000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 248,
+          "automicro": 62,
+          "fog": 33,
+          "grid": 1961,
+          "level_hud": 427,
+          "separation": 5375,
+          "stealth_ecast": 168,
+          "summon_eco": 85,
+          "zones": 104
+        },
+        "elapsed_us": 123295146,
+        "entry": 20,
+        "fully_in_play": true,
+        "interval_us": 34214,
+        "level_id": "arena",
+        "minute": 3,
+        "mode": "arena",
+        "physics_steps": 2,
+        "post_to_physics_us": 292,
+        "post_to_pre_draw_us": 30685,
+        "post_to_process_us": 16888,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 6932,
+        "unix_end_us": 1795508972506000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 189,
+          "automicro": 39,
+          "fog": 17,
+          "grid": 1262,
+          "level_hud": 441,
+          "separation": 3820,
+          "stealth_ecast": 7,
+          "summon_eco": 71,
+          "zones": 91
+        },
+        "elapsed_us": 123707390,
+        "entry": 20,
+        "fully_in_play": true,
+        "interval_us": 34328,
+        "level_id": "arena",
+        "minute": 3,
+        "mode": "arena",
+        "physics_steps": 1,
+        "post_to_physics_us": 672,
+        "post_to_pre_draw_us": 29365,
+        "post_to_process_us": 14683,
+        "profiled_battle_physics_steps": 1,
+        "unit_physics_us": 7032,
+        "unix_end_us": 1795508972918000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 431,
+          "automicro": 113,
+          "fog": 26,
+          "grid": 2878,
+          "level_hud": 854,
+          "separation": 8454,
+          "stealth_ecast": 276,
+          "summon_eco": 157,
+          "zones": 177
+        },
+        "elapsed_us": 123759608,
+        "entry": 20,
+        "fully_in_play": true,
+        "interval_us": 52218,
+        "level_id": "arena",
+        "minute": 3,
+        "mode": "arena",
+        "physics_steps": 2,
+        "post_to_physics_us": 516,
+        "post_to_pre_draw_us": 47875,
+        "post_to_process_us": 30297,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 14558,
+        "unix_end_us": 1795508972971000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 1002,
+          "automicro": 233,
+          "fog": 51,
+          "grid": 5546,
+          "level_hud": 1287,
+          "separation": 13493,
+          "stealth_ecast": 216,
+          "summon_eco": 268,
+          "zones": 297
+        },
+        "elapsed_us": 123825459,
+        "entry": 20,
+        "fully_in_play": true,
+        "interval_us": 65851,
+        "level_id": "arena",
+        "minute": 3,
+        "mode": "arena",
+        "physics_steps": 4,
+        "post_to_physics_us": 801,
+        "post_to_pre_draw_us": 62407,
+        "post_to_process_us": 46119,
+        "profiled_battle_physics_steps": 4,
+        "unit_physics_us": 19069,
+        "unix_end_us": 1795508973036000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 601,
+          "automicro": 141,
+          "fog": 29,
+          "grid": 3497,
+          "level_hud": 990,
+          "separation": 9546,
+          "stealth_ecast": 17,
+          "summon_eco": 211,
+          "zones": 226
+        },
+        "elapsed_us": 123869129,
+        "entry": 20,
+        "fully_in_play": true,
+        "interval_us": 43670,
+        "level_id": "arena",
+        "minute": 3,
+        "mode": "arena",
+        "physics_steps": 4,
+        "post_to_physics_us": 859,
+        "post_to_pre_draw_us": 41486,
+        "post_to_process_us": 33498,
+        "profiled_battle_physics_steps": 4,
+        "unit_physics_us": 15040,
+        "unix_end_us": 1795508973081000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 372,
+          "automicro": 90,
+          "fog": 18,
+          "grid": 2121,
+          "level_hud": 536,
+          "separation": 5358,
+          "stealth_ecast": 158,
+          "summon_eco": 115,
+          "zones": 133
+        },
+        "elapsed_us": 125886029,
+        "entry": 20,
+        "fully_in_play": true,
+        "interval_us": 36394,
+        "level_id": "arena",
+        "minute": 3,
+        "mode": "arena",
+        "physics_steps": 2,
+        "post_to_physics_us": 348,
+        "post_to_pre_draw_us": 33308,
+        "post_to_process_us": 20565,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 9966,
+        "unix_end_us": 1795508975097000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 249,
+          "automicro": 65,
+          "fog": 16,
+          "grid": 1701,
+          "level_hud": 487,
+          "separation": 4514,
+          "stealth_ecast": 8,
+          "summon_eco": 107,
+          "zones": 106
+        },
+        "elapsed_us": 125921398,
+        "entry": 20,
+        "fully_in_play": true,
+        "interval_us": 35369,
+        "level_id": "arena",
+        "minute": 3,
+        "mode": "arena",
+        "physics_steps": 2,
+        "post_to_physics_us": 389,
+        "post_to_pre_draw_us": 31272,
+        "post_to_process_us": 17062,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 7896,
+        "unix_end_us": 1795508975133000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 269,
+          "automicro": 68,
+          "fog": 17,
+          "grid": 1673,
+          "level_hud": 436,
+          "separation": 4329,
+          "stealth_ecast": 7,
+          "summon_eco": 100,
+          "zones": 123
+        },
+        "elapsed_us": 125957031,
+        "entry": 20,
+        "fully_in_play": true,
+        "interval_us": 35633,
+        "level_id": "arena",
+        "minute": 3,
+        "mode": "arena",
+        "physics_steps": 2,
+        "post_to_physics_us": 389,
+        "post_to_pre_draw_us": 32395,
+        "post_to_process_us": 16644,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 7757,
+        "unix_end_us": 1795508975168000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 357,
+          "automicro": 85,
+          "fog": 17,
+          "grid": 1950,
+          "level_hud": 474,
+          "separation": 4940,
+          "stealth_ecast": 233,
+          "summon_eco": 113,
+          "zones": 125
+        },
+        "elapsed_us": 125992526,
+        "entry": 20,
+        "fully_in_play": true,
+        "interval_us": 35495,
+        "level_id": "arena",
+        "minute": 3,
+        "mode": "arena",
+        "physics_steps": 2,
+        "post_to_physics_us": 347,
+        "post_to_pre_draw_us": 32343,
+        "post_to_process_us": 17241,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 7241,
+        "unix_end_us": 1795508975203000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 443,
+          "automicro": 132,
+          "fog": 20,
+          "grid": 2022,
+          "level_hud": 725,
+          "separation": 5294,
+          "stealth_ecast": 128,
+          "summon_eco": 134,
+          "zones": 140
+        },
+        "elapsed_us": 126026440,
+        "entry": 20,
+        "fully_in_play": true,
+        "interval_us": 33914,
+        "level_id": "arena",
+        "minute": 3,
+        "mode": "arena",
+        "physics_steps": 3,
+        "post_to_physics_us": 630,
+        "post_to_pre_draw_us": 31810,
+        "post_to_process_us": 22974,
+        "profiled_battle_physics_steps": 3,
+        "unit_physics_us": 11417,
+        "unix_end_us": 1795508975238000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 411,
+          "automicro": 110,
+          "fog": 15,
+          "grid": 2055,
+          "level_hud": 527,
+          "separation": 4667,
+          "stealth_ecast": 304,
+          "summon_eco": 122,
+          "zones": 112
+        },
+        "elapsed_us": 126117789,
+        "entry": 20,
+        "fully_in_play": true,
+        "interval_us": 40966,
+        "level_id": "arena",
+        "minute": 3,
+        "mode": "arena",
+        "physics_steps": 2,
+        "post_to_physics_us": 380,
+        "post_to_pre_draw_us": 37574,
+        "post_to_process_us": 21892,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 11680,
+        "unix_end_us": 1795508975329000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 373,
+          "automicro": 86,
+          "fog": 16,
+          "grid": 2206,
+          "level_hud": 568,
+          "separation": 4615,
+          "stealth_ecast": 12,
+          "summon_eco": 122,
+          "zones": 131
+        },
+        "elapsed_us": 126162145,
+        "entry": 20,
+        "fully_in_play": true,
+        "interval_us": 44356,
+        "level_id": "arena",
+        "minute": 3,
+        "mode": "arena",
+        "physics_steps": 2,
+        "post_to_physics_us": 690,
+        "post_to_pre_draw_us": 39938,
+        "post_to_process_us": 19125,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 8736,
+        "unix_end_us": 1795508975373000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 415,
+          "automicro": 96,
+          "fog": 29,
+          "grid": 3175,
+          "level_hud": 842,
+          "separation": 6479,
+          "stealth_ecast": 11,
+          "summon_eco": 133,
+          "zones": 143
+        },
+        "elapsed_us": 126206220,
+        "entry": 20,
+        "fully_in_play": true,
+        "interval_us": 44075,
+        "level_id": "arena",
+        "minute": 3,
+        "mode": "arena",
+        "physics_steps": 2,
+        "post_to_physics_us": 1338,
+        "post_to_pre_draw_us": 40964,
+        "post_to_process_us": 23380,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 8976,
+        "unix_end_us": 1795508975418000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 301,
+          "automicro": 66,
+          "fog": 17,
+          "grid": 2201,
+          "level_hud": 754,
+          "separation": 4102,
+          "stealth_ecast": 100,
+          "summon_eco": 124,
+          "zones": 212
+        },
+        "elapsed_us": 126248480,
+        "entry": 20,
+        "fully_in_play": true,
+        "interval_us": 42260,
+        "level_id": "arena",
+        "minute": 3,
+        "mode": "arena",
+        "physics_steps": 2,
+        "post_to_physics_us": 406,
+        "post_to_pre_draw_us": 38348,
+        "post_to_process_us": 19444,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 9517,
+        "unix_end_us": 1795508975460000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 578,
+          "automicro": 119,
+          "fog": 27,
+          "grid": 3623,
+          "level_hud": 866,
+          "separation": 8359,
+          "stealth_ecast": 164,
+          "summon_eco": 165,
+          "zones": 197
+        },
+        "elapsed_us": 126295158,
+        "entry": 20,
+        "fully_in_play": true,
+        "interval_us": 46678,
+        "level_id": "arena",
+        "minute": 3,
+        "mode": "arena",
+        "physics_steps": 3,
+        "post_to_physics_us": 1403,
+        "post_to_pre_draw_us": 44828,
+        "post_to_process_us": 33509,
+        "profiled_battle_physics_steps": 3,
+        "unit_physics_us": 15806,
+        "unix_end_us": 1795508975506000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 461,
+          "automicro": 82,
+          "fog": 19,
+          "grid": 2170,
+          "level_hud": 503,
+          "separation": 4702,
+          "stealth_ecast": 19,
+          "summon_eco": 117,
+          "zones": 113
+        },
+        "elapsed_us": 126546984,
+        "entry": 20,
+        "fully_in_play": true,
+        "interval_us": 38292,
+        "level_id": "arena",
+        "minute": 3,
+        "mode": "arena",
+        "physics_steps": 2,
+        "post_to_physics_us": 1006,
+        "post_to_pre_draw_us": 35036,
+        "post_to_process_us": 19844,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 9368,
+        "unix_end_us": 1795508975758000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 397,
+          "automicro": 93,
+          "fog": 17,
+          "grid": 2008,
+          "level_hud": 483,
+          "separation": 4628,
+          "stealth_ecast": 12,
+          "summon_eco": 123,
+          "zones": 113
+        },
+        "elapsed_us": 126670084,
+        "entry": 20,
+        "fully_in_play": true,
+        "interval_us": 38114,
+        "level_id": "arena",
+        "minute": 3,
+        "mode": "arena",
+        "physics_steps": 2,
+        "post_to_physics_us": 484,
+        "post_to_pre_draw_us": 34557,
+        "post_to_process_us": 19682,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 10012,
+        "unix_end_us": 1795508975881000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 379,
+          "automicro": 93,
+          "fog": 18,
+          "grid": 2497,
+          "level_hud": 527,
+          "separation": 4714,
+          "stealth_ecast": 239,
+          "summon_eco": 121,
+          "zones": 131
+        },
+        "elapsed_us": 126733571,
+        "entry": 20,
+        "fully_in_play": true,
+        "interval_us": 36924,
+        "level_id": "arena",
+        "minute": 3,
+        "mode": "arena",
+        "physics_steps": 2,
+        "post_to_physics_us": 407,
+        "post_to_pre_draw_us": 33138,
+        "post_to_process_us": 18694,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 8095,
+        "unix_end_us": 1795508975945000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 360,
+          "automicro": 84,
+          "fog": 19,
+          "grid": 2536,
+          "level_hud": 527,
+          "separation": 4515,
+          "stealth_ecast": 10,
+          "summon_eco": 122,
+          "zones": 132
+        },
+        "elapsed_us": 126772210,
+        "entry": 20,
+        "fully_in_play": true,
+        "interval_us": 38639,
+        "level_id": "arena",
+        "minute": 3,
+        "mode": "arena",
+        "physics_steps": 2,
+        "post_to_physics_us": 443,
+        "post_to_pre_draw_us": 33981,
+        "post_to_process_us": 17047,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 6994,
+        "unix_end_us": 1795508975983000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 433,
+          "automicro": 101,
+          "fog": 24,
+          "grid": 2749,
+          "level_hud": 667,
+          "separation": 6494,
+          "stealth_ecast": 12,
+          "summon_eco": 174,
+          "zones": 164
+        },
+        "elapsed_us": 126825046,
+        "entry": 20,
+        "fully_in_play": true,
+        "interval_us": 52836,
+        "level_id": "arena",
+        "minute": 3,
+        "mode": "arena",
+        "physics_steps": 2,
+        "post_to_physics_us": 586,
+        "post_to_pre_draw_us": 48679,
+        "post_to_process_us": 27636,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 14302,
+        "unix_end_us": 1795508976036000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 562,
+          "automicro": 192,
+          "fog": 29,
+          "grid": 3942,
+          "level_hud": 917,
+          "separation": 8003,
+          "stealth_ecast": 168,
+          "summon_eco": 183,
+          "zones": 190
+        },
+        "elapsed_us": 126872469,
+        "entry": 20,
+        "fully_in_play": true,
+        "interval_us": 47423,
+        "level_id": "arena",
+        "minute": 3,
+        "mode": "arena",
+        "physics_steps": 3,
+        "post_to_physics_us": 533,
+        "post_to_pre_draw_us": 44037,
+        "post_to_process_us": 29965,
+        "profiled_battle_physics_steps": 3,
+        "unit_physics_us": 12860,
+        "unix_end_us": 1795508976084000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 533,
+          "automicro": 113,
+          "fog": 29,
+          "grid": 3461,
+          "level_hud": 872,
+          "separation": 6679,
+          "stealth_ecast": 166,
+          "summon_eco": 161,
+          "zones": 177
+        },
+        "elapsed_us": 126910360,
+        "entry": 20,
+        "fully_in_play": true,
+        "interval_us": 37891,
+        "level_id": "arena",
+        "minute": 3,
+        "mode": "arena",
+        "physics_steps": 3,
+        "post_to_physics_us": 826,
+        "post_to_pre_draw_us": 35564,
+        "post_to_process_us": 26005,
+        "profiled_battle_physics_steps": 3,
+        "unit_physics_us": 10879,
+        "unix_end_us": 1795508976121000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 354,
+          "automicro": 81,
+          "fog": 20,
+          "grid": 2280,
+          "level_hud": 529,
+          "separation": 5467,
+          "stealth_ecast": 138,
+          "summon_eco": 114,
+          "zones": 131
+        },
+        "elapsed_us": 127285527,
+        "entry": 20,
+        "fully_in_play": true,
+        "interval_us": 39634,
+        "level_id": "arena",
+        "minute": 3,
+        "mode": "arena",
+        "physics_steps": 2,
+        "post_to_physics_us": 392,
+        "post_to_pre_draw_us": 35834,
+        "post_to_process_us": 19261,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 8239,
+        "unix_end_us": 1795508976497000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 435,
+          "automicro": 102,
+          "fog": 23,
+          "grid": 3169,
+          "level_hud": 540,
+          "separation": 6097,
+          "stealth_ecast": 11,
+          "summon_eco": 126,
+          "zones": 143
+        },
+        "elapsed_us": 127328246,
+        "entry": 20,
+        "fully_in_play": true,
+        "interval_us": 42719,
+        "level_id": "arena",
+        "minute": 3,
+        "mode": "arena",
+        "physics_steps": 2,
+        "post_to_physics_us": 421,
+        "post_to_pre_draw_us": 39980,
+        "post_to_process_us": 22483,
+        "profiled_battle_physics_steps": 2,
+        "unit_physics_us": 9711,
+        "unix_end_us": 1795508976539000
+      },
+      {
+        "battle_physics_sections_us": {
+          "aura": 707,
+          "automicro": 136,
+          "fog": 26,
+          "grid": 2828,
+          "level_hud": 871,
+          "separation": 5384,
+          "stealth_ecast": 172,
+          "summon_eco": 135,
+          "zones": 159
+        },
+        "elapsed_us": 127368353,
+        "entry": 20,
+        "fully_in_play": true,
+        "interval_us": 40107,
+        "level_id": "arena",
+        "minute": 3,
+        "mode": "arena",
+        "physics_steps": 3,
+        "post_to_physics_us": 615,
+        "post_to_pre_draw_us": 37701,
+        "post_to_process_us": 24213,
+        "profiled_battle_physics_steps": 3,
+        "unit_physics_us": 11453,
+        "unix_end_us": 1795508976580000
+      }
+    ]
+  },
+  "native_activity_counter_fix": {
+    "reason": "The local compiled-package runner converted SceneTree identifiers to Node calls using a textual substitution. It also converted the earlier activity snapshot string key, so older native activity.physics_steps counters cannot be read as per-visit deltas. Independently measured rendering and play_frame_trace.physics_steps are unaffected by that key.",
+    "play_frame_trace_disabled": true,
+    "wall_seconds": 63.6755,
+    "visits": [
+      {
+        "entry": 1,
+        "level_id": "level1",
+        "physics_steps": 365,
+        "start_tick_count": 128,
+        "end_tick_count": 493,
+        "live_seconds": 6.000699
+      },
+      {
+        "entry": 2,
+        "level_id": "arena",
+        "physics_steps": 362,
+        "start_tick_count": 501,
+        "end_tick_count": 863,
+        "live_seconds": 6.001766
+      },
+      {
+        "entry": 3,
+        "level_id": "skirmish",
+        "physics_steps": 362,
+        "start_tick_count": 888,
+        "end_tick_count": 1250,
+        "live_seconds": 6.000843
+      },
+      {
+        "entry": 4,
+        "level_id": "skirmish_ai",
+        "physics_steps": 361,
+        "start_tick_count": 1257,
+        "end_tick_count": 1618,
+        "live_seconds": 6.000712
+      },
+      {
+        "entry": 5,
+        "level_id": "custom_defense",
+        "physics_steps": 361,
+        "start_tick_count": 1635,
+        "end_tick_count": 1996,
+        "live_seconds": 6.000272
+      },
+      {
+        "entry": 6,
+        "level_id": "level5",
+        "physics_steps": 364,
+        "start_tick_count": 2016,
+        "end_tick_count": 2380,
+        "live_seconds": 6.000959
+      },
+      {
+        "entry": 7,
+        "level_id": "level1",
+        "physics_steps": 360,
+        "start_tick_count": 2399,
+        "end_tick_count": 2759,
+        "live_seconds": 6.00054
+      },
+      {
+        "entry": 8,
+        "level_id": "arena",
+        "physics_steps": 362,
+        "start_tick_count": 2768,
+        "end_tick_count": 3130,
+        "live_seconds": 6.00068
+      },
+      {
+        "entry": 9,
+        "level_id": "skirmish",
+        "physics_steps": 362,
+        "start_tick_count": 3149,
+        "end_tick_count": 3511,
+        "live_seconds": 6.001754
+      },
+      {
+        "entry": 10,
+        "level_id": "skirmish_ai",
+        "physics_steps": 355,
+        "start_tick_count": 3519,
+        "end_tick_count": 3874,
+        "live_seconds": 6.000409
+      }
+    ],
+    "revised_fixture_source_sha256": "f425c47e7ab6fff7df93baa8413b7e0004f46d9245b6db560d15671a27ac5132",
+    "native_scene_sha256": "c6efde8584bf60c1032aaada5d6f6ac0e031b4db8302d10fa7a8d4ee6959832a",
+    "run": {
+      "candidate": "f76e44fdd940da7dd66c4df4a855714948adcd27",
+      "payload_files_unchanged": true,
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "2b56c924785544902d9e1a6ea727cba5629bc9f9acbdce3c10d7c641b10f154f",
+      "split_identity": "86caa8a1da4dc0db77e8b47685db43f0b43ec86a64bbedf8284b7d69c3c4b33c",
+      "exe_unchanged": true,
+      "exit_code": 0,
+      "seconds": 72.319,
+      "errors": [],
+      "warnings": [],
+      "log_sha256": "4c279e5515ee776ad4191d48bd8d1499fcb461f20ba84f0562d22575cf3c7237",
+      "thread_id": 44912,
+      "thread_samples_sha256": "d9d9715fea7d8f6e636670c1f104be9789c520f725ec3b95d3f85f10a6019cd5",
+      "report_sha256": "1815fe959e1f7b0b3c749a5c14593376907666d3497540b6005a9f99de82b09e"
+    }
+  }
+}

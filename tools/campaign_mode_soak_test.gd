@@ -21,6 +21,7 @@ const MINUTE_USEC := 60_000_000
 const MIB := 1024.0 * 1024.0
 const FRAME_P95_LIMIT_MS := 16.7
 const FRAME_P99_LIMIT_MS := 33.3
+const MAX_PLAY_FRAME_TRACES := 4096
 const REPORT_NAME := "campaign_mode_soak.json"
 
 # A warm baseline is captured after the first complete six-scene route. By then
@@ -66,6 +67,14 @@ var _stage_timing_enabled := false
 var _mount_trace_enabled := false
 var _entry_signals_enabled := false
 var _entry_draw_trace_level := ""
+var _play_frame_trace_enabled := false
+var _play_frame_rows: Array[Dictionary] = []
+var _play_frame_overflow := 0
+var _play_stage_enter_usec := 0
+var _play_first_physics_usec := 0
+var _play_physics_steps := 0
+var _play_process_usec := 0
+var _play_pre_draw_usec := 0
 var _memory_probe_spans: Array[Dictionary] = []
 var _mount_trace := {}
 var _mount_samples: Array[Dictionary] = []
@@ -249,6 +258,8 @@ func _tag_frame_stage(stage: String, mode := "", level_id := "") -> void:
 			"frames": 0, "over_16_7_ms": 0, "over_33_3_ms": 0, "worst_ms": 0.0,
 		}
 	_active_stage_frames = _stage_frame_samples[key]
+	if _play_frame_trace_enabled and stage == "play":
+		_play_stage_enter_usec = Time.get_ticks_usec()
 
 
 func _record_stage_frame(frame_ms: float) -> void:
@@ -375,8 +386,51 @@ func _report_mount_trace() -> void:
 	_mount_trace = {}
 
 
+func _trace_play_physics() -> void:
+	if _play_physics_steps == 0:
+		_play_first_physics_usec = Time.get_ticks_usec()
+	_play_physics_steps += 1
+
+
+func _trace_play_process() -> void:
+	_play_process_usec = Time.get_ticks_usec()
+
+
+func _trace_play_pre_draw() -> void:
+	_play_pre_draw_usec = Time.get_ticks_usec()
+
+
+func _trace_play_frame(now: int) -> void:
+	if _active_stage_frames.get("stage") == "play" and _last_frame_usec > 0 \
+			and float(now - _last_frame_usec) / 1000.0 > FRAME_P99_LIMIT_MS:
+		if _play_frame_rows.size() < MAX_PLAY_FRAME_TRACES:
+			# Signal boundaries partition the same interval counted by the fixture.
+			# They measure wall time, including scheduler waits and driver work.
+			var process_valid := _play_process_usec >= _last_frame_usec and _play_process_usec <= _play_pre_draw_usec
+			var draw_valid := _play_pre_draw_usec >= _last_frame_usec and _play_pre_draw_usec <= now
+			var physics_valid := _play_first_physics_usec >= _last_frame_usec \
+				and _play_first_physics_usec <= _play_process_usec
+			_play_frame_rows.append({"mode": _current_mode, "level_id": _current_level_id,
+				"minute": _minute_samples.size() + 1, "entry": _transitions.size() + 1,
+				"fully_in_play": _last_frame_usec >= _play_stage_enter_usec,
+				"elapsed_us": now - _start_usec, "interval_us": now - _last_frame_usec,
+				"unix_end_us": roundi(Time.get_unix_time_from_system() * 1_000_000.0),
+				"physics_steps": _play_physics_steps,
+				"post_to_physics_us": _play_first_physics_usec - _last_frame_usec if physics_valid else -1,
+				"post_to_process_us": _play_process_usec - _last_frame_usec if process_valid and draw_valid else -1,
+				"post_to_pre_draw_us": _play_pre_draw_usec - _last_frame_usec if draw_valid else -1})
+		else:
+			_play_frame_overflow += 1
+	_play_first_physics_usec = 0
+	_play_physics_steps = 0
+	_play_process_usec = 0
+	_play_pre_draw_usec = 0
+
+
 func _record_render_frame() -> void:
 	var now := Time.get_ticks_usec()
+	if _play_frame_trace_enabled:
+		_trace_play_frame(now)
 	if _last_frame_usec > 0:
 		var frame_ms := float(now - _last_frame_usec) / 1000.0
 		# A negative/zero interval would be a clock failure. Retain long transition
@@ -510,7 +564,7 @@ func _activity_snapshot(battle) -> Dictionary:
 	for unit in battle.units:
 		if is_instance_valid(unit) and unit.hp > 0.0 and not unit.is_building and not unit.is_resource:
 			units[unit.get_instance_id()] = {"position": unit.position, "hp": unit.hp}
-	return {"units": units, "physics_frame": Engine.get_physics_frames()}
+	return {"units": units, "start_tick_count": Engine.get_physics_frames()}
 
 
 func _activity_evidence(battle, initial: Dictionary) -> Dictionary:
@@ -526,8 +580,11 @@ func _activity_evidence(battle, initial: Dictionary) -> Dictionary:
 		max_distance = maxf(max_distance, distance)
 		if distance > 1.0: moved += 1
 		if unit.hp < float(before.hp): damaged += 1
-	var physics_steps: int = Engine.get_physics_frames() - int(initial.physics_frame)
-	var evidence := {"physics_steps": physics_steps, "moved_units": moved, "damaged_units": damaged,
+	var start_ticks := int(initial.start_tick_count)
+	var end_ticks := Engine.get_physics_frames()
+	var physics_steps := end_ticks - start_ticks
+	var evidence := {"physics_steps": physics_steps, "start_tick_count": start_ticks,
+		"end_tick_count": end_ticks, "moved_units": moved, "damaged_units": damaged,
 		"removed_units": dead_or_removed, "max_distance": max_distance,
 		"passed": physics_steps > 0 and (moved > 0 or damaged > 0 or dead_or_removed > 0)}
 	if String(battle.level.id()) in ["skirmish", "custom_defense"]:
@@ -911,7 +968,12 @@ func _run() -> void:
 	_end_usec = _start_usec + int(_duration_seconds * 1_000_000.0)
 	_bucket_start_usec = _start_usec
 	_next_minute_usec = _start_usec + MINUTE_USEC
-	_stage_timing_enabled = OS.get_environment("CAMPAIGN_SOAK_STAGE_TIMING") == "1"
+	_play_frame_trace_enabled = OS.get_environment("CAMPAIGN_SOAK_PLAY_FRAME_TRACE") == "1"
+	_stage_timing_enabled = _play_frame_trace_enabled or OS.get_environment("CAMPAIGN_SOAK_STAGE_TIMING") == "1"
+	if _play_frame_trace_enabled:
+		physics_frame.connect(_trace_play_physics)
+		process_frame.connect(_trace_play_process)
+		RenderingServer.frame_pre_draw.connect(_trace_play_pre_draw)
 	_tag_frame_stage("menu")
 	_baseline = _snapshot(true)
 	# Start measuring after the synchronous process-memory probe.
@@ -1016,6 +1078,9 @@ func _run() -> void:
 	}
 	if _stage_timing_enabled:
 		_report["frame_stages"] = _stage_frame_samples.values()
+	if _play_frame_trace_enabled:
+		_report["play_frame_trace"] = {"threshold_ms": FRAME_P99_LIMIT_MS,
+			"dropped_rows": _play_frame_overflow, "rows": _play_frame_rows}
 	if _mount_trace_enabled:
 		_report["mount_traces"] = _mount_samples
 	if _entry_signals_enabled:

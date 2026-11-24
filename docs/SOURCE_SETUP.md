@@ -1,5 +1,10 @@
 # 源码设置与换机（2026-10-30）
 
+## 2026-11-24 Windows 交战慢帧分段
+
+`CAMPAIGN_SOAK_PLAY_FRAME_TRACE=1` 记录交战期间超过 33.3 毫秒的绘制间隔与物理、空闲和绘制信号。默认验收仍可直接运行。独立 60.0 秒复验核对了原生验收脚本修正后的逐局物理步数。以前的移植脚本改写了快照键，导致活动收据打印进程累计值。修正后 10 局每局 355–365 步，均有实际交战并释放关键节点。 [Windows 分段收据](../qa/battle_entry_timing_20261116/windows_play_frame_phases_f76e44fd_d09f8f4f.json)
+
+
 ## 2026-11-24 Windows 梁山入口台地绘制复用
 
 Windows 本地试验复用梁山台地网格。六入口验收未通过，候选结果保留。 冻结候选 d09f8f4f 只改动运行输入 `scripts/liangshan_entrance.gd`。渲染夹具为 `tools/windows_terrace_reuse_test.gd`。 [新旧成品及渲染验证](../qa/battle_entry_timing_20261116/windows_liangshan_terrace_reuse_d09f8f4f.json) [六入口长测](../qa/battle_entry_timing_20261116/windows_candidate_d09f8f4f_mode_soak_600.json)
