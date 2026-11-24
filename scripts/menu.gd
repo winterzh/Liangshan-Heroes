@@ -69,7 +69,8 @@ func _launch(campaign_level_id := "") -> void:
 		_launch_immediately()
 		return
 	_show_battle_loading(campaign_level_id)
-	if OS.get_name() == "Windows" and (not campaign_level_id.is_empty() or Campaign.skirmish or Campaign.custom_defense):
+	if OS.get_name() == "Windows" and (not campaign_level_id.is_empty() or Campaign.skirmish \
+			or Campaign.custom_defense or Campaign.skirmish_ai):
 		# Resource workers can begin decoding as soon as requests are submitted.
 		# Draw the loading overlay before the first batch competes for time.
 		await RenderingServer.frame_post_draw
@@ -243,6 +244,8 @@ func _finish_battle_launch(campaign_level_id: String) -> void:
 			prepared_level_id = "custom_defense"
 		elif Campaign.skirmish:
 			prepared_level_id = "skirmish"
+		elif Campaign.skirmish_ai:
+			prepared_level_id = "skirmish_ai"
 		elif campaign_level_id in ["level1", "level5"]:
 			prepared_level_id = campaign_level_id
 	if prepared_level_id.is_empty():
