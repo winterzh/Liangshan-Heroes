@@ -662,6 +662,9 @@ func _show_story() -> void:
 	var ov := _mk_overlay("剧情模式 · 八幕战役", null, 1080.0)
 	var overlay: ColorRect = ov[0]
 	var box: VBoxContainer = ov[1]
+	var flow := get_node_or_null("/root/ContinueFlow")
+	if flow != null:
+		flow.add_campaign_continue_entry(box, self)
 
 	var rule := Label.new()
 	rule.text = "完成核心目标即可通关；依原著完成可选目标，可收录「演义印」"

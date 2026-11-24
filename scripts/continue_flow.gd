@@ -92,23 +92,59 @@ func add_continue_entry(parent: Control, menu: Node) -> void:
 	button.name = "ContinueBattle"
 	parent.add_child(button)
 	var entry: WeakRef = weakref(button)
+	var menu_owner: WeakRef = weakref(menu)
 	# Reading the journal verifies the complete payload, which can be large.
 	# Keep the entry available for recovery while the summary loads.
 	var task := WorkerThreadPool.add_task(func() -> void:
 		var saved := slot.read_slot()
 		var context: Dictionary = saved.document.context if saved.ok else {}
-		_apply_menu_slot_summary.call_deferred(entry, context, String(saved.get("code", ""))), false, "Continue menu slot summary")
+		_apply_menu_slot_summary.call_deferred(entry, menu_owner, context, String(saved.get("code", ""))), false, "Continue menu slot summary")
 	_retire_menu_slot_task(task)
+
+func add_campaign_continue_entry(parent: Control, menu: Node) -> void:
+	# Both views use the same verified slot summary. Opening a picker does not
+	# read or hash the save again and cannot start a separate restore operation.
+	var original := menu.find_child("ContinueBattle", true, false) as Button
+	if original == null:
+		return
+	var ready := original.has_meta(&"continue_slot_context")
+	var context: Dictionary = original.get_meta(&"continue_slot_context", {})
+	if ready and not Session.Profiles.is_player_campaign_context(context):
+		return
+	var button := _button("继续上次战斗", func() -> void: request_continue(menu))
+	button.name = "ContinueCampaignFromPicker"
+	button.hide()
+	parent.add_child(button)
+	if ready:
+		_show_campaign_continue(button, context)
+
+
+func _show_campaign_continue(button: Button, context: Dictionary) -> void:
+	if not Session.Profiles.is_player_campaign_context(context):
+		button.queue_free()
+		return
+	var index := Campaign.index_for_id(context.level_id)
+	if index < 0:
+		button.queue_free()
+		return
+	Localize.bind_format(button, "继续上次战斗 · %s", Campaign.LEVELS[index]["title"])
+	button.show()
+
 
 func _retire_menu_slot_task(task: int) -> void:
 	while not WorkerThreadPool.is_task_completed(task):
 		await get_tree().process_frame
 	WorkerThreadPool.wait_for_task_completion(task)
 
-func _apply_menu_slot_summary(entry: WeakRef, context: Dictionary, error_code: String) -> void:
+func _apply_menu_slot_summary(entry: WeakRef, menu_owner: WeakRef, context: Dictionary, error_code: String) -> void:
 	var button := entry.get_ref() as Button
-	if not is_instance_valid(button) or not button.is_inside_tree():
+	var menu := menu_owner.get_ref() as Node
+	if not is_instance_valid(button) or not button.is_inside_tree() or not is_instance_valid(menu):
 		return
+	button.set_meta(&"continue_slot_context", context)
+	var campaign_entry := menu.find_child("ContinueCampaignFromPicker", true, false) as Button
+	if campaign_entry != null:
+		_show_campaign_continue(campaign_entry, context)
 	if context.is_empty():
 		if error_code == "NO_SLOT":
 			button.queue_free()

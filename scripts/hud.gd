@@ -3200,9 +3200,11 @@ func _request_pause_action(action: String) -> void:
 	_pause_pending_action = action
 	Localize.bind_render(_pause_confirm_title, func() -> String: return {"restart": Localize.text("重新开始本局？"), "menu": Localize.text("返回主菜单？"), "quit": Localize.text("退出游戏？")}[action])
 	Localize.bind_render(_pause_confirm_button, func() -> String: return {"restart": Localize.text("确认重新开始"), "menu": Localize.text("确认返回主菜单"), "quit": Localize.text("确认退出游戏")}[action])
-	Localize.bind_render(_pause_confirm_text, func() -> String: return Localize.text("本局的战斗进度不会保存，之后需从本局开头重新开始。"))
-	if battle != null and battle.level.id().begins_with("level"):
-		_pause_confirm_text.text += Localize.text("\n\n已获得的章节解锁和通关记录会保留。")
+	Localize.bind_render(_pause_confirm_text, func() -> String:
+		var message := Localize.text("本局的战斗进度不会保存，之后需从本局开头重新开始。")
+		if battle != null and battle.level.id().begins_with("level"):
+			message += Localize.text("\n\n已获得的章节解锁和通关记录会保留。")
+		return message)
 	_pause_options.hide()
 	_pause_confirm.show()
 	# Opening the question never focuses the destructive action.
