@@ -482,10 +482,11 @@ func _order_wounded_return(b) -> void:
 	if outside.is_empty():
 		return
 	var pending := outside.filter(func(u: Unit) -> bool:
-		return u._state != Unit.ST_MOVE or u._home.distance_to(hall.position) >= EVACUATION_RADIUS \
-			or u._path_i >= u._path.size())
+		return u._state == Unit.ST_IDLE and not u._hold_order_active and not u._patrolling \
+			and u._target == null and u._queue.is_empty() and not u._action_queue_busy() \
+			and not u.mission_order_active and u.mission_order_arrival_t <= 0.0)
 	if pending.is_empty():
-		b.mission.set_feedback("伤员正在归营途中。")
+		b.mission.set_feedback(Localize.format_text("当前没有待令的未归营伤员。改派可先选人按 %s 停止。", Settings.key_label("stop")))
 		return
 	var origin: Vector2i = b.map.world_to_cell(pending[0].position)
 	var rally_cell: Vector2i = b.map.nearest_open_from(EVACUATION_RALLY, origin)
@@ -495,15 +496,33 @@ func _order_wounded_return(b) -> void:
 		return
 	var targets: Array = b._formation_targets(pending, rally)
 	var pace: float = b._group_speed_cap(pending)
-	b._stamp_manual(pending)
+	var sent := 0
 	for i in range(pending.size()):
+		var actor: Unit = pending[i]
 		var target: Vector2 = targets[i]
 		if target.distance_to(hall.position) >= EVACUATION_RADIUS:
 			target = rally
-		pending[i].order_move(target, false, pace)
+		if not _can_reach_evacuation(b, actor, target):
+			if target == rally or not _can_reach_evacuation(b, actor, rally):
+				continue
+			target = rally
+		b._stamp_manual([actor])
+		actor.order_move(target, false, pace)
+		sent += 1
+	if sent == 0:
+		b.mission.set_feedback("待令伤员暂时走不到前营。请清开道路或手动改道。")
+		return
 	b.select_members(outside, false)
 	Sfx.play("order")
-	b.mission.set_feedback(Localize.format_text("已派%d名伤员返回前营。", [pending.size()]))
+	var message := "已派%d名伤员返回前营。" if sent == pending.size() \
+		else "已派%d名伤员返回前营。其余待令伤员暂时找不到通路。"
+	b.mission.set_feedback(Localize.format_text(message, [sent]))
+
+
+func _can_reach_evacuation(b, actor: Unit, target: Vector2) -> bool:
+	var path: PackedVector2Array = b.map.find_path(actor.position, target, actor.faction, actor.movement_profile)
+	return not path.is_empty() and path[-1].distance_to(hall.position) < EVACUATION_RADIUS
+
 
 func _inside_action_available(b, action: Dictionary) -> bool:
 	return not action.is_empty() and not action.done and String(action.get("blocked_reason", "")).is_empty() \
