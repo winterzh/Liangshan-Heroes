@@ -1,0 +1,315 @@
+{
+  "windows_candidate": "e4e45635ac3812119aff9d551dd459e215cd7583",
+  "overlay_order_experiment": {
+    "scope": "Same packaged build in four isolated Windows Vulkan processes. Sample menu scripts preserve the underlying package and apply or instrument the two order alternatives.",
+    "window": [
+      1280,
+      720
+    ],
+    "vsync": 1,
+    "comparison_us": {
+      "arena": {
+        "current": {
+          "first_loading_draw_us": 17582.0,
+          "first_battle_frame_us": 81321.0,
+          "longest_draw_gap_us": 63840.5
+        },
+        "first_draw": {
+          "first_loading_draw_us": 7510.5,
+          "first_battle_frame_us": 101365.0,
+          "longest_draw_gap_us": 94516.0
+        }
+      },
+      "skirmish_ai": {
+        "current": {
+          "first_loading_draw_us": 21737.5,
+          "first_battle_frame_us": 104263.0,
+          "longest_draw_gap_us": 80184.5
+        },
+        "first_draw": {
+          "first_loading_draw_us": 7494.0,
+          "first_battle_frame_us": 89834.5,
+          "longest_draw_gap_us": 81926.0
+        }
+      }
+    },
+    "runs": [
+      {
+        "trial": "a",
+        "launcher": {
+          "candidate": "e4e45635ac3812119aff9d551dd459e215cd7583",
+          "variation": "current",
+          "route_first": "arena",
+          "variant_menu_sha256": "f5bab5b9a772d8e486695bf7620796963579c87895581a0564826731d9b4ca1b",
+          "probe_sha256": "08e580fa05f35d2a6ce49d616423292ee9cfc2be1a3057e82cf77a1b7e5eba0f",
+          "payload_files_unchanged": true,
+          "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+          "pck_sha256": "e039920055e100d6d727ca84787aa81b0afc845050177c33e0c5c20ccebbeea3",
+          "split_identity": "c4d58b17c366ea8499f8fce4a4f0c0eed2c26e7cf7d7456a20e681361c6c03cf",
+          "exe_unchanged": true,
+          "exit_code": 0,
+          "seconds": 10.757,
+          "errors": [],
+          "warnings": [],
+          "log_sha256": "22be00b379d619c87fc5a60dff9c804fa10be883518a42a6964c13c382e62f1a",
+          "report_sha256": "99449ebfccc61352f4e34ccec0c87d18640b0a881a09f70e1e7f56b14d8e523c"
+        },
+        "samples": [
+          {
+            "first_battle_frame_us": 186060,
+            "first_loading_draw_us": 44003,
+            "identity_start_us": 11991,
+            "longest_draw_gap_us": 142057,
+            "mode": "arena"
+          },
+          {
+            "first_battle_frame_us": 106710,
+            "first_loading_draw_us": 26174,
+            "identity_start_us": 1699,
+            "longest_draw_gap_us": 80536,
+            "mode": "skirmish_ai"
+          },
+          {
+            "first_battle_frame_us": 68180,
+            "first_loading_draw_us": 17663,
+            "identity_start_us": 699,
+            "longest_draw_gap_us": 50517,
+            "mode": "arena"
+          },
+          {
+            "first_battle_frame_us": 101816,
+            "first_loading_draw_us": 21983,
+            "identity_start_us": 1642,
+            "longest_draw_gap_us": 79833,
+            "mode": "skirmish_ai"
+          }
+        ]
+      },
+      {
+        "trial": "b",
+        "launcher": {
+          "candidate": "e4e45635ac3812119aff9d551dd459e215cd7583",
+          "variation": "first_draw",
+          "route_first": "arena",
+          "variant_menu_sha256": "71a8ce6c8c7b0f2a27a6c8958d1cfdcb73bd1b4c962d209f4ac394610218a5ca",
+          "probe_sha256": "08e580fa05f35d2a6ce49d616423292ee9cfc2be1a3057e82cf77a1b7e5eba0f",
+          "payload_files_unchanged": true,
+          "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+          "pck_sha256": "e039920055e100d6d727ca84787aa81b0afc845050177c33e0c5c20ccebbeea3",
+          "split_identity": "c4d58b17c366ea8499f8fce4a4f0c0eed2c26e7cf7d7456a20e681361c6c03cf",
+          "exe_unchanged": true,
+          "exit_code": 0,
+          "seconds": 10.569,
+          "errors": [],
+          "warnings": [],
+          "log_sha256": "22be00b379d619c87fc5a60dff9c804fa10be883518a42a6964c13c382e62f1a",
+          "report_sha256": "5da031dce9028cf4f8fa045b8aad808d73ee840b07c8ebef80dfaf3a75118f30"
+        },
+        "samples": [
+          {
+            "first_battle_frame_us": 180437,
+            "first_loading_draw_us": 18923,
+            "identity_start_us": 19075,
+            "longest_draw_gap_us": 161514,
+            "mode": "arena"
+          },
+          {
+            "first_battle_frame_us": 83306,
+            "first_loading_draw_us": 3556,
+            "identity_start_us": 3632,
+            "longest_draw_gap_us": 79750,
+            "mode": "skirmish_ai"
+          },
+          {
+            "first_battle_frame_us": 67303,
+            "first_loading_draw_us": 6731,
+            "identity_start_us": 6789,
+            "longest_draw_gap_us": 60572,
+            "mode": "arena"
+          },
+          {
+            "first_battle_frame_us": 90867,
+            "first_loading_draw_us": 7633,
+            "identity_start_us": 7840,
+            "longest_draw_gap_us": 83234,
+            "mode": "skirmish_ai"
+          }
+        ]
+      },
+      {
+        "trial": "c",
+        "launcher": {
+          "candidate": "e4e45635ac3812119aff9d551dd459e215cd7583",
+          "variation": "first_draw",
+          "route_first": "versus",
+          "variant_menu_sha256": "71a8ce6c8c7b0f2a27a6c8958d1cfdcb73bd1b4c962d209f4ac394610218a5ca",
+          "probe_sha256": "08e580fa05f35d2a6ce49d616423292ee9cfc2be1a3057e82cf77a1b7e5eba0f",
+          "payload_files_unchanged": true,
+          "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+          "pck_sha256": "e039920055e100d6d727ca84787aa81b0afc845050177c33e0c5c20ccebbeea3",
+          "split_identity": "c4d58b17c366ea8499f8fce4a4f0c0eed2c26e7cf7d7456a20e681361c6c03cf",
+          "exe_unchanged": true,
+          "exit_code": 0,
+          "seconds": 9.925,
+          "errors": [],
+          "warnings": [],
+          "log_sha256": "22be00b379d619c87fc5a60dff9c804fa10be883518a42a6964c13c382e62f1a",
+          "report_sha256": "07c8224b38bf65f708a9d8a57940e9d09f0fb3c4142fe6a34b7b2e20d54bd17c"
+        },
+        "samples": [
+          {
+            "first_battle_frame_us": 160892,
+            "first_loading_draw_us": 7355,
+            "identity_start_us": 7469,
+            "longest_draw_gap_us": 153537,
+            "mode": "skirmish_ai"
+          },
+          {
+            "first_battle_frame_us": 120559,
+            "first_loading_draw_us": 8290,
+            "identity_start_us": 8455,
+            "longest_draw_gap_us": 112269,
+            "mode": "arena"
+          },
+          {
+            "first_battle_frame_us": 88802,
+            "first_loading_draw_us": 8184,
+            "identity_start_us": 8349,
+            "longest_draw_gap_us": 80618,
+            "mode": "skirmish_ai"
+          },
+          {
+            "first_battle_frame_us": 82171,
+            "first_loading_draw_us": 5408,
+            "identity_start_us": 5530,
+            "longest_draw_gap_us": 76763,
+            "mode": "arena"
+          }
+        ]
+      },
+      {
+        "trial": "d",
+        "launcher": {
+          "candidate": "e4e45635ac3812119aff9d551dd459e215cd7583",
+          "variation": "current",
+          "route_first": "versus",
+          "variant_menu_sha256": "f5bab5b9a772d8e486695bf7620796963579c87895581a0564826731d9b4ca1b",
+          "probe_sha256": "08e580fa05f35d2a6ce49d616423292ee9cfc2be1a3057e82cf77a1b7e5eba0f",
+          "payload_files_unchanged": true,
+          "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+          "pck_sha256": "e039920055e100d6d727ca84787aa81b0afc845050177c33e0c5c20ccebbeea3",
+          "split_identity": "c4d58b17c366ea8499f8fce4a4f0c0eed2c26e7cf7d7456a20e681361c6c03cf",
+          "exe_unchanged": true,
+          "exit_code": 0,
+          "seconds": 10.239,
+          "errors": [],
+          "warnings": [],
+          "log_sha256": "22be00b379d619c87fc5a60dff9c804fa10be883518a42a6964c13c382e62f1a",
+          "report_sha256": "646a776db91231add9fbc8b1625e46b81d677eb905faf2cfe171279d85dcaaf2"
+        },
+        "samples": [
+          {
+            "first_battle_frame_us": 124723,
+            "first_loading_draw_us": 21492,
+            "identity_start_us": 2725,
+            "longest_draw_gap_us": 103231,
+            "mode": "skirmish_ai"
+          },
+          {
+            "first_battle_frame_us": 94462,
+            "first_loading_draw_us": 17298,
+            "identity_start_us": 1093,
+            "longest_draw_gap_us": 77164,
+            "mode": "arena"
+          },
+          {
+            "first_battle_frame_us": 82458,
+            "first_loading_draw_us": 18872,
+            "identity_start_us": 1150,
+            "longest_draw_gap_us": 63586,
+            "mode": "skirmish_ai"
+          },
+          {
+            "first_battle_frame_us": 66980,
+            "first_loading_draw_us": 17501,
+            "identity_start_us": 771,
+            "longest_draw_gap_us": 49479,
+            "mode": "arena"
+          }
+        ]
+      }
+    ],
+    "production_menu_retained": true
+  },
+  "custom_defense": {
+    "production_soak_longest_entry": {
+      "first_overlay_us": 2179,
+      "battle_attached_us": 124635,
+      "map_attached_us": 124698,
+      "hud_attached_us": 215433,
+      "first_unit_us": 307290,
+      "scene_ready_us": 335997,
+      "first_battle_frame_us": 450656,
+      "gap_start_us": 120489,
+      "gap_end_us": 450656
+    },
+    "production_soak_verification_sha256": "6f13d129a2f68112c0a425e7c854902155e5a5ecbe7ef10842176e1ff43410f9",
+    "real_saved_preset_picker_diagnostic": {
+      "launcher": {
+        "candidate": "e4e45635ac3812119aff9d551dd459e215cd7583",
+        "fixture_sha256": "f81f8756b7e43f9ac5a957cd592f7a943d43af9e9402cdd5c92ef7d3c5c1c752",
+        "all_candidate_payloads_unchanged": true,
+        "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+        "pck_sha256": "e039920055e100d6d727ca84787aa81b0afc845050177c33e0c5c20ccebbeea3",
+        "exe_unchanged": true,
+        "exit_code": 0,
+        "seconds": 20.002,
+        "active_fps_cap": 0,
+        "errors": [],
+        "warnings": [],
+        "log_sha256": "5617d2825608553a54e8121eebacd26cf70458b9e1aeacd87809cfdfd2c438a1",
+        "report_sha256": "9011be3c90d58a3b41c49a7ff831adde4abd464a558f4f5b2cd08097c204aa22"
+      },
+      "samples": [
+        {
+          "first_loading_draw_us": 17425,
+          "first_battle_frame_us": 672241,
+          "fixture_script_load_us": 346322,
+          "detached_map_prepare_us": 50657,
+          "battle_ready_us": 78472,
+          "hud_ready_us": 39419,
+          "first_draw_after_scene_ready_us": 94825
+        },
+        {
+          "first_loading_draw_us": 11842,
+          "first_battle_frame_us": 128311,
+          "fixture_script_load_us": 6,
+          "detached_map_prepare_us": 27355,
+          "battle_ready_us": 45144,
+          "hud_ready_us": 12243,
+          "first_draw_after_scene_ready_us": 24618
+        },
+        {
+          "first_loading_draw_us": 8876,
+          "first_battle_frame_us": 113934,
+          "fixture_script_load_us": 4,
+          "detached_map_prepare_us": 27241,
+          "battle_ready_us": 36216,
+          "hud_ready_us": 9878,
+          "first_draw_after_scene_ready_us": 22525
+        },
+        {
+          "first_loading_draw_us": 14368,
+          "first_battle_frame_us": 149231,
+          "fixture_script_load_us": 5,
+          "detached_map_prepare_us": 32290,
+          "battle_ready_us": 50009,
+          "hud_ready_us": 14619,
+          "first_draw_after_scene_ready_us": 28032
+        }
+      ],
+      "first_trial_included_one_time_compilation_of_the_instrumented_fixture": true,
+      "first_trial_used_only_for_fixture_overhead_accounting": true
+    }
+  }
+}
