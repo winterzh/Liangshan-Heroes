@@ -11,6 +11,7 @@ const RIDER_POSTS := [Vector2i(52,20),Vector2i(52,42)]
 const DRILL := Vector2i(16,45)
 const DRILL_ENTRY := Vector2i(21,45)
 const SOUTH_SIEGE_BUTTON := "lhm_flank_artillery"
+const SOUTH_SIEGE_SELECT := "lhm_select_east_artillery"
 const SOUTH_SIEGE_CELLS := [
 	Vector2i(22,43), Vector2i(30,57), Vector2i(43,58), Vector2i(55,58),
 	Vector2i(60,46), Vector2i(61,40),
@@ -512,6 +513,10 @@ func _lane_has_riders(lane: int) -> bool:
 	return riders.any(func(u): return alive(u) and int(u.get_meta("wave_group",-1))==lane)
 
 func activate_mission_button(b,button_id: String) -> void:
+	if button_id == SOUTH_SIEGE_SELECT:
+		if _south_siege_available():
+			_select_east_artillery(b)
+		return
 	if button_id == SOUTH_SIEGE_BUTTON:
 		if _south_siege_available():
 			_order_south_siege(b)
@@ -546,6 +551,31 @@ func _update_south_siege_button(b, available: bool) -> void:
 	elif not available and button != null:
 		button.get_parent().remove_child(button)
 		button.queue_free()
+
+
+func _update_east_artillery_button(b, arrived: bool) -> void:
+	var button: Button = b.mission.find_level_button(SOUTH_SIEGE_SELECT)
+	if arrived and button == null:
+		button = b.mission.add_level_button(SOUTH_SIEGE_SELECT, "选中 · 东侧投石车",
+			"选中已到敌营东侧的投石车并移动镜头。右键可见的官军大营下令攻击。")
+		button.get_parent().move_child(button, 0)
+		b.mission.reveal_primary_level_button()
+	elif not arrived and button != null:
+		button.get_parent().remove_child(button)
+		button.queue_free()
+
+
+func _at_east_staging_point(unit, staging: Vector2) -> bool:
+	return _south_siege_actor(unit) and unit.position.distance_squared_to(staging) <= 32.0 * 32.0
+
+
+func _select_east_artillery(b) -> void:
+	var staging: Vector2 = b.map.cell_to_world(SOUTH_SIEGE_CELLS[-1])
+	var arrived: Array = b.units.filter(_at_east_staging_point.bind(staging))
+	if arrived.is_empty():
+		return
+	b.select_members(arrived, false)
+	b.center_camera_cell(SOUTH_SIEGE_CELLS[-1])
 
 
 func _south_siege_actor(unit) -> bool:
@@ -608,7 +638,9 @@ func _order_south_siege(b) -> void:
 		if _following_south_siege(unit, route, entry) or unit.position.distance_to(route[-1]) <= 24.0:
 			already += 1
 			continue
-		if not selected and (unit._state != Unit.ST_IDLE or unit._target != null or not unit._queue.is_empty()):
+		if not selected and (unit._state != Unit.ST_IDLE or unit._hold_order_active or unit._patrolling \
+			or unit._target != null or not unit._queue.is_empty() or unit._action_queue_busy() \
+			or unit.mission_order_active or unit.mission_order_arrival_t > 0.0):
 			continue
 		if not _south_siege_path_open(b.map, unit, route, entry):
 			blocked += 1
@@ -747,7 +779,13 @@ func _update_briefing(b) -> void:
 	var objective: String = briefing.objective
 	var south_siege_available := _south_siege_available()
 	_update_south_siege_button(b, south_siege_available)
-	if south_siege_available:
+	var staging: Vector2 = b.map.cell_to_world(SOUTH_SIEGE_CELLS[-1])
+	var arrived: bool = south_siege_available and b.units.any(_at_east_staging_point.bind(staging))
+	_update_east_artillery_button(b, arrived)
+	if arrived:
+		objective = "投石车已到敌营东侧。选中东侧投石车，右键可见的官军大营攻城。" if briefing == CAPTURED_COUNTER_BRIEFING \
+			else "投石车已到敌营东侧。想生擒韩滔，先击败他，再选中投石车攻营。"
+	elif south_siege_available:
 		objective = "韩滔已被生擒。可让投石车绕南侧，步军在正面牵制。投石车到位后，请下令攻营。" if briefing == CAPTURED_COUNTER_BRIEFING \
 			else "十二骑已击溃。可让投石车绕南侧，到位后下令攻营。想生擒韩滔，先击败他再拆大营。"
 	elif briefing == FINISH_BRIEFING and CAMP_FALL_WAVE_EVENTS.any(b.mission.has_event):
