@@ -1,0 +1,290 @@
+{
+  "steam_build": 26873421,
+  "candidate": {
+    "kind": "local_integrated_windows_candidate",
+    "layout": "split_pck",
+    "commit": "bdafa9ee166d8fee1d63284695c73b5f00281ac8",
+    "source_version": "source-v1:a8bf3531b4974c24fc52cb04499b4e12132710b328a4fd4ed032bf957ac78e87",
+    "tracked_runtime_count": 6574,
+    "steps": [
+      {
+        "stage": "import",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 71.33
+      },
+      {
+        "stage": "export",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 94.16
+      }
+    ],
+    "files": [
+      {
+        "path": "GODOTSTEAM_LICENSE.txt",
+        "bytes": 1110,
+        "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+      },
+      {
+        "path": "LiangshanHeroes.exe",
+        "bytes": 104886784,
+        "sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4"
+      },
+      {
+        "path": "LiangshanHeroes.pck",
+        "bytes": 1722727884,
+        "sha256": "bad27527aa1b68c36328f54574a5d3349283b7378c20d27179873689b87cfbf0"
+      },
+      {
+        "path": "libgodotsteam.windows.template_release.x86_64.dll",
+        "bytes": 3961344,
+        "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+      },
+      {
+        "path": "steam_api64.dll",
+        "bytes": 319128,
+        "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+      },
+      {
+        "path": "steam_stats_reader.dll",
+        "bytes": 393728,
+        "sha256": "5a79a77b5b6e2cff21b285c785118352805a09d91876f89276af119ee1702517"
+      },
+      {
+        "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+        "bytes": 1093,
+        "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+      }
+    ]
+  },
+  "input_generation_3_sha256": "1c1887df9b1be99968d63c4f4cbe15791b9ad773e18401146d7d27f29435591d",
+  "source_naval_receipt_sha256": "a7b4541ab67f93e80e21406197915e174bc684283526f23f7b55d5239c629dc9",
+  "observers": {
+    "gao_play.gd": "2adead3f0d747e34418aef2382606871623a1bcb7c55c493f7e970f42489e197",
+    "zhu_driver.gd": "a36348d8a71deffac08195e337caa64be3d9dfd7d56d9c1725924897681f6796",
+    "terminal.gd": "c9d1ca5a74c7f82da6d842961e8138a0a331783f213780f251b37e7afe46196d",
+    "terminal-reference.gd": "37a037bcdfcbc1a0ab8c063fb270844666841a43c9d77a10c4bd4035403ec332",
+    "loss-reference.gd": "e8803ba7e31b603d4d3710de906639cfd8651271e096568fc25b02748f3b01d3"
+  },
+  "stages": {
+    "capture": {
+      "checks": 20,
+      "facts": {
+        "carrier_id": "29",
+        "labels": {
+          "en": "Pay to recruit Liu Tang",
+          "ja": "劉唐を有料で再招集",
+          "zh_CN": "付费重募刘唐",
+          "zh_TW": "付費重募劉唐"
+        },
+        "loss": {
+          "carrier_cleared": true,
+          "clock": "585.883333333367",
+          "fire": true,
+          "gold": "2741",
+          "hall": "1",
+          "loss": true,
+          "present_liu": 0,
+          "queue": [],
+          "return_blocked": true,
+          "timer": "0.0",
+          "wood": "831"
+        },
+        "march": {
+          "carrier_cleared": true,
+          "clock": "586.1666666667",
+          "fire": true,
+          "gold": "2741",
+          "hall": "1",
+          "loss": true,
+          "original_liu": "6",
+          "present_liu": 0,
+          "queue": [],
+          "return_blocked": true,
+          "timer": "0.0",
+          "wood": "831"
+        },
+        "obsolete_return_at_loss": false,
+        "recruit_at_loss": true,
+        "slot_sha256": "b60c112c303d7fabf8a55c2f893d7c4e3313c29c2063cc3587b452ff1965ec63",
+        "tooltips": {
+          "en": "Queue Liu Tang at the Hall of Loyalty for the usual cost. He deploys ashore when training finishes.",
+          "ja": "忠義堂で通常の費用を払い、劉唐を再招集します。訓練が終わると陸上に出陣します。",
+          "zh_CN": "在忠义堂按正常价格排队重募刘唐。完成后，他将在岸上出阵。",
+          "zh_TW": "在忠義堂按原價排隊重募劉唐。完成後，他將在岸上出陣。"
+        },
+        "visible_contacts": 32
+      },
+      "failures": [],
+      "pid": 44844,
+      "stage": "capture",
+      "exit_code": 0,
+      "errors": [],
+      "log_sha256": "4e4b869bc069f3c2592060340fbb659ffd234b8d35c91a8b04b1df591ebe48ef",
+      "status": true
+    },
+    "queue": {
+      "checks": 20,
+      "facts": {
+        "camera_kept": true,
+        "duplicate_prevented": true,
+        "march": {
+          "carrier_cleared": true,
+          "clock": "586.350000000033",
+          "fire": true,
+          "gold": "2576",
+          "hall": "1",
+          "loss": true,
+          "original_liu": "6",
+          "present_liu": 0,
+          "queue": [
+            "liu_tang"
+          ],
+          "return_blocked": true,
+          "timer": "40.0",
+          "wood": "797"
+        },
+        "paid": [
+          175,
+          34
+        ],
+        "resource_gate_checked": true,
+        "selection_kept": true,
+        "slot_sha256": "e8b72370d8a3a9452882c3ad3ddd5184c390570de18aa7d5de4c91b921a7d4a0"
+      },
+      "failures": [],
+      "pid": 15628,
+      "stage": "queue",
+      "exit_code": 0,
+      "errors": [],
+      "log_sha256": "501e15822a439589bee4f07529e5489b26946674809f6eed52e6609560b6123e",
+      "status": true
+    },
+    "settle": {
+      "checks": 17,
+      "facts": {
+        "campaign_record": {
+          "best_done": 3,
+          "best_goal_ids": [
+            "gao_lure",
+            "gao_fire",
+            "gao_land"
+          ],
+          "cleared": true,
+          "contract_version": 3,
+          "story_complete": false,
+          "story_total": 4
+        },
+        "end_clock": 627.616666666732,
+        "hall_hp": 1500.0,
+        "progress_sha256": "d7396b09588a5caef2c69b7a3f68786aa1b32d0b64c5bdf19241d9f7b96ece54",
+        "replacement_liu": "144",
+        "result": {
+          "contract_version": 3,
+          "core_cleared": true,
+          "core_goal": "守住忠义堂和宋江，击退三批水陆主力，打停高俅座船。可直接收兵通关；生擒并押回堂前是可选演义目标。",
+          "done_ids": [
+            "gao_lure",
+            "gao_fire",
+            "gao_land"
+          ],
+          "goals": [
+            {
+              "id": "gao_lure",
+              "label": "阮小七引活官船进入港汊伏区",
+              "note": "",
+              "reason": "",
+              "state": "done"
+            },
+            {
+              "id": "gao_fire",
+              "label": "公孙胜祭风、刘唐登船举火，护两艘接应船撤离",
+              "note": "",
+              "reason": "",
+              "state": "done"
+            },
+            {
+              "id": "gao_land",
+              "label": "击退岸军并拔除山前补给营",
+              "note": "",
+              "reason": "",
+              "state": "done"
+            },
+            {
+              "id": "gao_capture",
+              "label": "封港凿船、水上接俘、返航后实际押至忠义堂",
+              "note": "",
+              "reason": "本局未完成",
+              "state": "missed"
+            }
+          ],
+          "missed_ids": [
+            "gao_capture"
+          ],
+          "pending_ids": [],
+          "story_complete": false,
+          "story_done": 3,
+          "story_total": 4
+        },
+        "slot_sha256": "e8b72370d8a3a9452882c3ad3ddd5184c390570de18aa7d5de4c91b921a7d4a0",
+        "training_completed_clock": 627.616666666732
+      },
+      "failures": [],
+      "pid": 44328,
+      "stage": "settle",
+      "exit_code": 0,
+      "errors": [],
+      "log_sha256": "399cb82c5f84f2d93182d98a8a28d05c2ddfad17fd387abead1ea9993f125771",
+      "status": true
+    },
+    "reject": {
+      "checks": 11,
+      "facts": {
+        "campaign_record": {
+          "best_done": 3,
+          "best_goal_ids": [
+            "gao_lure",
+            "gao_fire",
+            "gao_land"
+          ],
+          "cleared": true,
+          "contract_version": 3,
+          "story_complete": false,
+          "story_total": 4
+        },
+        "progress_sha256": "d7396b09588a5caef2c69b7a3f68786aa1b32d0b64c5bdf19241d9f7b96ece54",
+        "slot_sha256": "e8b72370d8a3a9452882c3ad3ddd5184c390570de18aa7d5de4c91b921a7d4a0",
+        "terminal_code": "LOCAL_RUN_TERMINAL"
+      },
+      "failures": [],
+      "pid": 37896,
+      "stage": "reject",
+      "exit_code": 0,
+      "errors": [],
+      "log_sha256": "856673a4db2b6d26f8dd9d477d21398e9eb1f071d1772f12d288148eb8373555",
+      "status": true
+    }
+  },
+  "complete": true,
+  "source_slots_preserved": true,
+  "initial_trial": {
+    "candidate": "2776acfd415fd8417e58a52c1349fe3ec1649cd7",
+    "failed_checks": [
+      "after sinking, the new action replaces the unreachable return action"
+    ],
+    "log_sha256": "bd58ec5cefcef56114ca4c94cdc0b05d6e26cf837292ffb25faec1577283a6a0"
+  },
+  "total_checks": 68,
+  "scope": {
+    "candidate": "Windows Vulkan Forward+ 960x540 native application in isolated offline profiles",
+    "origin": "the same official build lineage from a prior genuine two-escort withdrawal, with the original carrier and passenger still attached",
+    "input": "button mouse input inside the private viewport, normal physics and enemy damage, scripted 4x combat",
+    "controlled_boundary": "set gold to zero for the reject click only and restore the original value before paying; no disk write or simulation tick under the altered value"
+  },
+  "localization": {
+    "new_reviewed_entries": 3,
+    "previous_entries_unchanged": 5294,
+    "strict_merge_report_sha256": "30ca05f56a3a55a5bece113c8996131cfc51bd95319083ce55cdc9871fee8b16"
+  }
+}
