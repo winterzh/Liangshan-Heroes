@@ -546,9 +546,7 @@ func _send_empty_carts(b) -> void:
 	var issued := 0
 	var blocked := 0
 	for actor: Unit in _transport_group(b, false):
-		if actor._state != Unit.ST_IDLE or actor._hold_order_active or actor._patrolling \
-				or actor._target != null or not actor._queue.is_empty() or actor._action_queue_busy() \
-				or actor.mission_order_active or actor.mission_order_arrival_t > 0.0:
+		if not _cart_dispatch_idle(actor):
 			continue
 		var index: int = actor.get_meta("pushing_empty_tribute")
 		var action_id := "force_load_%d_%d" % [index, int(force_attempts.get(index, 0))]
@@ -578,15 +576,15 @@ func _send_loaded_carts(b) -> void:
 	var issued := 0
 	var blocked := 0
 	for actor: Unit in carriers:
+		if not _cart_dispatch_idle(actor):
+			continue
 		var index: int = actor.get_meta("carrying_tribute")
 		var action_id := "force_deliver_%d_%d" % [index, int(force_attempts.get(index,0))]
+		if b.mission.active_action_id == action_id:
+			continue
 		var action := _cart_dispatch_action(b, actor, action_id)
 		if action.is_empty():
 			blocked += 1
-			continue
-		var has_delivery_order: bool = (actor.mission_order_active or actor.mission_order_arrival_t > 0.0) \
-			and b.mission._nearest_clicked_action(actor.mission_order_target) == action_id
-		if b.mission.active_action_id == action_id or has_delivery_order:
 			continue
 		if _dispatch_cart_to_action(b, actor, action_id, action):
 			issued += 1
@@ -601,7 +599,13 @@ func _send_loaded_carts(b) -> void:
 	elif blocked > 0:
 		b.mission.set_feedback("当前无法下达新的交付命令。请清开退路或手动下令。")
 	else:
-		b.mission.set_feedback("已装货的车正在出冈或交付。")
+		b.mission.set_feedback(Localize.format_text("当前没有待令货车。要改派，请先选车按 %s 停止。", Settings.key_label("stop")))
+
+
+func _cart_dispatch_idle(actor: Unit) -> bool:
+	return actor._state == Unit.ST_IDLE and not actor._hold_order_active and not actor._patrolling \
+		and actor._target == null and actor._queue.is_empty() and not actor._action_queue_busy() \
+		and not actor.mission_order_active and actor.mission_order_arrival_t <= 0.0
 
 func _cart_dispatch_action(b, actor: Unit, action_id: String) -> Dictionary:
 	var action: Dictionary = b.mission.actions.get(action_id, {})
