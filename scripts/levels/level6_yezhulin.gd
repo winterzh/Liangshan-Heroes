@@ -679,12 +679,17 @@ func _escort_heading_to_rest(b) -> bool:
 		and escort_player_target.distance_to(b.map.cell_to_world(REST)) <= 96.0)
 
 func _escort_arrival_guidance(b, at_rest: bool) -> String:
-	var state := _escort_arrival_at(b.map.cell_to_world(REST if at_rest else EXIT_W),96.0 if at_rest else EXIT_R)
+	var target: Vector2 = b.map.cell_to_world(REST if at_rest else EXIT_W)
+	var state := _escort_arrival_at(target, 96.0 if at_rest else EXIT_R)
 	var destination := Localize.text("歇脚处" if at_rest else "出林口")
 	if state.missing.is_empty():
 		if b.hud.touch_ui:
 			return Localize.format_text("同伴已到齐；选中林冲，轻点%s的旗标。",destination)
 		return Localize.text("同伴已到齐；让林冲右键歇脚旗标完成停留。" if at_rest else "同伴已到齐；让林冲右键出林旗标完成停留。")
+	if not b.hud.touch_ui:
+		var action: Dictionary = b.mission.actions.get("rest_stop" if at_rest else "leave_forest", {})
+		if not action.is_empty() and _escort_is_moving_to(target, float(action.click_reach), state.missing):
+			return Localize.format_text("相送队正前往%s，已到 %d/%d 人。", [destination, state.arrived, state.total])
 	var names := PackedStringArray()
 	for member in state.missing: names.append(Localize.text(member.display_name))
 	var prompt := "%s已到 %d/%d 人；未到齐：%s。选中队伍后轻点旗标继续同行。" if b.hud.touch_ui \
@@ -717,6 +722,14 @@ func _update_escort_commands(b) -> void:
 				else "点「带队去歇脚」可完成演义目标，也可直接点「带队出林」。")
 	rest_button.disabled = rest_reached
 
+func _escort_is_moving_to(target: Vector2, reach: float, group: Array) -> bool:
+	if not (escort_player_target.distance_to(target) <= reach):
+		return false
+	return group.any(func(unit: Unit) -> bool:
+		return unit._path_i < unit._path.size() and unit._order_serial == int(escort_orders.get(unit.entity_id, -1))
+	)
+
+
 func _order_escort_group(b, action_id: String) -> void:
 	if st != ESCAPE or b.hud.touch_ui or not b._gameplay_rng_issue.is_empty():
 		return
@@ -726,9 +739,7 @@ func _order_escort_group(b, action_id: String) -> void:
 			or (action_id == "rest_stop" and rest_reached) or b.mission.active_action_id == action_id:
 		return
 	var target: Vector2 = b.map.cell_to_world(action.cell)
-	if escort_player_target.distance_to(target) <= float(action.click_reach) \
-			and group.any(func(unit: Unit) -> bool: return unit._path_i < unit._path.size() \
-				and unit._order_serial == int(escort_orders.get(unit.entity_id, -1))):
+	if _escort_is_moving_to(target, float(action.click_reach), group):
 		return
 	b.select_single(lin_freed, false)
 	b._stamp_manual([lin_freed])
