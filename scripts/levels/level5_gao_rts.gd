@@ -33,7 +33,7 @@ const RETURN_LIU_TANG := "gao_return_liu_tang"
 const RECRUIT_LIU_TANG := "gao_recruit_liu_tang"
 const WITHDRAW_ACTION := "gao_fire_withdraw"
 const RETURN_ACTION := "gao_liu_return"
-const WITHDRAW_PROMPT := "火船已点燃。点「撤出接应船」让两船驶向安全水域；附近有官船时，先压退追兵。"
+const WITHDRAW_PROMPT := "火船已点燃。点「撤出接应船」可派待令船只去安全水域。两船到齐前，先压退附近官船。"
 const RETURN_PROMPT := "双船已撤离。可点「送刘唐返港」，让载他的原船回主码头。"
 const SHIP_KEYS := ["ruan_xiaoqi_boat","ruan_xiaoer_boat","ruan_xiaowu_boat","zhang_shun_boat","liangshan_warship"]
 const OPENING_OBJECTIVE := "首批约140秒出发，后两批约330与540秒。岸军防东山关、舰队守内港；可出击拆两处补给，也可经营补兵接战。"
@@ -486,10 +486,16 @@ func _order_fire_route(b, button_id: String) -> void:
 	var marker: Vector2 = b.map.cell_to_world(action.cell)
 	var movers: Array = []
 	var targets: Array[Vector2] = []
+	var busy := false
 	for index in range(ships.size()):
 		var ship: Unit = ships[index]
 		if (ship.mission_order_active or ship.mission_order_arrival_t > 0.0) \
 				and ship.mission_order_target == marker:
+			continue
+		if ship._state != Unit.ST_IDLE or ship._hold_order_active or ship._patrolling \
+				or ship._target != null or not ship._queue.is_empty() or ship._action_queue_busy() \
+				or ship.mission_order_active or ship.mission_order_arrival_t > 0.0:
+			busy = true
 			continue
 		# Keep a full tile between each hull and the marker, within action reach.
 		var cell: Vector2i = action.cell
@@ -503,13 +509,20 @@ func _order_fire_route(b, button_id: String) -> void:
 			return
 		movers.append(ship)
 		targets.append(target)
-	if movers.is_empty() or not b.mission.can_tap_action(movers, marker):
+	if movers.is_empty():
+		if busy:
+			b.mission.set_feedback(Localize.format_text("当前没有待令船只。改派可先选船按 %s 停止。", Settings.key_label("stop")))
+		return
+	if not b.mission.can_tap_action(movers, marker):
 		return
 	b._stamp_manual(movers)
 	for index in range(movers.size()):
 		movers[index].order_move(targets[index])
 	b._stamp_mission_move(movers, marker)
-	b.mission.set_feedback("两艘接应船正驶往安全水域。" if withdrawing else "载刘唐的船已启程返港。")
+	var feedback := "载刘唐的船已启程返港。"
+	if withdrawing:
+		feedback = "两艘接应船正驶往安全水域。" if movers.size() == 2 else "已派一艘接应船驶向安全水域。"
+	b.mission.set_feedback(feedback)
 	Sfx.play("order")
 func _liu_return_ship() -> Unit:
 	if not is_instance_valid(embarked_liu): return null
@@ -895,7 +908,7 @@ func _wave_warning(b, index: int) -> String:
 
 func _update_wave_objective(b) -> void:
 	_sync_recruit_liu_tang_button(b)
-	_sync_fire_route_button(b, WITHDRAW_ESCORT_SHIPS, "撤出接应船", "派阮小二和阮小五驶向安全水域。两船到齐并压退附近官船后才算撤离。")
+	_sync_fire_route_button(b, WITHDRAW_ESCORT_SHIPS, "撤出接应船", "派待令接应船驶向安全水域。两船到齐并压退附近官船后才算撤离。")
 	_sync_fire_route_button(b, RETURN_LIU_TANG, "送刘唐返港", "派载刘唐的原船返回主码头。靠岸并清开登陆点后，刘唐才能下船。")
 	if core_ready: return
 	var objective := _wave_objective(b)
