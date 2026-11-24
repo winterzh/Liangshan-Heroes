@@ -1,5 +1,10 @@
 # 八幕战役后续开发路线图
 
+## M4 大名府潜入补救
+
+选中潜入角色可看到乔装告急与恢复进度，给退开巡守或返回蔡福家的决定提供反馈。真人两线取舍待验。 [Windows 成品验收](../qa/campaign_coordination_20261116/windows_daming_disguise_55c580d5.json)
+
+
 ## M7 寻路烘焙成品对照
 
 黄泥冈完成 Windows 成品对照。八次正常出征均可点选、下令并返回，逐格与按行烘焙的导航结果相同。 [Windows 成品对照](../qa/battle_entry_timing_20261116/windows_compiled_nav_bake_93b2e9bd.json)

@@ -1,0 +1,139 @@
+{
+  "scope": "Windows Vulkan Forward+ 960x540 in two isolated offline processes. Fresh level 8 from the campaign menu. A controlled placement of a real patrol and the spy near open cells exercises the existing suspicion and exposure tick. Normal viewport movement reaches a guarded safehouse, the fixture withdraws the nearby patrols, and the normal ticks advance recovery. Standard Save and Exit and an independent Continue preserve the spy and the recovery already elapsed.",
+  "candidate": {
+    "kind": "local_integrated_windows_candidate",
+    "layout": "split_pck",
+    "commit": "55c580d5a881a60dfe4ba15a9e1280dea24a011b",
+    "source_version": "source-v1:d139b1b697ccb96381347c9028fd964e4c519c8f094e4c534aded2def0869fe6",
+    "tracked_runtime_count": 6574,
+    "steps": [
+      {
+        "stage": "import",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 61.74
+      },
+      {
+        "stage": "export",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 86.86
+      }
+    ],
+    "files": [
+      {
+        "path": "GODOTSTEAM_LICENSE.txt",
+        "bytes": 1110,
+        "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+      },
+      {
+        "path": "LiangshanHeroes.exe",
+        "bytes": 104886784,
+        "sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4"
+      },
+      {
+        "path": "LiangshanHeroes.pck",
+        "bytes": 1722706620,
+        "sha256": "3210991fc7ff7e4809be2652eb0471f1d8727bb492e2c000d2488fd2d285f4e4"
+      },
+      {
+        "path": "libgodotsteam.windows.template_release.x86_64.dll",
+        "bytes": 3961344,
+        "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+      },
+      {
+        "path": "steam_api64.dll",
+        "bytes": 319128,
+        "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+      },
+      {
+        "path": "steam_stats_reader.dll",
+        "bytes": 393728,
+        "sha256": "5a79a77b5b6e2cff21b285c785118352805a09d91876f89276af119ee1702517"
+      },
+      {
+        "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+        "bytes": 1093,
+        "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+      }
+    ]
+  },
+  "changed_runtime_inputs": [
+    "assets/localization/catalog.json",
+    "scripts/levels/level8_daming_rts.gd"
+  ],
+  "full_input_count": 6574,
+  "localization_entries": 5260,
+  "fixture_sha256": "b8faf9fcbcf9f8e3b438d159814344628919265f5762c0200b90b06ca6e12c8e",
+  "processes": {
+    "cover-save": {
+      "checks": 25,
+      "facts": {
+        "blocking": [],
+        "checkpoint": {
+          "id": "25",
+          "invisible": false,
+          "order": "2",
+          "pos": [
+            "784.000061035156",
+            "912.000061035156"
+          ],
+          "recovery": 1.25
+        },
+        "countdown": {
+          "en": "Restoring cover · 2 s left",
+          "ja": "変装を整え直し中 · あと 2 秒",
+          "zh_CN": "重整乔装 · 还需 2 秒",
+          "zh_TW": "重整喬裝 · 還需 2 秒"
+        },
+        "recovery_state": {
+          "distance": 8.63167442730628e-05,
+          "guarded": false,
+          "progress": 1.25
+        },
+        "slot_sha256": "78979379f45a2ec5462cf7526fb650978ecfc4e5fcae39c958531d4155bfae11",
+        "warning": {
+          "en": "Cover at risk · Step away from patrols",
+          "ja": "変装が見破られそうだ · 巡回兵から離れる",
+          "zh_CN": "乔装快被识破 · 退开巡守",
+          "zh_TW": "喬裝快被識破 · 退開巡守"
+        },
+        "withdrawn_local_patrols": [
+          "guan_dao",
+          "guan_dao",
+          "guan_dao",
+          "guan_dao",
+          "guan_gong",
+          "guan_gong",
+          "guan_dao",
+          "guan_dao",
+          "guan_dao",
+          "guan_dao",
+          "guan_gong",
+          "guan_gong"
+        ]
+      },
+      "failures": [],
+      "stage": "cover-save",
+      "log_sha256": "0974548455e17fbf3b08f22105ff2e0446a455642e0187c5cc8ac6d32fb43840",
+      "rendering": "Vulkan Forward+",
+      "payload_verified": 7
+    },
+    "cover-reopen": {
+      "checks": 8,
+      "facts": {
+        "elapsed_to_cover": 1.86666666666666,
+        "resolution": [
+          960,
+          540
+        ],
+        "slot_sha256": "78979379f45a2ec5462cf7526fb650978ecfc4e5fcae39c958531d4155bfae11"
+      },
+      "failures": [],
+      "stage": "cover-reopen",
+      "log_sha256": "9331479b46dc858333f4bf6e2dbbf8512d39be07f214201418e6794008560983",
+      "rendering": "Vulkan Forward+",
+      "payload_verified": 7
+    }
+  }
+}

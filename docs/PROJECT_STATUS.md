@@ -1,5 +1,10 @@
 # 当前项目总览
 
+## Windows 大名府乔装反馈
+
+Windows 候选 55c580d5 核对靠近巡守、暴露后回蔡福家、受阻等候与中途存档，恢复剩余计时后可继续潜入。 [Windows 成品验收](../qa/campaign_coordination_20261116/windows_daming_disguise_55c580d5.json)
+
+
 ## M7 黄泥冈寻路烘焙成品验收
 
 黄泥冈实际菜单出征对照中，首帧中位数 368.62 → 358.61 ms，首条有效移动 480.62 → 481.64 ms。单独烘焙复测 1.72 → 0.31 ms。 [Windows 成品对照](../qa/battle_entry_timing_20261116/windows_compiled_nav_bake_93b2e9bd.json)

@@ -1,5 +1,10 @@
 # 源码设置与换机（2026-10-30）
 
+## 大名府乔装进度使用现有计时
+
+PC 角色面板读取原有盘查和恢复字段。实际进度和提示采用同一个安全屋范围与恢复时长。存档继续沿用原角色字段。 [Windows 成品验收](../qa/campaign_coordination_20261116/windows_daming_disguise_55c580d5.json)
+
+
 ## Windows 寻路烘焙成品复验
 
 逐格对照包只切换 GameMap 源码。按行版复用当前 Windows 候选。镜头和按键观测收集完毕后，用同一地形在新建地图节点上单独测编译后的烘焙函数。 [Windows 成品对照](../qa/battle_entry_timing_20261116/windows_compiled_nav_bake_93b2e9bd.json)

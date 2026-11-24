@@ -1,5 +1,10 @@
 # 开发日志
 
+## 2026-11-24 大名府潜入反馈
+
+PC 角色面板显示即将识破、暴露返回、安全等候和实际恢复倒计时。已在成品验证保存和独立续玩。 [Windows 成品验收](../qa/campaign_coordination_20261116/windows_daming_disguise_55c580d5.json)
+
+
 ## 2026-11-24 黄泥冈寻路烘焙成品对照
 
 补验当前 Windows 出征流程。每版四次的单独烘焙为 1.72 → 0.31 ms，五套寻路网格摘要一致。 [Windows 成品对照](../qa/battle_entry_timing_20261116/windows_compiled_nav_bake_93b2e9bd.json)
