@@ -2859,7 +2859,9 @@ func _add_feedback_button(container: Container, debrief: bool) -> void:
 		if text.is_empty():
 			return
 		DisplayServer.clipboard_set(text)
-		Localize.bind_text(button, "已复制本局信息"))
+		# Another Windows app can hold the clipboard during a copy.
+		var copied := DisplayServer.clipboard_get().replace("\r\n", "\n") == text.replace("\r\n", "\n")
+		Localize.bind_text(button, "已复制本局信息" if copied else "复制失败，点此重试"))
 	container.add_child(button)
 
 
