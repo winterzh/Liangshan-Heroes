@@ -1,0 +1,309 @@
+{
+  "source_build": 26873421,
+  "candidate_commit": "ea18f2cfaa3ef3160b3ff341c81daa52c33ae917",
+  "checks_passed": 115,
+  "boundary": "Native Windows offline, independent isolated profiles. UI mouse events went to the isolated viewport. Route setup and settlement used 4x speed.",
+  "renderer": "OpenGL Compatibility",
+  "candidate_launch_window": [
+    960,
+    540
+  ],
+  "candidate_build_payload": [
+    {
+      "path": "GODOTSTEAM_LICENSE.txt",
+      "bytes": 1110,
+      "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+    },
+    {
+      "path": "LiangshanHeroes.exe",
+      "bytes": 104886784,
+      "sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4"
+    },
+    {
+      "path": "LiangshanHeroes.pck",
+      "bytes": 1722731276,
+      "sha256": "e417ec0fbd2d0a8c2ef0ef00db8332364d69e89eabd5ae5d8894e80c6c92b5c3"
+    },
+    {
+      "path": "libgodotsteam.windows.template_release.x86_64.dll",
+      "bytes": 3961344,
+      "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+    },
+    {
+      "path": "steam_api64.dll",
+      "bytes": 319128,
+      "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+    },
+    {
+      "path": "steam_stats_reader.dll",
+      "bytes": 393728,
+      "sha256": "5a79a77b5b6e2cff21b285c785118352805a09d91876f89276af119ee1702517"
+    },
+    {
+      "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+      "bytes": 1093,
+      "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+    }
+  ],
+  "candidate_build_steps": [
+    {
+      "stage": "import",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 72.87
+    },
+    {
+      "stage": "export",
+      "exit_code": 0,
+      "errors": [],
+      "seconds": 93.61
+    }
+  ],
+  "source_checkpoint": {
+    "arrived": 7,
+    "living": 8,
+    "loads": 11,
+    "carts": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "depart_requested": false
+  },
+  "first_click": {
+    "dispatched": 1,
+    "localized_controls": {
+      "en": {
+        "button": "Rally Idle Companions",
+        "tooltip": "Send idle companions to the west exit. Companions with orders keep following them."
+      },
+      "ja": {
+        "button": "指示待ちの仲間を西口へ",
+        "tooltip": "まだ到着していない指示待ちの仲間を西口に集めます。指示を受けている仲間はそのまま行動します。"
+      },
+      "zh_CN": {
+        "button": "送待令同伴去西冈口",
+        "tooltip": "让尚未到达的待令同伴去西冈口集合。已下令的同伴继续行动。"
+      },
+      "zh_TW": {
+        "button": "送待令同伴去西岡口",
+        "tooltip": "讓尚未抵達的待令同伴去西岡口集合。已下令的同伴繼續行動。"
+      }
+    },
+    "layout": {
+      "button": "[P: (96.0, 475.0), S: (288.0, 37.0)]",
+      "scroll": "[P: (96.0, 129.0), S: (288.0, 415.0)]",
+      "viewport": "(1280.0, 720.0)"
+    }
+  },
+  "full_rally": {
+    "depart_requested": false,
+    "arrived": 8,
+    "progress_sha": "932209bee55feb6afde2aaafc00751b7ecac07210108447a1766900a582bf88e",
+    "story_done": 4
+  },
+  "early_departure": {
+    "depart_requested": true,
+    "arrived": 7,
+    "progress_sha": "c89067c744a3a3d7db9e5e2c569cbcc1acc5133a6f8d2faa99d3f087d9cbd4ef",
+    "story_done": 3
+  },
+  "terminal_reopen": {
+    "progress_sha": "932209bee55feb6afde2aaafc00751b7ecac07210108447a1766900a582bf88e",
+    "terminal_code": "LOCAL_RUN_TERMINAL"
+  },
+  "stages": {
+    "old-save": {
+      "checks": [
+        "isolated Windows process has no Steam connection",
+        "normal offline playtest startup",
+        "normal saved battle admission",
+        "verified exact Windows executable",
+        "Start Campaign exists in the real menu",
+        "real Huangnigang sortie button is available",
+        "convoy starts entering in sequence while merchants already rest",
+        "seven merchants and original carts are present before Bai appears",
+        "selection shortcut selects without issuing movement",
+        "Chao completes the optional cart care command without creating new carts",
+        "all fifteen convoy members finish real arrival before inquiry",
+        "Yang actually approaches the merchants before they answer",
+        "Liu answers Yang at the actual inquiry point",
+        "answer starts one automatic Bai arrival order",
+        "Bai really carries wine along the road without a player bring-wine order",
+        "Bai automatically arrives and unloads without new player orders",
+        "first wine trial uses real Liu movement",
+        "Wu and Bai can preposition without false suspicion",
+        "Liu initiates the actual cooperative distraction",
+        "three real participants complete one wine handoff",
+        "all fifteen convoy members survive unconscious",
+        "cargo needs no planning or staging chores",
+        "available original owners physically take their carts",
+        "available owners physically load their original carts",
+        "loaded carriers wait for separate exit orders",
+        "loaded carriers walk concurrently on player orders",
+        "surviving owners finish their original shipments",
+        "seven physical deliveries unlock final assembly",
+        "all original carts and eleven loads are delivered with all eight still alive",
+        "Bai is deliberately left at the wine station",
+        "the west exit has the expected marker for this exact version",
+        "seven arrive and the ordinary gather order keeps the battle open",
+        "no early exit order is active at the save",
+        "visible SaveAndExit button",
+        "normal pause menu commits the saved battle",
+        "disk slot contains the real chapter context",
+        "independent restart handoff is written"
+      ],
+      "slot_hashes": {
+        "record_0000000001.json": "32fe398471228478972ab6b25b3c0fe4de3982ddaa89a94a3982386ef905afbb"
+      },
+      "log_sha256": "8c9c705e27010d0628f18617310ceaf6dc7c6489e8593763c9616ea8dd35734e",
+      "scene_script_sha256": "cf9ccba083435c2f181551f0274dd0148866ff273108ccdbf8545f4100af1057",
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "a49365f77c2b069c9e4f79d49f6feddacd81d824cd0c554e790eff35a170363c",
+      "warnings": [
+        "WARNING: 2D MSAA is not yet supported for GLES3."
+      ]
+    },
+    "move-save": {
+      "checks": [
+        "isolated Windows process has no Steam connection",
+        "normal offline playtest startup",
+        "normal saved battle admission",
+        "verified exact Windows executable",
+        "an independent process sees the exact saved slot bytes",
+        "visible ContinueBattle button",
+        "normal Continue mounts the saved battle",
+        "restored battle stays paused in the rally phase",
+        "original battle clock survives",
+        "original participants, positions, seven cart identities and eleven loads survive",
+        "the resumed optional flag is separate and a gate click cannot complete it",
+        "restoring presentation preserves the old or new slot bytes",
+        "restored task contains the lagging companion selector",
+        "quick rally is the first PC task button",
+        "the whole rally button fits without overlap in the narrow task panel",
+        "zh_CN rally button and tooltip use the localized copy",
+        "zh_TW rally button and tooltip use the localized copy",
+        "en rally button and tooltip use the localized copy",
+        "ja rally button and tooltip use the localized copy",
+        "public save begins with seven arrived and no early withdrawal",
+        "the real map contains a reachable position behind the west exit",
+        "the two companions travel back out on ordinary player orders",
+        "a second reachable position is available for the detour",
+        "one idle companion, one defender and one active detour are present",
+        "single click dispatches only the idle late companion",
+        "the shortcut preserves the hold, detour, selection and view",
+        "the rally is a ground move without touching early departure or completing remotely",
+        "repeated clicks keep the active orders and explain the lack of idle companions",
+        "visible SaveAndExit button",
+        "normal pause menu commits the saved battle",
+        "disk slot contains the real chapter context",
+        "independent restart handoff is written"
+      ],
+      "slot_hashes": {
+        "record_0000000001.json": "32fe398471228478972ab6b25b3c0fe4de3982ddaa89a94a3982386ef905afbb",
+        "record_0000000002.json": "70c1ea20d1ee86ff98541b12da63840afa938c69694c733816f2e5f79befc0db"
+      },
+      "log_sha256": "e9f53d7b6cb158efb6e0826d4a3eabcc8ecad5aab5a14b9a4d957cf8298cc6ad",
+      "scene_script_sha256": "c3b0f78aa4cf1f958ce5ae8947e55735828f0dc3c0a23de507d2e6e670dd4e95",
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "e417ec0fbd2d0a8c2ef0ef00db8332364d69e89eabd5ae5d8894e80c6c92b5c3",
+      "warnings": [
+        "WARNING: 2D MSAA is not yet supported for GLES3."
+      ]
+    },
+    "finish": {
+      "checks": [
+        "isolated Windows process has no Steam connection",
+        "normal offline playtest startup",
+        "normal saved battle admission",
+        "verified exact Windows executable",
+        "an independent process sees the exact saved slot bytes",
+        "visible ContinueBattle button",
+        "normal Continue mounts the saved battle",
+        "restored battle stays paused in the rally phase",
+        "original battle clock survives",
+        "original participants, positions, seven cart identities and eleven loads survive",
+        "the resumed optional flag is separate and a gate click cannot complete it",
+        "restoring presentation preserves the old or new slot bytes",
+        "restored task contains the lagging companion selector",
+        "quick rally is the first PC task button",
+        "the whole rally button fits without overlap in the narrow task panel",
+        "independent restart restored hold, detour and rally movement",
+        "releasing and clicking sends only the two now-idle companions",
+        "the new orders are ordinary movement and do not request early departure",
+        "actual movement or explicitly ordering the optional flag finishes the battle",
+        "all eight arrivals earn full story credit while deliberate early exit earns core victory",
+        "natural victory settles into local campaign progress"
+      ],
+      "slot_hashes": {
+        "record_0000000001.json": "32fe398471228478972ab6b25b3c0fe4de3982ddaa89a94a3982386ef905afbb",
+        "record_0000000002.json": "70c1ea20d1ee86ff98541b12da63840afa938c69694c733816f2e5f79befc0db"
+      },
+      "log_sha256": "c56fea4baf2daa4f2d2ad9adf1e895df643bad9c6cda56e271d9287601319a8c",
+      "scene_script_sha256": "c3b0f78aa4cf1f958ce5ae8947e55735828f0dc3c0a23de507d2e6e670dd4e95",
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "e417ec0fbd2d0a8c2ef0ef00db8332364d69e89eabd5ae5d8894e80c6c92b5c3",
+      "warnings": [
+        "WARNING: 2D MSAA is not yet supported for GLES3."
+      ]
+    },
+    "reject": {
+      "checks": [
+        "isolated Windows process has no Steam connection",
+        "normal offline playtest startup",
+        "normal saved battle admission",
+        "verified exact Windows executable",
+        "visible ContinueBattle button",
+        "the player menu rejects a settled slot",
+        "original slot bytes are unchanged",
+        "visible CloseError button"
+      ],
+      "slot_hashes": {
+        "record_0000000001.json": "32fe398471228478972ab6b25b3c0fe4de3982ddaa89a94a3982386ef905afbb",
+        "record_0000000002.json": "70c1ea20d1ee86ff98541b12da63840afa938c69694c733816f2e5f79befc0db"
+      },
+      "log_sha256": "8223173fd39e4815fa5575975301a793dd938ae5f424263651a31e98ec5a6384",
+      "scene_script_sha256": "c3b0f78aa4cf1f958ce5ae8947e55735828f0dc3c0a23de507d2e6e670dd4e95",
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "e417ec0fbd2d0a8c2ef0ef00db8332364d69e89eabd5ae5d8894e80c6c92b5c3",
+      "warnings": [
+        "WARNING: 2D MSAA is not yet supported for GLES3."
+      ]
+    },
+    "depart": {
+      "checks": [
+        "isolated Windows process has no Steam connection",
+        "normal offline playtest startup",
+        "normal saved battle admission",
+        "verified exact Windows executable",
+        "an independent process sees the exact saved slot bytes",
+        "visible ContinueBattle button",
+        "normal Continue mounts the saved battle",
+        "restored battle stays paused in the rally phase",
+        "original battle clock survives",
+        "original participants, positions, seven cart identities and eleven loads survive",
+        "the resumed optional flag is separate and a gate click cannot complete it",
+        "restoring presentation preserves the old or new slot bytes",
+        "restored task contains the lagging companion selector",
+        "quick rally is the first PC task button",
+        "actual movement or explicitly ordering the optional flag finishes the battle",
+        "all eight arrivals earn full story credit while deliberate early exit earns core victory",
+        "natural victory settles into local campaign progress"
+      ],
+      "slot_hashes": {
+        "record_0000000001.json": "32fe398471228478972ab6b25b3c0fe4de3982ddaa89a94a3982386ef905afbb"
+      },
+      "log_sha256": "748976275e4068b19f6fc48910929e8d8ee5809f4ae2338768af6383e97ee93a",
+      "scene_script_sha256": "c3b0f78aa4cf1f958ce5ae8947e55735828f0dc3c0a23de507d2e6e670dd4e95",
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "e417ec0fbd2d0a8c2ef0ef00db8332364d69e89eabd5ae5d8894e80c6c92b5c3",
+      "warnings": [
+        "WARNING: 2D MSAA is not yet supported for GLES3."
+      ]
+    }
+  }
+}
