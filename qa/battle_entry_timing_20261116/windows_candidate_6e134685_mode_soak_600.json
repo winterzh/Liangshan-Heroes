@@ -1,0 +1,2800 @@
+{
+  "candidate": "6e134685909c0b9673297f0181c563e552789e99",
+  "scope": "Windows isolated desktop, 1280 by 720, offline native package, Vulkan Forward+, normal game speed, at least six seconds of real battle activity per entry.",
+  "launch_observer": "An external test-scene observer sampled slow menu launches at 1.2 seconds and every five seconds after that. No other game fixture or build export was run by this task during the soak.",
+  "native_process_receipt": {
+    "candidate": "6e134685909c0b9673297f0181c563e552789e99",
+    "payload_files_unchanged": true,
+    "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+    "pck_sha256": "2879547d669a5b0bdc661dcd5339756d34898f9b9346fd92090c67f300c82727",
+    "split_identity": "245b24178080fd72532d75d4e703e8025ae6105ace60c60ee637f67ec88160e2",
+    "exe_unchanged": true,
+    "exit_code": 0,
+    "seconds": 615.771,
+    "errors": [],
+    "warnings": [],
+    "log_sha256": "f75331dfaf9860f0b51396bcf387370acb06198d13dfc9c99fe3ecb336e33ec8",
+    "report_sha256": "0baf4bff28dc2f85dd836bff25523d1ac9516fb56afae2336c9999656d26d063"
+  },
+  "fixture_sha256": "68d417e290772ad3bfaee4baa3b452176fec5a419c51c1b9183992e99c25869a",
+  "entries": 97,
+  "releases": 97,
+  "routes": {
+    "level1": 17,
+    "arena": 16,
+    "skirmish": 16,
+    "skirmish_ai": 16,
+    "custom_defense": 16,
+    "level5": 16
+  },
+  "passed": true,
+  "failed_checks": [],
+  "reason": null,
+  "late_launch_samples": [],
+  "activities": 97,
+  "soak_seconds": 605.779,
+  "performance": {
+    "complete_minute_buckets": 10,
+    "max_minute_p95_ms": 12.822,
+    "max_minute_p99_ms": 29.432,
+    "p95_limit_ms": 16.7,
+    "p99_limit_ms": 33.3,
+    "peak_draw_calls": 1416.0,
+    "worst_frame_ms": 395.745
+  },
+  "minute_samples": [
+    {
+      "average_draw_calls": 598.013157894737,
+      "average_frame_ms": 2.01917244302766,
+      "bucket_seconds": 60.000637,
+      "cycle": 2,
+      "elapsed_seconds": 60.00064,
+      "frame_stages": [
+        {
+          "frames": 1,
+          "level_id": "",
+          "mode": "",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "menu"
+        },
+        {
+          "frames": 15,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 6,
+          "over_33_3_ms": 3,
+          "stage": "mount"
+        },
+        {
+          "frames": 2,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "start"
+        },
+        {
+          "frames": 4949,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 4,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "return"
+        },
+        {
+          "frames": 4,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 3,
+          "over_33_3_ms": 2,
+          "stage": "mount"
+        },
+        {
+          "frames": 2,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 7100,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 4,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "return"
+        },
+        {
+          "frames": 22,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 7,
+          "over_33_3_ms": 5,
+          "stage": "mount"
+        },
+        {
+          "frames": 2,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 5772,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 4,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "return"
+        },
+        {
+          "frames": 4,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 3,
+          "over_33_3_ms": 2,
+          "stage": "mount"
+        },
+        {
+          "frames": 2,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 6256,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 2,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "return"
+        },
+        {
+          "frames": 12,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 3,
+          "over_33_3_ms": 2,
+          "stage": "mount"
+        },
+        {
+          "frames": 1,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 3185,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 2,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "return"
+        },
+        {
+          "frames": 11,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 3,
+          "over_33_3_ms": 2,
+          "stage": "mount"
+        },
+        {
+          "frames": 1,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "start"
+        },
+        {
+          "frames": 2129,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 1,
+          "stage": "play"
+        },
+        {
+          "frames": 2,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "return"
+        }
+      ],
+      "level_id": "skirmish_ai",
+      "minute": 1,
+      "mode": "skirmish_ai",
+      "p95_frame_ms": 4.52,
+      "p99_frame_ms": 6.535,
+      "partial": false,
+      "peak_draw_calls": 1344.0,
+      "phase": 2,
+      "process_memory": {
+        "peak_working_set_bytes": 1182097408.0,
+        "private_bytes": 2100998144.0,
+        "query_ok": true,
+        "source": "powershell Get-Process for this Godot PID",
+        "virtual_bytes": 11573698560.0,
+        "working_set_bytes": 1115619328.0
+      },
+      "rendered_frames": 29488,
+      "resources": {
+        "draw_calls": 374.0,
+        "godot_static_bytes": 0.0,
+        "godot_static_peak_bytes": 0.0,
+        "node_count": 195.0,
+        "object_count": 3513.0,
+        "orphan_node_count": 0.0,
+        "render_buffer_bytes": 10545468.0,
+        "render_objects": 4805.0,
+        "render_primitives": 14348.0,
+        "render_texture_bytes": 679463936.0,
+        "render_video_bytes": 782291328.0,
+        "resource_count": 360.0
+      },
+      "root_child_count": 16,
+      "scene_count": 1,
+      "units": {
+        "alive_units": 40,
+        "buildings": 26,
+        "guan": 8,
+        "liang": 32,
+        "mobile_units": 14,
+        "resources": 0,
+        "scene_units": 40,
+        "visible": 32
+      },
+      "worst_frame_ms": 169.94
+    },
+    {
+      "average_draw_calls": 783.71464629238,
+      "average_frame_ms": 4.07710955726858,
+      "bucket_seconds": 59.999579,
+      "cycle": 4,
+      "elapsed_seconds": 120.000218,
+      "frame_stages": [
+        {
+          "frames": 6,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 4,
+          "over_33_3_ms": 3,
+          "stage": "mount"
+        },
+        {
+          "frames": 2,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "start"
+        },
+        {
+          "frames": 2229,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 195,
+          "over_33_3_ms": 13,
+          "stage": "play"
+        },
+        {
+          "frames": 2,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "return"
+        },
+        {
+          "frames": 2,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 1,
+          "stage": "mount"
+        },
+        {
+          "frames": 1,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 924,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 88,
+          "over_33_3_ms": 30,
+          "stage": "play"
+        },
+        {
+          "frames": 2,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "return"
+        },
+        {
+          "frames": 17,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 3,
+          "over_33_3_ms": 3,
+          "stage": "mount"
+        },
+        {
+          "frames": 1,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 684,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 82,
+          "over_33_3_ms": 20,
+          "stage": "play"
+        },
+        {
+          "frames": 2,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "return"
+        },
+        {
+          "frames": 2,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 1,
+          "stage": "mount"
+        },
+        {
+          "frames": 1,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 2642,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 78,
+          "over_33_3_ms": 4,
+          "stage": "play"
+        },
+        {
+          "frames": 4,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "return"
+        },
+        {
+          "frames": 38,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 7,
+          "over_33_3_ms": 5,
+          "stage": "mount"
+        },
+        {
+          "frames": 2,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "start"
+        },
+        {
+          "frames": 4693,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 9,
+          "over_33_3_ms": 4,
+          "stage": "play"
+        },
+        {
+          "frames": 4,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "return"
+        },
+        {
+          "frames": 21,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 6,
+          "over_33_3_ms": 4,
+          "stage": "mount"
+        },
+        {
+          "frames": 2,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 3374,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 4,
+          "over_33_3_ms": 1,
+          "stage": "play"
+        },
+        {
+          "frames": 4,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "return"
+        }
+      ],
+      "level_id": "level1",
+      "minute": 2,
+      "mode": "campaign",
+      "p95_frame_ms": 12.822,
+      "p99_frame_ms": 29.432,
+      "partial": false,
+      "peak_draw_calls": 1383.0,
+      "phase": 2,
+      "process_memory": {
+        "peak_working_set_bytes": 1187262464.0,
+        "private_bytes": 2104283136.0,
+        "query_ok": true,
+        "source": "powershell Get-Process for this Godot PID",
+        "virtual_bytes": 11582087168.0,
+        "working_set_bytes": 1118339072.0
+      },
+      "rendered_frames": 14659,
+      "resources": {
+        "draw_calls": 214.0,
+        "godot_static_bytes": 0.0,
+        "godot_static_peak_bytes": 0.0,
+        "node_count": 236.0,
+        "object_count": 3639.0,
+        "orphan_node_count": 0.0,
+        "render_buffer_bytes": 10858792.0,
+        "render_objects": 623.0,
+        "render_primitives": 20891.0,
+        "render_texture_bytes": 693091328.0,
+        "render_video_bytes": 796230720.0,
+        "resource_count": 380.0
+      },
+      "root_child_count": 16,
+      "scene_count": 1,
+      "units": {
+        "alive_units": 25,
+        "buildings": 11,
+        "guan": 18,
+        "liang": 7,
+        "mobile_units": 14,
+        "resources": 0,
+        "scene_units": 25,
+        "visible": 25
+      },
+      "worst_frame_ms": 395.745
+    },
+    {
+      "average_draw_calls": 641.346951103198,
+      "average_frame_ms": 1.90070649202008,
+      "bucket_seconds": 60.001046,
+      "cycle": 5,
+      "elapsed_seconds": 180.001265,
+      "frame_stages": [
+        {
+          "frames": 3,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 1,
+          "stage": "mount"
+        },
+        {
+          "frames": 1,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 2492,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 4,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "return"
+        },
+        {
+          "frames": 4,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 4,
+          "over_33_3_ms": 2,
+          "stage": "mount"
+        },
+        {
+          "frames": 2,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 7157,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 4,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "return"
+        },
+        {
+          "frames": 20,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 5,
+          "over_33_3_ms": 4,
+          "stage": "mount"
+        },
+        {
+          "frames": 2,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 6301,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 4,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "return"
+        },
+        {
+          "frames": 4,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 3,
+          "over_33_3_ms": 2,
+          "stage": "mount"
+        },
+        {
+          "frames": 2,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 8430,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 4,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "return"
+        },
+        {
+          "frames": 21,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 6,
+          "over_33_3_ms": 4,
+          "stage": "mount"
+        },
+        {
+          "frames": 2,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 4684,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 2,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "return"
+        },
+        {
+          "frames": 11,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "mount"
+        },
+        {
+          "frames": 1,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 2297,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 2,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "return"
+        }
+      ],
+      "level_id": "custom_defense",
+      "minute": 3,
+      "mode": "custom_defense",
+      "p95_frame_ms": 4.357,
+      "p99_frame_ms": 5.98,
+      "partial": false,
+      "peak_draw_calls": 1416.0,
+      "phase": 2,
+      "process_memory": {
+        "peak_working_set_bytes": 1187364864.0,
+        "private_bytes": 2108239872.0,
+        "query_ok": true,
+        "source": "powershell Get-Process for this Godot PID",
+        "virtual_bytes": 11540144128.0,
+        "working_set_bytes": 1116884992.0
+      },
+      "rendered_frames": 31454,
+      "resources": {
+        "draw_calls": 930.0,
+        "godot_static_bytes": 0.0,
+        "godot_static_peak_bytes": 0.0,
+        "node_count": 358.0,
+        "object_count": 3873.0,
+        "orphan_node_count": 0.0,
+        "render_buffer_bytes": 12081420.0,
+        "render_objects": 2147.0,
+        "render_primitives": 92095.0,
+        "render_texture_bytes": 713725440.0,
+        "render_video_bytes": 818088432.0,
+        "resource_count": 362.0
+      },
+      "root_child_count": 16,
+      "scene_count": 1,
+      "units": {
+        "alive_units": 37,
+        "buildings": 20,
+        "guan": 10,
+        "liang": 27,
+        "mobile_units": 17,
+        "resources": 0,
+        "scene_units": 37,
+        "visible": 27
+      },
+      "worst_frame_ms": 84.354
+    },
+    {
+      "average_draw_calls": 631.708534083862,
+      "average_frame_ms": 2.85144960167916,
+      "bucket_seconds": 59.999846,
+      "cycle": 7,
+      "elapsed_seconds": 240.00111,
+      "frame_stages": [
+        {
+          "frames": 6,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 4,
+          "over_33_3_ms": 2,
+          "stage": "mount"
+        },
+        {
+          "frames": 2,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 3849,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 4,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "return"
+        },
+        {
+          "frames": 4,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 3,
+          "over_33_3_ms": 2,
+          "stage": "mount"
+        },
+        {
+          "frames": 2,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 4968,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 5,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 4,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "return"
+        },
+        {
+          "frames": 22,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 6,
+          "over_33_3_ms": 4,
+          "stage": "mount"
+        },
+        {
+          "frames": 2,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 2209,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 3,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 2,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "return"
+        },
+        {
+          "frames": 2,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 1,
+          "stage": "mount"
+        },
+        {
+          "frames": 1,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 3291,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 2,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "return"
+        },
+        {
+          "frames": 11,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 3,
+          "over_33_3_ms": 2,
+          "stage": "mount"
+        },
+        {
+          "frames": 1,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 3557,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 4,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "return"
+        },
+        {
+          "frames": 20,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 6,
+          "over_33_3_ms": 4,
+          "stage": "mount"
+        },
+        {
+          "frames": 2,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 2994,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 4,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "return"
+        }
+      ],
+      "level_id": "skirmish",
+      "minute": 4,
+      "mode": "skirmish",
+      "p95_frame_ms": 6.378,
+      "p99_frame_ms": 9.891,
+      "partial": false,
+      "peak_draw_calls": 1383.0,
+      "phase": 2,
+      "process_memory": {
+        "peak_working_set_bytes": 1187364864.0,
+        "private_bytes": 2109980672.0,
+        "query_ok": true,
+        "source": "powershell Get-Process for this Godot PID",
+        "virtual_bytes": 11514978304.0,
+        "working_set_bytes": 1118736384.0
+      },
+      "rendered_frames": 20963,
+      "resources": {
+        "draw_calls": 1068.0,
+        "godot_static_bytes": 0.0,
+        "godot_static_peak_bytes": 0.0,
+        "node_count": 364.0,
+        "object_count": 3906.0,
+        "orphan_node_count": 0.0,
+        "render_buffer_bytes": 12135012.0,
+        "render_objects": 2445.0,
+        "render_primitives": 93929.0,
+        "render_texture_bytes": 713725440.0,
+        "render_video_bytes": 818142048.0,
+        "resource_count": 362.0
+      },
+      "root_child_count": 16,
+      "scene_count": 1,
+      "units": {
+        "alive_units": 37,
+        "buildings": 20,
+        "guan": 10,
+        "liang": 27,
+        "mobile_units": 17,
+        "resources": 0,
+        "scene_units": 37,
+        "visible": 27
+      },
+      "worst_frame_ms": 83.117
+    },
+    {
+      "average_draw_calls": 774.900238744884,
+      "average_frame_ms": 2.54837427523875,
+      "bucket_seconds": 60.000173,
+      "cycle": 8,
+      "elapsed_seconds": 300.001283,
+      "frame_stages": [
+        {
+          "frames": 3,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 1,
+          "stage": "mount"
+        },
+        {
+          "frames": 1,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 670,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 52,
+          "over_33_3_ms": 14,
+          "stage": "play"
+        },
+        {
+          "frames": 2,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "return"
+        },
+        {
+          "frames": 2,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "mount"
+        },
+        {
+          "frames": 1,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 2225,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 10,
+          "over_33_3_ms": 2,
+          "stage": "play"
+        },
+        {
+          "frames": 2,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "return"
+        },
+        {
+          "frames": 11,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 3,
+          "over_33_3_ms": 2,
+          "stage": "mount"
+        },
+        {
+          "frames": 1,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 4719,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 4,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "return"
+        },
+        {
+          "frames": 4,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 4,
+          "over_33_3_ms": 2,
+          "stage": "mount"
+        },
+        {
+          "frames": 2,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 6872,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 4,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "return"
+        },
+        {
+          "frames": 21,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 5,
+          "over_33_3_ms": 4,
+          "stage": "mount"
+        },
+        {
+          "frames": 2,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 5312,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 4,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "return"
+        },
+        {
+          "frames": 20,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 5,
+          "over_33_3_ms": 4,
+          "stage": "mount"
+        },
+        {
+          "frames": 2,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 3570,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 2,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "return"
+        }
+      ],
+      "level_id": "level5",
+      "minute": 5,
+      "mode": "campaign",
+      "p95_frame_ms": 6.094,
+      "p99_frame_ms": 10.954,
+      "partial": false,
+      "peak_draw_calls": 1416.0,
+      "phase": 2,
+      "process_memory": {
+        "peak_working_set_bytes": 1188212736.0,
+        "private_bytes": 2109980672.0,
+        "query_ok": true,
+        "source": "powershell Get-Process for this Godot PID",
+        "virtual_bytes": 11514978304.0,
+        "working_set_bytes": 1119387648.0
+      },
+      "rendered_frames": 23456,
+      "resources": {
+        "draw_calls": 1144.0,
+        "godot_static_bytes": 0.0,
+        "godot_static_peak_bytes": 0.0,
+        "node_count": 413.0,
+        "object_count": 3976.0,
+        "orphan_node_count": 0.0,
+        "render_buffer_bytes": 11834104.0,
+        "render_objects": 3071.0,
+        "render_primitives": 88970.0,
+        "render_texture_bytes": 713725440.0,
+        "render_video_bytes": 817841264.0,
+        "resource_count": 362.0
+      },
+      "root_child_count": 16,
+      "scene_count": 1,
+      "units": {
+        "alive_units": 69,
+        "buildings": 15,
+        "guan": 37,
+        "liang": 32,
+        "mobile_units": 54,
+        "resources": 0,
+        "scene_units": 69,
+        "visible": 35
+      },
+      "worst_frame_ms": 128.524
+    },
+    {
+      "average_draw_calls": 613.157217675941,
+      "average_frame_ms": 1.95685145662846,
+      "bucket_seconds": 59.999371,
+      "cycle": 10,
+      "elapsed_seconds": 360.000654,
+      "frame_stages": [
+        {
+          "frames": 6,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 4,
+          "over_33_3_ms": 2,
+          "stage": "mount"
+        },
+        {
+          "frames": 2,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 4636,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 4,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "return"
+        },
+        {
+          "frames": 4,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 3,
+          "over_33_3_ms": 2,
+          "stage": "mount"
+        },
+        {
+          "frames": 2,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 7311,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 4,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "return"
+        },
+        {
+          "frames": 20,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 5,
+          "over_33_3_ms": 4,
+          "stage": "mount"
+        },
+        {
+          "frames": 2,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 6008,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 4,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "return"
+        },
+        {
+          "frames": 4,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 3,
+          "over_33_3_ms": 2,
+          "stage": "mount"
+        },
+        {
+          "frames": 2,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 6658,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 2,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "return"
+        },
+        {
+          "frames": 10,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "mount"
+        },
+        {
+          "frames": 1,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 3353,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 2,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "return"
+        },
+        {
+          "frames": 10,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 3,
+          "over_33_3_ms": 2,
+          "stage": "mount"
+        },
+        {
+          "frames": 1,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 2500,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 4,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "return"
+        }
+      ],
+      "level_id": "skirmish_ai",
+      "minute": 6,
+      "mode": "skirmish_ai",
+      "p95_frame_ms": 4.368,
+      "p99_frame_ms": 6.052,
+      "partial": false,
+      "peak_draw_calls": 1416.0,
+      "phase": 2,
+      "process_memory": {
+        "peak_working_set_bytes": 1188691968.0,
+        "private_bytes": 2111283200.0,
+        "query_ok": true,
+        "source": "powershell Get-Process for this Godot PID",
+        "virtual_bytes": 11540144128.0,
+        "working_set_bytes": 1119961088.0
+      },
+      "rendered_frames": 30550,
+      "resources": {
+        "draw_calls": 493.0,
+        "godot_static_bytes": 0.0,
+        "godot_static_peak_bytes": 0.0,
+        "node_count": 199.0,
+        "object_count": 3535.0,
+        "orphan_node_count": 0.0,
+        "render_buffer_bytes": 10574796.0,
+        "render_objects": 5111.0,
+        "render_primitives": 15632.0,
+        "render_texture_bytes": 679463936.0,
+        "render_video_bytes": 782320672.0,
+        "resource_count": 360.0
+      },
+      "root_child_count": 16,
+      "scene_count": 1,
+      "units": {
+        "alive_units": 40,
+        "buildings": 26,
+        "guan": 8,
+        "liang": 32,
+        "mobile_units": 14,
+        "resources": 0,
+        "scene_units": 40,
+        "visible": 32
+      },
+      "worst_frame_ms": 81.057
+    },
+    {
+      "average_draw_calls": 682.884296973309,
+      "average_frame_ms": 1.97996334194317,
+      "bucket_seconds": 60.004043,
+      "cycle": 12,
+      "elapsed_seconds": 420.004698,
+      "frame_stages": [
+        {
+          "frames": 6,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 4,
+          "over_33_3_ms": 2,
+          "stage": "mount"
+        },
+        {
+          "frames": 2,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 4530,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 4,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "return"
+        },
+        {
+          "frames": 4,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 3,
+          "over_33_3_ms": 2,
+          "stage": "mount"
+        },
+        {
+          "frames": 2,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 4234,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 2,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "return"
+        },
+        {
+          "frames": 10,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 3,
+          "over_33_3_ms": 2,
+          "stage": "mount"
+        },
+        {
+          "frames": 1,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 3360,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 2,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "return"
+        },
+        {
+          "frames": 2,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 1,
+          "stage": "mount"
+        },
+        {
+          "frames": 1,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 7050,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 4,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "return"
+        },
+        {
+          "frames": 20,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 4,
+          "over_33_3_ms": 4,
+          "stage": "mount"
+        },
+        {
+          "frames": 2,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 6625,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 4,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "return"
+        },
+        {
+          "frames": 20,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 5,
+          "over_33_3_ms": 4,
+          "stage": "mount"
+        },
+        {
+          "frames": 2,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 4307,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 4,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "return"
+        }
+      ],
+      "level_id": "arena",
+      "minute": 7,
+      "mode": "arena",
+      "p95_frame_ms": 4.377,
+      "p99_frame_ms": 6.181,
+      "partial": false,
+      "peak_draw_calls": 1416.0,
+      "phase": 2,
+      "process_memory": {
+        "peak_working_set_bytes": 1189539840.0,
+        "private_bytes": 2110595072.0,
+        "query_ok": true,
+        "source": "powershell Get-Process for this Godot PID",
+        "virtual_bytes": 11514978304.0,
+        "working_set_bytes": 1120555008.0
+      },
+      "rendered_frames": 30198,
+      "resources": {
+        "draw_calls": 339.0,
+        "godot_static_bytes": 0.0,
+        "godot_static_peak_bytes": 0.0,
+        "node_count": 218.0,
+        "object_count": 3562.0,
+        "orphan_node_count": 0.0,
+        "render_buffer_bytes": 10367796.0,
+        "render_objects": 3756.0,
+        "render_primitives": 12030.0,
+        "render_texture_bytes": 679447552.0,
+        "render_video_bytes": 782095776.0,
+        "resource_count": 360.0
+      },
+      "root_child_count": 16,
+      "scene_count": 1,
+      "units": {
+        "alive_units": 58,
+        "buildings": 5,
+        "guan": 50,
+        "liang": 8,
+        "mobile_units": 53,
+        "resources": 0,
+        "scene_units": 58,
+        "visible": 58
+      },
+      "worst_frame_ms": 81.338
+    },
+    {
+      "average_draw_calls": 641.972667261374,
+      "average_frame_ms": 2.13193677074041,
+      "bucket_seconds": 59.995605,
+      "cycle": 13,
+      "elapsed_seconds": 480.000302,
+      "frame_stages": [
+        {
+          "frames": 3,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 1,
+          "stage": "mount"
+        },
+        {
+          "frames": 1,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 2153,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 2,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "return"
+        },
+        {
+          "frames": 2,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 1,
+          "stage": "mount"
+        },
+        {
+          "frames": 1,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 6438,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 4,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "return"
+        },
+        {
+          "frames": 20,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 4,
+          "over_33_3_ms": 4,
+          "stage": "mount"
+        },
+        {
+          "frames": 2,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 4952,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 18,
+          "over_33_3_ms": 4,
+          "stage": "play"
+        },
+        {
+          "frames": 4,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "return"
+        },
+        {
+          "frames": 4,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 3,
+          "over_33_3_ms": 2,
+          "stage": "mount"
+        },
+        {
+          "frames": 2,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 7344,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 4,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "return"
+        },
+        {
+          "frames": 23,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 6,
+          "over_33_3_ms": 5,
+          "stage": "mount"
+        },
+        {
+          "frames": 2,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 4962,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 2,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "return"
+        },
+        {
+          "frames": 10,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "mount"
+        },
+        {
+          "frames": 1,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 2087,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 2,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "return"
+        }
+      ],
+      "level_id": "custom_defense",
+      "minute": 8,
+      "mode": "custom_defense",
+      "p95_frame_ms": 4.924,
+      "p99_frame_ms": 7.069,
+      "partial": false,
+      "peak_draw_calls": 1383.0,
+      "phase": 2,
+      "process_memory": {
+        "peak_working_set_bytes": 1189916672.0,
+        "private_bytes": 2110681088.0,
+        "query_ok": true,
+        "source": "powershell Get-Process for this Godot PID",
+        "virtual_bytes": 11489812480.0,
+        "working_set_bytes": 1120968704.0
+      },
+      "rendered_frames": 28025,
+      "resources": {
+        "draw_calls": 938.0,
+        "godot_static_bytes": 0.0,
+        "godot_static_peak_bytes": 0.0,
+        "node_count": 358.0,
+        "object_count": 3872.0,
+        "orphan_node_count": 0.0,
+        "render_buffer_bytes": 12089964.0,
+        "render_objects": 2155.0,
+        "render_primitives": 92327.0,
+        "render_texture_bytes": 713725440.0,
+        "render_video_bytes": 818096976.0,
+        "resource_count": 362.0
+      },
+      "root_child_count": 16,
+      "scene_count": 1,
+      "units": {
+        "alive_units": 37,
+        "buildings": 20,
+        "guan": 10,
+        "liang": 27,
+        "mobile_units": 17,
+        "resources": 0,
+        "scene_units": 37,
+        "visible": 27
+      },
+      "worst_frame_ms": 103.504
+    },
+    {
+      "average_draw_calls": 639.665358873759,
+      "average_frame_ms": 2.29958119855372,
+      "bucket_seconds": 60.001921,
+      "cycle": 15,
+      "elapsed_seconds": 540.002224,
+      "frame_stages": [
+        {
+          "frames": 6,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 4,
+          "over_33_3_ms": 4,
+          "stage": "mount"
+        },
+        {
+          "frames": 2,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 3809,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 7,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 4,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "return"
+        },
+        {
+          "frames": 4,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 4,
+          "over_33_3_ms": 2,
+          "stage": "mount"
+        },
+        {
+          "frames": 2,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 7474,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 4,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "return"
+        },
+        {
+          "frames": 21,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 5,
+          "over_33_3_ms": 4,
+          "stage": "mount"
+        },
+        {
+          "frames": 2,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 4646,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 2,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "return"
+        },
+        {
+          "frames": 2,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 1,
+          "stage": "mount"
+        },
+        {
+          "frames": 1,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 3395,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 2,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "return"
+        },
+        {
+          "frames": 11,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "mount"
+        },
+        {
+          "frames": 1,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 3285,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 4,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "return"
+        },
+        {
+          "frames": 20,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 5,
+          "over_33_3_ms": 4,
+          "stage": "mount"
+        },
+        {
+          "frames": 2,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 3295,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 4,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "return"
+        }
+      ],
+      "level_id": "skirmish",
+      "minute": 9,
+      "mode": "skirmish",
+      "p95_frame_ms": 5.22,
+      "p99_frame_ms": 7.732,
+      "partial": false,
+      "peak_draw_calls": 1416.0,
+      "phase": 2,
+      "process_memory": {
+        "peak_working_set_bytes": 1190899712.0,
+        "private_bytes": 2113441792.0,
+        "query_ok": true,
+        "source": "powershell Get-Process for this Godot PID",
+        "virtual_bytes": 11489812480.0,
+        "working_set_bytes": 1122873344.0
+      },
+      "rendered_frames": 25998,
+      "resources": {
+        "draw_calls": 1067.0,
+        "godot_static_bytes": 0.0,
+        "godot_static_peak_bytes": 0.0,
+        "node_count": 364.0,
+        "object_count": 3906.0,
+        "orphan_node_count": 0.0,
+        "render_buffer_bytes": 12123252.0,
+        "render_objects": 2440.0,
+        "render_primitives": 93609.0,
+        "render_texture_bytes": 713725440.0,
+        "render_video_bytes": 818130288.0,
+        "resource_count": 362.0
+      },
+      "root_child_count": 16,
+      "scene_count": 1,
+      "units": {
+        "alive_units": 37,
+        "buildings": 20,
+        "guan": 10,
+        "liang": 27,
+        "mobile_units": 17,
+        "resources": 0,
+        "scene_units": 37,
+        "visible": 27
+      },
+      "worst_frame_ms": 108.814
+    },
+    {
+      "average_draw_calls": 722.314093226511,
+      "average_frame_ms": 2.17684865258557,
+      "bucket_seconds": 59.998475,
+      "cycle": 17,
+      "elapsed_seconds": 600.000698,
+      "frame_stages": [
+        {
+          "frames": 6,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 4,
+          "over_33_3_ms": 2,
+          "stage": "mount"
+        },
+        {
+          "frames": 2,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 2254,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 2,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "return"
+        },
+        {
+          "frames": 2,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 1,
+          "stage": "mount"
+        },
+        {
+          "frames": 1,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 3451,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 2,
+          "level_id": "arena",
+          "mode": "arena",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "return"
+        },
+        {
+          "frames": 10,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "mount"
+        },
+        {
+          "frames": 1,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 4406,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 4,
+          "level_id": "skirmish",
+          "mode": "skirmish",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "return"
+        },
+        {
+          "frames": 4,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 3,
+          "over_33_3_ms": 2,
+          "stage": "mount"
+        },
+        {
+          "frames": 2,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 7416,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 4,
+          "level_id": "skirmish_ai",
+          "mode": "skirmish_ai",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "return"
+        },
+        {
+          "frames": 20,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 5,
+          "over_33_3_ms": 4,
+          "stage": "mount"
+        },
+        {
+          "frames": 2,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 5990,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 4,
+          "level_id": "custom_defense",
+          "mode": "custom_defense",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "return"
+        },
+        {
+          "frames": 20,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 5,
+          "over_33_3_ms": 4,
+          "stage": "mount"
+        },
+        {
+          "frames": 2,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 0,
+          "stage": "start"
+        },
+        {
+          "frames": 3851,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 4,
+          "level_id": "level5",
+          "mode": "campaign",
+          "over_16_7_ms": 2,
+          "over_33_3_ms": 2,
+          "stage": "return"
+        }
+      ],
+      "level_id": "level1",
+      "minute": 10,
+      "mode": "campaign",
+      "p95_frame_ms": 4.924,
+      "p99_frame_ms": 7.214,
+      "partial": false,
+      "peak_draw_calls": 1416.0,
+      "phase": 2,
+      "process_memory": {
+        "peak_working_set_bytes": 1192030208.0,
+        "private_bytes": 2113581056.0,
+        "query_ok": true,
+        "source": "powershell Get-Process for this Godot PID",
+        "virtual_bytes": 11506589696.0,
+        "working_set_bytes": 1123028992.0
+      },
+      "rendered_frames": 27460,
+      "resources": {
+        "draw_calls": 322.0,
+        "godot_static_bytes": 0.0,
+        "godot_static_peak_bytes": 0.0,
+        "node_count": 236.0,
+        "object_count": 3666.0,
+        "orphan_node_count": 0.0,
+        "render_buffer_bytes": 10894432.0,
+        "render_objects": 924.0,
+        "render_primitives": 21499.0,
+        "render_texture_bytes": 693091328.0,
+        "render_video_bytes": 796266384.0,
+        "resource_count": 380.0
+      },
+      "root_child_count": 16,
+      "scene_count": 1,
+      "units": {
+        "alive_units": 19,
+        "buildings": 11,
+        "guan": 12,
+        "liang": 7,
+        "mobile_units": 8,
+        "resources": 0,
+        "scene_units": 19,
+        "visible": 19
+      },
+      "worst_frame_ms": 80.839
+    },
+    {
+      "average_draw_calls": 256.39438564197,
+      "average_frame_ms": 2.37513069489185,
+      "bucket_seconds": 5.374832,
+      "cycle": 17,
+      "elapsed_seconds": 605.375531,
+      "frame_stages": [
+        {
+          "frames": 2163,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "play"
+        },
+        {
+          "frames": 2,
+          "level_id": "level1",
+          "mode": "campaign",
+          "over_16_7_ms": 1,
+          "over_33_3_ms": 1,
+          "stage": "return"
+        },
+        {
+          "frames": 8,
+          "level_id": "",
+          "mode": "",
+          "over_16_7_ms": 0,
+          "over_33_3_ms": 0,
+          "stage": "final_cleanup"
+        }
+      ],
+      "level_id": "",
+      "minute": 11,
+      "mode": "final_cleanup",
+      "p95_frame_ms": 3.268,
+      "p99_frame_ms": 4.231,
+      "partial": true,
+      "peak_draw_calls": 342.0,
+      "phase": -1,
+      "process_memory": {
+        "peak_working_set_bytes": 1192030208.0,
+        "private_bytes": 2113384448.0,
+        "query_ok": true,
+        "source": "powershell Get-Process for this Godot PID",
+        "virtual_bytes": 11506589696.0,
+        "working_set_bytes": 1122832384.0
+      },
+      "rendered_frames": 2173,
+      "resources": {
+        "draw_calls": 45.0,
+        "godot_static_bytes": 0.0,
+        "godot_static_peak_bytes": 0.0,
+        "node_count": 74.0,
+        "object_count": 3288.0,
+        "orphan_node_count": 0.0,
+        "render_buffer_bytes": 10176500.0,
+        "render_objects": 490.0,
+        "render_primitives": 3860.0,
+        "render_texture_bytes": 686296576.0,
+        "render_video_bytes": 788753440.0,
+        "resource_count": 361.0
+      },
+      "root_child_count": 16,
+      "scene_count": 0,
+      "units": {
+        "alive_units": 0,
+        "buildings": 0,
+        "guan": 0,
+        "liang": 0,
+        "mobile_units": 0,
+        "resources": 0,
+        "scene_units": 0,
+        "visible": 0
+      },
+      "worst_frame_ms": 44.963
+    }
+  ],
+  "stability": {
+    "godot_static_bytes": {
+      "end": 0.0,
+      "end_delta_from_warm": 0.0,
+      "monotonic_growth_detected": false,
+      "peak": 0.0,
+      "recovered_from_peak": 0.0,
+      "recovery_passed": true,
+      "tolerance": 67108864.0,
+      "trend": {
+        "decreases": 0,
+        "first": 0.0,
+        "flat": 90,
+        "increases": 0,
+        "last": 0.0,
+        "near_monotonic": false,
+        "net": 0.0,
+        "samples": 91
+      },
+      "warm_baseline": 0.0
+    },
+    "node_count": {
+      "end": 74.0,
+      "end_delta_from_warm": 0.0,
+      "monotonic_growth_detected": false,
+      "peak": 74.0,
+      "recovered_from_peak": 0.0,
+      "recovery_passed": true,
+      "tolerance": 32.0,
+      "trend": {
+        "decreases": 0,
+        "first": 74.0,
+        "flat": 90,
+        "increases": 0,
+        "last": 74.0,
+        "near_monotonic": false,
+        "net": 0.0,
+        "samples": 91
+      },
+      "warm_baseline": 74.0
+    },
+    "object_count": {
+      "end": 3287.0,
+      "end_delta_from_warm": -13.0,
+      "monotonic_growth_detected": false,
+      "peak": 3300.0,
+      "recovered_from_peak": 13.0,
+      "recovery_passed": true,
+      "tolerance": 512.0,
+      "trend": {
+        "decreases": 2,
+        "first": 3300.0,
+        "flat": 87,
+        "increases": 1,
+        "last": 3300.0,
+        "near_monotonic": false,
+        "net": 0.0,
+        "samples": 91
+      },
+      "warm_baseline": 3300.0
+    },
+    "orphan_node_count": {
+      "end": 0.0,
+      "end_delta_from_warm": 0.0,
+      "monotonic_growth_detected": false,
+      "peak": 0.0,
+      "recovered_from_peak": 0.0,
+      "recovery_passed": true,
+      "tolerance": 2.0,
+      "trend": {
+        "decreases": 0,
+        "first": 0.0,
+        "flat": 90,
+        "increases": 0,
+        "last": 0.0,
+        "near_monotonic": false,
+        "net": 0.0,
+        "samples": 91
+      },
+      "warm_baseline": 0.0
+    },
+    "private_bytes": {
+      "end": 2113384448.0,
+      "end_delta_from_warm": 14516224.0,
+      "monotonic_growth_detected": false,
+      "peak": 2113581056.0,
+      "recovered_from_peak": 196608.0,
+      "recovery_passed": true,
+      "tolerance": 134217728.0,
+      "trend": {
+        "decreases": 0,
+        "first": 2098868224.0,
+        "flat": 5,
+        "increases": 6,
+        "last": 2113384448.0,
+        "near_monotonic": false,
+        "net": 14516224.0,
+        "samples": 12
+      },
+      "warm_baseline": 2098868224.0
+    },
+    "render_buffer_bytes": {
+      "end": 10176500.0,
+      "end_delta_from_warm": -1750304.0,
+      "monotonic_growth_detected": false,
+      "peak": 12147492.0,
+      "recovered_from_peak": 1970992.0,
+      "recovery_passed": true,
+      "tolerance": 67108864.0,
+      "trend": {
+        "decreases": 30,
+        "first": 10804816.0,
+        "flat": 30,
+        "increases": 30,
+        "last": 10807168.0,
+        "near_monotonic": false,
+        "net": 2352.0,
+        "samples": 91
+      },
+      "warm_baseline": 11926804.0
+    },
+    "render_texture_bytes": {
+      "end": 686296576.0,
+      "end_delta_from_warm": -34310656.0,
+      "monotonic_growth_detected": false,
+      "peak": 720607232.0,
+      "recovered_from_peak": 34310656.0,
+      "recovery_passed": true,
+      "tolerance": 33554432.0,
+      "trend": {
+        "decreases": 45,
+        "first": 699973120.0,
+        "flat": 15,
+        "increases": 30,
+        "last": 699973120.0,
+        "near_monotonic": false,
+        "net": 0.0,
+        "samples": 91
+      },
+      "warm_baseline": 720607232.0
+    },
+    "render_video_bytes": {
+      "end": 788753440.0,
+      "end_delta_from_warm": -36062352.0,
+      "monotonic_growth_detected": false,
+      "peak": 825036368.0,
+      "recovered_from_peak": 36282928.0,
+      "recovery_passed": true,
+      "tolerance": 67108864.0,
+      "trend": {
+        "decreases": 45,
+        "first": 803058544.0,
+        "flat": 15,
+        "increases": 30,
+        "last": 803060896.0,
+        "near_monotonic": false,
+        "net": 2352.0,
+        "samples": 91
+      },
+      "warm_baseline": 824815792.0
+    },
+    "resource_count": {
+      "end": 361.0,
+      "end_delta_from_warm": 0.0,
+      "monotonic_growth_detected": false,
+      "peak": 361.0,
+      "recovered_from_peak": 0.0,
+      "recovery_passed": true,
+      "tolerance": 128.0,
+      "trend": {
+        "decreases": 0,
+        "first": 361.0,
+        "flat": 90,
+        "increases": 0,
+        "last": 361.0,
+        "near_monotonic": false,
+        "net": 0.0,
+        "samples": 91
+      },
+      "warm_baseline": 361.0
+    },
+    "working_set_bytes": {
+      "end": 1122832384.0,
+      "end_delta_from_warm": 9854976.0,
+      "monotonic_growth_detected": false,
+      "peak": 1192030208.0,
+      "recovered_from_peak": 69197824.0,
+      "recovery_passed": true,
+      "tolerance": 134217728.0,
+      "trend": {
+        "decreases": 1,
+        "first": 1112977408.0,
+        "flat": 6,
+        "increases": 4,
+        "last": 1122832384.0,
+        "near_monotonic": false,
+        "net": 9854976.0,
+        "samples": 12
+      },
+      "warm_baseline": 1112977408.0
+    }
+  },
+  "progress_unchanged": true,
+  "largest_entry_gap": {
+    "index": 13,
+    "level": "level1",
+    "gap_ms": 395.716,
+    "milestones_ordered": true,
+    "milestones_from_click_ms": {
+      "first_overlay": 1.743,
+      "battle_attached": 42.954,
+      "map_attached": 42.972,
+      "hud_attached": 84.837,
+      "first_unit": 206.242,
+      "scene_ready": 346.47,
+      "first_battle_frame": 437.265
+    }
+  }
+}
