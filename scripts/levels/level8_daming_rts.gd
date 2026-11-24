@@ -11,6 +11,7 @@ const SAFEHOUSE := Vector2i(24,28)
 const SAFEHOUSE_RADIUS := 88.0
 const COVER_RECOVERY := 3.0
 const SEND_SCOUT_FIRE := "daming_send_scout_fire"
+const SEND_UNLOCK := "daming_send_rescuer"
 const PRISON_DOOR := Vector2i(19,20)
 const PRISON_CHECK := Vector2i(19,24)
 const PRISON_INSIDE := Vector2i(18,18)
@@ -409,7 +410,7 @@ func _briefing(b) -> Dictionary:
 	if gate_open:
 		if prison_open:
 			var order := "南门和牢院已通。清开枷锁旁守军，选一名好汉轻点开枷旗标，留兵保护前营和退路。" if b.hud.touch_ui \
-				else "南门和牢院已通。清开枷锁旁守军，选一名好汉右键「牢内：开枷救出二人」，留兵保护前营和退路。"
+				else "南门和牢院已通。先清开枷锁旁守军，再点「派人开枷」或右键旗标。留兵保护前营和退路。"
 			return {"title":"牢内 · 开枷救人", "text":order}
 		return {"title":"入城 · 清牢前救人", "text":"南门已通。军队清开牢前与箭楼，再入牢开枷救人；留兵保护前营和出城退路。"}
 	if signaled:
@@ -476,6 +477,7 @@ func _order_scout_fire(b) -> void:
 
 func _update_briefing(b) -> void:
 	_update_fire_shortcut(b)
+	_update_unlock_shortcut(b)
 	if rescued and gate_open and not b.hud.touch_ui:
 		_update_evacuation_button(b)
 	var next := _briefing(b)
@@ -487,6 +489,84 @@ func _guarded(b,cell: Vector2i,radius: float,visible_only := false) -> bool:
 	var target: Vector2 = b.map.cell_to_world(cell)
 	return b.units.any(func(u): return _effective(u) and u.faction==1 and not u.is_resource and _near(b,u,cell,radius) \
 		and (not visible_only or (u._invis_t <= 0.0 and b.is_visible_world(u.position))) and b.map._segment_open(u.position,target))
+func _unlock_shortcut_available(b, action: Dictionary) -> bool:
+	return (
+		b.phase == b.Phase.FIGHT and not b.hud.touch_ui and gate_open and prison_open and not rescued
+		and not action.is_empty() and not action.done and String(action.get("blocked_reason", "")).is_empty()
+	)
+
+
+func _update_unlock_shortcut(b) -> void:
+	var action: Dictionary = b.mission.actions.get("daming_rescue", {})
+	var button: Button = b.mission.find_level_button(SEND_UNLOCK)
+	if not _unlock_shortcut_available(b, action):
+		if button != null:
+			button.get_parent().remove_child(button)
+			button.queue_free()
+	elif button == null:
+		button = b.mission.add_level_button(SEND_UNLOCK, "派人开枷",
+			"有内应时派待令的柴进或乐和，否则派就近待令友军。到场停留三秒后开枷。")
+		button.get_parent().move_child(button, 0)
+		b.mission.reveal_primary_level_button()
+
+
+func _order_unlock(b) -> void:
+	var action: Dictionary = b.mission.actions.get("daming_rescue", {})
+	if not _unlock_shortcut_available(b, action) or not b._gameplay_rng_issue.is_empty():
+		return
+	if b.mission.active_action_id == "daming_rescue":
+		b.mission.set_feedback("已有友军正在开枷。")
+		return
+	if _guarded(b, JAIL_ACTION, JAIL_GUARD_RADIUS, true):
+		b.mission.set_feedback("开枷处还有可见守军。先清开，再派人开枷。")
+		return
+	var target: Vector2 = b.map.cell_to_world(action.cell)
+	if b.mission._nearest_clicked_action(target) != "daming_rescue":
+		return
+	# A waiting insider can still earn the route's unlock objective. Leave
+	# the choice to override that assignment to the original manual command.
+	var inner_team := _inside_prison(b, chai) and _inside_prison(b, yue)
+	var waiting: Array[Unit] = []
+	for actor: Unit in b.units:
+		if not _effective(actor) or not b.mission._valid_action_actor(actor, action):
+			continue
+		if actor.mission_order_active or actor.mission_order_arrival_t > 0.0:
+			if b.mission._nearest_clicked_action(actor.mission_order_target) == "daming_rescue":
+				b.mission.set_feedback("已有友军前往开枷旗标。")
+				return
+			continue
+		if inner_team and actor not in [chai, yue]:
+			continue
+		if (
+			actor == b.mission._actor or actor._state != Unit.ST_IDLE or actor._hold_order_active
+			or actor._patrolling or actor._target != null or not actor._queue.is_empty() or actor._action_queue_busy()
+		):
+			continue
+		waiting.append(actor)
+	waiting.sort_custom(func(a: Unit, other: Unit) -> bool:
+		var left := a.position.distance_squared_to(target)
+		var right := other.position.distance_squared_to(target)
+		return a.entity_id < other.entity_id if left == right else left < right)
+	for actor in waiting:
+		var path: PackedVector2Array = b.map.find_path(actor.position, target, actor.faction, actor.movement_profile)
+		if (path.is_empty() or path[-1].distance_to(target) > float(action.reach)
+			or not b.map._segment_open(path[-1], target, actor.movement_profile)):
+			continue
+		var group := [actor]
+		b._stamp_manual(group)
+		actor.order_move(target)
+		b._stamp_mission_move(group, target)
+		Sfx.play("order")
+		b.mission.set_feedback(Localize.format_text("已派%s前往开枷旗标。", Localize.text(actor.display_name)))
+		return
+	if not waiting.is_empty():
+		b.mission.set_feedback("暂时走不到旗标。请清开道路或手动改道。")
+	elif inner_team:
+		b.mission.set_feedback("柴进和乐和正在执行命令。可让一人停止，再下令开枷。")
+	else:
+		b.mission.set_feedback("当前没有待令友军。可停止一名友军，再下令开枷。")
+
+
 func _add_rescue(b) -> void:
 	b.mission.add_action("daming_rescue","牢内：开枷救出二人",JAIL_ACTION,RESCUERS,3,64)
 func _open_prison(b,breached: bool) -> void:
@@ -629,6 +709,9 @@ func activate_mission_button(b,button_id: String) -> void:
 	if b.phase!=b.Phase.FIGHT: return
 	if button_id == SEND_SCOUT_FIRE:
 		_order_scout_fire(b)
+		return
+	if button_id == SEND_UNLOCK:
+		_order_unlock(b)
 		return
 	if not rescued: return
 	if button_id=="daming_evac_wounded":
