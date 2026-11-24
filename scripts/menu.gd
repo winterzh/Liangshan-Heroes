@@ -237,7 +237,7 @@ func _finish_battle_launch(campaign_level_id: String) -> void:
 	if OS.get_name() == "Windows":
 		if Campaign.skirmish and not Campaign.custom_defense:
 			prepared_level_id = "skirmish"
-		elif campaign_level_id == "level1":
+		elif campaign_level_id in ["level1", "level5"]:
 			prepared_level_id = campaign_level_id
 	if prepared_level_id.is_empty():
 		await RenderingServer.frame_post_draw
