@@ -10,6 +10,7 @@ const WICKET := Vector2i(33,39)
 const SAFEHOUSE := Vector2i(24,28)
 const SAFEHOUSE_RADIUS := 88.0
 const COVER_RECOVERY := 3.0
+const SEND_SCOUT_FIRE := "daming_send_scout_fire"
 const PRISON_DOOR := Vector2i(19,20)
 const PRISON_CHECK := Vector2i(19,24)
 const PRISON_INSIDE := Vector2i(18,18)
@@ -429,7 +430,52 @@ func _briefing(b) -> Dictionary:
 	if chai._invis_t<=0 or yue._invis_t<=0:
 		return {"title":"潜入 · 重整乔装", "text":"柴进或乐和已暴露。甩开追兵后，到蔡福家停留3秒恢复乔装，再回牢前受验。外军也可护送器械强攻南门。"}
 	return {"title":"两线筹备 · 经营与潜入", "text":"城外练兵备器械；柴进、乐和乔装到牢前受验后进入内院。暴露可甩开守军，退到蔡福家重整；时迁等候举火。"}
+func _fire_shortcut_available(b, action: Dictionary) -> bool:
+	return not b.hud.touch_ui and not signaled and not gate_open and not rescued \
+		and not action.is_empty() and not action.done and String(action.get("blocked_reason", "")).is_empty() \
+		and _inside_prison(b, chai) and _inside_prison(b, yue) \
+		and _effective(scout) and b.mission._valid_action_actor(scout, action) and scout._invis_t > 0.0
+
+
+func _update_fire_shortcut(b) -> void:
+	var action: Dictionary = b.mission.actions.get("daming_fire", {})
+	var button: Button = b.mission.find_level_button(SEND_SCOUT_FIRE)
+	if not _fire_shortcut_available(b, action):
+		if button != null:
+			button.get_parent().remove_child(button)
+			button.queue_free()
+	elif button == null:
+		button = b.mission.add_level_button(SEND_SCOUT_FIRE, "派时迁去举火",
+			"派乔装的时迁去翠云楼。到场停留两秒后举火，火号给外军九十秒接应窗口。")
+		button.get_parent().move_child(button, 0)
+		b.mission.reveal_primary_level_button()
+
+
+func _order_scout_fire(b) -> void:
+	var action: Dictionary = b.mission.actions.get("daming_fire", {})
+	if not b._gameplay_rng_issue.is_empty() or not _fire_shortcut_available(b, action):
+		return
+	if b.mission.active_action_id == "daming_fire" or ((scout.mission_order_active or scout.mission_order_arrival_t > 0.0) \
+			and b.mission._nearest_clicked_action(scout.mission_order_target) == "daming_fire"):
+		return
+	var target: Vector2 = b.map.cell_to_world(action.cell)
+	var path: PackedVector2Array = b.map.find_path(scout.position, target, scout.faction, scout.movement_profile)
+	if path.is_empty() or path[-1].distance_to(target) > float(action.reach) \
+			or not b.map._segment_open(path[-1], target, scout.movement_profile):
+		b.mission.set_feedback("暂时走不到旗标。请清开道路或手动改道。")
+		return
+	var group := [scout]
+	var move: Dictionary = b.mission.prepare_manual_move(group, target)
+	if move.is_empty() or move.actor != scout:
+		return
+	b._stamp_manual(group)
+	scout.order_move(move.target)
+	b._stamp_mission_move(group, target)
+	Sfx.play("order")
+
+
 func _update_briefing(b) -> void:
+	_update_fire_shortcut(b)
 	if rescued and gate_open and not b.hud.touch_ui:
 		_update_evacuation_button(b)
 	var next := _briefing(b)
@@ -580,7 +626,11 @@ func _order_wounded_evacuation(b) -> void:
 		b.mission.set_feedback("伤员暂时无法到达接应地。请清开退路或手动改道。")
 
 func activate_mission_button(b,button_id: String) -> void:
-	if b.phase!=b.Phase.FIGHT or not rescued: return
+	if b.phase!=b.Phase.FIGHT: return
+	if button_id == SEND_SCOUT_FIRE:
+		_order_scout_fire(b)
+		return
+	if not rescued: return
 	if button_id=="daming_evac_wounded":
 		_order_wounded_evacuation(b)
 		return
