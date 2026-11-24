@@ -1,0 +1,2947 @@
+{
+  "scope": "Native Windows saved preset picker A/B with uninstrumented frozen packs. Separate source graphics fixture on the exported candidate source and instrumented first-draw diagnostic.",
+  "implementation": "Up to three complete static draw batches. Match ridge polylines, CPU height field, and terrain texture inputs. Reuse only completed valid batches.",
+  "baseline": {
+    "kind": "local_integrated_windows_candidate",
+    "layout": "split_pck",
+    "commit": "f76e44fdd940da7dd66c4df4a855714948adcd27",
+    "source_version": "source-v1:b9c4ebfa5d1f8e68313212e81cddb8c9d9c94d6c5d3b35d1938d69ce61fdd7da",
+    "tracked_runtime_count": 6574,
+    "steps": [
+      {
+        "stage": "import",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 66.98
+      },
+      {
+        "stage": "export",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 93.29
+      }
+    ],
+    "files": [
+      {
+        "path": "GODOTSTEAM_LICENSE.txt",
+        "bytes": 1110,
+        "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+      },
+      {
+        "path": "LiangshanHeroes.exe",
+        "bytes": 104886784,
+        "sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4"
+      },
+      {
+        "path": "LiangshanHeroes.pck",
+        "bytes": 1722728364,
+        "sha256": "2b56c924785544902d9e1a6ea727cba5629bc9f9acbdce3c10d7c641b10f154f"
+      },
+      {
+        "path": "libgodotsteam.windows.template_release.x86_64.dll",
+        "bytes": 3961344,
+        "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+      },
+      {
+        "path": "steam_api64.dll",
+        "bytes": 319128,
+        "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+      },
+      {
+        "path": "steam_stats_reader.dll",
+        "bytes": 393728,
+        "sha256": "5a79a77b5b6e2cff21b285c785118352805a09d91876f89276af119ee1702517"
+      },
+      {
+        "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+        "bytes": 1093,
+        "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+      }
+    ]
+  },
+  "candidate": {
+    "kind": "local_integrated_windows_candidate",
+    "layout": "split_pck",
+    "commit": "d09f8f4f354639cc68f2cab0b4767bc7e169233e",
+    "source_version": "source-v1:e90ef3e95f781512c56d60f291619fce90318639bc7a9862569bca9c1b1cbeeb",
+    "tracked_runtime_count": 6574,
+    "steps": [
+      {
+        "stage": "import",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 70.4
+      },
+      {
+        "stage": "export",
+        "exit_code": 0,
+        "errors": [],
+        "seconds": 100.34
+      }
+    ],
+    "files": [
+      {
+        "path": "GODOTSTEAM_LICENSE.txt",
+        "bytes": 1110,
+        "sha256": "4b72012dba000de1e0b4c0183e5ed99f4fe8e949f50e570442f692ce3995bae2"
+      },
+      {
+        "path": "LiangshanHeroes.exe",
+        "bytes": 104886784,
+        "sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4"
+      },
+      {
+        "path": "LiangshanHeroes.pck",
+        "bytes": 1722729548,
+        "sha256": "70bb31040b1998806202df9363fd9e219c2a3ce2811baae6bfa3436c5ab13393"
+      },
+      {
+        "path": "libgodotsteam.windows.template_release.x86_64.dll",
+        "bytes": 3961344,
+        "sha256": "b7a6316bb866691d01d311e181b76b0fe0c38602913725d1589083bee1db7f26"
+      },
+      {
+        "path": "steam_api64.dll",
+        "bytes": 319128,
+        "sha256": "8de54d32508e216c9135b8bf025749243d44e404c1c22a8e5fe35acecabe7a9c"
+      },
+      {
+        "path": "steam_stats_reader.dll",
+        "bytes": 393728,
+        "sha256": "5a79a77b5b6e2cff21b285c785118352805a09d91876f89276af119ee1702517"
+      },
+      {
+        "path": "STEAM_STATS_READER_GODOT_CPP_LICENSE.txt",
+        "bytes": 1093,
+        "sha256": "26a5b210d90760156ce886267ce9df235787dcc6cebfd7ecd95ef5b6fdcc95bf"
+      }
+    ]
+  },
+  "native_picker_metrics_ms": {
+    "baseline": {
+      "first": {
+        "samples": 4,
+        "battle_ms": {
+          "median": 530.436,
+          "max": 645.895
+        },
+        "gap_ms": {
+          "median": 193.62,
+          "max": 206.475
+        },
+        "ready_to_predraw_ms": {
+          "median": 85.994,
+          "max": 94.512
+        },
+        "attach_to_ready_ms": {
+          "median": 84.877,
+          "max": 87.359
+        },
+        "feedback_ms": {
+          "median": 15.458,
+          "max": 18.589
+        },
+        "entry_to_fight_ms": {
+          "median": 582.591,
+          "max": 697.696
+        },
+        "right_click_ms": {
+          "median": 8.369,
+          "max": 9.781
+        }
+      },
+      "repeat": {
+        "samples": 12,
+        "battle_ms": {
+          "median": 187.996,
+          "max": 222.249
+        },
+        "gap_ms": {
+          "median": 109.892,
+          "max": 141.154
+        },
+        "ready_to_predraw_ms": {
+          "median": 47.453,
+          "max": 61.606
+        },
+        "attach_to_ready_ms": {
+          "median": 54.243,
+          "max": 71.42
+        },
+        "feedback_ms": {
+          "median": 12.426,
+          "max": 25.332
+        },
+        "entry_to_fight_ms": {
+          "median": 215.014,
+          "max": 248.023
+        },
+        "right_click_ms": {
+          "median": 6.386,
+          "max": 12.638
+        }
+      }
+    },
+    "candidate": {
+      "first": {
+        "samples": 4,
+        "battle_ms": {
+          "median": 578.256,
+          "max": 838.232
+        },
+        "gap_ms": {
+          "median": 229.407,
+          "max": 303.487
+        },
+        "ready_to_predraw_ms": {
+          "median": 92.37,
+          "max": 111.579
+        },
+        "attach_to_ready_ms": {
+          "median": 110.147,
+          "max": 157.265
+        },
+        "feedback_ms": {
+          "median": 20.224,
+          "max": 28.129
+        },
+        "entry_to_fight_ms": {
+          "median": 632.175,
+          "max": 902.03
+        },
+        "right_click_ms": {
+          "median": 9.913,
+          "max": 11.843
+        }
+      },
+      "repeat": {
+        "samples": 12,
+        "battle_ms": {
+          "median": 175.935,
+          "max": 209.482
+        },
+        "gap_ms": {
+          "median": 97.156,
+          "max": 119.259
+        },
+        "ready_to_predraw_ms": {
+          "median": 36.588,
+          "max": 43.453
+        },
+        "attach_to_ready_ms": {
+          "median": 54.931,
+          "max": 71.001
+        },
+        "feedback_ms": {
+          "median": 13.269,
+          "max": 21.729
+        },
+        "entry_to_fight_ms": {
+          "median": 203.666,
+          "max": 240.98
+        },
+        "right_click_ms": {
+          "median": 5.322,
+          "max": 10.584
+        }
+      }
+    }
+  },
+  "native_picker_runs": [
+    {
+      "driver": "vulkan",
+      "exec_sha": "86caa8a1da4dc0db77e8b47685db43f0b43ec86a64bbedf8284b7d69c3c4b33c",
+      "fps_cap": 60,
+      "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+      "method": "forward_plus",
+      "progress_unchanged": true,
+      "samples": [
+        {
+          "attach_ms": 291.992,
+          "attach_to_ready_ms": 74.522,
+          "battle_ms": 447.824,
+          "callback_ms": 12.11,
+          "custom_override_verified": true,
+          "draws_to_first_battle": 11,
+          "entry_to_fight_ms": 481.253,
+          "feedback_ms": 14.87,
+          "gap_from_ms": 290.017,
+          "gap_ms": 157.807,
+          "gap_to_ms": 447.824,
+          "intro_pages": 1,
+          "mode": "custom_defense",
+          "mounted_prepared_scene": true,
+          "picker_draw_ms": [
+            44.481,
+            33.257
+          ],
+          "preclick_frame_age_ms": 0.821,
+          "predraw_to_frame_ms": 17.253,
+          "preparation": {
+            "custom": true,
+            "detached": true,
+            "elapsed_ms": 290.017,
+            "map_built": true,
+            "menu_painted_with_loading": true,
+            "sim_uninitialized": true
+          },
+          "preset": [
+            "Entry timing standard",
+            317,
+            30,
+            120.0
+          ],
+          "ready_to_predraw_ms": 64.057,
+          "right_click_ms": 6.006,
+          "start_to_fight_ms": null,
+          "visit": 1
+        },
+        {
+          "attach_ms": 77.439,
+          "attach_to_ready_ms": 52.38,
+          "battle_ms": 180.99,
+          "callback_ms": 10.771,
+          "custom_override_verified": true,
+          "draws_to_first_battle": 3,
+          "entry_to_fight_ms": 203.094,
+          "feedback_ms": 12.054,
+          "gap_from_ms": 75.081,
+          "gap_ms": 105.909,
+          "gap_to_ms": 180.99,
+          "intro_pages": 1,
+          "mode": "custom_defense",
+          "mounted_prepared_scene": true,
+          "picker_draw_ms": [
+            12.022,
+            3.693
+          ],
+          "preclick_frame_age_ms": 10.2,
+          "predraw_to_frame_ms": 3.646,
+          "preparation": {
+            "custom": true,
+            "detached": true,
+            "elapsed_ms": 75.081,
+            "map_built": true,
+            "menu_painted_with_loading": true,
+            "sim_uninitialized": true
+          },
+          "preset": [
+            "Entry timing alternate",
+            583,
+            2,
+            47.0
+          ],
+          "ready_to_predraw_ms": 47.525,
+          "right_click_ms": 9.465,
+          "start_to_fight_ms": null,
+          "visit": 2
+        },
+        {
+          "attach_ms": 78.573,
+          "attach_to_ready_ms": 57.093,
+          "battle_ms": 186.918,
+          "callback_ms": 11.683,
+          "custom_override_verified": true,
+          "draws_to_first_battle": 3,
+          "entry_to_fight_ms": 214.045,
+          "feedback_ms": 12.798,
+          "gap_from_ms": 77.114,
+          "gap_ms": 109.804,
+          "gap_to_ms": 186.918,
+          "intro_pages": 1,
+          "mode": "custom_defense",
+          "mounted_prepared_scene": true,
+          "picker_draw_ms": [
+            10.748,
+            3.06
+          ],
+          "preclick_frame_age_ms": 11.311,
+          "predraw_to_frame_ms": 3.872,
+          "preparation": {
+            "custom": true,
+            "detached": true,
+            "elapsed_ms": 77.114,
+            "map_built": true,
+            "menu_painted_with_loading": true,
+            "sim_uninitialized": true
+          },
+          "preset": [
+            "Entry timing standard",
+            317,
+            30,
+            120.0
+          ],
+          "ready_to_predraw_ms": 47.38,
+          "right_click_ms": 4.308,
+          "start_to_fight_ms": null,
+          "visit": 3
+        },
+        {
+          "attach_ms": 79.831,
+          "attach_to_ready_ms": 49.256,
+          "battle_ms": 181.27,
+          "callback_ms": 11.574,
+          "custom_override_verified": true,
+          "draws_to_first_battle": 3,
+          "entry_to_fight_ms": 206.999,
+          "feedback_ms": 12.918,
+          "gap_from_ms": 78.011,
+          "gap_ms": 103.259,
+          "gap_to_ms": 181.27,
+          "intro_pages": 1,
+          "mode": "custom_defense",
+          "mounted_prepared_scene": true,
+          "picker_draw_ms": [
+            13.669,
+            4.455
+          ],
+          "preclick_frame_age_ms": 8.976,
+          "predraw_to_frame_ms": 4.52,
+          "preparation": {
+            "custom": true,
+            "detached": true,
+            "elapsed_ms": 78.011,
+            "map_built": true,
+            "menu_painted_with_loading": true,
+            "sim_uninitialized": true
+          },
+          "preset": [
+            "Entry timing alternate",
+            583,
+            2,
+            47.0
+          ],
+          "ready_to_predraw_ms": 47.663,
+          "right_click_ms": 10.298,
+          "start_to_fight_ms": null,
+          "visit": 4
+        }
+      ],
+      "viewport": [
+        1280,
+        720
+      ],
+      "commit": "f76e44fdd940da7dd66c4df4a855714948adcd27",
+      "pack_sha256": "2b56c924785544902d9e1a6ea727cba5629bc9f9acbdce3c10d7c641b10f154f",
+      "payload_files_verified": 7,
+      "game_log_sha256": "38aeb8bb31a88a20011660df2f74a5ac9e6e99a7f4858c79901602fa4b765e00",
+      "seconds": 11.444,
+      "raw_report_sha256": "ffe680a1067ab53685819cb54ee10b4370e9882fed2981f6759f0d0552aa7093",
+      "exit_code": 0
+    },
+    {
+      "driver": "vulkan",
+      "exec_sha": "9971350051bc07701a20073953328617ea2227d08796a83f87e0dfa3b77e264f",
+      "fps_cap": 60,
+      "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+      "method": "forward_plus",
+      "progress_unchanged": true,
+      "samples": [
+        {
+          "attach_ms": 538.279,
+          "attach_to_ready_ms": 157.265,
+          "battle_ms": 838.232,
+          "callback_ms": 23.31,
+          "custom_override_verified": true,
+          "draws_to_first_battle": 13,
+          "entry_to_fight_ms": 902.03,
+          "feedback_ms": 28.129,
+          "gap_from_ms": 534.745,
+          "gap_ms": 303.487,
+          "gap_to_ms": 838.232,
+          "intro_pages": 1,
+          "mode": "custom_defense",
+          "mounted_prepared_scene": true,
+          "picker_draw_ms": [
+            74.677,
+            30.642
+          ],
+          "preclick_frame_age_ms": 1.244,
+          "predraw_to_frame_ms": 31.109,
+          "preparation": {
+            "custom": true,
+            "detached": true,
+            "elapsed_ms": 534.745,
+            "map_built": true,
+            "menu_painted_with_loading": true,
+            "sim_uninitialized": true
+          },
+          "preset": [
+            "Entry timing standard",
+            317,
+            30,
+            120.0
+          ],
+          "ready_to_predraw_ms": 111.579,
+          "right_click_ms": 11.843,
+          "start_to_fight_ms": null,
+          "visit": 1
+        },
+        {
+          "attach_ms": 96.796,
+          "attach_to_ready_ms": 65.817,
+          "battle_ms": 209.482,
+          "callback_ms": 19.694,
+          "custom_override_verified": true,
+          "draws_to_first_battle": 3,
+          "entry_to_fight_ms": 237.745,
+          "feedback_ms": 21.289,
+          "gap_from_ms": 93.459,
+          "gap_ms": 116.023,
+          "gap_to_ms": 209.482,
+          "intro_pages": 1,
+          "mode": "custom_defense",
+          "mounted_prepared_scene": true,
+          "picker_draw_ms": [
+            17.714,
+            5.234
+          ],
+          "preclick_frame_age_ms": 7.457,
+          "predraw_to_frame_ms": 3.416,
+          "preparation": {
+            "custom": true,
+            "detached": true,
+            "elapsed_ms": 93.459,
+            "map_built": true,
+            "menu_painted_with_loading": true,
+            "sim_uninitialized": true
+          },
+          "preset": [
+            "Entry timing alternate",
+            583,
+            2,
+            47.0
+          ],
+          "ready_to_predraw_ms": 43.453,
+          "right_click_ms": 6.763,
+          "start_to_fight_ms": null,
+          "visit": 2
+        },
+        {
+          "attach_ms": 86.304,
+          "attach_to_ready_ms": 53.789,
+          "battle_ms": 180.518,
+          "callback_ms": 18.777,
+          "custom_override_verified": true,
+          "draws_to_first_battle": 3,
+          "entry_to_fight_ms": 205.588,
+          "feedback_ms": 20.245,
+          "gap_from_ms": 84.093,
+          "gap_ms": 96.425,
+          "gap_to_ms": 180.518,
+          "intro_pages": 1,
+          "mode": "custom_defense",
+          "mounted_prepared_scene": true,
+          "picker_draw_ms": [
+            10.892,
+            2.783
+          ],
+          "preclick_frame_age_ms": 12.159,
+          "predraw_to_frame_ms": 2.893,
+          "preparation": {
+            "custom": true,
+            "detached": true,
+            "elapsed_ms": 84.093,
+            "map_built": true,
+            "menu_painted_with_loading": true,
+            "sim_uninitialized": true
+          },
+          "preset": [
+            "Entry timing standard",
+            317,
+            30,
+            120.0
+          ],
+          "ready_to_predraw_ms": 37.532,
+          "right_click_ms": 4.455,
+          "start_to_fight_ms": null,
+          "visit": 3
+        },
+        {
+          "attach_ms": 80.322,
+          "attach_to_ready_ms": 53.291,
+          "battle_ms": 173.482,
+          "callback_ms": 9.802,
+          "custom_override_verified": true,
+          "draws_to_first_battle": 3,
+          "entry_to_fight_ms": 196.78,
+          "feedback_ms": 10.908,
+          "gap_from_ms": 78.463,
+          "gap_ms": 95.019,
+          "gap_to_ms": 173.482,
+          "intro_pages": 1,
+          "mode": "custom_defense",
+          "mounted_prepared_scene": true,
+          "picker_draw_ms": [
+            11.054,
+            4.126
+          ],
+          "preclick_frame_age_ms": 10.617,
+          "predraw_to_frame_ms": 2.943,
+          "preparation": {
+            "custom": true,
+            "detached": true,
+            "elapsed_ms": 78.463,
+            "map_built": true,
+            "menu_painted_with_loading": true,
+            "sim_uninitialized": true
+          },
+          "preset": [
+            "Entry timing alternate",
+            583,
+            2,
+            47.0
+          ],
+          "ready_to_predraw_ms": 36.926,
+          "right_click_ms": 5.611,
+          "start_to_fight_ms": null,
+          "visit": 4
+        }
+      ],
+      "viewport": [
+        1280,
+        720
+      ],
+      "commit": "d09f8f4f354639cc68f2cab0b4767bc7e169233e",
+      "pack_sha256": "70bb31040b1998806202df9363fd9e219c2a3ce2811baae6bfa3436c5ab13393",
+      "payload_files_verified": 7,
+      "game_log_sha256": "843f0c5468de8a3df769a536542da236f488fba5222ea70765c0fa78da3f308a",
+      "seconds": 12.33,
+      "raw_report_sha256": "26aaf3c1947c76c5a6ad9738629c9b9ea92199d90cbb46fe6cec3bf4aaaee474",
+      "exit_code": 0
+    },
+    {
+      "driver": "vulkan",
+      "exec_sha": "9971350051bc07701a20073953328617ea2227d08796a83f87e0dfa3b77e264f",
+      "fps_cap": 60,
+      "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+      "method": "forward_plus",
+      "progress_unchanged": true,
+      "samples": [
+        {
+          "attach_ms": 312.042,
+          "attach_to_ready_ms": 74.662,
+          "battle_ms": 481.111,
+          "callback_ms": 13.749,
+          "custom_override_verified": true,
+          "draws_to_first_battle": 11,
+          "entry_to_fight_ms": 524.904,
+          "feedback_ms": 16.504,
+          "gap_from_ms": 310.685,
+          "gap_ms": 170.426,
+          "gap_to_ms": 481.111,
+          "intro_pages": 1,
+          "mode": "custom_defense",
+          "mounted_prepared_scene": true,
+          "picker_draw_ms": [
+            40.672,
+            30.952
+          ],
+          "preclick_frame_age_ms": 0.751,
+          "predraw_to_frame_ms": 21.873,
+          "preparation": {
+            "custom": true,
+            "detached": true,
+            "elapsed_ms": 310.685,
+            "map_built": true,
+            "menu_painted_with_loading": true,
+            "sim_uninitialized": true
+          },
+          "preset": [
+            "Entry timing standard",
+            317,
+            30,
+            120.0
+          ],
+          "ready_to_predraw_ms": 72.534,
+          "right_click_ms": 6.233,
+          "start_to_fight_ms": null,
+          "visit": 1
+        },
+        {
+          "attach_ms": 77.296,
+          "attach_to_ready_ms": 47.763,
+          "battle_ms": 162.26,
+          "callback_ms": 11.181,
+          "custom_override_verified": true,
+          "draws_to_first_battle": 3,
+          "entry_to_fight_ms": 190.351,
+          "feedback_ms": 12.351,
+          "gap_from_ms": 75.432,
+          "gap_ms": 86.828,
+          "gap_to_ms": 162.26,
+          "intro_pages": 1,
+          "mode": "custom_defense",
+          "mounted_prepared_scene": true,
+          "picker_draw_ms": [
+            10.343,
+            3.342
+          ],
+          "preclick_frame_age_ms": 10.897,
+          "predraw_to_frame_ms": 2.203,
+          "preparation": {
+            "custom": true,
+            "detached": true,
+            "elapsed_ms": 75.432,
+            "map_built": true,
+            "menu_painted_with_loading": true,
+            "sim_uninitialized": true
+          },
+          "preset": [
+            "Entry timing alternate",
+            583,
+            2,
+            47.0
+          ],
+          "ready_to_predraw_ms": 34.998,
+          "right_click_ms": 3.987,
+          "start_to_fight_ms": null,
+          "visit": 2
+        },
+        {
+          "attach_ms": 73.367,
+          "attach_to_ready_ms": 52.315,
+          "battle_ms": 162.99,
+          "callback_ms": 12.29,
+          "custom_override_verified": true,
+          "draws_to_first_battle": 3,
+          "entry_to_fight_ms": 192.783,
+          "feedback_ms": 13.555,
+          "gap_from_ms": 71.729,
+          "gap_ms": 91.261,
+          "gap_to_ms": 162.99,
+          "intro_pages": 1,
+          "mode": "custom_defense",
+          "mounted_prepared_scene": true,
+          "picker_draw_ms": [
+            13.826,
+            5.477
+          ],
+          "preclick_frame_age_ms": 8.058,
+          "predraw_to_frame_ms": 2.665,
+          "preparation": {
+            "custom": true,
+            "detached": true,
+            "elapsed_ms": 71.729,
+            "map_built": true,
+            "menu_painted_with_loading": true,
+            "sim_uninitialized": true
+          },
+          "preset": [
+            "Entry timing standard",
+            317,
+            30,
+            120.0
+          ],
+          "ready_to_predraw_ms": 34.643,
+          "right_click_ms": 9.268,
+          "start_to_fight_ms": null,
+          "visit": 3
+        },
+        {
+          "attach_ms": 89.023,
+          "attach_to_ready_ms": 59.074,
+          "battle_ms": 185.25,
+          "callback_ms": 20.02,
+          "custom_override_verified": true,
+          "draws_to_first_battle": 3,
+          "entry_to_fight_ms": 210.79,
+          "feedback_ms": 21.729,
+          "gap_from_ms": 86.856,
+          "gap_ms": 98.394,
+          "gap_to_ms": 185.25,
+          "intro_pages": 1,
+          "mode": "custom_defense",
+          "mounted_prepared_scene": true,
+          "picker_draw_ms": [
+            16.286,
+            5.728
+          ],
+          "preclick_frame_age_ms": 6.911,
+          "predraw_to_frame_ms": 2.69,
+          "preparation": {
+            "custom": true,
+            "detached": true,
+            "elapsed_ms": 86.856,
+            "map_built": true,
+            "menu_painted_with_loading": true,
+            "sim_uninitialized": true
+          },
+          "preset": [
+            "Entry timing alternate",
+            583,
+            2,
+            47.0
+          ],
+          "ready_to_predraw_ms": 34.463,
+          "right_click_ms": 6.472,
+          "start_to_fight_ms": null,
+          "visit": 4
+        }
+      ],
+      "viewport": [
+        1280,
+        720
+      ],
+      "commit": "d09f8f4f354639cc68f2cab0b4767bc7e169233e",
+      "pack_sha256": "70bb31040b1998806202df9363fd9e219c2a3ce2811baae6bfa3436c5ab13393",
+      "payload_files_verified": 7,
+      "game_log_sha256": "62c6de63ada5bfb56a194642110ccb75fe3d616c6a521a39f33d15936cc09f6e",
+      "seconds": 11.735,
+      "raw_report_sha256": "0778ec456e788249f9fdab571a2903c2965688668f82003452d45e0ba51e987b",
+      "exit_code": 0
+    },
+    {
+      "driver": "vulkan",
+      "exec_sha": "86caa8a1da4dc0db77e8b47685db43f0b43ec86a64bbedf8284b7d69c3c4b33c",
+      "fps_cap": 60,
+      "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+      "method": "forward_plus",
+      "progress_unchanged": true,
+      "samples": [
+        {
+          "attach_ms": 332.053,
+          "attach_to_ready_ms": 82.764,
+          "battle_ms": 524.656,
+          "callback_ms": 13.641,
+          "custom_override_verified": true,
+          "draws_to_first_battle": 10,
+          "entry_to_fight_ms": 576.818,
+          "feedback_ms": 16.046,
+          "gap_from_ms": 330.574,
+          "gap_ms": 194.082,
+          "gap_to_ms": 524.656,
+          "intro_pages": 1,
+          "mode": "custom_defense",
+          "mounted_prepared_scene": true,
+          "picker_draw_ms": [
+            45.513,
+            42.545
+          ],
+          "preclick_frame_age_ms": 0.552,
+          "predraw_to_frame_ms": 22.122,
+          "preparation": {
+            "custom": true,
+            "detached": true,
+            "elapsed_ms": 330.574,
+            "map_built": true,
+            "menu_painted_with_loading": true,
+            "sim_uninitialized": true
+          },
+          "preset": [
+            "Entry timing standard",
+            317,
+            30,
+            120.0
+          ],
+          "ready_to_predraw_ms": 87.717,
+          "right_click_ms": 9.781,
+          "start_to_fight_ms": null,
+          "visit": 1
+        },
+        {
+          "attach_ms": 82.932,
+          "attach_to_ready_ms": 50.303,
+          "battle_ms": 182.465,
+          "callback_ms": 12.357,
+          "custom_override_verified": true,
+          "draws_to_first_battle": 3,
+          "entry_to_fight_ms": 208.191,
+          "feedback_ms": 13.46,
+          "gap_from_ms": 80.782,
+          "gap_ms": 101.683,
+          "gap_to_ms": 182.465,
+          "intro_pages": 1,
+          "mode": "custom_defense",
+          "mounted_prepared_scene": true,
+          "picker_draw_ms": [
+            12.828,
+            4.709
+          ],
+          "preclick_frame_age_ms": 7.926,
+          "predraw_to_frame_ms": 4.376,
+          "preparation": {
+            "custom": true,
+            "detached": true,
+            "elapsed_ms": 80.782,
+            "map_built": true,
+            "menu_painted_with_loading": true,
+            "sim_uninitialized": true
+          },
+          "preset": [
+            "Entry timing alternate",
+            583,
+            2,
+            47.0
+          ],
+          "ready_to_predraw_ms": 44.854,
+          "right_click_ms": 5.207,
+          "start_to_fight_ms": null,
+          "visit": 2
+        },
+        {
+          "attach_ms": 78.926,
+          "attach_to_ready_ms": 58.491,
+          "battle_ms": 190.682,
+          "callback_ms": 11.548,
+          "custom_override_verified": true,
+          "draws_to_first_battle": 3,
+          "entry_to_fight_ms": 215.983,
+          "feedback_ms": 12.939,
+          "gap_from_ms": 77.654,
+          "gap_ms": 113.028,
+          "gap_to_ms": 190.682,
+          "intro_pages": 1,
+          "mode": "custom_defense",
+          "mounted_prepared_scene": true,
+          "picker_draw_ms": [
+            11.004,
+            3.019
+          ],
+          "preclick_frame_age_ms": 10.557,
+          "predraw_to_frame_ms": 4.593,
+          "preparation": {
+            "custom": true,
+            "detached": true,
+            "elapsed_ms": 77.654,
+            "map_built": true,
+            "menu_painted_with_loading": true,
+            "sim_uninitialized": true
+          },
+          "preset": [
+            "Entry timing standard",
+            317,
+            30,
+            120.0
+          ],
+          "ready_to_predraw_ms": 48.672,
+          "right_click_ms": 4.632,
+          "start_to_fight_ms": null,
+          "visit": 3
+        },
+        {
+          "attach_ms": 83.979,
+          "attach_to_ready_ms": 55.514,
+          "battle_ms": 191.42,
+          "callback_ms": 10.687,
+          "custom_override_verified": true,
+          "draws_to_first_battle": 3,
+          "entry_to_fight_ms": 216.8,
+          "feedback_ms": 11.866,
+          "gap_from_ms": 81.44,
+          "gap_ms": 109.98,
+          "gap_to_ms": 191.42,
+          "intro_pages": 1,
+          "mode": "custom_defense",
+          "mounted_prepared_scene": true,
+          "picker_draw_ms": [
+            13.249,
+            3.222
+          ],
+          "preclick_frame_age_ms": 9.5,
+          "predraw_to_frame_ms": 6.238,
+          "preparation": {
+            "custom": true,
+            "detached": true,
+            "elapsed_ms": 81.44,
+            "map_built": true,
+            "menu_painted_with_loading": true,
+            "sim_uninitialized": true
+          },
+          "preset": [
+            "Entry timing alternate",
+            583,
+            2,
+            47.0
+          ],
+          "ready_to_predraw_ms": 45.689,
+          "right_click_ms": 6.755,
+          "start_to_fight_ms": null,
+          "visit": 4
+        }
+      ],
+      "viewport": [
+        1280,
+        720
+      ],
+      "commit": "f76e44fdd940da7dd66c4df4a855714948adcd27",
+      "pack_sha256": "2b56c924785544902d9e1a6ea727cba5629bc9f9acbdce3c10d7c641b10f154f",
+      "payload_files_verified": 7,
+      "game_log_sha256": "925f8bd768f2126511b8bd576d1dd4b9fe5d5fc37c26f0e2a79c03168e210159",
+      "seconds": 12.617,
+      "raw_report_sha256": "345fe05a0b5a3943482096953638c09da7777f8a9b0e60694405c983d33f5925",
+      "exit_code": 0
+    },
+    {
+      "driver": "vulkan",
+      "exec_sha": "9971350051bc07701a20073953328617ea2227d08796a83f87e0dfa3b77e264f",
+      "fps_cap": 60,
+      "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+      "method": "forward_plus",
+      "progress_unchanged": true,
+      "samples": [
+        {
+          "attach_ms": 318.013,
+          "attach_to_ready_ms": 80.91,
+          "battle_ms": 498.483,
+          "callback_ms": 15.898,
+          "custom_override_verified": true,
+          "draws_to_first_battle": 12,
+          "entry_to_fight_ms": 545.599,
+          "feedback_ms": 18.786,
+          "gap_from_ms": 316.188,
+          "gap_ms": 182.295,
+          "gap_to_ms": 498.483,
+          "intro_pages": 1,
+          "mode": "custom_defense",
+          "mounted_prepared_scene": true,
+          "picker_draw_ms": [
+            45.542,
+            30.255
+          ],
+          "preclick_frame_age_ms": 1.146,
+          "predraw_to_frame_ms": 21.276,
+          "preparation": {
+            "custom": true,
+            "detached": true,
+            "elapsed_ms": 316.188,
+            "map_built": true,
+            "menu_painted_with_loading": true,
+            "sim_uninitialized": true
+          },
+          "preset": [
+            "Entry timing standard",
+            317,
+            30,
+            120.0
+          ],
+          "ready_to_predraw_ms": 78.284,
+          "right_click_ms": 9.252,
+          "start_to_fight_ms": null,
+          "visit": 1
+        },
+        {
+          "attach_ms": 79.802,
+          "attach_to_ready_ms": 57.554,
+          "battle_ms": 176.648,
+          "callback_ms": 15.995,
+          "custom_override_verified": true,
+          "draws_to_first_battle": 3,
+          "entry_to_fight_ms": 202.942,
+          "feedback_ms": 17.246,
+          "gap_from_ms": 78.179,
+          "gap_ms": 98.469,
+          "gap_to_ms": 176.648,
+          "intro_pages": 1,
+          "mode": "custom_defense",
+          "mounted_prepared_scene": true,
+          "picker_draw_ms": [
+            12.098,
+            3.417
+          ],
+          "preclick_frame_age_ms": 10.41,
+          "predraw_to_frame_ms": 3.238,
+          "preparation": {
+            "custom": true,
+            "detached": true,
+            "elapsed_ms": 78.179,
+            "map_built": true,
+            "menu_painted_with_loading": true,
+            "sim_uninitialized": true
+          },
+          "preset": [
+            "Entry timing alternate",
+            583,
+            2,
+            47.0
+          ],
+          "ready_to_predraw_ms": 36.054,
+          "right_click_ms": 5.032,
+          "start_to_fight_ms": null,
+          "visit": 2
+        },
+        {
+          "attach_ms": 79.883,
+          "attach_to_ready_ms": 56.074,
+          "battle_ms": 175.223,
+          "callback_ms": 9.645,
+          "custom_override_verified": true,
+          "draws_to_first_battle": 3,
+          "entry_to_fight_ms": 201.445,
+          "feedback_ms": 10.739,
+          "gap_from_ms": 77.335,
+          "gap_ms": 97.888,
+          "gap_to_ms": 175.223,
+          "intro_pages": 1,
+          "mode": "custom_defense",
+          "mounted_prepared_scene": true,
+          "picker_draw_ms": [
+            10.33,
+            3.458
+          ],
+          "preclick_frame_age_ms": 11.222,
+          "predraw_to_frame_ms": 2.94,
+          "preparation": {
+            "custom": true,
+            "detached": true,
+            "elapsed_ms": 77.335,
+            "map_built": true,
+            "menu_painted_with_loading": true,
+            "sim_uninitialized": true
+          },
+          "preset": [
+            "Entry timing standard",
+            317,
+            30,
+            120.0
+          ],
+          "ready_to_predraw_ms": 36.326,
+          "right_click_ms": 4.541,
+          "start_to_fight_ms": null,
+          "visit": 3
+        },
+        {
+          "attach_ms": 82.833,
+          "attach_to_ready_ms": 58.297,
+          "battle_ms": 180.816,
+          "callback_ms": 10.163,
+          "custom_override_verified": true,
+          "draws_to_first_battle": 3,
+          "entry_to_fight_ms": 212.215,
+          "feedback_ms": 11.438,
+          "gap_from_ms": 80.721,
+          "gap_ms": 100.095,
+          "gap_to_ms": 180.816,
+          "intro_pages": 1,
+          "mode": "custom_defense",
+          "mounted_prepared_scene": true,
+          "picker_draw_ms": [
+            11.35,
+            3.646
+          ],
+          "preclick_frame_age_ms": 10.803,
+          "predraw_to_frame_ms": 3.372,
+          "preparation": {
+            "custom": true,
+            "detached": true,
+            "elapsed_ms": 80.721,
+            "map_built": true,
+            "menu_painted_with_loading": true,
+            "sim_uninitialized": true
+          },
+          "preset": [
+            "Entry timing alternate",
+            583,
+            2,
+            47.0
+          ],
+          "ready_to_predraw_ms": 36.314,
+          "right_click_ms": 4.867,
+          "start_to_fight_ms": null,
+          "visit": 4
+        }
+      ],
+      "viewport": [
+        1280,
+        720
+      ],
+      "commit": "d09f8f4f354639cc68f2cab0b4767bc7e169233e",
+      "pack_sha256": "70bb31040b1998806202df9363fd9e219c2a3ce2811baae6bfa3436c5ab13393",
+      "payload_files_verified": 7,
+      "game_log_sha256": "267a21f245f42322db402681b57a4fcfcdf1c125cfe528dc95a7c0c1b86daf45",
+      "seconds": 11.595,
+      "raw_report_sha256": "adf9d4e607f18d1a06af5070ace51d0ed6de7522f224f8fa63a81644492a77d9",
+      "exit_code": 0
+    },
+    {
+      "driver": "vulkan",
+      "exec_sha": "86caa8a1da4dc0db77e8b47685db43f0b43ec86a64bbedf8284b7d69c3c4b33c",
+      "fps_cap": 60,
+      "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+      "method": "forward_plus",
+      "progress_unchanged": true,
+      "samples": [
+        {
+          "attach_ms": 331.893,
+          "attach_to_ready_ms": 86.991,
+          "battle_ms": 536.215,
+          "callback_ms": 9.154,
+          "custom_override_verified": true,
+          "draws_to_first_battle": 11,
+          "entry_to_fight_ms": 588.364,
+          "feedback_ms": 10.777,
+          "gap_from_ms": 329.74,
+          "gap_ms": 206.475,
+          "gap_to_ms": 536.215,
+          "intro_pages": 1,
+          "mode": "custom_defense",
+          "mounted_prepared_scene": true,
+          "picker_draw_ms": [
+            36.324,
+            24.742
+          ],
+          "preclick_frame_age_ms": 0.424,
+          "predraw_to_frame_ms": 22.819,
+          "preparation": {
+            "custom": true,
+            "detached": true,
+            "elapsed_ms": 329.74,
+            "map_built": true,
+            "menu_painted_with_loading": true,
+            "sim_uninitialized": true
+          },
+          "preset": [
+            "Entry timing standard",
+            317,
+            30,
+            120.0
+          ],
+          "ready_to_predraw_ms": 94.512,
+          "right_click_ms": 7.352,
+          "start_to_fight_ms": null,
+          "visit": 1
+        },
+        {
+          "attach_ms": 88.05,
+          "attach_to_ready_ms": 67.199,
+          "battle_ms": 216.733,
+          "callback_ms": 12.334,
+          "custom_override_verified": true,
+          "draws_to_first_battle": 3,
+          "entry_to_fight_ms": 247.664,
+          "feedback_ms": 13.497,
+          "gap_from_ms": 86.368,
+          "gap_ms": 130.365,
+          "gap_to_ms": 216.733,
+          "intro_pages": 1,
+          "mode": "custom_defense",
+          "mounted_prepared_scene": true,
+          "picker_draw_ms": [
+            15.036,
+            5.93
+          ],
+          "preclick_frame_age_ms": 7.233,
+          "predraw_to_frame_ms": 4.867,
+          "preparation": {
+            "custom": true,
+            "detached": true,
+            "elapsed_ms": 86.368,
+            "map_built": true,
+            "menu_painted_with_loading": true,
+            "sim_uninitialized": true
+          },
+          "preset": [
+            "Entry timing alternate",
+            583,
+            2,
+            47.0
+          ],
+          "ready_to_predraw_ms": 56.617,
+          "right_click_ms": 4.036,
+          "start_to_fight_ms": null,
+          "visit": 2
+        },
+        {
+          "attach_ms": 79.01,
+          "attach_to_ready_ms": 46.79,
+          "battle_ms": 173.541,
+          "callback_ms": 10.561,
+          "custom_override_verified": true,
+          "draws_to_first_battle": 3,
+          "entry_to_fight_ms": 197.359,
+          "feedback_ms": 11.612,
+          "gap_from_ms": 77.313,
+          "gap_ms": 96.228,
+          "gap_to_ms": 173.541,
+          "intro_pages": 1,
+          "mode": "custom_defense",
+          "mounted_prepared_scene": true,
+          "picker_draw_ms": [
+            11.789,
+            3.313
+          ],
+          "preclick_frame_age_ms": 10.771,
+          "predraw_to_frame_ms": 4.03,
+          "preparation": {
+            "custom": true,
+            "detached": true,
+            "elapsed_ms": 77.313,
+            "map_built": true,
+            "menu_painted_with_loading": true,
+            "sim_uninitialized": true
+          },
+          "preset": [
+            "Entry timing standard",
+            317,
+            30,
+            120.0
+          ],
+          "ready_to_predraw_ms": 43.711,
+          "right_click_ms": 10.394,
+          "start_to_fight_ms": null,
+          "visit": 3
+        },
+        {
+          "attach_ms": 79.333,
+          "attach_to_ready_ms": 50.78,
+          "battle_ms": 179.413,
+          "callback_ms": 8.792,
+          "custom_override_verified": true,
+          "draws_to_first_battle": 3,
+          "entry_to_fight_ms": 203.017,
+          "feedback_ms": 10.002,
+          "gap_from_ms": 77.105,
+          "gap_ms": 102.308,
+          "gap_to_ms": 179.413,
+          "intro_pages": 1,
+          "mode": "custom_defense",
+          "mounted_prepared_scene": true,
+          "picker_draw_ms": [
+            11.012,
+            3.04
+          ],
+          "preclick_frame_age_ms": 11.56,
+          "predraw_to_frame_ms": 4.539,
+          "preparation": {
+            "custom": true,
+            "detached": true,
+            "elapsed_ms": 77.105,
+            "map_built": true,
+            "menu_painted_with_loading": true,
+            "sim_uninitialized": true
+          },
+          "preset": [
+            "Entry timing alternate",
+            583,
+            2,
+            47.0
+          ],
+          "ready_to_predraw_ms": 44.761,
+          "right_click_ms": 5.113,
+          "start_to_fight_ms": null,
+          "visit": 4
+        }
+      ],
+      "viewport": [
+        1280,
+        720
+      ],
+      "commit": "f76e44fdd940da7dd66c4df4a855714948adcd27",
+      "pack_sha256": "2b56c924785544902d9e1a6ea727cba5629bc9f9acbdce3c10d7c641b10f154f",
+      "payload_files_verified": 7,
+      "game_log_sha256": "7cdd9db5ef256306d6dce7dc7cc6cc2675ea2b56d3b3bf3770b053873afb5684",
+      "seconds": 11.624,
+      "raw_report_sha256": "78ccacedfe94124cf457fd168288785cdb5ad436c06d1a101050fac5cb5c19a3",
+      "exit_code": 0
+    },
+    {
+      "driver": "vulkan",
+      "exec_sha": "86caa8a1da4dc0db77e8b47685db43f0b43ec86a64bbedf8284b7d69c3c4b33c",
+      "fps_cap": 60,
+      "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+      "method": "forward_plus",
+      "progress_unchanged": true,
+      "samples": [
+        {
+          "attach_ms": 455.498,
+          "attach_to_ready_ms": 87.359,
+          "battle_ms": 645.895,
+          "callback_ms": 16.026,
+          "custom_override_verified": true,
+          "draws_to_first_battle": 13,
+          "entry_to_fight_ms": 697.696,
+          "feedback_ms": 18.589,
+          "gap_from_ms": 452.738,
+          "gap_ms": 193.157,
+          "gap_to_ms": 645.895,
+          "intro_pages": 1,
+          "mode": "custom_defense",
+          "mounted_prepared_scene": true,
+          "picker_draw_ms": [
+            43.277,
+            23.223
+          ],
+          "preclick_frame_age_ms": 0.699,
+          "predraw_to_frame_ms": 18.767,
+          "preparation": {
+            "custom": true,
+            "detached": true,
+            "elapsed_ms": 452.738,
+            "map_built": true,
+            "menu_painted_with_loading": true,
+            "sim_uninitialized": true
+          },
+          "preset": [
+            "Entry timing standard",
+            317,
+            30,
+            120.0
+          ],
+          "ready_to_predraw_ms": 84.271,
+          "right_click_ms": 9.386,
+          "start_to_fight_ms": null,
+          "visit": 1
+        },
+        {
+          "attach_ms": 74.641,
+          "attach_to_ready_ms": 52.972,
+          "battle_ms": 189.075,
+          "callback_ms": 8.731,
+          "custom_override_verified": true,
+          "draws_to_first_battle": 3,
+          "entry_to_fight_ms": 218.11,
+          "feedback_ms": 9.659,
+          "gap_from_ms": 72.982,
+          "gap_ms": 116.093,
+          "gap_to_ms": 189.075,
+          "intro_pages": 1,
+          "mode": "custom_defense",
+          "mounted_prepared_scene": true,
+          "picker_draw_ms": [
+            10.433,
+            2.794
+          ],
+          "preclick_frame_age_ms": 11.551,
+          "predraw_to_frame_ms": 7.058,
+          "preparation": {
+            "custom": true,
+            "detached": true,
+            "elapsed_ms": 72.982,
+            "map_built": true,
+            "menu_painted_with_loading": true,
+            "sim_uninitialized": true
+          },
+          "preset": [
+            "Entry timing alternate",
+            583,
+            2,
+            47.0
+          ],
+          "ready_to_predraw_ms": 54.404,
+          "right_click_ms": 8.531,
+          "start_to_fight_ms": null,
+          "visit": 2
+        },
+        {
+          "attach_ms": 80.485,
+          "attach_to_ready_ms": 71.42,
+          "battle_ms": 218.971,
+          "callback_ms": 9.761,
+          "custom_override_verified": true,
+          "draws_to_first_battle": 3,
+          "entry_to_fight_ms": 246.178,
+          "feedback_ms": 10.95,
+          "gap_from_ms": 77.817,
+          "gap_ms": 141.154,
+          "gap_to_ms": 218.971,
+          "intro_pages": 1,
+          "mode": "custom_defense",
+          "mounted_prepared_scene": true,
+          "picker_draw_ms": [
+            11.355,
+            3.98
+          ],
+          "preclick_frame_age_ms": 10.167,
+          "predraw_to_frame_ms": 5.46,
+          "preparation": {
+            "custom": true,
+            "detached": true,
+            "elapsed_ms": 77.817,
+            "map_built": true,
+            "menu_painted_with_loading": true,
+            "sim_uninitialized": true
+          },
+          "preset": [
+            "Entry timing standard",
+            317,
+            30,
+            120.0
+          ],
+          "ready_to_predraw_ms": 61.606,
+          "right_click_ms": 12.638,
+          "start_to_fight_ms": null,
+          "visit": 3
+        },
+        {
+          "attach_ms": 112.782,
+          "attach_to_ready_ms": 61.918,
+          "battle_ms": 222.249,
+          "callback_ms": 23.465,
+          "custom_override_verified": true,
+          "draws_to_first_battle": 3,
+          "entry_to_fight_ms": 248.023,
+          "feedback_ms": 25.332,
+          "gap_from_ms": 109.787,
+          "gap_ms": 112.462,
+          "gap_to_ms": 222.249,
+          "intro_pages": 1,
+          "mode": "custom_defense",
+          "mounted_prepared_scene": true,
+          "picker_draw_ms": [
+            20.961,
+            7.631
+          ],
+          "preclick_frame_age_ms": 3.551,
+          "predraw_to_frame_ms": 4.53,
+          "preparation": {
+            "custom": true,
+            "detached": true,
+            "elapsed_ms": 109.787,
+            "map_built": true,
+            "menu_painted_with_loading": true,
+            "sim_uninitialized": true
+          },
+          "preset": [
+            "Entry timing alternate",
+            583,
+            2,
+            47.0
+          ],
+          "ready_to_predraw_ms": 43.019,
+          "right_click_ms": 6.016,
+          "start_to_fight_ms": null,
+          "visit": 4
+        }
+      ],
+      "viewport": [
+        1280,
+        720
+      ],
+      "commit": "f76e44fdd940da7dd66c4df4a855714948adcd27",
+      "pack_sha256": "2b56c924785544902d9e1a6ea727cba5629bc9f9acbdce3c10d7c641b10f154f",
+      "payload_files_verified": 7,
+      "game_log_sha256": "d4efe0609cc3ce5cfb96667b9e0d721f73b19beb5423f1ad435370172ab700a5",
+      "seconds": 11.471,
+      "raw_report_sha256": "14885b5685c621693479c539b04af7d0c5ddc7afdaa68ba6c991db3fad8ee4d1",
+      "exit_code": 0
+    },
+    {
+      "driver": "vulkan",
+      "exec_sha": "9971350051bc07701a20073953328617ea2227d08796a83f87e0dfa3b77e264f",
+      "fps_cap": 60,
+      "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+      "method": "forward_plus",
+      "progress_unchanged": true,
+      "samples": [
+        {
+          "attach_ms": 385.199,
+          "attach_to_ready_ms": 139.385,
+          "battle_ms": 658.03,
+          "callback_ms": 18.745,
+          "custom_override_verified": true,
+          "draws_to_first_battle": 12,
+          "entry_to_fight_ms": 718.751,
+          "feedback_ms": 21.663,
+          "gap_from_ms": 381.511,
+          "gap_ms": 276.519,
+          "gap_to_ms": 658.03,
+          "intro_pages": 1,
+          "mode": "custom_defense",
+          "mounted_prepared_scene": true,
+          "picker_draw_ms": [
+            52.436,
+            34.333
+          ],
+          "preclick_frame_age_ms": 0.662,
+          "predraw_to_frame_ms": 26.99,
+          "preparation": {
+            "custom": true,
+            "detached": true,
+            "elapsed_ms": 381.511,
+            "map_built": true,
+            "menu_painted_with_loading": true,
+            "sim_uninitialized": true
+          },
+          "preset": [
+            "Entry timing standard",
+            317,
+            30,
+            120.0
+          ],
+          "ready_to_predraw_ms": 106.456,
+          "right_click_ms": 10.573,
+          "start_to_fight_ms": null,
+          "visit": 1
+        },
+        {
+          "attach_ms": 82.497,
+          "attach_to_ready_ms": 49.854,
+          "battle_ms": 173.733,
+          "callback_ms": 11.74,
+          "custom_override_verified": true,
+          "draws_to_first_battle": 3,
+          "entry_to_fight_ms": 204.39,
+          "feedback_ms": 12.983,
+          "gap_from_ms": 80.836,
+          "gap_ms": 92.897,
+          "gap_to_ms": 173.733,
+          "intro_pages": 1,
+          "mode": "custom_defense",
+          "mounted_prepared_scene": true,
+          "picker_draw_ms": [
+            13.821,
+            5.054
+          ],
+          "preclick_frame_age_ms": 8.279,
+          "predraw_to_frame_ms": 2.901,
+          "preparation": {
+            "custom": true,
+            "detached": true,
+            "elapsed_ms": 80.836,
+            "map_built": true,
+            "menu_painted_with_loading": true,
+            "sim_uninitialized": true
+          },
+          "preset": [
+            "Entry timing alternate",
+            583,
+            2,
+            47.0
+          ],
+          "ready_to_predraw_ms": 38.481,
+          "right_click_ms": 6.231,
+          "start_to_fight_ms": null,
+          "visit": 2
+        },
+        {
+          "attach_ms": 78.862,
+          "attach_to_ready_ms": 49.302,
+          "battle_ms": 168.574,
+          "callback_ms": 10.632,
+          "custom_override_verified": true,
+          "draws_to_first_battle": 3,
+          "entry_to_fight_ms": 199.382,
+          "feedback_ms": 11.978,
+          "gap_from_ms": 77.527,
+          "gap_ms": 91.047,
+          "gap_to_ms": 168.574,
+          "intro_pages": 1,
+          "mode": "custom_defense",
+          "mounted_prepared_scene": true,
+          "picker_draw_ms": [
+            12.635,
+            5.116
+          ],
+          "preclick_frame_age_ms": 8.827,
+          "predraw_to_frame_ms": 3.559,
+          "preparation": {
+            "custom": true,
+            "detached": true,
+            "elapsed_ms": 77.527,
+            "map_built": true,
+            "menu_painted_with_loading": true,
+            "sim_uninitialized": true
+          },
+          "preset": [
+            "Entry timing standard",
+            317,
+            30,
+            120.0
+          ],
+          "ready_to_predraw_ms": 36.851,
+          "right_click_ms": 3.589,
+          "start_to_fight_ms": null,
+          "visit": 3
+        },
+        {
+          "attach_ms": 90.738,
+          "attach_to_ready_ms": 71.001,
+          "battle_ms": 205.863,
+          "callback_ms": 13.014,
+          "custom_override_verified": true,
+          "draws_to_first_battle": 3,
+          "entry_to_fight_ms": 240.98,
+          "feedback_ms": 14.182,
+          "gap_from_ms": 86.604,
+          "gap_ms": 119.259,
+          "gap_to_ms": 205.863,
+          "intro_pages": 1,
+          "mode": "custom_defense",
+          "mounted_prepared_scene": true,
+          "picker_draw_ms": [
+            13.697,
+            4.064
+          ],
+          "preclick_frame_age_ms": 10.324,
+          "predraw_to_frame_ms": 3.531,
+          "preparation": {
+            "custom": true,
+            "detached": true,
+            "elapsed_ms": 86.604,
+            "map_built": true,
+            "menu_painted_with_loading": true,
+            "sim_uninitialized": true
+          },
+          "preset": [
+            "Entry timing alternate",
+            583,
+            2,
+            47.0
+          ],
+          "ready_to_predraw_ms": 40.593,
+          "right_click_ms": 10.584,
+          "start_to_fight_ms": null,
+          "visit": 4
+        }
+      ],
+      "viewport": [
+        1280,
+        720
+      ],
+      "commit": "d09f8f4f354639cc68f2cab0b4767bc7e169233e",
+      "pack_sha256": "70bb31040b1998806202df9363fd9e219c2a3ce2811baae6bfa3436c5ab13393",
+      "payload_files_verified": 7,
+      "game_log_sha256": "8319f8af9fa04aced1f7e1d532ac2a77428aae81582104944e15485e55ed172f",
+      "seconds": 12.604,
+      "raw_report_sha256": "fc0e668c28fc4431e6cc0a8c140260795116671868cd1b906bf8ca24f7e8b84b",
+      "exit_code": 0
+    }
+  ],
+  "entrance_first_draw_probe": {
+    "baseline": {
+      "run": {
+        "candidate": "f76e44fdd940da7dd66c4df4a855714948adcd27",
+        "pck_sha256": "2b56c924785544902d9e1a6ea727cba5629bc9f9acbdce3c10d7c641b10f154f",
+        "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+        "exe_unchanged": true,
+        "exit_code": 0,
+        "seconds": 47.307,
+        "active_fps_cap": 60,
+        "errors": [],
+        "warnings": [],
+        "log_sha256": "ef5a052f6825c1770967f5aa9817b31cd6e66524f13794903a8a536190b22a69",
+        "report_sha256": "2d8bcf3760e272fa4932b5897c8dd957f074789693aeacaab69aead9b3eb905e"
+      },
+      "rows": [
+        {
+          "entrance_draw_us": 18114,
+          "terrace_geometry_us": 17667,
+          "first_map_draw_us": 19809,
+          "first_scenery_draw_us": 25832
+        },
+        {
+          "entrance_draw_us": 12863,
+          "terrace_geometry_us": 12230,
+          "first_map_draw_us": 8183,
+          "first_scenery_draw_us": 11445
+        },
+        {
+          "entrance_draw_us": 17253,
+          "terrace_geometry_us": 16668,
+          "first_map_draw_us": 10795,
+          "first_scenery_draw_us": 14051
+        },
+        {
+          "entrance_draw_us": 12557,
+          "terrace_geometry_us": 12153,
+          "first_map_draw_us": 9721,
+          "first_scenery_draw_us": 12531
+        },
+        {
+          "entrance_draw_us": 11027,
+          "terrace_geometry_us": 10730,
+          "first_map_draw_us": 7886,
+          "first_scenery_draw_us": 10703
+        },
+        {
+          "entrance_draw_us": 12870,
+          "terrace_geometry_us": 12306,
+          "first_map_draw_us": 8819,
+          "first_scenery_draw_us": 11600
+        },
+        {
+          "entrance_draw_us": 14281,
+          "terrace_geometry_us": 13808,
+          "first_map_draw_us": 9731,
+          "first_scenery_draw_us": 12426
+        },
+        {
+          "entrance_draw_us": 13010,
+          "terrace_geometry_us": 12539,
+          "first_map_draw_us": 8323,
+          "first_scenery_draw_us": 11325
+        },
+        {
+          "entrance_draw_us": 13201,
+          "terrace_geometry_us": 12748,
+          "first_map_draw_us": 9973,
+          "first_scenery_draw_us": 11783
+        },
+        {
+          "entrance_draw_us": 19889,
+          "terrace_geometry_us": 19212,
+          "first_map_draw_us": 10011,
+          "first_scenery_draw_us": 13698
+        },
+        {
+          "entrance_draw_us": 13644,
+          "terrace_geometry_us": 13161,
+          "first_map_draw_us": 8416,
+          "first_scenery_draw_us": 11776
+        },
+        {
+          "entrance_draw_us": 11662,
+          "terrace_geometry_us": 11303,
+          "first_map_draw_us": 8278,
+          "first_scenery_draw_us": 10357
+        },
+        {
+          "entrance_draw_us": 14561,
+          "terrace_geometry_us": 13924,
+          "first_map_draw_us": 13004,
+          "first_scenery_draw_us": 17308
+        },
+        {
+          "entrance_draw_us": 15942,
+          "terrace_geometry_us": 15261,
+          "first_map_draw_us": 12786,
+          "first_scenery_draw_us": 12715
+        },
+        {
+          "entrance_draw_us": 12960,
+          "terrace_geometry_us": 12562,
+          "first_map_draw_us": 9696,
+          "first_scenery_draw_us": 12841
+        }
+      ],
+      "warm_entrance_median_ms": 13.105,
+      "data_rows_with_terrace_construction": 15,
+      "repeat_count": 14
+    },
+    "candidate": {
+      "run": {
+        "candidate": "d09f8f4f354639cc68f2cab0b4767bc7e169233e",
+        "pck_sha256": "70bb31040b1998806202df9363fd9e219c2a3ce2811baae6bfa3436c5ab13393",
+        "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+        "exe_unchanged": true,
+        "exit_code": 0,
+        "seconds": 47.597,
+        "active_fps_cap": 60,
+        "errors": [],
+        "warnings": [],
+        "log_sha256": "359d27f316028fa2d9af890b7aed76683f8f3d963cd26576ead9fa6cff72a853",
+        "report_sha256": "a592d1f47f55c7f0092bb2000ed1c31a6250ed266f1a4c3c3cab93172ab0183b"
+      },
+      "rows": [
+        {
+          "entrance_draw_us": 17477,
+          "terrace_geometry_us": 16947,
+          "first_map_draw_us": 10980,
+          "first_scenery_draw_us": 14531
+        },
+        {
+          "entrance_draw_us": 679,
+          "terrace_geometry_us": -1,
+          "first_map_draw_us": 13615,
+          "first_scenery_draw_us": 18105
+        },
+        {
+          "entrance_draw_us": 815,
+          "terrace_geometry_us": -1,
+          "first_map_draw_us": 10637,
+          "first_scenery_draw_us": 16059
+        },
+        {
+          "entrance_draw_us": 437,
+          "terrace_geometry_us": -1,
+          "first_map_draw_us": 7976,
+          "first_scenery_draw_us": 12075
+        },
+        {
+          "entrance_draw_us": 447,
+          "terrace_geometry_us": -1,
+          "first_map_draw_us": 7757,
+          "first_scenery_draw_us": 12189
+        },
+        {
+          "entrance_draw_us": 635,
+          "terrace_geometry_us": -1,
+          "first_map_draw_us": 7846,
+          "first_scenery_draw_us": 11049
+        },
+        {
+          "entrance_draw_us": 614,
+          "terrace_geometry_us": -1,
+          "first_map_draw_us": 14241,
+          "first_scenery_draw_us": 17431
+        },
+        {
+          "entrance_draw_us": 763,
+          "terrace_geometry_us": -1,
+          "first_map_draw_us": 12206,
+          "first_scenery_draw_us": 18051
+        },
+        {
+          "entrance_draw_us": 542,
+          "terrace_geometry_us": -1,
+          "first_map_draw_us": 10852,
+          "first_scenery_draw_us": 17914
+        },
+        {
+          "entrance_draw_us": 417,
+          "terrace_geometry_us": -1,
+          "first_map_draw_us": 7986,
+          "first_scenery_draw_us": 12014
+        },
+        {
+          "entrance_draw_us": 416,
+          "terrace_geometry_us": -1,
+          "first_map_draw_us": 7672,
+          "first_scenery_draw_us": 12154
+        },
+        {
+          "entrance_draw_us": 618,
+          "terrace_geometry_us": -1,
+          "first_map_draw_us": 9431,
+          "first_scenery_draw_us": 13106
+        },
+        {
+          "entrance_draw_us": 666,
+          "terrace_geometry_us": -1,
+          "first_map_draw_us": 15568,
+          "first_scenery_draw_us": 28501
+        },
+        {
+          "entrance_draw_us": 440,
+          "terrace_geometry_us": -1,
+          "first_map_draw_us": 7647,
+          "first_scenery_draw_us": 11223
+        },
+        {
+          "entrance_draw_us": 597,
+          "terrace_geometry_us": -1,
+          "first_map_draw_us": 8498,
+          "first_scenery_draw_us": 11766
+        }
+      ],
+      "warm_entrance_median_ms": 0.606,
+      "data_rows_with_terrace_construction": 1,
+      "repeat_count": 14
+    }
+  },
+  "visual_and_cache_checks": {
+    "default": {
+      "batch_enabled": true,
+      "checks": {
+        "cache_key": {
+          "atlas_region_change_rebuilds": true,
+          "height_change_rebuilds": true,
+          "restored_height_reuses": true,
+          "restored_region_reuses": true
+        },
+        "lifetime": {
+          "cache_is_bounded": true,
+          "evicted_batch_rebuilt": true,
+          "live_owner_still_draws": true
+        },
+        "rts": {
+          "fresh_map_released": true,
+          "reference_valid": true,
+          "rgba_sha256": "82d29b6d1732aa37167beb749917fc610ed1577483bad0ed0bb169bd1870a133",
+          "same_batch": true,
+          "same_pixels": true
+        },
+        "traditional": {
+          "fresh_map_released": true,
+          "reference_valid": true,
+          "rgba_sha256": "bbb31425ce41ad535b623e3ce691f0aa54ec52044859cd424b4e04f22f4a97a8",
+          "same_batch": true,
+          "same_pixels": true
+        }
+      },
+      "passed": true,
+      "log_sha256": "468cb6d13ccc9d1edac92d60514780a33be1e51a6c5f4827f56a07e1812c8132",
+      "raw_report_sha256": "a45119df7de23759564200623abf4f132906c1b02d889e5767a8f6f715794b2b"
+    },
+    "fallback": {
+      "batch_enabled": false,
+      "checks": {
+        "rts": {
+          "fresh_map_released": true,
+          "reference_valid": true,
+          "rgba_sha256": "f11319b2e9e0bc44f2d55b0f3385cf46d5f038f7f103076078ee794c7458de29",
+          "same_batch": true,
+          "same_pixels": true
+        },
+        "traditional": {
+          "fresh_map_released": true,
+          "reference_valid": true,
+          "rgba_sha256": "072d14ed72dd87081722af2894d4160da99e0f19b633664087071f3d95f1a7f6",
+          "same_batch": true,
+          "same_pixels": true
+        }
+      },
+      "passed": true,
+      "log_sha256": "468cb6d13ccc9d1edac92d60514780a33be1e51a6c5f4827f56a07e1812c8132",
+      "raw_report_sha256": "79163a3002bf24940b341f2758e9f996b807f2da8b149f777f56a26a053fc888"
+    },
+    "opengl_compatibility": {
+      "batch_enabled": true,
+      "checks": {
+        "cache_key": {
+          "atlas_region_change_rebuilds": true,
+          "height_change_rebuilds": true,
+          "restored_height_reuses": true,
+          "restored_region_reuses": true
+        },
+        "lifetime": {
+          "cache_is_bounded": true,
+          "evicted_batch_rebuilt": true,
+          "live_owner_still_draws": true
+        },
+        "rts": {
+          "fresh_map_released": true,
+          "reference_valid": true,
+          "rgba_sha256": "2b5b50253ac1aa156517c73714b16377cf7e20bc86c4dc23fb3eaa8886c9c71b",
+          "same_batch": true,
+          "same_pixels": true
+        },
+        "traditional": {
+          "fresh_map_released": true,
+          "reference_valid": true,
+          "rgba_sha256": "e9413c584a445123fd0b169befc3d7a7e84600790a6bd14eff188fa7641a98b7",
+          "same_batch": true,
+          "same_pixels": true
+        }
+      },
+      "passed": true,
+      "warnings": [
+        "WARNING: 2D MSAA is not yet supported for GLES3."
+      ],
+      "raw_report_sha256": "accfb8252b08850de40e98ee7fea9fce33a47c78b6eb22adbc513f0c71ba3828",
+      "log_sha256": "a1f523f8460d30324505ae605a6b6b43a886b651aef76974b357241b3d771056"
+    }
+  },
+  "visual_fixture_sha256": "37f4ac511f5b1e96fffbc8cc3b6b2ff1f28c35b124a1d472cb1eff6e6b1cf8f8",
+  "cold_start_followup": {
+    "scope": "Eight more independent native Windows processes with reversed order, scoring the first battle from the same standard preset. First entry is fresh process state with shared Windows disk cache.",
+    "followup_runs": [
+      {
+        "driver": "vulkan",
+        "exec_sha": "9971350051bc07701a20073953328617ea2227d08796a83f87e0dfa3b77e264f",
+        "fps_cap": 60,
+        "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+        "method": "forward_plus",
+        "progress_unchanged": true,
+        "samples": [
+          {
+            "attach_ms": 282.457,
+            "attach_to_ready_ms": 99.061,
+            "battle_ms": 478.34,
+            "callback_ms": 12.952,
+            "custom_override_verified": true,
+            "draws_to_first_battle": 11,
+            "entry_to_fight_ms": 518.282,
+            "feedback_ms": 14.881,
+            "gap_from_ms": 279.603,
+            "gap_ms": 198.737,
+            "gap_to_ms": 478.34,
+            "intro_pages": 1,
+            "mode": "custom_defense",
+            "mounted_prepared_scene": true,
+            "picker_draw_ms": [
+              38.901,
+              26.805
+            ],
+            "preclick_frame_age_ms": 0.523,
+            "predraw_to_frame_ms": 18.678,
+            "preparation": {
+              "custom": true,
+              "detached": true,
+              "elapsed_ms": 279.603,
+              "map_built": true,
+              "menu_painted_with_loading": true,
+              "sim_uninitialized": true
+            },
+            "preset": [
+              "Entry timing standard",
+              317,
+              30,
+              120.0
+            ],
+            "ready_to_predraw_ms": 78.144,
+            "right_click_ms": 4.723,
+            "start_to_fight_ms": null,
+            "visit": 1
+          },
+          {
+            "attach_ms": 73.675,
+            "attach_to_ready_ms": 44.664,
+            "battle_ms": 151.348,
+            "callback_ms": 11.079,
+            "custom_override_verified": true,
+            "draws_to_first_battle": 3,
+            "entry_to_fight_ms": 163.235,
+            "feedback_ms": 12.268,
+            "gap_from_ms": 72.093,
+            "gap_ms": 79.255,
+            "gap_to_ms": 151.348,
+            "intro_pages": 1,
+            "mode": "custom_defense",
+            "mounted_prepared_scene": true,
+            "picker_draw_ms": [
+              10.917,
+              2.981
+            ],
+            "preclick_frame_age_ms": 11.289,
+            "predraw_to_frame_ms": 2.322,
+            "preparation": {
+              "custom": true,
+              "detached": true,
+              "elapsed_ms": 72.093,
+              "map_built": true,
+              "menu_painted_with_loading": true,
+              "sim_uninitialized": true
+            },
+            "preset": [
+              "Entry timing alternate",
+              583,
+              2,
+              47.0
+            ],
+            "ready_to_predraw_ms": 30.687,
+            "right_click_ms": 6.505,
+            "start_to_fight_ms": null,
+            "visit": 2
+          }
+        ],
+        "viewport": [
+          1280,
+          720
+        ],
+        "commit": "d09f8f4f354639cc68f2cab0b4767bc7e169233e",
+        "pack_sha256": "70bb31040b1998806202df9363fd9e219c2a3ce2811baae6bfa3436c5ab13393",
+        "payload_files_verified": 7,
+        "game_log_sha256": "6bc7371d33b16a4743dceae878d0471aa8d13bac967f300064dfffbfe95f1a34",
+        "seconds": 10.739,
+        "raw_report_sha256": "7dd66cee3ee56e9603c7dcc6c3f7c31247281520bbcba11b9b466fc80961b032",
+        "exit_code": 0
+      },
+      {
+        "driver": "vulkan",
+        "exec_sha": "86caa8a1da4dc0db77e8b47685db43f0b43ec86a64bbedf8284b7d69c3c4b33c",
+        "fps_cap": 60,
+        "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+        "method": "forward_plus",
+        "progress_unchanged": true,
+        "samples": [
+          {
+            "attach_ms": 275.101,
+            "attach_to_ready_ms": 81.987,
+            "battle_ms": 457.711,
+            "callback_ms": 16.649,
+            "custom_override_verified": true,
+            "draws_to_first_battle": 10,
+            "entry_to_fight_ms": 521.027,
+            "feedback_ms": 19.773,
+            "gap_from_ms": 272.833,
+            "gap_ms": 184.878,
+            "gap_to_ms": 457.711,
+            "intro_pages": 1,
+            "mode": "custom_defense",
+            "mounted_prepared_scene": true,
+            "picker_draw_ms": [
+              42.1,
+              26.775
+            ],
+            "preclick_frame_age_ms": 0.673,
+            "predraw_to_frame_ms": 23.867,
+            "preparation": {
+              "custom": true,
+              "detached": true,
+              "elapsed_ms": 272.833,
+              "map_built": true,
+              "menu_painted_with_loading": true,
+              "sim_uninitialized": true
+            },
+            "preset": [
+              "Entry timing standard",
+              317,
+              30,
+              120.0
+            ],
+            "ready_to_predraw_ms": 76.756,
+            "right_click_ms": 8.611,
+            "start_to_fight_ms": null,
+            "visit": 1
+          },
+          {
+            "attach_ms": 83.025,
+            "attach_to_ready_ms": 58.268,
+            "battle_ms": 217.442,
+            "callback_ms": 17.907,
+            "custom_override_verified": true,
+            "draws_to_first_battle": 3,
+            "entry_to_fight_ms": 261.99,
+            "feedback_ms": 19.15,
+            "gap_from_ms": 81.242,
+            "gap_ms": 136.2,
+            "gap_to_ms": 217.442,
+            "intro_pages": 1,
+            "mode": "custom_defense",
+            "mounted_prepared_scene": true,
+            "picker_draw_ms": [
+              16.417,
+              4.715
+            ],
+            "preclick_frame_age_ms": 6.105,
+            "predraw_to_frame_ms": 6.66,
+            "preparation": {
+              "custom": true,
+              "detached": true,
+              "elapsed_ms": 81.242,
+              "map_built": true,
+              "menu_painted_with_loading": true,
+              "sim_uninitialized": true
+            },
+            "preset": [
+              "Entry timing alternate",
+              583,
+              2,
+              47.0
+            ],
+            "ready_to_predraw_ms": 69.489,
+            "right_click_ms": 9.484,
+            "start_to_fight_ms": null,
+            "visit": 2
+          }
+        ],
+        "viewport": [
+          1280,
+          720
+        ],
+        "commit": "f76e44fdd940da7dd66c4df4a855714948adcd27",
+        "pack_sha256": "2b56c924785544902d9e1a6ea727cba5629bc9f9acbdce3c10d7c641b10f154f",
+        "payload_files_verified": 7,
+        "game_log_sha256": "58b6df60baa0262ea119e455f64df235255125c187e073bee40702795b31929c",
+        "seconds": 10.338,
+        "raw_report_sha256": "af089b3370ed26bb972db894892d6b87f2c6c1497a62df4e496c7403307c202a",
+        "exit_code": 0
+      },
+      {
+        "driver": "vulkan",
+        "exec_sha": "86caa8a1da4dc0db77e8b47685db43f0b43ec86a64bbedf8284b7d69c3c4b33c",
+        "fps_cap": 60,
+        "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+        "method": "forward_plus",
+        "progress_unchanged": true,
+        "samples": [
+          {
+            "attach_ms": 327.962,
+            "attach_to_ready_ms": 84.418,
+            "battle_ms": 497.621,
+            "callback_ms": 11.786,
+            "custom_override_verified": true,
+            "draws_to_first_battle": 13,
+            "entry_to_fight_ms": 538.845,
+            "feedback_ms": 14.152,
+            "gap_from_ms": 326.595,
+            "gap_ms": 171.026,
+            "gap_to_ms": 497.621,
+            "intro_pages": 1,
+            "mode": "custom_defense",
+            "mounted_prepared_scene": true,
+            "picker_draw_ms": [
+              45.175,
+              20.41
+            ],
+            "preclick_frame_age_ms": 0.56,
+            "predraw_to_frame_ms": 16.326,
+            "preparation": {
+              "custom": true,
+              "detached": true,
+              "elapsed_ms": 326.595,
+              "map_built": true,
+              "menu_painted_with_loading": true,
+              "sim_uninitialized": true
+            },
+            "preset": [
+              "Entry timing standard",
+              317,
+              30,
+              120.0
+            ],
+            "ready_to_predraw_ms": 68.915,
+            "right_click_ms": 8.058,
+            "start_to_fight_ms": null,
+            "visit": 1
+          },
+          {
+            "attach_ms": 85.245,
+            "attach_to_ready_ms": 54.116,
+            "battle_ms": 197.116,
+            "callback_ms": 12.144,
+            "custom_override_verified": true,
+            "draws_to_first_battle": 3,
+            "entry_to_fight_ms": 226.834,
+            "feedback_ms": 13.22,
+            "gap_from_ms": 83.932,
+            "gap_ms": 113.184,
+            "gap_to_ms": 197.116,
+            "intro_pages": 1,
+            "mode": "custom_defense",
+            "mounted_prepared_scene": true,
+            "picker_draw_ms": [
+              12.465,
+              4.834
+            ],
+            "preclick_frame_age_ms": 8.042,
+            "predraw_to_frame_ms": 6.031,
+            "preparation": {
+              "custom": true,
+              "detached": true,
+              "elapsed_ms": 83.932,
+              "map_built": true,
+              "menu_painted_with_loading": true,
+              "sim_uninitialized": true
+            },
+            "preset": [
+              "Entry timing alternate",
+              583,
+              2,
+              47.0
+            ],
+            "ready_to_predraw_ms": 51.724,
+            "right_click_ms": 3.644,
+            "start_to_fight_ms": null,
+            "visit": 2
+          }
+        ],
+        "viewport": [
+          1280,
+          720
+        ],
+        "commit": "f76e44fdd940da7dd66c4df4a855714948adcd27",
+        "pack_sha256": "2b56c924785544902d9e1a6ea727cba5629bc9f9acbdce3c10d7c641b10f154f",
+        "payload_files_verified": 7,
+        "game_log_sha256": "2ff4a75b78af7e491aed42041d06fd4fda3d1a580716e8ed6bb0c89b8b62e9db",
+        "seconds": 10.905,
+        "raw_report_sha256": "b39dcdef32fb849753d8f22daec331cfc035eaff55e394587e8456f7334691ee",
+        "exit_code": 0
+      },
+      {
+        "driver": "vulkan",
+        "exec_sha": "9971350051bc07701a20073953328617ea2227d08796a83f87e0dfa3b77e264f",
+        "fps_cap": 60,
+        "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+        "method": "forward_plus",
+        "progress_unchanged": true,
+        "samples": [
+          {
+            "attach_ms": 494.072,
+            "attach_to_ready_ms": 111.585,
+            "battle_ms": 733.221,
+            "callback_ms": 21.451,
+            "custom_override_verified": true,
+            "draws_to_first_battle": 14,
+            "entry_to_fight_ms": 805.203,
+            "feedback_ms": 25.833,
+            "gap_from_ms": 491.203,
+            "gap_ms": 242.018,
+            "gap_to_ms": 733.221,
+            "intro_pages": 1,
+            "mode": "custom_defense",
+            "mounted_prepared_scene": true,
+            "picker_draw_ms": [
+              68.276,
+              40.907
+            ],
+            "preclick_frame_age_ms": 0.669,
+            "predraw_to_frame_ms": 28.679,
+            "preparation": {
+              "custom": true,
+              "detached": true,
+              "elapsed_ms": 491.203,
+              "map_built": true,
+              "menu_painted_with_loading": true,
+              "sim_uninitialized": true
+            },
+            "preset": [
+              "Entry timing standard",
+              317,
+              30,
+              120.0
+            ],
+            "ready_to_predraw_ms": 98.885,
+            "right_click_ms": 21.458,
+            "start_to_fight_ms": null,
+            "visit": 1
+          },
+          {
+            "attach_ms": 86.306,
+            "attach_to_ready_ms": 58.738,
+            "battle_ms": 190.524,
+            "callback_ms": 17.102,
+            "custom_override_verified": true,
+            "draws_to_first_battle": 3,
+            "entry_to_fight_ms": 222.045,
+            "feedback_ms": 18.421,
+            "gap_from_ms": 84.556,
+            "gap_ms": 105.968,
+            "gap_to_ms": 190.524,
+            "intro_pages": 1,
+            "mode": "custom_defense",
+            "mounted_prepared_scene": true,
+            "picker_draw_ms": [
+              23.109,
+              9.407
+            ],
+            "preclick_frame_age_ms": 1.978,
+            "predraw_to_frame_ms": 3.361,
+            "preparation": {
+              "custom": true,
+              "detached": true,
+              "elapsed_ms": 84.556,
+              "map_built": true,
+              "menu_painted_with_loading": true,
+              "sim_uninitialized": true
+            },
+            "preset": [
+              "Entry timing alternate",
+              583,
+              2,
+              47.0
+            ],
+            "ready_to_predraw_ms": 42.119,
+            "right_click_ms": 6.631,
+            "start_to_fight_ms": null,
+            "visit": 2
+          }
+        ],
+        "viewport": [
+          1280,
+          720
+        ],
+        "commit": "d09f8f4f354639cc68f2cab0b4767bc7e169233e",
+        "pack_sha256": "70bb31040b1998806202df9363fd9e219c2a3ce2811baae6bfa3436c5ab13393",
+        "payload_files_verified": 7,
+        "game_log_sha256": "54ef0cd54753ecb6e367ec9b99ac89f5597ca750b575f4fb929336946ca0963b",
+        "seconds": 13.746,
+        "raw_report_sha256": "7f152d0b34a2dd99c1c1ed04b35e6081a2017aad16dadc08d609f3e88ced9d87",
+        "exit_code": 0
+      },
+      {
+        "driver": "vulkan",
+        "exec_sha": "86caa8a1da4dc0db77e8b47685db43f0b43ec86a64bbedf8284b7d69c3c4b33c",
+        "fps_cap": 60,
+        "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+        "method": "forward_plus",
+        "progress_unchanged": true,
+        "samples": [
+          {
+            "attach_ms": 383.779,
+            "attach_to_ready_ms": 84.552,
+            "battle_ms": 563.394,
+            "callback_ms": 14.9,
+            "custom_override_verified": true,
+            "draws_to_first_battle": 14,
+            "entry_to_fight_ms": 609.628,
+            "feedback_ms": 18.552,
+            "gap_from_ms": 381.533,
+            "gap_ms": 181.861,
+            "gap_to_ms": 563.394,
+            "intro_pages": 1,
+            "mode": "custom_defense",
+            "mounted_prepared_scene": true,
+            "picker_draw_ms": [
+              47.652,
+              31.962
+            ],
+            "preclick_frame_age_ms": 0.634,
+            "predraw_to_frame_ms": 20.045,
+            "preparation": {
+              "custom": true,
+              "detached": true,
+              "elapsed_ms": 381.533,
+              "map_built": true,
+              "menu_painted_with_loading": true,
+              "sim_uninitialized": true
+            },
+            "preset": [
+              "Entry timing standard",
+              317,
+              30,
+              120.0
+            ],
+            "ready_to_predraw_ms": 75.018,
+            "right_click_ms": 10.539,
+            "start_to_fight_ms": null,
+            "visit": 1
+          },
+          {
+            "attach_ms": 87.48,
+            "attach_to_ready_ms": 60.74,
+            "battle_ms": 213.363,
+            "callback_ms": 13.175,
+            "custom_override_verified": true,
+            "draws_to_first_battle": 3,
+            "entry_to_fight_ms": 249.152,
+            "feedback_ms": 14.287,
+            "gap_from_ms": 86.093,
+            "gap_ms": 127.27,
+            "gap_to_ms": 213.363,
+            "intro_pages": 1,
+            "mode": "custom_defense",
+            "mounted_prepared_scene": true,
+            "picker_draw_ms": [
+              25.616,
+              5.996
+            ],
+            "preclick_frame_age_ms": 0.345,
+            "predraw_to_frame_ms": 4.956,
+            "preparation": {
+              "custom": true,
+              "detached": true,
+              "elapsed_ms": 86.093,
+              "map_built": true,
+              "menu_painted_with_loading": true,
+              "sim_uninitialized": true
+            },
+            "preset": [
+              "Entry timing alternate",
+              583,
+              2,
+              47.0
+            ],
+            "ready_to_predraw_ms": 60.187,
+            "right_click_ms": 3.682,
+            "start_to_fight_ms": null,
+            "visit": 2
+          }
+        ],
+        "viewport": [
+          1280,
+          720
+        ],
+        "commit": "f76e44fdd940da7dd66c4df4a855714948adcd27",
+        "pack_sha256": "2b56c924785544902d9e1a6ea727cba5629bc9f9acbdce3c10d7c641b10f154f",
+        "payload_files_verified": 7,
+        "game_log_sha256": "744a8266528ae67c66d4f468b7df522ad89725a8ce324313b376d384fcb114b1",
+        "seconds": 11.742,
+        "raw_report_sha256": "65a7b1d7ef22ef99587accf05a62bdfce6e2aeb8b4f1ee1cf9e9a1936a8c83bd",
+        "exit_code": 0
+      },
+      {
+        "driver": "vulkan",
+        "exec_sha": "9971350051bc07701a20073953328617ea2227d08796a83f87e0dfa3b77e264f",
+        "fps_cap": 60,
+        "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+        "method": "forward_plus",
+        "progress_unchanged": true,
+        "samples": [
+          {
+            "attach_ms": 284.821,
+            "attach_to_ready_ms": 93.418,
+            "battle_ms": 477.302,
+            "callback_ms": 15.164,
+            "custom_override_verified": true,
+            "draws_to_first_battle": 10,
+            "entry_to_fight_ms": 519.745,
+            "feedback_ms": 18.281,
+            "gap_from_ms": 282.755,
+            "gap_ms": 194.547,
+            "gap_to_ms": 477.302,
+            "intro_pages": 1,
+            "mode": "custom_defense",
+            "mounted_prepared_scene": true,
+            "picker_draw_ms": [
+              45.367,
+              35.186
+            ],
+            "preclick_frame_age_ms": 0.64,
+            "predraw_to_frame_ms": 16.412,
+            "preparation": {
+              "custom": true,
+              "detached": true,
+              "elapsed_ms": 282.755,
+              "map_built": true,
+              "menu_painted_with_loading": true,
+              "sim_uninitialized": true
+            },
+            "preset": [
+              "Entry timing standard",
+              317,
+              30,
+              120.0
+            ],
+            "ready_to_predraw_ms": 82.651,
+            "right_click_ms": 5.991,
+            "start_to_fight_ms": null,
+            "visit": 1
+          },
+          {
+            "attach_ms": 76.855,
+            "attach_to_ready_ms": 49.028,
+            "battle_ms": 162.866,
+            "callback_ms": 9.268,
+            "custom_override_verified": true,
+            "draws_to_first_battle": 3,
+            "entry_to_fight_ms": 185.799,
+            "feedback_ms": 10.403,
+            "gap_from_ms": 75.266,
+            "gap_ms": 87.6,
+            "gap_to_ms": 162.866,
+            "intro_pages": 1,
+            "mode": "custom_defense",
+            "mounted_prepared_scene": true,
+            "picker_draw_ms": [
+              13.105,
+              4.061
+            ],
+            "preclick_frame_age_ms": 9.586,
+            "predraw_to_frame_ms": 3.681,
+            "preparation": {
+              "custom": true,
+              "detached": true,
+              "elapsed_ms": 75.266,
+              "map_built": true,
+              "menu_painted_with_loading": true,
+              "sim_uninitialized": true
+            },
+            "preset": [
+              "Entry timing alternate",
+              583,
+              2,
+              47.0
+            ],
+            "ready_to_predraw_ms": 33.302,
+            "right_click_ms": 8.924,
+            "start_to_fight_ms": null,
+            "visit": 2
+          }
+        ],
+        "viewport": [
+          1280,
+          720
+        ],
+        "commit": "d09f8f4f354639cc68f2cab0b4767bc7e169233e",
+        "pack_sha256": "70bb31040b1998806202df9363fd9e219c2a3ce2811baae6bfa3436c5ab13393",
+        "payload_files_verified": 7,
+        "game_log_sha256": "d7845c894f6f2dd2930cd96649b5fa26d90d6f3bf5c2d2cb00d58d4f808b6e63",
+        "seconds": 11.422,
+        "raw_report_sha256": "e874592a9e51ee8e73dc743cdf6a60a40bfc1840842da64a9855e75a4e81b165",
+        "exit_code": 0
+      },
+      {
+        "driver": "vulkan",
+        "exec_sha": "9971350051bc07701a20073953328617ea2227d08796a83f87e0dfa3b77e264f",
+        "fps_cap": 60,
+        "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+        "method": "forward_plus",
+        "progress_unchanged": true,
+        "samples": [
+          {
+            "attach_ms": 301.829,
+            "attach_to_ready_ms": 79.412,
+            "battle_ms": 472.772,
+            "callback_ms": 11.944,
+            "custom_override_verified": true,
+            "draws_to_first_battle": 12,
+            "entry_to_fight_ms": 516.306,
+            "feedback_ms": 14.49,
+            "gap_from_ms": 299.512,
+            "gap_ms": 173.26,
+            "gap_to_ms": 472.772,
+            "intro_pages": 1,
+            "mode": "custom_defense",
+            "mounted_prepared_scene": true,
+            "picker_draw_ms": [
+              44.934,
+              27.721
+            ],
+            "preclick_frame_age_ms": 0.635,
+            "predraw_to_frame_ms": 20.445,
+            "preparation": {
+              "custom": true,
+              "detached": true,
+              "elapsed_ms": 299.512,
+              "map_built": true,
+              "menu_painted_with_loading": true,
+              "sim_uninitialized": true
+            },
+            "preset": [
+              "Entry timing standard",
+              317,
+              30,
+              120.0
+            ],
+            "ready_to_predraw_ms": 71.086,
+            "right_click_ms": 6.037,
+            "start_to_fight_ms": null,
+            "visit": 1
+          },
+          {
+            "attach_ms": 81.057,
+            "attach_to_ready_ms": 51.048,
+            "battle_ms": 168.265,
+            "callback_ms": 10.254,
+            "custom_override_verified": true,
+            "draws_to_first_battle": 3,
+            "entry_to_fight_ms": 193.477,
+            "feedback_ms": 11.338,
+            "gap_from_ms": 79.409,
+            "gap_ms": 88.856,
+            "gap_to_ms": 168.265,
+            "intro_pages": 1,
+            "mode": "custom_defense",
+            "mounted_prepared_scene": true,
+            "picker_draw_ms": [
+              10.051,
+              3.442
+            ],
+            "preclick_frame_age_ms": 11.342,
+            "predraw_to_frame_ms": 2.155,
+            "preparation": {
+              "custom": true,
+              "detached": true,
+              "elapsed_ms": 79.409,
+              "map_built": true,
+              "menu_painted_with_loading": true,
+              "sim_uninitialized": true
+            },
+            "preset": [
+              "Entry timing alternate",
+              583,
+              2,
+              47.0
+            ],
+            "ready_to_predraw_ms": 34.005,
+            "right_click_ms": 2.909,
+            "start_to_fight_ms": null,
+            "visit": 2
+          }
+        ],
+        "viewport": [
+          1280,
+          720
+        ],
+        "commit": "d09f8f4f354639cc68f2cab0b4767bc7e169233e",
+        "pack_sha256": "70bb31040b1998806202df9363fd9e219c2a3ce2811baae6bfa3436c5ab13393",
+        "payload_files_verified": 7,
+        "game_log_sha256": "fde53bde97a55cc0203ece220f7c6e8d96cc22483a7d4e7ca52e6582bad21715",
+        "seconds": 11.157,
+        "raw_report_sha256": "f15589c04c4e857d7bf62e30a5b7dd1dbeaa054f40d20cb2832b58d184ecc5b7",
+        "exit_code": 0
+      },
+      {
+        "driver": "vulkan",
+        "exec_sha": "86caa8a1da4dc0db77e8b47685db43f0b43ec86a64bbedf8284b7d69c3c4b33c",
+        "fps_cap": 60,
+        "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+        "method": "forward_plus",
+        "progress_unchanged": true,
+        "samples": [
+          {
+            "attach_ms": 270.536,
+            "attach_to_ready_ms": 74.013,
+            "battle_ms": 424.46,
+            "callback_ms": 12.949,
+            "custom_override_verified": true,
+            "draws_to_first_battle": 11,
+            "entry_to_fight_ms": 465.936,
+            "feedback_ms": 15.732,
+            "gap_from_ms": 268.256,
+            "gap_ms": 156.204,
+            "gap_to_ms": 424.46,
+            "intro_pages": 1,
+            "mode": "custom_defense",
+            "mounted_prepared_scene": true,
+            "picker_draw_ms": [
+              50.167,
+              32.102
+            ],
+            "preclick_frame_age_ms": 1.236,
+            "predraw_to_frame_ms": 15.208,
+            "preparation": {
+              "custom": true,
+              "detached": true,
+              "elapsed_ms": 268.256,
+              "map_built": true,
+              "menu_painted_with_loading": true,
+              "sim_uninitialized": true
+            },
+            "preset": [
+              "Entry timing standard",
+              317,
+              30,
+              120.0
+            ],
+            "ready_to_predraw_ms": 64.703,
+            "right_click_ms": 6.06,
+            "start_to_fight_ms": null,
+            "visit": 1
+          },
+          {
+            "attach_ms": 77.942,
+            "attach_to_ready_ms": 51.007,
+            "battle_ms": 180.742,
+            "callback_ms": 9.49,
+            "custom_override_verified": true,
+            "draws_to_first_battle": 3,
+            "entry_to_fight_ms": 206.238,
+            "feedback_ms": 10.521,
+            "gap_from_ms": 76.294,
+            "gap_ms": 104.448,
+            "gap_to_ms": 180.742,
+            "intro_pages": 1,
+            "mode": "custom_defense",
+            "mounted_prepared_scene": true,
+            "picker_draw_ms": [
+              12.577,
+              3.488
+            ],
+            "preclick_frame_age_ms": 10.187,
+            "predraw_to_frame_ms": 4.247,
+            "preparation": {
+              "custom": true,
+              "detached": true,
+              "elapsed_ms": 76.294,
+              "map_built": true,
+              "menu_painted_with_loading": true,
+              "sim_uninitialized": true
+            },
+            "preset": [
+              "Entry timing alternate",
+              583,
+              2,
+              47.0
+            ],
+            "ready_to_predraw_ms": 47.546,
+            "right_click_ms": 7.753,
+            "start_to_fight_ms": null,
+            "visit": 2
+          }
+        ],
+        "viewport": [
+          1280,
+          720
+        ],
+        "commit": "f76e44fdd940da7dd66c4df4a855714948adcd27",
+        "pack_sha256": "2b56c924785544902d9e1a6ea727cba5629bc9f9acbdce3c10d7c641b10f154f",
+        "payload_files_verified": 7,
+        "game_log_sha256": "9fc59fdc8ea17f4d68b76ea99977984ec6b5befe82295ef48a1f1e84f1e43e09",
+        "seconds": 11.087,
+        "raw_report_sha256": "3ca5a2aee682fb4bc7c3e0fe431e592e45c25321093e2258012532865a369698",
+        "exit_code": 0
+      }
+    ],
+    "followup_first_entry": {
+      "baseline": {
+        "count": 4,
+        "median_ms": {
+          "battle_ms": 477.666,
+          "gap_ms": 176.444,
+          "ready_to_predraw_ms": 71.966,
+          "attach_to_ready_ms": 83.203,
+          "attach_ms": 301.531,
+          "entry_to_fight_ms": 529.936
+        },
+        "maximum_ms": {
+          "battle_ms": 563.394,
+          "gap_ms": 184.878,
+          "ready_to_predraw_ms": 76.756,
+          "attach_to_ready_ms": 84.552,
+          "attach_ms": 383.779,
+          "entry_to_fight_ms": 609.628
+        }
+      },
+      "candidate": {
+        "count": 4,
+        "median_ms": {
+          "battle_ms": 477.821,
+          "gap_ms": 196.642,
+          "ready_to_predraw_ms": 80.398,
+          "attach_to_ready_ms": 96.24,
+          "attach_ms": 293.325,
+          "entry_to_fight_ms": 519.014
+        },
+        "maximum_ms": {
+          "battle_ms": 733.221,
+          "gap_ms": 242.018,
+          "ready_to_predraw_ms": 98.885,
+          "attach_to_ready_ms": 111.585,
+          "attach_ms": 494.072,
+          "entry_to_fight_ms": 805.203
+        }
+      }
+    },
+    "across_both_batches": {
+      "baseline": {
+        "count": 8,
+        "median_ms": {
+          "battle_ms": 511.138,
+          "gap_ms": 183.369,
+          "ready_to_predraw_ms": 75.887,
+          "attach_to_ready_ms": 83.591,
+          "attach_ms": 329.928,
+          "entry_to_fight_ms": 557.832
+        },
+        "maximum_ms": {
+          "battle_ms": 645.895,
+          "gap_ms": 206.475,
+          "ready_to_predraw_ms": 94.512,
+          "attach_to_ready_ms": 87.359,
+          "attach_ms": 455.498,
+          "entry_to_fight_ms": 697.696
+        }
+      },
+      "candidate": {
+        "count": 8,
+        "median_ms": {
+          "battle_ms": 489.797,
+          "gap_ms": 196.642,
+          "ready_to_predraw_ms": 80.468,
+          "attach_to_ready_ms": 96.24,
+          "attach_ms": 315.027,
+          "entry_to_fight_ms": 535.252
+        },
+        "maximum_ms": {
+          "battle_ms": 838.232,
+          "gap_ms": 303.487,
+          "ready_to_predraw_ms": 111.579,
+          "attach_to_ready_ms": 157.265,
+          "attach_ms": 538.279,
+          "entry_to_fight_ms": 902.03
+        }
+      }
+    }
+  },
+  "six_entry_gate": {
+    "passed": false,
+    "receipt": "windows_candidate_d09f8f4f_mode_soak_600.json",
+    "completed_transitions": 95,
+    "worst_complete_minute_p95_ms": 16.479,
+    "worst_complete_minute_p99_ms": 38.952,
+    "first_run_receipt": "windows_terrace_first_soak_d09f8f4f_600.json",
+    "first_run_passed": false,
+    "over_limit_buckets": [
+      {
+        "minute": 2,
+        "p95_ms": 20.682,
+        "p99_ms": 57.679,
+        "frames_over_33_3_ms_by_stage": {
+          "mount": 21,
+          "start": 4,
+          "play": 124,
+          "return": 10
+        },
+        "custom_defense_65_gap_ms": 109.623,
+        "all_lifecycle_checks_passed": true
+      },
+      {
+        "minute": 9,
+        "p95_ms": 16.479,
+        "p99_ms": 38.952,
+        "frames_over_33_3_ms_by_stage": {
+          "mount": 20,
+          "start": 3,
+          "play": 95,
+          "return": 10
+        },
+        "custom_defense_65_gap_ms": 128.3,
+        "all_lifecycle_checks_passed": true
+      }
+    ]
+  },
+  "adoption": "Local experiment only after two failed long gates. The stable evidence commit records both verdicts and the validated warm-entry improvement."
+}

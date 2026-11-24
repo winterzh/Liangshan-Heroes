@@ -1,5 +1,11 @@
 # 源码设置与换机（2026-10-30）
 
+## 2026-11-24 Windows 梁山入口台地绘制复用
+
+Windows 本地试验复用梁山台地网格。六入口验收未通过，候选结果保留。 冻结候选 d09f8f4f 只改动运行输入 `scripts/liangshan_entrance.gd`。渲染夹具为 `tools/windows_terrace_reuse_test.gd`。 [新旧成品及渲染验证](../qa/battle_entry_timing_20261116/windows_liangshan_terrace_reuse_d09f8f4f.json) [六入口长测](../qa/battle_entry_timing_20261116/windows_candidate_d09f8f4f_mode_soak_600.json)
+
+两轮十分钟的帧时结果见各自收据。原生隔离测试和实现保存在本地试验分支 `codex/windows-terrace-experiment-20261124`。
+
 ## 2026-11-24 自定义驻守首帧绘制与主线程取样
 
 新增可选环境变量 CAMPAIGN_SOAK_ENTRY_DRAW_LEVEL，按关卡 ID 记录首帧画布回调顺序。进场信号模式同时标注了同步采样的起止。绘制信号表示观察边界，各回调的独占耗时需要另测。 [Windows 绘制追踪](../qa/battle_entry_timing_20261116/windows_cycle11_draw_cpu_f76e44fd.json)

@@ -1,5 +1,11 @@
 # 当前项目总览
 
+## 2026-11-24 Windows 梁山入口台地绘制复用
+
+Windows 本地试验复用梁山台地网格。六入口验收未通过，候选结果保留。 两份预设在八个隔离 Windows 进程交替运行，共 32 次实际菜单进出。重进时点击到首帧中位数 188.0 → 175.9 毫秒，最长绘制间隔中位数 109.9 → 97.2 毫秒，就绪到开始绘制中位数 47.5 → 36.6 毫秒。第一组首进点击到首帧中位数 530.4 → 578.3 毫秒。另以相反顺序补跑 8 个独立进程，两组共 16 次首进的中位数为 511.1 → 489.8 毫秒，完整样本和各阶段见收据。 [新旧成品及渲染验证](../qa/battle_entry_timing_20261116/windows_liangshan_terrace_reuse_d09f8f4f.json) [六入口长测](../qa/battle_entry_timing_20261116/windows_candidate_d09f8f4f_mode_soak_600.json) 同包首次长测 P95/P99 峰值分别为 20.682/57.679 毫秒，超过门槛。超标分钟的慢帧主要处于交战阶段。独立复测结果另记，保留两次完整数据。 [首次长测](../qa/battle_entry_timing_20261116/windows_terrace_first_soak_d09f8f4f_600.json)
+
+两轮十分钟的帧时结果见各自收据。原生隔离测试和实现保存在本地试验分支 `codex/windows-terrace-experiment-20261124`。
+
 ## 2026-11-24 自定义驻守首帧绘制与主线程取样
 
 两轮隔离 Windows 六入口长测覆盖第 65 次自定义驻守。首次所测就绪至绘制前约 123.5 毫秒，第二轮新增画布回调和内存采样边界。 [Windows 绘制追踪](../qa/battle_entry_timing_20261116/windows_cycle11_draw_cpu_f76e44fd.json)
