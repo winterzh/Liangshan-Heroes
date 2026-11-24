@@ -1,0 +1,467 @@
+{
+  "source": "4c3e31fa2ae63a2c284bb93bd125f1aa51a8ba68",
+  "stable_base": "7d79fbf328bc814060cee86a7ed6b2610824d84d",
+  "qualified_profile_isolation": "Windows native isolated desktop, independent processes.",
+  "raw_previous_ten_minute": {
+    "launcher": {
+      "candidate": "4c3e31fa2ae63a2c284bb93bd125f1aa51a8ba68",
+      "payload_files_unchanged": true,
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "4dc4c3f878b5c828e6db480c3df7462558fc7c45844ad3d2a02d10c8009649f2",
+      "split_identity": "a7042e45eff737d3adb3944d8999ff0f3111071d03b73abec6f42326708d8044",
+      "exe_unchanged": true,
+      "exit_code": 1,
+      "seconds": 615.467,
+      "errors": [],
+      "warnings": [],
+      "log_sha256": "175e42c69973bf9e2f19d15d79fbaf9bf66f6cb74b34a0e60b0bcc26925d67e1",
+      "report_sha256": "11aaeaa9e802d7f02478cecd23347915df1fdf8564bfc1308d2f7f159012c1e3"
+    },
+    "outside_frame_limit_minutes": [
+      {
+        "minute": 10,
+        "p95_ms": 16.035,
+        "p99_ms": 37.751,
+        "slow_frames_by_stage": {
+          "mount": 18,
+          "start": 1,
+          "play": 69,
+          "return": 10
+        }
+      }
+    ],
+    "performance": {
+      "complete_minute_buckets": 10,
+      "max_minute_p95_ms": 16.035,
+      "max_minute_p99_ms": 37.751,
+      "p95_limit_ms": 16.7,
+      "p99_limit_ms": 33.3,
+      "peak_draw_calls": 1416.0,
+      "worst_frame_ms": 224.367
+    }
+  },
+  "profile_runs": {
+    "uncapped_short": {
+      "launcher": {
+        "candidate": "4c3e31fa2ae63a2c284bb93bd125f1aa51a8ba68",
+        "payload_files_unchanged": true,
+        "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+        "pck_sha256": "4dc4c3f878b5c828e6db480c3df7462558fc7c45844ad3d2a02d10c8009649f2",
+        "split_identity": "a7042e45eff737d3adb3944d8999ff0f3111071d03b73abec6f42326708d8044",
+        "exe_unchanged": true,
+        "exit_code": 0,
+        "seconds": 141.953,
+        "errors": [],
+        "warnings": [],
+        "log_sha256": "5361a87df0533a3b77c072fa3be98543bd5d85f70984c083ff81dc4614bf1706",
+        "thread_id": 45316,
+        "thread_samples_sha256": "27de6e4a5c7f63fe1635a9fe24af4b3703bbe113938d1957f20200b54092dbdc",
+        "report_sha256": "270851097d1f875a34c1795bfe1363b59312632a9676fd435bc56c32ce6cdd73"
+      },
+      "fixture_sha256": "11146107818347b4e805e0387dcdc539482f163cce0532a9c37998e14fb47aee",
+      "seconds": 132.254504,
+      "renderer": {
+        "adapter": "NVIDIA GeForce RTX 4060 Laptop GPU",
+        "api": "1.4.357",
+        "display": "Windows",
+        "driver": "vulkan",
+        "godot": {
+          "build": "official",
+          "hash": "7d41c59c457bd5a245092b4e7eb2d833e3b3f8c3",
+          "hex": 263683,
+          "major": 4,
+          "minor": 6,
+          "patch": 3,
+          "status": "stable",
+          "string": "4.6.3-stable (official)",
+          "timestamp": 0
+        },
+        "max_fps": 0,
+        "method": "forward_plus",
+        "vendor": "NVIDIA",
+        "vsync": 0
+      },
+      "transitions": 21,
+      "performance": {
+        "complete_minute_buckets": 2,
+        "max_minute_p95_ms": 11.738,
+        "max_minute_p99_ms": 16.744,
+        "p95_limit_ms": 16.7,
+        "p99_limit_ms": 33.3,
+        "peak_draw_calls": 1416.0,
+        "worst_frame_ms": 339.464
+      },
+      "failures": [],
+      "memory_recovery": {
+        "working_set_bytes": {
+          "end": 1128648704.0,
+          "end_delta_from_warm": 12984320.0,
+          "monotonic_growth_detected": false,
+          "peak": 1161621504.0,
+          "recovered_from_peak": 32972800.0,
+          "recovery_passed": true,
+          "tolerance": 134217728.0,
+          "trend": {
+            "decreases": 0,
+            "first": 1115664384.0,
+            "flat": 1,
+            "increases": 2,
+            "last": 1128620032.0,
+            "near_monotonic": false,
+            "net": 12955648.0,
+            "samples": 4
+          },
+          "warm_baseline": 1115664384.0
+        },
+        "private_bytes": {
+          "end": 2124513280.0,
+          "end_delta_from_warm": 13189120.0,
+          "monotonic_growth_detected": false,
+          "peak": 2124513280.0,
+          "recovered_from_peak": 0.0,
+          "recovery_passed": true,
+          "tolerance": 134217728.0,
+          "trend": {
+            "decreases": 0,
+            "first": 2111324160.0,
+            "flat": 0,
+            "increases": 3,
+            "last": 2124513280.0,
+            "near_monotonic": false,
+            "net": 13189120.0,
+            "samples": 4
+          },
+          "warm_baseline": 2111324160.0
+        },
+        "orphan_node_count": {
+          "end": 0.0,
+          "end_delta_from_warm": 0.0,
+          "monotonic_growth_detected": false,
+          "peak": 0.0,
+          "recovered_from_peak": 0.0,
+          "recovery_passed": true,
+          "tolerance": 2.0,
+          "trend": {
+            "decreases": 0,
+            "first": 0.0,
+            "flat": 14,
+            "increases": 0,
+            "last": 0.0,
+            "near_monotonic": false,
+            "net": 0.0,
+            "samples": 15
+          },
+          "warm_baseline": 0.0
+        }
+      },
+      "outside_frame_limit_minutes": [],
+      "traced_play_frames": 0,
+      "fully_in_play": 0,
+      "ordered_physics_and_render_signals": 0,
+      "largest_phase_counts": {},
+      "valid_slow_frames_by_level": {},
+      "representatives": [],
+      "thread_samples": 9114
+    },
+    "native_frame_settings_short": {
+      "launcher": {
+        "candidate": "4c3e31fa2ae63a2c284bb93bd125f1aa51a8ba68",
+        "payload_files_unchanged": true,
+        "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+        "pck_sha256": "4dc4c3f878b5c828e6db480c3df7462558fc7c45844ad3d2a02d10c8009649f2",
+        "split_identity": "a7042e45eff737d3adb3944d8999ff0f3111071d03b73abec6f42326708d8044",
+        "exe_unchanged": true,
+        "exit_code": 0,
+        "seconds": 141.035,
+        "errors": [],
+        "warnings": [],
+        "log_sha256": "6eef66536feb602dfec4f02980ca4c21c095732e166db1ae282813a6e4198b71",
+        "thread_id": 5776,
+        "thread_samples_sha256": "f4fddde1ab5ff301e616476c706223172fc799235358f0aba146f43b29edf501",
+        "report_sha256": "be1c3a117ceaf022e55876c0716f1968be9264ec71dd97668824190b5e86684f"
+      },
+      "fixture_sha256": "284a05a8cf41a94e339df07fac7396e8e5f826cad9b441ce31427fc5d4e42c18",
+      "seconds": 131.367134,
+      "renderer": {
+        "adapter": "NVIDIA GeForce RTX 4060 Laptop GPU",
+        "api": "1.4.357",
+        "display": "Windows",
+        "driver": "vulkan",
+        "godot": {
+          "build": "official",
+          "hash": "7d41c59c457bd5a245092b4e7eb2d833e3b3f8c3",
+          "hex": 263683,
+          "major": 4,
+          "minor": 6,
+          "patch": 3,
+          "status": "stable",
+          "string": "4.6.3-stable (official)",
+          "timestamp": 0
+        },
+        "max_fps": 0,
+        "method": "forward_plus",
+        "vendor": "NVIDIA",
+        "vsync": 1
+      },
+      "transitions": 21,
+      "performance": {
+        "complete_minute_buckets": 2,
+        "max_minute_p95_ms": 8.703,
+        "max_minute_p99_ms": 11.54,
+        "p95_limit_ms": 16.7,
+        "p99_limit_ms": 33.3,
+        "peak_draw_calls": 1416.0,
+        "worst_frame_ms": 152.426
+      },
+      "failures": [],
+      "memory_recovery": {
+        "working_set_bytes": {
+          "end": 1114230784.0,
+          "end_delta_from_warm": 13512704.0,
+          "monotonic_growth_detected": false,
+          "peak": 1147953152.0,
+          "recovered_from_peak": 33722368.0,
+          "recovery_passed": true,
+          "tolerance": 134217728.0,
+          "trend": {
+            "decreases": 0,
+            "first": 1100718080.0,
+            "flat": 1,
+            "increases": 2,
+            "last": 1114230784.0,
+            "near_monotonic": false,
+            "net": 13512704.0,
+            "samples": 4
+          },
+          "warm_baseline": 1100718080.0
+        },
+        "private_bytes": {
+          "end": 2114752512.0,
+          "end_delta_from_warm": 15118336.0,
+          "monotonic_growth_detected": false,
+          "peak": 2114752512.0,
+          "recovered_from_peak": 0.0,
+          "recovery_passed": true,
+          "tolerance": 134217728.0,
+          "trend": {
+            "decreases": 0,
+            "first": 2099634176.0,
+            "flat": 1,
+            "increases": 2,
+            "last": 2114752512.0,
+            "near_monotonic": false,
+            "net": 15118336.0,
+            "samples": 4
+          },
+          "warm_baseline": 2099634176.0
+        },
+        "orphan_node_count": {
+          "end": 0.0,
+          "end_delta_from_warm": 0.0,
+          "monotonic_growth_detected": false,
+          "peak": 0.0,
+          "recovered_from_peak": 0.0,
+          "recovery_passed": true,
+          "tolerance": 2.0,
+          "trend": {
+            "decreases": 0,
+            "first": 0.0,
+            "flat": 14,
+            "increases": 0,
+            "last": 0.0,
+            "near_monotonic": false,
+            "net": 0.0,
+            "samples": 15
+          },
+          "warm_baseline": 0.0
+        }
+      },
+      "outside_frame_limit_minutes": [],
+      "traced_play_frames": 1,
+      "fully_in_play": 0,
+      "ordered_physics_and_render_signals": 0,
+      "largest_phase_counts": {},
+      "valid_slow_frames_by_level": {},
+      "representatives": [],
+      "thread_samples": 9057
+    },
+    "uncapped_600s": {
+      "launcher": {
+        "candidate": "4c3e31fa2ae63a2c284bb93bd125f1aa51a8ba68",
+        "payload_files_unchanged": true,
+        "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+        "pck_sha256": "4dc4c3f878b5c828e6db480c3df7462558fc7c45844ad3d2a02d10c8009649f2",
+        "split_identity": "a7042e45eff737d3adb3944d8999ff0f3111071d03b73abec6f42326708d8044",
+        "exe_unchanged": true,
+        "exit_code": 0,
+        "seconds": 611.162,
+        "errors": [],
+        "warnings": [],
+        "log_sha256": "9b8602f489021e82f858aa1f650f89f309c21e31d66de2751cd703bacd4ed19d",
+        "thread_id": 30232,
+        "thread_samples_sha256": "a61b365a32ec1149de0f12961a6537b455112d35b1dce6a5bcca2ee6c82cb7a2",
+        "report_sha256": "1ce02e73721807ab3307b7113ee67fd1c0a0858854ead3346906a54bbc2d23d5"
+      },
+      "fixture_sha256": "11146107818347b4e805e0387dcdc539482f163cce0532a9c37998e14fb47aee",
+      "seconds": 601.215777,
+      "renderer": {
+        "adapter": "NVIDIA GeForce RTX 4060 Laptop GPU",
+        "api": "1.4.357",
+        "display": "Windows",
+        "driver": "vulkan",
+        "godot": {
+          "build": "official",
+          "hash": "7d41c59c457bd5a245092b4e7eb2d833e3b3f8c3",
+          "hex": 263683,
+          "major": 4,
+          "minor": 6,
+          "patch": 3,
+          "status": "stable",
+          "string": "4.6.3-stable (official)",
+          "timestamp": 0
+        },
+        "max_fps": 0,
+        "method": "forward_plus",
+        "vendor": "NVIDIA",
+        "vsync": 0
+      },
+      "transitions": 97,
+      "performance": {
+        "complete_minute_buckets": 10,
+        "max_minute_p95_ms": 10.713,
+        "max_minute_p99_ms": 14.753,
+        "p95_limit_ms": 16.7,
+        "p99_limit_ms": 33.3,
+        "peak_draw_calls": 1416.0,
+        "worst_frame_ms": 160.583
+      },
+      "failures": [],
+      "memory_recovery": {
+        "working_set_bytes": {
+          "end": 1157767168.0,
+          "end_delta_from_warm": 44425216.0,
+          "monotonic_growth_detected": false,
+          "peak": 1191272448.0,
+          "recovered_from_peak": 33505280.0,
+          "recovery_passed": true,
+          "tolerance": 134217728.0,
+          "trend": {
+            "decreases": 0,
+            "first": 1113341952.0,
+            "flat": 3,
+            "increases": 8,
+            "last": 1157767168.0,
+            "near_monotonic": true,
+            "net": 44425216.0,
+            "samples": 12
+          },
+          "warm_baseline": 1113341952.0
+        },
+        "private_bytes": {
+          "end": 2151219200.0,
+          "end_delta_from_warm": 44425216.0,
+          "monotonic_growth_detected": false,
+          "peak": 2151219200.0,
+          "recovered_from_peak": 0.0,
+          "recovery_passed": true,
+          "tolerance": 134217728.0,
+          "trend": {
+            "decreases": 1,
+            "first": 2106793984.0,
+            "flat": 2,
+            "increases": 8,
+            "last": 2151219200.0,
+            "near_monotonic": true,
+            "net": 44425216.0,
+            "samples": 12
+          },
+          "warm_baseline": 2106793984.0
+        },
+        "orphan_node_count": {
+          "end": 0.0,
+          "end_delta_from_warm": 0.0,
+          "monotonic_growth_detected": false,
+          "peak": 0.0,
+          "recovered_from_peak": 0.0,
+          "recovery_passed": true,
+          "tolerance": 2.0,
+          "trend": {
+            "decreases": 0,
+            "first": 0.0,
+            "flat": 90,
+            "increases": 0,
+            "last": 0.0,
+            "near_monotonic": false,
+            "net": 0.0,
+            "samples": 91
+          },
+          "warm_baseline": 0.0
+        }
+      },
+      "outside_frame_limit_minutes": [],
+      "traced_play_frames": 0,
+      "fully_in_play": 0,
+      "ordered_physics_and_render_signals": 0,
+      "largest_phase_counts": {},
+      "valid_slow_frames_by_level": {},
+      "representatives": [],
+      "thread_samples": 39557
+    }
+  },
+  "tracked_harness_checks": {
+    "default": {
+      "launcher": {
+        "candidate": "4c3e31fa2ae63a2c284bb93bd125f1aa51a8ba68",
+        "tool_source_sha256": "730d891066c4b9cce10d303b29285bb9a3619c57ef422ab951a3384e4317c3b7",
+        "probe_sha256": "561559ceb47c3ffcd67be7ad9a1d3856c24827d55e92ce4db2b71f77119cf85c",
+        "controlled_delay_test": false,
+        "payload_files_unchanged": true,
+        "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+        "pck_sha256": "4dc4c3f878b5c828e6db480c3df7462558fc7c45844ad3d2a02d10c8009649f2",
+        "split_identity": "a7042e45eff737d3adb3944d8999ff0f3111071d03b73abec6f42326708d8044",
+        "exe_unchanged": true,
+        "exit_code": 0,
+        "seconds": 24.609,
+        "errors": [],
+        "warnings": [],
+        "log_sha256": "f92a64f625af95886c73e4156a2b7dd7574c20157bffdeb84937ad7ff7a63fcd",
+        "report_sha256": "69372c1b1feae34b76b482b8c4bd90a0b8e135da597afd179863fa5c0ffc2915"
+      },
+      "transitions": 2,
+      "vsync": 0,
+      "frame_configuration": {
+        "kept_native_settings": false,
+        "max_fps": 0
+      },
+      "rows_with_unit_and_battle_counters": 0
+    },
+    "native": {
+      "launcher": {
+        "candidate": "4c3e31fa2ae63a2c284bb93bd125f1aa51a8ba68",
+        "tool_source_sha256": "730d891066c4b9cce10d303b29285bb9a3619c57ef422ab951a3384e4317c3b7",
+        "probe_sha256": "5ddd445fe5b9e3ee26c1acb931cba0c22880e39a135b5e86a1e2a0b684b0bd80",
+        "controlled_delay_test": true,
+        "payload_files_unchanged": true,
+        "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+        "pck_sha256": "4dc4c3f878b5c828e6db480c3df7462558fc7c45844ad3d2a02d10c8009649f2",
+        "split_identity": "a7042e45eff737d3adb3944d8999ff0f3111071d03b73abec6f42326708d8044",
+        "exe_unchanged": true,
+        "exit_code": 0,
+        "seconds": 22.058,
+        "errors": [],
+        "warnings": [],
+        "log_sha256": "3cdefe574d2293262c16fba27d2f5297a8303f89ff3ad05c3ee32e20c74f7ab6",
+        "report_sha256": "1f8fdb651782d0a024552675b0e542e26d431fef410b2f08c353dada4b4e9389"
+      },
+      "transitions": 2,
+      "vsync": 1,
+      "frame_configuration": {
+        "kept_native_settings": true,
+        "max_fps": 0
+      },
+      "rows_with_unit_and_battle_counters": 2
+    }
+  },
+  "timing_scope": "Signal wall intervals include scheduling and rendering, and sampled CPU time is bracketed and Windows-quantized.",
+  "all_live_visits": "Authored fixture activity, campaign progress checked byte-for-byte."
+}

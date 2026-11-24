@@ -68,6 +68,8 @@ var _mount_trace_enabled := false
 var _entry_signals_enabled := false
 var _entry_draw_trace_level := ""
 var _play_frame_trace_enabled := false
+var _play_cpu_trace_enabled := false
+var _keep_native_frame_settings := false
 var _play_frame_rows: Array[Dictionary] = []
 var _play_frame_overflow := 0
 var _play_stage_enter_usec := 0
@@ -410,7 +412,7 @@ func _trace_play_frame(now: int) -> void:
 			var draw_valid := _play_pre_draw_usec >= _last_frame_usec and _play_pre_draw_usec <= now
 			var physics_valid := _play_first_physics_usec >= _last_frame_usec \
 				and _play_first_physics_usec <= _play_process_usec
-			_play_frame_rows.append({"mode": _current_mode, "level_id": _current_level_id,
+			var sample := {"mode": _current_mode, "level_id": _current_level_id,
 				"minute": _minute_samples.size() + 1, "entry": _transitions.size() + 1,
 				"fully_in_play": _last_frame_usec >= _play_stage_enter_usec,
 				"elapsed_us": now - _start_usec, "interval_us": now - _last_frame_usec,
@@ -418,9 +420,18 @@ func _trace_play_frame(now: int) -> void:
 				"physics_steps": _play_physics_steps,
 				"post_to_physics_us": _play_first_physics_usec - _last_frame_usec if physics_valid else -1,
 				"post_to_process_us": _play_process_usec - _last_frame_usec if process_valid and draw_valid else -1,
-				"post_to_pre_draw_us": _play_pre_draw_usec - _last_frame_usec if draw_valid else -1})
+				"post_to_pre_draw_us": _play_pre_draw_usec - _last_frame_usec if draw_valid else -1}
+			if _play_cpu_trace_enabled and is_instance_valid(_current_battle):
+				sample["battle_physics_sections_us"] = _current_battle._prof.duplicate()
+				sample["unit_physics_us"] = _current_battle._unit_proc_us
+				sample["profiled_battle_physics_steps"] = _current_battle._prof_frames
+			_play_frame_rows.append(sample)
 		else:
 			_play_frame_overflow += 1
+	if _play_cpu_trace_enabled and _active_stage_frames.get("stage") == "play" and is_instance_valid(_current_battle):
+		_current_battle._prof.clear()
+		_current_battle._unit_proc_us = 0
+		_current_battle._prof_frames = 0
 	_play_first_physics_usec = 0
 	_play_physics_steps = 0
 	_play_process_usec = 0
@@ -697,6 +708,9 @@ func _run_fixture(fixture: Dictionary) -> bool:
 	if _mount_trace_enabled:
 		_report_mount_trace()
 	_tag_frame_stage("play", mode, _current_level_id)
+	if _play_cpu_trace_enabled:
+		battle._prof_on = true
+		battle._prof_print_acc = -1_000_000.0
 	var expected_id := String(fixture.level_id)
 	var nodes_ok := battle.map != null and battle.hud != null and battle.world != null \
 		and battle.camera != null and battle.units_root != null
@@ -911,12 +925,14 @@ func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(_output_dir)
 	_duration_seconds = maxf(1.0, _env_float("CAMPAIGN_SOAK_SECONDS", MIN_ACCEPTANCE_SECONDS))
 	_dwell_seconds = clampf(_env_float("CAMPAIGN_SOAK_DWELL_SECONDS", DEFAULT_DWELL_SECONDS), 2.0, 30.0)
-	_acceptance_eligible = _duration_seconds >= MIN_ACCEPTANCE_SECONDS
+	_keep_native_frame_settings = OS.get_environment("CAMPAIGN_SOAK_NATIVE_FRAME_SETTINGS") == "1"
+	_acceptance_eligible = _duration_seconds >= MIN_ACCEPTANCE_SECONDS and not _keep_native_frame_settings
 	root.size = Vector2i(1280, 720)
 	root.content_scale_size = root.size
 	DisplayServer.window_set_size(root.size)
-	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
-	Engine.max_fps = 0
+	if not _keep_native_frame_settings:
+		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
+		Engine.max_fps = 0
 	Engine.time_scale = 1.0
 	root.get_node("Settings").edge_scroll = false
 	root.get_node("Settings").auto_micro_level = 0
@@ -969,6 +985,7 @@ func _run() -> void:
 	_bucket_start_usec = _start_usec
 	_next_minute_usec = _start_usec + MINUTE_USEC
 	_play_frame_trace_enabled = OS.get_environment("CAMPAIGN_SOAK_PLAY_FRAME_TRACE") == "1"
+	_play_cpu_trace_enabled = _play_frame_trace_enabled and OS.get_environment("CAMPAIGN_SOAK_PLAY_CPU_TRACE") == "1"
 	_stage_timing_enabled = _play_frame_trace_enabled or OS.get_environment("CAMPAIGN_SOAK_STAGE_TIMING") == "1"
 	if _play_frame_trace_enabled:
 		physics_frame.connect(_trace_play_physics)
@@ -1054,6 +1071,7 @@ func _run() -> void:
 			"vsync": DisplayServer.window_get_vsync_mode(),
 			"godot": Engine.get_version_info(),
 		},
+		"frame_configuration": {"kept_native_settings": _keep_native_frame_settings, "max_fps": Engine.max_fps},
 		"route": ROUTE,
 		"cycles_started": _cycle,
 		"visits": _visit_counts,
@@ -1080,7 +1098,7 @@ func _run() -> void:
 		_report["frame_stages"] = _stage_frame_samples.values()
 	if _play_frame_trace_enabled:
 		_report["play_frame_trace"] = {"threshold_ms": FRAME_P99_LIMIT_MS,
-			"dropped_rows": _play_frame_overflow, "rows": _play_frame_rows}
+			"cpu_counters": _play_cpu_trace_enabled, "dropped_rows": _play_frame_overflow, "rows": _play_frame_rows}
 	if _mount_trace_enabled:
 		_report["mount_traces"] = _mount_samples
 	if _entry_signals_enabled:
