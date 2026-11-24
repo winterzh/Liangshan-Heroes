@@ -674,7 +674,11 @@ func _draw() -> void:
 	# 战役原来每格交替提交贴图与纯色色罩，导致数千次材质/纹理批次切换。
 	# 对照采样可设CAMPAIGN_TERRAIN_BATCH=0；自由模式始终保留原提交顺序。
 	var terrain_batch: RefCounted = TerrainDrawBatch.new() if sample_scenery != null and OS.get_environment("CAMPAIGN_TERRAIN_BATCH") != "0" else null
+	# The texture and its atlas cells stay constant for one map draw.
+	var textures: Dictionary[String, Texture2D] = {}
+	var source_cells: Dictionary[String, Array] = {}
 	for y in range(h):
+		var source_row := (y % TILE_SPAN) * TILE_SPAN
 		for x in range(w):
 			var t := t_at(x, y)
 			var info: Dictionary = INFO[t]
@@ -716,14 +720,21 @@ func _draw() -> void:
 				if t == T.CLIFF and _is_authored_wall_base(x,y):
 					# 庄墙/城墙的CLIFF只承担不可通行标记；基底画夯土，墙由Stockade承担。
 					key = "road"; ground_tint = Color(0.72,0.67,0.54)
-			var tex: Texture2D = Art.terrain_texture(key)
+			if not textures.has(key):
+				textures[key] = Art.terrain_texture(key)
+			var tex := textures[key]
 			if tex != null:
 				var at := tex as AtlasTexture
 				# 地基(T.HALL)虽 solid，渲染上当草地无缝铺，避免营前出现一块突兀方块
 				if at != null and (not bool(info["solid"]) or t == T.HALL or sample_scenery != null):
-					var sub := at.region.size / float(TILE_SPAN)
-					var src := Rect2(at.region.position
-						+ Vector2(float(posmod(x, TILE_SPAN)), float(posmod(y, TILE_SPAN))) * sub, sub)
+					if not source_cells.has(key):
+						var cells: Array[Rect2] = []
+						var sub := at.region.size / float(TILE_SPAN)
+						for row in range(TILE_SPAN):
+							for column in range(TILE_SPAN):
+								cells.append(Rect2(at.region.position + Vector2(column, row) * sub, sub))
+						source_cells[key] = cells
+					var src: Rect2 = source_cells[key][source_row + x % TILE_SPAN]
 					if terrain_batch != null:
 						terrain_batch.add_region(at.atlas,rect,src,ground_tint)
 					else:

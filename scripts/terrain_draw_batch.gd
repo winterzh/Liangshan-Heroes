@@ -71,10 +71,12 @@ func _textured_mesh(quads: Array, texture_size: Vector2) -> ArrayMesh:
 		vertices[vertex + 1] = Vector3(destination.end.x, destination.position.y, 0.0)
 		vertices[vertex + 2] = Vector3(destination.end.x, destination.end.y, 0.0)
 		vertices[vertex + 3] = Vector3(destination.position.x, destination.end.y, 0.0)
-		uvs[vertex] = source.position / texture_size
-		uvs[vertex + 1] = Vector2(source.end.x / texture_size.x, source.position.y / texture_size.y)
-		uvs[vertex + 2] = source.end / texture_size
-		uvs[vertex + 3] = Vector2(source.position.x / texture_size.x, source.end.y / texture_size.y)
+		var uv_min := source.position / texture_size
+		var uv_max := source.end / texture_size
+		uvs[vertex] = uv_min
+		uvs[vertex + 1] = Vector2(uv_max.x, uv_min.y)
+		uvs[vertex + 2] = uv_max
+		uvs[vertex + 3] = Vector2(uv_min.x, uv_max.y)
 		colors[vertex] = color
 		colors[vertex + 1] = color
 		colors[vertex + 2] = color
