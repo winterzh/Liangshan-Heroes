@@ -130,7 +130,7 @@ func counter_window_state(b) -> Dictionary:
 		"footwork":_signature_footwork_ready(),"in_range":wu.position.distance_to(menshen.position)<=float(spec.radius),
 		"kick_cooldown":kick_remaining,"position":menshen.position}
 
-func _counter_status(b) -> String:
+func _counter_status(b, coach_signature := false) -> String:
 	if not is_instance_valid(wu) or not is_instance_valid(menshen) or not b.is_visible_world(menshen.position):
 		return Localize.format_text("当前破绽 %.1f秒 · 反击命中%d次", [exposed_left, counter_hits])
 	var slot := 2
@@ -141,7 +141,16 @@ func _counter_status(b) -> String:
 	var ability_id: String = wu.ability_slots[slot].id
 	var spec: Dictionary = b._scaled_ability(b._abilities[ability_id], b._hero_rb(wu), b._hero_db(wu))
 	var key := "" if b.hud.touch_ui else Settings.key_label("command_%d" % slot) + " "
-	var source := "破绽 %.1f秒 · %s%s反击" if wu.position.distance_to(menshen.position) <= float(spec.radius) else "破绽 %.1f秒 · 靠近后用%s%s"
+	var in_range := wu.position.distance_to(menshen.position) <= float(spec.radius)
+	if (coach_signature and in_range and slot == 2 and not b.hud.touch_ui
+			and not b.mission.has_event("mengzhou_signature") and not _signature_footwork_ready()):
+		var kick_key := Settings.key_label("command_2")
+		if step_serial == opening_serial:
+			return Localize.format_text("破绽 %.1f秒 · 右键换位，再按 %s 出脚完成演义", [exposed_left, kick_key], false)
+		if wu.slot_ready(1):
+			return Localize.format_text("破绽 %.1f秒 · 演义 %s 玉环步 → 移动 → %s 鸳鸯脚",
+				[exposed_left, Settings.key_label("command_1"), kick_key], false)
+	var source := "破绽 %.1f秒 · %s%s反击" if in_range else "破绽 %.1f秒 · 靠近后用%s%s"
 	return Localize.format_text(source, [exposed_left, key, String(spec.name)])
 
 func _apply_wine_speed() -> void:
@@ -197,8 +206,13 @@ func _verify_hit(b, target, before: float, signature: bool, counter: bool, abili
 		step_serial=-1
 		b.mission.mark("mengzhou_signature","趁这次失势，武松实际踏步换位，再以鸳鸯脚踢中蒋门神。")
 		b.msg("玉环步接鸳鸯脚！",3)
-	elif ability_id=="mengzhou_kick" and counter:
-		b.msg("鸳鸯脚击中破绽；招牌拳路还需在这次攻防中用W实际换位。",3)
+	elif (ability_id == "mengzhou_kick" and counter and target.story_outcome.is_empty()
+			and not b.mission.has_event("mengzhou_signature")):
+		var hint := Localize.text("鸳鸯脚命中。下次先用玉环步并移动，再出脚可完成演义。")
+		if not b.hud.touch_ui:
+			hint = Localize.format_text("鸳鸯脚命中。下次按 %s 用玉环步，再移动换位，最后按 %s 出脚可完成演义。",
+				[Settings.key_label("command_1"), Settings.key_label("command_2")], false)
+		b.msg(hint, 3)
 
 func process(b, delta: float) -> void:
 	if not is_instance_valid(wu) or wu.hp<=0 or not is_instance_valid(shi) or shi.hp<=0:
@@ -230,7 +244,7 @@ func _duel_tick(b, delta: float) -> void:
 			menshen.apply_damage_reduction(0.5,999,BRACE_SOURCE)
 			b.mission.set_status(DUEL_FOOTWORK_STATUS)
 		else:
-			b.mission.set_status(_counter_status(b))
+			b.mission.set_status(_counter_status(b, true))
 		return
 	if fist_windup>0:
 		fist_windup=maxf(0,fist_windup-delta)
@@ -288,7 +302,7 @@ func _finish_special(b, missed: bool, record_dodge := true) -> void:
 		menshen._damage_reduction_sources.erase(BRACE_SOURCE)
 		menshen._refresh_damage_reduction()
 		menshen.apply_stun(exposed_left)
-		b.mission.set_status(_counter_status(b))
+		b.mission.set_status(_counter_status(b, true))
 		if record_dodge:
 			dodged=true
 			if special_kind=="heavy": heavy_dodges+=1
