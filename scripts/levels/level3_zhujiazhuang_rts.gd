@@ -12,6 +12,7 @@ const GATE_DEFENDER_POSTS := [Vector2i(15, 26), Vector2i(15, 30), Vector2i(16, 2
 const INSIDE_ACTION := "zhu_rts_inside"
 const SEND_SUN_BUTTON := "zhu_send_sun_li"
 const VIEW_SIDE_BUTTON := "zhu_view_side_gate"
+const VIEW_MANOR_BUTTON := "zhu_view_manor"
 const VIEW_DANGER_BUTTON := "zhu_view_evacuation_danger"
 const EVACUATION_DANGER_NEAR := 3.0 * GameMap.CELL
 const FEINT_RULE := "zhu_feint_rule"
@@ -560,6 +561,26 @@ func _update_inside_shortcut(b) -> void:
 		b.mission.reveal_primary_level_button()
 
 
+func _can_view_manor(b) -> bool:
+	return not b.hud.touch_ui and (main_breached or _side_gate_is_open(b)) \
+		and _alive(enemy_base) and b.is_explored_world(enemy_base.position)
+
+
+func _update_manor_locator(b) -> void:
+	var button: Button = b.mission.find_level_button(VIEW_MANOR_BUTTON)
+	if not _can_view_manor(b):
+		if button != null:
+			button.get_parent().remove_child(button)
+			button.queue_free()
+		return
+	if button == null:
+		button = b.mission.add_level_button(VIEW_MANOR_BUTTON, "查看 · 祝家庄大营",
+			"只定位地图；选人和移动仍由玩家指挥。")
+		var danger_button: Button = b.mission.find_level_button(VIEW_DANGER_BUTTON)
+		button.get_parent().move_child(button, 1 if danger_button != null else 0)
+		b.mission.reveal_primary_level_button()
+
+
 func _order_sun_to_side_gate(b) -> void:
 	if b.hud.touch_ui or not b._gameplay_rng_issue.is_empty():
 		return
@@ -593,6 +614,10 @@ func activate_mission_button(b, button_id: String) -> void:
 	if button_id == VIEW_SIDE_BUTTON:
 		if not b.hud.touch_ui and _side_gate_is_open(b):
 			b.mission._activate_map_locator("祝家庄偏门", SIDE_GATE)
+		return
+	if button_id == VIEW_MANOR_BUTTON:
+		if _can_view_manor(b):
+			b.mission._activate_map_locator("祝家庄大营 · 核心目标", b.map.world_to_cell(enemy_base.position))
 		return
 	if button_id == VIEW_DANGER_BUTTON:
 		var wounded := _evacuation_danger(b)
@@ -1026,6 +1051,7 @@ func _refresh_stage(b) -> void:
 	if prisoners_freed:
 		danger = _evacuation_danger(b)
 		_update_evacuation_danger_control(b, danger)
+	_update_manor_locator(b)
 	if _finish_ready():
 		heading = "收军 · 时迁已归营"
 		if b.mission.has_event("zhu_prisoner_lost"):
