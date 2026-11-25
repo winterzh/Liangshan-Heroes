@@ -1048,6 +1048,8 @@ func _refresh_stage(b) -> void:
 	if stage == "contest":
 		heading = "第二打 · 争夺外围"
 		objective = "夺北面资源扩军，或拔南面外营断援；也可整备器械直接攻庄。"
+		if OS.get_name() == "Windows" and _alive(sun):
+			objective = "正攻可护送撞车打正门，留兵防南营。走偏门可先断援，再用正面小队牵制，派孙立接应。"
 	elif stage == "siege":
 		heading = "第三打 · 攻庄救人"
 		objective = "攻破大营、救时迁回营。内应和正面器械都可破局；营地与战果保留。"
@@ -1198,6 +1200,12 @@ func campaign_debrief(mission) -> Array[Dictionary]:
 		{"source": "南营 · %s · 共派出 %d 队", "args": ["已断援" if supply_cut else "外营未拆", raids_sent]},
 		{"source": "入口 · %s · %s", "args": ["正门已攻破" if main_breached else "正门未破", side_result]},
 	]
+	if OS.get_name() == "Windows":
+		var seconds := floori(mission.total_game_seconds)
+		var returned := prisoners.filter(_at_forward_camp).size() if _alive(hall) else 0
+		var lost := PRISONERS.size() - prisoners.filter(_alive).size()
+		rows.push_front({"source": "用时 %d:%02d · 伤员归营 %d/%d · 阵亡 %d",
+			"args": [floori(seconds / 60.0), seconds % 60, returned, PRISONERS.size(), lost]})
 	if mission.has_event(FEINT_AT_SIDE):
 		rows.append({"source": "重玩建议 · 本局佯攻接应成功。下次可集中兵力，护送撞车直攻正门。"})
 	elif not supply_cut and raids_sent > 0:
