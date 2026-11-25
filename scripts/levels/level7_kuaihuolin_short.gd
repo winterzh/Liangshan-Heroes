@@ -130,7 +130,7 @@ func counter_window_state(b) -> Dictionary:
 		"footwork":_signature_footwork_ready(),"in_range":wu.position.distance_to(menshen.position)<=float(spec.radius),
 		"kick_cooldown":kick_remaining,"position":menshen.position}
 
-func _counter_status(b, coach_signature := false) -> String:
+func _counter_status(b) -> String:
 	if not is_instance_valid(wu) or not is_instance_valid(menshen) or not b.is_visible_world(menshen.position):
 		return Localize.format_text("当前破绽 %.1f秒 · 反击命中%d次", [exposed_left, counter_hits])
 	var slot := 2
@@ -142,7 +142,7 @@ func _counter_status(b, coach_signature := false) -> String:
 	var spec: Dictionary = b._scaled_ability(b._abilities[ability_id], b._hero_rb(wu), b._hero_db(wu))
 	var key := "" if b.hud.touch_ui else Settings.key_label("command_%d" % slot) + " "
 	var in_range := wu.position.distance_to(menshen.position) <= float(spec.radius)
-	if (coach_signature and in_range and slot == 2 and not b.hud.touch_ui
+	if (in_range and slot == 2 and not b.hud.touch_ui
 			and not b.mission.has_event("mengzhou_signature") and not _signature_footwork_ready()):
 		var kick_key := Settings.key_label("command_2")
 		if step_serial == opening_serial:
@@ -244,7 +244,7 @@ func _duel_tick(b, delta: float) -> void:
 			menshen.apply_damage_reduction(0.5,999,BRACE_SOURCE)
 			b.mission.set_status(DUEL_FOOTWORK_STATUS)
 		else:
-			b.mission.set_status(_counter_status(b, true))
+			b.mission.set_status(_counter_status(b))
 		return
 	if fist_windup>0:
 		fist_windup=maxf(0,fist_windup-delta)
@@ -302,7 +302,7 @@ func _finish_special(b, missed: bool, record_dodge := true) -> void:
 		menshen._damage_reduction_sources.erase(BRACE_SOURCE)
 		menshen._refresh_damage_reduction()
 		menshen.apply_stun(exposed_left)
-		b.mission.set_status(_counter_status(b, true))
+		b.mission.set_status(_counter_status(b))
 		if record_dodge:
 			dodged=true
 			if special_kind=="heavy": heavy_dodges+=1
