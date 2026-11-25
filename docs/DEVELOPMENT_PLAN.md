@@ -1,5 +1,11 @@
 # 当前开发计划（2026-10-30）
 
+## 2026-11-25 Windows Steam 正式版 26915924
+
+Steamworks 的正式分支 `default` 已回读为 Build 26915924，Windows Depot 5088121 的清单为 `6846342387370384249`。独立 SteamCMD 从公开分支重新下载安装，七个文件的 SHA-256 与发布源逐项一致。使用下载版 EXE 在隔离离线配置中启动，退出码为 0，日志错误 0。本次从已验收目录直接上传。
+
+补丁说明关联 Build 26915924，已逐页核对简中、繁中、英语和日语公开公告的标题及正文。 [Steam 公告](https://store.steampowered.com/news/app/5088120/view/680768104678031405?l=schinese) · [发布验收](../qa/battle_entry_timing_20261116/windows_steam_release_26915924.json)
+
 ## 2026-11-25 Windows 成品续玩、Steam 读取与标准帧时复测
 
 08d41e35 的 Windows 成品在独立验收窗口完成 97 次实战和进退。最差完整分钟 P95/P99 为 8.28/12.63 毫秒，标准帧时复测通过。首次标准长测的失败记录仍保留。

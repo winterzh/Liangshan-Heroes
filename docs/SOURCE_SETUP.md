@@ -1,5 +1,11 @@
 # 源码设置与换机（2026-10-30）
 
+## 2026-11-25 Windows Steam 正式版 26915924
+
+Steamworks 的正式分支 `default` 已回读为 Build 26915924，Windows Depot 5088121 的清单为 `6846342387370384249`。独立 SteamCMD 从公开分支重新下载安装，七个文件的 SHA-256 与发布源逐项一致。使用下载版 EXE 在隔离离线配置中启动，退出码为 0，日志错误 0。本次从已验收目录直接上传。
+
+补丁说明关联 Build 26915924，已逐页核对简中、繁中、英语和日语公开公告的标题及正文。 [Steam 公告](https://store.steampowered.com/news/app/5088120/view/680768104678031405?l=schinese) · [发布验收](../qa/battle_entry_timing_20261116/windows_steam_release_26915924.json)
+
 ## Windows 加载期限计时（2026-11-25）
 
 加载期限使用系统单调时钟。验证在私有 Windows 进程中暂时屏蔽渲染完成信号，保留场景树帧推进，测到超时之后恢复渲染并实际点击返回选关。 [实际超时记录](../qa/battle_entry_timing_20261116/windows_loading_wall_clock_08d41e35.json)
