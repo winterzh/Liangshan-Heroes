@@ -305,5 +305,32 @@
       "all minute P99 values meet 33.3ms"
     ],
     "first_measured_frame_gate_sha256": "d7b4baa8f136adeb0433919ada62a07243314eeb99bc8b4e6001e5fd81aa5a02"
+  },
+  "external_windows_memory_observer": {
+    "prior_long_run": {
+      "reported_entry_gap_ms": 1871.674,
+      "overlap_with_synchronous_windows_memory_probe_ms": 1548.087,
+      "route": "arena",
+      "prior_report_sha256": "b4a3b600a2db5a477bf0ad22195892e10289475128e562c117a865eac19424ac"
+    },
+    "candidate_payload_sha256": "17c4e36e768ba8f5657d254439a584e9db174a258630a6d1f47c352c642e8a4a",
+    "sampling": "External observer uses K32GetProcessMemoryInfo on the tested process, retains working set, private bytes and peak working set. Game test driver reads a recent cached reading for its own PID.",
+    "short_diagnostic": {
+      "acceptance_eligible": false,
+      "actual_seconds": 125.059119,
+      "visits": 18,
+      "external_memory_samples": 270,
+      "max_in_game_memory_sample_read_ms": 51.178,
+      "p95_ms": 93.384,
+      "p99_ms": 205.374,
+      "peak_entry_gap_ms": 612.68,
+      "peak_entry_gap_route": "skirmish_ai",
+      "report_sha256": "afc335816752f2a7fbecb038d4ae1fb0b476fa5b7bbc4f5d7228274e4119bd01",
+      "test_driver_sha256": "a293708d20d3500774de2c3f0483ae50375f71948e61367cbbdf82689ebaf677"
+    },
+    "full_retest": {
+      "ran": false,
+      "reason": "No sustained idle window observed."
+    }
   }
 }
