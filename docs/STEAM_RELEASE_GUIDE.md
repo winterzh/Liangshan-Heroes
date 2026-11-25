@@ -31,7 +31,7 @@ Windows 候选使用明确的根文件白名单。内嵌版包含以下六个文
 
 | 阶段 | 合格证据 | 不能替代的事情 |
 | --- | --- | --- |
-| 本地候选完成 | QA 收据、ZIP 哈希、白名单文件清单、实际 EXE 短测 | 不代表已上传 |
+| 本地候选完成 | QA 收据、白名单文件清单及哈希、实际 EXE 短测 | 不代表已上传 |
 | Depot 上传完成 | 新 BuildID、ManifestID、服务器文件清单 | 不代表玩家正式分支已切换 |
 | `default` 上线 | Steamworks 构建页回读新 Build 带 `default` 标签，或权威 app info 显示新 BuildID | 不代表客户端已经下载 |
 | 补丁说明公开 | 四种语言公开页面的标题、正文和图片回读正确 | 不代表构建上线 |
@@ -53,7 +53,7 @@ Windows 候选使用明确的根文件白名单。内嵌版包含以下六个文
 目标 App / Depot / 分支：5088120 / 5088121 / default
 成功原生 QA 目录：
 唯一候选目录：
-唯一 ZIP 路径、字节数、SHA-256：
+冻结候选文件清单、字节数、SHA-256（若使用 ZIP，也记录 ZIP）：
 EXE 字节数、SHA-256：
 白名单文件清单及 SHA-1：
 实际 EXE 短测收据：
@@ -124,10 +124,10 @@ py -3 -X utf8 -B tools/build_steam_candidate.py `
 - `uploaded=false`、`live_steam_tested=false` 是正常的本地候选边界；
 - `source_head` 与发布单一致；
 - 来源身份和包内身份探针都通过；
-- ZIP 可重新读取，成员名、字节数和 SHA-256 与收据一致；
+- 白名单文件可重新读取，名称、字节数和 SHA-256 与收据一致。使用 ZIP 时也逐项读回成员；
 - 内嵌版恰好六个正式成员，拆包版恰好七个，EXE 与 PCK 共同纳入运行身份核对。
 
-候选一旦进入实际 EXE 短测，就把它视为只读。后续上传必须使用这一个 ZIP，不能在上传目录重新导出、替换 DLL、改名后重压或从当前工作区临时拼包。
+实际 EXE 短测后的候选保持只读。后续上传沿用同一冻结候选的白名单文件，逐项核对名称、大小和哈希。
 
 ### 5.3 实际 EXE 短测和证据归档
 
@@ -182,13 +182,13 @@ Steam 构建发布时同步准备并发布以下语言：
 
 ### 8.1 准备内容目录
 
-把已验证 ZIP 解压到一个全新的 ASCII 目录，例如：
+SteamCMD 可直接使用已验收的冻结候选文件。需要纯 ASCII 传输路径时，将同一白名单文件放到新的内容目录。已有验证 ZIP 时，也可解压到该目录。
 
 ```text
 D:\CodexTemp\lsh_steam_upload_<批次>\content
 ```
 
-解压后重新核对全部白名单成员名称、字节数、SHA-256 和 SHA-1。解压只是传输准备，不能修改候选内容。
+预览前重新核对全部白名单成员的名称、字节数、SHA-256 和 SHA-1。正式上传沿用通过预览的同一份文件。
 
 ### 8.2 显式白名单 VDF
 
@@ -291,7 +291,7 @@ steamcmd.exe +login anonymous +app_info_update 1 +app_info_print 5088120 +quit
 
 - appmanifest 的 BuildID / TargetBuildID；
 - Depot `5088121` 的 ManifestID；
-- 六成员名称、字节数和哈希；
+- 本次白名单成员的名称、字节数和哈希；
 - 服务器下载版 EXE 能以独立 profile 启动，日志无目标错误。
 
 ### 11.2 本机 Steam 客户端
@@ -316,7 +316,7 @@ steamcmd.exe +login anonymous +app_info_update 1 +app_info_print 5088120 +quit
 
 - 源提交 SHA、发布授权和相对上一正式版的变化清单；
 - 原生 QA、候选、身份探针和 EXE 短测收据；
-- ZIP / EXE / 六成员的字节数和哈希；
+- 白名单成员的字节数和哈希。使用 ZIP 时一并保留 ZIP 收据；
 - BuildID、ManifestID、目标分支、服务器文件核对；
 - `default` 权威回读时间和结果；
 - 四语公告 Event ID、公开 URL 和逐语言回读；
@@ -368,16 +368,16 @@ steamcmd.exe +login anonymous +app_info_update 1 +app_info_print 5088120 +quit
 - [ ] 用户已明确授权本次 Steam 发布。
 - [ ] 源提交、远端提交、发布范围和上一正式 Build 已记录。
 - [ ] 原生 QA 成功，源码在 QA 后未变化。
-- [ ] 唯一候选 `complete=true`，六成员和哈希已冻结。
+- [ ] 候选验收已完成，白名单文件和哈希已冻结。拆包版包含 EXE、PCK 和五个依赖及许可文件。
 - [ ] 同一实际 EXE 的短测成功，玩家目录和源码未受影响。
 - [ ] 四语补丁说明只写实际交付内容。
 - [ ] 回滚 BuildID 已确认。
 
 ### 上传与上线
 
-- [ ] 网页 ZIP 或 SteamCMD Preview 的范围只有 Depot `5088121` 六文件。
+- [ ] 网页 ZIP 或 SteamCMD Preview 的范围只有 Depot `5088121` 中本次白名单文件。
 - [ ] 正式上传成功，BuildID / ManifestID 已记录。
-- [ ] 服务器六成员名称、大小、SHA-1 与本地一致。
+- [ ] 服务器白名单成员的名称、大小、SHA-1 与本地一致。
 - [ ] 新 Build 已完成确认并在刷新后带 `default` 标签。
 - [ ] `branches.public.buildid` 或权威构建页回读正确。
 
