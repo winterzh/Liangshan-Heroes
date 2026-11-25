@@ -5,7 +5,7 @@ extends Control
 const SPEAKERS := {}
 const OPENING_PREVIEW_DELAY_US := 120_000
 const SCENERY_CALIBRATION_SLICE_US := 24_000
-const BATTLE_LOADING_TIMEOUT_SECONDS := 25.0
+const BATTLE_LOADING_TIMEOUT_MSEC := 25_000
 var _update_label: Label
 var _update_overlay: Control
 var _entry_overlay: ColorRect
@@ -13,7 +13,6 @@ var _entry_attempt := 0
 var _entry_message: Label
 var _entry_progress: ProgressBar
 var _entry_back: Button
-var _entry_timeout: Timer
 var _entry_prepared_battle: Node
 var _entry_scan: RefCounted
 var _entry_environment_requests: Array[String] = []
@@ -77,9 +76,8 @@ func _launch(campaign_level_id := "") -> void:
 	_show_battle_loading(campaign_level_id)
 	_entry_attempt += 1
 	var attempt := _entry_attempt
-	if _entry_timeout != null:
-		_entry_timeout.timeout.connect(_show_battle_loading_failure.bind(attempt))
-		_entry_timeout.start()
+	if _entry_back != null:
+		_watch_battle_loading.call_deferred(attempt, Time.get_ticks_msec() + BATTLE_LOADING_TIMEOUT_MSEC)
 	if OS.get_name() == "Windows" and (not campaign_level_id.is_empty() or Campaign.skirmish \
 			or Campaign.custom_defense or Campaign.skirmish_ai):
 		# Resource workers can begin decoding as soon as requests are submitted.
@@ -149,11 +147,6 @@ func _show_battle_loading(campaign_level_id: String) -> void:
 		_entry_back.pressed.connect(_close_battle_loading)
 		column.add_child(_entry_back)
 		_entry_back.grab_focus()
-		_entry_timeout = Timer.new()
-		_entry_timeout.wait_time = BATTLE_LOADING_TIMEOUT_SECONDS
-		_entry_timeout.one_shot = true
-		_entry_timeout.ignore_time_scale = true
-		_entry_overlay.add_child(_entry_timeout)
 
 
 func _battle_loading_destination(campaign_level_id: String) -> String:
@@ -187,6 +180,16 @@ func _battle_launch_active(attempt: int) -> bool:
 	return _entry_attempt == attempt and _entry_overlay != null and is_inside_tree() and not AppLifecycle.quit_started()
 
 
+func _watch_battle_loading(attempt: int, deadline_msec: int) -> void:
+	# A loading frame can be delayed or never drawn. Measure elapsed wall time
+	# independently of scaled and clamped engine frame deltas.
+	while _battle_launch_active(attempt):
+		if Time.get_ticks_msec() >= deadline_msec:
+			_show_battle_loading_failure(attempt)
+			return
+		await get_tree().process_frame
+
+
 func _stop_battle_preparation() -> void:
 	_entry_attempt += 1
 	if is_instance_valid(_entry_prepared_battle):
@@ -207,7 +210,6 @@ func _close_battle_loading() -> void:
 	_entry_overlay.hide()
 	_entry_overlay.queue_free()
 	_entry_overlay = null
-	_entry_timeout = null
 	_entry_back = null
 	_entry_message = null
 	_entry_progress = null
@@ -218,7 +220,6 @@ func _show_battle_loading_failure(attempt: int) -> void:
 	if not _battle_launch_active(attempt):
 		return
 	_stop_battle_preparation()
-	_entry_timeout.stop()
 	_entry_progress.hide()
 	Localize.bind_text(_entry_message, "战斗未能载入，请返回重试。")
 	Localize.bind_text(_entry_back, "返回选关")
