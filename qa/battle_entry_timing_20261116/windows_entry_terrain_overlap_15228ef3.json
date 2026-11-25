@@ -1,0 +1,613 @@
+{
+  "trial_count": 12,
+  "checks": 192,
+  "viewport": [
+    960,
+    540
+  ],
+  "frame_rate_limit": 60,
+  "renderer": "Vulkan Forward+",
+  "runtime_scope": "Windows, private desktop, fresh offline profile per trial",
+  "control": "Same split Windows EXE and PCK. The serial fixture bypasses early terrain preparation only.",
+  "timings": "First draw is measured from the picker button callback. The fast trial emits the visible picker callbacks in one frame; settled trials wait 400 ms after showing the picker.",
+  "comparisons": {
+    "classic-fast": {
+      "overlap": {
+        "draw_us_median": 647596.0,
+        "wait_us_median": 165819.0,
+        "cases_with_pending_surfaces": 2,
+        "cases_with_early_terrain": 2,
+        "trials": [
+          {
+            "camera_position": "(-384.0, 927.4063)",
+            "decoration_sha256": "b1f97697292b69ab43233d53edf7d7f71498c90ba9ac0e816144fcfe788e0061",
+            "early_terrain": true,
+            "early_terrain_valid": true,
+            "first_draw_us": 591653,
+            "grid_sha256": "d3bb3bb4f8086456eb0709eaeddb019909ea7388010b958b2074eb9b9f108c94",
+            "level_id": "skirmish",
+            "missing_surfaces": 0,
+            "mounted_us": 575046,
+            "pages": 2,
+            "pending_surfaces": 16,
+            "surface_wait_us": 145822,
+            "surfaces": 18,
+            "terrain_pass_us": 14528
+          },
+          {
+            "camera_position": "(-384.0, 927.4063)",
+            "decoration_sha256": "b1f97697292b69ab43233d53edf7d7f71498c90ba9ac0e816144fcfe788e0061",
+            "early_terrain": true,
+            "early_terrain_valid": true,
+            "first_draw_us": 703539,
+            "grid_sha256": "d3bb3bb4f8086456eb0709eaeddb019909ea7388010b958b2074eb9b9f108c94",
+            "level_id": "skirmish",
+            "missing_surfaces": 0,
+            "mounted_us": 687459,
+            "pages": 2,
+            "pending_surfaces": 16,
+            "surface_wait_us": 185816,
+            "surfaces": 18,
+            "terrain_pass_us": 15536
+          }
+        ]
+      },
+      "serial": {
+        "draw_us_median": 565264.0,
+        "wait_us_median": 145992.5,
+        "cases_with_pending_surfaces": 2,
+        "cases_with_early_terrain": 0,
+        "trials": [
+          {
+            "camera_position": "(-384.0, 927.4063)",
+            "decoration_sha256": "b1f97697292b69ab43233d53edf7d7f71498c90ba9ac0e816144fcfe788e0061",
+            "early_terrain": false,
+            "first_draw_us": 575454,
+            "grid_sha256": "d3bb3bb4f8086456eb0709eaeddb019909ea7388010b958b2074eb9b9f108c94",
+            "level_id": "skirmish",
+            "missing_surfaces": 0,
+            "mounted_us": 552318,
+            "pages": 2,
+            "pending_surfaces": 10,
+            "surface_wait_us": 136430,
+            "surfaces": 18,
+            "terrain_pass_us": 10
+          },
+          {
+            "camera_position": "(-384.0, 927.4063)",
+            "decoration_sha256": "b1f97697292b69ab43233d53edf7d7f71498c90ba9ac0e816144fcfe788e0061",
+            "early_terrain": false,
+            "first_draw_us": 555074,
+            "grid_sha256": "d3bb3bb4f8086456eb0709eaeddb019909ea7388010b958b2074eb9b9f108c94",
+            "level_id": "skirmish",
+            "missing_surfaces": 0,
+            "mounted_us": 537836,
+            "pages": 2,
+            "pending_surfaces": 11,
+            "surface_wait_us": 155555,
+            "surfaces": 18,
+            "terrain_pass_us": 7
+          }
+        ]
+      }
+    },
+    "classic-settled": {
+      "overlap": {
+        "draw_us_median": 273064,
+        "wait_us_median": 107,
+        "cases_with_pending_surfaces": 0,
+        "cases_with_early_terrain": 0,
+        "trials": [
+          {
+            "camera_position": "(-384.0, 927.4063)",
+            "decoration_sha256": "b1f97697292b69ab43233d53edf7d7f71498c90ba9ac0e816144fcfe788e0061",
+            "early_terrain": false,
+            "first_draw_us": 273064,
+            "grid_sha256": "d3bb3bb4f8086456eb0709eaeddb019909ea7388010b958b2074eb9b9f108c94",
+            "level_id": "skirmish",
+            "missing_surfaces": 0,
+            "mounted_us": 258251,
+            "pages": 2,
+            "pending_surfaces": 0,
+            "surface_wait_us": 107,
+            "surfaces": 18,
+            "terrain_pass_us": 37
+          }
+        ]
+      },
+      "serial": {
+        "draw_us_median": 317622,
+        "wait_us_median": 177,
+        "cases_with_pending_surfaces": 0,
+        "cases_with_early_terrain": 0,
+        "trials": [
+          {
+            "camera_position": "(-384.0, 927.4063)",
+            "decoration_sha256": "b1f97697292b69ab43233d53edf7d7f71498c90ba9ac0e816144fcfe788e0061",
+            "early_terrain": false,
+            "first_draw_us": 317622,
+            "grid_sha256": "d3bb3bb4f8086456eb0709eaeddb019909ea7388010b958b2074eb9b9f108c94",
+            "level_id": "skirmish",
+            "missing_surfaces": 0,
+            "mounted_us": 298312,
+            "pages": 2,
+            "pending_surfaces": 0,
+            "surface_wait_us": 177,
+            "surfaces": 18,
+            "terrain_pass_us": 5
+          }
+        ]
+      }
+    },
+    "custom-fast": {
+      "overlap": {
+        "draw_us_median": 525236.0,
+        "wait_us_median": 51773.0,
+        "cases_with_pending_surfaces": 2,
+        "cases_with_early_terrain": 2,
+        "trials": [
+          {
+            "camera_position": "(-384.0, 927.4063)",
+            "decoration_sha256": "b1f97697292b69ab43233d53edf7d7f71498c90ba9ac0e816144fcfe788e0061",
+            "early_terrain": true,
+            "early_terrain_valid": true,
+            "first_draw_us": 576431,
+            "grid_sha256": "d3bb3bb4f8086456eb0709eaeddb019909ea7388010b958b2074eb9b9f108c94",
+            "level_id": "custom_defense",
+            "missing_surfaces": 0,
+            "mounted_us": 561932,
+            "pages": 1,
+            "pending_surfaces": 18,
+            "surface_wait_us": 103118,
+            "surfaces": 18,
+            "terrain_pass_us": 59939
+          },
+          {
+            "camera_position": "(-384.0, 927.4063)",
+            "decoration_sha256": "b1f97697292b69ab43233d53edf7d7f71498c90ba9ac0e816144fcfe788e0061",
+            "early_terrain": true,
+            "early_terrain_valid": true,
+            "first_draw_us": 474041,
+            "grid_sha256": "d3bb3bb4f8086456eb0709eaeddb019909ea7388010b958b2074eb9b9f108c94",
+            "level_id": "custom_defense",
+            "missing_surfaces": 0,
+            "mounted_us": 458846,
+            "pages": 1,
+            "pending_surfaces": 12,
+            "surface_wait_us": 428,
+            "surfaces": 18,
+            "terrain_pass_us": 50709
+          }
+        ]
+      },
+      "serial": {
+        "draw_us_median": 944862.0,
+        "wait_us_median": 192749.5,
+        "cases_with_pending_surfaces": 2,
+        "cases_with_early_terrain": 0,
+        "trials": [
+          {
+            "camera_position": "(-384.0, 927.4063)",
+            "decoration_sha256": "b1f97697292b69ab43233d53edf7d7f71498c90ba9ac0e816144fcfe788e0061",
+            "early_terrain": false,
+            "first_draw_us": 544299,
+            "grid_sha256": "d3bb3bb4f8086456eb0709eaeddb019909ea7388010b958b2074eb9b9f108c94",
+            "level_id": "custom_defense",
+            "missing_surfaces": 0,
+            "mounted_us": 531213,
+            "pages": 1,
+            "pending_surfaces": 18,
+            "surface_wait_us": 149933,
+            "surfaces": 18,
+            "terrain_pass_us": 4
+          },
+          {
+            "camera_position": "(-384.0, 927.4063)",
+            "decoration_sha256": "b1f97697292b69ab43233d53edf7d7f71498c90ba9ac0e816144fcfe788e0061",
+            "early_terrain": false,
+            "first_draw_us": 1345425,
+            "grid_sha256": "d3bb3bb4f8086456eb0709eaeddb019909ea7388010b958b2074eb9b9f108c94",
+            "level_id": "custom_defense",
+            "missing_surfaces": 0,
+            "mounted_us": 1322332,
+            "pages": 1,
+            "pending_surfaces": 10,
+            "surface_wait_us": 235566,
+            "surfaces": 18,
+            "terrain_pass_us": 8
+          }
+        ]
+      }
+    },
+    "custom-settled": {
+      "overlap": {
+        "draw_us_median": 428946,
+        "wait_us_median": 285,
+        "cases_with_pending_surfaces": 0,
+        "cases_with_early_terrain": 0,
+        "trials": [
+          {
+            "camera_position": "(-384.0, 927.4063)",
+            "decoration_sha256": "b1f97697292b69ab43233d53edf7d7f71498c90ba9ac0e816144fcfe788e0061",
+            "early_terrain": false,
+            "first_draw_us": 428946,
+            "grid_sha256": "d3bb3bb4f8086456eb0709eaeddb019909ea7388010b958b2074eb9b9f108c94",
+            "level_id": "custom_defense",
+            "missing_surfaces": 0,
+            "mounted_us": 412638,
+            "pages": 1,
+            "pending_surfaces": 0,
+            "surface_wait_us": 285,
+            "surfaces": 18,
+            "terrain_pass_us": 59
+          }
+        ]
+      },
+      "serial": {
+        "draw_us_median": 463308,
+        "wait_us_median": 326,
+        "cases_with_pending_surfaces": 0,
+        "cases_with_early_terrain": 0,
+        "trials": [
+          {
+            "camera_position": "(-384.0, 927.4063)",
+            "decoration_sha256": "b1f97697292b69ab43233d53edf7d7f71498c90ba9ac0e816144fcfe788e0061",
+            "early_terrain": false,
+            "first_draw_us": 463308,
+            "grid_sha256": "d3bb3bb4f8086456eb0709eaeddb019909ea7388010b958b2074eb9b9f108c94",
+            "level_id": "custom_defense",
+            "missing_surfaces": 0,
+            "mounted_us": 446643,
+            "pages": 1,
+            "pending_surfaces": 0,
+            "surface_wait_us": 326,
+            "surfaces": 18,
+            "terrain_pass_us": 6
+          }
+        ]
+      }
+    }
+  },
+  "proofs": [
+    {
+      "checks": 15,
+      "facts": {
+        "camera_position": "(-384.0, 927.4063)",
+        "decoration_sha256": "b1f97697292b69ab43233d53edf7d7f71498c90ba9ac0e816144fcfe788e0061",
+        "early_terrain": true,
+        "early_terrain_valid": true,
+        "first_draw_us": 591653,
+        "grid_sha256": "d3bb3bb4f8086456eb0709eaeddb019909ea7388010b958b2074eb9b9f108c94",
+        "level_id": "skirmish",
+        "missing_surfaces": 0,
+        "mounted_us": 575046,
+        "pages": 2,
+        "pending_surfaces": 16,
+        "surface_wait_us": 145822,
+        "surfaces": 18,
+        "terrain_pass_us": 14528
+      },
+      "failures": [],
+      "stage": "overlap-classic-fast",
+      "source_commit": "15228ef3543a3212ed4f28e3feaa5553661cac45",
+      "startup_identity": "80e2b6b6e4d4e8c0b8e4bd03a3f9273b9bb7805ea9750386d5c888ebc2d39c80",
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "a3f468ed7ee1ec7111cd44995658e75b36b12bf217425fb6961a22fe215be188",
+      "package_files_verified": 7,
+      "log_sha256": "ba80b6e78c831adc7c210a0a7b54cfcb9337845bf634c5acfb7e43e221b5c5e0",
+      "fixture_sha256": "d156b76cae20d991f56d95f27e6a6438eaae7eaeebcb5a716d3d75f7a4be7a16",
+      "probe_sha256": "5f8d4dada32c92705da952c64bc29bd2e3a2ca6b3248e07c031772b0ae9b14d2"
+    },
+    {
+      "checks": 15,
+      "facts": {
+        "camera_position": "(-384.0, 927.4063)",
+        "decoration_sha256": "b1f97697292b69ab43233d53edf7d7f71498c90ba9ac0e816144fcfe788e0061",
+        "early_terrain": true,
+        "early_terrain_valid": true,
+        "first_draw_us": 703539,
+        "grid_sha256": "d3bb3bb4f8086456eb0709eaeddb019909ea7388010b958b2074eb9b9f108c94",
+        "level_id": "skirmish",
+        "missing_surfaces": 0,
+        "mounted_us": 687459,
+        "pages": 2,
+        "pending_surfaces": 16,
+        "surface_wait_us": 185816,
+        "surfaces": 18,
+        "terrain_pass_us": 15536
+      },
+      "failures": [],
+      "stage": "overlap-classic-fast",
+      "source_commit": "15228ef3543a3212ed4f28e3feaa5553661cac45",
+      "startup_identity": "80e2b6b6e4d4e8c0b8e4bd03a3f9273b9bb7805ea9750386d5c888ebc2d39c80",
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "a3f468ed7ee1ec7111cd44995658e75b36b12bf217425fb6961a22fe215be188",
+      "package_files_verified": 7,
+      "log_sha256": "1f20a3bc3ce79134055f74d00e2e90771fd2f988a38e6211bdb06cc86b791a98",
+      "fixture_sha256": "d156b76cae20d991f56d95f27e6a6438eaae7eaeebcb5a716d3d75f7a4be7a16",
+      "probe_sha256": "5f8d4dada32c92705da952c64bc29bd2e3a2ca6b3248e07c031772b0ae9b14d2"
+    },
+    {
+      "checks": 15,
+      "facts": {
+        "camera_position": "(-384.0, 927.4063)",
+        "decoration_sha256": "b1f97697292b69ab43233d53edf7d7f71498c90ba9ac0e816144fcfe788e0061",
+        "early_terrain": false,
+        "first_draw_us": 575454,
+        "grid_sha256": "d3bb3bb4f8086456eb0709eaeddb019909ea7388010b958b2074eb9b9f108c94",
+        "level_id": "skirmish",
+        "missing_surfaces": 0,
+        "mounted_us": 552318,
+        "pages": 2,
+        "pending_surfaces": 10,
+        "surface_wait_us": 136430,
+        "surfaces": 18,
+        "terrain_pass_us": 10
+      },
+      "failures": [],
+      "stage": "serial-classic-fast",
+      "source_commit": "15228ef3543a3212ed4f28e3feaa5553661cac45",
+      "startup_identity": "80e2b6b6e4d4e8c0b8e4bd03a3f9273b9bb7805ea9750386d5c888ebc2d39c80",
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "a3f468ed7ee1ec7111cd44995658e75b36b12bf217425fb6961a22fe215be188",
+      "package_files_verified": 7,
+      "log_sha256": "95267d9e44fd3c320ed00515b379e4d37ea8b1115530768d0685e91a79fc90f8",
+      "fixture_sha256": "d156b76cae20d991f56d95f27e6a6438eaae7eaeebcb5a716d3d75f7a4be7a16",
+      "probe_sha256": "5f8d4dada32c92705da952c64bc29bd2e3a2ca6b3248e07c031772b0ae9b14d2"
+    },
+    {
+      "checks": 15,
+      "facts": {
+        "camera_position": "(-384.0, 927.4063)",
+        "decoration_sha256": "b1f97697292b69ab43233d53edf7d7f71498c90ba9ac0e816144fcfe788e0061",
+        "early_terrain": false,
+        "first_draw_us": 555074,
+        "grid_sha256": "d3bb3bb4f8086456eb0709eaeddb019909ea7388010b958b2074eb9b9f108c94",
+        "level_id": "skirmish",
+        "missing_surfaces": 0,
+        "mounted_us": 537836,
+        "pages": 2,
+        "pending_surfaces": 11,
+        "surface_wait_us": 155555,
+        "surfaces": 18,
+        "terrain_pass_us": 7
+      },
+      "failures": [],
+      "stage": "serial-classic-fast",
+      "source_commit": "15228ef3543a3212ed4f28e3feaa5553661cac45",
+      "startup_identity": "80e2b6b6e4d4e8c0b8e4bd03a3f9273b9bb7805ea9750386d5c888ebc2d39c80",
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "a3f468ed7ee1ec7111cd44995658e75b36b12bf217425fb6961a22fe215be188",
+      "package_files_verified": 7,
+      "log_sha256": "6a18eb8e55214d2f67faee6530180c8471e5f99dca06dda684ede248e50ee6a9",
+      "fixture_sha256": "d156b76cae20d991f56d95f27e6a6438eaae7eaeebcb5a716d3d75f7a4be7a16",
+      "probe_sha256": "5f8d4dada32c92705da952c64bc29bd2e3a2ca6b3248e07c031772b0ae9b14d2"
+    },
+    {
+      "checks": 15,
+      "facts": {
+        "camera_position": "(-384.0, 927.4063)",
+        "decoration_sha256": "b1f97697292b69ab43233d53edf7d7f71498c90ba9ac0e816144fcfe788e0061",
+        "early_terrain": false,
+        "first_draw_us": 273064,
+        "grid_sha256": "d3bb3bb4f8086456eb0709eaeddb019909ea7388010b958b2074eb9b9f108c94",
+        "level_id": "skirmish",
+        "missing_surfaces": 0,
+        "mounted_us": 258251,
+        "pages": 2,
+        "pending_surfaces": 0,
+        "surface_wait_us": 107,
+        "surfaces": 18,
+        "terrain_pass_us": 37
+      },
+      "failures": [],
+      "stage": "overlap-classic-settled",
+      "source_commit": "15228ef3543a3212ed4f28e3feaa5553661cac45",
+      "startup_identity": "80e2b6b6e4d4e8c0b8e4bd03a3f9273b9bb7805ea9750386d5c888ebc2d39c80",
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "a3f468ed7ee1ec7111cd44995658e75b36b12bf217425fb6961a22fe215be188",
+      "package_files_verified": 7,
+      "log_sha256": "a4a35293a0007cbfd9331f91513fca576798e5dfb7bc23d97f9751254bdd6e97",
+      "fixture_sha256": "d156b76cae20d991f56d95f27e6a6438eaae7eaeebcb5a716d3d75f7a4be7a16",
+      "probe_sha256": "5f8d4dada32c92705da952c64bc29bd2e3a2ca6b3248e07c031772b0ae9b14d2"
+    },
+    {
+      "checks": 15,
+      "facts": {
+        "camera_position": "(-384.0, 927.4063)",
+        "decoration_sha256": "b1f97697292b69ab43233d53edf7d7f71498c90ba9ac0e816144fcfe788e0061",
+        "early_terrain": false,
+        "first_draw_us": 317622,
+        "grid_sha256": "d3bb3bb4f8086456eb0709eaeddb019909ea7388010b958b2074eb9b9f108c94",
+        "level_id": "skirmish",
+        "missing_surfaces": 0,
+        "mounted_us": 298312,
+        "pages": 2,
+        "pending_surfaces": 0,
+        "surface_wait_us": 177,
+        "surfaces": 18,
+        "terrain_pass_us": 5
+      },
+      "failures": [],
+      "stage": "serial-classic-settled",
+      "source_commit": "15228ef3543a3212ed4f28e3feaa5553661cac45",
+      "startup_identity": "80e2b6b6e4d4e8c0b8e4bd03a3f9273b9bb7805ea9750386d5c888ebc2d39c80",
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "a3f468ed7ee1ec7111cd44995658e75b36b12bf217425fb6961a22fe215be188",
+      "package_files_verified": 7,
+      "log_sha256": "f92c57680c5fcd898af028873b8f485a1699a145455275235d513e75a9b46ee8",
+      "fixture_sha256": "d156b76cae20d991f56d95f27e6a6438eaae7eaeebcb5a716d3d75f7a4be7a16",
+      "probe_sha256": "5f8d4dada32c92705da952c64bc29bd2e3a2ca6b3248e07c031772b0ae9b14d2"
+    },
+    {
+      "checks": 17,
+      "facts": {
+        "camera_position": "(-384.0, 927.4063)",
+        "decoration_sha256": "b1f97697292b69ab43233d53edf7d7f71498c90ba9ac0e816144fcfe788e0061",
+        "early_terrain": true,
+        "early_terrain_valid": true,
+        "first_draw_us": 576431,
+        "grid_sha256": "d3bb3bb4f8086456eb0709eaeddb019909ea7388010b958b2074eb9b9f108c94",
+        "level_id": "custom_defense",
+        "missing_surfaces": 0,
+        "mounted_us": 561932,
+        "pages": 1,
+        "pending_surfaces": 18,
+        "surface_wait_us": 103118,
+        "surfaces": 18,
+        "terrain_pass_us": 59939
+      },
+      "failures": [],
+      "stage": "overlap-custom-fast",
+      "source_commit": "15228ef3543a3212ed4f28e3feaa5553661cac45",
+      "startup_identity": "80e2b6b6e4d4e8c0b8e4bd03a3f9273b9bb7805ea9750386d5c888ebc2d39c80",
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "a3f468ed7ee1ec7111cd44995658e75b36b12bf217425fb6961a22fe215be188",
+      "package_files_verified": 7,
+      "log_sha256": "e815c75583934afc8db77b3cebb0fbb24f78c802282a268b8c6b2c342fcfd60a",
+      "fixture_sha256": "d156b76cae20d991f56d95f27e6a6438eaae7eaeebcb5a716d3d75f7a4be7a16",
+      "probe_sha256": "5f8d4dada32c92705da952c64bc29bd2e3a2ca6b3248e07c031772b0ae9b14d2"
+    },
+    {
+      "checks": 17,
+      "facts": {
+        "camera_position": "(-384.0, 927.4063)",
+        "decoration_sha256": "b1f97697292b69ab43233d53edf7d7f71498c90ba9ac0e816144fcfe788e0061",
+        "early_terrain": true,
+        "early_terrain_valid": true,
+        "first_draw_us": 474041,
+        "grid_sha256": "d3bb3bb4f8086456eb0709eaeddb019909ea7388010b958b2074eb9b9f108c94",
+        "level_id": "custom_defense",
+        "missing_surfaces": 0,
+        "mounted_us": 458846,
+        "pages": 1,
+        "pending_surfaces": 12,
+        "surface_wait_us": 428,
+        "surfaces": 18,
+        "terrain_pass_us": 50709
+      },
+      "failures": [],
+      "stage": "overlap-custom-fast",
+      "source_commit": "15228ef3543a3212ed4f28e3feaa5553661cac45",
+      "startup_identity": "80e2b6b6e4d4e8c0b8e4bd03a3f9273b9bb7805ea9750386d5c888ebc2d39c80",
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "a3f468ed7ee1ec7111cd44995658e75b36b12bf217425fb6961a22fe215be188",
+      "package_files_verified": 7,
+      "log_sha256": "bc541a04edb4e5832bac3de6d49806442846b028b3f55f6c61566527e0b9c08b",
+      "fixture_sha256": "d156b76cae20d991f56d95f27e6a6438eaae7eaeebcb5a716d3d75f7a4be7a16",
+      "probe_sha256": "5f8d4dada32c92705da952c64bc29bd2e3a2ca6b3248e07c031772b0ae9b14d2"
+    },
+    {
+      "checks": 17,
+      "facts": {
+        "camera_position": "(-384.0, 927.4063)",
+        "decoration_sha256": "b1f97697292b69ab43233d53edf7d7f71498c90ba9ac0e816144fcfe788e0061",
+        "early_terrain": false,
+        "first_draw_us": 544299,
+        "grid_sha256": "d3bb3bb4f8086456eb0709eaeddb019909ea7388010b958b2074eb9b9f108c94",
+        "level_id": "custom_defense",
+        "missing_surfaces": 0,
+        "mounted_us": 531213,
+        "pages": 1,
+        "pending_surfaces": 18,
+        "surface_wait_us": 149933,
+        "surfaces": 18,
+        "terrain_pass_us": 4
+      },
+      "failures": [],
+      "stage": "serial-custom-fast",
+      "source_commit": "15228ef3543a3212ed4f28e3feaa5553661cac45",
+      "startup_identity": "80e2b6b6e4d4e8c0b8e4bd03a3f9273b9bb7805ea9750386d5c888ebc2d39c80",
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "a3f468ed7ee1ec7111cd44995658e75b36b12bf217425fb6961a22fe215be188",
+      "package_files_verified": 7,
+      "log_sha256": "18d0d524a21871786b372eb7685c7513ad69964b77ed203903d24eed31490ee9",
+      "fixture_sha256": "d156b76cae20d991f56d95f27e6a6438eaae7eaeebcb5a716d3d75f7a4be7a16",
+      "probe_sha256": "5f8d4dada32c92705da952c64bc29bd2e3a2ca6b3248e07c031772b0ae9b14d2"
+    },
+    {
+      "checks": 17,
+      "facts": {
+        "camera_position": "(-384.0, 927.4063)",
+        "decoration_sha256": "b1f97697292b69ab43233d53edf7d7f71498c90ba9ac0e816144fcfe788e0061",
+        "early_terrain": false,
+        "first_draw_us": 1345425,
+        "grid_sha256": "d3bb3bb4f8086456eb0709eaeddb019909ea7388010b958b2074eb9b9f108c94",
+        "level_id": "custom_defense",
+        "missing_surfaces": 0,
+        "mounted_us": 1322332,
+        "pages": 1,
+        "pending_surfaces": 10,
+        "surface_wait_us": 235566,
+        "surfaces": 18,
+        "terrain_pass_us": 8
+      },
+      "failures": [],
+      "stage": "serial-custom-fast",
+      "source_commit": "15228ef3543a3212ed4f28e3feaa5553661cac45",
+      "startup_identity": "80e2b6b6e4d4e8c0b8e4bd03a3f9273b9bb7805ea9750386d5c888ebc2d39c80",
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "a3f468ed7ee1ec7111cd44995658e75b36b12bf217425fb6961a22fe215be188",
+      "package_files_verified": 7,
+      "log_sha256": "8c5ec999dd9e67545eaff08b325366fdfa15211379f123af9ed78d74645ad354",
+      "fixture_sha256": "d156b76cae20d991f56d95f27e6a6438eaae7eaeebcb5a716d3d75f7a4be7a16",
+      "probe_sha256": "5f8d4dada32c92705da952c64bc29bd2e3a2ca6b3248e07c031772b0ae9b14d2"
+    },
+    {
+      "checks": 17,
+      "facts": {
+        "camera_position": "(-384.0, 927.4063)",
+        "decoration_sha256": "b1f97697292b69ab43233d53edf7d7f71498c90ba9ac0e816144fcfe788e0061",
+        "early_terrain": false,
+        "first_draw_us": 428946,
+        "grid_sha256": "d3bb3bb4f8086456eb0709eaeddb019909ea7388010b958b2074eb9b9f108c94",
+        "level_id": "custom_defense",
+        "missing_surfaces": 0,
+        "mounted_us": 412638,
+        "pages": 1,
+        "pending_surfaces": 0,
+        "surface_wait_us": 285,
+        "surfaces": 18,
+        "terrain_pass_us": 59
+      },
+      "failures": [],
+      "stage": "overlap-custom-settled",
+      "source_commit": "15228ef3543a3212ed4f28e3feaa5553661cac45",
+      "startup_identity": "80e2b6b6e4d4e8c0b8e4bd03a3f9273b9bb7805ea9750386d5c888ebc2d39c80",
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "a3f468ed7ee1ec7111cd44995658e75b36b12bf217425fb6961a22fe215be188",
+      "package_files_verified": 7,
+      "log_sha256": "dec473f75077c5599558bc3f58c343fc67e7efbfdd2f312abb5f12417da51744",
+      "fixture_sha256": "d156b76cae20d991f56d95f27e6a6438eaae7eaeebcb5a716d3d75f7a4be7a16",
+      "probe_sha256": "5f8d4dada32c92705da952c64bc29bd2e3a2ca6b3248e07c031772b0ae9b14d2"
+    },
+    {
+      "checks": 17,
+      "facts": {
+        "camera_position": "(-384.0, 927.4063)",
+        "decoration_sha256": "b1f97697292b69ab43233d53edf7d7f71498c90ba9ac0e816144fcfe788e0061",
+        "early_terrain": false,
+        "first_draw_us": 463308,
+        "grid_sha256": "d3bb3bb4f8086456eb0709eaeddb019909ea7388010b958b2074eb9b9f108c94",
+        "level_id": "custom_defense",
+        "missing_surfaces": 0,
+        "mounted_us": 446643,
+        "pages": 1,
+        "pending_surfaces": 0,
+        "surface_wait_us": 326,
+        "surfaces": 18,
+        "terrain_pass_us": 6
+      },
+      "failures": [],
+      "stage": "serial-custom-settled",
+      "source_commit": "15228ef3543a3212ed4f28e3feaa5553661cac45",
+      "startup_identity": "80e2b6b6e4d4e8c0b8e4bd03a3f9273b9bb7805ea9750386d5c888ebc2d39c80",
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "a3f468ed7ee1ec7111cd44995658e75b36b12bf217425fb6961a22fe215be188",
+      "package_files_verified": 7,
+      "log_sha256": "d161d76478c14990d3e670353b067ea546ac65cea5fe0ceb58e4d14d98a5e851",
+      "fixture_sha256": "d156b76cae20d991f56d95f27e6a6438eaae7eaeebcb5a716d3d75f7a4be7a16",
+      "probe_sha256": "5f8d4dada32c92705da952c64bc29bd2e3a2ca6b3248e07c031772b0ae9b14d2"
+    }
+  ]
+}
