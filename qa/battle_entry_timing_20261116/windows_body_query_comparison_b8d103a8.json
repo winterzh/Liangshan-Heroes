@@ -1,0 +1,586 @@
+{
+  "query": {
+    "candidate": "b8d103a8f8e61acf7fe74db4bf23aa814ae98497",
+    "source_package": {
+      "candidate": "b8d103a8f8e61acf7fe74db4bf23aa814ae98497",
+      "payload_files_unchanged": true,
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "cfc9b1cc6c7058a4ad874cb6a17190ae0799cbf237ab05df673cf4c7007c614b",
+      "split_identity": "83afa730bda31daf859b593de1414d3007ec4905d2bfbeee319de74c5206e2a0",
+      "exe_unchanged": true,
+      "exit_code": 0,
+      "seconds": 99.239,
+      "errors": [],
+      "warnings": [],
+      "log_sha256": "0132a34c66fde5926949e624537e775a30784c0d417651eeee3e25b5e8ad7051",
+      "report_sha256": "3f2efd560b4c7f5c611dd992c28f885e979ee7661fd14230822030fecffb0c56"
+    },
+    "runtime_checks_passed": true,
+    "short_gate_failures": [],
+    "transitions": 17,
+    "fixture_sha256": {
+      "driver.gd": "f3a5b2469d2ee5d9cec74ff53ebdaeb8956ce0eb046072bcc801f97659165ee5",
+      "body_stock.gd": "d7c19ea048533eee7a21d6c4c31d12b183cf2b6ab826cb9253e94f298eca129d",
+      "body_cached.gd": "8e7776265dd8b9684f1f6170ee6fd44d5e1234e572851a2be4f189e491466152",
+      "body_typed.gd": "1ea7edf1713691ab65643fb88c077b3f13528572f0cef5fb3150986ef4f28c88"
+    },
+    "scope": "Paired body query timing on independent copies of the same exact battle state, with six balanced execution orders. Cases combine observed path destinations and two offsets per active actor. Also compares the empty-grid fallback. The trial reproduces body query wall times; full rendering and simulation budgets are measured separately.",
+    "overall": {
+      "matched_grid_queries": 6792,
+      "observed_path_queries": 1526,
+      "blocked_queries": 0,
+      "matched_fallback_queries": 1632,
+      "snapshots": 102,
+      "movement": {
+        "advancing": 1526,
+        "forward_blocked": 0,
+        "unneeded_y_body_checks": 0,
+        "unneeded_y_map_checks": 0,
+        "x_accepted": 0
+      },
+      "median_ns_per_query": {
+        "stock": 1605.1,
+        "cached": 1658.5,
+        "typed": 1709.1
+      },
+      "median_paired_change_percent": {
+        "cached": 3.14,
+        "typed": 5.59
+      }
+    },
+    "by_route": {
+      "arena:arena": {
+        "matched_grid_queries": 2808,
+        "observed_path_queries": 900,
+        "blocked_queries": 0,
+        "matched_fallback_queries": 288,
+        "snapshots": 18,
+        "movement": {
+          "advancing": 900,
+          "forward_blocked": 0,
+          "unneeded_y_body_checks": 0,
+          "unneeded_y_map_checks": 0,
+          "x_accepted": 0
+        },
+        "median_ns_per_query": {
+          "stock": 1571.3,
+          "cached": 1612.2,
+          "typed": 1688.0
+        },
+        "median_paired_change_percent": {
+          "cached": 2.87,
+          "typed": 6.27
+        }
+      },
+      "campaign:level1": {
+        "matched_grid_queries": 375,
+        "observed_path_queries": 41,
+        "blocked_queries": 0,
+        "matched_fallback_queries": 288,
+        "snapshots": 18,
+        "movement": {
+          "advancing": 41,
+          "forward_blocked": 0,
+          "unneeded_y_body_checks": 0,
+          "unneeded_y_map_checks": 0,
+          "x_accepted": 0
+        },
+        "median_ns_per_query": {
+          "stock": 1436.6,
+          "cached": 1507.5,
+          "typed": 1512.1
+        },
+        "median_paired_change_percent": {
+          "cached": 3.37,
+          "typed": 5.37
+        }
+      },
+      "campaign:level5": {
+        "matched_grid_queries": 1402,
+        "observed_path_queries": 106,
+        "blocked_queries": 0,
+        "matched_fallback_queries": 192,
+        "snapshots": 12,
+        "movement": {
+          "advancing": 106,
+          "forward_blocked": 0,
+          "unneeded_y_body_checks": 0,
+          "unneeded_y_map_checks": 0,
+          "x_accepted": 0
+        },
+        "median_ns_per_query": {
+          "stock": 1417.7,
+          "cached": 1471.3,
+          "typed": 1466.7
+        },
+        "median_paired_change_percent": {
+          "cached": 3.19,
+          "typed": 5.41
+        }
+      },
+      "custom_defense:custom_defense": {
+        "matched_grid_queries": 744,
+        "observed_path_queries": 132,
+        "blocked_queries": 0,
+        "matched_fallback_queries": 288,
+        "snapshots": 18,
+        "movement": {
+          "advancing": 132,
+          "forward_blocked": 0,
+          "unneeded_y_body_checks": 0,
+          "unneeded_y_map_checks": 0,
+          "x_accepted": 0
+        },
+        "median_ns_per_query": {
+          "stock": 1758.4,
+          "cached": 1805.9,
+          "typed": 1856.2
+        },
+        "median_paired_change_percent": {
+          "cached": 3.29,
+          "typed": 5.48
+        }
+      },
+      "skirmish:skirmish": {
+        "matched_grid_queries": 744,
+        "observed_path_queries": 132,
+        "blocked_queries": 0,
+        "matched_fallback_queries": 288,
+        "snapshots": 18,
+        "movement": {
+          "advancing": 132,
+          "forward_blocked": 0,
+          "unneeded_y_body_checks": 0,
+          "unneeded_y_map_checks": 0,
+          "x_accepted": 0
+        },
+        "median_ns_per_query": {
+          "stock": 1646.3,
+          "cached": 1709.9,
+          "typed": 1739.3
+        },
+        "median_paired_change_percent": {
+          "cached": 2.69,
+          "typed": 5.86
+        }
+      },
+      "skirmish_ai:skirmish_ai": {
+        "matched_grid_queries": 719,
+        "observed_path_queries": 215,
+        "blocked_queries": 0,
+        "matched_fallback_queries": 288,
+        "snapshots": 18,
+        "movement": {
+          "advancing": 215,
+          "forward_blocked": 0,
+          "unneeded_y_body_checks": 0,
+          "unneeded_y_map_checks": 0,
+          "x_accepted": 0
+        },
+        "median_ns_per_query": {
+          "stock": 1865.1,
+          "cached": 1942.6,
+          "typed": 1975.0
+        },
+        "median_paired_change_percent": {
+          "cached": 3.2,
+          "typed": 6.33
+        }
+      }
+    }
+  },
+  "neighbors": {
+    "candidate": "b8d103a8f8e61acf7fe74db4bf23aa814ae98497",
+    "source_package": {
+      "candidate": "b8d103a8f8e61acf7fe74db4bf23aa814ae98497",
+      "payload_files_unchanged": true,
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "cfc9b1cc6c7058a4ad874cb6a17190ae0799cbf237ab05df673cf4c7007c614b",
+      "split_identity": "83afa730bda31daf859b593de1414d3007ec4905d2bfbeee319de74c5206e2a0",
+      "exe_unchanged": true,
+      "exit_code": 0,
+      "seconds": 98.936,
+      "errors": [],
+      "warnings": [],
+      "log_sha256": "2d1e3b273bad0457e1391dfe6ce3c9c97e25184cb94a7b837241558cf72e0dc5",
+      "report_sha256": "c032e30a5ceeae8ee71ec692682b563c1d566dd05e3bcf5c9fdca218df9ad4ef"
+    },
+    "runtime_checks_passed": true,
+    "short_gate_failures": [],
+    "transitions": 17,
+    "fixture_sha256": {
+      "driver.gd": "d9347d54da84bd1d5f4388bceb7be73d522ec82b804e6423cb6b399bd5981125",
+      "body_stock.gd": "b7e50246402b48bc0f584ccc9d07705c2caf6f2e3d4e1db67f09d97a8a6ef3be",
+      "body_neighbors.gd": "aa0b2d0056461a36edd4e53eb9aa810f4c20a5f1dad58a32b93fa1f9fa21e32e",
+      "body_flat.gd": "a1a41c36aedc16126db31b1f69a2aa31a6108ce4ef3263a4f940da9b5d390543"
+    },
+    "scope": "Paired body queries on copies of the same battle state, with six balanced execution orders. Cases include path destinations and offsets, plus occupied enemy positions for the neighborhood trial. Each neighborhood timing repetition clears its cache. The empty-grid fallback is checked separately.",
+    "overall": {
+      "matched_grid_queries": 7610,
+      "observed_path_queries": 1528,
+      "blocked_queries": 816,
+      "matched_fallback_queries": 1632,
+      "snapshots": 102,
+      "movement": {
+        "advancing": 1528,
+        "forward_blocked": 0,
+        "unneeded_y_body_checks": 0,
+        "unneeded_y_map_checks": 0,
+        "x_accepted": 0
+      },
+      "median_ns_per_query": {
+        "stock": 1544.0,
+        "neighbors": 1408.3,
+        "flat": 1396.3
+      },
+      "median_paired_change_percent": {
+        "neighbors": -9.83,
+        "flat": -10.13
+      }
+    },
+    "by_route": {
+      "arena:arena": {
+        "matched_grid_queries": 2952,
+        "observed_path_queries": 900,
+        "blocked_queries": 144,
+        "matched_fallback_queries": 288,
+        "snapshots": 18,
+        "movement": {
+          "advancing": 900,
+          "forward_blocked": 0,
+          "unneeded_y_body_checks": 0,
+          "unneeded_y_map_checks": 0,
+          "x_accepted": 0
+        },
+        "median_ns_per_query": {
+          "stock": 1318.0,
+          "neighbors": 919.0,
+          "flat": 928.0
+        },
+        "median_paired_change_percent": {
+          "neighbors": -30.46,
+          "flat": -29.57
+        }
+      },
+      "campaign:level1": {
+        "matched_grid_queries": 519,
+        "observed_path_queries": 41,
+        "blocked_queries": 144,
+        "matched_fallback_queries": 288,
+        "snapshots": 18,
+        "movement": {
+          "advancing": 41,
+          "forward_blocked": 0,
+          "unneeded_y_body_checks": 0,
+          "unneeded_y_map_checks": 0,
+          "x_accepted": 0
+        },
+        "median_ns_per_query": {
+          "stock": 1403.0,
+          "neighbors": 1548.9,
+          "flat": 1506.2
+        },
+        "median_paired_change_percent": {
+          "neighbors": 8.6,
+          "flat": 6.39
+        }
+      },
+      "campaign:level5": {
+        "matched_grid_queries": 1500,
+        "observed_path_queries": 108,
+        "blocked_queries": 96,
+        "matched_fallback_queries": 192,
+        "snapshots": 12,
+        "movement": {
+          "advancing": 108,
+          "forward_blocked": 0,
+          "unneeded_y_body_checks": 0,
+          "unneeded_y_map_checks": 0,
+          "x_accepted": 0
+        },
+        "median_ns_per_query": {
+          "stock": 1383.2,
+          "neighbors": 1289.2,
+          "flat": 1290.8
+        },
+        "median_paired_change_percent": {
+          "neighbors": -6.75,
+          "flat": -5.91
+        }
+      },
+      "custom_defense:custom_defense": {
+        "matched_grid_queries": 888,
+        "observed_path_queries": 132,
+        "blocked_queries": 144,
+        "matched_fallback_queries": 288,
+        "snapshots": 18,
+        "movement": {
+          "advancing": 132,
+          "forward_blocked": 0,
+          "unneeded_y_body_checks": 0,
+          "unneeded_y_map_checks": 0,
+          "x_accepted": 0
+        },
+        "median_ns_per_query": {
+          "stock": 1824.8,
+          "neighbors": 1673.9,
+          "flat": 1659.4
+        },
+        "median_paired_change_percent": {
+          "neighbors": -9.92,
+          "flat": -9.63
+        }
+      },
+      "skirmish:skirmish": {
+        "matched_grid_queries": 888,
+        "observed_path_queries": 132,
+        "blocked_queries": 144,
+        "matched_fallback_queries": 288,
+        "snapshots": 18,
+        "movement": {
+          "advancing": 132,
+          "forward_blocked": 0,
+          "unneeded_y_body_checks": 0,
+          "unneeded_y_map_checks": 0,
+          "x_accepted": 0
+        },
+        "median_ns_per_query": {
+          "stock": 1559.9,
+          "neighbors": 1420.8,
+          "flat": 1406.0
+        },
+        "median_paired_change_percent": {
+          "neighbors": -9.01,
+          "flat": -9.35
+        }
+      },
+      "skirmish_ai:skirmish_ai": {
+        "matched_grid_queries": 863,
+        "observed_path_queries": 215,
+        "blocked_queries": 144,
+        "matched_fallback_queries": 288,
+        "snapshots": 18,
+        "movement": {
+          "advancing": 215,
+          "forward_blocked": 0,
+          "unneeded_y_body_checks": 0,
+          "unneeded_y_map_checks": 0,
+          "x_accepted": 0
+        },
+        "median_ns_per_query": {
+          "stock": 1674.5,
+          "neighbors": 1369.8,
+          "flat": 1364.1
+        },
+        "median_paired_change_percent": {
+          "neighbors": -13.45,
+          "flat": -13.57
+        }
+      }
+    }
+  },
+  "paths": {
+    "candidate": "b8d103a8f8e61acf7fe74db4bf23aa814ae98497",
+    "source_package": {
+      "candidate": "b8d103a8f8e61acf7fe74db4bf23aa814ae98497",
+      "payload_files_unchanged": true,
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "cfc9b1cc6c7058a4ad874cb6a17190ae0799cbf237ab05df673cf4c7007c614b",
+      "split_identity": "83afa730bda31daf859b593de1414d3007ec4905d2bfbeee319de74c5206e2a0",
+      "exe_unchanged": true,
+      "exit_code": 0,
+      "seconds": 105.121,
+      "errors": [],
+      "warnings": [],
+      "log_sha256": "26d4f9b45447d07879f140dce69a55dd6f2930bd201d467820bd51bd5660202b",
+      "report_sha256": "5ccca8f57425c7bbdae28e15721840429cf88bbd35d51d6637e0477c7eb71fad"
+    },
+    "runtime_checks_passed": true,
+    "short_gate_failures": [],
+    "transitions": 17,
+    "fixture_sha256": {
+      "driver.gd": "993288cdd551ee460e2b9aca8e6613beef2f9fedec63282089d4ce736115427f",
+      "body_stock.gd": "b7e50246402b48bc0f584ccc9d07705c2caf6f2e3d4e1db67f09d97a8a6ef3be",
+      "body_neighbors.gd": "aa0b2d0056461a36edd4e53eb9aa810f4c20a5f1dad58a32b93fa1f9fa21e32e",
+      "body_flat.gd": "a1a41c36aedc16126db31b1f69a2aa31a6108ce4ef3263a4f940da9b5d390543"
+    },
+    "scope": "Paired body queries on copies of the same battle state, with six balanced execution orders. Cases use only path destinations from play. Each neighborhood timing repetition clears its cache. The empty-grid fallback is checked separately.",
+    "overall": {
+      "matched_grid_queries": 1528,
+      "observed_path_queries": 1528,
+      "blocked_queries": 0,
+      "matched_fallback_queries": 916,
+      "snapshots": 102,
+      "minimum_movers": 8,
+      "maximum_movers": 54,
+      "movement": {
+        "advancing": 1528,
+        "forward_blocked": 2,
+        "unneeded_y_body_checks": 0,
+        "unneeded_y_map_checks": 2,
+        "x_accepted": 2
+      },
+      "median_ns_per_query": {
+        "stock": 1964.3,
+        "neighbors": 2075.2,
+        "flat": 2032.0
+      },
+      "median_paired_change_percent": {
+        "neighbors": 8.34,
+        "flat": 8.14
+      }
+    },
+    "by_route": {
+      "arena:arena": {
+        "matched_grid_queries": 900,
+        "observed_path_queries": 900,
+        "blocked_queries": 0,
+        "matched_fallback_queries": 288,
+        "snapshots": 18,
+        "minimum_movers": 53,
+        "maximum_movers": 53,
+        "movement": {
+          "advancing": 900,
+          "forward_blocked": 0,
+          "unneeded_y_body_checks": 0,
+          "unneeded_y_map_checks": 0,
+          "x_accepted": 0
+        },
+        "median_ns_per_query": {
+          "stock": 1655.0,
+          "neighbors": 1183.5,
+          "flat": 1235.2
+        },
+        "median_paired_change_percent": {
+          "neighbors": -26.61,
+          "flat": -26.27
+        }
+      },
+      "campaign:level1": {
+        "matched_grid_queries": 41,
+        "observed_path_queries": 41,
+        "blocked_queries": 0,
+        "matched_fallback_queries": 41,
+        "snapshots": 18,
+        "minimum_movers": 8,
+        "maximum_movers": 12,
+        "movement": {
+          "advancing": 41,
+          "forward_blocked": 0,
+          "unneeded_y_body_checks": 0,
+          "unneeded_y_map_checks": 0,
+          "x_accepted": 0
+        },
+        "median_ns_per_query": {
+          "stock": 2045.6,
+          "neighbors": 2590.3,
+          "flat": 2578.6
+        },
+        "median_paired_change_percent": {
+          "neighbors": 25.15,
+          "flat": 25.37
+        }
+      },
+      "campaign:level5": {
+        "matched_grid_queries": 108,
+        "observed_path_queries": 108,
+        "blocked_queries": 0,
+        "matched_fallback_queries": 108,
+        "snapshots": 12,
+        "minimum_movers": 54,
+        "maximum_movers": 54,
+        "movement": {
+          "advancing": 108,
+          "forward_blocked": 0,
+          "unneeded_y_body_checks": 0,
+          "unneeded_y_map_checks": 0,
+          "x_accepted": 0
+        },
+        "median_ns_per_query": {
+          "stock": 2306.7,
+          "neighbors": 2463.0,
+          "flat": 2475.1
+        },
+        "median_paired_change_percent": {
+          "neighbors": 8.93,
+          "flat": 6.75
+        }
+      },
+      "custom_defense:custom_defense": {
+        "matched_grid_queries": 132,
+        "observed_path_queries": 132,
+        "blocked_queries": 0,
+        "matched_fallback_queries": 132,
+        "snapshots": 18,
+        "minimum_movers": 17,
+        "maximum_movers": 17,
+        "movement": {
+          "advancing": 132,
+          "forward_blocked": 0,
+          "unneeded_y_body_checks": 0,
+          "unneeded_y_map_checks": 0,
+          "x_accepted": 0
+        },
+        "median_ns_per_query": {
+          "stock": 1516.4,
+          "neighbors": 1655.5,
+          "flat": 1657.7
+        },
+        "median_paired_change_percent": {
+          "neighbors": 10.24,
+          "flat": 10.27
+        }
+      },
+      "skirmish:skirmish": {
+        "matched_grid_queries": 132,
+        "observed_path_queries": 132,
+        "blocked_queries": 0,
+        "matched_fallback_queries": 132,
+        "snapshots": 18,
+        "minimum_movers": 17,
+        "maximum_movers": 17,
+        "movement": {
+          "advancing": 132,
+          "forward_blocked": 0,
+          "unneeded_y_body_checks": 0,
+          "unneeded_y_map_checks": 0,
+          "x_accepted": 0
+        },
+        "median_ns_per_query": {
+          "stock": 2295.6,
+          "neighbors": 2450.0,
+          "flat": 2526.7
+        },
+        "median_paired_change_percent": {
+          "neighbors": 11.85,
+          "flat": 10.94
+        }
+      },
+      "skirmish_ai:skirmish_ai": {
+        "matched_grid_queries": 215,
+        "observed_path_queries": 215,
+        "blocked_queries": 0,
+        "matched_fallback_queries": 215,
+        "snapshots": 18,
+        "minimum_movers": 14,
+        "maximum_movers": 14,
+        "movement": {
+          "advancing": 215,
+          "forward_blocked": 2,
+          "unneeded_y_body_checks": 0,
+          "unneeded_y_map_checks": 2,
+          "x_accepted": 2
+        },
+        "median_ns_per_query": {
+          "stock": 2440.7,
+          "neighbors": 2449.1,
+          "flat": 2541.2
+        },
+        "median_paired_change_percent": {
+          "neighbors": 1.23,
+          "flat": 2.99
+        }
+      }
+    }
+  }
+}
