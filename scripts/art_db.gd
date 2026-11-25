@@ -1187,6 +1187,11 @@ func _collect_menu_request(path: String) -> Resource:
 	return ResourceLoader.load_threaded_get(path) if status != ResourceLoader.THREAD_LOAD_INVALID_RESOURCE else null
 
 
+func discard_battle_opening_requests(paths: Array[String]) -> void:
+	for path in paths:
+		_collect_menu_request.call_deferred(path)
+
+
 func prefetch_gao_opening_art() -> void:
 	if _gao_opening_art_requested or DisplayServer.get_name() == "headless":
 		return

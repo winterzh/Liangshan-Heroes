@@ -5,9 +5,15 @@ extends Control
 const SPEAKERS := {}
 const OPENING_PREVIEW_DELAY_US := 120_000
 const SCENERY_CALIBRATION_SLICE_US := 24_000
+const BATTLE_LOADING_TIMEOUT_SECONDS := 25.0
 var _update_label: Label
 var _update_overlay: Control
 var _entry_overlay: ColorRect
+var _entry_attempt := 0
+var _entry_message: Label
+var _entry_progress: ProgressBar
+var _entry_back: Button
+var _entry_timeout: Timer
 var _entry_prepared_battle: Node
 var _entry_scan: RefCounted
 var _entry_environment_requests: Array[String] = []
@@ -69,12 +75,17 @@ func _launch(campaign_level_id := "") -> void:
 		_launch_immediately()
 		return
 	_show_battle_loading(campaign_level_id)
+	_entry_attempt += 1
+	var attempt := _entry_attempt
+	if _entry_timeout != null:
+		_entry_timeout.timeout.connect(_show_battle_loading_failure.bind(attempt))
+		_entry_timeout.start()
 	if OS.get_name() == "Windows" and (not campaign_level_id.is_empty() or Campaign.skirmish \
 			or Campaign.custom_defense or Campaign.skirmish_ai):
 		# Resource workers can begin decoding as soon as requests are submitted.
 		# Draw the loading overlay before the first batch competes for time.
 		await RenderingServer.frame_post_draw
-		if AppLifecycle.quit_started() or not is_inside_tree():
+		if not _battle_launch_active(attempt):
 			return
 		_request_battle_environment(campaign_level_id)
 		if campaign_level_id in ["level1", "level3", "level5"]:
@@ -84,7 +95,7 @@ func _launch(campaign_level_id := "") -> void:
 			elif campaign_level_id == "level5":
 				Art.prefetch_gao_opening_art()
 	# Continue on the main thread. The worker returns only verified file data.
-	_finish_battle_launch.call_deferred(campaign_level_id)
+	_finish_battle_launch.call_deferred(campaign_level_id, attempt)
 
 
 func _launch_immediately() -> void:
@@ -128,6 +139,21 @@ func _show_battle_loading(campaign_level_id: String) -> void:
 	progress.show_percentage = false
 	progress.indeterminate = true
 	column.add_child(progress)
+	if OS.get_name() == "Windows":
+		_entry_overlay.mouse_force_pass_scroll_events = false
+		_entry_message = label
+		_entry_progress = progress
+		_entry_back = Button.new()
+		_entry_back.name = "CancelBattleLoading"
+		Localize.bind_text(_entry_back, "取消")
+		_entry_back.pressed.connect(_close_battle_loading)
+		column.add_child(_entry_back)
+		_entry_back.grab_focus()
+		_entry_timeout = Timer.new()
+		_entry_timeout.wait_time = BATTLE_LOADING_TIMEOUT_SECONDS
+		_entry_timeout.one_shot = true
+		_entry_timeout.ignore_time_scale = true
+		_entry_overlay.add_child(_entry_timeout)
 
 
 func _battle_loading_destination(campaign_level_id: String) -> String:
@@ -145,9 +171,58 @@ func _battle_loading_destination(campaign_level_id: String) -> String:
 	return String(Campaign.LEVELS[index]["title"]) if index >= 0 else ""
 
 
-func _input(_event: InputEvent) -> void:
-	if _entry_overlay != null:
-		get_viewport().set_input_as_handled()
+func _input(event: InputEvent) -> void:
+	if _entry_overlay == null:
+		return
+	if _entry_back != null:
+		if event.is_action_pressed(&"ui_cancel"):
+			get_viewport().set_input_as_handled()
+			_close_battle_loading()
+		# The modal receives mouse and keyboard input while the picker is disabled.
+		return
+	get_viewport().set_input_as_handled()
+
+
+func _battle_launch_active(attempt: int) -> bool:
+	return _entry_attempt == attempt and _entry_overlay != null and is_inside_tree() and not AppLifecycle.quit_started()
+
+
+func _stop_battle_preparation() -> void:
+	_entry_attempt += 1
+	if is_instance_valid(_entry_prepared_battle):
+		_entry_prepared_battle.free()
+	_entry_prepared_battle = null
+	_cancel_battle_scan()
+	var pending := _entry_environment_requests.duplicate()
+	pending.append_array(_entry_opening_frame_requests.keys())
+	pending.append_array(_entry_opening_portrait_requests)
+	Art.discard_battle_opening_requests(pending)
+	_entry_environment_requests.clear()
+	_entry_opening_frame_requests.clear()
+	_entry_opening_portrait_requests.clear()
+
+
+func _close_battle_loading() -> void:
+	_stop_battle_preparation()
+	_entry_overlay.hide()
+	_entry_overlay.queue_free()
+	_entry_overlay = null
+	_entry_timeout = null
+	_entry_back = null
+	_entry_message = null
+	_entry_progress = null
+	_restore_battle_loading_frame_limit()
+
+
+func _show_battle_loading_failure(attempt: int) -> void:
+	if not _battle_launch_active(attempt):
+		return
+	_stop_battle_preparation()
+	_entry_timeout.stop()
+	_entry_progress.hide()
+	Localize.bind_text(_entry_message, "战斗未能载入，请返回重试。")
+	Localize.bind_text(_entry_back, "返回选关")
+	_restore_battle_loading_frame_limit()
 
 
 func _begin_battle_scan(prewarm := false) -> void:
@@ -177,7 +252,9 @@ func _request_battle_environment(campaign_level_id: String) -> void:
 			_entry_environment_requests.append(path)
 
 
-func _finish_battle_launch(campaign_level_id: String) -> void:
+func _finish_battle_launch(campaign_level_id: String, attempt: int) -> void:
+	if not _battle_launch_active(attempt):
+		return
 	var identity: Dictionary = {}
 	if _entry_scan == null:
 		var flow := get_node("/root/ContinueFlow")
@@ -189,22 +266,21 @@ func _finish_battle_launch(campaign_level_id: String) -> void:
 	if _entry_scan != null:
 		while _entry_scan.runtime_identity_scan_pending():
 			await get_tree().process_frame
-			if AppLifecycle.quit_started(): return
+			if not _battle_launch_active(attempt): return
 		identity = _entry_scan.finish_runtime_identity_scan()
 		_entry_scan = null
 		if identity.get("code") == "PREWARM_EXECUTABLE_CHANGED" and not AppLifecycle.quit_started():
-			_finish_battle_launch.call_deferred(campaign_level_id)
+			_finish_battle_launch.call_deferred(campaign_level_id, attempt)
 			return
-	if AppLifecycle.quit_started():
-		return
 	var environment_textures: Array[Texture2D] = []
 	var calibrate_liangshan := campaign_level_id == "level5" or Campaign.skirmish or Campaign.custom_defense
 	var calibration_frame := Engine.get_process_frames()
 	var calibration_us := 0
-	for path in _entry_environment_requests:
-		var texture := (await _wait_for_battle_resource(path)) as Texture2D
-		if AppLifecycle.quit_started():
+	for path in _entry_environment_requests.duplicate():
+		var texture := (await _wait_for_battle_resource(path, attempt)) as Texture2D
+		if not _battle_launch_active(attempt):
 			return
+		_entry_environment_requests.erase(path)
 		if texture == null:
 			continue
 		environment_textures.append(texture)
@@ -220,23 +296,22 @@ func _finish_battle_launch(campaign_level_id: String) -> void:
 			calibration_us += Time.get_ticks_usec() - started
 			if calibration_us >= SCENERY_CALIBRATION_SLICE_US:
 				await RenderingServer.frame_post_draw
-				if AppLifecycle.quit_started():
+				if not _battle_launch_active(attempt):
 					return
 				calibration_frame = Engine.get_process_frames()
 				calibration_us = 0
-	_entry_environment_requests.clear()
-	for path in _entry_opening_frame_requests:
-		var frames := await _wait_for_battle_resource(path)
-		if AppLifecycle.quit_started():
+	for path in _entry_opening_frame_requests.keys():
+		var frames := await _wait_for_battle_resource(path, attempt)
+		if not _battle_launch_active(attempt):
 			return
 		Art.cache_prepared_opening_frames(_entry_opening_frame_requests[path], frames)
-	_entry_opening_frame_requests.clear()
-	for path in _entry_opening_portrait_requests:
-		var texture := (await _wait_for_battle_resource(path)) as Texture2D
-		if AppLifecycle.quit_started():
+		_entry_opening_frame_requests.erase(path)
+	for path in _entry_opening_portrait_requests.duplicate():
+		var texture := (await _wait_for_battle_resource(path, attempt)) as Texture2D
+		if not _battle_launch_active(attempt):
 			return
+		_entry_opening_portrait_requests.erase(path)
 		Art.cache_prepared_opening_texture(path, texture)
-	_entry_opening_portrait_requests.clear()
 	# These maps are ready to prepare while the last loading frame is still visible.
 	var prepared_level_id := ""
 	if OS.get_name() == "Windows":
@@ -250,24 +325,24 @@ func _finish_battle_launch(campaign_level_id: String) -> void:
 			prepared_level_id = campaign_level_id
 	if prepared_level_id.is_empty():
 		await RenderingServer.frame_post_draw
-	if AppLifecycle.quit_started():
+	if not _battle_launch_active(attempt):
 		return
-	_install_battle.call_deferred(identity, environment_textures, prepared_level_id)
+	_install_battle.call_deferred(identity, environment_textures, prepared_level_id, attempt)
 
 
-func _wait_for_battle_resource(path: String) -> Resource:
+func _wait_for_battle_resource(path: String, attempt: int) -> Resource:
 	var status := ResourceLoader.load_threaded_get_status(path)
 	while status == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
 		await get_tree().process_frame
-		if AppLifecycle.quit_started():
+		if not _battle_launch_active(attempt):
 			return null
 		status = ResourceLoader.load_threaded_get_status(path)
-	return ResourceLoader.load_threaded_get(path) if status == ResourceLoader.THREAD_LOAD_LOADED else null
+	return ResourceLoader.load_threaded_get(path) if status != ResourceLoader.THREAD_LOAD_INVALID_RESOURCE else null
 
 
 func _install_battle(identity: Dictionary, environment_textures: Array[Texture2D],
-		prepared_level_id := "") -> void:
-	if AppLifecycle.quit_started():
+		prepared_level_id: String, attempt: int) -> void:
+	if not _battle_launch_active(attempt):
 		return
 	var changed_installation := String(identity.get("code", "")).begins_with("SPLIT_PACK_")
 	if not changed_installation:
@@ -283,21 +358,19 @@ func _install_battle(identity: Dictionary, environment_textures: Array[Texture2D
 				battle.prepare_entry_map(prepared_level_id)
 				_entry_prepared_battle = battle
 				await RenderingServer.frame_post_draw
-				if not is_instance_valid(battle):
+				if not _battle_launch_active(attempt):
 					return
 				_entry_prepared_battle = null
-				if AppLifecycle.quit_started():
-					battle.free()
-					return
 			if get_tree().change_scene_to_node(battle) == OK:
 				return
 			battle.free()
-	_entry_overlay.queue_free()
-	_entry_overlay = null
-	_restore_battle_loading_frame_limit()
 	if changed_installation:
+		_close_battle_loading()
 		get_node("/root/ContinueFlow").report_installation_failure(identity)
+	elif _entry_back != null:
+		_show_battle_loading_failure(attempt)
 	else:
+		_close_battle_loading()
 		push_error("Could not enter battle")
 
 
@@ -322,11 +395,8 @@ func take_battle_prewarm() -> RefCounted:
 
 
 func _exit_tree() -> void:
-	if is_instance_valid(_entry_prepared_battle):
-		_entry_prepared_battle.free()
-		_entry_prepared_battle = null
+	_stop_battle_preparation()
 	_restore_battle_loading_frame_limit()
-	_cancel_battle_scan()
 
 
 # ======================================================================
