@@ -1,0 +1,88 @@
+{
+  "candidate": "b8d103a8f8e61acf7fe74db4bf23aa814ae98497",
+  "launcher": {
+    "candidate": "b8d103a8f8e61acf7fe74db4bf23aa814ae98497",
+    "payload_files_unchanged": true,
+    "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+    "pck_sha256": "cfc9b1cc6c7058a4ad874cb6a17190ae0799cbf237ab05df673cf4c7007c614b",
+    "split_identity": "83afa730bda31daf859b593de1414d3007ec4905d2bfbeee319de74c5206e2a0",
+    "exe_unchanged": true,
+    "exit_code": 0,
+    "seconds": 75.894,
+    "errors": [],
+    "warnings": [],
+    "log_sha256": "69b216a159e91378f2c5b0b4e8b8215ac1857791b3b056ed632cbb4bc6efc6cd",
+    "report_sha256": "e4952c0c1d7c86510bd90c05ae3b8f9aa515845acfe244cf64a5f9d50c770db0"
+  },
+  "driver_sha256": "e2320895513f991d87cf8d5fddaa680446ad913d3f5a16c50fd051667ab7e52a",
+  "method": "Two GDScript copies of the same grid method, one checking depth before assigning it. Alternating order on identical live states with stable visibility. The game still runs its ordinary rebuild. Timing covers the paired rebuild calls.",
+  "output_equivalence": "All five grid/count dictionaries, mobile count, view rectangle, and unit depth/visibility/positions identical for every paired sample.",
+  "aggregate": {
+    "samples": 525,
+    "stock_median_us": 159,
+    "guard_median_us": 158,
+    "median_guard_minus_stock_us": -5,
+    "unchanged_depth_fraction": 0.817347,
+    "order_split_guard_minus_stock_us": {
+      "candidate_first": 36,
+      "stock_first": -39.0
+    }
+  },
+  "by_mode": {
+    "arena": {
+      "samples": 105,
+      "stock_median_us": 252,
+      "guard_median_us": 253,
+      "median_guard_minus_stock_us": 10,
+      "unchanged_depth_fraction": 0.552053,
+      "order_split_guard_minus_stock_us": {
+        "candidate_first": 51,
+        "stock_first": -55.0
+      }
+    },
+    "campaign": {
+      "samples": 175,
+      "stock_median_us": 125,
+      "guard_median_us": 136,
+      "median_guard_minus_stock_us": 2,
+      "unchanged_depth_fraction": 0.946088,
+      "order_split_guard_minus_stock_us": {
+        "candidate_first": 31,
+        "stock_first": -33.0
+      }
+    },
+    "custom_defense": {
+      "samples": 70,
+      "stock_median_us": 152.5,
+      "guard_median_us": 148.5,
+      "median_guard_minus_stock_us": -23.0,
+      "unchanged_depth_fraction": 0.908108,
+      "order_split_guard_minus_stock_us": {
+        "candidate_first": 33.0,
+        "stock_first": -39.0
+      }
+    },
+    "skirmish": {
+      "samples": 105,
+      "stock_median_us": 141,
+      "guard_median_us": 138,
+      "median_guard_minus_stock_us": -5,
+      "unchanged_depth_fraction": 0.904505,
+      "order_split_guard_minus_stock_us": {
+        "candidate_first": 39,
+        "stock_first": -37.0
+      }
+    },
+    "skirmish_ai": {
+      "samples": 70,
+      "stock_median_us": 138.5,
+      "guard_median_us": 132.5,
+      "median_guard_minus_stock_us": -19.0,
+      "unchanged_depth_fraction": 0.873929,
+      "order_split_guard_minus_stock_us": {
+        "candidate_first": 25.0,
+        "stock_first": -35.0
+      }
+    }
+  }
+}
