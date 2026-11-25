@@ -19,6 +19,8 @@ const SOUTH_SIEGE_CELLS := [
 const LINK_SOURCE := 4705
 const HOOK_KEYS := ["gou_lian","xu_ning"]
 const HOOK_TEAM_BUTTON := "lhm_select_hook_team"
+const HOOK_FORMATION_BUTTON := "lhm_place_hook_line"
+const HOOK_FORMATION_HINT := "按住鼠标左键拖出钩镰阵线，按 Esc 取消。"
 const WAVE_TIMES := [150.0, 270.0]
 const SUPPLY_DELAY := 45.0
 const CAMP_FALL_WAVE_EVENTS := ["lhm_north_after_camp_fall", "lhm_south_after_camp_fall"]
@@ -65,6 +67,7 @@ var strategy_t := 0.0
 var escort_t := 55.0
 var _hook_line_start := Vector2.INF
 var _hook_line_end := Vector2.INF
+var _hook_line_mouse_button := MOUSE_BUTTON_NONE
 var ai_trained := 0
 var ai_spent_gold := 0
 var ai_spent_wood := 0
@@ -373,40 +376,66 @@ func _available_hook_line_team(b) -> Array:
 
 func _update_hook_team_button(b) -> void:
 	var button: Button = b.mission.find_level_button(HOOK_TEAM_BUTTON)
-	var available := _available_hook_line_team(b).size() >= 2
-	if available and button == null:
+	var formation: Button = b.mission.find_level_button(HOOK_FORMATION_BUTTON)
+	if _available_hook_line_team(b).size() < 2:
+		cancel_hook_line()
+		for action: Button in [button, formation]:
+			if action != null:
+				action.get_parent().remove_child(action)
+				action.queue_free()
+		return
+	if button == null:
 		button = b.mission.add_level_button(HOOK_TEAM_BUTTON, "选中 · 钩镰队",
 			"按 Alt 拖动右键，在地面划出钩镰阵线。")
 		button.get_parent().move_child(button, 0)
+	if formation == null:
+		formation = b.mission.add_level_button(HOOK_FORMATION_BUTTON, "布阵 · 钩镰队", HOOK_FORMATION_HINT)
+		formation.get_parent().move_child(formation, 0)
 		b.mission.reveal_primary_level_button()
-	elif not available and button != null:
-		button.get_parent().remove_child(button)
-		button.queue_free()
+	formation.toggle_mode = true
+	formation.set_pressed_no_signal(_hook_line_mouse_button == MOUSE_BUTTON_LEFT)
 
 
-func begin_hook_line(b, point: Vector2) -> bool:
+func begin_hook_line(b, point: Vector2, mouse_button := MOUSE_BUTTON_RIGHT) -> bool:
 	if OS.get_name() != "Windows" or _line_hooks(b).size() < 2:
 		return false
+	_hook_line_mouse_button = mouse_button
 	_hook_line_start = point
 	_hook_line_end = point
 	return true
 
 
+func begin_armed_hook_line(b, point: Vector2) -> bool:
+	if _hook_line_mouse_button != MOUSE_BUTTON_LEFT or _hook_line_start != Vector2.INF:
+		return false
+	if not b.is_armed() and begin_hook_line(b, point, MOUSE_BUTTON_LEFT):
+		return true
+	cancel_hook_line()
+	return false
+
+
 func cancel_hook_line() -> void:
 	_hook_line_start = Vector2.INF
 	_hook_line_end = Vector2.INF
+	_hook_line_mouse_button = MOUSE_BUTTON_NONE
 
 
 func continue_hook_line(b, event: InputEvent) -> bool:
-	if _hook_line_start == Vector2.INF:
+	if _hook_line_mouse_button == MOUSE_BUTTON_NONE:
 		return false
 	if event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
 		cancel_hook_line()
 		return true
+	if _hook_line_mouse_button == MOUSE_BUTTON_LEFT and event is InputEventMouseButton:
+		if event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
+			cancel_hook_line()
+			return true
+	if _hook_line_start == Vector2.INF:
+		return false
 	if event is InputEventMouseMotion:
 		_hook_line_end = b.get_canvas_transform().affine_inverse() * event.position
 		return true
-	if event is not InputEventMouseButton or event.button_index != MOUSE_BUTTON_RIGHT or event.pressed:
+	if event is not InputEventMouseButton or event.button_index != _hook_line_mouse_button or event.pressed:
 		return false
 	var mouse: Vector2 = event.position
 	var world: Vector2 = b.get_canvas_transform().affine_inverse() * mouse
@@ -479,8 +508,8 @@ func unit_tactical_hint(b, unit) -> String:
 		if unit._target in riders and alive(unit._target) and b.is_visible_world(unit._target.position):
 			rider = unit._target
 		else:
-			if OS.get_name() == "Windows" and unit.key == "gou_lian" and not b.hud.touch_ui:
-				return Localize.text("选两名以上钩镰手，按 Alt 拖动右键布阵。遇受阻甲马，右键集火破阵。")
+			if unit.key == "gou_lian" and b.mission.find_level_button(HOOK_FORMATION_BUTTON) != null:
+				return Localize.text("点「布阵 · 钩镰队」后用左键拖线。遇受阻甲马，右键集火破阵。")
 			return Localize.text("钩镰配合：两人贴近受阻甲马\n轻点攻击；徐宁可充当搭档" if b.hud.touch_ui \
 				else "钩镰配合：两人贴近受阻甲马\n右键攻击；徐宁可充当搭档")
 	elif unit not in riders:
@@ -537,10 +566,19 @@ func _lane_has_riders(lane: int) -> bool:
 	return riders.any(func(u): return alive(u) and int(u.get_meta("wave_group",-1))==lane)
 
 func activate_mission_button(b,button_id: String) -> void:
-	if button_id == HOOK_TEAM_BUTTON:
+	if button_id in [HOOK_TEAM_BUTTON, HOOK_FORMATION_BUTTON]:
+		var formation_button := button_id == HOOK_FORMATION_BUTTON
+		var toggled_off := formation_button and _hook_line_mouse_button == MOUSE_BUTTON_LEFT
+		cancel_hook_line()
+		if toggled_off:
+			return
 		var team := _available_hook_line_team(b)
 		if team.size() >= 2:
 			b.select_members(team, false)
+			if formation_button:
+				b.cancel_armed()
+				_hook_line_mouse_button = MOUSE_BUTTON_LEFT
+				b.msg(HOOK_FORMATION_HINT, 5.0)
 		return
 	if button_id == SOUTH_SIEGE_SELECT:
 		if _south_siege_available():

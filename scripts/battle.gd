@@ -6185,6 +6185,9 @@ func _unhandled_input(event: InputEvent) -> void:
 				else get_canvas_transform().affine_inverse() * event.position
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if event.pressed:
+				if event.device != InputEvent.DEVICE_ID_EMULATION and level.has_method("begin_armed_hook_line"):
+					if level.begin_armed_hook_line(self, p):
+						return
 				if _build_armed != "":
 					if _touch_mode:
 						# 触屏：按下开始「拖动选址」，松手才落地（见下方 release 分支）；其间虚影跟手。
