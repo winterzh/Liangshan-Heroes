@@ -29,6 +29,7 @@ var _settings_before: Dictionary = {}
 var _campaign_applied := false
 var _canvas_before := Transform2D.IDENTITY
 var _slot_sha := ""
+var _retrying_checkpoint := false
 var _phase := "new"
 var _save_source: WeakRef
 var _save_lease: Dictionary = {}
@@ -234,17 +235,37 @@ func _read_restore_slot(player_entry: bool, lease: Dictionary) -> Dictionary:
 	var final_scope: Dictionary = _restore_packet_scope(read.document,player_entry,lease)
 	return read if final_scope.ok else final_scope
 
-func prepare_restore(menu: Node, entry := RestoreEntry.INTERNAL) -> Dictionary:
+func prepare_restore(scene: Node, entry := RestoreEntry.INTERNAL, checkpoint_sha := "") -> Dictionary:
 	if _phase != "new": return _bad("SESSION_ALREADY_USED")
-	if not is_instance_valid(menu) or menu.get_script() != MenuScript or not menu.is_inside_tree() or menu != _tree().current_scene or menu.get_parent() != _tree().root or menu.is_queued_for_deletion(): return _bad("CURRENT_MENU_REQUIRED")
+	if not is_instance_valid(scene) or not scene.is_inside_tree() or scene != _tree().current_scene or scene.get_parent() != _tree().root or scene.is_queued_for_deletion(): return _bad("CURRENT_MENU_REQUIRED")
+	_retrying_checkpoint = not checkpoint_sha.is_empty()
+	if _retrying_checkpoint:
+		if scene.get_script() != Core.B or scene.phase != scene.Phase.END or entry != RestoreEntry.PLAYER_MENU \
+			or not Profiles.is_player_campaign_context(scene._official_context):
+			return _bad("CHECKPOINT_SOURCE_CHANGED")
+	elif scene.get_script() != MenuScript: return _bad("CURRENT_MENU_REQUIRED")
 	if not _tree().paused or Engine.is_in_physics_frame(): return _bad("PAUSED_RESTORE_REQUIRED")
 	var lease := _lease()
 	if not lease.ok: return lease
-	if lease.active != 0: return _bad("ACTIVE_STEAM_RUN")
+	if lease.active != (scene._steam_run_id if _retrying_checkpoint else 0): return _bad("ACTIVE_STEAM_RUN")
 	if _campaign().get_script() != CampaignScript: return _bad("CAMPAIGN_REQUIRED")
 	if _settings().get_script() != SettingsScript: return _bad("SETTINGS_REQUIRED")
-	var read: Dictionary = _read_restore_slot(entry == RestoreEntry.PLAYER_MENU,lease)
+	# A retry can only read the exact checkpoint already installed in this battle.
+	# A different or pending slot still uses the main menu's normal recovery path.
+	var read: Dictionary = _store.read_slot() if _retrying_checkpoint else _read_restore_slot(entry == RestoreEntry.PLAYER_MENU,lease)
 	if not read.ok: return read
+	if _retrying_checkpoint:
+		if read.file_sha256 != checkpoint_sha or read.document.context != scene._official_context:
+			return _bad("SLOT_CHANGED")
+		var admitted := _restore_packet_scope(read.document, true, lease)
+		if not admitted.ok: return admitted
+		if (read.document.binding.kind == "steam") != (lease.active != 0):
+			return _bad("CHECKPOINT_SOURCE_CHANGED")
+		if lease.active != 0:
+			if read.document.binding.token != lease.token or read.document.context != lease.context:
+				return _bad("CHECKPOINT_SOURCE_CHANGED")
+			var durable: Dictionary = _steam()._checkpoint_persistent_run()
+			if not durable.ok: return durable
 	_packet = read.document; _slot_sha = read.file_sha256
 	var version := SaveVersion.resolve(_packet.context, _packet.world.content_version, _packet.world.engine_sha256, _trusted)
 	if not version.ok: return version
@@ -276,9 +297,10 @@ func prepare_restore(menu: Node, entry := RestoreEntry.INTERNAL) -> Dictionary:
 	var prepared: Dictionary = _core.prepare(_packet.world)
 	if not prepared.ok: return prepared
 	if _packet.binding.kind == "steam":
-		var binding_plan: Dictionary = _steam()._prepare_persistent_resume(_packet.binding, _packet.context, _core._battle._steam_valid_kills)
+		var retry_source: Node = scene if _retrying_checkpoint else null
+		var binding_plan: Dictionary = _steam()._prepare_persistent_resume(_packet.binding, _packet.context, _core._battle._steam_valid_kills, retry_source)
 		if not binding_plan.ok: _core.dispose(); return binding_plan
-	_old_scene = menu; _steam_lease = lease
+	_old_scene = scene; _steam_lease = lease
 	_canvas_before = _tree().root.canvas_transform
 	for name in ALL_CAMPAIGN_FLAGS: _campaign_before[name] = _campaign().get(name)
 	for name in Store.OPTIONS: _campaign_before[name] = _campaign().get(name)
@@ -350,6 +372,7 @@ func commit_restore() -> Dictionary:
 		if not staged.ok: return staged
 	if _phase != "mounted": return _bad("RESTORE_NOT_PREPARED")
 	if not _tree().paused or Engine.is_in_physics_frame() or not is_instance_valid(_old_scene) or _tree().current_scene != _old_scene or _old_scene.get_parent() != _tree().root or _old_scene.is_queued_for_deletion(): return _rollback(_bad("MENU_CHANGED"))
+	if _retrying_checkpoint and _lease() != _steam_lease: return _rollback(_bad("STEAM_LEASE_CHANGED"))
 	if _core._is_official_campaign() and _core._presentation_module != null and not _core._presentation_module._layout_done:
 		return _bad("PRESENTATION_LAYOUT_REQUIRED")
 	var node: Dictionary = Codec.new().decode(_packet.root_node)
@@ -359,7 +382,8 @@ func commit_restore() -> Dictionary:
 	if not activated.ok: return _rollback(activated)
 	var binding_plan := {}
 	if _packet.binding.kind == "steam":
-		binding_plan = _steam()._prepare_persistent_resume(_packet.binding, _packet.context, battle._steam_valid_kills)
+		var retry_source: Node = _old_scene if _retrying_checkpoint else null
+		binding_plan = _steam()._prepare_persistent_resume(_packet.binding, _packet.context, battle._steam_valid_kills, retry_source)
 		if not binding_plan.ok: return _rollback(binding_plan)
 	var owned: Dictionary = _core.handoff_world()
 	if not owned.ok: return _rollback(owned)

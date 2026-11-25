@@ -454,8 +454,14 @@ func _persistent_binding(run_id: int, context: Dictionary, total: int) -> Dictio
 	state.seed(durable.record.stats, durable.record.unlocked)
 	return bound
 
-func _prepare_persistent_resume(binding: Dictionary, context: Dictionary, total: int) -> Dictionary:
-	if _local_runs == null or not _persistent_ready or _correction_required or _active_run != 0 or _run_counter >= 2147483647 or not ensure_account() or not stats_ready: return _local_bad("PERSISTENT_STEAM_BINDING_REQUIRED")
+func _prepare_persistent_resume(binding: Dictionary, context: Dictionary, total: int, retry_source: Node = null) -> Dictionary:
+	if _local_runs == null or not _persistent_ready or _correction_required or _run_counter >= 2147483647 or not ensure_account() or not stats_ready: return _local_bad("PERSISTENT_STEAM_BINDING_REQUIRED")
+	if retry_source == null:
+		if _active_run != 0: return _local_bad("PERSISTENT_STEAM_BINDING_REQUIRED")
+	elif not _campaign_battle_source(retry_source) or _active_run == 0 or _active_run != retry_source._steam_run_id \
+		or retry_source._official_context != context or _context != context or binding.get("token") != _local_runs._token \
+		or Campaign.cloud_owner != account or _local_runs.has_pending():
+		return _local_bad("CHECKPOINT_SOURCE_CHANGED")
 	var prepared: Dictionary = _local_runs.prepare_resume(binding, context, total)
 	if not prepared.ok: return prepared
 	prepared.handle = _run_counter + 1

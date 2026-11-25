@@ -13,7 +13,7 @@ const CampaignStartup = preload("res://scripts/run_campaign_startup_scan.gd")
 const ConfigTransaction = preload("res://scripts/run_campaign_cfg_transaction.gd")
 const ProgressGate = preload("res://scripts/run_campaign_progress_gate.gd")
 const SaveVersion := preload("res://scripts/run_campaign_save_version.gd")
-enum Phase { IDLE, CONFIRM, SAVING, RESTORING, ERROR, EXITING, EXIT_CONFIRM, SETTLING }
+enum Phase { IDLE, CONFIRM, SAVING, RESTORING, ERROR, EXITING, EXIT_CONFIRM, SETTLING, CHECKPOINT }
 var phase := Phase.IDLE
 var last_result: Dictionary = {}
 var _source: Node
@@ -212,6 +212,14 @@ func _show(message: String, confirm: String = "") -> void:
 		accept.name = "ConfirmSave"
 		box.add_child(accept)
 		cancel_button.grab_focus()
+	elif phase == Phase.CHECKPOINT:
+		var retry := _button("从检查点重试", _retry_checkpoint)
+		retry.name = "RetryCampaignCheckpoint"
+		box.add_child(retry)
+		var settle := _button("结束本局并查看结算", _settle_defeat)
+		settle.name = "SettleCampaignDefeat"
+		box.add_child(settle)
+		retry.grab_focus()
 	elif phase == Phase.ERROR:
 		if last_result.get("startup_pending", false):
 			var retry := _button("重试确认进度", retry_startup)
@@ -418,7 +426,8 @@ func _restore() -> void:
 	if not trusted.ok: _fail(trusted, true); return
 	_session = Session.new(trusted, _runtime())
 	var entry := Session.RestoreEntry.QA_MENU if _private_qa_enabled() else Session.RestoreEntry.PLAYER_MENU
-	var prepared: Dictionary = _session.prepare_restore(_source, entry)
+	var checkpoint_sha := _restored_slot_sha if not _terminal.is_empty() else ""
+	var prepared: Dictionary = _session.prepare_restore(_source, entry, checkpoint_sha)
 	if not prepared.ok: _fail(prepared, true); return
 	var installed: Dictionary
 	if prepared.campaign:
@@ -431,6 +440,7 @@ func _restore() -> void:
 	_graph = installed.identity
 	_graph_owner = weakref(installed.battle)
 	_restored_slot_sha = installed.slot_file_sha256
+	_terminal.clear()
 	_menu_buttons.clear()
 	_source = null
 	phase = Phase.IDLE
@@ -484,8 +494,13 @@ func _fail(result: Dictionary, restoring: bool) -> Dictionary:
 			get_tree().paused = _before_paused
 	if restoring: get_tree().paused = _before_paused
 	_unfreeze_menu()
-	phase = Phase.ERROR
 	last_result = result.duplicate(true)
+	if restoring and not _terminal.is_empty():
+		phase = Phase.CHECKPOINT
+		_show(_error_message(String(result.get("code", "")), true))
+		operation_finished.emit(last_result)
+		return last_result
+	phase = Phase.ERROR
 	_show(_held_message() if result.get("battle_held", false) else _error_message(String(result.get("code", "")), restoring))
 	operation_finished.emit(last_result)
 	return last_result
@@ -562,10 +577,31 @@ func finish_local_battle(battle: Node, victory: bool, line: String) -> void:
 	_terminal = {"victory": victory, "line": line, "cancel_save": cancel_save}
 	_source = battle
 	_before_paused = get_tree().paused
-	phase = Phase.SETTLING
 	_expected.clear()
+	if not victory and not cancel_save and phase == Phase.IDLE and is_enabled() \
+		and Session.Profiles.is_player_campaign_context(battle._official_context) \
+		and _graph_owner != null and _graph_owner.get_ref() == battle and not _restored_slot_sha.is_empty():
+		phase = Phase.CHECKPOINT
+		_show(line + "\n\n" + "可以从本局上次保存的位置重试。")
+		return
+	phase = Phase.SETTLING
 	_clear_overlay()
 	get_tree().process_frame.connect(_commit_terminal, CONNECT_ONE_SHOT)
+
+func _retry_checkpoint() -> void:
+	if phase != Phase.CHECKPOINT or _terminal.is_empty(): return
+	phase = Phase.RESTORING
+	get_tree().paused = true
+	_show("正在读取战斗，请稍候…")
+	get_tree().process_frame.connect(_restore, CONNECT_ONE_SHOT)
+
+
+func _settle_defeat() -> void:
+	if phase != Phase.CHECKPOINT or _terminal.is_empty(): return
+	phase = Phase.SETTLING
+	_clear_overlay()
+	get_tree().process_frame.connect(_commit_terminal, CONNECT_ONE_SHOT)
+
 
 func has_capture_request(battle: Node) -> bool:
 	return phase == Phase.SAVING and is_instance_valid(battle) and _source == battle and is_instance_valid(battle._save_barrier) and battle._save_barrier.input_closed()
