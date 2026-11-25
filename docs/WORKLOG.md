@@ -4,6 +4,8 @@
 
 Steam 正式分支已更新到 Windows Build 26921663。Windows depot 5088121 的清单为 5048782531594136459。从正式分支重新下载的七个文件与候选 6c84c543 的 SHA-256 全部一致，独立启动通过。现有 Steam 账号的统计和云存档读取通过。 [Steam 发布验收](../qa/battle_entry_timing_20261116/windows_steam_release_26921663.json)
 
+小型更新公告已关联 Build 26921663。已公开核对简中、繁中、英语和日语的标题、五条正文和宣传图。 [Steam 公告](https://store.steampowered.com/news/app/5088120/view/680768104678031454?l=schinese)
+
 黄泥冈可一键派待令货车走北坡。祝家庄可比较正攻与内应的用时和伤员结算。三败高太尉选中火船时会显示火攻范围。真人首玩招募按当前安排暂缓。 [本版技术验收](../qa/battle_entry_timing_20261116/windows_campaign_routes_6c84c543.json)
 
 
