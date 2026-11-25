@@ -358,7 +358,7 @@ func _drill_hint(b) -> String:
 
 func _hook_line_actor(unit) -> bool:
 	return alive(unit) and unit.faction == Unit.FACTION_LIANG and unit.key == "gou_lian" \
-		and not unit.garrisoned and not unit.is_captive and unit.story_outcome.is_empty()
+		and not unit.garrisoned and not unit.is_captive
 
 
 func _line_hooks(b) -> Array:
