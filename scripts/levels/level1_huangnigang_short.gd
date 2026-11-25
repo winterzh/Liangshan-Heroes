@@ -11,6 +11,9 @@ const LOADED_RELAY_REACH := 80.0
 const TAKE_MARKER_REACH := 24.0
 const SEND_EMPTY_CARTS := "hg_send_empty_carts"
 const SEND_LOADED_CARTS := "hg_send_loaded_carts"
+const SEND_NORTH_CARTS := "hg_send_north_carts"
+const NORTH_CART_TURN := Vector2i(14, 10)
+const VIEW_NORTH_CART_TURN := "hg_view_north_carts"
 const RALLY_WAITING := "hg_rally_waiting"
 const EARLY_WITHDRAW := GATE_W + Vector2i(-3,0)
 const WITHDRAW_RADIUS := 150.0
@@ -359,6 +362,7 @@ func _begin_free_withdraw(b) -> void:
 	b.mission.add_action("withdraw_now","先行收队 · 未到者不计全员生还",EARLY_WITHDRAW,[],0.6,64)
 
 func refresh_restored_withdrawal(b) -> void:
+	_add_north_route_locator(b)
 	if st != WITHDRAW or not b.mission.actions.has("withdraw_now"): return
 	var action: Dictionary = b.mission.actions.withdraw_now
 	if action.cell != GATE_W or action.done or b.mission.active_action_id == "withdraw_now": return
@@ -452,6 +456,9 @@ func _sync_controls(b) -> void:
 			"让待令空车各自前往装车点。已经下令的车继续照原指令行动。")
 		_update_transport_button(b, SEND_LOADED_CARTS, not cargo.is_empty(), "送已装货的车出冈",
 			"让已装货的车各自前往交付旗标。途中可随时停下或改道。")
+		if OS.get_name() == "Windows":
+			_update_transport_button(b, SEND_NORTH_CARTS, not cargo.is_empty(), "走北坡 · 待令货车",
+				"让待令货车先绕过北坡，再去各自的交付旗标。用时较长，途中仍可停下或改道。")
 	if st == WITHDRAW and b.phase == b.Phase.FIGHT and not b.hud.touch_ui:
 		_update_transport_button(b, RALLY_WAITING, true, "送待令同伴去西冈口",
 			"让尚未到达的待令同伴去西冈口集合。已下令的同伴继续行动。")
@@ -479,15 +486,25 @@ func _sync_controls(b) -> void:
 			"定位运输旗标。空手人物优先查看可接手的重车。")
 	if st == WITHDRAW: _add_waiting_button(b)
 	b.mission.add_map_locator("西冈口 · 推车退路",GATE_W)
+	_add_north_route_locator(b)
 	if st in [MARCH,INQUIRY]: b.mission.add_map_locator("另一片松阴 · 七星与枣车",SHADE)
+
+func _add_north_route_locator(b) -> void:
+	if OS.get_name() != "Windows" or b.hud.touch_ui or st == WITHDRAW or b.mission.find_level_button(VIEW_NORTH_CART_TURN) != null:
+		return
+	b.mission.add_level_button(VIEW_NORTH_CART_TURN, "查看 · 北坡绕行", "只定位地图；选人和移动仍由玩家指挥。")
+
 
 func activate_mission_button(b, button_id: String) -> void:
 	if b.phase != b.Phase.FIGHT: return
+	if button_id == VIEW_NORTH_CART_TURN:
+		b.mission._activate_map_locator("北坡 · 绕行退路", NORTH_CART_TURN)
+		return
 	if button_id == SEND_EMPTY_CARTS:
 		_send_empty_carts(b)
 		return
-	if button_id == SEND_LOADED_CARTS:
-		_send_loaded_carts(b)
+	if button_id in [SEND_LOADED_CARTS, SEND_NORTH_CARTS]:
+		_send_loaded_carts(b, button_id == SEND_NORTH_CARTS)
 		return
 	if button_id == RALLY_WAITING:
 		_rally_waiting(b)
@@ -586,7 +603,7 @@ func _update_transport_button(b, id: String, available: bool, label: String, too
 	var button: Button = b.mission.find_level_button(id)
 	if button == null and available:
 		button = b.mission.add_level_button(id, label, tooltip)
-		var loaded: Button = b.mission.find_level_button(SEND_LOADED_CARTS) if id == SEND_EMPTY_CARTS else null
+		var loaded: Button = b.mission.find_level_button(SEND_LOADED_CARTS) if id in [SEND_EMPTY_CARTS, SEND_NORTH_CARTS] else null
 		var position := loaded.get_index() + 1 if loaded != null else 0
 		button.get_parent().move_child(button, position)
 		b.mission.reveal_primary_level_button()
@@ -619,7 +636,9 @@ func _send_empty_carts(b) -> void:
 	else:
 		b.mission.set_feedback("当前没有待令空车。")
 
-func _send_loaded_carts(b) -> void:
+func _send_loaded_carts(b, north := false) -> void:
+	if north and OS.get_name() != "Windows":
+		return
 	if st not in [CARRY,FORCE] or b.hud.touch_ui or not b._gameplay_rng_issue.is_empty():
 		return
 	var carriers := _transport_group(b, true)
@@ -639,13 +658,19 @@ func _send_loaded_carts(b) -> void:
 		if action.is_empty():
 			blocked += 1
 			continue
-		if _dispatch_cart_to_action(b, actor, action_id, action):
+		var waypoint := Vector2.INF
+		if north and b.map.world_to_cell(actor.position).x > NORTH_CART_TURN.x:
+			waypoint = b.map.cell_to_world(NORTH_CART_TURN)
+		if _dispatch_cart_to_action(b, actor, action_id, action, waypoint):
 			issued += 1
 		else:
 			blocked += 1
 	if issued > 0:
 		Sfx.play("order")
-	if issued > 0 and blocked > 0:
+	if issued > 0 and north:
+		var message := "已派%d辆货车走北坡。其余车辆请检查退路或手动下令。" if blocked > 0 else "已派%d辆货车走北坡。"
+		b.mission.set_feedback(Localize.format_text(message, issued))
+	elif issued > 0 and blocked > 0:
 		b.mission.set_feedback(Localize.format_text("已派%d辆车出冈。其余车辆暂无法交付，请检查退路或手动下令。", issued))
 	elif issued > 0:
 		b.mission.set_feedback(Localize.format_text("已派%d辆车前往各自的交付点。", issued))
@@ -667,9 +692,15 @@ func _cart_dispatch_action(b, actor: Unit, action_id: String) -> Dictionary:
 		return {}
 	return action
 
-func _dispatch_cart_to_action(b, actor: Unit, action_id: String, action: Dictionary) -> bool:
+func _dispatch_cart_to_action(b, actor: Unit, action_id: String, action: Dictionary, waypoint := Vector2.INF) -> bool:
 	var destination: Vector2 = b.map.cell_to_world(action.cell)
-	var path: PackedVector2Array = b.map.find_path(actor.position, destination, actor.faction, actor.movement_profile)
+	var origin := actor.position
+	if waypoint != Vector2.INF:
+		var detour: PackedVector2Array = b.map.find_path(origin, waypoint, actor.faction, actor.movement_profile)
+		if detour.is_empty() or not detour[-1].is_equal_approx(waypoint):
+			return false
+		origin = waypoint
+	var path: PackedVector2Array = b.map.find_path(origin, destination, actor.faction, actor.movement_profile)
 	if path.is_empty() or b.mission._nearest_clicked_action(destination) != action_id \
 			or path[-1].distance_to(destination) > float(action.reach) \
 			or not b.map._segment_open(path[-1], destination, actor.movement_profile):
@@ -677,7 +708,9 @@ func _dispatch_cart_to_action(b, actor: Unit, action_id: String, action: Diction
 	# Each cart needs its own token so one arrival cannot consume another order.
 	var group := [actor]
 	b._stamp_manual(group)
-	actor.order_move(destination)
+	if waypoint != Vector2.INF:
+		actor.order_move(waypoint)
+	actor.order_move(destination, waypoint != Vector2.INF)
 	b._stamp_mission_move(group, destination)
 	return true
 

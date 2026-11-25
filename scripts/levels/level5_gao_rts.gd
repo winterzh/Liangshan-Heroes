@@ -382,23 +382,45 @@ func _fire_escorts(b,actor) -> Array:
 	return [b.find_unit("ruan_xiaoer_boat"),b.find_unit("ruan_xiaowu_boat")].filter(func(u): return alive(u) and u.position.distance_to(actor.position)<=220)
 func _visible_fire_target_count(b) -> int:
 	return _fire_targets(fireboat).filter(func(u): return u._invis_t <= 0.0 and b.is_visible_world(u.position)).size()
+func _fire_marker_in_reach(b) -> bool:
+	for action_id in ["gao_fire_0", "gao_fire_1"]:
+		var action: Dictionary = b.mission.actions.get(action_id, {})
+		if action.is_empty() or action.done or not String(action.get("blocked_reason", "")).is_empty():
+			continue
+		var marker: Vector2 = b.map.cell_to_world(action.cell)
+		if fireboat.position.distance_to(marker) <= float(action.reach) \
+			and b.map._segment_open(fireboat.position, marker, fireboat.movement_profile):
+			return true
+	return false
+
+
 func _fire_next_step(b, visible_targets: int, escorts: int) -> String:
 	if visible_targets == 0 and not waves[1].sent:
 		return "第二批连船尚未出发。可留火船在安全水域，等连船驶近再举火。"
-	for action_id in ["gao_fire_0","gao_fire_1"]:
-		var action: Dictionary = b.mission.actions.get(action_id,{})
-		if action.is_empty() or action.done or not String(action.get("blocked_reason","")).is_empty(): continue
-		var marker: Vector2 = b.map.cell_to_world(action.cell)
-		if fireboat.position.distance_to(marker) > float(action.reach) or not b.map._segment_open(fireboat.position,marker,fireboat.movement_profile):
-			continue
-		if visible_targets == 0:
-			return "等第二批连船进入火区。"
-		if escorts < 2:
-			return "等两艘接应船靠近火船。"
-		if b.hud.touch_ui:
-			return "可以举火。选中火船，轻点举火旗标。"
-		return "可以举火。选中火船，右键举火旗标。"
-	return "先护送火船到举火旗标附近。"
+	if not _fire_marker_in_reach(b):
+		return "先护送火船到举火旗标附近。"
+	if visible_targets == 0:
+		return "等第二批连船进入火区。"
+	if escorts < 2:
+		return "等两艘接应船靠近火船。"
+	if b.hud.touch_ui:
+		return "可以举火。选中火船，轻点举火旗标。"
+	return "可以举火。选中火船，右键举火旗标。"
+
+
+func draw_tactical_overlay(b, overlay: Node2D) -> void:
+	if OS.get_name() != "Windows" or b.phase != b.Phase.FIGHT or not fireboat in b.selection or not _can_select_fireboat(b):
+		return
+	var ready := _fire_marker_in_reach(b) and _visible_fire_target_count(b) > 0 and _fire_escorts(b, fireboat).size() == 2
+	var ring := PackedVector2Array()
+	ring.resize(33)
+	for index in range(ring.size()):
+		var offset := Vector2.from_angle(TAU * index / 32.0) * FIRE_ZONE_RADIUS
+		ring[index] = b.to_screen(fireboat.position + offset)
+	var color := Color(1.0, 0.76, 0.24, 0.96) if ready else Color(0.98, 0.54, 0.29, 0.60)
+	overlay.draw_polyline(ring, color, 3.0 if ready else 2.0, true)
+
+
 func _fire_hint(b) -> String:
 	var visible_targets := _visible_fire_target_count(b)
 	var escorts := _fire_escorts(b,fireboat).size()
