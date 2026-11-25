@@ -1,0 +1,371 @@
+{
+  "candidate": "30394b4e1213b241b7556b88b10089cf4d2dc274",
+  "system_snapshot_probe": {
+    "candidate": "30394b4e1213b241b7556b88b10089cf4d2dc274",
+    "mode": "whole-system snapshot filtered to target",
+    "actual_seconds": 170.654787,
+    "route_visits": {
+      "campaign:level5": 17,
+      "custom_defense:custom_defense": 18,
+      "skirmish:skirmish": 18
+    },
+    "transitions": 53,
+    "failures": [],
+    "diagnostic": true,
+    "native_payload_hashes": {
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "7221ef5c3963dc7c1e4924ac6655cc5d35bba434d13e70359c062be7e487ed1b"
+    },
+    "hashes": {
+      "log_sha256": "40bd57d7f7331d5e119457854b87b21544d9e1bab5de0b628f6392eca99e80c0",
+      "thread_samples_sha256": "aa557ec3f88335cdf6dd9dd6c011f64927eaa679d5cf8a3e7e5da275ce939e7a",
+      "report_sha256": "a287a29c5e7335325842f67e86a1b2f6e2aef4792b2289a83bb883009f2828c6",
+      "probe_sha256": "f5e2b34c9d259499ee707d0ae9fde830023dba09f529e34d5c5f0b70f3698138"
+    },
+    "sampling": {
+      "median_query_width_us": 11544.5,
+      "p95_query_width_us": 15705,
+      "median_sample_spacing_us": 30888,
+      "wall_clock_reversals": 0,
+      "samples": 5782
+    },
+    "largest_drawing_gaps": [
+      {
+        "visit": 1,
+        "route": "skirmish:skirmish",
+        "first_frame_us": 262525,
+        "drawing_gap_us": 148700,
+        "pre_attach_overlap_us": 1878
+      },
+      {
+        "visit": 3,
+        "route": "campaign:level5",
+        "first_frame_us": 198630,
+        "drawing_gap_us": 123221,
+        "pre_attach_overlap_us": 2294
+      },
+      {
+        "visit": 2,
+        "route": "custom_defense:custom_defense",
+        "first_frame_us": 215581,
+        "drawing_gap_us": 97104,
+        "pre_attach_overlap_us": 97104,
+        "partial_gap_samples": {
+          "samples": 3,
+          "states": {
+            "Waiting:UserRequest": 3
+          },
+          "enclosing_cpu": {
+            "main_cpu_us": 46875,
+            "process_cpu_us": 78125,
+            "main_cycles": 126948297,
+            "context_switches": 12,
+            "enclosing_interval_us": 122922
+          },
+          "samples_elapsed_us": [
+            20099,
+            50706,
+            82102
+          ]
+        }
+      },
+      {
+        "visit": 47,
+        "route": "custom_defense:custom_defense",
+        "first_frame_us": 164956,
+        "drawing_gap_us": 84650,
+        "pre_attach_overlap_us": 2972
+      },
+      {
+        "visit": 42,
+        "route": "campaign:level5",
+        "first_frame_us": 138771,
+        "drawing_gap_us": 78483,
+        "pre_attach_overlap_us": 1901
+      },
+      {
+        "visit": 40,
+        "route": "skirmish:skirmish",
+        "first_frame_us": 147052,
+        "drawing_gap_us": 77180,
+        "pre_attach_overlap_us": 2861
+      },
+      {
+        "visit": 43,
+        "route": "skirmish:skirmish",
+        "first_frame_us": 130729,
+        "drawing_gap_us": 76284,
+        "pre_attach_overlap_us": 2487
+      },
+      {
+        "visit": 17,
+        "route": "custom_defense:custom_defense",
+        "first_frame_us": 143467,
+        "drawing_gap_us": 76282,
+        "pre_attach_overlap_us": 76282,
+        "partial_gap_samples": {
+          "samples": 2,
+          "states": {
+            "Running": 2
+          },
+          "enclosing_cpu": {
+            "main_cpu_us": 109375,
+            "process_cpu_us": 187500,
+            "main_cycles": 356394975,
+            "context_switches": 9,
+            "enclosing_interval_us": 123480
+          },
+          "samples_elapsed_us": [
+            28576,
+            59384
+          ]
+        }
+      },
+      {
+        "visit": 48,
+        "route": "campaign:level5",
+        "first_frame_us": 143105,
+        "drawing_gap_us": 75800,
+        "pre_attach_overlap_us": 1868
+      }
+    ],
+    "largest_callback_pauses": [],
+    "wait_state_scope": "Instantaneous scheduler state within the bounded sample. Generic wait labels do not establish a root cause."
+  },
+  "targeted_main_thread_probe": {
+    "candidate": "30394b4e1213b241b7556b88b10089cf4d2dc274",
+    "mode": "target main thread only",
+    "actual_seconds": 169.869033,
+    "route_visits": {
+      "campaign:level5": 17,
+      "custom_defense:custom_defense": 17,
+      "skirmish:skirmish": 17
+    },
+    "transitions": 51,
+    "failures": [],
+    "diagnostic": true,
+    "native_payload_hashes": {
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "7221ef5c3963dc7c1e4924ac6655cc5d35bba434d13e70359c062be7e487ed1b"
+    },
+    "hashes": {
+      "log_sha256": "65f14b564f518bde74eb020c36a10abef8d5f05864da538db46114938db8c12d",
+      "thread_samples_sha256": "9da0b35d26c45b05e16199135907f9955a8018d21ab116cf337ed93c344f141b",
+      "report_sha256": "f499f36fd84ab62683d426ba4252a9cfc29f728b165aa56983f83d4230277be2",
+      "probe_sha256": "f5e2b34c9d259499ee707d0ae9fde830023dba09f529e34d5c5f0b70f3698138"
+    },
+    "sampling": {
+      "median_query_width_us": 153,
+      "p95_query_width_us": 448,
+      "median_sample_spacing_us": 15455.5,
+      "wall_clock_reversals": 0,
+      "samples": 11575
+    },
+    "largest_drawing_gaps": [
+      {
+        "visit": 28,
+        "route": "skirmish:skirmish",
+        "first_frame_us": 846123,
+        "drawing_gap_us": 438955,
+        "pre_attach_overlap_us": 438955,
+        "partial_gap_samples": {
+          "samples": 28,
+          "states": {
+            "Running": 28
+          },
+          "enclosing_cpu": {
+            "main_cpu_us": 437500,
+            "process_cpu_us": 500000,
+            "main_cycles": 1336783276,
+            "context_switches": 76,
+            "enclosing_interval_us": 466889
+          },
+          "samples_elapsed_us": [
+            1531,
+            17276,
+            31759,
+            47560,
+            62861,
+            78546,
+            93804,
+            109287,
+            124573,
+            140178,
+            155921,
+            171704,
+            187372,
+            202435,
+            218767,
+            234316,
+            249660,
+            264706,
+            280369,
+            295389,
+            311870,
+            327078,
+            342658,
+            358563,
+            373900,
+            389976,
+            405350,
+            421617
+          ]
+        }
+      },
+      {
+        "visit": 31,
+        "route": "skirmish:skirmish",
+        "first_frame_us": 805744,
+        "drawing_gap_us": 412311,
+        "pre_attach_overlap_us": 412311,
+        "partial_gap_samples": {
+          "samples": 27,
+          "states": {
+            "Running": 27
+          },
+          "enclosing_cpu": {
+            "main_cpu_us": 406250,
+            "process_cpu_us": 484375,
+            "main_cycles": 1242709089,
+            "context_switches": 63,
+            "enclosing_interval_us": 436169
+          },
+          "samples_elapsed_us": [
+            1753,
+            17300,
+            33575,
+            48610,
+            64049,
+            79436,
+            94947,
+            110413,
+            125781,
+            141968,
+            157253,
+            171984,
+            186958,
+            203228,
+            218845,
+            234961,
+            250177,
+            266188,
+            281844,
+            297370,
+            312633,
+            328965,
+            344113,
+            359366,
+            375945,
+            391126,
+            406430
+          ]
+        }
+      },
+      {
+        "visit": 8,
+        "route": "custom_defense:custom_defense",
+        "first_frame_us": 505921,
+        "drawing_gap_us": 314718,
+        "pre_attach_overlap_us": 3920
+      },
+      {
+        "visit": 14,
+        "route": "custom_defense:custom_defense",
+        "first_frame_us": 406053,
+        "drawing_gap_us": 308347,
+        "pre_attach_overlap_us": 2811
+      },
+      {
+        "visit": 18,
+        "route": "campaign:level5",
+        "first_frame_us": 373241,
+        "drawing_gap_us": 293790,
+        "pre_attach_overlap_us": 2543
+      },
+      {
+        "visit": 1,
+        "route": "skirmish:skirmish",
+        "first_frame_us": 311565,
+        "drawing_gap_us": 169579,
+        "pre_attach_overlap_us": 1408
+      },
+      {
+        "visit": 37,
+        "route": "skirmish:skirmish",
+        "first_frame_us": 227239,
+        "drawing_gap_us": 129707,
+        "pre_attach_overlap_us": 2197
+      },
+      {
+        "visit": 9,
+        "route": "campaign:level5",
+        "first_frame_us": 246449,
+        "drawing_gap_us": 129306,
+        "pre_attach_overlap_us": 2795
+      },
+      {
+        "visit": 32,
+        "route": "custom_defense:custom_defense",
+        "first_frame_us": 180756,
+        "drawing_gap_us": 118523,
+        "pre_attach_overlap_us": 2469
+      }
+    ],
+    "largest_callback_pauses": [
+      {
+        "visit": 1,
+        "route": "skirmish:skirmish",
+        "first_frame_us": 311565,
+        "drawing_gap_us": 169579,
+        "pre_attach_overlap_us": 1408,
+        "post_draw_us": 59933,
+        "next_call": "physics",
+        "next_call_us": 86126,
+        "callback_pause_us": 26193,
+        "samples": 1,
+        "states": {
+          "Running": 1
+        },
+        "enclosing_cpu": {
+          "main_cpu_us": 31250,
+          "process_cpu_us": 46875,
+          "main_cycles": 127018649,
+          "context_switches": 13,
+          "enclosing_interval_us": 45975
+        },
+        "samples_elapsed_us": [
+          12185
+        ]
+      }
+    ],
+    "wait_state_scope": "Instantaneous scheduler state within the bounded sample. Generic wait labels do not establish a root cause."
+  },
+  "classic_defense_process_to_draw_peaks": [
+    {
+      "visit": 28,
+      "last_process_signal_us": 7285,
+      "next_pre_draw_us": 440547,
+      "after_process_to_pre_draw_us": 433262,
+      "draw_signals_us": 3656,
+      "inside_samples": 27,
+      "game_main_thread_state": "Running",
+      "inside_main_cpu_us": 375000,
+      "enclosing_main_cpu_us": 421875,
+      "interval_inside_us": 404341,
+      "interval_enclosure_us": 451416
+    },
+    {
+      "visit": 31,
+      "last_process_signal_us": 5457,
+      "next_pre_draw_us": 411842,
+      "after_process_to_pre_draw_us": 406385,
+      "draw_signals_us": 4024,
+      "inside_samples": 26,
+      "game_main_thread_state": "Running",
+      "inside_main_cpu_us": 359375,
+      "enclosing_main_cpu_us": 406250,
+      "interval_inside_us": 389130,
+      "interval_enclosure_us": 436169
+    }
+  ]
+}

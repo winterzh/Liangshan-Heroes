@@ -14,6 +14,8 @@ Liangshan Heroes · 基于 Godot 4.6.3 的水浒题材即时战略项目。
 
 Windows 离线试玩候选 `ee9f29f5`。完整解压，把 EXE 与 PCK 留在同一目录，再双击 `Start Local Playtest.cmd`。[试玩步骤](docs/PLAYTEST_CHECKLIST_20260906.md)
 
+开发分支的 Windows 战役多页开场可点「跳过对话」进入备战。回车每次继续一页，到备战后照常点「开战」。[开发版操作记录](qa/battle_entry_timing_20261116/windows_dialogue_skip_04a227d6.json)
+
 ## 从这里开始
 
 | 你要做什么 | 入口 |
