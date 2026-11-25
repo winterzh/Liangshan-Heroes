@@ -708,9 +708,11 @@ func _dispatch_cart_to_action(b, actor: Unit, action_id: String, action: Diction
 	# Each cart needs its own token so one arrival cannot consume another order.
 	var group := [actor]
 	b._stamp_manual(group)
-	if waypoint != Vector2.INF:
+	if waypoint == Vector2.INF:
+		actor.order_move(destination)
+	else:
 		actor.order_move(waypoint)
-	actor.order_move(destination, waypoint != Vector2.INF)
+		actor.queue_mission_move(destination)
 	b._stamp_mission_move(group, destination)
 	return true
 

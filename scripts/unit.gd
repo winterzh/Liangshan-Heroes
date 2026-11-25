@@ -488,6 +488,11 @@ func order_move(pos: Vector2, queued := false, group_cap := 0.0) -> void:
 	_enqueue({"kind": "move", "pos": pos, "group_cap": group_cap}, queued)
 
 
+## Queue the final leg of a scripted route whose existing mission order targets this point.
+func queue_mission_move(pos: Vector2) -> void:
+	_enqueue({"kind": "move", "pos": pos, "group_cap": 0.0, "continues_mission_order": true}, true)
+
+
 func order_attack(t: Unit, queued := false, explicit := false) -> void:
 	if t == null:
 		return
@@ -786,6 +791,9 @@ func _cancel_hold_order() -> void:
 
 
 func _begin_order(o: Dictionary) -> void:
+	var continuing_token := 0
+	if mission_order_active and o.get("continues_mission_order", false) and o.get("pos") == mission_order_target:
+		continuing_token = mission_order_token
 	clear_mission_order_intent()   # 追加时保留当前意图，轮到新命令真正开始时再解除。
 	_cancel_hold_order()
 	_patrolling = false
@@ -797,7 +805,10 @@ func _begin_order(o: Dictionary) -> void:
 		_move_retry = 0
 		_move_retry_pos = position
 	match kind:
-		"move": _begin_move(o["pos"])
+		"move":
+			_begin_move(o["pos"])
+			if continuing_token > 0:
+				stamp_mission_order_intent(o["pos"], continuing_token)
 		"amove": _begin_amove(o["pos"])
 		"attack": _begin_attack(o["target"], bool(o.get("explicit", false)))
 		"gather": _begin_gather(o["target"])

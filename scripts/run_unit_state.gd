@@ -1986,7 +1986,11 @@ func _order(order: Variant, registry_or_ids: Dictionary, capturing: bool, path: 
 	var result: Dictionary = {"kind":order.kind}
 	match order.kind:
 		"move", "amove":
-			if not _fields(order,["kind","pos","group_cap"]): return _failure("ORDER_FIELDS", path)
+			var names := ["kind","pos","group_cap"]
+			if order.kind == "move" and typeof(order.get("continues_mission_order")) == TYPE_BOOL and order["continues_mission_order"]:
+				names.append("continues_mission_order")
+				result["continues_mission_order"] = true
+			if not _fields(order,names): return _failure("ORDER_FIELDS", path)
 			if typeof(order.pos) != TYPE_VECTOR2 or not order.pos.is_finite(): return _failure("ORDER_POSITION", path)
 			if typeof(order.group_cap) != TYPE_FLOAT or not is_finite(order.group_cap): return _failure("ORDER_GROUP_CAP", path)
 			result["pos"] = order.pos
