@@ -1,0 +1,320 @@
+{
+  "candidate": "7261671c6200a9c6030e0d034f81fc6292759b94",
+  "reference_source": "04a227d6a099685e1f97bdde773056e3cf23f277",
+  "scope": "Actual shipped map geometry in the same test object. Alternating calls to old and new mesh functions. Includes valid partial fog.",
+  "published_mesh_hash": "SHA-256 of the Base64 serialization of the Godot mesh surface arrays.",
+  "measurements": {
+    "skirmish": {
+      "with_fog": {
+        "baseline_median_us": 5521.0,
+        "candidate_median_us": 3283.0,
+        "paired_delta_median_us": -2262.5,
+        "candidate_faster_pairs": 24
+      },
+      "without_fog": {
+        "baseline_median_us": 2010.0,
+        "candidate_median_us": 1452.5,
+        "paired_delta_median_us": -562.5,
+        "candidate_faster_pairs": 24
+      }
+    },
+    "level5": {
+      "with_fog": {
+        "baseline_median_us": 3539.5,
+        "candidate_median_us": 2103.0,
+        "paired_delta_median_us": -1396.0,
+        "candidate_faster_pairs": 24
+      },
+      "without_fog": {
+        "baseline_median_us": 1464.5,
+        "candidate_median_us": 968.0,
+        "paired_delta_median_us": -460.5,
+        "candidate_faster_pairs": 16
+      }
+    }
+  },
+  "proofs": {
+    "mode": {
+      "checks": 13,
+      "facts": {
+        "chapter": "skirmish",
+        "layouts": {
+          "with_fog": {
+            "hidden_vertices": 24528,
+            "mesh_sha256": "77bee76fe3bd9f928f41baf4f60b428004ae128742df2708dbc0e3a0b45edd15",
+            "signature": 827895804,
+            "timings": {
+              "candidate_us": [
+                3112,
+                3163,
+                3277,
+                3214,
+                3289,
+                3236,
+                3233,
+                3215,
+                3303,
+                3229,
+                3289,
+                3309,
+                3313,
+                3303,
+                3322,
+                3386,
+                3373,
+                3362,
+                3358,
+                3335,
+                3252,
+                3178,
+                3210,
+                3127
+              ],
+              "reference_us": [
+                5379,
+                5407,
+                5418,
+                5536,
+                5515,
+                5539,
+                5599,
+                5504,
+                5493,
+                5516,
+                5526,
+                5579,
+                5550,
+                5563,
+                5587,
+                5699,
+                15800,
+                5597,
+                5624,
+                5506,
+                5375,
+                5463,
+                5376,
+                5346
+              ]
+            },
+            "vertex_count": 32312
+          },
+          "without_fog": {
+            "hidden_vertices": 0,
+            "mesh_sha256": "c0b79d184498455e76a33bd9a2b3edc76be7ecb081089706d5f490ba25e181f8",
+            "signature": -1,
+            "timings": {
+              "candidate_us": [
+                1480,
+                1442,
+                1466,
+                1550,
+                1444,
+                1436,
+                1452,
+                1467,
+                1477,
+                1442,
+                1469,
+                1444,
+                1453,
+                1450,
+                1445,
+                1453,
+                1517,
+                1474,
+                1451,
+                1459,
+                1489,
+                1418,
+                1414,
+                1411
+              ],
+              "reference_us": [
+                2472,
+                2685,
+                2082,
+                2039,
+                1988,
+                2007,
+                2036,
+                1992,
+                1962,
+                1994,
+                2006,
+                2079,
+                1970,
+                2013,
+                2014,
+                2007,
+                12004,
+                2076,
+                2013,
+                2006,
+                1946,
+                1934,
+                2092,
+                1990
+              ]
+            },
+            "vertex_count": 32312
+          }
+        },
+        "normal_fight": true,
+        "reed_clumps": 577
+      },
+      "failures": [],
+      "stage": "mode",
+      "source_commit": "7261671c6200a9c6030e0d034f81fc6292759b94",
+      "startup_identity": "660df13e829b157dc59799f6e5db3530366730d452a81bebaa3a47ebcc1591df",
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "87abfb7c8292ed5a848b9061cef1ef461123c03f8e6b16ba6d0f07cef5487131",
+      "reference_source_sha256": "983dd79ffaf0943a0d98559446091fc0bb1c6cc735854fd8a03062bb33c2f3fa",
+      "reference_fixture_sha256": "22d7061a7d4b497e54cd78a8d7c56b17f0e56ac1804445ef3505c69af4fd4410",
+      "package_files_verified": 7,
+      "log_sha256": "cc6be53f36fd2bdfe36e22f24eb427050aaa45e40595e6113c8619ed8c0a3ae7",
+      "fixture_sha256": "919075a95ca3e7b545362e9e6626beec3b771063aa10a14fcc0b28c410015956"
+    },
+    "read": {
+      "checks": 13,
+      "facts": {
+        "chapter": "level5",
+        "layouts": {
+          "with_fog": {
+            "hidden_vertices": 14112,
+            "mesh_sha256": "3aa5824f470d9d1900436029e017633aeca3a441fbbbe8441be5d38558a29daa",
+            "signature": 1483912888,
+            "timings": {
+              "candidate_us": [
+                2008,
+                2012,
+                2124,
+                3045,
+                2848,
+                2101,
+                2080,
+                2051,
+                2039,
+                3006,
+                3202,
+                2107,
+                1999,
+                2011,
+                2043,
+                3082,
+                3087,
+                2047,
+                2114,
+                2035,
+                1947,
+                2955,
+                2664,
+                2105
+              ],
+              "reference_us": [
+                3383,
+                4313,
+                3541,
+                3409,
+                3420,
+                3624,
+                4577,
+                4525,
+                3342,
+                3379,
+                3470,
+                3538,
+                4230,
+                4454,
+                3492,
+                3557,
+                3684,
+                3371,
+                4422,
+                4577,
+                3457,
+                3567,
+                3392,
+                3471
+              ]
+            },
+            "vertex_count": 20272
+          },
+          "without_fog": {
+            "hidden_vertices": 0,
+            "mesh_sha256": "50ef50e48982ba55ca87e22e1f8897285d63a151e8eed8a9ae7a73044713d0ee",
+            "signature": -1,
+            "timings": {
+              "candidate_us": [
+                965,
+                931,
+                905,
+                1662,
+                1854,
+                956,
+                898,
+                941,
+                866,
+                1897,
+                1945,
+                1224,
+                889,
+                898,
+                913,
+                1669,
+                1992,
+                971,
+                995,
+                1062,
+                859,
+                1580,
+                1748,
+                885
+              ],
+              "reference_us": [
+                1588,
+                2459,
+                1392,
+                1304,
+                1315,
+                1312,
+                2111,
+                2265,
+                1637,
+                1298,
+                1314,
+                1345,
+                2430,
+                2976,
+                1463,
+                1359,
+                1694,
+                1370,
+                2609,
+                2533,
+                1466,
+                1475,
+                1302,
+                1319
+              ]
+            },
+            "vertex_count": 20272
+          }
+        },
+        "normal_fight": true,
+        "reed_clumps": 362
+      },
+      "failures": [],
+      "stage": "read",
+      "source_commit": "7261671c6200a9c6030e0d034f81fc6292759b94",
+      "startup_identity": "660df13e829b157dc59799f6e5db3530366730d452a81bebaa3a47ebcc1591df",
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "87abfb7c8292ed5a848b9061cef1ef461123c03f8e6b16ba6d0f07cef5487131",
+      "reference_source_sha256": "983dd79ffaf0943a0d98559446091fc0bb1c6cc735854fd8a03062bb33c2f3fa",
+      "reference_fixture_sha256": "22d7061a7d4b497e54cd78a8d7c56b17f0e56ac1804445ef3505c69af4fd4410",
+      "package_files_verified": 7,
+      "log_sha256": "c1bd49659744ee9e67d6c2c5002220d5bb12964cf5525720dad782913ca10352",
+      "fixture_sha256": "919075a95ca3e7b545362e9e6626beec3b771063aa10a14fcc0b28c410015956"
+    }
+  }
+}
