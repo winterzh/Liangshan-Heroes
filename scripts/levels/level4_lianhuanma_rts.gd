@@ -18,6 +18,7 @@ const SOUTH_SIEGE_CELLS := [
 ]
 const LINK_SOURCE := 4705
 const HOOK_KEYS := ["gou_lian","xu_ning"]
+const HOOK_TEAM_BUTTON := "lhm_select_hook_team"
 const WAVE_TIMES := [150.0, 270.0]
 const SUPPLY_DELAY := 45.0
 const CAMP_FALL_WAVE_EVENTS := ["lhm_north_after_camp_fall", "lhm_south_after_camp_fall"]
@@ -355,9 +356,32 @@ func _drill_hint(b) -> String:
 	return Localize.text("两名搭档已到。选中徐宁与钩镰手，轻点演练骑合击。" if b.hud.touch_ui \
 		else "两名搭档已到。选中徐宁与钩镰手，右键演练骑合击。")
 
+func _hook_line_actor(unit) -> bool:
+	return alive(unit) and unit.faction == Unit.FACTION_LIANG and unit.key == "gou_lian" \
+		and not unit.garrisoned and not unit.is_captive and unit.story_outcome.is_empty()
+
+
 func _line_hooks(b) -> Array:
-	return b.selection.filter(func(u): return alive(u) and u.faction == Unit.FACTION_LIANG \
-		and u.key == "gou_lian" and not u.garrisoned and not u.is_captive)
+	return b.selection.filter(_hook_line_actor)
+
+
+func _available_hook_line_team(b) -> Array:
+	if OS.get_name() != "Windows" or b.hud.touch_ui or lhm_killed >= 12:
+		return []
+	return b.units.filter(_hook_line_actor)
+
+
+func _update_hook_team_button(b) -> void:
+	var button: Button = b.mission.find_level_button(HOOK_TEAM_BUTTON)
+	var available := _available_hook_line_team(b).size() >= 2
+	if available and button == null:
+		button = b.mission.add_level_button(HOOK_TEAM_BUTTON, "选中 · 钩镰队",
+			"按 Alt 拖动右键，在地面划出钩镰阵线。")
+		button.get_parent().move_child(button, 0)
+		b.mission.reveal_primary_level_button()
+	elif not available and button != null:
+		button.get_parent().remove_child(button)
+		button.queue_free()
 
 
 func begin_hook_line(b, point: Vector2) -> bool:
@@ -513,6 +537,11 @@ func _lane_has_riders(lane: int) -> bool:
 	return riders.any(func(u): return alive(u) and int(u.get_meta("wave_group",-1))==lane)
 
 func activate_mission_button(b,button_id: String) -> void:
+	if button_id == HOOK_TEAM_BUTTON:
+		var team := _available_hook_line_team(b)
+		if team.size() >= 2:
+			b.select_members(team, false)
+		return
 	if button_id == SOUTH_SIEGE_SELECT:
 		if _south_siege_available():
 			_select_east_artillery(b)
@@ -784,6 +813,7 @@ func _update_briefing(b) -> void:
 	elif waves[0].sent or waves[1].sent:
 		briefing = DEFEND_BRIEFING
 	var objective: String = briefing.objective
+	_update_hook_team_button(b)
 	var south_siege_available := _south_siege_available()
 	_update_south_siege_button(b, south_siege_available)
 	var staging: Vector2 = b.map.cell_to_world(SOUTH_SIEGE_CELLS[-1])
