@@ -1,5 +1,13 @@
 # 开发日志
 
+## 2026-11-25 Windows Steam 上传与正式分支确认
+
+新 Windows 构建 26914334 已上传 App 5088120，Depot 5088121 的清单为 3706890338714832777，Steamworks 可见。Windows 菜单、八章战役和两种模式共 11 项启动通过。Steam 原生启动探针读回账号统计和云档。
+
+同成品用原生帧设置复跑 610.2 秒，六入口 95 次实际交战与释放通过。最差完整分钟 P95／P99 为 52.59／141.30 毫秒，自定义驻守出现一次约 1.42 秒的进场绘制间隔。用户选择保留当前正式版，Steamworks 回读 default 为 Build 26873421。新版作为无分支构建保存在 Steamworks。
+
+已验证并清理 14 个上传和原生启动验收使用的展开文件，单链接文件长度合计 3.46 GiB，另清理 209 个已退出测试的着色器缓存。保留 Windows ZIP、发布收据和原始验收数据。 [Windows 收尾记录](../qa/battle_entry_timing_20261116/windows_release_closeout_2449db1d.json)
+
 ## 2026-11-25 Windows 发布收尾
 
 Windows 打包入口 `tools/build_steam_release_zip.py --frozen <冻结批次> --output <目录>` 接收已完成导入和导出的成品。校对冻结清单中的七个 EXE、PCK、库和许可文件，逐项读回新 ZIP 的 SHA-256，再生成打包收据。候选 2449db1d 的七个条目全部通过。

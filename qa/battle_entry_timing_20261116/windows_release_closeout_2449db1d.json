@@ -54,5 +54,363 @@
   },
   "closed_test_links_removed": 28,
   "closed_test_link_logical_bytes": 7421625692,
-  "c_empty_historical_profile_directories_removed": 207
+  "c_empty_historical_profile_directories_removed": 207,
+  "checked_windows_smoke": {
+    "passed": true,
+    "method": "stock offline headless Windows launches, independent profiles, eight chapters and two modes",
+    "cases": [
+      {
+        "case": "menu",
+        "exit": 0,
+        "errors": [],
+        "entered": true,
+        "seconds": 16.166,
+        "log_sha256": "b16651cbedbab0a7b519f9e5b498eea40cb33bfb72252e264a7f4c2412765d58"
+      },
+      {
+        "case": "level1",
+        "exit": 0,
+        "errors": [],
+        "entered": true,
+        "seconds": 17.378,
+        "log_sha256": "6cbba3e3239951822ba38a56423d2fa27bcec6e357b21be5a16c229da3ea8a6c"
+      },
+      {
+        "case": "level2",
+        "exit": 0,
+        "errors": [],
+        "entered": true,
+        "seconds": 16.0,
+        "log_sha256": "0590a2b2fdfbe40a3aad39a94976e8439b80d31298ff48f3d84f3054b7957bae"
+      },
+      {
+        "case": "level3",
+        "exit": 0,
+        "errors": [],
+        "entered": true,
+        "seconds": 16.743,
+        "log_sha256": "986b7a0c6e14b935d08c6ff9139d37b12bbfc40d7403ad0aeecd9c87b23dab1f"
+      },
+      {
+        "case": "level4",
+        "exit": 0,
+        "errors": [],
+        "entered": true,
+        "seconds": 16.92,
+        "log_sha256": "1ca7d32e3f0183de7d88a317af1e7e2d31b91ca730f079d94664c14dbaaccfc9"
+      },
+      {
+        "case": "level5",
+        "exit": 0,
+        "errors": [],
+        "entered": true,
+        "seconds": 16.96,
+        "log_sha256": "13623daaed87ea66fea95893789ef55ee057b168c284afd4e4e349f3c8dc5040"
+      },
+      {
+        "case": "level6",
+        "exit": 0,
+        "errors": [],
+        "entered": true,
+        "seconds": 38.012,
+        "log_sha256": "10ffd93456bf8238d6bcddb463991e2d15ddd6ff3de83b0bdac905b7227a94c6"
+      },
+      {
+        "case": "level7",
+        "exit": 0,
+        "errors": [],
+        "entered": true,
+        "seconds": 17.155,
+        "log_sha256": "be4daa5466239d4e4252a266f4e19d6e50fb70d2b95fa686a35f6e4d86574cb6"
+      },
+      {
+        "case": "level8",
+        "exit": 0,
+        "errors": [],
+        "entered": true,
+        "seconds": 16.849,
+        "log_sha256": "ed00e057de1252ea70661239ea7cd374ef2b5cc0b7e33c9a3bd75fe649286e05"
+      },
+      {
+        "case": "skirmish",
+        "exit": 0,
+        "errors": [],
+        "entered": true,
+        "seconds": 15.474,
+        "log_sha256": "8db3257529a02f9763beee3bfe9fdebd83c2a80056a05e1ceda6bac80fb5da88"
+      },
+      {
+        "case": "skirmish_ai",
+        "exit": 0,
+        "errors": [],
+        "entered": true,
+        "seconds": 15.127,
+        "log_sha256": "b8e57aec25c7739655fa215e2dced386214821866728e225c5ba5d1306af203c"
+      }
+    ]
+  },
+  "native_frame_diagnostic": {
+    "candidate": "2449db1d5ead91ba42b54fc3b83060c78ebc979c",
+    "actual_seconds": 610.183328,
+    "transitions": 95,
+    "performance": {
+      "complete_minute_buckets": 10,
+      "max_minute_p95_ms": 52.592,
+      "max_minute_p99_ms": 141.302,
+      "p95_limit_ms": 16.7,
+      "p99_limit_ms": 33.3,
+      "peak_draw_calls": 1415.0,
+      "worst_frame_ms": 556.213
+    },
+    "renderer": {
+      "adapter": "NVIDIA GeForce RTX 4060 Laptop GPU",
+      "api": "1.4.357",
+      "display": "Windows",
+      "driver": "vulkan",
+      "godot": {
+        "build": "official",
+        "hash": "7d41c59c457bd5a245092b4e7eb2d833e3b3f8c3",
+        "hex": 263683,
+        "major": 4,
+        "minor": 6,
+        "patch": 3,
+        "status": "stable",
+        "string": "4.6.3-stable (official)",
+        "timestamp": 0
+      },
+      "method": "forward_plus",
+      "vendor": "NVIDIA",
+      "vsync": 1
+    },
+    "frame_configuration": {
+      "kept_native_settings": true,
+      "max_fps": 0
+    },
+    "longest_draw_gaps": [
+      {
+        "mode": "custom_defense",
+        "level_id": "custom_defense",
+        "first_overlay_us": 10391,
+        "battle_attached_us": 1419518,
+        "map_attached_us": 1419563,
+        "hud_attached_us": 1486528,
+        "scene_ready_us": 1578876,
+        "first_battle_frame_us": 1664613,
+        "gap_start_us": 244465,
+        "gap_end_us": 1664613,
+        "visit": 95,
+        "gap_us": 1420148,
+        "pre_attach_part_us": 1175053
+      },
+      {
+        "mode": "skirmish_ai",
+        "level_id": "skirmish_ai",
+        "first_overlay_us": 13031,
+        "battle_attached_us": 220736,
+        "map_attached_us": 220859,
+        "hud_attached_us": 360936,
+        "scene_ready_us": 540973,
+        "first_battle_frame_us": 768183,
+        "gap_start_us": 211957,
+        "gap_end_us": 768183,
+        "visit": 10,
+        "gap_us": 556226,
+        "pre_attach_part_us": 8779
+      },
+      {
+        "mode": "skirmish_ai",
+        "level_id": "skirmish_ai",
+        "first_overlay_us": 5469,
+        "battle_attached_us": 144465,
+        "map_attached_us": 144539,
+        "hud_attached_us": 235254,
+        "scene_ready_us": 361651,
+        "first_battle_frame_us": 528714,
+        "gap_start_us": 140035,
+        "gap_end_us": 528714,
+        "visit": 64,
+        "gap_us": 388679,
+        "pre_attach_part_us": 4430
+      },
+      {
+        "mode": "arena",
+        "level_id": "arena",
+        "first_overlay_us": 155966,
+        "battle_attached_us": 163537,
+        "map_attached_us": 217859,
+        "hud_attached_us": 283179,
+        "scene_ready_us": 419355,
+        "first_battle_frame_us": 536710,
+        "gap_start_us": 155966,
+        "gap_end_us": 536710,
+        "visit": 8,
+        "gap_us": 380744,
+        "pre_attach_part_us": 7571
+      },
+      {
+        "mode": "skirmish_ai",
+        "level_id": "skirmish_ai",
+        "first_overlay_us": 5602,
+        "battle_attached_us": 104995,
+        "map_attached_us": 105068,
+        "hud_attached_us": 188653,
+        "scene_ready_us": 321291,
+        "first_battle_frame_us": 477019,
+        "gap_start_us": 99684,
+        "gap_end_us": 477019,
+        "visit": 22,
+        "gap_us": 377335,
+        "pre_attach_part_us": 5311
+      },
+      {
+        "mode": "campaign",
+        "level_id": "level5",
+        "first_overlay_us": 5376,
+        "battle_attached_us": 306168,
+        "map_attached_us": 306251,
+        "hud_attached_us": 424097,
+        "scene_ready_us": 557031,
+        "first_battle_frame_us": 673784,
+        "gap_start_us": 301917,
+        "gap_end_us": 673784,
+        "visit": 12,
+        "gap_us": 371867,
+        "pre_attach_part_us": 4251
+      },
+      {
+        "mode": "custom_defense",
+        "level_id": "custom_defense",
+        "first_overlay_us": 4912,
+        "battle_attached_us": 305153,
+        "map_attached_us": 305228,
+        "hud_attached_us": 413955,
+        "scene_ready_us": 569142,
+        "first_battle_frame_us": 665945,
+        "gap_start_us": 300723,
+        "gap_end_us": 665945,
+        "visit": 11,
+        "gap_us": 365222,
+        "pre_attach_part_us": 4430
+      },
+      {
+        "mode": "skirmish_ai",
+        "level_id": "skirmish_ai",
+        "first_overlay_us": 5586,
+        "battle_attached_us": 133191,
+        "map_attached_us": 133248,
+        "hud_attached_us": 192716,
+        "scene_ready_us": 314527,
+        "first_battle_frame_us": 478926,
+        "gap_start_us": 130176,
+        "gap_end_us": 478926,
+        "visit": 58,
+        "gap_us": 348750,
+        "pre_attach_part_us": 3015
+      },
+      {
+        "mode": "skirmish",
+        "level_id": "skirmish",
+        "first_overlay_us": 6529,
+        "battle_attached_us": 338916,
+        "map_attached_us": 338977,
+        "hud_attached_us": 448385,
+        "scene_ready_us": 578977,
+        "first_battle_frame_us": 671953,
+        "gap_start_us": 334727,
+        "gap_end_us": 671953,
+        "visit": 9,
+        "gap_us": 337226,
+        "pre_attach_part_us": 4189
+      },
+      {
+        "mode": "campaign",
+        "level_id": "level1",
+        "first_overlay_us": 12580,
+        "battle_attached_us": 306257,
+        "map_attached_us": 306290,
+        "hud_attached_us": 364538,
+        "scene_ready_us": 570198,
+        "first_battle_frame_us": 633270,
+        "gap_start_us": 302752,
+        "gap_end_us": 633270,
+        "visit": 7,
+        "gap_us": 330518,
+        "pre_attach_part_us": 3505
+      },
+      {
+        "mode": "campaign",
+        "level_id": "level1",
+        "first_overlay_us": 8153,
+        "battle_attached_us": 220878,
+        "map_attached_us": 220963,
+        "hud_attached_us": 327220,
+        "scene_ready_us": 497457,
+        "first_battle_frame_us": 540767,
+        "gap_start_us": 215071,
+        "gap_end_us": 540767,
+        "visit": 19,
+        "gap_us": 325696,
+        "pre_attach_part_us": 5807
+      },
+      {
+        "mode": "arena",
+        "level_id": "arena",
+        "first_overlay_us": 140143,
+        "battle_attached_us": 146511,
+        "map_attached_us": 194188,
+        "hud_attached_us": 239234,
+        "scene_ready_us": 350577,
+        "first_battle_frame_us": 450972,
+        "gap_start_us": 140143,
+        "gap_end_us": 450972,
+        "visit": 14,
+        "gap_us": 310829,
+        "pre_attach_part_us": 6368
+      }
+    ],
+    "receipt_hashes": {
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "c3ec7fd953e409cfae771f909ff9aea1bd954a8a4b511080875788907a398b4e",
+      "log_sha256": "398efc39ed8f22c58cdc5c13050e64fe3e287035a1a66ed9051bba6ca87ca3bd",
+      "thread_samples_sha256": "6a7401ee3fa1303718e62fa68b0a7c3efc60233e181e928a2d1e832faf82b0dc",
+      "probe_sha256": "8c2309f643bd498983955d0888f8b608188cffaded79e358b3578f826ecf3da9",
+      "report_sha256": "08d27f2a8f922457fab7100bc6a723bdd9dc4d06bbf15b25ddfe65675f323e45"
+    },
+    "diagnostic_runtime_checks_passed": true
+  },
+  "steam_transfer": {
+    "app": 5088120,
+    "depot": 5088121,
+    "source_commit": "2449db1d5ead91ba42b54fc3b83060c78ebc979c",
+    "build_id": 26914334,
+    "manifest_id": "3706890338714832777",
+    "set_live_during_upload": false,
+    "rollback_build": 26873421,
+    "rollback_manifest": "1495091939036589520",
+    "build_row_readback_verified": true,
+    "preview_file_count": 7
+  },
+  "steam_public_decision": {
+    "branch": "default",
+    "build_id": 26873421,
+    "manifest_id": "1495091939036589520",
+    "verified_in_steamworks": true,
+    "held_current_by_user": true
+  },
+  "steam_stock_startup": {
+    "exit": 0,
+    "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+    "pck_sha256": "c3ec7fd953e409cfae771f909ff9aea1bd954a8a4b511080875788907a398b4e",
+    "authenticated_stats_read": true,
+    "cloud_gate": true,
+    "cloud_bound": true,
+    "pulled_cloud": true,
+    "remote_valid": true,
+    "preflight_passed": true,
+    "log_sha256": "a1f523f8460d30324505ae605a6b6b43a886b651aef76974b357241b3d771056"
+  },
+  "temporary_release_files_removed": 14,
+  "temporary_release_single_link_bytes_removed": 3710812926.0,
+  "completed_test_shader_cache_files_removed": 209,
+  "completed_test_shader_cache_logical_bytes_removed": 15943917.0
 }
