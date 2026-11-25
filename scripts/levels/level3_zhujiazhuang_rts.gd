@@ -1007,9 +1007,10 @@ func _refresh_stage(b) -> void:
 			objective = "正门和偏门都已通行。可分兵牵制守军、进牢院救人。还需攻破大营、护送时迁回前营。"
 		elif side_open:
 			objective = "偏门已可通行。可派护卫入庄救人，也可从正门牵制守军。还需攻破大营、护送时迁回前营。"
-		elif main_breached and not supply_cut:
-			objective = "正门已破。留兵守前营，护送器械破营，救时迁回营。缺金可查看前营金矿或在集市卖木，也可先断援。"
-		elif supply_cut and not main_breached:
+		elif main_breached:
+			objective = "南营已断援，正门已破。攻破大营，救出时迁并送他回前营。" if supply_cut \
+				else "正门已破。留兵守前营，护送器械破营，救时迁回营。缺金可查看前营金矿或在集市卖木，也可先断援。"
+		elif supply_cut:
 			objective = "南营已断援，庄内大营仍可补兵。可带器械攻正门，或接应孙立打开偏门。" if _alive(sun) else "孙立已阵亡，内应路线关闭；请用器械攻破庄门救人。"
 	if not main_breached and not side_open and _alive(sun):
 		var feint := defense_state == "feint" and _has_feint_guards(b.mission)
