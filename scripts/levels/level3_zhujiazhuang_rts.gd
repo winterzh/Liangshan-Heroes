@@ -26,6 +26,7 @@ const OUTPOST := Vector2i(36, 39)
 const EXPANSION := Vector2i(36, 16)
 const PRISON := Vector2i(11, 35)
 const INNER_CONTACT := Vector2i(25, 18)
+const NORTH_SIDE_APPROACH := Vector2i(35, 9)
 const EVACUATION_RADIUS := 190.0
 const EVACUATION_RALLY := CAMP + Vector2i(-3,0)
 const PRISONERS := ["shi_qian", "shi_xiu", "qin_ming", "yang_lin", "huang_xin", "wang_ying", "deng_fei"]
@@ -581,6 +582,27 @@ func _update_manor_locator(b) -> void:
 		b.mission.reveal_primary_level_button()
 
 
+func _side_gate_route(b, target: Vector2, reach: float) -> PackedVector2Array:
+	var route := PackedVector2Array()
+	var origin := sun.position
+	# East of the contested mines, the shortcut approaches from the north.
+	# Once the player secures the mines or gets past them, use the direct route.
+	var cell: Vector2i = b.map.world_to_cell(origin)
+	if not expansion_secured and cell.x > EXPANSION.x:
+		var approach: Vector2 = b.map.cell_to_world(NORTH_SIDE_APPROACH)
+		var north_path: PackedVector2Array = b.map.find_path(origin, approach, sun.faction, sun.movement_profile)
+		if north_path.is_empty() or not north_path[-1].is_equal_approx(approach):
+			return PackedVector2Array()
+		route.append(approach)
+		origin = approach
+	var path: PackedVector2Array = b.map.find_path(origin, target, sun.faction, sun.movement_profile)
+	if path.is_empty() or path[-1].distance_to(target) > reach \
+			or not b.map._segment_open(path[-1], target, sun.movement_profile):
+		return PackedVector2Array()
+	route.append(target)
+	return route
+
+
 func _order_sun_to_side_gate(b) -> void:
 	if b.hud.touch_ui or not b._gameplay_rng_issue.is_empty():
 		return
@@ -590,9 +612,8 @@ func _order_sun_to_side_gate(b) -> void:
 	if _sun_ordered_to_side_gate(b):
 		return
 	var target: Vector2 = b.map.cell_to_world(action.cell)
-	var path: PackedVector2Array = b.map.find_path(sun.position, target, sun.faction, sun.movement_profile)
-	if path.is_empty() or path[-1].distance_to(target) > float(action.reach) \
-			or not b.map._segment_open(path[-1], target, sun.movement_profile):
+	var route := _side_gate_route(b, target, float(action.reach))
+	if route.is_empty():
 		b.mission.set_feedback("暂时走不到旗标。请清开道路或手动改道。")
 		return
 	var group := [sun]
@@ -600,7 +621,9 @@ func _order_sun_to_side_gate(b) -> void:
 	if move.is_empty() or move.actor != sun:
 		return
 	b._stamp_manual(group)
-	sun.order_move(move.target)
+	route[-1] = move.target
+	for index in range(route.size()):
+		sun.order_move(route[index], index > 0)
 	b._stamp_mission_move(group, target)
 	Sfx.play("order")
 	b.mission.set_feedback("孙立已前往偏门接应。")
