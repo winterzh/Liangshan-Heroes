@@ -1,0 +1,2322 @@
+{
+  "scope": "isolated native Windows Vulkan, exact payloads; four ordered processes; manual shadow timers run after first frame",
+  "baseline": "c89f5e66ad10cd159ca57751c50bc3782a808dfa",
+  "candidate": "7fe271511058fc08223697cba65491b49f1b920b",
+  "comparisons": {
+    "campaign:level5": {
+      "verified_exact_geometry_recipes": 1,
+      "old": {
+        "cold_start_us": [
+          228461,
+          227532
+        ],
+        "warm_click_to_first_frame_us": {
+          "count": 10,
+          "median": 104013.0,
+          "p95": 265881,
+          "peak": 265881
+        },
+        "warm_overlay_to_attach_us": {
+          "count": 10,
+          "median": 49565.0,
+          "p95": 109296,
+          "peak": 109296
+        },
+        "warm_manual_shadow_us": {
+          "count": 30,
+          "median": 3490.5,
+          "p95": 8913,
+          "peak": 9454
+        }
+      },
+      "new": {
+        "cold_start_us": [
+          171165,
+          208088
+        ],
+        "warm_click_to_first_frame_us": {
+          "count": 10,
+          "median": 115033.5,
+          "p95": 215663,
+          "peak": 215663
+        },
+        "warm_overlay_to_attach_us": {
+          "count": 10,
+          "median": 53090.0,
+          "p95": 150476,
+          "peak": 150476
+        },
+        "warm_manual_shadow_us": {
+          "count": 30,
+          "median": 713.0,
+          "p95": 1214,
+          "peak": 1422
+        }
+      }
+    },
+    "custom_defense:custom_defense": {
+      "verified_exact_geometry_recipes": 1,
+      "old": {
+        "cold_start_us": [
+          136216,
+          233696
+        ],
+        "warm_click_to_first_frame_us": {
+          "count": 10,
+          "median": 103250.5,
+          "p95": 138046,
+          "peak": 138046
+        },
+        "warm_overlay_to_attach_us": {
+          "count": 10,
+          "median": 50759.0,
+          "p95": 67085,
+          "peak": 67085
+        },
+        "warm_manual_shadow_us": {
+          "count": 30,
+          "median": 3682.5,
+          "p95": 4506,
+          "peak": 5056
+        }
+      },
+      "new": {
+        "cold_start_us": [
+          201091,
+          293496
+        ],
+        "warm_click_to_first_frame_us": {
+          "count": 10,
+          "median": 111871.0,
+          "p95": 177426,
+          "peak": 177426
+        },
+        "warm_overlay_to_attach_us": {
+          "count": 10,
+          "median": 53840.5,
+          "p95": 72784,
+          "peak": 72784
+        },
+        "warm_manual_shadow_us": {
+          "count": 30,
+          "median": 887.5,
+          "p95": 1591,
+          "peak": 1929
+        }
+      }
+    },
+    "skirmish:skirmish": {
+      "verified_exact_geometry_recipes": 1,
+      "old": {
+        "cold_start_us": [
+          303003,
+          275565
+        ],
+        "warm_click_to_first_frame_us": {
+          "count": 10,
+          "median": 100903.0,
+          "p95": 142342,
+          "peak": 142342
+        },
+        "warm_overlay_to_attach_us": {
+          "count": 10,
+          "median": 48817.0,
+          "p95": 67123,
+          "peak": 67123
+        },
+        "warm_manual_shadow_us": {
+          "count": 30,
+          "median": 3680.0,
+          "p95": 5576,
+          "peak": 6086
+        }
+      },
+      "new": {
+        "cold_start_us": [
+          263674,
+          903161
+        ],
+        "warm_click_to_first_frame_us": {
+          "count": 10,
+          "median": 100761.5,
+          "p95": 131702,
+          "peak": 131702
+        },
+        "warm_overlay_to_attach_us": {
+          "count": 10,
+          "median": 48362.0,
+          "p95": 63611,
+          "peak": 63611
+        },
+        "warm_manual_shadow_us": {
+          "count": 30,
+          "median": 698.5,
+          "p95": 1008,
+          "peak": 1022
+        }
+      }
+    }
+  },
+  "runs_in_order": {
+    "old-a": {
+      "payload": {
+        "candidate": "c89f5e66ad10cd159ca57751c50bc3782a808dfa",
+        "probe_sha256": "dfb6e64f9a55e5def442b26a95386992934eff3169e4589258fcbb94ab5cef1f",
+        "payload_files_unchanged": true,
+        "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+        "pck_sha256": "ec3d2e23b1dd802ff8a7e379cb01d42ef336d5551a2969eebdfe7ccf2b90253c",
+        "split_identity": "04268c4d48447e14da2649c7dfdfc1ff424c86d5825c3ff2fb08a791c786a8d3",
+        "exe_unchanged": true,
+        "exit_code": 0,
+        "seconds": 50.187,
+        "errors": [],
+        "warnings": [],
+        "log_sha256": "a51fddec8dddf06aca09874e8f783412be87e8233e60c60148b0e9fe80e24cd8",
+        "report_sha256": "0eb39f31f10f2dc28cae0598ab1ce93c67ac4c9335c43efc6f71520c0fcf0f5c"
+      },
+      "seconds": 40.748385,
+      "entries": 18,
+      "rows": [
+        {
+          "route": "skirmish:skirmish",
+          "transition": 1,
+          "first_visit": true,
+          "first_battle_frame_us": 303003,
+          "mount_before_attach_us": 137750,
+          "max_drawing_gap_us": 161242,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223371714312796017,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            4579,
+            3933,
+            3912
+          ],
+          "same_instance_after_rebuild": false
+        },
+        {
+          "route": "custom_defense:custom_defense",
+          "transition": 2,
+          "first_visit": true,
+          "first_battle_frame_us": 136216,
+          "mount_before_attach_us": 84831,
+          "max_drawing_gap_us": 82889,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223371624101705647,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            3758,
+            3572,
+            3553
+          ],
+          "same_instance_after_rebuild": false
+        },
+        {
+          "route": "campaign:level5",
+          "transition": 3,
+          "first_visit": true,
+          "first_battle_frame_us": 228461,
+          "mount_before_attach_us": 86327,
+          "max_drawing_gap_us": 142383,
+          "anchors": 118,
+          "casts": 13,
+          "contact_id": -9223371551657687014,
+          "geometry_sha256": "2c2f07cceec838f83e3dfb026e162ed5e0c39393b4f7035f27389acea15c7014",
+          "grid_sha256": "f56965ca0633c16c1dbc417d8f36371f0f46f77b8af395a74f73d351b6e3f805",
+          "manual_rebuild_us": [
+            3686,
+            3563,
+            3638
+          ],
+          "same_instance_after_rebuild": false
+        },
+        {
+          "route": "skirmish:skirmish",
+          "transition": 4,
+          "first_visit": false,
+          "first_battle_frame_us": 101957,
+          "mount_before_attach_us": 50740,
+          "max_drawing_gap_us": 50282,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223371464332277770,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            3798,
+            3632,
+            3587
+          ],
+          "same_instance_after_rebuild": false
+        },
+        {
+          "route": "custom_defense:custom_defense",
+          "transition": 5,
+          "first_visit": false,
+          "first_battle_frame_us": 105358,
+          "mount_before_attach_us": 52711,
+          "max_drawing_gap_us": 52608,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223371396736873452,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            3850,
+            3762,
+            3646
+          ],
+          "same_instance_after_rebuild": false
+        },
+        {
+          "route": "campaign:level5",
+          "transition": 6,
+          "first_visit": false,
+          "first_battle_frame_us": 111388,
+          "mount_before_attach_us": 49984,
+          "max_drawing_gap_us": 61730,
+          "anchors": 118,
+          "casts": 13,
+          "contact_id": -9223371326524225497,
+          "geometry_sha256": "2c2f07cceec838f83e3dfb026e162ed5e0c39393b4f7035f27389acea15c7014",
+          "grid_sha256": "f56965ca0633c16c1dbc417d8f36371f0f46f77b8af395a74f73d351b6e3f805",
+          "manual_rebuild_us": [
+            4312,
+            3539,
+            3482
+          ],
+          "same_instance_after_rebuild": false
+        },
+        {
+          "route": "skirmish:skirmish",
+          "transition": 7,
+          "first_visit": false,
+          "first_battle_frame_us": 103812,
+          "mount_before_attach_us": 50372,
+          "max_drawing_gap_us": 52821,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223371266646341641,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            3881,
+            3617,
+            3666
+          ],
+          "same_instance_after_rebuild": false
+        },
+        {
+          "route": "custom_defense:custom_defense",
+          "transition": 8,
+          "first_visit": false,
+          "first_battle_frame_us": 105050,
+          "mount_before_attach_us": 52131,
+          "max_drawing_gap_us": 53838,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223371196433691626,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            4146,
+            3718,
+            3800
+          ],
+          "same_instance_after_rebuild": false
+        },
+        {
+          "route": "campaign:level5",
+          "transition": 9,
+          "first_visit": false,
+          "first_battle_frame_us": 96953,
+          "mount_before_attach_us": 44961,
+          "max_drawing_gap_us": 52212,
+          "anchors": 118,
+          "casts": 13,
+          "contact_id": -9223371124526544870,
+          "geometry_sha256": "2c2f07cceec838f83e3dfb026e162ed5e0c39393b4f7035f27389acea15c7014",
+          "grid_sha256": "f56965ca0633c16c1dbc417d8f36371f0f46f77b8af395a74f73d351b6e3f805",
+          "manual_rebuild_us": [
+            3306,
+            3169,
+            3101
+          ],
+          "same_instance_after_rebuild": false
+        },
+        {
+          "route": "skirmish:skirmish",
+          "transition": 10,
+          "first_visit": false,
+          "first_battle_frame_us": 98740,
+          "mount_before_attach_us": 48385,
+          "max_drawing_gap_us": 50340,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223371056998250506,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            4031,
+            3658,
+            3711
+          ],
+          "same_instance_after_rebuild": false
+        },
+        {
+          "route": "custom_defense:custom_defense",
+          "transition": 11,
+          "first_visit": false,
+          "first_battle_frame_us": 107716,
+          "mount_before_attach_us": 52391,
+          "max_drawing_gap_us": 56037,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223370979202298860,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            3881,
+            3637,
+            3549
+          ],
+          "same_instance_after_rebuild": false
+        },
+        {
+          "route": "campaign:level5",
+          "transition": 12,
+          "first_visit": false,
+          "first_battle_frame_us": 127219,
+          "mount_before_attach_us": 59877,
+          "max_drawing_gap_us": 67522,
+          "anchors": 118,
+          "casts": 13,
+          "contact_id": -9223370905936197593,
+          "geometry_sha256": "2c2f07cceec838f83e3dfb026e162ed5e0c39393b4f7035f27389acea15c7014",
+          "grid_sha256": "f56965ca0633c16c1dbc417d8f36371f0f46f77b8af395a74f73d351b6e3f805",
+          "manual_rebuild_us": [
+            3798,
+            3871,
+            3623
+          ],
+          "same_instance_after_rebuild": false
+        },
+        {
+          "route": "skirmish:skirmish",
+          "transition": 13,
+          "first_visit": false,
+          "first_battle_frame_us": 95909,
+          "mount_before_attach_us": 48519,
+          "max_drawing_gap_us": 47923,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223370839548753929,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            3684,
+            3493,
+            3428
+          ],
+          "same_instance_after_rebuild": false
+        },
+        {
+          "route": "custom_defense:custom_defense",
+          "transition": 14,
+          "first_visit": false,
+          "first_battle_frame_us": 97403,
+          "mount_before_attach_us": 46171,
+          "max_drawing_gap_us": 51377,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223370762105123818,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            4124,
+            3522,
+            3510
+          ],
+          "same_instance_after_rebuild": false
+        },
+        {
+          "route": "campaign:level5",
+          "transition": 15,
+          "first_visit": false,
+          "first_battle_frame_us": 103368,
+          "mount_before_attach_us": 47537,
+          "max_drawing_gap_us": 57100,
+          "anchors": 118,
+          "casts": 13,
+          "contact_id": -9223370679762548710,
+          "geometry_sha256": "2c2f07cceec838f83e3dfb026e162ed5e0c39393b4f7035f27389acea15c7014",
+          "grid_sha256": "f56965ca0633c16c1dbc417d8f36371f0f46f77b8af395a74f73d351b6e3f805",
+          "manual_rebuild_us": [
+            3603,
+            3262,
+            3189
+          ],
+          "same_instance_after_rebuild": false
+        },
+        {
+          "route": "skirmish:skirmish",
+          "transition": 16,
+          "first_visit": false,
+          "first_battle_frame_us": 99849,
+          "mount_before_attach_us": 49139,
+          "max_drawing_gap_us": 50747,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223370612536244234,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            4376,
+            3791,
+            3538
+          ],
+          "same_instance_after_rebuild": false
+        },
+        {
+          "route": "custom_defense:custom_defense",
+          "transition": 17,
+          "first_visit": false,
+          "first_battle_frame_us": 100714,
+          "mount_before_attach_us": 48225,
+          "max_drawing_gap_us": 52817,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223370530613097452,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            3895,
+            3499,
+            3423
+          ],
+          "same_instance_after_rebuild": false
+        },
+        {
+          "route": "campaign:level5",
+          "transition": 18,
+          "first_visit": false,
+          "first_battle_frame_us": 102541,
+          "mount_before_attach_us": 49146,
+          "max_drawing_gap_us": 53294,
+          "anchors": 118,
+          "casts": 13,
+          "contact_id": -9223370456877234137,
+          "geometry_sha256": "2c2f07cceec838f83e3dfb026e162ed5e0c39393b4f7035f27389acea15c7014",
+          "grid_sha256": "f56965ca0633c16c1dbc417d8f36371f0f46f77b8af395a74f73d351b6e3f805",
+          "manual_rebuild_us": [
+            3399,
+            3499,
+            3287
+          ],
+          "same_instance_after_rebuild": false
+        }
+      ],
+      "cross_visit_mesh_reuse": {}
+    },
+    "new-a": {
+      "payload": {
+        "candidate": "7fe271511058fc08223697cba65491b49f1b920b",
+        "probe_sha256": "dfb6e64f9a55e5def442b26a95386992934eff3169e4589258fcbb94ab5cef1f",
+        "payload_files_unchanged": true,
+        "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+        "pck_sha256": "10945ca146fe268a8b1a3b91c33ef7e32462e392be29f376b2704bf6a6323f0f",
+        "split_identity": "8044b2ec1e0b3294412b68bbc5778be028a8d0f16f9bfeb04214c6561734c4b0",
+        "exe_unchanged": true,
+        "exit_code": 0,
+        "seconds": 49.663,
+        "errors": [],
+        "warnings": [],
+        "log_sha256": "dc1fe0d5a1a67bf97d78acdd2a44898f64d865209c116563b898f0a95c3e570c",
+        "report_sha256": "bd5dd4e7cc44ace9ccf4d384d18744c2f89504c9be2cfd9b81a55fb64831b991"
+      },
+      "seconds": 40.966147,
+      "entries": 18,
+      "rows": [
+        {
+          "route": "skirmish:skirmish",
+          "transition": 1,
+          "first_visit": true,
+          "first_battle_frame_us": 263674,
+          "mount_before_attach_us": 121800,
+          "max_drawing_gap_us": 138640,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223371739713501039,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            749,
+            594,
+            582
+          ],
+          "same_instance_after_rebuild": true
+        },
+        {
+          "route": "custom_defense:custom_defense",
+          "transition": 2,
+          "first_visit": true,
+          "first_battle_frame_us": 201091,
+          "mount_before_attach_us": 153180,
+          "max_drawing_gap_us": 102657,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223371739713501039,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            702,
+            560,
+            548
+          ],
+          "same_instance_after_rebuild": true
+        },
+        {
+          "route": "campaign:level5",
+          "transition": 3,
+          "first_visit": true,
+          "first_battle_frame_us": 171165,
+          "mount_before_attach_us": 64585,
+          "max_drawing_gap_us": 106536,
+          "anchors": 118,
+          "casts": 13,
+          "contact_id": -9223371537162172359,
+          "geometry_sha256": "2c2f07cceec838f83e3dfb026e162ed5e0c39393b4f7035f27389acea15c7014",
+          "grid_sha256": "f56965ca0633c16c1dbc417d8f36371f0f46f77b8af395a74f73d351b6e3f805",
+          "manual_rebuild_us": [
+            720,
+            520,
+            492
+          ],
+          "same_instance_after_rebuild": true
+        },
+        {
+          "route": "skirmish:skirmish",
+          "transition": 4,
+          "first_visit": false,
+          "first_battle_frame_us": 92187,
+          "mount_before_attach_us": 43323,
+          "max_drawing_gap_us": 48336,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223371739713501039,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            699,
+            587,
+            584
+          ],
+          "same_instance_after_rebuild": true
+        },
+        {
+          "route": "custom_defense:custom_defense",
+          "transition": 5,
+          "first_visit": false,
+          "first_battle_frame_us": 103656,
+          "mount_before_attach_us": 47033,
+          "max_drawing_gap_us": 56862,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223371739713501039,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            1319,
+            936,
+            681
+          ],
+          "same_instance_after_rebuild": true
+        },
+        {
+          "route": "campaign:level5",
+          "transition": 6,
+          "first_visit": false,
+          "first_battle_frame_us": 104676,
+          "mount_before_attach_us": 49593,
+          "max_drawing_gap_us": 55372,
+          "anchors": 118,
+          "casts": 13,
+          "contact_id": -9223371537162172359,
+          "geometry_sha256": "2c2f07cceec838f83e3dfb026e162ed5e0c39393b4f7035f27389acea15c7014",
+          "grid_sha256": "f56965ca0633c16c1dbc417d8f36371f0f46f77b8af395a74f73d351b6e3f805",
+          "manual_rebuild_us": [
+            693,
+            559,
+            558
+          ],
+          "same_instance_after_rebuild": true
+        },
+        {
+          "route": "skirmish:skirmish",
+          "transition": 7,
+          "first_visit": false,
+          "first_battle_frame_us": 105099,
+          "mount_before_attach_us": 51060,
+          "max_drawing_gap_us": 53859,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223371739713501039,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            942,
+            691,
+            629
+          ],
+          "same_instance_after_rebuild": true
+        },
+        {
+          "route": "custom_defense:custom_defense",
+          "transition": 8,
+          "first_visit": false,
+          "first_battle_frame_us": 144421,
+          "mount_before_attach_us": 64250,
+          "max_drawing_gap_us": 79768,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223371739713501039,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            1929,
+            1591,
+            1488
+          ],
+          "same_instance_after_rebuild": true
+        },
+        {
+          "route": "campaign:level5",
+          "transition": 9,
+          "first_visit": false,
+          "first_battle_frame_us": 110045,
+          "mount_before_attach_us": 47510,
+          "max_drawing_gap_us": 62144,
+          "anchors": 118,
+          "casts": 13,
+          "contact_id": -9223371537162172359,
+          "geometry_sha256": "2c2f07cceec838f83e3dfb026e162ed5e0c39393b4f7035f27389acea15c7014",
+          "grid_sha256": "f56965ca0633c16c1dbc417d8f36371f0f46f77b8af395a74f73d351b6e3f805",
+          "manual_rebuild_us": [
+            803,
+            595,
+            571
+          ],
+          "same_instance_after_rebuild": true
+        },
+        {
+          "route": "skirmish:skirmish",
+          "transition": 10,
+          "first_visit": false,
+          "first_battle_frame_us": 99232,
+          "mount_before_attach_us": 47396,
+          "max_drawing_gap_us": 51981,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223371739713501039,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            1008,
+            722,
+            597
+          ],
+          "same_instance_after_rebuild": true
+        },
+        {
+          "route": "custom_defense:custom_defense",
+          "transition": 11,
+          "first_visit": false,
+          "first_battle_frame_us": 100859,
+          "mount_before_attach_us": 48306,
+          "max_drawing_gap_us": 53362,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223371739713501039,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            852,
+            720,
+            659
+          ],
+          "same_instance_after_rebuild": true
+        },
+        {
+          "route": "campaign:level5",
+          "transition": 12,
+          "first_visit": false,
+          "first_battle_frame_us": 111723,
+          "mount_before_attach_us": 51761,
+          "max_drawing_gap_us": 60203,
+          "anchors": 118,
+          "casts": 13,
+          "contact_id": -9223371537162172359,
+          "geometry_sha256": "2c2f07cceec838f83e3dfb026e162ed5e0c39393b4f7035f27389acea15c7014",
+          "grid_sha256": "f56965ca0633c16c1dbc417d8f36371f0f46f77b8af395a74f73d351b6e3f805",
+          "manual_rebuild_us": [
+            763,
+            572,
+            619
+          ],
+          "same_instance_after_rebuild": true
+        },
+        {
+          "route": "skirmish:skirmish",
+          "transition": 13,
+          "first_visit": false,
+          "first_battle_frame_us": 99201,
+          "mount_before_attach_us": 47044,
+          "max_drawing_gap_us": 52455,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223371739713501039,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            1022,
+            680,
+            585
+          ],
+          "same_instance_after_rebuild": true
+        },
+        {
+          "route": "custom_defense:custom_defense",
+          "transition": 14,
+          "first_visit": false,
+          "first_battle_frame_us": 100870,
+          "mount_before_attach_us": 48671,
+          "max_drawing_gap_us": 53057,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223371739713501039,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            1076,
+            623,
+            587
+          ],
+          "same_instance_after_rebuild": true
+        },
+        {
+          "route": "campaign:level5",
+          "transition": 15,
+          "first_visit": false,
+          "first_battle_frame_us": 109192,
+          "mount_before_attach_us": 49864,
+          "max_drawing_gap_us": 59948,
+          "anchors": 118,
+          "casts": 13,
+          "contact_id": -9223371537162172359,
+          "geometry_sha256": "2c2f07cceec838f83e3dfb026e162ed5e0c39393b4f7035f27389acea15c7014",
+          "grid_sha256": "f56965ca0633c16c1dbc417d8f36371f0f46f77b8af395a74f73d351b6e3f805",
+          "manual_rebuild_us": [
+            929,
+            951,
+            687
+          ],
+          "same_instance_after_rebuild": true
+        },
+        {
+          "route": "skirmish:skirmish",
+          "transition": 16,
+          "first_visit": false,
+          "first_battle_frame_us": 131702,
+          "mount_before_attach_us": 63611,
+          "max_drawing_gap_us": 68859,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223371739713501039,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            929,
+            842,
+            687
+          ],
+          "same_instance_after_rebuild": true
+        },
+        {
+          "route": "custom_defense:custom_defense",
+          "transition": 17,
+          "first_visit": false,
+          "first_battle_frame_us": 177426,
+          "mount_before_attach_us": 72784,
+          "max_drawing_gap_us": 104991,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223371739713501039,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            1128,
+            938,
+            936
+          ],
+          "same_instance_after_rebuild": true
+        },
+        {
+          "route": "campaign:level5",
+          "transition": 18,
+          "first_visit": false,
+          "first_battle_frame_us": 145329,
+          "mount_before_attach_us": 65625,
+          "max_drawing_gap_us": 78517,
+          "anchors": 118,
+          "casts": 13,
+          "contact_id": -9223371537162172359,
+          "geometry_sha256": "2c2f07cceec838f83e3dfb026e162ed5e0c39393b4f7035f27389acea15c7014",
+          "grid_sha256": "f56965ca0633c16c1dbc417d8f36371f0f46f77b8af395a74f73d351b6e3f805",
+          "manual_rebuild_us": [
+            1214,
+            710,
+            662
+          ],
+          "same_instance_after_rebuild": true
+        }
+      ],
+      "cross_visit_mesh_reuse": {
+        "skirmish:skirmish": 5,
+        "custom_defense:custom_defense": 5,
+        "campaign:level5": 5
+      }
+    },
+    "new-b": {
+      "payload": {
+        "candidate": "7fe271511058fc08223697cba65491b49f1b920b",
+        "probe_sha256": "dfb6e64f9a55e5def442b26a95386992934eff3169e4589258fcbb94ab5cef1f",
+        "payload_files_unchanged": true,
+        "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+        "pck_sha256": "10945ca146fe268a8b1a3b91c33ef7e32462e392be29f376b2704bf6a6323f0f",
+        "split_identity": "8044b2ec1e0b3294412b68bbc5778be028a8d0f16f9bfeb04214c6561734c4b0",
+        "exe_unchanged": true,
+        "exit_code": 0,
+        "seconds": 55.104,
+        "errors": [],
+        "warnings": [],
+        "log_sha256": "92ec8d8f0a1ace19e1acd7131fb3681403aae0033775a7ce582092c2734bb27a",
+        "report_sha256": "54c924a76f573afb0d351e8f67d6a4b5c0802f97ba01cd07dc1f2709a4bc7de5"
+      },
+      "seconds": 43.410386,
+      "entries": 18,
+      "rows": [
+        {
+          "route": "skirmish:skirmish",
+          "transition": 1,
+          "first_visit": true,
+          "first_battle_frame_us": 903161,
+          "mount_before_attach_us": 351964,
+          "max_drawing_gap_us": 548787,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223371725989738349,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            1459,
+            1236,
+            1115
+          ],
+          "same_instance_after_rebuild": true
+        },
+        {
+          "route": "custom_defense:custom_defense",
+          "transition": 2,
+          "first_visit": true,
+          "first_battle_frame_us": 293496,
+          "mount_before_attach_us": 219934,
+          "max_drawing_gap_us": 118197,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223371725989738349,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            1351,
+            866,
+            712
+          ],
+          "same_instance_after_rebuild": true
+        },
+        {
+          "route": "campaign:level5",
+          "transition": 3,
+          "first_visit": true,
+          "first_battle_frame_us": 208088,
+          "mount_before_attach_us": 83453,
+          "max_drawing_gap_us": 124512,
+          "anchors": 118,
+          "casts": 13,
+          "contact_id": -9223371602173884357,
+          "geometry_sha256": "2c2f07cceec838f83e3dfb026e162ed5e0c39393b4f7035f27389acea15c7014",
+          "grid_sha256": "f56965ca0633c16c1dbc417d8f36371f0f46f77b8af395a74f73d351b6e3f805",
+          "manual_rebuild_us": [
+            811,
+            619,
+            681
+          ],
+          "same_instance_after_rebuild": true
+        },
+        {
+          "route": "skirmish:skirmish",
+          "transition": 4,
+          "first_visit": false,
+          "first_battle_frame_us": 110392,
+          "mount_before_attach_us": 49417,
+          "max_drawing_gap_us": 60885,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223371725989738349,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            807,
+            638,
+            623
+          ],
+          "same_instance_after_rebuild": true
+        },
+        {
+          "route": "custom_defense:custom_defense",
+          "transition": 5,
+          "first_visit": false,
+          "first_battle_frame_us": 111486,
+          "mount_before_attach_us": 50718,
+          "max_drawing_gap_us": 60870,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223371725989738349,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            926,
+            787,
+            990
+          ],
+          "same_instance_after_rebuild": true
+        },
+        {
+          "route": "campaign:level5",
+          "transition": 6,
+          "first_visit": false,
+          "first_battle_frame_us": 139640,
+          "mount_before_attach_us": 68128,
+          "max_drawing_gap_us": 71240,
+          "anchors": 118,
+          "casts": 13,
+          "contact_id": -9223371602173884357,
+          "geometry_sha256": "2c2f07cceec838f83e3dfb026e162ed5e0c39393b4f7035f27389acea15c7014",
+          "grid_sha256": "f56965ca0633c16c1dbc417d8f36371f0f46f77b8af395a74f73d351b6e3f805",
+          "manual_rebuild_us": [
+            861,
+            643,
+            652
+          ],
+          "same_instance_after_rebuild": true
+        },
+        {
+          "route": "skirmish:skirmish",
+          "transition": 7,
+          "first_visit": false,
+          "first_battle_frame_us": 99603,
+          "mount_before_attach_us": 48820,
+          "max_drawing_gap_us": 50907,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223371725989738349,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            762,
+            601,
+            720
+          ],
+          "same_instance_after_rebuild": true
+        },
+        {
+          "route": "custom_defense:custom_defense",
+          "transition": 8,
+          "first_visit": false,
+          "first_battle_frame_us": 110415,
+          "mount_before_attach_us": 54720,
+          "max_drawing_gap_us": 54880,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223371725989738349,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            793,
+            628,
+            621
+          ],
+          "same_instance_after_rebuild": true
+        },
+        {
+          "route": "campaign:level5",
+          "transition": 9,
+          "first_visit": false,
+          "first_battle_frame_us": 118344,
+          "mount_before_attach_us": 54419,
+          "max_drawing_gap_us": 64382,
+          "anchors": 118,
+          "casts": 13,
+          "contact_id": -9223371602173884357,
+          "geometry_sha256": "2c2f07cceec838f83e3dfb026e162ed5e0c39393b4f7035f27389acea15c7014",
+          "grid_sha256": "f56965ca0633c16c1dbc417d8f36371f0f46f77b8af395a74f73d351b6e3f805",
+          "manual_rebuild_us": [
+            1037,
+            628,
+            608
+          ],
+          "same_instance_after_rebuild": true
+        },
+        {
+          "route": "skirmish:skirmish",
+          "transition": 10,
+          "first_visit": false,
+          "first_battle_frame_us": 95472,
+          "mount_before_attach_us": 45961,
+          "max_drawing_gap_us": 50035,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223371725989738349,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            809,
+            698,
+            618
+          ],
+          "same_instance_after_rebuild": true
+        },
+        {
+          "route": "custom_defense:custom_defense",
+          "transition": 11,
+          "first_visit": false,
+          "first_battle_frame_us": 112256,
+          "mount_before_attach_us": 52961,
+          "max_drawing_gap_us": 59564,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223371725989738349,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            1006,
+            664,
+            634
+          ],
+          "same_instance_after_rebuild": true
+        },
+        {
+          "route": "campaign:level5",
+          "transition": 12,
+          "first_visit": false,
+          "first_battle_frame_us": 215663,
+          "mount_before_attach_us": 150476,
+          "max_drawing_gap_us": 148946,
+          "anchors": 118,
+          "casts": 13,
+          "contact_id": -9223371602173884357,
+          "geometry_sha256": "2c2f07cceec838f83e3dfb026e162ed5e0c39393b4f7035f27389acea15c7014",
+          "grid_sha256": "f56965ca0633c16c1dbc417d8f36371f0f46f77b8af395a74f73d351b6e3f805",
+          "manual_rebuild_us": [
+            800,
+            598,
+            1136
+          ],
+          "same_instance_after_rebuild": true
+        },
+        {
+          "route": "skirmish:skirmish",
+          "transition": 13,
+          "first_visit": false,
+          "first_battle_frame_us": 120494,
+          "mount_before_attach_us": 59323,
+          "max_drawing_gap_us": 61082,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223371725989738349,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            901,
+            735,
+            838
+          ],
+          "same_instance_after_rebuild": true
+        },
+        {
+          "route": "custom_defense:custom_defense",
+          "transition": 14,
+          "first_visit": false,
+          "first_battle_frame_us": 123789,
+          "mount_before_attach_us": 57604,
+          "max_drawing_gap_us": 66739,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223371725989738349,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            982,
+            714,
+            923
+          ],
+          "same_instance_after_rebuild": true
+        },
+        {
+          "route": "campaign:level5",
+          "transition": 15,
+          "first_visit": false,
+          "first_battle_frame_us": 165702,
+          "mount_before_attach_us": 74426,
+          "max_drawing_gap_us": 90155,
+          "anchors": 118,
+          "casts": 13,
+          "contact_id": -9223371602173884357,
+          "geometry_sha256": "2c2f07cceec838f83e3dfb026e162ed5e0c39393b4f7035f27389acea15c7014",
+          "grid_sha256": "f56965ca0633c16c1dbc417d8f36371f0f46f77b8af395a74f73d351b6e3f805",
+          "manual_rebuild_us": [
+            1422,
+            1165,
+            1081
+          ],
+          "same_instance_after_rebuild": true
+        },
+        {
+          "route": "skirmish:skirmish",
+          "transition": 16,
+          "first_visit": false,
+          "first_battle_frame_us": 101920,
+          "mount_before_attach_us": 47904,
+          "max_drawing_gap_us": 53856,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223371725989738349,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            840,
+            673,
+            602
+          ],
+          "same_instance_after_rebuild": true
+        },
+        {
+          "route": "custom_defense:custom_defense",
+          "transition": 17,
+          "first_visit": false,
+          "first_battle_frame_us": 121726,
+          "mount_before_attach_us": 58158,
+          "max_drawing_gap_us": 64517,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223371725989738349,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            961,
+            850,
+            801
+          ],
+          "same_instance_after_rebuild": true
+        },
+        {
+          "route": "campaign:level5",
+          "transition": 18,
+          "first_visit": false,
+          "first_battle_frame_us": 110789,
+          "mount_before_attach_us": 48363,
+          "max_drawing_gap_us": 62744,
+          "anchors": 118,
+          "casts": 13,
+          "contact_id": -9223371602173884357,
+          "geometry_sha256": "2c2f07cceec838f83e3dfb026e162ed5e0c39393b4f7035f27389acea15c7014",
+          "grid_sha256": "f56965ca0633c16c1dbc417d8f36371f0f46f77b8af395a74f73d351b6e3f805",
+          "manual_rebuild_us": [
+            1037,
+            737,
+            716
+          ],
+          "same_instance_after_rebuild": true
+        }
+      ],
+      "cross_visit_mesh_reuse": {
+        "skirmish:skirmish": 5,
+        "custom_defense:custom_defense": 5,
+        "campaign:level5": 5
+      }
+    },
+    "old-b": {
+      "payload": {
+        "candidate": "c89f5e66ad10cd159ca57751c50bc3782a808dfa",
+        "probe_sha256": "dfb6e64f9a55e5def442b26a95386992934eff3169e4589258fcbb94ab5cef1f",
+        "payload_files_unchanged": true,
+        "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+        "pck_sha256": "ec3d2e23b1dd802ff8a7e379cb01d42ef336d5551a2969eebdfe7ccf2b90253c",
+        "split_identity": "04268c4d48447e14da2649c7dfdfc1ff424c86d5825c3ff2fb08a791c786a8d3",
+        "exe_unchanged": true,
+        "exit_code": 0,
+        "seconds": 51.747,
+        "errors": [],
+        "warnings": [],
+        "log_sha256": "e5142c4353b14565a8903b31d23b52c8723d32f13dda7f0128ed9004b574cc85",
+        "report_sha256": "9ef461c73a139b6eeb528f2b83aace0c1029a5ff6fe6d9c0e32ea5c5508c8aaf"
+      },
+      "seconds": 41.637659,
+      "entries": 18,
+      "rows": [
+        {
+          "route": "skirmish:skirmish",
+          "transition": 1,
+          "first_visit": true,
+          "first_battle_frame_us": 275565,
+          "mount_before_attach_us": 127546,
+          "max_drawing_gap_us": 143933,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223371746273392495,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            3678,
+            3537,
+            3618
+          ],
+          "same_instance_after_rebuild": false
+        },
+        {
+          "route": "custom_defense:custom_defense",
+          "transition": 2,
+          "first_visit": true,
+          "first_battle_frame_us": 233696,
+          "mount_before_attach_us": 171034,
+          "max_drawing_gap_us": 92272,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223371662437644205,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            3895,
+            3962,
+            3845
+          ],
+          "same_instance_after_rebuild": false
+        },
+        {
+          "route": "campaign:level5",
+          "transition": 3,
+          "first_visit": true,
+          "first_battle_frame_us": 227532,
+          "mount_before_attach_us": 81391,
+          "max_drawing_gap_us": 145362,
+          "anchors": 118,
+          "casts": 13,
+          "contact_id": -9223371591889450980,
+          "geometry_sha256": "2c2f07cceec838f83e3dfb026e162ed5e0c39393b4f7035f27389acea15c7014",
+          "grid_sha256": "f56965ca0633c16c1dbc417d8f36371f0f46f77b8af395a74f73d351b6e3f805",
+          "manual_rebuild_us": [
+            3947,
+            3810,
+            3557
+          ],
+          "same_instance_after_rebuild": false
+        },
+        {
+          "route": "skirmish:skirmish",
+          "transition": 4,
+          "first_visit": false,
+          "first_battle_frame_us": 104979,
+          "mount_before_attach_us": 48330,
+          "max_drawing_gap_us": 56358,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223371501460256776,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            4194,
+            3676,
+            3648
+          ],
+          "same_instance_after_rebuild": false
+        },
+        {
+          "route": "custom_defense:custom_defense",
+          "transition": 5,
+          "first_visit": false,
+          "first_battle_frame_us": 101406,
+          "mount_before_attach_us": 49124,
+          "max_drawing_gap_us": 52175,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223371430257751019,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            3530,
+            3365,
+            3399
+          ],
+          "same_instance_after_rebuild": false
+        },
+        {
+          "route": "campaign:level5",
+          "transition": 6,
+          "first_visit": false,
+          "first_battle_frame_us": 92642,
+          "mount_before_attach_us": 44488,
+          "max_drawing_gap_us": 48399,
+          "anchors": 118,
+          "casts": 13,
+          "contact_id": -9223371340013107159,
+          "geometry_sha256": "2c2f07cceec838f83e3dfb026e162ed5e0c39393b4f7035f27389acea15c7014",
+          "grid_sha256": "f56965ca0633c16c1dbc417d8f36371f0f46f77b8af395a74f73d351b6e3f805",
+          "manual_rebuild_us": [
+            3512,
+            3176,
+            3265
+          ],
+          "same_instance_after_rebuild": false
+        },
+        {
+          "route": "skirmish:skirmish",
+          "transition": 7,
+          "first_visit": false,
+          "first_battle_frame_us": 97408,
+          "mount_before_attach_us": 46271,
+          "max_drawing_gap_us": 51085,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223371274732959751,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            3697,
+            3486,
+            3543
+          ],
+          "same_instance_after_rebuild": false
+        },
+        {
+          "route": "custom_defense:custom_defense",
+          "transition": 8,
+          "first_visit": false,
+          "first_battle_frame_us": 98639,
+          "mount_before_attach_us": 47334,
+          "max_drawing_gap_us": 51696,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223371193548010473,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            3569,
+            3419,
+            3416
+          ],
+          "same_instance_after_rebuild": false
+        },
+        {
+          "route": "campaign:level5",
+          "transition": 9,
+          "first_visit": false,
+          "first_battle_frame_us": 95459,
+          "mount_before_attach_us": 44871,
+          "max_drawing_gap_us": 50638,
+          "anchors": 118,
+          "casts": 13,
+          "contact_id": -9223371104226113508,
+          "geometry_sha256": "2c2f07cceec838f83e3dfb026e162ed5e0c39393b4f7035f27389acea15c7014",
+          "grid_sha256": "f56965ca0633c16c1dbc417d8f36371f0f46f77b8af395a74f73d351b6e3f805",
+          "manual_rebuild_us": [
+            3676,
+            3120,
+            3108
+          ],
+          "same_instance_after_rebuild": false
+        },
+        {
+          "route": "skirmish:skirmish",
+          "transition": 10,
+          "first_visit": false,
+          "first_battle_frame_us": 142342,
+          "mount_before_attach_us": 67123,
+          "max_drawing_gap_us": 76269,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223371035405973512,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            5576,
+            6086,
+            5439
+          ],
+          "same_instance_after_rebuild": false
+        },
+        {
+          "route": "custom_defense:custom_defense",
+          "transition": 11,
+          "first_visit": false,
+          "first_battle_frame_us": 101451,
+          "mount_before_attach_us": 49387,
+          "max_drawing_gap_us": 52722,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223370962525746155,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            3798,
+            3647,
+            3627
+          ],
+          "same_instance_after_rebuild": false
+        },
+        {
+          "route": "campaign:level5",
+          "transition": 12,
+          "first_visit": false,
+          "first_battle_frame_us": 127703,
+          "mount_before_attach_us": 58038,
+          "max_drawing_gap_us": 70341,
+          "anchors": 118,
+          "casts": 13,
+          "contact_id": -9223370888957654999,
+          "geometry_sha256": "2c2f07cceec838f83e3dfb026e162ed5e0c39393b4f7035f27389acea15c7014",
+          "grid_sha256": "f56965ca0633c16c1dbc417d8f36371f0f46f77b8af395a74f73d351b6e3f805",
+          "manual_rebuild_us": [
+            4027,
+            4033,
+            3874
+          ],
+          "same_instance_after_rebuild": false
+        },
+        {
+          "route": "skirmish:skirmish",
+          "transition": 13,
+          "first_visit": false,
+          "first_battle_frame_us": 96971,
+          "mount_before_attach_us": 47099,
+          "max_drawing_gap_us": 50389,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223370825372006407,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            3949,
+            3838,
+            3635
+          ],
+          "same_instance_after_rebuild": false
+        },
+        {
+          "route": "custom_defense:custom_defense",
+          "transition": 14,
+          "first_visit": false,
+          "first_battle_frame_us": 112698,
+          "mount_before_attach_us": 56231,
+          "max_drawing_gap_us": 56511,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223370753297085417,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            3983,
+            4026,
+            4048
+          ],
+          "same_instance_after_rebuild": false
+        },
+        {
+          "route": "campaign:level5",
+          "transition": 15,
+          "first_visit": false,
+          "first_battle_frame_us": 265881,
+          "mount_before_attach_us": 109296,
+          "max_drawing_gap_us": 157050,
+          "anchors": 118,
+          "casts": 13,
+          "contact_id": -9223370686104336356,
+          "geometry_sha256": "2c2f07cceec838f83e3dfb026e162ed5e0c39393b4f7035f27389acea15c7014",
+          "grid_sha256": "f56965ca0633c16c1dbc417d8f36371f0f46f77b8af395a74f73d351b6e3f805",
+          "manual_rebuild_us": [
+            9454,
+            8913,
+            8802
+          ],
+          "same_instance_after_rebuild": false
+        },
+        {
+          "route": "skirmish:skirmish",
+          "transition": 16,
+          "first_visit": false,
+          "first_battle_frame_us": 102550,
+          "mount_before_attach_us": 49115,
+          "max_drawing_gap_us": 53510,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223370636796098568,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            3804,
+            3613,
+            3523
+          ],
+          "same_instance_after_rebuild": false
+        },
+        {
+          "route": "custom_defense:custom_defense",
+          "transition": 17,
+          "first_visit": false,
+          "first_battle_frame_us": 138046,
+          "mount_before_attach_us": 67085,
+          "max_drawing_gap_us": 70928,
+          "anchors": 128,
+          "casts": 13,
+          "contact_id": -9223370570878415851,
+          "geometry_sha256": "353c02527fd344e046a32f9d3fea05018b584775b173e7647bd18e860c138711",
+          "grid_sha256": "0817ccafc0b2fb7bc641c0c3810226b301ca48843a0325e350152b698acbd5a0",
+          "manual_rebuild_us": [
+            5056,
+            4506,
+            4409
+          ],
+          "same_instance_after_rebuild": false
+        },
+        {
+          "route": "campaign:level5",
+          "transition": 18,
+          "first_visit": false,
+          "first_battle_frame_us": 104658,
+          "mount_before_attach_us": 50872,
+          "max_drawing_gap_us": 53619,
+          "anchors": 118,
+          "casts": 13,
+          "contact_id": -9223370506420352983,
+          "geometry_sha256": "2c2f07cceec838f83e3dfb026e162ed5e0c39393b4f7035f27389acea15c7014",
+          "grid_sha256": "f56965ca0633c16c1dbc417d8f36371f0f46f77b8af395a74f73d351b6e3f805",
+          "manual_rebuild_us": [
+            3379,
+            3247,
+            3235
+          ],
+          "same_instance_after_rebuild": false
+        }
+      ],
+      "cross_visit_mesh_reuse": {}
+    }
+  },
+  "fourth_baseline_retry_after_host_disconnect": true,
+  "contract": {
+    "checks": [
+      "Windows builds the original Liangshan contact and casts",
+      "changed cast opacity misses the cache",
+      "restoring cast opacity reuses unmodified geometry",
+      "stock shadows reference an atlas cell",
+      "moving an atlas cell rebuilds UVs and restores the exact mesh",
+      "changed projected anchor misses the cache and restores exact geometry"
+    ],
+    "launcher": {
+      "candidate": "7fe271511058fc08223697cba65491b49f1b920b",
+      "probe_sha256": "e2337bd54985a11b1e4d341c9ef6dc0b1bac90061b3bde2ae57e65d712f7fc77",
+      "payload_files_unchanged": true,
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "10945ca146fe268a8b1a3b91c33ef7e32462e392be29f376b2704bf6a6323f0f",
+      "split_identity": "8044b2ec1e0b3294412b68bbc5778be028a8d0f16f9bfeb04214c6561734c4b0",
+      "exe_unchanged": true,
+      "exit_code": 1,
+      "seconds": 51.314,
+      "errors": [],
+      "warnings": [],
+      "log_sha256": "7b36d191b2fc544925e6214d773ccd0b720bb748c8a2f4c51395224250e4b579",
+      "report_sha256": "d7b7979d8ebfae331527d3919d66eaa1396c6bbb4529abd1db09a75e5bb80a35"
+    },
+    "failed_stability_checks": [
+      "working_set_bytes returns within warm-baseline tolerance",
+      "private_bytes returns within warm-baseline tolerance"
+    ],
+    "private_bytes": {
+      "end": 1814380544.0,
+      "end_delta_from_warm": 148697088.0,
+      "monotonic_growth_detected": false,
+      "peak": 1814380544.0,
+      "recovered_from_peak": 0.0,
+      "recovery_passed": false,
+      "tolerance": 134217728.0,
+      "trend": {
+        "decreases": 0,
+        "first": 1665683456.0,
+        "flat": 0,
+        "increases": 1,
+        "last": 1814380544.0,
+        "near_monotonic": false,
+        "net": 148697088.0,
+        "samples": 2
+      },
+      "warm_baseline": 1665683456.0
+    },
+    "working_set_bytes": {
+      "end": 1092177920.0,
+      "end_delta_from_warm": 148873216.0,
+      "monotonic_growth_detected": false,
+      "peak": 1125728256.0,
+      "recovered_from_peak": 33550336.0,
+      "recovery_passed": false,
+      "tolerance": 134217728.0,
+      "trend": {
+        "decreases": 0,
+        "first": 943304704.0,
+        "flat": 0,
+        "increases": 1,
+        "last": 1092169728.0,
+        "near_monotonic": false,
+        "net": 148865024.0,
+        "samples": 2
+      },
+      "warm_baseline": 943304704.0
+    }
+  },
+  "unmodified_classic_only_runs": {
+    "old": {
+      "launcher": {
+        "candidate": "c89f5e66ad10cd159ca57751c50bc3782a808dfa",
+        "probe_sha256": "17e05428f8c358f072caa3c0796d0d2d2113d56e496ec9e8e3ec24a142011473",
+        "payload_files_unchanged": true,
+        "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+        "pck_sha256": "ec3d2e23b1dd802ff8a7e379cb01d42ef336d5551a2969eebdfe7ccf2b90253c",
+        "split_identity": "04268c4d48447e14da2649c7dfdfc1ff424c86d5825c3ff2fb08a791c786a8d3",
+        "exe_unchanged": true,
+        "exit_code": 1,
+        "seconds": 52.47,
+        "errors": [],
+        "warnings": [],
+        "log_sha256": "0daea147973faa21e8bb4f805d967dfff360badd32a699bdcab5fa0e1b05449f",
+        "report_sha256": "8b7c5563c9762a018df123777d62da353ddea82a19a09aca04c5a5ae14ac28b2"
+      },
+      "runtime_checks_passed": false,
+      "failed_stability_checks": [
+        "working_set_bytes returns within warm-baseline tolerance",
+        "private_bytes returns within warm-baseline tolerance"
+      ],
+      "entries": 19,
+      "seconds": 42.020652,
+      "private_bytes": {
+        "end": 1816043520.0,
+        "end_delta_from_warm": 153415680.0,
+        "monotonic_growth_detected": false,
+        "peak": 1816043520.0,
+        "recovered_from_peak": 0.0,
+        "recovery_passed": false,
+        "tolerance": 134217728.0,
+        "trend": {
+          "decreases": 0,
+          "first": 1662627840.0,
+          "flat": 0,
+          "increases": 1,
+          "last": 1816043520.0,
+          "near_monotonic": false,
+          "net": 153415680.0,
+          "samples": 2
+        },
+        "warm_baseline": 1662627840.0
+      },
+      "working_set_bytes": {
+        "end": 1092419584.0,
+        "end_delta_from_warm": 152973312.0,
+        "monotonic_growth_detected": false,
+        "peak": 1125306368.0,
+        "recovered_from_peak": 32886784.0,
+        "recovery_passed": false,
+        "tolerance": 134217728.0,
+        "trend": {
+          "decreases": 0,
+          "first": 939446272.0,
+          "flat": 0,
+          "increases": 1,
+          "last": 1092411392.0,
+          "near_monotonic": false,
+          "net": 152965120.0,
+          "samples": 2
+        },
+        "warm_baseline": 939446272.0
+      }
+    },
+    "new": {
+      "launcher": {
+        "candidate": "7fe271511058fc08223697cba65491b49f1b920b",
+        "probe_sha256": "17e05428f8c358f072caa3c0796d0d2d2113d56e496ec9e8e3ec24a142011473",
+        "payload_files_unchanged": true,
+        "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+        "pck_sha256": "10945ca146fe268a8b1a3b91c33ef7e32462e392be29f376b2704bf6a6323f0f",
+        "split_identity": "8044b2ec1e0b3294412b68bbc5778be028a8d0f16f9bfeb04214c6561734c4b0",
+        "exe_unchanged": true,
+        "exit_code": 1,
+        "seconds": 53.247,
+        "errors": [],
+        "warnings": [],
+        "log_sha256": "a11a2a0e327b5c405728bebb4ee4aae3235712314fe21616d1d38ddccab2f34f",
+        "report_sha256": "baf68c2ef73a18416039c6974b91ea38e160a519a20b34d0ce30b684006b1dc2"
+      },
+      "runtime_checks_passed": false,
+      "failed_stability_checks": [
+        "working_set_bytes returns within warm-baseline tolerance",
+        "private_bytes returns within warm-baseline tolerance"
+      ],
+      "entries": 19,
+      "seconds": 42.079851,
+      "private_bytes": {
+        "end": 1813049344.0,
+        "end_delta_from_warm": 151433216.0,
+        "monotonic_growth_detected": false,
+        "peak": 1813049344.0,
+        "recovered_from_peak": 0.0,
+        "recovery_passed": false,
+        "tolerance": 134217728.0,
+        "trend": {
+          "decreases": 0,
+          "first": 1661616128.0,
+          "flat": 0,
+          "increases": 1,
+          "last": 1813049344.0,
+          "near_monotonic": false,
+          "net": 151433216.0,
+          "samples": 2
+        },
+        "warm_baseline": 1661616128.0
+      },
+      "working_set_bytes": {
+        "end": 1088094208.0,
+        "end_delta_from_warm": 152297472.0,
+        "monotonic_growth_detected": false,
+        "peak": 1121615872.0,
+        "recovered_from_peak": 33521664.0,
+        "recovery_passed": false,
+        "tolerance": 134217728.0,
+        "trend": {
+          "decreases": 0,
+          "first": 935796736.0,
+          "flat": 0,
+          "increases": 1,
+          "last": 1088086016.0,
+          "near_monotonic": false,
+          "net": 152289280.0,
+          "samples": 2
+        },
+        "warm_baseline": 935796736.0
+      }
+    }
+  },
+  "standard_six_entry_soak": "windows_shadow_geometry_7fe27151_six_entry_soak.json",
+  "same_package_rebuild_reuse": {
+    "launcher": {
+      "candidate": "7fe271511058fc08223697cba65491b49f1b920b",
+      "probe_sha256": "0b514ad926d12474bb3e9e8186419bb8aa91707eafae3cc2f463417e0a119335",
+      "payload_files_unchanged": true,
+      "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+      "pck_sha256": "10945ca146fe268a8b1a3b91c33ef7e32462e392be29f376b2704bf6a6323f0f",
+      "split_identity": "8044b2ec1e0b3294412b68bbc5778be028a8d0f16f9bfeb04214c6561734c4b0",
+      "exe_unchanged": true,
+      "exit_code": 0,
+      "seconds": 70.239,
+      "errors": [],
+      "warnings": [],
+      "log_sha256": "3ecea45787e0bc4d1e8e4464f37ac01795ada6f0493f4005e2bd71fa4de76086",
+      "report_sha256": "7b5829837098809c4b0e6d307e234173122314a72cdc978ef8bac80aa248a518"
+    },
+    "entries": 27,
+    "routes": {
+      "skirmish": {
+        "samples": [
+          {
+            "condition": "warmup",
+            "contact_id": -9223371750954235757,
+            "click_to_first_us": 269675,
+            "overlay_to_attach_us": 125048,
+            "attach_to_first_us": 139231,
+            "max_drawing_gap_us": 140685
+          },
+          {
+            "condition": "rebuild",
+            "contact_id": -9223371491175823328,
+            "click_to_first_us": 106932,
+            "overlay_to_attach_us": 49369,
+            "attach_to_first_us": 55678,
+            "max_drawing_gap_us": 57125
+          },
+          {
+            "condition": "reuse",
+            "contact_id": -9223371750954235757,
+            "click_to_first_us": 99196,
+            "overlay_to_attach_us": 44810,
+            "attach_to_first_us": 51892,
+            "max_drawing_gap_us": 52956
+          },
+          {
+            "condition": "reuse",
+            "contact_id": -9223371750954235757,
+            "click_to_first_us": 104142,
+            "overlay_to_attach_us": 46104,
+            "attach_to_first_us": 56862,
+            "max_drawing_gap_us": 58546
+          },
+          {
+            "condition": "rebuild",
+            "contact_id": -9223370847299827452,
+            "click_to_first_us": 107313,
+            "overlay_to_attach_us": 52299,
+            "attach_to_first_us": 54040,
+            "max_drawing_gap_us": 55720
+          },
+          {
+            "condition": "reuse",
+            "contact_id": -9223371750954235757,
+            "click_to_first_us": 277631,
+            "overlay_to_attach_us": 91924,
+            "attach_to_first_us": 184211,
+            "max_drawing_gap_us": 187180
+          },
+          {
+            "condition": "rebuild",
+            "contact_id": -9223370496555348176,
+            "click_to_first_us": 110589,
+            "overlay_to_attach_us": 54485,
+            "attach_to_first_us": 54610,
+            "max_drawing_gap_us": 56206
+          },
+          {
+            "condition": "rebuild",
+            "contact_id": -9223370324924428496,
+            "click_to_first_us": 116800,
+            "overlay_to_attach_us": 59085,
+            "attach_to_first_us": 56492,
+            "max_drawing_gap_us": 57949
+          },
+          {
+            "condition": "reuse",
+            "contact_id": -9223371750954235757,
+            "click_to_first_us": 104930,
+            "overlay_to_attach_us": 48523,
+            "attach_to_first_us": 55374,
+            "max_drawing_gap_us": 57406
+          }
+        ],
+        "medians": {
+          "rebuild": {
+            "click_to_first_us": 108951.0,
+            "overlay_to_attach_us": 53392.0,
+            "attach_to_first_us": 55144.0,
+            "max_drawing_gap_us": 56665.5
+          },
+          "reuse": {
+            "click_to_first_us": 104536.0,
+            "overlay_to_attach_us": 47313.5,
+            "attach_to_first_us": 56118.0,
+            "max_drawing_gap_us": 57976.0
+          },
+          "median_paired_delta": {
+            "click_to_first_us": -5453.5,
+            "overlay_to_attach_us": -5377.0,
+            "attach_to_first_us": 852.0,
+            "max_drawing_gap_us": 1141.5
+          }
+        },
+        "paired_deltas_us": [
+          {
+            "click_to_first_us": -7736,
+            "overlay_to_attach_us": -4559,
+            "attach_to_first_us": -3786,
+            "max_drawing_gap_us": -4169
+          },
+          {
+            "click_to_first_us": -3171,
+            "overlay_to_attach_us": -6195,
+            "attach_to_first_us": 2822,
+            "max_drawing_gap_us": 2826
+          },
+          {
+            "click_to_first_us": 167042,
+            "overlay_to_attach_us": 37439,
+            "attach_to_first_us": 129601,
+            "max_drawing_gap_us": 130974
+          },
+          {
+            "click_to_first_us": -11870,
+            "overlay_to_attach_us": -10562,
+            "attach_to_first_us": -1118,
+            "max_drawing_gap_us": -543
+          }
+        ]
+      },
+      "custom_defense": {
+        "samples": [
+          {
+            "condition": "warmup",
+            "contact_id": -9223371750954235757,
+            "click_to_first_us": 192624,
+            "overlay_to_attach_us": 137918,
+            "attach_to_first_us": 52731,
+            "max_drawing_gap_us": 79723
+          },
+          {
+            "condition": "rebuild",
+            "contact_id": -9223371416030671820,
+            "click_to_first_us": 111061,
+            "overlay_to_attach_us": 52881,
+            "attach_to_first_us": 56907,
+            "max_drawing_gap_us": 59142
+          },
+          {
+            "condition": "reuse",
+            "contact_id": -9223371750954235757,
+            "click_to_first_us": 108748,
+            "overlay_to_attach_us": 48565,
+            "attach_to_first_us": 59065,
+            "max_drawing_gap_us": 61459
+          },
+          {
+            "condition": "reuse",
+            "contact_id": -9223371750954235757,
+            "click_to_first_us": 119719,
+            "overlay_to_attach_us": 56889,
+            "attach_to_first_us": 61255,
+            "max_drawing_gap_us": 62584
+          },
+          {
+            "condition": "rebuild",
+            "contact_id": -9223370774520263108,
+            "click_to_first_us": 102777,
+            "overlay_to_attach_us": 47675,
+            "attach_to_first_us": 53958,
+            "max_drawing_gap_us": 55712
+          },
+          {
+            "condition": "reuse",
+            "contact_id": -9223371750954235757,
+            "click_to_first_us": 119823,
+            "overlay_to_attach_us": 54940,
+            "attach_to_first_us": 63443,
+            "max_drawing_gap_us": 64903
+          },
+          {
+            "condition": "rebuild",
+            "contact_id": -9223370433523347802,
+            "click_to_first_us": 127905,
+            "overlay_to_attach_us": 67054,
+            "attach_to_first_us": 59551,
+            "max_drawing_gap_us": 65222
+          },
+          {
+            "condition": "rebuild",
+            "contact_id": -9223370258335660037,
+            "click_to_first_us": 113587,
+            "overlay_to_attach_us": 55562,
+            "attach_to_first_us": 56945,
+            "max_drawing_gap_us": 59083
+          },
+          {
+            "condition": "reuse",
+            "contact_id": -9223371750954235757,
+            "click_to_first_us": 533927,
+            "overlay_to_attach_us": 319198,
+            "attach_to_first_us": 209270,
+            "max_drawing_gap_us": 314415
+          }
+        ],
+        "medians": {
+          "rebuild": {
+            "click_to_first_us": 112324.0,
+            "overlay_to_attach_us": 54221.5,
+            "attach_to_first_us": 56926.0,
+            "max_drawing_gap_us": 59112.5
+          },
+          "reuse": {
+            "click_to_first_us": 119771.0,
+            "overlay_to_attach_us": 55914.5,
+            "attach_to_first_us": 62349.0,
+            "max_drawing_gap_us": 63743.5
+          },
+          "median_paired_delta": {
+            "click_to_first_us": 7314.5,
+            "overlay_to_attach_us": 2449.0,
+            "attach_to_first_us": 5594.5,
+            "max_drawing_gap_us": 4594.5
+          }
+        },
+        "paired_deltas_us": [
+          {
+            "click_to_first_us": -2313,
+            "overlay_to_attach_us": -4316,
+            "attach_to_first_us": 2158,
+            "max_drawing_gap_us": 2317
+          },
+          {
+            "click_to_first_us": 16942,
+            "overlay_to_attach_us": 9214,
+            "attach_to_first_us": 7297,
+            "max_drawing_gap_us": 6872
+          },
+          {
+            "click_to_first_us": -8082,
+            "overlay_to_attach_us": -12114,
+            "attach_to_first_us": 3892,
+            "max_drawing_gap_us": -319
+          },
+          {
+            "click_to_first_us": 420340,
+            "overlay_to_attach_us": 263636,
+            "attach_to_first_us": 152325,
+            "max_drawing_gap_us": 255332
+          }
+        ]
+      },
+      "level5": {
+        "samples": [
+          {
+            "condition": "warmup",
+            "contact_id": -9223371572293662661,
+            "click_to_first_us": 216857,
+            "overlay_to_attach_us": 83292,
+            "attach_to_first_us": 131836,
+            "max_drawing_gap_us": 133633
+          },
+          {
+            "condition": "rebuild",
+            "contact_id": -9223371341724382952,
+            "click_to_first_us": 99388,
+            "overlay_to_attach_us": 46348,
+            "attach_to_first_us": 52086,
+            "max_drawing_gap_us": 53649
+          },
+          {
+            "condition": "reuse",
+            "contact_id": -9223371572293662661,
+            "click_to_first_us": 109510,
+            "overlay_to_attach_us": 50578,
+            "attach_to_first_us": 57597,
+            "max_drawing_gap_us": 59105
+          },
+          {
+            "condition": "reuse",
+            "contact_id": -9223371572293662661,
+            "click_to_first_us": 103538,
+            "overlay_to_attach_us": 46383,
+            "attach_to_first_us": 56013,
+            "max_drawing_gap_us": 57646
+          },
+          {
+            "condition": "rebuild",
+            "contact_id": -9223370704760599106,
+            "click_to_first_us": 119113,
+            "overlay_to_attach_us": 58264,
+            "attach_to_first_us": 59482,
+            "max_drawing_gap_us": 60775
+          },
+          {
+            "condition": "reuse",
+            "contact_id": -9223371572293662661,
+            "click_to_first_us": 112155,
+            "overlay_to_attach_us": 48839,
+            "attach_to_first_us": 62159,
+            "max_drawing_gap_us": 63668
+          },
+          {
+            "condition": "rebuild",
+            "contact_id": -9223370373913899369,
+            "click_to_first_us": 119714,
+            "overlay_to_attach_us": 57940,
+            "attach_to_first_us": 60304,
+            "max_drawing_gap_us": 62028
+          },
+          {
+            "condition": "rebuild",
+            "contact_id": -9223370191948214776,
+            "click_to_first_us": 111957,
+            "overlay_to_attach_us": 53865,
+            "attach_to_first_us": 56881,
+            "max_drawing_gap_us": 58344
+          },
+          {
+            "condition": "reuse",
+            "contact_id": -9223371572293662661,
+            "click_to_first_us": 100500,
+            "overlay_to_attach_us": 45115,
+            "attach_to_first_us": 54221,
+            "max_drawing_gap_us": 55358
+          }
+        ],
+        "medians": {
+          "rebuild": {
+            "click_to_first_us": 115535.0,
+            "overlay_to_attach_us": 55902.5,
+            "attach_to_first_us": 58181.5,
+            "max_drawing_gap_us": 59559.5
+          },
+          "reuse": {
+            "click_to_first_us": 106524.0,
+            "overlay_to_attach_us": 47611.0,
+            "attach_to_first_us": 56805.0,
+            "max_drawing_gap_us": 58375.5
+          },
+          "median_paired_delta": {
+            "click_to_first_us": -9508.0,
+            "overlay_to_attach_us": -8925.5,
+            "attach_to_first_us": -402.5,
+            "max_drawing_gap_us": -673.0
+          }
+        },
+        "paired_deltas_us": [
+          {
+            "click_to_first_us": 10122,
+            "overlay_to_attach_us": 4230,
+            "attach_to_first_us": 5511,
+            "max_drawing_gap_us": 5456
+          },
+          {
+            "click_to_first_us": -15575,
+            "overlay_to_attach_us": -11881,
+            "attach_to_first_us": -3469,
+            "max_drawing_gap_us": -3129
+          },
+          {
+            "click_to_first_us": -7559,
+            "overlay_to_attach_us": -9101,
+            "attach_to_first_us": 1855,
+            "max_drawing_gap_us": 1640
+          },
+          {
+            "click_to_first_us": -11457,
+            "overlay_to_attach_us": -8750,
+            "attach_to_first_us": -2660,
+            "max_drawing_gap_us": -2986
+          }
+        ]
+      }
+    },
+    "seconds": 61.216161,
+    "progress_unchanged": true
+  },
+  "eight_chapter_legacy_resave_and_reopen": {
+    "build_of_legacy_saves": 26873421,
+    "candidate": "7fe271511058fc08223697cba65491b49f1b920b",
+    "original_seed_and_journal_unchanged": true,
+    "proof_sha256": "92e0050bd33063da0f07f48f8b154e1599543b7f044e180ffd7208a50ff4ea35",
+    "chapters": {
+      "level1": [
+        {
+          "stage": "resave",
+          "checks": 15,
+          "log_sha256": "a904f056f0da180e887f29e76ce71fad05079a8c41b21e9fbfbfb28cc5ebb786"
+        },
+        {
+          "stage": "reopen",
+          "checks": 10,
+          "log_sha256": "224ac96c5b3a848ad719aa9d77f4917632ffee9b74e3da9b5deb7523699f7900"
+        }
+      ],
+      "level2": [
+        {
+          "stage": "resave",
+          "checks": 15,
+          "log_sha256": "028f6112eeb27f0ad855bb82f16cdbbf19c28ad410f2bd5229a57f13640b6281"
+        },
+        {
+          "stage": "reopen",
+          "checks": 10,
+          "log_sha256": "f06a0a6e9672e69a314d0b4205cb2fd7027761f7c323d0c19c0a0bd9210e899e"
+        }
+      ],
+      "level3": [
+        {
+          "stage": "resave",
+          "checks": 15,
+          "log_sha256": "9403add1d59739b3326c9603cc1ec35c9bc04cc7e8b1b2c48892a4e8d5703f19"
+        },
+        {
+          "stage": "reopen",
+          "checks": 10,
+          "log_sha256": "ada3271d8b1f3d369c61e587929debcdb05541c4067718ba13f137aa994e5e29"
+        }
+      ],
+      "level4": [
+        {
+          "stage": "resave",
+          "checks": 15,
+          "log_sha256": "dcd4077aa3dce4e9b3090366bfd8a4a0d599ebb8fcdc4e2b72c2467ef424e9c5"
+        },
+        {
+          "stage": "reopen",
+          "checks": 10,
+          "log_sha256": "1ea1adeea868a1c5320fbeefdc9c5b2250be2365ffc46781f7c7f7dc88dce8c5"
+        }
+      ],
+      "level5": [
+        {
+          "stage": "resave",
+          "checks": 15,
+          "log_sha256": "73f6d6c437a850e28a0890972331e8d2fcf25a023cbaf0379debb2ecca1a6e20"
+        },
+        {
+          "stage": "reopen",
+          "checks": 10,
+          "log_sha256": "6010ae4cbf6a4dee93a7aa59f5bb133c55c67446240b7ecb80aa4b1ef219be05"
+        }
+      ],
+      "level6": [
+        {
+          "stage": "resave",
+          "checks": 15,
+          "log_sha256": "55a6d4d3cb7e69c3ee85ffbbefa0106556888ce1e64c98520e41d7a954ea10d0"
+        },
+        {
+          "stage": "reopen",
+          "checks": 10,
+          "log_sha256": "3fb81a7fed9a486efc411ffb5e0ea0299de9820779d3f9eba51c2300b5a9580b"
+        }
+      ],
+      "level7": [
+        {
+          "stage": "resave",
+          "checks": 15,
+          "log_sha256": "cb9acd2d0bf9680958e7c988833b67b54d25507965b42b97de37e86f06185937"
+        },
+        {
+          "stage": "reopen",
+          "checks": 10,
+          "log_sha256": "e9a07ce2d981e9c58b5e27ec456f51a35e2beabc985a55f62be93448d2cb69b2"
+        }
+      ],
+      "level8": [
+        {
+          "stage": "resave",
+          "checks": 15,
+          "log_sha256": "d7223c81ee7926a1ea4a1da82fb1e0811e099c8cb0c8696183a33e006fee1bc7"
+        },
+        {
+          "stage": "reopen",
+          "checks": 10,
+          "log_sha256": "a1e12599179208d32b1799be9e412f3766f68539d9c81ae4fcd0cf1f661a3c23"
+        }
+      ]
+    },
+    "native_windows_processes": 16,
+    "checks": 200
+  },
+  "source_disposition": "local candidate; public source retains the previous drawing path"
+}
