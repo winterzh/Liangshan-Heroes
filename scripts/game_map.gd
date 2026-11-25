@@ -100,7 +100,11 @@ func ground_basis(p: Vector2) -> Transform2D:
 
 
 func project(p: Vector2) -> Vector2:
-	return ISO * p - Vector2(0, height_at(p))
+	var flat := ISO * p
+	if height_field == null:
+		return flat
+	var elevation: float = height_field.at(p)
+	return flat - Vector2(0, elevation)
 
 
 func unproject(screen: Vector2) -> Vector2:
