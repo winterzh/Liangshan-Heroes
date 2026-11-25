@@ -1062,6 +1062,8 @@ func _refresh_stage(b) -> void:
 				else "正门已破。留兵守前营，护送器械破营，救时迁回营。缺金可查看前营金矿或在集市卖木，也可先断援。"
 		elif supply_cut:
 			objective = "南营已断援，庄内大营仍可补兵。可带器械攻正门，或接应孙立打开偏门。" if _alive(sun) else "孙立已阵亡，内应路线关闭；请用器械攻破庄门救人。"
+			if OS.get_name() == "Windows" and _alive(sun):
+				objective = "南营已断援。可用撞车直攻正门，或用正面小队牵制，派孙立开偏门。庄内仍能补兵。"
 	if not main_breached and not side_open and _alive(sun):
 		var feint := defense_state == "feint" and _has_feint_guards(b.mission)
 		if not b.hud.touch_ui and b.mission.active_action_id == INSIDE_ACTION:
