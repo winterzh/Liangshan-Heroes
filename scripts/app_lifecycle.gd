@@ -18,7 +18,10 @@ func request_quit(reason := "app") -> void:
 	if _quit_started:
 		return
 	var flow := get_node_or_null("/root/ContinueFlow")
-	if flow != null and flow.busy() and reason not in ["continue_saved", "continue_failed"]: return
+	if flow != null and flow.busy() and reason not in ["continue_saved", "continue_failed"]:
+		# The defeat choice is waiting for input and has no pending save or settlement.
+		if reason != "window_close" or flow.phase != flow.Phase.CHECKPOINT:
+			return
 	_quit_started = true
 	_quit_reason = reason
 	var steam := get_node_or_null("/root/SteamService")
