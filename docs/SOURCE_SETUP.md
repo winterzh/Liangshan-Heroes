@@ -1,5 +1,9 @@
 # 源码设置与换机（2026-10-30）
 
+## 2026-11-25 Windows 检查点候选六入口帧时复测
+
+对同一成品 e4489775 独立运行 604.3 秒，六入口 98 次实战及关键节点释放通过，战役进度保持字节一致。十个完整分钟的最差 P95／P99 为 5.86／7.63 毫秒，通过 16.7／33.3 毫秒的门槛。最长进场绘制间隔为黄泥冈的 138.60 毫秒。本次无运行错误或警告。 [复测记录](../qa/battle_entry_timing_20261116/windows_checkpoint_e4489775_retest_soak.json) · [首轮记录](../qa/battle_entry_timing_20261116/windows_checkpoint_e4489775_first_soak.json)
+
 ## 2026-11-25 Windows 检查点候选八章旧档验收
 
 e4489775 从 Windows Steam Build 26873421 的原始八章存档逐章继续、移动、再保存，并用独立进程打开新一代保存。16 个隔离进程共通过 200 项，八章原件及其隔离首代副本的存档与账本均保持字节一致。 [八章旧档验收](../qa/battle_entry_timing_20261116/windows_checkpoint_e4489775_eight_legacy_saves.json)
