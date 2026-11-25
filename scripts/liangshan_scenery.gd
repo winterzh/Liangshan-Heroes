@@ -345,31 +345,40 @@ func _cache_reeds(x: int, y: int) -> void:
 
 
 func _build_reed_mesh() -> void:
-	# 合为一个静态线网格。数千条抗锯齿Canvas线段会产生大量绘制开销。
+	# Keep the same line order and colors while allocating each mesh buffer once.
+	var vertex_count := _reed_stems.size() + _reed_leaves.size() + _reed_heads.size()
+	if vertex_count == 0:
+		return
 	var vertices := PackedVector3Array()
 	var colors := PackedColorArray()
+	vertices.resize(vertex_count)
+	colors.resize(vertex_count)
 	var fog_ready := _fog_visibility_ready()
-	# Every stem/leaf/head vertex in a clump shares its world anchor.
-	# Keep visibility only for this rebuild; the next fog change reads live state.
-	var revealed := {}
+	var revealed: Dictionary[Vector2, bool] = {}
+	var offset := 0
 	for group in [[_reed_stems,_reed_stem_anchors,Color(0.40,0.43,0.25,0.9)],
 		[_reed_leaves,_reed_leaf_anchors,Color(0.39,0.46,0.26,0.8)],
 		[_reed_heads,_reed_head_anchors,Color(0.58,0.53,0.36,0.9)]]:
 		var points: PackedVector2Array = group[0]
 		var anchors: PackedVector2Array = group[1]
+		var base_color: Color = group[2]
+		var color := base_color
+		var previous_anchor := Vector2.INF
 		for i in range(points.size()):
-			var p: Vector2 = points[i]
-			var color: Color = group[2]
+			# Vertices in a clump share one anchor and color.
 			if fog_ready:
-				var anchor: Vector2 = anchors[i]
-				if not revealed.has(anchor):
-					revealed[anchor] = _fog_anchor_revealed(anchor,28.0)
-				if not revealed[anchor]:
-					color.a = 0.0
-			vertices.append(Vector3(p.x,p.y,0))
-			colors.append(color)
-	if vertices.is_empty():
-		return
+				var anchor := anchors[i]
+				if anchor != previous_anchor:
+					previous_anchor = anchor
+					if not revealed.has(anchor):
+						revealed[anchor] = _fog_anchor_revealed(anchor, 28.0)
+					color = base_color
+					if not revealed[anchor]:
+						color.a = 0.0
+			var point := points[i]
+			vertices[offset + i] = Vector3(point.x, point.y, 0.0)
+			colors[offset + i] = color
+		offset += points.size()
 	var arrays: Array = []
 	arrays.resize(Mesh.ARRAY_MAX)
 	arrays[Mesh.ARRAY_VERTEX] = vertices
