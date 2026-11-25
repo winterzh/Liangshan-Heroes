@@ -1,5 +1,11 @@
 # 当前项目总览
 
+## 2026-11-25 Windows 检查点候选八章旧档验收
+
+e4489775 从 Windows Steam Build 26873421 的原始八章存档逐章继续、移动、再保存，并用独立进程打开新一代保存。16 个隔离进程共通过 200 项，八章原件及其隔离首代副本的存档与账本均保持字节一致。 [八章旧档验收](../qa/battle_entry_timing_20261116/windows_checkpoint_e4489775_eight_legacy_saves.json)
+
+Steam 发布指南已对齐冻结文件直接上传与 ZIP 两条入口。拆包版核对 EXE、PCK 和五个依赖及许可文件。 [Steam 发布指南](STEAM_RELEASE_GUIDE.md)
+
 ## 2026-11-25 Windows 检查点候选首次六入口长测
 
 候选 e4489775 在 Windows Vulkan 1280×720 隔离进程中运行 602.1 秒。六入口 96 次实际交战及场景释放通过，战役进度字节一致，运行日志错误和警告均为零。
