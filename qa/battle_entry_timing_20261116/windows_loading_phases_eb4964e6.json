@@ -1,0 +1,2210 @@
+{
+  "candidate": "eb4964e6eaef6d93c5206a91c2b7caede2e9b23c",
+  "seconds": 140.257116,
+  "window": [
+    1280,
+    720
+  ],
+  "scope": "Instrumented isolated Windows Vulkan using hash-verified native payload. Six entry routes, three seconds of play per visit. Short diagnostic.",
+  "resource_timing": "Measure await completion and ResourceLoader.load_threaded_get separately. Wait time includes time spent between frames.",
+  "cpu_alignment": "Lower and upper main CPU, enclosing process CPU and elapsed sample window in microseconds. Require unambiguous wall-clock alignment.",
+  "visits": 44,
+  "perf_gates": {
+    "complete_minute_buckets": 2,
+    "max_minute_p95_ms": 6.02,
+    "max_minute_p99_ms": 8.114,
+    "p95_limit_ms": 16.7,
+    "p99_limit_ms": 33.3,
+    "peak_draw_calls": 1415.0,
+    "worst_frame_ms": 136.736
+  },
+  "failures": [],
+  "memory": {
+    "end": 2193973248.0,
+    "end_delta_from_warm": 24203264.0,
+    "monotonic_growth_detected": false,
+    "peak": 2193973248.0,
+    "recovered_from_peak": 0.0,
+    "recovery_passed": true,
+    "tolerance": 134217728.0,
+    "trend": {
+      "decreases": 0,
+      "first": 2169769984.0,
+      "flat": 1,
+      "increases": 2,
+      "last": 2193973248.0,
+      "near_monotonic": false,
+      "net": 24203264.0,
+      "samples": 4
+    },
+    "warm_baseline": 2169769984.0
+  },
+  "startup_payload_hashes": {
+    "exe_sha256": "d172e407132282594f00322cf2fb648c43eeb408ab48d7d600f8b2c151e284a4",
+    "pck_sha256": "f462ff34009e46ed9fb5c3cb845725be2ff65189770365aa63b370bc7c734add"
+  },
+  "receipt_hashes": {
+    "log_sha256": "f67ae6d6efb60e6c2778ac4f6128bcca090cdc8b20f28ad3186aaab053e3c959",
+    "thread_samples_sha256": "cb2c320605bbb7e8d0b44ce29281d93ebf38298bc1b545e84620c3ef23f2665f",
+    "report_sha256": "5473ca17f282c96cd234627d4695fa4cb0748210cefe3e054e14884640b73cca",
+    "probe_sha256": "bfea497f09d576d41fc88775b56a54ddb0e04bf3d228e83e4b33bb6a133a0f91"
+  },
+  "route_summary": {
+    "campaign:level1": {
+      "visits": 8,
+      "click_to_battle_frame_median_us": 69267.5,
+      "click_to_battle_frame_max_us": 247218,
+      "max_pre_attach_part_us": 2502,
+      "peak_draw_interval_us": 136737,
+      "peak_visit": 1,
+      "longest_resource_waits": [
+        [
+          32477,
+          "res://assets/campaign/environment/art_full_20260915/overlays.png",
+          1
+        ],
+        [
+          13792,
+          "res://assets/characters/ruan_xiaoqi_merchant_20261016/portrait.png",
+          1
+        ],
+        [
+          13559,
+          "res://assets/anim/character_traits_v2_ruan_xiaoqi_merchant_idle_se.tres",
+          1
+        ]
+      ]
+    },
+    "arena:arena": {
+      "visits": 8,
+      "click_to_battle_frame_median_us": 65398.0,
+      "click_to_battle_frame_max_us": 67980,
+      "max_pre_attach_part_us": 1822,
+      "peak_draw_interval_us": 52227,
+      "peak_visit": 2,
+      "longest_resource_waits": []
+    },
+    "skirmish:skirmish": {
+      "visits": 7,
+      "click_to_battle_frame_median_us": 100573,
+      "click_to_battle_frame_max_us": 272671,
+      "max_pre_attach_part_us": 84176,
+      "peak_draw_interval_us": 84176,
+      "peak_visit": 3,
+      "longest_resource_waits": [
+        [
+          85483,
+          "res://assets/campaign/environment/shared/surfaces/surface_wet_bank.png",
+          3
+        ],
+        [
+          14,
+          "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png",
+          15
+        ],
+        [
+          13,
+          "res://assets/campaign/environment/shared/surfaces/surface_forest_earth.png",
+          3
+        ]
+      ]
+    },
+    "skirmish_ai:skirmish_ai": {
+      "visits": 7,
+      "click_to_battle_frame_median_us": 74900,
+      "click_to_battle_frame_max_us": 82885,
+      "max_pre_attach_part_us": 1420,
+      "peak_draw_interval_us": 63511,
+      "peak_visit": 4,
+      "longest_resource_waits": []
+    },
+    "custom_defense:custom_defense": {
+      "visits": 7,
+      "click_to_battle_frame_median_us": 99720,
+      "click_to_battle_frame_max_us": 121557,
+      "max_pre_attach_part_us": 51545,
+      "peak_draw_interval_us": 60095,
+      "peak_visit": 29,
+      "longest_resource_waits": [
+        [
+          19,
+          "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png",
+          29
+        ],
+        [
+          13,
+          "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png",
+          11
+        ],
+        [
+          11,
+          "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png",
+          41
+        ]
+      ]
+    },
+    "campaign:level5": {
+      "visits": 7,
+      "click_to_battle_frame_median_us": 105323,
+      "click_to_battle_frame_max_us": 178086,
+      "max_pre_attach_part_us": 2095,
+      "peak_draw_interval_us": 100793,
+      "peak_visit": 6,
+      "longest_resource_waits": [
+        [
+          23886,
+          "res://assets/anim/character_traits_v2_liu_tang_ne_hold_idle_se.tres",
+          6
+        ],
+        [
+          18,
+          "res://assets/campaign/environment/level5/reeds_bent.png",
+          24
+        ],
+        [
+          14,
+          "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png",
+          6
+        ]
+      ]
+    }
+  },
+  "longest_gaps": [
+    {
+      "visit": 1,
+      "route": "campaign:level1",
+      "longest_draw_interval_us": 136737,
+      "pre_attach_share_us": 2502,
+      "cpu_time_bounds_us": [
+        109375,
+        125000,
+        390625,
+        155441
+      ],
+      "click_to_battle_frame_us": 247218,
+      "dominant_stages": [
+        [
+          "hud_attached_us_to_scene_ready_us",
+          56643
+        ],
+        [
+          "scene_ready_us_to_first_battle_frame_us",
+          53728
+        ],
+        [
+          "battle_attached_us_to_hud_attached_us",
+          23864
+        ],
+        [
+          "handoff_to_battle_attached_us",
+          2432
+        ]
+      ],
+      "dominant_resource_waits": [
+        {
+          "asset": "res://assets/campaign/environment/shared/surfaces/surface_dry_earth.png",
+          "wait_us": 12,
+          "get_us": 8,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/shared/surfaces/surface_forest_earth.png",
+          "wait_us": 5,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        }
+      ]
+    },
+    {
+      "visit": 6,
+      "route": "campaign:level5",
+      "longest_draw_interval_us": 100793,
+      "pre_attach_share_us": 1511,
+      "cpu_time_bounds_us": [
+        78125,
+        109375,
+        109375,
+        107143
+      ],
+      "click_to_battle_frame_us": 178086,
+      "dominant_stages": [
+        [
+          "scene_ready_us_to_first_battle_frame_us",
+          50628
+        ],
+        [
+          "battle_attached_us_to_hud_attached_us",
+          29095
+        ],
+        [
+          "hud_attached_us_to_scene_ready_us",
+          19559
+        ],
+        [
+          "handoff_to_battle_attached_us",
+          1461
+        ]
+      ],
+      "dominant_resource_waits": [
+        {
+          "asset": "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png",
+          "wait_us": 14,
+          "get_us": 10,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/shared/surfaces/surface_forest_earth.png",
+          "wait_us": 5,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        }
+      ]
+    },
+    {
+      "visit": 3,
+      "route": "skirmish:skirmish",
+      "longest_draw_interval_us": 84176,
+      "pre_attach_share_us": 84176,
+      "cpu_time_bounds_us": [
+        0,
+        15625,
+        109375,
+        91145
+      ],
+      "click_to_battle_frame_us": 272671,
+      "dominant_stages": [
+        [
+          "identity_ready_to_environment_complete",
+          84176
+        ]
+      ],
+      "dominant_resource_waits": [
+        {
+          "asset": "res://assets/campaign/environment/shared/surfaces/surface_wet_bank.png",
+          "wait_us": 85483,
+          "get_us": 8,
+          "polls": 2,
+          "initial_status": 1,
+          "final_status": 3,
+          "gap_overlap_us": 84176
+        },
+        {
+          "asset": "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png",
+          "wait_us": 8,
+          "get_us": 7,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        }
+      ]
+    },
+    {
+      "visit": 24,
+      "route": "campaign:level5",
+      "longest_draw_interval_us": 77492,
+      "pre_attach_share_us": 1371,
+      "cpu_time_bounds_us": [
+        62500,
+        93750,
+        93750,
+        93809
+      ],
+      "click_to_battle_frame_us": 135576,
+      "dominant_stages": [
+        [
+          "hud_attached_us_to_scene_ready_us",
+          32699
+        ],
+        [
+          "battle_attached_us_to_hud_attached_us",
+          22305
+        ],
+        [
+          "scene_ready_us_to_first_battle_frame_us",
+          21117
+        ],
+        [
+          "handoff_to_battle_attached_us",
+          1287
+        ]
+      ],
+      "dominant_resource_waits": [
+        {
+          "asset": "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png",
+          "wait_us": 12,
+          "get_us": 9,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/shared/surfaces/surface_forest_earth.png",
+          "wait_us": 5,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        }
+      ]
+    },
+    {
+      "visit": 4,
+      "route": "skirmish_ai:skirmish_ai",
+      "longest_draw_interval_us": 63511,
+      "pre_attach_share_us": 1079,
+      "cpu_time_bounds_us": [
+        31250,
+        93750,
+        93750,
+        94474
+      ],
+      "click_to_battle_frame_us": 82885,
+      "dominant_stages": [
+        [
+          "scene_ready_us_to_first_battle_frame_us",
+          28685
+        ],
+        [
+          "hud_attached_us_to_scene_ready_us",
+          20714
+        ],
+        [
+          "battle_attached_us_to_hud_attached_us",
+          13033
+        ],
+        [
+          "handoff_to_battle_attached_us",
+          1038
+        ]
+      ],
+      "dominant_resource_waits": []
+    },
+    {
+      "visit": 36,
+      "route": "campaign:level5",
+      "longest_draw_interval_us": 62525,
+      "pre_attach_share_us": 1657,
+      "cpu_time_bounds_us": [
+        46875,
+        78125,
+        78125,
+        76418
+      ],
+      "click_to_battle_frame_us": 116470,
+      "dominant_stages": [
+        [
+          "hud_attached_us_to_scene_ready_us",
+          23443
+        ],
+        [
+          "battle_attached_us_to_hud_attached_us",
+          19987
+        ],
+        [
+          "scene_ready_us_to_first_battle_frame_us",
+          17438
+        ],
+        [
+          "handoff_to_battle_attached_us",
+          1610
+        ]
+      ],
+      "dominant_resource_waits": [
+        {
+          "asset": "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png",
+          "wait_us": 10,
+          "get_us": 11,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/shared/surfaces/surface_forest_earth.png",
+          "wait_us": 4,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        }
+      ]
+    },
+    {
+      "visit": 29,
+      "route": "custom_defense:custom_defense",
+      "longest_draw_interval_us": 60095,
+      "pre_attach_share_us": 1292,
+      "cpu_time_bounds_us": [
+        31250,
+        78125,
+        78125,
+        76308
+      ],
+      "click_to_battle_frame_us": 121557,
+      "dominant_stages": [
+        [
+          "hud_attached_us_to_scene_ready_us",
+          21772
+        ],
+        [
+          "battle_attached_us_to_hud_attached_us",
+          19086
+        ],
+        [
+          "scene_ready_us_to_first_battle_frame_us",
+          17945
+        ],
+        [
+          "handoff_to_battle_attached_us",
+          1237
+        ]
+      ],
+      "dominant_resource_waits": [
+        {
+          "asset": "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png",
+          "wait_us": 19,
+          "get_us": 13,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/shared/surfaces/surface_forest_earth.png",
+          "wait_us": 5,
+          "get_us": 3,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        }
+      ]
+    },
+    {
+      "visit": 27,
+      "route": "skirmish:skirmish",
+      "longest_draw_interval_us": 59163,
+      "pre_attach_share_us": 1174,
+      "cpu_time_bounds_us": [
+        46875,
+        78125,
+        78125,
+        76917
+      ],
+      "click_to_battle_frame_us": 107653,
+      "dominant_stages": [
+        [
+          "battle_attached_us_to_hud_attached_us",
+          20906
+        ],
+        [
+          "hud_attached_us_to_scene_ready_us",
+          19675
+        ],
+        [
+          "scene_ready_us_to_first_battle_frame_us",
+          17408
+        ],
+        [
+          "handoff_to_battle_attached_us",
+          1133
+        ]
+      ],
+      "dominant_resource_waits": [
+        {
+          "asset": "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png",
+          "wait_us": 7,
+          "get_us": 6,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/shared/surfaces/surface_forest_earth.png",
+          "wait_us": 3,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        }
+      ]
+    }
+  ],
+  "gao_phases": [
+    {
+      "visit": 6,
+      "route": "campaign:level5",
+      "click_to_overlay_us": 1446,
+      "click_to_attach_us": 78804,
+      "click_to_battle_frame_us": 178086,
+      "longest_draw_interval_us": 100793,
+      "longest_draw_interval_begin_us": 77293,
+      "longest_draw_interval_end_us": 178086,
+      "pre_attach_share_us": 1511,
+      "resources": [
+        {
+          "asset": "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png",
+          "wait_us": 14,
+          "get_us": 10,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/shared/surfaces/surface_forest_earth.png",
+          "wait_us": 5,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/shared/surfaces/surface_wet_bank.png",
+          "wait_us": 4,
+          "get_us": 3,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/reeds_short.png",
+          "wait_us": 4,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/reeds_tall.png",
+          "wait_us": 4,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/reeds_bent.png",
+          "wait_us": 3,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/reeds_seeded.png",
+          "wait_us": 3,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/willow_old.png",
+          "wait_us": 4,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/tree_broad.png",
+          "wait_us": 3,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/tree_young.png",
+          "wait_us": 3,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/dock_straight.png",
+          "wait_us": 2,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/dock_head_t.png",
+          "wait_us": 2,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/watchtower.png",
+          "wait_us": 1,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/stockade_segment.png",
+          "wait_us": 3,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/zhongyi_hall.png",
+          "wait_us": 1,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/zhongyi_hall_standard_west_blank.png",
+          "wait_us": 4,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/zhongyi_hall_standard_east_blank.png",
+          "wait_us": 2,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/liangshan_hilltop_standard_blank.png",
+          "wait_us": 4,
+          "get_us": 3,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/anim/character_traits_v2_liu_tang_ne_hold_idle_se.tres",
+          "wait_us": 23886,
+          "get_us": 7,
+          "polls": 3,
+          "initial_status": 1,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/anim/gongsun_sheng_idle.png",
+          "wait_us": 4,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/anim/wu_yong_idle_se.tres",
+          "wait_us": 3,
+          "get_us": 3,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        }
+      ],
+      "stage_overlap_us": {
+        "map_prepared_to_detached_frame_drawn": 47,
+        "detached_frame_drawn_to_handoff": 3,
+        "handoff_to_battle_attached_us": 1461,
+        "battle_attached_us_to_hud_attached_us": 29095,
+        "hud_attached_us_to_scene_ready_us": 19559,
+        "scene_ready_us_to_first_battle_frame_us": 50628
+      },
+      "points_us": {
+        "battle_instantiated": 42993,
+        "battle_scene_loaded": 42931,
+        "before_battle_probe_attach": 42976,
+        "detached_frame_drawn": 77340,
+        "environment_complete": 18640,
+        "environment_requests": 1813,
+        "finish_deferred": 2715,
+        "finish_entered": 2872,
+        "frame_requests": 2335,
+        "frame_resources_complete": 42610,
+        "gao_art_requests": 2713,
+        "handoff": 77343,
+        "identity_applied": 42995,
+        "identity_ready": 18442,
+        "install_deferred": 42618,
+        "install_entered": 42626,
+        "map_prepare_started": 43002,
+        "map_prepared": 76528,
+        "overlay_added": 712,
+        "overlay_draw_done": 1450,
+        "portraits_complete": 42611,
+        "environment_enabled": 76524,
+        "environment_paint": 51771,
+        "level_decorate": 76515,
+        "level_paint": 51760,
+        "map_bake": 53418,
+        "map_node": 43069,
+        "map_size": 43145,
+        "battle_attached_us": 78804,
+        "hud_attached_us": 107899,
+        "scene_ready_us": 127458,
+        "first_battle_frame_us": 178086
+      },
+      "detached_probe_cost_us": 17,
+      "cpu_time_bounds_us": [
+        78125,
+        109375,
+        109375,
+        107143
+      ],
+      "detached_map_us": 33526
+    },
+    {
+      "visit": 12,
+      "route": "campaign:level5",
+      "click_to_overlay_us": 1055,
+      "click_to_attach_us": 47976,
+      "click_to_battle_frame_us": 102779,
+      "longest_draw_interval_us": 56898,
+      "longest_draw_interval_begin_us": 45881,
+      "longest_draw_interval_end_us": 102779,
+      "pre_attach_share_us": 2095,
+      "resources": [
+        {
+          "asset": "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png",
+          "wait_us": 8,
+          "get_us": 7,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/shared/surfaces/surface_forest_earth.png",
+          "wait_us": 3,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/shared/surfaces/surface_wet_bank.png",
+          "wait_us": 3,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/reeds_short.png",
+          "wait_us": 4,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/reeds_tall.png",
+          "wait_us": 3,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/reeds_bent.png",
+          "wait_us": 3,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/reeds_seeded.png",
+          "wait_us": 2,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/willow_old.png",
+          "wait_us": 9,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/tree_broad.png",
+          "wait_us": 3,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/tree_young.png",
+          "wait_us": 4,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/dock_straight.png",
+          "wait_us": 3,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/dock_head_t.png",
+          "wait_us": 2,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/watchtower.png",
+          "wait_us": 2,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/stockade_segment.png",
+          "wait_us": 3,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/zhongyi_hall.png",
+          "wait_us": 2,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/zhongyi_hall_standard_west_blank.png",
+          "wait_us": 3,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/zhongyi_hall_standard_east_blank.png",
+          "wait_us": 3,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/liangshan_hilltop_standard_blank.png",
+          "wait_us": 2,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        }
+      ],
+      "stage_overlap_us": {
+        "map_prepared_to_detached_frame_drawn": 54,
+        "detached_frame_drawn_to_handoff": 4,
+        "handoff_to_battle_attached_us": 2037,
+        "battle_attached_us_to_hud_attached_us": 19646,
+        "hud_attached_us_to_scene_ready_us": 20457,
+        "scene_ready_us_to_first_battle_frame_us": 14700
+      },
+      "points_us": {
+        "battle_instantiated": 17343,
+        "battle_scene_loaded": 17282,
+        "before_battle_probe_attach": 17323,
+        "detached_frame_drawn": 45935,
+        "environment_complete": 17055,
+        "environment_requests": 1382,
+        "finish_deferred": 1404,
+        "finish_entered": 1477,
+        "frame_requests": 1400,
+        "frame_resources_complete": 17056,
+        "gao_art_requests": 1402,
+        "handoff": 45939,
+        "identity_applied": 17345,
+        "identity_ready": 16901,
+        "install_deferred": 17065,
+        "install_entered": 17069,
+        "map_prepare_started": 17354,
+        "map_prepared": 44896,
+        "overlay_added": 572,
+        "overlay_draw_done": 1059,
+        "portraits_complete": 17056,
+        "environment_enabled": 44891,
+        "environment_paint": 26058,
+        "level_decorate": 44882,
+        "level_paint": 26051,
+        "map_bake": 26983,
+        "map_node": 17404,
+        "map_size": 17454,
+        "battle_attached_us": 47976,
+        "hud_attached_us": 67622,
+        "scene_ready_us": 88079,
+        "first_battle_frame_us": 102779
+      },
+      "detached_probe_cost_us": 20,
+      "cpu_time_bounds_us": [
+        46875,
+        78125,
+        78125,
+        77800
+      ],
+      "detached_map_us": 27542
+    },
+    {
+      "visit": 18,
+      "route": "campaign:level5",
+      "click_to_overlay_us": 1133,
+      "click_to_attach_us": 50685,
+      "click_to_battle_frame_us": 103989,
+      "longest_draw_interval_us": 54755,
+      "longest_draw_interval_begin_us": 49234,
+      "longest_draw_interval_end_us": 103989,
+      "pre_attach_share_us": 1451,
+      "resources": [
+        {
+          "asset": "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png",
+          "wait_us": 10,
+          "get_us": 8,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/shared/surfaces/surface_forest_earth.png",
+          "wait_us": 4,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/shared/surfaces/surface_wet_bank.png",
+          "wait_us": 3,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/reeds_short.png",
+          "wait_us": 4,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/reeds_tall.png",
+          "wait_us": 3,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/reeds_bent.png",
+          "wait_us": 3,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/reeds_seeded.png",
+          "wait_us": 3,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/willow_old.png",
+          "wait_us": 3,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/tree_broad.png",
+          "wait_us": 2,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/tree_young.png",
+          "wait_us": 3,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/dock_straight.png",
+          "wait_us": 2,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/dock_head_t.png",
+          "wait_us": 2,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/watchtower.png",
+          "wait_us": 2,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/stockade_segment.png",
+          "wait_us": 2,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/zhongyi_hall.png",
+          "wait_us": 2,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/zhongyi_hall_standard_west_blank.png",
+          "wait_us": 3,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/zhongyi_hall_standard_east_blank.png",
+          "wait_us": 3,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/liangshan_hilltop_standard_blank.png",
+          "wait_us": 2,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        }
+      ],
+      "stage_overlap_us": {
+        "map_prepared_to_detached_frame_drawn": 55,
+        "detached_frame_drawn_to_handoff": 4,
+        "handoff_to_battle_attached_us": 1392,
+        "battle_attached_us_to_hud_attached_us": 18375,
+        "hud_attached_us_to_scene_ready_us": 20982,
+        "scene_ready_us_to_first_battle_frame_us": 13947
+      },
+      "points_us": {
+        "battle_instantiated": 19748,
+        "battle_scene_loaded": 19690,
+        "before_battle_probe_attach": 19731,
+        "detached_frame_drawn": 49289,
+        "environment_complete": 19470,
+        "environment_requests": 1540,
+        "finish_deferred": 1570,
+        "finish_entered": 1683,
+        "frame_requests": 1564,
+        "frame_resources_complete": 19471,
+        "gao_art_requests": 1568,
+        "handoff": 49293,
+        "identity_applied": 19750,
+        "identity_ready": 19312,
+        "install_deferred": 19480,
+        "install_entered": 19483,
+        "map_prepare_started": 19760,
+        "map_prepared": 48383,
+        "overlay_added": 608,
+        "overlay_draw_done": 1138,
+        "portraits_complete": 19472,
+        "environment_enabled": 48378,
+        "environment_paint": 28986,
+        "level_decorate": 48368,
+        "level_paint": 28978,
+        "map_bake": 29984,
+        "map_node": 19815,
+        "map_size": 19867,
+        "battle_attached_us": 50685,
+        "hud_attached_us": 69060,
+        "scene_ready_us": 90042,
+        "first_battle_frame_us": 103989
+      },
+      "detached_probe_cost_us": 17,
+      "cpu_time_bounds_us": [
+        31250,
+        62500,
+        62500,
+        78092
+      ],
+      "detached_map_us": 28623
+    },
+    {
+      "visit": 24,
+      "route": "campaign:level5",
+      "click_to_overlay_us": 1463,
+      "click_to_attach_us": 59455,
+      "click_to_battle_frame_us": 135576,
+      "longest_draw_interval_us": 77492,
+      "longest_draw_interval_begin_us": 58084,
+      "longest_draw_interval_end_us": 135576,
+      "pre_attach_share_us": 1371,
+      "resources": [
+        {
+          "asset": "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png",
+          "wait_us": 12,
+          "get_us": 9,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/shared/surfaces/surface_forest_earth.png",
+          "wait_us": 5,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/shared/surfaces/surface_wet_bank.png",
+          "wait_us": 4,
+          "get_us": 3,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/reeds_short.png",
+          "wait_us": 5,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/reeds_tall.png",
+          "wait_us": 3,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/reeds_bent.png",
+          "wait_us": 18,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/reeds_seeded.png",
+          "wait_us": 4,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/willow_old.png",
+          "wait_us": 2,
+          "get_us": 3,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/tree_broad.png",
+          "wait_us": 3,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/tree_young.png",
+          "wait_us": 3,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/dock_straight.png",
+          "wait_us": 4,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/dock_head_t.png",
+          "wait_us": 3,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/watchtower.png",
+          "wait_us": 2,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/stockade_segment.png",
+          "wait_us": 11,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/zhongyi_hall.png",
+          "wait_us": 2,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/zhongyi_hall_standard_west_blank.png",
+          "wait_us": 3,
+          "get_us": 3,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/zhongyi_hall_standard_east_blank.png",
+          "wait_us": 3,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/liangshan_hilltop_standard_blank.png",
+          "wait_us": 4,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        }
+      ],
+      "stage_overlap_us": {
+        "map_prepared_to_detached_frame_drawn": 80,
+        "detached_frame_drawn_to_handoff": 4,
+        "handoff_to_battle_attached_us": 1287,
+        "battle_attached_us_to_hud_attached_us": 22305,
+        "hud_attached_us_to_scene_ready_us": 32699,
+        "scene_ready_us_to_first_battle_frame_us": 21117
+      },
+      "points_us": {
+        "battle_instantiated": 21764,
+        "battle_scene_loaded": 21693,
+        "before_battle_probe_attach": 21743,
+        "detached_frame_drawn": 58164,
+        "environment_complete": 21168,
+        "environment_requests": 1953,
+        "finish_deferred": 1993,
+        "finish_entered": 2329,
+        "frame_requests": 1987,
+        "frame_resources_complete": 21169,
+        "gao_art_requests": 1990,
+        "handoff": 58168,
+        "identity_applied": 21767,
+        "identity_ready": 20934,
+        "install_deferred": 21180,
+        "install_entered": 21186,
+        "map_prepare_started": 21779,
+        "map_prepared": 57003,
+        "overlay_added": 733,
+        "overlay_draw_done": 1468,
+        "portraits_complete": 21170,
+        "environment_enabled": 56998,
+        "environment_paint": 36008,
+        "level_decorate": 56990,
+        "level_paint": 35999,
+        "map_bake": 37141,
+        "map_node": 21852,
+        "map_size": 21935,
+        "battle_attached_us": 59455,
+        "hud_attached_us": 81760,
+        "scene_ready_us": 114459,
+        "first_battle_frame_us": 135576
+      },
+      "detached_probe_cost_us": 21,
+      "cpu_time_bounds_us": [
+        62500,
+        93750,
+        93750,
+        93809
+      ],
+      "detached_map_us": 35224
+    },
+    {
+      "visit": 30,
+      "route": "campaign:level5",
+      "click_to_overlay_us": 1140,
+      "click_to_attach_us": 51210,
+      "click_to_battle_frame_us": 105323,
+      "longest_draw_interval_us": 55641,
+      "longest_draw_interval_begin_us": 49682,
+      "longest_draw_interval_end_us": 105323,
+      "pre_attach_share_us": 1528,
+      "resources": [
+        {
+          "asset": "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png",
+          "wait_us": 10,
+          "get_us": 8,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/shared/surfaces/surface_forest_earth.png",
+          "wait_us": 3,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/shared/surfaces/surface_wet_bank.png",
+          "wait_us": 3,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/reeds_short.png",
+          "wait_us": 4,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/reeds_tall.png",
+          "wait_us": 2,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/reeds_bent.png",
+          "wait_us": 3,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/reeds_seeded.png",
+          "wait_us": 2,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/willow_old.png",
+          "wait_us": 2,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/tree_broad.png",
+          "wait_us": 1,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/tree_young.png",
+          "wait_us": 3,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/dock_straight.png",
+          "wait_us": 2,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/dock_head_t.png",
+          "wait_us": 2,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/watchtower.png",
+          "wait_us": 2,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/stockade_segment.png",
+          "wait_us": 2,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/zhongyi_hall.png",
+          "wait_us": 2,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/zhongyi_hall_standard_west_blank.png",
+          "wait_us": 2,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/zhongyi_hall_standard_east_blank.png",
+          "wait_us": 2,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/liangshan_hilltop_standard_blank.png",
+          "wait_us": 2,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        }
+      ],
+      "stage_overlap_us": {
+        "map_prepared_to_detached_frame_drawn": 42,
+        "detached_frame_drawn_to_handoff": 4,
+        "handoff_to_battle_attached_us": 1482,
+        "battle_attached_us_to_hud_attached_us": 16651,
+        "hud_attached_us_to_scene_ready_us": 21458,
+        "scene_ready_us_to_first_battle_frame_us": 16004
+      },
+      "points_us": {
+        "battle_instantiated": 19871,
+        "battle_scene_loaded": 19814,
+        "before_battle_probe_attach": 19854,
+        "detached_frame_drawn": 49724,
+        "environment_complete": 19566,
+        "environment_requests": 1639,
+        "finish_deferred": 1674,
+        "finish_entered": 1898,
+        "frame_requests": 1668,
+        "frame_resources_complete": 19567,
+        "gao_art_requests": 1672,
+        "handoff": 49728,
+        "identity_applied": 19873,
+        "identity_ready": 19415,
+        "install_deferred": 19576,
+        "install_entered": 19580,
+        "map_prepare_started": 19883,
+        "map_prepared": 48825,
+        "overlay_added": 589,
+        "overlay_draw_done": 1145,
+        "portraits_complete": 19568,
+        "environment_enabled": 48822,
+        "environment_paint": 29365,
+        "level_decorate": 48813,
+        "level_paint": 29359,
+        "map_bake": 30288,
+        "map_node": 19947,
+        "map_size": 20002,
+        "battle_attached_us": 51210,
+        "hud_attached_us": 67861,
+        "scene_ready_us": 89319,
+        "first_battle_frame_us": 105323
+      },
+      "detached_probe_cost_us": 17,
+      "cpu_time_bounds_us": [
+        31250,
+        78125,
+        78125,
+        76828
+      ],
+      "detached_map_us": 28942
+    },
+    {
+      "visit": 36,
+      "route": "campaign:level5",
+      "click_to_overlay_us": 1579,
+      "click_to_attach_us": 55602,
+      "click_to_battle_frame_us": 116470,
+      "longest_draw_interval_us": 62525,
+      "longest_draw_interval_begin_us": 53945,
+      "longest_draw_interval_end_us": 116470,
+      "pre_attach_share_us": 1657,
+      "resources": [
+        {
+          "asset": "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png",
+          "wait_us": 10,
+          "get_us": 11,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/shared/surfaces/surface_forest_earth.png",
+          "wait_us": 4,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/shared/surfaces/surface_wet_bank.png",
+          "wait_us": 3,
+          "get_us": 3,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/reeds_short.png",
+          "wait_us": 3,
+          "get_us": 3,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/reeds_tall.png",
+          "wait_us": 3,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/reeds_bent.png",
+          "wait_us": 2,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/reeds_seeded.png",
+          "wait_us": 3,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/willow_old.png",
+          "wait_us": 2,
+          "get_us": 3,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/tree_broad.png",
+          "wait_us": 3,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/tree_young.png",
+          "wait_us": 3,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/dock_straight.png",
+          "wait_us": 2,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/dock_head_t.png",
+          "wait_us": 6,
+          "get_us": 3,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/watchtower.png",
+          "wait_us": 3,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/stockade_segment.png",
+          "wait_us": 3,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/zhongyi_hall.png",
+          "wait_us": 3,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/zhongyi_hall_standard_west_blank.png",
+          "wait_us": 4,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/zhongyi_hall_standard_east_blank.png",
+          "wait_us": 3,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/liangshan_hilltop_standard_blank.png",
+          "wait_us": 9,
+          "get_us": 3,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        }
+      ],
+      "stage_overlap_us": {
+        "map_prepared_to_detached_frame_drawn": 44,
+        "detached_frame_drawn_to_handoff": 3,
+        "handoff_to_battle_attached_us": 1610,
+        "battle_attached_us_to_hud_attached_us": 19987,
+        "hud_attached_us_to_scene_ready_us": 23443,
+        "scene_ready_us_to_first_battle_frame_us": 17438
+      },
+      "points_us": {
+        "battle_instantiated": 21266,
+        "battle_scene_loaded": 21198,
+        "before_battle_probe_attach": 21244,
+        "detached_frame_drawn": 53989,
+        "environment_complete": 20831,
+        "environment_requests": 2341,
+        "finish_deferred": 2381,
+        "finish_entered": 2643,
+        "frame_requests": 2374,
+        "frame_resources_complete": 20832,
+        "gao_art_requests": 2377,
+        "handoff": 53992,
+        "identity_applied": 21268,
+        "identity_ready": 20634,
+        "install_deferred": 20844,
+        "install_entered": 20851,
+        "map_prepare_started": 21280,
+        "map_prepared": 53070,
+        "overlay_added": 741,
+        "overlay_draw_done": 1586,
+        "portraits_complete": 20833,
+        "environment_enabled": 53067,
+        "environment_paint": 31743,
+        "level_decorate": 53056,
+        "level_paint": 31732,
+        "map_bake": 32734,
+        "map_node": 21351,
+        "map_size": 21407,
+        "battle_attached_us": 55602,
+        "hud_attached_us": 75589,
+        "scene_ready_us": 99032,
+        "first_battle_frame_us": 116470
+      },
+      "detached_probe_cost_us": 22,
+      "cpu_time_bounds_us": [
+        46875,
+        78125,
+        78125,
+        76418
+      ],
+      "detached_map_us": 31790
+    },
+    {
+      "visit": 42,
+      "route": "campaign:level5",
+      "click_to_overlay_us": 1178,
+      "click_to_attach_us": 49149,
+      "click_to_battle_frame_us": 102508,
+      "longest_draw_interval_us": 54632,
+      "longest_draw_interval_begin_us": 47876,
+      "longest_draw_interval_end_us": 102508,
+      "pre_attach_share_us": 1273,
+      "resources": [
+        {
+          "asset": "res://assets/campaign/environment/shared/surfaces/surface_compacted_stone.png",
+          "wait_us": 11,
+          "get_us": 10,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/shared/surfaces/surface_forest_earth.png",
+          "wait_us": 5,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/shared/surfaces/surface_wet_bank.png",
+          "wait_us": 3,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/reeds_short.png",
+          "wait_us": 5,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/reeds_tall.png",
+          "wait_us": 2,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/reeds_bent.png",
+          "wait_us": 3,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/reeds_seeded.png",
+          "wait_us": 3,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/willow_old.png",
+          "wait_us": 2,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/tree_broad.png",
+          "wait_us": 3,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/tree_young.png",
+          "wait_us": 2,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/dock_straight.png",
+          "wait_us": 2,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/dock_head_t.png",
+          "wait_us": 2,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/watchtower.png",
+          "wait_us": 2,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/stockade_segment.png",
+          "wait_us": 3,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/zhongyi_hall.png",
+          "wait_us": 2,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/zhongyi_hall_standard_west_blank.png",
+          "wait_us": 2,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/zhongyi_hall_standard_east_blank.png",
+          "wait_us": 2,
+          "get_us": 1,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        },
+        {
+          "asset": "res://assets/campaign/environment/level5/liangshan_hilltop_standard_blank.png",
+          "wait_us": 2,
+          "get_us": 2,
+          "polls": 0,
+          "initial_status": 3,
+          "final_status": 3,
+          "gap_overlap_us": 0
+        }
+      ],
+      "stage_overlap_us": {
+        "map_prepared_to_detached_frame_drawn": 39,
+        "detached_frame_drawn_to_handoff": 3,
+        "handoff_to_battle_attached_us": 1231,
+        "battle_attached_us_to_hud_attached_us": 18170,
+        "hud_attached_us_to_scene_ready_us": 20484,
+        "scene_ready_us_to_first_battle_frame_us": 14705
+      },
+      "points_us": {
+        "battle_instantiated": 18963,
+        "battle_scene_loaded": 18898,
+        "before_battle_probe_attach": 18944,
+        "detached_frame_drawn": 47915,
+        "environment_complete": 18649,
+        "environment_requests": 1626,
+        "finish_deferred": 1652,
+        "finish_entered": 1712,
+        "frame_requests": 1648,
+        "frame_resources_complete": 18650,
+        "gao_art_requests": 1651,
+        "handoff": 47918,
+        "identity_applied": 18965,
+        "identity_ready": 18486,
+        "install_deferred": 18661,
+        "install_entered": 18664,
+        "map_prepare_started": 18977,
+        "map_prepared": 47126,
+        "overlay_added": 531,
+        "overlay_draw_done": 1182,
+        "portraits_complete": 18651,
+        "environment_enabled": 47120,
+        "environment_paint": 28215,
+        "level_decorate": 47112,
+        "level_paint": 28208,
+        "map_bake": 29158,
+        "map_node": 19040,
+        "map_size": 19095,
+        "battle_attached_us": 49149,
+        "hud_attached_us": 67319,
+        "scene_ready_us": 87803,
+        "first_battle_frame_us": 102508
+      },
+      "detached_probe_cost_us": 19,
+      "cpu_time_bounds_us": [
+        31250,
+        78125,
+        78125,
+        75989
+      ],
+      "detached_map_us": 28149
+    }
+  ],
+  "fixture_hashes": {
+    "qa_gao_stage_battle.gd": "ce962b05559986b09f3d59988b0c0840e9d62cc0355e0b7c946914300467de87",
+    "qa_gao_stage_menu.gd": "0936715310e14cd450fbe2f6d786f77c4290967bb8430ec8dab0b613eae40076"
+  },
+  "native_startup_thread_control": {
+    "candidate": "eb4964e6eaef6d93c5206a91c2b7caede2e9b23c",
+    "stock_boot": true,
+    "hashes_verified": true,
+    "scope": "normal startup and window close on private Windows desktop, no loose overrides",
+    "runs": {
+      "default": {
+        "exit": 0,
+        "window_titles": [
+          "水浒英雄传：八幕战役"
+        ],
+        "running_at_close": true,
+        "close_sent": true,
+        "timeout": false,
+        "warnings": {},
+        "errors": {},
+        "texture_update_stack_count": 0,
+        "log_sha256": "468cb6d13ccc9d1edac92d60514780a33be1e51a6c5f4827f56a07e1812c8132"
+      },
+      "separate": {
+        "exit": 0,
+        "window_titles": [
+          "水浒英雄传：八幕战役"
+        ],
+        "running_at_close": true,
+        "close_sent": true,
+        "timeout": false,
+        "warnings": {
+          "WARNING: The separate rendering thread feature is experimental. Feel free to try it since it will eventually become a stable feature.": 1
+        },
+        "errors": {
+          "ERROR: Condition \"p_image.is_null() || p_image->is_empty()\" is true.": 3
+        },
+        "texture_update_stack_count": 3,
+        "log_sha256": "ed486bd40d445d432a59bcc1f6f247c2110ae18719fd28dc120273360e4e5c05"
+      }
+    }
+  },
+  "instrumented_separate_thread_stop": {
+    "forced_by_fixture_on_first_engine_errors": true,
+    "exit_code": 124,
+    "error_count": 13,
+    "unique_errors": [
+      "ERROR: Condition \"p_image.is_null() || p_image->is_empty()\" is true."
+    ],
+    "warnings": [
+      "WARNING: The separate rendering thread feature is experimental. Feel free to try it since it will eventually become a stable feature."
+    ],
+    "log_sha256": "89d2cd1261fa3ae256d3b8a75b8cb57e34a9689826c528a8bf614d8d7533ce00",
+    "probe_sha256": "ea1edbf1c6d74d2478b5484d85efe397e081dec4240061b7f1d51f1dfe14812c"
+  }
+}
