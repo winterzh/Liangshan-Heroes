@@ -11,11 +11,14 @@ const BUILD_26873421_CONTENT := "source-v1:37565f00004271ea77cff37359992333e141e
 const BUILD_26873421_SPLIT_ID := "7c97301d45dbfc705cbb6c36cfee174d9f2dce71afa0518883ff67f33f466107"
 const BUILD_26915924_CONTENT := "source-v1:1060bebc78efe42b528979adc717d96782c18e14b34c6415c63a5b6fed8c882c"
 const BUILD_26915924_SPLIT_ID := "7e7d3cb68f7b27cd444d10873f6ea2e1e9a5bbd1469091a4beffd7fb6ca58121"
+const BUILD_26918086_CONTENT := "source-v1:9ebcfe7d0701fb7c8709537f48f0e102fc30a8e60aaad98dcf97d7f1774c0c9a"
+const BUILD_26918086_SPLIT_ID := "a7729da026d71d3c64eead35290dc52b597aa160764ba7dee5468ae7aaf92670"
 const APPROVED_WINDOWS_ORIGINS := {
 	BUILD_26735223_CONTENT: BUILD_26735223_EXE,
 	BUILD_26752476_CONTENT: BUILD_26752476_EXE,
 	BUILD_26873421_CONTENT: BUILD_26873421_SPLIT_ID,
 	BUILD_26915924_CONTENT: BUILD_26915924_SPLIT_ID,
+	BUILD_26918086_CONTENT: BUILD_26918086_SPLIT_ID,
 }
 
 
@@ -30,7 +33,7 @@ static func resolve(context: Variant, content_version: Variant, engine_sha: Vari
 	if not profile.ok:
 		return {"ok": false, "code": "WORLD_CORE_IDENTITY"}
 	var classic_from_release: bool = profile.context == Profiles.CLASSIC_CONTEXT \
-		and content_version in [BUILD_26873421_CONTENT, BUILD_26915924_CONTENT]
+		and content_version in [BUILD_26873421_CONTENT, BUILD_26915924_CONTENT, BUILD_26918086_CONTENT]
 	if profile.context.mode != "campaign" and not classic_from_release:
 		return {"ok": false, "code": "WORLD_CORE_IDENTITY"}
 	return {"ok": true, "legacy": true, "identity": {"ok": true, "save_eligible": true,
