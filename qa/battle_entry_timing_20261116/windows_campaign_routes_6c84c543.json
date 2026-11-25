@@ -187,5 +187,109 @@
   },
   "real_first_play_feedback_count": 0,
   "first_play_recruitment": "deferred_at_user_request",
-  "steam_state": "local_candidate"
+  "steam_state": "local_candidate",
+  "paired_short_frame_diagnostic": {
+    "method": "Same six-entry Windows Vulkan probe, 120 seconds each, sequential isolated profiles, with background engine process counts tracked",
+    "runs": {
+      "public-26918086": {
+        "source_commit": "3cb48869d0f5ebba457cbe3ce23acdc16ae01f63",
+        "started_utc": "2026-11-25T12:53:41.293005+00:00",
+        "runtime_exit": 0,
+        "full_minutes": [
+          {
+            "minute": 1,
+            "rendered_frames": 7053,
+            "p95_frame_ms": 13.736,
+            "p99_frame_ms": 149.696,
+            "worst_frame_ms": 1237.137
+          },
+          {
+            "minute": 2,
+            "rendered_frames": 9304,
+            "p95_frame_ms": 9.712,
+            "p99_frame_ms": 78.757,
+            "worst_frame_ms": 510.542
+          }
+        ],
+        "elapsed_seconds": 126.290154,
+        "visits": 18,
+        "exact_probe_sha256": "8c2309f643bd498983955d0888f8b608188cffaded79e358b3578f826ecf3da9",
+        "receipt_sha256": "27100e45e48a668988bcc5bf589a12e110895b9f6ac807ec7cf196e49775e11a",
+        "report_sha256": "660a7d4ee67775cf91abbcfe5a0bde391112c66812b3bfb219738a16df4e5831",
+        "observed_other_engine_process_counts": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      "campaign-candidate": {
+        "source_commit": "6c84c54347f62e87c1a8ff05aac4552c55d5dd7f",
+        "started_utc": "2026-11-25T12:56:03.177418+00:00",
+        "runtime_exit": 0,
+        "full_minutes": [
+          {
+            "minute": 1,
+            "rendered_frames": 3150,
+            "p95_frame_ms": 76.365,
+            "p99_frame_ms": 190.572,
+            "worst_frame_ms": 1214.834
+          },
+          {
+            "minute": 2,
+            "rendered_frames": 11642,
+            "p95_frame_ms": 10.047,
+            "p99_frame_ms": 37.893,
+            "worst_frame_ms": 334.37
+          }
+        ],
+        "elapsed_seconds": 121.920238,
+        "visits": 17,
+        "exact_probe_sha256": "8c2309f643bd498983955d0888f8b608188cffaded79e358b3578f826ecf3da9",
+        "receipt_sha256": "bcd1c21eab54c4cf02e97cec73a05104b4e9873edcc73f6697b3627f34663847",
+        "report_sha256": "64059638ca49d9c85bfc168331ec3995fa8c5ac768b40dc26584c09b3ff690bd",
+        "observed_other_engine_process_counts": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    },
+    "receipt_sha256": "16e940fe53a5e7dbd11152e357323b139a316a7688d56a1ecff769d7bcafba32",
+    "public_build_id": 26918086
+  }
 }
