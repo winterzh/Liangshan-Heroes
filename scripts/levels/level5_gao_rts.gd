@@ -21,6 +21,7 @@ const FIRE_POINTS := [Vector2i(42,29),Vector2i(40,40)]
 # Match the chained warship's 180 range plus both 25-pixel hull radii.
 # The same radius is used for readiness and actual fire damage.
 const FIRE_ZONE_RADIUS := 230.0
+const SELECT_FIREBOAT := "gao_select_fireboat"
 const PRISONER_ESCORT_RADIUS := 180.0
 const SHORE_ESCORT_SPACING := 104.0
 const PRISONER_WAITING := "高俅正在等待岸军护卫。已下达的行军命令会保留。"
@@ -437,9 +438,15 @@ func _fire_route_ships(b, button_id: String) -> Array:
 	return ships if ships.all(func(ship): return b.mission._valid_action_actor(ship, action)) else []
 
 
-func _sync_fire_route_button(b, button_id: String, label: String, tooltip: String) -> void:
+func _can_select_fireboat(b) -> bool:
+	return not b.hud.touch_ui and fire_prepared and not fire_lit and not fire_abandoned \
+		and alive(fireboat) and fireboat.faction == Unit.FACTION_LIANG and not fireboat.garrisoned and not fireboat.is_captive \
+		and b.mission.story_goals.get("gao_fire", {}).get("state", "") == "pending"
+
+
+func _sync_fire_route_button(b, button_id: String, label: String, tooltip: String, available: bool) -> void:
 	var button: Button = b.mission.find_level_button(button_id)
-	if _fire_route_ships(b, button_id).is_empty():
+	if not available:
 		if button != null:
 			button.get_parent().remove_child(button)
 			button.queue_free()
@@ -908,8 +915,12 @@ func _wave_warning(b, index: int) -> String:
 
 func _update_wave_objective(b) -> void:
 	_sync_recruit_liu_tang_button(b)
-	_sync_fire_route_button(b, WITHDRAW_ESCORT_SHIPS, "撤出接应船", "派待令接应船驶向安全水域。两船到齐并压退附近官船后才算撤离。")
-	_sync_fire_route_button(b, RETURN_LIU_TANG, "送刘唐返港", "派载刘唐的原船返回主码头。靠岸并清开登陆点后，刘唐才能下船。")
+	_sync_fire_route_button(b, SELECT_FIREBOAT, "选中 · 刘唐火船",
+		"定位火船，查看接应船到位情况和举火条件。", _can_select_fireboat(b))
+	_sync_fire_route_button(b, WITHDRAW_ESCORT_SHIPS, "撤出接应船",
+		"派待令接应船驶向安全水域。两船到齐并压退附近官船后才算撤离。", not _fire_route_ships(b, WITHDRAW_ESCORT_SHIPS).is_empty())
+	_sync_fire_route_button(b, RETURN_LIU_TANG, "送刘唐返港",
+		"派载刘唐的原船返回主码头。靠岸并清开登陆点后，刘唐才能下船。", not _fire_route_ships(b, RETURN_LIU_TANG).is_empty())
 	if core_ready: return
 	var objective := _wave_objective(b)
 	if b.mission.objective!=objective: b.mission.set_objective(objective)
@@ -970,6 +981,10 @@ func activate_mission_button(b, button_id: String) -> void:
 	if button_id == "gao_end": _finish(b)
 	elif button_id == "gao_escort": _order_prisoner_escort(b)
 	elif button_id == RECRUIT_LIU_TANG: _recruit_liu_tang(b)
+	elif button_id == SELECT_FIREBOAT:
+		if _can_select_fireboat(b):
+			b.select_single(fireboat, false)
+			b.center_camera_cell(b.map.world_to_cell(fireboat.position))
 	elif button_id == WITHDRAW_ESCORT_SHIPS or button_id == RETURN_LIU_TANG:
 		_order_fire_route(b, button_id)
 func on_unit_resolved(b,u,outcome: String) -> void:
