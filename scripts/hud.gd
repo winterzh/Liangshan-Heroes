@@ -154,6 +154,7 @@ const SKILL_RAIL_MAX_WIDTH_RATIO := 0.25
 var _skill_rail_cell := Vector2(64, 64)
 var _touch_action_layout_signature := ""
 var _intro_btn: Button
+var _intro_skip_btn: Button
 var _menu_btn: Button      # 触屏屏上「菜单」键（右上角）：等同安卓返回键，呼出暂停菜单
 var _eject_float: Button   # 桌面：选中有驻军建筑时浮在面板上方的「出击」键（命令卡挤不下时的可靠入口）
 
@@ -273,6 +274,8 @@ func setup(p_battle) -> void:
 ## 启用/刷新触屏布局（由 battle 收到首个触摸事件、或移动端启动时调用）
 func set_touch_ui(v: bool) -> void:
 	touch_ui = v
+	if is_instance_valid(_intro_root) and _intro_root.visible:
+		_update_intro_skip_button()
 	if v and not _touch_built:
 		_build_touch_controls()
 		_apply_touch_fonts()
@@ -2763,6 +2766,24 @@ func _build_intro() -> void:
 	_intro_btn = btn
 
 
+func _update_intro_skip_button() -> void:
+	var available: bool = OS.get_name() == "Windows" and not touch_ui and _intro_lines.size() > 1 \
+		and battle != null and battle._official_context.get("mode", "") == "campaign"
+	if available and _intro_skip_btn == null:
+		var row := HBoxContainer.new()
+		row.alignment = BoxContainer.ALIGNMENT_END
+		row.add_theme_constant_override("separation", 10)
+		_intro_btn.get_parent().add_child(row)
+		_intro_skip_btn = Button.new()
+		Localize.bind_text(_intro_skip_btn, "跳过对话")
+		_intro_skip_btn.add_theme_font_size_override("font_size", 18)
+		_intro_skip_btn.pressed.connect(_advance_intro.bind(true))
+		row.add_child(_intro_skip_btn)
+		_intro_btn.reparent(row, false)
+	if _intro_skip_btn != null:
+		_intro_skip_btn.visible = available
+
+
 func _build_end() -> void:
 	_end_root = ColorRect.new()
 	_end_root.color = Color(0.06, 0.05, 0.035, 1.0)
@@ -2907,7 +2928,10 @@ func show_intro(lines: Array, translate_content := true) -> void:
 	_intro_lines = lines
 	_intro_i = 0
 	_intro_root.visible = true
+	_update_intro_skip_button()
 	_show_intro_line()
+	if _intro_skip_btn != null and _intro_skip_btn.visible:
+		_intro_btn.grab_focus()
 
 
 func _show_intro_line() -> void:
@@ -2944,8 +2968,12 @@ func _show_intro_line() -> void:
 		_intro_port_char.text = (Localize.text(who) if _translate_intro else who).substr(0, 1)
 
 
-func _advance_intro() -> void:
-	_intro_i += 1
+func _advance_intro(skip := false) -> void:
+	if not _intro_root.visible:
+		return
+	if skip and (_intro_skip_btn == null or not _intro_skip_btn.is_visible_in_tree()):
+		return
+	_intro_i = _intro_lines.size() if skip else _intro_i + 1
 	if _intro_i >= _intro_lines.size():
 		_intro_root.visible = false
 		intro_done.emit()
