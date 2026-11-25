@@ -392,8 +392,6 @@ func _update_hook_team_button(b) -> void:
 		formation = b.mission.add_level_button(HOOK_FORMATION_BUTTON, "布阵 · 钩镰队", HOOK_FORMATION_HINT)
 		formation.get_parent().move_child(formation, 0)
 		b.mission.reveal_primary_level_button()
-	formation.toggle_mode = true
-	formation.set_pressed_no_signal(_hook_line_mouse_button == MOUSE_BUTTON_LEFT)
 
 
 func begin_hook_line(b, point: Vector2, mouse_button := MOUSE_BUTTON_RIGHT) -> bool:
